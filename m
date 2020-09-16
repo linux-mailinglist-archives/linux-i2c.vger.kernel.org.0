@@ -2,73 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1645926BBBE
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Sep 2020 07:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B351A26BBDA
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Sep 2020 07:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbgIPFVg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Sep 2020 01:21:36 -0400
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:34295 "EHLO
+        id S1726193AbgIPFfx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Sep 2020 01:35:53 -0400
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:53881 "EHLO
         wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726068AbgIPFVf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Sep 2020 01:21:35 -0400
+        by vger.kernel.org with ESMTP id S1726149AbgIPFft (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Sep 2020 01:35:49 -0400
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 4C0BB469;
-        Wed, 16 Sep 2020 01:21:34 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id 4413E793;
+        Wed, 16 Sep 2020 01:35:48 -0400 (EDT)
 Received: from imap2 ([10.202.2.52])
-  by compute3.internal (MEProxy); Wed, 16 Sep 2020 01:21:34 -0400
+  by compute3.internal (MEProxy); Wed, 16 Sep 2020 01:35:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
         mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm3; bh=Ra4+jaLN+MXOy6NAuUDpQpiZtwMKVaz
-        lgglIg2VCfnY=; b=GYk+BtegPglrn/LC4SM6TK0u+9ewxwONcvdB/dCntdIdOVM
-        5sdFn3h+Zgve+Ip+v/i0UbnnqtwsXuvIFKca60kw6yfLwiSzOmcm5pKeVQlxQEL7
-        KBXzWcW+2rkeVAlDwzZ/5zbE1ELUiNl9vCtjbo76+FF4rAB9kH2uVsIha/UMbWgH
-        4kFosVa7nCT89RFeBLYN7zH390ZfkqJ8Gzw4mOuUbuuatz971BAPiBHN9pu1goO7
-        e+/ZpbbEKVZ4FsCyg4KGcJw/Ia5M2v67HHJOwlUtkv+DgSPEYJ94enur/kDC2skJ
-        zMD1ZtojglPFTUYosBONN/RSqQD50BXSalEnw/A==
+        :subject:content-type; s=fm3; bh=dAhartNk4zeRElK+/OxgbX2nG4Mmm0a
+        i/4Y5aHhHOB8=; b=Sy2bgy4D3+z46ym6wc5/81/reL2KybtjK1GQF0fS26GYDhQ
+        doNXtsSJxpl8ptiOFTl61Nj+fGmOVDL/lS6T3eaIkrvX4IMbPnWH+biAcP9qe7WN
+        Nw4s5vDmQ43p+W5McPVKi38AcOmU2gYi93dOYB0s9fMmBwQHbagGZhi9pYih6aPx
+        Uqa/YS3gLgF8TnoTkItssPRjJnJu+ZlVbHgnM3q4lxsx97TjqMBcXMqgxzfJCR4C
+        hrVaSS7p78Y34/N+QdSZHBU+KCh7jqTRj1RXrCfmmpY1n38RoUEWgTsMkDnHA3bO
+        t+SJQ3kreMfDce1OKEEdi0qsc+0vl60Lv31PBYA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Ra4+ja
-        LN+MXOy6NAuUDpQpiZtwMKVazlgglIg2VCfnY=; b=JQXwvHt971ra+JJ+q5qOq7
-        3cG54V6pILeLeMt+dIqktlY+DFZus1VrzLz8OOPG9A9NqbUXChHPWfL/ax9f+RMX
-        79g4gv0nse9F4WDX1RhZgRDunKcXsaekq4C3CW+Y+lSQUKktiG7VKeBLVbFvOCdQ
-        yHkm+Lb9tS4rvHOaiYpqv+DYZJm7JAoCytXl4Qb1l2faKnq0g1TeaKERBnOO835n
-        FPjDHRmkh5U5Yj0yShj536oEYfvUKqmKWV36NOnHkfmzgu2P33oik7ADQpT7fpb7
-        +Dha5aquUZ0Umc4UOlYdiSrqt9eMnbUDGDPcd9vQg/dzw1rWnB3OS2nuy/ybGLyA
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=dAhart
+        Nk4zeRElK+/OxgbX2nG4Mmm0ai/4Y5aHhHOB8=; b=T5lPpf4r/fBtEwXYwwUYo8
+        x0qQp3FaISzTWxNBsM+v1JMm9nOi2Yb/GlquoImHHRFqah4qqtC/yR5UxZLscOor
+        NBC5MSNqyqAWO6bGL3GDvzbys2lPKogI1ZYi0kDOjlM1zy+UvaRWy1OjkkRx+PxS
+        XWaH49kUrRx6dYrzfPWxtMo/SPQg+wuGPS2WPN7ObHGSrBXcq3MucunXLq/tGQX/
+        JQZtTWRLh2ns1a5ztZLiTXMzjvkWD24vje1/bMF0Plb0REXHpW4tP0Tuw/qQ2FBy
+        oqflXISol0yGoER2qwgXft2d5M4GuTqHH9/zkk8SZjszLG+ds3ydykiD3r2MJBZA
         ==
-X-ME-Sender: <xms:3aBhX1mU9Ucei7AlFnXaHcR-82xUEXt6-_7hAsEhsaszO0HQXPQJ9Q>
-    <xme:3aBhXw082n4L0oOGPDHnKg63weQTh4ZURrl8z2K2FgwSGZvPsFg0NxxCT7xC2QVhy
-    EGsMQ1Rud6aM7b_aA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtddugdekkecutefuodetggdotefrodftvf
+X-ME-Sender: <xms:M6RhX-q68f0-eJs3ZaQj0wtGVBFdi8_fSo4T4VHRrTM3wopc4t0a_A>
+    <xme:M6RhX8rtiNHhElk08mdJ4bHJH2Bpr8Xpf7-zisFJecJxgVJ1Fz8OklCa1PJhQ57g3
+    SO4D1BYpcm05d9WmQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtddugdeltdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderreejnecuhfhrohhmpedftehnughr
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehnughr
     vgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtffrrg
-    htthgvrhhnpedutddtkeeugeegvddttdeukeeiuddtgfeuuddtfeeiueetfeeileettedv
-    tdfhieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    htthgvrhhnpeehhfefkefgkeduveehffehieehudejfeejveejfedugfefuedtuedvhefh
+    veeuffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     grnhgurhgvfiesrghjrdhiugdrrghu
-X-ME-Proxy: <xmx:3aBhX7qXO66M7PZzQwUgxw3MePX_SUVnSAmPuJmjPq2m-ISBOh5Kjg>
-    <xmx:3aBhX1kiDCpZ_xB3_8tOpAdfaFsrRbaNYU5gXCt12n-6KW7trC9OGQ>
-    <xmx:3aBhXz1aVuIdTxol-h63De_hOub3wYRv0sfGfu6t6AVOebaYbNRn-A>
-    <xmx:3aBhX-SZYX2uzaWiSFOsnBFMwU6PFhXFTnlHL5gLaNt-LYc_IwK-4w>
+X-ME-Proxy: <xmx:M6RhXzMTiZbPmvs_lRyOb6fZXO066GuVc4x4UjFLHG-tX_Ei5US9_A>
+    <xmx:M6RhX95qhHGp4KawewxfHNOYYyZEj_y73bzVr7uXv_PGcl6X4cGOuw>
+    <xmx:M6RhX964UJIsg8qKsak8gFD5-bfzRQG8RvtzmSdCUrTia10xi8Y0eQ>
+    <xmx:M6RhXw2MAGMvD8gSiiLb1aKzH8Jy7C83IJWIJI7rtFikVUTcNhoZYw>
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 641C1E00C8; Wed, 16 Sep 2020 01:21:32 -0400 (EDT)
+        id 6AE16E00C8; Wed, 16 Sep 2020 01:35:46 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.3.0-259-g88fbbfa-fm-20200903.003-g88fbbfa3
 Mime-Version: 1.0
-Message-Id: <48962472-b025-4b0d-90e9-60469bebf206@www.fastmail.com>
-In-Reply-To: <71067b18-c4bc-533a-0069-f21069c5fd0d@roeck-us.net>
+Message-Id: <120342ec-f44a-4550-8c54-45b97db41024@www.fastmail.com>
+In-Reply-To: <e7a64983-fe1d-1ba2-b0c3-ae4a791f7a75@roeck-us.net>
 References: <20200914122811.3295678-1-andrew@aj.id.au>
- <20200914122811.3295678-3-andrew@aj.id.au>
- <71067b18-c4bc-533a-0069-f21069c5fd0d@roeck-us.net>
-Date:   Wed, 16 Sep 2020 14:51:08 +0930
+ <e7a64983-fe1d-1ba2-b0c3-ae4a791f7a75@roeck-us.net>
+Date:   Wed, 16 Sep 2020 15:05:25 +0930
 From:   "Andrew Jeffery" <andrew@aj.id.au>
 To:     "Guenter Roeck" <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
         linux-i2c@vger.kernel.org
 Cc:     "Jean Delvare" <jdelvare@suse.com>, wsa@kernel.org,
         "Joel Stanley" <joel@jms.id.au>, linux-kernel@vger.kernel.org
-Subject: =?UTF-8?Q?Re:_[RFC_PATCH_2/2]_hwmon:_(pmbus/ucd9000)_Throttle_SMBus_tran?=
- =?UTF-8?Q?sfers_to_avoid_poor_behaviour?=
+Subject: Re: [RFC PATCH 0/2] Throttle I2C transfers to UCD9000 devices
 Content-Type: text/plain
 Sender: linux-i2c-owner@vger.kernel.org
 Precedence: bulk
@@ -77,69 +75,97 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 
 
-On Mon, 14 Sep 2020, at 23:44, Guenter Roeck wrote:
+On Tue, 15 Sep 2020, at 02:13, Guenter Roeck wrote:
 > On 9/14/20 5:28 AM, Andrew Jeffery wrote:
-> > Short turn-around times between transfers to e.g. the UCD90320 can lead
-> > to problematic behaviour, including excessive clock stretching, bus
-> > lockups and potential corruption of the device's volatile state.
+> > Hello,
 > > 
-> > Introduce transfer throttling for the device with a minimum access
-> > delay of 1ms.
+> > While working with system designs making use of TI's UCD90320 Power
+> > Sequencer we've found that communication with the device isn't terribly
+> > reliable.
+> > 
+> > It appears that back-to-back transfers where commands addressed to the
+> > device are put onto the bus with intervals between STOP and START in the
+> > neighbourhood of 250us or less can cause bad behaviour. This primarily
+> > happens during driver probe while scanning the device to determine its
+> > capabilities.
+> > 
+> > We have observed the device causing excessive clock stretches and bus
+> > lockups, and also corruption of the device's volatile state (requiring it
+> > to be reset).  The latter is particularly disruptive in that the controlled
+> > rails are brought down either by:
+> > 
+> > 1. The corruption causing a fault condition, or
+> > 2. Asserting the device's reset line to recover
+> > 
+> > A further observation is that pacing transfers to the device appears to
+> > mitigate the bad behaviour. We're in discussion with TI to better
+> > understand the limitations and at least get the behaviour documented.
+> > 
+> > This short series implements the mitigation in terms of a throttle in the
+> > i2c_client associated with the device's driver. Before the first
+> > communication with the device in the probe() of ucd9000 we configure the
+> > i2c_client to throttle transfers with a minimum of a 1ms delay (with the
+> > delay exposed as a module parameter).
+> > 
+> > The series is RFC for several reasons:
+> > 
+> > The first is to sus out feelings on the general direction. The problem is
+> > pretty unfortunate - are there better ways to implement the mitigation?
+> > 
+> > If there aren't, then:
+> > 
+> > I'd like thoughts on whether we want to account for i2c-dev clients.
+> > Implementing throttling in i2c_client feels like a solution-by-proxy as the
+> > throttling is really a property of the targeted device, but we don't have a
+> > coherent representation between platform devices and devices associated
+> > with i2c-dev clients. At the moment we'd have to resort to address-based
+> > lookups for platform data stashed in the transfer functions.
+> > 
+> > Next is that I've only implemented throttling for SMBus devices. I don't
+> > yet have a use-case for throttling non-SMBus devices so I'm not sure it's
+> > worth poking at it, but would appreciate thoughts there.
+> > 
+> > Further, I've had a bit of a stab at dealing with atomic transfers that's
+> > not been tested. Hopefully it makes sense.
+> > 
+> > Finally I'm also interested in feedback on exposing the control in a little
+> > more general manner than having to implement a module parameter in all
+> > drivers that want to take advantage of throttling. This isn't a big problem
+> > at the moment, but if anyone has thoughts there then I'm happy to poke at
+> > those too.
 > > 
 > 
-> Some Zilker labs devices have the same problem, though not as bad
-> to need a 1ms delay. See zl6100.c. Various LTS devices have a similar
-> problem, but there it is possible to poll the device until it is ready.
-> See ltc2978.c.
+> As mentioned in patch 2/2, I don't think a module parameter is a good idea.
+> I think this should be implemented on driver level, similar to zl6100.c,
+> it should be limited to affected devices and not be user controllable.
 > 
-> > Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-> > ---
-> >  drivers/hwmon/pmbus/ucd9000.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
-> > index 81f4c4f166cd..a0b97d035326 100644
-> > --- a/drivers/hwmon/pmbus/ucd9000.c
-> > +++ b/drivers/hwmon/pmbus/ucd9000.c
-> > @@ -9,6 +9,7 @@
-> >  #include <linux/debugfs.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> > +#include <linux/moduleparam.h>
-> >  #include <linux/of_device.h>
-> >  #include <linux/init.h>
-> >  #include <linux/err.h>
-> > @@ -18,6 +19,9 @@
-> >  #include <linux/gpio/driver.h>
-> >  #include "pmbus.h"
-> >  
-> > +static unsigned long smbus_delay_us = 1000;
-> 
-> Is that to be on the super-safe side ? Patch 0 talks about needing 250 uS.
-> 
-> > +module_param(smbus_delay_us, ulong, 0664);
-> > +
-> 
-> I would not want to have this in user control, and it should not affect devices
-> not known to be affected. 
+> In respect to implementation in the i2c core vs in drivers: So far we
+> encountered this problem for some Zilker labs devices and for some LTC
+> devices. While the solution needed here looks similar to the solution
+> implemented for Zilker labs devices, the solution for LTC devices is
+> different. I am not sure if an implementation in the i2c core is
+> desirable. It looks quite invasive to me, and it won't solve the problem
+> for all devices since it isn't always a simple "wait <n> microseconds
+> between accesses". For example, some devices may require a wait after
+> a write but not after a read, or a wait only after certain commands (such
+> as commands writing to an EEPROM). Other devices may require a mechanism
+> different to "wait a certain period of time". It seems all but impossible
+> to implement a generic mechanism on i2c level.
 
-Can you clarify what you mean here? Initially I interpreted your statement as 
-meaning "Don't impose delays on the UCD90160 when the issues have only been 
-demonstrated with the UCD90320". But I've since looked at zl6100.c and its 
-delay is also exposed as a module parameter, which makes me wonder whether it 
-was unclear that smbus_delay_us here is specific to the driver's i2c_client and 
-is not a delay imposed on all SMBus accesses from the associated master. That 
-is, with the implementation I've posted here, other (non-UCD9000) devices on 
-the same bus are _not_ impacted by this value.
+So I think it could be handled with an optional i2c client callback: e.g.
 
-> I would suggest an implementation similar to other
-> affected devices; again, see zl6100.c or ltc2978.c for examples.
+struct i2c_client {
+...
+bool (*prepare_device)(const struct i2c_client *client);
+}
 
-I've had a look at these two examples. As you suggest the delays in zl6100.c 
-look pretty similar to what this series implements in the i2c core. I'm finding 
-it hard to dislodge the feeling that open-coding the waits is error prone, but 
-to avoid that and not implement the waits in the i2c core means having almost 
-duplicate implementations of handlers for i2c_smbus_{read,write}*() and 
-pmbus_{read,write}*() calls in the driver.
+This way the logic to delay is kept inside the driver, catering to both the 
+Zilker and the LTC devices. If the problem exists only after specific 
+operations then we can stash some state in the client in the same way I've done 
+in patch 1, test that state in the callback and only do the "preparation" if 
+it's necessary.
+
+I can knock that up and post another RFC, just so we can get a feel for how 
+that solution looks.
 
 Andrew
