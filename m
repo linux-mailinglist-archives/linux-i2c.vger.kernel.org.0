@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 943D226D2F9
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 07:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE7E26D306
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 07:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726153AbgIQFXB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 01:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
+        id S1726247AbgIQFXn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 01:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbgIQFXB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 01:23:01 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40D4C06174A;
-        Wed, 16 Sep 2020 22:23:00 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id d9so491131pfd.3;
-        Wed, 16 Sep 2020 22:23:00 -0700 (PDT)
+        with ESMTP id S1726169AbgIQFXD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 01:23:03 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19171C06174A;
+        Wed, 16 Sep 2020 22:23:02 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id l71so680247pge.4;
+        Wed, 16 Sep 2020 22:23:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=S8OVV1mZhFttZGVKsQ9JByMqrc+T8zXoOJFR2iwsG4g=;
-        b=csZiyQVYfnEgwlEZ9kS/DEtPg3WS1RIfpF0DBEL8GWXMXfDDMCPigCDbhzVUmQy9Z3
-         +Xyf+LdqcXV8ZYAPetqHUqpn4AIZB9eLImehPcHNvpWRa4jbnkBZESrua7BZ6DiO0HnR
-         NwIUXrYkCNtyR0lf+t4pCmxMdY5piTPrlIavN9hbVxnf1YGtCqhVgUBRR5fIT9iqAg2Y
-         Wv/9zGTUNHSTUhjGtnsGdRUFXd4nVwPZdEbqEvxkGlhU7UTV2S2uTafqBI3M698XVbJd
-         cBfwkRqUQq2Bzzqc7DJtO0tdBoorLPLRuWKTH0JH4KuUfNc5hKqIBEn73Adr7yxKtCBe
-         hqLA==
+        bh=H9VSuNM4l/40vayIg5SAmxrV3Ky0F4a/ev4/YbXR38I=;
+        b=jfykg3GQwbbnkRd4mHs2T0pRUdzz6Qg04xQDWonYE+62vUyPxk2CSLjNyOuwQCK0wQ
+         kUaQ8/9tGinqIg9HVGsDRNH6jabj28nmPIwstqFlvS6NsEZ/loOvs/JlEfSnQrlt0TUv
+         riOpGWHsnRPnO1Dht3mtFK6Ge7oJALV93RpiDKnage3a9TapArQxpoR9EkToOJwoZGmg
+         kkEAiBqlnuCdonIX3vCrWzrli6uuZdrpxpmBW/pxRXWNcnMB6YpNk/E5lVt/7rO+TqRm
+         uLSMc4LtD9P2wavTLkjV+i3S0Nd3eQnJDFKgmPEc0HHyoCP+C1lS8QSTHxhlgomcEzNj
+         oXUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=S8OVV1mZhFttZGVKsQ9JByMqrc+T8zXoOJFR2iwsG4g=;
-        b=gRXWwJkghLrglLr6Wrxar1CjbtBzJoMSotfyLgWc2fpP/MmAarldo+AQkMUHvfO/yM
-         SWcw5zIw7zvvbaJrYbIARSq/Guh4TOJK1jkSlq1z+6hdisCwNnb8MTXPt5fxCkZGIc0N
-         ERLyAR8H/Z8CsGhrCr2/Vnsg8spWMcKJV1Z/3xO3CcDlVwVFXy7xU/gwPRVb7VB7HccO
-         f5fU8GTeTxCmwaSyTI0nb/4JPs+D4mX9QColFPyWPAnALyOIxFMwQkWiukdL9vHwuXok
-         KyHjbqDfyQexhsNfm8rVdczWZFoWvdyksBOcSMpD8IqcprjoaqjYY69QJ0+H9zMdfc4B
-         TV+A==
-X-Gm-Message-State: AOAM530VduBSYJ8ZMxLNttxPxwJriWES14G2IMjhNATPi1QcG0VUqVz5
-        uwDayBIFw/1I2602qCkUO1fTH17QFGEvyQ==
-X-Google-Smtp-Source: ABdhPJwRiiZC9FoLVuFtA6sythUYEh5Tocm0uFHYXvuvsa86NUhl1m2QIEbHD1xVx6udreMMVpi04Q==
-X-Received: by 2002:a62:52d3:0:b029:142:2501:3a00 with SMTP id g202-20020a6252d30000b029014225013a00mr9360192pfb.79.1600320180046;
-        Wed, 16 Sep 2020 22:23:00 -0700 (PDT)
+        bh=H9VSuNM4l/40vayIg5SAmxrV3Ky0F4a/ev4/YbXR38I=;
+        b=FXoiZMlyebz0KIAfDUWB3Qgcy/xKvQwMRYdSn+NEEuQUhPCJXr74M8XQsI3+9ElhpT
+         NIhXECTpQuz+aJY/xRyPquq5/m5UJOEs1mGIEaJmGKdvwgjiGYCEKJIKoiqm8PAHRu7Q
+         4Z86Tcqu1Y49EI4jV9kz51XXlG4Z+ItSF84Feut9fPvMJ6sHLBBnCQyO5FvrKm62/YgT
+         b6c6xsUGtVGN4vQjEc1zCmiikHMsYQwVJZ/lqAa5bj+IAhKg11yUlJGLoOMJwZ7QtY+U
+         m2z5l54//8O0Z2q1sxIZMojCcB/+LZZL2YyYZJHv0kaLJYDNZOO2TCbTj9Z0WFzrCLn8
+         1Dgw==
+X-Gm-Message-State: AOAM5323ifwaT3cRS6jfMKodiDbWoCv2/roSNP+pe27a8cZ4Uh98fKJQ
+        clVzq516dvPCnBlWYRtsIlmsvKO5dDxTVQ==
+X-Google-Smtp-Source: ABdhPJyQj2W93OVJdgG0z4BQfii7Jc+Bx08sqfPo7FS4qcFN/sVD4CD3GQSjhe2kx8kuKnZazAVFgg==
+X-Received: by 2002:a62:fb1a:0:b029:142:2501:39f9 with SMTP id x26-20020a62fb1a0000b0290142250139f9mr9134883pfm.72.1600320181402;
+        Wed, 16 Sep 2020 22:23:01 -0700 (PDT)
 Received: from sultan-book.localdomain ([104.200.129.212])
-        by smtp.gmail.com with ESMTPSA id i62sm18705619pfe.140.2020.09.16.22.22.59
+        by smtp.gmail.com with ESMTPSA id i62sm18705619pfe.140.2020.09.16.22.23.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2020 22:22:59 -0700 (PDT)
+        Wed, 16 Sep 2020 22:23:00 -0700 (PDT)
 From:   Sultan Alsawaf <sultan@kerneltoast.com>
 X-Google-Original-From: Sultan Alsawaf
 To:     linux-i2c@vger.kernel.org
@@ -57,9 +57,9 @@ Cc:     jikos@kernel.org, aaron.ma@canonical.com, admin@kryma.net,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         mika.westerberg@linux.intel.com, vicamo.yang@canonical.com,
         wsa@kernel.org, Sultan Alsawaf <sultan@kerneltoast.com>
-Subject: [PATCH v2 1/4] i2c: designware: Fix transfer failures for invalid SMBus block reads
-Date:   Wed, 16 Sep 2020 22:22:53 -0700
-Message-Id: <20200917052256.5770-2-sultan@kerneltoast.com>
+Subject: [PATCH v2 2/4] i2c: designware: Ensure tx_buf_len is nonzero for SMBus block reads
+Date:   Wed, 16 Sep 2020 22:22:54 -0700
+Message-Id: <20200917052256.5770-3-sultan@kerneltoast.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200917052256.5770-1-sultan@kerneltoast.com>
 References: <20200917052256.5770-1-sultan@kerneltoast.com>
@@ -71,45 +71,40 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Sultan Alsawaf <sultan@kerneltoast.com>
 
-SMBus block reads can be broken because the read function will just skip
-over bytes it doesn't like until reaching a byte that conforms to the
-length restrictions for block reads. This is problematic when it isn't
-known if the incoming payload is indeed a conforming block read.
+The point of adding a byte to len in i2c_dw_recv_len() is to make sure
+that tx_buf_len is nonzero, so that i2c_dw_xfer_msg() can let the i2c
+controller know that the i2c transaction can end. Otherwise, the i2c
+controller will think that the transaction can never end for block
+reads, which results in the stop-detection bit never being set and thus
+the transaction timing out.
 
-According to the SMBus specification, block reads will only send the
-payload length in the first byte, so we can fix this by only considering
-the first byte in a sequence for block read length purposes.
-
-In addition, when the length byte is invalid, the original transfer
-length still needs to be adjusted to avoid a controller timeout.
+Adding a byte to len is not a reliable way to do this though; sometimes
+it lets tx_buf_len become zero, which results in the scenario described
+above. Therefore, just directly ensure tx_buf_len cannot be zero to fix
+the issue.
 
 Fixes: c3ae106050b9 ("i2c: designware: Implement support for SMBus block read and write")
 Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
 ---
- drivers/i2c/busses/i2c-designware-master.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-designware-master.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index d6425ad6e6a3..d78f48ca4886 100644
+index d78f48ca4886..22f28516bca7 100644
 --- a/drivers/i2c/busses/i2c-designware-master.c
 +++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -430,10 +430,12 @@ i2c_dw_read(struct dw_i2c_dev *dev)
- 			u32 flags = msgs[dev->msg_read_idx].flags;
+@@ -395,8 +395,9 @@ i2c_dw_recv_len(struct dw_i2c_dev *dev, u8 len)
+ 	 * Adjust the buffer length and mask the flag
+ 	 * after receiving the first byte.
+ 	 */
+-	len += (flags & I2C_CLIENT_PEC) ? 2 : 1;
+-	dev->tx_buf_len = len - min_t(u8, len, dev->rx_outstanding);
++	if (flags & I2C_CLIENT_PEC)
++		len++;
++	dev->tx_buf_len = len - min_t(u8, len - 1, dev->rx_outstanding);
+ 	msgs[dev->msg_read_idx].len = len;
+ 	msgs[dev->msg_read_idx].flags &= ~I2C_M_RECV_LEN;
  
- 			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
--			/* Ensure length byte is a valid value */
--			if (flags & I2C_M_RECV_LEN &&
--			    tmp <= I2C_SMBUS_BLOCK_MAX && tmp > 0) {
--				len = i2c_dw_recv_len(dev, tmp);
-+			if (flags & I2C_M_RECV_LEN) {
-+				/* Ensure length byte is a valid value */
-+				if (tmp <= I2C_SMBUS_BLOCK_MAX && tmp > 0)
-+					len = i2c_dw_recv_len(dev, tmp);
-+				else
-+					len = i2c_dw_recv_len(dev, len);
- 			}
- 			*buf++ = tmp;
- 			dev->rx_outstanding--;
 -- 
 2.28.0
 
