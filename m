@@ -2,87 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA6626DEC5
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 16:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133C426DEFA
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 17:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727303AbgIQOwr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 17 Sep 2020 10:52:47 -0400
-Received: from mailout09.rmx.de ([94.199.88.74]:42461 "EHLO mailout09.rmx.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727387AbgIQOv2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 17 Sep 2020 10:51:28 -0400
-Received: from kdin01.retarus.com (kdin01.dmz1.retloc [172.19.17.48])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mailout09.rmx.de (Postfix) with ESMTPS id 4Bsf9R3fS6zbhsy;
-        Thu, 17 Sep 2020 16:14:35 +0200 (CEST)
-Received: from mta.arri.de (unknown [217.111.95.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by kdin01.retarus.com (Postfix) with ESMTPS id 4Bsf925k8gz2xcC;
-        Thu, 17 Sep 2020 16:14:14 +0200 (CEST)
-Received: from n95hx1g2.localnet (192.168.54.36) by mta.arri.de
- (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Thu, 17 Sep
- 2020 16:13:51 +0200
-From:   Christian Eggers <ceggers@arri.de>
-To:     Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 1/3] i2c: imx: Fix reset of I2SR_IAL flag
-Date:   Thu, 17 Sep 2020 16:13:50 +0200
-Message-ID: <16013235.tl8pWZfNaG@n95hx1g2>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <20200917140235.igfq2hq63f4qqhrr@pengutronix.de>
-References: <20200917122029.11121-1-ceggers@arri.de> <20200917122029.11121-2-ceggers@arri.de> <20200917140235.igfq2hq63f4qqhrr@pengutronix.de>
+        id S1727392AbgIQPCk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 11:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727898AbgIQPCc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 11:02:32 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B405AC06174A;
+        Thu, 17 Sep 2020 08:02:29 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id q8so2535206lfb.6;
+        Thu, 17 Sep 2020 08:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fNGJcc/2UfIVs8mbBxVK/VFNj4D7nz0HCrf2fMGXSIw=;
+        b=c3yPYEzcgE6WEkQG/+eUuv7eyZ/zXffo7yYj9Q3BHrRpxwV016wGSF2beNFXZxQKm9
+         W9bm8ywz3D898Gb/qSQcfQJsGymz6/8L/63GPOphIF8LfGxnTSA8+/OsIfv2JnZE6KtB
+         xABo8aFMyjY+SLsU/+kBPZtg6IwE/sh7T/VvvgmvKuJ5VUHfaX2GGqhRKFyvKn63f5wc
+         YM6G7RhjEqEWFhG43M/31EZ3rDgGiMvXy6tQ+UQpVW8d5E8y4HN02D4b0tWP+xNiFBMg
+         +c7alrqp7eusvWL2nSeH/BVy+lUbrYRH+aFIhvwV4VJisf2WLwoVdFBq0SizOaNzYT80
+         gOJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fNGJcc/2UfIVs8mbBxVK/VFNj4D7nz0HCrf2fMGXSIw=;
+        b=n3fbnga0a1W9IOPSegFoKglfu/07Dqog1UvrtJbk8FnV/35gOgR7pGqK0qfmbz77E3
+         TeUM84Ou5OEYZ65pU0IwgRZRbD01eKhue9bsGrJ3nxr4kklA064pDlUf/d0PcvwO7s+a
+         BS2GkKcRoWiJTy+4X8Dn1bTp44ywm3lYDwUQSS97UC0k1iWUGFILA8T6rAyxYQGbjurv
+         WRGeL5WJV0E9aUtukyXlAN35WqG9PAeoVA/pZBoVTZoOo86eYXFe5tEZ5nljsTCO/hrj
+         a0gbYO9yBDz4KX2JXF6cFKbQ3hNHiF6p7axd38VZRv4Zcys4su0Fz4kdBFNb0TyeEO57
+         TldQ==
+X-Gm-Message-State: AOAM532uvX8ziDkP44JBVzIecEKpf1smTnzyFhMjvs6BHwemb8CKTp4X
+        d9FbPR4Ksnnhtsj+td5lZtZ3iWZjx7M=
+X-Google-Smtp-Source: ABdhPJy9SHzJXK5t+K+Qr57CIq/n1rJX3Ku4eK9onEpBoXTxJIYvVAMfq0uBkC7ghUuGL1cjHtMLuA==
+X-Received: by 2002:a19:50d:: with SMTP id 13mr8435113lff.500.1600354948063;
+        Thu, 17 Sep 2020 08:02:28 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id s14sm6177917ljh.98.2020.09.17.08.02.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2020 08:02:27 -0700 (PDT)
+Subject: Re: [PATCH v7 14/34] i2c: tegra: Clean up probe function
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200908224006.25636-1-digetx@gmail.com>
+ <20200908224006.25636-15-digetx@gmail.com> <20200917123755.GO3515672@ulmo>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <7d2803c3-b25e-da62-5e55-fca8e550fcda@gmail.com>
+Date:   Thu, 17 Sep 2020 18:02:26 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Originating-IP: [192.168.54.36]
-X-RMX-ID: 20200917-161416-4Bsf925k8gz2xcC-0@kdin01
-X-RMX-SOURCE: 217.111.95.66
+In-Reply-To: <20200917123755.GO3515672@ulmo>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Uwe,
+17.09.2020 15:37, Thierry Reding пишет:
+...
+>> +	/* interrupt will be enabled during of transfer time */
+>> +	irq_set_status_flags(i2c_dev->irq, IRQ_NOAUTOEN);
+                                           ^^^^^^^^^^^^
 
-On Thursday, 17 September 2020, 16:02:35 CEST, Uwe Kleine-K�nig wrote:
-> Hello,
+>> +	ret = devm_request_irq(&pdev->dev, i2c_dev->irq, tegra_i2c_isr,
+>> +			       IRQF_NO_SUSPEND, dev_name(&pdev->dev),
+>> +			       i2c_dev);
+>> +	if (ret)
+>> +		return ret;
 > 
-> On Thu, Sep 17, 2020 at 02:20:27PM +0200, Christian Eggers wrote:
-> ...
-> >  		/* check for arbitration lost */
-> >  		if (temp & I2SR_IAL) {
-> >  			temp &= ~I2SR_IAL;
-> > +			temp |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IAL);
-> >  			imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
-> >  			return -EAGAIN;
-> ...
+> Is it safe to install the interrupt handler at this point? What if,
+> perhaps because some bootloader didn't properly quiesce the I2C
+> controller, an interrupt triggers immediately after this?
 
-> This looks strange. First the flag is cleared and then it is (in some
-> cases) set again.
-i.MX controllers require writing a 0 to clear these bits. Vybrid controllers
-need writing a 1 for the same.
-
-> If I2SR_IIF is set in temp you ack this irq without handling it. (Which
-> might happen if atomic is set and irqs are off?!)
-This patch is only about using the correct processor specific value for 
-acknowledging an IRQ... But I think that returning EAGAIN (which aborts the
-transfer) should be handling enough. At the next transfer, the controller will
-be set back to master mode.
-
-> I see this idiom is used in a few more places in the driver already, I
-> didn't check but these might have the same problem maybe?
-
-Best regards
-Christian
-
-
-
+This is why we're using the IRQ_NOAUTOEN flag above :)
