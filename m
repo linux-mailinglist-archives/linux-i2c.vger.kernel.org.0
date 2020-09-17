@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CEE26DAAB
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 13:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B702526DAB2
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 13:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726873AbgIQLrb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 07:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
+        id S1726928AbgIQLst (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 07:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgIQLrV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 07:47:21 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57B8C06174A;
-        Thu, 17 Sep 2020 04:47:20 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id x14so1699031wrl.12;
-        Thu, 17 Sep 2020 04:47:20 -0700 (PDT)
+        with ESMTP id S1726921AbgIQLsn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 07:48:43 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BEEC061756;
+        Thu, 17 Sep 2020 04:48:42 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id j2so1722575wrx.7;
+        Thu, 17 Sep 2020 04:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=CsSULRHEwOUPa0oBdSSa2xFRccNBYxIxudhxZxhguzQ=;
-        b=QitX2hEbnZeGW/PJejcn2xiUVk97n/t1hg3QgOSFJXVTo1UxxAiXTS6yyXT8XipbTs
-         nqdZMmAtQVBpv0q8+8DRERuHhMfvo+8fCS0w31oIY9vXSPj8mhats3h48EFUliUNdYij
-         M0mIW21JLzG+nQ91I0ym9jPK6QAwVfO7rn5vjOVVLsEe/qRcnOStBU+C5DTBPo3BHqAH
-         U5FLdmKmmD4aLX0OPWKo6x1hBNYQ1e9JAYG/Y9c8pqZJgr55D2EBPseMPHSnV1E0eopC
-         CSdpzdLqtfTPJ1+IhmVnOURgEilywrGFF4N7PS9PeiKXl2NexFTKQU7K2I+Lzin8mWk4
-         t9Gg==
+        bh=TPvEDJjNK01UiyyGzKwR/f90hyBviw1IeZoepaumxsY=;
+        b=CT43GMhD+VVnJ7NNFjwEg6T81/FYExAZG3VvUQ1t8U8eE2E4EPROTXTtjgiY7n1PTh
+         8cNIQPkxJ6g+0oiByFyzEHsdvDbXWlOqUfVzDbbTPdloDosC9BbuYo9oBOfcb82z8hbR
+         WT67iN28GpqLgSIHgDkWb/70huMSTOt/bwk9l0OjVNeunChilo4U55fjDEcN75TlkRTR
+         KnyUAFMOyVXrVurET2+H6tfRaR8IxQp953TDN83yIWvdMogqwcSD2KZgFlIoaw8jUOZ4
+         JXrZ0P330ojmiZVexlpZJzitxwyerOdd3rhuI8xSXhQbA8NmSW9P0UVQfZ/K+2qZCVYN
+         pNvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CsSULRHEwOUPa0oBdSSa2xFRccNBYxIxudhxZxhguzQ=;
-        b=gPuDNhDIC92YEUN1u3BtHzYqhPGZmKVrbmwFVJbVetzXerp94XPC3X/r8r+QIUTlAP
-         thQSjmruQQqpZn3SHPrM2ZHqQoN4RA35nfJrTjNsZt+LTM7uJSGSMLJBCsC83Tsy212p
-         KN5ASDuGQLYcGvYiHTnjNb4YoMCwpk5jihZL5IHIw7JsByzaGF4FdZ43H06KE3nLh6BN
-         dqCiweiHI6RtuCxx8OF0CBz/KlnT2fY7RTRHvKXTiDS/NKvu1LbZ9TqS4iCVaJ1GzCUW
-         DM1EHtHYRylbpO7TlucrPVhcJxE7T0kQzLmfNqks+WaBzwXe253YqAx/0Sxf/bTPU/ia
-         wQng==
-X-Gm-Message-State: AOAM532uakGNlotmLv2qtF/b1iEenHBVaDaPYjafQVDZIq8geyS+f1zy
-        eVAkAmKUbk1RE5fwdBE/L3s=
-X-Google-Smtp-Source: ABdhPJz+yKz3QpNLXp/JzXcrh9g10SAeQ/RabQPP8fMs6W/gl/lwTvxyNClHAnNctIYQvKWAa9vquQ==
-X-Received: by 2002:a5d:458a:: with SMTP id p10mr30826324wrq.282.1600343239531;
-        Thu, 17 Sep 2020 04:47:19 -0700 (PDT)
+        bh=TPvEDJjNK01UiyyGzKwR/f90hyBviw1IeZoepaumxsY=;
+        b=h18xVVH7lZYh9u93tJi2anhrB3y44WxdVjGvNgSu9KHMnfJ0BfFhkMi+RhVxcb520C
+         RFzoRE7nYjJbKh0FWZZ6CtDu4dDiPco5qacRxPiQhnuwuDw+tRQwUEhh2DA7LcoeA+Dn
+         Eju6H2VXn5ludFjawdXXXgGCCIuYfUuB6bim3QeCV34oQ8mra+aRe1qNKBNHH8Mg/nhp
+         VBmdUAq4W7qncz7VAt4/xbV+R0NYf94R0AH2ZKj0P8qoPQcnNuMEu4dT2u/y/d4q7c/8
+         X4XfTG82v81d2bzkl6pil0DfqIH4pyADOWgZGgdyWeke+wu4qh5Y4k8ZxDe1OsBxsKuD
+         jKJQ==
+X-Gm-Message-State: AOAM533URWxBuVc2JsCRVKuEWx9EoNCGGibTZhtnzaFaEPZ2tDhMm9DR
+        PsUOG55QcxZxYHlYQQ9qlM4=
+X-Google-Smtp-Source: ABdhPJxHKQoT22n12GJMrgck0/ByHn6OVOq1eELaXM/xMeHYkghMHNSKkU+wExQn2W2hwPnOBjjp0A==
+X-Received: by 2002:adf:e391:: with SMTP id e17mr30675700wrm.289.1600343320943;
+        Thu, 17 Sep 2020 04:48:40 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id q15sm36499027wrr.8.2020.09.17.04.47.17
+        by smtp.gmail.com with ESMTPSA id q4sm39776166wru.65.2020.09.17.04.48.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 04:47:18 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 13:47:16 +0200
+        Thu, 17 Sep 2020 04:48:39 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 13:48:38 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,65 +57,58 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 21/34] i2c: tegra: Don't fall back to PIO mode if DMA
- configuration fails
-Message-ID: <20200917114716.GZ3515672@ulmo>
+Subject: Re: [PATCH v7 22/34] i2c: tegra: Rename wait/poll functions
+Message-ID: <20200917114838.GA3515672@ulmo>
 References: <20200908224006.25636-1-digetx@gmail.com>
- <20200908224006.25636-22-digetx@gmail.com>
+ <20200908224006.25636-23-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Wn0J+vu9+NMIXK57"
+        protocol="application/pgp-signature"; boundary="W18qbkTAGYos9/y6"
 Content-Disposition: inline
-In-Reply-To: <20200908224006.25636-22-digetx@gmail.com>
+In-Reply-To: <20200908224006.25636-23-digetx@gmail.com>
 User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Wn0J+vu9+NMIXK57
-Content-Type: text/plain; charset=us-ascii
+--W18qbkTAGYos9/y6
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 09, 2020 at 01:39:53AM +0300, Dmitry Osipenko wrote:
-> The DMA code path has been tested well enough and the DMA configuration
-> performed by tegra_i2c_config_fifo_trig() shouldn't ever fail in practice.
-> Hence let's remove the obscure transfer-mode switching in order to have a
-> cleaner and simpler code. Now I2C transfer will be failed if DMA
-> configuration fails.
+On Wed, Sep 09, 2020 at 01:39:54AM +0300, Dmitry Osipenko wrote:
+> Drop '_timeout' postfix from the wait/poll completion function names in
+> order to make the names shorter, making code cleaner a tad.
 >=20
+> Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
+>  drivers/i2c/busses/i2c-tegra.c | 32 ++++++++++++++------------------
+>  1 file changed, 14 insertions(+), 18 deletions(-)
 
-I'm not sure that's a good idea. It's always possible that the DMA setup
-is going to break because of something that's not related to the I2C
-driver itself. Having the system completely break instead of falling
-back to PIO mode seems like it would only complicate troubleshooting any
-such issues.
+Not sure this is really worth it, but I don't feel strongly, so:
 
-Thierry
+Acked-by: Thierry Reding <treding@nvidia.com>
 
---Wn0J+vu9+NMIXK57
+--W18qbkTAGYos9/y6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jTMQACgkQ3SOs138+
-s6HHJw/+JbrupYuSJ+2UrJaYVJmaS3aD2VRhWfwqmchEo35Mm8b7gpCojcNZbF8N
-pqGsYXjkyg6Rv7lxuHBamwJMkpwhw1ELEqQM7Eh4QjWTfVTZ1dU9PCYZfQB5xUMm
-kcYGrfKyHQMfOpS4rYhOtYQirXzGQ9up+2UdR9LhL+ypvsh+kIjGDE1Fk0WTO8LN
-n7p/fpfikDzklNWh5VmWZKT7GEg9bcRVhQRHkTAQQ2Zm1DL8Io/jGnkGeyP/GjFq
-MoFRnAFBYxZaWE7Zv03CUw9JLucEuVe7AbxjV+4wlSWpqsTuVqREL977RB+4wGZo
-sEvuGCZBBwH+K2n+UKRMPfsbmLARZ2zMnAA8S3FNtNE+nKDQOZrRak2QcOmgDlY8
-+5wH+F5cODFXAuxHzYxmcnfp4Wk9ThigT7yv6+zbtOUvwBYeXiMi4lVh/TS83ncM
-qhdWpbRTToG+V4lX9tShb1309X+yjh3cYjHgE9IKHPDVOUh/HQQOke4YlTdHqxyt
-yJSjmeuQkPOPcM1qwY9wcViWaqCcvVNbWYsv/vsuBHX35QdGSxKNgylzDWIRmpml
-NaoVP9eshXPwbe6B2RrjEJ/SXNtIVLIGFACVg4BlU53LXOHBVKiTKXDcfYuw6DIP
-5+g/ZgrRprtbk5RBYJexHSRRyzY9RNSe/n+8Amu6wKnj4ltGxGA=
-=USYD
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jTRYACgkQ3SOs138+
+s6GZjBAAijMN3OUjAB/JXXlGmivh74E6fcLG9QtQIjkjlNveaAKsJxsoIrjopELD
+0rvAMHNegxy5Ye2x6XWHnLRPeQGyZ4U2vsk3hO8L7VW03DWhd6xEygQhL+hVM966
+JwXFrtay++JtmehAHimiSurnfzBKCdZ7ZjagfUwxrmhPAlDfY/IpOLe1EbLNYv5Q
+HTGb1GkaNnPQU4Kg7J6zIW9Qqc/cJ4WJE1SLbm5s+EL+sar6xGNjtv95Cizo6gjI
+rvmHO38KjRFEBqs0JRXvBGDts1NucRrJL1p+Mn8TTMooHL1372BiLgSohCzf7Nd2
+YWaFeGV34BKOe0xXY6esBfVqNyESEIZb+Q+vDr+3MAuOxjlaWeyRwmVEczIyhBGD
+Q3FVnHO6Olu8HEeFc0XwGbfZZ+YuRBV+LU4k7U5UsTx3hcL5Ufw36zIzaT3y91n7
+Yv94CUde2w8iuPYp/nLrrM67Krzdr17qCbK9N1QsmHFy4xxPQmlEblQ2AlFtZMFT
+aYLzodQy9KzGXmz6LtRWHpzrjEOPl+FwmrRTYG84PARJvs5XeqgMITNMFsUsIAeC
+wuWrSUvblxBI7OPZojpSSnU8qyrpqdwDg+cNnOL5v5/ymMC71LV5donpVQjslA6J
+vrra8RG+6oyYxdPsEu9L/5rGw1kgbUpjOkoCPIxcecWp0MUTaoE=
+=+lWH
 -----END PGP SIGNATURE-----
 
---Wn0J+vu9+NMIXK57--
+--W18qbkTAGYos9/y6--
