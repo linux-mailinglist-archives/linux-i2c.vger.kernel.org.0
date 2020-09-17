@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E0C26DAC4
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 13:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5967F26DAEA
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 13:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbgIQLvj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 07:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
+        id S1726969AbgIQL6q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 07:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726774AbgIQLv0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 07:51:26 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C04C06174A;
-        Thu, 17 Sep 2020 04:51:26 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id w5so1729303wrp.8;
-        Thu, 17 Sep 2020 04:51:25 -0700 (PDT)
+        with ESMTP id S1726964AbgIQL6k (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 07:58:40 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6BFC06174A;
+        Thu, 17 Sep 2020 04:58:07 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id s13so1682093wmh.4;
+        Thu, 17 Sep 2020 04:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=TBUiml/Uj9hKEJeA51ivy558iLQsoTK3f192+ZXXxgQ=;
-        b=s3j0jcq8lZnHN92aZ/GGewvxNv+c7ox6fw0js/K67WJ0qgSsRlQXQRrYXhcSH+GAFG
-         jQQ15WR/2Ltp/tGI3hw+2pd3hB1dtPBZsdYQnr4sCYLb4eus7/6sbnEgCNOvDYVPS96i
-         XBZwO/UN4sk0qIUy33gjJ8gZDpqb+2mtREhBegnq8K4o5QfV9OULgWQsJLTohLMSawIp
-         OYm4UcUuMLD/42JNScfj1K8IViF67GSf7xA4UcquZlAR0nGAL5DZ7rvHPiZZA0LAEY0s
-         pi/IUnZArRERoKlPDDKVa4v1ITxXshY/K/v3ejjhyr0locgU+7ui9JJqSrqcAaKzJ20i
-         BeDQ==
+        bh=RBptPCK3cQyzDC4iQm1JuF+G8rrPiJFIChJc1eo/SrA=;
+        b=lmREtLnOklYbI3srvQzEqSZtK5ujhvC4CyUFkIPqoP7OltUdmTeBd8UX4md/edLziG
+         IplQvddLFN6dsr69qRjbGADMu1M+8wJN/5mmHdsaYW10Vlgwgg6rSJKVP+wMM1dk3wWF
+         PRrqJtP/x3n82aquu/po2aRNoJWcq5eBR0que/CQb8U8/0ognq8++s0RPGkY4w3iwTeI
+         yDChJw0Rb3Zfc+p8HUQnXYIg/aY7fDp6/y1uJSsdOoPbLXsSPd9n53iE71WL8L5DaD4p
+         q16pI3lVLdbkq7iD7vkYMv7nhzTAGhbBnMucDPOvACLQgjJ9ACaEBsiBlO0xYv3w/Bcr
+         8+0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TBUiml/Uj9hKEJeA51ivy558iLQsoTK3f192+ZXXxgQ=;
-        b=fMo7KaRw7epgbMmtTuiQJlezmhicF6CmQ5rX//Hly38c/XUb/fkpe4Hf1AHU3rLm4R
-         JIkzOasDACySloD4WbAHzQOZBWjFeF8sqZiBYqsQFVfz0EDrtde0Vk+Xznomz1nZAmx/
-         jo92G7SVvCsXNNX4pjXkzJz+EGBaqM+472JL+0E6UjykfLdHVTutL33E3P5JQ5BWAObx
-         goHVqwub/fTWRkEtIrE4c4JbOsemInODR9tsucOVZawplFOHj/VvuKF957+urAOYpC8U
-         rphGyIBANStgRDHgm/vcAPGxypT6xdWrAcIFVZ3TidK1GD0R+OKUdhGh89qNOJ4F0qzr
-         CWNg==
-X-Gm-Message-State: AOAM533G0f90U0MM5f9qU4k1vB0kWeFNGw16UWRBcXEqP9apyy7GnPlA
-        y0mwpwA0NrPBFQ9qcOYSUdk=
-X-Google-Smtp-Source: ABdhPJxf2zUIgb7FLB/EuBFv18SytIkxbhYryS4bStUsreLQYQkgqOdwZAgKQSGCzN2QHr1D3z5YLg==
-X-Received: by 2002:adf:ff83:: with SMTP id j3mr32846642wrr.135.1600343484665;
-        Thu, 17 Sep 2020 04:51:24 -0700 (PDT)
+        bh=RBptPCK3cQyzDC4iQm1JuF+G8rrPiJFIChJc1eo/SrA=;
+        b=KSl2zhA9cfaXtPB932JOnBDV7miMcO7G8x9Nky9nBaFD8pBMwL7KF8sGbYzTDV1DwT
+         rZqgRGCFz8LPQnmFHReaimCsqe5aYjVz45tH68u0T5OQsqgnMUx733NxpH3ZdTYPB8mc
+         Tzcr3XxV0TJWThPxoIBicxx/YvpWp5884qBOl99mzcxJrzgfVdhrq9/9bLvngB1hFf91
+         mgwGsrj6daWa+dsKRAv6P9Ju0wznuMAhDYXONbaP1A2TlBqcg1NFKXpzV8i4/6/dUUzB
+         3+gAFhSv9rjg9WtCVTUy4flTI6cUB/7wmDFXz9xl8Ukrhs4/t72bmVNsKQCOCjh0kVet
+         L8Yw==
+X-Gm-Message-State: AOAM533X4K/vsHBI2HbyFTshpemAcaPu73xXdivr3D7+coOTxIjkQeU0
+        Rh88SwJIyvnzzN7Alif15Kc=
+X-Google-Smtp-Source: ABdhPJw/mWdAvNtcZT+O7OFBzGYrS+RLxKlsckI0DnnY0PrVS/fmvoVpxWtBYJZ5pGUWUX6fP6YGqg==
+X-Received: by 2002:a1c:65c1:: with SMTP id z184mr9225398wmb.61.1600343885657;
+        Thu, 17 Sep 2020 04:58:05 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id a13sm10725988wme.26.2020.09.17.04.51.23
+        by smtp.gmail.com with ESMTPSA id t16sm38888777wrm.57.2020.09.17.04.58.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 04:51:23 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 13:51:21 +0200
+        Thu, 17 Sep 2020 04:58:03 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 13:58:02 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,59 +57,152 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 24/34] i2c: tegra: Factor out packet header setup from
- tegra_i2c_xfer_msg()
-Message-ID: <20200917115121.GC3515672@ulmo>
+Subject: Re: [PATCH v7 25/34] i2c: tegra: Factor out register polling into
+ separate function
+Message-ID: <20200917115802.GD3515672@ulmo>
 References: <20200908224006.25636-1-digetx@gmail.com>
- <20200908224006.25636-25-digetx@gmail.com>
+ <20200908224006.25636-26-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="LkL3iLkxWcC48rNm"
+        protocol="application/pgp-signature"; boundary="stFzI3XAseUQ09UW"
 Content-Disposition: inline
-In-Reply-To: <20200908224006.25636-25-digetx@gmail.com>
+In-Reply-To: <20200908224006.25636-26-digetx@gmail.com>
 User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LkL3iLkxWcC48rNm
+--stFzI3XAseUQ09UW
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 09, 2020 at 01:39:56AM +0300, Dmitry Osipenko wrote:
-> The code related to packet header setting up is a bit messy and makes
-> tegra_i2c_xfer_msg() more difficult to read than it could be. Let's
-> factor the packet header setup from tegra_i2c_xfer_msg() into separate
-> function in order to make code easier to read and follow.
+On Wed, Sep 09, 2020 at 01:39:57AM +0300, Dmitry Osipenko wrote:
+> Factor out register polling into a separate function in order to remove
+> boilerplate code and make code cleaner.
 >=20
 > Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 92 ++++++++++++++++++++--------------
->  1 file changed, 53 insertions(+), 39 deletions(-)
+>  drivers/i2c/busses/i2c-tegra.c | 57 +++++++++++++++-------------------
+>  1 file changed, 25 insertions(+), 32 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegr=
+a.c
+> index 405b87e28a98..e071de9ce106 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -514,10 +514,24 @@ static void tegra_i2c_vi_init(struct tegra_i2c_dev =
+*i2c_dev)
+>  	i2c_writel(i2c_dev, 0x0, I2C_TLOW_SEXT);
+>  }
+> =20
+> +static int tegra_i2c_poll_register(struct tegra_i2c_dev *i2c_dev,
+> +				   u32 reg, u32 mask, u32 delay_us,
+> +				   u32 timeout_us)
+> +{
+> +	void __iomem *addr =3D i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg);
+> +	u32 val;
+> +
+> +	if (!i2c_dev->is_curr_atomic_xfer)
+> +		return readl_relaxed_poll_timeout(addr, val, !(val & mask),
+> +						  delay_us, timeout_us);
+> +
+> +	return readl_relaxed_poll_timeout_atomic(addr, val, !(val & mask),
+> +						 delay_us, timeout_us);
+> +}
+> +
+>  static int tegra_i2c_flush_fifos(struct tegra_i2c_dev *i2c_dev)
+>  {
+> -	u32 mask, val, offset, reg_offset;
+> -	void __iomem *addr;
+> +	u32 mask, val, offset;
+>  	int err;
+> =20
+>  	if (i2c_dev->hw->has_mst_fifo) {
+> @@ -534,16 +548,7 @@ static int tegra_i2c_flush_fifos(struct tegra_i2c_de=
+v *i2c_dev)
+>  	val |=3D mask;
+>  	i2c_writel(i2c_dev, val, offset);
+> =20
+> -	reg_offset =3D tegra_i2c_reg_addr(i2c_dev, offset);
+> -	addr =3D i2c_dev->base + reg_offset;
+> -
+> -	if (i2c_dev->is_curr_atomic_xfer)
+> -		err =3D readl_relaxed_poll_timeout_atomic(addr, val, !(val & mask),
+> -							1000, 1000000);
+> -	else
+> -		err =3D readl_relaxed_poll_timeout(addr, val, !(val & mask),
+> -						 1000, 1000000);
+> -
+> +	err =3D tegra_i2c_poll_register(i2c_dev, offset, mask, 1000, 1000000);
+>  	if (err) {
+>  		dev_err(i2c_dev->dev, "failed to flush FIFO\n");
+>  		return err;
+> @@ -553,30 +558,18 @@ static int tegra_i2c_flush_fifos(struct tegra_i2c_d=
+ev *i2c_dev)
+> =20
+>  static int tegra_i2c_wait_for_config_load(struct tegra_i2c_dev *i2c_dev)
+>  {
+> -	unsigned long reg_offset;
+> -	void __iomem *addr;
+> -	u32 val;
+>  	int err;
+> =20
+> -	if (i2c_dev->hw->has_config_load_reg) {
+> -		reg_offset =3D tegra_i2c_reg_addr(i2c_dev, I2C_CONFIG_LOAD);
+> -		addr =3D i2c_dev->base + reg_offset;
+> -		i2c_writel(i2c_dev, I2C_MSTR_CONFIG_LOAD, I2C_CONFIG_LOAD);
+> +	if (!i2c_dev->hw->has_config_load_reg)
+> +		return 0;
+> =20
+> -		if (i2c_dev->is_curr_atomic_xfer)
+> -			err =3D readl_relaxed_poll_timeout_atomic(
+> -						addr, val, val =3D=3D 0, 1000,
+> -						I2C_CONFIG_LOAD_TIMEOUT);
+> -		else
+> -			err =3D readl_relaxed_poll_timeout(
+> -						addr, val, val =3D=3D 0, 1000,
+> -						I2C_CONFIG_LOAD_TIMEOUT);
+> +	i2c_writel(i2c_dev, I2C_MSTR_CONFIG_LOAD, I2C_CONFIG_LOAD);
+> =20
+> -		if (err) {
+> -			dev_warn(i2c_dev->dev,
+> -				 "timeout waiting for config load\n");
+> -			return err;
+> -		}
+> +	err =3D tegra_i2c_poll_register(i2c_dev, I2C_CONFIG_LOAD, 0xffffffff,
+> +				      1000, I2C_CONFIG_LOAD_TIMEOUT);
+> +	if (err) {
+> +		dev_warn(i2c_dev->dev, "timeout waiting for config load\n");
+> +		return err;
+>  	}
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+The deindentation in this hunk is messing up the diffstat in my opinion.
+It would probably be worth splitting that into a separate patch to make
+it more evident that this patch actually removes boilerplate.
 
---LkL3iLkxWcC48rNm
+Thierry
+
+--stFzI3XAseUQ09UW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jTbkACgkQ3SOs138+
-s6FH7BAAlTp1UkThynTuwY8KzZ3PBlq1Z9HNV+CJCadQeENtcqBYn9/Q158SQaVi
-JfE4FcOf0EHPZKbjD1wujKr1AQfKepeQOAS1b38hKOhJCcDjGqPzWRkFoREA8s+p
-Q9umCHUxXYcAfroXyiBijakA9OqvXBRX1FmDxmdCqM8Hd6Emv6z3u998J+m+eIAw
-jRBUIYu1X93du0PnprxoISb6HEdJwBR6I7Y29WtZzQtjT5JTbdtyyqZEjux0sMF+
-jmELdmQ7fsRThS6bvxPTEM0R/aSvF/DQOreIvZQNAhl1ZufNMv4IeBeFWF/qpcqO
-0R06tUC4NSnXGvCRHHsbRkM9Q7YlAyDZ7phnP+MaMsmiGUP5RgEreKS7iSOVJ2Lt
-JfKESiSqEmxtGuG5mQNBScyVibbG3iEMGtKkq0qq0eUl3RBO5qC7Ju6TDxBjU1a3
-gbOmh65P7FDRbOz8q7ScHv2Hu83G3Vm0SJEN4eEmNYocoS+hIcZL+rHj+9HjiZ84
-pnPkp5CgYR/Xj2Cq+cqiNZRTzAtwalWuLPQJxXwfd/uki37rw19xf+Oj1+UKPzST
-sRbWjhioP37+xdoCifJP2dp+smj3NYu1oZxw76SMplG8b8CiLm9++FaYKd981W00
-8g5FSWZemUS6Isrnj+s13FMM/QU4tiSath4+4L73//xnZ3zR4bU=
-=8nUD
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jT0oACgkQ3SOs138+
+s6GUHxAAnwK9bQJoihAW8/1DAfvP9xNcE5rcJoKtrMJAxgpAFcZQQiMUKSerk+8G
+z5YRnKmv/JOZp9Yqavl6U6xDCYv9fR+D3TBQ34A3TRIrpazPwhffvt+QkzXaaj76
+2ybOQY4x0UmQW6ipWWOxBSzxy0Zql1bpUU4z+Mh7RZaR7vKqv0JuVdwLnERvPZJM
++YV98iZJoJIIVRM5QFJBL8jaL6nqkOh9vmOfONjAL8z/xqYFuYKMWpTkf1vOJ6P3
+peyRgTa9tgmvfWU/Rjr8DdBjBM/Y5s8aiJA4YO60S6R29fWEybnOud4UOXOixhM+
+D8PMFGiA6B+iwt4EAgwBD7eio8bxwQJ1vz+mqWyzrUvnDpCGMTkd6tzUX3M2v3lr
+WmIBQ09e9mK2H7DGn70WGn9GETn8ElMDhERQrAAIe+4u3BD9MhQAcK9nzMcIydyx
+OvAcSNghr4of1rmVYvcn5EFluRyPLidGqB8HxZP75BDPsRQ8NBfJP/rTGJi62JZy
+mgcfpdAXXCR0nw+efiVuAHYtqNJKnIDzgevU/zqIMEa336WCqaksdCdQLJcctWZ3
+z6+z+DVL4ueZ8aiBBk18TQjtxK5fTVZF9fWI/SUU4ZapvJicRIuHw66TMVOBUMFz
+R7q09gbPtYxwra6UOCmBIs+yiLLWpn7a+X7mFi8XS5mZOnXjk3g=
+=CIb2
 -----END PGP SIGNATURE-----
 
---LkL3iLkxWcC48rNm--
+--stFzI3XAseUQ09UW--
