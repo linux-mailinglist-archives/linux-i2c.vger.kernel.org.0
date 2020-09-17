@@ -2,83 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 199E026E769
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 23:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B6726E948
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Sep 2020 01:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbgIQV0y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 17:26:54 -0400
-Received: from sauhun.de ([88.99.104.3]:37178 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725900AbgIQV0y (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 17 Sep 2020 17:26:54 -0400
-X-Greylist: delayed 515 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 17:26:53 EDT
-Received: from localhost (router.4pisysteme.de [80.79.225.122])
-        by pokefinder.org (Postfix) with ESMTPSA id D88CE2C1682;
-        Thu, 17 Sep 2020 23:18:16 +0200 (CEST)
-Date:   Thu, 17 Sep 2020 23:18:16 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kai Heng Feng <kai.heng.feng@canonical.com>,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH] i2c: core: Call i2c_acpi_install_space_handler() before
- i2c_acpi_register_devices()
-Message-ID: <20200917211816.GB18027@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kai Heng Feng <kai.heng.feng@canonical.com>,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <20200909103233.58287-1-hdegoede@redhat.com>
+        id S1726097AbgIQXMx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 19:12:53 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43086 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725987AbgIQXMw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 19:12:52 -0400
+Received: by mail-pf1-f196.google.com with SMTP id f18so2182857pfa.10;
+        Thu, 17 Sep 2020 16:12:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VvWE0vd6Z6cZqNOq/2evFZ4nZv2/3WPxT1Xp9nhMpCg=;
+        b=W6PHbcJhW0Wn+uaAgZbbt6gDU0Qs9fixGFEvADwY4Hi2tuhPFR2N9rf1TvXCUE9/Os
+         YfWUG9UnROqsxIGXTlB+uoMoR/qGD/X0TDCUxKoKQsacOqnTgx91HSlpVuDL8ebKaWX6
+         tg+RUkBfWzmJYMrzGm698vYaefKgDMQ1laKrpkTpAJFZGneEbIiBMlUenMJohp1j7T5Y
+         KBWJt7SOA+3PUuPCkmF+B4tRTktAz+uhGqsM2KlagUsMN95EbryRyn4sl4keF3WOksK7
+         c2IDEHFCjLxr3VAMIbSqNhDagk5TTkDqI/fW3ABx+ejCYyOMSoNlWfB17c9pFflBExgw
+         khQg==
+X-Gm-Message-State: AOAM530BfmQ1uR7Ggs4POFexuJ6+uf+9ownQkOBCd5wCIA28fY/04L+f
+        oo7lEgt2sx4Je1y2Et9R5Po=
+X-Google-Smtp-Source: ABdhPJxt16ws+afmcEjE451K6KhkT3P/E6pP+NFY+T3z3+DXG86vfKzRR8K/1I4mhEuzC8Suc4LpyQ==
+X-Received: by 2002:a05:6a00:1356:b029:13e:5203:fba3 with SMTP id k22-20020a056a001356b029013e5203fba3mr28672785pfu.3.1600384371921;
+        Thu, 17 Sep 2020 16:12:51 -0700 (PDT)
+Received: from sultan-box.localdomain ([104.200.129.212])
+        by smtp.gmail.com with ESMTPSA id h15sm704319pfo.194.2020.09.17.16.12.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 16:12:51 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 16:12:48 -0700
+From:   Sultan Alsawaf <sultan@kerneltoast.com>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        jikos@kernel.org, aaron.ma@canonical.com, admin@kryma.net,
+        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
+        hdegoede@redhat.com, hn.chen@weidahitech.com,
+        jarkko.nikula@linux.intel.com, kai.heng.feng@canonical.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com
+Subject: Re: [PATCH v2 3/4] i2c: designware: Allow SMBus block reads up to
+ 255 bytes in length
+Message-ID: <20200917231248.GA345017@sultan-box.localdomain>
+References: <20200917052256.5770-1-sultan@kerneltoast.com>
+ <20200917052256.5770-4-sultan@kerneltoast.com>
+ <20200917205704.GA18027@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oLBj+sq0vYjzfsbl"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200909103233.58287-1-hdegoede@redhat.com>
+In-Reply-To: <20200917205704.GA18027@kunai>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, Sep 17, 2020 at 10:57:04PM +0200, Wolfram Sang wrote:
+> On Wed, Sep 16, 2020 at 10:22:55PM -0700, Sultan Alsawaf wrote:
+> > From: Sultan Alsawaf <sultan@kerneltoast.com>
+> > 
+> > According to the SMBus 3.0 protocol specification, block transfer limits
+> > were increased from 32 bytes to 255 bytes. Remove the obsolete 32-byte
+> > limitation.
+> 
+> Sadly, it is not that easy. We are trying to extend BLOCK_MAX to 255
+> (SMBus 3 specs) but there are various things to be considered,
+> especially with buffers and when passing it to userspace. Check here for
+> the discussion (and you are welcome to join, of course):
+> 
+> http://patchwork.ozlabs.org/project/linux-i2c/list/?submitter=79741&state=*
+> 
+> > 
+> > Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
+> > ---
+> >  drivers/i2c/busses/i2c-designware-master.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+> > index 22f28516bca7..5bd64bd17d94 100644
+> > --- a/drivers/i2c/busses/i2c-designware-master.c
+> > +++ b/drivers/i2c/busses/i2c-designware-master.c
+> > @@ -433,7 +433,7 @@ i2c_dw_read(struct dw_i2c_dev *dev)
+> >  			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
+> >  			if (flags & I2C_M_RECV_LEN) {
+> >  				/* Ensure length byte is a valid value */
+> > -				if (tmp <= I2C_SMBUS_BLOCK_MAX && tmp > 0)
+> > +				if (tmp > 0)
+> >  					len = i2c_dw_recv_len(dev, tmp);
+> >  				else
+> >  					len = i2c_dw_recv_len(dev, len);
+> > -- 
+> > 2.28.0
+> > 
 
---oLBj+sq0vYjzfsbl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, it is not that easy to make the change on a global scale. However, in the
+case of the designware adapter, it really *is* that easy. This change covers the
+designware adapter, and others can follow later with the much more invasive
+changes that are needed.
 
-On Wed, Sep 09, 2020 at 12:32:33PM +0200, Hans de Goede wrote:
-> Some ACPI i2c-devices _STA method (which is used to detect if the device
-> is present) use autodetection code which probes which device is present
-> over i2c. This requires the I2C ACPI OpRegion handler to be registered
-> before we enumerate i2c-clients under the i2c-adapter.
->=20
-> This fixes the i2c touchpad on the Lenovo ThinkBook 14-IIL and
-> ThinkBook 15 IIL not getting an i2c-client instantiated and thus not
-> working.
->=20
-> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=3D1842039
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-
-Applied to for-current, thanks!
-
-
---oLBj+sq0vYjzfsbl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9j0pgACgkQFA3kzBSg
-KbYbRRAAoZnbHvoTYtpvtr5x9jGLKLGyf7IQqzT4GPWcCWvvYZtVfyQKQ/YmEYXF
-MihlYFywPdL7pYGmWZgp8HqGx/+jw8/qNk4U0q6W0Rxfm72XlDpe3W6fqfRl6fbx
-eR4uVrsvA4JjkUQAWyWVmREH9oficE7BzjxXtJnSRc23rcwjLVVJxmKGXw75PRZN
-OZMwJYL7YnUlCnjMwqxAtmJL7ZE0fgMMDEHNN2XtYwZq/KEmcMQkA0s1yjc1B6yZ
-pV0LXGyGC6Xf9t/bvgx4dJYClh5pIiPJtPecHJiXa+qo/1fVE1ps3QgObwmaI8Ju
-4ybN9diejSuDc23Pmpiq6z/m2hLpPnNZWhoheECFWZnIRxo162cPdegaCLqKk/rs
-uUUYZ2mAIkF4Th15pbBvdXNoAgi13oX2XSWel2OMW9h6g/8KUSHWjc7lbqfvfrhU
-/mupr8O6VGmONTAGzYSu/3KmvmPwPCO7TbGQMaVSOwgIMV0BeN9LADJsAwmN+367
-NOjCTASyIaP5JKSBAsG8U/GX3z8rLHrhBXacX23I50xdb6Wdjkh0HXLNMLIbJw0F
-JaRS8QS8mrW7yN2VNSjerB7q7g3iO7EZHUfzN7B8WzhyE8ma+1mrxEt58tU7raaM
-VS0+QQCXs7NNVujEUU7fOTtMCuNNgnW1BCF5SYGTXpx8QqgDKZY=
-=u60B
------END PGP SIGNATURE-----
-
---oLBj+sq0vYjzfsbl--
+Sultan
