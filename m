@@ -2,116 +2,150 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 728DF26DE35
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 16:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C070226DE9D
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 16:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727440AbgIQO2X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 10:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
+        id S1727326AbgIQOpd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 10:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727472AbgIQO2U (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 10:28:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520E2C0612F2
-        for <linux-i2c@vger.kernel.org>; Thu, 17 Sep 2020 07:02:47 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kIuUe-0000yr-Dp; Thu, 17 Sep 2020 16:02:36 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kIuUd-0007sB-D8; Thu, 17 Sep 2020 16:02:35 +0200
-Date:   Thu, 17 Sep 2020 16:02:35 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Christian Eggers <ceggers@arri.de>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/3] i2c: imx: Fix reset of I2SR_IAL flag
-Message-ID: <20200917140235.igfq2hq63f4qqhrr@pengutronix.de>
-References: <20200917122029.11121-1-ceggers@arri.de>
- <20200917122029.11121-2-ceggers@arri.de>
+        with ESMTP id S1727656AbgIQOdA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 10:33:00 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2C7C061356;
+        Thu, 17 Sep 2020 07:02:46 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id j34so1415578pgi.7;
+        Thu, 17 Sep 2020 07:02:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=4Gu/kgZ0T3sU+bTVTX8rTeW8dj7wNAAwtv+uUkf6kT8=;
+        b=W8C8nlyDEfLcq8xNbPQymtNUOjR2CD9bMw+KXSxoMB5NpZZhP6vwLJixC1VAm2dV1v
+         L1bDc9dJOQGh3KEttZgduxUfUHwgxNPRqAhrEmAaHi5fiDf+JMOjK8aIQDp/EdLhqljF
+         wbfkurtCOLD/G/Pc2NruSFfGFjwFN78wnrQ/MPvn0TCiNJI5hzI4B1R4N4w2NHiTHJOA
+         yV9xBeK0QNbS9TVcx6fpnLq/AlbGjWb7af4irM4bY1MxbdzBFPEtpWU1wutLg1xPu/pB
+         q4DIsZiwQIiwSRF5mMz9GGuxxMkphfuRl5n1hXpV868O+xj1kAqxNehTFobUit/mJ9O1
+         KALA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4Gu/kgZ0T3sU+bTVTX8rTeW8dj7wNAAwtv+uUkf6kT8=;
+        b=ii8vqtA9eYPfs1V6h5i4DjP0fCzYVxKJ44E/vqMQpZ6tXfVd/A6qPQt7657/G2qdXv
+         hxk1RSXeO30iB8Rh8O3i5F5XRJyvJahpovXL2+Z1ngMbcGWWPqgu/g2rNYk50gPdnBsE
+         EAm3jBclLlGAPYHGpLNRzzOTvQqdG9zTVkpEYdgd6rO/1r3dARrM2sWbid5l7o7TYfIN
+         +JpXrherWvqas8Z1EpUd4Qigebw/6pwSSqDWowCDrgpjwLxbA+JlnWXelkqcZjC77Vhg
+         BYoH+3/7XT4ieM6uMhJmqYoimsD/QwrXAVrrGWDNBPlf1nhbTpjVO5ZR81Reedwx58jC
+         NgRw==
+X-Gm-Message-State: AOAM530EjWssT8bN6lOL/Oa+Nkr/AOAC12/CiW/GlTSAZt59/D7Lh43g
+        zz4l8V28N0RU3tk52bY4zBMVqdU8lm8xYFPJtkY=
+X-Google-Smtp-Source: ABdhPJzL0WbFlMWT+trYKVIQchuNiS5/67KAavRNKcvBaRPIE4bxwTY61woA83l+unmcuVq6USWtd7OWlTJ0nqv1770=
+X-Received: by 2002:a63:c543:: with SMTP id g3mr23083908pgd.203.1600351365583;
+ Thu, 17 Sep 2020 07:02:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hsjb7ttwvxthj4ux"
-Content-Disposition: inline
-In-Reply-To: <20200917122029.11121-2-ceggers@arri.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+References: <20200917052256.5770-1-sultan@kerneltoast.com>
+In-Reply-To: <20200917052256.5770-1-sultan@kerneltoast.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 17 Sep 2020 17:02:27 +0300
+Message-ID: <CAHp75Vea8=WchmWVOGndgarjehv+sYQh7CNUrQYqmG8hGJCzHA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] i2c-hid: Save power by reducing i2c xfers with
+ block reads
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Aaron Ma <aaron.ma@canonical.com>,
+        Pavel Balan <admin@kryma.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        HungNien Chen <hn.chen@weidahitech.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-input <linux-input@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        You-Sheng Yang <vicamo.yang@canonical.com>,
+        Wolfram Sang <wsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, Sep 17, 2020 at 8:26 AM Sultan Alsawaf <sultan@kerneltoast.com> wro=
+te:
+>
+> From: Sultan Alsawaf <sultan@kerneltoast.com>
+>
+> This is a fixed resubmission of "[PATCH 0/2] i2c-hid: Save power by reduc=
+ing i2c
+> xfers with block reads". That original patchset did not have enough fixes=
+ for
+> the designware i2c adapter's I2C_M_RECV_LEN feature, which is documented
+> extensively in the original email thread.
+>
+> Here is the original cover letter, which still applies:
+> "I noticed on my Dell Precision 15 5540 with an i9-9880H that simply putt=
+ing my
+> finger on the touchpad would increase my system's power consumption by 4W=
+, which
+> is quite considerable. Resting my finger on the touchpad would generate r=
+oughly
+> 4000 i2c irqs per second, or roughly 20 i2c irqs per touchpad irq.
+>
+> Upon closer inspection, I noticed that the i2c-hid driver would always tr=
+ansfer
+> the maximum report size over i2c (which is 60 bytes for my touchpad), but=
+ all of
+> my touchpad's normal touch events are only 32 bytes long according to the=
+ length
+> byte contained in the buffer sequence.
+>
+> Therefore, I was able to save about 2W of power by passing the I2C_M_RECV=
+_LEN
+> flag in i2c-hid, which says to look for the payload length in the first b=
+yte of
+> the transfer buffer and adjust the i2c transaction accordingly. The only =
+problem
+> though is that my i2c controller's driver allows bytes other than the fir=
+st one
+> to be used to retrieve the payload length, which is incorrect according t=
+o the
+> SMBus spec, and would break my i2c-hid change since not *all* of the repo=
+rts
+> from my touchpad are conforming SMBus block reads.
+>
+> This patchset fixes the I2C_M_RECV_LEN behavior in the designware i2c dri=
+ver and
+> modifies i2c-hid to use I2C_M_RECV_LEN to save quite a bit of power. Even=
+ if the
+> peripheral controlled by i2c-hid doesn't support block reads, the i2c con=
+troller
+> drivers should cope with this and proceed with the i2c transfer using the
+> original requested length."
 
---hsjb7ttwvxthj4ux
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+for I=C2=B2C DesignWare patches.
 
-Hello,
+>
+> Sultan
+>
+> Sultan Alsawaf (4):
+>   i2c: designware: Fix transfer failures for invalid SMBus block reads
+>   i2c: designware: Ensure tx_buf_len is nonzero for SMBus block reads
+>   i2c: designware: Allow SMBus block reads up to 255 bytes in length
+>   HID: i2c-hid: Use block reads when possible to save power
+>
+>  drivers/hid/i2c-hid/i2c-hid-core.c         |  5 ++++-
+>  drivers/i2c/busses/i2c-designware-master.c | 15 +++++++++------
+>  2 files changed, 13 insertions(+), 7 deletions(-)
+>
+> --
+> 2.28.0
+>
 
-On Thu, Sep 17, 2020 at 02:20:27PM +0200, Christian Eggers wrote:
-> According to the "VFxxx Controller Reference Manual" (and the comment
-> block starting at line 97), Vybrid requires writing a one for clearing
-> an interrupt flag. Syncing with the method for clearing I2SR_IIF in
-> i2c_imx_isr().
->=20
-> Signed-off-by: Christian Eggers <ceggers@arri.de>
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/i2c/busses/i2c-imx.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 0ab5381aa012..d8b2e632dd10 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -425,6 +425,7 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2=
-c_imx, int for_busy, bool a
->  		/* check for arbitration lost */
->  		if (temp & I2SR_IAL) {
->  			temp &=3D ~I2SR_IAL;
-> +			temp |=3D (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IAL);
->  			imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
->  			return -EAGAIN;
-
-This looks strange. First the flag is cleared and then it is (in some
-cases) set again.
-
-If I2SR_IIF is set in temp you ack this irq without handling it. (Which
-might happen if atomic is set and irqs are off?!)
-
-I see this idiom is used in a few more places in the driver already, I
-didn't check but these might have the same problem maybe?
-
-Best regards
-Uwe
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---hsjb7ttwvxthj4ux
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl9jbHgACgkQwfwUeK3K
-7AnqUggAgYDa1nLQExNfvQp94aJ/t79An/B/XcB5UDUqZ72sqiC6zOQnyYIFJui9
-a9JZvsTefCEy2BCl88oV1HTpF6BybDDTEFOukk1z7PhDIK9tvfMxbuXZ+ZUdLzOn
-fC0QHdwgfAzVm+hCTYUNIP6fyNnjsZb8TAVU4IHZnttKdVN7Yz6qAcMYWEWSCFL6
-Tj/fheKBHs7/uwzOgjZk7D1IwM1GtjMn7O3jwOMioQs1uum092iiFFjeZX7ma/mE
-G9wmBXniFtxWoxmWJmzxNE8QKA0ATuWV4GmKzpFzf0BuaypM8RfGHcSlbxvJnn8q
-XanIVZM4uKj/je+xNideXjFmp7BU3A==
-=eJd3
------END PGP SIGNATURE-----
-
---hsjb7ttwvxthj4ux--
+With Best Regards,
+Andy Shevchenko
