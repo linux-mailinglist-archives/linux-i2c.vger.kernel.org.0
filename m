@@ -2,252 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D0B26E6B5
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 22:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B079926E6F7
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 22:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726580AbgIQUXe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 16:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726421AbgIQUXd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 16:23:33 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9EBC061756
-        for <linux-i2c@vger.kernel.org>; Thu, 17 Sep 2020 13:23:33 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id d6so1935366pfn.9
-        for <linux-i2c@vger.kernel.org>; Thu, 17 Sep 2020 13:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=YNTKdfmB+28CU+5YDgFT2N85sceXAWnBJsBarav4y+M=;
-        b=OdZtCvQoTUU2/0aeiyYVxshd5cH9YBMc46/QsslQPFg6HIoO1W3vPSMnGgfiTjq+hP
-         lZ67JaaqUhGORuBb6aOBcA0X1TKytQoCnwaV/I9z+hnCZicJ70GO3vqG78QBvxtraNQK
-         wgVLp+lE87xR6i3ugguJM0o/4hMfbe7tXbI4k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=YNTKdfmB+28CU+5YDgFT2N85sceXAWnBJsBarav4y+M=;
-        b=LQKcYnIo6Hed1lF5MK+QHX+uuOsZGRuhgXC8HzicqM6NREvGxIITQdVTcBCWjAm6sA
-         Wzzlt7oZXBQf2xcaqQdDWagJh7mfepPor2PcoVQe4l/3YvCEWXfqFaI9Qeg59pvuejDl
-         3MRB6bfJLO6NSAwcLvmixwBvRQy3FDFPExl6+pjL8+UHFQZ0v3+QXOev2H4o+hD9hopC
-         uqauLySms4IRR4Lp5vjuZDycsg239/ER4Ne05tJLQDrr0cZ6QfUfgGRl9IlbE4/lqkft
-         IFZIufHviE7WojkW3q1Cn5L+bTMU0Es5lJoLaZE5r5REjoFNjXyKvUM7+ib1ZXV8aFMO
-         6EQg==
-X-Gm-Message-State: AOAM531L8W58pfhF2+wDC7QWTq/8tZnPgkgFD0pLo2Qarp17bSsfvf0d
-        xekPsrm39xNfClbgOPdIMKSM9g==
-X-Google-Smtp-Source: ABdhPJwUqBYNZMyzzYNYV2v6k7IsJ0N4NSjmQfacJ/Gq4BJeWFAXgI4j+VtUDY8KYuhwwQR1Vc28lQ==
-X-Received: by 2002:aa7:989c:0:b029:142:2501:3973 with SMTP id r28-20020aa7989c0000b029014225013973mr13132887pfl.56.1600374213043;
-        Thu, 17 Sep 2020 13:23:33 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
-        by smtp.gmail.com with ESMTPSA id 84sm497155pfw.14.2020.09.17.13.23.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 13:23:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726408AbgIQU5I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 16:57:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43578 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726180AbgIQU5I (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 17 Sep 2020 16:57:08 -0400
+Received: from localhost (router.4pisysteme.de [80.79.225.122])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F5A520874;
+        Thu, 17 Sep 2020 20:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600376228;
+        bh=yioVQ2V47I4LfYvG7JgQOgciS8kwofLhOenDKNaa3XQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QM28TeKuU/FZvrhw0wWzwLsDqf2A6RT82P5IJYWJo17ZTE51enNCflKAXRRtaKwdO
+         B8dHOKgWsAG1ppdT8v/LmtqC+78QGUZ3+VXom4JrK2Vl/Mg6aMU+QpoSiB8ntzNMqM
+         YKDgjrvVISeTCzynyfXXJaZUMyD6wMkFJEQ+M3i0=
+Date:   Thu, 17 Sep 2020 22:57:04 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     linux-i2c@vger.kernel.org, jikos@kernel.org,
+        aaron.ma@canonical.com, admin@kryma.net,
+        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
+        hdegoede@redhat.com, hn.chen@weidahitech.com,
+        jarkko.nikula@linux.intel.com, kai.heng.feng@canonical.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com
+Subject: Re: [PATCH v2 3/4] i2c: designware: Allow SMBus block reads up to
+ 255 bytes in length
+Message-ID: <20200917205704.GA18027@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Sultan Alsawaf <sultan@kerneltoast.com>, linux-i2c@vger.kernel.org,
+        jikos@kernel.org, aaron.ma@canonical.com, admin@kryma.net,
+        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
+        hdegoede@redhat.com, hn.chen@weidahitech.com,
+        jarkko.nikula@linux.intel.com, kai.heng.feng@canonical.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com
+References: <20200917052256.5770-1-sultan@kerneltoast.com>
+ <20200917052256.5770-4-sultan@kerneltoast.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200917122558.23110-1-rojay@codeaurora.org>
-References: <20200917122558.23110-1-rojay@codeaurora.org>
-Subject: Re: [PATCH V4] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
-        gregkh@linuxfoundation.org, mka@chromium.org,
-        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
-        skakit@codeaurora.org, vkaur@codeaurora.org,
-        pyarlaga@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>, wsa@kernel.org
-Date:   Thu, 17 Sep 2020 13:23:30 -0700
-Message-ID: <160037421089.4188128.9425314091585708436@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
+Content-Disposition: inline
+In-Reply-To: <20200917052256.5770-4-sultan@kerneltoast.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Quoting Roja Rani Yarubandi (2020-09-17 05:25:58)
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-=
-qcom-geni.c
-> index dead5db3315a..b0d8043c8cb2 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -86,6 +86,10 @@ struct geni_i2c_dev {
->         u32 clk_freq_out;
->         const struct geni_i2c_clk_fld *clk_fld;
->         int suspended;
-> +       void *dma_buf;
-> +       size_t xfer_len;
-> +       dma_addr_t tx_dma;
-> +       dma_addr_t rx_dma;
 
-Do we need both tx_dma and rx_dma? Seems that we use cur->flags to
-figure out if the transfer is tx or rx so we could have juat dma_buf and
-dma_addr here?
+--yrj/dFKFPuw6o+aM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  };
-> =20
->  struct geni_i2c_err_log {
-> @@ -307,7 +311,6 @@ static void geni_i2c_abort_xfer(struct geni_i2c_dev *=
-gi2c)
-> =20
->         spin_lock_irqsave(&gi2c->lock, flags);
->         geni_i2c_err(gi2c, GENI_TIMEOUT);
-> -       gi2c->cur =3D NULL;
+On Wed, Sep 16, 2020 at 10:22:55PM -0700, Sultan Alsawaf wrote:
+> From: Sultan Alsawaf <sultan@kerneltoast.com>
+>=20
+> According to the SMBus 3.0 protocol specification, block transfer limits
+> were increased from 32 bytes to 255 bytes. Remove the obsolete 32-byte
+> limitation.
 
-This looks concerning. We're moving this out from under the spinlock.
-The irq handler in this driver seems to hold the spinlock all the time
-while processing and this function grabs it here to keep cur consistent
-when aborting the transfer due to a timeout. Otherwise it looks like the
-irqhandler can race with this and try to complete the transfer while
-it's being torn down here.
+Sadly, it is not that easy. We are trying to extend BLOCK_MAX to 255
+(SMBus 3 specs) but there are various things to be considered,
+especially with buffers and when passing it to userspace. Check here for
+the discussion (and you are welcome to join, of course):
 
->         geni_se_abort_m_cmd(&gi2c->se);
->         spin_unlock_irqrestore(&gi2c->lock, flags);
->         do {
-> @@ -349,10 +352,62 @@ static void geni_i2c_tx_fsm_rst(struct geni_i2c_dev=
- *gi2c)
->                 dev_err(gi2c->se.dev, "Timeout resetting TX_FSM\n");
->  }
-> =20
-> +static void geni_i2c_rx_msg_cleanup(struct geni_i2c_dev *gi2c)
+http://patchwork.ozlabs.org/project/linux-i2c/list/?submitter=3D79741&state=
+=3D*
 
-So maybe pass cur to this function?
+>=20
+> Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
+> ---
+>  drivers/i2c/busses/i2c-designware-master.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/bus=
+ses/i2c-designware-master.c
+> index 22f28516bca7..5bd64bd17d94 100644
+> --- a/drivers/i2c/busses/i2c-designware-master.c
+> +++ b/drivers/i2c/busses/i2c-designware-master.c
+> @@ -433,7 +433,7 @@ i2c_dw_read(struct dw_i2c_dev *dev)
+>  			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
+>  			if (flags & I2C_M_RECV_LEN) {
+>  				/* Ensure length byte is a valid value */
+> -				if (tmp <=3D I2C_SMBUS_BLOCK_MAX && tmp > 0)
+> +				if (tmp > 0)
+>  					len =3D i2c_dw_recv_len(dev, tmp);
+>  				else
+>  					len =3D i2c_dw_recv_len(dev, len);
+> --=20
+> 2.28.0
+>=20
 
-> +{
-> +       struct geni_se *se =3D &gi2c->se;
-> +
-> +       gi2c->cur_rd =3D 0;
-> +       if (gi2c->dma_buf) {
-> +               if (gi2c->err)
-> +                       geni_i2c_rx_fsm_rst(gi2c);
-> +               geni_se_rx_dma_unprep(se, gi2c->rx_dma, gi2c->xfer_len);
-> +               i2c_put_dma_safe_msg_buf(gi2c->dma_buf, gi2c->cur, !gi2c-=
->err);
-> +       }
-> +}
-> +
-> +static void geni_i2c_tx_msg_cleanup(struct geni_i2c_dev *gi2c)
+--yrj/dFKFPuw6o+aM
+Content-Type: application/pgp-signature; name="signature.asc"
 
-And this one?
+-----BEGIN PGP SIGNATURE-----
 
-> +{
-> +       struct geni_se *se =3D &gi2c->se;
-> +
-> +       gi2c->cur_wr =3D 0;
-> +       if (gi2c->dma_buf) {
-> +               if (gi2c->err)
-> +                       geni_i2c_tx_fsm_rst(gi2c);
-> +               geni_se_tx_dma_unprep(se, gi2c->tx_dma, gi2c->xfer_len);
-> +               i2c_put_dma_safe_msg_buf(gi2c->dma_buf, gi2c->cur, !gi2c-=
->err);
-> +       }
-> +}
-> +
-> +static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
-> +{
-> +       int ret;
-> +       u32 geni_status;
-> +
-> +       /* Resume device, as runtime suspend can happen anytime during tr=
-ansfer */
-> +       ret =3D pm_runtime_get_sync(gi2c->se.dev);
-> +       if (ret < 0) {
-> +               dev_err(gi2c->se.dev, "Failed to resume device: %d\n", re=
-t);
-> +               return;
-> +       }
-> +
-> +       geni_status =3D readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9jzZwACgkQFA3kzBSg
+KbbyuxAAtVvk4z2xbQhHrVRJqygO8JzmyOFWL1J8QCn7/cwZ+Kf1OhainyVtGkuq
+t36/lVl69MNwe7DNumQg3UdxpmSHdGTwd0QYkVRrHkQIEuCZEsvys7cWXcddvB/E
+v/rSyY4XQsJBK1+NKQxEBe0CdZ3geZoIMcBYNP67DF5qTH41G7Hgo/PIoBAfXyL8
+xqfpnr1zydL7ZtF4tRQ28moIbtuXO7sCxac8OpiDSFgJrLOby2eyw24nchu6aZL7
+ZVhCb71CeAmVrnRWHoma0HplPvxBGjR97qPfb7Bpsl42A1F4bk/didb3xIRzQvtt
+v6S1xQy6voytuBYzy/d1y6yss0aPeF7MZ4/W/953hspriVcd+D0kvHP8JyzG0AYo
+tMmIUdDV18k/v/21IFynhvxXcoSu3+BF2tAcbE3tkSCu5YSfH31EnJESVKAszlxW
+yCRgjpwN6cgcvlun4OHrRU+E2gnYVbY//Byt6zWUIEBt3QWhWALPhIHuHrLep4EZ
+gnBIadvjYZ5zL5lyUo+tQd+QLBtvkUV14WdxQXfGFbqokmZXjGlrH7+YTjuZm/2p
+U3Tft0oXVoT2ZSICejyCHEk/eYP1r4cEH5xupU/LPmnkIcxlQevQDbjek9+c23BU
+FRGQMvoYApPk2xcrfBau9ailDzUedB9gw7otHdP5+pCz599a3iI=
+=GStr
+-----END PGP SIGNATURE-----
 
-And this probably needs to hold the lock?
-
-> +       if (!(geni_status & M_GENI_CMD_ACTIVE))
-> +               goto out;
-> +
-> +       geni_i2c_abort_xfer(gi2c);
-> +       if (gi2c->cur->flags & I2C_M_RD)
-> +               geni_i2c_rx_msg_cleanup(gi2c);
-> +       else
-> +               geni_i2c_tx_msg_cleanup(gi2c);
-> +       gi2c->cur =3D NULL;
-
-until here?
-
-> +out:
-> +       pm_runtime_put_sync_suspend(gi2c->se.dev);
-> +}
-> +
->  static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg=
- *msg,
->                                 u32 m_param)
->  {
-> -       dma_addr_t rx_dma;
-> +       dma_addr_t rx_dma =3D 0;
->         unsigned long time_left;
->         void *dma_buf =3D NULL;
->         struct geni_se *se =3D &gi2c->se;
-> @@ -372,6 +427,10 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *=
-gi2c, struct i2c_msg *msg,
->                 geni_se_select_mode(se, GENI_SE_FIFO);
->                 i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
->                 dma_buf =3D NULL;
-> +       } else {
-> +               gi2c->xfer_len =3D len;
-> +               gi2c->rx_dma =3D rx_dma;
-> +               gi2c->dma_buf =3D dma_buf;
->         }
-> =20
->         geni_se_setup_m_cmd(se, I2C_READ, m_param);
-> @@ -380,13 +439,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *=
-gi2c, struct i2c_msg *msg,
->         if (!time_left)
->                 geni_i2c_abort_xfer(gi2c);
-> =20
-> -       gi2c->cur_rd =3D 0;
-> -       if (dma_buf) {
-> -               if (gi2c->err)
-> -                       geni_i2c_rx_fsm_rst(gi2c);
-> -               geni_se_rx_dma_unprep(se, rx_dma, len);
-> -               i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
-> -       }
-> +       geni_i2c_rx_msg_cleanup(gi2c);
-> =20
->         return gi2c->err;
->  }
-
-It may make sense to extract the cleanup stuff into another patch. Then
-have a patch after that which does the shutdown hook. So three patches
-total.
-
-> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni=
--se.c
-> index d0e4f520cff8..0216b38c1e9a 100644
-> --- a/drivers/soc/qcom/qcom-geni-se.c
-> +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -705,7 +705,7 @@ void geni_se_tx_dma_unprep(struct geni_se *se, dma_ad=
-dr_t iova, size_t len)
->  {
->         struct geni_wrapper *wrapper =3D se->wrapper;
-> =20
-> -       if (iova && !dma_mapping_error(wrapper->dev, iova))
-> +       if (!dma_mapping_error(wrapper->dev, iova))
->                 dma_unmap_single(wrapper->dev, iova, len, DMA_TO_DEVICE);
->  }
->  EXPORT_SYMBOL(geni_se_tx_dma_unprep);
-> @@ -722,7 +722,7 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_ad=
-dr_t iova, size_t len)
->  {
->         struct geni_wrapper *wrapper =3D se->wrapper;
-> =20
-> -       if (iova && !dma_mapping_error(wrapper->dev, iova))
-> +       if (!dma_mapping_error(wrapper->dev, iova))
->                 dma_unmap_single(wrapper->dev, iova, len, DMA_FROM_DEVICE=
-);
->  }
->  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
-
-I'd make this a different patch. Nothing depends on this change, right?
+--yrj/dFKFPuw6o+aM--
