@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB8926DC61
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 15:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6585326DC5D
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 15:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbgIQMiX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 08:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
+        id S1727004AbgIQNDW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 09:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726827AbgIQMhn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 08:37:43 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EDFC061788;
-        Thu, 17 Sep 2020 05:36:30 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id k15so1878358wrn.10;
-        Thu, 17 Sep 2020 05:36:30 -0700 (PDT)
+        with ESMTP id S1726954AbgIQMid (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 08:38:33 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B24C06174A;
+        Thu, 17 Sep 2020 05:37:59 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id m6so1917908wrn.0;
+        Thu, 17 Sep 2020 05:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=MokMm/FLs+Sj4gwWG5HS9e12djHrZ+NZZNdFZk133Bw=;
-        b=kv6hNtSDH/EgEe4Lv3fdMeAGUOLl2vIXGTRRnv1t+sgzjy9N2EszgDVJ6f67TcAYIq
-         CcQ/XDWknVMZsF6DLK7wKudQiu73AT4oTN7ENefmS+B5r3kmzVP/YS57peKGs6gGHN3r
-         fpsE6rb+nbtow6xiELrmS6ad6ZlZtIdJ8nkmtGkSHlhqngaWPeI1LYjiWMAbfAtUbO9f
-         r79hxzhkR9Uw+aN8JN0Q9qpvETI41JZUOcZMK5Bz2TLcgCfIpzx6qqvkWYACKJd3Mv52
-         PEfE6GSbLEcQa9arsDNM43ux6TpFojd6SOmOh9pvGeWJ5+In2mO+fX3F2az2axQb//v3
-         21zg==
+        bh=9GaMHSQU0yQ42od5DGkkXCjHUtY9xcpM9T7yfKiSehM=;
+        b=IN4ZLkAz/tWOfzYUbMxXPd5bfs4DQIWhCJBsuy6YSkqjdnaHec2YXf/eT72fbLx3kO
+         Wu5Ht/Of10FS2IEQIXSilB3zR1ca/CRNcLf+/hvZJDC7MuvUNoUvdGQd/Ecb6wvk1rjF
+         kgdpiOuX+fQye2sCL3ezisC9v8rM4aa4sHzgkhdNuf/N2ZZ2IaopX+97JOvKBPPyqMiS
+         Ja5KLncRafR0qJ1HRuqRXI6aWKvZKF0uI5lfvbI4eawgALmO4L6QKYLhWn0fVzI+szWs
+         hXNLXBHEj28s0I+utTm7Sv/WoODBnZoYSN6IqNuPkVy+sY+fX9Icd0QKP70brRaw58P0
+         k/zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MokMm/FLs+Sj4gwWG5HS9e12djHrZ+NZZNdFZk133Bw=;
-        b=LNiuMLqBCXRISZq332kOJj/DvaQR3NuWj4Vh0nKDemRalt7CXTlAw8rIbZSULspAG1
-         OUJSLCUPOaHXsVBk6E+pAEdGoYbb+qIrdvp3GgQS9lJ/vcVgaHRl4tTCj2I9Dlg4ldLM
-         DxfLaaijQufnghrEXFa50D/G1slTrbS9QiPgUZIYmbiUYUnppS7ll03T0gA86Y8w+HMo
-         s7Gkz4WoZ0KKudH/moJOkYQn5r+jSkHlQ5JAcLZ5o3ThN69+FH09edkFAHxI3a9jro0u
-         23sA6v7b5sUlJuZZqbhRYJRSQFsyj2HgCEsuBbX9QMe9IHJw9LWt3n8lJWk05k/3Lbea
-         VzAA==
-X-Gm-Message-State: AOAM532inu/oymjjbb749YwUVvUG+dCQ/ykzdnuq3OBWijWpxnpHV5U9
-        Roxmuw/TMTgK9fH+kzzk280=
-X-Google-Smtp-Source: ABdhPJxRMqECTdz9dwTSLAN/7LD5KigPqG8k+BnBJy9/Ld7b0rfeUli0oPm1sdfaaHFq8YTYxpj7Zw==
-X-Received: by 2002:a5d:6407:: with SMTP id z7mr31672989wru.65.1600346189025;
-        Thu, 17 Sep 2020 05:36:29 -0700 (PDT)
+        bh=9GaMHSQU0yQ42od5DGkkXCjHUtY9xcpM9T7yfKiSehM=;
+        b=sUBnB1h6+Qy5hLhlF08X9faCe4jtmoVDhP63wTgDV2TRK04xeIiGfw09bsSgYKgLIk
+         YZ/cvBTNgMD6+2yO5vUe1oE4W4v9wCueVeKmpY1e9EKEN71KZa9YqJij2EJiIIp/oX8t
+         5e4mIV5jQtJSwoS6jrGYCGooSYJpaS5LWoELwXADsK4K/kwPlWvH/ldj38SwSiqv5Z6o
+         sUT+4LeLFS4d+COhWbZ8TQeJSeqnm+m1P4aIM+IzjDEi7hKxZ+CLI4qX/dqkfPUweIxD
+         AIuHU7+Xl7C2I/53cm8k+PZuJHg0zr0lDfpsHS3XlitZs5XSby2E3v5uHS6f9CPYTr/j
+         5VJg==
+X-Gm-Message-State: AOAM533OkQm5SHDdW/yJb5ncJHC8cjOhUTE9Mprx5LGQpknI+xX0uMsH
+        hxApKWFyvevC50LEBgPJr+/G7tgmt0EWhA==
+X-Google-Smtp-Source: ABdhPJw35HZNmzPZdaZfHrek+5zX5Tzrs1EfBQyb7st5d3tkmA2+Mef3YvPp8C7Dy8876H/aKe0qJA==
+X-Received: by 2002:a05:6000:124d:: with SMTP id j13mr34048686wrx.182.1600346278299;
+        Thu, 17 Sep 2020 05:37:58 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id a83sm10847590wmh.48.2020.09.17.05.36.27
+        by smtp.gmail.com with ESMTPSA id x16sm37789087wrq.62.2020.09.17.05.37.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 05:36:27 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 14:36:26 +0200
+        Thu, 17 Sep 2020 05:37:56 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 14:37:55 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,64 +57,137 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 09/34] i2c: tegra: Use reset_control_reset()
-Message-ID: <20200917123626.GN3515672@ulmo>
+Subject: Re: [PATCH v7 14/34] i2c: tegra: Clean up probe function
+Message-ID: <20200917123755.GO3515672@ulmo>
 References: <20200908224006.25636-1-digetx@gmail.com>
- <20200908224006.25636-10-digetx@gmail.com>
+ <20200908224006.25636-15-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="BxZB57hXMgIq1JsC"
+        protocol="application/pgp-signature"; boundary="tR2cvQ13k2aMxNOa"
 Content-Disposition: inline
-In-Reply-To: <20200908224006.25636-10-digetx@gmail.com>
+In-Reply-To: <20200908224006.25636-15-digetx@gmail.com>
 User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---BxZB57hXMgIq1JsC
-Content-Type: text/plain; charset=utf-8
+--tR2cvQ13k2aMxNOa
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 09, 2020 at 01:39:41AM +0300, Dmitry Osipenko wrote:
-> Use a single reset_control_reset() instead of assert/deasset couple in
-> order to make code cleaner a tad. Note that the reset_control_reset()
-> uses 1 microsecond delay instead of 2 that was used previously, but this
-> shouldn't matter because one microsecond is a default reset time for most
-> of Tegra peripherals and TRM doesn't mention anything special in regards
-> to I2C controller's reset propagation time.
+On Wed, Sep 09, 2020 at 01:39:46AM +0300, Dmitry Osipenko wrote:
+> The driver's probe function code is a bit difficult to read. This patch
+> reorders code of the probe function, forming groups of code that are easy
+> to work with. The probe tear-down order now matches the driver-removal
+> order.
 >=20
-> In addition don't ignore potential error of the reset control by emitting
-> a noisy warning if it fails, which will indicate an existence of a severe
-> problem, while still allow machine to boot up.
->=20
-> Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
+>  drivers/i2c/busses/i2c-tegra.c | 100 ++++++++++++++++-----------------
+>  1 file changed, 49 insertions(+), 51 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegr=
+a.c
+> index 79d1cefdc901..7c91bbb3f95c 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -440,6 +440,9 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i=
+2c_dev)
+> =20
+>  	i2c_dev->tx_dma_chan =3D chan;
+> =20
+> +	i2c_dev->dma_buf_size =3D i2c_dev->hw->quirks->max_write_len +
+> +				I2C_PACKET_HEADER_SIZE;
+> +
+>  	dma_buf =3D dma_alloc_coherent(i2c_dev->dev, i2c_dev->dma_buf_size,
+>  				     &dma_phys, GFP_KERNEL | __GFP_NOWARN);
+>  	if (!dma_buf) {
+> @@ -1693,34 +1696,42 @@ static int tegra_i2c_probe(struct platform_device=
+ *pdev)
+>  	struct device *dev =3D &pdev->dev;
+>  	struct tegra_i2c_dev *i2c_dev;
+>  	struct resource *res;
+> -	void __iomem *base;
+> -	phys_addr_t base_phys;
+> -	int irq;
+>  	int ret;
+> =20
+> -	base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+> -	if (IS_ERR(base))
+> -		return PTR_ERR(base);
+> -
+> -	base_phys =3D res->start;
+> -
+> -	irq =3D platform_get_irq(pdev, 0);
+> -	if (irq < 0)
+> -		return irq;
+> -
+>  	i2c_dev =3D devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
+>  	if (!i2c_dev)
+>  		return -ENOMEM;
+> =20
+> -	i2c_dev->base =3D base;
+> -	i2c_dev->base_phys =3D base_phys;
+> -	i2c_dev->adapter.algo =3D &tegra_i2c_algo;
+> -	i2c_dev->adapter.retries =3D 1;
+> -	i2c_dev->adapter.timeout =3D 6 * HZ;
+> -	i2c_dev->irq =3D irq;
+> +	platform_set_drvdata(pdev, i2c_dev);
+> +
+> +	init_completion(&i2c_dev->msg_complete);
+> +	init_completion(&i2c_dev->dma_complete);
+> +
+> +	i2c_dev->hw =3D of_device_get_match_data(&pdev->dev);
+>  	i2c_dev->cont_id =3D pdev->id;
+>  	i2c_dev->dev =3D &pdev->dev;
+> =20
+> +	i2c_dev->base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+> +	if (IS_ERR(i2c_dev->base))
+> +		return PTR_ERR(i2c_dev->base);
+> +
+> +	i2c_dev->base_phys =3D res->start;
+> +
+> +	ret =3D platform_get_irq(pdev, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	i2c_dev->irq =3D ret;
+> +
+> +	/* interrupt will be enabled during of transfer time */
+> +	irq_set_status_flags(i2c_dev->irq, IRQ_NOAUTOEN);
+> +
+> +	ret =3D devm_request_irq(&pdev->dev, i2c_dev->irq, tegra_i2c_isr,
+> +			       IRQF_NO_SUSPEND, dev_name(&pdev->dev),
+> +			       i2c_dev);
+> +	if (ret)
+> +		return ret;
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Is it safe to install the interrupt handler at this point? What if,
+perhaps because some bootloader didn't properly quiesce the I2C
+controller, an interrupt triggers immediately after this?
 
---BxZB57hXMgIq1JsC
+Thierry
+
+--tR2cvQ13k2aMxNOa
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jWEkACgkQ3SOs138+
-s6FGyA/+LUKSWNjlGfuwG5hN3wAKNyvo9ixbGUEqUGWGmhlRaeECx+qcVAHi1i6V
-KfmAL1PMkfpI9HgDXzZ/1HZMdHkVvEx1Vy0Eh6/iYfnFcCWDDDwwd169VcnzoZST
-uzitg/ixEnSZV4zytvdvufisoR3OeZZE1q+9kGN9tSKZfqXVz33NSvvKJFSh7/M2
-HK69K2Ho5/FxL6RG6IWe3c1dIaGSjLNjewRDjpInpKjj7qMVoi7baLL2/tbXQBTA
-0tQhR5Hokhp1R+tAZxt3BY1GxRcB150V5GOFBVRLA0TD2+wxAYcOmMbcA3yuHOCY
-T8WEP+XNvonWPaib3OwCgt/KA/JO/zjssEycONipMlMuUhyU3qPVKikR7TnJdrfy
-pT3Um5Q5X6kqi30CkBq/7+WA7zoMdtYJL1/5WvCd1eYUH0yqmsOaz+orYbP9VSdX
-lre7RUe8LoNaSawTilo2nzdiihmhgQa7WluRFWUp4dLuh8xxSYG91P4PdybRIqIr
-8inS5kTxmkr64Y1OTogXRTJStxM415vGmeSQRr78oZe/e0RzwcpbvkofUeFH4qzk
-1FLBQ+fIjtqwiEOy9B6cjOxLkRPTLAcmZuFnQujtbPTaaaDXL8HhUWS1X5Hv8wei
-M+FC5JFH8x5YVgQmjpAz03onDtVD4a2yR9eJAghHT4N53CP6H7U=
-=fenL
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jWKMACgkQ3SOs138+
+s6F5mQ//XEhOo4wGZwWcPfyHnm2Oxs/RlGALFYnntenIpB3DoR0nsPKaPHORhmfV
+VfdJtQO4i7g37dVJnMcPCrCRbxHnZm77Yz0sWZIH48KSkGDJgaH9s9OwmaQ4URZ3
+uZnBcFi/5HoalfaVvrNQkANT86WdvQADTWLEdf8DoFRXzxY6S9PuskcuSaYBsb03
+mN2uBbDjdN1BhOLa44nriESFhucfvRK5KuBhIUoGrXpomQc2QRGRyjFoepe8cTsH
+xjMjobAeBmYGzMj7iZQO/3yyWu69Ffkh7OrLcwaay6/qfv1P/2D1YxVhsxbDm+9a
+7ElJwZ1k5Y1r4koSadyhaL+YTZIikQw9itxo7XoVIm8e0Aob5r5ucf1ieAesrxVI
+C2gDO+yqv9Bp7YZ0nDW6sttLI4GTnQEGhrfq4zJf0HcWg2jS6502JS4kiP/C2+6K
+L67K9McyxCuA48lpcU+9IXtVULh2GGUjyH2R+SXlLmUBA8uBQWRJf+C5ohjRe6+S
+B/QiO59ByIO/zc6nXzgbgtX3A3Y1qO7WhtEtPG0hHL2TsND2mK+ovUHYtiisuXcd
+ClzIsUKYVAn4BWBB12oGW5FOROwqVEhJejZ7THdAQJHjjD5y9QwOjTT7+YFlZ1FX
+PiNtTx9eUf1mKzUdjAaOTR595iRRWZhp+5/AyczCWxpUSl6zc6Y=
+=Qk5V
 -----END PGP SIGNATURE-----
 
---BxZB57hXMgIq1JsC--
+--tR2cvQ13k2aMxNOa--
