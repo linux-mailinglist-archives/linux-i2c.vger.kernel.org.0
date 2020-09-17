@@ -2,95 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C618126D5D9
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 10:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A8C26D943
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 12:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726217AbgIQIKV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 04:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S1726285AbgIQKkP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 06:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726347AbgIQIGf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 04:06:35 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B614C06178A
-        for <linux-i2c@vger.kernel.org>; Thu, 17 Sep 2020 01:06:19 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id z22so1972430ejl.7
-        for <linux-i2c@vger.kernel.org>; Thu, 17 Sep 2020 01:06:19 -0700 (PDT)
+        with ESMTP id S1726604AbgIQKj7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 06:39:59 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6A0C06178B
+        for <linux-i2c@vger.kernel.org>; Thu, 17 Sep 2020 03:39:58 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id q8so1638431lfb.6
+        for <linux-i2c@vger.kernel.org>; Thu, 17 Sep 2020 03:39:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y5BAoQ8Ga3wPT4OqKnKaprIGJrT/HusINmypTex/K/Y=;
-        b=fykaRfQxvrMFJBznzJC/4DXMvQdeEBXRCs0ipScrz7+TPQLj/PDg3NN+YFiRbyaU7B
-         VJO+L2D9In6sycTN85X+zrnOPiWVZ33kF9HGFGbrlfbnwBg0dIdBOWuC8cNxDwuihD+J
-         P4nRreyyL/zIRM0SJn02HVctVDiqEtYYyR9aenjUWScNfPljCalUFsOnwBCrcCH5quHp
-         avU/HWv8vqjAsxTfDotKNqdqFIskXaAuxTC27+MdJAUeOCqeE5k1UsIomEze3gkAj2b5
-         JGnjXp1o5yfQLIp4yFsLPzI+JNF8wTuvjEWgyYgf0V53kg0zkpIL/tM6lSUzO6kwWews
-         MoMA==
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=hf2P5/+cpeK1am79y/RoRQqvbHQaJG9hFBeQCwWUWOM=;
+        b=U9MdaVPiiyO8jb5u8jziyY1X0KSDvAmjNg6PGJyIJgfbjDhbWAEP4y1CwOkbNijPnN
+         xoMvXXmkLc009O0AQ0Bu15MKwNoWYfRdhwMrfW1DBT2sTVmdSmrPmTH1HZglxYUTcQ8A
+         MpIWuOPrFuvHaZmeMcWkI7NKxZIEU/bleoToE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y5BAoQ8Ga3wPT4OqKnKaprIGJrT/HusINmypTex/K/Y=;
-        b=dBVAfdrEf30Adx3kS+zqm+iXkR+U/qfk2+ypgRsTbQLN05442gn1hW2Sw2GHKvb62A
-         ngrPgcFZ+IlvNUEyc85natj/MXbYf0TyDOJuhmtfnVMJh8xm2NlYh7OPNvbwHo8u48LJ
-         rs0ftSKocjxqpnwallIuMqDUJaClhpkCWhfE9ZaSMfQiv8ESIcGueq/VNzGgH74W69ol
-         bHhDEjdQh3N/faST1QBu/SP+zBsnvD4XGUkkz9nMgCr+YvK6I+a9FR9hWaSN5eQ6j9w4
-         3paUUI04Do1kbSohY7hBIEDL6SgdSLonkwROEQrAlVplHypUo8MG0qA27XhbiUQ9hJRb
-         cZlA==
-X-Gm-Message-State: AOAM533aeoLVgwxmj34cTLo/JtM6oMsNVmCJtm7qK/eRrdkvZtS0iXUh
-        s/MToyPhTD8OieKav6dgbfQpt0HjPXs+r8wvHPdtdw==
-X-Google-Smtp-Source: ABdhPJyVrvKr9O4Mdmci3LL1u8dOErH3YZeH/3QVImK3nZcr6/ha1wPAfWTKAntu/g6l2IcYVH8rCrQQSXatqi0ubnM=
-X-Received: by 2002:a17:906:7489:: with SMTP id e9mr28986969ejl.154.1600329978090;
- Thu, 17 Sep 2020 01:06:18 -0700 (PDT)
+         :message-id:subject:to;
+        bh=hf2P5/+cpeK1am79y/RoRQqvbHQaJG9hFBeQCwWUWOM=;
+        b=nTAcoi12+KQJGEdXnzEUb0aLvwm+jsTx6z1UJz4Htl9hIh8e3rJm90aFVWKGhVaLSm
+         ZPCuA+pShWQqnA93J9PQ02PA33kI2crCyb17poeDHD90IWsNEYs0LX23M04w+8GE8jjy
+         EaeC7YIHLFEwOmmgPG2hgcYN3jcuUnBkpu/jyTsdK+4Bs8nrDeB7YdYIJHxCqRLDBUl8
+         kZYRVIpWiVJ1njruC2F78YPPsC1BFjRLUI+Q4XzFd+DlClSPTHfyDLLjSdAdwV0ci4C3
+         AEp3j8tiRGUA40UAMClhsumLUFNOHLa+tyOXnjI8mg7bn8TvU22zFoaApTVQ7SqbQ+38
+         hXqw==
+X-Gm-Message-State: AOAM533lPePBd6pNgUzIVkezRJkJz3pseP/9/PClHRqhSU2W6q7tivGs
+        g7Tnt+mcIDCbLZUzk8pumXRybp6CXgFn3lCFNlbBaFTwWeM=
+X-Google-Smtp-Source: ABdhPJzXEDfaHYGObAOf2iphXEUaPqVa1TRB/dpgorz6Y5byHjetugopDMJN/K9SD4ljmUAj7r6Mmebij8Jk7xspf7I=
+X-Received: by 2002:ac2:520f:: with SMTP id a15mr8263218lfl.546.1600339196477;
+ Thu, 17 Sep 2020 03:39:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200916170933.20302-1-vadym.kochan@plvision.eu> <20200916170933.20302-2-vadym.kochan@plvision.eu>
-In-Reply-To: <20200916170933.20302-2-vadym.kochan@plvision.eu>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Thu, 17 Sep 2020 10:06:07 +0200
-Message-ID: <CAMpxmJXehV1R7FdgefxWL3aG9dZvtO1SQJdhL4MjDDbuGtuMhA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] eeprom: at24: set type id as EEPROM
-To:     Vadym Kochan <vadym.kochan@plvision.eu>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <CAHO=5PHaJbNxQk3DN0wxD0ZaftrQDe4qMZc4L79vgwQpjHL8qg@mail.gmail.com>
+In-Reply-To: <CAHO=5PHaJbNxQk3DN0wxD0ZaftrQDe4qMZc4L79vgwQpjHL8qg@mail.gmail.com>
+From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Date:   Thu, 17 Sep 2020 16:09:45 +0530
+Message-ID: <CAHO=5PGaNjJoC1ttN6fayFyedyDWmYaTr5XkTfRSMD95NaPZJQ@mail.gmail.com>
+Subject: Re: Question on SMBUS slave transmit with PEC enabled
+To:     linux-i2c <linux-i2c@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 7:10 PM Vadym Kochan <vadym.kochan@plvision.eu> wrote:
+On Tue, Sep 15, 2020 at 2:47 PM Rayagonda Kokatanur
+<rayagonda.kokatanur@broadcom.com> wrote:
 >
-> Set type as NVMEM_TYPE_EEPROM to expose this info via
-> sysfs:
+> Hello All,
 >
-> $ cat /sys/bus/nvmem/devices/{DEVICE}/type
-> EEPROM
+> I have the following questions wrt SMBUS PEC support on the SLAVE side,
 >
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> ---
->  drivers/misc/eeprom/at24.c | 1 +
->  1 file changed, 1 insertion(+)
+> As we know when Master sends a read request, Slave keeps on
+> transferring data until STOP/NACK is received from Master.
+> This means Slave doesn't have a prior idea about how many bytes to
+> transmit to Master.
 >
-> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-> index 2591c21b2b5d..800300296c74 100644
-> --- a/drivers/misc/eeprom/at24.c
-> +++ b/drivers/misc/eeprom/at24.c
-> @@ -678,6 +678,7 @@ static int at24_probe(struct i2c_client *client)
->                         return err;
->         }
+> Let's say, the Master wants to read 1 byte of data with PEC enabled,
+> in this case Slave needs to send a total of two bytes (1st byte data
+> and 2nd byte PEC).
+> When Master puts this request on Bus, following events will happens,
 >
-> +       nvmem_config.type = NVMEM_TYPE_EEPROM;
->         nvmem_config.name = dev_name(dev);
->         nvmem_config.dev = dev;
->         nvmem_config.read_only = !writable;
-> --
-> 2.17.1
+> 1. Slave sends 1st bytes
+> 2. Master receives 1st byte and sends ACK
+> 3. Since no STOP is received from Master, slave send 2nd byte (But
+> Master is expecting PEC bytes as 2nd byte)
+> 4. Master receives 2nd byte and sends NACK/STOP.
 >
+> This means Slave didn't send PEC byte and is no longer driving the SDA
+> line to send PEC bytes.
+> When Master checks PEC it will not match and Master read will fail.
+>
+> How do we handle this case, what is the expected behavior from Slave
+> as per SMBUS protocol ?
+> In this case when should Slave send PEC bytes ?
+>
+> Please let me know.
 
-Queued for v5.10, thanks!
+Please let me know if anyone knows the solution for the above problem.
+Or any other forum to ask this question.
 
-Bartosz
+Thanks,
+Rayagonda
+
+>
+> Best regards,
+> Rayagonda
