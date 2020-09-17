@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 949C926DB9A
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 14:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F7B26DBAD
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 14:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726657AbgIQMcz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 08:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S1726348AbgIQMgu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 08:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726902AbgIQMcM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 08:32:12 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75684C06178A;
-        Thu, 17 Sep 2020 05:32:12 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id a9so1873140wmm.2;
-        Thu, 17 Sep 2020 05:32:12 -0700 (PDT)
+        with ESMTP id S1726719AbgIQMgJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 08:36:09 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BF0C06174A;
+        Thu, 17 Sep 2020 05:35:49 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id x14so1864282wrl.12;
+        Thu, 17 Sep 2020 05:35:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=FIH3VcDXq4V94tL9If4fuwbw/qKNh6i3j/t2acHJLj4=;
-        b=g/jYibskeo4VoYVh+3EUft1RyKUeeqTQqdPSVFPr/fJsiIBVPbKpYEqvtNjXaBg4Lj
-         Bxe/1YZiLA4oM4shK0ZJmQkNEqc3KCgzZuxj695pc9lhoxVCZmiJOeY6OmYame/6LbWw
-         1q7aH3FDvA58XBO3wJe0BcGD4qnOj1Lj/rXi2W5drd+niQA5Q2itzXZV6nrPFz4ms81X
-         Q1o0PFnF6oojAKwcWNmZIoXwMVkt35RohYZE5AGuLL5ibp5jit4sIJ18h3IhfgIx92YF
-         JGbf1sLbB2CpqS4+EOI2ZoYH3d9fe3xGcqyERl2PlkZmStAg+E+/ISLxvD/7qKhPDt3p
-         /m6Q==
+        bh=zLJqbDwuehQ2Cscsi0Vgu4DaQNXgK8MdMyM08+54l6o=;
+        b=EW7fwLGFFz06wWMfDjmNc0mTGIsD6om8dkMIOzMU7M+E6Ut7hiZBNVjztuD0+tq3hZ
+         Hb4TdAg3atN+o2E2EmY5R7YiH6J4Sb2iLVU4AwCc07FGuYIoKDW1sN8AR4rNaQAMbvXu
+         hqqZfT2YwsYNeabbMrvyxhQVSZpUCzryXER4NTh6nYKZi9IVKFygefy1ExXMRCXLAd+D
+         YPh6glNOrmgtge+Ao6fwNBdYQQ67SAki8WoV9Qj0tfAJzQLDi/miovcCGjKHJWr1HQ4e
+         MXL+xu8mOSSMLssjqbxAVWg7+WaGSxoHUrGuTD43piqbkPSrM9ab2cpMSjOlcTXek5m5
+         +07g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FIH3VcDXq4V94tL9If4fuwbw/qKNh6i3j/t2acHJLj4=;
-        b=Mme62xIa0tRPb56nxsbQTtYwlwaR8f4QovJpQmXj7+B7JgLEnVDn6l1TsfFLZp4pvS
-         E1rGIcwH9U5GJj4MVHKTD/Fdo4D2TUY+Et0q/9NuEdfRBXlO/d+3QoXjaQEjzu2W5ZPU
-         AVwGOgtPUaB8tVA2vS3BnkO6iuZbjaEW/FLZye2Y4GxKkhqm/UXKE3kZJ1DbwYNyjHPU
-         Gt7VKKTlb5b1gKwYghnx3G5M3/vBfGkgm5XRo1KpnIi1Ghj/8A8efouDBO5bDTRYh0JB
-         PGqy4hTM6r5czIHYK1Awi0RTc1VLI2Oxizjtf9BOvJNu1QWlE2RyWQ17932C7aLU0H+1
-         TNAw==
-X-Gm-Message-State: AOAM530fDXyvVLaW/+mhUxd0P6jJ9NwpahXv20EVhQyGhK7XJCySz32T
-        65BQ+5UYPmkGRnAcHKvT6ew38hs65n2IWg==
-X-Google-Smtp-Source: ABdhPJzDlvLlyHEgL4czsFCLnRuyxE3eJpFgb8lsCQaulTUKv/3HC2So8XF3jPuQpbikaT91EsEG1g==
-X-Received: by 2002:a7b:c14d:: with SMTP id z13mr9525832wmi.19.1600345931071;
-        Thu, 17 Sep 2020 05:32:11 -0700 (PDT)
+        bh=zLJqbDwuehQ2Cscsi0Vgu4DaQNXgK8MdMyM08+54l6o=;
+        b=bVr/e9MTF1nO4M4JWaa5pIC0rCn7GIP6CJkNcwl7Mm4PkOvrO17VW5M1Tb0fBtfuQV
+         0gHit0SE/jp/UtD1mXdapGJKosSlnlxIiRP5hipVQECLqMn9i8ExShGNXIvP1ZKNa+8G
+         L54IgefLlw6rgjqsz1dV+vO7t1Z/lNmIs52vOlqaoO1U2HRUVLqaJCiCIF1bka7K7VA1
+         JOb99y813xDEXUR2f5182F7DRB1A6KJqEUBdF38rglNSC5BNHlyGIUZnI5ti1XKSgaKv
+         F/dHyRhdu/eOW3LR/axD7fzd6F+cqMBjKpAO/YGIuG36byRIOAEefpoTpqXveLrdemGR
+         cYCQ==
+X-Gm-Message-State: AOAM530HugGeJCHRRB8+CoVzZane9Qx9fQlHamyZNOxdKkDwSw30UFkp
+        GJTFHFSHuWxCHZxUvFyhSUI=
+X-Google-Smtp-Source: ABdhPJwhPRBJXgodadIR6kaG3OgAHsTPr/V4LesSUl0PyXGAeRviLrUJ48AP40kTx16xFsIu+v+1Kg==
+X-Received: by 2002:adf:eacb:: with SMTP id o11mr31305653wrn.209.1600346148156;
+        Thu, 17 Sep 2020 05:35:48 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id q186sm10986022wma.45.2020.09.17.05.32.09
+        by smtp.gmail.com with ESMTPSA id t4sm39125403wrr.26.2020.09.17.05.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 05:32:09 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 14:32:08 +0200
+        Thu, 17 Sep 2020 05:35:46 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 14:35:44 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,146 +57,165 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 32/34] i2c: tegra: Clean up and improve comments
-Message-ID: <20200917123208.GK3515672@ulmo>
+Subject: Re: [PATCH v7 33/34] i2c: tegra: Clean up whitespaces, newlines and
+ indentation
+Message-ID: <20200917123544.GL3515672@ulmo>
 References: <20200908224006.25636-1-digetx@gmail.com>
- <20200908224006.25636-33-digetx@gmail.com>
+ <20200908224006.25636-34-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YaSFhaLO3hpMipqe"
+        protocol="application/pgp-signature"; boundary="tKh+x8PS77aidDsl"
 Content-Disposition: inline
-In-Reply-To: <20200908224006.25636-33-digetx@gmail.com>
+In-Reply-To: <20200908224006.25636-34-digetx@gmail.com>
 User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---YaSFhaLO3hpMipqe
-Content-Type: text/plain; charset=us-ascii
+--tKh+x8PS77aidDsl
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 09, 2020 at 01:40:04AM +0300, Dmitry Osipenko wrote:
-> Make all comments to be consistent in regards to capitalization and
-> punctuation, correct spelling and grammar errors, improve wording.
+On Wed, Sep 09, 2020 at 01:40:05AM +0300, Dmitry Osipenko wrote:
+> Some places in the code are missing newlines or have unnecessary
+> whitespaces and newlines. This creates inconsistency of the code and
+> hurts readability. This patch removes the unnecessary and adds necessary
+> whitespaces / newlines, clears indentation of the code.
 >=20
+> Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 88 ++++++++++++++++++----------------
->  1 file changed, 47 insertions(+), 41 deletions(-)
+>  drivers/i2c/busses/i2c-tegra.c | 72 +++++++++++++++++++++-------------
+>  1 file changed, 45 insertions(+), 27 deletions(-)
 >=20
 > diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegr=
 a.c
-> index 558b1f2934a0..31fbc6181dd5 100644
+> index 31fbc6181dd5..087f98010963 100644
 > --- a/drivers/i2c/busses/i2c-tegra.c
 > +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -136,7 +136,7 @@
->  /* configuration load timeout in microseconds */
->  #define I2C_CONFIG_LOAD_TIMEOUT			1000000
+> @@ -314,6 +314,7 @@ static u32 tegra_i2c_reg_addr(struct tegra_i2c_dev *i=
+2c_dev, u32 reg)
+>  		reg +=3D (reg >=3D I2C_TX_FIFO) ? 0x10 : 0x40;
+>  	else if (i2c_dev->is_vi)
+>  		reg =3D 0xc00 + (reg << 2);
+> +
+>  	return reg;
+>  }
 > =20
-> -/* Packet header size in bytes */
-> +/* packet header size in bytes */
->  #define I2C_PACKET_HEADER_SIZE			12
+> @@ -373,9 +374,12 @@ static int tegra_i2c_dma_submit(struct tegra_i2c_dev=
+ *i2c_dev, size_t len)
+>  	struct dma_chan *chan;
 > =20
->  /*
-> @@ -148,11 +148,10 @@
->  #define I2C_PIO_MODE_PREFERRED_LEN		32
+>  	dev_dbg(i2c_dev->dev, "starting DMA for length: %zu\n", len);
+> +
+>  	reinit_completion(&i2c_dev->dma_complete);
+> +
+>  	dir =3D i2c_dev->msg_read ? DMA_DEV_TO_MEM : DMA_MEM_TO_DEV;
+>  	chan =3D i2c_dev->msg_read ? i2c_dev->rx_dma_chan : i2c_dev->tx_dma_cha=
+n;
+> +
+>  	dma_desc =3D dmaengine_prep_slave_single(chan, i2c_dev->dma_phys,
+>  					       len, dir, DMA_PREP_INTERRUPT |
+>  					       DMA_CTRL_ACK);
+> @@ -387,8 +391,10 @@ static int tegra_i2c_dma_submit(struct tegra_i2c_dev=
+ *i2c_dev, size_t len)
 > =20
->  /*
-> - * msg_end_type: The bus control which need to be send at end of transfe=
-r.
-> - * @MSG_END_STOP: Send stop pulse at end of transfer.
-> - * @MSG_END_REPEAT_START: Send repeat start at end of transfer.
-> - * @MSG_END_CONTINUE: The following on message is coming and so do not s=
-end
-> - *		stop or repeat start.
-> + * msg_end_type: The bus control which needs to be sent at end of transf=
-er.
-> + * @MSG_END_STOP: Send stop pulse.
-> + * @MSG_END_REPEAT_START: Send repeat-start.
-> + * @MSG_END_CONTINUE: Don't send stop or repeat-start.
->   */
->  enum msg_end_type {
->  	MSG_END_STOP,
-> @@ -161,10 +160,10 @@ enum msg_end_type {
->  };
+>  	dma_desc->callback =3D tegra_i2c_dma_complete;
+>  	dma_desc->callback_param =3D i2c_dev;
+> +
+>  	dmaengine_submit(dma_desc);
+>  	dma_async_issue_pending(chan);
+> +
+>  	return 0;
+>  }
 > =20
->  /**
-> - * struct tegra_i2c_hw_feature : Different HW support on Tegra
-> - * @has_continue_xfer_support: Continue transfer supports.
-> + * struct tegra_i2c_hw_feature : per hardware generation features
-
-I think that space before ':' can go away. Although that's preexisting,
-so could also be a separate patch, I guess.
-
-> + * @has_continue_xfer_support: Continue-transfer supported.
-
-This isn't a proper sentence, so I don't think it should have a
-full-stop. And it shouldn't start with an uppercase letter, either.
-
->   * @has_per_pkt_xfer_complete_irq: Has enable/disable capability for tra=
-nsfer
-> - *		complete interrupt per packet basis.
-> + *		completion interrupt on per packet basis.
->   * @has_config_load_reg: Has the config load register to load the new
->   *		configuration.
->   * @clk_divisor_hs_mode: Clock divisor in HS mode.
-> @@ -184,7 +183,7 @@ enum msg_end_type {
->   * @has_mst_fifo: The I2C controller contains the new MST FIFO interface=
- that
->   *		provides additional features and allows for longer messages to
->   *		be transferred in one go.
-> - * @quirks: i2c adapter quirks for limiting write/read transfer size and=
- not
-> + * @quirks: I2C adapter quirks for limiting write/read transfer size and=
- not
->   *		allowing 0 length transfers.
->   * @supports_bus_clear: Bus Clear support to recover from bus hang during
->   *		SDA stuck low from device for some unknown reasons.
-> @@ -245,7 +244,7 @@ struct tegra_i2c_hw_feature {
->   * @msg_err: error code for completed message
->   * @msg_buf: pointer to current message data
->   * @msg_buf_remaining: size of unsent data in the message buffer
-> - * @msg_read: identifies read transfers
-> + * @msg_read: indicates read direction of a transfer
-
-Hm... "read" is the "direction". Perhaps "indicates the direction of a
-transfer"? Or perhaps "indicates that the transfer is a read access"?
-
-[...]
-> @@ -1797,9 +1804,8 @@ static int __maybe_unused tegra_i2c_runtime_resume(=
-struct device *dev)
+> @@ -455,6 +461,7 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i=
+2c_dev)
 > =20
->  	/*
->  	 * VI I2C device is attached to VE power domain which goes through
-> -	 * power ON/OFF during PM runtime resume/suspend. So, controller
-> -	 * should go through reset and need to re-initialize after power
-> -	 * domain ON.
-> +	 * power ON/OFF during of runtime PM resume/suspend, meaning that
+>  	i2c_dev->dma_buf =3D dma_buf;
+>  	i2c_dev->dma_phys =3D dma_phys;
+> +
+>  	return 0;
+> =20
+>  err_out:
+> @@ -557,6 +564,7 @@ static int tegra_i2c_flush_fifos(struct tegra_i2c_dev=
+ *i2c_dev)
+>  		dev_err(i2c_dev->dev, "failed to flush FIFO\n");
+>  		return err;
+>  	}
+> +
+>  	return 0;
+>  }
+> =20
+> @@ -650,8 +658,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_d=
+ev)
+>  	if (i2c_dev->hw->has_interface_timing_reg && tsu_thd)
+>  		i2c_writel(i2c_dev, tsu_thd, I2C_INTERFACE_TIMING_1);
+> =20
+> -	clk_multiplier  =3D tlow + thigh + 2;
+> -	clk_multiplier *=3D non_hs_mode + 1;
+> +	clk_multiplier =3D (tlow + thigh + 2) * (non_hs_mode + 1);
+> =20
+>  	err =3D clk_set_rate(i2c_dev->div_clk,
+>  			   i2c_dev->bus_clk_rate * clk_multiplier);
+> @@ -799,9 +806,9 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_de=
+v *i2c_dev)
+>  		 */
+>  		buf_remaining -=3D words_to_transfer * BYTES_PER_FIFO_WORD;
+>  		tx_fifo_avail -=3D words_to_transfer;
+> +
+>  		i2c_dev->msg_buf_remaining =3D buf_remaining;
+> -		i2c_dev->msg_buf =3D buf +
+> -			words_to_transfer * BYTES_PER_FIFO_WORD;
+> +		i2c_dev->msg_buf =3D buf + words_to_transfer * BYTES_PER_FIFO_WORD;
+> =20
+>  		i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
+> =20
+> @@ -914,12 +921,18 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev=
+_id)
+>  	goto done;
+>  err:
+>  	/* mask all interrupts on error */
+> -	tegra_i2c_mask_irq(i2c_dev, I2C_INT_NO_ACK | I2C_INT_ARBITRATION_LOST |
+> -		I2C_INT_PACKET_XFER_COMPLETE | I2C_INT_TX_FIFO_DATA_REQ |
+> -		I2C_INT_RX_FIFO_DATA_REQ);
+> +	tegra_i2c_mask_irq(i2c_dev,
+> +			   I2C_INT_NO_ACK |
+> +			   I2C_INT_ARBITRATION_LOST |
+> +			   I2C_INT_PACKET_XFER_COMPLETE |
+> +			   I2C_INT_TX_FIFO_DATA_REQ |
+> +			   I2C_INT_RX_FIFO_DATA_REQ);
 
-s/during of runtime PM/during runtime PM/
+This now seems inconsistent with the choice in other places in this
+driver where we wrap only when necessary. I think it would be more
+consistent to align the subsequent lines with the parameters on the
+first line. Or alternatively assign to a local variable and pass that to
+tegra_i2c_mask_irq().
 
-Thierry
+But the above is fine with me as well:
 
---YaSFhaLO3hpMipqe
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+--tKh+x8PS77aidDsl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jV0cACgkQ3SOs138+
-s6EtOw/+MERtG5U90+lebtyZO7QUSwH36CTFzt1LWUXuOk9tpU25qgv/9cVIv50z
-yF3ygzamdA8JqEEAic6DBsOd5cCMicw/wVBGXnzE+/UtFA5QW3JuH/l18RBDqNRZ
-wffHsV/qihWkeyvsG4pSM7Out3dzltwPhzv/D+zyE4jGs47TM1e4c5T1D+8KGnVa
-ZYICqUcm+UeomkaZlpDNdB6J1QGUwc4Sc8izbjIFmTou1aPFsNW3BJYtTLzIni95
-2/ZoAIFR0Nsn0l1ZostUABZUTVR6vPRyRT1c+0qJ75u1/ZaSvA0KfqBJwrfaCgag
-NBav0ILwy9EJkuKvYqkYm4Wq5s8ttSSArSqGAz8eiDBlFGFiGSKqiTr5ntqimmbH
-n8zHxCRmTaBYghyAZT3biB2gTlxSa7SuD5DR/yDDcD/2fYzOFxNWFdQ7rLygo5yP
-bYzlHy4x4p4UYfcVp6WjlTQlMghazm1mpZJYIYs0Lz77Defn9LA8ZQ9WKaxIeavR
-X7fs3Xu4LYbd61QRt1/j3hGLaShKzudJZiEHsdRCzYYIMo2u3ZgntKyatNbhmSiP
-y8nULwKZSoPpejRisrt7YWa/cYeVVLyYZzaX7S/cRnQcv/nAJPyhKC2cOJWJZUgH
-XO6QB4OxJRkdyaJtwudPVNm7hWfSB1i29PL5EjF15VedOhej+90=
-=IAbk
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jWCAACgkQ3SOs138+
+s6GCVA//W79A190+2W0uOxIWxiaJNbyANhmZG2Rr+NCnOzkfux/K9moch6/uLB/P
+THZASmuNRenBWhZ+/e8lRkZhXwpeUVSD8y8VxLGnVhxaOhKo0C1RdyY6l6gglLbD
+mF0B+glwz2NHyXdZhtGcAGswu/cW0glRzqtehiEqb9J98N9dgroiafzmYr/zc2Ip
+q4Zp0kAM/l+AIEFfUMmrTZ8nfX2vd5+rz8kYHwsKYjvL85yCAad4XV1vzrK47P6T
+Iwy4auCx6Rr2+Fh8TImMTU9LcfEOltTHT8/4jl4PLcV5QxA6qvriW1pymUqlyJLG
+EYxo4ezVN+Sf8CexT4rPM90AHtNKH5ToLHtcvgV6vT73OBqtSEA6/t48heGIQF24
+/i5Lo2kVgtmuYugd7F55Ws/xfGWZi31wHvE9c1NAvpU3FeaYFFoZydRALtcLNDRQ
+AOOpvdhjvbVJC6n7I2xJcJcUCPJhYVLdRUBKbdJlWYCgZSG5u4hVB/x41SLdI6rq
+sb1xRI23wBwx09WVmT0vBVFxx57Pz0AZsyfBt4ZVTwzt1rdY0OW/hvKpPSor2T7m
+Ow+VRunI7I3MBMOdtocY2H2948AqA6+iag9CEGeKgQo2iIiMGVslmojLX2fLD++i
+RtakINWoV7rxPjsWqVXt73OKRzMpDFoUtWHj9aWg/b9U2L899e8=
+=yIYF
 -----END PGP SIGNATURE-----
 
---YaSFhaLO3hpMipqe--
+--tKh+x8PS77aidDsl--
