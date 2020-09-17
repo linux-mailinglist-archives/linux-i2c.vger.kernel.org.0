@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FA526DBB2
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 14:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFAB26DBBC
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 14:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726997AbgIQMhK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 08:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S1727028AbgIQMjf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 08:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726861AbgIQMgJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 08:36:09 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89D9C061756;
-        Thu, 17 Sep 2020 05:36:03 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id m6so1911195wrn.0;
-        Thu, 17 Sep 2020 05:36:03 -0700 (PDT)
+        with ESMTP id S1727016AbgIQMjJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 08:39:09 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746E3C06174A;
+        Thu, 17 Sep 2020 05:38:43 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id x23so1810716wmi.3;
+        Thu, 17 Sep 2020 05:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=3yPXsrPhSCIZUrB7xZj1zBgenMOKixXRrzVZiQa+dO4=;
-        b=WVdnvsGCc2l4csA5idiz5iTwvWaHJ0eZNqDWhuAlryyyMn/OYAx9ewOZtWhBg0/cq+
-         GmcQCv+j3ijB+ifJVlcu03YzQXaKc6FUCCmwXxervJ/o6ae50PqjT81Q2RdrSnPLpV2y
-         hcTct0eLgR2WYcAEjgVY/53Q4mz2bo+7ZVoTYzMlMN2Y7y/p3VSmK/dXNf4Pq1xCqDAv
-         nj2uk7nbT37qqm9yi4BlpRr5NNG8VNkTRBmYDaxqD3sKId7FFWT2Yqz+7xelZeem44OJ
-         zsVd0319nO81CiNuoA7goFLnvxJCyG5xeVJHzqxzNDgGBtJGqwyac16GbylWkIPlUVVJ
-         +3yQ==
+        bh=FGjR+d+JXWgy8/GPd/QulX+q0ICOMnYHyNA3qxfsAgE=;
+        b=PAg8PwVfRywiYUjB1HLM0FGkbVI/EYy5tT19m/aDoOInLlAHR1cePQWz/iFGZ4WuFU
+         FXGmvhOgiVuOn7MsZPv/0EbWdTA70EAjeWA3lbOjVmNW5O7hratbPyZTsp93OqtkgQSO
+         ffRwmpfF55uS+9nokEz1iq9xrrfmvk8onFFpCnRskYWOy88OT12r4i+jP+uBiSOxO1NG
+         wcH4NuUM/WVN2r6MqbAaRN97veKinJEybzyM5CqaNdQwI4KiJxfaipPuNsoz0IYilBRn
+         jLAgeA5NS1tw8eDSws+G4IO139nCDoS5MWNMhUIYKKiA6kjoELpjhXl3Av8lliWmmmWZ
+         8xAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3yPXsrPhSCIZUrB7xZj1zBgenMOKixXRrzVZiQa+dO4=;
-        b=GV6L6HsUeiGzPqIma5dYia/eLiaU8ZXUGK2AIqPJ/GFyrlooU2WIS8UZvM2pBSZG1N
-         YFCCoVzgdPRg08n/5FwuaxnvGvb0UjzUveetLhoS1uPcG9H9mpc4k3iEBno8t6ipK4fp
-         6c5wfXKyFqnx15hBE1JWNhYQUXMg4Pw1TooM90RFhqasZuU1UMOC+sy2E2PGuNXG6eyX
-         /bZcDPaLlV706+uymRkxwk7HFKqCLRMo5H/JPo0gk7AzfG3YRUZaCSD0hNszKtnM4fs/
-         7MmLqxIgFWkM/cYDk86dGPEunNGz81wELvoRZNaxp0A9CEiz7JbnRKdSuHV0rjkK/m/e
-         9GEQ==
-X-Gm-Message-State: AOAM531hhS2cxllssTsJy/oBHU6BzF8Lbi2BLzn1zuzqiFe0Q1m1Jh/N
-        Iis4uiRumGWZsqSMmnZyr0o=
-X-Google-Smtp-Source: ABdhPJywcomF+a0+iY7h+fYLupgH6UzzAN511ZwJ4vwAxZaobLmDmAlvaCrBFWsPki3ptYHRx0ZmWg==
-X-Received: by 2002:a5d:69cd:: with SMTP id s13mr30907536wrw.379.1600346162543;
-        Thu, 17 Sep 2020 05:36:02 -0700 (PDT)
+        bh=FGjR+d+JXWgy8/GPd/QulX+q0ICOMnYHyNA3qxfsAgE=;
+        b=gEAL3l8p4McKbm72T4mgxejJEzQL/V/vlsfJ6Vdbrl7NeldS/1gloz4vB82erEbCL3
+         PiCwqjzfAaymZXu2uCTBFJQlcmPBoOMIcZ3FTqvvxiR1E1Y7B7b7d3gBVAQxVOJjimoK
+         jVx1un/KI3U1S8QqfINKkk0WVrboZWNT6bJgg5LU4Y9saEzcFpm9lWeoGz+mqeMydaGY
+         BYjj8d3HLx4ELkyCwWIEVEIsj7/kwk0N0HsSYRi8YpkFUdU1qLZ5iC8C4ixEf0arLuMR
+         G8+IaiPwMhusaEtLGx1icAoNb5+ghGqjffdWV2BreGcLxZivaHxov78Esf6x3Yrp5M+l
+         DRlA==
+X-Gm-Message-State: AOAM531YgfnQ0Zh1CB6kHLumpCeBaA7ha2b5dIsNbyV6GkZ8lS9H/BRZ
+        /P3LbwhmySyL8qaleBwCSgA=
+X-Google-Smtp-Source: ABdhPJwCWJ4lzAgCqQUZDD+gpVhPaqmbrn1bGTCOl455gjPiXzN26QwpwfIifwGui9GnO1JlvTUabQ==
+X-Received: by 2002:a7b:c359:: with SMTP id l25mr9571261wmj.187.1600346322154;
+        Thu, 17 Sep 2020 05:38:42 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id 9sm11063919wmf.7.2020.09.17.05.36.00
+        by smtp.gmail.com with ESMTPSA id y1sm10589324wma.36.2020.09.17.05.38.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 05:36:01 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 14:35:59 +0200
+        Thu, 17 Sep 2020 05:38:40 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 14:38:39 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,56 +57,59 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 34/34] i2c: tegra: Improve driver module description
-Message-ID: <20200917123559.GM3515672@ulmo>
+Subject: Re: [PATCH v7 15/34] i2c: tegra: Reorder location of functions in
+ the code
+Message-ID: <20200917123839.GP3515672@ulmo>
 References: <20200908224006.25636-1-digetx@gmail.com>
- <20200908224006.25636-35-digetx@gmail.com>
+ <20200908224006.25636-16-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="O7r0+uQg70mf5vhh"
+        protocol="application/pgp-signature"; boundary="ZgsfP6ejcHXtpYqZ"
 Content-Disposition: inline
-In-Reply-To: <20200908224006.25636-35-digetx@gmail.com>
+In-Reply-To: <20200908224006.25636-16-digetx@gmail.com>
 User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---O7r0+uQg70mf5vhh
+--ZgsfP6ejcHXtpYqZ
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 09, 2020 at 01:40:06AM +0300, Dmitry Osipenko wrote:
-> Use proper spelling of "NVIDIA" and don't designate driver as Tegra2-only
-> since newer SoC generations are supported as well.
+On Wed, Sep 09, 2020 at 01:39:47AM +0300, Dmitry Osipenko wrote:
+> Reorder location of functions in the code in order to have definition
+> of functions closer to the place of the invocation. This change makes
+> easier to navigate around the code and removes the need to have a
+> prototype for tegra_i2c_init().
 >=20
 > Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/i2c/busses/i2c-tegra.c | 486 ++++++++++++++++-----------------
+>  1 file changed, 242 insertions(+), 244 deletions(-)
 
 Acked-by: Thierry Reding <treding@nvidia.com>
 
---O7r0+uQg70mf5vhh
+--ZgsfP6ejcHXtpYqZ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jWC8ACgkQ3SOs138+
-s6FjmxAAuYZkqBGgrZXFeRxA8HF7im1K980s10TUvYL6syg0rZL2Ic/mAXhHw5ch
-X+Us9KVrUDv5lGK8h19oGCeZSKmort3NxPJpPff7r9AgJ2/IyWZmYKB6pNRUAGQy
-GkBfCMJBs1kvP3cY0+iaw2ePTlB3kNBpSogIHmC28zn4AMvMjeq8m5BKHeNJcywp
-Ub2DXJQvmic7e4SWFc0biJH0vzBl0r9Ujh1Ln3vzXQRpRbo1lm5bIOoNGsEMkkFk
-xvJ7hI5fT3Jk/+soM0/b9QYR6kQvUwbE057J1cfRug9hs+XVsMgZgVWX0h5Hv8fA
-FBe/VXDoAWFtcn4wJd6Ah+1nLvUVh/gvXUpHa4O9bDEAnIFrzpdVXs9Rm+JMTEEv
-96RMRgazS49xZuoVVEb+pesKYKvxkszs/eVss68M4DCdIWeJA+Qb2m0QWr4dGjXY
-W/GIAq4XIuf4EiyqaM4jy1VdVR+Cw0cVOoTc0bHRsGyopeu8SMR0F+K6luRT+KDf
-Yf2PwWij0g0xeGFPnb9Pn4fkr/O2M9ghkErCxGnv2uTk4BZwGX0DVDB420eQafgk
-gBn/tfx735dR4a1tFdwhL5vtWnxhU9eM6S5XqDMeRlGJWrYkxRuMk6jy9eIaRsko
-V7ARxD3vgxmgaHkZmOPQ2pNocH1T6MSSIAAm8hQUrmSp3UmKAdg=
-=i9VQ
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jWM8ACgkQ3SOs138+
+s6GnXg//XT5ks0Kikj1dVSBpnuRI+I2D72GCq0MdKa7mDu5vSFyIB1xIEn8+Yt1+
+SK+oTXOgq5Gzi2Fbu0wkPzptDoR+VzohHWVEcrLn4YYtJwEiwSjIsEC0++UeCSUi
+2Y1j1kFdBM4FUROKEwdZyAdKKm/kc6hb8WszGPojYZcLK8cdJd7OiN0+wpEGQzoc
+frezaUI+yMhaRNXf6oYq89lFApoeFc1WlGaYfaGdw8paIuOTFdjej5EgxW9NU9So
+L8nmQyGO/o3vM2ePu3BtkQfP5zgbNkX5wlKrlJAYSeD0VW4tlguY4Tdlq+LEaN/O
+n+a3iL+FGyTIG3Fy8uNHHb8OOiSdGMioNUfX87OocT+ScTf4duYMiObwqcU5AZov
+CsyNNVE7i0mAHBqYn7p8tTefzbudusDiWE0YOVUk7SwSYe0+brHwwzpxVXQZRKKa
+WLSut3uLfoq1hE9LSVJbLtBIMSf3l+yFD8VtDGg1chmYm0ZNFGTAHWbQfGOxha3z
+02ylX46rqJvwg+DSSO7NOLqxBI7iNZAhyiiJ0rqbzgiE89eBcoQP+w0/5ewdSzSI
+jZpCWKeBaGj/lEhKkGzQEVn+ohye6O59kzqgBYPjdfdBW1LUh3R+/d42WXv9LUEj
+KccdZUh+G9ZWWOxEzZP6FAxPgSBwy/0HZ9D8Nf0Y5gCi5gvuxLs=
+=1YhH
 -----END PGP SIGNATURE-----
 
---O7r0+uQg70mf5vhh--
+--ZgsfP6ejcHXtpYqZ--
