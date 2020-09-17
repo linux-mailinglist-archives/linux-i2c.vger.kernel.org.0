@@ -2,85 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFBF26E59D
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 21:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E07E26E61D
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 22:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727301AbgIQPCi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 11:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727895AbgIQPCN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 11:02:13 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A03C06174A;
-        Thu, 17 Sep 2020 08:02:11 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id u8so2551021lff.1;
-        Thu, 17 Sep 2020 08:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Zf8LlMvARovBrXzEO3HGREgydqWfx6EFuxhl0p18t9M=;
-        b=bWfWENMbnY7oAESDMK/5HIeZH+4SMkw+cKWYVu872dDh4WRDPkYSDnqAyWS7XrJI5S
-         43fOelLkJDcI5oNvN9q8MnYlM7yJqVi3ISe+kaWiiOpPFieUTHZaBlXTi3Xh9ewo0umk
-         4NnNZQagOi+NuSXn16v9KGHaool4x4o9sHzZUiwepA8qqzm47X8SfgwGLJSJTq4PsO/0
-         3cLRvEj915Kdgpb0k7lNQGSSsnn+xIyOSWNxpL1UJ8y4GwkLDrgNOq63ib/xVINrXClY
-         wuWks3dHyBDd/DYmQcTcEoDe3jJllUClN77IKjHbSAJhH9wtXaHQSpMGjAg10NdzVwhD
-         lLrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Zf8LlMvARovBrXzEO3HGREgydqWfx6EFuxhl0p18t9M=;
-        b=GOTwF2IvHxHj5S1bICelD+YUWWGCxLyzsH73BVhmHUSjWejrlPu3OoSW92DwKQxi4A
-         ZNmCLDJO8Bgjor04AmiTry5GaxAgszCM+6014IRQmN1iyxliLcJY3C6xOtHovt/yaqw5
-         /+GgOHg9VdjFP3W9v6HzwQ8Lf4tn641hClYSl0L1XckbO1dOHhhJK4+I4KgrcL4DoyUv
-         W3Dbzn3mifDSDeDTbE4h/qsceQ5AGgNbkdbRVOiaNrozUNjkuo+N5Uq86hsA7VkisnBN
-         /f9DOVLk8sBOeBQ1uNkTWKlhCCCZtWfHkwdmLbOybHtUMSF1r36QmwiRz6X0DDX+DGz8
-         eiYA==
-X-Gm-Message-State: AOAM531ZodsbWzAO0aw+DxOJ1yqsdqalcZsd4FhPXES4GmX5GJzp+imJ
-        9owqSDrR4aWEuhkwSrGyPw0MP/w5edE=
-X-Google-Smtp-Source: ABdhPJzSWl0onN9HET3Zo/m17BMIUfZvlq1W1X+EU44Et8YZbkGoe6j3GWcWK5tpHDOtPnWtZpIR+w==
-X-Received: by 2002:ac2:419a:: with SMTP id z26mr8915043lfh.537.1600354929588;
-        Thu, 17 Sep 2020 08:02:09 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id f2sm5279330lfm.208.2020.09.17.08.02.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2020 08:02:09 -0700 (PDT)
-Subject: Re: [PATCH v7 32/34] i2c: tegra: Clean up and improve comments
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200908224006.25636-1-digetx@gmail.com>
- <20200908224006.25636-33-digetx@gmail.com> <20200917123208.GK3515672@ulmo>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <11a29706-0870-792e-d5d5-7c0d1f402281@gmail.com>
-Date:   Thu, 17 Sep 2020 18:02:08 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726544AbgIQUFe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 16:05:34 -0400
+Received: from mga06.intel.com ([134.134.136.31]:35244 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726438AbgIQUFc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 17 Sep 2020 16:05:32 -0400
+IronPort-SDR: 1EqDDV9SWySMMXQjgrHW1/Tq43ZTXe22s50bgNybd15hjg4bWdlaVn0ZUNNKZFGLILKPh0ZVw+
+ 9up+rZjLo4DQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="221336979"
+X-IronPort-AV: E=Sophos;i="5.77,271,1596524400"; 
+   d="scan'208";a="221336979"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 12:40:16 -0700
+IronPort-SDR: OJtaUmUU2VRk9KtKnU2JOdZ0Wx6lNOu+0+CFBjlBeB4odozE5Gxp9wTpGmmaUJi2k6Nfsj2iiR
+ 1ryN5FpIrCvQ==
+X-IronPort-AV: E=Sophos;i="5.77,271,1596524400"; 
+   d="scan'208";a="483882946"
+Received: from jekeller-mobl1.amr.corp.intel.com (HELO [10.212.151.155]) ([10.212.151.155])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 12:40:13 -0700
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+To:     Keith Busch <kbusch@kernel.org>, Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Kees Cook <kees.cook@canonical.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
+        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        storagedev@microchip.com, sparclinux@vger.kernel.org,
+        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+        alsa-devel <alsa-devel@alsa-project.org>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+ <20200909205558.GA3384631@dhcp-10-100-145-180.wdl.wdc.com>
+From:   Jacob Keller <jacob.e.keller@intel.com>
+Organization: Intel Corporation
+Message-ID: <321069c8-a4c1-56ff-49fb-4c2bce1e6352@intel.com>
+Date:   Thu, 17 Sep 2020 12:40:13 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200917123208.GK3515672@ulmo>
+In-Reply-To: <20200909205558.GA3384631@dhcp-10-100-145-180.wdl.wdc.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-17.09.2020 15:32, Thierry Reding пишет:
-...
->>  /**
->> - * struct tegra_i2c_hw_feature : Different HW support on Tegra
->> - * @has_continue_xfer_support: Continue transfer supports.
->> + * struct tegra_i2c_hw_feature : per hardware generation features
-> 
-> I think that space before ':' can go away. Although that's preexisting,
-> so could also be a separate patch, I guess.
 
-I haven't even noticed that!
+
+On 9/9/2020 1:55 PM, Keith Busch wrote:
+> On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
+>> diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
+>> index eea0f453cfb6..8aac5bc60f4c 100644
+>> --- a/crypto/tcrypt.c
+>> +++ b/crypto/tcrypt.c
+>> @@ -2464,7 +2464,7 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
+>>  		test_hash_speed("streebog512", sec,
+>>  				generic_hash_speed_template);
+>>  		if (mode > 300 && mode < 400) break;
+>> -		fallthrough;
+>> +		break;
+>>  	case 399:
+>>  		break;
+> 
+> Just imho, this change makes the preceding 'if' look even more
+> pointless. Maybe the fallthrough was a deliberate choice? Not that my
+> opinion matters here as I don't know this module, but it looked a bit
+> odd to me.
+> 
+
+Yea this does look very odd..
