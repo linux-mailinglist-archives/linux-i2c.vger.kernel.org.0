@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1ED26DBC8
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 14:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110FC26DBD2
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 14:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbgIQMlp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 08:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
+        id S1727036AbgIQMnD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 08:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726766AbgIQMl3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 08:41:29 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA58DC06174A;
-        Thu, 17 Sep 2020 05:41:24 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id t10so1922130wrv.1;
-        Thu, 17 Sep 2020 05:41:24 -0700 (PDT)
+        with ESMTP id S1727018AbgIQMmX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 08:42:23 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AADC06174A;
+        Thu, 17 Sep 2020 05:42:12 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id l9so1902399wme.3;
+        Thu, 17 Sep 2020 05:42:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=NBHR/fgIoFwmMy9FagkEI3Hp1HWTM/rAeZswTOULEWM=;
-        b=oiHEEW9KiIBL2DtNhJzo1QxpIOhm/e+pIPpsmvTwBi0d839K5GCBj6IRZCNCfUcYun
-         l34MEY63AWgKua4s3sM6I+oOsH5k4SKzzqlpFro95p8kdcxVZxNfEdqwHCEBcNZE2p4G
-         OBvUvyD0P8qxXd+7y3EYGeM54tztI43PaLRlvQQ3o1MdDmNSQ8YaS8w50MHUyNQr9ToJ
-         ntCzZQlH+YfVIGc16KRfHP6lft+7ZzVlyXMgbu6NkTHiln9SqwU7v6TBr4Qw16ROBisn
-         U7NgYoop96e/xVbsV0d/jAViqsAOr54TNE0z5pj908JLONEpFdApr22LpyurOjikRp5g
-         9bkg==
+        bh=h23f+0CVelMxCyz72LzrDG5uYQIOPlWIq9Em2KmjoFU=;
+        b=puBGiThhSXGDmlOmHslnD6UOi+uzdAO5gWZ4zZSG/wo5YK8z4KhmZEyEryN6u+h6Qk
+         e8nyuPh0Uv2LZpk19V2FNhc08ALl6Okup17b4OWWp96FGs8a5SnUJocoqGyfZcQqbt/c
+         oZNu/2YInoVo3joLy0wlGNWgArxZJuVvfYhz2uY9EobxB5qkWmdwKJot16auib8UyHH1
+         8A07gGcVwQcuS+6GJ9TqmgBVxmG9f+IXMUOimyYbcg/pR0IsWzif5oq3Gck9Wk4T92k/
+         Wge2F8ml+8FtIvNDhZhB2XFV/pC+ZQEXPa9+ATl25x3MEKhcn+E2ciwV/1d2Yq5AkFTR
+         WRlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NBHR/fgIoFwmMy9FagkEI3Hp1HWTM/rAeZswTOULEWM=;
-        b=Kn4JzFhU7aI2LSHxPIzPjtFCdnmmjlCOWiv2Hr7u2xV3o1xLawqVghh7OGfXdyfpfQ
-         CODp5XuTHpGYto07ozbiDZCwr5lfHF52akmQVBXzgC3oNcOJmP6IGL2s6RvSLeWKBN1M
-         4eTvklSrL5oEHC+k6dXX2t4vCgyidWMojAjVbfjftIth8x6yydJ67NHBefvLKsyEOcUG
-         PyX5ap7Wj2XCHjFtOXc7vRD52Dns3W9u44iy3vkteTWoWySRn6QnL9vtNxxlmZcW4vUU
-         m3XFgX9+vJOCYMGpIbXsPqQYk1IuaZFsgsdVH1v/1yUK/p3/3if2Qyd0+OjVALLohiWh
-         00aQ==
-X-Gm-Message-State: AOAM532Et2h5ub/K+Kn6DKNE93evZYxvvTDBLs0nDQh5FVr/DNLY/7F8
-        J2KlyIDboIYbdO7X72fnbq0=
-X-Google-Smtp-Source: ABdhPJyN19L+ZxIYbdbk9hfFceuN6mCl4fWAlDvGP7X8RBovx12aRuredCaarWMW85c5lu/4CIwAvA==
-X-Received: by 2002:a5d:660f:: with SMTP id n15mr34461459wru.103.1600346483526;
-        Thu, 17 Sep 2020 05:41:23 -0700 (PDT)
+        bh=h23f+0CVelMxCyz72LzrDG5uYQIOPlWIq9Em2KmjoFU=;
+        b=dhxjKuDPNOHd2HW1kBTFXQ4VPmv8sBaUWqKSvk2TTG4GqCzJFqPMtFDDPtJyiNUn/6
+         2EYVluHiO3oh6CIV6vEtJkVYAWLSazUySRWC8X+/t51p7eGa+b8W1vAN26TDZD7E4FVc
+         9p0g2pnCmGtyKwy26MfLWqh/O9TIqX3dJScgx2tmkrsFDUHf9KAJD8SmrjwFTMNOMZKe
+         p5ASd/muDlbFQc3RCgbxuDVTrB7FqZnpE+0gthc8JVAWcGpSkuyqGyOjusG670WA8Rls
+         lEM/yJEbnBj+fvs7fMzcjGrF/fSELs77NNXKG46733vJdt62gAoR1yaLddRiesb508bE
+         I2cw==
+X-Gm-Message-State: AOAM532PeOqJQo0kT1nq56NQRFYvtTZfif4yxlEAC9PL1mCDUZCwTkXY
+        O/HlVd5OrlBWa2d12Cgsqs0=
+X-Google-Smtp-Source: ABdhPJysq9ETrGqay5QFOErstjXAvBv2c8Hj0PEQi4EqvLjTQzhwYb4hbDm1kB8eyiwSit8VhFUY1w==
+X-Received: by 2002:a7b:c397:: with SMTP id s23mr10116069wmj.174.1600346531347;
+        Thu, 17 Sep 2020 05:42:11 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id o15sm10476800wmh.29.2020.09.17.05.41.21
+        by smtp.gmail.com with ESMTPSA id w81sm11157547wmg.47.2020.09.17.05.42.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 05:41:21 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 14:41:20 +0200
+        Thu, 17 Sep 2020 05:42:10 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 14:42:08 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,78 +57,56 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 18/34] i2c: tegra: Remove likely/unlikely from the code
-Message-ID: <20200917124120.GS3515672@ulmo>
+Subject: Re: [PATCH v7 19/34] i2c: tegra: Remove redundant check in
+ tegra_i2c_issue_bus_clear()
+Message-ID: <20200917124208.GT3515672@ulmo>
 References: <20200908224006.25636-1-digetx@gmail.com>
- <20200908224006.25636-19-digetx@gmail.com>
+ <20200908224006.25636-20-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3xvobRwI6W2FSfVC"
+        protocol="application/pgp-signature"; boundary="hn090KliNom6wizA"
 Content-Disposition: inline
-In-Reply-To: <20200908224006.25636-19-digetx@gmail.com>
+In-Reply-To: <20200908224006.25636-20-digetx@gmail.com>
 User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---3xvobRwI6W2FSfVC
-Content-Type: text/plain; charset=utf-8
+--hn090KliNom6wizA
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 09, 2020 at 01:39:50AM +0300, Dmitry Osipenko wrote:
-> The likely/unlikely annotations should be used only in a hot paths of
-> performance-critical code. The I2C driver doesn't have such paths, and
-> thus, there is no justification for usage of likely/unlikely annotations
-> in the code. Hence remove them.
+On Wed, Sep 09, 2020 at 01:39:51AM +0300, Dmitry Osipenko wrote:
+> The tegra_i2c_wait_for_config_load() checks for 'has_config_load_reg' by
+> itself, hence there is no need to duplicate the check.
 >=20
-> Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegr=
-a.c
-> index ab83d1de6c94..fd0d51ec447f 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -852,7 +852,7 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_i=
-d)
->  		goto err;
->  	}
-> =20
-> -	if (unlikely(status & status_err)) {
-> +	if (status & status_err) {
->  		tegra_i2c_disable_packet_mode(i2c_dev);
->  		if (status & I2C_INT_NO_ACK)
->  			i2c_dev->msg_err |=3D I2C_ERR_NO_ACK;
-
-At least this one is an interrupt handler, so it's kind of performance
-critical. That said, it probably doesn't make a huge difference, so I
-don't have any objection:
+>  drivers/i2c/busses/i2c-tegra.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 
 Acked-by: Thierry Reding <treding@nvidia.com>
 
---3xvobRwI6W2FSfVC
+--hn090KliNom6wizA
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jWXAACgkQ3SOs138+
-s6EN1BAAl+GC/O0i3TYCRAwVs2JSksmmfZw7tOyIS66DyRolVplzWcmmaYc3SFFY
-emR7t+vbcueRN89jX0kR05LXAupTtdIcanFTdr6bvMnDwccLfnK1bXFF9dW/AwOl
-IbUdZrgZaYHBWHB9VvesJX3SONsrP9RjQ4ftJ+FIkd7c20VKkNnTsLbPpr/Qed6L
-+gsyVuJPOtcWeBn/jcXCuSXVKkXSq+RMAiJlxmwXxVcMm50KtlEnJixWpCAke2kl
-3zT3YPn17IOZYY3zxrnH1lVHVvgFXKDN6ild9qGpqRlvISp+KtKppa52yaNbJMam
-FpUst5MtqP+qWl8D2MmmmIk51KzmGelZghvQS0KMvi4Pa0WrUtlFaRoXh57oKdBH
-Xal3cUunpNMJzIT879UH9r+X13ahz8wbhYxMI7Rg5vbZd8lOdN1a8oPXJLexctLu
-YjmmCjCGAN5dCN0NEVNfGCwph+smKN+Y21OTPIcCkfp549EgMBP0doc6dCHTmUBc
-02hd5EasRwtf2ik3/sNUWTkDzoZeWyRqNDwn1Yg7jEfC4Civ12f/2JahjQRwrMPi
-HZRa0vgy7FDzr97L+4tRL+Qp9nZZlAUkgQeTNt+OcJ4R5g+MDjxvW8DWNHF62UOT
-HDCaFbwOchkrWRSExwvETNXoaLFRbUF4TS/ZSk1CNIKrLCK1nR8=
-=jcaP
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9jWaAACgkQ3SOs138+
+s6HRYxAAlUDHxsJ3l8Wd8B6zngzHT7qiHNVLLx3MuUnWj9wmR5tKPlJJYiMaGrLb
+S/HokvVegqCxfCpUoxmkIpcgthrJhcaSwoAOz0c3Zy/LmzOvIQwI/Kln8iYC52VK
+KR6KR9ruKB8z01g4k+DJ+OZqQyiZH5ddMbQ/0OBJR8UcnpIYgGoa7gGqJRTpjnqO
+dv4dUf6PlX4t8bpovE+KB9P2AAPcX/JrqSMkody9GagEQK5D+JdqQ4wbTic61pb4
+frJ7mIMpm5J2Be/mrsUTfTYWde4DpaI9ZXawm6fWZzPRWnkuXx603qFf8xungjPR
+jWy97LiiD5lx/CrfPpRNO3KY6CTjurGAjF5P7IgjlbEDEVm7BhPaSbcl1gG2rh1y
+2b2DEfB6H1fNSJJZV8CiMFLf3Z+jdzoPKAb2JlivaguoFGHIeyVD8bmgVIIIosVu
+sb8czk7NIJbHltMGM0HOOX/aPsHWJqF2NuzhIEybp8Zj3cjSb31KYjWESm6glmsf
+W2/0sPibO9yXXZ0ySxJWX/2TbdCuJaceSQBBzl4l047kRAsUqshZwWxPrnSXcstD
+vR0KCAACRUfPSayKub6hHJ98o6lkKqfFXBH737q5vCa8Qvof8RH3xx2Y9XwzBnua
+J7a1uvwoxnQ1snixx50wixFghmrBXpvKOKZ4jGyu42IGb3+cJvY=
+=UcSp
 -----END PGP SIGNATURE-----
 
---3xvobRwI6W2FSfVC--
+--hn090KliNom6wizA--
