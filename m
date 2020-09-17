@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F38726D2FB
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 07:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F066C26D302
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 07:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726198AbgIQFXG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S1726192AbgIQFXG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Thu, 17 Sep 2020 01:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726180AbgIQFXE (ORCPT
+        with ESMTP id S1726185AbgIQFXE (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 01:23:04 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5817FC061756;
-        Wed, 16 Sep 2020 22:23:03 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id z19so475171pfn.8;
-        Wed, 16 Sep 2020 22:23:03 -0700 (PDT)
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F895C06174A;
+        Wed, 16 Sep 2020 22:23:04 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id l71so680294pge.4;
+        Wed, 16 Sep 2020 22:23:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WDZd8tsRsFWv5ihYfraNwY2+UbRPuk2ibJ4Vl5wi/pY=;
-        b=teYJl6x5RIDP4Alc+XCeMh7yCiyF2cARRceeq+i17641JSN7U0OU5n93u8IZZtVpJi
-         V2T8CjpZl28JlqCE/md0a60Fc4F1MUqdbbOd8RyT9Fjb3iInQaQ+nP2PGD3DFov4eQgm
-         szNGCpEZP9y2rz/kQYi4+zO8MtYmsa46IejNRPhHEonc5QafOS7lMBNXddTMN4XuG3TG
-         DicSWOAGXyj26lPRmeeWAdwUK7ju/GZIBSVnl4pqIK2Uy/Q8mJnjo+EFWeMSCgEVVoVt
-         M8O44yIcPN4YWe+Ag1eNNQOepmbttBhMPdFOm0SKY4syLzTEisqvHcHqWo+Komajk2cP
-         dEog==
+        bh=m1D0o1H2R+Sauu9vaW7hv3HhUwelHNtIl/gUcqmOKIE=;
+        b=DOZ3yizRJb0zGyGIthPbPkYOMjI9b5lcmvm/pATc/12B+ttb/W764so3l1jQN5DGrZ
+         1gyikWe/cuL52lEpzHerQ6maxn0TE2PO1y4AqwQD/3rydpYkMWzKEU0lApTIK40nCs1q
+         r8fsBTXK9vtLLV/jv9QDO2g5juxwOb3QJcAgNnIL6HMnZHmxg4Snoz6BYhwcHRUAdoE0
+         xREILatfI0mUW0mZISLsHTmwHibgBaEbnlC21zUsReDh/jhQUSsTm6p5WPZGJrjDEOqG
+         9QaZ3GmGtBVRNUSBp0gbfxqkx5vQkwY2qS8FbG+lJDPPFXQIu4bxwSJimVusE05PSoJS
+         nF1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=WDZd8tsRsFWv5ihYfraNwY2+UbRPuk2ibJ4Vl5wi/pY=;
-        b=gCxElnuDQ2Ua8QBQQ0xMi7w+vBMFuvWAbdZN/0+oHLNyCzUwIWBiNnmOPuIp7IbbGg
-         kI2aM3kU+5TVCAtQzC05Wi92e5fZ86nOLVxgGn7ckyaSn9+oQ7ePcd6mG/BrkzizfFdc
-         kc9rbNEZLtY4X4FyJNRNKZGPQAD69jAmdBUSGIiwmSbesPGKu0wXSJFzyaf/KYkrwG1z
-         pBPGdG5qd4dKGSZCBgOBxIuRmuqgAFFTFmHkWMeRfs/qJeQItWUkfizF05WiWooXUDt8
-         GR0AxXyipknN4tH1053bDFzlh7ge1fcegV7m8n6ZAyT+71yjEW8XFAMXfc39ozyOA5gw
-         tFzw==
-X-Gm-Message-State: AOAM530fJiuwp/EZx9CrfweUPSUTSXq3pUSquXyW2D1gwWVa7wiZIXZp
-        s4tw5TECTAI6N7gjVjvJ8v03tSwtxT6xsg==
-X-Google-Smtp-Source: ABdhPJy2yKyMB98G1d9fOVe9cyIU4MU6rtz+y+tWiJJCWV9cCeeHDV1+2ZamQ2v/ihfI1xB0w2VS9A==
-X-Received: by 2002:a63:516:: with SMTP id 22mr21793976pgf.316.1600320182593;
-        Wed, 16 Sep 2020 22:23:02 -0700 (PDT)
+        bh=m1D0o1H2R+Sauu9vaW7hv3HhUwelHNtIl/gUcqmOKIE=;
+        b=cTCLQx3vAIUSSfsgomWJqTG64MkuNqGwAdhaPHwZQTmLjy1p0o2DOOCy9ow3RLP4qN
+         l/SBG7Xei5JJakewv77YH874ex4528OFgAITPVyKDpWus5e8Pk+T3UyiyoMZs5bIkjOk
+         zGSfDFV0QSxtQJrPFE8eNgVuK6qID+LXgJ/8EFhdCofRFsAxytYJAJUcTNaNrd8st1zm
+         WqDC5ql6BCRNqB7W7lyTx06TmS8zG+fz5vbb2L9pVMls8TBStQhrRusgp8F0iox2b1yA
+         rQugE84dCGL6gVdyZj5Qskh+yxfo7/D64w8bjUSG8kcXxyFBG9PdzBIZaFpOQOxy3jkV
+         wIyA==
+X-Gm-Message-State: AOAM532dTZWeVmseA8V8Et2yXmkaztbtvkQ1NvzHehvmLQxu4OIYXrM5
+        r6IuMs4eObTTVJLp54QgxsFRHTj3pw394w==
+X-Google-Smtp-Source: ABdhPJx+jY1AqwMdKGjuu5DjZw2rWg53c7FLzz03VBoukncRje4/3N6NDoIEHMaM8Fwcy9SjZLvP6g==
+X-Received: by 2002:a62:828b:0:b029:142:2501:35d6 with SMTP id w133-20020a62828b0000b0290142250135d6mr9861750pfd.54.1600320183895;
+        Wed, 16 Sep 2020 22:23:03 -0700 (PDT)
 Received: from sultan-book.localdomain ([104.200.129.212])
-        by smtp.gmail.com with ESMTPSA id i62sm18705619pfe.140.2020.09.16.22.23.01
+        by smtp.gmail.com with ESMTPSA id i62sm18705619pfe.140.2020.09.16.22.23.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2020 22:23:02 -0700 (PDT)
+        Wed, 16 Sep 2020 22:23:03 -0700 (PDT)
 From:   Sultan Alsawaf <sultan@kerneltoast.com>
 X-Google-Original-From: Sultan Alsawaf
 To:     linux-i2c@vger.kernel.org
@@ -56,10 +56,11 @@ Cc:     jikos@kernel.org, aaron.ma@canonical.com, admin@kryma.net,
         jarkko.nikula@linux.intel.com, kai.heng.feng@canonical.com,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         mika.westerberg@linux.intel.com, vicamo.yang@canonical.com,
-        wsa@kernel.org, Sultan Alsawaf <sultan@kerneltoast.com>
-Subject: [PATCH v2 3/4] i2c: designware: Allow SMBus block reads up to 255 bytes in length
-Date:   Wed, 16 Sep 2020 22:22:55 -0700
-Message-Id: <20200917052256.5770-4-sultan@kerneltoast.com>
+        wsa@kernel.org, Sultan Alsawaf <sultan@kerneltoast.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH v2 4/4] HID: i2c-hid: Use block reads when possible to save power
+Date:   Wed, 16 Sep 2020 22:22:56 -0700
+Message-Id: <20200917052256.5770-5-sultan@kerneltoast.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200917052256.5770-1-sultan@kerneltoast.com>
 References: <20200917052256.5770-1-sultan@kerneltoast.com>
@@ -71,28 +72,47 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Sultan Alsawaf <sultan@kerneltoast.com>
 
-According to the SMBus 3.0 protocol specification, block transfer limits
-were increased from 32 bytes to 255 bytes. Remove the obsolete 32-byte
-limitation.
+We have no way of knowing how large an incoming payload is going to be,
+so the only strategy available up until now has been to always retrieve
+the maximum possible report length over i2c, which can be quite
+inefficient. For devices that send reports in block read format, the i2c
+controller driver can read the payload length on the fly and terminate
+the i2c transaction early, resulting in considerable power savings.
 
+On a Dell Precision 15 5540 with an i9-9880H, resting my finger on the
+touchpad causes psys power readings to go up by about 4W and hover there
+until I remove my finger. With this patch, my psys readings go from 4.7W
+down to 3.1W, yielding about 1.6W in savings. This is because my
+touchpad's max report length is 60 bytes, but all of the regular reports
+it sends for touch events are only 32 bytes, so the i2c transfer is
+roughly halved for the common case.
+
+Acked-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
 ---
- drivers/i2c/busses/i2c-designware-master.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/i2c-hid/i2c-hid-core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index 22f28516bca7..5bd64bd17d94 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -433,7 +433,7 @@ i2c_dw_read(struct dw_i2c_dev *dev)
- 			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
- 			if (flags & I2C_M_RECV_LEN) {
- 				/* Ensure length byte is a valid value */
--				if (tmp <= I2C_SMBUS_BLOCK_MAX && tmp > 0)
-+				if (tmp > 0)
- 					len = i2c_dw_recv_len(dev, tmp);
- 				else
- 					len = i2c_dw_recv_len(dev, len);
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+index dbd04492825d..66950f472122 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -476,11 +476,14 @@ static void i2c_hid_get_input(struct i2c_hid *ihid)
+ 	int ret;
+ 	u32 ret_size;
+ 	int size = le16_to_cpu(ihid->hdesc.wMaxInputLength);
++	u16 flags;
+ 
+ 	if (size > ihid->bufsize)
+ 		size = ihid->bufsize;
+ 
+-	ret = i2c_master_recv(ihid->client, ihid->inbuf, size);
++	/* Try to do a block read if the size fits in one byte */
++	flags = size > 255 ? I2C_M_RD : I2C_M_RD | I2C_M_RECV_LEN;
++	ret = i2c_transfer_buffer_flags(ihid->client, ihid->inbuf, size, flags);
+ 	if (ret != size) {
+ 		if (ret < 0)
+ 			return;
 -- 
 2.28.0
 
