@@ -2,150 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C070226DE9D
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 16:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA6626DEC5
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Sep 2020 16:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727326AbgIQOpd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 10:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727656AbgIQOdA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 10:33:00 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2C7C061356;
-        Thu, 17 Sep 2020 07:02:46 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id j34so1415578pgi.7;
-        Thu, 17 Sep 2020 07:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4Gu/kgZ0T3sU+bTVTX8rTeW8dj7wNAAwtv+uUkf6kT8=;
-        b=W8C8nlyDEfLcq8xNbPQymtNUOjR2CD9bMw+KXSxoMB5NpZZhP6vwLJixC1VAm2dV1v
-         L1bDc9dJOQGh3KEttZgduxUfUHwgxNPRqAhrEmAaHi5fiDf+JMOjK8aIQDp/EdLhqljF
-         wbfkurtCOLD/G/Pc2NruSFfGFjwFN78wnrQ/MPvn0TCiNJI5hzI4B1R4N4w2NHiTHJOA
-         yV9xBeK0QNbS9TVcx6fpnLq/AlbGjWb7af4irM4bY1MxbdzBFPEtpWU1wutLg1xPu/pB
-         q4DIsZiwQIiwSRF5mMz9GGuxxMkphfuRl5n1hXpV868O+xj1kAqxNehTFobUit/mJ9O1
-         KALA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4Gu/kgZ0T3sU+bTVTX8rTeW8dj7wNAAwtv+uUkf6kT8=;
-        b=ii8vqtA9eYPfs1V6h5i4DjP0fCzYVxKJ44E/vqMQpZ6tXfVd/A6qPQt7657/G2qdXv
-         hxk1RSXeO30iB8Rh8O3i5F5XRJyvJahpovXL2+Z1ngMbcGWWPqgu/g2rNYk50gPdnBsE
-         EAm3jBclLlGAPYHGpLNRzzOTvQqdG9zTVkpEYdgd6rO/1r3dARrM2sWbid5l7o7TYfIN
-         +JpXrherWvqas8Z1EpUd4Qigebw/6pwSSqDWowCDrgpjwLxbA+JlnWXelkqcZjC77Vhg
-         BYoH+3/7XT4ieM6uMhJmqYoimsD/QwrXAVrrGWDNBPlf1nhbTpjVO5ZR81Reedwx58jC
-         NgRw==
-X-Gm-Message-State: AOAM530EjWssT8bN6lOL/Oa+Nkr/AOAC12/CiW/GlTSAZt59/D7Lh43g
-        zz4l8V28N0RU3tk52bY4zBMVqdU8lm8xYFPJtkY=
-X-Google-Smtp-Source: ABdhPJzL0WbFlMWT+trYKVIQchuNiS5/67KAavRNKcvBaRPIE4bxwTY61woA83l+unmcuVq6USWtd7OWlTJ0nqv1770=
-X-Received: by 2002:a63:c543:: with SMTP id g3mr23083908pgd.203.1600351365583;
- Thu, 17 Sep 2020 07:02:45 -0700 (PDT)
+        id S1727303AbgIQOwr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 17 Sep 2020 10:52:47 -0400
+Received: from mailout09.rmx.de ([94.199.88.74]:42461 "EHLO mailout09.rmx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727387AbgIQOv2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 17 Sep 2020 10:51:28 -0400
+Received: from kdin01.retarus.com (kdin01.dmz1.retloc [172.19.17.48])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailout09.rmx.de (Postfix) with ESMTPS id 4Bsf9R3fS6zbhsy;
+        Thu, 17 Sep 2020 16:14:35 +0200 (CEST)
+Received: from mta.arri.de (unknown [217.111.95.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by kdin01.retarus.com (Postfix) with ESMTPS id 4Bsf925k8gz2xcC;
+        Thu, 17 Sep 2020 16:14:14 +0200 (CEST)
+Received: from n95hx1g2.localnet (192.168.54.36) by mta.arri.de
+ (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Thu, 17 Sep
+ 2020 16:13:51 +0200
+From:   Christian Eggers <ceggers@arri.de>
+To:     Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH 1/3] i2c: imx: Fix reset of I2SR_IAL flag
+Date:   Thu, 17 Sep 2020 16:13:50 +0200
+Message-ID: <16013235.tl8pWZfNaG@n95hx1g2>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+In-Reply-To: <20200917140235.igfq2hq63f4qqhrr@pengutronix.de>
+References: <20200917122029.11121-1-ceggers@arri.de> <20200917122029.11121-2-ceggers@arri.de> <20200917140235.igfq2hq63f4qqhrr@pengutronix.de>
 MIME-Version: 1.0
-References: <20200917052256.5770-1-sultan@kerneltoast.com>
-In-Reply-To: <20200917052256.5770-1-sultan@kerneltoast.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 17 Sep 2020 17:02:27 +0300
-Message-ID: <CAHp75Vea8=WchmWVOGndgarjehv+sYQh7CNUrQYqmG8hGJCzHA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] i2c-hid: Save power by reducing i2c xfers with
- block reads
-To:     Sultan Alsawaf <sultan@kerneltoast.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Aaron Ma <aaron.ma@canonical.com>,
-        Pavel Balan <admin@kryma.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        HungNien Chen <hn.chen@weidahitech.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-input <linux-input@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        You-Sheng Yang <vicamo.yang@canonical.com>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Originating-IP: [192.168.54.36]
+X-RMX-ID: 20200917-161416-4Bsf925k8gz2xcC-0@kdin01
+X-RMX-SOURCE: 217.111.95.66
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 8:26 AM Sultan Alsawaf <sultan@kerneltoast.com> wro=
-te:
->
-> From: Sultan Alsawaf <sultan@kerneltoast.com>
->
-> This is a fixed resubmission of "[PATCH 0/2] i2c-hid: Save power by reduc=
-ing i2c
-> xfers with block reads". That original patchset did not have enough fixes=
- for
-> the designware i2c adapter's I2C_M_RECV_LEN feature, which is documented
-> extensively in the original email thread.
->
-> Here is the original cover letter, which still applies:
-> "I noticed on my Dell Precision 15 5540 with an i9-9880H that simply putt=
-ing my
-> finger on the touchpad would increase my system's power consumption by 4W=
-, which
-> is quite considerable. Resting my finger on the touchpad would generate r=
-oughly
-> 4000 i2c irqs per second, or roughly 20 i2c irqs per touchpad irq.
->
-> Upon closer inspection, I noticed that the i2c-hid driver would always tr=
-ansfer
-> the maximum report size over i2c (which is 60 bytes for my touchpad), but=
- all of
-> my touchpad's normal touch events are only 32 bytes long according to the=
- length
-> byte contained in the buffer sequence.
->
-> Therefore, I was able to save about 2W of power by passing the I2C_M_RECV=
-_LEN
-> flag in i2c-hid, which says to look for the payload length in the first b=
-yte of
-> the transfer buffer and adjust the i2c transaction accordingly. The only =
-problem
-> though is that my i2c controller's driver allows bytes other than the fir=
-st one
-> to be used to retrieve the payload length, which is incorrect according t=
-o the
-> SMBus spec, and would break my i2c-hid change since not *all* of the repo=
-rts
-> from my touchpad are conforming SMBus block reads.
->
-> This patchset fixes the I2C_M_RECV_LEN behavior in the designware i2c dri=
-ver and
-> modifies i2c-hid to use I2C_M_RECV_LEN to save quite a bit of power. Even=
- if the
-> peripheral controlled by i2c-hid doesn't support block reads, the i2c con=
-troller
-> drivers should cope with this and proceed with the i2c transfer using the
-> original requested length."
+Hello Uwe,
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-for I=C2=B2C DesignWare patches.
+On Thursday, 17 September 2020, 16:02:35 CEST, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Thu, Sep 17, 2020 at 02:20:27PM +0200, Christian Eggers wrote:
+> ...
+> >  		/* check for arbitration lost */
+> >  		if (temp & I2SR_IAL) {
+> >  			temp &= ~I2SR_IAL;
+> > +			temp |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IAL);
+> >  			imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+> >  			return -EAGAIN;
+> ...
 
->
-> Sultan
->
-> Sultan Alsawaf (4):
->   i2c: designware: Fix transfer failures for invalid SMBus block reads
->   i2c: designware: Ensure tx_buf_len is nonzero for SMBus block reads
->   i2c: designware: Allow SMBus block reads up to 255 bytes in length
->   HID: i2c-hid: Use block reads when possible to save power
->
->  drivers/hid/i2c-hid/i2c-hid-core.c         |  5 ++++-
->  drivers/i2c/busses/i2c-designware-master.c | 15 +++++++++------
->  2 files changed, 13 insertions(+), 7 deletions(-)
->
-> --
-> 2.28.0
->
+> This looks strange. First the flag is cleared and then it is (in some
+> cases) set again.
+i.MX controllers require writing a 0 to clear these bits. Vybrid controllers
+need writing a 1 for the same.
+
+> If I2SR_IIF is set in temp you ack this irq without handling it. (Which
+> might happen if atomic is set and irqs are off?!)
+This patch is only about using the correct processor specific value for 
+acknowledging an IRQ... But I think that returning EAGAIN (which aborts the
+transfer) should be handling enough. At the next transfer, the controller will
+be set back to master mode.
+
+> I see this idiom is used in a few more places in the driver already, I
+> didn't check but these might have the same problem maybe?
+
+Best regards
+Christian
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+
