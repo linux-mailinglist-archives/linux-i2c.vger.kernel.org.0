@@ -2,101 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B6726E948
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Sep 2020 01:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BFF26F247
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Sep 2020 04:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbgIQXMx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Sep 2020 19:12:53 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:43086 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725987AbgIQXMw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Sep 2020 19:12:52 -0400
-Received: by mail-pf1-f196.google.com with SMTP id f18so2182857pfa.10;
-        Thu, 17 Sep 2020 16:12:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VvWE0vd6Z6cZqNOq/2evFZ4nZv2/3WPxT1Xp9nhMpCg=;
-        b=W6PHbcJhW0Wn+uaAgZbbt6gDU0Qs9fixGFEvADwY4Hi2tuhPFR2N9rf1TvXCUE9/Os
-         YfWUG9UnROqsxIGXTlB+uoMoR/qGD/X0TDCUxKoKQsacOqnTgx91HSlpVuDL8ebKaWX6
-         tg+RUkBfWzmJYMrzGm698vYaefKgDMQ1laKrpkTpAJFZGneEbIiBMlUenMJohp1j7T5Y
-         KBWJt7SOA+3PUuPCkmF+B4tRTktAz+uhGqsM2KlagUsMN95EbryRyn4sl4keF3WOksK7
-         c2IDEHFCjLxr3VAMIbSqNhDagk5TTkDqI/fW3ABx+ejCYyOMSoNlWfB17c9pFflBExgw
-         khQg==
-X-Gm-Message-State: AOAM530BfmQ1uR7Ggs4POFexuJ6+uf+9ownQkOBCd5wCIA28fY/04L+f
-        oo7lEgt2sx4Je1y2Et9R5Po=
-X-Google-Smtp-Source: ABdhPJxt16ws+afmcEjE451K6KhkT3P/E6pP+NFY+T3z3+DXG86vfKzRR8K/1I4mhEuzC8Suc4LpyQ==
-X-Received: by 2002:a05:6a00:1356:b029:13e:5203:fba3 with SMTP id k22-20020a056a001356b029013e5203fba3mr28672785pfu.3.1600384371921;
-        Thu, 17 Sep 2020 16:12:51 -0700 (PDT)
-Received: from sultan-box.localdomain ([104.200.129.212])
-        by smtp.gmail.com with ESMTPSA id h15sm704319pfo.194.2020.09.17.16.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 16:12:51 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 16:12:48 -0700
-From:   Sultan Alsawaf <sultan@kerneltoast.com>
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        jikos@kernel.org, aaron.ma@canonical.com, admin@kryma.net,
-        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
-        hdegoede@redhat.com, hn.chen@weidahitech.com,
-        jarkko.nikula@linux.intel.com, kai.heng.feng@canonical.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com
-Subject: Re: [PATCH v2 3/4] i2c: designware: Allow SMBus block reads up to
- 255 bytes in length
-Message-ID: <20200917231248.GA345017@sultan-box.localdomain>
-References: <20200917052256.5770-1-sultan@kerneltoast.com>
- <20200917052256.5770-4-sultan@kerneltoast.com>
- <20200917205704.GA18027@kunai>
+        id S1730006AbgIRC52 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Sep 2020 22:57:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55812 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727773AbgIRCGc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:06:32 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 220DE206BE;
+        Fri, 18 Sep 2020 02:06:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600394787;
+        bh=soD9mfSC5yZAZGe0nPc7J0LkSN9i+t1bMSXV0n6QPQM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=g/CBaejqwMsUM5XzM90vNGl0xVcGMKeZzJl1S9lKAjyps1hJYiApJn7R7Dbzfs9XR
+         39hj5COngNJtC3gYc+AwnzJ0M13Wdr/ciSDX8MV02yZFegE2iN4Gx+VWb7bKXccxTa
+         g4hQRtMs14m7kv4Y7ofAwNTfnaBueQav1XoeupVY=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 258/330] i2c: tegra: Restore pinmux on system resume
+Date:   Thu, 17 Sep 2020 21:59:58 -0400
+Message-Id: <20200918020110.2063155-258-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200918020110.2063155-1-sashal@kernel.org>
+References: <20200918020110.2063155-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200917205704.GA18027@kunai>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 10:57:04PM +0200, Wolfram Sang wrote:
-> On Wed, Sep 16, 2020 at 10:22:55PM -0700, Sultan Alsawaf wrote:
-> > From: Sultan Alsawaf <sultan@kerneltoast.com>
-> > 
-> > According to the SMBus 3.0 protocol specification, block transfer limits
-> > were increased from 32 bytes to 255 bytes. Remove the obsolete 32-byte
-> > limitation.
-> 
-> Sadly, it is not that easy. We are trying to extend BLOCK_MAX to 255
-> (SMBus 3 specs) but there are various things to be considered,
-> especially with buffers and when passing it to userspace. Check here for
-> the discussion (and you are welcome to join, of course):
-> 
-> http://patchwork.ozlabs.org/project/linux-i2c/list/?submitter=79741&state=*
-> 
-> > 
-> > Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
-> > ---
-> >  drivers/i2c/busses/i2c-designware-master.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-> > index 22f28516bca7..5bd64bd17d94 100644
-> > --- a/drivers/i2c/busses/i2c-designware-master.c
-> > +++ b/drivers/i2c/busses/i2c-designware-master.c
-> > @@ -433,7 +433,7 @@ i2c_dw_read(struct dw_i2c_dev *dev)
-> >  			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
-> >  			if (flags & I2C_M_RECV_LEN) {
-> >  				/* Ensure length byte is a valid value */
-> > -				if (tmp <= I2C_SMBUS_BLOCK_MAX && tmp > 0)
-> > +				if (tmp > 0)
-> >  					len = i2c_dw_recv_len(dev, tmp);
-> >  				else
-> >  					len = i2c_dw_recv_len(dev, len);
-> > -- 
-> > 2.28.0
-> > 
+From: Thierry Reding <treding@nvidia.com>
 
-Yes, it is not that easy to make the change on a global scale. However, in the
-case of the designware adapter, it really *is* that easy. This change covers the
-designware adapter, and others can follow later with the much more invasive
-changes that are needed.
+[ Upstream commit 44c99904cf61f945d02ac9976ab10dd5ccaea393 ]
 
-Sultan
+Depending on the board design, the I2C controllers found on Tegra SoCs
+may require pinmuxing in order to function. This is done as part of the
+driver's runtime suspend/resume operations. However, the PM core does
+not allow devices to go into runtime suspend during system sleep to
+avoid potential races with the suspend/resume of their parents.
+
+As a result of this, when Tegra SoCs resume from system suspend, their
+I2C controllers may have lost the pinmux state in hardware, whereas the
+pinctrl subsystem is not aware of this. To fix this, make sure that if
+the I2C controller is not runtime suspended, the runtime suspend code is
+still executed in order to disable the module clock (which we don't need
+to be enabled during sleep) and set the pinmux to the idle state.
+
+Conversely, make sure that the I2C controller is properly resumed when
+waking up from sleep so that pinmux settings are properly restored.
+
+This fixes a bug seen with DDC transactions to an HDMI monitor timing
+out when resuming from system suspend.
+
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/busses/i2c-tegra.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 5ca72fb0b406c..db94e96aed77e 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1721,10 +1721,14 @@ static int tegra_i2c_remove(struct platform_device *pdev)
+ static int __maybe_unused tegra_i2c_suspend(struct device *dev)
+ {
+ 	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
++	int err = 0;
+ 
+ 	i2c_mark_adapter_suspended(&i2c_dev->adapter);
+ 
+-	return 0;
++	if (!pm_runtime_status_suspended(dev))
++		err = tegra_i2c_runtime_suspend(dev);
++
++	return err;
+ }
+ 
+ static int __maybe_unused tegra_i2c_resume(struct device *dev)
+@@ -1732,6 +1736,10 @@ static int __maybe_unused tegra_i2c_resume(struct device *dev)
+ 	struct tegra_i2c_dev *i2c_dev = dev_get_drvdata(dev);
+ 	int err;
+ 
++	/*
++	 * We need to ensure that clocks are enabled so that registers can be
++	 * restored in tegra_i2c_init().
++	 */
+ 	err = tegra_i2c_runtime_resume(dev);
+ 	if (err)
+ 		return err;
+@@ -1740,9 +1748,16 @@ static int __maybe_unused tegra_i2c_resume(struct device *dev)
+ 	if (err)
+ 		return err;
+ 
+-	err = tegra_i2c_runtime_suspend(dev);
+-	if (err)
+-		return err;
++	/*
++	 * In case we are runtime suspended, disable clocks again so that we
++	 * don't unbalance the clock reference counts during the next runtime
++	 * resume transition.
++	 */
++	if (pm_runtime_status_suspended(dev)) {
++		err = tegra_i2c_runtime_suspend(dev);
++		if (err)
++			return err;
++	}
+ 
+ 	i2c_mark_adapter_resumed(&i2c_dev->adapter);
+ 
+-- 
+2.25.1
+
