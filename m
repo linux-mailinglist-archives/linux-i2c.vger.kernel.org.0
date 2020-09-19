@@ -2,58 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1F6270CF6
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Sep 2020 12:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0446270D27
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Sep 2020 12:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbgISKXq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Sep 2020 06:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S1726129AbgISKqb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Sep 2020 06:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726041AbgISKXq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Sep 2020 06:23:46 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF754C0613CE;
-        Sat, 19 Sep 2020 03:23:45 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id g96so6283380ybi.12;
-        Sat, 19 Sep 2020 03:23:45 -0700 (PDT)
+        with ESMTP id S1726041AbgISKqb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Sep 2020 06:46:31 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E64C0613CE;
+        Sat, 19 Sep 2020 03:46:31 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id a2so6355480ybj.2;
+        Sat, 19 Sep 2020 03:46:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6eCfSV8Ptzwh9vo0B+QF+qFkhZVWBhG7mYqX5yvNY50=;
-        b=UTgudd0w5mQs9vT1TTOv7Ft4rtia6NtVy8EXAdA5Nr3DW6o/m6ioJ/RkkKJJ35ZTz0
-         DIVTYbQO7Nr5qj0sxh/WN85JJEz/Y2xDTPSqhE6myX5le0fDmSK8gfEZn6TjCeKYBIC5
-         cHW5+IjsIjMc7X7nlYgzPOZUoebvuQ7CvXfeproRRaFtXdzaiJUyCENgrMEXKMNUWd65
-         FOScJtIjjzh0IP9lmkvggcgpTu3m0TkTZ30YzjNbDgbaUB1Sr9MYp8eTQiHGL7e0ieQS
-         v2Bgu1n5tLj95nSasFpmYYKfLNsI4CVUzOLbL3O0+OULq763EX5R+Q/20pEPYbR4T+DG
-         klPQ==
+        bh=0S4Ht4NHIpyZ6tU7+DqxhQ4MU+jt5ffLJy99tEJzOgU=;
+        b=RbMN5zRWTm+yR39er0gdwyqlNcRtPlWXgaCF8b88WKxXhoRLE6Mn2AJPtrz4kxyyiY
+         P2bgIO58FWIfV2Ob4gx9iFfTuPA4mnLP7u054ZYJHmosYKD4YIXgggwrTTYX1tv4Za3W
+         YTFtkHvEB9PSsmaog8XNcYGLU9zaztr4gm1EdalTFWIariXDmB2qMfzDI1CvL1lszS73
+         H68oGFMn98K9SaHCrSQhZWPgXKaBQ1E07ns448nMyUAyVZ5Ov59JWfhx4VGh4YMjVsbw
+         jvDwFBQmliitx24i5JRU80wShJZMIVfHv7Muhuu+XzCEnTAzqDugUZKqjeq5hv9Jsz3m
+         gIHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6eCfSV8Ptzwh9vo0B+QF+qFkhZVWBhG7mYqX5yvNY50=;
-        b=mTntCYocOTCEQ6elfsGEWcDP5bxGmQPC/rXgMkOcvlLF2OuYHWo+F/XDI+O28UAaqg
-         2mjbeIT1KYs1C1jRrmyflLZw9ghD8lDOsZQVQyZ69GIHRqNeGg2cWxCiY8hJF0UZPefg
-         JznmrkZ7tNKAR9P5VMqHOUVXH3GcrxcQ6+4YqdeNnT8BWK+bkajylUFBJMhFOYdAqhha
-         MT7AyBI/7viWEYIFXdjTEfU1Ey6Xyb3BskD7fl28ZQZ1qY34AU4cWttpbi+4riPea/sE
-         AodAUfieEkTHsdwZKLUDgNglvbgovw9Y+md97F/orx2TGJ+1VKieywgGQWmIblCPmTIz
-         d5dA==
-X-Gm-Message-State: AOAM533kEjEpdGPySnsFhcrAJdqe75igGHl7joNLhOgmnaEFjhz2vs0X
-        U/ZU5nJ77ufCa/DqZJsMbBXUjk+/ph9cuU6L9Z4=
-X-Google-Smtp-Source: ABdhPJxJvGLmkjcwDwl3wap9FpKrFE9YZL6lgmFOz6nspGUWPzIFULr921hybhvvnKUrHrAjjmPYowSLNP5qI7UbVnU=
-X-Received: by 2002:a25:23d6:: with SMTP id j205mr36022995ybj.76.1600511024640;
- Sat, 19 Sep 2020 03:23:44 -0700 (PDT)
+        bh=0S4Ht4NHIpyZ6tU7+DqxhQ4MU+jt5ffLJy99tEJzOgU=;
+        b=GMB9yZC69zxdoHBvGCprmTcZSnKj5CE/SIrREbMZ4HcPOHLlqDvKPkoE8VYRvE/nIl
+         dL4+W/Rb/UG5cEczOn8Sg2hUlfOOd02cwA4vs9JEs7c+MFg1n2A8yh7lsOnzobIcZD/A
+         E8JdJ+GYauCXf6nuBbZPPLmWO5dejbroSWAWtzVpyvElbNYIeNNrIXNFLrFuzSyQOOQ4
+         IL1siECHZogjczD2Qt9sNLLLM1gnZW74tQCdTfII6IrlvpYJ1ozsbGZsPSApt0tfz+wh
+         bVqWGZH7KwvrAL/o4f+VwQHtOE4EtW1+kEN+VKVNRhxjY4SSReybdouVay3EKvc06aNa
+         3qZQ==
+X-Gm-Message-State: AOAM531zCbcCSyun/W0oY4WPDKUnaeTJeZ+WE2/9+MITdVafro5E0Hvi
+        wcpYuNde4t4+5gZJBrgUjVLLu3QqaBnirhfYia8=
+X-Google-Smtp-Source: ABdhPJxBzwAMJjSTYjRHy/WAC+nDOGo9k/2nrLlIMxBf5lqxiHWLl+BIDV5S+hhsFapjrr4zITsBsmLzEi7nEIvg5Zw=
+X-Received: by 2002:a25:23cb:: with SMTP id j194mr47717339ybj.445.1600512390461;
+ Sat, 19 Sep 2020 03:46:30 -0700 (PDT)
 MIME-Version: 1.0
 References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594919915-5225-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1594919915-5225-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sat, 19 Sep 2020 11:23:18 +0100
-Message-ID: <CA+V-a8uMoCs40RYENPhhpPQGrnoj-S_Zir718nvd94knsphO1Q@mail.gmail.com>
-Subject: Re: [PATCH 03/20] dt-bindings: ata: renesas,rcar-sata: Add r8a774e1 support
-To:     Jens Axboe <axboe@kernel.dk>
+Date:   Sat, 19 Sep 2020 11:46:04 +0100
+Message-ID: <CA+V-a8vtGZ8Tfptj6evmhZOWC+6w9M8uVQ_ob05j0UJwZnSWyQ@mail.gmail.com>
+Subject: Re: [PATCH 01/20] dt-bindings: pci: rcar-pci: Add device tree support
+ for r8a774e1
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Marek Vasut <marek.vasut+renesas@gmail.com>,
@@ -62,7 +64,6 @@ Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Niklas <niklas.soderlund@ragnatech.se>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Magnus Damm <magnus.damm@gmail.com>,
@@ -81,37 +82,36 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jens,
+Hi Lorenzo,
 
-On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
+On Thu, Jul 16, 2020 at 6:18 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 >
-> Document SATA support for the RZ/G2H, no driver change required.
+> Add PCIe support for the RZ/G2H (a.k.a. R8A774E1).
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 > ---
->  Documentation/devicetree/bindings/ata/renesas,rcar-sata.yaml | 1 +
+>  Documentation/devicetree/bindings/pci/rcar-pci.txt | 1 +
 >  1 file changed, 1 insertion(+)
 >
 Could you please pick this patch.
 
 Cheers,
-Prabhakar
+--Prabhakar Lad
 
-
-> diff --git a/Documentation/devicetree/bindings/ata/renesas,rcar-sata.yaml b/Documentation/devicetree/bindings/ata/renesas,rcar-sata.yaml
-> index d06096a7ba4b..2ad2444f1042 100644
-> --- a/Documentation/devicetree/bindings/ata/renesas,rcar-sata.yaml
-> +++ b/Documentation/devicetree/bindings/ata/renesas,rcar-sata.yaml
-> @@ -26,6 +26,7 @@ properties:
->        - items:
->            - enum:
->                - renesas,sata-r8a774b1     # RZ/G2N
-> +              - renesas,sata-r8a774e1     # RZ/G2H
->                - renesas,sata-r8a7795      # R-Car H3
->                - renesas,sata-r8a77965     # R-Car M3-N
->            - const: renesas,rcar-gen3-sata # generic R-Car Gen3 or RZ/G2
+> diff --git a/Documentation/devicetree/bindings/pci/rcar-pci.txt b/Documentation/devicetree/bindings/pci/rcar-pci.txt
+> index 1041c44a614f..64bb87e7dd06 100644
+> --- a/Documentation/devicetree/bindings/pci/rcar-pci.txt
+> +++ b/Documentation/devicetree/bindings/pci/rcar-pci.txt
+> @@ -6,6 +6,7 @@ compatible: "renesas,pcie-r8a7743" for the R8A7743 SoC;
+>             "renesas,pcie-r8a774a1" for the R8A774A1 SoC;
+>             "renesas,pcie-r8a774b1" for the R8A774B1 SoC;
+>             "renesas,pcie-r8a774c0" for the R8A774C0 SoC;
+> +           "renesas,pcie-r8a774e1" for the R8A774E1 SoC;
+>             "renesas,pcie-r8a7779" for the R8A7779 SoC;
+>             "renesas,pcie-r8a7790" for the R8A7790 SoC;
+>             "renesas,pcie-r8a7791" for the R8A7791 SoC;
 > --
 > 2.17.1
 >
