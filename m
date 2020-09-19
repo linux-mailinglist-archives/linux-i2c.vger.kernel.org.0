@@ -2,73 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4568D270D6D
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Sep 2020 13:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00CC270D85
+	for <lists+linux-i2c@lfdr.de>; Sat, 19 Sep 2020 13:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726338AbgISLGB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Sep 2020 07:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S1726256AbgISLOA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 19 Sep 2020 07:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726041AbgISLGB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Sep 2020 07:06:01 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC9BC0613CE;
-        Sat, 19 Sep 2020 04:06:01 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id x20so6369338ybs.8;
-        Sat, 19 Sep 2020 04:06:00 -0700 (PDT)
+        with ESMTP id S1726354AbgISLN7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Sep 2020 07:13:59 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388F8C0613D3
+        for <linux-i2c@vger.kernel.org>; Sat, 19 Sep 2020 04:13:59 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id d4so7607509wmd.5
+        for <linux-i2c@vger.kernel.org>; Sat, 19 Sep 2020 04:13:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0Ij7bvisAUQqcftsNPRluVmVo55tqxHkQBfHxZFcMOA=;
-        b=QXuiXUNrQssc+AmgBVbKQxNzGo5tROj3AJ+f/1m3yJZ+Luju1U9BNROqgJmx9MMyOr
-         mFI9BS8XS4gFSYurp2pr6oGgPub/q9VcS+OshZA3iZbg2bohf/ebHc/nXA1mwzy5q56X
-         EJ7spOnvN8ZaSNZOBVjS67rmeCWoe9W6GpK+k557oP4dp1JTq6s0ze24blVvQEjbAN9v
-         ACdaIWWlSZUiSxYi6gKKTjac1YBw5UnvzymtdfM5uOUiSJVGTHxabBHzD69AvtPgFRdX
-         uWL3lhWMCciU41cU+AYOk5oi+kOP8koiqC0LihfXmFB8vMIDN4bZnwQSobAMvEprPPp9
-         mjqA==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rdXsTgoGM0w1H/nnYlMehpdLdQB8fsaLuG+w+yCrM5Y=;
+        b=oE1Ira58YScVwaWdnk8LgV/cmqXxiHNeIxxJxGh/47M2R9d91zsr8xnnO10hEg/rbV
+         X/OkZoB+Ec6C3icy0bbdRVni1Zi24/ZEAoEejz/V2DtZpk5RIl2uqXZF0EuIc4ajTRTP
+         stmClxW2sPQNFUxn8a5St2F18T9mfjkN/O0VMqoyDWgBFiz8MYdKiwWCffRt+7eYZW82
+         KKQ60NKca7pjSMx9p9P1MNuJL8b2UE43042p8VdL1ET41Ho6kJPh0Ed3BIQB00lJ3DPD
+         nMjGLYrTrM4RwItA7Kt243vXvwpkpoPOVcT/SuQ9cdFU5y0yWLxrjspRqE/v4y2onTNm
+         RGxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0Ij7bvisAUQqcftsNPRluVmVo55tqxHkQBfHxZFcMOA=;
-        b=bAutchs26Qxj17JlRTg8lkW8Dtwon6QVl0Cd5jjX5thgb7oNYgqEQLt9IvGz3u/xrn
-         ylfMaJwGzIED5wMN9v9JW2WFGnfALQxI4zlE0uzh8jXN0K1vTjYG6iBd73ActWMNx+pD
-         23j+Pp2b+lrRSfpRrKyjDVhEEe6Vu18qFrMd1F4qqtLu62gMxZlnhjcHhZ0bRPWH3x2X
-         H47hl0avL4L+xeeiq7ohdHI07hJdY3KFwXzQkm86VTvewgeylYC4Ly+nTWvBfozlkoQ5
-         tmpom4jhBnoO1UUh+aCGp7mcBRsvFYj2eHE5lvUQd1qenp1x8xDDIQPHBs1OFS13+IXG
-         xp/Q==
-X-Gm-Message-State: AOAM5310T4XO2CJt6xnz0sw9G6WpX548VeIGBLVERnoh8y0jv+keL2Gp
-        9+ryTNttfj93MkZKyzCUHCn9YvforxRhJ0L6R6Y=
-X-Google-Smtp-Source: ABdhPJxiabQbGSqQ3/I9bCoypnGYRh9dwnRNf8kkHTS7HlO2VXzvkXrzQAbnqylSkxUqAmX3P2x1QEczoNP6w8K1IAY=
-X-Received: by 2002:a25:23cb:: with SMTP id j194mr47804126ybj.445.1600513559955;
- Sat, 19 Sep 2020 04:05:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com> <CA+V-a8vwhtTWjaoXkfMBjKx90WkcoejD5ryPkXnQNEbtgnJGXQ@mail.gmail.com>
-In-Reply-To: <CA+V-a8vwhtTWjaoXkfMBjKx90WkcoejD5ryPkXnQNEbtgnJGXQ@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sat, 19 Sep 2020 12:05:34 +0100
-Message-ID: <CA+V-a8tzELW-F3GLqq+M3pKoYZwfsc28K-PVVQq-sxJN0pL73Q@mail.gmail.com>
-Subject: Re: [PATCH 02/20] dt-bindings: thermal: rcar-gen3-thermal: Add
- r8a774e1 support
-To:     Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rdXsTgoGM0w1H/nnYlMehpdLdQB8fsaLuG+w+yCrM5Y=;
+        b=o2WiD3AXMVR+3420RkKqPqUu6Umk3bYs1klc44oCy2umSLLT34XGWpxSpUYq9fkHCk
+         VojgvyZ3XEbk34/AQae2HQ0onPDg1Vk7W67yPEzeUzhATPfjz4Vq5GWTGESq9U9VCbw5
+         3HeVV/82JFlvqBvKAP1JfjJXKPX8gwhWeHkLZDlvs7Hux3x0uAfITCyaC2zHppP6vuhf
+         oAaMnSqsPoGtqzZC84XK1Ds9JoRy0EZQLCJOiUBSibZjIsWhV2nVkTgwtUo9AGcSHM5m
+         e2uWDyLBBdEQ0OxdxrM1N9Qw9g9Hz0WoTigRZzdDSecL6Aj8nSgN6vtCbD4xV101Ysog
+         whDw==
+X-Gm-Message-State: AOAM532WjPEEvA2VXZ+FzREKPU4jxekiVqltqSCGGU4k1oWMEN36uaj3
+        W6xHsbip6lErQfQT0jTn2knxMw==
+X-Google-Smtp-Source: ABdhPJxtvQBqLG15ElhXHTv/DA5n/A5hXVODsh0bX2dk1jWFMP3l4fnu0fcw+jZBZHKHnGGxUTbOHg==
+X-Received: by 2002:a7b:c40b:: with SMTP id k11mr19727844wmi.135.1600514037438;
+        Sat, 19 Sep 2020 04:13:57 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:9142:20e7:201d:cd11? ([2a01:e34:ed2f:f020:9142:20e7:201d:cd11])
+        by smtp.googlemail.com with ESMTPSA id o129sm10277063wmb.27.2020.09.19.04.13.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Sep 2020 04:13:56 -0700 (PDT)
+Subject: Re: [PATCH 05/20] dt-bindings: timer: renesas,cmt: Document r8a774e1
+ CMT support
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
 Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Rob Herring <robh+dt@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Magnus Damm <magnus.damm@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
         Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -79,31 +77,52 @@ Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
         Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CA+V-a8sBF2ak+dYd9g=Tf_2Kwz_Om2mpK=z+KzGQQG4qJM-+zA@mail.gmail.com>
+ <CA+V-a8tcuxiDBZ0WYgrMrPjnse7On1LWiJngznZMiSOQAqT9Ag@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <bce1bbc3-203c-aa9e-6c40-5a1eb82510e3@linaro.org>
+Date:   Sat, 19 Sep 2020 13:13:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CA+V-a8tcuxiDBZ0WYgrMrPjnse7On1LWiJngznZMiSOQAqT9Ag@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Niklas/Zhang/Daniel,
+On 19/09/2020 13:00, Lad, Prabhakar wrote:
+> Hi Daniel and Thomas,
+> 
+> On Thu, Aug 27, 2020 at 6:00 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+>>
+>> Hi Daniel and Thomas,
+>>
+>> On Wed, Jul 15, 2020 at 12:09 PM Lad Prabhakar
+>> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>>>
+>>> Document SoC specific bindings for RZ/G2H (r8a774e1) SoC.
+>>>
+>>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/timer/renesas,cmt.yaml | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>> Gentle ping.
+>>
+> Could you please pick this patch.
 
-On Thu, Aug 27, 2020 at 5:52 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
->
-> Hi Zhang,Daniel,Amit,
->
-> On Wed, Jul 15, 2020 at 12:09 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > Document RZ/G2H (R8A774E1) SoC bindings.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> Gentle ping.
->
-Could either of please pick this patch.
+Applied, thanks
 
-Cheers,
-Prabhakar
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
