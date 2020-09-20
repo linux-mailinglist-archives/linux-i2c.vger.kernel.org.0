@@ -2,85 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B342714D6
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Sep 2020 16:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FBA271807
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Sep 2020 23:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgITOIW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Sep 2020 10:08:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34276 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726290AbgITOIV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 20 Sep 2020 10:08:21 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0AC2621531;
-        Sun, 20 Sep 2020 14:08:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600610900;
-        bh=lu9h9XynfWiHeNchuTVq0VmpBRgsLcjroJ08RriK6FQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tLu+eCAhLmynwau/OgjdgXITj8Uu3Ajyw7j6L6WMWTBtOCQUoxWo96pINqGo/ITMB
-         iLoj0ieZJon4iv+bsf0rstdavCuZDRNOCuxN4mFQi7hrQT+zsjVJE3jrAAC9dKoSX8
-         Rim6zO4acLR631zEPonMI5FK/X8l5Rf9YUot6uBQ=
-Date:   Sun, 20 Sep 2020 16:08:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 11/20] dt-bindings: usb: renesas,usbhs: Add r8a774e1
- support
-Message-ID: <20200920140846.GB2915460@kroah.com>
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-12-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CA+V-a8vuR-7vqxNnrqQ5Ysf3Xjvhp3xRZ33i8+6nEGFLJciT3A@mail.gmail.com>
+        id S1726436AbgITVI3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Sep 2020 17:08:29 -0400
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:55417 "EHLO
+        herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726126AbgITVI3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Sep 2020 17:08:29 -0400
+X-Greylist: delayed 1130 seconds by postgrey-1.27 at vger.kernel.org; Sun, 20 Sep 2020 17:08:28 EDT
+Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 08KKmfuV002773;
+        Sun, 20 Sep 2020 23:48:41 +0300
+Received: by taln60.nuvoton.co.il (Postfix, from userid 20088)
+        id AF7F5639D5; Sun, 20 Sep 2020 23:48:41 +0300 (IDT)
+From:   Tali Perry <tali.perry1@gmail.com>
+To:     wsa@kernel.org, andriy.shevchenko@linux.intel.com,
+        kunyi@google.com, benjaminfair@google.com, avifishman70@gmail.com,
+        joel@jms.id.au, tmaimon77@gmail.com
+Cc:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Tali Perry <tali.perry1@gmail.com>
+Subject: [PATCH v1] i2c: npcm7xx: Clear LAST bit after a failed transaction.
+Date:   Sun, 20 Sep 2020 23:48:09 +0300
+Message-Id: <20200920204809.132911-1-tali.perry1@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8vuR-7vqxNnrqQ5Ysf3Xjvhp3xRZ33i8+6nEGFLJciT3A@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 11:54:05AM +0100, Lad, Prabhakar wrote:
-> Hi Greg,
-> 
-> On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > Document RZ/G2H (R8A774E1) SoC bindings.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> Could you please pick this patch.
+Due to a HW issue, in some scenarios the LAST bit might remain set.
+This will cause an unexpected NACK after reading 16 bytes on the next
+read.
 
-Same here, doesn't a DT maintainer have to ack this?
+Example: if user tries to read from a missing device, get a NACK,
+then if the next command is a long read ( > 16 bytes),
+the master will stop reading after 16 bytes.
+To solve this, if a command fails, check if LAST bit is still
+set. If it does, reset the module.
 
-thanks,
+Fixes: 56a1485b102e (i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver)
+Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+---
+ drivers/i2c/busses/i2c-npcm7xx.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-greg k-h
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index dfcf04e1967f..2ad166355ec9 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -2163,6 +2163,15 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+ 	if (bus->cmd_err == -EAGAIN)
+ 		ret = i2c_recover_bus(adap);
+ 
++	/*
++	 * After any type of error, check if LAST bit is still set,
++	 * due to a HW issue.
++	 * It cannot be cleared without resetting the module.
++	 */
++	if (bus->cmd_err &&
++	    (NPCM_I2CRXF_CTL_LAST_PEC & ioread8(bus->reg + NPCM_I2CRXF_CTL)))
++		npcm_i2c_reset(bus);
++
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 	/* reenable slave if it was enabled */
+ 	if (bus->slave)
+
+base-commit: 856deb866d16e29bd65952e0289066f6078af773
+-- 
+2.22.0
+
