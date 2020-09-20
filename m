@@ -2,53 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 955982711AF
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Sep 2020 03:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6882714CB
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Sep 2020 16:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgITBlK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Sep 2020 21:41:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54552 "EHLO mail.kernel.org"
+        id S1726333AbgITOIA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Sep 2020 10:08:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34010 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726759AbgITBlK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 19 Sep 2020 21:41:10 -0400
-Subject: Re: [PULL REQUEST] i2c for 5.9
+        id S1726290AbgITOIA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 20 Sep 2020 10:08:00 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C05FC21531;
+        Sun, 20 Sep 2020 14:07:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600566070;
-        bh=3xT2aWSJEjnjVq25OEh/uUDau6fkOa2Fdg5pHaZVTkw=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=XEWsvUVDX95DwU4EjOwo8ADdPYGcY/3dmhmzQ8qaPdW9RAA7FNQswHjf51kkghd/z
-         TvfJScqG9sAxybtnj7zwHv6uuzce3tyJfQAP/rgmCSbAngP1cBVb8ZSIih+PgT66jx
-         oO4kT3TRS0nTeMXH6MNhChfYs8kPi22X4tP4oSfI=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200919160206.GA50781@kunai>
-References: <20200919160206.GA50781@kunai>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200919160206.GA50781@kunai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-X-PR-Tracked-Commit-Id: 6eb158ec0a45dbfd98bc6971c461b7d4d5bf61b3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c8d1a46f943877c08d1154a6f90f43a245a671cf
-Message-Id: <160056607014.29516.9459722962297050710.pr-tracker-bot@kernel.org>
-Date:   Sun, 20 Sep 2020 01:41:10 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        s=default; t=1600610879;
+        bh=5Nu/Q5V28hWJU3Crt7+FLHDN+lSqZIJn2t8MycJ4Kfc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=my7AamuI0IRhPPpTH8LoiNnx+5ToKW4tisR+RYX62c0lCpubPnNVu35GdWXBc2RqE
+         BncX3ahljtB9G9+fJyoK6vnft7jC2L8PKTHeIHBUJ0hLizAQty/w7wk5tOL0RQd562
+         xvfzpRl+X/f0CbrhiyMVi/j5k1OB0ObMhpYkNLEE=
+Date:   Sun, 20 Sep 2020 16:08:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
+        dmaengine <dmaengine@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 07/20] dt-bindings: usb: renesas,usb3-peri: Document
+ r8a774e1 support
+Message-ID: <20200920140824.GA2915460@kroah.com>
+References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594919915-5225-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CA+V-a8vJ2n3KEL8P+XmVob2zjoWaX+s4a6c1TV_WoPFkwdkZmA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8vJ2n3KEL8P+XmVob2zjoWaX+s4a6c1TV_WoPFkwdkZmA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sat, 19 Sep 2020 18:02:06 +0200:
+On Sat, Sep 19, 2020 at 11:50:07AM +0100, Lad, Prabhakar wrote:
+> Hi Greg,
+> 
+> On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> >
+> > Document RZ/G2H (R8A774E1) SoC bindings.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> > ---
+> >  Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> Could you please pick this patch.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+Don't DT patches have to be acked by a DT maintainer first?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c8d1a46f943877c08d1154a6f90f43a245a671cf
+thanks,
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+greg k-h
