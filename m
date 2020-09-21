@@ -2,77 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A42F271EAF
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 11:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2A1271EB2
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 11:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726347AbgIUJOf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 05:14:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51780 "EHLO mail.kernel.org"
+        id S1726366AbgIUJP1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 05:15:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51982 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726333AbgIUJOf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Sep 2020 05:14:35 -0400
+        id S1726333AbgIUJP1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 21 Sep 2020 05:15:27 -0400
 Received: from localhost (p5486cf2a.dip0.t-ipconnect.de [84.134.207.42])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EBA7B20773;
-        Mon, 21 Sep 2020 09:14:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 152BF214F1;
+        Mon, 21 Sep 2020 09:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600679674;
-        bh=BRbOoDphO4Ujz5VCwVbFOL8AVkUVG0gfMgL1+cDToMk=;
+        s=default; t=1600679726;
+        bh=gpUEgGaj7qwnPbyCn8E9GntJ2kpJTop0zsxc8eNtV1M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G3hVa2bibzqtHJmwN1rce0HmRMSxRbxPN41zOlTSEg2XVOI9thEFbqoBqm+Xz6S5c
-         ekMj4SOXhXWDOWhUIkSFKTNPW9csKBqXgyKc6Naxq+d9wbiOSy4rcuogNmNeid+gu8
-         MMLtfJ/lU3WHq33n4Nj2esj7n7Ie3u/tbhXYWibM=
-Date:   Mon, 21 Sep 2020 11:14:31 +0200
+        b=GE6B+g9UcMki9RMBhzEGxWrskYugBNl76ui1W+edeiFomRs+aac9ds0PEwghtwwSF
+         spfJc1EK1w76a/F4Qx1Bfxu71xiQwx/Oexi/Ollw5q+ZDMDnOR2XyHS/IQFOQopeRe
+         YJntyWh7BKY4Y9WgYMObgENUDhbridSqxx7dmIWQ=
+Date:   Mon, 21 Sep 2020 11:15:23 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Tian Tao <tiantao6@hisilicon.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com
-Subject: Re: [PATCH] i2c: Switch to using the new API kobj_to_dev()
-Message-ID: <20200921091431.GE1840@ninjato>
-References: <1600133898-35883-1-git-send-email-tiantao6@hisilicon.com>
+To:     Wang Qing <wangqing@vivo.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: Use kobj_to_dev() API
+Message-ID: <20200921091523.GF1840@ninjato>
+References: <1600312126-24048-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bi5JUZtvcfApsciF"
+        protocol="application/pgp-signature"; boundary="/aVve/J9H4Wl5yVO"
 Content-Disposition: inline
-In-Reply-To: <1600133898-35883-1-git-send-email-tiantao6@hisilicon.com>
+In-Reply-To: <1600312126-24048-1-git-send-email-wangqing@vivo.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---bi5JUZtvcfApsciF
+--/aVve/J9H4Wl5yVO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 15, 2020 at 09:38:18AM +0800, Tian Tao wrote:
-> Switch to using the new API kobj_to_dev().
->=20
-> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+On Thu, Sep 17, 2020 at 11:08:44AM +0800, Wang Qing wrote:
+> Use kobj_to_dev() instead of container_of()
 
-Applied to for-next, thanks!
+Correct. But same patch was already sent earlier:
+
+http://patchwork.ozlabs.org/project/linux-i2c/patch/1600133898-35883-1-git-send-email-tiantao6@hisilicon.com/
+
+Still thanks!
 
 
---bi5JUZtvcfApsciF
+--/aVve/J9H4Wl5yVO
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9obvYACgkQFA3kzBSg
-KbYt3w//TERvLUXD51oWjyD0NtmwkVNEnAbFRLYQLRA1A7xnytGxo9O7aQR7pB81
-OzjM0e111nhv0/MI1kgxmo9F2/IhsZCtoXbiwO5Z/EUynz4vGe62nfIQu0k1oQTR
-wzKJUz+OdJdS+oW2+uXD9nFpDUfxXw3+WgoIN48j3TdL1F58xRmKPpZjZ/quvNU3
-ROxfGeLzphBXZwcLeKv8kN6m5fMkQgahhApQI/XtzcjvUEqHU7g+JLXTZHC9/TDa
-kJusaKDiBrT0GNZK1age8DlO50FNgxRJL4OEjDk5PE331i3gDESR6YR/K0rKhw8T
-m05EBl09WKMW0GC+nBxt4oLsmEG8L3QstgdI32JENqLEr/QNqsVaKKcbB/xhsJxi
-92OroWgb490hRmCP2L38j1Qsh+Y5IZJK5d30CkcRagiDmZsjAugYbbLnGpmhH65c
-0p7DAy8Fg8FiVMy52mTFeOWCPHpqsJsklIeY9NkH73nwRK2JAnJaFLRL9yrVsZHi
-lWURzHhkO9k8SVdzkI4rjspud1W33ct0QxaGTqwb4B0pdRW4ZXrF+WgxUugWxGyH
-2JgWYq89uOyeLfLMQD3J5WibVQnskxcGiy7KnERgrVobvctdtuVtP9GMDAyLCwAa
-TR2uPxzhVB3GmujT5A653uAwo7PUHa+y15ZoJIJjxCRxxMFKjZo=
-=OGlR
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9obysACgkQFA3kzBSg
+KbaSohAAgDry1ostr3KHmKSkab5eTNueURh8/ziotQYuXakt0ogDYx5KWpsPdIBh
+zEobJdns03GS8QPgRK+8liIi0HDQqLnO+ix9RGjsvSfg2O6rmzBAP2hhJNsKd9ix
+UhUg8URKdo0Mir0AlY4jxbNTT/tIxmefZBS8ktPLDqUuq/sg1K1Z2PQdp0kpWl6T
+rd9aDDhYZVYADSos0oTGsvAlhFtnZrKnNYnufdkJ+0vQXb8qSgq4/ui1R5iaUY81
+A1QcQoQuTf7vZvKy89r0kp9J1Sq90uvk7nuatyhqk8ze8tQFXvzA2wmI6l7b9Bng
+Ngrb3rkBKdwXY1z8PSTRnFodPxQeAGtZ00ndq8Ez+r4k/oZilY7qml8LjgBAk9q2
+mSUs6LhN5VGPNyphULmoJknG3bl4YliiSnvIXdvjYInCRMjqj4Mgmk4TOXUoxHNL
+kJQ+3YI423ONOuhZIW8zMBZsSq4ZoxSISGZY+FSUp4Hvku67iZZI+xJutg2tD+tP
+PqXOe+baAA+qEyoNxDUsWIqjldBDTbqpeSEgtvwnCg6QGdrzzNNP1AUfmJkX4kF/
+N+GWOkznYnmz1hTRlw9eKJrqVRyoon3mMM2rmV26WSAiCX+4W6a54fv/dNXh/bRX
+wev45AWJ1eREHqhkRuc/Bmk4NM0E7xechFf92gLxzqw91Cc/CPM=
+=4xiY
 -----END PGP SIGNATURE-----
 
---bi5JUZtvcfApsciF--
+--/aVve/J9H4Wl5yVO--
