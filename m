@@ -2,101 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD480271BD4
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 09:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117E2271E85
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 11:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726471AbgIUHax (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 03:30:53 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:32977 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbgIUHaw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Sep 2020 03:30:52 -0400
-Received: by mail-oi1-f195.google.com with SMTP id m7so15933045oie.0;
-        Mon, 21 Sep 2020 00:30:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bvT46MVLA1wc77+QBaxqpfVEdVrcHoplawt2ilNveyU=;
-        b=A2oe3ANEBZxhfC77GDz2mQA+UsPCo3vJh70NhyUlSkvk1ByTJ/pHVoKHI6l9LFqeSE
-         226GU2D0N/qw35k5o1NqLLe7nPo0sq5c+ytPwcYjhEyeVP9BWihv119ayxiSwhyvAYwV
-         vPuAt2NcDMNRKGdtCmSaFCcRThQTvFv+wCTBQXYF6tzoEHkqvfUt2uaK+1615I307EAw
-         bxHRMwTCJnSZZDmIKQiCTIVJvJnhOR1V3/LY8eADQI5uIf0Pg9gra6gDCuaj27xjgyKY
-         BvbYqvs10TA7qM28MboExUslHZ6L30JV1xRJy9M4zBEDc2jgOv08uRk5qIayN9TH+mNN
-         ca0w==
-X-Gm-Message-State: AOAM531jLjrhEk5N8kaJ9hzZG5qVEVtLmy83vu6FFqD0397B2wstTAz4
-        yozaNZ0efL+frQiXhidk1hdj/0vkSA46Rp0E2QM=
-X-Google-Smtp-Source: ABdhPJz9xmN9krNVkmFntK1fJCP4SVdiOQdSlUn0glZjdNUu0BDHNFHEgQW2lXttV0KKLloQqhm28dH1yGE42S/hfkE=
-X-Received: by 2002:aca:4441:: with SMTP id r62mr15852660oia.153.1600673451338;
- Mon, 21 Sep 2020 00:30:51 -0700 (PDT)
+        id S1726358AbgIUJFX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 05:05:23 -0400
+Received: from www.zeus03.de ([194.117.254.33]:35474 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726384AbgIUJFX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 21 Sep 2020 05:05:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=Gv7xlTATONSjJAHN19A25wtHZ0LO
+        KQ0L+VB+9aY8UWg=; b=y9dr0NxPcnkJrq+23UjiMoloWCMhzfLo7vGOQDwFE+Yp
+        WIqnAvr3Dzilot8ibFey7/XkUEksnUy3cGwggfcA/7iZsVNDNrLmZeuV0PpQhuLf
+        iFfj4xcwvtdSHUIi5RU0hb/RanDbBK3LRbRbFasYjkFGnq1GwFpfU7/al+OP/Hc=
+Received: (qmail 68691 invoked from network); 21 Sep 2020 11:05:20 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Sep 2020 11:05:20 +0200
+X-UD-Smtp-Session: l3s3148p1@6a1lJs+vXrIgAwDPXwWzANnLaz0lJiia
+Date:   Mon, 21 Sep 2020 11:05:17 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Alain Volmat <alain.volmat@st.com>
+Subject: Re: [PATCH v2 1/1] i2c: add slave testunit driver
+Message-ID: <20200921090517.GA1840@ninjato>
+References: <20200914071737.6354-1-wsa+renesas@sang-engineering.com>
+ <20200914071737.6354-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CA+V-a8vJ2n3KEL8P+XmVob2zjoWaX+s4a6c1TV_WoPFkwdkZmA@mail.gmail.com> <20200920140824.GA2915460@kroah.com>
-In-Reply-To: <20200920140824.GA2915460@kroah.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 21 Sep 2020 09:30:39 +0200
-Message-ID: <CAMuHMdUyXMfZcVKkqaZHJ8tJf-3Kotqg+S2NHMZT0VFO0ZJJww@mail.gmail.com>
-Subject: Re: [PATCH 07/20] dt-bindings: usb: renesas,usb3-peri: Document
- r8a774e1 support
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/04w6evG8XlLl3ft"
+Content-Disposition: inline
+In-Reply-To: <20200914071737.6354-2-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Greg,
 
-On Sun, Sep 20, 2020 at 4:08 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Sat, Sep 19, 2020 at 11:50:07AM +0100, Lad, Prabhakar wrote:
-> > On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > >
-> > > Document RZ/G2H (R8A774E1) SoC bindings.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > Could you please pick this patch.
->
-> Don't DT patches have to be acked by a DT maintainer first?
+--/04w6evG8XlLl3ft
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/r/20200721033508.GA3504365@bogus
+On Mon, Sep 14, 2020 at 09:17:37AM +0200, Wolfram Sang wrote:
+> Here is an I2C slave backend driver which allows to test some uncommon
+> functionalities of the I2C and SMBus world. Usually, you need specific
+> devices to test e.g. SMBus Host Notify and such. With this driver you
+> just need the slave interface of another I2C controller.
+>=20
+> This initial version has testcases for multi-master and SMBus Host
+> Notify. Already planned but not yet implemented are SMBus Alert and
+> messages with I2C_M_RECV_LEN.
+>=20
+> Please read the documentation for further details.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Gr{oetje,eeting}s,
+Applied to for-next, thanks!
 
-                        Geert
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+--/04w6evG8XlLl3ft
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9obMkACgkQFA3kzBSg
+Kbbw5A/9HNx+rM9lBR3cxVPy3D3zWFaK7Uf352LoTl+svu9vU4NZ2COhsRpK1UcS
+fdWQ/lF+1rHUDfh4g/QXGgt56lJ6SYmoxkjP2qEh/DNvU/WvawotC9GrkUJlx+fA
+/eBiWcbHPBdHvOUf3XRz2akc8LpRKWftBwnXqzHrwTe9MCodDoqEOy5xi0BAd6B5
+BsXKQksWynqluWZ1rsdyNsFRqZyepQ4o/yvwqTrroxJb4Ylq20luMlxTYaDn0tVf
+cWlLVG5fMxCtCAN72cb9Jaa4GgmxnXLXevdO5fbqbtmwrPt9YCgyg42GUiSQ7b1W
+RlQMETW6qraTKIbyTA5Oc+stvurRntZ4qDKy/lmhRhLu+WSIUwBw1qAAGZnIJ3CS
+jpoCQTITujlm93Z6ym9acLM2fsTyWCScwJOMLlxd9ROsNVDcXtQgvUFGHmQhvHUm
+eIlvMOqivjh56GInW8hrDqUjt2BwIIt9nZ/YCRPwn9Z2v2bAxjNWTmtVkBapWcNC
+br9ClHYZdaNdIZvIjD6k9+ab08eGs8fKmBb0ryewrfDn7Et4gDmjsjTmejcOXfKu
+ZPRyqn89msxqnIiZRUFoLTD0j0CNGEryI7KsPzaiGpIzazPgKuiQznCZuSFpYhwM
+W0gu99daYbTMCZpI8r+A7RS2RgSxI0JkmGUhwUaZjuqukK2Q/vY=
+=X0W6
+-----END PGP SIGNATURE-----
+
+--/04w6evG8XlLl3ft--
