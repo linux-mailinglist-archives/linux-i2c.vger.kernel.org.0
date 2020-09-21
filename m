@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF1A272174
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 12:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CED2721A1
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 12:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbgIUKtZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 06:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
+        id S1726732AbgIUK5d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 06:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726333AbgIUKtZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Sep 2020 06:49:25 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0F7C061755;
-        Mon, 21 Sep 2020 03:49:25 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id d4so11644790wmd.5;
-        Mon, 21 Sep 2020 03:49:25 -0700 (PDT)
+        with ESMTP id S1726470AbgIUK5c (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Sep 2020 06:57:32 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F41C061755;
+        Mon, 21 Sep 2020 03:57:32 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id a17so12226654wrn.6;
+        Mon, 21 Sep 2020 03:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=sFVxQK8xBdnDzjC1OK9aTiATQgc70EQvPj0Jv/k0m2U=;
-        b=LhgB896XWAR4s2E2aG3g4uEPeh7KjNPwa6dX/xHSQ8LHOxzY+mRid+dUEOgG6UsBhJ
-         IoRcSVKdEjWHBK8oqbryBenL916Ult9x0nvSeP3neaOz5KLD/zHtRZShWC1XrS1gLH8C
-         Y1VMdysiQjI++mibrEjGMsl0EVfPngVhwZglGdr6DEtHMFu5w8NdVMeIcV+d/3DKoCFD
-         udvzBdgpHrm29tUyt13dGKA5KNbWSrAtWrW4YtGApghHqQPiU0WjNfmxSNqt6AQmy17W
-         M52QK+aWP138GkTqxtJ/bzkRX8ZzqvYnJw9r2ITkaMA2Z4iD8k5/Kxy9PzDwlysrBLlT
-         EeZg==
+        bh=vg2wNNfraTYJE20kXoFGxN1k8DtAwKPA0F7QLzPYkis=;
+        b=G+3UVHK7pneoY0UgAaU76CWTOq7/VBrFb3pAUvKLSFTCP+Q0z+cMCUhwqtIMzboxHc
+         N4wiQUiLyVmXcNQqjqaHfGaKzM6a0YWCbtG2iaIJl1pwEZcseXBg4aeuAONzyaLCq669
+         vwyVp1ZOJOrRUskQOSbav2YGzMUR/4714zYPNKT7h3GM5PYIJBz/8pACsIymjymdTtgj
+         nEH4jKxDSd71Run3FF1/uQXcQAgA4c4C5DqrQdI40uvGxdTCms8StIn3O0I7Cefps8Iq
+         UNz3yQMGr2xT/7IAOCqUXwi5/VrnEwBxyAghJt9jf3VbIDPWjTWfHOjmNRbCqwaG7eTz
+         i35Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sFVxQK8xBdnDzjC1OK9aTiATQgc70EQvPj0Jv/k0m2U=;
-        b=OsJPNvFjiO8wThYvbt/E4vree4YmK28iQBrTQv6e3SvW89t83iBLewoXPI16VLBCgo
-         qauZY8clMZHC5xHHKCZccKZffFP5Qx5WbiKCicACMs98GkisxmNimUg/cWW0sHGuu3dl
-         5YqfltW6WhcDZfCYnV2ceJmMy3rJ987/m7E8m0LWv92OPzU2EHVyI4WLqdHI6MKTSlDK
-         Q7l5BTR1w/7PLiUekFrKtBQ1klg7y5/3ZnBgCDIxVa0ggCp+Z8D3/nYLsX/1CyRjH3GQ
-         NSlX2ZcTXPKDc9GwUsllnHsvWdKFLT+SG8JTKa/v0wyoBtmVjKxRL1wZhxfRk5an7LE0
-         Qv3w==
-X-Gm-Message-State: AOAM533H8dFf3zBeFNnsIbMfT8QhdBxKXTREKWBZeWvmGEGjcP0J9ciJ
-        +d4K+iiRTFiQhxz75KFhy8U=
-X-Google-Smtp-Source: ABdhPJxrLrraWSWA5NDAw14eQvB/LHfrHR4gsnemPlmWHSd4rdUZOfU1uTsJkoL0IZjUL29ej3djRg==
-X-Received: by 2002:a1c:7714:: with SMTP id t20mr30894952wmi.55.1600685363673;
-        Mon, 21 Sep 2020 03:49:23 -0700 (PDT)
+        bh=vg2wNNfraTYJE20kXoFGxN1k8DtAwKPA0F7QLzPYkis=;
+        b=RMi1pxTz27ywW+eKUB41UotWhao9iCg9QebUnPlSQMuu9X9+XGNKUwlZCzGFJhc+9/
+         CA1nKTc+UMHas4GVFySrkf0F28U6A2lDtXYalvReHsiLDzgabvU1+UwKqm9R2ykSw1k+
+         ZUTchZQHAj9XznY1fn6aXEIhBlNiLiLa7VQddHNpsDUDQaJei58fWsQuBqWEETB8E2cN
+         x9EgpAq1yAXqyAP62yPJvDMF9ck5vU+WHsc1vQrUDOkv9zG2/5tY431ww73yTtbPyGOO
+         vD85C7wNhWVe5EM0nipHzv6ixTQdCGbwycPxtW5xIBerQQTW1S8o5TYC0MI9bRq8B4F0
+         cf7A==
+X-Gm-Message-State: AOAM531SL/0CBAWx7oXQRBKuSXsrXZdcYEr2yix9HBp6srPbM5UiVrgY
+        YwL/OdrY+YhoqjeTEmk4zc4=
+X-Google-Smtp-Source: ABdhPJzy3Nuwdrnr3Qsmd76+KukJVqmbC2U010hra8kJCQlqWPj8LY2U5yRRy+Gsan7G0iQCUCIOEg==
+X-Received: by 2002:adf:9e41:: with SMTP id v1mr56390776wre.60.1600685850888;
+        Mon, 21 Sep 2020 03:57:30 -0700 (PDT)
 Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id z13sm19918106wro.97.2020.09.21.03.49.21
+        by smtp.gmail.com with ESMTPSA id q186sm20397159wma.45.2020.09.21.03.57.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2020 03:49:21 -0700 (PDT)
-Date:   Mon, 21 Sep 2020 12:49:20 +0200
+        Mon, 21 Sep 2020 03:57:29 -0700 (PDT)
+Date:   Mon, 21 Sep 2020 12:57:27 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,124 +57,103 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 06/34] i2c: tegra: Remove
- i2c_dev.clk_divisor_non_hs_mode member
-Message-ID: <20200921104920.GB3950626@ulmo>
+Subject: Re: [PATCH v7 08/34] i2c: tegra: Remove error message used for
+ devm_request_irq() failure
+Message-ID: <20200921105727.GC3950626@ulmo>
 References: <20200908224006.25636-1-digetx@gmail.com>
- <20200908224006.25636-7-digetx@gmail.com>
- <20200917112541.GR3515672@ulmo>
- <716583f1-60df-f576-16d3-dbb72d12fa54@gmail.com>
+ <20200908224006.25636-9-digetx@gmail.com>
+ <20200917112852.GT3515672@ulmo>
+ <0a11e836-dcc0-0fba-4da7-caf28cbcf7d6@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/NkBOFFp2J2Af1nK"
+        protocol="application/pgp-signature"; boundary="3siQDZowHQqNOShm"
 Content-Disposition: inline
-In-Reply-To: <716583f1-60df-f576-16d3-dbb72d12fa54@gmail.com>
+In-Reply-To: <0a11e836-dcc0-0fba-4da7-caf28cbcf7d6@gmail.com>
 User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---/NkBOFFp2J2Af1nK
+--3siQDZowHQqNOShm
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 17, 2020 at 06:27:28PM +0300, Dmitry Osipenko wrote:
-> 17.09.2020 14:25, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Wed, Sep 09, 2020 at 01:39:38AM +0300, Dmitry Osipenko wrote:
-> >> The "non_hs_mode" divisor value is fixed, thus there is no need to have
-> >> the variable i2c_dev.clk_divisor_non_hs_mode struct member. Let's remo=
-ve
-> >> it and move the mode selection into tegra_i2c_init() where it can be
-> >> united with the timing selection.
+On Thu, Sep 17, 2020 at 05:59:28PM +0300, Dmitry Osipenko wrote:
+> 17.09.2020 14:28, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Wed, Sep 09, 2020 at 01:39:40AM +0300, Dmitry Osipenko wrote:
+> >> The error message prints number of vIRQ, which isn't a useful informat=
+ion.
+> >> In practice devm_request_irq() never fails, hence let's remove the bog=
+us
+> >> message in order to make code cleaner.
 > >>
 > >> Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > >> ---
-> >>  drivers/i2c/busses/i2c-tegra.c | 46 ++++++++++++++++------------------
-> >>  1 file changed, 21 insertions(+), 25 deletions(-)
-> >>
-> >> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-t=
-egra.c
-> >> index 720a75439e91..85ed0e02d48c 100644
-> >> --- a/drivers/i2c/busses/i2c-tegra.c
-> >> +++ b/drivers/i2c/busses/i2c-tegra.c
-> >> @@ -250,7 +250,6 @@ struct tegra_i2c_hw_feature {
-> >>   * @msg_buf_remaining: size of unsent data in the message buffer
-> >>   * @msg_read: identifies read transfers
-> >>   * @bus_clk_rate: current I2C bus clock rate
-> >> - * @clk_divisor_non_hs_mode: clock divider for non-high-speed modes
-> >>   * @is_multimaster_mode: track if I2C controller is in multi-master m=
-ode
-> >>   * @tx_dma_chan: DMA transmit channel
-> >>   * @rx_dma_chan: DMA receive channel
-> >> @@ -281,7 +280,6 @@ struct tegra_i2c_dev {
-> >>  	size_t msg_buf_remaining;
-> >>  	int msg_read;
-> >>  	u32 bus_clk_rate;
-> >> -	u16 clk_divisor_non_hs_mode;
-> >>  	bool is_multimaster_mode;
-> >>  	struct dma_chan *tx_dma_chan;
-> >>  	struct dma_chan *rx_dma_chan;
-> >> @@ -783,6 +781,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2=
-c_dev)
-> >>  	u32 val;
-> >>  	int err;
-> >>  	u32 clk_divisor, clk_multiplier;
-> >> +	u32 non_hs_mode;
-> >>  	u32 tsu_thd;
-> >>  	u8 tlow, thigh;
-> >> =20
-> >> @@ -805,24 +804,33 @@ static int tegra_i2c_init(struct tegra_i2c_dev *=
-i2c_dev)
-> >>  	if (i2c_dev->is_vi)
-> >>  		tegra_i2c_vi_init(i2c_dev);
-> >> =20
-> >> -	/* Make sure clock divisor programmed correctly */
-> >> -	clk_divisor =3D FIELD_PREP(I2C_CLK_DIVISOR_HSMODE,
-> >> -				 i2c_dev->hw->clk_divisor_hs_mode) |
-> >> -		      FIELD_PREP(I2C_CLK_DIVISOR_STD_FAST_MODE,
-> >> -				 i2c_dev->clk_divisor_non_hs_mode);
-> >> -	i2c_writel(i2c_dev, clk_divisor, I2C_CLK_DIVISOR);
-> >> -
-> >> -	if (i2c_dev->bus_clk_rate > I2C_MAX_STANDARD_MODE_FREQ &&
-> >> -	    i2c_dev->bus_clk_rate <=3D I2C_MAX_FAST_MODE_PLUS_FREQ) {
-> >> +	switch (i2c_dev->bus_clk_rate) {
-> >> +	case I2C_MAX_STANDARD_MODE_FREQ + 1 ... I2C_MAX_FAST_MODE_PLUS_FREQ:
+> >>  drivers/i2c/busses/i2c-tegra.c | 4 +---
+> >>  1 file changed, 1 insertion(+), 3 deletions(-)
 > >=20
-> > Is there are particular reason for switching the simple conditional to a
-> > switch here? The old variant looks much easier to understand to me.
+> > I think I have seen this fail occasionally when something's wrong in the
+> > IRQ code, or when we are not properly configuring the IRQ in device tree
+> > for example.
+> >=20
+> > So I'd prefer if this error message stayed here. I agree that it's not a
+> > terribly useful error message, so perhaps adding the error code to it
+> > would make it more helpful?
 >=20
-> The reason is make it readable :) For me it's too difficult to read > <=3D
-> && { } + no proper indentation.
+> We have dtbs_check nowadays and I assume you only saw a such problem
+> during of hardware bring-up, correct?
 
-Guess this is very subjective then... It would've been nice to avoid the
-+ 1 and instead use the correct enumeration value. I think that would've
-made it a little bit easier on the eye.
+dtbs_check is far from perfect, especially since only a handful of
+bindings have been converted for Tegra. It's also not going to catch any
+functional issues. You could still have a valid combination of flags
+passed via DTB and still the interrupt allocation could fail because it
+just so happens that the particular combination wasn't valid in that
+particular setup.
 
-But anyway, no reason to hold up this patch set:
+> Realistically, this error should never happen "randomly" and even if it
+> will happen, then you will still know that I2C driver failed because
+> driver-core will tell you about that.
+
+And yes, this is the type of error that you typically get during
+bring-up and it does obviously go away once you've fixed it and then
+tends not to come back. But that's exactly what happens with most errors
+and having error messages helps in finding what went wrong.
+
+If we drop the error message, then I may notice that the I2C driver
+didn't probe correctly. But in order to find out why it didn't, I have
+to go and add error messages to narrow down where I need to look. The
+whole point of having error messages in the code is to avoid having to
+go in and modify the code in order to troubleshoot.
+
+In the interest of moving this along I'm fine with this for now. But I
+suspect that we'll run into an issue with this eventually and that we'll
+have to add an error message here again. If that happens we can always
+reintroduce one, and perhaps at that time do a better job of making it
+actually useful.
 
 Reviewed-by: Thierry Reding <treding@nvidia.com>
 
---/NkBOFFp2J2Af1nK
+--3siQDZowHQqNOShm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9ohTAACgkQ3SOs138+
-s6H5gxAAq8lxEQuTD+ICSI7UrAnKvtPj0dffLSIhLhI6sJskBNYnNdYsf7XSV0+Q
-L/VEqn9a7bILeTeSCx2woc/WEIi2lvVIWjy7PN0NFd5Iy47zlq1+Q9F8dfJjGZPX
-HQan5r50jFANqZLyxd3pE+XXreO3pv7sDAHTIOfiHME5Za81XShtcqG7b66R4wU+
-BJlUSIKxUM4uiDoaJGtkFY3F2fGpMM3FrcbzaqArmiN37E42G409NUiUSMQgzdw2
-jNiXYHysoPAC46owmd0mRSt2R6UM98vYD5BoRM5zc1eXMynfjsA+Pz/cTqaVnzqR
-tKfhalHcTSOIIzWi2tIBDBYYhgJ0TZfyoHgVaKa9p98BuOPWYFCnuUJMgh4gWSEe
-3zGFRGLF9LPb64WoU6DRWFwIezxJTmhkKg/Xm9asplw/FiPJKGoLtycM1bQTKfb4
-AHqBcGaeMI8GU9uIQa9dn91Oj9iDbaEbnHd73BW+y/Vfd+5jt6CRG3ctmA1Ke9y2
-zM4xFpX5wh5pNwyBypPQ+p8HGBXPX75d0+WUnZYphId2Es+SUfPbRzJ1p/gjC2fr
-mj50HJLY4R2xtFbSmbUjLjn8/GS12O/gQ4j3SUxDauNgdW8Ds42KPdXmLbvwOzpE
-7syEHSl/vdX47rS3j7tbPAarlBVXK4o7TrvH4xZeYtITIV8dOjo=
-=h5/U
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9ohxcACgkQ3SOs138+
+s6FAZw/+MzyklBHCa3NuvItwvPM9YixGZSka+8F3obm3hy3fMEPx4AftTHJoiiE9
+WShcAFegVPQN2hTeFuqI+qUqBuVKg2T9DY/Oc8h7x56uwY70dmUE35gGX/qkgFu/
+zD3Xz0Zz4GyUBl6K4Ry9usUfATLp+2zy5KY+v2dxTvO4vGhJTMKAXOJJxv1Cxsn/
+rGuzQ4bXmmpi84nHIaAHAK8SXq5WIpLgmn0MH93ztW4b8axJvzGBZ8/vU1JHCgGA
+ijaK/tN8fQr0jzY4OOYezrb/+eIDudwqSPkFbdErJvRjc1CYuD2H6yKZeNm2mUw5
+7y/Jju2vunoR4m6NM71TexHmsQq7p3isED2cEPZ66d4VeMqqLan17sVnslJH+puB
+KeLKmmZ0PhCjeJwfxgVT1j8YhRRb46vmZzfIMXOlJlesruNMjk6q3xmXeFnql/pn
+qZQnRpfkA5qfMX6QU9I5m478XRoiqyGf+zTRpoW5sIGDYSVZbSe2+sc7Hkh7zJjI
+/ZxbMN0koMqmG/q4fVbwdKDfuWm/2ROKqute+Aq3VVobISmKeDKKYoagJtljOss1
+xTAZuepn1sz6ENtMbQFH2vcMB87tElfgfF2ouuMOiEr2YqQFOFTbHltl9RQ+//8L
+OwfH6AjPcqu8jnHASxyfXBgIj/EvwapSjZJCTI+CyovY1jQ+M8c=
+=IBBC
 -----END PGP SIGNATURE-----
 
---/NkBOFFp2J2Af1nK--
+--3siQDZowHQqNOShm--
