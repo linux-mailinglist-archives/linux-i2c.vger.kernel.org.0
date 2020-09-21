@@ -2,99 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E119D271F08
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 11:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C29271F09
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 11:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgIUJjI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 05:39:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59828 "EHLO mail.kernel.org"
+        id S1726507AbgIUJjS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 05:39:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59878 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726474AbgIUJjH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Sep 2020 05:39:07 -0400
+        id S1726367AbgIUJjS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 21 Sep 2020 05:39:18 -0400
 Received: from localhost (p5486cf2a.dip0.t-ipconnect.de [84.134.207.42])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2C1002151B;
-        Mon, 21 Sep 2020 09:39:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E3A0B2151B;
+        Mon, 21 Sep 2020 09:39:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600681146;
-        bh=FB9gmrtsPTmm2+oEdcUPVmACiV0h7uL+URx6rj0YMDQ=;
+        s=default; t=1600681157;
+        bh=aMczpGqXtPI/LNHqyP5LpS7scjs+KqG3Q940lW72ss8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cHc0Uz13XkSIy8AQVkBJwIgP1suUUXe1ytVxn32kA4FSnYQsTT6Wd6ETrayDF2SRU
-         SR4bHvmrRyEeqcwU/6AilZkh3q7XHaa6EcLzGv8nSrMOZjqL0d3UFLls2S9GQBUHxj
-         mhPOhzl3Txg0ze3J34vdfwUFjohjmipI0AEbOO0s=
-Date:   Mon, 21 Sep 2020 11:39:03 +0200
+        b=Q5Dtqh6rIDcSpfWs/+63d0rQFosBoVOA2fRD46aTCXY/VOUR4PVdMGfNz4i1yWYv+
+         eSok+EhNkGgvDV6U25OtfYL6cW/XHVzPY1sEljzA6KgUv3PDf094lfF/ZcZNBQpnJ/
+         p3ZrNYA/1vkFIDiymhgds6C/mCkF26rYJdwrimmA=
+Date:   Mon, 21 Sep 2020 11:39:14 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     "Mukesh, Savaliya" <msavaliy@codeaurora.org>
-Cc:     Barry Song <song.bao.hua@hisilicon.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH] i2c: busses: replace spin_lock_irqsave by spin_lock in
- hard IRQ
-Message-ID: <20200921093903.GI1840@ninjato>
-References: <20200909041001.5612-1-song.bao.hua@hisilicon.com>
- <268c12c2-c72d-809c-9ecc-520ef274c1c3@codeaurora.org>
+To:     trix@redhat.com
+Cc:     syniurge@gmail.com, nehal-bakulchandra.shah@amd.com,
+        shyam-sundar.s-k@amd.com, natechancellor@gmail.com,
+        ndesaulniers@google.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: Re: [PATCH] i2c: amd_mp2: handle num is 0 input for i2c_amd_xfer
+Message-ID: <20200921093914.GJ1840@ninjato>
+References: <20200904180647.21080-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LYw3s/afESlflPpp"
+        protocol="application/pgp-signature"; boundary="GvznHscUikHnwW2p"
 Content-Disposition: inline
-In-Reply-To: <268c12c2-c72d-809c-9ecc-520ef274c1c3@codeaurora.org>
+In-Reply-To: <20200904180647.21080-1-trix@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LYw3s/afESlflPpp
-Content-Type: text/plain; charset=utf-8
+--GvznHscUikHnwW2p
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 10, 2020 at 11:48:02PM +0530, Mukesh, Savaliya wrote:
+On Fri, Sep 04, 2020 at 11:06:47AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 >=20
-> On 9/9/2020 9:40 AM, Barry Song wrote:
-> > The code has been in a irq-disabled context since it is hard IRQ. There
-> > is no necessity to do it again.
-> >=20
-> > Cc: Gregory CLEMENT <gregory.clement@bootlin.com>
-> > Cc: "Andreas F=C3=A4rber" <afaerber@suse.de>
-> > Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Cc: Akash Asthana <akashast@codeaurora.org>
-> > Cc: Mukesh Savaliya <msavaliy@codeaurora.org>
-> > Cc: Andy Gross <agross@kernel.org>
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-> > ---
-> Reviewed-by: Mukesh Kumar Savaliya <msavaliy@codeaurora.org>
+> clang static analyzer reports this problem
+>=20
+> i2c-amd-mp2-plat.c:174:9: warning: Branch condition evaluates
+>   to a garbage value
+>         return err ? err : num;
+>                ^~~
+>=20
+> err is not initialized, it depends on the being set in the
+> transfer loop which will not happen if num is 0.  Surveying
+> other master_xfer() implementations show all handle a 0 num.
+>=20
+> Because returning 0 is expected, initialize err to 0.
+>=20
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thanks! Did you review the whole patch or only the qcom-geni part?
-(and please don't include the full message when you only reply to a part
-of it).
+Applied to for-next, thanks!
 
 
---LYw3s/afESlflPpp
+--GvznHscUikHnwW2p
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9odLMACgkQFA3kzBSg
-KbYMgRAAr7VDQjXeRo9RUQBho8zeCTQYGoeDV/CgZsNbMfA1PTDQ8cCDs5zSNLV6
-6BY6597BhKIXrjuiV/5ROCW+VKNbvhVl73KQfeGPlY9JSoR+al93Xijb4YneFjjK
-x7GH9p/Tx9O+Y50LHQOAG5xuLLNurSjKlAXSpI4anZwt0BYP9lqoYl20sUZ10MdY
-LnYT9jgJyc1ImQVoCKBwEkUzglvcHuyZUl7fsI3VFSSAZAc9mayMfrvOKgTgJD9H
-jAoXhU0xIg+bBZI/kdnj0W6S+/AUU9XJJ3bHwdlGZGtpQ9G3wABIpo5GPPXDNAMU
-Hc6LXEAaHLWRgkA76Btia7At3UXhIng+fb6MXXdiNq2n7Q66CLEFMUua3Wm1f+86
-h13gCbSsz9Yw80JKw1QFSMBzHcXYSpp4hYXJxqtqaThgSfK5htfB93W7zSn0EP1A
-8G3BYvYd3JoxQXs6GZRNlAYYvJSGlZ9a/fp9bCMHY5WorxGrOSVBqiOTPTVHeLt9
-ewli/CRZhKYgXGgS/Z9gyme5sHrqWlKvtAxKa8ZeO4eMsYKGGFv2WxJAHMJRaONr
-Ui/PNlY0fHvQwIap3VdBS4wSB5O9M7nv+lFxYo6lEX6hkhOXy9uh6r5sehh475Ho
-vb2QhGQDxOIEa3HhmOHdQ9DYHentKi16gQRyN2coQUr9r16wWiM=
-=JACI
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9odMIACgkQFA3kzBSg
+KbYswA/8Dr/QwVbjfGkDlOvW2zJybPB+fpYamXJdBiftsNc/WyLDoLrw3236A987
+oRLA/UXcxyVRaXsFNDc7hoGG1GwxpqmiVFL34mGo02O20PtpO3VBFbDGk+oDYyF7
+AqWjxFw1xLSWx2pYQM6KXcd4JG7+wPT/XJ5eoRayLabLMoIboQWTM6LB2QxH4HV1
+/uDlVXuIY/q6kWJLuR1kUJ8loYo2n2TV5+9LSPLxNPfkmfnKfbDsf1AnqNEWRG+3
+y8CSda2VL/jvP3FAfsef+4i+2hKpW3PWoFrClgSl5mErw5g75+AO9P6WO7mQGdyd
+I4RybjsfXh5BaEMzyRVu1jcefcTdsir3Qt5025hRloMxZHNa3FnEU4XYvqHmNchG
+zSpMR6ynpQgbUGYh1N0Vi/jv1EJgPVi/vjH7XlA7+wMBOt9lIUiXdABSrWDEquOQ
+k4SJpDfIrSc0s2PWwMKiSPZkIH+wcrEnbXiFv/oVEw/AFf6mOihCVGbsomGn0hMh
+jSaHryCszQlzWn3J0NIyu/1v6chPTL/WuP9tVXP0lKRmSFzAdCUxupemqLWnIwuf
+I454ZgIKhZLsWk7v9qicDG9MTpJEEK63U4tBtmjHzCsg0f5cHO7YY/+liIT4H5/b
+Vyp27XqWrVJMriJda3rfF8htS3BcN+FXZtBVmXk22NCGQqhYN6I=
+=Kytx
 -----END PGP SIGNATURE-----
 
---LYw3s/afESlflPpp--
+--GvznHscUikHnwW2p--
