@@ -2,109 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3E3272209
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 13:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E34272214
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 13:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbgIULP2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 07:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S1726627AbgIULPn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 07:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726347AbgIULP1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Sep 2020 07:15:27 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFECC061755;
-        Mon, 21 Sep 2020 04:15:27 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id 34so8721725pgo.13;
-        Mon, 21 Sep 2020 04:15:27 -0700 (PDT)
+        with ESMTP id S1726353AbgIULPl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Sep 2020 07:15:41 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C0EC061755;
+        Mon, 21 Sep 2020 04:15:41 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id s12so12284947wrw.11;
+        Mon, 21 Sep 2020 04:15:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MngPZs8exR/vA7ZNHKQcqmS1MllzhXNLPWSroEcCreo=;
-        b=LX0emU0LoPbym8bk1qDg8dvbOd8iXZQmRjJTQ9/DLIivbsbncsGxpcbGsIbIyBYQpk
-         lLGjBdH9DDte3Ja2+7j1lkkU7qaVrq1xJd27p2OYMtdMuaPmAGJMGeejyHcKvX8tHgo/
-         VKGnGuLucrAoITjLxtWOLn5kJOJ/sPNeuDIIQ4nOkZZ5BJ1gv4IZq7y13s17T8timuKn
-         6XRLIszHX5PGmSX58TyJgELBbz2+9LlitWKIWyb06KVdJgeEQjGe/UtcSeY+72VsoQdK
-         /vOXtCXfC0H2vaukjh56ML4kn090wXwV2lnky+R3ZcCe9/s8BPT0cUeDRMDYZwtJf82n
-         bQhA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wClfm+RU3xl+5yhIUC/40symO9pQWUClshjXpyXDPhg=;
+        b=dNbznspCUB9NWlhHlue5W+MgQvYy3SRlaA0rqQAsOB+vYlY29DXwJ8n7Jw8a4CnJX+
+         9a5qQqvefV/kMv2nMlYQ/XTR9v6d8nHJi8bMlLx/FCl1x7TyZKdClpraWH+CW7D7TCIu
+         Brmf8c7lmKOBCCuvO0uz2TUQZsFNAqRdZ7Ewe6dVW66LCufwOMtnHmXDLBpZKU2UsbIj
+         d4iNS2oe9jfcRQ7jC3R7kmksGEOkCMBuzjNi7ODVow7MGAZeGUhq1e7Ukx5QfpuGrDpZ
+         YxcgcChguwx2PIFb1pUwE9GsoQKPzCMZantxbrS7B7tRWrU1IXmrVDRff/wNvVXLVsZk
+         99wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MngPZs8exR/vA7ZNHKQcqmS1MllzhXNLPWSroEcCreo=;
-        b=OY0Xon0csdmjcUuwiCUJ0RGUlY87V71LeN1DCE/yv3mxmwvjP39zkT1bRXdD4TX8bE
-         pMDr0NPePIPL3Sw7M7hsCjr6uOOttSqV7mdrEmFrNgrOYNUO8k4ytdnSHo7AeW51VYAI
-         Y59OkbvwHKRDG3swhcLadABkFJfqd0WL6OAGU5hda6X+bERqVdjl/ZbbD5HuJMoqNWKa
-         HHVlidR4BqkDmBf6wSSzD6KjuiJi7DwXcTRvmv3LD78NsuN2bi2tbeIVRSHD7ZZDdr+p
-         /Zt2NcQvDnGIn0FJyxai+Ka3wl29tTOMY5z18aHkBkKZVkGXapsU/oLGmYrHQ0VAhFC8
-         VBRQ==
-X-Gm-Message-State: AOAM533cZzID/JNxmVur7nucFgOMPdVSuVCUpbXgWFyMagTcrkH88K/b
-        IH5nRMCylZXcPkoEpLCJ6zRAxkrqj5jqBVS8vgw=
-X-Google-Smtp-Source: ABdhPJzey1/Xon9D8NUVucg/ZLX3GIc6RVy5tXjThImNyN3M1IVbLYNwOZJSnpND6kXCkDfQoSrpG57wAsYZlIWIS0g=
-X-Received: by 2002:a63:d648:: with SMTP id d8mr36718890pgj.4.1600686927127;
- Mon, 21 Sep 2020 04:15:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200908224006.25636-1-digetx@gmail.com> <20200908224006.25636-13-digetx@gmail.com>
- <20200917113846.GX3515672@ulmo> <CAHp75Vd_B9WLM99LnN2YiZ045z8SUkD7KwY2wVEUeQ9Mx7fg5g@mail.gmail.com>
- <20200921110159.GD3950626@ulmo>
-In-Reply-To: <20200921110159.GD3950626@ulmo>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Sep 2020 14:15:09 +0300
-Message-ID: <CAHp75VcpoZ-m2wkJGv4s+KthOVLQR1XBTzMFMmvj-Q82BEh7NQ@mail.gmail.com>
-Subject: Re: [PATCH v7 12/34] i2c: tegra: Use clk-bulk helpers
-To:     Thierry Reding <thierry.reding@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wClfm+RU3xl+5yhIUC/40symO9pQWUClshjXpyXDPhg=;
+        b=d3xpkyramuDr4TDHObQ7Ot2q/PbNaXD3bgwrY4kcF3PIYMtFVii8CjSKpwOG2fDTai
+         HrBh+OILwLpayStWq7doHXMl5zRsgV895Y/wrPQ8qobR1cI4BBDKf1Q+HnRzAMbpx8vl
+         kqUafaSGcUMPkFbN7Zbp2ptI95M9y4/6f8Ex3D1PCAzPhrebsre7setDMHtp423JUcxP
+         aL8piG6WmTQTilcO5Cd1QvEPzdP+O1oQyEHnsKPMluIoMIrZnmCx/bUZgLu992jhS5bh
+         vH1YtkWf+DfPGjGh1MB7Z+MoxLiuL3ydwYosAUhNcKlOLtv70u077AKxt8CO/6Ul6CTd
+         vkyw==
+X-Gm-Message-State: AOAM531tEr08GJjSmVopa4PGrlDSe5Lb8zYGKmMMRpgv+s3urRRZwPUh
+        MzLLfRTSsOlsa58wiwueHo4=
+X-Google-Smtp-Source: ABdhPJwbuNbewhCeSLiStKYxwRC/uidvhQOnlGLEkB6asBpFLOeW616vpjOdmtML2EBIPTpDFv0flA==
+X-Received: by 2002:a5d:4448:: with SMTP id x8mr55201719wrr.207.1600686939822;
+        Mon, 21 Sep 2020 04:15:39 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id y6sm20410238wrn.41.2020.09.21.04.15.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2020 04:15:38 -0700 (PDT)
+Date:   Mon, 21 Sep 2020 13:15:36 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Dmitry Osipenko <digetx@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Wolfram Sang <wsa@the-dreams.de>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         linux-tegra@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v7 14/34] i2c: tegra: Clean up probe function
+Message-ID: <20200921111536.GG3950626@ulmo>
+References: <20200908224006.25636-1-digetx@gmail.com>
+ <20200908224006.25636-15-digetx@gmail.com>
+ <20200917123755.GO3515672@ulmo>
+ <CAHp75VeWq_GzJ_yZag2yceuUDqPiMRWEa4XNYT5uPwXCzrsb7g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="JbKQpFqZXJ2T76Sg"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VeWq_GzJ_yZag2yceuUDqPiMRWEa4XNYT5uPwXCzrsb7g@mail.gmail.com>
+User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 2:02 PM Thierry Reding <thierry.reding@gmail.com> wrote:
-> On Thu, Sep 17, 2020 at 04:54:28PM +0300, Andy Shevchenko wrote:
-> > On Thu, Sep 17, 2020 at 2:38 PM Thierry Reding <thierry.reding@gmail.com> wrote:
-> > > On Wed, Sep 09, 2020 at 01:39:44AM +0300, Dmitry Osipenko wrote:
 
-...
+--JbKQpFqZXJ2T76Sg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > This is tempting from a diffstat point of view, but the downside is that
-> > > we can now no longer validate that all of the necessary clocks are given
-> > > in device tree.
-> > >
-> > > Previously the driver would fail to probe the I2C controller if any of
-> > > the expected clocks were not defined in device tree, but now it's just
-> > > going to continue without it and not give any indication as to what's
-> > > wrong.
+On Thu, Sep 17, 2020 at 04:46:45PM +0300, Andy Shevchenko wrote:
+> On Thu, Sep 17, 2020 at 3:37 PM Thierry Reding <thierry.reding@gmail.com>=
+ wrote:
+> > On Wed, Sep 09, 2020 at 01:39:46AM +0300, Dmitry Osipenko wrote:
+>=20
+> ...
+>=20
+> > > +     ret =3D devm_request_irq(&pdev->dev, i2c_dev->irq, tegra_i2c_is=
+r,
+> > > +                            IRQF_NO_SUSPEND, dev_name(&pdev->dev),
+> > > +                            i2c_dev);
+> > > +     if (ret)
+> > > +             return ret;
 > >
-> > You may print an error in the error path as previously. Since both
-> > clocks are mandatory (as far as I understood the code) user will need
-> > to check DT in any case.
->
-> The problem is that the number of required clocks depends on the variant
-> of the IP block that's implemented. Some require just one clock and
-> others require two or three. With this patch the driver is just going to
-> pick whatever clocks are given in device tree, but it removes any
-> possibility of detecting whether the device trees contain the correct
-> clocks. So we may very well run into a situation where the driver now
-> successfully probes but then malfunctions because one or more of the
-> clocks were not specified in device tree.
->
-> Thierry
+> > Is it safe to install the interrupt handler at this point? What if,
+> > perhaps because some bootloader didn't properly quiesce the I2C
+> > controller, an interrupt triggers immediately after this?
+>=20
+> It\s easy to check with debug shared IRQ, but here IRQ is not shared...
+> So, with a hack into the code and enabled debug it will be achievable to =
+test.
+>=20
+> And you probably meant that IRQ triggers *before* the handler is in place?
 
-I still failed to get this. Are you suggesting that CCF bulk
-operations are fundamentally broken?
+It shouldn't be possible for the interrupt to trigger before the handler
+is in place, because requesting the IRQ here is what will unmask the IRQ
+at the parent.
 
-In the above case one may add more checks. AFAICS is_vi won't be
-removed, so can be easily checked.
-Basically that for-loop for div_clk is questionable. I agree on that.
+I'm more concerned that the hardware may be in some state where it
+already has a pending interrupt and therefore unmasking (as part of the
+request here) is going to immediately trigger an interrupt. If we
+haven't set up i2c_dev completely at this point this may cause issues
+because the interrupt handler will now have to deal with a partially
+initialized structure.
 
+Thierry
 
--- 
-With Best Regards,
-Andy Shevchenko
+--JbKQpFqZXJ2T76Sg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9oi1gACgkQ3SOs138+
+s6FcFw//RlEH0g54qtu8PGnLh8rFz2mm5O6zc8lmlmkoqrQGm3ZP2izN2u4k54ti
+D5ndkjiSW2JvYeixx9qRzyOKjrRlwNFAHU6Zo/BkqVlTryKbmjiDnqtFW0khbFHm
+Fg2GrMsVRQKc0UayPjQhWYQFn64y/msmevPUZ0ipwV49vxQoS7A4aVhoZFkBjkuX
+S55np3zEmCBb8Pht/atCcEUpd1U2/RZwkgI9NVdKdtAXicAeM+Juh7a0VImW1CsI
+KhG6XPJaDsUjOcZLWxXHgeHTWU7J/rvHVsWcVH4EQht5TIEl+el0gAGhdQVGsgaD
+K/UXZT4DEhvflIbuQeMPe/4p1o/jIoNhbSDZZCZhNSkawuHDSvoMcSCCaTIP/9W6
+UygShkr5j64QEBxzybB+9Ab+AHp9w0SoBNZbBpGj4DeLGog2S/PN0pn6LhuOc5By
+qiydmGr+VoEpCyq+hY8t+PfCl3Q1YSFa90Hpxssc+NZ0HXz5Dsy9x7Gc90MtIv3P
+tgyMpvchOwQCWzhypDUPe7126Uap7ebb1KA65yskBHpzD5bSAXzmQD5k+gpxE6Z1
+qMsThtdOl28ZnveAOh8C7EA+8u3gxnKU0/Ib7j/pm46RBR3eTGuM6FV1N73DSUOe
+Scaioz/OR5k+Q/vvxz8W4itv6XO/zEcGy9GUlzcAqWKV14i8dlg=
+=/pGp
+-----END PGP SIGNATURE-----
+
+--JbKQpFqZXJ2T76Sg--
