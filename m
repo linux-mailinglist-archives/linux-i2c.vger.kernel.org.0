@@ -2,83 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AAD27283C
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 16:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52372728AC
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 16:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728095AbgIUOlm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 10:41:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51020 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728078AbgIUOlf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Sep 2020 10:41:35 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D236235F8;
-        Mon, 21 Sep 2020 14:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600699295;
-        bh=hGw+1Ze6k5/Mdm/F3sQRnWvTlvJENxIxqcdnzezofeY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IEB/aEM9zfzz8S6KRpEZ+jG6h/Sd/sdND+WR4qAm26+sFumFbwWfPxr2VRTwCd68m
-         fIIm8eFWKkiFeYaXcEi098OREoWBkrukyw18peW+BQVN+xUhaWenwXr4R67ozVEglJ
-         eB7o6lq41QCSc1d9Q8YP7JFhLLssmv3JhxQkGv3Q=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 2/3] i2c: core: Call i2c_acpi_install_space_handler() before i2c_acpi_register_devices()
-Date:   Mon, 21 Sep 2020 10:41:30 -0400
-Message-Id: <20200921144132.2135971-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200921144132.2135971-1-sashal@kernel.org>
-References: <20200921144132.2135971-1-sashal@kernel.org>
+        id S1728049AbgIUOoo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 10:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727965AbgIUOom (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Sep 2020 10:44:42 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E225BC061755;
+        Mon, 21 Sep 2020 07:44:41 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id 77so6996365lfj.0;
+        Mon, 21 Sep 2020 07:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=VBmGKsH4HXBysaC98/3xCnOtRsPHJTpyWV8wSKmKAjM=;
+        b=BFVZcoCXkbqbquKK2sSGrqLtZKU9hzgIVQ2eHQpno/78sfx38zmfBEIhAH1oOuaatm
+         lX7GOmadwj/QomMTDwgUyLyExg3FoHj9ReuFspSZ8IyUmt4YBN3NEMi+mScNFnEg8gtK
+         4i5re2ZtmX2gYb2MANPMa3upP1zoLp3CFzZI6PTnBuhH6DNKdeLs2f6e8/buiPyfMA/P
+         0Wof0+d7k2Gs33gLKi16XEihTtQa8nhfqQ5p3WBJjmYa9MwZeeqEsQyMhLuLvY8MHbHI
+         V+EK2A+4HlnMfzeu7lygDLb7KCjca8QCFnR//FPG56cetY8StplXI7REZUHw3JQ2VlyD
+         u4Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VBmGKsH4HXBysaC98/3xCnOtRsPHJTpyWV8wSKmKAjM=;
+        b=dBd0idAccgsOt+tbUfbgWH3RekJ+ZDJ8/ERJQcFzwmCzmcudISwzjaZFSPS0UImJHO
+         4YPEeabfmDwezU607MGVXOTbdKetYen+yusw9+C8XT/L38VMHxqKisPJg+Wm9x9qGS0i
+         xEpgaaY3O0FyvUMmUiOAVClHO/EHb9XdBXPZeWdwJ6JHyKbBrfNvu5awxclSczPceHuT
+         PQ112Zmamqoa0lOBJauQTHeaHaYxFMMdZ+WiglFIrjfhGDyISrr5PNFQc+524g3osoZ7
+         sanqceddodN3nvIbDcNhodhmISp1zrXdf4/M6nA+dDQTf3gHaY5K702ZaGPoBIf7XUsh
+         yK1Q==
+X-Gm-Message-State: AOAM532rGqWEWilRcEh7cdDx+UPU0Tz2trKrnfIQLOPpj/Q6zC7eYqph
+        tyqMZg/dvQ0n1lqX5jFsfNXCqTa7H4A=
+X-Google-Smtp-Source: ABdhPJz5SLAxXZRgZVYvNQwvj6rRLaz1d+7HanqGVKxv0Y8w2q0awvZO/dcXQiZTg5zyIAQogBIZTg==
+X-Received: by 2002:ac2:593b:: with SMTP id v27mr116180lfi.338.1600699480014;
+        Mon, 21 Sep 2020 07:44:40 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id x5sm2765162ljh.127.2020.09.21.07.44.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2020 07:44:39 -0700 (PDT)
+Subject: Re: [PATCH v7 12/34] i2c: tegra: Use clk-bulk helpers
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200908224006.25636-1-digetx@gmail.com>
+ <20200908224006.25636-13-digetx@gmail.com> <20200917113846.GX3515672@ulmo>
+ <175e7f54-36f0-32c6-35a3-14c5b5e89e95@gmail.com>
+ <20200921111257.GF3950626@ulmo>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <7b3b9e21-f8c8-eebb-85bb-af62fc204f10@gmail.com>
+Date:   Mon, 21 Sep 2020 17:44:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <20200921111257.GF3950626@ulmo>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+21.09.2020 14:12, Thierry Reding пишет:
+> On Thu, Sep 17, 2020 at 06:01:56PM +0300, Dmitry Osipenko wrote:
+> [...]
+>> It's still possible to add the clk-num checking, but it should be
+>> unpractical. We could always add it later on if there will be a real
+>> incident. Do you agree?
+> 
+> There's also clk_bulk_get(), which allows you to specify the number of
+> clocks and their consumer IDs that you want to request. That seems like
+> it would allow us to both avoid the repetitive calls to clk APIs and at
+> the same time allows us to specify exactly which clocks we need. Would
+> that not work as a compromise?
 
-[ Upstream commit 21653a4181ff292480599dad996a2b759ccf050f ]
-
-Some ACPI i2c-devices _STA method (which is used to detect if the device
-is present) use autodetection code which probes which device is present
-over i2c. This requires the I2C ACPI OpRegion handler to be registered
-before we enumerate i2c-clients under the i2c-adapter.
-
-This fixes the i2c touchpad on the Lenovo ThinkBook 14-IIL and
-ThinkBook 15 IIL not getting an i2c-client instantiated and thus not
-working.
-
-BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1842039
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/i2c-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/i2c-core.c b/drivers/i2c/i2c-core.c
-index 80d82c6792d8d..4fd7bfda2f9de 100644
---- a/drivers/i2c/i2c-core.c
-+++ b/drivers/i2c/i2c-core.c
-@@ -1858,8 +1858,8 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
- 
- 	/* create pre-declared device nodes */
- 	of_i2c_register_devices(adap);
--	i2c_acpi_register_devices(adap);
- 	i2c_acpi_install_space_handler(adap);
-+	i2c_acpi_register_devices(adap);
- 
- 	if (adap->nr < __i2c_first_dynamic_bus_num)
- 		i2c_scan_static_board_info(adap);
--- 
-2.25.1
-
+I'll change to use clk_bulk_get(), thanks.
