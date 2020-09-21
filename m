@@ -2,23 +2,23 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AAA271FDD
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 12:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B16E271FE3
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 12:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbgIUKSy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 06:18:54 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:18118 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726326AbgIUKSy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Sep 2020 06:18:54 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f687e010001>; Mon, 21 Sep 2020 03:18:41 -0700
+        id S1726550AbgIUKS6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 06:18:58 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:18405 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726326AbgIUKS6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Sep 2020 06:18:58 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f687db50000>; Mon, 21 Sep 2020 03:17:25 -0700
 Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL111.nvidia.com
  (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 21 Sep
- 2020 10:18:53 +0000
+ 2020 10:18:57 +0000
 Received: from [192.168.22.23] (10.124.1.5) by HQMAIL111.nvidia.com
  (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 21 Sep 2020 10:18:51 +0000
+ Transport; Mon, 21 Sep 2020 10:18:55 +0000
 From:   Thierry Reding <treding@nvidia.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 CC:     Thierry Reding <thierry.reding@gmail.com>,
@@ -29,41 +29,40 @@ CC:     Thierry Reding <thierry.reding@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         <linux-i2c@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 06/34] i2c: tegra: Remove
- i2c_dev.clk_divisor_non_hs_mode member
-In-Reply-To: <20200908224006.25636-7-digetx@gmail.com>
-References: <20200908224006.25636-7-digetx@gmail.com>
+Subject: Re: [PATCH v7 07/34] i2c: tegra: Runtime PM always available on Tegra
+In-Reply-To: <20200908224006.25636-8-digetx@gmail.com>
+References: <20200908224006.25636-8-digetx@gmail.com>
 X-NVConfidentiality: public
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Message-ID: <0c69ae5704544812a6debe02a5dee178@HQMAIL111.nvidia.com>
-Date:   Mon, 21 Sep 2020 10:18:51 +0000
+Message-ID: <ea6d5580a0f040caac30d70533814c40@HQMAIL111.nvidia.com>
+Date:   Mon, 21 Sep 2020 10:18:55 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1600683521; bh=gB+wpNxpnLYbrWlLpieJ3HTcd+AvEi8XiWeUQ8CXHy8=;
+        t=1600683445; bh=ie8rGEINW3MKCgc0UrTv0/7rjOA56FJ+kaUHyLL1zms=;
         h=From:To:CC:Subject:In-Reply-To:References:X-NVConfidentiality:
          Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:
          Date;
-        b=bd7zBJo0N6FE9aNxCxymw6Hu5Ka22T2fhvgI67E0zqrNztBhB3RF9ezr6AxXGSfuB
-         Mpb+21t8c1/tbFXg4L4SwHruUzGZYl28JF3FOXRv3UyyuOHg35ZrhhcHXeT7vRBmQC
-         weNHf/IfWdCLwu7A+LZjfhFa6yYx/1edvt1rbG7Nlh+rc1Y9VoVcMxa5Gss0b3x/I0
-         x5uWNASyYVEjUjY2GNba7t6GWBff5SBySGZD2a4AiRPjiN2wuP6woTQySLq6VyJYAH
-         pugTU/348/s1FmiuFY01P4OI3zmdOwkIIkCF12++XUk/tKgBbUTkIKT0FQB2uAZNCs
-         M+0b0NHTbPF1w==
+        b=nh80Wb8rQ0RWHlDqFjPTpRrAYMlcrnqNqyOvTqzXQBUKCQW7ogUv3uGxvPotud8Gv
+         ddCbCrZJoNDymsogIHKeMOEdLHZGXWUD9jwpiMms+frzdjiZ062jG2eewDwVC2okOZ
+         ofsxvu4D2/Oi99a2XkUa//HqZldeB47TdwDBy4gg5TvQjnWjUdy4eICXx21FWP6cBs
+         Z6S9ZiuQdwduwHX4Lq8b2NWxvhkSrJAr4LJwS2L0cxheWQ/PulI5iGnMOR4hDDEeks
+         vq6O4tDkof2nIT337TWmEyxvbNsVghS6DUv/dWGEY8hAfpx3eZ2GmLn2jE0MwnorNA
+         gcr+YW0R3k6xw==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 09 Sep 2020 01:39:38 +0300, Dmitry Osipenko wrote:
-> The "non_hs_mode" divisor value is fixed, thus there is no need to have
-> the variable i2c_dev.clk_divisor_non_hs_mode struct member. Let's remove
-> it and move the mode selection into tegra_i2c_init() where it can be
-> united with the timing selection.
+On Wed, 09 Sep 2020 01:39:39 +0300, Dmitry Osipenko wrote:
+> The runtime PM is guaranteed to be always available on Tegra after commit
+> 40b2bb1b132a ("ARM: tegra: enforce PM requirement"). Hence let's remove
+> all the RPM-availability checking and handling from the code.
 >=20
 > Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> Reviewed-by: Thierry Reding <treding@nvidia.com>
 > ---
->  drivers/i2c/busses/i2c-tegra.c | 46 ++++++++++++++++------------------
->  1 file changed, 21 insertions(+), 25 deletions(-)
+>  drivers/i2c/busses/i2c-tegra.c | 29 ++++++-----------------------
+>  1 file changed, 6 insertions(+), 23 deletions(-)
 
 Tested-by: Thierry Reding <treding@nvidia.com>
