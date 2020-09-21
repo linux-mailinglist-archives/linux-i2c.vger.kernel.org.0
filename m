@@ -2,36 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7D127286A
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 16:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CFE272809
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 16:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728219AbgIUOnL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 10:43:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49560 "EHLO mail.kernel.org"
+        id S1727954AbgIUOk5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 10:40:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49796 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727899AbgIUOku (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Sep 2020 10:40:50 -0400
+        id S1727928AbgIUOk5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 21 Sep 2020 10:40:57 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0841223447;
-        Mon, 21 Sep 2020 14:40:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6B7DD2371F;
+        Mon, 21 Sep 2020 14:40:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600699249;
-        bh=E0ekg5aWtYtk64cRZDogsmPhWOTt7xCyRrKTdmYg2Vk=;
+        s=default; t=1600699252;
+        bh=epOgRHJDgXsxln8kuvcmrBtLdvOqe96oF8UpA61L8X0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HSu8lmECLBsVICvMBwyxmylO6v2mI9Ok1CiHtLMebKAD2Zs3YwEUX1tfbgEabjaef
-         fPl3ryjvZkjDR0MIWY2OsqVT9pvk+RyJBxJejDPOBclyxZZ1+Bw3xXyIAt2FPgrSb1
-         6rlz41m82wMamCQFOvJqI3AmXiKkzCp15QT58YAk=
+        b=S8dOr7n3XFo3w/dITei4kEhijo8bA7pfeJjTGLdIoTAzNQHX+9LDRzwxg07Rah27X
+         T+lOxryJphhl3GV7UN0LaoBe2vBRH6o9TuF/YXhL7HrJFo3CXn32+5NoA9nFyUlNro
+         otRQ1V8+p2AiS1RVz5r22jCdDLLWLnGmrsFfeCgU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+Cc:     Qii Wang <qii.wang@mediatek.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 17/20] i2c: core: Call i2c_acpi_install_space_handler() before i2c_acpi_register_devices()
-Date:   Mon, 21 Sep 2020 10:40:24 -0400
-Message-Id: <20200921144027.2135390-17-sashal@kernel.org>
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.8 19/20] i2c: mediatek: Send i2c master code at more than 1MHz
+Date:   Mon, 21 Sep 2020 10:40:26 -0400
+Message-Id: <20200921144027.2135390-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200921144027.2135390-1-sashal@kernel.org>
 References: <20200921144027.2135390-1-sashal@kernel.org>
@@ -43,42 +44,35 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Qii Wang <qii.wang@mediatek.com>
 
-[ Upstream commit 21653a4181ff292480599dad996a2b759ccf050f ]
+[ Upstream commit b44658e755b5a733e9df04449facbc738df09170 ]
 
-Some ACPI i2c-devices _STA method (which is used to detect if the device
-is present) use autodetection code which probes which device is present
-over i2c. This requires the I2C ACPI OpRegion handler to be registered
-before we enumerate i2c-clients under the i2c-adapter.
+The master code needs to being sent when the speed is more than
+I2C_MAX_FAST_MODE_PLUS_FREQ, not I2C_MAX_FAST_MODE_FREQ in the
+latest I2C-bus specification and user manual.
 
-This fixes the i2c touchpad on the Lenovo ThinkBook 14-IIL and
-ThinkBook 15 IIL not getting an i2c-client instantiated and thus not
-working.
-
-BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1842039
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Qii Wang <qii.wang@mediatek.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/i2c-core-base.c | 2 +-
+ drivers/i2c/busses/i2c-mt65xx.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 4f09d4c318287..7031393c74806 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1336,8 +1336,8 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index deef69e569062..440b12eba1e3c 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -736,7 +736,7 @@ static int mtk_i2c_set_speed(struct mtk_i2c *i2c, unsigned int parent_clk)
+ 	for (clk_div = 1; clk_div <= max_clk_div; clk_div++) {
+ 		clk_src = parent_clk / clk_div;
  
- 	/* create pre-declared device nodes */
- 	of_i2c_register_devices(adap);
--	i2c_acpi_register_devices(adap);
- 	i2c_acpi_install_space_handler(adap);
-+	i2c_acpi_register_devices(adap);
- 
- 	if (adap->nr < __i2c_first_dynamic_bus_num)
- 		i2c_scan_static_board_info(adap);
+-		if (target_speed > I2C_MAX_FAST_MODE_FREQ) {
++		if (target_speed > I2C_MAX_FAST_MODE_PLUS_FREQ) {
+ 			/* Set master code speed register */
+ 			ret = mtk_i2c_calculate_speed(i2c, clk_src,
+ 						      I2C_MAX_FAST_MODE_FREQ,
 -- 
 2.25.1
 
