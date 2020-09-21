@@ -2,80 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25808271F3D
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 11:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1832271F67
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 11:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbgIUJrp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 05:47:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33756 "EHLO mail.kernel.org"
+        id S1726341AbgIUJ5J (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 05:57:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35462 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726334AbgIUJrp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Sep 2020 05:47:45 -0400
+        id S1726333AbgIUJ5J (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 21 Sep 2020 05:57:09 -0400
 Received: from localhost (p5486cf2a.dip0.t-ipconnect.de [84.134.207.42])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1E1E52193E;
-        Mon, 21 Sep 2020 09:47:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 23C0C207BC;
+        Mon, 21 Sep 2020 09:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600681664;
-        bh=LcXKBX1wP04dCEC8OyZKFVCw6H/G2yo5Sn1JBV1yC+M=;
+        s=default; t=1600682228;
+        bh=n/PGm49Tz9asrI2DPCUCIxPfO2u8WQpKIFxyYjKXcV8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ueW+MtNOP7Crg00KaYYY5U871SWksGQ07GPClpbQ5iCT3vjZkZoNT+hip0yWBHorw
-         GUyqW+UJiyZWF27ERWbAzCP+RIbxorEhUPBDrDLlWQqGDoYIvcxHLqniDIcA8kQlrH
-         YyKfSDbTsLtcceOKrEFhC2GXTIx6kGsnWizRT0Ww=
-Date:   Mon, 21 Sep 2020 11:47:42 +0200
+        b=eZWYaTOJiUUW+KyAnXloFE9I5dQSdFEfo9CXy0dX4H97OHk4U9nlz3eLysC3Vab0t
+         PgOXPOXBv6GaNUocaRHPMLYqyAc+9U/W0ZHRhXM7IW0FICJwRrC/fIIYIuH+FWyHWu
+         glFQtX6ybidlYVWUMYEGvB9se+hYNTGt6LL8VrKE=
+Date:   Mon, 21 Sep 2020 11:57:05 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Rob Herring <robh+dt@kernel.org>, od@zcrc.me,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] i2c: jz4780: Remove of_match_ptr()
-Message-ID: <20200921094741.GN1840@ninjato>
-References: <20200904131152.17390-1-paul@crapouillou.net>
- <20200904131152.17390-3-paul@crapouillou.net>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v1] i2c: ismt: Describe parameters in kernel doc
+Message-ID: <20200921095705.GO1840@ninjato>
+References: <20200722134355.46098-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p1Od3smaOkJqivj4"
+        protocol="application/pgp-signature"; boundary="RHdRtM27np9fZUoh"
 Content-Disposition: inline
-In-Reply-To: <20200904131152.17390-3-paul@crapouillou.net>
+In-Reply-To: <20200722134355.46098-1-andriy.shevchenko@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---p1Od3smaOkJqivj4
+--RHdRtM27np9fZUoh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 04, 2020 at 03:11:52PM +0200, Paul Cercueil wrote:
-> CONFIG_OF is selected by CONFIG_MACH_INGENIC, therefore we don't need to
-> handle the case where Device Tree is not supported.
+On Wed, Jul 22, 2020 at 04:43:55PM +0300, Andy Shevchenko wrote:
+> Kernel doc validation script complains:
 >=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>   CHECK   .../drivers/i2c/busses/i2c-ismt.c
+> .../i2c-ismt.c:182: warning: cannot understand function prototype: 'const=
+ struct pci_device_id ismt_ids[] =3D '
+> .../i2c-ismt.c:202: warning: Function parameter or member 'dev' not descr=
+ibed in '__ismt_desc_dump'
+> .../i2c-ismt.c:202: warning: Function parameter or member 'desc' not desc=
+ribed in '__ismt_desc_dump'
+> .../i2c-ismt.c:649: warning: cannot understand function prototype: 'const=
+ struct i2c_algorithm smbus_algorithm =3D '
+>=20
+> Fix corresponding descriptions to make reader and kernel doc validator ha=
+ppy.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 Applied to for-next, thanks!
 
 
---p1Od3smaOkJqivj4
+--RHdRtM27np9fZUoh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9odr0ACgkQFA3kzBSg
-KbYJZA//QnuGBJc6iFsU8NJi2BJffyArvPlK6nzELvYMqTPUyRTN3tlD1Zpt22HD
-S1kugxYMswtlO1yeB3My22j05ma2qZomoaIQfkiuNp2WIWZGwRPnVyZDIOp5E+Cj
-V5MQ6bnO/mrzYsEW/slZww9CfNZCAS/vxn78AkJzBs2khq71wc4J3sHEOMVjuqO3
-sm8NO2iKPg1glMVtS87iR3f0Ro4QqEqZpC5ukuINYojy11GxAvNXlzZ66H6NIXdH
-eRKVJ4SvnMB1GcTmAZLRcCG7JDUy90KutBCC2+NR/JFO/xK4GNHiVjeSCjD52zIR
-cBoQnP019Cazl+ov2Hl7cSi//dXoGU504f9KgCJTHRd5PS1fTvAYgn6QhoJaDKZX
-EiOQfuq3SFf93f5VVmttxqQwRZwpYzaOTTeXp2h6JUuaL53BRho1ginP5pI5xn6f
-0/pBprkz72WTkK+6DQguz264VvBcC8sUf7UA2hp8jsNeofg9IJbTO/L7LXGvy+7y
-nQmjV+YUafJQGOvhvy4RCe42ixFWq86OorzUMsBIADb9E0+SYcHikZvvChVBGZbM
-o7BERCw08v5Kyh/lV38uhAk5qbm0nAEbCPnleE8WndAkF2xRHoJdBWL2lq7yxjXb
-hCi//VlzeO4uSyvdc87lxx1SmGr1voGRekUbpDdWbYQCMBsNqCA=
-=C4Zn
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9oePEACgkQFA3kzBSg
+Kbbcxw/+PHt0vbzCFGyB04QYpkXbNN3G6zP1U2LvGgTagNzYfrLcsud09gK66LW2
+ckLr1ju3tZPXjtnPhEutg8HEWWIwFAnTXosWwnR3haZdTe+/CGq3C7DNVoF2eZXU
+ei22V1He0yaXBndgEQn+9Us2QZS4kAJBEVhaWmua6aQnd1JPiuMkp7eWwfXQQU7G
+yTrcHecSCrFXIB8afzJwkj5caIWnUVTnvImsSUG0Ix7QOmsb67bkC3jMSRcwM5it
++EdUp19o1DICfgcaG9fUgkDJXfx3wVQkCPBRWNDIM4d/LIP3bBS3xzySSjyY+9dJ
+npnzMOktMWm8iGt9uYqprZrODFw4ClYDNuclI/hFNJ7XXve4QA5ns1H3oae2AB3y
+GHL40WlLBk1bh9sQIQ9JdAtb5aRPe3Bx3BjaTulFrgNBIu3cbLcwAf/foG/chMzU
+NpPLcuePlgLrA5GlXgmAs434eSJtnvenWhFJT8G3QUdSmAU2NzegnnQvVuWNUclN
+7SCF7+5ZM05Cr9eFHtnDxokZxEIVmk7P1cTusmer5sIVKUoxBtgFgeHsUMdSXxum
+DsECKFVe/jE/4gSJi8T9sIDhGqmBnzXt8PCfQieaGKrLf3Emka/9rkEVe1DhjdIq
+XDqG5AMTFQBTyiNET4dCuTLtXQKvawuMKR0hMbvWgEQnhFMsy9w=
+=F3VZ
 -----END PGP SIGNATURE-----
 
---p1Od3smaOkJqivj4--
+--RHdRtM27np9fZUoh--
