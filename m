@@ -2,84 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2B9271F99
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 12:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613F5271FA7
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 12:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbgIUKDP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 06:03:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39724 "EHLO mail.kernel.org"
+        id S1726549AbgIUKFL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 06:05:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726406AbgIUKDM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Sep 2020 06:03:12 -0400
+        id S1726353AbgIUKFJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 21 Sep 2020 06:05:09 -0400
 Received: from localhost (p5486cf2a.dip0.t-ipconnect.de [84.134.207.42])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B71E221D80;
-        Mon, 21 Sep 2020 10:03:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4B73D21D7A;
+        Mon, 21 Sep 2020 10:05:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600682591;
-        bh=s6WUFqRoxlMqyPU07x/zquSNmm0tUyvfnjizImEZYY0=;
+        s=default; t=1600682709;
+        bh=vDkTT0rYCHX8vIEu3yTNlWobHtccXIN+5tPbmvrwhrw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2QbptYBNrYGt6pHcUt8MmP79cFuMJnuHbW+YPL4V/t5hAotEHz8CwS30da6N/pVow
-         1jbOMa37HMVGRw7QzRlkNahDT+GzTeRtQ4gqNTEpS8mMUd/U2giuIfHNf/k3n2a4Md
-         sGH/2UY59udQDPbHDaRQSkMRLWzIHesLAhRWXlms=
-Date:   Mon, 21 Sep 2020 12:03:07 +0200
+        b=J+uCZssv3jIrb8uQG1jYmrNa7cxFKl1Wog9jTjXGoGKd8sSJnGzwLYVbWpSOXCdrY
+         d1C7ZqvByO3h9gClG0jzxsJ5wNumPBPz9RG3SXR/CvP99v0L6L2EAUyNHO+P8VeJuz
+         AT/P4HEHNTL6RL7aNJaSN2noa9f3P2cfsLOVm/TM=
+Date:   Mon, 21 Sep 2020 12:05:06 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Seth Heasley <seth.heasley@intel.com>,
+To:     "Seth Heasley (Linux)" <seth.heasley@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Seth Heasley <seth.heasley@intel.com>,
         Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org
 Subject: Re: [PATCH v1] i2c: ismt: Add support for Intel Emmitsburg PCH
-Message-ID: <20200921100307.GQ1840@ninjato>
+Message-ID: <20200921100505.GR1840@ninjato>
 References: <20200615161001.12817-1-andriy.shevchenko@linux.intel.com>
- <20200828150239.GU1891694@smile.fi.intel.com>
+ <b11640ffc0956412c1cab112d881f569f5e7dd9a.camel@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qd/SZIFVu+MYwfCR"
+        protocol="application/pgp-signature"; boundary="JKGvNdIvrY8Ovf7Z"
 Content-Disposition: inline
-In-Reply-To: <20200828150239.GU1891694@smile.fi.intel.com>
+In-Reply-To: <b11640ffc0956412c1cab112d881f569f5e7dd9a.camel@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---qd/SZIFVu+MYwfCR
+--JKGvNdIvrY8Ovf7Z
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 28, 2020 at 06:02:39PM +0300, Andy Shevchenko wrote:
-> On Mon, Jun 15, 2020 at 07:10:01PM +0300, Andy Shevchenko wrote:
-> > Add PCI ID for the Intel Emmitsburg PCH iSMT SMBus controller.
+On Mon, Sep 14, 2020 at 02:43:56AM -0700, Seth Heasley (Linux) wrote:
+> Hi Andy,
 >=20
-> Seth, Neil, any tag for this?
-> Wolfram, this is an ID and I don't think silence from maintainers prevent=
- us to
-> add it. What do you think?
+> Sorry for the slow response.
+>=20
+> > Add PCI ID for the Intel Emmitsburg PCH iSMT SMBus controller.
+> >=20
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>   Signed-off-by: Seth Heasley <seth.heasley@linux.intel.com>
 
-Only as a very last resort. If there are dedicated driver maintainers,
-the drivers are their authority. If I apply trivial patches on my own,
-then there may be confusion about what is a trivial patch.
+Thanks! One favor I am asking: Would you mind using "Reviewed-by" in the
+future? It is more apropriate and also for easier for my tools to detect
+when a patch was reviewed.
 
 
---qd/SZIFVu+MYwfCR
+--JKGvNdIvrY8Ovf7Z
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9oelsACgkQFA3kzBSg
-KbYD1A//TqLqU50kXNLiBkXd8m6eFf9oq5TdsjauCWlEwLgC0ma/5MEbRCHbk1TH
-Yd4yj0H2yPPgRasPfrb5Qt5PxyADMuoxcvk5cZSB8ciFa8gvU0d/ECXI1FC9XAXZ
-xijx+VFgTX7SIlwcU+wIwhvilPQ14Mp6SHvqoOOweC6Ou0jmf0NuJa4Dug7vLe7t
-Ep3CRg41/xeujXjG6j5puEEZBr2+UT76uDy6BZ3ou4WYIHi3vCDEEZkb3i72Z5H7
-sZxVs/Jjzm5oKnNajgPLT3xsuZKnss4aa/PjN4yclogsE6weDrfcPBB1iBRfMBtU
-r61+f5h7Ex8xikSvGrfIUb6ijPZkECgTI9snLFR4wMDm2nVDS2YeYufXcsRL15je
-3XMPbpnPEBX6SXMehsjQiq/kQr+vmnoMWz6v3xsCKrzXVKLPBlU2EsRImYA0dngt
-IDBWxE6t2L13dZ2JIotaH2qUFx/kq/cyxlH/GN2WnwcJvcarqSfBOmkeK4b+8k5n
-H9WfoY684+z1PnIan7GE3j58uMMMxXhh1d7hrYG/JeV8Ht8Wu7pir7wEvjCZWQWW
-pjptLRAOCHSFfuqNDRg6TwAKfvhyGGz7qIgAHPsAf4yb7Lm6m5/5SV6/LWRDyr9T
-TIbvoyMzTYoZyU/WMcu1T8Ee/vgtb1LGqupJfggiRRf1C4IU5P8=
-=vpWR
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9oetEACgkQFA3kzBSg
+KbZ8tA//XlIRK4ZpJcFDfLiuPJehAlyez1A9NWkBw/JrgU0A3+H4SVz/PPxznBF8
+iQx38yKRlB6EIlz0wz0L6Ga/TcNwV1cOxunRruksYMfQcOwwoC9WIPHYmR4MzL5M
+DmSiDKJ4SNIZvOSePcJfSqKrh8vLTulcL8kTzzAnM7ARoBSz2BcYKyN5jxoAQn1I
+nOXjC3qvBpDEZM28ClMlm3FPwKSaDmyAitlJ+0kYqqXXrU6rY/v/NHlK2O9SJAGB
+M9Tvl5QHwV+8Lo5dkrMsmUPBky3+csmdoIMQ31i2UW6kyrqg09JzjHWDz2Sizi5t
+avtF0hT6TfrdzKPdnhsHA9eOfEmoWiM4BlNhXFbC3tsifUEIL3mRLHqQZSISNrKu
+IzKSebIYMf5NGaGbsv0NLwE+/x4opxCMy0rhYLAlpvEjJQlmJxVTBH7BzoPXgoos
+Bp+DBO0/M3KaEBz1asVoGkfSz82fiJvXJEJztyj74YgHnP1nQYNIyOpCzSgHohOq
+spBZz3vFcpJn74ceGAS+zWMIgR2RjUe0KjBIxzdwU+ErKEZsrFdsEU6d04R7FcTX
+yqPxiLlZ5O959+nK8xp73VogVwIpTorHfHW/wBbvFG24S/PyyJE/1A9YPP7tXQqw
+W/FGNUrjFOlaUiuoa/7DzBq2XMP3GzzO92jyLzGUea+nizxiqrQ=
+=v9bM
 -----END PGP SIGNATURE-----
 
---qd/SZIFVu+MYwfCR--
+--JKGvNdIvrY8Ovf7Z--
