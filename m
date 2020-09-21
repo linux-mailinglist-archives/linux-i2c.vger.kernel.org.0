@@ -2,73 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF88271E89
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 11:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1BB271EA1
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Sep 2020 11:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726375AbgIUJIa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Sep 2020 05:08:30 -0400
-Received: from www.zeus03.de ([194.117.254.33]:36652 "EHLO mail.zeus03.de"
+        id S1726353AbgIUJMo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Sep 2020 05:12:44 -0400
+Received: from sauhun.de ([88.99.104.3]:50954 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726341AbgIUJIa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 21 Sep 2020 05:08:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=WE274rrwtzEWCI3iqRn/Gx2FcRpa
-        tHGfTEPgPUVzcOI=; b=PrpnBtfPil+KxliuJ90t5PAbWu35qCpfFBfl4+/G3ksW
-        tb4ueM6DgFH+eGTPhmdgPdX5WX7dNKrJ7T3VoqFglMcvyNtNDc1Emg1LYfZdtVVS
-        WV29C6QJVL19fz2qGJK7EzbeAzLZw4Mh+JY++2GUr9iQfHWXXPUgSagqrcQf7b4=
-Received: (qmail 69723 invoked from network); 21 Sep 2020 11:08:28 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Sep 2020 11:08:28 +0200
-X-UD-Smtp-Session: l3s3148p1@ukyXMc+vkLIgAwDPXwWzANnLaz0lJiia
-Date:   Mon, 21 Sep 2020 11:08:28 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.de>
-Subject: Re: [PATCH] misc: eeprom: use helper to get i2c_client from kobj
-Message-ID: <20200921090828.GC1840@ninjato>
-References: <20200919065615.4939-1-wsa+renesas@sang-engineering.com>
+        id S1726333AbgIUJMn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 21 Sep 2020 05:12:43 -0400
+Received: from localhost (p5486cf2a.dip0.t-ipconnect.de [84.134.207.42])
+        by pokefinder.org (Postfix) with ESMTPSA id E1C8F2C0505;
+        Mon, 21 Sep 2020 11:12:40 +0200 (CEST)
+Date:   Mon, 21 Sep 2020 11:12:39 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-tegra@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 00/34] Improvements for Tegra I2C driver
+Message-ID: <20200921091239.GD1840@ninjato>
+References: <20200908224006.25636-1-digetx@gmail.com>
+ <CAHp75Vdh6bErqeO-ki2xsS9jEeoy4mKF1h0Jw_HM6UpukqH_BQ@mail.gmail.com>
+ <854a0ed8-35dd-0b25-6c53-4915be0e33e9@gmail.com>
+ <20200909154902.GA916@kunai>
+ <20200917124418.GU3515672@ulmo>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NU0Ex4SbNnrxsi6C"
+        protocol="application/pgp-signature"; boundary="M38YqGLZlgb6RLPS"
 Content-Disposition: inline
-In-Reply-To: <20200919065615.4939-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20200917124418.GU3515672@ulmo>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---NU0Ex4SbNnrxsi6C
-Content-Type: text/plain; charset=us-ascii
+--M38YqGLZlgb6RLPS
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 19, 2020 at 08:56:15AM +0200, Wolfram Sang wrote:
-> Slightly easier to read.
+On Thu, Sep 17, 2020 at 02:44:18PM +0200, Thierry Reding wrote:
+> On Wed, Sep 09, 2020 at 05:49:02PM +0200, Wolfram Sang wrote:
+> > On Wed, Sep 09, 2020 at 06:36:50PM +0300, Dmitry Osipenko wrote:
+> > > 09.09.2020 12:11, Andy Shevchenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > > > On Wed, Sep 9, 2020 at 1:40 AM Dmitry Osipenko <digetx@gmail.com> w=
+rote:
+> > > >>
+> > > >> Hello!
+> > > >>
+> > > >> This series performs refactoring of the Tegra I2C driver code and =
+hardens
+> > > >> the atomic-transfer mode.
+> > > >=20
+> > > > I think there is still room for improvement, but let not block it, =
+FWIW,
+> > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > >=20
+> > > Thank you and Micha=C5=82 for helping with the review! Very appreciat=
+e this!
+> >=20
+> > Yes, thanks everyone so far!
+> >=20
+> > Is there some internal testfarm where this should be regression tested?
+> > Otherwise, I'd trust Dmitry, Andy, and Micha=C5=82 here and would apply=
+ it
+> > this week after some generic high-level review.
 >=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> I'll queue this for a run on the test farm. I had a couple of minor
+> comments, but after going through the full series I'm pretty happy
+> overall with the result, so I'll go over my comments again and will
+> reevaluate.
 
-Applied to for-next, thanks!
+Cool, thanks! You guys just let me know if v7 is fine please. Otherwise
+I will surely notice if a v8 hits the list ;)
 
 
---NU0Ex4SbNnrxsi6C
+--M38YqGLZlgb6RLPS
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9obYwACgkQFA3kzBSg
-KbZJ2Q/8DT4GBFV0d6h8a969J+qcT5FRvsFpM9h1SzGUI0IaHplmi8V1rUE3ceSi
-atjMPmOX4ckNeNKkf8N1sfDgZn990PCOf2Hx4gOh1vMzp5kPHXWyvrdZkw5UCQyq
-0Mi/YIjFtAYKbqoW2sajqPQBR0NNCSg+FtMt1bpamaSwu5UjT3gc+wjOFdj0ugcg
-fU6sdnlFNJEEPJC7P3GZdN/bp3A5yUdq3H95bet4eTC41s9PqnKwkezHxMEyk1uY
-M6refm/+UpUGuafXZYFA1JvJZqWiRheN+aGS+YzSf1egE1/NeTnuQA2PwBV9iVwm
-9dnxRNzR0KNJTqC8gwqin/yMZCV1JXziIXINUibg6TcS7IfLdpD0El2qqRyFOq44
-G5CYpqJujuv5zimJOV91eonkONG1fstNCJfhnSevTmHGV/iqxT3pnRNhasxyJqOh
-DdsJ0PB1xMqkG4P2PCsFvUkCq09FaIU93Pm04gyoDG1A730TAhIXXWnyM6GRV3+7
-c3qOxp3gtBt9s0vNiVkIA0r99cBtDcI1rqEl9TKYG6/bh8/iEhToPOlr8puSX58E
-MpJ6ghVbK7SModmOKPBjCjRJOuLatPU2wr+ss4nX81hqvhv/TUI8/hFTY9PiNMgd
-LWPKs2Ph/wKXN94tAknHoWe/JCd8J0k31ittM6lyriPx4v5ruuE=
-=zyLv
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9obocACgkQFA3kzBSg
+KbayEQ/9GE4R7RHuTRmxdHMw3BDUAbBK4rUVkdbXlK2OurNJppa3fn8uNm90duoR
+hHd3E00Qp23SoLz49m/33eG9g5m++qEzAByQWdEijHofXiAY3rkQ/tbD6oaBZLFn
+jUqz52z6eqcHbUOdGkI+RjQ9/drvT/G5p/l1kIMX/U8MDDbAd3vTGvypCK75X6pj
+gSkKPa2f8jH47JJPd93GIg+byghzWTHoQY7K9ia3j7pzC9jiOO1xqE5RAJGqIdwA
+yIih5PhllKu7f6GXV31Ec7sWg4AEb685G8JJfqKL7uFykj5eC2zr+BECjCCCs0Hr
+lGZvkW7uFS6klPNAoDOU4JxA+fcf66nvMmHodsN5ckrF89N+uZK9GV4jS3pwPs8G
+0D19Xt4EqSG/BuFcBjUN2dR/H1SkHZV6mYi4l+r4rrKRKoawRH7EYgK8qv9dvkyy
+ZNq4UPDNuKCU4Pj6dFERsVTZYPQcBE8fPIAsh/huZEkI+9nIA4ZorJkG6FqGD2O6
+oikU8+MjV8gooVIQTZEFncqcKtH3kfyT3l15Wv6KkPRx9Ua07x+s1p9KfsFsBbmh
+kfPa/10ovLSECUAFDTd35f5lP3zXxL35XvXSoltVTKr9HnaLDXqcihuWyJgFjuBB
+7nVH1jxCCqMrD1egO9lanrxj7w5R2XzD8T+nPwbyIVwdRBHUIus=
+=gFo1
 -----END PGP SIGNATURE-----
 
---NU0Ex4SbNnrxsi6C--
+--M38YqGLZlgb6RLPS--
