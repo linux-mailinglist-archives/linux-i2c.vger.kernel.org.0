@@ -2,93 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41952273E00
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Sep 2020 11:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1198A273E25
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Sep 2020 11:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726533AbgIVJEl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Sep 2020 05:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726503AbgIVJEl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Sep 2020 05:04:41 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E6FC061755
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Sep 2020 02:04:40 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id t10so16167508wrv.1
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Sep 2020 02:04:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:reply-to;
-        bh=+4XpQvtWXPyTznpGAkELP/n7lzSxC14odmmMx4vJPug=;
-        b=SVbjsAJ0lWAiA2xI9F50MwEk6p08jujYjGl79GAah+H/jsP1VaIl/Q/T8OqTw0HjLb
-         BhzRPEdRcfsyyD/60fOMmfevb2aoDxE/9VDD3hrCIwJZnQFaukBsbL76JheYyN3lPjmG
-         bcOnDKPhe3//S0PN+6NBHwemosnlunB525QZH4IS1LucVhKL5i5EZo6WLU4Y4aOlqyUJ
-         fywP5HxHiLW8FUKr/0vY1Ijsvfaqamlj4mRVmiwhZjtfiOPrS6YKSs6qT/GKUclbrdPZ
-         FgNwUm4hnZ52rGaNgRti0WwZopwrDnQFZRX27rLU41Ba1hset9/Qgdgo22ROuWuKQtp9
-         vDIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+4XpQvtWXPyTznpGAkELP/n7lzSxC14odmmMx4vJPug=;
-        b=RsId+1TC+Au9LMU4mgQmKIeGFJkHxLprnO90LrxEnEHTSlBZl/xDLKHQ7la4YPmQHR
-         miq8mxC0Bm/bhO8XWPKhWBmBvxtJXjtpAtkE+G+Rz2RLjinr7YlE05lZeklVkuo/GLa/
-         t/C2Os4akFsnrmRTRB81V7VGWRcyhkevstCZ5WsqgUg9fj4TkppaYYvK0yBq9eBIVl+r
-         9Ul1RUc+aVRiJxrcaKF2poV/fOZKjvHUIQNe2ZTv4CNcHVU1k+ROOrI0vbOH+70WFC88
-         Pa8umsWAY7WCQReMZYh8EFl+TE/KcE3n2ZTqtROFMvOjWZ6b99s9aaQ0r54G5Ut6jcJ+
-         9Nfg==
-X-Gm-Message-State: AOAM530sgnaDt/GGL9XdpuaGEDBv5jau4D5sR4IDhNH+GMSMlQuMf+54
-        +ksRvSLOft5e7vNw8LLnDfZkQqxgcVR36Q==
-X-Google-Smtp-Source: ABdhPJxf58HxG1Bf12cBrhsl/LUrq4fECwilAh8SGkmqljX2a0mJoLjdwuBSSmuJxGo/P+mTh/Q4Tg==
-X-Received: by 2002:adf:f34f:: with SMTP id e15mr3959591wrp.387.1600765479573;
-        Tue, 22 Sep 2020 02:04:39 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:287:860:29d1:d0a8:b1c3:1cbf])
-        by smtp.gmail.com with ESMTPSA id n3sm3428741wmn.28.2020.09.22.02.04.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 02:04:39 -0700 (PDT)
-From:   nico.vince@gmail.com
-X-Google-Original-From: nicolas.vincent@vossloh.com
-To:     jochen@scram.de
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        Nicolas VINCENT <nicolas.vincent@vossloh.com>
-Subject: [PATCH] i2c: cpm: Fix i2c_ram structure
-Date:   Tue, 22 Sep 2020 11:04:00 +0200
-Message-Id: <20200922090400.6282-1-nicolas.vincent@vossloh.com>
-X-Mailer: git-send-email 2.17.1
-Reply-To: nicolas.vincent@vossloh.com
+        id S1726620AbgIVJKC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Sep 2020 05:10:02 -0400
+Received: from mga03.intel.com ([134.134.136.65]:2427 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726612AbgIVJKC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 22 Sep 2020 05:10:02 -0400
+IronPort-SDR: lLl1m99uckNl/OYCb2pC6PwHUFaz/e7KIfwaSOssbUmOtLqTGbCWjQARvwm9DVIsA6cFAXXEXp
+ QJm3aghbaSlQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="160635717"
+X-IronPort-AV: E=Sophos;i="5.77,290,1596524400"; 
+   d="scan'208";a="160635717"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2020 02:10:02 -0700
+IronPort-SDR: RJNMPlR6Jlk1zF38cbRBOPbHpsS6NW67JNCd+RQOqJCtr6Xnrx5ty0wnzfF1oeLGk73qBQQYbe
+ 5CrsvK0MewIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,290,1596524400"; 
+   d="scan'208";a="338222449"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 22 Sep 2020 02:10:00 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kKeJA-0013FU-Kq; Tue, 22 Sep 2020 12:09:56 +0300
+Date:   Tue, 22 Sep 2020 12:09:56 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org, ohad@wizery.com,
+        bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
+        avi.fishman@nuvoton.com, eyal.cohen@nuvoton.com
+Subject: Re: Upstream I2C driver that designed for rpmsg
+Message-ID: <20200922090956.GK3956970@smile.fi.intel.com>
+References: <CAP6Zq1jrT-AmNT2J11OEk80=qL04=jCKTBoM-FLEt1na6d00kQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP6Zq1jrT-AmNT2J11OEk80=qL04=jCKTBoM-FLEt1na6d00kQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Nicolas VINCENT <nicolas.vincent@vossloh.com>
+On Tue, Sep 22, 2020 at 12:41:35AM +0300, Tomer Maimon wrote:
+> Hello all,
+> 
+> Our BMC have two processors
+> 
+>    1. main processors  - A35
+>    2. Coprocessor(CP) - M4.
+> 
+> The BMC handles more than 30 I2C buses.
+> 
+> We like to handle the I2C module in the Coprocessor for offload the i2c
+> transaction from main processor.
+> 
+> The main processor is running Linux,
+> 
+> The main processor and the CP communicate through rpmsg.
+> 
+>  Is an I2C driver that designed for rpmsg will be up-streamed to Linux.Org?
 
-the i2c_ram structure is missing the sdmatmp field mentionned in
-datasheet for MPC8272 at paragraph 36.5. With this field missing, the
-hardware would write past the allocated memory done through
-cpm_muram_alloc for the i2c_ram structure and land in memory allocated
-for the buffers descriptors corrupting the cbd_bufaddr field. Since this
-field is only set during setup(), the first i2c transaction would work
-and the following would send data read from an arbitrary memory
-location.
+There are examples in the kernel of indirect access to I2C host controllers
+which are parts of auxiliary micro controllers. I guess in principle it's okay
+and most of the success of the submission depends on implementation.
 
-Signed-off-by: Nicolas VINCENT <nicolas.vincent@vossloh.com>
----
- drivers/i2c/busses/i2c-cpm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-cpm.c b/drivers/i2c/busses/i2c-cpm.c
-index 1213e1932ccb..c5700addbf65 100644
---- a/drivers/i2c/busses/i2c-cpm.c
-+++ b/drivers/i2c/busses/i2c-cpm.c
-@@ -64,7 +64,8 @@ struct i2c_ram {
- 	uint    txtmp;		/* Internal */
- 	char    res1[4];	/* Reserved */
- 	ushort  rpbase;		/* Relocation pointer */
--	char    res2[2];	/* Reserved */
-+	char    res2[6];	/* Reserved */
-+	uint    sdmatmp;	/* Internal */
- };
- 
- #define I2COM_START	0x80
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
