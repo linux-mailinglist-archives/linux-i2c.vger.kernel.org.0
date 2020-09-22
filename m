@@ -2,78 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1198A273E25
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Sep 2020 11:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBB2273E64
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Sep 2020 11:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbgIVJKC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Sep 2020 05:10:02 -0400
-Received: from mga03.intel.com ([134.134.136.65]:2427 "EHLO mga03.intel.com"
+        id S1726534AbgIVJTG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Sep 2020 05:19:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36700 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726612AbgIVJKC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 22 Sep 2020 05:10:02 -0400
-IronPort-SDR: lLl1m99uckNl/OYCb2pC6PwHUFaz/e7KIfwaSOssbUmOtLqTGbCWjQARvwm9DVIsA6cFAXXEXp
- QJm3aghbaSlQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="160635717"
-X-IronPort-AV: E=Sophos;i="5.77,290,1596524400"; 
-   d="scan'208";a="160635717"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2020 02:10:02 -0700
-IronPort-SDR: RJNMPlR6Jlk1zF38cbRBOPbHpsS6NW67JNCd+RQOqJCtr6Xnrx5ty0wnzfF1oeLGk73qBQQYbe
- 5CrsvK0MewIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,290,1596524400"; 
-   d="scan'208";a="338222449"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 22 Sep 2020 02:10:00 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kKeJA-0013FU-Kq; Tue, 22 Sep 2020 12:09:56 +0300
-Date:   Tue, 22 Sep 2020 12:09:56 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org, ohad@wizery.com,
-        bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
-        avi.fishman@nuvoton.com, eyal.cohen@nuvoton.com
-Subject: Re: Upstream I2C driver that designed for rpmsg
-Message-ID: <20200922090956.GK3956970@smile.fi.intel.com>
-References: <CAP6Zq1jrT-AmNT2J11OEk80=qL04=jCKTBoM-FLEt1na6d00kQ@mail.gmail.com>
+        id S1726489AbgIVJTG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 22 Sep 2020 05:19:06 -0400
+Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 320A72075E;
+        Tue, 22 Sep 2020 09:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600766345;
+        bh=mWFRSZMyBbjwK/FEQm1JMdfw+4awqsgxyVdSlSR+BE4=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=eDRX5gyGqt2fplwA55rpFPGnTMwa7OmKZ8zKsKHi8HAF8J7UzNVeDKZG9TPudC4lZ
+         BL3+12jGTB0Kas3zxYvSAjUG4TFgcq9dxzn9MrZ4A4qgsLziUbz0kBLw1zUvqxTacD
+         GCbP6OCWx4JXcS4XXTZ/CZItrNszCOm2jUYTrW6o=
+Date:   Tue, 22 Sep 2020 11:19:00 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Sultan Alsawaf <sultan@kerneltoast.com>
+cc:     linux-i2c@vger.kernel.org, aaron.ma@canonical.com, admin@kryma.net,
+        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
+        hdegoede@redhat.com, hn.chen@weidahitech.com,
+        jarkko.nikula@linux.intel.com, kai.heng.feng@canonical.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com,
+        wsa@kernel.org
+Subject: Re: [PATCH v2 0/4] i2c-hid: Save power by reducing i2c xfers with
+ block reads
+In-Reply-To: <20200917052256.5770-1-sultan@kerneltoast.com>
+Message-ID: <nycvar.YFH.7.76.2009221118150.3336@cbobk.fhfr.pm>
+References: <20200917052256.5770-1-sultan@kerneltoast.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP6Zq1jrT-AmNT2J11OEk80=qL04=jCKTBoM-FLEt1na6d00kQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Sep 22, 2020 at 12:41:35AM +0300, Tomer Maimon wrote:
-> Hello all,
-> 
-> Our BMC have two processors
-> 
->    1. main processors  - A35
->    2. Coprocessor(CP) - M4.
-> 
-> The BMC handles more than 30 I2C buses.
-> 
-> We like to handle the I2C module in the Coprocessor for offload the i2c
-> transaction from main processor.
-> 
-> The main processor is running Linux,
-> 
-> The main processor and the CP communicate through rpmsg.
-> 
->  Is an I2C driver that designed for rpmsg will be up-streamed to Linux.Org?
+On Wed, 16 Sep 2020, Sultan Alsawaf wrote:
 
-There are examples in the kernel of indirect access to I2C host controllers
-which are parts of auxiliary micro controllers. I guess in principle it's okay
-and most of the success of the submission depends on implementation.
+> From: Sultan Alsawaf <sultan@kerneltoast.com>
+> 
+> This is a fixed resubmission of "[PATCH 0/2] i2c-hid: Save power by reducing i2c
+> xfers with block reads". That original patchset did not have enough fixes for
+> the designware i2c adapter's I2C_M_RECV_LEN feature, which is documented
+> extensively in the original email thread.
+> 
+> Here is the original cover letter, which still applies:
+> "I noticed on my Dell Precision 15 5540 with an i9-9880H that simply putting my
+> finger on the touchpad would increase my system's power consumption by 4W, which
+> is quite considerable. Resting my finger on the touchpad would generate roughly
+> 4000 i2c irqs per second, or roughly 20 i2c irqs per touchpad irq.
+> 
+> Upon closer inspection, I noticed that the i2c-hid driver would always transfer
+> the maximum report size over i2c (which is 60 bytes for my touchpad), but all of
+> my touchpad's normal touch events are only 32 bytes long according to the length
+> byte contained in the buffer sequence.
+> 
+> Therefore, I was able to save about 2W of power by passing the I2C_M_RECV_LEN
+> flag in i2c-hid, which says to look for the payload length in the first byte of
+> the transfer buffer and adjust the i2c transaction accordingly. The only problem
+> though is that my i2c controller's driver allows bytes other than the first one
+> to be used to retrieve the payload length, which is incorrect according to the
+> SMBus spec, and would break my i2c-hid change since not *all* of the reports
+> from my touchpad are conforming SMBus block reads.
+> 
+> This patchset fixes the I2C_M_RECV_LEN behavior in the designware i2c driver and
+> modifies i2c-hid to use I2C_M_RECV_LEN to save quite a bit of power. Even if the
+> peripheral controlled by i2c-hid doesn't support block reads, the i2c controller
+> drivers should cope with this and proceed with the i2c transfer using the
+> original requested length."
+> 
+> Sultan
+> 
+> Sultan Alsawaf (4):
+>   i2c: designware: Fix transfer failures for invalid SMBus block reads
+>   i2c: designware: Ensure tx_buf_len is nonzero for SMBus block reads
+>   i2c: designware: Allow SMBus block reads up to 255 bytes in length
+>   HID: i2c-hid: Use block reads when possible to save power
+> 
+>  drivers/hid/i2c-hid/i2c-hid-core.c         |  5 ++++-
+>  drivers/i2c/busses/i2c-designware-master.c | 15 +++++++++------
+>  2 files changed, 13 insertions(+), 7 deletions(-)
 
+Hans, Benjamin, could you please give this patchset some smoke-testing? It 
+looks good to me, but I'd like it to get some testing from your testing 
+machinery before merging.
+
+Thanks,
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Jiri Kosina
+SUSE Labs
 
