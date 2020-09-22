@@ -2,70 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 153D72746AA
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Sep 2020 18:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DACC42749B0
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Sep 2020 21:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbgIVQ3m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Sep 2020 12:29:42 -0400
-Received: from sauhun.de ([88.99.104.3]:40002 "EHLO pokefinder.org"
+        id S1726577AbgIVT7u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Sep 2020 15:59:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57072 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726508AbgIVQ3m (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 22 Sep 2020 12:29:42 -0400
-Received: from localhost (p54b332c9.dip0.t-ipconnect.de [84.179.50.201])
-        by pokefinder.org (Postfix) with ESMTPSA id 78A3C2C0537;
-        Tue, 22 Sep 2020 18:29:39 +0200 (CEST)
-Date:   Tue, 22 Sep 2020 18:29:35 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org,
-        linux-i2c@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH v3] i2c: sh_mobile: implement atomic transfers
-Message-ID: <20200922162935.GA1029@ninjato>
-References: <20200922154943.29574-1-uli+renesas@fpond.eu>
+        id S1726563AbgIVT7u (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 22 Sep 2020 15:59:50 -0400
+Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 250D6221E8;
+        Tue, 22 Sep 2020 19:59:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600804789;
+        bh=9hKEx0c62BVTx8Jprj2kG0CvGf0oLBx3Vphp8tDxFl0=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=a0glveV8KOjNjV0gaRkagn2eu7ChZfJlNYdVLkddjH+t6O6yA9Sj3IK+vPhaxyXfx
+         w0y2RXJCrjT7wYe4K4TS2tN0rFgCUg5iDT0kS914KNrN84y91MnEWUX3yy1jLIoQpZ
+         EM3hlqy9uWQ5BYIrzJFWlxRNPQGLkeYJ7GOQW/pM=
+Date:   Tue, 22 Sep 2020 21:59:44 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>
+cc:     Sultan Alsawaf <sultan@kerneltoast.com>, linux-i2c@vger.kernel.org,
+        aaron.ma@canonical.com, admin@kryma.net,
+        andriy.shevchenko@linux.intel.com, benjamin.tissoires@redhat.com,
+        hdegoede@redhat.com, hn.chen@weidahitech.com,
+        jarkko.nikula@linux.intel.com, kai.heng.feng@canonical.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mika.westerberg@linux.intel.com, vicamo.yang@canonical.com
+Subject: Re: [PATCH v2 0/4] i2c-hid: Save power by reducing i2c xfers with
+ block reads
+In-Reply-To: <20200922113646.GA6731@ninjato>
+Message-ID: <nycvar.YFH.7.76.2009222159170.3336@cbobk.fhfr.pm>
+References: <20200917052256.5770-1-sultan@kerneltoast.com> <nycvar.YFH.7.76.2009221118150.3336@cbobk.fhfr.pm> <20200922113646.GA6731@ninjato>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Nq2Wo0NMKNjxTN9z"
-Content-Disposition: inline
-In-Reply-To: <20200922154943.29574-1-uli+renesas@fpond.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, 22 Sep 2020, Wolfram Sang wrote:
 
---Nq2Wo0NMKNjxTN9z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> > Hans, Benjamin, could you please give this patchset some smoke-testing? It 
+> > looks good to me, but I'd like it to get some testing from your testing 
+> > machinery before merging.
+> 
+> Please give me some more days. I am not fully convinced yet that this
+> use of I2C_M_RECV_LEN is not broken on some controllers.
+> 
+> Plus, I'd favor if this could go via I2C tree. It is within I2C where
+> the non-trivial changes are. The HID part is just the final bit. Can we
+> agree on that?
 
+Absolutely no problem with that. But I'd like to have this ran through 
+Benjamin/Hans first too.
 
-> This is a rebased version of v2 with a minor issue fixed. It does not
-> resolve the runtime PM issue that may arise (see "watchdog: da9063: wake up
-> parent ahead of reboot", https://patchwork.kernel.org/patch/11749121/ ), but
-> in practice it works, and our understanding so far is that this will have to
-> be resolved outside this driver and should IMO not block this patch.
+Thanks,
 
-I totally agree. Other opinions?
+-- 
+Jiri Kosina
+SUSE Labs
 
-
---Nq2Wo0NMKNjxTN9z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9qJmsACgkQFA3kzBSg
-KbZFbw/+J0hTaP1PrHO0xkaahTj0XK6bscNWaWZqV0m7eT89NOBF4y+DhXhnuJTn
-VnIxo91rUIL020ISOIK6whABIvpWD7gc9v34k9tWllGifVXgxSqc3k8+JNPKgWyD
-DwVe2bsPRPy2LgPxoEJ9LsIcOKRxi2lF3eybxe83DFE7qWiofzkY5LxKFyz25rH3
-ZVfnHW/Qp1EdOK/pL0rimSAZ9NZ01Bcoib8Gghei3U74FIK8VUd00R+EpbIanNya
-vLBCysuhVe+pZUZl5wZkrhll1ylKKUge0g+dld54DplDkxC0A33QyoiyjSb3ISLT
-Vgo2vZ0sn+cLCpXCkzaG4dkt0OIi70gR5sqeLivOXf+Sps19CsA1Mhp2TMQD1kK8
-9bOtABD/x91Se4pQrzv7PXx78GzkiLRPGRUMxTvAHB1uOyG+v7VUfQUWPTmrgApg
-bLPqoyeSXhy0hV1NPAJwEn816rW9Huxy/eas0DY7Pazy9N2O4yINTPIW4OavgKWx
-wHynaQX5TcCEXpu+LurMfQKyqzaWpBhjroylOiuEQ4bpmbojFsCLZX3ItEaOpXzr
-e5mhlrtJlVudwX3kdCfygGkvafDYS0Jsbt5UJ/mUMeXE958jGj7nRcETfY98u9f3
-Zy+XWtfUkc6Fy946ks77pyyPRIhCcV370dIM/JeJAypu8Cq3G/Y=
-=dSX8
------END PGP SIGNATURE-----
-
---Nq2Wo0NMKNjxTN9z--
