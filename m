@@ -2,117 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBBF273D84
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Sep 2020 10:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41952273E00
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Sep 2020 11:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726587AbgIVIko (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Sep 2020 04:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        id S1726533AbgIVJEl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Sep 2020 05:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbgIVIko (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Sep 2020 04:40:44 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCA3C061755;
-        Tue, 22 Sep 2020 01:40:43 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id 133so5031600ybg.11;
-        Tue, 22 Sep 2020 01:40:43 -0700 (PDT)
+        with ESMTP id S1726503AbgIVJEl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Sep 2020 05:04:41 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E6FC061755
+        for <linux-i2c@vger.kernel.org>; Tue, 22 Sep 2020 02:04:40 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id t10so16167508wrv.1
+        for <linux-i2c@vger.kernel.org>; Tue, 22 Sep 2020 02:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N+OZiUP1vnnZHS8QHCk/3wxoJQlfFggJgv3Kp7po0iw=;
-        b=NuVLgPgziheHwTfP5LjhFY4SesKJN6z12RILB1pN4/SeYDJzsHHvNKezR7ZYNY4dks
-         R0rzGhN6Udmt//3tnPZXjgTsNr/c3ToPlEYCpNKg+XX1/tON4IljkX1fpQmsFLu4fysH
-         ZjJ86XJRSYLhpVFJDKRk9CJOC4RjlB+fC4P1iwaz1sZk4aKze740Q52vngewtGl/oIyY
-         Y45SYNMv6ibCl+2Vx1HERK0vRajzkUQ1kQpv9q64EgtEFcw7fBDhONQWuRZU8tl15Q5p
-         dapvzfVuitIIPO3bUQ/+iHaSDz56C4mqO4AuLzfsHRSyNQkmm471kLn7Lwusf38OStzE
-         yLyw==
+        h=from:to:cc:subject:date:message-id:reply-to;
+        bh=+4XpQvtWXPyTznpGAkELP/n7lzSxC14odmmMx4vJPug=;
+        b=SVbjsAJ0lWAiA2xI9F50MwEk6p08jujYjGl79GAah+H/jsP1VaIl/Q/T8OqTw0HjLb
+         BhzRPEdRcfsyyD/60fOMmfevb2aoDxE/9VDD3hrCIwJZnQFaukBsbL76JheYyN3lPjmG
+         bcOnDKPhe3//S0PN+6NBHwemosnlunB525QZH4IS1LucVhKL5i5EZo6WLU4Y4aOlqyUJ
+         fywP5HxHiLW8FUKr/0vY1Ijsvfaqamlj4mRVmiwhZjtfiOPrS6YKSs6qT/GKUclbrdPZ
+         FgNwUm4hnZ52rGaNgRti0WwZopwrDnQFZRX27rLU41Ba1hset9/Qgdgo22ROuWuKQtp9
+         vDIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N+OZiUP1vnnZHS8QHCk/3wxoJQlfFggJgv3Kp7po0iw=;
-        b=V4Dsro4+lFjeFdaVIcURwTKwb9hB2isUYSy3tdcmi4AE+LepaLjwOIPiLYiPJx0frl
-         cLk42+AFL+OWynJsD2xkkJKvGpSF0LR52PoL8/gxavMaMeDW7FJHv1OKPTiNMUUiKRTu
-         QVNZNR/EHJI3bNbs7dlN+LRDaNNVneNwuFFjTRWtPY88D2/k0+ZOdlW9hCvITi5ELZp4
-         taV710LI6Z9PTC4SL5c01MMqGw63ifPtf8bXlyvWRmOQN6YChWBFj66G8Ilicvd8r7CM
-         /r85iG4sJqb9zW2AcHwqyBTcvn7VPgLrwoB+JOnDZQMPat791AyWxZzxTOMpbTqwGDNW
-         2P0g==
-X-Gm-Message-State: AOAM533MjfZ69pZZ+pN6Q0uCxIo8gH86xf/4wqkf+EPdBvQgRs+EAmOF
-        1+7sgWi0bBw+rxk77DpxLIDZxKNBPmR+Z9fpY1k=
-X-Google-Smtp-Source: ABdhPJz7tp5/sbJjNYhmIjZ7Es4Bbt3UXUUN5/fc2NbqpCJMyZa2zZxOrHHSujRQO3IVOmIzjvH6zmqGIz2tZe5DpxI=
-X-Received: by 2002:a25:aba1:: with SMTP id v30mr5709473ybi.518.1600764043123;
- Tue, 22 Sep 2020 01:40:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CA+V-a8vJ2n3KEL8P+XmVob2zjoWaX+s4a6c1TV_WoPFkwdkZmA@mail.gmail.com>
- <20200920140824.GA2915460@kroah.com> <CAMuHMdUyXMfZcVKkqaZHJ8tJf-3Kotqg+S2NHMZT0VFO0ZJJww@mail.gmail.com>
- <20200922083909.GA2092905@kroah.com>
-In-Reply-To: <20200922083909.GA2092905@kroah.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 22 Sep 2020 09:40:16 +0100
-Message-ID: <CA+V-a8u_0+XqyBiV6vxuc1d6_eDZdzO8dy3qBrmO1ke3L4BROQ@mail.gmail.com>
-Subject: Re: [PATCH 07/20] dt-bindings: usb: renesas,usb3-peri: Document
- r8a774e1 support
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+4XpQvtWXPyTznpGAkELP/n7lzSxC14odmmMx4vJPug=;
+        b=RsId+1TC+Au9LMU4mgQmKIeGFJkHxLprnO90LrxEnEHTSlBZl/xDLKHQ7la4YPmQHR
+         miq8mxC0Bm/bhO8XWPKhWBmBvxtJXjtpAtkE+G+Rz2RLjinr7YlE05lZeklVkuo/GLa/
+         t/C2Os4akFsnrmRTRB81V7VGWRcyhkevstCZ5WsqgUg9fj4TkppaYYvK0yBq9eBIVl+r
+         9Ul1RUc+aVRiJxrcaKF2poV/fOZKjvHUIQNe2ZTv4CNcHVU1k+ROOrI0vbOH+70WFC88
+         Pa8umsWAY7WCQReMZYh8EFl+TE/KcE3n2ZTqtROFMvOjWZ6b99s9aaQ0r54G5Ut6jcJ+
+         9Nfg==
+X-Gm-Message-State: AOAM530sgnaDt/GGL9XdpuaGEDBv5jau4D5sR4IDhNH+GMSMlQuMf+54
+        +ksRvSLOft5e7vNw8LLnDfZkQqxgcVR36Q==
+X-Google-Smtp-Source: ABdhPJxf58HxG1Bf12cBrhsl/LUrq4fECwilAh8SGkmqljX2a0mJoLjdwuBSSmuJxGo/P+mTh/Q4Tg==
+X-Received: by 2002:adf:f34f:: with SMTP id e15mr3959591wrp.387.1600765479573;
+        Tue, 22 Sep 2020 02:04:39 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:287:860:29d1:d0a8:b1c3:1cbf])
+        by smtp.gmail.com with ESMTPSA id n3sm3428741wmn.28.2020.09.22.02.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2020 02:04:39 -0700 (PDT)
+From:   nico.vince@gmail.com
+X-Google-Original-From: nicolas.vincent@vossloh.com
+To:     jochen@scram.de
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        Nicolas VINCENT <nicolas.vincent@vossloh.com>
+Subject: [PATCH] i2c: cpm: Fix i2c_ram structure
+Date:   Tue, 22 Sep 2020 11:04:00 +0200
+Message-Id: <20200922090400.6282-1-nicolas.vincent@vossloh.com>
+X-Mailer: git-send-email 2.17.1
+Reply-To: nicolas.vincent@vossloh.com
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Sep 22, 2020 at 9:38 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Sep 21, 2020 at 09:30:39AM +0200, Geert Uytterhoeven wrote:
-> > Hi Greg,
-> >
-> > On Sun, Sep 20, 2020 at 4:08 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > > On Sat, Sep 19, 2020 at 11:50:07AM +0100, Lad, Prabhakar wrote:
-> > > > On Thu, Jul 16, 2020 at 6:19 PM Lad Prabhakar
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > >
-> > > > > Document RZ/G2H (R8A774E1) SoC bindings.
-> > > > >
-> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> > > > > ---
-> > > > >  Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > >
-> > > > Could you please pick this patch.
-> > >
-> > > Don't DT patches have to be acked by a DT maintainer first?
-> >
-> > https://lore.kernel.org/r/20200721033508.GA3504365@bogus
->
-> Ah, missed that, sorry.  This, and patch 11/20, now queued up.
->
-Thank you.
+From: Nicolas VINCENT <nicolas.vincent@vossloh.com>
 
-Cheers,
-Prabhakar
+the i2c_ram structure is missing the sdmatmp field mentionned in
+datasheet for MPC8272 at paragraph 36.5. With this field missing, the
+hardware would write past the allocated memory done through
+cpm_muram_alloc for the i2c_ram structure and land in memory allocated
+for the buffers descriptors corrupting the cbd_bufaddr field. Since this
+field is only set during setup(), the first i2c transaction would work
+and the following would send data read from an arbitrary memory
+location.
+
+Signed-off-by: Nicolas VINCENT <nicolas.vincent@vossloh.com>
+---
+ drivers/i2c/busses/i2c-cpm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-cpm.c b/drivers/i2c/busses/i2c-cpm.c
+index 1213e1932ccb..c5700addbf65 100644
+--- a/drivers/i2c/busses/i2c-cpm.c
++++ b/drivers/i2c/busses/i2c-cpm.c
+@@ -64,7 +64,8 @@ struct i2c_ram {
+ 	uint    txtmp;		/* Internal */
+ 	char    res1[4];	/* Reserved */
+ 	ushort  rpbase;		/* Relocation pointer */
+-	char    res2[2];	/* Reserved */
++	char    res2[6];	/* Reserved */
++	uint    sdmatmp;	/* Internal */
+ };
+ 
+ #define I2COM_START	0x80
+-- 
+2.17.1
+
