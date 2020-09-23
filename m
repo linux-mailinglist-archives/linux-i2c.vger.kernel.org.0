@@ -2,130 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5BF2752B5
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Sep 2020 10:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CF127542A
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Sep 2020 11:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgIWIBQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Sep 2020 04:01:16 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:50376 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726130AbgIWIBQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 23 Sep 2020 04:01:16 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4Bx9bq4QPjz9v09g;
-        Wed, 23 Sep 2020 10:01:11 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id o-mWIuJAAecS; Wed, 23 Sep 2020 10:01:11 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4Bx9bq29Pnz9tx4Q;
-        Wed, 23 Sep 2020 10:01:11 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id F1A5C8B7F4;
-        Wed, 23 Sep 2020 10:01:11 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id yJFG8sUqnTVC; Wed, 23 Sep 2020 10:01:11 +0200 (CEST)
-Received: from [10.25.210.27] (unknown [10.25.210.27])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8777A8B7F1;
-        Wed, 23 Sep 2020 10:01:11 +0200 (CEST)
-Subject: Re: [PATCH] i2c: cpm: Fix i2c_ram structure
-To:     Vincent Nicolas <Nicolas.Vincent@vossloh.com>,
-        "jochen@scram.de" <jochen@scram.de>
-Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20200922090400.6282-1-nicolas.vincent@vossloh.com>
- <956c4b63-f859-df0c-2836-80a988ee6aa9@csgroup.eu>
- <PR3P193MB0731945473A9F251C7F37608F1380@PR3P193MB0731.EURP193.PROD.OUTLOOK.COM>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <2ecfe18a-61f6-bb0e-22c5-b7ab79a77d03@csgroup.eu>
-Date:   Wed, 23 Sep 2020 10:01:03 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726332AbgIWJPP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Sep 2020 05:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726242AbgIWJPP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Sep 2020 05:15:15 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37036C0613CE
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Sep 2020 02:15:15 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id u21so26798790eja.2
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Sep 2020 02:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k+orPivdtkIhi2/+DCsb0aHIGGKlk58BwIbkL2c8OXE=;
+        b=b0cXVGoWMxMSjUmBe73Ir2VHt6b6HeMPDg9ITy0nlxfvt+nfGcH6ULy6Yfb05m6b9R
+         V7rNup5xQ3sHSRcvEltzMhS6dOBGwvW/+7FubHmwPSGMBsGqxrgqfupptvgSd7409oAN
+         QZY79fEXqt7oCMUbZCHSIRvumBxJL29lx7PwwXwwe9qMuHH5rSnovTKOYkIShJu3UJ/C
+         8WVW+4VDlIIEidOrZ+tF0Lk63N0VOs01IcgypBeVllQBiGD/8vzr1WUjUR1iwBHiaA5E
+         Gvdw7QsBb0+YP7PYOawpRUn0KcWC05Nrbw+UNV0pv99XG7TzaMzP82cs2lnYm3EfpGAO
+         pBNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k+orPivdtkIhi2/+DCsb0aHIGGKlk58BwIbkL2c8OXE=;
+        b=L4QwoDzChAoMa3oF8pHCnNecZTMloW00kB3LHyZVpnIRfkFWqL8i2iuyIbqXbk+EQo
+         MM4KqjJpSWQG3Lc1gJsVhB614gSR6uOlT2vb4nCquyoqoiViIo1jqBgPFscYbdROFiBe
+         w+JjSpjczTgZOyFYqbBlM/A5lqlZpPpGMcweabmnO1mn9/CovcilJQra3JWDz2rVrYBc
+         vdnHJYEqOdtmpol6LpbQZvLd7uRcOuCC6AiyV5Ksyy/2l9RxVlwa4djuhkrVpSa9ySRQ
+         xgFRSsCGnn5Lc70DOW+QV9Dx99lkW+W75HBUAPYvG94OdF0KBC+JJ+5hEEIzt0mJPuL8
+         qkgw==
+X-Gm-Message-State: AOAM5327cNBes7rXj6ruYc7AKSVPfXgrlaiDjBE6ZagBAoOkxBggH2Uy
+        TLcyfFm+4PUuMvh6THgTPBuO1OcmZPpMAxtSqlITMA==
+X-Google-Smtp-Source: ABdhPJxsj1SgC5CPIZrwIKGez9btT0ZoBj+Syo+tSKXy5WrWFEci2o5Lpgfk6iCFKLomUXGGSKtqoLQ5WAlzeul68PU=
+X-Received: by 2002:a17:906:7489:: with SMTP id e9mr9120634ejl.154.1600852513787;
+ Wed, 23 Sep 2020 02:15:13 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <PR3P193MB0731945473A9F251C7F37608F1380@PR3P193MB0731.EURP193.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+References: <20200916094952.458003-1-jonathanh@nvidia.com>
+In-Reply-To: <20200916094952.458003-1-jonathanh@nvidia.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Wed, 23 Sep 2020 11:15:03 +0200
+Message-ID: <CAMpxmJX6OxS-dxcK8whCm-Ups6Uts1iYE8bux_wAGeBPXihYBA@mail.gmail.com>
+Subject: Re: [PATCH V2 0/5] Add support for custom names for AT24 EEPROMs
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Sep 16, 2020 at 11:50 AM Jon Hunter <jonathanh@nvidia.com> wrote:
+>
+> For platforms that have multiple boards and hence have multiple EEPROMs
+> for identifying the different boards, it is useful to label the EEPROMs
+> in device-tree so that they can be easily identified. For example, MAC
+> address information is stored in the EEPROM on the processor module for
+> some Jetson platforms which is not only required by the kernel but the
+> bootloader as well. So having a simple way to identify the EEPROM is
+> needed.
+>
+> Changes since V1:
+> - By default initialise the nvmem_config.id as NVMEM_DEVID_AUTO and not
+>   NVMEM_DEVID_NONE
+> - Dropped the 'maxItems' from the dt-binding doc.
+>
+> Jon Hunter (5):
+>   misc: eeprom: at24: Initialise AT24 NVMEM ID field
+>   dt-bindings: eeprom: at24: Add label property for AT24
+>   misc: eeprom: at24: Support custom device names for AT24 EEPROMs
+>   arm64: tegra: Add label properties for EEPROMs
+>   arm64: tegra: Populate EEPROMs for Jetson Xavier NX
+>
+>  .../devicetree/bindings/eeprom/at24.yaml      |  3 +++
+>  .../boot/dts/nvidia/tegra186-p2771-0000.dts   |  1 +
+>  .../arm64/boot/dts/nvidia/tegra186-p3310.dtsi |  1 +
+>  .../arm64/boot/dts/nvidia/tegra194-p2888.dtsi |  1 +
+>  .../boot/dts/nvidia/tegra194-p2972-0000.dts   |  1 +
+>  .../nvidia/tegra194-p3509-0000+p3668-0000.dts | 14 ++++++++++++
+>  .../boot/dts/nvidia/tegra194-p3668-0000.dtsi  | 16 ++++++++++++++
+>  .../arm64/boot/dts/nvidia/tegra210-p2180.dtsi |  1 +
+>  .../boot/dts/nvidia/tegra210-p2371-2180.dts   |  1 +
+>  .../boot/dts/nvidia/tegra210-p3450-0000.dts   |  2 ++
+>  drivers/misc/eeprom/at24.c                    | 22 ++++++++++++++++++-
+>  11 files changed, 62 insertions(+), 1 deletion(-)
+>
+> --
+> 2.25.1
+>
 
+Just FYI: I'm fine with the at24 part. I can take them through my tree
+for v5.10. Who is taking the DTS patches for tegra? Thierry? I can
+provide you with an immutable branch if that's fine. I can't just ack
+the at24 patches because they conflict with what I already have in my
+tree for v5.10.
 
-Le 23/09/2020 à 09:18, Vincent Nicolas a écrit :
-> 
-> 
-> 
-> From: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Sent: Tuesday, 22 September 2020 14:38
-> To: Vincent Nicolas <Nicolas.Vincent@vossloh.com>; jochen@scram.de <jochen@scram.de>
-> Cc: linuxppc-dev@lists.ozlabs.org <linuxppc-dev@lists.ozlabs.org>; linux-i2c@vger.kernel.org <linux-i2c@vger.kernel.org>
-> Subject: Re: [PATCH] i2c: cpm: Fix i2c_ram structure
->   
-> 
-> 
-> Le 22/09/2020 à 11:04, nico.vince@gmail.com a écrit :
->> From: Nicolas VINCENT <nicolas.vincent@vossloh.com>
->>
->> the i2c_ram structure is missing the sdmatmp field mentionned in
->> datasheet for MPC8272 at paragraph 36.5. With this field missing, the
->> hardware would write past the allocated memory done through
->> cpm_muram_alloc for the i2c_ram structure and land in memory allocated
->> for the buffers descriptors corrupting the cbd_bufaddr field. Since this
->> field is only set during setup(), the first i2c transaction would work
->> and the following would send data read from an arbitrary memory
->> location.
->>
->> Signed-off-by: Nicolas VINCENT <nicolas.vincent@vossloh.com>
->> ---
->>     drivers/i2c/busses/i2c-cpm.c | 3 ++-
->>     1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-cpm.c b/drivers/i2c/busses/i2c-cpm.c
->> index 1213e1932ccb..c5700addbf65 100644
->> --- a/drivers/i2c/busses/i2c-cpm.c
->> +++ b/drivers/i2c/busses/i2c-cpm.c
->> @@ -64,7 +64,8 @@ struct i2c_ram {
->>          uint    txtmp;          /* Internal */
->>          char    res1[4];        /* Reserved */
->>          ushort  rpbase;         /* Relocation pointer */
->> -     char    res2[2];        /* Reserved */
->> +     char    res2[6];        /* Reserved */
->> +     uint    sdmatmp;        /* Internal */
-> 
-> On CPM1, I2C param RAM has size 0x30 (offset 0x1c80-0x1caf)
-> 
-> Your change overlaps the miscellaneous area that contains CP Microcode
-> Revision Number, ref MPC885 Reference Manual §18.7.3
-> 
-> As far as I understand the mpc885 contains in the dts the compatible=fsl,cpm1-i2c which is used in cpm-i2c.c to either determine the address of the i2c_ram structure (cpm1), or dynamically allocate it with cpm_muram_alloc (cpm2).
-> In the first case the structure will indeed overlaps with the miscellaneous section but since the sdmatmp is only used by cpm2 hardware it shall not be an issue.
-> 
-> Please, let me know if I am mistaken. If the patch cannot be accepted as is, I would gladly accept pointers on how to address this kind of issue.
-
-
-Please use a mail client that properly sets the > in front of 
-original/answered text. Here your mailer has mixed you text and mine, 
-that's unusable on the long term.
-
-
-I think you are right on the fact that it doesn't seem to be an issue. 
-Nevertheless, that's confusing.
-
-What I would suggest is to leave res2[2] as is, and add something like:
-
-	/* The following elements are only for CPM2 */
-	char res3[4];	/* Reserved */
-	uint sdmatmp;	/* Internal */
-
-
-Other solution (not sure that's the best solution thought) would be to 
-do as in spi-fsl-cpm: use iic_t structure from asm/cpm1.h when 
-CONFIG_CPM1 is selected and use iic_t from asm/cpm2.h when CONFIG_CPM2 
-is selected, taking into account that CONFIG_CPM1 and CONFIG_CPM2 are 
-mutually exclusive at the time being.
-
-Christophe
+Bartosz
