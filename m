@@ -2,84 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEA32759AB
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Sep 2020 16:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8AB2759BD
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Sep 2020 16:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726156AbgIWOQX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Sep 2020 10:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgIWOQX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Sep 2020 10:16:23 -0400
-X-Greylist: delayed 172 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Sep 2020 07:16:23 PDT
-Received: from mail.scram.de (mail0.scram.de [IPv6:2a01:4f8:130:2201::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60681C0613CE
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Sep 2020 07:16:23 -0700 (PDT)
-Received: from localhost (mail0.scram.de [78.47.204.202])
-        by localhost (Postfix) with ESMTP id B8B2057377;
-        Wed, 23 Sep 2020 16:13:27 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at scram.de
-X-Spam-Flag: NO
-X-Spam-Score: -2.524
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.524 required=5 tests=[AWL=0.076, BAYES_00=-2.599,
-        NO_RELAYS=-0.001]
-Received: from mail.scram.de ([78.47.204.202])
-        by localhost (mail.scram.de [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1OVkS7QmSj1S; Wed, 23 Sep 2020 16:12:49 +0200 (CEST)
-Received: (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (Client did not present a certificate)
-        (Authenticated sender)
-        by mail.scram.de (Postfix) with ESMTPSA id 8B9C156CC7;
-        Wed, 23 Sep 2020 16:12:49 +0200 (CEST)
-Subject: Re: [PATCH v2] i2c: cpm: Fix i2c_ram structure
-To:     nicolas.vincent@vossloh.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org
-References: <20200923140840.8700-1-nicolas.vincent@vossloh.com>
-From:   Jochen Friedrich <jochen@scram.de>
-Message-ID: <b518e49b-87d7-55bb-42f3-619b83f90b6d@scram.de>
-Date:   Wed, 23 Sep 2020 16:12:49 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726504AbgIWORf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Sep 2020 10:17:35 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:40478 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgIWORf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Sep 2020 10:17:35 -0400
+Received: by mail-ot1-f68.google.com with SMTP id e23so19096490otk.7;
+        Wed, 23 Sep 2020 07:17:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VSeybIBU3kGA2PcrZleCzYug44g495BTjxa9JqK9OKc=;
+        b=d4DSqIXhTBQGPICCO//oaLJvm9k6ve5Pie/iyErDIlhkFwfjD4sG9AZq0DDWB4ScVm
+         JW/AF5vBF5Y7qXAQMZvsB7/JG8QwqcRH0kp5mlO+WPSTQi5SObcmgYn3baSNNQaFxonJ
+         /6HKB2RysjgJUBYJbMrZBO5/0RDq2n4WdR7lrq3R1a2byw2/prbxpe4JQ5CICIzM4Shp
+         BY4hM4IzP8F6MGeAZRRegytHem+QRAIRCXCO9+xqCfLZB63cKB+OsTW3yJgylaWewn3Y
+         2jeWuLIemRaE10NkPTyox8HojBmrFVAwmdzDeROhBfJvBYijv2dtsLRoJ/Zrh4U703xm
+         Ijzg==
+X-Gm-Message-State: AOAM531rlezypHkRHQtVwVNcos75MqQ+JkQLEsNFTbxbf8ae/b4cP3Ub
+        Oca0N+2knXqoOcdi72ixCFinYg/cMEJG9mk7OwlqEY3E
+X-Google-Smtp-Source: ABdhPJw/KoDzFtMyhYkvfFwDr5n2859py+1+HhxKo1UDpc0TYwvGy9TOEgrCqAZR4ZbM/xnIapI05JIh05CrefBETFo=
+X-Received: by 2002:a9d:5a92:: with SMTP id w18mr6155070oth.145.1600870654343;
+ Wed, 23 Sep 2020 07:17:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200923140840.8700-1-nicolas.vincent@vossloh.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20200922154943.29574-1-uli+renesas@fpond.eu>
+In-Reply-To: <20200922154943.29574-1-uli+renesas@fpond.eu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 23 Sep 2020 16:17:23 +0200
+Message-ID: <CAMuHMdXF7kX0u_awH3w8sCAvAQUN7dzZix6anSrrafwTjpLBUg@mail.gmail.com>
+Subject: Re: [PATCH v3] i2c: sh_mobile: implement atomic transfers
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Acked-by: Jochen Friedrich <jochen@scram.de>
+Hi Uli,
 
-Am 23.09.2020 um 16:08 schrieb nico.vince@gmail.com:
-> From: Nicolas VINCENT <nicolas.vincent@vossloh.com>
-> 
-> the i2c_ram structure is missing the sdmatmp field mentionned in
-> datasheet for MPC8272 at paragraph 36.5. With this field missing, the
-> hardware would write past the allocated memory done through
-> cpm_muram_alloc for the i2c_ram structure and land in memory allocated
-> for the buffers descriptors corrupting the cbd_bufaddr field. Since this
-> field is only set during setup(), the first i2c transaction would work
-> and the following would send data read from an arbitrary memory
-> location.
-> 
-> Signed-off-by: Nicolas VINCENT <nicolas.vincent@vossloh.com>
-> ---
->   drivers/i2c/busses/i2c-cpm.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-cpm.c b/drivers/i2c/busses/i2c-cpm.c
-> index 1213e1932ccb..24d584a1c9a7 100644
-> --- a/drivers/i2c/busses/i2c-cpm.c
-> +++ b/drivers/i2c/busses/i2c-cpm.c
-> @@ -65,6 +65,9 @@ struct i2c_ram {
->   	char    res1[4];	/* Reserved */
->   	ushort  rpbase;		/* Relocation pointer */
->   	char    res2[2];	/* Reserved */
-> +	/* The following elements are only for CPM2 */
-> +	char    res3[4];	/* Reserved */
-> +	uint    sdmatmp;	/* Internal */
->   };
->   
->   #define I2COM_START	0x80
-> 
+On Tue, Sep 22, 2020 at 5:49 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
+> Implements atomic transfers to fix reboot/shutdown on r8a7790 Lager and
+> similar boards.
+>
+> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> This is a rebased version of v2 with a minor issue fixed. It does not
+> resolve the runtime PM issue that may arise (see "watchdog: da9063: wake up
+> parent ahead of reboot", https://patchwork.kernel.org/patch/11749121/ ), but
+> in practice it works, and our understanding so far is that this will have to
+> be resolved outside this driver and should IMO not block this patch.
+
+See my comment below.
+
+> Changes since v2:
+> - rebase
+> - make sure time_left is updated
+
+Thanks for the update!
+
+> --- a/drivers/i2c/busses/i2c-sh_mobile.c
+> +++ b/drivers/i2c/busses/i2c-sh_mobile.c
+
+> @@ -429,7 +432,8 @@ static irqreturn_t sh_mobile_i2c_isr(int irq, void *dev_id)
+>
+>         if (wakeup) {
+>                 pd->sr |= SW_DONE;
+> -               wake_up(&pd->wait);
+> +               if (!pd->atomic_xfer)
+> +                       wake_up(&pd->wait);
+>         }
+>
+>         /* defeat write posting to avoid spurious WAIT interrupts */
+> @@ -581,12 +585,14 @@ static void start_ch(struct sh_mobile_i2c_data *pd, struct i2c_msg *usr_msg,
+>         pd->pos = -1;
+>         pd->sr = 0;
+>
+
+    if (pd->atomic_xfer)
+            return;
+
+and be done with it?
+
+> -       pd->dma_buf = i2c_get_dma_safe_msg_buf(pd->msg, 8);
+> -       if (pd->dma_buf)
+> -               sh_mobile_i2c_xfer_dma(pd);
+> -
+> -       /* Enable all interrupts to begin with */
+> -       iic_wr(pd, ICIC, ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
+> +       if (!pd->atomic_xfer) {
+> +               pd->dma_buf = i2c_get_dma_safe_msg_buf(pd->msg, 8);
+> +               if (pd->dma_buf)
+> +                       sh_mobile_i2c_xfer_dma(pd);
+> +               /* Enable all interrupts to begin with */
+> +               iic_wr(pd, ICIC,
+> +                      ICIC_DTEE | ICIC_WAITE | ICIC_ALE | ICIC_TACKE);
+> +       }
+>  }
+>
+
+> @@ -696,14 +721,35 @@ static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
+>         return err ?: num;
+>  }
+>
+> +static int sh_mobile_i2c_xfer(struct i2c_adapter *adapter,
+> +                             struct i2c_msg *msgs,
+> +                             int num)
+> +{
+> +       struct sh_mobile_i2c_data *pd = i2c_get_adapdata(adapter);
+> +
+> +       pd->atomic_xfer = false;
+> +       return sh_mobile_xfer(pd, msgs, num);
+> +}
+> +
+> +static int sh_mobile_i2c_xfer_atomic(struct i2c_adapter *adapter,
+> +                                    struct i2c_msg *msgs,
+> +                                    int num)
+> +{
+> +       struct sh_mobile_i2c_data *pd = i2c_get_adapdata(adapter);
+> +
+
+To make sure external conditions are satisfied, and we never deadlock:
+
+    if (pd->dev->power.is_suspended)
+            return -EPERM;  /* any other suitable error code? */
+
+Perhaps this can even be done in the i2c core instead?
+
+> +       pd->atomic_xfer = true;
+> +       return sh_mobile_xfer(pd, msgs, num);
+> +}
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
