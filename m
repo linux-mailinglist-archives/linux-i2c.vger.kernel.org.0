@@ -2,101 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D631C275FCC
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Sep 2020 20:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0BA2760C0
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Sep 2020 21:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbgIWS2B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Sep 2020 14:28:01 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:34948 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726228AbgIWS2A (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 23 Sep 2020 14:28:00 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4BxRW257DJz9ty1f;
-        Wed, 23 Sep 2020 20:27:58 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id A6iDkr2G_cIq; Wed, 23 Sep 2020 20:27:58 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4BxRW22zhmz9ty1d;
-        Wed, 23 Sep 2020 20:27:58 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 49A398B803;
-        Wed, 23 Sep 2020 20:27:58 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id Rtm7DRNNz8YX; Wed, 23 Sep 2020 20:27:58 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E0FC18B76B;
-        Wed, 23 Sep 2020 20:27:57 +0200 (CEST)
-Subject: Re: [PATCH v2] i2c: cpm: Fix i2c_ram structure
-To:     Wolfram Sang <wsa@kernel.org>, nicolas.vincent@vossloh.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org
-References: <20200923140840.8700-1-nicolas.vincent@vossloh.com>
- <20200923160829.GB6697@ninjato>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <96cbd909-818e-c10b-9e10-68a39ea269e9@csgroup.eu>
-Date:   Wed, 23 Sep 2020 20:27:50 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726460AbgIWTF0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Sep 2020 15:05:26 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:36088 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726199AbgIWTFZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Sep 2020 15:05:25 -0400
+Received: by mail-oi1-f193.google.com with SMTP id v20so996052oiv.3;
+        Wed, 23 Sep 2020 12:05:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=riDSVgXlGYFR+6jWV+2ATBBKwbz1TRVTuZiwea5PJ9s=;
+        b=Hjju+W0cGOzisr1G21K0uROICBFATAVKhuJjHxEHNR5x6vMrFOeUUCtRFiAXKUSQc9
+         BemhNrK5sgPriO9puFpStpBUNo5rFLPTeP0BVSs0Mo+/2RbMEGIxcAp/NelMNU/y2GL0
+         hgM2EgDriNfjl3AuejFgKBfuDy20B4j97kFBqGLQg41gf8FzJ+HlXIhXiq2PeZemwXqc
+         Xwr7BvhjMR9jYs3bQ9/f7nW0BP3ylhkPy7oxk7TJHNdFCEfOI9FfiN9pJmdGEwM4xvf9
+         LF690BuIJFP8JPfURu6LANBwFmQ+xtpUoxWvpXWRO49KRsCLuvRke1PnT3hjh6kTMWje
+         05RA==
+X-Gm-Message-State: AOAM532aMfaJaJVM8W7kQsmpdUCEplHFopiD05xFYCb1yRuwoTXXD1H5
+        eiiwHMGoJsLDCC9jt0r/PeXA2VAgrOCtj5rPVGn5ra33
+X-Google-Smtp-Source: ABdhPJy5GTGjyHrW2H+N0TM5K1BJLFkK54/2LwkBFIxRlcZ9ns/xjt7e8BUd3q+8cbioeo7oofTcgJOa2jbn3Dd9NKw=
+X-Received: by 2002:aca:4441:: with SMTP id r62mr499595oia.153.1600887925058;
+ Wed, 23 Sep 2020 12:05:25 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200923160829.GB6697@ninjato>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+References: <20200922154943.29574-1-uli+renesas@fpond.eu> <CAMuHMdXF7kX0u_awH3w8sCAvAQUN7dzZix6anSrrafwTjpLBUg@mail.gmail.com>
+ <20200923160627.GA6697@ninjato>
+In-Reply-To: <20200923160627.GA6697@ninjato>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 23 Sep 2020 21:05:13 +0200
+Message-ID: <CAMuHMdV1dJax_gBB-mR2fvJLSiynEnS8GZkcZq3BNmb6KXxxDg@mail.gmail.com>
+Subject: Re: [PATCH v3] i2c: sh_mobile: implement atomic transfers
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
+On Wed, Sep 23, 2020 at 6:06 PM Wolfram Sang <wsa@the-dreams.de> wrote:
+> > To make sure external conditions are satisfied, and we never deadlock:
+> >
+> >     if (pd->dev->power.is_suspended)
+> >             return -EPERM;  /* any other suitable error code? */
+> >
+> > Perhaps this can even be done in the i2c core instead?
+>
+> Good question! My gut feeling says "i2c core", but that would need more
+> research. I'd say we tackle this in a seperate patch but also for the
+> next merge window. Sounds good?
 
-Le 23/09/2020 à 18:08, Wolfram Sang a écrit :
-> On Wed, Sep 23, 2020 at 04:08:40PM +0200, nico.vince@gmail.com wrote:
->> From: Nicolas VINCENT <nicolas.vincent@vossloh.com>
->>
->> the i2c_ram structure is missing the sdmatmp field mentionned in
->> datasheet for MPC8272 at paragraph 36.5. With this field missing, the
->> hardware would write past the allocated memory done through
->> cpm_muram_alloc for the i2c_ram structure and land in memory allocated
->> for the buffers descriptors corrupting the cbd_bufaddr field. Since this
->> field is only set during setup(), the first i2c transaction would work
->> and the following would send data read from an arbitrary memory
->> location.
->>
->> Signed-off-by: Nicolas VINCENT <nicolas.vincent@vossloh.com>
-> 
-> Thanks!
-> 
-> Is someone able to identify a Fixes: tag I could add?
+Fine for me, it's already late in the v5.9-rc cycle.
 
-I'd suggest
+Gr{oetje,eeting}s,
 
-Fixes: 61045dbe9d8d ("i2c: Add support for I2C bus on Freescale 
-CPM1/CPM2 controllers")
+                        Geert
 
-Christophe
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> 
->> ---
->>   drivers/i2c/busses/i2c-cpm.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/i2c/busses/i2c-cpm.c b/drivers/i2c/busses/i2c-cpm.c
->> index 1213e1932ccb..24d584a1c9a7 100644
->> --- a/drivers/i2c/busses/i2c-cpm.c
->> +++ b/drivers/i2c/busses/i2c-cpm.c
->> @@ -65,6 +65,9 @@ struct i2c_ram {
->>   	char    res1[4];	/* Reserved */
->>   	ushort  rpbase;		/* Relocation pointer */
->>   	char    res2[2];	/* Reserved */
->> +	/* The following elements are only for CPM2 */
->> +	char    res3[4];	/* Reserved */
->> +	uint    sdmatmp;	/* Internal */
->>   };
->>   
->>   #define I2COM_START	0x80
->> -- 
->> 2.17.1
->>
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
