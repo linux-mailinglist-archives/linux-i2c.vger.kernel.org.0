@@ -2,132 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F06275861
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Sep 2020 15:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3CA275940
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Sep 2020 15:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbgIWNFH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Sep 2020 09:05:07 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:25924 "EHLO pegase1.c-s.fr"
+        id S1726516AbgIWN73 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Sep 2020 09:59:29 -0400
+Received: from mga09.intel.com ([134.134.136.24]:22474 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726513AbgIWNFH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 23 Sep 2020 09:05:07 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4BxJLQ45sYz9v2Yp;
-        Wed, 23 Sep 2020 15:05:02 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id QkybPVvzKyzl; Wed, 23 Sep 2020 15:05:02 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4BxJLQ39P9z9v2Yn;
-        Wed, 23 Sep 2020 15:05:02 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id AE6D08B76B;
-        Wed, 23 Sep 2020 15:05:03 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id EuY-BO8pFxEx; Wed, 23 Sep 2020 15:05:03 +0200 (CEST)
-Received: from [10.25.210.27] (unknown [10.25.210.27])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 070048B7FC;
-        Wed, 23 Sep 2020 15:05:03 +0200 (CEST)
-Subject: Re: [PATCH] i2c: cpm: Fix i2c_ram structure
-To:     Vincent Nicolas <Nicolas.Vincent@vossloh.com>,
-        "jochen@scram.de" <jochen@scram.de>
-Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20200922090400.6282-1-nicolas.vincent@vossloh.com>
- <956c4b63-f859-df0c-2836-80a988ee6aa9@csgroup.eu>
- <PR3P193MB0731945473A9F251C7F37608F1380@PR3P193MB0731.EURP193.PROD.OUTLOOK.COM>
- <2ecfe18a-61f6-bb0e-22c5-b7ab79a77d03@csgroup.eu>
- <PR3P193MB0731A954E01511C22259ECF0F1380@PR3P193MB0731.EURP193.PROD.OUTLOOK.COM>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <644cc2e3-367b-2982-61ef-c057033216e3@csgroup.eu>
-Date:   Wed, 23 Sep 2020 15:04:55 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+        id S1726460AbgIWN73 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 23 Sep 2020 09:59:29 -0400
+IronPort-SDR: HSDgW3bp6augOKhIPrnwomHK7A7XxZWUW8jUGxAtXSoOd3946P1/fOVbPpG6uqmzmbziAyPWg8
+ FhSxkgvxJnzw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9752"; a="161826177"
+X-IronPort-AV: E=Sophos;i="5.77,293,1596524400"; 
+   d="scan'208";a="161826177"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2020 06:59:28 -0700
+IronPort-SDR: 8Oy5AgqLUvn41mrOnHSUoULieLzrAnjuAay2f7s2JTlXC+LLeuNY+bsqH3+VOnac40F8u7XiWx
+ I1CPmyJ3ogDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,293,1596524400"; 
+   d="scan'208";a="309916738"
+Received: from mylly.fi.intel.com (HELO [10.237.72.56]) ([10.237.72.56])
+  by orsmga006.jf.intel.com with ESMTP; 23 Sep 2020 06:59:25 -0700
+Subject: Re: [PATCH v2 0/4] i2c-hid: Save power by reducing i2c xfers with
+ block reads
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Aaron Ma <aaron.ma@canonical.com>,
+        Pavel Balan <admin@kryma.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        HungNien Chen <hn.chen@weidahitech.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-input <linux-input@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        You-Sheng Yang <vicamo.yang@canonical.com>,
+        Wolfram Sang <wsa@kernel.org>
+References: <20200917052256.5770-1-sultan@kerneltoast.com>
+ <CAHp75Vea8=WchmWVOGndgarjehv+sYQh7CNUrQYqmG8hGJCzHA@mail.gmail.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <86cbe3f2-30c9-615e-6d29-c94c98d6be53@linux.intel.com>
+Date:   Wed, 23 Sep 2020 16:59:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <PR3P193MB0731A954E01511C22259ECF0F1380@PR3P193MB0731.EURP193.PROD.OUTLOOK.COM>
+In-Reply-To: <CAHp75Vea8=WchmWVOGndgarjehv+sYQh7CNUrQYqmG8hGJCzHA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-
-Le 23/09/2020 à 14:55, Vincent Nicolas a écrit :
+On 9/17/20 5:02 PM, Andy Shevchenko wrote:
+> On Thu, Sep 17, 2020 at 8:26 AM Sultan Alsawaf <sultan@kerneltoast.com> wrote:
+>>
+>> From: Sultan Alsawaf <sultan@kerneltoast.com>
+>>
+>> This is a fixed resubmission of "[PATCH 0/2] i2c-hid: Save power by reducing i2c
+>> xfers with block reads". That original patchset did not have enough fixes for
+>> the designware i2c adapter's I2C_M_RECV_LEN feature, which is documented
+>> extensively in the original email thread.
+>>
+>> Here is the original cover letter, which still applies:
+>> "I noticed on my Dell Precision 15 5540 with an i9-9880H that simply putting my
+>> finger on the touchpad would increase my system's power consumption by 4W, which
+>> is quite considerable. Resting my finger on the touchpad would generate roughly
+>> 4000 i2c irqs per second, or roughly 20 i2c irqs per touchpad irq.
+>>
+>> Upon closer inspection, I noticed that the i2c-hid driver would always transfer
+>> the maximum report size over i2c (which is 60 bytes for my touchpad), but all of
+>> my touchpad's normal touch events are only 32 bytes long according to the length
+>> byte contained in the buffer sequence.
+>>
+>> Therefore, I was able to save about 2W of power by passing the I2C_M_RECV_LEN
+>> flag in i2c-hid, which says to look for the payload length in the first byte of
+>> the transfer buffer and adjust the i2c transaction accordingly. The only problem
+>> though is that my i2c controller's driver allows bytes other than the first one
+>> to be used to retrieve the payload length, which is incorrect according to the
+>> SMBus spec, and would break my i2c-hid change since not *all* of the reports
+>> from my touchpad are conforming SMBus block reads.
+>>
+>> This patchset fixes the I2C_M_RECV_LEN behavior in the designware i2c driver and
+>> modifies i2c-hid to use I2C_M_RECV_LEN to save quite a bit of power. Even if the
+>> peripheral controlled by i2c-hid doesn't support block reads, the i2c controller
+>> drivers should cope with this and proceed with the i2c transfer using the
+>> original requested length."
 > 
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> for I²C DesignWare patches.
 > 
->> ________________________________________
->> From: Christophe Leroy <christophe.leroy@csgroup.eu>
->> Sent: Wednesday, 23 September 2020 10:01
->> To: Vincent Nicolas; jochen@scram.de
->> Cc: linuxppc-dev@lists.ozlabs.org; linux-i2c@vger.kernel.org
->> Subject: Re: [PATCH] i2c: cpm: Fix i2c_ram structure
->>
->>
->>
->> Le 23/09/2020 à 09:18, Vincent Nicolas a écrit :
->>>
->>>
->>>
->>> From: Christophe Leroy <christophe.leroy@csgroup.eu>
->>> Sent: Tuesday, 22 September 2020 14:38
->>> To: Vincent Nicolas <Nicolas.Vincent@vossloh.com>; jochen@scram.de <jochen@scram.de>
->>> Cc: linuxppc-dev@lists.ozlabs.org <linuxppc-dev@lists.ozlabs.org>; linux-i2c@vger.kernel.org <linux-i2c@vger.kernel.org>
->>> Subject: Re: [PATCH] i2c: cpm: Fix i2c_ram structure
->>>
->>>
->>>
->>> Le 22/09/2020 à 11:04, nico.vince@gmail.com a écrit :
->>>> From: Nicolas VINCENT <nicolas.vincent@vossloh.com>
->>>>
->>>> the i2c_ram structure is missing the sdmatmp field mentionned in
->>>> datasheet for MPC8272 at paragraph 36.5. With this field missing, the
->>>> hardware would write past the allocated memory done through
->>>> cpm_muram_alloc for the i2c_ram structure and land in memory allocated
->>>> for the buffers descriptors corrupting the cbd_bufaddr field. Since this
->>>> field is only set during setup(), the first i2c transaction would work
->>>> and the following would send data read from an arbitrary memory
->>>> location.
->>>>
->>>> Signed-off-by: Nicolas VINCENT <nicolas.vincent@vossloh.com>
->>>> ---
->>>>      drivers/i2c/busses/i2c-cpm.c | 3 ++-
->>>>      1 file changed, 2 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/i2c/busses/i2c-cpm.c b/drivers/i2c/busses/i2c-cpm.c
->>>> index 1213e1932ccb..c5700addbf65 100644
->>>> --- a/drivers/i2c/busses/i2c-cpm.c
->>>> +++ b/drivers/i2c/busses/i2c-cpm.c
->>>> @@ -64,7 +64,8 @@ struct i2c_ram {
->>>>           uint    txtmp;          /* Internal */
->>>>           char    res1[4];        /* Reserved */
->>>>           ushort  rpbase;         /* Relocation pointer */
->>>> -     char    res2[2];        /* Reserved */
->>>> +     char    res2[6];        /* Reserved */
->>>> +     uint    sdmatmp;        /* Internal */
->>>
->>> On CPM1, I2C param RAM has size 0x30 (offset 0x1c80-0x1caf)
->>>
->>> Your change overlaps the miscellaneous area that contains CP Microcode
->>> Revision Number, ref MPC885 Reference Manual §18.7.3
->>>
->>> As far as I understand the mpc885 contains in the dts the compatible=fsl,cpm1-i2c which is used in cpm-i2c.c to either determine the address of the i2c_ram structure (cpm1), or dynamically allocate it with cpm_muram_alloc (cpm2).
->>> In the first case the structure will indeed overlaps with the miscellaneous section but since the sdmatmp is only used by cpm2 hardware it shall not be an issue.
->>>
->>> Please, let me know if I am mistaken. If the patch cannot be accepted as is, I would gladly accept pointers on how to address this kind of issue.
->>
->>
->> Please use a mail client that properly sets the > in front of
->> original/answered text. Here your mailer has mixed you text and mine,
->> that's unusable on the long term.
-> 
-> I changed my configuration, please let me know if there are still issues
+Also for i2c-designware
 
-Yes it is OK now.
-
-Christophe
-
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
