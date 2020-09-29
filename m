@@ -2,101 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2936427D71B
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Sep 2020 21:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894F527D728
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Sep 2020 21:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727879AbgI2TmP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Sep 2020 15:42:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40362 "EHLO mail.kernel.org"
+        id S1728229AbgI2Tp1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Sep 2020 15:45:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42692 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727740AbgI2TmP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 29 Sep 2020 15:42:15 -0400
+        id S1727758AbgI2Tp1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 29 Sep 2020 15:45:27 -0400
 Received: from localhost (p54b3311a.dip0.t-ipconnect.de [84.179.49.26])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F254420774;
-        Tue, 29 Sep 2020 19:42:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7B4620774;
+        Tue, 29 Sep 2020 19:45:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601408534;
-        bh=JIZhwPve3Mi1IGC1oczxYPHxPllsJSq8vchO7C2xFDE=;
+        s=default; t=1601408726;
+        bh=Soet9P57gA78D46fkz8p/ZW7RggrzHRQhcNMOl/7jXA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Op/Fa70DBWQ33OIwm5D/RA9825RjbqiyqvUfTFfpQkbvF4rmv4tb/y+fCwVDkYBbP
-         eVhzcnKl/g3YgZ6HhAAGcIMd/H+Ofr5XGba6mRQFl+wsxUPvXWOlzlbvDPU9ed/hhN
-         6MwqkW8eGCRmVC/d4NwF03U0JhvYCIF2dOUu43AA=
-Date:   Tue, 29 Sep 2020 21:42:11 +0200
+        b=FDraZpqel5v9eqODi0cXJO+4TqLjB9Gc3hOM/4bj4Y9gfbeRsPO6v2Ezx2A89NoYT
+         cY1+8SoGWGN4auoOGif8cTPn+HgGdGwIIN9tkbZ1bws9kDhxYuOsZLYiR8SNPs9i21
+         5DTXq+tyUg3JDDhvIWoC7W6lmrmUT/DRcrQvp/QY=
+Date:   Tue, 29 Sep 2020 21:45:23 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Barry Song <song.bao.hua@hisilicon.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxarm@huawei.com, Gregory CLEMENT <gregory.clement@bootlin.com>,
+To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH] i2c: busses: replace spin_lock_irqsave by spin_lock in
- hard IRQ
-Message-ID: <20200929194211.GD2010@kunai>
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org
+Subject: Re: [PATCH v2 1/1] i2c: busses: Add support for atomic transfers in
+ Actions Semi Owl driver
+Message-ID: <20200929194523.GE2010@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Barry Song <song.bao.hua@hisilicon.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20200909041001.5612-1-song.bao.hua@hisilicon.com>
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org
+References: <b6c56858854805b0f03e29b7dde40b20796d5c93.1599561278.git.cristian.ciocaltea@gmail.com>
+ <20200909151748.GA11397@mani>
+ <20200909165915.GA387239@BV030612LT>
+ <20200910030225.GA10495@mani>
+ <20200910141223.GA447296@BV030612LT>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zbGR4y+acU1DwHSi"
+        protocol="application/pgp-signature"; boundary="imjhCm/Pyz7Rq5F2"
 Content-Disposition: inline
-In-Reply-To: <20200909041001.5612-1-song.bao.hua@hisilicon.com>
+In-Reply-To: <20200910141223.GA447296@BV030612LT>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---zbGR4y+acU1DwHSi
-Content-Type: text/plain; charset=utf-8
+--imjhCm/Pyz7Rq5F2
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Sep 09, 2020 at 04:10:01PM +1200, Barry Song wrote:
-> The code has been in a irq-disabled context since it is hard IRQ. There
-> is no necessity to do it again.
->=20
-> Cc: Gregory CLEMENT <gregory.clement@bootlin.com>
-> Cc: "Andreas F=C3=A4rber" <afaerber@suse.de>
-> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Cc: Akash Asthana <akashast@codeaurora.org>
-> Cc: Mukesh Savaliya <msavaliy@codeaurora.org>
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-
-Applied to for-next, thanks!
 
 
---zbGR4y+acU1DwHSi
+> Sure, I can handle this. I assume this should be a separate patch, to
+> be applied before the current patch. Should I submit a patch series
+> instead?
+
+Yes, just do it. And please remove irrelevant parts of the mail when
+replying. Thanks!
+
+
+--imjhCm/Pyz7Rq5F2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9zjhMACgkQFA3kzBSg
-KbbrIQ/9GNfwgXDfzhJXoRxRQ+qol/m15D4ZUHfjG7HayRBsGrYEoTT+feO67CG3
-vcoEWYLDDAewu7Q2QhP2IUNulMJvDVuEutLN+RmzIsQLHIKmOB+sFiHdfQvoAe1t
-KQVu4mp8+yEkDsjzLrDRJCf2NglBmmCVEPq2L86mrxe87mJpBIr/E9nm4c9FUTyA
-ZRDDNTsMkyAxnXjOBGz3hMsmyDKnwhA8BBFFLu5WZaGeNvrAk+waUKLRY87ZUA15
-ZtBMyldh4zWMXCvFFMf1WtXwKXhVdMDXX4crwGDSeMyZg2ccE9eo9spZdICpso3X
-kkZVW5vHzBa9VFJyfKbZbHwi9gtDt7c3cB1aQn/B67fXsTLhbW5E6c/5AMqA68oS
-QO4874An6wTjYEddKCrsLlCN9eh6W4RJXhSEJ8lg4clHUk66xq5rPwhyYTBjTIFO
-2Xr1ywsNH7YEPA2vQVWXHZUH2ycZy448AQM7LaTL8ffcXF0R9Qtg4uI9JLvTRnSU
-DzovnUnuaPNlVGUDDSyQcMaMijUnEPvip4tT36fuYz3L7Haydm8onmBWand9ywsO
-Xmv0PGI2RjkG7Lx2jSJl+fhckz73+7oPr4yf8uzZi3Q1u+8l3047OL6cNILYDZDj
-K6jlmKVB0vSQOV3qxA2VmShIJGJLw8WNUzkUqLq0dfTN6oNe8nM=
-=mYcU
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9zjtMACgkQFA3kzBSg
+KbYLhw//Yn21wF9FzyenX2h/pLxOeAwFCzpOqboAkiJ2T+PS/dqFZTNZbxCfgaTe
+ynhD7+ZRlJekYU5M5NiSrq+kKW+6Q5tQAvD6nkDPx22aXf0zrRxE60g+vvarCftV
+uwtx0vgY1PgMLeOGLWYXXO+Sx7WdW3Cn/fxnwmtL5rp3T3bTwLfBxD1Kc+79sDhI
++6J/uaLB77bDVCexG5yjLL2nANsreuopXGaikornbNOxDSBBgtYXjZV1CLmFxJvB
+jgt2AfJBL5XR7597l3K+HpW5UTSoBmJMLj9YY5rF+xk5kiH6N06OqOH90lb2Munc
+jpvF7uI7AmsajEDL57u0ZLHTVQs8Rlu7ot77+OFnyp261JJetuvgR50lbjo60aU3
+QidNWf4uShznRRwAxAcWrefuFVmNp/LcYEtiTDaMZ9OI+raGL5dUW84z8BGWIi9v
+yhU+dEVNd3E3rK4/dTS+0l5t5o1mA5qJxwRnyC9qYGlI3SjxC0I9aNEXBPE1+HZb
+aDRqM1DY7D6SfVcVLbWgSHq+o+Qxif487GVXNwKNMffXJHoaHNgM+zDJu/3eSUp7
+HSNk0k9Db24z9eCIhmssASTk+wVKP89c+oGi+IxedpYUMQ4Frh6b8lwDWMjJbAwI
+AEkFyxDyHmbBZsnWYwVpPwBSperzJCfpxhnpIw8gAjo3w/M+kE4=
+=eaRf
 -----END PGP SIGNATURE-----
 
---zbGR4y+acU1DwHSi--
+--imjhCm/Pyz7Rq5F2--
