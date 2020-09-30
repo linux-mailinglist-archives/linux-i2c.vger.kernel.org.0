@@ -2,103 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6082927E261
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Sep 2020 09:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9088827E421
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Sep 2020 10:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725836AbgI3HOx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Sep 2020 03:14:53 -0400
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:56347 "EHLO
-        herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725777AbgI3HOx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Sep 2020 03:14:53 -0400
-Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 08U7DuH7016068;
-        Wed, 30 Sep 2020 10:13:56 +0300
-Received: by taln60.nuvoton.co.il (Postfix, from userid 20088)
-        id D7798639D5; Wed, 30 Sep 2020 10:13:55 +0300 (IDT)
-From:   Tali Perry <tali.perry1@gmail.com>
-To:     wsa@kernel.org, andriy.shevchenko@linux.intel.com, xqiu@google.com,
-        kunyi@google.com, benjaminfair@google.com, avifishman70@gmail.com,
-        joel@jms.id.au, tmaimon77@gmail.com
-Cc:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Tali Perry <tali.perry1@gmail.com>
-Subject: [PATCH v1] i2c: npcm7xx: Support changing bus speed using debugfs.
-Date:   Wed, 30 Sep 2020 10:13:42 +0300
-Message-Id: <20200930071342.98691-1-tali.perry1@gmail.com>
-X-Mailer: git-send-email 2.22.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727657AbgI3ItY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Sep 2020 04:49:24 -0400
+Received: from smtp23.cstnet.cn ([159.226.251.23]:54326 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725877AbgI3ItY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 30 Sep 2020 04:49:24 -0400
+X-Greylist: delayed 399 seconds by postgrey-1.27 at vger.kernel.org; Wed, 30 Sep 2020 04:49:23 EDT
+Received: from localhost.localdomain (unknown [159.226.5.100])
+        by APP-03 (Coremail) with SMTP id rQCowAB3L1z7RHRfZnOjAA--.46271S2;
+        Wed, 30 Sep 2020 16:42:36 +0800 (CST)
+From:   Xu Wang <vulab@iscas.ac.cn>
+To:     qii.wang@mediatek.com, matthias.bgg@gmail.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: mediatek: remove redundant null check
+Date:   Wed, 30 Sep 2020 08:42:33 +0000
+Message-Id: <20200930084233.53085-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: rQCowAB3L1z7RHRfZnOjAA--.46271S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7JF4UZF47GFy5Wr1DWF4fGrg_yoW8JrW8pF
+        WxGr9Yyr47XFWj9F1DXw4q9ry5ta13GF9agr45Ga4fWr45tr1vvFW5Ka4DZF1IyrWxtw17
+        Xr1DKrnrGFyjk3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUySb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2Iq
+        xVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r
+        106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AK
+        xVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7
+        xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jw2-5UUUUU=
+X-Originating-IP: [159.226.5.100]
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCAsPA18J9rWkNgAAsI
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Systems that can dinamically add and remove slave devices
-often need to change the bus speed in runtime.
-This patch exposes the bus frequency to the user.
-This feature can also be used for test automation.
+Because clk_disable_unprepare already checked NULL clock parameter,
+so the additional checks are unnecessary, just remove it
 
-Fixes: 56a1485b102e (i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver)
-Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
 ---
- drivers/i2c/busses/i2c-npcm7xx.c | 36 ++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ drivers/i2c/busses/i2c-mt65xx.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 2ad166355ec9..44e2340c1893 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -2208,6 +2208,41 @@ static const struct i2c_algorithm npcm_i2c_algo = {
- /* i2c debugfs directory: used to keep health monitor of i2c devices */
- static struct dentry *npcm_i2c_debugfs_dir;
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index 0cbdfbe605b5..48d37de827e1 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -449,8 +449,7 @@ static int mtk_i2c_clock_enable(struct mtk_i2c *i2c)
+ 	return 0;
  
-+static int i2c_speed_get(void *data, u64 *val)
-+{
-+	struct npcm_i2c *bus = data;
-+
-+	*val = (u64)bus->bus_freq;
-+	return 0;
-+}
-+
-+static int i2c_speed_set(void *data, u64 val)
-+{
-+	struct npcm_i2c *bus = data;
-+	int ret;
-+
-+	if (val < (u64)I2C_FREQ_MIN_HZ || val > (u64)I2C_FREQ_MAX_HZ)
-+		return -EINVAL;
-+
-+	if (val == (u64)bus->bus_freq)
-+		return 0;
-+
-+	i2c_lock_bus(&bus->adap, I2C_LOCK_ROOT_ADAPTER);
-+
-+	npcm_i2c_int_enable(bus, false);
-+
-+	ret = npcm_i2c_init_module(bus, I2C_MASTER, (u32)val);
-+
-+	i2c_unlock_bus(&bus->adap, I2C_LOCK_ROOT_ADAPTER);
-+
-+	if (ret)
-+		return -EAGAIN;
-+
-+	return 0;
-+}
-+
-+DEFINE_DEBUGFS_ATTRIBUTE(i2c_clock_ops, i2c_speed_get, i2c_speed_set, "%lld\n");
-+
- static void npcm_i2c_init_debugfs(struct platform_device *pdev,
- 				  struct npcm_i2c *bus)
+ err_arb:
+-	if (i2c->have_pmic)
+-		clk_disable_unprepare(i2c->clk_pmic);
++	clk_disable_unprepare(i2c->clk_pmic);
+ err_pmic:
+ 	clk_disable_unprepare(i2c->clk_main);
+ err_main:
+@@ -461,11 +460,9 @@ static int mtk_i2c_clock_enable(struct mtk_i2c *i2c)
+ 
+ static void mtk_i2c_clock_disable(struct mtk_i2c *i2c)
  {
-@@ -2223,6 +2258,7 @@ static void npcm_i2c_init_debugfs(struct platform_device *pdev,
- 	debugfs_create_u64("rec_succ_cnt", 0444, d, &bus->rec_succ_cnt);
- 	debugfs_create_u64("rec_fail_cnt", 0444, d, &bus->rec_fail_cnt);
- 	debugfs_create_u64("timeout_cnt", 0444, d, &bus->timeout_cnt);
-+	debugfs_create_file("i2c_speed", 0644, d, bus, &i2c_clock_ops);
+-	if (i2c->clk_arb)
+-		clk_disable_unprepare(i2c->clk_arb);
++	clk_disable_unprepare(i2c->clk_arb);
  
- 	bus->debugfs = d;
- }
-
-base-commit: 06d56c38d7d411c162e4d406a9864bed32e30e61
+-	if (i2c->have_pmic)
+-		clk_disable_unprepare(i2c->clk_pmic);
++	clk_disable_unprepare(i2c->clk_pmic);
+ 
+ 	clk_disable_unprepare(i2c->clk_main);
+ 	clk_disable_unprepare(i2c->clk_dma);
 -- 
-2.22.0
+2.17.1
 
