@@ -2,117 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D3A2805A2
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Oct 2020 19:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053AF280685
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Oct 2020 20:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732795AbgJARk6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Oct 2020 13:40:58 -0400
-Received: from mga09.intel.com ([134.134.136.24]:13978 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732096AbgJARk5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 1 Oct 2020 13:40:57 -0400
-IronPort-SDR: /5bs0QYRhWBf2O+4m16ItWErilKLoaLqQBiiYB0m203ziEKOWAiTSaEPRE5Cnkg3kSQz1pAgf6
- n5Iz2LgIK3tw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9761"; a="163650045"
-X-IronPort-AV: E=Sophos;i="5.77,324,1596524400"; 
-   d="scan'208";a="163650045"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2020 10:40:56 -0700
-IronPort-SDR: MCXDRqQZOepaqaV9bmXjhsE4cmN81J+zNy1QBx7+SBPTHHRgjL+yK4UxtywV436mpunpxcbP00
- NOF/rTiMO38g==
-X-IronPort-AV: E=Sophos;i="5.77,324,1596524400"; 
-   d="scan'208";a="339633448"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2020 10:40:53 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1kO2ZS-003H5E-LL; Thu, 01 Oct 2020 20:40:46 +0300
-Date:   Thu, 1 Oct 2020 20:40:46 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Avi Fishman <avifishman70@gmail.com>
-Cc:     Tali Perry <tali.perry1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
-        Alex Qiu <xqiu@google.com>, Kun Yi <kunyi@google.com>,
+        id S1732342AbgJAS1V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Oct 2020 14:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729927AbgJAS1V (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Oct 2020 14:27:21 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75310C0613E2
+        for <linux-i2c@vger.kernel.org>; Thu,  1 Oct 2020 11:27:21 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id l85so339991oih.10
+        for <linux-i2c@vger.kernel.org>; Thu, 01 Oct 2020 11:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zromK0/y1g94z1qMbmCPDoqoKsF72rgD/Yb3hoPUPLE=;
+        b=pLBTVtvJ9NKHNXLlKWMCwrI1NKqibC67z+5cNeyc2WXfC7fy/QkHxOFhguWXhpkjjm
+         kvFuUKjdbaHfctbf0UifWDngSs4qrbslBkkmgpOGr0FfupKXFkBf0PCyjzQhD7S5R50m
+         mkMv+zD8KygJZmW33d0TB3W2CDZ538/00wp8K/fnc+bLkm/atasPqnnytIWJgjoVe2pn
+         m34dE+Ejk4EcyS31EKVlVKAf/+3+p271nX9o+T9vaCkTwMLKi3lVfTx9i8MdD4+feDG0
+         YA2A2w5ry4sZigiY1eNKH3KAq/k9pz2DPfFt2tje5PvHWl24z7DGIO5LB8G/yhy2fSn5
+         PF3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zromK0/y1g94z1qMbmCPDoqoKsF72rgD/Yb3hoPUPLE=;
+        b=mkB2JGVuJxAayJAoSfp8iAhbTPZQTd4+GsdSZdWDjaOyTMwYMDq3XSpxn2kl6Zr22d
+         ZspIcfmxulOm9QsJ5EuElQaM3BXGhFFnllzuv1QtoIC+XPbMnFkd9L3GqKfgCewqXvgp
+         biDb5MLoCE76cNSJ5PKI2VOVWkjFwnJksZazYXQhT5X3vSyimc+l0S8LE6NAYcxkHVj1
+         5iZmmM2fEzdtlz2P9+8GrpnW553ZmHDEmUAD/CfExIKq8yPRAuOf/VccTLaXtsb3oTKw
+         Hsr25y9yJcOtX4klZvICKobHtjWJCu4xo4p06rTWX05QOOL+QuMQZeDxUT7/1kLEvgd5
+         qmzw==
+X-Gm-Message-State: AOAM531AQpQwlBkyc9P4C3m5s8cN0lC07eLJZpj8YQOI7fgZQ844eUF7
+        5+SXs2/vU8oEFfbdJQR/UlSsxM3aDf9r+Lf07K7+5g==
+X-Google-Smtp-Source: ABdhPJzCcYsTc+Gbn+vcX/SUcoHjDOjZU40L0YDPwvNusAh6NPCap8hFfSdxCse55eKzTcbn+lL3yvgaDWcCEeOq2y4=
+X-Received: by 2002:aca:d982:: with SMTP id q124mr824698oig.103.1601576840640;
+ Thu, 01 Oct 2020 11:27:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200930071342.98691-1-tali.perry1@gmail.com> <20200930093117.GY3956970@smile.fi.intel.com>
+ <CAHb3i=sWxiVLCC0hfY+6-_x92ZEMY7Ctyyuz9CbMYxrH_BqAZQ@mail.gmail.com>
+ <CAHp75Vc3Bw-dTpEmpeUpB4n5-8-xGPx+jm_HkB5Pj6Qr8U=CAw@mail.gmail.com>
+ <CAKKbWA4gHobXFGi5CiPnawWoMOi0GFrCbzanuOFZ+Aky6=9Mpg@mail.gmail.com> <20201001174046.GK3956970@smile.fi.intel.com>
+In-Reply-To: <20201001174046.GK3956970@smile.fi.intel.com>
+From:   Alex Qiu <xqiu@google.com>
+Date:   Thu, 1 Oct 2020 11:27:09 -0700
+Message-ID: <CAA_a9xL+qP3zOy=oKHjCuR+CvsXeoU5EX9WgEhUH0Fza2Vs5DA@mail.gmail.com>
+Subject: Re: [PATCH v1] i2c: npcm7xx: Support changing bus speed using debugfs.
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, Kun Yi <kunyi@google.com>,
         Benjamin Fair <benjaminfair@google.com>,
         Joel Stanley <joel@jms.id.au>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] i2c: npcm7xx: Support changing bus speed using
- debugfs.
-Message-ID: <20201001174046.GK3956970@smile.fi.intel.com>
-References: <20200930071342.98691-1-tali.perry1@gmail.com>
- <20200930093117.GY3956970@smile.fi.intel.com>
- <CAHb3i=sWxiVLCC0hfY+6-_x92ZEMY7Ctyyuz9CbMYxrH_BqAZQ@mail.gmail.com>
- <CAHp75Vc3Bw-dTpEmpeUpB4n5-8-xGPx+jm_HkB5Pj6Qr8U=CAw@mail.gmail.com>
- <CAKKbWA4gHobXFGi5CiPnawWoMOi0GFrCbzanuOFZ+Aky6=9Mpg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKKbWA4gHobXFGi5CiPnawWoMOi0GFrCbzanuOFZ+Aky6=9Mpg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Oct 01, 2020 at 08:13:49PM +0300, Avi Fishman wrote:
-> Hi Andy,
-> 
-> Customers using BMC with complex i2c topology asked us to support
-> changing bus frequency at run time, for example same device will
-> communicate with one slave at 100Kbp/s and another with 400kbp/s and
-> maybe also with smae device at different speed (for example an i2c
-> mux).
-> This is not only for debug.
-
-The above design is fragile to start with. If you have connected peripheral
-devices with different speed limitations and you try to access faster one the
-slower ones may block and break the bus which will need recovery.
-
-> Can DT overlay support that?
-
-Probably. DT overlay describes the update in the device topology, including
-certain device properties.
-
-P.S. Please do not top post.
-
-> On Thu, Oct 1, 2020 at 6:40 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
+On Thu, Oct 1, 2020 at 10:41 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Thu, Oct 01, 2020 at 08:13:49PM +0300, Avi Fishman wrote:
+> > Hi Andy,
 > >
-> > On Thu, Oct 1, 2020 at 8:34 AM Tali Perry <tali.perry1@gmail.com> wrote:
-> > > On Wed, Sep 30, 2020 at 12:31 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > On Wed, Sep 30, 2020 at 10:13:42AM +0300, Tali Perry wrote:
-> > > > > Systems that can dinamically add and remove slave devices
-> > > >
-> > > > dynamically
-> > > >
-> > > > > often need to change the bus speed in runtime.
-> > > >
-> > > > > This patch exposes the bus frequency to the user.
-> > > >
-> > > > Expose the bus frequency to the user.
-> > > >
-> > > > > This feature can also be used for test automation.
-> > > >
-> > > > In general I think that DT overlays or so should be user rather than this.
-> > > > If we allow to change bus speed settings for debugging purposes it might make
-> > > > sense to do this on framework level for all drivers which support that (via
-> > > > additional callback or so).
-> > >
-> > > Do you mean adding something like this:
-> >
-> > Nope. I meant to use DT description for that. I²C core should cope
-> > with DT already.
-> > I do not understand why you need special nodes for that rather than DT
-> > overlay which will change the speed for you.
+> > Customers using BMC with complex i2c topology asked us to support
+> > changing bus frequency at run time, for example same device will
+> > communicate with one slave at 100Kbp/s and another with 400kbp/s and
+> > maybe also with smae device at different speed (for example an i2c
+> > mux).
+> > This is not only for debug.
+>
+> The above design is fragile to start with. If you have connected peripheral
+> devices with different speed limitations and you try to access faster one the
+> slower ones may block and break the bus which will need recovery.
+>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Hi Andy,
 
+To clarify, we are using a single read-only image to support multiple
+configurations, so the supported bus rate of the devices are not known
+at compile time, but at runtime. We start with 100 kHz, and go 400 kHz
+if applicable. FYI, we are using 5.1 kernel, however I don't know much
+about DT overlay.
 
+Thx.
+
+-Alex Qiu
