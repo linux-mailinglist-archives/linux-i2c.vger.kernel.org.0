@@ -2,64 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CB8281B8C
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Oct 2020 21:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF4E281DDC
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Oct 2020 23:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733260AbgJBTWA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 2 Oct 2020 15:22:00 -0400
-Received: from mx.metalurgs.lv ([81.198.125.103]:65054 "EHLO mx.metalurgs.lv"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388410AbgJBTV7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 2 Oct 2020 15:21:59 -0400
-X-Greylist: delayed 452 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:21:59 EDT
-Received: from mx.metalurgs.lv (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 75A8E5CBDB
-        for <linux-i2c@vger.kernel.org>; Fri,  2 Oct 2020 22:14:23 +0300 (EEST)
-Received: from kas30pipe.localhost (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 5B07C5CBAE
-        for <linux-i2c@vger.kernel.org>; Fri,  2 Oct 2020 22:14:23 +0300 (EEST)
-Received: by mx.metalurgs.lv (Postfix, from userid 1005)
-        id 135D062AE8; Fri,  2 Oct 2020 22:14:20 +0300 (EEST)
-Received: from [100.64.1.74] (unknown [190.15.125.50])
-        (Authenticated sender: admin)
-        by mx.metalurgs.lv (Postfix) with ESMTPA id EBFCB62AA2;
-        Fri,  2 Oct 2020 22:14:14 +0300 (EEST)
+        id S1725379AbgJBVvF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 2 Oct 2020 17:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbgJBVvB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Oct 2020 17:51:01 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EEBC0613E3
+        for <linux-i2c@vger.kernel.org>; Fri,  2 Oct 2020 14:51:01 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id t7so1826600pjd.3
+        for <linux-i2c@vger.kernel.org>; Fri, 02 Oct 2020 14:51:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=MTj4+BZWhmKGSnEdkwcHGMLlvYpIZh3xxkajlqsCipI=;
+        b=aMLcL8EsV7LpoAegaaOlTz6Oxbj/G14dAbtudhcqsLMAn36QLmUNav89JexGzYGf0f
+         mEGHI6AfH0PHDhYUAtpe15bZHYgDfBUiWt8CXACcdaAG0PX6nZ03oJcbo9gnGZEoswKX
+         u5MFkTs5Ze65+D+PP0tIQvQH8t3F2q8cHna3M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=MTj4+BZWhmKGSnEdkwcHGMLlvYpIZh3xxkajlqsCipI=;
+        b=DmoGrW90FC3QzutdAxpcWiOO5PIROLt+wv6/RDjKvAOelhTfbWuSqP3Y+qsVv+mYIf
+         MqzQhKKpUIgkmlwtMlQZVjaL1fFwserimRW8wtWG3LVAcsYT2jC7fXHRIvJ9h4lK2FF0
+         QSgXgWLuJ9u0oAC6R8z0Gr6PuZIzMQA/W6PzoLBQUohSacKCDhteKoeNAT5biVzhawtt
+         Ic4A6pRyU1pgKq+buzKYUF0F36bC7Swj5vOHMAKFiX7yYsOzhID9b3jaZwjZKhV3Tsxh
+         r/GLeSDCEEn2PQWweVq/PvfpDUakfcy6TEGbLfMhWM6Jb2FpQWFeTfQe07jiQwAl4tfi
+         R75w==
+X-Gm-Message-State: AOAM530xC7Yfx/022aPOMqIypj5O4c1TeG7DzGLzuAUZ3xrIY+drJYIT
+        IvMVbV0cqPWOA3eMtfC82eZraQ==
+X-Google-Smtp-Source: ABdhPJyr6u9rdsK4fG3g+WuZvaXVX5tbAG7cL2mf0zOD4wuDWPZ4+xuhOwVom4h61rewPdkv5G/W3g==
+X-Received: by 2002:a17:90a:cf13:: with SMTP id h19mr5070453pju.88.1601675460660;
+        Fri, 02 Oct 2020 14:51:00 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id il14sm2472705pjb.54.2020.10.02.14.50.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2020 14:50:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Description: Mail message body
-To:     Recipients <financialcapability6@gmail.com>
-From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
-Date:   Fri, 02 Oct 2020 16:14:08 -0300
-Reply-To: binmurrah@gmail.com
-X-SpamTest-Envelope-From: financialcapability6@gmail.com
-X-SpamTest-Group-ID: 00000000
-X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
-X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
-X-SpamTest-Info: {DATE: unreal year}
-X-SpamTest-Method: none
-X-SpamTest-Rate: 55
-X-SpamTest-Status: Not detected
-X-SpamTest-Status-Extended: not_detected
-X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
-Message-ID: <20201002191421.135D062AE8@mx.metalurgs.lv>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-Subject: Low Rate Loan.
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20140401 #7726142, check: 20201002 notchecked
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20201001084425.23117-2-rojay@codeaurora.org>
+References: <20201001084425.23117-1-rojay@codeaurora.org> <20201001084425.23117-2-rojay@codeaurora.org>
+Subject: Re: [PATCH V5 1/3] soc: qcom: geni: Remove "iova" check
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
+        gregkh@linuxfoundation.org, mka@chromium.org,
+        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
+        skakit@codeaurora.org, vkaur@codeaurora.org,
+        pyarlaga@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        Roja Rani Yarubandi <rojay@codeaurora.org>
+To:     Roja Rani Yarubandi <rojay@codeaurora.org>, wsa@kernel.org
+Date:   Fri, 02 Oct 2020 14:50:58 -0700
+Message-ID: <160167545865.310579.3186738276930584786@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Dear,
+Quoting Roja Rani Yarubandi (2020-10-01 01:44:23)
+> Remove "iova" check from geni_se_tx_dma_unprep and geni_se_rx_dma_unprep
+> fucntions as invalidating with dma_mapping_error() is enough.
 
-We are Investment Company offering Corporate and Personal
-Loan at 3% Interest Rate for a duration of 10Years.
+s/fucntions/functions/
 
-We also pay 1% commission to brokers, who introduce project
-owners for finance or other opportunities.
+also=20
 
-Please get back to me if you are interested for more
-details.
+s/invalidating/checking/
 
-Yours faithfully,
-Hashim Bin 
+>=20
+> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+> ---
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
