@@ -2,58 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF8A28130C
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Oct 2020 14:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D5228167E
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Oct 2020 17:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgJBMpI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 2 Oct 2020 08:45:08 -0400
-Received: from www.zeus03.de ([194.117.254.33]:42856 "EHLO mail.zeus03.de"
+        id S2387807AbgJBPYn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 2 Oct 2020 11:24:43 -0400
+Received: from mailout06.rmx.de ([94.199.90.92]:38542 "EHLO mailout06.rmx.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387749AbgJBMpH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 2 Oct 2020 08:45:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=EPCTi5rHIoFDjL/r1UZ6qUhIGuK
-        JTv8SCNCKelJa6IY=; b=Ae3uTnKFWJ9G5tlVHPx08dw1uRS5fdXMhZJg17MMMNB
-        QOskNFE6je3kg6VCnhnE9QxgrVIQmF92KNV9FWNzdq6lArnAB6Lx7g0cCElAULVq
-        U+Z8xS2w611/642tmGu1ZmL1GgIWNrhJ5iselEvnHDHJ0xvTNjVLm9AHbyIaSP/E
-        =
-Received: (qmail 1384133 invoked from network); 2 Oct 2020 14:45:04 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 2 Oct 2020 14:45:04 +0200
-X-UD-Smtp-Session: l3s3148p1@vKN7gK+wIsQgAwDPXwkAADD+YGrDqBUE
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH] Documentation: i2c: add testunit docs to index
-Date:   Fri,  2 Oct 2020 14:44:58 +0200
-Message-Id: <20201002124458.3059-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.28.0
+        id S1726017AbgJBPYn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 2 Oct 2020 11:24:43 -0400
+Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailout06.rmx.de (Postfix) with ESMTPS id 4C2v1N4XFpz9w9H;
+        Fri,  2 Oct 2020 17:24:40 +0200 (CEST)
+Received: from mta.arri.de (unknown [217.111.95.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by kdin02.retarus.com (Postfix) with ESMTPS id 4C2v1005yYz2TSBc;
+        Fri,  2 Oct 2020 17:24:20 +0200 (CEST)
+Received: from N95HX1G2.wgnetz.xx (192.168.54.33) by mta.arri.de
+ (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Fri, 2 Oct
+ 2020 17:23:57 +0200
+From:   Christian Eggers <ceggers@arri.de>
+To:     Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/3] i2c: imx: Fix handling of arbitration loss
+Date:   Fri, 2 Oct 2020 17:23:02 +0200
+Message-ID: <20201002152305.4963-1-ceggers@arri.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.54.33]
+X-RMX-ID: 20201002-172422-4C2v1005yYz2TSBc-0@kdin02
+X-RMX-SOURCE: 217.111.95.66
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Fixes: a8335c64c5f0 ("i2c: add slave testunit driver")
-Reported-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- Documentation/i2c/index.rst | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v2:
+---------------
+- Don't accidently clear additional status flags on Vybrid
+  (reported by Uwe Kleine-Koenig)
 
-diff --git a/Documentation/i2c/index.rst b/Documentation/i2c/index.rst
-index 8a2ad3845191..8b76217e370a 100644
---- a/Documentation/i2c/index.rst
-+++ b/Documentation/i2c/index.rst
-@@ -47,6 +47,7 @@ Slave I2C
- 
-    slave-interface
-    slave-eeprom-backend
-+   slave-testunit-backend
- 
- Advanced topics
- ===============
--- 
-2.28.0
+
+On my (noisy) system, I2C arbitration losses happen quite often. In it's
+current implementation, the IAL flag is partly handled, but has a
+number of shortcomings:
+
+1. The driver runs unnecessarily in a timeout when waiting for an
+interrupt.
+
+2. The driver performs 500 ms busy-waiting without any value.
+
+3. Arbitration loss errors may be reported one transfer later than they
+occured.
+
+Best regards
+Christian
+
 
