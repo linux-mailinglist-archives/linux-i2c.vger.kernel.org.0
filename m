@@ -2,129 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 684C42816F6
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Oct 2020 17:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CB8281B8C
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Oct 2020 21:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388050AbgJBPo2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 2 Oct 2020 11:44:28 -0400
-Received: from sauhun.de ([88.99.104.3]:43202 "EHLO pokefinder.org"
+        id S1733260AbgJBTWA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 2 Oct 2020 15:22:00 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:65054 "EHLO mx.metalurgs.lv"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387777AbgJBPo0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 2 Oct 2020 11:44:26 -0400
-Received: from localhost (p5486cf7b.dip0.t-ipconnect.de [84.134.207.123])
-        by pokefinder.org (Postfix) with ESMTPSA id 648B62C0880;
-        Fri,  2 Oct 2020 17:44:23 +0200 (CEST)
-Date:   Fri, 2 Oct 2020 17:44:23 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org,
-        linux-i2c@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH v4] i2c: sh_mobile: implement atomic transfers
-Message-ID: <20201002154423.GA16758@ninjato>
-References: <20200928155950.1185-1-uli+renesas@fpond.eu>
+        id S2388410AbgJBTV7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 2 Oct 2020 15:21:59 -0400
+X-Greylist: delayed 452 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:21:59 EDT
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 75A8E5CBDB
+        for <linux-i2c@vger.kernel.org>; Fri,  2 Oct 2020 22:14:23 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 5B07C5CBAE
+        for <linux-i2c@vger.kernel.org>; Fri,  2 Oct 2020 22:14:23 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id 135D062AE8; Fri,  2 Oct 2020 22:14:20 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.50])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id EBFCB62AA2;
+        Fri,  2 Oct 2020 22:14:14 +0300 (EEST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ew6BAiZeqk4r7MaW"
-Content-Disposition: inline
-In-Reply-To: <20200928155950.1185-1-uli+renesas@fpond.eu>
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Fri, 02 Oct 2020 16:14:08 -0300
+Reply-To: binmurrah@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201002191421.135D062AE8@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan.
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201002 notchecked
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hello Dear,
 
---ew6BAiZeqk4r7MaW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We are Investment Company offering Corporate and Personal
+Loan at 3% Interest Rate for a duration of 10Years.
 
-Hi Uli,
+We also pay 1% commission to brokers, who introduce project
+owners for finance or other opportunities.
 
-On Mon, Sep 28, 2020 at 05:59:50PM +0200, Ulrich Hecht wrote:
-> Implements atomic transfers to fix reboot/shutdown on r8a7790 Lager and
-> similar boards.
->=20
-> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
-> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Please get back to me if you are interested for more
+details.
 
-It works, but I have two comments and two questions:
-
-> @@ -581,10 +585,12 @@ static void start_ch(struct sh_mobile_i2c_data *pd,=
- struct i2c_msg *usr_msg,
->  	pd->pos =3D -1;
->  	pd->sr =3D 0;
-> =20
-> +	if (pd->atomic_xfer)
-> +		return;
-> +
->  	pd->dma_buf =3D i2c_get_dma_safe_msg_buf(pd->msg, 8);
->  	if (pd->dma_buf)
->  		sh_mobile_i2c_xfer_dma(pd);
-> -
-
-This blank line should stay.
-
-=2E..
-
-> +		if (pd->atomic_xfer) {
-> +			unsigned long j =3D jiffies + pd->adap.timeout;
-> +
-> +			time_left =3D time_before_eq(jiffies, j);
-> +			while (time_left &&
-> +			       !(pd->sr & (ICSR_TACK | SW_DONE))) {
-> +				unsigned char sr =3D iic_rd(pd, ICSR);
-> +
-> +				if (sr & (ICSR_AL   | ICSR_TACK |
-> +					  ICSR_WAIT | ICSR_DTE)) {
-> +					sh_mobile_i2c_isr(0, pd);
-> +					udelay(150);
-> +				} else {
-> +					cpu_relax();
-> +				}
-
-Is it 100% safe to call cpu_relax() that late? Aren't interrupts
-disabled? What is waking the CPU again? And where does the value 150us
-come from?
-
-> +				time_left =3D time_before_eq(jiffies, j);
-> +			}
-> +		} else {
-> +			/* The interrupt handler takes care of the rest... */
-> +			time_left =3D wait_event_timeout(pd->wait,
-> +					pd->sr & (ICSR_TACK | SW_DONE),
-> +					pd->adap.timeout);
-> +
-> +			/* 'stop_after_dma' tells if DMA xfer was complete */
-> +			i2c_put_dma_safe_msg_buf(pd->dma_buf, pd->msg,
-> +						 pd->stop_after_dma);
-> =20
-
-This blank line can go.
-
-Thanks and regards,
-
-   Wolfram
-
-
---ew6BAiZeqk4r7MaW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl93StMACgkQFA3kzBSg
-Kbb33w/9GPAVT09fYkuWTA2zH4eGHNNINK6WemYumZkVbv9sceVmtg08GlgS4Wyh
-ASTpKf9lj/m+kd1viiQsYJzmC2IQG7ANozAX5BlUU4jcm4oboc6gLu6Q/My5mxEs
-vtunKXEjexrWtsaFkJtbtomFdEMMTkTWSQbGacNoPaa0bOCkErIM9rJgh+7jk6lD
-KXCIPuTBK2SbjVo3kXsR8ba1pW0H1v+60wwAzWFNWmH1tXRW2dQlWiarnJdhUQhM
-xzu/ZAglhc4A+KJXJlrQZ8GRIqP75+2ZUnFKzhPXl4oUHqiqyOvtSCFCLB1+Hlsl
-qSgTrQjxTN38FWSMzlqasWbMV1yOSgqBnl/0DK1vtsH15gDTmCPY6legI7wn49Vk
-974cGK1Z2nKPeK6QN+dPzrplpJCtfunKDliZKsa8kUWri6P7CXawdPeiPYf+afrS
-s1s3RuUKDO26dF3gzRudBYDoxMX9A3u59+gEkDrylHmXIlmqCvuazedHigObS8hS
-uhekWSwKBimIHnslY/soN7Ps9rSyusDpvIclv4MZOHunrdqbCRnzfT7E8bhcDaa3
-Ixp2GJzVmcmTu74usHH9HwgtCs8faqcmLuYb9D9QRWewr+CsJ/hN83gyvUFgrg0U
-LnMbwfhwYe4cWaOfuLVhRUHImYHfP6iqMbObdJJFjCpRqFFCxWo=
-=oEV/
------END PGP SIGNATURE-----
-
---ew6BAiZeqk4r7MaW--
+Yours faithfully,
+Hashim Bin 
