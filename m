@@ -2,125 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2493282034
-	for <lists+linux-i2c@lfdr.de>; Sat,  3 Oct 2020 03:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376C928219C
+	for <lists+linux-i2c@lfdr.de>; Sat,  3 Oct 2020 07:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725808AbgJCBj6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 2 Oct 2020 21:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725801AbgJCBj6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Oct 2020 21:39:58 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87807C0613E4
-        for <linux-i2c@vger.kernel.org>; Fri,  2 Oct 2020 18:39:56 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id q18so2007596pgk.7
-        for <linux-i2c@vger.kernel.org>; Fri, 02 Oct 2020 18:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=1v3By7yU45Bmu0NIaU5QNcQkQvQCDjWaS3fjoaCGs4M=;
-        b=X1Admulul8xwuETLmzkYaZmPKEcjCvBdCxOIAo6xYnj0918QidtP5lCCoCFYAOj6yW
-         Yxn566dOAjKJ9iJx33fFAxQgsSab3CHx1Ry4FcwZCP8f6zhaqW0cCsNLqq+4wMPUKth9
-         7dehe7jAXb2/HI7wlIvMLJmEkivR6hNmQnSNI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=1v3By7yU45Bmu0NIaU5QNcQkQvQCDjWaS3fjoaCGs4M=;
-        b=f9OXKs9qCvFyWf7+OZk99BwvzxYqsiuOF/MPfo+AjaVlzOlKIVeDHXPpn/SP2i2GJe
-         kIKH1sU5v1Je3LTv2BcIqLmfLUAGGd73qdVtlE/dGIyGml/WwcSi/AV7IaByYHbIyaqL
-         fHHlAnSHy90DhgGNtu6v3Cg4m5wrIvc76wKDSOtAVDg5EIPE9ZjU57dcQXG/i3sKXI7M
-         bI7bR81cfVfUfRx71PQoVe6nq/59RzkasiqsXHq+p0xFR+4hqm6VQdeAngUOFKKzfCW9
-         2dBu7TwEwjXViaGBl4vmx8DzO071G1jL8HFt51pzWRFQQ+696kOhhNm9pAFyj4kZEqeI
-         peGg==
-X-Gm-Message-State: AOAM533zvQ8aC7NSJxmUx0/A/qk5XzRMMo0e2Maj+YHDdvBX7Iu9yZ49
-        +sXqBXJ1S3L2M4Rnaldx6JLJDA==
-X-Google-Smtp-Source: ABdhPJx3l+GbWwg/wKPqoJepbGG2OIbKFcguASZ6y5wTgqJgOe9scEIGjuqf7fADhsHj623SrG1WJg==
-X-Received: by 2002:aa7:85d4:0:b029:142:4339:42ca with SMTP id z20-20020aa785d40000b0290142433942camr5460800pfn.5.1601689195794;
-        Fri, 02 Oct 2020 18:39:55 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
-        by smtp.gmail.com with ESMTPSA id z28sm3648837pfq.81.2020.10.02.18.39.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2020 18:39:54 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20201001084425.23117-4-rojay@codeaurora.org>
-References: <20201001084425.23117-1-rojay@codeaurora.org> <20201001084425.23117-4-rojay@codeaurora.org>
-Subject: Re: [PATCH V5 3/3] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
-        gregkh@linuxfoundation.org, mka@chromium.org,
-        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
-        skakit@codeaurora.org, vkaur@codeaurora.org,
-        pyarlaga@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        id S1725616AbgJCFcm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 3 Oct 2020 01:32:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39386 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725446AbgJCFcl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 3 Oct 2020 01:32:41 -0400
+Received: from localhost (p54b337f0.dip0.t-ipconnect.de [84.179.55.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CCCAF206C3;
+        Sat,  3 Oct 2020 05:32:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601703161;
+        bh=ivPdo+afXcrBnRWmahPyp3SKVbAOjpAaMI2f+qq+UYc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HjyheEieSYiArv1ufpvKAuS+Q47TF7FBjKwsvlIO/ht7q2VzsDlnu8VVVgNo9EpFc
+         zQW9VhiNivlQRtoMZZfaCxk/OzyBcqLDpXxP49Dc6+WJZ9cwL2J6k3hN1lVVh+bwSM
+         d3Rszs6GbtYbZgLSd1XKUGCmrBS/TXU8/SQiD728=
+Date:   Sat, 3 Oct 2020 07:32:34 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for 5.9
+Message-ID: <20201003053234.GA2550@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>, wsa@kernel.org
-Date:   Fri, 02 Oct 2020 18:39:53 -0700
-Message-ID: <160168919332.310579.15311671258384969025@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UugvWAfsgieZRqgk"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Quoting Roja Rani Yarubandi (2020-10-01 01:44:25)
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-=
-qcom-geni.c
-> index aee2a1dd2c62..56d3fbfe7eb6 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -380,6 +380,36 @@ static void geni_i2c_tx_msg_cleanup(struct geni_i2c_=
-dev *gi2c,
->         }
->  }
-> =20
-> +static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
-> +{
-> +       int ret;
-> +       u32 geni_status;
-> +       unsigned long flags;
-> +       struct i2c_msg *cur;
-> +
-> +       /* Resume device, runtime suspend can happen anytime during trans=
-fer */
-> +       ret =3D pm_runtime_get_sync(gi2c->se.dev);
-> +       if (ret < 0) {
-> +               dev_err(gi2c->se.dev, "Failed to resume device: %d\n", re=
-t);
-> +               return;
-> +       }
-> +
-> +       spin_lock_irqsave(&gi2c->lock, flags);
 
-We grab the lock here.
+--UugvWAfsgieZRqgk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +       geni_status =3D readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
-> +       if (!(geni_status & M_GENI_CMD_ACTIVE))
-> +               goto out;
-> +
-> +       cur =3D gi2c->cur;
-> +       geni_i2c_abort_xfer(gi2c);
+Linus,
 
-But it looks like this function takes the lock again? Did you test this
-with lockdep enabled? It should hang even without lockdep, so it seems
-like this path of code has not been tested.
+some more driver fixes from I2C.
 
-> +       if (cur->flags & I2C_M_RD)
-> +               geni_i2c_rx_msg_cleanup(gi2c, cur);
-> +       else
-> +               geni_i2c_tx_msg_cleanup(gi2c, cur);
-> +       spin_unlock_irqrestore(&gi2c->lock, flags);
-> +out:
-> +       pm_runtime_put_sync_suspend(gi2c->se.dev);
-> +}
-> +
->  static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg=
- *msg,
->                                 u32 m_param)
->  {
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit ba4f184e126b751d1bffad5897f263108befc780:
+
+  Linux 5.9-rc6 (2020-09-20 16:33:55 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to 8947efc077168c53b84d039881a7c967086a248a:
+
+  i2c: npcm7xx: Clear LAST bit after a failed transaction. (2020-09-27 20:05:27 +0200)
+
+----------------------------------------------------------------
+Jean Delvare (1):
+      i2c: i801: Exclude device from suspend direct complete optimization
+
+Nicolas VINCENT (1):
+      i2c: cpm: Fix i2c_ram structure
+
+Tali Perry (1):
+      i2c: npcm7xx: Clear LAST bit after a failed transaction.
+
+ drivers/i2c/busses/i2c-cpm.c     | 3 +++
+ drivers/i2c/busses/i2c-i801.c    | 1 +
+ drivers/i2c/busses/i2c-npcm7xx.c | 9 +++++++++
+ 3 files changed, 13 insertions(+)
+
+--UugvWAfsgieZRqgk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl94DO0ACgkQFA3kzBSg
+KbYaOg/8DNrKHEmaXW398wNKNBKhwF9JPBuTvGuxYH9AmtAULpu6oTMkipO/YiEs
+WQ6Dr05Ayu+uztcetKywLql7mkQIJzsqdoYWqIXYF0B+zFY65pTonXCpU3JPiBs7
+Lud4O6LF6rge35lNvBqfdr/4PtdI+I+HHJBQFPrDTo1N9xIx3ND319VVA01mgW2i
+uXO1mwOZvnCG26ZvR7cweYFCaoGRQIIZcycoxepzVATqWjNhotQRTLAQu6a57LPQ
+XTz4dpMwTexY0qLZHRMT9lA2Tn8S69oC+qQ5EsEKeB7z3E7f6XqpIxvd2WbcKbUq
+clFsu5yTg0MsVpCAi53ohyznmrwoOvyGKn5qgvtk96Kps8QN1wms0I9vMCzDZOD3
+J+Y9tjnbP285KYOX7+0+us+hy5XpGNHiQXB4GlLNv5CzpRi06Ya18+l0K+nH95gq
+1OtpWi/FHlflCjOsD6cGYvzxCoEkY9Npj3xZh+hMrIlTGecV1FHA21mXLCwFTmq8
+0eKMEVrm8I1R7ZR9D5RXGe7aMZDKeHwMPS3baxKxtSDNlpB9t2SYtKHZ28HTLITS
+U573Yj9Fh81beTKOcj1D6eZ6ep1uJY8BeDzh6EX5uAcNqvJkWrVO6EyVJioAgsnD
+1MkVkJPZdIQ2ilUeBG4U0/dU0/wgfr/xRWWfzhYyYHzUeiVlJZg=
+=m4eH
+-----END PGP SIGNATURE-----
+
+--UugvWAfsgieZRqgk--
