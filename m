@@ -2,131 +2,184 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 490F028272F
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Oct 2020 00:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E699F2829C3
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Oct 2020 11:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725933AbgJCWqS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 3 Oct 2020 18:46:18 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:61377 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725931AbgJCWqR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 3 Oct 2020 18:46:17 -0400
+        id S1725826AbgJDJS3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 4 Oct 2020 05:18:29 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:58218 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbgJDJS3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 4 Oct 2020 05:18:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1601765175; x=1633301175;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=fJXu3MDUzNslK7ukgDP2lMIodbRt2PJPY4SmvSFMsFw=;
-  b=FaocotEfv9wSJjWDQ8v/Da3a1bvHXITOJPbJ8EO2uw2guRk43txgnGqa
-   LJrhNPY60wL8tq0t5TuopaLO97AfZFb2yQK8gsXgIWpTcKLWINBqa8Il9
-   7Lz6CdvegsJh6iZ8wLTjvq0wkkDD5r00pSWPmFRrp1+ZP3MdZEmQonb1j
-   dPivt/+5XKfxM1+5/7UEvWpQ8kjVWDj0kShmgYd4UG6gm6dB90gWKMGYk
-   QJdDvonOJ9oKDlLKz+6MbNfxW2aEuUtN+hp915hc5QDrFC4CvYEgPHUKY
-   RTFfsnef7A8QENVwVafXQRl7eRWpjR06aRixFT25Lsyi79p4z+61DQC/O
-   g==;
-IronPort-SDR: PEsOOj5DFQCGJ1G1dUu8gILOX5uRsCUFhtwadMZTKpcVkde3fw2Z8BH/gffThUH0WsM9tHTOR4
- U02PuBO0lH2VpMcJkIan308VgS+Q70hbia1ksix6Xv7kj5OFIIS9wJ63ancpCBxQ6f0qWBykSM
- MXH6POs8fddp3vr51Ch1ZhCqnEUmyO+ep3fhzOCFTymVCaxH9cTft9gJlrcLm4K4NEHz1fwZHT
- TWpHr63zNQyITm2MI4htVeqZetdJmKZavJ61KiqQHJ/R+21zVA0agqa6XXshQH4TxfRuAzKvdE
- /BA=
-X-IronPort-AV: E=Sophos;i="5.77,333,1596524400"; 
-   d="scan'208";a="91334750"
+  t=1601803108; x=1633339108;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mJB4PM3W0XuShCHCsKFfKvn4aRYMv9WtYMDh2EN4KAQ=;
+  b=yDGgT0k3NRsjt2MIbnLidrCzCzv06XvdKj4/ggimHWuTesC/bHnSEwfr
+   2u3Wwg+m+SVXn8nNgsFrcv8O0o6wf+ZFo5pG7vK6+6LYy18Z7cJmV6APG
+   cH72YS4qbI0N+r8cEDtFLneBWwc0VCt8IBePsXjYA2YGEgITJeUF9C9lO
+   4KmX19uQGtUCVTI6Z6IKLyf3XPxVLkgfoJqSritGip8aXPFgmZBxBpUrg
+   MdUqIQINdHz/hDAA17q3VjIfsd+XBSjz05VxQMYfuSEEiMY4y2wcBU530
+   muZF+0CJh0PCfD3FE4pUDhL8hkztWo3E45tAM+qK/WpFz1ysTdTyejUdF
+   A==;
+IronPort-SDR: QLQWuDl11RWXHKKAGVpBcDJOOYMq4XVZsRb0kIxvXe5q3AyqeGPjZYYfZHmnC+S/1lDdC/8KcM
+ cSEfw8FLzs+EFYOQTqduCXe8PnOdZoToxb8qyYC313yfIXjNFSC69KoABxX0WRku9UlAJ16PYw
+ rYhs/BIFzOf51iqfC15GgJKm9cB6udGFKXk62CwKwgJML+Yu9NKTbtwIMeVzMPGzYhPq4x2vm6
+ 9gqp/eZQc24hSWcV6ic9eBY5BtUOY6pd/Bnzqljp0C0bFbs6AO7p/Ty4CeAQtqxcieFn8q8UDM
+ VKc=
+X-IronPort-AV: E=Sophos;i="5.77,335,1596524400"; 
+   d="scan'208";a="28646518"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Oct 2020 15:46:15 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Oct 2020 02:18:27 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Sat, 3 Oct 2020 15:46:15 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3
- via Frontend Transport; Sat, 3 Oct 2020 15:46:15 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YpnZZBe7mgqft3aE15Pl2ARfRoKfAycD77na+SXkDkuVsQ1CFSl1Duqwq5sTOVyFEnlXblpE9SNbuxG90GRfkVC7GmvN4aO6D9CH6mgRoTZNXF7VbyZ2Poyc3b0xsCmyOKRxQO09nKYln+2wzPwdt1m0l17Te5RG3PGyP5O/7AUBISYMR6uGNN9t8RPkMa1pYush9mYbghXDov2FV8027BzS0zC4eWuGP5F9EPLw6T4SLV6MTUvYELsdDcVPQjis74WK77gv6JLctEHk0/hIRjpe5IvK8cBONrHU+QQCGA4yokr+wZ3keHWwaM31r5rPvxouSyYbwELQg6elKas7KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fJXu3MDUzNslK7ukgDP2lMIodbRt2PJPY4SmvSFMsFw=;
- b=mX/TvcG5OwjMGnu46glGY9dagleEqafvBhZprEvRFtHQtWiXPvfhyNs5qtCLpzNfI2iK1EC+QYF3vM2KzCVVUSjLclYpfLfSAo9vhNeZeq1C+Hf2i+fdDbhND1xmmaIJ8NllReInn2k1M+8iJ0/JsZo/+L/xs4GBXjYEfXzisKP44Fx8mmwSxRcOUxd3/NjH445U8FAJWx8CY1qitrmEc/3ZqaaQ9BqjLdM8rfQyqJ4Vz+sYq41HMuTu7Ookq40bzTvDqKAS/+Gv6yNSddockQrP7aVmniA9o4Zd2VWjymA3zCPDtH+oZVEFb/49rx8DiPWNuVr16OyDl2sxRx9XLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fJXu3MDUzNslK7ukgDP2lMIodbRt2PJPY4SmvSFMsFw=;
- b=SvICjAXyydiAIAC3ihFZHIZy2SNTSqQ6LHLRqfxloYlRI/Y3BcM9cPdBTRJ4ARECumd8pAG8AQA5XNnvoX1+/FSxHBClgTwVGJBCjEbonOFn6QJtd0x0eth5QXiPLFgSjYOw4gVV4ibOQ5NXXUSWA2gBBT6+nqlMvsbfngtTrss=
-Received: from CY4PR1101MB2341.namprd11.prod.outlook.com
- (2603:10b6:903:b1::22) by CY4PR11MB0072.namprd11.prod.outlook.com
- (2603:10b6:910:76::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.29; Sat, 3 Oct
- 2020 22:46:14 +0000
-Received: from CY4PR1101MB2341.namprd11.prod.outlook.com
- ([fe80::908:a628:69ca:d62e]) by CY4PR1101MB2341.namprd11.prod.outlook.com
- ([fe80::908:a628:69ca:d62e%7]) with mapi id 15.20.3433.042; Sat, 3 Oct 2020
- 22:46:13 +0000
-From:   <Codrin.Ciubotariu@microchip.com>
-To:     <linux@armlinux.org.uk>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <wsa@kernel.org>,
-        <alpawi@amazon.com>
-Subject: Re: [PATCH] i2c: pxa: move to generic GPIO recovery
-Thread-Topic: [PATCH] i2c: pxa: move to generic GPIO recovery
-Thread-Index: AQHWmaFbBZ8ed2vmCEezMTnByxu//KmGOd4AgABA2wA=
-Date:   Sat, 3 Oct 2020 22:46:13 +0000
-Message-ID: <dde8b782-9193-a044-a328-98955e9fa35e@microchip.com>
-References: <20201003162141.925518-1-codrin.ciubotariu@microchip.com>
- <20201003185404.GH1551@shell.armlinux.org.uk>
-In-Reply-To: <20201003185404.GH1551@shell.armlinux.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-authentication-results: armlinux.org.uk; dkim=none (message not signed)
- header.d=none;armlinux.org.uk; dmarc=none action=none
- header.from=microchip.com;
-x-originating-ip: [86.121.164.182]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ada7d1ef-c78b-4100-0e02-08d867ee21c0
-x-ms-traffictypediagnostic: CY4PR11MB0072:
-x-microsoft-antispam-prvs: <CY4PR11MB007278CC2048DB85FE9AEF84E70E0@CY4PR11MB0072.namprd11.prod.outlook.com>
-x-bypassexternaltag: True
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4sVt6eCfghMAjPkKSJ9ZZOcaY8CaJQMA2381b1yl/wizAn/wGN7rv16qFn4tNt4Wlq5Fjx7M6WGTDnXL/tN01aviPt1WiKUNdY29WFdz0h0GshCZ7Pq1/td09EYTP1VHKRwt4mQwAefbzm3SM9+hyzsR15pnQv+xjUd92e58NqeDY1Hz5r1dRlozsHx/eyq2q0C/tuOnhxGuQ+eR/R0zEv1LbV8h0FvojRKmnw3y7EIXKtrrN9VLoI003a4ezQ5W6v9Co9eFugLYwNtAzZH6x+l8IuFrtlNv1RmTL9mPILcX4a42WNtK6YyRxf0fVoVYu3xWr1vzgP4fex17e1aLHzaCsVS1KVtRInVPTJwsRxK8V5sFfE9l/iwxpcN92xo1HPfuONkd216GSxbBmFSWEz/4bkDulD36yPvFfSWhYKLxjHsqoCE+3zIpBbe2KpXBX6yw7Jx4y+d1/Z/qxajkxQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1101MB2341.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(136003)(376002)(396003)(366004)(39850400004)(36756003)(186003)(4744005)(26005)(8676002)(6506007)(8936002)(2906002)(6512007)(83380400001)(31686004)(64756008)(4326008)(6486002)(66556008)(86362001)(478600001)(66476007)(31696002)(6916009)(66446008)(5660300002)(2616005)(66946007)(71200400001)(76116006)(91956017)(316002)(54906003)(41533002)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: rKiNMf+XwQIZVPB6CJ7D55S/HrTruDPJrbLD3SXDWlqrbmKMNjKpYLVNNGeVtlX1qGeBCI9IaBZ5uygvMClUzjfTxnSx4JAKOOnXBk4/U57+ICQEXHDymn3WUNsg1JMPIqEw+O+gWg3HnwcMkbdI1qsQV4Oq4bBmOe16Y29PfzqJH8eu5+wHWC3nxeD62WbCvoyj733lU/DzUUfmn8IZ/nuLY2nyCvW1a21ZF1kF/mdTw72YjCajjynP5O0CJ9OnGMbIf3ygW0kILPHF7Ncjc4F+aE06TVkykv1HvTk0FBzekULTUpfmToq4mVDMwCAoodT1fPU6Sm684iWBeNv3CJOtc4SnR2lLZM044j+Xg5/P4u8P9sPzCOIOPbnFv2glej97JUZpa39hT4DeX83nhkxn20tttr6h5wvL+DkkyPdskyqJqNvzvPgmCkoUuc5J1hk57cFAcwQ0FVMOwxD2+vzEvEU6nIOw2uI6IzPuac1cv8jh5Xz/QfzWZ+HmLuGp4ATcG1NOCtCfizqtxdaq5wCc3K0yJUqjGyzJUy2qu9Ikdmb1IpgH8XpIIZfAPX76EIdqGO5T4VuvYM/SVSqGGisVb9AFDltO5R1Xq5bHJ3JiWIeRsVw/RGNJ/mMZrib/mJ75dVMoWbLBNODipJbh3g==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F5C2F45F5DBEFC429BF857DE14E6CEF4@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 15.1.1979.3; Sun, 4 Oct 2020 02:17:39 -0700
+Received: from rob-ult-m19940.amer.actel.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Sun, 4 Oct 2020 02:18:22 -0700
+From:   Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <wsa@kernel.org>, <rmk+kernel@armlinux.org.uk>,
+        <alpawi@amazon.com>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Subject: [PATCH v2] i2c: pxa: move to generic GPIO recovery
+Date:   Sun, 4 Oct 2020 12:16:56 +0300
+Message-ID: <20201004091656.1004575-1-codrin.ciubotariu@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR1101MB2341.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ada7d1ef-c78b-4100-0e02-08d867ee21c0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2020 22:46:13.7927
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UdLcsda7lHJFNSopI5cyiya15UoDhHgY0kel0U7MA3zte/E2HUDy9Joh81pRhiZTJf+aG5o0Yc/115tSUfD+VHLSCYJOfsflpSXr8vh+KAs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB0072
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Pj4gICBzdGF0aWMgdm9pZCBpMmNfcHhhX3VucHJlcGFyZV9yZWNvdmVyeShzdHJ1Y3QgaTJjX2Fk
-YXB0ZXIgKmFkYXApDQo+PiBAQCAtMTMyNSw4ICsxMzIwLDYgQEAgc3RhdGljIHZvaWQgaTJjX3B4
-YV91bnByZXBhcmVfcmVjb3Zlcnkoc3RydWN0IGkyY19hZGFwdGVyICphZGFwKQ0KPj4gICAgICAg
-ICAgICAgICAgaTJjX3B4YV9kb19yZXNldChpMmMpOw0KPj4gICAgICAgIH0NCj4+DQo+PiAtICAg
-ICBXQVJOX09OKHBpbmN0cmxfc2VsZWN0X3N0YXRlKGkyYy0+cGluY3RybCwgaTJjLT5waW5jdHJs
-X2RlZmF1bHQpKTsNCj4+IC0NCj4gDQo+IFRoaXMgd29uJ3QgZmx5LiBXZSBuZWVkIHRvIHB1dCB0
-aGUgcGluY3RybCBiYWNrIGludG8gaTJjIG1vZGUgX2JlZm9yZV8NCj4gd2UgcmUtZW5hYmxlIHRo
-ZSBJMkMgbW9kdWxlLCBvdGhlcndpc2UgdGhlIEkyQyBibG9jayB3aWxsIHNlZSBsb2dpYyAwDQo+
-IG9uIGJvdGggU0NMIGFuZCBTREEgd2hpY2ggY291bGQgY29uZnVzZSB0aGUgYmxvY2suDQoNClJp
-Z2h0LCBJIHdpbGwgYWRkIGl0IGJhY2suDQoNCkJlc3QgcmVnYXJkcywNCkNvZHJpbg0K
+Starting with
+commit 75820314de26 ("i2c: core: add generic I2C GPIO recovery")
+GPIO bus recovery is supported by the I2C core, so we can remove the
+driver implementation and use that one instead.
+
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+---
+
+This patch is not tested.
+
+Changes in v2:
+ - readded the pinctrl state change to default from the
+   unprepare_recovery callback;
+
+ drivers/i2c/busses/i2c-pxa.c | 73 +++---------------------------------
+ 1 file changed, 6 insertions(+), 67 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
+index 35ca2c02c9b9..006cc1d5931f 100644
+--- a/drivers/i2c/busses/i2c-pxa.c
++++ b/drivers/i2c/busses/i2c-pxa.c
+@@ -264,9 +264,6 @@ struct pxa_i2c {
+ 	u32			hs_mask;
+ 
+ 	struct i2c_bus_recovery_info recovery;
+-	struct pinctrl		*pinctrl;
+-	struct pinctrl_state	*pinctrl_default;
+-	struct pinctrl_state	*pinctrl_recovery;
+ };
+ 
+ #define _IBMR(i2c)	((i2c)->reg_ibmr)
+@@ -1305,8 +1302,6 @@ static void i2c_pxa_prepare_recovery(struct i2c_adapter *adap)
+ 	 */
+ 	gpiod_set_value(i2c->recovery.scl_gpiod, ibmr & IBMR_SCLS);
+ 	gpiod_set_value(i2c->recovery.sda_gpiod, ibmr & IBMR_SDAS);
+-
+-	WARN_ON(pinctrl_select_state(i2c->pinctrl, i2c->pinctrl_recovery));
+ }
+ 
+ static void i2c_pxa_unprepare_recovery(struct i2c_adapter *adap)
+@@ -1347,76 +1342,20 @@ static int i2c_pxa_init_recovery(struct pxa_i2c *i2c)
+ 	if (IS_ENABLED(CONFIG_I2C_PXA_SLAVE))
+ 		return 0;
+ 
+-	i2c->pinctrl = devm_pinctrl_get(dev);
+-	if (PTR_ERR(i2c->pinctrl) == -ENODEV)
+-		i2c->pinctrl = NULL;
+-	if (IS_ERR(i2c->pinctrl))
+-		return PTR_ERR(i2c->pinctrl);
+-
+-	if (!i2c->pinctrl)
+-		return 0;
+-
+-	i2c->pinctrl_default = pinctrl_lookup_state(i2c->pinctrl,
+-						    PINCTRL_STATE_DEFAULT);
+-	i2c->pinctrl_recovery = pinctrl_lookup_state(i2c->pinctrl, "recovery");
+-
+-	if (IS_ERR(i2c->pinctrl_default) || IS_ERR(i2c->pinctrl_recovery)) {
+-		dev_info(dev, "missing pinmux recovery information: %ld %ld\n",
+-			 PTR_ERR(i2c->pinctrl_default),
+-			 PTR_ERR(i2c->pinctrl_recovery));
+-		return 0;
+-	}
+-
+-	/*
+-	 * Claiming GPIOs can influence the pinmux state, and may glitch the
+-	 * I2C bus. Do this carefully.
+-	 */
+-	bri->scl_gpiod = devm_gpiod_get(dev, "scl", GPIOD_OUT_HIGH_OPEN_DRAIN);
+-	if (bri->scl_gpiod == ERR_PTR(-EPROBE_DEFER))
+-		return -EPROBE_DEFER;
+-	if (IS_ERR(bri->scl_gpiod)) {
+-		dev_info(dev, "missing scl gpio recovery information: %pe\n",
+-			 bri->scl_gpiod);
+-		return 0;
+-	}
+-
+-	/*
+-	 * We have SCL. Pull SCL low and wait a bit so that SDA glitches
+-	 * have no effect.
+-	 */
+-	gpiod_direction_output(bri->scl_gpiod, 0);
+-	udelay(10);
+-	bri->sda_gpiod = devm_gpiod_get(dev, "sda", GPIOD_OUT_HIGH_OPEN_DRAIN);
+-
+-	/* Wait a bit in case of a SDA glitch, and then release SCL. */
+-	udelay(10);
+-	gpiod_direction_output(bri->scl_gpiod, 1);
+-
+-	if (bri->sda_gpiod == ERR_PTR(-EPROBE_DEFER))
+-		return -EPROBE_DEFER;
+-
+-	if (IS_ERR(bri->sda_gpiod)) {
+-		dev_info(dev, "missing sda gpio recovery information: %pe\n",
+-			 bri->sda_gpiod);
++	bri->pinctrl = devm_pinctrl_get(dev);
++	if (PTR_ERR(bri->pinctrl) == -ENODEV) {
++		bri->pinctrl = NULL;
+ 		return 0;
+ 	}
++	if (IS_ERR(bri->pinctrl))
++		return PTR_ERR(bri->pinctrl);
+ 
+ 	bri->prepare_recovery = i2c_pxa_prepare_recovery;
+ 	bri->unprepare_recovery = i2c_pxa_unprepare_recovery;
+-	bri->recover_bus = i2c_generic_scl_recovery;
+ 
+ 	i2c->adap.bus_recovery_info = bri;
+ 
+-	/*
+-	 * Claiming GPIOs can change the pinmux state, which confuses the
+-	 * pinctrl since pinctrl's idea of the current setting is unaffected
+-	 * by the pinmux change caused by claiming the GPIO. Work around that
+-	 * by switching pinctrl to the GPIO state here. We do it this way to
+-	 * avoid glitching the I2C bus.
+-	 */
+-	pinctrl_select_state(i2c->pinctrl, i2c->pinctrl_recovery);
+-
+-	return pinctrl_select_state(i2c->pinctrl, i2c->pinctrl_default);
++	return 0;
+ }
+ 
+ static int i2c_pxa_probe(struct platform_device *dev)
+-- 
+2.25.1
+
