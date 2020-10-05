@@ -2,38 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E70E2840BE
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Oct 2020 22:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02362840DF
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Oct 2020 22:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728463AbgJEUcA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Oct 2020 16:32:00 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:40032 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727262AbgJEUb7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Oct 2020 16:31:59 -0400
-Received: by mail-wm1-f65.google.com with SMTP id k18so827215wmj.5;
-        Mon, 05 Oct 2020 13:31:55 -0700 (PDT)
+        id S1729752AbgJEUdM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Oct 2020 16:33:12 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38591 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727262AbgJEUdL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Oct 2020 16:33:11 -0400
+Received: by mail-wr1-f66.google.com with SMTP id n18so3235090wrs.5;
+        Mon, 05 Oct 2020 13:33:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=B4PwgTffJiJmPt6zUisqAw6fhFqqUXNEIJ77LrR5pRQ=;
-        b=niGxbyG6YYwt29jP/PAkQMzezk9R40Mp2J3BgZY3UeV0tGC53v2K1c5FIYfJPDMMbr
-         eM9ZY0DWpIEviXKYInyjIRTMIlxteYS1wUlimu9FddZ0Ft2MtPgMQfikxI9ZEcY4k2F3
-         RregBQBVS0ME2K7Ym95DgX/TF/M7Tq6InzH5CKpOuWFAgxoI7/UK0B3Q1CEIPEWiVtN1
-         XOwwgMu2YP73ZBtia7NAyOhHq3ZN/OfWC1TCc8vsasVnu2JzVJa7pRm+GFbbITwpk0KK
-         I8iyf7gezRzj69hgd2WNW0e+xZLXzCMQQ6+HMvLHS2CxmHOQ2cgFaemaQ5gR0x6fxYfp
-         iNYA==
-X-Gm-Message-State: AOAM531Mv08wwGWNgLR6nhCXUuOspTkFLSxtKwulafA16B95cqn3NIzY
-        mDsppDaLcGRtA+izTxiAbqc=
-X-Google-Smtp-Source: ABdhPJzy/knAUMS+nLZ2ZykupLkPHOuEPodU8SYLBLWYdXtI/NOcJ+WVMZPLLZLhgC0dauFczWhBnQ==
-X-Received: by 2002:a1c:35c5:: with SMTP id c188mr1144613wma.11.1601929914355;
-        Mon, 05 Oct 2020 13:31:54 -0700 (PDT)
+        bh=ARrZ6TB7yXMqpP/+XXhswWetXRSqYRU5CXxzWSIwqA0=;
+        b=RnCaTAeLda2g7G5fRy5G6tkS7At6V0s/RegwR9VguJioedEtQIJdw6BNLKEK/gUGRD
+         AkEB4uPGf3i+LyEsLWBdPb5/DcD/BL7glr7/Kqr+DhNf5J4HVWo+7n/mUse3ZY7S8gLr
+         SHGy1GGZG4l1bH3MKOMzvgNvPk3l3MBNeR7Y1bb6OaZSo1FyocBeFTq/+g75HfHcPlAJ
+         YK98UWQ/irYlWEDTjRo3FB2draI8v8Bup47C8o/AQoRtLLLd80xga6C8A5u2LgihGqQU
+         qGI2giLr060foyPTuSrxFAiFXpeO56x9qKG9Y0Sv744sQiomDaBHzfaDshfnctRB0WHO
+         JAyA==
+X-Gm-Message-State: AOAM530bXKyLIBGo4JH1pO7bUr+EogsTQovm/K5mNjfX4q1FlBuPhS96
+        KJez1DDXkXTZaW5NrlElQGo=
+X-Google-Smtp-Source: ABdhPJweyRYGmXLqO/tcc/k2HRzuAg/v1oLgLOtbvTUusAAWSCQYB/uOgoLBn7Xz9zdrfu5geKiRqw==
+X-Received: by 2002:a5d:4682:: with SMTP id u2mr1245871wrq.254.1601929986334;
+        Mon, 05 Oct 2020 13:33:06 -0700 (PDT)
 Received: from kozik-lap ([194.230.155.194])
-        by smtp.googlemail.com with ESMTPSA id z11sm1294344wru.88.2020.10.05.13.31.50
+        by smtp.googlemail.com with ESMTPSA id c14sm1265048wrm.64.2020.10.05.13.33.02
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 05 Oct 2020 13:31:53 -0700 (PDT)
-Date:   Mon, 5 Oct 2020 22:31:48 +0200
+        Mon, 05 Oct 2020 13:33:05 -0700 (PDT)
+Date:   Mon, 5 Oct 2020 22:33:00 +0200
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Rob Herring <robh@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -95,31 +95,29 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
-Message-ID: <20201005203148.GA23742@kozik-lap>
+Subject: Re: [PATCH 2/4] dt-bindings: Use 'additionalProperties' instead of
+ 'unevaluatedProperties'
+Message-ID: <20201005203300.GB23742@kozik-lap>
 References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-2-robh@kernel.org>
+ <20201005183830.486085-3-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+In-Reply-To: <20201005183830.486085-3-robh@kernel.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 01:38:27PM -0500, Rob Herring wrote:
-> This doesn't yet do anything in the tools, but make it explicit so we can
-> check either 'unevaluatedProperties' or 'additionalProperties' is present
-> in schemas.
+On Mon, Oct 05, 2020 at 01:38:28PM -0500, Rob Herring wrote:
+> In cases where we don't reference another schema, 'additionalProperties'
+> can be used instead. This is preferred for now as 'unevaluatedProperties'
+> support isn't implemented yet.
 > 
-> 'unevaluatedProperties' is appropriate when including another schema (via
-> '$ref') and all possible properties and/or child nodes are not
-> explicitly listed in the schema with the '$ref'.
-> 
-> This is in preparation to add a meta-schema to check for missing
-> 'unevaluatedProperties' or 'additionalProperties'. This has been a
-> constant source of review issues.
+> In a few cases, this means adding some missing property definitions of
+> which most are for SPI bus properties. 'unevaluatedProperties' is not going
+> to work for the SPI bus properties anyways as they are evaluated from the
+> parent node, not the SPI child node.
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 
