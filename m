@@ -2,37 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6AE283ED1
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Oct 2020 20:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEA8283E8A
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Oct 2020 20:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728861AbgJESiu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Oct 2020 14:38:50 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:34418 "EHLO
+        id S1729077AbgJESi5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Oct 2020 14:38:57 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:41589 "EHLO
         mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725940AbgJESir (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Oct 2020 14:38:47 -0400
-Received: by mail-ot1-f67.google.com with SMTP id d28so3356626ote.1;
-        Mon, 05 Oct 2020 11:38:43 -0700 (PDT)
+        with ESMTP id S1728806AbgJESiw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Oct 2020 14:38:52 -0400
+Received: by mail-ot1-f67.google.com with SMTP id q21so9613283ota.8;
+        Mon, 05 Oct 2020 11:38:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HgBGLe+m/aV/vr0rp0zFhsTmonQBhufRwEBdhetDqcw=;
-        b=BZYozgjXcH4J3nDlBixQs+Uu+LZVWr0tOPQQnZoa7AvzdNme7c6RzwDmU1vQGzR+jQ
-         wykbkbENZb/kXnDxxH2ZXiE33fFrNY509y008ihLZ9f7I3xIxzwz9xMbHHjvOIlalbKL
-         +c7bf6vyGMwQlDtMMfsHQd0phw8tUAwdoima+eDt2KJP1G1QdbWAbvveruLGuvqIiQCu
-         /3oKOj0+60JfNTUgx1PyRXi7IumwLLGLrxEQalJrap6U0PLeXz7OkZWsJIUCDO5mu5Hf
-         jENcFv+FeBtc4TJaWWtX/xkguUUdPOqQ+SP4JlPi95fyNCkVqpeOaI/DnN8vIOTwDZTm
-         n4pQ==
-X-Gm-Message-State: AOAM531ymz4G3bVRw+WxZywC9sYRG3vm96RN3HDqWFetx/Xxl68+BZKi
-        SdpzM8CjLtJk6XFoGc9FaCP2ICbzfBg9
-X-Google-Smtp-Source: ABdhPJzZIQ2L2euOiEQv4z7zspdWuCivaLyqEa0Y93oVjOHxIzGE/ENDxOiN9rMWrODa2Igy3kjqdA==
-X-Received: by 2002:a9d:4e1a:: with SMTP id p26mr458391otf.197.1601923122929;
-        Mon, 05 Oct 2020 11:38:42 -0700 (PDT)
+        bh=vgIboSIrR39t+QJyhTBbSOMhd+0sUioLqfZlbg+GUS0=;
+        b=oMurSMHpwPhqDJ3PGKM0iVMyauZgMiD34ubViWn/bq+uePAxMbScqWvfCMDRH7eduD
+         sW8SwOUgekk3PB984PZcWbl9+FZKoZ7puwihGD80it7j+5Iz1xOnFtSJUpak6Ka6hXAh
+         LkKqo4JNgvWcmWrHfa8NadFRC7+Ioil3zb2VcFM400WgwQEu8RlHfRmQ0NoB+ElNuWif
+         5DIkRayzEeripafS8UVYJmBCEblCsoTugBdGvNIOVqWrsHmtqIeENrvWVsJIiIDM9mQt
+         GFWY8ifIYEqYPWCvMa0Ahh2OdI/AM+/X4H11yOEf9AA/Z7FDEEk+xc+hBHUtIMBRCESf
+         haiQ==
+X-Gm-Message-State: AOAM531Na0p4clK/U05pHzKlBi8P1cc77TYDlUMkGpcUaq46IgXP5mWO
+        9KoJhgGD9ZnGux3bF5EuwlH3AjqogSWl
+X-Google-Smtp-Source: ABdhPJw6QSielwUqXJZqbCEA4Wfl/YUQk7mG1FkpPVihjPwW4tg04G5AMwdknglk3TxeRBnOMI5A2A==
+X-Received: by 2002:a9d:3bb5:: with SMTP id k50mr467625otc.39.1601923127419;
+        Mon, 05 Oct 2020 11:38:47 -0700 (PDT)
 Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id z25sm143140otq.31.2020.10.05.11.38.39
+        by smtp.googlemail.com with ESMTPSA id z25sm143140otq.31.2020.10.05.11.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 11:38:42 -0700 (PDT)
+        Mon, 05 Oct 2020 11:38:46 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
 To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Albert Ou <aou@eecs.berkeley.edu>,
@@ -94,9 +94,9 @@ Cc:     Albert Ou <aou@eecs.berkeley.edu>,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH 2/4] dt-bindings: Use 'additionalProperties' instead of 'unevaluatedProperties'
-Date:   Mon,  5 Oct 2020 13:38:28 -0500
-Message-Id: <20201005183830.486085-3-robh@kernel.org>
+Subject: [PATCH 3/4] dt-bindings: Explicitly allow additional properties in board/SoC schemas
+Date:   Mon,  5 Oct 2020 13:38:29 -0500
+Message-Id: <20201005183830.486085-4-robh@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201005183830.486085-1-robh@kernel.org>
 References: <20201005183830.486085-1-robh@kernel.org>
@@ -106,555 +106,743 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In cases where we don't reference another schema, 'additionalProperties'
-can be used instead. This is preferred for now as 'unevaluatedProperties'
-support isn't implemented yet.
-
-In a few cases, this means adding some missing property definitions of
-which most are for SPI bus properties. 'unevaluatedProperties' is not going
-to work for the SPI bus properties anyways as they are evaluated from the
-parent node, not the SPI child node.
+In order to add meta-schema checks for additional/unevaluatedProperties
+being present, all schema need to make this explicit. As the top-level
+board/SoC schemas always have additional properties, add
+'additionalProperties: true'.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/clock/baikal,bt1-ccu-div.yaml  |  6 +++++-
- .../devicetree/bindings/clock/baikal,bt1-ccu-pll.yaml  |  2 +-
- .../devicetree/bindings/clock/imx8m-clock.yaml         |  2 +-
- .../devicetree/bindings/hwmon/baikal,bt1-pvt.yaml      |  4 ++--
- .../devicetree/bindings/iio/accel/adi,adis16240.yaml   |  4 +++-
- .../devicetree/bindings/iio/accel/adi,adxl345.yaml     |  4 +++-
- .../devicetree/bindings/iio/accel/adi,adxl372.yaml     |  4 +++-
- .../devicetree/bindings/iio/adc/adi,ad7124.yaml        |  4 +++-
- .../devicetree/bindings/iio/adc/adi,ad7192.yaml        |  4 +++-
- .../devicetree/bindings/iio/adc/adi,ad7292.yaml        |  4 +++-
- .../devicetree/bindings/iio/adc/adi,ad7606.yaml        |  6 +++++-
- .../devicetree/bindings/iio/adc/adi,ad7923.yaml        |  4 +++-
- .../devicetree/bindings/iio/adc/maxim,max1241.yaml     |  4 +++-
- .../devicetree/bindings/iio/dac/adi,ad5770r.yaml       | 10 +++++++++-
- .../devicetree/bindings/iio/frequency/adf4371.yaml     |  4 +++-
- .../devicetree/bindings/iio/imu/adi,adis16460.yaml     |  4 +++-
- .../devicetree/bindings/iio/imu/adi,adis16475.yaml     |  2 +-
- .../devicetree/bindings/iio/imu/bosch,bmi160.yaml      |  4 +++-
- .../devicetree/bindings/iio/imu/nxp,fxos8700.yaml      |  4 +++-
- .../bindings/interrupt-controller/mti,gic.yaml         |  2 +-
- .../devicetree/bindings/mfd/cirrus,lochnagar.yaml      | 10 +++++++++-
- .../bindings/mfd/ti,j721e-system-controller.yaml       |  5 ++++-
- .../devicetree/bindings/misc/olpc,xo1.75-ec.yaml       |  4 +++-
- .../opp/allwinner,sun50i-h6-operating-points.yaml      |  4 +++-
- .../bindings/regulator/qcom-labibb-regulator.yaml      |  2 +-
- .../devicetree/bindings/timer/snps,dw-apb-timer.yaml   |  2 +-
- 26 files changed, 82 insertions(+), 27 deletions(-)
+ Documentation/devicetree/bindings/arm/actions.yaml             | 2 ++
+ Documentation/devicetree/bindings/arm/altera.yaml              | 3 +++
+ Documentation/devicetree/bindings/arm/amazon,al.yaml           | 2 ++
+ Documentation/devicetree/bindings/arm/amlogic.yaml             | 3 +++
+ Documentation/devicetree/bindings/arm/arm,integrator.yaml      | 2 ++
+ Documentation/devicetree/bindings/arm/arm,realview.yaml        | 2 ++
+ Documentation/devicetree/bindings/arm/arm,versatile.yaml       | 2 ++
+ Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml   | 2 ++
+ Documentation/devicetree/bindings/arm/atmel-at91.yaml          | 2 ++
+ Documentation/devicetree/bindings/arm/axxia.yaml               | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml         | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/brcm,bcm11351.yaml   | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/brcm,bcm21664.yaml   | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/brcm,bcm23550.yaml   | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/brcm,bcm4708.yaml    | 3 +++
+ Documentation/devicetree/bindings/arm/bcm/brcm,cygnus.yaml     | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/brcm,hr2.yaml        | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/brcm,ns2.yaml        | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml        | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/brcm,stingray.yaml   | 2 ++
+ Documentation/devicetree/bindings/arm/bcm/brcm,vulcan-soc.yaml | 2 ++
+ Documentation/devicetree/bindings/arm/bitmain.yaml             | 3 +++
+ Documentation/devicetree/bindings/arm/calxeda.yaml             | 2 ++
+ Documentation/devicetree/bindings/arm/digicolor.yaml           | 2 ++
+ Documentation/devicetree/bindings/arm/fsl.yaml                 | 2 ++
+ Documentation/devicetree/bindings/arm/hisilicon/hisilicon.yaml | 3 +++
+ Documentation/devicetree/bindings/arm/intel,keembay.yaml       | 3 +++
+ Documentation/devicetree/bindings/arm/intel-ixp4xx.yaml        | 2 ++
+ .../devicetree/bindings/arm/keystone/ti,k3-sci-common.yaml     | 2 ++
+ .../devicetree/bindings/arm/marvell/armada-7k-8k.yaml          | 2 ++
+ Documentation/devicetree/bindings/arm/mediatek.yaml            | 3 +++
+ Documentation/devicetree/bindings/arm/microchip,sparx5.yaml    | 2 ++
+ Documentation/devicetree/bindings/arm/moxart.yaml              | 1 +
+ Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml           | 3 +++
+ Documentation/devicetree/bindings/arm/mstar/mstar.yaml         | 2 ++
+ Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml         | 2 ++
+ Documentation/devicetree/bindings/arm/qcom.yaml                | 2 ++
+ Documentation/devicetree/bindings/arm/rda.yaml                 | 2 ++
+ Documentation/devicetree/bindings/arm/realtek.yaml             | 3 +++
+ Documentation/devicetree/bindings/arm/renesas.yaml             | 2 ++
+ Documentation/devicetree/bindings/arm/rockchip.yaml            | 3 +++
+ .../devicetree/bindings/arm/samsung/samsung-boards.yaml        | 2 ++
+ Documentation/devicetree/bindings/arm/sirf.yaml                | 3 +++
+ Documentation/devicetree/bindings/arm/socionext/milbeaut.yaml  | 3 +++
+ Documentation/devicetree/bindings/arm/socionext/uniphier.yaml  | 2 ++
+ Documentation/devicetree/bindings/arm/spear.yaml               | 3 +++
+ Documentation/devicetree/bindings/arm/sprd/sprd.yaml           | 2 ++
+ Documentation/devicetree/bindings/arm/sti.yaml                 | 3 +++
+ Documentation/devicetree/bindings/arm/stm32/stm32.yaml         | 3 +++
+ Documentation/devicetree/bindings/arm/sunxi.yaml               | 2 ++
+ Documentation/devicetree/bindings/arm/tegra.yaml               | 2 ++
+ Documentation/devicetree/bindings/arm/ti/nspire.yaml           | 3 +++
+ Documentation/devicetree/bindings/arm/ti/ti,davinci.yaml       | 3 +++
+ Documentation/devicetree/bindings/arm/ux500.yaml               | 2 ++
+ Documentation/devicetree/bindings/arm/vt8500.yaml              | 3 +++
+ Documentation/devicetree/bindings/arm/xilinx.yaml              | 2 ++
+ Documentation/devicetree/bindings/arm/zte.yaml                 | 2 ++
+ Documentation/devicetree/bindings/mips/ingenic/devices.yaml    | 3 +++
+ Documentation/devicetree/bindings/mips/loongson/devices.yaml   | 3 +++
+ Documentation/devicetree/bindings/riscv/sifive.yaml            | 3 +++
+ 60 files changed, 140 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-div.yaml b/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-div.yaml
-index 2821425ee445..bd4cefbb1244 100644
---- a/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-div.yaml
-+++ b/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-div.yaml
-@@ -134,7 +134,11 @@ properties:
-   "#reset-cells":
-     const: 1
+diff --git a/Documentation/devicetree/bindings/arm/actions.yaml b/Documentation/devicetree/bindings/arm/actions.yaml
+index 14023f0a8552..9d12984691e4 100644
+--- a/Documentation/devicetree/bindings/arm/actions.yaml
++++ b/Documentation/devicetree/bindings/arm/actions.yaml
+@@ -38,3 +38,5 @@ properties:
+           - enum:
+               - ucrobotics,bubblegum-96 # uCRobotics Bubblegum-96
+           - const: actions,s900
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
+index 0bc5020b7539..c15c92fdf2ed 100644
+--- a/Documentation/devicetree/bindings/arm/altera.yaml
++++ b/Documentation/devicetree/bindings/arm/altera.yaml
+@@ -19,4 +19,7 @@ properties:
+           - altr,socfpga-arria5
+           - altr,socfpga-arria10
+       - const: altr,socfpga
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/amazon,al.yaml b/Documentation/devicetree/bindings/arm/amazon,al.yaml
+index a3a4d710bd02..0f03135d91b6 100644
+--- a/Documentation/devicetree/bindings/arm/amazon,al.yaml
++++ b/Documentation/devicetree/bindings/arm/amazon,al.yaml
+@@ -30,4 +30,6 @@ properties:
+               - amazon,al-alpine-v3-evp
+           - const: amazon,al-alpine-v3
  
--unevaluatedProperties: false
-+  clocks: true
++additionalProperties: true
 +
-+  clock-names: true
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
+index 5eba9f48823e..51dea8844569 100644
+--- a/Documentation/devicetree/bindings/arm/amlogic.yaml
++++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
+@@ -171,4 +171,7 @@ properties:
+           - enum:
+               - amlogic,ad401
+           - const: amlogic,a1
 +
-+additionalProperties: false
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/arm,integrator.yaml b/Documentation/devicetree/bindings/arm/arm,integrator.yaml
+index f0daf990e077..528eee64290a 100644
+--- a/Documentation/devicetree/bindings/arm/arm,integrator.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,integrator.yaml
+@@ -83,4 +83,6 @@ required:
+   - compatible
+   - core-module@10000000
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/arm,realview.yaml b/Documentation/devicetree/bindings/arm/arm,realview.yaml
+index 1d0b4e2bc7d2..4f9b21f49e84 100644
+--- a/Documentation/devicetree/bindings/arm/arm,realview.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,realview.yaml
+@@ -120,4 +120,6 @@ required:
+   - compatible
+   - soc
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/arm,versatile.yaml b/Documentation/devicetree/bindings/arm/arm,versatile.yaml
+index 06efd2a075c9..34b437c72751 100644
+--- a/Documentation/devicetree/bindings/arm/arm,versatile.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,versatile.yaml
+@@ -68,4 +68,6 @@ required:
+   - compatible
+   - core-module@10000000
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+index 26829a803fda..55ef656d1192 100644
+--- a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+@@ -216,4 +216,6 @@ allOf:
+       required:
+         - arm,hbi
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+index 31b0c54fa2cf..df95d1068030 100644
+--- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
++++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+@@ -183,4 +183,6 @@ properties:
+           - const: atmel,samv71
+           - const: atmel,samv7
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/axxia.yaml b/Documentation/devicetree/bindings/arm/axxia.yaml
+index 3ea5f2fdcd96..e0d2bb71cf50 100644
+--- a/Documentation/devicetree/bindings/arm/axxia.yaml
++++ b/Documentation/devicetree/bindings/arm/axxia.yaml
+@@ -18,4 +18,6 @@ properties:
+       - const: lsi,axm5516-amarillo
+       - const: lsi,axm5516
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml b/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+index dd52e29b0642..812ae8cc5959 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml
+@@ -51,4 +51,6 @@ properties:
+               - raspberrypi,3-compute-module-lite
+           - const: brcm,bcm2837
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm11351.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm11351.yaml
+index 497600a2ffb9..c60324357435 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm11351.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm11351.yaml
+@@ -18,4 +18,6 @@ properties:
+           - brcm,bcm28155-ap
+       - const: brcm,bcm11351
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm21664.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm21664.yaml
+index e0ee931723dc..b3020757380f 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm21664.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm21664.yaml
+@@ -18,4 +18,6 @@ properties:
+           - brcm,bcm21664-garnet
+       - const: brcm,bcm21664
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm23550.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm23550.yaml
+index 40d12ea56e54..37f3a6fcde76 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm23550.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm23550.yaml
+@@ -18,4 +18,6 @@ properties:
+           - brcm,bcm23550-sparrow
+       - const: brcm,bcm23550
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm4708.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm4708.yaml
+index d48313c7ae45..86a1fe885387 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm4708.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm4708.yaml
+@@ -85,4 +85,7 @@ properties:
+               - brcm,bcm953012k
+           - const: brcm,brcm53012
+           - const: brcm,bcm4708
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,cygnus.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,cygnus.yaml
+index 9ba7b16e1fc4..432ccf990f9e 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,cygnus.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,cygnus.yaml
+@@ -26,4 +26,6 @@ properties:
+           - brcm,bcm58305
+       - const: brcm,cygnus
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,hr2.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,hr2.yaml
+index ae614b6722c2..294948399f82 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,hr2.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,hr2.yaml
+@@ -25,4 +25,6 @@ properties:
+       - const: brcm,bcm53342
+       - const: brcm,hr2
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,ns2.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,ns2.yaml
+index 0749adf94c28..c4847abbecd8 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,ns2.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,ns2.yaml
+@@ -20,4 +20,6 @@ properties:
+           - brcm,ns2-xmc
+       - const: brcm,ns2
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
+index 8c2cacb2bb4f..476bc23a7f75 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
+@@ -33,4 +33,6 @@ properties:
+           - brcm,bcm88312
+       - const: brcm,nsp
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,stingray.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,stingray.yaml
+index c13cb96545a2..c638e04ebae0 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,stingray.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,stingray.yaml
+@@ -21,4 +21,6 @@ properties:
+           - brcm,bcm958802a802x
+       - const: brcm,stingray
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,vulcan-soc.yaml b/Documentation/devicetree/bindings/arm/bcm/brcm,vulcan-soc.yaml
+index ccdf9f99cb2b..4eba182abd53 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/brcm,vulcan-soc.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/brcm,vulcan-soc.yaml
+@@ -19,4 +19,6 @@ properties:
+           - cavium,thunderx2-cn9900
+       - const: brcm,vulcan-soc
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/bitmain.yaml b/Documentation/devicetree/bindings/arm/bitmain.yaml
+index 5880083ab8d0..90ba02be48ce 100644
+--- a/Documentation/devicetree/bindings/arm/bitmain.yaml
++++ b/Documentation/devicetree/bindings/arm/bitmain.yaml
+@@ -17,4 +17,7 @@ properties:
+       - enum:
+           - bitmain,sophon-edge
+       - const: bitmain,bm1880
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/calxeda.yaml b/Documentation/devicetree/bindings/arm/calxeda.yaml
+index aa5571d23c39..46f78addebb0 100644
+--- a/Documentation/devicetree/bindings/arm/calxeda.yaml
++++ b/Documentation/devicetree/bindings/arm/calxeda.yaml
+@@ -20,3 +20,5 @@ properties:
+       - enum:
+           - calxeda,highbank
+           - calxeda,ecx-2000
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/digicolor.yaml b/Documentation/devicetree/bindings/arm/digicolor.yaml
+index 849e20518339..a35de3c9e284 100644
+--- a/Documentation/devicetree/bindings/arm/digicolor.yaml
++++ b/Documentation/devicetree/bindings/arm/digicolor.yaml
+@@ -15,4 +15,6 @@ properties:
+   compatible:
+     const: cnxt,cx92755
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 6da9d734cdb7..43adf7241d79 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -526,4 +526,6 @@ properties:
+               - fsl,s32v234-evb           # S32V234-EVB2 Customer Evaluation Board
+           - const: fsl,s32v234
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/hisilicon/hisilicon.yaml b/Documentation/devicetree/bindings/arm/hisilicon/hisilicon.yaml
+index 43b8ce2227aa..b38458022946 100644
+--- a/Documentation/devicetree/bindings/arm/hisilicon/hisilicon.yaml
++++ b/Documentation/devicetree/bindings/arm/hisilicon/hisilicon.yaml
+@@ -64,4 +64,7 @@ properties:
+         items:
+           - const: H836ASDJ
+           - const: hisilicon,sd5203
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/intel,keembay.yaml b/Documentation/devicetree/bindings/arm/intel,keembay.yaml
+index 06a7b05f435f..69cd30872928 100644
+--- a/Documentation/devicetree/bindings/arm/intel,keembay.yaml
++++ b/Documentation/devicetree/bindings/arm/intel,keembay.yaml
+@@ -16,4 +16,7 @@ properties:
+       - enum:
+           - intel,keembay-evm
+       - const: intel,keembay
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/intel-ixp4xx.yaml b/Documentation/devicetree/bindings/arm/intel-ixp4xx.yaml
+index f18302efb90e..d72e92bdf7c1 100644
+--- a/Documentation/devicetree/bindings/arm/intel-ixp4xx.yaml
++++ b/Documentation/devicetree/bindings/arm/intel-ixp4xx.yaml
+@@ -22,3 +22,5 @@ properties:
+           - enum:
+               - gateworks,gw2358
+           - const: intel,ixp43x
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/keystone/ti,k3-sci-common.yaml b/Documentation/devicetree/bindings/arm/keystone/ti,k3-sci-common.yaml
+index 7597bc93a55f..5cbcacaeb441 100644
+--- a/Documentation/devicetree/bindings/arm/keystone/ti,k3-sci-common.yaml
++++ b/Documentation/devicetree/bindings/arm/keystone/ti,k3-sci-common.yaml
+@@ -42,3 +42,5 @@ properties:
+       - description: TI-SCI processor id for the remote processor device
+       - description: TI-SCI host id to which processor control ownership
+                      should be transferred to
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/marvell/armada-7k-8k.yaml b/Documentation/devicetree/bindings/arm/marvell/armada-7k-8k.yaml
+index a9828c50c0fb..e9bf3054529f 100644
+--- a/Documentation/devicetree/bindings/arm/marvell/armada-7k-8k.yaml
++++ b/Documentation/devicetree/bindings/arm/marvell/armada-7k-8k.yaml
+@@ -59,3 +59,5 @@ properties:
+           - const: marvell,cn9130
+           - const: marvell,armada-ap807-quad
+           - const: marvell,armada-ap807
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+index 30908963ae26..f736e8c859fa 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+@@ -119,4 +119,7 @@ properties:
+           - const: google,krane-sku176
+           - const: google,krane
+           - const: mediatek,mt8183
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml b/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml
+index ecf6fa12e6ad..6193388c6318 100644
+--- a/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml
++++ b/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml
+@@ -62,4 +62,6 @@ required:
+   - compatible
+   - axi@600000000
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/moxart.yaml b/Documentation/devicetree/bindings/arm/moxart.yaml
+index c068df59fad2..670d24ce8ec5 100644
+--- a/Documentation/devicetree/bindings/arm/moxart.yaml
++++ b/Documentation/devicetree/bindings/arm/moxart.yaml
+@@ -16,4 +16,5 @@ properties:
+       - const: moxa,moxart-uc-7112-lx
+       - const: moxa,moxart
+ 
++additionalProperties: true
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml b/Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml
+index 3235ec9e9bad..d58116136154 100644
+--- a/Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml
++++ b/Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml
+@@ -35,4 +35,7 @@ properties:
+           - enum:
+               - dell,wyse-ariel
+           - const: marvell,mmp3
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/mstar/mstar.yaml b/Documentation/devicetree/bindings/arm/mstar/mstar.yaml
+index c2f980b00b06..7c787405bb2f 100644
+--- a/Documentation/devicetree/bindings/arm/mstar/mstar.yaml
++++ b/Documentation/devicetree/bindings/arm/mstar/mstar.yaml
+@@ -31,3 +31,5 @@ properties:
+           - enum:
+               - 70mai,midrived08 # 70mai midrive d08
+           - const: mstar,mercury5
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml b/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml
+index f7f024910e71..214c97bc3063 100644
+--- a/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml
++++ b/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml
+@@ -21,4 +21,6 @@ properties:
+               - ea,ea3250
+               - phytec,phy3250
+           - const: nxp,lpc3250
++
++additionalProperties: true
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index ae6284be9fef..8604f1f9266b 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -167,4 +167,6 @@ properties:
+               - qcom,ipq6018-cp01-c1
+           - const: qcom,ipq6018
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/rda.yaml b/Documentation/devicetree/bindings/arm/rda.yaml
+index 9672aa0c760d..a5c0444aa2b4 100644
+--- a/Documentation/devicetree/bindings/arm/rda.yaml
++++ b/Documentation/devicetree/bindings/arm/rda.yaml
+@@ -19,4 +19,6 @@ properties:
+           - xunlong,orangepi-i96        # Orange Pi i96
+       - const: rda,8810pl
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/realtek.yaml b/Documentation/devicetree/bindings/arm/realtek.yaml
+index 845f9c76d6f7..9fb0297fe1ce 100644
+--- a/Documentation/devicetree/bindings/arm/realtek.yaml
++++ b/Documentation/devicetree/bindings/arm/realtek.yaml
+@@ -54,4 +54,7 @@ properties:
+           - enum:
+               - realtek,mjolnir # Realtek Mjolnir EVB
+           - const: realtek,rtd1619
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/renesas.yaml b/Documentation/devicetree/bindings/arm/renesas.yaml
+index 0d4dabb4a164..dfb31ad0061e 100644
+--- a/Documentation/devicetree/bindings/arm/renesas.yaml
++++ b/Documentation/devicetree/bindings/arm/renesas.yaml
+@@ -287,4 +287,6 @@ properties:
+               - renesas,rzn1d400-db # RZN1D-DB (RZ/N1D Demo Board for the RZ/N1D 400 pins package)
+           - const: renesas,r9a06g032
+ 
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+index db2e35796795..8d5933a1cb16 100644
+--- a/Documentation/devicetree/bindings/arm/rockchip.yaml
++++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+@@ -555,4 +555,7 @@ properties:
+         items:
+           - const: tronsmart,orion-r68-meta
+           - const: rockchip,rk3368
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+index eb92f9eefaba..272508010b02 100644
+--- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
++++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+@@ -180,3 +180,5 @@ properties:
  
  required:
    - compatible
-diff --git a/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-pll.yaml b/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-pll.yaml
-index 97131bfa6f87..624984d51c10 100644
---- a/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-pll.yaml
-+++ b/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-pll.yaml
-@@ -101,7 +101,7 @@ properties:
-   clock-names:
-     const: ref_clk
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- required:
-   - compatible
-diff --git a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-index 31e7cc9693c3..625f573a7b90 100644
---- a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-@@ -96,7 +96,7 @@ allOf:
-             - const: clk_ext3
-             - const: clk_ext4
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   # Clock Control Module node:
-diff --git a/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml b/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
-index 84ae4cdd08ed..00a6511354e6 100644
---- a/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
-@@ -79,7 +79,7 @@ properties:
-       minimum: 0
-       maximum: 7130
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- required:
-   - compatible
-@@ -99,7 +99,7 @@ examples:
- 
-       interrupts = <GIC_SHARED 31 IRQ_TYPE_LEVEL_HIGH>;
- 
--      baikal,pvt-temp-trim-millicelsius = <1000>;
-+      baikal,pvt-temp-offset-millicelsius = <1000>;
- 
-       clocks = <&ccu_sys>, <&ccu_sys>;
-       clock-names = "ref", "pclk";
-diff --git a/Documentation/devicetree/bindings/iio/accel/adi,adis16240.yaml b/Documentation/devicetree/bindings/iio/accel/adi,adis16240.yaml
-index 8589b722028d..4fcbfd93e218 100644
---- a/Documentation/devicetree/bindings/iio/accel/adi,adis16240.yaml
-+++ b/Documentation/devicetree/bindings/iio/accel/adi,adis16240.yaml
-@@ -25,12 +25,14 @@ properties:
-   interrupts:
-     maxItems: 1
- 
-+  spi-max-frequency: true
 +
- required:
-   - compatible
-   - reg
-   - interrupts
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/accel/adi,adxl345.yaml b/Documentation/devicetree/bindings/iio/accel/adi,adxl345.yaml
-index 591ca32181b0..11d32a288535 100644
---- a/Documentation/devicetree/bindings/iio/accel/adi,adxl345.yaml
-+++ b/Documentation/devicetree/bindings/iio/accel/adi,adxl345.yaml
-@@ -32,6 +32,8 @@ properties:
- 
-   spi-cpol: true
- 
-+  spi-max-frequency: true
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/sirf.yaml b/Documentation/devicetree/bindings/arm/sirf.yaml
+index 0b597032c923..b25eb35d1b66 100644
+--- a/Documentation/devicetree/bindings/arm/sirf.yaml
++++ b/Documentation/devicetree/bindings/arm/sirf.yaml
+@@ -24,4 +24,7 @@ properties:
+       - items:
+           - const: sirf,prima2-cb
+           - const: sirf,prima2
 +
-   interrupts:
-     maxItems: 1
- 
-@@ -40,7 +42,7 @@ required:
-   - reg
-   - interrupts
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/accel/adi,adxl372.yaml b/Documentation/devicetree/bindings/iio/accel/adi,adxl372.yaml
-index 64f275c8e2d9..38b59b6454ce 100644
---- a/Documentation/devicetree/bindings/iio/accel/adi,adxl372.yaml
-+++ b/Documentation/devicetree/bindings/iio/accel/adi,adxl372.yaml
-@@ -25,12 +25,14 @@ properties:
-   interrupts:
-     maxItems: 1
- 
-+  spi-max-frequency: true
++additionalProperties: true
 +
- required:
-   - compatible
-   - reg
-   - interrupts
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml
-index d0d2880626c2..f1c574c896cb 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml
-@@ -52,6 +52,8 @@ properties:
-   avdd-supply:
-     description: avdd supply can be used as reference for conversion.
- 
-+  spi-max-frequency: true
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/socionext/milbeaut.yaml b/Documentation/devicetree/bindings/arm/socionext/milbeaut.yaml
+index 2bd519d2e855..aa1d4afbc510 100644
+--- a/Documentation/devicetree/bindings/arm/socionext/milbeaut.yaml
++++ b/Documentation/devicetree/bindings/arm/socionext/milbeaut.yaml
+@@ -19,4 +19,7 @@ properties:
+           - enum:
+               - socionext,milbeaut-m10v-evb
+           - const: socionext,sc2000a
 +
- required:
-   - compatible
-   - reg
-@@ -108,7 +110,7 @@ patternProperties:
-       - reg
-       - diff-channels
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-index ed363a796e50..e0cc3b2e8957 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-@@ -30,6 +30,8 @@ properties:
- 
-   spi-cpha: true
- 
-+  spi-max-frequency: true
++additionalProperties: true
 +
-   clocks:
-     maxItems: 1
-     description: phandle to the master clock (mclk)
-@@ -92,7 +94,7 @@ required:
-   - spi-cpol
-   - spi-cpha
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7292.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7292.yaml
-index 55e973c6449c..108d202b288f 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7292.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7292.yaml
-@@ -30,6 +30,8 @@ properties:
- 
-   spi-cpha: true
- 
-+  spi-max-frequency: true
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml b/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
+index 6caf1f9be390..8c0e91658474 100644
+--- a/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
++++ b/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
+@@ -60,3 +60,5 @@ properties:
+           - enum:
+               - socionext,uniphier-pxs3-ref
+           - const: socionext,uniphier-pxs3
 +
-   '#address-cells':
-     const: 1
- 
-@@ -63,7 +65,7 @@ patternProperties:
-     required:
-       - reg
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml
-index 014b020ed0c2..73775174cf57 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml
-@@ -31,6 +31,10 @@ properties:
- 
-   spi-cpha: true
- 
-+  spi-cpol: true
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/spear.yaml b/Documentation/devicetree/bindings/arm/spear.yaml
+index f6ec731c9531..605ad3f882ef 100644
+--- a/Documentation/devicetree/bindings/arm/spear.yaml
++++ b/Documentation/devicetree/bindings/arm/spear.yaml
+@@ -22,4 +22,7 @@ properties:
+           - st,spear320
+           - st,spear1310
+           - st,spear1340
 +
-+  spi-max-frequency: true
++additionalProperties: true
 +
-   avcc-supply: true
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/sprd/sprd.yaml b/Documentation/devicetree/bindings/arm/sprd/sprd.yaml
+index 0258a96bfbde..7b6ae3070396 100644
+--- a/Documentation/devicetree/bindings/arm/sprd/sprd.yaml
++++ b/Documentation/devicetree/bindings/arm/sprd/sprd.yaml
+@@ -30,4 +30,6 @@ properties:
+               - sprd,sp9863a-1h10
+           - const: sprd,sc9863a
  
-   interrupts:
-@@ -102,7 +106,7 @@ required:
-   - interrupts
-   - adi,conversion-start-gpios
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-index 2a17641faed5..e82194974eea 100644
---- a/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7923.yaml
-@@ -43,11 +43,13 @@ properties:
-   '#size-cells':
-     const: 0
- 
-+  spi-max-frequency: true
++additionalProperties: true
 +
- required:
-   - compatible
-   - reg
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/adc/maxim,max1241.yaml b/Documentation/devicetree/bindings/iio/adc/maxim,max1241.yaml
-index 181213b862db..4c7e0d94bff1 100644
---- a/Documentation/devicetree/bindings/iio/adc/maxim,max1241.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/maxim,max1241.yaml
-@@ -39,13 +39,15 @@ properties:
-       thus enabling power-down mode.
-     maxItems: 1
- 
-+  spi-max-frequency: true
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/sti.yaml b/Documentation/devicetree/bindings/arm/sti.yaml
+index 47f9b8eebaa0..b1f28d16d3fb 100644
+--- a/Documentation/devicetree/bindings/arm/sti.yaml
++++ b/Documentation/devicetree/bindings/arm/sti.yaml
+@@ -20,4 +20,7 @@ properties:
+           - st,stih407
+           - st,stih410
+           - st,stih418
 +
- required:
-   - compatible
-   - reg
-   - vdd-supply
-   - vref-supply
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/dac/adi,ad5770r.yaml b/Documentation/devicetree/bindings/iio/dac/adi,ad5770r.yaml
-index faef288b7148..fb2c48fc7ce4 100644
---- a/Documentation/devicetree/bindings/iio/dac/adi,ad5770r.yaml
-+++ b/Documentation/devicetree/bindings/iio/dac/adi,ad5770r.yaml
-@@ -49,6 +49,14 @@ properties:
-       asserted during driver probe.
-     maxItems: 1
- 
-+  spi-max-frequency: true
++additionalProperties: true
 +
-+  '#address-cells':
-+    const: 1
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+index 696a0101ebcc..6c3e7a9587a2 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+@@ -52,4 +52,7 @@ properties:
+           - const: st,stm32mp157c-ev1
+           - const: st,stm32mp157c-ed1
+           - const: st,stm32mp157
 +
-+  '#size-cells':
-+    const: 0
++additionalProperties: true
 +
-   channel@0:
-     description: Represents an external channel which are
-       connected to the DAC. Channel 0 can act both as a current
-@@ -130,7 +138,7 @@ required:
-   - channel@4
-   - channel@5
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/frequency/adf4371.yaml b/Documentation/devicetree/bindings/iio/frequency/adf4371.yaml
-index 11d445f7010e..6b3a611e1cf1 100644
---- a/Documentation/devicetree/bindings/iio/frequency/adf4371.yaml
-+++ b/Documentation/devicetree/bindings/iio/frequency/adf4371.yaml
-@@ -40,13 +40,15 @@ properties:
-       output stage will shut down until the ADF4371/ADF4372 achieves lock as
-       measured by the digital lock detect circuitry.
- 
-+  spi-max-frequency: true
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
+index efc9118233b4..e1f21a051ded 100644
+--- a/Documentation/devicetree/bindings/arm/sunxi.yaml
++++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+@@ -883,3 +883,5 @@ properties:
+         items:
+           - const: xunlong,orangepi-zero-plus2-h3
+           - const: allwinner,sun8i-h3
 +
- required:
-   - compatible
-   - reg
-   - clocks
-   - clock-names
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/imu/adi,adis16460.yaml b/Documentation/devicetree/bindings/iio/imu/adi,adis16460.yaml
-index 07c8ed4ee0f1..340be256f283 100644
---- a/Documentation/devicetree/bindings/iio/imu/adi,adis16460.yaml
-+++ b/Documentation/devicetree/bindings/iio/imu/adi,adis16460.yaml
-@@ -25,6 +25,8 @@ properties:
- 
-   spi-cpol: true
- 
-+  spi-max-frequency: true
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/tegra.yaml b/Documentation/devicetree/bindings/arm/tegra.yaml
+index b4d53290c5f0..0340d3f956a1 100644
+--- a/Documentation/devicetree/bindings/arm/tegra.yaml
++++ b/Documentation/devicetree/bindings/arm/tegra.yaml
+@@ -121,3 +121,5 @@ properties:
+         items:
+           - const: nvidia,p3509-0000+p3668-0000
+           - const: nvidia,tegra194
 +
-   interrupts:
-     maxItems: 1
- 
-@@ -33,7 +35,7 @@ required:
-   - reg
-   - interrupts
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/imu/adi,adis16475.yaml b/Documentation/devicetree/bindings/iio/imu/adi,adis16475.yaml
-index c29385697bbf..79fba1508e89 100644
---- a/Documentation/devicetree/bindings/iio/imu/adi,adis16475.yaml
-+++ b/Documentation/devicetree/bindings/iio/imu/adi,adis16475.yaml
-@@ -116,7 +116,7 @@ allOf:
-       dependencies:
-         adi,sync-mode: [ clocks ]
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/imu/bosch,bmi160.yaml b/Documentation/devicetree/bindings/iio/imu/bosch,bmi160.yaml
-index 4f215399c8df..6e73cd889b5c 100644
---- a/Documentation/devicetree/bindings/iio/imu/bosch,bmi160.yaml
-+++ b/Documentation/devicetree/bindings/iio/imu/bosch,bmi160.yaml
-@@ -46,11 +46,13 @@ properties:
-   mount-matrix:
-     description: an optional 3x3 mounting rotation matrix
- 
-+  spi-max-frequency: true
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/ti/nspire.yaml b/Documentation/devicetree/bindings/arm/ti/nspire.yaml
+index e372b43da62f..cc2023bb7fa6 100644
+--- a/Documentation/devicetree/bindings/arm/ti/nspire.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/nspire.yaml
+@@ -21,4 +21,7 @@ properties:
+           - ti,nspire-tp
+           # Clickpad models
+           - ti,nspire-clp
 +
- required:
-   - compatible
-   - reg
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml b/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml
-index 716731c2b794..479e7065d4eb 100644
---- a/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml
-+++ b/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml
-@@ -36,11 +36,13 @@ properties:
-   drive-open-drain:
-     type: boolean
- 
-+  spi-max-frequency: true
++additionalProperties: true
 +
- required:
-   - compatible
-   - reg
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml b/Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
-index ce6aaff15214..039e08af98bb 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
-@@ -95,7 +95,7 @@ properties:
- 
-     additionalProperties: false
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- required:
-   - compatible
-diff --git a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
-index 7a616577ac63..c00ad3e21c21 100644
---- a/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
-+++ b/Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml
-@@ -130,6 +130,14 @@ properties:
-     type: object
-     $ref: /schemas/pinctrl/cirrus,lochnagar.yaml#
- 
-+  lochnagar-hwmon:
-+    type: object
-+    $ref: /schemas/hwmon/cirrus,lochnagar.yaml#
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/ti/ti,davinci.yaml b/Documentation/devicetree/bindings/arm/ti/ti,davinci.yaml
+index a8765ba29476..c022d325fc08 100644
+--- a/Documentation/devicetree/bindings/arm/ti/ti,davinci.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/ti,davinci.yaml
+@@ -23,4 +23,7 @@ properties:
+           - enbw,cmc        # EnBW AM1808 based CMC board
+           - lego,ev3        # LEGO MINDSTORMS EV3 (AM1808 based)
+       - const: ti,da850
 +
-+  lochnagar-sc:
-+    type: object
-+    $ref: /schemas/sound/cirrus,lochnagar.yaml#
++additionalProperties: true
 +
-   VDDCORE:
-     description:
-       Initialisation data for the VDDCORE regulator, which supplies the
-@@ -249,7 +257,7 @@ required:
-   - lochnagar-clk
-   - lochnagar-pinctrl
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-index da3d9ab758b9..19fcf59fd2fe 100644
---- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-+++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
-@@ -30,6 +30,9 @@ properties:
-       - const: syscon
-       - const: simple-mfd
- 
-+  reg:
-+    maxItems: 1
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/ux500.yaml b/Documentation/devicetree/bindings/arm/ux500.yaml
+index accaee906050..5db7cfba81a4 100644
+--- a/Documentation/devicetree/bindings/arm/ux500.yaml
++++ b/Documentation/devicetree/bindings/arm/ux500.yaml
+@@ -34,3 +34,5 @@ properties:
+         items:
+           - const: samsung,golden
+           - const: st-ericsson,u8500
 +
-   "#address-cells":
-     const: 1
- 
-@@ -54,7 +57,7 @@ required:
-   - "#size-cells"
-   - ranges
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-index e75d77beec6a..ade733cd60f7 100644
---- a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-+++ b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-@@ -28,11 +28,13 @@ properties:
-     description: GPIO uspecifier of the CMD pin
-     maxItems: 1
- 
-+  spi-cpha: true
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/arm/vt8500.yaml b/Documentation/devicetree/bindings/arm/vt8500.yaml
+index 7b25b6fa34e9..29ff399551ca 100644
+--- a/Documentation/devicetree/bindings/arm/vt8500.yaml
++++ b/Documentation/devicetree/bindings/arm/vt8500.yaml
+@@ -21,3 +21,6 @@ properties:
+           - wm,wm8650
+           - wm,wm8750
+           - wm,wm8850
++          
++additionalProperties: true
 +
- required:
-   - compatible
-   - cmd-gpios
+diff --git a/Documentation/devicetree/bindings/arm/xilinx.yaml b/Documentation/devicetree/bindings/arm/xilinx.yaml
+index c73b1f5c7f49..e0c6787f6e94 100644
+--- a/Documentation/devicetree/bindings/arm/xilinx.yaml
++++ b/Documentation/devicetree/bindings/arm/xilinx.yaml
+@@ -111,4 +111,6 @@ properties:
+           - const: xlnx,zynqmp-zcu111
+           - const: xlnx,zynqmp
  
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml b/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
-index aef87a33a7c9..aeff2bd774dd 100644
---- a/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
-+++ b/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
-@@ -31,6 +31,8 @@ properties:
-       Documentation/devicetree/bindings/nvmem/nvmem.txt and also
-       examples below.
- 
-+  opp-shared: true
++additionalProperties: true
 +
- required:
-   - compatible
-   - nvmem-cells
-@@ -53,7 +55,7 @@ patternProperties:
+ ...
+diff --git a/Documentation/devicetree/bindings/arm/zte.yaml b/Documentation/devicetree/bindings/arm/zte.yaml
+index 2d3fefdccdff..672f8129cd31 100644
+--- a/Documentation/devicetree/bindings/arm/zte.yaml
++++ b/Documentation/devicetree/bindings/arm/zte.yaml
+@@ -23,4 +23,6 @@ properties:
+               - zte,zx296718-evb
+           - const: zte,zx296718
  
-     unevaluatedProperties: false
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-index fb111e2d5b99..53853ec20fe2 100644
---- a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-@@ -47,7 +47,7 @@ properties:
- required:
-   - compatible
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-index 7b39e3204fb3..2fc617377e2c 100644
---- a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-+++ b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-@@ -45,7 +45,7 @@ properties:
-       frequency in HZ, but is defined only for the backwards compatibility
-       with the picoxcell platform.
- 
--unevaluatedProperties: false
-+additionalProperties: false
- 
- required:
-   - compatible
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/mips/ingenic/devices.yaml b/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
+index 83c86cbe4716..bd5fbc973cca 100644
+--- a/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
++++ b/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
+@@ -47,4 +47,7 @@ properties:
+         items:
+           - const: yna,cu1830-neo
+           - const: ingenic,x1830
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/mips/loongson/devices.yaml b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+index d25e80aa8b2a..9fee6708e6f5 100644
+--- a/Documentation/devicetree/bindings/mips/loongson/devices.yaml
++++ b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+@@ -36,4 +36,7 @@ properties:
+       - description: Virtual Loongson64 Quad Core + VirtIO
+         items:
+           - const: loongson,loongson64v-4core-virtio
++
++additionalProperties: true
++
+ ...
+diff --git a/Documentation/devicetree/bindings/riscv/sifive.yaml b/Documentation/devicetree/bindings/riscv/sifive.yaml
+index 3ab532713dc1..3a8647d1da4c 100644
+--- a/Documentation/devicetree/bindings/riscv/sifive.yaml
++++ b/Documentation/devicetree/bindings/riscv/sifive.yaml
+@@ -22,4 +22,7 @@ properties:
+           - sifive,hifive-unleashed-a00
+       - const: sifive,fu540-c000
+       - const: sifive,fu540
++
++additionalProperties: true
++
+ ...
 -- 
 2.25.1
 
