@@ -2,101 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A915E2830F7
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Oct 2020 09:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5682830FC
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Oct 2020 09:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725963AbgJEHg2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Oct 2020 03:36:28 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:35800 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbgJEHg0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Oct 2020 03:36:26 -0400
-Received: by mail-ot1-f65.google.com with SMTP id s66so7719794otb.2;
-        Mon, 05 Oct 2020 00:36:25 -0700 (PDT)
+        id S1725875AbgJEHjq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Oct 2020 03:39:46 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:44935 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbgJEHjq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Oct 2020 03:39:46 -0400
+Received: by mail-ot1-f68.google.com with SMTP id a2so7694076otr.11;
+        Mon, 05 Oct 2020 00:39:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LNf+1CZwCtB9/X+lquZ9luTdVAuF2E896Sfv5oD/tBM=;
-        b=STvxtpZfC4pWnV41oRa6cuIeNvuU+7zp/a7SKUdSOYZqJadxJasYfVTXL6gGu1Va0i
-         S/d84MExERaZ+dYEyUcDHTjNSXwDtBtGwIXExVQ2Z+LddEnvEBD3N4gFs2vdE5Q2z2Bn
-         eDQ7tef62R9T4XnNp/83pr4XnjwgEmT9Hi/y22+YpymQwk3VLwT87TNTFiieugKDQNhr
-         8yccesuutV2usDImCKLQE8LPa3Ctwbkq7alAt2qwJP4tmEqBYS3E5PICVRu0hT9Eq8Xb
-         FYAtPKAo3UNnz4J0tLt9GnEQzPlscnVkGl4ibTelr3fPfMnB0V32Sv5Cr1FDerq6E4Pw
-         lyWg==
-X-Gm-Message-State: AOAM5314cecMwOcrqW2TP+7jdPE9RzFBD+1V8svz9ymLtJFTFsuS8hWz
-        4vGSiIuLQOkUcYcJxrVAIaMafmkeEJi4ft9u3DFDehcftlc=
-X-Google-Smtp-Source: ABdhPJzOQo1UFJID4qbLY694qspjNCn+uW/02sXFHIEaU4eVUZ3/egysBtWTvWM937OKuc73FryAkSz/TIAuqciuNtA=
-X-Received: by 2002:a9d:3b76:: with SMTP id z109mr11016581otb.250.1601883385236;
- Mon, 05 Oct 2020 00:36:25 -0700 (PDT)
+        bh=5SPh2he2Jjc9n0j4/J15sHh1TSSZGC0HhCFcAtt85i8=;
+        b=j/5eSeZD2rlTNh72vX7Y4QtcjcmtKU6/hi5D6FvK34ljOhvg2fTNZuhRvlGg2ez0U1
+         s6m1nrJPgep+bgIhbtn1bGKjdY1Jju73V8dfkLSoZhy6uBhtRbHlUqCIU2j/jhuy2NZ8
+         8jaoV9NCKu+MHAU5sK9BMU1eKqz3JOj5VIDnl/hQwLE9Kwx7AxGKLxy9aftA3gnWEiX+
+         WscMIewXUF4GojDuxo7m14m6fNb/ltTkVFTtX0yGJqJVSXPdQgOs7+UHBpWwPCXivssz
+         /Y8CSneKp02VlqRXRCtcIcAwuUoL94YVYf+6exkNj8Asimp1Jl5A2IxPAaa3B5HiwQcV
+         8Csw==
+X-Gm-Message-State: AOAM530cVwR9yUPjrR313f93A+kIpUW+UhF9o/xpEZY/Hc6JepSPeRl1
+        IV+PH3vDWXPpXqev7fek5qH3BT2kDP7vV6u264c=
+X-Google-Smtp-Source: ABdhPJx/lz6ouKsE1Lni3Mo3wReiYtmE5P1UwKx9YaGGDDZCj7wGzoBWKoemqZH3rboAaIfS/XygvOh+0BhV/GhhuNo=
+X-Received: by 2002:a9d:3b76:: with SMTP id z109mr11029086otb.250.1601883585728;
+ Mon, 05 Oct 2020 00:39:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200928155950.1185-1-uli+renesas@fpond.eu> <20201002154423.GA16758@ninjato>
-In-Reply-To: <20201002154423.GA16758@ninjato>
+References: <20200928155950.1185-1-uli+renesas@fpond.eu>
+In-Reply-To: <20200928155950.1185-1-uli+renesas@fpond.eu>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 5 Oct 2020 09:36:14 +0200
-Message-ID: <CAMuHMdX=815AT54cOECCVvsD70AbhOzXKAMpQccE5XvOS4TSdw@mail.gmail.com>
+Date:   Mon, 5 Oct 2020 09:39:34 +0200
+Message-ID: <CAMuHMdVzkRwrwzju0tpsZ3DLvtUaebJDemKTEJZ0BmsdqSme-Q@mail.gmail.com>
 Subject: Re: [PATCH v4] i2c: sh_mobile: implement atomic transfers
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
         Linux I2C <linux-i2c@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+Hi Uli,
 
-On Fri, Oct 2, 2020 at 5:44 PM Wolfram Sang <wsa@the-dreams.de> wrote:
-> On Mon, Sep 28, 2020 at 05:59:50PM +0200, Ulrich Hecht wrote:
-> > Implements atomic transfers to fix reboot/shutdown on r8a7790 Lager and
-> > similar boards.
-> >
-> > Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
-
-> > @@ -581,10 +585,12 @@ static void start_ch(struct sh_mobile_i2c_data *pd, struct i2c_msg *usr_msg,
-
-> > +             if (pd->atomic_xfer) {
-> > +                     unsigned long j = jiffies + pd->adap.timeout;
-> > +
-> > +                     time_left = time_before_eq(jiffies, j);
-> > +                     while (time_left &&
-> > +                            !(pd->sr & (ICSR_TACK | SW_DONE))) {
-> > +                             unsigned char sr = iic_rd(pd, ICSR);
-> > +
-> > +                             if (sr & (ICSR_AL   | ICSR_TACK |
-> > +                                       ICSR_WAIT | ICSR_DTE)) {
-> > +                                     sh_mobile_i2c_isr(0, pd);
-> > +                                     udelay(150);
-> > +                             } else {
-> > +                                     cpu_relax();
-> > +                             }
+On Mon, Sep 28, 2020 at 6:09 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
+> Implements atomic transfers to fix reboot/shutdown on r8a7790 Lager and
+> similar boards.
 >
-> Is it 100% safe to call cpu_relax() that late? Aren't interrupts
-> disabled? What is waking the CPU again? And where does the value 150us
-> come from?
+> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>
+> Hi!
+>
+> Another minor change in the atomic code path in start_ch() as suggested by
+> Geert. All power management-related issues have been decided to be solved
+> outside this driver, so we should be done here.
+>
+> CU
+> Uli
+>
+>
+> Changes since v3:
+> - cut atomic_xfer code path short in start_ch()
 
-cpu_relax() does not sleep, usually it's merely a compiler directive.
+Thanks for the update!
 
-On arm32/v7 (and most other platforms):
+> --- a/drivers/i2c/busses/i2c-sh_mobile.c
+> +++ b/drivers/i2c/busses/i2c-sh_mobile.c
 
-    #define cpu_relax()                     barrier()
+> +static int sh_mobile_i2c_xfer_atomic(struct i2c_adapter *adapter,
+> +                                    struct i2c_msg *msgs,
+> +                                    int num)
+> +{
+> +       struct sh_mobile_i2c_data *pd = i2c_get_adapdata(adapter);
 
-    #define barrier() __asm__ __volatile__("": : :"memory")
+To make sure external conditions are satisfied, and we never deadlock,
+as discussed in v3?
 
-On arm64:
+    if (pd->dev->power.is_suspended)
+            return -EPERM;  /* any other suitable error code? */
 
-    static inline void cpu_relax(void)
-    {
-            asm volatile("yield" ::: "memory");
-    }
-
+> +
+> +       pd->atomic_xfer = true;
+> +       return sh_mobile_xfer(pd, msgs, num);
+> +}
 Gr{oetje,eeting}s,
 
                         Geert
 
--- 
+--
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
 In personal conversations with technical people, I call myself a hacker. But
