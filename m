@@ -2,74 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 642A82841D6
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Oct 2020 22:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A662842E4
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Oct 2020 01:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727069AbgJEU4t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Oct 2020 16:56:49 -0400
-Received: from www.zeus03.de ([194.117.254.33]:36310 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725942AbgJEU4t (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 5 Oct 2020 16:56:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=GH6IZz2J0smnvYp4WcPnt8raTfHb
-        dLF0TuAgYRXbQD8=; b=eBguSYhLlL6WW7j+nMtS01HSR0eoaBLMdsoWvrcp4fYJ
-        3IZmDHZnWcB4t+YGSar7qNJ8ahxXF2BoE2KPeRCckcbf2UaJeCBwuMxxWkbF+HoS
-        WHBsAoZMtjFVvJRENSVOfvsApKz+sz/Jg6VTiA8ws83bcGe2/vm/ylEiQRcoED8=
-Received: (qmail 2370149 invoked from network); 5 Oct 2020 22:56:48 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Oct 2020 22:56:48 +0200
-X-UD-Smtp-Session: l3s3148p1@ZqWHuPKwhrYgAwDPXwUgANl8elq/Sjdv
-Date:   Mon, 5 Oct 2020 22:56:47 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: Re: [PATCH] Documentation: i2c: add testunit docs to index
-Message-ID: <20201005205647.GD1397@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-References: <20201002124458.3059-1-wsa+renesas@sang-engineering.com>
+        id S1726904AbgJEXQ6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Oct 2020 19:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725865AbgJEXQ5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Oct 2020 19:16:57 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8DDC0613CE;
+        Mon,  5 Oct 2020 16:16:57 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id v23so9015096ljd.1;
+        Mon, 05 Oct 2020 16:16:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=/y1V2ecGBf9QUrE1DUxCojq7CebMo4/29DZgpz0CqIc=;
+        b=q8oWwtIr0n+bGp6hi5u5/QwztpijlrnKhlg4zjiqNnCztVBvbZk9dddJV1qzpyAaa1
+         kxQlyj020HlMvFzIA82i+IvfLFbN2y3yfBCuPo3ZeLApj0REXHk7Mshk2vVOJvD46fMs
+         x0DZoC5ZRdkP+aWZj9mwGhT0JkV/76p75wdZuX1ksYPb3kuSqBTmc/XbzpDkHR+yOHtP
+         GfxY/C8xpSjPR7uqVEkz/eowKpQtS5LSiBPHexYJVGaoslqvlk4C/c1wivj/CD2wh3j3
+         dbe4m/Mu1ksaQYwNQJKbp6gMroPvlUpe/1FvDUetKsKs+WQdmWiyu3E5oEbk7acm73WA
+         VPIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/y1V2ecGBf9QUrE1DUxCojq7CebMo4/29DZgpz0CqIc=;
+        b=iU5WaBeLMnTd2bRlG6y/fmFKXilYVzep+T4QD8CwZXXffmeGwQRVGHVyGULQ7ONCX/
+         3AMelOIoqcozs6sq9SVer30BHvkqJ4bo1M3sPaeCCoMz8mJDUcLF4xq1n2DA8KnGDEAZ
+         +xfVMBEuF0/mKCzu4AQg3mOGPGvMjjLyIFliWefbNGIIXRVpLHDPX7AYW8G9SBzLGqNY
+         WHyN0Wy1/P01QT8B5Nk+SmCCCCu8lj2kDpq8Z5zNxRw3s/2SI6WVjvFRy32KQ2XPhWhh
+         KQqOFHRSDhXAdzc6b9uIXk+DmAP4nzZS3KJ//qD5YbKGOqQNsmVf1nm7tPopvyERs0kw
+         kg4g==
+X-Gm-Message-State: AOAM5339xszE3GuXl1AvL3OBPDwIi7C1bCGX3eXX9SZ3OQ6/tjGCQWG4
+        f5U2SpcVD9g9zBldlBxWnBhOGeoapVM=
+X-Google-Smtp-Source: ABdhPJwp4vHlmg7PM1+KoUFLLsLH0vbNcBJsVSIUG8JvbOi2f0jOdajZcUSlCSgzB0NrAxP4rHVq+w==
+X-Received: by 2002:a2e:6e12:: with SMTP id j18mr690906ljc.430.1601939815406;
+        Mon, 05 Oct 2020 16:16:55 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-91-252.nat.spd-mgts.ru. [109.252.91.252])
+        by smtp.googlemail.com with ESMTPSA id 73sm338889lff.125.2020.10.05.16.16.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Oct 2020 16:16:54 -0700 (PDT)
+Subject: Re: [PATCH v9 00/32] Improvements for Tegra I2C driver
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200929221915.10979-1-digetx@gmail.com>
+ <20201005205258.GB1397@kunai>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <60ff95a4-2466-a41f-5496-2474f5a256a8@gmail.com>
+Date:   Tue, 6 Oct 2020 02:16:53 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5gxpn/Q6ypwruk0T"
-Content-Disposition: inline
-In-Reply-To: <20201002124458.3059-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20201005205258.GB1397@kunai>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+05.10.2020 23:52, Wolfram Sang пишет:
+> On Wed, Sep 30, 2020 at 01:18:43AM +0300, Dmitry Osipenko wrote:
+>> Hello!
+>>
+>> This series performs refactoring of the Tegra I2C driver code and hardens
+>> the atomic-transfer mode.
+> 
+> Applied to for-next, thanks to everyone! Please send incremental patches
+> from now on.
 
---5gxpn/Q6ypwruk0T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hello, Wolfram! Thank you! This series started with 10 small patches and
+then was growing with every new review round because more ideas were
+suggested and I needed to rebase/redo majority of the patches, hence it
+was a bit difficult to split it up into a smaller parts that could be
+applied incrementally. But I'll try to improve this in the future, thanks!
 
-On Fri, Oct 02, 2020 at 02:44:58PM +0200, Wolfram Sang wrote:
-> Fixes: a8335c64c5f0 ("i2c: add slave testunit driver")
-> Reported-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Also, there is this unreviewed series:
+> 
+> http://patchwork.ozlabs.org/project/linux-i2c/list/?series=191802
+> 
+> Is it obsolete by now?
+> 
 
-Applied to for-next, thanks!
-
-
---5gxpn/Q6ypwruk0T
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl97iI8ACgkQFA3kzBSg
-KbYCvg//YaXGDmY7UkBI503/3KZDhw7+rejwjAyFrlAFMJ3Z1DkLdhaBuUNFJL9+
-CzIfZVi0VykgQoIMuRKw6Cdp+GxLFHWPSeUZ1zjOjZ4e2YVzQfWJm/JGnU0Zh2V2
-W2mL8bmu80hzXrIx8neITUqgP051jJYGl3sUfIxHGKTPNWsto1pQQs289BrunyCP
-3g5BIHms0667PsPJGUtm/YsfxIXbg0Ec2rqpIWxu5SBzP7z6P1AX4yVFQ2rHtfZE
-KLhFlzvK2c0GjaezrQl9dhMXMOaH+/KZlR9/QItJH6d1sva+Z6BQ1YY/MRxr/hv9
-LYA+ygN/jF8kbm+6EHq1xSLSIT9uHmXQpTLhC0CZ28ZHKjhquqUJzFsL1KYtGhUa
-VVXlMhb7s6Fz1u2/oqKCnpG3HRVAHEwawUxR8dTrkpWHFogSGB6tz3LcMAZipHay
-TASWQyuZv9UGYGkXU5BQtaSUsjJsdu5AlGbV8Sj4JNrkfB90aWovqN5Z4SYTS9P0
-2HOVvB+gfT43DE5Iri1h+tCqeHzgNjfGt4jvkWjuFV3mGnEpeXZkjq90aXGs3/aT
-4ZbS41gp2zlNQTsS7+elz2wGh86jZuqlES3QpgANHFm/QI8b5IYTLMTABDKCKABd
-12XgaFiFQwkNWir0ISfB0wv1McCXH3c+ww8Cd28d5+DMZ+vpadE=
-=17li
------END PGP SIGNATURE-----
-
---5gxpn/Q6ypwruk0T--
+To be honest, I don't know. The author never answered, guess he may
+reappear sometime in the future with a v2. Those patches need to be
+corrected and rebased.
