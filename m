@@ -2,100 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A662842E4
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Oct 2020 01:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3607B28430F
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Oct 2020 01:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726904AbgJEXQ6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Oct 2020 19:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725865AbgJEXQ5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Oct 2020 19:16:57 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8DDC0613CE;
-        Mon,  5 Oct 2020 16:16:57 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id v23so9015096ljd.1;
-        Mon, 05 Oct 2020 16:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=/y1V2ecGBf9QUrE1DUxCojq7CebMo4/29DZgpz0CqIc=;
-        b=q8oWwtIr0n+bGp6hi5u5/QwztpijlrnKhlg4zjiqNnCztVBvbZk9dddJV1qzpyAaa1
-         kxQlyj020HlMvFzIA82i+IvfLFbN2y3yfBCuPo3ZeLApj0REXHk7Mshk2vVOJvD46fMs
-         x0DZoC5ZRdkP+aWZj9mwGhT0JkV/76p75wdZuX1ksYPb3kuSqBTmc/XbzpDkHR+yOHtP
-         GfxY/C8xpSjPR7uqVEkz/eowKpQtS5LSiBPHexYJVGaoslqvlk4C/c1wivj/CD2wh3j3
-         dbe4m/Mu1ksaQYwNQJKbp6gMroPvlUpe/1FvDUetKsKs+WQdmWiyu3E5oEbk7acm73WA
-         VPIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/y1V2ecGBf9QUrE1DUxCojq7CebMo4/29DZgpz0CqIc=;
-        b=iU5WaBeLMnTd2bRlG6y/fmFKXilYVzep+T4QD8CwZXXffmeGwQRVGHVyGULQ7ONCX/
-         3AMelOIoqcozs6sq9SVer30BHvkqJ4bo1M3sPaeCCoMz8mJDUcLF4xq1n2DA8KnGDEAZ
-         +xfVMBEuF0/mKCzu4AQg3mOGPGvMjjLyIFliWefbNGIIXRVpLHDPX7AYW8G9SBzLGqNY
-         WHyN0Wy1/P01QT8B5Nk+SmCCCCu8lj2kDpq8Z5zNxRw3s/2SI6WVjvFRy32KQ2XPhWhh
-         KQqOFHRSDhXAdzc6b9uIXk+DmAP4nzZS3KJ//qD5YbKGOqQNsmVf1nm7tPopvyERs0kw
-         kg4g==
-X-Gm-Message-State: AOAM5339xszE3GuXl1AvL3OBPDwIi7C1bCGX3eXX9SZ3OQ6/tjGCQWG4
-        f5U2SpcVD9g9zBldlBxWnBhOGeoapVM=
-X-Google-Smtp-Source: ABdhPJwp4vHlmg7PM1+KoUFLLsLH0vbNcBJsVSIUG8JvbOi2f0jOdajZcUSlCSgzB0NrAxP4rHVq+w==
-X-Received: by 2002:a2e:6e12:: with SMTP id j18mr690906ljc.430.1601939815406;
-        Mon, 05 Oct 2020 16:16:55 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-91-252.nat.spd-mgts.ru. [109.252.91.252])
-        by smtp.googlemail.com with ESMTPSA id 73sm338889lff.125.2020.10.05.16.16.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Oct 2020 16:16:54 -0700 (PDT)
-Subject: Re: [PATCH v9 00/32] Improvements for Tegra I2C driver
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200929221915.10979-1-digetx@gmail.com>
- <20201005205258.GB1397@kunai>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <60ff95a4-2466-a41f-5496-2474f5a256a8@gmail.com>
-Date:   Tue, 6 Oct 2020 02:16:53 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201005205258.GB1397@kunai>
-Content-Type: text/plain; charset=utf-8
+        id S1727213AbgJEXy0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Oct 2020 19:54:26 -0400
+Received: from nat-hk.nvidia.com ([203.18.50.4]:1679 "EHLO nat-hk.nvidia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725861AbgJEXyZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 5 Oct 2020 19:54:25 -0400
+Received: from HKMAIL104.nvidia.com (Not Verified[10.18.92.100]) by nat-hk.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f7bb22f0000>; Tue, 06 Oct 2020 07:54:23 +0800
+Received: from HKMAIL103.nvidia.com (10.18.16.12) by HKMAIL104.nvidia.com
+ (10.18.16.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 5 Oct
+ 2020 23:54:22 +0000
+Received: from NAM04-CO1-obe.outbound.protection.outlook.com (104.47.45.56) by
+ HKMAIL103.nvidia.com (10.18.16.12) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Mon, 5 Oct 2020 23:54:22 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oauuRF/GwiPQV1Kc1nFIxCjJ1+uzlzhQAArVpwdsY8DJSImj06rVmOnoLzyCSPpKQO1UeWM/yR4VnCX1HSyY1/FNpHpoiaITeyQHGzN7DEzcKs0e6g2mbTbqoBWJR1N9qTzg8Yqwi8TvokdnTuFHuIvy+NPUGg3cNseQNpb8ax+VjL0zN5rEtuBALQMiKIZMF+yCkvwkAdeZ1wyeNuS3i/CJvEmZ3gMBHXtWmbnyXur3725jrSxzzbNeblPjtfh5+4vLllHNL6stSQbrcZfvSAsDIlL1yGakQ8b5z8hmOrAzYbojlNPpeZaDypNSocvydJIBDV7V4R7+YUkgrQTrXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MLTBeUax8WYh9Op4ALT1HU1xRiLonXsP8OiWiXMX9Bo=;
+ b=kqR891ozBwAhfxFmwlbs1BFAOirxrxG42RmtoR9bvB8R2G7ae0vQLLPR03GHptAWBk4ahR1OxTRIVLTLlUolfhhTirSRAco5g+hbdqgGLPLIW4+O4VC/n/aQpFdvHzd8R5MQeHVtGR+SzPplqs94aqg0ZSK3Z9K2g1gH0fRN81lfWWgRjCXw45qmEjL/dNQwXBbqrUnh12xyPTp3Mm5Duv6lKLP0Kx9cM68dr9NLMG8+yWYil42OPRo3wyJqd6ui4mqFkyGrmg1Ef8zW0bGoH4fagkygZtU3MopQK3Z118w27bNwvuZtn9uUDr7bQnWcIpd26NpvaXto4TGhL6LrHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from MN2PR12MB3616.namprd12.prod.outlook.com (2603:10b6:208:cc::25)
+ by MN2PR12MB3293.namprd12.prod.outlook.com (2603:10b6:208:106::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.32; Mon, 5 Oct
+ 2020 23:54:19 +0000
+Received: from MN2PR12MB3616.namprd12.prod.outlook.com
+ ([fe80::89a:e4ad:708f:363f]) by MN2PR12MB3616.namprd12.prod.outlook.com
+ ([fe80::89a:e4ad:708f:363f%5]) with mapi id 15.20.3433.044; Mon, 5 Oct 2020
+ 23:54:19 +0000
+From:   Khalil Blaiech <kblaiech@nvidia.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Khalil Blaiech <kblaiech@mellanox.com>,
+        Vadim Pasternak <vadimp@mellanox.com>
+Subject: RE: [PATCH v11 1/2] i2c: i2c-mlxbf: I2C SMBus driver for Mellanox
+ BlueField SoC
+Thread-Topic: [PATCH v11 1/2] i2c: i2c-mlxbf: I2C SMBus driver for Mellanox
+ BlueField SoC
+Thread-Index: AQHWkTLCvB89D0q+REKLlisH88Nxu6l8iR2AgAO3SgCAAHX/AIAJC4aw
+Date:   Mon, 5 Oct 2020 23:54:18 +0000
+Message-ID: <MN2PR12MB36167849F16529392C0337D1AB0C0@MN2PR12MB3616.namprd12.prod.outlook.com>
+References: <cover.1600804577.git.kblaiech@mellanox.com>
+ <69651f24de181c7ea766a41bf7ac7a2539368ee5.1600804577.git.kblaiech@mellanox.com>
+ <20200927135445.GC7298@kunai>
+ <MN2PR12MB36160C5BC782D9AF3A017D17AB320@MN2PR12MB3616.namprd12.prod.outlook.com>
+ <20200930054152.GA1305@ninjato>
+In-Reply-To: <20200930054152.GA1305@ninjato>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: sang-engineering.com; dkim=none (message not signed)
+ header.d=none;sang-engineering.com; dmarc=none action=none
+ header.from=nvidia.com;
+x-originating-ip: [173.48.75.27]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a2e131fa-d674-4fe6-51c5-08d86989f987
+x-ms-traffictypediagnostic: MN2PR12MB3293:
+x-microsoft-antispam-prvs: <MN2PR12MB3293E8574886F630C918ED7AAB0C0@MN2PR12MB3293.namprd12.prod.outlook.com>
+x-ms-exchange-transport-forked: True
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rlIFp2pSysx2azqXHdt3SzhhwKUHJ58WKTHuWCPpXedK0qzVtt+K9u4SUZgiflsaPdMQ5MSEE67vgwJrjUvXykNCdV2Njxcby21roCFLoV7ZIUfzcg1le6VkJMlVUQLIXdeKWw/eKAnVJm+Ar8ukbBCzpLj9HOauGeuUwP2n5Od6CtsN4PrOERTKa4H3mhLzD9hNvxXlK5b0FyVF6DhJYaKmJN5p+uqogGvMOLwf5KL213ZC+31l43AkXe5oCz8DD8wYLQ2bk2Amjg/yoqFbEZpgTjmkxSKVjMQ+jL+55ZBdFoS63AfuOjylbqinlNXdj5n9joIis2aJpO8JhMIYKA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3616.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(39860400002)(136003)(376002)(396003)(316002)(9686003)(83380400001)(4326008)(26005)(76116006)(52536014)(54906003)(6506007)(66556008)(66446008)(64756008)(66946007)(478600001)(4744005)(33656002)(66476007)(107886003)(7696005)(5660300002)(2906002)(186003)(8936002)(71200400001)(86362001)(55016002)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: jodiGxtvhWpm75VdsZDdT+12Ci9fnBRocNG5gPwbDwOxzl6qzTRXdeJDAJHWIZz2dxLoH+tU+HfUR5RdrInWZIvkLYkbd76/xEqX3kJu3rIWxprlexxnAXOYcQPXGwv5g7QgQOPL4yRRuDU6q+Fm+vW23XnD0jJM4bKunP20B/O3j7aGybLZH50Qn1DEr/lneX7isolE/2CkfVD44I53enjd4MU2r+k0bCCY2fBS7D5tEAFjZPlH0YwvfSSoE1HeE7PquGgj6yiv3ihmRm8JHdwxqqa8uzZ2wXc3ICaC/Wo67wSi/QrApvQAizQq6/mkAN2OC0Mg8DwPJFiqutdmw4H6mqjNaYbgzy+YkGEBqRCyzbeEWgwsPTxCDYYYtEGAMSuTf6EuLAdDTHbnKLvxnM7eOCsoL41s3rrCBJqlYw3jLEDA3rnso5XVGOKV7RBH+VldtojpBviqgzDFJHz0cFq+euLqreR3qyDpS+b3x6n7G/y8qD9RURIC2LMB7WNwHho6EgZbU/nVcl4je98VhynhZ2OCetBELEqPTc3Arpmw33W6fZVHTf2NPHrDoER5j+G7tnfZjuklb8BbMYqLUcVvvyDOyjcbBSLo9Qeq1T2JDAJ0l5OT1d7hNsfMWCKvjMnrhOQkpWOHufuYqHFhzQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3616.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2e131fa-d674-4fe6-51c5-08d86989f987
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Oct 2020 23:54:18.8997
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oghNV9kcI3eM+z4CycbYxB7ICKOwOiVZHBhGcdTPGSqnsvyXHonra5xY7/amZ7x3DoAIdmCh8Dl8ceK+C7b+Jg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3293
+X-OriginatorOrg: Nvidia.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1601942063; bh=MLTBeUax8WYh9Op4ALT1HU1xRiLonXsP8OiWiXMX9Bo=;
+        h=ARC-Seal:ARC-Message-Signature:ARC-Authentication-Results:From:To:
+         CC:Subject:Thread-Topic:Thread-Index:Date:Message-ID:References:
+         In-Reply-To:Accept-Language:Content-Language:X-MS-Has-Attach:
+         X-MS-TNEF-Correlator:authentication-results:x-originating-ip:
+         x-ms-publictraffictype:x-ms-office365-filtering-correlation-id:
+         x-ms-traffictypediagnostic:x-microsoft-antispam-prvs:
+         x-ms-exchange-transport-forked:x-ms-oob-tlc-oobclassifiers:
+         x-ms-exchange-senderadcheck:x-microsoft-antispam:
+         x-microsoft-antispam-message-info:x-forefront-antispam-report:
+         x-ms-exchange-antispam-messagedata:Content-Type:
+         Content-Transfer-Encoding:MIME-Version:
+         X-MS-Exchange-CrossTenant-AuthAs:
+         X-MS-Exchange-CrossTenant-AuthSource:
+         X-MS-Exchange-CrossTenant-Network-Message-Id:
+         X-MS-Exchange-CrossTenant-originalarrivaltime:
+         X-MS-Exchange-CrossTenant-fromentityheader:
+         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+         X-MS-Exchange-CrossTenant-userprincipalname:
+         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+        b=F5bz7e7PPvLbh/QOsoQUWw9oZiy7AmjOPE2oWk5z2YuaaqjSpCpfjMEn/VMaqrNo1
+         yF1lVGYGmbrxM41ssJy+rh4UGN+vc5DE6BHU2cu1ZmxJWcpf1ZvuahOh81dvfdnxcu
+         s+KvKX24AgvMTPlq244aFClY6r35tQMvn/6gu3VgChE0kw1IdKGy4CJRy69UZXMDI7
+         EzUJe4VJQrtzuXzF6N1k+R8uVr/nw0jI6pe18l7TIQlEp2gTU1tfvh2EDGLjad+SG2
+         KWbhFnUgLDIaIIfKrD3xXBFhJ9fTdAVM8Ijya1pHAUehydDMle+UbdoDhGDzY+/Fcu
+         0LgLSsCAhnb1w==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-05.10.2020 23:52, Wolfram Sang пишет:
-> On Wed, Sep 30, 2020 at 01:18:43AM +0300, Dmitry Osipenko wrote:
->> Hello!
->>
->> This series performs refactoring of the Tegra I2C driver code and hardens
->> the atomic-transfer mode.
-> 
-> Applied to for-next, thanks to everyone! Please send incremental patches
-> from now on.
 
-Hello, Wolfram! Thank you! This series started with 10 small patches and
-then was growing with every new review round because more ideas were
-suggested and I needed to rebase/redo majority of the patches, hence it
-was a bit difficult to split it up into a smaller parts that could be
-applied incrementally. But I'll try to improve this in the future, thanks!
+> > Wolfram, thank you very much.
+> > I have seen that you applied it to "for-next" branch.
+> > I 'll address the build issue as soon as possible and post a v12
+> > with the appropriate tags.
+>=20
+> You are welcome. But please don't send new versions anymore now but only
+> incremental patches which go on top of v11. That is the normal
+> procedure. Thank you as well!
 
-> Also, there is this unreviewed series:
-> 
-> http://patchwork.ozlabs.org/project/linux-i2c/list/?series=191802
-> 
-> Is it obsolete by now?
-> 
+Thank you.
 
-To be honest, I don't know. The author never answered, guess he may
-reappear sometime in the future with a v2. Those patches need to be
-corrected and rebased.
+Please note that I addressed the build issue and converted the DT file
+into YAML schema.
+Please allow some time for the internal review,  I will post the patches
+to the Linux kernel afterwards.=20
