@@ -2,88 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E938B2831B8
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Oct 2020 10:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D2E283323
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Oct 2020 11:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725915AbgJEIQp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Oct 2020 04:16:45 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55265 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725880AbgJEIQp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Oct 2020 04:16:45 -0400
-Received: by mail-wm1-f65.google.com with SMTP id p15so3132612wmi.4;
-        Mon, 05 Oct 2020 01:16:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=so3Q2iStLANQzUsWPJtNOkoc+zx5z4LsFtN/g7RdwuA=;
-        b=Yb1QZxxkooLudEnk8XN6HPSfmEsrM9EL59bf2/392ELo2GDinoakbX9PgcBJjbI5st
-         xxr3lcdNiWhjHtghgEAjwQmyfe3aCWtaJM+mMO4K3BX3d6Z5eaU5jx0W8ZR8/jvSffEd
-         XnjVHyd0XkQ6BUR6kMQvm394XVa1oQbQCWldRigxltOR4n5chjMbPaFzW3poN+YQpiaJ
-         qU4j9kmCxMjyaz0O4K/i0PK9lNDkjHuVRackFUekA/AQ2oiGGdHe1dAI+vWkIFpy0FZR
-         /Z97mF9MMchmOqxVu0nsqhsnao2HzD+O/X+RlxAnuBman4qgU7I0qp0nadjm2MSRR6r6
-         J8+A==
-X-Gm-Message-State: AOAM533YN76uQDYP+/GNqwOsIgQGnJlbpTONyxXdszuZTbsU6iH3/uBT
-        /ajAyb3efunjvk5Se8ndjTw=
-X-Google-Smtp-Source: ABdhPJy1FDIel9WhtFJmJd9CyAQEOlK6fIY5XuLZ0pflqjU2ZvCyXQDazBGV4roSAtjoCmXu+DoPFw==
-X-Received: by 2002:a1c:4b0f:: with SMTP id y15mr16442283wma.165.1601885803104;
-        Mon, 05 Oct 2020 01:16:43 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.194])
-        by smtp.googlemail.com with ESMTPSA id c130sm873401wma.17.2020.10.05.01.16.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 05 Oct 2020 01:16:41 -0700 (PDT)
-Date:   Mon, 5 Oct 2020 10:16:39 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Christian Eggers <ceggers@arri.de>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        id S1725939AbgJEJ0G (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Oct 2020 05:26:06 -0400
+Received: from mailout12.rmx.de ([94.199.88.78]:56290 "EHLO mailout12.rmx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725891AbgJEJ0G (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 5 Oct 2020 05:26:06 -0400
+Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailout12.rmx.de (Postfix) with ESMTPS id 4C4Zw961JPzRp7N;
+        Mon,  5 Oct 2020 11:26:01 +0200 (CEST)
+Received: from mta.arri.de (unknown [217.111.95.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by kdin02.retarus.com (Postfix) with ESMTPS id 4C4Zvn14HCz2TTL1;
+        Mon,  5 Oct 2020 11:25:41 +0200 (CEST)
+Received: from n95hx1g2.localnet (192.168.54.143) by mta.arri.de
+ (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 5 Oct
+ 2020 11:25:13 +0200
+From:   Christian Eggers <ceggers@arri.de>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+CC:     Oleksij Rempel <linux@rempel-privat.de>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] i2c: imx: Don't generate STOP condition if
- arbitration has been lost
-Message-ID: <20201005081639.GA7431@kozik-lap>
-References: <20201002152305.4963-1-ceggers@arri.de>
- <20201002152305.4963-4-ceggers@arri.de>
+        <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 2/3] i2c: imx: Check for I2SR_IAL after every byte
+Date:   Mon, 5 Oct 2020 11:25:13 +0200
+Message-ID: <3765943.G7FBkpUTMe@n95hx1g2>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+In-Reply-To: <20201005080725.GB7135@kozik-lap>
+References: <20201002152305.4963-1-ceggers@arri.de> <20201002152305.4963-3-ceggers@arri.de> <20201005080725.GB7135@kozik-lap>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201002152305.4963-4-ceggers@arri.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [192.168.54.143]
+X-RMX-ID: 20201005-112545-4C4Zvn14HCz2TTL1-0@kdin02
+X-RMX-SOURCE: 217.111.95.66
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Oct 02, 2020 at 05:23:05PM +0200, Christian Eggers wrote:
-> If arbitration is lost, the master automatically changes to slave mode.
-> I2SR_IBB may or may not be reset by hardware. Raising a STOP condition
-> by resetting I2CR_MSTA has no effect and will not clear I2SR_IBB.
-> 
-> So calling i2c_imx_bus_busy() is not required and would busy-wait until
-> timeout.
-> 
-> Signed-off-by: Christian Eggers <ceggers@arri.de>
-> Cc: stable@vger.kernel.org # Requires trivial backporting, simple remove
->                            # the 3rd argument from the calls to
->                            # i2c_imx_bus_busy().
-> ---
->  drivers/i2c/busses/i2c-imx.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
+On Monday, 5 October 2020, 10:07:25 CEST, Krzysztof Kozlowski wrote:
+> The I2C on Vybrid VF500 still works fine. I did not test this actual
+> condition (arbitration) but only a regular I2C driver (BQ27xxx fuel
+> gauge). Obviously this only proves that regular operation is not
+> broken...
+thank you very much for testing on Vybrid.
 
-Tested (not extensively) on Vybrid VF500 (Toradex VF50):
-Tested-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Alternatively if you have a specific testing procedure (reproduction of
+> a problem), please share.
 
-The I2C on Vybrid VF500 still works fine (also bigger transfers). I did
-not test this actual condition (arbitration) but only a regular I2C
-driver (BQ27xxx fuel gauge). Obviously this only proves that regular
-operation is not broken...
+The IAL errors happen due to noise on our I2C bus. We have our power supply 
+connected via I2C. The hardware designers wanted to make sure that no
+high currents flow through the ground pins of the I2C interface. So they added 
+a series resistor (30 Ohm) in the GND line between the power supply and the 
+i.MX board.
 
-Best regards,
-Krzysztof
+If you have an I2C device on an external PCB, adding some small series 
+resistance in the GND line may cause IAL errors. On the other hand, if 
+everything else works fine, also handling if IAL should work on Vybrid.
+
+> Best regards,
+> Krzysztof
+Best regards
+Christian
+
+
+
