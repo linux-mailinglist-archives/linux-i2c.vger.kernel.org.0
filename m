@@ -2,119 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E64284A13
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Oct 2020 12:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C07284A91
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Oct 2020 13:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbgJFKCa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Oct 2020 06:02:30 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2959 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725939AbgJFKC3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 6 Oct 2020 06:02:29 -0400
-Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id 339F145D8CC503B2B5EB;
-        Tue,  6 Oct 2020 11:02:25 +0100 (IST)
-Received: from localhost (10.52.123.13) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 6 Oct 2020
- 11:02:22 +0100
-Date:   Tue, 6 Oct 2020 11:00:36 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        "Andrew Lunn" <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        <dmaengine@vger.kernel.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Lars-Peter Clausen" <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "Marc Zyngier" <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "MyungJoo Ham" <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Peter Meerwald-Stadler" <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
+        id S1725947AbgJFLAw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Oct 2020 07:00:52 -0400
+Received: from mailout10.rmx.de ([94.199.88.75]:43074 "EHLO mailout10.rmx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725902AbgJFLAv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 6 Oct 2020 07:00:51 -0400
+Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailout10.rmx.de (Postfix) with ESMTPS id 4C5DzP0qQ1z35np;
+        Tue,  6 Oct 2020 13:01:05 +0200 (CEST)
+Received: from mta.arri.de (unknown [217.111.95.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by kdin02.retarus.com (Postfix) with ESMTPS id 4C5Dz636Pnz2TTWd;
+        Tue,  6 Oct 2020 13:00:50 +0200 (CEST)
+Received: from N95HX1G2.wgnetz.xx (192.168.54.97) by mta.arri.de
+ (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 6 Oct
+ 2020 12:52:18 +0200
+From:   Christian Eggers <ceggers@arri.de>
+To:     Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <linux-i2c@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-can@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-pci@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-rtc@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
- in common schemas
-Message-ID: <20201006100036.00007ec7@Huawei.com>
-In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
-References: <20201005183830.486085-1-robh@kernel.org>
-        <20201005183830.486085-5-robh@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/3] i2c: imx: Fix handling of arbitration loss
+Date:   Tue, 6 Oct 2020 12:51:32 +0200
+Message-ID: <20201006105135.28985-1-ceggers@arri.de>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20201006060528.drh2yoo2dklyntez@pengutronix.de>
+References: <20201006060528.drh2yoo2dklyntez@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.123.13]
-X-ClientProxiedBy: lhreml716-chm.china.huawei.com (10.201.108.67) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.54.97]
+X-RMX-ID: 20201006-130058-4C5Dz636Pnz2TTWd-0@kdin02
+X-RMX-SOURCE: 217.111.95.66
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 5 Oct 2020 13:38:30 -0500
-Rob Herring <robh@kernel.org> wrote:
-
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As common/shared
-> schema are included by other schemas, they should always allow for
-> additionalProperties.
+On Tuesday, 6 October 2020, 08:05:28 CEST, Uwe Kleine-König wrote:
+> Could we please move clearing an irq to a dedicated function? Such that
+> it looks like:
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> 	/* check for arbitration lost */
+> 	if (temp & I2SR_IAL) {
+> 		i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
+> 		return -EAGAIN;
+> 	}
+done
 
->  Documentation/devicetree/bindings/iio/common.yaml            | 2 ++
-For IIO
+Changes in v2:
+---------------
+- Don't accidently clear additional status flags on Vybrid
+  (reported by Uwe Kleine-Koenig)
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->  ...
+Changes in v3:
+---------------
+- dedicated function for clearing an irq
 
 
