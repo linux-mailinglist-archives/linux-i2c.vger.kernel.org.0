@@ -2,41 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EAA92847AA
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Oct 2020 09:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077AB2847B5
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Oct 2020 09:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727105AbgJFHmR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Oct 2020 03:42:17 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:42819 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726670AbgJFHmQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Oct 2020 03:42:16 -0400
-Received: by mail-ot1-f66.google.com with SMTP id m13so11416006otl.9;
-        Tue, 06 Oct 2020 00:42:14 -0700 (PDT)
+        id S1726917AbgJFHng (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Oct 2020 03:43:36 -0400
+Received: from mail-oo1-f66.google.com ([209.85.161.66]:45394 "EHLO
+        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726670AbgJFHnf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Oct 2020 03:43:35 -0400
+Received: by mail-oo1-f66.google.com with SMTP id h8so2944257ooc.12;
+        Tue, 06 Oct 2020 00:43:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=X92StBJO7Jl08+emNfT4SOvEfEh2SDH9sc44xoCG2JQ=;
-        b=jDi0Mjz/ZGTamRVFUUtQ4Rn2TjOLfqBteqgqxKanvMacjTpaSfFdk2WoE9eDnaUxXj
-         x86NKJQl+R60tC9HXWlFem/3WvLrI5eZMeT0XBED8sGwRdcGCcvJKghx1V9Zl95p8pHd
-         IdFJZlBuqVw1s9yGR9ZJOm8iOW7nTIZcKW2tZG8uKn6+QNR7/omL6DONaBNmrbJZ/YOw
-         9VHDteqoGekRfwnIyWvHU34YRUhW9taXfQXINl0hN9J4I2HrIwD60WzF8bMD2r/+bWto
-         MeDJ6UbZtmCImHfbJeC4RNXjajjRcGBDkaQegs3rdhXM1pHGN/4LkYEEXcg2A2LDSZx3
-         /v0w==
-X-Gm-Message-State: AOAM533fmr93poNo1YrJEqSmM2bZas+ybUWrtkMW/Tm9TLiI7p4l/0Qp
-        t/VJDafHqVueoxDwlMLRO2BML5YMieOXkOe3UKA=
-X-Google-Smtp-Source: ABdhPJzRlbEpWRGt0J1cMm9H92xwWTt7DmJhhKL4iaOIkYDjOIUTuv76uRmvAtK3KDjga7sfjkeNBHq0tHs9kJqt0m0=
-X-Received: by 2002:a05:6830:1008:: with SMTP id a8mr1972113otp.107.1601970134083;
- Tue, 06 Oct 2020 00:42:14 -0700 (PDT)
+        bh=LzRJVHcc4AOcRIg5DtD/82Z3g3zvHdupm81fE1K+lIM=;
+        b=BW/5PAt2AJgMD9SfH/QsesYXt+U/6bJFbJQJfG5sxIYovIOzcyQ6gF2bIj00iMfQ8d
+         RZygqQIpMNr1c+c+L666giDhaIvxt5bpg7pDbrKAdRYbskhePtOFUFbeCsi0PR6i9hri
+         ukWIrXxRgbSvImT6J1AG3aaltDe/P34wE+52dYRr/0L4r82SfI/cnWcILSJRt6MC4EFH
+         SLfakT9+lnXcfJoqT4igN3gNVxCTnXPonal2wWndqUtrEghaWXsLvLlSScDMWEnpjS0m
+         HDh/nWOTCWl2WQupa64z+xozEO0bj2+IfqFYzSW5VUxjh8t+/MDCnCUK5icpBh4CnM7+
+         knFw==
+X-Gm-Message-State: AOAM531AZ0jK25lmTr78zk4FeDlzxsf7eKFhghkWNIuZSDrAmrWiyT8O
+        jhv9FD23b84uzn6+4x0NIIkF/ZddD/1VaqeSXVk=
+X-Google-Smtp-Source: ABdhPJyU6RRQM46ugWdopDgtkhgi7iGduwzWS1jU+uDheEg5pvon8IztULtlGUyDWuzb6A77GTJ3kgcTOraYuvM5h0M=
+X-Received: by 2002:a4a:4f17:: with SMTP id c23mr2343959oob.11.1601970213208;
+ Tue, 06 Oct 2020 00:43:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201005183830.486085-1-robh@kernel.org> <20201005183830.486085-4-robh@kernel.org>
-In-Reply-To: <20201005183830.486085-4-robh@kernel.org>
+References: <20201005183830.486085-1-robh@kernel.org> <20201005183830.486085-5-robh@kernel.org>
+In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Oct 2020 09:42:03 +0200
-Message-ID: <CAMuHMdXhtt=BMU4hrQLrNb9W6ZodaVFRd7tAfdrzzxEXpCgDPg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: Explicitly allow additional properties
- in board/SoC schemas
+Date:   Tue, 6 Oct 2020 09:43:22 +0200
+Message-ID: <CAMuHMdVfNE_vLgmCEH7-cat_OasxxZ958WMDUmaFi8PbbEvbaA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
+ in common schemas
 To:     Rob Herring <robh@kernel.org>
 Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
@@ -115,13 +115,13 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Mon, Oct 5, 2020 at 8:39 PM Rob Herring <robh@kernel.org> wrote:
 > In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As the top-level
-> board/SoC schemas always have additional properties, add
-> 'additionalProperties: true'.
+> being present, all schema need to make this explicit. As common/shared
+> schema are included by other schemas, they should always allow for
+> additionalProperties.
 >
 > Signed-off-by: Rob Herring <robh@kernel.org>
 
->  Documentation/devicetree/bindings/arm/renesas.yaml             | 2 ++
+>  Documentation/devicetree/bindings/bus/simple-pm-bus.yaml     | 2 ++
 
 Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
