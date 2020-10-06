@@ -2,139 +2,123 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C2628459B
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Oct 2020 07:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0962845CB
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Oct 2020 08:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727014AbgJFFmb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Oct 2020 01:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S1726917AbgJFGFo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Oct 2020 02:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726007AbgJFFmb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Oct 2020 01:42:31 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2D4C0613A8
-        for <linux-i2c@vger.kernel.org>; Mon,  5 Oct 2020 22:42:31 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id c6so668049plr.9
-        for <linux-i2c@vger.kernel.org>; Mon, 05 Oct 2020 22:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FYOEybxQ9Y8nUxVZmzLLg+Qyso2tjlpbGNthFRqblLc=;
-        b=scAXD8YuBk8j/NF0iYDdCeaAVj2lJqU4ekQ7XmxKGRZD9n7rlAL/7uG23DDE1fcZ56
-         zF72mU8P6EdMfXizzEbowAVRT7aqB90B0ZPahldWPyAERYWd6msUiWvIw5u5I68GC10s
-         2mfO8dqRM6oWZLB0Q6RNjtouVvMzAMtCqHytHKbKwrjH25Far6tK8oMk2FL/+Ytm6yFo
-         ix24Oh/3R7FZgjcOmnnbZhO2Rnj4pwkEjTGIWiz4UAhFCmHcKJq5fJPHDGVhMb52+bja
-         GRW+sJiWWq/RfS6N9j6fS0MlegpQS8J4O6R0p/6fHQbNSKo6Dg2SOD+ESIa+qx/GxTp7
-         QQLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FYOEybxQ9Y8nUxVZmzLLg+Qyso2tjlpbGNthFRqblLc=;
-        b=X8ePBb+WxmY6tm3qX4GZzKClyyicpono1i3s8ig8TvU+X0yYAfdCgUqawUUcAVFYiP
-         VpvntujJmVyEWvgI2cJFwlLgF0ym0JbRcb8uThmcUllTDPRZxAeevzXC3YT5Mj3B7uMT
-         gUmeik1N0zNTOR+rPm9n0mX162SmRGVHUN5WW1a95NoK0LrrFRWPkXXN7U/dcOi+Ysus
-         MI9U0hBV5fj16DIVbg6cEzCrnzpILr4BotlYAfRYJZgMPPS15jA5K+COYAMUYS0/NmxQ
-         bht2YvVyLr4Kcnr7dQgfHW8Sd2Me5snq0ECrimuqOYK7vTgP8lbm4wIqKL3oTXWeS4MG
-         SMeA==
-X-Gm-Message-State: AOAM530/Cy0Q6pGilW+g7vBtX9Mmz1n/3dMiqi27HMjAjaPUQ+S6lwuz
-        k/JZ0xvrhbkMn2KZwS9JwL/F4g==
-X-Google-Smtp-Source: ABdhPJzo+T1F54fl8q16F3SuWBffglk48PEytQu7/wpxM8oR5iYvbOQGglf6EbVoa0EICQ893qG+lw==
-X-Received: by 2002:a17:90b:950:: with SMTP id dw16mr2661711pjb.200.1601962950652;
-        Mon, 05 Oct 2020 22:42:30 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id d145sm2005503pfd.136.2020.10.05.22.42.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Oct 2020 22:42:29 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 11:12:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: Explicitly allow additional properties
- in board/SoC schemas
-Message-ID: <20201006054228.ho3ajzfgpiew32ft@vireshk-i7>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-4-robh@kernel.org>
+        with ESMTP id S1726022AbgJFGFl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Oct 2020 02:05:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACA8C0613A7
+        for <linux-i2c@vger.kernel.org>; Mon,  5 Oct 2020 23:05:40 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kPg6L-0000oO-Ed; Tue, 06 Oct 2020 08:05:29 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kPg6K-0008VL-6x; Tue, 06 Oct 2020 08:05:28 +0200
+Date:   Tue, 6 Oct 2020 08:05:28 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Christian Eggers <ceggers@arri.de>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] i2c: imx: Fix reset of I2SR_IAL flag
+Message-ID: <20201006060528.drh2yoo2dklyntez@pengutronix.de>
+References: <20201002152305.4963-1-ceggers@arri.de>
+ <20201002152305.4963-2-ceggers@arri.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="beidewvdqrs5sqid"
 Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-4-robh@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20201002152305.4963-2-ceggers@arri.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 05-10-20, 13:38, Rob Herring wrote:
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As the top-level
-> board/SoC schemas always have additional properties, add
-> 'additionalProperties: true'.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+
+--beidewvdqrs5sqid
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Oct 02, 2020 at 05:23:03PM +0200, Christian Eggers wrote:
+> According to the "VFxxx Controller Reference Manual" (and the comment
+> block starting at line 97), Vybrid requires writing a one for clearing
+> an interrupt flag. Syncing the method for clearing I2SR_IIF in
+> i2c_imx_isr().
+>=20
+> Signed-off-by: Christian Eggers <ceggers@arri.de>
+> Cc: stable@vger.kernel.org
 > ---
->  Documentation/devicetree/bindings/arm/spear.yaml               | 3 +++
+>  drivers/i2c/busses/i2c-imx.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 0ab5381aa012..34648df7f1a6 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -424,7 +424,12 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i=
+2c_imx, int for_busy, bool a
+> =20
+>  		/* check for arbitration lost */
+>  		if (temp & I2SR_IAL) {
+> -			temp &=3D ~I2SR_IAL;
+> +			/*
+> +			 * i2sr_clr_opcode is the value to clear all interrupts.
+> +			 * Here we want to clear only I2SR_IAL, so we write
+> +			 * ~i2sr_clr_opcode with just the I2SR_IAL bit toggled.
+> +			 */
+> +			temp =3D ~i2c_imx->hwdata->i2sr_clr_opcode ^ I2SR_IAL;
+>  			imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+>  			return -EAGAIN;
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Could we please move clearing an irq to a dedicated function? Such that
+it looks like:
 
--- 
-viresh
+	/* check for arbitration lost */
+	if (temp & I2SR_IAL) {
+		i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
+		return -EAGAIN;
+	}
+
+Then you also don't need to duplicate the describing comment but just
+add it to the implementation of i2c_imx_clear_irq().
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--beidewvdqrs5sqid
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl98CSUACgkQwfwUeK3K
+7Am04Af+OTHNZcf5HD/6YfTPax3ijKMVsrDbdquTlavc18g1lO3D/xaDPAY5mi36
+bh/qE6BmZhlIkmUMK01v48HMbItfQsI7B+r5qVoVdH6RXzsNC9nHsoHwcyULBba4
+apXyv5v1gmySyFiyA+udRI38vv4+4NPX48YAiKIFuMl7TYzI8wFNYQmaywWVvAya
+tGy06ddMFv5Sz5gIlm0wxNZ54L1UPSdvxFtzdkWPD98liHG7hxNK0EsmAwNfherR
+0lhL9CpNcP49RSEgI6wYOEAWCc4iRWoZ1C/hGQWkL58mttTv8TaCGuzgGvjR6yC/
++Lb/zwLwG5jqdfSEiLjMUvUTMF4JLw==
+=RlAA
+-----END PGP SIGNATURE-----
+
+--beidewvdqrs5sqid--
