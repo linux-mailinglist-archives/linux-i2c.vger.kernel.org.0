@@ -2,117 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C27B28582C
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Oct 2020 07:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B142859E1
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Oct 2020 09:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbgJGFfy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Oct 2020 01:35:54 -0400
-Received: from mail.vivotek.com ([60.248.39.150]:35036 "EHLO mail.vivotek.com"
+        id S1727781AbgJGHui (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Oct 2020 03:50:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52824 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726096AbgJGFfy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 7 Oct 2020 01:35:54 -0400
-X-Greylist: delayed 1527 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Oct 2020 01:35:53 EDT
-Received: from pps.filterd (vivotekpps.vivotek.com [127.0.0.1])
-        by vivotekpps.vivotek.com (8.16.0.42/8.16.0.42) with SMTP id 09753swT005755;
-        Wed, 7 Oct 2020 13:10:13 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivotek.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=dkim; bh=vDsNzoMwII9+Wqwg/Geyy6Fns5VwPkDCjigM9D1SCOw=;
- b=TNVwiEl+q178iezQClAUbM0ubhhskVCgHeLifekaRhFypaX5GD7myD7hh2H4Af7D40py
- tmfOuhUGQtCRToY6QpFRQy2wgCUyr2Z8exSw5GiKcHFS6bb7KLhhXOeUgNGKbBbNd6F1
- NENpROXu8RscUvaVVtrj0lz6Ptv5u6/5Rl0= 
-Received: from cas02.vivotek.tw ([192.168.0.59])
-        by vivotekpps.vivotek.com with ESMTP id 33xbr2tnvg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 07 Oct 2020 13:10:12 +0800
-Received: from MBS07.vivotek.tw ([fe80::2027:4d67:6c01:78d8]) by
- CAS02.vivotek.tw ([fe80::157e:3677:ef5b:27a2%11]) with mapi id
- 14.03.0487.000; Wed, 7 Oct 2020 13:10:12 +0800
-From:   <Michael.Wu@vatics.com>
-To:     <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>
-CC:     <linux-i2c@vger.kernel.org>, <morgan.chang@vatics.com>,
-        <dean.hsiao@vatics.com>, <paul.chen@vatics.com>
-Subject: Designeware I2C slave confusing IC_INTR_STOP_DET handle
-Thread-Topic: Designeware I2C slave confusing IC_INTR_STOP_DET handle
-Thread-Index: AdacaCEF1S068DPwQGOIeCihPcVtGg==
-Date:   Wed, 7 Oct 2020 05:10:11 +0000
-Message-ID: <5DB475451BAA174CB158B5E897FC1525B1293AB2@MBS07.vivotek.tw>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [192.168.17.134]
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        id S1726041AbgJGHui (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 7 Oct 2020 03:50:38 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E84CB2168B;
+        Wed,  7 Oct 2020 07:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602057037;
+        bh=wjdNt9fk4taQnomW0LVqef9xaaEAkbgb9aWhBDQXp98=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mATuEgSyP7rL8fztvdZ53xzVIQ0qiPBqDwDBwWpo7rGEWsoGSbmmjIVQ5/T1+oElx
+         LvpkoKvJ8f5ss619Sonne3lz61hYZpXyQxmYthySt9mfenl+HmSvgO6FwM2OsG4YKJ
+         kT3Htww3WM2HgrpoCHPm4ah8QAk7jTJJ0BtcldME=
+Received: by mail-ej1-f52.google.com with SMTP id e22so1605094ejr.4;
+        Wed, 07 Oct 2020 00:50:36 -0700 (PDT)
+X-Gm-Message-State: AOAM530rc7NFY9sIYC3ycga8oDTSn/LbnamHO4qCVw159nvj2qvEJ95X
+        BlXgludfSrtgpWIvbFSDw+lpLyJGeh48gKgmmNM=
+X-Google-Smtp-Source: ABdhPJyWOIbIcP4wtSvYOiWoDxRKahL3vDWWNT1vEumlBFNfZ5i4lu4dCOOmyGNrCQg5lbBkQnB6XJQZzof4vU1nLm8=
+X-Received: by 2002:a17:906:8401:: with SMTP id n1mr1955039ejx.215.1602057035339;
+ Wed, 07 Oct 2020 00:50:35 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-07_03:2020-10-06,2020-10-07 signatures=0
-X-Proofpoint-Spam-Reason: safe
+References: <20201006160814.22047-1-ceggers@arri.de> <20201006160814.22047-2-ceggers@arri.de>
+In-Reply-To: <20201006160814.22047-2-ceggers@arri.de>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 7 Oct 2020 09:50:23 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPctS2DGkQW3EhP5Tg0y39oVF0xhEcmbs=T0vHmUsMgsQw@mail.gmail.com>
+Message-ID: <CAJKOXPctS2DGkQW3EhP5Tg0y39oVF0xhEcmbs=T0vHmUsMgsQw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] i2c: imx: Fix reset of I2SR_IAL flag
+To:     Christian Eggers <ceggers@arri.de>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        David Laight <David.Laight@aculab.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgU2lyLA0KDQpNeSBJMkMgc2xhdmUgc29tZXRpbWVzIGdldHMgb25seSAyIGludGVycnVwdHM6
-IG9uZSBpcyBJQ19JTlRSX1JYX0ZVTEwgYW5kDQp0aGUgb3RoZXIgaXMgSUNfSU5UUl9SWF9GVUxM
-IHdpdGggSUNfSU5UUl9TVE9QX0RFVC4gVGhlIDJuZCBpbnRlcnJ1cHQNCmNhdXNlcyB0d28gcHJv
-YmxlbXM6DQoNCjEuIElDX0lOVFJfU1RPUF9ERVQgaXMgcmlzaW5nIGFmdGVyIGkyY19kd19yZWFk
-X2NsZWFyX2ludHJiaXRzX3NsYXZlKCkNCiAgIGRvbmU6IEl0IHNlZW1zIGludmFsaWRhdGVkIGJl
-Y2F1c2UgV1JJVEVfUkVRVUVTVEVEIGlzIGRvbmUgYWZ0ZXIgdGhlDQogICAxc3QgV1JJVEVfUkVD
-RUlWRUQuDQoNCiMgaTJjc2V0IC1mIC15IDIgMHg0MiAweDAwIDB4NDE7IGRtZXNnIC1jDQpbMF1b
-Y2xlYXJfaW50cmJpdHNdMHgxIFNUQVRVUyBTTEFWRV9BQ1RJVklUWT0weDEgOiBSQVdfSU5UUl9T
-VEFUPTB4NTE0IDogSU5UUl9TVEFUPTB4NA0KWzFdW2lycV9oYW5kbGVyICBdMHgxIFNUQVRVUyBT
-TEFWRV9BQ1RJVklUWT0weDEgOiBSQVdfSU5UUl9TVEFUPTB4NTE0IDogSU5UUl9TVEFUPTB4NA0K
-V1JJVEVfUkVDRUlWRUQNClswXVtjbGVhcl9pbnRyYml0c10weDEgU1RBVFVTIFNMQVZFX0FDVElW
-SVRZPTB4MSA6IFJBV19JTlRSX1NUQVQ9MHg1MTQgOiBJTlRSX1NUQVQ9MHg0DQpbMV1baXJxX2hh
-bmRsZXIgICBdMHgxIFNUQVRVUyBTTEFWRV9BQ1RJVklUWT0weDAgOiBSQVdfSU5UUl9TVEFUPTB4
-NzE0IDogSU5UUl9TVEFUPTB4MjA0DQpXUklURV9SRVFVRVNURUQNCldSSVRFX1JFQ0VJVkVEDQpb
-MF1bY2xlYXJfaW50cmJpdHNdMHgxIFNUQVRVUyBTTEFWRV9BQ1RJVklUWT0weDAgOiBSQVdfSU5U
-Ul9TVEFUPTB4NzEwIDogSU5UUl9TVEFUPTB4MjAwDQpbMV1baXJxX2hhbmRsZXIgICBdMHgxIFNU
-QVRVUyBTTEFWRV9BQ1RJVklUWT0weDAgOiBSQVdfSU5UUl9TVEFUPTB4NTEwIDogSU5UUl9TVEFU
-PTB4MA0KU1RPUA0KWzJdW2NsZWFyX2ludHJiaXRzXTB4MSBTVEFUVVMgU0xBVkVfQUNUSVZJVFk9
-MHgwIDogUkFXX0lOVFJfU1RBVD0weDUxMCA6IElOVFJfU1RBVD0weDANCg0KICB0MTogSVNSIHdp
-dGggdGhlIDFzdCBJQ19JTlRSX1JYX0ZVTEwuDQogIHQyOiBDbGVhciBsaXN0ZWQgSUNfSU5UUiBi
-aXRzIGJ5IGkyY19kd19yZWFkX2NsZWFyX2ludHJiaXRzX3NsYXZlKCkuDQogIHQzOiBFbnRlciBp
-MmNfZHdfaXJxX2hhbmRsZXJfc2xhdmUoKSBhbmQgdGhlbiBkbw0KICAgICAgaTJjX3NsYXZlX2V2
-ZW50KFdSSVRFX1JFQ0VJVkVEKSBiZWNhdXNlDQogICAgICBpZiAoc3RhdCAmIERXX0lDX0lOVFJf
-UlhfRlVMTCkuDQogIHQ0OiBJU1Igd2l0aCB0aGUgMm5kIElDX0lOVFJfUlhfRlVMTC4NCiAgdDU6
-IENsZWFyIGxpc3RlZCBJQ19JTlRSIGJpdHMgYnkgaTJjX2R3X3JlYWRfY2xlYXJfaW50cmJpdHNf
-c2xhdmUoKSwNCiAgICAgIHdoaWxlIElDX0lOVFJfU1RPUF9ERVQgaGFzIG5vdCByaXNlbiB5ZXQu
-DQogIHQ2OiBFbnRlciBpMmNfZHdfaXJxX2hhbmRsZXJfc2xhdmUoKSBhbmQgdGhlbiBJQ19JTlRS
-X1NUT1BfREVUIGlzDQogICAgICByaXNpbmcuIGkyY19zbGF2ZV9ldmVudChXUklURV9SRVFVRVNU
-RUQpIHdpbGwgYmUgZG9uZSBmaXJzdCBiZWNhdXNlDQogICAgICBpZiAoKHN0YXQgJiBEV19JQ19J
-TlRSX1JYX0ZVTEwpICYmIChzdGF0ICYgRFdfSUNfSU5UUl9TVE9QX0RFVCkpIGFuZA0KICAgICAg
-dGhlbiBkb2luZyBpMmNfc2xhdmVfZXZlbnQoV1JJVEVfUkVDRUlWRUQpLg0KICB0NzogZG8gaTJj
-X3NsYXZlX2V2ZW50KFNUT1ApIGR1ZSB0byBJQ19JTlRSX1NUT1BfREVUIG5vdCBiZSBjbGVhcmVk
-IHlldC4NCg0KMi4gQm90aCBJQ19JTlRSX1NUT1BfREVUIGFuZCBJQ19JTlRSX1JYX0ZVTEwgYXJl
-IHJpc2luZyBiZWZvcmUNCiAgIGkyY19kd19yZWFkX2NsZWFyX2ludHJiaXRzX3NsYXZlKCk6IFNU
-T1AgY2Fubm90IHdhaXQgYmVjYXVzZQ0KICAgSUNfSU5UUl9TVE9QX0RFVCBpcyBjbGVhcmVkIGJ5
-IGkyY19kd19yZWFkX2NsZWFyX2ludHJiaXRzX3NsYXZlKCkuDQoNCiMgaTJjc2V0IC1mIC15IDIg
-MHg0MiAweDAwIDB4NDE7IGRtZXNnIC1jDQpbMF1bY2xlYXJfaW50cmJpdHNdMHgxIFNUQVRVUyBT
-TEFWRV9BQ1RJVklUWT0weDEgOiBSQVdfSU5UUl9TVEFUPTB4NTE0IDogSU5UUl9TVEFUPTB4NA0K
-WzFdW2lycV9oYW5kbGVyICAgXTB4MSBTVEFUVVMgU0xBVkVfQUNUSVZJVFk9MHgxIDogUkFXX0lO
-VFJfU1RBVD0weDUxNCA6IElOVFJfU1RBVD0weDQNCldSSVRFX1JFQ0VJVkVEDQpbMF1bY2xlYXJf
-aW50cmJpdHNdMHgxIFNUQVRVUyBTTEFWRV9BQ1RJVklUWT0weDAgOiBSQVdfSU5UUl9TVEFUPTB4
-NzE0IDogSU5UUl9TVEFUPTB4MjA0DQpbMV1baXJxX2hhbmRsZXIgICBdMHgxIFNUQVRVUyBTTEFW
-RV9BQ1RJVklUWT0weDAgOiBSQVdfSU5UUl9TVEFUPTB4NTE0IDogSU5UUl9TVEFUPTB4NA0KV1JJ
-VEVfUkVDRUlWRUQNCg0KICB0MTogSVNSIHdpdGggdGhlIDFzdCBJQ19JTlRSX1JYX0ZVTEwuDQog
-IHQyOiBDbGVhciBsaXN0ZWQgSUNfSU5UUiBiaXRzIGJ5IGkyY19kd19yZWFkX2NsZWFyX2ludHJi
-aXRzX3NsYXZlKCkuDQogIHQzOiBFbnRlciBpMmNfZHdfaXJxX2hhbmRsZXJfc2xhdmUoKSBhbmQg
-dGhlbiBkbw0KICAgICAgaTJjX3NsYXZlX2V2ZW50KFdSSVRFX1JFQ0VJVkVEKSBiZWNhdXNlDQog
-ICAgICBpZiAoc3RhdCAmIERXX0lDX0lOVFJfUlhfRlVMTCkuDQogIHQ0OiBJU1Igd2l0aCBib3Ro
-IElDX0lOVFJfU1RPUF9ERVQgYW5kIHRoZSAybmQgSUNfSU5UUl9SWF9GVUxMLg0KICB0NTogQ2xl
-YXIgbGlzdGVkIElDX0lOVFIgYml0cyBieSBpMmNfZHdfcmVhZF9jbGVhcl9pbnRyYml0c19zbGF2
-ZSgpLiBUaGUNCiAgICAgIGN1cnJlbnQgSUNfSU5UUl9TVE9QX0RFVCBpcyBjbGVhcmVkIGJ5IHRo
-aXMNCiAgICAgIGkyY19kd19yZWFkX2NsZWFyX2ludHJiaXRzX3NsYXZlKCkuDQogIHQ2OiBFbnRl
-ciBpMmNfZHdfaXJxX2hhbmRsZXJfc2xhdmUoKSBhbmQgdGhlbiBkbw0KICAgICAgaTJjX3NsYXZl
-X2V2ZW50KFdSSVRFX1JFQ0VJVkVEKSBiZWNhdXNlDQogICAgICBpZiAoc3RhdCAmIERXX0lDX0lO
-VFJfUlhfRlVMTCkuDQogIHQ3OiBpMmNfc2xhdmVfZXZlbnQoU1RPUCkgbmV2ZXIgYmUgZG9uZSBi
-ZWNhdXNlIElDX0lOVFJfU1RPUF9ERVQgd2FzDQogICAgICBjbGVhcmVkIGluIHQ1Lg0KDQoNClRo
-ZXNlIGFib3ZlIHNjZW5hcmlvcyBhcHBlYXJzIHdoZW4gT1MgaXMgYnVzeSBvciB0b28gbGF0ZSB0
-byBoYW5kbGUgSTJDDQppbnRlcnJ1cHRzLiBDdXJyZW50IGkyY19kd19pcnFfaGFuZGxlcl9zbGF2
-ZSgpIHNlZW1zIHRoYXQgbGFzdA0KSUNfSU5UUl9SWF9GVUxMIHdpbGwgYmUgaGFuZGxlZCBiZWZv
-cmUgSUNfSU5UUl9TVE9QX0RFVCByaXNpbmcsIG9yDQpJQ19JTlRSX1NUT1BfREVUIHdpbGwgbm90
-IGJlIGNsZWFyZWQgYmVmb3JlIGxhc3QgSUNfSU5UUl9SWF9GVUxMIGhhbmRsZWQuDQpJIHRoaW5r
-IGl0IGNhbid0IGJlIGd1YXJhbnRlZWQuDQoNCi0tDQpCUiwNCk1pY2hhZWwgV3UNCg0K
+On Tue, 6 Oct 2020 at 18:10, Christian Eggers <ceggers@arri.de> wrote:
+>
+> According to the "VFxxx Controller Reference Manual" (and the comment
+> block starting at line 97), Vybrid requires writing a one for clearing
+> an interrupt flag. Syncing the method for clearing I2SR_IIF in
+> i2c_imx_isr().
+>
+> Signed-off-by: Christian Eggers <ceggers@arri.de>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/i2c/busses/i2c-imx.c | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
+
+I replied to your v2 with testing, so what happened with all my tested tags?
+
+Best regards,
+Krzysztof
