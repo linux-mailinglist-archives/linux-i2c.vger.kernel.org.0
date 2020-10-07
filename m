@@ -2,59 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4E7285A1C
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0D7285A1B
 	for <lists+linux-i2c@lfdr.de>; Wed,  7 Oct 2020 10:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbgJGIIV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Oct 2020 04:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        id S1726096AbgJGIIU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Oct 2020 04:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727229AbgJGIIM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Oct 2020 04:08:12 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34709C061755
-        for <linux-i2c@vger.kernel.org>; Wed,  7 Oct 2020 01:08:12 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id ly6so1644374ejb.8
-        for <linux-i2c@vger.kernel.org>; Wed, 07 Oct 2020 01:08:12 -0700 (PDT)
+        with ESMTP id S1727287AbgJGIIO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Oct 2020 04:08:14 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8376BC0613D5
+        for <linux-i2c@vger.kernel.org>; Wed,  7 Oct 2020 01:08:13 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id cq12so1212401edb.2
+        for <linux-i2c@vger.kernel.org>; Wed, 07 Oct 2020 01:08:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oCF8SynXrWVRYxNQ22uW6uSFDL0I44L0Irm6uzCuBCc=;
-        b=ox4PxNK9iCxu2B18rdmRCaoEGcbD4CgFLBa5LFXCSNsT2y/kBWF/XUpeD8yZyzwaRS
-         LC4z+VOvuwPT6de7nY0uKs9PYwbpdH+Ec1qyaAeIpTLPi5s9dJ6iKJI/goNuO00wF6z6
-         ISDrcgjCSz6JlM7b4Hg2Tqpoxg0G5d7tDWBckRvdA1vsYDQFtPuJM85BVxJtocTScbLU
-         Tp579wt2OvniUuqGoPCDps3DiKK8u6lR7oNZrM4vJWpY5JD5h5SomMZZgtap+99G/2Oz
-         vA7al3NHRSZRLTtfd+c5v7F9SnxbLYlGhrmLOJjuqr/DHXEGOveOvtVY5+FNMeb4YAwK
-         s/mw==
+        bh=N9BB7E4iGMc/0xci5wMPtXbQzs5kI/9VbBMLqTlLSE8=;
+        b=QE5wCYvx8kvJMvIBqPW3Xjj5S68geqga477qq7uif1HkyevhmAtFMOt/buaJVFfpEH
+         jiijKBMvzIka7KNi7BK8/tuFS6+UEIjCz9fz7+Ypbka0repb8XQcAI5hXq6nDoDXhU2z
+         tx0IDqrog0nbwdZ2tKtSI05lEYppygDek+j8xKBsG1lX7hEhXlVAb8G6A7QzqDayzsj+
+         G+LFf+r8Qsiy1PGjAifRuvdNj8l2eVQW5lgd+i+bfJAc5aq8whixyfoXHtzRKvz8gy3T
+         o8eefN8FkN6922LvF5PWy+Xu+VDfrvq0YyNM9t210jFSd2lH0yciRdcWJAmjuGH/q3hm
+         QdEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oCF8SynXrWVRYxNQ22uW6uSFDL0I44L0Irm6uzCuBCc=;
-        b=DqnTn5Gg3nfvoU/cKoNs/uPIdzp+h1SGvEA30rWXnRmXhp9BGUW5t5Aanr6dcviiGF
-         OmHfI3CakozMqeyncns9k4F8gtSsNOw9KOQ4UjNl9die0tT372JpST+KQtjaJP9UYKjY
-         yz5HpsN8LKnY3Yv/7ftNnH60pMWZmaAuc4T+EzsBkdAXJrIfeQNeIeXUF85NWU1QnhN8
-         1psaMgts5cn6yY2xaKS7r5bC8jZBlDQRaMwx4BAyRnhJNuB4CbbQctVuCs98DXCKnOaw
-         HYed8lSdv+ZjnBHoM/474ElrRD58zdmnOgryAUgkb8xJG6LtZZuljWjMu6RZqcBXnvHA
-         QJxw==
-X-Gm-Message-State: AOAM532jaIdA4VAmo/HeIhAcwNV9dO1/WVJ3vZN7dl0jE6sDpG5FajeE
-        mvaYuw24/C9aWA0JCRhSGDd/nUjz7wovFw==
-X-Google-Smtp-Source: ABdhPJybptPbF4/1Q7e1paiatpmUVApwJAseaJOEaCM+dgpba+3RlGvV8tZ4QucnKe3c0/wuHvfsdw==
-X-Received: by 2002:a17:906:564d:: with SMTP id v13mr2231056ejr.217.1602058090835;
-        Wed, 07 Oct 2020 01:08:10 -0700 (PDT)
+        bh=N9BB7E4iGMc/0xci5wMPtXbQzs5kI/9VbBMLqTlLSE8=;
+        b=eJ151H/hX4TarMNe56qDRoBXYo+vBTeVDDQNpKcW3AviPPt3mUvHPOjU+CNcv3M1NW
+         EDhmXKzAGTeUlFPT5qG6jKmEuoKmPxcRjDIAS7WxnX2HyndtYdwy4oeK+MoFVoLfrYI3
+         U7npmSG6G3lKlHLpDQkJrTjYbNYzsJWaSp+UK71cAOas7SOD8yDZ/54Y70IKilzA1EcH
+         73ioXWvUANhCMyPR+t0wwDBDQ/cIm1xkJBEbNkawEYHn2Y1lrfEt4/5mE+f6Lf8n6qJU
+         L1h3vvumWfxHsCmhnxadJiduOAUtUlCYIdMtHLzBUevr+wX82rOoXTILShZpYhwcBhJQ
+         i34Q==
+X-Gm-Message-State: AOAM530f1tNG0SvCephVeZSLSV2zdKFUMLJjt1YKYGO48T47BPoJeDgQ
+        Q/+xCBBeXGEgSw2LZDx3tnoC/g==
+X-Google-Smtp-Source: ABdhPJypq5afOnV5h1ZSBHO4fnEsWDyM831RAyRh/f+UBTgfm4W7zKgvvkr6dtv2ORMIalObWbBJLQ==
+X-Received: by 2002:a05:6402:1612:: with SMTP id f18mr2253541edv.166.1602058092223;
+        Wed, 07 Oct 2020 01:08:12 -0700 (PDT)
 Received: from starbuck.lan (cag06-3-82-243-161-21.fbx.proxad.net. [82.243.161.21])
-        by smtp.googlemail.com with ESMTPSA id p11sm888645edu.93.2020.10.07.01.08.09
+        by smtp.googlemail.com with ESMTPSA id p11sm888645edu.93.2020.10.07.01.08.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2020 01:08:10 -0700 (PDT)
+        Wed, 07 Oct 2020 01:08:11 -0700 (PDT)
 From:   Jerome Brunet <jbrunet@baylibre.com>
 To:     Wolfram Sang <wsa@kernel.org>, Kevin Hilman <khilman@baylibre.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Nicolas Belin <nbelin@baylibre.com>, linux-i2c@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] i2c: meson: keep peripheral clock enabled
-Date:   Wed,  7 Oct 2020 10:07:50 +0200
-Message-Id: <20201007080751.1259442-3-jbrunet@baylibre.com>
+Cc:     Nicolas Belin <nbelin@baylibre.com>, linux-i2c@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH 3/3] i2c: meson: fixup rate calculation with filter delay
+Date:   Wed,  7 Oct 2020 10:07:51 +0200
+Message-Id: <20201007080751.1259442-4-jbrunet@baylibre.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20201007080751.1259442-1-jbrunet@baylibre.com>
 References: <20201007080751.1259442-1-jbrunet@baylibre.com>
@@ -65,68 +65,75 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SCL rate appears to be different than what is expected. For example,
-We get 164kHz on i2c3 of the vim3 when 400kHz is expected. This is
-partially due to the peripheral clock being disabled when the clock is
-set.
+From: Nicolas Belin <nbelin@baylibre.com>
 
-Let's keep the peripheral clock on after probe to fix the problem. This
-does not affect the SCL output which is still gated when i2c is idle.
+Apparently, 15 cycles of the peripheral clock are used by the controller
+for sampling and filtering. Because this was not known before, the rate
+calculation is slightly off.
 
-Fixes: 09af1c2fa490 ("i2c: meson: set clock divider in probe instead of setting it for each transfer")
+Clean up and fix the calculation taking this filtering delay into account.
+
+Fixes: 30021e3707a7 ("i2c: add support for Amlogic Meson I2C controller")
+Signed-off-by: Nicolas Belin <nbelin@baylibre.com>
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/i2c/busses/i2c-meson.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/i2c/busses/i2c-meson.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-index dac0d2a00cec..e7ec2ab2a220 100644
+index e7ec2ab2a220..ef73a42577cc 100644
 --- a/drivers/i2c/busses/i2c-meson.c
 +++ b/drivers/i2c/busses/i2c-meson.c
-@@ -370,16 +370,12 @@ static int meson_i2c_xfer_messages(struct i2c_adapter *adap,
- 	struct meson_i2c *i2c = adap->algo_data;
- 	int i, ret = 0;
+@@ -34,10 +34,8 @@
+ #define REG_CTRL_ACK_IGNORE	BIT(1)
+ #define REG_CTRL_STATUS		BIT(2)
+ #define REG_CTRL_ERROR		BIT(3)
+-#define REG_CTRL_CLKDIV_SHIFT	12
+-#define REG_CTRL_CLKDIV_MASK	GENMASK(21, 12)
+-#define REG_CTRL_CLKDIVEXT_SHIFT 28
+-#define REG_CTRL_CLKDIVEXT_MASK	GENMASK(29, 28)
++#define REG_CTRL_CLKDIV		GENMASK(21, 12)
++#define REG_CTRL_CLKDIVEXT	GENMASK(29, 28)
  
--	clk_enable(i2c->clk);
--
- 	for (i = 0; i < num; i++) {
- 		ret = meson_i2c_xfer_msg(i2c, msgs + i, i == num - 1, atomic);
- 		if (ret)
- 			break;
+ #define REG_SLV_ADDR		GENMASK(7, 0)
+ #define REG_SLV_SDA_FILTER	GENMASK(10, 8)
+@@ -46,6 +44,7 @@
+ #define REG_SLV_SCL_LOW_EN	BIT(28)
+ 
+ #define I2C_TIMEOUT_MS		500
++#define FILTER_DELAY		15
+ 
+ enum {
+ 	TOKEN_END = 0,
+@@ -140,19 +139,21 @@ static void meson_i2c_set_clk_div(struct meson_i2c *i2c, unsigned int freq)
+ 	unsigned long clk_rate = clk_get_rate(i2c->clk);
+ 	unsigned int div;
+ 
+-	div = DIV_ROUND_UP(clk_rate, freq * i2c->data->div_factor);
++	div = DIV_ROUND_UP(clk_rate, freq);
++	div -= FILTER_DELAY;
++	div = DIV_ROUND_UP(div, i2c->data->div_factor);
+ 
+ 	/* clock divider has 12 bits */
+-	if (div >= (1 << 12)) {
++	if (div > GENMASK(11, 0)) {
+ 		dev_err(i2c->dev, "requested bus frequency too low\n");
+-		div = (1 << 12) - 1;
++		div = GENMASK(11, 0);
  	}
  
--	clk_disable(i2c->clk);
--
- 	return ret ?: i;
- }
+-	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIV_MASK,
+-			   (div & GENMASK(9, 0)) << REG_CTRL_CLKDIV_SHIFT);
++	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIV,
++			   FIELD_PREP(REG_CTRL_CLKDIV, div & GENMASK(9, 0)));
  
-@@ -448,7 +444,7 @@ static int meson_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
+-	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIVEXT_MASK,
+-			   (div >> 10) << REG_CTRL_CLKDIVEXT_SHIFT);
++	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIVEXT,
++			   FIELD_PREP(REG_CTRL_CLKDIVEXT, div >> 10));
  
--	ret = clk_prepare(i2c->clk);
-+	ret = clk_prepare_enable(i2c->clk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "can't prepare clock\n");
- 		return ret;
-@@ -470,7 +466,7 @@ static int meson_i2c_probe(struct platform_device *pdev)
- 
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret < 0) {
--		clk_unprepare(i2c->clk);
-+		clk_disable_unprepare(i2c->clk);
- 		return ret;
- 	}
- 
-@@ -488,7 +484,7 @@ static int meson_i2c_remove(struct platform_device *pdev)
- 	struct meson_i2c *i2c = platform_get_drvdata(pdev);
- 
- 	i2c_del_adapter(&i2c->adap);
--	clk_unprepare(i2c->clk);
-+	clk_disable_unprepare(i2c->clk);
- 
- 	return 0;
- }
+ 	/* Disable HIGH/LOW mode */
+ 	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_EN, 0);
 -- 
 2.25.4
 
