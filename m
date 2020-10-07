@@ -2,135 +2,142 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 784F0285E50
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Oct 2020 13:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29701285FBF
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Oct 2020 15:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbgJGLkc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Oct 2020 07:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbgJGLkb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Oct 2020 07:40:31 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B9FC061755;
-        Wed,  7 Oct 2020 04:40:29 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id t21so1799365eds.6;
-        Wed, 07 Oct 2020 04:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=k0aeJ1aYDeTbfQgHa1bFP6cUwbAIO3u/WkE2x9DvX8Y=;
-        b=lL6tR969hOKqmM8s5zNN//ayAtdv7Ochna4uq6PZS54QF5l4MU+t4smAXv2EhtFOqi
-         0nBsyOoRstNSS4yzZ0OpGMCmjhoDIJprstf5+YlImipSM6XjE3oqFGtuX/iLdMrQ/heO
-         zAm7Vec+A9T6Dl9ep+/AgFwyns8sTn5gRSSp62jRC/It1TbFyx+Mm+gkpEK0kMY3k1hX
-         acrMmRVLwp7XiIzJ8ADtFKlnpsGI1Lkqv8/5bm5xPO6d5h7uosjpQcP/5RLaC7pMcQMC
-         uzBZofb6QC1JUw3n/1DJJ90EGnn2ZXzGMfR6Yxzk9H9S0EPphVCovR8pf9hEisWrqtIV
-         PxbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:references:date
-         :in-reply-to:message-id:user-agent:mime-version;
-        bh=k0aeJ1aYDeTbfQgHa1bFP6cUwbAIO3u/WkE2x9DvX8Y=;
-        b=fjB8B/clBY5Qt7Fw6Rd9AGKdSP/tpIgDMX6HUYD6ClIEifjeiuqwhDL8ybgiGBVQgO
-         PspXnkjVaxUXJZScNfRd6O2eVBEEonPrWKj/TXQ8GSjqnr780ILpcTm4u695z3ZElO8I
-         dQDX8cO9jya/GMxLLc0VY4khyUCd76ivBSJDjP5OTVhEvCK/EHd+d/61yS4csbZ0WKXf
-         TDMCo3i4JL5US+WBI98EnIY1dLzGI7PTeuKu46fni+u6V4BPYMganje8Bt6YZw5NHl+s
-         ZwFuMA70VXCLomFSgcv+xy7TtgeqSKM9cdjcgKkN+2c93fHuLi7Cw39ZV/BDQP54vzhw
-         Cigg==
-X-Gm-Message-State: AOAM530vV8jOvREi+vo9nXLvg9/DMH767RnOlXRGnyhYDTjf6v3P9wLZ
-        4KATQVsDO/EM172BcqBvzzA=
-X-Google-Smtp-Source: ABdhPJwJ9X8Pq8LdGx1IPQXF6Ck6Bt3s9OPFOqe1bc1uSKlyPS0JUsrgQKWA19ob02V6jsPNKYXNvg==
-X-Received: by 2002:aa7:dbc5:: with SMTP id v5mr3195373edt.54.1602070828096;
-        Wed, 07 Oct 2020 04:40:28 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
-        by smtp.gmail.com with ESMTPSA id r21sm1319295eda.3.2020.10.07.04.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2020 04:40:26 -0700 (PDT)
-Sender: Peter Korsgaard <jacmet@gmail.com>
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
-        (envelope-from <peter@korsgaard.com>)
-        id 1kQ7o2-0002tm-0t; Wed, 07 Oct 2020 13:40:26 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-i2c@vger.kernel.org, andrew@lunn.ch,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
-Subject: Re: [PATCH 1/1] i2c: ocores: fix polling mode workaround on FU540-C000 SoC
-References: <1602006796-273724-1-git-send-email-sagar.kadam@sifive.com>
-        <1602006796-273724-2-git-send-email-sagar.kadam@sifive.com>
-Date:   Wed, 07 Oct 2020 13:40:26 +0200
-In-Reply-To: <1602006796-273724-2-git-send-email-sagar.kadam@sifive.com>
-        (Sagar Shrikant Kadam's message of "Tue, 6 Oct 2020 10:53:16 -0700")
-Message-ID: <87imbm4639.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1728362AbgJGNIK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Oct 2020 09:08:10 -0400
+Received: from mga17.intel.com ([192.55.52.151]:46484 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728360AbgJGNIJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 7 Oct 2020 09:08:09 -0400
+IronPort-SDR: gLhSnojKRRCFd8v2/aQgqZwO/wOw2FwDPn11CTGgb4G+VUtr8D42WwQqm+Hl/LAGB/tcrv060M
+ 4FcSTnX2RIWA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9766"; a="144848066"
+X-IronPort-AV: E=Sophos;i="5.77,346,1596524400"; 
+   d="scan'208";a="144848066"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2020 06:08:08 -0700
+IronPort-SDR: hlosZPgWJYyzIlRRCsTCeqlwPZaQ10RDs5XScimiBjcpHkZRS/xzIY665gWJ+uyZBG2j5WAX7Z
+ RGwDoEqKYN7w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,346,1596524400"; 
+   d="scan'208";a="354890493"
+Received: from unknown (HELO [10.237.72.56]) ([10.237.72.56])
+  by orsmga007.jf.intel.com with ESMTP; 07 Oct 2020 06:08:05 -0700
+Subject: Re: Designeware I2C slave confusing IC_INTR_STOP_DET handle
+To:     Michael.Wu@vatics.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com
+Cc:     linux-i2c@vger.kernel.org, morgan.chang@vatics.com,
+        dean.hsiao@vatics.com, paul.chen@vatics.com
+References: <5DB475451BAA174CB158B5E897FC1525B1293AB2@MBS07.vivotek.tw>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <655eb758-c94b-d319-1866-6f1db413d337@linux.intel.com>
+Date:   Wed, 7 Oct 2020 16:08:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <5DB475451BAA174CB158B5E897FC1525B1293AB2@MBS07.vivotek.tw>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
->>>>> "Sagar" == Sagar Shrikant Kadam <sagar.kadam@sifive.com> writes:
+Hi
 
- > The FU540-C000 has a broken IRQ and support was added earlier
- > so that it will operate in polling mode, but seems to work only
- > in case interrupts property is missing from the i2c0 dt-node.
- > This should not be the case and the driver should handle polling
- > mode with the interrupt property present in i2c0 node of the
- > device tree.
- > So check if it's the FU540-C000 soc and enable polling mode master
- > xfers, as the IRQ for this chip is broken.
+On 10/7/20 8:10 AM, Michael.Wu@vatics.com wrote:
+> These above scenarios appears when OS is busy or too late to handle I2C
+> interrupts. Current i2c_dw_irq_handler_slave() seems that last
+> IC_INTR_RX_FULL will be handled before IC_INTR_STOP_DET rising, or
+> IC_INTR_STOP_DET will not be cleared before last IC_INTR_RX_FULL handled.
+> I think it can't be guaranteed.
+> 
+Indeed i2c_dw_irq_handler_slave() handling looks doubtful when I look at 
+it after your report. Especially many of those 
+i2c_dw_read_clear_intrbits_slave() calls. I think there are good changes 
+to miss some interrupts.
 
- > Fixes commit c45d4ba86731 ("i2c: ocores: add polling mode workaround
- > for Sifive FU540-C000 SoC")
+Unfortunately I don't have right now a setup to try myself but could you 
+try these ideas to read and clear interrupt status in one place only and 
+move I2C_SLAVE_WRITE_REQUESTED reporting after I2C_SLAVE_WRITE_RECEIVED 
+like in a patch below?
 
- > Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
- > ---
- >  drivers/i2c/busses/i2c-ocores.c | 22 +++++++++++++---------
- >  1 file changed, 13 insertions(+), 9 deletions(-)
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c 
+b/drivers/i2c/busses/i2c-designware-slave.c
+index 44974b53a626..97131e888e24 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -159,7 +159,6 @@ static int i2c_dw_irq_handler_slave(struct 
+dw_i2c_dev *dev)
+  	u32 raw_stat, stat, enabled, tmp;
+  	u8 val = 0, slave_activity;
 
- > diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
- > index f5fc75b..4405244 100644
- > --- a/drivers/i2c/busses/i2c-ocores.c
- > +++ b/drivers/i2c/busses/i2c-ocores.c
- > @@ -686,17 +686,21 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 
- >  	init_waitqueue_head(&i2c->wait);
- 
- > +	/*
- > +	 * Set OCORES_FLAG_BROKEN_IRQ to enable workaround for
- > +	 * FU540-C000 SoC in polling mode.
- > +	 * Since the SoC does have interrupt it's dt has the interrupt
- > +	 * defined but it should be bypassed in driver as this SoC has
- > +	 * a broken IRQ, hence update the master_xfer to use polling
- > +	 * transfers.
- > +	 */
- > +	match = of_match_node(ocores_i2c_match, pdev->dev.of_node);
- > +	if (match && (long)match->data == TYPE_SIFIVE_REV0)
- > +		i2c->flags |= OCORES_FLAG_BROKEN_IRQ;
- > +
- >  	irq = platform_get_irq(pdev, 0);
- > -	if (irq == -ENXIO) {
- > +	if (i2c->flags == OCORES_FLAG_BROKEN_IRQ || irq == -ENXIO) {
+-	regmap_read(dev->map, DW_IC_INTR_STAT, &stat);
+  	regmap_read(dev->map, DW_IC_ENABLE, &enabled);
+  	regmap_read(dev->map, DW_IC_RAW_INTR_STAT, &raw_stat);
+  	regmap_read(dev->map, DW_IC_STATUS, &tmp);
+@@ -168,13 +167,11 @@ static int i2c_dw_irq_handler_slave(struct 
+dw_i2c_dev *dev)
+  	if (!enabled || !(raw_stat & ~DW_IC_INTR_ACTIVITY) || !dev->slave)
+  		return 0;
 
-NIT: flags is a bitmask, so i2c->flags & OCORES_FLAG_BROKEN_IRQ would be
-better, even if there currently doesn't exist any other flags.
++	stat = i2c_dw_read_clear_intrbits_slave(dev);
+  	dev_dbg(dev->dev,
+  		"%#x STATUS SLAVE_ACTIVITY=%#x : RAW_INTR_STAT=%#x : INTR_STAT=%#x\n",
+  		enabled, slave_activity, raw_stat, stat);
 
-TYPE_SIFIVE_REV0 is also set for two compatibles:
+-	if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET))
+-		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
+-
+  	if (stat & DW_IC_INTR_RD_REQ) {
+  		if (slave_activity) {
+  			if (stat & DW_IC_INTR_RX_FULL) {
+@@ -188,11 +185,9 @@ static int i2c_dw_irq_handler_slave(struct 
+dw_i2c_dev *dev)
+  						 val);
+  				}
+  				regmap_read(dev->map, DW_IC_CLR_RD_REQ, &tmp);
+-				stat = i2c_dw_read_clear_intrbits_slave(dev);
+  			} else {
+  				regmap_read(dev->map, DW_IC_CLR_RD_REQ, &tmp);
+  				regmap_read(dev->map, DW_IC_CLR_RX_UNDER, &tmp);
+-				stat = i2c_dw_read_clear_intrbits_slave(dev);
+  			}
+  			if (!i2c_slave_event(dev->slave,
+  					     I2C_SLAVE_READ_REQUESTED,
+@@ -207,7 +202,6 @@ static int i2c_dw_irq_handler_slave(struct 
+dw_i2c_dev *dev)
+  			regmap_read(dev->map, DW_IC_CLR_RX_DONE, &tmp);
 
-        {
-                .compatible = "sifive,fu540-c000-i2c",
-                .data = (void *)TYPE_SIFIVE_REV0,
-        },
-        {
-                .compatible = "sifive,i2c0",
-                .data = (void *)TYPE_SIFIVE_REV0,
-        },
+  		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
+-		stat = i2c_dw_read_clear_intrbits_slave(dev);
+  		return 1;
+  	}
 
-Are both affected by this issue? if not, we will need to extend the code
-to handle them differently.
+@@ -219,9 +213,11 @@ static int i2c_dw_irq_handler_slave(struct 
+dw_i2c_dev *dev)
+  			dev_vdbg(dev->dev, "Byte %X acked!", val);
+  	} else {
+  		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
+-		stat = i2c_dw_read_clear_intrbits_slave(dev);
+  	}
 
-Other than that, it looks OK to me.
++	if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET))
++		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
++
+  	return 1;
+  }
 
--- 
-Bye, Peter Korsgaard
+@@ -230,7 +226,6 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, 
+void *dev_id)
+  	struct dw_i2c_dev *dev = dev_id;
+  	int ret;
+
+-	i2c_dw_read_clear_intrbits_slave(dev);
+  	ret = i2c_dw_irq_handler_slave(dev);
+  	if (ret > 0)
+  		complete(&dev->cmd_complete);
