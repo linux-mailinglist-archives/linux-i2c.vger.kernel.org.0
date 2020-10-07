@@ -2,137 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6232855C8
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Oct 2020 03:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C27B28582C
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Oct 2020 07:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbgJGBE6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Oct 2020 21:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726487AbgJGBE5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Oct 2020 21:04:57 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05310C061755;
-        Tue,  6 Oct 2020 18:04:57 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id f19so347028pfj.11;
-        Tue, 06 Oct 2020 18:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0/bWrGoCkUT1XKG15S3LcPCeuj/9H6SulVmeatRXh2o=;
-        b=o3Pwy5wYAD2KjHFxqx8zJn29Vs5mbvXSBjNxI6P7OabTpsU/U0SGpYd4FsvkK/Ndjy
-         o6haFaQLhrlga1BZAonVWdmnYb32RwDlKDv1iNZSfD0mkYhL6AlLSFycnS+oYFh7ZUp1
-         TkX5mqfIN4mnxWvwmM0DfqKMDy+og8IZ+jNqBte63Si7LyqSrYcSS5VQLfQgB80bmtjl
-         SLVjNURG8b+QRtDeh3cy+5wKhP+/ucXDk7OVxpSlq1MvLPkb9wEBt0slTTHRiZnkT43r
-         0Da6jEuUUaW5qy0DOhRMGh0Fme25JQoAZtM8rFDZY+jZY5w1aTzbtncjcS61sVCE0zAC
-         N0gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0/bWrGoCkUT1XKG15S3LcPCeuj/9H6SulVmeatRXh2o=;
-        b=a1G6fi1EodDtoVqkE/ZT2MnTfw0f2v/KMbVKBUpDm+H0nyJo6IMNpfa4xf0hApNsX1
-         aGWNwS08gSEgXttXhYrR42K4tTGJd/VuXoRBbLtVhrewU6jloBUPZJZ+1uwelYC2ethb
-         zzK2ZRdBzJKbY3EdHRSJlRr3P7YO16rQEJi1QXF0L3RuLxdbXJAmBSKrTnEX+kF1R3zq
-         z2RCdow+vBfYQYCIbnH4sHRbJNIYS3yhQbJroWbyCubaxyea5SeuQ+ov/JzW7JQSzNz/
-         7atR/dTqzRirDFdE2VQDvJLmRow1iJXBHRBTBahZA2V0WcFIBd807CpanfCMKmXgO8Zx
-         sWbg==
-X-Gm-Message-State: AOAM530ox5GdVqIrBjAmv6bpsb1PtVtM9IjCvT623EvKyVDR+nZwbeoN
-        +xQBnXXcJSkVO2ckoaxGuTz9orqvXvpUGg==
-X-Google-Smtp-Source: ABdhPJwHBE/6svDofq3JI1Nvl9AaFlg1oX0F7Zhinc7Yx4XbSqxrhmfr8wUc0v2ZFV5xqE5jZ9MdIA==
-X-Received: by 2002:aa7:9e4a:0:b029:152:54d1:bffa with SMTP id z10-20020aa79e4a0000b029015254d1bffamr663621pfq.6.1602032696538;
-        Tue, 06 Oct 2020 18:04:56 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id o62sm458923pfb.172.2020.10.06.18.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 18:04:55 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 18:04:49 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
- in common schemas
-Message-ID: <20201007010449.GQ1009802@dtor-ws>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-5-robh@kernel.org>
+        id S1726138AbgJGFfy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Oct 2020 01:35:54 -0400
+Received: from mail.vivotek.com ([60.248.39.150]:35036 "EHLO mail.vivotek.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726096AbgJGFfy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 7 Oct 2020 01:35:54 -0400
+X-Greylist: delayed 1527 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Oct 2020 01:35:53 EDT
+Received: from pps.filterd (vivotekpps.vivotek.com [127.0.0.1])
+        by vivotekpps.vivotek.com (8.16.0.42/8.16.0.42) with SMTP id 09753swT005755;
+        Wed, 7 Oct 2020 13:10:13 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivotek.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=dkim; bh=vDsNzoMwII9+Wqwg/Geyy6Fns5VwPkDCjigM9D1SCOw=;
+ b=TNVwiEl+q178iezQClAUbM0ubhhskVCgHeLifekaRhFypaX5GD7myD7hh2H4Af7D40py
+ tmfOuhUGQtCRToY6QpFRQy2wgCUyr2Z8exSw5GiKcHFS6bb7KLhhXOeUgNGKbBbNd6F1
+ NENpROXu8RscUvaVVtrj0lz6Ptv5u6/5Rl0= 
+Received: from cas02.vivotek.tw ([192.168.0.59])
+        by vivotekpps.vivotek.com with ESMTP id 33xbr2tnvg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 07 Oct 2020 13:10:12 +0800
+Received: from MBS07.vivotek.tw ([fe80::2027:4d67:6c01:78d8]) by
+ CAS02.vivotek.tw ([fe80::157e:3677:ef5b:27a2%11]) with mapi id
+ 14.03.0487.000; Wed, 7 Oct 2020 13:10:12 +0800
+From:   <Michael.Wu@vatics.com>
+To:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>
+CC:     <linux-i2c@vger.kernel.org>, <morgan.chang@vatics.com>,
+        <dean.hsiao@vatics.com>, <paul.chen@vatics.com>
+Subject: Designeware I2C slave confusing IC_INTR_STOP_DET handle
+Thread-Topic: Designeware I2C slave confusing IC_INTR_STOP_DET handle
+Thread-Index: AdacaCEF1S068DPwQGOIeCihPcVtGg==
+Date:   Wed, 7 Oct 2020 05:10:11 +0000
+Message-ID: <5DB475451BAA174CB158B5E897FC1525B1293AB2@MBS07.vivotek.tw>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.17.134]
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-07_03:2020-10-06,2020-10-07 signatures=0
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 01:38:30PM -0500, Rob Herring wrote:
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As common/shared
-> schema are included by other schemas, they should always allow for
-> additionalProperties.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-For input:
-
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
--- 
-Dmitry
+SGkgU2lyLA0KDQpNeSBJMkMgc2xhdmUgc29tZXRpbWVzIGdldHMgb25seSAyIGludGVycnVwdHM6
+IG9uZSBpcyBJQ19JTlRSX1JYX0ZVTEwgYW5kDQp0aGUgb3RoZXIgaXMgSUNfSU5UUl9SWF9GVUxM
+IHdpdGggSUNfSU5UUl9TVE9QX0RFVC4gVGhlIDJuZCBpbnRlcnJ1cHQNCmNhdXNlcyB0d28gcHJv
+YmxlbXM6DQoNCjEuIElDX0lOVFJfU1RPUF9ERVQgaXMgcmlzaW5nIGFmdGVyIGkyY19kd19yZWFk
+X2NsZWFyX2ludHJiaXRzX3NsYXZlKCkNCiAgIGRvbmU6IEl0IHNlZW1zIGludmFsaWRhdGVkIGJl
+Y2F1c2UgV1JJVEVfUkVRVUVTVEVEIGlzIGRvbmUgYWZ0ZXIgdGhlDQogICAxc3QgV1JJVEVfUkVD
+RUlWRUQuDQoNCiMgaTJjc2V0IC1mIC15IDIgMHg0MiAweDAwIDB4NDE7IGRtZXNnIC1jDQpbMF1b
+Y2xlYXJfaW50cmJpdHNdMHgxIFNUQVRVUyBTTEFWRV9BQ1RJVklUWT0weDEgOiBSQVdfSU5UUl9T
+VEFUPTB4NTE0IDogSU5UUl9TVEFUPTB4NA0KWzFdW2lycV9oYW5kbGVyICBdMHgxIFNUQVRVUyBT
+TEFWRV9BQ1RJVklUWT0weDEgOiBSQVdfSU5UUl9TVEFUPTB4NTE0IDogSU5UUl9TVEFUPTB4NA0K
+V1JJVEVfUkVDRUlWRUQNClswXVtjbGVhcl9pbnRyYml0c10weDEgU1RBVFVTIFNMQVZFX0FDVElW
+SVRZPTB4MSA6IFJBV19JTlRSX1NUQVQ9MHg1MTQgOiBJTlRSX1NUQVQ9MHg0DQpbMV1baXJxX2hh
+bmRsZXIgICBdMHgxIFNUQVRVUyBTTEFWRV9BQ1RJVklUWT0weDAgOiBSQVdfSU5UUl9TVEFUPTB4
+NzE0IDogSU5UUl9TVEFUPTB4MjA0DQpXUklURV9SRVFVRVNURUQNCldSSVRFX1JFQ0VJVkVEDQpb
+MF1bY2xlYXJfaW50cmJpdHNdMHgxIFNUQVRVUyBTTEFWRV9BQ1RJVklUWT0weDAgOiBSQVdfSU5U
+Ul9TVEFUPTB4NzEwIDogSU5UUl9TVEFUPTB4MjAwDQpbMV1baXJxX2hhbmRsZXIgICBdMHgxIFNU
+QVRVUyBTTEFWRV9BQ1RJVklUWT0weDAgOiBSQVdfSU5UUl9TVEFUPTB4NTEwIDogSU5UUl9TVEFU
+PTB4MA0KU1RPUA0KWzJdW2NsZWFyX2ludHJiaXRzXTB4MSBTVEFUVVMgU0xBVkVfQUNUSVZJVFk9
+MHgwIDogUkFXX0lOVFJfU1RBVD0weDUxMCA6IElOVFJfU1RBVD0weDANCg0KICB0MTogSVNSIHdp
+dGggdGhlIDFzdCBJQ19JTlRSX1JYX0ZVTEwuDQogIHQyOiBDbGVhciBsaXN0ZWQgSUNfSU5UUiBi
+aXRzIGJ5IGkyY19kd19yZWFkX2NsZWFyX2ludHJiaXRzX3NsYXZlKCkuDQogIHQzOiBFbnRlciBp
+MmNfZHdfaXJxX2hhbmRsZXJfc2xhdmUoKSBhbmQgdGhlbiBkbw0KICAgICAgaTJjX3NsYXZlX2V2
+ZW50KFdSSVRFX1JFQ0VJVkVEKSBiZWNhdXNlDQogICAgICBpZiAoc3RhdCAmIERXX0lDX0lOVFJf
+UlhfRlVMTCkuDQogIHQ0OiBJU1Igd2l0aCB0aGUgMm5kIElDX0lOVFJfUlhfRlVMTC4NCiAgdDU6
+IENsZWFyIGxpc3RlZCBJQ19JTlRSIGJpdHMgYnkgaTJjX2R3X3JlYWRfY2xlYXJfaW50cmJpdHNf
+c2xhdmUoKSwNCiAgICAgIHdoaWxlIElDX0lOVFJfU1RPUF9ERVQgaGFzIG5vdCByaXNlbiB5ZXQu
+DQogIHQ2OiBFbnRlciBpMmNfZHdfaXJxX2hhbmRsZXJfc2xhdmUoKSBhbmQgdGhlbiBJQ19JTlRS
+X1NUT1BfREVUIGlzDQogICAgICByaXNpbmcuIGkyY19zbGF2ZV9ldmVudChXUklURV9SRVFVRVNU
+RUQpIHdpbGwgYmUgZG9uZSBmaXJzdCBiZWNhdXNlDQogICAgICBpZiAoKHN0YXQgJiBEV19JQ19J
+TlRSX1JYX0ZVTEwpICYmIChzdGF0ICYgRFdfSUNfSU5UUl9TVE9QX0RFVCkpIGFuZA0KICAgICAg
+dGhlbiBkb2luZyBpMmNfc2xhdmVfZXZlbnQoV1JJVEVfUkVDRUlWRUQpLg0KICB0NzogZG8gaTJj
+X3NsYXZlX2V2ZW50KFNUT1ApIGR1ZSB0byBJQ19JTlRSX1NUT1BfREVUIG5vdCBiZSBjbGVhcmVk
+IHlldC4NCg0KMi4gQm90aCBJQ19JTlRSX1NUT1BfREVUIGFuZCBJQ19JTlRSX1JYX0ZVTEwgYXJl
+IHJpc2luZyBiZWZvcmUNCiAgIGkyY19kd19yZWFkX2NsZWFyX2ludHJiaXRzX3NsYXZlKCk6IFNU
+T1AgY2Fubm90IHdhaXQgYmVjYXVzZQ0KICAgSUNfSU5UUl9TVE9QX0RFVCBpcyBjbGVhcmVkIGJ5
+IGkyY19kd19yZWFkX2NsZWFyX2ludHJiaXRzX3NsYXZlKCkuDQoNCiMgaTJjc2V0IC1mIC15IDIg
+MHg0MiAweDAwIDB4NDE7IGRtZXNnIC1jDQpbMF1bY2xlYXJfaW50cmJpdHNdMHgxIFNUQVRVUyBT
+TEFWRV9BQ1RJVklUWT0weDEgOiBSQVdfSU5UUl9TVEFUPTB4NTE0IDogSU5UUl9TVEFUPTB4NA0K
+WzFdW2lycV9oYW5kbGVyICAgXTB4MSBTVEFUVVMgU0xBVkVfQUNUSVZJVFk9MHgxIDogUkFXX0lO
+VFJfU1RBVD0weDUxNCA6IElOVFJfU1RBVD0weDQNCldSSVRFX1JFQ0VJVkVEDQpbMF1bY2xlYXJf
+aW50cmJpdHNdMHgxIFNUQVRVUyBTTEFWRV9BQ1RJVklUWT0weDAgOiBSQVdfSU5UUl9TVEFUPTB4
+NzE0IDogSU5UUl9TVEFUPTB4MjA0DQpbMV1baXJxX2hhbmRsZXIgICBdMHgxIFNUQVRVUyBTTEFW
+RV9BQ1RJVklUWT0weDAgOiBSQVdfSU5UUl9TVEFUPTB4NTE0IDogSU5UUl9TVEFUPTB4NA0KV1JJ
+VEVfUkVDRUlWRUQNCg0KICB0MTogSVNSIHdpdGggdGhlIDFzdCBJQ19JTlRSX1JYX0ZVTEwuDQog
+IHQyOiBDbGVhciBsaXN0ZWQgSUNfSU5UUiBiaXRzIGJ5IGkyY19kd19yZWFkX2NsZWFyX2ludHJi
+aXRzX3NsYXZlKCkuDQogIHQzOiBFbnRlciBpMmNfZHdfaXJxX2hhbmRsZXJfc2xhdmUoKSBhbmQg
+dGhlbiBkbw0KICAgICAgaTJjX3NsYXZlX2V2ZW50KFdSSVRFX1JFQ0VJVkVEKSBiZWNhdXNlDQog
+ICAgICBpZiAoc3RhdCAmIERXX0lDX0lOVFJfUlhfRlVMTCkuDQogIHQ0OiBJU1Igd2l0aCBib3Ro
+IElDX0lOVFJfU1RPUF9ERVQgYW5kIHRoZSAybmQgSUNfSU5UUl9SWF9GVUxMLg0KICB0NTogQ2xl
+YXIgbGlzdGVkIElDX0lOVFIgYml0cyBieSBpMmNfZHdfcmVhZF9jbGVhcl9pbnRyYml0c19zbGF2
+ZSgpLiBUaGUNCiAgICAgIGN1cnJlbnQgSUNfSU5UUl9TVE9QX0RFVCBpcyBjbGVhcmVkIGJ5IHRo
+aXMNCiAgICAgIGkyY19kd19yZWFkX2NsZWFyX2ludHJiaXRzX3NsYXZlKCkuDQogIHQ2OiBFbnRl
+ciBpMmNfZHdfaXJxX2hhbmRsZXJfc2xhdmUoKSBhbmQgdGhlbiBkbw0KICAgICAgaTJjX3NsYXZl
+X2V2ZW50KFdSSVRFX1JFQ0VJVkVEKSBiZWNhdXNlDQogICAgICBpZiAoc3RhdCAmIERXX0lDX0lO
+VFJfUlhfRlVMTCkuDQogIHQ3OiBpMmNfc2xhdmVfZXZlbnQoU1RPUCkgbmV2ZXIgYmUgZG9uZSBi
+ZWNhdXNlIElDX0lOVFJfU1RPUF9ERVQgd2FzDQogICAgICBjbGVhcmVkIGluIHQ1Lg0KDQoNClRo
+ZXNlIGFib3ZlIHNjZW5hcmlvcyBhcHBlYXJzIHdoZW4gT1MgaXMgYnVzeSBvciB0b28gbGF0ZSB0
+byBoYW5kbGUgSTJDDQppbnRlcnJ1cHRzLiBDdXJyZW50IGkyY19kd19pcnFfaGFuZGxlcl9zbGF2
+ZSgpIHNlZW1zIHRoYXQgbGFzdA0KSUNfSU5UUl9SWF9GVUxMIHdpbGwgYmUgaGFuZGxlZCBiZWZv
+cmUgSUNfSU5UUl9TVE9QX0RFVCByaXNpbmcsIG9yDQpJQ19JTlRSX1NUT1BfREVUIHdpbGwgbm90
+IGJlIGNsZWFyZWQgYmVmb3JlIGxhc3QgSUNfSU5UUl9SWF9GVUxMIGhhbmRsZWQuDQpJIHRoaW5r
+IGl0IGNhbid0IGJlIGd1YXJhbnRlZWQuDQoNCi0tDQpCUiwNCk1pY2hhZWwgV3UNCg0K
