@@ -2,130 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF52286B3A
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Oct 2020 00:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8100C286C4C
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Oct 2020 03:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728914AbgJGWsj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Oct 2020 18:48:39 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:38265 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727353AbgJGWsi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Oct 2020 18:48:38 -0400
-X-Greylist: delayed 500 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Oct 2020 18:48:33 EDT
-X-Originating-IP: 90.65.88.165
-Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id D577D1BF203;
-        Wed,  7 Oct 2020 22:48:27 +0000 (UTC)
-Date:   Thu, 8 Oct 2020 00:48:27 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
-Message-ID: <20201007224827.GK2804081@piout.net>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-2-robh@kernel.org>
+        id S1726323AbgJHBBA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Oct 2020 21:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727018AbgJHBBA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Oct 2020 21:01:00 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FDAC0613D2
+        for <linux-i2c@vger.kernel.org>; Wed,  7 Oct 2020 18:01:00 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id h9so3260078ybm.4
+        for <linux-i2c@vger.kernel.org>; Wed, 07 Oct 2020 18:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=YJo9oOffvlMupSs0EYfG2M2Ce6sHSdbY2jHp+565CrY=;
+        b=X9n8lfJ7J5blYgw0xF6HCWOpZnm2PUHJmr7zTLIhWxZmMOtAnUA8Ele9s6iD9cShnp
+         UR+rrsHOHx2YipVhhpFY1nlw2SL9q+EGvOR8rR8QyTrKKSa1DNaMXgPuyAvKVbFatv5I
+         2fZtWNtFaCaNoRQv7vpzSFGAldKa6N5yxDTiL+iD1wiYrdVZ1wqACmwt5zJWX4xZbJH+
+         vCbpDqexsJWWVS1RLvhkpB6h29yEpOFq2APxThFXL+nNuUCK+e5h/KI11/NlRkWlva/P
+         wX0hubhNLcKtsSFP9ty1EdyBqSkfIV4jyVl3jUAYeWGpyk1teOEFjQwVlbg51XcOh9/F
+         d5lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=YJo9oOffvlMupSs0EYfG2M2Ce6sHSdbY2jHp+565CrY=;
+        b=Wp8prXUM3l+5jYry/VLtwkHecboFY5AWA7fMNCXnSSDVEGgUentHBo4+xNPzbjxVgj
+         yOqM4h4rejL65tVfv6CdpA2vKg94j67yrUScInHNEdDqukG44BP0W7iumyXXIlE2Knx8
+         H2j6zShMHr23WKChN/7sK+cadTb+/DwJDJXVEG7b8x9c1ZbT5y9kTiDu5ag/KtCHFRCT
+         9zZfdFUfCN/zB1JZPzMLK+giZKNJQz5oLIPao8kDCRviIjmSWIFPX/zEMW5cjnroBsUe
+         XMFvKGt4tnR9AMF/i9iA2eZIhlVXqHX2jxcxptIcLeY9GS5U9dhSByLLqADAYCu3EBI3
+         Hx3g==
+X-Gm-Message-State: AOAM533YaeBpOl1GzxuKxa1fMQIMKy34CU8SFE6NG8jjaKASZhyey6Vm
+        0A4e9QwOqxYg4JslHvXbZY6yxcOuinO9eVJmZ+U=
+X-Google-Smtp-Source: ABdhPJwc5WX+o5lOxQ7DynIdsh8gegIMeAJowpI8tv9ZXAv3H9az92xHzkKayadgy84wuqMLW12VfxVq7/UBDUBBROI=
+X-Received: by 2002:a25:f803:: with SMTP id u3mr7706545ybd.118.1602118859100;
+ Wed, 07 Oct 2020 18:00:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+Received: by 2002:a05:7000:2346:0:0:0:0 with HTTP; Wed, 7 Oct 2020 18:00:58
+ -0700 (PDT)
+Reply-To: mrsnancychristopher8@gmail.com
+From:   "Mrs.Nancy Christopher" <honbarrzongoibrahim@gmail.com>
+Date:   Wed, 7 Oct 2020 18:00:58 -0700
+Message-ID: <CAKZhgJQe0+UJNQt39JD=23XjDQ1BRdmXOYO-Y76UZ_DBv6Fcfw@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+--=20
+Dear Beloved,
 
-On 05/10/2020 13:38:27-0500, Rob Herring wrote:
-> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> index bc2c7e53a28e..60e93e86ad9d 100644
-> --- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> @@ -68,6 +68,8 @@ required:
->    - clocks
->    - clock-names
->  
-> +unevaluatedProperties: false
+I=E2=80=99m Mrs.Nancy Christopher, 69years old affected with breast cancer,
+the wife of late Brown Christopher,  the Director of High River Gold
+Mines Ltd Burkina Faso West Africa. I am contacting you because of my
+health condition,i need a reliable person, who will handle this
+project accordingly, accomplish my heart desire and utilize this fund.
+I have decided to donate the sum Twenty-Five Million Two Hundred
+Thousand United State Dollars Only ($25,200,000.00) to Charity
+Organizations or to support the Orphans, Motherless Babies,Less
+privileged and free Medical & Medicine Poor People's around the World
+since I don t have any child and do not want the bank take over the
+fund. I don't really know if i am going to survive this stage,
+therefore if you ready to handle this project, kindly response so that
+i will instruct the bank to transfer the fund to your account.
 
-This one could be additionalProperties: false after adding start-year to
-the properties
+Contact my private email only if you are interested
+(mrsnancychristopher8@gmail.com)
 
-> +
->  examples:
->    - |
->      #include <dt-bindings/clock/jz4740-cgu.h>
-> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> index 76bbf8b7555b..d51b236939bf 100644
-> --- a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> @@ -74,6 +74,8 @@ allOf:
->            items:
->              - const: rtc
->  
-> +unevaluatedProperties: false
-
-This one can be simply additionalProperties: false
+Remain blessed in the name of the Lord.
 
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards
+
+Mrs.Nancy Christopher,
