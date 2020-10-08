@@ -2,98 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 345162879A9
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Oct 2020 18:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145D8287E38
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Oct 2020 23:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725941AbgJHQFe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Oct 2020 12:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
+        id S1726719AbgJHVoo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Oct 2020 17:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbgJHQFd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Oct 2020 12:05:33 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF9FC061755;
-        Thu,  8 Oct 2020 09:05:33 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id 33so6342809edq.13;
-        Thu, 08 Oct 2020 09:05:33 -0700 (PDT)
+        with ESMTP id S1725995AbgJHVoo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Oct 2020 17:44:44 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F0BC0613D2;
+        Thu,  8 Oct 2020 14:44:44 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id c22so10245063ejx.0;
+        Thu, 08 Oct 2020 14:44:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=+IxddX4oBk5xd+J6oJQDzodRCbBwVMmnfDSkK4eauMY=;
-        b=PJkgtsftOWBXMcghiv2N5V7s2DI4hHtos1td/PMZB5oE8VKubxXLKA28eJcV9py7uN
-         uMS4163wBmkcYYsUWWD+y6kjGXgPVun3sO17VnUKpKje2Qphzp78/oQe6NOgH0NYSJwx
-         tAt4/i5oD+IEvEE29PDf1WBMxJhshOsn2Nt2Vkq8QgmRlwSUP3TwJSiOapMfhS2J2ACi
-         k/qYpg0rOTn4ZAvh9d/66dMoQOElNdJWN0bNiWhJEi9eWmV2HKP09iYlRzBuUkMk9PSa
-         MumZxYh69Brgba/XzTLHZWtlwpOzaaEgKszQa1ZqZopa7khuV8xRYvD+9wzppU8Afqmi
-         4f2w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OL8+lmrAXXWLp+r3THXbwOuJFsPpc8Sn/rLcUaGJ2o0=;
+        b=AVQ6dqo9sNa/8TQxRe1y96btk3lhED4lonWb4FioNzxOJ3YWRSuPDjUDlgW5dOi93B
+         E8sPjPKEqToa+UsF8KZimkwrZcMcDzyvnxY//h9r+e3+9LmSEYIo4k9sdcak3md+iaNh
+         ZyWSZUfEkvipVhEjNqHwWiExsKuNbeypdL0BKZmUCf2kOWWRBfHyEdorKFOz2xekLrsJ
+         PDyeW2/2i8Wm5x/Qd6O+/qu9hzbXFVKvP4sypMG6Zq6LXJirfwIbYDWgivmUEZ5C4/YO
+         oiZr7VFEqLbiQZ5Lex/4tHIYUY8fdU1P6jWrxbzBo4ojJda0T9KiAAaVjborbTxalI1k
+         naIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:references:date
-         :in-reply-to:message-id:user-agent:mime-version;
-        bh=+IxddX4oBk5xd+J6oJQDzodRCbBwVMmnfDSkK4eauMY=;
-        b=EF7w2ohqGV10tMnmVi0HDKhQ0ytsUhIkxctLgH/JtZP2dEEKKrcZK05x9wknfK9gdV
-         L4uP5insF/N+5wxnjIxSIf2szQn+wfeD/5vA1ve5ZC5WaSjub0kpulJ//u/Hhgq3zrYB
-         s28/EtDPOmIE65nNVpZs9kUZhzAlmdtiK2mhksjn7Lyyyqugcd96y6+Ts1MAATE0CUGH
-         zPLdU3XC6lDro1fqcvuceSjZhONMTFAyZBrQRTxwx8xjC7XFUa/O5tyON3/cPHWDC1h9
-         5GcmBJzcD32E3CUHRSbsyYX4BmgKmP2mf6KvkBmQxVwqW7YU/kRAb3kY1WMao8K08Gfs
-         k8gg==
-X-Gm-Message-State: AOAM532LV8l63ZwyUMSUwsExfu8P4ddmt//row+Cm1D0jI4h5KJPquNH
-        k680Qe52HmKp9PbN5ZV9U/g=
-X-Google-Smtp-Source: ABdhPJwuTzS32L+O61zHpVqMV/uEtrOc60vbDockApCbavsHqfioCUhtSmoVPbaRjgAo16HxjFweRw==
-X-Received: by 2002:a50:f613:: with SMTP id c19mr9803727edn.81.1602173132148;
-        Thu, 08 Oct 2020 09:05:32 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
-        by smtp.gmail.com with ESMTPSA id j24sm3863617edq.29.2020.10.08.09.05.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OL8+lmrAXXWLp+r3THXbwOuJFsPpc8Sn/rLcUaGJ2o0=;
+        b=gSpHH3ss5PFWtEhV5ovkZCziW6WgGgnKk6UDAjJMAMi+VbFS4UQDzIsAKa5XkHEBU6
+         WwH/lhtsm+dAhbhhhnwy87ZRfX69x/i7qfS7e/7W60IRgOMEn0wI2VLhKBJxiLi2kGws
+         NyJeXs5/5ZQLM2dQj17Kcruy26E01XfEbNvGaSGdyE5zNeJK0+pj3umg5izYmS/JVuca
+         K+oDmPEtZiia2i8VUeVYg2D1PZ2tt5KlNI12r/VR3K5zUzr/7Y0QKm7ar1jMXiYx4Cn5
+         eW/29u98qKpgh5pd/SNNpPgKH7MGSGOL+QdBoD0kjJEa+mr2SJTaCSqDLezIXKoBrgTc
+         +a2w==
+X-Gm-Message-State: AOAM530dvwXWWv5Psd7n/giGwlPnAi1zuVfy054Gf8i5BrohJy/3vD9z
+        i2tcVNr+gcCi737QQOmnXhQ=
+X-Google-Smtp-Source: ABdhPJzF+Qci1OtJC3oz+/z1/FAYSrNrBvkc4xolg+Nt5Q1mvU4lidSaZfZ7WNFlSOtYUb9Tp5GbeQ==
+X-Received: by 2002:a17:906:7c4b:: with SMTP id g11mr6062120ejp.469.1602193483082;
+        Thu, 08 Oct 2020 14:44:43 -0700 (PDT)
+Received: from localhost.localdomain ([188.24.159.61])
+        by smtp.gmail.com with ESMTPSA id i8sm4831800ejg.84.2020.10.08.14.44.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2020 09:05:31 -0700 (PDT)
-Sender: Peter Korsgaard <jacmet@gmail.com>
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
-        (envelope-from <peter@korsgaard.com>)
-        id 1kQYQ6-0007Is-Hl; Thu, 08 Oct 2020 18:05:30 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Sagar Kadam <sagar.kadam@openfive.com>
-Cc:     "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv\@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-i2c\@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "andrew\@lunn.ch" <andrew@lunn.ch>,
-        "Paul Walmsley \( Sifive\)" <paul.walmsley@sifive.com>,
-        "palmer\@dabbelt.com" <palmer@dabbelt.com>,
-        "aou\@eecs.berkeley.edu" <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH 1/1] i2c: ocores: fix polling mode workaround on FU540-C000 SoC
-References: <1602006796-273724-1-git-send-email-sagar.kadam@sifive.com>
-        <1602006796-273724-2-git-send-email-sagar.kadam@sifive.com>
-        <87imbm4639.fsf@dell.be.48ers.dk>
-        <DM6PR13MB345137AD526D0AAA6CE0DBDF970B0@DM6PR13MB3451.namprd13.prod.outlook.com>
-Date:   Thu, 08 Oct 2020 18:05:30 +0200
-In-Reply-To: <DM6PR13MB345137AD526D0AAA6CE0DBDF970B0@DM6PR13MB3451.namprd13.prod.outlook.com>
-        (Sagar Kadam's message of "Thu, 8 Oct 2020 13:53:55 +0000")
-Message-ID: <87eem84sad.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 08 Oct 2020 14:44:42 -0700 (PDT)
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org
+Subject: [PATCH 0/3] Improve Actions Semi Owl I2C driver
+Date:   Fri,  9 Oct 2020 00:44:38 +0300
+Message-Id: <cover.1602190168.git.cristian.ciocaltea@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
->>>>> "Sagar" == Sagar Kadam <sagar.kadam@openfive.com> writes:
+This patchset brings a few improvements to the Actions Semiconductor
+Owl I2C driver driver:
 
- > Hello Peter,
- >> Are both affected by this issue? if not, we will need to extend the code
- >> to handle them differently.
- >> 
+- Fixes an issue reported by Mani related to the error handling
+- Adds support for atomic transfers
+- Enables asynchronous probing, per Mani's suggestion
 
- > No, this issue is present in FU540-C000 SoC i.e SoC- specific, and so I can check 
- > for the soc-compatible string as follows:
+Please note the first two patches incorporate the review received for
+the following patch (which became obsolete now):
+https://lore.kernel.org/lkml/b6c56858854805b0f03e29b7dde40b20796d5c93.1599561278.git.cristian.ciocaltea@gmail.com/
 
- > -       match = of_match_node(ocores_i2c_match, pdev->dev.of_node);
- > -       if (match && (long)match->data == TYPE_SIFIVE_REV0)
- > +       if (of_device_is_compatible(pdev->dev.of_node,
- > +                                       "sifive,fu540-c000-i2c"))
+Kind regards,
+Cristi
 
- > Please let me know if this is okay.
+Cristian Ciocaltea (3):
+  i2c: owl: Clear NACK and BUS error bits
+  i2c: owl: Add support for atomic transfers
+  i2c: owl: Enable asynchronous probing
 
-Yes, that sounds sensible. Thanks.
+ drivers/i2c/busses/i2c-owl.c | 83 +++++++++++++++++++++++++++---------
+ 1 file changed, 63 insertions(+), 20 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+2.28.0
+
