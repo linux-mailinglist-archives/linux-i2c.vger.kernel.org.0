@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA95287ED4
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Oct 2020 00:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E787B287ED8
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Oct 2020 00:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730676AbgJHWw5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Oct 2020 18:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
+        id S1730706AbgJHWxE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Oct 2020 18:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728690AbgJHWw5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Oct 2020 18:52:57 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00EDC0613D4
-        for <linux-i2c@vger.kernel.org>; Thu,  8 Oct 2020 15:52:56 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id d6so3482024plo.13
-        for <linux-i2c@vger.kernel.org>; Thu, 08 Oct 2020 15:52:56 -0700 (PDT)
+        with ESMTP id S1728890AbgJHWxA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Oct 2020 18:53:00 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC05C0613D2
+        for <linux-i2c@vger.kernel.org>; Thu,  8 Oct 2020 15:52:58 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id x22so5187136pfo.12
+        for <linux-i2c@vger.kernel.org>; Thu, 08 Oct 2020 15:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HcqrOYUaXP7xqOn/NCvrxZmfWKkHczVuHn5c3tWtj90=;
-        b=Bbt7BHTQpUC509D9VqIW+84cqAfUbbUetNRXXmTbL/g+l8QvgAkOlL7EbFub/nmrmM
-         uTAxHGvQhME9a7aFL1xgFO2S/b/Y3k0wp+TenPAvNHvyHD03gBOkoVSuLKt8nvF5N7/a
-         6t4FaCCKq6QI1NAXULkYXP8VX78WE1IsCvtqo=
+        bh=JqHlvYS/nUyuuUVkp5zanpXouWo0jl8ps/632AK5Tl4=;
+        b=YOE0Wl3PeOp/Btq95AWsudLkZhaYipMAqAe17Y6oLaTjaqlL2QCzfBTTeD20EdMvoL
+         fXLPpqXgsiF5aRQD8FwAuI82R+k5kZf/R8dPcPli2/VIZu9ZAlyK4df7MGZVev521chQ
+         gdibFwzbcjksBBNG4J6EMOpv6+wiccx1P0PaQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HcqrOYUaXP7xqOn/NCvrxZmfWKkHczVuHn5c3tWtj90=;
-        b=dYeop3W3VJnwG463xobTh+HWKX2mP8A5d+yWv4a9tdL5Ddsr63KWGCd9px1hBC+7jz
-         rNuiwXcVqSdD6giBxGz5k3czWh5FgPFN0P7H6mY4TlaoRl9sXkzLKlRe8SdC1MA5eLJI
-         kivv/jm8t7G3Y8qilhhQtodoQ6ETV1GNin6+YdP7nMdcGmIdqLHdyjz6X7JAfXyCVqIK
-         oJuW86DEGMQthAQmthTWo1PB3TdKFyu87zvpAMU2o/0wNlkRJnsQ2Ugx2g57nQeU8B+/
-         KhLaCD/pLU8XvyZfMT35th+aSxno6iCSPs8IP+vJgVJ2FNggJa7HrIwAQwkvl8stsS/N
-         /H5A==
-X-Gm-Message-State: AOAM533IOJ/ahnqIbeAHcomBdr0nE3ngU8WwLcUxnWDVEokZIbQ63fej
-        NnuoUOKf7/rlEcJ27JY4bKu+cw==
-X-Google-Smtp-Source: ABdhPJyXF/5NsHMNTh0qCN74yGdZp3X5pFGM+vRbQ2c2GzcDpoXUjRfqQN55djiYs6v965D6j7vQsg==
-X-Received: by 2002:a17:902:6545:b029:d3:d1fc:ff28 with SMTP id d5-20020a1709026545b02900d3d1fcff28mr9585066pln.34.1602197576452;
-        Thu, 08 Oct 2020 15:52:56 -0700 (PDT)
+        bh=JqHlvYS/nUyuuUVkp5zanpXouWo0jl8ps/632AK5Tl4=;
+        b=pgdrKqNELkun17ckrvPGc/B6LP92jn0XrNh9sYLdFvstfTHwycxUwQcM51EDMICK5+
+         07jlSeNyy7FuEsP3fAW9cuUkkBWw+vQW1ws9pHLfPC7/lrtnVe/ggOer1pVvC/Hr+9en
+         gQuu/bH6mUpKe7VXI1rTHIsatqVkU5oVaonKoAY+CxIPxfe88nqm2Qy/SHHAIC8ZaDzf
+         FMXsOVb0LT8Qa7HKW/dOC4qYVA5jj4P5XnVlZ0dfTQd2d4MlqVGvGR8GoL5Kb2S2G/BO
+         bXsqjOOb1pRdlfscBukKhtoiJa3ESNxED2pezUH45SgtilTFrMd4CtOqXfaZ7kq40iJH
+         RFXA==
+X-Gm-Message-State: AOAM5322V7xdyxoPS4qlkJ6KMBmRiOjgFfz3WxwfcgfM1aFz7YDufbLG
+        5TJC1UYE9Q/Ck3Ceqn0x1RWJmw==
+X-Google-Smtp-Source: ABdhPJyLMsvK9tWb74s1XR8v4qYe6UeK5+cQ51iDyu1MToPy/Tz9RvaCeozqlVgNRBBIKEMwQmzLFg==
+X-Received: by 2002:a62:d10b:0:b029:152:56c0:df72 with SMTP id z11-20020a62d10b0000b029015256c0df72mr9933786pfg.10.1602197578485;
+        Thu, 08 Oct 2020 15:52:58 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:42b0:34ff:fe3d:58e6])
-        by smtp.gmail.com with ESMTPSA id jx17sm8386369pjb.10.2020.10.08.15.52.55
+        by smtp.gmail.com with ESMTPSA id jx17sm8386369pjb.10.2020.10.08.15.52.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2020 15:52:55 -0700 (PDT)
+        Thu, 08 Oct 2020 15:52:57 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
@@ -52,13 +52,11 @@ Cc:     linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
         linux-i2c@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
         Andy Gross <agross@kernel.org>,
-        Girish Mahadevan <girishm@codeaurora.org>,
-        Karthikeyan Ramasubramanian <kramasub@codeaurora.org>,
-        Mukesh Kumar Savaliya <msavaliy@codeaurora.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] soc: qcom: geni: More properly switch to DMA mode
-Date:   Thu,  8 Oct 2020 15:52:33 -0700
-Message-Id: <20201008155154.1.Ifdb1b69fa3367b81118e16e9e4e63299980ca798@changeid>
+Subject: [PATCH 2/3] Revert "i2c: i2c-qcom-geni: Fix DMA transfer race"
+Date:   Thu,  8 Oct 2020 15:52:34 -0700
+Message-Id: <20201008155154.2.I7b22281453b8a18ab16ef2bfd4c641fb1cc6a92c@changeid>
 X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
 In-Reply-To: <20201008225235.2035820-1-dianders@chromium.org>
 References: <20201008225235.2035820-1-dianders@chromium.org>
@@ -68,96 +66,64 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On geni-i2c transfers using DMA, it was seen that if you program the
-command (I2C_READ) before calling geni_se_rx_dma_prep() that it could
-cause interrupts to fire.  If we get unlucky, these interrupts can
-just keep firing (and not be handled) blocking further progress and
-hanging the system.
+This reverts commit 02b9aec59243c6240fc42884acc958602146ddf6.
 
-In commit 02b9aec59243 ("i2c: i2c-qcom-geni: Fix DMA transfer race")
-we avoided that by making sure we didn't program the command until
-after geni_se_rx_dma_prep() was called.  While that avoided the
-problems, it also turns out to be invalid.  At least in the TX case we
-started seeing sporadic corrupted transfers.  This is easily seen by
-adding an msleep() between the DMA prep and the writing of the
-command, which makes the problem worse.  That means we need to revert
-that commit and find another way to fix the bogus IRQs.
+As talked about in the patch ("soc: qcom: geni: More properly switch
+to DMA mode"), swapping the order of geni_se_setup_m_cmd() and
+geni_se_xx_dma_prep() can sometimes cause corrupted transfers.  Thus
+we traded one problem for another.  Now that we've debugged the
+problem further and fixed the geni helper functions to more disable
+FIFO interrupts when we move to DMA mode we can revert it and end up
+with (hopefully) zero problems!
 
-Specifically, after reverting commit 02b9aec59243 ("i2c:
-i2c-qcom-geni: Fix DMA transfer race"), I put some traces in.  I found
-that the when the interrupts were firing like crazy:
-- "m_stat" had bits for M_RX_IRQ_EN, M_RX_FIFO_WATERMARK_EN set.
-- "dma" was set.
+To be explicit, the patch ("soc: qcom: geni: More properly switch
+to DMA mode") is a prerequisite for this one.
 
-Further debugging showed that I could make the problem happen more
-reliably by adding an "msleep(1)" any time after geni_se_setup_m_cmd()
-ran up until geni_se_rx_dma_prep() programmed the length.
-
-A rather simple fix is to change geni_se_select_dma_mode() so it's a
-true inverse of geni_se_select_fifo_mode() and disables all the FIFO
-related interrupts.  Now the problematic interrupts can't fire and we
-can program things in the correct order without worrying.
-
-As part of this, let's also change the writel_relaxed() in the prepare
-function to a writel() so that our DMA is guaranteed to be prepared
-now that we can't rely on geni_se_setup_m_cmd()'s writel().
-
-NOTE: the only current user of GENI_SE_DMA in mainline is i2c.
-
-Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the Qualcomm GENI I2C controller")
 Fixes: 02b9aec59243 ("i2c: i2c-qcom-geni: Fix DMA transfer race")
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- drivers/soc/qcom/qcom-geni-se.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-qcom-geni.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-index d0e4f520cff8..751a49f6534f 100644
---- a/drivers/soc/qcom/qcom-geni-se.c
-+++ b/drivers/soc/qcom/qcom-geni-se.c
-@@ -289,10 +289,23 @@ static void geni_se_select_fifo_mode(struct geni_se *se)
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index dead5db3315a..32b2a9921b14 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -367,6 +367,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 		geni_se_select_mode(se, GENI_SE_FIFO);
  
- static void geni_se_select_dma_mode(struct geni_se *se)
- {
-+	u32 proto = geni_se_read_proto(se);
- 	u32 val;
+ 	writel_relaxed(len, se->base + SE_I2C_RX_TRANS_LEN);
++	geni_se_setup_m_cmd(se, I2C_READ, m_param);
  
- 	geni_se_irq_clear(se);
+ 	if (dma_buf && geni_se_rx_dma_prep(se, dma_buf, len, &rx_dma)) {
+ 		geni_se_select_mode(se, GENI_SE_FIFO);
+@@ -374,8 +375,6 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 		dma_buf = NULL;
+ 	}
  
-+	val = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
-+	if (proto != GENI_SE_UART) {
-+		val &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN);
-+		val &= ~(M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
-+	}
-+	writel_relaxed(val, se->base + SE_GENI_M_IRQ_EN);
-+
-+	val = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
-+	if (proto != GENI_SE_UART)
-+		val &= ~S_CMD_DONE_EN;
-+	writel_relaxed(val, se->base + SE_GENI_S_IRQ_EN);
-+
- 	val = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
- 	val |= GENI_DMA_MODE_EN;
- 	writel_relaxed(val, se->base + SE_GENI_DMA_MODE_EN);
-@@ -651,7 +664,7 @@ int geni_se_tx_dma_prep(struct geni_se *se, void *buf, size_t len,
- 	writel_relaxed(lower_32_bits(*iova), se->base + SE_DMA_TX_PTR_L);
- 	writel_relaxed(upper_32_bits(*iova), se->base + SE_DMA_TX_PTR_H);
- 	writel_relaxed(GENI_SE_DMA_EOT_BUF, se->base + SE_DMA_TX_ATTR);
--	writel_relaxed(len, se->base + SE_DMA_TX_LEN);
-+	writel(len, se->base + SE_DMA_TX_LEN);
- 	return 0;
- }
- EXPORT_SYMBOL(geni_se_tx_dma_prep);
-@@ -688,7 +701,7 @@ int geni_se_rx_dma_prep(struct geni_se *se, void *buf, size_t len,
- 	writel_relaxed(upper_32_bits(*iova), se->base + SE_DMA_RX_PTR_H);
- 	/* RX does not have EOT buffer type bit. So just reset RX_ATTR */
- 	writel_relaxed(0, se->base + SE_DMA_RX_ATTR);
--	writel_relaxed(len, se->base + SE_DMA_RX_LEN);
-+	writel(len, se->base + SE_DMA_RX_LEN);
- 	return 0;
- }
- EXPORT_SYMBOL(geni_se_rx_dma_prep);
+-	geni_se_setup_m_cmd(se, I2C_READ, m_param);
+-
+ 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+ 	if (!time_left)
+ 		geni_i2c_abort_xfer(gi2c);
+@@ -409,6 +408,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 		geni_se_select_mode(se, GENI_SE_FIFO);
+ 
+ 	writel_relaxed(len, se->base + SE_I2C_TX_TRANS_LEN);
++	geni_se_setup_m_cmd(se, I2C_WRITE, m_param);
+ 
+ 	if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &tx_dma)) {
+ 		geni_se_select_mode(se, GENI_SE_FIFO);
+@@ -416,8 +416,6 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+ 		dma_buf = NULL;
+ 	}
+ 
+-	geni_se_setup_m_cmd(se, I2C_WRITE, m_param);
+-
+ 	if (!dma_buf) /* Get FIFO IRQ */
+ 		writel_relaxed(1, se->base + SE_GENI_TX_WATERMARK_REG);
+ 
 -- 
 2.28.0.1011.ga647a8990f-goog
 
