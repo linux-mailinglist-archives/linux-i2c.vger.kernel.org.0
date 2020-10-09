@@ -2,112 +2,141 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAE0288303
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Oct 2020 08:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B25AA28834D
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Oct 2020 09:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729081AbgJIGxy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Oct 2020 02:53:54 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:35058 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726432AbgJIGxy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 9 Oct 2020 02:53:54 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602226434; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=YDkhWM48cAkdMOYBmNFvGoMUdH8DwI8lrMxm58+8ZjQ=; b=jVB485LRL2y90tS/Prun6yyeQ49Om0i2lodXiTLL1xBrw5jfYAJmL6rVRP+3hx+l98nfOabX
- OpwhGsuHrl+yoYkJDz6dwN825/5M3UdFPmUzcVfCmKDfCIKO66QN3KoSX7xbRrW8v8bIxiD7
- Z1GZlS6jEAs8vqKjjWBreT8Om7M=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 5f80090157b88ccb567e4b60 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 09 Oct 2020 06:53:53
- GMT
-Sender: msavaliy=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 7F66EC433C9; Fri,  9 Oct 2020 06:53:53 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.43.8] (unknown [106.213.185.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: msavaliy)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B2D7BC433CB;
-        Fri,  9 Oct 2020 06:53:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B2D7BC433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=msavaliy@codeaurora.org
-Subject: Re: [PATCH 5/5] i2c: geni: sdm845: dont perform DMA for the oneplus6
-To:     Wolfram Sang <wsa@kernel.org>, Caleb Connolly <caleb@connolly.tech>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201007174736.292968-1-caleb@connolly.tech>
- <20201007174736.292968-6-caleb@connolly.tech>
- <20201008100352.GF76290@ninjato>
-From:   "Mukesh, Savaliya" <msavaliy@codeaurora.org>
-Message-ID: <5243ff4c-f08a-d9ff-ab1d-cadfa84171b8@codeaurora.org>
-Date:   Fri, 9 Oct 2020 12:23:41 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1731860AbgJIHLp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Oct 2020 03:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731857AbgJIHLp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Oct 2020 03:11:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3689EC0613D2
+        for <linux-i2c@vger.kernel.org>; Fri,  9 Oct 2020 00:11:45 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kQmYw-0005sr-Qa; Fri, 09 Oct 2020 09:11:34 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kQmYu-0000l6-Hp; Fri, 09 Oct 2020 09:11:32 +0200
+Date:   Fri, 9 Oct 2020 09:11:32 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Christian Eggers <ceggers@arri.de>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        David Laight <David.Laight@ACULAB.COM>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        stable@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] i2c: imx: Fix reset of I2SR_IAL flag
+Message-ID: <20201009071132.GA817@pengutronix.de>
+References: <20201007084524.10835-1-ceggers@arri.de>
+ <20201007084524.10835-2-ceggers@arri.de>
 MIME-Version: 1.0
-In-Reply-To: <20201008100352.GF76290@ninjato>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201007084524.10835-2-ceggers@arri.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 09:09:37 up 35 days, 21:17, 228 users,  load average: 11.65, 14.13,
+ 11.62
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Christian,
 
-On 10/8/2020 3:33 PM, Wolfram Sang wrote:
-> On Wed, Oct 07, 2020 at 05:49:35PM +0000, Caleb Connolly wrote:
->> The OnePlus 6/T has the same issues as the c630 causing a crash when DMA
->> is used for i2c, so disable it.
->>
->> https://patchwork.kernel.org/patch/11133827/
->> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
-Reviewed-by: Mukesh Kumar Savaliya <msavaliy@codeaurora.org>
-> May I ask for a quick review here, so we can get this into 5.9 if
-> qcom-geni maintainers agree this is good to go?
->
->> ---
->>   drivers/i2c/busses/i2c-qcom-geni.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
->> index dead5db3315a..50a0674a6553 100644
->> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->> @@ -358,7 +358,8 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->>   	struct geni_se *se = &gi2c->se;
->>   	size_t len = msg->len;
->>   
->> -	if (!of_machine_is_compatible("lenovo,yoga-c630"))
->> +	if (!of_machine_is_compatible("lenovo,yoga-c630") &&
->> +	    !of_machine_is_compatible("oneplus,oneplus6"))
->>   		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
->>   
->>   	if (dma_buf)
->> @@ -400,7 +401,8 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->>   	struct geni_se *se = &gi2c->se;
->>   	size_t len = msg->len;
->>   
->> -	if (!of_machine_is_compatible("lenovo,yoga-c630"))
->> +	if (!of_machine_is_compatible("lenovo,yoga-c630") &&
->> +	    !of_machine_is_compatible("oneplus,oneplus6"))
->>   		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
->>   
->>   	if (dma_buf)
->> -- 
->> 2.28.0
->>
->>
+On Wed, Oct 07, 2020 at 10:45:22AM +0200, Christian Eggers wrote:
+> According to the "VFxxx Controller Reference Manual" (and the comment
+> block starting at line 97), Vybrid requires writing a one for clearing
+> an interrupt flag. Syncing the method for clearing I2SR_IIF in
+> i2c_imx_isr().
+> 
+> Signed-off-by: Christian Eggers <ceggers@arri.de>
+> Fixes: 4b775022f6fd ("i2c: imx: add struct to hold more configurable quirks")
+> Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/i2c/busses/i2c-imx.c | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 0ab5381aa012..cbdcab73a055 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -412,6 +412,19 @@ static void i2c_imx_dma_free(struct imx_i2c_struct *i2c_imx)
+>  	dma->chan_using = NULL;
+>  }
+>  
+> +static void i2c_imx_clear_irq(struct imx_i2c_struct *i2c_imx, unsigned int bits)
+> +{
+> +	unsigned int temp;
+> +
+> +	/*
+> +	 * i2sr_clr_opcode is the value to clear all interrupts. Here we want to
+> +	 * clear only <bits>, so we write ~i2sr_clr_opcode with just <bits>
+> +	 * toggled. This is required because i.MX needs W1C and Vybrid uses W0C.
+> +	 */
+
+This comment need correction. The i.MX needs W0C and Vybrid uses W1C 
+
+> +	temp = ~i2c_imx->hwdata->i2sr_clr_opcode ^ bits;
+> +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+> +}
+> +
+>  static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool atomic)
+>  {
+>  	unsigned long orig_jiffies = jiffies;
+> @@ -424,8 +437,7 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool a
+>  
+>  		/* check for arbitration lost */
+>  		if (temp & I2SR_IAL) {
+> -			temp &= ~I2SR_IAL;
+> -			imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+> +			i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
+>  			return -EAGAIN;
+>  		}
+>  
+> @@ -623,9 +635,7 @@ static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
+>  	if (temp & I2SR_IIF) {
+>  		/* save status register */
+>  		i2c_imx->i2csr = temp;
+> -		temp &= ~I2SR_IIF;
+> -		temp |= (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
+> -		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+> +		i2c_imx_clear_irq(i2c_imx, I2SR_IIF);
+>  		wake_up(&i2c_imx->queue);
+>  		return IRQ_HANDLED;
+>  	}
+> -- 
+
+Otherwise
+
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de> 
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
