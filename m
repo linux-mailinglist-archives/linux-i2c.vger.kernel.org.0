@@ -2,77 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7802890B6
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Oct 2020 20:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787142891D0
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Oct 2020 21:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388037AbgJISYo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Oct 2020 14:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731198AbgJISYl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Oct 2020 14:24:41 -0400
-Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96361C0613D2
-        for <linux-i2c@vger.kernel.org>; Fri,  9 Oct 2020 11:24:41 -0700 (PDT)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4C7Ggl6dbdz1rsMq;
-        Fri,  9 Oct 2020 20:24:35 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4C7Ggl5Rsxz1qrDV;
-        Fri,  9 Oct 2020 20:24:35 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 2mbYlDZWbOcq; Fri,  9 Oct 2020 20:24:34 +0200 (CEST)
-X-Auth-Info: LZoooTdPUM9XaQoDhU03clxRO+LEeX6w/lImTE/OmOPPBdMcRJILnzkfJa/RlVrk
-Received: from igel.home (ppp-46-244-168-131.dynamic.mnet-online.de [46.244.168.131])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri,  9 Oct 2020 20:24:34 +0200 (CEST)
-Received: by igel.home (Postfix, from userid 1000)
-        id 17F1F2C2864; Fri,  9 Oct 2020 20:24:34 +0200 (CEST)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-i2c@vger.kernel.org, peter@korsgaard.com, andrew@lunn.ch,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
-Subject: Re: [PATCH v2 1/1] i2c: ocores: fix polling mode workaround on
- FU540-C000 SoC
-References: <1602257980-375157-1-git-send-email-sagar.kadam@sifive.com>
-        <1602257980-375157-2-git-send-email-sagar.kadam@sifive.com>
-X-Yow:  Dehydrated EGGS are STREWN across ROULETTE TABLES..
-Date:   Fri, 09 Oct 2020 20:24:34 +0200
-In-Reply-To: <1602257980-375157-2-git-send-email-sagar.kadam@sifive.com>
-        (Sagar Shrikant Kadam's message of "Fri, 9 Oct 2020 08:39:40 -0700")
-Message-ID: <87pn5rp89p.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S2387485AbgJITi0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 9 Oct 2020 15:38:26 -0400
+Received: from mail.csu.ru ([195.54.14.68]:56806 "HELO mail.csu.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
+        id S1731727AbgJITi0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 9 Oct 2020 15:38:26 -0400
+X-Greylist: delayed 669 seconds by postgrey-1.27 at vger.kernel.org; Fri, 09 Oct 2020 15:38:15 EDT
+Received: from webmail.csu.ru (webmail.csu.ru [195.54.14.80])
+        (Authenticated sender: gmu)
+        by mail.csu.ru (Postfix) with ESMTPA id B0D15146B8D;
+        Sat, 10 Oct 2020 00:26:32 +0500 (+05)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.csu.ru B0D15146B8D
+Received: from 156.146.59.22
+        (SquirrelMail authenticated user gmu)
+        by webmail.csu.ru with HTTP;
+        Sat, 10 Oct 2020 00:26:35 +0500
+Message-ID: <b044fb95bab3658b6d8dc7a34d5da346.squirrel@webmail.csu.ru>
+Date:   Sat, 10 Oct 2020 00:26:35 +0500
+Subject: Vorschlag
+From:   "Yi Huiman" <info@bsu.de>
+Reply-To: info@huiman.cf
+User-Agent: SquirrelMail/1.4.22
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain;charset=iso-8859-1
+X-Priority: 3 (Normal)
+Importance: Normal
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 159051 [Oct 09 2020]
+X-KLMS-AntiSpam-Version: 5.9.11.0
+X-KLMS-AntiSpam-Envelope-From: info@bsu.de
+X-KLMS-AntiSpam-Auth: dmarc=none header.from=bsu.de;spf=none smtp.mailfrom=bsu.de;dkim=none
+X-KLMS-AntiSpam-Rate: 70
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Info: LuaCore: 381 381 faef97d3f9d8f5dd6a9feadc50ba5b34b9486c58, {rep_avail}, {Tracking_content_type, plain}, {Prob_reply_not_match_from}, {Prob_to_header_missing}, {Prob_Reply_to_without_To}, {Tracking_susp_macro_from_formal}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;huiman.cf:7.1.1;webmail.csu.ru:7.1.1;195.54.14.80:7.1.2;127.0.0.199:7.1.2;bsu.de:7.1.1, ApMailHostAddress: 195.54.14.80
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2020/10/09 16:54:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2020/10/09 00:29:00 #15463494
+X-KLMS-AntiVirus-Status: Clean, skipped
+Content-Transfer-Encoding: 8BIT
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Okt 09 2020, Sagar Shrikant Kadam wrote:
+ich habe ein Geschäft Vorschlag für dich.
 
-> diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-> index f5fc75b..9b3d1ab 100644
-> --- a/drivers/i2c/busses/i2c-ocores.c
-> +++ b/drivers/i2c/busses/i2c-ocores.c
-> @@ -686,17 +686,21 @@ static int ocores_i2c_probe(struct platform_device *pdev)
->  
->  	init_waitqueue_head(&i2c->wait);
->  
-> +	/*
-> +	 * Set OCORES_FLAG_BROKEN_IRQ to enable workaround for
-> +	 * FU540-C000 SoC in polling mode.
-> +	 * Since the SoC does have interrupt it's dt has the interrupt
-
-Typo: its
-
-Andreas.
-
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
