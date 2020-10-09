@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F372883FC
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Oct 2020 09:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE562884FF
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Oct 2020 10:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732409AbgJIHxu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Oct 2020 03:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S1732536AbgJIIOs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Oct 2020 04:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725908AbgJIHxr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Oct 2020 03:53:47 -0400
+        with ESMTP id S1732337AbgJIIOo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Oct 2020 04:14:44 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD537C0613D2
-        for <linux-i2c@vger.kernel.org>; Fri,  9 Oct 2020 00:53:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDCAC0613D2
+        for <linux-i2c@vger.kernel.org>; Fri,  9 Oct 2020 01:14:44 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1kQnDc-0002nC-33; Fri, 09 Oct 2020 09:53:36 +0200
+        id 1kQnXn-0006kZ-A8; Fri, 09 Oct 2020 10:14:27 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1kQnDb-0000D2-KW; Fri, 09 Oct 2020 09:53:35 +0200
-Date:   Fri, 9 Oct 2020 09:53:35 +0200
+        id 1kQnXl-00053q-Gt; Fri, 09 Oct 2020 10:14:25 +0200
+Date:   Fri, 9 Oct 2020 10:14:25 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Christian Eggers <ceggers@arri.de>
 Cc:     Oleksij Rempel <linux@rempel-privat.de>,
@@ -38,21 +38,22 @@ Cc:     Oleksij Rempel <linux@rempel-privat.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         stable@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] i2c: imx: Check for I2SR_IAL after every byte
-Message-ID: <20201009075335.GC817@pengutronix.de>
+Subject: Re: [PATCH v5 3/3] i2c: imx: Don't generate STOP condition if
+ arbitration has been lost
+Message-ID: <20201009081425.GD817@pengutronix.de>
 References: <20201007084524.10835-1-ceggers@arri.de>
- <20201007084524.10835-3-ceggers@arri.de>
+ <20201007084524.10835-4-ceggers@arri.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201007084524.10835-3-ceggers@arri.de>
+In-Reply-To: <20201007084524.10835-4-ceggers@arri.de>
 X-Sent-From: Pengutronix Hildesheim
 X-URL:  http://www.pengutronix.de/
 X-IRC:  #ptxdist @freenode
 X-Accept-Language: de,en
 X-Accept-Content-Type: text/plain
-X-Uptime: 09:53:03 up 35 days, 22:00, 231 users,  load average: 0.34, 1.03,
- 4.32
+X-Uptime: 10:13:39 up 35 days, 22:21, 227 users,  load average: 10.92, 14.39,
+ 9.84
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
 X-SA-Exim-Mail-From: ore@pengutronix.de
@@ -62,47 +63,70 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Oct 07, 2020 at 10:45:23AM +0200, Christian Eggers wrote:
-> Arbitration Lost (IAL) can happen after every single byte transfer. If
-> arbitration is lost, the I2C hardware will autonomously switch from
-> master mode to slave. If a transfer is not aborted in this state,
-> consecutive transfers will not be executed by the hardware and will
+On Wed, Oct 07, 2020 at 10:45:24AM +0200, Christian Eggers wrote:
+> If arbitration is lost, the master automatically changes to slave mode.
+> I2SR_IBB may or may not be reset by hardware. Raising a STOP condition
+> by resetting I2CR_MSTA has no effect and will not clear I2SR_IBB.
+> 
+> So calling i2c_imx_bus_busy() is not required and would busy-wait until
 > timeout.
 > 
 > Signed-off-by: Christian Eggers <ceggers@arri.de>
 > Tested (not extensively) on Vybrid VF500 (Toradex VF50):
 > Tested-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: stable@vger.kernel.org
+> Cc: stable@vger.kernel.org # Requires trivial backporting, simple remove
+>                            # the 3rd argument from the calls to
+>                            # i2c_imx_bus_busy().
 
 Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-
 Thank you!
 
+
 > ---
->  drivers/i2c/busses/i2c-imx.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  drivers/i2c/busses/i2c-imx.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index cbdcab73a055..63575af41c09 100644
+> index 63575af41c09..5d8a79319b2b 100644
 > --- a/drivers/i2c/busses/i2c-imx.c
 > +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -490,6 +490,16 @@ static int i2c_imx_trx_complete(struct imx_i2c_struct *i2c_imx, bool atomic)
->  		dev_dbg(&i2c_imx->adapter.dev, "<%s> Timeout\n", __func__);
->  		return -ETIMEDOUT;
->  	}
-> +
-> +	/* check for arbitration lost */
-> +	if (i2c_imx->i2csr & I2SR_IAL) {
-> +		dev_dbg(&i2c_imx->adapter.dev, "<%s> Arbitration lost\n", __func__);
-> +		i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
-> +
-> +		i2c_imx->i2csr = 0;
-> +		return -EAGAIN;
-> +	}
-> +
->  	dev_dbg(&i2c_imx->adapter.dev, "<%s> TRX complete\n", __func__);
->  	i2c_imx->i2csr = 0;
->  	return 0;
+> @@ -615,6 +615,8 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx, bool atomic)
+>  		/* Stop I2C transaction */
+>  		dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
+>  		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+> +		if (!(temp & I2CR_MSTA))
+> +			i2c_imx->stopped = 1;
+>  		temp &= ~(I2CR_MSTA | I2CR_MTX);
+>  		if (i2c_imx->dma)
+>  			temp &= ~I2CR_DMAEN;
+> @@ -778,9 +780,12 @@ static int i2c_imx_dma_read(struct imx_i2c_struct *i2c_imx,
+>  		 */
+>  		dev_dbg(dev, "<%s> clear MSTA\n", __func__);
+>  		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+> +		if (!(temp & I2CR_MSTA))
+> +			i2c_imx->stopped = 1;
+>  		temp &= ~(I2CR_MSTA | I2CR_MTX);
+>  		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+> -		i2c_imx_bus_busy(i2c_imx, 0, false);
+> +		if (!i2c_imx->stopped)
+> +			i2c_imx_bus_busy(i2c_imx, 0, false);
+>  	} else {
+>  		/*
+>  		 * For i2c master receiver repeat restart operation like:
+> @@ -905,9 +910,12 @@ static int i2c_imx_read(struct imx_i2c_struct *i2c_imx, struct i2c_msg *msgs,
+>  				dev_dbg(&i2c_imx->adapter.dev,
+>  					"<%s> clear MSTA\n", __func__);
+>  				temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+> +				if (!(temp & I2CR_MSTA))
+> +					i2c_imx->stopped =  1;
+>  				temp &= ~(I2CR_MSTA | I2CR_MTX);
+>  				imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+> -				i2c_imx_bus_busy(i2c_imx, 0, atomic);
+> +				if (!i2c_imx->stopped)
+> +					i2c_imx_bus_busy(i2c_imx, 0, atomic);
+>  			} else {
+>  				/*
+>  				 * For i2c master receiver repeat restart operation like:
 > -- 
 > Christian Eggers
 > Embedded software developer
@@ -114,6 +138,10 @@ Thank you!
 > Geschaeftsfuehrer: Dr. Michael Neuhaeuser; Stephan Schenk; Walter Trauninger; Markus Zeiler
 > 
 > 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 > 
 
 -- 
