@@ -2,87 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC76028A32E
-	for <lists+linux-i2c@lfdr.de>; Sun, 11 Oct 2020 01:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536CC28A320
+	for <lists+linux-i2c@lfdr.de>; Sun, 11 Oct 2020 01:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390475AbgJJW5X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 10 Oct 2020 18:57:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57070 "EHLO mail.kernel.org"
+        id S2390487AbgJJW5Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 10 Oct 2020 18:57:25 -0400
+Received: from www.zeus03.de ([194.117.254.33]:55730 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732642AbgJJTyo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 10 Oct 2020 15:54:44 -0400
-Received: from localhost (p5486c996.dip0.t-ipconnect.de [84.134.201.150])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4CDE422246;
-        Sat, 10 Oct 2020 11:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602328583;
-        bh=U4cdh7dwjwdM5zAxioLEF4oJApkgULJqjXDXDatugW8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LMe66DGgw+AqgbPu7cJ9KPCe/BW44Ezb7p7Iyg1sl5E2kAEDk0gGPe9w9jRz8byjg
-         i1zSLEk/7iq/2XlRas98CKR45FmOxe8aHwtp6Rfj6XFQ6LQy/Xeni0reCzopDIizSt
-         yTt9zFScfs7Tuq20LkrO5384f+8xlxC8z4M9O0pI=
-Date:   Sat, 10 Oct 2020 13:16:19 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-actions@lists.infradead.org
-Subject: Re: [PATCH 1/3] i2c: owl: Clear NACK and BUS error bits
-Message-ID: <20201010111619.GE4669@ninjato>
-References: <cover.1602190168.git.cristian.ciocaltea@gmail.com>
- <6ee573f2904c001ab07e30b386815257c05f6308.1602190168.git.cristian.ciocaltea@gmail.com>
+        id S2387539AbgJJUTt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 10 Oct 2020 16:19:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=rl/Orf6woo+IrVZiQ1yWI4hhM3LF
+        YMVEjdM+w6uFuI0=; b=Nfh6TEXGaIMk6ZFPmGSyK24bBTJEIkpztQUTvHknpw2H
+        tTKmhjaz4QmNhTe+IDKwNtgNhStwHo+7HoE+8dkw6pqAUuYiGET1esm64SaX3y94
+        RIE3/7tDeA5RbxYgGfiRjgz/delVSCyyEQJBe+fP+sU2eSvPcyJQcBnwVx7T1lA=
+Received: (qmail 3961098 invoked from network); 10 Oct 2020 13:19:43 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Oct 2020 13:19:43 +0200
+X-UD-Smtp-Session: l3s3148p1@dTXtPU+xkLQgAwDPXyGpAKJteNp0JwbZ
+Date:   Sat, 10 Oct 2020 13:19:42 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Khalil Blaiech <kblaiech@mellanox.com>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: mlxbf: I2C_MLXBF should depend on MELLANOX_PLATFORM
+Message-ID: <20201010111942.GF4669@ninjato>
+References: <20201005124949.26810-1-geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5xSkJheCpeK0RUEJ"
+        protocol="application/pgp-signature"; boundary="8JPrznbw0YAQ/KXy"
 Content-Disposition: inline
-In-Reply-To: <6ee573f2904c001ab07e30b386815257c05f6308.1602190168.git.cristian.ciocaltea@gmail.com>
+In-Reply-To: <20201005124949.26810-1-geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---5xSkJheCpeK0RUEJ
+--8JPrznbw0YAQ/KXy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 09, 2020 at 12:44:39AM +0300, Cristian Ciocaltea wrote:
-> When the NACK and BUS error bits are set by the hardware, the driver is
-> responsible for clearing them by writing "1" into the corresponding
-> status registers.
+On Mon, Oct 05, 2020 at 02:49:49PM +0200, Geert Uytterhoeven wrote:
+> The Mellanox BlueField I2C controller is only present on Mellanox
+> BlueField SoCs.  Hence add a dependency on MELLANOX_PLATFORM, to prevent
+> asking the user about this driver when configuring a kernel without
+> Mellanox platform support.
 >=20
-> Hence perform the necessary operations in owl_i2c_interrupt().
->=20
-> Fixes: d211e62af466 ("i2c: Add Actions Semiconductor Owl family S900 I2C =
-driver")
-> Reported-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+> Fixes: b5b5b32081cd206b ("i2c: mlxbf: I2C SMBus driver for Mellanox BlueF=
+ield SoC")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Applied to for-current, thanks!
+Usually, I wait for maintainer acks before I apply driver patches. I
+make an exception here to have it sorted out before the merge window.
+
+Applied to for-next, thanks!
 
 
---5xSkJheCpeK0RUEJ
+--8JPrznbw0YAQ/KXy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+BmAMACgkQFA3kzBSg
-Kbb+Ng//Whds9uRZ4LlhO3Up0kDYIsrl2tVh7o5moP5k+/3YmDlqNdyfaq2ZcDgZ
-zAdpwobUhUPbBQ8pM5ePoBrCoiQQ5sJCMih/WQwqE/nuYsYkPism1Y5IuRwWXnsQ
-Z8jbn87E86mQQ7rZXg/fcpBdaVxKdFWlpBJAbJGE4C2BgD3u/yLdBc1aI/TfNMB1
-u5QdzKoxZ++2ahPa0s3fRJ4QNg4mWewJTjeTqDxI5MuB5KTF3cZXnv7L/rITsaGw
-yAzKKvIQlt9Y+m2GGLbVUf/22Bj2YUDOyR5sHR/ehFGs65+uK+jafFND+xSCwOyH
-ikDJL+lUbYGaB/Y2fIE/8AfW9FGTMwyAYX4S6etZGi+NOT4iPEo3mWqz6Ol8+1st
-DERrviXTQbMavY5dIiQVJkMqsvVQH6Xjhhmc64j1dRNipQr0bplNLx3CQBwD9Zfn
-GicX9eJ9xWEiAHR25Kuyh+m/kpm1LeLUnqAYBeUe3xabMvH+U31WJafYvuMfozvo
-d65OakiKrAhZLVE28Ty07/OOyXNB+0Y+g4z+uhrQ+TTwKJqRZrjv5MJYi1ReV637
-bCEP6jybHXFZu2jzXitPB4NFNJW81Rf4wEO4o+lmCw3XKQjKktyQNko6LW7beHwF
-sAG6B/V2vXUmgWt+RBp0+Mg3s9ocI9xfLLfs2CXs12wTaKT/+wE=
-=DCB7
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+BmM4ACgkQFA3kzBSg
+KbbkcRAAqH0geSsBQ+tIA+JZN6yAuFcVfj/XU57Yb5K50jdQK0RPQXtcCAeWeHHk
+22j4iTefaeeIhWWEtK167bn4mJzU+NgUjGypgFB5H3qIVISHD1347Ot57bUpZzAX
+FDjLPF5qjEjE2C3RZHnsIxXrlWJa0y+cGZ3UqYfYLulsU2rhL5NubPLJzt9GlIfR
+WfjpqiKxrtmokFeL42wRzrlMpa0D/oKIS+okje+fzJ8iKaQuXajjtdiQXlC6bB5H
+oKSJ4z02SDr21q2oUWhkZdRliftQMkyYn5GVnQL7wtL//ToaZRusv3b5hJY6kkU/
+81X1OvyJUvMejB8h+bepKueKF5zF8tcVTx1PDD+kaBSniVGi3ND0rPc2r7T4Pbs7
+86jbE5Re8RIAxgfSWYxlS5DNsfZbe6LP8UCmMeNUWUUe/7EAksCTzm6lFupETzPL
+oCKaTMl9i57pPdIX0reBN+MOoF+AXwG6/hai6tOSaIxC6CpwbGaGVBlxilNl0Huv
+plAye9ancBlXDBoY+NvlQ7Kis0hvbmhLYQLw7aG8i+E24ztd8ya9yvVervSz1Jpt
+P98LKqBsuOG4HBfqKomCF3ISxQ0AbWkQidCqG7cDg3UWE42qi8kXEONzhqhTyz2J
+t3uQ/LIxYUtAYRmqMv31KhBPlY9fBKgA/ekStXrGCddv+NewVhE=
+=jn4R
 -----END PGP SIGNATURE-----
 
---5xSkJheCpeK0RUEJ--
+--8JPrznbw0YAQ/KXy--
