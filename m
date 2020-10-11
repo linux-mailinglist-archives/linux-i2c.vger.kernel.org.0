@@ -2,47 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 010B628A942
-	for <lists+linux-i2c@lfdr.de>; Sun, 11 Oct 2020 20:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D889928A945
+	for <lists+linux-i2c@lfdr.de>; Sun, 11 Oct 2020 20:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728265AbgJKSXw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 11 Oct 2020 14:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
+        id S1728542AbgJKSX7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 11 Oct 2020 14:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727322AbgJKSXw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 11 Oct 2020 14:23:52 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761CFC0613CE
-        for <linux-i2c@vger.kernel.org>; Sun, 11 Oct 2020 11:23:52 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id g29so11867871pgl.2
-        for <linux-i2c@vger.kernel.org>; Sun, 11 Oct 2020 11:23:52 -0700 (PDT)
+        with ESMTP id S1728464AbgJKSX6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 11 Oct 2020 14:23:58 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBFAC0613CE
+        for <linux-i2c@vger.kernel.org>; Sun, 11 Oct 2020 11:23:58 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id e10so11356169pfj.1
+        for <linux-i2c@vger.kernel.org>; Sun, 11 Oct 2020 11:23:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=/71nk0S4ENTMZENtRlzIMthS++75rK9Cqa4LWNRWpq4=;
-        b=X/TgZxxGNFXbdM3mWdVLkwO+PumZqQpqMSkwdGvLgy3fYDKV5B3RQZseG9BCYP7p07
-         c1LmSyBgqwUUvCChMn8bhv0HF7iF6uuCyXUlR+TUStDTLH15KOd9/r088l84XjoEzWtE
-         d48dYTOM4DGruBUo3M29uFYmQ2ba5h7D2k/TM=
+        bh=Ffic9cjBVd53stj/GKBHzkQsPwbSNBr60t/cZU/O6hg=;
+        b=aPkpklKtQAH+4gqZ7UijzuboAaX61x1UblDiHNv7rxJ9hNzVYDrGnG1FyMboGaJq+k
+         tIt82UGIuay3v62BtfZDWYGN0/mwrjg63poxfKeC812oLFujhxNkX5zTNw2dZ9GmMnDy
+         8ZZmk0s4UDws2x96STb/niQahBMR9/KG3DuwU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=/71nk0S4ENTMZENtRlzIMthS++75rK9Cqa4LWNRWpq4=;
-        b=TdB8xHXXDC/jyMRVeuRbhFYMQjCDx/tbC5bfQ/rN22/+fm5qLiPMzZragvkJuJLLcz
-         EBRg9qj0WbXqDsD8+ujJiTpp6ckRXM/Qseadr1ToIeVSXJD0Vj11qp6eSsEafMcGcIT6
-         dCX5ESI+ZFsetSY8fWA1wfTCnwBI6/YWD+tYR9r/5bIXDv359pghEduEYWkGwRAp8up8
-         paCyOxsvzgOvy0FW93eWVvNEVUYe2FNKQKD8o6dUn4+IEsYLxzyDtyXPRj1A7GOQx5vI
-         zloXlaHwTSWRh/3N+2iDCX79XRjQ0BJ0zGrG7WFsnewud3Jdk2FWW1F62J4nIwITdlUj
-         JRzQ==
-X-Gm-Message-State: AOAM532fEhglKez+A4h/FZncprIhkIzE7bs+Pt3p/BJLZ+zXvrgC3ZNt
-        AbdDe5w1OIthxoY6Ki7SUtxA6g==
-X-Google-Smtp-Source: ABdhPJwmEFMYp86guBbSRyu1QnFpF/2fczMooDD+Dfw6LItBeV0cEn5IJQkvgU2BP/NCyw9coDmMMA==
-X-Received: by 2002:a17:90b:33ca:: with SMTP id lk10mr15151821pjb.221.1602440631908;
-        Sun, 11 Oct 2020 11:23:51 -0700 (PDT)
+        bh=Ffic9cjBVd53stj/GKBHzkQsPwbSNBr60t/cZU/O6hg=;
+        b=enHplJrIjK3jnJXT8B/YHAWudQFaugQUl1FkOCw43qkZ1+lom6Fwq4T6NCUlOnAjwH
+         SIMNY0DqRxRivGdJpDuX6EFZPHWC1BCR3r5fOeHsgksFzHsaUuL0BLf+ypyJdHcO/v5c
+         fGuVUVIoQ+U5DOtB0aHm7miR9AlR8CeoSabnKTtVBY2qMOs89BBC2CF5G/ytiit6i9ZM
+         +hVulTC4Oh3EKHnTt33eR89Ypjii7rZ1tsp9hU65YufYRVgjkKTaki3ixHmwxNqxhMc5
+         haEDAhA9yXtYY95ima1J7yyXlLIOywP6UdKBNQEJPjixWzU5MfkuXZAuSj//xIiHF15M
+         ndhg==
+X-Gm-Message-State: AOAM531mUAOLs9ZF0UwVve7My9XkqqBRVE43icBafxs1+8hmG28N1t80
+        GT+GfjDEecU9A1Oe+iyvxOixuuN5zSVkiw==
+X-Google-Smtp-Source: ABdhPJxmqj6Lh3dwIQFbEVlXnmf1iPdHyrrcYGDf+sIaC00Zc3j0W7X7WVegYGN4foRe7zNHxf5EdQ==
+X-Received: by 2002:a17:90a:8a04:: with SMTP id w4mr14367991pjn.201.1602440637809;
+        Sun, 11 Oct 2020 11:23:57 -0700 (PDT)
 Received: from rayagonda.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id g1sm21977807pjj.3.2020.10.11.11.23.47
+        by smtp.gmail.com with ESMTPSA id g1sm21977807pjj.3.2020.10.11.11.23.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Oct 2020 11:23:51 -0700 (PDT)
+        Sun, 11 Oct 2020 11:23:57 -0700 (PDT)
 From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 To:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com,
@@ -55,48 +55,46 @@ To:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
         linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Subject: [PATCH v1 3/6] i2c: iproc: update slave isr mask (ISR_MASK_SLAVE)
-Date:   Sun, 11 Oct 2020 23:52:51 +0530
-Message-Id: <20201011182254.17776-4-rayagonda.kokatanur@broadcom.com>
+Subject: [PATCH v1 4/6] i2c: iproc: fix typo in slave_isr function
+Date:   Sun, 11 Oct 2020 23:52:52 +0530
+Message-Id: <20201011182254.17776-5-rayagonda.kokatanur@broadcom.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201011182254.17776-1-rayagonda.kokatanur@broadcom.com>
 References: <20201011182254.17776-1-rayagonda.kokatanur@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a9260d05b1694848"
+        boundary="000000000000032e6705b1694928"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---000000000000a9260d05b1694848
+--000000000000032e6705b1694928
 
-Update slave isr mask (ISR_MASK_SLAVE) to include remaining
-two slave interrupts.
+Fix typo in bcm_iproc_i2c_slave_isr().
 
 Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
 Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 ---
- drivers/i2c/busses/i2c-bcm-iproc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-bcm-iproc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-index b54f5130d246..cd687696bf0b 100644
+index cd687696bf0b..7a235f9f5884 100644
 --- a/drivers/i2c/busses/i2c-bcm-iproc.c
 +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-@@ -216,7 +216,8 @@ struct bcm_iproc_i2c_dev {
- 
- #define ISR_MASK_SLAVE (BIT(IS_S_START_BUSY_SHIFT)\
- 		| BIT(IS_S_RX_EVENT_SHIFT) | BIT(IS_S_RD_EVENT_SHIFT)\
--		| BIT(IS_S_TX_UNDERRUN_SHIFT))
-+		| BIT(IS_S_TX_UNDERRUN_SHIFT) | BIT(IS_S_RX_FIFO_FULL_SHIFT)\
-+		| BIT(IS_S_RX_THLD_SHIFT))
- 
- static int bcm_iproc_i2c_reg_slave(struct i2c_client *slave);
- static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave);
+@@ -382,7 +382,7 @@ static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev *iproc_i2c,
+ 	if (status & BIT(IS_S_START_BUSY_SHIFT)) {
+ 		i2c_slave_event(iproc_i2c->slave, I2C_SLAVE_STOP, &value);
+ 		/*
+-		 * Enable interrupt for TX FIFO becomes empty and
++		 * Disable interrupt for TX FIFO becomes empty and
+ 		 * less than PKT_LENGTH bytes were output on the SMBUS
+ 		 */
+ 		val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
 -- 
 2.17.1
 
 
---000000000000a9260d05b1694848
+--000000000000032e6705b1694928
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -167,13 +165,13 @@ FtqJWw6DATg5ePiAAn+S0JoIL1xqKsZi2ioNqm02QMFb7RbB3yEGb/7ZLAGcPW666o5GSLsUnPPq
 YOfL/3X6tVfGeoi3IgfI+z76/lXk8vOQzQQxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkw
 FwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2ln
 biAyIENBIC0gU0hBMjU2IC0gRzMCDDw+ri+StHzo6PJZ/DANBglghkgBZQMEAgEFAKCB1DAvBgkq
-hkiG9w0BCQQxIgQg7dD46P11ygRPT29o6noPvf2uhHeNdaCg4Mxz+Zq+zs8wGAYJKoZIhvcNAQkD
-MQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMDExMTgyMzUyWjBpBgkqhkiG9w0BCQ8x
+hkiG9w0BCQQxIgQgYcwLzjguLhtJOcB9/FU8vJ1MFkBVBE+hNIIE41B354swGAYJKoZIhvcNAQkD
+MQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMDExMTgyMzU4WjBpBgkqhkiG9w0BCQ8x
 XDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsG
-CSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAA5n
-cB/6DST7wqGnMpWQ9jZFu882DRa/bJjpdU2rp4mZ/DsXfDWoB5XVCfMIMi4oxxITZQi8BUjwpxlA
-zEfbzUMaYUp8udog5OIYPNkXc2tWUqZpbUXOU9I98I2f0y37EddpTEu5gwPafCsvMJUV+IAD0upv
-JgpRnhcIjbOWpUrbhfZGoXtPT3V3srP2AzAhn3RVah1xE7ueaq0ZQVg8nloLXhLlei/z2Lr6y1np
-Jyzxg1LjHrB7GZQ+Ecq+P4slXSzYTNX4TRB6ASVMvsdsfjD04fgmju6MXt1bl2x9QVJRZfosIxkw
-y14OC18mOGhch3htdzbksowbtpbi3/sR78w=
---000000000000a9260d05b1694848--
+CSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAJO9
+y6emVGiebMHCWps+NKX8WQ3/8qPyP5if4qYcgMoFwEWrft5rp9OubHimXTQdgNrxApbjb1dZ7pzQ
+3f5luXk0pU979T18jFzkoUF9K4gPXv42K/MH9huq3RGdvhy050ig977ZFS5W24X6sB+M0V//60W+
+CJzChT2Z2KK1tVgvIL7RbgNLjQvo2SzAjO/rEJZQaVdSXOkRfOcNzb7e88XiEIOGIrqaC8g5GLbe
+fXJrd32har9dZ5dS5zg5b4UkWbeEQb6jVyepYm+f+BuNdie4J8Ud9y2k6ZpU5khf4phDqfolmvQl
+E9nBQndRZ833a5KNGmLNAtOQDUXh+sqkt5E=
+--000000000000032e6705b1694928--
