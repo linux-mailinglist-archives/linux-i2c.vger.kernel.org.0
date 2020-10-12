@@ -2,70 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D34A528C1A5
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Oct 2020 21:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA7128C478
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Oct 2020 00:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729253AbgJLTwP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Oct 2020 15:52:15 -0400
-Received: from ms-10.1blu.de ([178.254.4.101]:57284 "EHLO ms-10.1blu.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726676AbgJLTwP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 12 Oct 2020 15:52:15 -0400
-Received: from [37.201.5.97] (helo=[192.168.1.61])
-        by ms-10.1blu.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <rainer@finke.cc>)
-        id 1kS3rb-0005HB-0n; Mon, 12 Oct 2020 21:52:07 +0200
-To:     linux-i2c@vger.kernel.org
-Cc:     hdegoede@redhat.com, mika.westerberg@linux.intel.com,
-        wsa@kernel.org, sashal@kernel.org
-From:   Rainer Finke <rainer@finke.cc>
-Subject: [Bug 209627] Touchscreen doesn't work anymore since commit
- 21653a4181ff292480599dad996a2b759ccf050f (regression)
-Message-ID: <ab71ef62-64c8-ff31-c5aa-43ad454d1143@finke.cc>
-Date:   Mon, 12 Oct 2020 21:52:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:82.0) Gecko/20100101
- Thunderbird/82.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Con-Id: 198604
-X-Con-U: 0-mail
-X-Originating-IP: 37.201.5.97
+        id S1731528AbgJLWDN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Oct 2020 18:03:13 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:50676 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727457AbgJLWDN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Oct 2020 18:03:13 -0400
+Received: by linux.microsoft.com (Postfix, from userid 1046)
+        id BDDA020B4905; Mon, 12 Oct 2020 15:03:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BDDA020B4905
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1602540192;
+        bh=Z6k1J1k3EOCYyGbhzmrhdvk4J/Eq/rLCJl2XEaEux1o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QbDpqcXbmE19MAU9feFg/0RhBh0PPhGpAGwjMCBN4ke9V9XV/C5Z3/gRNUkVVwq4M
+         GexItT7MoldHDvzL3O2CLTjf4441H8jRtg7DHdZDpE+S9TzD6BGDcgjbnJadTBsLX2
+         9HgqHS7K1uNWtJONfXwbwPQDxLL4iQ5WYQeBSe4A=
+From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
+To:     rayagonda.kokatanur@broadcom.com
+Cc:     andriy.shevchenko@linux.intel.com,
+        bcm-kernel-feedback-list@broadcom.com, brendanhiggins@google.com,
+        dphadke@linux.microsoft.com, f.fainelli@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lori.hikichi@broadcom.com,
+        rjui@broadcom.com, sbranden@broadcom.com, wsa@kernel.org
+Subject: [PATCH v1 6/6] i2c: iproc: handle rx fifo full interrupt
+Date:   Mon, 12 Oct 2020 15:03:04 -0700
+Message-Id: <20201011182254.17776-7-rayagonda.kokatanur@broadcom.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <20201011182254.17776-7-rayagonda.kokatanur@broadcom.com>
+References: <20201011182254.17776-7-rayagonda.kokatanur@broadcom.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-After upgrading from Linux 5.4.68 to Linux 5.4.69, the touchscreen of my 
-Huawei Matebook 12 doesn't work anymore. The same issue happens with 
-Linux >= 5.8.13.
+From: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 
-I've compiled Linux from git to verify if it was fixed, but it doesn't 
-help. But when reverting the commit 
-21653a4181ff292480599dad996a2b759ccf050f the touchscreen works fine again.
+On Sun, 11 Oct 2020 23:52:54 +0530, Rayagonda Kokatanur wrote:
+> Add code to handle IS_S_RX_FIFO_FULL_SHIFT interrupt to support
+> master write request with >= 64 bytes.
+> 
+> Iproc has a slave rx fifo size of 64 bytes.
+> Rx fifo full interrupt (IS_S_RX_FIFO_FULL_SHIFT) will be generated
+> when RX fifo becomes full. This can happen if master issues write
+> request of more than 64 bytes.
+> 
 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v5.8.13&id=953fc770d069b167266d9d9ccfef0455fcfdc070 
+ARM cores run much faster than I2C bus, why would rx fifo go full when
+rx interrupt is enabled and bytes are read out by bus driver isr?
+Isn't fifo read pointer updated on these byte reads?
+Does controller stretch clock when rx fifo is full (e.g. kernel has
+crashed, bus driver isn't draining fifo)?
 
-
-For reference my bug reports:
-
-https://bugzilla.kernel.org/show_bug.cgi?id=209627
-
-https://bugs.archlinux.org/task/68178#comment193400
-
-
-Hardware:
-
-- CPU Intel Core m3-6Y30
-
-- GPU Intel Graphics 515
-
-
-
-Sorry, I had to resend this message, it was rejected due to some 
-automatic html encoding.
-
-Thank you
-
-Rainer Finke
