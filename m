@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1903D28DCC3
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Oct 2020 11:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112E028DD87
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Oct 2020 11:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730637AbgJNJUB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Oct 2020 05:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S1730545AbgJNJZI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Oct 2020 05:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730348AbgJNJTk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Oct 2020 05:19:40 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCF0C0613DC
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Oct 2020 14:26:25 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id j18so637749pfa.0
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Oct 2020 14:26:25 -0700 (PDT)
+        with ESMTP id S1730508AbgJNJTm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Oct 2020 05:19:42 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA70C0613E1
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Oct 2020 14:26:27 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id d23so584821pll.7
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Oct 2020 14:26:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mufC+Ap9xnkOPtTpdL6qCz85PvFDmFdb1oHbD9woAtU=;
-        b=bG5DDyWe1hHiGqKx0Rliz987Jdvd1KBLnhOpKw7zvVhHSUayWhHukVEUoD0lRf9Hff
-         NwP2nkVaqDESF/XxzgRbUjxLDBXspHDDSufLm3UZTGCqOEA6K0cIPeeUXaQHq6FxB9Mb
-         9xNCKsDx8gIEgtXsFA98LMkMtUz3VK5iIQlvY=
+        bh=hTZ0TY6V/O5G/81ybrQ47uBho41Y6v3NILTItnTrKis=;
+        b=T3Cnn4d1Ny8T3yEUuaeG/1+IH1vROXxkaEaD4oCx3/SUz2fANe41fdb43L3Sz5SUEW
+         gdCLROFz1PhQAIbYAKSolN7hxHW6M8WDHDyKuaBqV4m1dZMJXX9XaUPn20YEkdRwd2Sp
+         PBSasWiplYjvEMc2K/r04sCKdsaBmpDkTtWnM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mufC+Ap9xnkOPtTpdL6qCz85PvFDmFdb1oHbD9woAtU=;
-        b=U/6C7+If4aaa5NpJFj66tEgWkaKdCW4YqsHtk4J483l1+umpb06McR2Krj4uDxlAy8
-         a5ItuwQghuiMwMJjvHn1sdMY6sL5pLGOxxn/YfbJ28gzBZMXdiwuZyDJOdD2bObp8ccJ
-         YoX20v1WZCf5dj9zQtjTxKUKWf9n0qyUHt3tiNqattmxC/Q9lmMF3+1SsJpQrfWSD1BH
-         wwAFq9Lres76IR3IcZJW7I/BYTsk0/QiMErs6cD+TunMyZEe0kYLjhjNG033fROlI/Gi
-         LmfltuLw/KxJgCSyzFSJ998t+spaT8Lruxusp5xmOwBUluTKt5ubQg6RiyuFbMcTQHsZ
-         tIiQ==
-X-Gm-Message-State: AOAM532zHHgkffFrWracP1MGGVp7GCz1ILtXFR6M+sL2KcHH3jAtaCwB
-        0A5pmkYGCqnXcy9f4FvqXw0jLw==
-X-Google-Smtp-Source: ABdhPJw+h+grE52QGnT2LkbzYI8gkajzy92W3dKZksdWwf6EhrdGgjFBRQymoUTAneV6TKBnCrjltQ==
-X-Received: by 2002:a63:3747:: with SMTP id g7mr1248978pgn.190.1602624385221;
-        Tue, 13 Oct 2020 14:26:25 -0700 (PDT)
+        bh=hTZ0TY6V/O5G/81ybrQ47uBho41Y6v3NILTItnTrKis=;
+        b=hilYUetr3xPI9VMQAHaAJfdf2h88Rsx9HW4XJfBsEtQ0IDAFYN4+x695Vb37une1ml
+         7mETzB24o1QR+Pzkgo4rO1l1lIgxIEs8/W+JtiqCDiHYS0CWyPPcPso7WyyMAyM89RQ0
+         u6AjufClOUyCXz/jeWvEYMOQX4EU7dWP8WUC3APxzB4MH7vrJWM7AYaZk121IY/rafdz
+         6ev+/rRefodKZZZ9EE3KXTftr0JcOLedPi7QZGEmD6qV/61b97rlopwJPGFSJu8hTCJZ
+         I25eMmPoBYuVekCkQHgQe62k9n0yGu+GoDRy8YJ22kCq330xeuu+keJNpZizm7SxFnBU
+         S9iA==
+X-Gm-Message-State: AOAM533HzZ538ozTJiHuqe+xNHdEVs6vviEicONik4JWmA5qhkyJh768
+        3iwcQFGlHzaPjnXP2sQajKuDeA==
+X-Google-Smtp-Source: ABdhPJw5ERljxRf+ppIaCppwP2hYl/Q2fTvmgZmRjyD1gtAuM5lCQGnkocPD2bHIa1j0bXRARwbObw==
+X-Received: by 2002:a17:90b:19c9:: with SMTP id nm9mr319550pjb.6.1602624386670;
+        Tue, 13 Oct 2020 14:26:26 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:42b0:34ff:fe3d:58e6])
-        by smtp.gmail.com with ESMTPSA id b15sm167713pju.16.2020.10.13.14.26.23
+        by smtp.gmail.com with ESMTPSA id b15sm167713pju.16.2020.10.13.14.26.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2020 14:26:24 -0700 (PDT)
+        Tue, 13 Oct 2020 14:26:26 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Wolfram Sang <wsa@kernel.org>,
@@ -54,12 +54,10 @@ Cc:     linux-i2c@vger.kernel.org,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] Revert "i2c: i2c-qcom-geni: Fix DMA transfer race"
-Date:   Tue, 13 Oct 2020 14:25:29 -0700
-Message-Id: <20201013142448.v2.2.I7b22281453b8a18ab16ef2bfd4c641fb1cc6a92c@changeid>
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/3] soc: qcom: geni: Optimize/comment select fifo/dma mode
+Date:   Tue, 13 Oct 2020 14:25:30 -0700
+Message-Id: <20201013142448.v2.3.I646736d3969dc47de8daceb379c6ba85993de9f4@changeid>
 X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
 In-Reply-To: <20201013212531.428538-1-dianders@chromium.org>
 References: <20201013212531.428538-1-dianders@chromium.org>
@@ -69,69 +67,124 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This reverts commit 02b9aec59243c6240fc42884acc958602146ddf6.
+The functions geni_se_select_fifo_mode() and
+geni_se_select_fifo_mode() are a little funny.  They read/write a
+bunch of memory mapped registers even if they don't change or aren't
+relevant for the current protocol.  Let's make them a little more
+sane.  We'll also add a comment explaining why we don't do some of the
+operations for UART.
 
-As talked about in the patch ("soc: qcom: geni: More properly switch
-to DMA mode"), swapping the order of geni_se_setup_m_cmd() and
-geni_se_xx_dma_prep() can sometimes cause corrupted transfers.  Thus
-we traded one problem for another.  Now that we've debugged the
-problem further and fixed the geni helper functions to more disable
-FIFO interrupts when we move to DMA mode we can revert it and end up
-with (hopefully) zero problems!
+NOTE: there is no evidence at all that this makes any performance
+difference and it fixes no bugs.  However, it seems (to me) like it
+makes the functions a little easier to understand.  Decreasing the
+amount of times we read/write memory mapped registers is also nice,
+even if we are using "relaxed" variants.
 
-To be explicit, the patch ("soc: qcom: geni: More properly switch
-to DMA mode") is a prerequisite for this one.
-
-Fixes: 02b9aec59243 ("i2c: i2c-qcom-geni: Fix DMA transfer race")
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Akash Asthana <akashast@codeaurora.org>
-Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
+Note that I didn't add Dmitry Baryshkov's Tested-by tag to the 3rd
+patch since it changed subtly.  Also note that when adding comments
+about why the UART is special it seems clear to me that we really
+shouldn't be managing these interrupt enables in the common code.  It
+seems like drivers should manage / enable the interrupts that they
+care about.  That seems like a bigger change, though, and I didn't
+want to muddy the waters and potentially delay the important fix from
+patch #1 and #2.  Hopefully someone from Qualcomm can take on cleaning
+this stuff up after these fixes land.
 
-(no changes since v1)
+Changes in v2:
+- Consistently use "val_old" to keep track of old value.
+- Add comments about why UART is special.
 
- drivers/i2c/busses/i2c-qcom-geni.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/soc/qcom/qcom-geni-se.c | 50 +++++++++++++++++++++------------
+ 1 file changed, 32 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index dead5db3315a..32b2a9921b14 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -367,6 +367,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 		geni_se_select_mode(se, GENI_SE_FIFO);
+diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+index 751a49f6534f..7649b2057b9a 100644
+--- a/drivers/soc/qcom/qcom-geni-se.c
++++ b/drivers/soc/qcom/qcom-geni-se.c
+@@ -266,49 +266,63 @@ EXPORT_SYMBOL(geni_se_init);
+ static void geni_se_select_fifo_mode(struct geni_se *se)
+ {
+ 	u32 proto = geni_se_read_proto(se);
+-	u32 val;
++	u32 val, val_old;
  
- 	writel_relaxed(len, se->base + SE_I2C_RX_TRANS_LEN);
-+	geni_se_setup_m_cmd(se, I2C_READ, m_param);
+ 	geni_se_irq_clear(se);
  
- 	if (dma_buf && geni_se_rx_dma_prep(se, dma_buf, len, &rx_dma)) {
- 		geni_se_select_mode(se, GENI_SE_FIFO);
-@@ -374,8 +375,6 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 		dma_buf = NULL;
- 	}
+-	val = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
++	/*
++	 * The RX path for the UART is asynchronous and so needs more
++	 * complex logic for enabling / disabling its interrupts.
++	 *
++	 * Specific notes:
++	 * - The done and TX-related interrupts are managed manually.
++	 * - We don't RX from the main sequencer (we use the secondary) so
++	 *   we don't need the RX-related interrupts enabled in the main
++	 *   sequencer for UART.
++	 */
+ 	if (proto != GENI_SE_UART) {
++		val_old = val = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
+ 		val |= M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN;
+ 		val |= M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN;
+-	}
+-	writel_relaxed(val, se->base + SE_GENI_M_IRQ_EN);
++		if (val != val_old)
++			writel_relaxed(val, se->base + SE_GENI_M_IRQ_EN);
  
--	geni_se_setup_m_cmd(se, I2C_READ, m_param);
--
- 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
- 	if (!time_left)
- 		geni_i2c_abort_xfer(gi2c);
-@@ -409,6 +408,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 		geni_se_select_mode(se, GENI_SE_FIFO);
+-	val = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
+-	if (proto != GENI_SE_UART)
++		val_old = val = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
+ 		val |= S_CMD_DONE_EN;
+-	writel_relaxed(val, se->base + SE_GENI_S_IRQ_EN);
++		if (val != val_old)
++			writel_relaxed(val, se->base + SE_GENI_S_IRQ_EN);
++	}
  
- 	writel_relaxed(len, se->base + SE_I2C_TX_TRANS_LEN);
-+	geni_se_setup_m_cmd(se, I2C_WRITE, m_param);
+-	val = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
++	val_old = val = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
+ 	val &= ~GENI_DMA_MODE_EN;
+-	writel_relaxed(val, se->base + SE_GENI_DMA_MODE_EN);
++	if (val != val_old)
++		writel_relaxed(val, se->base + SE_GENI_DMA_MODE_EN);
+ }
  
- 	if (dma_buf && geni_se_tx_dma_prep(se, dma_buf, len, &tx_dma)) {
- 		geni_se_select_mode(se, GENI_SE_FIFO);
-@@ -416,8 +416,6 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 		dma_buf = NULL;
- 	}
+ static void geni_se_select_dma_mode(struct geni_se *se)
+ {
+ 	u32 proto = geni_se_read_proto(se);
+-	u32 val;
++	u32 val, val_old;
  
--	geni_se_setup_m_cmd(se, I2C_WRITE, m_param);
--
- 	if (!dma_buf) /* Get FIFO IRQ */
- 		writel_relaxed(1, se->base + SE_GENI_TX_WATERMARK_REG);
+ 	geni_se_irq_clear(se);
  
+-	val = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
+ 	if (proto != GENI_SE_UART) {
++		val_old = val = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
+ 		val &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN);
+ 		val &= ~(M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
+-	}
+-	writel_relaxed(val, se->base + SE_GENI_M_IRQ_EN);
++		if (val != val_old)
++			writel_relaxed(val, se->base + SE_GENI_M_IRQ_EN);
+ 
+-	val = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
+-	if (proto != GENI_SE_UART)
++		val_old = val = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
+ 		val &= ~S_CMD_DONE_EN;
+-	writel_relaxed(val, se->base + SE_GENI_S_IRQ_EN);
++		if (val != val_old)
++			writel_relaxed(val, se->base + SE_GENI_S_IRQ_EN);
++	}
+ 
+-	val = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
++	val_old = val = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
+ 	val |= GENI_DMA_MODE_EN;
+-	writel_relaxed(val, se->base + SE_GENI_DMA_MODE_EN);
++	if (val != val_old)
++		writel_relaxed(val, se->base + SE_GENI_DMA_MODE_EN);
+ }
+ 
+ /**
 -- 
 2.28.0.1011.ga647a8990f-goog
 
