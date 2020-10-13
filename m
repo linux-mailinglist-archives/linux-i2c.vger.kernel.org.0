@@ -2,108 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F0628CFEC
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Oct 2020 16:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8793628D170
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Oct 2020 17:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388449AbgJMOMF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Oct 2020 10:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388446AbgJMOMF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Oct 2020 10:12:05 -0400
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25CB9C0613D2
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Oct 2020 07:12:04 -0700 (PDT)
-Received: from ramsan ([84.195.186.194])
-        by michel.telenet-ops.be with bizsmtp
-        id fSC22300U4C55Sk06SC26L; Tue, 13 Oct 2020 16:12:02 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1kSL22-00064A-MP; Tue, 13 Oct 2020 16:12:02 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1kSL22-0007Nq-K8; Tue, 13 Oct 2020 16:12:02 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] i2c: sh_mobile: Mark adapter suspended during suspend
-Date:   Tue, 13 Oct 2020 16:12:01 +0200
-Message-Id: <20201013141201.28338-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        id S1730741AbgJMPp6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Oct 2020 11:45:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:46038 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727830AbgJMPp5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Oct 2020 11:45:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602603956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CVL6suc3bCYXCeTxwyDVXkvvDs+rPcToK4ihASqFKPA=;
+        b=BYniBPlA7660QkLKzZyjkvukksKvi/MV5iAzA1Ii+iG62ZmsBjojHvUUs1ECAGhYNeG31r
+        K+s7y9jTRcyHjycLkyZUH/OFNdEBhBQCrhj9mnj1SAU7Nfae6efHe0dN/f6+5nviF26Rf0
+        6gpeD3DxZvULTvfGugrjNFRlJHWxDgU=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-34-2_RkSDXsPrukeQoge12AAQ-1; Tue, 13 Oct 2020 11:45:53 -0400
+X-MC-Unique: 2_RkSDXsPrukeQoge12AAQ-1
+Received: by mail-ed1-f70.google.com with SMTP id o24so21787edz.11
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Oct 2020 08:45:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CVL6suc3bCYXCeTxwyDVXkvvDs+rPcToK4ihASqFKPA=;
+        b=cLU6Ny7OrHHgiZy+OQwFiYdKpcKdx2T/nQagXHIbmEvUXsHSLQOWbnTTN6Bv0Fjh92
+         sxCEWIO266qdsnnEUV4YO09PInLzQyUgN9w3xQ2hILI2FtpBIMsyQdzUAeY2+r8E2Uid
+         kqB39oAT6qwRLNgxdkq7RaMjSOyXEfvGUVJZyUI34ny9OUYZ5WZ3/4wa7LBTvcMw3dUM
+         uryT2JhotmMsYrbOozV4poiUuOPAVEom8Hys6vSnyZEn2xMQG+M2u+VdCHIrf0IdWoT2
+         rliSEBkkDvyeN8ldrEl3tAHZWUlNUIt6YdLxuk+27WzBCZyutR5JUj2L0Lwxai97X4lF
+         vg+A==
+X-Gm-Message-State: AOAM532+fXJiKtZ42AcGbFGia2GaP3nLNLvlf+0lb0fXxAP/IQcfsGEW
+        GyA+qtImgt0pscVSx479gVmc7Fny6xU6aJ1+znVGznpJ5LEWm3ih0OwfBrAhFtaX1YIFD9nLzPX
+        IJ+QqehGrcrahZcjGB8TB
+X-Received: by 2002:a17:907:9ef:: with SMTP id ce15mr366354ejc.430.1602603952006;
+        Tue, 13 Oct 2020 08:45:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyajKajYRMHQdAu5fbqEKcfd+zyIp/zEg7r3nLOT+/4tCMfRvyZyJNocQVTFgOxL4gd/c0Qqg==
+X-Received: by 2002:a17:907:9ef:: with SMTP id ce15mr366326ejc.430.1602603951693;
+        Tue, 13 Oct 2020 08:45:51 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id m9sm194656ejl.45.2020.10.13.08.45.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Oct 2020 08:45:49 -0700 (PDT)
+Subject: Re: [Bug 209627] Touchscreen doesn't work anymore since commit
+ 21653a4181ff292480599dad996a2b759ccf050f (regression)
+To:     Rainer Finke <rainer@finke.cc>, linux-i2c@vger.kernel.org
+Cc:     mika.westerberg@linux.intel.com, wsa@kernel.org, sashal@kernel.org
+References: <ab71ef62-64c8-ff31-c5aa-43ad454d1143@finke.cc>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <cb544a8b-98e8-2f43-4984-bc0422a05703@redhat.com>
+Date:   Tue, 13 Oct 2020 17:45:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <ab71ef62-64c8-ff31-c5aa-43ad454d1143@finke.cc>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When a driver tries to send an I2C message while the adapter is
-suspended, this typically fails with:
+Hi,
 
-    i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+On 10/12/20 9:52 PM, Rainer Finke wrote:
+> After upgrading from Linux 5.4.68 to Linux 5.4.69, the touchscreen of my Huawei Matebook 12 doesn't work anymore. The same issue happens with Linux >= 5.8.13.
+> 
+> I've compiled Linux from git to verify if it was fixed, but it doesn't help. But when reverting the commit 21653a4181ff292480599dad996a2b759ccf050f the touchscreen works fine again.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v5.8.13&id=953fc770d069b167266d9d9ccfef0455fcfdc070
+> 
+> For reference my bug reports:
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=209627
+> 
+> https://bugs.archlinux.org/task/68178#comment193400
+> 
+> 
+> Hardware:
+> 
+> - CPU Intel Core m3-6Y30
+> 
+> - GPU Intel Graphics 515
 
-Avoid accessing the adapter while it is suspended by marking it
-suspended during suspend.  This allows the I2C core to catch this, and
-print a warning:
+Thank you for your bug report and I'm sorry to hear about this problem.
 
-    WARNING: CPU: 1 PID: 13 at drivers/i2c/i2c-core.h:54
-__i2c_transfer+0x4a4/0x4e4
-    i2c i2c-6: Transfer while suspended
+The commit in question fixes the touchpad not working on several
+recent Lenovo models. What it does it makes the method (opregion) to
+access the i2c bus from ACPI code available to the ACPI code before
+calling the status method of ACPI devices on that i2c-bus.
+This status method tells us if the device is actually present or not
+and on those Thinkpads the status method did an i2c check, so we
+needed to register the i2c opregion before checking for new devices.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-This follows the same approach as commit 18569fa89a4db9ed ("i2c: rcar:
-add suspend/resume support").
-Exposed by commit dc279ac6e5b4e06e ("cpufreq: dt: Refactor
-initialization to handle probe deferral properly") in linux-next, which
-tries to talk to the PMIC on r8a7791/koelsch while the I2C controller is
-suspended.
----
- drivers/i2c/busses/i2c-sh_mobile.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Registering the i2c opregion earlier seemed like an obvious
+solution, but I was already afraid we would hit an issue on some
+device because of this, because of ACPI being ACPI.
 
-diff --git a/drivers/i2c/busses/i2c-sh_mobile.c b/drivers/i2c/busses/i2c-sh_mobile.c
-index bdd60770779ad523..3ae6ca21a02c6b9f 100644
---- a/drivers/i2c/busses/i2c-sh_mobile.c
-+++ b/drivers/i2c/busses/i2c-sh_mobile.c
-@@ -956,10 +956,38 @@ static int sh_mobile_i2c_remove(struct platform_device *dev)
- 	return 0;
- }
- 
-+#ifdef CONFIG_PM_SLEEP
-+static int sh_mobile_i2c_suspend(struct device *dev)
-+{
-+	struct sh_mobile_i2c_data *pd = dev_get_drvdata(dev);
-+
-+	i2c_mark_adapter_suspended(&pd->adap);
-+	return 0;
-+}
-+
-+static int sh_mobile_i2c_resume(struct device *dev)
-+{
-+	struct sh_mobile_i2c_data *pd = dev_get_drvdata(dev);
-+
-+	i2c_mark_adapter_resumed(&pd->adap);
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops sh_mobile_i2c_pm_ops = {
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(sh_mobile_i2c_suspend,
-+				      sh_mobile_i2c_resume)
-+};
-+
-+#define DEV_PM_OPS (&sh_mobile_i2c_pm_ops)
-+#else
-+#define DEV_PM_OPS NULL
-+#endif /* CONFIG_PM_SLEEP */
-+
- static struct platform_driver sh_mobile_i2c_driver = {
- 	.driver		= {
- 		.name		= "i2c-sh_mobile",
- 		.of_match_table = sh_mobile_i2c_dt_ids,
-+		.pm	= DEV_PM_OPS,
- 	},
- 	.probe		= sh_mobile_i2c_probe,
- 	.remove		= sh_mobile_i2c_remove,
--- 
-2.17.1
+It seems that the ACPI status method for your device probably
+also does something with the i2c bus when the i2c opregion
+is available, but for some reason that is not working...
+
+The next step in debugging this would be to take a look at
+the ACPI tables for your device, can you please run:
+
+sudo acpidump -o acpidump.Huawei-Matebook-12
+
+And then send out an email with the generated
+acpidump.Huawei-Matebook-12 file attached?
+
+Note please drop the list from the Cc when sending the
+email with the attachment.
+
+What would also be useful (for a possible workaround) would
+be the output of:
+
+grep . /sys/class/dmi/id/* 2> /dev/null
+
+Please run this as a normal user (*) and copy and paste
+the output into your next email.
+
+Regards,
+
+Hans
+
+
+
+*) this will exclude serialnumbers for your device which
+are only readable by root
+
 
