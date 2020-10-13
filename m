@@ -2,90 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FF728D18E
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Oct 2020 17:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8819828DDA4
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Oct 2020 11:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729372AbgJMPyJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Oct 2020 11:54:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727016AbgJMPyJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Oct 2020 11:54:09 -0400
-Received: from localhost (dyndsl-091-249-035-207.ewe-ip-backbone.de [91.249.35.207])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6CA1E25215;
-        Tue, 13 Oct 2020 15:54:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602604448;
-        bh=trQOVCfY7quismV6EFJLZYCRoqbFMFBZuwroBsLlQXk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0kx25ZycPbfKI57m16/MizCeX6undrJikhtC1/6PMcHbuvDoojeIJt33jcVj7dyqY
-         8Tds4rJ9V8md2TQ6uyj2LwgSqtm+ub8CrArNHHGEQhfG0RDMMnYv82rPhVu46gxqJV
-         AbY0Ni7oe6OYo3jTrGI3Mz18cc03qwzcAtL+W4Ag=
-Date:   Tue, 13 Oct 2020 17:53:58 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Balbir Singh <sblbir@amazon.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 13/24] docs: i2c: index.rst: add
- slave-testunit-backend.rst
-Message-ID: <20201013155358.GA1465@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Balbir Singh <sblbir@amazon.com>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-i2c@vger.kernel.org,
+        id S1727449AbgJNJaa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Oct 2020 05:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729685AbgJNJTi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Oct 2020 05:19:38 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9EBC0613D7
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Oct 2020 14:26:22 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id x16so532334pgj.3
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Oct 2020 14:26:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OoAVR9AHVrF5AmfQOiW6xvU4LK/5cY35UObNq6NT9XE=;
+        b=EQTxzxUuIKTcB+XY70IZK53ZA9IwEFA63ysUwVxyS6E2XHi8jvNKV1KDaWxPQOMZwa
+         DpWi781oIYquJ8RoAVv9BkQ8pmtZdjPU+u2OYk/cOqkvKpFXOplZdLqRCARtqWwa6WM8
+         M7r+0Nwo0XKiYriJXGI2rMUfGAmFqR3fW0Wl0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OoAVR9AHVrF5AmfQOiW6xvU4LK/5cY35UObNq6NT9XE=;
+        b=oxbVV2rSL+IfTziIm2BvyEfzP1IF6WG4OhzLbd9T8rat1s+LzvPoiPG/Yy903ACoRf
+         ltb/5y449dxi289842j1Z2x/NEGHR2a5mAZK4cbbhWjRtId9YdCr49Dt2W2Fs2Twq6qX
+         YLpuZTBsFwaOmlyS6+ULgDI1C2E2DpsYqyfbi27vNAdvnLSakS6FQjFB2xFtIJr49RYr
+         ZwmPkbZgyj7qazM9CjlHljnshinzdPo2AH0Cu6FFjjsqitBUC2TGW65iAFSQoP01W9cZ
+         X/P4c8zk5ekmsx+vz95BJr5+Iz6T8CAsoPLEeNJmTyijLNx74c1lxTXqXgbV2A+HZSQg
+         lMNg==
+X-Gm-Message-State: AOAM530GXjcLkTAlXYV31rrsKgXHV2FJmc7v/N+X3Mvk7ebYTA17Wk4C
+        VkFgrS/trwkAKHsOrqLhtM3gqg==
+X-Google-Smtp-Source: ABdhPJxjpE+t6tSF6IoGOjD0t+fTHO4qbXOhNCwIJqg8rHVYSn4dWpiqWHiGitjlRTuGvKhaxa/vBA==
+X-Received: by 2002:a63:fe49:: with SMTP id x9mr1177056pgj.192.1602624381982;
+        Tue, 13 Oct 2020 14:26:21 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:42b0:34ff:fe3d:58e6])
+        by smtp.gmail.com with ESMTPSA id b15sm167713pju.16.2020.10.13.14.26.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2020 14:26:21 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akash Asthana <akashast@codeaurora.org>
+Cc:     linux-i2c@vger.kernel.org,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Girish Mahadevan <girishm@codeaurora.org>,
+        Karthikeyan Ramasubramanian <kramasub@codeaurora.org>,
+        Mukesh Kumar Savaliya <msavaliy@codeaurora.org>,
+        Sagar Dharia <sdharia@codeaurora.org>,
         linux-kernel@vger.kernel.org
-References: <cover.1602590106.git.mchehab+huawei@kernel.org>
- <8b46f6d001962e7b562c3542eb4449bd905f448a.1602590106.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 0/3] i2c: i2c-qcom-geni: More properly fix the DMA race
+Date:   Tue, 13 Oct 2020 14:25:27 -0700
+Message-Id: <20201013212531.428538-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jRHKVT23PllUwdXP"
-Content-Disposition: inline
-In-Reply-To: <8b46f6d001962e7b562c3542eb4449bd905f448a.1602590106.git.mchehab+huawei@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Previously I landed commit 02b9aec59243 ("i2c: i2c-qcom-geni: Fix DMA
+transfer race") to fix a race we were seeing.  While that most
+definitely fixed the race we were seeing, it looks like it causes
+problems in the TX path, which we didn't stress test until we started
+trying to update firmware on devices.
 
---jRHKVT23PllUwdXP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Let's revert that patch and try another way: fix the original problem
+by disabling the interrupts that aren't relevant to DMA transfers.
+Now we can stress both TX and RX cases and see no problems.  I also
+can't find any place to put an msleep() that causes problems anymore.
 
+Since this problem only affects i2c, I'm hoping for an Ack from Bjorn
+and then all these patches can go through the i2c tree.  However, if
+maintainers want to work a different way out to land that's OK too.
 
-> Fixes: a8335c64c5f0 ("i2c: add slave testunit driver")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+NOTE: the 3rd patch in the series could certianly be squashed with
+patch #1 or I could re-order / rejigger.  To me it seemed like a good
+idea to first fix the probelm (and make the two functions as much of
+an inverse as possible) and later try to clean things up.  Yell if you
+want something different.
 
-As discussed with v1, I already fixed it (correctly). Patch is in
-linux-next:
+Changes in v2:
+- Consistently use "val_old" to keep track of old value.
+- Add comments about why UART is special.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git/commit/?h=i2c/for-next&id=40daf09a30a0c86a038bcce606604333f32e03f8
+Douglas Anderson (3):
+  soc: qcom: geni: More properly switch to DMA mode
+  Revert "i2c: i2c-qcom-geni: Fix DMA transfer race"
+  soc: qcom: geni: Optimize/comment select fifo/dma mode
 
-Thanks!
+ drivers/i2c/busses/i2c-qcom-geni.c |  6 ++--
+ drivers/soc/qcom/qcom-geni-se.c    | 55 ++++++++++++++++++++++--------
+ 2 files changed, 43 insertions(+), 18 deletions(-)
 
+-- 
+2.28.0.1011.ga647a8990f-goog
 
---jRHKVT23PllUwdXP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+FzY0ACgkQFA3kzBSg
-KbaaXw/9GVxvuUSDOgJD2XFZbvdWzUHyr58OcfG6bnfRZrlD8RJPLSmGUTA8xsLr
-5AbQG5y18J84KIiUqQpfFXR8Tie0NmTb7cCzCz5S/uTTzuCNNt/WU04OCDdTrbFV
-ZkfxZV3chY+oo7yDRCsGzSNDj3Wn0MQlp5MKnSXjRoQAihxId0ePRSQ9F+r/vWlt
-wqpCN6kDFZrjKZESDlY6CReVpvt4VHzQfW8O2NzlSUgkP3c08xBa0ILRNZGC2wUs
-Cw4mngubxrXvFCt5i/p+a797GbB5rsamwu0inmnoDYD92+BDJpJicf5GsxeO1Z/B
-RpETW9U6lQZZ1AqolS0hLwt4BULgU5QQSUx9to7O6mcvI/0jLApRi60X5baf5rny
-w3W/spX6FzPBzrrwucQxg5/RpJIirTa8RANtXChGwcVFxucvX0nXEWS/URiejy8t
-nVL9wnCinWtBAR3/sYeOSy0jpUuNJ0EusOKdwiPZbZxz50zs4Da5l+ER3ZuTjtlB
-AXU1fzYl4OH041qioAyJOuXf6GV5YZJm+P3xPbc55gnTqLTC3tqmm5Uk8lq0X1aT
-VPvR1Xq3c55uUG8rBfR2HMh07jETerLuTd71plQz6yV0IpiwzSSd6fBVrI1K6fRX
-c2a4HsBmTaZ9fkQMxQ9Lby+ktflUXf0GX/E7k0TErp2gC08yg4Q=
-=0/8Q
------END PGP SIGNATURE-----
-
---jRHKVT23PllUwdXP--
