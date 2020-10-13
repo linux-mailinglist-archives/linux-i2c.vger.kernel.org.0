@@ -2,140 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8793628D170
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Oct 2020 17:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FF728D18E
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Oct 2020 17:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730741AbgJMPp6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Oct 2020 11:45:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:46038 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727830AbgJMPp5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Oct 2020 11:45:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602603956;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CVL6suc3bCYXCeTxwyDVXkvvDs+rPcToK4ihASqFKPA=;
-        b=BYniBPlA7660QkLKzZyjkvukksKvi/MV5iAzA1Ii+iG62ZmsBjojHvUUs1ECAGhYNeG31r
-        K+s7y9jTRcyHjycLkyZUH/OFNdEBhBQCrhj9mnj1SAU7Nfae6efHe0dN/f6+5nviF26Rf0
-        6gpeD3DxZvULTvfGugrjNFRlJHWxDgU=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-34-2_RkSDXsPrukeQoge12AAQ-1; Tue, 13 Oct 2020 11:45:53 -0400
-X-MC-Unique: 2_RkSDXsPrukeQoge12AAQ-1
-Received: by mail-ed1-f70.google.com with SMTP id o24so21787edz.11
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Oct 2020 08:45:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CVL6suc3bCYXCeTxwyDVXkvvDs+rPcToK4ihASqFKPA=;
-        b=cLU6Ny7OrHHgiZy+OQwFiYdKpcKdx2T/nQagXHIbmEvUXsHSLQOWbnTTN6Bv0Fjh92
-         sxCEWIO266qdsnnEUV4YO09PInLzQyUgN9w3xQ2hILI2FtpBIMsyQdzUAeY2+r8E2Uid
-         kqB39oAT6qwRLNgxdkq7RaMjSOyXEfvGUVJZyUI34ny9OUYZ5WZ3/4wa7LBTvcMw3dUM
-         uryT2JhotmMsYrbOozV4poiUuOPAVEom8Hys6vSnyZEn2xMQG+M2u+VdCHIrf0IdWoT2
-         rliSEBkkDvyeN8ldrEl3tAHZWUlNUIt6YdLxuk+27WzBCZyutR5JUj2L0Lwxai97X4lF
-         vg+A==
-X-Gm-Message-State: AOAM532+fXJiKtZ42AcGbFGia2GaP3nLNLvlf+0lb0fXxAP/IQcfsGEW
-        GyA+qtImgt0pscVSx479gVmc7Fny6xU6aJ1+znVGznpJ5LEWm3ih0OwfBrAhFtaX1YIFD9nLzPX
-        IJ+QqehGrcrahZcjGB8TB
-X-Received: by 2002:a17:907:9ef:: with SMTP id ce15mr366354ejc.430.1602603952006;
-        Tue, 13 Oct 2020 08:45:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyajKajYRMHQdAu5fbqEKcfd+zyIp/zEg7r3nLOT+/4tCMfRvyZyJNocQVTFgOxL4gd/c0Qqg==
-X-Received: by 2002:a17:907:9ef:: with SMTP id ce15mr366326ejc.430.1602603951693;
-        Tue, 13 Oct 2020 08:45:51 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id m9sm194656ejl.45.2020.10.13.08.45.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2020 08:45:49 -0700 (PDT)
-Subject: Re: [Bug 209627] Touchscreen doesn't work anymore since commit
- 21653a4181ff292480599dad996a2b759ccf050f (regression)
-To:     Rainer Finke <rainer@finke.cc>, linux-i2c@vger.kernel.org
-Cc:     mika.westerberg@linux.intel.com, wsa@kernel.org, sashal@kernel.org
-References: <ab71ef62-64c8-ff31-c5aa-43ad454d1143@finke.cc>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <cb544a8b-98e8-2f43-4984-bc0422a05703@redhat.com>
-Date:   Tue, 13 Oct 2020 17:45:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729372AbgJMPyJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Oct 2020 11:54:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41908 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727016AbgJMPyJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Oct 2020 11:54:09 -0400
+Received: from localhost (dyndsl-091-249-035-207.ewe-ip-backbone.de [91.249.35.207])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6CA1E25215;
+        Tue, 13 Oct 2020 15:54:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602604448;
+        bh=trQOVCfY7quismV6EFJLZYCRoqbFMFBZuwroBsLlQXk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0kx25ZycPbfKI57m16/MizCeX6undrJikhtC1/6PMcHbuvDoojeIJt33jcVj7dyqY
+         8Tds4rJ9V8md2TQ6uyj2LwgSqtm+ub8CrArNHHGEQhfG0RDMMnYv82rPhVu46gxqJV
+         AbY0Ni7oe6OYo3jTrGI3Mz18cc03qwzcAtL+W4Ag=
+Date:   Tue, 13 Oct 2020 17:53:58 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Balbir Singh <sblbir@amazon.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 13/24] docs: i2c: index.rst: add
+ slave-testunit-backend.rst
+Message-ID: <20201013155358.GA1465@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Balbir Singh <sblbir@amazon.com>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1602590106.git.mchehab+huawei@kernel.org>
+ <8b46f6d001962e7b562c3542eb4449bd905f448a.1602590106.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <ab71ef62-64c8-ff31-c5aa-43ad454d1143@finke.cc>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jRHKVT23PllUwdXP"
+Content-Disposition: inline
+In-Reply-To: <8b46f6d001962e7b562c3542eb4449bd905f448a.1602590106.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
 
-On 10/12/20 9:52 PM, Rainer Finke wrote:
-> After upgrading from Linux 5.4.68 to Linux 5.4.69, the touchscreen of my Huawei Matebook 12 doesn't work anymore. The same issue happens with Linux >= 5.8.13.
-> 
-> I've compiled Linux from git to verify if it was fixed, but it doesn't help. But when reverting the commit 21653a4181ff292480599dad996a2b759ccf050f the touchscreen works fine again.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v5.8.13&id=953fc770d069b167266d9d9ccfef0455fcfdc070
-> 
-> For reference my bug reports:
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=209627
-> 
-> https://bugs.archlinux.org/task/68178#comment193400
-> 
-> 
-> Hardware:
-> 
-> - CPU Intel Core m3-6Y30
-> 
-> - GPU Intel Graphics 515
-
-Thank you for your bug report and I'm sorry to hear about this problem.
-
-The commit in question fixes the touchpad not working on several
-recent Lenovo models. What it does it makes the method (opregion) to
-access the i2c bus from ACPI code available to the ACPI code before
-calling the status method of ACPI devices on that i2c-bus.
-This status method tells us if the device is actually present or not
-and on those Thinkpads the status method did an i2c check, so we
-needed to register the i2c opregion before checking for new devices.
-
-Registering the i2c opregion earlier seemed like an obvious
-solution, but I was already afraid we would hit an issue on some
-device because of this, because of ACPI being ACPI.
-
-It seems that the ACPI status method for your device probably
-also does something with the i2c bus when the i2c opregion
-is available, but for some reason that is not working...
-
-The next step in debugging this would be to take a look at
-the ACPI tables for your device, can you please run:
-
-sudo acpidump -o acpidump.Huawei-Matebook-12
-
-And then send out an email with the generated
-acpidump.Huawei-Matebook-12 file attached?
-
-Note please drop the list from the Cc when sending the
-email with the attachment.
-
-What would also be useful (for a possible workaround) would
-be the output of:
-
-grep . /sys/class/dmi/id/* 2> /dev/null
-
-Please run this as a normal user (*) and copy and paste
-the output into your next email.
-
-Regards,
-
-Hans
+--jRHKVT23PllUwdXP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
+> Fixes: a8335c64c5f0 ("i2c: add slave testunit driver")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-*) this will exclude serialnumbers for your device which
-are only readable by root
+As discussed with v1, I already fixed it (correctly). Patch is in
+linux-next:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git/commit/?h=i2c/for-next&id=40daf09a30a0c86a038bcce606604333f32e03f8
+
+Thanks!
 
 
+--jRHKVT23PllUwdXP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+FzY0ACgkQFA3kzBSg
+KbaaXw/9GVxvuUSDOgJD2XFZbvdWzUHyr58OcfG6bnfRZrlD8RJPLSmGUTA8xsLr
+5AbQG5y18J84KIiUqQpfFXR8Tie0NmTb7cCzCz5S/uTTzuCNNt/WU04OCDdTrbFV
+ZkfxZV3chY+oo7yDRCsGzSNDj3Wn0MQlp5MKnSXjRoQAihxId0ePRSQ9F+r/vWlt
+wqpCN6kDFZrjKZESDlY6CReVpvt4VHzQfW8O2NzlSUgkP3c08xBa0ILRNZGC2wUs
+Cw4mngubxrXvFCt5i/p+a797GbB5rsamwu0inmnoDYD92+BDJpJicf5GsxeO1Z/B
+RpETW9U6lQZZ1AqolS0hLwt4BULgU5QQSUx9to7O6mcvI/0jLApRi60X5baf5rny
+w3W/spX6FzPBzrrwucQxg5/RpJIirTa8RANtXChGwcVFxucvX0nXEWS/URiejy8t
+nVL9wnCinWtBAR3/sYeOSy0jpUuNJ0EusOKdwiPZbZxz50zs4Da5l+ER3ZuTjtlB
+AXU1fzYl4OH041qioAyJOuXf6GV5YZJm+P3xPbc55gnTqLTC3tqmm5Uk8lq0X1aT
+VPvR1Xq3c55uUG8rBfR2HMh07jETerLuTd71plQz6yV0IpiwzSSd6fBVrI1K6fRX
+c2a4HsBmTaZ9fkQMxQ9Lby+ktflUXf0GX/E7k0TErp2gC08yg4Q=
+=0/8Q
+-----END PGP SIGNATURE-----
+
+--jRHKVT23PllUwdXP--
