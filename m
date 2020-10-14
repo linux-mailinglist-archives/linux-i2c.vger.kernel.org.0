@@ -2,119 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3A228E26B
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Oct 2020 16:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973A728E2E1
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Oct 2020 17:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgJNOmK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Oct 2020 10:42:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52917 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729032AbgJNOmK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Oct 2020 10:42:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602686529;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PlJoLtIpkVOz1qyb1zjr6+0JD61+zNOgWz6cLK2byzI=;
-        b=FkHHq+IJRWS8lvsJPmqlOyWWJDWZAaJHkKq9kGWCFEgTWRNHjCEamnrxyAkrWeLDUjrn/Y
-        6hXtWsevq5kxu8fuD3I+22+R2N6UmicnelM37/XM40p+g6Md/cJinValoI5TM6vus1Emb8
-        s/CC15KbS5/QHtmDft+YNyQuVzBKv3s=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-1-X78Fyf9RO3q9XwTFpdIA2w-1; Wed, 14 Oct 2020 10:42:06 -0400
-X-MC-Unique: X78Fyf9RO3q9XwTFpdIA2w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1730133AbgJNPNI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Oct 2020 11:13:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38870 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726006AbgJNPNI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 14 Oct 2020 11:13:08 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6F5421021213;
-        Wed, 14 Oct 2020 14:42:04 +0000 (UTC)
-Received: from x1.localdomain (ovpn-112-126.ams2.redhat.com [10.36.112.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 90CFC6EF7B;
-        Wed, 14 Oct 2020 14:42:02 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Wolfram Sang <wsa@the-dreams.de>,
+        by mail.kernel.org (Postfix) with ESMTPSA id B963920714;
+        Wed, 14 Oct 2020 15:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602688387;
+        bh=3i5dhUIVAy4nbl1V3WKqV1+5PF4u0kkQVmgry44PdW4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gzuO+r6W7qZ91N2av8n7cDiJfqvdzzX0Uxet1DjP0Yb+jG2gMQ7tIkr4vBi1TDDxs
+         uDrbp8rf55Q547yyfMenJUUEZH1KtXXuJ6rOOUar/kY35JoRXL7H2Nlb58n289xUyV
+         kC8PuMo4SVtLa6g6oqYHuVvILNHMMRZcWwneEOI4=
+Date:   Wed, 14 Oct 2020 17:13:41 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Maximilian Luz <luzmaximilian@gmail.com>,
         stable@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-acpi@vger.kernel.org
-Subject: [PATCH 5.8+ regression fix] i2c: core: Restore acpi_walk_dep_device_list() getting called after registering the ACPI i2c devs
-Date:   Wed, 14 Oct 2020 16:41:58 +0200
-Message-Id: <20201014144158.18036-2-hdegoede@redhat.com>
-In-Reply-To: <20201014144158.18036-1-hdegoede@redhat.com>
+Subject: Re: [PATCH 5.8+ regression fix 0/1] i2c: core: Restore
+ acpi_walk_dep_device_list() getting called after registering the ACPI i2c
+ devs
+Message-ID: <20201014151341.GB3761660@kroah.com>
 References: <20201014144158.18036-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201014144158.18036-1-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Commit 21653a4181ff ("i2c: core: Call i2c_acpi_install_space_handler()
-before i2c_acpi_register_devices()")'s intention was to only move the
-acpi_install_address_space_handler() call to the point before where
-the ACPI declared i2c-children of the adapter where instantiated by
-i2c_acpi_register_devices().
+On Wed, Oct 14, 2020 at 04:41:57PM +0200, Hans de Goede wrote:
+> Hi All,
+> 
+> I am afraid that commit 21653a4181ff ("i2c: core: Call
+> i2c_acpi_install_space_handler() before i2c_acpi_register_devices()")
+> which is in 5.9 and was also added to 5.8.13 (and possible other
+> stable series releases) causes a regression on some devices including
+> on the Microsoft Surface Go 2 (and possibly also the Go 1) where the
+> system no longer boots.
 
-But i2c_acpi_install_space_handler() had a call to
-acpi_walk_dep_device_list() hidden (that is I missed it) at the end
-of it, so as an unwanted side-effect now acpi_walk_dep_device_list()
-was also being called before i2c_acpi_register_devices().
+That commit is also in the following stable releases:
+	4.9.238 4.14.200 4.19.149 5.4.69 5.8.13
 
-Move the acpi_walk_dep_device_list() call to the end of
-i2c_acpi_register_devices(), so that it is once again called *after*
-the i2c_client-s hanging of the adapter have been created.
+so it would need to fixed in all of those places :)
 
-This fixes the Microsoft Surface Go 2 hanging at boot.
+thanks,
 
-Fixes: 21653a4181ff ("i2c: core: Call i2c_acpi_install_space_handler() before i2c_acpi_register_devices()")
-Suggested-by: Maximilian Luz <luzmaximilian@gmail.com>
-Reported-and-tested-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/i2c/i2c-core-acpi.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index e627d7b2790f..37c510d9347a 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -264,6 +264,7 @@ static acpi_status i2c_acpi_add_device(acpi_handle handle, u32 level,
- void i2c_acpi_register_devices(struct i2c_adapter *adap)
- {
- 	acpi_status status;
-+	acpi_handle handle;
- 
- 	if (!has_acpi_companion(&adap->dev))
- 		return;
-@@ -274,6 +275,15 @@ void i2c_acpi_register_devices(struct i2c_adapter *adap)
- 				     adap, NULL);
- 	if (ACPI_FAILURE(status))
- 		dev_warn(&adap->dev, "failed to enumerate I2C slaves\n");
-+
-+	if (!adap->dev.parent)
-+		return;
-+
-+	handle = ACPI_HANDLE(adap->dev.parent);
-+	if (!handle)
-+		return;
-+
-+	acpi_walk_dep_device_list(handle);
- }
- 
- static const struct acpi_device_id i2c_acpi_force_400khz_device_ids[] = {
-@@ -719,7 +729,6 @@ int i2c_acpi_install_space_handler(struct i2c_adapter *adapter)
- 		return -ENOMEM;
- 	}
- 
--	acpi_walk_dep_device_list(handle);
- 	return 0;
- }
- 
--- 
-2.28.0
-
+greg k-h
