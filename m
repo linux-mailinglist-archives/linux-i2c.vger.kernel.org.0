@@ -2,248 +2,145 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB9028D988
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Oct 2020 07:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3385228DC6F
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Oct 2020 11:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728815AbgJNF0u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Oct 2020 01:26:50 -0400
-Received: from mail.vivotek.com ([60.248.39.150]:47348 "EHLO mail.vivotek.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728619AbgJNF0u (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Oct 2020 01:26:50 -0400
-Received: from pps.filterd (vivotekpps.vivotek.com [127.0.0.1])
-        by vivotekpps.vivotek.com (8.16.0.42/8.16.0.42) with SMTP id 09E5PEBT029712;
-        Wed, 14 Oct 2020 13:26:43 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivotek.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=dkim;
- bh=vgyu/BhhyrWEekZhbBTnSbUBvL3B5Y+saUl7LForRJw=;
- b=EBkxsn13pBWELWU9d4jgB6uUDkM6r+iMEasd1xyFVKSsY+MQI8FdjRWrtzt7ct7qojo4
- hK98w8R3MQL0N+vYxcm4t6yWjHaBvY25VF2fGqSCs8tWwIQ/iUVpz2Mb+cHO9iSPi5NY
- oCGX4pXTlxaZzB6a4zykbStuuDomATyZrPU= 
-Received: from cas01.vivotek.tw ([192.168.0.58])
-        by vivotekpps.vivotek.com with ESMTP id 342yd1ans1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 14 Oct 2020 13:26:43 +0800
-Received: from localhost.localdomain (192.168.17.134) by CAS01.vivotek.tw
- (192.168.0.58) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 14 Oct
- 2020 13:26:42 +0800
-From:   Michael Wu <michael.wu@vatics.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Morgan Chang <morgan.chang@vatics.com>,
-        Dean Hsiao <dean.hsiao@vatics.com>,
-        Paul Chen <paul.chen@vatics.com>,
-        Michael Wu <michael.wu@vatics.com>
-Subject: [PATCH] i2c: designware: fix slave omitted IC_INTR_STOP_DET
-Date:   Wed, 14 Oct 2020 13:25:32 +0800
-Message-ID: <20201014052532.3298-1-michael.wu@vatics.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728280AbgJNJJh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Oct 2020 05:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728264AbgJNJJh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Oct 2020 05:09:37 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304A6C04585E;
+        Tue, 13 Oct 2020 22:30:54 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id m65so1494768qte.11;
+        Tue, 13 Oct 2020 22:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=74gtbcSoQxBU/Zm+4MVD4nGSWX1uGiDbcEQFSH2Vxhw=;
+        b=W1bbLqtMmSL+ANSOQe8P5DwLGGiKKtcj7T8ijYHZ+Cjn35VQJt1HwpuWShCRVQQHDr
+         IZc1oYF2nVGSp8zrVWaPHXXaqWNiWZROH7EvKmO4qSK7YfIWL8MGSNpN86/pjw/F1+Sx
+         Pbt1X2n0rA5hwuFs4X3TC/ar8/JQa4xo5EWLM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=74gtbcSoQxBU/Zm+4MVD4nGSWX1uGiDbcEQFSH2Vxhw=;
+        b=rKlQPEZBzdovP6Cpv6L+ZyTbYWjvhTpfSWVNhKWuYPxnYby0kZBPm2Rqhbht7/zgt2
+         Ie2AgbrkLGnphq0zoHYOBJN4pW6LQo3SMZLWuE0D1rkHKsS2asoDmel5qZB2VM1iXRvz
+         XOt7guPi49wPkoyumYjtDgJtlPqkcyLUpGl1+kv8+qDbyv9w2KXoRCsHZeMGzJt8E6vr
+         t2F620jOVl8y0iM3YxQVMcwAFMrbOmv0tpXavSXqdMEST1eO5ngfJ4dC+OzKzUItDdaL
+         huokNguTW1bA0XaDlpsCQbxPLYSdIY2PZmZiYSY8B60jRn5waCo0uqlrTPlxm26WW+w8
+         0f4Q==
+X-Gm-Message-State: AOAM533YwofzzJ7L3ZfSrLaLHeFIQrviiZ1Udg96zHu14VCzxDw9RfR1
+        JpIyM08siwsHZhspNxFSAO7k3EzlWeGFQhOe7DM=
+X-Google-Smtp-Source: ABdhPJwFSofO1DnV5P1Q+GhVV9xWH5KVbG2AZVq2YXBrwkOok/555qf+pK9DhGN6Re52aadNtaTeBFn/Zu46YqnpXHg=
+X-Received: by 2002:ac8:5b82:: with SMTP id a2mr3268208qta.176.1602653453244;
+ Tue, 13 Oct 2020 22:30:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [192.168.17.134]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-14_03:2020-10-14,2020-10-14 signatures=0
-X-Proofpoint-Spam-Reason: safe
+References: <20201013100314.216154-1-tali.perry1@gmail.com>
+In-Reply-To: <20201013100314.216154-1-tali.perry1@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 14 Oct 2020 05:30:41 +0000
+Message-ID: <CACPK8XfoBcQpxaMHWcMrcwU3KtKi8KLNXDP5Nu-5Feo8V+7VFw@mail.gmail.com>
+Subject: Re: [PATCH v2] i2c: npcm7xx: Support changing bus speed using debugfs.
+To:     Tali Perry <tali.perry1@gmail.com>
+Cc:     wsa@kernel.org, andriy.shevchenko@linux.intel.com, xqiu@google.com,
+        Kun Yi <kunyi@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>, linux-i2c@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When an I2C slave works, sometimes both IC_INTR_RX_FULL and
-IC_INTR_STOP_DET are rising during an IRQ handle, especially when system
-is busy or too late to handle interrupts.
+On Tue, 13 Oct 2020 at 10:03, Tali Perry <tali.perry1@gmail.com> wrote:
+>
+> Systems that can dynamically add and remove slave devices
+> often need to change the bus speed in runtime.
+> This patch expose the bus frequency to the user.
+> This feature can also be used for test automation.
+>
+> --
+> v2 -> v1:
+>         - Fix typos.
+>         - Remove casting to u64.
+>
+> v1: initial version
+>
+> Fixes: 56a1485b102e (i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver)
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
 
-If IC_INTR_RX_FULL is rising and the system doesn't handle immediately,
-IC_INTR_STOP_DET may be rising and the system has to handle these two
-events. For this there may be two problems:
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-1. IC_INTR_STOP_DET is rising after i2c_dw_read_clear_intrbits_slave()
-   done: It seems invalidated because WRITE_REQUESTED is done after the
-   1st WRITE_RECEIVED.
+I'm not sure that the Fixes tag is quite correct, but it's no biggie.
 
-$ i2cset -f -y 2 0x42 0x00 0x41; dmesg -c
-[0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
-[1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
-WRITE_RECEIVED
-[0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
-[1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x714 : INTR_STAT=0x204
-WRITE_REQUESTED
-WRITE_RECEIVED
-[0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x710 : INTR_STAT=0x200
-[1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x510 : INTR_STAT=0x0
-STOP
-[2][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x510 : INTR_STAT=0x0
 
-  t1: ISR with the 1st IC_INTR_RX_FULL.
-  t2: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave().
-  t3: Enter i2c_dw_irq_handler_slave() and then do
-      i2c_slave_event(WRITE_RECEIVED) because
-      if (stat & DW_IC_INTR_RX_FULL).
-  t4: ISR with the 2nd IC_INTR_RX_FULL.
-  t5: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave(),
-      while IC_INTR_STOP_DET has not risen yet.
-  t6: Enter i2c_dw_irq_handler_slave() and then IC_INTR_STOP_DET is
-      rising. i2c_slave_event(WRITE_REQUESTED) will be done first because
-      if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET)) and
-      then doing i2c_slave_event(WRITE_RECEIVED).
-  t7: do i2c_slave_event(STOP) due to IC_INTR_STOP_DET not be cleared yet.
-
-2. Both IC_INTR_STOP_DET and IC_INTR_RX_FULL are rising before
-   i2c_dw_read_clear_intrbits_slave(): STOP cannot wait because
-   IC_INTR_STOP_DET is cleared by i2c_dw_read_clear_intrbits_slave().
-
-$ i2cset -f -y 2 0x42 0x00 0x41; dmesg -c
-[0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
-[1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
-WRITE_RECEIVED
-[0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x714 : INTR_STAT=0x204
-[1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
-WRITE_RECEIVED
-
-  t1: ISR with the 1st IC_INTR_RX_FULL.
-  t2: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave().
-  t3: Enter i2c_dw_irq_handler_slave() and then do
-      i2c_slave_event(WRITE_RECEIVED) because
-      if (stat & DW_IC_INTR_RX_FULL).
-  t4: ISR with both IC_INTR_STOP_DET and the 2nd IC_INTR_RX_FULL.
-  t5: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave(). The
-      current IC_INTR_STOP_DET is cleared by this
-      i2c_dw_read_clear_intrbits_slave().
-  t6: Enter i2c_dw_irq_handler_slave() and then do
-      i2c_slave_event(WRITE_RECEIVED) because
-      if (stat & DW_IC_INTR_RX_FULL).
-  t7: i2c_slave_event(STOP) never be done because IC_INTR_STOP_DET was
-      cleared in t5.
-
-In order to resolve these problems, i2c_dw_read_clear_intrbits_slave()
-should be called only one time in ISR and take the returned stat to handle
-those occurred events.
-
-Signed-off-by: Michael Wu <michael.wu@vatics.com>
----
- drivers/i2c/busses/i2c-designware-slave.c | 79 ++++++++++++-----------
- 1 file changed, 40 insertions(+), 39 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
-index 44974b53a626..8b3047fb2eae 100644
---- a/drivers/i2c/busses/i2c-designware-slave.c
-+++ b/drivers/i2c/busses/i2c-designware-slave.c
-@@ -159,7 +159,6 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
- 	u32 raw_stat, stat, enabled, tmp;
- 	u8 val = 0, slave_activity;
- 
--	regmap_read(dev->map, DW_IC_INTR_STAT, &stat);
- 	regmap_read(dev->map, DW_IC_ENABLE, &enabled);
- 	regmap_read(dev->map, DW_IC_RAW_INTR_STAT, &raw_stat);
- 	regmap_read(dev->map, DW_IC_STATUS, &tmp);
-@@ -168,58 +167,61 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
- 	if (!enabled || !(raw_stat & ~DW_IC_INTR_ACTIVITY) || !dev->slave)
- 		return 0;
- 
-+	stat = i2c_dw_read_clear_intrbits_slave(dev);
- 	dev_dbg(dev->dev,
- 		"%#x STATUS SLAVE_ACTIVITY=%#x : RAW_INTR_STAT=%#x : INTR_STAT=%#x\n",
- 		enabled, slave_activity, raw_stat, stat);
- 
--	if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET))
--		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
-+	if (stat & DW_IC_INTR_RX_FULL) {
-+		if (dev->status != STATUS_WRITE_IN_PROGRESS) {
-+			if (dev->status != STATUS_IDLE)
-+				i2c_slave_event(dev->slave, I2C_SLAVE_STOP,
-+						&val);
-+
-+			dev->status = STATUS_WRITE_IN_PROGRESS
-+			i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED,
-+					&val);
-+		}
-+
-+		regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
-+		val = tmp;
-+
-+		if (!i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
-+				     &val))
-+			dev_vdbg(dev->dev, "Byte %X acked!", val);
-+	}
- 
- 	if (stat & DW_IC_INTR_RD_REQ) {
-+		if (dev->status != STATUS_IDEL) {
-+			dev->status = STATUS_IDLE;
-+			i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
-+		}
-+
- 		if (slave_activity) {
--			if (stat & DW_IC_INTR_RX_FULL) {
--				regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
--				val = tmp;
--
--				if (!i2c_slave_event(dev->slave,
--						     I2C_SLAVE_WRITE_RECEIVED,
--						     &val)) {
--					dev_vdbg(dev->dev, "Byte %X acked!",
--						 val);
--				}
--				regmap_read(dev->map, DW_IC_CLR_RD_REQ, &tmp);
--				stat = i2c_dw_read_clear_intrbits_slave(dev);
--			} else {
--				regmap_read(dev->map, DW_IC_CLR_RD_REQ, &tmp);
--				regmap_read(dev->map, DW_IC_CLR_RX_UNDER, &tmp);
--				stat = i2c_dw_read_clear_intrbits_slave(dev);
--			}
--			if (!i2c_slave_event(dev->slave,
--					     I2C_SLAVE_READ_REQUESTED,
--					     &val))
--				regmap_write(dev->map, DW_IC_DATA_CMD, val);
-+			regmap_read(dev->map, DW_IC_CLR_RD_REQ, &tmp);
-+			regmap_read(dev->map, DW_IC_CLR_RX_UNDER, &tmp);
-+
-+			dev->status = STATUS_READ_IN_PROGRESS;
-+			i2c_slave_event(dev->slave, I2C_SLAVE_READ_REQUESTED,
-+					&val);
-+			regmap_write(dev->map, DW_IC_DATA_CMD, val);
- 		}
- 	}
- 
- 	if (stat & DW_IC_INTR_RX_DONE) {
--		if (!i2c_slave_event(dev->slave, I2C_SLAVE_READ_PROCESSED,
--				     &val))
--			regmap_read(dev->map, DW_IC_CLR_RX_DONE, &tmp);
-+		i2c_slave_event(dev->slave, I2C_SLAVE_READ_PROCESSED, &val);
-+		regmap_read(dev->map, DW_IC_CLR_RX_DONE, &tmp);
- 
-+		dev->status = STATUS_IDLE;
- 		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
--		stat = i2c_dw_read_clear_intrbits_slave(dev);
--		return 1;
- 	}
- 
--	if (stat & DW_IC_INTR_RX_FULL) {
--		regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
--		val = tmp;
--		if (!i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
--				     &val))
--			dev_vdbg(dev->dev, "Byte %X acked!", val);
--	} else {
--		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
--		stat = i2c_dw_read_clear_intrbits_slave(dev);
-+	if (stat & DW_IC_INTR_STOP_DET) {
-+		if (dev->status != STATUS_IDLE) {
-+			dev->status = STATUS_IDLE;
-+
-+			i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
-+		}
- 	}
- 
- 	return 1;
-@@ -230,7 +232,6 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
- 	struct dw_i2c_dev *dev = dev_id;
- 	int ret;
- 
--	i2c_dw_read_clear_intrbits_slave(dev);
- 	ret = i2c_dw_irq_handler_slave(dev);
- 	if (ret > 0)
- 		complete(&dev->cmd_complete);
--- 
-2.17.1
-
+> ---
+>  drivers/i2c/busses/i2c-npcm7xx.c | 35 ++++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>
+> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+> index 2ad166355ec9..633ac67153e2 100644
+> --- a/drivers/i2c/busses/i2c-npcm7xx.c
+> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> @@ -2208,6 +2208,40 @@ static const struct i2c_algorithm npcm_i2c_algo = {
+>  /* i2c debugfs directory: used to keep health monitor of i2c devices */
+>  static struct dentry *npcm_i2c_debugfs_dir;
+>
+> +static int i2c_speed_get(void *data, u64 *val)
+> +{
+> +       struct npcm_i2c *bus = data;
+> +
+> +       *val = bus->bus_freq;
+> +       return 0;
+> +}
+> +
+> +static int i2c_speed_set(void *data, u64 val)
+> +{
+> +       struct npcm_i2c *bus = data;
+> +       int ret;
+> +
+> +       if (val < I2C_FREQ_MIN_HZ || val > I2C_FREQ_MAX_HZ)
+> +               return -EINVAL;
+> +
+> +       if (val == bus->bus_freq)
+> +               return 0;
+> +
+> +       i2c_lock_bus(&bus->adap, I2C_LOCK_ROOT_ADAPTER);
+> +
+> +       npcm_i2c_int_enable(bus, false);
+> +
+> +       ret = npcm_i2c_init_module(bus, I2C_MASTER, (u32)val);
+> +
+> +       i2c_unlock_bus(&bus->adap, I2C_LOCK_ROOT_ADAPTER);
+> +
+> +       if (ret)
+> +               return -EAGAIN;
+> +
+> +       return 0;
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(i2c_clock_ops, i2c_speed_get, i2c_speed_set, "%llu\n");
+> +
+>  static void npcm_i2c_init_debugfs(struct platform_device *pdev,
+>                                   struct npcm_i2c *bus)
+>  {
+> @@ -2223,6 +2257,7 @@ static void npcm_i2c_init_debugfs(struct platform_device *pdev,
+>         debugfs_create_u64("rec_succ_cnt", 0444, d, &bus->rec_succ_cnt);
+>         debugfs_create_u64("rec_fail_cnt", 0444, d, &bus->rec_fail_cnt);
+>         debugfs_create_u64("timeout_cnt", 0444, d, &bus->timeout_cnt);
+> +       debugfs_create_file("i2c_speed", 0644, d, bus, &i2c_clock_ops);
+>
+>         bus->debugfs = d;
+>  }
+>
+> base-commit: 865c50e1d279671728c2936cb7680eb89355eeea
+> --
+> 2.22.0
+>
