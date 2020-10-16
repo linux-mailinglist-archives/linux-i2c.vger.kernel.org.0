@@ -2,219 +2,161 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8237F28FD8A
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Oct 2020 07:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B1728FE02
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Oct 2020 08:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728376AbgJPFDv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Oct 2020 01:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727076AbgJPFDv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Oct 2020 01:03:51 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E8AC061755
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Oct 2020 22:03:51 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id t18so631575plo.1
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Oct 2020 22:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qtvV026HLCzz5NoDCyozzqnf4hHRYfc35Oyit81StQ4=;
-        b=Ite6O0sCdHz/TgSDObsypuRJ50z5WPXZKhRbHh9UISq6lAfUuYiP2/fxTwDz6y5Ybl
-         FzmVDWhO8+7+s2AonNYSGfsZpkyHMN+ZMH1DpakymkuZQ40z2PCL6ii3HREtm5QOkOe7
-         wUX1yTeE1uQKl9WSquqWA6niHRpgmmDLMngi0LALRWW/dMqvWdDcOEY7GgsyCy3Ck5S0
-         Xdas5bG2RjXOEXQh60p7Jn+86jyRQ6rkeNwGudEH1KCJew9Qu9t4snMdGkBrFXPgINeF
-         OAcPYABU9h8FTwtiUSsGsr7wIeaUyVzD7ppPGgkOUBACYyJyZk6vuk3380wzeTwDLdMX
-         RP2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qtvV026HLCzz5NoDCyozzqnf4hHRYfc35Oyit81StQ4=;
-        b=jCOdbTnMegHK8ssHS57T2W36Y4cKllmY9f3Vi11Qws2wLPDdCwjp86Kjz6/n5d+LNe
-         u5RZoCqp9AjZVqmNluO/A1WnyqeZuOFZThp6beBXXdkGZA8oXJ9UGBalcDtlZo0xL+yv
-         uBVgd1sUMTSnnqkfEmDjBMQokgtDFg08TC9kg2U+ghGzh+OVTtQNUQ1T3+7DC3FsRtbO
-         qHgkpVm5S0nahh5sek7aHGVJ1qiIOkPTLj89RyuGhWya94eI3JVO6Q6V4TNxVIZ2EEY0
-         Er+0xvh7W8XJxqJB3kvI4j9vc23nSRxkOt0KO93KWVlPnV4rN1Gi9YiyrYaJHGhJTuPk
-         DKfw==
-X-Gm-Message-State: AOAM531J+At/E1G73HZXO6s3kqww+GwWDMj5+AaQOSDN4xsjHCMCjBuW
-        v36Optn7nEo53XohRR6IC6oQhA==
-X-Google-Smtp-Source: ABdhPJwS+WvqHaiufqyl/oZWHRdnnVMhUffeS+VlYpnK2fAPQP12O+6RzLoANUPd82bd045uDJtZDA==
-X-Received: by 2002:a17:902:930c:b029:d3:b362:7939 with SMTP id bc12-20020a170902930cb02900d3b3627939mr2277168plb.54.1602824630725;
-        Thu, 15 Oct 2020 22:03:50 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id e4sm1097611pgg.37.2020.10.15.22.03.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Oct 2020 22:03:49 -0700 (PDT)
-Date:   Fri, 16 Oct 2020 10:33:47 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Stephan Gerhold <stephan@gerhold.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        nks@flawful.org, Georgi Djakov <georgi.djakov@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH V2 2/2] cpufreq: dt: Refactor initialization to handle
- probe deferral properly
-Message-ID: <20201016050347.ers54itzmxgijzsy@vireshk-i7>
-References: <24ff92dd1b0ee1b802b45698520f2937418f8094.1598260050.git.viresh.kumar@linaro.org>
- <f75c61f193f396608d592ae2a9938264d582c038.1598260050.git.viresh.kumar@linaro.org>
- <CAMuHMdXLQKN5n58NvOp43vhc3ryLXWurBSsmcW9Q=oW502PYOQ@mail.gmail.com>
- <20201013095613.mbgmjwzojg5wxmau@vireshk-i7>
- <CAMuHMdVAJdHVMtK3Sc4sJiJGAwz1J4dKODBFcNzgstaktyKkOw@mail.gmail.com>
+        id S2391296AbgJPGFV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Oct 2020 02:05:21 -0400
+Received: from mail.vivotek.com ([60.248.39.150]:33136 "EHLO mail.vivotek.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391295AbgJPGFV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 16 Oct 2020 02:05:21 -0400
+Received: from pps.filterd (vivotekpps.vivotek.com [127.0.0.1])
+        by vivotekpps.vivotek.com (8.16.0.42/8.16.0.42) with SMTP id 09G65Bvu030142;
+        Fri, 16 Oct 2020 14:05:11 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivotek.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=dkim;
+ bh=OiryTol3lsa7n+iIcBzbc/EuEG5m0GVQYbD/SFQ9KYU=;
+ b=dTUyTtYZpVgADzGjzJbvl3EYgaP59swy4Mm5Hh6zjNgIrtNkQpZI0gGy+N9nUSLpx5jy
+ NChgifm7iyKhctuzG4B7BsrWIHrHuAPt1qOtTNhWBTb9KeakEfcO2quVxRiGSouT5KxQ
+ E354osAhLn9Qu+9Ijk1SJdTJNVb6GtfRr5s= 
+Received: from cas01.vivotek.tw ([192.168.0.58])
+        by vivotekpps.vivotek.com with ESMTP id 342yd1ccpm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 16 Oct 2020 14:05:11 +0800
+Received: from localhost.localdomain (192.168.17.134) by CAS01.vivotek.tw
+ (192.168.0.58) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 16 Oct
+ 2020 14:05:10 +0800
+From:   Michael Wu <michael.wu@vatics.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Morgan Chang <morgan.chang@vatics.com>,
+        Dean Hsiao <dean.hsiao@vatics.com>,
+        Paul Chen <paul.chen@vatics.com>,
+        Michael Wu <michael.wu@vatics.com>
+Subject: [PATCH 1/2] i2c: designware: call i2c_dw_read_clear_intrbits_slave() once
+Date:   Fri, 16 Oct 2020 14:04:01 +0800
+Message-ID: <20201016060402.17259-1-michael.wu@vatics.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVAJdHVMtK3Sc4sJiJGAwz1J4dKODBFcNzgstaktyKkOw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain
+X-Originating-IP: [192.168.17.134]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-16_02:2020-10-16,2020-10-16 signatures=0
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 14-10-20, 18:40, Geert Uytterhoeven wrote:
-> On this platform (r8a7791-koelsch.dts), there is no opp table in DT.
-> 
->   Before:
+i2c_dw_read_clear_intrbits_slave() was called per each interrupt handle.
+It caused some interrupt bits which haven't been handled yet were cleared,
+the corresponding handlers would do nothing due to interrupt bits been
+discarded. For example,
 
-I assume this means before this patchset came in..
+$ i2cset -f -y 2 0x42 0x00 0x41; dmesg -c
+[0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
+[1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
+WRITE_RECEIVED
+[0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x714 : INTR_STAT=0x204
+[1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
+WRITE_RECEIVED
 
->     boot:
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:362
->       cpu cpu0: resources_available:95
->       cpu cpu0: resources_available:102: clk_get() returned z
->       cpu cpu0: resources_available:120:
-> dev_pm_opp_of_find_icc_paths() returned 0
->       cpu cpu0: resources_available:125: find_supply_name() returned cpu0
->       cpu cpu0: resources_available:132: regulator_get_optional()
-> returned -EPROBE_DEFER
->       cpu cpu0: cpu0 regulator not ready, retry
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:371:
-> resources_available() returned -517
+  t1: ISR with the 1st IC_INTR_RX_FULL.
+  t2: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave().
+  t3: Enter i2c_dw_irq_handler_slave() and then do
+      i2c_slave_event(WRITE_RECEIVED) because
+      if (stat & DW_IC_INTR_RX_FULL).
+  t4: ISR with both IC_INTR_STOP_DET and the 2nd IC_INTR_RX_FULL.
+  t5: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave(). The
+      current IC_INTR_STOP_DET is cleared by this
+      i2c_dw_read_clear_intrbits_slave().
+  t6: Enter i2c_dw_irq_handler_slave() and then do
+      i2c_slave_event(WRITE_RECEIVED) because
+      if (stat & DW_IC_INTR_RX_FULL).
+  t7: i2c_slave_event(STOP) never be done because IC_INTR_STOP_DET was
+      cleared in t5.
 
-we deferred probe once.
+The root cause is that i2c_dw_read_clear_intrbits_slave() was called many
+times. Calling i2c_dw_read_clear_intrbits_slave() once in one ISR and take
+the returned stat for later handling is the solution.
 
->       ...
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:362
->       cpu cpu0: resources_available:95
->       cpu cpu0: resources_available:102: clk_get() returned z
->       cpu cpu0: resources_available:120:
-> dev_pm_opp_of_find_icc_paths() returned 0
->       cpu cpu0: resources_available:125: find_supply_name() returned cpu0
->       cpu cpu0: resources_available:132: regulator_get_optional()
-> returned (ptrval)
+Signed-off-by: Michael Wu <michael.wu@vatics.com>
+---
+ drivers/i2c/busses/i2c-designware-slave.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-found regulator next time.
-
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:371:
-> resources_available() returned 0
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:375
->       cpufreq_dt: cpufreq_init:162
->       cpu cpu0: cpufreq_init:170: clk_get() returned z
->       cpu cpu0: cpufreq_init:179: dev_pm_opp_of_get_sharing_cpus() returned -2
->       cpu cpu0: cpufreq_init:198: find_supply_name() returned cpu0
->       <i2c comm>
->       cpu cpu0: cpufreq_init:201: dev_pm_opp_set_regulators() returned (ptrval)
->       <i2c comm>
->       cpu cpu0: cpufreq_init:230: dev_pm_opp_of_cpumask_add_table() returned 0
->       cpu cpu0: cpufreq_init:239: dev_pm_opp_get_opp_count() returned 0
->       cpu cpu0: OPP table is not ready, deferring probe
-
-This failed, as we couldn't have deferred probe from cpufreq_init.
-Which means that cpufreq didn't work here.
-
->       cpufreq_dt: cpufreq_init:162
->       cpu cpu1: cpufreq_init:170: clk_get() returned z
->       cpu cpu1: cpufreq_init:179: dev_pm_opp_of_get_sharing_cpus() returned -2
->       cpu cpu1: no regulator for cpu1
->       cpu cpu1: cpufreq_init:198: find_supply_name() returned (null)
->       cpu cpu1: cpufreq_init:230: dev_pm_opp_of_cpumask_add_table() returned 0
->       cpu cpu1: cpufreq_init:239: dev_pm_opp_get_opp_count() returned 0
->       cpu cpu1: OPP table is not ready, deferring probe
-
-Same for CPU1.
-
-> 
->     s2ram:
->       cpufreq_dt: cpufreq_init:162
->       cpu cpu1: cpufreq_init:170: clk_get() returned z
->       cpu cpu1: cpufreq_init:179: dev_pm_opp_of_get_sharing_cpus() returned -2
->       cpu cpu1: no regulator for cpu1
->       cpu cpu1: cpufreq_init:198: find_supply_name() returned (null)
->       cpu cpu1: cpufreq_init:230: dev_pm_opp_of_cpumask_add_table() returned 0
->       cpu cpu1: cpufreq_init:239: dev_pm_opp_get_opp_count() returned 0
->       cpu cpu1: OPP table is not ready, deferring probe
-
-And same here.
-
->       CPU1 is up
-> 
->   After:
->     boot:
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:356
->       cpufreq_dt: dt_cpufreq_early_init:251
->       cpu cpu0: dt_cpufreq_early_init:256
->       cpu cpu0: dt_cpufreq_early_init:271: dev_pm_opp_get_opp_table()
-> returned (ptrval)
->       cpu cpu0: dt_cpufreq_early_init:284: find_supply_name() returned cpu0
->       cpu cpu0: dt_cpufreq_early_init:288: dev_pm_opp_set_regulators()
-> returned -EPROBE_DEFER
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:360:
-> dt_cpufreq_early_init() returned -517
->       ...
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:356
->       cpufreq_dt: dt_cpufreq_early_init:251
->       cpu cpu0: dt_cpufreq_early_init:256
->       cpu cpu0: dt_cpufreq_early_init:271: dev_pm_opp_get_opp_table()
-> returned (ptrval)
->       cpu cpu0: dt_cpufreq_early_init:284: find_supply_name() returned cpu0
->       cpu cpu0: dt_cpufreq_early_init:288: dev_pm_opp_set_regulators()
-> returned (ptrval)
->       cpu cpu0: dt_cpufreq_early_init:301:
-> dev_pm_opp_of_get_sharing_cpus() returned -2
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:360:
-> dt_cpufreq_early_init() returned 0
->       cpufreq_dt: dt_cpufreq_early_init:251
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:360:
-> dt_cpufreq_early_init() returned 0
->       cpufreq-dt cpufreq-dt: dt_cpufreq_probe:365
->       cpufreq_dt: cpufreq_init:114
->       cpu cpu0: cpufreq_init:124: clk_get() returned z
->       cpu cpu0: cpufreq_init:142: dev_pm_opp_of_cpumask_add_table() returned 0
->       cpu cpu0: cpufreq_init:151: dev_pm_opp_get_opp_count() returned 0
->       cpu cpu0: OPP table can't be empty
-
-Same issue here.
-
->       cpufreq_dt: cpufreq_init:114
->       cpu cpu0: cpufreq_init:124: clk_get() returned z
->       <i2c comm>
->       cpu cpu0: cpufreq_init:142: dev_pm_opp_of_cpumask_add_table() returned 0
->       cpu cpu0: cpufreq_init:151: dev_pm_opp_get_opp_count() returned 0
-> 
->     s2ram:
-> 
->       cpufreq_dt: cpufreq_init:114
->       cpu cpu0: cpufreq_init:124: clk_get() returned z
->       WARNING: CPU: 1 PID: 14 at drivers/i2c/i2c-core.h:54
-> __i2c_transfer+0x2d8/0x310
->       i2c i2c-6: Transfer while suspended
->       cpu cpu0: cpufreq_init:142: dev_pm_opp_of_cpumask_add_table() returned 0
->       cpu cpu0: cpufreq_init:151: dev_pm_opp_get_opp_count() returned 0
->       cpu cpu0: OPP table can't be empty
->       CPU1 is up
-> 
-> I hope this helps.
-
-Unfortunately it raised more questions than what it answered :(
-
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+index 44974b53a626..02e7c5171827 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -159,7 +159,6 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 	u32 raw_stat, stat, enabled, tmp;
+ 	u8 val = 0, slave_activity;
+ 
+-	regmap_read(dev->map, DW_IC_INTR_STAT, &stat);
+ 	regmap_read(dev->map, DW_IC_ENABLE, &enabled);
+ 	regmap_read(dev->map, DW_IC_RAW_INTR_STAT, &raw_stat);
+ 	regmap_read(dev->map, DW_IC_STATUS, &tmp);
+@@ -168,13 +167,11 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 	if (!enabled || !(raw_stat & ~DW_IC_INTR_ACTIVITY) || !dev->slave)
+ 		return 0;
+ 
++	stat = i2c_dw_read_clear_intrbits_slave(dev);
+ 	dev_dbg(dev->dev,
+ 		"%#x STATUS SLAVE_ACTIVITY=%#x : RAW_INTR_STAT=%#x : INTR_STAT=%#x\n",
+ 		enabled, slave_activity, raw_stat, stat);
+ 
+-	if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET))
+-		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
+-
+ 	if (stat & DW_IC_INTR_RD_REQ) {
+ 		if (slave_activity) {
+ 			if (stat & DW_IC_INTR_RX_FULL) {
+@@ -188,11 +185,9 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 						 val);
+ 				}
+ 				regmap_read(dev->map, DW_IC_CLR_RD_REQ, &tmp);
+-				stat = i2c_dw_read_clear_intrbits_slave(dev);
+ 			} else {
+ 				regmap_read(dev->map, DW_IC_CLR_RD_REQ, &tmp);
+ 				regmap_read(dev->map, DW_IC_CLR_RX_UNDER, &tmp);
+-				stat = i2c_dw_read_clear_intrbits_slave(dev);
+ 			}
+ 			if (!i2c_slave_event(dev->slave,
+ 					     I2C_SLAVE_READ_REQUESTED,
+@@ -207,7 +202,6 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 			regmap_read(dev->map, DW_IC_CLR_RX_DONE, &tmp);
+ 
+ 		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
+-		stat = i2c_dw_read_clear_intrbits_slave(dev);
+ 		return 1;
+ 	}
+ 
+@@ -217,10 +211,11 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 		if (!i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
+ 				     &val))
+ 			dev_vdbg(dev->dev, "Byte %X acked!", val);
+-	} else {
++	} else
+ 		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
+-		stat = i2c_dw_read_clear_intrbits_slave(dev);
+-	}
++
++	if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET))
++		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
+ 
+ 	return 1;
+ }
+@@ -230,7 +225,6 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
+ 	struct dw_i2c_dev *dev = dev_id;
+ 	int ret;
+ 
+-	i2c_dw_read_clear_intrbits_slave(dev);
+ 	ret = i2c_dw_irq_handler_slave(dev);
+ 	if (ret > 0)
+ 		complete(&dev->cmd_complete);
 -- 
-viresh
+2.17.1
+
