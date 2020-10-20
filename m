@@ -2,111 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C9C292BEB
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Oct 2020 18:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9282933C3
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Oct 2020 06:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730025AbgJSQym (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Oct 2020 12:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730498AbgJSQyl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Oct 2020 12:54:41 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8612C0613D0
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Oct 2020 09:54:39 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id z2so355870lfr.1
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Oct 2020 09:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WWe1nyT09mfP995hqz7RZGWn3qxoOPoS4oyItVvSHIA=;
-        b=OuBRRIaNVW4sTCoqWv1mPmTw7hVN3ZKuzZpOcOF5DDEf/55sVq99t/SFPfjSK/56KA
-         oCp/8BNdCL7+xQJJXdjtBzwqWKHzB6VfZxcXStrY/0/16UcUNhMpE/0lPrPazKKI11Hm
-         q9wLB13d9P9GsiPO66kJn/lpgvunLWukaHsNI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WWe1nyT09mfP995hqz7RZGWn3qxoOPoS4oyItVvSHIA=;
-        b=tkEtSqMGAFNdW7t0xsRfyx6reY59BoVS8g6/3Gqqy/VqwfxUz8XGTJrptvJ6Ok/vDk
-         qCYP/1qrORRVaenQ8PIKeH01frp1qgTZKxMTZRkHqlXYrw2VoJOL/3izFvCgACucqvfZ
-         exPDNT9xWfZUvRwlb2Y8midFXnccj4DCa2KupbBrZh28TnhieoEp4D8qVdllmbO7RkCu
-         8xT1skBTL1QwOFKjd5a78riWxaD2jhToJ6AIEP7B0TMXtFuHshW0r7A67ItFe2acFPhX
-         n7RegPQNejZzqb7znfm8QOJMzGdzz40NopYctFRKfVBKwy0vD7M66la+8EpXpvzsPd14
-         Aqaw==
-X-Gm-Message-State: AOAM530MRSpw/SwJBKAAjhHjD0xmLB+KN/XQZfcEemouLp1EvQjJEKIm
-        4qW4hn0OOIsIKZWeu1HPBskp2h6cePOj8w==
-X-Google-Smtp-Source: ABdhPJwyZ6LKmmJvy0Ggdp8HbVt8fR82sfi2aWxPSuvqJ+C+9mL4fkLIs0xGdvLP4Jzqod/FtiOZRQ==
-X-Received: by 2002:a19:68a:: with SMTP id 132mr180083lfg.429.1603126477917;
-        Mon, 19 Oct 2020 09:54:37 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id a24sm53621lfg.282.2020.10.19.09.54.36
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Oct 2020 09:54:37 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id p15so809718ljj.8
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Oct 2020 09:54:36 -0700 (PDT)
-X-Received: by 2002:a2e:9955:: with SMTP id r21mr380357ljj.124.1603126476431;
- Mon, 19 Oct 2020 09:54:36 -0700 (PDT)
+        id S1725300AbgJTEDR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 20 Oct 2020 00:03:17 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17794 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725283AbgJTEDR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 20 Oct 2020 00:03:17 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f8e61280000>; Mon, 19 Oct 2020 21:01:44 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 20 Oct
+ 2020 04:03:16 +0000
+Received: from skomatineni-linux.nvidia.com (10.124.1.5) by mail.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Tue, 20 Oct 2020 04:03:16 +0000
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <digetx@gmail.com>, <skomatineni@nvidia.com>
+CC:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+Subject: [PATCH v1] i2c: tegra: Fix i2c_writesl() to use writel() instead of writesl()
+Date:   Mon, 19 Oct 2020 21:03:54 -0700
+Message-ID: <1603166634-13639-1-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <20201016222523.364218-1-evgreen@chromium.org> <20201016152454.v3.2.Idef164c23d326f5e5edecfc5d3eb2a68fcf18be1@changeid>
- <CAHp75VfsM+ysz_tr_h0rJpspcZAToiV+H5KDCi7J=LCEO0sFxQ@mail.gmail.com>
-In-Reply-To: <CAHp75VfsM+ysz_tr_h0rJpspcZAToiV+H5KDCi7J=LCEO0sFxQ@mail.gmail.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 19 Oct 2020 09:53:59 -0700
-X-Gmail-Original-Message-ID: <CAE=gft5cd4v=THHuBPAeB5ApgH+TAPiEukZiG0pC33RsZ4AriQ@mail.gmail.com>
-Message-ID: <CAE=gft5cd4v=THHuBPAeB5ApgH+TAPiEukZiG0pC33RsZ4AriQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] i2c: i2c-mux-gpio: Enable this driver in ACPI land
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1603166504; bh=k0OpCwKOIS1mzOf9rDffepCbD0hVHg+ZBxopLq0hOT0=;
+        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:X-NVConfidentiality:
+         MIME-Version:Content-Type;
+        b=msQieKyHswBsMpmzAhUyhwrV5hazjv2iGfCMdcVaXmfLWmKaAFqarqmmRaHim6pWs
+         9X94Mx2vHymB0IfZcIvOAoIAp76+PFnbktb0uOcUEwCSSELvoZj2u6FgHxxAsLGENl
+         dXQhXIKj6oLi3VDiwqWbku/9nms2fcrr6WSaNla8EuAHTF/EClR+hfeEOeuXsyxrbY
+         u/mdUaEMed9caeh59PuuTrbiK5AjIp/0hZs/7bXw+D0ILTTtvB1DEijE+4tjJ2i8Si
+         RrKLbzi5FDhy07SNMzFqjY9xGNkBOrVaXTwClJVp2hi/7jjq9XV/PFaTPbdDVMavJY
+         sOO46WV/ufKOg==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Oct 18, 2020 at 11:58 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sat, Oct 17, 2020 at 8:30 AM Evan Green <evgreen@chromium.org> wrote:
-> >
-> > Enable i2c-mux-gpio devices to be defined via ACPI. The idle-state
-> > property translates directly to a fwnode_property_*() call. The child
-> > reg property translates naturally into _ADR in ACPI.
-> >
-> > The i2c-parent binding is a relic from the days when the bindings
-> > dictated that all direct children of an I2C controller had to be I2C
-> > devices. These days that's no longer required. The i2c-mux can sit as a
-> > direct child of its parent controller, which is where it makes the most
-> > sense from a hardware description perspective. For the ACPI
-> > implementation we'll assume that's always how the i2c-mux-gpio is
-> > instantiated.
->
-> Can you tell me if the following is relevant to what you are looking for?
-> https://elixir.bootlin.com/linux/latest/source/drivers/i2c/i2c-mux.c#L393
+VI I2C don't have DMA support and uses PIO mode all the time.
 
-I don't think so, but let me know if I'm reading between the lines incorrectly.
+Current driver uses writesl() to fill TX FIFO based on available
+empty slots and with this seeing strange silent hang during any I2C
+register access after filling TX FIFO with 8 words.
 
-The code you pointed to links the newly-minted fake i2c controller
-back together with its ACPI node. This is important, since I think
-that's how child I2C devices underneath the fake busses get populated
-in ACPI land. But the paragraph above is discussing how to identify
-the parent adapter (ie the real hardware) for an i2c-mux-gpio device.
+Using writel() followed by i2c_readl() in a loop to write all words
+to TX FIFO instead of using writesl() helps for large transfers in
+PIO mode.
 
-In DT-land, the i2c-mux-gpio floats at the top of the tree directly
-under /, and then uses a phandle to point to where transactions should
-be forwarded. I'm told the reason for this is historical limitations
-with the DT bindings. Rather than trying to translate the phandle over
-1:1 into ACPI-land, I'm asserting that the mux device should live
-underneath the adapter it wants to forward traffic to.
+So, this patch updates i2c_writesl() API to use writel() in a loop
+instead of writesl().
 
--Evan
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 6f08c0c..274bf3a 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -333,10 +333,13 @@ static u32 i2c_readl(struct tegra_i2c_dev *i2c_dev, unsigned int reg)
+ 	return readl_relaxed(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
+ }
+ 
+-static void i2c_writesl(struct tegra_i2c_dev *i2c_dev, void *data,
++static void i2c_writesl(struct tegra_i2c_dev *i2c_dev, u32 *data,
+ 			unsigned int reg, unsigned int len)
+ {
+-	writesl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data, len);
++	while (len--) {
++		writel(*data++, i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
++		i2c_readl(i2c_dev, I2C_INT_STATUS);
++	}
+ }
+ 
+ static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
+@@ -811,7 +814,7 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
+ 		i2c_dev->msg_buf_remaining = buf_remaining;
+ 		i2c_dev->msg_buf = buf + words_to_transfer * BYTES_PER_FIFO_WORD;
+ 
+-		i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
++		i2c_writesl(i2c_dev, (u32 *)buf, I2C_TX_FIFO, words_to_transfer);
+ 
+ 		buf += words_to_transfer * BYTES_PER_FIFO_WORD;
+ 	}
+-- 
+2.7.4
+
