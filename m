@@ -2,153 +2,159 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB01829360F
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Oct 2020 09:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E342936DC
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Oct 2020 10:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731290AbgJTHsu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 20 Oct 2020 03:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727536AbgJTHst (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 20 Oct 2020 03:48:49 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD80FC061755;
-        Tue, 20 Oct 2020 00:48:50 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id z5so1257328ejw.7;
-        Tue, 20 Oct 2020 00:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=twqsZzBZbpmbth9P3/d5RUUDvLm4p+PgbnCnaNPBX8A=;
-        b=EeAzwdsLl5ESHsfOeD0E5yAQUYMH5ZRnPAjcTxuxk7IkErmRxSc0jTAfqERc62WQoL
-         36h4Sfm3Md44eOkHIvDkVDEEDhcGERmHPGg9/6BB0Iwyqdkl2hyZQDib7ZcJ/biZrfbh
-         Z1KNuvhabN38BC4OF3hZ5avFEOPv/B1rctHN53qigToSC5A4Cb1fUBI0+jmta74HJ4pt
-         K8I+JZ2/ZSP2bHxrTahWGvv1aC2gcv3Fava6nkJixwxaoPfNEClzE33ZOMENpL8U4OSw
-         xqo+WoAfedCMENg8YVojkndECHXQ6Ri0qiIRqAKKw2Lh77c7Y+gZ8WH38314v121oU4O
-         lyCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=twqsZzBZbpmbth9P3/d5RUUDvLm4p+PgbnCnaNPBX8A=;
-        b=d/rktKsDgf03xlfWjyw8mFheubHJwuHbBfyDWx6wdAG0tiNLWt0bp1ihaf7iX5gqu5
-         A17/P1AqLbfK+f3EZaUhE3UytyumSM9PgOqUlMIesT4LL8hmPMBzSve83chXIe6CrLnk
-         kwH7aoEjDRv/wiSD0dz5x3vCjjEa5+R01K8H39Cs3IgKCMBep/ix9lMk9LaSVbMbQH8j
-         1pfoopg13asRtiYnlG8EuFdTvnjs99i2eC2lqW5RcxJob3sK3Hi821hxsrNQdDD+yVXA
-         2vYaAQulWitVrRogZFt2MGd0XqallBDnpyP940MXm0/BmHZlEJ3pnfUpOUWyAhXN7iWP
-         NNdw==
-X-Gm-Message-State: AOAM533DLcF6O+vItC3IbbWERq/1SGe0pjG5x31VHHZd4pTph90yxf7O
-        ywfifDh2JbwkEd5+q4zj21A=
-X-Google-Smtp-Source: ABdhPJzCsnGCLKKzoyNkL5YtRW1r9cg3qeQsfhw/ATmq+hOtMiG65FcwkNTY4HrbNhEy1+cJryxsqQ==
-X-Received: by 2002:a17:906:7254:: with SMTP id n20mr1789979ejk.382.1603180129400;
-        Tue, 20 Oct 2020 00:48:49 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id o13sm1426008ejr.120.2020.10.20.00.48.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2020 00:48:47 -0700 (PDT)
-Date:   Tue, 20 Oct 2020 09:48:46 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     jonathanh@nvidia.com, digetx@gmail.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v1] i2c: tegra: Fix i2c_writesl() to use writel() instead
- of writesl()
-Message-ID: <20201020074846.GA1877013@ulmo>
-References: <1603166634-13639-1-git-send-email-skomatineni@nvidia.com>
+        id S2389000AbgJTIeW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 20 Oct 2020 04:34:22 -0400
+Received: from mail.vivotek.com ([60.248.39.150]:45716 "EHLO mail.vivotek.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727228AbgJTIeV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 20 Oct 2020 04:34:21 -0400
+Received: from pps.filterd (vivotekpps.vivotek.com [127.0.0.1])
+        by vivotekpps.vivotek.com (8.16.0.42/8.16.0.42) with SMTP id 09K8Xx5j028535;
+        Tue, 20 Oct 2020 16:34:14 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivotek.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=dkim;
+ bh=OiryTol3lsa7n+iIcBzbc/EuEG5m0GVQYbD/SFQ9KYU=;
+ b=I79hXsWAP5jvfi9upAnYpnG8SSj/JmsBA1UZhmGJaLYET9mVJi+vZziiHAkqqgj3B9pK
+ 2FY1dM192RzxpFjzYYwz7NAMduW9oOc0lmmQb6sP8CtW5IuayDG4xvvX4Op7yn9jI3Jn
+ 1+X8YeBTpER542Pnp+gpS6eo6idILuISp3o= 
+Received: from cas01.vivotek.tw ([192.168.0.58])
+        by vivotekpps.vivotek.com with ESMTP id 349m9fg9d4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 20 Oct 2020 16:34:14 +0800
+Received: from localhost.localdomain (192.168.17.134) by CAS01.vivotek.tw
+ (192.168.0.58) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 20 Oct
+ 2020 16:34:13 +0800
+From:   Michael Wu <michael.wu@vatics.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Morgan Chang <morgan.chang@vatics.com>,
+        Michael Wu <michael.wu@vatics.com>
+Subject: [PATCH] i2c: designware: call i2c_dw_read_clear_intrbits_slave() once
+Date:   Tue, 20 Oct 2020 16:33:10 +0800
+Message-ID: <20201020083310.7489-1-michael.wu@vatics.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wac7ysb48OaltWcw"
-Content-Disposition: inline
-In-Reply-To: <1603166634-13639-1-git-send-email-skomatineni@nvidia.com>
-User-Agent: Mutt/1.14.7 (2020-08-29)
+Content-Type: text/plain
+X-Originating-IP: [192.168.17.134]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-20_04:2020-10-20,2020-10-20 signatures=0
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+i2c_dw_read_clear_intrbits_slave() was called per each interrupt handle.
+It caused some interrupt bits which haven't been handled yet were cleared,
+the corresponding handlers would do nothing due to interrupt bits been
+discarded. For example,
 
---wac7ysb48OaltWcw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+$ i2cset -f -y 2 0x42 0x00 0x41; dmesg -c
+[0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
+[1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
+WRITE_RECEIVED
+[0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x714 : INTR_STAT=0x204
+[1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
+WRITE_RECEIVED
 
-On Mon, Oct 19, 2020 at 09:03:54PM -0700, Sowjanya Komatineni wrote:
-> VI I2C don't have DMA support and uses PIO mode all the time.
->=20
-> Current driver uses writesl() to fill TX FIFO based on available
-> empty slots and with this seeing strange silent hang during any I2C
-> register access after filling TX FIFO with 8 words.
->=20
-> Using writel() followed by i2c_readl() in a loop to write all words
-> to TX FIFO instead of using writesl() helps for large transfers in
-> PIO mode.
->=20
-> So, this patch updates i2c_writesl() API to use writel() in a loop
-> instead of writesl().
->=20
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegr=
-a.c
-> index 6f08c0c..274bf3a 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -333,10 +333,13 @@ static u32 i2c_readl(struct tegra_i2c_dev *i2c_dev,=
- unsigned int reg)
->  	return readl_relaxed(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
->  }
-> =20
-> -static void i2c_writesl(struct tegra_i2c_dev *i2c_dev, void *data,
-> +static void i2c_writesl(struct tegra_i2c_dev *i2c_dev, u32 *data,
->  			unsigned int reg, unsigned int len)
->  {
-> -	writesl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data, len);
-> +	while (len--) {
-> +		writel(*data++, i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
-> +		i2c_readl(i2c_dev, I2C_INT_STATUS);
-> +	}
->  }
-> =20
->  static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
-> @@ -811,7 +814,7 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_de=
-v *i2c_dev)
->  		i2c_dev->msg_buf_remaining =3D buf_remaining;
->  		i2c_dev->msg_buf =3D buf + words_to_transfer * BYTES_PER_FIFO_WORD;
-> =20
-> -		i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
-> +		i2c_writesl(i2c_dev, (u32 *)buf, I2C_TX_FIFO, words_to_transfer);
+  t1: ISR with the 1st IC_INTR_RX_FULL.
+  t2: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave().
+  t3: Enter i2c_dw_irq_handler_slave() and then do
+      i2c_slave_event(WRITE_RECEIVED) because
+      if (stat & DW_IC_INTR_RX_FULL).
+  t4: ISR with both IC_INTR_STOP_DET and the 2nd IC_INTR_RX_FULL.
+  t5: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave(). The
+      current IC_INTR_STOP_DET is cleared by this
+      i2c_dw_read_clear_intrbits_slave().
+  t6: Enter i2c_dw_irq_handler_slave() and then do
+      i2c_slave_event(WRITE_RECEIVED) because
+      if (stat & DW_IC_INTR_RX_FULL).
+  t7: i2c_slave_event(STOP) never be done because IC_INTR_STOP_DET was
+      cleared in t5.
 
-I've thought a bit more about this and I wonder if we're simply reading
-out the wrong value for tx_fifo_avail and therefore end up overflowing
-the TX FIFO. Have you checked what the value is for tx_fifo_avail when
-this silent hang occurs? Given that this is specific to the VI I2C I'm
-wondering if this is perhaps a hardware bug where we read the wrong TX
-FIFO available count.
+The root cause is that i2c_dw_read_clear_intrbits_slave() was called many
+times. Calling i2c_dw_read_clear_intrbits_slave() once in one ISR and take
+the returned stat for later handling is the solution.
 
-Thierry
+Signed-off-by: Michael Wu <michael.wu@vatics.com>
+---
+ drivers/i2c/busses/i2c-designware-slave.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
---wac7ysb48OaltWcw
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+index 44974b53a626..02e7c5171827 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -159,7 +159,6 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 	u32 raw_stat, stat, enabled, tmp;
+ 	u8 val = 0, slave_activity;
+ 
+-	regmap_read(dev->map, DW_IC_INTR_STAT, &stat);
+ 	regmap_read(dev->map, DW_IC_ENABLE, &enabled);
+ 	regmap_read(dev->map, DW_IC_RAW_INTR_STAT, &raw_stat);
+ 	regmap_read(dev->map, DW_IC_STATUS, &tmp);
+@@ -168,13 +167,11 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 	if (!enabled || !(raw_stat & ~DW_IC_INTR_ACTIVITY) || !dev->slave)
+ 		return 0;
+ 
++	stat = i2c_dw_read_clear_intrbits_slave(dev);
+ 	dev_dbg(dev->dev,
+ 		"%#x STATUS SLAVE_ACTIVITY=%#x : RAW_INTR_STAT=%#x : INTR_STAT=%#x\n",
+ 		enabled, slave_activity, raw_stat, stat);
+ 
+-	if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET))
+-		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
+-
+ 	if (stat & DW_IC_INTR_RD_REQ) {
+ 		if (slave_activity) {
+ 			if (stat & DW_IC_INTR_RX_FULL) {
+@@ -188,11 +185,9 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 						 val);
+ 				}
+ 				regmap_read(dev->map, DW_IC_CLR_RD_REQ, &tmp);
+-				stat = i2c_dw_read_clear_intrbits_slave(dev);
+ 			} else {
+ 				regmap_read(dev->map, DW_IC_CLR_RD_REQ, &tmp);
+ 				regmap_read(dev->map, DW_IC_CLR_RX_UNDER, &tmp);
+-				stat = i2c_dw_read_clear_intrbits_slave(dev);
+ 			}
+ 			if (!i2c_slave_event(dev->slave,
+ 					     I2C_SLAVE_READ_REQUESTED,
+@@ -207,7 +202,6 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 			regmap_read(dev->map, DW_IC_CLR_RX_DONE, &tmp);
+ 
+ 		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
+-		stat = i2c_dw_read_clear_intrbits_slave(dev);
+ 		return 1;
+ 	}
+ 
+@@ -217,10 +211,11 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+ 		if (!i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
+ 				     &val))
+ 			dev_vdbg(dev->dev, "Byte %X acked!", val);
+-	} else {
++	} else
+ 		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &val);
+-		stat = i2c_dw_read_clear_intrbits_slave(dev);
+-	}
++
++	if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET))
++		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
+ 
+ 	return 1;
+ }
+@@ -230,7 +225,6 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
+ 	struct dw_i2c_dev *dev = dev_id;
+ 	int ret;
+ 
+-	i2c_dw_read_clear_intrbits_slave(dev);
+ 	ret = i2c_dw_irq_handler_slave(dev);
+ 	if (ret > 0)
+ 		complete(&dev->cmd_complete);
+-- 
+2.17.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl+OlloACgkQ3SOs138+
-s6HCaw/+LQuIAv3gsJoa2SGq9zYaceHoXp93kkAyTvGO9HDT29Q8gf+faoLrk/cH
-rSCfYtwqcwJvGfxUg3Z9gbRwuc6B/xph0RKQbS9YxC7sVxU710Qp3jGWMayc1efk
-akO2WhDX9Dj1MNX+KDSR0jX9I0sAoBorjyiUovuPKTHkMkqUN7dP9PZPzvqwXVR+
-W/40fWxPP3WFc8rL4Z4VdPLSTStnvtjQx1nc+2IF0nqLnU/bm+5cMiOSpwdw5RLW
-ursbuj+gyZDLZRHplw4xCjc/kjycGDHFEJyA2rNnepefBQZXWjDGlJGXRvwl6FPw
-AmI4Vbc/dZkbi+Y/j8mVZeNk6RF7PaRjJUBsg/OvNZh4ebDvQpsHp+9AreLZ99a7
-l4NsR43yD/oS8EuRZISryRU1R2p3WsPeMx/uRr9jpdJwj6Cld39uAh9w3oDcjdCx
-EYx3AKLz2u6QMdYABkIa3iFbq7kwe2pZ5aNHuNTyjMmHYdaSnLP2CU1Hna7Dzs3D
-vsODCc0NPCzfAtpF8X/I8u2qZyZzDNH3gXxXE0hH7aPaiy1sSyf8uATyrp3dVj1q
-EQ0B8lUHp6gI1NM7wZeiJMbFqTdUqmcNAn62M/A+Mx/7Am+JgdEJhf8LoJOJvq90
-EDnmtVv9Ru8I0ucLKRKRQnW03RVh5GkKbwi5Z5ItNTg6efUqYVU=
-=PrtH
------END PGP SIGNATURE-----
-
---wac7ysb48OaltWcw--
