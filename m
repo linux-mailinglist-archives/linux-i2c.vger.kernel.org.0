@@ -2,74 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FBF2949CB
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Oct 2020 10:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011FB294C78
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Oct 2020 14:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436655AbgJUI6A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Oct 2020 04:58:00 -0400
-Received: from sonic317-28.consmr.mail.bf2.yahoo.com ([74.6.129.83]:38125 "EHLO
-        sonic317-28.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2441197AbgJUI56 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Oct 2020 04:57:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1603270677; bh=NajTNMrfMLb6UXcjRhYpYerQX8PtVBLz0oFgaMINSWY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=d4rrYv3V2GJTucSzxHI0poqvECxQCuSKX4APhFt9rKN6EimvrunRxtGLPpmGC+3G31roWA41aYuzFEMmlKmf7P/Q0sUlg3s9Ou4mxrpF6l/0oxHJMCWPcGiH1NGPUxo3gUtGq/oYSF7/c2NG7eTiJ8mJGMCIjPIokhiWkGTauRhfVPH3vsF9tiHj0+pBy3nWIp+jMl7frUYpHR5p3xM+PZhYKvpgKSjcFoDwKOqStiLRPOMH2JuHA7ReBF9vDTZtpkIs7u6Xtp6BRjwsCKRPQGQh0BmSa6IDfEnfn4ekYCkUY7IdgDEwCkvk9M2hqZgUuXdcuKt24Uw1x4LxbKiWsA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1603270677; bh=pUKPVXVUVqGBchhUwlgheIAjNXzldvseapb/CY56kLE=; h=Date:From:Subject; b=eMNdI2+afZpry5nL8TRuRk86ZlHYtwAsCIw82ymsAstPV0ytNjw0FxlbybpNHZHoY5qiTcucPrn2ZLMXTmcYjCUAAJAcHzRjZQmgFz7TaL0UBAE/HzD8ykDEjaD/d7LWHDxt3LP5X7XCSGHzIhZuIAP5IphSzgUO2gCmhX7BD2Hc6y0O32ennlncMC6YMPfVRRIanOeR9qRzcBxOy/hBT+jfwQYPxYzSjl2uM4e9Nqe2iQ03+Gr7yDiTDZc2zFdU5zq2nwLP6RCATI4q6KCD+l2sCOHdzT7MnmNjV83T43OzuOjxGBga4ZT3+WZkMARQGOdWyKPMdE6WFO5PhwT2xA==
-X-YMail-OSG: 27O9dHMVM1l0v1zZCY7N17sxiCY0UJUNa3S9RO84G7Mxo2xEe5xYKLte4._DV_a
- eGb4t6ZaeisnE_wP4rHNd20rDmFadcIOz2ZRS4R1.WwbffWpez410aLx3Al0erAX.j6mdWIHv2x8
- 4UsEM6conx3CapOGxAte_VV4u2NtrjvGggdFB6dWVERBtwaKEKm9tcGf2kgUD8Khr12r7IoaOEjf
- M9RcoclxMd30nFX5RTdyrQ2.Mq5HvgcfmDNbXb_JoHmSU_xpkcxX28bnTujlnk5.fYllEQ1YIpyK
- eDfob2o7GDp28zp8ZksAN7B0PlCla42pVz37ALxhu.bnGrgOxO8AZrCTNdfu6TKi_8sgF7qORPt4
- jWu0pbbcqQ0QtsQSO8oaI6TX_aqWNBpddQe8QX6tPxVTSEhOcK8dAaA3pf3bMhUqhIi9IJEBfq6B
- jn96vgCuxI6PsbWBlZj0odnEOSO8wUvUFiXzUtcK40UShkPxb8mD9OK3V.V25eKnqXQHw4FtUgrn
- MDkGU3yozvuJ86_r4zF8xkkOlLYqC4hWMxjMVlqG9KDoH.L.hG99yuMXSOAKFy51JPqInct0QQ0B
- bzdX3Bil1aKvhJUGay6lI5sWrd2jBkIwdkK3v2UBEO1l1rxUBAGlXHKlhoPlj0RiyFupyrSeV71U
- 9rKIlINyoSsN4CqO3om6D0wlcIWXhJOdxsd6HEzrheqOdobW.fZNla16UCJeOhJdH2e6CVT0C7pS
- 8Xh3P4yIxGtP86nUb8rgkl5F43cBBWNwseiHaM6lUD4Btw1UQBjucPXZmzVjXk_vvQ.qfCHuGd5D
- nHkNOdTYLbCwzLiwF_cLNVj3o8cgQwSF9HcFX2q4MbLWWGHQWpXmfZcGkK8Cn6AsUZzSesQMirR4
- gf4J1E3RdVGqDWhGhfx09EqE0DKy4ZQ6hGbn.9beBCoJWox3Q10vbxnmuCCSmXI70RPxMxBEyxYw
- cOP.Twy9EMlkbgLqTbroTh6FgeVMrP1YFIDaa6KhM0cAG.wPa5QN_vB2Qftig_WcPKYR5hB.Wlvr
- .EQNOCrguP24hZRm_QcCKwUIhwAC8vL02dWhwArYHkBqoHNm8h63A1u_DkTA5YU217FuWSxlED.X
- qzYz5fX6DEtf5MkSQaG8tuBXY56LS565QV9p3.6OkHpvYhwHniYIZXMou3Kdkfk3f7spzAS3cPNR
- YEc7pQoFWypS4F2YEiMM1G8T.Dw_rbTTX7D9A7ZCSDOJmBZFb3o11KA4gvoK6s6_ZkLK7wJj9qRW
- xxE7nSte3exUdyXjbFYtXFe.c1rqr1AtdIZki5CVddLxtza._UD5NzBaWGk6DyaXQuEW9C38ZgRm
- 7FBE1rWUt3kAOjwB38shxtCYEjWinKcdOixPVZZoTIHnks.VwwsrehFjdZIXDbch1ndjTpZp7aQT
- wTTaRHtFUnyRU1P4cP6QoXxUFepUZIN3xL6OGUglLYbWs
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.bf2.yahoo.com with HTTP; Wed, 21 Oct 2020 08:57:57 +0000
-Date:   Wed, 21 Oct 2020 08:57:55 +0000 (UTC)
-From:   Ms lisa Hugh <lisahugh531@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <772581317.1319804.1603270675650@mail.yahoo.com>
-Subject: YOUR CO-OPERATION FOR THIS BUSINESS (Ms Lisa Hugh).
+        id S2411745AbgJUMWQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 21 Oct 2020 08:22:16 -0400
+Received: from mga04.intel.com ([192.55.52.120]:55895 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2411742AbgJUMWQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 21 Oct 2020 08:22:16 -0400
+IronPort-SDR: hIgNyzk5qcqGVxtpeTCUxnFQ3QWoYszF1e6qPsnM+zXQtB25HXIwSR4inaBv2t2SlapIBAk+wG
+ khWJlUrcAG8w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="164750061"
+X-IronPort-AV: E=Sophos;i="5.77,401,1596524400"; 
+   d="scan'208";a="164750061"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2020 05:22:15 -0700
+IronPort-SDR: +2UvfjcawuPd1uZWUtuBUisgOC99+F3y4cNfUQJkidaaJgIvR5wnJ41I7NrSIAG8o4QBL660sr
+ LIlEwKAPb5cg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,401,1596524400"; 
+   d="scan'208";a="332567763"
+Received: from mylly.fi.intel.com (HELO [10.237.72.187]) ([10.237.72.187])
+  by orsmga002.jf.intel.com with ESMTP; 21 Oct 2020 05:22:14 -0700
+Subject: Re: [PATCH] i2c: designware: call i2c_dw_read_clear_intrbits_slave()
+ once
+To:     Michael Wu <michael.wu@vatics.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Morgan Chang <morgan.chang@vatics.com>
+References: <20201020083310.7489-1-michael.wu@vatics.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <02c0362d-cf4b-090a-3fc2-40039eba2cbd@linux.intel.com>
+Date:   Wed, 21 Oct 2020 15:22:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20201020083310.7489-1-michael.wu@vatics.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-References: <772581317.1319804.1603270675650.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16868 YMailNodin Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi
 
+On 10/20/20 11:33 AM, Michael Wu wrote:
+> i2c_dw_read_clear_intrbits_slave() was called per each interrupt handle.
+> It caused some interrupt bits which haven't been handled yet were cleared,
+> the corresponding handlers would do nothing due to interrupt bits been
+> discarded. For example,
+> 
+> $ i2cset -f -y 2 0x42 0x00 0x41; dmesg -c
+> [0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
+> [1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
+> WRITE_RECEIVED
+> [0][clear_intrbits]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x714 : INTR_STAT=0x204
+> [1][irq_handler   ]0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
+> WRITE_RECEIVED
+> 
+>    t1: ISR with the 1st IC_INTR_RX_FULL.
+>    t2: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave().
+>    t3: Enter i2c_dw_irq_handler_slave() and then do
+>        i2c_slave_event(WRITE_RECEIVED) because
+>        if (stat & DW_IC_INTR_RX_FULL).
+>    t4: ISR with both IC_INTR_STOP_DET and the 2nd IC_INTR_RX_FULL.
+>    t5: Clear listed IC_INTR bits by i2c_dw_read_clear_intrbits_slave(). The
+>        current IC_INTR_STOP_DET is cleared by this
+>        i2c_dw_read_clear_intrbits_slave().
+>    t6: Enter i2c_dw_irq_handler_slave() and then do
+>        i2c_slave_event(WRITE_RECEIVED) because
+>        if (stat & DW_IC_INTR_RX_FULL).
+>    t7: i2c_slave_event(STOP) never be done because IC_INTR_STOP_DET was
+>        cleared in t5.
+> 
+> The root cause is that i2c_dw_read_clear_intrbits_slave() was called many
+> times. Calling i2c_dw_read_clear_intrbits_slave() once in one ISR and take
+> the returned stat for later handling is the solution.
+> 
+> Signed-off-by: Michael Wu <michael.wu@vatics.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-slave.c | 16 +++++-----------
+>   1 file changed, 5 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+> index 44974b53a626..02e7c5171827 100644
+> --- a/drivers/i2c/busses/i2c-designware-slave.c
+> +++ b/drivers/i2c/busses/i2c-designware-slave.c
+> @@ -159,7 +159,6 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+>   	u32 raw_stat, stat, enabled, tmp;
+>   	u8 val = 0, slave_activity;
+>   
+> -	regmap_read(dev->map, DW_IC_INTR_STAT, &stat);
+>   	regmap_read(dev->map, DW_IC_ENABLE, &enabled);
+>   	regmap_read(dev->map, DW_IC_RAW_INTR_STAT, &raw_stat);
+>   	regmap_read(dev->map, DW_IC_STATUS, &tmp);
+> @@ -168,13 +167,11 @@ static int i2c_dw_irq_handler_slave(struct dw_i2c_dev *dev)
+>   	if (!enabled || !(raw_stat & ~DW_IC_INTR_ACTIVITY) || !dev->slave)
+>   		return 0;
+>   
+> +	stat = i2c_dw_read_clear_intrbits_slave(dev);
+>   	dev_dbg(dev->dev,
+>   		"%#x STATUS SLAVE_ACTIVITY=%#x : RAW_INTR_STAT=%#x : INTR_STAT=%#x\n",
+>   		enabled, slave_activity, raw_stat, stat);
+>   
+> -	if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET))
+> -		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
+> -
 
-Dear Friend,
+...
 
-I am Ms Lisa hugh, work with the department of Audit and accounting manager here in the Bank(B.O.A).
+> +
+> +	if ((stat & DW_IC_INTR_RX_FULL) && (stat & DW_IC_INTR_STOP_DET))
+> +		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
 
-Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
+Was this move a leftover that got committed by accident? I think it's 
+better to have this logic change in another patch. Or was it even 
+questionable to move the I2C_SLAVE_WRITE_REQUESTED reporting after all 
+other?
 
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me for success.
-
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
-
-Below information is what i need from you so will can be reaching each other
-
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
-
-
-Thanks.
-
-Ms Lisa hugh.
+Jarkko
