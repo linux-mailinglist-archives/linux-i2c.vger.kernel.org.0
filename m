@@ -2,50 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FAC296B17
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Oct 2020 10:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74441296B19
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Oct 2020 10:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S375927AbgJWIXs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Oct 2020 04:23:48 -0400
+        id S375948AbgJWIXw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Oct 2020 04:23:52 -0400
 Received: from mail-vi1eur05on2085.outbound.protection.outlook.com ([40.107.21.85]:31553
         "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S369593AbgJWIXs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 23 Oct 2020 04:23:48 -0400
+        id S375928AbgJWIXv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 23 Oct 2020 04:23:51 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gT3qhf7Spnf3oYVwlbpaQYDY87ttM3kXxtBROAKrLTDT2bHdOAx9MiPqOrafIVJ7c+4l/rTxc+Hw98dGssty4Mz1NBXeiPsBsQtp5roN8gHKlkfDj58Rn0tQPa6dW/K7mFXS7Dr8FmFnxtBGXSDBYlWBjY/p5qWiR0O69J90VUaqB8pnTj9HizBIUCcNJ0Cfzwk6/OhVc4N7VTgc1zk7WdqbCQ/J/Lq55+26XTED+yKVmW0Lq07S6ThvK+3qcdq+5Bs0IB2iGObIXbbgQqI45uWq0c0hwcniyGfa+Sb78xS/J8oNGxwlI+CfwyO5c9++dTB0pnnOLmMuQVK8Q5tZLQ==
+ b=P5nttqi5UH8O1A7y9TrdN1h1JQmFXKBhAtJZOOxcnva5heu0mHrT7rUXg0TqBFkfxWwQh0JUaNg5GbhJOZutkHbWssTRJ27XOprfNG7DR4cCzitKisgvqFglkJ/i9CE3qHuI4A09y2py1AF1bpjIaQitpTrTvx9+mLJr5CaJc9kYXtOlr5L6zG4QEqhP9ot9+jPT4C7aIeVuqQGuPH8SMPIHDUnHxD+Zdd4p/3ZnhPfZiU6xjB/Y3nsCVgAyVVlRzrTTyaCpGb3bny6beJijnvzTleFuCAR0dCwKkDfZt4D61JKA+ijm0tRLMooqWpn09gTSSHJOI43GEGbVolOpyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uKfCW6ex1LncEkW/NqA2vfj1JSUgmn/Y8S/rGrO4/x4=;
- b=Z3uDiSelDdfY7kSy/BruwnQwVulmgNOjhjDmvAK22R11XT60NdB7PVjincRA8ZB6rgPHBvGqoJLXlS7Zs+uGia2okWUuwLEr/ZVS6/cUVQbNQhtedeooRhK8v5dn0UeWZUGZQGzr8y1UXgtXaBJGnEdVA0371M9uVgQy35Yuy4XALWS6GhHNHB2W0QvDc7aujB3zuRDerSs+DmHMSRxJoZy+FDmNTKEPt941n9s7R6awPDTH99fGmdsKMPZC7nIhc7+RIoofcQG5hZAmcqoNlb9QaGYqffwc7GDOQPYKmPlVQE1RseUVd9X3AGhj1E/OPoloZ944paR8doFRggl6QQ==
+ bh=8WK9FIW8Y0kLYbjRihWsgPm9JeGJlETCHYwzISFMc9A=;
+ b=DUXdc82zoLIUzgTCIOWeq8usfGuW1tf3ThgX9Rd3CTlbrJLxPvKGdtpleb1dn4Lq6AXj8zO4EZBU0kObMHJXhEiUZ6VxcX+bJnf9YCR6VSfU4n/3wdj4IQsdt2DWKD1dQf0nkDPN0bi1HcmbgqV1HgIi1XzzcNAGGNJ0IZaBUCmfMRQ9BqKbCSjIgFNM0ZObLdoAkT4kuA+gF+gC/Nmc7Eh7+IRtl7nPO35WyVUsNWQqniMY5CH89aQgIZqRj6GV4e3kG7s9xhaB4rTJPv0B9F4HhPUGt/+CrvilQl5DJA4fQkEkOqA+zDs5hiJjhhmUCUMqMht8RSUOjgY7xjCiZg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uKfCW6ex1LncEkW/NqA2vfj1JSUgmn/Y8S/rGrO4/x4=;
- b=HKYAq0LmfpD3JUEosmHm0/qKKjkJx5JfFslbMwH6S84/bR3NUOM2RIe+gYrJQd7kxVoVZvSMlZoJRxE6IvKNvMcAXoKMxFSrW0/fO3cvMGRFiuR5LUephVq71o0g15hkK63CgBWbtoOsITpx4q9F+nkQE1IJGM/ypOI/xjvjGsQ=
+ bh=8WK9FIW8Y0kLYbjRihWsgPm9JeGJlETCHYwzISFMc9A=;
+ b=qKjza1FL/KnfDGlLNhRcCakEBaNyyWSzNblSD2Sn7wTFm9GgB8Enzg0MrsMrwPBhCYvAQ6Hj2SM/FWf9rW4VQgbldUf6sM3Y1RWhRrtyozXgWTfimrN+0tMdW9vkwgHHxEbglx9/dv4IfgBLPa6RakQA+sfTV+rDW8U7Qu3ZlQE=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14)
  by DB7PR04MB5465.eurprd04.prod.outlook.com (2603:10a6:10:85::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.21; Fri, 23 Oct
- 2020 08:23:43 +0000
+ 2020 08:23:46 +0000
 Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com
  ([fe80::ec42:b6d0:7666:19ef]) by DB6PR0402MB2760.eurprd04.prod.outlook.com
  ([fe80::ec42:b6d0:7666:19ef%8]) with mapi id 15.20.3477.028; Fri, 23 Oct 2020
- 08:23:43 +0000
+ 08:23:46 +0000
 From:   peng.fan@nxp.com
 To:     shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com
 Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
         linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 1/2] i2c: imx: use devm_request_threaded_irq to simplify code
-Date:   Fri, 23 Oct 2020 16:18:22 +0800
-Message-Id: <1603441103-17735-1-git-send-email-peng.fan@nxp.com>
+Subject: [PATCH 2/2] i2c: imx: remove id_table entry
+Date:   Fri, 23 Oct 2020 16:18:23 +0800
+Message-Id: <1603441103-17735-2-git-send-email-peng.fan@nxp.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1603441103-17735-1-git-send-email-peng.fan@nxp.com>
+References: <1603441103-17735-1-git-send-email-peng.fan@nxp.com>
 Content-Type: text/plain
 X-Originating-IP: [119.31.174.66]
 X-ClientProxiedBy: SG2PR03CA0148.apcprd03.prod.outlook.com
@@ -53,29 +55,29 @@ X-ClientProxiedBy: SG2PR03CA0148.apcprd03.prod.outlook.com
  (2603:10a6:4:a1::14)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR03CA0148.apcprd03.prod.outlook.com (2603:1096:4:c8::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3499.6 via Frontend Transport; Fri, 23 Oct 2020 08:23:40 +0000
+Received: from localhost.localdomain (119.31.174.66) by SG2PR03CA0148.apcprd03.prod.outlook.com (2603:1096:4:c8::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3499.6 via Frontend Transport; Fri, 23 Oct 2020 08:23:43 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: be642abf-3460-4d0c-2388-08d8772cf418
+X-MS-Office365-Filtering-Correlation-Id: 7ef81973-f2e3-44e8-3697-08d8772cf607
 X-MS-TrafficTypeDiagnostic: DB7PR04MB5465:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DB7PR04MB5465D02FBDA20178D262A6F2881A0@DB7PR04MB5465.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:431;
+X-Microsoft-Antispam-PRVS: <DB7PR04MB54651A06DD27FB8EC322ACF7881A0@DB7PR04MB5465.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:605;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6lRSCC5TIVl0Px7QO+o+igPv4tnKPnJTBRK0Ojo2bOIDJBjSEKISvzODGw7cJf6veuq27PrdAVSt9kmw9FWKsky+qu5oGCY+nvFh2BV1nO7y5WNSoFZPAMU55CtJGXfWkD+g3k7O+j/5BE/9GIVAKuMgr4CQ2PliQWocM6aP5Grmne0CnOwiY/P4/d+VjVpN1sD5lKUtzRlIs08vhPe2DIBdhG+TgkaEvCR/puei4aY/goNfMj+KDq70eEdI6SkGSdWvBG4KR0G8Xr+mJ71yNbTmDSXRUYtZl8aunVc+qJyPwVOiDbp9rRrcuWTvd+4nTmbhf8LgtgrgciWo0v5/eKFfwrCVGyZzUv1hkIcbo+6lWiCBuxDSwo1bV+kBG+Mw
+X-Microsoft-Antispam-Message-Info: KweILz34xKFfuPjS3rh7oG2zmlBYAScDK63TZdDt+vGyKnlk/GaisH0WIezIU8gUb5aiUJd+Z8C5Ci2IzjuTvmJdxfwrFvpvwsQP3GIi9oO/3aKORuSzmmRtCM/T8kTiSQRVFcbYy3bC3imLVl+hKzUSbeExVK5Q/6WKLUmk0ssqldNTSZb8WVpuJDzbShCjgXnE3RNqf5Z0zf3Ae3OSO6baaAsSjIoUHPhf5+pfr0oZzbfBu0M5t/JRIDBr2V4WiMFBPNpQ3nXn+zPMKLgotfxNBaTV5em6W9iO9g2Pd9cuCvlNV7/Ev7cSPF4GEeMO+DmpYTtbsqJeYhWLFr1NqFsSAn1wedymkT9j3tBzUft4QEycs1YtNF+8OD0oql2c
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2760.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(396003)(39860400002)(376002)(366004)(6486002)(83380400001)(956004)(186003)(26005)(316002)(2616005)(478600001)(2906002)(9686003)(36756003)(16526019)(8676002)(66946007)(6512007)(6506007)(69590400008)(8936002)(52116002)(4326008)(86362001)(5660300002)(66556008)(6666004)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: JBZbP1PFnMQOhOvMC9koCCTWnbrTJV2xfpDp8htOCKex4jNYXX7uK84W5UQPdhcgz/6BEpGnO3/fdu7AjofQCWWhBOI/S4FNLlMUShye7IBt68aHsx3KBoIIj2CLMmriGYjji3H5k3xaeZKe/slKjmjU3PIzAs0Jb0Ait7hsvvaO79aiBIsMOtc2W5hpX+B0rHNI8TrkxJRVjd4gMKttCD/vjD2YPk6AfnbD6KtB6ucdCcCSCD1CtVEhzq3jcDDDcAn4iSrxYUClRTjGYJdXBbV6aGZcXWuLAlxQ4iRC4Vgy7HLeThO5QvG4ps5apFMvsVJdo2eFX24g1VzBRo7RwWAVxFmUpwiGWUHoTcBRuGSprsraBZb7Jke+vNfyV1lpYt11PhiHIg1pL/IFEtmlT95gU2EEJ28acH6FtjcEu9hzMCjY1ikPUuUVFN9/ktAle2+CKALleMEYeg2M+cByBw4GVNttoPPc0YCXXhhqyQKJ6WtnsV7P2EcTfqsLOGDglBJwUmeE8jJlX+oF7MnXDyJHO9iEZ7QTd7aGECObNGgcNHwGiagofT74ldc+etQ/PYzq3tyZ8bOvxu6E97kQtiRXvZKaKZqTHG4Sknf+d5UyNcSalcL1MyQlONeuUbdtLlpUFxBPMuxdszAcopi4DQ==
+X-MS-Exchange-AntiSpam-MessageData: /3s+51ik/2PwEbaYviBouDuH6KpSINUMVKxlTCLQdTIyaTa1+9eiukjy8gRHGYPYvzPKl0sNclJPfEp8YLfzzBxT7h0OlnPbpzlUJt6cdGWpmMxp7lD7hvT8qc9QYSIVQU5sf2BSpVChOpoTjfjVTDpr7ALSyZOL1IPvTKuRBtgOHYdzbF++CEOqjKN00NWxso497UNrxF1pwIarEKBQ6VQcUP4z0laLgYJxx3Lj3ffjvQ+dwusXsD6uQYVE4p4ulYB26ffnAdHOAPX28i0NdZpfsY2FSGe+GQdrY0Yvnn6/w+q/O282dpl+oDSr9O5Kj+1dHvnm0b/ffDL8QEbZBaIpSPPFQBPzaXeC12uCb+5l5Rhb37P1BvjXiuUukJe8wPDPnsG7tK9WQQe3IMtQ01ZIxvWz69/ZyJCqx+6nTaxe48I2dn6nF0LuUtdNroh0eg3WMBeym20sfqL92EE4xAfz0RbXYIlarmQdqokdqR3xlAy/14o+NSYIPz95rK9+zlZH1NR9ZsuQiVBuG5bH2wr2/AWce5fmkqMjdXzP98ow0HxspArF+WaLmNiBupUr2+U9GSwmLgbhTfzj2duGaXi3dO1k4/EJchZsv7jphEutHoKlGUljatyNNNPZq1IHFExcuoWACZjBwK/wjsr4vw==
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be642abf-3460-4d0c-2388-08d8772cf418
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ef81973-f2e3-44e8-3697-08d8772cf607
 X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2760.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2020 08:23:43.3482
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2020 08:23:46.6577
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W39+UmJ+jVcANvM2SsiyA6TPxsqLsr+n+c2RPN+6AosIauRp67Ln1ymK6u9/oHWft8x94wI/TIyu6q41qx/kCA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: udVElxd/maEx15cO8euN6TG2h3G+5O7h/H+TcaXo5T89rdQX1IyxSfGPlznAhK10/f1Kr399E6dl6t7y9M/frA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5465
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
@@ -83,55 +85,46 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Peng Fan <peng.fan@nxp.com>
 
-Use devm_request_threaded_irq to simplify code
+The legacy platform device code has been removed under arch/arm/mach-imx,
+so we no need id_table entry here.
 
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/i2c/busses/i2c-imx.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/i2c/busses/i2c-imx.c | 14 --------------
+ 1 file changed, 14 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index e6f8d6e45a15..ba9d639223ec 100644
+index ba9d639223ec..7ea36a78abb0 100644
 --- a/drivers/i2c/busses/i2c-imx.c
 +++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1216,8 +1216,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 		goto rpm_disable;
+@@ -233,19 +233,6 @@ static struct imx_i2c_hwdata vf610_i2c_hwdata = {
  
- 	/* Request IRQ */
--	ret = request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
--				   pdev->name, i2c_imx);
-+	ret = devm_request_threaded_irq(&pdev->dev, irq, i2c_imx_isr, NULL, IRQF_SHARED,
-+					pdev->name, i2c_imx);
- 	if (ret) {
- 		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
- 		goto rpm_disable;
-@@ -1265,7 +1265,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ };
  
- clk_notifier_unregister:
- 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
--	free_irq(irq, i2c_imx);
- rpm_disable:
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
-@@ -1278,7 +1277,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
- static int i2c_imx_remove(struct platform_device *pdev)
- {
- 	struct imx_i2c_struct *i2c_imx = platform_get_drvdata(pdev);
--	int irq, ret;
-+	int ret;
+-static const struct platform_device_id imx_i2c_devtype[] = {
+-	{
+-		.name = "imx1-i2c",
+-		.driver_data = (kernel_ulong_t)&imx1_i2c_hwdata,
+-	}, {
+-		.name = "imx21-i2c",
+-		.driver_data = (kernel_ulong_t)&imx21_i2c_hwdata,
+-	}, {
+-		/* sentinel */
+-	}
+-};
+-MODULE_DEVICE_TABLE(platform, imx_i2c_devtype);
+-
+ static const struct of_device_id i2c_imx_dt_ids[] = {
+ 	{ .compatible = "fsl,imx1-i2c", .data = &imx1_i2c_hwdata, },
+ 	{ .compatible = "fsl,imx21-i2c", .data = &imx21_i2c_hwdata, },
+@@ -1340,7 +1327,6 @@ static struct platform_driver i2c_imx_driver = {
+ 		.of_match_table = i2c_imx_dt_ids,
+ 		.acpi_match_table = i2c_imx_acpi_ids,
+ 	},
+-	.id_table = imx_i2c_devtype,
+ };
  
- 	ret = pm_runtime_get_sync(&pdev->dev);
- 	if (ret < 0)
-@@ -1298,9 +1297,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
- 	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
- 
- 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
--	irq = platform_get_irq(pdev, 0);
--	if (irq >= 0)
--		free_irq(irq, i2c_imx);
- 	clk_disable_unprepare(i2c_imx->clk);
- 
- 	pm_runtime_put_noidle(&pdev->dev);
+ static int __init i2c_adap_imx_init(void)
 -- 
 2.28.0
 
