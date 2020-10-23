@@ -2,113 +2,227 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 197832975AD
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Oct 2020 19:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608C52975BB
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Oct 2020 19:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1753263AbgJWRVD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Oct 2020 13:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
+        id S461447AbgJWR0x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Oct 2020 13:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S465626AbgJWRVD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Oct 2020 13:21:03 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EB3C0613CE
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Oct 2020 10:21:03 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id f19so1838642pfj.11
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Oct 2020 10:21:03 -0700 (PDT)
+        with ESMTP id S370301AbgJWR0w (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Oct 2020 13:26:52 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF99AC0613CE
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Oct 2020 10:26:52 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id e10so1883412pfj.1
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Oct 2020 10:26:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to;
-        bh=AhkDFdlO7xXaCmAYcz2ch4MeNHH8f+TzFALJVBW+IW8=;
-        b=L8RfIN4Oq9jWJmu2WvjjfGMIb5L/Lx0emvAC/sjIUGtESVciPNo+PgtrdfgcD1Ia2R
-         rHqm4t5ywIYHYW+LO4D/4pFRCPTlYbRfbCaw8lgO6sVrGQDOptYi5RfD7CamXl0PrT3A
-         y1ukw+ddXSIkVmO63zhHXhzTRw/DmL2x4r6fE=
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to;
+        bh=UwAqWyzZBSZG6scxd7ox700b3jjiUlPsMK0gxlNxYp8=;
+        b=GBd/2aHWNNST3epMv6+OjlLx6ULONotzdvTHkuTK6r45GJ2XYazmmqSTsMCl++hjyn
+         9SqGcZcctV1JrB7F7d9fFlUNAZpEJh7aJo+3MUTcM6JehWjnMT8MOV36AuDwHkOCyeKi
+         792LrdRU2ZSDDp5/+6bFzw6RxaiE3A+GxqGeI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to;
-        bh=AhkDFdlO7xXaCmAYcz2ch4MeNHH8f+TzFALJVBW+IW8=;
-        b=LA9uGNP0ys054p0fAidtQaPV7RONlzFhu6Ux7LQ62vpLg+y5kTViJws4gI97yMVFLl
-         eeFOUahDl3EiucFpsrPqkYuFzCuFuOs3CA6AqKJGp9XeU3sqWQP48EZASyGh4ec20rT8
-         ERZXOhhTofzsWkQm0Z1kafo4EZhGdlVKC/waqPBGzCIaWW3/inWpOKArSp62gSg4uWbF
-         bq4ars9iPXVklsSsntqd2xcf0SW7cEwj6ZSpbra8uxkhBTvEReEQ77QUlsjj8pb8o4EU
-         saQ1DhLSa9mB63ARoLH4RNdRlhv24NG6xoXrssFjJ0KDvU1nrWXXJAYaX8p2KH1SLUCg
-         rF6w==
-X-Gm-Message-State: AOAM533ANXtpEvgUkY3MZqc4HhDJPJk1HYIXLj3pjY3tFpU3bv3g+Gl9
-        sipPocT46s+vVcf2NbXljdFFj29Yn5mXaBRc
-X-Google-Smtp-Source: ABdhPJxbn8O4DptaYwuQmhiegQ4PaFJ3KuT2/qvxianBV98Ea1llXZitivdGyx9L1HzBXktGd0q5GA==
-X-Received: by 2002:a62:2c8a:0:b029:160:d7a:d045 with SMTP id s132-20020a622c8a0000b02901600d7ad045mr179263pfs.65.1603473662539;
-        Fri, 23 Oct 2020 10:21:02 -0700 (PDT)
+        bh=UwAqWyzZBSZG6scxd7ox700b3jjiUlPsMK0gxlNxYp8=;
+        b=RSNDqMNW1gVN4MmDS3sHn5TAZfDcwn/IYBe/rYTVdz2FVgnC50HaLOHD0fV34Bc/A4
+         rmfs48rQuClzCUYYF4hT8m89StiNU7pvtYJjF77xyU11plPCdO86QYFGt7oWAISeiPtq
+         Ulf2bz3ARfhsyMuk1QhWCj6uze9cPZQpc2zSc2HknBIJyxJgZZt66MGx3OJnPkrB+kJd
+         /PKpZpUgw8X+ABNpuyFXu4+Z+Y1kfZuE6nXMcwJPF5OGedFrqV/knsRlC6rWT1DFRXFe
+         1vJUFLEWp47NAR/lKmlBnj1U83t8+MZaurhS3UJQNb84VA81NCUjRTehhWAm2Uyz5r8D
+         Wo6Q==
+X-Gm-Message-State: AOAM5339xl6yiZmSe6OMUm0iWlZPYjDvE0HlEg+6e19+iFlPKYX2XR8q
+        Eo1CfEZUY2SH7L6gCscQ2WoFsg==
+X-Google-Smtp-Source: ABdhPJyiRjRu2Ph1eCxnSucW8TUUW1duiXliDoRNQFtn1l7vp/lIr02sxk7+nMFf1jXxPApyfSC2sg==
+X-Received: by 2002:a17:90b:4303:: with SMTP id ih3mr3816001pjb.25.1603474012141;
+        Fri, 23 Oct 2020 10:26:52 -0700 (PDT)
 Received: from [10.230.182.181] ([192.19.224.250])
-        by smtp.gmail.com with ESMTPSA id z6sm2824874pfj.48.2020.10.23.10.21.01
+        by smtp.gmail.com with ESMTPSA id ga19sm3147741pjb.3.2020.10.23.10.26.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Oct 2020 10:21:01 -0700 (PDT)
-Subject: Re: [PATCH v1 4/6] i2c: iproc: fix typo in slave_isr function
+        Fri, 23 Oct 2020 10:26:51 -0700 (PDT)
+Subject: Re: [PATCH v1 5/6] i2c: iproc: handle master read request
 To:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
+        Dhananjay Phadke <dphadke@linux.microsoft.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lori Hikichi <lori.hikichi@broadcom.com>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Wolfram Sang <wsa@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lori Hikichi <lori.hikichi@broadcom.com>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20201011182254.17776-1-rayagonda.kokatanur@broadcom.com>
- <20201011182254.17776-5-rayagonda.kokatanur@broadcom.com>
+        Wolfram Sang <wsa@kernel.org>
+References: <20201011182254.17776-6-rayagonda.kokatanur@broadcom.com>
+ <1602645639-12854-1-git-send-email-dphadke@linux.microsoft.com>
+ <CAHO=5PEtoJrFEPin0hH19Ubs9Zmhxiay4jSGAhXBFE=ft=+CYg@mail.gmail.com>
 From:   Ray Jui <ray.jui@broadcom.com>
-Message-ID: <6232a47d-9ff1-9c4a-6ed1-80b4c6222cc0@broadcom.com>
-Date:   Fri, 23 Oct 2020 10:20:57 -0700
+Message-ID: <6c16052c-e427-90c1-8095-4135f35cc775@broadcom.com>
+Date:   Fri, 23 Oct 2020 10:26:46 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.1
 MIME-Version: 1.0
-In-Reply-To: <20201011182254.17776-5-rayagonda.kokatanur@broadcom.com>
+In-Reply-To: <CAHO=5PEtoJrFEPin0hH19Ubs9Zmhxiay4jSGAhXBFE=ft=+CYg@mail.gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000016f11705b259ce90"
+        boundary="000000000000ee4e1105b259e2d3"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---00000000000016f11705b259ce90
+--000000000000ee4e1105b259e2d3
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 10/11/2020 11:22 AM, Rayagonda Kokatanur wrote:
-> Fix typo in bcm_iproc_i2c_slave_isr().
+On 10/13/2020 10:12 PM, Rayagonda Kokatanur wrote:
 > 
-> Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
-
-This is merely a fix of typo in code comment and there's no functional
-impact. Why do we need a Fixes tag on this (which indicates the fix
-needs to be backported to LTS kernels)?
-
-> Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-> ---
->  drivers/i2c/busses/i2c-bcm-iproc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index cd687696bf0b..7a235f9f5884 100644
-> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -382,7 +382,7 @@ static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev *iproc_i2c,
->  	if (status & BIT(IS_S_START_BUSY_SHIFT)) {
->  		i2c_slave_event(iproc_i2c->slave, I2C_SLAVE_STOP, &value);
->  		/*
-> -		 * Enable interrupt for TX FIFO becomes empty and
-> +		 * Disable interrupt for TX FIFO becomes empty and
->  		 * less than PKT_LENGTH bytes were output on the SMBUS
->  		 */
->  		val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
+> On Wed, Oct 14, 2020 at 8:50 AM Dhananjay Phadke
+> <dphadke@linux.microsoft.com <mailto:dphadke@linux.microsoft.com>> wrote:
 > 
+>     On Sun, 11 Oct 2020 23:52:53 +0530, Rayagonda Kokatanur wrote:
+>     > --- a/drivers/i2c/busses/i2c-bcm-iproc.c
+>     > +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+>     >
+>     > -             } else if (status & BIT(IS_S_RD_EVENT_SHIFT)) {
+>     > -                     /* Start of SMBUS for Master Read */
+>     > +                                     I2C_SLAVE_WRITE_REQUESTED,
+>     &rx_data);
+>     > +                     iproc_i2c->rx_start_rcvd = true;
+>     > +                     iproc_i2c->slave_read_complete = false;
+>     > +             } else if (rx_status == I2C_SLAVE_RX_DATA &&
+>     > +                        iproc_i2c->rx_start_rcvd) {
+>     > +                     /* Middle of SMBUS Master write */
+>     >                       i2c_slave_event(iproc_i2c->slave,
+>     > -                                     I2C_SLAVE_READ_REQUESTED,
+>     &value);
+>     > -                     iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, value);
+>     > +                                     I2C_SLAVE_WRITE_RECEIVED,
+>     &rx_data);
+>     > +             } else if (rx_status == I2C_SLAVE_RX_END &&
+>     > +                        iproc_i2c->rx_start_rcvd) {
+>     > +                     /* End of SMBUS Master write */
+>     > +                     if (iproc_i2c->slave_rx_only)
+>     > +                             i2c_slave_event(iproc_i2c->slave,
+>     > +                                           
+>      I2C_SLAVE_WRITE_RECEIVED,
+>     > +                                             &rx_data);
+>     > +
+>     > +                     i2c_slave_event(iproc_i2c->slave,
+>     I2C_SLAVE_STOP,
+>     > +                                     &rx_data);
+>     > +             } else if (rx_status == I2C_SLAVE_RX_FIFO_EMPTY) {
+>     > +                     iproc_i2c->rx_start_rcvd = false;
+>     > +                     iproc_i2c->slave_read_complete = true;
+>     > +                     break;
+>     > +             }
+>     > 
+>     > -                     val = BIT(S_CMD_START_BUSY_SHIFT);
+>     > -                     iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
+>     > +             rx_bytes++;
+> 
+>     rx_bytes should be incremented only along with
+>     I2C_SLAVE_WRITE_RECEIVED event?
+> 
+> 
+> It should be incremented in both I2C_SLAVE_WRITE_REQUESTED and  
+> I2C_SLAVE_WRITE_RECEIVED cases because in both case it is reading valid
+> bytes from rx fifo.
+> 
+> 
+>     >
+>     > +static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev
+>     *iproc_i2c,
+>     > +                                 u32 status)
+>     > +{
+>     > +     u32 val;
+>     > +     u8 value;
+>     > +
+>     > +     /*
+>     > +      * Slave events in case of master-write, master-write-read and,
+>     > +      * master-read
+>     > +      *
+>     > +      * Master-write     : only IS_S_RX_EVENT_SHIFT event
+>     > +      * Master-write-read: both IS_S_RX_EVENT_SHIFT and
+>     IS_S_RD_EVENT_SHIFT
+>     > +      *                    events
+>     > +      * Master-read      : both IS_S_RX_EVENT_SHIFT and
+>     IS_S_RD_EVENT_SHIFT
+>     > +      *                    events or only IS_S_RD_EVENT_SHIFT
+>     > +      */
+>     > +     if (status & BIT(IS_S_RX_EVENT_SHIFT) ||
+>     > +         status & BIT(IS_S_RD_EVENT_SHIFT)) {
+>     > +             /* disable slave interrupts */
+>     > +             val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
+>     > +             val &= ~iproc_i2c->slave_int_mask;
+>     > +             iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
+>     > +
+>     > +             if (status & BIT(IS_S_RD_EVENT_SHIFT))
+>     > +                     /* Master-write-read request */
+>     > +                     iproc_i2c->slave_rx_only = false;
+>     > +             else
+>     > +                     /* Master-write request only */
+>     > +                     iproc_i2c->slave_rx_only = true;
+>     > +
+>     > +             /* schedule tasklet to read data later */
+>     > +             tasklet_schedule(&iproc_i2c->slave_rx_tasklet);
+>     > +
+>     > +             /* clear only IS_S_RX_EVENT_SHIFT interrupt */
+>     > +             iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET,
+>     > +                              BIT(IS_S_RX_EVENT_SHIFT));
+>     >
+> 
+>     Both tasklet and isr are writing to status (IS_OFFSET) reg.
+> 
+> 
+> Yes this is required.
+> 
+> For ex, If IS_S_RD_EVENT_SHIFT interrupt, this should be cleared once
+> the driver completes reading all data from rx fifo.
+> After this the driver can start sending data to master.
+>  
 
---00000000000016f11705b259ce90
+If both tasklet and isr are accessing the IS_OFFSET register, don't you
+need lock protection against race condition? That is, ISR can interrupt
+tasklet.
+
+> 
+> 
+>     The tasklet seems to be batching up rx fifo reads because of
+>     time-sensitive
+>     Master-write-read transaction? Linux I2C framework is byte interface
+>     anyway.
+>     Can the need to batch reads be avoided by setting slave rx threshold for
+>     interrupt (S_FIFO_RX_THLD) to 1-byte?
+> 
+> 
+> To process more data with a single interrupt we are batching up rx fifo
+> reads.
+> This will reduce the number of interrupts.
+> 
+> Also to avoid tasklet running more time (20us) we have a threshold of 10
+> bytes for batching read.
+> This is a better/optimised approach than reading single byte data per
+> interrupt.
+> 
+> 
+>     Also, wouldn't tasklets be susceptible to other interrupts? If fifo
+>     reads
+>     have to be batched up, can it be changed to threaded irq?
+> 
+> 
+> tasklets have higher priority than threaded irq, since i2c is time
+> sensitive so using a tasklet is preferred over threaded irq.
+>  
+
+--000000000000ee4e1105b259e2d3
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -178,13 +292,13 @@ yX1HjSkrlIsRwi6DN0/ieL04O9aD1UNPlCC6akGnv4tgwlESh51M564qhonlfSW6La+L/aTIuQc0
 88lq8s/VMBBGdc7176/v5TbNwEC/c5QYbp2n76rAmKKjhjwWmBk64yLT7CoIxk0xggJvMIICawIB
 ATBtMF0xCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQDEypH
 bG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gU0hBMjU2IC0gRzMCDCUMagLNLily51ao1jAN
-BglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgdGojsY1VNV76zEuUY29Fa/GDdrs9p8Zi
-rlbwjkbxy4kwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMDIz
-MTcyMTAzWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZI
+BglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgk+L2CYR/23gmADLuEtSwG7cYVmrVxxzz
+dUxKZId/YuMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMDIz
+MTcyNjUyWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZI
 AWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIB
-MA0GCSqGSIb3DQEBAQUABIIBAHPylzmsCWtCTBT+2iEt6CKlsvVIyds+Q3YugxXON1BB2Jf/8hfV
-3xb0JMu6hKn8zsAqM4CPTZpxZL8g+kJBg+hRj2uXvS6PArGZ4abT1yDSdQT9QtZP6TCUFrnzsHkW
-0gQ8GcA5Big08EiAWiWk4R1uNjhOo1aAmSOvD10vjm5za8CnvNAATzyvyL4HTkr4Qv7sJqonJhYr
-Rkj+YGuwqUxPuqUUdhl8xSLec13O22JCzeorExSTLGWxyIubTVjQKPI9ih/2Nyhe0RHn2TmF0gEH
-VQkSVwciCg19yEUcPM2tQeFx+lhWFiL+9QHh0d4t6YPwdDgQfII6r45iv1glEc4=
---00000000000016f11705b259ce90--
+MA0GCSqGSIb3DQEBAQUABIIBADEnGene93/T9+y0QNdlBgyEH9Qo2KuXVz0l86h7zNpEudqkGe0K
++34NqQqWxuiLptCE/4nGScnCWIuAHwjQtsmne5OIsKORmusyTZxX1Tz3FPxII4TFQxBbfXgFJ5GT
+5pghDBYlt7kJpPcBbsbZ0fopJGK3NL6qgOLw4OrHt5dMuw53WrDlkJEuKA5fzUFTMxslhVonc1ti
+PyxxRCib04W7tJJiDw+fP3xqSYW9CGruIENyWhiNUOuWda8N8fYmCqtjuCwaQe4u4+bxJZgUnJLg
+RYA3tlAlKy2roAdsKHDFYkEmya9iXIdBQT8fTaaEdZxyyCvx0yS4JIWEJEHh9L8=
+--000000000000ee4e1105b259e2d3--
