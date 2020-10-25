@@ -2,53 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 142B0298319
-	for <lists+linux-i2c@lfdr.de>; Sun, 25 Oct 2020 19:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FAA298344
+	for <lists+linux-i2c@lfdr.de>; Sun, 25 Oct 2020 20:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1418127AbgJYSfS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 25 Oct 2020 14:35:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46356 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1418125AbgJYSfR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 25 Oct 2020 14:35:17 -0400
-Subject: Re: [PULL REQUEST] i2c for 5.10
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603650917;
-        bh=KZ5ResFc3TX17CSixMNMQYfEVf7Hgj+gHEC053DADow=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=vipcxaiBIXJWl1WoX2pvVk5GzswCRMQ7ubPycSlcMAzED6WCwgIWsEXId1J8hlrSS
-         9q20RnF+rycvnoJu9GBTrAPkfI22T2Z3Lim9akl253xl1JoC4W4p7To2p2S1iPdO+s
-         ri2RBQqAoo6jjCiafMs2n0Rk0tA3pE/1GEcSagHI=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20201025123745.GA7614@kunai>
-References: <20201025123745.GA7614@kunai>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20201025123745.GA7614@kunai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.10
-X-PR-Tracked-Commit-Id: 8058d69905058ec8f467a120b5ec5bb831ea67f3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0746c4a9f3d37caf73fb93420bcf34a841019a40
-Message-Id: <160365091742.20889.3464918674388994884.pr-tracker-bot@kernel.org>
-Date:   Sun, 25 Oct 2020 18:35:17 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        id S1418407AbgJYTAB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 25 Oct 2020 15:00:01 -0400
+Received: from eu-shark1.inbox.eu ([195.216.236.81]:58178 "EHLO
+        eu-shark1.inbox.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1418405AbgJYTAB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 25 Oct 2020 15:00:01 -0400
+X-Greylist: delayed 374 seconds by postgrey-1.27 at vger.kernel.org; Sun, 25 Oct 2020 14:59:59 EDT
+Received: from eu-shark1.inbox.eu (localhost [127.0.0.1])
+        by eu-shark1-out.inbox.eu (Postfix) with ESMTP id C08986C006AC;
+        Sun, 25 Oct 2020 20:53:43 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.ee; s=20150108;
+        t=1603652023; bh=/L+8Tzs+lfv26ikHJRBktySxIrJHPQ7fcPUYKAnW1XY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=Yi1xgLiUlRU7PHtqRn53IVgKTQWVwphtendaBbEFxykj1ac+ho/hKi/x0aBdc26NM
+         AWPLeQy/ayXsuFT3U5edwbxd5bygsRA90ut08lj5qvmY9qgSeCOnuNalwk5Fof6a89
+         O4MVwwtSlbaZc4eqzsojQoOg56654SxSBt7prssY=
+Received: from mail.inbox.eu (eu-pop1 [127.0.0.1])
+        by eu-shark1-in.inbox.eu (Postfix) with ESMTP id 9E5E86C006A9;
+        Sun, 25 Oct 2020 20:53:43 +0200 (EET)
+Received: from hp15 (unknown [185.176.222.57])
+        (Authenticated sender: arzamas-16@mail.ee)
+        by mail.inbox.eu (Postfix) with ESMTPA id 2BD9E1BE00B2;
+        Sun, 25 Oct 2020 20:53:42 +0200 (EET)
+Date:   Sun, 25 Oct 2020 21:53:38 +0300
+From:   Boris Lysov <arzamas-16@mail.ee>
+To:     Qii Wang <qii.wang@mediatek.com>
+Cc:     <linux-i2c@vger.kernel.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: i2c: i2c-mt65xx: Update binding example
+Message-ID: <20201025215338.63664268@hp15>
+In-Reply-To: <1600049386.25719.7.camel@mhfsdcap03>
+References: <20200904223345.3daea5ad@hp15>
+        <1599442087.25719.2.camel@mhfsdcap03>
+        <20200907180841.0044d571@hp15>
+        <1600049386.25719.7.camel@mhfsdcap03>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: OK
+X-ESPOL: +dBm1NUOBk3XhyLHXxmqCAcypixLVOnh/+SmqX1UnXP/Ly+DeFYPUhKpmGtqLw+1uyM=
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sun, 25 Oct 2020 13:37:45 +0100:
+On Mon, 14 Sep 2020 10:09:46 +0800
+Qii Wang <qii.wang@mediatek.com> wrote:
+> None of the examples you cited are the upstream code of our official
+> release
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.10
+Where can I access the official upstream release for both MT6577 and MT6589? Me and other developers would certainly like to research it.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0746c4a9f3d37caf73fb93420bcf34a841019a40
+> , and the name of customer's SOC cannot be accurately evaluated. 
 
-Thank you!
+I'm sorry, but I don't understand what do you mean by "customer's SOC". I own a device with MT6577, and in all source code bundles I had listed in the previous message the SoCs are either MT6577 or MT6589.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+As of now, the code in the example of i2c-mt65xx driver documentation is declared compatible with MT6577, but it clearly does *not* work on actual MT6577 SoC.
