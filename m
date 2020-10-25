@@ -2,106 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE575297E18
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Oct 2020 21:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513922981A0
+	for <lists+linux-i2c@lfdr.de>; Sun, 25 Oct 2020 13:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1760432AbgJXT2p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 24 Oct 2020 15:28:45 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:44984 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1760426AbgJXT2o (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 24 Oct 2020 15:28:44 -0400
-Received: by mail-ed1-f68.google.com with SMTP id t20so5040660edr.11;
-        Sat, 24 Oct 2020 12:28:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e4VBZrIVbXA5K5+1xS8Vj2wOcFTF1ErdEn+41O+kAnI=;
-        b=XDKfwaJj8eGL+G4NfUNuTTunaGyFZjcSBPAWGjLZ6gvknWYHOD+sF1/iy50gr5sJyB
-         eDYa0RtTjGGriDtoNsy8gUh4FUj3HjOjl0xGhBk8PzgDmvMYXgOzTBGy+eeu9GyOn+KO
-         9URCWXEfVTHLMLYIXwjd2asS/S/HphkbeqbniPDa0LKRrIPiLYNpSV47uGB2hOOK0nkM
-         y61hgL3Q0dEXFnwFa5fqXX5fMHw/4F4d71NYvIWerhAjVSaDErp7wfUmnoTBovBeHvrc
-         IJrN8F9377YxGPFSSzPU5+9YyxBaeRjILVbpskKjBwI3UG2sghINeisuK6uYohn/mkAN
-         4uCg==
-X-Gm-Message-State: AOAM530j0CAdgGXEhkydHjzm+MnuV3ah201syJhyCNHJ+a+Cp5MUlE2q
-        GRJ2QUop6hUsdHNKzpD8C14FbakRhh4=
-X-Google-Smtp-Source: ABdhPJyRoEAbypDQg0qtaAsbMF+T7hVlpTz9RCVWfQQu8jR7NTFcNbptSFnllzrrpdcbVbtXrbx9Sg==
-X-Received: by 2002:a50:9e82:: with SMTP id a2mr8219658edf.117.1603567722004;
-        Sat, 24 Oct 2020 12:28:42 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.174])
-        by smtp.googlemail.com with ESMTPSA id 22sm2746047ejw.27.2020.10.24.12.28.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Oct 2020 12:28:40 -0700 (PDT)
-Date:   Sat, 24 Oct 2020 21:28:38 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] i2c: imx: use devm_request_threaded_irq to simplify
- code
-Message-ID: <20201024192838.GB4638@kozik-lap>
-References: <1603441103-17735-1-git-send-email-peng.fan@nxp.com>
- <CAJKOXPcPMRYmQURxAX5JPOR7k0JQmzoaX4xkmyZar_HHLX3dkA@mail.gmail.com>
- <DB6PR0402MB276054D75742322A734DF638881B0@DB6PR0402MB2760.eurprd04.prod.outlook.com>
+        id S1415673AbgJYMVy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 25 Oct 2020 08:21:54 -0400
+Received: from sauhun.de ([88.99.104.3]:39328 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1415672AbgJYMVy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 25 Oct 2020 08:21:54 -0400
+Received: from localhost (p54b33def.dip0.t-ipconnect.de [84.179.61.239])
+        by pokefinder.org (Postfix) with ESMTPSA id 0EB1A2C051E;
+        Sun, 25 Oct 2020 13:21:51 +0100 (CET)
+Date:   Sun, 25 Oct 2020 13:21:46 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        stable@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH 5.8+ regression fix] i2c: core: Restore
+ acpi_walk_dep_device_list() getting called after registering the ACPI i2c
+ devs
+Message-ID: <20201025122146.GA3327@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>, stable@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org
+References: <20201014144158.18036-1-hdegoede@redhat.com>
+ <20201014144158.18036-2-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oyUTqETQ0mS9luUI"
 Content-Disposition: inline
-In-Reply-To: <DB6PR0402MB276054D75742322A734DF638881B0@DB6PR0402MB2760.eurprd04.prod.outlook.com>
+In-Reply-To: <20201014144158.18036-2-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Oct 24, 2020 at 07:39:47AM +0000, Peng Fan wrote:
-> > Subject: Re: [PATCH 1/2] i2c: imx: use devm_request_threaded_irq to simplify
-> > code
-> > 
-> > On Fri, 23 Oct 2020 at 10:27, <peng.fan@nxp.com> wrote:
-> > >
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > Use devm_request_threaded_irq to simplify code
-> > >
-> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > ---
-> > >  drivers/i2c/busses/i2c-imx.c | 10 +++-------
-> > >  1 file changed, 3 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/i2c/busses/i2c-imx.c
-> > > b/drivers/i2c/busses/i2c-imx.c index e6f8d6e45a15..ba9d639223ec 100644
-> > > --- a/drivers/i2c/busses/i2c-imx.c
-> > > +++ b/drivers/i2c/busses/i2c-imx.c
-> > > @@ -1216,8 +1216,8 @@ static int i2c_imx_probe(struct platform_device
-> > *pdev)
-> > >                 goto rpm_disable;
-> > >
-> > >         /* Request IRQ */
-> > > -       ret = request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
-> > > -                                  pdev->name, i2c_imx);
-> > > +       ret = devm_request_threaded_irq(&pdev->dev, irq, i2c_imx_isr,
-> > NULL, IRQF_SHARED,
-> > > +                                       pdev->name, i2c_imx);
-> > 
-> > Really? You silently revert commit e50e4f0b85be ("i2c: imx: Fix external abort
-> > on interrupt in exit paths"). This is not a simplification but serious change. NAK.
-> > At least without proper reasoning of why this is suddenly safe.
-> 
-> Oh, I need look at git history before. But
-> Is it because i2c interrupt enabled too early? I'll try your case on i.MX8M platform.
 
-Shortly, it is because shared interrupts do not go well or at all with
-devm-managed interrupt handlers. Probably they could be made working
-with additional code, e.g. devm_free_irq() call or some additional
-checks in interrupt handlers. But in that case there won't be much of
-simplification.
+--oyUTqETQ0mS9luUI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Wed, Oct 14, 2020 at 04:41:58PM +0200, Hans de Goede wrote:
+> Commit 21653a4181ff ("i2c: core: Call i2c_acpi_install_space_handler()
+> before i2c_acpi_register_devices()")'s intention was to only move the
+> acpi_install_address_space_handler() call to the point before where
+> the ACPI declared i2c-children of the adapter where instantiated by
+> i2c_acpi_register_devices().
+>=20
+> But i2c_acpi_install_space_handler() had a call to
+> acpi_walk_dep_device_list() hidden (that is I missed it) at the end
+> of it, so as an unwanted side-effect now acpi_walk_dep_device_list()
+> was also being called before i2c_acpi_register_devices().
+>=20
+> Move the acpi_walk_dep_device_list() call to the end of
+> i2c_acpi_register_devices(), so that it is once again called *after*
+> the i2c_client-s hanging of the adapter have been created.
+>=20
+> This fixes the Microsoft Surface Go 2 hanging at boot.
+>=20
+> Fixes: 21653a4181ff ("i2c: core: Call i2c_acpi_install_space_handler() be=
+fore i2c_acpi_register_devices()")
+> Suggested-by: Maximilian Luz <luzmaximilian@gmail.com>
+> Reported-and-tested-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
+Applied to for-current, thanks!
+
+
+--oyUTqETQ0mS9luUI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+VbdYACgkQFA3kzBSg
+KbYpcBAAtnlevgQhqA3wf2plhknr+IvEy5eRyL+7ykgsyfnmIRddR5KWY8rJBgEI
+3M0FFpgNaiaoWQaKGaYDfOuK78PDu1OHwxsOYryYZzrLWWlmXHmI9l+PSgYiQj+J
+BUjDtbNm6ymj/aaXusJ8xW8D5aYQ26VQggvEmcn3ArH1iK7TAITAI/WTzrh5zHOe
+pgm1LYIqMxV9MK9HH16svYl4v2BgHoY66JEVf4DvFja5Cb4ET6U0aPNr5/c4aibM
+o1D+QZjlRfO4kwR3NdXcH1uOtuT+fo3OfG5SVXWXvRJHLNF7F/JIWd6+Q+uWLfzw
+DnDh9rnEFwDfeHu7nc6jT6XvwLzfSypWPU3CUI7VnbQ/BH3btzOMepjUGjynJSm0
+EZNm7REFvbacaHMlq34rYHjTopJTy7If1B/Jf84g+Zs84NT0n90jbwT3/T+wwVhg
+wCUG4H0/csZfojhuiUy471jed+YXwKJ4bouiEXNdo89Wxs5TGyQbubEjCzWJng/p
++Dl2npx2XWhcEf5R417R9SzCe9pTdXbi+g6LZ3MEq7qJCq7OLuoXgsY+gPpL1RhY
+9I1CW2q/6GzjfHHe6Xc6q9e4YF5/2ZCORJIlyMr+3PnwgK7ZBmqTFoYOhlIBQ1LT
+t+ah8PJ+FzirbsytqppSVvfvhLfAhrvKxTtB5kVNPZE6PO7IJig=
+=p0ot
+-----END PGP SIGNATURE-----
+
+--oyUTqETQ0mS9luUI--
