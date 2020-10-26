@@ -2,30 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 250E32990BE
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Oct 2020 16:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A4529989A
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Oct 2020 22:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1783415AbgJZPN4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Oct 2020 11:13:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46954 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1783343AbgJZPN4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 26 Oct 2020 11:13:56 -0400
-Received: from localhost (p54b335fd.dip0.t-ipconnect.de [84.179.53.253])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 735CB2222C;
-        Mon, 26 Oct 2020 15:13:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603725235;
-        bh=rdypqWru50mKsVqtG1SbMdaWW5DpSTgT2JsspxBvrBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kRIa4GuxF5XYhTsdWuV4S9Z82noyYZpSGBxpZXOcvqkGCaHx1jda7mHC2hV9lT4xH
-         5Vo+rCci5gtwT4gXwL700meVOPdh7lsY/tuyZvZQdpOCyh5P0CCAERJ0XY73KX1P5o
-         zB6B3esvWd6sLNna5vjEQmJBYAG6Ivy65RBeG1l8=
-Date:   Mon, 26 Oct 2020 16:13:51 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+        id S1730837AbgJZVPh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Oct 2020 17:15:37 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:43630 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730835AbgJZVPh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Oct 2020 17:15:37 -0400
+Received: by mail-ot1-f68.google.com with SMTP id k68so9301230otk.10
+        for <linux-i2c@vger.kernel.org>; Mon, 26 Oct 2020 14:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QmP6ommws7bD3EAxo4Z+a9iuwOjm8jdlxsVzMzZCnic=;
+        b=aWCS2E3njOFgdsl/wWxPpPWRpRb5H1rNzxEFSFzSv2a+GV2SnUCj6GwNg+blzfsZSa
+         HJFytxFRP/GY499T8woCGxYuyOrgkn6j2T416CubUbuedrpIIPODJWr4s9HLjAHmGSGc
+         vd1H5SYbmSE4EARubMoFanLdd4XkUd1ugHXM+t5gADEOy2aCN9f5VBjUoRR1qO7mtwBA
+         8EpjDWTDwacyPYBlWtUY7FPWVPF7NhJD/IlQsWf3I9Z4eqnVdrF5AMfKId6Fupd2PCW9
+         CEqZqnCBSIKu1/CsS8PkPuiIfBl4FCjHvLId/uYYLvgBT3mtsrLd6IS1JcACurj0EJC/
+         SVug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QmP6ommws7bD3EAxo4Z+a9iuwOjm8jdlxsVzMzZCnic=;
+        b=qZzW10ZNdKQRidz+sW3FgCt5mN3Hg6DKAuAC2GgU1FDpl5WPc26SwiaUUP25Gsy+oT
+         7vx0zb0p9MdH1Wh9yLI6J1j1vx2r9xyl65c1wBAO7jhI0mPepS91VY26rKiYxF8O9p76
+         /U3fKYGkQatacahRP9Y6XFF41fqDEP2FvnecWpZzxZ4dw11eRXaznqQUOsz6bxNozFEr
+         gjgwaJGyPWZpDJwIv/7kB7Da15pXXd7RFI4zpHT7HoKX5SnkRWHnWW7rEocfTwKQEs9G
+         JCbXbHT6PYLl+o4pxCA/mD8SWQsFhqO8UUMgOKtwv7OCqgJNvR7HE56iuHCUWngk+mHB
+         Pe3w==
+X-Gm-Message-State: AOAM532VMzni2mEtAhylYYwPSSDeaeMqYkRpER2WerFth2FHjVJ6lwD1
+        tIPwRZ8KNe6NWGQeLih2yLFKHw==
+X-Google-Smtp-Source: ABdhPJxgiXgtfOSSV05hV3Pfthk/o2qjlzK5rY0LNOqdG7wkBEOkQ1XK4wC4KwhzERrZZVGowdl2AQ==
+X-Received: by 2002:a9d:75d6:: with SMTP id c22mr12402461otl.213.1603746936482;
+        Mon, 26 Oct 2020 14:15:36 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id h15sm4378000ots.31.2020.10.26.14.15.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2020 14:15:35 -0700 (PDT)
+Date:   Mon, 26 Oct 2020 16:15:34 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Wolfram Sang <wsa@kernel.org>
 Cc:     Douglas Anderson <dianders@chromium.org>,
         Akash Asthana <akashast@codeaurora.org>,
         linux-i2c@vger.kernel.org,
@@ -36,52 +57,37 @@ Cc:     Douglas Anderson <dianders@chromium.org>,
         Mukesh Savaliya <msavaliy@codeaurora.org>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 2/3] Revert "i2c: i2c-qcom-geni: Fix DMA transfer race"
-Message-ID: <20201026151351.GB1044@ninjato>
+Message-ID: <20201026211534.GA4001@builder.lan>
 References: <20201013212531.428538-1-dianders@chromium.org>
  <20201013142448.v2.2.I7b22281453b8a18ab16ef2bfd4c641fb1cc6a92c@changeid>
  <20201026150500.GA26921@builder.lan>
+ <20201026151351.GB1044@ninjato>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EuxKj2iCbKjpUGkD"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201026150500.GA26921@builder.lan>
+In-Reply-To: <20201026151351.GB1044@ninjato>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon 26 Oct 10:13 CDT 2020, Wolfram Sang wrote:
 
---EuxKj2iCbKjpUGkD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> 
+> > Wolfram, would you like to pick this patch or would you prefer that it
+> > goes together with the other two through the soc tree?
+> 
+> Actually, I prefer the soc tree because of the functional dependency. I
+> am not aware of any pending qcom-geni patches, yet I think an immutable
+> branch for me to pull in would be nice in this case. Could you provide
+> one for me?
+> 
+
+Sounds good, please find the series applied on top of v5.10-rc1 at:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/20201013212531.428538-1-dianders@chromium.org
 
 
-> Wolfram, would you like to pick this patch or would you prefer that it
-> goes together with the other two through the soc tree?
+I've merged the same into the qcom tree for 5.11.
 
-Actually, I prefer the soc tree because of the functional dependency. I
-am not aware of any pending qcom-geni patches, yet I think an immutable
-branch for me to pull in would be nice in this case. Could you provide
-one for me?
-
-
---EuxKj2iCbKjpUGkD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+W56sACgkQFA3kzBSg
-Kbag5Q/+MDIQrIrcVr4d8UHc9MsdoSJUNYl64v50xdhP2yxGys+USr2rgJ1gcUCy
-R9YR65gJL3m8ogdMDJ+TT35LcIXEtlWWPV+UXDE/LqkicwyuTxLOTqdpCZg1X9Jx
-jQmnal61gEdBh+ShT4rQCY7iRFqm4aMkuYXraWk4H7rF008F2lfapB7zL9R0sHXX
-t7NXKCQaAw52gxdPJEgisbGHKyUrUVKUXRVBp+TivOJ4MJ8pZhcSjylKWzXeHaxI
-k9XTKVGqmqmvke5TVllo+aQeA5NvKzmPLvpVKQwfHTcjTwTqLbT8dSe4m36k/Xjn
-2g0mvDb3THcyQHw955OUH8qAuV35I04eHTOFgiKa9JOaEIvoM7K6zcukwPkTNHLi
-PGD6uK6bJ5dALt14KnLB4k4w+6Gy9C+tKs6Dz8szhKUZzeniVQ8C0Fl1aSuZky8v
-vugl4R//IK44cdTWhy+tZnOKvw2LwiTiSgNuCvVUTc1Y22LGD1r9sU3eP2MB/HAA
-thelzmWzhZULTH/HpZNCgRc7BGRYN71f8+v6oyZ391Uj/O9BlvWLreikSxkkMcO1
-e70inxFQV4R70epazvqhK9ZFizpMC+Wg1VBZbkxJVU38QMAIXVwgO+C0SkZbVpRk
-yARhc/eTgaSxeSMUMm1fT/RXYa8EzU2JR2YY2iOsjvPyS7gWrUA=
-=mSR+
------END PGP SIGNATURE-----
-
---EuxKj2iCbKjpUGkD--
+Regards,
+Bjorn
