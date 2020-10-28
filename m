@@ -2,214 +2,212 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B051629D98E
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Oct 2020 23:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D76529DA9B
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Oct 2020 00:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389843AbgJ1Wz7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 28 Oct 2020 18:55:59 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:18239 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389789AbgJ1Wz6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Oct 2020 18:55:58 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f99f6e90000>; Wed, 28 Oct 2020 15:55:37 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 28 Oct
- 2020 22:55:57 +0000
-Received: from vdi.nvidia.com (172.20.13.39) by mail.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Wed, 28 Oct 2020 22:55:56 +0000
-From:   Khalil Blaiech <kblaiech@nvidia.com>
-To:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <kblaiech@nvidia.com>, <wsa+renesas@sang-engineering.com>,
-        Leon Romanovsky <leonro@nvidia.com>
-Subject: [PATCH i2c-next v1 6/6] dt-bindings: i2c: Convert DT file to YAML schema
-Date:   Wed, 28 Oct 2020 18:55:54 -0400
-Message-ID: <77461da87050051e0d2e7decdc9b088ff8738e19.1603925078.git.kblaiech@nvidia.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <cover.1603925077.git.kblaiech@nvidia.com>
-References: <cover.1603925077.git.kblaiech@nvidia.com>
+        id S2390298AbgJ1XZ4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 28 Oct 2020 19:25:56 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:36241 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390287AbgJ1XZh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Oct 2020 19:25:37 -0400
+Received: by mail-oi1-f195.google.com with SMTP id y186so1389869oia.3;
+        Wed, 28 Oct 2020 16:25:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WRqdyxaHVERacl4jf/075/U1BNHD64QQhedn3+Sdi/8=;
+        b=Pb/rR75SIF+nwxRlmSbuUBwghXPIVLP3kqE+fwaRhW2TM9kCgWPGBHqIf9OtXtWn/a
+         22ZmW2KTl/85e49X1vy3W6nZUO9SavD4XgdihogxwFYXi/fN+xCY83box/Jfo67c1jGH
+         v7K4ev3WDBiQELzjwg+EW1WY78lEKI9CsslEJkckXeVh5QbxT5i9B5X7/rchK2PrAUvJ
+         9Cpsl7V1Yd3UxDtZE4MFU1O+d9cjHh10AOS01YmSuXe2848K7Q6drsrgSFUCAHufYywu
+         5G2onKErn+wHwxZbnuOADaVoAWWFH8NGw9Lt5fhow4V6kzhhmgc1+KvEM17gQyrolboU
+         qKjw==
+X-Gm-Message-State: AOAM530NFWvoVhhaDqaOwBIZMVku1sCTAHLYpOSij6jeKo0+hqTKvmOO
+        RCxtyZtErk2p6nNCYEjnxoeHQvgXv9WGrMN0b6Bu0CgEs84JLg==
+X-Google-Smtp-Source: ABdhPJyXYiynuJcGVEVWbMjMQv17WJ9Bdi5zI7Wuu0SiRqN/fHDXAy41dVJBMeByjeXKfMb+nbbdqdgyyPIFu/7hCdI=
+X-Received: by 2002:aca:c490:: with SMTP id u138mr4696584oif.54.1603878596951;
+ Wed, 28 Oct 2020 02:49:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1603925737; bh=zdGyU/tos+LL7nZ/nXxmn5OR1oT+vsgz2vaHUm1hz/E=;
-        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding:Content-Type;
-        b=H1jJVfTJXUxUn52LNZJRCrPMEqTW4XyrEFFgR6+oEDwQ0EHZUK/xirCKKXBIJnhmF
-         qz/8oaiNF3gYgYJMoHh4V8mqFphWLtw54FMq3YmRuQ6vlcQS/fBFXi0y9IJPjjzO2L
-         eiq1QQFhekvAJPchcldQqTclHgkPr4irM8bY5mhQ7nbQzLr4m31mziVknlt6HPBiV8
-         0c0yCM5x/8iyJi1SaGAZAu9/dkPl5yvVooekz1l3UvQAsachMnZHeTJowBGhJUwlV0
-         MqDIlTHMHfS0I1SszjFdcySGcAa1sgkn3wlk63SSai7fVqvZsQFtzzi4d5jJOrvGbQ
-         h6aJwrXMRRTXw==
+References: <24ff92dd1b0ee1b802b45698520f2937418f8094.1598260050.git.viresh.kumar@linaro.org>
+ <f75c61f193f396608d592ae2a9938264d582c038.1598260050.git.viresh.kumar@linaro.org>
+ <CAMuHMdXLQKN5n58NvOp43vhc3ryLXWurBSsmcW9Q=oW502PYOQ@mail.gmail.com>
+ <20201013095613.mbgmjwzojg5wxmau@vireshk-i7> <CAMuHMdVAJdHVMtK3Sc4sJiJGAwz1J4dKODBFcNzgstaktyKkOw@mail.gmail.com>
+ <20201016050347.ers54itzmxgijzsy@vireshk-i7> <CAMuHMdUUzoFxbJts3gVC7i5A5daa_TYzKdrGEHho=3a1eeC_ww@mail.gmail.com>
+ <20201016080730.h7u3jmlyjbyhqn3t@vireshk-i7> <CAMuHMdV1pnE===53_8r596G=9ktw-UMqD3N=T_F34Yk9aw9wWA@mail.gmail.com>
+ <20201028054829.42zckdtwvj67tcfl@vireshk-i7>
+In-Reply-To: <20201028054829.42zckdtwvj67tcfl@vireshk-i7>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 28 Oct 2020 10:49:45 +0100
+Message-ID: <CAMuHMdXnfG8riHYsd9PYSHTDvJ11zQ27y_JJh_9+obUxxLen0g@mail.gmail.com>
+Subject: Re: [PATCH V2 2/2] cpufreq: dt: Refactor initialization to handle
+ probe deferral properly
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        nks@flawful.org, Georgi Djakov <georgi.djakov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Write the devicetree binding text file in schema file, JSON
-compatible subset of YAML.
-Besides, add an entry within MAINTAINERS file.
+Hi Viresh,
 
-Fixes: d9becc53b3ade81e ("dt-bindings: i2c: I2C binding for Mellanox BlueFi=
-eld SoC")
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Khalil Blaiech <kblaiech@nvidia.com>
----
- .../bindings/i2c/mellanox,i2c-mlxbf.txt       | 42 ----------
- .../bindings/i2c/mellanox,i2c-mlxbf.yaml      | 78 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 3 files changed, 79 insertions(+), 42 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxb=
-f.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxb=
-f.yaml
+On Wed, Oct 28, 2020 at 6:48 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> On 27-10-20, 17:29, Geert Uytterhoeven wrote:
+> > On plain v5.9, with #define DEBUG and a few extra debug prints
+> > added, I get:
+> >
+> >     cpufreq_dt: cpufreq_init:164: policy->cpu = 0
+> >     cpufreq_dt: cpufreq_init:165: policy->cpus = 0
+> >     cpufreq_dt: cpufreq_init:166: policy->related_cpus =
+> >     cpufreq_dt: cpufreq_init:167: policy->real_cpus =
+> >     cpu cpu0: dev_pm_opp_of_get_sharing_cpus: Couldn't find opp node.
+> >     of: dev_pm_opp_of_cpumask_add_table:1049
+> >     of: dev_pm_opp_of_cpumask_add_table:1054: cpu 0
+> >     cpu cpu0: dev_pm_opp_of_add_table:954
+> >     cpu cpu0: dev_pm_opp_of_add_table:956:
+> > dev_pm_opp_get_opp_table_indexed() returned (ptrval)
+> >     cpu cpu0: _of_add_opp_table_v1:891
+> >     cpu cpu0: _of_add_opp_table_v1:893: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: _of_add_opp_table_v1:909: 6 entries
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 6
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 6
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 6
+> >     cpu cpu0: Couldn't find proper 'dynamic-power-coefficient' in DT
+> >     cpu cpu0: Couldn't register Energy Model -22
+> >
+> > This happens quite late in the boot sequence, long after cpu1 has been
+> > brought online.
+> > So it finds the v1 opp table for cpu0, which has 6 entries.
+> > The last two messages should be harmless, right?
+>
+> Yes.
+>
+> > So you say cpufreq is not working? How can I verify that?
+>
+> I said it because your earlier logs showed that we defered probed
+> again or the count was 0 and we failed. Something like that.
+>
+> Give output of this to verify if cpufreq is working or not:
+>
+> grep . /sys/devices/system/cpu/cpufreq/policy*/*
+>
+> This will be empty if there is no cpufreq.
 
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt b=
-/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
-deleted file mode 100644
-index 566ea861aa00..000000000000
---- a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--Device tree configuration for the Mellanox I2C SMBus on BlueField SoCs
--
--Required Properties:
--
--- compatible : should be "mellanox,i2c-mlxbf1" or "mellanox,i2c-mlxbf2".
--
--- reg : address offset and length of the device registers. The
--	registers consist of the following set of resources:
--		1) Smbus block registers.
--		2) Cause master registers.
--		3) Cause slave registers.
--		4) Cause coalesce registers (if compatible isn't set
--		   to "mellanox,i2c-mlxbf1").
--
--- interrupts : interrupt number.
--
--Optional Properties:
--
--- clock-frequency : bus frequency used to configure timing registers;
--			allowed values are 100000, 400000 and 1000000;
--			those are expressed in Hz. Default is 100000.
--
--Example:
--
--i2c@2804000 {
--	compatible =3D "mellanox,i2c-mlxbf1";
--	reg =3D	<0x02804000 0x800>,
--		<0x02801200 0x020>,
--		<0x02801260 0x020>;
--	interrupts =3D <57>;
--	clock-frequency =3D <100000>;
--};
--
--i2c@2808800 {
--	compatible =3D "mellanox,i2c-mlxbf2";
--	reg =3D	<0x02808800 0x600>,
--	        <0x02808e00 0x020>,
--		<0x02808e20 0x020>,
--		<0x02808e40 0x010>;
--	interrupts =3D <57>;
--	clock-frequency =3D <400000>;
--};
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml =
-b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-new file mode 100644
-index 000000000000..b9f6b07c503f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-@@ -0,0 +1,78 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/mellanox,i2c-mlxbf.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mellanox I2C SMBus on BlueField SoCs
-+
-+maintainers:
-+  - Khalil Blaiech <kblaiech@nvidia.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mellanox,i2c-mlxbf1
-+      - mellanox,i2c-mlxbf2
-+
-+  reg:
-+    minItems: 3
-+    maxItems: 4
-+    items:
-+      - description: Smbus block registers
-+      - description: Cause master registers
-+      - description: Cause slave registers
-+      - description: Cause coalesce registers
-+
-+  interrupts:
-+      maxItems: 1
-+
-+  clock-frequency:
-+      enum: [ 100000, 400000, 1000000 ]
-+
-+      description:
-+        bus frequency used to configure timing registers;
-+        The frequency is expressed in Hz. Default is 100000.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - mellanox,i2c-mlxbf1
-+
-+then:
-+  properties:
-+    reg:
-+      maxItems: 3
-+
-+examples:
-+  - |
-+    i2c@2804000 {
-+        compatible =3D "mellanox,i2c-mlxbf1";
-+        reg =3D <0x02804000 0x800>,
-+              <0x02801200 0x020>,
-+              <0x02801260 0x020>;
-+        interrupts =3D <57>;
-+        clock-frequency =3D <100000>;
-+    };
-+
-+  - |
-+    i2c@2808800 {
-+        compatible =3D "mellanox,i2c-mlxbf2";
-+        reg =3D <0x02808800 0x600>,
-+              <0x02808e00 0x020>,
-+              <0x02808e20 0x020>,
-+              <0x02808e40 0x010>;
-+        interrupts =3D <57>;
-+        clock-frequency =3D <400000>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9128200af1d0..8dba7ace4a40 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11075,6 +11075,7 @@ MELLANOX BLUEFIELD I2C DRIVER
- M:	Khalil Blaiech <kblaiech@nvidia.com>
- L:	linux-i2c@vger.kernel.org
- S:	Supported
-+F:	Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
- F:	drivers/i2c/busses/i2c-mlxbf.c
-=20
- MELLANOX ETHERNET DRIVER (mlx4_en)
---=20
-2.24.1
+/sys/devices/system/cpu/cpufreq/policy0/affected_cpus:0 1
+/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_cur_freq:375000
+/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq:1500000
+/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_min_freq:375000
+/sys/devices/system/cpu/cpufreq/policy0/cpuinfo_transition_latency:300000
+/sys/devices/system/cpu/cpufreq/policy0/related_cpus:0 1
+/sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies:375000
+750000 937500 1125000 1312500 1500000
+/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors:conservative
+ondemand userspace powersave performance schedutil
+/sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:375000
+/sys/devices/system/cpu/cpufreq/policy0/scaling_driver:cpufreq-dt
+/sys/devices/system/cpu/cpufreq/policy0/scaling_governor:schedutil
+/sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq:1500000
+/sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq:375000
+/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed:<unsupported>
 
+So it works in v5.9, but not in v5.10-rc1.
+
+Bisection says it was broken by commit 90d46d71cce279d8 ("opp: Handle
+multiple calls for same OPP table in _of_add_opp_table_v1()").
+
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned (ptrval)
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 0
+> >     cpu cpu0: OPP table can't be empty
+> >
+> > Wait, _get_opp_count() returns 0?
+>
+> Does this fix it for you as well ?
+>
+> https://lore.kernel.org/lkml/2c73ab54717ef358b118ea0cfb727b1427e7730a.1602648719.git.viresh.kumar@linaro.org/
+
+Thanks, it does. I had arrived at the same conclusion after bisection.
+
+> I didn't point you to this earlier as your logs said something else.
+
+All my logs said _get_opp_count() returns 0.
+
+> > During s2ram, v5.10-rc1, it redoes most of the above, incl. touching the
+> > PMIC, which it shouldn't due in this phase of system resume:
+> >
+> >     Disabling non-boot CPUs ...
+> >     Enabling non-boot CPUs ...
+> >     cpufreq_dt: cpufreq_init:112: policy->cpu = 1
+> >     cpufreq_dt: cpufreq_init:113: policy->cpus = 1
+> >     cpufreq_dt: cpufreq_init:114: policy->related_cpus =
+> >     cpufreq_dt: cpufreq_init:115: policy->real_cpus =
+> >     of: dev_pm_opp_of_cpumask_add_table:1075
+> >     of: dev_pm_opp_of_cpumask_add_table:1080: cpu 0
+> >     cpu cpu0: dev_pm_opp_of_add_table:980
+> >     cpu cpu0: dev_pm_opp_of_add_table:982:
+> > dev_pm_opp_get_opp_table_indexed() returned f680980b
+> >     cpu cpu0: _of_add_opp_table_v1:914
+> >     cpu cpu0: _of_add_opp_table_v1:916: _find_opp_table() returned a4afd426
+> >     cpu cpu0: _of_add_opp_table_v1:937: 6 entries
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >
+> > The i2c controller is suspended, this could go boom...
+> >
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     of: dev_pm_opp_of_cpumask_add_table:1080: cpu 1
+> >     cpu cpu1: dev_pm_opp_of_add_table:980
+> >     cpu cpu1: dev_pm_opp_of_add_table:982:
+> > dev_pm_opp_get_opp_table_indexed() returned f680980b
+> >     cpu cpu1: _of_add_opp_table_v1:914
+> >     cpu cpu1: _of_add_opp_table_v1:916: _find_opp_table() returned 9087c76d
+> >     cpu cpu1: _of_add_opp_table_v1:937: 6 entries
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     i2c-sh_mobile e60b0000.i2c: Transfer request timed out
+> >     cpu cpu0: dev_pm_opp_get_opp_count:331
+> >     cpu cpu0: dev_pm_opp_get_opp_count:333: _find_opp_table() returned f680980b
+> >     cpu cpu0: dev_pm_opp_get_opp_count:342: _get_opp_count() returned 0
+> >     cpu cpu0: OPP table can't be empty
+> >     CPU1 is up
+>
+> Lets make the normal boot work first and see about this later.
+
+This is also fixed by your patch: the PMIC is no longer accessed while
+suspended.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
