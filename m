@@ -2,66 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DEF29DCD4
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Oct 2020 01:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CF929E091
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Oct 2020 02:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733143AbgJ1W3H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 28 Oct 2020 18:29:07 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:40473 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387508AbgJ1W3H (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Oct 2020 18:29:07 -0400
-Received: by mail-wr1-f67.google.com with SMTP id m13so723569wrj.7;
-        Wed, 28 Oct 2020 15:29:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TuERzv+I0rpz7wGuytgD+7FYdwTEBi7hw79iaAsE+F4=;
-        b=btqzOokfPjt7hK371Su1Cq8JRNnPaZQdPkQhzKVPNRW5K/NnmOzcHTFtvQYXaq0tA2
-         qCVelsYrzMIe629X6wRHEAo4wyAQxC1kU47Ix3WPAMXWXCPQzJ5LL64WXKriQKbiw00N
-         rcnc17+BG7hZUaw4wjGL2SFNL8vEfjnUbRLE4VdMzYECbrDTdzeQTVUWOvM88JmuaZf8
-         eoxk0DuETyur54p2HqpPVwGEPbtFW9C1tzSVverhocN8CoPVfgnmhryPg99e37maPyG0
-         txn4jghMi9Tv2e/PLx9204TFJYRZuZDQJ6Oz2fSWlDXFE+5TuZxMG7BBNtO2K6XRzUpe
-         cZRg==
-X-Gm-Message-State: AOAM531z4OnbwuPkHRht3V9dRRscv2ckceIU0JXaEuWO6n8DgYEJGLEn
-        gMcnmqhBTd4cSEDiKCVEurLHl/8lh50mHw==
-X-Google-Smtp-Source: ABdhPJzqFo3mj4of5jE+IZvMiFxXULXKc0DG0DwWkOdEK2aXLgDE+YvMXSsMl4K4YrUuxRL82hp0jg==
-X-Received: by 2002:a17:906:c0d8:: with SMTP id bn24mr6127669ejb.480.1603869716907;
-        Wed, 28 Oct 2020 00:21:56 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id q3sm2287534edv.17.2020.10.28.00.21.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 00:21:55 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 08:21:54 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Wolfram Sang <wsa@kernel.org>, Andrzej Hajda <a.hajda@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: exynos5: fix platform_get_irq error handling
-Message-ID: <20201028072154.GA3494@kozik-lap>
-References: <20201027214257.8099-1-martin@kaiser.cx>
+        id S1729911AbgJ2BXE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 28 Oct 2020 21:23:04 -0400
+Received: from mail.vivotek.com ([60.248.39.150]:59032 "EHLO mail.vivotek.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729907AbgJ1WEE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:04:04 -0400
+Received: from pps.filterd (vivotekpps.vivotek.com [127.0.0.1])
+        by vivotekpps.vivotek.com (8.16.0.42/8.16.0.42) with SMTP id 09S5NlOi028183;
+        Wed, 28 Oct 2020 13:24:26 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivotek.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=dkim;
+ bh=XWsKafwoBCMXGPRGJKSVlFm0WD27smvMp+c/m4XjJPU=;
+ b=VM4Jak4Cqd64+ksznrNTiMVCTvbSKKYmABWCXqeTfQvkdd55srER9iVx5FpGTu1G3qjd
+ JainmNlmKcyQ8CZLoPEWK+jo0D+xkyqzl3W4xh98/oFhHLqOzrdEnwWXh5890V96GatK
+ 3OUiXzSaaDvFWM8FN+KgLJD25AafDkuWWmA= 
+Received: from cas01.vivotek.tw ([192.168.0.58])
+        by vivotekpps.vivotek.com with ESMTP id 34c6q13vtv-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 28 Oct 2020 13:24:26 +0800
+Received: from MBS07.vivotek.tw ([fe80::2027:4d67:6c01:78d8]) by
+ CAS01.vivotek.tw ([::1]) with mapi id 14.03.0487.000; Wed, 28 Oct 2020
+ 13:24:20 +0800
+From:   <Michael.Wu@vatics.com>
+To:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <morgan.chang@vatics.com>
+Subject: RE: [PATCH v3] i2c: designware: call
+ i2c_dw_read_clear_intrbits_slave() once
+Thread-Topic: [PATCH v3] i2c: designware: call
+ i2c_dw_read_clear_intrbits_slave() once
+Thread-Index: AQHWqP8ftBcyz8mHlUeZHq5yT12bhqmkMvSAgAhP5AA=
+Date:   Wed, 28 Oct 2020 05:24:18 +0000
+Message-ID: <5DB475451BAA174CB158B5E897FC1525B1294F5F@MBS07.vivotek.tw>
+References: <20201023054027.13540-1-michael.wu@vatics.com>
+ <a44aacbb-fcb4-f83f-b781-b69f52944f09@linux.intel.com>
+In-Reply-To: <a44aacbb-fcb4-f83f-b781-b69f52944f09@linux.intel.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.17.134]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201027214257.8099-1-martin@kaiser.cx>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-28_01:2020-10-26,2020-10-28 signatures=0
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 10:42:57PM +0100, Martin Kaiser wrote:
-> platform_get_irq already prints an error message if the requested irq
-> was not found. Don't print another message in the driver.
-> 
-> If platform_get_irq returns an error, relay this error to the caller of the
-> probe function. Don't change all errors to -EINVAL. This breaks the case
-> where platform_get_irq returns -EPROBE_DEFER.
-> 
-> platform_get_irq never returns 0. Don't check for this. Make it clear that
-> the error path always returns a negative error code.
-
-These should be three separate commits.
-
-Best regards,
-Krzysztof
+SGksDQoNCj4gT24gMTAvMjMvMjAgODo0MCBBTSwgTWljaGFlbCBXdSB3cm90ZToNCj4gPiBJZiBz
+b21lIGJpdHMgd2VyZSBjbGVhcmVkIGJ5IGkyY19kd19yZWFkX2NsZWFyX2ludHJiaXRzX3NsYXZl
+KCkgaW4NCj4gPiBpMmNfZHdfaXNyX3NsYXZlKCkgYW5kIG5vdCBoYW5kbGVkIGltbWVkaWF0ZWx5
+LCB0aG9zZSBjbGVhcmVkIGJpdHMgd291bGQNCj4gPiBub3QgYmUgc2hvd24gYWdhaW4gYnkgbGF0
+ZXIgaTJjX2R3X3JlYWRfY2xlYXJfaW50cmJpdHNfc2xhdmUoKS4gVGhleQ0KPiA+IHRoZXJlZm9y
+ZSB3ZXJlIGZvcmdvdHRlbiB0byBiZSBoYW5kbGVkLg0KPiA+DQo+ID4gaTJjX2R3X3JlYWRfY2xl
+YXJfaW50cmJpdHNfc2xhdmUoKSBzaG91bGQgYmUgY2FsbGVkIG9uY2UgaW4gYW4gSVNSIGFuZCB0
+YWtlDQo+ID4gaXRzIHJldHVybmVkIHN0YXRlIGZvciBhbGwgbGF0ZXIgaGFuZGxpbmdzLg0KPiA+
+IC0tLQ0KPiA+ICAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1kZXNpZ253YXJlLXNsYXZlLmMgfCA3
+ICstLS0tLS0NCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgNiBkZWxldGlv
+bnMoLSkNCj4gPg0KPiBBY2tlZC1ieTogSmFya2tvIE5pa3VsYSA8amFya2tvLm5pa3VsYUBsaW51
+eC5pbnRlbC5jb20+DQoNClRoZXJlIGlzIGFub3RoZXIgbG9naWMgaXNzdWUgYWJvdXQgdGhlIEky
+Q19TTEFWRV9XUklURV9SRVFVRVNURUQgcmVwb3J0aW5nLg0KTWF5IEkgZ2l2ZSBwYXRjaGVzIGJh
+c2VkIG9uIHRoaXMgY29tbWl0Pw0KDQpNaWNoYWVsIFd1DQo=
