@@ -2,81 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B16232A085D
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Oct 2020 15:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D812A08B7
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Oct 2020 16:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgJ3Osf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Oct 2020 10:48:35 -0400
-Received: from mga03.intel.com ([134.134.136.65]:38461 "EHLO mga03.intel.com"
+        id S1726953AbgJ3PAb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Oct 2020 11:00:31 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:31536 "EHLO z5.mailgun.us"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726239AbgJ3OrB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 30 Oct 2020 10:47:01 -0400
-IronPort-SDR: MYes1HbQxGgmM41l95aX8YwVuh1tfsxeQCboDVSBAEGIm0oLpRkgxTPWfG02Kvs7DojbhYuQ94
- Axr1IMy/RzRA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9789"; a="168712021"
-X-IronPort-AV: E=Sophos;i="5.77,433,1596524400"; 
-   d="scan'208";a="168712021"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2020 07:46:05 -0700
-IronPort-SDR: JFvH7no/9HmOkEt0yQULlmCJZDuhjNnU/TSiSzPDvyqnNz1LgU7P1Fjl1F4JIqA0/hpVlmtQyN
- 66OYUgcPkH+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,433,1596524400"; 
-   d="scan'208";a="356609975"
-Received: from mylly.fi.intel.com (HELO [10.237.72.73]) ([10.237.72.73])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Oct 2020 07:46:03 -0700
-Subject: Re: [PATCH 2/2] i2c: designware: slave should do WRITE_REQUESTED
- before WRITE_RECEIVED
-To:     Michael Wu <michael.wu@vatics.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Morgan Chang <morgan.chang@vatics.com>
-References: <20201030080420.28016-1-michael.wu@vatics.com>
- <20201030080420.28016-3-michael.wu@vatics.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <85c6cb3f-2eeb-07c7-0a53-a502b45c91a5@linux.intel.com>
-Date:   Fri, 30 Oct 2020 16:46:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1725939AbgJ3PAa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 30 Oct 2020 11:00:30 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1604069973; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=NRiAvEzduLH4Fyb+nC9qHYSc/q8IvoaoKJXFIDpgOag=;
+ b=uEdmCX24MegZT0stROoDcWddCJOxx/P6O/HhKTg5pAM6aVqIRgb23qqUhosEk7/oAfuJ0x+0
+ II0tpPi4L2uZq4OnU70In/um6T/5IwTA6loCXdqqJ33Jt1WY5WWmdr48C89a+8lxTJCtWkrI
+ 1E064YMT7gI/knG+CSDA/DC5FPc=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 5f9c2a54b01cad7dbfeeadbc (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 30 Oct 2020 14:59:32
+ GMT
+Sender: rojay=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8E71FC433C6; Fri, 30 Oct 2020 14:59:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: rojay)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E8E1BC433C9;
+        Fri, 30 Oct 2020 14:59:31 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <20201030080420.28016-3-michael.wu@vatics.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Fri, 30 Oct 2020 20:29:31 +0530
+From:   rojay@codeaurora.org
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     wsa@kernel.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        vkaur@codeaurora.org, pyarlaga@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH V5 3/3] i2c: i2c-qcom-geni: Add shutdown callback for i2c
+In-Reply-To: <160168919332.310579.15311671258384969025@swboyd.mtv.corp.google.com>
+References: <20201001084425.23117-1-rojay@codeaurora.org>
+ <20201001084425.23117-4-rojay@codeaurora.org>
+ <160168919332.310579.15311671258384969025@swboyd.mtv.corp.google.com>
+Message-ID: <17edaa6ceded98199a6f94a505cbd436@codeaurora.org>
+X-Sender: rojay@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 10/30/20 10:04 AM, Michael Wu wrote:
-> Sometimes we would get the following flow when doing an i2cset:
+Hi Stephen,
+
+On 2020-10-03 07:09, Stephen Boyd wrote:
+> Quoting Roja Rani Yarubandi (2020-10-01 01:44:25)
+>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c 
+>> b/drivers/i2c/busses/i2c-qcom-geni.c
+>> index aee2a1dd2c62..56d3fbfe7eb6 100644
+>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>> @@ -380,6 +380,36 @@ static void geni_i2c_tx_msg_cleanup(struct 
+>> geni_i2c_dev *gi2c,
+>>         }
+>>  }
+>> 
+>> +static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
+>> +{
+>> +       int ret;
+>> +       u32 geni_status;
+>> +       unsigned long flags;
+>> +       struct i2c_msg *cur;
+>> +
+>> +       /* Resume device, runtime suspend can happen anytime during 
+>> transfer */
+>> +       ret = pm_runtime_get_sync(gi2c->se.dev);
+>> +       if (ret < 0) {
+>> +               dev_err(gi2c->se.dev, "Failed to resume device: %d\n", 
+>> ret);
+>> +               return;
+>> +       }
+>> +
+>> +       spin_lock_irqsave(&gi2c->lock, flags);
 > 
-> 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
-> I2C_SLAVE_WRITE_RECEIVED
-> 0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x714 : INTR_STAT=0x204
-> I2C_SLAVE_WRITE_REQUESTED
-> I2C_SLAVE_WRITE_RECEIVED
+> We grab the lock here.
 > 
-> Documentation/i2c/slave-interface.rst says that I2C_SLAVE_WRITE_REQUESTED,
-> which is mandatory, should be sent while the data did not arrive yet. It
-> means in a write-request I2C_SLAVE_WRITE_REQUESTED should be reported
-> before any I2C_SLAVE_WRITE_RECEIVED.
+>> +       geni_status = readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
+>> +       if (!(geni_status & M_GENI_CMD_ACTIVE))
+>> +               goto out;
+>> +
+>> +       cur = gi2c->cur;
+>> +       geni_i2c_abort_xfer(gi2c);
 > 
-> By the way, I2C_SLAVE_STOP didn't be reported in the above case because
-> DW_IC_INTR_STAT was not 0x200.
+> But it looks like this function takes the lock again? Did you test this
+> with lockdep enabled? It should hang even without lockdep, so it seems
+> like this path of code has not been tested.
 > 
-> dev->status can be used to record the current state, especially Designware
-> I2C controller has no interrupts to identify a write-request. This patch
-> makes not only I2C_SLAVE_WRITE_REQUESTED been reported first when
-> IC_INTR_RX_FULL is rising and dev->status isn't STATUS_WRITE_IN_PROGRESS
-> but also I2C_SLAVE_STOP been reported when a STOP condition is received.
-> 
-> Signed-off-by: Michael Wu <michael.wu@vatics.com>
-> ---
->   drivers/i2c/busses/i2c-designware-slave.c | 45 +++++++++--------------
->   1 file changed, 18 insertions(+), 27 deletions(-)
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+
+Tested with lockdep enabled, and fixed the unsafe lock order issue here.
+And to be more proper moved spin_lock/unlock to cleanup functions.
+
+>> +       if (cur->flags & I2C_M_RD)
+>> +               geni_i2c_rx_msg_cleanup(gi2c, cur);
+>> +       else
+>> +               geni_i2c_tx_msg_cleanup(gi2c, cur);
+>> +       spin_unlock_irqrestore(&gi2c->lock, flags);
+>> +out:
+>> +       pm_runtime_put_sync_suspend(gi2c->se.dev);
+>> +}
+>> +
+>>  static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct 
+>> i2c_msg *msg,
+>>                                 u32 m_param)
+>>  {
