@@ -2,79 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DED572A150F
-	for <lists+linux-i2c@lfdr.de>; Sat, 31 Oct 2020 11:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A52C2A1968
+	for <lists+linux-i2c@lfdr.de>; Sat, 31 Oct 2020 19:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbgJaKCl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 31 Oct 2020 06:02:41 -0400
-Received: from srv02.websitenoar.net ([108.61.158.97]:37450 "EHLO
-        srv02.websitenoar.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726475AbgJaKCl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 31 Oct 2020 06:02:41 -0400
-X-Greylist: delayed 948 seconds by postgrey-1.27 at vger.kernel.org; Sat, 31 Oct 2020 06:02:40 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=ng9brasil.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wEx5x5RMkzCNqqA140YCB9w4JdWszHtbnS9lTGkOoXw=; b=ENhW3S1g3KyYMT0RNfE9tL2S0c
-        LcH4SC5MYmijXv8jSEfnyUgPip7ng6+wwtDWFE98vITgiCreZGhhVL/cTqXoAR1iGj0PIFh5e0rMU
-        6Biks58bFijic1B7FHFDDjtZsrvqt7Cgt1wvYcWQB8v5lg3H0oWqyQgevgTi3HxG6GbIDX3XKYLNE
-        BN3KPc/Hvk9PHSAFAUaZqGsQKDAYpHZBlq0+jh2IKLEL+SaEpP7LRIhYFL6dDFJlhMuuhmNWF4PpO
-        3y1q6VwAbXUeKvITaTjfKNAj8Ca1wMPYuAvxQ624KawoisnXTXM42LDRljtO17tXzJ6SYhSQXY7A3
-        oRnwO+Xw==;
-Received: from [::1] (port=47002 helo=srv02.websitenoar.net)
-        by srv02.websitenoar.net with esmtpa (Exim 4.93)
-        (envelope-from <mfrancofoundation20@gmail.com>)
-        id 1kYnRL-000538-8T; Sat, 31 Oct 2020 06:44:51 -0300
+        id S1728209AbgJaSUM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 31 Oct 2020 14:20:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47284 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727967AbgJaSUM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 31 Oct 2020 14:20:12 -0400
+Received: from localhost.localdomain (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 20204206D5;
+        Sat, 31 Oct 2020 18:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604168412;
+        bh=WeJM9sqefLyTbec/MpOe67C4HqcW9wc+PbJIX8GXQqo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tFb3o3AbvzA/GKzWSwaSam11G2jgvfJ9gPZsU7Y89kQsIop++ogPSUAM/Nnvy6Pld
+         opbjTy6WXTGOyBh+o3SgQkbeg9bNbDzWv9MZrAUL5FF3fYdSTfb7KEYILlC2MZBZhr
+         U1gX6KBXBRbt/u1QB1s7E8NH2XvieHh+yQ0qykjs=
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     linux-iio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 0/3] dt-bindings: yaml conversion of i2c-gate and IIO users
+Date:   Sat, 31 Oct 2020 18:17:58 +0000
+Message-Id: <20201031181801.742585-1-jic23@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Date:   Sat, 31 Oct 2020 06:44:51 -0300
-From:   Manuel Franco <mfrancofoundation20@gmail.com>
-To:     undisclosed-recipients:;
-Subject: 2 MILLIONEN EURO GEWINNEN
-Reply-To: mfrancofoundation20@gmail.com
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <7d7c189caa14a00900694f4d3cda72c9@gmail.com>
-X-Sender: mfrancofoundation20@gmail.com
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - srv02.websitenoar.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - gmail.com
-X-Get-Message-Sender-Via: srv02.websitenoar.net: authenticated_id: contato@ng9brasil.com
-X-Authenticated-Sender: srv02.websitenoar.net: contato@ng9brasil.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
+As part of a general effort to convert all IIO bindings over to yaml,
+we need to handle those that specify an i2c-gate.
+As such this also includes conversion of the base i2c-gate binding
+which is then referenced by the i2c binding files.
+
+Jonathan Cameron (3):
+  dt-bindings:i2c:i2c-gate: txt to yaml conversion
+  dt-bindings:iio:imu:invensense,mpu6050: txt to yaml conversion
+  dt-bindings:iio:gyro:invensense,mpu3050: txt to yaml format
+    conversion.
+
+ .../devicetree/bindings/i2c/i2c-gate.txt      |  41 -------
+ .../devicetree/bindings/i2c/i2c-gate.yaml     |  52 +++++++++
+ .../iio/gyroscope/invensense,mpu3050.txt      |  45 --------
+ .../iio/gyroscope/invensense,mpu3050.yaml     |  70 ++++++++++++
+ .../bindings/iio/imu/inv_mpu6050.txt          |  67 -----------
+ .../bindings/iio/imu/invensense,mpu6050.yaml  | 105 ++++++++++++++++++
+ 6 files changed, 227 insertions(+), 153 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-gate.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-gate.yaml
+ delete mode 100644 Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.txt
+ create mode 100644 Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.yaml
+ delete mode 100644 Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt
+ create mode 100644 Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
 
 -- 
-Hallo und Glückwunsch!
+2.28.0
 
-Sie sind der glückliche Gewinner von 2 Millionen Euro. Bitte senden Sie 
-Ihre IBAN an die unten stehende E-Mail, um einen Anspruch geltend zu 
-machen.
-
-E-Mail: mfrancofoundation20@gmail.com
-
-
-
-=======================
-
-
-
-
-Hello and Congratulations!
-
-You are the lucky winner of 2 million euros. Please send your IBAN to 
-the email below to make a claim.
-
-Email: mfrancofoundation20@gmail.com
