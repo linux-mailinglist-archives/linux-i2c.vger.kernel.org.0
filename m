@@ -2,67 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9342A261E
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Nov 2020 09:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200F92A2635
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Nov 2020 09:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727870AbgKBIaj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Nov 2020 03:30:39 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:60566 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727806AbgKBIaj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 2 Nov 2020 03:30:39 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3E5B02014C2;
-        Mon,  2 Nov 2020 09:30:38 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0DAE92014BF;
-        Mon,  2 Nov 2020 09:30:32 +0100 (CET)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 28813402D2;
-        Mon,  2 Nov 2020 09:30:24 +0100 (CET)
-From:   Biwen Li <biwen.li@oss.nxp.com>
-To:     leoyang.li@nxp.com, linux@rempel-privat.de, kernel@pengutronix.de,
-        wsa@the-dreams.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, aisheng.dong@nxp.com, xiaoning.wang@nxp.com,
-        o.rempel@pengutronix.de
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jiafei.pan@nxp.com, xiaobo.xie@nxp.com,
-        linux-arm-kernel@lists.infradead.org, Biwen Li <biwen.li@nxp.com>
-Subject: [v9 2/2] i2c: imx: select I2C_SLAVE by default
-Date:   Mon,  2 Nov 2020 16:21:02 +0800
-Message-Id: <20201102082102.16508-2-biwen.li@oss.nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201102082102.16508-1-biwen.li@oss.nxp.com>
-References: <20201102082102.16508-1-biwen.li@oss.nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1728183AbgKBIhS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 Nov 2020 03:37:18 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:34877 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728004AbgKBIhS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Nov 2020 03:37:18 -0500
+Received: by mail-wr1-f67.google.com with SMTP id n15so13549690wrq.2;
+        Mon, 02 Nov 2020 00:37:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TuUrkOcH//Xx3KZ0IESTZA0H3E8OCi9T5X7+sNOtdHs=;
+        b=g2cQj8C2ZdrhW3vyFREFG6VYviX6piTBSyBvcoBRSZibetL2Zt15xdxmYaMujXmt1p
+         lAxeU4tl538ceCcZr2eiqgNAxVUCdhf+szd1wWgx2DK5q+s2i/Ygryxaqwt4l53fB6GT
+         4vNUDXE9Mjf56+uKEBxf0exM3bSiKXKseszUKouP6ltAM+6rimwu2myoW/jpH6+BAyg0
+         6tCX4ApzpVqWEihiIzeyPgboKM3PhYzLD+bXYJADJ9N5Ty5dXNd4SV8ksS4MoUrg3WpE
+         Eg1qUAuLugFN+0FGH3iNhym63aD4cIpfHNLcpj8gL+jR4sRFqhVIszX+176oslP7dtuw
+         pjiQ==
+X-Gm-Message-State: AOAM530iXkS9y3UK21jXnFstlnZI+nUqpwl8cwVt2UMPf2OrBcDDafYj
+        yohjstkc+Mdt3Mas4iQgmzI=
+X-Google-Smtp-Source: ABdhPJxb/qF1Ivn97RkEh23PzumLjCjjlCUT5uwRz1N40PsWAhGuhHKrQopXET8xwFXVS8vZHZAL5g==
+X-Received: by 2002:adf:f104:: with SMTP id r4mr18919536wro.202.1604306236001;
+        Mon, 02 Nov 2020 00:37:16 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id v24sm21819894wrv.80.2020.11.02.00.37.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2020 00:37:14 -0800 (PST)
+Date:   Mon, 2 Nov 2020 09:37:13 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Wolfram Sang <wsa@kernel.org>, Andrzej Hajda <a.hajda@samsung.com>,
+        linux-i2c@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] i2c: exynos5: don't check for irq 0
+Message-ID: <20201102083713.GA6986@kozik-lap>
+References: <20201027214257.8099-1-martin@kaiser.cx>
+ <20201101171807.8182-1-martin@kaiser.cx>
+ <20201101171807.8182-3-martin@kaiser.cx>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201101171807.8182-3-martin@kaiser.cx>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Biwen Li <biwen.li@nxp.com>
+On Sun, Nov 01, 2020 at 06:18:07PM +0100, Martin Kaiser wrote:
+> platform_get_irq never returns 0. Don't check for this. Make it clear that
+> the error path always returns a negative error code.
+> 
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> ---
+> changes in v2
+> - split the patch in three parts
+> 
+>  drivers/i2c/busses/i2c-exynos5.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Select I2C_SLAVE by default
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
----
-Change in v9:
-	- none
-
- drivers/i2c/busses/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index a4f473ef4e5c..d3d9a61db76e 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -675,6 +675,7 @@ config I2C_IMG
- config I2C_IMX
- 	tristate "IMX I2C interface"
- 	depends on ARCH_MXC || ARCH_LAYERSCAPE || COLDFIRE
-+	select I2C_SLAVE
- 	help
- 	  Say Y here if you want to use the IIC bus controller on
- 	  the Freescale i.MX/MXC, Layerscape or ColdFire processors.
--- 
-2.17.1
-
+Best regards,
+Krzysztof
