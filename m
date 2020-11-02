@@ -2,47 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 690212A23AD
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Nov 2020 04:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D612A23AF
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Nov 2020 04:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727848AbgKBDzL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 1 Nov 2020 22:55:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
+        id S1727865AbgKBDzQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 1 Nov 2020 22:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727808AbgKBDzK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 1 Nov 2020 22:55:10 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A499BC0617A6
-        for <linux-i2c@vger.kernel.org>; Sun,  1 Nov 2020 19:55:10 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id w65so9930375pfd.3
-        for <linux-i2c@vger.kernel.org>; Sun, 01 Nov 2020 19:55:10 -0800 (PST)
+        with ESMTP id S1727805AbgKBDzP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 1 Nov 2020 22:55:15 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DBAC061A04
+        for <linux-i2c@vger.kernel.org>; Sun,  1 Nov 2020 19:55:15 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id o3so9618414pgr.11
+        for <linux-i2c@vger.kernel.org>; Sun, 01 Nov 2020 19:55:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=9v5ya7Dj3TDsokfeg7wV2+M3UCVwbFUmjVB4QAi1TP8=;
-        b=L2+uu1dLnxtRfRz7QrmPy8gaKjt28q64u7UyA6iY/GRRRCu1h0CgmMGiU5Pji3WN0K
-         k2FSk949rlV9oXvgGOMaDfEIfAPlvbdrwS95xLratzmQFfrBOTyx/oIBLJbnLyvCQukv
-         pVA/OYuvTUL6s/Z0aKO9i0TxMkKglSijiXHlY=
+        bh=3F36bxg6LI1uT97DjHNWbeMZQl1FEDiKF0JQ8LQ89q4=;
+        b=N8yEzbr76FLBNOnd9ME4WqXfnNOA81bLnhAPnE4PgOmU6Wu+Og361vaz2WPLlMyc6f
+         SXSgX4B/cYJm807ydYjR02OdlI3UxM5uHWgiMEr9k3H0uVYHSiVfIhsJZ8EfcVgCAM/u
+         GiVyRBBLFkIpSwRq98CA90lTtQ7gdVr7Qhfm4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=9v5ya7Dj3TDsokfeg7wV2+M3UCVwbFUmjVB4QAi1TP8=;
-        b=edkREovbeMrWoNtwnPuSgLh/NzNFbkrH2DkeuBC1Zp/MIbZQFvWz8AQEz4QTKl5M2C
-         IbD/uMWQfarZb4gzqizytUF9/hQajjeqAIlXgMv9NJWvljQUfKZ/jDEmgKqqBCbNdiNZ
-         nnjPwTJKQhv1P0JoJyGOgDwnje432a/viHsDN1LzG6a2TT3PjKNvyLAvsMDve9hCFxJG
-         I563jy9crLDYmt23sWKUKWONVU9pxqij+obRu3Yh13xXOcaabaI6sDnVJ7z/urfm36bZ
-         CELNdqqAL8SYymvYysatlL4fhp+JlP+c4l8W6e8mo8/biL6Xst2qJ0rmtkvGAzlRzwK2
-         aw2w==
-X-Gm-Message-State: AOAM531lbYwmxxWaEodHVNQmyjiLpp0pUXd7ugZcyye4nC+YBgKz6vlT
-        qmfHv3GRmIVuMXWc6+JIXRpzXw==
-X-Google-Smtp-Source: ABdhPJxbKn1pNyplA+Ds06niDEdpRrYZnCw22GZBmIYzN4b2tQfdUO1ub6S8IpQxDdfx7BhI6TWglQ==
-X-Received: by 2002:a63:c211:: with SMTP id b17mr11489447pgd.195.1604289309585;
-        Sun, 01 Nov 2020 19:55:09 -0800 (PST)
+        bh=3F36bxg6LI1uT97DjHNWbeMZQl1FEDiKF0JQ8LQ89q4=;
+        b=MIqwqoPbJAoO2LBwzxVWfannftqBHQ1lGphw974sCWdagNwhDwxNsJ95GMuP7TXOB/
+         tWJDHRzqup7Lea3wWFwTTJk5EvWYjbRz3G2nFDJVe9Mm9ApqkPm1lBted5c43Uqx4Evj
+         i2AP1s9xRhIXCCrfTlSRwmlixDRbMJ4FPLHtk3HUFAKJq82Nvi1j/Mopj2ZX9o8QYl5U
+         j9xmYtRpsnpcUIbKjNeWIb2uI2nw1MgBHKi+3Dxi2EH3SgObFxcExVznu+ZD1EurZOC8
+         U9lfI/B6/2w3kYgYDUM1xw5vWSDVlfcvMY95s64L63mschgJfridNuexBQAolcPaqgUi
+         JlZw==
+X-Gm-Message-State: AOAM533Evz8BE49Up8NO5w9x6aA+gYue9ESWGoObRzGLmqXmOfjapFap
+        2vbTudMd904ZQ1ICESGRYCKXNg==
+X-Google-Smtp-Source: ABdhPJxy4Qfc7cAoQ6sk9ClfnX368ToyQ1BBz5/6hFmt1hgk3l4zPGN03tyfsDgru33gY51HcGIoqA==
+X-Received: by 2002:a63:6585:: with SMTP id z127mr554352pgb.210.1604289315124;
+        Sun, 01 Nov 2020 19:55:15 -0800 (PST)
 Received: from rayagonda.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id y5sm5655711pfc.165.2020.11.01.19.55.04
+        by smtp.gmail.com with ESMTPSA id y5sm5655711pfc.165.2020.11.01.19.55.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2020 19:55:08 -0800 (PST)
+        Sun, 01 Nov 2020 19:55:14 -0800 (PST)
 From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 To:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com,
@@ -55,45 +55,331 @@ To:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
         linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Subject: [PATCH v3 4/6] i2c: iproc: fix typo in slave_isr function
-Date:   Mon,  2 Nov 2020 09:24:31 +0530
-Message-Id: <20201102035433.6774-5-rayagonda.kokatanur@broadcom.com>
+Subject: [PATCH v3 5/6] i2c: iproc: handle master read request
+Date:   Mon,  2 Nov 2020 09:24:32 +0530
+Message-Id: <20201102035433.6774-6-rayagonda.kokatanur@broadcom.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201102035433.6774-1-rayagonda.kokatanur@broadcom.com>
 References: <20201102035433.6774-1-rayagonda.kokatanur@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000077a83705b317b65a"
+        boundary="000000000000c654e105b317b6d0"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---00000000000077a83705b317b65a
+--000000000000c654e105b317b6d0
 
-Fix typo in bcm_iproc_i2c_slave_isr().
+Handle single or multi byte master read request with or without
+repeated start.
 
+Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
 Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
 ---
- drivers/i2c/busses/i2c-bcm-iproc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-bcm-iproc.c | 215 +++++++++++++++++++++++------
+ 1 file changed, 170 insertions(+), 45 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-index cd687696bf0b..7a235f9f5884 100644
+index 7a235f9f5884..22e04055b447 100644
 --- a/drivers/i2c/busses/i2c-bcm-iproc.c
 +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-@@ -382,7 +382,7 @@ static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev *iproc_i2c,
+@@ -160,6 +160,11 @@
+ 
+ #define IE_S_ALL_INTERRUPT_SHIFT     21
+ #define IE_S_ALL_INTERRUPT_MASK      0x3f
++/*
++ * It takes ~18us to reading 10bytes of data, hence to keep tasklet
++ * running for less time, max slave read per tasklet is set to 10 bytes.
++ */
++#define MAX_SLAVE_RX_PER_INT         10
+ 
+ enum i2c_slave_read_status {
+ 	I2C_SLAVE_RX_FIFO_EMPTY = 0,
+@@ -206,8 +211,18 @@ struct bcm_iproc_i2c_dev {
+ 	/* bytes that have been read */
+ 	unsigned int rx_bytes;
+ 	unsigned int thld_bytes;
++
++	bool slave_rx_only;
++	bool rx_start_rcvd;
++	bool slave_read_complete;
++	u32 tx_underrun;
++	u32 slave_int_mask;
++	struct tasklet_struct slave_rx_tasklet;
+ };
+ 
++/* tasklet to process slave rx data */
++static void slave_rx_tasklet_fn(unsigned long);
++
+ /*
+  * Can be expanded in the future if more interrupt status bits are utilized
+  */
+@@ -261,6 +276,7 @@ static void bcm_iproc_i2c_slave_init(
+ {
+ 	u32 val;
+ 
++	iproc_i2c->tx_underrun = 0;
+ 	if (need_reset) {
+ 		/* put controller in reset */
+ 		val = iproc_i2c_rd_reg(iproc_i2c, CFG_OFFSET);
+@@ -297,8 +313,11 @@ static void bcm_iproc_i2c_slave_init(
+ 
+ 	/* Enable interrupt register to indicate a valid byte in receive fifo */
+ 	val = BIT(IE_S_RX_EVENT_SHIFT);
++	/* Enable interrupt register to indicate a Master read transaction */
++	val |= BIT(IE_S_RD_EVENT_SHIFT);
+ 	/* Enable interrupt register for the Slave BUSY command */
+ 	val |= BIT(IE_S_START_BUSY_SHIFT);
++	iproc_i2c->slave_int_mask = val;
+ 	iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
+ }
+ 
+@@ -324,76 +343,176 @@ static void bcm_iproc_i2c_check_slave_status(
+ 	}
+ }
+ 
+-static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev *iproc_i2c,
+-				    u32 status)
++static void bcm_iproc_i2c_slave_read(struct bcm_iproc_i2c_dev *iproc_i2c)
+ {
++	u8 rx_data, rx_status;
++	u32 rx_bytes = 0;
+ 	u32 val;
+-	u8 value, rx_status;
+ 
+-	/* Slave RX byte receive */
+-	if (status & BIT(IS_S_RX_EVENT_SHIFT)) {
++	while (rx_bytes < MAX_SLAVE_RX_PER_INT) {
+ 		val = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
+ 		rx_status = (val >> S_RX_STATUS_SHIFT) & S_RX_STATUS_MASK;
+-		if (rx_status == I2C_SLAVE_RX_START) {
+-			/* Start of SMBUS for Master write */
+-			i2c_slave_event(iproc_i2c->slave,
+-					I2C_SLAVE_WRITE_REQUESTED, &value);
++		rx_data = ((val >> S_RX_DATA_SHIFT) & S_RX_DATA_MASK);
+ 
+-			val = iproc_i2c_rd_reg(iproc_i2c, S_RX_OFFSET);
+-			value = (u8)((val >> S_RX_DATA_SHIFT) & S_RX_DATA_MASK);
++		if (rx_status == I2C_SLAVE_RX_START) {
++			/* Start of SMBUS Master write */
+ 			i2c_slave_event(iproc_i2c->slave,
+-					I2C_SLAVE_WRITE_RECEIVED, &value);
+-		} else if (status & BIT(IS_S_RD_EVENT_SHIFT)) {
+-			/* Start of SMBUS for Master Read */
++					I2C_SLAVE_WRITE_REQUESTED, &rx_data);
++			iproc_i2c->rx_start_rcvd = true;
++			iproc_i2c->slave_read_complete = false;
++		} else if (rx_status == I2C_SLAVE_RX_DATA &&
++			   iproc_i2c->rx_start_rcvd) {
++			/* Middle of SMBUS Master write */
+ 			i2c_slave_event(iproc_i2c->slave,
+-					I2C_SLAVE_READ_REQUESTED, &value);
+-			iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, value);
++					I2C_SLAVE_WRITE_RECEIVED, &rx_data);
++		} else if (rx_status == I2C_SLAVE_RX_END &&
++			   iproc_i2c->rx_start_rcvd) {
++			/* End of SMBUS Master write */
++			if (iproc_i2c->slave_rx_only)
++				i2c_slave_event(iproc_i2c->slave,
++						I2C_SLAVE_WRITE_RECEIVED,
++						&rx_data);
++
++			i2c_slave_event(iproc_i2c->slave, I2C_SLAVE_STOP,
++					&rx_data);
++		} else if (rx_status == I2C_SLAVE_RX_FIFO_EMPTY) {
++			iproc_i2c->rx_start_rcvd = false;
++			iproc_i2c->slave_read_complete = true;
++			break;
++		}
+ 
+-			val = BIT(S_CMD_START_BUSY_SHIFT);
+-			iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
++		rx_bytes++;
++	}
++}
+ 
+-			/*
+-			 * Enable interrupt for TX FIFO becomes empty and
+-			 * less than PKT_LENGTH bytes were output on the SMBUS
+-			 */
+-			val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
+-			val |= BIT(IE_S_TX_UNDERRUN_SHIFT);
+-			iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
+-		} else {
+-			/* Master write other than start */
+-			value = (u8)((val >> S_RX_DATA_SHIFT) & S_RX_DATA_MASK);
++static void slave_rx_tasklet_fn(unsigned long data)
++{
++	struct bcm_iproc_i2c_dev *iproc_i2c = (struct bcm_iproc_i2c_dev *)data;
++	u32 int_clr;
++
++	bcm_iproc_i2c_slave_read(iproc_i2c);
++
++	/* clear pending IS_S_RX_EVENT_SHIFT interrupt */
++	int_clr = BIT(IS_S_RX_EVENT_SHIFT);
++
++	if (!iproc_i2c->slave_rx_only && iproc_i2c->slave_read_complete) {
++		/*
++		 * In case of single byte master-read request,
++		 * IS_S_TX_UNDERRUN_SHIFT event is generated before
++		 * IS_S_START_BUSY_SHIFT event. Hence start slave data send
++		 * from first IS_S_TX_UNDERRUN_SHIFT event.
++		 *
++		 * This means don't send any data from slave when
++		 * IS_S_RD_EVENT_SHIFT event is generated else it will increment
++		 * eeprom or other backend slave driver read pointer twice.
++		 */
++		iproc_i2c->tx_underrun = 0;
++		iproc_i2c->slave_int_mask |= BIT(IE_S_TX_UNDERRUN_SHIFT);
++
++		/* clear IS_S_RD_EVENT_SHIFT interrupt */
++		int_clr |= BIT(IS_S_RD_EVENT_SHIFT);
++	}
++
++	/* clear slave interrupt */
++	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, int_clr);
++	/* enable slave interrupts */
++	iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, iproc_i2c->slave_int_mask);
++}
++
++static bool bcm_iproc_i2c_slave_isr(struct bcm_iproc_i2c_dev *iproc_i2c,
++				    u32 status)
++{
++	u32 val;
++	u8 value;
++
++	/*
++	 * Slave events in case of master-write, master-write-read and,
++	 * master-read
++	 *
++	 * Master-write     : only IS_S_RX_EVENT_SHIFT event
++	 * Master-write-read: both IS_S_RX_EVENT_SHIFT and IS_S_RD_EVENT_SHIFT
++	 *                    events
++	 * Master-read      : both IS_S_RX_EVENT_SHIFT and IS_S_RD_EVENT_SHIFT
++	 *                    events or only IS_S_RD_EVENT_SHIFT
++	 */
++	if (status & BIT(IS_S_RX_EVENT_SHIFT) ||
++	    status & BIT(IS_S_RD_EVENT_SHIFT)) {
++		/* disable slave interrupts */
++		val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
++		val &= ~iproc_i2c->slave_int_mask;
++		iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
++
++		if (status & BIT(IS_S_RD_EVENT_SHIFT))
++			/* Master-write-read request */
++			iproc_i2c->slave_rx_only = false;
++		else
++			/* Master-write request only */
++			iproc_i2c->slave_rx_only = true;
++
++		/* schedule tasklet to read data later */
++		tasklet_schedule(&iproc_i2c->slave_rx_tasklet);
++
++		/* clear only IS_S_RX_EVENT_SHIFT interrupt */
++		iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET,
++				 BIT(IS_S_RX_EVENT_SHIFT));
++	}
++
++	if (status & BIT(IS_S_TX_UNDERRUN_SHIFT)) {
++		iproc_i2c->tx_underrun++;
++		if (iproc_i2c->tx_underrun == 1)
++			/* Start of SMBUS for Master Read */
+ 			i2c_slave_event(iproc_i2c->slave,
+-					I2C_SLAVE_WRITE_RECEIVED, &value);
+-			if (rx_status == I2C_SLAVE_RX_END)
+-				i2c_slave_event(iproc_i2c->slave,
+-						I2C_SLAVE_STOP, &value);
+-		}
+-	} else if (status & BIT(IS_S_TX_UNDERRUN_SHIFT)) {
+-		/* Master read other than start */
+-		i2c_slave_event(iproc_i2c->slave,
+-				I2C_SLAVE_READ_PROCESSED, &value);
++					I2C_SLAVE_READ_REQUESTED,
++					&value);
++		else
++			/* Master read other than start */
++			i2c_slave_event(iproc_i2c->slave,
++					I2C_SLAVE_READ_PROCESSED,
++					&value);
+ 
+ 		iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, value);
++		/* start transfer */
+ 		val = BIT(S_CMD_START_BUSY_SHIFT);
+ 		iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
++
++		/* clear interrupt */
++		iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET,
++				 BIT(IS_S_TX_UNDERRUN_SHIFT));
+ 	}
+ 
+-	/* Stop */
++	/* Stop received from master in case of master read transaction */
  	if (status & BIT(IS_S_START_BUSY_SHIFT)) {
- 		i2c_slave_event(iproc_i2c->slave, I2C_SLAVE_STOP, &value);
+-		i2c_slave_event(iproc_i2c->slave, I2C_SLAVE_STOP, &value);
  		/*
--		 * Enable interrupt for TX FIFO becomes empty and
-+		 * Disable interrupt for TX FIFO becomes empty and
+ 		 * Disable interrupt for TX FIFO becomes empty and
  		 * less than PKT_LENGTH bytes were output on the SMBUS
  		 */
- 		val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
+-		val = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
+-		val &= ~BIT(IE_S_TX_UNDERRUN_SHIFT);
+-		iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, val);
++		iproc_i2c->slave_int_mask &= ~BIT(IE_S_TX_UNDERRUN_SHIFT);
++		iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET,
++				 iproc_i2c->slave_int_mask);
++
++		/* End of SMBUS for Master Read */
++		val = BIT(S_TX_WR_STATUS_SHIFT);
++		iproc_i2c_wr_reg(iproc_i2c, S_TX_OFFSET, val);
++
++		val = BIT(S_CMD_START_BUSY_SHIFT);
++		iproc_i2c_wr_reg(iproc_i2c, S_CMD_OFFSET, val);
++
++		/* flush TX FIFOs */
++		val = iproc_i2c_rd_reg(iproc_i2c, S_FIFO_CTRL_OFFSET);
++		val |= (BIT(S_FIFO_TX_FLUSH_SHIFT));
++		iproc_i2c_wr_reg(iproc_i2c, S_FIFO_CTRL_OFFSET, val);
++
++		i2c_slave_event(iproc_i2c->slave, I2C_SLAVE_STOP, &value);
++
++		/* clear interrupt */
++		iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET,
++				 BIT(IS_S_START_BUSY_SHIFT));
+ 	}
+ 
+-	/* clear interrupt status */
+-	iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET, status);
++	/* check slave transmit status only if slave is transmitting */
++	if (!iproc_i2c->slave_rx_only)
++		bcm_iproc_i2c_check_slave_status(iproc_i2c);
+ 
+-	bcm_iproc_i2c_check_slave_status(iproc_i2c);
+ 	return true;
+ }
+ 
+@@ -1074,6 +1193,10 @@ static int bcm_iproc_i2c_reg_slave(struct i2c_client *slave)
+ 		return -EAFNOSUPPORT;
+ 
+ 	iproc_i2c->slave = slave;
++
++	tasklet_init(&iproc_i2c->slave_rx_tasklet, slave_rx_tasklet_fn,
++		     (unsigned long)iproc_i2c);
++
+ 	bcm_iproc_i2c_slave_init(iproc_i2c, false);
+ 	return 0;
+ }
+@@ -1094,6 +1217,8 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
+ 			IE_S_ALL_INTERRUPT_SHIFT);
+ 	iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, tmp);
+ 
++	tasklet_kill(&iproc_i2c->slave_rx_tasklet);
++
+ 	/* Erase the slave address programmed */
+ 	tmp = iproc_i2c_rd_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET);
+ 	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
 -- 
 2.17.1
 
 
---00000000000077a83705b317b65a
+--000000000000c654e105b317b6d0
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -164,13 +450,13 @@ FtqJWw6DATg5ePiAAn+S0JoIL1xqKsZi2ioNqm02QMFb7RbB3yEGb/7ZLAGcPW666o5GSLsUnPPq
 YOfL/3X6tVfGeoi3IgfI+z76/lXk8vOQzQQxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkw
 FwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2ln
 biAyIENBIC0gU0hBMjU2IC0gRzMCDDw+ri+StHzo6PJZ/DANBglghkgBZQMEAgEFAKCB1DAvBgkq
-hkiG9w0BCQQxIgQgCJRsnPJYTOZxzYDHbKmXJzVqdvMSWqCFqvZ4kqYhD3swGAYJKoZIhvcNAQkD
-MQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMTAyMDM1NTEwWjBpBgkqhkiG9w0BCQ8x
+hkiG9w0BCQQxIgQgpZ3jR9eWoi9QZBdWA2kIBoSCYZBNsorqh2AOUP/3UBswGAYJKoZIhvcNAQkD
+MQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMTAyMDM1NTE1WjBpBgkqhkiG9w0BCQ8x
 XDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsG
-CSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBACM+
-5HCMD1vEE24pOiMWKHbkq4JLHdx32wsqoFqFaFkIkcoBl+88m+GtPfEVMMkeuyVwIx1xv8p1xEFj
-SbQazrZ8naODoQquze3TzQETPlY1wCS1HU1h+6Ww/8HB/mvAtX/LteDnbnXREJ4DyLvInsU6OgCC
-TEPOghxC1VAY+6fgDfU8sf2n7IfayM8OfWM8rFuZPFjNMLMtzlCVghXHbEjLLTPqUKICoJwTyHRH
-BfsMXpZ50iNJBcqk508NfMx1FL4SwzrhFekBJxttQSrr2/rV2oovFoGXGyF2gkI8SjlOfi+7/MwD
-4N9AYED7nI4/zVxQ2av2wK6RYQ2e1oWjOGY=
---00000000000077a83705b317b65a--
+CSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAJQF
+7nPyEkyw/PBs2WQONmUfz1BVh0xpTg+5+ZWmPC1dYagi1B3zLqPAHJ+7XpgUTSbC6m4Jm13pnAHT
+9X8RH5RIrbhQE+WYwFByGz3Hz5ux0I3tjrzveQsKx4UOlcnKOkKTkkML1FHaXUukoJwqHX3YThoE
+Uir3hmDBQEEiRXdonDUn1KRpSxcaAe0dVJ8H/yhGIJitIOsMRNKro/l7SDPHb9ZLQFB2mGQbx4+S
+otcF/m2cJ+n0lsVX1UVtPNUE+cQtOogOMtf1076JY/VvJoiegwTD8XwCtCXlfgbEI4LDEFaEyNDB
+Zp43BnklcMrp6bsVtbwIWgP51yLYIsBUOb8=
+--000000000000c654e105b317b6d0--
