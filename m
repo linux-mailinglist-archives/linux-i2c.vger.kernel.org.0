@@ -2,179 +2,276 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B87F2A3A63
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 03:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 223CC2A3A6C
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 03:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725958AbgKCCZM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Nov 2020 21:25:12 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:40194 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbgKCCZM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Nov 2020 21:25:12 -0500
-Received: by mail-ot1-f68.google.com with SMTP id 79so7172488otc.7;
-        Mon, 02 Nov 2020 18:25:11 -0800 (PST)
+        id S1725982AbgKCC3g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 Nov 2020 21:29:36 -0500
+Received: from mail-oo1-f65.google.com ([209.85.161.65]:33675 "EHLO
+        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725932AbgKCC3g (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Nov 2020 21:29:36 -0500
+Received: by mail-oo1-f65.google.com with SMTP id u5so3866925oot.0;
+        Mon, 02 Nov 2020 18:29:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+WKFbwbVIGeckGk+onARWsEbLJfylB3iJhTbWycXwdk=;
-        b=rz21r7LmqfAIJJOaoH/8ciUE+ynPWfKN54Gc0xE5Vttp0Pp/LxZWUgLi1LeI1BAx7X
-         ZEevwqc6JZ01FZlQyCANOWuQkRFU/S+KQq9o7v2dImf2EXeqJaGVlckL4QE9IHAYcX0A
-         CPSLoJQxsA349w48MFagpS0zUPjzvNAQiOZSFdJxoBNGMXEnIH/2fkSOU5lcVkwxZVec
-         D1yfssPKE/NN+5+7mX9ZrE81iJSACHnuOKKjPCZcezFgQ8Uj19YSD7KEwW8kJVNYqsJs
-         aStzAewdm/LmqDJsmzhjlhubuBQw1Vg+hOQ6gD2YgDUTVHON+Ii7AIhnTQZEn2cBA/bn
-         sMzQ==
-X-Gm-Message-State: AOAM53233CIFPw2w2oSoubSjVf+KXkY/I0Spt+r9qyC7r7IQhZ98MLFb
-        T+XX2CHuYregmVHJjzH+pg==
-X-Google-Smtp-Source: ABdhPJxa6GYB7BF9voybZ5WvNO1XzsdemlYbwUoqDr7zL7mCPePWkDN3MDpUMFYcvR1TqBj+kCZxsA==
-X-Received: by 2002:a9d:7848:: with SMTP id c8mr14328787otm.120.1604370311439;
-        Mon, 02 Nov 2020 18:25:11 -0800 (PST)
+        bh=LvMH2M39sGMDugQ+SeCib9ETqH3o3fYshl+O+PWh8Ic=;
+        b=YieTujv39I+HxKwb771U3kU30HHY4jJRm4P+hyoU3ybRoBpfLVdwr4OaB4Jla0McHl
+         J0WjeCv+CqPxdgVAvj8KrUG22EjuYB0hrid+E6W1p7h9D5WhgjAfot3Xtvgcph/C9LPm
+         fEpjfLceafRafMxxuRCfQsN6E4Bw/iqVKB6syysqpE3Tm8DgJN+GtwX4GRP3B2farcI/
+         Fgzwh2T1r7kE3VlruwWw4c8itaTKEmVRNJ8rgZQuGukRALA7rbYnR8sS8ayt8S2m5kmw
+         b5LEh10pNyndJlqsavBp2vBBjzobbGLwtlxXrfZJOcm4G+EOMunenes3YII4kWbpfMWf
+         ii6A==
+X-Gm-Message-State: AOAM531sgsS/LT+mzGCIsFFGjzpHBCwwkqAZ7QpS6ZcPWScNzzj8QUKe
+        Jj0Qr4FU/WDHT7gjhNPfpA==
+X-Google-Smtp-Source: ABdhPJy8t7I4uF5iXGRmohxwvxRM33Kg8xlXPwBT2gtlZNNedV0t/JOmoNoNK433W9wBlZE/VuUJBQ==
+X-Received: by 2002:a4a:b503:: with SMTP id r3mr13879716ooo.28.1604370573696;
+        Mon, 02 Nov 2020 18:29:33 -0800 (PST)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id z10sm87609otp.0.2020.11.02.18.25.10
+        by smtp.gmail.com with ESMTPSA id p126sm3827647oia.24.2020.11.02.18.29.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 18:25:10 -0800 (PST)
-Received: (nullmailer pid 684165 invoked by uid 1000);
-        Tue, 03 Nov 2020 02:25:09 -0000
-Date:   Mon, 2 Nov 2020 20:25:09 -0600
+        Mon, 02 Nov 2020 18:29:33 -0800 (PST)
+Received: (nullmailer pid 689946 invoked by uid 1000);
+        Tue, 03 Nov 2020 02:29:32 -0000
+Date:   Mon, 2 Nov 2020 20:29:32 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Jonathan Cameron <jic23@kernel.org>
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH 1/3] dt-bindings:i2c:i2c-gate: txt to yaml conversion
-Message-ID: <20201103022509.GA679426@bogus>
+        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
+        Wolfram Sang <wsa@the-dreams.de>, Peter Rosin <peda@axentia.se>
+Subject: Re: [PATCH 2/3] dt-bindings:iio:imu:invensense,mpu6050: txt to yaml
+ conversion
+Message-ID: <20201103022932.GB679426@bogus>
 References: <20201031181801.742585-1-jic23@kernel.org>
- <20201031181801.742585-2-jic23@kernel.org>
+ <20201031181801.742585-3-jic23@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201031181801.742585-2-jic23@kernel.org>
+In-Reply-To: <20201031181801.742585-3-jic23@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Oct 31, 2020 at 06:17:59PM +0000, Jonathan Cameron wrote:
+On Sat, Oct 31, 2020 at 06:18:00PM +0000, Jonathan Cameron wrote:
 > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
-> Needed to reference from the invensense,mpu6050 yaml binding.
+> Relies on the patch to convert i2c-gate over to yaml.
 > 
+> 2 prior examples combinded into one as a single example can show
+> all of the binding elements as long as the right part is selected.
+> 
+> I don't know if there is a simple way to exclude i2c-gate if the
+> master interface is SPI.
+
+Not currently.
+
 > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: Peter Rosin <peda@axentia.se>
+> Cc: Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
 > Cc: Wolfram Sang <wsa@the-dreams.de>
+> Cc: Peter Rosin <peda@axentia.se>
 > ---
->  .../devicetree/bindings/i2c/i2c-gate.txt      | 41 ---------------
->  .../devicetree/bindings/i2c/i2c-gate.yaml     | 52 +++++++++++++++++++
->  2 files changed, 52 insertions(+), 41 deletions(-)
+>  .../bindings/iio/imu/inv_mpu6050.txt          |  67 -----------
+>  .../bindings/iio/imu/invensense,mpu6050.yaml  | 105 ++++++++++++++++++
+>  2 files changed, 105 insertions(+), 67 deletions(-)
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+However, ...
+
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-gate.txt b/Documentation/devicetree/bindings/i2c/i2c-gate.txt
+> diff --git a/Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt b/Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt
 > deleted file mode 100644
-> index 1846d236e656..000000000000
-> --- a/Documentation/devicetree/bindings/i2c/i2c-gate.txt
+> index f2f64749e818..000000000000
+> --- a/Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt
 > +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -An i2c gate is useful to e.g. reduce the digital noise for RF tuners connected
-> -to the i2c bus. Gates are similar to arbitrators in that you need to perform
-> -some kind of operation to access the i2c bus past the arbitrator/gate, but
-> -there are no competing masters to consider for gates and therefore there is
-> -no arbitration happening for gates.
+> @@ -1,67 +0,0 @@
+> -InvenSense MPU-6050 Six-Axis (Gyro + Accelerometer) MEMS MotionTracking Device
 > -
-> -Common i2c gate properties.
+> -http://www.invensense.com/mems/gyro/mpu6050.html
 > -
-> -- i2c-gate child node
+> -Required properties:
+> - - compatible : should be one of
+> -		"invensense,mpu6000"
+> -		"invensense,mpu6050"
+> - 		"invensense,mpu6500"
+> -		"invensense,mpu6515"
+> -		"invensense,mpu9150"
+> -		"invensense,mpu9250"
+> -		"invensense,mpu9255"
+> -		"invensense,icm20608"
+> -		"invensense,icm20609"
+> -		"invensense,icm20689"
+> -		"invensense,icm20602"
+> -		"invensense,icm20690"
+> -		"invensense,iam20680"
+> - - reg : the I2C address of the sensor
+> - - interrupts: interrupt mapping for IRQ. It should be configured with flags
+> -   IRQ_TYPE_LEVEL_HIGH, IRQ_TYPE_EDGE_RISING, IRQ_TYPE_LEVEL_LOW or
+> -   IRQ_TYPE_EDGE_FALLING.
 > -
-> -Required properties for the i2c-gate child node:
-> -- #address-cells = <1>;
-> -- #size-cells = <0>;
+> -  Refer to interrupt-controller/interrupts.txt for generic interrupt client node
+> -  bindings.
 > -
-> -Optional properties for i2c-gate child node:
-> -- Child nodes conforming to i2c bus binding
+> -Optional properties:
+> - - vdd-supply: regulator phandle for VDD supply
+> - - vddio-supply: regulator phandle for VDDIO supply
+> - - mount-matrix: an optional 3x3 mounting rotation matrix
+> - - i2c-gate node.  These devices also support an auxiliary i2c bus.  This is
+> -   simple enough to be described using the i2c-gate binding. See
+> -   i2c/i2c-gate.txt for more details.
 > -
-> -
-> -Example :
-> -
-> -	/*
-> -	   An Invensense mpu9150 at address 0x68 featuring an on-chip Asahi
-> -	   Kasei ak8975 compass behind a gate.
-> -	 */
-> -
-> -	mpu9150@68 {
-> -		compatible = "invensense,mpu9150";
+> -Example:
+> -	mpu6050@68 {
+> -		compatible = "invensense,mpu6050";
 > -		reg = <0x68>;
 > -		interrupt-parent = <&gpio1>;
-> -		interrupts = <18 1>;
+> -		interrupts = <18 IRQ_TYPE_EDGE_RISING>;
+> -		mount-matrix = "-0.984807753012208",  /* x0 */
+> -		               "0",                   /* y0 */
+> -		               "-0.173648177666930",  /* z0 */
+> -		               "0",                   /* x1 */
+> -		               "-1",                  /* y1 */
+> -		               "0",                   /* z1 */
+> -		               "-0.173648177666930",  /* x2 */
+> -		               "0",                   /* y2 */
+> -		               "0.984807753012208";   /* z2 */
+> -	};
 > -
+> -
+> -	mpu9250@68 {
+> -		compatible = "invensense,mpu9250";
+> -		reg = <0x68>;
+> -		interrupt-parent = <&gpio3>;
+> -		interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
 > -		i2c-gate {
 > -			#address-cells = <1>;
 > -			#size-cells = <0>;
-> -
 > -			ax8975@c {
 > -				compatible = "ak,ak8975";
 > -				reg = <0x0c>;
 > -			};
 > -		};
 > -	};
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-gate.yaml b/Documentation/devicetree/bindings/i2c/i2c-gate.yaml
+> diff --git a/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml b/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
 > new file mode 100644
-> index 000000000000..29aa0690ed9a
+> index 000000000000..f640d161773c
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-gate.yaml
-> @@ -0,0 +1,52 @@
+> +++ b/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
+> @@ -0,0 +1,105 @@
 > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/i2c/i2c-gate.yaml#
+> +$id: http://devicetree.org/schemas/iio/imu/invensense,mpu6050.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Common i2c gate properties
+> +title: InvenSense MPU-6050 Six-Axis (Gyro + Accelerometer) MEMS MotionTracking Device
 > +
 > +maintainers:
-> +  - Peter Rosin <peda@axentia.se>
+> +  - Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
 > +
 > +description: |
-> +  An i2c gate is useful to e.g. reduce the digital noise for RF tuners connected
-> +  to the i2c bus. Gates are similar to arbitrators in that you need to perform
-> +  some kind of operation to access the i2c bus past the arbitrator/gate, but
-> +  there are no competing masters to consider for gates and therefore there is
-> +  no arbitration happening for gates.
+> +  These devices support both I2C and SPI bus interfaces.
 > +
 > +properties:
-> +  $nodename:
-> +    const: i2c-gate
+> +  compatible:
+> +    enum:
+> +      - invensense,iam20680
+> +      - invensense,icm20608
+> +      - invensense,icm20609
+> +      - invensense,icm20689
+> +      - invensense,icm20602
+> +      - invensense,icm20690
+> +      - invensense,mpu6000
+> +      - invensense,mpu6050
+> +      - invensense,mpu6500
+> +      - invensense,mpu6515
+> +      - invensense,mpu9150
+> +      - invensense,mpu9250
+> +      - invensense,mpu9255
 > +
-> +  "#address-cells":
-> +    const: 1
+> +  reg:
+> +    maxItems: 1
 > +
-> +  "#size-cells":
-> +    const: 0
+> +  interrupts:
+> +    maxItems: 1
 > +
-> +patternProperties:
-> +  "^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-fA-F]+$":
-> +    type: object
+> +  spi-max-frequency: true
+> +
+> +  vdd-supply: true
+> +  vddio-supply: true
+> +
+> +  mount-matrix: true
+> +
+> +  i2c-gate:
+> +    $ref: "../../i2c/i2c-gate.yaml"
+
+Though really I think we could just get rid of i2c-gate. We set the name 
+here, so having it doesn't add much over just including 
+i2c-controller.yaml here.
+
+> +    unevaluatedProperties: false
 > +    description: |
-> +      Child nodes for i2c devices behind the gate.
-
-So reference i2c-controller.yaml. With that, you only need $nodename.
-
+> +      These devices also support an auxiliary i2c bus.  This is
+> +      simple enough to be described using the i2c-gate binding.
+> +      Only possible if using an I2C interface to the host.
+> +
+> +allOf:
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - invensense,mpu9150
+> +                - invensense,mpu9250
+> +                - invensense,mpu9255
+> +    then:
+> +      properties:
+> +        i2c-gate: false
+> +
+> +additionalProperties: false
 > +
 > +required:
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +additionalProperties: true
+> +  - compatible
+> +  - reg
+> +  - interrupts
 > +
 > +examples:
 > +  - |
-> +    i2c-gate {
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
 > +        #address-cells = <1>;
 > +        #size-cells = <0>;
-> +        ak8975@c {
-> +            compatible = "ak,ak8975";
-> +            reg = <0x0c>;
+> +
+> +        imu@68 {
+> +            compatible = "invensense,mpu9250";
+> +            reg = <0x68>;
+> +            interrupt-parent = <&gpio3>;
+> +            interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
+> +            mount-matrix = "-0.984807753012208",  /* x0 */
+> +                           "0",                   /* y0 */
+> +                           "-0.173648177666930",  /* z0 */
+> +                           "0",                   /* x1 */
+> +                           "-1",                  /* y1 */
+> +                           "0",                   /* z1 */
+> +                           "-0.173648177666930",  /* x2 */
+> +                           "0",                   /* y2 */
+> +                           "0.984807753012208";   /* z2 */
+> +            i2c-gate {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                magnetometer@c {
+> +                    compatible = "ak,ak8975";
+> +                    reg = <0x0c>;
+> +                };
+> +            };
 > +        };
 > +    };
 > +...
-> +
 > -- 
 > 2.28.0
 > 
