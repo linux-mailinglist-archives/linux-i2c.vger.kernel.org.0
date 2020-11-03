@@ -2,99 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE3C2A53B7
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 22:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 197A82A5506
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 22:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732312AbgKCVD4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Nov 2020 16:03:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41742 "EHLO mail.kernel.org"
+        id S1730794AbgKCVQG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Nov 2020 16:16:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387902AbgKCVDz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 3 Nov 2020 16:03:55 -0500
+        id S2388423AbgKCVLc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 3 Nov 2020 16:11:32 -0500
 Received: from localhost (p5486c89f.dip0.t-ipconnect.de [84.134.200.159])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1C9D20658;
-        Tue,  3 Nov 2020 21:03:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A9D7B207BC;
+        Tue,  3 Nov 2020 21:11:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604437435;
-        bh=hxlW3r3b6lq9QoYdLWyolF+GAnU+TF8hAo252FIV2hI=;
+        s=default; t=1604437891;
+        bh=CP4CcVYGwLAuKW0InrArv7u2uP3dgV+GP26YB2JQaTo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sDgRjZU7tvtviGdhngDeWfaKnIgKFat9R1eRHYGoEDdUxQoE1XNK+BRzcDx3gEAnn
-         KAETXu6+WzFnAGB74BxZ7azCpg8xFwRTb78VNdBLnXMX5CDRpb4GRaBP6P94H5m1yg
-         nPuF3sTYdMwCdIZ/ArsV7pISNGC5DeBTttVJ56pA=
-Date:   Tue, 3 Nov 2020 22:03:49 +0100
+        b=s5RQJj11L+Lccv3UkvxIF/sh+5XJgeUsQF1xOAtGPKVTTPYBUtO15E6hgxZ21CpWB
+         NZuvkVhyc+Lir1EkBOACcJt6FSd2IiRNgnxdsVQkiPP4QaEj/Tk8qkgqSbj83x1T6M
+         OTay9PzzQAFQarMumAslccvAO1D56KvWWEa+mjBg=
+Date:   Tue, 3 Nov 2020 22:11:26 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Michael Wu <michael.wu@vatics.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Morgan Chang <morgan.chang@vatics.com>
-Subject: Re: [PATCH 2/2] i2c: designware: slave should do WRITE_REQUESTED
- before WRITE_RECEIVED
-Message-ID: <20201103210349.GE1583@kunai>
+To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-i2c@vger.kernel.org, peter@korsgaard.com, andrew@lunn.ch,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
+Subject: Re: [PATCH v4 1/1] i2c: ocores: fix polling mode workaround on
+ FU540-C000 SoC
+Message-ID: <20201103211126.GF1583@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Michael Wu <michael.wu@vatics.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Morgan Chang <morgan.chang@vatics.com>
-References: <20201030080420.28016-1-michael.wu@vatics.com>
- <20201030080420.28016-3-michael.wu@vatics.com>
+        Sagar Shrikant Kadam <sagar.kadam@sifive.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-i2c@vger.kernel.org, peter@korsgaard.com, andrew@lunn.ch,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
+References: <1603291814-240377-1-git-send-email-sagar.kadam@sifive.com>
+ <1603291814-240377-2-git-send-email-sagar.kadam@sifive.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0H629O+sVkh21xTi"
+        protocol="application/pgp-signature"; boundary="Y/WcH0a6A93yCHGr"
 Content-Disposition: inline
-In-Reply-To: <20201030080420.28016-3-michael.wu@vatics.com>
+In-Reply-To: <1603291814-240377-2-git-send-email-sagar.kadam@sifive.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---0H629O+sVkh21xTi
+--Y/WcH0a6A93yCHGr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Michael,
+On Wed, Oct 21, 2020 at 07:50:14AM -0700, Sagar Shrikant Kadam wrote:
+> The FU540-C000 has a broken IRQ and support was added earlier
+> so that it will operate in polling mode, but seems to work only
+> in case interrupts property is missing from the i2c0 dt-node.
+> This should not be the case and the driver should handle polling
+> mode with the interrupt property present in i2c0 node of the
+> device tree.
+> So check if it's the FU540-C000 soc and enable polling mode master
+> xfers, as the IRQ for this chip is broken.
+>=20
+> Fixes commit c45d4ba86731 ("i2c: ocores: add polling mode workaround
+> for Sifive FU540-C000 SoC")
+>=20
+> Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
 
-> Documentation/i2c/slave-interface.rst says that I2C_SLAVE_WRITE_REQUESTED,
-> which is mandatory, should be sent while the data did not arrive yet. It
-> means in a write-request I2C_SLAVE_WRITE_REQUESTED should be reported
-> before any I2C_SLAVE_WRITE_RECEIVED.
-
-Correct.
-
-> dev->status can be used to record the current state, especially Designware
-> I2C controller has no interrupts to identify a write-request. This patch
-
-Just double-checking: the designware HW does not raise an interrupt when
-its own address + RW bit has been received?
-
-Kind regards,
-
-   Wolfram
+Applied to for-next, thanks!
 
 
---0H629O+sVkh21xTi
+--Y/WcH0a6A93yCHGr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+hxbUACgkQFA3kzBSg
-KbYVtg/+Lz6bV+bRe1EfNnrycWSFkU4zSTG72yi/kf2leHJt/rpkFj2PHyLV7XF8
-8BOUjehod8KY+1NO0tFP2Vf9obK6LLk7LkfLHfaeh1z09nx/zAAtTy9N/VBNG94s
-I2WDUmUaLR6LGHZBmphdljba1gkBR4LV04WITgMtn9QM8TR1KKyuAGez7nPuN59S
-Mv442+qnpZttGtKRvNayJDz0uSGuUpimyxvPFWZablJgT5YeVjr7A7KGYSND4ILw
-fDjfllSShmshgbmY9bI74GVurcAtAqbpdE2sQyQ2Dz9Pd/2aHvcZ7hscQVSeJ2NJ
-sEFCLHsFcW4dJGaGlc2+QiYPnVxMk9y3QbUmQhO+a2b2KYI+7IJktEPwKzm8/ap6
-tYioaB6Ezy4Y5SnzAxuKESCjQeC4uS1wQPnriFRqxyK9CCbnNm8D1mJAhynmORqy
-oY8yoxlPNX+5nou6s10Ox6aqZ039m3N8JY/yD3ixHVXT6+K0TEWmGChVM2/+FNtF
-ZvDvg4NHox2S1vGSRBtCH9+fJICeoZsxwuwp3+0hoQ12v1G8ZkK8C76sw0RIwZIx
-HTP9ShZtaYDDhHs/Svc3XfePYcNekSf+iP7/ZraEiH9wnQ/5wxN7fFyo7gZ8X2xz
-68z+R4q1xqRdbIG/etjsOrBt8UlQKKXZaByEf2LVt0CHUJ4jaHs=
-=ISuO
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+hx3oACgkQFA3kzBSg
+KbbKIRAAmB6/sKtZ7WE4OQbGRQft8f+GgZMLuc1AT810RO/vUmKK7QIfNzdGNhVT
+C2tgYQq4TvK05D/lldsDakeow8HfI1DmrOR2L2h2orzNmKaq913NAh1T8ezTtsBE
+V74PwyqTp78V95uDvH1nW7ms//l0VGMZ3VPPkqR1ob8kwI1Oc7U8/yBbINuNGnKG
+NhEpTcw5Ajvnf1hooWceZ9bKZrPZSbSf8dpTtiV6RllK1h3LdDogTNEFP8eeN/qY
+wi3J648pO1y6iwUVIb1+nkZDR96snSHCg0FP6JjjpEi9e1TlSfXAyx7UqlL3FjcT
+AzueDgAPbjj1ym7IRDN0BGVtzKEHpHFeVZqNt5OTlnuXBKn4UXN7eMd7xCFjZ48u
+FNKkQLAId2WEZ08it1R9cJShdJSqq65gegs1FlYXrTS4fuVGLlFKUEDplk2NPVhp
+KcWr/Hs9GG4uq7bFqt2X/v2v5hfGtDJ0Qa50hSYZ5Xqyu5NR0AKfzLMhIX94x0uW
+gOfplo8UCK57UtB/c2P7NXTSRnXoDBz1cMiWRgMsUfBXVGxUGvVZ+lMw7R7LRnRj
+wCfXDgytTWVW6Yzkp05tpnUkAJzN85o4olfdHouct0P7IJ3bjq+yThFV6Vvet4p8
+f3hWLBHzbQBR0KGz1l/qtIaH4iYg3sxl74KEx1GB5VE5zp0NELg=
+=LLzu
 -----END PGP SIGNATURE-----
 
---0H629O+sVkh21xTi--
+--Y/WcH0a6A93yCHGr--
