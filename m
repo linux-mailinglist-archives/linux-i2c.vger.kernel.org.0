@@ -2,210 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6ADC2A508E
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 20:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD182A50F3
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 21:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729382AbgKCT4M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Nov 2020 14:56:12 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:19475 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725997AbgKCT4M (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 Nov 2020 14:56:12 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fa1b5db0000>; Tue, 03 Nov 2020 11:56:11 -0800
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 3 Nov
- 2020 19:56:11 +0000
-Received: from vdi.nvidia.com (172.20.13.39) by mail.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Tue, 3 Nov 2020 19:56:10 +0000
-From:   Khalil Blaiech <kblaiech@nvidia.com>
-To:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <kblaiech@nvidia.com>, <wsa+renesas@sang-engineering.com>,
-        <robh+dt@kernel.org>
-Subject: [PATCH i2c-next v2 6/6] dt-bindings: i2c: Convert DT file to YAML schema
-Date:   Tue, 3 Nov 2020 14:56:08 -0500
-Message-ID: <c81a0679413dd77e68bdf7e3023d1a54e62f26ea.1604432921.git.kblaiech@nvidia.com>
-X-Mailer: git-send-email 2.1.2
-In-Reply-To: <cover.1604432921.git.kblaiech@nvidia.com>
-References: <cover.1604432921.git.kblaiech@nvidia.com>
+        id S1728471AbgKCUfa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Nov 2020 15:35:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46350 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727688AbgKCUf3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 3 Nov 2020 15:35:29 -0500
+Received: from localhost (p5486c89f.dip0.t-ipconnect.de [84.134.200.159])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E56121556;
+        Tue,  3 Nov 2020 20:35:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604435729;
+        bh=tHwc8s6fjbwKaViOlHw5mcgc1zaRkVkv2Q0CYANhwtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nv5unKjohu5nlqbhgYokpHXosGgIz/ed/asRvGTl9SkILFrnBDoiXtcVJSqytx/ff
+         UQENQefcPq67w2b0Q4dp22zGEH4W0ontG7DGC8VVPBzAtVxI68gDpR7dKP9xrT+ugp
+         2+fY1pwL75wpgz4ZUhpHt0NJre0BNS03UVzD+vH4=
+Date:   Tue, 3 Nov 2020 21:35:22 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        linux-i2c@vger.kernel.org,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] Revert "i2c: i2c-qcom-geni: Fix DMA transfer race"
+Message-ID: <20201103203522.GA1583@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Akash Asthana <akashast@codeaurora.org>, linux-i2c@vger.kernel.org,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
+        linux-kernel@vger.kernel.org
+References: <20201013212531.428538-1-dianders@chromium.org>
+ <20201013142448.v2.2.I7b22281453b8a18ab16ef2bfd4c641fb1cc6a92c@changeid>
+ <20201026150500.GA26921@builder.lan>
+ <20201026151351.GB1044@ninjato>
+ <20201026211534.GA4001@builder.lan>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1604433371; bh=TLWU+Tykj3XfZ+ZojiWDG4tqqPP3sdNWaq+bAyVLq8s=;
-        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Type;
-        b=dbhT/ER9lmxzuxRW+MQrDftuZO7hhHRgkLlB9qK3fG0GkFgrrYrwIo/ZC9aSdobZy
-         GM0SvtJH7YZtvz8Q9DB7I7cXD01uXl5SG5ZySOM561ygcv9F5rxpCbuKAfIdg/xnCq
-         KnUzi6nT71NXF7jZssgJ8z4xX5OQoYk3lyibqtT+XMMERz+yr1sw7C00hdpmwI/Ekw
-         Xxd0TS6dPR1b613Xc20SxxvFI20wdbvj82OIcAoFcv0ox7ndJHeQqSl/xnZ0N0uMKR
-         DWWKAwHkZicDK+wYcpR4bC+JIf5RpYXgSWKGVEqinreUy20wEU61xKYx0vwtv/fFEM
-         1uoVgw1swgsfw==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YZ5djTAD1cGYuMQK"
+Content-Disposition: inline
+In-Reply-To: <20201026211534.GA4001@builder.lan>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Write the devicetree binding text file associated with
-the Mellanox BlueField I2C controller in schema file,
-JSON compatible subset of YAML. Besides, add an entry
-within MAINTAINERS file.
 
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Khalil Blaiech <kblaiech@nvidia.com>
----
- .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt | 42 ------------
- .../bindings/i2c/mellanox,i2c-mlxbf.yaml           | 80 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 3 files changed, 81 insertions(+), 42 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
+--YZ5djTAD1cGYuMQK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
-deleted file mode 100644
-index 566ea86..0000000
---- a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--Device tree configuration for the Mellanox I2C SMBus on BlueField SoCs
--
--Required Properties:
--
--- compatible : should be "mellanox,i2c-mlxbf1" or "mellanox,i2c-mlxbf2".
--
--- reg : address offset and length of the device registers. The
--	registers consist of the following set of resources:
--		1) Smbus block registers.
--		2) Cause master registers.
--		3) Cause slave registers.
--		4) Cause coalesce registers (if compatible isn't set
--		   to "mellanox,i2c-mlxbf1").
--
--- interrupts : interrupt number.
--
--Optional Properties:
--
--- clock-frequency : bus frequency used to configure timing registers;
--			allowed values are 100000, 400000 and 1000000;
--			those are expressed in Hz. Default is 100000.
--
--Example:
--
--i2c@2804000 {
--	compatible = "mellanox,i2c-mlxbf1";
--	reg =	<0x02804000 0x800>,
--		<0x02801200 0x020>,
--		<0x02801260 0x020>;
--	interrupts = <57>;
--	clock-frequency = <100000>;
--};
--
--i2c@2808800 {
--	compatible = "mellanox,i2c-mlxbf2";
--	reg =	<0x02808800 0x600>,
--	        <0x02808e00 0x020>,
--		<0x02808e20 0x020>,
--		<0x02808e40 0x010>;
--	interrupts = <57>;
--	clock-frequency = <400000>;
--};
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-new file mode 100644
-index 0000000..3eb7457
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/mellanox,i2c-mlxbf.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mellanox I2C SMBus on BlueField SoCs
-+
-+maintainers:
-+  - Khalil Blaiech <kblaiech@nvidia.com>
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mellanox,i2c-mlxbf1
-+      - mellanox,i2c-mlxbf2
-+
-+  reg:
-+    minItems: 3
-+    maxItems: 4
-+    items:
-+      - description: Smbus block registers
-+      - description: Cause master registers
-+      - description: Cause slave registers
-+      - description: Cause coalesce registers
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clock-frequency:
-+    enum: [ 100000, 400000, 1000000 ]
-+    description:
-+      bus frequency used to configure timing registers;
-+      The frequency is expressed in Hz. Default is 100000.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - mellanox,i2c-mlxbf1
-+
-+then:
-+  properties:
-+    reg:
-+      maxItems: 3
-+
-+examples:
-+  - |
-+    i2c@2804000 {
-+        compatible = "mellanox,i2c-mlxbf1";
-+        reg = <0x02804000 0x800>,
-+              <0x02801200 0x020>,
-+              <0x02801260 0x020>;
-+        interrupts = <57>;
-+        clock-frequency = <100000>;
-+    };
-+
-+  - |
-+    i2c@2808800 {
-+        compatible = "mellanox,i2c-mlxbf2";
-+        reg = <0x02808800 0x600>,
-+              <0x02808e00 0x020>,
-+              <0x02808e20 0x020>,
-+              <0x02808e40 0x010>;
-+        interrupts = <57>;
-+        clock-frequency = <400000>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 551587f..40569fd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11166,6 +11166,7 @@ MELLANOX BLUEFIELD I2C DRIVER
- M:	Khalil Blaiech <kblaiech@nvidia.com>
- L:	linux-i2c@vger.kernel.org
- S:	Supported
-+F:	Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
- F:	drivers/i2c/busses/i2c-mlxbf.c
- 
- MELLANOX ETHERNET DRIVER (mlx4_en)
--- 
-2.1.2
+> Sounds good, please find the series applied on top of v5.10-rc1 at:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/20201=
+013212531.428538-1-dianders@chromium.org
 
+Thanks, pulled.
+
+
+--YZ5djTAD1cGYuMQK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+hvwYACgkQFA3kzBSg
+Kba8CRAAn/BrUUlHmwubxRWenvHPX3jpDDj+laBwUX1/U4xkmXURTubzHzNk26lA
+kuucdInwqvKNP40l8Gnhr9N1m1o3XstLND3Tt2mdcvdXINSTdjU6kKdIHr936yFs
+LNYc7QIaOIos6toeySuKGJVjaRnbXyzcvliexw3sz/7khoSG0k/H804n483TiDQt
+CdfGZhenWTv1vYyojs29rU1qEuoDey40rzbKGVhrGPXfCSyH0NfYxsHRN2KTaiMk
+oqwDlc2ddcTlAdzLHdNNvZkq2L5jS9nUeScicmQpgoor50UcpeLV+CTbr6tu55RD
+FfzIjzroabstIbmTVjArfMqRdHBJupSQVuCVQo76N/9F2tyce8PSDEcCpMLjyf2Q
+SQ8Mu98qOeOUtcQw8hrZDw7BgVZoG/4kMG3O25C1OqhnqTwxUjmNLVEdi6j1bOes
+hGa3JNCPlFWVI2xeZH/zG0gdycNN12K7OE3fJK2UWrtX6al04gKnC47SIYMZirl1
+Hd44JpM60fAo8UNKH7GvJObPiIQ+lEIAjQw6FvsC9R0BikH7kjpK2vqOaJecPIMh
+UiJRNEfJftyltNk5fVNJrKwqbnsWyZyCZIHqfSHjwbbLJvzKOvulYtoPnGo3XqvG
+6oqCttv3hGY+/fsRe1K59FwVA4Gw3z2c9KG8kJ69AjXXxhG44uI=
+=Sf2P
+-----END PGP SIGNATURE-----
+
+--YZ5djTAD1cGYuMQK--
