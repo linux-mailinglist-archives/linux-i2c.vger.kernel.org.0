@@ -2,94 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 197A82A5506
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 22:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB39E2A54C8
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 22:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730794AbgKCVQG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Nov 2020 16:16:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53300 "EHLO mail.kernel.org"
+        id S2389134AbgKCVOX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Nov 2020 16:14:23 -0500
+Received: from sauhun.de ([88.99.104.3]:40538 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388423AbgKCVLc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 3 Nov 2020 16:11:32 -0500
+        id S2389131AbgKCVNQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 3 Nov 2020 16:13:16 -0500
 Received: from localhost (p5486c89f.dip0.t-ipconnect.de [84.134.200.159])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A9D7B207BC;
-        Tue,  3 Nov 2020 21:11:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604437891;
-        bh=CP4CcVYGwLAuKW0InrArv7u2uP3dgV+GP26YB2JQaTo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s5RQJj11L+Lccv3UkvxIF/sh+5XJgeUsQF1xOAtGPKVTTPYBUtO15E6hgxZ21CpWB
-         NZuvkVhyc+Lir1EkBOACcJt6FSd2IiRNgnxdsVQkiPP4QaEj/Tk8qkgqSbj83x1T6M
-         OTay9PzzQAFQarMumAslccvAO1D56KvWWEa+mjBg=
-Date:   Tue, 3 Nov 2020 22:11:26 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sagar Shrikant Kadam <sagar.kadam@sifive.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-i2c@vger.kernel.org, peter@korsgaard.com, andrew@lunn.ch,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
-Subject: Re: [PATCH v4 1/1] i2c: ocores: fix polling mode workaround on
- FU540-C000 SoC
-Message-ID: <20201103211126.GF1583@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sagar Shrikant Kadam <sagar.kadam@sifive.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-i2c@vger.kernel.org, peter@korsgaard.com, andrew@lunn.ch,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
-References: <1603291814-240377-1-git-send-email-sagar.kadam@sifive.com>
- <1603291814-240377-2-git-send-email-sagar.kadam@sifive.com>
+        by pokefinder.org (Postfix) with ESMTPSA id 4BCBD2C0561;
+        Tue,  3 Nov 2020 22:13:13 +0100 (CET)
+Date:   Tue, 3 Nov 2020 22:13:12 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     qii.wang@mediatek.com
+Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        leilk.liu@mediatek.com
+Subject: Re: [PATCH] i2c: mediatek: move dma reset before i2c reset
+Message-ID: <20201103211312.GG1583@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>, qii.wang@mediatek.com,
+        matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        leilk.liu@mediatek.com
+References: <1604059081-28197-1-git-send-email-qii.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Y/WcH0a6A93yCHGr"
+        protocol="application/pgp-signature"; boundary="4ndw/alBWmZEhfcZ"
 Content-Disposition: inline
-In-Reply-To: <1603291814-240377-2-git-send-email-sagar.kadam@sifive.com>
+In-Reply-To: <1604059081-28197-1-git-send-email-qii.wang@mediatek.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Y/WcH0a6A93yCHGr
+--4ndw/alBWmZEhfcZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 21, 2020 at 07:50:14AM -0700, Sagar Shrikant Kadam wrote:
-> The FU540-C000 has a broken IRQ and support was added earlier
-> so that it will operate in polling mode, but seems to work only
-> in case interrupts property is missing from the i2c0 dt-node.
-> This should not be the case and the driver should handle polling
-> mode with the interrupt property present in i2c0 node of the
-> device tree.
-> So check if it's the FU540-C000 soc and enable polling mode master
-> xfers, as the IRQ for this chip is broken.
+On Fri, Oct 30, 2020 at 07:58:01PM +0800, qii.wang@mediatek.com wrote:
+> From: Qii Wang <qii.wang@mediatek.com>
 >=20
-> Fixes commit c45d4ba86731 ("i2c: ocores: add polling mode workaround
-> for Sifive FU540-C000 SoC")
+> The i2c driver default do dma reset after i2c reset, but sometimes
+> i2c reset will trigger dma tx2rx, then apdma write data to dram
+> which has been i2c_put_dma_safe_msg_buf(kfree). Move dma reset
+> before i2c reset in mtk_i2c_init_hw to fix it.
 >=20
-> Signed-off-by: Sagar Shrikant Kadam <sagar.kadam@sifive.com>
+> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
 
-Applied to for-next, thanks!
+Applied to for-current, thanks!
 
 
---Y/WcH0a6A93yCHGr
+--4ndw/alBWmZEhfcZ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+hx3oACgkQFA3kzBSg
-KbbKIRAAmB6/sKtZ7WE4OQbGRQft8f+GgZMLuc1AT810RO/vUmKK7QIfNzdGNhVT
-C2tgYQq4TvK05D/lldsDakeow8HfI1DmrOR2L2h2orzNmKaq913NAh1T8ezTtsBE
-V74PwyqTp78V95uDvH1nW7ms//l0VGMZ3VPPkqR1ob8kwI1Oc7U8/yBbINuNGnKG
-NhEpTcw5Ajvnf1hooWceZ9bKZrPZSbSf8dpTtiV6RllK1h3LdDogTNEFP8eeN/qY
-wi3J648pO1y6iwUVIb1+nkZDR96snSHCg0FP6JjjpEi9e1TlSfXAyx7UqlL3FjcT
-AzueDgAPbjj1ym7IRDN0BGVtzKEHpHFeVZqNt5OTlnuXBKn4UXN7eMd7xCFjZ48u
-FNKkQLAId2WEZ08it1R9cJShdJSqq65gegs1FlYXrTS4fuVGLlFKUEDplk2NPVhp
-KcWr/Hs9GG4uq7bFqt2X/v2v5hfGtDJ0Qa50hSYZ5Xqyu5NR0AKfzLMhIX94x0uW
-gOfplo8UCK57UtB/c2P7NXTSRnXoDBz1cMiWRgMsUfBXVGxUGvVZ+lMw7R7LRnRj
-wCfXDgytTWVW6Yzkp05tpnUkAJzN85o4olfdHouct0P7IJ3bjq+yThFV6Vvet4p8
-f3hWLBHzbQBR0KGz1l/qtIaH4iYg3sxl74KEx1GB5VE5zp0NELg=
-=LLzu
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+hx+gACgkQFA3kzBSg
+KbYX6Q//ZGVdd7tkdj2nWfdk4zLv7XxhsnNc0yRj5kGzxUJKvKNkQhYfnhhxFMX7
+HPEU0NIyBcT0NniiLqHhqAvAe91PNdUt2rlaD8zoWJkm22nBHH06IO1XBLglK6Ok
+9mQWJ/h4E9SZVA7pPoOKQE8XDdD4Th767jmIDQ16xvo/YyAWu0yxwMep5ausuIHr
+RT2MmJisrXYHXXMDCVBkgBrD2UWR8XjNVrjap0aMfvdEb5N35BxsEB4BO3472XKI
+Ex00+kTjc+mFbwOtMTxtjVnOqW9fqqYu7indYah0mqDX5W8XUK/Ztuqi1qnQ7FBE
+4X3DXxmZYGBgMBYfU4oQYQJDbCu/+X7hljgmvZ+uobhnEMIBIcRZ1qgNIGG3/my5
+9Xdzvc6fKdfZefYc2cUFoJ7EpLgY+KJP/oKEhYQ43y0ORN0ZWdO2eMH2GUOJdhhd
+9YH1lPPnZQcvCkt14U5FYyDCT2ZnbgTcZFo9TgLctlNqdm2o7xTYokbwmbooBx1m
+scA3peUJ+OyjQJrIX/b1+I1uYdh2v1Z/WRnIEIt2fdf+cBJGUEOC6VAP5v5FRO2M
+Is7BlkZnyuLXMyIz3wHYng/ivGqE2SPrO/JYk3rR2O8w+8dn/2HWOsZsyydyKa/l
+GPuN3WQru6TiDeD7lYTjRqRjl9jGzkSETQFO9jtdiTy3Wu+4uBk=
+=YC2K
 -----END PGP SIGNATURE-----
 
---Y/WcH0a6A93yCHGr--
+--4ndw/alBWmZEhfcZ--
