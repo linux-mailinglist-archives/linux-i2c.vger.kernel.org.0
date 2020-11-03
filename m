@@ -2,79 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB39E2A54C8
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 22:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52D12A56EA
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Nov 2020 22:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389134AbgKCVOX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Nov 2020 16:14:23 -0500
-Received: from sauhun.de ([88.99.104.3]:40538 "EHLO pokefinder.org"
+        id S1732906AbgKCVcD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Nov 2020 16:32:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59640 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389131AbgKCVNQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 3 Nov 2020 16:13:16 -0500
+        id S1732129AbgKCU5W (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 3 Nov 2020 15:57:22 -0500
 Received: from localhost (p5486c89f.dip0.t-ipconnect.de [84.134.200.159])
-        by pokefinder.org (Postfix) with ESMTPSA id 4BCBD2C0561;
-        Tue,  3 Nov 2020 22:13:13 +0100 (CET)
-Date:   Tue, 3 Nov 2020 22:13:12 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     qii.wang@mediatek.com
-Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 90F52223BF;
+        Tue,  3 Nov 2020 20:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604437042;
+        bh=a7ZH9fyHYZTO/SRArO7XSMg0/aQU+bYIqJmSUVsuhCA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QTtwg4L4/i86DoriZ3tYS9UO8SdYNdPyXWiI6EoauuBTIeuVHWnP26XFh7c0Rq1L+
+         GgIz9Uj1tNWnCbVSuQYAtd/ppNMWuddZbO32TkTXv71MqGsLvgzWEgp4k3AeCK16Ad
+         iyf6nSlurOM/etk+w2gx0lPk1Gkmv10vscjFFcCg=
+Date:   Tue, 3 Nov 2020 21:57:18 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com
-Subject: Re: [PATCH] i2c: mediatek: move dma reset before i2c reset
-Message-ID: <20201103211312.GG1583@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>, qii.wang@mediatek.com,
-        matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-actions@lists.infradead.org
+Subject: Re: [PATCH 2/3] i2c: owl: Add support for atomic transfers
+Message-ID: <20201103205718.GC1583@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com
-References: <1604059081-28197-1-git-send-email-qii.wang@mediatek.com>
+        linux-actions@lists.infradead.org
+References: <cover.1602190168.git.cristian.ciocaltea@gmail.com>
+ <1af37112fafd6cf069dfe864560f77996f57d80d.1602190168.git.cristian.ciocaltea@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4ndw/alBWmZEhfcZ"
+        protocol="application/pgp-signature"; boundary="m51xatjYGsM+13rf"
 Content-Disposition: inline
-In-Reply-To: <1604059081-28197-1-git-send-email-qii.wang@mediatek.com>
+In-Reply-To: <1af37112fafd6cf069dfe864560f77996f57d80d.1602190168.git.cristian.ciocaltea@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---4ndw/alBWmZEhfcZ
+--m51xatjYGsM+13rf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 30, 2020 at 07:58:01PM +0800, qii.wang@mediatek.com wrote:
-> From: Qii Wang <qii.wang@mediatek.com>
+On Fri, Oct 09, 2020 at 12:44:40AM +0300, Cristian Ciocaltea wrote:
+> Atomic transfers are required to properly power off a machine through
+> an I2C controlled PMIC, such as the Actions Semi ATC260x series.
 >=20
-> The i2c driver default do dma reset after i2c reset, but sometimes
-> i2c reset will trigger dma tx2rx, then apdma write data to dram
-> which has been i2c_put_dma_safe_msg_buf(kfree). Move dma reset
-> before i2c reset in mtk_i2c_init_hw to fix it.
+> System shutdown may happen with interrupts being disabled and, as a
+> consequence, the kernel may hang if the driver does not support atomic
+> transfers.
 >=20
-> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
+> This functionality is essentially implemented by polling the FIFO
+> Status register until either Command Execute Completed or NACK Error
+> bits are set.
+>=20
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
 
 
---4ndw/alBWmZEhfcZ
+--m51xatjYGsM+13rf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+hx+gACgkQFA3kzBSg
-KbYX6Q//ZGVdd7tkdj2nWfdk4zLv7XxhsnNc0yRj5kGzxUJKvKNkQhYfnhhxFMX7
-HPEU0NIyBcT0NniiLqHhqAvAe91PNdUt2rlaD8zoWJkm22nBHH06IO1XBLglK6Ok
-9mQWJ/h4E9SZVA7pPoOKQE8XDdD4Th767jmIDQ16xvo/YyAWu0yxwMep5ausuIHr
-RT2MmJisrXYHXXMDCVBkgBrD2UWR8XjNVrjap0aMfvdEb5N35BxsEB4BO3472XKI
-Ex00+kTjc+mFbwOtMTxtjVnOqW9fqqYu7indYah0mqDX5W8XUK/Ztuqi1qnQ7FBE
-4X3DXxmZYGBgMBYfU4oQYQJDbCu/+X7hljgmvZ+uobhnEMIBIcRZ1qgNIGG3/my5
-9Xdzvc6fKdfZefYc2cUFoJ7EpLgY+KJP/oKEhYQ43y0ORN0ZWdO2eMH2GUOJdhhd
-9YH1lPPnZQcvCkt14U5FYyDCT2ZnbgTcZFo9TgLctlNqdm2o7xTYokbwmbooBx1m
-scA3peUJ+OyjQJrIX/b1+I1uYdh2v1Z/WRnIEIt2fdf+cBJGUEOC6VAP5v5FRO2M
-Is7BlkZnyuLXMyIz3wHYng/ivGqE2SPrO/JYk3rR2O8w+8dn/2HWOsZsyydyKa/l
-GPuN3WQru6TiDeD7lYTjRqRjl9jGzkSETQFO9jtdiTy3Wu+4uBk=
-=YC2K
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+hxC4ACgkQFA3kzBSg
+KbYrHw//euNdIAgM/h+leoIrHtmx4U1t4ASeeDaSMNetrFYOEGWcHtzjDZkYMMJj
+3jEzBhFGNGWPMixjn9JTUg3nIhnEMZ7VUklIUaIBRr9Ig/6AU3ymAHk1mFLVVcQo
+ZWKC1yCGr6BS910ahG4ydLI9JM4cECwBcxy6uAm4scKX8mqW7AJY8aPxv1bsA71R
+9JbDkSYP1PwhslH0NBcubgSwrF8zP93PRGp6nVItqw4l9/7yLYunTNlwR8yNt1F5
+t7p3u9Yg/JVBOklJDWyKOVRSqyYgfqzDdutVhXnXtUhyJcu6qf7XyioT1/XmMlmH
+3qSemDshe75Un0dAM5a6nyRHoG4CG/Je7j2SQb5XfXO1gyuaUo1TCZOAqqy/BDWw
+GLX91vvGu7Y6sJCyHAGyZ5FLB3KOLwMWOTDTauHqzVgSlWFsuPOufvBBBeaAE/HB
+IsjK3KPZ+oFi7nAD5zjPi6pHF2/jOl0G6P6AN7vA4w+3SAtz6e9JsWfFWKlFmGV6
+BaOexMaHHQ5WlJEGFrwoEwW2+8nFxf1tRk7yRI2GeL7CHykdsyx8vx5MXDmJwwnC
+HZA0NShfFaKS9lQAZVNg7NmTdHaJ70xfHCvBWU7oCgqJskhUaWGQ/Bga8Fsn/V12
+z8IAa4ixpYWCtjVitRlo8bLDMk5KUCEg0CG9bNk+QVpS8cbA0fw=
+=IJ2+
 -----END PGP SIGNATURE-----
 
---4ndw/alBWmZEhfcZ--
+--m51xatjYGsM+13rf--
