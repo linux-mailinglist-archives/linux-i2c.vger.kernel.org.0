@@ -2,223 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D862A5D3E
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Nov 2020 04:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2E82A6162
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Nov 2020 11:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729342AbgKDD5a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Nov 2020 22:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726008AbgKDD53 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 Nov 2020 22:57:29 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64389C061A4D
-        for <linux-i2c@vger.kernel.org>; Tue,  3 Nov 2020 19:57:29 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id s30so2988462lfc.4
-        for <linux-i2c@vger.kernel.org>; Tue, 03 Nov 2020 19:57:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gaXtHpBrlxR6wEbbsYCmBn5xIrujwPP1FIE/bo3ltmc=;
-        b=SACbZ+dtgAEBxH40AQNaityku77yrm9mmYixEvcePZKJk/th+nr72AXWgKE5Td9zKS
-         KEBlxMSt0ApYsIORwUwgTKVxn5Mb8eRSIIThfKH1UlFcNSUlyMvHFJXtrKoeNrhBw6Ga
-         Q95+cyIFNbwDawvG/4rbxFK64bamwkCqkJMlM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gaXtHpBrlxR6wEbbsYCmBn5xIrujwPP1FIE/bo3ltmc=;
-        b=iiiv3fB/FaFg7DJvboisPghNIa0qik7p79Vr3LD2tnlxzz7/QGQcioCMSFCZqTOfr6
-         /67jSfTFMG0euK8fkUlcvsFUr2TuQJPdwPumHiRQCYMIhL0+By8BnS/wqhd4Q9LVhULT
-         cOqCZmhHYvAulRichFc0E7FQ+PMLCKPLQKOp9V6oWGurPNdSGM3Zld2mOSWU3G0NKHpu
-         B7vPYuhf7AIjcGL51r6gCNvZmuK2XWlEr9VB5MOWTPKDI0hVmwL4XB/d5V/xf/b3OElu
-         Om3EMulhyUC5q8u8mBEk4hFoKILzpHfP+xlorVo3OUobgXYU5pVjSqQyrL/foS13MlBC
-         hJ+A==
-X-Gm-Message-State: AOAM531NYuMSfQUZe2wWxvziL8Jwns8TwDP2SUemFrS35DwOEjf6+jF5
-        sAu1Es/eOi3ilq62kVSm7Hmtm1cxwURDOJP4dd2ORjX7rEP7MYB3
-X-Google-Smtp-Source: ABdhPJy0KlKHv7n8jvHCRk3WYvhvUrG7sZqZBvezZPpkVKRsk8FaPsUQId11RTWZfCBQN7zpIKMYs7uTBOzHWlmDcY4=
-X-Received: by 2002:a05:6512:1da:: with SMTP id f26mr9576019lfp.245.1604462247625;
- Tue, 03 Nov 2020 19:57:27 -0800 (PST)
+        id S1728287AbgKDKRm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 Nov 2020 05:17:42 -0500
+Received: from mail.vivotek.com ([60.248.39.150]:34998 "EHLO mail.vivotek.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726410AbgKDKRm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 4 Nov 2020 05:17:42 -0500
+Received: from pps.filterd (vivotekpps.vivotek.com [127.0.0.1])
+        by vivotekpps.vivotek.com (8.16.0.42/8.16.0.42) with SMTP id 0A4AEqtN016487;
+        Wed, 4 Nov 2020 18:17:30 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivotek.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=dkim;
+ bh=OxCP/q6SKiXzG28NQs4PGiRSEJVVo7+TKVgKwuSTDc4=;
+ b=Eu4+rfkU5PJmjmeXYAzwHPQ0z2pSLEk8bTxS8uAvLFal3gh5zkZPuf0WJM/WegIV9/HB
+ 6YWKdlVvyxOrN1qT6r9R/sfQKyUHNoHXBDTLz5zeJHmTPRsoJS8VX8zRCGI/vf8+YBMP
+ uvl+51dSgsKcnEWTEamOSn2uqqk+a6L9V1c= 
+Received: from cas01.vivotek.tw ([192.168.0.58])
+        by vivotekpps.vivotek.com with ESMTP id 34gtc344wx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 04 Nov 2020 18:17:30 +0800
+Received: from MBS07.vivotek.tw ([fe80::2027:4d67:6c01:78d8]) by
+ CAS01.vivotek.tw ([::1]) with mapi id 14.03.0487.000; Wed, 4 Nov 2020
+ 18:17:29 +0800
+From:   <Michael.Wu@vatics.com>
+To:     <wsa@kernel.org>
+CC:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <morgan.chang@vatics.com>
+Subject: RE: [PATCH 2/2] i2c: designware: slave should do WRITE_REQUESTED
+ before WRITE_RECEIVED
+Thread-Topic: [PATCH 2/2] i2c: designware: slave should do WRITE_REQUESTED
+ before WRITE_RECEIVED
+Thread-Index: AQHWrpNb9HMFwrLvFkOeW57CDSt2oKm2ZmOAgAFYIoA=
+Date:   Wed, 4 Nov 2020 10:17:29 +0000
+Message-ID: <5DB475451BAA174CB158B5E897FC1525B1295560@MBS07.vivotek.tw>
+References: <20201030080420.28016-1-michael.wu@vatics.com>
+ <20201030080420.28016-3-michael.wu@vatics.com> <20201103210349.GE1583@kunai>
+In-Reply-To: <20201103210349.GE1583@kunai>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.17.134]
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20201102035433.6774-6-rayagonda.kokatanur@broadcom.com> <861d734f-c776-f70b-e414-a4b32c0f991e@gmail.com>
-In-Reply-To: <861d734f-c776-f70b-e414-a4b32c0f991e@gmail.com>
-From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Date:   Wed, 4 Nov 2020 09:27:16 +0530
-Message-ID: <CAHO=5PGdcN2V8XOKdtTHwUBJW9eB2mjQ-CeMvwK4Rem7KBy5GA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] i2c: iproc: handle master read request
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lori Hikichi <lori.hikichi@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005a74fb05b33ffaeb"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-04_06:2020-11-04,2020-11-04 signatures=0
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---0000000000005a74fb05b33ffaeb
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, Nov 4, 2020 at 9:05 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
->
->
-> On 11/2/2020 10:19 PM, Dhananjay Phadke wrote:
-> > On Mon,  2 Nov 2020 09:24:32 +0530, Rayagonda Kokatanur wrote:
-> >
-> >> Handle single or multi byte master read request with or without
-> >> repeated start.
-> >>
-> >> Fixes: c245d94ed106 ("i2c: iproc: Add multi byte read-write support for slave mode")
-> >> Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-> >> ---
-> >>  drivers/i2c/busses/i2c-bcm-iproc.c | 215 +++++++++++++++++++++++------
-> >>  1 file changed, 170 insertions(+), 45 deletions(-)
-> >>
-> >> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> >> index 7a235f9f5884..22e04055b447 100644
-> >> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> >> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> >> @@ -160,6 +160,11 @@
-> >>
-> >>  #define IE_S_ALL_INTERRUPT_SHIFT     21
-> >>  #define IE_S_ALL_INTERRUPT_MASK      0x3f
-> >> +/*
-> >> + * It takes ~18us to reading 10bytes of data, hence to keep tasklet
-> >> + * running for less time, max slave read per tasklet is set to 10 bytes.
-> >> + */
-> >> +#define MAX_SLAVE_RX_PER_INT         10
-> >>
-> >
-> > In patch [3/6], you've enabled IS_S_RX_THLD_SHIFT in slave ISR bitmask,
-> > however it's not actually used in processing rx events.
-> >
-> > Instead of hardcoding this threshold here, it's better to add a
-> > device-tree knob for rx threshold, program it in controller and handle
-> > that RX_THLD interrupt. This will give more flexibility to drain the rx
-> > fifo earlier than -
-> > (1) waiting for FIFO_FULL interrupt for transactions > 64B.
-> > (2) waiting for start of read transaction in case of master write-read.
-
-Yes this is one way to implement.
-But do you see any issue in batching 64 bytes at a time in case of
-transaction > 64 Bytes.
-I feel batching will be more efficient as it avoids more number of
-interrupts and hence context switch.
-
->
-> The Device Tree is really intended to describe the hardware FIFO size,
-> not watermarks, as those tend to be more of a policy/work load decision.
-> Maybe this is something that can be added as a module parameter, or
-> configurable via ioctl() at some point.
-
-#define MAX_SLAVE_RX_PER_INT         10
-
-is not hw fifo threshold level, it is a kind of watermark for the
-tasklet to process the max number of packets in single run.
-The intention to add the macro is to make sure the tasklet does not
-run more than 20us.
-If we keep this as a module parameter or dt parameter then there is a
-good possibility that the number can be set to higher value.
-This will make the tasklet run more than 20us and defeat the purpose.
-
-This number is constant and not variable to change
-
-Please feel free to add your comments.
-
-Best regards,
-Rayagonda
-
-> --
-> Florian
-
---0000000000005a74fb05b33ffaeb
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-xVUYGnc0GLrYeHC2X4wJbUsgi+UFM/rVW0RKe5Sg4xmLXWc/rBhXDBVPeFVdN2dYsk5MyDRM/fXj
-cAA+xTX+SQGoND8CAwEAAaOCAdcwggHTMA4GA1UdDwEB/wQEAwIFoDCBngYIKwYBBQUHAQEEgZEw
-gY4wTQYIKwYBBQUHMAKGQWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVy
-c29uYWxzaWduMnNoYTJnM29jc3AuY3J0MD0GCCsGAQUFBzABhjFodHRwOi8vb2NzcDIuZ2xvYmFs
-c2lnbi5jb20vZ3NwZXJzb25hbHNpZ24yc2hhMmczME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0
-MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNV
-HRMEAjAAMEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NwZXJz
-b25hbHNpZ24yc2hhMmczLmNybDArBgNVHREEJDAigSByYXlhZ29uZGEua29rYXRhbnVyQGJyb2Fk
-Y29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJ
-nXsLYTAdBgNVHQ4EFgQU1rE7oQJ7FiSTADFOqokePoGwIq4wDQYJKoZIhvcNAQELBQADggEBAD8I
-VcITGu1E61LQLR1zygqFw8ByKPgiiprMuQB74Viskl7pAZigzYJB8H3Mpd2ljve+GRo8yvbBC76r
-Gi5WdS06XI5vuImDJ2g6QUt754rj7xEYftM5Gy9ZMslKNvSiPPh1/ACx5w7ecD1ZK0YLMKGATeBD
-XybduRFIEPZBAjgJ5LOYT2ax3ZesfAkan1XJ97yLA93edgTTO2cbUAADTIMFWm4lI/e14wdGmK0I
-FtqJWw6DATg5ePiAAn+S0JoIL1xqKsZi2ioNqm02QMFb7RbB3yEGb/7ZLAGcPW666o5GSLsUnPPq
-YOfL/3X6tVfGeoi3IgfI+z76/lXk8vOQzQQxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkw
-FwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2ln
-biAyIENBIC0gU0hBMjU2IC0gRzMCDDw+ri+StHzo6PJZ/DANBglghkgBZQMEAgEFAKCB1DAvBgkq
-hkiG9w0BCQQxIgQguIgJQdoPdON4MJRNk4F8yoCvkyKE0Zah3wDbm3Xu6fcwGAYJKoZIhvcNAQkD
-MQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMTA0MDM1NzI4WjBpBgkqhkiG9w0BCQ8x
-XDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsG
-CSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAHt1
-4SvmJzLo6BpvQ3LeHXmESkQZS5nS0UW0eZ1djH+86BzYaV8M5BpqCSEzeI05YBJ4/B0dD9U4B9MU
-sHHgMJ4caOPTIzb6Ku0B81Bqlzru8IZD06fKaYN411w9L3c514umqAHCHDe9HKBtt0bQkOl71m2x
-0nu9+vsMBna1VxGmxItLOosiBbhlI3AjXSYrgmz4iutfnru0cVDc4YxeKB2q3VxXlOfjkQMC1jr5
-X7oJEqTdD906DlEA4JxRsyWhSmi/MltYiu6Fa2s/EV0caIkwTPjx6QEQDtQXZNVJvnpy+PO6jqBw
-G3DRV7n5b1MuNNSvridsp+VovXopRNS6yjc=
---0000000000005a74fb05b33ffaeb--
+SGkgV29sZnJhbSwNCg0KPiA+IGRldi0+c3RhdHVzIGNhbiBiZSB1c2VkIHRvIHJlY29yZCB0aGUg
+Y3VycmVudCBzdGF0ZSwgZXNwZWNpYWxseSBEZXNpZ253YXJlDQo+ID4gSTJDIGNvbnRyb2xsZXIg
+aGFzIG5vIGludGVycnVwdHMgdG8gaWRlbnRpZnkgYSB3cml0ZS1yZXF1ZXN0LiBUaGlzIHBhdGNo
+DQo+IA0KPiBKdXN0IGRvdWJsZS1jaGVja2luZzogdGhlIGRlc2lnbndhcmUgSFcgZG9lcyBub3Qg
+cmFpc2UgYW4gaW50ZXJydXB0IHdoZW4NCj4gaXRzIG93biBhZGRyZXNzICsgUlcgYml0IGhhcyBi
+ZWVuIHJlY2VpdmVkPw0KDQpOb3QgZXhhY3RseS4gVGhlcmUncmUgYW4gaW50ZXJydXB0IHN0YXRl
+IG5hbWUgIlJEX1JFUSIgYnV0IG5vIG9uZSBuYW1lZA0KbGlrZSAiV1JfUkVRIi4NCg0KRm9yIHJl
+YWQtcmVxdWVzdCwgdGhlIHNsYXZlIHdpbGwgZ2V0IGEgUkRfUkVRIGludGVycnVwdC4gDQpGb3Ig
+d3JpdGUtcmVxdWVzdCwgdGhlIHNsYXZlIHdvbid0IGJlIGludGVycnVwdGVkIHVudGlsIGRhdGEg
+YXJyaXZlZCB0bw0KdHJpZ2dlciBpbnRlcnJ1cHQgIlJYX0ZVTEwiLg0KDQpJIHRyaWVkIHRvIHVz
+ZSBHUElPIHRvIHNpbXVsYXRlIGFuIEkyQyBtYXN0ZXIuIEkgb25seSBzZW50IGl0cyBvd24NCmFk
+ZHJlc3MgKyBXIGJpdCB3aXRob3V0IGFueSBkYXRhIGFuZCB0aGVuIEkgZ290IG9ubHkgYSBTVE9Q
+X0RFVCBpbnRlcnJ1cHQuDQpJZiBJIHNlbnQgaXRzIG93biBhZGRyZXNzICsgVyBiaXQgKyBvbmUg
+Ynl0ZSBkYXRhIGFuZCB0aGVuIEkgZ290IG9uZQ0KUlhfRlVMTCBhbmQgYSBTVE9QX0RFVC4NCg0K
+SXQgc2VlbXMgdGhlIGNvbnRyb2xsZXIgZG9lc24ndCBpbnRlcnJ1cHQgd2hlbiBSVyBiaXQgaXMg
+VywgYnV0IFIgZG9lcy4NCldoYXQgZG8geW91IHRoaW5rLCBKYXJra28/DQoNClNpbmNlcmVseSwN
+Cg0KTWljaGFlbCBXdQ0K
