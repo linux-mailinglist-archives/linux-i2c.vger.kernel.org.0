@@ -2,93 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A60B72A7835
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Nov 2020 08:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D542A7870
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Nov 2020 09:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbgKEHqq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Nov 2020 02:46:46 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:49522 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725320AbgKEHqq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Nov 2020 02:46:46 -0500
-Received: by linux.microsoft.com (Postfix, from userid 1046)
-        id 5B48D20B4905; Wed,  4 Nov 2020 23:46:45 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5B48D20B4905
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1604562405;
-        bh=+4vC5pdHWhZcsC4RLqsaXzruecfzwJvr9SPbBGML92k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PUIS5sSOund47b2bGCatf6rcJhvYsR39zR8hdPoD83WmfHmrpB6rxs14MbPhsoEd0
-         KFNmGAaZHP9tI4uCmlbnRUskomHcymw9Iya0xpHsON9Wgsm0Eu8BBtKoryEpgkXCdR
-         nF4PlSCGPSYxyH65Bt0DWHlMENv9ctS8mwcvB7R0=
-From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-To:     ray.jui@broadcom.com
-Cc:     andriy.shevchenko@linux.intel.com,
-        bcm-kernel-feedback-list@broadcom.com, brendanhiggins@google.com,
-        dphadke@linux.microsoft.com, f.fainelli@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lori.hikichi@broadcom.com,
-        rayagonda.kokatanur@broadcom.com, rjui@broadcom.com,
-        sbranden@broadcom.com, wsa@kernel.org
-Subject: Re: [PATCH v3 5/6] i2c: iproc: handle master read request
-Date:   Wed,  4 Nov 2020 23:46:45 -0800
-Message-Id: <1604562405-25414-1-git-send-email-dphadke@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <97a8d7bf-e877-c03a-f789-16cac9bb2643@broadcom.com>
-References: <97a8d7bf-e877-c03a-f789-16cac9bb2643@broadcom.com>
+        id S1729386AbgKEIAX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Nov 2020 03:00:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59355 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729490AbgKEIAW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Nov 2020 03:00:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604563221;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7jXlk9odBRKRYbgd27QDkTiXL3HhvfI1QYTHmgthYKc=;
+        b=YNidzD89qL3V1lvK39o+sh0eJQoDaiFax5dKGtJtKTxXXLFFLmlzKunbSUjBZ5ugVEk19a
+        CymYiT0BSWnWkF2yx0PjZ2n6a3E5Wn9bu7AlHnPvwgd4wcljoOfbJouQpFd2P+qSt75VXY
+        wvK++iu109kdW/8XcmI7BqRN50PiOJ8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-255-E90e-SFuPBejwxB3nD_1uA-1; Thu, 05 Nov 2020 03:00:19 -0500
+X-MC-Unique: E90e-SFuPBejwxB3nD_1uA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6A95A1084CA6;
+        Thu,  5 Nov 2020 08:00:17 +0000 (UTC)
+Received: from x1.localdomain.com (ovpn-113-73.ams2.redhat.com [10.36.113.73])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AC5C65DA76;
+        Thu,  5 Nov 2020 08:00:15 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mark Gross <mgross@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [RFC 0/4] platform/x86: i2c-multi-instantiate: Pass ACPI fwnode to instantiated i2c-clients
+Date:   Thu,  5 Nov 2020 09:00:10 +0100
+Message-Id: <20201105080014.45410-1-hdegoede@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 4 Nov 2020 10:01:06 -0800, Ray Jui wrote:
+Hi All,
 
->>>> +#define MAX_SLAVE_RX_PER_INT         10
->>>>
->>>
->>>> In patch [3/6], you've enabled IS_S_RX_THLD_SHIFT in slave ISR bitmask,
->>>> however it's not actually used in processing rx events.
->>>>
->>>> Instead of hardcoding this threshold here, it's better to add a
->>>> device-tree knob for rx threshold, program it in controller and handle
->>>> that RX_THLD interrupt. This will give more flexibility to drain the rx
->>>> fifo earlier than -
->>>> (1) waiting for FIFO_FULL interrupt for transactions > 64B.
->>>> (2) waiting for start of read transaction in case of master write-read.
->> 
->> Yes this is one way to implement.
->> But do you see any issue in batching 64 bytes at a time in case of
->> transaction > 64 Bytes.
->> I feel batching will be more efficient as it avoids more number of
->> interrupts and hence context switch.
->> 
->>>
->>> The Device Tree is really intended to describe the hardware FIFO size,
->>> not watermarks, as those tend to be more of a policy/work load decision.
->>> Maybe this is something that can be added as a module parameter, or
->>> configurable via ioctl() at some point.
->> 
->
->Yes, DT can have properties to describe the FIFO size, if there happens
->to be some variants in the HW blocks in different versions. But that is
->not the case here. DT should not be used to control SW/use case specific
->behavior.
+As the subject says this series is mostly about passing the ACPI fwnode to
+i2c-clients instantiated by the i2c-multi-instantiate code.
 
-So the suggestion was to set HW threshold for rx fifo interrupt, not
-really a SW property. By setting it in DT, makes it easier to
-customize for target system, module param needs or ioctl makes it
-dependent on userpsace to configure it.
+As discussed here:
+https://bugzilla.kernel.org/show_bug.cgi?id=198671
 
-The need for tasklet seems to arise from the fact that many bytes are
-left in the fifo. If there's a common problem here, such tasklet would be
-needed in i2c subsys rather than controller specific tweak, akin to
-how networking uses NAPI or adding block transactions to the interface?
+BOSC0200 ACPI devices may sometimes describe 2 accelerometers in a single
+ACPI device, while working on this I noticed that BOSC0200 ACPI nodes
+contain ACCEL_MOUNT_MATRIX info (unlike all the other ACPI ids for bmc150
+accelerometers). Which is why I wanted to pass the fwnode so that we
+could use this info in the bmc150-accel driver.
 
-For master write-read event, it seems both IS_S_RD_EVENT_SHIFT and
-IS_S_RX_EVENT_SHIFT are detected, which implies that core is late to
-drain rx fifo i.e. write is complete and the read has started on the bus?
+The plan was to use i2c-multi-instantiate for this, but doing so will
+change the modalias and /lib/udev/hwdb.d/60-sensor.hwdb matches on
+the modalias for various quirks setting ACCEL_MOUNT_MATRIX. So then the
+plan became to first add support for the mount-matrix provided inside
+the BOSC0200 ACPI node, making the udev info unnecessary. But for at
+least 1 model (and probably more) the BOSC0200 ACPI node and hwdb info
+does not match and since the hwdb info is added by users of the actual
+devices we can assume it is correct, so it seems that we cannot always
+trust the ACPI provided info.  This is ok, the hwdb info overrides it
+(iio-sensor-proxy prefers the udev provided mount-matrix over the
+one provided by the driver) but this means that we MUST keep the
+existing hwdb matches working, which means that we cannot use
+i2c-multi-instantiate for this.
 
+Instead I will dust of an old patch for this from Jeremy Cline:
+https://patchwork.kernel.org/project/linux-iio/patch/010001602cf53153-39ad69f1-1b39-4e6d-a748-9455a16c2fbd-000000@email.amazonses.com/
 
-Thanks,
-Dhananjay
+Which deals with there being 2 accelerometers inside the bmc150-accel
+driver.
 
+But before coming to the conclusion that i2c-multi-instantiate
+would not work I had already written this series. Since this might
+be useful for some other case in the future I'm sending this out
+as a RFC now, mostly so that it gets added to the archives.
+
+Regards,
+
+Hans
+
+p.s.
+
+The 4th patch is not related to the fwnode passing, but was also
+necessary for the BOSC0200 case.
 
