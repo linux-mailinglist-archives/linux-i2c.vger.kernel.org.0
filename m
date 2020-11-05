@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 911192A7BD5
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Nov 2020 11:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BED2A7BF3
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Nov 2020 11:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbgKEKaY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Nov 2020 05:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S1729484AbgKEKgI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Nov 2020 05:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726152AbgKEKaX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Nov 2020 05:30:23 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB5EC0613CF;
-        Thu,  5 Nov 2020 02:30:23 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id z3so1130647pfb.10;
-        Thu, 05 Nov 2020 02:30:23 -0800 (PST)
+        with ESMTP id S1729480AbgKEKgG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Nov 2020 05:36:06 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF5DC0613CF;
+        Thu,  5 Nov 2020 02:36:06 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id r10so1121318pgb.10;
+        Thu, 05 Nov 2020 02:36:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GOJzhBi9qk3xmG5fix9DYsoSpE+r8wExY1ctyU+UTJw=;
-        b=ZFGg0rmd+NKsGP1OyIASx8mTbwh3Uu9BXu9U9MBP05Phu2doDelMHVRmPYn8vlzUfR
-         Y8tK+NG7V8RxS5aepcBdOXe9cf0BVv73NTKHvZcEjdU9s43r4bHrKw5u49ZFdVxGU9f3
-         7Lp6jphMm0UMK/LgTl+1jp3bQvz9Vkci9PB5etaia9b1oHO6+LgFlbaxVSYH1LO49o/L
-         x6ChJEXbwDR1a4ivvi9Z2zInT97h4iU5+i9t46Gp1Kq+mhnv0+RifV2bqYR7MH0UQf59
-         C2JmQ0oFy0YbqeKeQl9bkNMAuJylnoPvpju+/IFdgrisGnLq9i4g64eNwRr05gAjr2U4
-         s4yw==
+        bh=0ka5MhqGz9TFvBdNwBPCVY+dFvV8nrpAIWu8ggYe6gg=;
+        b=dpzTq2vnjChKAZHjvhW2rvU+QblwjsaNr02uBN4fg7IQFFO9NlxNrR9YLhbwvi8zCh
+         sbvcdLOzm5mYhEfXhZs4ztZapg52Rku7S0vlXu2kUssknV9owq5xhJYkqyHxUW1RE2Xq
+         BCjT2fRU6pKIZZqNcJTPVoPHJQcT7ITAbGGbUKDSVKksacycNCaqpNLlRF56+9DnrYfE
+         +yQVqwe4StXvIxP5PEUb/7Xl5hM7SB1AT16GC2OyqNeg6PTdb9Kk1Om+eWP7JPYHqV5h
+         zaBQC3/FQ1Eo2/C8ISr6J05VAaue/Qjg0ld05Q+ohfdxgsV3uuHA/pkL8rBEFjbfUP0o
+         Hhnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GOJzhBi9qk3xmG5fix9DYsoSpE+r8wExY1ctyU+UTJw=;
-        b=fY69zfoHe3wd6kB0nRUh2RNhZAftHL+T9lw07yCVFtfxqsAd8y8W8sZiKiXHXh6BJY
-         w74p2D4FrdPDBIdnAgiAURWeaV2HEM7RJ6wl94AH+O3EySnTKJiZnhAX4j8s55Fp3Qb2
-         oZcsiPT2HCrArF2FTie4/qatpnLcgoh23jfLSqE/7hV2wLbr8zu9ioVUrLbPWJoH9UBW
-         n+lMuQQWODyh1wABLhrBrxKH3cgFVY7h85hPc/ngGE9EHqO9aXofkHEc5woRnMSDG+Dj
-         N6wezR6rXVb7q3alMxdNVnSlfZ1tRRttIgP1qYl187t97xx/PMi5nZGPwLvvoU7MsF+p
-         xqjQ==
-X-Gm-Message-State: AOAM530VZLHyG98UmrTx0mi+d3NZp5sLfF1UEz8iaRnxT9PKlhDZK0JA
-        gy/m6yUe9oDJY4n5eDmnEdSEyMn4KV71MAUPRhIEvx/Q3No=
-X-Google-Smtp-Source: ABdhPJwJkM5ITRaW0VukHEqhnAv7SD57QZo8ePx8R1HuR9klGopkfrnTCFDRouchicBXA3GDS0sDV9SkORsLh/99smE=
-X-Received: by 2002:a17:90b:1107:: with SMTP id gi7mr1724697pjb.181.1604572223128;
- Thu, 05 Nov 2020 02:30:23 -0800 (PST)
+        bh=0ka5MhqGz9TFvBdNwBPCVY+dFvV8nrpAIWu8ggYe6gg=;
+        b=ekieGVeVqt0fdy1dFXsBuGEEd9UKfJ6zUdugAG+sJYpASM7H6Gu1W7GLB8y/Koytuq
+         WW7xLwwgY80YjPMqwYDvmkCxbT8js2b29NBocQq8oCGic5Jhqq2bGpUNeUrETzlAKus3
+         coH8hY7ahKC9jovUx/gnSbo/OgXmR8DKQEFeduCunxjCut7RMnu+bRx3VdlpAfwiH3HH
+         75Py+S712zniJmMGOmt4ITzgxgHgiS6Do/y38noaWqpY8unQGZtj7JyprmbVXXxGJGQ7
+         /pJNOW4AXQhSnYt0Q1VNr0Yb29xPwKqaligvKh2aDBsH+vCUtBl+tqOyV7IUbQkdXJqz
+         M3kQ==
+X-Gm-Message-State: AOAM533mqFQBoiO6vqzz1dN7fJL+BprNgdoxxwjXLEUR9Grt59mHgauJ
+        FtCPBGuNWf1LE22m2HLiRzefH5FPc45cXNfyhaY=
+X-Google-Smtp-Source: ABdhPJxedcN3p9lMEn4aUv35HYvW3RfL6DRzta3i8HG435TEJCnIkMVICp9CyYmK5K9Egos4rL74/KPr3lKye3SuG3c=
+X-Received: by 2002:a17:90a:6683:: with SMTP id m3mr1842882pjj.225.1604572566319;
+ Thu, 05 Nov 2020 02:36:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20201105080014.45410-1-hdegoede@redhat.com> <20201105080014.45410-4-hdegoede@redhat.com>
-In-Reply-To: <20201105080014.45410-4-hdegoede@redhat.com>
+References: <20201105080014.45410-1-hdegoede@redhat.com> <20201105080014.45410-5-hdegoede@redhat.com>
+In-Reply-To: <20201105080014.45410-5-hdegoede@redhat.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 5 Nov 2020 12:31:11 +0200
-Message-ID: <CAHp75VfspJRRyKd1_K+akZXPHC=k91fnbGTs4SOK8NmPr20bLw@mail.gmail.com>
-Subject: Re: [RFC 3/4] platform/x86: i2c-multi-instantiate: Pass ACPI fwnode
- to instantiated I2C-clients
+Date:   Thu, 5 Nov 2020 12:36:55 +0200
+Message-ID: <CAHp75Vdk7pdxEMDp0E3XXj2DYhP8jvofQFnErmGJ0cADbxePCA@mail.gmail.com>
+Subject: Re: [RFC 4/4] platform/x86: i2c-multi-instantiate: Add
+ IRQ_RESOURCE_GPIO_OPTIONAL IRQ type
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Mark Gross <mgross@linux.intel.com>,
         Wolfram Sang <wsa@the-dreams.de>,
@@ -65,51 +65,45 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Thu, Nov 5, 2020 at 10:00 AM Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> The ACPI fwnode may contain additional info which is useful for the
-> I2C-driver. E.g. some accelerometer ACPI fwnode's contain an ACPI method
-> providing rotation/mount matrix info.
->
-> Pass the ACPI-fwnode to the instantiated I2C-clients by setting
-> i2c_board_info.fwnode, so that the I2C-drivers can access this info.
->
-> Now that we set i2c_board_info.irq to -ENOENT if there is no IRQ,
-> avoiding the I2C-core assigning the first IRQ described in the ACPI
-> resources to the client, this is safe to do.
->
-> Setting the fwnode also influences acpi_device_[uevent_]modalias and
-> acpi_dev_pm_attach, but these both call acpi_device_is_first_physical_node
-> and are a no-op if this returns false.
+> Most I2C-drivers treat IRQs as optional and in some cases ACPI
+> devices managed by i2c-multi-instantiate.c may have a GpioInt resource
+> specified on some systems, while it is not there on others.
 
-Perhaps add () to the mentioned function calls.
+GpioInt()
 
-> The first physical node for the ACPI fwnode is actually the ACPI core
-> instantiated platform-device to which the I2C-multi-instantiate driver
-> binds, so acpi_device_is_first_physical_node always returns false for
-> the instantiated I2C-clients and thus we can safely pass the fwnode.
+> Add a new IRQ_RESOURCE_GPIO_OPTIONAL IRQ type, which still tries to get
+> a GpioInt IRQ, but does not consider it a fatal error when this fails.
 
-Ditto.
+GpioInt()
 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  drivers/platform/x86/i2c-multi-instantiate.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/platform/x86/i2c-multi-instantiate.c b/drivers/platform/x86/i2c-multi-instantiate.c
-> index cb4688bdd6b6..cbccfcbed44c 100644
-> --- a/drivers/platform/x86/i2c-multi-instantiate.c
-> +++ b/drivers/platform/x86/i2c-multi-instantiate.c
-> @@ -93,6 +93,7 @@ static int i2c_multi_inst_probe(struct platform_device *pdev)
->                 snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev),
->                          inst_data[i].type, i);
->                 board_info.dev_name = name;
-> +               board_info.fwnode = dev->fwnode;
->                 switch (inst_data[i].flags & IRQ_RESOURCE_TYPE) {
+...
+
+> -#define IRQ_RESOURCE_TYPE      GENMASK(1, 0)
+> -#define IRQ_RESOURCE_NONE      0
+> -#define IRQ_RESOURCE_GPIO      1
+> -#define IRQ_RESOURCE_APIC      2
+> +#define IRQ_RESOURCE_TYPE              GENMASK(1, 0)
+> +#define IRQ_RESOURCE_NONE              0
+> +#define IRQ_RESOURCE_GPIO              1
+> +#define IRQ_RESOURCE_GPIO_OPTIONAL     2
+> +#define IRQ_RESOURCE_APIC              3
+
+I think flag is cleaner:
+
+#define IRQ_RESOURCE_OPTIONAL     BIT(2)
+
+...
+
 >                 case IRQ_RESOURCE_GPIO:
 >                         ret = acpi_dev_gpio_irq_get(adev, inst_data[i].irq_idx);
-> --
-> 2.28.0
->
+> -                       if (ret < 0) {
+> +                       if (ret < 0 && (!irq_optional || ret != -ENOENT)) {
 
+ret < 0 && !((inst_data[i].flags & IRQ_RESOURCE_OPTIONAL) && ret == -ENOENT)
+
+>                                 dev_err(dev, "Error requesting irq at index %d: %d\n",
+>                                         inst_data[i].irq_idx, ret);
+>                                 goto error;
 
 -- 
 With Best Regards,
