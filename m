@@ -2,105 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2908D2AA422
-	for <lists+linux-i2c@lfdr.de>; Sat,  7 Nov 2020 10:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AAB2AA427
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 Nov 2020 10:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728058AbgKGJHL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 7 Nov 2020 04:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728000AbgKGJHK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 7 Nov 2020 04:07:10 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B77C0613CF;
-        Sat,  7 Nov 2020 01:07:10 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id ie6so634447pjb.0;
-        Sat, 07 Nov 2020 01:07:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RW4r/t8cWsM2QI2eaMKZPfD/c5BaeuF1WMlenTu7Oxo=;
-        b=SN9s+ArdbfrEYSu1VlGpsgxbFE/wnSAOocVWaTB1sr99W4UcBdABbJhHO2d8ownBOm
-         Bx0bBtlUEY5B1tgcLM7+9PBLvPZ6TqKLHHAN+le48nB2QY3svSK4QgOCeFilmCKK6StH
-         WgvyQutyQSw52pKvR1acUPbxIqAa+yrgYpwBhbZ3sTXElXThpBFNSqYYquwM9PK42G77
-         0gJz5EJREETkdkaFZfnsd7Mbe3RfJYZE5Kd0UY67+fQcXcEK5jUoNv44n7jenZDOiAqY
-         8N7k11o8GzUmbLVbs0CqnedXDP7a0Gmmsp4VEQlLbFKcYL9E+QmcnAhz3Fvbycfwg9+E
-         mM4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RW4r/t8cWsM2QI2eaMKZPfD/c5BaeuF1WMlenTu7Oxo=;
-        b=GTWxrp9mAJ0Czs3lZVECCtKbD6ox9f1YjCj0b6HSjcoSb0B3qlojV9NN/klmHCYFjx
-         bADuF+2UQQetqQFjJnd3b0kTIpTX65/78uo2Me+C22OIwX/wqDGZeqdvM0Z+lXKfhdVS
-         GRV0w+rilkmldSJ+UASqWoUEMt6e9BK2X5HifjtEJ0xeWUdfmvSV8Nr7EviIuB6OP/2i
-         kXDXqYhZr8HBbv9yAXyF23YZ4VlYwbLchBg4z9UvkgKZroe6A91phnbe/DBywlax2UC2
-         LQUuYLhQ8wcksuuFqRRShtwalguc/N9Ud8ldktxSwWWjWjmni/hmKPLc++yHW+DJF0GP
-         T3dA==
-X-Gm-Message-State: AOAM531XyH8WB29VDoTfcufFIzdcMrWIW9KBRWmxLI4/8GDMxU2e09Y0
-        xVd6O1u0S6argrXMC4cmScg=
-X-Google-Smtp-Source: ABdhPJyxufHOqc6m6gxXEsP3lbi1HPHz0P0D9ZPKMkKjXG/fFxl+ZWkJoLKLOAcz6wV4DPfVcc/mww==
-X-Received: by 2002:a17:902:728f:b029:d6:fcbe:99c5 with SMTP id d15-20020a170902728fb02900d6fcbe99c5mr4903814pll.20.1604740029581;
-        Sat, 07 Nov 2020 01:07:09 -0800 (PST)
-Received: from gmail.com ([223.179.149.110])
-        by smtp.gmail.com with ESMTPSA id t85sm4098072pgb.29.2020.11.07.01.07.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2020 01:07:09 -0800 (PST)
-Date:   Sat, 7 Nov 2020 14:34:42 +0530
-From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
-To:     Ajay Gupta <ajayg@nvidia.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v1] i2c: nvidia-gpu: drop empty stub for runtime pm
-Message-ID: <20201107090442.GA107675@gmail.com>
-References: <20201107082151.58239-1-vaibhavgupta40@gmail.com>
+        id S1728099AbgKGJJz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 7 Nov 2020 04:09:55 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:49577 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727973AbgKGJJz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 7 Nov 2020 04:09:55 -0500
+X-UUID: 4c10f6f62e784f0f9a69b20474108dcf-20201107
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=DLmHKhdRR/VJKHOqoZljcarIlMnzrJ2krXQMqsv1Zb4=;
+        b=rWbKmN2q5wGtSK8HcFo8PvRMUewE/9TXmxpkg991c1K8wQWvvCTP0Z4KzPASirLnh/Ij1J9Nm5RZ1Jv7VhRo7zx7U8QTLKC5IjWeTGBOmpQeG7Ba/WhZYyY3J3uuXOEREZql6fz9SEYMj/Hup1r3Crp1LMdCiZwAcz1F+2ROI1w=;
+X-UUID: 4c10f6f62e784f0f9a69b20474108dcf-20201107
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 670291704; Sat, 07 Nov 2020 17:09:50 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 7 Nov 2020 17:09:49 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 7 Nov 2020 17:09:48 +0800
+From:   <qii.wang@mediatek.com>
+To:     <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>
+Subject: [i2c-next,PATCH] i2c: medaitek: Move suspend and resume handling to NOIRQ phase
+Date:   Sat, 7 Nov 2020 17:09:40 +0800
+Message-ID: <1604740180-14645-1-git-send-email-qii.wang@mediatek.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201107082151.58239-1-vaibhavgupta40@gmail.com>
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Nov 07, 2020 at 01:51:51PM +0530, Vaibhav Gupta wrote:
-> After the commit c5eb1190074c ("PCI / PM: Allow runtime PM without callback
-> functions") we no more need empty stubs for runtime-pm to work.
-> 
-> The driver has no device specific task(s) for .suspend() . The stub was
-> placed just for runtime-pm, which can be dropped now.
-> 
-> Reported-by: Bjorn Helgaas <bhelgaas@google.com>
-> Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-nvidia-gpu.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> index f9a69b109e5c..6b20601ffb13 100644
-> --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-> +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> @@ -353,15 +353,7 @@ static void gpu_i2c_remove(struct pci_dev *pdev)
->  	pci_free_irq_vectors(pdev);
->  }
->  
-> -/*
-> - * We need gpu_i2c_suspend() even if it is stub, for runtime pm to work
-> - * correctly. Without it, lspci shows runtime pm status as "D0" for the card.
-> - * Documentation/power/pci.rst also insists for driver to provide this.
-> - */
-> -static __maybe_unused int gpu_i2c_suspend(struct device *dev)
-> -{
-> -	return 0;
-> -}
-> +#define gpu_i2c_suspend NULL
->  
->  static __maybe_unused int gpu_i2c_resume(struct device *dev)
->  {
-> -- 
-> 2.28.0
-> 
-The patch is only compile-tested.
+RnJvbTogUWlpIFdhbmcgPHFpaS53YW5nQG1lZGlhdGVrLmNvbT4NCg0KU29tZSBpMmMgZGV2aWNl
+IGRyaXZlciBpbmRpcmVjdGx5IHVzZXMgSTJDIGRyaXZlciB3aGVuIGl0IGlzIG5vdw0KYmVpbmcg
+c3VzcGVuZGVkLiBUaGUgaTJjIGRldmljZXMgZHJpdmVyIGlzIHN1c3BlbmRlZCBkdXJpbmcgdGhl
+DQpOT0lSUSBwaGFzZSBhbmQgdGhpcyBjYW5ub3QgYmUgY2hhbmdlZCBkdWUgdG8gb3RoZXIgZGVw
+ZW5kZW5jaWVzLg0KVGhlcmVmb3JlLCB3ZSBhbHNvIG5lZWQgdG8gbW92ZSB0aGUgc3VzcGVuZCBo
+YW5kbGluZyBmb3IgdGhlIEkyQw0KY29udHJvbGxlciBkcml2ZXIgdG8gdGhlIE5PSVJRIHBoYXNl
+IGFzIHdlbGwuDQoNClNpZ25lZC1vZmYtYnk6IFFpaSBXYW5nIDxxaWkud2FuZ0BtZWRpYXRlay5j
+b20+DQotLS0NCiBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jIHwgMTkgKysrKysrKysr
+KysrKysrKy0tLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9u
+cygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tdDY1eHguYyBiL2Ry
+aXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXQ2NXh4LmMNCmluZGV4IDMzZGU5OWIuLjZmNjE1OTUgMTAw
+NjQ0DQotLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW10NjV4eC5jDQorKysgYi9kcml2ZXJz
+L2kyYy9idXNzZXMvaTJjLW10NjV4eC5jDQpAQCAtMTI1OCw3ICsxMjU4LDggQEAgc3RhdGljIGlu
+dCBtdGtfaTJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQogCW10a19pMmNf
+Y2xvY2tfZGlzYWJsZShpMmMpOw0KIA0KIAlyZXQgPSBkZXZtX3JlcXVlc3RfaXJxKCZwZGV2LT5k
+ZXYsIGlycSwgbXRrX2kyY19pcnEsDQotCQkJICAgICAgIElSUUZfVFJJR0dFUl9OT05FLCBJMkNf
+RFJWX05BTUUsIGkyYyk7DQorCQkJICAgICAgIElSUUZfTk9fU1VTUEVORCB8IElSUUZfVFJJR0dF
+Ul9OT05FLA0KKwkJCSAgICAgICBJMkNfRFJWX05BTUUsIGkyYyk7DQogCWlmIChyZXQgPCAwKSB7
+DQogCQlkZXZfZXJyKCZwZGV2LT5kZXYsDQogCQkJIlJlcXVlc3QgSTJDIElSUSAlZCBmYWlsXG4i
+LCBpcnEpOw0KQEAgLTEyODUsNyArMTI4NiwxNiBAQCBzdGF0aWMgaW50IG10a19pMmNfcmVtb3Zl
+KHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQogfQ0KIA0KICNpZmRlZiBDT05GSUdfUE1f
+U0xFRVANCi1zdGF0aWMgaW50IG10a19pMmNfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCitz
+dGF0aWMgaW50IG10a19pMmNfc3VzcGVuZF9ub2lycShzdHJ1Y3QgZGV2aWNlICpkZXYpDQorew0K
+KwlzdHJ1Y3QgbXRrX2kyYyAqaTJjID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQorDQorCWkyY19t
+YXJrX2FkYXB0ZXJfc3VzcGVuZGVkKCZpMmMtPmFkYXApOw0KKw0KKwlyZXR1cm4gMDsNCit9DQor
+DQorc3RhdGljIGludCBtdGtfaTJjX3Jlc3VtZV9ub2lycShzdHJ1Y3QgZGV2aWNlICpkZXYpDQog
+ew0KIAlpbnQgcmV0Ow0KIAlzdHJ1Y3QgbXRrX2kyYyAqaTJjID0gZGV2X2dldF9kcnZkYXRhKGRl
+dik7DQpAQCAtMTMwMCwxMiArMTMxMCwxNSBAQCBzdGF0aWMgaW50IG10a19pMmNfcmVzdW1lKHN0
+cnVjdCBkZXZpY2UgKmRldikNCiANCiAJbXRrX2kyY19jbG9ja19kaXNhYmxlKGkyYyk7DQogDQor
+CWkyY19tYXJrX2FkYXB0ZXJfcmVzdW1lZCgmaTJjLT5hZGFwKTsNCisNCiAJcmV0dXJuIDA7DQog
+fQ0KICNlbmRpZg0KIA0KIHN0YXRpYyBjb25zdCBzdHJ1Y3QgZGV2X3BtX29wcyBtdGtfaTJjX3Bt
+ID0gew0KLQlTRVRfU1lTVEVNX1NMRUVQX1BNX09QUyhOVUxMLCBtdGtfaTJjX3Jlc3VtZSkNCisJ
+U0VUX05PSVJRX1NZU1RFTV9TTEVFUF9QTV9PUFMobXRrX2kyY19zdXNwZW5kX25vaXJxLA0KKwkJ
+CQkgICAgICBtdGtfaTJjX3Jlc3VtZV9ub2lycSkNCiB9Ow0KIA0KIHN0YXRpYyBzdHJ1Y3QgcGxh
+dGZvcm1fZHJpdmVyIG10a19pMmNfZHJpdmVyID0gew0KLS0gDQoxLjkuMQ0K
 
---Vaibhav
