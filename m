@@ -2,114 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5F52AD331
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Nov 2020 11:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B052AD40E
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Nov 2020 11:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbgKJKKL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Nov 2020 05:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S1729630AbgKJKst (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Nov 2020 05:48:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726428AbgKJKKL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Nov 2020 05:10:11 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB3C0613CF;
-        Tue, 10 Nov 2020 02:10:09 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id 10so10994726pfp.5;
-        Tue, 10 Nov 2020 02:10:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UXw8lANWF+DcYrvXP88miW026AegfOsaawplpvjBxqE=;
-        b=cEMrRLXJk4TxfgLHrnJ0KtZ577dLW7PN6qJQObYGQRaea5tulrv+Q+aHNxg2HT7S5W
-         5CYUwE8bvpxhx1Ua+KmsO0Mwu4ZBO2VHhjtKRvJcNbYbKheP1D0H/KhEHypkPgPaVWky
-         siNtBarPoL1EOVi5TjZ1a944LKC3Dhab9zi58IzRgBtwKxmUdPERFg5Ri65GFYAN0QkK
-         2nCQ3EEq5YydCF9rASqVJfrlmgr7552w+yXW54+O/ffksYmfkcsasR11Kj2Wduch4QYI
-         IyowkfP3+1wX+jumWTkQevSkJ76eTVhgsZg5PSujtEUY0gS5tUPL4Mjjl6euM87l+1e/
-         /zpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UXw8lANWF+DcYrvXP88miW026AegfOsaawplpvjBxqE=;
-        b=V6Ub2lu54HPIroQSNObTst6dxSsdScI11JGeNYs5ycEDMQxFErWz6Xl4PFnX5oEenn
-         MQvvJBcSnlFQdkKTpTItE3DyaUwTgqIZV8hrFGvlZwY16IuammALlKEtoXhw+jj5yayW
-         y0vw4euOSjZKK0EYrDbepj0Wzegd369XmUVz6F8z8qOWTvyQz+30fck1L0+RPYd7UTq5
-         WD0igYqWr9qpXBbhINXtZ7jOdqS9f8GNOVy8WpaQreOx6fEBNTBt5DOT6d6peVpdtuvw
-         6aAPfFA7rf9z2Nkqi9W7Ytx83EOUUjSfa1qZxhOz4HEbwo2UCT5m++dGNxJz7sH/d7P9
-         RX7g==
-X-Gm-Message-State: AOAM532sDe0XnztIqVJmGbnPUMXLZ26cJf/aMp5C8qfxt/MyIP1mEqWl
-        25DcZ5uG9LuGgT38BEfc1EDnEQBsBZHvgkt4Oso=
-X-Google-Smtp-Source: ABdhPJx881zO2y+CaAaDgUOKp/Hn8wFf1KCQnm0amakLKef7zPJ3yRQ4utVIclEmizF+k3sh7fxjXfwqVCQfUKeyvRc=
-X-Received: by 2002:a17:90a:4816:: with SMTP id a22mr4416818pjh.228.1605003009064;
- Tue, 10 Nov 2020 02:10:09 -0800 (PST)
+        with ESMTP id S1726467AbgKJKst (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Nov 2020 05:48:49 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D611C0613CF
+        for <linux-i2c@vger.kernel.org>; Tue, 10 Nov 2020 02:48:49 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kcRCd-0002bA-CF; Tue, 10 Nov 2020 11:48:43 +0100
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kcRCb-0000qk-UW; Tue, 10 Nov 2020 11:48:41 +0100
+Date:   Tue, 10 Nov 2020 11:48:41 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Biwen Li <biwen.li@oss.nxp.com>
+Cc:     leoyang.li@nxp.com, linux@rempel-privat.de, kernel@pengutronix.de,
+        wsa@the-dreams.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, aisheng.dong@nxp.com, xiaoning.wang@nxp.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jiafei.pan@nxp.com, xiaobo.xie@nxp.com,
+        linux-arm-kernel@lists.infradead.org, Biwen Li <biwen.li@nxp.com>
+Subject: Re: [v9 2/2] i2c: imx: select I2C_SLAVE by default
+Message-ID: <20201110104841.go32dadjctuprxxu@pengutronix.de>
+References: <20201102082102.16508-1-biwen.li@oss.nxp.com>
+ <20201102082102.16508-2-biwen.li@oss.nxp.com>
 MIME-Version: 1.0
-References: <20201105080014.45410-1-hdegoede@redhat.com> <CAHp75Vdm4PuQpAMj98wJZoNMwV2tFGPj-r9ezvXyWCYj2cSuaA@mail.gmail.com>
- <81343662-aaac-a5e8-af86-1370951ff646@redhat.com>
-In-Reply-To: <81343662-aaac-a5e8-af86-1370951ff646@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 10 Nov 2020 12:10:57 +0200
-Message-ID: <CAHp75VdbHPwnOAUWjSN+HuVsWVb=8EUwfWNR1onL9QNrX8yU0w@mail.gmail.com>
-Subject: Re: [RFC 0/4] platform/x86: i2c-multi-instantiate: Pass ACPI fwnode
- to instantiated i2c-clients
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Andy Shevchenko <andy@infradead.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201102082102.16508-2-biwen.li@oss.nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 11:45:24 up 361 days,  2:03, 30 users,  load average: 0.36, 0.11,
+ 0.03
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Nov 9, 2020 at 1:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> On 11/5/20 11:38 AM, Andy Shevchenko wrote:
-> > On Thu, Nov 5, 2020 at 10:00 AM Hans de Goede <hdegoede@redhat.com> wrote:
+Hi,
 
-...
+it makes no sense to have separate patch for it
 
-> >> But before coming to the conclusion that i2c-multi-instantiate
-> >> would not work I had already written this series. Since this might
-> >> be useful for some other case in the future I'm sending this out
-> >> as a RFC now, mostly so that it gets added to the archives.
-> >
-> > I think they are in pretty good shape (only the 4th required a bit of
-> > attention).
->
-> FWIW I agree with the changes which you suggest for the 4th patch.
->
-> > Please, send as non-RFC and also Cc Heikki (just in case if he has
-> > comments wrt INT3515).
->
-> But do we really want to land these changes, while ATM we do not
-> really have any need for them ?  Esp. the
->
-> "platform/x86: i2c-multi-instantiate: Pass ACPI fwnode to instantiated I2C-clients"
->
-> Change is not without a chance of regressions. The acpi_device_is_first_physical_node()
-> behavior surprised me a bit while working on the BOSC0200 changes. So I'm not
-> 100% sure I have managed to see / think of all implications of this change.
-
-I think in general the direction to switch to fwnode is a good one. I
-was thinking about moving i2c core to use swnodes in which case they
-will utilize fwnode pointer. But it might have complications, you are
-right.
-
-> Heikki do you now (or in the near future) need access to the fwnode for
-> the TypeC controllers handled by the i2c-multi-instantiate code ?
->
-> Note that if we do decide to move forward with this set, it should probably
-> be merged in its entirety by Wolfram as it also makes i2c-core changes
-> (or Wolfram could just merge the i2c-core change and provide an immutable
-> branch for me to merge into pdx86/for-next.
->
-> And then your (Andy's) cleanup series can be applied on top of this once merged.
-
-Fine to me.
+On Mon, Nov 02, 2020 at 04:21:02PM +0800, Biwen Li wrote:
+> From: Biwen Li <biwen.li@nxp.com>
+> 
+> Select I2C_SLAVE by default
+> 
+> Signed-off-by: Biwen Li <biwen.li@nxp.com>
+> ---
+> Change in v9:
+> 	- none
+> 
+>  drivers/i2c/busses/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index a4f473ef4e5c..d3d9a61db76e 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -675,6 +675,7 @@ config I2C_IMG
+>  config I2C_IMX
+>  	tristate "IMX I2C interface"
+>  	depends on ARCH_MXC || ARCH_LAYERSCAPE || COLDFIRE
+> +	select I2C_SLAVE
+>  	help
+>  	  Say Y here if you want to use the IIC bus controller on
+>  	  the Freescale i.MX/MXC, Layerscape or ColdFire processors.
+> -- 
+> 2.17.1
+> 
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
