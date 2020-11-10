@@ -2,226 +2,432 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2B62ACE86
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Nov 2020 05:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7FF2ACF63
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Nov 2020 07:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731601AbgKJEX6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 9 Nov 2020 23:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731423AbgKJEX5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Nov 2020 23:23:57 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F155C0613D3
-        for <linux-i2c@vger.kernel.org>; Mon,  9 Nov 2020 20:23:56 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id u18so15584988lfd.9
-        for <linux-i2c@vger.kernel.org>; Mon, 09 Nov 2020 20:23:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MiPAXmdXxDChwVF+WMTIAHbHOfaVa1OeOFBletLvQMI=;
-        b=S402EVfCj6IVs9PbyIpzP6pkVMtKioO/uA99wSIqMxXj+1t1Lusp8OWJz8m7T+kpZu
-         1nEsj4nLs02q9ZUhmFURb3k+nKzgbB0ETVjqIlLwX0o7uuukW3hSQiLe1xxJo249JSnR
-         560WETAellkB+EgZMCwyBYKn5HQLcatKTM9es=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MiPAXmdXxDChwVF+WMTIAHbHOfaVa1OeOFBletLvQMI=;
-        b=LW8Sr9B2/kFTIOxfa3HF5cdh53UwifFwsi9opbOjaW4Qslrs7hYpvPvlEfwdPu4NbF
-         JfF4kEERj4tBz6vJO2zNi3VCrPfdxCtWI6ZNgOgvKYJIEsMxfsieT+RH6+DUDuV+hvNd
-         P6kxS8yLWZyBPjqidzfF7gx4VgTsGFYPPFCQhKb3mvMjwMXKMVXBE6V0s5MtIqEeRH8G
-         6liNzIqz3zt+fmbK1f49ZTkc4XRyTOpWerxdFguj4iL8bLm2zK4vII1oyYy8hc44+4w8
-         /aPc15zUmjzZ/zdP2Yu0+BZkebnLMFdowTLR1h2eFNrPL4KSTitPHbX3NIPap1f2/Ime
-         YG5g==
-X-Gm-Message-State: AOAM533fiZP4NuhS1lGflq4QYgeMEYp6FPiVE0SsEQ5NmF7OnOYYhv0f
-        iXMPa+hDDffRERZ8FAJXzG1GBBHKx1dh24r20A+12Q==
-X-Google-Smtp-Source: ABdhPJwi5ELQ5QO+b3S4fCInqX1T5uwDQQv03C2RtO4vkjmLA202chT/DVVUQfxWRtzjHn5+vG1iU1UeE09Bj3++auE=
-X-Received: by 2002:a19:4f47:: with SMTP id a7mr7360366lfk.245.1604982234320;
- Mon, 09 Nov 2020 20:23:54 -0800 (PST)
+        id S1731771AbgKJGHe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Nov 2020 01:07:34 -0500
+Received: from mail-eopbgr60089.outbound.protection.outlook.com ([40.107.6.89]:11808
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728085AbgKJGHd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 10 Nov 2020 01:07:33 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fUF/DW1+C6pUa0D1XUr4D3XHlxQawe2qkGlOEiDd/Uj7igiVQbiTNpoYJS8hGn0klnjGkJY1TT8MEUySTNllrNLOXNkaibH+TEE63BLkpZb9uIM6zWBKpbeMqrRHxY/3jveCF1xRT7+EbrPwkI0tn5JSgVVxmpRG8OyTurFvKqheun7yL148ARMCFZRmqg5Kxa8m/Z6JEIgA2JEgis//4O/KYWWPsBHYfCwEc8ez2rbBwrfr7tP+uxawO22gGxDonOyecF2/3xLs1pdSWOImk5tFJK0ylKBZpLff4fkw+oXS4rpMtmDAVNVLPUPhuclBlfe0H5VUXJaIOFUR3aL2WA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V3SxswPZ8PesU0iJBF3A0jaXcg8oF2On2vXP7NYCQLo=;
+ b=kCpxNVNbd/YAMBIQ4jxVZnOmtAfnseAvpB4y0O7llNB8lfHilSTOSnXRbryKmiMz8uJ+S26oVAK5IHvUn8aXamIl4kP0LaTEP/a6Ez0c2vtHqXqt5wNUBwTsCmWvs2pQ2b0ZqOLJEhGQD8SqfKRtMP6+on3Ytywuyc1MnIFN47cWRTZQ44RhyOEucFkxvkT9Ha2nb2uufHv0anTCGb/WZiJHsHZMISRLemrQ2fVbJDZrl7qr8gsntBxyrAdtDO+AwqC4XhE5kCi1v1ADzq1E3wpGN3/AFVFgPwcI/k4ZLpH4F+00yoLooFeEiybH3zACWibLlPW6gxEWaWldF55U9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V3SxswPZ8PesU0iJBF3A0jaXcg8oF2On2vXP7NYCQLo=;
+ b=gxxuMUtws7+8Y+e0mK/ByB7v7uDjHzVduyxCh/vtx+k0olHkUxx+XGsk4bGfMEXeK5P26zrexYA1n5EEejIfpDlZg+0VsGRl3XqR2BNSJ0Hir7GGeqHRHAJUXAnAEl9RjSnrJACWKvXBi5au5ccFyKA8rotMlV3YsLWj8+nQUHQ=
+Received: from DB6PR0401MB2438.eurprd04.prod.outlook.com (2603:10a6:4:33::14)
+ by DB8PR04MB6699.eurprd04.prod.outlook.com (2603:10a6:10:3c::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Tue, 10 Nov
+ 2020 06:07:28 +0000
+Received: from DB6PR0401MB2438.eurprd04.prod.outlook.com
+ ([fe80::f0c9:fd48:c8d1:5c22]) by DB6PR0401MB2438.eurprd04.prod.outlook.com
+ ([fe80::f0c9:fd48:c8d1:5c22%11]) with mapi id 15.20.3541.025; Tue, 10 Nov
+ 2020 06:07:28 +0000
+From:   Biwen Li <biwen.li@nxp.com>
+To:     "Biwen Li (OSS)" <biwen.li@oss.nxp.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        "linux@rempel-privat.de" <linux@rempel-privat.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "wsa@the-dreams.de" <wsa@the-dreams.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        "o.rempel@pengutronix.de" <o.rempel@pengutronix.de>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jiafei Pan <jiafei.pan@nxp.com>,
+        Xiaobo Xie <xiaobo.xie@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [v9 1/2] i2c: imx: support slave mode for imx I2C driver
+Thread-Topic: [v9 1/2] i2c: imx: support slave mode for imx I2C driver
+Thread-Index: AQHWsPJxQCSwa049oUKJUXBWHq6O7KnA7A5g
+Date:   Tue, 10 Nov 2020 06:07:27 +0000
+Message-ID: <DB6PR0401MB2438F925B8A6DF5B8367A8F38FE90@DB6PR0401MB2438.eurprd04.prod.outlook.com>
+References: <20201102082102.16508-1-biwen.li@oss.nxp.com>
+In-Reply-To: <20201102082102.16508-1-biwen.li@oss.nxp.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: oss.nxp.com; dkim=none (message not signed)
+ header.d=none;oss.nxp.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 1a2ebe6b-2e65-4911-a0c0-08d8853ee6d6
+x-ms-traffictypediagnostic: DB8PR04MB6699:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB8PR04MB669924D52E7DF1BE05EED6A98FE90@DB8PR04MB6699.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:230;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EJAP2CMieOwRugn/udKRAt4l5WrEFEsDd06aAsbZRGlkcB7zfb0L1n6gRzrfRA+cIQEjHmLFbsEjcbDFh6pa6tHSftZmVVcUT9kr7givdRXCIUjWICUnOSRroP+trX/NR70Ir5kX2eC2kU5+fyiTZ54KUjRNnX/skeHtIzywKBLYOMypIzXZKF/w7A7z8VltiKCauAJXytjsDkWHQ12qWcVTvn1GE6fUx2wosVtXtRLnzh3Rhb6Z8EiHn8aiw8IyMJiDls7byLrmNrw1D23QZY8338GvzpcRTSlVgjF6IuK81n9vN80SSkbytiG7dgTNxKM43CnLktuMRnI8zp98qDARhYvfdbiY8vxQytN06dCBm/9ucMbQtwd3+k8wQPht
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0401MB2438.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(39860400002)(366004)(136003)(396003)(44832011)(2906002)(316002)(186003)(478600001)(110136005)(26005)(7696005)(86362001)(6506007)(55016002)(83380400001)(4326008)(66946007)(66556008)(5660300002)(52536014)(66446008)(66476007)(54906003)(33656002)(7416002)(8936002)(8676002)(71200400001)(64756008)(9686003)(76116006)(921003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 48SJ89Ihnzh1g5OwTEvbrVPgcJy24m+5F5Q8HnwxxM9OTyPJgVwwMLmI8yWHUcfEzWiBFMwYQRaqYqwhdKHkEpejZl0WokR+Z+/6sAyNReniaNvIxdLIl6tFzgOAo15Q02XjjON+90iuWPlO+yDJs2jRuLtgJp3uMmflnv4n9cJi9q0Hxa1Du8DAtuvQqahs57ugVKvFOwE328SeG4Nkee2HNocG6CQNXnETupBQmCRH9WwXwag96M2e/qpxXcIBXJxYqwHcG1uoPG8AT4y6Q25wNzKWMugKMQNYG/6aonfawKmmkkP6VtCKtlsHl1kcfeJr+LT9XJxC0g4GwoAkJ4X6hPoqCS71JzvLHKf0uMvsKIpi0JxO3iGoCSpJuaXze/nyrvGl9RntSLuwvBIwoXv8t0ow/tW8fyQh3t+f1huMLlG3mFJ3SziZy/B4+eQ5Cv5Js3/9SuHVAXcuwWL6YowCJvrDhu8HguiJBY5tSiwNNgdTlQ9AsDnjilCjz9CAM51CWpfLkbmHAIt73kmRG/7HR89nLxUz9/1Hfj9zcuAL//dlMgdGJmSPETPoNCSJbsyTtG682SHMLqlDzlCeHF0yN+QC8TwB1DO49N6YbiAeLeHyAKIw5Rxzfcja4tAQqOX8H8w5VJ99t83zy+5Dkf8GPQfFdLP5VcWINwlLxmjWpJJWuFwg9QsT3ZUTGsKGD0gOQwMuH81SYNbLiTo/jbRctQgX2+ZthD2bM7k+9kUVqTbSWv0Ezf2WfgQaC4WMFDpU2JIJHEF/Zote6cwiWY2WjfhS8Bwc1lIklXm0ZI7lMBn+5Io9WVoXnZZ+VT36m8tTitIG68A9etoPORkyiYjK9HuSBzBpM5IJ78CwwlfkB8OYCtGWIGTsz7loMS6WmRaD1iQmfYEB+GaWypxS1A==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <CAHO=5PGAMvRAyrBF3_ubbgciqHV3hAbmt4B7Rb3hdibMbgs6ZQ@mail.gmail.com>
- <1604684486-16272-1-git-send-email-dphadke@linux.microsoft.com>
-In-Reply-To: <1604684486-16272-1-git-send-email-dphadke@linux.microsoft.com>
-From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Date:   Tue, 10 Nov 2020 09:53:41 +0530
-Message-ID: <CAHO=5PEJZ35O2Kwtinw5Kon+fXvciZHJDn9wCp6LKp8wtvVF=Q@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] i2c: iproc: handle master read request
-To:     Ray Jui <ray.jui@broadcom.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lori Hikichi <lori.hikichi@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000fb634e05b3b90b5a"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR0401MB2438.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a2ebe6b-2e65-4911-a0c0-08d8853ee6d6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2020 06:07:27.8607
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XsM2Q3lgm5ItCI6m90On0JleIsPiA9NujKaRpfWQstsNOF6aPN4YHSIrWTa2igA2Xu4jDGu/xrYfl//uF/8w5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6699
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---000000000000fb634e05b3b90b5a
-Content-Type: text/plain; charset="UTF-8"
+Hi Oleksij, Wolfram,
 
-Hi Ray,
+Any comments?
 
-Could you please check Dhananjay comments and update your thoughts.
+Regards,
+Biwen Li
 
-On Fri, Nov 6, 2020 at 11:11 PM Dhananjay Phadke
-<dphadke@linux.microsoft.com> wrote:
->
-> On Thu, 5 Nov 2020 15:13:04 +0530, Rayagonda Kokatanur wrote:
-> >> So the suggestion was to set HW threshold for rx fifo interrupt, not
-> >> really a SW property. By setting it in DT, makes it easier to
-> >> customize for target system, module param needs or ioctl makes it
-> >> dependent on userpsace to configure it.
-> >>
-> >> The need for tasklet seems to arise from the fact that many bytes are
-> >> left in the fifo. If there's a common problem here, such tasklet would be
-> >> needed in i2c subsys rather than controller specific tweak, akin to
-> >> how networking uses NAPI or adding block transactions to the interface?
-> >>
-> >> For master write-read event, it seems both IS_S_RD_EVENT_SHIFT and
-> >> IS_S_RX_EVENT_SHIFT are detected, which implies that core is late to
-> >> drain rx fifo i.e. write is complete and the read has started on the bus?
-> >
-> >Yes it's true that for master write-read events both
-> >IS_S_RD_EVENT_SHIFT and IS_S_RX_EVENT_SHIFT  are coming together.
-> >So before the slave starts transmitting data to the master, it should
-> >first read all data from rx-fifo i.e. complete master write and then
-> >process master read.
-> >
-> >To minimise interrupt overhead, we are batching 64bytes.
-> >To keep isr running for less time, we are using a tasklet.
-> >Again to keep the tasklet not running for more than 20u, we have set
-> >max of 10 bytes data read from rx-fifo per tasklet run.
-> >
-> >If we start processing everything in isr and using rx threshold
-> >interrupt, then isr will run for a longer time and this may hog the
-> >system.
-> >For example, to process 10 bytes it takes 20us, to process 30 bytes it
-> >takes 60us and so on.
-> >So is it okay to run isr for so long ?
-> >
-> >Keeping all this in mind we thought a tasklet would be a good option
-> >and kept max of 10 bytes read per tasklet.
-> >
-> >Please let me know if you still feel we should not use a tasklet and
-> >don't batch 64 bytes.
->
-> Deferring to tasklet is OK, could use a kernel thread (i.e. threaded_irq)
-> as i2c rate is quite low.
->
-> But do enable rx_threshold and read out early. This will avoid fifo full
-> or master write-read situation where lot of bytes must be drained from rx
-> fifo before serving tx fifo (avoid tx underrun).
->
-> Best would have been setting up DMA into mem (some controllers seem capable).
-> In absence of that, it's a trade off: if rx intr threshold is low,
-> there will be more interrupts, but less time spent in each. Default could
-> still be 64B or no-thresh (allow override in dtb).
->
-> Few other comments -
->
-> >+              /* schedule tasklet to read data later */
-> >+              tasklet_schedule(&iproc_i2c->slave_rx_tasklet);
-> >+
-> >+              /* clear only IS_S_RX_EVENT_SHIFT interrupt */
-> >+              iproc_i2c_wr_reg(iproc_i2c, IS_OFFSET,
-> >+                               BIT(IS_S_RX_EVENT_SHIFT));
-> >+      }
->
-> Why clearing one rx interrupt bit here after scheduling tasklet? Should all that
-> be done by tasklet? Also should just return after scheduling tasklet?
->
-> Thanks,
-> Dhananjay
+> From: Biwen Li <biwen.li@nxp.com>
+>=20
+> The patch supports slave mode for imx I2C driver
+>=20
+> Signed-off-by: Biwen Li <biwen.li@nxp.com>
+> ---
+> Change in v9:
+> 	- remove #ifdef after select I2C_SLAVE by default
+>=20
+> Change in v8:
+> 	- fix build issue
+>=20
+> Change in v7:
+> 	- support auto switch mode between master and slave
+> 	- enable interrupt when idle in slave mode
+> 	- remove #ifdef
+>=20
+> Change in v6:
+> 	- delete robust logs and comments
+> 	- not read status register again in master isr.
+>=20
+> Change in v5:
+> 	- fix a bug that cannot determine in what mode(master mode or
+> 	  slave mode)
+>=20
+> Change in v4:
+> 	- add MACRO CONFIG_I2C_SLAVE to fix compilation issue
+>=20
+> Change in v3:
+> 	- support layerscape and i.mx platform
+>=20
+> Change in v2:
+> 	- remove MACRO CONFIG_I2C_SLAVE
+>=20
+>  drivers/i2c/busses/i2c-imx.c | 213
+> ++++++++++++++++++++++++++++++++---
+>  1 file changed, 199 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c =
+index
+> c98529c76348..098e2c8a0fc7 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -17,6 +17,7 @@
+>   *	Copyright (C) 2008 Darius Augulis <darius.augulis at teltonika.lt>
+>   *
+>   *	Copyright 2013 Freescale Semiconductor, Inc.
+> + *	Copyright 2020 NXP
+>   *
+>   */
+>=20
+> @@ -72,6 +73,7 @@
+>  #define IMX_I2C_I2CR	0x02	/* i2c control */
+>  #define IMX_I2C_I2SR	0x03	/* i2c status */
+>  #define IMX_I2C_I2DR	0x04	/* i2c transfer data */
+> +#define IMX_I2C_IBIC	0x05    /* i2c transfer data */
+>=20
+>  #define IMX_I2C_REGSHIFT	2
+>  #define VF610_I2C_REGSHIFT	0
+> @@ -91,6 +93,7 @@
+>  #define I2CR_MSTA	0x20
+>  #define I2CR_IIEN	0x40
+>  #define I2CR_IEN	0x80
+> +#define IBIC_BIIE	0x80 // Bus idle interrupt enable
+>=20
+>  /* register bits different operating codes definition:
+>   * 1) I2SR: Interrupt flags clear operation differ between SoCs:
+> @@ -201,6 +204,7 @@ struct imx_i2c_struct {
+>  	struct pinctrl_state *pinctrl_pins_gpio;
+>=20
+>  	struct imx_i2c_dma	*dma;
+> +	struct i2c_client	*slave;
+>  };
+>=20
+>  static const struct imx_i2c_hwdata imx1_i2c_hwdata =3D { @@ -277,6 +281,=
+14
+> @@ static inline unsigned char imx_i2c_read_reg(struct imx_i2c_struct
+> *i2c_imx,
+>  	return readb(i2c_imx->base + (reg << i2c_imx->hwdata->regshift));  }
+>=20
+> +/* Set up i2c controller register and i2c status register to default
+> +value. */ static void i2c_imx_reset_regs(struct imx_i2c_struct
+> +*i2c_imx) {
+> +	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
+> +			i2c_imx, IMX_I2C_I2CR);
+> +	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx,
+> +IMX_I2C_I2SR); }
+> +
+>  /* Functions for DMA support */
+>  static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
+>  						dma_addr_t phy_addr)
+> @@ -614,20 +626,188 @@ static void i2c_imx_stop(struct imx_i2c_struct
+> *i2c_imx, bool atomic)
+>  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);  }
+>=20
+> +/*
+> + * Enable bus idle interrupts
+> + * Note: IBIC register will be cleared after disabled i2c module.
+> + */
+> +static void i2c_imx_enable_bus_idle(struct imx_i2c_struct *i2c_imx) {
+> +	unsigned int temp;
+> +
+> +	temp =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_IBIC);
+> +	temp |=3D IBIC_BIIE;
+> +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_IBIC); }
+> +
+> +static void i2c_imx_clr_if_bit(unsigned int status, struct
+> +imx_i2c_struct *i2c_imx) {
+> +	status &=3D ~I2SR_IIF;
+> +	status |=3D (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
+> +	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR); }
+> +
+> +/* Clear arbitration lost bit */
+> +static void i2c_imx_clr_al_bit(unsigned int status, struct
+> +imx_i2c_struct *i2c_imx) {
+> +	status &=3D ~I2SR_IAL;
+> +	status |=3D (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IAL);
+> +	imx_i2c_write_reg(status, i2c_imx, IMX_I2C_I2SR); }
+> +
+> +static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx,
+> +				     unsigned int status, unsigned int ctl) {
+> +	u8 value;
+> +
+> +	if (status & I2SR_IAL) { /* Arbitration lost */
+> +		i2c_imx_clr_al_bit(status | I2SR_IIF, i2c_imx);
+> +	} else if (status & I2SR_IAAS) { /* Addressed as a slave */
+> +		if (status & I2SR_SRW) { /* Master wants to read from us*/
+> +			dev_dbg(&i2c_imx->adapter.dev, "read requested");
+> +			i2c_slave_event(i2c_imx->slave, I2C_SLAVE_READ_REQUESTED,
+> &value);
+> +
+> +			/* Slave transmit */
+> +			ctl |=3D I2CR_MTX;
+> +			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +
+> +			/* Send data */
+> +			imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
+> +		} else { /* Master wants to write to us */
+> +			dev_dbg(&i2c_imx->adapter.dev, "write requested");
+> +			i2c_slave_event(i2c_imx->slave,
+> 	I2C_SLAVE_WRITE_REQUESTED, &value);
+> +
+> +			/* Slave receive */
+> +			ctl &=3D ~I2CR_MTX;
+> +			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +			/* Dummy read */
+> +			imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +		}
+> +	} else if (!(ctl & I2CR_MTX)) { /* Receive mode */
+> +		if (status & I2SR_IBB) { /* No STOP signal detected */
+> +			value =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +			i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_RECEIVED,
+> &value);
+> +		} else { /* STOP signal is detected */
+> +			dev_dbg(&i2c_imx->adapter.dev,
+> +				"STOP signal detected");
+> +			i2c_slave_event(i2c_imx->slave, I2C_SLAVE_STOP, &value);
+> +		}
+> +	} else if (!(status & I2SR_RXAK)) { /* Transmit mode received ACK */
+> +		ctl |=3D I2CR_MTX;
+> +		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +
+> +		i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_READ_PROCESSED,
+> &value);
+> +
+> +		imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
+> +	} else { /* Transmit mode received NAK */
+> +		ctl &=3D ~I2CR_MTX;
+> +		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +		imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int i2c_imx_slave_init(struct imx_i2c_struct *i2c_imx) {
+> +	int temp;
+> +
+> +	/* Resume */
+> +	temp =3D pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
+> +	if (temp < 0) {
+> +		dev_err(&i2c_imx->adapter.dev, "failed to resume i2c controller");
+> +		return temp;
+> +	}
+> +
+> +	/* Set slave addr. */
+> +	imx_i2c_write_reg((i2c_imx->slave->addr << 1), i2c_imx, IMX_I2C_IADR);
+> +
+> +	i2c_imx_reset_regs(i2c_imx);
+> +
+> +	/* Enable module */
+> +	temp =3D i2c_imx->hwdata->i2cr_ien_opcode;
+> +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+> +
+> +	/* Enable interrupt from i2c module */
+> +	temp |=3D I2CR_IIEN;
+> +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+> +
+> +	i2c_imx_enable_bus_idle(i2c_imx);
+> +
+> +	/* Wait controller to be stable */
+> +	usleep_range(50, 150);
+> +
+> +	return 0;
+> +}
+> +
+> +static int i2c_imx_reg_slave(struct i2c_client *client) {
+> +	struct imx_i2c_struct *i2c_imx =3D i2c_get_adapdata(client->adapter);
+> +	int ret;
+> +
+> +	if (!IS_ENABLED(CONFIG_I2C_SLAVE))
+> +		return -EINVAL;
+> +
+> +	if (i2c_imx->slave)
+> +		return -EBUSY;
+> +
+> +	i2c_imx->slave =3D client;
+> +
+> +	ret =3D i2c_imx_slave_init(i2c_imx);
+> +	if (ret < 0)
+> +		dev_err(&i2c_imx->adapter.dev, "failed to switch to slave mode");
+> +
+> +	return ret;
+> +}
+> +
+> +static int i2c_imx_unreg_slave(struct i2c_client *client) {
+> +	struct imx_i2c_struct *i2c_imx =3D i2c_get_adapdata(client->adapter);
+> +	int ret;
+> +
+> +	if (!IS_ENABLED(CONFIG_I2C_SLAVE))
+> +		return -EINVAL;
+> +
+> +	if (!i2c_imx->slave)
+> +		return -EINVAL;
+> +
+> +	/* Reset slave address. */
+> +	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+> +
+> +	i2c_imx_reset_regs(i2c_imx);
+> +
+> +	i2c_imx->slave =3D NULL;
+> +
+> +	/* Suspend */
+> +	ret =3D pm_runtime_put_sync(i2c_imx->adapter.dev.parent);
+> +	if (ret < 0)
+> +		dev_err(&i2c_imx->adapter.dev, "failed to suspend i2c controller");
+> +
+> +	return ret;
+> +}
+> +
+> +static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx,
+> +unsigned int status) {
+> +	/* Save status register */
+> +	i2c_imx->i2csr =3D status | I2SR_IIF;
+> +	wake_up(&i2c_imx->queue);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+>  static irqreturn_t i2c_imx_isr(int irq, void *dev_id)  {
+>  	struct imx_i2c_struct *i2c_imx =3D dev_id;
+> -	unsigned int temp;
+> +	unsigned int ctl, status;
+> +
+> +	status =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+> +	ctl =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+> +
+> +	if (status & I2SR_IIF) {
+> +		i2c_imx_clr_if_bit(status, i2c_imx);
+> +		if (IS_ENABLED(CONFIG_I2C_SLAVE) && i2c_imx->slave && !(ctl &
+> I2CR_MSTA))
+> +			return i2c_imx_slave_isr(i2c_imx, status, ctl);
+>=20
+> -	temp =3D imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+> -	if (temp & I2SR_IIF) {
+> -		/* save status register */
+> -		i2c_imx->i2csr =3D temp;
+> -		temp &=3D ~I2SR_IIF;
+> -		temp |=3D (i2c_imx->hwdata->i2sr_clr_opcode & I2SR_IIF);
+> -		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+> -		wake_up(&i2c_imx->queue);
+> -		return IRQ_HANDLED;
+> +		return i2c_imx_master_isr(i2c_imx, status);
+>  	}
+>=20
+>  	return IRQ_NONE;
+> @@ -999,6 +1179,12 @@ static int i2c_imx_xfer_common(struct i2c_adapter
+> *adapter,
+>  	dev_dbg(&i2c_imx->adapter.dev, "<%s> exit with: %s: %d\n", __func__,
+>  		(result < 0) ? "error" : "success msg",
+>  			(result < 0) ? result : num);
+> +	/* After data is transferred, switch to slave mode(as a receiver) */
+> +	if (IS_ENABLED(CONFIG_I2C_SLAVE) && i2c_imx->slave) {
+> +		if (i2c_imx_slave_init(i2c_imx) < 0)
+> +			dev_err(&i2c_imx->adapter.dev, "failed to switch to slave
+> mode");
+> +	}
+> +
+>  	return (result < 0) ? result : num;
+>  }
+>=20
+> @@ -1112,6 +1298,8 @@ static const struct i2c_algorithm i2c_imx_algo =3D =
+{
+>  	.master_xfer =3D i2c_imx_xfer,
+>  	.master_xfer_atomic =3D i2c_imx_xfer_atomic,
+>  	.functionality =3D i2c_imx_func,
+> +	.reg_slave	=3D i2c_imx_reg_slave,
+> +	.unreg_slave	=3D i2c_imx_unreg_slave,
+>  };
+>=20
+>  static int i2c_imx_probe(struct platform_device *pdev) @@ -1205,10
+> +1393,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>  	clk_notifier_register(i2c_imx->clk, &i2c_imx->clk_change_nb);
+>  	i2c_imx_set_clk(i2c_imx, clk_get_rate(i2c_imx->clk));
+>=20
+> -	/* Set up chip registers to defaults */
+> -	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
+> -			i2c_imx, IMX_I2C_I2CR);
+> -	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx,
+> IMX_I2C_I2SR);
+> +	i2c_imx_reset_regs(i2c_imx);
+>=20
+>  	/* Init optional bus recovery function */
+>  	ret =3D i2c_imx_init_recovery_info(i2c_imx, pdev);
+> --
+> 2.17.1
 
---000000000000fb634e05b3b90b5a
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-xVUYGnc0GLrYeHC2X4wJbUsgi+UFM/rVW0RKe5Sg4xmLXWc/rBhXDBVPeFVdN2dYsk5MyDRM/fXj
-cAA+xTX+SQGoND8CAwEAAaOCAdcwggHTMA4GA1UdDwEB/wQEAwIFoDCBngYIKwYBBQUHAQEEgZEw
-gY4wTQYIKwYBBQUHMAKGQWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVy
-c29uYWxzaWduMnNoYTJnM29jc3AuY3J0MD0GCCsGAQUFBzABhjFodHRwOi8vb2NzcDIuZ2xvYmFs
-c2lnbi5jb20vZ3NwZXJzb25hbHNpZ24yc2hhMmczME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0
-MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNV
-HRMEAjAAMEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NwZXJz
-b25hbHNpZ24yc2hhMmczLmNybDArBgNVHREEJDAigSByYXlhZ29uZGEua29rYXRhbnVyQGJyb2Fk
-Y29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJ
-nXsLYTAdBgNVHQ4EFgQU1rE7oQJ7FiSTADFOqokePoGwIq4wDQYJKoZIhvcNAQELBQADggEBAD8I
-VcITGu1E61LQLR1zygqFw8ByKPgiiprMuQB74Viskl7pAZigzYJB8H3Mpd2ljve+GRo8yvbBC76r
-Gi5WdS06XI5vuImDJ2g6QUt754rj7xEYftM5Gy9ZMslKNvSiPPh1/ACx5w7ecD1ZK0YLMKGATeBD
-XybduRFIEPZBAjgJ5LOYT2ax3ZesfAkan1XJ97yLA93edgTTO2cbUAADTIMFWm4lI/e14wdGmK0I
-FtqJWw6DATg5ePiAAn+S0JoIL1xqKsZi2ioNqm02QMFb7RbB3yEGb/7ZLAGcPW666o5GSLsUnPPq
-YOfL/3X6tVfGeoi3IgfI+z76/lXk8vOQzQQxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkw
-FwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2ln
-biAyIENBIC0gU0hBMjU2IC0gRzMCDDw+ri+StHzo6PJZ/DANBglghkgBZQMEAgEFAKCB1DAvBgkq
-hkiG9w0BCQQxIgQgzdzylOZ00558hEz3E5iTS4XcbaZocjIPgSDR7sFdzZowGAYJKoZIhvcNAQkD
-MQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMTEwMDQyMzU0WjBpBgkqhkiG9w0BCQ8x
-XDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsG
-CSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAEH0
-tAF/3I2UkyeK2AesPgympEjXy8noFEmApzb99+Q4c+A3dKlmjEtYieY49xCJBPFFeDTX2Rano22N
-7aorULxLf+U7hd/h4lshOv4A9qvtay5/gIjJrI8fY9k8+e8YMgqM+RBIGsIVJjm9MW4BkrEzXAz6
-NGr2ivYqj3cMQ0fqWvP+eBXD/mCiY2Y287MdjgvyzkIdGxozgyU+YbAXFlg273uWYHIh2X+aijuF
-f+77uTXHs3A0MwrSqCykzxV0CjoaUlNCWmXkYtUX9n8cpV8zOyzE8ZnssSq0/GyPgaICWSkGbTqV
-oJJSPLiwXhXmNZn3pRUYjzBsb9bVthcpn2A=
---000000000000fb634e05b3b90b5a--
