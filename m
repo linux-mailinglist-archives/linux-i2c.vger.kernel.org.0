@@ -2,66 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B3F2AF1D7
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Nov 2020 14:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1FF2AFEAD
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Nov 2020 06:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726136AbgKKNSc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 11 Nov 2020 08:18:32 -0500
-Received: from mail.bata.co.id ([117.54.3.130]:40554 "EHLO mail.bata.co.id"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725912AbgKKNSb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 11 Nov 2020 08:18:31 -0500
-X-Greylist: delayed 1574 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Nov 2020 08:18:29 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mail.bata.co.id (Postfix) with ESMTP id 7DCCB6C7435;
-        Wed, 11 Nov 2020 19:34:30 +0700 (WIB)
-Received: from mail.bata.co.id ([127.0.0.1])
-        by localhost (mail.bata.co.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id pRUA-vTlcBKb; Wed, 11 Nov 2020 19:34:30 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.bata.co.id (Postfix) with ESMTP id 7681C6C7442;
-        Wed, 11 Nov 2020 19:34:29 +0700 (WIB)
-X-Virus-Scanned: amavisd-new at bata.co.id
-Received: from mail.bata.co.id ([127.0.0.1])
-        by localhost (mail.bata.co.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id kB-x6Y7g7J3t; Wed, 11 Nov 2020 19:34:29 +0700 (WIB)
-Received: from mail.bata.co.id (mail.bata.co.id [117.54.3.130])
-        by mail.bata.co.id (Postfix) with ESMTP id 44FFA6C7426;
-        Wed, 11 Nov 2020 19:34:28 +0700 (WIB)
-Date:   Wed, 11 Nov 2020 19:34:28 +0700 (WIB)
-From:   =?utf-8?B?0KHQuNGB0YLQtdC80L3QuNC5INCw0LTQvNGW0L3RltGB0YLRgNCw0YLQvtGA?= 
-        <sb57405@bata.co.id>
-Reply-To: mailupgrade@mail2engineer.com
-Message-ID: <1937473043.51996.1605098068234.JavaMail.zimbra@bata.co.id>
-Subject: 
+        id S1728219AbgKLFjX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Nov 2020 00:39:23 -0500
+Received: from mail-proxy101.phy.heteml.jp ([157.7.189.101]:38188 "EHLO
+        mail-proxy101.phy.heteml.jp" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728344AbgKLDkS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Nov 2020 22:40:18 -0500
+X-Greylist: delayed 888 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Nov 2020 22:40:14 EST
+Received: from mail-proxy101.phy.heteml.jp (localhost [127.0.0.1])
+        by mail-proxy101.phy.heteml.jp (Postfix) with ESMTP id 5D4F41661124;
+        Thu, 12 Nov 2020 12:25:22 +0900 (JST)
+Received: from 127.0.0.1 (127.0.0.1)
+ by mail-proxy101.phy.heteml.jp (HETEML-Fsecure);
+ Thu, 12 Nov 2020 12:25:22 +0900 (JST)
+X-Virus-Status: clean(HETEML-Fsecure)
+Received: from User (unknown [52.231.203.57])
+        (Authenticated sender: form@healingart-n.jp)
+        by mail-proxy101.phy.heteml.jp (Postfix) with ESMTPA;
+        Thu, 12 Nov 2020 12:25:22 +0900 (JST)
+Reply-To: <reemhashimymail@gmail.com>
+From:   "Reem" <form@healingart-n.jp>
+Subject: Hello Friend  12/11/2020
+Date:   Thu, 12 Nov 2020 03:25:24 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-Originating-IP: [110.225.88.196]
-X-Mailer: Zimbra 8.8.15_GA_3975 (zclient/8.8.15_GA_3975)
-Thread-Index: ocKgZdWkWCk5ri83QYGbmxXwd/cP5Q==
-Thread-Topic: 
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20201112032522.5D4F41661124@mail-proxy101.phy.heteml.jp>
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-УВАГА;
+My name is Reem Hashimy, the Emirates Minister of State and Managing Director of the United Arab Emirates (Dubai) World Expo 2020 Committee which has been postponed to October 2021 to March 2022 because of the Covid-19 pandemic.
+ 
+I am writing to you to manage the funds I received as financial gratification from various foreign companies I assisted to receive a participation approval to the coming event. The amount is $44,762,906.00 United States dollars. But I can not personally manage the fund in my country because of the sensitive nature of my office and the certain restriction on married Muslim women.
 
-Ваша поштова скринька перевищила ліміт пам’яті, який становить 5 ГБ, визначений адміністратором, який наразі працює на 10,9 ГБ, і можливо, ви не зможете надсилати або отримувати нову пошту, поки ви знову не підтвердите свою поштову скриньку. Щоб підтвердити свою поштову скриньку, надішліть таку інформацію нижче:
+For this reason, an agreement was reached with a consulting firm to direct the various financial gifts into an open beneficiary account in my name with a bank where it will be possible for me to instruct the transfer of ownership right to a third party for investment purpose; which is the reason I am contacting you to receive the fund and manage it as my investment partner. Note that the fund is NOT connected to any criminal or terrorist activity.
+ 
+On your indication of interest with your information to include your name, your phone number and contact mailing address; I will instruct the consulting firm to process the fund from the bank to your country for investment purposes.
 
-Ім'я:
-Ім'я користувача:
-пароль:
-Підтвердьте пароль:
-Електронна пошта:
-телефон:
-
-Якщо ви не можете повторно перевірити свою поштову скриньку, поштову скриньку буде вимкнено!
-
-Вибачте за порушення
-Код підтвердження: 666690opp4r56: 006524
-Електронна пошта Технічна підтримка © 2020
-
-Дякую
-Системний адміністратор
+Regards.
+Reem Hashimy.
