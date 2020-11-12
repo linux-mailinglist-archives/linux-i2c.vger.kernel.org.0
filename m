@@ -2,52 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1FF2AFEAD
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Nov 2020 06:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952E62B09D1
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Nov 2020 17:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728219AbgKLFjX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Nov 2020 00:39:23 -0500
-Received: from mail-proxy101.phy.heteml.jp ([157.7.189.101]:38188 "EHLO
-        mail-proxy101.phy.heteml.jp" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728344AbgKLDkS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Nov 2020 22:40:18 -0500
-X-Greylist: delayed 888 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Nov 2020 22:40:14 EST
-Received: from mail-proxy101.phy.heteml.jp (localhost [127.0.0.1])
-        by mail-proxy101.phy.heteml.jp (Postfix) with ESMTP id 5D4F41661124;
-        Thu, 12 Nov 2020 12:25:22 +0900 (JST)
-Received: from 127.0.0.1 (127.0.0.1)
- by mail-proxy101.phy.heteml.jp (HETEML-Fsecure);
- Thu, 12 Nov 2020 12:25:22 +0900 (JST)
-X-Virus-Status: clean(HETEML-Fsecure)
-Received: from User (unknown [52.231.203.57])
-        (Authenticated sender: form@healingart-n.jp)
-        by mail-proxy101.phy.heteml.jp (Postfix) with ESMTPA;
-        Thu, 12 Nov 2020 12:25:22 +0900 (JST)
-Reply-To: <reemhashimymail@gmail.com>
-From:   "Reem" <form@healingart-n.jp>
-Subject: Hello Friend  12/11/2020
-Date:   Thu, 12 Nov 2020 03:25:24 -0000
+        id S1729030AbgKLQWN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Nov 2020 11:22:13 -0500
+Received: from mail-03.mail-europe.com ([91.134.188.129]:52608 "EHLO
+        mail-03.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729051AbgKLQWL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Nov 2020 11:22:11 -0500
+Date:   Thu, 12 Nov 2020 16:22:04 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1605198126;
+        bh=G5vIZonOu1YP1IFD5UKC7p+SMCBtaBVGRFKb/phoFDk=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=A3CC7k+Nr4tS2kVm1B84u45rLjxXTIKOizlNks9oz0AdOIqj74aRSHUTgL642AWnp
+         afuGJUS6keIxbJDYSjfo5x7tdyP3EcbpQEskT1Yz01JhFJvIt/8e821EmWCqJLYNRz
+         zfahxVORYJLH63n/EKODUVhzpd0nlHPgh9IK7QAc=
+To:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Caleb Connolly <caleb@connolly.tech>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Caleb Connolly <caleb@connolly.tech>
+Subject: [PATCH 5/5] i2c: geni: sdm845: dont perform DMA for OnePlus 6 devices
+Message-ID: <20201112161920.2671430-6-caleb@connolly.tech>
+In-Reply-To: <20201112161920.2671430-1-caleb@connolly.tech>
+References: <20201112161920.2671430-1-caleb@connolly.tech>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20201112032522.5D4F41661124@mail-proxy101.phy.heteml.jp>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-My name is Reem Hashimy, the Emirates Minister of State and Managing Director of the United Arab Emirates (Dubai) World Expo 2020 Committee which has been postponed to October 2021 to March 2022 because of the Covid-19 pandemic.
- 
-I am writing to you to manage the funds I received as financial gratification from various foreign companies I assisted to receive a participation approval to the coming event. The amount is $44,762,906.00 United States dollars. But I can not personally manage the fund in my country because of the sensitive nature of my office and the certain restriction on married Muslim women.
+The OnePlus 6/T has the same issue as the Yoga c630 causing a crash when DM=
+A
+is used for i2c, so disable it.
 
-For this reason, an agreement was reached with a consulting firm to direct the various financial gifts into an open beneficiary account in my name with a bank where it will be possible for me to instruct the transfer of ownership right to a third party for investment purpose; which is the reason I am contacting you to receive the fund and manage it as my investment partner. Note that the fund is NOT connected to any criminal or terrorist activity.
- 
-On your indication of interest with your information to include your name, your phone number and contact mailing address; I will instruct the consulting firm to process the fund from the bank to your country for investment purposes.
+https://patchwork.kernel.org/patch/11133827/
 
-Regards.
-Reem Hashimy.
+Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+---
+ drivers/i2c/busses/i2c-qcom-geni.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qc=
+om-geni.c
+index 8b4c35f47a70..9acdcfe73be2 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -357,7 +357,8 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2=
+c, struct i2c_msg *msg,
+ =09struct geni_se *se =3D &gi2c->se;
+ =09size_t len =3D msg->len;
+=20
+-=09if (!of_machine_is_compatible("lenovo,yoga-c630"))
++=09if (!of_machine_is_compatible("lenovo,yoga-c630") &&
++=09    !of_machine_is_compatible("oneplus,oneplus6"))
+ =09=09dma_buf =3D i2c_get_dma_safe_msg_buf(msg, 32);
+=20
+ =09if (dma_buf)
+@@ -399,7 +400,8 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2=
+c, struct i2c_msg *msg,
+ =09struct geni_se *se =3D &gi2c->se;
+ =09size_t len =3D msg->len;
+=20
+-=09if (!of_machine_is_compatible("lenovo,yoga-c630"))
++=09if (!of_machine_is_compatible("lenovo,yoga-c630") &&
++=09    !of_machine_is_compatible("oneplus,oneplus6"))
+ =09=09dma_buf =3D i2c_get_dma_safe_msg_buf(msg, 32);
+=20
+ =09if (dma_buf)
+--=20
+2.29.2
+
+
