@@ -2,183 +2,438 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED222B1736
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Nov 2020 09:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F36ED2B1CD8
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Nov 2020 15:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgKMI2p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Nov 2020 03:28:45 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:10350 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725866AbgKMI2p (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Nov 2020 03:28:45 -0500
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AD8R67D030468;
-        Fri, 13 Nov 2020 09:28:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : references
- : from : message-id : date : mime-version : in-reply-to : content-type :
- content-transfer-encoding; s=STMicroelectronics;
- bh=kNfsi7ZtmZxFM4ZtJQvG2R+5IFYOpR6oyz11MxeQh0U=;
- b=Xx156703FE+Jx/MC4tXWCC6Do/CaKcNA2hA4ZOOOK/lPFTL34zHv/RRsUHgiD2FUN05c
- HAwrn0Gk86r7YqX6cWRStD+a1i6isnGMla4D6J7L4KiF+OIDso3TdgdmI9DEyBC+v7pz
- H4B/qIFQ1WO435KQcFR7N32G6vZlJW3XFwTZLyBsWjia+3qosHH2Zp/OnE5GoqiO7NtR
- d9JoxOSbeZiUx3rBHxGVlD1yGlMRH/JBNVIx40v/ikv9fRj9NgMYqSX6HpoCrMAoAs8R
- 6W3ErPosprCZrDdmqKP+ldYV6kbqXAT54eMYqKEb7JxVDhjwV1P5CD2GcN4+G2aKC06v 1g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 34nj819krb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Nov 2020 09:28:17 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3047F10002A;
-        Fri, 13 Nov 2020 09:28:09 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag1node2.st.com [10.75.127.2])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 19C0222A4C0;
-        Fri, 13 Nov 2020 09:28:09 +0100 (CET)
-Received: from lmecxl1060.lme.st.com (10.75.127.46) by SFHDAG1NODE2.st.com
- (10.75.127.2) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 13 Nov
- 2020 09:28:05 +0100
-Subject: Re: [PATCH] [v2] i2c: stm32f7: Fix runtime PM imbalance on error
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        "kjlu@umn.edu" <kjlu@umn.edu>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20200527013853.30252-1-dinghao.liu@zju.edu.cn>
- <20200601055634.GB17269@gnbcxd0016.gnb.st.com>
-From:   Pierre Yves MORDRET <pierre-yves.mordret@st.com>
-Message-ID: <22cad188-c13c-207d-ad8e-fac9d7277346@st.com>
-Date:   Fri, 13 Nov 2020 09:27:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726594AbgKMN7y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Nov 2020 08:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726418AbgKMN7y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Nov 2020 08:59:54 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09411C0613D1
+        for <linux-i2c@vger.kernel.org>; Fri, 13 Nov 2020 05:59:54 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kdZcD-0001kj-Qb; Fri, 13 Nov 2020 14:59:49 +0100
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kdZcB-0005PK-2Y; Fri, 13 Nov 2020 14:59:47 +0100
+Date:   Fri, 13 Nov 2020 14:59:47 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Biwen Li <biwen.li@oss.nxp.com>
+Cc:     leoyang.li@nxp.com, linux@rempel-privat.de, kernel@pengutronix.de,
+        wsa@the-dreams.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, aisheng.dong@nxp.com, xiaoning.wang@nxp.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jiafei.pan@nxp.com, xiaobo.xie@nxp.com,
+        linux-arm-kernel@lists.infradead.org, Biwen Li <biwen.li@nxp.com>
+Subject: Re: [v10] i2c: imx: support slave mode for imx I2C driver
+Message-ID: <20201113135947.h7cek55eevilay2t@pengutronix.de>
+References: <20201111113255.28710-1-biwen.li@oss.nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20200601055634.GB17269@gnbcxd0016.gnb.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG1NODE2.st.com
- (10.75.127.2)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-13_05:2020-11-12,2020-11-13 signatures=0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201111113255.28710-1-biwen.li@oss.nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 14:58:11 up 364 days,  5:16, 30 users,  load average: 0.26, 0.26,
+ 0.11
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello
-
-Looks good to me
-
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
-
-Thx
-Regards
-
-
-On 6/1/20 7:56 AM, Alain Volmat wrote:
-> Hi,
+On Wed, Nov 11, 2020 at 07:32:55PM +0800, Biwen Li wrote:
+> From: Biwen Li <biwen.li@nxp.com>
 > 
-> Reviewed-by: Alain Volmat <alain.volmat@st.com>
+> The patch supports slave mode for imx I2C driver
 > 
-> Thanks,
-> Alain
+> Signed-off-by: Biwen Li <biwen.li@nxp.com>
+
+Thank you for your work!
+
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+
+@Wolfram, Christian Eggers I2SR_IAL patches should go before this one.
+
+> ---
+> Change in v10:
+> 	- totally remove CONFIG_I2C_SLAVE
+> 	- replace api with i2c_imx_clart_irq()
+> 	- remove robust code
+> 	- place pm_runtime_get in i2c_imx_slave_init()
+> 	  to i2c_imx_reg_slave()
+> 	- apply the patch on top of this patch set:
+> 	  [PATCH v6 0/3] i2c: imx: Fix handling of arbitration loss
+> 	  https://lkml.org/lkml/2020/10/9/407
 > 
-> On Wed, May 27, 2020 at 01:38:53AM +0000, Dinghao Liu wrote:
->> pm_runtime_get_sync() increments the runtime PM usage counter even
->> the call returns an error code. Thus a pairing decrement is needed
->> on the error handling path to keep the counter balanced.
->>
->> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
->> ---
->>
->> Changelog:
->>
->> v2: - Use pm_runtime_put_noidle() instead of
->>       pm_runtime_put_autosuspend(). Fix 5 more
->>       similar cases within this dirver.
->> ---
->>  drivers/i2c/busses/i2c-stm32f7.c | 24 ++++++++++++++++++------
->>  1 file changed, 18 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
->> index 330ffed011e0..822fd1f5b5ae 100644
->> --- a/drivers/i2c/busses/i2c-stm32f7.c
->> +++ b/drivers/i2c/busses/i2c-stm32f7.c
->> @@ -1620,8 +1620,10 @@ static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
->>  	f7_msg->smbus = false;
->>  
->>  	ret = pm_runtime_get_sync(i2c_dev->dev);
->> -	if (ret < 0)
->> +	if (ret < 0) {
->> +		pm_runtime_put_noidle(i2c_dev->dev);
->>  		return ret;
->> +	}
->>  
->>  	ret = stm32f7_i2c_wait_free_bus(i2c_dev);
->>  	if (ret)
->> @@ -1666,8 +1668,10 @@ static int stm32f7_i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
->>  	f7_msg->smbus = true;
->>  
->>  	ret = pm_runtime_get_sync(dev);
->> -	if (ret < 0)
->> +	if (ret < 0) {
->> +		pm_runtime_put_noidle(dev);
->>  		return ret;
->> +	}
->>  
->>  	ret = stm32f7_i2c_wait_free_bus(i2c_dev);
->>  	if (ret)
->> @@ -1767,8 +1771,10 @@ static int stm32f7_i2c_reg_slave(struct i2c_client *slave)
->>  		return ret;
->>  
->>  	ret = pm_runtime_get_sync(dev);
->> -	if (ret < 0)
->> +	if (ret < 0) {
->> +		pm_runtime_put_noidle(dev);
->>  		return ret;
->> +	}
->>  
->>  	if (!stm32f7_i2c_is_slave_registered(i2c_dev))
->>  		stm32f7_i2c_enable_wakeup(i2c_dev, true);
->> @@ -1837,8 +1843,10 @@ static int stm32f7_i2c_unreg_slave(struct i2c_client *slave)
->>  	WARN_ON(!i2c_dev->slave[id]);
->>  
->>  	ret = pm_runtime_get_sync(i2c_dev->dev);
->> -	if (ret < 0)
->> +	if (ret < 0) {
->> +		pm_runtime_put_noidle(i2c_dev->dev);
->>  		return ret;
->> +	}
->>  
->>  	if (id == 0) {
->>  		mask = STM32F7_I2C_OAR1_OA1EN;
->> @@ -2182,8 +2190,10 @@ static int stm32f7_i2c_regs_backup(struct stm32f7_i2c_dev *i2c_dev)
->>  	struct stm32f7_i2c_regs *backup_regs = &i2c_dev->backup_regs;
->>  
->>  	ret = pm_runtime_get_sync(i2c_dev->dev);
->> -	if (ret < 0)
->> +	if (ret < 0) {
->> +		pm_runtime_put_noidle(i2c_dev->dev);
->>  		return ret;
->> +	}
->>  
->>  	backup_regs->cr1 = readl_relaxed(i2c_dev->base + STM32F7_I2C_CR1);
->>  	backup_regs->cr2 = readl_relaxed(i2c_dev->base + STM32F7_I2C_CR2);
->> @@ -2204,8 +2214,10 @@ static int stm32f7_i2c_regs_restore(struct stm32f7_i2c_dev *i2c_dev)
->>  	struct stm32f7_i2c_regs *backup_regs = &i2c_dev->backup_regs;
->>  
->>  	ret = pm_runtime_get_sync(i2c_dev->dev);
->> -	if (ret < 0)
->> +	if (ret < 0) {
->> +		pm_runtime_put_noidle(i2c_dev->dev);
->>  		return ret;
->> +	}
->>  
->>  	cr1 = readl_relaxed(i2c_dev->base + STM32F7_I2C_CR1);
->>  	if (cr1 & STM32F7_I2C_CR1_PE)
->> -- 
->> 2.17.1
->>
+> Change in v9:
+> 	- remove #ifdef after select I2C_SLAVE by default
+> 
+> Change in v8:
+> 	- fix build issue
+> 
+> Change in v7:
+> 	- support auto switch mode between master and slave
+> 	- enable interrupt when idle in slave mode
+> 	- remove #ifdef
+> 
+> Change in v6:
+> 	- delete robust logs and comments
+> 	- not read status register again in master isr.
+> 
+> Change in v5:
+> 	- fix a bug that cannot determine in what mode(master mode or
+> 	  slave mode)
+> 
+> Change in v4:
+> 	- add MACRO CONFIG_I2C_SLAVE to fix compilation issue
+> 
+> Change in v3:
+> 	- support layerscape and i.mx platform
+> 
+> Change in v2:
+> 	- remove MACRO CONFIG_I2C_SLAVE
+> 
+>  drivers/i2c/busses/Kconfig   |   1 +
+>  drivers/i2c/busses/i2c-imx.c | 219 +++++++++++++++++++++++++++++++----
+>  2 files changed, 196 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index a97a9d058198..e2ad62481f25 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -675,6 +675,7 @@ config I2C_IMG
+>  config I2C_IMX
+>  	tristate "IMX I2C interface"
+>  	depends on ARCH_MXC || ARCH_LAYERSCAPE || COLDFIRE
+> +	select I2C_SLAVE
+>  	help
+>  	  Say Y here if you want to use the IIC bus controller on
+>  	  the Freescale i.MX/MXC, Layerscape or ColdFire processors.
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index e6f8d6e45a15..a8e8af57e33f 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -17,6 +17,7 @@
+>   *	Copyright (C) 2008 Darius Augulis <darius.augulis at teltonika.lt>
+>   *
+>   *	Copyright 2013 Freescale Semiconductor, Inc.
+> + *	Copyright 2020 NXP
+>   *
+>   */
+>  
+> @@ -73,6 +74,11 @@
+>  #define IMX_I2C_I2SR	0x03	/* i2c status */
+>  #define IMX_I2C_I2DR	0x04	/* i2c transfer data */
+>  
+> +/*
+> + * All of the layerscape series SoCs support IBIC register.
+> + */
+> +#define IMX_I2C_IBIC	0x05    /* i2c bus interrupt config */
+> +
+>  #define IMX_I2C_REGSHIFT	2
+>  #define VF610_I2C_REGSHIFT	0
+>  
+> @@ -91,6 +97,7 @@
+>  #define I2CR_MSTA	0x20
+>  #define I2CR_IIEN	0x40
+>  #define I2CR_IEN	0x80
+> +#define IBIC_BIIE	0x80 /* Bus idle interrupt enable */
+>  
+>  /* register bits different operating codes definition:
+>   * 1) I2SR: Interrupt flags clear operation differ between SoCs:
+> @@ -201,6 +208,7 @@ struct imx_i2c_struct {
+>  	struct pinctrl_state *pinctrl_pins_gpio;
+>  
+>  	struct imx_i2c_dma	*dma;
+> +	struct i2c_client	*slave;
+>  };
+>  
+>  static const struct imx_i2c_hwdata imx1_i2c_hwdata = {
+> @@ -265,6 +273,11 @@ static inline int is_imx1_i2c(struct imx_i2c_struct *i2c_imx)
+>  	return i2c_imx->hwdata->devtype == IMX1_I2C;
+>  }
+>  
+> +static inline int is_vf610_i2c(struct imx_i2c_struct *i2c_imx)
+> +{
+> +	return i2c_imx->hwdata->devtype == VF610_I2C;
+> +}
+> +
+>  static inline void imx_i2c_write_reg(unsigned int val,
+>  		struct imx_i2c_struct *i2c_imx, unsigned int reg)
+>  {
+> @@ -277,6 +290,27 @@ static inline unsigned char imx_i2c_read_reg(struct imx_i2c_struct *i2c_imx,
+>  	return readb(i2c_imx->base + (reg << i2c_imx->hwdata->regshift));
+>  }
+>  
+> +static void i2c_imx_clear_irq(struct imx_i2c_struct *i2c_imx, unsigned int bits)
+> +{
+> +	unsigned int temp;
+> +
+> +	/*
+> +	 * i2sr_clr_opcode is the value to clear all interrupts. Here we want to
+> +	 * clear only <bits>, so we write ~i2sr_clr_opcode with just <bits>
+> +	 * toggled. This is required because i.MX needs W0C and Vybrid uses W1C.
+> +	 */
+> +	temp = ~i2c_imx->hwdata->i2sr_clr_opcode ^ bits;
+> +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+> +}
+> +
+> +/* Set up i2c controller register and i2c status register to default value. */
+> +static void i2c_imx_reset_regs(struct imx_i2c_struct *i2c_imx)
+> +{
+> +	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
+> +			  i2c_imx, IMX_I2C_I2CR);
+> +	i2c_imx_clear_irq(i2c_imx, I2SR_IIF | I2SR_IAL);
+> +}
+> +
+>  /* Functions for DMA support */
+>  static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
+>  						dma_addr_t phy_addr)
+> @@ -412,19 +446,6 @@ static void i2c_imx_dma_free(struct imx_i2c_struct *i2c_imx)
+>  	dma->chan_using = NULL;
+>  }
+>  
+> -static void i2c_imx_clear_irq(struct imx_i2c_struct *i2c_imx, unsigned int bits)
+> -{
+> -	unsigned int temp;
+> -
+> -	/*
+> -	 * i2sr_clr_opcode is the value to clear all interrupts. Here we want to
+> -	 * clear only <bits>, so we write ~i2sr_clr_opcode with just <bits>
+> -	 * toggled. This is required because i.MX needs W0C and Vybrid uses W1C.
+> -	 */
+> -	temp = ~i2c_imx->hwdata->i2sr_clr_opcode ^ bits;
+> -	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2SR);
+> -}
+> -
+>  static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool atomic)
+>  {
+>  	unsigned long orig_jiffies = jiffies;
+> @@ -638,18 +659,165 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx, bool atomic)
+>  	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+>  }
+>  
+> +/*
+> + * Enable bus idle interrupts
+> + * Note: IBIC register will be cleared after disabled i2c module.
+> + * All of layerscape series SoCs support IBIC register.
+> + */
+> +static void i2c_imx_enable_bus_idle(struct imx_i2c_struct *i2c_imx)
+> +{
+> +	if (is_vf610_i2c(i2c_imx)) {
+> +		unsigned int temp;
+> +
+> +		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_IBIC);
+> +		temp |= IBIC_BIIE;
+> +		imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_IBIC);
+> +	}
+> +}
+> +
+> +static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx,
+> +				     unsigned int status, unsigned int ctl)
+> +{
+> +	u8 value;
+> +
+> +	if (status & I2SR_IAL) { /* Arbitration lost */
+> +		i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
+> +		if (!(status & I2SR_IAAS))
+> +			return IRQ_HANDLED;
+> +	}
+> +
+> +	if (status & I2SR_IAAS) { /* Addressed as a slave */
+> +		if (status & I2SR_SRW) { /* Master wants to read from us*/
+> +			dev_dbg(&i2c_imx->adapter.dev, "read requested");
+> +			i2c_slave_event(i2c_imx->slave, I2C_SLAVE_READ_REQUESTED, &value);
+> +
+> +			/* Slave transmit */
+> +			ctl |= I2CR_MTX;
+> +			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +
+> +			/* Send data */
+> +			imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
+> +		} else { /* Master wants to write to us */
+> +			dev_dbg(&i2c_imx->adapter.dev, "write requested");
+> +			i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_REQUESTED, &value);
+> +
+> +			/* Slave receive */
+> +			ctl &= ~I2CR_MTX;
+> +			imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +			/* Dummy read */
+> +			imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +		}
+> +	} else if (!(ctl & I2CR_MTX)) { /* Receive mode */
+> +		if (status & I2SR_IBB) { /* No STOP signal detected */
+> +			value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +			i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_WRITE_RECEIVED, &value);
+> +		} else { /* STOP signal is detected */
+> +			dev_dbg(&i2c_imx->adapter.dev,
+> +				"STOP signal detected");
+> +			i2c_slave_event(i2c_imx->slave, I2C_SLAVE_STOP, &value);
+> +		}
+> +	} else if (!(status & I2SR_RXAK)) { /* Transmit mode received ACK */
+> +		ctl |= I2CR_MTX;
+> +		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +
+> +		i2c_slave_event(i2c_imx->slave,	I2C_SLAVE_READ_PROCESSED, &value);
+> +
+> +		imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
+> +	} else { /* Transmit mode received NAK */
+> +		ctl &= ~I2CR_MTX;
+> +		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> +		imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static void i2c_imx_slave_init(struct imx_i2c_struct *i2c_imx)
+> +{
+> +	int temp;
+> +
+> +	/* Set slave addr. */
+> +	imx_i2c_write_reg((i2c_imx->slave->addr << 1), i2c_imx, IMX_I2C_IADR);
+> +
+> +	i2c_imx_reset_regs(i2c_imx);
+> +
+> +	/* Enable module */
+> +	temp = i2c_imx->hwdata->i2cr_ien_opcode;
+> +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+> +
+> +	/* Enable interrupt from i2c module */
+> +	temp |= I2CR_IIEN;
+> +	imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
+> +
+> +	i2c_imx_enable_bus_idle(i2c_imx);
+> +}
+> +
+> +static int i2c_imx_reg_slave(struct i2c_client *client)
+> +{
+> +	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
+> +	int ret;
+> +
+> +	if (i2c_imx->slave)
+> +		return -EBUSY;
+> +
+> +	i2c_imx->slave = client;
+> +
+> +	/* Resume */
+> +	ret = pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
+> +	if (ret < 0) {
+> +		dev_err(&i2c_imx->adapter.dev, "failed to resume i2c controller");
+> +		return ret;
+> +	}
+> +
+> +	i2c_imx_slave_init(i2c_imx);
+> +
+> +	return 0;
+> +}
+> +
+> +static int i2c_imx_unreg_slave(struct i2c_client *client)
+> +{
+> +	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(client->adapter);
+> +	int ret;
+> +
+> +	if (!i2c_imx->slave)
+> +		return -EINVAL;
+> +
+> +	/* Reset slave address. */
+> +	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+> +
+> +	i2c_imx_reset_regs(i2c_imx);
+> +
+> +	i2c_imx->slave = NULL;
+> +
+> +	/* Suspend */
+> +	ret = pm_runtime_put_sync(i2c_imx->adapter.dev.parent);
+> +	if (ret < 0)
+> +		dev_err(&i2c_imx->adapter.dev, "failed to suspend i2c controller");
+> +
+> +	return ret;
+> +}
+> +
+> +static irqreturn_t i2c_imx_master_isr(struct imx_i2c_struct *i2c_imx, unsigned int status)
+> +{
+> +	/* save status register */
+> +	i2c_imx->i2csr = status;
+> +	wake_up(&i2c_imx->queue);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+>  static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
+>  {
+>  	struct imx_i2c_struct *i2c_imx = dev_id;
+> -	unsigned int temp;
+> +	unsigned int ctl, status;
+>  
+> -	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+> -	if (temp & I2SR_IIF) {
+> -		/* save status register */
+> -		i2c_imx->i2csr = temp;
+> +	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+> +	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+> +	if (status & I2SR_IIF) {
+>  		i2c_imx_clear_irq(i2c_imx, I2SR_IIF);
+> -		wake_up(&i2c_imx->queue);
+> -		return IRQ_HANDLED;
+> +		if (i2c_imx->slave && !(ctl & I2CR_MSTA))
+> +			return i2c_imx_slave_isr(i2c_imx, status, ctl);
+> +		return i2c_imx_master_isr(i2c_imx, status);
+>  	}
+>  
+>  	return IRQ_NONE;
+> @@ -1027,6 +1195,10 @@ static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
+>  	dev_dbg(&i2c_imx->adapter.dev, "<%s> exit with: %s: %d\n", __func__,
+>  		(result < 0) ? "error" : "success msg",
+>  			(result < 0) ? result : num);
+> +	/* After data is transferred, switch to slave mode(as a receiver) */
+> +	if (i2c_imx->slave)
+> +		i2c_imx_slave_init(i2c_imx);
+> +
+>  	return (result < 0) ? result : num;
+>  }
+>  
+> @@ -1140,6 +1312,8 @@ static const struct i2c_algorithm i2c_imx_algo = {
+>  	.master_xfer = i2c_imx_xfer,
+>  	.master_xfer_atomic = i2c_imx_xfer_atomic,
+>  	.functionality = i2c_imx_func,
+> +	.reg_slave	= i2c_imx_reg_slave,
+> +	.unreg_slave	= i2c_imx_unreg_slave,
+>  };
+>  
+>  static int i2c_imx_probe(struct platform_device *pdev)
+> @@ -1233,10 +1407,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>  	clk_notifier_register(i2c_imx->clk, &i2c_imx->clk_change_nb);
+>  	i2c_imx_set_clk(i2c_imx, clk_get_rate(i2c_imx->clk));
+>  
+> -	/* Set up chip registers to defaults */
+> -	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode ^ I2CR_IEN,
+> -			i2c_imx, IMX_I2C_I2CR);
+> -	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx, IMX_I2C_I2SR);
+> +	i2c_imx_reset_regs(i2c_imx);
+>  
+>  	/* Init optional bus recovery function */
+>  	ret = i2c_imx_init_recovery_info(i2c_imx, pdev);
+> -- 
+> 2.17.1
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
