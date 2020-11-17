@@ -2,115 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 307552B528E
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Nov 2020 21:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB3F2B59F8
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Nov 2020 08:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732591AbgKPU3e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Nov 2020 15:29:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
+        id S1726412AbgKQHBr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Nov 2020 02:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730751AbgKPU3d (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Nov 2020 15:29:33 -0500
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C542C0613CF
-        for <linux-i2c@vger.kernel.org>; Mon, 16 Nov 2020 12:29:32 -0800 (PST)
-Received: by mail-qk1-x741.google.com with SMTP id q22so18249476qkq.6
-        for <linux-i2c@vger.kernel.org>; Mon, 16 Nov 2020 12:29:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=IaB0DFhzc/5KDrNFZumai2eiYNxkTar/KQWukG/PG5U=;
-        b=GwzTAM3vG9/vCPviYVlm9b8IyvGfUY7N0b1Ky96QnoqEKJ2i2A6z/iup98gwvqq3+t
-         5FCVngny8P2IbEFjdIDtH+4nHOZw46LQ8p8KHev8KPpYF20WNobOcEcnq7If0Hp0i/ZF
-         5BlQ4l2h7yzkG6/2Z61VtWLNBO+Kz5l4paEIhTpnkHBf6GCmfGoN4nDoSvbbWSqKjdhi
-         mutdun6N6rxj2h3JK/UNcGu6Pg/Wywlvb0Z4lJHzJPqds09+f8xJTbDBWC3BvUBJm4ok
-         xwLVsvPisICq0Hq9uqMXcDZiYIv1DK/DWwqU3Hxt//2cB0Zhxyz6V91jPlbwRq8OdczL
-         +xZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=IaB0DFhzc/5KDrNFZumai2eiYNxkTar/KQWukG/PG5U=;
-        b=G6mq9CwXgsM3jASEAOR2+K/pbTe/AhJjsuuQhvbqbuJb95rkyBYM+mW+WJ2/5yFq/n
-         CBHB62kYXPUY3V7XD+cTKj3iLEwN6wEr8nf7UJtDJwApVaz4XoTmxwjobGM3OtEvl6bI
-         pl+lrOKLCzItxA9T5R0//A+6J9qXMag7OZSbQkNZvNjvaYCWY270LHLZIpLJUSvOgtfZ
-         lC69pktnxRNqyr9qYEhflzexs6AcYbK3e1eJQvGj9q9QavIH2728uqIqVj3593HJtLyj
-         86N/tcNHB6mVFB53SEEGFgedhUVZbDRe7W2sTQ6u3B+NAk68UvBO5YGSDbLSHkpU08lW
-         R0Qw==
-X-Gm-Message-State: AOAM532KOjzTf//hU/2Llnnspd89og5GNdeQlKr3cINl1HilMkNykjoX
-        hVk6SaEE7z1CvK8gTNNk7tc=
-X-Google-Smtp-Source: ABdhPJyoagSMx/Uj/uFW5uDbzCcbSvzjpOwIL5MHGjgfE3f9Gn6k9KgvLbP9ruuaNvHj37LxpO8wxg==
-X-Received: by 2002:a37:517:: with SMTP id 23mr8087174qkf.333.1605558571708;
-        Mon, 16 Nov 2020 12:29:31 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:482:997:213a:a240:fc07:36c8])
-        by smtp.gmail.com with ESMTPSA id w27sm12375326qtv.29.2020.11.16.12.29.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 12:29:31 -0800 (PST)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     wsa@the-dreams.de
-Cc:     kernel@pengutronix.de, shawnguo@kernel.org,
-        linux-i2c@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH] i2c: imx: Remove unused .id_table support
-Date:   Mon, 16 Nov 2020 17:29:10 -0300
-Message-Id: <20201116202910.30061-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S1726387AbgKQHBr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Nov 2020 02:01:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCC2C0613CF
+        for <linux-i2c@vger.kernel.org>; Mon, 16 Nov 2020 23:01:46 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1keuzm-00050L-VY; Tue, 17 Nov 2020 08:01:42 +0100
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1keuzm-00076R-3M; Tue, 17 Nov 2020 08:01:42 +0100
+Date:   Tue, 17 Nov 2020 08:01:40 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     wsa@the-dreams.de, shawnguo@kernel.org, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] i2c: imx: Remove unused .id_table support
+Message-ID: <20201117070140.mtkwuxfb5gb5olg2@pengutronix.de>
+References: <20201116202910.30061-1-festevam@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yixxt7vw6tnuqqvr"
+Content-Disposition: inline
+In-Reply-To: <20201116202910.30061-1-festevam@gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Since 5.10-rc1 i.MX is a devicetree-only platform and the existing
-.id_table support in this driver was only useful for old non-devicetree
-platforms.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- drivers/i2c/busses/i2c-imx.c | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+--yixxt7vw6tnuqqvr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index c98529c76348..ebf66120c51e 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -233,19 +233,6 @@ static struct imx_i2c_hwdata vf610_i2c_hwdata = {
- 
- };
- 
--static const struct platform_device_id imx_i2c_devtype[] = {
--	{
--		.name = "imx1-i2c",
--		.driver_data = (kernel_ulong_t)&imx1_i2c_hwdata,
--	}, {
--		.name = "imx21-i2c",
--		.driver_data = (kernel_ulong_t)&imx21_i2c_hwdata,
--	}, {
--		/* sentinel */
--	}
--};
--MODULE_DEVICE_TABLE(platform, imx_i2c_devtype);
--
- static const struct of_device_id i2c_imx_dt_ids[] = {
- 	{ .compatible = "fsl,imx1-i2c", .data = &imx1_i2c_hwdata, },
- 	{ .compatible = "fsl,imx21-i2c", .data = &imx21_i2c_hwdata, },
-@@ -1141,11 +1128,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	match = device_get_match_data(&pdev->dev);
--	if (match)
--		i2c_imx->hwdata = match;
--	else
--		i2c_imx->hwdata = (struct imx_i2c_hwdata *)
--				platform_get_device_id(pdev)->driver_data;
-+	i2c_imx->hwdata = match;
- 
- 	/* Setup i2c_imx driver structure */
- 	strlcpy(i2c_imx->adapter.name, pdev->name, sizeof(i2c_imx->adapter.name));
-@@ -1316,7 +1299,6 @@ static struct platform_driver i2c_imx_driver = {
- 		.of_match_table = i2c_imx_dt_ids,
- 		.acpi_match_table = i2c_imx_acpi_ids,
- 	},
--	.id_table = imx_i2c_devtype,
- };
- 
- static int __init i2c_adap_imx_init(void)
--- 
-2.17.1
+On Mon, Nov 16, 2020 at 05:29:10PM -0300, Fabio Estevam wrote:
+> Since 5.10-rc1 i.MX is a devicetree-only platform and the existing
+> .id_table support in this driver was only useful for old non-devicetree
+> platforms.
+>=20
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Thanks
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--yixxt7vw6tnuqqvr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl+zdVEACgkQwfwUeK3K
+7AmkHgf+OGadHZJiUOk9Ybo29WPl/0gGHF8l8V5k0eTCbThvhyeu7T/Dd1NCA78N
+aaEZReeDKcvNu0xdKwIv0hRUxpOIaeSRVC55E4Y7h78bEQc8lHuc7FDe/A0YBEzj
+t6zsqqlTEHfvA3b7K8L6hUgbGZwFgXYDJ9GfsiIFaxFbMn+4buM6xApVMcEqUFtZ
+Us+w6ESWnFnGWEJrO5421DGX5/sMI2DiL2rN5KZzMeVh3ZkDDsYY13fKpfIZhuOf
+BLbPBWp48UFpwoQCQ1WzvqMKpaDUja5kdIXeKsWm+9fm9DqydzD16ZB7srg3cgTc
+xMvs4N8FjV71H53ZxfQfn6n0YdI/eA==
+=kZdb
+-----END PGP SIGNATURE-----
+
+--yixxt7vw6tnuqqvr--
