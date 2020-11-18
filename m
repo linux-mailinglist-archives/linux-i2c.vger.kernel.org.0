@@ -2,121 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A646D2B7EA3
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Nov 2020 14:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0B82B7F98
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Nov 2020 15:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgKRNuJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Nov 2020 08:50:09 -0500
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:47748 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726621AbgKRNuI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Nov 2020 08:50:08 -0500
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@nvidia.com)
-        with SMTP; 18 Nov 2020 15:50:05 +0200
-Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 0AIDnxsX024731;
-        Wed, 18 Nov 2020 15:50:05 +0200
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     wsa@the-dreams.de
-Cc:     linux-i2c@vger.kernel.org, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [Re-send: PATCH i2c-next 6/6] i2c: mux: mlxcpld: Extend supported mux number
-Date:   Wed, 18 Nov 2020 15:49:57 +0200
-Message-Id: <20201118134957.182779-7-vadimp@nvidia.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20201118134957.182779-1-vadimp@nvidia.com>
+        id S1726864AbgKROkz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Nov 2020 09:40:55 -0500
+Received: from sauhun.de ([88.99.104.3]:52592 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726625AbgKROky (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 18 Nov 2020 09:40:54 -0500
+Received: from localhost (p54b33df4.dip0.t-ipconnect.de [84.179.61.244])
+        by pokefinder.org (Postfix) with ESMTPSA id 4E64A2C05E0;
+        Wed, 18 Nov 2020 15:40:52 +0100 (CET)
+Date:   Wed, 18 Nov 2020 15:40:47 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Vadim Pasternak <vadimp@nvidia.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [Re-send: PATCH i2c-next 0/6] i2c: mux: mlxcpld: Extend driver
+ functionality and update licenses
+Message-ID: <20201118144047.GA2649@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Vadim Pasternak <vadimp@nvidia.com>, linux-i2c@vger.kernel.org
 References: <20201118134957.182779-1-vadimp@nvidia.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SLDf9lqlvOQaIe6s"
+Content-Disposition: inline
+In-Reply-To: <20201118134957.182779-1-vadimp@nvidia.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Allow to extend mux number supported by driver.
-Currently it is limited by eight, which is not enough for new coming
-Mellanox modular system with line cards, which require up to 64 mux
-support.
 
-Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
-Reviewed-by: Michael Shych <michaelsh@nvidia.com>
----
- drivers/i2c/muxes/i2c-mux-mlxcpld.c   | 17 +++++------------
- include/linux/platform_data/mlxcpld.h |  3 +++
- 2 files changed, 8 insertions(+), 12 deletions(-)
+--SLDf9lqlvOQaIe6s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/i2c/muxes/i2c-mux-mlxcpld.c b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-index c76180919fc3..760636b507fa 100644
---- a/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-+++ b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-@@ -15,8 +15,6 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- 
--#define CPLD_MUX_MAX_NCHANS	8
--
- /* mlxcpld_mux - mux control structure:
-  * @last_chan - last register value
-  * @client - I2C device client
-@@ -24,7 +22,7 @@
-  * @sel_buf: I2C message buffer for mux select 16 bits transactions
-  */
- struct mlxcpld_mux {
--	u8 last_chan;
-+	int last_chan;
- 	struct i2c_client *client;
- 	struct mlxcpld_mux_plat_data pdata;
- 	u8 sel_buf[3];
-@@ -94,7 +92,6 @@ static int mlxcpld_mux_select_chan(struct i2c_mux_core *muxc, u32 chan)
- 	int err = 0;
- 
- 	/* Only select the channel if its different from the last channel */
--	chan++;
- 	if (mux->last_chan != chan) {
- 		err = mlxcpld_mux_reg_write(muxc->parent, mux, chan);
- 		mux->last_chan = err < 0 ? 0 : chan;
-@@ -143,7 +140,7 @@ static int mlxcpld_mux_probe(struct platform_device *pdev)
- 	if (!i2c_check_functionality(client->adapter, func))
- 		return -ENODEV;
- 
--	muxc = i2c_mux_alloc(client->adapter, &pdev->dev, CPLD_MUX_MAX_NCHANS,
-+	muxc = i2c_mux_alloc(client->adapter, &pdev->dev, pdata->num_adaps,
- 			     sizeof(*data), 0, mlxcpld_mux_select_chan,
- 			     mlxcpld_mux_deselect);
- 	if (!muxc)
-@@ -158,13 +155,9 @@ static int mlxcpld_mux_probe(struct platform_device *pdev)
- 	data->last_chan = 0; /* force the first selection */
- 
- 	/* Create an adapter for each channel. */
--	for (num = 0; num < CPLD_MUX_MAX_NCHANS; num++) {
--		if (num >= pdata->num_adaps)
--			/* discard unconfigured channels */
--			break;
--
--		force = pdata->adap_ids[num];
--
-+	for (num = 0; num < pdata->num_adaps; num++) {
-+		force = pdata->base_nr ? (pdata->base_nr +
-+			pdata->adap_ids[num]) : pdata->adap_ids[num];
- 		err = i2c_mux_add_adapter(muxc, force, num, 0);
- 		if (err)
- 			goto virt_reg_failed;
-diff --git a/include/linux/platform_data/mlxcpld.h b/include/linux/platform_data/mlxcpld.h
-index da4f7e8f5721..ea88817b3b35 100644
---- a/include/linux/platform_data/mlxcpld.h
-+++ b/include/linux/platform_data/mlxcpld.h
-@@ -11,12 +11,15 @@
- /* Platform data for the CPLD I2C multiplexers */
- 
- /* mlxcpld_mux_plat_data - per mux data, used with i2c_register_board_info
-+ * @base_nr: base I2C bus number to number adapters from or zero for setting
-+ *	     to adap_ids vector
-  * @adap_ids - adapter array
-  * @num_adaps - number of adapters
-  * @sel_reg_addr - mux select register offset in CPLD space
-  * @reg_size: register size in bytes (default 0 - 1 byte data, 1 - 2 bytes data
-  */
- struct mlxcpld_mux_plat_data {
-+	int base_nr;
- 	int *adap_ids;
- 	int num_adaps;
- 	int sel_reg_addr;
--- 
-2.11.0
+On Wed, Nov 18, 2020 at 03:49:51PM +0200, Vadim Pasternak wrote:
+> The patchset adds new features for the existing Mellanox systems.
 
+Please CC the i2c-mux maintainer, too.
+
+
+--SLDf9lqlvOQaIe6s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl+1MmsACgkQFA3kzBSg
+KbZI6hAAsQ/rxU3nOXI4jggoZ3jH2yji3b9kpyedo1oBW1B7YxheBw76L744nsA4
+h1PzQhI9IVXJZU10LFD8o2gZ9mSGz1BL0v30aG9Gd9FD/1LGxH0isLCe4xyM5WLX
+QU4lJEPcJgZFwe8YpNa8c6h0TVmUYYNSlU1QernIyZIplc07609jkzXduRBVzV2w
+fu7xfk7notnoc6cJAMAmlztcIzpDKfJst3sRUxmtyTepdiEj4gbbEjBoedGUKSaD
+dv4qLiXP/0/C8qUs13Tsamn/GPgosT9tCM7vgQmv9EczBUccVKlZkpnfUXvDbTXA
+8A+13fax25+0qk0GizCKpn6ebPQScxUpKV6Oz0sCfQCaBcU0y2pRZMUGwvup0jeO
+VjmPgrFMKuJdJ+KcimIA6v6okUSGd33diYl3J2JgMzr2uPBULz7UJUfWDehW9RZs
+3qK0BiEUSyK6fsiN4JX+7Ap5u0w8k178Nm4UA77byg0bw61LkHc3SrTLVi0gOctL
+d0v2YbOUBWxrcSZkPrSrbu4n79lmlxu7BISwxdXxVrjUHtSY4jd1g8OD0hC+pIm2
+QyT4JJH3FFZNHGsM0RGGPt5VLSY/MpbwEmAiGEuH5jV4ppPVKTw8OhxXx1nOmo8B
+ND4LaPa9beoEvBM6FuaBvffwdNX8su2UL8iEaeVqfuM0KlcWMY4=
+=6Szc
+-----END PGP SIGNATURE-----
+
+--SLDf9lqlvOQaIe6s--
