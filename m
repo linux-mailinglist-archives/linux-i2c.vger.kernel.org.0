@@ -2,207 +2,171 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DE92B7EA1
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Nov 2020 14:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC602B7EA4
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Nov 2020 14:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbgKRNuI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Nov 2020 08:50:08 -0500
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:47737 "EHLO
+        id S1726389AbgKRNuJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Nov 2020 08:50:09 -0500
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:47746 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726580AbgKRNuI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Nov 2020 08:50:08 -0500
+        with ESMTP id S1726625AbgKRNuJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Nov 2020 08:50:09 -0500
 Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@nvidia.com)
-        with SMTP; 18 Nov 2020 15:50:03 +0200
+        with SMTP; 18 Nov 2020 15:50:04 +0200
 Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 0AIDnxsV024731;
-        Wed, 18 Nov 2020 15:50:03 +0200
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 0AIDnxsW024731;
+        Wed, 18 Nov 2020 15:50:04 +0200
 From:   Vadim Pasternak <vadimp@nvidia.com>
 To:     wsa@the-dreams.de
 Cc:     linux-i2c@vger.kernel.org, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [Re-send: PATCH i2c-next 4/6] i2c: mux: mlxcpld: Convert driver to platform driver
-Date:   Wed, 18 Nov 2020 15:49:55 +0200
-Message-Id: <20201118134957.182779-5-vadimp@nvidia.com>
+Subject: [Re-send: PATCH i2c-next 5/6] i2c: mux: mlxcpld: Extend driver to support word address space devices
+Date:   Wed, 18 Nov 2020 15:49:56 +0200
+Message-Id: <20201118134957.182779-6-vadimp@nvidia.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201118134957.182779-1-vadimp@nvidia.com>
 References: <20201118134957.182779-1-vadimp@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Convert driver from 'i2c' to 'platform'.
-The motivation is to avoid I2C addressing conflict between
-‘i2c-mux-cpld’ driver, providing mux selection and deselection through
-CPLD ‘mux control’ register, and CPLD host driver. The CPLD is I2C
-device and is multi-functional device performing logic for different
-components, like LED, ‘hwmon’, interrupt control, watchdog etcetera.
-For such configuration CPLD should be host I2C device, connected to the
-relevant I2C bus with the relevant I2C address and all others component
-drivers are supposed to be its children.
-The hierarchy in such case will be like in the below example:
-ls /sys/bus/i2c/devices/44-0032
-i2c-mux-mlxcpld.44  leds-mlxreg.44  mlxreg-io.44
-ls /sys/bus/i2c/devices/44-0032/i2c-mux-mlxcpld.44
-channel-0, …,  channel-X
-
-Currently this driver is not activated by any kernel driver,
-so this conversion doesn’t affect any user.
+Extend driver to allow I2C routing control through CPLD devices with
+word address space. Till now only CPLD devices with byte address space
+have been supported.
 
 Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 Reviewed-by: Michael Shych <michaelsh@nvidia.com>
 ---
- drivers/i2c/muxes/i2c-mux-mlxcpld.c | 62 +++++++++++++++++--------------------
- 1 file changed, 28 insertions(+), 34 deletions(-)
+ drivers/i2c/muxes/i2c-mux-mlxcpld.c   | 57 +++++++++++++++++++++++++++--------
+ include/linux/platform_data/mlxcpld.h |  2 ++
+ 2 files changed, 47 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/i2c/muxes/i2c-mux-mlxcpld.c b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-index 3d894cfb19df..6bb8caecf8e8 100644
+index 6bb8caecf8e8..c76180919fc3 100644
 --- a/drivers/i2c/muxes/i2c-mux-mlxcpld.c
 +++ b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-@@ -20,10 +20,12 @@
- /* mlxcpld_mux - mux control structure:
+@@ -21,11 +21,13 @@
   * @last_chan - last register value
   * @client - I2C device client
-+ * @pdata: platform data
+  * @pdata: platform data
++ * @sel_buf: I2C message buffer for mux select 16 bits transactions
   */
  struct mlxcpld_mux {
  	u8 last_chan;
  	struct i2c_client *client;
-+	struct mlxcpld_mux_plat_data pdata;
+ 	struct mlxcpld_mux_plat_data pdata;
++	u8 sel_buf[3];
  };
  
  /* MUX logic description.
-@@ -54,37 +56,30 @@ struct mlxcpld_mux {
-  *
-  */
- 
--static const struct i2c_device_id mlxcpld_mux_id[] = {
--	{ "mlxcpld_mux_module", 0 },
--	{ }
--};
--MODULE_DEVICE_TABLE(i2c, mlxcpld_mux_id);
--
- /* Write to mux register. Don't use i2c_transfer() and i2c_smbus_xfer()
+@@ -60,26 +62,42 @@ struct mlxcpld_mux {
   * for this as they will try to lock adapter a second time.
   */
  static int mlxcpld_mux_reg_write(struct i2c_adapter *adap,
--				 struct i2c_client *client, u8 val)
-+				 struct mlxcpld_mux *mux, u8 val)
+-				 struct mlxcpld_mux *mux, u8 val)
++				 struct mlxcpld_mux *mux, int chan)
  {
--	struct mlxcpld_mux_plat_data *pdata = dev_get_platdata(&client->dev);
-+	struct i2c_client *client = mux->client;
- 	union i2c_smbus_data data = { .byte = val };
- 
- 	return __i2c_smbus_xfer(adap, client->addr, client->flags,
--				I2C_SMBUS_WRITE, pdata->sel_reg_addr,
-+				I2C_SMBUS_WRITE, mux->pdata.sel_reg_addr,
- 				I2C_SMBUS_BYTE_DATA, &data);
+ 	struct i2c_client *client = mux->client;
+-	union i2c_smbus_data data = { .byte = val };
+-
+-	return __i2c_smbus_xfer(adap, client->addr, client->flags,
+-				I2C_SMBUS_WRITE, mux->pdata.sel_reg_addr,
+-				I2C_SMBUS_BYTE_DATA, &data);
++	union i2c_smbus_data data;
++	struct i2c_msg msg;
++
++	switch (mux->pdata.reg_size) {
++	case 1:
++		data.byte = (chan < 0) ? 0 : chan;
++		return __i2c_smbus_xfer(adap, client->addr, client->flags,
++					I2C_SMBUS_WRITE,
++					mux->pdata.sel_reg_addr,
++					I2C_SMBUS_BYTE_DATA, &data);
++	case 2:
++		mux->sel_buf[mux->pdata.reg_size] = (chan < 0) ? 0 :
++						    mux->pdata.adap_ids[chan];
++		msg.addr = client->addr;
++		msg.buf = mux->sel_buf;
++		msg.len = mux->pdata.reg_size + 1;
++		msg.flags = 0;
++		return __i2c_transfer(adap, &msg, 1);
++	default:
++		return -EINVAL;
++	}
  }
  
  static int mlxcpld_mux_select_chan(struct i2c_mux_core *muxc, u32 chan)
  {
--	struct mlxcpld_mux *data = i2c_mux_priv(muxc);
--	struct i2c_client *client = data->client;
-+	struct mlxcpld_mux *mux = i2c_mux_priv(muxc);
- 	u8 regval = chan + 1;
+ 	struct mlxcpld_mux *mux = i2c_mux_priv(muxc);
+-	u8 regval = chan + 1;
  	int err = 0;
  
  	/* Only select the channel if its different from the last channel */
--	if (data->last_chan != regval) {
--		err = mlxcpld_mux_reg_write(muxc->parent, client, regval);
--		data->last_chan = err < 0 ? 0 : regval;
-+	if (mux->last_chan != regval) {
-+		err = mlxcpld_mux_reg_write(muxc->parent, mux, regval);
-+		mux->last_chan = err < 0 ? 0 : regval;
+-	if (mux->last_chan != regval) {
+-		err = mlxcpld_mux_reg_write(muxc->parent, mux, regval);
+-		mux->last_chan = err < 0 ? 0 : regval;
++	chan++;
++	if (mux->last_chan != chan) {
++		err = mlxcpld_mux_reg_write(muxc->parent, mux, chan);
++		mux->last_chan = err < 0 ? 0 : chan;
  	}
  
  	return err;
-@@ -92,21 +87,19 @@ static int mlxcpld_mux_select_chan(struct i2c_mux_core *muxc, u32 chan)
- 
- static int mlxcpld_mux_deselect(struct i2c_mux_core *muxc, u32 chan)
- {
--	struct mlxcpld_mux *data = i2c_mux_priv(muxc);
--	struct i2c_client *client = data->client;
-+	struct mlxcpld_mux *mux = i2c_mux_priv(muxc);
- 
- 	/* Deselect active channel */
--	data->last_chan = 0;
-+	mux->last_chan = -1;
- 
--	return mlxcpld_mux_reg_write(muxc->parent, client, data->last_chan);
-+	return mlxcpld_mux_reg_write(muxc->parent, mux, mux->last_chan);
- }
- 
- /* Probe/reomove functions */
--static int mlxcpld_mux_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id)
-+static int mlxcpld_mux_probe(struct platform_device *pdev)
- {
--	struct i2c_adapter *adap = client->adapter;
--	struct mlxcpld_mux_plat_data *pdata = dev_get_platdata(&client->dev);
-+	struct mlxcpld_mux_plat_data *pdata = dev_get_platdata(&pdev->dev);
-+	struct i2c_client *client = to_i2c_client(pdev->dev.parent);
+@@ -103,13 +121,26 @@ static int mlxcpld_mux_probe(struct platform_device *pdev)
  	struct i2c_mux_core *muxc;
  	int num, force;
  	struct mlxcpld_mux *data;
-@@ -115,18 +108,20 @@ static int mlxcpld_mux_probe(struct i2c_client *client,
++	u16 sel_reg_addr = 0;
++	u32 func;
+ 	int err;
+ 
  	if (!pdata)
  		return -EINVAL;
  
--	if (!i2c_check_functionality(adap, I2C_FUNC_SMBUS_WRITE_BYTE_DATA))
-+	if (!i2c_check_functionality(client->adapter,
-+				     I2C_FUNC_SMBUS_WRITE_BYTE_DATA))
+-	if (!i2c_check_functionality(client->adapter,
+-				     I2C_FUNC_SMBUS_WRITE_BYTE_DATA))
++	switch (pdata->reg_size) {
++	case 1:
++		func = I2C_FUNC_SMBUS_WRITE_BYTE_DATA;
++		break;
++	case 2:
++		func = I2C_FUNC_SMBUS_WRITE_WORD_DATA;
++		sel_reg_addr = cpu_to_be16(pdata->sel_reg_addr);
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	if (!i2c_check_functionality(client->adapter, func))
  		return -ENODEV;
  
--	muxc = i2c_mux_alloc(adap, &client->dev, CPLD_MUX_MAX_NCHANS,
-+	muxc = i2c_mux_alloc(client->adapter, &pdev->dev, CPLD_MUX_MAX_NCHANS,
- 			     sizeof(*data), 0, mlxcpld_mux_select_chan,
- 			     mlxcpld_mux_deselect);
- 	if (!muxc)
- 		return -ENOMEM;
- 
-+	platform_set_drvdata(pdev, muxc);
+ 	muxc = i2c_mux_alloc(client->adapter, &pdev->dev, CPLD_MUX_MAX_NCHANS,
+@@ -122,6 +153,8 @@ static int mlxcpld_mux_probe(struct platform_device *pdev)
  	data = i2c_mux_priv(muxc);
--	i2c_set_clientdata(client, muxc);
  	data->client = client;
-+	memcpy(&data->pdata, pdata, sizeof(*pdata));
+ 	memcpy(&data->pdata, pdata, sizeof(*pdata));
++	/* Save mux select address for 16 bits transaction size. */
++	memcpy(data->sel_buf, &sel_reg_addr, 2);
  	data->last_chan = 0; /* force the first selection */
  
  	/* Create an adapter for each channel. */
-@@ -149,24 +144,23 @@ static int mlxcpld_mux_probe(struct i2c_client *client,
- 	return err;
- }
- 
--static int mlxcpld_mux_remove(struct i2c_client *client)
-+static int mlxcpld_mux_remove(struct platform_device *pdev)
- {
--	struct i2c_mux_core *muxc = i2c_get_clientdata(client);
-+	struct i2c_mux_core *muxc = platform_get_drvdata(pdev);
- 
- 	i2c_mux_del_adapters(muxc);
- 	return 0;
- }
- 
--static struct i2c_driver mlxcpld_mux_driver = {
--	.driver		= {
--		.name	= "mlxcpld-mux",
-+static struct platform_driver mlxcpld_mux_driver = {
-+	.driver = {
-+		.name = "i2c-mux-mlxcpld",
- 	},
--	.probe		= mlxcpld_mux_probe,
--	.remove		= mlxcpld_mux_remove,
--	.id_table	= mlxcpld_mux_id,
-+	.probe = mlxcpld_mux_probe,
-+	.remove = mlxcpld_mux_remove,
+diff --git a/include/linux/platform_data/mlxcpld.h b/include/linux/platform_data/mlxcpld.h
+index e6c18bf017dd..da4f7e8f5721 100644
+--- a/include/linux/platform_data/mlxcpld.h
++++ b/include/linux/platform_data/mlxcpld.h
+@@ -14,11 +14,13 @@
+  * @adap_ids - adapter array
+  * @num_adaps - number of adapters
+  * @sel_reg_addr - mux select register offset in CPLD space
++ * @reg_size: register size in bytes (default 0 - 1 byte data, 1 - 2 bytes data
+  */
+ struct mlxcpld_mux_plat_data {
+ 	int *adap_ids;
+ 	int num_adaps;
+ 	int sel_reg_addr;
++	u8 reg_size;
  };
  
--module_i2c_driver(mlxcpld_mux_driver);
-+module_platform_driver(mlxcpld_mux_driver);
- 
- MODULE_AUTHOR("Michael Shych (michaels@mellanox.com)");
- MODULE_DESCRIPTION("Mellanox I2C-CPLD-MUX driver");
+ #endif /* _LINUX_I2C_MLXCPLD_H */
 -- 
 2.11.0
 
