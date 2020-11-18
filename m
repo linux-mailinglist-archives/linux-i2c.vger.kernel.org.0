@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54ED72B7FA5
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Nov 2020 15:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B152B7FA8
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Nov 2020 15:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727012AbgKROoX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 18 Nov 2020 09:44:23 -0500
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:48157 "EHLO
+        id S1727010AbgKROo2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 18 Nov 2020 09:44:28 -0500
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:48208 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726869AbgKROoX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Nov 2020 09:44:23 -0500
+        with ESMTP id S1727021AbgKROo2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 18 Nov 2020 09:44:28 -0500
 Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@nvidia.com)
-        with SMTP; 18 Nov 2020 16:44:21 +0200
+        with SMTP; 18 Nov 2020 16:44:22 +0200
 Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 0AIEiIHs008040;
-        Wed, 18 Nov 2020 16:44:20 +0200
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 0AIEiIHt008040;
+        Wed, 18 Nov 2020 16:44:22 +0200
 From:   Vadim Pasternak <vadimp@nvidia.com>
 To:     wsa@the-dreams.de
 Cc:     peda@axentia.se, linux-i2c@vger.kernel.org,
         Vadim Pasternak <vadimp@nvidia.com>
-Subject: [Re-send: PATCH i2c-next 1/6] i2c: mux: mlxcpld: Update module license
-Date:   Wed, 18 Nov 2020 16:44:11 +0200
-Message-Id: <20201118144416.184120-2-vadimp@nvidia.com>
+Subject: [Re-send: PATCH i2c-next 2/6] platform/x86: mlxcpld: Update module license
+Date:   Wed, 18 Nov 2020 16:44:12 +0200
+Message-Id: <20201118144416.184120-3-vadimp@nvidia.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201118144416.184120-1-vadimp@nvidia.com>
 References: <20201118144416.184120-1-vadimp@nvidia.com>
@@ -34,21 +34,22 @@ Update license to SPDX-License.
 
 Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 ---
- drivers/i2c/muxes/i2c-mux-mlxcpld.c | 33 +++------------------------------
- 1 file changed, 3 insertions(+), 30 deletions(-)
+ include/linux/platform_data/x86/mlxcpld.h | 34 +++----------------------------
+ 1 file changed, 3 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/i2c/muxes/i2c-mux-mlxcpld.c b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-index 5ed55ca4fe93..53bce81cf5c9 100644
---- a/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-+++ b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-@@ -1,35 +1,8 @@
-+// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0
+diff --git a/include/linux/platform_data/x86/mlxcpld.h b/include/linux/platform_data/x86/mlxcpld.h
+index b08dcb183fca..e6c18bf017dd 100644
+--- a/include/linux/platform_data/x86/mlxcpld.h
++++ b/include/linux/platform_data/x86/mlxcpld.h
+@@ -1,36 +1,8 @@
++/* SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0 */
  /*
-- * drivers/i2c/muxes/i2c-mux-mlxcpld.c
+- * mlxcpld.h - Mellanox I2C multiplexer support in CPLD
++ * Mellanox I2C multiplexer support in CPLD
+  *
 - * Copyright (c) 2016 Mellanox Technologies. All rights reserved.
 - * Copyright (c) 2016 Michael Shych <michaels@mellanox.com>
-+ * Mellanox i2c mux driver
-  *
+- *
 - * Redistribution and use in source and binary forms, with or without
 - * modification, are permitted provided that the following conditions are met:
 - *
@@ -79,7 +80,7 @@ index 5ed55ca4fe93..53bce81cf5c9 100644
 + * Copyright (C) 2016-2020 Mellanox Technologies
   */
  
- #include <linux/device.h>
+ #ifndef _LINUX_I2C_MLXCPLD_H
 -- 
 2.11.0
 
