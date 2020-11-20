@@ -2,128 +2,179 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A542B9EDA
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Nov 2020 00:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56CA2BB4B1
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Nov 2020 20:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727262AbgKSX4f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Nov 2020 18:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S1730268AbgKTS7z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Nov 2020 13:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726680AbgKSX4e (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 19 Nov 2020 18:56:34 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B885C0613CF;
-        Thu, 19 Nov 2020 15:56:34 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id o21so10413117ejb.3;
-        Thu, 19 Nov 2020 15:56:34 -0800 (PST)
+        with ESMTP id S1730041AbgKTS7y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Nov 2020 13:59:54 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0866EC0613CF
+        for <linux-i2c@vger.kernel.org>; Fri, 20 Nov 2020 10:59:53 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id s30so14939628lfc.4
+        for <linux-i2c@vger.kernel.org>; Fri, 20 Nov 2020 10:59:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sj++PSDD1oLF90eK36g1/9vIzuW7FnNR6keIC7+p2sg=;
-        b=A4msB7sz3aJrPlbu6qj3Wa2Dzb+cpVX97w5uTGOwtLiiwgPZrqPnTmJxo3pvaSMmyk
-         9TSOBpWrFofq6IGEbc622cZlpzoumAjd9/s42kIeQBwtOIF8vEorcktaxRyiL6lxF8WB
-         zZQnWBAkTrdoqPl7jIosD2G1tsns/BggirTiuu4gx5iOP4Kntu5qHXCaYUcIgWl+Aizq
-         wrQyy+1KRAkLdahPK/MUlJcKQ9iMDqt33mZzeI941BOjNehazXqXGHcHCAUjEsdjLX9L
-         J5Lqynrz/OBKYY9VyTKWp6QcnLkgstQef3uapcwIVrQwHVhIdfaj8f0Fo2m+HWUbJUO7
-         umJQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WP40hyIHVW+8+OBoS/eJu6n4FBxVosTt45ETp9kRxys=;
+        b=iH6DYysSkQwGTz88LDkNljp6oFZgEGlYTmTVobZl/qFx8kbV2sq8WPrsBYs0JqxPs2
+         JpaDdHbB3ZHYnEequccgC9CERCbsDthVuEYtV+ObOSVmw6eq2mY2SvY3M9lsPF6azORX
+         r5UUMhtjVIbCM0g0fIXmo0aIeRDt4oDjgxLrA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sj++PSDD1oLF90eK36g1/9vIzuW7FnNR6keIC7+p2sg=;
-        b=HY3Ub3sApUuRdG/FawPxvozYJv9m8G/+Ea7IwbmS2XoWziRD9fFWT0RYwyPHtX2OkE
-         8+zuxvDuuhvs03HDfQvpyozuMmARY/3nl1aptuOEv15sZrOt2O/F09VfQPZZl2d4tXmW
-         M3WMkIOZ31PbVDf2gvzYP7zHw684N/BSH5aj1qcOD/uiQJ2GPL/vbU95eXSXmN6raVPB
-         GIJgClmhINvCQcJTK9DnAd3huoTajcYP5K3SRaHs+Fne4liz61Lc5pQxHeXJfolt4fOH
-         pG/os5QWUf1IdVMZoNMM9MQoSjZ6ginvd9VeQM88xDpjrN1PRUNDsryamjWKuqnx9hCT
-         Tq6Q==
-X-Gm-Message-State: AOAM533Y+Hz1sm3TVlB0IVf+PxxZ/3Z5jdK2/QiMZDaDKakprs2prX6n
-        l2hOgLqQKlFtvPIyrKebAvA=
-X-Google-Smtp-Source: ABdhPJxy9ZEQlfi8Qbn7YloqQ+3dJ3BLgOn4YUxh+9grdKTytp+YvAGFztACqK77oVPpmATs8zNjbg==
-X-Received: by 2002:a17:907:10d9:: with SMTP id rv25mr31260806ejb.437.1605830193015;
-        Thu, 19 Nov 2020 15:56:33 -0800 (PST)
-Received: from localhost.localdomain ([188.24.159.61])
-        by smtp.gmail.com with ESMTPSA id i3sm452987ejh.80.2020.11.19.15.56.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 15:56:32 -0800 (PST)
-From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH v2 13/18] arm: dts: owl-s500: Add I2C support
-Date:   Fri, 20 Nov 2020 01:56:07 +0200
-Message-Id: <99e81f582b19d0e13abf506c1d7dda0f0a857fd5.1605823502.git.cristian.ciocaltea@gmail.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1605823502.git.cristian.ciocaltea@gmail.com>
-References: <cover.1605823502.git.cristian.ciocaltea@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WP40hyIHVW+8+OBoS/eJu6n4FBxVosTt45ETp9kRxys=;
+        b=DXaeGTSSXTDaJy+Ed8l/HwHjZU9W+co1SsLlsHoZ7LMcA0pKA+p34YDJcHwoA7cxW+
+         g4KGp11kQuNp2zm0TH9NvdVXT/aSr979Vrdwyl5WwUEeJmwWMFMNOhRmsbUqEFdi3ppF
+         hYah9uKaTKO1fIf1dx3BylExLe73NJCOQMiXjwAh0TBt4+GaTj3fUzZ4pj4k6QI7Ha0p
+         5jvAaCT/He0glNusPLmCfQULNrf8ohvTKNiAvCURDVnt8dBnZGWTqVnkuCK+9/zBUr4m
+         4tN8IIZjLQSokHxRaJyV0993W2DusRN+V/oC/kxtbvwYJzZcEXySfHO87r8I328qELpZ
+         dHzA==
+X-Gm-Message-State: AOAM530y9eS3RW17cZiSZgJJSxy/ik04JhlhkUkmhwOYhhLs8yW5V4w9
+        KNS0khiRBvN7aaGpLamapKWufPheC4PoGQ==
+X-Google-Smtp-Source: ABdhPJxH6aarhMPrBbUUQOzHvPoI9evVdGkBPHT+AwNXYDLp4rh/xmUQe1ik+80HliVyMQSrLrGoIQ==
+X-Received: by 2002:a19:d06:: with SMTP id 6mr8286410lfn.531.1605898791064;
+        Fri, 20 Nov 2020 10:59:51 -0800 (PST)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
+        by smtp.gmail.com with ESMTPSA id q27sm434478lfo.242.2020.11.20.10.59.49
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Nov 2020 10:59:50 -0800 (PST)
+Received: by mail-lf1-f43.google.com with SMTP id u19so14930867lfr.7
+        for <linux-i2c@vger.kernel.org>; Fri, 20 Nov 2020 10:59:49 -0800 (PST)
+X-Received: by 2002:a19:4b92:: with SMTP id y140mr8175542lfa.485.1605898789139;
+ Fri, 20 Nov 2020 10:59:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201118234025.376412-1-evgreen@chromium.org> <20201118153951.RESEND.v3.2.Idef164c23d326f5e5edecfc5d3eb2a68fcf18be1@changeid>
+ <CAHp75VdtwyCj7emc7Bk87q7kMQA0sSX81-aK-fMq4qTfTF-c_g@mail.gmail.com>
+In-Reply-To: <CAHp75VdtwyCj7emc7Bk87q7kMQA0sSX81-aK-fMq4qTfTF-c_g@mail.gmail.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Fri, 20 Nov 2020 10:59:12 -0800
+X-Gmail-Original-Message-ID: <CAE=gft4OW7_pWfco4+kY65tbUGUDzXXDfsVMCP8MN93inVem4A@mail.gmail.com>
+Message-ID: <CAE=gft4OW7_pWfco4+kY65tbUGUDzXXDfsVMCP8MN93inVem4A@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3 2/2] i2c: i2c-mux-gpio: Enable this driver in
+ ACPI land
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add I2C controller nodes for Actions Semi S500 SoC.
+On Thu, Nov 19, 2020 at 7:24 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Thu, Nov 19, 2020 at 1:40 AM Evan Green <evgreen@chromium.org> wrote:
+> >
+> > Enable i2c-mux-gpio devices to be defined via ACPI. The idle-state
+> > property translates directly to a fwnode_property_*() call. The child
+> > reg property translates naturally into _ADR in ACPI.
+> >
+> > The i2c-parent binding is a relic from the days when the bindings
+> > dictated that all direct children of an I2C controller had to be I2C
+> > devices. These days that's no longer required. The i2c-mux can sit as a
+> > direct child of its parent controller, which is where it makes the most
+> > sense from a hardware description perspective. For the ACPI
+> > implementation we'll assume that's always how the i2c-mux-gpio is
+> > instantiated.
+>
+> ...
+>
+> > +#ifdef CONFIG_ACPI
+> > +
+> > +static int i2c_mux_gpio_get_acpi_adr(struct device *dev,
+> > +                                    struct fwnode_handle *fwdev,
+> > +                                    unsigned int *adr)
+> > +
+> > +{
+> > +       unsigned long long adr64;
+> > +       acpi_status status;
+> > +
+> > +       status = acpi_evaluate_integer(ACPI_HANDLE_FWNODE(fwdev),
+> > +                                      METHOD_NAME__ADR,
+> > +                                      NULL, &adr64);
+> > +
+> > +       if (!ACPI_SUCCESS(status)) {
+> > +               dev_err(dev, "Cannot get address\n");
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       *adr = adr64;
+> > +       if (*adr != adr64) {
+> > +               dev_err(dev, "Address out of range\n");
+> > +               return -ERANGE;
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +#else
+> > +
+> > +static int i2c_mux_gpio_get_acpi_adr(struct device *dev,
+> > +                                    struct fwnode_handle *fwdev,
+> > +                                    unsigned int *adr)
+> > +{
+> > +       return -EINVAL;
+> > +}
+> > +
+> > +#endif
+>
+> I'm wondering if you may use acpi_find_child_device() here.
+> Or is it a complementary function?
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
----
- arch/arm/boot/dts/owl-s500.dtsi | 40 +++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+I think it's complementary. The code above is "I have a device, I want
+its _ADR". whereas acpi_find_child_device() is "I have an _ADR, I want
+its device". I could flip things around to use this, but it would turn
+the code from linear into quadratic. I'd have to scan each possible
+address and call acpi_find_child_device() with that _ADR to see if
+there's a child device there.
 
-diff --git a/arch/arm/boot/dts/owl-s500.dtsi b/arch/arm/boot/dts/owl-s500.dtsi
-index 7af7c9e1119d..55f8b8c2e149 100644
---- a/arch/arm/boot/dts/owl-s500.dtsi
-+++ b/arch/arm/boot/dts/owl-s500.dtsi
-@@ -193,6 +193,46 @@ cmu: clock-controller@b0160000 {
- 			#reset-cells = <1>;
- 		};
- 
-+		i2c0: i2c@b0170000 {
-+			compatible = "actions,s500-i2c";
-+			reg = <0xb0170000 0x4000>;
-+			clocks = <&cmu CLK_I2C0>;
-+			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c1: i2c@b0174000 {
-+			compatible = "actions,s500-i2c";
-+			reg = <0xb0174000 0x4000>;
-+			clocks = <&cmu CLK_I2C1>;
-+			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c2: i2c@b0178000 {
-+			compatible = "actions,s500-i2c";
-+			reg = <0xb0178000 0x4000>;
-+			clocks = <&cmu CLK_I2C2>;
-+			interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c3: i2c@b017c000 {
-+			compatible = "actions,s500-i2c";
-+			reg = <0xb017c000 0x4000>;
-+			clocks = <&cmu CLK_I2C3>;
-+			interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
- 		timer: timer@b0168000 {
- 			compatible = "actions,s500-timer";
- 			reg = <0xb0168000 0x8000>;
--- 
-2.29.2
+>
+> ...
+>
+> > +       device_for_each_child_node(dev, child) {
+> > +               if (is_of_node(child)) {
+> > +                       fwnode_property_read_u32(child, "reg", values + i);
+> > +
+> > +               } else if (is_acpi_node(child)) {
+> > +                       rc = i2c_mux_gpio_get_acpi_adr(dev, child, values + i);
+> > +                       if (rc)
+> > +                               return rc;
+> > +               }
+> > +
+> >                 i++;
+> >         }
+>
+> And for this I already told in two different threads with similar code
+> that perhaps we need common helper that will check reg followed by
+> _ADR.
 
+Oh, I'm not aware of those threads. I'd need some advice: I guess a
+new fwnode_* API would make sense for this, but I had trouble coming
+up with a generic interface. _ADR is just a blobbo 64 bit int, but
+DT's "reg" is a little more flexible, having a length, and potentially
+being an array. I suppose it would have to be something like:
+
+int fwnode_property_read_reg(const struct fwnode_handle *fwnode,
+                                 size_t index, uint64_t *addr, uint64_t *len);
+
+But then ACPI would always return 0 for length, and only index 0 would
+ever work? I'm worried I'm designing an API that's only useful to me.
+
+I tried to look around for other examples of this specific pattern of
+_ADR then "reg", but struggled to turn up much.
+-Evan
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
