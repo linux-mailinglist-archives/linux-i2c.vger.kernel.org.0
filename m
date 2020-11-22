@@ -2,112 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE6C2BC79F
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Nov 2020 19:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6C02BFB0A
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Nov 2020 22:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728062AbgKVR7w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 Nov 2020 12:59:52 -0500
-Received: from mail-03.mail-europe.com ([91.134.188.129]:42922 "EHLO
-        mail-03.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727317AbgKVR7v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 Nov 2020 12:59:51 -0500
-Date:   Sun, 22 Nov 2020 17:59:44 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1606067987;
-        bh=0tDIIuf1Tt9UO5w2d7UPKWMd7FZ0ye8L9YX/ZJ0uO48=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=N9wfKYz9xQLTcAPvtTX7NH1mNJcxIOInJfKomsHFIQ6O4eZjlNIfHWG2cyw0hNIti
-         gPNQoCZ0l10nk9fpcdC46Ob7SMUr6JYkC6GU2aH18O8fzIpTCxcNVsnqbpmbslZR9i
-         n2v/z/qSRtJbnDTuG2b0X2jbSxTkzQdXak+buDYw=
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [PATCH 5/5] i2c: geni: sdm845: dont perform DMA for OnePlus 6 devices
-Message-ID: <72a37c8c-12e4-eb51-2644-3436d19cf314@connolly.tech>
-In-Reply-To: <20201122034709.GA95182@builder.lan>
-References: <20201112161920.2671430-1-caleb@connolly.tech> <20201112161920.2671430-6-caleb@connolly.tech> <20201122034709.GA95182@builder.lan>
+        id S1726667AbgKVVu1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 Nov 2020 16:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726296AbgKVVu1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 Nov 2020 16:50:27 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E6DC0613CF;
+        Sun, 22 Nov 2020 13:50:26 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id z5so512474ejp.4;
+        Sun, 22 Nov 2020 13:50:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
+        b=TnXlN4ldBjSgvAJgHY3T7vW9Ah283ksAmG/FdquMjOZgT+Bv/lPfHOurJbnzow4d2K
+         WkeLuX83GKuRW9SDF7dTwt5dp4cm75H35X3R1+3m27nAtUm40+IFLPxmLS7v1uGkKHO1
+         uxE948eZOQ2viFVEZb2urqvYOvPhewco+NNfi0aF7+XhSn5Abtdk/PHagpRGeNrdHWlE
+         gUSpUVyJB1ib7msceREHc/uZjUSvUA0x7PCjT4tQdrFT2e74CnrmQQgpC+9Kg1GmkURW
+         CPFF/a9bQ96VM1bM2FXUYB8LYYH9uqLOctB1dZhYKcPgXorMiyY3jCqJOjQWOCyzIsR8
+         G+dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
+        b=nrHexLh3ZbMmW01VstD939A9TRTSE/YQ83nELn6EfqLiFCKbMNckDPGKxTebCuxLE9
+         Iid73WEvcx4s5iLIoGddEB0m+SeVDyQwDcEstjZ/r8VermBKQNozEPEv/IeI7izpnHAt
+         r9W8ycDeDfllon7dKttN3F+kCMFUn0Bsq/MD9rgN3XZT4UtPPDhnYOojH8rMBOs1uGlB
+         q8CPDeI5plxY+38fptzULhoKo1xucHxxXyR0HWg0g86bLOfNPWJjdvGcg8MWqbYrJZ58
+         He+96v+/ZDSq/AikgPiOYTfzcGp5s+rERcJ3oreS+crP50ZCfBCcntAuXypBnpYGPlz3
+         ab0g==
+X-Gm-Message-State: AOAM5300GJ5qIwKsuH43gzYOHDCZCwJ/CAcZA4s9lUD7DTsaYU1rTjLm
+        w/dR+5X6Yd9KKY0v49TbRFqPpjG9DAA=
+X-Google-Smtp-Source: ABdhPJy8RsgFxVJC6xng+s7wc1yIOJggFktbwGbFXSy5aOBwsXWy3RF3vXttwMVJEULoT8UVWu+Xrw==
+X-Received: by 2002:a17:906:6d8e:: with SMTP id h14mr18193647ejt.522.1606081825652;
+        Sun, 22 Nov 2020 13:50:25 -0800 (PST)
+Received: from [192.168.43.48] ([197.210.35.67])
+        by smtp.gmail.com with ESMTPSA id e17sm4016232edc.45.2020.11.22.13.50.20
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sun, 22 Nov 2020 13:50:25 -0800 (PST)
+Message-ID: <5fbadd21.1c69fb81.8dfc7.11d1@mx.google.com>
+Sender: Baniko Diallo <banidiallo23@gmail.com>
+From:   Adelina Zeuki <adelinazeuki@gmail.com>
+X-Google-Original-From: "Adelina Zeuki" <  adelinazeuki@gmail.comm >
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Description: Mail message body
+Subject: Hello !!
+To:     Recipients <adelinazeuki@gmail.comm>
+Date:   Sun, 22 Nov 2020 21:50:14 +0000
+Reply-To: adelinazeuki@gmail.com
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Bjorn,
+Hi dear,
 
-It looks like I still have the same issue even with this patch applied.
-
-Regards,
-Caleb
-
-On 2020-11-22 03:47, Bjorn Andersson wrote:
-> On Thu 12 Nov 10:22 CST 2020, Caleb Connolly wrote:
->
->> The OnePlus 6/T has the same issue as the Yoga c630 causing a crash when=
- DMA
->> is used for i2c, so disable it.
->>
->> https://patchwork.kernel.org/patch/11133827/
->>
->> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
->> ---
->>   drivers/i2c/busses/i2c-qcom-geni.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c=
--qcom-geni.c
->> index 8b4c35f47a70..9acdcfe73be2 100644
->> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->> @@ -357,7 +357,8 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *=
-gi2c, struct i2c_msg *msg,
->>   =09struct geni_se *se =3D &gi2c->se;
->>   =09size_t len =3D msg->len;
->>
->> -=09if (!of_machine_is_compatible("lenovo,yoga-c630"))
->> +=09if (!of_machine_is_compatible("lenovo,yoga-c630") &&
->> +=09    !of_machine_is_compatible("oneplus,oneplus6"))
-> This hack seems to have been working around two separate issues. First
-> with iommu active the GENI wrappers needs to have their stream mapping
-> configured. Secondly there was a bug in the transaction setup that was
-> recently fixed by Doug Anderson.
->
-> So can you please give the following patch a go? I've yet to test it on
-> the Lenovo machine, but I think it allows us to remove the quirk.
->
-> https://lore.kernel.org/lkml/20201122034149.626045-1-bjorn.andersson@lina=
-ro.org/T/#u
->
-> Regards,
-> Bjorn
->
->>   =09=09dma_buf =3D i2c_get_dma_safe_msg_buf(msg, 32);
->>
->>   =09if (dma_buf)
->> @@ -399,7 +400,8 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *=
-gi2c, struct i2c_msg *msg,
->>   =09struct geni_se *se =3D &gi2c->se;
->>   =09size_t len =3D msg->len;
->>
->> -=09if (!of_machine_is_compatible("lenovo,yoga-c630"))
->> +=09if (!of_machine_is_compatible("lenovo,yoga-c630") &&
->> +=09    !of_machine_is_compatible("oneplus,oneplus6"))
->>   =09=09dma_buf =3D i2c_get_dma_safe_msg_buf(msg, 32);
->>
->>   =09if (dma_buf)
->> --
->> 2.29.2
->>
->>
-
-
+Can i talk with you ?
