@@ -2,87 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B909D2BC223
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 Nov 2020 21:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B6B2BC367
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Nov 2020 04:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728456AbgKUU5O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 Nov 2020 15:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S1727271AbgKVD1Q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 Nov 2020 22:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728403AbgKUU5O (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 Nov 2020 15:57:14 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B244C0613CF
-        for <linux-i2c@vger.kernel.org>; Sat, 21 Nov 2020 12:57:14 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id q5so11231222pfk.6
-        for <linux-i2c@vger.kernel.org>; Sat, 21 Nov 2020 12:57:14 -0800 (PST)
+        with ESMTP id S1727051AbgKVD1P (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 Nov 2020 22:27:15 -0500
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BABFC061A4A
+        for <linux-i2c@vger.kernel.org>; Sat, 21 Nov 2020 19:27:15 -0800 (PST)
+Received: by mail-ot1-x343.google.com with SMTP id o3so12746326ota.8
+        for <linux-i2c@vger.kernel.org>; Sat, 21 Nov 2020 19:27:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=Y0Eppo/kYLyMRVTN/kpzdicBUcF/hn0/YG7ihTMQInU=;
-        b=axX5Y57oFdsVvw+5VELGjEImu7KCbh6A4QrZ9ki/4E0brGYMGAQ96RbtAm/cl3oG4z
-         ttk54i7rqqDw/HmidTDSxPgpU+Q3iNiY5CycZ2ygJhcUWGcAikaBjipVREoMH++PSerh
-         8jx4byoMq0z/bPhm+ehtnAvJ2O5wYMakMqCWcW6ljXheo5dI00YPCaEOTgUBURn3XNTA
-         RpBahNkLPGlIqXPScgIXCStg7ecqfvs/kfariiifA54Rs/nm45pYb4c26n8zc43up0bc
-         IQTT2/PmuClb0subywMmxcC/Edp30+abDVFLcDMahXflW4o4U2En+FZxSFvuYmVmjrLQ
-         X9yg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gcJ/gZYUXR9QLu14QvKD5lqjMbo7YC2xKOPSwdvWYkg=;
+        b=cMVPreriOsxiBapSTAIYACsTKMFBggUNDJTWPOlbu0MizKIp/57CkomARQi2wFDxOo
+         2TRVV6f9+x9LDc0a2qMMd1OG0BHwuco9fCKJD3Mrcad/HXwA+OePc8vrnmFqEtZXbFXN
+         bcTOwwKNTLUIUQnOTQQ6wMJ+JjPJKy4s7iZbwDS8fEypkOJFOmNCy1rdiB3PQaBw75kZ
+         449TFvTvmFCyLIIYLWzQ1xnURgApnSTv1M2vJEo0Y/txY+zB1z+t7O6KM3C0H9ZWdrmv
+         Xkzrjfc1HZgeqozI+kAL0Q/uwOiOqkcHM81dm0BNhk6fn6udbpa9/UR48XBxKrog0EN+
+         SutA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=Y0Eppo/kYLyMRVTN/kpzdicBUcF/hn0/YG7ihTMQInU=;
-        b=FTQoKNJlAKGTMlDeXJUtfJcRLGmOElQ9mrbTg49hjSnPKKAGU/sLHi4SbcUsozMn5V
-         iBtCif0yZ8ltAOFfpaICG2PrnLjGvp1d0N+Cz6lR7px2JnI1KNcsqhR7kJFPDF2dmNgu
-         s7FcT5AfCncTV13KZosUHfg0XxVZ54+FSwWdwUz7eLWlmPBekkzTC5z8dIVHq4GMhHSn
-         5H3JmpsFWxGzJeA988YdyKP+qLlgfWCG3JSQLpewvIbrrhiFTa7MKvK7gTyinTrPi5TD
-         puPf+UmP8JkVhV4v5sqgQfS/wsjXe2HNpgxPH3OidGp62h1/iVYeNLbqhc+wZT4e2ju+
-         Qkqw==
-X-Gm-Message-State: AOAM5320vR4H+72O10iHHQpssO0EqdsEhzTJ0ZBOOgFFIFxE6uLr07Qt
-        R3GdvEzexTJzwLTNet1KoSGfjqOEhxQq1Q77hWc=
-X-Google-Smtp-Source: ABdhPJzVaSCTbV5Mn8yIjlt1/Id4DXAAD5V3PChFP4nzqwBXa802fvjAkT0jxh4zAPC3gZq62Gbx5nv9abePAiHiApo=
-X-Received: by 2002:a17:90a:dc02:: with SMTP id i2mr2799860pjv.132.1605992233750;
- Sat, 21 Nov 2020 12:57:13 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gcJ/gZYUXR9QLu14QvKD5lqjMbo7YC2xKOPSwdvWYkg=;
+        b=YuU+ZiQWW40F6HJwIGctV7HS4DfhFlO7jjVtC6675dpV6/QhBMbg0GyEWK1MtOJVgN
+         SKZrUiN3HzzP2QFUzZNBKIhey+hkXmP3ar0FLssW53nLyE+k4e9tEqzU99FNXhq5E3qG
+         znUPG/Vlj8bmqF1EyjJqw8me7Ci/FJGJT4B7jQkqfkPhNZ6pT2w58ukBpBykatfk6qr/
+         xpBTzXQN48jS3y4Bqcn/pYvTPEAvykg23AJtlP3YE8rJcUhrZmkn7ey5rr/dw1ndAJVe
+         ITmFVKoViaMfxtYMAnu2/W36Tqj+uAz2HUwgAClAa1Af5KjMQmJrRHuQgRjJP81eaAII
+         /50g==
+X-Gm-Message-State: AOAM530vu1ziim2Ns8putYBKk/Tq9A8JwS9lEoNirhUbt7E1avWnxi3S
+        +gWsaStB4GxR1g9VR2sRlpeo8A==
+X-Google-Smtp-Source: ABdhPJxOBeYHmrJgzTQIdruCWiGFr8x7Y922pbyzi4OB0QQCAhRvaOrUG7mkSy+BThKqLnb4GXH/tA==
+X-Received: by 2002:a9d:68c3:: with SMTP id i3mr17893774oto.31.1606015634538;
+        Sat, 21 Nov 2020 19:27:14 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id c136sm4584564oib.7.2020.11.21.19.27.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Nov 2020 19:27:13 -0800 (PST)
+Date:   Sat, 21 Nov 2020 21:27:11 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Roja Rani Yarubandi <rojay@codeaurora.org>
+Cc:     wsa@kernel.org, swboyd@chromium.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        vkaur@codeaurora.org, pyarlaga@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sumit.semwal@linaro.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH V6 1/3] soc: qcom: geni: Remove "iova" check
+Message-ID: <20201122032711.GO8532@builder.lan>
+References: <20201030145959.505-1-rojay@codeaurora.org>
+ <20201030145959.505-2-rojay@codeaurora.org>
 MIME-Version: 1.0
-Sender: judenkuma10@gmail.com
-Received: by 2002:a05:6a10:9e89:0:0:0:0 with HTTP; Sat, 21 Nov 2020 12:57:13
- -0800 (PST)
-From:   Mrs Francisca Carlsen <franciscacarlsen20@gmail.com>
-Date:   Sat, 21 Nov 2020 21:57:13 +0100
-X-Google-Sender-Auth: AynPe3I3SvPjk4Pi2gqXwHFo9-E
-Message-ID: <CAP=Po6cwX4kkiWvsmwAQHM80=06JUOT_x8F1HiRs9Cd1uqx2JA@mail.gmail.com>
-Subject: Greetings My Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201030145959.505-2-rojay@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Greetings My Dear,
+On Fri 30 Oct 09:59 CDT 2020, Roja Rani Yarubandi wrote:
 
-    I sent this mail praying it will found you in a good condition of
-health, since I myself are in a very critical health condition in
-which I  sleep every night without knowing if I may be alive to see
-the next day. I am Mrs. Francisca  Carlsen from Denmark wife of late
-Mr John Carlsen, a widow suffering from long time illness. I have some
-funds I inherited from my late husband, the sum of (eleven million
-dollars) my Doctor told me recently that I have serious sickness which
-is cancer problem. What disturbs me most is my stroke sickness. Having
-known my condition, I decided to donate this fund to a good person
-that will utilize it the way i am going to instruct herein. I need a
-very honest and God fearing person who can claim this money and use it
-for Charity works, for orphanages, widows and also build schools for
-less privileges that will be named after my late husband if possible
-and to promote the word of God and the effort that the house of God is
-maintained.
+> Remove "iova" check from geni_se_tx_dma_unprep and geni_se_rx_dma_unprep
+> functions as checking with dma_mapping_error() is enough.
+> 
 
-I do not want a situation where this money will be used in an ungodly
-manner. That's why I'm taking this decision. I'm not afraid of death,
-so I know where I'm going. I accept this decision because I do not
-have any child who will inherit this money after I die. Please I want
-your sincerely and urgent answer to know if you will be able to
-execute this project, and I will give you more information on how the
-fund will be transferred to your bank account. I am waiting for your
-reply.
+Applied this patch towards v5.11.
 
-May God Bless you,
-Mrs. Francisca Carlsen
+Thank you,
+Bjorn
+
+> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+> ---
+> Changes in V5:
+>  - This is newly added patch in V5. As per Stephen's comments separted
+>    this patch from shutdown callback patch.
+> 
+> Changes in V6:
+>  - Fixed nit-picks in commit text.
+> 
+>  drivers/soc/qcom/qcom-geni-se.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+> index d0e4f520cff8..0216b38c1e9a 100644
+> --- a/drivers/soc/qcom/qcom-geni-se.c
+> +++ b/drivers/soc/qcom/qcom-geni-se.c
+> @@ -705,7 +705,7 @@ void geni_se_tx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+>  {
+>  	struct geni_wrapper *wrapper = se->wrapper;
+>  
+> -	if (iova && !dma_mapping_error(wrapper->dev, iova))
+> +	if (!dma_mapping_error(wrapper->dev, iova))
+>  		dma_unmap_single(wrapper->dev, iova, len, DMA_TO_DEVICE);
+>  }
+>  EXPORT_SYMBOL(geni_se_tx_dma_unprep);
+> @@ -722,7 +722,7 @@ void geni_se_rx_dma_unprep(struct geni_se *se, dma_addr_t iova, size_t len)
+>  {
+>  	struct geni_wrapper *wrapper = se->wrapper;
+>  
+> -	if (iova && !dma_mapping_error(wrapper->dev, iova))
+> +	if (!dma_mapping_error(wrapper->dev, iova))
+>  		dma_unmap_single(wrapper->dev, iova, len, DMA_FROM_DEVICE);
+>  }
+>  EXPORT_SYMBOL(geni_se_rx_dma_unprep);
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 
