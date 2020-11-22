@@ -2,107 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 869352BC37E
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Nov 2020 05:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE6C2BC79F
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Nov 2020 19:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727141AbgKVEIy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 Nov 2020 23:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727045AbgKVEIx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 Nov 2020 23:08:53 -0500
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68545C0613CF
-        for <linux-i2c@vger.kernel.org>; Sat, 21 Nov 2020 20:08:51 -0800 (PST)
-Received: by mail-ot1-x343.google.com with SMTP id o3so12789675ota.8
-        for <linux-i2c@vger.kernel.org>; Sat, 21 Nov 2020 20:08:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1+eyUtmtAjsxqioppn1au2QM1OrIpCppXp8wpa6NVJc=;
-        b=H9o3IDcPqHxIRAJk/VPIody7M0PPT3eLBVvvSPaCQvdyWMPnIl2LDupEvrIFRXDpT0
-         kkyVDf9AjK5fLIj8uPbM6V8RHgGMuk+N0mDcFUw8zwDDLtKGTtOFG69XSCO9QmDx6L8x
-         svlwlSTuZLuKn2AdfDZ8xA4M45AjfxyUNRaM0CpWeDSYhlbk5UfEukhVCGpcPeVpJN50
-         r9ZXOrs1DQWD2+4qaGmEG8xN3rEmKoBmBUhX2DetCfbUuVeO2QAyf90kixeKgfL6w57Q
-         Ol/VE7kqOzrj1n/0jYfc+TtivFdj5xpP/rXR6ojRrulonHqV2oQvs+ESVoAS7nrecfsN
-         6+Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1+eyUtmtAjsxqioppn1au2QM1OrIpCppXp8wpa6NVJc=;
-        b=a4VQ/i8GunrGDz00EWbbMr+VTMgqG+9uHGgt0/mPJFUYeeJIEAhDrMp8hHYETdLtjK
-         smY6Whp0jjqkh4hrMSDCSDEzctiCDPqBuOPo6Dn2rmrELWLwUX4YyFr+S4azGgIMsP5t
-         uIeCPHUmpY1jLcZKnHoPLW9kaUTD7Uunhzpo+/MO1TFlErF+YnrpA9bwpnY4Gp4ezT8C
-         1EMICMgW5dzo65iRjsSfHIORfx1IDOMmknU69ECfyV6/4OK5DRXZ3Ju9XdlULFMzyPy/
-         u2gVs8iwOoXSUsh0bhjj2hV9CiY/hfIuXspMeqO0UaOIS/lsYoUh+xjotlULWf/fu+Jm
-         pv1w==
-X-Gm-Message-State: AOAM5319PhKHo7Z0DY+a59YvSl5ywvkEe6pYs5TdGw0SMo+GeViraY52
-        nLHRBAnXB4jlN70f+XwoTyJI0ZjpDElAwA==
-X-Google-Smtp-Source: ABdhPJzDLfEkZxcFiWaLStMrxjN/UhXjzvllrqtvzx0fXPC+nCUgusgbAX6kKqGdHvA3LzoxEK2tgw==
-X-Received: by 2002:a9d:892:: with SMTP id 18mr11024273otf.9.1606018130559;
-        Sat, 21 Nov 2020 20:08:50 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id p12sm4131377oti.35.2020.11.21.20.08.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Nov 2020 20:08:49 -0800 (PST)
-Date:   Sat, 21 Nov 2020 22:08:48 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     agross@kernel.org, wsa@kernel.org, sricharan@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH] i2c: qup: Fix error return code in
- qup_i2c_bam_schedule_desc()
-Message-ID: <20201122040848.GB95182@builder.lan>
-References: <20201116141058.2365043-1-chengzhihao1@huawei.com>
+        id S1728062AbgKVR7w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 Nov 2020 12:59:52 -0500
+Received: from mail-03.mail-europe.com ([91.134.188.129]:42922 "EHLO
+        mail-03.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727317AbgKVR7v (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 Nov 2020 12:59:51 -0500
+Date:   Sun, 22 Nov 2020 17:59:44 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1606067987;
+        bh=0tDIIuf1Tt9UO5w2d7UPKWMd7FZ0ye8L9YX/ZJ0uO48=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=N9wfKYz9xQLTcAPvtTX7NH1mNJcxIOInJfKomsHFIQ6O4eZjlNIfHWG2cyw0hNIti
+         gPNQoCZ0l10nk9fpcdC46Ob7SMUr6JYkC6GU2aH18O8fzIpTCxcNVsnqbpmbslZR9i
+         n2v/z/qSRtJbnDTuG2b0X2jbSxTkzQdXak+buDYw=
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Caleb Connolly <caleb@connolly.tech>
+Subject: Re: [PATCH 5/5] i2c: geni: sdm845: dont perform DMA for OnePlus 6 devices
+Message-ID: <72a37c8c-12e4-eb51-2644-3436d19cf314@connolly.tech>
+In-Reply-To: <20201122034709.GA95182@builder.lan>
+References: <20201112161920.2671430-1-caleb@connolly.tech> <20201112161920.2671430-6-caleb@connolly.tech> <20201122034709.GA95182@builder.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201116141058.2365043-1-chengzhihao1@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon 16 Nov 08:10 CST 2020, Zhihao Cheng wrote:
+Hi Bjorn,
 
-> Fix to return the error code from qup_i2c_change_state()
-> instaed of 0 in qup_i2c_bam_schedule_desc().
-> 
-> Fixes: fbf9921f8b35d9b2 ("i2c: qup: Fix error handling")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> ---
->  drivers/i2c/busses/i2c-qup.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
-> index fbc04b60cfd1..5a47915869ae 100644
-> --- a/drivers/i2c/busses/i2c-qup.c
-> +++ b/drivers/i2c/busses/i2c-qup.c
-> @@ -801,7 +801,8 @@ static int qup_i2c_bam_schedule_desc(struct qup_i2c_dev *qup)
->  	if (ret || qup->bus_err || qup->qup_err) {
->  		reinit_completion(&qup->xfer);
->  
-> -		if (qup_i2c_change_state(qup, QUP_RUN_STATE)) {
-> +		ret = qup_i2c_change_state(qup, QUP_RUN_STATE);
-
-In the case that we entered this block because ret was -ETIMEDOUT then
-this will overwrite this and the function will return -EIO.
-
-But in the other paths out of this block ret is being overwritten
-anyways, so I think it's fine.
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+It looks like I still have the same issue even with this patch applied.
 
 Regards,
-Bjorn
+Caleb
 
-> +		if (ret) {
->  			dev_err(qup->dev, "change to run state timed out");
->  			goto desc_err;
->  		}
-> -- 
-> 2.25.4
-> 
+On 2020-11-22 03:47, Bjorn Andersson wrote:
+> On Thu 12 Nov 10:22 CST 2020, Caleb Connolly wrote:
+>
+>> The OnePlus 6/T has the same issue as the Yoga c630 causing a crash when=
+ DMA
+>> is used for i2c, so disable it.
+>>
+>> https://patchwork.kernel.org/patch/11133827/
+>>
+>> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+>> ---
+>>   drivers/i2c/busses/i2c-qcom-geni.c | 6 ++++--
+>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c=
+-qcom-geni.c
+>> index 8b4c35f47a70..9acdcfe73be2 100644
+>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>> @@ -357,7 +357,8 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *=
+gi2c, struct i2c_msg *msg,
+>>   =09struct geni_se *se =3D &gi2c->se;
+>>   =09size_t len =3D msg->len;
+>>
+>> -=09if (!of_machine_is_compatible("lenovo,yoga-c630"))
+>> +=09if (!of_machine_is_compatible("lenovo,yoga-c630") &&
+>> +=09    !of_machine_is_compatible("oneplus,oneplus6"))
+> This hack seems to have been working around two separate issues. First
+> with iommu active the GENI wrappers needs to have their stream mapping
+> configured. Secondly there was a bug in the transaction setup that was
+> recently fixed by Doug Anderson.
+>
+> So can you please give the following patch a go? I've yet to test it on
+> the Lenovo machine, but I think it allows us to remove the quirk.
+>
+> https://lore.kernel.org/lkml/20201122034149.626045-1-bjorn.andersson@lina=
+ro.org/T/#u
+>
+> Regards,
+> Bjorn
+>
+>>   =09=09dma_buf =3D i2c_get_dma_safe_msg_buf(msg, 32);
+>>
+>>   =09if (dma_buf)
+>> @@ -399,7 +400,8 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *=
+gi2c, struct i2c_msg *msg,
+>>   =09struct geni_se *se =3D &gi2c->se;
+>>   =09size_t len =3D msg->len;
+>>
+>> -=09if (!of_machine_is_compatible("lenovo,yoga-c630"))
+>> +=09if (!of_machine_is_compatible("lenovo,yoga-c630") &&
+>> +=09    !of_machine_is_compatible("oneplus,oneplus6"))
+>>   =09=09dma_buf =3D i2c_get_dma_safe_msg_buf(msg, 32);
+>>
+>>   =09if (dma_buf)
+>> --
+>> 2.29.2
+>>
+>>
+
+
