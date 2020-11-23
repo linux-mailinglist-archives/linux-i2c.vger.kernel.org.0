@@ -2,68 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6C02BFB0A
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Nov 2020 22:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0972C1684
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Nov 2020 21:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726667AbgKVVu1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 22 Nov 2020 16:50:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        id S1729624AbgKWU16 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 Nov 2020 15:27:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726296AbgKVVu1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 Nov 2020 16:50:27 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E6DC0613CF;
-        Sun, 22 Nov 2020 13:50:26 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id z5so512474ejp.4;
-        Sun, 22 Nov 2020 13:50:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:sender:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
-        b=TnXlN4ldBjSgvAJgHY3T7vW9Ah283ksAmG/FdquMjOZgT+Bv/lPfHOurJbnzow4d2K
-         WkeLuX83GKuRW9SDF7dTwt5dp4cm75H35X3R1+3m27nAtUm40+IFLPxmLS7v1uGkKHO1
-         uxE948eZOQ2viFVEZb2urqvYOvPhewco+NNfi0aF7+XhSn5Abtdk/PHagpRGeNrdHWlE
-         gUSpUVyJB1ib7msceREHc/uZjUSvUA0x7PCjT4tQdrFT2e74CnrmQQgpC+9Kg1GmkURW
-         CPFF/a9bQ96VM1bM2FXUYB8LYYH9uqLOctB1dZhYKcPgXorMiyY3jCqJOjQWOCyzIsR8
-         G+dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:sender:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
-        b=nrHexLh3ZbMmW01VstD939A9TRTSE/YQ83nELn6EfqLiFCKbMNckDPGKxTebCuxLE9
-         Iid73WEvcx4s5iLIoGddEB0m+SeVDyQwDcEstjZ/r8VermBKQNozEPEv/IeI7izpnHAt
-         r9W8ycDeDfllon7dKttN3F+kCMFUn0Bsq/MD9rgN3XZT4UtPPDhnYOojH8rMBOs1uGlB
-         q8CPDeI5plxY+38fptzULhoKo1xucHxxXyR0HWg0g86bLOfNPWJjdvGcg8MWqbYrJZ58
-         He+96v+/ZDSq/AikgPiOYTfzcGp5s+rERcJ3oreS+crP50ZCfBCcntAuXypBnpYGPlz3
-         ab0g==
-X-Gm-Message-State: AOAM5300GJ5qIwKsuH43gzYOHDCZCwJ/CAcZA4s9lUD7DTsaYU1rTjLm
-        w/dR+5X6Yd9KKY0v49TbRFqPpjG9DAA=
-X-Google-Smtp-Source: ABdhPJy8RsgFxVJC6xng+s7wc1yIOJggFktbwGbFXSy5aOBwsXWy3RF3vXttwMVJEULoT8UVWu+Xrw==
-X-Received: by 2002:a17:906:6d8e:: with SMTP id h14mr18193647ejt.522.1606081825652;
-        Sun, 22 Nov 2020 13:50:25 -0800 (PST)
-Received: from [192.168.43.48] ([197.210.35.67])
-        by smtp.gmail.com with ESMTPSA id e17sm4016232edc.45.2020.11.22.13.50.20
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sun, 22 Nov 2020 13:50:25 -0800 (PST)
-Message-ID: <5fbadd21.1c69fb81.8dfc7.11d1@mx.google.com>
-Sender: Baniko Diallo <banidiallo23@gmail.com>
-From:   Adelina Zeuki <adelinazeuki@gmail.com>
-X-Google-Original-From: "Adelina Zeuki" <  adelinazeuki@gmail.comm >
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S1728156AbgKWU16 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Nov 2020 15:27:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A94FC0613CF
+        for <linux-i2c@vger.kernel.org>; Mon, 23 Nov 2020 12:27:57 -0800 (PST)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1khIRI-0007s6-02; Mon, 23 Nov 2020 21:27:56 +0100
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1khIRH-0006iq-Am; Mon, 23 Nov 2020 21:27:55 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] i2c: pca-platform: drop two members from driver data that are assigned to only
+Date:   Mon, 23 Nov 2020 21:27:46 +0100
+Message-Id: <20201123202746.2817480-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Hello !!
-To:     Recipients <adelinazeuki@gmail.comm>
-Date:   Sun, 22 Nov 2020 21:50:14 +0000
-Reply-To: adelinazeuki@gmail.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi dear,
+io_base and io_size are assigned to only in .probe() and otherwise unused.
 
-Can i talk with you ?
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/i2c/busses/i2c-pca-platform.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-pca-platform.c b/drivers/i2c/busses/i2c-pca-platform.c
+index 546426a470cc..86d4f75ef8d3 100644
+--- a/drivers/i2c/busses/i2c-pca-platform.c
++++ b/drivers/i2c/busses/i2c-pca-platform.c
+@@ -33,8 +33,6 @@ struct i2c_pca_pf_data {
+ 	wait_queue_head_t		wait;
+ 	struct i2c_adapter		adap;
+ 	struct i2c_algo_pca_data	algo_data;
+-	unsigned long			io_base;
+-	unsigned long			io_size;
+ };
+ 
+ /* Read/Write functions for different register alignments */
+@@ -156,8 +154,6 @@ static int i2c_pca_pf_probe(struct platform_device *pdev)
+ 
+ 	init_waitqueue_head(&i2c->wait);
+ 
+-	i2c->io_base = res->start;
+-	i2c->io_size = resource_size(res);
+ 	i2c->irq = irq;
+ 
+ 	i2c->adap.nr = pdev->id;
+-- 
+2.29.2
+
