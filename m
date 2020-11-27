@@ -2,102 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D312A2C5906
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Nov 2020 17:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322202C6706
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Nov 2020 14:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391490AbgKZQKL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Nov 2020 11:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S1730544AbgK0NkA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Nov 2020 08:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730987AbgKZQKL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Nov 2020 11:10:11 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171EBC0613D4
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Nov 2020 08:10:11 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id b6so2002819pfp.7
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Nov 2020 08:10:11 -0800 (PST)
+        with ESMTP id S1730438AbgK0Nj5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Nov 2020 08:39:57 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEF1C0613D4
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Nov 2020 05:39:56 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id f23so7688804ejk.2
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Nov 2020 05:39:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XX1dKY+g5cNULWumwqO6QpUHR/ReF5hRORN8sYXjQBU=;
-        b=W/5Fc9iFFkc2XtMFTWg9row9KaKBexv9VZ4pj/3ElJzj3fs6664TpDiV/EtYqkAf6G
-         cXvRsFe1Beft6NBMjnSc+jzEMm+GEAsWhbIYFb0mnHbpSapv7WxJPuo28+89D2OAuLC5
-         jZnnRjBbWnf2n+J3RUyGwGBRHnpBeF1xJkOA5cnN7lXn7AEUrKTsnTNmTjwLA2l89HoX
-         oXfruCXbK9RDekg6imdjiQNJUMl9tlSBK61ahG1Ip//G05vtTgv2ic5Fr02RhPmUPScH
-         rDWITon7R6/yPNAQtrEPdQC/I5JoFbTC7m1dYiEvfGKfazR68aElmh82ycmopbWLkZ88
-         VpqA==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZTzYDGlssiWZrUEFT2+YAeEh5ntk2vBgSh5UR1iN5dM=;
+        b=ULNlQGsr3qUNzH/jaEfgFSgEyxt6P0XKTUnq1MIA+5i44yiv0m/KnfBsBRFM19+Y+D
+         RSScUObp4c25El6RzmLPoNg/JsufYS7LHJMAI8Oo+kbZBY1+ZE7komJ9u7CEfhmwBL2H
+         HWZ6/nn2XkCunJ8v5w4GQxlK92VT28h5Wbc4n58j+Fc5AhffjZAgrVJ29bgICVLg5aoS
+         aVC+WsED7UiDvLULIuqF4Duy778G+j1sR5X5VXB5v5owMwFLc0JYwo6JYhLowRBbuv0I
+         1780ULPOWodEfzXGZ1Pcy+rGSmYWLS8nhoLMTcoev+/wBAKySLxh4w8sVla71UFvlQ0U
+         vSgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XX1dKY+g5cNULWumwqO6QpUHR/ReF5hRORN8sYXjQBU=;
-        b=FktGwYuG7nT/zLPM7RTFLbF2DgPA8Rh8NCsrKZMZ3hRinubYU3Bv1fmm9wEMLknrfm
-         4Do/KgMGWNPYTMJJrdKAxYifLcIPgOCSyBW6GEiq8kJb9LMh7gKr/n56C/1eowl3aTZh
-         CT3bw3raQMdbsBIf8jKG4N9kMfkjO3bzqoClqsn2OPYw1LYcev/xH8Zvj6n+tIlaHCff
-         EvN/5tHfwmmRcSXhZeaoNvfruqGMHkeZ8qku30pwj+bTFuEVjGEaWZ5qXAyE598I7RUn
-         /P0E0bHJJgVf1AUSVoQMHEZ/JJClOgP8n4XnHkapp675hvdHIHuGBItPCTZiD2Kin2KJ
-         uj0A==
-X-Gm-Message-State: AOAM530cRABnE4222BOucj4NqumRpqyymn0G+7/781Vh4amkXXi0WGBF
-        hTawVJU9x2XZtQ/Bc9RVaPEj
-X-Google-Smtp-Source: ABdhPJxPk8yzwbdBrvHhw1L2hjPE0hNuaXTYPgSDi9ylqtHzP7IaIaBzhdHSGeeTo5FjZtQmSLGqDw==
-X-Received: by 2002:a63:d157:: with SMTP id c23mr2967582pgj.196.1606407010538;
-        Thu, 26 Nov 2020 08:10:10 -0800 (PST)
-Received: from thinkpad ([2409:4072:6e95:f2a:3996:9d7f:e389:7f7d])
-        by smtp.gmail.com with ESMTPSA id q5sm5256623pff.36.2020.11.26.08.10.07
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZTzYDGlssiWZrUEFT2+YAeEh5ntk2vBgSh5UR1iN5dM=;
+        b=Vtw1+QZhQ3h+ejqvUbsmJprrlgnXNm4gBtRgglZJysP2m4kG+T7UnYLfa+0jdoRZ+e
+         RUx+xQCGVEhU5OjYJ6Fcg/fIahlp30oGXwLA4lXtD+NosCtBDQJcmj57HvgVIr8ze0bm
+         I1IZGgEx9jvSs6heARAWfY7VoKQ3mTMETAt2ljRC0ORKQAyvH74E1OyZRKGDJ9VF2XFk
+         fiyxSXs1JSi33STrD4r+8iKYey7XhU/KcvU/oz3kmP8sH0K8HLHhVETzSwqX0FmGItM/
+         cc4RoCIE5Ru3mJwDw6yzpO2aU8XvNdrP9hwUzKFM1THqnyJj8mBz7edFYJ6zBiJ1Q74P
+         UtkQ==
+X-Gm-Message-State: AOAM533l3/WFbQDM0abkNsetN/38DtDGwqeOP5npRrVwYoYZ8iS7uqXQ
+        8DFC8HoA6pFrY4I2gzDiD1TkhQ==
+X-Google-Smtp-Source: ABdhPJwfONJAi7YtCaCsi4iSGdldwFF46ZMraq6EoZJOiOLRQAkr6rj/+YjLyi/d50CKVVgwe/dX6w==
+X-Received: by 2002:a17:906:7a18:: with SMTP id d24mr5856719ejo.324.1606484394871;
+        Fri, 27 Nov 2020 05:39:54 -0800 (PST)
+Received: from localhost.localdomain ([2a02:2450:102f:d6a:a6a1:9dbe:c8e3:3524])
+        by smtp.gmail.com with ESMTPSA id z16sm4840092ejx.119.2020.11.27.05.39.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2020 08:10:09 -0800 (PST)
-Date:   Thu, 26 Nov 2020 21:40:05 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Loic Poulain <loic.poulain@linaro.org>, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] i2c: qcom: Fix IRQ error misassignement
-Message-ID: <20201126161005.GF51288@thinkpad>
-References: <20201126145321.18269-1-robert.foss@linaro.org>
- <20201126150334.GC51288@thinkpad>
- <CAG3jFysosSVGfLzAvERS=GaEz8J8SJwh7roS5twG6-7meErKdw@mail.gmail.com>
+        Fri, 27 Nov 2020 05:39:54 -0800 (PST)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     loic.poulain@linaro.org, robert.foss@linaro.org,
+        bjorn.andersson@linaro.org, wsa@kernel.org, todor.too@gmail.com,
+        vkoul@kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2] i2c: qcom: Fix IRQ error misassignement
+Date:   Fri, 27 Nov 2020 14:39:37 +0100
+Message-Id: <20201127133937.93208-1-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG3jFysosSVGfLzAvERS=GaEz8J8SJwh7roS5twG6-7meErKdw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 04:58:48PM +0100, Robert Foss wrote:
-> Thanks for the review Mani.
-> 
-> On Thu, 26 Nov 2020 at 16:03, Manivannan Sadhasivam
-> <manivannan.sadhasivam@linaro.org> wrote:
-> >
-> > On Thu, Nov 26, 2020 at 03:53:21PM +0100, Robert Foss wrote:
-> > > During cci_isr() errors read from register fields belonging to
-> > > i2c master1 are currently assigned to the status field belonging to
-> >
-> > s/correctly/incorrectly
-> 
-> I don't think there actually is an error in the comment.
-> 
+During cci_isr() errors read from register fields belonging to
+i2c master1 are currently assigned to the status field belonging to
+i2c master0. This patch corrects this error, and always assigns
+master1 errors to the status field of master1.
 
-Yeah its an error in my comment ;) Please ignore that.
+Fixes: e517526195de ("i2c: Add Qualcomm CCI I2C driver")
 
-Thanks,
-Mani
+Reported-by: Loic Poulain <loic.poulain@linaro.org>
+Suggested-by: Loic Poulain <loic.poulain@linaro.org>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+---
+ drivers/i2c/busses/i2c-qcom-cci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> >
-> > > i2c master0. This patch corrects this error, and always assigns
-> > > master1 errors to the status field of master1.
-> > >
-> >
-> > This patch fixes a legitimate bug. So there should be a fixes tag!
-> 
-> On it, fixed in v2
-> 
-> >
-> > > Suggested-by: Loic Poulain <loic.poulain@linaro.org>
-> >
-> > Reported-by?
-> 
-> I'll add both in v2
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index f13735beca58..1c259b5188de 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -194,9 +194,9 @@ static irqreturn_t cci_isr(int irq, void *dev)
+ 	if (unlikely(val & CCI_IRQ_STATUS_0_I2C_M1_ERROR)) {
+ 		if (val & CCI_IRQ_STATUS_0_I2C_M1_Q0_NACK_ERR ||
+ 			val & CCI_IRQ_STATUS_0_I2C_M1_Q1_NACK_ERR)
+-			cci->master[0].status = -ENXIO;
++			cci->master[1].status = -ENXIO;
+ 		else
+-			cci->master[0].status = -EIO;
++			cci->master[1].status = -EIO;
+ 
+ 		writel(CCI_HALT_REQ_I2C_M1_Q0Q1, cci->base + CCI_HALT_REQ);
+ 		ret = IRQ_HANDLED;
+-- 
+2.27.0
+
