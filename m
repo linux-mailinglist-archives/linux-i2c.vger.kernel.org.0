@@ -2,39 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD4A2C7286
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Nov 2020 23:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3BE2C7274
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Nov 2020 23:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733189AbgK1VuJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45758 "EHLO mail.kernel.org"
+        id S1733170AbgK1VuI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45766 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733178AbgK1SL4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S1730883AbgK1SL4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Sat, 28 Nov 2020 13:11:56 -0500
 Received: from localhost.localdomain (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D090C246DC;
-        Sat, 28 Nov 2020 17:35:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0A524246DE;
+        Sat, 28 Nov 2020 17:35:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606584951;
-        bh=9BQlSLMXU7WdE/+S3iVfiYVyMzHTfy7TaP9dxoF6nXA=;
+        s=default; t=1606584953;
+        bh=6qNyZ1RtQGHuKLMWge17BBB6zo62SDUtn3lfhDZJZAk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fRbd+QL5mVVzD0mfqm5tQa6u3F4IhPx1HnjVILbZzWMHVD/9cNQc3BXzG2zEpeeRd
-         eGCGO5rhUh9oI3xjVmAE1bcrgOScWYzq0/U8RI52FeK9odPQOoMMtKm27+wwuq4Anh
-         A3OZKBlauFexuvI3hXdZrabpbUzMxyqpwurHEilY=
+        b=vzSZqtyxwLzk+3Q2GF6+3WfEP7KYzBpUefXHLTXmRq7FjIZMG/k3GDDgGEF7z3xPr
+         90LXvcn6jVEwivGKxPbedMN4v/bqddMc8wgorcrUfUpROlWTd2PmGbfxlMKTjIMR1b
+         TfIljwhhINop5T409hmlhkkuFb96kut70UOtsPIs=
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-i2c@vger.kernel.org
 Cc:     Rob Herring <robh+dt@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         Peter Rosin <peda@axentia.se>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Rob Herring <robh@kernel.org>,
-        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Subject: [PATCH v2 2/3] dt-bindings:iio:imu:invensense,mpu6050: txt to yaml conversion
-Date:   Sat, 28 Nov 2020 17:33:42 +0000
-Message-Id: <20201128173343.390165-3-jic23@kernel.org>
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 3/3] dt-bindings:iio:gyro:invensense,mpu3050: txt to yaml format conversion.
+Date:   Sat, 28 Nov 2020 17:33:43 +0000
+Message-Id: <20201128173343.390165-4-jic23@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201128173343.390165-1-jic23@kernel.org>
 References: <20201128173343.390165-1-jic23@kernel.org>
@@ -46,144 +45,106 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-As Rob Herring suggested, this no long requires the explicit
-i2c-gate binding, but instead just used i2c-controller.yaml
+Very similar to the mpu6050 binding.
+Only unusual element is the i2c-gate section.
+Example tweaked a little to include a real device behind the gate.
+
+As Rob Herring suggested, dropped use of explicit i2c-gate yaml
+binding in favour of just using the i2c-controller.yaml binding
 directly.
 
-2 prior examples combinded into one as a single example can show
-all of the binding elements as long as the right part is selected.
-
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Reviewed-by: Rob Herring <robh@kernel.org>
-Cc: Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
-Cc: Wolfram Sang <wsa@the-dreams.de>
-Cc: Peter Rosin <peda@axentia.se>
-Link: https://lore.kernel.org/r/20201031181801.742585-3-jic23@kernel.org
+Link: https://lore.kernel.org/r/20201031181801.742585-4-jic23@kernel.org
 ---
- .../bindings/iio/imu/inv_mpu6050.txt          |  67 ------------
- .../bindings/iio/imu/invensense,mpu6050.yaml  | 103 ++++++++++++++++++
- 2 files changed, 103 insertions(+), 67 deletions(-)
+ .../iio/gyroscope/invensense,mpu3050.txt      | 45 ------------
+ .../iio/gyroscope/invensense,mpu3050.yaml     | 70 +++++++++++++++++++
+ 2 files changed, 70 insertions(+), 45 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt b/Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt
+diff --git a/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.txt b/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.txt
 deleted file mode 100644
-index f2f64749e818..000000000000
---- a/Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt
+index 233fe207aded..000000000000
+--- a/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.txt
 +++ /dev/null
-@@ -1,67 +0,0 @@
--InvenSense MPU-6050 Six-Axis (Gyro + Accelerometer) MEMS MotionTracking Device
--
--http://www.invensense.com/mems/gyro/mpu6050.html
+@@ -1,45 +0,0 @@
+-Invensense MPU-3050 Gyroscope device tree bindings
 -
 -Required properties:
-- - compatible : should be one of
--		"invensense,mpu6000"
--		"invensense,mpu6050"
-- 		"invensense,mpu6500"
--		"invensense,mpu6515"
--		"invensense,mpu9150"
--		"invensense,mpu9250"
--		"invensense,mpu9255"
--		"invensense,icm20608"
--		"invensense,icm20609"
--		"invensense,icm20689"
--		"invensense,icm20602"
--		"invensense,icm20690"
--		"invensense,iam20680"
-- - reg : the I2C address of the sensor
-- - interrupts: interrupt mapping for IRQ. It should be configured with flags
--   IRQ_TYPE_LEVEL_HIGH, IRQ_TYPE_EDGE_RISING, IRQ_TYPE_LEVEL_LOW or
--   IRQ_TYPE_EDGE_FALLING.
--
--  Refer to interrupt-controller/interrupts.txt for generic interrupt client node
--  bindings.
+-  - compatible : should be "invensense,mpu3050"
+-  - reg : the I2C address of the sensor
 -
 -Optional properties:
-- - vdd-supply: regulator phandle for VDD supply
-- - vddio-supply: regulator phandle for VDDIO supply
-- - mount-matrix: an optional 3x3 mounting rotation matrix
-- - i2c-gate node.  These devices also support an auxiliary i2c bus.  This is
--   simple enough to be described using the i2c-gate binding. See
--   i2c/i2c-gate.txt for more details.
+-  - interrupts : interrupt mapping for the trigger interrupt from the
+-    internal oscillator. The following IRQ modes are supported:
+-    IRQ_TYPE_EDGE_RISING, IRQ_TYPE_EDGE_FALLING, IRQ_TYPE_LEVEL_HIGH and
+-    IRQ_TYPE_LEVEL_LOW. The driver should detect and configure the hardware
+-    for the desired interrupt type.
+-  - vdd-supply : supply regulator for the main power voltage.
+-  - vlogic-supply : supply regulator for the signal voltage.
+-  - mount-matrix : see iio/mount-matrix.txt
+-
+-Optional subnodes:
+-  - The MPU-3050 will pass through and forward the I2C signals from the
+-    incoming I2C bus, alternatively drive traffic to a slave device (usually
+-    an accelerometer) on its own initiative. Therefore is supports a subnode
+-    i2c gate node. For details see: i2c/i2c-gate.txt
 -
 -Example:
--	mpu6050@68 {
--		compatible = "invensense,mpu6050";
--		reg = <0x68>;
--		interrupt-parent = <&gpio1>;
--		interrupts = <18 IRQ_TYPE_EDGE_RISING>;
--		mount-matrix = "-0.984807753012208",  /* x0 */
--		               "0",                   /* y0 */
--		               "-0.173648177666930",  /* z0 */
--		               "0",                   /* x1 */
--		               "-1",                  /* y1 */
--		               "0",                   /* z1 */
--		               "-0.173648177666930",  /* x2 */
--		               "0",                   /* y2 */
--		               "0.984807753012208";   /* z2 */
--	};
 -
+-mpu3050@68 {
+-	compatible = "invensense,mpu3050";
+-	reg = <0x68>;
+-	interrupt-parent = <&foo>;
+-	interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
+-	vdd-supply = <&bar>;
+-	vlogic-supply = <&baz>;
 -
--	mpu9250@68 {
--		compatible = "invensense,mpu9250";
--		reg = <0x68>;
--		interrupt-parent = <&gpio3>;
--		interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
--		i2c-gate {
--			#address-cells = <1>;
--			#size-cells = <0>;
--			ax8975@c {
--				compatible = "ak,ak8975";
--				reg = <0x0c>;
--			};
+-	/* External I2C interface */
+-	i2c-gate {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		fnord@18 {
+-			compatible = "fnord";
+-			reg = <0x18>;
+-			interrupt-parent = <&foo>;
+-			interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
 -		};
 -	};
-diff --git a/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml b/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
+-};
+diff --git a/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.yaml b/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.yaml
 new file mode 100644
-index 000000000000..9268b6ca2afe
+index 000000000000..7e2accc3d5ce
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
-@@ -0,0 +1,103 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++++ b/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/iio/imu/invensense,mpu6050.yaml#
++$id: http://devicetree.org/schemas/iio/gyroscope/invensense,mpu3050.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: InvenSense MPU-6050 Six-Axis (Gyro + Accelerometer) MEMS MotionTracking Device
++title: Invensense MPU-3050 Gyroscope
 +
 +maintainers:
-+  - Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
-+
-+description: |
-+  These devices support both I2C and SPI bus interfaces.
++  - Linus Walleij <linus.walleij@linaro.org>
 +
 +properties:
 +  compatible:
-+    enum:
-+      - invensense,iam20680
-+      - invensense,icm20608
-+      - invensense,icm20609
-+      - invensense,icm20689
-+      - invensense,icm20602
-+      - invensense,icm20690
-+      - invensense,mpu6000
-+      - invensense,mpu6050
-+      - invensense,mpu6500
-+      - invensense,mpu6515
-+      - invensense,mpu9150
-+      - invensense,mpu9250
-+      - invensense,mpu9255
++    const: invensense,mpu3050
 +
 +  reg:
 +    maxItems: 1
 +
-+  interrupts:
-+    maxItems: 1
-+
-+  spi-max-frequency: true
-+
 +  vdd-supply: true
-+  vddio-supply: true
++
++  vlogic-supply: true
++
++  interrupts:
++    minItems: 1
++    description:
++      Interrupt mapping for the trigger interrupt from the internal oscillator.
 +
 +  mount-matrix: true
 +
@@ -191,28 +152,16 @@ index 000000000000..9268b6ca2afe
 +    $ref: /schemas/i2c/i2c-controller.yaml
 +    unevaluatedProperties: false
 +    description: |
-+      These devices also support an auxiliary i2c bus via an i2c-gate.
-+
-+allOf:
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              enum:
-+                - invensense,mpu9150
-+                - invensense,mpu9250
-+                - invensense,mpu9255
-+    then:
-+      properties:
-+        i2c-gate: false
-+
-+additionalProperties: false
++      The MPU-3050 will pass through and forward the I2C signals from the
++      incoming I2C bus, alternatively drive traffic to a slave device (usually
++      an accelerometer) on its own initiative. Therefore is supports an
++      i2c-gate subnode.
 +
 +required:
 +  - compatible
 +  - reg
-+  - interrupts
++
++additionalProperties: false
 +
 +examples:
 +  - |
@@ -220,24 +169,18 @@ index 000000000000..9268b6ca2afe
 +    i2c {
 +        #address-cells = <1>;
 +        #size-cells = <0>;
-+
-+        imu@68 {
-+            compatible = "invensense,mpu9250";
++        gyroscope@68 {
++            compatible = "invensense,mpu3050";
 +            reg = <0x68>;
-+            interrupt-parent = <&gpio3>;
-+            interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
-+            mount-matrix = "-0.984807753012208",  /* x0 */
-+                           "0",                   /* y0 */
-+                           "-0.173648177666930",  /* z0 */
-+                           "0",                   /* x1 */
-+                           "-1",                  /* y1 */
-+                           "0",                   /* z1 */
-+                           "-0.173648177666930",  /* x2 */
-+                           "0",                   /* y2 */
-+                           "0.984807753012208";   /* z2 */
++            interrupt-parent = <&foo>;
++            interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
++            vdd-supply = <&bar>;
++            vlogic-supply = <&baz>;
++
 +            i2c-gate {
 +                #address-cells = <1>;
 +                #size-cells = <0>;
++
 +                magnetometer@c {
 +                    compatible = "ak,ak8975";
 +                    reg = <0x0c>;
