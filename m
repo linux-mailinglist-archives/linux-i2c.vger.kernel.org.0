@@ -2,97 +2,146 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 650EE2C81AD
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Nov 2020 11:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE622C8312
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Nov 2020 12:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726249AbgK3KFh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Nov 2020 05:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725902AbgK3KFg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Nov 2020 05:05:36 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BBFC0613D4
-        for <linux-i2c@vger.kernel.org>; Mon, 30 Nov 2020 02:04:56 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id d18so15187212edt.7
-        for <linux-i2c@vger.kernel.org>; Mon, 30 Nov 2020 02:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2KorrjkWpWhpPEyV8UtE3mX2C8VcPs9mGkAT1KAXZsY=;
-        b=YPCdVIZ4Yy/Rd08Qthx7KKMs9WSu82cJ7OEgbuAYxsvIXUVBO0yy1ceI5p2Bc30zib
-         ONAtl2Wezjc9rL88UMUWvifswVTyFA0dj+TqgUlVCd+yR5pUXBkjyJZDS8w6Va1koW+Y
-         FXk3X8804n0FOq46PT9TFlodigENJOWH54F2ijzDyC2dboWUJVTsEe6zTOpctCJCcoWA
-         X+AsyXjMVMo73b3RGr5C1CWLwweLjHvjIXUMhq4MwqPop89Ugg8XofuQ2OUpDq/8nvwf
-         Hg61k4nYR9mvMmpfHvKbb7M3OXs3/IQYyD/A6L1uxDP/9kUB7mtGVytmcRiVqpp95VMT
-         Nr3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2KorrjkWpWhpPEyV8UtE3mX2C8VcPs9mGkAT1KAXZsY=;
-        b=pq60WbhE7IQeJPMD7cTDWprAZvqAza0RnhjSphikolSVNcqgp0xmE0+zwTi1p9Mbm8
-         K0hoffRwrUhX3kzutpcuZjhROUz83Iq+dtpblsL7WApufyUDry1BS+1QJmEz855TC0Nf
-         3f7iNVXsGwIj13lbxdFYI26/fyzsYh9qY2U1SlYjr26j4sC55QY2EHRbiEpXD4rZONtP
-         FVHy7u+dKmYDzb/RbU+WLU00Pyt6KGc8vRkl6b9lIi1yCwO3SnwdI3tasez+HJ7bX1Po
-         mT/rE2dzHuaMV/HuZfOlPaRTZhTXgBWKt5nNpdCm5MdAmrgfapRNmYe+WiO4jpSecAPm
-         z8CQ==
-X-Gm-Message-State: AOAM531DFIy93r95FA3Jpyo/yTPpoFJoEAnGdCDKP/+sV1BH3UQcb52d
-        UZvPfFKUgHlQxr4dWRy5oPgkcw==
-X-Google-Smtp-Source: ABdhPJzHUtKFbFKczdlmvtuRuWH1BE2O5OVdn8Ea1tIw8HuAN9cB0giOO8M/jlDUzAZ/C9APOv+ZRQ==
-X-Received: by 2002:a05:6402:17d6:: with SMTP id s22mr9742899edy.20.1606730694832;
-        Mon, 30 Nov 2020 02:04:54 -0800 (PST)
-Received: from localhost.localdomain ([2a02:2450:102f:d6a:4045:6525:ec27:9b77])
-        by smtp.gmail.com with ESMTPSA id i9sm8267378ejf.41.2020.11.30.02.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 02:04:54 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     loic.poulain@linaro.org, robert.foss@linaro.org, wsa@kernel.org,
-        vkoul@kernel.org, todor.too@gmail.com, bjorn.andersson@linaro.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3] i2c: qcom: Fix IRQ error misassignement
-Date:   Mon, 30 Nov 2020 11:04:45 +0100
-Message-Id: <20201130100445.66930-1-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.27.0
+        id S1727288AbgK3LTx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 30 Nov 2020 06:19:53 -0500
+Received: from mga14.intel.com ([192.55.52.115]:53876 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726991AbgK3LTx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 30 Nov 2020 06:19:53 -0500
+IronPort-SDR: eALRnKzJrkNd+m4VpqXegC4UQqpIE8yNCVwu6IllFScAMux23Kl9zWD9FWubbkOL6CkHaju3ad
+ r0uuzwxzQhgg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9820"; a="171833932"
+X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
+   d="scan'208";a="171833932"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 03:18:12 -0800
+IronPort-SDR: 5X8Tc7DCdXzhdDv8CFJc09FehYzjAcD0BPPyn0Q3yPSHOMMFfZCfoz85kcfJn92QG1LA5GjvmU
+ FLVjDsV1kWKA==
+X-IronPort-AV: E=Sophos;i="5.78,381,1599548400"; 
+   d="scan'208";a="315200774"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 03:18:08 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kjhD3-00B1vI-UN; Mon, 30 Nov 2020 13:19:09 +0200
+Date:   Mon, 30 Nov 2020 13:19:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sanjay R Mehta <sanju.mehta@amd.com>
+Cc:     wsa+renesas@sang-engineering.com, jarkko.nikula@linux.intel.com,
+        jdelvare@suse.de, Sergey.Semin@baikalelectronics.ru,
+        krzk@kernel.org, kblaiech@mellanox.com, loic.poulain@linaro.org,
+        rppt@kernel.org, bjorn.andersson@linaro.org, linux@roeck-us.net,
+        vadimp@mellanox.com, tali.perry1@gmail.com,
+        linux-i2c@vger.kernel.org,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.Shah@amd.com>
+Subject: Re: [PATCH] i2c: add i2c bus driver for AMD NAVI GPU
+Message-ID: <20201130111909.GJ4077@smile.fi.intel.com>
+References: <1606505439-39836-1-git-send-email-sanju.mehta@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1606505439-39836-1-git-send-email-sanju.mehta@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-During cci_isr() errors read from register fields belonging to
-i2c master1 are currently assigned to the status field belonging to
-i2c master0. This patch corrects this error, and always assigns
-master1 errors to the status field of master1.
+On Fri, Nov 27, 2020 at 01:30:39PM -0600, Sanjay R Mehta wrote:
+> From: Nehal Bakulchandra Shah <Nehal-Bakulchandra.Shah@amd.com>
+> 
+> Latest AMD GPU card has USB Type-C interface. There is a
+> Type-C controller which can be accessed over I2C.
+> 
+> This driver adds I2C bus driver to communicate with Type-C controller.
+> I2C client driver will be part of USB Type-C UCSI driver.
 
-Fixes: e517526195de ("i2c: Add Qualcomm CCI I2C driver")
-Reported-by: Loic Poulain <loic.poulain@linaro.org>
-Suggested-by: Loic Poulain <loic.poulain@linaro.org>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/i2c/busses/i2c-qcom-cci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+...
 
-diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-index f13735beca58..1c259b5188de 100644
---- a/drivers/i2c/busses/i2c-qcom-cci.c
-+++ b/drivers/i2c/busses/i2c-qcom-cci.c
-@@ -194,9 +194,9 @@ static irqreturn_t cci_isr(int irq, void *dev)
- 	if (unlikely(val & CCI_IRQ_STATUS_0_I2C_M1_ERROR)) {
- 		if (val & CCI_IRQ_STATUS_0_I2C_M1_Q0_NACK_ERR ||
- 			val & CCI_IRQ_STATUS_0_I2C_M1_Q1_NACK_ERR)
--			cci->master[0].status = -ENXIO;
-+			cci->master[1].status = -ENXIO;
- 		else
--			cci->master[0].status = -EIO;
-+			cci->master[1].status = -EIO;
- 
- 		writel(CCI_HALT_REQ_I2C_M1_Q0Q1, cci->base + CCI_HALT_REQ);
- 		ret = IRQ_HANDLED;
+> +I2C CONTROLLER DRIVER FOR AMD NAVI GPU
+
+>  I2C MUXES
+
+I always thought that NVIDIA should come after AMD...
+You still didn't learn to run checkpatch.pl?
+
+...
+
+> +#include <asm/unaligned.h>
+
+Move this after linux/* ones, or explain why should it be first.
+
+> +#include <linux/delay.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/pci.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm.h>
+> +#include <linux/pm_runtime.h>
+
+...
+
+> +#define DRIVER_DESC "AMD I2C Controller Driver for Navi"
+> +#define AMD_UCSI_INTR_REG 0x474
+> +#define AMD_UCSI_INTR_EN 0xD
+> +#define AMD_MASTERCFG_MASK GENMASK_ULL(15, 0)
+
+linux/bits.h is missing.
+
+May you create a better indentation of the values to make it easier to read?
+
+> +struct amdgpu_i2c_dev {
+> +	void __iomem *regs;
+
+DesignWare driver has been converted to use regmap. How comes you are using old
+approach?
+
+> +	struct device *dev;
+> +	u32 master_cfg;
+> +	u32 slave_adr;
+> +	u32			tx_fifo_depth;
+> +	u32			rx_fifo_depth;
+> +	u32			sda_hold_time;
+> +	u16			ss_hcnt;
+> +	u16			ss_lcnt;
+> +	u16			fs_hcnt;
+> +	u16			fs_lcnt;
+> +	u16			fp_hcnt;
+> +	u16			fp_lcnt;
+> +	u16			hs_hcnt;
+> +	u16			hs_lcnt;
+> +	struct i2c_adapter adapter;
+> +	struct i2c_board_info *gpu_ccgx_ucsi;
+> +	struct i2c_client *ccgx_client;
+> +};
+
+...
+
+> +	while (readl(i2cd->regs + DW_IC_STATUS) & DW_IC_STATUS_ACTIVITY) {
+> +		if (timeout <= 0) {
+> +			dev_dbg(i2cd->dev, "timeout waiting for bus ready\n");
+> +			if (readl(i2cd->regs + DW_IC_STATUS) & DW_IC_STATUS_ACTIVITY)
+> +				return -ETIMEDOUT;
+> +			return 0;
+> +		}
+> +		timeout--;
+> +		usleep_range(1000, 1100);
+> +	}
+
+Homework: discover iopoll.h (or regmap.h if we take into account previous
+comment). Bonus: try to read newest kernel submission in the area to see what's
+new.
+
+I stopped here. I think it's enough to revisit entire patch.
+It will look differently for sure when you address all given comments.
+
 -- 
-2.27.0
+With Best Regards,
+Andy Shevchenko
+
 
