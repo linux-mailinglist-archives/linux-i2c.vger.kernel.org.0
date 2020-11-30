@@ -2,26 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BFB2C8D0C
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Nov 2020 19:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86432C8D12
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Nov 2020 19:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729740AbgK3Sl1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Nov 2020 13:41:27 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:32962 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729717AbgK3Sl0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Nov 2020 13:41:26 -0500
+        id S1729778AbgK3Smc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 30 Nov 2020 13:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726520AbgK3Smc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Nov 2020 13:42:32 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A286C0613D4;
+        Mon, 30 Nov 2020 10:41:52 -0800 (PST)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D15E8B26;
-        Mon, 30 Nov 2020 19:40:42 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6A95A99;
+        Mon, 30 Nov 2020 19:41:49 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1606761643;
-        bh=FeJgv55ZQDGX5SC/a9GdqcQVulu7NByYBHSarUh+RDs=;
+        s=mail; t=1606761709;
+        bh=CPdPrulLViLfkaCcKKsWPHwhLQ/hUyuF5Gf5uEYOwDc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TV/jfwfpKshB/m6EolPfZ4H+kgSJbZjpiHsjxU8moCRW2NlpV6DFp9AJVTfbDrJN+
-         S7ej31bt2N4KK3FotagOeQc/GAengfDIf6ISGFXeIxW8FzFyELeXHC/YvNzaHtIGx3
-         oCjJTeY8Agt8scqXAkl8GaBmLjbxH0j46YRzltM0=
-Date:   Mon, 30 Nov 2020 20:40:34 +0200
+        b=ZV7LSuLo5qGpZsp9gP2EiSRj2LrDSnXbR91WNmGSwoxgj5lPSUsGvZJizZ6GW5nht
+         I67pLvh+IWjRiJlAdc/U3vn1xRJUgkdbyw27f3vPXGsEqhXiI/VfcY8mZopO3mUa/E
+         ga5a1f05kmxbkaH5A+cs1HFCrU6xnPRs0IHONPYk=
+Date:   Mon, 30 Nov 2020 20:41:41 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Daniel Scally <djrscally@gmail.com>, linux-kernel@vger.kernel.org,
@@ -39,103 +42,62 @@ Cc:     Daniel Scally <djrscally@gmail.com>, linux-kernel@vger.kernel.org,
         laurent.pinchart+renesas@ideasonboard.com,
         jorhand@linux.microsoft.com, kitakar@gmail.com,
         heikki.krogerus@linux.intel.com
-Subject: Re: [PATCH 14/18] acpi: utils: Add function to fetch dependent
- acpi_devices
-Message-ID: <20201130184034.GW4141@pendragon.ideasonboard.com>
+Subject: Re: [PATCH 02/18] property: Add support for calling
+ fwnode_graph_get_endpoint_by_id() for fwnode->secondary
+Message-ID: <20201130184141.GX4141@pendragon.ideasonboard.com>
 References: <20201130133129.1024662-1-djrscally@gmail.com>
- <20201130133129.1024662-15-djrscally@gmail.com>
- <20201130182354.GW4077@smile.fi.intel.com>
+ <20201130133129.1024662-3-djrscally@gmail.com>
+ <20201130172900.GM4077@smile.fi.intel.com>
+ <20201130172857.GS14465@pendragon.ideasonboard.com>
+ <20201130175319.GS4077@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201130182354.GW4077@smile.fi.intel.com>
+In-Reply-To: <20201130175319.GS4077@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Andy,
 
-On Mon, Nov 30, 2020 at 08:23:54PM +0200, Andy Shevchenko wrote:
-> On Mon, Nov 30, 2020 at 01:31:25PM +0000, Daniel Scally wrote:
-> > ACPI devices declare themselves dependent on other devices via the _DEP
-> > buffer. Fetching the dependee from dependent is a matter of parsing
-> > _DEP, but currently there's no method to fetch dependent from dependee.
-> > Add one, so we can parse sensors dependent on a PMIC from the PMIC's
-> > acpi_driver.
-> 
-> Do I understand correctly that it's an existing table provided by firmware that
-> (ab)uses _DEP in such way? Note, the specification doesn't tell we may use it
-> in this way, OTOH I don't remember if it strictly forbids such use.
-
-The ACPI "bindings" (I come from the DT world, is there a standard term
-to describe this in ACPI ?) for the camera in Windows-based Kaby Lake
-machines could be used as textbook examples of how to abuse ACPI, in
-many different ways :-) I'm sure that applies to ACPI in general
-though...
-
-Depending on the device, camera sensors are controlled by a PMIC that
-provides regulators, clocks and GPIOs (for the reset and power down
-signals), or directly by GPIOs that control discrete regulators and
-sensor signals. In the first case an INT3472 device models the
-regulator, which can be a TI TPS68470 or a uPI Semi uP6641Q (two
-completely different devices with a single HID...). The device model is
-specified in the CLDB, a custom data table for INT3472.
-
-In the latter case, Intel has created ACPI bindings for a "discrete
-PMIC". It uses an ACPI device object with HID set to INT3472 as well,
-also with a CLDB whose type field indicate the PMIC is "discrete". The
-ACPI device is only used to reference up to 4 GPIOs (provided by the
-Kaby Lake GPIO controller, the LPSS) in the _CRS. There's also a _DSM
-that reports, for each GPIO, its function. All this information should
-have been stored in the camera sensor ACPI device object, but that would
-have been too simple...
-
-In both cases, the PMIC device object is referenced by the _DEP data. We
-need to access it to dig up the GPIOs, look up their type, and register
-fixed regulators, supply mappings and GPIO mappings for the sensor.
-
-> So, please elaborate in the commit message why you need this and pint out to
-> the 6.5.8 "_DEP (Operation Region Dependencies)" which clearly says about
-> OpRegions and that part already supported by ACPI in the Linux, if I'm not
-> mistaken, need to refresh my memory.
+On Mon, Nov 30, 2020 at 07:53:19PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 30, 2020 at 07:28:57PM +0200, Laurent Pinchart wrote:
+> > On Mon, Nov 30, 2020 at 07:29:00PM +0200, Andy Shevchenko wrote:
+> > > On Mon, Nov 30, 2020 at 01:31:13PM +0000, Daniel Scally wrote:
 > 
 > ...
 > 
-> > +	handle = adev->handle;
-> > +
-> > +	if (!acpi_has_method(handle, "_DEP"))
-> > +		return 0;
-> > +
-> > +	status = acpi_evaluate_reference(handle, "_DEP", NULL, &dep_handles);
-> > +	if (ACPI_FAILURE(status))
-> > +		return 0;
-> > +
-> > +	for (i = 0; i < dep_handles.count; i++) {
-> > +		struct acpi_device_info *info;
-> > +
-> > +		status = acpi_get_object_info(dep_handles.handles[i], &info);
-> > +		if (ACPI_FAILURE(status))
-> > +			continue;
-> > +
-> > +		if (info->valid & ACPI_VALID_HID) {
-> > +			ret = acpi_bus_get_device(dep_handles.handles[i], &candidate);
-> > +			if (ret || !candidate) {
-> > +				kfree(info);
-> > +				continue;
-> > +			}
-> > +
-> > +			if (candidate == dependee) {
-> > +				acpi_dev_put(candidate);
-> > +				kfree(info);
-> > +				return 1;
-> > +			}
-> > +
-> > +			kfree(info);
-> > +		}
-> > +	}
+> > > > +	if (!best_ep && fwnode && !IS_ERR_OR_NULL(fwnode->secondary))
+> > > > +		return fwnode_graph_get_endpoint_by_id(fwnode->secondary, port,
+> > > > +						       endpoint, flags);
+> > > 
+> > > >  	return best_ep;
+> > > 
+> > > Can we, please, do
+> > > 
+> > > 	if (best_ep)
+> > > 		return best_ep;
+> > > 
+> > > 	if (fwnode && !IS_ERR_OR_NULL(fwnode->secondary))
+> > > 		return fwnode_graph_get_endpoint_by_id(fwnode->secondary, port,
+> > > 						       endpoint, flags);
+> > > 
+> > > 	return NULL;
+> > > 
+> > > ?
+> > > 
+> > > This 'if (fwnode && !IS_ERR_OR_NULL(fwnode->secondary))' becomes kinda
+> > > idiomatic to the cases when we need to proceed primary followed by the
+> > > secondary in cases where it's not already done.
+> > 
+> > We could also move the !fwnode check to the beginning of the function.
 > 
-> Can you utilize (by moving to here and export for ACPI layer the
-> acpi_lpss_dep()?
+> It's already there (1). What did I miss?
+
+It is, but as we need an explicitly check at the end, it feels cleaner
+to move it to the beginning. No big deal though.
+
+> 1) via fwnode_graph_get_next_endpoint() -> fwnode_call_ptr_op()
 
 -- 
 Regards,
