@@ -2,26 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE412C8974
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Nov 2020 17:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E4D2C897D
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Nov 2020 17:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728792AbgK3Q1A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Nov 2020 11:27:00 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:60180 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725859AbgK3Q1A (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Nov 2020 11:27:00 -0500
+        id S1728836AbgK3Q2Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 30 Nov 2020 11:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726995AbgK3Q2Z (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Nov 2020 11:28:25 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513E1C0613D2;
+        Mon, 30 Nov 2020 08:27:45 -0800 (PST)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 72462B26;
-        Mon, 30 Nov 2020 17:26:17 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFCDAB26;
+        Mon, 30 Nov 2020 17:27:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1606753577;
-        bh=J3bPUtVMb+IJFadsY0xMSWedkKztYbsIqrdvmGmF7Ew=;
+        s=mail; t=1606753664;
+        bh=i330NE/Tn2ccl8y6bCOsqTM7HJgPOsK1+uiu+4FUjsU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c5ucFxnyYh8Z/Ssk8k25I+lOHCOTGUva4CPYOt8Cn113F0IrD48g9SI22QS3AqpnL
-         GFSLmQm0hO9fxpjgd0iMq+LMNty7kJFIMp+8x57xk2JSbpyszBFHLuiLTWA4r14xSl
-         fMD1WQhtugZ5DVRgtkyEXvPFiY8O/9vPUxxA0+ng=
-Date:   Mon, 30 Nov 2020 18:26:09 +0200
+        b=MmQbJwppWWRYMbEUb80Ri4wyuw8FTRABX9pFF1Ok+J1kSR5yeOaTd/VIzbljKUY4R
+         MnzedaGjeikrn7wIE8BOqOAEcKPaaZu6CUrqA9lhcHv9O/acuGqm9guLC+iqfQVFqL
+         i+RrXMW9Q6Q+GpjTTweCMHgndBVZSUjfTZb5vKNw=
+Date:   Mon, 30 Nov 2020 18:27:35 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Daniel Scally <djrscally@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
@@ -39,15 +42,15 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         laurent.pinchart+renesas@ideasonboard.com,
         jorhand@linux.microsoft.com, kitakar@gmail.com,
         heikki.krogerus@linux.intel.com
-Subject: Re: [PATCH 08/18] lib/test_printf.c: Use helper function to unwind
- array of software_nodes
-Message-ID: <20201130162609.GL14465@pendragon.ideasonboard.com>
+Subject: Re: [PATCH 11/18] media: v4l2-core: v4l2-async: Check possible match
+ in match_fwnode based on sd->fwnode->secondary
+Message-ID: <20201130162735.GM14465@pendragon.ideasonboard.com>
 References: <20201130133129.1024662-1-djrscally@gmail.com>
- <20201130133129.1024662-9-djrscally@gmail.com>
+ <20201130133129.1024662-12-djrscally@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201130133129.1024662-9-djrscally@gmail.com>
+In-Reply-To: <20201130133129.1024662-12-djrscally@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -56,13 +59,12 @@ Hi Daniel,
 
 Thank you for the patch.
 
-On Mon, Nov 30, 2020 at 01:31:19PM +0000, Daniel Scally wrote:
-> Use the software_node_unregister_nodes() helper function to unwind this
-> array in a cleaner way.
+On Mon, Nov 30, 2020 at 01:31:22PM +0000, Daniel Scally wrote:
+> Where the fwnode graph is comprised of software_nodes, these will be
+> assigned as the secondary to dev->fwnode. Check the v4l2_subdev's fwnode
+> for a secondary and attempt to match against it during match_fwnode() to
+> accommodate that possibility.
 > 
-> Acked-by: Petr Mladek <pmladek@suse.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Signed-off-by: Daniel Scally <djrscally@gmail.com>
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
@@ -70,27 +72,30 @@ Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > ---
 > Changes since RFC v3:
 > 
-> 	Changed the called function name - didn't drop the tags since it's
-> 	such a trivial change, hope that's alright!
+> 	- None
 > 
->  lib/test_printf.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  drivers/media/v4l2-core/v4l2-async.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/lib/test_printf.c b/lib/test_printf.c
-> index 7ac87f18a10f..7d60f24240a4 100644
-> --- a/lib/test_printf.c
-> +++ b/lib/test_printf.c
-> @@ -644,9 +644,7 @@ static void __init fwnode_pointer(void)
->  	test(second_name, "%pfwP", software_node_fwnode(&softnodes[1]));
->  	test(third_name, "%pfwP", software_node_fwnode(&softnodes[2]));
+> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+> index e3ab003a6c85..6486dbde784f 100644
+> --- a/drivers/media/v4l2-core/v4l2-async.c
+> +++ b/drivers/media/v4l2-core/v4l2-async.c
+> @@ -87,6 +87,14 @@ static bool match_fwnode(struct v4l2_async_notifier *notifier,
+>  	if (sd->fwnode == asd->match.fwnode)
+>  		return true;
 >  
-> -	software_node_unregister(&softnodes[2]);
-> -	software_node_unregister(&softnodes[1]);
-> -	software_node_unregister(&softnodes[0]);
-> +	software_node_unregister_nodes(softnodes);
->  }
->  
->  static void __init
+> +	/*
+> +	 * Check the same situation for any possible secondary assigned to the
+> +	 * subdev's fwnode
+> +	 */
+> +	if ((!IS_ERR_OR_NULL(sd->fwnode->secondary)) &&
+> +	    sd->fwnode->secondary == asd->match.fwnode)
+> +		return true;
+> +
+>  	/*
+>  	 * Otherwise, check if the sd fwnode and the asd fwnode refer to an
+>  	 * endpoint or a device. If they're of the same type, there's no match.
 
 -- 
 Regards,
