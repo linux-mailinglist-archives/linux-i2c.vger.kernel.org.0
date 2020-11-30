@@ -2,226 +2,331 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C532C9274
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 00:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D4A2C92A0
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 00:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388013AbgK3XWl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 30 Nov 2020 18:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728255AbgK3XWl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Nov 2020 18:22:41 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43631C0613CF;
-        Mon, 30 Nov 2020 15:22:01 -0800 (PST)
+        id S2388762AbgK3XdZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 30 Nov 2020 18:33:25 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:34630 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388510AbgK3XdY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 30 Nov 2020 18:33:24 -0500
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 257E993;
-        Tue,  1 Dec 2020 00:21:58 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7A5492A4;
+        Tue,  1 Dec 2020 00:32:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1606778518;
-        bh=2rZbLW54bWofYEhqpSjR8n/RiQEA9IFG0ZE3J1Tl/aE=;
+        s=mail; t=1606779160;
+        bh=lU++4kSerLSCK/Ovv5NuVq0+EwNTdVJlezIWcTkIZMQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HuuIPMEOwH4NZ8aZWjt+cx9M4J4hhh7ObDG38HBMhOT8aTpScH8gGtV45aQKzVCHb
-         caBwLmBSHbNpXYBlijLRFD1ZdqI2m6eevga8awsAe0PIq0v1EunZeRHBJV0PWLPS22
-         9PKVDWJMB+TFlaqJ81VUcrSWv2skfqrkIoOzTurs=
-Date:   Tue, 1 Dec 2020 01:21:50 +0200
+        b=GG7828EkJ8QIL1QEhX2jJjrzRw3jyotgA+MjJt/uTn2BlTK1hgjH7u9tktQAkPq6g
+         g9+FalPvL0BiMojlELCObp2xQaDntR+srQL0Y1lPJKqYC0W6L4EMrhnTa1wBevRSQg
+         IFFVxyQf+z4NWjzOKkdX+hbiRRoD1nX1fxRUhuSo=
+Date:   Tue, 1 Dec 2020 01:32:32 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dan Scally <djrscally@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@iki.fi>, linux-kernel@vger.kernel.org,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Scally <djrscally@gmail.com>, linux-kernel@vger.kernel.org,
         linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
         devel@acpica.org, rjw@rjwysocki.net, lenb@kernel.org,
         gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, wsa@kernel.org, yong.zhi@intel.com,
-        sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
-        tian.shu.qiu@intel.com, mchehab@kernel.org, robert.moore@intel.com,
-        erik.kaneda@intel.com, pmladek@suse.com, rostedt@goodmis.org,
-        sergey.senozhatsky@gmail.com, linux@rasmusvillemoes.dk,
-        kieran.bingham+renesas@ideasonboard.com, jacopo+renesas@jmondi.org,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        wsa@kernel.org, yong.zhi@intel.com, sakari.ailus@linux.intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        linux@rasmusvillemoes.dk, kieran.bingham+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org,
         laurent.pinchart+renesas@ideasonboard.com,
         jorhand@linux.microsoft.com, kitakar@gmail.com,
         heikki.krogerus@linux.intel.com
 Subject: Re: [PATCH 18/18] ipu3: Add driver for dummy INT3472 ACPI device
-Message-ID: <20201130232150.GC25713@pendragon.ideasonboard.com>
+Message-ID: <20201130233232.GD25713@pendragon.ideasonboard.com>
 References: <20201130133129.1024662-1-djrscally@gmail.com>
  <20201130133129.1024662-19-djrscally@gmail.com>
- <20201130205203.GQ4351@valkosipuli.retiisi.org.uk>
- <3e8494a0-a2c0-59e7-46bb-9635c3c239dd@gmail.com>
+ <20201130200719.GB4077@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3e8494a0-a2c0-59e7-46bb-9635c3c239dd@gmail.com>
+In-Reply-To: <20201130200719.GB4077@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
+Hi Andy,
 
-On Mon, Nov 30, 2020 at 11:06:03PM +0000, Dan Scally wrote:
-> On 30/11/2020 20:52, Sakari Ailus wrote:
-> >> +static const struct acpi_device_id int3472_device_id[] = {
-> >> +	{ "INT3472", 0 },
-> >
-> > The INT3472 _HID is really allocated for the tps68470 PMIC chip. It may not
-> > be used by other drivers; people will want to build kernels where both of
-> > these ACPI table layouts are functional.
-
-I actually don't think it is, at least not if you consider how Intel
-uses it. It can mean TI TPS64870, uPI Semi uP6641Q, or "discrete
-regulator". It's called an "Intel camera power management device" in
-Windows if I remember correctly.
-
-If we go in the direction of creating a platform driver for this ACPI
-HID, it should be called accordingly (int3472, intel-camera-pmic, ...),
-check the device type from the CLDB, and register the right device.
-
-One Chrome OS platforms, INT3472 refers to the TPS64870 only, and the
-ACPI device object doesn't have a CLDB. That's easy to detect, and we
-can enable tps64870 support when there's no CLDB. Note that for the
-TPS64870 case, when a CLDB is present, the kernel driver will need to
-register regulators and clocks, while when no CLDB is present, it will
-need to register an opregion as done today. That's yet another mode of
-operation of this driver.
-
-> > Instead, I propose, that you add this as an option to the tps68470 driver
-> > that figures out whether the ACPI device for the tps68470 device actually
-> > describes something else, in a similar fashion you do with the cio2-bridge
-> > driver. I think it may need a separate Kconfig option albeit this and
-> > cio2-bridge cannot be used separately.
+On Mon, Nov 30, 2020 at 10:07:19PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 30, 2020 at 01:31:29PM +0000, Daniel Scally wrote:
+> > On platforms where ACPI is designed for use with Windows, resources
+> > that are intended to be consumed by sensor devices are sometimes in
+> > the _CRS of a dummy INT3472 device upon which the sensor depends. This
+> > driver binds to the dummy acpi device (which does not represent a
 > 
-> It actually occurs to me that that may not work (I know I called that
-> out as an option we considered, but that was a while ago actually). The
-> reason I wasn't worried about the existing tps68470 driver binding to
-> these devices is that it's an i2c driver, and these dummy devices don't
-> have an I2cSerialBusV2, so no I2C device is created by them the kernel.
+> acpi device -> acpi_device
 > 
-> Won't that mean the tps68470 driver won't ever be probed for these devices?
+> > physical PMIC) and maps them into GPIO lines and regulators for use by
+> > the sensor device instead.
+> 
+> ...
+> 
+> > This patch contains the bits of this process that we're least sure about.
+> > The sensors in scope for this work are called out as dependent (in their
+> > DSDT entry's _DEP) on a device with _HID INT3472. These come in at least
+> > 2 kinds; those with an I2cSerialBusV2 entry (which we presume therefore
+> > are legitimate tps68470 PMICs that need handling by those drivers - work
+> > on that in the future). And those without an I2C device. For those without
+> > an I2C device they instead have an array of GPIO pins defined in _CRS. So
+> > for example, my Lenovo Miix 510's OVTI2680 sensor is dependent on one of
+> > the _latter_ kind of INT3472 devices, with this _CRS:
+> > 
+> > Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+> > {
+> >     Name (SBUF, ResourceTemplate ()
+> >     {
+> >         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000,
+> > 	    IoRestrictionOutputOnly, "\\_SB.PCI0.GPI0",
+> > 	    0x00, ResourceConsumer, ,
+> >             )
+> >             {   // Pin list
+> >                 0x0079
+> >             }
+> >         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000,
+> > 	    IoRestrictionOutputOnly, "\\_SB.PCI0.GPI0",
+> > 	    0x00, ResourceConsumer, ,
+> >             )
+> >             {   // Pin list
+> >                 0x007A
+> >             }
+> >         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000,
+> > 	    IoRestrictionOutputOnly, "\\_SB.PCI0.GPI0",
+> > 	    0x00, ResourceConsumer, ,
+> >             )
+> >             {   // Pin list
+> >                 0x008F
+> >             }
+> >     })
+> >     Return (SBUF) /* \_SB_.PCI0.PMI1._CRS.SBUF */
+> > }
+> > 
+> > and the same device has a _DSM Method, which returns 32-bit ints where
+> > the second lowest byte we noticed to match the pin numbers of the GPIO
+> > lines:
+> > 
+> > Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
+> > {
+> >     If ((Arg0 == ToUUID ("79234640-9e10-4fea-a5c1-b5aa8b19756f")))
+> >     {
+> >         If ((Arg2 == One))
+> >         {
+> >             Return (0x03)
+> >         }
+> > 
+> >         If ((Arg2 == 0x02))
+> >         {
+> >             Return (0x01007900)
+> >         }
+> > 
+> >         If ((Arg2 == 0x03))
+> >         {
+> >             Return (0x01007A0C)
+> >         }
+> > 
+> >         If ((Arg2 == 0x04))
+> >         {
+> >             Return (0x01008F01)
+> >         }
+> >     }
+> > 
+> >     Return (Zero)
+> > }
+> > 
+> > We know that at least some of those pins have to be toggled active for the
+> > sensor devices to be available in i2c, so the conclusion we came to was
+> > that those GPIO entries assigned to the INT3472 device actually represent
+> > GPIOs and regulators to be consumed by the sensors themselves. Tsuchiya
+> > noticed that the lowest byte in the return values of the _DSM method
+> > seemed to represent the type or function of the GPIO line, and we
+> > confirmed that by testing on each surface device that GPIO lines where the
+> > low byte in the _DSM entry for that pin was 0x0d controlled the privacy
+> > LED of the cameras.
+> > 
+> > We're guessing as to the exact meaning of the function byte, but I
+> > conclude they're something like this:
+> > 
+> > 0x00 - probably a reset GPIO
+> > 0x01 - regulator for the sensor
+> > 0x0c - regulator for the sensor
+> > 0x0b - regulator again, but for a VCM or EEPROM
+> > 0x0d - privacy led (only one we're totally confident of since we can see
+> >        it happen!)
+> 
+> It's solely Windows driver design...
+> Luckily I found some information and can clarify above table:
+> 
+> 0x00 Reset
+> 0x01 Power down
+> 0x0b Power enable
+> 0x0c Clock enable
+> 0x0d LED (active high)
 
-I think we can create a platform driver in that case. The same module
-can register multiple drivers (platform and I2C).
+That's very useful information ! Thank you.
 
-> >> +	{ },
-> >> +};
-> >> +MODULE_DEVICE_TABLE(acpi, int3472_device_id);
-> >> +
-> >> +static struct acpi_driver int3472_driver = {
-> >> +	.name = "int3472",
-> >> +	.ids = int3472_device_id,
-> >> +	.ops = {
-> >> +		.add = int3472_add,
-> >> +		.remove = int3472_remove,
-> >> +	},
-> >> +	.owner = THIS_MODULE,
-> >> +};
-> >> +
-> >> +module_acpi_driver(int3472_driver);
-> >> +
-> >> +MODULE_LICENSE("GPL v2");
-> >> +MODULE_AUTHOR("Dan Scally <djrscally@gmail.com>");
-> >> +MODULE_DESCRIPTION("ACPI Driver for Discrete type INT3472 ACPI Devices");
-> >> diff --git a/drivers/media/pci/intel/ipu3/int3472.h b/drivers/media/pci/intel/ipu3/int3472.h
-> >> new file mode 100644
-> >> index 000000000000..6964726e8e1f
-> >> --- /dev/null
-> >> +++ b/drivers/media/pci/intel/ipu3/int3472.h
-> >> @@ -0,0 +1,96 @@
-> >> +/* SPDX-License-Identifier: GPL-2.0 */
-> >> +/* Author: Dan Scally <djrscally@gmail.com> */
-> >> +#include <linux/regulator/machine.h>
-> >> +
-> >> +#define INT3472_MAX_SENSOR_GPIOS			3
-> >> +#define GPIO_REGULATOR_NAME_LENGTH			17
-> >> +#define GPIO_REGULATOR_SUPPLY_NAME_LENGTH		9
-> >> +
-> >> +#define INT3472_REGULATOR(_NAME, _SUPPLY, _ID, _OPS)	\
-> >> +	((const struct regulator_desc) {		\
-> >> +		.name = _NAME,				\
-> >> +		.supply_name = _SUPPLY,			\
-> >> +		.id = _ID,				\
-> >> +		.type = REGULATOR_VOLTAGE,		\
-> >> +		.ops = _OPS,				\
-> >> +		.owner = THIS_MODULE,			\
-> >> +	})
-> >> +
-> >> +const guid_t int3472_gpio_guid = GUID_INIT(0x79234640, 0x9e10, 0x4fea,
-> >> +					     0xa5, 0xc1, 0xb5, 0xaa, 0x8b,
-> >> +					     0x19, 0x75, 0x6f);
-> >> +
-> >> +const guid_t cio2_sensor_module_guid = GUID_INIT(0x822ace8f, 0x2814, 0x4174,
-> >> +						 0xa5, 0x6b, 0x5f, 0x02, 0x9f,
-> >> +						 0xe0, 0x79, 0xee);
-> >> +
-> >> +struct int3472_cldb {
-> >> +	u8 version;
-> >> +	/*
-> >> +	 * control logic type
-> >> +	 * 0: UNKNOWN
-> >> +	 * 1: DISCRETE(CRD-D)
-> >> +	 * 2: PMIC TPS68470
-> >> +	 * 3: PMIC uP6641
-> >> +	 */
-> >> +	u8 control_logic_type;
-> >> +	u8 control_logic_id;
-> >> +	u8 sensor_card_sku;
-> >> +	u8 reserved[28];
-> >> +};
-> >> +
-> >> +struct int3472_device {
-> >> +	struct acpi_device *adev;
-> >> +	struct acpi_device *sensor;
-> >> +
-> >> +	unsigned int n_gpios; /* how many GPIOs have we seen */
-> >> +
-> >> +	unsigned int n_regulators;
-> >> +	struct list_head regulators;
-> >> +
-> >> +	unsigned int n_sensor_gpios; /* how many have we mapped to sensor */
-> >> +	struct gpiod_lookup_table gpios;
-> >> +};
-> >> +
-> >> +struct int3472_gpio_regulator {
-> >> +	char regulator_name[GPIO_REGULATOR_NAME_LENGTH];
-> >> +	char supply_name[GPIO_REGULATOR_SUPPLY_NAME_LENGTH];
-> >> +	struct gpio_desc *gpio;
-> >> +	struct regulator_dev *rdev;
-> >> +	struct regulator_desc rdesc;
-> >> +	struct list_head list;
-> >> +};
-> >> +
-> >> +struct int3472_sensor_regulator_map {
-> >> +	char *sensor_module_name;
-> >> +	unsigned int n_supplies;
-> >> +	struct regulator_consumer_supply *supplies;
-> >> +};
-> >> +
-> >> +/*
-> >> + * Here follows platform specific mapping information that we can pass to
-> >> + * regulator_init_data when we register our regulators. They're just mapped
-> >> + * via index, I.E. the first regulator pin that the code finds for the
-> >> + * i2c-OVTI2680:00 device is avdd, the second is dovdd and so on.
-> >> + */
-> >> +
-> >> +static struct regulator_consumer_supply miix_510_ov2680[] = {
-> >> +	{ "i2c-OVTI2680:00", "avdd" },
-> >> +	{ "i2c-OVTI2680:00", "dovdd" },
-> >> +};
-> >> +
-> >> +static struct regulator_consumer_supply surface_go2_ov5693[] = {
-> >> +	{ "i2c-INT33BE:00", "avdd" },
-> >> +	{ "i2c-INT33BE:00", "dovdd" },
-> >> +};
-> >> +
-> >> +static struct regulator_consumer_supply surface_book_ov5693[] = {
-> >> +	{ "i2c-INT33BE:00", "avdd" },
-> >> +	{ "i2c-INT33BE:00", "dovdd" },
-> >> +};
-> >> +
-> >> +static struct int3472_sensor_regulator_map int3472_sensor_regulator_maps[] = {
-> >> +	{ "GNDF140809R", 2, miix_510_ov2680 },
-> >> +	{ "YHCU", 2, surface_go2_ov5693 },
-> >> +	{ "MSHW0070", 2, surface_book_ov5693 },
-> >> +};
+> The above text perhaps should go somewhere under Documentation.
+
+Or in the driver source code, but definitely somewhere else than in the
+commit message.
+
+> > After much internal debate I decided to write this as a standalone
+> > acpi_driver. Alternative options we considered:
+> > 
+> > 1. Squash all this into the cio2-bridge code, which I did originally write
+> > but decided I didn't like.
+> > 2. Extend the existing tps68470 mfd driver...they share an ACPI ID so this
+> > kinda makes sense, but ultimately given there is no actual physical
+> > tps68470 in the scenario this patch handles I decided I didn't like this
+> > either.
+> 
+> Looking to this I think the best is to create a module that can be consumed by tps68470 and separately.
+> So, something near to it rather than under ipu3 hood.
+> 
+> You may use same ID's in both drivers (in PMIC less case it can be simple
+> platform and thus they won't conflict), but both of them should provide GPIO
+> resources for consumption.
+> 
+> So, something like
+> 
+>  tps68470.h with API to consume
+>  split tps68470 to -core, -i2c parts
+>  add int3472, which will serve for above and be standalone platform driver
+>  update cio2-bridge accordingly
+> 
+> Would it be feasible?
+
+Given that INT3472 means Intel camera power management device (that's
+more or less the wording in Windows, I can double-check), would the
+following make sense ?
+
+A top-level module named intel-camera-pmic (or int3472, or ...) would
+register two drivers, a platform driver and an I2C driver, to
+accommodate for both cases ("discrete PMIC" that doesn't have an
+I2cSerialBusV2, and TPS64870 or uP6641Q that are I2C devices). The probe
+function would perform the following:
+
+- If there's no CLDB, then the device uses the Chrome OS "ACPI
+  bindings", and refers to a TPS64870. The code that exists in the
+  kernel today (registering GPIOs, and registering an OpRegion to
+  communicate with the power management code in the DSDT) would be
+  activated.
+
+- If there's a CLDB, then the device type would be retrieved from it:
+
+  - If the device is a "discrete PMIC", the driver would register clocks
+    and regulators controlled by GPIOs, and create clock, regulator and
+    GPIO lookup entries for the sensor device that references the PMIC.
+
+  - If the device is a TPS64870, the code that exists in the kernel
+    today to register GPIOs would be activated, and new code would need
+    to be written to register regulators and clocks.
+
+  - If the device is a uP6641Q, a new driver will need to be written (I
+    don't know on which devices this PMIC is used, so this can probably
+    be deferred).
+
+We can split this in multiple files and/or modules.
+
+> ...
+> 
+> > +	table_entry = (struct gpiod_lookup)GPIO_LOOKUP_IDX(acpi_dev_name(adev),
+> > +							   ares->data.gpio.pin_table[0],
+> > +							   func, 0, GPIO_ACTIVE_HIGH);
+> 
+> You won't need this if you have regular INT3472 platform driver.
+> Simple call there _DSM to map resources to the type and use devm_gpiod_get on
+> consumer behalf. Thus, previous patch is not needed.
+
+How does the consumer (the camera sensor) retrieve the GPIO though ? The
+_DSM is in the PMIC device object, while the real consumer is the camera
+sensor.
+
+> ...
+> 
+> > +	case 0x01: /* Power regulators (we think) */
+> > +	case 0x0c:
+> > +	case 0x0b: /* Power regulators, but to a device separate to sensor */
+> > +	case 0x0d: /* Indicator LEDs */
+> 
+> 
+> Give names to those constants.
+> 
+> 	#define INT3472_GPIO_TYPE_RESET 0x00
+> 	...
+> 
+> 
+> > +static struct acpi_driver int3472_driver = {
+> 
+> No acpi_driver! Use platform_driver instead with plenty of examples all over
+> the kernel.
+> 
+> > +	.name = "int3472",
+> > +	.ids = int3472_device_id,
+> > +	.ops = {
+> > +		.add = int3472_add,
+> > +		.remove = int3472_remove,
+> > +	},
+> 
+> > +	.owner = THIS_MODULE,
+> 
+> No need
+> 
+> > +};
+> 
+> ...
+> 
+> > +const guid_t int3472_gpio_guid = GUID_INIT(0x79234640, 0x9e10, 0x4fea,
+> > +					     0xa5, 0xc1, 0xb5, 0xaa, 0x8b,
+> > +					     0x19, 0x75, 0x6f);
+> > +
+> > +const guid_t cio2_sensor_module_guid = GUID_INIT(0x822ace8f, 0x2814, 0x4174,
+> > +						 0xa5, 0x6b, 0x5f, 0x02, 0x9f,
+> > +						 0xe0, 0x79, 0xee);
+> 
+> Use more or less standard pattern for these, like
+> 
+> /* 79234640-9e10-4fea-a5c1b5aa8b19756f */
+> const guid_t int3472_gpio_guid =
+> 	GUID_INIT(0x79234640, 0x9e10, 0x4fea,
+> 		  0xa5, 0xc1, 0xb5, 0xaa, 0x8b, 0x19, 0x75, 0x6f);
+> 
+> ...
+> 
+> > +static struct regulator_consumer_supply miix_510_ov2680[] = {
+> > +	{ "i2c-OVTI2680:00", "avdd" },
+> > +	{ "i2c-OVTI2680:00", "dovdd" },
+> > +};
+> 
+> Can we use acpi_dev_first_match_dev() to get instance name out of their HIDs?
+> 
+> > +static struct regulator_consumer_supply surface_go2_ov5693[] = {
+> > +	{ "i2c-INT33BE:00", "avdd" },
+> > +	{ "i2c-INT33BE:00", "dovdd" },
+> > +};
+> > +
+> > +static struct regulator_consumer_supply surface_book_ov5693[] = {
+> > +	{ "i2c-INT33BE:00", "avdd" },
+> > +	{ "i2c-INT33BE:00", "dovdd" },
+> > +};
+> 
+> Ditto.
+> 
+> ...
+> 
+> > +static struct int3472_sensor_regulator_map int3472_sensor_regulator_maps[] = {
+> > +	{ "GNDF140809R", 2, miix_510_ov2680 },
+> > +	{ "YHCU", 2, surface_go2_ov5693 },
+> > +	{ "MSHW0070", 2, surface_book_ov5693 },
+> > +};
+> 
+> Hmm... Usual way is to use DMI for that. I'm not sure above will not give us
+> false positive matches.
 
 -- 
 Regards,
