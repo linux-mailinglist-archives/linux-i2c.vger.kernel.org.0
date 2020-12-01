@@ -2,106 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBDB2CA68A
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 16:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F512CA6B3
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 16:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391716AbgLAPHT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Dec 2020 10:07:19 -0500
-Received: from mga12.intel.com ([192.55.52.136]:56660 "EHLO mga12.intel.com"
+        id S2388890AbgLAPLD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Dec 2020 10:11:03 -0500
+Received: from mga09.intel.com ([134.134.136.24]:2314 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387462AbgLAPHT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 1 Dec 2020 10:07:19 -0500
-IronPort-SDR: O0Gq3HRctk79IbPZ5bOC9GaU9TuwpVT112ZXX20mvKAQnlJp+Nn5XMHWLUNlCoZ5/hyBzQKYrQ
- Q5zMmdkXyMSA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="152093092"
+        id S2387678AbgLAPLD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 1 Dec 2020 10:11:03 -0500
+IronPort-SDR: cyCZegX4Q8P86CgvrjL5zo32f7NZ3c8PQjfyd0lbKC7vuRwgG0gT8Hh/poc1djlcXctK4iDF2N
+ Kbu2Nr9VXZVg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="172999501"
 X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
-   d="scan'208";a="152093092"
+   d="scan'208";a="172999501"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 07:05:36 -0800
-IronPort-SDR: OQ4oSN/ZfoiCZhKZjYG9XGJcVgAuKTLV12ethorldSZdb2n1J8QTmg5CGra7aN4/3BwuY5Evsq
- sSZ/uEhZiGHw==
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 07:09:19 -0800
+IronPort-SDR: RlyogqPQm/v07Bl/w7DaKQ+1EqQ55TIIGsAcJsPsGxpr8ZpFsm/ANdOg3KbkaZAy/vlY2lXXiU
+ f/Wnrtqn3eyw==
 X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
-   d="scan'208";a="367579376"
+   d="scan'208";a="345492105"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 07:05:30 -0800
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 07:09:12 -0800
 Received: from andy by smile with local (Exim 4.94)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kk7Ec-00BIOo-Rr; Tue, 01 Dec 2020 17:06:30 +0200
-Date:   Tue, 1 Dec 2020 17:06:30 +0200
+        id 1kk7IC-00BIQf-5v; Tue, 01 Dec 2020 17:10:12 +0200
+Date:   Tue, 1 Dec 2020 17:10:12 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Daniel Scally <djrscally@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
-        devel@acpica.org, rjw@rjwysocki.net, lenb@kernel.org,
-        gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        wsa@kernel.org, yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
-        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        linux@rasmusvillemoes.dk, kieran.bingham+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org,
+To:     Dan Scally <djrscally@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
+        lenb@kernel.org, gregkh@linuxfoundation.org,
+        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, wsa@kernel.org, yong.zhi@intel.com,
+        sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
+        tian.shu.qiu@intel.com, mchehab@kernel.org, robert.moore@intel.com,
+        erik.kaneda@intel.com, pmladek@suse.com, rostedt@goodmis.org,
+        sergey.senozhatsky@gmail.com, linux@rasmusvillemoes.dk,
+        kieran.bingham+renesas@ideasonboard.com, jacopo+renesas@jmondi.org,
         laurent.pinchart+renesas@ideasonboard.com,
         jorhand@linux.microsoft.com, kitakar@gmail.com,
         heikki.krogerus@linux.intel.com
-Subject: Re: [PATCH 13/18] ipu3-cio2: Add functionality allowing
- software_node connections to sensors on platforms designed for Windows
-Message-ID: <20201201150630.GF4077@smile.fi.intel.com>
+Subject: Re: [PATCH 14/18] acpi: utils: Add function to fetch dependent
+ acpi_devices
+Message-ID: <20201201151012.GG4077@smile.fi.intel.com>
 References: <20201130133129.1024662-1-djrscally@gmail.com>
- <20201130133129.1024662-14-djrscally@gmail.com>
- <20201130203551.GP4351@valkosipuli.retiisi.org.uk>
+ <20201130133129.1024662-15-djrscally@gmail.com>
+ <20201130182354.GW4077@smile.fi.intel.com>
+ <26d7fa3f-3552-90e0-1f64-5c39449dcdd7@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201130203551.GP4351@valkosipuli.retiisi.org.uk>
+In-Reply-To: <26d7fa3f-3552-90e0-1f64-5c39449dcdd7@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 10:35:51PM +0200, Sakari Ailus wrote:
-> On Mon, Nov 30, 2020 at 01:31:24PM +0000, Daniel Scally wrote:
-
-...
-
-> > +/*
-> > + * Extend this array with ACPI Hardware ID's of devices known to be working.
-> > + * Do not add a HID for a sensor that is not actually supported.
-> > + */
-> > +static const char * const cio2_supported_devices[] = {
-> > +	"INT33BE",
-> > +	"OVTI2680",
+On Mon, Nov 30, 2020 at 11:54:44PM +0000, Dan Scally wrote:
+> Hi Andy
 > 
-> I guess we don't have the known-good frequencies for the CSI-2 bus in
-> firmware?
+> On 30/11/2020 18:23, Andy Shevchenko wrote:
+> > On Mon, Nov 30, 2020 at 01:31:25PM +0000, Daniel Scally wrote:
+> >> ACPI devices declare themselves dependent on other devices via the _DEP
+> >> buffer. Fetching the dependee from dependent is a matter of parsing
+> >> _DEP, but currently there's no method to fetch dependent from dependee.
+> >> Add one, so we can parse sensors dependent on a PMIC from the PMIC's
+> >> acpi_driver.
+> > Do I understand correctly that it's an existing table provided by firmware that
+> > (ab)uses _DEP in such way? Note, the specification doesn't tell we may use it
+> > in this way, OTOH I don't remember if it strictly forbids such use.
+> >
+> > So, please elaborate in the commit message why you need this and pint out to
+> > the 6.5.8 "_DEP (Operation Region Dependencies)" which clearly says about
+> > OpRegions and that part already supported by ACPI in the Linux, if I'm not
+> > mistaken, need to refresh my memory.
 > 
-> One option would be to put there what the drivers currently use. This
-> assumes the support for these devices is, well, somewhat opportunistic but
-> I guess there's no way around that right now at least.
 > 
-> As the systems are laptops, they're likely somewhat less prone to EMI
-> issues to begin with than mobile phones anyway.
-
-ACPI has only XTAL clock frequency (dunno if it's the same as CSI-2 bus clock).
-Currently it may be one out of 19.2 MHz, 24 MHz (with a remark that all sensors
-must use same value as PMIC can't produce several clocks).
-
-> > +};
-
-...
-
-> > +	strcpy(sensor->prop_names.clock_frequency, "clock-frequency");
-> > +	strcpy(sensor->prop_names.rotation, "rotation");
-> > +	strcpy(sensor->prop_names.bus_type, "bus-type");
-> > +	strcpy(sensor->prop_names.data_lanes, "data-lanes");
-> > +	strcpy(sensor->prop_names.remote_endpoint, "remote-endpoint");
+> Laurent's reply is good explanation, but for example see my Lenovo Miix
+> 510's DSDT:
 > 
-> Please use the actual field size instead with strncpy / strscpy.
+> 
+> https://gist.githubusercontent.com/djrscally/e64d112180517352fa3392878b0f4a7d/raw/88b90b3ea4204fd7845257b6666fdade47cc2981/dsdt.dsl
+> 
+> 
+> Search OVTI2680 and OVTI5648 for the cameras. Both are dependent on
+> IN3472 devices (PMI0 and PMI1) which are the discrete type that we're
+> attempting to handle here.
 
-Perhaps Laurent's proposal is better?
+Yes, it seems since PMIC is kinda "power resource" (don't mix with real power
+resource as by ACPI specifications) and that's why they decided to include it
+into _DEP.  So, it seems a de facto common practice. Thus, it would be nice to
+have the above in the commit message in some form. Can you do it?
 
 -- 
 With Best Regards,
