@@ -2,122 +2,258 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DA62CA6F5
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 16:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D76D2CA790
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 17:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391795AbgLAPXw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Dec 2020 10:23:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391739AbgLAPXt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Dec 2020 10:23:49 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AD8C0613CF;
-        Tue,  1 Dec 2020 07:23:03 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id a6so3708791wmc.2;
-        Tue, 01 Dec 2020 07:23:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=yADVRMh/EY6ElQ2fDzuAEHfJk7R1Ue0wFYgwIbY8SU4=;
-        b=ufKAFIXDThq6pW+Sj32IvUaxOtQH2TGECe7CGUE7RHXDZXP6RBYu2En0UnVg/Xw3Pq
-         plhEnti1LjoRMxNFODbT+cLDWXf76bGNFjshBXTD/fkLNcibUpYSHyNP3rLo/NvOLMro
-         SLDBvAua0DC5P4YsbnqqogEkPt6Jk0UAJKIoHAvcW/NKMGnp+SJiymkOLE3nlPtgkRWT
-         p/u8FiEzVdjNRxgLKtipg8YY5HTL7VuBA9hGXXxCgSwNa3Kw8rjchYk6yGZC9y1IyMqx
-         Glsxbh08YB/MznIJO+NO+Bd07f9Y8r5jbt+j8Z36ZPUq6jTM7n51ueLIRB5MAlhye2fo
-         xuCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=yADVRMh/EY6ElQ2fDzuAEHfJk7R1Ue0wFYgwIbY8SU4=;
-        b=n43njrWIhR1x6lWTUT+Wgj4qvDzyJH02JyQFbN/MZwhP6V5f309pv6YsRWMfNSd8tE
-         xQihOc3WjEj/aM5bl2i9EaKTKTbl6fkwSFBzjrZbwkRo4OVZYdgC3u7C//j9/FWaGsbW
-         4oO22jFYSDWs7SS2QMjcYsxnMIKQFzfjCnJUhMMvR6ICwLpuAJ8DIVuKHbZXkm22RLes
-         hoFrSi/HVhcUx2TYiAaDoGiBeOt1NskNWhKDjCNyivDyggXhcD4pBhT8E5cBwVccaqU8
-         4pIUMvPNItz98T84ymJVUWwSRjEdoFnnsqsHd7ZLz/6tiAkrGaxowWrZM7eQezlx+fbE
-         16Yg==
-X-Gm-Message-State: AOAM5327h804x1rFR+0WgfD1fzIHbHHEdu8rUk8esbU24iHXeDLfZNx/
-        LvYv1z8mFtd1B4chWNrsZr0=
-X-Google-Smtp-Source: ABdhPJxcHJN0zQ1xaZvWXO8OSl+Ad4sFnkieJdvurZiCfNEOeCrpgUOvoEneb7pfHHk7dMEXDS0u/g==
-X-Received: by 2002:a1c:208f:: with SMTP id g137mr3137329wmg.67.1606836182294;
-        Tue, 01 Dec 2020 07:23:02 -0800 (PST)
-Received: from [192.168.1.211] ([2.31.224.80])
-        by smtp.gmail.com with ESMTPSA id h83sm322241wmf.9.2020.12.01.07.23.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Dec 2020 07:23:01 -0800 (PST)
-Subject: Re: [PATCH 14/18] acpi: utils: Add function to fetch dependent
- acpi_devices
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        id S2391807AbgLAP5H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Dec 2020 10:57:07 -0500
+Received: from mga06.intel.com ([134.134.136.31]:30482 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388395AbgLAP5H (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 1 Dec 2020 10:57:07 -0500
+IronPort-SDR: S9K7opjTIa/JsbxFxonXeMdtL5dQRutd88uN8jypLxiUUqXyNgdBErz0Px47munoP2Ay85CfQa
+ UVWnMdovOj8w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="234453436"
+X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
+   d="scan'208";a="234453436"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 07:55:23 -0800
+IronPort-SDR: QfcYMzGShBE137FZNZLaRpHlgTLYVcGE+1s1yU7a+CfUUHvYLSDyZMsF9MTm3asiBC2wXbeTpJ
+ 4z04FpiZgDYQ==
+X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
+   d="scan'208";a="481151293"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 07:55:16 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id EDCA221E1A; Tue,  1 Dec 2020 17:55:13 +0200 (EET)
+Date:   Tue, 1 Dec 2020 17:55:13 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
         lenb@kernel.org, gregkh@linuxfoundation.org,
         mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
         bgolaszewski@baylibre.com, wsa@kernel.org, yong.zhi@intel.com,
-        sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
-        tian.shu.qiu@intel.com, mchehab@kernel.org, robert.moore@intel.com,
-        erik.kaneda@intel.com, pmladek@suse.com, rostedt@goodmis.org,
-        sergey.senozhatsky@gmail.com, linux@rasmusvillemoes.dk,
-        kieran.bingham+renesas@ideasonboard.com, jacopo+renesas@jmondi.org,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        linux@rasmusvillemoes.dk, kieran.bingham+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org,
         laurent.pinchart+renesas@ideasonboard.com,
         jorhand@linux.microsoft.com, kitakar@gmail.com,
         heikki.krogerus@linux.intel.com
+Subject: Re: [PATCH 18/18] ipu3: Add driver for dummy INT3472 ACPI device
+Message-ID: <20201201155513.GB852@paasikivi.fi.intel.com>
 References: <20201130133129.1024662-1-djrscally@gmail.com>
- <20201130133129.1024662-15-djrscally@gmail.com>
- <20201130182354.GW4077@smile.fi.intel.com>
- <26d7fa3f-3552-90e0-1f64-5c39449dcdd7@gmail.com>
- <20201201151012.GG4077@smile.fi.intel.com>
-From:   Dan Scally <djrscally@gmail.com>
-Message-ID: <1244ac3e-2835-6cb2-611d-af0a4f5614a9@gmail.com>
-Date:   Tue, 1 Dec 2020 15:23:00 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <20201130133129.1024662-19-djrscally@gmail.com>
+ <20201130200719.GB4077@smile.fi.intel.com>
+ <20201130233232.GD25713@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <20201201151012.GG4077@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201130233232.GD25713@pendragon.ideasonboard.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Laurent,
 
-On 01/12/2020 15:10, Andy Shevchenko wrote:
-> On Mon, Nov 30, 2020 at 11:54:44PM +0000, Dan Scally wrote:
->> Hi Andy
->>
->> On 30/11/2020 18:23, Andy Shevchenko wrote:
->>> On Mon, Nov 30, 2020 at 01:31:25PM +0000, Daniel Scally wrote:
->>>> ACPI devices declare themselves dependent on other devices via the _DEP
->>>> buffer. Fetching the dependee from dependent is a matter of parsing
->>>> _DEP, but currently there's no method to fetch dependent from dependee.
->>>> Add one, so we can parse sensors dependent on a PMIC from the PMIC's
->>>> acpi_driver.
->>> Do I understand correctly that it's an existing table provided by firmware that
->>> (ab)uses _DEP in such way? Note, the specification doesn't tell we may use it
->>> in this way, OTOH I don't remember if it strictly forbids such use.
->>>
->>> So, please elaborate in the commit message why you need this and pint out to
->>> the 6.5.8 "_DEP (Operation Region Dependencies)" which clearly says about
->>> OpRegions and that part already supported by ACPI in the Linux, if I'm not
->>> mistaken, need to refresh my memory.
->>
->> Laurent's reply is good explanation, but for example see my Lenovo Miix
->> 510's DSDT:
->>
->>
->> https://gist.githubusercontent.com/djrscally/e64d112180517352fa3392878b0f4a7d/raw/88b90b3ea4204fd7845257b6666fdade47cc2981/dsdt.dsl
->>
->>
->> Search OVTI2680 and OVTI5648 for the cameras. Both are dependent on
->> IN3472 devices (PMI0 and PMI1) which are the discrete type that we're
->> attempting to handle here.
-> Yes, it seems since PMIC is kinda "power resource" (don't mix with real power
-> resource as by ACPI specifications) and that's why they decided to include it
-> into _DEP.  So, it seems a de facto common practice. Thus, it would be nice to
-> have the above in the commit message in some form. Can you do it?
->
-Sure, no problem. I'll include that in the next version
+On Tue, Dec 01, 2020 at 01:32:32AM +0200, Laurent Pinchart wrote:
+> Hi Andy,
+> 
+> On Mon, Nov 30, 2020 at 10:07:19PM +0200, Andy Shevchenko wrote:
+> > On Mon, Nov 30, 2020 at 01:31:29PM +0000, Daniel Scally wrote:
+> > > On platforms where ACPI is designed for use with Windows, resources
+> > > that are intended to be consumed by sensor devices are sometimes in
+> > > the _CRS of a dummy INT3472 device upon which the sensor depends. This
+> > > driver binds to the dummy acpi device (which does not represent a
+> > 
+> > acpi device -> acpi_device
+> > 
+> > > physical PMIC) and maps them into GPIO lines and regulators for use by
+> > > the sensor device instead.
+> > 
+> > ...
+> > 
+> > > This patch contains the bits of this process that we're least sure about.
+> > > The sensors in scope for this work are called out as dependent (in their
+> > > DSDT entry's _DEP) on a device with _HID INT3472. These come in at least
+> > > 2 kinds; those with an I2cSerialBusV2 entry (which we presume therefore
+> > > are legitimate tps68470 PMICs that need handling by those drivers - work
+> > > on that in the future). And those without an I2C device. For those without
+> > > an I2C device they instead have an array of GPIO pins defined in _CRS. So
+> > > for example, my Lenovo Miix 510's OVTI2680 sensor is dependent on one of
+> > > the _latter_ kind of INT3472 devices, with this _CRS:
+> > > 
+> > > Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+> > > {
+> > >     Name (SBUF, ResourceTemplate ()
+> > >     {
+> > >         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000,
+> > > 	    IoRestrictionOutputOnly, "\\_SB.PCI0.GPI0",
+> > > 	    0x00, ResourceConsumer, ,
+> > >             )
+> > >             {   // Pin list
+> > >                 0x0079
+> > >             }
+> > >         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000,
+> > > 	    IoRestrictionOutputOnly, "\\_SB.PCI0.GPI0",
+> > > 	    0x00, ResourceConsumer, ,
+> > >             )
+> > >             {   // Pin list
+> > >                 0x007A
+> > >             }
+> > >         GpioIo (Exclusive, PullDefault, 0x0000, 0x0000,
+> > > 	    IoRestrictionOutputOnly, "\\_SB.PCI0.GPI0",
+> > > 	    0x00, ResourceConsumer, ,
+> > >             )
+> > >             {   // Pin list
+> > >                 0x008F
+> > >             }
+> > >     })
+> > >     Return (SBUF) /* \_SB_.PCI0.PMI1._CRS.SBUF */
+> > > }
+> > > 
+> > > and the same device has a _DSM Method, which returns 32-bit ints where
+> > > the second lowest byte we noticed to match the pin numbers of the GPIO
+> > > lines:
+> > > 
+> > > Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
+> > > {
+> > >     If ((Arg0 == ToUUID ("79234640-9e10-4fea-a5c1-b5aa8b19756f")))
+> > >     {
+> > >         If ((Arg2 == One))
+> > >         {
+> > >             Return (0x03)
+> > >         }
+> > > 
+> > >         If ((Arg2 == 0x02))
+> > >         {
+> > >             Return (0x01007900)
+> > >         }
+> > > 
+> > >         If ((Arg2 == 0x03))
+> > >         {
+> > >             Return (0x01007A0C)
+> > >         }
+> > > 
+> > >         If ((Arg2 == 0x04))
+> > >         {
+> > >             Return (0x01008F01)
+> > >         }
+> > >     }
+> > > 
+> > >     Return (Zero)
+> > > }
+> > > 
+> > > We know that at least some of those pins have to be toggled active for the
+> > > sensor devices to be available in i2c, so the conclusion we came to was
+> > > that those GPIO entries assigned to the INT3472 device actually represent
+> > > GPIOs and regulators to be consumed by the sensors themselves. Tsuchiya
+> > > noticed that the lowest byte in the return values of the _DSM method
+> > > seemed to represent the type or function of the GPIO line, and we
+> > > confirmed that by testing on each surface device that GPIO lines where the
+> > > low byte in the _DSM entry for that pin was 0x0d controlled the privacy
+> > > LED of the cameras.
+> > > 
+> > > We're guessing as to the exact meaning of the function byte, but I
+> > > conclude they're something like this:
+> > > 
+> > > 0x00 - probably a reset GPIO
+> > > 0x01 - regulator for the sensor
+> > > 0x0c - regulator for the sensor
+> > > 0x0b - regulator again, but for a VCM or EEPROM
+> > > 0x0d - privacy led (only one we're totally confident of since we can see
+> > >        it happen!)
+> > 
+> > It's solely Windows driver design...
+> > Luckily I found some information and can clarify above table:
+> > 
+> > 0x00 Reset
+> > 0x01 Power down
+> > 0x0b Power enable
+> > 0x0c Clock enable
+> > 0x0d LED (active high)
+> 
+> That's very useful information ! Thank you.
+> 
+> > The above text perhaps should go somewhere under Documentation.
+> 
+> Or in the driver source code, but definitely somewhere else than in the
+> commit message.
+> 
+> > > After much internal debate I decided to write this as a standalone
+> > > acpi_driver. Alternative options we considered:
+> > > 
+> > > 1. Squash all this into the cio2-bridge code, which I did originally write
+> > > but decided I didn't like.
+> > > 2. Extend the existing tps68470 mfd driver...they share an ACPI ID so this
+> > > kinda makes sense, but ultimately given there is no actual physical
+> > > tps68470 in the scenario this patch handles I decided I didn't like this
+> > > either.
+> > 
+> > Looking to this I think the best is to create a module that can be consumed by tps68470 and separately.
+> > So, something near to it rather than under ipu3 hood.
+> > 
+> > You may use same ID's in both drivers (in PMIC less case it can be simple
+> > platform and thus they won't conflict), but both of them should provide GPIO
+> > resources for consumption.
+> > 
+> > So, something like
+> > 
+> >  tps68470.h with API to consume
+> >  split tps68470 to -core, -i2c parts
+> >  add int3472, which will serve for above and be standalone platform driver
+> >  update cio2-bridge accordingly
+> > 
+> > Would it be feasible?
+> 
+> Given that INT3472 means Intel camera power management device (that's
+> more or less the wording in Windows, I can double-check), would the
+> following make sense ?
+> 
+> A top-level module named intel-camera-pmic (or int3472, or ...) would
+> register two drivers, a platform driver and an I2C driver, to
+> accommodate for both cases ("discrete PMIC" that doesn't have an
+> I2cSerialBusV2, and TPS64870 or uP6641Q that are I2C devices). The probe
+> function would perform the following:
+> 
+> - If there's no CLDB, then the device uses the Chrome OS "ACPI
+>   bindings", and refers to a TPS64870. The code that exists in the
+>   kernel today (registering GPIOs, and registering an OpRegion to
+>   communicate with the power management code in the DSDT) would be
+>   activated.
+> 
+> - If there's a CLDB, then the device type would be retrieved from it:
+> 
+>   - If the device is a "discrete PMIC", the driver would register clocks
+>     and regulators controlled by GPIOs, and create clock, regulator and
+>     GPIO lookup entries for the sensor device that references the PMIC.
+> 
+>   - If the device is a TPS64870, the code that exists in the kernel
+>     today to register GPIOs would be activated, and new code would need
+>     to be written to register regulators and clocks.
+> 
+>   - If the device is a uP6641Q, a new driver will need to be written (I
+>     don't know on which devices this PMIC is used, so this can probably
+>     be deferred).
+> 
+> We can split this in multiple files and/or modules.
+
+That's what I thought of, too, as one option, but with some more detail.
+This would be indeed the cleanest option.
+
+I think it'd be nice if the CLDB stuff (apart from checking whether it's
+there) would be in a different module to avoid cluttering up the real
+tps68470 driver.
+
+-- 
+Regards,
+
+Sakari Ailus
