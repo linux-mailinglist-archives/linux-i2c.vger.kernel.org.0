@@ -2,109 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB692C97DD
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 08:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF83D2C98D8
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 09:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727652AbgLAHLa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Dec 2020 02:11:30 -0500
-Received: from mga03.intel.com ([134.134.136.65]:53468 "EHLO mga03.intel.com"
+        id S1728315AbgLAIJW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 1 Dec 2020 03:09:22 -0500
+Received: from mailout05.rmx.de ([94.199.90.90]:37150 "EHLO mailout05.rmx.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725859AbgLAHL3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 1 Dec 2020 02:11:29 -0500
-IronPort-SDR: rO9fOdvou2bGbH8N7ZQttr2HheNGPFRFQW8zOeHxJlfwjc2bh5uxMwGujkTIpriu9Z14TtJElT
- dP1Zsdwytv7A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="172879120"
-X-IronPort-AV: E=Sophos;i="5.78,383,1599548400"; 
-   d="scan'208";a="172879120"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 23:09:48 -0800
-IronPort-SDR: Vn09THofrQN9w7Vq4pwPzYjq94ZZPXk+iWJnCoCMvfl5OF6xgGcr0MUZKXmJ5UlVBupzz5Vitj
- 9wqIElHxjxJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,383,1599548400"; 
-   d="scan'208";a="480979673"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.232.196]) ([10.238.232.196])
-  by orsmga004.jf.intel.com with ESMTP; 30 Nov 2020 23:09:40 -0800
-Subject: Re: [PATCH 10/18] ipu3-cio2: Rename ipu3-cio2.c to allow module to be
- built from multiple source files retaining ipu3-cio2 name
-From:   Bingbu Cao <bingbu.cao@linux.intel.com>
-To:     Daniel Scally <djrscally@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
-        devel@acpica.org
-Cc:     rjw@rjwysocki.net, lenb@kernel.org, gregkh@linuxfoundation.org,
-        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        wsa@kernel.org, yong.zhi@intel.com, sakari.ailus@linux.intel.com,
-        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
-        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        linux@rasmusvillemoes.dk, kieran.bingham+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jorhand@linux.microsoft.com, kitakar@gmail.com,
-        heikki.krogerus@linux.intel.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20201130133129.1024662-1-djrscally@gmail.com>
- <20201130133129.1024662-11-djrscally@gmail.com>
- <832ce84b-0dba-826b-51c8-90162c2f7ab8@linux.intel.com>
-Message-ID: <7861a56c-8cae-6b23-9ed6-55a11e993edc@linux.intel.com>
-Date:   Tue, 1 Dec 2020 15:07:03 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728309AbgLAIJV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 1 Dec 2020 03:09:21 -0500
+X-Greylist: delayed 1962 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Dec 2020 03:09:21 EST
+Received: from kdin02.retarus.com (kdin02.dmz1.retloc [172.19.17.49])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailout05.rmx.de (Postfix) with ESMTPS id 4ClYms0Rytz9vZl;
+        Tue,  1 Dec 2020 08:35:57 +0100 (CET)
+Received: from mta.arri.de (unknown [217.111.95.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by kdin02.retarus.com (Postfix) with ESMTPS id 4ClYmS2TjMz2TTLk;
+        Tue,  1 Dec 2020 08:35:36 +0100 (CET)
+Received: from n95hx1g2.localnet (192.168.54.19) by mta.arri.de
+ (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 1 Dec
+ 2020 08:34:53 +0100
+From:   Christian Eggers <ceggers@arri.de>
+To:     Wolfram Sang <wsa@kernel.org>, <wsa@the-dreams.de>
+CC:     Oleksij Rempel <linux@rempel-privat.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "David Laight" <David.Laight@aculab.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH v6 1/3] i2c: imx: Fix reset of I2SR_IAL flag
+Date:   Tue, 1 Dec 2020 08:34:52 +0100
+Message-ID: <18285740.IRuNKOj0Az@n95hx1g2>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+In-Reply-To: <20201010110920.GB4669@ninjato>
+References: <20201009110320.20832-1-ceggers@arri.de> <20201009110320.20832-2-ceggers@arri.de> <20201010110920.GB4669@ninjato>
 MIME-Version: 1.0
-In-Reply-To: <832ce84b-0dba-826b-51c8-90162c2f7ab8@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Originating-IP: [192.168.54.19]
+X-RMX-ID: 20201201-083538-4ClYmS2TjMz2TTLk-0@kdin02
+X-RMX-SOURCE: 217.111.95.66
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 12/1/20 2:56 PM, Bingbu Cao wrote:
-> I see there will be multiple files, but there will be no conflict if keep as the main
-> file name unchanged, right? If so, I prefer keep as it was.
-
-Oops, I notice you try to build all the files into single module, so please ignore my
-comment above.
-
+On Saturday, 10 October 2020, 13:09:20 CET, Wolfram Sang wrote:
+> On Fri, Oct 09, 2020 at 01:03:18PM +0200, Christian Eggers wrote:
+> > According to the "VFxxx Controller Reference Manual" (and the comment
+> > block starting at line 97), Vybrid requires writing a one for clearing
+> > an interrupt flag. Syncing the method for clearing I2SR_IIF in
+> > i2c_imx_isr().
+> > 
+> > Signed-off-by: Christian Eggers <ceggers@arri.de>
+> > Fixes: 4b775022f6fd ("i2c: imx: add struct to hold more configurable quirks")
+> > Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> > Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > Cc: stable@vger.kernel.org
 > 
-> On 11/30/20 9:31 PM, Daniel Scally wrote:
->> ipu3-cio2 driver needs extending with multiple files; rename the main
->> source file and specify the renamed file in Makefile to accommodate that.
->>
->> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->> Signed-off-by: Daniel Scally <djrscally@gmail.com>
->> ---
->> Changes since RFC v3:
->>
->> 	- None
->>
->>  drivers/media/pci/intel/ipu3/Makefile                          | 2 ++
->>  drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} | 0
->>  2 files changed, 2 insertions(+)
->>  rename drivers/media/pci/intel/ipu3/{ipu3-cio2.c => ipu3-cio2-main.c} (100%)
->>
->> diff --git a/drivers/media/pci/intel/ipu3/Makefile b/drivers/media/pci/intel/ipu3/Makefile
->> index 98ddd5beafe0..429d516452e4 100644
->> --- a/drivers/media/pci/intel/ipu3/Makefile
->> +++ b/drivers/media/pci/intel/ipu3/Makefile
->> @@ -1,2 +1,4 @@
->>  # SPDX-License-Identifier: GPL-2.0-only
->>  obj-$(CONFIG_VIDEO_IPU3_CIO2) += ipu3-cio2.o
->> +
->> +ipu3-cio2-y += ipu3-cio2-main.o
->> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
->> similarity index 100%
->> rename from drivers/media/pci/intel/ipu3/ipu3-cio2.c
->> rename to drivers/media/pci/intel/ipu3/ipu3-cio2-main.c
->>
+> Applied to for-next, thanks!
 > 
+I cannot find my patches in kernel/git/wsa/linux.git, branch "for-next".
+Did they get lost?
 
--- 
-Best regards,
-Bingbu Cao
+regards
+Christian
+
+
+
+
