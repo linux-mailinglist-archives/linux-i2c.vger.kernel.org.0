@@ -2,34 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8DB2CAB2C
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 19:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 295DF2CAB58
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Dec 2020 20:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731236AbgLAS4t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Dec 2020 13:56:49 -0500
-Received: from mga17.intel.com ([192.55.52.151]:65533 "EHLO mga17.intel.com"
+        id S2392352AbgLATCr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Dec 2020 14:02:47 -0500
+Received: from mga09.intel.com ([134.134.136.24]:28865 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726213AbgLAS4t (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 1 Dec 2020 13:56:49 -0500
-IronPort-SDR: ymHOwF9dz5a11dYhtIRfpEmCVUe7hDaCdE+ASviyymQRKnEj8N48P2+Bf5GPhpr9PWs25Ymgll
- f65XtC4rMqOA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="152716011"
+        id S2388004AbgLATCq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 1 Dec 2020 14:02:46 -0500
+IronPort-SDR: kHKVMZ177Xjyd38ROHonB4THuBHuDXNNHVqZfN3GzYIlFTRJLEFCIv5tbQdAznbeJyHTO9gyJL
+ 1yHwn31Es79A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="173047975"
 X-IronPort-AV: E=Sophos;i="5.78,385,1599548400"; 
-   d="scan'208";a="152716011"
+   d="scan'208";a="173047975"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 10:55:08 -0800
-IronPort-SDR: O1EQ8vM/QvOLK7AKHZagQtym6r3r7agEaHfKrsefFl/abSiMiZfy7LQEOEJzQYFMGdozDImMyB
- TZlyuPsZwQZA==
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 11:01:01 -0800
+IronPort-SDR: tGFE7zu9R3jBry5iYfAFhFMcH6Xq8kfbvYyCxFwqADHJmXHi24BPQWpHUcSvgRd9tLbPENwJJ8
+ nuHwzYech7FA==
 X-IronPort-AV: E=Sophos;i="5.78,385,1599548400"; 
-   d="scan'208";a="361147132"
+   d="scan'208";a="434787131"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 10:54:58 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 11:00:51 -0800
 Received: from andy by smile with local (Exim 4.94)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kkAog-00BLBW-ML; Tue, 01 Dec 2020 20:55:58 +0200
-Date:   Tue, 1 Dec 2020 20:55:58 +0200
+        id 1kkAuN-00BLFh-Ne; Tue, 01 Dec 2020 21:01:51 +0200
+Date:   Tue, 1 Dec 2020 21:01:51 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Dan Scally <djrscally@gmail.com>
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>, linux-kernel@vger.kernel.org,
@@ -49,45 +49,35 @@ Cc:     Sakari Ailus <sakari.ailus@iki.fi>, linux-kernel@vger.kernel.org,
         heikki.krogerus@linux.intel.com,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Subject: Re: [PATCH 18/18] ipu3: Add driver for dummy INT3472 ACPI device
-Message-ID: <20201201185558.GM4077@smile.fi.intel.com>
+Message-ID: <20201201190151.GN4077@smile.fi.intel.com>
 References: <20201130133129.1024662-1-djrscally@gmail.com>
  <20201130133129.1024662-19-djrscally@gmail.com>
  <20201130205203.GQ4351@valkosipuli.retiisi.org.uk>
  <3e8494a0-a2c0-59e7-46bb-9635c3c239dd@gmail.com>
+ <20201201064421.GR4351@valkosipuli.retiisi.org.uk>
+ <2a548835-78c6-8fe3-cceb-1fc000707157@gmail.com>
+ <20201201123244.GT4351@valkosipuli.retiisi.org.uk>
+ <0f85d875-cac2-8273-d687-e5845f4c2bb8@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3e8494a0-a2c0-59e7-46bb-9635c3c239dd@gmail.com>
+In-Reply-To: <0f85d875-cac2-8273-d687-e5845f4c2bb8@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 11:06:03PM +0000, Dan Scally wrote:
-> On 30/11/2020 20:52, Sakari Ailus wrote:
-> >> +static const struct acpi_device_id int3472_device_id[] = {
-> >> +	{ "INT3472", 0 },
-> > The INT3472 _HID is really allocated for the tps68470 PMIC chip. It may not
-> > be used by other drivers; people will want to build kernels where both of
-> > these ACPI table layouts are functional.
-> >
-> > Instead, I propose, that you add this as an option to the tps68470 driver
-> > that figures out whether the ACPI device for the tps68470 device actually
-> > describes something else, in a similar fashion you do with the cio2-bridge
-> > driver. I think it may need a separate Kconfig option albeit this and
-> > cio2-bridge cannot be used separately.
-> 
-> It actually occurs to me that that may not work (I know I called that
-> out as an option we considered, but that was a while ago actually). The
-> reason I wasn't worried about the existing tps68470 driver binding to
-> these devices is that it's an i2c driver, and these dummy devices don't
-> have an I2cSerialBusV2, so no I2C device is created by them the kernel.
-> 
-> 
-> Won't that mean the tps68470 driver won't ever be probed for these devices?
+On Tue, Dec 01, 2020 at 12:48:28PM +0000, Dan Scally wrote:
+> On 01/12/2020 12:32, Sakari Ailus wrote:
 
-It won't be probed by kernel as long as it stays pure I²C driver..
+...
+
+> Sorry, clarification here: The INT3472 driver in patch #18 runs probe()
+> for the device representing a physical tps68470, but then -EINVAL's. The
+> existing tps68470 mfd driver doesn't probe() for the dummy INT3472 device.
+
+As I said in the other subthread, we need to take ACPI ID from MFD and move it
+to platform driver. I like the idea what Laurent proposed there.
 
 -- 
 With Best Regards,
