@@ -2,82 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAE82CC188
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 17:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A322CC197
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 17:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728610AbgLBQBH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Dec 2020 11:01:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39728 "EHLO mail.kernel.org"
+        id S1730641AbgLBQCb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Dec 2020 11:02:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40292 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727106AbgLBQBH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 2 Dec 2020 11:01:07 -0500
-Date:   Wed, 2 Dec 2020 17:00:23 +0100
+        id S1730555AbgLBQCa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 2 Dec 2020 11:02:30 -0500
+Date:   Wed, 2 Dec 2020 17:01:47 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606924827;
-        bh=hXImQ6K02Yegy6Y94PccbAdhUH0xZSrzWBT+NlVFwSQ=;
-        h=From:To:Subject:References:In-Reply-To:From;
-        b=U8a2yB8ZkReIBlfAVsWxI/SzXRGadzkwHS9gKcUHXTBAPSVHlN5/sUSEDxibvY9Qd
-         WcziuL5YxA6+cIBa6Hg6Rp2Y+m8lDo8/nlOWhWj0BZ4c2aIOH7io4/A0cCaxt+r90k
-         7j0tPbTfXKaY7qcpICZLWPeY2ZR5CPeffGK8f/yg=
+        s=default; t=1606924910;
+        bh=9y0LlxmEF1cHONU8uCHjPKLxbT3A337K5gUaFRHe1aY=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ltPsscUqZGVDy54nfKVts0kaQ/+TvCapB9Ql+ZhbZZlng9igkua0WFGVdvuRpHpQP
+         Wf/vQyfyFTcI0bw0yPitJ4g5DVB2IzITtU5K7vWsExa52N0fnvncpDfXUvBJ+rukqM
+         pM2bkFzMhoh9hlJPCJS1hZZL5v8vLcsW6fR4N8kM=
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Seth Heasley <seth.heasley@intel.com>,
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Seth Heasley <seth.heasley@intel.com>,
         Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
-        Mario Alejandro Posso Escobar <mario.posso.escobar@intel.com>
-Subject: Re: [PATCH v1] i2c: ismt: Adding support for
- I2C_SMBUS_BLOCK_PROC_CALL
-Message-ID: <20201202160023.GF13425@kunai>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: busses: Use dma_set_mask_and_coherent
+Message-ID: <20201202160147.GG13425@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Youling Tang <tangyouling@loongson.cn>,
         Seth Heasley <seth.heasley@intel.com>,
         Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
-        Mario Alejandro Posso Escobar <mario.posso.escobar@intel.com>
-References: <20201116153245.24083-1-andriy.shevchenko@linux.intel.com>
- <20201202154501.GB13425@kunai>
+        linux-kernel@vger.kernel.org
+References: <1606223315-13390-1-git-send-email-tangyouling@loongson.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4VrXvz3cwkc87Wze"
+        protocol="application/pgp-signature"; boundary="4eRLI4hEmsdu6Npr"
 Content-Disposition: inline
-In-Reply-To: <20201202154501.GB13425@kunai>
+In-Reply-To: <1606223315-13390-1-git-send-email-tangyouling@loongson.cn>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---4VrXvz3cwkc87Wze
+--4eRLI4hEmsdu6Npr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Signed-off-by: Mario Alejandro Posso Escobar <mario.posso.escobar@intel=
-=2Ecom>
+On Tue, Nov 24, 2020 at 09:08:35PM +0800, Youling Tang wrote:
+> 'pci_set_dma_mask()' + 'pci_set_consistent_dma_mask()' can be replaced by
+> an equivalent 'dma_set_mask_and_coherent()' which is much less verbose.
 >=20
-> Applied to for-next, thanks!
+> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
 
-Oops, I thought Andy was the maintainer. Seth, Neil are you okay with
-this patch?
+Please use "i2c: ismt:", so driver maintainers know that the patch is
+relevant to them.
 
+> ---
+>  drivers/i2c/busses/i2c-ismt.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
+> index a35a27c..5f49830 100644
+> --- a/drivers/i2c/busses/i2c-ismt.c
+> +++ b/drivers/i2c/busses/i2c-ismt.c
+> @@ -903,16 +903,12 @@ ismt_probe(struct pci_dev *pdev, const struct pci_d=
+evice_id *id)
+>  		return -ENODEV;
+>  	}
+> =20
+> -	if ((pci_set_dma_mask(pdev, DMA_BIT_MASK(64)) !=3D 0) ||
+> -	    (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(64)) !=3D 0)) {
+> -		if ((pci_set_dma_mask(pdev, DMA_BIT_MASK(32)) !=3D 0) ||
+> -		    (pci_set_consistent_dma_mask(pdev,
+> -						 DMA_BIT_MASK(32)) !=3D 0)) {
+> +	if (dma_set_mask_and_coherent(pdev, DMA_BIT_MASK(64)) !=3D 0)
+> +		if (dma_set_mask_and_coherent(pdev, DMA_BIT_MASK(32)) !=3D 0) {
+>  			dev_err(&pdev->dev, "pci_set_dma_mask fail %p\n",
+>  				pdev);
+>  			return -ENODEV;
+>  		}
+> -	}
+> =20
+>  	err =3D ismt_dev_init(priv);
+>  	if (err)
+> --=20
+> 2.1.0
+>=20
 
---4VrXvz3cwkc87Wze
+--4eRLI4hEmsdu6Npr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/HuhcACgkQFA3kzBSg
-Kbb0NRAAkmua80u77tJDxjq5FVx7PrsCLODDbMUjPxWahGK62XwOLDcpYe8+9J+m
-OAD4NeC5Oer9CED6qaouC1ZTSyVb1/ohTWopMBaZzB2CxFr9ZkC1J/DXAhidqWnv
-RD/aOdhUK1zRa2fviSofwTPnv4avnTJZT/DtIt9aYuL0+SmnccHuVJcb9ZNZuqpj
-nEbCQyjVCfG57ahUtx99yGtrPNdXe92L7cY7Lgy8SQuthufpXODrrGZ2ew1Y5ivI
-GLQcknKW4XZpQbfG78YMptp/Y0ZMUaUI3oYM3cZWMkOQb3QvebsGb2a9ttNlgHLN
-8OvSgXZHIyjTXboKruYENNYRr0YGZhyic82ahDz3+rYuKa/rk2uugZKzkUClizbr
-t7weeUfd0N1S8W45HaimNXFv/SSRAgq8jnuql7CvrBSAtqKHSykpRBvrUjNjBt6v
-1j58KtopY7xiaZ7LpacJ2CQBy2wTAlmS3CgXFYPp+o5Frpz6mXlcbiiRwjqcZr3a
-K7glEFUCuWUcZnzCpKLwnO55i2PbFLgoB6f3jnVYvHyQwo3DsCOMvhv2XcA7jMTJ
-lOlovCWCj7ichDJIdENYKTlXLPfCWxnD/M6X3Ckt8NCi3vTm/JfGJ8VRqCqu5kdM
-WQ1NB+AexNcJPRvmTgns9Pbl54itYIql5Pe715nRWlAB2HoPifw=
-=PwT2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/HumsACgkQFA3kzBSg
+KbYDxQ//eZHrOlo9+24Xoy/VSVKvsQWLUtaRtOUxqsorG83Qe9tUSm9z9hmm76Wi
+FVirv8rj1CwIXDhWIxth/eibIcReBt+6ndMkaqvGKpRS5+SuJMrDRkOFCS0IGrw6
+qqtWk+9+DuV4vStR2HaZ2oY0oCBMF7SATvcyk8CdB5bKHvkv+GZLywWyjPnnWwoT
+c3j1DTPF2ieaknl6tAkRpgAlpENhiqNnNschkVY7uEBOh2DajaGkqT4QseR8hx7t
+/hCp69RgX/kLaZAI97Ri6J0B4OTMu7K0s0CyrD3kyfmxKsCf7GTnUY+Q7AWh+VdR
+N/+wcnFjH6teifVg2S2pQksjBQ9tQ1GVZjcm+TTW8eSv6YT/uKD2h45F8E+2FxKv
+ZVyEUUWssplT7x70ueZ6ZEtK0r3bh3hVvb1pAb4m+kMcZuse2WSVxRhCVUB8xG6i
+SnxErerPask2DT3BZqv0f1kyTPJMqBmFABuqFHf+6OeJlwJEeMJ0b2MYYcF1pxeQ
+/c5Ltf4XvBdChesVYpPgnqQ/K9KFQLP5H40CFMDbZqoq35cWtVcJ0k41bE69z4I8
+yvZZGBWU+m+gLTmxj7OJGBdu7md4Bx8nWTRP2YpeoB7YtxwBepfe2NXqbvnJU4lb
+EEwZJjROEHaX8L6wK3zW09Vy+8GTz6KXPDaQEc3cYAWwX400Fpc=
+=9Dws
 -----END PGP SIGNATURE-----
 
---4VrXvz3cwkc87Wze--
+--4eRLI4hEmsdu6Npr--
