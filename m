@@ -2,57 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E892CBA13
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 11:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F83D2CBA44
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 11:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388521AbgLBKFS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Dec 2020 05:05:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
+        id S1728118AbgLBKNq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Dec 2020 05:13:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388373AbgLBKFS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Dec 2020 05:05:18 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8992AC0613D4;
-        Wed,  2 Dec 2020 02:04:37 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id r3so2988918wrt.2;
-        Wed, 02 Dec 2020 02:04:37 -0800 (PST)
+        with ESMTP id S1726202AbgLBKNq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Dec 2020 05:13:46 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C872C0613D4;
+        Wed,  2 Dec 2020 02:13:05 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id i2so3032961wrs.4;
+        Wed, 02 Dec 2020 02:13:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5IxG6Wmtw+u+fIWb/sq8BW3pfIfvQKBkdCaDxJ1S95c=;
-        b=NpQdnAYkM3hYe9lUCXxuMvi8tbwkduhwURKx6KDiuLc6/cdZG5tOva+7i64PV4qO8U
-         9YkoBmvBgmLj34TfwoUiWkuFCPGi8bm9Ipc45b7NrOw0Fbku5BlsKXtFNXLJfSDey7n2
-         yrBSsTodw2xtihanyGz639SR1r0kbsTKhw72DLiHgpQJ5hlk/a1ayOpVxi+PF7iXIJsN
-         vJ0sasIjv0rbhDRXHNZzZ2YreO1VKa+RDSTbQfoHL3Lj8ur/kRuuQG78GvJ/RRYGfxTL
-         SUsG0ZYn7AxNIlRZSweinYRyZsN8E62fI0L7OcS1oo5KKFcMKLCSK93aWuoFpfOy+5i1
-         ZkSw==
+        bh=YRo9NkVz67RsSz0oVAn5GaGR1jVGmdNG0sWFEV/nvQY=;
+        b=WGnCqwDEYoCmaIZWjfTTHAZDUtVsG5Lzp/JBM1/mORzyojtcyMVDgR+RNLPHJFHBZu
+         m3Bta4JN2TcKsRSmjNy4iYNA8p1DtJ3TxooNkkc7UsVc7OW0WCOVC1wPKgEm0GIJQ9ev
+         8zJMONjWuSVT7Y4bth8d+GUImk8UAsdN87vTPaSy8DrecQHkLr0ly6BENn9l5U2l1cEt
+         6gDkyRXr9ewid+od3LdbOiLE0mxHRJvq3eGlU6FxQRhb2fwFQxJdkVtzFsFuKic5DuZh
+         As4zjaekYuIsWz3fuGldU3CVztCWAIKDt3MwPzKnflBwnqhPpaal66/pPznlsurpLLIH
+         kJpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=5IxG6Wmtw+u+fIWb/sq8BW3pfIfvQKBkdCaDxJ1S95c=;
-        b=JmvU2Wxd24QSGkVRgDhdHjZGVqo4hH/e0dKxVZQsh/XBU9LA2R+3S/Z7o3FRUL8hIV
-         cFtonlrK/mknoW4rW0uSIMUO2YQrax4Yz5iiC9eF6d+2wWX3JPy6VbsXygiO0Xg0cAJA
-         xS5ExbCX3s90M09Cueece1dofS7uuAqxO/5fkgjh70UIupR0an459DsjcsIWtoIZxFkQ
-         eS5w9zlnzoNtwskIZab3oeU0ERNOR0omIYH0xFMY6IPxrDSK+B5ZT+G3g0Ii+FTea5C2
-         uxPcQePOOeGGDvfI2RhL7/3sre4u3W4T6Byg3e+amD7poYOy12d8L8fwh/Pn/c1KKv29
-         k/Lg==
-X-Gm-Message-State: AOAM530W4K/1el+Yqg8/5kJl7/8UUmrlXqa6Risf3jVHkbdwisXK0Kaa
-        2JUJCb3CJKfdpwwcPoFFalo=
-X-Google-Smtp-Source: ABdhPJyfCYV6cSul4aJwkW0s7CGv3wEXRYxHe9IRaq8ViOmh8mGPw7XsoLPWFps7rtnR4dQGcGN1rQ==
-X-Received: by 2002:adf:f085:: with SMTP id n5mr2327047wro.371.1606903475998;
-        Wed, 02 Dec 2020 02:04:35 -0800 (PST)
+        bh=YRo9NkVz67RsSz0oVAn5GaGR1jVGmdNG0sWFEV/nvQY=;
+        b=BCDIZ2u491RFjjTkx3OwCUMrz3/kg25u7PsIcs6DnVMO7nxD5iC5HYcfIk/SFcwrb5
+         2i//t0yAzkm6OJqxbHSiA1gZoaOX4PCdf2qA/GJegWhghqE1n7h2wUy+bj/+FfKuX6pR
+         bDOmrrH80W4BPOBqfpWujo4IBsvyMxdJmsAV5RDJgfu7SMzTAmqEbc5t5DuWcHf55X5U
+         dD5N66APs3wKYoaq++hivTBFOioGbLBYminnIjv5rWiOnq37EocywcxJpuM+FQhK2zi9
+         4Dean3PlX12BsSbnmBH5wbn4+r5f9NdUBSjgeVkYNaqkR16KnVyLJK4oKdwMGFTDMV0J
+         c3MA==
+X-Gm-Message-State: AOAM531h9TSlBMREPVlOCezgYgUhQIzjhO81asSALYDnJQT/QBf2ZPgk
+        a/C+VGS4QD52WUlr9nhPJmo=
+X-Google-Smtp-Source: ABdhPJzlrjn/IAtH113SPOWhBEj0Ja0tFBc0+q+IGME/kgo84LPEvrTuspSOlOj8i7DBMa55WqKmNw==
+X-Received: by 2002:adf:e5c4:: with SMTP id a4mr2531897wrn.56.1606903984312;
+        Wed, 02 Dec 2020 02:13:04 -0800 (PST)
 Received: from [192.168.1.211] ([2.31.224.80])
-        by smtp.gmail.com with ESMTPSA id q25sm1519063wmq.37.2020.12.02.02.04.34
+        by smtp.gmail.com with ESMTPSA id f18sm1478886wru.42.2020.12.02.02.13.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Dec 2020 02:04:35 -0800 (PST)
-Subject: Re: [PATCH 06/18] software_node: amend
- software_node_unregister_node_group() to perform unregistration of array in
- reverse order to be consistent with software_node_unregister_nodes()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        Wed, 02 Dec 2020 02:13:03 -0800 (PST)
+Subject: Re: [PATCH 02/18] property: Add support for calling
+ fwnode_graph_get_endpoint_by_id() for fwnode->secondary
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
@@ -68,55 +66,56 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         jorhand@linux.microsoft.com, kitakar@gmail.com,
         heikki.krogerus@linux.intel.com
 References: <20201130133129.1024662-1-djrscally@gmail.com>
- <20201130133129.1024662-7-djrscally@gmail.com>
- <20201130161716.GJ14465@pendragon.ideasonboard.com>
- <20201130174728.GR4077@smile.fi.intel.com>
+ <20201130133129.1024662-3-djrscally@gmail.com>
+ <20201130172900.GM4077@smile.fi.intel.com>
 From:   Dan Scally <djrscally@gmail.com>
-Message-ID: <962775e3-0e96-8a05-b618-fad60abe9ecb@gmail.com>
-Date:   Wed, 2 Dec 2020 10:04:34 +0000
+Message-ID: <e90e2ecb-d0d5-fe95-0bde-b3d02da6540b@gmail.com>
+Date:   Wed, 2 Dec 2020 10:13:02 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201130174728.GR4077@smile.fi.intel.com>
+In-Reply-To: <20201130172900.GM4077@smile.fi.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 30/11/2020 17:47, Andy Shevchenko wrote:
-> On Mon, Nov 30, 2020 at 06:17:16PM +0200, Laurent Pinchart wrote:
->> Hi Daniel,
->>
->> Thank you for the patch.
->>
->> The subject line is very long. We try to keep it within a 72 characters
->> limit in the kernel. That can be a challenge sometimes, and expections
->> can be accepted, but this one is reaaaally long.
->>
->> (The same comment holds for other patches in the series)
+On 30/11/2020 17:29, Andy Shevchenko wrote:
+> On Mon, Nov 30, 2020 at 01:31:13PM +0000, Daniel Scally wrote:
+>> This function is used to find fwnode endpoints against a device. In
+>> some instances those endpoints are software nodes which are children of
+>> fwnode->secondary. Add support to fwnode_graph_get_endpoint_by_id() to
+>> find those endpoints by recursively calling itself passing the ptr to
+>> fwnode->secondary in the event no endpoint is found for the primary.
 > 
-> +1.
-
-My bad; I'll go through the series and condense them down as much as
-possible.
-
->> On Mon, Nov 30, 2020 at 01:31:17PM +0000, Daniel Scally wrote:
->>> To maintain consistency with software_node_unregister_nodes(), reverse
->>> the order in which the software_node_unregister_node_group() function
->>> unregisters nodes.
->>>
->>> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
->>
->> I"d squash this with the previous patch to avoid introducing an
->> inconsistency.
+> One nit below, after addressing:
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> It's different to previous. It touches not complementary API, but different
-> one. However, I would follow your comment about documenting the behaviour of
-> these two APIs as well…
+> ...
+> 
+>> +	if (!best_ep && fwnode && !IS_ERR_OR_NULL(fwnode->secondary))
+>> +		return fwnode_graph_get_endpoint_by_id(fwnode->secondary, port,
+>> +						       endpoint, flags);
+> 
+>>  	return best_ep;
+> 
+> Can we, please, do
+> 
+> 	if (best_ep)
+> 		return best_ep;
+> 
+> 	if (fwnode && !IS_ERR_OR_NULL(fwnode->secondary))
+> 		return fwnode_graph_get_endpoint_by_id(fwnode->secondary, port,
+> 						       endpoint, flags);
+> 
+> 	return NULL;
+> 
+> ?
+> 
+> This 'if (fwnode && !IS_ERR_OR_NULL(fwnode->secondary))' becomes kinda
+> idiomatic to the cases when we need to proceed primary followed by the
+> secondary in cases where it's not already done.
 
-I'll update the documentation for this function too.
-
-
+Thanks - I made this change too
