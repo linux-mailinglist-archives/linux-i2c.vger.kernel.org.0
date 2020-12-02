@@ -2,82 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD68F2CC121
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 16:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEE22CC12F
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 16:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387553AbgLBPnT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Dec 2020 10:43:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35382 "EHLO mail.kernel.org"
+        id S1727415AbgLBPpq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Dec 2020 10:45:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35944 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726465AbgLBPnT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 2 Dec 2020 10:43:19 -0500
-Date:   Wed, 2 Dec 2020 16:42:35 +0100
+        id S1726307AbgLBPpp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 2 Dec 2020 10:45:45 -0500
+Date:   Wed, 2 Dec 2020 16:45:01 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606923758;
-        bh=aUhNkuH56LOzxnKy8d+V6aU/Q/OZ8AX+U6/MUs5PM1o=;
+        s=default; t=1606923904;
+        bh=g/DeM9xoCwe0uYwAa4AHbnidtnx3uC8dwHcC0mG2gJo=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WD0K9J57H+NE0nC5DJVX2hRHlL1KNIwbrRNwXchdb0UfE/1saZXIMxGRhEZXrKm3g
-         h3Nn/9aH53asLvG/jmg/nodeqkQ7IAh8szN0Skl7Tp3+9EC2yCYFENuKvq+TLazH/j
-         cFKJUL+f99BN6rfDjofdrAwjFT1rjM/wTXKnY3kQ=
+        b=tugMgC45TTyVgssMBa8qxnWmUNxZL2P+4matOOIgtquuPLr0faKrntrr+44fvrD7I
+         khnlsi7LSjq3Am7x/ZNf8OtHZ5Q9kDJ6yayBST1s6TYAi7BEzs0CXBfCLQTv/tCr0F
+         y+1kY7nWerutmFPrB1f++I4Vslc/gHlTC8tmYStc=
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        sricharan@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH] i2c: qup: Fix error return code in
- qup_i2c_bam_schedule_desc()
-Message-ID: <20201202154235.GA13425@kunai>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
+        Mario Alejandro Posso Escobar <mario.posso.escobar@intel.com>
+Subject: Re: [PATCH v1] i2c: ismt: Adding support for
+ I2C_SMBUS_BLOCK_PROC_CALL
+Message-ID: <20201202154501.GB13425@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Zhihao Cheng <chengzhihao1@huawei.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, sricharan@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-References: <20201116141058.2365043-1-chengzhihao1@huawei.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
+        Mario Alejandro Posso Escobar <mario.posso.escobar@intel.com>
+References: <20201116153245.24083-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZPt4rx8FFjLCG7dd"
+        protocol="application/pgp-signature"; boundary="uQr8t48UFsdbeI+V"
 Content-Disposition: inline
-In-Reply-To: <20201116141058.2365043-1-chengzhihao1@huawei.com>
+In-Reply-To: <20201116153245.24083-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---ZPt4rx8FFjLCG7dd
+--uQr8t48UFsdbeI+V
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 16, 2020 at 10:10:58PM +0800, Zhihao Cheng wrote:
-> Fix to return the error code from qup_i2c_change_state()
-> instaed of 0 in qup_i2c_bam_schedule_desc().
+On Mon, Nov 16, 2020 at 05:32:45PM +0200, Andy Shevchenko wrote:
+> From: Mario Alejandro Posso Escobar <mario.posso.escobar@intel.com>
 >=20
-> Fixes: fbf9921f8b35d9b2 ("i2c: qup: Fix error handling")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> Expand the driver to support I2C_SMBUS_BLOCK_PROC_CALL since
+> HW supports it already.
+>=20
+> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied to for-current, thanks!
+I removed that. Andy's SoB should do.
+
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Mario Alejandro Posso Escobar <mario.posso.escobar@intel.c=
+om>
+
+Applied to for-next, thanks!
 
 
---ZPt4rx8FFjLCG7dd
+--uQr8t48UFsdbeI+V
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/HteoACgkQFA3kzBSg
-KbYUpw//aaOCAfpGYH0kZiqPABqobS+1lx9rRp3Vakdiv6JkFccrshdD6si9mlMU
-zKa+yaxYYA7PQ4oczNcKk4Tl+IrcEEY+p9jVCbrXewd1TpYhTCMzJYWqChGKiTE2
-oGI2oGzwCMu5VoRyWBfxe/cyZyGSJF3VlYBmmRPVSNN3KSK54dUArjzgK8Y/nWSn
-lYU8cJ+XuroJBbsBsIrwxtneAH9IJ9w2jSXtze6xrwTbAdXtduelM7kEnUFPexoZ
-3scF+PryMvynxZ+9yFY18njACCwTsJa3WFp8ZuVzwG7StLEs1Mnc6JGnBKVeHEoj
-Z8IrUMCMnK/8tl0aXhYGLZma53hH5bapRWKJMObP4gAUao9shuBYbqmptpJB1hrU
-zgqqxyWSwQ9Rp595QI2G7WHQVXm3k2k4ptWITp587CxBb6T4V5I/4IXnJ3w3mNKM
-vt5Z/ih8x3mZaYOdrTOpXQJt52ZEbgSjyNl7hQhUrtCsH2bmHwtVbS3QY3QJZEFH
-IWG79zjc7yQfWH7Al01VBX6GNyO6EWyL/MR8LP7uWRbDLTWmIgtrAcVpCJy8uK+w
-/NjvDYlj7QbhiCbq2RpuRtuz/8Y8kqEMi1Id7nYrDLsQmUp1IqNhuH9lC3wte7KY
-vuGfFf7rLTMzHEuHOOSSMKGLY9DEIEadYUyaP54+2Ep9sd/67hQ=
-=9RPF
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/Htn0ACgkQFA3kzBSg
+KbbveA//VVzXcowEYWfxvA2ZFG+NMbMw8v7KoDUNqv7fB6xeVWG0iWqP9hw7N8tR
+KA2koora7wAlbEokcJAIEk8nfJi3UImO2vhW3b/X7FGwaepvdithOoMZKE2x9LJ8
+piPQrcU15MgoNUJvvJIRD5nTf26Slo4GpD3eioImwcYkDJqYN4wEB386Lj4vUiWA
+jBvOK0VgXbNj46yi/I4eBKP61PdNOSgwrhIVQa8wQgv2vJBD/ApZ/5fvz+cUUkRH
+N1UipUgi2uVzZv44Z9arDNi26AwY8ihj81CM2OUMg/TH54d8XDeQexDyA3ZbU+at
+lThik74s/aHUtBuRXG3o0ZdKcKSlaTP4NQcgpjO1E8CVf2uDG7ez+rIWz4qguKgj
+nz07KPs1kv7OUU3u7msm36a12Fsi6yp2vlCjY8EIptjRqnmzOInsp67M6mKVfc8o
+wfwSPnQA6DLfhstpTSXj9mSFtf5cb74M5d3qY2SzKDDcxyh9/Fyn6WcJ7bQgxRWy
+KVkP4e/LPa7244RuywfC3eh1+M0JCeqgzmFqtVwa21mcZBrFrehtG4keSzaOqZg1
+DNfBhYx+u4CT+oipBPxpgz9kVcuW3v0G1Mz8+bJlVtlzwmZkfbah8S6eKRqlkBAh
+vqzCuhlpNMTgGF4KpGRokN5DC3lYvHSehMiO4eIedLs/av+/Hn4=
+=R4RC
 -----END PGP SIGNATURE-----
 
---ZPt4rx8FFjLCG7dd--
+--uQr8t48UFsdbeI+V--
