@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A94832CB640
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 09:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A54B2CB639
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 09:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387786AbgLBIFy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Dec 2020 03:05:54 -0500
-Received: from mail-bn7nam10on2068.outbound.protection.outlook.com ([40.107.92.68]:64224
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S2387765AbgLBIFe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Dec 2020 03:05:34 -0500
+Received: from mail-eopbgr770054.outbound.protection.outlook.com ([40.107.77.54]:53377
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387539AbgLBIFx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 2 Dec 2020 03:05:53 -0500
+        id S2387747AbgLBIFd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 2 Dec 2020 03:05:33 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lEz5LPDCiFV/KzO00l0+0QYTZHUKR+UJsmpiS4WE+rZifJ2vcslBzg3kzSyjkYgsSaG2TExVa+GXA11I3f0vSrBaKwViYHcpiRFq8QTBheZnpr20ciYLrMvd7X4Vzr34zJeWoKWrg/5S7E04LSbj1lvZ6DqYJZS6RwtQScGliFg/x7bck18aQNEUrhjTgHpU8nvFIzcnQ8IDodni1pT6wUJeny5rLcrLfKlv3wSudTUXBbZU7DM1s5LuX524VZKMfZ3DQQpqNkupaqZdDluDYLe08bYpykVo+MIuNwwFcwnQ6ruLlzia58jz8w6rSFfcjul5Yot95Wmzfl4HzOpejA==
+ b=B/2h2jKg4TGLo82zUNyx44CjbVS7hXRAUv6Kf+fMBcTdJKqnRWtRl0JEfLk4UORFCwP9icy1Lhpo2z4Xd0UQPsb7qkXsCCyL23CAE91I9swDcwFfI5UYTpWlXcyXN6/NBY8HzY5e4A8YMI1i3VCeN10YiZlaen2GRFBjBv45IX9qgkTteors1yTsb4ZOLuItk2wWv9isT1oCPSBYuDeTSDMiONWHp1BHMepI+PvjU52QbO40NUXHpDyNpo/i2XkaTN2IYfpbGWI+IBWKQj4ogYNfsApZjml1lulXSDa0fzyQ4fYDBEHJIX+0BPSZ7muU7tfYY2MSCamQb1/tjzeOWA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JUuopZSpuIpELtSlAn3QG/oLGT6c9pMMq2EZHybsogw=;
- b=U3kGqgxntBEJ5kw+TiO1FV5CUtqkXRfmoVGUsLs19d+7sQs085TlYE8nm3u8SHIUS/0JzIBRR+akIkgHHFcAb4OlvmwP6imkw/Id9zWR8Q+Jtc3Yy9l0PzfGFthri29HG3uHRbvP3tYwNQ0A/HEGGsp2f4WMj192kM7LehYeiwCCpUMuAlnz678h8xHKV9582RjN1dREt/0UuCLX24tJZN9dWqNW7BOAIUd58jpygiylnYJiLbJKoI0ob0GTcNbv2sFdughfseUMn8IslrjM8iWWqlPpiVgkLpMKmdSieutkjxh59edqm0Mths7RLHABAM2sr1F9AFhQfvQZ/gCvZw==
+ bh=595i8qYAJj06O7chMo9vj+g4CoeMalJrgEeFxCtIp2E=;
+ b=d6oruZM2NTEx3AFaAkBCzudsgq3UaE/dSwTQelE38fZiW7EKr7Gy4eiZ9gt/qYFctBonaS+RpPw7PxckXS9WKu5sMK5rjbAUrihptq8mf4zEqEC1hKGNS7MuGcRM8TvumnliToC1UOQFnLGHCQGKaYVMBFFQQafRRGzY10ZVlWlhsGvNpXMhPAlpB3kCRHty6zmP7fT0Ks4qpLwU1d9p21UqZnN2eDliOJ8B+iE3WS1V6O/Roo0Sh0K+IjFlCZSGpe8DOSLn/fJmpxxmyAywPoXX5taGsvpgj4LLuelvsZdiC5cT8q1e+zN0mjYPrspgvRdLdLQhPJ8ZRaPAt6zbAg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=openfive.com; dmarc=pass action=none header.from=sifive.com;
  dkim=pass header.d=sifive.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sifive.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JUuopZSpuIpELtSlAn3QG/oLGT6c9pMMq2EZHybsogw=;
- b=Y90KOZbAcqiY3vWKATXc+LINLX7Q6U9mkzZlgfopLNUbraB67PU/WU+FF9IMLe7J/dq8Od9+GRZDCKx9outkINn8Y0xKIKhgQHMEUaZffcafb/F0dk3Hr6zJFniWe3DiOctRUc3BjyD8KT4VIFFXlW+OnZz/UZenR9yYpmZ9L4M=
+ bh=595i8qYAJj06O7chMo9vj+g4CoeMalJrgEeFxCtIp2E=;
+ b=lNuoiwx+H4ZifZUaY5VUgFh6FblUaam2UsUNLQ2edEuO8d+bfPECi1jfyMa3VNuqppI6u1iXSBacxEXhClLmaAU8Rxe9YWuH7B61TZWCi4LYVHS/CIsV5WwJUyVni2UIrQC3Wy4xgsQ2mEogyyimQlOJfCNHMXZlwckQqox96Iw=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=sifive.com;
 Received: from CH2PR13MB4458.namprd13.prod.outlook.com (2603:10b6:610:6c::22)
  by CH2PR13MB3543.namprd13.prod.outlook.com (2603:10b6:610:2b::33) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.6; Wed, 2 Dec
- 2020 08:04:28 +0000
+ 2020 08:04:34 +0000
 Received: from CH2PR13MB4458.namprd13.prod.outlook.com
  ([fe80::bdcd:2c1b:bf81:515c]) by CH2PR13MB4458.namprd13.prod.outlook.com
  ([fe80::bdcd:2c1b:bf81:515c%7]) with mapi id 15.20.3632.006; Wed, 2 Dec 2020
- 08:04:28 +0000
+ 08:04:34 +0000
 From:   Yash Shah <yash.shah@sifive.com>
 To:     linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -50,9 +50,9 @@ Cc:     broonie@kernel.org, gregkh@linuxfoundation.org,
         palmer@dabbelt.com, robh+dt@kernel.org, bgolaszewski@baylibre.com,
         linus.walleij@linaro.org, sachin.ghadi@sifive.com,
         Yash Shah <yash.shah@sifive.com>
-Subject: [PATCH 1/4] dt-bindings: riscv: Update DT binding docs to support SiFive FU740 SoC
-Date:   Wed,  2 Dec 2020 13:33:53 +0530
-Message-Id: <1606896236-62780-2-git-send-email-yash.shah@sifive.com>
+Subject: [PATCH 2/4] riscv: dts: add initial support for the SiFive FU740-C000 SoC
+Date:   Wed,  2 Dec 2020 13:33:54 +0530
+Message-Id: <1606896236-62780-3-git-send-email-yash.shah@sifive.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1606896236-62780-1-git-send-email-yash.shah@sifive.com>
 References: <1606896236-62780-1-git-send-email-yash.shah@sifive.com>
@@ -63,184 +63,362 @@ X-ClientProxiedBy: BMXPR01CA0018.INDPRD01.PROD.OUTLOOK.COM
  (2603:10b6:610:6c::22)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from osubuntu003.open-silicon.com (159.117.144.156) by BMXPR01CA0018.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:d::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17 via Frontend Transport; Wed, 2 Dec 2020 08:04:21 +0000
+Received: from osubuntu003.open-silicon.com (159.117.144.156) by BMXPR01CA0018.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:d::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17 via Frontend Transport; Wed, 2 Dec 2020 08:04:28 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ef36eaf5-70ec-42c4-7c58-08d89698e42b
+X-MS-Office365-Filtering-Correlation-Id: 4329b155-3fcd-4bbf-4f7c-08d89698e835
 X-MS-TrafficTypeDiagnostic: CH2PR13MB3543:
 X-LD-Processed: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1,ExtAddr
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CH2PR13MB3543F79251536C24D39AB0A782F30@CH2PR13MB3543.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-Microsoft-Antispam-PRVS: <CH2PR13MB354338BC4C79BDD9F551919682F30@CH2PR13MB3543.namprd13.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2733;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zucpgp7X9QBbPDeaL7XF4RFXAZH/NBoTtKMAXcBotSScqS2ta2lFgZbLsWvca29D15sY4acJy7DuYT/+3424eyrXJC7jBwkzsE8iDq7HgqT3T3KQL3SA1L21hDkNUTrsV2SSL1Yei/9bIbvCKA1HnycV709CsufJh4LC8OWvtkvDuF0W/TZeP7vf7NPccTkphxSGGJBRl96xp3srMvf53t7l1A0sgBUSkkNlpP708dcgG2n6D8eLBmj7MI7+HMHvxz2UkLV1IEEZtKLn8XZ0F9co3qXCublQ4OkpsWcmoMuN2A3Y8lXJQavde/R92HH80k4/QgpQf/MirkI15ItPFg==
+X-Microsoft-Antispam-Message-Info: riAp1BmZ/RVMIJ4OS+awx9afGzV61kRCFdQrQ2EUdC0HD20nwL/fVvJHjbzB5jGpJ6WJbFsIgALJFkqMOwWAmU09OOLORHG9VVh685CRjpcpEb+ALBtxfHunQMlCUSZoeHCtZsXN5O4QWtpRdLPsRyS+1TpVaAo5vBWgWVf3mfr80JCV/PttvlOT63iEsfrhPQufGyl7pzUJcAoPTZDBPVrB2Z5EkQuGjJ6fz+oF9at+iwPcd25lQvyORK6qFs4003Dm6fdFL4DoEhOHyEva9BH1THPkuq1a3i2AfQKIJAheeRzFTMvRg7nC5oSHcsos
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR13MB4458.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(366004)(136003)(396003)(39850400004)(346002)(376002)(83170400001)(36756003)(42882007)(66476007)(316002)(66556008)(83380400001)(2906002)(4326008)(956004)(2616005)(26005)(44832011)(5660300002)(7416002)(52116002)(478600001)(107886003)(66946007)(16526019)(8936002)(6512007)(6666004)(6506007)(186003)(6486002)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?W2gvtJmukPp7Xm0fFJJCBqhWE3kgBUCOhu2Ihxjdc/KYtdcN5tGoQQKwXxI9?=
- =?us-ascii?Q?OZBAkFgGFWF8w4ghjKNJvQ+P0eVNjQA2Gsoe7YgXlv1vFqCfGMImK9kWfhBa?=
- =?us-ascii?Q?pSYcHSqm7i+rz7pt5rE1LIgyvRnV8KFPpwLZeX0UWASJMm+HM2yW6KYbOewJ?=
- =?us-ascii?Q?RyACY50H5OU6YCo5QT78FPrAjKjHplYaN79jVFTZzqfzhB1gk2mjoRIEdeYm?=
- =?us-ascii?Q?qlraZbxQq2miEBM91wv1C/2Ehg5Q83MyMnlI8Mm3QMXmGgKFzUuwqhR+bT3r?=
- =?us-ascii?Q?xaHLrw0VZjDbTbcJg7wM7JQr08ibDbA8g4901nlGxx5iJzoVP/ISYLBBm/iD?=
- =?us-ascii?Q?F7NF3DvREr6YAMDc5eMviyFdoVQhA1tgXOq4vsXsNytgX8QwCuHCojB9XyOD?=
- =?us-ascii?Q?AcoZTiPMRCtd5TKCngpiS64Iexk5qoVVosxma8nc66n3TrBc9BtpOc5tPyaR?=
- =?us-ascii?Q?fHFlCJN2QnaiH0aGBODaPEI8rCAES10xueiTG3GpcYT8djOGWdad1+OrKi5M?=
- =?us-ascii?Q?CnbeUVMzGClIBpBKAYA9yIHq/TbcrXcx83jRrjOlci9trQZ2VYb375UMfLIV?=
- =?us-ascii?Q?rPmZpx5s2ZfHO7xTl61odHeEK7Lp1WLwikKMf6GIx24rtj1J49FLpfNpNlBN?=
- =?us-ascii?Q?08iPjkjZuhr42mN/Ux0Y5hj//BUBYJtQmvhPZ0dM+tGMATCLWXUTZmLwRRiT?=
- =?us-ascii?Q?S4J+wR/f0sKGnVJ+EalkLoj/YYvhJ2BfsBgkAD/a+BNT4uWKxwuCSrnD+QOq?=
- =?us-ascii?Q?wnM1EG4Z82CinTqeKUijKALPtm5K4rbxVblbfhQz8mJM1YN1s8fjt9KGkRM4?=
- =?us-ascii?Q?Uwxvcb931mVD5FcE/483lvE/TxzvkO+fcFH4WroJFe33rcyfbV4DNQwMm8BE?=
- =?us-ascii?Q?yt7ia4iXubqW+i0f9fBrfadz4yh2N6jlIE2vO9rNqsHGneyzW8bUMxpWtX6e?=
- =?us-ascii?Q?tIgMAnzYqtWWh13tEsluNVmqY93qf/bwLZ75QgheSK9b/FNpNIxhqNAaGPQD?=
- =?us-ascii?Q?tPp1?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?nwPFtCQ/et7OTvJB2Gvv5zN1+yU89WRT7hVKI3hNJexlL0g0Bdffvvgz8WXS?=
+ =?us-ascii?Q?9L2VuYGaTJrz++Wh+s+Qnm92aP/mAFqPu6CnzuOUSnoU0qCIYSdzrx094oXv?=
+ =?us-ascii?Q?dVdFOExlUwvtUYL4MvFM7kAFn5M3GHNNn/0bUwRGLkYhI7sV9RzLart+b2O7?=
+ =?us-ascii?Q?5lhcRMrdlQrsOd3FkX+zYPfZ7fHo9SiyJWAnGC8+1TwzXArdA+l7Eg7ZBQdL?=
+ =?us-ascii?Q?Sq5gz1FcEwgocHQZfh4I8zrWGATDP7r8DAXTsK+l3C5D9DZ3FkllOQrjPKgd?=
+ =?us-ascii?Q?/SqwERQe+DYfc2l2ynM6/rvCWEvoTM+L7vGW51BF52fGcqZauJl3loI+Kx3I?=
+ =?us-ascii?Q?NCktRcAHtVdXTnfX3Tz7WPJRLAMH0RKsjF8OIzHQvPMROOMXMsRRMlyv1Yji?=
+ =?us-ascii?Q?fU+yD882+VcFw/mN/YzcFy5/kG1IHGbbwUpgFwA0sR3KVpcL6BDynqPtXG7L?=
+ =?us-ascii?Q?jDs857v2ytLFZ2y/deCFKir6tz96T5YM3TASpEnSziftAHvSdKAVDNSMTmQ2?=
+ =?us-ascii?Q?lfj0CeVutjREPlXp0NW3SuOl+rI/ibKcQCxqoKr4P7pJdHOhIDVozVE0J9FP?=
+ =?us-ascii?Q?r+Qa/wAG5pio8ToC0Su3LCTzXto9456AWdMt1nSuyfT1cRw393XmeID4FRMF?=
+ =?us-ascii?Q?uSSBaJEcXsgUpwwXrT8ddCXFCHBRdQRWxRdgWZTtzybtDKkMyuvRC8NyXWYl?=
+ =?us-ascii?Q?CPPypg3YXCdHuYdZookuZ7MfMRD09MQSq7JQ6bZfbhzG8hwMmBthZ3p/fOJa?=
+ =?us-ascii?Q?wb7o/ObhFApyhrBteGYE8EjETrM3imbHDqiC7eEF55qoADhZgNMujAjw+aeu?=
+ =?us-ascii?Q?SBlAFyljF8ASTdOKXYDWTYqz30ReJbRbZ2cBuN8gO31Xyo3zlKcX+oweVxZP?=
+ =?us-ascii?Q?hqLsSSYrUnUJrTN8hd4SO11l3fRUI5/Dr2D59mrCxxhqHBySv274LmtAjOxK?=
+ =?us-ascii?Q?D+ESrEZ7ih+wLPiayEJwDZECc+xdj0cdwkBa7HE9LX3SQxOv30VPLHIgTQF/?=
+ =?us-ascii?Q?FaqT?=
 X-OriginatorOrg: sifive.com
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR13MB4458.namprd13.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2020 08:04:27.9090
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2020 08:04:34.6743
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef36eaf5-70ec-42c4-7c58-08d89698e42b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4329b155-3fcd-4bbf-4f7c-08d89698e835
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CN0ksEpp/I4fWSR1HL5SL+unqNzA43An8K9+ri3u+fZCXBO+ZYouCGj+Vle6AT2naNkidvqTWhOQujqvkVStMg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: qiqwU1My63XLhLnOlA6ZO7cRYXg/nHzj4ljWXXYmTE4KlPnHldHNbQuhYBuLA5nZ0dAQNzgXkKPHNuZpij3fLw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3543
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add new compatible strings to the DT binding documents to support SiFive
-FU740-C000. Also, add new compatible strings in cpus.yaml to support the
-E71 and U74 CPU cores ("harts") that are present on FU740-C000 SoC.
+Add initial support for the SiFive FU540-C000 SoC. FU740-C000 is built
+around the SiFIve U7 Core Complex and a TileLink interconnect.
+
+This file is expected to grow as more device drivers are added to the
+kernel.
 
 Signed-off-by: Yash Shah <yash.shah@sifive.com>
 ---
- Documentation/devicetree/bindings/gpio/sifive,gpio.yaml     |  4 +++-
- Documentation/devicetree/bindings/i2c/i2c-ocores.txt        |  6 ++++--
- Documentation/devicetree/bindings/pwm/pwm-sifive.yaml       |  9 ++++++---
- Documentation/devicetree/bindings/riscv/cpus.yaml           |  6 ++++++
- Documentation/devicetree/bindings/serial/sifive-serial.yaml |  4 +++-
- Documentation/devicetree/bindings/spi/spi-sifive.yaml       | 10 ++++++----
- 6 files changed, 28 insertions(+), 11 deletions(-)
+ arch/riscv/boot/dts/sifive/fu740-c000.dtsi | 293 +++++++++++++++++++++++++++++
+ 1 file changed, 293 insertions(+)
+ create mode 100644 arch/riscv/boot/dts/sifive/fu740-c000.dtsi
 
-diff --git a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
-index a0efd8d..ab22056 100644
---- a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
-+++ b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
-@@ -13,7 +13,9 @@ maintainers:
- properties:
-   compatible:
-     items:
--      - const: sifive,fu540-c000-gpio
-+      - enum:
-+          - sifive,fu540-c000-gpio
-+          - sifive,fu740-c000-gpio
-       - const: sifive,gpio0
- 
-   reg:
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-index 6b25a80..1966b2c 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-@@ -3,9 +3,11 @@ Device tree configuration for i2c-ocores
- Required properties:
- - compatible      : "opencores,i2c-ocores"
-                     "aeroflexgaisler,i2cmst"
--                    "sifive,fu540-c000-i2c", "sifive,i2c0"
-+                    "sifive,<chip>-i2c", "sifive,i2c0"
-                     For Opencore based I2C IP block reimplemented in
--                    FU540-C000 SoC. Please refer to sifive-blocks-ip-versioning.txt
-+                    SiFive SoC. Supported compatible strings are:
-+                    "sifive,fu540-c000-i2c" and "sifive,fu740-c000-i2c"
-+                    Please refer to sifive-blocks-ip-versioning.txt
-                     for additional details.
- - reg             : bus address start and address range size of device
- - clocks          : handle to the controller clock; see the note below.
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
-index 5ac2527..84e6691 100644
---- a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
-+++ b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
-@@ -25,12 +25,15 @@ description:
- properties:
-   compatible:
-     items:
--      - const: sifive,fu540-c000-pwm
-+      - enum:
-+          - sifive,fu540-c000-pwm
-+          - sifive,fu740-c000-pwm
-       - const: sifive,pwm0
-     description:
-       Should be "sifive,<chip>-pwm" and "sifive,pwm<version>". Supported
--      compatible strings are "sifive,fu540-c000-pwm" for the SiFive PWM v0
--      as integrated onto the SiFive FU540 chip, and "sifive,pwm0" for the
-+      compatible strings are "sifive,fu540-c000-pwm" and
-+      "sifive,fu740-c000-pwm" for the SiFive PWM v0 as integrated onto the
-+      SiFive FU540 and FU740 chip respectively, and "sifive,pwm0" for the
-       SiFive PWM v0 IP block with no chip integration tweaks.
-       Please refer to sifive-blocks-ip-versioning.txt for details.
- 
-diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-index c6925e0..eb6843f 100644
---- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-+++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-@@ -28,11 +28,17 @@ properties:
-       - items:
-           - enum:
-               - sifive,rocket0
-+              - sifive,bullet0
-               - sifive,e5
-+              - sifive,e7
-               - sifive,e51
-+              - sifive,e71
-               - sifive,u54-mc
-+              - sifive,u74-mc
-               - sifive,u54
-+              - sifive,u74
-               - sifive,u5
-+              - sifive,u7
-           - const: riscv
-       - const: riscv    # Simulator only
-     description:
-diff --git a/Documentation/devicetree/bindings/serial/sifive-serial.yaml b/Documentation/devicetree/bindings/serial/sifive-serial.yaml
-index 92283f6..3ac5c7f 100644
---- a/Documentation/devicetree/bindings/serial/sifive-serial.yaml
-+++ b/Documentation/devicetree/bindings/serial/sifive-serial.yaml
-@@ -17,7 +17,9 @@ allOf:
- properties:
-   compatible:
-     items:
--      - const: sifive,fu540-c000-uart
-+      - enum:
-+          - sifive,fu540-c000-uart
-+          - sifive,fu740-c000-uart
-       - const: sifive,uart0
- 
-     description:
-diff --git a/Documentation/devicetree/bindings/spi/spi-sifive.yaml b/Documentation/devicetree/bindings/spi/spi-sifive.yaml
-index 56dcf1d..6e7e394 100644
---- a/Documentation/devicetree/bindings/spi/spi-sifive.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-sifive.yaml
-@@ -17,15 +17,17 @@ allOf:
- properties:
-   compatible:
-     items:
--      - const: sifive,fu540-c000-spi
-+      - enum:
-+          - sifive,fu540-c000-spi
-+          - sifive,fu740-c000-spi
-       - const: sifive,spi0
- 
-     description:
-       Should be "sifive,<chip>-spi" and "sifive,spi<version>".
-       Supported compatible strings are -
--      "sifive,fu540-c000-spi" for the SiFive SPI v0 as integrated
--      onto the SiFive FU540 chip, and "sifive,spi0" for the SiFive
--      SPI v0 IP block with no chip integration tweaks.
-+      "sifive,fu540-c000-spi" and "sifive,fu740-c000-spi" for the SiFive SPI v0
-+      as integrated onto the SiFive FU540 and FU740 chip resp, and "sifive,spi0"
-+      for the SiFive SPI v0 IP block with no chip integration tweaks.
-       Please refer to sifive-blocks-ip-versioning.txt for details
- 
-       SPI RTL that corresponds to the IP block version numbers can be found here -
+diff --git a/arch/riscv/boot/dts/sifive/fu740-c000.dtsi b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
+new file mode 100644
+index 0000000..eeb4f8c3
+--- /dev/null
++++ b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
+@@ -0,0 +1,293 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/* Copyright (c) 2020 SiFive, Inc */
++
++/dts-v1/;
++
++#include <dt-bindings/clock/sifive-fu740-prci.h>
++
++/ {
++	#address-cells = <2>;
++	#size-cells = <2>;
++	compatible = "sifive,fu740-c000", "sifive,fu740";
++
++	aliases {
++		serial0 = &uart0;
++		serial1 = &uart1;
++		ethernet0 = &eth0;
++	};
++
++	chosen {
++	};
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		cpu0: cpu@0 {
++			compatible = "sifive,bullet0", "riscv";
++			device_type = "cpu";
++			i-cache-block-size = <64>;
++			i-cache-sets = <128>;
++			i-cache-size = <16384>;
++			next-level-cache = <&ccache>;
++			reg = <0x0>;
++			riscv,isa = "rv64imac";
++			status = "disabled";
++			cpu0_intc: interrupt-controller {
++				#interrupt-cells = <1>;
++				compatible = "riscv,cpu-intc";
++				interrupt-controller;
++			};
++		};
++		cpu1: cpu@1 {
++			compatible = "sifive,bullet0", "riscv";
++			d-cache-block-size = <64>;
++			d-cache-sets = <64>;
++			d-cache-size = <32768>;
++			d-tlb-sets = <1>;
++			d-tlb-size = <40>;
++			device_type = "cpu";
++			i-cache-block-size = <64>;
++			i-cache-sets = <128>;
++			i-cache-size = <32768>;
++			i-tlb-sets = <1>;
++			i-tlb-size = <40>;
++			mmu-type = "riscv,sv39";
++			next-level-cache = <&ccache>;
++			reg = <0x1>;
++			riscv,isa = "rv64imafdc";
++			tlb-split;
++			cpu1_intc: interrupt-controller {
++				#interrupt-cells = <1>;
++				compatible = "riscv,cpu-intc";
++				interrupt-controller;
++			};
++		};
++		cpu2: cpu@2 {
++			compatible = "sifive,bullet0", "riscv";
++			d-cache-block-size = <64>;
++			d-cache-sets = <64>;
++			d-cache-size = <32768>;
++			d-tlb-sets = <1>;
++			d-tlb-size = <40>;
++			device_type = "cpu";
++			i-cache-block-size = <64>;
++			i-cache-sets = <128>;
++			i-cache-size = <32768>;
++			i-tlb-sets = <1>;
++			i-tlb-size = <40>;
++			mmu-type = "riscv,sv39";
++			next-level-cache = <&ccache>;
++			reg = <0x2>;
++			riscv,isa = "rv64imafdc";
++			tlb-split;
++			cpu2_intc: interrupt-controller {
++				#interrupt-cells = <1>;
++				compatible = "riscv,cpu-intc";
++				interrupt-controller;
++			};
++		};
++		cpu3: cpu@3 {
++			compatible = "sifive,bullet0", "riscv";
++			d-cache-block-size = <64>;
++			d-cache-sets = <64>;
++			d-cache-size = <32768>;
++			d-tlb-sets = <1>;
++			d-tlb-size = <40>;
++			device_type = "cpu";
++			i-cache-block-size = <64>;
++			i-cache-sets = <128>;
++			i-cache-size = <32768>;
++			i-tlb-sets = <1>;
++			i-tlb-size = <40>;
++			mmu-type = "riscv,sv39";
++			next-level-cache = <&ccache>;
++			reg = <0x3>;
++			riscv,isa = "rv64imafdc";
++			tlb-split;
++			cpu3_intc: interrupt-controller {
++				#interrupt-cells = <1>;
++				compatible = "riscv,cpu-intc";
++				interrupt-controller;
++			};
++		};
++		cpu4: cpu@4 {
++			compatible = "sifive,bullet0", "riscv";
++			d-cache-block-size = <64>;
++			d-cache-sets = <64>;
++			d-cache-size = <32768>;
++			d-tlb-sets = <1>;
++			d-tlb-size = <40>;
++			device_type = "cpu";
++			i-cache-block-size = <64>;
++			i-cache-sets = <128>;
++			i-cache-size = <32768>;
++			i-tlb-sets = <1>;
++			i-tlb-size = <40>;
++			mmu-type = "riscv,sv39";
++			next-level-cache = <&ccache>;
++			reg = <0x4>;
++			riscv,isa = "rv64imafdc";
++			tlb-split;
++			cpu4_intc: interrupt-controller {
++				#interrupt-cells = <1>;
++				compatible = "riscv,cpu-intc";
++				interrupt-controller;
++			};
++		};
++	};
++	soc {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		compatible = "simple-bus";
++		ranges;
++		plic0: interrupt-controller@c000000 {
++			#interrupt-cells = <1>;
++			#address-cells = <0>;
++			compatible = "sifive,fu540-c000-plic", "sifive,plic-1.0.0";
++			reg = <0x0 0xc000000 0x0 0x4000000>;
++			riscv,ndev = <69>;
++			interrupt-controller;
++			interrupts-extended = <
++				&cpu0_intc 0xffffffff
++				&cpu1_intc 0xffffffff &cpu1_intc 9
++				&cpu2_intc 0xffffffff &cpu2_intc 9
++				&cpu3_intc 0xffffffff &cpu3_intc 9
++				&cpu4_intc 0xffffffff &cpu4_intc 9>;
++		};
++		prci: clock-controller@10000000 {
++			compatible = "sifive,fu740-c000-prci";
++			reg = <0x0 0x10000000 0x0 0x1000>;
++			clocks = <&hfclk>, <&rtcclk>;
++			#clock-cells = <1>;
++		};
++		uart0: serial@10010000 {
++			compatible = "sifive,fu740-c000-uart", "sifive,uart0";
++			reg = <0x0 0x10010000 0x0 0x1000>;
++			interrupt-parent = <&plic0>;
++			interrupts = <39>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			status = "disabled";
++		};
++		uart1: serial@10011000 {
++			compatible = "sifive,fu740-c000-uart", "sifive,uart0";
++			reg = <0x0 0x10011000 0x0 0x1000>;
++			interrupt-parent = <&plic0>;
++			interrupts = <40>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			status = "disabled";
++		};
++		i2c0: i2c@10030000 {
++			compatible = "sifive,fu740-c000-i2c", "sifive,i2c0";
++			reg = <0x0 0x10030000 0x0 0x1000>;
++			interrupt-parent = <&plic0>;
++			interrupts = <52>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			reg-shift = <2>;
++			reg-io-width = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++		i2c1: i2c@10031000 {
++			compatible = "sifive,fu740-c000-i2c", "sifive,i2c0";
++			reg = <0x0 0x10031000 0x0 0x1000>;
++			interrupt-parent = <&plic0>;
++			interrupts = <53>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			reg-shift = <2>;
++			reg-io-width = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++		qspi0: spi@10040000 {
++			compatible = "sifive,fu740-c000-spi", "sifive,spi0";
++			reg = <0x0 0x10040000 0x0 0x1000>,
++			      <0x0 0x20000000 0x0 0x10000000>;
++			interrupt-parent = <&plic0>;
++			interrupts = <41>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++		qspi1: spi@10041000 {
++			compatible = "sifive,fu740-c000-spi", "sifive,spi0";
++			reg = <0x0 0x10041000 0x0 0x1000>,
++			      <0x0 0x30000000 0x0 0x10000000>;
++			interrupt-parent = <&plic0>;
++			interrupts = <42>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++		spi0: spi@10050000 {
++			compatible = "sifive,fu740-c000-spi", "sifive,spi0";
++			reg = <0x0 0x10050000 0x0 0x1000>;
++			interrupt-parent = <&plic0>;
++			interrupts = <43>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++		eth0: ethernet@10090000 {
++			compatible = "sifive,fu540-c000-gem";
++			interrupt-parent = <&plic0>;
++			interrupts = <55>;
++			reg = <0x0 0x10090000 0x0 0x2000>,
++			      <0x0 0x100a0000 0x0 0x1000>;
++			local-mac-address = [00 00 00 00 00 00];
++			clock-names = "pclk", "hclk";
++			clocks = <&prci PRCI_CLK_GEMGXLPLL>,
++				 <&prci PRCI_CLK_GEMGXLPLL>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
++		pwm0: pwm@10020000 {
++			compatible = "sifive,fu740-c000-pwm", "sifive,pwm0";
++			reg = <0x0 0x10020000 0x0 0x1000>;
++			interrupt-parent = <&plic0>;
++			interrupts = <44>, <45>, <46>, <47>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			#pwm-cells = <3>;
++			status = "disabled";
++		};
++		pwm1: pwm@10021000 {
++			compatible = "sifive,fu740-c000-pwm", "sifive,pwm0";
++			reg = <0x0 0x10021000 0x0 0x1000>;
++			interrupt-parent = <&plic0>;
++			interrupts = <48>, <49>, <50>, <51>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			#pwm-cells = <3>;
++			status = "disabled";
++		};
++		ccache: cache-controller@2010000 {
++			compatible = "sifive,fu740-c000-ccache", "cache";
++			cache-block-size = <64>;
++			cache-level = <2>;
++			cache-sets = <2048>;
++			cache-size = <2097152>;
++			cache-unified;
++			interrupt-parent = <&plic0>;
++			interrupts = <19 20 21 22>;
++			reg = <0x0 0x2010000 0x0 0x1000>;
++		};
++		gpio: gpio@10060000 {
++			compatible = "sifive,fu740-c000-gpio", "sifive,gpio0";
++			interrupt-parent = <&plic0>;
++			interrupts = <23>, <24>, <25>, <26>, <27>, <28>, <29>,
++				     <30>, <31>, <32>, <33>, <34>, <35>, <36>,
++				     <37>, <38>;
++			reg = <0x0 0x10060000 0x0 0x1000>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			clocks = <&prci PRCI_CLK_PCLK>;
++			status = "disabled";
++		};
++	};
++};
 -- 
 2.7.4
 
