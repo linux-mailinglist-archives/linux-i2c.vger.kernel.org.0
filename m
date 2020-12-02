@@ -2,123 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB452CB441
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 06:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA09C2CB50D
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 07:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726499AbgLBFPI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Dec 2020 00:15:08 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:57590 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728355AbgLBFPH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Dec 2020 00:15:07 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0B25Dwg2030870;
-        Tue, 1 Dec 2020 23:13:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1606886038;
-        bh=uT8L/6+8iPwegVkljvpLhMiRA7Q/66yaOiKBWToJElQ=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=tv15ECY4kx0Hpu8hsx1cxf/W35myez2y+omwyqLvD3jmUDuNFfkldREoapalah7Qf
-         t7jN/TVhDVG3pD4U250UiyQEVKGDKoiigFliV0ZYuGTcTHPuy/WkculXZtiu1eX3e7
-         CFmIOw98k/04QQ60Rmb2uIytNWjpRwrx1jncFZH4=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0B25DwK0115034
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 1 Dec 2020 23:13:58 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 1 Dec
- 2020 23:13:58 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 1 Dec 2020 23:13:58 -0600
-Received: from [10.250.233.179] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0B25Du8X035835;
-        Tue, 1 Dec 2020 23:13:56 -0600
-Subject: Re: [PATCH 5/8] i2c: omap: fix reference leak when
- pm_runtime_get_sync fails
-To:     Qinglang Miao <miaoqinglang@huawei.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Tony Lindgren <tony@atomide.com>
-CC:     <linux-omap@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20201201092924.112461-1-miaoqinglang@huawei.com>
- <20201201093143.113180-1-miaoqinglang@huawei.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <618aa605-e1a2-9661-441a-a1bd28971438@ti.com>
-Date:   Wed, 2 Dec 2020 10:43:55 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728615AbgLBGbt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Dec 2020 01:31:49 -0500
+Received: from a2.mail.mailgun.net ([198.61.254.61]:20286 "EHLO
+        a2.mail.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725885AbgLBGbt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Dec 2020 01:31:49 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1606890688; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=N5yCqs3Q0ix9g25K5caB+4a4wuk5yuJaeaiX1thxbUA=; b=NoskuytJT+dKVKDGlvB1rjzLrCCuzib7AsjIl68BNZ8ShDYfYHtmkyNlU2HyVKvVq5VYJOJf
+ gYHjST0OimX6K7w+/iT+l3jnmG+p67sPtApRhe0FnCNiRjTpDOU8ioHE11+PoRUkvdz/uuHa
+ +NpWa3OddwL+jqRLFopZ4UI32mE=
+X-Mailgun-Sending-Ip: 198.61.254.61
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 5fc734a40f9adc18c7f5c79e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 02 Dec 2020 06:31:00
+ GMT
+Sender: akashast=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 61F79C43464; Wed,  2 Dec 2020 06:30:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.43.98] (unknown [47.9.70.25])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 33DE9C433C6;
+        Wed,  2 Dec 2020 06:30:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 33DE9C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH] Revert "i2c: qcom-geni: Disable DMA processing on the
+ Lenovo Yoga C630"
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+References: <20201124185743.401946-1-bjorn.andersson@linaro.org>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <6bcdfdc0-2e41-2eb5-0de3-04e68daaeab5@codeaurora.org>
+Date:   Wed, 2 Dec 2020 12:00:37 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <20201201093143.113180-1-miaoqinglang@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+In-Reply-To: <20201124185743.401946-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+On 11/25/2020 12:27 AM, Bjorn Andersson wrote:
+> A combination of recent bug fixes by Doug Anderson and the proper
+> definition of iommu streams means that this hack is no longer needed.
+> Let's clean up the code by reverting '127068abe85b ("i2c: qcom-geni:
+> Disable DMA processing on the Lenovo Yoga C630")'.
+>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Akash Asthana <akashast@codeaurora.org>
 
-On 12/1/20 3:01 PM, Qinglang Miao wrote:
-> The PM reference count is not expected to be incremented on
-> return in omap_i2c_probe() and omap_i2c_remove().
-> 
-> However, pm_runtime_get_sync will increment the PM reference
-> count even failed. Forgetting to putting operation will result
-> in a reference leak here. I Replace it with pm_runtime_resume_and_get
-> to keep usage counter balanced.
-> 
-> What's more, error path 'err_free_mem' seems not like a proper
-> name any more. So I change the name to err_disable_pm and move
-> pm_runtime_disable below, for pm_runtime of 'pdev->dev' should
-> be disabled when pm_runtime_resume_and_get fails.
-> 
-> Fixes: 3b0fb97c8dc4 ("I2C: OMAP: Handle error check for pm runtime")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
-> ---
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
 
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
-
->  drivers/i2c/busses/i2c-omap.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-> index 12ac4212a..d4f6c6d60 100644
-> --- a/drivers/i2c/busses/i2c-omap.c
-> +++ b/drivers/i2c/busses/i2c-omap.c
-> @@ -1404,9 +1404,9 @@ omap_i2c_probe(struct platform_device *pdev)
->  	pm_runtime_set_autosuspend_delay(omap->dev, OMAP_I2C_PM_TIMEOUT);
->  	pm_runtime_use_autosuspend(omap->dev);
->  
-> -	r = pm_runtime_get_sync(omap->dev);
-> +	r = pm_runtime_resume_and_get(omap->dev);
->  	if (r < 0)
-> -		goto err_free_mem;
-> +		goto err_disable_pm;
->  
->  	/*
->  	 * Read the Rev hi bit-[15:14] ie scheme this is 1 indicates ver2.
-> @@ -1513,8 +1513,8 @@ omap_i2c_probe(struct platform_device *pdev)
->  	omap_i2c_write_reg(omap, OMAP_I2C_CON_REG, 0);
->  	pm_runtime_dont_use_autosuspend(omap->dev);
->  	pm_runtime_put_sync(omap->dev);
-> +err_disable_pm:
->  	pm_runtime_disable(&pdev->dev);
-> -err_free_mem:
->  
->  	return r;
->  }
-> @@ -1525,7 +1525,7 @@ static int omap_i2c_remove(struct platform_device *pdev)
->  	int ret;
->  
->  	i2c_del_adapter(&omap->adapter);
-> -	ret = pm_runtime_get_sync(&pdev->dev);
-> +	ret = pm_runtime_resume_and_get(&pdev->dev);
->  	if (ret < 0)
->  		return ret;
->  
-> 
