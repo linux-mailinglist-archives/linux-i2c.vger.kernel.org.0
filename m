@@ -2,81 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 546BB2CC0D2
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 16:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6512CC0E2
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Dec 2020 16:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728343AbgLBPaJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Dec 2020 10:30:09 -0500
-Received: from www.zeus03.de ([194.117.254.33]:32790 "EHLO mail.zeus03.de"
+        id S1726367AbgLBPb6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Dec 2020 10:31:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60054 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727995AbgLBPaJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 2 Dec 2020 10:30:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Zq818eC4nVSwduKxL7y/rr9tCVX8
-        jngv5zkE5tPYP44=; b=f2qmXBDUvyiD0xOSmPK5JsGXc0G6TYe3NdBOZ6hw/zkl
-        A6B7ARRKrfidBPvpPFdm8sWDJ/oeXsWzgk4euE0LeAh64ubzuk5KilhmhFDVgw+z
-        fCYeBDuFj9pduLvFP3fJcTsV+lGyKpmz2hounuHC+GR+ADl9H15i9dZL1EnfRVA=
-Received: (qmail 1569066 invoked from network); 2 Dec 2020 16:29:27 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 2 Dec 2020 16:29:27 +0100
-X-UD-Smtp-Session: l3s3148p1@HeWh6Hy18OogAwDPXwYGAC+09q6oRBZx
-Date:   Wed, 2 Dec 2020 16:29:26 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Khalil Blaiech <kblaiech@nvidia.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH i2c-next v4 1/1] dt-bindings: i2c: mellanox,i2c-mlxbf:
- convert txt to YAML schema
-Message-ID: <20201202152926.GE874@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-References: <897f036098a9bf2497857c328c344aa0de5cdfdb.1605913307.git.kblaiech@nvidia.com>
+        id S1726088AbgLBPb5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 2 Dec 2020 10:31:57 -0500
+Date:   Wed, 2 Dec 2020 16:31:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606923076;
+        bh=4VuGyn84oOsN2fMeDdIHrqZQusWZiW7KJN6Mumj/b/E=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=piRJGjDu8txP/cWnq+Sd+9SQJSBOGDC8fewMHuVhD+UalHSVTp3tFsXaAhduFx9fD
+         PKQugzaXTGuTYtks8Rldx18y5b6N+9+XQ4kVkeDNw9IwUKuIpAdJ/OVUxTu2Fg+Uvh
+         +cveDe8ojQ7++PKC8HhYF6xEDA54p5I5eb+WU1Cg=
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Cc:     Ajay Gupta <ajayg@nvidia.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v1] i2c: nvidia-gpu: drop empty stub for runtime pm
+Message-ID: <20201202153113.GF874@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+References: <20201107082151.58239-1-vaibhavgupta40@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BRE3mIcgqKzpedwo"
+        protocol="application/pgp-signature"; boundary="wchHw8dVAp53YPj8"
 Content-Disposition: inline
-In-Reply-To: <897f036098a9bf2497857c328c344aa0de5cdfdb.1605913307.git.kblaiech@nvidia.com>
+In-Reply-To: <20201107082151.58239-1-vaibhavgupta40@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---BRE3mIcgqKzpedwo
+--wchHw8dVAp53YPj8
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 20, 2020 at 06:06:06PM -0500, Khalil Blaiech wrote:
-> Write the devicetree binding text file associated with
-> the Mellanox BlueField I2C controller in schema file,
-> JSON compatible subset of YAML. Besides, add an entry
-> within MAINTAINERS file.
+On Sat, Nov 07, 2020 at 01:51:51PM +0530, Vaibhav Gupta wrote:
+> After the commit c5eb1190074c ("PCI / PM: Allow runtime PM without callba=
+ck
+> functions") we no more need empty stubs for runtime-pm to work.
 >=20
-> Signed-off-by: Khalil Blaiech <kblaiech@nvidia.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> The driver has no device specific task(s) for .suspend() . The stub was
+> placed just for runtime-pm, which can be dropped now.
+>=20
+> Reported-by: Bjorn Helgaas <bhelgaas@google.com>
+> Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
 
 Applied to for-next, thanks!
 
 
---BRE3mIcgqKzpedwo
+--wchHw8dVAp53YPj8
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/HstYACgkQFA3kzBSg
-KbZO3hAAla4ALECCk3SABS2FLEAHDqaRiYNw5Uu1Qgjq2bFJ/kVFrzoPEjh/XZek
-Ciu3F1nX1bd/PiNZSjAsNOj4uff2Ph+M/PqETWXYhCXkcBYLBbEaLsgVw7VRncU3
-2uDQpsFV0Cb4ajOfmIOpr32VbQDGjGSayx+4evoHQKUKl2F8bUfeSftI+scT4xme
-rE1kdmjidohI3dPKkFHvYT0XrUdH/ZtuI36u32n2ed3Cd6nTqWjZhXGPdr1O35Pn
-GHVzeArgkfTZz9qXXEnRH5B6CTQF2CgLfFXgk2YD+o57GuKso6STDRRPWfeFUe/7
-7ksHwrz4zv5ynXgA2u5c3E/AIA5K65p4K5Ig80ifG9O/ycY3PyZFjuF30bdLI6Mm
-02dDZ2Qwq91ZK73zXEbkC90N6POqBKpghH6q1Dglbjx/YfqI+cVaMZ1H4xhSSQAj
-zkIghq1wa/O7GdH0IBMY243Z3LY9u77qSHSyotYKk/vwD8lO7iC5sK4BFmtABxhq
-2z9nWq8BzxcbBQPLrJXAIj8XpkSrH0NJqC3e60PwWlaY8cmeQOrKCKR/0+xJQ7Jc
-w0PDdl8se2Lzx351IDah34H9LSrob4qQplROwh8VqvignIKrgiyhC0np+pY8GbKl
-064j0Ei2CSDo1o0+E1sd71wi1VdnK+dauB+Xf6kGnHMX9fcrqz8=
-=aWzf
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/Hs0EACgkQFA3kzBSg
+KbZjJRAAlTj05bFsjhp2ZE6URRYK44l3P7fz8tEG9Ba8/SrY7f23aRs/lDusTqiJ
+lzL9KZDd5cJ7iH3SQXTn0adpoYCnqVTX5eqOCD8VkwyqRBKMI9u+7yOvL94+16XW
+2r542vmiNfNP7Km+DhqwxUnejz2sIEe/Se+aKgAdrAVztcwlpq5v4C+TgDDRRWYH
+n9uDEB/zjBwE4RDJ+Vpmz9pk1QmiuHNoJR1/pMvS2ccxf3PzypfthfAYbE6f5inz
+peWlZc9eF+AdTIsuoSGMPsflnHWU7J7KI6nS6VnW/I62IfAxopGawnfv/Mkz+kBa
+8YJfEPOhFMZkT3f1Jl9eGFf48OBIkLhRJsA+VlnzUmwzx5opI5QCVITW5zHbKVkZ
+VAz+Duf2Ze0ob9MG4QLYL7iReJFmNpruGPKb8rtftbp0CBl6AAPXW7GGEp/sJF8c
+yRdtH9R9LXMChBLXQ3BUNXT8SZt1TH+GdJV+OpUg+bA3md9mSGteuUxGkNdRLGCw
+XVk1GimTJnmRU5m7FTggZIR2rY9RRcKWmFKUKwblkANkg+ucXbjVhElhdFVAtzU9
+2IKQ5q2BaitXQ6NajlLBjjcjAs8ocsapDfK62e1cLUOfSHRm3DrHOufbP5CpXe4c
+4SSvqmJH9L9CCuXfAJl8RGOfEyUoKeEC3OcotfRG+YUqv3p4xpo=
+=DpHr
 -----END PGP SIGNATURE-----
 
---BRE3mIcgqKzpedwo--
+--wchHw8dVAp53YPj8--
