@@ -2,86 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C43B2CD0BF
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 09:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD472CD3B8
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 11:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729918AbgLCIDx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Dec 2020 03:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726451AbgLCIDx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Dec 2020 03:03:53 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81141C061A4E
-        for <linux-i2c@vger.kernel.org>; Thu,  3 Dec 2020 00:03:13 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kkja4-0006Gh-17; Thu, 03 Dec 2020 09:03:12 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kkja3-0006fN-LC; Thu, 03 Dec 2020 09:03:11 +0100
-Date:   Thu, 3 Dec 2020 09:03:11 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Cc:     Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH] i2c: pca-platform: drop two members from driver data
- that are assigned to only
-Message-ID: <20201203080311.kpomqeeqvjr3pjef@pengutronix.de>
-References: <20201123202746.2817480-1-u.kleine-koenig@pengutronix.de>
- <20201202155701.GD13425@kunai>
+        id S2388979AbgLCKdx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Dec 2020 05:33:53 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:36077 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388701AbgLCKdw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Dec 2020 05:33:52 -0500
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 03 Dec 2020 02:32:44 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Dec 2020 02:32:42 -0800
+X-QCInternal: smtphost
+Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Dec 2020 16:01:59 +0530
+Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
+        id 31E3F2819; Thu,  3 Dec 2020 16:01:58 +0530 (IST)
+From:   Roja Rani Yarubandi <rojay@codeaurora.org>
+To:     wsa@kernel.org
+Cc:     swboyd@chromium.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        vkaur@codeaurora.org, pyarlaga@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        Roja Rani Yarubandi <rojay@codeaurora.org>
+Subject: [RESEND PATCH V6 0/2] Implement Shutdown callback for geni-i2c
+Date:   Thu,  3 Dec 2020 16:01:54 +0530
+Message-Id: <20201203103156.32595-1-rojay@codeaurora.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rslnat7clqcwp3bx"
-Content-Disposition: inline
-In-Reply-To: <20201202155701.GD13425@kunai>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi,
 
---rslnat7clqcwp3bx
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Below patch is picked:
+[V6,1/3] soc: qcom: geni: Remove "iova" check
 
-On Wed, Dec 02, 2020 at 04:57:01PM +0100, Wolfram Sang wrote:
-> On Mon, Nov 23, 2020 at 09:27:46PM +0100, Uwe Kleine-K=F6nig wrote:
-> > io_base and io_size are assigned to only in .probe() and otherwise unus=
-ed.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> My very first driver :)
+Resending below patches for review:
+[V6,2/3] i2c: i2c-qcom-geni: Store DMA mapping data in geni_i2c_dev struct
+[V6,3/3] i2c: i2c-qcom-geni: Add shutdown callback for i2c
 
-Just for the record: I was never Wolfram's chauffeur. I guess he meant
-that the i2c-pca-platform driver was the first i2c driver he wrote.
+Thanks,
+Roja
 
-SCNR
-Uwe
+Roja Rani Yarubandi (2):
+  i2c: i2c-qcom-geni: Store DMA mapping data in geni_i2c_dev struct
+  i2c: i2c-qcom-geni: Add shutdown callback for i2c
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+ drivers/i2c/busses/i2c-qcom-geni.c | 104 ++++++++++++++++++++++++-----
+ 1 file changed, 88 insertions(+), 16 deletions(-)
 
---rslnat7clqcwp3bx
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl/Im7wACgkQwfwUeK3K
-7AnvAQf/d5ehLH39FwtwNDp25SNw2i7LO7FLLdun+qBdH710HJh2GlA/ZUGCgDmB
-nQigVGb7gwq/YcpYn6ufRHKmPEiyTR0FPE4yDTXbzH4Y/tP9BRP33OfgDKz6aG1j
-obj54tWtpF+i8PU+3z5Y0kllgsrwKGLISesYVCOY/JPM5AZ06Z4XzqJvav4mcBp7
-XNDs6zZo3E3hR96SUKsGRxVnYfQPgipHVScvx2BM1vg8ucRu8UXBn+etVKKJ/xZ9
-RAr+//uHHStuBGeTCtglckq77eglXduCK8k1Wmkw0o7HgTqv+Pwyeuc0FkyyeLQy
-jmmqdG+L5n3E2W+4jrjY18dKmjIZyQ==
-=9kao
------END PGP SIGNATURE-----
-
---rslnat7clqcwp3bx--
