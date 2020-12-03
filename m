@@ -2,63 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C6A2CCB9C
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 02:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AF02CCBCC
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 02:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726763AbgLCB0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Dec 2020 20:26:24 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:41493 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725959AbgLCB0Y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Dec 2020 20:26:24 -0500
-X-UUID: 76da3a98ce544379bee8a7dbf8cbb144-20201203
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=wK0zfo0dPiyFhQQJ4nzywTR+uMF2OgABw+6Iks5D4mQ=;
-        b=CFPToLL0sZWBqroEFBvBnu3C1xB7f2YEQK55TLcFtzT7OOtnD6Umvp1NElNmQh4fAxnaxQnr4oMlgAj8q34YCcJw4kweQzVfP9D/Tn3EfyTYaGS5Vy2/6wxwsPb4bBoyrOE8l/7SZ/ki9l/IJoR2HY2NIsKdWFOxa1AzGA0kXts=;
-X-UUID: 76da3a98ce544379bee8a7dbf8cbb144-20201203
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1208836293; Thu, 03 Dec 2020 09:25:37 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 3 Dec
- 2020 09:25:36 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 3 Dec 2020 09:25:35 +0800
-Message-ID: <1606958735.25719.29.camel@mhfsdcap03>
-Subject: Re: [v2] i2c: mediatek: Move suspend and resume handling to NOIRQ
- phase
-From:   Qii Wang <qii.wang@mediatek.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>
-Date:   Thu, 3 Dec 2020 09:25:35 +0800
-In-Reply-To: <20201202153543.GG874@kunai>
-References: <1605701861-30800-1-git-send-email-qii.wang@mediatek.com>
-         <20201202153543.GG874@kunai>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1727726AbgLCBpH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Dec 2020 20:45:07 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:8993 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727691AbgLCBpG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Dec 2020 20:45:06 -0500
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Cmdsn3Rd4zhld9;
+        Thu,  3 Dec 2020 09:43:57 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.487.0; Thu, 3 Dec 2020
+ 09:44:16 +0800
+From:   Wang Xiaojun <wangxiaojun11@huawei.com>
+To:     <kblaiech@nvidia.com>
+CC:     <linux-i2c@vger.kernel.org>
+Subject: [PATCH v2] i2c: mlxbf: Fix the return check of devm_ioremap and ioremap
+Date:   Wed, 2 Dec 2020 20:46:47 -0500
+Message-ID: <20201203014647.3468430-1-wangxiaojun11@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 4EFEE1FEB07A9BE4BDA81639A3A3E1E0EC21718CFC0395F146C8E8461D7B11C22000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTEyLTAyIGF0IDE2OjM1ICswMTAwLCBXb2xmcmFtIFNhbmcgd3JvdGU6DQo+
-IEhpLA0KPiANCj4gPiBTb21lIGkyYyBkZXZpY2UgZHJpdmVyIGluZGlyZWN0bHkgdXNlcyBJMkMg
-ZHJpdmVyIHdoZW4gaXQgaXMgbm93DQo+ID4gYmVpbmcgc3VzcGVuZGVkLiBUaGUgaTJjIGRldmlj
-ZXMgZHJpdmVyIGlzIHN1c3BlbmRlZCBkdXJpbmcgdGhlDQo+ID4gTk9JUlEgcGhhc2UgYW5kIHRo
-aXMgY2Fubm90IGJlIGNoYW5nZWQgZHVlIHRvIG90aGVyIGRlcGVuZGVuY2llcy4NCj4gPiBUaGVy
-ZWZvcmUsIHdlIGFsc28gbmVlZCB0byBtb3ZlIHRoZSBzdXNwZW5kIGhhbmRsaW5nIGZvciB0aGUg
-STJDDQo+ID4gY29udHJvbGxlciBkcml2ZXIgdG8gdGhlIE5PSVJRIHBoYXNlIGFzIHdlbGwuDQo+
-ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogUWlpIFdhbmcgPHFpaS53YW5nQG1lZGlhdGVrLmNvbT4N
-Cj4gDQo+IElzIHRoaXMgYSBidWdmaXggYW5kIHNob3VsZCBnbyBpbnRvIDUuMTA/IE9yIGNhbiBp
-dCB3YWl0IGZvciA1LjExPw0KPiANCg0KWWVzLCBDYW4geW91IGhlbHAgdG8gYXBwbHkgaXQgaW50
-byA1LjEwPyBUaGFua3MNCg0KPiBUaGFua3MsDQo+IA0KPiAgICBXb2xmcmFtDQo+IA0KDQo=
+devm_ioremap and ioremap may return NULL which cannot be checked
+by IS_ERR.
+
+Signed-off-by: Wang Xiaojun <wangxiaojun11@huawei.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+---
+v2: fix the typo error.
+
+ drivers/i2c/busses/i2c-mlxbf.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
+index 33574d40ea9c..2fb0532d8a16 100644
+--- a/drivers/i2c/busses/i2c-mlxbf.c
++++ b/drivers/i2c/busses/i2c-mlxbf.c
+@@ -1258,9 +1258,9 @@ static int mlxbf_i2c_get_gpio(struct platform_device *pdev,
+ 		return -EFAULT;
+ 
+ 	gpio_res->io = devm_ioremap(dev, params->start, size);
+-	if (IS_ERR(gpio_res->io)) {
++	if (!gpio_res->io) {
+ 		devm_release_mem_region(dev, params->start, size);
+-		return PTR_ERR(gpio_res->io);
++		return -ENOMEM;
+ 	}
+ 
+ 	return 0;
+@@ -1323,9 +1323,9 @@ static int mlxbf_i2c_get_corepll(struct platform_device *pdev,
+ 		return -EFAULT;
+ 
+ 	corepll_res->io = devm_ioremap(dev, params->start, size);
+-	if (IS_ERR(corepll_res->io)) {
++	if (!corepll_res->io) {
+ 		devm_release_mem_region(dev, params->start, size);
+-		return PTR_ERR(corepll_res->io);
++		return -ENOMEM;
+ 	}
+ 
+ 	return 0;
+@@ -1717,9 +1717,9 @@ static int mlxbf_i2c_init_coalesce(struct platform_device *pdev,
+ 			return -EFAULT;
+ 
+ 		coalesce_res->io = ioremap(params->start, size);
+-		if (IS_ERR(coalesce_res->io)) {
++		if (!coalesce_res->io) {
+ 			release_mem_region(params->start, size);
+-			return PTR_ERR(coalesce_res->io);
++			return -ENOMEM;
+ 		}
+ 
+ 		priv->coalesce = coalesce_res;
+-- 
+2.25.1
 
