@@ -2,99 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B28DC2CDF90
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 21:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3572E2CDF99
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 21:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729257AbgLCUQN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Dec 2020 15:16:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40130 "EHLO mail.kernel.org"
+        id S1727570AbgLCURj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Dec 2020 15:17:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40826 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727352AbgLCUQN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 3 Dec 2020 15:16:13 -0500
-Date:   Thu, 3 Dec 2020 21:15:23 +0100
+        id S1726166AbgLCURj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 3 Dec 2020 15:17:39 -0500
+Date:   Thu, 3 Dec 2020 21:16:54 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607026532;
-        bh=sTLisENEUL1Kv4Gz8uUtUdHhZyPXG36W6EFw4wIEQvg=;
+        s=k20201202; t=1607026618;
+        bh=wwvkLgUFOYF86cvivgeVpKe+dXjmYA7IO6AstU46bYc=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZSDST5lJb21dROcR57sKm7LwP0X3KrZicV4vjl4MnY8wyN/ah9rq2kHPfQb+7WGy/
-         373wjhiEnu4m+vYcKQYuHQsu1NoFon76VbN9Q4RUvwpTGVeffdni9evz0J92DUxqna
-         cU48ClV+lvqfmlPKcj3ZgaDxIoPeUZUqbUfCGolZlbnLaMG6HulC/UpYKpwVwW3os8
-         QoLUXffxYDxpOVED+mN/erN5qz5B0a307VbLVQUsY9ksJERlmuQSHTq9TY3NzZysD4
-         xs81xIrAFNVHnSMvYn08BD3hm8c7jpytk+QBXZGnJQVOhXc3R/bfu0+UZswvy/evtn
-         MDUw1MTOmB8aQ==
+        b=eCz6CXf3oH3BcrxAv1BOboQpAkzjg91RiLfnUtia42q3K/Bmi0TsbRr4itBbkaVxK
+         mkDJBz1ZClBGklkLDPYJ2WoDCWBU4sfRLpsP6IDKTrKvQt21XWSi+zXVL2HqTgpizZ
+         jeo1iyS3IJffoXH6SJOffbS5RDmmTaMQmRxJ3yfavD8Eji5aM2fk1nlufAXxBUWmu8
+         P368olN177iCilDbwUEyw3Bt0n2yh4HEvcBeoAwB52IEK5AN2Yo2R8hQiAjV3tp106
+         pHmjyt17CT4G6XEmcqxvXCQdBpSYLQVdzK39kLNhp497y1GttXJLLH4+emVMSWsBtd
+         vJDxMMN4Q5VwA==
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH] Revert "i2c: qcom-geni: Disable DMA processing on the
- Lenovo Yoga C630"
-Message-ID: <20201203201523.GA3585@kunai>
+To:     Stefan =?utf-8?Q?L=C3=A4sser?= <stefan.laesser@omicronenergy.com>
+Cc:     peter@korsgaard.com, andrew@lunn.ch, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: ocores: Avoid false-positive error log message.
+Message-ID: <20201203201654.GB3585@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20201124185743.401946-1-bjorn.andersson@linaro.org>
+        Stefan =?utf-8?Q?L=C3=A4sser?= <stefan.laesser@omicronenergy.com>,
+        peter@korsgaard.com, andrew@lunn.ch, linux-i2c@vger.kernel.org
+References: <6185f3fc-35ed-4de2-8bf7-fb991555580c@EXC03-ATKLA.omicron.at>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u3/rZRmxL6MmkK24"
+        protocol="application/pgp-signature"; boundary="kXdP64Ggrk/fb43R"
 Content-Disposition: inline
-In-Reply-To: <20201124185743.401946-1-bjorn.andersson@linaro.org>
+In-Reply-To: <6185f3fc-35ed-4de2-8bf7-fb991555580c@EXC03-ATKLA.omicron.at>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---u3/rZRmxL6MmkK24
-Content-Type: text/plain; charset=us-ascii
+--kXdP64Ggrk/fb43R
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 24, 2020 at 12:57:43PM -0600, Bjorn Andersson wrote:
-> A combination of recent bug fixes by Doug Anderson and the proper
-> definition of iommu streams means that this hack is no longer needed.
-> Let's clean up the code by reverting '127068abe85b ("i2c: qcom-geni:
-> Disable DMA processing on the Lenovo Yoga C630")'.
+On Thu, Dec 03, 2020 at 04:02:52PM +0100, Stefan L=C3=A4sser wrote:
+> Since commit 7723f4c5ecdb ("driver core: platform: Add an error message to
+> platform_get_irq*()"), platform_get_irq() will call dev_err() on an error.
+> In case of i2c ocores this leads to a false-positive error being logged:
 >=20
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
+> [ 4.173989] 007: ocores-i2c ocores-i2c: IRQ index 0 not found
+>=20
+> i2c ocores already handles the case when the IRQ cannot be found and
+> therefore there is no benefit in having this error message being logged.
+>=20
+> This commit switches to platform_get_irq_optional(), which does not log
+> in case the IRQ cannot be found.
+>=20
+> Signed-off-by: Stefan L=C3=A4sser <stefan.laesser@omicronenergy.com>
 
-Added another ack from Caleb and applied to for-next, thanks!
+Applied to for-current, thanks!
 
 
---u3/rZRmxL6MmkK24
+--kXdP64Ggrk/fb43R
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/JR1cACgkQFA3kzBSg
-Kbb+gg//Uss4phLY7CH1vEfZhKbhoLdilPpKsolr8PnK/C8XLY2X7Os1NS88WNJp
-Y47uFbVlPeH03Y415omWj35uB9Rx95Oe1y5dwKcD/M8lBC6PZD0R9zXUswkuspZY
-u3TzNmlTZfh9N/i2A0S3zJibePIdpfXe1H1LlMND/oFik/Kfi66aM+nPAVOAER46
-y+I8peLv0fDKZ4moscpaZJQAGivsB75bNoB6II77Sit6Ip+Y8YR/RB7aOQ3rd572
-FbyTYcvxyjsGfsEIGzH/uxR+39tJv62jmnSK7n2CxBhEYKvjVv8Qm4tmhumjgYdm
-SXOZ+TeHhU/ecp6crtIT53KiGC//uMqry3hXnloZ0IOkMlPB92Mp6F5E32SwWvtY
-sEZjLDchVsDFcKoj6Ya7JuuT33736fW426BwKQEbUXpC3QMnLC1gDjwYotmRBEG1
-CxzSjsVzaRFsDY5fzmmggx74gHQ2Cat6HbrvpgensnHX46o3SsPt4vB0eKHvtDJ4
-oDCtKh2xURGJzq3CneR9qFSDtTvUmMrF/MxIpTw5GaWfp3O+GXgIAMkZsFQYR4YN
-rTJlLRmhyoJfxHDwJarGeI6A1RK+1RWJ8UpKItZ6C8aAZALpBKVDnaAEWnUxfiMh
-6CxWnINqceXPu9fo6mi5ZTwpuVMXautJ5Y2vr4bWkecXgOdJHMg=
-=Uqhs
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/JR7YACgkQFA3kzBSg
+KbbgxRAAjjOMgWp/XPMMdXJPYDdVuVvlUCuk9DoYHj+AMRfORlqQ00TWnJ1gsbbE
+UuTESSibHTjpci5YnJOD1LLd1YOErjc7/OPyH0OJazVOdiiXtBiZWaNeKZM+xuvW
+HuuCDckUPA67r8zLIR0miFOVigoZThaF6zRJKTEshjFeYNKHBQoXobPEygZqmWpk
+CZdEMQD6SW0+UglpckzxBMVbUybR0BrYv5jLbrAnFdqV6hFybPtHffV5drc1nWAx
+DrAv+KtgIydAoviDHNDCsHCOhZfHYJBq2hWFaUN3Orcu4/u0Bk1/+jK2bTjZ+bvu
+PrgKT28Ncuex+Fg4hrocOPh8mvjay+d0HdVjOpRqN9oRo0sIpbI2wHYokDpSMxY2
+jntbdPbsqNU+XCE4xBtAKYHs9XeCZPZt1pS5fBUTOXiR2w05OYuZoXyYpB5uIiyl
+ZJbamkXLJhpNfuJ7v0KnSx7KdEeR/1s4K7RpAxsLBB0fHnCmlwlaOfy9xS/Fap69
+MLXChxD+tsTxsM1rHcbisbp37e4I2XlZMK8zfgQrRRHwbB+uSpCXfotqYSPObMRH
+4udZjhcdoCSnz8osxvsDCtSkUnL6NRY0+YLuC/OvkUBdtkXD62OjQWbJRWOCAzCi
+0qnGjFGLqr3CwaXjd8xWLgFSGEJ0ZZNTmOwWWzk7rjdBOSK9EP4=
+=rBm/
 -----END PGP SIGNATURE-----
 
---u3/rZRmxL6MmkK24--
+--kXdP64Ggrk/fb43R--
