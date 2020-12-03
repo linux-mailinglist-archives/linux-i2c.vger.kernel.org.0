@@ -2,156 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 189BB2CD3B3
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 11:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B232CD57D
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 13:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388732AbgLCKdh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Dec 2020 05:33:37 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:36077 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388608AbgLCKdh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Dec 2020 05:33:37 -0500
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 03 Dec 2020 02:32:42 -0800
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Dec 2020 02:32:40 -0800
-X-QCInternal: smtphost
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Dec 2020 16:02:02 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id DD11A2833; Thu,  3 Dec 2020 16:02:00 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        vkaur@codeaurora.org, pyarlaga@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [RESEND PATCH V6 2/2] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-Date:   Thu,  3 Dec 2020 16:01:56 +0530
-Message-Id: <20201203103156.32595-3-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20201203103156.32595-1-rojay@codeaurora.org>
-References: <20201203103156.32595-1-rojay@codeaurora.org>
+        id S1726798AbgLCM0S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Dec 2020 07:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730297AbgLCM0R (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Dec 2020 07:26:17 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D89AC061A4E;
+        Thu,  3 Dec 2020 04:25:37 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id p8so1683621wrx.5;
+        Thu, 03 Dec 2020 04:25:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xQY5AbzujeliSiWY2E/G4LEsHJG3L2qcBmGWXG44TV4=;
+        b=CQnUcBAS2skp/TXF3SD6blZcjbwS5Rl+nd+ZnQB+o8GST+cCkfbQxi+NvgnrOYj9b1
+         Mz8lbBe3WDUMywvVP7qv0EygFJ4OoklVewUKFA91MaLqxKAD/wL0j+WxVPC8pkc/KnJD
+         tCo8XmVsSNexBZzpQ3+a8C26iRe/wYsAxXz2nnwoUYHdb2kcXPBNRjiZoRGU6oFo7G+4
+         m7I3yik0vBvBKew9GlWXjsrSi8WinBSsv102KAVI/Yugw90oYNQIAXMQI4HZ5jv2jQeX
+         nbway0x6c3pwxG7WVxOMPcDupcZT01ALcVJyjfHswc5H5ORmDDFjd/e9fzhLHAIGJ8bb
+         5naA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xQY5AbzujeliSiWY2E/G4LEsHJG3L2qcBmGWXG44TV4=;
+        b=nk/nNlF3KEPrrFBZGIi5xkNvGIW2WOMVGNBosl2FW24jjVB/82e8nQ0VaUPuEWHG5f
+         BvkyweqW+ZJdC+Rt7NWKfMWK0Xo8IxcL0cQYVUkUG3FiOMEusJs2P2LfHBSIwYWs74ZP
+         P83ZjRy2ZbRqhPFZPHSBXVnj5z58kSDpwiUquICixvjuR0fj3yUHjcVSLGNZxrURolPm
+         1XzJOOkC/9Ts/hvmdEAo3mHam/ZqSl9fscdxfo8ARsOnJhCMhzHVOA5KRe8Ch+zcTLtp
+         +hvHWRn0akxv7nkDPWCIh7MiNerXUKMNxlRmMKfAs8UwkVnIPNO6CAk6J+yhL1D9irGX
+         pqNA==
+X-Gm-Message-State: AOAM533y6K/+oLVGkZVL+RxevjmHHdDQ1SuHCF02U1/bn+sqdWbH4JYR
+        szJRZpxnkh+dXVNkqxQTLQY=
+X-Google-Smtp-Source: ABdhPJyKOeFWO0jrA2mT1UQ2VqaNnYXsenWU01+yH9N1p3sy7QqnRJnqZoNYkhxfeEqPxNnBrcYZKA==
+X-Received: by 2002:a5d:5704:: with SMTP id a4mr3535666wrv.170.1606998335845;
+        Thu, 03 Dec 2020 04:25:35 -0800 (PST)
+Received: from [192.168.1.211] ([2.31.225.57])
+        by smtp.gmail.com with ESMTPSA id o67sm1361569wmo.31.2020.12.03.04.25.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Dec 2020 04:25:35 -0800 (PST)
+Subject: Re: [PATCH 18/18] ipu3: Add driver for dummy INT3472 ACPI device
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, devel@acpica.org, rjw@rjwysocki.net,
+        lenb@kernel.org, gregkh@linuxfoundation.org,
+        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, wsa@kernel.org, yong.zhi@intel.com,
+        sakari.ailus@linux.intel.com, bingbu.cao@intel.com,
+        tian.shu.qiu@intel.com, mchehab@kernel.org, robert.moore@intel.com,
+        erik.kaneda@intel.com, pmladek@suse.com, rostedt@goodmis.org,
+        sergey.senozhatsky@gmail.com, linux@rasmusvillemoes.dk,
+        kieran.bingham+renesas@ideasonboard.com, jacopo+renesas@jmondi.org,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jorhand@linux.microsoft.com, kitakar@gmail.com,
+        heikki.krogerus@linux.intel.com
+References: <20201130133129.1024662-1-djrscally@gmail.com>
+ <20201130133129.1024662-19-djrscally@gmail.com>
+ <20201130200719.GB4077@smile.fi.intel.com>
+ <20201130233232.GD25713@pendragon.ideasonboard.com>
+ <20201201184925.GJ4077@smile.fi.intel.com>
+ <4181e6a6-a60f-0a2b-1b46-13a2359d8753@gmail.com>
+ <20201202093952.GU4077@smile.fi.intel.com>
+From:   Dan Scally <djrscally@gmail.com>
+Message-ID: <56008891-9b86-f318-aae0-1ea36bc2a0eb@gmail.com>
+Date:   Thu, 3 Dec 2020 12:25:33 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20201202093952.GU4077@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If the hardware is still accessing memory after SMMU translation
-is disabled (as part of smmu shutdown callback), then the
-IOVAs (I/O virtual address) which it was using will go on the bus
-as the physical addresses which will result in unknown crashes
-like NoC/interconnect errors.
+On 02/12/2020 09:39, Andy Shevchenko wrote:
+> On Tue, Dec 01, 2020 at 08:59:53PM +0000, Dan Scally wrote:
+>> On 01/12/2020 18:49, Andy Shevchenko wrote:
+> 
+> ...
+> 
+>>> Seems we can do this, by locating intel_int3472.c under PDx86 hood and dropping
+>>> ACPI ID table from TPS68470 MFD driver. The PMIC can be instantiated via
+>>> i2c_acpi_new_device() (IIRC the API name).
+>>>
+>>> And actually it makes more sense since it's not and MFD and should not be there.
+>>>
+>>> (Dan, patch wise the one creates intel_int3472.c followed by another one that
+>>>  moves ACPI ID from PMIC and introduces its instantiation via I²C board info
+>>>  structure)
+>>
+>> I'm mostly following this, but why would we need an i2c_board_info or
+>> i2c_acpi_new_device()? The INT3472 entries that refer to actual tps68470
+>> devices do have an I2cSerialBusV2 enumerated in _CRS so in their case
+>> there's an i2c device registered with the kernel already.
+> 
+> Because as we discussed already we can't have two drivers for the same ID
+> without a big disruption in the driver(s).
+> 
+> If you have a single point of enumeration, it will make things much easier
+> (refer to the same intel_cht_int33fe driver you mentioned earlier).
+> 
+> I just realize that the name of int3472 should follow the same pattern, i.e.
+> intel_skl_int3472.c
 
-So, implement shutdown callback to i2c driver to stop on-going transfer
-and unmap DMA mappings during system "reboot" or "shutdown".
+Ah! I didn't read intel_cht_int33fe_common.c before, just the typec.c.
+Having reviewed common I think I'm clear on the method now, thank you :)
 
-Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the Qualcomm GENI I2C controller")
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
----
-Changes in V2:
- - As per Stephen's comments added seperate function for stop transfer,
-   fixed minor nitpicks.
- - As per Stephen's comments, changed commit text.
 
-Changes in V3:
- - As per Stephen's comments, squashed patch 1 into patch 2, added Fixes tag.
- - As per Akash's comments, included FIFO case in stop_xfer, fixed minor nitpicks.
+>> I think we need those things when we get round to handling the
+>> VCM/EEPROM that's hidden within the sensor's ACPI entry, but I've not
+>> done any work on that yet at all.
+> 
+> Let's consider this later — one step at a time.
 
-Changes in V4:
- - As per Stephen's comments cleaned up geni_i2c_stop_xfer function,
-   added dma_buf in geni_i2c_dev struct to call i2c_put_dma_safe_msg_buf()
-   from other functions, removed "iova" check in geni_se_rx_dma_unprep()
-   and geni_se_tx_dma_unprep() functions.
- - Added two helper functions geni_i2c_rx_one_msg_done() and
-   geni_i2c_tx_one_msg_done() to unwrap the things after rx/tx FIFO/DMA
-   transfers, so that the same can be used in geni_i2c_stop_xfer() function
-   during shutdown callback. Updated commit text accordingly.
- - Checking whether it is tx/rx transfer using I2C_M_RD which is valid for both
-   FIFO and DMA cases, so dropped DMA_RX_ACTIVE and DMA_TX_ACTIVE bit checking
-
-Changes in V5:
- - As per Stephen's comments, added spin_lock_irqsave & spin_unlock_irqsave in
-   geni_i2c_stop_xfer() function.
-
-Changes in V6:
- - As per Stephen's comments, taken care of unsafe lock order in
-   geni_i2c_stop_xfer().
- - Moved spin_lock/unlock to geni_i2c_rx_msg_cleanup() and
-   geni_i2c_tx_msg_cleanup() functions.
-
- drivers/i2c/busses/i2c-qcom-geni.c | 35 ++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index bfbc80f65006..9a6bd7a0a56f 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -385,6 +385,33 @@ static void geni_i2c_tx_msg_cleanup(struct geni_i2c_dev *gi2c,
- 	spin_unlock_irqrestore(&gi2c->lock, flags);
- }
- 
-+static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
-+{
-+	int ret;
-+	u32 geni_status;
-+	struct i2c_msg *cur;
-+
-+	/* Resume device, as runtime suspend can happen anytime during transfer */
-+	ret = pm_runtime_get_sync(gi2c->se.dev);
-+	if (ret < 0) {
-+		dev_err(gi2c->se.dev, "Failed to resume device: %d\n", ret);
-+		return;
-+	}
-+
-+	geni_status = readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
-+	if (!(geni_status & M_GENI_CMD_ACTIVE))
-+		goto out;
-+
-+	cur = gi2c->cur;
-+	geni_i2c_abort_xfer(gi2c);
-+	if (cur->flags & I2C_M_RD)
-+		geni_i2c_rx_msg_cleanup(gi2c, cur);
-+	else
-+		geni_i2c_tx_msg_cleanup(gi2c, cur);
-+out:
-+	pm_runtime_put_sync_suspend(gi2c->se.dev);
-+}
-+
- static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
-@@ -664,6 +691,13 @@ static int geni_i2c_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static void  geni_i2c_shutdown(struct platform_device *pdev)
-+{
-+	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
-+
-+	geni_i2c_stop_xfer(gi2c);
-+}
-+
- static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
- {
- 	int ret;
-@@ -728,6 +762,7 @@ MODULE_DEVICE_TABLE(of, geni_i2c_dt_match);
- static struct platform_driver geni_i2c_driver = {
- 	.probe  = geni_i2c_probe,
- 	.remove = geni_i2c_remove,
-+	.shutdown = geni_i2c_shutdown,
- 	.driver = {
- 		.name = "geni_i2c",
- 		.pm = &geni_i2c_pm_ops,
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+Agree!
 
