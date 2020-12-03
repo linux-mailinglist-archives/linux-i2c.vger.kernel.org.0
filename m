@@ -2,79 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A24EE2CCB5C
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 02:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C6A2CCB9C
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 02:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727498AbgLCBCS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Dec 2020 20:02:18 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:36546 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727384AbgLCBCS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 2 Dec 2020 20:02:18 -0500
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx73_qOMhfRz0ZAA--.41109S2;
-        Thu, 03 Dec 2020 09:01:31 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Neil Horman <nhorman@tuxdriver.com>,
-        Seth Heasley <seth.heasley@intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] i2c: ismt: Use dma_set_mask_and_coherent
-Date:   Thu,  3 Dec 2020 09:01:30 +0800
-Message-Id: <1606957290-15260-1-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dx73_qOMhfRz0ZAA--.41109S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZFW8KFWfJrW8Kw4xAF4Utwb_yoWkCwb_tw
-        10qF92gFsYyr90v347KFW5Xr95t3yrZ34DZF1vy3WI9ry3uwsxJa17uFykAF4UZFsrJFya
-        g3WvyrZ5ArWjvjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb7kYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z2
-        80aVCY1x0267AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_KwCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
-        CF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcZqXDUUUU
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+        id S1726763AbgLCB0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Dec 2020 20:26:24 -0500
+Received: from mailgw02.mediatek.com ([1.203.163.81]:41493 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725959AbgLCB0Y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Dec 2020 20:26:24 -0500
+X-UUID: 76da3a98ce544379bee8a7dbf8cbb144-20201203
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=wK0zfo0dPiyFhQQJ4nzywTR+uMF2OgABw+6Iks5D4mQ=;
+        b=CFPToLL0sZWBqroEFBvBnu3C1xB7f2YEQK55TLcFtzT7OOtnD6Umvp1NElNmQh4fAxnaxQnr4oMlgAj8q34YCcJw4kweQzVfP9D/Tn3EfyTYaGS5Vy2/6wxwsPb4bBoyrOE8l/7SZ/ki9l/IJoR2HY2NIsKdWFOxa1AzGA0kXts=;
+X-UUID: 76da3a98ce544379bee8a7dbf8cbb144-20201203
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1208836293; Thu, 03 Dec 2020 09:25:37 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 3 Dec
+ 2020 09:25:36 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 3 Dec 2020 09:25:35 +0800
+Message-ID: <1606958735.25719.29.camel@mhfsdcap03>
+Subject: Re: [v2] i2c: mediatek: Move suspend and resume handling to NOIRQ
+ phase
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>
+Date:   Thu, 3 Dec 2020 09:25:35 +0800
+In-Reply-To: <20201202153543.GG874@kunai>
+References: <1605701861-30800-1-git-send-email-qii.wang@mediatek.com>
+         <20201202153543.GG874@kunai>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: 4EFEE1FEB07A9BE4BDA81639A3A3E1E0EC21718CFC0395F146C8E8461D7B11C22000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-'pci_set_dma_mask()' + 'pci_set_consistent_dma_mask()' can be replaced by
-an equivalent 'dma_set_mask_and_coherent()' which is much less verbose.
-
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
----
- drivers/i2c/busses/i2c-ismt.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
-index a35a27c..5f49830 100644
---- a/drivers/i2c/busses/i2c-ismt.c
-+++ b/drivers/i2c/busses/i2c-ismt.c
-@@ -903,16 +903,12 @@ ismt_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return -ENODEV;
- 	}
- 
--	if ((pci_set_dma_mask(pdev, DMA_BIT_MASK(64)) != 0) ||
--	    (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(64)) != 0)) {
--		if ((pci_set_dma_mask(pdev, DMA_BIT_MASK(32)) != 0) ||
--		    (pci_set_consistent_dma_mask(pdev,
--						 DMA_BIT_MASK(32)) != 0)) {
-+	if (dma_set_mask_and_coherent(pdev, DMA_BIT_MASK(64)) != 0)
-+		if (dma_set_mask_and_coherent(pdev, DMA_BIT_MASK(32)) != 0) {
- 			dev_err(&pdev->dev, "pci_set_dma_mask fail %p\n",
- 				pdev);
- 			return -ENODEV;
- 		}
--	}
- 
- 	err = ismt_dev_init(priv);
- 	if (err)
--- 
-2.1.0
+T24gV2VkLCAyMDIwLTEyLTAyIGF0IDE2OjM1ICswMTAwLCBXb2xmcmFtIFNhbmcgd3JvdGU6DQo+
+IEhpLA0KPiANCj4gPiBTb21lIGkyYyBkZXZpY2UgZHJpdmVyIGluZGlyZWN0bHkgdXNlcyBJMkMg
+ZHJpdmVyIHdoZW4gaXQgaXMgbm93DQo+ID4gYmVpbmcgc3VzcGVuZGVkLiBUaGUgaTJjIGRldmlj
+ZXMgZHJpdmVyIGlzIHN1c3BlbmRlZCBkdXJpbmcgdGhlDQo+ID4gTk9JUlEgcGhhc2UgYW5kIHRo
+aXMgY2Fubm90IGJlIGNoYW5nZWQgZHVlIHRvIG90aGVyIGRlcGVuZGVuY2llcy4NCj4gPiBUaGVy
+ZWZvcmUsIHdlIGFsc28gbmVlZCB0byBtb3ZlIHRoZSBzdXNwZW5kIGhhbmRsaW5nIGZvciB0aGUg
+STJDDQo+ID4gY29udHJvbGxlciBkcml2ZXIgdG8gdGhlIE5PSVJRIHBoYXNlIGFzIHdlbGwuDQo+
+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogUWlpIFdhbmcgPHFpaS53YW5nQG1lZGlhdGVrLmNvbT4N
+Cj4gDQo+IElzIHRoaXMgYSBidWdmaXggYW5kIHNob3VsZCBnbyBpbnRvIDUuMTA/IE9yIGNhbiBp
+dCB3YWl0IGZvciA1LjExPw0KPiANCg0KWWVzLCBDYW4geW91IGhlbHAgdG8gYXBwbHkgaXQgaW50
+byA1LjEwPyBUaGFua3MNCg0KPiBUaGFua3MsDQo+IA0KPiAgICBXb2xmcmFtDQo+IA0KDQo=
 
