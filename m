@@ -2,77 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F122CDBA7
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 17:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 233DA2CDC45
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Dec 2020 18:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbgLCQ7E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Dec 2020 11:59:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60252 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726026AbgLCQ7E (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 3 Dec 2020 11:59:04 -0500
-Date:   Thu, 3 Dec 2020 17:58:14 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607014703;
-        bh=VMkcLy6e7wNsxKmMbkP1derZ/NyIdK59AZNcuQRcYXg=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ceMKQ83j9Ay5xrPe5ShVNcYergw9JWyCslthsveYboOOWcRL/JSVctnRS2JSd1Sy+
-         xogZKmIr9DMiJC7GEKgoJj3dNrefE/8uXbR4GgXlC5zmII22jxXg5oS89JbYQYY+zN
-         LsMkrPIiUCBDc1guMR5Yc5YcqAMQBY01RjN2BywWWVNgQMw6tp/06vrvsraTHqHT7Y
-         abtvIKjDX1E3DTz4RCjWvE1A6iCvhBk9479muDs7ZphOAT9hFrdw/nsNSj7+uQW6eQ
-         BIw19F60mT9/o0Laj7tWbTDPLVMahNFoQQfDsw0H0ona/VNWYlmdsJ945txLMKQk/Y
-         dqOAFJB/1lY6Q==
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] i2c: pca-platform: drop two members from driver data
- that are assigned to only
-Message-ID: <20201203165814.GA1034@ninjato>
-References: <20201123202746.2817480-1-u.kleine-koenig@pengutronix.de>
- <20201202155701.GD13425@kunai>
- <20201203080311.kpomqeeqvjr3pjef@pengutronix.de>
+        id S1728874AbgLCRT4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Dec 2020 12:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726498AbgLCRT4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Dec 2020 12:19:56 -0500
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F23C061A4E
+        for <linux-i2c@vger.kernel.org>; Thu,  3 Dec 2020 09:19:15 -0800 (PST)
+Received: by mail-ej1-x643.google.com with SMTP id ga15so4623702ejb.4
+        for <linux-i2c@vger.kernel.org>; Thu, 03 Dec 2020 09:19:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=ZIDCFJwPj9sTKiTkG/jQdskaVtK2lMvHf4scf+3zmw4=;
+        b=haoLtEewJGkpFWfAf8bIhzGzuXdvaAYh9mP0/tLemXyx3Tne7t16Oy7DTEEsq3zEt2
+         55+/eIgPljjQAsNFMVjqSxZNnolMibTq2QH0PCsb3cT0oqAxtqvHsuCzGkp8d9WoSv4D
+         cWhG7T8qkahIJNF3bJvZdMRgnkYU9oceo6ftVoBtLTW3AQY8uqUsEwJeN7CFGND1S231
+         kxIe5IIeNCR6l6+xahpNk2Bb1hhCFhaMsnFB0/c9OCv7LiJQcad7XvtVbUpj+HGQ3kf0
+         2qpX3v8ra+nq1/gGlxX3MdtA38BYnQPTEqfRYnFgwfg4Xv7mB/CHm53JN9CWr4MWEW8q
+         z8PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:references:date
+         :in-reply-to:message-id:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=ZIDCFJwPj9sTKiTkG/jQdskaVtK2lMvHf4scf+3zmw4=;
+        b=AA9qTwWkQAwBUi5fkiR/xrWjZoX7tJxkQjuSX0HQTvF0OcBxCXhgLyrqqf5sTeO2BV
+         uUbGPUARO61zFfE75vgQ/92CL+fyawaM6dlV4KxZvK8PJ8zSu/oRKDSUjOhntYYqxDx9
+         yCcwLAaM5/tSaJRhwG3+gsZ5u4FYUDVZjjHZyXgvgFQgIqkd8U3KiFYBVWPG8qKlJI7C
+         a5eNoPK+TbcrEdncIgH00KQDB6Hw27i6vjvkYoCVetlxywJYyz5pFnaM5byBxZpHByFv
+         8oIhP/2tNaRHY5pt+lQp7Yi2IHUSPIlRP885INjIBcgRC0h3Jtp4da1gsJERA87mSs7p
+         TOmg==
+X-Gm-Message-State: AOAM532fjLo/apo2X0A5sRf/qHkauDqDeaZ6FooYOGS0IDoqEiW8vtNN
+        0F3tn4faB1qgD8GH4uJgguk=
+X-Google-Smtp-Source: ABdhPJxAza3WI3pP+ys+F+T1YjjIrf2uPvqw60dXotv3jtoq/pZDsfCAvxZEEy7O1cEACbkDiyRk4Q==
+X-Received: by 2002:a17:906:3102:: with SMTP id 2mr3477323ejx.135.1607015954683;
+        Thu, 03 Dec 2020 09:19:14 -0800 (PST)
+Received: from dell.be.48ers.dk (d51a5bc31.access.telenet.be. [81.165.188.49])
+        by smtp.gmail.com with ESMTPSA id s12sm1271384ejy.25.2020.12.03.09.19.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Dec 2020 09:19:13 -0800 (PST)
+Sender: Peter Korsgaard <jacmet@gmail.com>
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+        (envelope-from <peter@korsgaard.com>)
+        id 1kksG9-00056D-Ct; Thu, 03 Dec 2020 18:19:13 +0100
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Stefan =?utf-8?Q?L=C3=A4sser?= <stefan.laesser@omicronenergy.com>
+Cc:     <andrew@lunn.ch>, <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: ocores: Avoid false-positive error log message.
+References: <6185f3fc-35ed-4de2-8bf7-fb991555580c@EXC03-ATKLA.omicron.at>
+Date:   Thu, 03 Dec 2020 18:19:13 +0100
+In-Reply-To: <6185f3fc-35ed-4de2-8bf7-fb991555580c@EXC03-ATKLA.omicron.at>
+        ("Stefan =?utf-8?Q?L=C3=A4sser=22's?= message of "Thu, 3 Dec 2020 16:02:52
+ +0100")
+Message-ID: <87zh2ux0xa.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2oS5YaxWCcQjTEyO"
-Content-Disposition: inline
-In-Reply-To: <20201203080311.kpomqeeqvjr3pjef@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+>>>>> "Stefan" =3D=3D Stefan L=C3=A4sser <stefan.laesser@omicronenergy.com>=
+ writes:
 
---2oS5YaxWCcQjTEyO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+ > Since commit 7723f4c5ecdb ("driver core: platform: Add an error message =
+to
+ > platform_get_irq*()"), platform_get_irq() will call dev_err() on an erro=
+r.
+ > In case of i2c ocores this leads to a false-positive error being logged:
 
+ > [ 4.173989] 007: ocores-i2c ocores-i2c: IRQ index 0 not found
 
-> > My very first driver :)
->=20
-> Just for the record: I was never Wolfram's chauffeur. I guess he meant
-> that the i2c-pca-platform driver was the first i2c driver he wrote.
+ > i2c ocores already handles the case when the IRQ cannot be found and
+ > therefore there is no benefit in having this error message being logged.
 
-:D
+ > This commit switches to platform_get_irq_optional(), which does not log
+ > in case the IRQ cannot be found.
 
+ > Signed-off-by: Stefan L=C3=A4sser <stefan.laesser@omicronenergy.com>
 
---2oS5YaxWCcQjTEyO
-Content-Type: application/pgp-signature; name="signature.asc"
+Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/JGSMACgkQFA3kzBSg
-KbYjEA/+KRi1cjaL+bm9BrIKWB6e847r++W2rZO99Gi1kTqdoWqbeJm6jMtKf0Qs
-gtU0lgVjzcSnj7uLrap03AUdrJEU9bO6ToGVSXginxwdKIDCP6XmSEvN6eIWRpGL
-VessY0lfu8IyZhDv9H8lOEQxa7MoHqzwIYH12mKIHSLmKxvgV6pQ4KBxeJ504RRt
-dh31FK1IdEQIpponZqmMsj35GHRVdQXe7bD9Wkh9hAmx4XSJgbVHxTEBNoOqa7fv
-Vu7zwqZoRIAWxD7sZAhvA3ELQQS4tBMpJ5hQQ8AYveumnRr82ZHG8NE5a/X+6HTs
-EBfb9y+bhmrdgXdgmKZxnrECOHka3iRVbEuA15JPqmNd7f5VXe91NcJtPr6v/rZC
-REmdMs5sC5Tk18IkzgS/h2/IZHgd+z6l4x2GOZ3C6Lo5ZRKAf0oq78wSHxj/odgL
-axp+jQinP0+1Gv7hLXwJiLlc9oevG+0uHIw08gi6N1tZw2pQaaEQm3Gz/72s/AXw
-fltbcIG7lLtwppeDIe164kLrbddR1rnhJboXYb6qFSgZkNuups/IIEQgdgvE4z3s
-Sd9nH8qLW2fmSItoeT0JWpZUlCSOwZfodG5xgXFU9N+GxbObs/sfqsnHsvfrSv3h
-Hh49I/H8IWsRi+DDanD0MaSC2X3ZJEROrpj1T2Lam8mOolK2zY0=
-=nkHQ
------END PGP SIGNATURE-----
-
---2oS5YaxWCcQjTEyO--
+--=20
+Bye, Peter Korsgaard
