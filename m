@@ -2,85 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 401892CE8D0
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Dec 2020 08:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442C92CEB4A
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Dec 2020 10:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727831AbgLDHuL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Dec 2020 02:50:11 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:45320 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726669AbgLDHuL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 4 Dec 2020 02:50:11 -0500
-X-Greylist: delayed 486 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 02:50:11 EST
-Received: from localhost.localdomain (unknown [124.16.141.242])
-        by APP-01 (Coremail) with SMTP id qwCowABX9o0a6MlfsIDYAA--.25775S2;
-        Fri, 04 Dec 2020 15:41:14 +0800 (CST)
-From:   Xu Wang <vulab@iscas.ac.cn>
-To:     kblaiech@nvidia.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: mlxbf: Fix an error pointer vs NULL check
-Date:   Fri,  4 Dec 2020 07:41:11 +0000
-Message-Id: <20201204074111.1359-1-vulab@iscas.ac.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: qwCowABX9o0a6MlfsIDYAA--.25775S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrtF13Ar1DtFyfArWftrW8Zwb_yoW8Jryfpr
-        4ruFZ0k345KrW2qwsrX3Z5XFyYywnxtay0krW8uwsI9Fs8JrWDZF1rAFWj9r4SyrZ5uw45
-        tF90yFW3CFWUZw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_GF4l42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU0UGYPUUUUU==
-X-Originating-IP: [124.16.141.242]
-X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCwkAA1z4joXwngAAsA
+        id S1728360AbgLDJqv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Dec 2020 04:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727430AbgLDJqu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Dec 2020 04:46:50 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536A2C061A4F
+        for <linux-i2c@vger.kernel.org>; Fri,  4 Dec 2020 01:46:10 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id d17so7742428ejy.9
+        for <linux-i2c@vger.kernel.org>; Fri, 04 Dec 2020 01:46:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=13j7//U5ngAAwJ/+cKruaoMObrSqoN1DZscR3S47Ako=;
+        b=hMRjcGrjmQsE+J2JLEUdAS62G7hoO/ZiYlUf7DBnIj5ngvK67B9n6RIo/3wgMPiwol
+         OXY6H9VzG3g9+V9pD0ix5Vq6VHrb1gouXcZ0xBAb8EycOIhoIYBHfYH7StKrEyWk01v4
+         Q+LPkOT/i1FoQWUk8hMudFUJLnk14jvmRGiFjRFp29Jmlljdt75yItEEa4idtYwwH6aN
+         vqgyUoO4m4Lk+3Cs7JW9OTrOFxoRJZet9lXhmtr5bI022Js/eJbb8ut0S7CaH+xN4vRo
+         Nc1KqYOmrIYHnjptq3bjMsOOcIaSpSuitAzETyzCTo5mMm0KmRGOuLfpUdH1Ed3vyDU4
+         l8iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=13j7//U5ngAAwJ/+cKruaoMObrSqoN1DZscR3S47Ako=;
+        b=hbGhsWkxqxu5SMoMCRhM1BcfToWRF8R98YWcKRSCoajACAcF+5QHtVrGqUNRWjwk+o
+         PxGXBwiAjAu4mtsTMMZe/KQupt5oTVWjX4Yz6iamVd4Zz3GTkIPGIFWz3B8vHmdmk2O+
+         MMvL5ESNMWK+XxOhGWuRoiO88ebdLetkGXlOTRYn9v+3OSMxKy8BVAqCsnrntWkkbY69
+         B8kPr5dk5p0XwY6xtX2eMDmZxqdnCH7kwwSojNyVkNAxSN0gcLZ18xScTBL0ZOznORis
+         fTE73kisptuGiuw6QCCXLTxlGrdkPsLUE36lTRDFFAsYklf7L0xSoFGo9/vtMJORDG4W
+         /pBw==
+X-Gm-Message-State: AOAM532IF10IEGpURC+mUit+pNdVzEVxf8hNwkfVnn5u9ZI8vZI1VRg9
+        dmwHt1yX978PYGbGnATQE45f8f9BIC89+VLiMlAJXUmngWQ=
+X-Google-Smtp-Source: ABdhPJygQa2sSe05Xs+oK8luho4EHcatB4h+cHNF7dz6qjfLD8QecuHskOlOv3cTChSAqlcJP3eT2vKL8X/WPwLy8+c=
+X-Received: by 2002:a17:906:3513:: with SMTP id r19mr6151541eja.445.1607075169050;
+ Fri, 04 Dec 2020 01:46:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20201203214703.18258-1-Diego.SantaCruz@spinetix.com>
+In-Reply-To: <20201203214703.18258-1-Diego.SantaCruz@spinetix.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Fri, 4 Dec 2020 10:45:58 +0100
+Message-ID: <CAMpxmJWL+gBAxe10KX2aYDFR2aWxDHCquewAdF5jvaqkY1pufQ@mail.gmail.com>
+Subject: Re: [PATCH] misc: eeprom: at24: fix NVMEM name with custom AT24
+ device name
+To:     Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In case of error, the function devm_ioremap() returns NULL pointer not
-ERR_PTR(). The IS_ERR() test in the return value check should be
-replaced with NULL test.
+On Thu, Dec 3, 2020 at 10:47 PM Diego Santa Cruz
+<Diego.SantaCruz@spinetix.com> wrote:
+>
+> When the "label" property is set on the AT24 EEPROM the NVMEM devid is
+> set to NVMEM_DEVID_NONE, but it is not effective since there is a
+> leftover line setting it back to NVMEM_DEVID_AUTO a few lines after.
+>
+> Fixes: 61f764c307f6 ("eeprom: at24: Support custom device names for AT24 EEPROMs")
+> Signed-off-by: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
+> ---
+>  drivers/misc/eeprom/at24.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index 35fabaf539b7..fbf69148b5ad 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -704,7 +704,6 @@ static int at24_probe(struct i2c_client *client)
+>
+>         nvmem_config.type = NVMEM_TYPE_EEPROM;
+>         nvmem_config.dev = dev;
+> -       nvmem_config.id = NVMEM_DEVID_AUTO;
+>         nvmem_config.read_only = !writable;
+>         nvmem_config.root_only = !(flags & AT24_FLAG_IRUGO);
+>         nvmem_config.owner = THIS_MODULE;
+> --
+> 2.18.4
+>
 
-Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
----
- drivers/i2c/busses/i2c-mlxbf.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Goog catch, thanks. Applied to fixes.
 
-diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-index 33574d40ea9c..73a58beb7b82 100644
---- a/drivers/i2c/busses/i2c-mlxbf.c
-+++ b/drivers/i2c/busses/i2c-mlxbf.c
-@@ -1258,9 +1258,9 @@ static int mlxbf_i2c_get_gpio(struct platform_device *pdev,
- 		return -EFAULT;
- 
- 	gpio_res->io = devm_ioremap(dev, params->start, size);
--	if (IS_ERR(gpio_res->io)) {
-+	if (!gpio_res->io) {
- 		devm_release_mem_region(dev, params->start, size);
--		return PTR_ERR(gpio_res->io);
-+		return -ENOMEM;
- 	}
- 
- 	return 0;
-@@ -1323,9 +1323,9 @@ static int mlxbf_i2c_get_corepll(struct platform_device *pdev,
- 		return -EFAULT;
- 
- 	corepll_res->io = devm_ioremap(dev, params->start, size);
--	if (IS_ERR(corepll_res->io)) {
-+	if (!corepll_res->io) {
- 		devm_release_mem_region(dev, params->start, size);
--		return PTR_ERR(corepll_res->io);
-+		return -ENOMEM;
- 	}
- 
- 	return 0;
--- 
-2.17.1
-
+Bartosz
