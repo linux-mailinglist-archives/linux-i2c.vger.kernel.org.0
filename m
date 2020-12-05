@@ -2,168 +2,150 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABFA2CFDB5
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Dec 2020 19:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0722CFCFA
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Dec 2020 19:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbgLESnH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Dec 2020 13:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
+        id S1729260AbgLEST1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Dec 2020 13:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727301AbgLEQ4O (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Dec 2020 11:56:14 -0500
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF674C02A181;
-        Sat,  5 Dec 2020 08:30:12 -0800 (PST)
-Received: from localhost (home.natalenko.name [151.237.229.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 143D98C5EF8;
-        Sat,  5 Dec 2020 17:24:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1607185444;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GK1PlK9w+nRMGOMB2nAyoVtDY3FO7kDEwHLHCW8nhA4=;
-        b=iQeJiu7i/J2REiY0NP5gViG9pXMAflZwOOLWauV7OcFN7IsZqGt3kPudD6ohc6vbbp3fp0
-        CCbiBkbXBrnOGVg21+GRS1wTFXbzMdo0TvcUZP0y6SBD81klOVGRbFhQvleWZ6noko+1VY
-        gejBdQqT9nF2LhSTprt93n5ZlWy6d3U=
-Date:   Sat, 5 Dec 2020 17:24:03 +0100
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     bugzilla-daemon@bugzilla.kernel.org, jdelvare@suse.de,
-        wsa@kernel.org, benjamin.tissoires@redhat.com, rui.zhang@intel.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Carlos Jimenez <javashin1986@gmail.com>
-Subject: Re: [Bug 202453] TRACE irq/18-i801_smb Tainted when enabled
- threadirqs in kernel commandline.
-Message-ID: <20201205162403.sey33v2js2cs65q4@spock.localdomain>
-References: <bug-202453-19117@https.bugzilla.kernel.org/>
- <bug-202453-19117-0k1QQBMPTi@https.bugzilla.kernel.org/>
- <20201204201930.vtvitsq6xcftjj3o@spock.localdomain>
- <87zh2s8buh.fsf@nanos.tec.linutronix.de>
+        with ESMTP id S1727897AbgLERsl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Dec 2020 12:48:41 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B168C02A180;
+        Sat,  5 Dec 2020 08:29:35 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id cm17so9151843edb.4;
+        Sat, 05 Dec 2020 08:29:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WQqtIew8z+9SUipnxpDKUsTvv38hqnp7W7iU0a6e5Fs=;
+        b=GV4VZYw1USsEYDmt5Ru/pQcKr7T1UdSSpOCBRlAbP8QAhwwu0CCMLyCzFJ18XKNPgm
+         r9M7/ySC7rbc3yLT9G2f74xyA5WKGxwwtn7UdHmYHS76B03NBCVaKuYWAWtROMHc2KG1
+         txGa81sd1BgTrMOYlJN+gM95NaHFz5+lz5cvr65mR4BiXh496tEM3I6rRbZsTGNBK5JP
+         fApOzjOMkYrZExucX0Cbrap3P8wVXINi7foxYpM4EZTh1trCPDs9sQ7NLjLOYMKcrhg7
+         m0XBIWLuxQnsqyHIElyT5I8gCk9b+p4Jmz2FS4OgqlazTrXVmskWhY361EyiRqiUiJkj
+         PuEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WQqtIew8z+9SUipnxpDKUsTvv38hqnp7W7iU0a6e5Fs=;
+        b=nhEQI0Eb1Dh1exdHxlw2WnrHI9ZcaQV0kiUHV4sgNQ8Kk1nbSOduY4qGVQhFhRDtZ+
+         L/ZMC2Cszi/kUoLAQE/TBtMANSixotQPFpyw8sM0EBZrnSKz5DVZUfKVFjQx33LbY2Qh
+         S3ZacZ0dQtLj77r2SqquZjbXm4eFh3EFy1y4eCjIIR6XN3fdKJYLSj1obl7PTwLqvOyJ
+         V7YuATxBVpIUDe3RmLHTAGHhIAzP/Rgp4LX4SQUFjVoyJli/aD688av+V5hvvPjPP8c7
+         JINvynoqWIg2ZVCwjAiRmwoSgAyU4eWVTrJ/0l2R9dE+3kh18XuQpTeX7LzN+tclT48i
+         VUcw==
+X-Gm-Message-State: AOAM531ENOTwSmMc7hlcXTmgx1GY4o84trTUn+AlHBEBIp+CQEBsw7jg
+        0EQZBWl8QILbkII/i1E+2tE=
+X-Google-Smtp-Source: ABdhPJxHhxyTbkf8AeKc304pFq3fBp8Q+sg3EtAFKXfOlBuOEWGoJ+qCdATY9KOgo5nUYvxo7zkm1g==
+X-Received: by 2002:aa7:c403:: with SMTP id j3mr12538643edq.217.1607185774251;
+        Sat, 05 Dec 2020 08:29:34 -0800 (PST)
+Received: from ubuntu2004 ([188.24.159.61])
+        by smtp.gmail.com with ESMTPSA id v9sm5438858ejk.48.2020.12.05.08.29.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Dec 2020 08:29:33 -0800 (PST)
+Date:   Sat, 5 Dec 2020 18:29:33 +0200
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v2 00/18] Add CMU/RMU/DMA/MMC/I2C support for Actions
+ Semi S500 SoCs
+Message-ID: <20201205162933.GA187065@ubuntu2004>
+References: <cover.1605823502.git.cristian.ciocaltea@gmail.com>
+ <20201205061115.GB4068@thinkpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87zh2s8buh.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <20201205061115.GB4068@thinkpad>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Dec 05, 2020 at 05:19:18PM +0100, Thomas Gleixner wrote:
-> On Fri, Dec 04 2020 at 21:19, Oleksandr Natalenko wrote:
-> > On Thu, Dec 03, 2020 at 07:04:00PM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
-> >>    2) Have a wrapper around handle_generic_irq() which ensures that
-> >>       interrupts are disabled before invoking it.
+Hi Mani,
+
+On Sat, Dec 05, 2020 at 11:41:15AM +0530, Manivannan Sadhasivam wrote:
+> Hi Cristi,
 > 
-> > The question is whether it's guaranteed under all circumstances
-> > including forced irq threading. The i801 driver has assumptions about
-> > this, so I wouldn't be surprised if there are more.
+> On Fri, Nov 20, 2020 at 01:55:54AM +0200, Cristian Ciocaltea wrote:
+> > Hi,
+> > 
+> > This patchset brings a series of improvements for the Actions Semi S500
+> > SoCs family, by adding support for Clock & Reset Management Units, DMA,
+> > MMC, I2C & SIRQ controllers.
+> > 
+> > Please note the patches consist mostly of DTS and bindings/compatibles
+> > changes, since all the work they depend on has been already merged,
+> > i.e. clock fixes/additions, pinctrl driver, sirq driver.
+> > 
+> > For the moment, I have only enabled the features I could test on
+> > RoseapplePi SBC.
+> > 
 > 
-> Assuming that a final answer might take some time, the below which
-> implements #2 will make it at least work for now.
-> 
+> I was hoping to apply this series for v5.11 but we ran out of time. So expect
+> this series to be in v5.12.
+
+No problem, thanks a lot for taking care of this!
+
+Kind regards,
+Cristi
+
 > Thanks,
+> Mani
 > 
->         tglx
-> ---
-> Subject: genirq, i2c: Provide and use generic_dispatch_irq()
-> From: Thomas Gleixner <tglx@linutronix.de>
-> Date: Thu, 03 Dec 2020 19:12:24 +0100
-> 
-> Carlos reported that on his system booting with 'threadirqs' on the command
-> line result in the following warning:
-> 
-> irq 31 handler irq_default_primary_handler+0x0/0x10 enabled interrupts
-> WARNING: CPU: 2 PID: 989 at kernel/irq/handle.c:153 __handle_irq_event_percpu+0x19f/0x1b0
-> 
-> The reason is in the i2c stack:
-> 
->     i801_isr()
->       i801_host_notify_isr()
->         i2c_handle_smbus_host_notify()
->           generic_handle_irq()
-> 
-> and that explodes with forced interrupt threading because it's called with
-> interrupts enabled.
-> 
-> It would be possible to set IRQF_NO_THREAD on the i801 interrupt to exclude
-> it from force threading, but that would break on RT and require a larger
-> update.
-> 
-> It's also unclear whether there are other drivers which can reach that code
-> path via i2c_slave_host_notify_cb(). As there are enough i2c drivers which
-> use threaded interrupt handlers by default it seems not completely
-> impossible that this can happen even without force threaded interrupts.
-> 
-> For a quick fix provide a wrapper around generic_handle_irq() which has a
-> local_irq_save/restore() around the invocation and use it in the i2c code.
-> 
-> Reported-by: Carlos Jimenez <javashin1986@gmail.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=202453
-> ---
->  drivers/i2c/i2c-core-base.c |    2 +-
->  include/linux/irqdesc.h     |    1 +
->  kernel/irq/irqdesc.c        |   20 ++++++++++++++++++++
->  3 files changed, 22 insertions(+), 1 deletion(-)
-> 
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -1385,7 +1385,7 @@ int i2c_handle_smbus_host_notify(struct
->  	if (irq <= 0)
->  		return -ENXIO;
->  
-> -	generic_handle_irq(irq);
-> +	generic_dispatch_irq(irq);
->  
->  	return 0;
->  }
-> --- a/include/linux/irqdesc.h
-> +++ b/include/linux/irqdesc.h
-> @@ -153,6 +153,7 @@ static inline void generic_handle_irq_de
->  }
->  
->  int generic_handle_irq(unsigned int irq);
-> +int generic_dispatch_irq(unsigned int irq);
->  
->  #ifdef CONFIG_HANDLE_DOMAIN_IRQ
->  /*
-> --- a/kernel/irq/irqdesc.c
-> +++ b/kernel/irq/irqdesc.c
-> @@ -652,6 +652,26 @@ int generic_handle_irq(unsigned int irq)
->  }
->  EXPORT_SYMBOL_GPL(generic_handle_irq);
->  
-> +/**
-> + * generic_dispatch_irq - Dispatch an interrupt from an interrupt handler
-> + * @irq:	The irq number to handle
-> + *
-> + * A wrapper around generic_handle_irq() which ensures that interrupts are
-> + * disabled when the primary handler of the dispatched irq is invoked.
-> + * This is useful for interrupt handlers with dispatching to be safe for
-> + * the forced threaded case.
-> + */
-> +int generic_dispatch_irq(unsigned int irq)
-> +{
-> +	unsigned long flags;
-> +	int ret;
-> +
-> +	local_irq_save(&flags);
-> +	ret = generic_handle_irq(irq);
-> +	local_irq_restore(&flags);
-
-FWIW, for me &flags explodes build on v5.10-rc6. I had to change it to local_irq_save/restore(flags) (without taking an address via &).
-
-> +	return ret;
-> +}
-> +
->  #ifdef CONFIG_HANDLE_DOMAIN_IRQ
->  /**
->   * __handle_domain_irq - Invoke the handler for a HW irq belonging to a domain
-
--- 
-  Oleksandr Natalenko (post-factum)
+> > Thanks,
+> > Cristi
+> > 
+> > Changes in v2:
+> > - Added new bindings/compatibles for S500 DMA, MMC & I2C controllers
+> > - Added support for the SIRQ controller
+> > - Added new entries in MAINTAINERS
+> > - Updated naming of some patches in v1
+> > 
+> > Cristian Ciocaltea (18):
+> >   arm: dts: owl-s500: Add Clock Management Unit
+> >   arm: dts: owl-s500: Set CMU clocks for UARTs
+> >   arm: dts: owl-s500: Add Reset controller
+> >   dt-bindings: dma: owl: Add compatible string for Actions Semi S500 SoC
+> >   dmaengine: owl: Add compatible for the Actions Semi S500 DMA
+> >     controller
+> >   arm: dts: owl-s500: Add DMA controller
+> >   arm: dts: owl-s500: Add pinctrl & GPIO support
+> >   dt-bindings: mmc: owl: Add compatible string for Actions Semi S500 SoC
+> >   arm: dts: owl-s500: Add MMC support
+> >   dt-bindings: i2c: owl: Convert Actions Semi Owl binding to a schema
+> >   MAINTAINERS: Update entry for Actions Semi Owl I2C binding
+> >   i2c: owl: Add compatible for the Actions Semi S500 I2C controller
+> >   arm: dts: owl-s500: Add I2C support
+> >   arm: dts: owl-s500: Add SIRQ controller
+> >   arm: dts: owl-s500-roseapplepi: Use UART clock from CMU
+> >   arm: dts: owl-s500-roseapplepi: Add uSD support
+> >   arm: dts: owl-s500-roseapplepi: Add I2C pinctrl configuration
+> >   MAINTAINERS: Add linux-actions ML for Actions Semi Arch
+> > 
+> >  .../devicetree/bindings/dma/owl-dma.yaml      |   5 +-
+> >  .../devicetree/bindings/i2c/i2c-owl.txt       |  29 ----
+> >  .../devicetree/bindings/i2c/i2c-owl.yaml      |  62 ++++++++
+> >  .../devicetree/bindings/mmc/owl-mmc.yaml      |   4 +-
+> >  MAINTAINERS                                   |   3 +-
+> >  arch/arm/boot/dts/owl-s500-roseapplepi.dts    |  97 +++++++++++-
+> >  arch/arm/boot/dts/owl-s500.dtsi               | 140 ++++++++++++++++++
+> >  drivers/dma/owl-dma.c                         |   1 +
+> >  drivers/i2c/busses/i2c-owl.c                  |   1 +
+> >  9 files changed, 304 insertions(+), 38 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-owl.txt
+> >  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-owl.yaml
+> > 
+> > -- 
+> > 2.29.2
+> > 
