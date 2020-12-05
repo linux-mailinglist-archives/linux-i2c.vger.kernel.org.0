@@ -2,141 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21632CF9F7
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Dec 2020 07:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB11F2CFBB1
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Dec 2020 16:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728431AbgLEGMH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Dec 2020 01:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgLEGMH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Dec 2020 01:12:07 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA85CC0613D1
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Dec 2020 22:11:26 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id j1so4361086pld.3
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Dec 2020 22:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D7AczkzMwnCTqGNk/WinEN4GxDXh0TBrfFJyaIs9yxY=;
-        b=W6xJPGENxbezmkuhhtaWZSnVB8iblzBFz/ZlCgViToQq/1fJIkWo7hIZ6s89WkKvom
-         fKZ1/KGgHcS6ZuRfbmQebsZHKpdk2DSAJVlITgghsbHI0FWR7kMbuabZvjrU3pAT2Uql
-         k4hJtbP6tyfLVhUOe3VPtfnV1ln245JCCOPFNJRGPu3v6uzh2kuyBQeFvABGJfzt9NBw
-         9By5QUj73eF6+qeQLjlh+Nc8Ya+chlN4VLJXwdHM+vJqOJuZcpcHMiXUgyUQuk4w00b5
-         zTDoZia8oFImOhBVf3eAcExH7pekUIWZ/4NPjIKRyo5rF02BDVOFEBJYBXVIUshvK0j6
-         LzhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D7AczkzMwnCTqGNk/WinEN4GxDXh0TBrfFJyaIs9yxY=;
-        b=MrKTgdsdcZb/4sKOky3Loj+2++JYbwYudDgdToP7ELPT7mJMZ6Vq6IJzyN1D0DXQ1+
-         rbJSSQNDC6qru+YquPQ2bNhc/u9knxQNRbDQi3hR+GXJ6hYndmYRU2xDAjqPdCiKpvd5
-         N9eM7YC2YzNjGWay4gAqAqNKxXsPaQYJWyL92CTqd54PY2fOAIBrr01INrnEfX+luIW5
-         cxOA90wh/+vU4pBa0pRToFryekFEeooLGKVGaEsxzsrBZX6sba6Rjv0QMCKOJsa83zEu
-         tGat5BHJjEKDTODY6rjKSDfq5Wj4NBejaIm63Qecuk1G6+ItURaxl2bQFHZN2KZe7hR4
-         DYIg==
-X-Gm-Message-State: AOAM530JI5AmBm8FiDI3+92Es5OcYodlqehANlRD1lMPkS9w7qxeQQ8t
-        1VYVXjvLLeiL0mDAV9fj5/TX
-X-Google-Smtp-Source: ABdhPJzvEXQ4h/j2yTz8qIDNrIHGaz8TRTASTCZ9h+hLDXfffPdy21Bc34vKlGOcvRYRYnuIk6pB4w==
-X-Received: by 2002:a17:90a:7e95:: with SMTP id j21mr7373400pjl.217.1607148686216;
-        Fri, 04 Dec 2020 22:11:26 -0800 (PST)
-Received: from thinkpad ([2409:4072:648e:8bd1:74b2:a4d8:e3fe:225b])
-        by smtp.gmail.com with ESMTPSA id q23sm6915493pfg.18.2020.12.04.22.11.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 22:11:25 -0800 (PST)
-Date:   Sat, 5 Dec 2020 11:41:15 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Subject: Re: [PATCH v2 00/18] Add CMU/RMU/DMA/MMC/I2C support for Actions
- Semi S500 SoCs
-Message-ID: <20201205061115.GB4068@thinkpad>
-References: <cover.1605823502.git.cristian.ciocaltea@gmail.com>
+        id S1726395AbgLEPLk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Dec 2020 10:11:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44142 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726867AbgLEO7a (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 5 Dec 2020 09:59:30 -0500
+Date:   Sat, 5 Dec 2020 14:49:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607176156;
+        bh=avTC0vKm+HCnpWOb2l0x6fMZwug0bB+vBnqbMQiiwTM=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NHwXk6MB73OjROTKxa+Ok66U4PLyGi7zDvwEe/EhcXjvgsFs26jY7GG2tzefRPA+e
+         IPZBNghbWMUXTKRkHDYEkkt7WEx5yLh5AHgc7Vn+hT0+irGDsaQtLM/+yfc6+t+ppA
+         nBY8CNMpa/Grnq2NgDWz8Mk0OhqF/Cr+oK7XYmcnObS8h1YZcQtzpC/EVhAi33kPSq
+         OmlDhy04aX2dz5S6ZZlRcJI4m4+y7X4w1JOH8P8qqaA34MRE4flZWcvWsCNp/vtpPX
+         N4tJlqMij1fIA1BIHrDciXEwKL6NRGzi0KMY6bKFxdvmbL8G88I5vjg0AV35R3M0eA
+         mt6tvgFYHoNrw==
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Vadim Pasternak <vadimp@mellanox.com>,
+        Khalil Blaiech <kblaiech@mellanox.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: mlxbf: select CONFIG_I2C_SLAVE
+Message-ID: <20201205134907.GA5761@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        Khalil Blaiech <kblaiech@mellanox.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20201203223311.1251788-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qDbXVdCdHGoSgWSk"
 Content-Disposition: inline
-In-Reply-To: <cover.1605823502.git.cristian.ciocaltea@gmail.com>
+In-Reply-To: <20201203223311.1251788-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Cristi,
 
-On Fri, Nov 20, 2020 at 01:55:54AM +0200, Cristian Ciocaltea wrote:
-> Hi,
-> 
-> This patchset brings a series of improvements for the Actions Semi S500
-> SoCs family, by adding support for Clock & Reset Management Units, DMA,
-> MMC, I2C & SIRQ controllers.
-> 
-> Please note the patches consist mostly of DTS and bindings/compatibles
-> changes, since all the work they depend on has been already merged,
-> i.e. clock fixes/additions, pinctrl driver, sirq driver.
-> 
-> For the moment, I have only enabled the features I could test on
-> RoseapplePi SBC.
-> 
+--qDbXVdCdHGoSgWSk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I was hoping to apply this series for v5.11 but we ran out of time. So expect
-this series to be in v5.12.
+On Thu, Dec 03, 2020 at 11:32:50PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> If this is not enabled, the interfaces used in this driver do not work:
+>=20
+> drivers/i2c/busses/i2c-mlxbf.c:1888:3: error: implicit declaration of fun=
+ction 'i2c_slave_event' [-Werror,-Wimplicit-function-declaration]
+>                 i2c_slave_event(slave, I2C_SLAVE_WRITE_REQUESTED, &value);
+>                 ^
+> drivers/i2c/busses/i2c-mlxbf.c:1888:26: error: use of undeclared identifi=
+er 'I2C_SLAVE_WRITE_REQUESTED'
+>                 i2c_slave_event(slave, I2C_SLAVE_WRITE_REQUESTED, &value);
+>                                        ^
+> drivers/i2c/busses/i2c-mlxbf.c:1890:32: error: use of undeclared identifi=
+er 'I2C_SLAVE_WRITE_RECEIVED'
+>                 ret =3D i2c_slave_event(slave, I2C_SLAVE_WRITE_RECEIVED,
+>                                              ^
+> drivers/i2c/busses/i2c-mlxbf.c:1892:26: error: use of undeclared identifi=
+er 'I2C_SLAVE_STOP'
+>                 i2c_slave_event(slave, I2C_SLAVE_STOP, &value);
+>                                        ^
+>=20
+> Fixes: b5b5b32081cd ("i2c: mlxbf: I2C SMBus driver for Mellanox BlueField=
+ SoC")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks,
-Mani
+Applied to for-current, thanks!
 
-> Thanks,
-> Cristi
-> 
-> Changes in v2:
-> - Added new bindings/compatibles for S500 DMA, MMC & I2C controllers
-> - Added support for the SIRQ controller
-> - Added new entries in MAINTAINERS
-> - Updated naming of some patches in v1
-> 
-> Cristian Ciocaltea (18):
->   arm: dts: owl-s500: Add Clock Management Unit
->   arm: dts: owl-s500: Set CMU clocks for UARTs
->   arm: dts: owl-s500: Add Reset controller
->   dt-bindings: dma: owl: Add compatible string for Actions Semi S500 SoC
->   dmaengine: owl: Add compatible for the Actions Semi S500 DMA
->     controller
->   arm: dts: owl-s500: Add DMA controller
->   arm: dts: owl-s500: Add pinctrl & GPIO support
->   dt-bindings: mmc: owl: Add compatible string for Actions Semi S500 SoC
->   arm: dts: owl-s500: Add MMC support
->   dt-bindings: i2c: owl: Convert Actions Semi Owl binding to a schema
->   MAINTAINERS: Update entry for Actions Semi Owl I2C binding
->   i2c: owl: Add compatible for the Actions Semi S500 I2C controller
->   arm: dts: owl-s500: Add I2C support
->   arm: dts: owl-s500: Add SIRQ controller
->   arm: dts: owl-s500-roseapplepi: Use UART clock from CMU
->   arm: dts: owl-s500-roseapplepi: Add uSD support
->   arm: dts: owl-s500-roseapplepi: Add I2C pinctrl configuration
->   MAINTAINERS: Add linux-actions ML for Actions Semi Arch
-> 
->  .../devicetree/bindings/dma/owl-dma.yaml      |   5 +-
->  .../devicetree/bindings/i2c/i2c-owl.txt       |  29 ----
->  .../devicetree/bindings/i2c/i2c-owl.yaml      |  62 ++++++++
->  .../devicetree/bindings/mmc/owl-mmc.yaml      |   4 +-
->  MAINTAINERS                                   |   3 +-
->  arch/arm/boot/dts/owl-s500-roseapplepi.dts    |  97 +++++++++++-
->  arch/arm/boot/dts/owl-s500.dtsi               | 140 ++++++++++++++++++
->  drivers/dma/owl-dma.c                         |   1 +
->  drivers/i2c/busses/i2c-owl.c                  |   1 +
->  9 files changed, 304 insertions(+), 38 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-owl.txt
->  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-owl.yaml
-> 
-> -- 
-> 2.29.2
-> 
+
+--qDbXVdCdHGoSgWSk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/Lj84ACgkQFA3kzBSg
+KbY3gQ/9HdDd3tmrX2RSD5pjtUUuQEa0bKb5t41oHP7lnR/WepimCmAWce4QBETd
+ugb81HuAUYhX0tbzQn+TRKC6jYobyChPKpdVVAIbtqBCt1ScLSnvXxRIB7Q5VNJI
+Uwhj0gqnITyvzNdc5if0wGNXk3CphcKkvp0LgpfjxIku+0BQSt5dyCmYTetB2Yy2
+crI6YnBYKu8VbZR3cnTDcTypqDr3tKenE0h2mVqNtbW4H567I6mw5Wi09NBJsANS
+F3qlJjrOfHlWvJWd5iqGKUF4xsEw/Hg63977ulrbVvZnFTIVXsCjHQ9JGt03mHr2
+i0HB31N46gk0LUjNzGU8Oig2UI4ybUl/IQPitroBxahphGU0D44QF2Kf+aQMo4FD
+v3mmnQykUA2+IFAtXucqvKyxrjkHduEi4pcDQVYgOO7LwNEwVuJvqDLJO4mY84JL
+cqiHEdcAZp3Gxi81Wn94TTRJ9MRNNzKLB4DmLIWKQNke0p4+AGSMaD6zlQt2WS66
+nTE5JcKwU/fDxlO1eO7o7aMAKttufq5/wxgjMNTPdBDLtmDUIILNfcpuzH7AdYOR
+Sd6LXCAeOegwog7ipa0yBrWRj9SVRjKtpNP+DmVdWvBxPZOAOqmas/HLeo3yuGHy
+0tGIAYWj+icVlmXrFxWifQC3VxPl+NJP9qR2NIcRijm3dD/GDgA=
+=OE8V
+-----END PGP SIGNATURE-----
+
+--qDbXVdCdHGoSgWSk--
