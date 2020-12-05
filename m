@@ -2,79 +2,160 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9D32CFCF9
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Dec 2020 19:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C9A2CFD02
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Dec 2020 19:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729318AbgLEST1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Dec 2020 13:19:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42900 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727922AbgLERte (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 5 Dec 2020 12:49:34 -0500
-Date:   Sat, 5 Dec 2020 15:12:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607177550;
-        bh=CIg1dKdZ01j4X7aWOWsE5DYxc5DliM0YMIs1RD+O+ME=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i8IOIjDQTsJhAL/9CwrhMCBBe8k3MRfUu/7G8dpEfX+uS/LGMeRF0snMryfw87flL
-         r5s3GeKQE02CTRRGWQL5+MTJgh3bJbS+wxZJfe2fbTJ7nOEtODsqHwGT6gR+n8kE6v
-         pv5FG5zE9TqNR7HytvPk/dkmMc1NuNOxGxKXqYixaiLODc6ssY3gGIxPcUBsyivwba
-         222almcB+JmHOy0sDbItS08zozEuU7EyvhE9aqtdA6veC1e27NICOtFBU2J9PwIifr
-         RHLzELVUTOxBFZlcPBmNcEsowPlje5fYulwQ5/oX52RS2LUmgAmOaS5ZHypx6Yg9wm
-         2uZT5VG/MqqmQ==
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Wang Xiaojun <wangxiaojun11@huawei.com>
-Cc:     kblaiech@nvidia.com, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: mlxbf: Fix the return check of devm_ioremap and
- ioremap
-Message-ID: <20201205141227.GB5761@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Wang Xiaojun <wangxiaojun11@huawei.com>, kblaiech@nvidia.com,
-        linux-i2c@vger.kernel.org
-References: <20201203014647.3468430-1-wangxiaojun11@huawei.com>
+        id S1729324AbgLEST2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Dec 2020 13:19:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728047AbgLERzF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Dec 2020 12:55:05 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558D2C02B8FC;
+        Sat,  5 Dec 2020 08:25:03 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1607185158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1FFJXTlgaPHPlq6JWR5jS6UY7uzh0dgGC/bjFp+gbqs=;
+        b=nNQoqrajM4mtTtRcF4zjUNShWLzosjUuF6Dq5zJws3xqTuorL0/J5XmBRONWGCs0HkMshG
+        QucEVw6SpX+2R4I3BcxcwOdtywz/FteHm0+FmriPyLOHLyWhufgRILYpWWyfDcN1fx9TPC
+        AtM9vLxfx/tnHZ4HwuDkaNb9i6mlUcfUDgOF7tTVylSjE1qW+t2Ld8UupZNmLXwVZ7EyjR
+        1ODR/p+NvYzrHI8FbI1c72BAFsQU4qTenwqmzQfRdIVPlM8m24OhTTuYa4ate441pnR/3h
+        u+K0bg8duDCOHGDKDUaqrZbZnZkfZ9ruCX75CzLPPYRKsapY9zmW7qZ2RCer4w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1607185158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1FFJXTlgaPHPlq6JWR5jS6UY7uzh0dgGC/bjFp+gbqs=;
+        b=YGJ7VAeVnR3FO93VpAq1Z2Jq1Qn7TDFMCAN/z+cTtrHFilQiMFhSsX0w4Qo8oNz5+eO9Kh
+        2Fq+x4fOajQ+E1BA==
+To:     Oleksandr Natalenko <oleksandr@natalenko.name>,
+        bugzilla-daemon@bugzilla.kernel.org
+Cc:     jdelvare@suse.de, wsa@kernel.org, benjamin.tissoires@redhat.com,
+        rui.zhang@intel.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Carlos Jimenez <javashin1986@gmail.com>
+Subject: Re: [Bug 202453] TRACE irq/18-i801_smb Tainted when enabled threadirqs in kernel commandline.
+In-Reply-To: <20201204201930.vtvitsq6xcftjj3o@spock.localdomain>
+References: <bug-202453-19117@https.bugzilla.kernel.org/> <bug-202453-19117-0k1QQBMPTi@https.bugzilla.kernel.org/> <20201204201930.vtvitsq6xcftjj3o@spock.localdomain>
+Date:   Sat, 05 Dec 2020 17:19:18 +0100
+Message-ID: <87zh2s8buh.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gj572EiMnwbLXET9"
-Content-Disposition: inline
-In-Reply-To: <20201203014647.3468430-1-wangxiaojun11@huawei.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Dec 04 2020 at 21:19, Oleksandr Natalenko wrote:
+> On Thu, Dec 03, 2020 at 07:04:00PM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
+>>    2) Have a wrapper around handle_generic_irq() which ensures that
+>>       interrupts are disabled before invoking it.
 
---gj572EiMnwbLXET9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The question is whether it's guaranteed under all circumstances
+> including forced irq threading. The i801 driver has assumptions about
+> this, so I wouldn't be surprised if there are more.
 
-On Wed, Dec 02, 2020 at 08:46:47PM -0500, Wang Xiaojun wrote:
-> devm_ioremap and ioremap may return NULL which cannot be checked
-> by IS_ERR.
->=20
-> Signed-off-by: Wang Xiaojun <wangxiaojun11@huawei.com>
-> Reported-by: Hulk Robot <hulkci@huawei.com>
+Assuming that a final answer might take some time, the below which
+implements #2 will make it at least work for now.
 
-Applied to for-current, thanks!
+Thanks,
 
+        tglx
+---
+Subject: genirq, i2c: Provide and use generic_dispatch_irq()
+From: Thomas Gleixner <tglx@linutronix.de>
+Date: Thu, 03 Dec 2020 19:12:24 +0100
 
---gj572EiMnwbLXET9
-Content-Type: application/pgp-signature; name="signature.asc"
+Carlos reported that on his system booting with 'threadirqs' on the command
+line result in the following warning:
 
------BEGIN PGP SIGNATURE-----
+irq 31 handler irq_default_primary_handler+0x0/0x10 enabled interrupts
+WARNING: CPU: 2 PID: 989 at kernel/irq/handle.c:153 __handle_irq_event_percpu+0x19f/0x1b0
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/LlUsACgkQFA3kzBSg
-KbZHfQ//SZv/0jg4PQcNbp73t3976kUqQXhy/mwPP9Hx9F4LVWrGfoP/BNxfhCLs
-PoWrSV+NPouAsZpZC13KgVZbQvsCzxCGsVGF2DrvGdLlCrgE3uyv/hn9N/RYsjpA
-P0KAYtmZoqH6kziMPDfrA3N9fwsm4a1V6+2jBqY+pZRMCKrS7BEeTh3FkhsejqbY
-Vm9I3f7FGBM0o01VhPgP8QdjEpEJJmNU+CQNGl40sHKIM0fLyERD21qwpEBATCjc
-TqcN+ibRPbh9E1a+U1nZCa1YvhMr8/sdJ6eoOTUXzkeVlnu2bsB3+CA+Bqo/x4c9
-LuPPD3ruof6iCJM10sKJbkLAm12CcNZji6/9ott1rANBgxBRgMLFuNXkMh0k5KeB
-CQl5bIRAKxQAgztBzp9oqli5EAP0gFl5LLP8GV0XWpsMClkSCLEqpRosRFLY/IbO
-fLBbYp5qz4vl9OB+V3iZYLamEa3MDAnLg+BWCB5jnIAUN6FrmBr+9iDICIsWAVgG
-ZUeYMXueIOB15+lRRllDHhbfgWZwtmgBIj40Xd7++1UeDo9YjJgCpVv5Oc6/HjgX
-A0sksjw/HHaNM9kA/C3PwRb6ZjkiIGDYLzoLd14F8lgwsOnK2UMhIVW46DohcnP8
-d7r+brycQZSFDzxxTGrvjraqfZ/zAwUDamBR+GABiVQg5fm2VUg=
-=79Vn
------END PGP SIGNATURE-----
+The reason is in the i2c stack:
 
---gj572EiMnwbLXET9--
+    i801_isr()
+      i801_host_notify_isr()
+        i2c_handle_smbus_host_notify()
+          generic_handle_irq()
+
+and that explodes with forced interrupt threading because it's called with
+interrupts enabled.
+
+It would be possible to set IRQF_NO_THREAD on the i801 interrupt to exclude
+it from force threading, but that would break on RT and require a larger
+update.
+
+It's also unclear whether there are other drivers which can reach that code
+path via i2c_slave_host_notify_cb(). As there are enough i2c drivers which
+use threaded interrupt handlers by default it seems not completely
+impossible that this can happen even without force threaded interrupts.
+
+For a quick fix provide a wrapper around generic_handle_irq() which has a
+local_irq_save/restore() around the invocation and use it in the i2c code.
+
+Reported-by: Carlos Jimenez <javashin1986@gmail.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=202453
+---
+ drivers/i2c/i2c-core-base.c |    2 +-
+ include/linux/irqdesc.h     |    1 +
+ kernel/irq/irqdesc.c        |   20 ++++++++++++++++++++
+ 3 files changed, 22 insertions(+), 1 deletion(-)
+
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1385,7 +1385,7 @@ int i2c_handle_smbus_host_notify(struct
+ 	if (irq <= 0)
+ 		return -ENXIO;
+ 
+-	generic_handle_irq(irq);
++	generic_dispatch_irq(irq);
+ 
+ 	return 0;
+ }
+--- a/include/linux/irqdesc.h
++++ b/include/linux/irqdesc.h
+@@ -153,6 +153,7 @@ static inline void generic_handle_irq_de
+ }
+ 
+ int generic_handle_irq(unsigned int irq);
++int generic_dispatch_irq(unsigned int irq);
+ 
+ #ifdef CONFIG_HANDLE_DOMAIN_IRQ
+ /*
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -652,6 +652,26 @@ int generic_handle_irq(unsigned int irq)
+ }
+ EXPORT_SYMBOL_GPL(generic_handle_irq);
+ 
++/**
++ * generic_dispatch_irq - Dispatch an interrupt from an interrupt handler
++ * @irq:	The irq number to handle
++ *
++ * A wrapper around generic_handle_irq() which ensures that interrupts are
++ * disabled when the primary handler of the dispatched irq is invoked.
++ * This is useful for interrupt handlers with dispatching to be safe for
++ * the forced threaded case.
++ */
++int generic_dispatch_irq(unsigned int irq)
++{
++	unsigned long flags;
++	int ret;
++
++	local_irq_save(&flags);
++	ret = generic_handle_irq(irq);
++	local_irq_restore(&flags);
++	return ret;
++}
++
+ #ifdef CONFIG_HANDLE_DOMAIN_IRQ
+ /**
+  * __handle_domain_irq - Invoke the handler for a HW irq belonging to a domain
