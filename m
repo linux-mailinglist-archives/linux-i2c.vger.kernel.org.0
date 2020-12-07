@@ -2,93 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADA02D0B27
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Dec 2020 08:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21452D1689
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Dec 2020 17:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726041AbgLGHeu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Dec 2020 02:34:50 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:9117 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725853AbgLGHeu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Dec 2020 02:34:50 -0500
-X-UUID: c595306f98a241539a3c857c5a4737bf-20201207
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=nxMwRSEvNImRt8FLT/HpQDb52ECXSjRWAqaVtLi/YSA=;
-        b=D/ElVMRk8klFNvyJvUfwhPYrrvN9bs5WTguTCg3QFQ/XcLF6Swxo3VmEFIEMXMvGyAidS4HqAQ83UlF6kG/JpBJDE7Y0UxtQnBWetyQe6SjcVAy7q0s4kQM3DcPOJMikjDDCIVoMnKyWQi9KEQ7H/jp14xnpd05vm0QIv0KHgko=;
-X-UUID: c595306f98a241539a3c857c5a4737bf-20201207
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2077601130; Mon, 07 Dec 2020 15:33:52 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Dec
- 2020 15:33:50 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 7 Dec 2020 15:33:49 +0800
-Message-ID: <1607326431.25719.33.camel@mhfsdcap03>
+        id S1726197AbgLGQhv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Dec 2020 11:37:51 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:60612 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726519AbgLGQhv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Dec 2020 11:37:51 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0B7GZwX1042796;
+        Mon, 7 Dec 2020 10:35:58 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1607358958;
+        bh=fWW6CWuFZDng3XQpuOdA7EkJI2MaZaeOWos/vGaNhew=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=mKX6ADblBUNutzeHDNeUaH7LJb/F2v2eR/WeGesa/PqPKnNgjd+SXf26DK7GESkwt
+         5rxcUsvhHuMc+5q/VgVosV+wxsmKR6ZK6+A9zWX3pUAPJEDY+CmR/XH8DBfycqhpda
+         n6F/2DVzxaP7sRNG1cZrJmt6MuFgQ0EnNCkRkBXo=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0B7GZwxZ008762
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 7 Dec 2020 10:35:58 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 7 Dec
+ 2020 10:35:57 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 7 Dec 2020 10:35:57 -0600
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0B7GZquT065189;
+        Mon, 7 Dec 2020 10:35:54 -0600
 Subject: Re: [v2] i2c: mediatek: Move suspend and resume handling to NOIRQ
  phase
-From:   Qii Wang <qii.wang@mediatek.com>
-To:     Grygorii Strashko <grygorii.strashko@ti.com>
+To:     Qii Wang <qii.wang@mediatek.com>
 CC:     Wolfram Sang <wsa@the-dreams.de>, <matthias.bgg@gmail.com>,
         <linux-i2c@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>
-Date:   Mon, 7 Dec 2020 15:33:51 +0800
-In-Reply-To: <629d171a-0e77-3d74-ae23-e6439dcf17b7@ti.com>
 References: <1605701861-30800-1-git-send-email-qii.wang@mediatek.com>
-         <20201202153543.GG874@kunai> <1606958735.25719.29.camel@mhfsdcap03>
-         <629d171a-0e77-3d74-ae23-e6439dcf17b7@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+ <20201202153543.GG874@kunai> <1606958735.25719.29.camel@mhfsdcap03>
+ <629d171a-0e77-3d74-ae23-e6439dcf17b7@ti.com>
+ <1607326431.25719.33.camel@mhfsdcap03>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <a9cb5ba5-f3ce-3f82-15cc-30419bb70f4e@ti.com>
+Date:   Mon, 7 Dec 2020 18:35:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 822D965A52E0536F39BE37E6EB109DFF6F0F10236684C611F6E4658D684AAC652000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <1607326431.25719.33.camel@mhfsdcap03>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGk6DQpUaGFuayB5b3UgdmVyeSBtdWNoIGZvciB5b3VyIHBhdGllbmNlIHJldmlldy4NClRoZXJl
-IGFyZSB0d28gbWFpbiBwdXJwb3NlcyBvZiB0aGlzIHBhdGNoOg0KMS5pMmNfbWFya19hZGFwdGVy
-X3N1c3BlbmRlZCZpMmNfbWFya19hZGFwdGVyX3Jlc3VtZWQNCkF2b2lkIGFjY2Vzc2luZyB0aGUg
-YWRhcHRlciB3aGlsZSBpdCBpcyBzdXNwZW5kZWQgYnkgbWFya2luZyBpdA0Kc3VzcGVuZGVkIGR1
-cmluZyBzdXNwZW5kLiAgVGhpcyBhbGxvd3MgdGhlIEkyQyBjb3JlIHRvIGNhdGNoIHRoaXMsIGFu
-ZA0KcHJpbnQgYSB3YXJuaW5nLg0KaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wcm9qZWN0
-L2xpbnV4LWFybS1rZXJuZWwvcGF0Y2gvMjAxODEyMTkxNjQ4MjcuMjA5ODUtMi13c2ErcmVuZXNh
-c0BzYW5nLWVuZ2luZWVyaW5nLmNvbS8NCg0KMi4gSVJRRl9OT19TVVNQRU5ELg0KSGF2aW5nIGlu
-dGVycnVwdHMgZGlzYWJsZWQgbWVhbnMgbm90IG9ubHkgdGhhdCBhbiBpbnRlcnJ1cHQgd2lsbCBu
-b3QNCm9jY3VyIGF0IGFuIGF3a3dhcmQgdGltZSwgYnV0IGFsc28gdGhhdCB1c2luZyBhbnkgZnVu
-Y3Rpb25hbGl0eSB0aGF0DQpyZXF1aXJlcyBpbnRlcnJ1cHRzIHdpbGwgbm90IHdvcmsuIFNvIGlm
-IHRoZSBkcml2ZXIgdXNlcyBhbiBJMkMgYnVzIG9yDQpzaW1pbGFyIHRvIHRlbGwgdGhlIGRldmlj
-ZSB0byB0dXJuIG9mZiwgYW5kIGlmIHRoZSBJMkMgYnVzIHVzZXMNCmludGVycnVwdHMgdG8gaW5k
-aWNhdGUgY29tcGxldGlvbiAod2hpY2ggaXMgbm9ybWFsKSwgdGhlbiBlaXRoZXIgdGhlDQpkZXZp
-Y2UgbXVzdCBiZSBwb3dlcmVkLW9mZiBpbiBzdXNwZW5kX2xhdGUsIHNvIHRoZSBJMkMgaW50ZXJy
-dXB0IG11c3QgYmUNCm1hcmtlZCBJUlFGX05PX1NVU1BFTkQuDQpodHRwczovL3BhdGNod29yay5r
-ZXJuZWwub3JnL3Byb2plY3QvbGludXgtYWNwaS9wYXRjaC8yMDE4MDkyMzEzNTgxMi4yOTU3NC04
-LWhkZWdvZWRlQHJlZGhhdC5jb20vDQoNCk9uIFRodSwgMjAyMC0xMi0wMyBhdCAxMDowMSArMDIw
-MCwgR3J5Z29yaWkgU3RyYXNoa28gd3JvdGU6DQo+IA0KPiBPbiAwMy8xMi8yMDIwIDAzOjI1LCBR
-aWkgV2FuZyB3cm90ZToNCj4gPiBPbiBXZWQsIDIwMjAtMTItMDIgYXQgMTY6MzUgKzAxMDAsIFdv
-bGZyYW0gU2FuZyB3cm90ZToNCj4gPj4gSGksDQo+ID4+DQo+ID4+PiBTb21lIGkyYyBkZXZpY2Ug
-ZHJpdmVyIGluZGlyZWN0bHkgdXNlcyBJMkMgZHJpdmVyIHdoZW4gaXQgaXMgbm93DQo+ID4+PiBi
-ZWluZyBzdXNwZW5kZWQuIFRoZSBpMmMgZGV2aWNlcyBkcml2ZXIgaXMgc3VzcGVuZGVkIGR1cmlu
-ZyB0aGUNCj4gPj4+IE5PSVJRIHBoYXNlIGFuZCB0aGlzIGNhbm5vdCBiZSBjaGFuZ2VkIGR1ZSB0
-byBvdGhlciBkZXBlbmRlbmNpZXMuDQo+ID4+PiBUaGVyZWZvcmUsIHdlIGFsc28gbmVlZCB0byBt
-b3ZlIHRoZSBzdXNwZW5kIGhhbmRsaW5nIGZvciB0aGUgSTJDDQo+ID4+PiBjb250cm9sbGVyIGRy
-aXZlciB0byB0aGUgTk9JUlEgcGhhc2UgYXMgd2VsbC4NCj4gPj4+DQo+ID4+PiBTaWduZWQtb2Zm
-LWJ5OiBRaWkgV2FuZyA8cWlpLndhbmdAbWVkaWF0ZWsuY29tPg0KPiA+Pg0KPiA+PiBJcyB0aGlz
-IGEgYnVnZml4IGFuZCBzaG91bGQgZ28gaW50byA1LjEwPyBPciBjYW4gaXQgd2FpdCBmb3IgNS4x
-MT8NCj4gPj4NCj4gPiANCj4gPiBZZXMsIENhbiB5b3UgaGVscCB0byBhcHBseSBpdCBpbnRvIDUu
-MTA/IFRoYW5rcw0KPiANCj4gVG8gYmUgaG9uZXN0IGlmIHlvdSBzdGlsbCBkbyBoYXZlIGFueSBp
-MmMgZGV2aWNlIHdoaWNoIGFjY2Vzc2luZyBpMmMgYnVzcyBhZnRlciBfbm9pcnENCj4gc3RhZ2Ug
-YW5kIHlvdXIgZHJpdmVyIGRvZXMgbm90IGltcGxlbWVudCAubWFzdGVyX3hmZXJfYXRvbWljKCkg
-LSB5b3UgZGVmaW5pdGVseSBoYXZlIGEgYmlnZ2VyIHByb2JsZW0uDQo+IFNvIGFkZGluZyBJUlFG
-X05PX1NVU1BFTkQgc291bmQgbGlrZSBhIGhhY2sgYW5kIHByb2JhYmx5IHdvcmtzIGp1c3QgYnkg
-bHVjay4NCj4gDQoNCkF0IHByZXNlbnQsIGl0IGlzIG9ubHkgYSBwcm9ibGVtIGNhdXNlZCBieSBt
-aXNzaW5nIGludGVycnVwdHMsDQphbmQgLm1hc3Rlcl94ZmVyX2F0b21pYygpIGp1c3QgYSBpbXBs
-ZW1lbnQgaW4gcG9sbGluZyBtb2RlLiBXaHkgbm90IHNldA0KdGhlIGludGVycnVwdCB0byBhIHN0
-YXRlIHRoYXQgY2FuIGFsd2F5cyBiZSB0cmlnZ2VyZWQ/DQoNCg0K
 
+
+On 07/12/2020 09:33, Qii Wang wrote:
+> Hi:
+> Thank you very much for your patience review.
+> There are two main purposes of this patch:
+> 1.i2c_mark_adapter_suspended&i2c_mark_adapter_resumed
+> Avoid accessing the adapter while it is suspended by marking it
+> suspended during suspend.  This allows the I2C core to catch this, and
+> print a warning.
+> https://patchwork.kernel.org/project/linux-arm-kernel/patch/20181219164827.20985-2-wsa+renesas@sang-engineering.com/
+> 
+> 2. IRQF_NO_SUSPEND.
+> Having interrupts disabled means not only that an interrupt will not
+> occur at an awkward time, but also that using any functionality that
+> requires interrupts will not work. So if the driver uses an I2C bus or
+> similar to tell the device to turn off, and if the I2C bus uses
+> interrupts to indicate completion (which is normal), then either the
+> device must be powered-off in suspend_late, so the I2C interrupt must be
+> marked IRQF_NO_SUSPEND.
+> https://patchwork.kernel.org/project/linux-acpi/patch/20180923135812.29574-8-hdegoede@redhat.com/
+> 
+
+Pls, do not top post.
+
+> 
+> On Thu, 2020-12-03 at 10:01 +0200, Grygorii Strashko wrote:
+>>
+>> On 03/12/2020 03:25, Qii Wang wrote:
+>>> On Wed, 2020-12-02 at 16:35 +0100, Wolfram Sang wrote:
+>>>> Hi,
+>>>>
+>>>>> Some i2c device driver indirectly uses I2C driver when it is now
+>>>>> being suspended. The i2c devices driver is suspended during the
+>>>>> NOIRQ phase and this cannot be changed due to other dependencies.
+>>>>> Therefore, we also need to move the suspend handling for the I2C
+>>>>> controller driver to the NOIRQ phase as well.
+>>>>>
+>>>>> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
+>>>>
+>>>> Is this a bugfix and should go into 5.10? Or can it wait for 5.11?
+>>>>
+>>>
+>>> Yes, Can you help to apply it into 5.10? Thanks
+>>
+>> To be honest if you still do have any i2c device which accessing i2c buss after _noirq
+>> stage and your driver does not implement .master_xfer_atomic() - you definitely have a bigger problem.
+>> So adding IRQF_NO_SUSPEND sound like a hack and probably works just by luck.
+>>
+> 
+> At present, it is only a problem caused by missing interrupts,
+> and .master_xfer_atomic() just a implement in polling mode. Why not set
+> the interrupt to a state that can always be triggered?
+> 
+> 
+
+Because you must not use any IRQ driven operations after _noirq suspend state as it might (and most probably will)
+cause unpredictable behavior later  in suspend_enter():
+
+	arch_suspend_disable_irqs();
+	BUG_ON(!irqs_disabled());
+^after this point any IRQ driven I2C transfer will cause IRQ to be re-enabled
+
+if you need  turn off device from platform callbacks -  .master_xfer_atomic() has to be implemented and used.
+  
+
+-- 
+Best regards,
+grygorii
