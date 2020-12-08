@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF982D22B9
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Dec 2020 06:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96022D22AF
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Dec 2020 06:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgLHE57 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Dec 2020 23:57:59 -0500
-Received: from mail-bn8nam08on2060.outbound.protection.outlook.com ([40.107.100.60]:33313
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        id S1727901AbgLHE5q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Dec 2020 23:57:46 -0500
+Received: from mail-bn8nam11on2062.outbound.protection.outlook.com ([40.107.236.62]:38624
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726112AbgLHE57 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 7 Dec 2020 23:57:59 -0500
+        id S1727482AbgLHE5p (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 7 Dec 2020 23:57:45 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R5zrYcRQMXxDz4QPrmvVsSEkH/1ervDVKD2lRjQ4kVpkIvK2u/iARAgUKBOvoGa9UslWH0AaNRsRcxnJKYT0/hlw3ZpBepXq5t3Z4HKe/JDrcB5EVy9hXA9727jnYGsquxnOmYr7p31aEhmz6Lt6v7nTyLIxx/MpxaE0/ZT3PyYRo3w9MglTm88d5VtNuO6kgtYMFy0n2ydxAsAkZ/b8epPKuKcr52IAwwbmZTM4O0NcmvrXBNhGpubxGvSeSPd7FqlvPLrngscJhF88v9HRniv6EJTPyOo2bFVa9KgCbOG+wPns8fL+VbC32oExh1knur9QYOGoA2Yw2C20kau3iQ==
+ b=CSu7An7+EZNncCUM4UXEmy6k015fCcXf4Bga8x2opiUmjtE5zAQqsmo1uzAYcSn1SykOtZDu6V/4gph4P5CvhxWT4GawXTgwNZgnGZQx7UMkok9V5ztDb8d5v3JrB4Pem6q+pw/F8SK/es8ocRa4Wu6WjcBsZ4MIPhyHBcScKp4BqCAaCnHeFOd5T34xwbh4H5fsx0Hi4y7UpM5W8eWRKxUREsFu1M2fwZYvLi7PmmCo6PSDHI7KOvc9V1rQTF7Z5JfmjusNvvgulyS6KFdcWhJhwG1frmukb3DCqz0T53pwQA2OK6nyJi8MawWcGncaG8JxRtgnvmLE+JD9kod2DA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rZhEKCFJzCnNos2x7WD/PFnlxZ5e89Fqzk8AyLv7PVs=;
- b=bzxdFWUdjnIhQG3pRWhIXDyUu6fzYNWpi9Mj9ePEW6yxlqvRLH9HgHVgxZdr1Kpa8+083A/JdMqwU/4pIV4YvCQf9BbqxfYR28wPpMdlJ9Vi6XpCF2W5poRHlNRaY3ffYFQyJhMOtaVqx1vu/pky071Pds3rQLe7KiZ3mX1a655PnRuJ3p6stAwcmukWgilqg3ybNi6WIXpMIxG2elCjVacOXpekuvxLspGBqYM8t3Qbac40o9EUrC2+/EdjS+6U/yrM+dATmrTWg8hKZlXSjurbdJLBucgs3YV29VlQaX+DS/eVGgtMZo5RnnHNIaIjjXGFK6S5wYXibNsjcGDJIg==
+ bh=AgYWRXqBgMEDCw9SV03rS27+og+9I8kVf/YXH7x1f4c=;
+ b=WPZg3BiTd7rCFSoG69dqWuazH95Dy5UW763MxBxn5rYE1AY+nmwcEHrxpFKg35aplDZwGhalkDjcQbSqAdpuPjviLnODHVLqzVjJJh3luDsJ50dHnLHct2GwIMJg7mq/IIUCSTnv86zwC2MKmDmPjjEMp/35zdv+UDHmN7kx1RPbonygV+k8hkIigJgijq/McMriiLXQR2KCEZEbXYfSp1JVOYJ7CFFcxZpgJciQPT8JR7qj48HbdOJosQc+YuAmgt7dRlo7tvBKqw/ccTOkEoVGcl4QvUyX1tq+5Ebl6MDV9N3wC0d4/81q0NSIEPKi8Ny0L5T2zlD3IYkVODWPjw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=openfive.com; dmarc=pass action=none header.from=sifive.com;
  dkim=pass header.d=sifive.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sifive.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rZhEKCFJzCnNos2x7WD/PFnlxZ5e89Fqzk8AyLv7PVs=;
- b=bU68HKIX8VgNCVD5EK2nCQ5JhTy4I6YCaFk802Le5FycONM0cfNytYzGG9hMRkLIChfkCNCuKmyeCWK4TbXBo9A/mK4XguB8I1BGZjRtWayndNtQgC3WvICDjokYMDjOli5EazUzJcMQCNmeMC0FGhXVaRe3OJzt7KDD2CLv6Nw=
+ bh=AgYWRXqBgMEDCw9SV03rS27+og+9I8kVf/YXH7x1f4c=;
+ b=TPJ/EPC1oP70bitZTTFg1E/+qUNwOhzWc94jQdhLnsl56E+OlttnYIDotq2UOs6V9VcGckaOdWnRu7wO5Zi5qZFujGKrrHA6XyWVFMie0thsfSR+e0FSdxqVrIXNjfS+dgFPnC2bPOHlylLf9VSzMSMtBYGVi4yrXj54VEgE+2w=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=sifive.com;
 Received: from BY5PR13MB4453.namprd13.prod.outlook.com (2603:10b6:a03:1d1::19)
  by BY5PR13MB4440.namprd13.prod.outlook.com (2603:10b6:a03:1d2::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.7; Tue, 8 Dec
- 2020 04:56:36 +0000
+ 2020 04:56:42 +0000
 Received: from BY5PR13MB4453.namprd13.prod.outlook.com
  ([fe80::7c13:1ac6:9f2a:5eae]) by BY5PR13MB4453.namprd13.prod.outlook.com
  ([fe80::7c13:1ac6:9f2a:5eae%8]) with mapi id 15.20.3654.012; Tue, 8 Dec 2020
- 04:56:36 +0000
+ 04:56:42 +0000
 From:   Yash Shah <yash.shah@sifive.com>
 To:     linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc:     broonie@kernel.org, gregkh@linuxfoundation.org,
         andrew@lunn.ch, peter@korsgaard.com, paul.walmsley@sifive.com,
         palmer@dabbelt.com, robh+dt@kernel.org, bgolaszewski@baylibre.com,
         linus.walleij@linaro.org, Yash Shah <yash.shah@sifive.com>
-Subject: [PATCH v2 5/9] dt-bindings: gpio: Update DT binding docs to support SiFive FU740 SoC
-Date:   Tue,  8 Dec 2020 10:25:37 +0530
-Message-Id: <1607403341-57214-6-git-send-email-yash.shah@sifive.com>
+Subject: [PATCH v2 6/9] dt-bindings: i2c: Update DT binding docs to support SiFive FU740 SoC
+Date:   Tue,  8 Dec 2020 10:25:38 +0530
+Message-Id: <1607403341-57214-7-git-send-email-yash.shah@sifive.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1607403341-57214-1-git-send-email-yash.shah@sifive.com>
 References: <1607403341-57214-1-git-send-email-yash.shah@sifive.com>
@@ -62,46 +62,46 @@ X-ClientProxiedBy: PN1PR0101CA0041.INDPRD01.PROD.OUTLOOK.COM
  (2603:10b6:a03:1d1::19)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from osubuntu003.open-silicon.com (159.117.144.156) by PN1PR0101CA0041.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c00:c::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17 via Frontend Transport; Tue, 8 Dec 2020 04:56:29 +0000
+Received: from osubuntu003.open-silicon.com (159.117.144.156) by PN1PR0101CA0041.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c00:c::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17 via Frontend Transport; Tue, 8 Dec 2020 04:56:36 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bd728beb-dada-4abf-6489-08d89b35a409
+X-MS-Office365-Filtering-Correlation-Id: 18b0065f-6a40-4d57-f670-08d89b35a802
 X-MS-TrafficTypeDiagnostic: BY5PR13MB4440:
 X-LD-Processed: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1,ExtAddr
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR13MB4440C1D87D63D5EA62D0D05382CD0@BY5PR13MB4440.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:989;
+X-Microsoft-Antispam-PRVS: <BY5PR13MB44403A7F05D24E6DCA01C2F582CD0@BY5PR13MB4440.namprd13.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vSiPzJ2VrCiH8pIUaY71wp2QW469Mh3nxQUWzmTIGBDlEGkL3Ien4XcZDVWNE5s6g90KaObdZ8rloIausqIGl0BfiN2ciHMhary1I2rmCNLFh/OCxbAtZ4W0K61SVDDwwjyf4J3A0WKJDqvHiiOiBhNPuwuIDTcECUew7qPgo4WQD7gO3QpReXR4eW02bEKlu590KpOmkelUJxEGtcNCGjqFbAuoGp/RlpmbNoRh+ESeTXhMkXchw3wis9mTGeyovgfcYNSc8XrbnEVuOc+FBApAva20yr6+6JQCgSO4P3MHsd8hb8stX2x0SADvhWjiUcQsxCkOvB8Opd2rd5Z1IA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR13MB4453.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(396003)(376002)(39840400004)(366004)(136003)(346002)(52116002)(83170400001)(956004)(5660300002)(4326008)(107886003)(2616005)(26005)(4744005)(2906002)(316002)(7416002)(42882007)(44832011)(6666004)(83380400001)(16526019)(6506007)(8936002)(8676002)(36756003)(478600001)(6486002)(186003)(6512007)(66946007)(66476007)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?qklgi6aeC/MFw1QoJSOC+Q9RidOpfoGWub53rLxrbKNO3toHkjzvzHunlJCf?=
- =?us-ascii?Q?n/AvPjyoXi7b1OTZwdCt5rKVnvFH6gY6IYTnMdyNVUzdWVfQGkkngWqGzo14?=
- =?us-ascii?Q?V9JRDQuPgBq/4eFsBQVgygLO5tVy9zwT3mJk80b2b/7TAJ9qZba7xDlnMbcR?=
- =?us-ascii?Q?Qbi676NLLzXiqQUTzfjiXQErQgBZ1oOkjiuEQekvvdzoGUd5IeH/+6a4Hq6S?=
- =?us-ascii?Q?21K0D8ynhcEtRdQsu+1LHVd84TedIyRpm5WRZuBvhamACewB8Py5BDBt31x5?=
- =?us-ascii?Q?pHWZAjZTlF+kY7AdShje1O2k963dqW+QbC01hHSxRPIrpMECV4mvnD/bUCpK?=
- =?us-ascii?Q?n/dqdNSoJeDOmwpkI0Nzs+mLN65E6wHSPPmJnd5hGFpJnd/rTjrFoepvIoRQ?=
- =?us-ascii?Q?8fOgM+MohXKQ2f0LEx+iaYWDQyp/NYpsJ3UfT4PwlmAwGh06j8kGlHEIIpvO?=
- =?us-ascii?Q?SQJiIcTkqEXJJtQCFoUQCQElD4iEmSpeS8ybs9SK/Jmcse4YyZrWTgKilyoc?=
- =?us-ascii?Q?lMBqjtrZ2vV2vFBqvtGyWt+TnsWvwu41aNryjTwlIYV+asVSvto2yjF/e4Hq?=
- =?us-ascii?Q?MuFUMpRrzTnN5M0kTdZI1d2A4MC5D7G7VFkk5veEV1ZFMI6/1iFDsTqogna3?=
- =?us-ascii?Q?HeWI/Lq5pOyjbWPPs/qMN+8VIw6eeddJH96g62oq9zbBwe+vP4PaOm61BNjy?=
- =?us-ascii?Q?sqyNdJ1qwsLjK8kosWe4rkzwWjQETtHlFdHERP0Wh/zZryq61KojpG+8hOTJ?=
- =?us-ascii?Q?nVXJdoJbSHzJ26bJrfj4Ur+0NEsngtl53XFYMFVMrdgNw08kHPUC4DaiccLW?=
- =?us-ascii?Q?Yr58AZqLe01Fh+R6XzENPB/kNEUPOLxMuMgT66re6/wOCvAcnH5VuMjtPJ9c?=
- =?us-ascii?Q?veWYV50ltnCCFhBSEYsSotvDvaYT4fVe6hLior5Q6rgONMfg+j3rRhXXu+Fw?=
- =?us-ascii?Q?PlmBVUEf2B/MmjLnWr6yS6vWCjwLwGk/RtuX3oNyxeb+r3Wd2yfYb2FZn4YJ?=
- =?us-ascii?Q?T5PG?=
+X-Microsoft-Antispam-Message-Info: P74QYjTQx0AVIpp0dgFVqysthyMVBf1aNOINCXy7cZ9Wu6cosMr265khXCH0DCacIDo7wh0Qk77e/yPVkXqKVFAYFQjmfC7FeeP1/vUVS5tepGVU8wOqRiAApCml8RzPmD3iMSRJygmXvHDO6RxtiSayv0jUTHkCjENkOAw+5F1Mc21enTZXJOdX18pHzhRVxT83q3a5pCW9FPw3CjANQ6zj0ZutW6CDTN1RcvMZ3g3K1tA3OUXOsywawa+zJsIEtmGJUP3QayxOxgf7d2o3oJCkrloLcBBNOaah1ZSRbKAV0MW42v9Ut70w86jMKEKPksEBowDtor/9KS5EcrYQGQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR13MB4453.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(396003)(376002)(39850400004)(366004)(136003)(346002)(52116002)(83170400001)(956004)(5660300002)(4326008)(107886003)(2616005)(26005)(2906002)(316002)(7416002)(42882007)(44832011)(83380400001)(16526019)(6506007)(8936002)(8676002)(36756003)(478600001)(6486002)(186003)(6512007)(66946007)(66476007)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?ZTJrkiVd4a3VrDUecIF3bdL1eP/6VagUzc4qUrwvzUEc2kNBVii9N2dlSAgY?=
+ =?us-ascii?Q?zhJ7hhVzNJovyvPuy/uZhxv/ZkiozG6o4MaGr9HvfViYJL4fU6CbStqF2zAO?=
+ =?us-ascii?Q?mt4/ICUY+3tAIyDd+w9P9xocSflA0IieY2Xr5eG0gpCkwUd44Ay2GpQx5eG/?=
+ =?us-ascii?Q?09SoZdMPwM69H5gn5wpW9ic9ooQg6q0JO2a3jX4tYqflY8a/wZBoLGxzJCsV?=
+ =?us-ascii?Q?1zJlbeMRRzr/6fyj5L/peAlCtbpN/K6CmMyV0zWfIiGYCX0xbygB1bj6hj8G?=
+ =?us-ascii?Q?9jgZnWoNFO+bVhZKMBfiECDc2drYHU0E5jhu9PnVKXALDQ7it4dt/rqY5K2P?=
+ =?us-ascii?Q?cWFpalUfUqQf2GWq/yDldf81lHsM3qvOpYBByf2y/Cm4F1AOtShH3Pzuu55P?=
+ =?us-ascii?Q?IWb/A+AbSdiNT0jJ1oLPpX9XkxSU0/Ex/a93CF7oW/0iLpVmg9f3ZZiXIHUC?=
+ =?us-ascii?Q?vQ5ZnyuqKEIMJOiEXrhYOt4tXY2zZLvdx5BaiEwradOShOyEYWGfaQDevXTL?=
+ =?us-ascii?Q?Y334Cu+gnHnbxO41Vnu1QPa5BR4ZhbRzDcJjX09xOYvfKvWNZX7BQKUhUCEv?=
+ =?us-ascii?Q?xioYWPR/YvShAVX2TzWhQ29jloiEdlDq1yhH3h0pcVeTpXOS8+M9s5bAV9rz?=
+ =?us-ascii?Q?iBT0d8JDVzR+ZCWTlq0XcyMknTi9J72tTgLu+b5zs3XtDylxwUUtWbFs8PuT?=
+ =?us-ascii?Q?vBXy1d4fDBuF+SNeSuEkHfZQNwswsFYrlCt3hSPI0AYWFIzpxVcYSTNq63oB?=
+ =?us-ascii?Q?KkkAhMqaQQ2nwp0YLQA2QYMr6QfBQr1ZZ4yYRSuiIPybWXfqZpwp12hNPX2A?=
+ =?us-ascii?Q?p2Uec+Wrfqv6Ln9OSxd3wDZtPRG4UsWqa2rf2H5LJDnZLxOw4tfBtxT+4PKU?=
+ =?us-ascii?Q?0Nsofn7BLLYd/CourdPjr/EGYol7cLgNNrfxZGd1ViMv0w74akb8csPFVDrJ?=
+ =?us-ascii?Q?b0tYL94SBGHNTgvOT7FaO/JT9Xipp6zjUO3DIJToLdXSyrhmEHRRE7M0x67H?=
+ =?us-ascii?Q?N7IM?=
 X-OriginatorOrg: sifive.com
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR13MB4453.namprd13.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2020 04:56:35.9271
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2020 04:56:42.5292
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd728beb-dada-4abf-6489-08d89b35a409
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18b0065f-6a40-4d57-f670-08d89b35a802
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YSz9aYASvsgWiKs0ATsXUk1fX/ERTXQkTkGQvWV738b+Hp5qL2ZUDbljF3KJaKNkHlL6XFeUkgDE0o88EGDYzA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: dyPR5ZsRzA0x02e11Bq8BHx5GwHyogulrcz+vbAX6Kv3JWpyavSXABOY/CSljXTR/xXakQQcmslGS2o1LGVA4w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB4440
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
@@ -112,24 +112,28 @@ FU740-C000.
 
 Signed-off-by: Yash Shah <yash.shah@sifive.com>
 ---
- Documentation/devicetree/bindings/gpio/sifive,gpio.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/i2c/i2c-ocores.txt | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
-index a0efd8d..ab22056 100644
---- a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
-+++ b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
-@@ -13,7 +13,9 @@ maintainers:
- properties:
-   compatible:
-     items:
--      - const: sifive,fu540-c000-gpio
-+      - enum:
-+          - sifive,fu540-c000-gpio
-+          - sifive,fu740-c000-gpio
-       - const: sifive,gpio0
- 
-   reg:
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+index 6b25a80..a37c945 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
++++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+@@ -5,8 +5,12 @@ Required properties:
+                     "aeroflexgaisler,i2cmst"
+                     "sifive,fu540-c000-i2c", "sifive,i2c0"
+                     For Opencore based I2C IP block reimplemented in
+-                    FU540-C000 SoC. Please refer to sifive-blocks-ip-versioning.txt
+-                    for additional details.
++                    FU540-C000 SoC.
++                    "sifive,fu740-c000-i2c", "sifive,i2c0"
++                    For Opencore based I2C IP block reimplemented in
++                    FU740-C000 SoC.
++                    Please refer to sifive-blocks-ip-versioning.txt for
++                    additional details.
+ - reg             : bus address start and address range size of device
+ - clocks          : handle to the controller clock; see the note below.
+                     Mutually exclusive with opencores,ip-clock-frequency
 -- 
 2.7.4
 
