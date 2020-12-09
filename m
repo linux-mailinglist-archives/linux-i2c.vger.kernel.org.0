@@ -2,89 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 650092D4C29
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Dec 2020 21:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3C82D4C3A
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Dec 2020 21:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbgLIUra (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Dec 2020 15:47:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50414 "EHLO mail.kernel.org"
+        id S1726576AbgLIUx0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Dec 2020 15:53:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54890 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726227AbgLIUr3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 9 Dec 2020 15:47:29 -0500
-Date:   Wed, 9 Dec 2020 21:46:45 +0100
+        id S1726227AbgLIUx0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 9 Dec 2020 15:53:26 -0500
+Date:   Wed, 9 Dec 2020 21:52:42 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607546808;
-        bh=mgWZJMnlHPNKk3G+8BwkQUcX4IRQNVusX1bax+wFkBY=;
+        s=k20201202; t=1607547166;
+        bh=yntw2EH6xf/CTjpQ7iWfMtsRq38lOTGsTOcpyKsbdak=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JNO3XBKSlWouy47UmeJO4vI4b1M4+hFzwEQsyqogkXyZyy2GwHlfW74/cNAoORePW
-         OCNiGIX+Yr5/3R/uYdT7TMZnIMKWQQ+Fj+nUoLC5I6I+8H2tsdO/thqpdmlrcty+z4
-         zQs51lZf8YUhKQwE3Dsn8x3vZNUQmXlCeWkCSbTRmmUITyRxZaJN/RrSobn2m5q1pK
-         gO3U2XMm+FzMTKEsrgYC0EuNdSwd4OAIT+LG+omJ4NfKvi5p4vRHMeGSJ7X1+h9397
-         vaL0R86hISbRhrAEgZug4Y9WFxVPkYLB5uPhHgUlSTY6mg9eRVE8ucIG2mD9tVhx39
-         2DxY3XYOK72gA==
+        b=hVM64dgpIzqLw66ju4llOJn5TrlQFlimjqCfJNLLJWoqMSN/Qk7k5Iy8e7+ev4lZt
+         Lul47ZUqeykKVgDDh67elu8BHR3rmeOvWBz3SG8LQ0TOhXJ/DV/lkJuzILUij4FNVY
+         h7Dy+NdEQ1PU6qttvaCa/9ZbWk6BppLw82DYGegOZpd1Z5nsSmsywmyXovHlv0t/j0
+         AruxH69OcjWEmdfsRYChZTO3EKoXCY+FQWg00UStNoP0VKOJCRQXWVqPnW6HrGw+oR
+         6rJMvFO639P7M2PclpMdMiFmvrvD1bcCd0G9cAgheppYC3H7Mnwnv9xOsjoXKHpVNX
+         OsDkAfI6QZu7A==
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, rmk+kernel@armlinux.org.uk,
-        alpawi@amazon.com
-Subject: Re: [PATCH v3] i2c: pxa: move to generic GPIO recovery
-Message-ID: <20201209204645.GF3499@kunai>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] i2c: designware: Fix indentation in the header
+Message-ID: <20201209205242.GG3499@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, rmk+kernel@armlinux.org.uk,
-        alpawi@amazon.com
-References: <20201004100711.1093343-1-codrin.ciubotariu@microchip.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+References: <20201208140337.33236-1-andriy.shevchenko@linux.intel.com>
+ <20201208140337.33236-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ChQOR20MqfxkMJg9"
+        protocol="application/pgp-signature"; boundary="iJXiJc/TAIT2rh2r"
 Content-Disposition: inline
-In-Reply-To: <20201004100711.1093343-1-codrin.ciubotariu@microchip.com>
+In-Reply-To: <20201208140337.33236-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---ChQOR20MqfxkMJg9
+--iJXiJc/TAIT2rh2r
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Oct 04, 2020 at 01:07:11PM +0300, Codrin Ciubotariu wrote:
-> Starting with
-> commit 75820314de26 ("i2c: core: add generic I2C GPIO recovery")
-> GPIO bus recovery is supported by the I2C core, so we can remove the
-> driver implementation and use that one instead.
->=20
-> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-
-Applied to for-next, thanks!
-
-> ---
->=20
-> patch not tested.
-
-LGTM. In case we missed a glitch, we can still revert the patch later.
 
 
---ChQOR20MqfxkMJg9
+> @@ -243,7 +243,7 @@ struct dw_i2c_dev {
+>  	struct clk		*clk;
+>  	struct clk		*pclk;
+>  	struct reset_control	*rst;
+> -	struct i2c_client		*slave;
+> +	struct i2c_client	*slave;
+>  	u32			(*get_clk_rate_khz) (struct dw_i2c_dev *dev);
+>  	int			cmd_err;
+>  	struct i2c_msg		*msgs;
+
+What about using just a single space after the type? Won't need an
+update ever again.
+
+
+--iJXiJc/TAIT2rh2r
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/RN7UACgkQFA3kzBSg
-KbYc2BAAiiCx5TicTmnQ2Y3k/DLOHrMguzZe+dJVoOagrXFM8iTo121597Ocjzi+
-vmrpwv7W4lYJ9KTBpxNTz7h8l6KmfPozHqHttzGqVzjMFhYljadCxcnnDgqwQd+y
-UvSawLOVOroFpfwoi0wqyk4KM8NF7LcWvOI/0c80UkVD2178hh5n4aKoHFE7fyCR
-2LPfh/rf7R9wEJ3Krttp34m77prtHCn1sLt32d63qcmY5hPwsiSV3NkZX8b/uiFD
-UX458zJIMtq05IF/LKAYnheSeOCJ6wyoIz0ohyVr9a+wuU3QpDRkKnGu7bRBi2IP
-JcKt5GVcSFp7hVvbgwF8X0D48VedT0S3Lar/G2Ki+nbOi75b4ljfVlALksHENRtA
-DTzLKE20M+2NIb289hTMdR6Q6RHtBdWhSfYmrIzr1qqT0pO86OBWRsrLdOvNfcea
-Ot8YLickpAkoDMSrbk5xp23eiIXi640i2U8RyfQStDI/qe3iHHkDXeaJnx2y6MkO
-GwwTzASevlnggEuynjhIdypT6wVma1IbZGjhkq0FT9yypk1xgZPaxlXbSQRMLoiL
-IHbF0NygVesPowHecHfrc2ALw7iRjQap3xDtiDH6S/x3xvAI+GFcldxJtIP8V35l
-BE/PqpYspIIMaJ0vqsVS8y+jhxX5twY9UAvR6wDbFpdJXpm9oUQ=
-=2eVC
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/RORYACgkQFA3kzBSg
+KbZV1w//dTG0M2RhmCkru6l8blS1FfI5u2QNOOhiHR3CRU6ZKOT/g7/VWiuMurby
+1WFLGAjLx6UssxIe9jp7STlQWTh3KcuAJdvlsjQ2er0jlhxyIzs08Upr2kc+LSZ1
+rpHr2dut2YNvYgGpYVj86DZjfIpEghpANn7BRvZQazswVLseHOGIJF/fhIRMgLQD
+c0eSz5BassNhNtpxrvK3cpdNR0WgxKi6XsvJftX28dpc2n0QR3nCsfhcKWS7jU59
+Ece/YLxKdXR+qRtGXJ0LYUDOhIDr+0Gz9sUbQidGPaqcgHIWz2gMorjlYHvOB6Kd
+rY3CcSzXUtiw/KcK5wCk+ddp3gqxLD4O4XJ3FxzKt0O2coNSRG0JMfqFoTagsqUy
+5TnupNGNPM6uVsh37f7DhKNEEs/sYhwAx42/tO5JUfb1U9BloQhvcwC4pBzIkkvN
+nQ+n/NbG5iOGbKnT6blnejF1KWCXKMJ5hC2/Z4Cy3pNxQREG1d1nN2KVpXQaDZeT
+1weEYtMYIPQcDA/nLcN6d/zmQhsuvXkwcVSDRZc7L3dH+r5FT++EO6B4WASBaaCu
+QGKQh8RIGs7V/SrXXtM3/INkBClvqZ6U4k/DYBxS2WooebhdOm+ea0ZOgbuBGTO3
+IF6gfgsWA9xMnSx4IWld4g6+f0PXYPcjBfoO1XTS4KoScKRX0xM=
+=yGI1
 -----END PGP SIGNATURE-----
 
---ChQOR20MqfxkMJg9--
+--iJXiJc/TAIT2rh2r--
