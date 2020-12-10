@@ -2,73 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EA82D526F
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Dec 2020 05:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539822D5782
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Dec 2020 10:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732048AbgLJECE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Dec 2020 23:02:04 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44119 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732225AbgLJEAD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Dec 2020 23:00:03 -0500
-Received: by mail-oi1-f195.google.com with SMTP id d189so4270978oig.11;
-        Wed, 09 Dec 2020 19:59:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6oGGK+dOGnoINWzCvubHZwwfiFrKLTQRjMEQW/QxQb0=;
-        b=e7T57kNJBsn9PdhWT2j/OO2t8sHG/BFtEW4vm1NTEUwXBVTcst4WhkoYNZl2DaJMsT
-         AXTpHr+riZvxHHgv3hO89EXhBNb9vli/WJVkiP66T1kTR56pzPa7gPz1f+RlHOu76NaD
-         4z3zqplmjbbFZMKn9RF0x16oyi39kqXpTTPIXf+UWhUUFNHsTu2ynLtbNBbMGqWmaLFe
-         Ucqmx9Y4o6sBTGnS8RXP2ZE+kcl6P56mknpOFWukBOw8KlnlM1S5AmTMJInz0d2KspIC
-         EBwaHGyPOOhb51zv9hmy67Nn2cEgUyoQzYkbOge/V+DYCUAMUeWBYgmJ1vWEu4NQXKNH
-         xWTw==
-X-Gm-Message-State: AOAM530ONunrVJfIsnSe/VgR/H37//34d5PVxN7Him5Dhbr9dbb1Kgfi
-        A0g2E42HAOMwZH4QdagcDg==
-X-Google-Smtp-Source: ABdhPJzEJCziD7jzt8D07hIPtVj4iDG6Ls9LzxABH6iHQCPLAjSuLffty8DXLKn3cyFZUEmG/e2Tew==
-X-Received: by 2002:aca:6044:: with SMTP id u65mr4205383oib.109.1607572762746;
-        Wed, 09 Dec 2020 19:59:22 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g12sm795862oos.8.2020.12.09.19.59.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 19:59:22 -0800 (PST)
-Received: (nullmailer pid 1638029 invoked by uid 1000);
-        Thu, 10 Dec 2020 03:59:20 -0000
-Date:   Wed, 9 Dec 2020 21:59:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yash Shah <yash.shah@sifive.com>
-Cc:     gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
-        paul.walmsley@sifive.com, peter@korsgaard.com,
-        lee.jones@linaro.org, linux-serial@vger.kernel.org,
-        thierry.reding@gmail.com, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org, bgolaszewski@baylibre.com,
-        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
-        palmer@dabbelt.com, u.kleine-koenig@pengutronix.de,
-        broonie@kernel.org, linus.walleij@linaro.org,
-        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
-        andrew@lunn.ch, linux-pwm@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v2 8/9] dt-bindings: riscv: Update YAML doc to support
- SiFive HiFive Unmatched board
-Message-ID: <20201210035920.GA1637999@robh.at.kernel.org>
-References: <1607403341-57214-1-git-send-email-yash.shah@sifive.com>
- <1607403341-57214-9-git-send-email-yash.shah@sifive.com>
+        id S1726475AbgLJJrs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Dec 2020 04:47:48 -0500
+Received: from mga14.intel.com ([192.55.52.115]:27571 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726175AbgLJJrs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 10 Dec 2020 04:47:48 -0500
+IronPort-SDR: FjNGE5mpDuOoxAfH3gAdlj/Q9ZekIn5b1YBvrkEzjDRWS2Ouf4RxkaYClkk9t0clTpo5E4kZO8
+ m12gdaabGbeQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="173463891"
+X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
+   d="scan'208";a="173463891"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2020 01:45:50 -0800
+IronPort-SDR: PQMS8dl52hunY4+QxrQl6rXLeZK/aj0ekWma2di9KBXTU6A370h7QbF3lyLFB3Ke5Z8cYo+KHR
+ 4n9rp/V1JqFw==
+X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
+   d="scan'208";a="348720985"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2020 01:45:44 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1knIX8-00DNgG-Nh; Thu, 10 Dec 2020 11:46:46 +0200
+Date:   Thu, 10 Dec 2020 11:46:46 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] i2c: designware: Fix indentation in the header
+Message-ID: <20201210094646.GB4077@smile.fi.intel.com>
+References: <20201208140337.33236-1-andriy.shevchenko@linux.intel.com>
+ <20201208140337.33236-3-andriy.shevchenko@linux.intel.com>
+ <20201209205242.GG3499@kunai>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1607403341-57214-9-git-send-email-yash.shah@sifive.com>
+In-Reply-To: <20201209205242.GG3499@kunai>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 08 Dec 2020 10:25:40 +0530, Yash Shah wrote:
-> Add new compatible strings to the YAML DT binding document to support
-> SiFive's HiFive Unmatched board
+On Wed, Dec 09, 2020 at 09:52:42PM +0100, Wolfram Sang wrote:
 > 
-> Signed-off-by: Yash Shah <yash.shah@sifive.com>
-> ---
->  Documentation/devicetree/bindings/riscv/sifive.yaml | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+> > @@ -243,7 +243,7 @@ struct dw_i2c_dev {
+> >  	struct clk		*clk;
+> >  	struct clk		*pclk;
+> >  	struct reset_control	*rst;
+> > -	struct i2c_client		*slave;
+> > +	struct i2c_client	*slave;
+> >  	u32			(*get_clk_rate_khz) (struct dw_i2c_dev *dev);
+> >  	int			cmd_err;
+> >  	struct i2c_msg		*msgs;
 > 
+> What about using just a single space after the type? Won't need an
+> update ever again.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Maybe, but this is really so minor patch, so if you are okay with other two
+(that have more importance) drop this one.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
