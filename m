@@ -2,100 +2,150 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F992D683E
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Dec 2020 21:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575A52D6D5C
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Dec 2020 02:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390172AbgLJULc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Dec 2020 15:11:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37966 "EHLO mail.kernel.org"
+        id S2394739AbgLKBWf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Dec 2020 20:22:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:49880 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404506AbgLJUL2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 10 Dec 2020 15:11:28 -0500
-Date:   Thu, 10 Dec 2020 21:10:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607631047;
-        bh=3Ig/ulS+GXuDBWBNEh8mI/Yafuj8V+n82PGtSh4ca9E=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gt3ODvdnzpNZZBAHK+ZVuL+e7eATNFHVL5M3gZ0/6JxBAB8u3V3LLuoLtBixHYf6z
-         Kc9tkzArK9b0NGPLaWs+xOS0MTxirKo+EuH/L9qHSpDchCM+Oju5omwK+jknnCM5AN
-         B1hiUf3bKLwjUJ53fiYQ4SLqEERzT5v1W7Td6mJUkYe7hU0+ue+i1UGZfbuzU8r0ZB
-         pXyJ303+B3zTkt8RdcL+sp1iK+wQ8Ft+QExr2CBBBKU3BeuNUaEfkOcTf5fnwwhBe1
-         f+uuTvpywGsFMdNiwAPRPtln0IIAmBdfUJd8ij5I92knV2ZOjo3uRLsulmVHhDqhtD
-         CU2xe5sbU8ZNQ==
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-i2c@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 1/2] i2c: Warn when device removing fails
-Message-ID: <20201210201044.GB11120@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-i2c@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@pengutronix.de
-References: <20201126072331.1737632-1-u.kleine-koenig@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5/uDoXvLw7AC5HRs"
-Content-Disposition: inline
-In-Reply-To: <20201126072331.1737632-1-u.kleine-koenig@pengutronix.de>
+        id S2394792AbgLKBWW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 10 Dec 2020 20:22:22 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 554C21534;
+        Thu, 10 Dec 2020 17:20:39 -0800 (PST)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E0DC3F66B;
+        Thu, 10 Dec 2020 17:20:36 -0800 (PST)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Icenowy Zheng <icenowy@aosc.xyz>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 18/21] dt-bindings: allwinner: Add H616 compatible strings
+Date:   Fri, 11 Dec 2020 01:19:31 +0000
+Message-Id: <20201211011934.6171-19-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.14.1
+In-Reply-To: <20201211011934.6171-1-andre.przywara@arm.com>
+References: <20201211011934.6171-1-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
+bindings, and pair them with an existing fallback compatible string,
+as the devices are compatible.
+This covers I2C, infrared, RTC and SPI.
 
---5/uDoXvLw7AC5HRs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Use enums to group all compatible devices together.
 
-On Thu, Nov 26, 2020 at 08:23:30AM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> The driver core ignores the return value of struct bus_type::remove. So
-> warn if there is an error that went unnoticed before and return 0
-> unconditionally in i2c_device_remove().
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ .../bindings/i2c/marvell,mv64xxx-i2c.yaml     | 21 +++++++------------
+ .../media/allwinner,sun4i-a10-ir.yaml         | 16 ++++++--------
+ .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |  3 +++
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  1 +
+ 4 files changed, 17 insertions(+), 24 deletions(-)
 
-I wondered about the "return 0" part...
+diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+index 5b5ae402f97a..eb72dd571def 100644
+--- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+@@ -18,21 +18,14 @@ properties:
+           - const: allwinner,sun4i-a10-i2c
+       - const: allwinner,sun6i-a31-i2c
+       - items:
+-          - const: allwinner,sun8i-a23-i2c
++          - enum:
++              - allwinner,sun8i-a23-i2c
++              - allwinner,sun8i-a83t-i2c
++              - allwinner,sun50i-a64-i2c
++              - allwinner,sun50i-a100-i2c
++              - allwinner,sun50i-h6-i2c
++              - allwinner,sun50i-h616-i2c
+           - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun8i-a83t-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun50i-a64-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun50i-a100-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun50i-h6-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-
+       - const: marvell,mv64xxx-i2c
+       - const: marvell,mv78230-i2c
+       - const: marvell,mv78230-a0-i2c
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
+index 5fa19d4aeaf3..6d8395d6bca0 100644
+--- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
++++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
+@@ -20,16 +20,12 @@ properties:
+       - const: allwinner,sun5i-a13-ir
+       - const: allwinner,sun6i-a31-ir
+       - items:
+-          - const: allwinner,sun8i-a83t-ir
+-          - const: allwinner,sun6i-a31-ir
+-      - items:
+-          - const: allwinner,sun8i-r40-ir
+-          - const: allwinner,sun6i-a31-ir
+-      - items:
+-          - const: allwinner,sun50i-a64-ir
+-          - const: allwinner,sun6i-a31-ir
+-      - items:
+-          - const: allwinner,sun50i-h6-ir
++          - enum:
++              - allwinner,sun8i-a83t-ir
++              - allwinner,sun8i-r40-ir
++              - allwinner,sun50i-a64-ir
++              - allwinner,sun50i-h6-ir
++              - allwinner,sun50i-h616-ir
+           - const: allwinner,sun6i-a31-ir
+ 
+   reg:
+diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+index 37c2a601c3fa..97928efd2bc9 100644
+--- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+@@ -26,6 +26,9 @@ properties:
+           - const: allwinner,sun50i-a64-rtc
+           - const: allwinner,sun8i-h3-rtc
+       - const: allwinner,sun50i-h6-rtc
++      - items:
++          - const: allwinner,sun50i-h616-rtc
++          - const: allwinner,sun50i-h6-rtc
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+index 7866a655d81c..908248260afa 100644
+--- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+@@ -25,6 +25,7 @@ properties:
+           - enum:
+               - allwinner,sun8i-r40-spi
+               - allwinner,sun50i-h6-spi
++              - allwinner,sun50i-h616-spi
+           - const: allwinner,sun8i-h3-spi
+ 
+   reg:
+-- 
+2.17.5
 
->=20
-> This prepares changing struct bus_type::remove to return void.
-
-=2E.. until I read this. You are working on that?
-
->  	if (driver->remove) {
-> +		int status =3D 0;
-
-No need to initialize to 0, or?
-
-> +
->  		dev_dbg(dev, "remove\n");
-> +
->  		status =3D driver->remove(client);
-> +		if (status)
-> +			dev_warn(dev, "remove failed (%pe), will be ignored\n", ERR_PTR(statu=
-s));
-
-The rest and patch 2 look good.
-
-
---5/uDoXvLw7AC5HRs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/SgMQACgkQFA3kzBSg
-KbYabQ/+PRWldHox1MK22arc3L+F82zP+pYh/i9FCwdITq95v+0karyDrITu+4Ed
-gGkT7eQSXMi7liXmDayXZtWpEyFEQlsY8M9CuS9dyn/R7hkSSr9tC3QDweK86njT
-9CLVELOV0rogFI1mlT4hQjLJxL4kYjqawGginyUsWbGXiE9qnNd/X2w9xg0C2Lm5
-+3xyXIA3vWPsyw6Qb4JNUEXZCaUxo6npULuk2/NsloxEfuAnxSB3NB3/KQ72HAJ4
-OnIQ+UyYIC1S1w8i5xjwz8XnCH/LzKWP7/3DvwFAyT48OQqFyOnUZLHglu2a11rw
-VwfyUYZVItegh5aj2+nDN6rl5xdZvnM4mMy5qHZoLhtRru3CCMVotn9PP9BEmrFj
-UCu5isMPIsS2jZPdNrfzEezI6HXjTF6Pyc/X9bF8IAOQj8KfbqaScUYQkRCFQcHY
-ScW+CKft2vmMTYL5Lil8Nc6SYqPSlxmsCpJAAD6BqdK/pOi9A/kolshSS3wQTaNK
-fmMIuZZHpId4bMdeGvQrVrExaGwYmbFg+l3/geBR/RsZxfLVeJfHIACyTaNmRUSn
-JU/c2usUfBy5PrdC1pej3aWucMRT2hCyfPi0Il8w8UmSYSXpoBfR/zu7Y3i3q4a/
-ZAYgXhsF1mlNvMU0ntFzmBzLKwa2TE3F0C43DwiujMY5IMerlvc=
-=RVuc
------END PGP SIGNATURE-----
-
---5/uDoXvLw7AC5HRs--
