@@ -2,116 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C672D73DE
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Dec 2020 11:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E512D7421
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Dec 2020 11:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbgLKKX7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Dec 2020 05:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
+        id S1727726AbgLKKor (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Dec 2020 05:44:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbgLKKXm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Dec 2020 05:23:42 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9929C0613D3;
-        Fri, 11 Dec 2020 02:23:01 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id t3so6796072pgi.11;
-        Fri, 11 Dec 2020 02:23:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=n11CZEHDbroVAtkHzM/7M/ETKh3HOtw2JsXDTI0ERgc=;
-        b=JaSA57u9MlRUxTJFqzX5CVkhX6FchPoA6l+e4n7cU9osmJSFpzbNpR3w4Uo9JI9BmB
-         YiEBR9RxzaQwyuW9PZ2jXc9PJBAhmSpUKmQVxs4+TV4xBOp/pCmJObY9pQ3+Ub6byo5L
-         VLWKs5EnHjhF+BNU72uCfgEGuFUZv7i11JDYqcmIAlU5GXIDSNWoVRKfetLkCW6ik/yx
-         j2FtUA2MmwlRZzkpmF+bl5bTuAUVn5CEDpBtDCtBTY0qW/LcE8UYYXur0Qf6N+r3xaxY
-         rjDy2a0yVFfL6xzOpod3YqG3EY2tDhBWbFEC/5xpcYrf5CYdCSJSPQW7AOkafc7xrCDY
-         MT8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=n11CZEHDbroVAtkHzM/7M/ETKh3HOtw2JsXDTI0ERgc=;
-        b=sb98jTMkjn2f4WUmy8UXYWAzZSchEU0jp1IGmW/TSNY6n2m0pPiCPYbgoqDF7lkaNC
-         ej+sgXf73C1VQMzBdXVLN1ZMyxnSu3My1QUTQCeO0h3+OnTn+HwI6yeEu53V9hP5XSOG
-         HJkKWP+NOJE/yAV9Lyo7SXf4cswYm+HR5keeSevP/Sxam5dHpj6hBJEDDuq0XxFPrRGQ
-         tdc1uwEl+DQur0UP5dhPzW7GPR1ObO10+1um4FFQ9Ruxwuc0MxtWDag9Pwb5jWrfQFTw
-         I/jJe2vFEPlFDkrVsiWt3JwZxKd2sWacNR2Gi5nVopqTvUaMBh4G+xI/58UNVGB5CRZe
-         hC8w==
-X-Gm-Message-State: AOAM532W3duxzVV/WcFNv4Z7scdvgOeOoCi7lwhhO9lG/dHhhwrrCvRo
-        t0E0iSkhbX9GYKYLInpIr5s=
-X-Google-Smtp-Source: ABdhPJzIYpYavritO9FWIDO0Xr4ylEydj1seGnoP2/zyQPK+5RNbQwcjDIEjTrzizaY/9WNaxQqN+w==
-X-Received: by 2002:a65:688a:: with SMTP id e10mr11052563pgt.347.1607682181490;
-        Fri, 11 Dec 2020 02:23:01 -0800 (PST)
-Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id 72sm10031318pfw.177.2020.12.11.02.22.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 02:23:00 -0800 (PST)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Linhua Xu <linhua.xu@unisoc.com>
-Subject: [PATCH] i2c: sprd: use a specific timeout to avoid system hang up issue
-Date:   Fri, 11 Dec 2020 18:22:48 +0800
-Message-Id: <20201211102248.1018374-1-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S2393125AbgLKKoL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Dec 2020 05:44:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DA4C0613CF
+        for <linux-i2c@vger.kernel.org>; Fri, 11 Dec 2020 02:43:30 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1knftZ-00072b-8Q; Fri, 11 Dec 2020 11:43:29 +0100
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1knftY-0003pY-Pm; Fri, 11 Dec 2020 11:43:28 +0100
+Date:   Fri, 11 Dec 2020 11:43:28 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 1/2] i2c: Warn when device removing fails
+Message-ID: <20201211104328.3h5of6kegwcbhob2@pengutronix.de>
+References: <20201126072331.1737632-1-u.kleine-koenig@pengutronix.de>
+ <20201210201044.GB11120@kunai>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="csivnhfymequdwft"
+Content-Disposition: inline
+In-Reply-To: <20201210201044.GB11120@kunai>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-If the i2c device SCL bus being pulled up due to some exception before
-message transfer done, the system cannot receive the completing interrupt
-signal any more, it would not exit waiting loop until MAX_SCHEDULE_TIMEOUT
-jiffies eclipse, that would make the system seemed hang up. To avoid that
-happen, this patch adds a specific timeout for message transfer.
+--csivnhfymequdwft
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
-Original-by: Linhua Xu <linhua.xu@unisoc.com>
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
----
- drivers/i2c/busses/i2c-sprd.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Hey Wolfram,
 
-diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
-index 19cda6742423..dba3d526444e 100644
---- a/drivers/i2c/busses/i2c-sprd.c
-+++ b/drivers/i2c/busses/i2c-sprd.c
-@@ -72,6 +72,8 @@
- 
- /* timeout (ms) for pm runtime autosuspend */
- #define SPRD_I2C_PM_TIMEOUT	1000
-+/* timeout (ms) for transfer message */
-+#define IC2_XFER_TIMEOUT	1000
- 
- /* SPRD i2c data structure */
- struct sprd_i2c {
-@@ -244,6 +246,7 @@ static int sprd_i2c_handle_msg(struct i2c_adapter *i2c_adap,
- 			       struct i2c_msg *msg, bool is_last_msg)
- {
- 	struct sprd_i2c *i2c_dev = i2c_adap->algo_data;
-+	unsigned long timeout = msecs_to_jiffies(I2C_XFER_TIMEOUT);
- 
- 	i2c_dev->msg = msg;
- 	i2c_dev->buf = msg->buf;
-@@ -273,7 +276,9 @@ static int sprd_i2c_handle_msg(struct i2c_adapter *i2c_adap,
- 
- 	sprd_i2c_opt_start(i2c_dev);
- 
--	wait_for_completion(&i2c_dev->complete);
-+	timeout = wait_for_completion_timeout(&i2c_dev->complete, timeout);
-+	if (!timeout)
-+		return -EIO;
- 
- 	return i2c_dev->err;
- }
--- 
-2.25.1
+On Thu, Dec 10, 2020 at 09:10:44PM +0100, Wolfram Sang wrote:
+> On Thu, Nov 26, 2020 at 08:23:30AM +0100, Uwe Kleine-K=F6nig wrote:
+> > The driver core ignores the return value of struct bus_type::remove. So
+> > warn if there is an error that went unnoticed before and return 0
+> > unconditionally in i2c_device_remove().
+>=20
+> I wondered about the "return 0" part...
+>=20
+> >=20
+> > This prepares changing struct bus_type::remove to return void.
+>=20
+> ... until I read this. You are working on that?
 
+Yes, I'm not paid for it, but it serves as an idle cleanup task for me.
+Greg even assists, see 8142a46c50d2dd8160c42284e1044eed3bec0d18. :-)
+
+>=20
+> >  	if (driver->remove) {
+> > +		int status =3D 0;
+>=20
+> No need to initialize to 0, or?
+
+Right, this comes straight from:
+-	int status =3D 0;
+
+=66rom the current version of i2c_device_remove, where it was still
+relevant. I don't feel strong here, and if you do I can resend or you
+can fixup while applying.
+
+> > +
+> >  		dev_dbg(dev, "remove\n");
+> > +
+> >  		status =3D driver->remove(client);
+> > +		if (status)
+> > +			dev_warn(dev, "remove failed (%pe), will be ignored\n", ERR_PTR(sta=
+tus));
+>=20
+> The rest and patch 2 look good.
+
+Great.
+
+Liebe Gr=FC=DFe aus Freiburg!
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--csivnhfymequdwft
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl/TTU0ACgkQwfwUeK3K
+7Am8oQf8CU9TGpeEYJcwm+qZMiXrOmSsy/nxABH5tmI/IW1ZbFr2yUwC+qTkPIHX
+hosYRRf0goO5xFDTX2Qa/7iAi51866qUiagcSsqFx49p+45LY9TpQIio2u707aMQ
+TGQgOnWzBY1PeOWUay0gVLwPJXvTfHVdJzB3AmywE4GNoQjVMAmrUmFaZnsMl0zO
+eIYuI5i7RfS769cN3JhMlzJYpFrxDHT1ggwq6IgMpYDIWzp4Yf7KvwCzbTHFin6f
+MjVHEV15M8d8wRt+3sDjFtDukfAy1bPqgOsR19JpzJYSt8L4rTwcPVUuk7OR3cYW
+jxEb0EtmalYUtFzG0/kGXnusLQhN8g==
+=xJ1I
+-----END PGP SIGNATURE-----
+
+--csivnhfymequdwft--
