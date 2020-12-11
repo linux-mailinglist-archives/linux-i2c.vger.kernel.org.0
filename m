@@ -2,196 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E183D2D8D33
-	for <lists+linux-i2c@lfdr.de>; Sun, 13 Dec 2020 14:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4192D8DF5
+	for <lists+linux-i2c@lfdr.de>; Sun, 13 Dec 2020 15:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406776AbgLMNVT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 13 Dec 2020 08:21:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51424 "EHLO mail.kernel.org"
+        id S1732245AbgLMO3b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 13 Dec 2020 09:29:31 -0500
+Received: from noc.ebotel.net ([72.29.77.203]:54506 "EHLO noc.ebotel.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406755AbgLMNVK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 13 Dec 2020 08:21:10 -0500
-Received: from archlinux (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4482823105;
-        Sun, 13 Dec 2020 13:20:28 +0000 (UTC)
-Date:   Sun, 13 Dec 2020 13:20:24 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 3/3] dt-bindings:iio:gyro:invensense,mpu3050: txt to
- yaml format conversion.
-Message-ID: <20201213132024.24cddc1a@archlinux>
-In-Reply-To: <20201128173343.390165-4-jic23@kernel.org>
-References: <20201128173343.390165-1-jic23@kernel.org>
-        <20201128173343.390165-4-jic23@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1725778AbgLMO30 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 13 Dec 2020 09:29:26 -0500
+X-Greylist: delayed 166755 seconds by postgrey-1.27 at vger.kernel.org; Sun, 13 Dec 2020 09:29:26 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ebo.tv;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=cPrx/ATZlI9/dVnqv4//un3cqCjAwF5kfPq5I2k8VpI=; b=DDwjsXC/uuGy+i9RS9WjoYvVA9
+        FdwJjeIG/jpFU7e06Np4lhfDcacaPp4t6yUxG6vVRor/i/EHQO1G1y2yqQhDwuBVtXvfPkgUkE2Pd
+        2Gp0NTXn2VcM8B+Avl+gDcUm+ix4Rdvj1Hoo6ohkPHatQc741jLuYLZyvxgWLs8XYbQo=;
+Received: from [14.226.235.220] (port=35457 helo=ebo.tv)
+        by noc.ebotel.net with esmtpa (Exim 4.87)
+        (envelope-from <gerencia@ebo.tv>)
+        id 1knkyw-0003E1-MS; Fri, 11 Dec 2020 12:09:23 -0400
+To:     "Pankaj DEV" <pankaj.dev@stericsson.com>,
+        "David McCullough" <david_mccullough@mcafee.com>,
+        "davidm" <davidm@snapgear.com>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "linux i2c" <linux-i2c@vger.kernel.org>,
+        "Ben Dooks" <ben-linux@fluff.org>,
+        "Alessandro Zummo" <a.zummo@towertech.it>
+From:   nik_bin_nek_alwi <gerencia@ebo.tv>
+Subject: =?UTF-8?Q?Re=3AServus._alles_gut_bei_dir=3F?=
+Message-ID: <c71a5e5f-3d5c-45e5-be4f-e0de06185d80@ebo.tv>
+Date:   Fri, 11 Dec 2020 10:59:32 -0500
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - noc.ebotel.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - ebo.tv
+X-Get-Message-Sender-Via: noc.ebotel.net: authenticated_id: gerencia@ebo.tv
+X-Authenticated-Sender: noc.ebotel.net: gerencia@ebo.tv
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, 28 Nov 2020 17:33:43 +0000
-Jonathan Cameron <jic23@kernel.org> wrote:
 
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> Very similar to the mpu6050 binding.
-> Only unusual element is the i2c-gate section.
-> Example tweaked a little to include a real device behind the gate.
-> 
-> As Rob Herring suggested, dropped use of explicit i2c-gate yaml
-> binding in favour of just using the i2c-controller.yaml binding
-> directly.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Link: https://lore.kernel.org/r/20201031181801.742585-4-jic23@kernel.org
-Applied.
 
-Thanks,
 
-Jonathan
+💫 Morgen. Wie geht es dir?
+https://bit.ly/2ImBE3F
 
-> ---
->  .../iio/gyroscope/invensense,mpu3050.txt      | 45 ------------
->  .../iio/gyroscope/invensense,mpu3050.yaml     | 70 +++++++++++++++++++
->  2 files changed, 70 insertions(+), 45 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.txt b/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.txt
-> deleted file mode 100644
-> index 233fe207aded..000000000000
-> --- a/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.txt
-> +++ /dev/null
-> @@ -1,45 +0,0 @@
-> -Invensense MPU-3050 Gyroscope device tree bindings
-> -
-> -Required properties:
-> -  - compatible : should be "invensense,mpu3050"
-> -  - reg : the I2C address of the sensor
-> -
-> -Optional properties:
-> -  - interrupts : interrupt mapping for the trigger interrupt from the
-> -    internal oscillator. The following IRQ modes are supported:
-> -    IRQ_TYPE_EDGE_RISING, IRQ_TYPE_EDGE_FALLING, IRQ_TYPE_LEVEL_HIGH and
-> -    IRQ_TYPE_LEVEL_LOW. The driver should detect and configure the hardware
-> -    for the desired interrupt type.
-> -  - vdd-supply : supply regulator for the main power voltage.
-> -  - vlogic-supply : supply regulator for the signal voltage.
-> -  - mount-matrix : see iio/mount-matrix.txt
-> -
-> -Optional subnodes:
-> -  - The MPU-3050 will pass through and forward the I2C signals from the
-> -    incoming I2C bus, alternatively drive traffic to a slave device (usually
-> -    an accelerometer) on its own initiative. Therefore is supports a subnode
-> -    i2c gate node. For details see: i2c/i2c-gate.txt
-> -
-> -Example:
-> -
-> -mpu3050@68 {
-> -	compatible = "invensense,mpu3050";
-> -	reg = <0x68>;
-> -	interrupt-parent = <&foo>;
-> -	interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
-> -	vdd-supply = <&bar>;
-> -	vlogic-supply = <&baz>;
-> -
-> -	/* External I2C interface */
-> -	i2c-gate {
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -
-> -		fnord@18 {
-> -			compatible = "fnord";
-> -			reg = <0x18>;
-> -			interrupt-parent = <&foo>;
-> -			interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
-> -		};
-> -	};
-> -};
-> diff --git a/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.yaml b/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.yaml
-> new file mode 100644
-> index 000000000000..7e2accc3d5ce
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/gyroscope/invensense,mpu3050.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/gyroscope/invensense,mpu3050.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Invensense MPU-3050 Gyroscope
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: invensense,mpu3050
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vdd-supply: true
-> +
-> +  vlogic-supply: true
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    description:
-> +      Interrupt mapping for the trigger interrupt from the internal oscillator.
-> +
-> +  mount-matrix: true
-> +
-> +  i2c-gate:
-> +    $ref: /schemas/i2c/i2c-controller.yaml
-> +    unevaluatedProperties: false
-> +    description: |
-> +      The MPU-3050 will pass through and forward the I2C signals from the
-> +      incoming I2C bus, alternatively drive traffic to a slave device (usually
-> +      an accelerometer) on its own initiative. Therefore is supports an
-> +      i2c-gate subnode.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        gyroscope@68 {
-> +            compatible = "invensense,mpu3050";
-> +            reg = <0x68>;
-> +            interrupt-parent = <&foo>;
-> +            interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
-> +            vdd-supply = <&bar>;
-> +            vlogic-supply = <&baz>;
-> +
-> +            i2c-gate {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                magnetometer@c {
-> +                    compatible = "ak,ak8975";
-> +                    reg = <0x0c>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
 
+
+
+
+ nik_bin_nek_alwi@yahoo.com
+
+
+ 12/11/2020 7:59:32 AM
+
+
+
+
+
+
+
+
+
+
+
+
+
+____________________________________________________________________
+ Supreme Court rejects GOP bid to overturn Pennsylvania election results
+The high court spurned a request from Republican allies of President Trump to decertify Pennsylvania's election results.
+EU Ends Standoff, Moves Forward With Budget And Coronavirus Relief Fund
+Poland and Hungary had blocked the EU budget over a provision requiring each member nation to uphold the bloc's rule-of-law principles. The two nations are under investigation for not doing so.
+Earth Is Still Sailing Into Climate Chaos, Report Says, but Its Course Could Shift
+The biggest polluters are continuing to pollute, raising the risks of global warming. There are, however, new signs of a pivot to a green economy.
+Covid-19: The mask-wearing US city that bucked the trend
+Compulsory mask-wearing has been highly controversial in the US.
+Tesla will sell electric cars in the Middle East
+The automaker announced Monday that its first official venture in the oil-rich Middle East will be in the United Arab Emirates.
+Trump claims it's 'the big one' but Texas election lawsuit looks doomed to failure 
+Legal experts are calling it a Hail Mary bid, an 11th hour desperate moonshot and one of the dumbest cases they've ever seen.
+AOC Ridiculed as Her Campaign Store Starts Selling 'Tax the Rich' Sweatshirt... for $58
+Democrat Representative Alexandria Ocasio-Cortez, also known to many by her initials AOC, has been re-elected by New York’s 14th Congressional District this year. The youngest woman to win a place in the US House of Representatives, AOC also came down in history as a vocal promoter of socialist agenda.
+Former prosecutor, jurors back federal inmate who is set to die next week
+After a 17-year hiatus in executing federal inmates, President Trump's Justice Department has executed eight federal inmates in 2020, and four more men and one woman are set to die before Inauguration Day. Lead national correspondent David Begnaud looks at the public push to stop one execution scheduled for next week.
+Coronavirus World Map: Tracking The Spread Of The Outbreak
+A map of confirmed COVID-19 cases and deaths around the world. The respiratory disease has spread rapidly across six continents and has killed at least 1 million globally.
+Australia Scraps Covid-19 Vaccine That Produced H.I.V. False Positives
+Of the dozens of coronavirus vaccines being tested worldwide, the one under development at the University of Queensland was the first to be abandoned.
+Covid in Scotland: Why are Clackmannanshire's rates so high?
+Clackmannanshire currently has the highest infection rate in any Scottish local authority.
+A Toronto restaurant owner was arrested after allegedly continuing to violate public health orders
+A Toronto restaurant owner was arrested Thursday after continuing to violate public health orders, officials said.
+'We will take a decision on Sunday,' says EU chief ahead of deadline for Brexit trade talks
+European Commission President Ursula von der Leyen has given EU and UK negotiators three days to strike a trade deal as she declared: "We will take a decision on Sunday."
+China to Launch Digital Yuan ‘Giveaway’ in Massive On-the-Ground Trial Of 'Cashless' Payment System
+China has been trailblazing the global trend to explore the viability of digital currency, rolling out an ambitious test of a crypto yuan earlier this year, with pilots existing in four Chinese cities, where transactions to a reported tune of more than 2 billion yuan ($300 million) have already taken place.
