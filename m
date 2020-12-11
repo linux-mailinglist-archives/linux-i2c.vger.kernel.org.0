@@ -2,150 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 575A52D6D5C
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Dec 2020 02:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C672D73DE
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Dec 2020 11:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394739AbgLKBWf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Dec 2020 20:22:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:49880 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394792AbgLKBWW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 10 Dec 2020 20:22:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 554C21534;
-        Thu, 10 Dec 2020 17:20:39 -0800 (PST)
-Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E0DC3F66B;
-        Thu, 10 Dec 2020 17:20:36 -0800 (PST)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Cc:     Icenowy Zheng <icenowy@aosc.xyz>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 18/21] dt-bindings: allwinner: Add H616 compatible strings
-Date:   Fri, 11 Dec 2020 01:19:31 +0000
-Message-Id: <20201211011934.6171-19-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20201211011934.6171-1-andre.przywara@arm.com>
-References: <20201211011934.6171-1-andre.przywara@arm.com>
+        id S1726075AbgLKKX7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Dec 2020 05:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbgLKKXm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Dec 2020 05:23:42 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9929C0613D3;
+        Fri, 11 Dec 2020 02:23:01 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id t3so6796072pgi.11;
+        Fri, 11 Dec 2020 02:23:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n11CZEHDbroVAtkHzM/7M/ETKh3HOtw2JsXDTI0ERgc=;
+        b=JaSA57u9MlRUxTJFqzX5CVkhX6FchPoA6l+e4n7cU9osmJSFpzbNpR3w4Uo9JI9BmB
+         YiEBR9RxzaQwyuW9PZ2jXc9PJBAhmSpUKmQVxs4+TV4xBOp/pCmJObY9pQ3+Ub6byo5L
+         VLWKs5EnHjhF+BNU72uCfgEGuFUZv7i11JDYqcmIAlU5GXIDSNWoVRKfetLkCW6ik/yx
+         j2FtUA2MmwlRZzkpmF+bl5bTuAUVn5CEDpBtDCtBTY0qW/LcE8UYYXur0Qf6N+r3xaxY
+         rjDy2a0yVFfL6xzOpod3YqG3EY2tDhBWbFEC/5xpcYrf5CYdCSJSPQW7AOkafc7xrCDY
+         MT8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n11CZEHDbroVAtkHzM/7M/ETKh3HOtw2JsXDTI0ERgc=;
+        b=sb98jTMkjn2f4WUmy8UXYWAzZSchEU0jp1IGmW/TSNY6n2m0pPiCPYbgoqDF7lkaNC
+         ej+sgXf73C1VQMzBdXVLN1ZMyxnSu3My1QUTQCeO0h3+OnTn+HwI6yeEu53V9hP5XSOG
+         HJkKWP+NOJE/yAV9Lyo7SXf4cswYm+HR5keeSevP/Sxam5dHpj6hBJEDDuq0XxFPrRGQ
+         tdc1uwEl+DQur0UP5dhPzW7GPR1ObO10+1um4FFQ9Ruxwuc0MxtWDag9Pwb5jWrfQFTw
+         I/jJe2vFEPlFDkrVsiWt3JwZxKd2sWacNR2Gi5nVopqTvUaMBh4G+xI/58UNVGB5CRZe
+         hC8w==
+X-Gm-Message-State: AOAM532W3duxzVV/WcFNv4Z7scdvgOeOoCi7lwhhO9lG/dHhhwrrCvRo
+        t0E0iSkhbX9GYKYLInpIr5s=
+X-Google-Smtp-Source: ABdhPJzIYpYavritO9FWIDO0Xr4ylEydj1seGnoP2/zyQPK+5RNbQwcjDIEjTrzizaY/9WNaxQqN+w==
+X-Received: by 2002:a65:688a:: with SMTP id e10mr11052563pgt.347.1607682181490;
+        Fri, 11 Dec 2020 02:23:01 -0800 (PST)
+Received: from ubt.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id 72sm10031318pfw.177.2020.12.11.02.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Dec 2020 02:23:00 -0800 (PST)
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Linhua Xu <linhua.xu@unisoc.com>
+Subject: [PATCH] i2c: sprd: use a specific timeout to avoid system hang up issue
+Date:   Fri, 11 Dec 2020 18:22:48 +0800
+Message-Id: <20201211102248.1018374-1-zhang.lyra@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
-bindings, and pair them with an existing fallback compatible string,
-as the devices are compatible.
-This covers I2C, infrared, RTC and SPI.
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-Use enums to group all compatible devices together.
+If the i2c device SCL bus being pulled up due to some exception before
+message transfer done, the system cannot receive the completing interrupt
+signal any more, it would not exit waiting loop until MAX_SCHEDULE_TIMEOUT
+jiffies eclipse, that would make the system seemed hang up. To avoid that
+happen, this patch adds a specific timeout for message transfer.
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
+Original-by: Linhua Xu <linhua.xu@unisoc.com>
+Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
 ---
- .../bindings/i2c/marvell,mv64xxx-i2c.yaml     | 21 +++++++------------
- .../media/allwinner,sun4i-a10-ir.yaml         | 16 ++++++--------
- .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |  3 +++
- .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  1 +
- 4 files changed, 17 insertions(+), 24 deletions(-)
+ drivers/i2c/busses/i2c-sprd.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-index 5b5ae402f97a..eb72dd571def 100644
---- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-@@ -18,21 +18,14 @@ properties:
-           - const: allwinner,sun4i-a10-i2c
-       - const: allwinner,sun6i-a31-i2c
-       - items:
--          - const: allwinner,sun8i-a23-i2c
-+          - enum:
-+              - allwinner,sun8i-a23-i2c
-+              - allwinner,sun8i-a83t-i2c
-+              - allwinner,sun50i-a64-i2c
-+              - allwinner,sun50i-a100-i2c
-+              - allwinner,sun50i-h6-i2c
-+              - allwinner,sun50i-h616-i2c
-           - const: allwinner,sun6i-a31-i2c
--      - items:
--          - const: allwinner,sun8i-a83t-i2c
--          - const: allwinner,sun6i-a31-i2c
--      - items:
--          - const: allwinner,sun50i-a64-i2c
--          - const: allwinner,sun6i-a31-i2c
--      - items:
--          - const: allwinner,sun50i-a100-i2c
--          - const: allwinner,sun6i-a31-i2c
--      - items:
--          - const: allwinner,sun50i-h6-i2c
--          - const: allwinner,sun6i-a31-i2c
--
-       - const: marvell,mv64xxx-i2c
-       - const: marvell,mv78230-i2c
-       - const: marvell,mv78230-a0-i2c
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-index 5fa19d4aeaf3..6d8395d6bca0 100644
---- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-@@ -20,16 +20,12 @@ properties:
-       - const: allwinner,sun5i-a13-ir
-       - const: allwinner,sun6i-a31-ir
-       - items:
--          - const: allwinner,sun8i-a83t-ir
--          - const: allwinner,sun6i-a31-ir
--      - items:
--          - const: allwinner,sun8i-r40-ir
--          - const: allwinner,sun6i-a31-ir
--      - items:
--          - const: allwinner,sun50i-a64-ir
--          - const: allwinner,sun6i-a31-ir
--      - items:
--          - const: allwinner,sun50i-h6-ir
-+          - enum:
-+              - allwinner,sun8i-a83t-ir
-+              - allwinner,sun8i-r40-ir
-+              - allwinner,sun50i-a64-ir
-+              - allwinner,sun50i-h6-ir
-+              - allwinner,sun50i-h616-ir
-           - const: allwinner,sun6i-a31-ir
+diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
+index 19cda6742423..dba3d526444e 100644
+--- a/drivers/i2c/busses/i2c-sprd.c
++++ b/drivers/i2c/busses/i2c-sprd.c
+@@ -72,6 +72,8 @@
  
-   reg:
-diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-index 37c2a601c3fa..97928efd2bc9 100644
---- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-@@ -26,6 +26,9 @@ properties:
-           - const: allwinner,sun50i-a64-rtc
-           - const: allwinner,sun8i-h3-rtc
-       - const: allwinner,sun50i-h6-rtc
-+      - items:
-+          - const: allwinner,sun50i-h616-rtc
-+          - const: allwinner,sun50i-h6-rtc
+ /* timeout (ms) for pm runtime autosuspend */
+ #define SPRD_I2C_PM_TIMEOUT	1000
++/* timeout (ms) for transfer message */
++#define IC2_XFER_TIMEOUT	1000
  
-   reg:
-     maxItems: 1
-diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-index 7866a655d81c..908248260afa 100644
---- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-@@ -25,6 +25,7 @@ properties:
-           - enum:
-               - allwinner,sun8i-r40-spi
-               - allwinner,sun50i-h6-spi
-+              - allwinner,sun50i-h616-spi
-           - const: allwinner,sun8i-h3-spi
+ /* SPRD i2c data structure */
+ struct sprd_i2c {
+@@ -244,6 +246,7 @@ static int sprd_i2c_handle_msg(struct i2c_adapter *i2c_adap,
+ 			       struct i2c_msg *msg, bool is_last_msg)
+ {
+ 	struct sprd_i2c *i2c_dev = i2c_adap->algo_data;
++	unsigned long timeout = msecs_to_jiffies(I2C_XFER_TIMEOUT);
  
-   reg:
+ 	i2c_dev->msg = msg;
+ 	i2c_dev->buf = msg->buf;
+@@ -273,7 +276,9 @@ static int sprd_i2c_handle_msg(struct i2c_adapter *i2c_adap,
+ 
+ 	sprd_i2c_opt_start(i2c_dev);
+ 
+-	wait_for_completion(&i2c_dev->complete);
++	timeout = wait_for_completion_timeout(&i2c_dev->complete, timeout);
++	if (!timeout)
++		return -EIO;
+ 
+ 	return i2c_dev->err;
+ }
 -- 
-2.17.5
+2.25.1
 
