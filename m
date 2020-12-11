@@ -2,85 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4F32D78BD
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Dec 2020 16:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5BD2D78CC
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Dec 2020 16:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391048AbgLKPEl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Dec 2020 10:04:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33858 "EHLO mail.kernel.org"
+        id S2391290AbgLKPFp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Dec 2020 10:05:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34252 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437634AbgLKPE1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 11 Dec 2020 10:04:27 -0500
-Date:   Fri, 11 Dec 2020 15:44:42 +0100
+        id S2406550AbgLKPFN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 11 Dec 2020 10:05:13 -0500
+Date:   Fri, 11 Dec 2020 15:53:35 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607697888;
-        bh=vwrDMTV6ono8gbpx2Il2cAAR2idDXYM1O4xSUpotKQo=;
+        s=k20201202; t=1607698418;
+        bh=YDIuYljoqc26LKVO8C90Z3OhvO6XmgA1mBkLcV52L4Q=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ijeBV0eUraQg2sgAFpKvESHIS9d62RFjcZbvXaID6KqoBP5P7oJELG/jz0IBUFgaE
-         XQebAKXRTwep1umX0hv/iqyigFXhPT38zQaGAhg0pK53PnlYDNzFcN1CAQ7MDB4coU
-         hhjlHAlGcR+2iF5s53pji9UqkUrYs9xJ3lVY5gXaiZoza1qeGpahkR/Hi6zso8vx+y
-         gD8Pq6RnWrrAzvUknlFUHv/jsdKFiMFsn8MU4Zj0j473fmM763Sgt0tTxtMi5wlUvT
-         UsoR98CSVHY563Qgk+xPsyYf3PHAh6gHh1LW+fXorvcYfrHqTcY4URUamULP/kejMe
-         t9UycjL/Z33HQ==
+        b=Qljz9ZohTXrHZVCSw1s45CrDnlZypeDo9DfenGPcLEiFwfqht65ynHuajG83iUgaU
+         TPSD5vDcXoeG++i9FeAhXWxfFVDqn5nJ/PyoBlUelG2ajvDV3ddzd/8pNltA36km+E
+         1AykQYoCmwIiRyDl/85cKtsWNiU9woYECYqcQB0puf5UiHVZfrUvRoswpWfUjicBWM
+         IIwlAFsju2vVYm50dbDV0144PR3pegCsZva3rFVueT2SmJLShU+9fHCArTgnqsuwK/
+         zod8sOxKaMDAlMpLBWQg31Io9h65gRykfArODM26+THmMK9ryZqm4mZ4YsjSnGlRY0
+         8ECDW9o12Y4gA==
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-i2c@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 2/2] i2c: remove check that can never be true
-Message-ID: <20201211144442.GB1990@kunai>
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Linhua Xu <linhua.xu@unisoc.com>
+Subject: Re: [PATCH] i2c: sprd: use a specific timeout to avoid system hang
+ up issue
+Message-ID: <20201211145335.GC1990@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-i2c@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@pengutronix.de
-References: <20201126072331.1737632-1-u.kleine-koenig@pengutronix.de>
- <20201126072331.1737632-2-u.kleine-koenig@pengutronix.de>
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Linhua Xu <linhua.xu@unisoc.com>
+References: <20201211102248.1018374-1-zhang.lyra@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yNb1oOkm5a9FJOVX"
+        protocol="application/pgp-signature"; boundary="KN5l+BnMqAQyZLvT"
 Content-Disposition: inline
-In-Reply-To: <20201126072331.1737632-2-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20201211102248.1018374-1-zhang.lyra@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---yNb1oOkm5a9FJOVX
-Content-Type: text/plain; charset=utf-8
+--KN5l+BnMqAQyZLvT
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 26, 2020 at 08:23:31AM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> A driver remove callback is only called if the device was bound before.
-> So it's sure that both dev and dev->driver are valid and dev is an i2c
-> device. If the check fails something louder than "return 0" might be
-> appropriate because the problem is grave (something like memory
-> corruption), otherwise the check is useless.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Hi,
 
-Applied to for-next, thanks!
+thanks for your patch!
+
+> If the i2c device SCL bus being pulled up due to some exception before
+> message transfer done, the system cannot receive the completing interrupt
+> signal any more, it would not exit waiting loop until MAX_SCHEDULE_TIMEOUT
+> jiffies eclipse, that would make the system seemed hang up. To avoid that
+> happen, this patch adds a specific timeout for message transfer.
+
+Yes.
+
+> Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
+> Original-by: Linhua Xu <linhua.xu@unisoc.com>
+
+I can't find this tag documented. Maybe "Co-developed by"? Or just
+"Signed-off-by"?
+
+> +	unsigned long timeout =3D msecs_to_jiffies(I2C_XFER_TIMEOUT);
+> =20
+>  	i2c_dev->msg =3D msg;
+>  	i2c_dev->buf =3D msg->buf;
+> @@ -273,7 +276,9 @@ static int sprd_i2c_handle_msg(struct i2c_adapter *i2=
+c_adap,
+> =20
+>  	sprd_i2c_opt_start(i2c_dev);
+> =20
+> -	wait_for_completion(&i2c_dev->complete);
+> +	timeout =3D wait_for_completion_timeout(&i2c_dev->complete, timeout);
+> +	if (!timeout)
+> +		return -EIO;
+
+Basically OK, but readability can be improved. Because it reads "if not
+timeout, then return error". But it IS a timeout :) What about this:
+
+	time_left =3D wait_for_completion_timeout(&i2c_dev->complete,
+						msecs_to_jiffies(I2C_XFER_TIMEOUT));
+	if (!time_left)
+		...
+
+and the rest adjusted accordingly. What do you think?
+
+Kind regards,
+
+   Wolfram
 
 
---yNb1oOkm5a9FJOVX
+--KN5l+BnMqAQyZLvT
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/ThdoACgkQFA3kzBSg
-KbYicg//c76GkhL3LvKKOTAtejCg8epPB40qxOeXP8H/qlxSu3y2hsfr2ASsb+Z6
-RkhnqCTCoYQJQLxHIAY9+mb406L4MBij13kv6OuTsmboPMhgNHaTpflodZIh8REi
-YkOslaRzK1PE+rZoBuvbB0EzjT0FQgTR4gOBnALMHhtkfBjZQBcyWGMfR5WUpIyI
-bql/PPwnKAPwNHzAbYV10AaScdBuJHNQWyC/K1Ol43nXCykZMguzugG9uD/KPgcE
-prdF9ltKUH1GKdgdIYjOTJaZqpwDH4dTum+Y5jeVQl0wCqwVhY2ZLLPHIc/E0q1H
-gbZtF0qSd2k9C9GlIPfzRLb2Kq7fdjmD94iblWOfq9h/pdo1ZE9uSz8FOKNb8Wyn
-0oPFlLmFjWY9mSNw2JrXY8+y+vVw5uUtJeYm3a5qsOKIQuD6GxFU4IORve7drTWo
-UyPQUn2AmTLWMKxfi5SVNpKE8ioXXgrFlnubsjhQvWuWnqU0VBYvr56IwSVdhLki
-44NSqh/wyMvyt1+TaPSOi9G1pz1uDzIrREXPGGDvCx0XD81SsC+t0sJpsVQRRp3F
-eb3ifw4UGvllkuZX5VmOsjd75yV20Up2Sqg5E3SGkDK0RGRDOTEi2LA9o2Df8iFI
-z0hH/WU5YsrwdJu+gOPhBjwTWHYBfGqJO9VZxHQKYIWCG+0a6ok=
-=azQN
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/Th+8ACgkQFA3kzBSg
+KbYbpA/+J22ESmz7QHBJjTsElLQIbQEx4RDg4L/yLMyZxkTNM2rqQOgoKCknZRWU
+PI0YRUKMp4RWDicqIp11+2nLHH/YZ5BWDPD0zg0B2m0x9JIbIvWEMewxP0K8E/OF
+QtlHvpwmUdKnJaLATlqVWTnAZpQ73qfQ6gCQqs2MHcIGhWKYM3gm6zHGudkttmqH
+NMPdbndg//ykaqO62F/lSY4SVhS+sZDzJbiYefMcsz88u2mXdtdaiGt7VWb89WLn
+RTA1jwFoYs69F13cbl3t6TaNjs+0ul5bOiAfh5qx41/sHIyFhKYVd6SLqrD2d4yU
+5mI3i2xNrir6twxyqSQv7EB/vSHyIY/AC9tkDsiL4gQStagWG2aJTUIkhn66ghQV
+xMbpUK7iUy1ddUxAGjCXvm0eTGrFu3rSsTicmI5H2a8nmCljAQ+Y1plSmTGQX/QY
+4+FZZv6lU6Ur8bXPTCFCwKG/1MQNXmmYU+W2ta87Lt9I4dTVJuAP/VJolI4j3ve1
+X47xlHlOi5MI4ix8iS1L4SGbEFOmo9LnmHvsL1lZ7rpO5nthLSKPyr/X94dyrTrs
+V8HuKhfc915ClP4VRRofSQrKdJGMK7LVaq3wQw0+5G5sWAGhLqwqCX94JUmf/MV4
+yiRFXIZMjKMZHlGZubn/rIIzRF3CB+5HjSeTXDul3HezHEGwbJk=
+=YT9Y
 -----END PGP SIGNATURE-----
 
---yNb1oOkm5a9FJOVX--
+--KN5l+BnMqAQyZLvT--
