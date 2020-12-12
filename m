@@ -2,159 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C46D32D8596
-	for <lists+linux-i2c@lfdr.de>; Sat, 12 Dec 2020 11:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F182D8946
+	for <lists+linux-i2c@lfdr.de>; Sat, 12 Dec 2020 19:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437965AbgLLKCx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 12 Dec 2020 05:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388294AbgLLJyn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 12 Dec 2020 04:54:43 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF48C0611CA
-        for <linux-i2c@vger.kernel.org>; Sat, 12 Dec 2020 01:09:47 -0800 (PST)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1knz4S-00071V-FD; Sat, 12 Dec 2020 08:12:00 +0100
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1knz4R-0008PJ-AJ; Sat, 12 Dec 2020 08:11:59 +0100
-Date:   Sat, 12 Dec 2020 08:11:59 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Kevin Herbert <kph@platinasystems.com>
-Cc:     Biwen Li <biwen.li@nxp.com>, Aisheng Dong <aisheng.dong@nxp.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Biwen Li (OSS)" <biwen.li@oss.nxp.com>,
-        "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Jiafei Pan <jiafei.pan@nxp.com>, Leo Li <leoyang.li@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Xiaobo Xie <xiaobo.xie@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [v10] i2c: imx: support slave mode for imx I2C driver
-Message-ID: <20201212071159.mxylwo3jk725k7kq@pengutronix.de>
-References: <20201111113255.28710-1-biwen.li@oss.nxp.com>
- <20201202151033.GC874@kunai>
- <CABP=6zZcmsFUVwUaAH7f2-RqFHz71GLDnSfLreUo5GA3Y58HYA@mail.gmail.com>
- <20201209170948.GA2249@kunai>
- <CABP=6zbKxu7ruGRi59k8+JbX5UB9jfP=C76-Pd4Q39Mc0yOTrA@mail.gmail.com>
- <DB6PR0401MB2438F3FF50B601295BBE7F378FCB0@DB6PR0401MB2438.eurprd04.prod.outlook.com>
- <CABP=6zahhQSXwG2MzR+ry9h8MCRqjyS=ysdvF1UYuejZd-0RkQ@mail.gmail.com>
+        id S2391064AbgLLSbd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 12 Dec 2020 13:31:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47970 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726237AbgLLSbd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 12 Dec 2020 13:31:33 -0500
+Date:   Sat, 12 Dec 2020 19:30:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607797852;
+        bh=DQO8Hh/sKBkHBIRSNOASCcwn+SVBegd3+zWyvflofFM=;
+        h=From:To:Cc:Subject:From;
+        b=sEVy/5DVmbZmdTqy1U4yVzCmE67dWXAlN/JMsOz9ApNM30rV2I7PX4aobOXxFurss
+         TpVoRldSB05qADNlq8sw+TbFcB8b/XaNgBjhFiORc3q6oHLbz60NqzNGJYvKCO3G4m
+         ZE4CzQISyiZhsr+Wu4XqWa0ApwN049oGDxBrhEeLsfuDi+2nlnFhIyAKkkRPVVhvBt
+         J2W2qHc00FuxxTeUTvRcp7blwd9YGe7LMJzQ0iRApdo51LlpoOZ1tKtYvYN4KyOzSa
+         pBuc9sL9sNhYXl1fS7D/F7NRQN2/gFCaY9kXrBttPiLxwWjZRhuBHjwW9MG5PJGJgX
+         GQSrUTsvtloEw==
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for 5.10
+Message-ID: <20201212183046.GA8096@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="k+w/mQv8wyuph6w0"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABP=6zahhQSXwG2MzR+ry9h8MCRqjyS=ysdvF1UYuejZd-0RkQ@mail.gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:09:39 up 9 days, 21:16,  5 users,  load average: 0.00, 0.01, 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Dec 11, 2020 at 09:57:19AM -0800, Kevin Herbert wrote:
-> Thanks for the tip. I attempted to see if the register was implemented
-> on the i.mx6, and it doesn't appear to be. I'll reach out to my FAE. I
-> found the datasheet and the register definitely isn't documented
-> there.
-> 
-> I was thinking of a patch that would keep track of state, and
-> synthesize the I2C_SLAVE_STOP on the next interrupt if it was a new
-> transaction. Does this seem too hacky to you? What are your thoughts?
 
-I would say, send patches :)
-Please provide in to the commit message enough description to understand and
-reproduce your issue.
- 
-> 
-> On Wed, Dec 9, 2020 at 6:16 PM Biwen Li <biwen.li@nxp.com> wrote:
-> >
-> > Hi Kevin,
-> >
-> >
-> >
-> > After enabling idle interrupts, the i2c register will generate an idle interrupts(whatever read or write) when i2c bus enter idle status. Then get I2C_SLAVE_STOP event.
-> >
-> > But don’t have the IBIC register(Maybe it’s a hidden register) in imx. You can query about the AE of imx about this.
-> >
-> > static void i2c_imx_enable_bus_idle(struct imx_i2c_struct *i2c_imx)
-> >
-> > {
-> >
-> >         if (is_vf610_i2c(i2c_imx)) {
-> >
-> >                 unsigned int temp;
-> >
-> >
-> >
-> >                 temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_IBIC);
-> >
-> >                 temp |= IBIC_BIIE;
-> >
-> >                 imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_IBIC);
-> >
-> >         }
-> >
-> > }
-> >
-> >
-> >
-> > Best Regards,
-> >
-> > Biwen Li
-> >
-> > From: Kevin Herbert <kph@platinasystems.com>
-> > Sent: 2020年12月10日 1:18
-> > To: Wolfram Sang <wsa@the-dreams.de>; Kevin Herbert <kph@platinasystems.com>; Biwen Li (OSS) <biwen.li@oss.nxp.com>; Leo Li <leoyang.li@nxp.com>; linux@rempel-privat.de; kernel@pengutronix.de; shawnguo@kernel.org; s.hauer@pengutronix.de; festevam@gmail.com; Aisheng Dong <aisheng.dong@nxp.com>; Clark Wang <xiaoning.wang@nxp.com>; o.rempel@pengutronix.de; linux-i2c@vger.kernel.org; linux-kernel@vger.kernel.org; Jiafei Pan <jiafei.pan@nxp.com>; Xiaobo Xie <xiaobo.xie@nxp.com>; linux-arm-kernel@lists.infradead.org; Biwen Li <biwen.li@nxp.com>
-> > Subject: [EXT] Re: [v10] i2c: imx: support slave mode for imx I2C driver
-> >
-> >
-> >
-> > Caution: EXT Email
-> >
-> > Even on an operation like writing a byte, I get I2C_SLAVE_WRITE_REQUESTED followed by I2C_SLAVE_WRITE_RECEIVED, but no I2C_SLAVE_STOP. If I do a I2C write of multiple bytes, I get I2c_SLAVE_WRITE_REQUESTED followed by multiple I2C_SLAVE_WRITE_RECEIVED.
-> >
-> >
-> >
-> > Kevin
-> >
-> >
-> >
-> > On Wed, Dec 9, 2020 at 9:10 AM Wolfram Sang <wsa@the-dreams.de> wrote:
-> >
-> > On Wed, Dec 09, 2020 at 09:03:50AM -0800, Kevin Herbert wrote:
-> > > What is the protocol for the I2C_SLAVE_STOP event? I am working on my own
-> > > backend, and I've only tried it with this i.mx driver, and I do not receive
-> > > I2C_SLAVE_STOP at the end of every I2C transaction. It was my expectation
-> > > I'd receive this event at the end of every frame. In my testing, I've never
-> > > received this event at all.
-> > >
-> > > Where are the I2C registers on the i.mx documented? My board is an i.mx6sx.
-> >
-> > Hmm, from a glimpse, it looks the STOP event is only sent after a write
-> > and not after a read? Does this match your findings?
-> 
-> 
+--k+w/mQv8wyuph6w0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Linus,
+
+the AT24 EEPROM driver still needs a bugfix for 5.10.
+
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit 0477e92881850d44910a7e94fc2c46f96faa131f:
+
+  Linux 5.10-rc7 (2020-12-06 14:25:12 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to e977aaf899a6d3b3d6658da66e262b6e307ae3a2:
+
+  Merge tag 'at24-fixes-for-v5.10' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux into i2c/for-current (2020-12-11 23:23:30 +0100)
+
+----------------------------------------------------------------
+Diego Santa Cruz (1):
+      misc: eeprom: at24: fix NVMEM name with custom AT24 device name
+
+Wolfram Sang (1):
+      Merge tag 'at24-fixes-for-v5.10' of git://git.kernel.org/.../brgl/linux into i2c/for-current
+
+ drivers/misc/eeprom/at24.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+--k+w/mQv8wyuph6w0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/VDFEACgkQFA3kzBSg
+Kbag/w//XF+WHLkeHrjp0y3KJH2Q27Yy5IvdT2NlwidqdrdiyYnfNX1vPTo9O8Gj
+AHCzYhN4X0MTJoHpJCVodbS86dSPW4wLe9FUFcMVUkvMIpsJ2z09hqNn+2dPO5ao
+ofnjIXijbpwlb9i97j+RrP7bLyWwSE180oXqb5Cram4QL1G9+MdfOFJvL4vcgr0k
+MdqYq9iU9WE3QXsoB0DaRprz5ZnDZ10pCkpxEaRTxWl44tLALLC7kdAmGNt4DEsI
+LQVrDKBBTK+yblbwYqHNXr8EdSwMtiLE2aocIRr+v4s8srnNhGSllNlvYeNBPpKl
+dn0ULzUhGw1ksucAUNLPQnFheih87kFd2X156KS1IAMr5rsVFneTif5y0dT9oYA5
+rYzflALLENH0tUnFkpDd8rNK67g5Q4ufyvs/NhRY0IdvJzzZw2Y0yN2deD6nFlM+
+oxjBTjhMhFvteXRMzLzyD5ZY9rDk5oMq1dle/oNF6EP16pRlwDcLMxymRlcrCsV/
+4AfjjxoyxWOBgBI5J+qiQpFATCarHQQVF7jE0Qzz7+dhIYbsBx9hkXiwG9q7NZsg
+YBE2iZw9eWH9iVZvbJtG+DHKyPczwkXkK8KOyW7f0ztkfQcvrA4Hc6zxVK8bX/91
+VA76kvj3EqoLJRWldYfDh+o2F0JLoFsLxk7tDlEP82vYsEQL9ZY=
+=GqTY
+-----END PGP SIGNATURE-----
+
+--k+w/mQv8wyuph6w0--
