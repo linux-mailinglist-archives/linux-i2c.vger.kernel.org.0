@@ -2,56 +2,250 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B7D2D8A16
-	for <lists+linux-i2c@lfdr.de>; Sat, 12 Dec 2020 22:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00FA2D8D2F
+	for <lists+linux-i2c@lfdr.de>; Sun, 13 Dec 2020 14:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407933AbgLLVD6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 12 Dec 2020 16:03:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38514 "EHLO mail.kernel.org"
+        id S2406762AbgLMNUq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 13 Dec 2020 08:20:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51390 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726912AbgLLVD6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 12 Dec 2020 16:03:58 -0500
-Subject: Re: [PULL REQUEST] i2c for 5.10
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607806998;
-        bh=LrD1Zfl1EeJhmin2MIKPDd6M2V7CbI7jps+oos3WPoI=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=g1Yn1eCX9SGWyR1gVyrWOvYAuGI/fQR2flDsG1t58pSVuZiR1NLOWIOKRGnDnlzRO
-         12GOJWb9CHdqkyoY2K4aJZU4TevVgZsCMgQVznvaTqSJW6Zb/afob0GQk3xASgm5Am
-         dar9HsgUBw1iGOQwogDvRz/k0TsRMmDjmnDej/ikTQNtleXkm1VIeaA5qE6rFXASTX
-         ytGfV0Rq2kL86Rdgi+0GAeHWPCz7jV29qbQ2RLpe7EaTyl8KIDqsn3MYljNW1y91iz
-         cFhVd3i6vsT0wMgA3WCllso87zFCFSCQiuGolR6RcJjpe6/DivQ9eC5iIcybEbVXDh
-         o67J1D0f4zlig==
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20201212183046.GA8096@kunai>
-References: <20201212183046.GA8096@kunai>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20201212183046.GA8096@kunai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-X-PR-Tracked-Commit-Id: e977aaf899a6d3b3d6658da66e262b6e307ae3a2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5ee595d9079b94ee931287ce004d34886b7d3c24
-Message-Id: <160780699796.2095.10671629074764009696.pr-tracker-bot@kernel.org>
-Date:   Sat, 12 Dec 2020 21:03:17 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S2406755AbgLMNUp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 13 Dec 2020 08:20:45 -0500
+Received: from archlinux (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5948E22EBE;
+        Sun, 13 Dec 2020 13:20:03 +0000 (UTC)
+Date:   Sun, 13 Dec 2020 13:19:59 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Rob Herring <robh@kernel.org>,
+        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH v2 2/3] dt-bindings:iio:imu:invensense,mpu6050: txt to
+ yaml conversion
+Message-ID: <20201213131959.0974f197@archlinux>
+In-Reply-To: <20201128173343.390165-3-jic23@kernel.org>
+References: <20201128173343.390165-1-jic23@kernel.org>
+        <20201128173343.390165-3-jic23@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sat, 12 Dec 2020 19:30:46 +0100:
+On Sat, 28 Nov 2020 17:33:42 +0000
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+> As Rob Herring suggested, this no long requires the explicit
+> i2c-gate binding, but instead just used i2c-controller.yaml
+> directly.
+> 
+> 2 prior examples combinded into one as a single example can show
+> all of the binding elements as long as the right part is selected.
+> 
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Cc: Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
+> Cc: Wolfram Sang <wsa@the-dreams.de>
+> Cc: Peter Rosin <peda@axentia.se>
+> Link: https://lore.kernel.org/r/20201031181801.742585-3-jic23@kernel.org
+Applied to the togreg branch of iio.git
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5ee595d9079b94ee931287ce004d34886b7d3c24
 
-Thank you!
+> ---
+>  .../bindings/iio/imu/inv_mpu6050.txt          |  67 ------------
+>  .../bindings/iio/imu/invensense,mpu6050.yaml  | 103 ++++++++++++++++++
+>  2 files changed, 103 insertions(+), 67 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt b/Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt
+> deleted file mode 100644
+> index f2f64749e818..000000000000
+> --- a/Documentation/devicetree/bindings/iio/imu/inv_mpu6050.txt
+> +++ /dev/null
+> @@ -1,67 +0,0 @@
+> -InvenSense MPU-6050 Six-Axis (Gyro + Accelerometer) MEMS MotionTracking Device
+> -
+> -http://www.invensense.com/mems/gyro/mpu6050.html
+> -
+> -Required properties:
+> - - compatible : should be one of
+> -		"invensense,mpu6000"
+> -		"invensense,mpu6050"
+> - 		"invensense,mpu6500"
+> -		"invensense,mpu6515"
+> -		"invensense,mpu9150"
+> -		"invensense,mpu9250"
+> -		"invensense,mpu9255"
+> -		"invensense,icm20608"
+> -		"invensense,icm20609"
+> -		"invensense,icm20689"
+> -		"invensense,icm20602"
+> -		"invensense,icm20690"
+> -		"invensense,iam20680"
+> - - reg : the I2C address of the sensor
+> - - interrupts: interrupt mapping for IRQ. It should be configured with flags
+> -   IRQ_TYPE_LEVEL_HIGH, IRQ_TYPE_EDGE_RISING, IRQ_TYPE_LEVEL_LOW or
+> -   IRQ_TYPE_EDGE_FALLING.
+> -
+> -  Refer to interrupt-controller/interrupts.txt for generic interrupt client node
+> -  bindings.
+> -
+> -Optional properties:
+> - - vdd-supply: regulator phandle for VDD supply
+> - - vddio-supply: regulator phandle for VDDIO supply
+> - - mount-matrix: an optional 3x3 mounting rotation matrix
+> - - i2c-gate node.  These devices also support an auxiliary i2c bus.  This is
+> -   simple enough to be described using the i2c-gate binding. See
+> -   i2c/i2c-gate.txt for more details.
+> -
+> -Example:
+> -	mpu6050@68 {
+> -		compatible = "invensense,mpu6050";
+> -		reg = <0x68>;
+> -		interrupt-parent = <&gpio1>;
+> -		interrupts = <18 IRQ_TYPE_EDGE_RISING>;
+> -		mount-matrix = "-0.984807753012208",  /* x0 */
+> -		               "0",                   /* y0 */
+> -		               "-0.173648177666930",  /* z0 */
+> -		               "0",                   /* x1 */
+> -		               "-1",                  /* y1 */
+> -		               "0",                   /* z1 */
+> -		               "-0.173648177666930",  /* x2 */
+> -		               "0",                   /* y2 */
+> -		               "0.984807753012208";   /* z2 */
+> -	};
+> -
+> -
+> -	mpu9250@68 {
+> -		compatible = "invensense,mpu9250";
+> -		reg = <0x68>;
+> -		interrupt-parent = <&gpio3>;
+> -		interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
+> -		i2c-gate {
+> -			#address-cells = <1>;
+> -			#size-cells = <0>;
+> -			ax8975@c {
+> -				compatible = "ak,ak8975";
+> -				reg = <0x0c>;
+> -			};
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml b/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
+> new file mode 100644
+> index 000000000000..9268b6ca2afe
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/imu/invensense,mpu6050.yaml
+> @@ -0,0 +1,103 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/imu/invensense,mpu6050.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: InvenSense MPU-6050 Six-Axis (Gyro + Accelerometer) MEMS MotionTracking Device
+> +
+> +maintainers:
+> +  - Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>
+> +
+> +description: |
+> +  These devices support both I2C and SPI bus interfaces.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - invensense,iam20680
+> +      - invensense,icm20608
+> +      - invensense,icm20609
+> +      - invensense,icm20689
+> +      - invensense,icm20602
+> +      - invensense,icm20690
+> +      - invensense,mpu6000
+> +      - invensense,mpu6050
+> +      - invensense,mpu6500
+> +      - invensense,mpu6515
+> +      - invensense,mpu9150
+> +      - invensense,mpu9250
+> +      - invensense,mpu9255
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency: true
+> +
+> +  vdd-supply: true
+> +  vddio-supply: true
+> +
+> +  mount-matrix: true
+> +
+> +  i2c-gate:
+> +    $ref: /schemas/i2c/i2c-controller.yaml
+> +    unevaluatedProperties: false
+> +    description: |
+> +      These devices also support an auxiliary i2c bus via an i2c-gate.
+> +
+> +allOf:
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - invensense,mpu9150
+> +                - invensense,mpu9250
+> +                - invensense,mpu9255
+> +    then:
+> +      properties:
+> +        i2c-gate: false
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        imu@68 {
+> +            compatible = "invensense,mpu9250";
+> +            reg = <0x68>;
+> +            interrupt-parent = <&gpio3>;
+> +            interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
+> +            mount-matrix = "-0.984807753012208",  /* x0 */
+> +                           "0",                   /* y0 */
+> +                           "-0.173648177666930",  /* z0 */
+> +                           "0",                   /* x1 */
+> +                           "-1",                  /* y1 */
+> +                           "0",                   /* z1 */
+> +                           "-0.173648177666930",  /* x2 */
+> +                           "0",                   /* y2 */
+> +                           "0.984807753012208";   /* z2 */
+> +            i2c-gate {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                magnetometer@c {
+> +                    compatible = "ak,ak8975";
+> +                    reg = <0x0c>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
