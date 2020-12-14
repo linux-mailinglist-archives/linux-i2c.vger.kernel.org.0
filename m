@@ -2,172 +2,257 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5692A2DA124
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Dec 2020 21:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D6E2DA2E0
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Dec 2020 22:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502981AbgLNUJu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Dec 2020 15:09:50 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:47208 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502860AbgLNUJl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Dec 2020 15:09:41 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0BEK8L4L073067;
-        Mon, 14 Dec 2020 14:08:21 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1607976501;
-        bh=bYx/KPXoQnydtHvU0A93Ft8RQtsoKRmWYVYqEzohC3E=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ca6cYdkcTVbnkADiNBN0eInegJ8WDq4+PFGkFWDOfk4/LXyfDKsgmkIHAkRgfcDpP
-         0CJgnGqdd7ya9oPUwsDPmaq5ZAkF7MsJGCw8s4RmyZq3mfbtPoNr2EMQBOh+D2Rbuq
-         ClrMKStJktpBh5LWXg0cUwUzr56JkyJM4WLnHvfU=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0BEK8LOM088012
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 14 Dec 2020 14:08:21 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 14
- Dec 2020 14:08:21 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 14 Dec 2020 14:08:21 -0600
-Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0BEK8Hgr080343;
-        Mon, 14 Dec 2020 14:08:18 -0600
-Subject: Re: [v2] i2c: mediatek: Move suspend and resume handling to NOIRQ
- phase
-To:     Qii Wang <qii.wang@mediatek.com>
-CC:     Wolfram Sang <wsa@the-dreams.de>, <matthias.bgg@gmail.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>
-References: <1605701861-30800-1-git-send-email-qii.wang@mediatek.com>
- <20201202153543.GG874@kunai> <1606958735.25719.29.camel@mhfsdcap03>
- <629d171a-0e77-3d74-ae23-e6439dcf17b7@ti.com>
- <1607326431.25719.33.camel@mhfsdcap03>
- <a9cb5ba5-f3ce-3f82-15cc-30419bb70f4e@ti.com>
- <1607565387.25719.43.camel@mhfsdcap03>
- <e83ab23b-81f2-620c-039b-9cadd84a39fa@ti.com>
- <1607935685.25719.49.camel@mhfsdcap03>
-From:   Grygorii Strashko <grygorii.strashko@ti.com>
-Message-ID: <765c182a-5c68-b408-85ca-f757e891090e@ti.com>
-Date:   Mon, 14 Dec 2020 22:08:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1732575AbgLNVyW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Dec 2020 16:54:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48272 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727624AbgLNVyW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 14 Dec 2020 16:54:22 -0500
+Date:   Mon, 14 Dec 2020 22:53:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607982821;
+        bh=e7/nWuQN99M/Q3cVOFxplYir6ndBIL+r4to0u3mrNa0=;
+        h=From:To:Cc:Subject:From;
+        b=CyjfsW2CAEjg18P4zJ9TiRinI6CZI4ChMWI1wbzejk2Ir8UtzXZNdpCZyTLtbJ94R
+         YHVPlgukfsnHdOguK+2V5c4Iub0OIjwioLt1zlovaaUA7r0Iny4xmfDuaC8MLcxFN2
+         8WlmHpDgVch5oJiRuM01Z2hUlBzSpAHqK5mbAEo4dPWJxcJfmzWueLzmwdbXY0o8Pf
+         PGawddrO4bpMsBL/a5v0g6d8GvzHrELcvdvgkE8WXQEN9gzsH9gNFlBi2DXP5WgHhJ
+         puzxKWCGMLxDZ/VkxpSC4zR8Vy5CJEIvG0clPuUCVDYjvtP3RK7A5gVLExez62XFiO
+         iwrQ2pyt7gYtA==
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for 5.11
+Message-ID: <20201214215335.GA4651@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-In-Reply-To: <1607935685.25719.49.camel@mhfsdcap03>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PNTmBPCT7hxwcZjr"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+--PNTmBPCT7hxwcZjr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 14/12/2020 10:48, Qii Wang wrote:
-> On Thu, 2020-12-10 at 15:03 +0200, Grygorii Strashko wrote:
->>
->> On 10/12/2020 03:56, Qii Wang wrote:
->>> On Mon, 2020-12-07 at 18:35 +0200, Grygorii Strashko wrote:
->>>>
->>>>>
->>>>> On Thu, 2020-12-03 at 10:01 +0200, Grygorii Strashko wrote:
->>>>>>
->>>>>> On 03/12/2020 03:25, Qii Wang wrote:
->>>>>>> On Wed, 2020-12-02 at 16:35 +0100, Wolfram Sang wrote:
->>>>>>>> Hi,
->>>>>>>>
->>>>>>>>> Some i2c device driver indirectly uses I2C driver when it is now
->>>>>>>>> being suspended. The i2c devices driver is suspended during the
->>>>>>>>> NOIRQ phase and this cannot be changed due to other dependencies.
->>>>>>>>> Therefore, we also need to move the suspend handling for the I2C
->>>>>>>>> controller driver to the NOIRQ phase as well.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
->>>>>>>>
->>>>>>>> Is this a bugfix and should go into 5.10? Or can it wait for 5.11?
->>>>>>>>
->>>>>>>
->>>>>>> Yes, Can you help to apply it into 5.10? Thanks
->>>>>>
->>>>>> To be honest if you still do have any i2c device which accessing i2c buss after _noirq
->>>>>> stage and your driver does not implement .master_xfer_atomic() - you definitely have a bigger problem.
->>>>>> So adding IRQF_NO_SUSPEND sound like a hack and probably works just by luck.
->>>>>>
->>>>>
->>>>> At present, it is only a problem caused by missing interrupts,
->>>>> and .master_xfer_atomic() just a implement in polling mode. Why not set
->>>>> the interrupt to a state that can always be triggered?
->>>>>
->>>>>
->>>>
->>>> Because you must not use any IRQ driven operations after _noirq suspend state as it might (and most probably will)
->>>> cause unpredictable behavior later  in suspend_enter():
->>>>
->>>> 	arch_suspend_disable_irqs();
->>>> 	BUG_ON(!irqs_disabled());
->>>> ^after this point any IRQ driven I2C transfer will cause IRQ to be re-enabled
->>>>
->>>> if you need  turn off device from platform callbacks -  .master_xfer_atomic() has to be implemented and used.
->>>>     
->>> Maybe my comment is a bit disturbing.Our purpose is not to call i2c and
->>> use interrupts after _noirq pauses.So We use
->>> i2c_mark_adapter_suspended&i2c_mark_adapter_resumed to block these i2c
->>> transfers， There will not have any IRQ driven I2C transfer after this
->>> point:
->>>           arch_suspend_disable_irqs();
->>>           BUG_ON(!irqs_disabled());
->>> But some device driver will do i2c transfer after
->>> dpm_noirq_resume_devices in dpm_resume_noirq(PMSG_RESUME) when our
->>> driver irq hasn't resume.
->>> 	void dpm_resume_noirq(pm_message_t state)
->>> 	{
->>>           	dpm_noirq_resume_devices(state);
->>
->> Just to clarify. You have resume sequence in dpm_noirq_resume_devices
->>    dpm_noirq_resume_devices -> resume I2C -> resume some device -> do i2c transfer after?
->>
-> 
-> Yes.
+Linus,
 
-huh. First consider IRQF_EARLY_RESUME - it's better, but still will be a hack
+the pull request for I2C is a bit smaller this time with mostly usual
+driver updates. Slave support for imx stands out a little.
 
-> 
->> Is "some device" in Kernel mainline?
->>
-> 
-> The problematic device driver is drivers/regulator/da9211-regulator.c in
-> Kernel mainline.
+Please pull.
 
-regulator is passive device, somebody should call it !?
+Thanks,
 
-And da9211-regulator IRQ handler should remain disabled till resume_device_irqs() call.
-
-note. regulator_class implements only
-
-static const struct dev_pm_ops __maybe_unused regulator_pm_ops = {
-	.suspend	= regulator_suspend,
-	.resume		= regulator_resume,
-};
+   Wolfram
 
 
-> 
->>>           	resume_device_irqs();
->>>           	device_wakeup_disarm_wake_irqs();
->>>           	cpuidle_resume();
->>> 	}
->>> .master_xfer_atomic() seems to be invalid for this question at this
->>> time?
->>>
->>
-> 
+The following changes since commit 0477e92881850d44910a7e94fc2c46f96faa131f:
 
--- 
-Best regards,
-grygorii
+  Linux 5.10-rc7 (2020-12-06 14:25:12 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-5.11
+
+for you to fetch changes up to 4e970a0ada5299d017a4263074f725227c2d2852:
+
+  i2c: remove check that can never be true (2020-12-11 15:43:49 +0100)
+
+----------------------------------------------------------------
+Alexandre Belloni (1):
+      i2c: at91: remove legacy DMA left overs
+
+Andy Shevchenko (2):
+      i2c: designware: Switch header to use BIT() and GENMASK()
+      i2c: designware: Make register offsets all of the same width
+
+Aswath Govindraju (1):
+      dt-bindings: i2c: Add compatible string for AM64 SoC
+
+Biwen Li (1):
+      i2c: imx: support slave mode for imx I2C driver
+
+Bjorn Andersson (1):
+      Revert "i2c: qcom-geni: Disable DMA processing on the Lenovo Yoga C63=
+0"
+
+Codrin Ciubotariu (1):
+      i2c: pxa: move to generic GPIO recovery
+
+Cristian Ciocaltea (4):
+      i2c: owl: Add support for atomic transfers
+      i2c: owl: Enable asynchronous probing
+      dt-bindings: i2c: owl: Convert Actions Semi Owl binding to a schema
+      i2c: owl: Add compatible for the Actions Semi S500 I2C controller
+
+Douglas Anderson (3):
+      soc: qcom: geni: More properly switch to DMA mode
+      Revert "i2c: i2c-qcom-geni: Fix DMA transfer race"
+      soc: qcom: geni: Optimize/comment select fifo/dma mode
+
+Fabio Estevam (2):
+      i2c: imx: Remove unused .id_table support
+      i2c: mxs: Remove unneeded platform_device_id
+
+Geert Uytterhoeven (1):
+      i2c: sh_mobile: Mark adapter suspended during suspend
+
+Khalil Blaiech (1):
+      dt-bindings: i2c: mellanox,i2c-mlxbf: convert txt to YAML schema
+
+Mario Alejandro Posso Escobar (1):
+      i2c: ismt: Adding support for I2C_SMBUS_BLOCK_PROC_CALL
+
+Mark Tomlinson (1):
+      i2c: mv64xxx: Add bus error recovery
+
+Martin Kaiser (3):
+      i2c: exynos5: remove duplicate error message
+      i2c: exynos5: fix platform_get_irq error handling
+      i2c: exynos5: don't check for irq 0
+
+Sagar Shrikant Kadam (1):
+      i2c: ocores: fix polling mode workaround on FU540-C000 SoC
+
+Stefan L=C3=A4sser (1):
+      i2c: ocores: Avoid false-positive error log message.
+
+Uwe Kleine-K=C3=B6nig (3):
+      i2c: pca-platform: drop two members from driver data that are assigne=
+d to only
+      i2c: Warn when device removing fails
+      i2c: remove check that can never be true
+
+Vaibhav Gupta (1):
+      i2c: nvidia-gpu: drop empty stub for runtime pm
+
+Wolfram Sang (2):
+      Merge tag '20201013212531.428538-1-dianders@chromium.org' of https://=
+git.kernel.org/.../qcom/linux into i2c/for-5.11
+      Merge branch 'i2c/for-current' into i2c/for-5.11
+
+Yash Shah (1):
+      dt-bindings: i2c: Update DT binding docs to support SiFive FU740 SoC
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Akash Asthana (3):
+      (Rev.) Revert "i2c: qcom-geni: Disable DMA processing on the Lenovo Y=
+oga C630"
+      (Rev.) Revert "i2c: i2c-qcom-geni: Fix DMA transfer race"
+      (Rev.) soc: qcom: geni: More properly switch to DMA mode
+
+Andrew Lunn (1):
+      (Rev.) i2c: ocores: Avoid false-positive error log message.
+
+Codrin Ciubotariu (1):
+      (Rev.) i2c: at91: remove legacy DMA left overs
+
+Dmitry Baryshkov (2):
+      (Test) Revert "i2c: i2c-qcom-geni: Fix DMA transfer race"
+      (Test) soc: qcom: geni: More properly switch to DMA mode
+
+Jarkko Nikula (1):
+      (Rev.) i2c: nvidia-gpu: drop empty stub for runtime pm
+
+Krzysztof Kozlowski (3):
+      (Rev.) i2c: exynos5: don't check for irq 0
+      (Rev.) i2c: exynos5: fix platform_get_irq error handling
+      (Rev.) i2c: exynos5: remove duplicate error message
+
+Manivannan Sadhasivam (4):
+      (Rev.) i2c: owl: Add compatible for the Actions Semi S500 I2C control=
+ler
+      (Rev.) i2c: owl: Add compatible for the Actions Semi S500 I2C control=
+ler
+      (Rev.) i2c: owl: Enable asynchronous probing
+      (Rev.) i2c: owl: Add support for atomic transfers
+
+Peter Korsgaard (1):
+      (Rev.) i2c: ocores: Avoid false-positive error log message.
+
+Rob Herring (3):
+      (Rev.) dt-bindings: i2c: Update DT binding docs to support SiFive FU7=
+40 SoC
+      (Rev.) dt-bindings: i2c: owl: Convert Actions Semi Owl binding to a s=
+chema
+      (Rev.) dt-bindings: i2c: mellanox,i2c-mlxbf: convert txt to YAML sche=
+ma
+
+Steev Klimaszewski (1):
+      (Test) Revert "i2c: qcom-geni: Disable DMA processing on the Lenovo Y=
+oga C630"
+
+Stephen Boyd (2):
+      (Rev.) Revert "i2c: i2c-qcom-geni: Fix DMA transfer race"
+      (Rev.) soc: qcom: geni: More properly switch to DMA mode
+
+ .../devicetree/bindings/i2c/i2c-ocores.txt         |   8 +-
+ Documentation/devicetree/bindings/i2c/i2c-omap.txt |   1 +
+ Documentation/devicetree/bindings/i2c/i2c-owl.txt  |  29 ---
+ Documentation/devicetree/bindings/i2c/i2c-owl.yaml |  62 ++++++
+ .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.txt |  42 ----
+ .../bindings/i2c/mellanox,i2c-mlxbf.yaml           |  78 +++++++
+ MAINTAINERS                                        |   3 +-
+ drivers/i2c/busses/Kconfig                         |   1 +
+ drivers/i2c/busses/i2c-at91-master.c               |   1 -
+ drivers/i2c/busses/i2c-at91.h                      |   2 -
+ drivers/i2c/busses/i2c-designware-core.h           |  98 ++++-----
+ drivers/i2c/busses/i2c-exynos5.c                   |   5 +-
+ drivers/i2c/busses/i2c-imx.c                       | 239 +++++++++++++++++=
+----
+ drivers/i2c/busses/i2c-ismt.c                      |  19 +-
+ drivers/i2c/busses/i2c-mv64xxx.c                   |  29 ++-
+ drivers/i2c/busses/i2c-mxs.c                       |  22 +-
+ drivers/i2c/busses/i2c-nvidia-gpu.c                |  10 +-
+ drivers/i2c/busses/i2c-ocores.c                    |  25 ++-
+ drivers/i2c/busses/i2c-owl.c                       |  75 +++++--
+ drivers/i2c/busses/i2c-pca-platform.c              |   4 -
+ drivers/i2c/busses/i2c-pxa.c                       |  76 +------
+ drivers/i2c/busses/i2c-qcom-geni.c                 |  18 +-
+ drivers/i2c/busses/i2c-sh_mobile.c                 |  28 +++
+ drivers/i2c/i2c-core-base.c                        |  14 +-
+ drivers/soc/qcom/qcom-geni-se.c                    |  55 +++--
+ 25 files changed, 604 insertions(+), 340 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-owl.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-owl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxb=
+f.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxb=
+f.yaml
+
+--PNTmBPCT7hxwcZjr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/X3toACgkQFA3kzBSg
+KbavVRAAqRIueaBZtcE1a98L39pGKW14iIKe078dhIMgJf3soeLtGpinFDr4HhHW
+ipndEaeGP2LCU1pumJh6jjzGADVJNDNeVKkScreg59tKkw0QHLsZDwZTgKoHciH9
+EPGVQqn2t/D51Uq0Z9zLV7RRPHSJVEyjm1r/pKgBcK2g1LdbPqgTzmh7ZK8o/x0P
+eQ434theFhg/gmhARJqrqWw5+go7VFrhzwRAQFzHFeY0o6H0ZeaneWak8Niu0br6
+NSIMiyy1CKjk1XvsNbGY1345tAw2QmqrYVv5ldv23x31ICi9LufwqJT97jI5RwjM
+NMQ5W95br2+5iFYxuDxoWvqMGuf+GrB7NrRjOy/vWAjJLgCsl4Gr58a1aujDEbDT
+/U08184cE0KW36y9IclWeGEr/C8kk07VHJDCGYkjjOaA6R1KjFdFvKkUuNvb9IbC
+/FeuILd1ZqSncbcjtyLZmGvibWA7bH1DIwERc7dFQ4IM8iMqZUkASjlpHMXEJaZI
+AQN6G/PMmC9TUl/yqHR8XZlLHVviwOZ0moj73W1JpCkMgBeXHuRAbj6lJOYBkW3K
+Qlq+iDISeAABILQ1qEKER9KUrL45TariQ2V953w0ogdtEO8P52NhY5zQ+bosqZRZ
+Vc/oVAZ9343QUOl/TocIeINWSAZzpGanu30mEli3YUQ5vtvZ7sQ=
+=esms
+-----END PGP SIGNATURE-----
+
+--PNTmBPCT7hxwcZjr--
