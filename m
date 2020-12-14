@@ -2,122 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B99792D925B
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Dec 2020 06:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00F12D9452
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Dec 2020 09:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbgLNFBz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Dec 2020 00:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbgLNFBz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Dec 2020 00:01:55 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E6BC0613CF;
-        Sun, 13 Dec 2020 21:01:15 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id hk16so5898545pjb.4;
-        Sun, 13 Dec 2020 21:01:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kxAD3aRQUiMk1E45cepxnGfD2pHGp8PBeo2qCCoeP5M=;
-        b=r0wFvoL8/TrisSKiImOruIIt6uMG7xAD3wqWM3wj+Rltx3gIkX3RzdXlR2bhHPTGB/
-         Y9czYHrYbi3RETGZ+o5vFDxbg8I3icwL0CEdX0rnfJyyI5coayegzWNpMf8oZZJsHEoC
-         oDtqYSyuNbspz3R2zGuI0ln5mARFUdvG89TAUOY7MMw4ssvqrCn/Y2p7k4+vbgIzzLzS
-         j4VZ2208FPbUiA8MyoltHVhmJnvdyPCu7vfuNbERpK7T2pvU2fOBcR/xoqeZAQaQVLvf
-         rZZJWfJ+tECp4Rj6T1YY2D3zNT86w7OZP6xKJJ4ORwc9yC1JbtUfeemCNk7lCSjgp0No
-         T6bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kxAD3aRQUiMk1E45cepxnGfD2pHGp8PBeo2qCCoeP5M=;
-        b=Xu1GSIKRqxZwSplcQKDg8Gb54eVjArTExuMEvDfcwBquwUu1M3HYAVqQ6rKo6Vbpni
-         tyjKCA7Pvo+GOPXtUXhEMySFaWQikuqtidUoq9jbgJ/PU+oD2aRKjRT/ZsWVy/HeMmLW
-         I7KqpAM0Uam67H6R32sa8z1KTzuqAaIoIhmtxTrb6HytwU8Agg6VOIfpaH56wzVFclRS
-         4Q3K/VQKkFx7yukrcvjZ+1aLJsKT3BV20Hv3Elj8KFobXbuOaZiRxBSDqJ4jISuFWN2i
-         Lk3R/GtX0lsdUCmcKzmV5zUYNNkUpkCKmUWOnbu8ZQwbFNeUmFiJJIcgcOt289slN9o5
-         byZw==
-X-Gm-Message-State: AOAM532UHzDFUkkK5Ml6Py9Nah4CcpYKNnXIiMiWR7T5SjguQ22zWl7g
-        B2KCiRlk0VSgYhrgTi/hPjLdoWwwM8dkQA==
-X-Google-Smtp-Source: ABdhPJyMOll/mAgPzRYE4GReYqTEnfK/NyQOlhAnYOrehwjgDaomybup/hVfa5k7zqdRxYLhp73VOQ==
-X-Received: by 2002:a17:902:6b48:b029:d8:e603:75fb with SMTP id g8-20020a1709026b48b02900d8e60375fbmr21350639plt.6.1607922074698;
-        Sun, 13 Dec 2020 21:01:14 -0800 (PST)
-Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id na6sm15650321pjb.12.2020.12.13.21.01.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Dec 2020 21:01:14 -0800 (PST)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Linhua Xu <linhua.xu@unisoc.com>
-Subject: [PATCH v2] i2c: sprd: use a specific timeout to avoid system hang up issue
-Date:   Mon, 14 Dec 2020 12:58:50 +0800
-Message-Id: <20201214045850.1026293-1-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S2405205AbgLNItP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Dec 2020 03:49:15 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:20798 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727215AbgLNItO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Dec 2020 03:49:14 -0500
+X-UUID: 07ff6e1b070540819f46b0b60ec874d6-20201214
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=n1kA6Xt14g3xa0Kc7PDsfol/8c8gVI0uIJMViFPg2wE=;
+        b=ENhkujVPk4+U8Q1Qw8QJkWL16yFzOLCfre7VkpWrT88IzkjcRsGcG++nwDhMEsQ35Jyk5/jfEDFdQgTzdLoXKXe79fD3bpV6qAd5ABblKgQNGJS/0prLi4Djr5/RnY6THD8MT6RwaAoj5fRfXcWjRkb7z1qP7cHirN+h5gsAtgg=;
+X-UUID: 07ff6e1b070540819f46b0b60ec874d6-20201214
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1033874007; Mon, 14 Dec 2020 16:48:07 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Dec
+ 2020 16:48:05 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 14 Dec 2020 16:48:04 +0800
+Message-ID: <1607935685.25719.49.camel@mhfsdcap03>
+Subject: Re: [v2] i2c: mediatek: Move suspend and resume handling to NOIRQ
+ phase
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     Grygorii Strashko <grygorii.strashko@ti.com>
+CC:     Wolfram Sang <wsa@the-dreams.de>, <matthias.bgg@gmail.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>
+Date:   Mon, 14 Dec 2020 16:48:05 +0800
+In-Reply-To: <e83ab23b-81f2-620c-039b-9cadd84a39fa@ti.com>
+References: <1605701861-30800-1-git-send-email-qii.wang@mediatek.com>
+         <20201202153543.GG874@kunai> <1606958735.25719.29.camel@mhfsdcap03>
+         <629d171a-0e77-3d74-ae23-e6439dcf17b7@ti.com>
+         <1607326431.25719.33.camel@mhfsdcap03>
+         <a9cb5ba5-f3ce-3f82-15cc-30419bb70f4e@ti.com>
+         <1607565387.25719.43.camel@mhfsdcap03>
+         <e83ab23b-81f2-620c-039b-9cadd84a39fa@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-TM-SNTS-SMTP: A348A07C4749E292614C871158F2A1BF55706716C364BA0E2AF8FF30E55F93102000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-
-If the i2c device SCL bus being pulled up due to some exception before
-message transfer done, the system cannot receive the completing interrupt
-signal any more, it would not exit waiting loop until MAX_SCHEDULE_TIMEOUT
-jiffies eclipse, that would make the system seemed hang up. To avoid that
-happen, this patch adds a specific timeout for message transfer.
-
-Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
-Signed-off-by: Linhua Xu <linhua.xu@unisoc.com>
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
----
-* Changes since v1:
-- Addressed Wolfram's comments for code;
-- Changed to use Signed-off-by instead of Original-by;
-- Fixed a compile error.
----
- drivers/i2c/busses/i2c-sprd.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
-index 19cda6742423..b9f58a4b2281 100644
---- a/drivers/i2c/busses/i2c-sprd.c
-+++ b/drivers/i2c/busses/i2c-sprd.c
-@@ -72,6 +72,8 @@
- 
- /* timeout (ms) for pm runtime autosuspend */
- #define SPRD_I2C_PM_TIMEOUT	1000
-+/* timeout (ms) for transfer message */
-+#define I2C_XFER_TIMEOUT	1000
- 
- /* SPRD i2c data structure */
- struct sprd_i2c {
-@@ -244,6 +246,7 @@ static int sprd_i2c_handle_msg(struct i2c_adapter *i2c_adap,
- 			       struct i2c_msg *msg, bool is_last_msg)
- {
- 	struct sprd_i2c *i2c_dev = i2c_adap->algo_data;
-+	unsigned long time_left;
- 
- 	i2c_dev->msg = msg;
- 	i2c_dev->buf = msg->buf;
-@@ -273,7 +276,10 @@ static int sprd_i2c_handle_msg(struct i2c_adapter *i2c_adap,
- 
- 	sprd_i2c_opt_start(i2c_dev);
- 
--	wait_for_completion(&i2c_dev->complete);
-+	time_left = wait_for_completion_timeout(&i2c_dev->complete,
-+				msecs_to_jiffies(I2C_XFER_TIMEOUT));
-+	if (!time_left)
-+		return -EIO;
- 
- 	return i2c_dev->err;
- }
--- 
-2.25.1
+T24gVGh1LCAyMDIwLTEyLTEwIGF0IDE1OjAzICswMjAwLCBHcnlnb3JpaSBTdHJhc2hrbyB3cm90
+ZToNCj4gDQo+IE9uIDEwLzEyLzIwMjAgMDM6NTYsIFFpaSBXYW5nIHdyb3RlOg0KPiA+IE9uIE1v
+biwgMjAyMC0xMi0wNyBhdCAxODozNSArMDIwMCwgR3J5Z29yaWkgU3RyYXNoa28gd3JvdGU6DQo+
+ID4+DQo+ID4+Pg0KPiA+Pj4gT24gVGh1LCAyMDIwLTEyLTAzIGF0IDEwOjAxICswMjAwLCBHcnln
+b3JpaSBTdHJhc2hrbyB3cm90ZToNCj4gPj4+Pg0KPiA+Pj4+IE9uIDAzLzEyLzIwMjAgMDM6MjUs
+IFFpaSBXYW5nIHdyb3RlOg0KPiA+Pj4+PiBPbiBXZWQsIDIwMjAtMTItMDIgYXQgMTY6MzUgKzAx
+MDAsIFdvbGZyYW0gU2FuZyB3cm90ZToNCj4gPj4+Pj4+IEhpLA0KPiA+Pj4+Pj4NCj4gPj4+Pj4+
+PiBTb21lIGkyYyBkZXZpY2UgZHJpdmVyIGluZGlyZWN0bHkgdXNlcyBJMkMgZHJpdmVyIHdoZW4g
+aXQgaXMgbm93DQo+ID4+Pj4+Pj4gYmVpbmcgc3VzcGVuZGVkLiBUaGUgaTJjIGRldmljZXMgZHJp
+dmVyIGlzIHN1c3BlbmRlZCBkdXJpbmcgdGhlDQo+ID4+Pj4+Pj4gTk9JUlEgcGhhc2UgYW5kIHRo
+aXMgY2Fubm90IGJlIGNoYW5nZWQgZHVlIHRvIG90aGVyIGRlcGVuZGVuY2llcy4NCj4gPj4+Pj4+
+PiBUaGVyZWZvcmUsIHdlIGFsc28gbmVlZCB0byBtb3ZlIHRoZSBzdXNwZW5kIGhhbmRsaW5nIGZv
+ciB0aGUgSTJDDQo+ID4+Pj4+Pj4gY29udHJvbGxlciBkcml2ZXIgdG8gdGhlIE5PSVJRIHBoYXNl
+IGFzIHdlbGwuDQo+ID4+Pj4+Pj4NCj4gPj4+Pj4+PiBTaWduZWQtb2ZmLWJ5OiBRaWkgV2FuZyA8
+cWlpLndhbmdAbWVkaWF0ZWsuY29tPg0KPiA+Pj4+Pj4NCj4gPj4+Pj4+IElzIHRoaXMgYSBidWdm
+aXggYW5kIHNob3VsZCBnbyBpbnRvIDUuMTA/IE9yIGNhbiBpdCB3YWl0IGZvciA1LjExPw0KPiA+
+Pj4+Pj4NCj4gPj4+Pj4NCj4gPj4+Pj4gWWVzLCBDYW4geW91IGhlbHAgdG8gYXBwbHkgaXQgaW50
+byA1LjEwPyBUaGFua3MNCj4gPj4+Pg0KPiA+Pj4+IFRvIGJlIGhvbmVzdCBpZiB5b3Ugc3RpbGwg
+ZG8gaGF2ZSBhbnkgaTJjIGRldmljZSB3aGljaCBhY2Nlc3NpbmcgaTJjIGJ1c3MgYWZ0ZXIgX25v
+aXJxDQo+ID4+Pj4gc3RhZ2UgYW5kIHlvdXIgZHJpdmVyIGRvZXMgbm90IGltcGxlbWVudCAubWFz
+dGVyX3hmZXJfYXRvbWljKCkgLSB5b3UgZGVmaW5pdGVseSBoYXZlIGEgYmlnZ2VyIHByb2JsZW0u
+DQo+ID4+Pj4gU28gYWRkaW5nIElSUUZfTk9fU1VTUEVORCBzb3VuZCBsaWtlIGEgaGFjayBhbmQg
+cHJvYmFibHkgd29ya3MganVzdCBieSBsdWNrLg0KPiA+Pj4+DQo+ID4+Pg0KPiA+Pj4gQXQgcHJl
+c2VudCwgaXQgaXMgb25seSBhIHByb2JsZW0gY2F1c2VkIGJ5IG1pc3NpbmcgaW50ZXJydXB0cywN
+Cj4gPj4+IGFuZCAubWFzdGVyX3hmZXJfYXRvbWljKCkganVzdCBhIGltcGxlbWVudCBpbiBwb2xs
+aW5nIG1vZGUuIFdoeSBub3Qgc2V0DQo+ID4+PiB0aGUgaW50ZXJydXB0IHRvIGEgc3RhdGUgdGhh
+dCBjYW4gYWx3YXlzIGJlIHRyaWdnZXJlZD8NCj4gPj4+DQo+ID4+Pg0KPiA+Pg0KPiA+PiBCZWNh
+dXNlIHlvdSBtdXN0IG5vdCB1c2UgYW55IElSUSBkcml2ZW4gb3BlcmF0aW9ucyBhZnRlciBfbm9p
+cnEgc3VzcGVuZCBzdGF0ZSBhcyBpdCBtaWdodCAoYW5kIG1vc3QgcHJvYmFibHkgd2lsbCkNCj4g
+Pj4gY2F1c2UgdW5wcmVkaWN0YWJsZSBiZWhhdmlvciBsYXRlciAgaW4gc3VzcGVuZF9lbnRlcigp
+Og0KPiA+Pg0KPiA+PiAJYXJjaF9zdXNwZW5kX2Rpc2FibGVfaXJxcygpOw0KPiA+PiAJQlVHX09O
+KCFpcnFzX2Rpc2FibGVkKCkpOw0KPiA+PiBeYWZ0ZXIgdGhpcyBwb2ludCBhbnkgSVJRIGRyaXZl
+biBJMkMgdHJhbnNmZXIgd2lsbCBjYXVzZSBJUlEgdG8gYmUgcmUtZW5hYmxlZA0KPiA+Pg0KPiA+
+PiBpZiB5b3UgbmVlZCAgdHVybiBvZmYgZGV2aWNlIGZyb20gcGxhdGZvcm0gY2FsbGJhY2tzIC0g
+IC5tYXN0ZXJfeGZlcl9hdG9taWMoKSBoYXMgdG8gYmUgaW1wbGVtZW50ZWQgYW5kIHVzZWQuDQo+
+ID4+ICAgIA0KPiA+IE1heWJlIG15IGNvbW1lbnQgaXMgYSBiaXQgZGlzdHVyYmluZy5PdXIgcHVy
+cG9zZSBpcyBub3QgdG8gY2FsbCBpMmMgYW5kDQo+ID4gdXNlIGludGVycnVwdHMgYWZ0ZXIgX25v
+aXJxIHBhdXNlcy5TbyBXZSB1c2UNCj4gPiBpMmNfbWFya19hZGFwdGVyX3N1c3BlbmRlZCZpMmNf
+bWFya19hZGFwdGVyX3Jlc3VtZWQgdG8gYmxvY2sgdGhlc2UgaTJjDQo+ID4gdHJhbnNmZXJz77yM
+IFRoZXJlIHdpbGwgbm90IGhhdmUgYW55IElSUSBkcml2ZW4gSTJDIHRyYW5zZmVyIGFmdGVyIHRo
+aXMNCj4gPiBwb2ludDoNCj4gPiAgICAgICAgICBhcmNoX3N1c3BlbmRfZGlzYWJsZV9pcnFzKCk7
+DQo+ID4gICAgICAgICAgQlVHX09OKCFpcnFzX2Rpc2FibGVkKCkpOw0KPiA+IEJ1dCBzb21lIGRl
+dmljZSBkcml2ZXIgd2lsbCBkbyBpMmMgdHJhbnNmZXIgYWZ0ZXINCj4gPiBkcG1fbm9pcnFfcmVz
+dW1lX2RldmljZXMgaW4gZHBtX3Jlc3VtZV9ub2lycShQTVNHX1JFU1VNRSkgd2hlbiBvdXINCj4g
+PiBkcml2ZXIgaXJxIGhhc24ndCByZXN1bWUuDQo+ID4gCXZvaWQgZHBtX3Jlc3VtZV9ub2lycShw
+bV9tZXNzYWdlX3Qgc3RhdGUpDQo+ID4gCXsNCj4gPiAgICAgICAgICAJZHBtX25vaXJxX3Jlc3Vt
+ZV9kZXZpY2VzKHN0YXRlKTsNCj4gDQo+IEp1c3QgdG8gY2xhcmlmeS4gWW91IGhhdmUgcmVzdW1l
+IHNlcXVlbmNlIGluIGRwbV9ub2lycV9yZXN1bWVfZGV2aWNlcw0KPiAgIGRwbV9ub2lycV9yZXN1
+bWVfZGV2aWNlcyAtPiByZXN1bWUgSTJDIC0+IHJlc3VtZSBzb21lIGRldmljZSAtPiBkbyBpMmMg
+dHJhbnNmZXIgYWZ0ZXI/DQo+IA0KDQpZZXMuDQoNCj4gSXMgInNvbWUgZGV2aWNlIiBpbiBLZXJu
+ZWwgbWFpbmxpbmU/DQo+IA0KDQpUaGUgcHJvYmxlbWF0aWMgZGV2aWNlIGRyaXZlciBpcyBkcml2
+ZXJzL3JlZ3VsYXRvci9kYTkyMTEtcmVndWxhdG9yLmMgaW4NCktlcm5lbCBtYWlubGluZS4NCg0K
+PiA+ICAgICAgICAgIAlyZXN1bWVfZGV2aWNlX2lycXMoKTsNCj4gPiAgICAgICAgICAJZGV2aWNl
+X3dha2V1cF9kaXNhcm1fd2FrZV9pcnFzKCk7DQo+ID4gICAgICAgICAgCWNwdWlkbGVfcmVzdW1l
+KCk7DQo+ID4gCX0NCj4gPiAubWFzdGVyX3hmZXJfYXRvbWljKCkgc2VlbXMgdG8gYmUgaW52YWxp
+ZCBmb3IgdGhpcyBxdWVzdGlvbiBhdCB0aGlzDQo+ID4gdGltZT8NCj4gPiANCj4gDQoNCg==
 
