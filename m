@@ -2,51 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F07E2D9BC1
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Dec 2020 17:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD0F2D9BA4
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Dec 2020 17:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439915AbgLNQFl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Dec 2020 11:05:41 -0500
-Received: from server.kenspensetc.com ([185.148.128.76]:48008 "EHLO
-        server.kenspensetc.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439358AbgLNQFj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Dec 2020 11:05:39 -0500
-Received: from localhost ([127.0.0.1]:47936 helo=server.kenspensetc.com)
-        by server.kenspensetc.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <sender@ridecals.com>)
-        id 1knLn0-00029V-6J; Thu, 10 Dec 2020 08:15:22 -0500
-Received: from [70.32.0.46] ([70.32.0.46]) by ridecals.com (Horde Framework)
- with HTTPS; Thu, 10 Dec 2020 08:15:22 -0500
-Date:   Thu, 10 Dec 2020 08:15:22 -0500
-Message-ID: <20201210081522.Horde.GEA1j18D53oi4VTUxYWD_87@ridecals.com>
-From:   Russell Branting <sender@ridecals.com>
-Subject: Vital
-Reply-to: Goodagent01@gmail.com
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        id S2407986AbgLNQBi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Dec 2020 11:01:38 -0500
+Received: from www.zeus03.de ([194.117.254.33]:60916 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406958AbgLNQB3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 14 Dec 2020 11:01:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=8GQApI/l+g6NMrOgnLOb1AORT3M
+        0jd6EgA/DdNEWurU=; b=2cutqTMUAdEgLb15UMDdgyXdvCVRFqYLbcMzNSUFBX9
+        /843smyaWVovJSI2CNf4t4cY1+BJnjiZm7iZAANSjOEDxwUNQzRNDmcZDv1CzQwU
+        bCS8Oly0hvz5/1LDjyYEEMqjSbQ/3c7ZccUUu9MTMmYktMlaGxg+9WQtS1eFOnF4
+        =
+Received: (qmail 2470543 invoked from network); 14 Dec 2020 17:00:48 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Dec 2020 17:00:48 +0100
+X-UD-Smtp-Session: l3s3148p1@163Rvm623q1UhsJO
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH] i2c: gpio: fix MODULE_LICENCE
+Date:   Mon, 14 Dec 2020 17:00:44 +0100
+Message-Id: <20201214160044.3378-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server.kenspensetc.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - ridecals.com
-X-Get-Message-Sender-Via: server.kenspensetc.com: authenticated_id: sender9@ridecals.com
-X-Authenticated-Sender: server.kenspensetc.com: sender9@ridecals.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Let MODULE_LICENCE match the SPDX header which is correctly based on the
+previous textual description.
 
-I am instructed to inform you of your appointment as the next of kin  
-to your deceased relative estate. Kindly indicate your acceptance by  
-reconfirming your Full Name, Address & Phone Number for immediate  
-processing of the funds release to your control OR the deceased  
-deposited funds will be declared unclaimed.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/i2c/busses/i2c-gpio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
+index a4a6825c8758..7a048abbf92b 100644
+--- a/drivers/i2c/busses/i2c-gpio.c
++++ b/drivers/i2c/busses/i2c-gpio.c
+@@ -520,5 +520,5 @@ module_exit(i2c_gpio_exit);
+ 
+ MODULE_AUTHOR("Haavard Skinnemoen (Atmel)");
+ MODULE_DESCRIPTION("Platform-independent bitbanging I2C driver");
+-MODULE_LICENSE("GPL");
++MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("platform:i2c-gpio");
+-- 
+2.28.0
 
