@@ -2,65 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 836392D9A8C
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Dec 2020 16:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABAB12D9AB1
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Dec 2020 16:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731616AbgLNPFJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Dec 2020 10:05:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731084AbgLNPFJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Dec 2020 10:05:09 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9A6C0613D3
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Dec 2020 07:04:29 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id m6so2476572pfm.6
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Dec 2020 07:04:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=b+RWJ4+h9CcyV9dNvpGbR+OOmowaJ15vnZpnVFgZJzk=;
-        b=G/QZcNZE+R8z2RGyo9jTtp0w0EUMhpIR2DR2RD4IKif/RDeGA/bdAt6uY01xpWdBFc
-         lub2x65r2JrlqeQi3S4O19LeU7k99ELDUp5APDrvrucVIDEFC+oPy8bdpa/+dU0z7mTQ
-         vKRyCYp8OWJSXzyCyzzdXIYrbwzlbwyR9SYwt89qfHE7hz7tmH/SxV2YhuM4VdH1LVvC
-         lEwmTS2EiRR2XsDUmhXCLLobdkjHGo2BAuTE4F/BvHXKOV3RyWLmZ4QbeEdDjL2yATHx
-         0owWioap5jPJ3+gAA6QixPFFyiEZryu+521JxbCRbP6/2ihpgpRMxukY4F8XAfWalIuP
-         vtvQ==
+        id S2438225AbgLNPRO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Dec 2020 10:17:14 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37111 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407158AbgLNPRN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Dec 2020 10:17:13 -0500
+Received: by mail-ot1-f66.google.com with SMTP id o11so16009456ote.4;
+        Mon, 14 Dec 2020 07:16:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=b+RWJ4+h9CcyV9dNvpGbR+OOmowaJ15vnZpnVFgZJzk=;
-        b=sYBGV+RbayKerU92LfPy94tuHJIqAAeMdyRZ2Y0Ynvh4JFs2NBKMOUPPp3WTHqFWVe
-         iOY7A2VwOGHtMSYO56Y8KgAFsfZM9RAoe12VRcmEhZzhmdOND0pzfeREToksyEeZVXIq
-         O4QO181OXrltnAb7Td+/00KgYE9orTpFhpjLAgoMq9qk3ew1lg159w4M5ubzyrP9JVrh
-         14irJPaUwQMWKvmuzYQlpHGtMxIic6sZIY1n4xiFIezBcxCCjesdaTemOFqEzYRqYsGb
-         NP68xNlmC/Jdp1N1uIy4HzEHkUKBRTO7vyI52dMtspQb/JXvQ4GDaTEEweViCFnrMRi5
-         784g==
-X-Gm-Message-State: AOAM532fapekTwXmW4YY2Ab5AC5ZnRI/FL6r2i+HbQAxpBR2YknNe+PJ
-        3nQmFzs8xwlyegcnDbmshCOOlI+V4gfW941k8LtU6xBCPWzrIg==
-X-Google-Smtp-Source: ABdhPJz3MSY5rGx/gBTKYIrts9X+PRA0wNwenAGJ22pNLmgBJV596DOwGIn7VFDx9CSD74txPYvnpmxqrVwR3W/Ym04=
-X-Received: by 2002:a63:c04b:: with SMTP id z11mr23805762pgi.74.1607958268700;
- Mon, 14 Dec 2020 07:04:28 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ySr/Vl2ci/XujLZBu5wQq6kxGRFqMO/2YetNSvkqjAc=;
+        b=hwvRFzCMkmLAyumcEZ+x5HoxioVtQ55fkctIIb046RV+u8UCTXuqzd6bJKNbLgMMZ6
+         FFu5CAVC8RUDt8DL7XB91o5m/lRsY/jiIWgZhuH/5Rp1JqtAeyMfsWlFZdlqq3sRcDR7
+         K33Xy/kUSfDCSfstiTPCkNv/oCsX7+cqGqOg+HvLB8VTHt9ttTrKkblKvTbRP/uxxSzJ
+         opGumD1/5OrVCnGhDLbtmfNrZ7rjHFdzg86o/mWdc/B9htfIrTqRTsdSb1QcxIKLYenR
+         CVV4bGEjCKhhGEvP874Fv3tlIsmqm4HnTr6v2quUkrOC4POptoVpPeD5+4jiGqSpX26K
+         ZGUw==
+X-Gm-Message-State: AOAM533gYfvudEV3h/0pxvOPA3y/9nfPQhTy1oanaWUNzKEthW/YZVzz
+        MNFJmtdqxNGjlBtAcgT/SQ==
+X-Google-Smtp-Source: ABdhPJwvWfFei+PUOgunAnO1jgcQwKu4UbC3ifUNhnnCaKcRLPgKg6n6i+c4oz1Hvoc/6ZSzcE5ltA==
+X-Received: by 2002:a9d:2d84:: with SMTP id g4mr20059505otb.212.1607958992340;
+        Mon, 14 Dec 2020 07:16:32 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id y8sm4027679oix.43.2020.12.14.07.16.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 07:16:31 -0800 (PST)
+Received: (nullmailer pid 1938534 invoked by uid 1000);
+        Mon, 14 Dec 2020 15:16:30 -0000
+Date:   Mon, 14 Dec 2020 09:16:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Wolfram Sang <wsa@kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] dt-bindings: i2c: dw: cancel mandatory
+ requirements for "#address-cells" and "#size-cells"
+Message-ID: <20201214151630.GA1938499@robh.at.kernel.org>
+References: <20201214124347.2120-1-thunder.leizhen@huawei.com>
+ <20201214124347.2120-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 14 Dec 2020 17:05:17 +0200
-Message-ID: <CAHp75VeTO1RR-tGhz-uN+bOMRphAcHpe95GrRrQTtrEs+itK=A@mail.gmail.com>
-Subject: repo update
-To:     Peter Rosin <peda@axentia.se>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201214124347.2120-2-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi, Peter.
+On Mon, 14 Dec 2020 20:43:47 +0800, Zhen Lei wrote:
+> The "#address-cells" and "#size-cells" are required only when the I2C
+> controller has subnodes. However, some I2C controllers defined in
+> "arch/arm64/boot/dts/amd/" and "arch/arm64/boot/dts/hisilicon/"
+> directories do not have child nodes. So they don't need these two
+> properties and don't write them explicitly.
+> 
+> Therefore, setting properties "#address-cells" and "#size-cells" as
+> "required" in this yaml file causes the following warnings:
+> /root/linux-next/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dt.yaml: \
+> i2c@f7100000: '#address-cells' is a required property
+> /root/linux-next/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dt.yaml: \
+> i2c@f7100000: '#size-cells' is a required property
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 8 --------
+>  1 file changed, 8 deletions(-)
+> 
 
-For a few releases I have been observing the mux patch ("mux:
-adgs1408: Add mod_devicetable.h...") dangling in Linux Next. It seems
-that one of your repositories hasn't been updated to one of the
-vanilla rc:s or releases. Can you align it so it will not linger in
-Linux Next anymore?
-
--- 
-With Best Regards,
-Andy Shevchenko
+Applied, thanks!
