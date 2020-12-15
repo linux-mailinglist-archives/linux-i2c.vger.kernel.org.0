@@ -2,54 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 895672DAAE6
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Dec 2020 11:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAFE2DAAF0
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Dec 2020 11:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728061AbgLOKaB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Dec 2020 05:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S1727128AbgLOKdL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Dec 2020 05:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727618AbgLOK3y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Dec 2020 05:29:54 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B39C06179C;
-        Tue, 15 Dec 2020 02:29:02 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id c5so15662732wrp.6;
-        Tue, 15 Dec 2020 02:29:02 -0800 (PST)
+        with ESMTP id S1726709AbgLOKdF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Dec 2020 05:33:05 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCA5C06179C;
+        Tue, 15 Dec 2020 02:32:19 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id c133so4387370wme.4;
+        Tue, 15 Dec 2020 02:32:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bEPk2uGzECYAQJ4oI/j29UH0rIRPTZKl5uP1+LSK3t0=;
-        b=XwsRumAI61dONDNOV52HiUwTKEmlpOmfropbwQKjP4fTAgS2/tpIpiPaeRQ7J7mBSx
-         uObBrIiZBVdHrzDlAkdubBcDmbYSa7RkYHC2s46lAIquWeF9IKQcZZHUuBmHkoQusOJL
-         iLMMKC23AnY9esp0GRoPCSGODkz1g9MsxTYVe35d5x0WqcBry8xN57fEhecqzfIurVT0
-         43GCCrHxpxaj1rWi0SV+Dvb7B6/pwJsT8ugxpuoXhhu6qxf7pRnPe0EdYv3KkyQOgTLi
-         ewZkCCIzt+uw/0vT8/LHNFABgp6sAwjr8yDrbmDv/L0OyDkhv37T16yzBZ6xC2HS4268
-         m2Bg==
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=zM12Vu2WHRPOJz6hUWWLoP76rHHBWWIXvKZ62qMZpOo=;
+        b=Ql5S7sxstdmE3XGP6QmWP0l1O9dxtvqCl/284IlCrUCXxpNOrcC0QhvH5hsY2qDorn
+         2unlqivrj9Afdl+JM6qHZ9zR8tWIxZDexIyb/QwtWi1Vhs76RX0HqtUNd+SZubvAvtUC
+         i8vtQkdk+d2BrVi+FE5xFNRT9/GPcjTe3fxyKUswyttdj1dBwf/2r4wUqxM0dG6px1AX
+         jGa004iWa7wV8WsFMQqu1MF2OVKdic3gNA5ZnJ2qtGkKSMHcAj8p8HEamYhVz9wPHzzk
+         u4PaqR71RCuR48pyK7kIsqWttGnHo0wqzi17IilT1MpnknokiKL59i2MzhJEc4VF+LPv
+         Xkfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bEPk2uGzECYAQJ4oI/j29UH0rIRPTZKl5uP1+LSK3t0=;
-        b=oxO/gZ9UrHaMNTNQ0i06o1l8AC+TcPzQdu4SKKMNCPwuFLAEm6YpljZeIQVBfWzNos
-         RBhrtw8Ws5W3ptQ4zQXimXmcYy5CoSqstGYsMludn0IBzvrfX+rfL+KQ4pvXnUx0x/oD
-         latTCGL9h1vWQ0LsBklAOZ5pr9Lck8sfNLsEDPx0ivesoPDLu7ZaJeBoFUI2qeSjnG90
-         rHL3VT9Bbq/m+xeZHGUzZKd5DSoLkaebEqmHyLkY/1iWcewA9hPRK8rsBikYx2sqoYdR
-         2KLgn3R4bhpnfDmo0kKfKhfIcsJO0Recuu5JXaq0xan5jEqiYRUa707vE9hxBmg87n3U
-         8uWA==
-X-Gm-Message-State: AOAM531USwUOlK/Gwfwxpt8lvGpe5qVsARxO+u4jwcM2c23Edu+STfn9
-        LLiU2jEl/qV3Y/xfiMdddIQ=
-X-Google-Smtp-Source: ABdhPJxqL2E61WJUkFapZMQ/brMjvDKVvba9iJH8655/cxH4Jg3M4Y54HtGk5DAJ3wrzoPm5ZzAIvg==
-X-Received: by 2002:a5d:4d50:: with SMTP id a16mr25426154wru.43.1608028141652;
-        Tue, 15 Dec 2020 02:29:01 -0800 (PST)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=zM12Vu2WHRPOJz6hUWWLoP76rHHBWWIXvKZ62qMZpOo=;
+        b=MA9SdzFd3d5K4PTRtWKwpSFiwLEpm7ma37CrX9HqNlLl6taFwK3A4/Q/wJdr52S2No
+         dsx/recqfgqq4EjWlb6imF9DqLYfozolIXZx+aZczpiye77yc1wSn+KDS/3i9vzVJcQl
+         59MQvAEuUsW0XMmkiVBhapB6DjfIuD3sWyb8qXE3RSkD2QUMLtufZGJ3jU1ys0gDJhvj
+         rnzMQXG60ntYhFSeUMrxkpqHW3CAmd2C6s4n31m2Bk5k9E8C/5pOtWy91ms7g1Nd6vq1
+         vyphKO0NyK0v8TZ7TamCN2v6baKnbgcVU4y5dYpOudUmnp35mI8ADNjyTL3hgTGwVi+W
+         MhQA==
+X-Gm-Message-State: AOAM531mmFkCh9V1adiwJUDoEJaZfYc4u2B8zEOy50DspSKDdLnDEBcN
+        NZhPHvfzE4Upkyvc8Rojyuo=
+X-Google-Smtp-Source: ABdhPJwZ82yXRV2xba7TcgkEC4E5GvoMBYDenAO+wt6vgbm4LkRqezVikCXN+mePBO1G2X+9RsAANQ==
+X-Received: by 2002:a1c:a9c8:: with SMTP id s191mr3348516wme.89.1608028338138;
+        Tue, 15 Dec 2020 02:32:18 -0800 (PST)
 Received: from [192.168.1.211] ([2.29.208.56])
-        by smtp.gmail.com with ESMTPSA id q15sm36200111wrw.75.2020.12.15.02.28.59
+        by smtp.gmail.com with ESMTPSA id e17sm35548101wrw.84.2020.12.15.02.32.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Dec 2020 02:29:00 -0800 (PST)
+        Tue, 15 Dec 2020 02:32:17 -0800 (PST)
 Subject: Re: [PATCH 13/18] ipu3-cio2: Add functionality allowing software_node
  connections to sensors on platforms designed for Windows
+From:   Daniel Scally <djrscally@gmail.com>
 To:     Sakari Ailus <sakari.ailus@iki.fi>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -69,74 +70,57 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
 References: <20201130133129.1024662-1-djrscally@gmail.com>
  <20201130133129.1024662-14-djrscally@gmail.com>
  <20201130203551.GP4351@valkosipuli.retiisi.org.uk>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <5238fc28-350b-a785-0a33-edeba9dfb096@gmail.com>
-Date:   Tue, 15 Dec 2020 10:28:59 +0000
+ <5238fc28-350b-a785-0a33-edeba9dfb096@gmail.com>
+Message-ID: <aff13cfd-5664-8b49-d188-ac1e2adec0b9@gmail.com>
+Date:   Tue, 15 Dec 2020 10:32:16 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201130203551.GP4351@valkosipuli.retiisi.org.uk>
+In-Reply-To: <5238fc28-350b-a785-0a33-edeba9dfb096@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Morning Sakari
-
-On 30/11/2020 20:35, Sakari Ailus wrote:
->> +/*
->> + * Extend this array with ACPI Hardware ID's of devices known to be working.
->> + * Do not add a HID for a sensor that is not actually supported.
->> + */
->> +static const char * const cio2_supported_devices[] = {
->> +	"INT33BE",
->> +	"OVTI2680",
-> 
-> I guess we don't have the known-good frequencies for the CSI-2 bus in
-> firmware?
-> 
-> One option would be to put there what the drivers currently use. This
-> assumes the support for these devices is, well, somewhat opportunistic but
-> I guess there's no way around that right now at least.
-> 
-> As the systems are laptops, they're likely somewhat less prone to EMI
-> issues to begin with than mobile phones anyway.
-
-Just looking at this; we're currently using this with the ov2680 driver
-that's in mainline currently (with very minor tweaks) plus a
-hacked-into-roughly-working version of the atomisp-ov5693 driver (ACPI
-ID INT33BE = ov5693 physical device). Neither of those drivers lists any
-link frequencies, nor provides a link frequency control for v4l2 to work
-with.
-
-On the other hand, the ov5648 [1] and ov8865 [2] drivers which Paul has
-submitted recently, which we also want to be able to support, _do_
-include that. I can register the frequencies Paul's defined there as a
-link-frequencies property but this gives rise to two questions:
+On 15/12/2020 10:28, Daniel Scally wrote:
+> Morning Sakari
+>
+> On 30/11/2020 20:35, Sakari Ailus wrote:
+>>> +/*
+>>> + * Extend this array with ACPI Hardware ID's of devices known to be working.
+>>> + * Do not add a HID for a sensor that is not actually supported.
+>>> + */
+>>> +static const char * const cio2_supported_devices[] = {
+>>> +	"INT33BE",
+>>> +	"OVTI2680",
+>> I guess we don't have the known-good frequencies for the CSI-2 bus in
+>> firmware?
+>>
+>> One option would be to put there what the drivers currently use. This
+>> assumes the support for these devices is, well, somewhat opportunistic but
+>> I guess there's no way around that right now at least.
+>>
+>> As the systems are laptops, they're likely somewhat less prone to EMI
+>> issues to begin with than mobile phones anyway.
+> Just looking at this; we're currently using this with the ov2680 driver
+> that's in mainline currently (with very minor tweaks) plus a
+> hacked-into-roughly-working version of the atomisp-ov5693 driver (ACPI
+> ID INT33BE = ov5693 physical device). Neither of those drivers lists any
+> link frequencies, nor provides a link frequency control for v4l2 to work
+> with.
+>
+> On the other hand, the ov5648 [1] and ov8865 [2] drivers which Paul has
+> submitted recently
 
 
-1. Is this _mandatory_? Do I need to be finding the link-frequencies for
-the OV2680 and OV5693 drivers too? Or can I skip that property where the
-driver doesn't handle it anyway. Seems to be working fine without
-controlling it in driver.
-2. Can I trust all the values in the drivers to be available on each
-platform? For example for the ov5648 Paul lists these as available:
-
- 938static const s64 ov5648_link_freq_menu[] = {
+Forgot to actually link these:
 
 
- 939        210000000,
+[1]
+https://lore.kernel.org/linux-media/20201211154027.153535-1-paul.kocialkowski@bootlin.com/T/#m5eb18611b7df1538ed4924422583b62cc61dbfae
 
+[2]
+https://lore.kernel.org/linux-media/20201211154428.153762-1-paul.kocialkowski@bootlin.com/T/#m6d4fd5e590b1c4583d4a74f5ae938ea011408640
 
- 940        168000000,
-
-
- 941};
-
-But can I safely register a link-frequencies property for both of those
-and trust that that'll work on all IPU3 platforms with an ov5648 in them?
-
-Thanks
-Dan
