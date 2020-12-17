@@ -2,199 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE5F2DCB9E
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Dec 2020 05:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4212DD2CC
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Dec 2020 15:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbgLQEJR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Dec 2020 23:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        id S1727303AbgLQOR5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Dec 2020 09:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbgLQEJR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Dec 2020 23:09:17 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E04C0617A7
-        for <linux-i2c@vger.kernel.org>; Wed, 16 Dec 2020 20:08:36 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id h205so10441623lfd.5
-        for <linux-i2c@vger.kernel.org>; Wed, 16 Dec 2020 20:08:36 -0800 (PST)
+        with ESMTP id S1727415AbgLQOR4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Dec 2020 09:17:56 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E32C061794;
+        Thu, 17 Dec 2020 06:17:16 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id c5so23100561wrp.6;
+        Thu, 17 Dec 2020 06:17:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=VozpQirzFuEtzfUUqdZmHxyOSX9ggolW1gqx3gzfJ78=;
-        b=HkUrokkP/JqHYbUbJo5H5EvxssQdR1w1rSsvamy2ezln3oO0iU97TUG7C3mfWqVAi+
-         FD0Y/COnXz5VTmCUU8+0NrfQDCnM0NRrnOGoeQ7K0pTmqEdTtp70mvebzZbshxB2V9Gm
-         cghj0Llq3DC4SPxtV7aekmgq5Pay3zpEqjqMw=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=RVg2KaUX9LtQiHzjB7xT37Qy3WEyf0tgr+9J0DJhh24=;
+        b=elLHsMhscHdpWReZCb0saZ18kXY3TQwyWKKjk4J/DDSkJEa6TEqF/R1VJ9cI8Du5n1
+         in7SwPFMnB072o0zodeRItpXzFA/gijJ3+s5fDtzqW8AY6NGcidWXLfTwlq9elhIq34Q
+         12wKCsmDUyjy+6KOHsUuj1S1IA3RjtffIje7f5kDp+QIoL6ds9lHwEWLDt076LkYaRr0
+         NIMtEk5ztziZL0+Gcx+VNfiPzPRF1I6xipCcXJ9kJADJWEsPJVxpELfzGt/OrMJRcqmu
+         FkNGbljp8D3PEE01W2eZLv+y0dTo3km34j1eK693igl080OWz249961mCS7bLLaWdwSe
+         jXgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=VozpQirzFuEtzfUUqdZmHxyOSX9ggolW1gqx3gzfJ78=;
-        b=dKmF/eIvCM0Z4aAQaBCaK1AXVfKp3vWjcDjy8ezsPaOT9Bkr7RSZ16YLUohYaFY+ga
-         6XcnE8zSjtPzjUjIqBfpl2+ZyA2tADINg1hTX9EQKxTUWwTJaHybe+uq7j6LaUkLZh72
-         p8sZ3ckk0Cdf9P2WVsf1umQmizLJzCN+mVT9qJ3S7baGh/r7iQIaSJrlp4dH+zbRwxrn
-         iuKQLFAy0yVd202Y4S8MzutiXNsTUObq5slA2B/X+rn5YLvIWoA599fdw3HC0Ywp1PfM
-         THXfg/Ne0/Xl/z9cwl8/r1r/ST6cb0qdlzuKleKZPiNo3mtlOzbF6BWOrziy/WutumC1
-         kcMw==
-X-Gm-Message-State: AOAM5314oZDTIdOSbt9lFNqwyrBnaHqKYLXClnzfOGCgTE2Z/mq42Nep
-        CdH5fkLSRLxlICsgcYx+TTaLjodDvdRml0ije5UkmTsdkDt6oYlYnaZcpYnV2zvIyNlTUdrRNG/
-        fU3Mkvl984WaBgm9OGMyhD3ByB3I=
-X-Google-Smtp-Source: ABdhPJxyTWcdhRdum/asRPjQnQUlaFhSIdbrXR2n+h0GrPjO4V/PObFy/wT9vtHB5Y+CWLToKiZyWQ9mUW1GGnoZ49I=
-X-Received: by 2002:a2e:874c:: with SMTP id q12mr15247391ljj.424.1608178114926;
- Wed, 16 Dec 2020 20:08:34 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RVg2KaUX9LtQiHzjB7xT37Qy3WEyf0tgr+9J0DJhh24=;
+        b=Hmj/QJ2lGBn5mFFfH1DcxJ6+2MjH3l9muXAqjHyEsCFgSaRfcmQUx7uWAqF9nTxvG1
+         S6KjKcKtyJt9wmZEo/ldwqHA+XlwGSUgOFw72KjVCKnnKJdrgupUoZLEhwpwJ9mc1gNg
+         yVbm9hx8VI40kpSFAlpFrEh1AWOPZ52RSBYCONpLp5ugkf/CF4Drxy/Re8eVaHn2Bvcc
+         0xQwQDgkIlqr6X9/g99BxaU/lsfD13XU/GIDMdEYvxiSXSbx0KDd22lK3+nnRTI110Mu
+         XmeRTzsWueU9CWZKlfYlMqtZr/6Cl0PipiVxDdrYEwI//P2wN/PXGV3ueKussOUxXZmG
+         Cc7w==
+X-Gm-Message-State: AOAM533/cMxeZmVhG1f5ievFHciRYSGYxbuAsObVcHc5OBa8Ch7ttIeC
+        5LssPQcloWmJrpQrt0Gc9N8=
+X-Google-Smtp-Source: ABdhPJxZvUwst1WZ0MrRvTXG9usPINfZ0wEuqEMsaqHc3yrKUJOq/opPYDvircGFa1Qjy5wmZfc4Uw==
+X-Received: by 2002:a5d:4905:: with SMTP id x5mr28326528wrq.75.1608214634962;
+        Thu, 17 Dec 2020 06:17:14 -0800 (PST)
+Received: from [192.168.1.211] ([2.29.208.56])
+        by smtp.gmail.com with ESMTPSA id h98sm10253123wrh.69.2020.12.17.06.17.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Dec 2020 06:17:14 -0800 (PST)
+Subject: Re: [PATCH 13/18] ipu3-cio2: Add functionality allowing software_node
+ connections to sensors on platforms designed for Windows
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Sakari Ailus <sakari.ailus@iki.fi>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
+        devel@acpica.org, rjw@rjwysocki.net, lenb@kernel.org,
+        gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, wsa@kernel.org, yong.zhi@intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com, mchehab@kernel.org,
+        robert.moore@intel.com, erik.kaneda@intel.com, pmladek@suse.com,
+        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        linux@rasmusvillemoes.dk, kieran.bingham+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jorhand@linux.microsoft.com, kitakar@gmail.com,
+        heikki.krogerus@linux.intel.com
+References: <20201130133129.1024662-1-djrscally@gmail.com>
+ <20201130133129.1024662-14-djrscally@gmail.com>
+ <20201130203551.GP4351@valkosipuli.retiisi.org.uk>
+ <5238fc28-350b-a785-0a33-edeba9dfb096@gmail.com>
+ <20201215220249.GG26370@paasikivi.fi.intel.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <797dda65-aedd-6a83-3f36-0cba457e4570@gmail.com>
+Date:   Thu, 17 Dec 2020 14:17:12 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <38a23afc-57da-a01f-286c-15f8b3d61705@broadcom.com>
- <1605316659-3422-1-git-send-email-dphadke@linux.microsoft.com>
- <CAHO=5PFzd9KTR93ntUvAX5dqzxqJQpVXEirs5uoXdvcnZ7hL4g@mail.gmail.com>
- <20201202143505.GA874@kunai> <23a2f2e8-06ad-c728-98eb-91b164572ba4@broadcom.com>
-In-Reply-To: <23a2f2e8-06ad-c728-98eb-91b164572ba4@broadcom.com>
-From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Date:   Thu, 17 Dec 2020 09:38:23 +0530
-Message-ID: <CAHO=5PE=BRADou_Hn8qP3mgWiSwDezPCxDjuqa0v1MxMOJRyHQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] i2c: iproc: handle master read request
-To:     Ray Jui <ray.jui@broadcom.com>, Wolfram Sang <wsa@kernel.org>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lori Hikichi <lori.hikichi@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004d9d4a05b6a12517"
+In-Reply-To: <20201215220249.GG26370@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---0000000000004d9d4a05b6a12517
-Content-Type: text/plain; charset="UTF-8"
+Hi Sakari - sorry for delayed reply. I didn't get this email actually,
+just spotted it on the newsgroup by chance.
 
-On Wed, Dec 2, 2020 at 11:14 PM Ray Jui <ray.jui@broadcom.com> wrote:
->
->
->
-> On 12/2/2020 6:35 AM, Wolfram Sang wrote:
-> >
-> >> All review comments are scattered now, please let me know what has to be
-> >> done further,
-> >> Are we going to change the tasklet to irq thread ?
-> >> Are we going to remove batching 64 packets if transaction > 64B and use rx
-> >> fifo threshold ?
-> >>
-> >> I don't see any issue with current code but if it has to change we need a
-> >> valid reason for the same.
-> >> If nothing to be done, please acknowledge the patch.
-> >
-> > Valid request. Has there been any news?
-> >
->
-> Sorry for the delay. I just replied.
+On 15/12/2020 22:02, Sakari Ailus wrote:
+> Hi Daniel,
+> 
+> On Tue, Dec 15, 2020 at 10:28:59AM +0000, Daniel Scally wrote:
+>> Morning Sakari
+>>
+>> On 30/11/2020 20:35, Sakari Ailus wrote:
+>>>> +/*
+>>>> + * Extend this array with ACPI Hardware ID's of devices known to be working.
+>>>> + * Do not add a HID for a sensor that is not actually supported.
+>>>> + */
+>>>> +static const char * const cio2_supported_devices[] = {
+>>>> +	"INT33BE",
+>>>> +	"OVTI2680",
+>>>
+>>> I guess we don't have the known-good frequencies for the CSI-2 bus in
+>>> firmware?
+>>>
+>>> One option would be to put there what the drivers currently use. This
+>>> assumes the support for these devices is, well, somewhat opportunistic but
+>>> I guess there's no way around that right now at least.
+>>>
+>>> As the systems are laptops, they're likely somewhat less prone to EMI
+>>> issues to begin with than mobile phones anyway.
+>>
+>> Just looking at this; we're currently using this with the ov2680 driver
+>> that's in mainline currently (with very minor tweaks) plus a
+>> hacked-into-roughly-working version of the atomisp-ov5693 driver (ACPI
+>> ID INT33BE = ov5693 physical device). Neither of those drivers lists any
+>> link frequencies, nor provides a link frequency control for v4l2 to work
+>> with.
+>>
+>> On the other hand, the ov5648 [1] and ov8865 [2] drivers which Paul has
+>> submitted recently, which we also want to be able to support, _do_
+>> include that. I can register the frequencies Paul's defined there as a
+>> link-frequencies property but this gives rise to two questions:
+>>
+>>
+>> 1. Is this _mandatory_? Do I need to be finding the link-frequencies for
+>> the OV2680 and OV5693 drivers too? Or can I skip that property where the
+>> driver doesn't handle it anyway. Seems to be working fine without
+>> controlling it in driver.
+> 
+> Receiver drivers generally need the information to program the receiver
+> timing. It may work for you without using the correct frequency, but the
+> risk of failure on another unit increases.
 
-This patch is tested and validated with all corner cases and its working.
-Can we merge this and take up any improvement as part of separate patch?
+Hmm, ok. I'll see if I can find the correct values then to add to the
+existing drivers.
 
-Thanks,
-Rayagonda
+>> 2. Can I trust all the values in the drivers to be available on each
+>> platform? For example for the ov5648 Paul lists these as available:
+>>
+>>  938static const s64 ov5648_link_freq_menu[] = {
+>>
+>>
+>>  939        210000000,
+>>
+>>
+>>  940        168000000,
+>>
+>>
+>>  941};
+>>
+>> But can I safely register a link-frequencies property for both of those
+>> and trust that that'll work on all IPU3 platforms with an ov5648 in them?
+> 
+> Ideally we'd know which frequency Windows uses, and use the same.
+> 
+> Using another frequency may have adverse effects elsewhere in the system.
+> AFAIU mostly this concerns radios of all sorts.
+> 
+> Now that this is in the kernel in any case, it can be fixed later on so I'm
+> not too worried about it. Having still a comment there that the
+> configuration is opportunistic would be nice.
+> 
 
->
->
-> Thanks,
->
-> Ray
+Understood - I'll add in the ability to add the link-frequencies plus a
+comment explaining.
 
--- 
-This electronic communication and the information and any files transmitted 
-with it, or attached to it, are confidential and are intended solely for 
-the use of the individual or entity to whom it is addressed and may contain 
-information that is confidential, legally privileged, protected by privacy 
-laws, or otherwise restricted from disclosure to anyone else. If you are 
-not the intended recipient or the person responsible for delivering the 
-e-mail to the intended recipient, you are hereby notified that any use, 
-copying, distributing, dissemination, forwarding, printing, or copying of 
-this e-mail is strictly prohibited. If you received this e-mail in error, 
-please return the e-mail to the sender, delete it from your computer, and 
-destroy any printed copy of it.
+Thanks
+Dan
 
---0000000000004d9d4a05b6a12517
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-xVUYGnc0GLrYeHC2X4wJbUsgi+UFM/rVW0RKe5Sg4xmLXWc/rBhXDBVPeFVdN2dYsk5MyDRM/fXj
-cAA+xTX+SQGoND8CAwEAAaOCAdcwggHTMA4GA1UdDwEB/wQEAwIFoDCBngYIKwYBBQUHAQEEgZEw
-gY4wTQYIKwYBBQUHMAKGQWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVy
-c29uYWxzaWduMnNoYTJnM29jc3AuY3J0MD0GCCsGAQUFBzABhjFodHRwOi8vb2NzcDIuZ2xvYmFs
-c2lnbi5jb20vZ3NwZXJzb25hbHNpZ24yc2hhMmczME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0
-MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNV
-HRMEAjAAMEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NwZXJz
-b25hbHNpZ24yc2hhMmczLmNybDArBgNVHREEJDAigSByYXlhZ29uZGEua29rYXRhbnVyQGJyb2Fk
-Y29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJ
-nXsLYTAdBgNVHQ4EFgQU1rE7oQJ7FiSTADFOqokePoGwIq4wDQYJKoZIhvcNAQELBQADggEBAD8I
-VcITGu1E61LQLR1zygqFw8ByKPgiiprMuQB74Viskl7pAZigzYJB8H3Mpd2ljve+GRo8yvbBC76r
-Gi5WdS06XI5vuImDJ2g6QUt754rj7xEYftM5Gy9ZMslKNvSiPPh1/ACx5w7ecD1ZK0YLMKGATeBD
-XybduRFIEPZBAjgJ5LOYT2ax3ZesfAkan1XJ97yLA93edgTTO2cbUAADTIMFWm4lI/e14wdGmK0I
-FtqJWw6DATg5ePiAAn+S0JoIL1xqKsZi2ioNqm02QMFb7RbB3yEGb/7ZLAGcPW666o5GSLsUnPPq
-YOfL/3X6tVfGeoi3IgfI+z76/lXk8vOQzQQxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkw
-FwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2ln
-biAyIENBIC0gU0hBMjU2IC0gRzMCDDw+ri+StHzo6PJZ/DANBglghkgBZQMEAgEFAKCB1DAvBgkq
-hkiG9w0BCQQxIgQgwOJKP4ubqyLDxs30hM29dpxdSunNmOqXGSN+ITyt7wMwGAYJKoZIhvcNAQkD
-MQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMjE3MDQwODM1WjBpBgkqhkiG9w0BCQ8x
-XDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsG
-CSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAF8j
-/HGmVa0W++Z0x5z/TMW1xY4bDP7yQ2kB+coBdvw4IZAEeUdAjXV5RXr+NsItQB8RUTkgA8SQ3r0L
-px4Kke6+2MHKI5bHKIjwrdrG1l6g4njGN6n5swP0IgdCTkGu13Vuta1SxFDwWsn5HGoJhcz57vYI
-jTpkzEFNo6p5AU9Ix/VD8WWtRbApSXs5jvuZZEe2T38VbVTV2dwvYBT7WVUKzhX9wasCzjx/ad5+
-hDQZydpUhf8q2v2xzDAiuOau7oCgMrzhzBdwHQ8oT05CGzrLtF0bykZrn8yBQIgJa/Ow24HwLLG4
-SuiUll76KtaCK8yewbRl4pzyMMYxpXowOCk=
---0000000000004d9d4a05b6a12517--
