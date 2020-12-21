@@ -2,224 +2,249 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF162DF446
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Dec 2020 08:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408F12DFBE4
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Dec 2020 13:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727077AbgLTHOC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Dec 2020 02:14:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726996AbgLTHOB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Dec 2020 02:14:01 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943B7C0617B0
-        for <linux-i2c@vger.kernel.org>; Sat, 19 Dec 2020 23:13:21 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id 23so16074359lfg.10
-        for <linux-i2c@vger.kernel.org>; Sat, 19 Dec 2020 23:13:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BOfF17E6DbfCMQZLlUcRjkqer8cCaahYinC/nIULq6w=;
-        b=PDMlLd7MxywKBAYQs/CRnOt+LKE8lvsQgmmW+LFPgwVilqWNqkehTKe2YL9TrpMWvk
-         UXXccsowkbf+GLzUQk8T9h2p+T5QCLqVS0qwo6uJgigQrSp2wjh+y9Sah8xXNjAOdSqm
-         l6Y8QumAqA41mEIldbfvLk5PxDWgBK6SsPUZQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BOfF17E6DbfCMQZLlUcRjkqer8cCaahYinC/nIULq6w=;
-        b=B3mtA9LvHmuPiXRIbZxAcL3h0q3uQEIfVEJtb/NlskdnjBsDJfMhTAGV3vJDyPWBxe
-         BsE3mOhJndEnbSYnyxi9AgFOFdoGumbuIxhzHXam1Seql2RHBoyVciRNcP3OalNa3uDZ
-         drk7epBV534++lGWnDkr5qHq5RgLA9+htB7nVzZ/vfbf17N6TC+VulpXzgxb+2TfbJtU
-         N2EvDm+eZZB6MUgtL2TXjIOHBYHy79FCn7Qt+dTPkhyDYVvDYJrc9AuXLWvSoUv7ZG/m
-         q1aaQW9XNMaTOu71bcaXPdDjcm64+IBl2lleM5mkkFCuYUM9ib8c1gXBxPV/upkUrmX9
-         7BZQ==
-X-Gm-Message-State: AOAM533mvST1c6h2ZrcVJDrG9NQGng2TRp4iiOgH+e1ehpPnApqQGmHy
-        PDaeOlnS1TFSlfhjIkhb2Zcjorzj9d72gOYvu0y2HbKb+jZXrQTeFM/Xe7CchpqKZiVYHFewUOA
-        E++1I6l6fXRmUgKkLbtVGkKwPGzQ=
-X-Google-Smtp-Source: ABdhPJwtNBTivV45nEM4ynO2CYmPhMC7CGftsW1XxCPgm6t9xc0R/VG8MB7sm8m7+IuoMj6gz9l6F+rw5XnhK/pg72w=
-X-Received: by 2002:a05:6512:314c:: with SMTP id s12mr4247282lfi.100.1608448399256;
- Sat, 19 Dec 2020 23:13:19 -0800 (PST)
+        id S1726746AbgLUMfH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Dec 2020 07:35:07 -0500
+Received: from so254-31.mailgun.net ([198.61.254.31]:45434 "EHLO
+        so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726614AbgLUMfH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Dec 2020 07:35:07 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1608554088; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=tDvl9tDLfGJ7JN2lYUJAQJ9Ss9Zsrq4uuuiex7ki2+Q=;
+ b=WiAc5hhdA+tAw6IlO1Zgv5rOK8WqyKXOv1+uSzgQvaW720IgB2Sma/8r56hoMfQUn7Zq9lcf
+ m3agyUIyGhH3ESRxdH9C5xicqb7IsFunporaES/gKumiG6zDncmV/3l5H8cj2VsAipzHB6OI
+ XRhA2qwUxBHg/Tw8G6MdG4mPCd8=
+X-Mailgun-Sending-Ip: 198.61.254.31
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n08.prod.us-west-2.postgun.com with SMTP id
+ 5fe09646cfe5dd67dbcda5b5 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 21 Dec 2020 12:34:14
+ GMT
+Sender: rojay=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8FFD3C433ED; Mon, 21 Dec 2020 12:34:14 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: rojay)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4CAD8C433C6;
+        Mon, 21 Dec 2020 12:34:13 +0000 (UTC)
 MIME-Version: 1.0
-References: <38a23afc-57da-a01f-286c-15f8b3d61705@broadcom.com>
- <1605316659-3422-1-git-send-email-dphadke@linux.microsoft.com>
- <CAHO=5PFzd9KTR93ntUvAX5dqzxqJQpVXEirs5uoXdvcnZ7hL4g@mail.gmail.com>
- <20201202143505.GA874@kunai> <23a2f2e8-06ad-c728-98eb-91b164572ba4@broadcom.com>
- <CAHO=5PE=BRADou_Hn8qP3mgWiSwDezPCxDjuqa0v1MxMOJRyHQ@mail.gmail.com> <35541129-df37-fa6f-5dae-34eb34a78731@broadcom.com>
-In-Reply-To: <35541129-df37-fa6f-5dae-34eb34a78731@broadcom.com>
-From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Date:   Sun, 20 Dec 2020 12:43:07 +0530
-Message-ID: <CAHO=5PFCsWQb7nv5Sg00DAX6XXTfV7V8BH-ithK-Scq8eFFVbA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] i2c: iproc: handle master read request
-To:     Ray Jui <ray.jui@broadcom.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lori Hikichi <lori.hikichi@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000081dfd205b6e01310"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 21 Dec 2020 18:04:13 +0530
+From:   rojay@codeaurora.org
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     wsa@kernel.org, swboyd@chromium.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        vkaur@codeaurora.org, pyarlaga@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org
+Subject: Re: [RESEND PATCH V6 1/2] i2c: i2c-qcom-geni: Store DMA mapping data
+ in geni_i2c_dev struct
+In-Reply-To: <049c28e9-1211-377f-941d-ba169645dd24@codeaurora.org>
+References: <20201203103156.32595-1-rojay@codeaurora.org>
+ <20201203103156.32595-2-rojay@codeaurora.org>
+ <049c28e9-1211-377f-941d-ba169645dd24@codeaurora.org>
+Message-ID: <585a9b7ab44e3a99eb803536af6334e5@codeaurora.org>
+X-Sender: rojay@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---00000000000081dfd205b6e01310
-Content-Type: text/plain; charset="UTF-8"
+On 2020-12-09 18:29, Akash Asthana wrote:
+> Hi Roja,
+> 
+> On 12/3/2020 4:01 PM, Roja Rani Yarubandi wrote:
+>> Store DMA mapping data in geni_i2c_dev struct to enhance DMA mapping
+>> data scope. For example during shutdown callback to unmap DMA mapping,
+>> this stored DMA mapping data can be used to call geni_se_tx_dma_unprep
+>> and geni_se_rx_dma_unprep functions.
+>> 
+>> Add two helper functions geni_i2c_rx_msg_cleanup and
+>> geni_i2c_tx_msg_cleanup to unwrap the things after rx/tx FIFO/DMA
+>> transfers, so that the same can be used in geni_i2c_stop_xfer()
+>> function during shutdown callback.
+>> 
+>> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+>> ---
+>> Changes in V5:
+>>   - As per Stephen's comments separated this patch from shutdown
+>>     callback patch, gi2c->cur = NULL is not removed from
+>>     geni_i2c_abort_xfer(), and made a copy of gi2c->cur and passed
+>>     to cleanup functions.
+>> 
+>> Changes in V6:
+>>   - Added spin_lock/unlock in geni_i2c_rx_msg_cleanup() and
+>>     geni_i2c_tx_msg_cleanup() functions.
+>> 
+>>   drivers/i2c/busses/i2c-qcom-geni.c | 69 
+>> +++++++++++++++++++++++-------
+>>   1 file changed, 53 insertions(+), 16 deletions(-)
+>> 
+>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c 
+>> b/drivers/i2c/busses/i2c-qcom-geni.c
+>> index dce75b85253c..bfbc80f65006 100644
+>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>> @@ -86,6 +86,9 @@ struct geni_i2c_dev {
+>>   	u32 clk_freq_out;
+>>   	const struct geni_i2c_clk_fld *clk_fld;
+>>   	int suspended;
+>> +	void *dma_buf;
+>> +	size_t xfer_len;
+>> +	dma_addr_t dma_addr;
+>>   };
+>>     struct geni_i2c_err_log {
+>> @@ -348,14 +351,49 @@ static void geni_i2c_tx_fsm_rst(struct 
+>> geni_i2c_dev *gi2c)
+>>   		dev_err(gi2c->se.dev, "Timeout resetting TX_FSM\n");
+>>   }
+>>   +static void geni_i2c_rx_msg_cleanup(struct geni_i2c_dev *gi2c,
+>> +				     struct i2c_msg *cur)
+>> +{
+>> +	struct geni_se *se = &gi2c->se;
+>> +	unsigned long flags;
+>> +
+>> +	spin_lock_irqsave(&gi2c->lock, flags);
+>> +	gi2c->cur_rd = 0;
+>> +	if (gi2c->dma_buf) {
+>> +		if (gi2c->err)
+>> +			geni_i2c_rx_fsm_rst(gi2c);
+> 
+> Which race we are trying to avoid here by holding spinlock?
+> 
 
-On Fri, Dec 18, 2020 at 12:41 AM Ray Jui <ray.jui@broadcom.com> wrote:
->
->
->
-> On 12/16/2020 8:08 PM, Rayagonda Kokatanur wrote:
-> > On Wed, Dec 2, 2020 at 11:14 PM Ray Jui <ray.jui@broadcom.com> wrote:
-> >>
-> >>
-> >>
-> >> On 12/2/2020 6:35 AM, Wolfram Sang wrote:
-> >>>
-> >>>> All review comments are scattered now, please let me know what has to be
-> >>>> done further,
-> >>>> Are we going to change the tasklet to irq thread ?
-> >>>> Are we going to remove batching 64 packets if transaction > 64B and use rx
-> >>>> fifo threshold ?
-> >>>>
-> >>>> I don't see any issue with current code but if it has to change we need a
-> >>>> valid reason for the same.
-> >>>> If nothing to be done, please acknowledge the patch.
-> >>>
-> >>> Valid request. Has there been any news?
-> >>>
-> >>
-> >> Sorry for the delay. I just replied.
-> >
-> > This patch is tested and validated with all corner cases and its working.
-> > Can we merge this and take up any improvement as part of separate patch?
-> >
->
-> I think that makes sense, and I'm okay with these patches going in as
-> they are now.
->
-> Acked-by: Ray Jui <ray.jui@broadcom.com>
+Thought that race might occur with "cur" here.
 
-Thank you.
+> We cannot call any sleeping API by holding spinlock,
+> geni_i2c_rx_fsm_rst calls *wait-for-completion*, which is a sleeping
+> call.
+> 
 
->
-> But please help to collect precise FIFO access timing (later when you
-> have time), that would allow us to know if the current defer-to-tasklet
-> (instead of thread) based approach makes sense or not.
->
-> Thanks,
->
-> Ray
->
-> > Thanks,
-> > Rayagonda
-> >
-> >>
-> >>
-> >> Thanks,
-> >>
-> >> Ray
+Fixed this.
 
--- 
-This electronic communication and the information and any files transmitted 
-with it, or attached to it, are confidential and are intended solely for 
-the use of the individual or entity to whom it is addressed and may contain 
-information that is confidential, legally privileged, protected by privacy 
-laws, or otherwise restricted from disclosure to anyone else. If you are 
-not the intended recipient or the person responsible for delivering the 
-e-mail to the intended recipient, you are hereby notified that any use, 
-copying, distributing, dissemination, forwarding, printing, or copying of 
-this e-mail is strictly prohibited. If you received this e-mail in error, 
-please return the e-mail to the sender, delete it from your computer, and 
-destroy any printed copy of it.
-
---00000000000081dfd205b6e01310
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-xVUYGnc0GLrYeHC2X4wJbUsgi+UFM/rVW0RKe5Sg4xmLXWc/rBhXDBVPeFVdN2dYsk5MyDRM/fXj
-cAA+xTX+SQGoND8CAwEAAaOCAdcwggHTMA4GA1UdDwEB/wQEAwIFoDCBngYIKwYBBQUHAQEEgZEw
-gY4wTQYIKwYBBQUHMAKGQWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVy
-c29uYWxzaWduMnNoYTJnM29jc3AuY3J0MD0GCCsGAQUFBzABhjFodHRwOi8vb2NzcDIuZ2xvYmFs
-c2lnbi5jb20vZ3NwZXJzb25hbHNpZ24yc2hhMmczME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0
-MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNV
-HRMEAjAAMEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NwZXJz
-b25hbHNpZ24yc2hhMmczLmNybDArBgNVHREEJDAigSByYXlhZ29uZGEua29rYXRhbnVyQGJyb2Fk
-Y29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBRpcoJiMWeVRIV3kYDEBDZJ
-nXsLYTAdBgNVHQ4EFgQU1rE7oQJ7FiSTADFOqokePoGwIq4wDQYJKoZIhvcNAQELBQADggEBAD8I
-VcITGu1E61LQLR1zygqFw8ByKPgiiprMuQB74Viskl7pAZigzYJB8H3Mpd2ljve+GRo8yvbBC76r
-Gi5WdS06XI5vuImDJ2g6QUt754rj7xEYftM5Gy9ZMslKNvSiPPh1/ACx5w7ecD1ZK0YLMKGATeBD
-XybduRFIEPZBAjgJ5LOYT2ax3ZesfAkan1XJ97yLA93edgTTO2cbUAADTIMFWm4lI/e14wdGmK0I
-FtqJWw6DATg5ePiAAn+S0JoIL1xqKsZi2ioNqm02QMFb7RbB3yEGb/7ZLAGcPW666o5GSLsUnPPq
-YOfL/3X6tVfGeoi3IgfI+z76/lXk8vOQzQQxggJvMIICawIBATBtMF0xCzAJBgNVBAYTAkJFMRkw
-FwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTMwMQYDVQQDEypHbG9iYWxTaWduIFBlcnNvbmFsU2ln
-biAyIENBIC0gU0hBMjU2IC0gRzMCDDw+ri+StHzo6PJZ/DANBglghkgBZQMEAgEFAKCB1DAvBgkq
-hkiG9w0BCQQxIgQgIYVIX67oy1P9pmUx1vMw9ffQMdfm9C+UsPUlzmYG/ugwGAYJKoZIhvcNAQkD
-MQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjAxMjIwMDcxMzE5WjBpBgkqhkiG9w0BCQ8x
-XDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMAsG
-CSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBANCz
-mHhbcGY2hwNHdXyGbPMqDfwvUX3TXeYiROWzPfw/AAHrBvEfqZhGlfagIPxzRBDUvvk0MDSMhpMD
-77ZRPky05HZKG9OY/xx1a88p43//nNmcEXeUtCSwPufw/BWxB+r4bcvXM5rY7HpCwNTTG7Q3I65f
-VDq5oLSsvJVdtsuVqTj5DbXuLYDYBlAzfvkpVq2aIy/mJlsEayQX3zvgmA/rz01flMt0EnyxwJNl
-sXVSdQGfDlqzpmRiMjbgn3hGRBrMTTCcx/krcxvXmb8fBg9RVrob6Jlj1GhrSGfjae47QIJJt51I
-fZ2jd9xy6AjtDzvZL2WmjT+i1sjTKn5jQ2o=
---00000000000081dfd205b6e01310--
+>> +		geni_se_rx_dma_unprep(se, gi2c->dma_addr, gi2c->xfer_len);
+>> +		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, cur, !gi2c->err);
+>> +	}
+>> +	spin_unlock_irqrestore(&gi2c->lock, flags);
+>> +}
+>> +
+>> +static void geni_i2c_tx_msg_cleanup(struct geni_i2c_dev *gi2c,
+>> +				     struct i2c_msg *cur)
+>> +{
+>> +	struct geni_se *se = &gi2c->se;
+>> +	unsigned long flags;
+>> +
+>> +	spin_lock_irqsave(&gi2c->lock, flags);
+>> +	gi2c->cur_wr = 0;
+>> +	if (gi2c->dma_buf) {
+>> +		if (gi2c->err)
+>> +			geni_i2c_tx_fsm_rst(gi2c);
+> 
+> Same here
+> 
+> Regards,
+> 
+> Akash
+> 
+>> +		geni_se_tx_dma_unprep(se, gi2c->dma_addr, gi2c->xfer_len);
+>> +		i2c_put_dma_safe_msg_buf(gi2c->dma_buf, cur, !gi2c->err);
+>> +	}
+>> +	spin_unlock_irqrestore(&gi2c->lock, flags);
+>> +}
+>> +
+>>   static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct 
+>> i2c_msg *msg,
+>>   				u32 m_param)
+>>   {
+>> -	dma_addr_t rx_dma;
+>> +	dma_addr_t rx_dma = 0;
+>>   	unsigned long time_left;
+>>   	void *dma_buf = NULL;
+>>   	struct geni_se *se = &gi2c->se;
+>>   	size_t len = msg->len;
+>> +	struct i2c_msg *cur;
+>>     	if (!of_machine_is_compatible("lenovo,yoga-c630"))
+>>   		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+>> @@ -372,19 +410,18 @@ static int geni_i2c_rx_one_msg(struct 
+>> geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>>   		geni_se_select_mode(se, GENI_SE_FIFO);
+>>   		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+>>   		dma_buf = NULL;
+>> +	} else {
+>> +		gi2c->xfer_len = len;
+>> +		gi2c->dma_addr = rx_dma;
+>> +		gi2c->dma_buf = dma_buf;
+>>   	}
+>>   +	cur = gi2c->cur;
+>>   	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+>>   	if (!time_left)
+>>   		geni_i2c_abort_xfer(gi2c);
+>>   -	gi2c->cur_rd = 0;
+>> -	if (dma_buf) {
+>> -		if (gi2c->err)
+>> -			geni_i2c_rx_fsm_rst(gi2c);
+>> -		geni_se_rx_dma_unprep(se, rx_dma, len);
+>> -		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+>> -	}
+>> +	geni_i2c_rx_msg_cleanup(gi2c, cur);
+>>     	return gi2c->err;
+>>   }
+>> @@ -392,11 +429,12 @@ static int geni_i2c_rx_one_msg(struct 
+>> geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>>   static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct 
+>> i2c_msg *msg,
+>>   				u32 m_param)
+>>   {
+>> -	dma_addr_t tx_dma;
+>> +	dma_addr_t tx_dma = 0;
+>>   	unsigned long time_left;
+>>   	void *dma_buf = NULL;
+>>   	struct geni_se *se = &gi2c->se;
+>>   	size_t len = msg->len;
+>> +	struct i2c_msg *cur;
+>>     	if (!of_machine_is_compatible("lenovo,yoga-c630"))
+>>   		dma_buf = i2c_get_dma_safe_msg_buf(msg, 32);
+>> @@ -413,22 +451,21 @@ static int geni_i2c_tx_one_msg(struct 
+>> geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>>   		geni_se_select_mode(se, GENI_SE_FIFO);
+>>   		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+>>   		dma_buf = NULL;
+>> +	} else {
+>> +		gi2c->xfer_len = len;
+>> +		gi2c->dma_addr = tx_dma;
+>> +		gi2c->dma_buf = dma_buf;
+>>   	}
+>>     	if (!dma_buf) /* Get FIFO IRQ */
+>>   		writel_relaxed(1, se->base + SE_GENI_TX_WATERMARK_REG);
+>>   +	cur = gi2c->cur;
+>>   	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+>>   	if (!time_left)
+>>   		geni_i2c_abort_xfer(gi2c);
+>>   -	gi2c->cur_wr = 0;
+>> -	if (dma_buf) {
+>> -		if (gi2c->err)
+>> -			geni_i2c_tx_fsm_rst(gi2c);
+>> -		geni_se_tx_dma_unprep(se, tx_dma, len);
+>> -		i2c_put_dma_safe_msg_buf(dma_buf, msg, !gi2c->err);
+>> -	}
+>> +	geni_i2c_tx_msg_cleanup(gi2c, cur);
+>>     	return gi2c->err;
+>>   }
