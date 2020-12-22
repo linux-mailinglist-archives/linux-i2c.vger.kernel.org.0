@@ -2,110 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E022E00E8
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Dec 2020 20:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A002E04B5
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Dec 2020 04:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725818AbgLUTYC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Dec 2020 14:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S1726057AbgLVDZI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Dec 2020 22:25:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725807AbgLUTYC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Dec 2020 14:24:02 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CAAC0613D3;
-        Mon, 21 Dec 2020 11:23:21 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id hk16so6995684pjb.4;
-        Mon, 21 Dec 2020 11:23:21 -0800 (PST)
+        with ESMTP id S1725870AbgLVDZI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Dec 2020 22:25:08 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D703DC061282
+        for <linux-i2c@vger.kernel.org>; Mon, 21 Dec 2020 19:23:47 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id b8so6721415plx.0
+        for <linux-i2c@vger.kernel.org>; Mon, 21 Dec 2020 19:23:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OJNB6duLuQr1jHZTJGFdXQVfxxzUTpmZhuWoY6RlUlI=;
-        b=HTZ50NsytxDPe/Vv4JBcv10crvZA15PEiLHf3ct7DSoch8n7qQOnt4PBUY16j+Pm+N
-         6qsapl4I2kkTUhlD1eIucYc0l39o5BWhNnnhZ/fwornhX00KkxwFRKFDiuLln0DWGOQW
-         gXqbhIc2yw21XXOR1OZ74cbz1kBislNzQ+ZfRK6Nk9Cz4cjTvfo+MI7l7rHAxIxb+3nR
-         sYbDhqOyZXTeD3SJgp4aMijP3BAPwoIdFyJjIT5vDIHCH1h4Vxsk+kAkNxEOBj78Ql+p
-         EOLULZJosN6NqwziSEWtC3ynmHldbk6UivpjO6IVr2ZDdkyMcqNwaF6k9W2ogtwkcRgG
-         gcJw==
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fml0HPxjeW3KlPkKcmTMycAdGJqoiBPdorZITHm27g0=;
+        b=t2Ihxv8CCjKXimsL3cXaHE5f4jZID8yHMHiPh2PSkXudjaAFnpGShEaw6VdhToOq7+
+         aNwOHfGCpikS0MrjzXMHXHuhzfy4RAbHzd19BZzm2VsL4iJnXjXSlCfSJwmqvSXD4RiR
+         9byzZOdm5eIJmeiWoEiYBI9x3xy5pbZYx01hE3mrNWQNLV7c7YHTv9dav+BLtG7HUt21
+         o4NMzKRpP7sncqtH19KvcsgIpOQRR+bQ8p0WatBuH4qkp/RtoYW4KHSvLTxOGFE6vpNf
+         qCUABT1NvZKEUoSWYxkYLcUUiHeyTlL8t7Gkol+C80Idj0+nPfIOahhErsc2O49n3lRr
+         QYwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OJNB6duLuQr1jHZTJGFdXQVfxxzUTpmZhuWoY6RlUlI=;
-        b=pfAMPKWoIh739XZV7i/NB5sU6fG44lrta0VNJ3OOcitGAcfvuNK2fUhCBGbG6ISAwd
-         Hm74dkkanYhWIjo3lzUFlHB95zyz4T3RB2elLL/FiJoaOgnEzHScB3Fo/rGG2dJ9fkH5
-         zcVI+VGgnDadx5kJR7p5j3VL+OAtIoXQVdFud+o1dRe1PNGAI0cAPdyRqDQ2QCFHqVNa
-         HtatFMOCoHQsT3dHXi0NvGtUsLP4QGFn5j3uf0g41R/sSfVQwANBX3RJxeJwmL3HTSMN
-         Il9FZAax0lGLqPEdFVw1v6Y+o5U+MHxfhVM8krhGbnUf6fRD+GdzNEtv+xuXe9IKkjVA
-         Vztw==
-X-Gm-Message-State: AOAM532zA6IhYK793BpE+uRMKIuXv64VTZ/JR3C4GPokmFhCH86wvHk/
-        /UMvxPuZg7Nyum6AGmNU0XPHeatk4XGkiWi13+E=
-X-Google-Smtp-Source: ABdhPJwW5keF5naHjsXoSXEPRp0yapfGhnjKi8Z1eWaLDMIT0UU9Jt6HSRmfYurz716TfYAkGbGYVvcW5vwCMjUuYZ0=
-X-Received: by 2002:a17:90a:1050:: with SMTP id y16mr18839828pjd.181.1608578601361;
- Mon, 21 Dec 2020 11:23:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20201221191300.244648-1-hdegoede@redhat.com>
-In-Reply-To: <20201221191300.244648-1-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Dec 2020 21:24:09 +0200
-Message-ID: <CAHp75VcEb-qfOQ3_gXOEBj0_gmke7=Y4FUZHin0Y7YfovdVD5Q@mail.gmail.com>
-Subject: Re: [PATCH] i2c: core: Do not print duplicate error when failing to
- register an i2c-client from ACPI
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Fml0HPxjeW3KlPkKcmTMycAdGJqoiBPdorZITHm27g0=;
+        b=NJebLRTURTmU7Fc8r+LeM3lfEeEhzmpQsFxTo4a2fsfoo+76cgThHk5WPclFEaPOLM
+         Y+q+O74IKNosxCKGXk7oiyDVV8p95po0B4O8bYrKzQenAEeUiEVthvVwYDZVXtxF3Z1Q
+         e/l0eCF9/32jJj6/zWql9gpHfJLOQ4r7cLkveKioqoBCGHd0y6NBDUC1C12WAVzNJXdu
+         xh91iBeze8pb7MizrWSg3PTXC1JvlC9JExJjan0XH4HzEilPQ2aDPsuU80/u2JMJxoI5
+         vXIODBcbX2qvarUxbYRBsccpWqVpD+BWnnSp+jIPWAMn7gWwr0BSdP3Z3ypPz11Nuwt9
+         OtvQ==
+X-Gm-Message-State: AOAM5330grO7/PN49eImFA1Jx7JZnWEPNdvo08EXzYE9zadjj3qO+9/h
+        Zhg4az1AM43wTQ7Hlj0OH4sH5Q==
+X-Google-Smtp-Source: ABdhPJxDXLKNIS+nAjmXcerR0lYz9gNHq8QC54QEIsJysxTCG2V28VwRupYxSkOil5ucyogRD7tvXw==
+X-Received: by 2002:a17:90a:3e4f:: with SMTP id t15mr20316849pjm.57.1608607427201;
+        Mon, 21 Dec 2020 19:23:47 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id w27sm14448896pfq.104.2020.12.21.19.23.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Dec 2020 19:23:46 -0800 (PST)
+Date:   Mon, 21 Dec 2020 19:23:46 -0800 (PST)
+X-Google-Original-Date: Mon, 21 Dec 2020 19:23:16 PST (-0800)
+Subject:     Re: [PATCH v2 6/9] dt-bindings: i2c: Update DT binding docs to support SiFive FU740 SoC
+In-Reply-To: <1607403341-57214-7-git-send-email-yash.shah@sifive.com>
+CC:     linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        broonie@kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        aou@eecs.berkeley.edu, lee.jones@linaro.org,
+        u.kleine-koenig@pengutronix.de, thierry.reding@gmail.com,
+        andrew@lunn.ch, peter@korsgaard.com,
+        Paul Walmsley <paul.walmsley@sifive.com>, robh+dt@kernel.org,
+        bgolaszewski@baylibre.com, linus.walleij@linaro.org,
+        yash.shah@sifive.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     yash.shah@sifive.com
+Message-ID: <mhng-c1b8fc11-36ec-4143-846b-130086defe06@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Dec 21, 2020 at 9:13 PM Hans de Goede <hdegoede@redhat.com> wrote:
+On Mon, 07 Dec 2020 20:55:38 PST (-0800), yash.shah@sifive.com wrote:
+> Add new compatible strings to the DT binding documents to support SiFive
+> FU740-C000.
 >
-> i2c_new_client_device() already prints an error when it fails. Some
-> ACPI tables contain 2 ACPI devices describing the same i2c-client,
-> leading to errors like this:
->
-> [    1.620847] i2c i2c-4: Failed to register i2c client MAGN0001:00 at 0x1d (-16)
-> [    1.620870] i2c i2c-4: failed to add I2C device MAGN0001:00 from ACPI
->
-> There is nothing we can do about the first -EBUSY error being logged,
-> but the second error does not really add any new information, so lets
-> drop it.
-
-Makes sense to me,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Yash Shah <yash.shah@sifive.com>
 > ---
->  drivers/i2c/i2c-core-acpi.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+>  Documentation/devicetree/bindings/i2c/i2c-ocores.txt | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index 37c510d9347a..8ceaa88dd78f 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -225,12 +225,8 @@ static void i2c_acpi_register_device(struct i2c_adapter *adapter,
->         adev->power.flags.ignore_parent = true;
->         acpi_device_set_enumerated(adev);
->
-> -       if (IS_ERR(i2c_new_client_device(adapter, info))) {
-> +       if (IS_ERR(i2c_new_client_device(adapter, info)))
->                 adev->power.flags.ignore_parent = false;
-> -               dev_err(&adapter->dev,
-> -                       "failed to add I2C device %s from ACPI\n",
-> -                       dev_name(&adev->dev));
-> -       }
->  }
->
->  static acpi_status i2c_acpi_add_device(acpi_handle handle, u32 level,
-> --
-> 2.28.0
->
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> index 6b25a80..a37c945 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> @@ -5,8 +5,12 @@ Required properties:
+>                      "aeroflexgaisler,i2cmst"
+>                      "sifive,fu540-c000-i2c", "sifive,i2c0"
+>                      For Opencore based I2C IP block reimplemented in
+> -                    FU540-C000 SoC. Please refer to sifive-blocks-ip-versioning.txt
+> -                    for additional details.
+> +                    FU540-C000 SoC.
+> +                    "sifive,fu740-c000-i2c", "sifive,i2c0"
+> +                    For Opencore based I2C IP block reimplemented in
+> +                    FU740-C000 SoC.
+> +                    Please refer to sifive-blocks-ip-versioning.txt for
+> +                    additional details.
+>  - reg             : bus address start and address range size of device
+>  - clocks          : handle to the controller clock; see the note below.
+>                      Mutually exclusive with opencores,ip-clock-frequency
 
-
--- 
-With Best Regards,
-Andy Shevchenko
+Presumably this new one no longer has the interrupt bug?  The current
+implementation turns the errata off (it's only enabled for the fu540), so if
+that's the case we should be good to go.
