@@ -2,164 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A26D42E2618
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Dec 2020 12:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4C02E26D7
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Dec 2020 13:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728166AbgLXLOO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Dec 2020 06:14:14 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:29679 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726591AbgLXLOO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Dec 2020 06:14:14 -0500
-Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 24 Dec 2020 03:12:57 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 24 Dec 2020 03:12:54 -0800
-X-QCInternal: smtphost
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 24 Dec 2020 16:42:16 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id 4D2622DCA; Thu, 24 Dec 2020 16:42:15 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, mka@chromium.org,
-        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
-        parashar@codeaurora.org, rnayak@codeaurora.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        agross@kernel.org, linux-i2c@vger.kernel.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for 'assigned-performance-states'
-Date:   Thu, 24 Dec 2020 16:42:10 +0530
-Message-Id: <20201224111210.1214-4-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20201224111210.1214-1-rojay@codeaurora.org>
-References: <20201224111210.1214-1-rojay@codeaurora.org>
+        id S1726931AbgLXM1E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Dec 2020 07:27:04 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:60167 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726746AbgLXM1E (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Dec 2020 07:27:04 -0500
+X-UUID: cd4c9f1888c4451b88cd7fff41c16f91-20201224
+X-UUID: cd4c9f1888c4451b88cd7fff41c16f91-20201224
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1540264706; Thu, 24 Dec 2020 20:26:16 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 24 Dec 2020 20:26:13 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 24 Dec 2020 20:26:13 +0800
+From:   <qii.wang@mediatek.com>
+To:     <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>
+Subject: i2c: mediatek: Fix apdma and i2c hand-shake timeout
+Date:   Thu, 24 Dec 2020 20:26:07 +0800
+Message-ID: <1608812767-3254-1-git-send-email-qii.wang@mediatek.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-For devices which have 'assigned-performance-states' specified in DT,
-set the specified performance state during probe and drop it on remove.
-Also drop/set as part of runtime suspend/resume callbacks.
+From: Qii Wang <qii.wang@mediatek.com>
 
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+With the apdma remove hand-shake signal, it requirs special
+operation timing to reset i2c manually, otherwise the interrupt
+will not be triggered, i2c transmission will be timeout.
+
+Signed-off-by: Qii Wang <qii.wang@mediatek.com>
 ---
- drivers/i2c/busses/i2c-qcom-geni.c | 49 ++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ drivers/i2c/busses/i2c-mt65xx.c | 27 ++++++++++++++++++++++-----
+ 1 file changed, 22 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 046d241183c5..250773784631 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -11,6 +11,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <linux/qcom-geni-se.h>
- #include <linux/spinlock.h>
-@@ -86,6 +87,7 @@ struct geni_i2c_dev {
- 	u32 clk_freq_out;
- 	const struct geni_i2c_clk_fld *clk_fld;
- 	int suspended;
-+	unsigned int assigned_pstate;
- };
+base Message ID: 1605701861-30800-1-git-send-email-qii.wang@mediatek.com
+
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index 6f61595..2ffd2f3 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -38,6 +38,7 @@
+ #define I2C_IO_CONFIG_OPEN_DRAIN	0x0003
+ #define I2C_IO_CONFIG_PUSH_PULL		0x0000
+ #define I2C_SOFT_RST			0x0001
++#define I2C_HANDSHAKE_RST		0x0020
+ #define I2C_FIFO_ADDR_CLR		0x0001
+ #define I2C_DELAY_LEN			0x0002
+ #define I2C_TIME_CLR_VALUE		0x0000
+@@ -45,6 +46,7 @@
+ #define I2C_WRRD_TRANAC_VALUE		0x0002
+ #define I2C_RD_TRANAC_VALUE		0x0001
+ #define I2C_SCL_MIS_COMP_VALUE		0x0000
++#define I2C_CHN_CLR_FLAG		0x0000
  
- struct geni_i2c_err_log {
-@@ -497,6 +499,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 	u32 proto, tx_depth;
- 	int ret;
- 	struct device *dev = &pdev->dev;
-+	unsigned int assigned_pstate;
+ #define I2C_DMA_CON_TX			0x0000
+ #define I2C_DMA_CON_RX			0x0001
+@@ -54,7 +56,9 @@
+ #define I2C_DMA_START_EN		0x0001
+ #define I2C_DMA_INT_FLAG_NONE		0x0000
+ #define I2C_DMA_CLR_FLAG		0x0000
++#define I2C_DMA_WARM_RST		0x0001
+ #define I2C_DMA_HARD_RST		0x0002
++#define I2C_DMA_HANDSHAKE_RST		0x0004
  
- 	gi2c = devm_kzalloc(dev, sizeof(*gi2c), GFP_KERNEL);
- 	if (!gi2c)
-@@ -520,6 +523,20 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 		gi2c->clk_freq_out = KHZ(100);
- 	}
- 
-+	/* Set the assigned performance state */
-+	if (!of_property_read_u32(pdev->dev.of_node, "assigned-performance-states",
-+					&assigned_pstate)) {
-+		if (assigned_pstate) {
-+			ret = dev_pm_genpd_set_performance_state(dev,
-+								 assigned_pstate);
-+			if (ret) {
-+				dev_err(dev, "Failed to set performance state\n");
-+				return ret;
-+			}
-+			gi2c->assigned_pstate = assigned_pstate;
-+		}
-+	}
-+
- 	if (has_acpi_companion(dev))
- 		ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(dev));
- 
-@@ -616,10 +633,22 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 
- static int geni_i2c_remove(struct platform_device *pdev)
+ #define MAX_SAMPLE_CNT_DIV		8
+ #define MAX_STEP_CNT_DIV		64
+@@ -475,11 +479,24 @@ static void mtk_i2c_init_hw(struct mtk_i2c *i2c)
  {
-+	int ret;
-+	struct device *dev = &pdev->dev;
- 	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
+ 	u16 control_reg;
  
- 	i2c_del_adapter(&gi2c->adap);
- 	pm_runtime_disable(gi2c->se.dev);
-+
-+	/* Drop the assigned performance state */
-+	if (gi2c->assigned_pstate) {
-+		ret = dev_pm_genpd_set_performance_state(dev, 0);
-+		if (ret) {
-+			dev_err(dev, "Failed to set performance state\n");
-+			return ret;
-+		}
+-	writel(I2C_DMA_HARD_RST, i2c->pdmabase + OFFSET_RST);
+-	udelay(50);
+-	writel(I2C_DMA_CLR_FLAG, i2c->pdmabase + OFFSET_RST);
+-
+-	mtk_i2c_writew(i2c, I2C_SOFT_RST, OFFSET_SOFTRESET);
++	if (i2c->dev_comp->dma_sync) {
++		writel(I2C_DMA_WARM_RST, i2c->pdmabase + OFFSET_RST);
++		udelay(10);
++		writel(I2C_DMA_CLR_FLAG, i2c->pdmabase + OFFSET_RST);
++		udelay(10);
++		writel(I2C_DMA_HANDSHAKE_RST | I2C_DMA_HARD_RST,
++		       i2c->pdmabase + OFFSET_RST);
++		mtk_i2c_writew(i2c, I2C_HANDSHAKE_RST | I2C_SOFT_RST,
++			       OFFSET_SOFTRESET);
++		udelay(10);
++		writel(I2C_DMA_CLR_FLAG, i2c->pdmabase + OFFSET_RST);
++		mtk_i2c_writew(i2c, I2C_CHN_CLR_FLAG, OFFSET_SOFTRESET);
++	} else {
++		writel(I2C_DMA_HARD_RST, i2c->pdmabase + OFFSET_RST);
++		udelay(50);
++		writel(I2C_DMA_CLR_FLAG, i2c->pdmabase + OFFSET_RST);
++		mtk_i2c_writew(i2c, I2C_SOFT_RST, OFFSET_SOFTRESET);
 +	}
-+
- 	return 0;
- }
  
-@@ -629,6 +658,16 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
- 	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
- 
- 	disable_irq(gi2c->irq);
-+
-+	/* Drop the assigned performance state */
-+	if (gi2c->assigned_pstate) {
-+		ret = dev_pm_genpd_set_performance_state(dev, 0);
-+		if (ret) {
-+			dev_err(dev, "Failed to set performance state\n");
-+			return ret;
-+		}
-+	}
-+
- 	ret = geni_se_resources_off(&gi2c->se);
- 	if (ret) {
- 		enable_irq(gi2c->irq);
-@@ -654,6 +693,16 @@ static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
- 	if (ret)
- 		return ret;
- 
-+	/* Set the assigned performance state */
-+	if (gi2c->assigned_pstate) {
-+		ret = dev_pm_genpd_set_performance_state(dev,
-+							 gi2c->assigned_pstate);
-+		if (ret) {
-+			dev_err(dev, "Failed to set performance state\n");
-+			return ret;
-+		}
-+	}
-+
- 	enable_irq(gi2c->irq);
- 	gi2c->suspended = 0;
- 	return 0;
+ 	/* Set ioconfig */
+ 	if (i2c->use_push_pull)
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+1.9.1
 
