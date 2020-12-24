@@ -2,25 +2,25 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A66D62E2616
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Dec 2020 12:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A26D42E2618
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Dec 2020 12:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728039AbgLXLOF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Dec 2020 06:14:05 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:1807 "EHLO
+        id S1728166AbgLXLOO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Dec 2020 06:14:14 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:29679 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726591AbgLXLOF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Dec 2020 06:14:05 -0500
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+        with ESMTP id S1726591AbgLXLOO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Dec 2020 06:14:14 -0500
+Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
   by alexa-out.qualcomm.com with ESMTP; 24 Dec 2020 03:12:57 -0800
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Dec 2020 03:12:54 -0800
+  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 24 Dec 2020 03:12:54 -0800
 X-QCInternal: smtphost
 Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 24 Dec 2020 16:42:15 +0530
+  by ironmsg02-blr.qualcomm.com with ESMTP; 24 Dec 2020 16:42:16 +0530
 Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id 7BB972DC8; Thu, 24 Dec 2020 16:42:14 +0530 (IST)
+        id 4D2622DCA; Thu, 24 Dec 2020 16:42:15 +0530 (IST)
 From:   Roja Rani Yarubandi <rojay@codeaurora.org>
 To:     ulf.hansson@linaro.org, robh+dt@kernel.org,
         bjorn.andersson@linaro.org, wsa@kernel.org
@@ -32,9 +32,9 @@ Cc:     swboyd@chromium.org, dianders@chromium.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         agross@kernel.org, linux-i2c@vger.kernel.org,
         Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH 2/3] arm64: dts: sc7180: Add assigned-performance-states for i2c
-Date:   Thu, 24 Dec 2020 16:42:09 +0530
-Message-Id: <20201224111210.1214-3-rojay@codeaurora.org>
+Subject: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for 'assigned-performance-states'
+Date:   Thu, 24 Dec 2020 16:42:10 +0530
+Message-Id: <20201224111210.1214-4-rojay@codeaurora.org>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201224111210.1214-1-rojay@codeaurora.org>
 References: <20201224111210.1214-1-rojay@codeaurora.org>
@@ -44,132 +44,121 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-qup-i2c devices on sc7180 are clocked with a fixed clock (19.2 MHz).
-Though qup-i2c does not support DVFS, it still needs to vote for a
-performance state on 'CX' to satisfy the 19.2 MHz clock frequency
-requirement.
-
-Use 'assigned-performance-states' to pass this information from
-device tree, and also add the power-domains property to specify
-the CX power-domain.
+For devices which have 'assigned-performance-states' specified in DT,
+set the specified performance state during probe and drop it on remove.
+Also drop/set as part of runtime suspend/resume callbacks.
 
 Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
 ---
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/i2c/busses/i2c-qcom-geni.c | 49 ++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 22b832fc62e3..70d74215ba8b 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -782,6 +782,8 @@ i2c0: i2c@880000 {
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index 046d241183c5..250773784631 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -11,6 +11,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_domain.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/qcom-geni-se.h>
+ #include <linux/spinlock.h>
+@@ -86,6 +87,7 @@ struct geni_i2c_dev {
+ 	u32 clk_freq_out;
+ 	const struct geni_i2c_clk_fld *clk_fld;
+ 	int suspended;
++	unsigned int assigned_pstate;
+ };
  
-@@ -834,6 +836,8 @@ i2c1: i2c@884000 {
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
+ struct geni_i2c_err_log {
+@@ -497,6 +499,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
+ 	u32 proto, tx_depth;
+ 	int ret;
+ 	struct device *dev = &pdev->dev;
++	unsigned int assigned_pstate;
  
-@@ -886,6 +890,8 @@ i2c2: i2c@888000 {
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
+ 	gi2c = devm_kzalloc(dev, sizeof(*gi2c), GFP_KERNEL);
+ 	if (!gi2c)
+@@ -520,6 +523,20 @@ static int geni_i2c_probe(struct platform_device *pdev)
+ 		gi2c->clk_freq_out = KHZ(100);
+ 	}
  
-@@ -920,6 +926,8 @@ i2c3: i2c@88c000 {
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
++	/* Set the assigned performance state */
++	if (!of_property_read_u32(pdev->dev.of_node, "assigned-performance-states",
++					&assigned_pstate)) {
++		if (assigned_pstate) {
++			ret = dev_pm_genpd_set_performance_state(dev,
++								 assigned_pstate);
++			if (ret) {
++				dev_err(dev, "Failed to set performance state\n");
++				return ret;
++			}
++			gi2c->assigned_pstate = assigned_pstate;
++		}
++	}
++
+ 	if (has_acpi_companion(dev))
+ 		ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(dev));
  
-@@ -972,6 +980,8 @@ i2c4: i2c@890000 {
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
+@@ -616,10 +633,22 @@ static int geni_i2c_probe(struct platform_device *pdev)
  
-@@ -1006,6 +1016,8 @@ i2c5: i2c@894000 {
- 						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
+ static int geni_i2c_remove(struct platform_device *pdev)
+ {
++	int ret;
++	struct device *dev = &pdev->dev;
+ 	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
  
-@@ -1073,6 +1085,8 @@ i2c6: i2c@a80000 {
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
+ 	i2c_del_adapter(&gi2c->adap);
+ 	pm_runtime_disable(gi2c->se.dev);
++
++	/* Drop the assigned performance state */
++	if (gi2c->assigned_pstate) {
++		ret = dev_pm_genpd_set_performance_state(dev, 0);
++		if (ret) {
++			dev_err(dev, "Failed to set performance state\n");
++			return ret;
++		}
++	}
++
+ 	return 0;
+ }
  
-@@ -1125,6 +1139,8 @@ i2c7: i2c@a84000 {
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
+@@ -629,6 +658,16 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
+ 	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
  
-@@ -1159,6 +1175,8 @@ i2c8: i2c@a88000 {
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
+ 	disable_irq(gi2c->irq);
++
++	/* Drop the assigned performance state */
++	if (gi2c->assigned_pstate) {
++		ret = dev_pm_genpd_set_performance_state(dev, 0);
++		if (ret) {
++			dev_err(dev, "Failed to set performance state\n");
++			return ret;
++		}
++	}
++
+ 	ret = geni_se_resources_off(&gi2c->se);
+ 	if (ret) {
+ 		enable_irq(gi2c->irq);
+@@ -654,6 +693,16 @@ static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
  
-@@ -1211,6 +1229,8 @@ i2c9: i2c@a8c000 {
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
- 
-@@ -1245,6 +1265,8 @@ i2c10: i2c@a90000 {
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
- 
-@@ -1297,6 +1319,8 @@ i2c11: i2c@a94000 {
- 						<&aggre2_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
- 				interconnect-names = "qup-core", "qup-config",
- 							"qup-memory";
-+				power-domains = <&rpmhpd SC7180_CX>;
-+				assigned-performance-states = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
- 				status = "disabled";
- 			};
- 
++	/* Set the assigned performance state */
++	if (gi2c->assigned_pstate) {
++		ret = dev_pm_genpd_set_performance_state(dev,
++							 gi2c->assigned_pstate);
++		if (ret) {
++			dev_err(dev, "Failed to set performance state\n");
++			return ret;
++		}
++	}
++
+ 	enable_irq(gi2c->irq);
+ 	gi2c->suspended = 0;
+ 	return 0;
 -- 
 QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
 of Code Aurora Forum, hosted by The Linux Foundation
