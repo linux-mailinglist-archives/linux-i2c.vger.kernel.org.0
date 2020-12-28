@@ -2,82 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA87C2E6939
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Dec 2020 17:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DF02E6BBF
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Dec 2020 00:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728481AbgL1QrM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Dec 2020 11:47:12 -0500
-Received: from www.zeus03.de ([194.117.254.33]:41050 "EHLO mail.zeus03.de"
+        id S1729491AbgL1Wzw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Dec 2020 17:55:52 -0500
+Received: from mga17.intel.com ([192.55.52.151]:20884 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728627AbgL1Mzt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 28 Dec 2020 07:55:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=cUkCmu3K5ZBrw9JS/0zXOSslVzo2
-        IcTlMaVAEVlMv64=; b=aitghaC+Sz/FmOJ0sA4ASt9o7xQl/IOD8f4yhEZR1U97
-        C9uxXbMnlsLRkl3Mjwv3G1y1JHP78x2Z3HSb+W8/XnhXGQ9nWnd2Xh4OYCUfG89k
-        PrkL4sTG3QMMLGBu7oJ8orBL2RwYInP+Tw8UVcDSrQO01cYwDlyaYW5MelH7W60=
-Received: (qmail 1758329 invoked from network); 28 Dec 2020 13:55:07 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Dec 2020 13:55:07 +0100
-X-UD-Smtp-Session: l3s3148p1@ZiKZyIW37pUgAwDPXwIpAOUwDQytQs2L
-Date:   Mon, 28 Dec 2020 13:55:07 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH 2/4] i2c: rcar: optimize cacheline to minimize HW race
- condition
-Message-ID: <20201228125507.GD10822@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-References: <20201223172154.34462-1-wsa+renesas@sang-engineering.com>
- <20201223172154.34462-3-wsa+renesas@sang-engineering.com>
- <CAMuHMdV7i28HjfLbrzrJaJw6hB51u=kgmqqYmK_zBETFXumCUg@mail.gmail.com>
+        id S1729382AbgL1UIT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 28 Dec 2020 15:08:19 -0500
+IronPort-SDR: 8Z/hSQ77/38OJ3SUz2mfJFD9ejDnW6xAZ75OstJ/hBl53jtVPMdZS+mQhGE5GVvzQZ1TkxrID8
+ /1IQegic0eUw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="156207358"
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="156207358"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 12:06:23 -0800
+IronPort-SDR: W6LKwrETLC3WRbOG5xzlvTpxv26PmDKoRXEDvBUukESFNZjZ0lebjqfAWlPW47AQ006ZvYFJWN
+ 32pT3crmtVKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
+   d="scan'208";a="392869412"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Dec 2020 12:06:20 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 98C96DE; Mon, 28 Dec 2020 22:06:19 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-gpio@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/3] gpiolib: Follow usual pattern for gpiod_remove_lookup_table() call
+Date:   Mon, 28 Dec 2020 22:06:16 +0200
+Message-Id: <20201228200618.58716-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Qrgsu6vtpU/OV/zm"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdV7i28HjfLbrzrJaJw6hB51u=kgmqqYmK_zBETFXumCUg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The usual pattern for the remove calls, like gpiod_remove_lookup_table(),
+is to be NULL-aware, i.o.w. become a no-op whenever parameter is NULL.
+Update gpiod_remove_lookup_table() call to follow this pattern.
 
---Qrgsu6vtpU/OV/zm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/gpio/gpiolib.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index b02cc2abd3b6..611d6ea82d75 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -3460,6 +3460,10 @@ EXPORT_SYMBOL_GPL(gpiod_add_lookup_table);
+  */
+ void gpiod_remove_lookup_table(struct gpiod_lookup_table *table)
+ {
++	/* Nothing to remove */
++	if (!table)
++		return;
++
+ 	mutex_lock(&gpio_lookup_lock);
+ 
+ 	list_del(&table->list);
+-- 
+2.29.2
 
-> But if this really can make a difference, IMHO it is still broken
-
-It *is* broken on Gen2, no way around that. We can only minimze the race
-best as we can.
-
-
---Qrgsu6vtpU/OV/zm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/p1asACgkQFA3kzBSg
-KbbO4A/+J70Auekngjemk5Awmyr634n5FxmgB6LEvBjf7L4+lGD7fj3fKbEWFe9k
-QET6JThjcNlnVwQHGIpZevXuCyv8cXqKKFIt+S3Hm3nRFWaK+qjZvlVRSAgs5ueN
-ERXHltsjWPM2HVgxGS+d2WoG7Y6/CyCFE8PmgeIJE6i32jGLUgZckOWZjWLYbpUc
-elSKxAHBv9gXWAOO3f69zvgAjOrB8VhLS12hM/0SpjsTxJYGVqIREu/mPgWpIEv3
-8SWlwcQC/pk/Kq0zSsGHFOvBp3zwhQgc2pe/WAGnO87KFtZk9/6Ev/sTv424zijS
-EVMTNa6o07mr/izhAPt8Zdvf+S0d8Bt6xu51Ufd7xEvMxvCZqWPuICPWg8rNCW+G
-zC2iiliTi/9CV5xr6ONyFmBTa2FSWVpfxGmal+SalTvOAJrwrIham2iua62PMc3i
-1R0O6lMK0OQ10dB/9kGbIR6KrlnGwxTy/b5u83+RBkUv2iOAeNYb4m24IL+MhTWM
-edXeMWl7OUYWqpaOn32djrGzAeQkrgNOGTqofmpopp3s0FMTY4MYvcqKOKp0HVp6
-jDBvs1BCqgwqMFr1KcESen1vM5YGnj2ndJ+Gphi7cjSo+wuZ0nOkpOLHXkvOVaZX
-C6ZvHLR6hKqhyKcpNcqVktOKYRYRUxVPK/94m4oq2xWSdeLYBME=
-=7sFN
------END PGP SIGNATURE-----
-
---Qrgsu6vtpU/OV/zm--
