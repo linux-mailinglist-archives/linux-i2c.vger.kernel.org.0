@@ -2,81 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 377582E3325
-	for <lists+linux-i2c@lfdr.de>; Sun, 27 Dec 2020 23:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0C22E6457
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Dec 2020 16:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbgL0Wmf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 27 Dec 2020 17:42:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726194AbgL0Wmf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 27 Dec 2020 17:42:35 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FE1C061794
-        for <linux-i2c@vger.kernel.org>; Sun, 27 Dec 2020 14:41:54 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id m12so20278498lfo.7
-        for <linux-i2c@vger.kernel.org>; Sun, 27 Dec 2020 14:41:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TiUVtK9OeSFWzFQmBANaHzaEsallUsNWzJQS3+gHSHc=;
-        b=D7uRdDCCiZZvK3tsg46HWwkADgyhfJn86vrcI1O6PQlHYexIv5nJqbF6uEdLiESZcS
-         a4oFmUxOEG95/xkh4j8oQABfCPeOjLPfTYeHCmKWLtgffqT8FHp7EYZ0XbPmfCwpXJK4
-         dsKmibMpV9pVYbgaW5jxRuF+D9G7Iq5+Xu5QODr2bVM/kBxnIglZgEGiSHbkRTz8XcCb
-         T+3O8FFkjq89Lu613JoCqLFJcHA2ZjT0SJpa+Eou/w/nvzz95Ai0DiL6hVnXLZeGITTN
-         KgtYzWAAjOuCtAP4bGl22S7HU9gkio8aVWzCz0Qu+zs7bsKBmZHsTfKJCZII+BO3kvxe
-         j4Kg==
+        id S2391440AbgL1Ni2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Dec 2020 08:38:28 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:41122 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391398AbgL1NiY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Dec 2020 08:38:24 -0500
+Received: by mail-ot1-f45.google.com with SMTP id x13so9112743oto.8;
+        Mon, 28 Dec 2020 05:38:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TiUVtK9OeSFWzFQmBANaHzaEsallUsNWzJQS3+gHSHc=;
-        b=Grd/rA4YNyDfUu39GhKraXXPFYdASnx+Lo9LorucEAT8t4weq2xhhifWMWTeKCOxqx
-         k97qetRkqJWfSoQ0rx18pBiV9D1BNXcBBwV7rgwXyZjxlycJTu3qJV752JXc/pOZrOzI
-         oVJTJSl7YkYdPYDxtfmsS90ZJmilg+MMjFpmDKB33TzLvC455ctzI2lHFRzC3Y2j9ZFL
-         0mRBCFDMbnz4fAdMenRzJgeftics9L/rVUO+gN6VcTO3YayPteO414bBsdUpZiqt3nRb
-         gS7TilfLBMcbyQm2tGFtjhJskcxcku4l99FfEIiMT48mW0YkBzvnVLhv29u5zca/6vM2
-         Cl+Q==
-X-Gm-Message-State: AOAM533+Ghl0mjAgwD/tCo7z7koIMk4bXSkCIMt6krPsQX+Y+wo7nWBg
-        4Q44Rm4hItbzr7p5zBDJsttX9nEx9j+W1oQI2GB0Bw==
-X-Google-Smtp-Source: ABdhPJz5A3h25jIqt2I95JWA2PRAYsrrx0V+vogB1FIORy0QrfPRA1WdNKp2vmyB+DcYS5jEhlvkZI/W1o5Be3E3vwg=
-X-Received: by 2002:a05:651c:1312:: with SMTP id u18mr20566799lja.200.1609108913442;
- Sun, 27 Dec 2020 14:41:53 -0800 (PST)
+        bh=xtrfQuQnyNAaVJXZ6+NykLzyM/gg5DoautEkBZLloKQ=;
+        b=XreerNaYqzFmQZcZkkQyCPSpOKhwTjjo2xWiG9wTC5UhMnt7GYcRWv4yVub9THkl1m
+         xq3n0n8P6G2iz72uGcvKP5uNv1GsECOnKDuddcz43bTjwr7q2D9sFtGqd6KF/vTp0jLz
+         acuonjG2AvmJhHwbtSVqkoskwD/hhnfl/grnsXlu4Um12IheBAzljsSdTyV6y8bAz1bO
+         /tcZZE1N4L+cCKMj6ZEanceyaVUJmNeJSUBSStKraZbeDtqsenyZ9GJ9OyVuwq7W7gE4
+         7PpCku9ve4pwCZxsbescCT32THHDpka4bMmHe/0JGjhSB+buWHNbnzEEeYVU9hT7mMB/
+         erkw==
+X-Gm-Message-State: AOAM530hx+FGM/MKyQRfHiWYaiXm/bs2xqMzEqbLRBkrzJnkAhUWQv+P
+        g1J9/jXQZlBngIrdLDqaCcEJ3bFfmlpIlh3mQAg6nHjF
+X-Google-Smtp-Source: ABdhPJwRKFKOGwrhQo6MkWu7nf73xZXEdW3xtWzT5PYhCCTBANFRv9cSRZQAD0yFMLygz7+JhGEPOm80gLjWa1fA3w0=
+X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr32898563otc.145.1609162662989;
+ Mon, 28 Dec 2020 05:37:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20201221134225.106728-1-hdegoede@redhat.com>
-In-Reply-To: <20201221134225.106728-1-hdegoede@redhat.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 27 Dec 2020 23:41:42 +0100
-Message-ID: <CACRpkdZxMf-QgumQhS8-uhrDZYccfrJN=CATnXZj3HHxKfQ03Q@mail.gmail.com>
-Subject: Re: [PATCH] i2c: i801: Fix the i2c-mux gpiod_lookup_table not being
- properly terminated
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@the-dreams.de>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20201223172154.34462-1-wsa+renesas@sang-engineering.com> <20201223172154.34462-5-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20201223172154.34462-5-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Dec 2020 14:37:32 +0100
+Message-ID: <CAMuHMdW48sFLernApzcQ7Dqz90kX18d9+9e9ytQ=rVQ2hWD_4A@mail.gmail.com>
+Subject: Re: [PATCH 4/4] i2c: rcar: protect against supurious interrupts on V3U
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Dec 21, 2020 at 2:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
+Hi Wolfram,
 
-> gpiod_add_lookup_table() expects the gpiod_lookup_table->table passed to
-> it to be terminated with a zero-ed out entry.
+On Wed, Dec 23, 2020 at 6:24 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> V3U creates spurious interrupts which we need to handle. This costs time
+> until BUS_PHASE_DATA can be activated which is problematic for Gen2 SoCs
+> and earlier. Because of this we introduce two interrupt handlers here
+> which will call a generic main irq function once the timing critical
+> stuff is done.
 >
-> So we need to allocate one more entry then we will use.
->
-> Cc: Serge Semin <fancer.lancer@gmail.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Andy Shevchenko <andy@infradead.org>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Fixes: d308dfbf62ef ("i2c: mux/i801: Switch to use descriptor passing")
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks for your patch!
 
-Yours,
-Linus Walleij
+> --- a/drivers/i2c/busses/i2c-rcar.c
+> +++ b/drivers/i2c/busses/i2c-rcar.c
+> @@ -625,20 +625,11 @@ static bool rcar_i2c_slave_irq(struct rcar_i2c_priv *priv)
+>   * generated. It turned out that taking a spinlock at the beginning of the ISR
+>   * was already causing repeated messages. Thus, this driver was converted to
+>   * the now lockless behaviour. Please keep this in mind when hacking the driver.
+> + * R-Car Gen3 seems to have this fixed but earlier versions than R-Car Gen2 are
+
+s/than/like/?
+
+> + * likely affected. Therefore, we have different interrupt handler entries.
+>   */
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
