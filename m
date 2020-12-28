@@ -2,84 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0C22E6457
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Dec 2020 16:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AADF2E42EB
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Dec 2020 16:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391440AbgL1Ni2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Dec 2020 08:38:28 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:41122 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391398AbgL1NiY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Dec 2020 08:38:24 -0500
-Received: by mail-ot1-f45.google.com with SMTP id x13so9112743oto.8;
-        Mon, 28 Dec 2020 05:38:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xtrfQuQnyNAaVJXZ6+NykLzyM/gg5DoautEkBZLloKQ=;
-        b=XreerNaYqzFmQZcZkkQyCPSpOKhwTjjo2xWiG9wTC5UhMnt7GYcRWv4yVub9THkl1m
-         xq3n0n8P6G2iz72uGcvKP5uNv1GsECOnKDuddcz43bTjwr7q2D9sFtGqd6KF/vTp0jLz
-         acuonjG2AvmJhHwbtSVqkoskwD/hhnfl/grnsXlu4Um12IheBAzljsSdTyV6y8bAz1bO
-         /tcZZE1N4L+cCKMj6ZEanceyaVUJmNeJSUBSStKraZbeDtqsenyZ9GJ9OyVuwq7W7gE4
-         7PpCku9ve4pwCZxsbescCT32THHDpka4bMmHe/0JGjhSB+buWHNbnzEEeYVU9hT7mMB/
-         erkw==
-X-Gm-Message-State: AOAM530hx+FGM/MKyQRfHiWYaiXm/bs2xqMzEqbLRBkrzJnkAhUWQv+P
-        g1J9/jXQZlBngIrdLDqaCcEJ3bFfmlpIlh3mQAg6nHjF
-X-Google-Smtp-Source: ABdhPJwRKFKOGwrhQo6MkWu7nf73xZXEdW3xtWzT5PYhCCTBANFRv9cSRZQAD0yFMLygz7+JhGEPOm80gLjWa1fA3w0=
-X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr32898563otc.145.1609162662989;
- Mon, 28 Dec 2020 05:37:42 -0800 (PST)
+        id S2406932AbgL1Nvf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Dec 2020 08:51:35 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:10086 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406922AbgL1Nvd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Dec 2020 08:51:33 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4D4Jnm3qbhzMBTJ;
+        Mon, 28 Dec 2020 21:49:48 +0800 (CST)
+Received: from ubuntu.network (10.175.138.68) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 28 Dec 2020 21:50:41 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zheng Yongjun <zhengyongjun3@huawei.com>
+Subject: [PATCH -next] i2c: busses: Use DEFINE_SPINLOCK() for spinlock
+Date:   Mon, 28 Dec 2020 21:51:20 +0800
+Message-ID: <20201228135120.28678-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20201223172154.34462-1-wsa+renesas@sang-engineering.com> <20201223172154.34462-5-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20201223172154.34462-5-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Dec 2020 14:37:32 +0100
-Message-ID: <CAMuHMdW48sFLernApzcQ7Dqz90kX18d9+9e9ytQ=rVQ2hWD_4A@mail.gmail.com>
-Subject: Re: [PATCH 4/4] i2c: rcar: protect against supurious interrupts on V3U
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.138.68]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+spinlock can be initialized automatically with DEFINE_SPINLOCK()
+rather than explicitly calling spin_lock_init().
 
-On Wed, Dec 23, 2020 at 6:24 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> V3U creates spurious interrupts which we need to handle. This costs time
-> until BUS_PHASE_DATA can be activated which is problematic for Gen2 SoCs
-> and earlier. Because of this we introduce two interrupt handlers here
-> which will call a generic main irq function once the timing critical
-> stuff is done.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+ drivers/i2c/busses/i2c-elektor.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks for your patch!
-
-> --- a/drivers/i2c/busses/i2c-rcar.c
-> +++ b/drivers/i2c/busses/i2c-rcar.c
-> @@ -625,20 +625,11 @@ static bool rcar_i2c_slave_irq(struct rcar_i2c_priv *priv)
->   * generated. It turned out that taking a spinlock at the beginning of the ISR
->   * was already causing repeated messages. Thus, this driver was converted to
->   * the now lockless behaviour. Please keep this in mind when hacking the driver.
-> + * R-Car Gen3 seems to have this fixed but earlier versions than R-Car Gen2 are
-
-s/than/like/?
-
-> + * likely affected. Therefore, we have different interrupt handler entries.
->   */
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/i2c/busses/i2c-elektor.c b/drivers/i2c/busses/i2c-elektor.c
+index 140426db28df..671f9ac8387e 100644
+--- a/drivers/i2c/busses/i2c-elektor.c
++++ b/drivers/i2c/busses/i2c-elektor.c
+@@ -49,7 +49,7 @@ static int mmapped;
+ 
+ static wait_queue_head_t pcf_wait;
+ static int pcf_pending;
+-static spinlock_t lock;
++static DEFINE_SPINLOCK(lock);
+ 
+ static struct i2c_adapter pcf_isa_ops;
+ 
+@@ -132,7 +132,6 @@ static irqreturn_t pcf_isa_handler(int this_irq, void *dev_id) {
+ 
+ static int pcf_isa_init(void)
+ {
+-	spin_lock_init(&lock);
+ 	if (!mmapped) {
+ 		if (!request_region(base, 2, pcf_isa_ops.name)) {
+ 			printk(KERN_ERR "%s: requested I/O region (%#x:2) is "
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.22.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
