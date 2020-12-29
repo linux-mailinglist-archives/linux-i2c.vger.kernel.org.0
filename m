@@ -2,95 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 206A62E6BE1
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Dec 2020 00:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E181D2E7426
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Dec 2020 22:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729394AbgL1Wzx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Dec 2020 17:55:53 -0500
-Received: from mga12.intel.com ([192.55.52.136]:28661 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729381AbgL1UIT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 28 Dec 2020 15:08:19 -0500
-IronPort-SDR: qxJEmYEOcl//nJ1CwVeAPYXnzU4tXSCraNWuIPEGpzxLB+AYTZDEx/oe2pvc6L4LsWkt+S3moL
- OnIvLP+xxI0w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="155625473"
-X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
-   d="scan'208";a="155625473"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 12:06:22 -0800
-IronPort-SDR: ns2x00IEq3P4ivZEYLQzzPqlKG2xceSqcgNl6KdngvnTIeYREdndXZdmgVojWnsiASHVPRuOdH
- hqklLaP2pA2g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,456,1599548400"; 
-   d="scan'208";a="459871195"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Dec 2020 12:06:20 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id AFBDF109; Mon, 28 Dec 2020 22:06:19 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-gpio@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 3/3] i2c: i801: Refactor mux code since platform_device_unregister() is NULL aware
-Date:   Mon, 28 Dec 2020 22:06:18 +0200
-Message-Id: <20201228200618.58716-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201228200618.58716-1-andriy.shevchenko@linux.intel.com>
-References: <20201228200618.58716-1-andriy.shevchenko@linux.intel.com>
+        id S1726300AbgL2VSN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Dec 2020 16:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbgL2VSM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Dec 2020 16:18:12 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498CEC061574;
+        Tue, 29 Dec 2020 13:17:32 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id b2so13761513edm.3;
+        Tue, 29 Dec 2020 13:17:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FZ/H9WSOhHVwLs+QGJ7fpSAvZcye4tGBUW7rT83ZTqs=;
+        b=sAEohDXxCNdSD5xC6VTxLT/TaeDso+7HGrFm10sPmuXrBrtpqB8NCseIrdcgUtHM+l
+         SlfmHpW31fxTG4qdN+h1KQGsT1CiqY7zK96LgWVMVI0u4kb89jXqnoNX0dblI7i3bkBp
+         /KMsL6mIyDWUfTALgHftqkJ8EngKKUgFOenfDD8VQSd8dLYw7kiypJHwHWoz5gBgO27f
+         IWp2GhK2b8RwhiEse0Ot1r3XCMbBV5RyPs89at3RgmxHSn6ThjFNNkztj+CibMEiCg7h
+         ROoFVyM724u37xcOV+a+smAffQcM46AyF/YkFibmpqkT9GTwWcOkTXcZhDmWjMUp2NBB
+         30sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FZ/H9WSOhHVwLs+QGJ7fpSAvZcye4tGBUW7rT83ZTqs=;
+        b=eYC4icw9ZS1OlfBzrFUp8BoJvxS4Mp7UhSFnA+5cGMCVlgsabfUMsMW4mf4pc6VKFl
+         H5iR/itALErfQeHr5XuhG5wXkLnmEBmwavArkA2H9wU/vWRlbMjORNqgS641eJGa7t+o
+         tEtStmSVe+0CNHr/L+Zcgxta7iULFCER3RMmCTHOfQIhIAzVMvIhJYNormht/Y6uQGFE
+         55flqvQtwLzV2ahxA30uOr3lEeZ09jdA6+eHFdF8OZZ7EqNmHHPzHHtM9d8aLlc602Go
+         OCO0KP2q83tmjyOSg2mqK0srwb0CUW3zIwhIn58Te+flhY9jrjEipUDJxX90H57mXgf5
+         gTjg==
+X-Gm-Message-State: AOAM5330i8L99N74lk8aRfog8bshg2gjLfHkLdRZY7Ah1kzkNI578jnD
+        xosUBMDXvA6JDEtnid9vtpk=
+X-Google-Smtp-Source: ABdhPJzKxhTpgS/AV3nUiTk7WK0f95zDG2XoswIhZbVPontZj9HQK6yA6qageu0/vszLTMrGHH15ow==
+X-Received: by 2002:aa7:ca03:: with SMTP id y3mr48618048eds.87.1609276651068;
+        Tue, 29 Dec 2020 13:17:31 -0800 (PST)
+Received: from localhost.localdomain ([188.24.159.61])
+        by smtp.gmail.com with ESMTPSA id u9sm37354553edd.54.2020.12.29.13.17.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Dec 2020 13:17:30 -0800 (PST)
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Subject: [PATCH v3 00/13] Add CMU/RMU/DMA/MMC/I2C support for Actions Semi
+Date:   Tue, 29 Dec 2020 23:17:15 +0200
+Message-Id: <cover.1609263738.git.cristian.ciocaltea@gmail.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-platform_device_unregister() is NULL-aware and thus doesn't required a
-duplication check in i801_del_mux(). Besides that it's also error pointer
-aware, and we may drop unneeded assignment in i801_add_mux() followed by
-conversion to PTR_ERR_OR_ZERO() for the returned value.
+Hi,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/busses/i2c-i801.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+This patchset brings a series of improvements for the Actions Semi S500
+SoCs family, by adding support for Clock & Reset Management Units, DMA,
+MMC, I2C & SIRQ controllers.
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 7c2569a18f8c..1400a8716388 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1433,7 +1433,7 @@ static int i801_add_mux(struct i801_priv *priv)
- 	const struct i801_mux_config *mux_config;
- 	struct i2c_mux_gpio_platform_data gpio_data;
- 	struct gpiod_lookup_table *lookup;
--	int err, i;
-+	int i;
- 
- 	if (!priv->mux_drvdata)
- 		return 0;
-@@ -1473,20 +1473,16 @@ static int i801_add_mux(struct i801_priv *priv)
- 				PLATFORM_DEVID_NONE, &gpio_data,
- 				sizeof(struct i2c_mux_gpio_platform_data));
- 	if (IS_ERR(priv->mux_pdev)) {
--		err = PTR_ERR(priv->mux_pdev);
- 		gpiod_remove_lookup_table(lookup);
--		priv->mux_pdev = NULL;
- 		dev_err(dev, "Failed to register i2c-mux-gpio device\n");
--		return err;
- 	}
- 
--	return 0;
-+	return PTR_ERR_OR_ZERO(priv->mux_pdev);
- }
- 
- static void i801_del_mux(struct i801_priv *priv)
- {
--	if (priv->mux_pdev)
--		platform_device_unregister(priv->mux_pdev);
-+	platform_device_unregister(priv->mux_pdev);
- 	gpiod_remove_lookup_table(priv->lookup);
- }
- 
+Please note the patches consist mostly of DTS and bindings/compatibles
+changes, since all the work they depend on has been already merged,
+i.e. clock fixes/additions, pinctrl driver, sirq driver.
+
+For the moment, I have only enabled the features I could test on
+RoseapplePi SBC.
+
+Thanks,
+Cristi
+
+Changes in v3:
+- Squashed 'arm: dts: owl-s500-roseapplepi: Use UART clock from CMU' with
+  'arm: dts: owl-s500: Set CMU clocks for UARTs', according to Mani's review
+- Rebased series on v5.11-rc1 and dropped the already merged patches:
+ * dt-bindings: mmc: owl: Add compatible string for Actions Semi S500 SoC
+ * dt-bindings: i2c: owl: Convert Actions Semi Owl binding to a schema
+ * MAINTAINERS: Update entry for Actions Semi Owl I2C binding
+ * i2c: owl: Add compatible for the Actions Semi S500 I2C controller
+
+Changes in v2:
+- Added new bindings/compatibles for S500 DMA, MMC & I2C controllers
+- Added support for the SIRQ controller
+- Added new entries in MAINTAINERS
+- Updated naming of some patches in v1
+
+Cristian Ciocaltea (13):
+  arm: dts: owl-s500: Add Clock Management Unit
+  arm: dts: owl-s500: Set CMU clocks for UARTs
+  arm: dts: owl-s500: Add Reset controller
+  dt-bindings: dma: owl: Add compatible string for Actions Semi S500 SoC
+  dmaengine: owl: Add compatible for the Actions Semi S500 DMA
+    controller
+  arm: dts: owl-s500: Add DMA controller
+  arm: dts: owl-s500: Add pinctrl & GPIO support
+  arm: dts: owl-s500: Add MMC support
+  arm: dts: owl-s500: Add I2C support
+  arm: dts: owl-s500: Add SIRQ controller
+  arm: dts: owl-s500-roseapplepi: Add uSD support
+  arm: dts: owl-s500-roseapplepi: Add I2C pinctrl configuration
+  MAINTAINERS: Add linux-actions ML for Actions Semi Arch
+
+ .../devicetree/bindings/dma/owl-dma.yaml      |   7 +-
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/owl-s500-cubieboard6.dts    |   7 -
+ .../arm/boot/dts/owl-s500-guitar-bb-rev-b.dts |   7 -
+ .../arm/boot/dts/owl-s500-labrador-base-m.dts |   7 -
+ arch/arm/boot/dts/owl-s500-roseapplepi.dts    |  97 +++++++++++-
+ arch/arm/boot/dts/owl-s500-sparky.dts         |   7 -
+ arch/arm/boot/dts/owl-s500.dtsi               | 140 ++++++++++++++++++
+ drivers/dma/owl-dma.c                         |   3 +-
+ 9 files changed, 239 insertions(+), 37 deletions(-)
+
 -- 
-2.29.2
+2.30.0
 
