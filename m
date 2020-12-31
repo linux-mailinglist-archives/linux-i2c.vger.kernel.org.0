@@ -2,86 +2,142 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 796DB2E7768
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Dec 2020 10:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3452E7E9F
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Dec 2020 08:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726305AbgL3J1h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Dec 2020 04:27:37 -0500
-Received: from so254-31.mailgun.net ([198.61.254.31]:39604 "EHLO
-        so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgL3J1g (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Dec 2020 04:27:36 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1609320431; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=o2qY+P/k6nZKXIz5IQeQrJGLD6mxXbjgeSDUUhW3E34=; b=sEYiG/8yuQ6bm4OTpmnaR0jDv47m8kyaEz/KXqDrUSXveN6EFgj103I7WoVZf2FoWf7dqNS5
- Eli3/vbcY4mbnoZz13wxzSx/9+tdqemBmzs38AjU35I0G2gs60ccdsdP8mkNE6SCciu7wgXz
- EhWIeyWY8WBFl8BZVO0+57ruTec=
-X-Mailgun-Sending-Ip: 198.61.254.31
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-west-2.postgun.com with SMTP id
- 5fec47efda47198188aadaae (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 30 Dec 2020 09:27:11
- GMT
-Sender: akashast=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 32704C433ED; Wed, 30 Dec 2020 09:27:11 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-6.3 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.43.89] (unknown [106.205.1.36])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A24E3C433C6;
-        Wed, 30 Dec 2020 09:27:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A24E3C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V7 2/2] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>, wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        pyarlaga@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org
-References: <20201221123801.26643-1-rojay@codeaurora.org>
- <20201221123801.26643-3-rojay@codeaurora.org>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <f70837e3-2289-5320-df2e-c5a09e03d1c1@codeaurora.org>
-Date:   Wed, 30 Dec 2020 14:56:57 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1726314AbgLaHzZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 31 Dec 2020 02:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726037AbgLaHzZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 31 Dec 2020 02:55:25 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4319CC061573
+        for <linux-i2c@vger.kernel.org>; Wed, 30 Dec 2020 23:54:45 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id f14so4595475pju.4
+        for <linux-i2c@vger.kernel.org>; Wed, 30 Dec 2020 23:54:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LjRECRtXIzwtRi7U4uWbCOAACvteq5kQEsUibs961Aw=;
+        b=eRyeXnAgxzHv2sIST/aF1FE0S5bB0fG5s3OFAU9Mig/dUKdY5CLYRbIz7fOmO+Q4+d
+         o6eeuqqNT8nzu5n82t3N+VgJhnvemmvg2xzLahiXRVHWSB8im9hJw5x51ytnFpTzBxAc
+         PqgXoXWPGBSpxcM7OVvbkzxbQ+sGszr8pMr1ciwHU2WCDPSg6k4Nw4jqan4UjA0l6i2z
+         TwfOii3APxx1q2r7/pAUVdyyH5PmQkBFV0drfCZedZbmTKDrzOMWWU3t7ol0I+UZAldX
+         WJCpif5reqZ3/IpIqFraKYhl0F8sWyD7GukX1qS6Ba0nGbupRe4gUvHqRV5QLNvKGSnp
+         mx2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LjRECRtXIzwtRi7U4uWbCOAACvteq5kQEsUibs961Aw=;
+        b=KcDzZcScu/I+8Nz4M9+tAPrs8vyEXnHDcvUl9dGdKe4zO5dcRpMDUiFxoQVs7aTcp8
+         8QBYWe6S075J2XPQl5/TdnFKy2bbrXA3RdRYMCz782d5UsiLhdfkFFeZAHO+brIAdUtg
+         BIJddIXSoGG861tNmDJJ0k8gbLxa6KHf29dtzeR69JlHUnozv0qzfqt2oJR2PvKotlCm
+         WoXZu21QfcW1XubcYBTW6rPOaV/lzOyQJopkKN/KvdT0SVMsTtBkqtpNusHTBheKEo8a
+         OF9gRsYDOGn5hE+64LN9413kN9YOKsTnTyAJfKjDVhBWH49krdsbo4pR4hoek65FNzSQ
+         o81g==
+X-Gm-Message-State: AOAM530RseITmT6e+OJRFtShcxB1wOuRheyoJ6/4TuAXvE7p+Yps5b1O
+        K3hLVbGmR7sxMQPUtuiR5nJp
+X-Google-Smtp-Source: ABdhPJy5P7AJ+WidqF/ZjXD1Won5mShdQwBoju/Dg6zwADGelOsHTdEdZSA8RHSVZHyR1QuZyCNbZg==
+X-Received: by 2002:a17:90a:348f:: with SMTP id p15mr12316040pjb.125.1609401284765;
+        Wed, 30 Dec 2020 23:54:44 -0800 (PST)
+Received: from thinkpad ([2409:4072:6d1f:be3b:71a9:d2bf:a32d:897d])
+        by smtp.gmail.com with ESMTPSA id z28sm46534047pfr.140.2020.12.30.23.54.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Dec 2020 23:54:43 -0800 (PST)
+Date:   Thu, 31 Dec 2020 13:24:35 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v3 00/13] Add CMU/RMU/DMA/MMC/I2C support for Actions Semi
+Message-ID: <20201231075435.GG7345@thinkpad>
+References: <cover.1609263738.git.cristian.ciocaltea@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201221123801.26643-3-rojay@codeaurora.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1609263738.git.cristian.ciocaltea@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Dec 29, 2020 at 11:17:15PM +0200, Cristian Ciocaltea wrote:
+> Hi,
+> 
+> This patchset brings a series of improvements for the Actions Semi S500
+> SoCs family, by adding support for Clock & Reset Management Units, DMA,
+> MMC, I2C & SIRQ controllers.
+> 
+> Please note the patches consist mostly of DTS and bindings/compatibles
+> changes, since all the work they depend on has been already merged,
+> i.e. clock fixes/additions, pinctrl driver, sirq driver.
+> 
+> For the moment, I have only enabled the features I could test on
+> RoseapplePi SBC.
+> 
 
-On 12/21/2020 6:08 PM, Roja Rani Yarubandi wrote:
-> If the hardware is still accessing memory after SMMU translation
-> is disabled (as part of smmu shutdown callback), then the
-> IOVAs (I/O virtual address) which it was using will go on the bus
-> as the physical addresses which will result in unknown crashes
-> like NoC/interconnect errors.
->
-> So, implement shutdown callback to i2c driver to stop on-going transfer
-> and unmap DMA mappings during system "reboot" or "shutdown".
->
-> Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the Qualcomm GENI I2C controller")
-> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
-Reviewed-by: Akash Asthana <akashast@codeaurora.org>
+Applied all patches except the 2 dmaengine patches for v5.12. Andreas, please
+let me know if you want to do the PR this time. Else I'll proceed.
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+Thanks,
+Mani
 
+> Thanks,
+> Cristi
+> 
+> Changes in v3:
+> - Squashed 'arm: dts: owl-s500-roseapplepi: Use UART clock from CMU' with
+>   'arm: dts: owl-s500: Set CMU clocks for UARTs', according to Mani's review
+> - Rebased series on v5.11-rc1 and dropped the already merged patches:
+>  * dt-bindings: mmc: owl: Add compatible string for Actions Semi S500 SoC
+>  * dt-bindings: i2c: owl: Convert Actions Semi Owl binding to a schema
+>  * MAINTAINERS: Update entry for Actions Semi Owl I2C binding
+>  * i2c: owl: Add compatible for the Actions Semi S500 I2C controller
+> 
+> Changes in v2:
+> - Added new bindings/compatibles for S500 DMA, MMC & I2C controllers
+> - Added support for the SIRQ controller
+> - Added new entries in MAINTAINERS
+> - Updated naming of some patches in v1
+> 
+> Cristian Ciocaltea (13):
+>   arm: dts: owl-s500: Add Clock Management Unit
+>   arm: dts: owl-s500: Set CMU clocks for UARTs
+>   arm: dts: owl-s500: Add Reset controller
+>   dt-bindings: dma: owl: Add compatible string for Actions Semi S500 SoC
+>   dmaengine: owl: Add compatible for the Actions Semi S500 DMA
+>     controller
+>   arm: dts: owl-s500: Add DMA controller
+>   arm: dts: owl-s500: Add pinctrl & GPIO support
+>   arm: dts: owl-s500: Add MMC support
+>   arm: dts: owl-s500: Add I2C support
+>   arm: dts: owl-s500: Add SIRQ controller
+>   arm: dts: owl-s500-roseapplepi: Add uSD support
+>   arm: dts: owl-s500-roseapplepi: Add I2C pinctrl configuration
+>   MAINTAINERS: Add linux-actions ML for Actions Semi Arch
+> 
+>  .../devicetree/bindings/dma/owl-dma.yaml      |   7 +-
+>  MAINTAINERS                                   |   1 +
+>  arch/arm/boot/dts/owl-s500-cubieboard6.dts    |   7 -
+>  .../arm/boot/dts/owl-s500-guitar-bb-rev-b.dts |   7 -
+>  .../arm/boot/dts/owl-s500-labrador-base-m.dts |   7 -
+>  arch/arm/boot/dts/owl-s500-roseapplepi.dts    |  97 +++++++++++-
+>  arch/arm/boot/dts/owl-s500-sparky.dts         |   7 -
+>  arch/arm/boot/dts/owl-s500.dtsi               | 140 ++++++++++++++++++
+>  drivers/dma/owl-dma.c                         |   3 +-
+>  9 files changed, 239 insertions(+), 37 deletions(-)
+> 
+> -- 
+> 2.30.0
+> 
