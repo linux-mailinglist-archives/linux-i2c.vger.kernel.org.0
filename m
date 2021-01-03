@@ -2,124 +2,316 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 189112E895A
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 Jan 2021 00:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D37192E8BC1
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Jan 2021 11:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbhABXlx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 2 Jan 2021 18:41:53 -0500
-Received: from mail-vi1eur05on2132.outbound.protection.outlook.com ([40.107.21.132]:27361
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726822AbhABXlw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 2 Jan 2021 18:41:52 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g1BwrkwjYa3kbf/ju0lhtQPW12Ex7CGvBh6yIXDamZ1Gd/wQJBEfXe7nGYrcWVQ9xkgwJ5F/LgnUbpNBwXSmbnZ4lR9OyH88LlAsyKYj4CG8y3D3ewkKaJHNeGYwKZJ0qBja/jckm2pivzMciztaxc6TQw4f5/CWalMfVzCBndsJMPY6INafVryg1JL+UW6zkf4Ob2yApjaXHccKRHKqMsVNo/CW4cCBJXXtHxM0Asu88reBhZCT3ZfoaQgsc546J0RZoeWsYOSNmLKYsRYE+bJyA1wbL8kqLSssuEKiND/of3siQ3EQ+JB+zafCJi0G0NTQ22iyoZ54W9MVLIU5Bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3c0GLhvnL+a2w3M/3jbAw4waVNG5d8NJ92v+JJIm1Eo=;
- b=JGbDsAFwgba1w5qDJk5apz/yqyFFQ+tZRkArBUtFkR/QgtbRM9tbwbLatYOTs+Q7M0SLcNP9jqHseZdqBOHsQlTGSuu8ESByvgK5+WY1kh64ir6g3l7kYvf0I9Hr1GFaGcqQDbqgsJ90pvGUow7sk2wDE0npRPD6uYn7a15n84e3mcnh+3htGfRHAZ2tNgvWiPaVdr5kecnFgbrPdAq95yKPwPlYXDWfG20TMSw2op+xgTa42nZIgV0nIBHKiNJuQwXwAe2lnxDr6qxhbcFvIqRHiIuMV6fBdr7Hghv3y9RE0PHl63vL7gyd2XiTddrtkRrkWhqw/161hSohCR3bFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3c0GLhvnL+a2w3M/3jbAw4waVNG5d8NJ92v+JJIm1Eo=;
- b=KceMB5EAIaxmj6FKbiwZLjD3aqCe48hSImIRxzPLSWgEHLSiuIc9zrcXT5S7+T1FZwOCoXdokOzuQaEqlvETQ4vdPifVdwOtEVGp4xupTtwsqdnHhVxUctTu2kg3NM6RfVkolUBQC9kRrK5KwKsRGAWnTFnENLxIVK+7E4xW5+w=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=axentia.se;
-Received: from DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
- by DB9PR02MB6890.eurprd02.prod.outlook.com (2603:10a6:10:21b::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3721.19; Sat, 2 Jan
- 2021 23:41:02 +0000
-Received: from DB8PR02MB5482.eurprd02.prod.outlook.com
- ([fe80::7975:bb50:c24:9e4f]) by DB8PR02MB5482.eurprd02.prod.outlook.com
- ([fe80::7975:bb50:c24:9e4f%6]) with mapi id 15.20.3721.024; Sat, 2 Jan 2021
- 23:41:02 +0000
-Subject: Re: repo update
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>
-References: <CAHp75VeTO1RR-tGhz-uN+bOMRphAcHpe95GrRrQTtrEs+itK=A@mail.gmail.com>
-From:   Peter Rosin <peda@axentia.se>
-Organization: Axentia Technologies AB
-Message-ID: <73fa7ef3-8f29-b7a8-803f-a6da1246d3f9@axentia.se>
-Date:   Sun, 3 Jan 2021 00:40:50 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-In-Reply-To: <CAHp75VeTO1RR-tGhz-uN+bOMRphAcHpe95GrRrQTtrEs+itK=A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [85.229.94.233]
-X-ClientProxiedBy: HE1PR06CA0154.eurprd06.prod.outlook.com
- (2603:10a6:7:16::41) To DB8PR02MB5482.eurprd02.prod.outlook.com
- (2603:10a6:10:eb::29)
+        id S1726418AbhACKwi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 3 Jan 2021 05:52:38 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:53753 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726029AbhACKwh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 3 Jan 2021 05:52:37 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id AA0E251B;
+        Sun,  3 Jan 2021 05:51:50 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 03 Jan 2021 05:51:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=pNHgSBW8RYTr+UdeVo6i146iO8
+        tIN/TN0W3UEDm3Cyk=; b=sdArhijelFOtPHWA6/K9eNrYbI23MZuN0h7iCS0JGl
+        EiO3K4tl71GSVXkHOn6VYRb7XAMZowF0hgIwTYESjPBGBfzQHJ4dM22mas9gLQtd
+        XjJf0BYlOOqKZU4JAdvjgVDvsnwuaDjkUGLXr4VNzxnBJM7x5cz/FVqtlWvBB0B9
+        jNzHR1R1Xp7wpGrSfFxWAMnULoq7Nrni0X7p5zUndieRiXzKY1RBTv6qgo0f1NCv
+        TTiukJYWdDKaPHJa4t2tJUbSwkbaDDKHfE1Aeg1e9844tXoLi0dEzPgvuR49oLg2
+        NfFKGHz024Rfo7YhnpyCSXKbqNXhfxAENjR5PZ3IgYeQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=pNHgSBW8RYTr+UdeV
+        o6i146iO8tIN/TN0W3UEDm3Cyk=; b=NyxbJrNmcVhzCJN2Vc+jvrs1Ap9AoCSSx
+        xTreDD3gLUMzVxrbdLx60hmVXBQ6gzJbw5b9S0e0+64STEZoqnRru8h1B0E5cpKC
+        PjpFs4qZxKyirXoDvPjubtDIbIzA0Tn9zyuZEp6wo3dWCdflT+puuamUaYVOKDyv
+        zUg4Wp7HoGXQ4VgAqat4JL9xdBulvsi1XRWZUXoPFCqlAIXmIav4KFa4Y2ET+yTH
+        CZGxkvtgqGKPaC2uyOyTiJ/uOikp6lYWwOgWUxj5NvakDjClulo0ckwzJvU9TkGt
+        Ngy5J4MTfCGhZ87Rh3OL8g22sHrw1D/sCFpR4BvFUefVX3EESVAqQ==
+X-ME-Sender: <xms:xKHxX7ypAQnrethFZDmnzw_GMQ9QAD0uGhdJsuB_D1kF6Ob6uU0Tuw>
+    <xme:xKHxXzRJeh1MxSIfooV5bbUIbmDpS4BDI1Hnnn4YZBmaLWyj11_QKdjUgPsmFPnuY
+    sZwsnUI9-GCRPlRAA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdefuddgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucfkphepjedtrddufeehrddugeekrdduhedunecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdr
+    ohhrgh
+X-ME-Proxy: <xmx:xKHxX1U7Jvbc6p6DXsbyEE1oOY-qU3fcrgeW7yC4IVxTZYIonmIOew>
+    <xmx:xKHxX1gN1dTud1Ztpyd3rWH6K5i_NwF-7g_DI73THif06KmaSH9FvA>
+    <xmx:xKHxX9CCF-Kum8m3579fY3x9WzIaPOkxFdrGv0gr5EI6rWe6TZLa6w>
+    <xmx:xqHxX_31XGFDI55tIUE_CyZmGBCt3rDy0MY686NdCozldFBS_3Q1Aw>
+Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 19EEA24005B;
+        Sun,  3 Jan 2021 05:51:48 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-i2c@vger.kernel.org
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Ondrej Jirman <megous@megous.com>,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH] i2c: mv64xxx: Add runtime PM support
+Date:   Sun,  3 Jan 2021 04:51:46 -0600
+Message-Id: <20210103105146.33835-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.13.3] (85.229.94.233) by HE1PR06CA0154.eurprd06.prod.outlook.com (2603:10a6:7:16::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3721.19 via Frontend Transport; Sat, 2 Jan 2021 23:41:01 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 426c8dbe-a4f4-4c00-d16a-08d8af77ddae
-X-MS-TrafficTypeDiagnostic: DB9PR02MB6890:
-X-Microsoft-Antispam-PRVS: <DB9PR02MB68909F0163F9689F01DADF31BCD40@DB9PR02MB6890.eurprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uxLGCOUC1L+/t3QNsQMCIeC5KTSDDsiP4C1kOSr4UI+33nH3ah6b/VNoJLRw41NvWNam8UbKZNENcWHWCHV7aUDyFH/HhUDM/+0DdrnCre0dwpJuAABuNg74Nab7iqW8r/p0i3SilX2YpbCyDux+v6aeMz9JTxnQ8K2CVc2rtGkKAJZAVX1jVKfDCRzvJalm02Z9Q0bGc0BlU+/QDpp8F+uVhPStnJrCvbasVubfCJo3KPWgCu/FOoiP9v/B5/pDiaITCzlFAxm98QnLfrxHD+xDNPsQzBNhm+/Ml8Ua4eMUw101zxz9PjKFUwrVdIf36WkqJxLuuFkYTziYffZm9xq8NpUfWes2ZBNsVSeD6LFgwR6JJNXIaa5zzVuR/Mhps2tMOoBHX32qjJlcI1NXrDLAJS7oaetFTFHMZjB1Dyju+gG/tB642gEDzjLj4yEiJClS38ALo11EUwk/leIxMVC70RJ+huyWP/PzzqTMRdM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR02MB5482.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(396003)(136003)(39830400003)(366004)(31696002)(8936002)(508600001)(2616005)(36756003)(956004)(3480700007)(4001150100001)(15650500001)(4326008)(186003)(16526019)(6916009)(53546011)(36916002)(86362001)(6486002)(16576012)(6666004)(316002)(83380400001)(7116003)(26005)(4744005)(2906002)(8676002)(66946007)(5660300002)(66556008)(66476007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?SFkwc2RBcllPMUxaLzNRQVpkc0NYSUdhVG50bEwxalFYVlNZZ256dVlINlEr?=
- =?utf-8?B?d1c0ZkZ2N1NucjFDZi92YldkS0dxODJsWGZUa3huRmpUM1g1QVBRWi8xZDRV?=
- =?utf-8?B?dThHNENPVHRqc0k3NElyRitTNkk0aDRkKzBPSWVzU3dSaHI1TnliVTlhTGZ5?=
- =?utf-8?B?YnJLTU5OZnA4WWlFYlVFZnd1THBPMUZCcnR1Y1VBYlRENGhmeUZnSlNiejIv?=
- =?utf-8?B?WjZtdXF3c0NTcnRTOEJ5aDZWN20rK3BLUnplZEtNVm5HWW9QUDlscEtYUUZM?=
- =?utf-8?B?SElzY0F6a2dWWkwyNnppYWVSblEwSmtvdklSR2tLcTA3aUJ2cDBGQTQraGtr?=
- =?utf-8?B?alI1Z3FyN0crZ01oczJld1BkMjZ3Zy9vNU92amdJeDJLS2RqV0lNclhaT2Fk?=
- =?utf-8?B?OWVEVFpOVmxnMmh0ZjhsMVQ2QUtmT2ZRRHhQVXNHb01XODJKem5zYU94d2ZX?=
- =?utf-8?B?c0oyMjE1UWJTZjdtR0ZkMzVXdkxjOGE3YTNFVmM2bkJNWWh3QkZpYjA2WHZw?=
- =?utf-8?B?akJHQjBIL0tSNkptK2VidFRMVEVlbUJ5TGZRUXF3VU9PKzZxNVpwbzNUVTFK?=
- =?utf-8?B?UDZ3Qi9CTXhYU3JBc0RLa2J3ZEtBM3RwNmxkcXlkRFJjeno4bmt4dzQ2bXJ6?=
- =?utf-8?B?aUdZRWh1RjhDMXliRHBVT3dPMlRGVlI0UVE2K3RjaWMzU0JSbUhyUWo5cVFM?=
- =?utf-8?B?dWVKQi9nS09kZldPRTJhd056bWtGN1pNaS92UEJlR1c5a1hpOUZBQ2N5c0pt?=
- =?utf-8?B?ZWdPZVdMNkpPY3ZZTTc3NHhCVWJFUklLY1E1bzNPdWpZakpSZ29DbUtGQkw2?=
- =?utf-8?B?MFY3UExISEhoeVV5WWNrUGFleWZyaUNlOXhLUVZjMkxYakVQQmVEZ2h6RC9k?=
- =?utf-8?B?Ykd2Wi8wRXlvTTBOSklROSt4Yjc5eUJubCtVMkZUUnBQeEhlSFEvbnhRWkpw?=
- =?utf-8?B?aWRtM2hNcmx6R2ZlaytPZzZrUUQ2UkwxREp1dTBqek1rN2RKTEFEVUo2ZFNa?=
- =?utf-8?B?TEErdE9NWlhUVERtVGU2RTNkL2VhaHpnYWprSy9ZT2s1NmRtaDVuYkErWFBx?=
- =?utf-8?B?N0ZOamFaYStOZzRuN3Q2cnE1VGFjSUJwMTZZb1F2UURHYXRJTlE0N3dNZHV0?=
- =?utf-8?B?WDA5NGJZaGd3WGdIeWkzZjVTdFR6S01NMkRqQzFhaVQ2Y0JPK2JHMitXZ2RW?=
- =?utf-8?B?Y2IxNHZ5ZEY5Z2VFZXJONC9KRyt0L1FZVnpod0hrem1mWERFY01iZ0VIUS93?=
- =?utf-8?B?NjFIQXp3bnExYTBDT3RSdHY3SDBjNUQxeFhoMFRUU0NXbW1iRUkyeEJYNEQ0?=
- =?utf-8?Q?GZ8BEqp+lslzw+FtZE55BhZJpG+WgjCsYH?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR02MB5482.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jan 2021 23:41:02.7336
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-Network-Message-Id: 426c8dbe-a4f4-4c00-d16a-08d8af77ddae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: z9Lt3cT78yG3OdEKnNiB0nDCujeR/njfLDSyO2O6WeeSvTNnZw/NrqBrO+hGZ2UK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR02MB6890
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+To save power, gate the clock when the bus is inactive, during system
+sleep, and during shutdown. On some platforms, specifically Allwinner
+A13/A20, gating the clock implicitly resets the module as well. Since
+the module already needs to be reset after some suspend/resume cycles,
+it is simple enough to reset it during every runtime suspend/resume.
 
-On 2020-12-14 16:05, Andy Shevchenko wrote:
-> Hi, Peter.
-> 
-> For a few releases I have been observing the mux patch ("mux:
-> adgs1408: Add mod_devicetable.h...") dangling in Linux Next. It seems
-> that one of your repositories hasn't been updated to one of the
-> vanilla rc:s or releases. Can you align it so it will not linger in
-> Linux Next anymore?
+Because the bus may be used by wakeup source IRQ threads, it needs to
+be functional as soon as IRQs are enabled. Thus, its system PM hooks
+need to run in the noirq phase.
 
-Hi Andy,
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+ drivers/i2c/busses/i2c-mv64xxx.c | 120 ++++++++++++++++++++-----------
+ 1 file changed, 78 insertions(+), 42 deletions(-)
 
-Updated now, sorry for the inconvenience. Not much going on in
-drivers/mux...
+diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
+index 5cfe70aedced..b03c344323d1 100644
+--- a/drivers/i2c/busses/i2c-mv64xxx.c
++++ b/drivers/i2c/busses/i2c-mv64xxx.c
+@@ -18,6 +18,7 @@
+ #include <linux/mv643xx_i2c.h>
+ #include <linux/platform_device.h>
+ #include <linux/pinctrl/consumer.h>
++#include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+@@ -717,6 +718,10 @@ mv64xxx_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 	struct mv64xxx_i2c_data *drv_data = i2c_get_adapdata(adap);
+ 	int rc, ret = num;
+ 
++	rc = pm_runtime_resume_and_get(&adap->dev);
++	if (rc)
++		return rc;
++
+ 	BUG_ON(drv_data->msgs != NULL);
+ 	drv_data->msgs = msgs;
+ 	drv_data->num_msgs = num;
+@@ -732,6 +737,9 @@ mv64xxx_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 	drv_data->num_msgs = 0;
+ 	drv_data->msgs = NULL;
+ 
++	pm_runtime_mark_last_busy(&adap->dev);
++	pm_runtime_put_autosuspend(&adap->dev);
++
+ 	return ret;
+ }
+ 
+@@ -828,7 +836,6 @@ mv64xxx_of_config(struct mv64xxx_i2c_data *drv_data,
+ 		rc = PTR_ERR(drv_data->rstc);
+ 		goto out;
+ 	}
+-	reset_control_deassert(drv_data->rstc);
+ 
+ 	/* Its not yet defined how timeouts will be specified in device tree.
+ 	 * So hard code the value to 1 second.
+@@ -893,6 +900,32 @@ static int mv64xxx_i2c_init_recovery_info(struct mv64xxx_i2c_data *drv_data,
+ 	return 0;
+ }
+ 
++static int
++mv64xxx_i2c_runtime_suspend(struct device *dev)
++{
++	struct mv64xxx_i2c_data *drv_data = dev_get_drvdata(dev);
++
++	reset_control_assert(drv_data->rstc);
++	clk_disable_unprepare(drv_data->reg_clk);
++	clk_disable_unprepare(drv_data->clk);
++
++	return 0;
++}
++
++static int
++mv64xxx_i2c_runtime_resume(struct device *dev)
++{
++	struct mv64xxx_i2c_data *drv_data = dev_get_drvdata(dev);
++
++	clk_prepare_enable(drv_data->clk);
++	clk_prepare_enable(drv_data->reg_clk);
++	reset_control_reset(drv_data->rstc);
++
++	mv64xxx_i2c_hw_init(drv_data);
++
++	return 0;
++}
++
+ static int
+ mv64xxx_i2c_probe(struct platform_device *pd)
+ {
+@@ -920,18 +953,22 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+ 
+ 	/* Not all platforms have clocks */
+ 	drv_data->clk = devm_clk_get(&pd->dev, NULL);
+-	if (PTR_ERR(drv_data->clk) == -EPROBE_DEFER)
+-		return -EPROBE_DEFER;
+-	if (!IS_ERR(drv_data->clk))
+-		clk_prepare_enable(drv_data->clk);
++	if (IS_ERR(drv_data->clk)) {
++		if (PTR_ERR(drv_data->clk) == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++		drv_data->clk = NULL;
++	}
+ 
+ 	drv_data->reg_clk = devm_clk_get(&pd->dev, "reg");
+-	if (PTR_ERR(drv_data->reg_clk) == -EPROBE_DEFER)
+-		return -EPROBE_DEFER;
+-	if (!IS_ERR(drv_data->reg_clk))
+-		clk_prepare_enable(drv_data->reg_clk);
++	if (IS_ERR(drv_data->reg_clk)) {
++		if (PTR_ERR(drv_data->reg_clk) == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++		drv_data->reg_clk = NULL;
++	}
+ 
+ 	drv_data->irq = platform_get_irq(pd, 0);
++	if (drv_data->irq < 0)
++		return drv_data->irq;
+ 
+ 	if (pdata) {
+ 		drv_data->freq_m = pdata->freq_m;
+@@ -942,16 +979,12 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+ 	} else if (pd->dev.of_node) {
+ 		rc = mv64xxx_of_config(drv_data, &pd->dev);
+ 		if (rc)
+-			goto exit_clk;
+-	}
+-	if (drv_data->irq < 0) {
+-		rc = drv_data->irq;
+-		goto exit_reset;
++			return rc;
+ 	}
+ 
+ 	rc = mv64xxx_i2c_init_recovery_info(drv_data, &pd->dev);
+ 	if (rc == -EPROBE_DEFER)
+-		goto exit_reset;
++		return rc;
+ 
+ 	drv_data->adapter.dev.parent = &pd->dev;
+ 	drv_data->adapter.algo = &mv64xxx_i2c_algo;
+@@ -962,7 +995,14 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+ 	platform_set_drvdata(pd, drv_data);
+ 	i2c_set_adapdata(&drv_data->adapter, drv_data);
+ 
+-	mv64xxx_i2c_hw_init(drv_data);
++	pm_runtime_set_autosuspend_delay(&pd->dev, MSEC_PER_SEC);
++	pm_runtime_use_autosuspend(&pd->dev);
++	pm_runtime_enable(&pd->dev);
++	if (!pm_runtime_enabled(&pd->dev)) {
++		rc = mv64xxx_i2c_runtime_resume(&pd->dev);
++		if (rc)
++			goto exit_disable_pm;
++	}
+ 
+ 	rc = request_irq(drv_data->irq, mv64xxx_i2c_intr, 0,
+ 			 MV64XXX_I2C_CTLR_NAME, drv_data);
+@@ -970,7 +1010,7 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+ 		dev_err(&drv_data->adapter.dev,
+ 			"mv64xxx: Can't register intr handler irq%d: %d\n",
+ 			drv_data->irq, rc);
+-		goto exit_reset;
++		goto exit_disable_pm;
+ 	} else if ((rc = i2c_add_numbered_adapter(&drv_data->adapter)) != 0) {
+ 		dev_err(&drv_data->adapter.dev,
+ 			"mv64xxx: Can't add i2c adapter, rc: %d\n", -rc);
+@@ -981,54 +1021,50 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+ 
+ exit_free_irq:
+ 	free_irq(drv_data->irq, drv_data);
+-exit_reset:
+-	reset_control_assert(drv_data->rstc);
+-exit_clk:
+-	clk_disable_unprepare(drv_data->reg_clk);
+-	clk_disable_unprepare(drv_data->clk);
++exit_disable_pm:
++	pm_runtime_disable(&pd->dev);
++	if (!pm_runtime_status_suspended(&pd->dev))
++		mv64xxx_i2c_runtime_suspend(&pd->dev);
+ 
+ 	return rc;
+ }
+ 
+ static int
+-mv64xxx_i2c_remove(struct platform_device *dev)
++mv64xxx_i2c_remove(struct platform_device *pd)
+ {
+-	struct mv64xxx_i2c_data		*drv_data = platform_get_drvdata(dev);
++	struct mv64xxx_i2c_data		*drv_data = platform_get_drvdata(pd);
+ 
+ 	i2c_del_adapter(&drv_data->adapter);
+ 	free_irq(drv_data->irq, drv_data);
+-	reset_control_assert(drv_data->rstc);
+-	clk_disable_unprepare(drv_data->reg_clk);
+-	clk_disable_unprepare(drv_data->clk);
++	pm_runtime_disable(&pd->dev);
++	if (!pm_runtime_status_suspended(&pd->dev))
++		mv64xxx_i2c_runtime_suspend(&pd->dev);
+ 
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_PM
+-static int mv64xxx_i2c_resume(struct device *dev)
++static void
++mv64xxx_i2c_shutdown(struct platform_device *pd)
+ {
+-	struct mv64xxx_i2c_data *drv_data = dev_get_drvdata(dev);
+-
+-	mv64xxx_i2c_hw_init(drv_data);
+-
+-	return 0;
++	pm_runtime_disable(&pd->dev);
++	if (!pm_runtime_status_suspended(&pd->dev))
++		mv64xxx_i2c_runtime_suspend(&pd->dev);
+ }
+ 
+-static const struct dev_pm_ops mv64xxx_i2c_pm = {
+-	.resume = mv64xxx_i2c_resume,
++static const struct dev_pm_ops mv64xxx_i2c_pm_ops = {
++	SET_RUNTIME_PM_OPS(mv64xxx_i2c_runtime_suspend,
++			   mv64xxx_i2c_runtime_resume, NULL)
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
++				      pm_runtime_force_resume)
+ };
+ 
+-#define mv64xxx_i2c_pm_ops (&mv64xxx_i2c_pm)
+-#else
+-#define mv64xxx_i2c_pm_ops NULL
+-#endif
+-
+ static struct platform_driver mv64xxx_i2c_driver = {
+ 	.probe	= mv64xxx_i2c_probe,
+ 	.remove	= mv64xxx_i2c_remove,
++	.shutdown = mv64xxx_i2c_shutdown,
+ 	.driver	= {
+ 		.name	= MV64XXX_I2C_CTLR_NAME,
+-		.pm     = mv64xxx_i2c_pm_ops,
++		.pm     = &mv64xxx_i2c_pm_ops,
+ 		.of_match_table = mv64xxx_i2c_of_match_table,
+ 	},
+ };
+-- 
+2.26.2
 
-Cheers,
-Peter
