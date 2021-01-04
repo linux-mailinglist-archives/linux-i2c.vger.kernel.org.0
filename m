@@ -2,79 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C832A2E9CFB
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Jan 2021 19:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A0C2E9D0D
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Jan 2021 19:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726074AbhADS1H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 4 Jan 2021 13:27:07 -0500
-Received: from sauhun.de ([88.99.104.3]:60440 "EHLO pokefinder.org"
+        id S1726642AbhADSam (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 4 Jan 2021 13:30:42 -0500
+Received: from sauhun.de ([88.99.104.3]:60494 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726072AbhADS1H (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 4 Jan 2021 13:27:07 -0500
+        id S1726396AbhADSam (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 4 Jan 2021 13:30:42 -0500
 Received: from localhost (p54b33105.dip0.t-ipconnect.de [84.179.49.5])
-        by pokefinder.org (Postfix) with ESMTPSA id E8D352C04DF;
-        Mon,  4 Jan 2021 19:26:24 +0100 (CET)
-Date:   Mon, 4 Jan 2021 19:26:24 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id 0EE372C04DF;
+        Mon,  4 Jan 2021 19:30:00 +0100 (CET)
+Date:   Mon, 4 Jan 2021 19:29:59 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] i2c: i801: Fix the i2c-mux gpiod_lookup_table not being
- properly terminated
-Message-ID: <20210104182624.GB935@ninjato>
-References: <20201221134225.106728-1-hdegoede@redhat.com>
+To:     qii.wang@mediatek.com
+Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        leilk.liu@mediatek.com
+Subject: Re: i2c: mediatek: Fix apdma and i2c hand-shake timeout
+Message-ID: <20210104182959.GC935@ninjato>
+References: <1608812767-3254-1-git-send-email-qii.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WhfpMioaduB5tiZL"
+        protocol="application/pgp-signature"; boundary="uh9ZiVrAOUUm9fzH"
 Content-Disposition: inline
-In-Reply-To: <20201221134225.106728-1-hdegoede@redhat.com>
+In-Reply-To: <1608812767-3254-1-git-send-email-qii.wang@mediatek.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---WhfpMioaduB5tiZL
+--uh9ZiVrAOUUm9fzH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 21, 2020 at 02:42:25PM +0100, Hans de Goede wrote:
-> gpiod_add_lookup_table() expects the gpiod_lookup_table->table passed to
-> it to be terminated with a zero-ed out entry.
+On Thu, Dec 24, 2020 at 08:26:07PM +0800, qii.wang@mediatek.com wrote:
+> From: Qii Wang <qii.wang@mediatek.com>
 >=20
-> So we need to allocate one more entry then we will use.
+> With the apdma remove hand-shake signal, it requirs special
+> operation timing to reset i2c manually, otherwise the interrupt
+> will not be triggered, i2c transmission will be timeout.
 >=20
-> Cc: Serge Semin <fancer.lancer@gmail.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Andy Shevchenko <andy@infradead.org>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Fixes: d308dfbf62ef ("i2c: mux/i801: Switch to use descriptor passing")
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
 
 Applied to for-current, thanks!
 
 
---WhfpMioaduB5tiZL
+--uh9ZiVrAOUUm9fzH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/zXdAACgkQFA3kzBSg
-KbYjnBAAsolNLdBINdsMFNPb67+PBmrwsh3+Hxd5JPoXuaueoqm3FM49scMOfHTK
-HTM/7Z0WWBZXeagRNJ97ft9JxNKm8qKbdV+w1dsq/WuGjndk1NHvMJJ82pAA2AbB
-fXgRVhHO0imSS/QPSHimLg0sm9YayRS9M56InDhmenMh+B85cYrjAnRn7H7/n05Z
-vPiM6r9g46cYTxEW6InVnLA1EEGrD1bsMpoKwbvq63TAZjxWogLjDmBD+ovOb5ra
-Ga0NS5geN1JwV8tYVh8nCmoPDy74n5nu3IIV6NonutQ/xN/uF/O0vkWi8+zRu5IR
-xHmEAIeHRWdlqbwLqni+dtLuyBfqoDVjnTV+hzW5x6jj3ZCxESJkZsdvjbQ4ZMZk
-8OtVBtLKYdavOnVsO4MQ/n4KFuvUywsRNe+RbJhxXub9EalbPmBJ9PQeyFt0bxTx
-Hz6d9WRswqXh4TfS9Afx8ZK5ieE2X44R9h1hLoC6fvqaaUvVFOizjh2cg7RRhnwn
-jcbgQFtL8pWkPkieWpA4MEp1esKbzdl4ViIsxhk+KZFbGfJZ+TApcKykhpY1d7H1
-bSclFS/iOxdALbWIsVZ8iPJI1DxMtKO92zuqk5Qg5STaLX5doZAJ3+y2nsMfrMW9
-nlld2s6dAKXDvbm/qqQkOu9m6j52NdBFdc+cn9DDn1Fs80phTxQ=
-=wznx
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/zXqcACgkQFA3kzBSg
+KbZQ8w/8DE+WVtoHYrCXAHx91n4/N6jsfZxOi7xLlm9x3FX55Lo0eiHeNIRHjgXV
+puAT1I9S8RkBC7s2Sc9jDH0ZGXsGfSeeWxTJydK3RV1tq59EySpl6PZQ5GYjPRPJ
+VXf12AEDnFFKOHiN4K5N1uRFMkP+mp8lYnher8fJvEN3qOhtg+kQPw/JZVwoJ2yf
+uB4MxKGyYdKPGHgb9cVrJhNYg4wx0wfHGWt/wrai4jVqjcqezI74SiUmbvI9a3B5
+lFAwZkMKKQ44MKclF31Ctil+GRUTDp/ZrpuMKIJMX6zn2yTSS+M174NcvatScm5D
+jJBTOdjKOD7f4Yz1FWsJ+mKx7t+go8+ON5DguoEFxJBVqyjcw7FEgsZLP7f5yrgj
+QaJwdUx5v7E/+WPVAZTb7cnllHrPXrAihrRm4VSKlzbqWxUr0q5CDuIAQLKe4mKV
+EFbRol3wetWpT5y2YPEj9p3O3IZnhYQWMysrnwI9clNOdZ50ChlNRHKylugbBXxF
+V5LmyIHkFXDg6GqZulqaArUkp2kh4bavOejN0JPEZkPg0cGzqb1jd74R8CZuorHL
+JtdZ8hp3icd360VXxSZ3YWeIPOPUSeaBRxusMNnJqNiGS1+4qGeGNBEdY3wdufDh
+lRdyjCKQcIR3Ren+c/A3tbS+TRFQ8A1h9IBpznbaqgc/TQbzoAk=
+=L+pH
 -----END PGP SIGNATURE-----
 
---WhfpMioaduB5tiZL--
+--uh9ZiVrAOUUm9fzH--
