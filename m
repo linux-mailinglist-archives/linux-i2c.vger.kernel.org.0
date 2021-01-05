@@ -2,93 +2,152 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5532EB484
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jan 2021 21:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A85E22EB650
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jan 2021 00:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731379AbhAEUvx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Jan 2021 15:51:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53110 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731367AbhAEUvx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 5 Jan 2021 15:51:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A769022262;
-        Tue,  5 Jan 2021 20:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609879824;
-        bh=9VOt6YRWo5PlMhQR000IAJMTQb6o1yGHq5eamT/XZsQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CvuwCYNlPSY/BnoaO4a56xQcVYGwfv5PPRHOIjqdQgNdWSLrSTPnnuQQjxKsQaU7R
-         cijxRJHrbfekvWUDkpL/BqaFrkzz6fa9yU4spz+hbBkjhuAc01hUbd/Qq1yOwPB3hx
-         O5U1yF++D2JLp+04S8vs0TIrwiXd/MgZzfEAJzvGeYdzsRPkFfUnExmrXWNMuE89uz
-         RD4MSQZLyTnqDqCBSJ1KUjm0kUfxY93IqLnBZui5nOWpfLqSbW9KbLWkKE/vOh38Zv
-         ktvWjep89zz0s1xQGxBCf2xJIUG5BtWxeAcNfu80QZL/xiYM3VCtdvpDyaqBX3Y0KV
-         K8Dwv1WgRlKfw==
-Date:   Tue, 5 Jan 2021 21:50:17 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
-        Ray Jui <ray.jui@broadcom.com>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lori Hikichi <lori.hikichi@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Subject: Re: [PATCH v3 5/6] i2c: iproc: handle master read request
-Message-ID: <20210105205017.GA1824@ninjato>
-References: <38a23afc-57da-a01f-286c-15f8b3d61705@broadcom.com>
- <1605316659-3422-1-git-send-email-dphadke@linux.microsoft.com>
- <CAHO=5PFzd9KTR93ntUvAX5dqzxqJQpVXEirs5uoXdvcnZ7hL4g@mail.gmail.com>
- <20201202143505.GA874@kunai>
- <23a2f2e8-06ad-c728-98eb-91b164572ba4@broadcom.com>
- <CAHO=5PE=BRADou_Hn8qP3mgWiSwDezPCxDjuqa0v1MxMOJRyHQ@mail.gmail.com>
- <35541129-df37-fa6f-5dae-34eb34a78731@broadcom.com>
- <CAHO=5PFCsWQb7nv5Sg00DAX6XXTfV7V8BH-ithK-Scq8eFFVbA@mail.gmail.com>
- <20210105162145.GG1842@ninjato>
- <b5e38606-6ca8-b52c-65cd-5f24411661d0@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qMm9M+Fa2AknHoGS"
-Content-Disposition: inline
-In-Reply-To: <b5e38606-6ca8-b52c-65cd-5f24411661d0@gmail.com>
+        id S1727391AbhAEXej (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Jan 2021 18:34:39 -0500
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:37852 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727303AbhAEXej (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Jan 2021 18:34:39 -0500
+Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@nvidia.com)
+        with SMTP; 6 Jan 2021 01:33:49 +0200
+Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 105NXnID018091;
+        Wed, 6 Jan 2021 01:33:49 +0200
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     peda@axentia.se, wsa@the-dreams.de
+Cc:     linux-i2c@vger.kernel.org, Vadim Pasternak <vadimp@nvidia.com>
+Subject: [PATCH i2c-next v2 1/1] i2c: mlxcpld: Add support for I2C bus frequency setting
+Date:   Wed,  6 Jan 2021 01:33:47 +0200
+Message-Id: <20210105233347.459-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Add support for I2C bus frequency setting according to the specific
+system capability. This capability is obtained from CPLD frequency
+setting register, which could be provided through the platform data.
+If such register is provided, it specifies minimal I2C bus frequency
+to be used for the devices attached to the I2C bus. Supported
+freqeuncies are 100KHz, 400KHz, 1MHz, while 100KHz is the default.
 
---qMm9M+Fa2AknHoGS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+---
+v1->v2:
+ - Fix "signedness" warning.
+---
+ drivers/i2c/busses/i2c-mlxcpld.c | 63 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 62 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/i2c/busses/i2c-mlxcpld.c b/drivers/i2c/busses/i2c-mlxcpld.c
+index 9e45214d1eb6..4e0b7c2882ce 100644
+--- a/drivers/i2c/busses/i2c-mlxcpld.c
++++ b/drivers/i2c/busses/i2c-mlxcpld.c
+@@ -11,7 +11,9 @@
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/platform_data/mlxreg.h>
+ #include <linux/platform_device.h>
++#include <linux/regmap.h>
+ 
+ /* General defines */
+ #define MLXPLAT_CPLD_LPC_I2C_BASE_ADDR	0x2000
+@@ -46,6 +48,16 @@
+ #define MLXCPLD_LPCI2C_ACK_IND		1
+ #define MLXCPLD_LPCI2C_NACK_IND		2
+ 
++#define MLXCPLD_I2C_FREQ_1000KHZ_SET	0x04
++#define MLXCPLD_I2C_FREQ_400KHZ_SET	0x0f
++#define MLXCPLD_I2C_FREQ_100KHZ_SET	0x42
++
++enum mlxcpld_i2c_frequency {
++	MLXCPLD_I2C_FREQ_1000KHZ = 1,
++	MLXCPLD_I2C_FREQ_400KHZ = 2,
++	MLXCPLD_I2C_FREQ_100KHZ = 3,
++};
++
+ struct  mlxcpld_i2c_curr_xfer {
+ 	u8 cmd;
+ 	u8 addr_width;
+@@ -463,8 +475,45 @@ static struct i2c_adapter mlxcpld_i2c_adapter = {
+ 	.nr		= MLXCPLD_I2C_BUS_NUM,
+ };
+ 
++static int
++mlxcpld_i2c_set_frequency(struct mlxcpld_i2c_priv *priv,
++			  struct mlxreg_core_hotplug_platform_data *pdata)
++{
++	struct mlxreg_core_item *item = pdata->items;
++	struct mlxreg_core_data *data;
++	u32 regval;
++	u8 freq;
++	int err;
++
++	if (!item)
++		return 0;
++
++	/* Read frequency setting. */
++	data = item->data;
++	err = regmap_read(pdata->regmap, data->reg, &regval);
++	if (err)
++		return err;
++
++	/* Set frequency only if it is not 100KHz, which is default. */
++	switch ((data->reg & data->mask) >> data->bit) {
++	case MLXCPLD_I2C_FREQ_1000KHZ:
++		freq = MLXCPLD_I2C_FREQ_1000KHZ_SET;
++		break;
++	case MLXCPLD_I2C_FREQ_400KHZ:
++		freq = MLXCPLD_I2C_FREQ_400KHZ_SET;
++		break;
++	default:
++		return 0;
++	}
++
++	mlxcpld_i2c_write_comm(priv, MLXCPLD_LPCI2C_HALF_CYC_REG, &freq, 1);
++
++	return 0;
++}
++
+ static int mlxcpld_i2c_probe(struct platform_device *pdev)
+ {
++	struct mlxreg_core_hotplug_platform_data *pdata;
+ 	struct mlxcpld_i2c_priv *priv;
+ 	int err;
+ 	u8 val;
+@@ -479,6 +528,14 @@ static int mlxcpld_i2c_probe(struct platform_device *pdev)
+ 	priv->dev = &pdev->dev;
+ 	priv->base_addr = MLXPLAT_CPLD_LPC_I2C_BASE_ADDR;
+ 
++	/* Set I2C bus frequency if platform data provides this info. */
++	pdata = dev_get_platdata(&pdev->dev);
++	if (pdata) {
++		err = mlxcpld_i2c_set_frequency(priv, pdata);
++		if (err)
++			goto mlxcpld_i2_probe_failed;
++	}
++
+ 	/* Register with i2c layer */
+ 	mlxcpld_i2c_adapter.timeout = usecs_to_jiffies(MLXCPLD_I2C_XFER_TO);
+ 	/* Read capability register */
+@@ -497,8 +554,12 @@ static int mlxcpld_i2c_probe(struct platform_device *pdev)
+ 
+ 	err = i2c_add_numbered_adapter(&priv->adap);
+ 	if (err)
+-		mutex_destroy(&priv->lock);
++		goto mlxcpld_i2_probe_failed;
+ 
++	return 0;
++
++mlxcpld_i2_probe_failed:
++	mutex_destroy(&priv->lock);
+ 	return err;
+ }
+ 
+-- 
+2.11.0
 
-> We are working on it, but as you may expect with any large corporations
-> it is "complicated".
-
-I understand. Good luck, then!
-
-
---qMm9M+Fa2AknHoGS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/00QUACgkQFA3kzBSg
-KbbD5BAAiFecmQS+ZDRmbLaweW+ydzmXk+B01i4MZeiXZLT5PTzaGVAlpUSXMKOQ
-Oretk1Dke+1bwJxVRH6WHZlk1AuZyLA/TVMieq7VGXksTQqrn8SNV6H5A57woElb
-qw9a+C/cadFLPP71R3Q4o9XkTTIEiwCaeQJXtXcx+4jDSj1IynGphDUl7mw4DaPP
-L3+hKGCoP0Bqpjsu7pFw//CR/3z/uQd+rSqhz+sLyD3kyJgCfagnGwivQeN+wINK
-xnRd4cfHkTHnd6lCFI2VCI7dvB4bv4keIiifu3bddQyyP8rQb/K9gVw1hCHmxQ7O
-+j+TizPriPV4SKcrfYIh85OZSxtFGZz+/E004ozNlqnLyTnW4tpfkkjthZNj4jN1
-BOHFVM7DC7iaMeVu347y8SyljbQu5YrSi2t1pXusSh1SCj9XhzzAEUKyeGgcDSwS
-5EW+SGFafZKZDDvpmg4s0OT2agdTNyXFKTj3PdLGCxhZG7zTlM50Gw+ANz8ZicJ5
-A+37jKTO0cUxSoQA5DkSQOtwnrpOsTi5xsYokTexeW3Wgn3AJVCpQRUFNr6XfMPr
-bdR98aQ1KweTHQ+FRTuiB/pz/QiC+rKqFVQbiyc5nWdn445ToQe0gcZ6lYawLsBc
-ncMxG34p4zlT0FQo8e5m36wAeb0VqXOSkM2MMTm5r/AHOfxwIo0=
-=dsvX
------END PGP SIGNATURE-----
-
---qMm9M+Fa2AknHoGS--
