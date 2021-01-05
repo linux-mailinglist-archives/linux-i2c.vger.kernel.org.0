@@ -2,189 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF692EA896
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jan 2021 11:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C222EA89F
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jan 2021 11:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728847AbhAEKZt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Jan 2021 05:25:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59938 "EHLO mail.kernel.org"
+        id S1728557AbhAEK2B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Jan 2021 05:28:01 -0500
+Received: from sauhun.de ([88.99.104.3]:41302 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728768AbhAEKZt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 5 Jan 2021 05:25:49 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9761922288;
-        Tue,  5 Jan 2021 10:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609842308;
-        bh=zLoJm/jX8+jgBPXDxQcbEqrCSdvNxPcfwvCFMTIo8Vc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sGwfZ5h0bEAuJbJKVVShympik/S5fFRfJjCySO+em2w5mQnujlvFUxZhe3JEVyqSQ
-         7fTGqFq/X91FpOi+51NV5f3JswISHekebd007LDKd37ooWm9iuktwMwNudguogMlCV
-         ZOit1IToMBYPhGG9cvBI3ZPzh2vPYNYIgDc3uRAWaCrNpl0mjcze/N2NdL/cRITYJB
-         AJsenICB2+ebb0UvLZvj+m9wph0JbsjKAJTDU4p1K0AkSmKaPACDxlNLyzMYCm8SP0
-         +AqFB72dZcSp1X0h7U0gMtALNIcclEDAAMlPEEfyvH+NxqKvHpnOkPHn3c1fBYDErQ
-         YDcWK1RRFcN3g==
-Date:   Tue, 5 Jan 2021 11:25:05 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Evan Green <evgreen@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH v3 2/2] i2c: i2c-mux-gpio: Enable this driver in
- ACPI land
-Message-ID: <20210105102505.GG2000@ninjato>
-References: <20201118234025.376412-1-evgreen@chromium.org>
- <20201118153951.RESEND.v3.2.Idef164c23d326f5e5edecfc5d3eb2a68fcf18be1@changeid>
- <CAHp75VdtwyCj7emc7Bk87q7kMQA0sSX81-aK-fMq4qTfTF-c_g@mail.gmail.com>
- <CAE=gft4OW7_pWfco4+kY65tbUGUDzXXDfsVMCP8MN93inVem4A@mail.gmail.com>
+        id S1728422AbhAEK2B (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 5 Jan 2021 05:28:01 -0500
+Received: from localhost (p5486cfc1.dip0.t-ipconnect.de [84.134.207.193])
+        by pokefinder.org (Postfix) with ESMTPSA id 783E02C03EF;
+        Tue,  5 Jan 2021 11:27:19 +0100 (CET)
+Date:   Tue, 5 Jan 2021 11:27:19 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Vadim Pasternak <vadimp@nvidia.com>, Peter Rosin <peda@axentia.se>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [Re-send: PATCH i2c-next 0/6] i2c: mux: mlxcpld: Extend driver
+ functionality and update licenses
+Message-ID: <20210105102719.GH2000@ninjato>
+References: <20201118144416.184120-1-vadimp@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qoTlaiD+Y2fIM3Ll"
+        protocol="application/pgp-signature"; boundary="smOfPzt+Qjm5bNGJ"
 Content-Disposition: inline
-In-Reply-To: <CAE=gft4OW7_pWfco4+kY65tbUGUDzXXDfsVMCP8MN93inVem4A@mail.gmail.com>
+In-Reply-To: <20201118144416.184120-1-vadimp@nvidia.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---qoTlaiD+Y2fIM3Ll
+--smOfPzt+Qjm5bNGJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 20, 2020 at 10:59:12AM -0800, Evan Green wrote:
-> On Thu, Nov 19, 2020 at 7:24 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> >
-> > On Thu, Nov 19, 2020 at 1:40 AM Evan Green <evgreen@chromium.org> wrote:
-> > >
-> > > Enable i2c-mux-gpio devices to be defined via ACPI. The idle-state
-> > > property translates directly to a fwnode_property_*() call. The child
-> > > reg property translates naturally into _ADR in ACPI.
-> > >
-> > > The i2c-parent binding is a relic from the days when the bindings
-> > > dictated that all direct children of an I2C controller had to be I2C
-> > > devices. These days that's no longer required. The i2c-mux can sit as=
- a
-> > > direct child of its parent controller, which is where it makes the mo=
-st
-> > > sense from a hardware description perspective. For the ACPI
-> > > implementation we'll assume that's always how the i2c-mux-gpio is
-> > > instantiated.
-> >
-> > ...
-> >
-> > > +#ifdef CONFIG_ACPI
-> > > +
-> > > +static int i2c_mux_gpio_get_acpi_adr(struct device *dev,
-> > > +                                    struct fwnode_handle *fwdev,
-> > > +                                    unsigned int *adr)
-> > > +
-> > > +{
-> > > +       unsigned long long adr64;
-> > > +       acpi_status status;
-> > > +
-> > > +       status =3D acpi_evaluate_integer(ACPI_HANDLE_FWNODE(fwdev),
-> > > +                                      METHOD_NAME__ADR,
-> > > +                                      NULL, &adr64);
-> > > +
-> > > +       if (!ACPI_SUCCESS(status)) {
-> > > +               dev_err(dev, "Cannot get address\n");
-> > > +               return -EINVAL;
-> > > +       }
-> > > +
-> > > +       *adr =3D adr64;
-> > > +       if (*adr !=3D adr64) {
-> > > +               dev_err(dev, "Address out of range\n");
-> > > +               return -ERANGE;
-> > > +       }
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +#else
-> > > +
-> > > +static int i2c_mux_gpio_get_acpi_adr(struct device *dev,
-> > > +                                    struct fwnode_handle *fwdev,
-> > > +                                    unsigned int *adr)
-> > > +{
-> > > +       return -EINVAL;
-> > > +}
-> > > +
-> > > +#endif
-> >
-> > I'm wondering if you may use acpi_find_child_device() here.
-> > Or is it a complementary function?
+On Wed, Nov 18, 2020 at 04:44:10PM +0200, Vadim Pasternak wrote:
+> The patchset adds new features for the existing Mellanox systems.
 >=20
-> I think it's complementary. The code above is "I have a device, I want
-> its _ADR". whereas acpi_find_child_device() is "I have an _ADR, I want
-> its device". I could flip things around to use this, but it would turn
-> the code from linear into quadratic. I'd have to scan each possible
-> address and call acpi_find_child_device() with that _ADR to see if
-> there's a child device there.
->=20
-> >
-> > ...
-> >
-> > > +       device_for_each_child_node(dev, child) {
-> > > +               if (is_of_node(child)) {
-> > > +                       fwnode_property_read_u32(child, "reg", values=
- + i);
-> > > +
-> > > +               } else if (is_acpi_node(child)) {
-> > > +                       rc =3D i2c_mux_gpio_get_acpi_adr(dev, child, =
-values + i);
-> > > +                       if (rc)
-> > > +                               return rc;
-> > > +               }
-> > > +
-> > >                 i++;
-> > >         }
-> >
-> > And for this I already told in two different threads with similar code
-> > that perhaps we need common helper that will check reg followed by
-> > _ADR.
->=20
-> Oh, I'm not aware of those threads. I'd need some advice: I guess a
-> new fwnode_* API would make sense for this, but I had trouble coming
-> up with a generic interface. _ADR is just a blobbo 64 bit int, but
-> DT's "reg" is a little more flexible, having a length, and potentially
-> being an array. I suppose it would have to be something like:
->=20
-> int fwnode_property_read_reg(const struct fwnode_handle *fwnode,
->                                  size_t index, uint64_t *addr, uint64_t *=
-len);
->=20
-> But then ACPI would always return 0 for length, and only index 0 would
-> ever work? I'm worried I'm designing an API that's only useful to me.
->=20
-> I tried to look around for other examples of this specific pattern of
-> _ADR then "reg", but struggled to turn up much.
-> -Evan
+> Patches #1-#2 update license to SPDX-License.
+> Patch #3  moves header file out of x86 realm.
+> Patch #4 converts driver to platform driver.
+> Patch #5 adds support for word address space devices.
+> Patch #6 extends mux number supported by driver.
 
-Andy, is Evan's answer satisfying for you?
+Hi Peter,
+
+I hope you had a good start in 2021 and all things are good. Do you have
+time to review this series in the near future?
+
+Kind regards,
+
+   Wolfram
 
 
---qoTlaiD+Y2fIM3Ll
+--smOfPzt+Qjm5bNGJ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/0PoEACgkQFA3kzBSg
-KbYPthAAn3lYOe2d2fVI+hrRlYvYV7KgQkkeLODG00f26qhA5RSIf5bBGwcLSZcN
-7XeW5MUf7ofCWmBAOvxHlpiazLlrkDBTsQi5lXWAcF0y0FZkCjkI72lD2cHY1iZJ
-Tu7O4y/b//N5yTIgqjMHKwC8ZOUhRZ0pR/Tj5OGq6iAo6KCWj4FC+odPXc/mRsM7
-jrfRRHSDhT6eB5WHUoemaJqo0CH0rQ+OrQyvYKLzIePePvSBqBi64F4Srv6vNXsf
-sVXvVYzVLHoWKvJK9oUdMx6DLeXG9w43y5nCqVllM+WQ9CbQXimlS7XKjESy9YN1
-QNWCgRSKE+lKl45yAe0DlmuMIagjbctk57LYvtVFHflp8dqyreuPPPfhy7ZC9sui
-3nbkN+nJrHKe1iMLhVEEIi/fVPjkJA0Hb/wtOxoxAjILAxhsMRBxXs8idxIepgfA
-uk1W64qo2DKU5b57ukU/gz738Xy4QAwW0lpOCTsqzXw0O1ez5/6jDlzJ4tRf+WwZ
-bmpGiCZm93Y6u7Jhx1a5LneUqCGEn8xKHh6p5V2ily26WdvEI77K6SxC5nfPUElq
-USz+vYDUD26L67betIvvWEmcj8s4rOPcYDaPzAOe783RnvXhjMZeniCo5t5oTiBB
-rL+nIAQaD2ENPWsLPxrjggVQxdrMWhG+rGBYmT19pDlVOhkQmbM=
-=RerS
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/0PwMACgkQFA3kzBSg
+Kbb9IBAAnrN91ZhG/BgLh0JafoZ6utxBte0mMTQGJB3x7Z9gfKaejW+ibWhMf0+Q
+/mKBOXdnye+cUIAcjpRxdzIdAZLdZnNf+JVDgFTp/kdUk/PXXbfCInyhvNs2YhPR
+EG9kPswzVLmmhS1GYGKJxHbS1ki2h9T5Z/jOOhHi31C5FR6OFhDHFJW+DOVOFHcQ
+FtXc8YICtnb9OoVNjocMWwnV518iStF/AGeCnMAfdZ594PF67N+qnWM9c3Zg6XJP
+TEKgs3/XctfHOgQsZ/zAPwHqU5nNKU8Hphqbk0/ga58XSs1Ub0/K2czZSowiLZ5C
+WDmF1KW1DxrQrdDSJpc2+1hyG2wVsGi36ZO3BFqxzF35bvzlwMZ3qctk5aZug09V
+nf+WjDI9+gW7IeoHVHRUioPQhSEv0089hGosCg8wELTwIHyvL38NFPbYYCj60gLT
+fjOr31X1ecKAPU0EYNjlJ5tOfoTjUFHYFWpu5UACYwKudObrtLK2ojVbTwE8rAjv
+/3Jby/Axtc0cXyAjZEj/QvdnVLzSyC4j1HOyOSHMYnaChauPP2ZHAZ0qt1g0hFXD
+jvn1DRn+Nkbte9yGRr2NqDWlFzmMBBeYBBbyB3YPW04bzIAJvie21Yy7AHfoF4Gh
+FMeiuav5Gyp7Qjusn1pBuUIV9DmXVKCGqVdtlri5b0FDG0T3a/E=
+=zkDV
 -----END PGP SIGNATURE-----
 
---qoTlaiD+Y2fIM3Ll--
+--smOfPzt+Qjm5bNGJ--
