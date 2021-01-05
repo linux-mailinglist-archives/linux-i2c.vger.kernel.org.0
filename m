@@ -2,87 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E23482EA33F
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jan 2021 03:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E0A2EA5ED
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jan 2021 08:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727713AbhAECOr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 4 Jan 2021 21:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbhAECOr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Jan 2021 21:14:47 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EB9C061796;
-        Mon,  4 Jan 2021 18:14:06 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id e25so1011904wme.0;
-        Mon, 04 Jan 2021 18:14:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=40GzxaNwwxkSMXNQB32SQeWYrAuv6Ok0Sq4KbJWmJx0=;
-        b=FRUF0l+vR9KEZSQ3HiGDCOVCU4krSX8z/glTCByHV8Z0LBB6YIMcbAfJWVfq75fk9U
-         TEZ7a6QLKbyfjzERg4FeFiXuZ+tBsODetU3AP2n64qi8/wotrsGMSs5wTkuLtLD6470n
-         lAAVFVS//BnCNtAtjc4G2XlyWJdE0c4DQuN4Hstoq489QHvNpIMTj7EwWib9OLaGL6Yn
-         aOD8Fz72/v3pTDN7+A6YfQB0VwVPYGqyUJl3EBEaGkGVMMMcW2QivAmWsMXUzz5Eu5y8
-         NKPeqTNUkvq3vhC2NHWhSvX6XKZTGkChavi/+iQSvn8rQDpgmjXxeBg7Ay6IC1i9PHGs
-         cE7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=40GzxaNwwxkSMXNQB32SQeWYrAuv6Ok0Sq4KbJWmJx0=;
-        b=YYmtPTolBFCZNdUlEBPYWiqvvzm9a9JMRtHhDLMzBz8gENKQTdyxbodG6qqHb//QOb
-         XxGT1ZPewSNE/6fODQWI2eAvpM1KR0HqjYU1hAqQV6U+J8SX6UYz/hC1EPm/0iX+Zmsl
-         qfmtD1RJlI8gliZS5K3+MGCzpWrRdkPY4WwJectq5mEEU9OttGDeONAMDs1yQRtfrdT9
-         bWhHox16hj0LYM9Flo5+fEeWgEsleZ8/e52e6P/bHsaL8AHbh4SERCzOiiYZkO7JgEGN
-         YGvVQ7DnTV5G/SJ0Pnu2FuIXqtefjNod4E5TaHVnrbhA0K5NkDyKjM9LIQ9GrAmGZwlD
-         fC2g==
-X-Gm-Message-State: AOAM533JbEPJirIfoUtpgm1eXfo4EaeOlyJatD1Kf6TZORL2hy+W26De
-        ouoCsNob3cIapT4zzns26gaucC/Hn+u2BRmspCRQxlr+
-X-Google-Smtp-Source: ABdhPJzrQvjv+X0my5Z8aP3SiM0nbGWCeKhFNCrEJp/qhHsPnZe2xNZeP4GfvVxeDu2S4z5qSzwqiKpg/42fbjzvZf8=
-X-Received: by 2002:a1c:2646:: with SMTP id m67mr1352850wmm.81.1609812845558;
- Mon, 04 Jan 2021 18:14:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20201214045850.1026293-1-zhang.lyra@gmail.com> <20210104182353.GA935@ninjato>
-In-Reply-To: <20210104182353.GA935@ninjato>
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Tue, 5 Jan 2021 10:13:29 +0800
-Message-ID: <CAAfSe-t-J3ckbwKjNuRpcm0wq7gme7YFG7fiHqLHk-Pu44jwZQ@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: sprd: use a specific timeout to avoid system hang
- up issue
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Linhua Xu <linhua.xu@unisoc.com>
+        id S1726029AbhAEHZv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Jan 2021 02:25:51 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:12449 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725855AbhAEHZv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Jan 2021 02:25:51 -0500
+X-UUID: 00b9807406e44507a71142604aa08bf2-20210105
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=iNJ8pMFepiraeDCLGRX8PhqklWQesO7XeNlg6qJmjj0=;
+        b=lH+5NPmAaoiplE2yO8HyiAHykaEhlZuVh9S7hkDfCq/Fduj4jBzKmaMy9qQB9IQCFiH0xj2BaR+HbpvY+l68jV/HWCWDrpjCDsV7e3UiFU0YVi0aBO5dxjvL2MuBf0NTPEnep5tWlzGNFZ9z2Ml30moMH0ZdQdwWhrrTTB7umTk=;
+X-UUID: 00b9807406e44507a71142604aa08bf2-20210105
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 136633279; Tue, 05 Jan 2021 15:25:01 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 5 Jan
+ 2021 15:24:57 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 5 Jan 2021 15:24:56 +0800
+Message-ID: <1609831496.23685.7.camel@mhfsdcap03>
+Subject: Re: i2c: mediatek: Fix apdma and i2c hand-shake timeout
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>
+Date:   Tue, 5 Jan 2021 15:24:56 +0800
+In-Reply-To: <20210104183202.GD935@ninjato>
+References: <1608812767-3254-1-git-send-email-qii.wang@mediatek.com>
+         <20210104182959.GC935@ninjato> <20210104183202.GD935@ninjato>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: 8622BB2201912994D94D12F5823443A0F8E2910C300CEAE4236ECE2AE31BE4892000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 5 Jan 2021 at 02:24, Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Mon, Dec 14, 2020 at 12:58:50PM +0800, Chunyan Zhang wrote:
-> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> >
-> > If the i2c device SCL bus being pulled up due to some exception before
-> > message transfer done, the system cannot receive the completing interrupt
-> > signal any more, it would not exit waiting loop until MAX_SCHEDULE_TIMEOUT
-> > jiffies eclipse, that would make the system seemed hang up. To avoid that
-> > happen, this patch adds a specific timeout for message transfer.
-> >
-> > Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
-> > Signed-off-by: Linhua Xu <linhua.xu@unisoc.com>
-> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
->
-> Took the liberty to change the errno to ETIMEDOUT and applied to
-> for-current, thanks!
+T24gTW9uLCAyMDIxLTAxLTA0IGF0IDE5OjMyICswMTAwLCBXb2xmcmFtIFNhbmcgd3JvdGU6DQo+
+IE9uIE1vbiwgSmFuIDA0LCAyMDIxIGF0IDA3OjI5OjU5UE0gKzAxMDAsIFdvbGZyYW0gU2FuZyB3
+cm90ZToNCj4gPiBPbiBUaHUsIERlYyAyNCwgMjAyMCBhdCAwODoyNjowN1BNICswODAwLCBxaWku
+d2FuZ0BtZWRpYXRlay5jb20gd3JvdGU6DQo+ID4gPiBGcm9tOiBRaWkgV2FuZyA8cWlpLndhbmdA
+bWVkaWF0ZWsuY29tPg0KPiA+ID4gDQo+ID4gPiBXaXRoIHRoZSBhcGRtYSByZW1vdmUgaGFuZC1z
+aGFrZSBzaWduYWwsIGl0IHJlcXVpcnMgc3BlY2lhbA0KPiA+ID4gb3BlcmF0aW9uIHRpbWluZyB0
+byByZXNldCBpMmMgbWFudWFsbHksIG90aGVyd2lzZSB0aGUgaW50ZXJydXB0DQo+ID4gPiB3aWxs
+IG5vdCBiZSB0cmlnZ2VyZWQsIGkyYyB0cmFuc21pc3Npb24gd2lsbCBiZSB0aW1lb3V0Lg0KPiA+
+ID4gDQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBRaWkgV2FuZyA8cWlpLndhbmdAbWVkaWF0ZWsuY29t
+Pg0KPiA+IA0KPiA+IEFwcGxpZWQgdG8gZm9yLWN1cnJlbnQsIHRoYW5rcyENCj4gDQo+IEFueSBG
+aXhlczotVGFnIHdlIGNvdWxkIGFkZD8NCj4gDQoNCkNvdWxkIHlvdSBoZWxwIG1lIGFkZDoNCglG
+aXhlczogODQyNmZlNzBjZmE0KCJpMmM6IG1lZGlhdGVrOiBBZGQgYXBkbWEgc3luYyBpbiBpMmMg
+ZHJpdmVyIikNClRoYW5rcw0K
 
-Thanks!
-
-Chunyan
-
->
