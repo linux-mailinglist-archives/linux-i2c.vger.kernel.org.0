@@ -2,70 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D152EA811
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jan 2021 10:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE13E2EA81B
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jan 2021 11:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727768AbhAEJ4V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Jan 2021 04:56:21 -0500
-Received: from sauhun.de ([88.99.104.3]:40878 "EHLO pokefinder.org"
+        id S1725919AbhAEKAp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Jan 2021 05:00:45 -0500
+Received: from sauhun.de ([88.99.104.3]:40936 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726558AbhAEJ4U (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 5 Jan 2021 04:56:20 -0500
+        id S1725831AbhAEKAp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 5 Jan 2021 05:00:45 -0500
 Received: from localhost (p5486cfc1.dip0.t-ipconnect.de [84.134.207.193])
-        by pokefinder.org (Postfix) with ESMTPSA id B54AC2C03EF;
-        Tue,  5 Jan 2021 10:55:38 +0100 (CET)
-Date:   Tue, 5 Jan 2021 10:55:34 +0100
+        by pokefinder.org (Postfix) with ESMTPSA id E38C72C03EF;
+        Tue,  5 Jan 2021 11:00:02 +0100 (CET)
+Date:   Tue, 5 Jan 2021 11:00:01 +0100
 From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Qii Wang <qii.wang@mediatek.com>
-Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com
-Subject: Re: i2c: mediatek: Fix apdma and i2c hand-shake timeout
-Message-ID: <20210105095534.GA2000@ninjato>
-References: <1608812767-3254-1-git-send-email-qii.wang@mediatek.com>
- <20210104182959.GC935@ninjato>
- <20210104183202.GD935@ninjato>
- <1609831496.23685.7.camel@mhfsdcap03>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: Do not print duplicate error when failing to
+ register an i2c-client from ACPI
+Message-ID: <20210105100001.GB2000@ninjato>
+References: <20201221191300.244648-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LZvS9be/3tNcYl/X"
+        protocol="application/pgp-signature"; boundary="gatW/ieO32f1wygP"
 Content-Disposition: inline
-In-Reply-To: <1609831496.23685.7.camel@mhfsdcap03>
+In-Reply-To: <20201221191300.244648-1-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LZvS9be/3tNcYl/X
+--gatW/ieO32f1wygP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Dec 21, 2020 at 08:13:00PM +0100, Hans de Goede wrote:
+> i2c_new_client_device() already prints an error when it fails. Some
+> ACPI tables contain 2 ACPI devices describing the same i2c-client,
+> leading to errors like this:
+>=20
+> [    1.620847] i2c i2c-4: Failed to register i2c client MAGN0001:00 at 0x=
+1d (-16)
+> [    1.620870] i2c i2c-4: failed to add I2C device MAGN0001:00 from ACPI
+>=20
+> There is nothing we can do about the first -EBUSY error being logged,
+> but the second error does not really add any new information, so lets
+> drop it.
+>=20
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+Applied to for-next, thanks!
 
 
-> Could you help me add:
-> 	Fixes: 8426fe70cfa4("i2c: mediatek: Add apdma sync in i2c driver")
-
-Thanks, added!
-
-
---LZvS9be/3tNcYl/X
+--gatW/ieO32f1wygP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/0N5IACgkQFA3kzBSg
-KbYv7BAAnDggg4mbm29RRXNwxb2yO9vm0fVbb+W3FGF5JcD6Djg+baJqJwy3JbqU
-UjUTSaZsvlhtI9qbWQaO39gnDSsFmVFm8mcTVK1yRAB2KyduAz0zEDPuk8tWGhgR
-7LSS8F7OGLPM7iHEtVa1mhb+Wkt4Cq44bgbToXyYQymDgw4qoRWxFMQV2mAdc3xq
-ZbzrJvqkDBRKF02K3bA734sTcGnILuA+31ewfgUBGpy5Tqx9I2WyJ5yGKO7DdYwy
-+a3TQdrZHnE5LRpYkrZltKvHg5wyy2gL1Z+tLtgZOqzzavaG3TVyJfDzfvWS+ttv
-1gke0PG5G7BjovGfDKoeNX2kYc9UyMNALebIv+aw3zqsOcfoMXrRHM3dsnsfAAKa
-xnv4NqTeuGIbBNHEvje0AwnlOyMnsu9t8vwezwUNFk2jJmPDbEEHOcczS6ClXtnw
-/AZraLbdipJqXMx/jDHAov2OOaSCu2gz0gaIyOc+coDJ9El2kbqQs74OS9wL/Jlg
-V4YRaRi4f7yd1zrMwHUXv+x5MMMb/s3tJVVuSNyKeGosZ/893IfKxFUPmL1gUroh
-Af7eyqY8X2FvzFA7AKSCY2Az/fofN4DZxA+2gGTHz35b1TRQdKWpuIOoK3JsK0Vk
-yT1uFZOnDfQus358NOi+I6Jt2uK+BA5rRXKLyg5sQsqbz9L6cGE=
-=cDDG
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/0OKEACgkQFA3kzBSg
+KbZw6w//fNjx9Xc9pJHZp7Rhl6FfYMrELZpsPb/rZ6603Y3BhTD8+aStoOWYCW6C
+DIZ4IQwqB6Y6/wU29clnMI3DvEx27yX+VwbECmqzixxQjihoDo8Y4PVUd05WTTOp
+qSnaL1CqY0N7X7VbBG/jx+oqsrUHJmvoaqSlYu1uPnwydLMAIebBg2WLQ9IF2sp1
+AJXhyxAvekjGw8OzKqFklSrH73omNZ8Aj/FhTBvkosPU/JMoZfacwxxzJrkfzfe/
+9Gl9qwzXdfR3XfZnWz6985D82yGMM1NyoiqJlqZtezebTnt4cdFQMWsd0L4Bi/ub
+4DdxL7N1+ex6aHdfnDRfi1c/j4WxcB/j/QXn3VRt6UfCa+M9IxVA1sij8CI3zRR4
+Sf2ftB+nDRMSmdSsMVTYrhGpXmHnedXawdPcMK+GIuc0OBExSuwPkFKyETxdugDr
+Gn492BvoWr6MkrrihRyP+t4wcnnkBuK23WkarJA3vSqeYN7b3hX+BtsvycbpY8wg
+8gXjLgXEZcfkgZxwshA/nt328G4LBKDxzTeCxADIPKVJRSEJk072MClJ0Lhq7787
+gAY3jx/therbs/7nLUbD66UDlnvilJkydMIK/yhGjWFZ6sJ9kMwh41iGwpKprv5C
+9XkNl0/nEsfetGIz/l9gRFBKAu9uSe+/LT7MpWqFEBSqHnLSkVY=
+=imiC
 -----END PGP SIGNATURE-----
 
---LZvS9be/3tNcYl/X--
+--gatW/ieO32f1wygP--
