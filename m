@@ -2,98 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC152EB012
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jan 2021 17:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84BB2EB01A
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Jan 2021 17:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728477AbhAEQac (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Jan 2021 11:30:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40682 "EHLO mail.kernel.org"
+        id S1727791AbhAEQcH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Jan 2021 11:32:07 -0500
+Received: from www.zeus03.de ([194.117.254.33]:37398 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727036AbhAEQab (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 5 Jan 2021 11:30:31 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 705C422CA0;
-        Tue,  5 Jan 2021 16:29:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609864191;
-        bh=rntfB7C5mBvVXgliBl2U7ngampY/9LrSTvoo5JN6PHE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S88AqmoJInnEWhe9qFDxHx5FvAYHSp2+rb+N2gfbHNDqaltI/vzxj97J0i6Zl4ZSo
-         FrMnv1h7c5jq1+J/SA2CzP53dUx9Ic5a226yVsQDL87Z/TQTi0ydw0WX0Gj6bWEpff
-         Bpyl/Wv92pZ60y5kZU+mTkDBRRw0n5k3Pfp6MyjOURgVKFyTCYlDKpmW+92zkIrrio
-         AiabCKPbajE3T7uFKNjPkX05HK+As0UcALR8Cs2/Crq2Iy/CX0hUrt7kpGlUCUKYks
-         Y3fP0co3+5kMdsvFM/c9iGlnTGd3Eki1+zbIW6H6Q7OPVStS8Z9lIf0SRS6tjSj6fW
-         QaCVt0a72co2w==
-Date:   Tue, 5 Jan 2021 17:29:46 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Icenowy Zheng <icenowy@aosc.xyz>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 18/21] dt-bindings: allwinner: Add H616 compatible
- strings
-Message-ID: <20210105162946.GI1842@ninjato>
-References: <20201211011934.6171-1-andre.przywara@arm.com>
- <20201211011934.6171-19-andre.przywara@arm.com>
+        id S1726151AbhAEQcH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 5 Jan 2021 11:32:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=LnkLlHTxDKWlNwbW3R/CfzZv6kER
+        VWAMuXxWehUePUA=; b=2Rrdz1b5YCeFHzpDmTytEZYCmiRVGD53VydJyJmPfylX
+        qJi/pSSLRXxFAnf5ePaRHATw4pZSyAo42RhwDtPGj6Yenm4DG+kf+ly+Mw0wDcFR
+        a4A3Jrog9t2zCpimTpdy2h/FqUVU6HjavPZHfiN8UkAoVZjePYX81A4nqodNLs4=
+Received: (qmail 122965 invoked from network); 5 Jan 2021 17:31:25 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Jan 2021 17:31:25 +0100
+X-UD-Smtp-Session: l3s3148p1@ItPgvCm49OUgAwDPXyX1AEdA8SGgn5QT
+Date:   Tue, 5 Jan 2021 17:31:25 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] i2c: gpio: fix MODULE_LICENCE
+Message-ID: <20210105163125.GJ1842@ninjato>
+References: <20201214160044.3378-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WIIRZ1HQ6FgrlPgb"
+        protocol="application/pgp-signature"; boundary="BghK6+krpKHjj+jk"
 Content-Disposition: inline
-In-Reply-To: <20201211011934.6171-19-andre.przywara@arm.com>
+In-Reply-To: <20201214160044.3378-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---WIIRZ1HQ6FgrlPgb
+--BghK6+krpKHjj+jk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 11, 2020 at 01:19:31AM +0000, Andre Przywara wrote:
-> Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
-> bindings, and pair them with an existing fallback compatible string,
-> as the devices are compatible.
-> This covers I2C, infrared, RTC and SPI.
+On Mon, Dec 14, 2020 at 05:00:44PM +0100, Wolfram Sang wrote:
+> Let MODULE_LICENCE match the SPDX header which is correctly based on the
+> previous textual description.
 >=20
-> Use enums to group all compatible devices together.
->=20
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+Applied to for-next, thanks!
 
 
---WIIRZ1HQ6FgrlPgb
+--BghK6+krpKHjj+jk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/0k/oACgkQFA3kzBSg
-KbYcAA//fxeNSjKkeAsUP+tmVP+6UOmYGFWuzggJQKr5y0aThBUNYPfWWF/lDRa/
-wuzgurDJZhsKyb8BxhgY2Bc/EoPsxWZi30fz2l6YdTLi3NfYoky2LhUECl+JYGjV
-MgMCCNdVyLZ8uU39J/PuCBH4oN2gBcuLxmOsiVnXcfkbbWjI6c1DNOxRDJdXx9WU
-4YDBk98pbmW7Bxik+11pmF9nncF1HvMQ4MYU+Z7fDvQfwGV74dogLu4Psr0q30o+
-zNgU/BPvf/U7DLlkcTz18ChX+v9++OZe0AnEPKMtugTZW1rI28SYvNSGhE3QDXcW
-otfDp2FvmbilDX5CtK14mlIi+0mVqu0xx6o20pNVAmx4QTjuDr2zAh+EHJ11kP6O
-KEKQRZIP7Wj0NBbaSi/mAieeF/DvH8lK9FNKUFMj8108wNF05NB00KuZ4DFvhpDA
-M1IgSiSLqJOokZw9Kbw1coKROsYZcWuCrY4tCLVe3m7u0mE9wHIgXsnDtEKLajqL
-Vd7GLY60FVPoF9OMlz2Q2liy4D+gz/NIwKYsrFU87FrMag9Lw0JZQVeH9eqw1akl
-ACSHHN3JNDJUIH5g1Yiem+VGAOQSBrz4Lr0sTTHm+OAo6b9q8k7DJtyuwUrUajG9
-s26hNzxVo+c5AbLTltlCd9esoPiHr4/zia2oKz8kM6WYsDLwKMU=
-=9MjQ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/0lF0ACgkQFA3kzBSg
+KbaQtg//bzCsIRG/jhBsyModm/+QBCSWBwf0w281qrchQ9Mo9znkzb7H5DirExtG
+quFt3WjI3lSjBWHtrZsQofxQnY3QNgpm2Mdzv2RYtpyvPB+plHigXQywRIn7LV4J
+LhokdH3MXtt370WtdLmlQ5g4B8xL0qRZSbF8ZZGM6MeMHLhhZYsPtj2zF9G+33fs
+S+V9Reng5m7LNNTam/7zj7c5/0r7gTB10zHT7G3ES7HitHH3JjEsYbo/SveZaRp4
+1rfYu/glbvqM33btEFswyG5NRd+F79mdNMqKhgWTt2bUNdavm7v+B8HUzFtJhiKa
+ErQ6TBrj+Tjfdfl2wk6bSsz5KpTqDP8xosIfbGMg21lmSpA5p/p1ij47zFfXN8RI
+QPMA70W/1k5lJNRkPLUBd2ZEqiTqXoPrg72rALKxlIS3T1HnJjTXj110/livPhnS
+ffrHzT0ivmF5FwIEMIu7DewoQbecr/5k4rNRsakMac+HUR+o6pVN1n5ze2KCc/Uc
+FYsnA8gIdNk8lzQ5nmCh6ndos8qfo9gE59bLIQLVZg8+eRonr/9ZT+tm+7CfRDx8
+YJMdml6nIoDgIM9vJmzFubc+zm6Oi2Hjf+9n1vnJlJPQbl3fvLCYXFC9/LlncJQp
+H9dskm+zUrB6LfFKVS790AO7gTPv4dGIX2C/F1qmH+iGF7xQEJQ=
+=Onse
 -----END PGP SIGNATURE-----
 
---WIIRZ1HQ6FgrlPgb--
+--BghK6+krpKHjj+jk--
