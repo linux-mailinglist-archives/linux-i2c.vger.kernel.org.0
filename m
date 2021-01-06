@@ -2,31 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A984B2EC0D1
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jan 2021 17:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D8E2EC0D3
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jan 2021 17:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727280AbhAFQDp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Jan 2021 11:03:45 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38232 "EHLO mx2.suse.de"
+        id S1727297AbhAFQD6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Jan 2021 11:03:58 -0500
+Received: from mx2.suse.de ([195.135.220.15]:38326 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727203AbhAFQDp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 6 Jan 2021 11:03:45 -0500
+        id S1726589AbhAFQD6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 6 Jan 2021 11:03:58 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A5BEAAD75;
-        Wed,  6 Jan 2021 16:03:03 +0000 (UTC)
-Date:   Wed, 6 Jan 2021 17:03:02 +0100
+        by mx2.suse.de (Postfix) with ESMTP id 75ECBAD89;
+        Wed,  6 Jan 2021 16:03:16 +0000 (UTC)
+Date:   Wed, 6 Jan 2021 17:03:15 +0100
 From:   Jean Delvare <jdelvare@suse.de>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         linux-gpio@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
         linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] gpiolib: Follow usual pattern for
- gpiod_remove_lookup_table() call
-Message-ID: <20210106170302.551cb579@endymion>
-In-Reply-To: <20201228200618.58716-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 2/3] i2c: i801: Drop duplicate NULL check in
+ i801_del_mux()
+Message-ID: <20210106170315.7cd1bdac@endymion>
+In-Reply-To: <20201228200618.58716-2-andriy.shevchenko@linux.intel.com>
 References: <20201228200618.58716-1-andriy.shevchenko@linux.intel.com>
+        <20201228200618.58716-2-andriy.shevchenko@linux.intel.com>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
@@ -36,31 +37,29 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 28 Dec 2020 22:06:16 +0200, Andy Shevchenko wrote:
-> The usual pattern for the remove calls, like gpiod_remove_lookup_table(),
-> is to be NULL-aware, i.o.w. become a no-op whenever parameter is NULL.
-> Update gpiod_remove_lookup_table() call to follow this pattern.
+On Mon, 28 Dec 2020 22:06:17 +0200, Andy Shevchenko wrote:
+> Since gpiod_remove_lookup_table() is NULL-aware, no need to have this check
+> in the caller. Drop duplicate NULL check.
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/gpio/gpiolib.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/i2c/busses/i2c-i801.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index b02cc2abd3b6..611d6ea82d75 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -3460,6 +3460,10 @@ EXPORT_SYMBOL_GPL(gpiod_add_lookup_table);
->   */
->  void gpiod_remove_lookup_table(struct gpiod_lookup_table *table)
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index ae90713443fa..7c2569a18f8c 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -1487,8 +1487,7 @@ static void i801_del_mux(struct i801_priv *priv)
 >  {
-> +	/* Nothing to remove */
-> +	if (!table)
-> +		return;
-> +
->  	mutex_lock(&gpio_lookup_lock);
+>  	if (priv->mux_pdev)
+>  		platform_device_unregister(priv->mux_pdev);
+> -	if (priv->lookup)
+> -		gpiod_remove_lookup_table(priv->lookup);
+> +	gpiod_remove_lookup_table(priv->lookup);
+>  }
 >  
->  	list_del(&table->list);
+>  static unsigned int i801_get_adapter_class(struct i801_priv *priv)
 
 Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
