@@ -2,75 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 142342EBFAC
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jan 2021 15:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F8C2EBFBE
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Jan 2021 15:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725890AbhAFOiy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Jan 2021 09:38:54 -0500
-Received: from sauhun.de ([88.99.104.3]:57828 "EHLO pokefinder.org"
+        id S1725803AbhAFOoN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Jan 2021 09:44:13 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40278 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725803AbhAFOiy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 6 Jan 2021 09:38:54 -0500
-Received: from localhost (p54b33782.dip0.t-ipconnect.de [84.179.55.130])
-        by pokefinder.org (Postfix) with ESMTPSA id D0CCF2C07EC;
-        Wed,  6 Jan 2021 15:38:11 +0100 (CET)
-Date:   Wed, 6 Jan 2021 15:38:06 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Vadim Pasternak <vadimp@nvidia.com>
-Cc:     peda@axentia.se, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH i2c-next v2 1/1] i2c: mlxcpld: Add support for I2C bus
- frequency setting
-Message-ID: <20210106143806.GA997@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Vadim Pasternak <vadimp@nvidia.com>, peda@axentia.se,
-        linux-i2c@vger.kernel.org
-References: <20210105233347.459-1-vadimp@nvidia.com>
+        id S1726011AbhAFOoH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 6 Jan 2021 09:44:07 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9FC51ACAF;
+        Wed,  6 Jan 2021 14:43:25 +0000 (UTC)
+Date:   Wed, 6 Jan 2021 15:43:24 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     trix@redhat.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: remove h from printk format specifier
+Message-ID: <20210106154324.78e005da@endymion>
+In-Reply-To: <20210105100942.GC2000@ninjato>
+References: <20201215183327.2072052-1-trix@redhat.com>
+        <20210105100942.GC2000@ninjato>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SUOF0GtieIMvvwua"
-Content-Disposition: inline
-In-Reply-To: <20210105233347.459-1-vadimp@nvidia.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Tom, Wolfram,
 
---SUOF0GtieIMvvwua
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, 5 Jan 2021 11:09:42 +0100, Wolfram Sang wrote:
+> On Tue, Dec 15, 2020 at 10:33:27AM -0800, trix@redhat.com wrote:
+> > From: Tom Rix <trix@redhat.com>
+> > 
+> > See Documentation/core-api/printk-formats.rst.
+> > h should no longer be used in the format specifier for printk.
+> > 
+> > Signed-off-by: Tom Rix <trix@redhat.com>  
+> 
+> Adding Jean to CC. Jean, I'd think %02x would be better, what do you
+> think?
 
-On Wed, Jan 06, 2021 at 01:33:47AM +0200, Vadim Pasternak wrote:
-> Add support for I2C bus frequency setting according to the specific
-> system capability. This capability is obtained from CPLD frequency
-> setting register, which could be provided through the platform data.
-> If such register is provided, it specifies minimal I2C bus frequency
-> to be used for the devices attached to the I2C bus. Supported
-> freqeuncies are 100KHz, 400KHz, 1MHz, while 100KHz is the default.
->=20
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+Agreed, 0x%02x would be better.
 
-Applied to for-next, thanks!
+If this is done then you can add:
 
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
---SUOF0GtieIMvvwua
-Content-Type: application/pgp-signature; name="signature.asc"
+> > ---
+> >  drivers/i2c/i2c-smbus.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+> > index d3d06e3b4f3b..5cd2cf84659e 100644
+> > --- a/drivers/i2c/i2c-smbus.c
+> > +++ b/drivers/i2c/i2c-smbus.c
+> > @@ -396,7 +396,7 @@ void i2c_register_spd(struct i2c_adapter *adap)
+> >  
+> >  		if (!IS_ERR(i2c_new_scanned_device(adap, &info, addr_list, NULL))) {
+> >  			dev_info(&adap->dev,
+> > -				 "Successfully instantiated SPD at 0x%hx\n",
+> > +				 "Successfully instantiated SPD at 0x%x\n",
+> >  				 addr_list[0]);
+> >  			dimm_count--;
+> >  		}
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/1y0oACgkQFA3kzBSg
-KbYsShAAhyAjozlGKV0PpD/PuFb2aUe9bR9FyFpO8qYNKWPNp4RQVI/piID9Knk7
-TrPYIQfclgEzVpH7zdpt9XzU6DgAoUOO71H3CbeAhI8KyGuqy/uUrzZLzdfkTZIg
-xQzLfsld6wXzNFOAf29dTAiGuFRitQqXWRbUroI7nYObBqPRXVrLX0nG8mzzI1dL
-B1IwiR42VInR4bSAsJtKbdhWjIrn47t5jP5YNMcUKRk4rbZ5vgOzj1fVgKiPTzTv
-hh2c6KJxTErDLjY2ogNRcF+/qHLqMXW4QD03azlD65DSW+X/aToaUPhfrLoSAjkD
-XL97eBPLoMV/bJG0p3UpKWqc346L8tdpZJnCVHUB6VFup80ZmexO2PtI5U3DQCfP
-qgWHQvA1XiRCkDX4dZ8R/Qs9dBaEHiEXRxK/9IcG6ha+aojSWKd0HgFNXs2TCeoO
-d9R5weBLrjftDULH+VIobxE9kaKO6gynn+MFN1hHs2NxqpkZsFwWw21erFJXG57/
-0rVDQOYK0JTB0lPPVAiZrLPkE9gvj247ixAnu2G+afHoXEdlnKxnC6TTos0Adfyb
-LX+3MgvB7YjKIRnT0NCxmPa9uCzZO/bl0U3ER5gsOhfK7IhlsrRNNcF89T2lJ9d1
-xPRmD1ytR8qC6dBiEqXhLvZHfLa5goP03TtT5wVpP+QQvR16i2I=
-=N4hf
------END PGP SIGNATURE-----
-
---SUOF0GtieIMvvwua--
+-- 
+Jean Delvare
+SUSE L3 Support
