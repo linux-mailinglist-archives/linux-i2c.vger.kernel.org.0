@@ -2,155 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E84422EF254
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Jan 2021 13:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41DC2EF2E1
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Jan 2021 14:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbhAHMRu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 8 Jan 2021 07:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728156AbhAHMRn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Jan 2021 07:17:43 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B17C0612FA;
-        Fri,  8 Jan 2021 04:17:01 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id z12so3552078pjn.1;
-        Fri, 08 Jan 2021 04:17:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QJpmPSXBMkDyRpOAie8nEtiKxW2diZukk9pipJ57ovs=;
-        b=APSTOjBSR9NIMt2G+tAKvfWj2tZ4hY4e3e1aiF7JekWmZUQuDSiZ5IbRXu1/KhIooQ
-         J/HcWQyXi3KQ8+D3KlBShkw+3DV6P4O1wxDFt0b6FOjSvZOjWafWoGAE5gPV76cBRJEm
-         Trby4n2kGLMcOmuVcRt+XtceGuTyFfThWFR/vn0PxK22wx1n4JN5HZUiXRxrbyd94B1R
-         vwNFtlu1wjAJNAzTBHWOysPbZxTNUDeohmI4FYAlxbyEXEsJR4qwQI7U+VJiK8rIce49
-         UCcCgQVlofROPknaFgODvIv6KE0B/8oLY3ZGWbI6odx41TeD/9kCPg7pBagojBWs0pX9
-         gmyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QJpmPSXBMkDyRpOAie8nEtiKxW2diZukk9pipJ57ovs=;
-        b=kzWJdXbWtSVdYF6un2pC2l5x5uFmu+iPWhmo4sNz5Ad5uIB7syYNEMUVHno8CSedOQ
-         s5Re3PrCE2EXBrz+vl8Mvq7v5+iPL23Ilx4BXYhaMzSHQZVTxErhaHsYO2eE/93ATJQe
-         JLWkKnodJ8HWtqW1AToeCE66JfK2mGGYQXslo/cO7NDKCfxxS8SETU1obiEtY06/iZhX
-         2fQB4bfNaa7iwHpyUa3Be7Cmz2SIRgJC8xYPVJjx1OxMZiP1GfQR10NYs2lKx7ZQiEHA
-         XgzM8UT0edGCs+aIsn4YC5SVb5ucidiLKTvwUnJ9BqTLQz9W/H6ZQ1pIxgeqDvSJzAEl
-         ZYZA==
-X-Gm-Message-State: AOAM531yOEuXnIZwoycRCf0pjkNvWPzX+lXiQPOyUTXSUBQ+3M0eQtUv
-        HC4ZhwlTMDqxJRnzf6XuRRRlz2cEUJbJf0odauw=
-X-Google-Smtp-Source: ABdhPJyldR1piNAeKj9uIZ1Le/5wxh9TOr537qIrpxGvyxjo1onN4F4oe8SR/CXSTDkdvSzMQ7bZigw9hkKUqlRE4vo=
-X-Received: by 2002:a17:90a:c592:: with SMTP id l18mr3486365pjt.228.1610108221001;
- Fri, 08 Jan 2021 04:17:01 -0800 (PST)
+        id S1726189AbhAHNMf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 8 Jan 2021 08:12:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32960 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726059AbhAHNMf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 8 Jan 2021 08:12:35 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9BE5E235FC;
+        Fri,  8 Jan 2021 13:11:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610111514;
+        bh=M9Atlx8u08z9YMgRfE9vtBIVYvGIpxRGTC2fZnn2N28=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LwY3wZ/KS0BAJWVts75/9teMst30/2ejrz5I1eST1ah9dQJ1m0y3smwxcAh038wAg
+         iu0HuohtdaYPFZaexyS/L5bAJ4YVP6pyhyY6JOMIhrWLfy1vsfckctfFJHbvPHf57/
+         dO95uhm3hwmcfE0wAwAu1clcb9pkXLkvDoAS65CC/kT1gHnIVU7qK0HQJB0i1X47C9
+         ldNQaiScJZLbL0GtwtIZU1NadIbDPx+FT2Yhw+fzl1RDkZhm/ZPcJd37xsp5VeqKKu
+         HfztmR/J15d4+nMr+z2qSRDfMP2UId3ULjaXFDmypFc5MBRVAvjmUJ7mzouVHMjFJh
+         vmGh5anRuZnww==
+Date:   Fri, 8 Jan 2021 14:11:47 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Daniel Stodden <daniel.stodden@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, jdelvare@suse.de
+Subject: Re: [RFC PATCH v2] i2c: Support Smbus 3.0 block sizes up to 255
+ bytes.
+Message-ID: <20210108131147.GA1023@ninjato>
+References: <20200729203658.411-1-daniel.stodden@gmail.com>
+ <20210106152757.GB997@kunai>
+ <78317552-E485-46B4-84EA-625E6E0CBF54@gmail.com>
 MIME-Version: 1.0
-References: <20201130133129.1024662-1-djrscally@gmail.com> <20201130133129.1024662-19-djrscally@gmail.com>
- <20201130200719.GB4077@smile.fi.intel.com> <778f23fc-b99c-33a2-642d-ca0e47fd4ed5@gmail.com>
-In-Reply-To: <778f23fc-b99c-33a2-642d-ca0e47fd4ed5@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 8 Jan 2021 14:17:49 +0200
-Message-ID: <CAHp75VeYOqJt9iKaGPA4=dkb2kYUbqUV4PGTn8uSsnUt_kSGSw@mail.gmail.com>
-Subject: Re: [PATCH 18/18] ipu3: Add driver for dummy INT3472 ACPI device
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        devel@acpica.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Yong Zhi <yong.zhi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tian Shu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        kieran.bingham+renesas@ideasonboard.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Jordan Hand <jorhand@linux.microsoft.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vkogqOf2sHV7VnPd"
+Content-Disposition: inline
+In-Reply-To: <78317552-E485-46B4-84EA-625E6E0CBF54@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jan 8, 2021 at 1:56 AM Daniel Scally <djrscally@gmail.com> wrote:
-> On 30/11/2020 20:07, Andy Shevchenko wrote:
-> > On Mon, Nov 30, 2020 at 01:31:29PM +0000, Daniel Scally wrote:
 
-...
+--vkogqOf2sHV7VnPd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > It's solely Windows driver design...
-> > Luckily I found some information and can clarify above table:
-> >
-> > 0x00 Reset
-> > 0x01 Power down
-> > 0x0b Power enable
-> > 0x0c Clock enable
-> > 0x0d LED (active high)
-> >
-> > The above text perhaps should go somewhere under Documentation.
->
-> Coming back to this; there's a bit of an anomaly with the 0x01 Power
-> Down pin for at least one platform.  As listed above, the OV2680 on one
-> of my platforms has 3 GPIOs defined, and the table above gives them as
-> type Reset, Power down and Clock enable. I'd assumed from this table
-> that "power down" meant a powerdown GPIO (I.E. the one usually called
-> PWDNB in Omnivision datasheets and "powerdown" in drivers), but the
-> datasheet for the OV2680 doesn't list a separate reset and powerdown
-> pin, but rather a single pin that performs both functions.
+Hi Daniel,
 
-All of them are GPIOs, the question here is how they are actually
-connected on PCB level and I have no answer to that. You have to find
-schematics somewhere.
+thanks for your response!
 
-> Am I wrong to treat that as something that ought to be mapped as a
-> powerdown GPIO to the sensors? Or do you know of any other way to
-> reconcile that discrepancy?
+> Don=E2=80=99t be, I=E2=80=99m sorry. This came out of a SONiC-related pro=
+ject at work. Work
+> got fixed and moved on. I was originally going to keep this an upstream p=
+roject
+> after hours, then fell off the rails.
 
-The GPIOs can go directly to the sensors or be a control pin for
-separate discrete power gates.
-So, we can do one of the following:
- a) present PD GPIO as fixed regulator;
- b) present PD & Reset GPIOs as regulator;
- c) provide them as is to the sensor and sensor driver must do what it
-considers right.
+I understand, happened to me as well. Is it okay to CC you on patches?
+Or are you too far away from it meanwhile?
 
-Since we don't have schematics (yet?) and we have plenty of variations
-of sensors, I would go to c) and update the driver of the affected
-sensor as needed. Because even if you have separate discrete PD for
-one sensor on one platform there is no guarantee that it will be the
-same on another. Providing a "virtual" PD in a sensor that doesn't
-support it is the best choice I think. Let's hear what Sakari and
-other experienced camera sensor developers say.
+> As for v2 =E2=80=94 I still believe the direction is good. The main issue=
+ I
+> had was that I lacked insight into one or more popular-enough
+> commodity bus drivers (amd? nvidia? intel?), for further verification,
+> as opposed to our proprietary accels around here.
 
-My vision is purely based on electrical engineering background,
-experience with existing (not exactly camera) sensor drivers and
-generic cases.
+Real HW setups for testing are a problem, yes. I noticed this, too, when
+I said I fix the existing drivers. I reconsidered. Fixing them would
+result in non-trivial changes which need testing SMBUS_BLOCK_DATA
+transfers. This is too rare, so I'll just focus on the systems I have at
+hand. Digging in deeper, I found there is enough to fix at the core
+level anyhow. I won't be bored.
 
-> Failing that; the only way I can think to handle this is to register
-> proxy GPIO pins assigned to the sensors as you suggested previously, and
-> have them toggle the GPIO's assigned to the INT3472 based on platform
-> specific mapping data (I.E. we register a pin called "reset", which on
-> most platforms just toggles the 0x00 pin, but on this specific platform
-> would drive both 0x00 and 0x01 together. We're already heading that way
-> for the regulator consumer supplies so it's sort of nothing new, but I'd
-> still rather not if it can be avoided.
+> That 1->2 succession you outline below, starting with kernel and kernel-c=
+lients,
+> sounds a lot like what I was missing.
+
+Yeah, I hope it grows the pool of interested people.
+
+All the best,
+
+   Wolfram
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+--vkogqOf2sHV7VnPd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/4Wg8ACgkQFA3kzBSg
+KbbN2BAAk2JXzWAkA5Fgl2hug4N4N62mS/4Lj39AHsneZNb2/pOzwrI1bz+XuY2Z
+WMXmaQyXK6qtOgd+/T8J+MyR0k9K3bcQLZMY2EhSG71YoMsZi6/AZn1yABl5Kh/U
+7WOG5Hv0gWL5bV11JQA2Trwz/MbyZQmp3rme8XPbINCfmg9wUgGo7Wd8AdcKaUii
+mkb0v+Jx+c52j0unwxgRJ61VkX/1EEW3Q7MIezFh7kXBKDZgtaASAbUW6j1JpMYI
+01LPHB1pA3hVcv/KTTokGlYexptcjfId1HMr+Goj7K8jXNnFv16pBSJF4ceqVPeW
+ynJ7SAgbbqlj1an91TXceJ8C+n5rHg+4NvCb4v32iqtqZlIVNjK+G0RceZbEu4Ip
+3nE6kQx0BodtMg6K3ZV09ta0VtbvGtxpgmKDqCHoMd8sD1dClsz6nPziKPft6D8I
+97N0jchE0QU7cpb0FiHYfDZiM3t9jGOi8dT+PfyurGwqYNmeCy0u8UvyxhvtBrmX
+mVR4WQ607ri0UfPcSIqIEsPi2KRjM+jwg3qGTppJC7TuiTtcm90KMPjFFZ2VREL1
+Tlb2So+8wAbRDBHIEjMHPmYbtiFJ67GCqAptEGq7uW+j4G9bjz+a3FwSv95OYlrG
+g0Iy3nb8yfz7D6NPVdG7ipdZP2+y0mxKlGY1/vVUP1DEG76rTvA=
+=WAyJ
+-----END PGP SIGNATURE-----
+
+--vkogqOf2sHV7VnPd--
