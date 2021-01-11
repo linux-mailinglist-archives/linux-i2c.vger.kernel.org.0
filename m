@@ -2,31 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F8A2F1CD9
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 18:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405872F1CF4
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 18:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389859AbhAKRo2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Jan 2021 12:44:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59456 "EHLO mail.kernel.org"
+        id S2389715AbhAKRrg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Jan 2021 12:47:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60422 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389732AbhAKRo2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 Jan 2021 12:44:28 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AF1FC22ADF;
-        Mon, 11 Jan 2021 17:43:46 +0000 (UTC)
+        id S1731491AbhAKRrg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Jan 2021 12:47:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 918FA20738;
+        Mon, 11 Jan 2021 17:46:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610387027;
-        bh=6+/ilvJJLN7TEww9JbHDtpJW8J0ABFB6fdnOEzOK4r8=;
+        s=k20201202; t=1610387215;
+        bh=M5kVK7uF3sGT60+cuOEj9ZXacj6vUP4CkK/QSJuRLx8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nFB3b/0Izl0LF2J1c+1JcukWORbRPjL7BOXwUoKN1RoRXSb4emMMhoYKv723oe7Bx
-         rGYGf6kXaJC1clVuaUkQwgOb+zayO6GKyxFznd7R2M0N7XyoEeq0ZReYJ4D/RTkC0P
-         QAd0QEXLV4qLZrsaU9mFIRLFcVR9t5YezS8FobwDsOlKVzhItuK2GxWr9UITkX+jzn
-         g06gPHzCFAHHYQ0eozc8ErLrxpf7iOooJwkj2UnBBIy9cm9tvJ1Jpx9hacEzod0aON
-         I5pt25He4ENNRfvh1sUy5AUbsqaV8fXIwhmn1bhndiM9iv3rPPAOEv5+haamXa8z2S
-         7rSXtjhAu8ETw==
-Date:   Mon, 11 Jan 2021 23:13:42 +0530
+        b=tyCfU3ThDjQPJZ4eZw7MvG2lkorZbmWu5xZs+sFc1zhVuLiTUNRQSME4ifdtzyWel
+         0UJaDK1NPucuAA1sgO1uhXq5q5KaF5KgHsyWlqUW1WxWcH+KoBgHd2LABE6rzOrOMh
+         w/ZR7DOFkraAF7vZ98WDdVIrntY9NRSWdoG8SbYWjUsMKBZcP8uHtAwLwXjLvloEOt
+         8/nv6QxZR6lGEd/mtMYtY2SjDkB0+lCVgQzhiUpaY+pprwYx+80sOmEyYJ8ZwgYzp9
+         fE7LnQtLKCt647CF8l+as4drdIVFvDvbHnb7Qzwd8xm66/EZT6or2Ro1ftOAopiMm6
+         hjgTvXDQmbS6Q==
+Date:   Mon, 11 Jan 2021 23:16:49 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
         Matthias Kaehlcke <mka@chromium.org>,
         Douglas Anderson <dianders@chromium.org>,
@@ -34,41 +35,39 @@ Cc:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         Amit Pundir <amit.pundir@linaro.org>,
         linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] soc: qcom: geni: move struct geni_wrapper to header
-Message-ID: <20210111174342.GB2771@vkoul-mobl>
+Subject: Re: [PATCH 7/7] arm64: dts: qcom: sdm845: enable dma for spi
+Message-ID: <20210111174649.GC2771@vkoul-mobl>
 References: <20210111151651.1616813-1-vkoul@kernel.org>
- <20210111151651.1616813-3-vkoul@kernel.org>
- <X/xwHeRAs4Cl/efj@builder.lan>
+ <20210111151651.1616813-8-vkoul@kernel.org>
+ <6cc90f43-f2c8-85f7-3d1c-f96468aab196@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <X/xwHeRAs4Cl/efj@builder.lan>
+In-Reply-To: <6cc90f43-f2c8-85f7-3d1c-f96468aab196@somainline.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 11-01-21, 09:34, Bjorn Andersson wrote:
-> On Mon 11 Jan 09:16 CST 2021, Vinod Koul wrote:
+Hi Konrad,
+
+On 11-01-21, 17:04, Konrad Dybcio wrote:
+> Hi,
 > 
-> > I2C geni driver needs to access struct geni_wrapper, so move it to
-> > header.
-> > 
-> 
-> Please tell me more!
-> 
-> Glanced through the other patches and the only user I can find it in
-> patch 5 where you use this to get the struct device * of the wrapper.
+> looks like sdm845-cheza also uses the spi0 bus, which as far as I
+> understand is going to break with the GPI DMA disabled. Perhaps it
+> should also be enabled over there?
 
-That is correct. The dma mapping needs to be done with SE device.
+If it is working without GPI enabled, it would work.. GPI for QUP is
+something that requires firmware and would have to be enabled by
+firmware
 
-> At least in the DT case this would be [SE]->dev->parent, perhaps we
-> can't rely on this due to ACPI?
+> Actually, is there a point in disabling DMA for BLSPs/QUPs in the SoC
+> DTSI? I don't think any platform/vendor firmware disables entire
+> hosts..
 
-I would have missed that then, but I somehow recall trying that.. Though
-I have not looked into ACPI..
+Since DMA support may not be available on certain targets (firmware
+support), so enabling per board would make sense
 
-Given that we would need to worry about ACPI, do you recommend using
-parent or keeping this
-
+Thanks
 -- 
 ~Vinod
