@@ -2,83 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0132F1A53
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 16:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D612F1A9D
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 17:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387731AbhAKP7J (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Jan 2021 10:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731804AbhAKP7J (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Jan 2021 10:59:09 -0500
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1704EC061786;
-        Mon, 11 Jan 2021 07:58:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-         s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
-        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=7Po4id9eWkY7uvToizGBFW5yEu2kvXRu4dj6jXQtgHo=; b=ym6Fttri1WKbSAKbRIudWCv2rr
-        eLJkUbLVQ60OpUYu48+3KrSg7PD+BhBhyQ4QEdpmIv9+FsLCLh/mrf3qORhjseOJ2SYh0VeL2sVmn
-        dx8As0clkznvKlAizDsQzTS9LO0daZvJxmaIwE6Md2MjR+lsI3EmraL0ihu3noOs0y0d0Q3UGlYgG
-        QaErLfo8YkkFaZRDLfCNKliqu7Xag1ftCDxVcr+UdxXUMzk8X6hkJ9RT9N40shXOSnaA46Mlnchky
-        1ljxHO1jjp8lhnaRoOBjYU2Y8+WuSjAFHw0KTbQQ6L6BTiRBq3/Y5Tv4zS3obWLD9MU9tmfK/CSsA
-        bTe55VaQ==;
-Received: from dsl-hkibng22-54f986-236.dhcp.inet.fi ([84.249.134.236] helo=toshino.localdomain)
-        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <mperttunen@nvidia.com>)
-        id 1kyzaN-0005h1-89; Mon, 11 Jan 2021 17:58:27 +0200
-From:   Mikko Perttunen <mperttunen@nvidia.com>
-To:     thierry.reding@gmail.com, jonathanh@nvidia.com
-Cc:     talho@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Muhammed Fazal <mfazale@nvidia.com>, stable@vger.kernel.org,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Subject: [PATCH v2] i2c: tegra-bpmp: ignore DMA safe buffer flag
-Date:   Mon, 11 Jan 2021 17:58:16 +0200
-Message-Id: <20210111155816.3656820-1-mperttunen@nvidia.com>
-X-Mailer: git-send-email 2.30.0
+        id S1731691AbhAKQMK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Jan 2021 11:12:10 -0500
+Received: from m-r2.th.seeweb.it ([5.144.164.171]:48859 "EHLO
+        m-r2.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730599AbhAKQMK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Jan 2021 11:12:10 -0500
+X-Greylist: delayed 380 seconds by postgrey-1.27 at vger.kernel.org; Mon, 11 Jan 2021 11:12:08 EST
+Received: from [192.168.1.101] (abaf53.neoplus.adsl.tpnet.pl [83.6.169.53])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E88673F1FD;
+        Mon, 11 Jan 2021 17:04:50 +0100 (CET)
+Subject: Re: [PATCH 7/7] arm64: dts: qcom: sdm845: enable dma for spi
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210111151651.1616813-1-vkoul@kernel.org>
+ <20210111151651.1616813-8-vkoul@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+Message-ID: <6cc90f43-f2c8-85f7-3d1c-f96468aab196@somainline.org>
+Date:   Mon, 11 Jan 2021 17:04:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 84.249.134.236
-X-SA-Exim-Mail-From: mperttunen@nvidia.com
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+In-Reply-To: <20210111151651.1616813-8-vkoul@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Muhammed Fazal <mfazale@nvidia.com>
+Hi,
 
-Ignore I2C_M_DMA_SAFE flag as it does not make a difference
-for bpmp-i2c, but causes -EINVAL to be returned for valid
-transactions.
+looks like sdm845-cheza also uses the spi0 bus, which as far as I understand is going to break with the GPI DMA disabled. Perhaps it should also be enabled over there?
 
-Signed-off-by: Muhammed Fazal <mfazale@nvidia.com>
-Cc: stable@vger.kernel.org # v4.19+
-Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
----
-v2:
-- Remove unnecessary check for if the bit is set
----
- drivers/i2c/busses/i2c-tegra-bpmp.c | 2 ++
- 1 file changed, 2 insertions(+)
+Actually, is there a point in disabling DMA for BLSPs/QUPs in the SoC DTSI? I don't think any platform/vendor firmware disables entire hosts..
 
-diff --git a/drivers/i2c/busses/i2c-tegra-bpmp.c b/drivers/i2c/busses/i2c-tegra-bpmp.c
-index ec7a7e917edd..aa6685cabde3 100644
---- a/drivers/i2c/busses/i2c-tegra-bpmp.c
-+++ b/drivers/i2c/busses/i2c-tegra-bpmp.c
-@@ -80,6 +80,8 @@ static int tegra_bpmp_xlate_flags(u16 flags, u16 *out)
- 		flags &= ~I2C_M_RECV_LEN;
- 	}
- 
-+	flags &= ~I2C_M_DMA_SAFE;
-+
- 	return (flags != 0) ? -EINVAL : 0;
- }
- 
--- 
-2.30.0
+
+Konrad
 
