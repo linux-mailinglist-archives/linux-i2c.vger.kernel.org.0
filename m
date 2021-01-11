@@ -2,55 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D612F1A9D
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 17:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA792F1A8A
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 17:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731691AbhAKQMK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Jan 2021 11:12:10 -0500
-Received: from m-r2.th.seeweb.it ([5.144.164.171]:48859 "EHLO
-        m-r2.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730599AbhAKQMK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Jan 2021 11:12:10 -0500
-X-Greylist: delayed 380 seconds by postgrey-1.27 at vger.kernel.org; Mon, 11 Jan 2021 11:12:08 EST
-Received: from [192.168.1.101] (abaf53.neoplus.adsl.tpnet.pl [83.6.169.53])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E88673F1FD;
-        Mon, 11 Jan 2021 17:04:50 +0100 (CET)
-Subject: Re: [PATCH 7/7] arm64: dts: qcom: sdm845: enable dma for spi
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210111151651.1616813-1-vkoul@kernel.org>
- <20210111151651.1616813-8-vkoul@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-Message-ID: <6cc90f43-f2c8-85f7-3d1c-f96468aab196@somainline.org>
-Date:   Mon, 11 Jan 2021 17:04:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S2387850AbhAKQJX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Jan 2021 11:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730554AbhAKQJW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Jan 2021 11:09:22 -0500
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B48FC061794;
+        Mon, 11 Jan 2021 08:08:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=mBrxEkbUIvCU64g8yLzd4fzQlEvtB3Lv42lSlfsc8rI=; b=u3fAoA6ZOBhFbdIhIm47DZPUXP
+        5U0BaI8pWeNHbfyBZ35bXAw8ApyZOvA5IF1b/PrIO7g8nce9J49Kl/azhi04l4hRjDIewHWnuFJjM
+        MGT5xAdMGhG9unjyXE8u9JDk0owmbHk8DifmpkgeVMa4q7hxzN5wgvJ+WKn8kaNPDKfVvMLBbyn2q
+        0Clw6xue5Pd7VgQ3xN9q3UJinbsU8jgwmFMzkvjMDY0YrM76I7EhlWclaCvaxWAWlVCrxd/QibIxm
+        NhthxsLqkWJ2GVvIINCSyyex4PnqqZW2HuxsvS1LqPFwEja0UqPgL/ylFGuY9huyyfjuO0Pr+oRP9
+        moT4ZIJg==;
+Received: from dsl-hkibng22-54f986-236.dhcp.inet.fi ([84.249.134.236] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <mperttunen@nvidia.com>)
+        id 1kyzkC-000879-FQ; Mon, 11 Jan 2021 18:08:36 +0200
+From:   Mikko Perttunen <mperttunen@nvidia.com>
+To:     ldewangan@nvidia.com, digetx@gmail.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, wsa@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mikko Perttunen <mperttunen@nvidia.com>, stable@vger.kernel.org
+Subject: [PATCH v2] i2c: tegra: Wait for config load atomically while in ISR
+Date:   Mon, 11 Jan 2021 18:08:32 +0200
+Message-Id: <20210111160832.3669873-1-mperttunen@nvidia.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-In-Reply-To: <20210111151651.1616813-8-vkoul@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 84.249.134.236
+X-SA-Exim-Mail-From: mperttunen@nvidia.com
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Upon a communication error, the interrupt handler can call
+tegra_i2c_disable_packet_mode. This causes a sleeping poll to happen
+unless the current transaction was marked atomic. Fix this by
+making the poll happen atomically if we are in an IRQ.
 
-looks like sdm845-cheza also uses the spi0 bus, which as far as I understand is going to break with the GPI DMA disabled. Perhaps it should also be enabled over there?
+This matches the behavior prior to the patch mentioned
+in the Fixes tag.
 
-Actually, is there a point in disabling DMA for BLSPs/QUPs in the SoC DTSI? I don't think any platform/vendor firmware disables entire hosts..
+Fixes: ede2299f7101 ("i2c: tegra: Support atomic transfers")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+---
+v2:
+* Use in_irq() instead of passing a flag from the ISR.
+  Thanks to Dmitry for the suggestion.
+* Update commit message.
+---
+ drivers/i2c/busses/i2c-tegra.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Konrad
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 6f08c0c3238d..0727383f4940 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -533,7 +533,7 @@ static int tegra_i2c_poll_register(struct tegra_i2c_dev *i2c_dev,
+ 	void __iomem *addr = i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg);
+ 	u32 val;
+ 
+-	if (!i2c_dev->atomic_mode)
++	if (!i2c_dev->atomic_mode && !in_irq())
+ 		return readl_relaxed_poll_timeout(addr, val, !(val & mask),
+ 						  delay_us, timeout_us);
+ 
+-- 
+2.30.0
 
