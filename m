@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C0D2F1964
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 16:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEB52F1966
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 16:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732793AbhAKPSC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Jan 2021 10:18:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53966 "EHLO mail.kernel.org"
+        id S1733035AbhAKPSI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Jan 2021 10:18:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732254AbhAKPR7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 Jan 2021 10:17:59 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6CBAB229CA;
-        Mon, 11 Jan 2021 15:17:11 +0000 (UTC)
+        id S1732254AbhAKPSI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Jan 2021 10:18:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0CA0622A83;
+        Mon, 11 Jan 2021 15:17:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610378239;
-        bh=63qwzC9c0LlBIqqdfrjnZd4HsZDhESbEoY3niqpxfyg=;
+        s=k20201202; t=1610378247;
+        bh=mgPG975hZ/zT7DR9gnPDc3VlS/vIBBlXErvGoIyOQWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y3CO8hkTtE7BZXBnSJnv29JeOD5i2ZnKkojIQfA/pB79i6sv53lWcObDppbw5u62r
-         CpydZDc2Lx3IwOsWEHG+RMIRJpGKr3AIa7/gtltO1UGqxXByZ1XE6LcLyENYrx/flI
-         GhfF/72cyGL5ffo/FZQiPdGo6u7yrTiVA6s1H4PgX9LlIZy8XH6q/RH+FQFLwRW2hG
-         yZaEmvIDknCa93OFiz0BYyeXaSItoGPLyV5XO012LERrAjJV2Ejudf3vVnXkOlh18Y
-         FdsnLzYUo5be1HmmJRLHka6Sebu/fihtHqFLQd+6ntNy+S5zkLCG58SPE9M5IYUy5+
-         PZE5T3slHpppg==
+        b=CEU/R6qRPr5KhtJFMPm17zQv7HLG6IaERWmPfyAX+1j3ziELESpn8Jfmv38x6wngQ
+         QVSXOnFmqxwcjWSEocK7IwNRO6mWPo8EOLXTcH7spsoKGiBGxZ+Cxa1dO68MVN8EAr
+         zDB5+vsWo9uc42skVoiaqbGeUGXvuT7ugiryLoIXn1U74+ICw1vHy1bgATy2Ui8UNv
+         kdMnNc8xjmrJiFLzdYxSt3W65LYJdoixUPIsOiKVetdIHK9DNDyjEOpvjOMIxQaxZW
+         NxDVhfhUjP3lEcja809HaEWeZ//NekLEWwN5W0wAy5+mHh3bw7ZvuUiZCB1O+EMKAt
+         U42i/cUB8ctew==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
@@ -34,9 +34,9 @@ Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
         Amit Pundir <amit.pundir@linaro.org>,
         linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/7] soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
-Date:   Mon, 11 Jan 2021 20:46:45 +0530
-Message-Id: <20210111151651.1616813-2-vkoul@kernel.org>
+Subject: [PATCH 2/7] soc: qcom: geni: move struct geni_wrapper to header
+Date:   Mon, 11 Jan 2021 20:46:46 +0530
+Message-Id: <20210111151651.1616813-3-vkoul@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210111151651.1616813-1-vkoul@kernel.org>
 References: <20210111151651.1616813-1-vkoul@kernel.org>
@@ -46,39 +46,67 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-GENI_IF_DISABLE_RO is used by geni spi driver as well to check the
-status if GENI, so move this to common header qcom-geni-se.h
+I2C geni driver needs to access struct geni_wrapper, so move it to
+header.
 
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- drivers/soc/qcom/qcom-geni-se.c | 1 -
- include/linux/qcom-geni-se.h    | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ drivers/soc/qcom/qcom-geni-se.c | 15 ---------------
+ include/linux/qcom-geni-se.h    | 15 +++++++++++++++
+ 2 files changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-index f42954e2c98e..285ed86c2bab 100644
+index 285ed86c2bab..a3868228ea05 100644
 --- a/drivers/soc/qcom/qcom-geni-se.c
 +++ b/drivers/soc/qcom/qcom-geni-se.c
-@@ -108,7 +108,6 @@ static struct geni_wrapper *earlycon_wrapper;
- #define GENI_OUTPUT_CTRL		0x24
- #define GENI_CGC_CTRL			0x28
- #define GENI_CLK_CTRL_RO		0x60
--#define GENI_IF_DISABLE_RO		0x64
- #define GENI_FW_S_REVISION_RO		0x6c
- #define SE_GENI_BYTE_GRAN		0x254
- #define SE_GENI_TX_PACKING_CFG0		0x260
+@@ -79,21 +79,6 @@
+  */
+ 
+ #define MAX_CLK_PERF_LEVEL 32
+-#define NUM_AHB_CLKS 2
+-
+-/**
+- * struct geni_wrapper - Data structure to represent the QUP Wrapper Core
+- * @dev:		Device pointer of the QUP wrapper core
+- * @base:		Base address of this instance of QUP wrapper core
+- * @ahb_clks:		Handle to the primary & secondary AHB clocks
+- * @to_core:		Core ICC path
+- */
+-struct geni_wrapper {
+-	struct device *dev;
+-	void __iomem *base;
+-	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+-	struct geni_icc_path to_core;
+-};
+ 
+ static const char * const icc_path_names[] = {"qup-core", "qup-config",
+ 						"qup-memory"};
 diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-index ec2ad4b0fe14..e3f4b16040d9 100644
+index e3f4b16040d9..cb4e40908f9f 100644
 --- a/include/linux/qcom-geni-se.h
 +++ b/include/linux/qcom-geni-se.h
-@@ -65,6 +65,7 @@ struct geni_se {
- #define SE_GENI_STATUS			0x40
- #define GENI_SER_M_CLK_CFG		0x48
- #define GENI_SER_S_CLK_CFG		0x4c
-+#define GENI_IF_DISABLE_RO		0x64
- #define GENI_FW_REVISION_RO		0x68
- #define SE_GENI_CLK_SEL			0x7c
- #define SE_GENI_DMA_MODE_EN		0x258
+@@ -38,6 +38,21 @@ struct geni_icc_path {
+ 	unsigned int avg_bw;
+ };
+ 
++#define NUM_AHB_CLKS 2
++
++/**
++ * @struct geni_wrapper - Data structure to represent the QUP Wrapper Core
++ * @dev:		Device pointer of the QUP wrapper core
++ * @base:		Base address of this instance of QUP wrapper core
++ * @ahb_clks:		Handle to the primary & secondary AHB clocks
++ */
++struct geni_wrapper {
++	struct device *dev;
++	void __iomem *base;
++	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
++	struct geni_icc_path to_core;
++};
++
+ /**
+  * struct geni_se - GENI Serial Engine
+  * @base:		Base Address of the Serial Engine's register block
 -- 
 2.26.2
 
