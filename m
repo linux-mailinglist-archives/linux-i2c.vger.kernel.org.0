@@ -2,177 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DCD2F1950
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 16:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3AE2F195C
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 16:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730179AbhAKPPm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Jan 2021 10:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729295AbhAKPPl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Jan 2021 10:15:41 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA04C061786;
-        Mon, 11 Jan 2021 07:15:01 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id o19so78906lfo.1;
-        Mon, 11 Jan 2021 07:15:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=AjtuZDdcWOc1/aa559ej/SsGKfJvStJlSBlf/+tuqFA=;
-        b=IDPaeXPlFe/R9pS10V9hjQdlj+S47fDehlQSxYLZ7jj/yBD7pn3TAw+7g+/3Iw/Dco
-         b9pe7BZE9sPZoZfqLZLh3xoCpKeMvutiK7qcFt2aWSOktto9q1nSiZL4dtY5dOR3HypW
-         gwfGRWRagM48GipIVOgvPpX1MTGgeNVLmsVypdwNQFLIlh5l5h6hmGW7AA/DCf0v8Hkz
-         UrO8uEYYlBeinK2HxQS//MpYUKTaoHKClbczwORmsA7vmu5r3oRPxOnVn8abTeThC1u0
-         mXXOlhmRgdTyT3HsoP/i/oXZ52zE+Ox53uWjCIQ2p1HFEyC+Ek6RmzbSRXjRSUr7mrD+
-         BZ9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=AjtuZDdcWOc1/aa559ej/SsGKfJvStJlSBlf/+tuqFA=;
-        b=sAsa4iVCHAW/FvwyJxOeW4x3s+71FvSZOn6dtmV4XcaTO/3ecQwNuvnAFHNR2TTwP/
-         CZHUL45qa3swJyuXS+t8mhtoI6CYRlZ3dHO6th7kYhjJWzPQGWBsAWALr9WfkmQVYOby
-         yzxVN+G0tt4aLV4TbRWaI2dUCO9qqdh3RZXPDWbtjQXmu16GDKPyZQuCO2oh6HO1lT4L
-         77xAf8wqzr8oaueGGgg5lGC1gvzuFKptpjcSOWE98SIH313k4KL4WxIpVhaDVcvs9Ujb
-         TB3IiA7rWjQyHo7DkLDZUS+Nx9VrimED+0wElbg2E/Ii5WdUtI+F3lRYTMjL1CxyyqNO
-         vPRw==
-X-Gm-Message-State: AOAM531CunFpyTGY9LFPoA5JU68NINHV6ZSktw4jFoP6pJnPaBVT5caX
-        ljsTiX0Vtl7YHBG7H31Ic6Dkya095Ow=
-X-Google-Smtp-Source: ABdhPJwYAi44DlFlpntPHSRlq0LUv5Am5FXiHbfev4FoJCgQ1QQ7fNoxfmGX4Nl6deNcgFvTcxIHbQ==
-X-Received: by 2002:a19:e210:: with SMTP id z16mr35086lfg.640.1610378099532;
-        Mon, 11 Jan 2021 07:14:59 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id y23sm3484025ljc.119.2021.01.11.07.14.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jan 2021 07:14:58 -0800 (PST)
-Subject: Re: [PATCH] i2c: tegra: Wait for config load atomically while in ISR
-To:     Mikko Perttunen <mperttunen@nvidia.com>, ldewangan@nvidia.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, wsa@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20210111135547.3613092-1-mperttunen@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b7f69fb9-2960-f994-51d8-afd86af26bba@gmail.com>
-Date:   Mon, 11 Jan 2021 18:14:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        id S1731713AbhAKPRv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Jan 2021 10:17:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53920 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728444AbhAKPRu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Jan 2021 10:17:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DDB6422795;
+        Mon, 11 Jan 2021 15:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610378230;
+        bh=QqIEqDXkBOPauIfpjp6CQHoxGmT+IBo0bjk1fPqQook=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PxuROWJgIsfrtu8forYfa8hejmiYwSla+uXHR2V933YSPJwboBxAYKqW2aQ+c/SJK
+         GXQmEJVaduwCJQSqygrtNt+8FzINha1ExrFFF8t4khOGuQz1qzCduj5qI6zb9J3UOL
+         Rex/sXPobf4TxXfmRI4Ts1ibUc1fBFpYUQYrgqWJf7ZrQcepko8Sv2D0ONjAtSQ3RL
+         VXqAem+9U2EUUxX3/JXMi4VBD5A10xWiu7ZZiiWmqscakDZmiIwHFp13hcAdftZ0M8
+         xBNKaNYTRdVCPyIewaKgdkPDQeF4fnnfWP5Q5r1ytzbv8k8ONlxbpt7A7F5Tgvwh3X
+         g/YAZQR8BhKaw==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] Add and enable GPI DMA users
+Date:   Mon, 11 Jan 2021 20:46:44 +0530
+Message-Id: <20210111151651.1616813-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20210111135547.3613092-1-mperttunen@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-11.01.2021 16:55, Mikko Perttunen пишет:
-> Upon a communication error, the interrupt handler can call
-> tegra_i2c_disable_packet_mode. This causes a sleeping poll to happen
-> unless the current transaction was marked atomic. Since
-> tegra_i2c_disable_packet_mode is only called from the interrupt path,
-> make it use atomic waiting always.
-> 
-> Fixes: ede2299f7101 ("i2c: tegra: Support atomic transfers")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
-> ---
-> This fixes constant spew for me while HDMI is connected to a
-> powered off television.
-> 
->  drivers/i2c/busses/i2c-tegra.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-> index 6f08c0c3238d..4a7ff1840565 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -528,12 +528,12 @@ static void tegra_i2c_vi_init(struct tegra_i2c_dev *i2c_dev)
->  
->  static int tegra_i2c_poll_register(struct tegra_i2c_dev *i2c_dev,
->  				   u32 reg, u32 mask, u32 delay_us,
-> -				   u32 timeout_us)
-> +				   u32 timeout_us, bool force_atomic)
->  {
->  	void __iomem *addr = i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg);
->  	u32 val;
->  
-> -	if (!i2c_dev->atomic_mode)
-> +	if (!i2c_dev->atomic_mode && !force_atomic)
->  		return readl_relaxed_poll_timeout(addr, val, !(val & mask),
->  						  delay_us, timeout_us);
->  
-> @@ -560,7 +560,7 @@ static int tegra_i2c_flush_fifos(struct tegra_i2c_dev *i2c_dev)
->  	val |= mask;
->  	i2c_writel(i2c_dev, val, offset);
->  
-> -	err = tegra_i2c_poll_register(i2c_dev, offset, mask, 1000, 1000000);
-> +	err = tegra_i2c_poll_register(i2c_dev, offset, mask, 1000, 1000000, false);
->  	if (err) {
->  		dev_err(i2c_dev->dev, "failed to flush FIFO\n");
->  		return err;
-> @@ -569,7 +569,7 @@ static int tegra_i2c_flush_fifos(struct tegra_i2c_dev *i2c_dev)
->  	return 0;
->  }
->  
-> -static int tegra_i2c_wait_for_config_load(struct tegra_i2c_dev *i2c_dev)
-> +static int tegra_i2c_wait_for_config_load(struct tegra_i2c_dev *i2c_dev, bool force_atomic)
->  {
->  	int err;
->  
-> @@ -579,7 +579,7 @@ static int tegra_i2c_wait_for_config_load(struct tegra_i2c_dev *i2c_dev)
->  	i2c_writel(i2c_dev, I2C_MSTR_CONFIG_LOAD, I2C_CONFIG_LOAD);
->  
->  	err = tegra_i2c_poll_register(i2c_dev, I2C_CONFIG_LOAD, 0xffffffff,
-> -				      1000, I2C_CONFIG_LOAD_TIMEOUT);
-> +				      1000, I2C_CONFIG_LOAD_TIMEOUT, force_atomic);
->  	if (err) {
->  		dev_err(i2c_dev->dev, "failed to load config\n");
->  		return err;
-> @@ -684,7 +684,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
->  	if (i2c_dev->multimaster_mode && i2c_dev->hw->has_slcg_override_reg)
->  		i2c_writel(i2c_dev, I2C_MST_CORE_CLKEN_OVR, I2C_CLKEN_OVERRIDE);
->  
-> -	err = tegra_i2c_wait_for_config_load(i2c_dev);
-> +	err = tegra_i2c_wait_for_config_load(i2c_dev, false);
->  	if (err)
->  		return err;
->  
-> @@ -707,7 +707,7 @@ static int tegra_i2c_disable_packet_mode(struct tegra_i2c_dev *i2c_dev)
->  	if (cnfg & I2C_CNFG_PACKET_MODE_EN)
->  		i2c_writel(i2c_dev, cnfg & ~I2C_CNFG_PACKET_MODE_EN, I2C_CNFG);
->  
-> -	return tegra_i2c_wait_for_config_load(i2c_dev);
-> +	return tegra_i2c_wait_for_config_load(i2c_dev, true);
->  }
->  
->  static int tegra_i2c_empty_rx_fifo(struct tegra_i2c_dev *i2c_dev)
-> @@ -1090,7 +1090,7 @@ static int tegra_i2c_issue_bus_clear(struct i2c_adapter *adap)
->  	      I2C_BC_TERMINATE;
->  	i2c_writel(i2c_dev, val, I2C_BUS_CLEAR_CNFG);
->  
-> -	err = tegra_i2c_wait_for_config_load(i2c_dev);
-> +	err = tegra_i2c_wait_for_config_load(i2c_dev, false);
->  	if (err)
->  		return err;
->  
-> 
+Hello,
 
-What about a simpler variant:
+This series add the GPI DMA in qcom geni spi and i2c drivers. For this we
+first need to move GENI_IF_DISABLE_RO and struct geni_wrapper to common
+headers and then add support for gpi dma in geni driver.
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 6f08c0c3238d..0727383f4940 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -533,7 +533,7 @@ static int tegra_i2c_poll_register(struct
-tegra_i2c_dev *i2c_dev,
- 	void __iomem *addr = i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg);
- 	u32 val;
+Then we add spi and i2c geni driver changes to support this DMA.
 
--	if (!i2c_dev->atomic_mode)
-+	if (!i2c_dev->atomic_mode && !in_irq())
- 		return readl_relaxed_poll_timeout(addr, val, !(val & mask),
- 						  delay_us, timeout_us);
+Lastly, add the GPI dma nodes and enable dma for spi found in Rb3 board.
+
+To merge this, we could merge all thru qcom tree with ack on spi/i2c.
+
+Vinod Koul (7):
+  soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
+  soc: qcom: geni: move struct geni_wrapper to header
+  soc: qcom: geni: Add support for gpi dma
+  spi: spi-geni-qcom: Add support for GPI dma
+  i2c: qcom-geni: Add support for GPI DMA
+  arm64: dts: qcom: sdm845: Add gpi dma node
+  arm64: dts: qcom: sdm845: enable dma for spi
+
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts |   4 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi       |  57 +++
+ drivers/i2c/busses/i2c-qcom-geni.c         | 246 ++++++++++++-
+ drivers/soc/qcom/qcom-geni-se.c            |  55 ++-
+ drivers/spi/spi-geni-qcom.c                | 395 ++++++++++++++++++++-
+ include/linux/qcom-geni-se.h               |  20 ++
+ 6 files changed, 747 insertions(+), 30 deletions(-)
+
+Thanks
+-- 
+2.26.2
 
