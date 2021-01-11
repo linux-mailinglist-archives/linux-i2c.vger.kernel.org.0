@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3AE2F195C
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 16:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C0D2F1964
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Jan 2021 16:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731713AbhAKPRv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Jan 2021 10:17:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53920 "EHLO mail.kernel.org"
+        id S1732793AbhAKPSC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Jan 2021 10:18:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728444AbhAKPRu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 Jan 2021 10:17:50 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DDB6422795;
-        Mon, 11 Jan 2021 15:17:03 +0000 (UTC)
+        id S1732254AbhAKPR7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Jan 2021 10:17:59 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6CBAB229CA;
+        Mon, 11 Jan 2021 15:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610378230;
-        bh=QqIEqDXkBOPauIfpjp6CQHoxGmT+IBo0bjk1fPqQook=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PxuROWJgIsfrtu8forYfa8hejmiYwSla+uXHR2V933YSPJwboBxAYKqW2aQ+c/SJK
-         GXQmEJVaduwCJQSqygrtNt+8FzINha1ExrFFF8t4khOGuQz1qzCduj5qI6zb9J3UOL
-         Rex/sXPobf4TxXfmRI4Ts1ibUc1fBFpYUQYrgqWJf7ZrQcepko8Sv2D0ONjAtSQ3RL
-         VXqAem+9U2EUUxX3/JXMi4VBD5A10xWiu7ZZiiWmqscakDZmiIwHFp13hcAdftZ0M8
-         xBNKaNYTRdVCPyIewaKgdkPDQeF4fnnfWP5Q5r1ytzbv8k8ONlxbpt7A7F5Tgvwh3X
-         g/YAZQR8BhKaw==
+        s=k20201202; t=1610378239;
+        bh=63qwzC9c0LlBIqqdfrjnZd4HsZDhESbEoY3niqpxfyg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Y3CO8hkTtE7BZXBnSJnv29JeOD5i2ZnKkojIQfA/pB79i6sv53lWcObDppbw5u62r
+         CpydZDc2Lx3IwOsWEHG+RMIRJpGKr3AIa7/gtltO1UGqxXByZ1XE6LcLyENYrx/flI
+         GhfF/72cyGL5ffo/FZQiPdGo6u7yrTiVA6s1H4PgX9LlIZy8XH6q/RH+FQFLwRW2hG
+         yZaEmvIDknCa93OFiz0BYyeXaSItoGPLyV5XO012LERrAjJV2Ejudf3vVnXkOlh18Y
+         FdsnLzYUo5be1HmmJRLHka6Sebu/fihtHqFLQd+6ntNy+S5zkLCG58SPE9M5IYUy5+
+         PZE5T3slHpppg==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
@@ -34,46 +34,51 @@ Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
         Amit Pundir <amit.pundir@linaro.org>,
         linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/7] Add and enable GPI DMA users
-Date:   Mon, 11 Jan 2021 20:46:44 +0530
-Message-Id: <20210111151651.1616813-1-vkoul@kernel.org>
+Subject: [PATCH 1/7] soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
+Date:   Mon, 11 Jan 2021 20:46:45 +0530
+Message-Id: <20210111151651.1616813-2-vkoul@kernel.org>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210111151651.1616813-1-vkoul@kernel.org>
+References: <20210111151651.1616813-1-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
+GENI_IF_DISABLE_RO is used by geni spi driver as well to check the
+status if GENI, so move this to common header qcom-geni-se.h
 
-This series add the GPI DMA in qcom geni spi and i2c drivers. For this we
-first need to move GENI_IF_DISABLE_RO and struct geni_wrapper to common
-headers and then add support for gpi dma in geni driver.
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ drivers/soc/qcom/qcom-geni-se.c | 1 -
+ include/linux/qcom-geni-se.h    | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-Then we add spi and i2c geni driver changes to support this DMA.
-
-Lastly, add the GPI dma nodes and enable dma for spi found in Rb3 board.
-
-To merge this, we could merge all thru qcom tree with ack on spi/i2c.
-
-Vinod Koul (7):
-  soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
-  soc: qcom: geni: move struct geni_wrapper to header
-  soc: qcom: geni: Add support for gpi dma
-  spi: spi-geni-qcom: Add support for GPI dma
-  i2c: qcom-geni: Add support for GPI DMA
-  arm64: dts: qcom: sdm845: Add gpi dma node
-  arm64: dts: qcom: sdm845: enable dma for spi
-
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts |   4 +
- arch/arm64/boot/dts/qcom/sdm845.dtsi       |  57 +++
- drivers/i2c/busses/i2c-qcom-geni.c         | 246 ++++++++++++-
- drivers/soc/qcom/qcom-geni-se.c            |  55 ++-
- drivers/spi/spi-geni-qcom.c                | 395 ++++++++++++++++++++-
- include/linux/qcom-geni-se.h               |  20 ++
- 6 files changed, 747 insertions(+), 30 deletions(-)
-
-Thanks
+diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+index f42954e2c98e..285ed86c2bab 100644
+--- a/drivers/soc/qcom/qcom-geni-se.c
++++ b/drivers/soc/qcom/qcom-geni-se.c
+@@ -108,7 +108,6 @@ static struct geni_wrapper *earlycon_wrapper;
+ #define GENI_OUTPUT_CTRL		0x24
+ #define GENI_CGC_CTRL			0x28
+ #define GENI_CLK_CTRL_RO		0x60
+-#define GENI_IF_DISABLE_RO		0x64
+ #define GENI_FW_S_REVISION_RO		0x6c
+ #define SE_GENI_BYTE_GRAN		0x254
+ #define SE_GENI_TX_PACKING_CFG0		0x260
+diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
+index ec2ad4b0fe14..e3f4b16040d9 100644
+--- a/include/linux/qcom-geni-se.h
++++ b/include/linux/qcom-geni-se.h
+@@ -65,6 +65,7 @@ struct geni_se {
+ #define SE_GENI_STATUS			0x40
+ #define GENI_SER_M_CLK_CFG		0x48
+ #define GENI_SER_S_CLK_CFG		0x4c
++#define GENI_IF_DISABLE_RO		0x64
+ #define GENI_FW_REVISION_RO		0x68
+ #define SE_GENI_CLK_SEL			0x7c
+ #define SE_GENI_DMA_MODE_EN		0x258
 -- 
 2.26.2
 
