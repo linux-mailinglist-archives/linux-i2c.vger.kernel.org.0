@@ -2,70 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9C72F28F3
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jan 2021 08:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4ED92F2A5F
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jan 2021 09:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392007AbhALHcf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 Jan 2021 02:32:35 -0500
-Received: from bmailout1.hostsharing.net ([83.223.95.100]:43139 "EHLO
-        bmailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391921AbhALHcf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jan 2021 02:32:35 -0500
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 77F5E300002AA;
-        Tue, 12 Jan 2021 08:31:52 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 68CA219B9; Tue, 12 Jan 2021 08:31:52 +0100 (CET)
-Date:   Tue, 12 Jan 2021 08:31:52 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] spi: spi-geni-qcom: Add support for GPI dma
-Message-ID: <20210112073152.GA11056@wunner.de>
-References: <20210111151651.1616813-1-vkoul@kernel.org>
- <20210111151651.1616813-5-vkoul@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210111151651.1616813-5-vkoul@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S2392378AbhALIx7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 12 Jan 2021 03:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729189AbhALIx7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jan 2021 03:53:59 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2CEC061575;
+        Tue, 12 Jan 2021 00:53:18 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id 15so992699pgx.7;
+        Tue, 12 Jan 2021 00:53:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=iCD56C5pg1d1NTNumNDFp4t2vfpUV33Zv3uz34vtHcM=;
+        b=cgvc90vIzF3OIyMlOfnqqxO/AsGLIEc5lSv8L3t2RrsXjaJSpeCOzyADwRMLDX80mh
+         XpILvChB1UGanSwSh6JXbZ8EScoCziyl+K42gASbMI+uL3K0M5xenZza2PmsE8rxiewr
+         RmrdDkT78NsO6+6ElPSNuO05ompOuvhNXk0PiqqbSUs27UsWrZIvvWL1WFTD5Es//tkj
+         /REpahA1UzM1SenWXb0wydnkdyTr1V3jNmT/sK4JbxNp5RolCN6t4fWA8PWmch0bwevM
+         5Pm0JULrnTj4LU7tpifvD5+Yq4FbhTHKF9P8iL02bH7IJIP8r55DIomBY10uwBILvvXi
+         YBOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=iCD56C5pg1d1NTNumNDFp4t2vfpUV33Zv3uz34vtHcM=;
+        b=qrsnneYKzWKAzcioR+UyKw2l0q8J38Cwnv7iiCbNZ/A64XpsMAag1VtB/VNAUdXPMP
+         fUQfu48YqAmLHnHkm0xUUssscB1ERbsMsWW4xj0AmHDotVlWXdEaPF63N/q5IICRnAzY
+         /a6AGWkKfLqW2q3v5w/hiGh0io/pOGy5oRw35N5UpO1VilvVTj7vfxgCsJ8IwCmRyGth
+         qHavq66stWXidFCd4Nuh5m+ihfJKB9eXt4NvAfltaAMwh6LfLNxc642dTx5kV4HpvaAb
+         6cpIHfksDDowJHJKPNGzhYoqaGjKfqMNGQ4f7uDcqIkrbgedsVYJG0FkXfERyRDSaFaj
+         fRLQ==
+X-Gm-Message-State: AOAM533bm9jaDHbUtzIBenkLCkxg8aBHyTx+H1/91frtYMPd3fiO1uiN
+        3p7m+V27og4kl+j5GPBFLXQ=
+X-Google-Smtp-Source: ABdhPJwWcJw4BGKctgBn3fXpdsTZXyGdlSBNAKK3KdVpgrKCr7T/XRv51DVD9EnvtC9WsP84zj53Ww==
+X-Received: by 2002:a63:d246:: with SMTP id t6mr3727099pgi.283.1610441598288;
+        Tue, 12 Jan 2021 00:53:18 -0800 (PST)
+Received: from localhost.localdomain ([178.236.46.205])
+        by smtp.gmail.com with ESMTPSA id 198sm2392803pfw.29.2021.01.12.00.53.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jan 2021 00:53:17 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: dong.menglong@zte.com.cn
+To:     pierre-yves.mordret@st.com
+Cc:     mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <dong.menglong@zte.com.cn>
+Subject: [PATCH] i2c: remove redundant error print in stm32f7_i2c_probe
+Date:   Tue, 12 Jan 2021 00:53:11 -0800
+Message-Id: <20210112085311.7308-1-dong.menglong@zte.com.cn>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 08:46:48PM +0530, Vinod Koul wrote:
-> @@ -328,8 +609,34 @@ static int spi_geni_init(struct spi_geni_master *mas)
->  	spi_tx_cfg &= ~CS_TOGGLE;
->  	writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
->  
-> +	mas->tx = dma_request_slave_channel(mas->dev, "tx");
-> +	if (IS_ERR_OR_NULL(mas->tx)) {
-> +		dev_err(mas->dev, "Failed to get tx DMA ch %ld", PTR_ERR(mas->tx));
-> +		ret = PTR_ERR(mas->tx);
-> +		goto out_pm;
-> +	} else {
-> +		mas->rx = dma_request_slave_channel(mas->dev, "rx");
-> +		if (IS_ERR_OR_NULL(mas->rx)) {
-> +			dev_err(mas->dev, "Failed to get rx DMA ch %ld", PTR_ERR(mas->rx));
-> +			dma_release_channel(mas->tx);
-> +			ret = PTR_ERR(mas->rx);
-> +			goto out_pm;
-> +		}
+From: Menglong Dong <dong.menglong@zte.com.cn>
 
-These channels need to be released in spi_geni_remove().
+Coccinelle reports a redundant error print in stm32f7_i2c_probe.
+As 'platform_get_irq' already prints the error message, error
+print here is redundant and can be removed.
 
-Also, you may want to fall back to PIO mode if channel allocation fails.
+Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
+---
+ drivers/i2c/busses/i2c-stm32f7.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Thanks,
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index 9aa8e65b511e..adba496e1e31 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -2026,12 +2026,8 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	irq_error = platform_get_irq(pdev, 1);
+-	if (irq_error <= 0) {
+-		if (irq_error != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Failed to get IRQ error: %d\n",
+-				irq_error);
++	if (irq_error <= 0)
+ 		return irq_error ? : -ENOENT;
+-	}
+ 
+ 	i2c_dev->wakeup_src = of_property_read_bool(pdev->dev.of_node,
+ 						    "wakeup-source");
+-- 
+2.17.1
 
-Lukas
