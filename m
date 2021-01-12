@@ -2,67 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD6B2F2813
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jan 2021 06:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CF52F287F
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jan 2021 07:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731872AbhALF5X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 Jan 2021 00:57:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
+        id S2388059AbhALGtE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 12 Jan 2021 01:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727202AbhALF5W (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jan 2021 00:57:22 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274A3C061786;
-        Mon, 11 Jan 2021 21:56:42 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id b26so1555965lff.9;
-        Mon, 11 Jan 2021 21:56:42 -0800 (PST)
+        with ESMTP id S1729891AbhALGtE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jan 2021 01:49:04 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2EEC061575;
+        Mon, 11 Jan 2021 22:48:23 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id m13so1611710ljo.11;
+        Mon, 11 Jan 2021 22:48:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=kewR8jh2A3TkX/7UyrwcvwLVAx/fKlrhrCa3SYpMsFU=;
-        b=HBlvFR1Lg+zU434x4t3ydB6f2XtfmEbF9ANLVINbsRn8w7f4yECb5S9wlR8Z10aXAp
-         WqHerHXKQ/5vzY5IG9cYFTKBwOf0b981DBsk5fs7wa06abOcY5Sm0HFxAdGrHG8qgvdR
-         Ft/bUwkj3qM5+9cg5t+6mmyllSsju2gsBtoNjqQijvufHwrCvMAsFUqiiHQPyD61cKcE
-         cq9zi82eqTPgT03fmu7CsLKtJ79uSmxM1pMGbmF6BUUuPnl+eW+jorH/sgrtxjsdNQ58
-         YvyBDjI/1P+5rtX3ZTorTvaE1Yo7jPfatID2jyeYs4q3alktFk4TfIaz/m2r4xmkVmGw
-         Uwdg==
+        bh=y6E8pJAG2xNBc207S+ylj91Gue5AgH8ypGOMKjlMFkg=;
+        b=TfqXdSK2nUn8Ilb5i0ApAX3yamw5Gh+PXZ9+051NRsoZ3rZXgAcLS5mZ9hPUP+6cQK
+         Qnc38xo6NCOor8W1s4FhxxRwz+gmZm2X6IE9AXSh5zwVbGPnDff7MWfeOZ6Iizji0T0N
+         GOjfav5/i3pMne9g0b/77IM/DFGzX+TINJvzAisnAOOwQ60xHpKJN6SqcZ1Dy20A7Jto
+         SbweUE40q1aO9ItN0JtpxAqnodAVeRTxjvV0NGRneVtN7LTXNm7xFD1OQodTt9QbGp7Q
+         aVLC2CZvoH/tf5tdcI6lE1JB8Kuyxy4c4TLciAHRVtTGFn+9pPprdW4Lw6e2sgcIdiEa
+         JyPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=kewR8jh2A3TkX/7UyrwcvwLVAx/fKlrhrCa3SYpMsFU=;
-        b=Srm79PH7YlAUWQGckxb8u2JidacL0XO4bZ/Y/2Ya+gtFiMoHweTFK6VnV9YbHPSovt
-         +xX7o6Vq8bAxDfETRATezR8aWqU4d1sGa36UgNROWnfshjS7vwZnHxsH/8I2B7NCnwod
-         HDlAtANih3M3Yc2pBE5KPV7xj25WR5WSvYlfD9LUJ0m3oqBpCp2zCGLwXCczXm7PdRaM
-         Z9LAEMF5V8n6alo64h1/vjn6qbzIxFTHAuoRyFiWJICznARYH1SHJBkPVCG8B0TsqGn2
-         a9fxPjss3k8xhMCcofzrhnoArRtC4eZM4oOd0zuIXwCtF1pUmrY00wo69iC99OsCIAaq
-         kGrg==
-X-Gm-Message-State: AOAM531/mL09151fADQ23j4HL3sJ0n+4ZqF4Ke4gHW8nHrxcu8ecRhUM
-        ubH0MbeIFchYFFw7Wjj9Ihu0oFvLL6Y=
-X-Google-Smtp-Source: ABdhPJwzjIlrdYRaNiiZ0u6c/Lh/dlac7DMazQ1f/haWrpPnfFWGabWbcH2aJegE0gZyZ+tEGUj/OA==
-X-Received: by 2002:ac2:5faf:: with SMTP id s15mr1439773lfe.20.1610431000016;
-        Mon, 11 Jan 2021 21:56:40 -0800 (PST)
+        bh=y6E8pJAG2xNBc207S+ylj91Gue5AgH8ypGOMKjlMFkg=;
+        b=NHTqkTxAEK8CnJPhUF/vJyWDEs/WwsZCudSjAWVY5oV/5sNBs/nW5Lo0UtTxOymW/h
+         rWTZAZAokM0G1z9GP0QMvevNxv5Uwv2JLg1xrkHm7aDlc+imo3pXM2DnXlLHLAMJeyHR
+         61QirU/NFlYdrBGPjpzZ/fWCOLC77HKQXZsReqewzQdAe3PkvmYYW3GZX9f6+wh1DFEN
+         h2YVmv8P0toHHGyLvw0cVzvoqvN0UPpasPnfo6G/AIyeKTe9Tzi1Ue8wgaWOKmX8BxeH
+         4TebwEjTVNDeH0uzEwhaOOZa/OoLQExlJXplNT+i/TS0ZjnkvEtxGXCl+Za7O/wOkiEi
+         ngVQ==
+X-Gm-Message-State: AOAM53313TgnYP0d9kaS8adgRztXTUrjwQtFbqbNbaMgFC0scOIbA0+f
+        z8hxdNOtDuXCVIYNaB6WICRP+Z/9GbU=
+X-Google-Smtp-Source: ABdhPJyQQ3QGu8coMULH0iUFbesygnM5VHn9NN8VGXF8Mqd2Lf05odYHvGCEaLFhQ7covX6IIgM2xA==
+X-Received: by 2002:a2e:8250:: with SMTP id j16mr1455053ljh.354.1610434102294;
+        Mon, 11 Jan 2021 22:48:22 -0800 (PST)
 Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id y23sm221359ljc.119.2021.01.11.21.56.39
+        by smtp.googlemail.com with ESMTPSA id s8sm273037lfi.21.2021.01.11.22.48.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jan 2021 21:56:39 -0800 (PST)
-Subject: Re: [PATCH v2] i2c: tegra: Create i2c_writesl_vi() to use with VI I2C
- for filling TX FIFO
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, wsa@the-dreams.de
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <1610424379-23653-1-git-send-email-skomatineni@nvidia.com>
- <1610424379-23653-2-git-send-email-skomatineni@nvidia.com>
+        Mon, 11 Jan 2021 22:48:21 -0800 (PST)
+Subject: Re: [PATCH v2] i2c: tegra: Wait for config load atomically while in
+ ISR
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <ae886d28-ef6c-63d3-2cc7-90752ddb8b21@gmail.com>
-Date:   Tue, 12 Jan 2021 08:56:38 +0300
+To:     Mikko Perttunen <mperttunen@nvidia.com>, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, wsa@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20210111160832.3669873-1-mperttunen@nvidia.com>
+ <a3b6944a-7c1e-54bf-664d-0ee6a6de4deb@gmail.com>
+Message-ID: <cb37f001-da0d-fcef-dea8-258caf5687fe@gmail.com>
+Date:   Tue, 12 Jan 2021 09:48:20 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.2
 MIME-Version: 1.0
-In-Reply-To: <1610424379-23653-2-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <a3b6944a-7c1e-54bf-664d-0ee6a6de4deb@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -70,113 +70,45 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-12.01.2021 07:06, Sowjanya Komatineni пишет:
-> VI I2C don't have DMA support and uses PIO mode all the time.
+11.01.2021 22:31, Dmitry Osipenko пишет:
+> 11.01.2021 19:08, Mikko Perttunen пишет:
+>> Upon a communication error, the interrupt handler can call
+>> tegra_i2c_disable_packet_mode. This causes a sleeping poll to happen
+>> unless the current transaction was marked atomic. Fix this by
+>> making the poll happen atomically if we are in an IRQ.
+>>
+>> This matches the behavior prior to the patch mentioned
+>> in the Fixes tag.
+>>
+>> Fixes: ede2299f7101 ("i2c: tegra: Support atomic transfers")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+>> ---
+>> v2:
+>> * Use in_irq() instead of passing a flag from the ISR.
+>>   Thanks to Dmitry for the suggestion.
+>> * Update commit message.
+>> ---
+>>  drivers/i2c/busses/i2c-tegra.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+>> index 6f08c0c3238d..0727383f4940 100644
+>> --- a/drivers/i2c/busses/i2c-tegra.c
+>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>> @@ -533,7 +533,7 @@ static int tegra_i2c_poll_register(struct tegra_i2c_dev *i2c_dev,
+>>  	void __iomem *addr = i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg);
+>>  	u32 val;
+>>  
+>> -	if (!i2c_dev->atomic_mode)
+>> +	if (!i2c_dev->atomic_mode && !in_irq())
+>>  		return readl_relaxed_poll_timeout(addr, val, !(val & mask),
+>>  						  delay_us, timeout_us);
+>>  
+>>
 > 
-> Current driver uses writesl() to fill TX FIFO based on available
-> empty slots and with this seeing strange silent hang during any I2C
-> register access after filling TX FIFO with 8 words.
-> 
-> Using writel() followed by i2c_readl() in a loop to write all words
-> to TX FIFO instead of using writesl() helps for large transfers in
-> PIO mode.
-> 
-> So, this patch creates i2c_writesl_vi() API to use with VI I2C for
-> filling TX FIFO.
-> 
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-> index 6f08c0c..e2b7503 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -339,6 +339,21 @@ static void i2c_writesl(struct tegra_i2c_dev *i2c_dev, void *data,
->  	writesl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data, len);
->  }
->  
-> +static void i2c_writesl_vi(struct tegra_i2c_dev *i2c_dev, u32 *data,
-> +			   unsigned int reg, unsigned int len)
-> +{
-> +	/*
-> +	 * Using writesl() to fill VI I2C TX FIFO for transfers more than
-> +	 * 6 words is causing a silent hang on any VI I2C register access
-> +	 * after TX FIFO writes.
-> +	 * So using writel() followed by i2c_readl().
-> +	 */
-> +	while (len--) {
-> +		writel(*data++, i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
-> +		i2c_readl(i2c_dev, I2C_INT_STATUS);
-> +	}
-> +}
-> +
->  static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
->  		       unsigned int reg, unsigned int len)
->  {
-> @@ -811,7 +826,10 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
->  		i2c_dev->msg_buf_remaining = buf_remaining;
->  		i2c_dev->msg_buf = buf + words_to_transfer * BYTES_PER_FIFO_WORD;
->  
-> -		i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
-> +		if (i2c_dev->is_vi)
-> +			i2c_writesl_vi(i2c_dev, (u32 *)buf, I2C_TX_FIFO, words_to_transfer);
-> +		else
-> +			i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
->  
->  		buf += words_to_transfer * BYTES_PER_FIFO_WORD;
->  	}
+> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 > 
 
-Looks almost good, could we please use a relaxed writel and avoid the casting in the code?
-
-Like this:
-
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 6f08c0c3238d..4f843b423d83 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -326,6 +326,8 @@ static void i2c_writel(struct tegra_i2c_dev *i2c_dev, u32 val, unsigned int reg)
- 	/* read back register to make sure that register writes completed */
- 	if (reg != I2C_TX_FIFO)
- 		readl_relaxed(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
-+	else
-+		readl_relaxed(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, I2C_INT_STATUS));
- }
- 
- static u32 i2c_readl(struct tegra_i2c_dev *i2c_dev, unsigned int reg)
-@@ -339,6 +341,21 @@ static void i2c_writesl(struct tegra_i2c_dev *i2c_dev, void *data,
- 	writesl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data, len);
- }
- 
-+static void i2c_writesl_vi(struct tegra_i2c_dev *i2c_dev, void *data,
-+			   unsigned int reg, unsigned int len)
-+{
-+	u32 *data32 = data;
-+
-+	/*
-+	 * Using writesl() to fill VI I2C TX FIFO for transfers more than
-+	 * 6 words is causing a silent hang on any VI I2C register access
-+	 * after TX FIFO writes. Each write to FIFO should follow by a read
-+	 * of any I2C register in order to work around the problem.
-+	 */
-+	while (len--)
-+		i2c_writel(i2c_dev, *data32++, reg);
-+}
-+
- static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
- 		       unsigned int reg, unsigned int len)
- {
-@@ -811,7 +828,10 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
- 		i2c_dev->msg_buf_remaining = buf_remaining;
- 		i2c_dev->msg_buf = buf + words_to_transfer * BYTES_PER_FIFO_WORD;
- 
--		i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
-+		if (i2c_dev->is_vi)
-+			i2c_writesl_vi(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
-+		else
-+			i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
- 
- 		buf += words_to_transfer * BYTES_PER_FIFO_WORD;
- 	}
+Perhaps a follow up change could be to use a threaded interrupt context,
+I'll type a patch for that.
