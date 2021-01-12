@@ -2,107 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6602F26E5
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jan 2021 05:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612E32F26FA
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jan 2021 05:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726647AbhALEG7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Jan 2021 23:06:59 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:12094 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729510AbhALEG7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Jan 2021 23:06:59 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5ffd203a0003>; Mon, 11 Jan 2021 20:06:18 -0800
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 12 Jan
- 2021 04:06:18 +0000
-Received: from skomatineni-linux.nvidia.com (172.20.145.6) by mail.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Tue, 12 Jan 2021 04:06:17 +0000
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <digetx@gmail.com>, <wsa@the-dreams.de>, <skomatineni@nvidia.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>
-Subject: [PATCH v2] i2c: tegra: Create i2c_writesl_vi() to use with VI I2C for filling TX FIFO
-Date:   Mon, 11 Jan 2021 20:06:19 -0800
-Message-ID: <1610424379-23653-2-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1610424379-23653-1-git-send-email-skomatineni@nvidia.com>
-References: <1610424379-23653-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S1728353AbhALEUa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Jan 2021 23:20:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36192 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726723AbhALEUa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Jan 2021 23:20:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B3C7D22D05;
+        Tue, 12 Jan 2021 04:19:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610425189;
+        bh=FO37EniEa2kQkwbyuyGiXqZ0QF3JxKl9A0w3chEQ+b0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rfBIPP6/z3SWVutzIiC7OD2MXvKw+aWpy49bBTUjGrbzKh3uqvRj0I3sx5x2xBnnj
+         x8tmSnu73yR4lYE0GLrAGMTvaNYaDkfwzVoOi/mZqkavS9mbqo1Mhm/AahY0jNm+fU
+         S9s5aQUL3TewFP/WN2Gf3oLUwvGXNj15aPNH3PM4dn+n6q9LAtRr2EIiXr6Dx2EebW
+         uFhvPQN4V1M+gaGc3EWpfZ2Tu7Y9BjtmRH93wHVH4H3p7+a+g7/rmdprqhizRwIeHG
+         sv9e2AK7yJZfseqYkeyfX3mQl7jhJOj7b87GSvKhUWhoySSEGmkykMNojI4tnjna12
+         1aJdktn9AsA7A==
+Date:   Tue, 12 Jan 2021 09:49:44 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] arm64: dts: qcom: sdm845: enable dma for spi
+Message-ID: <20210112041944.GF2771@vkoul-mobl>
+References: <20210111151651.1616813-1-vkoul@kernel.org>
+ <20210111151651.1616813-8-vkoul@kernel.org>
+ <6cc90f43-f2c8-85f7-3d1c-f96468aab196@somainline.org>
+ <20210111174649.GC2771@vkoul-mobl>
+ <12aae061-3a7e-883f-9b82-0b608ccf9441@somainline.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1610424378; bh=Di1nGnKfNHnPo2PJcbfvnWaUpPkwPeDFp//2vWWPufA=;
-        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-         References:X-NVConfidentiality:MIME-Version:Content-Type;
-        b=Ypirb7bYMBR+6DU6KIv9n0AKphmfPfLv0no+mMMye1peTBc9Bl/C8Q8e2s9GqW7e7
-         LXS2biZ+f5orFlw6r71D0c6HRGQ2V7iJ6gampp364Ux/wxWpPBudbqruVadm2BEuwO
-         +fe5oXIs1IP88jpvY07dffL+mP2ZXs/B4rDXVDNPTY/4Zf/sNKPZU/oTXVRjF4swy8
-         a/sM1mw0W8sqx4zUpoERlwCVZ50w608b5zIDNsg/ai0l1EM6GfUpgz+5S+ch10diZm
-         As7BeAQDTKO8P51k7GaR1eOFm0kcAFctljpqYh55e/nkQ26XK5oOyHYxf0TmYEul32
-         czYp0pyjOVVAQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12aae061-3a7e-883f-9b82-0b608ccf9441@somainline.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-VI I2C don't have DMA support and uses PIO mode all the time.
+On 11-01-21, 21:45, Konrad Dybcio wrote:
+> 
+> > If it is working without GPI enabled, it would work.. GPI for QUP is
+> > something that requires firmware and would have to be enabled by
+> > firmware
+> 
+> 
+> I think with the new code of yours:
+> 
+> 
+> mas->tx = dma_request_slave_channel(mas->dev, "tx");
+> + if (IS_ERR_OR_NULL(mas->tx)) {
+> + dev_err(mas->dev, "Failed to get tx DMA ch %ld", PTR_ERR(mas->tx)); ret = PTR_ERR(mas->tx); + goto out_pm;
 
-Current driver uses writesl() to fill TX FIFO based on available
-empty slots and with this seeing strange silent hang during any I2C
-register access after filling TX FIFO with 8 words.
+This code would be exercised *only* when DMA mode is enabled in
+firmware.. Both SPI and I2C driver would probe the mode supported
+(reason for exposing stuff in first two patches of this series)..
 
-Using writel() followed by i2c_readl() in a loop to write all words
-to TX FIFO instead of using writesl() helps for large transfers in
-PIO mode.
+Only if the device reports we should enable it.. Also if the device is
+working with FIFO mode then DMA mode wont work..
 
-So, this patch creates i2c_writesl_vi() API to use with VI I2C for
-filling TX FIFO.
+> 
+> it *may* fail to probe with the channels assigned in the "dmas="
+> property but with the engine having "status=disabled", but as I don't
+> have any hardware to test that driver on, please confirm whether my
+> concerns are right..
+> 
+> 
+> > Since DMA support may not be available on certain targets (firmware
+> > support), so enabling per board would make sense
+> 
+> Oh really, are there SDM845 boards shipping with GPI DMA *disabled to
+> all peripherals*?
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- drivers/i2c/busses/i2c-tegra.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+Is the peripheral working with FIFO mode, then answer is yes :)
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 6f08c0c..e2b7503 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -339,6 +339,21 @@ static void i2c_writesl(struct tegra_i2c_dev *i2c_dev, void *data,
- 	writesl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data, len);
- }
- 
-+static void i2c_writesl_vi(struct tegra_i2c_dev *i2c_dev, u32 *data,
-+			   unsigned int reg, unsigned int len)
-+{
-+	/*
-+	 * Using writesl() to fill VI I2C TX FIFO for transfers more than
-+	 * 6 words is causing a silent hang on any VI I2C register access
-+	 * after TX FIFO writes.
-+	 * So using writel() followed by i2c_readl().
-+	 */
-+	while (len--) {
-+		writel(*data++, i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg));
-+		i2c_readl(i2c_dev, I2C_INT_STATUS);
-+	}
-+}
-+
- static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
- 		       unsigned int reg, unsigned int len)
- {
-@@ -811,7 +826,10 @@ static int tegra_i2c_fill_tx_fifo(struct tegra_i2c_dev *i2c_dev)
- 		i2c_dev->msg_buf_remaining = buf_remaining;
- 		i2c_dev->msg_buf = buf + words_to_transfer * BYTES_PER_FIFO_WORD;
- 
--		i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
-+		if (i2c_dev->is_vi)
-+			i2c_writesl_vi(i2c_dev, (u32 *)buf, I2C_TX_FIFO, words_to_transfer);
-+		else
-+			i2c_writesl(i2c_dev, buf, I2C_TX_FIFO, words_to_transfer);
- 
- 		buf += words_to_transfer * BYTES_PER_FIFO_WORD;
- 	}
+Thanks
 -- 
-2.7.4
-
+~Vinod
