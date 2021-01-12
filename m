@@ -2,86 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BBF2F28EC
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jan 2021 08:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9C72F28F3
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Jan 2021 08:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730307AbhALHbt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 12 Jan 2021 02:31:49 -0500
-Received: from so254-31.mailgun.net ([198.61.254.31]:40599 "EHLO
-        so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726949AbhALHbt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jan 2021 02:31:49 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1610436688; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=cBjd+mxvdRBq+9OHv7BDdff4Bs/on3l7fhAHwfVcq+o=; b=v0NBxzt6Jq0AR3UwUyzffSqyKU8FWcsRAYgzvbt4EjZksh7aT2Rtk1hASBHYElg1hkxk+rAr
- RT6ybUSgW3ErsgBqxLZ2A/ty/Uht4NX4dZEAWZDvcrIEqwZpsdV63E1NyCYukC6m24iF4V+o
- 0UMoKqApGE1mDySjsnfqgqsUp3c=
-X-Mailgun-Sending-Ip: 198.61.254.31
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 5ffd5033c88af06107ba80cd (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 12 Jan 2021 07:30:59
- GMT
-Sender: akashast=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 06417C43463; Tue, 12 Jan 2021 07:30:59 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [192.168.43.98] (unknown [223.225.121.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D9486C433C6;
-        Tue, 12 Jan 2021 07:30:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D9486C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V8 1/1] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>, wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org
-References: <20210108150545.2018-1-rojay@codeaurora.org>
- <20210108150545.2018-2-rojay@codeaurora.org>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <1cf28a5a-6de0-1f4e-4cd0-3a1f8125c1ca@codeaurora.org>
-Date:   Tue, 12 Jan 2021 13:00:40 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S2392007AbhALHcf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 12 Jan 2021 02:32:35 -0500
+Received: from bmailout1.hostsharing.net ([83.223.95.100]:43139 "EHLO
+        bmailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391921AbhALHcf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jan 2021 02:32:35 -0500
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 77F5E300002AA;
+        Tue, 12 Jan 2021 08:31:52 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 68CA219B9; Tue, 12 Jan 2021 08:31:52 +0100 (CET)
+Date:   Tue, 12 Jan 2021 08:31:52 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] spi: spi-geni-qcom: Add support for GPI dma
+Message-ID: <20210112073152.GA11056@wunner.de>
+References: <20210111151651.1616813-1-vkoul@kernel.org>
+ <20210111151651.1616813-5-vkoul@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210108150545.2018-2-rojay@codeaurora.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210111151651.1616813-5-vkoul@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, Jan 11, 2021 at 08:46:48PM +0530, Vinod Koul wrote:
+> @@ -328,8 +609,34 @@ static int spi_geni_init(struct spi_geni_master *mas)
+>  	spi_tx_cfg &= ~CS_TOGGLE;
+>  	writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
+>  
+> +	mas->tx = dma_request_slave_channel(mas->dev, "tx");
+> +	if (IS_ERR_OR_NULL(mas->tx)) {
+> +		dev_err(mas->dev, "Failed to get tx DMA ch %ld", PTR_ERR(mas->tx));
+> +		ret = PTR_ERR(mas->tx);
+> +		goto out_pm;
+> +	} else {
+> +		mas->rx = dma_request_slave_channel(mas->dev, "rx");
+> +		if (IS_ERR_OR_NULL(mas->rx)) {
+> +			dev_err(mas->dev, "Failed to get rx DMA ch %ld", PTR_ERR(mas->rx));
+> +			dma_release_channel(mas->tx);
+> +			ret = PTR_ERR(mas->rx);
+> +			goto out_pm;
+> +		}
 
-On 1/8/2021 8:35 PM, Roja Rani Yarubandi wrote:
-> If the hardware is still accessing memory after SMMU translation
-> is disabled (as part of smmu shutdown callback), then the
-> IOVAs (I/O virtual address) which it was using will go on the bus
-> as the physical addresses which will result in unknown crashes
-> like NoC/interconnect errors.
->
-> So, implement shutdown callback to i2c driver to stop on-going transfer
-> and unmap DMA mappings during system "reboot" or "shutdown".
->
-> Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the Qualcomm GENI I2C controller")
-> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
-Reviewed-by: Akash Asthana <akashast@codeaurora.org>
+These channels need to be released in spi_geni_remove().
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+Also, you may want to fall back to PIO mode if channel allocation fails.
 
+Thanks,
+
+Lukas
