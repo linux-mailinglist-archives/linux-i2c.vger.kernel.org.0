@@ -2,61 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 841D12F40D4
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Jan 2021 01:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3A42F40D6
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Jan 2021 01:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393728AbhAMAnJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S2393721AbhAMAnJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Tue, 12 Jan 2021 19:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392137AbhAMADB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jan 2021 19:03:01 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B89C0617A2
-        for <linux-i2c@vger.kernel.org>; Tue, 12 Jan 2021 16:01:39 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id g5so122119uak.10
-        for <linux-i2c@vger.kernel.org>; Tue, 12 Jan 2021 16:01:39 -0800 (PST)
+        with ESMTP id S2392098AbhAMACz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 12 Jan 2021 19:02:55 -0500
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72617C0617A5
+        for <linux-i2c@vger.kernel.org>; Tue, 12 Jan 2021 16:01:44 -0800 (PST)
+Received: by mail-vk1-xa2b.google.com with SMTP id a6so118387vkb.8
+        for <linux-i2c@vger.kernel.org>; Tue, 12 Jan 2021 16:01:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=X1O0kACakbx2RcXU3rpwMtnI8YwFi/QQJx5lWup4tPs=;
-        b=TDD54LXJMIOHuHC7yNuKWAIpA7mi5lm/OaZT3vtTzB+EkbjAgXxIfvyiLWCvNt2eYd
-         7H015wWHRDVue0tnkGew/FoTWBQN5+AKOCCqt1KtEX+CVdeCsXBTX39Zm+9qh7Cme+C7
-         HYZTgCC2CbUmmy71bvcExAzSpON5Y5i8fhc5Y=
+        bh=3BtruZqMnfhWC8c+dyxQjHk/A/qVpuTj2wP4eiHZiZg=;
+        b=QLG6Rs/Kl7iv0RZCYBM7+LdcLP8MYmiFoPiRCbRaC8fqyruBzgxDQNLkoCnnYckqCX
+         07Iv6NK3sO1gPQkH75J4yoQmJStnUVf7GmBIwUXaAt+T8gFaooSktmqLbLGShghaGq4Y
+         7NAKEZO4aTboVunWQoZcuCbxgpsgxdwUMTdto=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=X1O0kACakbx2RcXU3rpwMtnI8YwFi/QQJx5lWup4tPs=;
-        b=sOwC1of+ucMvTuiiyxggTZn5+Yx9kbIYAd7nP4jg80D04Lddpqztt85ft9RZF2Uftu
-         wOdMX1+kdMt6IOGquC5EAO+vcPMVPb21DpSq73kc9ZlUGyOcfxu8Yie2RpYuA07LOg4G
-         30qwtplILNbw3JApfNyNS7U7QQPQ/6Kpq63p6q9rZr17wwgBVUF5aEJs1gkcpDmGzKKU
-         MhlIjgbYWNt++kqEPESG+2vpoLa87G6WZ4QxCGbK0a8xSInGhr2Yv434zGUtpHIisLVE
-         rknd9jnGmjy7jOORgG5/379VRuigPg1w9Ts6zYCD8RjAUW6tRH4pWjBJZ/2s/IiIS/3v
-         PKaA==
-X-Gm-Message-State: AOAM532TbvUO7Ph+4v3Y04brGKoRxDAKFiZr+rS+NXFB1NvkSawdVRQX
-        xvH3NAM64pMpxcQYY5pwH32qDKwUe/hcAQ==
-X-Google-Smtp-Source: ABdhPJwluMEkzj+bzTbgyTkJlTiX4+5749c0XR9BYQFezvDCLK1Doj+rIQKiXhWyJDgD0Tb7LNur0A==
-X-Received: by 2002:ab0:7386:: with SMTP id l6mr1885854uap.141.1610496098288;
-        Tue, 12 Jan 2021 16:01:38 -0800 (PST)
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com. [209.85.217.52])
-        by smtp.gmail.com with ESMTPSA id k14sm48778uae.12.2021.01.12.16.01.37
+        bh=3BtruZqMnfhWC8c+dyxQjHk/A/qVpuTj2wP4eiHZiZg=;
+        b=XOaAcR3ARVeI4W7xH6Uwk1ISRXh5FPAtXd4/rX1U4o196cbLqVtoJblXItz8y5JXHY
+         HBHyuwudkBOGe4ccI8F9UEH3e1IIBBXMBYyTnO9+M9c5LrhZKoTsq8Qz3ERAHW6Wcaaf
+         L+XRZYJeLTVBWgmfff2TUAyPmMWT/YxYDdtJvT1yXZfXiTesB3CB49+LriIgh5uQjyIk
+         +v11gFCRs/+q8s/M6wp5fWX1hxhorvlGNVwweZB5ii39DedJkZa16S/arDanRDVj/kBN
+         qSxwk3OJGuhfziInTm/hWogGs8HN47/Tj/69VnK6BaAkr7Hn23Kiebc/ICqXnVWkq+rX
+         8kEQ==
+X-Gm-Message-State: AOAM533njiTBJUpjJ5I6mXwXvBiqhO2LeL44tJksrmCl9TEleX9kw8Sx
+        BilAzVBIU0uQbMOqkUaDOADHqshuVVDocw==
+X-Google-Smtp-Source: ABdhPJzHZvYJ8T27M0Z84rbb8kZv9x0EenskYIOxQxwxOPVHuWRXHqOUHhxVUa2enkKGEOJVF+SiVQ==
+X-Received: by 2002:a1f:608a:: with SMTP id u132mr2337781vkb.10.1610496103735;
+        Tue, 12 Jan 2021 16:01:43 -0800 (PST)
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
+        by smtp.gmail.com with ESMTPSA id p136sm75747vke.6.2021.01.12.16.01.43
         for <linux-i2c@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jan 2021 16:01:37 -0800 (PST)
-Received: by mail-vs1-f52.google.com with SMTP id x4so161515vsp.7
-        for <linux-i2c@vger.kernel.org>; Tue, 12 Jan 2021 16:01:37 -0800 (PST)
-X-Received: by 2002:a67:7385:: with SMTP id o127mr2228991vsc.8.1610496096878;
- Tue, 12 Jan 2021 16:01:36 -0800 (PST)
+        Tue, 12 Jan 2021 16:01:43 -0800 (PST)
+Received: by mail-vs1-f42.google.com with SMTP id e15so183368vsa.0
+        for <linux-i2c@vger.kernel.org>; Tue, 12 Jan 2021 16:01:43 -0800 (PST)
+X-Received: by 2002:a67:ec45:: with SMTP id z5mr2070809vso.10.1610496103001;
+ Tue, 12 Jan 2021 16:01:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20210111151651.1616813-1-vkoul@kernel.org>
-In-Reply-To: <20210111151651.1616813-1-vkoul@kernel.org>
+References: <20210111151651.1616813-1-vkoul@kernel.org> <20210111151651.1616813-4-vkoul@kernel.org>
+In-Reply-To: <20210111151651.1616813-4-vkoul@kernel.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 12 Jan 2021 16:01:24 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XvgP5j3ikCnr2zDptFbWPRQhGGQotqyFGmN7NWNP8knA@mail.gmail.com>
-Message-ID: <CAD=FV=XvgP5j3ikCnr2zDptFbWPRQhGGQotqyFGmN7NWNP8knA@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Add and enable GPI DMA users
+Date:   Tue, 12 Jan 2021 16:01:30 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UOR2vxo7_gpjiv-djagq5bVwztCuDoCj5kjY7UtXR2PQ@mail.gmail.com>
+Message-ID: <CAD=FV=UOR2vxo7_gpjiv-djagq5bVwztCuDoCj5kjY7UtXR2PQ@mail.gmail.com>
+Subject: Re: [PATCH 3/7] soc: qcom: geni: Add support for gpi dma
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
@@ -66,7 +66,8 @@ Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         Amit Pundir <amit.pundir@linaro.org>,
         linux-spi <linux-spi@vger.kernel.org>, linux-i2c@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
@@ -76,33 +77,92 @@ Hi,
 
 On Mon, Jan 11, 2021 at 7:17 AM Vinod Koul <vkoul@kernel.org> wrote:
 >
-> Hello,
->
-> This series add the GPI DMA in qcom geni spi and i2c drivers. For this we
-> first need to move GENI_IF_DISABLE_RO and struct geni_wrapper to common
-> headers and then add support for gpi dma in geni driver.
->
-> Then we add spi and i2c geni driver changes to support this DMA.
->
-> Lastly, add the GPI dma nodes and enable dma for spi found in Rb3 board.
->
-> To merge this, we could merge all thru qcom tree with ack on spi/i2c.
+> +static int geni_se_select_gpi_mode(struct geni_se *se)
+> +{
+> +       unsigned int geni_dma_mode = 0;
+> +       unsigned int gpi_event_en = 0;
+> +       unsigned int common_geni_m_irq_en = 0;
+> +       unsigned int common_geni_s_irq_en = 0;
+> +
+> +       common_geni_m_irq_en = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
+> +       common_geni_s_irq_en = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
+> +       common_geni_m_irq_en &=
+> +                       ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN |
+> +                       M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
+> +       common_geni_s_irq_en &= ~S_CMD_DONE_EN;
+> +       geni_dma_mode = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
 
-It'd be super great if somewhere (ideally in the commit message and
-maybe somewhere in the code) you could talk more about the different
-modes.  Maybe something like this (if it's correct):
+Do you really need to do a read/modify/write of SE_GENI_DMA_MODE_EN?
+It's a register with a single bit in it.  Just set the bit, no?  There
+are cases where read-modify-write is the correct thing to do but IMO
+it shouldn't be the default way of working.  If code is initting a
+register to a default state it should just be setting the register.
+If some later incarnation of the hardware comes along and adds extra
+bits to this register then, sure, we might have to modify the code.
+However, it has the advantage where we aren't left at the whims of
+whatever was programmed by whatever version of whatever firmware was
+running on the device.  I've been bitten way more often by firmware
+leaving registers in some random / unexpected state than by new bits
+introduced by new versions of hardware.
 
-GPI Mode (confusingly, also known as "GSI" mode in some places): In
-this mode something else running on the SoC is sharing access to the
-geni instance.  This mode allows sharing the device between the Linux
-kernel and other users including handling the fact that other users
-might be running the geni port at a different clock rate.  GPI mode
-limits what you can do with a port.  For instance, direct control of
-chip select is not allowed.  NOTE: if firmware has configured a geni
-instance for GPI then FIFO and SE_DMA usage is not allowed.
-Conversely, if firmware has not configured a geni instance for GPI
-then only FIFO and SE_DMA usage is allowed.
+...same for other registers in your patch that you can just init.
 
-SE DMA Mode: Data transfers happen over DMA.
+(this is true throughout lots of Qualcomm code, but I figure might as
+well start trying to do something about it?)
 
-SE FIFO Mode: Data is manually transferred into the FIFO by the CPU.
+
+> +       gpi_event_en = readl_relaxed(se->base + SE_GSI_EVENT_EN);
+> +
+> +       geni_dma_mode |= GENI_DMA_MODE_EN;
+> +       gpi_event_en |= (DMA_RX_EVENT_EN | DMA_TX_EVENT_EN |
+> +                               GENI_M_EVENT_EN | GENI_S_EVENT_EN);
+> +
+> +       writel_relaxed(0, se->base + SE_IRQ_EN);
+> +       writel_relaxed(common_geni_s_irq_en, se->base + SE_GENI_S_IRQ_EN);
+> +       writel_relaxed(common_geni_m_irq_en, se->base + SE_GENI_M_IRQ_EN);
+
+Last time I touched this bit of code I think folks agreed that it
+would be better to move managing of the interrupt enables out of the
+common code and move them to the various drivers using geni [1].  I
+was hoping that someone from Qualcomm would be able to pick this up.
+Managing them in the wrapper just ends up causing a whole bunch of
+special cases.  Any chance you could take that on as part of your
+series?
+
+Presumably if this was mananged in individual drivers you also might
+be able to do less read-modify-write type stuff, too...
+
+[1] https://lore.kernel.org/linux-arm-msm/CAD=FV=VWPqswOXJejyXjYT_Yspdu75ELq42cffN87FrpTwPUQg@mail.gmail.com/
+
+
+> +       writel_relaxed(0xFFFFFFFF, se->base + SE_GENI_M_IRQ_CLEAR);
+> +       writel_relaxed(0xFFFFFFFF, se->base + SE_GENI_S_IRQ_CLEAR);
+> +       writel_relaxed(0xFFFFFFFF, se->base + SE_DMA_TX_IRQ_CLR);
+> +       writel_relaxed(0xFFFFFFFF, se->base + SE_DMA_RX_IRQ_CLR);
+
+This looks mostly like geni_se_irq_clear().  Should they somehow share code?
+
+
+> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
+> index cb4e40908f9f..12003a6cb133 100644
+> --- a/include/linux/qcom-geni-se.h
+> +++ b/include/linux/qcom-geni-se.h
+> @@ -12,6 +12,7 @@
+>  enum geni_se_xfer_mode {
+>         GENI_SE_INVALID,
+>         GENI_SE_FIFO,
+> +       GENI_GPI_DMA,
+
+Add a comment like "Also known as GSI" here to help people figure out
+what's going on when they're trying to parse the manual or #defines
+like "SE_GSI_EVENT_EN"
+
+
+> @@ -123,6 +124,9 @@ struct geni_se {
+>  #define CLK_DIV_MSK                    GENMASK(15, 4)
+>  #define CLK_DIV_SHFT                   4
+>
+> +/* GENI_IF_DISABLE_RO fields */
+> +#define FIFO_IF_DISABLE                        (BIT(0))
+
+Maybe this define belonged in patch #1?  It doesn't seem related to this patch?
