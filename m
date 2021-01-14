@@ -2,94 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3893A2F62AA
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Jan 2021 15:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6995C2F634F
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Jan 2021 15:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbhANOEr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 14 Jan 2021 09:04:47 -0500
-Received: from www.zeus03.de ([194.117.254.33]:54226 "EHLO mail.zeus03.de"
+        id S1728919AbhANOkB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 14 Jan 2021 09:40:01 -0500
+Received: from mga04.intel.com ([192.55.52.120]:6291 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726609AbhANOEr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 14 Jan 2021 09:04:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=XYkIYw8kXYr0WVS9+2HEs7b4ExRD
-        AHL7hAMoLwRnuhs=; b=jEynJZOCa0wXW6Sxo/cdadXQbmnkFb0zCbxSlq2NLVRp
-        FzkLrNbJwFB7vC59c7YZuCwh+o3/amsZmNp05TKfzLoQecioj4Gk2I1AKYcZP3MH
-        m4JSAw6v+6MIYVmCwKAwjQ9fzSbCpPsEHXqLlvk016S5fIltsCfEkZZK0vQGbu8=
-Received: (qmail 3538568 invoked from network); 14 Jan 2021 15:04:04 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jan 2021 15:04:04 +0100
-X-UD-Smtp-Session: l3s3148p1@3JJSuty4NNMgAwDPXwjsANskl+1DI0tg
-Date:   Thu, 14 Jan 2021 15:04:01 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Corey Minyard <minyard@acm.org>
-Cc:     linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        Colin Ian King <colin.king@canonical.com>,
-        Vijay Khemka <vijaykhemka@fb.com>,
-        Asmaa Mnebhi <Asmaa@mellanox.com>
-Subject: Re: [PATCH RFC 3/3] ipmi: remove open coded version of SMBus block
- write
-Message-ID: <20210114140401.GA973@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Corey Minyard <minyard@acm.org>, linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        Colin Ian King <colin.king@canonical.com>,
-        Vijay Khemka <vijaykhemka@fb.com>,
-        Asmaa Mnebhi <Asmaa@mellanox.com>
-References: <20210112164130.47895-1-wsa+renesas@sang-engineering.com>
- <20210112164130.47895-4-wsa+renesas@sang-engineering.com>
- <20210114004822.GY3348@minyard.net>
+        id S1728523AbhANOkA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 14 Jan 2021 09:40:00 -0500
+IronPort-SDR: MHpZhNm2V45Y6SkhlUjJldR8paUz6fnDt9BauUZB63CBUX1QBUNjB3J9E7P4bb//iF9GA+vdiD
+ ycDLZ5y45kXw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9863"; a="175794848"
+X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
+   d="scan'208";a="175794848"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2021 06:38:14 -0800
+IronPort-SDR: fgHQ4xOnPkgoKV+9F/6efulmuQaFDcWfce55AhXBQMCDZrs9NugJjyvQBImQdlPs0+v6l5gxoq
+ XtsirzT0Egkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,347,1602572400"; 
+   d="scan'208";a="400916862"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.56])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jan 2021 06:38:13 -0800
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH] i2c: i801: Add support for Intel Alder Lake PCH-P
+Date:   Thu, 14 Jan 2021 16:38:11 +0200
+Message-Id: <20210114143811.1820137-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tThc/1wpZn/ma/RB"
-Content-Disposition: inline
-In-Reply-To: <20210114004822.GY3348@minyard.net>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Add PCI ID of SMBus controller on Intel Alder Lake PCH-P.
 
---tThc/1wpZn/ma/RB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 4435e5fdc75e..b931b629b457 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -73,6 +73,7 @@
+  * Jasper Lake (SOC)		0x4da3	32	hard	yes	yes	yes
+  * Comet Lake-V (PCH)		0xa3a3	32	hard	yes	yes	yes
+  * Alder Lake-S (PCH)		0x7aa3	32	hard	yes	yes	yes
++ * Alder Lake-P (PCH)		0x51a3	32	hard	yes	yes	yes
+  *
+  * Features supported by this driver:
+  * Software PEC				no
+@@ -230,6 +231,7 @@
+ #define PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS		0x43a3
+ #define PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS		0x4b23
+ #define PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS		0x4da3
++#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS		0x51a3
+ #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
+ #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
+@@ -1087,6 +1089,7 @@ static const struct pci_device_id i801_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS) },
+ 	{ 0, }
+ };
+ 
+@@ -1776,6 +1779,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS:
+ 	case PCI_DEVICE_ID_INTEL_EBG_SMBUS:
+ 	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS:
++	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS:
+ 		priv->features |= FEATURE_BLOCK_PROC;
+ 		priv->features |= FEATURE_I2C_BLOCK_READ;
+ 		priv->features |= FEATURE_IRQ;
+-- 
+2.29.2
 
-> I asked the original authors of this about the change, and apparently is
-> results in a stack size warning.  Arnd Bergmann ask for it to be changed
-> from what you are suggesting to what it currently is.  See:
->=20
-> https://www.lkml.org/lkml/2019/6/19/440
->=20
-> So apparently this change will cause compile warnings due to the size of
-> struct i2c_client.
-
-Wow, didn't know that my patch was actually a revert. I replaced now the
-stack usage with kmemdup and will have a second thought about this
-patch. Thanks for the heads up!
-
-
---tThc/1wpZn/ma/RB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAAT0kACgkQFA3kzBSg
-KbYBKA/+KGwiJWaUiU0+N17bTU/45Nmz2omMARKtrKFuDnxqUBSvbp0QVpMvtXvV
-IP9YN0TVopn2OQ4TbUssjPKeF/bsRK9La45lvdDHOpeFKYdXQcTD2O+EWVKGneXR
-Qp8dGNO0aMHcSi1Gmexd0OycizF9NbQ8vGSxXzvMgoLqjTe1RCFCNEEXgYQ+8sgW
-3QMDPYVrDo53A5+d0au3PEvFdJtTI7yZuiG1M9+pn9j/awM26yIDU4+VCsQxoxic
-6oh5DJVQUSzUL2VpEIlwbp32Jl7eDKTz7lrgSIObAY/IFz/siWlwFvaTxbQb9t6V
-4hgZQ0ts4xX/OL64PlA706d6wHajmQ1rxDl0tSrhPMEyxVI20gIn/NxMkWeYVwv3
-pI7FmNqqfHamZM6QTpODv4edzcNgYQvlXjVlFFe67mjmKVzTTsj8hRwVSM77WIct
-FhozjJTQ1nL28UJwqYcbxd4NCUK7xmv/XbG/0LHdgEOE8J0QOwmj9S5CJoyRjz+A
-hVv2elcCtEXFb5UxhZcwdD2lTExbzfJ2LmP54eTHR5iwLcS/HHLmEmMEDiQFbMBt
-1iD5KZNjif+Ep2A3L2+o3AE/QzIMOfutwcZh0WcYw//WnHMbLzIc3pjjBt5l9+dl
-u7Oqn7CsmdtU70IKAUjRFM/jwYMk3jaZwVKMU11ki6NyXZqQ59A=
-=hJuM
------END PGP SIGNATURE-----
-
---tThc/1wpZn/ma/RB--
