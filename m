@@ -2,97 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5422F77DF
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Jan 2021 12:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4282F7E76
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Jan 2021 15:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727198AbhAOLoR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 15 Jan 2021 06:44:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49406 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727152AbhAOLoR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 15 Jan 2021 06:44:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 17D9623358;
-        Fri, 15 Jan 2021 11:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610711016;
-        bh=Hj1xrGgXnothbShfmnv3YV5GqPhtoi+Xda1pWAl34nM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=q8+QBIC96lHsnW1PybDTN45ey792Ti4sow9QS3YlpQUTPvbzt+79uXXMvW68BjA14
-         zLbfS/y5it2trNgCxLjryR1O/Abiw0k03L4cPAmRA0rFAY9ybC3LItg/WPwORRpu6z
-         aa2knOBZ59oeEKC5gieSe4puNtcbK3xPjwicULvv+DavnW3Z/Na6+8CyiEPv/xxQjm
-         cYHWQ9C5p+gRxoDgWkr5xbST/MAOzmXCA+GTBal4C8Ki8CzQzpC5Mp9XkBS/AyFAp5
-         JzNC/3+NiC0KgpwlJFdBgD/+08z7Cb3H6iCfyU35Le4MEuo2lJoKKQpqARCKjzLJCG
-         R8BJ/Y1+/3ClA==
-From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-i2c@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH i2c-tools] remove 'eepromer' subdir
-Date:   Fri, 15 Jan 2021 12:43:21 +0100
-Message-Id: <20210115114321.394262-1-wsa@kernel.org>
-X-Mailer: git-send-email 2.28.0
+        id S1731420AbhAOOoh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 15 Jan 2021 09:44:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728330AbhAOOog (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Jan 2021 09:44:36 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0EDC0613C1
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Jan 2021 06:43:56 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id j20so8705496otq.5
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Jan 2021 06:43:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=x0jeRffU+yop2UeLzXkeiDQE3IGPjGYo516b3eTS6oY=;
+        b=IJ+4HWXUdwcAH3GtOhYa7ypaWMxhh5MbHnIQIlibpi840ZZ02W/dhYFnc5rH20mGNY
+         2j6gViUNbEwJ8P8kJktJN6VHMMlRbOMzCRMyHhNYqYfe0J2e9g1R9jDBNUVAd8YeAh/e
+         UnaXRNXhH5OtAZk7GlTbSBzLDOaj7K7ylyIXBcQs47u5LmTRHKAOxoC81VPBJc7197fo
+         IDbB/nAPrSO23dHFAajc+A0m8bbOKSAoauPfBo9/ALGAwmDUHct2YYpcPVFzlkC5z/KG
+         qCs17nZy3BmyuqPx6F09zdIGNeJ09QzAynUqXrKN2qcmrZQ3UO7Pudaa1llDn5CGE5IR
+         Fziw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x0jeRffU+yop2UeLzXkeiDQE3IGPjGYo516b3eTS6oY=;
+        b=j3/FHpVLTrc3lNlUGpuQj6HclHBm1khLXy11cNI9Ft2sgOmF1G/6l05zaeVFLN+4XX
+         LHr1/gOok2USFq6suzCzty/5vmbEoeSH5I91IvmR1TX6qXXfgy5mZCJWKNDG2Ef5Yk/9
+         CYt2rRvH842TpkzkXB4Mx3Grw74dAuKEfdDMNgKGcaYcowynFWACWSucE+9hywU3UjHU
+         LpXFHpCTDFlNi4LpyNLAiPvvO73RuEdfFv32GhgW1OEQY0OtYYu/RdlB7MPRMk4db4Dv
+         wefWtDjB3fW0kHEkBDWfdWaNdef0nAPy2FDy3nWJBHv6L6ylf8Vxevdh4+yDJbzMVGVW
+         d4Kw==
+X-Gm-Message-State: AOAM532S2LACgG81nC9/cT7L/etOR1+DOKZAnKyrV0dN1JBqKfQjzo3v
+        CgDvFC/imhjBeIXr+fRGDgdA8w==
+X-Google-Smtp-Source: ABdhPJxjeiUubZZgCiEeMMb59uqjChQ3EteGlfG88/A7rOidXAq3ujcrFUAaVhSD6WWTbVBchNAgXw==
+X-Received: by 2002:a9d:3e0d:: with SMTP id a13mr8552934otd.194.1610721835721;
+        Fri, 15 Jan 2021 06:43:55 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id w10sm1695715oic.44.2021.01.15.06.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jan 2021 06:43:55 -0800 (PST)
+Date:   Fri, 15 Jan 2021 08:43:53 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Roja Rani Yarubandi <rojay@codeaurora.org>, ulf.hansson@linaro.org,
+        viresh.kumar@linaro.org
+Cc:     robh+dt@kernel.org, wsa@kernel.org, swboyd@chromium.org,
+        dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, parashar@codeaurora.org,
+        rnayak@codeaurora.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for
+ 'assigned-performance-states'
+Message-ID: <YAGqKfDfB7EEuZVn@builder.lan>
+References: <20201224111210.1214-1-rojay@codeaurora.org>
+ <20201224111210.1214-4-rojay@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201224111210.1214-4-rojay@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-These tools are deprecated for 6 years now because we have better
-alternatives. They are not built by default. I think it is time we can
-remove them.
+On Thu 24 Dec 05:12 CST 2020, Roja Rani Yarubandi wrote:
 
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
----
+> @@ -629,6 +658,16 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
+>  	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
+>  
+>  	disable_irq(gi2c->irq);
+> +
+> +	/* Drop the assigned performance state */
+> +	if (gi2c->assigned_pstate) {
+> +		ret = dev_pm_genpd_set_performance_state(dev, 0);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to set performance state\n");
+> +			return ret;
+> +		}
+> +	}
+> +
 
-Jean, if you agree, I'll simply push this to the repo. This is why I
-sent the reduced patch here.
+Ulf, Viresh, I think we discussed this at the time of introducing the
+performance states.
 
- eepromer/.gitignore      |   2 -
- eepromer/Makefile        |  12 -
- eepromer/README          |  34 --
- eepromer/README.eeprom   |  87 -----
- eepromer/README.eepromer |  29 --
- eepromer/eeprom.8        |  64 ----
- eepromer/eeprom.c        | 299 ----------------
- eepromer/eepromer.8      |  61 ----
- eepromer/eepromer.c      | 723 ---------------------------------------
- 9 files changed, 1311 deletions(-)
- delete mode 100644 eepromer/.gitignore
- delete mode 100644 eepromer/Makefile
- delete mode 100644 eepromer/README
- delete mode 100644 eepromer/README.eeprom
- delete mode 100644 eepromer/README.eepromer
- delete mode 100644 eepromer/eeprom.8
- delete mode 100644 eepromer/eeprom.c
- delete mode 100644 eepromer/eepromer.8
- delete mode 100644 eepromer/eepromer.c
+The client's state does not affect if its performance_state should
+be included in the calculation of the aggregated performance_state, so
+each driver that needs to keep some minimum performance state needs to
+have these two snippets.
 
-diff --git a/eepromer/.gitignore b/eepromer/.gitignore
-deleted file mode 100644
-index 5f76592..0000000
-diff --git a/eepromer/Makefile b/eepromer/Makefile
-deleted file mode 100644
-index b7d38f4..0000000
-diff --git a/eepromer/README b/eepromer/README
-deleted file mode 100644
-index 392c266..0000000
-diff --git a/eepromer/README.eeprom b/eepromer/README.eeprom
-deleted file mode 100644
-index b465d07..0000000
-diff --git a/eepromer/README.eepromer b/eepromer/README.eepromer
-deleted file mode 100644
-index 4f0648c..0000000
-diff --git a/eepromer/eeprom.8 b/eepromer/eeprom.8
-deleted file mode 100644
-index 0489590..0000000
-diff --git a/eepromer/eeprom.c b/eepromer/eeprom.c
-deleted file mode 100644
-index 78f5481..0000000
-diff --git a/eepromer/eepromer.8 b/eepromer/eepromer.8
-deleted file mode 100644
-index c3f3239..0000000
-diff --git a/eepromer/eepromer.c b/eepromer/eepromer.c
-deleted file mode 100644
-index 1536b15..0000000
--- 
-2.28.0
+Would it not make sense to on enable/disable re-evaluate the
+performance_state and potentially reconfigure the hardware
+automatically?
 
+Regards,
+Bjorn
+
+>  	ret = geni_se_resources_off(&gi2c->se);
+>  	if (ret) {
+>  		enable_irq(gi2c->irq);
+> @@ -654,6 +693,16 @@ static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	/* Set the assigned performance state */
+> +	if (gi2c->assigned_pstate) {
+> +		ret = dev_pm_genpd_set_performance_state(dev,
+> +							 gi2c->assigned_pstate);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to set performance state\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+>  	enable_irq(gi2c->irq);
+>  	gi2c->suspended = 0;
+>  	return 0;
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 
