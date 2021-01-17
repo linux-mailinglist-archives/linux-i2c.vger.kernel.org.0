@@ -2,88 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C72832F9219
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jan 2021 12:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DDF2F9224
+	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jan 2021 12:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728499AbhAQLpg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Jan 2021 06:45:36 -0500
-Received: from www.zeus03.de ([194.117.254.33]:56960 "EHLO mail.zeus03.de"
+        id S1728431AbhAQLyW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Jan 2021 06:54:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38226 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728462AbhAQLom (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 17 Jan 2021 06:44:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=g2JStMt2togUITmRS2fQ0q1p1eOf
-        wFPzmkuuf72bPJk=; b=kL4jtkXr5G10/0fU+TLCBqZdXmhIEDAhGHyIwUO+NyRl
-        7YKKF97xt9dgiZSsoExShK2UU8xt5tGr3x4VIaxKlBRsPV2K7hR+fYossk40WBqI
-        Jxk1ubWFtePkUmib1EU3lV6RcmMy+DJkxoHgsFNmBUVnsQPC8cHAfpOQiuJ8yJQ=
-Received: (qmail 307363 invoked from network); 17 Jan 2021 12:44:00 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jan 2021 12:44:00 +0100
-X-UD-Smtp-Session: l3s3148p1@reMZHxe5ppkgAwDPXy7qAHeYPdzlZkhM
-Date:   Sun, 17 Jan 2021 12:44:00 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/5] dt-bindings: i2c: renesas,i2c: add r8a779a0 (V3U)
- support
-Message-ID: <20210117114400.GF1983@ninjato>
-References: <20201223172505.34736-1-wsa+renesas@sang-engineering.com>
- <20201223172505.34736-2-wsa+renesas@sang-engineering.com>
- <CAMuHMdVKmb8tCGQUQtCOfkjB3VxbVtwuA3u9kh2XuxQumKhekg@mail.gmail.com>
+        id S1728131AbhAQLyV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 17 Jan 2021 06:54:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 85F252080D;
+        Sun, 17 Jan 2021 11:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610884421;
+        bh=Eb4daXwLyW90LV1J5VBpoK9AsF8VVzB5wDF2WYuJoBw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V2ELbnS/OMr/xQHoNrQSfrtY2erVZAEMeTqQEE3TmBaFA3AZPCbcRpOyxpfS/r/hh
+         836beG9rWfapXuVJRf1kOUclQuNtDs7k7bQzkugz4fyXpPNQm+jZX0dclXmPm30cl4
+         yow8QqrExoqdZsBSGbI+ElW2LXoJF9ES0P0L8/UqaKjDAZd5GB07cCU261vRm1ruxA
+         wq1tFKfUmXZF9+Ai+R8ydXlY8clhV+fp5nIHMzzRW4NBu9/WMZPB5gUEi+DI0fUhYt
+         AzrLAjCyGExzLHJ2FNE9FJ/PC6ec2OX7EAve/rUcrf+vQ3S/+s50Bh3JW9ZgvCKXwo
+         uF60AyQ1xeL2w==
+Date:   Sun, 17 Jan 2021 12:53:38 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Peter Rosin <peda@axentia.se>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v3 1/2] i2c: i2c-mux-gpio: Factor out pdev->dev in
+ _probe_dt()
+Message-ID: <20210117115338.GG1983@ninjato>
+References: <20201118234025.376412-1-evgreen@chromium.org>
+ <20201118153951.RESEND.v3.1.Ia45846771c63de3f2418d2b9c767cd95938a164c@changeid>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5CUMAwwhRxlRszMD"
+        protocol="application/pgp-signature"; boundary="5L6AZ1aJH5mDrqCQ"
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdVKmb8tCGQUQtCOfkjB3VxbVtwuA3u9kh2XuxQumKhekg@mail.gmail.com>
+In-Reply-To: <20201118153951.RESEND.v3.1.Ia45846771c63de3f2418d2b9c767cd95938a164c@changeid>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---5CUMAwwhRxlRszMD
+--5L6AZ1aJH5mDrqCQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> New features:
->   - Slave Clock Stretch Select,
->   - Fast Mode+ Enable,
->   - Enhanced First Bit Setup Cycle configuration.
+On Wed, Nov 18, 2020 at 03:40:24PM -0800, Evan Green wrote:
+> Factor out &pdev->dev into a local variable in preparation for
+> the ACPI enablement of this function, which will utilize the variable
+> more.
 >=20
-> Looks like the R-Car V3U variant can be treated as a generic R-Car Gen3
-> variant (lacking the new features, of course).
+> Signed-off-by: Evan Green <evgreen@chromium.org>
 
-FM+ doesn't need an update. It will just handle higher values for the
-bus frequency. This is also the most likely one to be supported in
-Linux. First Bit setup is not even supported yet in the basic version.
-Configuration via Linux is unclear same as SlaveClockStretch. Use cases
-are unclear, too, which we would need for implementating any of this.
+Applied to for-next, thanks!
 
 
---5CUMAwwhRxlRszMD
+--5L6AZ1aJH5mDrqCQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAEIvwACgkQFA3kzBSg
-KbbXFBAAsihiUyUTEcje17AWbRdnKQkuD5JVydJjOMwI7v2ZLVKjK0vDePImlnG2
-modkQu7otK5NtzioVRulBmHD9Yrc5LtPx3F6SpAMwBX7ovo4lmII7xPmFnWozNfm
-pyoVsJBqrWxLe85lg979FRHuUqRePzlv+Cbb9DhPmzfHzKw3pQFt1en1qkp9S8P1
-W9NaU+aMYM5Yizh2tuZOCI4BVVan9bp8EWKLTn3Ke/lg/9oC8UomeYrVCgjz5kB3
-YWWjOb4/anST2RMUEU5dWy4WKClGCphUWZdbdBjS7Sq0k6C23SpX9dmz2jwADJ3a
-75s3+nOZo4TwtVm0Mt9vjACr+znaP3rT47vXx+zff4CHMLgdt+savJkzw25tnCxb
-xzFRU0snOc6jwm+NZZ41DfDVgvWGZzMB5t2lSig9CzyOQGBkEbT9p/jrUY94AoyH
-RyQEwl7m/H/UlLN/dFMbZWOSS3Xekl8ISAR6mhuDwloWNU/zHuV4r7xZGA1TXD0F
-XIXtF9Qozu4HORJvY0oh3fiBz5X95KwChhD19xuBAKgVm1DSpYznHpX6KA8SZgI5
-hKwucm+/E30C0HVqOSBLlKHZhVjicDamYYEvAR7Db05oTNQiPtnEgZqqKkWH7ZAo
-bkqnMZEeAzjVzodn66XEVFMwgXn/TqmB8kWlQHA571jpA6KItI4=
-=+IuA
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAEJUIACgkQFA3kzBSg
+KbbveQ//aGFZMCKlGf9QEsDNocPBmJ+aCrO2wUj2a0cHbnFl66fyZiUKK07s3cXt
+IYvzDDzSOKiAHj5m7a/6khAyUfAxUAEGvSVfAfVUK/dE7s2xffzoM5GGDyfpTTew
+oF5o1IAGJPskKOL9S+0WVRUdOT6/TmGz0ZyEm9o7MQMDj2Jyij8/T9ekkELmyDxU
+ZtFqvqz20Tes4H/tzwDCXCy7dN44QYOY2emqjPpOWyLRyUrFJ+nv0acUQ5Lw1gbw
+xonLMOtGS2tKkXYQ6+daqrHEIPCXxzZny7OpfAOLISAB2uCHX0ZWzj6vPWPpedAf
+oBygfU1I4cGkN2jg26YwE2AoHW0bviQ+0G4vCzscUslTZiwJTT3kGLd8XksL07E0
+b2A/OWnrZx/JRRCuejNzEBiQeevNgeCYM4VYKKro5xV34LGj/wSxxjKudFc7GUxa
+AB8FezNnhlPkV/Qo/rUiHrstVHlagB9RMTUnLEQEE/2G1IDDG6Cbefe/hWjcce1j
++lIakLH2rvJsJtMF7ZzTwXn6vw+npQ9IqpFaYBQou7oE3jp4MgqfsrG0sk9pA7SS
+cKdm4FJ9k6FpgHp6H5aDgyGRWdL0T5yhjBC3sQBBw8kisDFMzQq7CSR5t/ibzoUQ
+pNRbzJC9Bk9OcXJB8SnT9cp1yg53a5D92OzEII5M0YqN0ngQcSI=
+=3Eps
 -----END PGP SIGNATURE-----
 
---5CUMAwwhRxlRszMD--
+--5L6AZ1aJH5mDrqCQ--
