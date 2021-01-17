@@ -2,86 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1D42F91EC
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jan 2021 12:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B893F2F91F6
+	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jan 2021 12:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbhAQLUs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Jan 2021 06:20:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34500 "EHLO mail.kernel.org"
+        id S1728462AbhAQLZd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Jan 2021 06:25:33 -0500
+Received: from sauhun.de ([88.99.104.3]:35480 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726295AbhAQLUr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 17 Jan 2021 06:20:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 19BBD206B2;
-        Sun, 17 Jan 2021 11:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610882406;
-        bh=zIuhWRheLZmQUMRd0qhmmD0m6Hxi2JLajZVc2WmMRzw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i/XUA551ivfCfRGlSRvjL/z/079vBZMKC/WOhXkVLXoMjamVwn5offkPg0Ae8KHA3
-         QQ65Q5m6+9x9wbcbb26lGxqy6k4nati2DEOxVgw6dFCVsBKpcddXgdCFqyQOy+IAAg
-         YnqYiyAtItw4hulzkFbT35A/sTw2tC2K0KhAJXzOjk4KjdGByGQRrX0JVVAp/aYAM7
-         1+p+tHLNZvJq+lKv9w8OTGkYuutm3FNx6Knh+z5n3SIic8TpxtWFrmRDfIBypgJpaB
-         JdItkurb6O5U0G4EalOUCXe7sHKd7yTxBUmzuVy0pgrxP4i5Z1WofaSyUkkMUoBPXQ
-         Jt/JIPMzzvw5w==
-Date:   Sun, 17 Jan 2021 12:20:03 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, talho@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: bpmp-tegra: Ignore unknown I2C_M flags
-Message-ID: <20210117112003.GB1983@ninjato>
-References: <20210112102225.3737326-1-mperttunen@nvidia.com>
+        id S1728146AbhAQLZa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 17 Jan 2021 06:25:30 -0500
+Received: from localhost (p54b3344f.dip0.t-ipconnect.de [84.179.52.79])
+        by pokefinder.org (Postfix) with ESMTPSA id F0DF72C04D8;
+        Sun, 17 Jan 2021 12:24:46 +0100 (CET)
+Date:   Sun, 17 Jan 2021 12:24:46 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, digetx@gmail.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: tegra: Create i2c_writesl_vi() to use with VI
+ I2C for filling TX FIFO
+Message-ID: <20210117112446.GC1983@ninjato>
+References: <1610478161-4877-1-git-send-email-skomatineni@nvidia.com>
+ <1610478161-4877-2-git-send-email-skomatineni@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v9Ux+11Zm5mwPlX6"
+        protocol="application/pgp-signature"; boundary="ncSAzJYg3Aa9+CRW"
 Content-Disposition: inline
-In-Reply-To: <20210112102225.3737326-1-mperttunen@nvidia.com>
+In-Reply-To: <1610478161-4877-2-git-send-email-skomatineni@nvidia.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---v9Ux+11Zm5mwPlX6
+--ncSAzJYg3Aa9+CRW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 12, 2021 at 12:22:25PM +0200, Mikko Perttunen wrote:
-> In order to not to start returning errors when new I2C_M flags are
-> added, change behavior to just ignore all flags that we don't know
-> about. This includes the I2C_M_DMA_SAFE flag that already exists.
+On Tue, Jan 12, 2021 at 11:02:41AM -0800, Sowjanya Komatineni wrote:
+> VI I2C controller has known hardware bug where immediate multiple
+> writes to TX_FIFO register gets stuck.
 >=20
-> Cc: stable@vger.kernel.org # v4.19+
-> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> Recommended software work around is to read I2C register after
+> each write to TX_FIFO register to flush out the data.
+>=20
+> This patch implements this work around for VI I2C controller.
+>=20
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 
-Applied to for-current, thanks! I added also this sentence from v2 to
-the description to justify stable: "but causes -EINVAL to be returned
-for valid transactions."
-
-Also, this driver has no dedicated maintainer. Is there someone up for
-this task? There is probably little to do and it will speed up patch
-acceptance because I pick patches once the driver maintainer is happy.
+Applied to for-current, thanks!
 
 
---v9Ux+11Zm5mwPlX6
+--ncSAzJYg3Aa9+CRW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAEHWMACgkQFA3kzBSg
-KbZmhg/7BgeQK5idumot2QsUSNDe+VvX+MeQt1dow4WsA+1/fsxofjLwwyQjo3gO
-TgW95GxMQTl4iUBLfmXnTd0kwpZ2pTWrA3E/dKk3H1elQjRavUC9K8pMSXXNCB7D
-gLk3x4fYxcJVn49NOESthe46mtqXCEExtgTUBVT5OCk/9v8w6pI34WAyly23Tkmg
-Mctpu8B+yDAw5J860eoCrTtmmRR/KI4AsG2OfFAo/E+M9L3vGwgAFid6aOWENqaT
-fSQ2SfHZOjPrGmF0xA+/ypQDd4wznQfEAzbM4Bo7dkPqRJNanFoLRfb+ySgE52es
-zu6HemkZ7cpFDQEuyZkgJ+zYU8QHLPw6B1uCTvrFyEtc0cWPGaZwKzaMl9XjweWT
-C+CE6Vg/zvX/1SBwfJzV/8YLR/zFLFiNAkFEXlFzmAyHUKO1QPfDttUjra4o/cil
-tGUt9zAgJyoql+5/5dvR1a9ZbjLWw9pd2ftNhXyHw90XxaJW3ygdh3ErGGXeLS+5
-mo1VHSUmK2LS5lfQRIAvhFgpoQX9afTlMfbAxfzCQr7LYyNc5qfNswMpg/z0Lt9A
-UR0aJ5Q6730pbpKtJDGvkNfYLT5seUX+Y7f2b+RA+RTv2WJS/3/2C0k/Vkttar+m
-EsAzVkRHRJE7Jl/uxIcDZUhGW4O4EUX3SP2khbvAfANFfodNUyU=
-=+zL6
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAEHn4ACgkQFA3kzBSg
+KbauDQ//WWf4l+IGkmljJgqCl0gS+WfQEGYVDnreh1bK7jKXzmGsB6WJ1eshsiFf
+UKTDVx0lbOSEo724D6Fix/AjIx1LCKXUwUV3jvDk9OxQol8e5S4w/McWN3qQKhrH
+dGfLoFfvDWg1kRnFctk9wrjxQyi+jzkY7mT0i1+9ZcDntPew7pxHBqxQhlrk9Wnt
+ehzkXahoTlPDYzrQ+lnNVZj0s28TB3SiU+PAlc/KKwuLi+v2GwkpQSfccD7DarMK
+tpWHT3N3OHJBg8PsNQwP1B5gX33HZ+OX/LgJUKntfWfLzK5UyM82t3T328tGzN3u
+2w4/jHXXXbWFaz23Da0hjDc5ETTte96beocPKWxDBtRwnf3IIty+6KoHBjL+oCrF
+GWcgvEvo7cKXFhKNzs5plmHvYrP3EaHd7W++GG4W3GvMa8vanwNO5d2HWyaO1p/N
+PvHl61Mko/+OadFYHNb+IW7qQtpKgvh6q6x+kDJ9OV14itfZxK+d6xVYIe/dilAo
+rv1HIa3TWjKiwiA5wVsP4wpFf1UGI+mbNtRO54Pd3UZXlWni6qaUk/ubD+a5pN60
+llTEbHOt4eie5yJM99DtLVki6KYCLRrh4m11AoKxDHyNFlWJumpDEH6nqQNOmVF0
+MqYB/mxDUoPSLCn3MmoPYKh5nO0r8MKZ5DFv7xuN1HR9PT/wP0I=
+=1/hR
 -----END PGP SIGNATURE-----
 
---v9Ux+11Zm5mwPlX6--
+--ncSAzJYg3Aa9+CRW--
