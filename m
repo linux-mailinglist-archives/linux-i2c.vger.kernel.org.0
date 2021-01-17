@@ -2,92 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F9E2F9226
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jan 2021 12:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC752F9236
+	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jan 2021 13:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728582AbhAQLzM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Jan 2021 06:55:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38366 "EHLO mail.kernel.org"
+        id S1728669AbhAQMCr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Jan 2021 07:02:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39716 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728131AbhAQLzK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 17 Jan 2021 06:55:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 456F2208A9;
-        Sun, 17 Jan 2021 11:54:29 +0000 (UTC)
+        id S1728271AbhAQMCq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 17 Jan 2021 07:02:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E7242225E;
+        Sun, 17 Jan 2021 12:02:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610884470;
-        bh=P/l7DcbXXThfMa8Bgtb8IcRN7BkhTfOynj6nvXtxxVg=;
+        s=k20201202; t=1610884925;
+        bh=O/tnSDMDCRVRjI8g8t3rleyjgCCQyMvi79QgJsgDNuk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uRE9y7p9aWuxvDv6xRwThTLdPejk77WTQspD+ac760kTW77HcjPK2xjM44wSnJS6g
-         YUKPcln8Ei9Aexngj5eejX/yU/o7kuRJ0YeymgggMh+dDXNSdDZrQdzooTAgnkQ9Sn
-         gdna3qyyEHCiyd32dcP7Uvj9cfs7DeLhoT7kV3SiIm1aA165jm51ub5h7InkpHjy3o
-         JeJ0i6kPNDEabg31Clma4wr2Suledk4AgDmacuA6AvbVNYbL8o3b+Vm0UKekxhFeNu
-         rwbxnOCqMTrJ4y/5gccj9bvkj7wUP2s5ammfdcxNEsZVMZmpzoV9f/YxWkblL2J8in
-         DcE11TBJlb7lg==
-Date:   Sun, 17 Jan 2021 12:54:26 +0100
+        b=cprZR91SodrC5oVvkPHjN6Y0cWAKxQetzdSOryV78BNXQrPFGSs08a96+gSF4JNUb
+         XPG5gv44lceepJXtJQLCVx1kj1gFAkwZqmcFG1W2f9lXwLgZLv0GgoBAG4oYP1AJ5R
+         zjH/aXlZilTZfbOz4KKVDJSNHlnB/rxXOfRG1FXwMShdbjYP34zXRcO0wLmMBHdqoD
+         ZWDNfwCGgJriFjQg4L7NRh3D7gSrLilrh4nicSn7rv2WN+1FRFYw1i2/NjTV4Id0Px
+         ONoXAZfQjOBeqPB0W4LJ06i1Rq194nc+vM9LpBIwmdj3uazRK3w62Q8YNrDzNBgnWV
+         CecfkQRx+UPHA==
+Date:   Sun, 17 Jan 2021 13:02:02 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v3 2/2] i2c: i2c-mux-gpio: Enable this driver in
- ACPI land
-Message-ID: <20210117115426.GH1983@ninjato>
-References: <20201118234025.376412-1-evgreen@chromium.org>
- <20201118153951.RESEND.v3.2.Idef164c23d326f5e5edecfc5d3eb2a68fcf18be1@changeid>
+To:     trix@redhat.com
+Cc:     jdelvare@suse.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: stub: remove definition of DEBUG
+Message-ID: <20210117120202.GI1983@ninjato>
+References: <20210114024456.1752286-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7J16OGEJ/mt06A90"
+        protocol="application/pgp-signature"; boundary="mhOzvPhkurUs4vA9"
 Content-Disposition: inline
-In-Reply-To: <20201118153951.RESEND.v3.2.Idef164c23d326f5e5edecfc5d3eb2a68fcf18be1@changeid>
+In-Reply-To: <20210114024456.1752286-1-trix@redhat.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---7J16OGEJ/mt06A90
+--mhOzvPhkurUs4vA9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 18, 2020 at 03:40:25PM -0800, Evan Green wrote:
-> Enable i2c-mux-gpio devices to be defined via ACPI. The idle-state
-> property translates directly to a fwnode_property_*() call. The child
-> reg property translates naturally into _ADR in ACPI.
+On Wed, Jan 13, 2021 at 06:44:56PM -0800, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 >=20
-> The i2c-parent binding is a relic from the days when the bindings
-> dictated that all direct children of an I2C controller had to be I2C
-> devices. These days that's no longer required. The i2c-mux can sit as a
-> direct child of its parent controller, which is where it makes the most
-> sense from a hardware description perspective. For the ACPI
-> implementation we'll assume that's always how the i2c-mux-gpio is
-> instantiated.
+> Defining DEBUG should only be done in development.
+> So remove DEBUG.
 >=20
-> Signed-off-by: Evan Green <evgreen@chromium.org>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Applied to for-next, thanks! The code Andy mentioned can still be
-refactored later if new ACPI helpers appear in the future.
+Yes, we can still enable them easily with the Kconfg debug option for
+I2C core. Applied to for-next, thanks!
 
 
---7J16OGEJ/mt06A90
+--mhOzvPhkurUs4vA9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAEJXIACgkQFA3kzBSg
-Kbb1vg/+KdOXIWsXRKhM/WY5e4lYT/wZh633lzos59SDuTmM4+iILPjJDN6uQF4T
-bDKKwePHPafdhuTAyv465RrAHgxJvDoS13ZYgZqT89kfVd2YnUrdaixRIaSUkgXj
-nH2cJmMN67DR0srGOheyqBqiUYvQKaEKrX7lDHjf4tu6wwh/kkOkaVzjM9ie1Jp1
-PwDeYmtpmGntIEaA80xnbVV0QR6TtbC+DPx8A46+gxSpinsAKJQzP32v5FmP5DPG
-/nxRh6YQyadsCfv9g3R48vFhKinr6LhEwfSlqmNWB8+xwSA53P9vqF8+yW6g+jqp
-Jx24xk2g3XYZS5ZfjXriGV6wKAfgtAzh5ukazlF0Q9c36z6OT/x3oDBZZOarYsUZ
-q7osjT2jlDsobHE1eLP3MAtQp1+X0MaDOrl4gy8WIi4SYAMkHmTxv53hXhw8lTbi
-X2ZBJhuem+xk/EDtNCF/4FjjM9I0Ule6XjEoMT7yuKjeq0IvCJfloSHfte7UR85P
-Id4FjW1C9mcwMlNITl4ospzBSMwb4VsP2G+MhG7ZG0PODT3j1pi3lxIH9xsZFxD2
-bo0KAW61LDC807U/PRpYDmR86Agv3zYQww1KmhRv3OFzob3OASeV1hk2nNvUFAVC
-yFURvrC98Sx3lkFLm9knsIrzZgQNFqxj3XETnYwsaEtqjou5QkI=
-=YX94
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAEJzoACgkQFA3kzBSg
+KbbqDA/8CiGu1KlfKUZL6hGBozOTWcWQRuBoG+bUiVwP4TWK7w1U9f5PHRdMFzpo
+kdtDKDsu1+xjDt4oCBkNvn7xaBsFZc8liJCKiRelEzTzpdxsTtrncthCH1UfSMlk
+hh8T/TkNFGiEk/YyiqlJWBcLAYIBGsCvnVR9h0CQH9eJCaOs+D8nUgrV1aJS8tRe
+kDhjSFPKn1ZZLLqiDsTs6zpI88FpeXXvBXiGNgkuI4YMvwkXeudPxKI8DYvrt0cT
+wmqcdzVSUpjbbeJp+0pJsjjFAd9tXuxbl77vvUWieNtPLurECS7zgQttooMeUO/0
+aYLJnSSGZRD9mlBH6Bg/DQOvn8YDsn72+lCpp6ZPL27jajNIRO205/z60ud/tdWR
+v3j1eaEfdVWsOy51jLQJwr+Tkp8kjhQdttcl8hbLfY6g56iArhx4q1UqSLcvwjFl
+lwQsQm6G8s2p6yyt4IBWjZQgtqJ04rXcB9Up1sf5F/drXy/6c0qhoRhUlgkUUiA7
+utRm0QAyy9zi7KffC4aBCFtZ3obqVpq6ZNeIi+rUHXkM1AQlCnYOdBSqHZYffvL9
+Ffge73E3VY7AIOZatf/NzM5xuoP0JQcdMEZQQXD3C+WnNM9HfX52zLKbgrB/8xQU
+gijeweyCg4cRyKFbvLzYzTiBWzDojhesA/rJO6qylmIJuUh+hrI=
+=DWbI
 -----END PGP SIGNATURE-----
 
---7J16OGEJ/mt06A90--
+--mhOzvPhkurUs4vA9--
