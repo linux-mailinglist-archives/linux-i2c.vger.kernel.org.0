@@ -2,80 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC752F9236
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jan 2021 13:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B6D2F9420
+	for <lists+linux-i2c@lfdr.de>; Sun, 17 Jan 2021 18:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728669AbhAQMCr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Jan 2021 07:02:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39716 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728271AbhAQMCq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 17 Jan 2021 07:02:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E7242225E;
-        Sun, 17 Jan 2021 12:02:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610884925;
-        bh=O/tnSDMDCRVRjI8g8t3rleyjgCCQyMvi79QgJsgDNuk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cprZR91SodrC5oVvkPHjN6Y0cWAKxQetzdSOryV78BNXQrPFGSs08a96+gSF4JNUb
-         XPG5gv44lceepJXtJQLCVx1kj1gFAkwZqmcFG1W2f9lXwLgZLv0GgoBAG4oYP1AJ5R
-         zjH/aXlZilTZfbOz4KKVDJSNHlnB/rxXOfRG1FXwMShdbjYP34zXRcO0wLmMBHdqoD
-         ZWDNfwCGgJriFjQg4L7NRh3D7gSrLilrh4nicSn7rv2WN+1FRFYw1i2/NjTV4Id0Px
-         ONoXAZfQjOBeqPB0W4LJ06i1Rq194nc+vM9LpBIwmdj3uazRK3w62Q8YNrDzNBgnWV
-         CecfkQRx+UPHA==
-Date:   Sun, 17 Jan 2021 13:02:02 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     trix@redhat.com
-Cc:     jdelvare@suse.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: stub: remove definition of DEBUG
-Message-ID: <20210117120202.GI1983@ninjato>
-References: <20210114024456.1752286-1-trix@redhat.com>
+        id S1729852AbhAQRQ2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Jan 2021 12:16:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728181AbhAQRQ1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Jan 2021 12:16:27 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95218C061573
+        for <linux-i2c@vger.kernel.org>; Sun, 17 Jan 2021 09:15:46 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id e7so15804440ljg.10
+        for <linux-i2c@vger.kernel.org>; Sun, 17 Jan 2021 09:15:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xRrXXlB0SlhsMGxZpyUDf3iYlu9jA32sbaiCZc/Xe2k=;
+        b=VvSU+ft+YquGegQ3KmUxVPGnYCjDQoGgpcQ3zjjVcUBi1+Z9emAIVks+mqbNME1Rwz
+         7teHdkeKNxWLCkO4+ilGbZntDAVqHDAMqX/hR6695fXUautQKJa4cPOjjD79gDKFQEpj
+         ft2laAKIQVj3gm4u/o4sET4wywLAsR6Uqkbuk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xRrXXlB0SlhsMGxZpyUDf3iYlu9jA32sbaiCZc/Xe2k=;
+        b=UvBx+EycX/rSijQjoG/wbjMxTkujc6psgAwrbixJfQy0WJzYQHBgFJvWToQOHHZ4YP
+         cPekA2GW5wrQcGSt7kqzObMACdgwucGR1iPjJJBf8h+pn0oWzhXQv+15e/z7ZDQnm+3m
+         3bgzeyHzrkQ977Mr2MzA+sea2V26gbsiSGPjLFRFC2eYmxuSmkePecVvRC42Vqal9sz1
+         wEvOe/vOUuiz4PaHwwdqsGMHJHQ3X/q3WASyqwSLVYAGnfKbYgpDG5lgLxV2EBGEKs8P
+         a5kQ7vAM6Wk217/UEj06pEvkzpqGGOZwcMt1kK7J8FTxyAz+ut82gWPFh/oBPUcjHsdL
+         V1EQ==
+X-Gm-Message-State: AOAM531EgF1ifi+ep+YEGeKjxWD5U8zkD6a7rpAajHXYdogg7JAENJ+m
+        c+UuVkfHGSYvtr7WS4eqPjJzcTEfpqNDeQ==
+X-Google-Smtp-Source: ABdhPJyMh9fxRbGIOu/5ZLu/Ojh0MzG/L37VVM3IPLGJ27A3v8DURbRDr5setOOmjWChJ2t7dGdt5A==
+X-Received: by 2002:a2e:9153:: with SMTP id q19mr8742791ljg.173.1610903744913;
+        Sun, 17 Jan 2021 09:15:44 -0800 (PST)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id v7sm1621019lfg.9.2021.01.17.09.15.43
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Jan 2021 09:15:43 -0800 (PST)
+Received: by mail-lj1-f181.google.com with SMTP id f11so15807749ljm.8
+        for <linux-i2c@vger.kernel.org>; Sun, 17 Jan 2021 09:15:43 -0800 (PST)
+X-Received: by 2002:a2e:a40b:: with SMTP id p11mr8809120ljn.315.1610903742948;
+ Sun, 17 Jan 2021 09:15:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mhOzvPhkurUs4vA9"
-Content-Disposition: inline
-In-Reply-To: <20210114024456.1752286-1-trix@redhat.com>
+References: <20201118234025.376412-1-evgreen@chromium.org> <20201118153951.RESEND.v3.2.Idef164c23d326f5e5edecfc5d3eb2a68fcf18be1@changeid>
+ <20210117115426.GH1983@ninjato>
+In-Reply-To: <20210117115426.GH1983@ninjato>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Sun, 17 Jan 2021 09:15:06 -0800
+X-Gmail-Original-Message-ID: <CAE=gft6qb9aBJTrTL_QE=LATh+1+J1gaWjtXs_OXhEbCdgm0jw@mail.gmail.com>
+Message-ID: <CAE=gft6qb9aBJTrTL_QE=LATh+1+J1gaWjtXs_OXhEbCdgm0jw@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3 2/2] i2c: i2c-mux-gpio: Enable this driver in
+ ACPI land
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Peter Rosin <peda@axentia.se>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sun, Jan 17, 2021 at 3:54 AM Wolfram Sang <wsa@kernel.org> wrote:
+>
+> On Wed, Nov 18, 2020 at 03:40:25PM -0800, Evan Green wrote:
+> > Enable i2c-mux-gpio devices to be defined via ACPI. The idle-state
+> > property translates directly to a fwnode_property_*() call. The child
+> > reg property translates naturally into _ADR in ACPI.
+> >
+> > The i2c-parent binding is a relic from the days when the bindings
+> > dictated that all direct children of an I2C controller had to be I2C
+> > devices. These days that's no longer required. The i2c-mux can sit as a
+> > direct child of its parent controller, which is where it makes the most
+> > sense from a hardware description perspective. For the ACPI
+> > implementation we'll assume that's always how the i2c-mux-gpio is
+> > instantiated.
+> >
+> > Signed-off-by: Evan Green <evgreen@chromium.org>
+>
+> Applied to for-next, thanks! The code Andy mentioned can still be
+> refactored later if new ACPI helpers appear in the future.
 
---mhOzvPhkurUs4vA9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jan 13, 2021 at 06:44:56PM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
->=20
-> Defining DEBUG should only be done in development.
-> So remove DEBUG.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
-
-Yes, we can still enable them easily with the Kconfg debug option for
-I2C core. Applied to for-next, thanks!
-
-
---mhOzvPhkurUs4vA9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAEJzoACgkQFA3kzBSg
-KbbqDA/8CiGu1KlfKUZL6hGBozOTWcWQRuBoG+bUiVwP4TWK7w1U9f5PHRdMFzpo
-kdtDKDsu1+xjDt4oCBkNvn7xaBsFZc8liJCKiRelEzTzpdxsTtrncthCH1UfSMlk
-hh8T/TkNFGiEk/YyiqlJWBcLAYIBGsCvnVR9h0CQH9eJCaOs+D8nUgrV1aJS8tRe
-kDhjSFPKn1ZZLLqiDsTs6zpI88FpeXXvBXiGNgkuI4YMvwkXeudPxKI8DYvrt0cT
-wmqcdzVSUpjbbeJp+0pJsjjFAd9tXuxbl77vvUWieNtPLurECS7zgQttooMeUO/0
-aYLJnSSGZRD9mlBH6Bg/DQOvn8YDsn72+lCpp6ZPL27jajNIRO205/z60ud/tdWR
-v3j1eaEfdVWsOy51jLQJwr+Tkp8kjhQdttcl8hbLfY6g56iArhx4q1UqSLcvwjFl
-lwQsQm6G8s2p6yyt4IBWjZQgtqJ04rXcB9Up1sf5F/drXy/6c0qhoRhUlgkUUiA7
-utRm0QAyy9zi7KffC4aBCFtZ3obqVpq6ZNeIi+rUHXkM1AQlCnYOdBSqHZYffvL9
-Ffge73E3VY7AIOZatf/NzM5xuoP0JQcdMEZQQXD3C+WnNM9HfX52zLKbgrB/8xQU
-gijeweyCg4cRyKFbvLzYzTiBWzDojhesA/rJO6qylmIJuUh+hrI=
-=DWbI
------END PGP SIGNATURE-----
-
---mhOzvPhkurUs4vA9--
+Thanks Wolfram and Peter!
