@@ -2,55 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D72592FA08B
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 13:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE8A2FA00F
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 13:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391784AbhARM4p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 07:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391680AbhARMgJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 07:36:09 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70667C061573;
-        Mon, 18 Jan 2021 04:35:28 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id d26so16289092wrb.12;
-        Mon, 18 Jan 2021 04:35:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=dDqpVUDIXcJxr0nlcBjerifvUAz/3KcnYbeDUROK8QQ=;
-        b=fl6qCPK0st1ldqXiDkQnc419pVnLOQ0MSAIv9SHxcspuyM8ZHmzNgoJAbRlU10C3A6
-         5+R4zmEEDlO3BLLTeWgkqnwbPdrskLCiiMZO3P3TtdOMzGrZC33Rt0fYfVfly0H+xZ3S
-         xHRzv87/bSu4nxCaNTgZ6VYZKlg3BBZKDEPa3dXMdKdO9i7l5A+LQ8XXprPDaDLIlTQT
-         upgEumMBp6yh2r41woGp62z1C4Qgb7yzBbF4ZyOYVisRvcaOBFc/aqBHMPTmh3dyJV5+
-         UVMEOHk9VWtz2x1WtOYCl0P7D45S8ow0FmRCW3fRH2pFRfsyhca3LCXxI/Cv0yqIOQDs
-         nQgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=dDqpVUDIXcJxr0nlcBjerifvUAz/3KcnYbeDUROK8QQ=;
-        b=bOEPeV3nA3/Vs353xeclKBlzvDR7w3qcBWP6Te3AbULgMfriWygnBGcdL69Wj+CIgu
-         /VExGcIe9Wxk6FzypF29pK882p/cbqvYXxhVd76pFOG6bYR6hkDyn5NAC1rZVRXtqqs4
-         Py5ADsVG7c0gdjYMwdBaWwmh8PuBsiG6U36o5JDqZ1wPcyvL6cwjSWHoaaPAqtmgv0qt
-         4sZfz2T5XcXBVbQNyDurW3DoyUqw54X8ohVn2Onp4aeXsPElPC5Xy4FFxdy8b6WH15NN
-         QsxOv4pmBZ7f1V8kJZOyB67Ho4UAtSudJ13rKroVZ2sHCFgfpBcCqlz68kWt9q3Xra6R
-         /nkg==
-X-Gm-Message-State: AOAM533T9L/FpePYPBPk6FE0wCppe7o3XL6XUG11McLziDnxUAdVHcGc
-        ExlhFhNkFVGspRqSFU27XBQ=
-X-Google-Smtp-Source: ABdhPJz6TFx4ZcRZ3wBY64+lquhHyb/9EVGtIBxJImQ9wVhyzU+A7KvmYddJtho3ZOk+pbS8rdhD9Q==
-X-Received: by 2002:adf:eb4e:: with SMTP id u14mr25832729wrn.99.1610973327263;
-        Mon, 18 Jan 2021 04:35:27 -0800 (PST)
-Received: from [192.168.1.211] ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id 33sm32880949wrn.35.2021.01.18.04.35.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jan 2021 04:35:26 -0800 (PST)
-Subject: Re: [PATCH v2 1/7] acpi: utils: move acpi_lpss_dep() to utils
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        id S2404140AbhARMkf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 07:40:35 -0500
+Received: from mga12.intel.com ([192.55.52.136]:25171 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404134AbhARMk3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 18 Jan 2021 07:40:29 -0500
+IronPort-SDR: MRx95v8s+VqhFX3Pd4CWSsBOzZFfoMRD7HhvjYzcbU1EV8kcS74IRS9f7KpzoC8NTlbFrHtfib
+ viJT3+CymR/A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="157977409"
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="157977409"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 04:38:43 -0800
+IronPort-SDR: WMRsZG1MOufHvxOoZIIgcqAuj1XaPWgqLN7+7YCCwfZF8XPmtUTbFJb5X8yV9VJQ6s/PPMdjJc
+ Vq/KEtLrm6Tw==
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="466359027"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 04:38:38 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1l1Toq-00285s-4i; Mon, 18 Jan 2021 14:39:40 +0200
+Date:   Mon, 18 Jan 2021 14:39:40 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, devel@acpica.org,
@@ -59,38 +38,99 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
         hdegoede@redhat.com, mgross@linux.intel.com,
         robert.moore@intel.com, erik.kaneda@intel.com,
-        sakari.ailus@linux.intel.com, kieran.bingham@ideasonboard.com
+        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 3/7] i2c: i2c-core-base: Use format macro in
+ i2c_dev_set_name()
+Message-ID: <20210118123940.GG4077@smile.fi.intel.com>
 References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-2-djrscally@gmail.com>
- <YAU3msXszVZ8CLjs@pendragon.ideasonboard.com>
- <20210118122950.GE4077@smile.fi.intel.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <a0e3cc39-c497-5fab-947e-e47d44509b9f@gmail.com>
-Date:   Mon, 18 Jan 2021 12:35:25 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <20210118003428.568892-4-djrscally@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210118122950.GE4077@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210118003428.568892-4-djrscally@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, Jan 18, 2021 at 12:34:24AM +0000, Daniel Scally wrote:
+> Some places in the kernel allow users to map resources to a device
+> using device name (for example, gpiod_lookup_table). Currently
 
-On 18/01/2021 12:29, Andy Shevchenko wrote:
-> On Mon, Jan 18, 2021 at 09:24:10AM +0200, Laurent Pinchart wrote:
->> On Mon, Jan 18, 2021 at 12:34:22AM +0000, Daniel Scally wrote:
-> ...
->
->>> +bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle);
->> "lpss" stands for low power subsystem, an Intel device within the PCH
->> that handles I2C, SPI, UART, ... I think the function should be renamed,
->> as it's now generic. acpi_dev_has_dep() is a potential candidate, I'm
->> sure better ones exist. A bit of kerneldoc would also not hurt.
-> Actually a good suggestions. Please apply my tag after addressing above.
+"...in the struct gpiod_lookup_table)." ?
 
+> this involves waiting for the i2c_client to have been registered so we
 
-Will do, thanks
+I²C client ?
+
+> can use dev_name(&client->dev). We want to add a function to allow users
+> to refer to an i2c device by name before it has been instantiated, so
+
+I²C device ?
+
+> create a macro for the format that's accessible outside the i2c layer
+
+I²C layer ?
+
+> and use it in i2c_dev_set_name()
+
+Period at the end.
+
+For the record, I do not like wrapping below to 80 limit and agree with
+Wolfram.
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> ---
+> 	- Used format macro in i2c_dev_set_name() instead of sub func
+> 
+>  drivers/i2c/i2c-core-base.c | 4 ++--
+>  include/linux/i2c.h         | 3 +++
+>  2 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 63ebf722a424..547b8926cac8 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -811,12 +811,12 @@ static void i2c_dev_set_name(struct i2c_adapter *adap,
+>  	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+>  
+>  	if (info && info->dev_name) {
+> -		dev_set_name(&client->dev, "i2c-%s", info->dev_name);
+> +		dev_set_name(&client->dev, I2C_DEV_NAME_FORMAT, info->dev_name);
+>  		return;
+>  	}
+>  
+>  	if (adev) {
+> -		dev_set_name(&client->dev, "i2c-%s", acpi_dev_name(adev));
+> +		dev_set_name(&client->dev, I2C_DEV_NAME_FORMAT, acpi_dev_name(adev));
+>  		return;
+>  	}
+>  
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index 56622658b215..4d40a4b46810 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -39,6 +39,9 @@ enum i2c_slave_event;
+>  typedef int (*i2c_slave_cb_t)(struct i2c_client *client,
+>  			      enum i2c_slave_event event, u8 *val);
+>  
+> +/* I2C Device Name Format - to maintain consistency outside the i2c layer */
+> +#define I2C_DEV_NAME_FORMAT		"i2c-%s"
+> +
+>  /* I2C Frequency Modes */
+>  #define I2C_MAX_STANDARD_MODE_FREQ	100000
+>  #define I2C_MAX_FAST_MODE_FREQ		400000
+> -- 
+> 2.25.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
