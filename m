@@ -2,43 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1306F2FA59F
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 17:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FAF2FA5D1
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 17:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406428AbhARQHh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 11:07:37 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:39475 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406424AbhARQHa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 11:07:30 -0500
-Received: by mail-oi1-f173.google.com with SMTP id w124so18165803oia.6;
-        Mon, 18 Jan 2021 08:07:12 -0800 (PST)
+        id S2406489AbhARQPN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 11:15:13 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:43302 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406484AbhARQPJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 11:15:09 -0500
+Received: by mail-oi1-f179.google.com with SMTP id q25so18165410oij.10;
+        Mon, 18 Jan 2021 08:14:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CS5IjSAEXLMX2L3dlbJYEV3dTj36qlbZID0kijl+T1k=;
-        b=uXBtSFqxV5Q6Q8b2xtDuwfp89OU4NH9xpfecKrIehu6c5VQup1LithSsIn2Pv6J2dA
-         hz7hRy1PejBssfx0htCuOjvg8iwvGpsMugoiDS6G3ds05s300jp9f7LfTLo/D5nroj3T
-         w9JypOnC2qThtB9LBjD5EZGWKOrBpULm4aA2igu6rWfYTxxCbWatXkJww2H+WbqCazY7
-         0dYYf8RVj2Pi1QNaIyhwozb3A6wUIbmLXapFy1ek1Yp8MwIELVcSbC5nbzkVelOTJazp
-         ZGfasFNE/trXdEB3X9hEC7bsda6dj5aMewePutEusKdGN7PBCUGlUGqmZMHJs6yheOA1
-         BBaQ==
-X-Gm-Message-State: AOAM533KvGBMqzVAlMZVAm3exK/ghAxtRIf+SQHViBIud2gDBfwTmBQG
-        vSqs6YvgTkbDF4jJRk3c0c/jUbKsi3v4fCHJX8o=
-X-Google-Smtp-Source: ABdhPJy3ugoahJb5GudMqD9tviCmqbTq1+xfj8D5UQTzrIQJP/8XJYGCzj99cfuy+SxZwaXbxO0FovXX0bZadB5pw/w=
-X-Received: by 2002:aca:4892:: with SMTP id v140mr32020oia.71.1610986006546;
- Mon, 18 Jan 2021 08:06:46 -0800 (PST)
+        bh=kytasFWKgvc5nOgZfApzBHs9Vw3bTByXjqhFQofMSYo=;
+        b=RGI6HfMoHdxn5lyZ+SlMsj2bSwT8qKwQpbYmgsWhn9OFG0Am9NViYAZ91tMMjFU+eP
+         ui5lE3XjrbdqeDAgQOJslQSGsIZaNG1j+vJ6sE8Y1NqnyekEk3ctLRV8qhTzDKQAWRmO
+         wDBMGIyOQyA7uTQA1gXM4vCc5gSEZ8tb0b6Z8USchHFg9FrBHVPStUccznOAIkvJbPEy
+         MoMyJqkthuipkg/el6xyY7nPRHr4a+4riyJgIZVz7KRN6erEoym+M0LjYz/WVL3C8sJ7
+         Nf+JwwHlDFt+/cTbXXuR1bgKzsiDxVLeZjzkTGHY6dN1g2oGooJwGOTgWMve7OYY+jTR
+         NwBw==
+X-Gm-Message-State: AOAM530zBHSQpZSaF4htpm3zwggfKKNGwxATFtskCm7oCM1jvKb6SWzW
+        cSIQZzxl3m/BXC2UzMFk1DIulYx7m+OQoFFdtxI=
+X-Google-Smtp-Source: ABdhPJzcYWh4Vned6TY+/VKW3DmEPz34IY9LpEHScCK2HKDVDzY0CKS2HMxu5PygiGqOof6JgT3sOGKw7PMfZula10Q=
+X-Received: by 2002:aca:5c05:: with SMTP id q5mr47953oib.157.1610986468728;
+ Mon, 18 Jan 2021 08:14:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20210118003428.568892-1-djrscally@gmail.com> <20210118003428.568892-2-djrscally@gmail.com>
- <20210118122852.GD4077@smile.fi.intel.com>
-In-Reply-To: <20210118122852.GD4077@smile.fi.intel.com>
+References: <20210118003428.568892-1-djrscally@gmail.com> <20210118003428.568892-3-djrscally@gmail.com>
+In-Reply-To: <20210118003428.568892-3-djrscally@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 18 Jan 2021 17:06:30 +0100
-Message-ID: <CAJZ5v0hihFa=M658GE2LtoKCnPkMQznXBtq9_+g0_4gFnw6qAg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] acpi: utils: move acpi_lpss_dep() to utils
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>
+Date:   Mon, 18 Jan 2021 17:14:17 +0100
+Message-ID: <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent acpi_devices
+To:     Daniel Scally <djrscally@gmail.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
@@ -56,6 +54,7 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Robert Moore <robert.moore@intel.com>,
         Erik Kaneda <erik.kaneda@intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -63,121 +62,95 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 1:30 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Mon, Jan 18, 2021 at 1:37 AM Daniel Scally <djrscally@gmail.com> wrote:
 >
-> On Mon, Jan 18, 2021 at 12:34:22AM +0000, Daniel Scally wrote:
-> > I need to be able to identify devices which declare themselves to be
-> > dependent on other devices through _DEP; add this function to utils.c
-> > and export it to the rest of the ACPI layer.
->
-> Prefix -> "ACPI / utils: "
+> In some ACPI tables we encounter, devices use the _DEP method to assert
+> a dependence on other ACPI devices as opposed to the OpRegions that the
+> specification intends. We need to be able to find those devices "from"
+> the dependee, so add a function to parse all ACPI Devices and check if
+> the include the handle of the dependee device in their _DEP buffer.
 
-Preferably "ACPI: utils: " for that matter and yes, please rename the
-function while moving it.
+What exactly do you need this for?
 
-> Otherwise good to me
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Would it be practical to look up the suppliers in acpi_dep_list instead?
+
+Note that supplier drivers may remove entries from there, but does
+that matter for your use case?
+
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> ---
+> Changes in v2:
+>         - Used acpi_lpss_dep() as Andy suggested.
 >
-> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Signed-off-by: Daniel Scally <djrscally@gmail.com>
-> > ---
-> > Changes in v2:
-> >       - Introduced
-> >
-> >  drivers/acpi/acpi_lpss.c | 24 ------------------------
-> >  drivers/acpi/internal.h  |  1 +
-> >  drivers/acpi/utils.c     | 24 ++++++++++++++++++++++++
-> >  3 files changed, 25 insertions(+), 24 deletions(-)
-> >
-> > diff --git a/drivers/acpi/acpi_lpss.c b/drivers/acpi/acpi_lpss.c
-> > index be73974ce449..70c7d9a3f715 100644
-> > --- a/drivers/acpi/acpi_lpss.c
-> > +++ b/drivers/acpi/acpi_lpss.c
-> > @@ -543,30 +543,6 @@ static struct device *acpi_lpss_find_device(const char *hid, const char *uid)
-> >       return bus_find_device(&pci_bus_type, NULL, &data, match_hid_uid);
-> >  }
-> >
-> > -static bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
-> > -{
-> > -     struct acpi_handle_list dep_devices;
-> > -     acpi_status status;
-> > -     int i;
-> > -
-> > -     if (!acpi_has_method(adev->handle, "_DEP"))
-> > -             return false;
-> > -
-> > -     status = acpi_evaluate_reference(adev->handle, "_DEP", NULL,
-> > -                                      &dep_devices);
-> > -     if (ACPI_FAILURE(status)) {
-> > -             dev_dbg(&adev->dev, "Failed to evaluate _DEP.\n");
-> > -             return false;
-> > -     }
-> > -
-> > -     for (i = 0; i < dep_devices.count; i++) {
-> > -             if (dep_devices.handles[i] == handle)
-> > -                     return true;
-> > -     }
-> > -
-> > -     return false;
-> > -}
-> > -
-> >  static void acpi_lpss_link_consumer(struct device *dev1,
-> >                                   const struct lpss_device_links *link)
-> >  {
-> > diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-> > index cb229e24c563..ee62c0973576 100644
-> > --- a/drivers/acpi/internal.h
-> > +++ b/drivers/acpi/internal.h
-> > @@ -79,6 +79,7 @@ static inline void acpi_lpss_init(void) {}
-> >  #endif
-> >
-> >  void acpi_apd_init(void);
-> > +bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle);
-> >
-> >  acpi_status acpi_hotplug_schedule(struct acpi_device *adev, u32 src);
-> >  bool acpi_queue_hotplug_work(struct work_struct *work);
-> > diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
-> > index ddca1550cce6..78b38775f18b 100644
-> > --- a/drivers/acpi/utils.c
-> > +++ b/drivers/acpi/utils.c
-> > @@ -807,6 +807,30 @@ static int acpi_dev_match_cb(struct device *dev, const void *data)
-> >       return hrv == match->hrv;
-> >  }
-> >
-> > +bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
-> > +{
-> > +     struct acpi_handle_list dep_devices;
-> > +     acpi_status status;
-> > +     int i;
-> > +
-> > +     if (!acpi_has_method(adev->handle, "_DEP"))
-> > +             return false;
-> > +
-> > +     status = acpi_evaluate_reference(adev->handle, "_DEP", NULL,
-> > +                                      &dep_devices);
-> > +     if (ACPI_FAILURE(status)) {
-> > +             dev_dbg(&adev->dev, "Failed to evaluate _DEP.\n");
-> > +             return false;
-> > +     }
-> > +
-> > +     for (i = 0; i < dep_devices.count; i++) {
-> > +             if (dep_devices.handles[i] == handle)
-> > +                     return true;
-> > +     }
-> > +
-> > +     return false;
-> > +}
-> > +
-> >  /**
-> >   * acpi_dev_present - Detect that a given ACPI device is present
-> >   * @hid: Hardware ID of the device.
-> > --
-> > 2.25.1
-> >
+>  drivers/acpi/utils.c    | 34 ++++++++++++++++++++++++++++++++++
+>  include/acpi/acpi_bus.h |  2 ++
+>  2 files changed, 36 insertions(+)
 >
+> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+> index 78b38775f18b..ec6a2406a886 100644
+> --- a/drivers/acpi/utils.c
+> +++ b/drivers/acpi/utils.c
+> @@ -831,6 +831,18 @@ bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
+>         return false;
+>  }
+>
+> +static int acpi_dev_match_by_dep(struct device *dev, const void *data)
+> +{
+> +       struct acpi_device *adev = to_acpi_device(dev);
+> +       const struct acpi_device *dependee = data;
+> +       acpi_handle handle = dependee->handle;
+> +
+> +       if (acpi_lpss_dep(adev, handle))
+> +               return 1;
+> +
+> +       return 0;
+> +}
+> +
+>  /**
+>   * acpi_dev_present - Detect that a given ACPI device is present
+>   * @hid: Hardware ID of the device.
+> @@ -866,6 +878,28 @@ bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
+>  }
+>  EXPORT_SYMBOL(acpi_dev_present);
+>
+> +/**
+> + * acpi_dev_get_next_dep_dev - Return next ACPI device dependent on input dev
+> + * @adev: Pointer to the dependee device
+> + * @prev: Pointer to the previous dependent device (or NULL for first match)
+> + *
+> + * Return the next ACPI device which declares itself dependent on @adev in
+> + * the _DEP buffer.
+> + *
+> + * The caller is responsible to call put_device() on the returned device.
+> + */
+> +struct acpi_device *acpi_dev_get_next_dep_dev(struct acpi_device *adev,
+> +                                             struct acpi_device *prev)
+> +{
+> +       struct device *start = prev ? &prev->dev : NULL;
+> +       struct device *dev;
+> +
+> +       dev = bus_find_device(&acpi_bus_type, start, adev, acpi_dev_match_by_dep);
+> +
+> +       return dev ? to_acpi_device(dev) : NULL;
+> +}
+> +EXPORT_SYMBOL(acpi_dev_get_next_dep_dev);
+> +
+>  /**
+>   * acpi_dev_get_next_match_dev - Return the next match of ACPI device
+>   * @adev: Pointer to the previous acpi_device matching this @hid, @uid and @hrv
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index 02a716a0af5d..33deb22294f2 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -683,6 +683,8 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
+>
+>  bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
+>
+> +struct acpi_device *
+> +acpi_dev_get_next_dep_dev(struct acpi_device *adev, struct acpi_device *prev);
+>  struct acpi_device *
+>  acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
+>  struct acpi_device *
 > --
-> With Best Regards,
-> Andy Shevchenko
->
+> 2.25.1
 >
