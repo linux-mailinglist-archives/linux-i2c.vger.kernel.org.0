@@ -2,31 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B2E2FAB03
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 21:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3159A2FABD5
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 21:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388570AbhARUIk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 15:08:40 -0500
-Received: from smtprelay0021.hostedemail.com ([216.40.44.21]:49188 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387977AbhARUIe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 15:08:34 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 715CD180A7FDE;
-        Mon, 18 Jan 2021 20:07:27 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:968:973:988:989:1260:1261:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:2895:3138:3139:3140:3141:3142:3353:3622:3653:3865:3866:3867:3868:3870:3872:4250:4321:5007:6117:6119:6120:6238:6742:6743:7652:7809:7901:7903:10004:10400:10848:11026:11232:11473:11658:11914:12043:12296:12297:12438:12555:12740:12760:12895:12986:13018:13019:13439:14096:14097:14181:14659:14721:21080:21220:21451:21627:21889:21939:30054:30070:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: box36_1c182e92754c
-X-Filterd-Recvd-Size: 3497
-Received: from [192.168.1.159] (unknown [47.151.137.21])
-        (Authenticated sender: joe@perches.com)
-        by omf04.hostedemail.com (Postfix) with ESMTPA;
-        Mon, 18 Jan 2021 20:07:23 +0000 (UTC)
-Message-ID: <dcc9fbef12ec58dfd3a2a98d9d3986fc5fa15f73.camel@perches.com>
-Subject: Re: [PATCH v2 7/7] mfd: Remove tps68470 MFD driver
-From:   Joe Perches <joe@perches.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>
+        id S2394409AbhARUsw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 15:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394441AbhARUrY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 15:47:24 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165B4C061757;
+        Mon, 18 Jan 2021 12:46:37 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id c124so14715504wma.5;
+        Mon, 18 Jan 2021 12:46:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=9pd6NP8MKjOIZLtlaBPlwpeyWjI68tp87PnWyTG6FQo=;
+        b=P7MDBVp2loUeGaeaCPb9ydJEPSginKWp9PFeqivuX7x+oNuy4YmjoWQtCR+1FZK3lp
+         maXNw5mdKbPvYczcDHWlM1VN5o/qJXC8Uhfc0KXMZMW+XlhRpQOTnVDeD6cGQaY/ae00
+         6R968ILzIQlI9sYkvsO2YETiAmTtnlF+uKYDKJOTM5j2dx52jtb1QbE6NSD31vscEL3J
+         /fUGV1mjvjo3airWsTnBIuO+n2TcZaivt9BEOv+FhcIQtDZqu2wY+maAB2DBNumNRHK2
+         hkpiD7BY8Rwsz9rcQjFA4OkY9ZLZj/ryjbQS/C0SnPYdc/Av9l4eccXlKZO0yrLEL0rf
+         l+aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=9pd6NP8MKjOIZLtlaBPlwpeyWjI68tp87PnWyTG6FQo=;
+        b=MzrVzoUR+J7m52AMvdiZl+mi0MAOrJiEd/CqWAE033asHnntega4kGD5sGfv5co0OP
+         hQmg2EJj64C4F0OX6CAoYdTlYPdSYaale/snjDt27RDpgVbOHfBUu/DwUVFVNxC/8r8P
+         pTHTxLLdR4ekm6AgdMf7w4RYHZ9DRIO9HO78it/Yn4Z4fzE4EbQfhuZZVs4rxSpIPGU/
+         RGKVPkmOL7Dpy2VPBS27m7OmndMlTbaTvrm9YN1L1VU7izifzpb+bTzpJ94BFGugj4ln
+         iMTFO/sjgVNm0ju129BRUA6CPG9Z+NvnfLE/Q1i2Hr53MQI58se9rX1kW2sjZPlfrsT6
+         FlWQ==
+X-Gm-Message-State: AOAM531+7Ymfi7rz67AJI/O8moeo33UUlNKLmDWu2iUxDclUmuWg+/Dm
+        jFjXHzPEdyNPCH5a92a5hj0=
+X-Google-Smtp-Source: ABdhPJyi0RSCbLsr1taKlUHRyiXCxtKBjT2oiXy25DuCHFmuTZZFyrIWKN1HWGLpUoWz11fxYUhB3Q==
+X-Received: by 2002:a05:600c:2044:: with SMTP id p4mr5632wmg.11.1611002795765;
+        Mon, 18 Jan 2021 12:46:35 -0800 (PST)
+Received: from [192.168.1.211] ([2.29.208.120])
+        by smtp.gmail.com with ESMTPSA id 33sm35554183wrn.35.2021.01.18.12.46.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 12:46:35 -0800 (PST)
+From:   Daniel Scally <djrscally@gmail.com>
+Subject: Re: [PATCH v2 6/7] platform: x86: Add intel_skl_int3472 driver
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, devel@acpica.org,
@@ -35,53 +59,291 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
         hdegoede@redhat.com, mgross@linux.intel.com,
         robert.moore@intel.com, erik.kaneda@intel.com,
-        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
         kieran.bingham@ideasonboard.com
-Date:   Mon, 18 Jan 2021 12:07:22 -0800
-In-Reply-To: <20210118135310.GN4077@smile.fi.intel.com>
 References: <20210118003428.568892-1-djrscally@gmail.com>
-         <20210118003428.568892-8-djrscally@gmail.com>
-         <20210118135310.GN4077@smile.fi.intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+ <20210118003428.568892-7-djrscally@gmail.com>
+ <YAVRqWeUsLjvU62P@pendragon.ideasonboard.com>
+Message-ID: <3872041c-1a4a-2508-d325-80242598d55e@gmail.com>
+Date:   Mon, 18 Jan 2021 20:46:34 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <YAVRqWeUsLjvU62P@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 2021-01-18 at 15:53 +0200, Andy Shevchenko wrote:
-> On Mon, Jan 18, 2021 at 12:34:28AM +0000, Daniel Scally wrote:
-> > This driver only covered one scenario in which ACPI devices with _HID
-> > INT3472 are found, and its functionality has been taken over by the
-> > intel-skl-int3472 module, so remove it.
-> 
-> Prefix: "mfd: tps68470: ". Rationale: easier to look for specific commits, by,
-> for example, running `git log --grep tps68470`.
-
-It's also reasonable to grep by path instead
-
-$ git log --pretty=oneline --grep 'tps68470'
-cf2e8c544cd3b33e9e403b7b72404c221bf888d1 Merge tag 'mfd-next-5.1' of git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd
-66265e719b4603ef9a1b8a6c876bcb542c021496 mfd: tps68470: Drop unused MODULE_DEVICE_TABLE
-883cad5ba8cc2d9b740b4ad0a8a91063c99c75a3 Merge tag 'mfd-next-4.18' of git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd
-ca34b4f0bed802e1c8612ef08456b20992aeb02a gpio: tps68470: Update to SPDX license identifier
-
-vs
-
-$ git log --pretty=oneline -- '*tps68470*'
-e42615ec233b30dfaf117b108d4cb49455b4df1d gpio: Use new GPIO_LINE_DIRECTION
-66265e719b4603ef9a1b8a6c876bcb542c021496 mfd: tps68470: Drop unused MODULE_DEVICE_TABLE
-36b835176fe014197639f335d9d35424b7805027 ACPI / PMIC: Sort headers alphabetically
-37c089d1facaf03969f66a5469c169a2c73429f6 mfd: Update to SPDX license identifier
-1b2951dd99af3970c1c1a8385a12b90236b837de Merge tag 'gpio-v4.17-1' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio
-ca34b4f0bed802e1c8612ef08456b20992aeb02a gpio: tps68470: Update to SPDX license identifier
-66444f460e68d641a63f0787627bac6c1ee340b5 ACPI / PMIC: Replace license boilerplate with SPDX license identifier
-e13452ac379070f038c264618e35559434252175 ACPI / PMIC: Add TI PMIC TPS68470 operation region driver
-968c61f7da3cf6d58a49587cfe00d899ca72c1ad Merge tag 'mfd-next-4.14' of git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd
-9bbf6a15ce19dd947b7fa6ad4095931ab3682da8 mfd: Add support for TPS68470 device
-275b13a65547e2dc39c75d660d2e0f0fddde90f6 gpio: Add support for TPS68470 GPIOs
+Hi Laurent, thanks for the comments - really appreciate the detail.
 
 
+Some specific responses below but assume a general "will do" to
+everything you mentioned otherwise...
 
+On 18/01/2021 09:15, Laurent Pinchart wrote:
+>> +	  PMIC) and one designed for Chrome OS.
+> How about expanding this a bit to explain what the INT3472 stands for ?
+>
+> 	  The INT3472 is an Intel camera power controller, a logical device
+> 	  found on some Skylake-based systems that can map to different
+> 	  hardware devices depending on the platform. On machines
+> 	  designed for Chrome OS, it maps to a TPS68470 camera PMIC. On
+> 	  machines designed for Windows, it maps to either a TP68470
+> 	  camera PMIC, a uP6641Q sensor PMIC, or a set of discrete GPIOs
+> 	  and power gates.
+
+Yeah sure ok
+
+
+>> This driver handles all three
+>> +	  situations by discovering information it needs to discern them at
+>> +	  runtime.
+>> +
+>> +	  If your device was designed for Chrome OS, this driver will provide
+>> +	  an ACPI operation region, which must be available before any of the
+>> +	  devices using this are probed. For this reason, you should select Y
+>> +	  if your device was designed for ChromeOS. This option also configures
+>> +	  the designware-i2c driver to be built-in, for the same reason.
+> Is the last sentence a leftover ?
+
+Oops - it is, but it was supposed to remind me to double check that that
+was still necessary. I'll take a look, thanks.
+
+
+>> +
+>> +#include "intel_skl_int3472_common.h"
+>> +
+>> +int skl_int3472_get_cldb_buffer(struct acpi_device *adev,
+>> +				struct int3472_cldb *cldb)
+>> +{
+>> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+>> +	acpi_handle handle = adev->handle;
+>> +	union acpi_object *obj;
+>> +	acpi_status status;
+>> +	int ret = 0;
+>> +
+>> +	status = acpi_evaluate_object(handle, "CLDB", NULL, &buffer);
+>> +	if (ACPI_FAILURE(status))
+>> +		return -ENODEV;
+>> +
+>> +	obj = buffer.pointer;
+>> +	if (!obj) {
+>> +		dev_err(&adev->dev, "ACPI device has no CLDB object\n");
+> Is this the code path that is taken on Chrome OS ? If so an error
+> message isn't appropriate. I'd drop this message, and instead add an
+> error message in the discrete PMIC code.
+
+Ah yes of course, thanks, I'll move the error message.
+
+
+>> +
+>> +	unsigned int n_gpios; /* how many GPIOs have we seen */
+>> +
+>> +	struct int3472_gpio_regulator regulator;
+>> +	struct int3472_gpio_clock clock;
+> You don't necessarily need to define separate structures for this, you
+> could also write
+>
+> 	struct {
+> 		char regulator_name[GPIO_REGULATOR_NAME_LENGTH];
+> 		char supply_name[GPIO_REGULATOR_SUPPLY_NAME_LENGTH];
+> 		struct gpio_desc *gpio;
+> 		struct regulator_dev *rdev;
+> 		struct regulator_desc rdesc;
+> 	} regulator;
+>
+> 	struct {
+> 		struct clk *clk;
+> 		struct clk_hw clk_hw;
+> 		struct clk_lookup *cl;
+> 		struct gpio_desc *gpio;
+> 	} clock;
+>
+> It's entirely up to you.
+
+
+Ooh yeah I like that more, thanks very much.
+
+
+>> +/* 79234640-9e10-4fea-a5c1-b5aa8b19756f */
+>> +static const guid_t int3472_gpio_guid =
+>> +	GUID_INIT(0x79234640, 0x9e10, 0x4fea,
+>> +		  0xa5, 0xc1, 0xb5, 0xaa, 0x8b, 0x19, 0x75, 0x6f);
+>> +
+>> +/* 822ace8f-2814-4174-a56b-5f029fe079ee */
+>> +static const guid_t cio2_sensor_module_guid =
+>> +	GUID_INIT(0x822ace8f, 0x2814, 0x4174,
+>> +		  0xa5, 0x6b, 0x5f, 0x02, 0x9f, 0xe0, 0x79, 0xee);
+> A comment that explains what those DSM functions do would be useful for
+> reference. It has taken lots of time to figure it out, let's spare the
+> pain to the next person who tries to understand this :-)
+
+
+Hah - good point, well made. I'll explain what they're for then.
+
+
+>> +static int skl_int3472_clk_enable(struct clk_hw *hw)
+>> +{
+>> +	struct int3472_gpio_clock *clk = to_int3472_clk(hw);
+>> +
+>> +	gpiod_set_value(clk->gpio, 1);
+> The clock enable() and disable() methods are not supposed to sleep,
+> while setting a GPIO value may sleep in the general case. Should this be
+> moved to skl_int3472_clk_prepare() ? Same for skl_int3472_clk_disable()
+> and skl_int3472_clk_unprepare().
+
+
+I was under the assumption the difference between gpiod_set_value() and
+gpiod_set_value_cansleep() was that gpiod_set_value() _can't_ sleep, but
+actually reading the function's comments it seems it will just complain
+if it turns out it can sleep:
+
+
+* This function can be called from contexts where we cannot sleep, and will
+* complain if the GPIO chip functions potentially sleep. It doesn't
+complain, on either of my devices, but I guess that can't be guaranteed
+for _every_ device, so these calls probably are safer in (un)prepare() yes.
+
+>> +			}
+>> +
+>> +			i++;
+>> +		}
+>> +	}
+>> +
+>> +	if (!func)
+>> +		return 0;
+> I initially thought this wasn't right, as if no entry was found in the
+> mapping table, func would still have its non-NULL value as passed to
+> this function. I then realized that you're checking if the match that
+> was found is NULL. A comment to explain this would be useful.
+
+
+Yep ok - I actually had one and decided it was superfluous and removed
+it - my bad.
+
+>> +
+>> +	status = acpi_get_handle(NULL, path, &handle);
+>> +	if (ACPI_FAILURE(status))
+>> +		return -EINVAL;
+>> +
+>> +	ret = acpi_bus_get_device(handle, &adev);
+>> +	if (ret)
+>> +		return -ENODEV;
+>> +
+>> +	table_entry = (struct gpiod_lookup)GPIO_LOOKUP_IDX(acpi_dev_name(adev),
+>> +							   ares->data.gpio.pin_table[0],
+>> +							   func, 0, polarity);
+> I wonder if
+>
+> 	table_entry.key = acpi_dev_name(adev);
+> 	table_entry.chip_hwnum = ares->data.gpio.pin_table[0];
+> 	table_entry.con_id = func;
+> 	table_entry.idx = 0;
+> 	table_entry.flags = polarity;
+>
+> (with struct gpiod_lookup table_entry = { }; above) would be more
+> readable. Up to you.
+>
+>> +
+>> +	memcpy(&int3472->gpios.table[int3472->n_sensor_gpios], &table_entry,
+>> +	       sizeof(table_entry));
+> Ah, or maybe
+>
+> 	struct gpio_lookup *table_entry;
+>
+> 	table_entry = &int3472->gpios.table[int3472->n_sensor_gpios];
+> 	table_entry->key = acpi_dev_name(adev);
+> 	table_entry->chip_hwnum = ares->data.gpio.pin_table[0];
+> 	table_entry->con_id = func;
+> 	table_entry->idx = 0;
+> 	table_entry->flags = polarity;
+>
+> (no need to memset() to 0 first as the whole structure has been
+> allocated with kzalloc()).
+
+
+Yeah you're right, this looks much nicer - thanks.
+
+
+>> +	int ret = 0;
+>> +
+>> +	init.name = kasprintf(GFP_KERNEL, "%s-clk",
+>> +			      acpi_dev_name(int3472->adev));
+> You need to check for NULL and return -ENOMEM.
+
+
+Oops, of course, thanks
+
+
+>> +		goto err_unregister_clk;
+> If this fails, you will end up calling clk_unregister() and
+> clkdev_drop() in skl_int3472_discrete_remove(). You should replace the
+> check in the remove function with
+>
+> 	if (!int3472->clock.cl) {
+
+You're right, good spot, thank you.
+
+
+>> +		dev_err(&int3472->pdev->dev, "No sensor module config\n");
+>> +		return PTR_ERR(sensor_config);
+>> +	}
+> Would it make sense to call this in skl_int3472_discrete_probe() or
+> skl_int3472_parse_crs() and cache the config pointer ?
+
+
+Yes, probably actually, and then the GPIO mapping function can just
+check for its presence.
+
+
+>> +	init_data.constraints.valid_ops_mask = REGULATOR_CHANGE_STATUS;
+>> +	init_data.num_consumer_supplies = 1;
+>> +	init_data.consumer_supplies = &sensor_config->supply_map;
+>> +
+>> +	snprintf(int3472->regulator.regulator_name,
+>> +		 GPIO_REGULATOR_NAME_LENGTH, "int3472-discrete-regulator");
+> s/GPIO_REGULATOR_NAME_LENGTH/sizeof(int3472->regulator.regulator_name)/
+>
+> Do regulator names need to be unique ? If so you may have a problem if a
+> platform has two discrete INT3472.
+
+
+Unlike clocks, the regulator framework doesn't shout at you when you do
+this, but I agree it's suboptimal at the very least, I'll set it to
+..."%s-regulator", acpi_dev_name(int3472->adev)... as with the clock.
+
+
+>> +	case INT3472_GPIO_TYPE_PRIVACY_LED:
+>> +		ret = skl_int3472_map_gpio_to_sensor(int3472, ares,
+>> +						     "indicator-led",
+>> +						     GPIO_ACTIVE_HIGH);
+> Mapping the indicator LED to the sensor isn't great, as all sensor
+> drivers would then need to handle it. Could it be handled in the
+> regulator instead, so that it would be turned on automatically when the
+> sensor is powered up ? Another option, more complicated, would be to
+> handle it in the CIO2 driver (but I'm not sure how we would map it).
+
+
+Not with the regulator, because it turns out only the 0x0b pin is one of
+those and those appear on very few devices in scope, so it wouldn't be
+called on a Surface Book 2 for example. Perhaps as part of clock
+prepare/enable? I don't much like the idea of it running in the CIO2
+driver to be honest, feels a bit out of place.
+
+
+>> +
+>> +	if (int3472->gpios_mapped)
+>> +		gpiod_remove_lookup_table(&int3472->gpios);
+> You could avoid the need for the gpios_mapped field by checking for
+>
+> 	if (int3472->gpios.list.next)
+>
+> Up to you.
+
+
+Thank you! I was scratching my head trying to figure out a better way of
+doing that.
 
