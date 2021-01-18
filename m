@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EF82F96B8
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 01:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C30992F96BC
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 01:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730753AbhARAhb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Jan 2021 19:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S1730730AbhARAh1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Jan 2021 19:37:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730494AbhARAfX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Jan 2021 19:35:23 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA06C061574;
-        Sun, 17 Jan 2021 16:34:43 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id i63so12122218wma.4;
-        Sun, 17 Jan 2021 16:34:42 -0800 (PST)
+        with ESMTP id S1730507AbhARAfY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Jan 2021 19:35:24 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54217C061575;
+        Sun, 17 Jan 2021 16:34:44 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id c5so14846553wrp.6;
+        Sun, 17 Jan 2021 16:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RJZvDTx1XXuRYdw+x5NTve2jp5kyClRdRV3Lu9KCjgs=;
-        b=oQUa3mMcz+3upwqceaYIYRZIPID3stOz5WpURqI035bd8f2KVT+dpBhLzXD1SbKt6Q
-         qyMdu2e/DQD1FdM3y7glCrF3aMJ+5NVw8j4UBjpp0L7MJZt1SWvkcyk/GFf1FUxWZqxO
-         VYpidYR8r3YgjnBp338CY+TV5RHYukzEy0VQFgR/SZh4iBFT9060FePLHePwR34mmgjX
-         lJc21ic5z5fIEv7Um5yk7hfcZPL4YajPxr+sz39Rc0D7cQVpGMZZo1HyJReL+n9LHUxW
-         sd7M2hUxWmdKcM9tRFH2iZt5rcBWOVsoPqIegyi1lVAVLxSZsEni4xBQzFnWnCqwEIAb
-         Id6g==
+        bh=oxyOObT1sg5s9bWkUVceIGz0KKXfziZMqNtmhxIBUsg=;
+        b=QzL/Nu1C+vMnHFaRThEDIZe5Ncq5Of2W3gkYCJnm8AmU7SESXNgasBnk8UNZDddGaQ
+         NY2UFS1U4m8+RsHxWIsXCuHC55DliW48CVdjoyr/Hcn1plYmlhE+l47VbBxLoz8itTu2
+         aZo45y9QldNIOq5Rzwd+s1ivBqcKHiGqlxioGfubLKYAdjh4m37/fcMJWFQus9zOugXS
+         c2PKC6sAQ6Am6/ejcfKwnxansf6BufsA8GzXsQYwjgJtbZ4C5jlb8HNHBXaD+lJ3jQiN
+         ZY1wZFnmzKWrxFBPslIqd9GIVPEHI3y+LjYJCjN6WD5tpfhV22TIdQt7X/v833C874MM
+         pfbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RJZvDTx1XXuRYdw+x5NTve2jp5kyClRdRV3Lu9KCjgs=;
-        b=e/E0e9dsplSJlTdc0o4jVTSVUOH+iliHFKkRENxOkBykIpepryGBbrFJgNfasWIuBF
-         6XntzpHB+8N0upaXJnsIvyp1ts+Z7gg2CXhglnVKs5sNa+87r45Bg4oelcYECloufM8y
-         GB49nG12FCQq5Ezb6KAcz6Upmzj7/tDYuoNJHi0ECwXInX4y4VsGEZQsO77fkBJEzos6
-         5CxttUDA+VzC4r/0+1vnCec3Gnjm3RVWP3vr7k4qBbJ1SLKrtiuuwyMR3cV7JtP5pBtq
-         K4j7ZQ+Dd9DcFoEHtDCfEeEB6LdItPc9itAcBYAjDrBrJ06LxgGDDMeL/dwgYKNt7Kna
-         xlQA==
-X-Gm-Message-State: AOAM531w3H6uXEIZxJ3YIMO/623/T0hqpwZY/WwbIO/70EW9MlI07Lti
-        L2HgJwlAHvEyxeDhv8rqegiHf326mo/mhw==
-X-Google-Smtp-Source: ABdhPJyrmuivtQjmF+XMSkLSEA6I51KLLylqniCHheFrZI1/FrzwXPkC+Th8A3ZsNVw8ZM7E+RbEXg==
-X-Received: by 2002:a7b:ca4d:: with SMTP id m13mr15551546wml.28.1610930081761;
-        Sun, 17 Jan 2021 16:34:41 -0800 (PST)
+        bh=oxyOObT1sg5s9bWkUVceIGz0KKXfziZMqNtmhxIBUsg=;
+        b=NyUYXtlmW9rx/aHp6K/xozCJP1rNchifLWx8LL2ebFjUiWvoVSLsk1RbIDOvTeQ24j
+         j10xNCp0SgDwk49PNcAHhCB4fw2fGb9cw3FaTOGpA8qyTcDO/6FY3GxVj7tiayEApjzA
+         S+e6qmLaINLFsTsEBgKVFvYBtG79IFxlTd0bHCsCCmKko13TKEssjxzDWrQ55oG1wiKo
+         Rld9R4CZwZ33/2j8tk4TPi1b+SFyulvutqvwuL1TiHMXeB1UptDCe3fJBeGH+R7raLSt
+         uklrwOV/GOc18nJmXmaBcqOYr7yw8TNYOAiFWQkZgzE4wcio3kkU5hfQ6xNU2Lt/jDwU
+         2gGA==
+X-Gm-Message-State: AOAM530nHKW984q5KIRC22FxPYRyxBzOE9tmt8LOu364uVfUnYKkXtbx
+        Gvlk/LFBsz5Gwrztb6GyYckTT3dA2ylOwA==
+X-Google-Smtp-Source: ABdhPJwP8X4dWttjUj1Bb2v8rxhV65TD73lpEEX+TkikPku+vK0TaGlSy9mss5ow/8gIZF3SXV9r4Q==
+X-Received: by 2002:adf:cc81:: with SMTP id p1mr23185951wrj.339.1610930083018;
+        Sun, 17 Jan 2021 16:34:43 -0800 (PST)
 Received: from valhalla.home ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id o124sm23642040wmb.5.2021.01.17.16.34.40
+        by smtp.gmail.com with ESMTPSA id o124sm23642040wmb.5.2021.01.17.16.34.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jan 2021 16:34:41 -0800 (PST)
+        Sun, 17 Jan 2021 16:34:42 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     rjw@rjwysocki.net, lenb@kernel.org, andy@kernel.org,
         robert.moore@intel.com, erik.kaneda@intel.com,
         sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
         laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com
-Subject: [PATCH v2 1/7] acpi: utils: move acpi_lpss_dep() to utils
-Date:   Mon, 18 Jan 2021 00:34:22 +0000
-Message-Id: <20210118003428.568892-2-djrscally@gmail.com>
+Subject: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent acpi_devices
+Date:   Mon, 18 Jan 2021 00:34:23 +0000
+Message-Id: <20210118003428.568892-3-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210118003428.568892-1-djrscally@gmail.com>
 References: <20210118003428.568892-1-djrscally@gmail.com>
@@ -70,103 +70,86 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I need to be able to identify devices which declare themselves to be
-dependent on other devices through _DEP; add this function to utils.c
-and export it to the rest of the ACPI layer.
+In some ACPI tables we encounter, devices use the _DEP method to assert
+a dependence on other ACPI devices as opposed to the OpRegions that the
+specification intends. We need to be able to find those devices "from"
+the dependee, so add a function to parse all ACPI Devices and check if
+the include the handle of the dependee device in their _DEP buffer.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v2:
-	- Introduced
+	- Used acpi_lpss_dep() as Andy suggested.
 
- drivers/acpi/acpi_lpss.c | 24 ------------------------
- drivers/acpi/internal.h  |  1 +
- drivers/acpi/utils.c     | 24 ++++++++++++++++++++++++
- 3 files changed, 25 insertions(+), 24 deletions(-)
+ drivers/acpi/utils.c    | 34 ++++++++++++++++++++++++++++++++++
+ include/acpi/acpi_bus.h |  2 ++
+ 2 files changed, 36 insertions(+)
 
-diff --git a/drivers/acpi/acpi_lpss.c b/drivers/acpi/acpi_lpss.c
-index be73974ce449..70c7d9a3f715 100644
---- a/drivers/acpi/acpi_lpss.c
-+++ b/drivers/acpi/acpi_lpss.c
-@@ -543,30 +543,6 @@ static struct device *acpi_lpss_find_device(const char *hid, const char *uid)
- 	return bus_find_device(&pci_bus_type, NULL, &data, match_hid_uid);
- }
- 
--static bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
--{
--	struct acpi_handle_list dep_devices;
--	acpi_status status;
--	int i;
--
--	if (!acpi_has_method(adev->handle, "_DEP"))
--		return false;
--
--	status = acpi_evaluate_reference(adev->handle, "_DEP", NULL,
--					 &dep_devices);
--	if (ACPI_FAILURE(status)) {
--		dev_dbg(&adev->dev, "Failed to evaluate _DEP.\n");
--		return false;
--	}
--
--	for (i = 0; i < dep_devices.count; i++) {
--		if (dep_devices.handles[i] == handle)
--			return true;
--	}
--
--	return false;
--}
--
- static void acpi_lpss_link_consumer(struct device *dev1,
- 				    const struct lpss_device_links *link)
- {
-diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-index cb229e24c563..ee62c0973576 100644
---- a/drivers/acpi/internal.h
-+++ b/drivers/acpi/internal.h
-@@ -79,6 +79,7 @@ static inline void acpi_lpss_init(void) {}
- #endif
- 
- void acpi_apd_init(void);
-+bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle);
- 
- acpi_status acpi_hotplug_schedule(struct acpi_device *adev, u32 src);
- bool acpi_queue_hotplug_work(struct work_struct *work);
 diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
-index ddca1550cce6..78b38775f18b 100644
+index 78b38775f18b..ec6a2406a886 100644
 --- a/drivers/acpi/utils.c
 +++ b/drivers/acpi/utils.c
-@@ -807,6 +807,30 @@ static int acpi_dev_match_cb(struct device *dev, const void *data)
- 	return hrv == match->hrv;
+@@ -831,6 +831,18 @@ bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
+ 	return false;
  }
  
-+bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
++static int acpi_dev_match_by_dep(struct device *dev, const void *data)
 +{
-+	struct acpi_handle_list dep_devices;
-+	acpi_status status;
-+	int i;
++	struct acpi_device *adev = to_acpi_device(dev);
++	const struct acpi_device *dependee = data;
++	acpi_handle handle = dependee->handle;
 +
-+	if (!acpi_has_method(adev->handle, "_DEP"))
-+		return false;
++	if (acpi_lpss_dep(adev, handle))
++		return 1;
 +
-+	status = acpi_evaluate_reference(adev->handle, "_DEP", NULL,
-+					 &dep_devices);
-+	if (ACPI_FAILURE(status)) {
-+		dev_dbg(&adev->dev, "Failed to evaluate _DEP.\n");
-+		return false;
-+	}
-+
-+	for (i = 0; i < dep_devices.count; i++) {
-+		if (dep_devices.handles[i] == handle)
-+			return true;
-+	}
-+
-+	return false;
++	return 0;
 +}
 +
  /**
   * acpi_dev_present - Detect that a given ACPI device is present
   * @hid: Hardware ID of the device.
+@@ -866,6 +878,28 @@ bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
+ }
+ EXPORT_SYMBOL(acpi_dev_present);
+ 
++/**
++ * acpi_dev_get_next_dep_dev - Return next ACPI device dependent on input dev
++ * @adev: Pointer to the dependee device
++ * @prev: Pointer to the previous dependent device (or NULL for first match)
++ *
++ * Return the next ACPI device which declares itself dependent on @adev in
++ * the _DEP buffer.
++ *
++ * The caller is responsible to call put_device() on the returned device.
++ */
++struct acpi_device *acpi_dev_get_next_dep_dev(struct acpi_device *adev,
++					      struct acpi_device *prev)
++{
++	struct device *start = prev ? &prev->dev : NULL;
++	struct device *dev;
++
++	dev = bus_find_device(&acpi_bus_type, start, adev, acpi_dev_match_by_dep);
++
++	return dev ? to_acpi_device(dev) : NULL;
++}
++EXPORT_SYMBOL(acpi_dev_get_next_dep_dev);
++
+ /**
+  * acpi_dev_get_next_match_dev - Return the next match of ACPI device
+  * @adev: Pointer to the previous acpi_device matching this @hid, @uid and @hrv
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index 02a716a0af5d..33deb22294f2 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -683,6 +683,8 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
+ 
+ bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
+ 
++struct acpi_device *
++acpi_dev_get_next_dep_dev(struct acpi_device *adev, struct acpi_device *prev);
+ struct acpi_device *
+ acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
+ struct acpi_device *
 -- 
 2.25.1
 
