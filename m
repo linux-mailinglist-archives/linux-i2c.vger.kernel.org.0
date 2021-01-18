@@ -2,34 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EAB2F9FD9
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 13:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D72592FA08B
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 13:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390732AbhARMey (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 07:34:54 -0500
-Received: from mga03.intel.com ([134.134.136.65]:33257 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404055AbhARMeu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 18 Jan 2021 07:34:50 -0500
-IronPort-SDR: MxqmXUfBU5LuYfmsxWK0knQc4fqoe5VGAz980ECJAZrhR8ukHLLiqyqst2RAXhPXhOSdhYx5ZU
- vy8psgIA2NZA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="178882109"
-X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
-   d="scan'208";a="178882109"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 04:32:58 -0800
-IronPort-SDR: KpQl6Qabvav18BtNcRapJV3kUkLwcUyZ1hPHgtgvtgXbRb3U/GdOt7sUgY3UXvOTcAKPfPy43I
- dxdGuYOAzxcg==
-X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
-   d="scan'208";a="365325419"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 04:32:53 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1l1TjH-0027kG-Q9; Mon, 18 Jan 2021 14:33:55 +0200
-Date:   Mon, 18 Jan 2021 14:33:55 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Daniel Scally <djrscally@gmail.com>
+        id S2391784AbhARM4p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 07:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391680AbhARMgJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 07:36:09 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70667C061573;
+        Mon, 18 Jan 2021 04:35:28 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id d26so16289092wrb.12;
+        Mon, 18 Jan 2021 04:35:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=dDqpVUDIXcJxr0nlcBjerifvUAz/3KcnYbeDUROK8QQ=;
+        b=fl6qCPK0st1ldqXiDkQnc419pVnLOQ0MSAIv9SHxcspuyM8ZHmzNgoJAbRlU10C3A6
+         5+R4zmEEDlO3BLLTeWgkqnwbPdrskLCiiMZO3P3TtdOMzGrZC33Rt0fYfVfly0H+xZ3S
+         xHRzv87/bSu4nxCaNTgZ6VYZKlg3BBZKDEPa3dXMdKdO9i7l5A+LQ8XXprPDaDLIlTQT
+         upgEumMBp6yh2r41woGp62z1C4Qgb7yzBbF4ZyOYVisRvcaOBFc/aqBHMPTmh3dyJV5+
+         UVMEOHk9VWtz2x1WtOYCl0P7D45S8ow0FmRCW3fRH2pFRfsyhca3LCXxI/Cv0yqIOQDs
+         nQgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=dDqpVUDIXcJxr0nlcBjerifvUAz/3KcnYbeDUROK8QQ=;
+        b=bOEPeV3nA3/Vs353xeclKBlzvDR7w3qcBWP6Te3AbULgMfriWygnBGcdL69Wj+CIgu
+         /VExGcIe9Wxk6FzypF29pK882p/cbqvYXxhVd76pFOG6bYR6hkDyn5NAC1rZVRXtqqs4
+         Py5ADsVG7c0gdjYMwdBaWwmh8PuBsiG6U36o5JDqZ1wPcyvL6cwjSWHoaaPAqtmgv0qt
+         4sZfz2T5XcXBVbQNyDurW3DoyUqw54X8ohVn2Onp4aeXsPElPC5Xy4FFxdy8b6WH15NN
+         QsxOv4pmBZ7f1V8kJZOyB67Ho4UAtSudJ13rKroVZ2sHCFgfpBcCqlz68kWt9q3Xra6R
+         /nkg==
+X-Gm-Message-State: AOAM533T9L/FpePYPBPk6FE0wCppe7o3XL6XUG11McLziDnxUAdVHcGc
+        ExlhFhNkFVGspRqSFU27XBQ=
+X-Google-Smtp-Source: ABdhPJz6TFx4ZcRZ3wBY64+lquhHyb/9EVGtIBxJImQ9wVhyzU+A7KvmYddJtho3ZOk+pbS8rdhD9Q==
+X-Received: by 2002:adf:eb4e:: with SMTP id u14mr25832729wrn.99.1610973327263;
+        Mon, 18 Jan 2021 04:35:27 -0800 (PST)
+Received: from [192.168.1.211] ([2.29.208.120])
+        by smtp.gmail.com with ESMTPSA id 33sm32880949wrn.35.2021.01.18.04.35.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 04:35:26 -0800 (PST)
+Subject: Re: [PATCH v2 1/7] acpi: utils: move acpi_lpss_dep() to utils
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, devel@acpica.org,
@@ -38,52 +59,38 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
         hdegoede@redhat.com, mgross@linux.intel.com,
         robert.moore@intel.com, erik.kaneda@intel.com,
-        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
-        kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent
- acpi_devices
-Message-ID: <20210118123355.GF4077@smile.fi.intel.com>
+        sakari.ailus@linux.intel.com, kieran.bingham@ideasonboard.com
 References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-3-djrscally@gmail.com>
+ <20210118003428.568892-2-djrscally@gmail.com>
+ <YAU3msXszVZ8CLjs@pendragon.ideasonboard.com>
+ <20210118122950.GE4077@smile.fi.intel.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <a0e3cc39-c497-5fab-947e-e47d44509b9f@gmail.com>
+Date:   Mon, 18 Jan 2021 12:35:25 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210118003428.568892-3-djrscally@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210118122950.GE4077@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 12:34:23AM +0000, Daniel Scally wrote:
-> In some ACPI tables we encounter, devices use the _DEP method to assert
-> a dependence on other ACPI devices as opposed to the OpRegions that the
-> specification intends. We need to be able to find those devices "from"
-> the dependee, so add a function to parse all ACPI Devices and check if
-> the include the handle of the dependee device in their _DEP buffer.
 
-Fix prefix to be "ACPI / utils: " and rebase on top of function name changes as
-suggested by Laurent.
+On 18/01/2021 12:29, Andy Shevchenko wrote:
+> On Mon, Jan 18, 2021 at 09:24:10AM +0200, Laurent Pinchart wrote:
+>> On Mon, Jan 18, 2021 at 12:34:22AM +0000, Daniel Scally wrote:
+> ...
+>
+>>> +bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle);
+>> "lpss" stands for low power subsystem, an Intel device within the PCH
+>> that handles I2C, SPI, UART, ... I think the function should be renamed,
+>> as it's now generic. acpi_dev_has_dep() is a potential candidate, I'm
+>> sure better ones exist. A bit of kerneldoc would also not hurt.
+> Actually a good suggestions. Please apply my tag after addressing above.
 
-...
 
-> +/**
-> + * acpi_dev_get_next_dep_dev - Return next ACPI device dependent on input dev
-
-Are you expecting some kind of for_each_*() macro to be added and used?
-Otherwise there is probably no need to have it "_next_" in the name as it will
-be a bit confusing.
-
-> + * @adev: Pointer to the dependee device
-> + * @prev: Pointer to the previous dependent device (or NULL for first match)
-> + *
-> + * Return the next ACPI device which declares itself dependent on @adev in
-> + * the _DEP buffer.
-> + *
-> + * The caller is responsible to call put_device() on the returned device.
-> + */
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Will do, thanks
 
