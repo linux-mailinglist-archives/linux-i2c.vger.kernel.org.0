@@ -2,93 +2,166 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 355FD2F9F18
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 13:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5182F9FA9
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 13:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389648AbhARMHV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 07:07:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45286 "EHLO mail.kernel.org"
+        id S2403917AbhARMaD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 07:30:03 -0500
+Received: from mga17.intel.com ([192.55.52.151]:3201 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389047AbhARMHR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 18 Jan 2021 07:07:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C933222BB;
-        Mon, 18 Jan 2021 12:06:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610971596;
-        bh=q/FYT+FiLtSjL+KOgS20Z7N04SjGI/P+GlPMtd2nG60=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XFh0dYiGpx4oVbGvJ+staJ5LrwgAf5GdKJDUFEjr5UDoxNnGQBI8y8J8NlsPIufoO
-         M6q1bBYN2LC5/GD6yVc681THbRJs0DoxBjd/Njx/vV4N1MidSMwgT4x+Cx4UaHMx0U
-         iZLUKrXKNgLVV4Zg0WdTUyFWfhvA+OWu4kGLmWEkvSuDUT2vSBrToEL+k/NpcEG7hp
-         W9yM1oYm1p2zy5KlUxDxHKikDgScSt86a27jsK0/fb2aLOYhE6mU+lpaFlfV9UZkgj
-         CjRUGr4mF8pKErGOTyGEW8Sko6KzP134rX2uR5rKKvIlhLw0pTAr85K4TgB2cikoRc
-         yO/Ye2ELoD7MQ==
-Date:   Mon, 18 Jan 2021 12:05:58 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 18/21] dt-bindings: allwinner: Add H616 compatible
- strings
-Message-ID: <20210118120558.GD4455@sirena.org.uk>
-References: <20210118020848.11721-1-andre.przywara@arm.com>
- <20210118020848.11721-19-andre.przywara@arm.com>
+        id S2391480AbhARM3m (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 18 Jan 2021 07:29:42 -0500
+IronPort-SDR: nxnbOWCZEH08Q1+W7Lk7Ya10E3vlgOFxGF1x7ekinxN0/Gga4i2BjsI//wY1trC/Utl7CEB1cv
+ T5chMmN6PWxw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="158569566"
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="158569566"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 04:27:55 -0800
+IronPort-SDR: 2j/s5jqLYA5tSPupN5GM+8EIavU5r0cI0hwt2U8w3taMjoaixo9V17vkvePk10ElGdV9NYhb2T
+ SeW3LjG0YcBA==
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="500631904"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 04:27:50 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1l1TeO-0027Qp-96; Mon, 18 Jan 2021 14:28:52 +0200
+Date:   Mon, 18 Jan 2021 14:28:52 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, devel@acpica.org,
+        rjw@rjwysocki.net, lenb@kernel.org, andy@kernel.org,
+        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
+        hdegoede@redhat.com, mgross@linux.intel.com,
+        robert.moore@intel.com, erik.kaneda@intel.com,
+        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 1/7] acpi: utils: move acpi_lpss_dep() to utils
+Message-ID: <20210118122852.GD4077@smile.fi.intel.com>
+References: <20210118003428.568892-1-djrscally@gmail.com>
+ <20210118003428.568892-2-djrscally@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jL2BoiuKMElzg3CS"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210118020848.11721-19-andre.przywara@arm.com>
-X-Cookie: Huh?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210118003428.568892-2-djrscally@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, Jan 18, 2021 at 12:34:22AM +0000, Daniel Scally wrote:
+> I need to be able to identify devices which declare themselves to be
+> dependent on other devices through _DEP; add this function to utils.c
+> and export it to the rest of the ACPI layer.
 
---jL2BoiuKMElzg3CS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Prefix -> "ACPI / utils: "
 
-On Mon, Jan 18, 2021 at 02:08:45AM +0000, Andre Przywara wrote:
-> Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
-> bindings, and pair them with an existing fallback compatible string,
-> as the devices are compatible.
-> This covers I2C, infrared, RTC and SPI.
->=20
-> Use enums to group all compatible devices together.
+Otherwise good to me
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Please submit normal, per subsystem patches for things like this.
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> ---
+> Changes in v2:
+> 	- Introduced
+> 
+>  drivers/acpi/acpi_lpss.c | 24 ------------------------
+>  drivers/acpi/internal.h  |  1 +
+>  drivers/acpi/utils.c     | 24 ++++++++++++++++++++++++
+>  3 files changed, 25 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/acpi/acpi_lpss.c b/drivers/acpi/acpi_lpss.c
+> index be73974ce449..70c7d9a3f715 100644
+> --- a/drivers/acpi/acpi_lpss.c
+> +++ b/drivers/acpi/acpi_lpss.c
+> @@ -543,30 +543,6 @@ static struct device *acpi_lpss_find_device(const char *hid, const char *uid)
+>  	return bus_find_device(&pci_bus_type, NULL, &data, match_hid_uid);
+>  }
+>  
+> -static bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
+> -{
+> -	struct acpi_handle_list dep_devices;
+> -	acpi_status status;
+> -	int i;
+> -
+> -	if (!acpi_has_method(adev->handle, "_DEP"))
+> -		return false;
+> -
+> -	status = acpi_evaluate_reference(adev->handle, "_DEP", NULL,
+> -					 &dep_devices);
+> -	if (ACPI_FAILURE(status)) {
+> -		dev_dbg(&adev->dev, "Failed to evaluate _DEP.\n");
+> -		return false;
+> -	}
+> -
+> -	for (i = 0; i < dep_devices.count; i++) {
+> -		if (dep_devices.handles[i] == handle)
+> -			return true;
+> -	}
+> -
+> -	return false;
+> -}
+> -
+>  static void acpi_lpss_link_consumer(struct device *dev1,
+>  				    const struct lpss_device_links *link)
+>  {
+> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+> index cb229e24c563..ee62c0973576 100644
+> --- a/drivers/acpi/internal.h
+> +++ b/drivers/acpi/internal.h
+> @@ -79,6 +79,7 @@ static inline void acpi_lpss_init(void) {}
+>  #endif
+>  
+>  void acpi_apd_init(void);
+> +bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle);
+>  
+>  acpi_status acpi_hotplug_schedule(struct acpi_device *adev, u32 src);
+>  bool acpi_queue_hotplug_work(struct work_struct *work);
+> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+> index ddca1550cce6..78b38775f18b 100644
+> --- a/drivers/acpi/utils.c
+> +++ b/drivers/acpi/utils.c
+> @@ -807,6 +807,30 @@ static int acpi_dev_match_cb(struct device *dev, const void *data)
+>  	return hrv == match->hrv;
+>  }
+>  
+> +bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
+> +{
+> +	struct acpi_handle_list dep_devices;
+> +	acpi_status status;
+> +	int i;
+> +
+> +	if (!acpi_has_method(adev->handle, "_DEP"))
+> +		return false;
+> +
+> +	status = acpi_evaluate_reference(adev->handle, "_DEP", NULL,
+> +					 &dep_devices);
+> +	if (ACPI_FAILURE(status)) {
+> +		dev_dbg(&adev->dev, "Failed to evaluate _DEP.\n");
+> +		return false;
+> +	}
+> +
+> +	for (i = 0; i < dep_devices.count; i++) {
+> +		if (dep_devices.handles[i] == handle)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  /**
+>   * acpi_dev_present - Detect that a given ACPI device is present
+>   * @hid: Hardware ID of the device.
+> -- 
+> 2.25.1
+> 
 
---jL2BoiuKMElzg3CS
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+With Best Regards,
+Andy Shevchenko
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmAFeaUACgkQJNaLcl1U
-h9A+Fwf+LAkNmQitmzhglYIYHsNeibirBy6k8yPJ2w1+MZulWEhOeDJvaqgbS3ct
-4Q3qFxVZGkgzzsypXzU0iEB03Vzxy33H6J3QPfNqMhNQPQOZOXQho3xTuKgar9P+
-qQEQDJFYL1qpMKz3+CqO4SQotdjIFEJYNd/O44cnTCU98AnHARvi32ajvs7+VzNu
-HHKAsqKmQT4a4nPA31joiWxp2XAC7rA1q+KZ7iL5rWIKuJkp4pfkXK58QiBegXhz
-CCCrggzrjimyFakw4WA6IWyTF2pE6maY0UyLrP9n6AHPC/DDIvalzos5xjC7KWj8
-KsITNqrGnlImwAjQ5fSm/X1uTyqipw==
-=MpJn
------END PGP SIGNATURE-----
-
---jL2BoiuKMElzg3CS--
