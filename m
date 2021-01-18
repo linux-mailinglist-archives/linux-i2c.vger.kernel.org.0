@@ -2,28 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDB92F9ABB
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 08:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B3C2F9B54
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 09:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732861AbhARHnS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 02:43:18 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54976 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732724AbhARHnS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 02:43:18 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1E4CA2BB;
-        Mon, 18 Jan 2021 08:42:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1610955755;
-        bh=Vnby0mwsCmasS2TI5LzaiZyTwN99T+ncYSU29OFGRgA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MRImOa7E95Lr11SFTvPZORP2Sje7v1eiGCMqLXkzTQUOFWyWkOXCojNci/WVTDiv/
-         2Rwybse2XO+tIVEheqljj7mJvtqC0W9NzFnSUVsbtcCCDTF3xkCd38u3Krfaakze16
-         iGG/lUeq1XtCAhZUHTEZRfw6uWYA/bD7Mpfpzr24=
-Date:   Mon, 18 Jan 2021 09:42:19 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Daniel Scally <djrscally@gmail.com>
+        id S2387837AbhARIcu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 03:32:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726488AbhARIci (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 03:32:38 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A4FC061573;
+        Mon, 18 Jan 2021 00:31:56 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id 6so8254396wri.3;
+        Mon, 18 Jan 2021 00:31:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=mV6Bo6RnxoD+Wo+WZWXYj5Z/xntqPRjWRdQIckQx4+s=;
+        b=R7Xg4fdNVNvV1pjh0MXgS0lrsw0EbZ82Zr1s7Re2aHAHuSL81ou6Oclr4q6MrsN7G5
+         QB3JI4InchASbmxYjgUrrs+B1QvTBANCqyIFc+5bFKm7jPU+86pHBsYILBY6v8/6GhSP
+         ZehxNKrH84r6p1TYLwx7vjzkP+by56EtxjcUR9EEvdoyMvdAr1a5+HF5R9OFpoxnKKCn
+         VevZleRUpkZ1bY+aOaHvxyrtt20PO2GmqXsFHtZWZeyez9WPgJ6xN0RAmhbeBV5UmYuK
+         kteQbfJrZsZf9QMs4O/QDTS9XtBKxv9w0fC5XFrxTY/6hM4IZ6K5ual0FCMXUnjoGk2q
+         oHlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=mV6Bo6RnxoD+Wo+WZWXYj5Z/xntqPRjWRdQIckQx4+s=;
+        b=lNTJLtD5CQVi4vCNUKhUJbWQBQiqWOBglvzli17Z8q1U/C4We7Rj8A4UhXR/DL37OD
+         zkdSKp11X12cOpj1T9YXtswXCXQlQXpHo4V8h1B3D4vJP3hIjAcEqJBpWeeGWjdZ0NHy
+         Gf9CKqrM+PkOtTMETJ553we5yFzgc27DoH3CCeKbYS6cUOdWcApi1BeZXEnFcXsmu0WQ
+         R8R7sUPfap1CtVVwyG/rLkNl4aKc/lAb9zb7zSioV74S9iwdMZOzos9PdhRju6DKHZkB
+         BUm4lMrOMlMJWAanZCCLRkLN3fj82qCBdHQfDPv/06nGB3YKSm6GYqaAOKYFrEDG/KNQ
+         P8QA==
+X-Gm-Message-State: AOAM532RcYV+LW3F+CK6mCKx+yl58HCtS6Afr6fBQi6Lad8rmlannncF
+        MCGRpep7WQ1V2joPCeE7VrH1eOZneudt7g==
+X-Google-Smtp-Source: ABdhPJxZBCHKwlIldrumbbeb3NS0Fy5oV5Jm1Q4nPb19wsm+4b4tguqLaJiglYZRuof4GpdxIi48gQ==
+X-Received: by 2002:a05:6000:222:: with SMTP id l2mr24227009wrz.392.1610958715325;
+        Mon, 18 Jan 2021 00:31:55 -0800 (PST)
+Received: from [192.168.1.211] ([2.29.208.120])
+        by smtp.gmail.com with ESMTPSA id p15sm28555537wrt.15.2021.01.18.00.31.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 00:31:54 -0800 (PST)
+Subject: Re: [PATCH v2 1/7] acpi: utils: move acpi_lpss_dep() to utils
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, devel@acpica.org,
@@ -34,223 +60,132 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         robert.moore@intel.com, erik.kaneda@intel.com,
         sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
         kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 7/7] mfd: Remove tps68470 MFD driver
-Message-ID: <YAU726t7zz9k22YT@pendragon.ideasonboard.com>
 References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-8-djrscally@gmail.com>
+ <20210118003428.568892-2-djrscally@gmail.com>
+ <YAU3msXszVZ8CLjs@pendragon.ideasonboard.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <0ac56c5f-7a8b-5bab-13fc-300206d65d13@gmail.com>
+Date:   Mon, 18 Jan 2021 08:31:52 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <YAU3msXszVZ8CLjs@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210118003428.568892-8-djrscally@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Daniel,
+Hi Laurent
 
-Thank you for the patch.
-
-On Mon, Jan 18, 2021 at 12:34:28AM +0000, Daniel Scally wrote:
-> This driver only covered one scenario in which ACPI devices with _HID
-> INT3472 are found, and its functionality has been taken over by the
-> intel-skl-int3472 module, so remove it.
-> 
-> Signed-off-by: Daniel Scally <djrscally@gmail.com>
-> ---
-> Changes in v2:
-> 
-> 	- Introduced
-> 
->  drivers/acpi/pmic/Kconfig |  1 -
->  drivers/gpio/Kconfig      |  1 -
->  drivers/mfd/Kconfig       | 18 --------
->  drivers/mfd/Makefile      |  1 -
->  drivers/mfd/tps68470.c    | 97 ---------------------------------------
->  5 files changed, 118 deletions(-)
->  delete mode 100644 drivers/mfd/tps68470.c
-> 
-> diff --git a/drivers/acpi/pmic/Kconfig b/drivers/acpi/pmic/Kconfig
-> index 56bbcb2ce61b..e27d8ef3a32c 100644
-> --- a/drivers/acpi/pmic/Kconfig
-> +++ b/drivers/acpi/pmic/Kconfig
-> @@ -52,7 +52,6 @@ endif	# PMIC_OPREGION
->  
->  config TPS68470_PMIC_OPREGION
->  	bool "ACPI operation region support for TPS68470 PMIC"
-> -	depends on MFD_TPS68470
-
-Should this now depend on INTEL_SKL_INT3472 ?
-
->  	help
->  	  This config adds ACPI operation region support for TI TPS68470 PMIC.
->  	  TPS68470 device is an advanced power management unit that powers
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index c70f46e80a3b..07ff8f24b0d9 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -1343,7 +1343,6 @@ config GPIO_TPS65912
->  
->  config GPIO_TPS68470
->  	bool "TPS68470 GPIO"
-> -	depends on MFD_TPS68470
-
-Same here.
-
-This won't deal with the case where th TPS68470 is instantiated through
-DT, but that's not supported yet, so it can be dealt with it later when
-the need arises.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  	help
->  	  Select this option to enable GPIO driver for the TPS68470
->  	  chip family.
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index bdfce7b15621..9a1f648efde0 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1520,24 +1520,6 @@ config MFD_TPS65217
->  	  This driver can also be built as a module.  If so, the module
->  	  will be called tps65217.
->  
-> -config MFD_TPS68470
-> -	bool "TI TPS68470 Power Management / LED chips"
-> -	depends on ACPI && PCI && I2C=y
-> -	depends on I2C_DESIGNWARE_PLATFORM=y
-> -	select MFD_CORE
-> -	select REGMAP_I2C
-> -	help
-> -	  If you say yes here you get support for the TPS68470 series of
-> -	  Power Management / LED chips.
-> -
-> -	  These include voltage regulators, LEDs and other features
-> -	  that are often used in portable devices.
-> -
-> -	  This option is a bool as it provides an ACPI operation
-> -	  region, which must be available before any of the devices
-> -	  using this are probed. This option also configures the
-> -	  designware-i2c driver to be built-in, for the same reason.
-> -
->  config MFD_TI_LP873X
->  	tristate "TI LP873X Power Management IC"
->  	depends on I2C
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 14fdb188af02..5994e812f479 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -105,7 +105,6 @@ obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o
->  obj-$(CONFIG_MFD_TPS65912)	+= tps65912-core.o
->  obj-$(CONFIG_MFD_TPS65912_I2C)	+= tps65912-i2c.o
->  obj-$(CONFIG_MFD_TPS65912_SPI)  += tps65912-spi.o
-> -obj-$(CONFIG_MFD_TPS68470)	+= tps68470.o
->  obj-$(CONFIG_MFD_TPS80031)	+= tps80031.o
->  obj-$(CONFIG_MENELAUS)		+= menelaus.o
->  
-> diff --git a/drivers/mfd/tps68470.c b/drivers/mfd/tps68470.c
-> deleted file mode 100644
-> index 4a4df4ffd18c..000000000000
-> --- a/drivers/mfd/tps68470.c
-> +++ /dev/null
-> @@ -1,97 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/*
-> - * TPS68470 chip Parent driver
-> - *
-> - * Copyright (C) 2017 Intel Corporation
-> - *
-> - * Authors:
-> - *	Rajmohan Mani <rajmohan.mani@intel.com>
-> - *	Tianshu Qiu <tian.shu.qiu@intel.com>
-> - *	Jian Xu Zheng <jian.xu.zheng@intel.com>
-> - *	Yuning Pu <yuning.pu@intel.com>
-> - */
-> -
-> -#include <linux/acpi.h>
-> -#include <linux/delay.h>
-> -#include <linux/i2c.h>
-> -#include <linux/init.h>
-> -#include <linux/mfd/core.h>
-> -#include <linux/mfd/tps68470.h>
-> -#include <linux/regmap.h>
-> -
-> -static const struct mfd_cell tps68470s[] = {
-> -	{ .name = "tps68470-gpio" },
-> -	{ .name = "tps68470_pmic_opregion" },
-> -};
-> -
-> -static const struct regmap_config tps68470_regmap_config = {
-> -	.reg_bits = 8,
-> -	.val_bits = 8,
-> -	.max_register = TPS68470_REG_MAX,
-> -};
-> -
-> -static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
-> -{
-> -	unsigned int version;
-> -	int ret;
-> -
-> -	/* Force software reset */
-> -	ret = regmap_write(regmap, TPS68470_REG_RESET, TPS68470_REG_RESET_MASK);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = regmap_read(regmap, TPS68470_REG_REVID, &version);
-> -	if (ret) {
-> -		dev_err(dev, "Failed to read revision register: %d\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	dev_info(dev, "TPS68470 REVID: 0x%x\n", version);
-> -
-> -	return 0;
-> -}
-> -
-> -static int tps68470_probe(struct i2c_client *client)
-> -{
-> -	struct device *dev = &client->dev;
-> -	struct regmap *regmap;
-> -	int ret;
-> -
-> -	regmap = devm_regmap_init_i2c(client, &tps68470_regmap_config);
-> -	if (IS_ERR(regmap)) {
-> -		dev_err(dev, "devm_regmap_init_i2c Error %ld\n",
-> -			PTR_ERR(regmap));
-> -		return PTR_ERR(regmap);
-> -	}
-> -
-> -	i2c_set_clientdata(client, regmap);
-> -
-> -	ret = tps68470_chip_init(dev, regmap);
-> -	if (ret < 0) {
-> -		dev_err(dev, "TPS68470 Init Error %d\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE, tps68470s,
-> -			      ARRAY_SIZE(tps68470s), NULL, 0, NULL);
-> -	if (ret < 0) {
-> -		dev_err(dev, "devm_mfd_add_devices failed: %d\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static const struct acpi_device_id tps68470_acpi_ids[] = {
-> -	{"INT3472"},
-> -	{},
-> -};
-> -
-> -static struct i2c_driver tps68470_driver = {
-> -	.driver = {
-> -		   .name = "tps68470",
-> -		   .acpi_match_table = tps68470_acpi_ids,
-> -	},
-> -	.probe_new = tps68470_probe,
-> -};
-> -builtin_i2c_driver(tps68470_driver);
-
--- 
-Regards,
-
-Laurent Pinchart
+On 18/01/2021 07:24, Laurent Pinchart wrote:
+> Hi Daniel,
+>
+> Thank you for the patch.
+>
+> On Mon, Jan 18, 2021 at 12:34:22AM +0000, Daniel Scally wrote:
+>> I need to be able to identify devices which declare themselves to be
+>> dependent on other devices through _DEP; add this function to utils.c
+>> and export it to the rest of the ACPI layer.
+>>
+>> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+>> ---
+>> Changes in v2:
+>> 	- Introduced
+>>
+>>  drivers/acpi/acpi_lpss.c | 24 ------------------------
+>>  drivers/acpi/internal.h  |  1 +
+>>  drivers/acpi/utils.c     | 24 ++++++++++++++++++++++++
+>>  3 files changed, 25 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/acpi/acpi_lpss.c b/drivers/acpi/acpi_lpss.c
+>> index be73974ce449..70c7d9a3f715 100644
+>> --- a/drivers/acpi/acpi_lpss.c
+>> +++ b/drivers/acpi/acpi_lpss.c
+>> @@ -543,30 +543,6 @@ static struct device *acpi_lpss_find_device(const char *hid, const char *uid)
+>>  	return bus_find_device(&pci_bus_type, NULL, &data, match_hid_uid);
+>>  }
+>>  
+>> -static bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
+>> -{
+>> -	struct acpi_handle_list dep_devices;
+>> -	acpi_status status;
+>> -	int i;
+>> -
+>> -	if (!acpi_has_method(adev->handle, "_DEP"))
+>> -		return false;
+>> -
+>> -	status = acpi_evaluate_reference(adev->handle, "_DEP", NULL,
+>> -					 &dep_devices);
+>> -	if (ACPI_FAILURE(status)) {
+>> -		dev_dbg(&adev->dev, "Failed to evaluate _DEP.\n");
+>> -		return false;
+>> -	}
+>> -
+>> -	for (i = 0; i < dep_devices.count; i++) {
+>> -		if (dep_devices.handles[i] == handle)
+>> -			return true;
+>> -	}
+>> -
+>> -	return false;
+>> -}
+>> -
+>>  static void acpi_lpss_link_consumer(struct device *dev1,
+>>  				    const struct lpss_device_links *link)
+>>  {
+>> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+>> index cb229e24c563..ee62c0973576 100644
+>> --- a/drivers/acpi/internal.h
+>> +++ b/drivers/acpi/internal.h
+>> @@ -79,6 +79,7 @@ static inline void acpi_lpss_init(void) {}
+>>  #endif
+>>  
+>>  void acpi_apd_init(void);
+>> +bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle);
+> "lpss" stands for low power subsystem, an Intel device within the PCH
+> that handles I2C, SPI, UART, ... I think the function should be renamed,
+> as it's now generic. acpi_dev_has_dep() is a potential candidate, I'm
+> sure better ones exist. A bit of kerneldoc would also not hurt.
+Okedokey; I shall add kerneldoc and think of an appropriate name, plus
+rename all the uses of it. How about acpi_dev_is_dep()? "has_dep" to me
+implies anything at all in _DEP should return true.
+>>  
+>>  acpi_status acpi_hotplug_schedule(struct acpi_device *adev, u32 src);
+>>  bool acpi_queue_hotplug_work(struct work_struct *work);
+>> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+>> index ddca1550cce6..78b38775f18b 100644
+>> --- a/drivers/acpi/utils.c
+>> +++ b/drivers/acpi/utils.c
+>> @@ -807,6 +807,30 @@ static int acpi_dev_match_cb(struct device *dev, const void *data)
+>>  	return hrv == match->hrv;
+>>  }
+>>  
+>> +bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
+>> +{
+>> +	struct acpi_handle_list dep_devices;
+>> +	acpi_status status;
+>> +	int i;
+>> +
+>> +	if (!acpi_has_method(adev->handle, "_DEP"))
+>> +		return false;
+>> +
+>> +	status = acpi_evaluate_reference(adev->handle, "_DEP", NULL,
+>> +					 &dep_devices);
+>> +	if (ACPI_FAILURE(status)) {
+>> +		dev_dbg(&adev->dev, "Failed to evaluate _DEP.\n");
+>> +		return false;
+>> +	}
+>> +
+>> +	for (i = 0; i < dep_devices.count; i++) {
+>> +		if (dep_devices.handles[i] == handle)
+>> +			return true;
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>>  /**
+>>   * acpi_dev_present - Detect that a given ACPI device is present
+>>   * @hid: Hardware ID of the device.
