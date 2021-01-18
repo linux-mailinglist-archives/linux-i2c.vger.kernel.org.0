@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4D12F969C
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 01:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A34F2F96A7
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 01:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730540AbhARAfd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Jan 2021 19:35:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S1730636AbhARAg0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Jan 2021 19:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730532AbhARAf2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Jan 2021 19:35:28 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19A7C0613C1;
-        Sun, 17 Jan 2021 16:34:46 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id y17so14846229wrr.10;
-        Sun, 17 Jan 2021 16:34:46 -0800 (PST)
+        with ESMTP id S1730523AbhARAgC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Jan 2021 19:36:02 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E507DC0613CF;
+        Sun, 17 Jan 2021 16:34:47 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id e15so6003753wme.0;
+        Sun, 17 Jan 2021 16:34:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PbvX9p++F2mDiu44jiSND5knwA5OcZJgkRIiG9x4IPE=;
-        b=aK2h+ZKGBqLjK+HOsK8Eb94wCvZZPHTRYUej+vcgRDgyBKsMIHmwfl+IK5pu94V0EG
-         9C86oP5mfCuSSVn/H1QmrHiJ3FwAa8iwt4W1Y5CUXK121frgvoxSGe26vlzjHr9+S1A0
-         5+dc9s6vi3u2Q6RbKUHK5s7YKhgotybEZC5+ukSDjW5rq2fyhTSDCa4X3hp8Gc73fLYy
-         gR24PgQGPz7T+Wi6P8qE7VmyNzvNV4IdO1vLa5sT/JjIEvtwG9z6ag6rD/hBdLTPICsB
-         eP4KcjnTjj5JY4AwJ6FQLaPn+sjG3uHR7GO/IdszjqJsnOtt+/09bNFcvozu8LaoE67L
-         YRVA==
+        bh=xaT2dcHZPdRJ0y4idc+VOXuKF4+lYQ1c3wtupWCa5lw=;
+        b=qBC/1udNWoM7qwWbUL53JFbD0+wuAlegkZZd6nQPdTzEf8VEioBlYOhTtgItMm83km
+         9vsAnmj3el0tQo0TY1ruwGWcgVTO+1OVFwIXiZahVjWp1KnVk0DA7pdpAUvbv41ObjZN
+         ntapD1w2UYh8DzrNTu6EMdsxulygorhg/zv4w3b66L1JzZXKMD4KbnRC+8criP5nsgu5
+         wLeZ5dDBEvEIKdYcvwzqGL8jnvmUeS9gTe/7+9nIOe/26W2KmGAUWog8XrpGO2l1MvXO
+         w/ikXOuDH1EfJ4fl0v16j4HvdHcHM6lLNkxgk0t9H5fX7qJvloyoysnmvnlfUZKl5rO6
+         4yiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PbvX9p++F2mDiu44jiSND5knwA5OcZJgkRIiG9x4IPE=;
-        b=Sry+6HM0bI3M3s45VmNvcM4yO9fCyaqet2ZqIQjC5JU3Zug3Yh3NnV5GcXXvE6XwJZ
-         e2q5ZUL3gEzPhYIqP0tlU3n/WxE6PrE41ngOi6NZ7iERMgMJcuWjPWfttwaoFhCX2fHq
-         G+6MQN/W65MXlQKK9NQy71prCBc9AiPWUDPy2Gydqgajmja5Ca5QTOT27k9uEr7uoaYk
-         4CJEMohWqrcafhuX7oMPoZL3FVjCWBPgbxqMwI+Qw8Qlx0K97h+1InYyAqIgJ9f+TvQH
-         cthkilRnWPZe78xG8ieQ8tRr5vJHHAtME/83RnWZKcnA32tbMPXWZtYdLq7D7ujcN4KU
-         ViAQ==
-X-Gm-Message-State: AOAM531L0E0ZN6lvUMp8LFVRBGXnoYtcwN4ukUosRewjFtdE/1zCShkZ
-        x0C6GuSYLeOKwOuqWvxIbnyUNzhUwH/Rpw==
-X-Google-Smtp-Source: ABdhPJzn7m9FqPVHSUWMPIKCaOySd8Kyzq/uVeNq66KJG9h3ejnku8fB0HiFon0VF+qkXnVSKChDFA==
-X-Received: by 2002:a05:6000:104d:: with SMTP id c13mr22897288wrx.127.1610930085498;
-        Sun, 17 Jan 2021 16:34:45 -0800 (PST)
+        bh=xaT2dcHZPdRJ0y4idc+VOXuKF4+lYQ1c3wtupWCa5lw=;
+        b=MzpwN/IVrlHLWNlI0cbzKUM+QR6+0d3YkiQq3fXSHeniMaFodSrQtgRFT7hbggEzdb
+         4v6QW7fMbes+zTa6AKLuTRNxqx8aTcm51+i+oTVXnlM5JSoA3O6xSZOC1PVoz/3dmvOj
+         fqPPbNKTw99eVfTo+GM1/fPpmE5sX+GMnwkpHMhVU6As9XdJSBwkDRivUE5cMJ1ZNt7u
+         wZ1XC+sF6lGWGSdIJrL2s1256TUNfuPQsLucOZTTRyOGZDLbDTpfkfsipqcOqZTdXAqi
+         7Q3OsBQLsp7Gylz31rZLZevE0ZakI5X7EdDjOmYGxj5pBMtx1YuI42FPREg2/TMAvzW+
+         lCKg==
+X-Gm-Message-State: AOAM530wmeY/mc5h87OdFiS1J415/asMo2Ij1hAuSZ6iOt76MDbC6LLW
+        kvu+h/iSVjWzofLwpXbeHq5rLMRAhoLgQQ==
+X-Google-Smtp-Source: ABdhPJwbFdX9FL2YemiaSMI9/cbs6Jpg4yHjtWaPhHc4xRuVvJSfIVyI4sfsixU+kk04jRuT88Ygyw==
+X-Received: by 2002:a1c:6a13:: with SMTP id f19mr18019473wmc.10.1610930086718;
+        Sun, 17 Jan 2021 16:34:46 -0800 (PST)
 Received: from valhalla.home ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id o124sm23642040wmb.5.2021.01.17.16.34.44
+        by smtp.gmail.com with ESMTPSA id o124sm23642040wmb.5.2021.01.17.16.34.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jan 2021 16:34:44 -0800 (PST)
+        Sun, 17 Jan 2021 16:34:46 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     rjw@rjwysocki.net, lenb@kernel.org, andy@kernel.org,
         robert.moore@intel.com, erik.kaneda@intel.com,
         sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
         laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com
-Subject: [PATCH v2 4/7] i2c: i2c-core-acpi: Add i2c_acpi_dev_name()
-Date:   Mon, 18 Jan 2021 00:34:25 +0000
-Message-Id: <20210118003428.568892-5-djrscally@gmail.com>
+Subject: [PATCH v2 5/7] gpio: gpiolib-acpi: Export acpi_get_gpiod()
+Date:   Mon, 18 Jan 2021 00:34:26 +0000
+Message-Id: <20210118003428.568892-6-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210118003428.568892-1-djrscally@gmail.com>
 References: <20210118003428.568892-1-djrscally@gmail.com>
@@ -70,70 +70,65 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-We want to refer to an i2c device by name before it has been
-created by the kernel; add a function that constructs the name
-from the acpi device instead.
+I need to be able to translate GPIO resources in an acpi_device's _CRS
+into gpio_descs. Those are represented in _CRS as a pathname to a GPIO
+device plus the pin's index number: this function is perfect for that
+purpose.
 
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v2:
 
-	- Stopped using devm_kasprintf()
+	-None
 
- drivers/i2c/i2c-core-acpi.c | 16 ++++++++++++++++
- include/linux/i2c.h         |  5 +++++
- 2 files changed, 21 insertions(+)
+ drivers/gpio/gpiolib-acpi.c | 3 ++-
+ include/linux/acpi.h        | 5 +++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 37c510d9347a..98c3ba9a2350 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -497,6 +497,22 @@ struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
- }
- EXPORT_SYMBOL_GPL(i2c_acpi_new_device);
- 
-+/**
-+ * i2c_acpi_dev_name - Construct i2c device name for devs sourced from ACPI
-+ * @adev:     ACPI device to construct the name for
-+ *
-+ * Constructs the name of an i2c device matching the format used by
-+ * i2c_dev_set_name() to allow users to refer to an i2c device by name even
-+ * before they have been instantiated.
-+ *
-+ * The caller is responsible for freeing the returned pointer.
-+ */
-+char *i2c_acpi_dev_name(struct acpi_device *adev)
-+{
-+	return kasprintf(GFP_KERNEL, I2C_DEV_NAME_FORMAT, acpi_dev_name(adev));
-+}
-+EXPORT_SYMBOL_GPL(i2c_acpi_dev_name);
-+
- #ifdef CONFIG_ACPI_I2C_OPREGION
- static int acpi_gsb_i2c_read_bytes(struct i2c_client *client,
- 		u8 cmd, u8 *data, u8 data_len)
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 4d40a4b46810..b82aac05b17f 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -998,6 +998,7 @@ bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
- u32 i2c_acpi_find_bus_speed(struct device *dev);
- struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
- 				       struct i2c_board_info *info);
-+char *i2c_acpi_dev_name(struct acpi_device *adev);
- struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle);
- #else
- static inline bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
-@@ -1014,6 +1015,10 @@ static inline struct i2c_client *i2c_acpi_new_device(struct device *dev,
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index e37a57d0a2f0..83f9f85cd0ab 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -111,7 +111,7 @@ static int acpi_gpiochip_find(struct gpio_chip *gc, void *data)
+  * controller does not have GPIO chip registered at the moment. This is to
+  * support probe deferral.
+  */
+-static struct gpio_desc *acpi_get_gpiod(char *path, int pin)
++struct gpio_desc *acpi_get_gpiod(char *path, int pin)
  {
- 	return ERR_PTR(-ENODEV);
+ 	struct gpio_chip *chip;
+ 	acpi_handle handle;
+@@ -127,6 +127,7 @@ static struct gpio_desc *acpi_get_gpiod(char *path, int pin)
+ 
+ 	return gpiochip_get_desc(chip, pin);
  }
-+static inline char *i2c_acpi_dev_name(struct acpi_device *adev)
++EXPORT_SYMBOL_GPL(acpi_get_gpiod);
+ 
+ static irqreturn_t acpi_gpio_irq_handler(int irq, void *data)
+ {
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 2630c2e953f7..5cd272326eb7 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -1066,6 +1066,7 @@ void __acpi_handle_debug(struct _ddebug *descriptor, acpi_handle handle, const c
+ bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
+ 				struct acpi_resource_gpio **agpio);
+ int acpi_dev_gpio_irq_get(struct acpi_device *adev, int index);
++struct gpio_desc *acpi_get_gpiod(char *path, int pin);
+ #else
+ static inline bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
+ 					      struct acpi_resource_gpio **agpio)
+@@ -1076,6 +1077,10 @@ static inline int acpi_dev_gpio_irq_get(struct acpi_device *adev, int index)
+ {
+ 	return -ENXIO;
+ }
++struct gpio_desc *acpi_get_gpiod(char *path, int pin)
 +{
 +	return NULL;
 +}
- static inline struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle)
- {
- 	return NULL;
+ #endif
+ 
+ /* Device properties */
 -- 
 2.25.1
 
