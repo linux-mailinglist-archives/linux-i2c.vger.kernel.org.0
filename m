@@ -2,132 +2,159 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 696462F9CDD
+	by mail.lfdr.de (Postfix) with ESMTP id D63522F9CDE
 	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 11:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389364AbhARK2U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 05:28:20 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55760 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388571AbhARJTz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 04:19:55 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BB0AF2BB;
-        Mon, 18 Jan 2021 10:19:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1610961551;
-        bh=gjnQsqFgxtpSq29xrtqXIVq4Xvc9Ow3B2rHgXQ+GU3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lYwoQ3Lh7ouSl1TmFTMKG2c4wx3waTDRv8f10AxBqjGIpJ796ly2IOzm2fvAnYDmO
-         hHwEVuJD5DngMdlfvi6mFvMcWOxI85BE53JDlzDfMPsMeAxt5r/1BoGo+k1qmj3jIP
-         DPG34Im8q/Jek+X88TtBRdYDlavT/vy9MRdiHNjE=
-Date:   Mon, 18 Jan 2021 11:18:55 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devel@acpica.org,
-        rjw@rjwysocki.net, lenb@kernel.org, andy@kernel.org,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
-        hdegoede@redhat.com, mgross@linux.intel.com,
-        robert.moore@intel.com, erik.kaneda@intel.com,
-        sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 4/7] i2c: i2c-core-acpi: Add i2c_acpi_dev_name()
-Message-ID: <YAVSf7+iTPNYf5XS@pendragon.ideasonboard.com>
-References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-5-djrscally@gmail.com>
+        id S2389699AbhARK2t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 05:28:49 -0500
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:33269 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388308AbhARJ2h (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 04:28:37 -0500
+X-Greylist: delayed 341 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 Jan 2021 04:28:36 EST
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 1QjhlHYgEyutM1QjklY4Jd; Mon, 18 Jan 2021 10:22:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1610961732; bh=nchNVY2zwVarn3ID4y2tb8ptH7cMG+u5nOJNfukDNFU=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=en/vC/J40Czqt9qZbq9yItDkhHoE/I17g5MsZ1ykssk3lZSmS7MsTEPpnJ4iyQV9M
+         YjHuPALCigRyJUS63vo0joY0OKh84SNKP077gzMfdwuAj+qEhhBwm7BiqUICS2li8j
+         eeNSjmWb3+70QJXNL3nGK19f+54WVwIjLbqbNQ8CUuGPeVE1PDxeRxtB5DGUdiDQRI
+         0wo0GslpFV90DR4TWo2vGgXOoQmd+PnEv+qn3wRhTixest/QgErVjQEiEswSmv0wbK
+         rHb2ZH78QqY2Nmzga2tuJwRQv1XwZufdhkKdAxkFgsbqZvzlH0calSvQNo3OTjEOtB
+         2vRwbgsBm4nwA==
+Subject: Re: [PATCH RFC 2/3] media: i2c: adv7842: remove open coded version of
+ SMBus block read
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210112164130.47895-1-wsa+renesas@sang-engineering.com>
+ <20210112164130.47895-3-wsa+renesas@sang-engineering.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <62c10525-69c6-e681-feaa-5ec3a865c06c@xs4all.nl>
+Date:   Mon, 18 Jan 2021 10:22:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <20210112164130.47895-3-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210118003428.568892-5-djrscally@gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfDjiSTgtflMtk+wcszCsyAVFtHl0V0DjBtsTPPP2KY00Au46URGXe6sckKrvcQ9gTnRZtAxAPxdO8QjgA5Fz6FQ3wyzFoxbD2L+GdIYHT/yTI+11Yrty
+ NWzp4r6OygrDH2KO9G0RB5ZEcSYGf0Lx1gxVE3HJPnXx8/rN85cw3WkU/LnEAXq6vBPwFYT/sD9gXpztwWcsY67egtjwIUxlyVKHX9jGLLtGy5vBOuFOvpFc
+ rdxEY/M0zMDiA1tNtDtCApoDlAewwofRyCx2LeTHTSeg4end20cLTUQoiJWdwaQ9NrCGboQ9cdcpc+Fyp/mMRw9KFxy1pWYuiTR2mNLmCQooRqCT/4AVvfqY
+ OiD8of8P
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Daniel,
+Hi Wolfram,
 
-Thank you for the patch.
+On 12/01/2021 17:41, Wolfram Sang wrote:
+> The open coded version differs from the one in the core in one way: the
+> buffer will be always copied back, even when the transfer failed. It
+> looks like it is expected that the sanity check for a correct CRC and
+> header will bail out later.
 
-On Mon, Jan 18, 2021 at 12:34:25AM +0000, Daniel Scally wrote:
-> We want to refer to an i2c device by name before it has been
+Nah, it's just a bug. It should have returned and checked the error code,
+so your patch does the right thing.
 
-s/i2c device/acpi i2c device/ ?
-
-> created by the kernel; add a function that constructs the name
-> from the acpi device instead.
-> 
-> Signed-off-by: Daniel Scally <djrscally@gmail.com>
-> ---
-> Changes in v2:
-> 
-> 	- Stopped using devm_kasprintf()
-> 
->  drivers/i2c/i2c-core-acpi.c | 16 ++++++++++++++++
->  include/linux/i2c.h         |  5 +++++
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index 37c510d9347a..98c3ba9a2350 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -497,6 +497,22 @@ struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
->  }
->  EXPORT_SYMBOL_GPL(i2c_acpi_new_device);
->  
-> +/**
-> + * i2c_acpi_dev_name - Construct i2c device name for devs sourced from ACPI
-> + * @adev:     ACPI device to construct the name for
-> + *
-> + * Constructs the name of an i2c device matching the format used by
-> + * i2c_dev_set_name() to allow users to refer to an i2c device by name even
-> + * before they have been instantiated.
-> + *
-> + * The caller is responsible for freeing the returned pointer.
-> + */
-> +char *i2c_acpi_dev_name(struct acpi_device *adev)
-> +{
-> +	return kasprintf(GFP_KERNEL, I2C_DEV_NAME_FORMAT, acpi_dev_name(adev));
-
-There's a real danger of a memory leak, as the function name sounds very
-similar to dev_name() or acpi_dev_name() and those don't allocate
-memory. I'm not sure what a better name would be, but given that this
-function is only used in patch 6/7 and not in the I2C subsystem itself,
-I wonder if we should inline this kasprintf() call in the caller and
-drop this patch.
-
-> +}
-> +EXPORT_SYMBOL_GPL(i2c_acpi_dev_name);
-> +
->  #ifdef CONFIG_ACPI_I2C_OPREGION
->  static int acpi_gsb_i2c_read_bytes(struct i2c_client *client,
->  		u8 cmd, u8 *data, u8 data_len)
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index 4d40a4b46810..b82aac05b17f 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -998,6 +998,7 @@ bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
->  u32 i2c_acpi_find_bus_speed(struct device *dev);
->  struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
->  				       struct i2c_board_info *info);
-> +char *i2c_acpi_dev_name(struct acpi_device *adev);
->  struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle);
->  #else
->  static inline bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
-> @@ -1014,6 +1015,10 @@ static inline struct i2c_client *i2c_acpi_new_device(struct device *dev,
->  {
->  	return ERR_PTR(-ENODEV);
->  }
-> +static inline char *i2c_acpi_dev_name(struct acpi_device *adev)
-> +{
-> +	return NULL;
-> +}
->  static inline struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle)
->  {
->  	return NULL;
-
--- 
 Regards,
 
-Laurent Pinchart
+	Hans
+
+> 
+> Use the block read from the I2C core and propagate a potential errno
+> further to the sanity check.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> Note: we could now make the error checking even stronger by checking if
+> the number of received bytes is I2C_SMBUS_BLOCK_MAX. But to avoid
+> regressions, I kept the logic as is, i.e. only check for errno.
+> 
+>  drivers/media/i2c/adv7511-v4l2.c | 40 +++++++++++---------------------
+>  1 file changed, 14 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
+> index a3161d709015..0150f76dc6a6 100644
+> --- a/drivers/media/i2c/adv7511-v4l2.c
+> +++ b/drivers/media/i2c/adv7511-v4l2.c
+> @@ -214,36 +214,24 @@ static inline void adv7511_wr_and_or(struct v4l2_subdev *sd, u8 reg, u8 clr_mask
+>  	adv7511_wr(sd, reg, (adv7511_rd(sd, reg) & clr_mask) | val_mask);
+>  }
+>  
+> -static int adv_smbus_read_i2c_block_data(struct i2c_client *client,
+> -					 u8 command, unsigned length, u8 *values)
+> -{
+> -	union i2c_smbus_data data;
+> -	int ret;
+> -
+> -	if (length > I2C_SMBUS_BLOCK_MAX)
+> -		length = I2C_SMBUS_BLOCK_MAX;
+> -	data.block[0] = length;
+> -
+> -	ret = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+> -			     I2C_SMBUS_READ, command,
+> -			     I2C_SMBUS_I2C_BLOCK_DATA, &data);
+> -	memcpy(values, data.block + 1, length);
+> -	return ret;
+> -}
+> -
+> -static void adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
+> +static int adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
+>  {
+>  	struct adv7511_state *state = get_adv7511_state(sd);
+> +	s32 len;
+>  	int i;
+> -	int err = 0;
+>  
+>  	v4l2_dbg(1, debug, sd, "%s:\n", __func__);
+>  
+> -	for (i = 0; !err && i < len; i += I2C_SMBUS_BLOCK_MAX)
+> -		err = adv_smbus_read_i2c_block_data(state->i2c_edid, i,
+> +	for (i = 0; i < len; i += I2C_SMBUS_BLOCK_MAX) {
+> +		len = i2c_smbus_read_i2c_block_data(state->i2c_edid, i,
+>  						    I2C_SMBUS_BLOCK_MAX, buf + i);
+> -	if (err)
+> -		v4l2_err(sd, "%s: i2c read error\n", __func__);
+> +		if (len < 0) {
+> +			v4l2_err(sd, "%s: i2c read error\n", __func__);
+> +			return len;
+> +		}
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static inline int adv7511_cec_read(struct v4l2_subdev *sd, u8 reg)
+> @@ -1668,20 +1656,20 @@ static bool adv7511_check_edid_status(struct v4l2_subdev *sd)
+>  	if (edidRdy & MASK_ADV7511_EDID_RDY) {
+>  		int segment = adv7511_rd(sd, 0xc4);
+>  		struct adv7511_edid_detect ed;
+> +		int err;
+>  
+>  		if (segment >= EDID_MAX_SEGM) {
+>  			v4l2_err(sd, "edid segment number too big\n");
+>  			return false;
+>  		}
+>  		v4l2_dbg(1, debug, sd, "%s: got segment %d\n", __func__, segment);
+> -		adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
+> +		err = adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
+>  		adv7511_dbg_dump_edid(2, debug, sd, segment, &state->edid.data[segment * 256]);
+>  		if (segment == 0) {
+>  			state->edid.blocks = state->edid.data[0x7e] + 1;
+>  			v4l2_dbg(1, debug, sd, "%s: %d blocks in total\n", __func__, state->edid.blocks);
+>  		}
+> -		if (!edid_verify_crc(sd, segment) ||
+> -		    !edid_verify_header(sd, segment)) {
+> +		if (err < 0 || !edid_verify_crc(sd, segment) || !edid_verify_header(sd, segment)) {
+>  			/* edid crc error, force reread of edid segment */
+>  			v4l2_err(sd, "%s: edid crc or header error\n", __func__);
+>  			state->have_monitor = false;
+> 
+
