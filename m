@@ -2,74 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3159A2FABD5
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 21:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422DB2FABDE
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 21:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394409AbhARUsw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 15:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
+        id S2390629AbhARUwT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 15:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394441AbhARUrY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 15:47:24 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165B4C061757;
-        Mon, 18 Jan 2021 12:46:37 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id c124so14715504wma.5;
-        Mon, 18 Jan 2021 12:46:37 -0800 (PST)
+        with ESMTP id S2388137AbhARUwL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 15:52:11 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FD5C061573;
+        Mon, 18 Jan 2021 12:51:30 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id a12so17694048wrv.8;
+        Mon, 18 Jan 2021 12:51:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
+        h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=9pd6NP8MKjOIZLtlaBPlwpeyWjI68tp87PnWyTG6FQo=;
-        b=P7MDBVp2loUeGaeaCPb9ydJEPSginKWp9PFeqivuX7x+oNuy4YmjoWQtCR+1FZK3lp
-         maXNw5mdKbPvYczcDHWlM1VN5o/qJXC8Uhfc0KXMZMW+XlhRpQOTnVDeD6cGQaY/ae00
-         6R968ILzIQlI9sYkvsO2YETiAmTtnlF+uKYDKJOTM5j2dx52jtb1QbE6NSD31vscEL3J
-         /fUGV1mjvjo3airWsTnBIuO+n2TcZaivt9BEOv+FhcIQtDZqu2wY+maAB2DBNumNRHK2
-         hkpiD7BY8Rwsz9rcQjFA4OkY9ZLZj/ryjbQS/C0SnPYdc/Av9l4eccXlKZO0yrLEL0rf
-         l+aQ==
+        bh=5E1Zqwt5UjpmEr7JHA37Jh75pgHb6STpqkB7TTBWW50=;
+        b=Ivs93hOFttTr3QutQiEn7v4khyR/Cu0v7nXNxL0kVULz949KUenftU31wNhGejsWR3
+         2cj2BVKyW17bOqfGKu+O0OEJP93thm0gSjrYUSCvy470l6Mf4Hrh6jyCjOIFdAlLUePL
+         K1/gFKbFB49NnwxixupCEbEdY9sFDCXxyGzPEkJ+aj33Xbgz46lPAWg4Dx1Sxt+3HWZP
+         WTU08A3D4ArtfZMxRa10Qfo+sPgmba98/mKn3rpxZQPOuSs9ifU5BqhHpX5q9WmyZhb3
+         WCTo1F5tGFeSyit7GyCFHo+fdrxsMJxnPymObrVz7zPr8S0nJekjqsWOWTy2v8BMBocF
+         sSnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=9pd6NP8MKjOIZLtlaBPlwpeyWjI68tp87PnWyTG6FQo=;
-        b=MzrVzoUR+J7m52AMvdiZl+mi0MAOrJiEd/CqWAE033asHnntega4kGD5sGfv5co0OP
-         hQmg2EJj64C4F0OX6CAoYdTlYPdSYaale/snjDt27RDpgVbOHfBUu/DwUVFVNxC/8r8P
-         pTHTxLLdR4ekm6AgdMf7w4RYHZ9DRIO9HO78it/Yn4Z4fzE4EbQfhuZZVs4rxSpIPGU/
-         RGKVPkmOL7Dpy2VPBS27m7OmndMlTbaTvrm9YN1L1VU7izifzpb+bTzpJ94BFGugj4ln
-         iMTFO/sjgVNm0ju129BRUA6CPG9Z+NvnfLE/Q1i2Hr53MQI58se9rX1kW2sjZPlfrsT6
-         FlWQ==
-X-Gm-Message-State: AOAM531+7Ymfi7rz67AJI/O8moeo33UUlNKLmDWu2iUxDclUmuWg+/Dm
-        jFjXHzPEdyNPCH5a92a5hj0=
-X-Google-Smtp-Source: ABdhPJyi0RSCbLsr1taKlUHRyiXCxtKBjT2oiXy25DuCHFmuTZZFyrIWKN1HWGLpUoWz11fxYUhB3Q==
-X-Received: by 2002:a05:600c:2044:: with SMTP id p4mr5632wmg.11.1611002795765;
-        Mon, 18 Jan 2021 12:46:35 -0800 (PST)
+        bh=5E1Zqwt5UjpmEr7JHA37Jh75pgHb6STpqkB7TTBWW50=;
+        b=DR40pFUtXie2K6/mocihXY26rIacjZm1h+FTDLxjJS7xo/a5JtEfzMrqg1KS508/n9
+         iA1fkprdUt2Nh92VWo5AX43v/1T5svv5Yv9XFTj6j6EDAhLgIzeaKoeyit7ACh+G75r1
+         D48f1SMVXrmSC9+vONQ7VyVLelGRj9Ed6lY/we54irij5MzYPNTAHIDXiHk+0f8VsBIh
+         CPLKbk6dQu0XaNJcUdQn9eVOmPdnsVygqFbXCnJuBbcoKd53Vg1SywP0FvcJA6fk93ha
+         2jFxrrBUGLnl0sEbGYHdyS5W8Z2kuPLsTYzZ0dXrHdn+zQBugtABY7UWnWViiXHOdixt
+         5qEw==
+X-Gm-Message-State: AOAM531N+X/f2OOvScol8CVhROaNVfD9X0Hm2dyp6XZ8Tj1OxIgKDY9F
+        X5zYAT+8g7bSIgqqH9fIOfw=
+X-Google-Smtp-Source: ABdhPJxGidmbbneboahUdZhjGq8xt0VCVCs84Wz2eeHobWmhtpd0J6mJOTZntq2sHo3iKJuEkbuTWQ==
+X-Received: by 2002:a05:6000:1082:: with SMTP id y2mr1144586wrw.233.1611003088948;
+        Mon, 18 Jan 2021 12:51:28 -0800 (PST)
 Received: from [192.168.1.211] ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id 33sm35554183wrn.35.2021.01.18.12.46.34
+        by smtp.gmail.com with ESMTPSA id v11sm31392225wrt.25.2021.01.18.12.51.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jan 2021 12:46:35 -0800 (PST)
-From:   Daniel Scally <djrscally@gmail.com>
-Subject: Re: [PATCH v2 6/7] platform: x86: Add intel_skl_int3472 driver
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devel@acpica.org,
-        rjw@rjwysocki.net, lenb@kernel.org, andy@kernel.org,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
-        hdegoede@redhat.com, mgross@linux.intel.com,
-        robert.moore@intel.com, erik.kaneda@intel.com,
-        sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        kieran.bingham@ideasonboard.com
+        Mon, 18 Jan 2021 12:51:28 -0800 (PST)
+Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent
+ acpi_devices
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, andy@kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
 References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-7-djrscally@gmail.com>
- <YAVRqWeUsLjvU62P@pendragon.ideasonboard.com>
-Message-ID: <3872041c-1a4a-2508-d325-80242598d55e@gmail.com>
-Date:   Mon, 18 Jan 2021 20:46:34 +0000
+ <20210118003428.568892-3-djrscally@gmail.com>
+ <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com>
+Date:   Mon, 18 Jan 2021 20:51:27 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <YAVRqWeUsLjvU62P@pendragon.ideasonboard.com>
+In-Reply-To: <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -77,273 +88,105 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Laurent, thanks for the comments - really appreciate the detail.
+On 18/01/2021 16:14, Rafael J. Wysocki wrote:
+> On Mon, Jan 18, 2021 at 1:37 AM Daniel Scally <djrscally@gmail.com> wrote:
+>> In some ACPI tables we encounter, devices use the _DEP method to assert
+>> a dependence on other ACPI devices as opposed to the OpRegions that the
+>> specification intends. We need to be able to find those devices "from"
+>> the dependee, so add a function to parse all ACPI Devices and check if
+>> the include the handle of the dependee device in their _DEP buffer.
+> What exactly do you need this for?
 
 
-Some specific responses below but assume a general "will do" to
-everything you mentioned otherwise...
+So, in our DSDT we have devices with _HID INT3472, plus sensors which
+refer to those INT3472's in their _DEP method. The driver binds to the
+INT3472 device, we need to find the sensors dependent on them.
 
-On 18/01/2021 09:15, Laurent Pinchart wrote:
->> +	  PMIC) and one designed for Chrome OS.
-> How about expanding this a bit to explain what the INT3472 stands for ?
+
+> Would it be practical to look up the suppliers in acpi_dep_list instead?
 >
-> 	  The INT3472 is an Intel camera power controller, a logical device
-> 	  found on some Skylake-based systems that can map to different
-> 	  hardware devices depending on the platform. On machines
-> 	  designed for Chrome OS, it maps to a TPS68470 camera PMIC. On
-> 	  machines designed for Windows, it maps to either a TP68470
-> 	  camera PMIC, a uP6641Q sensor PMIC, or a set of discrete GPIOs
-> 	  and power gates.
-
-Yeah sure ok
+> Note that supplier drivers may remove entries from there, but does
+> that matter for your use case?
 
 
->> This driver handles all three
->> +	  situations by discovering information it needs to discern them at
->> +	  runtime.
->> +
->> +	  If your device was designed for Chrome OS, this driver will provide
->> +	  an ACPI operation region, which must be available before any of the
->> +	  devices using this are probed. For this reason, you should select Y
->> +	  if your device was designed for ChromeOS. This option also configures
->> +	  the designware-i2c driver to be built-in, for the same reason.
-> Is the last sentence a leftover ?
-
-Oops - it is, but it was supposed to remind me to double check that that
-was still necessary. I'll take a look, thanks.
+Ah - that may work, yes. Thank you, let me test that.
 
 
->> +
->> +#include "intel_skl_int3472_common.h"
->> +
->> +int skl_int3472_get_cldb_buffer(struct acpi_device *adev,
->> +				struct int3472_cldb *cldb)
+>
+>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+>> ---
+>> Changes in v2:
+>>         - Used acpi_lpss_dep() as Andy suggested.
+>>
+>>  drivers/acpi/utils.c    | 34 ++++++++++++++++++++++++++++++++++
+>>  include/acpi/acpi_bus.h |  2 ++
+>>  2 files changed, 36 insertions(+)
+>>
+>> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+>> index 78b38775f18b..ec6a2406a886 100644
+>> --- a/drivers/acpi/utils.c
+>> +++ b/drivers/acpi/utils.c
+>> @@ -831,6 +831,18 @@ bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
+>>         return false;
+>>  }
+>>
+>> +static int acpi_dev_match_by_dep(struct device *dev, const void *data)
 >> +{
->> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
->> +	acpi_handle handle = adev->handle;
->> +	union acpi_object *obj;
->> +	acpi_status status;
->> +	int ret = 0;
+>> +       struct acpi_device *adev = to_acpi_device(dev);
+>> +       const struct acpi_device *dependee = data;
+>> +       acpi_handle handle = dependee->handle;
 >> +
->> +	status = acpi_evaluate_object(handle, "CLDB", NULL, &buffer);
->> +	if (ACPI_FAILURE(status))
->> +		return -ENODEV;
+>> +       if (acpi_lpss_dep(adev, handle))
+>> +               return 1;
 >> +
->> +	obj = buffer.pointer;
->> +	if (!obj) {
->> +		dev_err(&adev->dev, "ACPI device has no CLDB object\n");
-> Is this the code path that is taken on Chrome OS ? If so an error
-> message isn't appropriate. I'd drop this message, and instead add an
-> error message in the discrete PMIC code.
-
-Ah yes of course, thanks, I'll move the error message.
-
-
+>> +       return 0;
+>> +}
 >> +
->> +	unsigned int n_gpios; /* how many GPIOs have we seen */
->> +
->> +	struct int3472_gpio_regulator regulator;
->> +	struct int3472_gpio_clock clock;
-> You don't necessarily need to define separate structures for this, you
-> could also write
->
-> 	struct {
-> 		char regulator_name[GPIO_REGULATOR_NAME_LENGTH];
-> 		char supply_name[GPIO_REGULATOR_SUPPLY_NAME_LENGTH];
-> 		struct gpio_desc *gpio;
-> 		struct regulator_dev *rdev;
-> 		struct regulator_desc rdesc;
-> 	} regulator;
->
-> 	struct {
-> 		struct clk *clk;
-> 		struct clk_hw clk_hw;
-> 		struct clk_lookup *cl;
-> 		struct gpio_desc *gpio;
-> 	} clock;
->
-> It's entirely up to you.
-
-
-Ooh yeah I like that more, thanks very much.
-
-
->> +/* 79234640-9e10-4fea-a5c1-b5aa8b19756f */
->> +static const guid_t int3472_gpio_guid =
->> +	GUID_INIT(0x79234640, 0x9e10, 0x4fea,
->> +		  0xa5, 0xc1, 0xb5, 0xaa, 0x8b, 0x19, 0x75, 0x6f);
->> +
->> +/* 822ace8f-2814-4174-a56b-5f029fe079ee */
->> +static const guid_t cio2_sensor_module_guid =
->> +	GUID_INIT(0x822ace8f, 0x2814, 0x4174,
->> +		  0xa5, 0x6b, 0x5f, 0x02, 0x9f, 0xe0, 0x79, 0xee);
-> A comment that explains what those DSM functions do would be useful for
-> reference. It has taken lots of time to figure it out, let's spare the
-> pain to the next person who tries to understand this :-)
-
-
-Hah - good point, well made. I'll explain what they're for then.
-
-
->> +static int skl_int3472_clk_enable(struct clk_hw *hw)
+>>  /**
+>>   * acpi_dev_present - Detect that a given ACPI device is present
+>>   * @hid: Hardware ID of the device.
+>> @@ -866,6 +878,28 @@ bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
+>>  }
+>>  EXPORT_SYMBOL(acpi_dev_present);
+>>
+>> +/**
+>> + * acpi_dev_get_next_dep_dev - Return next ACPI device dependent on input dev
+>> + * @adev: Pointer to the dependee device
+>> + * @prev: Pointer to the previous dependent device (or NULL for first match)
+>> + *
+>> + * Return the next ACPI device which declares itself dependent on @adev in
+>> + * the _DEP buffer.
+>> + *
+>> + * The caller is responsible to call put_device() on the returned device.
+>> + */
+>> +struct acpi_device *acpi_dev_get_next_dep_dev(struct acpi_device *adev,
+>> +                                             struct acpi_device *prev)
 >> +{
->> +	struct int3472_gpio_clock *clk = to_int3472_clk(hw);
+>> +       struct device *start = prev ? &prev->dev : NULL;
+>> +       struct device *dev;
 >> +
->> +	gpiod_set_value(clk->gpio, 1);
-> The clock enable() and disable() methods are not supposed to sleep,
-> while setting a GPIO value may sleep in the general case. Should this be
-> moved to skl_int3472_clk_prepare() ? Same for skl_int3472_clk_disable()
-> and skl_int3472_clk_unprepare().
-
-
-I was under the assumption the difference between gpiod_set_value() and
-gpiod_set_value_cansleep() was that gpiod_set_value() _can't_ sleep, but
-actually reading the function's comments it seems it will just complain
-if it turns out it can sleep:
-
-
-* This function can be called from contexts where we cannot sleep, and will
-* complain if the GPIO chip functions potentially sleep. It doesn't
-complain, on either of my devices, but I guess that can't be guaranteed
-for _every_ device, so these calls probably are safer in (un)prepare() yes.
-
->> +			}
+>> +       dev = bus_find_device(&acpi_bus_type, start, adev, acpi_dev_match_by_dep);
 >> +
->> +			i++;
->> +		}
->> +	}
+>> +       return dev ? to_acpi_device(dev) : NULL;
+>> +}
+>> +EXPORT_SYMBOL(acpi_dev_get_next_dep_dev);
 >> +
->> +	if (!func)
->> +		return 0;
-> I initially thought this wasn't right, as if no entry was found in the
-> mapping table, func would still have its non-NULL value as passed to
-> this function. I then realized that you're checking if the match that
-> was found is NULL. A comment to explain this would be useful.
-
-
-Yep ok - I actually had one and decided it was superfluous and removed
-it - my bad.
-
->> +
->> +	status = acpi_get_handle(NULL, path, &handle);
->> +	if (ACPI_FAILURE(status))
->> +		return -EINVAL;
->> +
->> +	ret = acpi_bus_get_device(handle, &adev);
->> +	if (ret)
->> +		return -ENODEV;
->> +
->> +	table_entry = (struct gpiod_lookup)GPIO_LOOKUP_IDX(acpi_dev_name(adev),
->> +							   ares->data.gpio.pin_table[0],
->> +							   func, 0, polarity);
-> I wonder if
->
-> 	table_entry.key = acpi_dev_name(adev);
-> 	table_entry.chip_hwnum = ares->data.gpio.pin_table[0];
-> 	table_entry.con_id = func;
-> 	table_entry.idx = 0;
-> 	table_entry.flags = polarity;
->
-> (with struct gpiod_lookup table_entry = { }; above) would be more
-> readable. Up to you.
->
->> +
->> +	memcpy(&int3472->gpios.table[int3472->n_sensor_gpios], &table_entry,
->> +	       sizeof(table_entry));
-> Ah, or maybe
->
-> 	struct gpio_lookup *table_entry;
->
-> 	table_entry = &int3472->gpios.table[int3472->n_sensor_gpios];
-> 	table_entry->key = acpi_dev_name(adev);
-> 	table_entry->chip_hwnum = ares->data.gpio.pin_table[0];
-> 	table_entry->con_id = func;
-> 	table_entry->idx = 0;
-> 	table_entry->flags = polarity;
->
-> (no need to memset() to 0 first as the whole structure has been
-> allocated with kzalloc()).
-
-
-Yeah you're right, this looks much nicer - thanks.
-
-
->> +	int ret = 0;
->> +
->> +	init.name = kasprintf(GFP_KERNEL, "%s-clk",
->> +			      acpi_dev_name(int3472->adev));
-> You need to check for NULL and return -ENOMEM.
-
-
-Oops, of course, thanks
-
-
->> +		goto err_unregister_clk;
-> If this fails, you will end up calling clk_unregister() and
-> clkdev_drop() in skl_int3472_discrete_remove(). You should replace the
-> check in the remove function with
->
-> 	if (!int3472->clock.cl) {
-
-You're right, good spot, thank you.
-
-
->> +		dev_err(&int3472->pdev->dev, "No sensor module config\n");
->> +		return PTR_ERR(sensor_config);
->> +	}
-> Would it make sense to call this in skl_int3472_discrete_probe() or
-> skl_int3472_parse_crs() and cache the config pointer ?
-
-
-Yes, probably actually, and then the GPIO mapping function can just
-check for its presence.
-
-
->> +	init_data.constraints.valid_ops_mask = REGULATOR_CHANGE_STATUS;
->> +	init_data.num_consumer_supplies = 1;
->> +	init_data.consumer_supplies = &sensor_config->supply_map;
->> +
->> +	snprintf(int3472->regulator.regulator_name,
->> +		 GPIO_REGULATOR_NAME_LENGTH, "int3472-discrete-regulator");
-> s/GPIO_REGULATOR_NAME_LENGTH/sizeof(int3472->regulator.regulator_name)/
->
-> Do regulator names need to be unique ? If so you may have a problem if a
-> platform has two discrete INT3472.
-
-
-Unlike clocks, the regulator framework doesn't shout at you when you do
-this, but I agree it's suboptimal at the very least, I'll set it to
-..."%s-regulator", acpi_dev_name(int3472->adev)... as with the clock.
-
-
->> +	case INT3472_GPIO_TYPE_PRIVACY_LED:
->> +		ret = skl_int3472_map_gpio_to_sensor(int3472, ares,
->> +						     "indicator-led",
->> +						     GPIO_ACTIVE_HIGH);
-> Mapping the indicator LED to the sensor isn't great, as all sensor
-> drivers would then need to handle it. Could it be handled in the
-> regulator instead, so that it would be turned on automatically when the
-> sensor is powered up ? Another option, more complicated, would be to
-> handle it in the CIO2 driver (but I'm not sure how we would map it).
-
-
-Not with the regulator, because it turns out only the 0x0b pin is one of
-those and those appear on very few devices in scope, so it wouldn't be
-called on a Surface Book 2 for example. Perhaps as part of clock
-prepare/enable? I don't much like the idea of it running in the CIO2
-driver to be honest, feels a bit out of place.
-
-
->> +
->> +	if (int3472->gpios_mapped)
->> +		gpiod_remove_lookup_table(&int3472->gpios);
-> You could avoid the need for the gpios_mapped field by checking for
->
-> 	if (int3472->gpios.list.next)
->
-> Up to you.
-
-
-Thank you! I was scratching my head trying to figure out a better way of
-doing that.
-
+>>  /**
+>>   * acpi_dev_get_next_match_dev - Return the next match of ACPI device
+>>   * @adev: Pointer to the previous acpi_device matching this @hid, @uid and @hrv
+>> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+>> index 02a716a0af5d..33deb22294f2 100644
+>> --- a/include/acpi/acpi_bus.h
+>> +++ b/include/acpi/acpi_bus.h
+>> @@ -683,6 +683,8 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
+>>
+>>  bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
+>>
+>> +struct acpi_device *
+>> +acpi_dev_get_next_dep_dev(struct acpi_device *adev, struct acpi_device *prev);
+>>  struct acpi_device *
+>>  acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
+>>  struct acpi_device *
+>> --
+>> 2.25.1
+>>
