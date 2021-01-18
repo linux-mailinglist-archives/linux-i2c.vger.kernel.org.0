@@ -2,191 +2,324 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 422DB2FABDE
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 21:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D32F2FAC7C
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 22:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390629AbhARUwT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 15:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
+        id S2394588AbhARVUj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 16:20:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388137AbhARUwL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 15:52:11 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FD5C061573;
-        Mon, 18 Jan 2021 12:51:30 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a12so17694048wrv.8;
-        Mon, 18 Jan 2021 12:51:30 -0800 (PST)
+        with ESMTP id S2394581AbhARVUg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 16:20:36 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F228C0613C1;
+        Mon, 18 Jan 2021 13:19:56 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id i63so14775839wma.4;
+        Mon, 18 Jan 2021 13:19:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=from:subject:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=5E1Zqwt5UjpmEr7JHA37Jh75pgHb6STpqkB7TTBWW50=;
-        b=Ivs93hOFttTr3QutQiEn7v4khyR/Cu0v7nXNxL0kVULz949KUenftU31wNhGejsWR3
-         2cj2BVKyW17bOqfGKu+O0OEJP93thm0gSjrYUSCvy470l6Mf4Hrh6jyCjOIFdAlLUePL
-         K1/gFKbFB49NnwxixupCEbEdY9sFDCXxyGzPEkJ+aj33Xbgz46lPAWg4Dx1Sxt+3HWZP
-         WTU08A3D4ArtfZMxRa10Qfo+sPgmba98/mKn3rpxZQPOuSs9ifU5BqhHpX5q9WmyZhb3
-         WCTo1F5tGFeSyit7GyCFHo+fdrxsMJxnPymObrVz7zPr8S0nJekjqsWOWTy2v8BMBocF
-         sSnw==
+        bh=QeTGjTOjovKjwl3obfQQbrmZun7B3WQGrzr0gIWDHE4=;
+        b=D/dXT5h0UbpIkNvnAPEIoLqZvcKvZrdFQCUpqlZ73sksgcXetxd2IkJXgikBc0QSzV
+         i1VPRYfpWyJK5qhnIfi9HlSYUnFR3K99kJ1oYBUmG8dUMPN4F01kOF1Yr1uj8XoOeDhO
+         GYbMTRFnTVremA+ZyuWuu4XZC1n0MTwL71vn7+fb3zlJ0Z2RupYQ2tu4Bwia8pLECmKG
+         o/unD9A8yZTD3FyEVD/nlt5LhSep1HeeNfyY17Netlh1Xwt7+y9Kzpmi10gwfkLGXNDC
+         fpu35+agLRAXJCHyGNt8NF0GY5ocqTXvMtKu98f72NJSVcU25dl6Z0tzA6gqzt47fBgl
+         k1+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=5E1Zqwt5UjpmEr7JHA37Jh75pgHb6STpqkB7TTBWW50=;
-        b=DR40pFUtXie2K6/mocihXY26rIacjZm1h+FTDLxjJS7xo/a5JtEfzMrqg1KS508/n9
-         iA1fkprdUt2Nh92VWo5AX43v/1T5svv5Yv9XFTj6j6EDAhLgIzeaKoeyit7ACh+G75r1
-         D48f1SMVXrmSC9+vONQ7VyVLelGRj9Ed6lY/we54irij5MzYPNTAHIDXiHk+0f8VsBIh
-         CPLKbk6dQu0XaNJcUdQn9eVOmPdnsVygqFbXCnJuBbcoKd53Vg1SywP0FvcJA6fk93ha
-         2jFxrrBUGLnl0sEbGYHdyS5W8Z2kuPLsTYzZ0dXrHdn+zQBugtABY7UWnWViiXHOdixt
-         5qEw==
-X-Gm-Message-State: AOAM531N+X/f2OOvScol8CVhROaNVfD9X0Hm2dyp6XZ8Tj1OxIgKDY9F
-        X5zYAT+8g7bSIgqqH9fIOfw=
-X-Google-Smtp-Source: ABdhPJxGidmbbneboahUdZhjGq8xt0VCVCs84Wz2eeHobWmhtpd0J6mJOTZntq2sHo3iKJuEkbuTWQ==
-X-Received: by 2002:a05:6000:1082:: with SMTP id y2mr1144586wrw.233.1611003088948;
-        Mon, 18 Jan 2021 12:51:28 -0800 (PST)
-Received: from [192.168.1.211] ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id v11sm31392225wrt.25.2021.01.18.12.51.27
+        bh=QeTGjTOjovKjwl3obfQQbrmZun7B3WQGrzr0gIWDHE4=;
+        b=H7vi7rcRNugp24yLdGWF2nTfkNNzFYbF/cMJKlk2wp4yBvPRaLEF8MIC0xND8tT9DJ
+         1JB/9St3D8gF/D1DP51KWR+Hx/Kt6XqGriOpmX9OpBko3UPYfKH9VMfqD1u0xgU75xMl
+         z4mB3B3cIaXOT2zyGpC48pssohLCciQgva50hq8cMXnszbNHx/eaJarX4Dy0ZecCvfMA
+         Bt2704RCW97BR20wy6Ss0fNMK075arMtc1usjVgJib6sTyqeiEzWp0zSpyYOu9bX5Zsk
+         Q4Ma/+AyH2m4nZvEDnta5F33C3dQ+Kkyg3XMriDk9bpvYQ4b4jRsBE3PMw9qota5hnzc
+         yH3A==
+X-Gm-Message-State: AOAM531tulwtDwYcD0iDKIhV9GQVW4q3Zw7QqyIZ9x+fJa2Gsbuj4hBr
+        dBaC8Qjd9R9JDcwbYK80jo0=
+X-Google-Smtp-Source: ABdhPJxLmvZG+vXqjOu+Bjm1wWXUvDoxzDi4PKRTqpskAfgFHzzy4MXdi/LoyUa8nB7QdU1Wq2iS5A==
+X-Received: by 2002:a1c:7fcf:: with SMTP id a198mr1073794wmd.121.1611004794792;
+        Mon, 18 Jan 2021 13:19:54 -0800 (PST)
+Received: from [192.168.1.158] ([2.29.208.120])
+        by smtp.gmail.com with ESMTPSA id y6sm30894095wrp.6.2021.01.18.13.19.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jan 2021 12:51:28 -0800 (PST)
-Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent
- acpi_devices
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, andy@kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-3-djrscally@gmail.com>
- <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com>
+        Mon, 18 Jan 2021 13:19:54 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com>
-Date:   Mon, 18 Jan 2021 20:51:27 +0000
+Subject: Re: [PATCH v2 6/7] platform: x86: Add intel_skl_int3472 driver
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, devel@acpica.org,
+        rjw@rjwysocki.net, lenb@kernel.org, andy@kernel.org,
+        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
+        hdegoede@redhat.com, mgross@linux.intel.com,
+        robert.moore@intel.com, erik.kaneda@intel.com,
+        sakari.ailus@linux.intel.com, kieran.bingham@ideasonboard.com
+References: <20210118003428.568892-1-djrscally@gmail.com>
+ <20210118003428.568892-7-djrscally@gmail.com>
+ <YAVRqWeUsLjvU62P@pendragon.ideasonboard.com>
+ <20210118144606.GO4077@smile.fi.intel.com>
+Message-ID: <75e99a06-4579-44ee-5f20-8f2ee3309a68@gmail.com>
+Date:   Mon, 18 Jan 2021 21:19:52 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com>
+In-Reply-To: <20210118144606.GO4077@smile.fi.intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 18/01/2021 16:14, Rafael J. Wysocki wrote:
-> On Mon, Jan 18, 2021 at 1:37 AM Daniel Scally <djrscally@gmail.com> wrote:
->> In some ACPI tables we encounter, devices use the _DEP method to assert
->> a dependence on other ACPI devices as opposed to the OpRegions that the
->> specification intends. We need to be able to find those devices "from"
->> the dependee, so add a function to parse all ACPI Devices and check if
->> the include the handle of the dependee device in their _DEP buffer.
-> What exactly do you need this for?
+Hi Andy - thanks as always for the comments
 
 
-So, in our DSDT we have devices with _HID INT3472, plus sensors which
-refer to those INT3472's in their _DEP method. The driver binds to the
-INT3472 device, we need to find the sensors dependent on them.
+Some responses below, but if not mentioned I'll follow your suggestion
+of course
 
-
-> Would it be practical to look up the suppliers in acpi_dep_list instead?
+On 18/01/2021 14:46, Andy Shevchenko wrote:
+> On Mon, Jan 18, 2021 at 11:15:21AM +0200, Laurent Pinchart wrote:
+>> On Mon, Jan 18, 2021 at 12:34:27AM +0000, Daniel Scally wrote:
+> My comments on top of Laurent's to avoid dups.
 >
-> Note that supplier drivers may remove entries from there, but does
-> that matter for your use case?
+> First of all, PDx86 has its own prefix pattern: "platform/x86: ..."
 
 
-Ah - that may work, yes. Thank you, let me test that.
+Sorry, I probably should have put more effort into figuring out the
+right pattern for those
 
 
+>>> +config INTEL_SKL_INT3472
+>>> +	tristate "Intel SkyLake ACPI INT3472 Driver"
+>>> +	depends on X86 && ACPI
+> X86 is a dup. Entire lot of PDx86 is a priory dependent on it (find "if X86"
+> line in Kconfig).
+
+
+Ah, oh yeah - thanks. I'll watch for that in future
+
+
+>>> +static struct i2c_driver int3472_tps68470 = {
+>>> +	.driver = {
+>>> +		.name = "int3472-tps68470",
+>>> +		.acpi_match_table = int3472_device_id,
+>>> +	},
+>>> +	.probe_new = skl_int3472_tps68470_probe,
+>>> +};
+> I'm not sure we want to have like this. If I'm not mistaken the I²C driver can
+> be separated without ACPI IDs (just having I²C IDs) and you may instantiate it
+> via i2c_new_client_device() or i2c_acpi_new_device() whichever suits better...
+
+
+Sorry, I'm a bit confused by this. The i2c device is already
+present...we just want the driver to bind to them, so what role do those
+functions have there?
+
+
+>>> +struct int3472_gpio_clock {
+>>> +	struct clk *clk;
+>>> +	struct clk_hw clk_hw;
+>>> +	struct clk_lookup *cl;
+>>> +	struct gpio_desc *gpio;
+>>> +};
+> Wondering if this has some similarities with and actually can utilize clk-gpio
+> driver.
 >
->> Signed-off-by: Daniel Scally <djrscally@gmail.com>
->> ---
->> Changes in v2:
->>         - Used acpi_lpss_dep() as Andy suggested.
+>
+>
+>>> +static const struct clk_ops skl_int3472_clock_ops = {
+>>> +	.prepare = skl_int3472_clk_prepare,
+>>> +	.unprepare = skl_int3472_clk_unprepare,
+>>> +	.enable = skl_int3472_clk_enable,
+>>> +	.disable = skl_int3472_clk_disable,
+>>> +};
+> Yeah, sounds like reinventing clk-gpio.c.
+>
+> static const struct clk_ops clk_gpio_gate_ops = {
+> 	.enable = clk_gpio_gate_enable,
+> 	.disable = clk_gpio_gate_disable,
+> 	.is_enabled = clk_gpio_gate_is_enabled,
+> };
+>
+> (Or is it mux? It has support there as well.
+>
+Hmm, yeah, this looks like it would work actually. So I think I'd need to:
+
+
+1. Make enabling INTEL_SKL_INT3472 also enable the clk-gpio driver
+
+2. Register a platform device to bind to the clk-gpio driver
+
+3. Register a gpio lookup table so that the clk-gpio driver can find the
+gpio in question using gpiod_get()
+
+
+And that looks like it will work; I'll try it.
+
+
+>>> +	/* Lenovo Miix 510-12ISK - OV5648, Rear */
+>>> +	{ "GEFF150023R", REGULATOR_SUPPLY("avdd", "i2c-OVTI5648:00"), NULL},
+>>> +	/* Surface Go 1&2 - OV5693, Front */
+>>> +	{ "YHCU", REGULATOR_SUPPLY("avdd", "i2c-INT33BE:00"), NULL},
+> I'm wondering if you should use same I2C format macro and create this
+> dynamically? Or rather find a corresponding ACPI device instance and
+> copy it's name? ... 
+
+
+The supply name needs hard-coding really, but the device name I suppose
+can come from int3472->sensor_name.
+
+
+>>> +static struct int3472_sensor_config *
+>>> +skl_int3472_get_sensor_module_config(struct int3472_device *int3472)
+>>> +{
+>>> +	unsigned int i = ARRAY_SIZE(int3472_sensor_configs);
+>>> +	struct int3472_sensor_config *ret;
+>>> +	union acpi_object *obj;
+>>> +
+>>> +	obj = acpi_evaluate_dsm_typed(int3472->sensor->handle,
+>>> +				      &cio2_sensor_module_guid, 0x00,
+>>> +				      0x01, NULL, ACPI_TYPE_STRING);
+>>> +
+>>> +	if (!obj) {
+>>> +		dev_err(&int3472->pdev->dev,
+>>> +			"Failed to get sensor module string from _DSM\n");
+>>> +		return ERR_PTR(-ENODEV);
+>>> +	}
+>>> +
+>>> +	if (obj->string.type != ACPI_TYPE_STRING) {
+>>> +		dev_err(&int3472->pdev->dev,
+>>> +			"Sensor _DSM returned a non-string value\n");
+>>> +		ret = ERR_PTR(-EINVAL);
+>>> +		goto out_free_obj;
+> And after below change you can turn this to
+>
+> 	ACPI_FREE(obj);
+> 	return ERR_PTR(-EINVAL);
+>
+> and remove label completely, but it's up to you.
+>
+>>> +	}
+>>> +	ret = ERR_PTR(-ENODEV);
+> This seems redundant. Or are you expecting ARRAY_SIZE() to be 0?
+> If no, you may add static_assert() near to the array definition.
+
+
+It **could** become 0, if the entries I've added are removed in future
+because the sensors are no longer supported or something. There might be
+no sensor_module_config for a given device. We only need to supply one if
+
+
+a) The platform has a 0x0b type GPIO, which means we need to define a
+supply name the driver is expecting
+
+b) The GPIO functions deviate from documented purpose, which means we
+need to supply a remapping struct
+
+
+Otherwise, there's no need for it.
+
+
+>>> +
+>>> +	int3472->regulator.rdev = regulator_register(&int3472->regulator.rdesc,
+>>> +						     &cfg);
+>>> +	if (IS_ERR(int3472->regulator.rdev)) {
+>>> +		ret = PTR_ERR(int3472->regulator.rdev);
+>>> +		goto err_free_gpio;
+>>> +	}
+> Similar here, can we utilize gpio-regulator.c?
+>
+
+Also yes probably, with the same steps as for the clocks. Again, I'll
+try that out, thanks very much.
+
+
+>>> +		dev_warn(&int3472->pdev->dev,
+>>> +			 "GPIO type 0x%llx unknown; the sensor may not work\n",
+>>> +			 (obj->integer.value & 0xff));
+>> No need for parentheses.
+> And instead of "%llx" with " & 0xff" you may use "%x" with "(u8)" cast.
+> However, I don't think we need to show only last byte, because it may give
+> wrong impression on values like "0x100".
+
+
+But in this case only the last byte holds the type information, second
+lowest byte is the pin number. So as we understand it, 0x100 would be
+invalid anyway.
+
+
+>>> +	int3472 = kzalloc(sizeof(*int3472) +
+>>> +			 ((INT3472_MAX_SENSOR_GPIOS + 1) * sizeof(struct gpiod_lookup)),
+>> One more space for the indentation, and the outer parentheses are not
+>> needed.
+> And use struct_size() from overflow.h.
+
+TIL! Thank you
+
+
+>>> +	if (int3472->gpios_mapped)
+>>> +		gpiod_remove_lookup_table(&int3472->gpios);
+>> You could avoid the need for the gpios_mapped field by checking for
 >>
->>  drivers/acpi/utils.c    | 34 ++++++++++++++++++++++++++++++++++
->>  include/acpi/acpi_bus.h |  2 ++
->>  2 files changed, 36 insertions(+)
->>
->> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
->> index 78b38775f18b..ec6a2406a886 100644
->> --- a/drivers/acpi/utils.c
->> +++ b/drivers/acpi/utils.c
->> @@ -831,6 +831,18 @@ bool acpi_lpss_dep(struct acpi_device *adev, acpi_handle handle)
->>         return false;
->>  }
->>
->> +static int acpi_dev_match_by_dep(struct device *dev, const void *data)
->> +{
->> +       struct acpi_device *adev = to_acpi_device(dev);
->> +       const struct acpi_device *dependee = data;
->> +       acpi_handle handle = dependee->handle;
->> +
->> +       if (acpi_lpss_dep(adev, handle))
->> +               return 1;
->> +
->> +       return 0;
->> +}
->> +
->>  /**
->>   * acpi_dev_present - Detect that a given ACPI device is present
->>   * @hid: Hardware ID of the device.
->> @@ -866,6 +878,28 @@ bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
->>  }
->>  EXPORT_SYMBOL(acpi_dev_present);
->>
->> +/**
->> + * acpi_dev_get_next_dep_dev - Return next ACPI device dependent on input dev
->> + * @adev: Pointer to the dependee device
->> + * @prev: Pointer to the previous dependent device (or NULL for first match)
->> + *
->> + * Return the next ACPI device which declares itself dependent on @adev in
->> + * the _DEP buffer.
->> + *
->> + * The caller is responsible to call put_device() on the returned device.
->> + */
->> +struct acpi_device *acpi_dev_get_next_dep_dev(struct acpi_device *adev,
->> +                                             struct acpi_device *prev)
->> +{
->> +       struct device *start = prev ? &prev->dev : NULL;
->> +       struct device *dev;
->> +
->> +       dev = bus_find_device(&acpi_bus_type, start, adev, acpi_dev_match_by_dep);
->> +
->> +       return dev ? to_acpi_device(dev) : NULL;
->> +}
->> +EXPORT_SYMBOL(acpi_dev_get_next_dep_dev);
->> +
->>  /**
->>   * acpi_dev_get_next_match_dev - Return the next match of ACPI device
->>   * @adev: Pointer to the previous acpi_device matching this @hid, @uid and @hrv
->> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
->> index 02a716a0af5d..33deb22294f2 100644
->> --- a/include/acpi/acpi_bus.h
->> +++ b/include/acpi/acpi_bus.h
->> @@ -683,6 +683,8 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
->>
->>  bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
->>
->> +struct acpi_device *
->> +acpi_dev_get_next_dep_dev(struct acpi_device *adev, struct acpi_device *prev);
->>  struct acpi_device *
->>  acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
->>  struct acpi_device *
->> --
->> 2.25.1
->>
+>> 	if (int3472->gpios.list.next)
+> I think this is an intrusion to GPIO realm.
+> Instead would you consider to drop the check completely and use ->gpios to be
+> NULL / not-NULL (and yes, you won't need gpios_mapped flag)?
+>
+> d321ad1286d2 ("gpiolib: Follow usual pattern for gpiod_remove_lookup_table() call")
+>
+> in I²C tree makes it possible.
+
+That's also fine by me; or I guess also check int3472->gpiods.dev_id,
+and only set the pointer the first time a GPIO is mapped.
+
+
+I'll rework it, thanks.
+
+
+>>> +		return -EINVAL;
+>>> +
+>>> +	if (ret)
+>>> +		cldb_present = false;
+>>> +
+>>> +	gpio_dev = skl_int3472_register_pdev("tps68470-gpio", &client->dev);
+>>> +	if (IS_ERR(gpio_dev))
+>>> +		return PTR_ERR(gpio_dev);
+>>> +
+>>> +	if (cldb_present) {
+>>> +		clk_dev = skl_int3472_register_pdev("tps68470-clk",
+>>> +						    &client->dev);
+>>> +		if (IS_ERR(clk_dev)) {
+>>> +			ret = PTR_ERR(clk_dev);
+>>> +			goto err_free_gpio;
+>>> +		}
+>>> +
+>>> +		regulator_dev = skl_int3472_register_pdev("tps68470-regulator",
+>>> +							  &client->dev);
+>>> +		if (IS_ERR(regulator_dev)) {
+>>> +			ret = PTR_ERR(regulator_dev);
+>>> +			goto err_free_clk;
+>>> +		}
+>>> +	} else {
+>>> +		opregion_dev = skl_int3472_register_pdev("tps68470_pmic_opregion",
+>>> +							 &client->dev);
+>>> +		if (IS_ERR(opregion_dev)) {
+>>> +			ret = PTR_ERR(opregion_dev);
+>>> +			goto err_free_gpio;
+>>> +		}
+>>> +	}
+>> I wonder if this could be simplified by using devm_mfd_add_devices. You
+>> could have two arrays of mfd_cell, one for each case.
+> Yeah, which effectively means that we should have some kind of mfd/tps68470 in
+> place.
+
+
+Can you expand on what you mean by that a little, please?
+
