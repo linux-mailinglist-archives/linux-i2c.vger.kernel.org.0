@@ -2,26 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D352F9AA6
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 08:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDB92F9ABB
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 08:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732703AbhARHik (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 02:38:40 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54932 "EHLO
+        id S1732861AbhARHnS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 02:43:18 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:54976 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbhARHii (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 02:38:38 -0500
+        with ESMTP id S1732724AbhARHnS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 02:43:18 -0500
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4A3AB2BB;
-        Mon, 18 Jan 2021 08:37:56 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1E4CA2BB;
+        Mon, 18 Jan 2021 08:42:35 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1610955476;
-        bh=zgto1uNnvZ2GpO37f5o+w/xXmKyI+iSAGEN7OiEiaTg=;
+        s=mail; t=1610955755;
+        bh=Vnby0mwsCmasS2TI5LzaiZyTwN99T+ncYSU29OFGRgA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=acCJ589txn50jkAr3fEASXMMzRmaZIz1oP5tPfDocMDArWr5uuIvsW/mM2T7l0oBK
-         bE37I4w3alC0Zl5oS60W/sy6ImOYwbazQDV3bKTlUeeu9eOX1xKO5RjZAdsCiffrdf
-         LJBngh/Psk0bcPTc+ezuVxjTaHg8YsYhnKVdhE3c=
-Date:   Mon, 18 Jan 2021 09:37:40 +0200
+        b=MRImOa7E95Lr11SFTvPZORP2Sje7v1eiGCMqLXkzTQUOFWyWkOXCojNci/WVTDiv/
+         2Rwybse2XO+tIVEheqljj7mJvtqC0W9NzFnSUVsbtcCCDTF3xkCd38u3Krfaakze16
+         iGG/lUeq1XtCAhZUHTEZRfw6uWYA/bD7Mpfpzr24=
+Date:   Mon, 18 Jan 2021 09:42:19 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Daniel Scally <djrscally@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
@@ -34,14 +34,14 @@ Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         robert.moore@intel.com, erik.kaneda@intel.com,
         sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
         kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 5/7] gpio: gpiolib-acpi: Export acpi_get_gpiod()
-Message-ID: <YAU6xCZq8mRkRm6U@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v2 7/7] mfd: Remove tps68470 MFD driver
+Message-ID: <YAU726t7zz9k22YT@pendragon.ideasonboard.com>
 References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-6-djrscally@gmail.com>
+ <20210118003428.568892-8-djrscally@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210118003428.568892-6-djrscally@gmail.com>
+In-Reply-To: <20210118003428.568892-8-djrscally@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -50,69 +50,205 @@ Hi Daniel,
 
 Thank you for the patch.
 
-On Mon, Jan 18, 2021 at 12:34:26AM +0000, Daniel Scally wrote:
-> I need to be able to translate GPIO resources in an acpi_device's _CRS
-> into gpio_descs. Those are represented in _CRS as a pathname to a GPIO
-> device plus the pin's index number: this function is perfect for that
-> purpose.
+On Mon, Jan 18, 2021 at 12:34:28AM +0000, Daniel Scally wrote:
+> This driver only covered one scenario in which ACPI devices with _HID
+> INT3472 are found, and its functionality has been taken over by the
+> intel-skl-int3472 module, so remove it.
 > 
 > Signed-off-by: Daniel Scally <djrscally@gmail.com>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
 > ---
 > Changes in v2:
 > 
-> 	-None
+> 	- Introduced
 > 
->  drivers/gpio/gpiolib-acpi.c | 3 ++-
->  include/linux/acpi.h        | 5 +++++
->  2 files changed, 7 insertions(+), 1 deletion(-)
+>  drivers/acpi/pmic/Kconfig |  1 -
+>  drivers/gpio/Kconfig      |  1 -
+>  drivers/mfd/Kconfig       | 18 --------
+>  drivers/mfd/Makefile      |  1 -
+>  drivers/mfd/tps68470.c    | 97 ---------------------------------------
+>  5 files changed, 118 deletions(-)
+>  delete mode 100644 drivers/mfd/tps68470.c
 > 
-> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-> index e37a57d0a2f0..83f9f85cd0ab 100644
-> --- a/drivers/gpio/gpiolib-acpi.c
-> +++ b/drivers/gpio/gpiolib-acpi.c
-> @@ -111,7 +111,7 @@ static int acpi_gpiochip_find(struct gpio_chip *gc, void *data)
->   * controller does not have GPIO chip registered at the moment. This is to
->   * support probe deferral.
->   */
-> -static struct gpio_desc *acpi_get_gpiod(char *path, int pin)
-> +struct gpio_desc *acpi_get_gpiod(char *path, int pin)
->  {
->  	struct gpio_chip *chip;
->  	acpi_handle handle;
-> @@ -127,6 +127,7 @@ static struct gpio_desc *acpi_get_gpiod(char *path, int pin)
+> diff --git a/drivers/acpi/pmic/Kconfig b/drivers/acpi/pmic/Kconfig
+> index 56bbcb2ce61b..e27d8ef3a32c 100644
+> --- a/drivers/acpi/pmic/Kconfig
+> +++ b/drivers/acpi/pmic/Kconfig
+> @@ -52,7 +52,6 @@ endif	# PMIC_OPREGION
 >  
->  	return gpiochip_get_desc(chip, pin);
->  }
-> +EXPORT_SYMBOL_GPL(acpi_get_gpiod);
+>  config TPS68470_PMIC_OPREGION
+>  	bool "ACPI operation region support for TPS68470 PMIC"
+> -	depends on MFD_TPS68470
+
+Should this now depend on INTEL_SKL_INT3472 ?
+
+>  	help
+>  	  This config adds ACPI operation region support for TI TPS68470 PMIC.
+>  	  TPS68470 device is an advanced power management unit that powers
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index c70f46e80a3b..07ff8f24b0d9 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -1343,7 +1343,6 @@ config GPIO_TPS65912
 >  
->  static irqreturn_t acpi_gpio_irq_handler(int irq, void *data)
->  {
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 2630c2e953f7..5cd272326eb7 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -1066,6 +1066,7 @@ void __acpi_handle_debug(struct _ddebug *descriptor, acpi_handle handle, const c
->  bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
->  				struct acpi_resource_gpio **agpio);
->  int acpi_dev_gpio_irq_get(struct acpi_device *adev, int index);
-> +struct gpio_desc *acpi_get_gpiod(char *path, int pin);
->  #else
->  static inline bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
->  					      struct acpi_resource_gpio **agpio)
-> @@ -1076,6 +1077,10 @@ static inline int acpi_dev_gpio_irq_get(struct acpi_device *adev, int index)
->  {
->  	return -ENXIO;
->  }
-> +struct gpio_desc *acpi_get_gpiod(char *path, int pin)
-> +{
-> +	return NULL;
-> +}
->  #endif
+>  config GPIO_TPS68470
+>  	bool "TPS68470 GPIO"
+> -	depends on MFD_TPS68470
+
+Same here.
+
+This won't deal with the case where th TPS68470 is instantiated through
+DT, but that's not supported yet, so it can be dealt with it later when
+the need arises.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+>  	help
+>  	  Select this option to enable GPIO driver for the TPS68470
+>  	  chip family.
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index bdfce7b15621..9a1f648efde0 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1520,24 +1520,6 @@ config MFD_TPS65217
+>  	  This driver can also be built as a module.  If so, the module
+>  	  will be called tps65217.
 >  
->  /* Device properties */
+> -config MFD_TPS68470
+> -	bool "TI TPS68470 Power Management / LED chips"
+> -	depends on ACPI && PCI && I2C=y
+> -	depends on I2C_DESIGNWARE_PLATFORM=y
+> -	select MFD_CORE
+> -	select REGMAP_I2C
+> -	help
+> -	  If you say yes here you get support for the TPS68470 series of
+> -	  Power Management / LED chips.
+> -
+> -	  These include voltage regulators, LEDs and other features
+> -	  that are often used in portable devices.
+> -
+> -	  This option is a bool as it provides an ACPI operation
+> -	  region, which must be available before any of the devices
+> -	  using this are probed. This option also configures the
+> -	  designware-i2c driver to be built-in, for the same reason.
+> -
+>  config MFD_TI_LP873X
+>  	tristate "TI LP873X Power Management IC"
+>  	depends on I2C
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 14fdb188af02..5994e812f479 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -105,7 +105,6 @@ obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o
+>  obj-$(CONFIG_MFD_TPS65912)	+= tps65912-core.o
+>  obj-$(CONFIG_MFD_TPS65912_I2C)	+= tps65912-i2c.o
+>  obj-$(CONFIG_MFD_TPS65912_SPI)  += tps65912-spi.o
+> -obj-$(CONFIG_MFD_TPS68470)	+= tps68470.o
+>  obj-$(CONFIG_MFD_TPS80031)	+= tps80031.o
+>  obj-$(CONFIG_MENELAUS)		+= menelaus.o
+>  
+> diff --git a/drivers/mfd/tps68470.c b/drivers/mfd/tps68470.c
+> deleted file mode 100644
+> index 4a4df4ffd18c..000000000000
+> --- a/drivers/mfd/tps68470.c
+> +++ /dev/null
+> @@ -1,97 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/*
+> - * TPS68470 chip Parent driver
+> - *
+> - * Copyright (C) 2017 Intel Corporation
+> - *
+> - * Authors:
+> - *	Rajmohan Mani <rajmohan.mani@intel.com>
+> - *	Tianshu Qiu <tian.shu.qiu@intel.com>
+> - *	Jian Xu Zheng <jian.xu.zheng@intel.com>
+> - *	Yuning Pu <yuning.pu@intel.com>
+> - */
+> -
+> -#include <linux/acpi.h>
+> -#include <linux/delay.h>
+> -#include <linux/i2c.h>
+> -#include <linux/init.h>
+> -#include <linux/mfd/core.h>
+> -#include <linux/mfd/tps68470.h>
+> -#include <linux/regmap.h>
+> -
+> -static const struct mfd_cell tps68470s[] = {
+> -	{ .name = "tps68470-gpio" },
+> -	{ .name = "tps68470_pmic_opregion" },
+> -};
+> -
+> -static const struct regmap_config tps68470_regmap_config = {
+> -	.reg_bits = 8,
+> -	.val_bits = 8,
+> -	.max_register = TPS68470_REG_MAX,
+> -};
+> -
+> -static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
+> -{
+> -	unsigned int version;
+> -	int ret;
+> -
+> -	/* Force software reset */
+> -	ret = regmap_write(regmap, TPS68470_REG_RESET, TPS68470_REG_RESET_MASK);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = regmap_read(regmap, TPS68470_REG_REVID, &version);
+> -	if (ret) {
+> -		dev_err(dev, "Failed to read revision register: %d\n", ret);
+> -		return ret;
+> -	}
+> -
+> -	dev_info(dev, "TPS68470 REVID: 0x%x\n", version);
+> -
+> -	return 0;
+> -}
+> -
+> -static int tps68470_probe(struct i2c_client *client)
+> -{
+> -	struct device *dev = &client->dev;
+> -	struct regmap *regmap;
+> -	int ret;
+> -
+> -	regmap = devm_regmap_init_i2c(client, &tps68470_regmap_config);
+> -	if (IS_ERR(regmap)) {
+> -		dev_err(dev, "devm_regmap_init_i2c Error %ld\n",
+> -			PTR_ERR(regmap));
+> -		return PTR_ERR(regmap);
+> -	}
+> -
+> -	i2c_set_clientdata(client, regmap);
+> -
+> -	ret = tps68470_chip_init(dev, regmap);
+> -	if (ret < 0) {
+> -		dev_err(dev, "TPS68470 Init Error %d\n", ret);
+> -		return ret;
+> -	}
+> -
+> -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE, tps68470s,
+> -			      ARRAY_SIZE(tps68470s), NULL, 0, NULL);
+> -	if (ret < 0) {
+> -		dev_err(dev, "devm_mfd_add_devices failed: %d\n", ret);
+> -		return ret;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct acpi_device_id tps68470_acpi_ids[] = {
+> -	{"INT3472"},
+> -	{},
+> -};
+> -
+> -static struct i2c_driver tps68470_driver = {
+> -	.driver = {
+> -		   .name = "tps68470",
+> -		   .acpi_match_table = tps68470_acpi_ids,
+> -	},
+> -	.probe_new = tps68470_probe,
+> -};
+> -builtin_i2c_driver(tps68470_driver);
 
 -- 
 Regards,
