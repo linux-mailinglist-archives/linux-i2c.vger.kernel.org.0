@@ -2,208 +2,138 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EDD2F98A5
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 05:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C658E2F9954
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 06:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730852AbhAREaA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Jan 2021 23:30:00 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:51227 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728690AbhARE35 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Jan 2021 23:29:57 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 936285805F2;
-        Sun, 17 Jan 2021 23:28:50 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sun, 17 Jan 2021 23:28:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=s
-        ICxixPxct6sLtmHxkqJI743Hy8F/P1ZryCsE09D94Q=; b=ifZUkXk+q51ej7SmX
-        2PaJs3RJQHylWkQ79NZB01+E581m62vwJx28PdkVACenTTpsWDK4BVclI0m3cY3l
-        EbF+UYV7DLxIpaQsPs/FYT9dFrUUrz/R5V409UOLlPmbK5TbuIPPo2qvGdCDNkeD
-        4yHPTzYNRxO3h4c6+dZiALjPrfWNibow+jQAC9JsurWE3Po0lUgt7Ch9kFuQaJkb
-        oGNcp7zz6GmStXLtymZgznnAADhCntBlRM5JswHeJt6V6IsDzgiAru6uFdBgPL4Q
-        Uun4t8wp78p9Mymk49/f2XL2mvxqP09QBlk6HwYL7OeHa0KS77dwJ6BUw5sVv8AZ
-        ilMlA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=sICxixPxct6sLtmHxkqJI743Hy8F/P1ZryCsE09D9
-        4Q=; b=EC6xx3WGKXuJ+a52Myt/R1gvlro3ZnbwpkeLcKGFwxz1Wcsc+J9oVP3VF
-        iqoe/4i+8CKQiXfRB8oyi+7b1ibl2nZnUARSGVmuKSvYMlJF1TaWwzqrvpA7NZoo
-        iPk8tfVyZ1kIRjiEKrDA9D7dc2Kf1Sg2dOIHPMmEgfd3N4WZtgsW6utNPY0zLYaI
-        FCF+l3fnl86Z5tCSlK8ksO6V7VHmxbosXRsUoogSCvbyupjSYmQrAF4f3uhqU34G
-        YoD1f1GMGlK4+TBdycUeW8oBT/Y7vxZhtwokLcPxVYNUfj7AQJd8D5QkdahxMLs4
-        EA2nNGsZIWnQWDH0iqDEMiS7sjk0Q==
-X-ME-Sender: <xms:gA4FYEpEaczjmpzMcqddwTrVyRZNYcwj13JaP9cpqeBBrKoOGJ-4eg>
-    <xme:gA4FYKqrWgSZ1-YX5KTxIXula5JAmnVn3sS7SBPyW-GWFnG4r_2PiZWA5Z1DIt1H9
-    1Y9Juqiu5sruKD1gg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrtdejgdejtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpefgveffteelheffjeeukedvkedviedtheevgeefkeehueeiieeuteeu
-    gfettdeggeenucfkphepjedtrddufeehrddugeekrdduhedunecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghn
-    ugdrohhrgh
-X-ME-Proxy: <xmx:gQ4FYJMr7vTk_aUfBh_Cy3LnTZwzD66_cbgDGxn1ewDlpamW5ErqWw>
-    <xmx:gQ4FYL4L9i7Vgjh2mvgEiOur5LtzkqbND31DH_1Gq8sf2GEx8IxK3Q>
-    <xmx:gQ4FYD54u-AIq-0EXE2pYxu_TSrlpOvUAW5fRKPAHCplNtph5QwQvg>
-    <xmx:gg4FYB7M_N6QRj_OvrC_HhViGEGCS6NozhshuWm31TTEukMR1RktsA>
-Received: from [70.135.148.151] (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 35D7B1080057;
-        Sun, 17 Jan 2021 23:28:48 -0500 (EST)
-Subject: Re: [PATCH v3 18/21] dt-bindings: allwinner: Add H616 compatible
- strings
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org
-References: <20210118020848.11721-1-andre.przywara@arm.com>
- <20210118020848.11721-19-andre.przywara@arm.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <c21019af-a6e4-4a06-5307-23b227d25934@sholland.org>
-Date:   Sun, 17 Jan 2021 22:28:47 -0600
-User-Agent: Mozilla/5.0 (X11; Linux ppc64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S1731752AbhARFhe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 00:37:34 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:49891 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731743AbhARFhd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 00:37:33 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1610948227; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=TjYdGssVsPJFHu21J0UDvrX/gV9OIWsRXIPK5jhOiOg=; b=Ba+iJkvRTtFCQsGypOZ+OJPKmTmB0r+XBTIk9apoYnLYc3b0hmuI8Cg6uqw5uEeQLuimmrWc
+ fENOLjHWejAaq//KCyMpPRiNaGKUYIyKEBIJksmE8Eo3byNNMlvFNqBr76qg2TcV+KxBrB4m
+ vr+VPSjLHRnGxB9cdR64lDdIZ/0=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
+ 60051e59e23dedcc3a9bf135 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 18 Jan 2021 05:36:25
+ GMT
+Sender: rnayak=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 11DDDC43465; Mon, 18 Jan 2021 05:36:25 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [192.168.0.120] (unknown [49.207.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E82BDC433C6;
+        Mon, 18 Jan 2021 05:36:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E82BDC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for
+ 'assigned-performance-states'
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        ulf.hansson@linaro.org, viresh.kumar@linaro.org
+Cc:     robh+dt@kernel.org, wsa@kernel.org, swboyd@chromium.org,
+        dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
+        mka@chromium.org, akashast@codeaurora.org,
+        msavaliy@qti.qualcomm.com, parashar@codeaurora.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        agross@kernel.org, linux-i2c@vger.kernel.org
+References: <20201224111210.1214-1-rojay@codeaurora.org>
+ <20201224111210.1214-4-rojay@codeaurora.org> <YAGqKfDfB7EEuZVn@builder.lan>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <6bfec3e6-3d26-7ade-d836-032273856ce2@codeaurora.org>
+Date:   Mon, 18 Jan 2021 11:06:10 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <20210118020848.11721-19-andre.przywara@arm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <YAGqKfDfB7EEuZVn@builder.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/17/21 8:08 PM, Andre Przywara wrote:
-> Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
-> bindings, and pair them with an existing fallback compatible string,
-> as the devices are compatible.
-> This covers I2C, infrared, RTC and SPI.
-> 
-> Use enums to group all compatible devices together.
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
-> ---
->  .../bindings/i2c/marvell,mv64xxx-i2c.yaml     | 21 +++++++------------
->  .../media/allwinner,sun4i-a10-ir.yaml         | 16 ++++++--------
->  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |  3 +++
->  .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  1 +
->  4 files changed, 17 insertions(+), 24 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-> index 5b5ae402f97a..eb72dd571def 100644
-> --- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-> @@ -18,21 +18,14 @@ properties:
->            - const: allwinner,sun4i-a10-i2c
->        - const: allwinner,sun6i-a31-i2c
->        - items:
-> -          - const: allwinner,sun8i-a23-i2c
-> +          - enum:
-> +              - allwinner,sun8i-a23-i2c
-> +              - allwinner,sun8i-a83t-i2c
-> +              - allwinner,sun50i-a64-i2c
-> +              - allwinner,sun50i-a100-i2c
-> +              - allwinner,sun50i-h6-i2c
-> +              - allwinner,sun50i-h616-i2c
->            - const: allwinner,sun6i-a31-i2c
-> -      - items:
-> -          - const: allwinner,sun8i-a83t-i2c
-> -          - const: allwinner,sun6i-a31-i2c
-> -      - items:
-> -          - const: allwinner,sun50i-a64-i2c
-> -          - const: allwinner,sun6i-a31-i2c
-> -      - items:
-> -          - const: allwinner,sun50i-a100-i2c
-> -          - const: allwinner,sun6i-a31-i2c
-> -      - items:
-> -          - const: allwinner,sun50i-h6-i2c
-> -          - const: allwinner,sun6i-a31-i2c
-> -
->        - const: marvell,mv64xxx-i2c
->        - const: marvell,mv78230-i2c
->        - const: marvell,mv78230-a0-i2c
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-> index 5fa19d4aeaf3..6d8395d6bca0 100644
-> --- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-> @@ -20,16 +20,12 @@ properties:
->        - const: allwinner,sun5i-a13-ir
->        - const: allwinner,sun6i-a31-ir
->        - items:
-> -          - const: allwinner,sun8i-a83t-ir
-> -          - const: allwinner,sun6i-a31-ir
-> -      - items:
-> -          - const: allwinner,sun8i-r40-ir
-> -          - const: allwinner,sun6i-a31-ir
-> -      - items:
-> -          - const: allwinner,sun50i-a64-ir
-> -          - const: allwinner,sun6i-a31-ir
-> -      - items:
-> -          - const: allwinner,sun50i-h6-ir
-> +          - enum:
-> +              - allwinner,sun8i-a83t-ir
-> +              - allwinner,sun8i-r40-ir
-> +              - allwinner,sun50i-a64-ir
-> +              - allwinner,sun50i-h6-ir
-> +              - allwinner,sun50i-h616-ir
->            - const: allwinner,sun6i-a31-ir
->  
->    reg:
-> diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> index 37c2a601c3fa..97928efd2bc9 100644
-> --- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> @@ -26,6 +26,9 @@ properties:
->            - const: allwinner,sun50i-a64-rtc
->            - const: allwinner,sun8i-h3-rtc
->        - const: allwinner,sun50i-h6-rtc
-> +      - items:
-> +          - const: allwinner,sun50i-h616-rtc
-> +          - const: allwinner,sun50i-h6-rtc
 
-Since H6, the RTC manages the 24 MHz DCXO, so it provides a fourth clock
-output. If this is easy to change later, then it is fine for now, but
-maybe it is better to get the H616 binding correct from the beginning?
-
-Cheers,
-Samuel
-
->    reg:
->      maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> index 7866a655d81c..908248260afa 100644
-> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> @@ -25,6 +25,7 @@ properties:
->            - enum:
->                - allwinner,sun8i-r40-spi
->                - allwinner,sun50i-h6-spi
-> +              - allwinner,sun50i-h616-spi
->            - const: allwinner,sun8i-h3-spi
->  
->    reg:
+On 1/15/2021 8:13 PM, Bjorn Andersson wrote:
+> On Thu 24 Dec 05:12 CST 2020, Roja Rani Yarubandi wrote:
 > 
+>> @@ -629,6 +658,16 @@ static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
+>>   	struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
+>>   
+>>   	disable_irq(gi2c->irq);
+>> +
+>> +	/* Drop the assigned performance state */
+>> +	if (gi2c->assigned_pstate) {
+>> +		ret = dev_pm_genpd_set_performance_state(dev, 0);
+>> +		if (ret) {
+>> +			dev_err(dev, "Failed to set performance state\n");
+>> +			return ret;
+>> +		}
+>> +	}
+>> +
+> 
+> Ulf, Viresh, I think we discussed this at the time of introducing the
+> performance states.
+> 
+> The client's state does not affect if its performance_state should
+> be included in the calculation of the aggregated performance_state, so
+> each driver that needs to keep some minimum performance state needs to
+> have these two snippets.
+> 
+> Would it not make sense to on enable/disable re-evaluate the
+> performance_state and potentially reconfigure the hardware
+> automatically?
 
+I agree, this will be repeated across multiple drivers which would
+need some minimal vote while they are active, handling this during
+genpd enable/disable in genpd core makes sense.
+
+> 
+> Regards,
+> Bjorn
+> 
+>>   	ret = geni_se_resources_off(&gi2c->se);
+>>   	if (ret) {
+>>   		enable_irq(gi2c->irq);
+>> @@ -654,6 +693,16 @@ static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> +	/* Set the assigned performance state */
+>> +	if (gi2c->assigned_pstate) {
+>> +		ret = dev_pm_genpd_set_performance_state(dev,
+>> +							 gi2c->assigned_pstate);
+>> +		if (ret) {
+>> +			dev_err(dev, "Failed to set performance state\n");
+>> +			return ret;
+>> +		}
+>> +	}
+>> +
+>>   	enable_irq(gi2c->irq);
+>>   	gi2c->suspended = 0;
+>>   	return 0;
+>> -- 
+>> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+>> of Code Aurora Forum, hosted by The Linux Foundation
+>>
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
