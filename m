@@ -2,120 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26AAB2F9DC3
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 12:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201A52F9E0B
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Jan 2021 12:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389912AbhARLNi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 06:13:38 -0500
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:56664 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389404AbhARLNe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 06:13:34 -0500
-Date:   Mon, 18 Jan 2021 11:12:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1610968360;
-        bh=peSC9o9yu05hJE1IC0P2apZMWF5VoegXfyyqCO9GoLM=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=n3XZ3zXlRHqfavOYPOO4tMpM6ITEmWi7rzGm1xwFAXrA+DFpaNcnHbXyTD0eQaL0N
-         xqR7q698aaAqxz/QTH/P7btgZ0H//3/BvLEHd0K+66DfrfUfORbrj5tmGE0HTdaaCw
-         o1awLClmG58F+Hwqq9edfb4Q1t/wBUWASaq2qI0Y=
-To:     Daniel Scally <djrscally@gmail.com>
-From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "andy@kernel.org" <andy@kernel.org>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "mgross@linux.intel.com" <mgross@linux.intel.com>,
-        "robert.moore@intel.com" <robert.moore@intel.com>,
-        "erik.kaneda@intel.com" <erik.kaneda@intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>
-Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Subject: Re: [PATCH v2 6/7] platform: x86: Add intel_skl_int3472 driver
-Message-ID: <-GKrxu8GJvGe-PlKkLpblw9N-DtVtS7i87BOCLgJR72yf4hUFpUgiOlGcFero_gqgUxJrX2gxtLOnz_31hJugfam0SXXmXxIzGIhS162mhI=@protonmail.com>
-In-Reply-To: <20210118003428.568892-7-djrscally@gmail.com>
-References: <20210118003428.568892-1-djrscally@gmail.com> <20210118003428.568892-7-djrscally@gmail.com>
+        id S2390141AbhARLYu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 06:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390146AbhARLXL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 06:23:11 -0500
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB928C061573;
+        Mon, 18 Jan 2021 03:22:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=aUlcPf/jHMTuCu5fOX4kjclkFtZwtbh8tbGRwleHuOI=; b=iRHygFCUFFEBW4fRU5BK5d9p5+
+        KALLc1HznvK1PuBZk8EEN8GSm7+2PoKxy0Zr8i/7LT3kPL28KkT4qdpywH1/puJnnv0g/20B/M3rj
+        zWgmiWc+PPxmAxVxABpdMhfqQlYJEI7AQqxd01mQvNGgFk7hJlHO7efIzdMJYCWv9BMdgcSpb89OY
+        AE3sz+eoROQuOt48zeDgTWVsgDJXYbwSWSrjYnTownPdt5E+UQWzZSX4nus8W3RXjQQnWZSRDpfl6
+        llzE3QfPbup2Hc4MIAkOcH+0SEt2g0IoJS9IQFysDkh7AWyaXv3txbauHYnXx/dFQSBDWvMvnzpQc
+        iYTnSOBw==;
+Received: from dsl-hkibng22-54f986-236.dhcp.inet.fi ([84.249.134.236] helo=[192.168.1.10])
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1l1Sc7-0002u2-0x; Mon, 18 Jan 2021 13:22:27 +0200
+Subject: Re: [PATCH v3] i2c: bpmp-tegra: Ignore unknown I2C_M flags
+To:     Wolfram Sang <wsa@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, talho@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20210112102225.3737326-1-mperttunen@nvidia.com>
+ <20210117112003.GB1983@ninjato>
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+Message-ID: <99326ffc-7590-84ce-dfa7-7c09bc17ca31@kapsi.fi>
+Date:   Mon, 18 Jan 2021 13:22:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+In-Reply-To: <20210117112003.GB1983@ninjato>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 84.249.134.236
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
+On 1/17/21 1:20 PM, Wolfram Sang wrote:
+> On Tue, Jan 12, 2021 at 12:22:25PM +0200, Mikko Perttunen wrote:
+>> In order to not to start returning errors when new I2C_M flags are
+>> added, change behavior to just ignore all flags that we don't know
+>> about. This includes the I2C_M_DMA_SAFE flag that already exists.
+>>
+>> Cc: stable@vger.kernel.org # v4.19+
+>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> 
+> Applied to for-current, thanks! I added also this sentence from v2 to
+> the description to justify stable: "but causes -EINVAL to be returned
+> for valid transactions."
 
+Thanks!
 
-2021. janu=C3=A1r 18., h=C3=A9tf=C5=91 1:34 keltez=C3=A9ssel, Daniel Scally=
- =C3=ADrta:
+> 
+> Also, this driver has no dedicated maintainer. Is there someone up for
+> this task? There is probably little to do and it will speed up patch
+> acceptance because I pick patches once the driver maintainer is happy.
+> 
 
-> ACPI devices with _HID INT3472 are currently matched to the tps68470
-> driver, however this does not cover all situations in which that _HID
-> occurs. We've encountered three possibilities:
->
-> 1. On Chrome OS devices, an ACPI device with _HID INT3472 (representing
-> a physical tps68470 device) that requires a GPIO and OpRegion driver
-> 2. On devices designed for Windows, an ACPI device with _HID INT3472
-> (again representing a physical tps68470 device) which requires GPIO,
-> Clock and Regulator drivers.
-> 3. On other devices designed for Windows, an ACPI device with _HID
-> INT3472 which does NOT represent a physical tps68470, and is instead
-> used as a dummy device to group some system GPIO lines which are meant
-> to be consumed by the sensor that is dependent on this entry.
->
-> This commit adds a new module, registering a platform driver to deal
-> with the 3rd scenario plus an i2c-driver to deal with #1 and #2, by
-> querying the CLDB buffer found against INT3472 entries to determine
-> which is most appropriate.
->
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Daniel Scally <djrscally@gmail.com>
-> ---
-> Changes in v2:
->
-> =09- Switched to a module registering a platform driver to run
-> =09the dummy ACPI devices, plus an i2c driver to replace and extend
-> =09the existing tps68470 driver
-> =09- Added clock handling functions to the int3472-discrete driver
-> =09- A whole bunch of other changes too numerous to enumerate
->  MAINTAINERS                                   |   5 +
->  drivers/platform/x86/Kconfig                  |  25 +
->  drivers/platform/x86/Makefile                 |   4 +
->  .../platform/x86/intel_skl_int3472_common.c   | 100 ++++
->  .../platform/x86/intel_skl_int3472_common.h   | 100 ++++
->  .../platform/x86/intel_skl_int3472_discrete.c | 496 ++++++++++++++++++
->  .../platform/x86/intel_skl_int3472_tps68470.c | 145 +++++
->  7 files changed, 875 insertions(+)
->  create mode 100644 drivers/platform/x86/intel_skl_int3472_common.c
->  create mode 100644 drivers/platform/x86/intel_skl_int3472_common.h
->  create mode 100644 drivers/platform/x86/intel_skl_int3472_discrete.c
->  create mode 100644 drivers/platform/x86/intel_skl_int3472_tps68470.c
+I think it falls under the 'TEGRA ARCHITECTURE SUPPORT' wildcard 
+(Thierry and Jon). Do we need a more specific maintainer entry?
 
-Have you considered putting the source (and header) files into a dedicated
-folder? I think it'd help manageability in the long run, and it'd be immedi=
-ately
-obvious that these source files form a single "unit".
+If it's helpful to Thierry and Jon, I guess I could pick it up.
 
-
-Regards,
-Barnab=C3=A1s P=C5=91cze
+Mikko
