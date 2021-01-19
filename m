@@ -2,92 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CEA2FC3B3
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Jan 2021 23:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D19DA2FC3B1
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Jan 2021 23:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390500AbhASOgm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Jan 2021 09:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405176AbhASLGH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Jan 2021 06:06:07 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B1CC061575
-        for <linux-i2c@vger.kernel.org>; Tue, 19 Jan 2021 03:05:20 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id z21so12759246pgj.4
-        for <linux-i2c@vger.kernel.org>; Tue, 19 Jan 2021 03:05:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4TOzYyZIin/yiRGi1ie9o6/CbIyjNQOy95/3SVEBU9A=;
-        b=uExiI/2TzOCWPI0pjBTK0TdMIUfxRWt8KPMbORnS5c9XO68eyPvKDWJwxuopER796L
-         vURhfaHxKLDrdEPMFkOr9D58bDFAGeSBZqyZoZFnV8Ds7wkLh1pLnTtIRfKzC3SNrIG8
-         4yP6GQFO22QzekfpAs4U1eCA1618km+cf6i7I1xDcH3U66TWqpFoSnJURTiEhgICz/DU
-         PNnFj2qdBYVwZw3IYfwhM3DmNJJsRyPbxgsnldEdXpXHVPwmlxWQ3gmqbfaoayhgLuzv
-         3XIncpgMG7FADLMlh68SnARce4hUuVnnPuu2JPftCXyp7Mk01bVkT2woy+Zvbj/1lR5b
-         eoIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4TOzYyZIin/yiRGi1ie9o6/CbIyjNQOy95/3SVEBU9A=;
-        b=kBwAIVpUCWArg3xBXtuKUiMrKnVcSZgVOkSyXFPU2R4viwFJqmYgcQdaYlZy0z0qdZ
-         bbzxP2lF/VpseDs7wEZK2LPCSi3ldKb/NvSHzkds86fKSsWkJTsTbod4o0vIij43gV5h
-         iZyS1drPpe/kRDj/2bqeWvLgpzdELtCRDPjOqG35Z7W2qvCsPzozjbyqdo/J7H1IeX0M
-         +znKl7Xxt7OREjUdX7zTUIwNn0J94YjFI1m///30JeKmy3ZEC6wLX3vLFdWcVguEiQ9H
-         W8ULeEY5n/W68GWlzVLhXPgxuulrcOjvFEy6E6geRxUSk2FA7PKvkc64dybx588HcnNH
-         Uikw==
-X-Gm-Message-State: AOAM533mBKCZjom+ZyXWJEnvR+9iQ0v+0PrgjWdbm6GrGIX5LjTERtN2
-        5YOu8BJUXFilFKQc06eIMJH/ew==
-X-Google-Smtp-Source: ABdhPJypZ7g85maNn/Fq9wWXClDnT5wovR1kfqNu7P4AWwxVkN+tY7vWNWWbv+l/0xEltuRgBAxuTA==
-X-Received: by 2002:a62:a508:0:b029:1ba:621:ff29 with SMTP id v8-20020a62a5080000b02901ba0621ff29mr707798pfm.44.1611054320340;
-        Tue, 19 Jan 2021 03:05:20 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id a5sm18186189pgl.41.2021.01.19.03.05.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 Jan 2021 03:05:18 -0800 (PST)
-Date:   Tue, 19 Jan 2021 16:35:16 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, parashar@codeaurora.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for
- 'assigned-performance-states'
-Message-ID: <20210119110516.fgbbllyg7lxwwfdz@vireshk-i7>
-References: <20201224111210.1214-1-rojay@codeaurora.org>
- <20201224111210.1214-4-rojay@codeaurora.org>
- <YAGqKfDfB7EEuZVn@builder.lan>
- <6bfec3e6-3d26-7ade-d836-032273856ce2@codeaurora.org>
- <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com>
+        id S2392063AbhASOgs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Jan 2021 09:36:48 -0500
+Received: from mga14.intel.com ([192.55.52.115]:24189 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392507AbhASMLB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 19 Jan 2021 07:11:01 -0500
+IronPort-SDR: 1Pw/fl4YQkGK9dL5hnNMHPauftIiGwcT3MWeFDmw8wcX4kdCw5Tz8F6m+RYlgHoUVdVin8g2o6
+ M8QxvAOesd0A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9868"; a="178137054"
+X-IronPort-AV: E=Sophos;i="5.79,358,1602572400"; 
+   d="scan'208";a="178137054"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 04:09:15 -0800
+IronPort-SDR: xMqb8hfeOPLnTkkbAiPy4i8xYqxSZoP0r+/GV70D63gCQIewrtUKZXIvzrfuksudIYUE7v+TZF
+ P52yM7EvwsBw==
+X-IronPort-AV: E=Sophos;i="5.79,358,1602572400"; 
+   d="scan'208";a="365727692"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 04:09:13 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1l1ppv-003Ut6-H7; Tue, 19 Jan 2021 14:10:15 +0200
+Date:   Tue, 19 Jan 2021 14:10:15 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Wolfram Sang <wsa@kernel.org>, Evan Green <evgreen@chromium.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RESEND PATCH v3 2/2] i2c: i2c-mux-gpio: Enable this driver in
+ ACPI land
+Message-ID: <20210119121015.GV4077@smile.fi.intel.com>
+References: <20201118234025.376412-1-evgreen@chromium.org>
+ <20201118153951.RESEND.v3.2.Idef164c23d326f5e5edecfc5d3eb2a68fcf18be1@changeid>
+ <CAHp75VdtwyCj7emc7Bk87q7kMQA0sSX81-aK-fMq4qTfTF-c_g@mail.gmail.com>
+ <CAE=gft4OW7_pWfco4+kY65tbUGUDzXXDfsVMCP8MN93inVem4A@mail.gmail.com>
+ <20210105102505.GG2000@ninjato>
+ <CAE=gft42nQECU9Sn9yC-o8+VE9EDoRgLmqVR0Uwma+vBTiEh-Q@mail.gmail.com>
+ <20210114195330.GA16693@kunai>
+ <6fd88320-740e-2fd6-8823-500032d0e541@axentia.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <6fd88320-740e-2fd6-8823-500032d0e541@axentia.se>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 19-01-21, 12:02, Ulf Hansson wrote:
-> As a matter of fact this was quite recently discussed [1], which also
-> pointed out some issues when using the "required-opps" in combination,
-> but perhaps that got resolved? Viresh?
+On Fri, Jan 15, 2021 at 10:29:46AM +0100, Peter Rosin wrote:
+> On 2021-01-14 20:53, Wolfram Sang wrote:
+> >> Can this be accepted as-is, or should I resend?
+> > 
+> > Peter, can you have a look here as well?
+> 
+> I have no issues, but I was waiting for a response from Andy here. I have
+> little knowledge of ACPI, and have previously made ignorant mistakes in
+> that area. I would greatly appreciate Andy following through with his
+> line of thinking...
+> 
+> So, if we ignore Andys review comments, then:
+> 
+> Acked-by: Peter Rosin <peda@axentia.se>
 
-Perhaps we never did anything there ..
+Sorry guys for me being silent, I have a lot of stuff which makes me under
+DDoS-like attack (metaphorically speaking). I'm going to look at this just now.
 
 -- 
-viresh
+With Best Regards,
+Andy Shevchenko
+
+
