@@ -2,103 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 051832FB9A8
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Jan 2021 15:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 835262FB9AD
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Jan 2021 15:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392057AbhASOgq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Jan 2021 09:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405252AbhASLMn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Jan 2021 06:12:43 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A5BC0613C1;
-        Tue, 19 Jan 2021 03:12:02 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id y187so16349257wmd.3;
-        Tue, 19 Jan 2021 03:12:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=vzBb5/Tv6UlBk+EMbkqMhlDzSJvMQnejvX8e7cfy6pY=;
-        b=iyKbA/ref/cqKHgmpv0D2SbIRkZVdsRnvxsb1kFyMXSwCclym02NRPq2rQUaahMNWf
-         fFOWZgA4hllMQSYlubBVGt3BNHoMUSYFtQXTeNCgHOdlnMMnoMIsf/ShygjQZiucVuCk
-         i09fmQjHgfbGTL2MeqfkeC1iGYWKDcHtbZVopWJO62y47u2A3ZC7G5MfmrpyV8pLTixn
-         U7a5PhbLQcQe3K0K8FKJ/Vax2pFtkcbfQig32ukhx9PrijsfqDUfzkcjbtJGIQdkxCMd
-         ERW/P9Sg5AnY1Z5qLRkxdgA/OJsNYEN1ZVDGxEPSZGEQtcwoXxWZixH0Cf54RKs5+WcM
-         NfUA==
+        id S2392067AbhASOgu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Jan 2021 09:36:50 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:38261 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390548AbhASNQU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Jan 2021 08:16:20 -0500
+Received: by mail-ot1-f44.google.com with SMTP id 34so8870534otd.5;
+        Tue, 19 Jan 2021 05:15:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=vzBb5/Tv6UlBk+EMbkqMhlDzSJvMQnejvX8e7cfy6pY=;
-        b=nufY3A+laS7DgkUbNxdtQg9/Vj+0bGZut2jhfL160Ck8nmV0qGdLAOF4HG2eFHJk0R
-         fUBzB130DMC5MQVljTfy3Jn65KX+DdOZT9CPApn4WQK3WY2ryKy8weP/Dou/zT3c7OTk
-         pZ5YdxfxYZ8aZAwYQ+/4ETKtN1nBkXg8LcFY/i5KLk9hbI3FSDEBe+lyScg7J3jPXVJx
-         JpfTqPiElAXtnRwyMLAB+NfOnDcQa4/iPg17lbIosxUojafYH+Hvz+/P1HhICRSQLEFm
-         jZj8xAy6NASpbmM3ypogB/OUcfRuLqdGsssSRbgY4AKmeQL/JAC/0ct6kDn1y2mGvxih
-         E4Lw==
-X-Gm-Message-State: AOAM532fqqkdequECosTr3D7GuUu/+8IAgd9eGHdw0jcGYzNTWRl1NXh
-        2OSZT+3mn26KIDHDlhggjuI=
-X-Google-Smtp-Source: ABdhPJzXyvKMRBHff/3egHeqjvWcHG8JKBSU0/vF5pWK95xFgz+RG+FsjEHU51pFgAwOPbn5ONplsA==
-X-Received: by 2002:a1c:24c4:: with SMTP id k187mr3693910wmk.14.1611054721747;
-        Tue, 19 Jan 2021 03:12:01 -0800 (PST)
-Received: from [192.168.1.211] ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id 17sm3833428wmk.48.2021.01.19.03.12.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jan 2021 03:12:01 -0800 (PST)
-Subject: Re: [PATCH v2 6/7] platform: x86: Add intel_skl_int3472 driver
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devel@acpica.org,
-        rjw@rjwysocki.net, lenb@kernel.org, andy@kernel.org,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
-        hdegoede@redhat.com, mgross@linux.intel.com,
-        robert.moore@intel.com, erik.kaneda@intel.com,
-        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com
-References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-7-djrscally@gmail.com>
- <2d8d7072-3b6f-4ffa-29dc-51f31fe4af72@ideasonboard.com>
- <20210119111122.GU4077@smile.fi.intel.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <c720ec32-b6d1-9b78-376e-4e3686878d70@gmail.com>
-Date:   Tue, 19 Jan 2021 11:12:00 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wxvsvsxyrpOZ/oY0spXlDXsPyT4qu420p3DmEnH6sfU=;
+        b=C7wqhDP881vKuRJx4NtLfuZjZGmBJsIQrLDCx47XV0OF/4dM5uoX6p/JUIDHW0vV77
+         VwsHE2cg70S6Nncx0BxDd4cD94/YhBJFE5B7rh+OVogNaSxiZM8U5CVQ+yAZb4EOicK/
+         i1hnEvBoNigSBeb12JDfGHd9iQu+Ej77JxDUF4xj6LOAEHseSgYYEMJQm+JjCio0+O5G
+         9GNCW0mqaAVvx19o9z+vX2NX9K1W6wWyqXuKIaQNtXmdKtc9e9SMg4zCk9vVZrADlYwo
+         P2Z7YfKKEzzaD9V8oN/X39MaJ7L1X3ILBmGM+ZdLljJAt9he7jzr4iNADjbKe8DVhZZZ
+         88Bw==
+X-Gm-Message-State: AOAM532jeKNkUBYdvL1O4Sglw2i3wVayK5VcspLs2DGDZzt2T0rfeE3J
+        IRE4mauSJ5Jr/104mmPWg+rug9mLlnKH5VuCKbdJHncX
+X-Google-Smtp-Source: ABdhPJwCehh3k/IMteXxnwOxWa37biw3gKZKIYGKKmoFB1cZ9WYyVmZ60RkecMm29B8DPoHIR9VSqGcKux2VkA0z8VU=
+X-Received: by 2002:a9d:1710:: with SMTP id i16mr3359773ota.260.1611062133927;
+ Tue, 19 Jan 2021 05:15:33 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210119111122.GU4077@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20210118003428.568892-1-djrscally@gmail.com> <20210118003428.568892-3-djrscally@gmail.com>
+ <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com> <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com>
+In-Reply-To: <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 Jan 2021 14:15:21 +0100
+Message-ID: <CAJZ5v0iU2m4Hs6APuauQ645DwbjYaB8nJFjYH0+7yQnR-FPZBQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent acpi_devices
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, andy@kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-On 19/01/2021 11:11, Andy Shevchenko wrote:
-> On Tue, Jan 19, 2021 at 10:56:17AM +0000, Kieran Bingham wrote:
->> On 18/01/2021 00:34, Daniel Scally wrote:
-> ...
+On Mon, Jan 18, 2021 at 9:51 PM Daniel Scally <djrscally@gmail.com> wrote:
 >
->>> +config INTEL_SKL_INT3472
->>> +	tristate "Intel SkyLake ACPI INT3472 Driver"
->>> +	depends on X86 && ACPI
->>> +	select REGMAP_I2C
->> I've tried compiling this as a built in and a module and on my minimal
->> config I had failures on both for regulator_register and
->> regulator_unregister.
->>
->> I suspect this needs to have either a selects or a depends upon
->> CONFIG_REGULATOR
-> Valid point, although it seems no consensus on which is better to use. It seems
-> to me that in this case we need to select it.
+> On 18/01/2021 16:14, Rafael J. Wysocki wrote:
+> > On Mon, Jan 18, 2021 at 1:37 AM Daniel Scally <djrscally@gmail.com> wrote:
+> >> In some ACPI tables we encounter, devices use the _DEP method to assert
+> >> a dependence on other ACPI devices as opposed to the OpRegions that the
+> >> specification intends. We need to be able to find those devices "from"
+> >> the dependee, so add a function to parse all ACPI Devices and check if
+> >> the include the handle of the dependee device in their _DEP buffer.
+> > What exactly do you need this for?
 >
-Yeah; it will be necessary for the gpio-regulator too anyway I expect.
+> So, in our DSDT we have devices with _HID INT3472, plus sensors which
+> refer to those INT3472's in their _DEP method. The driver binds to the
+> INT3472 device, we need to find the sensors dependent on them.
+>
 
+Well, this is an interesting concept. :-)
 
-Thanks Kieran; I missed that entirely.
+Why does _DEP need to be used for that?  Isn't there any other way to
+look up the dependent sensors?
 
+>
+> > Would it be practical to look up the suppliers in acpi_dep_list instead?
+> >
+> > Note that supplier drivers may remove entries from there, but does
+> > that matter for your use case?
+>
+> Ah - that may work, yes. Thank you, let me test that.
+
+Even if that doesn't work right away, but it can be made work, I would
+very much prefer that to the driver parsing _DEP for every device in
+the namespace by itself.
