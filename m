@@ -2,148 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BE72FADF4
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Jan 2021 01:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8F92FAE14
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Jan 2021 01:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403791AbhASAMZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Jan 2021 19:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S1732448AbhASAe4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Jan 2021 19:34:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391073AbhASAMY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 19:12:24 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8871C061573;
-        Mon, 18 Jan 2021 16:11:43 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id v184so10947539wma.1;
-        Mon, 18 Jan 2021 16:11:43 -0800 (PST)
+        with ESMTP id S1730466AbhASAez (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Jan 2021 19:34:55 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B19C061573
+        for <linux-i2c@vger.kernel.org>; Mon, 18 Jan 2021 16:34:15 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id h19so12579162qtq.13
+        for <linux-i2c@vger.kernel.org>; Mon, 18 Jan 2021 16:34:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=UmRvZt3oGsjKwYVRuTT29dplJG9vQFlA51PciylhdT4=;
-        b=fMJtulXAbW3qKUY3hFbmK6kX9G0R4hQ1lpMr1alJgKiGJCAv5GOtj7P7Ak8HXUwjZy
-         WBDOimIkLalIF5LY8qa293D6M/XMBtKaUXpTyvzlYAWFb8oTQKVnr7r/aDvQpFHKc1HL
-         lIN+PQ7PZ8KGSNQHcTilKRO/mJl9ReoedCB7cAvZ577xDcar6GGR3WeZ5Z2C2HAi4JrI
-         c0leQkiFumiFlSCVPP5U7QjGFXSlgejYcVz0g0b6W9KC83owivPPi+hHsGJ+twqxjQ9F
-         vTCdugz2GCsMzLYHIZxg1VO10KKZpUG2nefmPk8mx5SNP74YeLQ9JQfX/LvwAevWSnqU
-         xpVQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IaB0DFhzc/5KDrNFZumai2eiYNxkTar/KQWukG/PG5U=;
+        b=IcTVK1c10DY9BGIQUQC1x4LUd2C+idra0A9DsvXu/lnLB5jbSm+rLxCxOV/Bt4VAUK
+         l4b9QBqXViRV6g7E5OghqwObMMoIsDoVPkoSwXyFKsWM74fXi1JtKdm20oaEYUn6lci8
+         +d2i6P9TIU0miKTFuew0iSLmQoRlLTd/JvPgKXdqFOIQ1Q6QBPIOiwsrdgDD2Jsj1MY/
+         YE3BjLlHKwTFUKXRw3f53XkE4fmb0vm+v76Le4NR7qPVbupkkR7UwAfeHPB9KTb5V51D
+         dxa0UvKRNRtVP6Ps17CjY/fD8gwcncm+ba5oYAk3S12U+K5EJAu0LdLAc4/8omG94gKQ
+         QIPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=UmRvZt3oGsjKwYVRuTT29dplJG9vQFlA51PciylhdT4=;
-        b=pQZrsp7LCXAEh9F1x+XEL/b5Znt78vp1sn7RSZJCdKLkD+OUbkoc0Q7buXNeVKHHo4
-         kEjyIo61/JBe7mb0du644hAbV+zdW+MgyFbsO062N/oXWVZLwHgAunjO5cz3cUWqj8Fe
-         UPjC7TTFdHRTaLWo6EbHj8ER9CKdJB7FBx4AhtxJ3fvxRpttG2NJUcuNyk/4cVsD6B2n
-         yR+kP0F5+OC4h/G7lDrtQ98eR7jWA4DdIPHyFjlGZ+XJPTahPPEoDc24O8Nrfd6tjKSH
-         GGJd4fneHVYuSP/HYwqYSf/j3W8tvxnnLpHq1rUsn28pYBX8xyDc2AiYvXwyMmsdSVhU
-         k6cw==
-X-Gm-Message-State: AOAM531VU6fx5f1ZbgVLIN/7XhToT45eLv809v1l925z5e1WUxTGp/87
-        a1g4dyiu0p8HAeg1mblaBVg=
-X-Google-Smtp-Source: ABdhPJxDNT5AFpdigI+10S+0uFyqJYdarEOvAQTjwuqZcQO2G+MCLjnQCRCABvW3AMPSVeP932C7RQ==
-X-Received: by 2002:a1c:2802:: with SMTP id o2mr1559574wmo.68.1611015102673;
-        Mon, 18 Jan 2021 16:11:42 -0800 (PST)
-Received: from [192.168.1.211] ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id 62sm1825887wmd.34.2021.01.18.16.11.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jan 2021 16:11:41 -0800 (PST)
-Subject: Re: [PATCH v2 6/7] platform: x86: Add intel_skl_int3472 driver
-From:   Daniel Scally <djrscally@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devel@acpica.org,
-        rjw@rjwysocki.net, lenb@kernel.org, andy@kernel.org,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
-        hdegoede@redhat.com, mgross@linux.intel.com,
-        robert.moore@intel.com, erik.kaneda@intel.com,
-        sakari.ailus@linux.intel.com, kieran.bingham@ideasonboard.com
-References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-7-djrscally@gmail.com>
- <YAVRqWeUsLjvU62P@pendragon.ideasonboard.com>
- <20210118144606.GO4077@smile.fi.intel.com>
- <75e99a06-4579-44ee-5f20-8f2ee3309a68@gmail.com>
-Message-ID: <1053125f-7cb2-8aa0-3204-24df62986184@gmail.com>
-Date:   Tue, 19 Jan 2021 00:11:40 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IaB0DFhzc/5KDrNFZumai2eiYNxkTar/KQWukG/PG5U=;
+        b=LxVSkkCpe/gTKbI7Mh1pAtT3YKAJXIU75Bu/T6r5doIWARr3WKZIqFwKwHBvnNT6zu
+         Jb9iBev7int/KqH8TK9+kWVOOF+dCQlsR8B3CH12rexT2hQCN0abexwq5t77dCb7T0+X
+         qu/r/kNfB4hfdsyeBJ4GyC6eebe+hJU2gYdY4AUPBGDgKlVuiCG/0E16JDhkqb6p6e/M
+         1nFRUdEfHEFXKnAf3kEdmC33+5PuB9IMvV9teVQYlQIkRpjUtJRkFl4kPRqyDQzU8wax
+         YobONHN9ykNK3+KM0b4KcEo689XHmjfUtrB/zvSbOfl1xpC2NbqpgrUJkO/cSNEYRw5y
+         BSMw==
+X-Gm-Message-State: AOAM532aGLrraqSWu9fMNS8fC8ktSVNF/0HX/5e0iua5x9o4qj0AwDmG
+        /ljpYG0hfM7Lx78s6nVgQ4Y=
+X-Google-Smtp-Source: ABdhPJz0A1wdQ4mmg15zm7gAl2ZWv0pUjD162qMXI6G+hTEme27e5w8h5TWIx3uQTUBwWop9A1qLbw==
+X-Received: by 2002:ac8:4c99:: with SMTP id j25mr2119437qtv.390.1611016454710;
+        Mon, 18 Jan 2021 16:34:14 -0800 (PST)
+Received: from localhost.localdomain ([177.194.79.136])
+        by smtp.gmail.com with ESMTPSA id r15sm11791050qke.55.2021.01.18.16.34.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jan 2021 16:34:13 -0800 (PST)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     linux@rempel-privat.de
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de, wsa@kernel.org,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH] i2c: imx: Remove unused .id_table support
+Date:   Mon, 18 Jan 2021 21:31:47 -0300
+Message-Id: <20210119003148.1793614-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <75e99a06-4579-44ee-5f20-8f2ee3309a68@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy, Laurent
+Since 5.10-rc1 i.MX is a devicetree-only platform and the existing
+.id_table support in this driver was only useful for old non-devicetree
+platforms.
 
-On 18/01/2021 21:19, Daniel Scally wrote:
->>>> +static const struct clk_ops skl_int3472_clock_ops = {
->>>> +	.prepare = skl_int3472_clk_prepare,
->>>> +	.unprepare = skl_int3472_clk_unprepare,
->>>> +	.enable = skl_int3472_clk_enable,
->>>> +	.disable = skl_int3472_clk_disable,
->>>> +};
->> Yeah, sounds like reinventing clk-gpio.c.
->>
->> static const struct clk_ops clk_gpio_gate_ops = {
->> 	.enable = clk_gpio_gate_enable,
->> 	.disable = clk_gpio_gate_disable,
->> 	.is_enabled = clk_gpio_gate_is_enabled,
->> };
->>
->> (Or is it mux? It has support there as well.
->>
-> Hmm, yeah, this looks like it would work actually. So I think I'd need to:
->
->
-> 1. Make enabling INTEL_SKL_INT3472 also enable the clk-gpio driver
->
-> 2. Register a platform device to bind to the clk-gpio driver
->
-> 3. Register a gpio lookup table so that the clk-gpio driver can find the
-> gpio in question using gpiod_get()
->
->
-> And that looks like it will work; I'll try it.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ drivers/i2c/busses/i2c-imx.c | 20 +-------------------
+ 1 file changed, 1 insertion(+), 19 deletions(-)
 
-I'm more and more confident that this will work, but it has some
-knock-on effects:
-
-
-The both clk and regulator gpio driver expects to be able to fetch the
-GPIO using devm_gpiod_get(&pdev->dev, "enable", ...). That won't work of
-course, so we need to add another GPIO lookup table so those drivers can
-see the GPIOs. For that, we need to know what dev_name(&pdev->dev) will
-be so we can set the .dev_id member of a gpiod_lookup_table to that
-value, but that isn't set until _after_ the pdev is registered (because
-it has to figure out the id, we can't manually set the IDs because there
-could be more than one instance of int3472-discrete bound to multiple
-PMIC devices, and we don't know which id the current one should have).
-Finally, we can't wait until the device is registered because it
-immediately probes, can't find the GPIO and then fails probe.
-
-
-It's similar problem that causes us to need the i2c-acpi name format
-macros, but complicated by the dynamic ID part of dev_name(&pdev->dev)
-
-
-Solving it is a bit of a sticky one; perhaps something like moving the
-dev_set_name() part of platform_device_add() [1] to its own function,
-that's called in both platform_device_alloc() and
-platform_device_register(). That way it would be available before the
-device itself was registered, meaning we could create the lookup table
-before it probes the driver.
-
-
-(also, Laurent, if we did it this way we wouldn't be able to also handle
-the led-indicator GPIO here without some fairly major rework)
-
-
-[1]
-https://elixir.bootlin.com/linux/latest/source/drivers/base/platform.c#L563
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index c98529c76348..ebf66120c51e 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -233,19 +233,6 @@ static struct imx_i2c_hwdata vf610_i2c_hwdata = {
+ 
+ };
+ 
+-static const struct platform_device_id imx_i2c_devtype[] = {
+-	{
+-		.name = "imx1-i2c",
+-		.driver_data = (kernel_ulong_t)&imx1_i2c_hwdata,
+-	}, {
+-		.name = "imx21-i2c",
+-		.driver_data = (kernel_ulong_t)&imx21_i2c_hwdata,
+-	}, {
+-		/* sentinel */
+-	}
+-};
+-MODULE_DEVICE_TABLE(platform, imx_i2c_devtype);
+-
+ static const struct of_device_id i2c_imx_dt_ids[] = {
+ 	{ .compatible = "fsl,imx1-i2c", .data = &imx1_i2c_hwdata, },
+ 	{ .compatible = "fsl,imx21-i2c", .data = &imx21_i2c_hwdata, },
+@@ -1141,11 +1128,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	match = device_get_match_data(&pdev->dev);
+-	if (match)
+-		i2c_imx->hwdata = match;
+-	else
+-		i2c_imx->hwdata = (struct imx_i2c_hwdata *)
+-				platform_get_device_id(pdev)->driver_data;
++	i2c_imx->hwdata = match;
+ 
+ 	/* Setup i2c_imx driver structure */
+ 	strlcpy(i2c_imx->adapter.name, pdev->name, sizeof(i2c_imx->adapter.name));
+@@ -1316,7 +1299,6 @@ static struct platform_driver i2c_imx_driver = {
+ 		.of_match_table = i2c_imx_dt_ids,
+ 		.acpi_match_table = i2c_imx_acpi_ids,
+ 	},
+-	.id_table = imx_i2c_devtype,
+ };
+ 
+ static int __init i2c_adap_imx_init(void)
+-- 
+2.17.1
 
