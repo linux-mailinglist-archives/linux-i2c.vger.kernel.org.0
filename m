@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 835262FB9AD
+	by mail.lfdr.de (Postfix) with ESMTP id 16D3D2FB9AC
 	for <lists+linux-i2c@lfdr.de>; Tue, 19 Jan 2021 15:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392067AbhASOgu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Jan 2021 09:36:50 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:38261 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390548AbhASNQU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Jan 2021 08:16:20 -0500
-Received: by mail-ot1-f44.google.com with SMTP id 34so8870534otd.5;
-        Tue, 19 Jan 2021 05:15:59 -0800 (PST)
+        id S2392070AbhASOg6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Jan 2021 09:36:58 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:43398 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404399AbhASNUn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Jan 2021 08:20:43 -0500
+Received: by mail-oi1-f179.google.com with SMTP id q25so21077411oij.10;
+        Tue, 19 Jan 2021 05:19:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wxvsvsxyrpOZ/oY0spXlDXsPyT4qu420p3DmEnH6sfU=;
-        b=C7wqhDP881vKuRJx4NtLfuZjZGmBJsIQrLDCx47XV0OF/4dM5uoX6p/JUIDHW0vV77
-         VwsHE2cg70S6Nncx0BxDd4cD94/YhBJFE5B7rh+OVogNaSxiZM8U5CVQ+yAZb4EOicK/
-         i1hnEvBoNigSBeb12JDfGHd9iQu+Ej77JxDUF4xj6LOAEHseSgYYEMJQm+JjCio0+O5G
-         9GNCW0mqaAVvx19o9z+vX2NX9K1W6wWyqXuKIaQNtXmdKtc9e9SMg4zCk9vVZrADlYwo
-         P2Z7YfKKEzzaD9V8oN/X39MaJ7L1X3ILBmGM+ZdLljJAt9he7jzr4iNADjbKe8DVhZZZ
-         88Bw==
-X-Gm-Message-State: AOAM532jeKNkUBYdvL1O4Sglw2i3wVayK5VcspLs2DGDZzt2T0rfeE3J
-        IRE4mauSJ5Jr/104mmPWg+rug9mLlnKH5VuCKbdJHncX
-X-Google-Smtp-Source: ABdhPJwCehh3k/IMteXxnwOxWa37biw3gKZKIYGKKmoFB1cZ9WYyVmZ60RkecMm29B8DPoHIR9VSqGcKux2VkA0z8VU=
-X-Received: by 2002:a9d:1710:: with SMTP id i16mr3359773ota.260.1611062133927;
- Tue, 19 Jan 2021 05:15:33 -0800 (PST)
+        bh=kUDdGSpowK1CEbj8McVC+bBtkLq63WQr+Zql2YLqG5U=;
+        b=APR2QqebwLBhixWfzvKPO1J2toMMxc5wGp2eyDUTVTgDdeiNhXK9t6GdizLJ1xkZqO
+         9FUJcPELlC8JsKvZHgBtP/Ouyr8wWl7/QC6N2kqS0Li/vWGRmut2IRxVbXPhlkaNolc+
+         YXtBkshomBq06Z92/3M3YA3v32X5IuS3Fjcs2T+j7H8yNeRu/EH+gKLfKCGJPh9Buv2w
+         PH0oMcgsVw9Y6E7Bp34L49D7RMsDRVlVulxSNBXLwVyuZf1n6mqf1hlwIDnkodjDxUv5
+         TSBMz7CAVNaWyjyCpMwPiJ6OEpyBpr+lxLlu9AucA+mGHM9ffrkAt1B/xb2zhDj9eT2T
+         EnZg==
+X-Gm-Message-State: AOAM5320PfM7sBJ4mg7+Ikxwfq1IGR98LK0HQaVUFF7cmGuDrycn1e5q
+        +seTqS7UdaDCLlahsDcTmZN/4kOlHfyFAY4r+II=
+X-Google-Smtp-Source: ABdhPJx6gcAwtwXRqp5/IJOsji1kIJ+Z/62NGRk7TKZOMu+nRuZ+LcTh4icQ0/TaVor6jnR3+WE/obLzf1Lcm6Gy7n8=
+X-Received: by 2002:aca:5c05:: with SMTP id q5mr2555018oib.157.1611062368209;
+ Tue, 19 Jan 2021 05:19:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20210118003428.568892-1-djrscally@gmail.com> <20210118003428.568892-3-djrscally@gmail.com>
- <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com> <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com>
-In-Reply-To: <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com>
+References: <20210118003428.568892-1-djrscally@gmail.com> <20210118003428.568892-5-djrscally@gmail.com>
+ <YAVSf7+iTPNYf5XS@pendragon.ideasonboard.com>
+In-Reply-To: <YAVSf7+iTPNYf5XS@pendragon.ideasonboard.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Jan 2021 14:15:21 +0100
-Message-ID: <CAJZ5v0iU2m4Hs6APuauQ645DwbjYaB8nJFjYH0+7yQnR-FPZBQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent acpi_devices
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Date:   Tue, 19 Jan 2021 14:19:16 +0100
+Message-ID: <CAJZ5v0hUELtKc9CK=z47XQvSAAx=wTWvoVwP-PaMqugaXaCgZQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] i2c: i2c-core-acpi: Add i2c_acpi_dev_name()
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <djrscally@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
@@ -57,42 +57,64 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Erik Kaneda <erik.kaneda@intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 9:51 PM Daniel Scally <djrscally@gmail.com> wrote:
+On Mon, Jan 18, 2021 at 9:55 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
 >
-> On 18/01/2021 16:14, Rafael J. Wysocki wrote:
-> > On Mon, Jan 18, 2021 at 1:37 AM Daniel Scally <djrscally@gmail.com> wrote:
-> >> In some ACPI tables we encounter, devices use the _DEP method to assert
-> >> a dependence on other ACPI devices as opposed to the OpRegions that the
-> >> specification intends. We need to be able to find those devices "from"
-> >> the dependee, so add a function to parse all ACPI Devices and check if
-> >> the include the handle of the dependee device in their _DEP buffer.
-> > What exactly do you need this for?
+> Hi Daniel,
 >
-> So, in our DSDT we have devices with _HID INT3472, plus sensors which
-> refer to those INT3472's in their _DEP method. The driver binds to the
-> INT3472 device, we need to find the sensors dependent on them.
+> Thank you for the patch.
 >
-
-Well, this is an interesting concept. :-)
-
-Why does _DEP need to be used for that?  Isn't there any other way to
-look up the dependent sensors?
-
+> On Mon, Jan 18, 2021 at 12:34:25AM +0000, Daniel Scally wrote:
+> > We want to refer to an i2c device by name before it has been
 >
-> > Would it be practical to look up the suppliers in acpi_dep_list instead?
+> s/i2c device/acpi i2c device/ ?
+>
+> > created by the kernel; add a function that constructs the name
+> > from the acpi device instead.
 > >
-> > Note that supplier drivers may remove entries from there, but does
-> > that matter for your use case?
+> > Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> > ---
+> > Changes in v2:
+> >
+> >       - Stopped using devm_kasprintf()
+> >
+> >  drivers/i2c/i2c-core-acpi.c | 16 ++++++++++++++++
+> >  include/linux/i2c.h         |  5 +++++
+> >  2 files changed, 21 insertions(+)
+> >
+> > diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> > index 37c510d9347a..98c3ba9a2350 100644
+> > --- a/drivers/i2c/i2c-core-acpi.c
+> > +++ b/drivers/i2c/i2c-core-acpi.c
+> > @@ -497,6 +497,22 @@ struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
+> >  }
+> >  EXPORT_SYMBOL_GPL(i2c_acpi_new_device);
+> >
+> > +/**
+> > + * i2c_acpi_dev_name - Construct i2c device name for devs sourced from ACPI
+> > + * @adev:     ACPI device to construct the name for
+> > + *
+> > + * Constructs the name of an i2c device matching the format used by
+> > + * i2c_dev_set_name() to allow users to refer to an i2c device by name even
+> > + * before they have been instantiated.
+> > + *
+> > + * The caller is responsible for freeing the returned pointer.
+> > + */
+> > +char *i2c_acpi_dev_name(struct acpi_device *adev)
+> > +{
+> > +     return kasprintf(GFP_KERNEL, I2C_DEV_NAME_FORMAT, acpi_dev_name(adev));
 >
-> Ah - that may work, yes. Thank you, let me test that.
+> There's a real danger of a memory leak, as the function name sounds very
+> similar to dev_name() or acpi_dev_name() and those don't allocate
+> memory. I'm not sure what a better name would be, but given that this
+> function is only used in patch 6/7 and not in the I2C subsystem itself,
+> I wonder if we should inline this kasprintf() call in the caller and
+> drop this patch.
 
-Even if that doesn't work right away, but it can be made work, I would
-very much prefer that to the driver parsing _DEP for every device in
-the namespace by itself.
+IMO if this is a one-off usage, it's better to open-code it.
