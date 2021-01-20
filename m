@@ -2,146 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1D12FC9ED
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jan 2021 05:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA012FCB16
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jan 2021 07:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730533AbhATEZF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Jan 2021 23:25:05 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:35560 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729157AbhATEWu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Jan 2021 23:22:50 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9A05C813;
-        Wed, 20 Jan 2021 05:21:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1611116518;
-        bh=xhG0Y3xPv2al0xrkpAKnJ3S/80XPtXaxYvS8LXRwiAU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kl20bCBwXdoxZzHIeFzzsb/xpwi/HDn+SJXTa7MWIKPSnl/ljPFChTmea3Krj3XqA
-         CVQOhBXlHYmiwNTZLsksFAp3kgGNKUJZNIA7dLn628IvrnrTJcxN8Ju+r6h6kARPIJ
-         hyzWsx2NnslhwR1UyQwM+fQva7p1pFKM1vjtZyh4=
-Date:   Wed, 20 Jan 2021 06:21:41 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Scally <djrscally@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        devel@acpica.org, rjw@rjwysocki.net, lenb@kernel.org,
-        andy@kernel.org, mika.westerberg@linux.intel.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        wsa@kernel.org, lee.jones@linaro.org, hdegoede@redhat.com,
-        mgross@linux.intel.com, robert.moore@intel.com,
-        erik.kaneda@intel.com, sakari.ailus@linux.intel.com,
-        kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v2 6/7] platform: x86: Add intel_skl_int3472 driver
-Message-ID: <YAev1YviLVfEHSg6@pendragon.ideasonboard.com>
-References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-7-djrscally@gmail.com>
- <YAVRqWeUsLjvU62P@pendragon.ideasonboard.com>
- <20210118144606.GO4077@smile.fi.intel.com>
- <75e99a06-4579-44ee-5f20-8f2ee3309a68@gmail.com>
- <20210119092448.GN4077@smile.fi.intel.com>
- <a735380b-57ac-1950-b29a-07fe6cb708d2@gmail.com>
- <20210119110837.GT4077@smile.fi.intel.com>
- <YAcNT1d5zQHGsoe6@pendragon.ideasonboard.com>
- <YAccEtQIBrbKPSmv@smile.fi.intel.com>
+        id S1728852AbhATGbl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 Jan 2021 01:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728894AbhATGUV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 Jan 2021 01:20:21 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B26C0613C1;
+        Tue, 19 Jan 2021 22:19:40 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id u21so24761413lja.0;
+        Tue, 19 Jan 2021 22:19:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PARrbZXSNPN7iNNTTbIUXkMdIWWiNGrwyhvH2ICpw70=;
+        b=cvDh1YnmWCtuZPaobOb+KO/SRwfhUe0xzem75hfNE2O1qc56S117a4Gv0tLvCh3oBv
+         8sgTo+SU/GZ72AATutIJrw46s6VjdQqptaRTCYV771Uc1MQCZo36AzPvIWXJ5ClD5QUA
+         Z90aP+mNi86jt03axnaxk5AqRNFQmdnHhnv3xxE42UeWjHoakd6Twq4KQgqKNIwfaK4p
+         2JViDBLQJJqbg5+wsdZ2F+TV+yEjUM+Jdi1WMd8jcUdiI0HebQkweEn8z3QZSbS4iq7U
+         eWqIz1GtJK6/b0Ossz/Zwu+Ip4sb2SOoYWmYjOt5VaOJEsZ4Kr+z9D47UkVGA1PobkgN
+         XMCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PARrbZXSNPN7iNNTTbIUXkMdIWWiNGrwyhvH2ICpw70=;
+        b=T5lM5h88mlzXd8/31AO0jYT/CtJ2PLT2S19dQWP/uVVoUuJ4T9tCH6yY8BmEEnMquO
+         8bcUhzxNrfkvedW0BP6evr3/ri9dpd9NCOZ4WvJf1sZUjVkO7h/Bg/hd67d2UMA/5Lvk
+         7i6anN2G/DftCq7S7WmgdMpQGJW7ILwkuPy6c/Sr5CFotF85+bRha60scoGwApVUdPoo
+         qu3NLUGh8dRiGJl5uA9GzOJ2Mn0B6dcbu2ZVpukUbnBGANL2YFhCCWFg+K9saLE2I1Re
+         PApgqt7VYxcHvO5lEZMdBjlPczuEl0X8dWAsdqQ1a9iPwcJpKnKjYahZGet9ko7LuomA
+         S9vA==
+X-Gm-Message-State: AOAM531qJiKrfp1Kvz/j5GQ4sUTIraaQkvFDIKpJ1vD3mia75n8bWi5o
+        2wtyaAjMGWQBsphl5XxZfay7GFjKseY+qILQf+Hc5HlFmko=
+X-Google-Smtp-Source: ABdhPJyQeipgMjf45WphthUA64/VG3eMczoqG/IWWzwquSsNcAGkQesT9BEf2op8DUHh+CEi8vjMIZBiZQaLcQttYqw=
+X-Received: by 2002:a05:651c:28d:: with SMTP id b13mr3645167ljo.75.1611123578236;
+ Tue, 19 Jan 2021 22:19:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YAccEtQIBrbKPSmv@smile.fi.intel.com>
+References: <20210117114313.141428-1-krzk@kernel.org>
+In-Reply-To: <20210117114313.141428-1-krzk@kernel.org>
+From:   Baolin Wang <baolin.wang7@gmail.com>
+Date:   Wed, 20 Jan 2021 14:19:33 +0800
+Message-ID: <CADBw62pML49WTTmv7GSzMhJAsAJnujnReH70Kb1nCj2bt1voDA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: sprd:: depend on COMMON_CLK to fix compile tests
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy,
+Hi,
 
-On Tue, Jan 19, 2021 at 07:51:14PM +0200, Andy Shevchenko wrote:
-> On Tue, Jan 19, 2021 at 06:48:15PM +0200, Laurent Pinchart wrote:
-> > On Tue, Jan 19, 2021 at 01:08:37PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Jan 19, 2021 at 10:40:42AM +0000, Daniel Scally wrote:
-> > > > On 19/01/2021 09:24, Andy Shevchenko wrote:
-> > > > >>>>> +static struct i2c_driver int3472_tps68470 = {
-> > > > >>>>> +	.driver = {
-> > > > >>>>> +		.name = "int3472-tps68470",
-> > > > >>>>> +		.acpi_match_table = int3472_device_id,
-> > > > >>>>> +	},
-> > > > >>>>> +	.probe_new = skl_int3472_tps68470_probe,
-> > > > >>>>> +};
-> > > > >>> I'm not sure we want to have like this. If I'm not mistaken the I²C driver can
-> > > > >>> be separated without ACPI IDs (just having I²C IDs) and you may instantiate it
-> > > > >>> via i2c_new_client_device() or i2c_acpi_new_device() whichever suits better...
-> > > > >> Sorry, I'm a bit confused by this. The i2c device is already
-> > > > >> present...we just want the driver to bind to them, so what role do those
-> > > > >> functions have there?
-> > > > > What I meant is something like
-> > > > >
-> > > > >  *_i2c.c
-> > > > > 	real I²C driver for the TPS chip, but solely with I²C ID table, no ACPI
-> > > > > 	involved (and it sounds like it should be mfd/tps one, in which you
-> > > > > 	just cut out ACPI IDs and convert to pure I²C one, that what I had
-> > > > > 	suggested in the first place)
-> > > > 
-> > > > Ahh; sorry - i misunderstood what you meant there. I understand now I
-> > > > think, but there is one complication; the ACPI subsystem already creates
-> > > > a client for that i2c adapter and address; i2c_new_client_device()
-> > > > includes a check to see whether that adapter / address combination has
-> > > > an i2c device already.  So we would have to have the platform driver
-> > > > with ACPI ID first find the existing i2c_client and unregister it before
-> > > > registering the new one...the existing clients have a name matching the
-> > > > ACPI device instance name (e.g i2c-INT3472:00) which we can't use as an
-> > > > i2c_device_id of course.
-> > > 
-> > > See how INT33FE is being handled. Hint: drivers/acpi/scan.c:~1600
-> > > 
-> > > static const struct acpi_device_id i2c_multi_instantiate_ids[] = {
-> > > 	{"BSG1160", },
-> > > 	{"BSG2150", },
-> > > 	{"INT33FE", },
-> > > 	{"INT3515", },
-> > > 	{}
-> > > };
-> > > 
-> > > So, we quirklist it here and instantiate manually from platform driver (new
-> > > coming one).
-> > 
-> > This is documented as used for devices that have multiple I2cSerialBus
-> > resources. That's not the case for the INT3472 as far as I can tell. I
-> > don't think we should abuse this mechanism.
-> 
-> This is quite a similar case to that one. Let's avoid yak shaving, right?
+On Sun, Jan 17, 2021 at 7:43 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> The I2C_SPRD uses Common Clock Framework thus it cannot be built on
+> platforms without it (e.g. compile test on MIPS with LANTIQ):
+>
+>     /usr/bin/mips-linux-gnu-ld: drivers/i2c/busses/i2c-sprd.o: in function `sprd_i2c_probe':
+>     i2c-sprd.c:(.text.sprd_i2c_probe+0x254): undefined reference to `clk_set_parent'
+>
+> Fixes: 4a2d5f663dab ("i2c: Enable compile testing for more drivers")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Exactly my point, that's why I think this patch is good overall, I don't
-think it requires a complete rewrite.
+LGTM. Thanks.
+Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
 
-> > Don't forget that the TPS68470 I2C driver needs to be ACPI-aware, as it
-> > has to register an OpRegion for ACPI-based Chrome OS devices. On other
-> > platforms (including DT platforms), it should only register regulators,
-> > clocks and GPIOs. Given the differences between those platforms, I don't
-> > think a TPS68470 driver that would fake being unaware of being probed
-> > through ACPI would be a good idea. We can always refactor the code later
-> > when we'll have a non-ACPI based platform using the TPS68470, without
-> > such a platform there's no way we can test the I2C driver without ACPI
-> > anyway.
-> 
-> Are you agree that MFD approach should stay? How then we can manage to have an
-> MFD driver cohabit with our new driver? I proposed a clean solution which will
-> handle all possible cases via quirk driver. Having two drivers enumerated by
-> different scenarios is a call for troubles (we have already with one of that
-> sensors).
+> ---
+>  drivers/i2c/busses/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index d4d60ad0eda0..ab1f39ac39f4 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -1013,6 +1013,7 @@ config I2C_SIRF
+>  config I2C_SPRD
+>         tristate "Spreadtrum I2C interface"
+>         depends on I2C=y && (ARCH_SPRD || COMPILE_TEST)
+> +       depends on COMMON_CLK
+>         help
+>           If you say yes to this option, support will be included for the
+>           Spreadtrum I2C interface.
+> --
+> 2.25.1
+>
 
-I think we should solve this problem when it will arise. Solving
-problems with complex architectures without a platform to test the code
-on is a pretty sure way to get the architecture design wrong. Let's get
-this merged, it's an improvement compared to the current situation, and
-then let's improve it further on top when we'll need to support more use
-cases.
-
-> And there is no "faking" anything, it's rather gating it depending on the
-> platform.
 
 -- 
-Regards,
-
-Laurent Pinchart
+Baolin Wang
