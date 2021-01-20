@@ -2,32 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C882FD0B0
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jan 2021 13:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 260C72FD212
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jan 2021 14:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729154AbhATMtF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 Jan 2021 07:49:05 -0500
-Received: from mga14.intel.com ([192.55.52.115]:58467 "EHLO mga14.intel.com"
+        id S1726683AbhATNxE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 Jan 2021 08:53:04 -0500
+Received: from mga07.intel.com ([134.134.136.100]:26813 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388623AbhATLpO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 20 Jan 2021 06:45:14 -0500
-IronPort-SDR: aL2ktEegC5LV5U1VNOp58U5GcU3KJ4pX04CfZ/3vwwDlJtCBfXrm6VeVBg8MY1TS+hRkn/4uxN
- ei6VpNhRfV1A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9869"; a="178312335"
+        id S2388785AbhATM6w (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 20 Jan 2021 07:58:52 -0500
+IronPort-SDR: a16MObkPOgydVTtVtVn4sM3NMfNjZeDoh+63rUHnmjQmOm0Wm4QkCuVAEg/gD0CFioFNXcowF2
+ JvTe+hZkEphA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9869"; a="243168906"
 X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="178312335"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 03:43:25 -0800
-IronPort-SDR: 6d9Rl0rqHJqHoSH83fmczd67tFi0FPoX0meYdc4bz4p8ozkNLjsRJu/Sag1Y1gN4GNf12X7g9N
- RIBIzwexvgpg==
+   d="scan'208";a="243168906"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 04:56:58 -0800
+IronPort-SDR: E3+DqvOKS99F18AO9ed7Ig/CTmbzFRmG4z7PEc2gZkB40x9L2sX9NZvSvQK14js++SPQenII19
+ EhuidwvK1I+w==
 X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="501578998"
+   d="scan'208";a="351036000"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 03:43:20 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 04:56:53 -0800
 Received: from andy by smile with local (Exim 4.94)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1l2BuQ-0065s8-4t; Wed, 20 Jan 2021 13:44:22 +0200
-Date:   Wed, 20 Jan 2021 13:44:22 +0200
+        id 1l2D3b-006A5X-GZ; Wed, 20 Jan 2021 14:57:55 +0200
+Date:   Wed, 20 Jan 2021 14:57:55 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Daniel Scally <djrscally@gmail.com>, linux-kernel@vger.kernel.org,
@@ -41,77 +41,128 @@ Cc:     Daniel Scally <djrscally@gmail.com>, linux-kernel@vger.kernel.org,
         erik.kaneda@intel.com, sakari.ailus@linux.intel.com,
         kieran.bingham@ideasonboard.com
 Subject: Re: [PATCH v2 6/7] platform: x86: Add intel_skl_int3472 driver
-Message-ID: <YAgXlgLauIGEe05w@smile.fi.intel.com>
-References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-7-djrscally@gmail.com>
+Message-ID: <YAgo06hhlael1/rm@smile.fi.intel.com>
+References: <20210118003428.568892-7-djrscally@gmail.com>
  <YAVRqWeUsLjvU62P@pendragon.ideasonboard.com>
  <20210118144606.GO4077@smile.fi.intel.com>
  <75e99a06-4579-44ee-5f20-8f2ee3309a68@gmail.com>
- <1053125f-7cb2-8aa0-3204-24df62986184@gmail.com>
- <20210119093358.GO4077@smile.fi.intel.com>
- <YAcKj9fyNZY8QETd@pendragon.ideasonboard.com>
- <YAcaM9Tcif1rS3V/@smile.fi.intel.com>
- <YAevLTVlUSXMylWL@pendragon.ideasonboard.com>
+ <20210119092448.GN4077@smile.fi.intel.com>
+ <a735380b-57ac-1950-b29a-07fe6cb708d2@gmail.com>
+ <20210119110837.GT4077@smile.fi.intel.com>
+ <YAcNT1d5zQHGsoe6@pendragon.ideasonboard.com>
+ <YAccEtQIBrbKPSmv@smile.fi.intel.com>
+ <YAev1YviLVfEHSg6@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YAevLTVlUSXMylWL@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YAev1YviLVfEHSg6@pendragon.ideasonboard.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 06:18:53AM +0200, Laurent Pinchart wrote:
-> On Tue, Jan 19, 2021 at 07:43:15PM +0200, Andy Shevchenko wrote:
-> > On Tue, Jan 19, 2021 at 06:36:31PM +0200, Laurent Pinchart wrote:
-> > > On Tue, Jan 19, 2021 at 11:33:58AM +0200, Andy Shevchenko wrote:
-> > > > On Tue, Jan 19, 2021 at 12:11:40AM +0000, Daniel Scally wrote:
-> > > > > On 18/01/2021 21:19, Daniel Scally wrote:
-
-...
-
-> > > > See my previous reply. TL;DR: you have to modify clk-gpio.c to export couple of
-> > > > methods to be able to use it as a library.
-> > > 
-> > > That seems really overkill given the very simple implementation of the
-> > > clock provided here.
-> > 
-> > Less code in the end is called an overkill? Hmm...
-> > I think since we in Linux it's better to utilize what it provides. Do you want
-> > me to prepare a patch to show that there is no overkill at all?
-> 
-> The amount of code we would save it very small. It's not necessarily a
-> bad idea, but I think such an improvement could be made on top, it
-> shouldn't block this series.
-
-Okay, let's wait what Dan will say on this.
-I can probably help to achieve this improvement sooner than later.
-
-...
-
-> > > > > (also, Laurent, if we did it this way we wouldn't be able to also handle
-> > > > > the led-indicator GPIO here without some fairly major rework)
+On Wed, Jan 20, 2021 at 06:21:41AM +0200, Laurent Pinchart wrote:
+> On Tue, Jan 19, 2021 at 07:51:14PM +0200, Andy Shevchenko wrote:
+> > On Tue, Jan 19, 2021 at 06:48:15PM +0200, Laurent Pinchart wrote:
+> > > On Tue, Jan 19, 2021 at 01:08:37PM +0200, Andy Shevchenko wrote:
+> > > > On Tue, Jan 19, 2021 at 10:40:42AM +0000, Daniel Scally wrote:
+> > > > > On 19/01/2021 09:24, Andy Shevchenko wrote:
+> > > > > >>>>> +static struct i2c_driver int3472_tps68470 = {
+> > > > > >>>>> +	.driver = {
+> > > > > >>>>> +		.name = "int3472-tps68470",
+> > > > > >>>>> +		.acpi_match_table = int3472_device_id,
+> > > > > >>>>> +	},
+> > > > > >>>>> +	.probe_new = skl_int3472_tps68470_probe,
+> > > > > >>>>> +};
+> > > > > >>> I'm not sure we want to have like this. If I'm not mistaken the I²C driver can
+> > > > > >>> be separated without ACPI IDs (just having I²C IDs) and you may instantiate it
+> > > > > >>> via i2c_new_client_device() or i2c_acpi_new_device() whichever suits better...
+> > > > > >> Sorry, I'm a bit confused by this. The i2c device is already
+> > > > > >> present...we just want the driver to bind to them, so what role do those
+> > > > > >> functions have there?
+> > > > > > What I meant is something like
+> > > > > >
+> > > > > >  *_i2c.c
+> > > > > > 	real I²C driver for the TPS chip, but solely with I²C ID table, no ACPI
+> > > > > > 	involved (and it sounds like it should be mfd/tps one, in which you
+> > > > > > 	just cut out ACPI IDs and convert to pure I²C one, that what I had
+> > > > > > 	suggested in the first place)
+> > > > > 
+> > > > > Ahh; sorry - i misunderstood what you meant there. I understand now I
+> > > > > think, but there is one complication; the ACPI subsystem already creates
+> > > > > a client for that i2c adapter and address; i2c_new_client_device()
+> > > > > includes a check to see whether that adapter / address combination has
+> > > > > an i2c device already.  So we would have to have the platform driver
+> > > > > with ACPI ID first find the existing i2c_client and unregister it before
+> > > > > registering the new one...the existing clients have a name matching the
+> > > > > ACPI device instance name (e.g i2c-INT3472:00) which we can't use as an
+> > > > > i2c_device_id of course.
 > > > > 
-> > > > LED indicators are done as LED class devices (see plenty of examples in PDx86
-> > > > drivers: drivers/platform/x86/)
+> > > > See how INT33FE is being handled. Hint: drivers/acpi/scan.c:~1600
+> > > > 
+> > > > static const struct acpi_device_id i2c_multi_instantiate_ids[] = {
+> > > > 	{"BSG1160", },
+> > > > 	{"BSG2150", },
+> > > > 	{"INT33FE", },
+> > > > 	{"INT3515", },
+> > > > 	{}
+> > > > };
+> > > > 
+> > > > So, we quirklist it here and instantiate manually from platform driver (new
+> > > > coming one).
 > > > 
-> > > How do you expose the link between the sensor and its indicator LED to
-> > > userspace ? Isn't it better to handle it in the kernel to avoid rogue
-> > > userspace turning the camera on without notifying the user ?
+> > > This is documented as used for devices that have multiple I2cSerialBus
+> > > resources. That's not the case for the INT3472 as far as I can tell. I
+> > > don't think we should abuse this mechanism.
 > > 
-> > I didn't get this. It's completely a LED handling driver business. We may
-> > expose it to user space or not, but it's orthogonal to the usage of LED class
-> > IIUC. Am I mistaken here?
+> > This is quite a similar case to that one. Let's avoid yak shaving, right?
 > 
-> If it stays internal to the kernel and is solely controlled from the
-> int3472 driver, there's no need to involve the LED class. If we want to
-> expose the privacy LED to userspace then the LED framework is the way to
-> go, but we will also need to find a way to expose the link between the
-> camera sensor and the LED to userspace. If there are two privacy LEDs,
-> one for the front sensor and one for the back sensor, userspace will
-> need to know which is which.
+> Exactly my point, that's why I think this patch is good overall, I don't
+> think it requires a complete rewrite.
 
-I see. For now we probably can keep GPIO LED implementation internally.
+The approach in the series is to reinvent the MFD driver which I against of.
+I don;t think we need to kill it there and reborn in a new form and dragging
+code from there to here to there.
+
+On top of that the approach with a quirk driver in the middle seems to me
+cleaner than using different paths how the two drivers are being initialized.
+In the proposed approach there will be one making decision point and easy to
+understand what's going on.
+
+The bad example of two making decision points is acpi_lpss.c vs. individual
+drivers (however in that case it have different ID's, i.e. ACPI vs. PCI),
+
+> > > Don't forget that the TPS68470 I2C driver needs to be ACPI-aware, as it
+> > > has to register an OpRegion for ACPI-based Chrome OS devices. On other
+> > > platforms (including DT platforms), it should only register regulators,
+> > > clocks and GPIOs. Given the differences between those platforms, I don't
+> > > think a TPS68470 driver that would fake being unaware of being probed
+> > > through ACPI would be a good idea. We can always refactor the code later
+> > > when we'll have a non-ACPI based platform using the TPS68470, without
+> > > such a platform there's no way we can test the I2C driver without ACPI
+> > > anyway.
+> > 
+> > Are you agree that MFD approach should stay? How then we can manage to have an
+> > MFD driver cohabit with our new driver? I proposed a clean solution which will
+> > handle all possible cases via quirk driver. Having two drivers enumerated by
+> > different scenarios is a call for troubles (we have already with one of that
+> > sensors).
+> 
+> I think we should solve this problem when it will arise. Solving
+> problems with complex architectures without a platform to test the code
+> on is a pretty sure way to get the architecture design wrong. Let's get
+> this merged, it's an improvement compared to the current situation, and
+> then let's improve it further on top when we'll need to support more use
+> cases.
+
+But this is problem already here right now. The submitted code is to support
+a new platform that needs a quirk and treats INT3472 differently. The usual
+way is to refactor the existing solution to make them both to have a best
+compromise.
+
+> > And there is no "faking" anything, it's rather gating it depending on the
+> > platform.
 
 -- 
 With Best Regards,
