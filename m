@@ -2,34 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBE42FD215
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jan 2021 14:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191902FD216
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Jan 2021 14:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733197AbhATNyW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 Jan 2021 08:54:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56712 "EHLO mail.kernel.org"
+        id S2387726AbhATNy5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 Jan 2021 08:54:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56728 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387688AbhATN31 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 20 Jan 2021 08:29:27 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6A11423359;
-        Wed, 20 Jan 2021 13:28:43 +0000 (UTC)
+        id S2388988AbhATN32 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 20 Jan 2021 08:29:28 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0AE2423371;
+        Wed, 20 Jan 2021 13:28:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611149324;
-        bh=/90opyJtKERP5tgf9ueyDwCIIX9c+vUt6VtWbEcw9Wc=;
+        s=k20201202; t=1611149326;
+        bh=daY92/AhQfi+Xj2JjvwYy88EoYvzbqtz+/Vczl/dJMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KEchGDK0An5+FCHEOo+Nl+pxUOXeujt95zQ3RvAoWBNCzdmFPxRHMicbhlqUuHzFE
-         6+9fmBfIOOCMdp9ymQKObok6WcPwuMBN/h8dCQYKFfvbOAkL9+GGoT5wHXPm4NX0xj
-         QmMQK9hxAqwB4Ha03QCVPH6/DsEU5dtRPm6erKuzOkAhHZZ4VTiUqr3Q9FoopSUzjV
-         fYg7dobQTPshADwgQq5l3wCoMaNlJPRU/P5+JVYR9KShBlviy3UB6lzT5uE99Srvz+
-         uBQnQyVno3W8z5ew860m+6r3cE2CLeFtiiEWsdKdprkPx816OkCCiFgW9oOo/8s731
-         tv3oJgC0zrOBg==
+        b=YHCUBvNm9eMO61LEUVkP3eGRN2U70pVskg1X7G1NnrzuY8YUFxwlHgziMHd7u8huQ
+         ltfWOStP8vGm7H/VzxKJy7GO9qt/8Y8VtB5GJ0EyogR+cB5vgJKr51I3PgN8oLuneM
+         IGnW7mUakdWvU0oxuZt4IfyvBIHTJkDYa4sYDKAwfq6TyD0gU+Boj2/JEoDFBtOGbx
+         iyxfnBf+DPi5hYJiTGmFiRsBi+6lfN0FEyKVnXvUIy3eURorwsQzEGVgqq+5GE/Gex
+         PjYerPt7YN6/gzoY/cQ/hbxPOHlE4HmklVdYd1NFoFarCOYuTyHUG9snpqiGHS9LEg
+         ecObylb/RaURw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-i2c@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Barry Song <baohua@kernel.org>
-Subject: [PATCH 1/3] i2c: remove sirf bus driver
-Date:   Wed, 20 Jan 2021 14:28:32 +0100
-Message-Id: <20210120132834.2375048-2-arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 2/3] i2c: remove u300 bus driver
+Date:   Wed, 20 Jan 2021 14:28:33 +0100
+Message-Id: <20210120132834.2375048-3-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120132834.2375048-1-arnd@kernel.org>
 References: <20210120132834.2375048-1-arnd@kernel.org>
@@ -41,559 +42,1091 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The CSR SiRF prima2/atlas platforms are getting removed, so this driver
-is no longer needed.
+The ST-Ericsson U300 platform is getting removed, so this driver is no
+longer needed.
 
-Cc: Barry Song <baohua@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- .../devicetree/bindings/i2c/i2c-sirf.txt      |  19 -
- drivers/i2c/busses/Kconfig                    |  10 -
- drivers/i2c/busses/Makefile                   |   1 -
- drivers/i2c/busses/i2c-sirf.c                 | 475 ------------------
- 4 files changed, 505 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-sirf.txt
- delete mode 100644 drivers/i2c/busses/i2c-sirf.c
+ .../devicetree/bindings/i2c/i2c-stu300.txt    |   15 -
+ drivers/i2c/busses/Kconfig                    |   13 -
+ drivers/i2c/busses/Makefile                   |    1 -
+ drivers/i2c/busses/i2c-stu300.c               | 1008 -----------------
+ 4 files changed, 1037 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-stu300.txt
+ delete mode 100644 drivers/i2c/busses/i2c-stu300.c
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-sirf.txt b/Documentation/devicetree/bindings/i2c/i2c-sirf.txt
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-stu300.txt b/Documentation/devicetree/bindings/i2c/i2c-stu300.txt
 deleted file mode 100644
-index 2701eefb00f7..000000000000
---- a/Documentation/devicetree/bindings/i2c/i2c-sirf.txt
+index bd81a482634f..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-stu300.txt
 +++ /dev/null
-@@ -1,19 +0,0 @@
--I2C for SiRFprimaII platforms
+@@ -1,15 +0,0 @@
+-ST Microelectronics DDC I2C
 -
 -Required properties :
--- compatible : Must be "sirf,prima2-i2c"
+-- compatible : Must be "st,ddci2c"
 -- reg: physical base address of the controller and length of memory mapped
 -     region.
 -- interrupts: interrupt number to the cpu.
+-- #address-cells = <1>;
+-- #size-cells = <0>;
 -
 -Optional properties:
--- clock-frequency : Constains desired I2C/HS-I2C bus clock frequency in Hz.
--  The absence of the property indicates the default frequency 100 kHz.
+-- Child nodes conforming to i2c bus binding
 -
 -Examples :
 -
--i2c0: i2c@b00e0000 {
--    compatible = "sirf,prima2-i2c";
--    reg = <0xb00e0000 0x10000>;
--    interrupts = <24>;
--};
 diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 0e284fb750e5..85ed2b2bd31a 100644
+index 85ed2b2bd31a..f31922769187 100644
 --- a/drivers/i2c/busses/Kconfig
 +++ b/drivers/i2c/busses/Kconfig
-@@ -1000,16 +1000,6 @@ config I2C_SIMTEC
- 	  This driver can also be built as a module. If so, the module
- 	  will be called i2c-simtec.
+@@ -1039,19 +1039,6 @@ config I2C_STM32F7
+ 	  This driver can also be built as module. If so, the module
+ 	  will be called i2c-stm32f7.
  
--config I2C_SIRF
--	tristate "CSR SiRFprimaII I2C interface"
--	depends on ARCH_SIRF || COMPILE_TEST
+-config I2C_STU300
+-	tristate "ST Microelectronics DDC I2C interface"
+-	depends on MACH_U300 || COMPILE_TEST
+-	default y if MACH_U300
 -	help
 -	  If you say yes to this option, support will be included for the
--	  CSR SiRFprimaII I2C interface.
+-	  I2C interface from ST Microelectronics simply called "DDC I2C"
+-	  supporting both I2C and DDC, used in e.g. the U300 series
+-	  mobile platforms.
 -
--	  This driver can also be built as a module.  If so, the module
--	  will be called i2c-sirf.
+-	  This driver can also be built as a module. If so, the module
+-	  will be called i2c-stu300.
 -
- config I2C_SPRD
- 	tristate "Spreadtrum I2C interface"
- 	depends on I2C=y && (ARCH_SPRD || COMPILE_TEST)
+ config I2C_SUN6I_P2WI
+ 	tristate "Allwinner sun6i internal P2WI controller"
+ 	depends on RESET_CONTROLLER
 diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 683c49faca05..45ce4caa0c2b 100644
+index 45ce4caa0c2b..6621c9581658 100644
 --- a/drivers/i2c/busses/Makefile
 +++ b/drivers/i2c/busses/Makefile
-@@ -99,7 +99,6 @@ obj-$(CONFIG_I2C_S3C2410)	+= i2c-s3c2410.o
- obj-$(CONFIG_I2C_SH7760)	+= i2c-sh7760.o
- obj-$(CONFIG_I2C_SH_MOBILE)	+= i2c-sh_mobile.o
- obj-$(CONFIG_I2C_SIMTEC)	+= i2c-simtec.o
--obj-$(CONFIG_I2C_SIRF)		+= i2c-sirf.o
- obj-$(CONFIG_I2C_SPRD)		+= i2c-sprd.o
- obj-$(CONFIG_I2C_ST)		+= i2c-st.o
+@@ -104,7 +104,6 @@ obj-$(CONFIG_I2C_ST)		+= i2c-st.o
  obj-$(CONFIG_I2C_STM32F4)	+= i2c-stm32f4.o
-diff --git a/drivers/i2c/busses/i2c-sirf.c b/drivers/i2c/busses/i2c-sirf.c
+ i2c-stm32f7-drv-objs := i2c-stm32f7.o i2c-stm32.o
+ obj-$(CONFIG_I2C_STM32F7)	+= i2c-stm32f7-drv.o
+-obj-$(CONFIG_I2C_STU300)	+= i2c-stu300.o
+ obj-$(CONFIG_I2C_SUN6I_P2WI)	+= i2c-sun6i-p2wi.o
+ obj-$(CONFIG_I2C_SYNQUACER)	+= i2c-synquacer.o
+ obj-$(CONFIG_I2C_TEGRA)		+= i2c-tegra.o
+diff --git a/drivers/i2c/busses/i2c-stu300.c b/drivers/i2c/busses/i2c-stu300.c
 deleted file mode 100644
-index 30db8fafe078..000000000000
---- a/drivers/i2c/busses/i2c-sirf.c
+index 64d739baf480..000000000000
+--- a/drivers/i2c/busses/i2c-stu300.c
 +++ /dev/null
-@@ -1,475 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
+@@ -1,1008 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
 -/*
-- * I2C bus driver for CSR SiRFprimaII
-- *
-- * Copyright (c) 2011 Cambridge Silicon Radio Limited, a CSR plc group company.
+- * Copyright (C) 2007-2012 ST-Ericsson AB
+- * ST DDC I2C master mode driver, used in e.g. U300 series platforms.
+- * Author: Linus Walleij <linus.walleij@stericsson.com>
+- * Author: Jonas Aaberg <jonas.aberg@stericsson.com>
 - */
--
--#include <linux/interrupt.h>
--#include <linux/kernel.h>
+-#include <linux/init.h>
 -#include <linux/module.h>
--#include <linux/slab.h>
 -#include <linux/platform_device.h>
+-#include <linux/delay.h>
 -#include <linux/i2c.h>
--#include <linux/clk.h>
+-#include <linux/spinlock.h>
+-#include <linux/completion.h>
 -#include <linux/err.h>
+-#include <linux/interrupt.h>
+-#include <linux/clk.h>
 -#include <linux/io.h>
+-#include <linux/slab.h>
 -
--#define SIRFSOC_I2C_CLK_CTRL		0x00
--#define SIRFSOC_I2C_STATUS		0x0C
--#define SIRFSOC_I2C_CTRL		0x10
--#define SIRFSOC_I2C_IO_CTRL		0x14
--#define SIRFSOC_I2C_SDA_DELAY		0x18
--#define SIRFSOC_I2C_CMD_START		0x1C
--#define SIRFSOC_I2C_CMD_BUF		0x30
--#define SIRFSOC_I2C_DATA_BUF		0x80
+-/* the name of this kernel module */
+-#define NAME "stu300"
 -
--#define SIRFSOC_I2C_CMD_BUF_MAX		16
--#define SIRFSOC_I2C_DATA_BUF_MAX	16
+-/* CR (Control Register) 8bit (R/W) */
+-#define I2C_CR					(0x00000000)
+-#define I2C_CR_RESET_VALUE			(0x00)
+-#define I2C_CR_RESET_UMASK			(0x00)
+-#define I2C_CR_DDC1_ENABLE			(0x80)
+-#define I2C_CR_TRANS_ENABLE			(0x40)
+-#define I2C_CR_PERIPHERAL_ENABLE		(0x20)
+-#define I2C_CR_DDC2B_ENABLE			(0x10)
+-#define I2C_CR_START_ENABLE			(0x08)
+-#define I2C_CR_ACK_ENABLE			(0x04)
+-#define I2C_CR_STOP_ENABLE			(0x02)
+-#define I2C_CR_INTERRUPT_ENABLE			(0x01)
+-/* SR1 (Status Register 1) 8bit (R/-) */
+-#define I2C_SR1					(0x00000004)
+-#define I2C_SR1_RESET_VALUE			(0x00)
+-#define I2C_SR1_RESET_UMASK			(0x00)
+-#define I2C_SR1_EVF_IND				(0x80)
+-#define I2C_SR1_ADD10_IND			(0x40)
+-#define I2C_SR1_TRA_IND				(0x20)
+-#define I2C_SR1_BUSY_IND			(0x10)
+-#define I2C_SR1_BTF_IND				(0x08)
+-#define I2C_SR1_ADSL_IND			(0x04)
+-#define I2C_SR1_MSL_IND				(0x02)
+-#define I2C_SR1_SB_IND				(0x01)
+-/* SR2 (Status Register 2) 8bit (R/-) */
+-#define I2C_SR2					(0x00000008)
+-#define I2C_SR2_RESET_VALUE			(0x00)
+-#define I2C_SR2_RESET_UMASK			(0x40)
+-#define I2C_SR2_MASK				(0xBF)
+-#define I2C_SR2_SCLFAL_IND			(0x80)
+-#define I2C_SR2_ENDAD_IND			(0x20)
+-#define I2C_SR2_AF_IND				(0x10)
+-#define I2C_SR2_STOPF_IND			(0x08)
+-#define I2C_SR2_ARLO_IND			(0x04)
+-#define I2C_SR2_BERR_IND			(0x02)
+-#define I2C_SR2_DDC2BF_IND			(0x01)
+-/* CCR (Clock Control Register) 8bit (R/W) */
+-#define I2C_CCR					(0x0000000C)
+-#define I2C_CCR_RESET_VALUE			(0x00)
+-#define I2C_CCR_RESET_UMASK			(0x00)
+-#define I2C_CCR_MASK				(0xFF)
+-#define I2C_CCR_FMSM				(0x80)
+-#define I2C_CCR_CC_MASK				(0x7F)
+-/* OAR1 (Own Address Register 1) 8bit (R/W) */
+-#define I2C_OAR1				(0x00000010)
+-#define I2C_OAR1_RESET_VALUE			(0x00)
+-#define I2C_OAR1_RESET_UMASK			(0x00)
+-#define I2C_OAR1_ADD_MASK			(0xFF)
+-/* OAR2 (Own Address Register 2) 8bit (R/W) */
+-#define I2C_OAR2				(0x00000014)
+-#define I2C_OAR2_RESET_VALUE			(0x40)
+-#define I2C_OAR2_RESET_UMASK			(0x19)
+-#define I2C_OAR2_MASK				(0xE6)
+-#define I2C_OAR2_FR_25_10MHZ			(0x00)
+-#define I2C_OAR2_FR_10_1667MHZ			(0x20)
+-#define I2C_OAR2_FR_1667_2667MHZ		(0x40)
+-#define I2C_OAR2_FR_2667_40MHZ			(0x60)
+-#define I2C_OAR2_FR_40_5333MHZ			(0x80)
+-#define I2C_OAR2_FR_5333_66MHZ			(0xA0)
+-#define I2C_OAR2_FR_66_80MHZ			(0xC0)
+-#define I2C_OAR2_FR_80_100MHZ			(0xE0)
+-#define I2C_OAR2_FR_MASK			(0xE0)
+-#define I2C_OAR2_ADD_MASK			(0x06)
+-/* DR (Data Register) 8bit (R/W) */
+-#define I2C_DR					(0x00000018)
+-#define I2C_DR_RESET_VALUE			(0x00)
+-#define I2C_DR_RESET_UMASK			(0xFF)
+-#define I2C_DR_D_MASK				(0xFF)
+-/* ECCR (Extended Clock Control Register) 8bit (R/W) */
+-#define I2C_ECCR				(0x0000001C)
+-#define I2C_ECCR_RESET_VALUE			(0x00)
+-#define I2C_ECCR_RESET_UMASK			(0xE0)
+-#define I2C_ECCR_MASK				(0x1F)
+-#define I2C_ECCR_CC_MASK			(0x1F)
 -
--#define SIRFSOC_I2C_CMD(x)		(SIRFSOC_I2C_CMD_BUF + (x)*0x04)
--#define SIRFSOC_I2C_DATA_MASK(x)        (0xFF<<(((x)&3)*8))
--#define SIRFSOC_I2C_DATA_SHIFT(x)       (((x)&3)*8)
--
--#define SIRFSOC_I2C_DIV_MASK		(0xFFFF)
--
--/* I2C status flags */
--#define SIRFSOC_I2C_STAT_BUSY		BIT(0)
--#define SIRFSOC_I2C_STAT_TIP		BIT(1)
--#define SIRFSOC_I2C_STAT_NACK		BIT(2)
--#define SIRFSOC_I2C_STAT_TR_INT		BIT(4)
--#define SIRFSOC_I2C_STAT_STOP		BIT(6)
--#define SIRFSOC_I2C_STAT_CMD_DONE	BIT(8)
--#define SIRFSOC_I2C_STAT_ERR		BIT(9)
--#define SIRFSOC_I2C_CMD_INDEX		(0x1F<<16)
--
--/* I2C control flags */
--#define SIRFSOC_I2C_RESET		BIT(0)
--#define SIRFSOC_I2C_CORE_EN		BIT(1)
--#define SIRFSOC_I2C_MASTER_MODE		BIT(2)
--#define SIRFSOC_I2C_CMD_DONE_EN		BIT(11)
--#define SIRFSOC_I2C_ERR_INT_EN		BIT(12)
--
--#define SIRFSOC_I2C_SDA_DELAY_MASK	(0xFF)
--#define SIRFSOC_I2C_SCLF_FILTER		(3<<8)
--
--#define SIRFSOC_I2C_START_CMD		BIT(0)
--
--#define SIRFSOC_I2C_CMD_RP(x)		((x)&0x7)
--#define SIRFSOC_I2C_NACK		BIT(3)
--#define SIRFSOC_I2C_WRITE		BIT(4)
--#define SIRFSOC_I2C_READ		BIT(5)
--#define SIRFSOC_I2C_STOP		BIT(6)
--#define SIRFSOC_I2C_START		BIT(7)
--
--#define SIRFSOC_I2C_ERR_NOACK      1
--#define SIRFSOC_I2C_ERR_TIMEOUT    2
--
--struct sirfsoc_i2c {
--	void __iomem *base;
--	struct clk *clk;
--	u32 cmd_ptr;		/* Current position in CMD buffer */
--	u8 *buf;		/* Buffer passed by user */
--	u32 msg_len;		/* Message length */
--	u32 finished_len;	/* number of bytes read/written */
--	u32 read_cmd_len;	/* number of read cmd sent */
--	int msg_read;		/* 1 indicates a read message */
--	int err_status;		/* 1 indicates an error on bus */
--
--	u32 sda_delay;		/* For suspend/resume */
--	u32 clk_div;
--	int last;		/* Last message in transfer, STOP cmd can be sent */
--
--	struct completion done;	/* indicates completion of message transfer */
--	struct i2c_adapter adapter;
+-/*
+- * These events are more or less responses to commands
+- * sent into the hardware, presumably reflecting the state
+- * of an internal state machine.
+- */
+-enum stu300_event {
+-	STU300_EVENT_NONE = 0,
+-	STU300_EVENT_1,
+-	STU300_EVENT_2,
+-	STU300_EVENT_3,
+-	STU300_EVENT_4,
+-	STU300_EVENT_5,
+-	STU300_EVENT_6,
+-	STU300_EVENT_7,
+-	STU300_EVENT_8,
+-	STU300_EVENT_9
 -};
 -
--static void i2c_sirfsoc_read_data(struct sirfsoc_i2c *siic)
--{
--	u32 data = 0;
--	int i;
+-enum stu300_error {
+-	STU300_ERROR_NONE = 0,
+-	STU300_ERROR_ACKNOWLEDGE_FAILURE,
+-	STU300_ERROR_BUS_ERROR,
+-	STU300_ERROR_ARBITRATION_LOST,
+-	STU300_ERROR_UNKNOWN
+-};
 -
--	for (i = 0; i < siic->read_cmd_len; i++) {
--		if (!(i & 0x3))
--			data = readl(siic->base + SIRFSOC_I2C_DATA_BUF + i);
--		siic->buf[siic->finished_len++] =
--			(u8)((data & SIRFSOC_I2C_DATA_MASK(i)) >>
--				SIRFSOC_I2C_DATA_SHIFT(i));
--	}
+-/* timeout waiting for the controller to respond */
+-#define STU300_TIMEOUT (msecs_to_jiffies(1000))
+-
+-/*
+- * The number of address send athemps tried before giving up.
+- * If the first one fails it seems like 5 to 8 attempts are required.
+- */
+-#define NUM_ADDR_RESEND_ATTEMPTS 12
+-
+-/* I2C clock speed, in Hz 0-400kHz*/
+-static unsigned int scl_frequency = I2C_MAX_STANDARD_MODE_FREQ;
+-module_param(scl_frequency, uint,  0644);
+-
+-/**
+- * struct stu300_dev - the stu300 driver state holder
+- * @pdev: parent platform device
+- * @adapter: corresponding I2C adapter
+- * @clk: hardware block clock
+- * @irq: assigned interrupt line
+- * @cmd_issue_lock: this locks the following cmd_ variables
+- * @cmd_complete: acknowledge completion for an I2C command
+- * @cmd_event: expected event coming in as a response to a command
+- * @cmd_err: error code as response to a command
+- * @speed: current bus speed in Hz
+- * @msg_index: index of current message
+- * @msg_len: length of current message
+- */
+-
+-struct stu300_dev {
+-	struct platform_device	*pdev;
+-	struct i2c_adapter	adapter;
+-	void __iomem		*virtbase;
+-	struct clk		*clk;
+-	int			irq;
+-	spinlock_t		cmd_issue_lock;
+-	struct completion	cmd_complete;
+-	enum stu300_event	cmd_event;
+-	enum stu300_error	cmd_err;
+-	unsigned int		speed;
+-	int			msg_index;
+-	int			msg_len;
+-};
+-
+-/* Local forward function declarations */
+-static int stu300_init_hw(struct stu300_dev *dev);
+-
+-/*
+- * The block needs writes in both MSW and LSW in order
+- * for all data lines to reach their destination.
+- */
+-static inline void stu300_wr8(u32 value, void __iomem *address)
+-{
+-	writel((value << 16) | value, address);
 -}
 -
--static void i2c_sirfsoc_queue_cmd(struct sirfsoc_i2c *siic)
+-/*
+- * This merely masks off the duplicates which appear
+- * in bytes 1-3. You _MUST_ use 32-bit bus access on this
+- * device, else it will not work.
+- */
+-static inline u32 stu300_r8(void __iomem *address)
 -{
--	u32 regval;
--	int i = 0;
--
--	if (siic->msg_read) {
--		while (((siic->finished_len + i) < siic->msg_len)
--				&& (siic->cmd_ptr < SIRFSOC_I2C_CMD_BUF_MAX)) {
--			regval = SIRFSOC_I2C_READ | SIRFSOC_I2C_CMD_RP(0);
--			if (((siic->finished_len + i) ==
--					(siic->msg_len - 1)) && siic->last)
--				regval |= SIRFSOC_I2C_STOP | SIRFSOC_I2C_NACK;
--			writel(regval,
--				siic->base + SIRFSOC_I2C_CMD(siic->cmd_ptr++));
--			i++;
--		}
--
--		siic->read_cmd_len = i;
--	} else {
--		while ((siic->cmd_ptr < SIRFSOC_I2C_CMD_BUF_MAX - 1)
--				&& (siic->finished_len < siic->msg_len)) {
--			regval = SIRFSOC_I2C_WRITE | SIRFSOC_I2C_CMD_RP(0);
--			if ((siic->finished_len == (siic->msg_len - 1))
--				&& siic->last)
--				regval |= SIRFSOC_I2C_STOP;
--			writel(regval,
--				siic->base + SIRFSOC_I2C_CMD(siic->cmd_ptr++));
--			writel(siic->buf[siic->finished_len++],
--				siic->base + SIRFSOC_I2C_CMD(siic->cmd_ptr++));
--		}
--	}
--	siic->cmd_ptr = 0;
--
--	/* Trigger the transfer */
--	writel(SIRFSOC_I2C_START_CMD, siic->base + SIRFSOC_I2C_CMD_START);
+-	return readl(address) & 0x000000FFU;
 -}
 -
--static irqreturn_t i2c_sirfsoc_irq(int irq, void *dev_id)
+-static void stu300_irq_enable(struct stu300_dev *dev)
 -{
--	struct sirfsoc_i2c *siic = (struct sirfsoc_i2c *)dev_id;
--	u32 i2c_stat = readl(siic->base + SIRFSOC_I2C_STATUS);
+-	u32 val;
+-	val = stu300_r8(dev->virtbase + I2C_CR);
+-	val |= I2C_CR_INTERRUPT_ENABLE;
+-	/* Twice paranoia (possible HW glitch) */
+-	stu300_wr8(val, dev->virtbase + I2C_CR);
+-	stu300_wr8(val, dev->virtbase + I2C_CR);
+-}
 -
--	if (i2c_stat & SIRFSOC_I2C_STAT_ERR) {
--		/* Error conditions */
--		siic->err_status = SIRFSOC_I2C_ERR_NOACK;
--		writel(SIRFSOC_I2C_STAT_ERR, siic->base + SIRFSOC_I2C_STATUS);
+-static void stu300_irq_disable(struct stu300_dev *dev)
+-{
+-	u32 val;
+-	val = stu300_r8(dev->virtbase + I2C_CR);
+-	val &= ~I2C_CR_INTERRUPT_ENABLE;
+-	/* Twice paranoia (possible HW glitch) */
+-	stu300_wr8(val, dev->virtbase + I2C_CR);
+-	stu300_wr8(val, dev->virtbase + I2C_CR);
+-}
 -
--		if (i2c_stat & SIRFSOC_I2C_STAT_NACK)
--			dev_dbg(&siic->adapter.dev, "ACK not received\n");
--		else
--			dev_err(&siic->adapter.dev, "I2C error\n");
 -
--		/*
--		 * Due to hardware ANOMALY, we need to reset I2C earlier after
--		 * we get NOACK while accessing non-existing clients, otherwise
--		 * we will get errors even we access existing clients later
--		 */
--		writel(readl(siic->base + SIRFSOC_I2C_CTRL) | SIRFSOC_I2C_RESET,
--				siic->base + SIRFSOC_I2C_CTRL);
--		while (readl(siic->base + SIRFSOC_I2C_CTRL) & SIRFSOC_I2C_RESET)
--			cpu_relax();
+-/*
+- * Tells whether a certain event or events occurred in
+- * response to a command. The events represent states in
+- * the internal state machine of the hardware. The events
+- * are not very well described in the hardware
+- * documentation and can only be treated as abstract state
+- * machine states.
+- *
+- * @ret 0 = event has not occurred or unknown error, any
+- * other value means the correct event occurred or an error.
+- */
 -
--		complete(&siic->done);
--	} else if (i2c_stat & SIRFSOC_I2C_STAT_CMD_DONE) {
--		/* CMD buffer execution complete */
--		if (siic->msg_read)
--			i2c_sirfsoc_read_data(siic);
--		if (siic->finished_len == siic->msg_len)
--			complete(&siic->done);
--		else /* Fill a new CMD buffer for left data */
--			i2c_sirfsoc_queue_cmd(siic);
+-static int stu300_event_occurred(struct stu300_dev *dev,
+-				   enum stu300_event mr_event) {
+-	u32 status1;
+-	u32 status2;
 -
--		writel(SIRFSOC_I2C_STAT_CMD_DONE, siic->base + SIRFSOC_I2C_STATUS);
+-	/* What event happened? */
+-	status1 = stu300_r8(dev->virtbase + I2C_SR1);
+-
+-	if (!(status1 & I2C_SR1_EVF_IND))
+-		/* No event at all */
+-		return 0;
+-
+-	status2 = stu300_r8(dev->virtbase + I2C_SR2);
+-
+-	/* Block any multiple interrupts */
+-	stu300_irq_disable(dev);
+-
+-	/* Check for errors first */
+-	if (status2 & I2C_SR2_AF_IND) {
+-		dev->cmd_err = STU300_ERROR_ACKNOWLEDGE_FAILURE;
+-		return 1;
+-	} else if (status2 & I2C_SR2_BERR_IND) {
+-		dev->cmd_err = STU300_ERROR_BUS_ERROR;
+-		return 1;
+-	} else if (status2 & I2C_SR2_ARLO_IND) {
+-		dev->cmd_err = STU300_ERROR_ARBITRATION_LOST;
+-		return 1;
 -	}
+-
+-	switch (mr_event) {
+-	case STU300_EVENT_1:
+-		if (status1 & I2C_SR1_ADSL_IND)
+-			return 1;
+-		break;
+-	case STU300_EVENT_2:
+-	case STU300_EVENT_3:
+-	case STU300_EVENT_7:
+-	case STU300_EVENT_8:
+-		if (status1 & I2C_SR1_BTF_IND) {
+-			return 1;
+-		}
+-		break;
+-	case STU300_EVENT_4:
+-		if (status2 & I2C_SR2_STOPF_IND)
+-			return 1;
+-		break;
+-	case STU300_EVENT_5:
+-		if (status1 & I2C_SR1_SB_IND)
+-			/* Clear start bit */
+-			return 1;
+-		break;
+-	case STU300_EVENT_6:
+-		if (status2 & I2C_SR2_ENDAD_IND) {
+-			/* First check for any errors */
+-			return 1;
+-		}
+-		break;
+-	case STU300_EVENT_9:
+-		if (status1 & I2C_SR1_ADD10_IND)
+-			return 1;
+-		break;
+-	default:
+-		break;
+-	}
+-	/* If we get here, we're on thin ice.
+-	 * Here we are in a status where we have
+-	 * gotten a response that does not match
+-	 * what we requested.
+-	 */
+-	dev->cmd_err = STU300_ERROR_UNKNOWN;
+-	dev_err(&dev->pdev->dev,
+-		"Unhandled interrupt! %d sr1: 0x%x sr2: 0x%x\n",
+-		mr_event, status1, status2);
+-	return 0;
+-}
+-
+-static irqreturn_t stu300_irh(int irq, void *data)
+-{
+-	struct stu300_dev *dev = data;
+-	int res;
+-
+-	/* Just make sure that the block is clocked */
+-	clk_enable(dev->clk);
+-
+-	/* See if this was what we were waiting for */
+-	spin_lock(&dev->cmd_issue_lock);
+-
+-	res = stu300_event_occurred(dev, dev->cmd_event);
+-	if (res || dev->cmd_err != STU300_ERROR_NONE)
+-		complete(&dev->cmd_complete);
+-
+-	spin_unlock(&dev->cmd_issue_lock);
+-
+-	clk_disable(dev->clk);
 -
 -	return IRQ_HANDLED;
 -}
 -
--static void i2c_sirfsoc_set_address(struct sirfsoc_i2c *siic,
--	struct i2c_msg *msg)
+-/*
+- * Sends a command and then waits for the bits masked by *flagmask*
+- * to go high or low by IRQ awaiting.
+- */
+-static int stu300_start_and_await_event(struct stu300_dev *dev,
+-					  u8 cr_value,
+-					  enum stu300_event mr_event)
 -{
--	unsigned char addr;
--	u32 regval = SIRFSOC_I2C_START | SIRFSOC_I2C_CMD_RP(0) | SIRFSOC_I2C_WRITE;
+-	int ret;
 -
--	/* no data and last message -> add STOP */
--	if (siic->last && (msg->len == 0))
--		regval |= SIRFSOC_I2C_STOP;
+-	/* Lock command issue, fill in an event we wait for */
+-	spin_lock_irq(&dev->cmd_issue_lock);
+-	init_completion(&dev->cmd_complete);
+-	dev->cmd_err = STU300_ERROR_NONE;
+-	dev->cmd_event = mr_event;
+-	spin_unlock_irq(&dev->cmd_issue_lock);
 -
--	writel(regval, siic->base + SIRFSOC_I2C_CMD(siic->cmd_ptr++));
--
--	addr = i2c_8bit_addr_from_msg(msg);
--
--	/* Reverse direction bit */
--	if (msg->flags & I2C_M_REV_DIR_ADDR)
--		addr ^= 1;
--
--	writel(addr, siic->base + SIRFSOC_I2C_CMD(siic->cmd_ptr++));
--}
--
--static int i2c_sirfsoc_xfer_msg(struct sirfsoc_i2c *siic, struct i2c_msg *msg)
--{
--	u32 regval = readl(siic->base + SIRFSOC_I2C_CTRL);
--	/* timeout waiting for the xfer to finish or fail */
--	int timeout = msecs_to_jiffies((msg->len + 1) * 50);
--
--	i2c_sirfsoc_set_address(siic, msg);
--
--	writel(regval | SIRFSOC_I2C_CMD_DONE_EN | SIRFSOC_I2C_ERR_INT_EN,
--		siic->base + SIRFSOC_I2C_CTRL);
--	i2c_sirfsoc_queue_cmd(siic);
--
--	if (wait_for_completion_timeout(&siic->done, timeout) == 0) {
--		siic->err_status = SIRFSOC_I2C_ERR_TIMEOUT;
--		dev_err(&siic->adapter.dev, "Transfer timeout\n");
+-	/* Turn on interrupt, send command and wait. */
+-	cr_value |= I2C_CR_INTERRUPT_ENABLE;
+-	stu300_wr8(cr_value, dev->virtbase + I2C_CR);
+-	ret = wait_for_completion_interruptible_timeout(&dev->cmd_complete,
+-							STU300_TIMEOUT);
+-	if (ret < 0) {
+-		dev_err(&dev->pdev->dev,
+-		       "wait_for_completion_interruptible_timeout() "
+-		       "returned %d waiting for event %04x\n", ret, mr_event);
+-		return ret;
 -	}
 -
--	writel(regval & ~(SIRFSOC_I2C_CMD_DONE_EN | SIRFSOC_I2C_ERR_INT_EN),
--		siic->base + SIRFSOC_I2C_CTRL);
--	writel(0, siic->base + SIRFSOC_I2C_CMD_START);
--
--	/* i2c control doesn't response, reset it */
--	if (siic->err_status == SIRFSOC_I2C_ERR_TIMEOUT) {
--		writel(readl(siic->base + SIRFSOC_I2C_CTRL) | SIRFSOC_I2C_RESET,
--			siic->base + SIRFSOC_I2C_CTRL);
--		while (readl(siic->base + SIRFSOC_I2C_CTRL) & SIRFSOC_I2C_RESET)
--			cpu_relax();
+-	if (ret == 0) {
+-		dev_err(&dev->pdev->dev, "controller timed out "
+-		       "waiting for event %d, reinit hardware\n", mr_event);
+-		(void) stu300_init_hw(dev);
+-		return -ETIMEDOUT;
 -	}
--	return siic->err_status ? -EAGAIN : 0;
+-
+-	if (dev->cmd_err != STU300_ERROR_NONE) {
+-		dev_err(&dev->pdev->dev, "controller (start) "
+-		       "error %d waiting for event %d, reinit hardware\n",
+-		       dev->cmd_err, mr_event);
+-		(void) stu300_init_hw(dev);
+-		return -EIO;
+-	}
+-
+-	return 0;
 -}
 -
--static u32 i2c_sirfsoc_func(struct i2c_adapter *adap)
+-/*
+- * This waits for a flag to be set, if it is not set on entry, an interrupt is
+- * configured to wait for the flag using a completion.
+- */
+-static int stu300_await_event(struct stu300_dev *dev,
+-				enum stu300_event mr_event)
 -{
--	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+-	int ret;
+-
+-	/* Is it already here? */
+-	spin_lock_irq(&dev->cmd_issue_lock);
+-	dev->cmd_err = STU300_ERROR_NONE;
+-	dev->cmd_event = mr_event;
+-
+-	init_completion(&dev->cmd_complete);
+-
+-	/* Turn on the I2C interrupt for current operation */
+-	stu300_irq_enable(dev);
+-
+-	/* Unlock the command block and wait for the event to occur */
+-	spin_unlock_irq(&dev->cmd_issue_lock);
+-
+-	ret = wait_for_completion_interruptible_timeout(&dev->cmd_complete,
+-							STU300_TIMEOUT);
+-	if (ret < 0) {
+-		dev_err(&dev->pdev->dev,
+-		       "wait_for_completion_interruptible_timeout()"
+-		       "returned %d waiting for event %04x\n", ret, mr_event);
+-		return ret;
+-	}
+-
+-	if (ret == 0) {
+-		if (mr_event != STU300_EVENT_6) {
+-			dev_err(&dev->pdev->dev, "controller "
+-				"timed out waiting for event %d, reinit "
+-				"hardware\n", mr_event);
+-			(void) stu300_init_hw(dev);
+-		}
+-		return -ETIMEDOUT;
+-	}
+-
+-	if (dev->cmd_err != STU300_ERROR_NONE) {
+-		if (mr_event != STU300_EVENT_6) {
+-			dev_err(&dev->pdev->dev, "controller "
+-				"error (await_event) %d waiting for event %d, "
+-			       "reinit hardware\n", dev->cmd_err, mr_event);
+-			(void) stu300_init_hw(dev);
+-		}
+-		return -EIO;
+-	}
+-
+-	return 0;
 -}
 -
--static int i2c_sirfsoc_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
--	int num)
+-/*
+- * Waits for the busy bit to go low by repeated polling.
+- */
+-#define BUSY_RELEASE_ATTEMPTS 10
+-static int stu300_wait_while_busy(struct stu300_dev *dev)
 -{
--	struct sirfsoc_i2c *siic = adap->algo_data;
--	int i, ret;
+-	unsigned long timeout;
+-	int i;
 -
--	clk_enable(siic->clk);
+-	for (i = 0; i < BUSY_RELEASE_ATTEMPTS; i++) {
+-		timeout = jiffies + STU300_TIMEOUT;
 -
--	for (i = 0; i < num; i++) {
--		siic->buf = msgs[i].buf;
--		siic->msg_len = msgs[i].len;
--		siic->msg_read = !!(msgs[i].flags & I2C_M_RD);
--		siic->err_status = 0;
--		siic->cmd_ptr = 0;
--		siic->finished_len = 0;
--		siic->last = (i == (num - 1));
+-		while (!time_after(jiffies, timeout)) {
+-			/* Is not busy? */
+-			if ((stu300_r8(dev->virtbase + I2C_SR1) &
+-			     I2C_SR1_BUSY_IND) == 0)
+-				return 0;
+-			msleep(1);
+-		}
 -
--		ret = i2c_sirfsoc_xfer_msg(siic, &msgs[i]);
--		if (ret) {
--			clk_disable(siic->clk);
+-		dev_err(&dev->pdev->dev, "transaction timed out "
+-			"waiting for device to be free (not busy). "
+-		       "Attempt: %d\n", i+1);
+-
+-		dev_err(&dev->pdev->dev, "base address = "
+-			"0x%p, reinit hardware\n", dev->virtbase);
+-
+-		(void) stu300_init_hw(dev);
+-	}
+-
+-	dev_err(&dev->pdev->dev, "giving up after %d attempts "
+-		"to reset the bus.\n",  BUSY_RELEASE_ATTEMPTS);
+-
+-	return -ETIMEDOUT;
+-}
+-
+-struct stu300_clkset {
+-	unsigned long rate;
+-	u32 setting;
+-};
+-
+-static const struct stu300_clkset stu300_clktable[] = {
+-	{ 0,         0xFFU },
+-	{ 2500000,   I2C_OAR2_FR_25_10MHZ },
+-	{ 10000000,  I2C_OAR2_FR_10_1667MHZ },
+-	{ 16670000,  I2C_OAR2_FR_1667_2667MHZ },
+-	{ 26670000,  I2C_OAR2_FR_2667_40MHZ },
+-	{ 40000000,  I2C_OAR2_FR_40_5333MHZ },
+-	{ 53330000,  I2C_OAR2_FR_5333_66MHZ },
+-	{ 66000000,  I2C_OAR2_FR_66_80MHZ },
+-	{ 80000000,  I2C_OAR2_FR_80_100MHZ },
+-	{ 100000000, 0xFFU },
+-};
+-
+-
+-static int stu300_set_clk(struct stu300_dev *dev, unsigned long clkrate)
+-{
+-
+-	u32 val;
+-	int i = 0;
+-
+-	/* Locate the appropriate clock setting */
+-	while (i < ARRAY_SIZE(stu300_clktable) - 1 &&
+-	       stu300_clktable[i].rate < clkrate)
+-		i++;
+-
+-	if (stu300_clktable[i].setting == 0xFFU) {
+-		dev_err(&dev->pdev->dev, "too %s clock rate requested "
+-			"(%lu Hz).\n", i ? "high" : "low", clkrate);
+-		return -EINVAL;
+-	}
+-
+-	stu300_wr8(stu300_clktable[i].setting,
+-		   dev->virtbase + I2C_OAR2);
+-
+-	dev_dbg(&dev->pdev->dev, "Clock rate %lu Hz, I2C bus speed %d Hz "
+-		"virtbase %p\n", clkrate, dev->speed, dev->virtbase);
+-
+-	if (dev->speed > I2C_MAX_STANDARD_MODE_FREQ)
+-		/* Fast Mode I2C */
+-		val = ((clkrate/dev->speed) - 9)/3 + 1;
+-	else
+-		/* Standard Mode I2C */
+-		val = ((clkrate/dev->speed) - 7)/2 + 1;
+-
+-	/* According to spec the divider must be > 2 */
+-	if (val < 0x002) {
+-		dev_err(&dev->pdev->dev, "too low clock rate (%lu Hz).\n",
+-			clkrate);
+-		return -EINVAL;
+-	}
+-
+-	/* We have 12 bits clock divider only! */
+-	if (val & 0xFFFFF000U) {
+-		dev_err(&dev->pdev->dev, "too high clock rate (%lu Hz).\n",
+-			clkrate);
+-		return -EINVAL;
+-	}
+-
+-	if (dev->speed > I2C_MAX_STANDARD_MODE_FREQ) {
+-		/* CC6..CC0 */
+-		stu300_wr8((val & I2C_CCR_CC_MASK) | I2C_CCR_FMSM,
+-			   dev->virtbase + I2C_CCR);
+-		dev_dbg(&dev->pdev->dev, "set clock divider to 0x%08x, "
+-			"Fast Mode I2C\n", val);
+-	} else {
+-		/* CC6..CC0 */
+-		stu300_wr8((val & I2C_CCR_CC_MASK),
+-			   dev->virtbase + I2C_CCR);
+-		dev_dbg(&dev->pdev->dev, "set clock divider to "
+-			"0x%08x, Standard Mode I2C\n", val);
+-	}
+-
+-	/* CC11..CC7 */
+-	stu300_wr8(((val >> 7) & 0x1F),
+-		   dev->virtbase + I2C_ECCR);
+-
+-	return 0;
+-}
+-
+-
+-static int stu300_init_hw(struct stu300_dev *dev)
+-{
+-	u32 dummy;
+-	unsigned long clkrate;
+-	int ret;
+-
+-	/* Disable controller */
+-	stu300_wr8(0x00, dev->virtbase + I2C_CR);
+-	/*
+-	 * Set own address to some default value (0x00).
+-	 * We do not support slave mode anyway.
+-	 */
+-	stu300_wr8(0x00, dev->virtbase + I2C_OAR1);
+-	/*
+-	 * The I2C controller only operates properly in 26 MHz but we
+-	 * program this driver as if we didn't know. This will also set the two
+-	 * high bits of the own address to zero as well.
+-	 * There is no known hardware issue with running in 13 MHz
+-	 * However, speeds over 200 kHz are not used.
+-	 */
+-	clkrate = clk_get_rate(dev->clk);
+-	ret = stu300_set_clk(dev, clkrate);
+-
+-	if (ret)
+-		return ret;
+-	/*
+-	 * Enable block, do it TWICE (hardware glitch)
+-	 * Setting bit 7 can enable DDC mode. (Not used currently.)
+-	 */
+-	stu300_wr8(I2C_CR_PERIPHERAL_ENABLE,
+-				  dev->virtbase + I2C_CR);
+-	stu300_wr8(I2C_CR_PERIPHERAL_ENABLE,
+-				  dev->virtbase + I2C_CR);
+-	/* Make a dummy read of the status register SR1 & SR2 */
+-	dummy = stu300_r8(dev->virtbase + I2C_SR2);
+-	dummy = stu300_r8(dev->virtbase + I2C_SR1);
+-
+-	return 0;
+-}
+-
+-
+-
+-/* Send slave address. */
+-static int stu300_send_address(struct stu300_dev *dev,
+-				 struct i2c_msg *msg, int resend)
+-{
+-	u32 val;
+-	int ret;
+-
+-	if (msg->flags & I2C_M_TEN) {
+-		/* This is probably how 10 bit addresses look */
+-		val = (0xf0 | (((u32) msg->addr & 0x300) >> 7)) &
+-			I2C_DR_D_MASK;
+-		if (msg->flags & I2C_M_RD)
+-			/* This is the direction bit */
+-			val |= 0x01;
+-	} else {
+-		val = i2c_8bit_addr_from_msg(msg);
+-	}
+-
+-	if (resend) {
+-		if (msg->flags & I2C_M_RD)
+-			dev_dbg(&dev->pdev->dev, "read resend\n");
+-		else
+-			dev_dbg(&dev->pdev->dev, "write resend\n");
+-	}
+-
+-	stu300_wr8(val, dev->virtbase + I2C_DR);
+-
+-	/* For 10bit addressing, await 10bit request (EVENT 9) */
+-	if (msg->flags & I2C_M_TEN) {
+-		ret = stu300_await_event(dev, STU300_EVENT_9);
+-		/*
+-		 * The slave device wants a 10bit address, send the rest
+-		 * of the bits (the LSBits)
+-		 */
+-		val = msg->addr & I2C_DR_D_MASK;
+-		/* This clears "event 9" */
+-		stu300_wr8(val, dev->virtbase + I2C_DR);
+-		if (ret != 0)
 -			return ret;
+-	}
+-	/* FIXME: Why no else here? two events for 10bit?
+-	 * Await event 6 (normal) or event 9 (10bit)
+-	 */
+-
+-	if (resend)
+-		dev_dbg(&dev->pdev->dev, "await event 6\n");
+-	ret = stu300_await_event(dev, STU300_EVENT_6);
+-
+-	/*
+-	 * Clear any pending EVENT 6 no matter what happened during
+-	 * await_event.
+-	 */
+-	val = stu300_r8(dev->virtbase + I2C_CR);
+-	val |= I2C_CR_PERIPHERAL_ENABLE;
+-	stu300_wr8(val, dev->virtbase + I2C_CR);
+-
+-	return ret;
+-}
+-
+-static int stu300_xfer_msg(struct i2c_adapter *adap,
+-			     struct i2c_msg *msg, int stop)
+-{
+-	u32 cr;
+-	u32 val;
+-	u32 i;
+-	int ret;
+-	int attempts = 0;
+-	struct stu300_dev *dev = i2c_get_adapdata(adap);
+-
+-	clk_enable(dev->clk);
+-
+-	/* Remove this if (0) to trace each and every message. */
+-	if (0) {
+-		dev_dbg(&dev->pdev->dev, "I2C message to: 0x%04x, len: %d, "
+-			"flags: 0x%04x, stop: %d\n",
+-			msg->addr, msg->len, msg->flags, stop);
+-	}
+-
+-	/*
+-	 * For some reason, sending the address sometimes fails when running
+-	 * on  the 13 MHz clock. No interrupt arrives. This is a work around,
+-	 * which tries to restart and send the address up to 10 times before
+-	 * really giving up. Usually 5 to 8 attempts are enough.
+-	 */
+-	do {
+-		if (attempts)
+-			dev_dbg(&dev->pdev->dev, "wait while busy\n");
+-		/* Check that the bus is free, or wait until some timeout */
+-		ret = stu300_wait_while_busy(dev);
+-		if (ret != 0)
+-			goto exit_disable;
+-
+-		if (attempts)
+-			dev_dbg(&dev->pdev->dev, "re-int hw\n");
+-		/*
+-		 * According to ST, there is no problem if the clock is
+-		 * changed between 13 and 26 MHz during a transfer.
+-		 */
+-		ret = stu300_init_hw(dev);
+-		if (ret)
+-			goto exit_disable;
+-
+-		/* Send a start condition */
+-		cr = I2C_CR_PERIPHERAL_ENABLE;
+-		/* Setting the START bit puts the block in master mode */
+-		if (!(msg->flags & I2C_M_NOSTART))
+-			cr |= I2C_CR_START_ENABLE;
+-		if ((msg->flags & I2C_M_RD) && (msg->len > 1))
+-			/* On read more than 1 byte, we need ack. */
+-			cr |= I2C_CR_ACK_ENABLE;
+-		/* Check that it gets through */
+-		if (!(msg->flags & I2C_M_NOSTART)) {
+-			if (attempts)
+-				dev_dbg(&dev->pdev->dev, "send start event\n");
+-			ret = stu300_start_and_await_event(dev, cr,
+-							     STU300_EVENT_5);
+-		}
+-
+-		if (attempts)
+-			dev_dbg(&dev->pdev->dev, "send address\n");
+-
+-		if (ret == 0)
+-			/* Send address */
+-			ret = stu300_send_address(dev, msg, attempts != 0);
+-
+-		if (ret != 0) {
+-			attempts++;
+-			dev_dbg(&dev->pdev->dev, "failed sending address, "
+-				"retrying. Attempt: %d msg_index: %d/%d\n",
+-			       attempts, dev->msg_index, dev->msg_len);
+-		}
+-
+-	} while (ret != 0 && attempts < NUM_ADDR_RESEND_ATTEMPTS);
+-
+-	if (attempts < NUM_ADDR_RESEND_ATTEMPTS && attempts > 0) {
+-		dev_dbg(&dev->pdev->dev, "managed to get address "
+-			"through after %d attempts\n", attempts);
+-	} else if (attempts == NUM_ADDR_RESEND_ATTEMPTS) {
+-		dev_dbg(&dev->pdev->dev, "I give up, tried %d times "
+-			"to resend address.\n",
+-			NUM_ADDR_RESEND_ATTEMPTS);
+-		goto exit_disable;
+-	}
+-
+-
+-	if (msg->flags & I2C_M_RD) {
+-		/* READ: we read the actual bytes one at a time */
+-		for (i = 0; i < msg->len; i++) {
+-			if (i == msg->len-1) {
+-				/*
+-				 * Disable ACK and set STOP condition before
+-				 * reading last byte
+-				 */
+-				val = I2C_CR_PERIPHERAL_ENABLE;
+-
+-				if (stop)
+-					val |= I2C_CR_STOP_ENABLE;
+-
+-				stu300_wr8(val,
+-					   dev->virtbase + I2C_CR);
+-			}
+-			/* Wait for this byte... */
+-			ret = stu300_await_event(dev, STU300_EVENT_7);
+-			if (ret != 0)
+-				goto exit_disable;
+-			/* This clears event 7 */
+-			msg->buf[i] = (u8) stu300_r8(dev->virtbase + I2C_DR);
+-		}
+-	} else {
+-		/* WRITE: we send the actual bytes one at a time */
+-		for (i = 0; i < msg->len; i++) {
+-			/* Write the byte */
+-			stu300_wr8(msg->buf[i],
+-				   dev->virtbase + I2C_DR);
+-			/* Check status */
+-			ret = stu300_await_event(dev, STU300_EVENT_8);
+-			/* Next write to DR will clear event 8 */
+-			if (ret != 0) {
+-				dev_err(&dev->pdev->dev, "error awaiting "
+-				       "event 8 (%d)\n", ret);
+-				goto exit_disable;
+-			}
+-		}
+-		/* Check NAK */
+-		if (!(msg->flags & I2C_M_IGNORE_NAK)) {
+-			if (stu300_r8(dev->virtbase + I2C_SR2) &
+-			    I2C_SR2_AF_IND) {
+-				dev_err(&dev->pdev->dev, "I2C payload "
+-				       "send returned NAK!\n");
+-				ret = -EIO;
+-				goto exit_disable;
+-			}
+-		}
+-		if (stop) {
+-			/* Send stop condition */
+-			val = I2C_CR_PERIPHERAL_ENABLE;
+-			val |= I2C_CR_STOP_ENABLE;
+-			stu300_wr8(val, dev->virtbase + I2C_CR);
 -		}
 -	}
 -
--	clk_disable(siic->clk);
+-	/* Check that the bus is free, or wait until some timeout occurs */
+-	ret = stu300_wait_while_busy(dev);
+-	if (ret != 0) {
+-		dev_err(&dev->pdev->dev, "timeout waiting for transfer "
+-		       "to commence.\n");
+-		goto exit_disable;
+-	}
+-
+-	/* Dummy read status registers */
+-	val = stu300_r8(dev->virtbase + I2C_SR2);
+-	val = stu300_r8(dev->virtbase + I2C_SR1);
+-	ret = 0;
+-
+- exit_disable:
+-	/* Disable controller */
+-	stu300_wr8(0x00, dev->virtbase + I2C_CR);
+-	clk_disable(dev->clk);
+-	return ret;
+-}
+-
+-static int stu300_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+-			 int num)
+-{
+-	int ret = -1;
+-	int i;
+-
+-	struct stu300_dev *dev = i2c_get_adapdata(adap);
+-	dev->msg_len = num;
+-
+-	for (i = 0; i < num; i++) {
+-		/*
+-		 * Another driver appears to send stop for each message,
+-		 * here we only do that for the last message. Possibly some
+-		 * peripherals require this behaviour, then their drivers
+-		 * have to send single messages in order to get "stop" for
+-		 * each message.
+-		 */
+-		dev->msg_index = i;
+-
+-		ret = stu300_xfer_msg(adap, &msgs[i], (i == (num - 1)));
+-
+-		if (ret != 0) {
+-			num = ret;
+-			break;
+-		}
+-	}
+-
 -	return num;
 -}
 -
--/* I2C algorithms associated with this master controller driver */
--static const struct i2c_algorithm i2c_sirfsoc_algo = {
--	.master_xfer = i2c_sirfsoc_xfer,
--	.functionality = i2c_sirfsoc_func,
+-static int stu300_xfer_todo(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+-{
+-	/* TODO: implement polling for this case if need be. */
+-	WARN(1, "%s: atomic transfers not implemented\n", dev_name(&adap->dev));
+-	return -EOPNOTSUPP;
+-}
+-
+-static u32 stu300_func(struct i2c_adapter *adap)
+-{
+-	/* This is the simplest thing you can think of... */
+-	return I2C_FUNC_I2C | I2C_FUNC_10BIT_ADDR;
+-}
+-
+-static const struct i2c_algorithm stu300_algo = {
+-	.master_xfer = stu300_xfer,
+-	.master_xfer_atomic = stu300_xfer_todo,
+-	.functionality = stu300_func,
 -};
 -
--static int i2c_sirfsoc_probe(struct platform_device *pdev)
+-static const struct i2c_adapter_quirks stu300_quirks = {
+-	.flags = I2C_AQ_NO_ZERO_LEN,
+-};
+-
+-static int stu300_probe(struct platform_device *pdev)
 -{
--	struct sirfsoc_i2c *siic;
+-	struct stu300_dev *dev;
 -	struct i2c_adapter *adap;
--	struct clk *clk;
--	int bitrate;
--	int ctrl_speed;
--	int irq;
+-	int bus_nr;
+-	int ret = 0;
 -
--	int err;
--	u32 regval;
+-	dev = devm_kzalloc(&pdev->dev, sizeof(struct stu300_dev), GFP_KERNEL);
+-	if (!dev)
+-		return -ENOMEM;
 -
--	clk = clk_get(&pdev->dev, NULL);
--	if (IS_ERR(clk)) {
--		err = PTR_ERR(clk);
--		dev_err(&pdev->dev, "Clock get failed\n");
--		goto err_get_clk;
+-	bus_nr = pdev->id;
+-	dev->clk = devm_clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(dev->clk)) {
+-		dev_err(&pdev->dev, "could not retrieve i2c bus clock\n");
+-		return PTR_ERR(dev->clk);
 -	}
 -
--	err = clk_prepare(clk);
--	if (err) {
--		dev_err(&pdev->dev, "Clock prepare failed\n");
--		goto err_clk_prep;
+-	dev->pdev = pdev;
+-	dev->virtbase = devm_platform_ioremap_resource(pdev, 0);
+-	dev_dbg(&pdev->dev, "initialize bus device I2C%d on virtual "
+-		"base %p\n", bus_nr, dev->virtbase);
+-	if (IS_ERR(dev->virtbase))
+-		return PTR_ERR(dev->virtbase);
+-
+-	dev->irq = platform_get_irq(pdev, 0);
+-	ret = devm_request_irq(&pdev->dev, dev->irq, stu300_irh, 0, NAME, dev);
+-	if (ret < 0)
+-		return ret;
+-
+-	dev->speed = scl_frequency;
+-
+-	clk_prepare_enable(dev->clk);
+-	ret = stu300_init_hw(dev);
+-	clk_disable(dev->clk);
+-	if (ret != 0) {
+-		dev_err(&dev->pdev->dev, "error initializing hardware.\n");
+-		return -EIO;
 -	}
 -
--	err = clk_enable(clk);
--	if (err) {
--		dev_err(&pdev->dev, "Clock enable failed\n");
--		goto err_clk_en;
--	}
+-	/* IRQ event handling initialization */
+-	spin_lock_init(&dev->cmd_issue_lock);
+-	dev->cmd_event = STU300_EVENT_NONE;
+-	dev->cmd_err = STU300_ERROR_NONE;
 -
--	ctrl_speed = clk_get_rate(clk);
--
--	siic = devm_kzalloc(&pdev->dev, sizeof(*siic), GFP_KERNEL);
--	if (!siic) {
--		err = -ENOMEM;
--		goto out;
--	}
--	adap = &siic->adapter;
+-	adap = &dev->adapter;
+-	adap->owner = THIS_MODULE;
+-	/* DDC class but actually often used for more generic I2C */
 -	adap->class = I2C_CLASS_DEPRECATED;
--
--	siic->base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(siic->base)) {
--		err = PTR_ERR(siic->base);
--		goto out;
--	}
--
--	irq = platform_get_irq(pdev, 0);
--	if (irq < 0) {
--		err = irq;
--		goto out;
--	}
--	err = devm_request_irq(&pdev->dev, irq, i2c_sirfsoc_irq, 0,
--		dev_name(&pdev->dev), siic);
--	if (err)
--		goto out;
--
--	adap->algo = &i2c_sirfsoc_algo;
--	adap->algo_data = siic;
--	adap->retries = 3;
--
--	adap->dev.of_node = pdev->dev.of_node;
+-	strlcpy(adap->name, "ST Microelectronics DDC I2C adapter",
+-		sizeof(adap->name));
+-	adap->nr = bus_nr;
+-	adap->algo = &stu300_algo;
 -	adap->dev.parent = &pdev->dev;
--	adap->nr = pdev->id;
+-	adap->dev.of_node = pdev->dev.of_node;
+-	adap->quirks = &stu300_quirks;
 -
--	strlcpy(adap->name, "sirfsoc-i2c", sizeof(adap->name));
+-	i2c_set_adapdata(adap, dev);
 -
--	platform_set_drvdata(pdev, adap);
--	init_completion(&siic->done);
+-	/* i2c device drivers may be active on return from add_adapter() */
+-	ret = i2c_add_numbered_adapter(adap);
+-	if (ret)
+-		return ret;
 -
--	/* Controller initialisation */
--
--	writel(SIRFSOC_I2C_RESET, siic->base + SIRFSOC_I2C_CTRL);
--	while (readl(siic->base + SIRFSOC_I2C_CTRL) & SIRFSOC_I2C_RESET)
--		cpu_relax();
--	writel(SIRFSOC_I2C_CORE_EN | SIRFSOC_I2C_MASTER_MODE,
--		siic->base + SIRFSOC_I2C_CTRL);
--
--	siic->clk = clk;
--
--	err = of_property_read_u32(pdev->dev.of_node,
--		"clock-frequency", &bitrate);
--	if (err < 0)
--		bitrate = I2C_MAX_STANDARD_MODE_FREQ;
--
--	/*
--	 * Due to some hardware design issues, we need to tune the formula.
--	 * Since i2c is open drain interface that allows the slave to
--	 * stall the transaction by holding the SCL line at '0', the RTL
--	 * implementation is waiting for SCL feedback from the pin after
--	 * setting it to High-Z ('1'). This wait adds to the high-time
--	 * interval counter few cycles of the input synchronization
--	 * (depending on the SCL_FILTER_REG field), and also the time it
--	 * takes for the board pull-up resistor to rise the SCL line.
--	 * For slow SCL settings these additions are negligible,
--	 * but they start to affect the speed when clock is set to faster
--	 * frequencies.
--	 * Through the actual tests, use the different user_div value(which
--	 * in the divider formula 'Fio / (Fi2c * user_div)') to adapt
--	 * the different ranges of i2c bus clock frequency, to make the SCL
--	 * more accurate.
--	 */
--	if (bitrate <= 30000)
--		regval = ctrl_speed / (bitrate * 5);
--	else if (bitrate > 30000 && bitrate <= 280000)
--		regval = (2 * ctrl_speed) / (bitrate * 11);
--	else
--		regval = ctrl_speed / (bitrate * 6);
--
--	writel(regval, siic->base + SIRFSOC_I2C_CLK_CTRL);
--	if (regval > 0xFF)
--		writel(0xFF, siic->base + SIRFSOC_I2C_SDA_DELAY);
--	else
--		writel(regval, siic->base + SIRFSOC_I2C_SDA_DELAY);
--
--	err = i2c_add_numbered_adapter(adap);
--	if (err < 0)
--		goto out;
--
--	clk_disable(clk);
--
--	dev_info(&pdev->dev, " I2C adapter ready to operate\n");
+-	platform_set_drvdata(pdev, dev);
+-	dev_info(&pdev->dev, "ST DDC I2C @ %p, irq %d\n",
+-		 dev->virtbase, dev->irq);
 -
 -	return 0;
--
--out:
--	clk_disable(clk);
--err_clk_en:
--	clk_unprepare(clk);
--err_clk_prep:
--	clk_put(clk);
--err_get_clk:
--	return err;
 -}
 -
--static int i2c_sirfsoc_remove(struct platform_device *pdev)
+-#ifdef CONFIG_PM_SLEEP
+-static int stu300_suspend(struct device *device)
 -{
--	struct i2c_adapter *adapter = platform_get_drvdata(pdev);
--	struct sirfsoc_i2c *siic = adapter->algo_data;
+-	struct stu300_dev *dev = dev_get_drvdata(device);
 -
--	writel(SIRFSOC_I2C_RESET, siic->base + SIRFSOC_I2C_CTRL);
--	i2c_del_adapter(adapter);
--	clk_unprepare(siic->clk);
--	clk_put(siic->clk);
+-	/* Turn off everything */
+-	stu300_wr8(0x00, dev->virtbase + I2C_CR);
 -	return 0;
 -}
 -
--#ifdef CONFIG_PM
--static int i2c_sirfsoc_suspend(struct device *dev)
+-static int stu300_resume(struct device *device)
 -{
--	struct i2c_adapter *adapter = dev_get_drvdata(dev);
--	struct sirfsoc_i2c *siic = adapter->algo_data;
+-	int ret = 0;
+-	struct stu300_dev *dev = dev_get_drvdata(device);
 -
--	clk_enable(siic->clk);
--	siic->sda_delay = readl(siic->base + SIRFSOC_I2C_SDA_DELAY);
--	siic->clk_div = readl(siic->base + SIRFSOC_I2C_CLK_CTRL);
--	clk_disable(siic->clk);
--	return 0;
+-	clk_enable(dev->clk);
+-	ret = stu300_init_hw(dev);
+-	clk_disable(dev->clk);
+-
+-	if (ret != 0)
+-		dev_err(device, "error re-initializing hardware.\n");
+-	return ret;
 -}
 -
--static int i2c_sirfsoc_resume(struct device *dev)
--{
--	struct i2c_adapter *adapter = dev_get_drvdata(dev);
--	struct sirfsoc_i2c *siic = adapter->algo_data;
--
--	clk_enable(siic->clk);
--	writel(SIRFSOC_I2C_RESET, siic->base + SIRFSOC_I2C_CTRL);
--	while (readl(siic->base + SIRFSOC_I2C_CTRL) & SIRFSOC_I2C_RESET)
--		cpu_relax();
--	writel(SIRFSOC_I2C_CORE_EN | SIRFSOC_I2C_MASTER_MODE,
--		siic->base + SIRFSOC_I2C_CTRL);
--	writel(siic->clk_div, siic->base + SIRFSOC_I2C_CLK_CTRL);
--	writel(siic->sda_delay, siic->base + SIRFSOC_I2C_SDA_DELAY);
--	clk_disable(siic->clk);
--	return 0;
--}
--
--static const struct dev_pm_ops i2c_sirfsoc_pm_ops = {
--	.suspend = i2c_sirfsoc_suspend,
--	.resume = i2c_sirfsoc_resume,
--};
+-static SIMPLE_DEV_PM_OPS(stu300_pm, stu300_suspend, stu300_resume);
+-#define STU300_I2C_PM	(&stu300_pm)
+-#else
+-#define STU300_I2C_PM	NULL
 -#endif
 -
--static const struct of_device_id sirfsoc_i2c_of_match[] = {
--	{ .compatible = "sirf,prima2-i2c", },
+-static int stu300_remove(struct platform_device *pdev)
+-{
+-	struct stu300_dev *dev = platform_get_drvdata(pdev);
+-
+-	i2c_del_adapter(&dev->adapter);
+-	/* Turn off everything */
+-	stu300_wr8(0x00, dev->virtbase + I2C_CR);
+-	return 0;
+-}
+-
+-static const struct of_device_id stu300_dt_match[] = {
+-	{ .compatible = "st,ddci2c" },
 -	{},
 -};
--MODULE_DEVICE_TABLE(of, sirfsoc_i2c_of_match);
+-MODULE_DEVICE_TABLE(of, stu300_dt_match);
 -
--static struct platform_driver i2c_sirfsoc_driver = {
+-static struct platform_driver stu300_i2c_driver = {
 -	.driver = {
--		.name = "sirfsoc_i2c",
--#ifdef CONFIG_PM
--		.pm = &i2c_sirfsoc_pm_ops,
--#endif
--		.of_match_table = sirfsoc_i2c_of_match,
+-		.name	= NAME,
+-		.pm	= STU300_I2C_PM,
+-		.of_match_table = stu300_dt_match,
 -	},
--	.probe = i2c_sirfsoc_probe,
--	.remove = i2c_sirfsoc_remove,
--};
--module_platform_driver(i2c_sirfsoc_driver);
+-	.probe = stu300_probe,
+-	.remove = stu300_remove,
 -
--MODULE_DESCRIPTION("SiRF SoC I2C master controller driver");
--MODULE_AUTHOR("Zhiwu Song <Zhiwu.Song@csr.com>");
--MODULE_AUTHOR("Xiangzhen Ye <Xiangzhen.Ye@csr.com>");
--MODULE_LICENSE("GPL v2");
+-};
+-
+-static int __init stu300_init(void)
+-{
+-	return platform_driver_register(&stu300_i2c_driver);
+-}
+-
+-static void __exit stu300_exit(void)
+-{
+-	platform_driver_unregister(&stu300_i2c_driver);
+-}
+-
+-/*
+- * The systems using this bus often have very basic devices such
+- * as regulators on the I2C bus, so this needs to be loaded early.
+- * Therefore it is registered in the subsys_initcall().
+- */
+-subsys_initcall(stu300_init);
+-module_exit(stu300_exit);
+-
+-MODULE_AUTHOR("Linus Walleij <linus.walleij@stericsson.com>");
+-MODULE_DESCRIPTION("ST Micro DDC I2C adapter (" NAME ")");
+-MODULE_LICENSE("GPL");
+-MODULE_ALIAS("platform:" NAME);
 -- 
 2.29.2
 
