@@ -2,56 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 019822FE74D
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Jan 2021 11:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 028922FE986
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Jan 2021 13:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728517AbhAUKPW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Jan 2021 05:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728708AbhAUJrt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Jan 2021 04:47:49 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998C9C061575;
-        Thu, 21 Jan 2021 01:47:31 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id b5so1050428wrr.10;
-        Thu, 21 Jan 2021 01:47:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=yKc5i0pAM0tVHvQhN0nKtZMVSNkJgO1BmOAhXjVUe9U=;
-        b=jIYHon01Ye/54nu5CwPQAQ1eytx++CbmX92yv5dAYqEzAk0u6CSuQBswvAjb0XZdjc
-         /OS/PSaOUHTY1TJq6dp1oPKEGQeCSRw6NJw73BzzcQqQep3Xbru5wnL0mRUjYcB2nd2M
-         HUC7yB3w6wJFnLcFHlIbh7Ppm8ILeqye9tIFD2kFAyi9xIhMwUwk/1FJ7AtsJxeEnO72
-         FO+HTjnEz/9GUR1c8OwVuO04P54NRbYIkws+lqSHxuyBPIz2Doi6LlBDJadZnb8RHkML
-         xfkza48hXgIx5aVxKUAIBrgKqzPCK47T8+XgbVSqQo7zftiSAtInnyeaZ1JbVTsl9DJT
-         mRZA==
+        id S1730560AbhAUL7p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Jan 2021 06:59:45 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:42838 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728846AbhAUL7f (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Jan 2021 06:59:35 -0500
+Received: by mail-ot1-f41.google.com with SMTP id f6so1319644ots.9;
+        Thu, 21 Jan 2021 03:59:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=yKc5i0pAM0tVHvQhN0nKtZMVSNkJgO1BmOAhXjVUe9U=;
-        b=bWHH2iFPNcPCMju5nj88bv4k8A9wCNEg3F3bZx2ywYjijEfVRYP1OHjpOPmK/W733W
-         CwOJiJ+AOrUfyKgkUO/QO0ZD3op0ddBnhHucs6XmHEuDq+LjoyJhiacw+fgev8H6Nlbs
-         Ch9milkC5dJ4nAB4hfmWXOePbrYwJTuJc6TIl1/HC9qNiqwYvFFY8Bon9+36eMymr2e6
-         bdLvyCu/dX08Y9VGDa0CCgtvOUCW+z5aICrhtn/L7twxZo+KZ4OvB78p/zAHblQ7F2ed
-         YCYAzX+mLpl7KYsyf57esTcoNBnSyIeAfvJBVa8m3ruNq8AM/P5jEvODeaXMhxXD+5M8
-         5bRw==
-X-Gm-Message-State: AOAM530wFjzXsY3SHlgz85modexMT00GJ25fHhXWWjDE5RgKibDoY6V3
-        jKd1Mmk7sa9/w8ESl4MNj/U=
-X-Google-Smtp-Source: ABdhPJwjt1eJ+KrHwe5acgIBFhZjuKePkobn9OcmLVCO2pB2kKBCZs08qinTPDkGKYdcEneH3v0nqA==
-X-Received: by 2002:adf:902a:: with SMTP id h39mr13230023wrh.147.1611222450386;
-        Thu, 21 Jan 2021 01:47:30 -0800 (PST)
-Received: from [192.168.1.211] ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id u5sm8350654wmg.9.2021.01.21.01.47.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jan 2021 01:47:29 -0800 (PST)
-Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent
- acpi_devices
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LMQpWTlwXlB+6DhuZpRPyd2/2y3TLAjilyG8Sg/pBQ4=;
+        b=tbYRWno+wlZxOIOXoc2efdBECq/zwJxHZz1DYSHEeo+FGar5goxcUjpkxY3rGtxCeJ
+         fVg67s99LYEEctteoTQ+xRmZ3ewBDg4T4lUF4yAREJRFr0j/N8K/m/YKAKg2Vgc4xbB6
+         iEVO+UGhc8mKZ1xM7xdgDSchClUVeQvpsGbqXUDHcwMgPpX9d9Rg1GlCmDCq7u9jU954
+         GxnGuhfllwcvkfjkEuB+oYpodG9Xwyf9ROKGbVu1hHbGJ70bSXqdT5FOjD44ps9ysPA1
+         HgTK8dCXKw1DEhDwBAclb7jJtK0cuW7IsUemF0WzulbJavAPHbzIAKaiD3dCOikBTzAj
+         r6Rg==
+X-Gm-Message-State: AOAM53133IraZqjTiy30MFqRAaPr71tvh56qzkH6t7K4zJmFvIJ8+FjT
+        QFRQ/pwpkIz00imBdtTk60g7XAsjdeAn19ik9eo=
+X-Google-Smtp-Source: ABdhPJzUXT3Qcu1MEek/JIy1QokhzlIz+1Z889izuguqO0chtBSEj4LHKA87+uH8We9MoxEatFnak9b3i0z82NlULJU=
+X-Received: by 2002:a9d:1710:: with SMTP id i16mr9965157ota.260.1611230334235;
+ Thu, 21 Jan 2021 03:58:54 -0800 (PST)
+MIME-Version: 1.0
+References: <20210118003428.568892-1-djrscally@gmail.com> <20210118003428.568892-3-djrscally@gmail.com>
+ <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com>
+ <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com> <CAJZ5v0iU2m4Hs6APuauQ645DwbjYaB8nJFjYH0+7yQnR-FPZBQ@mail.gmail.com>
+ <e2d7e5e9-920f-7227-76a6-b166e30e11e5@gmail.com>
+In-Reply-To: <e2d7e5e9-920f-7227-76a6-b166e30e11e5@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 21 Jan 2021 12:58:43 +0100
+Message-ID: <CAJZ5v0gg5oXG3yOO9iDvPKSsadYrFojW6JcKfZcQbFFpO78zAQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent acpi_devices
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
@@ -71,58 +61,50 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>
-References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-3-djrscally@gmail.com>
- <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com>
- <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com>
- <CAJZ5v0iU2m4Hs6APuauQ645DwbjYaB8nJFjYH0+7yQnR-FPZBQ@mail.gmail.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <e2d7e5e9-920f-7227-76a6-b166e30e11e5@gmail.com>
-Date:   Thu, 21 Jan 2021 09:47:28 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0iU2m4Hs6APuauQ645DwbjYaB8nJFjYH0+7yQnR-FPZBQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rafael
-
-On 19/01/2021 13:15, Rafael J. Wysocki wrote:
-> On Mon, Jan 18, 2021 at 9:51 PM Daniel Scally <djrscally@gmail.com> wrote:
->> On 18/01/2021 16:14, Rafael J. Wysocki wrote:
->>> On Mon, Jan 18, 2021 at 1:37 AM Daniel Scally <djrscally@gmail.com> wrote:
->>>> In some ACPI tables we encounter, devices use the _DEP method to assert
->>>> a dependence on other ACPI devices as opposed to the OpRegions that the
->>>> specification intends. We need to be able to find those devices "from"
->>>> the dependee, so add a function to parse all ACPI Devices and check if
->>>> the include the handle of the dependee device in their _DEP buffer.
->>> What exactly do you need this for?
->> So, in our DSDT we have devices with _HID INT3472, plus sensors which
->> refer to those INT3472's in their _DEP method. The driver binds to the
->> INT3472 device, we need to find the sensors dependent on them.
->>
-> Well, this is an interesting concept. :-)
+On Thu, Jan 21, 2021 at 10:47 AM Daniel Scally <djrscally@gmail.com> wrote:
 >
-> Why does _DEP need to be used for that?  Isn't there any other way to
-> look up the dependent sensors?
+> Hi Rafael
 >
->>> Would it be practical to look up the suppliers in acpi_dep_list instead?
->>>
->>> Note that supplier drivers may remove entries from there, but does
->>> that matter for your use case?
->> Ah - that may work, yes. Thank you, let me test that.
-> Even if that doesn't work right away, but it can be made work, I would
-> very much prefer that to the driver parsing _DEP for every device in
-> the namespace by itself.
+> On 19/01/2021 13:15, Rafael J. Wysocki wrote:
+> > On Mon, Jan 18, 2021 at 9:51 PM Daniel Scally <djrscally@gmail.com> wrote:
+> >> On 18/01/2021 16:14, Rafael J. Wysocki wrote:
+> >>> On Mon, Jan 18, 2021 at 1:37 AM Daniel Scally <djrscally@gmail.com> wrote:
+> >>>> In some ACPI tables we encounter, devices use the _DEP method to assert
+> >>>> a dependence on other ACPI devices as opposed to the OpRegions that the
+> >>>> specification intends. We need to be able to find those devices "from"
+> >>>> the dependee, so add a function to parse all ACPI Devices and check if
+> >>>> the include the handle of the dependee device in their _DEP buffer.
+> >>> What exactly do you need this for?
+> >> So, in our DSDT we have devices with _HID INT3472, plus sensors which
+> >> refer to those INT3472's in their _DEP method. The driver binds to the
+> >> INT3472 device, we need to find the sensors dependent on them.
+> >>
+> > Well, this is an interesting concept. :-)
+> >
+> > Why does _DEP need to be used for that?  Isn't there any other way to
+> > look up the dependent sensors?
+> >
+> >>> Would it be practical to look up the suppliers in acpi_dep_list instead?
+> >>>
+> >>> Note that supplier drivers may remove entries from there, but does
+> >>> that matter for your use case?
+> >> Ah - that may work, yes. Thank you, let me test that.
+> > Even if that doesn't work right away, but it can be made work, I would
+> > very much prefer that to the driver parsing _DEP for every device in
+> > the namespace by itself.
+>
+>
+> This does work; do you prefer it in scan.c, or in utils.c (in which case
+> with acpi_dep_list declared as external var in internal.h)?
 
+Let's put it in scan.c for now, because there is the lock protecting
+the list in there too.
 
-This does work; do you prefer it in scan.c, or in utils.c (in which case
-with acpi_dep_list declared as external var in internal.h)?
-
-
-
+How do you want to implement this?  Something like "walk the list and
+run a callback for the matching entries" or do you have something else
+in mind?
