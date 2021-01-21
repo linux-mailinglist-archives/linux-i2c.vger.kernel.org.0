@@ -2,740 +2,227 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C83B72FF6D7
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Jan 2021 22:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2812FF6CA
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Jan 2021 22:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727069AbhAUVJP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Jan 2021 16:09:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S1727380AbhAUVHM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Jan 2021 16:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727457AbhAUU6P (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Jan 2021 15:58:15 -0500
-Received: from antares.kleine-koenig.org (antares.kleine-koenig.org [IPv6:2a01:4f8:c0c:3a97::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1768C0613D6;
-        Thu, 21 Jan 2021 12:57:22 -0800 (PST)
-Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
-        id CF593AD8EB4; Thu, 21 Jan 2021 21:48:22 +0100 (CET)
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pau Oliva Fora <pof@eslack.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hannes Reinecke <hare@suse.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: [PATCH v1 2/2] isa: Make the remove callback for isa drivers return void
-Date:   Thu, 21 Jan 2021 21:48:12 +0100
-Message-Id: <20210121204812.402589-3-uwe@kleine-koenig.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210121204812.402589-1-uwe@kleine-koenig.org>
-References: <20210121204812.402589-1-uwe@kleine-koenig.org>
+        with ESMTP id S1726530AbhAUVGt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Jan 2021 16:06:49 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C34C0613D6;
+        Thu, 21 Jan 2021 13:06:08 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id q7so3081583wre.13;
+        Thu, 21 Jan 2021 13:06:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=c32MJxHbMXKIzSN7o1VmWc7TXb9b5e1CGXL5LOjwT6g=;
+        b=u4djjoC9hSNDXFyCd/ImL8m1DEWuw8KUuPgFO4phIYc7TOTB4CPy+dLgKxjevXx5mT
+         aMDyGnjPAbpkNoz0XiEu1zkYimth4y6ArIV6H2SfbowC+6byq4OvFu5Wb8irSEEPzC5s
+         ChEql7/rDpn97TdjI8DAiFkTWaMWOfkSeQyAI70Tfm2EoN8crnvZiL0IiayzLCm45GjT
+         ki+OV8OG6dB1C/BZCYmEhG3ve23znznRaL3Sc7a4LKQDcXH+mgJaC8/DKhFeB/GJICM3
+         OtAquWWmeL0gjKWo6uNRBPgh17Qm9UVJBPq8mPuXHWCMrZwOY4OvyN0gA/Krbv0V7TJ+
+         XvGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=c32MJxHbMXKIzSN7o1VmWc7TXb9b5e1CGXL5LOjwT6g=;
+        b=g1NQiNlZiJlRRMxj93JRs0N5hd+NtSqYKxF5OOZ8UEUb4Z48tPfFaxUG9o0sRdijGa
+         r11XhPAZOP9NhXtakUDGtB7vqlS8A/L7362IyaxD+Zz/JsCT1vJm6ihhT6J41h0lLVwl
+         KSRNe2XD6o18nIA+gmTiKK9T3a4V0YVLHH7xdSdaBnZC7muJngD0OuX8JYTYAfeGiv32
+         mxFNOXA6u+7CN3s0dV6v9SdSGe1Phhb0s3Pd4zGRpBVSFpoX+QTTQ1sbt1Xf6pbL+JNL
+         5KTLh5ZCYk6x68fK3viEzqn7ijBuFGyIw2x9IaolBgTAEfp0he7y6azesP2t4SGQiHE7
+         2F3w==
+X-Gm-Message-State: AOAM532Fp5ElwFkaJlPEhv6LGoZECY0OKyHj/ILLMdfRBpAHYJlxzpOx
+        ps4vA/iX4dveTB+hALo6e/U=
+X-Google-Smtp-Source: ABdhPJyvMM67co17b2bl8bFHYOAqV+64lTyRfq/UMtWF4DXtiVki1RKalX7zaoMBeipjrKk8oZCZwg==
+X-Received: by 2002:adf:ba49:: with SMTP id t9mr1251120wrg.183.1611263167561;
+        Thu, 21 Jan 2021 13:06:07 -0800 (PST)
+Received: from [192.168.1.211] ([2.29.208.120])
+        by smtp.gmail.com with ESMTPSA id a130sm9049021wmf.4.2021.01.21.13.06.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jan 2021 13:06:06 -0800 (PST)
+Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent
+ acpi_devices
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, andy@kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+References: <20210118003428.568892-1-djrscally@gmail.com>
+ <20210118003428.568892-3-djrscally@gmail.com>
+ <CAJZ5v0gVQsZ4rxXW8uMidW9zfY_S50zpfrL-Gq0J3Z4-qqBiww@mail.gmail.com>
+ <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com>
+ <CAJZ5v0iU2m4Hs6APuauQ645DwbjYaB8nJFjYH0+7yQnR-FPZBQ@mail.gmail.com>
+ <e2d7e5e9-920f-7227-76a6-b166e30e11e5@gmail.com>
+ <CAJZ5v0gg5oXG3yOO9iDvPKSsadYrFojW6JcKfZcQbFFpO78zAQ@mail.gmail.com>
+ <85ccf00d-7c04-b1da-a4bc-82c805df69c9@gmail.com>
+ <CAJZ5v0jO9O1zhBMNRNB5kRt1o86BTjr1kRuFUe=nNVTDwBQhEg@mail.gmail.com>
+ <0fac24d2-e8fc-7dc8-0f2f-44c7aadb1daf@gmail.com>
+ <CAJZ5v0jVxMMGh6k-vXeBRsCtD0L14poNUrg4kZOpCfOz2sZGZQ@mail.gmail.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <ee8f6b58-55c8-e0a0-c161-bdef361f9e0a@gmail.com>
+Date:   Thu, 21 Jan 2021 21:06:05 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <CAJZ5v0jVxMMGh6k-vXeBRsCtD0L14poNUrg4kZOpCfOz2sZGZQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The driver core ignores the return value of the remove callback, so
-don't give isa drivers the chance to provide a value.
 
-Adapt all isa_drivers with a remove callbacks accordingly; they all
-return 0 unconditionally anyhow.
+On 21/01/2021 18:08, Rafael J. Wysocki wrote:
+> On Thu, Jan 21, 2021 at 5:34 PM Daniel Scally <djrscally@gmail.com> wrote:
+>>
+>> On 21/01/2021 14:39, Rafael J. Wysocki wrote:
+>>> On Thu, Jan 21, 2021 at 1:04 PM Daniel Scally <djrscally@gmail.com> wrote:
+>>>> On 21/01/2021 11:58, Rafael J. Wysocki wrote:
+>>>>> On Thu, Jan 21, 2021 at 10:47 AM Daniel Scally <djrscally@gmail.com> wrote:
+>>>>>> Hi Rafael
+>>>>>>
+>>>>>> On 19/01/2021 13:15, Rafael J. Wysocki wrote:
+>>>>>>> On Mon, Jan 18, 2021 at 9:51 PM Daniel Scally <djrscally@gmail.com> wrote:
+>>>>>>>> On 18/01/2021 16:14, Rafael J. Wysocki wrote:
+>>>>>>>>> On Mon, Jan 18, 2021 at 1:37 AM Daniel Scally <djrscally@gmail.com> wrote:
+>>>>>>>>>> In some ACPI tables we encounter, devices use the _DEP method to assert
+>>>>>>>>>> a dependence on other ACPI devices as opposed to the OpRegions that the
+>>>>>>>>>> specification intends. We need to be able to find those devices "from"
+>>>>>>>>>> the dependee, so add a function to parse all ACPI Devices and check if
+>>>>>>>>>> the include the handle of the dependee device in their _DEP buffer.
+>>>>>>>>> What exactly do you need this for?
+>>>>>>>> So, in our DSDT we have devices with _HID INT3472, plus sensors which
+>>>>>>>> refer to those INT3472's in their _DEP method. The driver binds to the
+>>>>>>>> INT3472 device, we need to find the sensors dependent on them.
+>>>>>>>>
+>>>>>>> Well, this is an interesting concept. :-)
+>>>>>>>
+>>>>>>> Why does _DEP need to be used for that?  Isn't there any other way to
+>>>>>>> look up the dependent sensors?
+>>>>>>>
+>>>>>>>>> Would it be practical to look up the suppliers in acpi_dep_list instead?
+>>>>>>>>>
+>>>>>>>>> Note that supplier drivers may remove entries from there, but does
+>>>>>>>>> that matter for your use case?
+>>>>>>>> Ah - that may work, yes. Thank you, let me test that.
+>>>>>>> Even if that doesn't work right away, but it can be made work, I would
+>>>>>>> very much prefer that to the driver parsing _DEP for every device in
+>>>>>>> the namespace by itself.
+>>>>>> This does work; do you prefer it in scan.c, or in utils.c (in which case
+>>>>>> with acpi_dep_list declared as external var in internal.h)?
+>>>>> Let's put it in scan.c for now, because there is the lock protecting
+>>>>> the list in there too.
+>>>>>
+>>>>> How do you want to implement this?  Something like "walk the list and
+>>>>> run a callback for the matching entries" or do you have something else
+>>>>> in mind?
+>>>> Something like this (though with a mutex_lock()). It could be simplified
+>>>> by dropping the prev stuff, but we have seen INT3472 devices with
+>>>> multiple sensors declaring themselves dependent on the same device
+>>>>
+>>>>
+>>>> struct acpi_device *
+>>>> acpi_dev_get_next_dependent_dev(struct acpi_device *supplier,
+>>>>                 struct acpi_device *prev)
+>>>> {
+>>>>     struct acpi_dep_data *dep;
+>>>>     struct acpi_device *adev;
+>>>>     int ret;
+>>>>
+>>>>     if (!supplier)
+>>>>         return ERR_PTR(-EINVAL);
+>>>>
+>>>>     if (prev) {
+>>>>         /*
+>>>>          * We need to find the previous device in the list, so we know
+>>>>          * where to start iterating from.
+>>>>          */
+>>>>         list_for_each_entry(dep, &acpi_dep_list, node)
+>>>>             if (dep->consumer == prev->handle &&
+>>>>                 dep->supplier == supplier->handle)
+>>>>                 break;
+>>>>
+>>>>         dep = list_next_entry(dep, node);
+>>>>     } else {
+>>>>         dep = list_first_entry(&acpi_dep_list, struct acpi_dep_data,
+>>>>                        node);
+>>>>     }
+>>>>
+>>>>
+>>>>     list_for_each_entry_from(dep, &acpi_dep_list, node) {
+>>>>         if (dep->supplier == supplier->handle) {
+>>>>             ret = acpi_bus_get_device(dep->consumer, &adev);
+>>>>             if (ret)
+>>>>                 return ERR_PTR(ret);
+>>>>
+>>>>             return adev;
+>>>>         }
+>>>>     }
+>>>>
+>>>>     return NULL;
+>>>> }
+>>> That would work I think, but would it be practical to modify
+>>> acpi_walk_dep_device_list() so that it runs a callback for every
+>>> consumer found instead of or in addition to the "delete from the list
+>>> and free the entry" operation?
+>>
+>> I think that this would work fine, if that's the way you want to go.
+>> We'd just need to move everything inside the if (dep->supplier ==
+>> handle) block to a new callback, and for my purposes I think also add a
+>> way to stop parsing the list from the callback (so like have the
+>> callbacks return int and stop parsing on a non-zero return). Do you want
+>> to expose that ability to pass a callback outside of ACPI?
+> Yes.
+>
+>> Or just export helpers to call each of the callbacks (one to fetch the next
+>> dependent device, one to decrement the unmet dependencies counter)
+> If you can run a callback for every matching entry, you don't really
+> need to have a callback to return the next matching entry.  You can do
+> stuff for all of them in one go
 
-Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
----
- drivers/base/isa.c                   | 2 +-
- drivers/i2c/busses/i2c-elektor.c     | 4 +---
- drivers/i2c/busses/i2c-pca-isa.c     | 4 +---
- drivers/input/touchscreen/htcpen.c   | 4 +---
- drivers/media/radio/radio-sf16fmr2.c | 4 +---
- drivers/net/can/sja1000/tscan1.c     | 4 +---
- drivers/net/ethernet/3com/3c509.c    | 3 +--
- drivers/scsi/advansys.c              | 3 +--
- drivers/scsi/aha1542.c               | 3 +--
- drivers/scsi/fdomain_isa.c           | 3 +--
- drivers/scsi/g_NCR5380.c             | 3 +--
- drivers/watchdog/pcwd.c              | 4 +---
- include/linux/isa.h                  | 2 +-
- sound/isa/ad1848/ad1848.c            | 3 +--
- sound/isa/adlib.c                    | 3 +--
- sound/isa/cmi8328.c                  | 3 +--
- sound/isa/cmi8330.c                  | 3 +--
- sound/isa/cs423x/cs4231.c            | 3 +--
- sound/isa/cs423x/cs4236.c            | 3 +--
- sound/isa/es1688/es1688.c            | 3 +--
- sound/isa/es18xx.c                   | 3 +--
- sound/isa/galaxy/galaxy.c            | 3 +--
- sound/isa/gus/gusclassic.c           | 3 +--
- sound/isa/gus/gusextreme.c           | 3 +--
- sound/isa/gus/gusmax.c               | 3 +--
- sound/isa/gus/interwave.c            | 3 +--
- sound/isa/msnd/msnd_pinnacle.c       | 3 +--
- sound/isa/opl3sa2.c                  | 3 +--
- sound/isa/opti9xx/miro.c             | 3 +--
- sound/isa/opti9xx/opti92x-ad1848.c   | 3 +--
- sound/isa/sb/jazz16.c                | 3 +--
- sound/isa/sb/sb16.c                  | 3 +--
- sound/isa/sb/sb8.c                   | 3 +--
- sound/isa/sc6000.c                   | 3 +--
- sound/isa/sscape.c                   | 3 +--
- sound/isa/wavefront/wavefront.c      | 3 +--
- 36 files changed, 36 insertions(+), 76 deletions(-)
+Well it my case it's more to return a pointer to the dep->consumer's
+acpi_device for a matching entry, so my idea was where there's multiple
+dependents you could use this as an iterator...but it could just be
+extended to that if needed later; I don't actually need to do it right now.
 
-diff --git a/drivers/base/isa.c b/drivers/base/isa.c
-index 2772f5d1948a..aa4737667026 100644
---- a/drivers/base/isa.c
-+++ b/drivers/base/isa.c
-@@ -51,7 +51,7 @@ static int isa_bus_remove(struct device *dev)
- 	struct isa_driver *isa_driver = dev->platform_data;
- 
- 	if (isa_driver && isa_driver->remove)
--		return isa_driver->remove(dev, to_isa_dev(dev)->id);
-+		isa_driver->remove(dev, to_isa_dev(dev)->id);
- 
- 	return 0;
- }
-diff --git a/drivers/i2c/busses/i2c-elektor.c b/drivers/i2c/busses/i2c-elektor.c
-index 140426db28df..b72a3c3ef2ab 100644
---- a/drivers/i2c/busses/i2c-elektor.c
-+++ b/drivers/i2c/busses/i2c-elektor.c
-@@ -282,7 +282,7 @@ static int elektor_probe(struct device *dev, unsigned int id)
- 	return -ENODEV;
- }
- 
--static int elektor_remove(struct device *dev, unsigned int id)
-+static void elektor_remove(struct device *dev, unsigned int id)
- {
- 	i2c_del_adapter(&pcf_isa_ops);
- 
-@@ -298,8 +298,6 @@ static int elektor_remove(struct device *dev, unsigned int id)
- 		iounmap(base_iomem);
- 		release_mem_region(base, 2);
- 	}
--
--	return 0;
- }
- 
- static struct isa_driver i2c_elektor_driver = {
-diff --git a/drivers/i2c/busses/i2c-pca-isa.c b/drivers/i2c/busses/i2c-pca-isa.c
-index f27bc1e55385..85e8cf58e8bf 100644
---- a/drivers/i2c/busses/i2c-pca-isa.c
-+++ b/drivers/i2c/busses/i2c-pca-isa.c
-@@ -161,7 +161,7 @@ static int pca_isa_probe(struct device *dev, unsigned int id)
- 	return -ENODEV;
- }
- 
--static int pca_isa_remove(struct device *dev, unsigned int id)
-+static void pca_isa_remove(struct device *dev, unsigned int id)
- {
- 	i2c_del_adapter(&pca_isa_ops);
- 
-@@ -170,8 +170,6 @@ static int pca_isa_remove(struct device *dev, unsigned int id)
- 		free_irq(irq, &pca_isa_ops);
- 	}
- 	release_region(base, IO_SIZE);
--
--	return 0;
- }
- 
- static struct isa_driver pca_isa_driver = {
-diff --git a/drivers/input/touchscreen/htcpen.c b/drivers/input/touchscreen/htcpen.c
-index 2f261a34f9c2..056ba76087e8 100644
---- a/drivers/input/touchscreen/htcpen.c
-+++ b/drivers/input/touchscreen/htcpen.c
-@@ -171,7 +171,7 @@ static int htcpen_isa_probe(struct device *dev, unsigned int id)
- 	return err;
- }
- 
--static int htcpen_isa_remove(struct device *dev, unsigned int id)
-+static void htcpen_isa_remove(struct device *dev, unsigned int id)
- {
- 	struct input_dev *htcpen_dev = dev_get_drvdata(dev);
- 
-@@ -182,8 +182,6 @@ static int htcpen_isa_remove(struct device *dev, unsigned int id)
- 	release_region(HTCPEN_PORT_INDEX, 2);
- 	release_region(HTCPEN_PORT_INIT, 1);
- 	release_region(HTCPEN_PORT_IRQ_CLEAR, 1);
--
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/drivers/media/radio/radio-sf16fmr2.c b/drivers/media/radio/radio-sf16fmr2.c
-index 0388894cfe41..d0dde55b7930 100644
---- a/drivers/media/radio/radio-sf16fmr2.c
-+++ b/drivers/media/radio/radio-sf16fmr2.c
-@@ -293,11 +293,9 @@ static void fmr2_remove(struct fmr2 *fmr2)
- 	kfree(fmr2);
- }
- 
--static int fmr2_isa_remove(struct device *pdev, unsigned int ndev)
-+static void fmr2_isa_remove(struct device *pdev, unsigned int ndev)
- {
- 	fmr2_remove(dev_get_drvdata(pdev));
--
--	return 0;
- }
- 
- static void fmr2_pnp_remove(struct pnp_dev *pdev)
-diff --git a/drivers/net/can/sja1000/tscan1.c b/drivers/net/can/sja1000/tscan1.c
-index 6ea802c66124..3dbba8d61afb 100644
---- a/drivers/net/can/sja1000/tscan1.c
-+++ b/drivers/net/can/sja1000/tscan1.c
-@@ -159,7 +159,7 @@ static int tscan1_probe(struct device *dev, unsigned id)
- 	return -ENXIO;
- }
- 
--static int tscan1_remove(struct device *dev, unsigned id /*unused*/)
-+static void tscan1_remove(struct device *dev, unsigned id /*unused*/)
- {
- 	struct net_device *netdev;
- 	struct sja1000_priv *priv;
-@@ -179,8 +179,6 @@ static int tscan1_remove(struct device *dev, unsigned id /*unused*/)
- 	release_region(pld_base, TSCAN1_PLD_SIZE);
- 
- 	free_sja1000dev(netdev);
--
--	return 0;
- }
- 
- static struct isa_driver tscan1_isa_driver = {
-diff --git a/drivers/net/ethernet/3com/3c509.c b/drivers/net/ethernet/3com/3c509.c
-index 667f38c9e4c6..53e1f7e07959 100644
---- a/drivers/net/ethernet/3com/3c509.c
-+++ b/drivers/net/ethernet/3com/3c509.c
-@@ -335,12 +335,11 @@ static int el3_isa_match(struct device *pdev, unsigned int ndev)
- 	return 1;
- }
- 
--static int el3_isa_remove(struct device *pdev,
-+static void el3_isa_remove(struct device *pdev,
- 				    unsigned int ndev)
- {
- 	el3_device_remove(pdev);
- 	dev_set_drvdata(pdev, NULL);
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
-index 79830e77afa9..b1e97f75b0ba 100644
---- a/drivers/scsi/advansys.c
-+++ b/drivers/scsi/advansys.c
-@@ -11459,12 +11459,11 @@ static int advansys_isa_probe(struct device *dev, unsigned int id)
- 	return err;
- }
- 
--static int advansys_isa_remove(struct device *dev, unsigned int id)
-+static void advansys_isa_remove(struct device *dev, unsigned int id)
- {
- 	int ioport = _asc_def_iop_base[id];
- 	advansys_release(dev_get_drvdata(dev));
- 	release_region(ioport, ASC_IOADR_GAP);
--	return 0;
- }
- 
- static struct isa_driver advansys_isa_driver = {
-diff --git a/drivers/scsi/aha1542.c b/drivers/scsi/aha1542.c
-index dc5667afeb27..e0d8cca1c70b 100644
---- a/drivers/scsi/aha1542.c
-+++ b/drivers/scsi/aha1542.c
-@@ -1025,12 +1025,11 @@ static int aha1542_isa_match(struct device *pdev, unsigned int ndev)
- 	return 1;
- }
- 
--static int aha1542_isa_remove(struct device *pdev,
-+static void aha1542_isa_remove(struct device *pdev,
- 				    unsigned int ndev)
- {
- 	aha1542_release(dev_get_drvdata(pdev));
- 	dev_set_drvdata(pdev, NULL);
--	return 0;
- }
- 
- static struct isa_driver aha1542_isa_driver = {
-diff --git a/drivers/scsi/fdomain_isa.c b/drivers/scsi/fdomain_isa.c
-index e0cdcd2003d0..2b4280a43a53 100644
---- a/drivers/scsi/fdomain_isa.c
-+++ b/drivers/scsi/fdomain_isa.c
-@@ -175,7 +175,7 @@ static int fdomain_isa_param_match(struct device *dev, unsigned int ndev)
- 	return 1;
- }
- 
--static int fdomain_isa_remove(struct device *dev, unsigned int ndev)
-+static void fdomain_isa_remove(struct device *dev, unsigned int ndev)
- {
- 	struct Scsi_Host *sh = dev_get_drvdata(dev);
- 	int base = sh->io_port;
-@@ -183,7 +183,6 @@ static int fdomain_isa_remove(struct device *dev, unsigned int ndev)
- 	fdomain_destroy(sh);
- 	release_region(base, FDOMAIN_REGION_SIZE);
- 	dev_set_drvdata(dev, NULL);
--	return 0;
- }
- 
- static struct isa_driver fdomain_isa_driver = {
-diff --git a/drivers/scsi/g_NCR5380.c b/drivers/scsi/g_NCR5380.c
-index 2df2f38a9b12..7ba3c9312731 100644
---- a/drivers/scsi/g_NCR5380.c
-+++ b/drivers/scsi/g_NCR5380.c
-@@ -720,12 +720,11 @@ static int generic_NCR5380_isa_match(struct device *pdev, unsigned int ndev)
- 	return 1;
- }
- 
--static int generic_NCR5380_isa_remove(struct device *pdev,
-+static void generic_NCR5380_isa_remove(struct device *pdev,
--                                      unsigned int ndev)
-+				       unsigned int ndev)
- {
- 	generic_NCR5380_release_resources(dev_get_drvdata(pdev));
- 	dev_set_drvdata(pdev, NULL);
--	return 0;
- }
- 
- static struct isa_driver generic_NCR5380_isa_driver = {
-diff --git a/drivers/watchdog/pcwd.c b/drivers/watchdog/pcwd.c
-index b95cd38f3ceb..a793b03a785d 100644
---- a/drivers/watchdog/pcwd.c
-+++ b/drivers/watchdog/pcwd.c
-@@ -951,7 +951,7 @@ static int pcwd_isa_probe(struct device *dev, unsigned int id)
- 	return ret;
- }
- 
--static int pcwd_isa_remove(struct device *dev, unsigned int id)
-+static void pcwd_isa_remove(struct device *dev, unsigned int id)
- {
- 	if (debug >= DEBUG)
- 		pr_debug("pcwd_isa_remove id=%d\n", id);
-@@ -968,8 +968,6 @@ static int pcwd_isa_remove(struct device *dev, unsigned int id)
- 			(pcwd_private.revision == PCWD_REVISION_A) ? 2 : 4);
- 	pcwd_private.io_addr = 0x0000;
- 	cards_found--;
--
--	return 0;
- }
- 
- static void pcwd_isa_shutdown(struct device *dev, unsigned int id)
-diff --git a/include/linux/isa.h b/include/linux/isa.h
-index 41336da0f4e7..e30963190968 100644
---- a/include/linux/isa.h
-+++ b/include/linux/isa.h
-@@ -13,7 +13,7 @@
- struct isa_driver {
- 	int (*match)(struct device *, unsigned int);
- 	int (*probe)(struct device *, unsigned int);
--	int (*remove)(struct device *, unsigned int);
-+	void (*remove)(struct device *, unsigned int);
- 	void (*shutdown)(struct device *, unsigned int);
- 	int (*suspend)(struct device *, unsigned int, pm_message_t);
- 	int (*resume)(struct device *, unsigned int);
-diff --git a/sound/isa/ad1848/ad1848.c b/sound/isa/ad1848/ad1848.c
-index 593c6e959afe..48f7cc57c3da 100644
---- a/sound/isa/ad1848/ad1848.c
-+++ b/sound/isa/ad1848/ad1848.c
-@@ -118,10 +118,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_ad1848_remove(struct device *dev, unsigned int n)
-+static void snd_ad1848_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/adlib.c b/sound/isa/adlib.c
-index 5105524b6f38..e6cd7c4da38e 100644
---- a/sound/isa/adlib.c
-+++ b/sound/isa/adlib.c
-@@ -97,10 +97,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_adlib_remove(struct device *dev, unsigned int n)
-+static void snd_adlib_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_adlib_driver = {
-diff --git a/sound/isa/cmi8328.c b/sound/isa/cmi8328.c
-index faca5dd95bfe..3b9fbb02864b 100644
---- a/sound/isa/cmi8328.c
-+++ b/sound/isa/cmi8328.c
-@@ -403,7 +403,7 @@ static int snd_cmi8328_probe(struct device *pdev, unsigned int ndev)
- 	return err;
- }
- 
--static int snd_cmi8328_remove(struct device *pdev, unsigned int dev)
-+static void snd_cmi8328_remove(struct device *pdev, unsigned int dev)
- {
- 	struct snd_card *card = dev_get_drvdata(pdev);
- 	struct snd_cmi8328 *cmi = card->private_data;
-@@ -420,7 +420,6 @@ static int snd_cmi8328_remove(struct device *pdev, unsigned int dev)
- 	snd_cmi8328_cfg_write(cmi->port, CFG2, 0);
- 	snd_cmi8328_cfg_write(cmi->port, CFG3, 0);
- 	snd_card_free(card);
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/cmi8330.c b/sound/isa/cmi8330.c
-index 4669eb0cc8ce..19e258527d69 100644
---- a/sound/isa/cmi8330.c
-+++ b/sound/isa/cmi8330.c
-@@ -631,11 +631,10 @@ static int snd_cmi8330_isa_probe(struct device *pdev,
- 	return 0;
- }
- 
--static int snd_cmi8330_isa_remove(struct device *devptr,
-+static void snd_cmi8330_isa_remove(struct device *devptr,
- 				  unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/cs423x/cs4231.c b/sound/isa/cs423x/cs4231.c
-index 2135963eba78..383ee621cea1 100644
---- a/sound/isa/cs423x/cs4231.c
-+++ b/sound/isa/cs423x/cs4231.c
-@@ -135,10 +135,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_cs4231_remove(struct device *dev, unsigned int n)
-+static void snd_cs4231_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/cs423x/cs4236.c b/sound/isa/cs423x/cs4236.c
-index fa3c39cff5f8..24688271e73f 100644
---- a/sound/isa/cs423x/cs4236.c
-+++ b/sound/isa/cs423x/cs4236.c
-@@ -487,11 +487,10 @@ static int snd_cs423x_isa_probe(struct device *pdev,
- 	return 0;
- }
- 
--static int snd_cs423x_isa_remove(struct device *pdev,
-+static void snd_cs423x_isa_remove(struct device *pdev,
- 				 unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(pdev));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/es1688/es1688.c b/sound/isa/es1688/es1688.c
-index 64610571a5e1..d99bb3f8f0c1 100644
---- a/sound/isa/es1688/es1688.c
-+++ b/sound/isa/es1688/es1688.c
-@@ -192,10 +192,9 @@ static int snd_es1688_isa_probe(struct device *dev, unsigned int n)
- 	return error;
- }
- 
--static int snd_es1688_isa_remove(struct device *dev, unsigned int n)
-+static void snd_es1688_isa_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_es1688_driver = {
-diff --git a/sound/isa/es18xx.c b/sound/isa/es18xx.c
-index 5f8d7e8a5477..9beef8079177 100644
---- a/sound/isa/es18xx.c
-+++ b/sound/isa/es18xx.c
-@@ -2210,11 +2210,10 @@ static int snd_es18xx_isa_probe(struct device *pdev, unsigned int dev)
- 	}
- }
- 
--static int snd_es18xx_isa_remove(struct device *devptr,
--				 unsigned int dev)
-+static void snd_es18xx_isa_remove(struct device *devptr,
-+				  unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/galaxy/galaxy.c b/sound/isa/galaxy/galaxy.c
-index 65f9f46c9f58..d33d69f29924 100644
---- a/sound/isa/galaxy/galaxy.c
-+++ b/sound/isa/galaxy/galaxy.c
-@@ -608,10 +608,9 @@ static int snd_galaxy_probe(struct device *dev, unsigned int n)
- 	return err;
- }
- 
--static int snd_galaxy_remove(struct device *dev, unsigned int n)
-+static void snd_galaxy_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_galaxy_driver = {
-diff --git a/sound/isa/gus/gusclassic.c b/sound/isa/gus/gusclassic.c
-index 7419b1939754..015f88a11352 100644
---- a/sound/isa/gus/gusclassic.c
-+++ b/sound/isa/gus/gusclassic.c
-@@ -195,10 +195,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_gusclassic_remove(struct device *dev, unsigned int n)
-+static void snd_gusclassic_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_gusclassic_driver = {
-diff --git a/sound/isa/gus/gusextreme.c b/sound/isa/gus/gusextreme.c
-index ed2f9d64efae..c9f31b4fb887 100644
---- a/sound/isa/gus/gusextreme.c
-+++ b/sound/isa/gus/gusextreme.c
-@@ -324,10 +324,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_gusextreme_remove(struct device *dev, unsigned int n)
-+static void snd_gusextreme_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_gusextreme_driver = {
-diff --git a/sound/isa/gus/gusmax.c b/sound/isa/gus/gusmax.c
-index 05cd9be4dd8a..dc09fbd6f88d 100644
---- a/sound/isa/gus/gusmax.c
-+++ b/sound/isa/gus/gusmax.c
-@@ -338,10 +338,9 @@ static int snd_gusmax_probe(struct device *pdev, unsigned int dev)
- 	return err;
- }
- 
--static int snd_gusmax_remove(struct device *devptr, unsigned int dev)
-+static void snd_gusmax_remove(struct device *devptr, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #define DEV_NAME "gusmax"
-diff --git a/sound/isa/gus/interwave.c b/sound/isa/gus/interwave.c
-index 3e9ad930deae..e4d412e72b75 100644
---- a/sound/isa/gus/interwave.c
-+++ b/sound/isa/gus/interwave.c
-@@ -825,10 +825,9 @@ static int snd_interwave_isa_probe(struct device *pdev,
- 	}
- }
- 
--static int snd_interwave_isa_remove(struct device *devptr, unsigned int dev)
-+static void snd_interwave_isa_remove(struct device *devptr, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- static struct isa_driver snd_interwave_driver = {
-diff --git a/sound/isa/msnd/msnd_pinnacle.c b/sound/isa/msnd/msnd_pinnacle.c
-index 24b34ecf5e5b..69647b41300d 100644
---- a/sound/isa/msnd/msnd_pinnacle.c
-+++ b/sound/isa/msnd/msnd_pinnacle.c
-@@ -1049,10 +1049,9 @@ static int snd_msnd_isa_probe(struct device *pdev, unsigned int idx)
- #endif
- }
- 
--static int snd_msnd_isa_remove(struct device *pdev, unsigned int dev)
-+static void snd_msnd_isa_remove(struct device *pdev, unsigned int dev)
- {
- 	snd_msnd_unload(dev_get_drvdata(pdev));
--	return 0;
- }
- 
- static struct isa_driver snd_msnd_driver = {
-diff --git a/sound/isa/opl3sa2.c b/sound/isa/opl3sa2.c
-index 85a181acd388..7649a8a4128d 100644
---- a/sound/isa/opl3sa2.c
-+++ b/sound/isa/opl3sa2.c
-@@ -878,11 +878,10 @@ static int snd_opl3sa2_isa_probe(struct device *pdev,
- 	return 0;
- }
- 
--static int snd_opl3sa2_isa_remove(struct device *devptr,
-+static void snd_opl3sa2_isa_remove(struct device *devptr,
- 				  unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/opti9xx/miro.c b/sound/isa/opti9xx/miro.c
-index 44ed1b65f6ce..20933342f5eb 100644
---- a/sound/isa/opti9xx/miro.c
-+++ b/sound/isa/opti9xx/miro.c
-@@ -1480,11 +1480,10 @@ static int snd_miro_isa_probe(struct device *devptr, unsigned int n)
- 	return 0;
- }
- 
--static int snd_miro_isa_remove(struct device *devptr,
-+static void snd_miro_isa_remove(struct device *devptr,
- 			       unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #define DEV_NAME "miro"
-diff --git a/sound/isa/opti9xx/opti92x-ad1848.c b/sound/isa/opti9xx/opti92x-ad1848.c
-index 881d3b5711d2..758f5b579138 100644
---- a/sound/isa/opti9xx/opti92x-ad1848.c
-+++ b/sound/isa/opti9xx/opti92x-ad1848.c
-@@ -1024,11 +1024,10 @@ static int snd_opti9xx_isa_probe(struct device *devptr,
- 	return 0;
- }
- 
--static int snd_opti9xx_isa_remove(struct device *devptr,
--				  unsigned int dev)
-+static void snd_opti9xx_isa_remove(struct device *devptr,
-+				   unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/sb/jazz16.c b/sound/isa/sb/jazz16.c
-index ee379bbf70a4..0e2e0ab3b9e4 100644
---- a/sound/isa/sb/jazz16.c
-+++ b/sound/isa/sb/jazz16.c
-@@ -339,12 +339,11 @@ static int snd_jazz16_probe(struct device *devptr, unsigned int dev)
- 	return err;
- }
- 
--static int snd_jazz16_remove(struct device *devptr, unsigned int dev)
-+static void snd_jazz16_remove(struct device *devptr, unsigned int dev)
- {
- 	struct snd_card *card = dev_get_drvdata(devptr);
- 
- 	snd_card_free(card);
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/sb/sb16.c b/sound/isa/sb/sb16.c
-index 479197c13803..db284b7b88a7 100644
---- a/sound/isa/sb/sb16.c
-+++ b/sound/isa/sb/sb16.c
-@@ -547,10 +547,9 @@ static int snd_sb16_isa_probe(struct device *pdev, unsigned int dev)
- 	}
- }
- 
--static int snd_sb16_isa_remove(struct device *pdev, unsigned int dev)
-+static void snd_sb16_isa_remove(struct device *pdev, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(pdev));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/sb/sb8.c b/sound/isa/sb/sb8.c
-index 438109f167d6..8e3e67b9a341 100644
---- a/sound/isa/sb/sb8.c
-+++ b/sound/isa/sb/sb8.c
-@@ -192,10 +192,9 @@ static int snd_sb8_probe(struct device *pdev, unsigned int dev)
- 	return err;
- }
- 
--static int snd_sb8_remove(struct device *pdev, unsigned int dev)
-+static void snd_sb8_remove(struct device *pdev, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(pdev));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/sc6000.c b/sound/isa/sc6000.c
-index 3d0bea44f454..def137579717 100644
---- a/sound/isa/sc6000.c
-+++ b/sound/isa/sc6000.c
-@@ -672,7 +672,7 @@ static int snd_sc6000_probe(struct device *devptr, unsigned int dev)
- 	return err;
- }
- 
--static int snd_sc6000_remove(struct device *devptr, unsigned int dev)
-+static void snd_sc6000_remove(struct device *devptr, unsigned int dev)
- {
- 	struct snd_card *card = dev_get_drvdata(devptr);
- 	char __iomem **vport = card->private_data;
-@@ -684,7 +684,6 @@ static int snd_sc6000_remove(struct device *devptr, unsigned int dev)
- 	release_region(mss_port[dev], 4);
- 
- 	snd_card_free(card);
--	return 0;
- }
- 
- static struct isa_driver snd_sc6000_driver = {
-diff --git a/sound/isa/sscape.c b/sound/isa/sscape.c
-index 2e5a5c5279e8..e70ef9aee545 100644
---- a/sound/isa/sscape.c
-+++ b/sound/isa/sscape.c
-@@ -1183,10 +1183,9 @@ static int snd_sscape_probe(struct device *pdev, unsigned int dev)
- 	return ret;
- }
- 
--static int snd_sscape_remove(struct device *devptr, unsigned int dev)
-+static void snd_sscape_remove(struct device *devptr, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #define DEV_NAME "sscape"
-diff --git a/sound/isa/wavefront/wavefront.c b/sound/isa/wavefront/wavefront.c
-index 9e0f6b226775..b750a4fd40de 100644
---- a/sound/isa/wavefront/wavefront.c
-+++ b/sound/isa/wavefront/wavefront.c
-@@ -565,11 +565,10 @@ static int snd_wavefront_isa_probe(struct device *pdev,
- 	return 0;
- }
- 
--static int snd_wavefront_isa_remove(struct device *devptr,
-+static void snd_wavefront_isa_remove(struct device *devptr,
- 				    unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #define DEV_NAME "wavefront"
--- 
-2.29.2
+
+> note that it probably is not a good
+> idea to run the callback under the lock, so the for loop currently in
+> there is not really suitable for that
+
+No problem;  I'll tweak that then
+
+>> Otherwise, I'd just need to update the 5 users of that function either
+>> to use the new helper or else to also pass the decrement dependencies
+>> callback.
+> Or have a wrapper around it passing the decrement dependencies
+> callback for the "typical" users.
+
+
+Yeah that's what I mean by helper; I'll do that then; thanks
 
