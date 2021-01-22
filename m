@@ -2,87 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E55CE2FFEE7
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 10:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E21300338
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 13:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727211AbhAVJAX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Jan 2021 04:00:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55572 "EHLO mail.kernel.org"
+        id S1727038AbhAVJY7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Jan 2021 04:24:59 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33964 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727118AbhAVI57 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 22 Jan 2021 03:57:59 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C8D42236F9;
-        Fri, 22 Jan 2021 08:57:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611305838;
-        bh=4WN6WZIW13Le34niPrIRUQdbKEyv4ykFjZJuLrSXaiU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JhSYGN0PghLXGESOCeXh2tkF9iNKbHvDaqdFkKDlU/X+fapCtshs5v5qccX3I8ooi
-         TWEMQS/2Q/DNYCYSY9rifsjlllcaf+opDTNiHSVvDEdPQbZuINrtfjSJCMWdHjDvYJ
-         3PXK6vTAZzilC6pq9sMfmEOuvwQKsHOLq2ouJeTT/4Izo+MCwKI2c1lfb0GudbPrEf
-         W1hFxq7jkNvW4hEAuoV4uOKvPr0EpPuFD2/cWjHRNhP8HiucXqEw+w5VxllIxpjc0V
-         tYNp8XDRRi19KMweFRNWs5pV6l6nkVvszb46x3GtasG+rt7OKc+7htL1dtZDbg7BYT
-         tMrX1uqh7WYAA==
-Date:   Fri, 22 Jan 2021 09:57:15 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH 2/3] i2c: remove u300 bus driver
-Message-ID: <20210122085715.GD858@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20210120132834.2375048-1-arnd@kernel.org>
- <20210120132834.2375048-3-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Xm/fll+QQv+hsKip"
-Content-Disposition: inline
-In-Reply-To: <20210120132834.2375048-3-arnd@kernel.org>
+        id S1727156AbhAVJB6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 22 Jan 2021 04:01:58 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 15E19AEAC;
+        Fri, 22 Jan 2021 09:01:16 +0000 (UTC)
+Date:   Fri, 22 Jan 2021 10:01:15 +0100
+Message-ID: <s5hv9bp8hwk.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <uwe@kleine-koenig.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pau Oliva Fora <pof@eslack.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v1 2/2] isa: Make the remove callback for isa drivers return void
+In-Reply-To: <20210121204812.402589-3-uwe@kleine-koenig.org>
+References: <20210121204812.402589-1-uwe@kleine-koenig.org>
+        <20210121204812.402589-3-uwe@kleine-koenig.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, 21 Jan 2021 21:48:12 +0100,
+Uwe Kleine-König wrote:
+> 
+> The driver core ignores the return value of the remove callback, so
+> don't give isa drivers the chance to provide a value.
+> 
+> Adapt all isa_drivers with a remove callbacks accordingly; they all
+> return 0 unconditionally anyhow.
+> 
+> Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
 
---Xm/fll+QQv+hsKip
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For the sound/* changes:
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
-On Wed, Jan 20, 2021 at 02:28:33PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The ST-Ericsson U300 platform is getting removed, so this driver is no
-> longer needed.
->=20
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Applied to for-next, thanks!
+BTW, how will we take the patches?
+Judging from the LOCs, sound/* are mostly affected, so I may merge
+them via sound.git tree, if other people have no objection.
 
 
---Xm/fll+QQv+hsKip
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAKk2sACgkQFA3kzBSg
-KbZRvw/+OyljxnUQNMREamklyeMJR02JwAidu/4PEqYdquzIA3hgLXGqi20iyOs0
-eV/DBJDZIZekazTWX+kJBChu284tXDhz5pO2Yh7F15RbZJyrvTRWSnpsY4tfBICL
-sGglvz/djBnA66li63iOFwJeudxIU23sKVfTSA6v0iq6384mtgu2dJFIPjZV1Yi4
-JnaJhPEcO3RPnH5uUUKW9mqTt5Imt4AoVkJLeF4b65+xJWyeDzs7UOgyALvSrd9J
-BRc5vRVyZCpzAyk0lr4P9vy9STFdVrt3rB+hP1V9VPLT8luK2JMZn8kgxrVdNI+0
-+dUwOhUK2X2gRrsyFceZF7l8WRoLnE3srE5BU9+U3NeQdc096Uh7wqRxdVxa6g4D
-PEPqMkhXAiCBmJrs6bDZTg1J7EwK7NNZjElNRw4Npuftz/Ne416Z06qncny1a4hj
-pZPQVLOYKVYE1V+oLqHn4hhsE7olTWNWXqFhGvAaYTktIHjjiWTajQATMlyGb3HB
-ub6Qv74/yHg29czwHMlzRnOpqpGosdo7zS7vBFqmU8yLs2Ccsmn19KabAl5Md3um
-FZ8FY+JB8qP10hlt6e2z3yttUJ061Fr3iY58q48178VHk+s8VEBy51Ne4eoGrr+0
-nop5C1q8v3e6jRzF0maSRynlmSv04LSX+222NJRvNohRkXtHQAw=
-=nwUW
------END PGP SIGNATURE-----
-
---Xm/fll+QQv+hsKip--
+Takashi
