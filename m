@@ -2,116 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CED2FFD75
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 08:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617D62FFEBB
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 09:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbhAVHgD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Jan 2021 02:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727056AbhAVHf5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Jan 2021 02:35:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD311C06178A
-        for <linux-i2c@vger.kernel.org>; Thu, 21 Jan 2021 23:35:16 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l2qxq-0007E4-Mh; Fri, 22 Jan 2021 08:34:38 +0100
-Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:aed1:e241:8b32:9cc0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9F94B5CA50A;
-        Fri, 22 Jan 2021 07:34:32 +0000 (UTC)
-Date:   Fri, 22 Jan 2021 08:34:31 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pau Oliva Fora <pof@eslack.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hannes Reinecke <hare@suse.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v1 2/2] isa: Make the remove callback for isa drivers
- return void
-Message-ID: <20210122073431.a3igyqh3rucmiy5y@hardanger.blackshift.org>
-References: <20210121204812.402589-1-uwe@kleine-koenig.org>
- <20210121204812.402589-3-uwe@kleine-koenig.org>
+        id S1726057AbhAVIxM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Jan 2021 03:53:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54696 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726794AbhAVIxA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 22 Jan 2021 03:53:00 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1B3BC20739;
+        Fri, 22 Jan 2021 08:52:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611305534;
+        bh=i5K8PRu8K6SDis824K4FHNiulT02/Qmgs0OXLuaS/uE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sq6xb8Rqea0Bx8nd2o1FnlhwaLa8KazFhw3Lwf7w6zyWHbkUFatkbT0QVOgsxApX4
+         /xwaGeLgw6PgvPRxjsJR59ifS3byh486NC91OCFn9AKDefORyLyTj3mFgYo46c++sl
+         Y+PSIko4dMUfylrzjDF57lgFvxn8VSyF5V/UoeKxQ11QRxflpgHkl4dAbKRfJYfO3g
+         l5yGALbYsLUNQwW3UmmSiyBMbmy35e3BjfGMP1k6G7/TDrmB4O3LWZsAVxs1rdrMcT
+         ag54nHZBOPU9vlXsXW0x2xWyh+dh7M1B7DkLsiOIXcJHWYwNq4X9zlmoZL9ILlOqyc
+         7JC7696HPoJbg==
+Date:   Fri, 22 Jan 2021 09:52:09 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     linux@rempel-privat.de, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, linux-i2c@vger.kernel.org,
+        Sascha Hauer <sha@pengutronix.de>
+Subject: Re: [PATCH] Revert "i2c: imx: Remove unused .id_table support"
+Message-ID: <20210122085209.GA858@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>, linux@rempel-privat.de,
+        s.hauer@pengutronix.de, kernel@pengutronix.de,
+        linux-i2c@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>
+References: <20210120024123.2534329-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zjvnr6y4kfwj4bce"
+        protocol="application/pgp-signature"; boundary="Kj7319i9nmIyA2yE"
 Content-Disposition: inline
-In-Reply-To: <20210121204812.402589-3-uwe@kleine-koenig.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20210120024123.2534329-1-festevam@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---zjvnr6y4kfwj4bce
-Content-Type: text/plain; charset=utf-8
+--Kj7319i9nmIyA2yE
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 21, 2021 at 09:48:12PM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> The driver core ignores the return value of the remove callback, so
-> don't give isa drivers the chance to provide a value.
+On Tue, Jan 19, 2021 at 11:41:23PM -0300, Fabio Estevam wrote:
+> Coldfire platforms are non-DT users of this driver, so
+> keep the .id_table support.
 >=20
-> Adapt all isa_drivers with a remove callbacks accordingly; they all
-> return 0 unconditionally anyhow.
+> This reverts commit c610199cd392e6e2d41811ef83d85355c1b862b3.
 >=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org>
-> ---
->  drivers/net/can/sja1000/tscan1.c     | 4 +---
+> Fixes: c610199cd392 (i2c: imx: Remove unused .id_table support")
+> Reported-by: Sascha Hauer <sha@pengutronix.de>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-For the can driver:
+Applied to for-current, thanks! imx21 could be removed, though.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---zjvnr6y4kfwj4bce
+--Kj7319i9nmIyA2yE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAKgAUACgkQqclaivrt
-76nKFwf/Qh+ytJZ22nqfhmCPbPHzMEovze0rf40PzuBbydukQ2E77J1a91Ol+M6I
-1ETmnULm8kVPDDxAcJDMCpVjyMJxgwLzxAFUbO/AXMpj94QvNurQZQfJvFSuDDIi
-b8bMue+b3+Bir9bDAQW+GAfmyMa6ARm5kpQFvnnMvLOerD9r3iPfMvMFmAM3tlpJ
-QBlvhC3avamtLNyYuNZUDq4Mq8AqsJOHy+0GHptbO7JGN6TS7tkuUo4blKU4XI2j
-JizmoGti3M6q+jHuUDOnLpHh6JDaetW68A+M4ggQIhoFVEvbS93ROd8v7exaUwrK
-f/iFuhnPc/++doJnCc4XvQg1N02pYA==
-=HgrA
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAKkjUACgkQFA3kzBSg
+KbYyCQ/8CFL0ldLzcmKPoCvPXj+93W1eswHMD2eqXW9ayHfJQWrmptkzKblsLWN6
+0NyRCmlj12PRxrh4T09juS6vGChnw+fS9ilTyIOOg8XZePelQGPPySkU5AL+jl73
+M7INQqjhwglFSLIUn9HFk/BHitIDIHlvMDixU9y1rRI0IMrHE/WBcRi8RcPXBBih
+JJU3EkAo/n88pDxzjfFNsYQPiUUhWCKmO3Y7/MnoUpasGvMKGQsT76SDK/pE7oFI
+zAEdtMO+yO5ZdgpMzhYH7EpSIQNJfFLJjD7pSaavFylJ/KpodQFnzyZKRIoyvm8Z
+KoWzfIhYOxY+aN6sHEb1YBRgraKa5RXUANg6cKIREqQX4z3qNdVuI8qIC+7pGYUo
+z/K8rOxSTMJvs+6rkxmnDTAnMrrA/2k3O+5NR28MlBDEOiZ+82KTh+dIK7SPqOwO
+yZe5FB4TVFbXZU73VchsLpljxmbsUtMsnCXFUzcvOzkWx1ORlvCMimfr4ZqCBBQ6
+txIHAluWWeHGUUP7mqfb3A4wyjYxreGAQfLrMWABwSpCluW7skRi+N1f0EP7OnmR
+TQUx5gMujp83ybilNYRouG9UTvgYY5BquoV589OJ1Mvv9vtua8/tIvFPZummafii
+olKlOL0/MYovr4KJ0cC4POpaVTI+XM1Nqzv2ijW2k8dYIl4fKbc=
+=D999
 -----END PGP SIGNATURE-----
 
---zjvnr6y4kfwj4bce--
+--Kj7319i9nmIyA2yE--
