@@ -2,82 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 404E8300CE0
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 20:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46210300F4B
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 22:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728567AbhAVTsu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Jan 2021 14:48:50 -0500
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:38538 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730531AbhAVT0F (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Jan 2021 14:26:05 -0500
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@nvidia.com)
-        with SMTP; 22 Jan 2021 21:25:13 +0200
-Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 10MJP4vF019220;
-        Fri, 22 Jan 2021 21:25:13 +0200
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     peda@axentia.se, wsa@the-dreams.de
-Cc:     linux-i2c@vger.kernel.org, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH i2c-next v2 7/7] i2c: mux: mlxcpld: Add callback to notify mux creation completion
-Date:   Fri, 22 Jan 2021 21:25:02 +0200
-Message-Id: <20210122192502.17645-8-vadimp@nvidia.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20210122192502.17645-1-vadimp@nvidia.com>
-References: <20210122192502.17645-1-vadimp@nvidia.com>
+        id S1730617AbhAVVwU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Jan 2021 16:52:20 -0500
+Received: from mail.padangpariamankab.go.id ([103.94.3.123]:40924 "EHLO
+        mail.padangpariamankab.go.id" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730365AbhAVVv4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Jan 2021 16:51:56 -0500
+X-Greylist: delayed 2959 seconds by postgrey-1.27 at vger.kernel.org; Fri, 22 Jan 2021 16:50:43 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mail.padangpariamankab.go.id (Postfix) with ESMTP id 3E68F6E6C72;
+        Sat, 23 Jan 2021 03:48:10 +0700 (WIB)
+Received: from mail.padangpariamankab.go.id ([127.0.0.1])
+        by localhost (mail.padangpariamankab.go.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id kBGXOQypupm6; Sat, 23 Jan 2021 03:48:09 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.padangpariamankab.go.id (Postfix) with ESMTP id 294CB6E6C77;
+        Sat, 23 Jan 2021 03:48:09 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.padangpariamankab.go.id 294CB6E6C77
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=padangpariamankab.go.id; s=D2C6CDEC-3607-11EA-BC8A-EEDE4AB8B776;
+        t=1611348489; bh=4AhSoXRU63EAbbOwseUY/pxjidGey07DskAQ7pZ9AvE=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=HThFhYOADhRCtO5N541vi9Gyg7fJmmutk/OT2THWWyfJ95sWN76AgwUEgQZtSvKhP
+         x/LxSc8MhKoXFOnNTieirEJIp/EcM8e1Pjx1VBDwhPK07CSOtfO2YNC/YwcDHmyfyz
+         2Lf9drxpZNkkPji5hrUXs8+6FbGouclsglppsLR4=
+X-Virus-Scanned: amavisd-new at padangpariamankab.go.id
+Received: from mail.padangpariamankab.go.id ([127.0.0.1])
+        by localhost (mail.padangpariamankab.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id mxYAXxb3FYdJ; Sat, 23 Jan 2021 03:48:08 +0700 (WIB)
+Received: from mail.padangpariamankab.go.id (mail.padangpariamankab.go.id [103.94.3.123])
+        by mail.padangpariamankab.go.id (Postfix) with ESMTP id B15016E6C6F;
+        Sat, 23 Jan 2021 03:48:05 +0700 (WIB)
+Date:   Sat, 23 Jan 2021 03:48:05 +0700 (WIB)
+From:   GREENLIGHT <rsud@padangpariamankab.go.id>
+Reply-To: "Greenlight Financial Services " <greenlightservices@usa.com>
+Message-ID: <1668595482.19502.1611348485649.JavaMail.zimbra@padangpariamankab.go.id>
+Subject: Update
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [103.94.3.123]
+X-Mailer: Zimbra 8.8.15_GA_3895 (zclient/8.8.15_GA_3895)
+Thread-Index: YwDzoLjYr5wvIyGTK9ZPzksGXyGLMw==
+Thread-Topic: Update
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add notification to inform caller that mux objects array has been
-created. It allows to user, invoked platform device registration for
-"i2c-mux-mlxcpld" driver, to be notified that mux infrastructure is
-available, and thus some devices could be connected to this
-infrastructure.
 
-Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
----
- drivers/i2c/muxes/i2c-mux-mlxcpld.c   | 4 ++++
- include/linux/platform_data/mlxcpld.h | 5 +++++
- 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/i2c/muxes/i2c-mux-mlxcpld.c b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-index 7b37d59dc23b..5e0b910790ce 100644
---- a/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-+++ b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-@@ -162,6 +162,10 @@ static int mlxcpld_mux_probe(struct platform_device *pdev)
- 			goto virt_reg_failed;
- 	}
- 
-+	/* Notify caller when all channels' adapters are created. */
-+	if (pdata->completion_notify)
-+		pdata->completion_notify(pdata->handle, muxc->parent, muxc->adapter);
-+
- 	return 0;
- 
- virt_reg_failed:
-diff --git a/include/linux/platform_data/mlxcpld.h b/include/linux/platform_data/mlxcpld.h
-index a7bee798d991..d7610b528856 100644
---- a/include/linux/platform_data/mlxcpld.h
-+++ b/include/linux/platform_data/mlxcpld.h
-@@ -15,12 +15,17 @@
-  * @num_adaps - number of adapters
-  * @sel_reg_addr - mux select register offset in CPLD space
-  * @reg_size: register size in bytes
-+ * @handle: handle to be passed by callback
-+ * @completion_notify: callback to notify when all the adapters are created
-  */
- struct mlxcpld_mux_plat_data {
- 	int *chan_ids;
- 	int num_adaps;
- 	int sel_reg_addr;
- 	u8 reg_size;
-+	void *handle;
-+	int (*completion_notify)(void *handle, struct i2c_adapter *parent,
-+				 struct i2c_adapter *adapters[]);
- };
- 
- #endif /* _LINUX_I2C_MLXCPLD_H */
--- 
-2.11.0
-
+We offer Reliable/Low Interest Rate Financial Services to Companies & Individuals including; Start-Up Business, Loans & Mortgage ETC. Apply Now
