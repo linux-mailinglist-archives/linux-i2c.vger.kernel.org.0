@@ -2,112 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEDA30033B
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 13:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17E2300300
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 13:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbhAVJZ1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Jan 2021 04:25:27 -0500
-Received: from www.zeus03.de ([194.117.254.33]:50342 "EHLO mail.zeus03.de"
+        id S1726794AbhAVJZ5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Jan 2021 04:25:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59818 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727320AbhAVJKH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 22 Jan 2021 04:10:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=yYGvRI5vU3fWCM5zTsEM9UPJW0uU
-        gsJKQhaglDaenrM=; b=kJqgN858MMfySUKcQZaPyYhlmhOPyH0C5Fa4MrjCB99y
-        GEgZH833rd0HaPgDTAtvOR789ZFd5DCNOz3s8WzRbxkxhuI6ZxwuEug3uvIMZKYt
-        Fcx84FSTMSAsvty5YUZIfvL3rvuIgSqbA+q7ELlR1Z21PYH3ja1PtSxVS/w6FTo=
-Received: (qmail 2271039 invoked from network); 22 Jan 2021 10:02:34 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Jan 2021 10:02:34 +0100
-X-UD-Smtp-Session: l3s3148p1@Itjzcnm5iOkgAwDPXwqqAP3nWBA3ETDu
-Date:   Fri, 22 Jan 2021 10:02:34 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 0/8] i2c: improve RECV_LEN documentation & usage
-Message-ID: <20210122090234.GE858@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20210109124314.27466-1-wsa+renesas@sang-engineering.com>
+        id S1727375AbhAVJRS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 22 Jan 2021 04:17:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 31C9A238D7;
+        Fri, 22 Jan 2021 09:05:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611306318;
+        bh=/74bwbossxmEXhL/OtCPhlJgq4pUOpJzTqb1C+8sR88=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f1UO3T8/luJRanwVum+boxFSVXnz3nDz0/vpJyhx+7qmMR83pYSs5j9kkwga2iX5G
+         IQRwrRPKEJDjYOZYIKG5k6/HsfV+j9O4lnr1BCjd3BzF7W6RnlJPJo2Pyhbu/inpC+
+         cpbSqdmYuvbAsQhbJQzH3gYbl2OcfvUeWYOo4frpKL5DkmrwYhAkqt2veWHRj3nfjk
+         gjxodLhGzbnWIpG/L/d9lfDX+w5Q/l+9AbF3CAX0eq7B0v6oaJo3aGSDmZn1khdj/W
+         WdtAjhkv8xhMNnU8kOmPSrBDk1ANbWxX3Tw+Vrn9+a7ObzAHotRVUzupa9eR0L3K/U
+         bptUehY5uqQbg==
+Date:   Fri, 22 Jan 2021 10:05:15 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] i2c: sprd:: depend on COMMON_CLK to fix compile tests
+Message-ID: <20210122090515.GF858@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20210117114313.141428-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mR8QP4gmHujQHb1c"
+        protocol="application/pgp-signature"; boundary="KJY2Ze80yH5MUxol"
 Content-Disposition: inline
-In-Reply-To: <20210109124314.27466-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20210117114313.141428-1-krzk@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---mR8QP4gmHujQHb1c
+--KJY2Ze80yH5MUxol
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 09, 2021 at 01:43:04PM +0100, Wolfram Sang wrote:
-> Because I want to clarify I2C_M_RECV len usage, this series updates the
-> documentation and some of its users. Patch 1 refactors the whole
-> documentation of 'i2c_msg', so all usage of I2C_M_* flags and their
-> conditions hopefully become clearer. Patch 2+3 remove some obvious
-> boilerplate in the UAPI headers while here. Patch 4 is a driver fix I
-> found while working on this series. Patch 5 introduces a new convenience
-> macro to enable SMBus transfers which need I2C_M_RECV_LEN. Then, some
-> drivers use the new macro, sometimes to remove boilerplate, sometimes
-> because these SMBus transfers have been forgotten before.
+On Sun, Jan 17, 2021 at 12:43:13PM +0100, Krzysztof Kozlowski wrote:
+> The I2C_SPRD uses Common Clock Framework thus it cannot be built on
+> platforms without it (e.g. compile test on MIPS with LANTIQ):
 >=20
-> This series is the first part of a larger work to extend I2C_M_RECV_LEN
-> to allow larger transfer sizes (as specified in the SMBus 3.0 standard)
-> and to enable this on Renesas R-Car hardware.
+>     /usr/bin/mips-linux-gnu-ld: drivers/i2c/busses/i2c-sprd.o: in functio=
+n `sprd_i2c_probe':
+>     i2c-sprd.c:(.text.sprd_i2c_probe+0x254): undefined reference to `clk_=
+set_parent'
 >=20
-> Looking forward to comments and/or reviews; the driver patches are only
-> build-tested.
->=20
-> Happy hacking,
->=20
->    Wolfram
->=20
->=20
-> Wolfram Sang (8):
->   i2c: refactor documentation of struct i2c_msg
->   i2c: remove licence boilerplate from main UAPI header
->   i2c: remove licence boilerplate from i2c-dev UAPI header
->   i2c: octeon: check correct size of maximum RECV_LEN packet
->   i2c: uapi: add macro to describe support for all SMBus transfers
->   i2c: algo: bit: use new macro to specifiy capabilities
->   i2c: qup: advertise SMBus transfers using RECV_LEN
->   i2c: s3c2410: advertise SMBus transfers using RECV_LEN
->=20
->  drivers/i2c/algos/i2c-algo-bit.c     |   4 +-
->  drivers/i2c/busses/i2c-octeon-core.c |   2 +-
->  drivers/i2c/busses/i2c-qup.c         |   2 +-
->  drivers/i2c/busses/i2c-s3c2410.c     |   2 +-
+> Fixes: 4a2d5f663dab ("i2c: Enable compile testing for more drivers")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Applied to for-next, thanks!
+Fixed the "::" in $subject ad applied to for-current, thanks!
 
 
---mR8QP4gmHujQHb1c
+--KJY2Ze80yH5MUxol
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAKlKoACgkQFA3kzBSg
-KbadmxAAgAsFpg45B6cfikhrtCMoQ9WUcg8TTipybmy33IOSiLZCrJ8DpzxkuWr4
-P4AirjpXtJuE/ibNXHGYhBr1AeXqL4jkKjkYkgNvXhvb77XEGwOThF/AVCOUS2Gf
-r0mgLfwF0zs1DTPtFKhX6yrANTmjriMY5uyAaBCIgd5zmo72cH2k8ozasBwQztrc
-rt39OTTt8ZDJonrCfVLUoj6p2YyuYQUNkBDtbQG/v/jxTw2G7CJErFUUXiu7W4R2
-kIJh5pH/aK5NqrUAGS86hmDUoIM6XXyIU5ddtLVBySB558yIWXZ9lgXKnvsw1JGs
-CyyV7x5almZQCSM8jVzSyz8aYpxJluACdJ4cdPojFODwG88cblfime/6olQGDWRF
-cG1LYLFyPpWYQjHi2LMX3YojJZBPFSFhOJF1hM8NjZpqEpS+9ZBWgy3uB+plXcUB
-Hlg9g0RrfufrDAzEomzASaQpYkbCxk6OAyXE50QieOJc5K6mYCSdANrdcQDgdTFR
-q6bv0MaG0xKbbRmTX7idzpstAvdj5mh0aPC13WVY0P5W8qRTsuY8j8splZffaOad
-4vcC3CWlHz/vfisQnCt4TwzqYYI4K0jYW7N+giOW9drP/hstaZXqFwYZnlo53ZV3
-XoisBWQA9qkTrhbvQA+b7E7NJzm4q8ZX+xfi20VlaVZgxg4voEY=
-=H1I2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAKlUsACgkQFA3kzBSg
+KbYOJhAAsP59jLr9jMlMJSvC9UvXTg5KA5JTQQ+yMLtuKXNNsPv2wtPrpmbGFPaF
+wuxSoUrzsQDxoQ6a9hGcq1f/Mg8sP9q8EySXygK97pWAMCJAougTrzFMKZL2w3ca
+Rqx7g7dmIld2D+ftHpfW5PTKTsSy+zRT84O+MIjIbSycK/2IwMkIDZey+JDHNZcn
+lL6tqPC7RNof/uhwC/gx3VKeFHJLALG0+XgrWQNLRfzKgTUytU758/DCpAnuI/y6
+cU+iNm93vCjL43ZTuAfzbgOKicS9f2VsvYCc+yqDPSB6PTwoOZrYQ46seZRTW8y4
+BsStdyvAimlvJMLKtIV5VXLzDKF90IFCnf5+pTE5BV/fB4skT1/Ce8POtH5YlRHE
+z5EGtAHtulMiUqDteXBYMkiCF58Zi2ibfYoycImVUSRgIhgTIIkf285KYdB4pfMo
+xbqE9u2hV+Gqa7aIYoXfdvMTTihxJYBYoCEi4n34TlsQkBG0nHjRD/+RD+v0HShu
+v2XwNz63U220Na7D3+A3jJiHm6tDmVL2AJnIMmKs0D+ysxQgIp2G1hn6U8nO67i7
+EgNl7xcw32C+vVgZNAng/1Q8Y6qA3jqIjkHr/MAkq/tHPDQTyRYPAAWFWMnxciZC
+d7D578LI+qb2M+eNmtyr2gINETawOZLXjgk2ahPbgFssaiMfUfU=
+=q8YR
 -----END PGP SIGNATURE-----
 
---mR8QP4gmHujQHb1c--
+--KJY2Ze80yH5MUxol--
