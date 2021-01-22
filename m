@@ -2,136 +2,181 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BFE2FF6DA
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Jan 2021 22:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF922FF9C4
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 02:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbhAUVLR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Jan 2021 16:11:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S1725819AbhAVBE2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Jan 2021 20:04:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727667AbhAUVJI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Jan 2021 16:09:08 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2479CC061756;
-        Thu, 21 Jan 2021 13:08:28 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id m4so3100127wrx.9;
-        Thu, 21 Jan 2021 13:08:28 -0800 (PST)
+        with ESMTP id S1725283AbhAVBE0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Jan 2021 20:04:26 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D54C06174A;
+        Thu, 21 Jan 2021 17:03:46 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id b8so2275719plh.12;
+        Thu, 21 Jan 2021 17:03:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=OMFMRDIlKBCL9Ohj87OUa8tkrf6G4uCu7Gi4SktmUto=;
-        b=KIp5eccKN5MoF5EXrpEigjcHLx1XdU7pp8SCXjiUMhOP7z30XgYU21ZTTHczLR/j/V
-         JjnhKqS1LUsWLbRXTE4le0QiPC1m3iNG2Fili4MHXGLYx3YVMoOu0bc7sRsN6v+BFMpv
-         UjkckzY8iVFdijAmbxeupjYIL1YnEjAmdVXYIWq0IYB94NdcYmoghMZAnxgWAHGGmkFL
-         pXO/3NlyjnPbCHVv+QktRvMlRkld1BBaQZ2rTQccbzW4J5ify05AH23Rc89B/K/jIJcr
-         O1hOXNLtrjxcpeye37n7r7VVgdCFpW2TV5wdXh9MG4JH7lrRSBbKp/r58QcL0LQQcVPB
-         4h+w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lw4cm+7RXhLgXHhIgHAntQuy6SsZDwNqhL+qH8M4o3Q=;
+        b=XhdA9ei1rorZZbjDB1bxDSifSMzivWAG6Z/YPsqR6QqmUxc6VTdh+WLbjCztj5VjV2
+         Y+dKEpFeuWM2An1Evn24rEmp+5Z1dm7qpRCibEQ+1GbNwX1r9T5/Gx9nSURWWwbIIe2r
+         HfM82xGGVz+LObwR71Pbjpi2+oRPfDZQWmV9/DV6mcUFtH+iaAEuh/XYNUYmanyIPwXg
+         ATzqC2zmij1Tegt2Xv3ZP71dx/wTol+Zu5oxZfoID7vldOsjrt6OxnB20MrihUv46wT5
+         9Qbw8tCFYnUVghfTteSJg3nWRppmB8WPscLwqjlcs2JIeH8v07/c+Q9k08CQy2bIBPMN
+         fXYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=OMFMRDIlKBCL9Ohj87OUa8tkrf6G4uCu7Gi4SktmUto=;
-        b=HEmT3MNZAfLxK3s6N/s2U5X15HRLC6TC6qHYU6vaFfq5hE/vSS3TLqYRZOsNblEST2
-         bIcUu6XRR8MAnEcQuZmqNeGhYWkMJo/FooOSoQ8oSo94myTompW+uR1PNHIwy2mhSDGd
-         ikGKDMMaF6dpFuU/G21h6aCed/oam/yCD906a7xUAOyiltHOSPWeqrdkPdOPV/z9kwQL
-         ojGcKHCSh6Fbxkny+yzW4PIBK0pYzee+2Oy7GE7BX90CFQA4BpRRkMnXdgDJpCD2Hnp4
-         TJdK3/MLRtJsMZCJj01s8DRWdwv6k/wZuIuFsgY1Z4JFFT+O8KkqPC/VTUREuc7iKWbq
-         9jSQ==
-X-Gm-Message-State: AOAM5302hU3OZW0OeaZg1zfiL9O6uyB5SiGyUtUMi7PVnYR6SGUBLG65
-        S5kwXjOM+fwe5ssTkIt9WDA=
-X-Google-Smtp-Source: ABdhPJw3191VKC674udlSDdtZ4NJ1fR1XfdltPOh/9Cz1AcR6fwweuP3nkh4JmZd0P/D8rW7WCg83Q==
-X-Received: by 2002:a05:6000:1374:: with SMTP id q20mr1279024wrz.44.1611263306941;
-        Thu, 21 Jan 2021 13:08:26 -0800 (PST)
-Received: from [192.168.1.211] ([2.29.208.120])
-        by smtp.gmail.com with ESMTPSA id i131sm8816923wmi.25.2021.01.21.13.08.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jan 2021 13:08:26 -0800 (PST)
-Subject: Re: [PATCH v2 6/7] platform: x86: Add intel_skl_int3472 driver
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devel@acpica.org,
-        rjw@rjwysocki.net, lenb@kernel.org, andy@kernel.org,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
-        hdegoede@redhat.com, mgross@linux.intel.com,
-        robert.moore@intel.com, erik.kaneda@intel.com,
-        sakari.ailus@linux.intel.com, kieran.bingham@ideasonboard.com
-References: <20210118003428.568892-1-djrscally@gmail.com>
- <20210118003428.568892-7-djrscally@gmail.com>
- <YAVRqWeUsLjvU62P@pendragon.ideasonboard.com>
- <20210118144606.GO4077@smile.fi.intel.com>
- <75e99a06-4579-44ee-5f20-8f2ee3309a68@gmail.com>
- <1053125f-7cb2-8aa0-3204-24df62986184@gmail.com>
- <20210119093358.GO4077@smile.fi.intel.com>
- <YAcKj9fyNZY8QETd@pendragon.ideasonboard.com>
- <YAcaM9Tcif1rS3V/@smile.fi.intel.com>
- <YAevLTVlUSXMylWL@pendragon.ideasonboard.com>
- <YAgXlgLauIGEe05w@smile.fi.intel.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <837b221d-57ad-88fb-65df-e1cae64f0ad0@gmail.com>
-Date:   Thu, 21 Jan 2021 21:08:25 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lw4cm+7RXhLgXHhIgHAntQuy6SsZDwNqhL+qH8M4o3Q=;
+        b=HOA6o1HkBG9t+R1vfk89GuC6qTiMgzzVu3SmXhDzN4KAbya9dKaKG4hbfPuwMWE4ys
+         43eOuIBhCofQDs5RRUUmSH/z2f+E65fXj2PO8L0tz09PYN0BWklD1fdRpK072oGF0tSV
+         u0l79cdWgkVYu43JHR63hUB64CZZOQ+7an3giSgSVRZTwfTcE1JOq9qMZ5si3ZMc310J
+         mkilybkFgqbaFPXZgcZgQxlS8w7eZ8bPg7mLYOK6Hfn3e8C+bC5rVKOhjHENznj1bTOQ
+         uSPIOIOG7n9ih5TsBfOjKFrjweBEIkUjS4NDWOsmhynG8C2/nrHL5API8E5MP7mqsuw4
+         8i8g==
+X-Gm-Message-State: AOAM530EdHrzRMj3PcYjJvddiszCN0pNQ17jFaEMXmiOGjJw4ETCe5XD
+        gpfrdgajeGNqZW3r4NBKIag=
+X-Google-Smtp-Source: ABdhPJzmb7nke4O74Aga3Has5vmSGhKK4Sa5I6pQqAuiHRHYi6rZ29DGdsXsL8nJ1Ji6VskHwOhaDA==
+X-Received: by 2002:a17:90a:5513:: with SMTP id b19mr2363941pji.99.1611277425889;
+        Thu, 21 Jan 2021 17:03:45 -0800 (PST)
+Received: from shinobu (113x33x126x33.ap113.ftth.ucom.ne.jp. [113.33.126.33])
+        by smtp.gmail.com with ESMTPSA id e3sm6395565pgs.60.2021.01.21.17.03.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jan 2021 17:03:44 -0800 (PST)
+Date:   Fri, 22 Jan 2021 10:03:32 +0900
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pau Oliva Fora <pof@eslack.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v1 0/2] isa: Make the remove callback for isa drivers
+ return void
+Message-ID: <YAokZMNkgVfJ+csC@shinobu>
+References: <20210121204812.402589-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-In-Reply-To: <YAgXlgLauIGEe05w@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PZu/ILMf5FNwdU4R"
+Content-Disposition: inline
+In-Reply-To: <20210121204812.402589-1-uwe@kleine-koenig.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi both
 
-On 20/01/2021 11:44, Andy Shevchenko wrote:
-> On Wed, Jan 20, 2021 at 06:18:53AM +0200, Laurent Pinchart wrote:
->> On Tue, Jan 19, 2021 at 07:43:15PM +0200, Andy Shevchenko wrote:
->>> On Tue, Jan 19, 2021 at 06:36:31PM +0200, Laurent Pinchart wrote:
->>>> On Tue, Jan 19, 2021 at 11:33:58AM +0200, Andy Shevchenko wrote:
->>>>> On Tue, Jan 19, 2021 at 12:11:40AM +0000, Daniel Scally wrote:
->>>>>> On 18/01/2021 21:19, Daniel Scally wrote:
-> ...
->
->>>>> See my previous reply. TL;DR: you have to modify clk-gpio.c to export couple of
->>>>> methods to be able to use it as a library.
->>>> That seems really overkill given the very simple implementation of the
->>>> clock provided here.
->>> Less code in the end is called an overkill? Hmm...
->>> I think since we in Linux it's better to utilize what it provides. Do you want
->>> me to prepare a patch to show that there is no overkill at all?
->> The amount of code we would save it very small. It's not necessarily a
->> bad idea, but I think such an improvement could be made on top, it
->> shouldn't block this series.
-> Okay, let's wait what Dan will say on this.
-> I can probably help to achieve this improvement sooner than later.
+--PZu/ILMf5FNwdU4R
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jan 21, 2021 at 09:48:10PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> Hello,
+>=20
+> as described in the commit log of the 2nd patch returning an error code
+> from a bus' remove callback doesn't make any difference as the driver
+> core ignores it and still considers the device removed.
+>=20
+> So change the remove callback to return void to not give driver authors
+> an incentive to believe they could return an error.
+>=20
+> There is only a single isa driver in the tree (assuming I didn't miss
+> any) that has a remove callback that can return a non zero return code.
+> This is "fixed" in the first patch, to make the second patch more
+> obviously correct.
+>=20
+> Best regards
+> Uwe
+>=20
+> Uwe Kleine-K=C3=B6nig (2):
+>   watchdog: pcwd: drop always-false if from remove callback
+>   isa: Make the remove callback for isa drivers return void
+>=20
+>  drivers/base/isa.c                   | 2 +-
+>  drivers/i2c/busses/i2c-elektor.c     | 4 +---
+>  drivers/i2c/busses/i2c-pca-isa.c     | 4 +---
+>  drivers/input/touchscreen/htcpen.c   | 4 +---
+>  drivers/media/radio/radio-sf16fmr2.c | 4 +---
+>  drivers/net/can/sja1000/tscan1.c     | 4 +---
+>  drivers/net/ethernet/3com/3c509.c    | 3 +--
+>  drivers/scsi/advansys.c              | 3 +--
+>  drivers/scsi/aha1542.c               | 3 +--
+>  drivers/scsi/fdomain_isa.c           | 3 +--
+>  drivers/scsi/g_NCR5380.c             | 3 +--
+>  drivers/watchdog/pcwd.c              | 7 +------
+>  include/linux/isa.h                  | 2 +-
+>  sound/isa/ad1848/ad1848.c            | 3 +--
+>  sound/isa/adlib.c                    | 3 +--
+>  sound/isa/cmi8328.c                  | 3 +--
+>  sound/isa/cmi8330.c                  | 3 +--
+>  sound/isa/cs423x/cs4231.c            | 3 +--
+>  sound/isa/cs423x/cs4236.c            | 3 +--
+>  sound/isa/es1688/es1688.c            | 3 +--
+>  sound/isa/es18xx.c                   | 3 +--
+>  sound/isa/galaxy/galaxy.c            | 3 +--
+>  sound/isa/gus/gusclassic.c           | 3 +--
+>  sound/isa/gus/gusextreme.c           | 3 +--
+>  sound/isa/gus/gusmax.c               | 3 +--
+>  sound/isa/gus/interwave.c            | 3 +--
+>  sound/isa/msnd/msnd_pinnacle.c       | 3 +--
+>  sound/isa/opl3sa2.c                  | 3 +--
+>  sound/isa/opti9xx/miro.c             | 3 +--
+>  sound/isa/opti9xx/opti92x-ad1848.c   | 3 +--
+>  sound/isa/sb/jazz16.c                | 3 +--
+>  sound/isa/sb/sb16.c                  | 3 +--
+>  sound/isa/sb/sb8.c                   | 3 +--
+>  sound/isa/sc6000.c                   | 3 +--
+>  sound/isa/sscape.c                   | 3 +--
+>  sound/isa/wavefront/wavefront.c      | 3 +--
+>  36 files changed, 36 insertions(+), 79 deletions(-)
+>=20
+>=20
+> base-commit: 5a158981aafa7f29709034b17bd007b15cb29983
+> --=20
+> 2.29.2
 
-Well; turns out that we missed an operation we really need to add
-(clk_recalc_rate) which in our case needs to read a fixed value stored
-in a buffer in ACPI; most of the code is shared with an existing
-function in the driver so it's not much extra to add, but I think it
-kinda precludes using clk-gpio for this anyway
+Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
->>>>>> (also, Laurent, if we did it this way we wouldn't be able to also handle
->>>>>> the led-indicator GPIO here without some fairly major rework)
->>>>> LED indicators are done as LED class devices (see plenty of examples in PDx86
->>>>> drivers: drivers/platform/x86/)
->>>> How do you expose the link between the sensor and its indicator LED to
->>>> userspace ? Isn't it better to handle it in the kernel to avoid rogue
->>>> userspace turning the camera on without notifying the user ?
->>> I didn't get this. It's completely a LED handling driver business. We may
->>> expose it to user space or not, but it's orthogonal to the usage of LED class
->>> IIUC. Am I mistaken here?
->> If it stays internal to the kernel and is solely controlled from the
->> int3472 driver, there's no need to involve the LED class. If we want to
->> expose the privacy LED to userspace then the LED framework is the way to
->> go, but we will also need to find a way to expose the link between the
->> camera sensor and the LED to userspace. If there are two privacy LEDs,
->> one for the front sensor and one for the back sensor, userspace will
->> need to know which is which.
-> I see. For now we probably can keep GPIO LED implementation internally.
->
+--PZu/ILMf5FNwdU4R
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmAKJFgACgkQhvpINdm7
+VJLzPQ/9FPQmfnPF1kWcQikWSXr31BdrY/bU1k3tsN3+yIFcnAkjeW5mH5TGysY8
+zpAFfnbdVIMz5er9oBLPRcOztSwitbQeOuLQHNnm5Bf8Vs/BBYahD8iK0Z11CLzU
+NaOcLr3iJYTisqqbPjiadkoKUeCh6vizab5oaZUR/5jn6YvtFX1vB3amb2J0600r
+mNVDoLHL4BnWW40jTxr12OQF/Z27BGaRqUImGhmgUqvLY8WMz79zGTgg4qHYMujs
+MYZxWX9ILt3oXKwFrd58mIcG9cIP9q18ndjkyMdH3sXMMYHPm6vKuVnVHcOjSqBn
+sX0ciA2HizGr7V2o1AhQiU3loQEaE3uHZ1t0te/vEqVRLlWlqSevRdNxxpgNk58Y
+iQe3J72kgc2Pb3009+FpzMMO4MaGfpNTXBeVP9qurmHmaAGBQLAoNxqmSOFnXx7I
+aSmNOW9wTuijQeUWN7WlYGtaRlEldvQlPiPbut8p9M7/5kTkW8GTXxvbJd1ylwwF
+Oxz1NxLAEvJN3NuwPoAkywW930fVXy4JJigSwMjKlc+vXvJgGqGP20HqeHKBxTdE
+GglZQJ0FunBNAYckgJwTqt6A84+wCwZ/5erqRqsJDipn8qcnQ79YiKjh+L4za0QA
+yyItzFeVSsa/lPxJ3OrDiOD2LsTb9hkJhmT5OHPFjwxt++d7KiA=
+=WpSs
+-----END PGP SIGNATURE-----
+
+--PZu/ILMf5FNwdU4R--
