@@ -2,119 +2,178 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E04300305
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 13:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 245F830033C
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Jan 2021 13:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727078AbhAVJ0P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Jan 2021 04:26:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59820 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727376AbhAVJRS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 22 Jan 2021 04:17:18 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 69725239D4;
-        Fri, 22 Jan 2021 09:07:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611306461;
-        bh=nV3I3ct6uOXZdsO/zAKfYmcrv4KNXm6gHX/iiv9UjrQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sYf3PzMCN3IkVyPRGtRZ0mFh/GfcyzepIlbb8ZQltNttPYuxIS2c86dvo2IiVHtYp
-         Q+7SiTXu3Q1qkF4TgXOQPxX/a2Co/tACASDhAjYQyrwCISzoANRK6zfVtL6tVP62qR
-         VSuEDT1VWcoLW0/S+SB7l2cnxK3RlEzD3MdiUz4RHUit3bAU6kl8O068qy6oxDjPZ+
-         uXstxzunYM5+xhpZqcHzVzRuPJEonVwfsahme4d0x9xaF/wSIOtWvdQBAwkJREw7/J
-         ELbT44JxOwU/kLiEKc07cGrgl7zV3uH1NeNl66Ux/8XfieyPgsOu+TIcgHJVrf11i8
-         lQoQGc/CT5rBw==
-Date:   Fri, 22 Jan 2021 10:07:37 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Youling Tang <tangyouling@loongson.cn>
-Cc:     Seth Heasley <seth.heasley@intel.com>,
-        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: ismt: Use dma_set_mask_and_coherent
-Message-ID: <20210122090737.GG858@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Seth Heasley <seth.heasley@intel.com>,
-        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1606978252-26169-1-git-send-email-tangyouling@loongson.cn>
+        id S1727913AbhAVMcL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Jan 2021 07:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727154AbhAVJZj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Jan 2021 04:25:39 -0500
+Received: from antares.kleine-koenig.org (antares.kleine-koenig.org [IPv6:2a01:4f8:c0c:3a97::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452ECC06174A;
+        Fri, 22 Jan 2021 01:24:58 -0800 (PST)
+Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
+        id D74D7AD996A; Fri, 22 Jan 2021 10:24:55 +0100 (CET)
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pau Oliva Fora <pof@eslack.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: [PATCH v2 0/3] isa: Make the remove callback for isa drivers return void
+Date:   Fri, 22 Jan 2021 10:24:46 +0100
+Message-Id: <20210122092449.426097-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qxfKREH7IwbezJ+T"
-Content-Disposition: inline
-In-Reply-To: <1606978252-26169-1-git-send-email-tangyouling@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hello,
 
---qxfKREH7IwbezJ+T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+changes since v1
+(https://lore.kernel.org/r/20210121204812.402589-1-uwe@kleine-koenig.org):
+ - fix build failure, found by the kernel test robot
+   (my grep missed the struct isa_driver embedded in struct
+   radio_isa_driver). For this I introduced patch 2 and adapted patch 3
+   a bit. An interdiff is below.
+ - Added Acks/Reviews by Guenter Roeck, William Breathitt Gray, Marc
+   Kleine-Budde, Wolfram Sang and Takashi Iwai <tiwai@suse.de>
 
-On Thu, Dec 03, 2020 at 02:50:52PM +0800, Youling Tang wrote:
-> 'pci_set_dma_mask()' + 'pci_set_consistent_dma_mask()' can be replaced by
-> an equivalent 'dma_set_mask_and_coherent()' which is much less verbose.
->=20
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+The base-commit I specified (by hand *sigh*) in v1 was broken, must be a
+cut-n-paste-error, sorry for that.
 
-Seth, Neil, are you OK with this patch?
+Takashi suggested to take this series via sound.git given that this is
+the most affected tree. This is fine for me. Otherwise I can also
+provide an immutable branch. For both variants we still need a few acks
+though.
 
-> ---
->=20
-> v3: Fix build errors of incompatible pointer types.
->=20
->  drivers/i2c/busses/i2c-ismt.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
-> index a35a27c..88f6039 100644
-> --- a/drivers/i2c/busses/i2c-ismt.c
-> +++ b/drivers/i2c/busses/i2c-ismt.c
-> @@ -903,16 +903,12 @@ ismt_probe(struct pci_dev *pdev, const struct pci_d=
-evice_id *id)
->  		return -ENODEV;
->  	}
-> =20
-> -	if ((pci_set_dma_mask(pdev, DMA_BIT_MASK(64)) !=3D 0) ||
-> -	    (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(64)) !=3D 0)) {
-> -		if ((pci_set_dma_mask(pdev, DMA_BIT_MASK(32)) !=3D 0) ||
-> -		    (pci_set_consistent_dma_mask(pdev,
-> -						 DMA_BIT_MASK(32)) !=3D 0)) {
-> -			dev_err(&pdev->dev, "pci_set_dma_mask fail %p\n",
-> +	if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64)) !=3D 0)
-> +		if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32)) !=3D 0) {
-> +			dev_err(&pdev->dev, "dma_set_mask_and_coherent fail %p\n",
->  				pdev);
->  			return -ENODEV;
->  		}
-> -	}
-> =20
->  	err =3D ismt_dev_init(priv);
->  	if (err)
-> --=20
-> 2.1.0
->=20
+Best regards
+Uwe
 
---qxfKREH7IwbezJ+T
-Content-Type: application/pgp-signature; name="signature.asc"
+Uwe Kleine-König (3):
+  watchdog: pcwd: drop always-false if from remove callback
+  media/radio: Make radio_isa_common_remove() return void
+  isa: Make the remove callback for isa drivers return void
 
------BEGIN PGP SIGNATURE-----
+ drivers/base/isa.c                   | 2 +-
+ drivers/i2c/busses/i2c-elektor.c     | 4 +---
+ drivers/i2c/busses/i2c-pca-isa.c     | 4 +---
+ drivers/input/touchscreen/htcpen.c   | 4 +---
+ drivers/media/radio/radio-isa.c      | 9 ++++-----
+ drivers/media/radio/radio-isa.h      | 2 +-
+ drivers/media/radio/radio-sf16fmr2.c | 4 +---
+ drivers/net/can/sja1000/tscan1.c     | 4 +---
+ drivers/net/ethernet/3com/3c509.c    | 3 +--
+ drivers/scsi/advansys.c              | 3 +--
+ drivers/scsi/aha1542.c               | 3 +--
+ drivers/scsi/fdomain_isa.c           | 3 +--
+ drivers/scsi/g_NCR5380.c             | 5 ++---
+ drivers/watchdog/pcwd.c              | 7 +------
+ include/linux/isa.h                  | 2 +-
+ sound/isa/ad1848/ad1848.c            | 3 +--
+ sound/isa/adlib.c                    | 3 +--
+ sound/isa/cmi8328.c                  | 3 +--
+ sound/isa/cmi8330.c                  | 3 +--
+ sound/isa/cs423x/cs4231.c            | 3 +--
+ sound/isa/cs423x/cs4236.c            | 3 +--
+ sound/isa/es1688/es1688.c            | 3 +--
+ sound/isa/es18xx.c                   | 5 ++---
+ sound/isa/galaxy/galaxy.c            | 3 +--
+ sound/isa/gus/gusclassic.c           | 3 +--
+ sound/isa/gus/gusextreme.c           | 3 +--
+ sound/isa/gus/gusmax.c               | 3 +--
+ sound/isa/gus/interwave.c            | 3 +--
+ sound/isa/msnd/msnd_pinnacle.c       | 3 +--
+ sound/isa/opl3sa2.c                  | 3 +--
+ sound/isa/opti9xx/miro.c             | 3 +--
+ sound/isa/opti9xx/opti92x-ad1848.c   | 5 ++---
+ sound/isa/sb/jazz16.c                | 3 +--
+ sound/isa/sb/sb16.c                  | 3 +--
+ sound/isa/sb/sb8.c                   | 3 +--
+ sound/isa/sc6000.c                   | 3 +--
+ sound/isa/sscape.c                   | 3 +--
+ sound/isa/wavefront/wavefront.c      | 3 +--
+ 38 files changed, 44 insertions(+), 88 deletions(-)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAKldkACgkQFA3kzBSg
-Kbb6hxAApGjfA14lG697L3sDX0kkV97wifgK3SOXUJuV+JgidPBfeQ6RG6oU5N07
-u+Dfp9SD30HIoG0SxMQYRta6L+JgSZIOPdYqwCGrewCNoFT4qZK2B4P+mMMeGpaC
-XX9br17j5XL5/EKkPTl2M0+1Zhs1+nA612LhrpCAOyUxcdLtvbEMjIkzRt8BXv8w
-S8jzYaEk8NB+uFzW5JQb1GBAGri+VWk4SWOhm9e1HTtVvqcf2z4B/ekC1uGI0lXM
-bRfLe5gnZ2+fy6411IvBaU8yJ8VFtOyQzswsMgerBJ6MYuwd9UtTfhpv74H9Dkjq
-sUWjQLvwwKke8utghJKWiWHmeRQNC+Ihes9RjbFyujGWYrU0vMs2k82iyFElHrUq
-vA9HQYkyuHUVmjT06iVIb8N8zPs+B8DQtLvC567roxYdY5kHRBCbgZDCegPVc3VJ
-IIQLwEt4U4RpQHv0CqDVEp5cQnv+lWtcRkYFwZItw2F4+KTB0Ch+kEtYKZUqv+/k
-nPCltlnpGkDSWloexme5twrs0poKW9GRJipQQezV8bP0kcv5JTitd0vEzLIl6mKf
-gaBs/5qX5p7+ziXmGcMARMzNmPvVUCw7OmzLGddjnEKulECMa1GgdUQ8+6I3oVXT
-moJE/m5qJ1v3DzErmoJtgofD06MeBw4bVYEAsnnpvXR8CUsZDZw=
-=Due/
------END PGP SIGNATURE-----
+Interdiff against v1:
+diff --git a/drivers/media/radio/radio-isa.c b/drivers/media/radio/radio-isa.c
+index ad2ac16ff12d..c591c0851fa2 100644
+--- a/drivers/media/radio/radio-isa.c
++++ b/drivers/media/radio/radio-isa.c
+@@ -273,8 +273,8 @@ static int radio_isa_common_probe(struct radio_isa_card *isa,
+ 	return res;
+ }
+ 
+-static int radio_isa_common_remove(struct radio_isa_card *isa,
+-				   unsigned region_size)
++static void radio_isa_common_remove(struct radio_isa_card *isa,
++				    unsigned region_size)
+ {
+ 	const struct radio_isa_ops *ops = isa->drv->ops;
+ 
+@@ -285,7 +285,6 @@ static int radio_isa_common_remove(struct radio_isa_card *isa,
+ 	release_region(isa->io, region_size);
+ 	v4l2_info(&isa->v4l2_dev, "Removed radio card %s\n", isa->drv->card);
+ 	kfree(isa);
+-	return 0;
+ }
+ 
+ int radio_isa_probe(struct device *pdev, unsigned int dev)
+@@ -338,11 +337,11 @@ int radio_isa_probe(struct device *pdev, unsigned int dev)
+ }
+ EXPORT_SYMBOL_GPL(radio_isa_probe);
+ 
+-int radio_isa_remove(struct device *pdev, unsigned int dev)
++void radio_isa_remove(struct device *pdev, unsigned int dev)
+ {
+ 	struct radio_isa_card *isa = dev_get_drvdata(pdev);
+ 
+-	return radio_isa_common_remove(isa, isa->drv->region_size);
++	radio_isa_common_remove(isa, isa->drv->region_size);
+ }
+ EXPORT_SYMBOL_GPL(radio_isa_remove);
+ 
+diff --git a/drivers/media/radio/radio-isa.h b/drivers/media/radio/radio-isa.h
+index 2f0736edfda8..c9159958203e 100644
+--- a/drivers/media/radio/radio-isa.h
++++ b/drivers/media/radio/radio-isa.h
+@@ -91,7 +91,7 @@ struct radio_isa_driver {
+ 
+ int radio_isa_match(struct device *pdev, unsigned int dev);
+ int radio_isa_probe(struct device *pdev, unsigned int dev);
+-int radio_isa_remove(struct device *pdev, unsigned int dev);
++void radio_isa_remove(struct device *pdev, unsigned int dev);
+ #ifdef CONFIG_PNP
+ int radio_isa_pnp_probe(struct pnp_dev *dev,
+ 			const struct pnp_device_id *dev_id);
 
---qxfKREH7IwbezJ+T--
+base-commit: e609571b5ffa3528bf85292de1ceaddac342bc1c
+-- 
+2.29.2
+
