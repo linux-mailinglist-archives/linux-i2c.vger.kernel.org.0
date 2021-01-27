@@ -2,145 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDC5305894
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Jan 2021 11:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB99A305AC9
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Jan 2021 13:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbhA0Kgr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 Jan 2021 05:36:47 -0500
-Received: from www.zeus03.de ([194.117.254.33]:35950 "EHLO mail.zeus03.de"
+        id S237590AbhA0MGc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 Jan 2021 07:06:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41492 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236008AbhA0Keo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 27 Jan 2021 05:34:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=IkCc9/Qqu1UTg57a2wVwA7B7o72
-        ErswRZruyvfrpbnk=; b=mlwktjANA/vlN0zNSJT1ftpZncHkCd3WhBrND346uyQ
-        kOG/GHofJdbOJRsG1uL2nKifKMEFPVe4K5CHMdYdNZ41R5ohrUroief2cAYn4cEV
-        Sf7WjmHWx5dXruE4362y57+cnck8FdmslrnnpWQK1iIF3EEV0aTdkT1gi2PlUeQA
-        =
-Received: (qmail 4025000 invoked from network); 27 Jan 2021 11:34:00 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Jan 2021 11:34:00 +0100
-X-UD-Smtp-Session: l3s3148p1@stomT9+5br0gAwDPXyX1AEdA8SGgn5QT
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-media@vger.kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH v2] media: i2c: adv7511: remove open coded version of SMBus block read
-Date:   Wed, 27 Jan 2021 11:33:57 +0100
-Message-Id: <20210127103357.5045-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.28.0
+        id S237582AbhA0MDx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 27 Jan 2021 07:03:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1227220773;
+        Wed, 27 Jan 2021 12:03:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1611748991;
+        bh=s9FyWRqQBYLlzUUdBkv3FZQxudbP70KKsuwRkeHWHEI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M8giB4ORvL3mx55LaDcj1/tIi+BhFJb4mO4m9pyBQqvZIwgP2vqkgkDOQ4I1vn8HH
+         U8aP648RT1pUgCmU92gSCKiLyN0XGWtBCyfjACVz8RiJzgpFsPQ6OWW77wlJfo28NM
+         bwp9LYhhA6QMhnElnHGF3hN0OdPBasyFUrm9T7kg=
+Date:   Wed, 27 Jan 2021 13:03:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 4/5] amba: Make the remove callback return void
+Message-ID: <YBFWfOmndoPckN1A@kroah.com>
+References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+ <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The open coded version differs from the one in the core in one way: the
-buffer will be always copied back, even when the transfer failed. Be
-more robust: use the block read from the I2C core and propagate a
-potential errno further to the sanity checks.
+On Tue, Jan 26, 2021 at 05:58:34PM +0100, Uwe Kleine-König wrote:
+> All amba drivers return 0 in their remove callback. Together with the
+> driver core ignoring the return value anyhow, it doesn't make sense to
+> return a value here.
+> 
+> Change the remove prototype to return void, which makes it explicit that
+> returning an error value doesn't work as expected. This simplifies changing
+> the core remove callback to return void, too.
+> 
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org> # for drivers/memory
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-
-Changes since v1:
-* respect 'err' in more code paths
-* updated comment
-
- drivers/media/i2c/adv7511-v4l2.c | 58 ++++++++++++++------------------
- 1 file changed, 26 insertions(+), 32 deletions(-)
-
-diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
-index a3161d709015..9183003ae22d 100644
---- a/drivers/media/i2c/adv7511-v4l2.c
-+++ b/drivers/media/i2c/adv7511-v4l2.c
-@@ -214,36 +214,25 @@ static inline void adv7511_wr_and_or(struct v4l2_subdev *sd, u8 reg, u8 clr_mask
- 	adv7511_wr(sd, reg, (adv7511_rd(sd, reg) & clr_mask) | val_mask);
- }
- 
--static int adv_smbus_read_i2c_block_data(struct i2c_client *client,
--					 u8 command, unsigned length, u8 *values)
--{
--	union i2c_smbus_data data;
--	int ret;
--
--	if (length > I2C_SMBUS_BLOCK_MAX)
--		length = I2C_SMBUS_BLOCK_MAX;
--	data.block[0] = length;
--
--	ret = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--			     I2C_SMBUS_READ, command,
--			     I2C_SMBUS_I2C_BLOCK_DATA, &data);
--	memcpy(values, data.block + 1, length);
--	return ret;
--}
--
--static void adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
-+static int adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
- {
- 	struct adv7511_state *state = get_adv7511_state(sd);
- 	int i;
--	int err = 0;
- 
- 	v4l2_dbg(1, debug, sd, "%s:\n", __func__);
- 
--	for (i = 0; !err && i < len; i += I2C_SMBUS_BLOCK_MAX)
--		err = adv_smbus_read_i2c_block_data(state->i2c_edid, i,
-+	for (i = 0; i < len; i += I2C_SMBUS_BLOCK_MAX) {
-+		s32 ret;
-+
-+		ret = i2c_smbus_read_i2c_block_data(state->i2c_edid, i,
- 						    I2C_SMBUS_BLOCK_MAX, buf + i);
--	if (err)
--		v4l2_err(sd, "%s: i2c read error\n", __func__);
-+		if (ret < 0) {
-+			v4l2_err(sd, "%s: i2c read error\n", __func__);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
- }
- 
- static inline int adv7511_cec_read(struct v4l2_subdev *sd, u8 reg)
-@@ -1668,22 +1657,27 @@ static bool adv7511_check_edid_status(struct v4l2_subdev *sd)
- 	if (edidRdy & MASK_ADV7511_EDID_RDY) {
- 		int segment = adv7511_rd(sd, 0xc4);
- 		struct adv7511_edid_detect ed;
-+		int err;
- 
- 		if (segment >= EDID_MAX_SEGM) {
- 			v4l2_err(sd, "edid segment number too big\n");
- 			return false;
- 		}
- 		v4l2_dbg(1, debug, sd, "%s: got segment %d\n", __func__, segment);
--		adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
--		adv7511_dbg_dump_edid(2, debug, sd, segment, &state->edid.data[segment * 256]);
--		if (segment == 0) {
--			state->edid.blocks = state->edid.data[0x7e] + 1;
--			v4l2_dbg(1, debug, sd, "%s: %d blocks in total\n", __func__, state->edid.blocks);
-+		err = adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
-+		if (!err) {
-+			adv7511_dbg_dump_edid(2, debug, sd, segment, &state->edid.data[segment * 256]);
-+			if (segment == 0) {
-+				state->edid.blocks = state->edid.data[0x7e] + 1;
-+				v4l2_dbg(1, debug, sd, "%s: %d blocks in total\n",
-+					 __func__, state->edid.blocks);
-+			}
- 		}
--		if (!edid_verify_crc(sd, segment) ||
--		    !edid_verify_header(sd, segment)) {
--			/* edid crc error, force reread of edid segment */
--			v4l2_err(sd, "%s: edid crc or header error\n", __func__);
-+
-+		if (err || !edid_verify_crc(sd, segment) || !edid_verify_header(sd, segment)) {
-+			/* Couldn't read EDID or EDID is invalid. Force retry! */
-+			if (!err)
-+				v4l2_err(sd, "%s: edid crc or header error\n", __func__);
- 			state->have_monitor = false;
- 			adv7511_s_power(sd, false);
- 			adv7511_s_power(sd, true);
--- 
-2.28.0
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
