@@ -2,74 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE7430720F
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 09:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B16307225
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 10:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbhA1Iw7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Jan 2021 03:52:59 -0500
-Received: from sauhun.de ([88.99.104.3]:60882 "EHLO pokefinder.org"
+        id S232356AbhA1Ize (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Jan 2021 03:55:34 -0500
+Received: from www.zeus03.de ([194.117.254.33]:43820 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232145AbhA1Iw0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 28 Jan 2021 03:52:26 -0500
-Received: from localhost (p54b33782.dip0.t-ipconnect.de [84.179.55.130])
-        by pokefinder.org (Postfix) with ESMTPSA id 21CED2C04D8;
-        Thu, 28 Jan 2021 09:53:06 +0100 (CET)
-Date:   Thu, 28 Jan 2021 09:53:05 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Vadim Pasternak <vadimp@nvidia.com>
-Cc:     peda@axentia.se, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH i2c-next v2 0/7] i2c: mux: mlxcpld: Extend driver
- functionality and update licenses
-Message-ID: <20210128085305.GC963@ninjato>
-References: <20210122192502.17645-1-vadimp@nvidia.com>
+        id S232347AbhA1IzR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 28 Jan 2021 03:55:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=RLPQGrUUCQdzVFt7dOPgwd8kwjq
+        2az7yIbIuSrpxtls=; b=rO80uRpH+00Ic89PO/1NRjrZxX6Uv0tJQsvTlli2uG9
+        gS4/kocQ4fzm3/QqovjW5jzYrohy0gefUpbHFb1TGhF+nNppXSel04iUx/OLuZZI
+        +ECrGTF7myc35ufAcZg2IMG8SWdLfPK0kvurAm+HNHx/GGpDbAQTvpFV9e+SMqlM
+        =
+Received: (qmail 160739 invoked from network); 28 Jan 2021 09:55:48 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Jan 2021 09:55:48 +0100
+X-UD-Smtp-Session: l3s3148p1@kGXJDfK5ipMgAwDPXyX1AEdA8SGgn5QT
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Corey Minyard <cminyard@mvista.com>,
+        Corey Minyard <minyard@acm.org>,
+        openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] ipmi: remove open coded version of SMBus block write
+Date:   Thu, 28 Jan 2021 09:55:43 +0100
+Message-Id: <20210128085544.7609-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="O3RTKUHj+75w1tg5"
-Content-Disposition: inline
-In-Reply-To: <20210122192502.17645-1-vadimp@nvidia.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The block-write function of the core was not used because there was no
+client-struct to use. However, in this case it seems apropriate to use a
+temporary client struct. Because we are answering a request we recieved
+when being a client ourselves. So, convert the code to use a temporary
+client and use the block-write function of the I2C core.
 
---O3RTKUHj+75w1tg5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Asmaa Mnebhi <asmaa@nvidia.com>
+Acked-by: Corey Minyard <cminyard@mvista.com>
+---
 
-Hi Vadim, Peter,
+No change since V1, Only added tags given in private communication.
 
-On Fri, Jan 22, 2021 at 09:24:55PM +0200, Vadim Pasternak wrote:
-> The patchset adds new features for the existing Mellanox systems.
->=20
-> Patches #1-#2 update license to SPDX-License.
-> Patch #3  moves header file out of x86 realm.
+ drivers/char/ipmi/ipmb_dev_int.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-I think I can add the first three patches right away, or?
+diff --git a/drivers/char/ipmi/ipmb_dev_int.c b/drivers/char/ipmi/ipmb_dev_int.c
+index 382b28f1cf2f..49b8f22fdcf0 100644
+--- a/drivers/char/ipmi/ipmb_dev_int.c
++++ b/drivers/char/ipmi/ipmb_dev_int.c
+@@ -137,7 +137,7 @@ static ssize_t ipmb_write(struct file *file, const char __user *buf,
+ {
+ 	struct ipmb_dev *ipmb_dev = to_ipmb_dev(file);
+ 	u8 rq_sa, netf_rq_lun, msg_len;
+-	union i2c_smbus_data data;
++	struct i2c_client *temp_client;
+ 	u8 msg[MAX_MSG_LEN];
+ 	ssize_t ret;
+ 
+@@ -160,21 +160,21 @@ static ssize_t ipmb_write(struct file *file, const char __user *buf,
+ 	}
+ 
+ 	/*
+-	 * subtract rq_sa and netf_rq_lun from the length of the msg passed to
+-	 * i2c_smbus_xfer
++	 * subtract rq_sa and netf_rq_lun from the length of the msg. Fill the
++	 * temporary client. Note that its use is an exception for IPMI.
+ 	 */
+ 	msg_len = msg[IPMB_MSG_LEN_IDX] - SMBUS_MSG_HEADER_LENGTH;
+-	if (msg_len > I2C_SMBUS_BLOCK_MAX)
+-		msg_len = I2C_SMBUS_BLOCK_MAX;
++	temp_client = kmemdup(ipmb_dev->client, sizeof(*temp_client), GFP_KERNEL);
++	if (!temp_client)
++		return -ENOMEM;
++
++	temp_client->addr = rq_sa;
+ 
+-	data.block[0] = msg_len;
+-	memcpy(&data.block[1], msg + SMBUS_MSG_IDX_OFFSET, msg_len);
+-	ret = i2c_smbus_xfer(ipmb_dev->client->adapter, rq_sa,
+-			     ipmb_dev->client->flags,
+-			     I2C_SMBUS_WRITE, netf_rq_lun,
+-			     I2C_SMBUS_BLOCK_DATA, &data);
++	ret = i2c_smbus_write_block_data(temp_client, netf_rq_lun, msg_len,
++					 msg + SMBUS_MSG_IDX_OFFSET);
++	kfree(temp_client);
+ 
+-	return ret ? : count;
++	return ret < 0 ? ret : count;
+ }
+ 
+ static __poll_t ipmb_poll(struct file *file, poll_table *wait)
+-- 
+2.28.0
 
-Happy hacking,
-
-   Wolfram
-
-
---O3RTKUHj+75w1tg5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmASe3EACgkQFA3kzBSg
-KbYDOA/+MuqkLIl6LhFwZ5uYMoo1YNKSXCmwt751xeNkhpBsvizaZliVkT70hWLa
-EAzF29YKpuWTE7U80WrnSLWKEvTc0CfMI9DR4Stq8tHkI5r52i6zvdUEH9MtPDd+
-ySJRa/fB3F1IziFvJOHOXe6Zp1bqnLN1pfCEBOACAksCfdK4H2RF2wEki+GkcDby
-7Yh2QYdtBy3wZB++hijw6LIKYzVhZR7SCi+vU9TI2JoOGPhGeL3W14htS25dSLrO
-8BxX9sysxYPP7fR/RtxCHW7bpuIrW58r9kGWkTHnPGC9kEsUnsFBEuni6LkpZca9
-0p7k4qAmn8OZ2hTh6HSg2rzLX12OuAVmm1XDrNQLIVOs6gUB4+RmdjENQngZm0hq
-l1CTPUuVaguqNLp/OLesqpCoFPpVwEfUA+TQKVkHVurmBtFBgG4lFDX1QW7K7NWJ
-gCqtL6rhZo7KFpLjio76UPAKZjXpT+c0KbAgsEcYbxLhasCcw+C81xLk2irokkRV
-uf/zHbPrlfhOkTPeGXl4vSM1LgzFQtracoUlwTmenLDzI+GBS5V/alFyuAYrjSPV
-xmf39DOvQybSaVaboJS7FOOS5kcYcNbO/Sb70q6V0DX0eyFeYlgf/pF2XzeCWBZT
-wjTzSGR0mHI3R3vDJkX7LrO1Pt0K9SbfDtv0dC2n+YOyq8H/7Ck=
-=Z0bL
------END PGP SIGNATURE-----
-
---O3RTKUHj+75w1tg5--
