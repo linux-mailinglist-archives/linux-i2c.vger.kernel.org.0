@@ -2,86 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF5A30726E
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 10:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0607D3072AA
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 10:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbhA1JQP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Jan 2021 04:16:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50742 "EHLO mail.kernel.org"
+        id S232361AbhA1JUV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Jan 2021 04:20:21 -0500
+Received: from www.zeus03.de ([194.117.254.33]:49440 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231975AbhA1JNq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 28 Jan 2021 04:13:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DAB2D64DBD;
-        Thu, 28 Jan 2021 09:13:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611825185;
-        bh=nCoc08hyKcJ5vfOd6TzDee2uuvisAAk6p0qjWq14A2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kzlWs2Dcyzckg43G6RflwpFzr0VJqgFzXsVPvlb8RNe76r9kWJudG65uiq+lraOdc
-         G9g2Z3woBHci3VOmC6wOEUfwNUzjYtKCkHkPmEOvZ8TvJYRzMtwTxCbW60JZEW7AEY
-         /fdFNCGGBdR75gw0Yj7UyPfah1Z2hQQ9wwCEDyQxujoesiGAZNVgpQ0HZfTD1M+EiI
-         zKJCg5FsSlODr9FwmmCZ1fsPQXPhxQVSgpZVGShuEhIsuommTcA/WJt6/JY5CvC9Vz
-         0yFhbAK8s+5psQXd1xSpgO4oxjffyvvPTENStWhlNtEGLMWWjz/d/cCmELYsMXLJqa
-         B4hTktMgNxSuw==
-Date:   Thu, 28 Jan 2021 10:13:02 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, bjorn.andersson@linaro.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        phone-devel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] dt-bindings: i2c: qcom,i2c-qup: Document noise
- rejection properties
-Message-ID: <20210128091302.GG963@ninjato>
-References: <20210114180415.404418-1-angelogioacchino.delregno@somainline.org>
- <20210114180415.404418-4-angelogioacchino.delregno@somainline.org>
+        id S232435AbhA1JQ1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 28 Jan 2021 04:16:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=Ce3BwYuGIywXjpBlp+osaGxqEMp0
+        dpdIYyXZq2m7nmo=; b=aUkpaR/TjM15D/MW7HK4mN+yAObjpPPSTs15X6whYOMn
+        OwTu19ZFHeQD877kBKTTZ0L1npM3Qz9OrvpNz83HAtZQxszEbRoE1Q9q0LK7DuHi
+        Mof+8J1doCX/nQd0qWBEOHVD67q6aliwvVe7bbHMrqieWBsigoZF+PMqx8dwCLQ=
+Received: (qmail 166700 invoked from network); 28 Jan 2021 10:15:43 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Jan 2021 10:15:43 +0100
+X-UD-Smtp-Session: l3s3148p1@n4oMVfK5eJQgAwDPXyX1AEdA8SGgn5QT
+Date:   Thu, 28 Jan 2021 10:15:43 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: smbus: don't abuse loop variable
+Message-ID: <20210128091543.GH963@ninjato>
+References: <20210112151230.46518-1-wsa+renesas@sang-engineering.com>
+ <20210112151230.46518-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gm5TwAJMO0F2iVRz"
+        protocol="application/pgp-signature"; boundary="ik0NlRzMGhMnxrMX"
 Content-Disposition: inline
-In-Reply-To: <20210114180415.404418-4-angelogioacchino.delregno@somainline.org>
+In-Reply-To: <20210112151230.46518-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---gm5TwAJMO0F2iVRz
+--ik0NlRzMGhMnxrMX
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jan 12, 2021 at 04:12:29PM +0100, Wolfram Sang wrote:
+> Don't use 'i' to carry data, make a specific variable for it. After the
+> move to memcpy recently, we can even remove 'i'.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Applied to for-next, thanks!
 
 
-> +  qcom,noise-reject-sda:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Noise rejection level for the SDA line.
-> +    minimum: 0
-> +    maximum: 3
-> +    default: 0
-
-What does this u32 describe? I wonder if we can introduce a generic
-property instead of a vendor-specific one.
-
-
---gm5TwAJMO0F2iVRz
+--ik0NlRzMGhMnxrMX
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmASgB4ACgkQFA3kzBSg
-Kbav/BAAoZZxCeFm2JgyZX5Iyv10zaVI7zevlrKrhcHrYWLaAQux2y2c+b4UCz7r
-nR2SLFgjRWELz2oomSb25ckMaNtBohgQurjk+lisKJoaar41C9mkFxFiQpWuFm8r
-QnTuwScs1CXAxK2zETbZNRrkoHtC4zSeVM9ut6q0hMl2Apfz8NDIZnySrz13AAjC
-UDGlZi3aqaa0iypPeRiuqABOlJ+0IGz72ZzlicH3RDazX4u6s51paxM59XessQQ5
-QnBMWpcO8H1aeLGhFsuJtk8LH8wx7PP5jxl1dq8h4JpGRX84ge1itFytwBBfiBHl
-q14hxVGg1bmCyTjJfnhWOANxi/wSdfYhnR/IVILAqJtjhxVeZp3Ry+QjqQpZBzHb
-uTwUF+mz6MtK3a0bsl57d7z76519Lk4Pdh0PyXUm2s8IAjpjSmMiYUZP/GkSNf2a
-7CZ0VjcqYA8RXs4nszb35HEY9hRCR3of11ZDDWtDCfm9VQonIYt1xTqG9mi+cTAy
-AylaZ+4rsKCLbp52Ik38uFGwwsdLw68TkLI5Teq5gXnQJZSpQz6Otdrdaxb6/K0f
-GZEQxOfFzoAiL08ejQ0vYub4vloDorZFVRLRCoYyDPtClIBcxkj6eNHR7KXqR26v
-Ij/6kxBNFSu6cZxtfwjXHa5NF6J+Sv8dvJ1C19sN6xrt76HnWjM=
-=dkAk
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmASgLsACgkQFA3kzBSg
+KbYEOg/+PKEgbRA2NiBtzk21Qa8j/cADvF5RMtig93vUTLkvBySAPfeadBiGo0DV
+bJgAQR+P/UW9iudmYk8KufCsGVl94Ubh9ZR0+7M2Sio0iahWdfPdUclPec9klb4B
+W5H4ejrjzyHDk5JWhTUE6+CWJWD+2GoUOg3F4c/DbQUm6hjy3wYyAsg4Z3P7Pc6E
+B8beEUcGL8a6biiNniqpCwH5+O1Z15dW3le0WuPFryPtbQyMazwPQd4d5Y48AvwD
+EsACtXHnBrLg81ArcA07GdPNZmsEwvaXu7aM0Bz+skjzf1qv43M2jylCw0W/4IN+
+9/GMPAouiPqYO7RYylIK7e+/bQsZBLiMcmTXiQdOD9RH0+DnjVtXrSndYJqEZq/4
+bBwsbs2LfAWKwA/zUpPGJrgYSZbmMkZPVv5lxb0uETRTR6BtrlpnhD6tm81WC54V
+YvJd9YBp1APbdzPIK6nJBamDNH33k1MSfqeRtCD4yNuEzLQ8tloQV2z/AYc7lXa8
+XsEY1814Gi5d6cBhE6JzAZvPgcWHZIIZJJhxBp1EGto2nFcb0zx1lpsstJ0Gs/fF
+XK4qHtuhegyml/FjYBxs5g+ePfoDtJPx+kPMCdT7Ib9V7MBRql/Pme4bjSTqVNew
+NVe/bn8zD+nQBXWBdZBc9loNnXbdts0AL0pgj1bM66cRUKc3zmE=
+=9pGe
 -----END PGP SIGNATURE-----
 
---gm5TwAJMO0F2iVRz--
+--ik0NlRzMGhMnxrMX--
