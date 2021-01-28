@@ -2,123 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8029307F99
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 21:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70327307FF6
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 21:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbhA1UZA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Jan 2021 15:25:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51160 "EHLO mail.kernel.org"
+        id S231310AbhA1Uyf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Jan 2021 15:54:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56000 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231154AbhA1UYZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 28 Jan 2021 15:24:25 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CA9DF64DDE;
-        Thu, 28 Jan 2021 20:23:43 +0000 (UTC)
+        id S231239AbhA1Ux5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 28 Jan 2021 15:53:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 096D064DD6;
+        Thu, 28 Jan 2021 20:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611865424;
-        bh=iO7ZSC72FkSO5msxnrNl3pzkNeuJI0KURaMGIetLQqA=;
+        s=k20201202; t=1611867194;
+        bh=LGnTk744nU516gZx8KhhGV5jHOG5uHAvhzd/Z/xuYPg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=We7XJH0G5nMQ6fnPVASdW/lPKdJOtJIBANLe2NM+9ZNg2tu7HZkxijytP9xkxCd/v
-         HdYLQ18qG5hTw7DJnaZt7ZvK6hfdq0Pe3J1d+vpVnh5pOuRPYXuWPHXwP1qcUbKxCU
-         N7tIqaorTkPh2jZBx4BQcNfw2wej30nLdaTpyik3lekkdwSHBYrLQCLuX2nL285Cby
-         Yvsx9SkR1fghrl4eLc8385w5hE+xvfQafo+4D3/H7RJoizRbS8fbyXbW2hyt4Wocn6
-         6QZWwC/7rnjGOkvq8yVJqG95Yq0+F22vSwj7SJLwY6p/nKStoz510U/yhQgo5R41sk
-         0q2hosLtkFK5A==
-Date:   Thu, 28 Jan 2021 21:23:36 +0100
+        b=BWany1+j2Mc0h743Bdk+VDYpBo3m8KhgnOrY1CDQ6/DZwm6xS5fTeV4058f1OHKsu
+         MH3PsF/dsY/FZyWxpb2ttFgCyo8M68gLjK9sWktLY9UF4IwlR7QVvMppTUq2CkHT8i
+         uqjXIJQBz1BWPoMmzKY6HerinFBDNCh7fdPfeKD2zB7aE7jI5GVPuE0XX46d6CxV6D
+         gdcC29ZrJhENlk4ML6N+v6B/aKHm3KultXxL4bkW27waA04mMg5MFU/ZRTGMTh7Qw6
+         h5QPwu/ciVRpgN6xmxb7z0DkAtiyCl+kUBip1R+qvwvAPVmXV9SNNVoixQEPyt3mHy
+         TXQ8sdXas4ihw==
+Date:   Thu, 28 Jan 2021 21:53:11 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Wolfram Sang <wolfram@the-dreams.de>,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Cleanup standard unit properties
-Message-ID: <20210128202336.GA3094@kunai>
+To:     "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
+Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Support Opensource <Support.Opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Steve Twiss <stwiss.opensource@diasemi.com>,
+        "marek.vasut@gmail.com" <marek.vasut@gmail.com>,
+        "RUAN Tingquan (BT-FIR/ENG1-Zhu)" <Tingquan.Ruan@cn.bosch.com>,
+        "Streidl Hubert (BT-FIR/ENG1-Grb)" <Hubert.Streidl@de.bosch.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "o.rempel@pengutronix.de" <o.rempel@pengutronix.de>,
+        "anson.huang@nxp.com" <anson.huang@nxp.com>
+Subject: Re: [PATCH 1/1] mfd: da9063: Support SMBus and I2C mode
+Message-ID: <20210128205311.GB3094@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Wolfram Sang <wolfram@the-dreams.de>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-watchdog@vger.kernel.org
-References: <20210128194515.743252-1-robh@kernel.org>
- <20210128201614.GA162245@roeck-us.net>
+        "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Support Opensource <Support.Opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Steve Twiss <stwiss.opensource@diasemi.com>,
+        "marek.vasut@gmail.com" <marek.vasut@gmail.com>,
+        "RUAN Tingquan (BT-FIR/ENG1-Zhu)" <Tingquan.Ruan@cn.bosch.com>,
+        "Streidl Hubert (BT-FIR/ENG1-Grb)" <Hubert.Streidl@de.bosch.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "o.rempel@pengutronix.de" <o.rempel@pengutronix.de>,
+        "anson.huang@nxp.com" <anson.huang@nxp.com>
+References: <20210125125458.1302525-1-mark.jonas@de.bosch.com>
+ <20210125125458.1302525-2-mark.jonas@de.bosch.com>
+ <PR3PR10MB41420E24A1303DA91175593E80BA9@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
+ <df52d5e7069541e78b8b01ddc54a6777@de.bosch.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/9DWx/yDrRhgMJTb"
+        protocol="application/pgp-signature"; boundary="U+BazGySraz5kW0T"
 Content-Disposition: inline
-In-Reply-To: <20210128201614.GA162245@roeck-us.net>
+In-Reply-To: <df52d5e7069541e78b8b01ddc54a6777@de.bosch.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---/9DWx/yDrRhgMJTb
+--U+BazGySraz5kW0T
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 28, 2021 at 12:16:14PM -0800, Guenter Roeck wrote:
-> On Thu, Jan 28, 2021 at 01:45:15PM -0600, Rob Herring wrote:
-> > Properties with standard unit suffixes already have a type and don't ne=
-ed
-> > type definitions. They also default to a single entry, so 'maxItems: 1'
-> > can be dropped.
-> >=20
-> > adi,ad5758 is an oddball which defined an enum of arrays. While a valid
-> > schema, it is simpler as a whole to only define scalar constraints.
+Hi,
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+> None of that seems to model the inability to perform atomic transactions
+> within the SMBus timeout. This is either a bug of this specific driver
+> or maybe the expressiveness of I2C_FUNC_* is not sufficient.
+>=20
+> https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/i2c.h#L=
+88
+>=20
+> What flag do you think we could check to find out whether the bus is
+> able to obey the SMBus timeout or not?
+
+While not perfect, you can reasonably assume that the bus cannot obey to
+SMBus timings when I2C_FUNC_I2C is set. Because in the vast majority of
+all cases with I2C_FUNC_I2C, SMBus commands are emulated which is prone
+to the latency you described. You'd need a native SMBus controller to
+avoid that which usually has not I2C_FUNC_I2C set.
+
+Happy hacking,
+
+   Wolfram
 
 
---/9DWx/yDrRhgMJTb
+--U+BazGySraz5kW0T
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmATHUQACgkQFA3kzBSg
-Kbb6dA//VS8eldi8uAa1mEf6ElM2KDOvyEFV2uyartRr0Y//54CMkLEmCIu16Whx
-AKOzpk7OOfMUlETV22cBsCRRLyZuJ/rDqgkphiLtPuQUi2h1sj89grqSUBL5Kg8C
-MzqNNOnqdbiISFKTgyfNM9cVOxPkbJ+3TrZHou8QfKKtl8x7SuE+Wr6+xYUpxC6x
-ZBI7NC1taOe8tHTM6DdsGTVh+sclfzaUXgxmabZfzBXlNM2rhANaWTa2MB2unWqk
-Lf/O8VVLc1f3NbfDS0UVafL6M3zbLrzBvlZWyBSHdo56y1P1ejpDzDl9PDQvzcNA
-ed9JmdQO0Jh+C6yESODylcOONiiQuGl4s11pId4+UPjWe/YSlnrd4BjncNBMWjb2
-2WDAvHWJxRt8Gh95EgIZIVSDExFpnsfw4s0QW8pUcEDh/SeADHkP/rCnT5pJ04oO
-AA8gfbdb7DpGzPo7+1M4DGMqfHC9nNk20bpByc0g10tDLfpf+fov01NJS95Ph4ms
-np4yxEtQ5cV4qGO+5Qm615C0xCcmsqpgmOe60USL3eb1N7FwjTX9/eCYxc61UOsK
-jQt6iVQaeoOXwJppAkSmzLa1q6er4BpPJyEK58HC77cmvr9X4udR7WNQY0+nUqpI
-0P7HBGXr9c2zQY0mVC86pc0EN8rjY/CIVrwn1RJ7f+D+CgI1Fno=
-=/5B3
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmATJDcACgkQFA3kzBSg
+KbZCRg/9GSZmsg5q/FvpBCuFZMaBWnlT3qnN23x945KUIWMJ9IFuJ+uXPFyA6efm
+T72toJzHh45I/vK7uMClC+UIbySOFA25aWeJlKO2k0i/pS8qMLr4RP7uJC6p3TM2
+84+jFYtmUbeWBhMO/ZbPxDTBgOXsgUoAsSj5hu3YRbFmy2v+d8D8vQvt6lgZBMwa
+s6ckAuCYHojbn0RqEwdDco6yHE2cUOYPKZruoP6Wpaz/aGusVuVW3aa8T8mqSo6C
+zdREpwE1XV8PKtpfJpTPh+J1yBUAr4GdXqkTsvgdfUNc6quFwiiHl6G6DQAZ/H7x
+pZXMuAtdSj4Yet37R6TawPrwrozYrz/xU3Gk0Bp+/shJ+9L41A+hLnSabzv783N4
+TdWpJyQk9b9K3/X44TyP1GuLy6tvD9pXLypusUT/9H7wzMyUu019l0bc9/zvYfY5
+r14Wo9hMwwDa9Juu2z17x1yxlipj/pQHVpMz6dXhDFIhElSg5MCJB7TEbXYn7BoN
+xf0iyUpFm8lLS7gYXfS4Y2iZOoZaW0FzMCJI3Bt8z75pByYoClMccxBsW6nPb793
+2C7dWHp6gK7XKBfkb9Wf+fDNmGGEV9hy+qXq280Exd4DNyXgtBqta/e1RFg4fp4T
+sdl35OyhUv8+RrasM+VMHHnimKq58xPfgFTpVoD3PacRkAPPXM0=
+=vwmG
 -----END PGP SIGNATURE-----
 
---/9DWx/yDrRhgMJTb--
+--U+BazGySraz5kW0T--
