@@ -2,88 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 809B03070C7
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 09:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89B9307203
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 09:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbhA1IMN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Jan 2021 03:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbhA1ILR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Jan 2021 03:11:17 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A99C0613D6
-        for <linux-i2c@vger.kernel.org>; Thu, 28 Jan 2021 00:10:37 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id c186so3076207pfa.23
-        for <linux-i2c@vger.kernel.org>; Thu, 28 Jan 2021 00:10:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=xhIblnQywgPtk5qspOVbwKaKHkL1LTY2VsAgL+AtKig=;
-        b=WD4xeJoZEqF+M2h7aJjMeqxKWYZDd3ZzA8vpPZ/nQ5raVj+jW/NcK2EOCZm0TJN0J6
-         nb7ZLRk80KPfbyV6TEXgcvfq7cRM70rIxCq6IBDjYMf5ETE8rVZy32o+7I2Gi0FeOzjg
-         bCdQWB0dYErnjOm0e23y8AKJZrfgicf91l2aafJypL3ooEf/C1sbKUkVwKsW2YOrHJpZ
-         x5aoZzQnppNqH7uEOkfz+A2676gKMRpUh4p593ukKefShxR9gE68Y6XEQxoelLjaBEMH
-         XnQTGV4FL7VyTekQXDAAreNis0FN9USQ6SVPoj8lpri7LEzocEuQGRnQFy56poQzzjaI
-         o6GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=xhIblnQywgPtk5qspOVbwKaKHkL1LTY2VsAgL+AtKig=;
-        b=JXLdCv0okKTHrUbcbWuEh87/ftjOTZs/eqMHBj/tes+eq27WRWRyE8AnI5G4aTkMmt
-         el0EO+IkrXtRITeXkYfhSj3Jl55x4NLXhiQ7sxj3WSX9v+8YCYVCwudhA37Q6KoeavY5
-         uoqmynzJSnjC8ZUFbRhU3Rx/OxwStFoThKy3SZ3bFVln7gsx8W4fQu9lWRqEDf3F1bWp
-         IEt0MGUlBFCFpH3K0fcdU00A3/8XBpI3vekkcwg8nma+0g1eNutPhI3b0rcruj0fU7tw
-         1J/T7xKOhpzJYdURtzUexdgOgCpG6lvPuo+daQK+Z6J5K/Ag4zbEizzwT4v6zKnP5UpY
-         NWTg==
-X-Gm-Message-State: AOAM532hFMc7w97K2HrfuFO9L5yzC3OcQqEai/5MqIPpWMByAKRgoHLq
-        PI61XfQ1hvClHtmX2nd2BO/knh0B7ifCkNMh
-X-Google-Smtp-Source: ABdhPJzDwTg6d2cAWZ7kopJTIwvW6zLAym6qfOu4YcGv/besy02NWJjE6AYhUCMMEilIeWqmnPDxCCozT3k3dgYx
-Sender: "hsiufangho via sendgmr" 
-        <hsiufangho@hsiufangho-gl.tnn.corp.google.com>
-X-Received: from hsiufangho-gl.tnn.corp.google.com ([2401:fa00:f1:200:d092:5885:655f:10cd])
- (user=hsiufangho job=sendgmr) by 2002:a17:902:758b:b029:df:d1f6:9af9 with
- SMTP id j11-20020a170902758bb02900dfd1f69af9mr15249314pll.21.1611821436757;
- Thu, 28 Jan 2021 00:10:36 -0800 (PST)
-Date:   Thu, 28 Jan 2021 16:10:30 +0800
-Message-Id: <20210128081030.2345998-1-hsiufangho@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-Subject: [PATCH] eeprom: at24: Add permission to write_timeout
-From:   Jenny Ho <hsiufangho@google.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jenny Ho <hsiufangho@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S232194AbhA1Iu4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Jan 2021 03:50:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47912 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231433AbhA1Itx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 28 Jan 2021 03:49:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2EE0664DBD;
+        Thu, 28 Jan 2021 08:44:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611823450;
+        bh=+rgbJKufy26IHZu23xm+S6i1LOemte3QUajMr6KqkX8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NKjBgvzoxwUeYfuVdsae2f4pSsudS2RzYlOG2GwZDxFdNqrQci7EspyenbiEdJTAl
+         8+sjOAlak3fxb31H992DwFPIVzWrHDF6UI4bOOmt/53IV/takh96anpHF2jSVlCYpz
+         v4yiIGFqZFKsfVCpQT/5Z0Z+Y007uYt+791ztFBtUK4D+EMgult6jpa2DnLnGhGf0B
+         1uvRi7tKQCNhII8ojEV3OD4JWft7hCFXSc9m1V8ewS3Epr2WCooWC2rIybHuHYgmSk
+         1OQjALtGG6kR9JEC6WtwR+fLICJuqUYQISgwBHJXZPtYQhJhEsfHUusaAMhmr4BTeH
+         3V6KZRM4R/N5A==
+Date:   Thu, 28 Jan 2021 09:44:05 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Samuel Holland <samuel@sholland.org>,
+        Icenowy Zheng <icenowy@aosc.io>, Rob Herring <robh@kernel.org>,
+        =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v5 10/20] dt-bindings: i2c: mv64xxx: Add H616 compatible
+ string
+Message-ID: <20210128084405.GA963@ninjato>
+References: <20210127172500.13356-1-andre.przywara@arm.com>
+ <20210127172500.13356-11-andre.przywara@arm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BXVAT5kNtrzKuDFl"
+Content-Disposition: inline
+In-Reply-To: <20210127172500.13356-11-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Need to change timeout time for different use
-cases to prevent I2C error cases. Open the api
-and allow Read/Write permission to write_timeout
 
-Signed-off-by: Jenny Ho <hsiufangho@google.com>
----
- drivers/misc/eeprom/at24.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--BXVAT5kNtrzKuDFl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 926408b41270..39caead4058c 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -117,7 +117,7 @@ MODULE_PARM_DESC(at24_io_limit, "Maximum bytes per I/O (default 128)");
-  * it's important to recover from write timeouts.
-  */
- static unsigned int at24_write_timeout = 25;
--module_param_named(write_timeout, at24_write_timeout, uint, 0);
-+module_param_named(write_timeout, at24_write_timeout, uint, 0600);
- MODULE_PARM_DESC(at24_write_timeout, "Time (in ms) to try writes (default 25)");
- 
- struct at24_chip_data {
--- 
-2.30.0.280.ga3ce27912f-goog
+On Wed, Jan 27, 2021 at 05:24:50PM +0000, Andre Przywara wrote:
+> Add the obvious compatible name to the existing I2C binding, and pair
+> it with the existing A31 fallback compatible string, as the devices
+> are compatible.
+>=20
+> On the way use enums to group all compatible devices together.
+>=20
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Acked-by: Wolfram Sang <wsa@kernel.org>
 
+Applied to for-next, thanks!
+
+
+--BXVAT5kNtrzKuDFl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmASeVEACgkQFA3kzBSg
+KbYF1w/+MCKCR5WY8DgISyJtBI5LweEOVDKugSqgJOKJzX7kBGj28nw6YeTFmYx0
+wPb5LjgKr45odH3Gq5IGXJFd+zD4UgNNYnIUV6ThymiVZCVOrfD64wES5Kijj0wb
+4WfkcCTVDXwR6Y0FGvwrBR6nix+y55xgWkIeMrfX8+Do31NO/u6Ovoj0+7+xJdbg
+9n0jdAy1ooatJgrNcWJZlAWYyXAk/ziRyFIkGNWKe2Thpa9aGBWRrKLw4lLqSzpZ
+uBq7VMm8SRLAlLVQr819psInJsbIawer9EocIlAPkooaB0hcGig7hv5PCjRexf/f
+7yALoXT6S7SEUhZQPl7Jl748DnVAlS1hEGZUUWb7whnpqL6jYWSvuNbr51igb5C7
+GsIv40s6NbsZnL9uTk0sDWx/MfwZHPJo7ZoItW0WBDEQ72ymJDQzRPqNy+qE2s0y
+2bsea+u459iEtZKoVij8XSNp7kPVi7jTCDw+cDtkRU8UYAgt/6pFX1CwiefNZ9Ce
+0blfjhr5do2/pTvzfKZ26GBOPAIHkIsPYqtOvkWG2a0Fo2EUanIJV0RkOuP3YV8s
+ruXDyAvTuX0uRac4Oy//NNSCYdDLsOr/AZny7Ub9jkRLTDfdQns8YgVzmH6Xr2qh
+ydsfuaCcrUyUml25TOMBc3ta78kCuKjpkJsFrb5adUd+1JuRapg=
+=PojC
+-----END PGP SIGNATURE-----
+
+--BXVAT5kNtrzKuDFl--
