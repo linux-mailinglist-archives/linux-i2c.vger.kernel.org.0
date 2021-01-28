@@ -2,105 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B16307225
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 10:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A73C30722D
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Jan 2021 10:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbhA1Ize (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Jan 2021 03:55:34 -0500
-Received: from www.zeus03.de ([194.117.254.33]:43820 "EHLO mail.zeus03.de"
+        id S231501AbhA1I7C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Jan 2021 03:59:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49206 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232347AbhA1IzR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 28 Jan 2021 03:55:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=RLPQGrUUCQdzVFt7dOPgwd8kwjq
-        2az7yIbIuSrpxtls=; b=rO80uRpH+00Ic89PO/1NRjrZxX6Uv0tJQsvTlli2uG9
-        gS4/kocQ4fzm3/QqovjW5jzYrohy0gefUpbHFb1TGhF+nNppXSel04iUx/OLuZZI
-        +ECrGTF7myc35ufAcZg2IMG8SWdLfPK0kvurAm+HNHx/GGpDbAQTvpFV9e+SMqlM
-        =
-Received: (qmail 160739 invoked from network); 28 Jan 2021 09:55:48 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Jan 2021 09:55:48 +0100
-X-UD-Smtp-Session: l3s3148p1@kGXJDfK5ipMgAwDPXyX1AEdA8SGgn5QT
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Corey Minyard <minyard@acm.org>,
-        openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] ipmi: remove open coded version of SMBus block write
-Date:   Thu, 28 Jan 2021 09:55:43 +0100
-Message-Id: <20210128085544.7609-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.28.0
+        id S231500AbhA1I7B (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 28 Jan 2021 03:59:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 45D1864D92;
+        Thu, 28 Jan 2021 08:59:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611824385;
+        bh=xUNu87wCMjH0CDUYay46yGiklVlrLPUVdAWqPYEwilE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iB0AoMJk4U0NvL9O8bc9i2U63rp/+oQC/iNYlkIWRHBaqMTBgDU2LQaJE/an6TtyS
+         899AHTszNULZHRJnkfEmgOBR4h2g1WH6SvliIVD9RMgaUaVM0RPOEwdMh6WWTxEl8o
+         MrYQWBRVDl5Rjj6VT8ivNBXGq4zAJXniOE6Ti2uu5walRHL8Uw0vc2cl/G4e8C4Jtt
+         MlEf3OxhmYBUu21nwpth7KYkjlULqjj8oqzQVqLSdn/4fsVt4v2JHc9fHDSXi/372i
+         GOuVgDYZmfZrqrvyaieizKg1vKv0SAvih1TnQAw9rdKarTAtWf3+WRNlOtZuy4/BGU
+         Qq3kCrkaiIXpA==
+Date:   Thu, 28 Jan 2021 09:59:43 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: Add support for Intel Alder Lake PCH-P
+Message-ID: <20210128085943.GD963@ninjato>
+References: <20210114143811.1820137-1-jarkko.nikula@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u65IjBhB3TIa72Vp"
+Content-Disposition: inline
+In-Reply-To: <20210114143811.1820137-1-jarkko.nikula@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The block-write function of the core was not used because there was no
-client-struct to use. However, in this case it seems apropriate to use a
-temporary client struct. Because we are answering a request we recieved
-when being a client ourselves. So, convert the code to use a temporary
-client and use the block-write function of the I2C core.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Asmaa Mnebhi <asmaa@nvidia.com>
-Acked-by: Corey Minyard <cminyard@mvista.com>
----
+--u65IjBhB3TIa72Vp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No change since V1, Only added tags given in private communication.
+On Thu, Jan 14, 2021 at 04:38:11PM +0200, Jarkko Nikula wrote:
+> Add PCI ID of SMBus controller on Intel Alder Lake PCH-P.
+>=20
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
- drivers/char/ipmi/ipmb_dev_int.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+Do we still update Documentation/i2c/busses/i2c-i801.rst?
 
-diff --git a/drivers/char/ipmi/ipmb_dev_int.c b/drivers/char/ipmi/ipmb_dev_int.c
-index 382b28f1cf2f..49b8f22fdcf0 100644
---- a/drivers/char/ipmi/ipmb_dev_int.c
-+++ b/drivers/char/ipmi/ipmb_dev_int.c
-@@ -137,7 +137,7 @@ static ssize_t ipmb_write(struct file *file, const char __user *buf,
- {
- 	struct ipmb_dev *ipmb_dev = to_ipmb_dev(file);
- 	u8 rq_sa, netf_rq_lun, msg_len;
--	union i2c_smbus_data data;
-+	struct i2c_client *temp_client;
- 	u8 msg[MAX_MSG_LEN];
- 	ssize_t ret;
- 
-@@ -160,21 +160,21 @@ static ssize_t ipmb_write(struct file *file, const char __user *buf,
- 	}
- 
- 	/*
--	 * subtract rq_sa and netf_rq_lun from the length of the msg passed to
--	 * i2c_smbus_xfer
-+	 * subtract rq_sa and netf_rq_lun from the length of the msg. Fill the
-+	 * temporary client. Note that its use is an exception for IPMI.
- 	 */
- 	msg_len = msg[IPMB_MSG_LEN_IDX] - SMBUS_MSG_HEADER_LENGTH;
--	if (msg_len > I2C_SMBUS_BLOCK_MAX)
--		msg_len = I2C_SMBUS_BLOCK_MAX;
-+	temp_client = kmemdup(ipmb_dev->client, sizeof(*temp_client), GFP_KERNEL);
-+	if (!temp_client)
-+		return -ENOMEM;
-+
-+	temp_client->addr = rq_sa;
- 
--	data.block[0] = msg_len;
--	memcpy(&data.block[1], msg + SMBUS_MSG_IDX_OFFSET, msg_len);
--	ret = i2c_smbus_xfer(ipmb_dev->client->adapter, rq_sa,
--			     ipmb_dev->client->flags,
--			     I2C_SMBUS_WRITE, netf_rq_lun,
--			     I2C_SMBUS_BLOCK_DATA, &data);
-+	ret = i2c_smbus_write_block_data(temp_client, netf_rq_lun, msg_len,
-+					 msg + SMBUS_MSG_IDX_OFFSET);
-+	kfree(temp_client);
- 
--	return ret ? : count;
-+	return ret < 0 ? ret : count;
- }
- 
- static __poll_t ipmb_poll(struct file *file, poll_table *wait)
--- 
-2.28.0
+And maybe we should add Jarkko as i801 maintainer because Jean is usually
+fine with such changes?
 
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 4435e5fdc75e..b931b629b457 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -73,6 +73,7 @@
+>   * Jasper Lake (SOC)		0x4da3	32	hard	yes	yes	yes
+>   * Comet Lake-V (PCH)		0xa3a3	32	hard	yes	yes	yes
+>   * Alder Lake-S (PCH)		0x7aa3	32	hard	yes	yes	yes
+> + * Alder Lake-P (PCH)		0x51a3	32	hard	yes	yes	yes
+>   *
+>   * Features supported by this driver:
+>   * Software PEC				no
+> @@ -230,6 +231,7 @@
+>  #define PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS		0x43a3
+>  #define PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS		0x4b23
+>  #define PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS		0x4da3
+> +#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS		0x51a3
+>  #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
+>  #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
+>  #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
+> @@ -1087,6 +1089,7 @@ static const struct pci_device_id i801_ids[] =3D {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS=
+) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS=
+) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBU=
+S) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBU=
+S) },
+>  	{ 0, }
+>  };
+> =20
+> @@ -1776,6 +1779,7 @@ static int i801_probe(struct pci_dev *dev, const st=
+ruct pci_device_id *id)
+>  	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS:
+>  	case PCI_DEVICE_ID_INTEL_EBG_SMBUS:
+>  	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS:
+> +	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS:
+>  		priv->features |=3D FEATURE_BLOCK_PROC;
+>  		priv->features |=3D FEATURE_I2C_BLOCK_READ;
+>  		priv->features |=3D FEATURE_IRQ;
+> --=20
+> 2.29.2
+>=20
+
+--u65IjBhB3TIa72Vp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmASfP8ACgkQFA3kzBSg
+KbZXiQ//dF5rsqC/o1rdt2VYnocxMIhKPq6Jnj0ZUpKMugWXcf6bSBwCszvoDT7X
+3XpBGDN1ImDHXv9ttllMGpbGdGgOj1ZWzoMRe340GpynNKK/oO6EaHCFc8fC0aHI
+0cfVgCql9oyk+XnYp9sf0B/4XDaVFIIfZ4J2giLaX78oTH/PJkVB+vSkEPdMyWtj
+nKAULp56Hfbegpe0fU10QfNgu4qzNcPGFW+isocBJ5gGitiYt2YKQwsnE1z1UzGf
+wfLWBWWoaZ6rxBZ9g0KmL5chF4DKZPNe6uyAeTj9Q1NUCziVD1f9MHEyTa2iZuwS
+2hAd5JtWlOTHnBrDfpx9/Dwv241iitI1+RfbDNvvJ87RWiyGL8zcxQ73KiKhWb80
+taQhs/BHeiWAcAGlIUU7azZ4iNog+160DgCpKODqZjI9dAfHSra3J98mZ5AYPVQu
+De+bYqWX2uUFE8u5BYO34gE9l8AbMYK6/H06Lbk9HL5tGabJaf5bAFurcWqpYuMw
+pFeiUFEZ+dqnjf4GBPNvea/PbdUbxvY0Bp4DCvArx5mk93z/VBQTqKrWezhDPES1
+Ld1Ri+tLUH1jFUiBzCVJu591afZewppl5MXiAZAt2e+4AOoIJsNSwhYgYdbQf2DS
+vsmDc1x7FOQzcrTEgvpDCtAx9UqWFS/4KDoFB355KfrLN3s0Qno=
+=l6YP
+-----END PGP SIGNATURE-----
+
+--u65IjBhB3TIa72Vp--
