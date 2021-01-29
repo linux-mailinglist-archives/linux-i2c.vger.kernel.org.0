@@ -2,148 +2,592 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B598308AC1
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Jan 2021 17:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A377308B38
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Jan 2021 18:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbhA2Q6m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 29 Jan 2021 11:58:42 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:38175 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbhA2Q6Q (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Jan 2021 11:58:16 -0500
-Received: by mail-oi1-f170.google.com with SMTP id h6so10559294oie.5;
-        Fri, 29 Jan 2021 08:58:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=py4i/w8jro7Fl8LekRKSdeeXTTY0JD8nUzdfE1Ud7gw=;
-        b=W7Z4fjeuMMB2UXe8PGYab9G2Vkr0+wBQj0a+0nsGEYOArYHvDbMx2LTOK6gaEEWMcB
-         Y9GwDto3T/xe3YvBNNnrlWBA037MWe8BID1p7ILkTy9JlZt//YZ1JV1oXPysRNdqLe4q
-         C69pvmJVZS/vWA9wCeepBO6JSw3HK/OQ8uWXfUJlf7zkwG/ipqdBEEQqPqKj8WVn2/BH
-         m65ottOTea+55JL11Lk098VI928sLyLw7m9Fv51x49Lpn/KtCwFVNG65SeP432wRBJC4
-         z/0DuTuxRBOLkLXz+29QNpA8ujqg+uA9NgcS9b7AoSd2T4+OZJsaBrdOmHgKSVGudhU3
-         xKrA==
-X-Gm-Message-State: AOAM532/PWOFhiBte/Bj0oCGmO2X1W0SkTokiUIlBcCOn4f6oyg+td/u
-        J3xbvcXA97N0leXBGVgjAn2Sg9KPFxvnn6J98Es=
-X-Google-Smtp-Source: ABdhPJx2f+cW84BsIhyHfaV87Rb7P+2padlLT1jzuRtmB5eD/O2c3AiQZ1zHZNTq/nE2F3h8l+GlyOJDsm3fq31tJq8=
-X-Received: by 2002:aca:d14:: with SMTP id 20mr3262383oin.157.1611939448031;
- Fri, 29 Jan 2021 08:57:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20200903081550.6012-1-sakari.ailus@linux.intel.com>
- <20210128232729.16064-1-sakari.ailus@linux.intel.com> <CAJZ5v0hdG1W0D5E6GbrTDiAjMyC0mSgb3Z2WEBy3hhb4iJhDNw@mail.gmail.com>
- <20210129164522.GJ32460@paasikivi.fi.intel.com>
-In-Reply-To: <20210129164522.GJ32460@paasikivi.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 29 Jan 2021 17:57:17 +0100
-Message-ID: <CAJZ5v0iJB80QX9ze9_hpNP4R-+C36Rvn8d+7S-4-guWrN=SiWQ@mail.gmail.com>
-Subject: Re: [PATCH v9 1/7] ACPI: scan: Obtain device's desired enumeration
- power state
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S229676AbhA2RO4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Jan 2021 12:14:56 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:15302 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230525AbhA2RNH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Jan 2021 12:13:07 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10TGMEb7004690;
+        Fri, 29 Jan 2021 17:23:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=nHENikI4D+1UCudoekYAKYLiYsT5Xl4/aqeywy5nnw8=;
+ b=QJdt8L3Z8oPpcqiLpxE1eCfQ8/VSoPFadRFs/kDX/E9wWTRBoOpiGnst1qpndelqysQg
+ svE+ZOSwGmmlkJ4nN8BbK3FnGSz1WpkmzadsC2AivJHobuvscxiMgWOnoPqQwSwFHDcM
+ cZmLtYNUZ5xVU65Kv/TyUbXlIWTd5neTl8cdOqD52lic1ecgoDLoseYp1nLmelK/5dGS
+ dvw13V2w6485bqtaR0O4Y6ptypUfzVhmv8BJbKYct+PwVxk0PuB/8Q9YQxPAuXshHK8u
+ kL5Fk+jM2DnusDnvtsH3bzO2+fpCxwWAi0JU4w7Ston0GfRCihMuSLNa08RrPQ1Jo4SW aQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3689teew8p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jan 2021 17:23:37 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AC72E10002A;
+        Fri, 29 Jan 2021 17:23:34 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4F607219816;
+        Fri, 29 Jan 2021 17:23:34 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.44) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 29 Jan
+ 2021 17:23:33 +0100
+Subject: Re: [PATCH] dt-bindings: Cleanup standard unit properties
+To:     Rob Herring <robh@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Serge Semin <fancer.lancer@gmail.com>,
+        Wolfram Sang <wolfram@the-dreams.de>,
+        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-input@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-watchdog@vger.kernel.org>
+References: <20210128194515.743252-1-robh@kernel.org>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <a234af98-a86a-69cd-80d8-265779ca9330@st.com>
+Date:   Fri, 29 Jan 2021 17:23:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210128194515.743252-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG3NODE3.st.com (10.75.127.9) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-01-29_05:2021-01-29,2021-01-29 signatures=0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jan 29, 2021 at 5:45 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> Hi Rafael,
->
-> Thanks for the comments.
->
-> On Fri, Jan 29, 2021 at 03:07:57PM +0100, Rafael J. Wysocki wrote:
-> > On Fri, Jan 29, 2021 at 12:27 AM Sakari Ailus
-> > <sakari.ailus@linux.intel.com> wrote:
-> > >
-> > > Store a device's desired enumeration power state in struct
-> > > acpi_device_power_flags during acpi_device object's initialisation.
-> > >
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > ---
-> > >  drivers/acpi/scan.c     | 6 ++++++
-> > >  include/acpi/acpi_bus.h | 3 ++-
-> > >  2 files changed, 8 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> > > index 1d7a02ee45e05..b077c645c9845 100644
-> > > --- a/drivers/acpi/scan.c
-> > > +++ b/drivers/acpi/scan.c
-> > > @@ -987,6 +987,8 @@ static void acpi_bus_init_power_state(struct acpi_device *device, int state)
-> > >
-> > >  static void acpi_bus_get_power_flags(struct acpi_device *device)
-> > >  {
-> > > +       unsigned long long pre;
-> > > +       acpi_status status;
-> > >         u32 i;
-> > >
-> > >         /* Presence of _PS0|_PR0 indicates 'power manageable' */
-> > > @@ -1008,6 +1010,10 @@ static void acpi_bus_get_power_flags(struct acpi_device *device)
-> > >         if (acpi_has_method(device->handle, "_DSW"))
-> > >                 device->power.flags.dsw_present = 1;
-> > >
-> > > +       status = acpi_evaluate_integer(device->handle, "_PRE", NULL, &pre);
-> > > +       if (ACPI_SUCCESS(status) && !pre)
-> > > +               device->power.flags.allow_low_power_probe = 1;
-> >
-> > While this is what has been discussed and thanks for taking it into
-> > account, I'm now thinking that it may be cleaner to introduce a new
-> > object to return the deepest power state of the device in which it can
-> > be enumerated, say _DSE (Device State for Enumeration) such that 4
-> > means D3cold, 3 - D3hot and so on, so the above check can be replaced
-> > with something like
-> >
-> > status = acpi_evaluate_integer(device->handle, "_PRE", NULL, &dse);
->
-> s/_PRE/_DSE/
->
-> ?
 
-Yes, sorry.
 
->
-> > if (ACPI_FAILURE(status))
->
-> ACPI_SUCCESS?
+On 1/28/21 8:45 PM, Rob Herring wrote:
+> Properties with standard unit suffixes already have a type and don't need
+> type definitions. They also default to a single entry, so 'maxItems: 1'
+> can be dropped.
+> 
+> adi,ad5758 is an oddball which defined an enum of arrays. While a valid
+> schema, it is simpler as a whole to only define scalar constraints.
+> 
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: Alexandre Torgue <alexandre.torgue@st.com>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Serge Semin <fancer.lancer@gmail.com>
+> Cc: Wolfram Sang <wolfram@the-dreams.de>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-watchdog@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>   .../devicetree/bindings/arm/cpus.yaml         |  1 -
+>   .../bindings/extcon/wlf,arizona.yaml          |  1 -
+>   .../bindings/hwmon/adi,ltc2947.yaml           |  1 -
+>   .../bindings/hwmon/baikal,bt1-pvt.yaml        |  8 ++--
+>   .../devicetree/bindings/hwmon/ti,tmp513.yaml  |  1 -
+>   .../devicetree/bindings/i2c/i2c-gpio.yaml     |  2 -
+>   .../bindings/i2c/snps,designware-i2c.yaml     |  3 --
+>   .../bindings/iio/adc/maxim,max9611.yaml       |  1 -
+>   .../bindings/iio/adc/st,stm32-adc.yaml        |  1 -
+>   .../bindings/iio/adc/ti,palmas-gpadc.yaml     |  2 -
+>   .../bindings/iio/dac/adi,ad5758.yaml          | 41 ++++++++++++-------
+>   .../bindings/iio/health/maxim,max30100.yaml   |  1 -
+>   .../input/touchscreen/touchscreen.yaml        |  2 -
+>   .../bindings/mmc/mmc-controller.yaml          |  1 -
+>   .../bindings/mmc/mmc-pwrseq-simple.yaml       |  2 -
+>   .../bindings/net/ethernet-controller.yaml     |  2 -
+>   .../devicetree/bindings/net/snps,dwmac.yaml   |  1 -
+>   .../bindings/power/supply/battery.yaml        |  3 --
+>   .../bindings/power/supply/bq2515x.yaml        |  1 -
+>   .../bindings/regulator/dlg,da9121.yaml        |  1 -
+>   .../bindings/regulator/fixed-regulator.yaml   |  2 -
+>   .../devicetree/bindings/rtc/rtc.yaml          |  2 -
+>   .../devicetree/bindings/serial/pl011.yaml     |  2 -
+>   .../devicetree/bindings/sound/sgtl5000.yaml   |  2 -
+>   .../bindings/watchdog/watchdog.yaml           |  1 -
+>   25 files changed, 29 insertions(+), 56 deletions(-)
 
-Yup.
+For stm32:
+Acked-by: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 
-> >         device->power.state_for_enumeratin = dse;
-> >
-> > And then, it is a matter of comparing ->power.state_for_enumeratin
-> > with ->power.state and putting the device into D0 if the former is
-> > shallower than the latter.
-> >
-> > What do you think?
->
-> Sounds good. How about calling the function e.g.
-> acpi_device_resume_for_probe(), so runtime PM could be used to resume the
-> device if the function returns true?
-
-I'd rather try to power it up before enabling runtime PM, because in
-order to do the latter properly, you need to know if the device is
-active or suspended to start with.
-
-So you need something like (pseudo-code)
-
-if (this_device_needs_to_be_on(ACPI_COMPANION(dev))) {
-   acpi_device_set_power(ACPI_COMPANION(dev), ACPI_STATE_D0);
-   pm_runtime_set_active(dev);
-} else {
-   pm_runtime_set_suspended(dev);
-}
-
-and then you can enable PM-runtime.
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+> index 14cd727d3c4b..f02fd10de604 100644
+> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+> @@ -232,7 +232,6 @@ properties:
+>         by this cpu (see ./idle-states.yaml).
+>   
+>     capacity-dmips-mhz:
+> -    $ref: '/schemas/types.yaml#/definitions/uint32'
+>       description:
+>         u32 value representing CPU capacity (see ./cpu-capacity.txt) in
+>         DMIPS/MHz, relative to highest capacity-dmips-mhz
+> diff --git a/Documentation/devicetree/bindings/extcon/wlf,arizona.yaml b/Documentation/devicetree/bindings/extcon/wlf,arizona.yaml
+> index 5fe784f487c5..efdf59abb2e1 100644
+> --- a/Documentation/devicetree/bindings/extcon/wlf,arizona.yaml
+> +++ b/Documentation/devicetree/bindings/extcon/wlf,arizona.yaml
+> @@ -85,7 +85,6 @@ properties:
+>     wlf,micd-timeout-ms:
+>       description:
+>         Timeout for microphone detection, specified in milliseconds.
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+>   
+>     wlf,micd-force-micbias:
+>       description:
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
+> index eef614962b10..bf04151b63d2 100644
+> --- a/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml
+> @@ -49,7 +49,6 @@ properties:
+>       description:
+>         This property controls the Accumulation Dead band which allows to set the
+>         level of current below which no accumulation takes place.
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       maximum: 255
+>       default: 0
+>   
+> diff --git a/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml b/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
+> index 00a6511354e6..5d3ce641fcde 100644
+> --- a/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
+> @@ -73,11 +73,9 @@ properties:
+>       description: |
+>         Temperature sensor trimming factor. It can be used to manually adjust the
+>         temperature measurements within 7.130 degrees Celsius.
+> -    maxItems: 1
+> -    items:
+> -      default: 0
+> -      minimum: 0
+> -      maximum: 7130
+> +    default: 0
+> +    minimum: 0
+> +    maximum: 7130
+>   
+>   additionalProperties: false
+>   
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+> index 8020d739a078..1502b22c77cc 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+> @@ -52,7 +52,6 @@ properties:
+>     ti,bus-range-microvolt:
+>       description: |
+>         This is the operating range of the bus voltage in microvolt
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       enum: [16000000, 32000000]
+>       default: 32000000
+>   
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml b/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
+> index cc3aa2a5e70b..ff99344788ab 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
+> @@ -39,11 +39,9 @@ properties:
+>   
+>     i2c-gpio,delay-us:
+>       description: delay between GPIO operations (may depend on each platform)
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>   
+>     i2c-gpio,timeout-ms:
+>       description: timeout to get data
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>   
+>     # Deprecated properties, do not use in new device tree sources:
+>     gpios:
+> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> index c22b66b6219e..d9293c57f573 100644
+> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> @@ -66,21 +66,18 @@ properties:
+>       default: 400000
+>   
+>     i2c-sda-hold-time-ns:
+> -    maxItems: 1
+>       description: |
+>         The property should contain the SDA hold time in nanoseconds. This option
+>         is only supported in hardware blocks version 1.11a or newer or on
+>         Microsemi SoCs.
+>   
+>     i2c-scl-falling-time-ns:
+> -    maxItems: 1
+>       description: |
+>         The property should contain the SCL falling time in nanoseconds.
+>         This value is used to compute the tLOW period.
+>       default: 300
+>   
+>     i2c-sda-falling-time-ns:
+> -    maxItems: 1
+>       description: |
+>         The property should contain the SDA falling time in nanoseconds.
+>         This value is used to compute the tHIGH period.
+> diff --git a/Documentation/devicetree/bindings/iio/adc/maxim,max9611.yaml b/Documentation/devicetree/bindings/iio/adc/maxim,max9611.yaml
+> index 9475a9e6e920..95774a55629d 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/maxim,max9611.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/maxim,max9611.yaml
+> @@ -23,7 +23,6 @@ properties:
+>       maxItems: 1
+>   
+>     shunt-resistor-micro-ohms:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       description: |
+>         Value in micro Ohms of the shunt resistor connected between the RS+ and
+>         RS- inputs, across which the current is measured.  Value needed to compute
+> diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+> index 6364ede9bb5f..a58334c3bb76 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+> @@ -248,7 +248,6 @@ patternProperties:
+>             Resolution (bits) to use for conversions:
+>               - can be 6, 8, 10 or 12 on stm32f4
+>               - can be 8, 10, 12, 14 or 16 on stm32h7 and stm32mp1
+> -        $ref: /schemas/types.yaml#/definitions/uint32
+>   
+>         st,adc-channels:
+>           description: |
+> diff --git a/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml b/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml
+> index 692dacd0fee5..7b895784e008 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml
+> @@ -42,7 +42,6 @@ properties:
+>       const: 1
+>   
+>     ti,channel0-current-microamp:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       description: Channel 0 current in uA.
+>       enum:
+>         - 0
+> @@ -51,7 +50,6 @@ properties:
+>         - 20
+>   
+>     ti,channel3-current-microamp:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       description: Channel 3 current in uA.
+>       enum:
+>         - 0
+> diff --git a/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml b/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
+> index 626ccb6fe21e..fd4edca34a28 100644
+> --- a/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
+> +++ b/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
+> @@ -46,31 +46,42 @@ properties:
+>         two properties must be present:
+>   
+>     adi,range-microvolt:
+> -    $ref: /schemas/types.yaml#/definitions/int32-array
+>       description: |
+>         Voltage output range specified as <minimum, maximum>
+> -    enum:
+> -      - [[0, 5000000]]
+> -      - [[0, 10000000]]
+> -      - [[-5000000, 5000000]]
+> -      - [[-10000000, 10000000]]
+> +    oneOf:
+> +      - items:
+> +          - const: 0
+> +          - enum: [5000000, 10000000]
+> +      - items:
+> +          - const: -5000000
+> +          - const: 5000000
+> +      - items:
+> +          - const: -10000000
+> +          - const: 10000000
+>   
+>     adi,range-microamp:
+> -    $ref: /schemas/types.yaml#/definitions/int32-array
+>       description: |
+>         Current output range specified as <minimum, maximum>
+> -    enum:
+> -      - [[0, 20000]]
+> -      - [[0, 24000]]
+> -      - [[4, 24000]]
+> -      - [[-20000, 20000]]
+> -      - [[-24000, 24000]]
+> -      - [[-1000, 22000]]
+> +    oneOf:
+> +      - items:
+> +          - const: 0
+> +          - enum: [20000, 24000]
+> +      - items:
+> +          - const: 4
+> +          - const: 24000
+> +      - items:
+> +          - const: -20000
+> +          - const: 20000
+> +      - items:
+> +          - const: -24000
+> +          - const: 24000
+> +      - items:
+> +          - const: -1000
+> +          - const: 22000
+>   
+>     reset-gpios: true
+>   
+>     adi,dc-dc-ilim-microamp:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       enum: [150000, 200000, 250000, 300000, 350000, 400000]
+>       description: |
+>         The dc-to-dc converter current limit.
+> diff --git a/Documentation/devicetree/bindings/iio/health/maxim,max30100.yaml b/Documentation/devicetree/bindings/iio/health/maxim,max30100.yaml
+> index 64b862637039..967778fb0ce8 100644
+> --- a/Documentation/devicetree/bindings/iio/health/maxim,max30100.yaml
+> +++ b/Documentation/devicetree/bindings/iio/health/maxim,max30100.yaml
+> @@ -21,7 +21,6 @@ properties:
+>       description: Connected to ADC_RDY pin.
+>   
+>     maxim,led-current-microamp:
+> -    $ref: /schemas/types.yaml#/definitions/uint32-array
+>       minItems: 2
+>       maxItems: 2
+>       description: |
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> index a771a15f053f..046ace461cc9 100644
+> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> @@ -70,11 +70,9 @@ properties:
+>   
+>     touchscreen-x-mm:
+>       description: horizontal length in mm of the touchscreen
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>   
+>     touchscreen-y-mm:
+>       description: vertical length in mm of the touchscreen
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>   
+>   dependencies:
+>     touchscreen-size-x: [ touchscreen-size-y ]
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> index df4ee4c778ae..e141330c1114 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> @@ -261,7 +261,6 @@ properties:
+>         waiting for I/O signalling and card power supply to be stable,
+>         regardless of whether pwrseq-simple is used. Default to 10ms if
+>         no available.
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       default: 10
+>   
+>     supports-cqe:
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
+> index 6cd57863c1db..226fb191913d 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
+> @@ -41,13 +41,11 @@ properties:
+>       description:
+>         Delay in ms after powering the card and de-asserting the
+>         reset-gpios (if any).
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>   
+>     power-off-delay-us:
+>       description:
+>         Delay in us after asserting the reset-gpios (if any)
+>         during power off of the card.
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>   
+>   required:
+>     - compatible
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> index 0965f6515f9e..dac4aadb6e2e 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> @@ -122,7 +122,6 @@ properties:
+>         such as flow control thresholds.
+>   
+>     rx-internal-delay-ps:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       description: |
+>         RGMII Receive Clock Delay defined in pico seconds.
+>         This is used for controllers that have configurable RX internal delays.
+> @@ -140,7 +139,6 @@ properties:
+>         is used for components that can have configurable fifo sizes.
+>   
+>     tx-internal-delay-ps:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       description: |
+>         RGMII Transmit Clock Delay defined in pico seconds.
+>         This is used for controllers that have configurable TX internal delays.
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index b2f6083f556a..9ac77b8cb767 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -208,7 +208,6 @@ properties:
+>         Triplet of delays. The 1st cell is reset pre-delay in micro
+>         seconds. The 2nd cell is reset pulse in micro seconds. The 3rd
+>         cell is reset post-delay in micro seconds.
+> -    $ref: /schemas/types.yaml#/definitions/uint32-array
+>       minItems: 3
+>       maxItems: 3
+>   
+> diff --git a/Documentation/devicetree/bindings/power/supply/battery.yaml b/Documentation/devicetree/bindings/power/supply/battery.yaml
+> index 0c7e2e44793b..c3b4b7543591 100644
+> --- a/Documentation/devicetree/bindings/power/supply/battery.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/battery.yaml
+> @@ -83,21 +83,18 @@ properties:
+>         for each of the battery capacity lookup table.
+>   
+>     operating-range-celsius:
+> -    $ref: /schemas/types.yaml#/definitions/uint32-array
+>       description: operating temperature range of a battery
+>       items:
+>         - description: minimum temperature at which battery can operate
+>         - description: maximum temperature at which battery can operate
+>   
+>     ambient-celsius:
+> -    $ref: /schemas/types.yaml#/definitions/uint32-array
+>       description: safe range of ambient temperature
+>       items:
+>         - description: alert when ambient temperature is lower than this value
+>         - description: alert when ambient temperature is higher than this value
+>   
+>     alert-celsius:
+> -    $ref: /schemas/types.yaml#/definitions/uint32-array
+>       description: safe range of battery temperature
+>       items:
+>         - description: alert when battery temperature is lower than this value
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> index 75a56773be4a..813d6afde606 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> @@ -50,7 +50,6 @@ properties:
+>       maxItems: 1
+>   
+>     input-current-limit-microamp:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       description: Maximum input current in micro Amps.
+>       minimum: 50000
+>       maximum: 500000
+> diff --git a/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml b/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
+> index 6f2164f7bc57..228018c87bea 100644
+> --- a/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
+> @@ -62,7 +62,6 @@ properties:
+>       description: IRQ line information.
+>   
+>     dlg,irq-polling-delay-passive-ms:
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+>       minimum: 1000
+>       maximum: 10000
+>       description: |
+> diff --git a/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml b/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
+> index d3d0dc13dd8b..8850c01bd470 100644
+> --- a/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
+> @@ -72,11 +72,9 @@ properties:
+>   
+>     startup-delay-us:
+>       description: startup time in microseconds
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>   
+>     off-on-delay-us:
+>       description: off delay time in microseconds
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>   
+>     enable-active-high:
+>       description:
+> diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> index d30dc045aac6..0ec3551f12dd 100644
+> --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> @@ -27,7 +27,6 @@ properties:
+>         1: chargeable
+>   
+>     quartz-load-femtofarads:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       description:
+>         The capacitive load of the quartz(x-tal), expressed in femto
+>         Farad (fF). The default value shall be listed (if optional),
+> @@ -47,7 +46,6 @@ properties:
+>       deprecated: true
+>   
+>     trickle-resistor-ohms:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       description:
+>         Selected resistor for trickle charger. Should be given
+>         if trickle charger should be enabled.
+> diff --git a/Documentation/devicetree/bindings/serial/pl011.yaml b/Documentation/devicetree/bindings/serial/pl011.yaml
+> index c23c93b400f0..07fa6d26f2b4 100644
+> --- a/Documentation/devicetree/bindings/serial/pl011.yaml
+> +++ b/Documentation/devicetree/bindings/serial/pl011.yaml
+> @@ -88,14 +88,12 @@ properties:
+>       description:
+>         Rate at which poll occurs when auto-poll is set.
+>         default 100ms.
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       default: 100
+>   
+>     poll-timeout-ms:
+>       description:
+>         Poll timeout when auto-poll is set, default
+>         3000ms.
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       default: 3000
+>   
+>   required:
+> diff --git a/Documentation/devicetree/bindings/sound/sgtl5000.yaml b/Documentation/devicetree/bindings/sound/sgtl5000.yaml
+> index d116c174b545..70b4a8831073 100644
+> --- a/Documentation/devicetree/bindings/sound/sgtl5000.yaml
+> +++ b/Documentation/devicetree/bindings/sound/sgtl5000.yaml
+> @@ -41,14 +41,12 @@ properties:
+>         values of 2k, 4k or 8k. If set to 0 it will be off. If this node is not
+>         mentioned or if the value is unknown, then micbias resistor is set to
+>         4k.
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+>       enum: [ 0, 2, 4, 8 ]
+>   
+>     micbias-voltage-m-volts:
+>       description: The bias voltage to be used in mVolts. The voltage can take
+>         values from 1.25V to 3V by 250mV steps. If this node is not mentioned
+>         or the value is unknown, then the value is set to 1.25V.
+> -    $ref: "/schemas/types.yaml#/definitions/uint32"
+>       enum: [ 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000 ]
+>   
+>     lrclk-strength:
+> diff --git a/Documentation/devicetree/bindings/watchdog/watchdog.yaml b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> index 4e2c26cd981d..e3dfb02f0ca5 100644
+> --- a/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> @@ -19,7 +19,6 @@ properties:
+>       pattern: "^watchdog(@.*|-[0-9a-f])?$"
+>   
+>     timeout-sec:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+>       description:
+>         Contains the watchdog timeout in seconds.
+>   
+> 
