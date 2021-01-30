@@ -2,73 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DA4309EAB
-	for <lists+linux-i2c@lfdr.de>; Sun, 31 Jan 2021 21:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADBE30CDAD
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Feb 2021 22:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbhAaUJW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 31 Jan 2021 15:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbhAaTqL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 31 Jan 2021 14:46:11 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F67C061A27
-        for <linux-i2c@vger.kernel.org>; Sun, 31 Jan 2021 11:35:17 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id f1so19875825lfu.3
-        for <linux-i2c@vger.kernel.org>; Sun, 31 Jan 2021 11:35:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=TMdAwgGCU0UK2zGDufFD/rnwy1XjE0usi+CtbeAisS8=;
-        b=XZNf2G5ga3i/e0kxJm4Usq8ojU9pUUov9Ps2+vp3HvTpxsIJVu8VDUJLGxtXGyvwcQ
-         AAnh1Lu2EQb+IGdRHowyxfY2TJ6TxDwoC0LovnoCrtz25JVV3UJKzw3zRjVu0gFSlSnM
-         98MUPt4nnZIrbp+Jl0FWzGyR6UG9YyOQib4Pg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=TMdAwgGCU0UK2zGDufFD/rnwy1XjE0usi+CtbeAisS8=;
-        b=FKRW7TWKd4ARSBqI6FD5gUimVVCJKMcJueRflYfpeX+5U78pI4G0+fgYr0Atqa2Jjj
-         DjzfU4koTOO7qB0gFrRaY4QC66h9FLNVrqQNhWK9djnJ9ErQ9DHiqv7o2M7Mo0rhUV2y
-         wdh9UhSZ+DdK0mn/dpHVCWj2qWBgA9yfD9Fm0Mp/leOxqGH53Jcz562mIG3MT6Q2Zi4v
-         Yxq7IqYNMxMZCjZ5W94D+wbN3+oYmBDRByQtTdYrxXmLb47MpHpVW7N9Nx8PUPF3NVwg
-         NNNAK9HNy87iEBrOvQbo68uaBaa5rFy+Mmnioy6gsN6WWhDBHRUZFOGO5UAv82Q6W3ey
-         6lKQ==
-X-Gm-Message-State: AOAM530H/3D6zWy6kL9cMEoCdj/xSRLkX4pTjysvfKP5w3ThZLAZxFub
-        mB2LmWJJujmT+oZl4LhF0vOeAKpj8IzaGg==
-X-Google-Smtp-Source: ABdhPJw4qjVpQytKFEPXlWVrVNMlSBhDsfxiYtDc5aIU1EFL8yMzSNAfGXCzrqfvfkDAX0vixOo1pA==
-X-Received: by 2002:ac2:5462:: with SMTP id e2mr7330386lfn.655.1612121715436;
-        Sun, 31 Jan 2021 11:35:15 -0800 (PST)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id 127sm3528908ljf.132.2021.01.31.11.35.14
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Jan 2021 11:35:14 -0800 (PST)
-Received: by mail-lj1-f177.google.com with SMTP id y14so4314831ljn.8
-        for <linux-i2c@vger.kernel.org>; Sun, 31 Jan 2021 11:35:14 -0800 (PST)
-X-Received: by 2002:a2e:850d:: with SMTP id j13mr8269533lji.507.1612121714111;
- Sun, 31 Jan 2021 11:35:14 -0800 (PST)
+        id S234009AbhBBVKX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Feb 2021 16:10:23 -0500
+Received: from [20.39.40.203] ([20.39.40.203]:65313 "EHLO optinix.in"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S231256AbhBBVKS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 2 Feb 2021 16:10:18 -0500
+dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
+        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
+        b=TP5ImnyHcJd6ZOutD2G4fr5f8wWoUQwQgOLW2PI/280OHeTqlZLToIxAIofahXeo75Wu3EjCyPUkWCAvONVwZu0fevODO9NabCWAisW+z0dGu9MXtR6qZycknhfK+mQQvORufc2uJdOyxsLmIaqgju02ah6NTaY7MUrrDAsnypqV/dHvFc1ZCeNq9M9cnBgI6P8moRvB3Uy5b0Di8H1i0zAyCi2Ui0iRGfGkTkO0ugXob5Evs8zBCz+bQn
+        OGNJsvkyEuoIiGf1dhK8ZygeNRPTDeubCEGrI3iP2v+CePRDNJj0O+GADoZLV93dYARi5DbbBgbqte2GtdOqu1KHIrhw==
+Received: from User (Unknown [52.231.31.5])
+        by optinix.in with ESMTP
+        ; Sat, 30 Jan 2021 02:13:52 +0000
+Message-ID: <8F335769-7194-475D-8960-10F7C26454EB@optinix.in>
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <support@digitalsol.in>
+Subject: Re:read
+Date:   Sat, 30 Jan 2021 02:13:50 -0000
 MIME-Version: 1.0
-References: <20210131114017.GA1332@kunai>
-In-Reply-To: <20210131114017.GA1332@kunai>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 31 Jan 2021 11:34:57 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiZ5-eiJbkJxQo+kXPN=wRBTGZZHKUB8eA428Uft7j1Eg@mail.gmail.com>
-Message-ID: <CAHk-=wiZ5-eiJbkJxQo+kXPN=wRBTGZZHKUB8eA428Uft7j1Eg@mail.gmail.com>
-Subject: Re: [PULL REQUEST] i2c for 5.11
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Jan 31, 2021 at 3:40 AM Wolfram Sang <wsa@kernel.org> wrote:
->
-> one I2C driver update this time.
+Hello,
 
-Pulled (manual notification because the automation seems very flaky).
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-            Linus
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
+
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
+Regards,
+Ms. Reem.
+
