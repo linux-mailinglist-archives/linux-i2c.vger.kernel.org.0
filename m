@@ -2,68 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7A530A951
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Feb 2021 15:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 395FE30AE80
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Feb 2021 18:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbhBAOFb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Feb 2021 09:05:31 -0500
-Received: from mga12.intel.com ([192.55.52.136]:7453 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231778AbhBAOFa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 1 Feb 2021 09:05:30 -0500
-IronPort-SDR: M5jvLr1n6H/PYPov8q7YDBctPmb8M5zle+OZWjhCG/fkJDdrfyRx/RNoWrLgCK73BthttxlERr
- BHlWKtE1yQig==
-X-IronPort-AV: E=McAfee;i="6000,8403,9881"; a="159855700"
-X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="159855700"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 06:02:52 -0800
-IronPort-SDR: zbcZ3BtmV8u1/LzUfbU5PXrxMj1+5+w5MrQlg/3t2zSM+OcztEAkJtdGZbw8Ra814Qzxi+C9Ms
- KAukZzPuFj1g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,392,1602572400"; 
-   d="scan'208";a="479075591"
-Received: from mylly.fi.intel.com (HELO [10.237.72.56]) ([10.237.72.56])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Feb 2021 06:02:49 -0800
-Subject: Re: [PATCH] i2c: i801: Add support for Intel Alder Lake PCH-P
-To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>
-Cc:     linux-i2c@vger.kernel.org
-References: <20210114143811.1820137-1-jarkko.nikula@linux.intel.com>
- <20210128085943.GD963@ninjato>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <70c0c886-f8bb-1179-3bb9-f805ac7f4800@linux.intel.com>
-Date:   Mon, 1 Feb 2021 16:02:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S231872AbhBARyV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Feb 2021 12:54:21 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:47681 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229607AbhBARyU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Feb 2021 12:54:20 -0500
+Received: from envy.fritz.box ([87.123.101.73]) by mrelayeu.kundenserver.de
+ (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N8VkX-1m2G5M1AaP-014S4G; Mon, 01 Feb 2021 18:51:41 +0100
+From:   Richard Neumann <mail@richard-neumann.de>
+To:     syniurge@gmail.com, nehal-bakulchandra.shah@amd.com,
+        shyam-sundar.s-k@amd.com, mail@richard-neumann.de,
+        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] i2c: i2c-amd-mp2: Clean up driver
+Date:   Mon,  1 Feb 2021 18:51:36 +0100
+Message-Id: <20210201175138.8986-1-mail@richard-neumann.de>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-In-Reply-To: <20210128085943.GD963@ninjato>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:J1gDmxjtCLTJUJeJgLh2zegx2U2FMGvlTC8V7JvzRo5ue9aKnRz
+ hmRdh/awBuxCH0RnnJQbIqGwxqEr9j8a1lUPltoNxA5GPhtIHGNVkaTf+695/nzNHhZ7l7j
+ ZT55lk7VwBI0rBH97dJsAG1vwn6EJH07gbEhWHsGAgJ5mfxsc2DDUE8Uvph+rse0IK/jWCk
+ r1E7aBmAoPhilQqxx1Zhg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hdctGeT7eVc=:JvEZ5K12gGpLe+Dtv3ZSB+
+ 1t6uEYdfyF6q+ZW2CxPJ+EbRBO2Cc5kaQ6CmKWCr05M619e4wGtCG0fVMKejjgwNfgs56m7BM
+ 9fIGqM1Qe23DvBUZegA03fX+1K2d4U+7ovGS591+CMN75uxfq4SkS2VSQ8bmCNa3DXPp3cL74
+ LqvMuMzkx3QbSsS9FXIVujytCUVuzX4eaLRha2L63h89ue6jkSrdRX3gDAz8AWZsA19WkcFr7
+ /3dd6cyyaAsumky+M/1omlniLwoGkh7Kc9Odikj4bcUCYannJfACKRnIjPNFu2K514SF+XEdx
+ v84yrngw2PvdhDsmmPcndCw12GtfD3E86hDsVFaFQZ/cI4YD8PPh8OwXhK0cxRM5IRA0pmt5a
+ jrlAT9Fpu/7Qu0l6AVx9wEQwIv8GssHCFYDXApmSMug8vaPoK4rNTNuWOFS5rNZMRrsoOAdDJ
+ LJqcVfPyCg==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/28/21 10:59 AM, Wolfram Sang wrote:
-> On Thu, Jan 14, 2021 at 04:38:11PM +0200, Jarkko Nikula wrote:
->> Add PCI ID of SMBus controller on Intel Alder Lake PCH-P.
->>
->> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> 
-> Do we still update Documentation/i2c/busses/i2c-i801.rst?
-> 
-Actually need to avoid patching it and Kconfig for each new chipset 
-variant and make them shorter was my motivation behind commit 
-80d943ab19e9 ("i2c: i801: Consolidate chipset names in documentation and 
-Kconfig").
+Clean up i2c-amd-mp2-{pci,plat} drivers:
+* Use pci_* logging functions provided by the kernel's PCI API.
+* Remove unused macros.
+* Remove useless __func__ from logging.
 
-Here Alder Lake name was added by the commit 332fdaebb64e ("i2c: i801: 
-Add support for Intel Alder Lake PCH-S").
+Changes since v1:
+* Remove useless __func__ from logging.
+* Assign pci_dev to local variable where applicable.
 
-> And maybe we should add Jarkko as i801 maintainer because Jean is usually
-> fine with such changes?
-> 
-I'm not sure am I up to the task? Meaning I don't feel I know it so 
-well. I've been mostly adding new PCI IDs to new platforms.
+Changes since v2:
+* Remove duplicate local pointer to pci_dev.
 
-Jarkko
+Richard Neumann (2):
+  i2c: i2c-amd-mp2: Remove NIH logging functions
+  i2c: i2c-amd-mp2: Remove unused macro
+
+ drivers/i2c/busses/i2c-amd-mp2-pci.c  | 55 +++++++++++----------------
+ drivers/i2c/busses/i2c-amd-mp2-plat.c |  3 +-
+ drivers/i2c/busses/i2c-amd-mp2.h      |  6 ---
+ 3 files changed, 24 insertions(+), 40 deletions(-)
+
+-- 
+2.30.0
+
