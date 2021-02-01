@@ -2,74 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C3730B268
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Feb 2021 22:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBBC30B280
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Feb 2021 23:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbhBAV5W (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Feb 2021 16:57:22 -0500
-Received: from sauhun.de ([88.99.104.3]:57720 "EHLO pokefinder.org"
+        id S229996AbhBAWEC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Feb 2021 17:04:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56286 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229739AbhBAV5P (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 1 Feb 2021 16:57:15 -0500
-Received: from localhost (p5486cf8f.dip0.t-ipconnect.de [84.134.207.143])
-        by pokefinder.org (Postfix) with ESMTPSA id 62A962C0AC8;
-        Mon,  1 Feb 2021 22:56:34 +0100 (CET)
-Date:   Mon, 1 Feb 2021 22:56:34 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Vadim Pasternak <vadimp@nvidia.com>
-Cc:     peda@axentia.se, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH i2c-next v2 3/7] i2c: mux: mlxcpld: Move header file out
- of x86 realm
-Message-ID: <20210201215634.GC24315@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Vadim Pasternak <vadimp@nvidia.com>, peda@axentia.se,
-        linux-i2c@vger.kernel.org
-References: <20210122192502.17645-1-vadimp@nvidia.com>
- <20210122192502.17645-4-vadimp@nvidia.com>
+        id S229831AbhBAWD4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 1 Feb 2021 17:03:56 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9A91364D92;
+        Mon,  1 Feb 2021 22:03:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612216995;
+        bh=SD5hcJPKXw5+XdYGFxyx1vpvAOsqU17t1KZiL1O3Ilc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mLitDEYNbSt+zZssJUpc+OtPhxKX9OO//VOAoHOi7r/1bG0eQtRjMlEGTlr/ujWJ7
+         2YiPME/PTSLW92plKj3UIi9UfELFaS9DpWhbokXjzj0Xgd2fxxIfwNcpK1R151c2Vs
+         uB/1K8NDKgfX6lLdmqsCAwl3/g4mjm5NFSCpiDDpbZr5fyDLctOrXuZ6tBmPo8YmqN
+         SkMhWZcM0oObSLC5ybWXq8zDpjW1owaF9FRk33BPhHbz5D96xFwW9VoheMwqU7bq/o
+         yxY3mVwlgg4fyKcfw/apBQ/9SMKjzoA/c/YW1GlL/i798HOOycRwUw77r617Bjzjut
+         DKDQvGiP5iVzQ==
+Date:   Mon, 1 Feb 2021 23:03:11 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Richard Neumann <mail@richard-neumann.de>
+Cc:     syniurge@gmail.com, nehal-bakulchandra.shah@amd.com,
+        shyam-sundar.s-k@amd.com, andriy.shevchenko@linux.intel.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] i2c: i2c-amd-mp2: Remove NIH logging functions
+Message-ID: <20210201220311.GD24315@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Richard Neumann <mail@richard-neumann.de>, syniurge@gmail.com,
+        nehal-bakulchandra.shah@amd.com, shyam-sundar.s-k@amd.com,
+        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210201175138.8986-1-mail@richard-neumann.de>
+ <20210201175138.8986-2-mail@richard-neumann.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TYecfFk8j8mZq+dy"
+        protocol="application/pgp-signature"; boundary="zbGR4y+acU1DwHSi"
 Content-Disposition: inline
-In-Reply-To: <20210122192502.17645-4-vadimp@nvidia.com>
+In-Reply-To: <20210201175138.8986-2-mail@richard-neumann.de>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---TYecfFk8j8mZq+dy
+--zbGR4y+acU1DwHSi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 22, 2021 at 09:24:58PM +0200, Vadim Pasternak wrote:
-> Move out header file from include/linux/platform_data/x86/ to
-> include/linux/platform_data/, since it does not depend on x86
-> architecture.
+On Mon, Feb 01, 2021 at 06:51:37PM +0100, Richard Neumann wrote:
+> Use pci_{info,warn,err,dbg} functions of the kernel's PCI API.
+> Remove unnecessary ndev_pdev(), ndev_name() and ndev_dev() macros.
+> While at it, remove useless __func__ from logging.
 >=20
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
-> Reviewed-by: Michael Shych <michaelsh@nvidia.com>
+> Signed-off-by: Richard Neumann <mail@richard-neumann.de>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied to for-next, thanks!
+$subject looked wrong to me so I changed it to "convert to PCI logging
+functions". Applied to for-next, thanks!
 
 
---TYecfFk8j8mZq+dy
+--zbGR4y+acU1DwHSi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAYeRIACgkQFA3kzBSg
-KbZtMA/9HTch4ENItt+ZfHN2HOJpTvUNxWSYlW1/f39oImuPZexh4XhVhrmTQUgW
-nufFrbu6Nh8b46n31woSDFRVynwmJzwvcdRsJWbn3AQTh3jaLqoX3lPdQod1huE7
-XZxJXX4zsPEk2Z13h5+pC+E4QruIR7QSgtn4BKIiLOS9dN4OsXCn99msNFdcp/LQ
-//j17a7bMaPYqLKiY273Mtt4cCT8ZRNlW1U3MXbAgCrDITvNRAyTueOfjsJyvx8a
-jGqjULx7FTHxzzq53SOEGGHSmekY+nIvzw6nEClU57UKyxW/9wjovbGTN1ztltnI
-LLtF7zgi8zciyKbUY0aNGfNbuTdY3f4FEPxnJ2wzjPTn4DrK2Dih0t7fVvqnoXhr
-kzIP4vQtli5eHP5nDph7jYo3vv2N6jK6BCOwgnpbf1zCmDS7njMdhgVdJbxYRQFh
-Bu/KzEK96W79890Lil0Q8AaKRP8/Qa7VUigVK+sfENvlWB3d0u/Uxun0Fd+v8y03
-LdSUoGgzloh+ayRydvl1AdRvdWmc5nl3V6y1e3WhjYRZgPnKT5Bpqn8TYw8hGbMO
-UiA6sJ7DlbrwOQRK475KRKHrWTD1ZDYnV3OfhrW6XG4nYYOZA1HNn2CftzJICmu5
-+DJcnRRqbgBw9aqhNiPc1uh/JmUrSf0zzHII5gTepuVThza5w+0=
-=N4F7
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAYep8ACgkQFA3kzBSg
+KbZP6Q/+IdTaOU1Tino6fMC7XzPc6AuY7SouD4qGDUYIM2gXCSaNoz60MV9Zr93v
+EP5d1rXn9EmDvF7e4hr9oPiP0lF2TGxgWrOiUXDjjt+zNLXz3uBUL3jdwmhxVvK2
+yABZAXjcchAFjxqq6eGzXMvrrmmQlKNITrMTue5COx15hv+2ZSOQ3I1cL/VTjJ6q
+lhNCEeQQaSGFnmIQr/Mpz2xdfz4VTTqBXi+7q1Yfi6jMfvO0++QeUdG8U9XoC/G2
+/0n8FcdNERDO4AFTR0IAEuwKm2Ta5JycgU3NknP24SBVv/d4vo3JdzpTTW+fZ4R9
+ZObGjLRCKdix1o0AvybuHLcck4zRGDV7ESiIaSLN+QrYBbpqf8jsBp9sL7VnJOiw
+GVI3qSYK1CCFfsL5tvrxuRZ5/Wohdv1/OPwtK6rUV7zSVfox16g6L7fx4kO/chPs
+zTbODDS+4oAnKx/m6efQam0COGs02s0H4TII99j4ge9qxVlrctIvukFf2gPl1p2+
+jkWZfkxiUZrXejwYYys957CC9EGt1ecdVfiden0nHO44Bsp06/1EaDqngjhkGL3W
+bHjF2Jpzp9WbAmxy1Qgq5KyNR0uFLNyMsKYAj0NrrbVoQSe1BzRrgLZDBZQMM32a
+JaOisYxIeBy8NWlYm7fUpTivQFcZafxCkvsmVVPddC476jMQjps=
+=L2gM
 -----END PGP SIGNATURE-----
 
---TYecfFk8j8mZq+dy--
+--zbGR4y+acU1DwHSi--
