@@ -2,63 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4407B30AEF2
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Feb 2021 19:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0BF30B264
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Feb 2021 22:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbhBASSJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Feb 2021 13:18:09 -0500
-Received: from mga04.intel.com ([192.55.52.120]:64944 "EHLO mga04.intel.com"
+        id S229810AbhBAV5G (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Feb 2021 16:57:06 -0500
+Received: from sauhun.de ([88.99.104.3]:57698 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232201AbhBASRr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 1 Feb 2021 13:17:47 -0500
-IronPort-SDR: eRVRMB4c5v0PG2l99V/SKVgnrUXKpjLhfVrJfOaUNsIebXjs8W/9RUn/N/S1Xv3oFeGGtGs8NS
- Q7ud3/OauHxw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="178166577"
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="178166577"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 10:16:11 -0800
-IronPort-SDR: 7ZTkZfhuXzF7tmOMmHnDrQnEHTXexXTrhVR8ghgtlvHHzTOhV1hOCID+pwkTOLSQBsCSzb5Y6H
- NuHbPBIMip5g==
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="370025800"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 10:16:09 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1l6dk6-001CGd-CH; Mon, 01 Feb 2021 20:16:06 +0200
-Date:   Mon, 1 Feb 2021 20:16:06 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Richard Neumann <mail@richard-neumann.de>
-Cc:     syniurge@gmail.com, nehal-bakulchandra.shah@amd.com,
-        shyam-sundar.s-k@amd.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] i2c: i2c-amd-mp2: Remove NIH logging functions
-Message-ID: <YBhFZikbVgyaFqNs@smile.fi.intel.com>
-References: <20210201175138.8986-1-mail@richard-neumann.de>
- <20210201175138.8986-2-mail@richard-neumann.de>
+        id S229498AbhBAV5F (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 1 Feb 2021 16:57:05 -0500
+Received: from localhost (p5486cf8f.dip0.t-ipconnect.de [84.134.207.143])
+        by pokefinder.org (Postfix) with ESMTPSA id BE06E2C04D3;
+        Mon,  1 Feb 2021 22:56:21 +0100 (CET)
+Date:   Mon, 1 Feb 2021 22:56:18 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Vadim Pasternak <vadimp@nvidia.com>
+Cc:     peda@axentia.se, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH i2c-next v2 1/7] i2c: mux: mlxcpld: Update module license
+Message-ID: <20210201215618.GA24315@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Vadim Pasternak <vadimp@nvidia.com>, peda@axentia.se,
+        linux-i2c@vger.kernel.org
+References: <20210122192502.17645-1-vadimp@nvidia.com>
+ <20210122192502.17645-2-vadimp@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="G4iJoqBmSsgzjUCe"
 Content-Disposition: inline
-In-Reply-To: <20210201175138.8986-2-mail@richard-neumann.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210122192502.17645-2-vadimp@nvidia.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 06:51:37PM +0100, Richard Neumann wrote:
-> Use pci_{info,warn,err,dbg} functions of the kernel's PCI API.
-> Remove unnecessary ndev_pdev(), ndev_name() and ndev_dev() macros.
-> While at it, remove useless __func__ from logging.
-> 
-> Signed-off-by: Richard Neumann <mail@richard-neumann.de>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I haven't given you the tag for this patch, but this time it's okay,
-no need to resend.
+--G4iJoqBmSsgzjUCe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Fri, Jan 22, 2021 at 09:24:56PM +0200, Vadim Pasternak wrote:
+> Update license to SPDX-License.
+>=20
+> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+
+Applied to for-next, thanks!
 
 
+--G4iJoqBmSsgzjUCe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAYeP4ACgkQFA3kzBSg
+KbYnGA//ZeJLgx1W9JKfMU3J84D+jS7qMii4AtkCnL95toqTXwy0M6rTAbUD1YHF
+7VQRNvKyuUS5c6RPURNBbi1knL+1njcfl2VnRC/L5IcwPV0hrtfqB/NagJhLFWEg
+bK7t46AvkzZinsfkVN0mQFX6pvvClWYWx8uDTf2dNpeSAdRot7E20TyeOoCTdH0I
+zaZaqzPeCM2dQLruI7PAtK2SED1DIh9lI8seyZ0NadpO/r3Px0cznI0+yIBZddde
+KrNfZaVEqgv3Wle63i82N3RTMt45Ri6sXbAwgflZfFlwLP4GR5bgGDnpFzhTs2+I
+pTrCxAWXDDCWuqE+0lpVdPf4FiAIvXJzRZ3+AZlrlC6xO/CzL8uNIco45cqrHQuh
+BMlWYMFNd5TApXRG1Uj6gSPuFCYcSl+1mRVTiROWk1gfW4MPw/n5EX8CvCUWEaSo
+5FE9LRBuh/9FZW8lPXDX7cfgI7xdByGnwCDLwJPLx4lR3FUaS6rTA5kRxoKWrW7s
+nUqgBv0sXQoK0M3JrvU9c9K5/GNqLKaOQXhO7iII9yrDigeCECj1DUVe54hcbtho
+n07NxRIoJjjAeK8cgbfup0HpthSlfZZUDFS1mHMmsbwybbZEE7dIsseJOSWAwWzN
+mSjCIXW9YUEYE+q4YmWf0vH5VF97MG2TQWNUSngshZ5KeEpGhY4=
+=qMTH
+-----END PGP SIGNATURE-----
+
+--G4iJoqBmSsgzjUCe--
