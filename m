@@ -2,131 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAAB30BC65
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Feb 2021 11:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E0430BD23
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Feb 2021 12:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbhBBKvk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Feb 2021 05:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhBBKvj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Feb 2021 05:51:39 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DB0C061573;
-        Tue,  2 Feb 2021 02:50:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=QUFoL1M4pevTeMyLwnDogHEMlQrHMZssskb6wG1LFcA=; b=wg2o6QP/gHbhqBuIhn1RZoUGj
-        2iHotGU7ufXkLAWPw4UwYFPNHzUu8ddsLF6ZH7DAZK9ibPxZPao37pY3QUiSj2kNvPg18QoU3RIbp
-        SB9YdTsgzRp09KPTWE899TVtBN6b7+9uCVpM084z3RB+393ttTKlzy9IbXmuACxRaE7AQP1axErmx
-        9bdLyqL5Tzp+2AR1s8H8Ra8HKPn+VaEgvK7MKLCh/WvBYIcLxWRrMqhYn6+wAR7lOhqYiExSBYnla
-        2ZSGKUuSlOCD0mvUg9A5mz9A1bzzWPt0jeQ/XhpyrV3IGp6JHZ9fsbmIMsvJ8Mev9a6w8QLTZD9/a
-        CRpSMItzA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38176)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1l6tFN-0004FH-LS; Tue, 02 Feb 2021 10:49:25 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1l6tFE-0002yZ-0J; Tue, 02 Feb 2021 10:49:16 +0000
-Date:   Tue, 2 Feb 2021 10:49:15 +0000
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
+        id S231148AbhBBLbe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Feb 2021 06:31:34 -0500
+Received: from mga17.intel.com ([192.55.52.151]:6959 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230319AbhBBL3e (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 2 Feb 2021 06:29:34 -0500
+IronPort-SDR: Mfg/488EZG1NsiXVMVGwbHvLj29W8WOYlWqewBIsz83yGGVMvRAYZC7J62+9bJmDdvYcO3YXe/
+ 928gBCh2FJJA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="160603654"
+X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
+   d="scan'208";a="160603654"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 03:27:43 -0800
+IronPort-SDR: 2Rc0Ikw4v3gdbwgcJwco0+nR1oatilf8/ryPGdXG7K+2H+4ey6rP6I8ScbsETZ+vR3T1kOCBEy
+ GN/VDhaWLS0Q==
+X-IronPort-AV: E=Sophos;i="5.79,394,1602572400"; 
+   d="scan'208";a="370573944"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 03:27:39 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1l6tqK-001NPV-2X; Tue, 02 Feb 2021 13:27:36 +0200
+Date:   Tue, 2 Feb 2021 13:27:36 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, andy@kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig.org@pengutronix.de>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 0/5] amba: minor fix and various cleanups
-Message-ID: <20210202104915.GK1463@shell.armlinux.org.uk>
-References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [PATCH v2 2/7] acpi: utils: Add function to fetch dependent
+ acpi_devices
+Message-ID: <YBk3KDs5FCffkQp1@smile.fi.intel.com>
+References: <b381b48e-1bf2-f3e7-10a6-e51cd261f43c@gmail.com>
+ <CAJZ5v0iU2m4Hs6APuauQ645DwbjYaB8nJFjYH0+7yQnR-FPZBQ@mail.gmail.com>
+ <e2d7e5e9-920f-7227-76a6-b166e30e11e5@gmail.com>
+ <CAJZ5v0gg5oXG3yOO9iDvPKSsadYrFojW6JcKfZcQbFFpO78zAQ@mail.gmail.com>
+ <85ccf00d-7c04-b1da-a4bc-82c805df69c9@gmail.com>
+ <CAJZ5v0jO9O1zhBMNRNB5kRt1o86BTjr1kRuFUe=nNVTDwBQhEg@mail.gmail.com>
+ <0fac24d2-e8fc-7dc8-0f2f-44c7aadb1daf@gmail.com>
+ <CAJZ5v0jVxMMGh6k-vXeBRsCtD0L14poNUrg4kZOpCfOz2sZGZQ@mail.gmail.com>
+ <ee8f6b58-55c8-e0a0-c161-bdef361f9e0a@gmail.com>
+ <d9ec0439-4323-51a2-70e7-c258fe63cd86@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
+In-Reply-To: <d9ec0439-4323-51a2-70e7-c258fe63cd86@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 05:58:30PM +0100, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig.org@pengutronix.de
-> 
-> Hello,
-> 
-> Changes since v2 sent with Message-Id:
-> 20201124133139.3072124-1-uwe@kleine-koenig.org:
-> 
->  - Rebase to v5.11-rc1 (which resulted in a few conflicts in
->    drivers/hwtracing).
->  - Add various Acks.
->  - Send to more maintainers directly (which I think is one of the
->    reasons why there are so few Acks).
-> 
-> For my taste patch 4 needs some more acks (drivers/char/hw_random,
-> drivers/dma, drivers/gpu/drm/pl111, drivers/i2c, drivers/mmc,
-> drivers/vfio, drivers/watchdog and sound/arm have no maintainer feedback
-> yet).
-> 
-> My suggestion is to let this series go in via Russell King (who cares
-> for amba). Once enough Acks are there I can also provide a tag for
-> merging into different trees. Just tell me if you prefer this solution.
-> 
-> Would be great if this could make it for v5.12, but I'm aware it's
-> already late in the v5.11 cycle so it might have to wait for v5.13.
+On Tue, Feb 02, 2021 at 09:58:17AM +0000, Daniel Scally wrote:
+> On 21/01/2021 21:06, Daniel Scally wrote:
+> > On 21/01/2021 18:08, Rafael J. Wysocki wrote:
 
-I think you need to have a 6th patch which moves the
-probe/remove/shutdown methods into the bus_type - if you're setting
-them for every struct device_driver, then there's no point doing that
-and they may as well be in the bus_type.
+...
 
-Apart from that, it looks good.
+> > No problem;  I'll tweak that then
+> 
+> Slightly walking back my "No problem" here; as I understand this there's
+> kinda two options:
+> 
+> 1. Walk over the (locked) list, when a match is found unlock, run the
+> callback and re-lock.
+> 
+> The problem with that idea is unless I'm mistaken there's no guarantee
+> that the .next pointer is still valid then (even using the *_safe()
+> methods) because either the next or the next + 1 entry could have been
+> removed whilst the list was unlocked and the callback was being ran, so
+> this seems a little unsafe.
+
+It's easy to solve.
+See an example in deferred_probe_work_func().
+
+https://elixir.bootlin.com/linux/latest/source/drivers/base/dd.c#L75
+
+> 2. Walk over the (locked) list twice, the first time counting matching
+> entries and using that to allocate a temporary buffer, then walk again
+> to store the matching entries into the buffer. Finally, run the callback
+> for everything in the buffer, free it and return.
+> 
+> Obviously that's a lot less efficient than the current function, which
+> isn't particularly palatable.
+> 
+> Apologies if I've missed a better option that would work fine; but
+> failing that do you still want me to go ahead and change
+> acpi_walk_dep_device_list() to do this (I'd choose #2 of the above), or
+> fallback to using acpi_dev_get_next_dependent_dev() described above? If
+> the latter, does acpi_walk_dep_device_list() maybe need re-naming to
+> make clear it's not a generalised function?
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+
