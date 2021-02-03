@@ -2,89 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A98930D7AB
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Feb 2021 11:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC6930D881
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Feb 2021 12:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbhBCKgY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 3 Feb 2021 05:36:24 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:49796 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233825AbhBCKgQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Feb 2021 05:36:16 -0500
-X-UUID: 5a4cfd566a3b4d3fab00057c9881199f-20210203
-X-UUID: 5a4cfd566a3b4d3fab00057c9881199f-20210203
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 615688265; Wed, 03 Feb 2021 18:35:30 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 3 Feb 2021 18:35:28 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 3 Feb 2021 18:35:28 +0800
-From:   <qii.wang@mediatek.com>
-To:     <wsa@the-dreams.de>
-CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>
-Subject: [PATCH] i2c: mediatek: Get device clock-stretch time via dts
-Date:   Wed, 3 Feb 2021 18:35:25 +0800
-Message-ID: <1612348525-13364-1-git-send-email-qii.wang@mediatek.com>
-X-Mailer: git-send-email 1.9.1
+        id S234204AbhBCLXb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 3 Feb 2021 06:23:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34424 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234198AbhBCLXI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 3 Feb 2021 06:23:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B73E164DE8;
+        Wed,  3 Feb 2021 11:22:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612351346;
+        bh=wGQw7gT3qnKCIXEO+rxqRvVbPbNtV92xRV2Pv+Ej3+o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MrJAtf5mnK1C4Q4ZyKjla2kAdXf633/lnbrk7VmF4rTw8ELv9cY7AI3lYFHz5IvTs
+         gW1JO8UMu0KWxpiE11pDElcoFi2aScKR/6EtEhTveStAUFXYmhZ/2VkMZcgd1/0YfE
+         ni15CbrfkH0uB9TmCzEv5FfL+g5ymnw5CEbyZXJD4ppEFij+lOdgpYmtLPj5YnxQt2
+         S89UXBGzveoZJe7weH0eyO7487Q9x29lPyzQEfs7eq9AcnO8mCcpuFXjNyVKHYr8yx
+         p+BAk8A9gP2L8aa7Eyu5laiQUOjkYC5JRKTNmmv8FsKcsF1NgygkcixHo6F7gFSZQG
+         dH3CVM+A3lgnQ==
+Date:   Wed, 3 Feb 2021 16:52:22 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Vincent Cheng <vincent.cheng.xh@renesas.com>,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-watchdog@vger.kernel.org,
+        Eric Anholt <eric@anholt.net>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Subject: Re: [PATCH 3/3] dt-bindings: Fix errors in 'if' schemas
+Message-ID: <20210203112222.GO2771@vkoul-mobl>
+References: <20210202205544.24812-1-robh@kernel.org>
+ <20210202205544.24812-3-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210202205544.24812-3-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Qii Wang <qii.wang@mediatek.com>
+On 02-02-21, 14:55, Rob Herring wrote:
+> Properties in if/then schemas weren't getting checked by the meta-schemas.
+> Enabling meta-schema checks finds several errors.
+> 
+> The use of an 'items' schema (as opposed to the list form) is wrong in
+> some cases as it applies to all entries. 'contains' is the correct schema
+> to use in the case of multiple entries.
+> 
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Eric Anholt <eric@anholt.net>
+> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: linux-crypto@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-gpio@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/crypto/allwinner,sun8i-ce.yaml   | 3 +--
+>  .../devicetree/bindings/display/brcm,bcm2835-hvs.yaml    | 2 +-
+>  Documentation/devicetree/bindings/leds/ti,tca6507.yaml   | 1 +
+>  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml  | 2 +-
+>  Documentation/devicetree/bindings/phy/brcm,sata-phy.yaml | 3 +--
+>  .../devicetree/bindings/phy/renesas,usb2-phy.yaml        | 5 ++---
 
-tSU,STA/tHD,STA/tSU,STOP maybe out of spec due to device
-clock-stretching or circuit loss, we could get device
-clock-stretch time from dts to adjust these parameters
-to meet the spec via EXT_CONF register.
+For phy:
 
-Signed-off-by: Qii Wang <qii.wang@mediatek.com>
----
- drivers/i2c/busses/i2c-mt65xx.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 2ffd2f3..47c7255 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -245,6 +245,7 @@ struct mtk_i2c {
- 	u16 irq_stat;			/* interrupt status */
- 	unsigned int clk_src_div;
- 	unsigned int speed_hz;		/* The speed in transfer */
-+	unsigned int clock_stretch_ns;
- 	enum mtk_trans_op op;
- 	u16 timing_reg;
- 	u16 high_speed_reg;
-@@ -607,7 +608,8 @@ static int mtk_i2c_check_ac_timing(struct mtk_i2c *i2c,
- 	else
- 		clk_ns = sample_ns / 2;
- 
--	su_sta_cnt = DIV_ROUND_UP(spec->min_su_sta_ns, clk_ns);
-+	su_sta_cnt = DIV_ROUND_UP(spec->min_su_sta_ns + i2c->clock_stretch_ns,
-+				  clk_ns);
- 	if (su_sta_cnt > max_sta_cnt)
- 		return -1;
- 
-@@ -1171,6 +1173,8 @@ static int mtk_i2c_parse_dt(struct device_node *np, struct mtk_i2c *i2c)
- 	if (i2c->clk_src_div == 0)
- 		return -EINVAL;
- 
-+	of_property_read_u32(np, "clock-stretch-ns", &i2c->clock_stretch_ns);
-+
- 	i2c->have_pmic = of_property_read_bool(np, "mediatek,have-pmic");
- 	i2c->use_push_pull =
- 		of_property_read_bool(np, "mediatek,use-push-pull");
 -- 
-1.9.1
-
+~Vinod
