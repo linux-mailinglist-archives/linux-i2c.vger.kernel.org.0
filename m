@@ -2,161 +2,278 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40CB630FB41
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Feb 2021 19:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD2830FF66
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Feb 2021 22:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239032AbhBDSWe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 4 Feb 2021 13:22:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
+        id S229894AbhBDVfd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 4 Feb 2021 16:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238998AbhBDSUd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 4 Feb 2021 13:20:33 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AB8C061794
-        for <linux-i2c@vger.kernel.org>; Thu,  4 Feb 2021 10:19:53 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l7jAm-0002WQ-TD; Thu, 04 Feb 2021 19:16:08 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l7jAV-0005Pi-Pr; Thu, 04 Feb 2021 19:15:51 +0100
-Date:   Thu, 4 Feb 2021 19:15:51 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fbdev@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>, kvm@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
-        Jaroslav Kysela <perex@perex.cz>,
-        Eric Anholt <eric@anholt.net>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-rtc@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Takashi Iwai <tiwai@suse.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mike Leach <mike.leach@linaro.org>,
-        linux-watchdog@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, Vladimir Zapolskiy <vz@mleia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
-        Leo Yan <leo.yan@linaro.org>, dmaengine@vger.kernel.org
-Subject: Re: [GIT PULL] immutable branch for amba changes targeting v5.12-rc1
-Message-ID: <20210204181551.ethtuzm65flujmwe@pengutronix.de>
-References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
- <20210202135350.36nj3dmcoq3t7gcf@pengutronix.de>
- <YBlcTXlxemmC2lgr@kroah.com>
- <20210204165224.GA1463@shell.armlinux.org.uk>
- <YBwnUrQqlAz2LDPI@kroah.com>
- <20210204165951.GB1463@shell.armlinux.org.uk>
+        with ESMTP id S229771AbhBDVfb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 4 Feb 2021 16:35:31 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D160C061786
+        for <linux-i2c@vger.kernel.org>; Thu,  4 Feb 2021 13:34:50 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id f19so5240603ljn.5
+        for <linux-i2c@vger.kernel.org>; Thu, 04 Feb 2021 13:34:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BCno6Ao+dwCVXfvTIIoqfVrP6GUQPTZVIPIC7Z6fmno=;
+        b=BZOz6UaayRrtBM/evJF7kodBQxJhWGPCHVI2t097sAYuulXR8u02ZfuBKw5zaXFbn9
+         PFirLtNtBcle8UsXYmPksbaJM2bfWX+9Bdk+IPTMvWmHOVRu8NwRGdUEHtfEFxiJxihO
+         B4o2FCVq/8Tb55huK2zS+6GFwpJat6/241fnu0lCxzTbuhoHBirr2Wz2/xRAFvlUT0xV
+         CVMfIBqTqQpb/AY8m9Srg1+X4AIzajKf+2Tq4WPquGirA2NF1lZ7o26SfGxVPA9r0gYF
+         nS55UBQfH9R+82EJRf8D/YHalynvu/ZyB7rvY5vKZu2dHiWck4c62yvaKg/mgIL9LUmj
+         YvOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BCno6Ao+dwCVXfvTIIoqfVrP6GUQPTZVIPIC7Z6fmno=;
+        b=Ft1QZA6Irj8ZocJpnBz9W1xxrRnl4rTx2baA8wo0P2KDlKdc6fZ7nitmoUzEQfF2v4
+         0Y3N64xmvLyxlMiVmklXBiVexpFotLQ9t52AlXOAcg/sinCofMBUcvgnnUTaIz/Ti0S+
+         cpbsk+Amrd3qml8CGvJZVUgQkFbVDPuC2IOiwdPxAuI7AO3L0qRXQ4M1YUd5i9NoLCUt
+         ewTHzKRi+3mWxH3mrMhhhUU/qIkGbUoejQlcvVxXIuT71kBjqV6enI44s802PTyWfpbo
+         VYkJnsMMSvkcy0QHxFxx7yhaS4fBEt7hWomiYj5p8sW4BKfk4qP/8IFFEh4gqdsDMc0O
+         Nkvw==
+X-Gm-Message-State: AOAM5329KZ2JYFnHMTpoq77YS1ECWzO1SHflHp8bCUN3yv4lPXrGwSJm
+        kMRMWtyLISX85y8sryqfPYv9VQ==
+X-Google-Smtp-Source: ABdhPJwKUWSgvkl+QDCXohVE2j8HxXVX0EEU8jhBEYfSjwR2RJ6yEaMjEmXlDauz9H4svNTK1hCO+A==
+X-Received: by 2002:a2e:a550:: with SMTP id e16mr770611ljn.197.1612474489012;
+        Thu, 04 Feb 2021 13:34:49 -0800 (PST)
+Received: from [192.168.1.211] ([188.162.64.67])
+        by smtp.gmail.com with ESMTPSA id h15sm747258lfc.221.2021.02.04.13.34.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Feb 2021 13:34:48 -0800 (PST)
+Subject: Re: [PATCH 4/7] spi: spi-geni-qcom: Add support for GPI dma
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210111151651.1616813-1-vkoul@kernel.org>
+ <20210111151651.1616813-5-vkoul@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Message-ID: <14dbf839-a9f9-73b6-8de3-cdb2f6353833@linaro.org>
+Date:   Fri, 5 Feb 2021 00:34:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mw66hszyvu2hxhxe"
-Content-Disposition: inline
-In-Reply-To: <20210204165951.GB1463@shell.armlinux.org.uk>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20210111151651.1616813-5-vkoul@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 11/01/2021 18:16, Vinod Koul wrote:
+> We can use GPI DMA for devices where it is enabled by firmware. Add
+> support for this mode
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>   drivers/spi/spi-geni-qcom.c | 395 +++++++++++++++++++++++++++++++++++-
+>   1 file changed, 384 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> index 512e925d5ea4..5bb0e2192734 100644
+> --- a/drivers/spi/spi-geni-qcom.c
+> +++ b/drivers/spi/spi-geni-qcom.c
 
---mw66hszyvu2hxhxe
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[skipped]
 
-On Thu, Feb 04, 2021 at 04:59:51PM +0000, Russell King - ARM Linux admin wr=
-ote:
-> On Thu, Feb 04, 2021 at 05:56:50PM +0100, Greg Kroah-Hartman wrote:
-> > On Thu, Feb 04, 2021 at 04:52:24PM +0000, Russell King - ARM Linux admi=
-n wrote:
-> > > On Tue, Feb 02, 2021 at 03:06:05PM +0100, Greg Kroah-Hartman wrote:
-> > > > I'm glad to take this through my char/misc tree, as that's where the
-> > > > other coresight changes flow through.  So if no one else objects, I=
- will
-> > > > do so...
-> > >=20
-> > > Greg, did you end up pulling this after all? If not, Uwe produced a v=
-2.
-> > > I haven't merged v2 yet as I don't know what you've done.
-> >=20
-> > I thought you merged this?
->=20
-> I took v1, and put it in a branch I've promised in the past not to
-> rebase/rewind. Uwe is now asking for me to take a v2 or apply a patch
-> on top.
->=20
-> The only reason to produce an "immutable" branch is if it's the basis
-> for some dependent work and you need that branch merged into other
-> people's trees... so the whole "lets produce a v2" is really odd
-> workflow... I'm confused about what I should do, and who has to be
-> informed which option I take.
->=20
-> I'm rather lost here too.
+> @@ -328,8 +609,34 @@ static int spi_geni_init(struct spi_geni_master *mas)
+>   	spi_tx_cfg &= ~CS_TOGGLE;
+>   	writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
+>   
+> +	mas->tx = dma_request_slave_channel(mas->dev, "tx");
+> +	if (IS_ERR_OR_NULL(mas->tx)) {
 
-Sorry to have cause this confusion. After I saw that my initial tag
-missed to adapt a driver I wanted to make it easy for you to fix the
-situation.
-So I created a patch to fix it and created a second tag with the patch
-squashed in. Obviously only one of them have to be picked and I hoped
-you (=3D Russell + Greg) would agree which option to pick.
+dma_request_slave_channel() is deprecated. Also it does not return an 
+actualy error, it always returns NULL. So the error path here is bugged.
+Judging from the rest of the driver, it might be logical to select the 
+transfer mode at the probe time, then it would be possible to skip 
+checking for DMA channels if FIFO mode is selected.
 
-My preference would be if you both pick up v2 of the tag to yield a
-history that is bisectable without build problems, but if Russell (who
-already picked up the broken tag) considers his tree immutable and so
-isn't willing to rebase, then picking up the patch is the way to go.
+> +		dev_err(mas->dev, "Failed to get tx DMA ch %ld", PTR_ERR(mas->tx));
+> +		ret = PTR_ERR(mas->tx);
+> +		goto out_pm;
+> +	} else {
+> +		mas->rx = dma_request_slave_channel(mas->dev, "rx");
+> +		if (IS_ERR_OR_NULL(mas->rx)) {
+> +			dev_err(mas->dev, "Failed to get rx DMA ch %ld", PTR_ERR(mas->rx));
+> +			dma_release_channel(mas->tx);
+> +			ret = PTR_ERR(mas->rx);
+> +			goto out_pm;
+> +		}
+> +
+> +		gsi_sz = sizeof(struct spi_geni_gsi) * NUM_SPI_XFER;
+> +		mas->gsi = devm_kzalloc(mas->dev, gsi_sz, GFP_KERNEL);
+> +		if (IS_ERR_OR_NULL(mas->gsi)) {
+> +			dma_release_channel(mas->tx);
+> +			dma_release_channel(mas->rx);
+> +			mas->tx = NULL;
+> +			mas->rx = NULL;
+> +			goto out_pm;
+> +		}
+> +	}
+> +
+> +out_pm:
+>   	pm_runtime_put(mas->dev);
+> -	return 0;
+> +	return ret;
+>   }
+>   
+>   static unsigned int geni_byte_per_fifo_word(struct spi_geni_master *mas)
+> @@ -420,6 +727,7 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+>   {
+>   	u32 m_cmd = 0;
+>   	u32 len;
+> +	u32 m_param = 0;
+>   	struct geni_se *se = &mas->se;
+>   	int ret;
+>   
+> @@ -457,6 +765,11 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+>   		len = xfer->len / (mas->cur_bits_per_word / BITS_PER_BYTE + 1);
+>   	len &= TRANS_LEN_MSK;
+>   
+> +	if (!xfer->cs_change) {
+> +		if (!list_is_last(&xfer->transfer_list, &spi->cur_msg->transfers))
+> +			m_param |= FRAGMENTATION;
+> +	}
+> +
+>   	mas->cur_xfer = xfer;
+>   	if (xfer->tx_buf) {
+>   		m_cmd |= SPI_TX_ONLY;
+> @@ -475,7 +788,7 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+>   	 * interrupt could come in at any time now.
+>   	 */
+>   	spin_lock_irq(&mas->lock);
+> -	geni_se_setup_m_cmd(se, m_cmd, FRAGMENTATION);
+> +	geni_se_setup_m_cmd(se, m_cmd, m_param);
+>   
+>   	/*
+>   	 * TX_WATERMARK_REG should be set after SPI configuration and
+> @@ -494,13 +807,52 @@ static int spi_geni_transfer_one(struct spi_master *spi,
+>   				struct spi_transfer *xfer)
+>   {
+>   	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+> +	unsigned long timeout, jiffies;
+> +	int ret = 0i, i;
+>   
+>   	/* Terminate and return success for 0 byte length transfer */
+>   	if (!xfer->len)
+> -		return 0;
+> +		return ret;
+> +
+> +	if (mas->cur_xfer_mode == GENI_SE_FIFO) {
+> +		setup_fifo_xfer(xfer, mas, slv->mode, spi);
+> +	} else {
+> +		setup_gsi_xfer(xfer, mas, slv, spi);
+> +		if (mas->num_xfers >= NUM_SPI_XFER ||
+> +		    (list_is_last(&xfer->transfer_list, &spi->cur_msg->transfers))) {
+> +			for (i = 0 ; i < mas->num_tx_eot; i++) {
+> +				jiffies = msecs_to_jiffies(SPI_XFER_TIMEOUT_MS);
+> +				timeout = wait_for_completion_timeout(&mas->tx_cb, jiffies);
+> +				if (timeout <= 0) {
+> +					dev_err(mas->dev, "Tx[%d] timeout%lu\n", i, timeout);
+> +					ret = -ETIMEDOUT;
+> +					goto err_gsi_geni_transfer_one;
+> +				}
+> +				spi_finalize_current_transfer(spi);
+> +			}
+> +			for (i = 0 ; i < mas->num_rx_eot; i++) {
+> +				jiffies = msecs_to_jiffies(SPI_XFER_TIMEOUT_MS);
+> +				timeout = wait_for_completion_timeout(&mas->tx_cb, jiffies);
+> +				if (timeout <= 0) {
+> +					dev_err(mas->dev, "Rx[%d] timeout%lu\n", i, timeout);
+> +					ret = -ETIMEDOUT;
+> +					goto err_gsi_geni_transfer_one;
+> +				}
+> +				spi_finalize_current_transfer(spi);
+> +			}
+> +			if (mas->qn_err) {
+> +				ret = -EIO;
+> +				mas->qn_err = false;
+> +				goto err_gsi_geni_transfer_one;
+> +			}
+> +		}
+> +	}
+>   
+> -	setup_fifo_xfer(xfer, mas, slv->mode, spi);
+> -	return 1;
+> +	return ret;
+> +
+> +err_gsi_geni_transfer_one:
+> +	dmaengine_terminate_all(mas->tx);
+> +	return ret;
+>   }
+>   
+>   static irqreturn_t geni_spi_isr(int irq, void *data)
+> @@ -595,6 +947,15 @@ static int spi_geni_probe(struct platform_device *pdev)
+>   	if (irq < 0)
+>   		return irq;
+>   
+> +	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+> +	if (ret) {
+> +		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "could not set DMA mask\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+>   	base = devm_platform_ioremap_resource(pdev, 0);
+>   	if (IS_ERR(base))
+>   		return PTR_ERR(base);
+> @@ -632,15 +993,18 @@ static int spi_geni_probe(struct platform_device *pdev)
+>   	spi->num_chipselect = 4;
+>   	spi->max_speed_hz = 50000000;
+>   	spi->prepare_message = spi_geni_prepare_message;
+> +	spi->unprepare_message = spi_geni_unprepare_message;
+>   	spi->transfer_one = spi_geni_transfer_one;
+>   	spi->auto_runtime_pm = true;
+>   	spi->handle_err = handle_fifo_timeout;
+> -	spi->set_cs = spi_geni_set_cs;
+>   	spi->use_gpio_descriptors = true;
+>   
+>   	init_completion(&mas->cs_done);
+>   	init_completion(&mas->cancel_done);
+>   	init_completion(&mas->abort_done);
+> +	init_completion(&mas->xfer_done);
+> +	init_completion(&mas->tx_cb);
+> +	init_completion(&mas->rx_cb);
+>   	spin_lock_init(&mas->lock);
+>   	pm_runtime_use_autosuspend(&pdev->dev);
+>   	pm_runtime_set_autosuspend_delay(&pdev->dev, 250);
+> @@ -661,6 +1025,15 @@ static int spi_geni_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		goto spi_geni_probe_runtime_disable;
+>   
+> +	/*
+> +	 * query the mode supported and set_cs for fifo mode only
+> +	 * for dma (gsi) mode, the gsi will set cs based on params passed in
+> +	 * TRE
+> +	 */
+> +	mas->cur_xfer_mode = get_xfer_mode(spi);
+> +	if (mas->cur_xfer_mode == GENI_SE_FIFO)
+> +		spi->set_cs = spi_geni_set_cs;
+> +
+>   	ret = request_irq(mas->irq, geni_spi_isr, 0, dev_name(dev), spi);
+>   	if (ret)
+>   		goto spi_geni_probe_runtime_disable;
+> 
 
-I suggest that Russell descides which option he wants to pick and tells
-Greg to do the same!?
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---mw66hszyvu2hxhxe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmAcOdQACgkQwfwUeK3K
-7AlatwgAoTySm2q5g+gxl/CCA9C6tYko2Pu8wLkL3YfNBIgf05iOJ9G8Miwhd95G
-eDv5Ue6LEvHVOMZHbbZMliKzacCtSGzzhTpNpIcL7SZH/Vu0nyB8qGbN+PAm+rsX
-K54DEaOvyPIcDUkuXgUGC2e0nXjg7499oDQs/rajEADbs8ECpDvKCTRYczmQ6E8v
-VS9a/GOt/WDa0dqOdAt6OfxirahLKjPQC1/FS1kcREk1QBYbH6TqM/t8b4t0ED9p
-A5RYkSHAXArD/ifkinbRDUIhLY7XzhBYGEiiNgwCCtsbHE06GP/BNPlXMj6+fLAY
-g/wGBoyP1j9OrCrpGDnsy/oyv64XRg==
-=Rv8c
------END PGP SIGNATURE-----
-
---mw66hszyvu2hxhxe--
+-- 
+With best wishes
+Dmitry
