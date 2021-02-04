@@ -2,26 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA2030F7BD
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA9F30F7BC
 	for <lists+linux-i2c@lfdr.de>; Thu,  4 Feb 2021 17:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237901AbhBDQ00 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 4 Feb 2021 11:26:26 -0500
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:49681 "EHLO
+        id S237140AbhBDQ0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 4 Feb 2021 11:26:24 -0500
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:49686 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237942AbhBDQZr (ORCPT
+        with ESMTP id S237964AbhBDQZr (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Thu, 4 Feb 2021 11:25:47 -0500
 Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@nvidia.com)
-        with SMTP; 4 Feb 2021 18:24:56 +0200
+        with SMTP; 4 Feb 2021 18:24:57 +0200
 Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 114GOrHE012325;
-        Thu, 4 Feb 2021 18:24:56 +0200
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 114GOrHF012325;
+        Thu, 4 Feb 2021 18:24:57 +0200
 From:   Vadim Pasternak <vadimp@nvidia.com>
 To:     peda@axentia.se, wsa@the-dreams.de
 Cc:     linux-i2c@vger.kernel.org, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH i2c-next v4 3/6] i2c: mux: mlxcpld: Get rid of adapter numbers enforcement
-Date:   Thu,  4 Feb 2021 18:24:48 +0200
-Message-Id: <20210204162451.29518-4-vadimp@nvidia.com>
+Subject: [PATCH i2c-next v4 4/6] i2c: mux: mlxcpld: Extend driver to support word address space devices
+Date:   Thu,  4 Feb 2021 18:24:49 +0200
+Message-Id: <20210204162451.29518-5-vadimp@nvidia.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20210204162451.29518-1-vadimp@nvidia.com>
 References: <20210204162451.29518-1-vadimp@nvidia.com>
@@ -29,80 +29,130 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Do not set the argument 'force_nr' of i2c_mux_add_adapter() routine,
-instead provide argument 'chan_id'.
-Rename mux ids array from 'adap_ids' to 'chan_ids'.
-
-The motivation is to prepare infrastructure to be able to:
-- Create only the child adapters which are actually needed - for which
-  channel ids are specified.
-- To assign 'nrs' to these child adapters dynamically, with no 'nr'
-  enforcement.
+Extend driver to allow I2C routing control through CPLD devices with
+word address space. Till now only CPLD devices with byte address space
+have been supported.
 
 Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+Reviewed-by: Michael Shych <michaelsh@nvidia.com>
 ---
-v3->v4:
- Comments pointed out by Peter:
- - Extend patch with the code from the next patches dealing with
-   argument two and three of the i2c_mux_add_adapter() routine.
 v2->v3:
- Changes added by Vadim:
- - Rename patch from "Rename mux ids array" to "Get rid of adapter
-   numbers enforcement".
+ Comments pointed out by Peter:
+ - Do not change mlxcpld_mux_reg_write() argumnet "val" to "chan",
+   since it is misleading for the one-byte case.
+ - Drop cpu_to_be16() conversion from mlxcpld_mux_reg_write().
+v1->v2:
+ Comments pointed out by Peter:
+ - Remove data buffer allocation from 'mlxcpld_mux' structure, do it on
+   stack instead.
+ - Do not use array pdata.adap_ids[] in mlxcpld_mux_reg_write() for
+   channel assignment.
+ - Return back 'regval' variable, used for channel assignment in
+   mlxcpld_mux_select_chan().
+ - Fix functionality validation in mlxcpld_mux_probe().
+ - Fix comment for 'reg_size' field in mlxcpld_mux_plat_data' structure.
+  Added by Vadim:
+  - Change type of register select address to '__be16' to align with
+    type in assignment in cpu_to_be16().
 ---
- drivers/i2c/muxes/i2c-mux-mlxcpld.c   | 11 ++---------
- include/linux/platform_data/mlxcpld.h |  4 ++--
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ drivers/i2c/muxes/i2c-mux-mlxcpld.c   | 47 +++++++++++++++++++++++++++++------
+ include/linux/platform_data/mlxcpld.h |  2 ++
+ 2 files changed, 41 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/i2c/muxes/i2c-mux-mlxcpld.c b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-index 113ad84cdd94..388fe5c080aa 100644
+index 388fe5c080aa..ba307ee6b034 100644
 --- a/drivers/i2c/muxes/i2c-mux-mlxcpld.c
 +++ b/drivers/i2c/muxes/i2c-mux-mlxcpld.c
-@@ -101,9 +101,8 @@ static int mlxcpld_mux_probe(struct platform_device *pdev)
- 	struct mlxcpld_mux_plat_data *pdata = dev_get_platdata(&pdev->dev);
- 	struct i2c_client *client = to_i2c_client(pdev->dev.parent);
+@@ -63,19 +63,39 @@ static int mlxcpld_mux_reg_write(struct i2c_adapter *adap,
+ 				 struct mlxcpld_mux *mux, u32 val)
+ {
+ 	struct i2c_client *client = mux->client;
+-	union i2c_smbus_data data = { .byte = val };
+-
+-	return __i2c_smbus_xfer(adap, client->addr, client->flags,
+-				I2C_SMBUS_WRITE, mux->pdata.sel_reg_addr,
+-				I2C_SMBUS_BYTE_DATA, &data);
++	union i2c_smbus_data data;
++	struct i2c_msg msg;
++	u8 buf[3];
++
++	switch (mux->pdata.reg_size) {
++	case 1:
++		data.byte = val;
++		return __i2c_smbus_xfer(adap, client->addr, client->flags,
++					I2C_SMBUS_WRITE, mux->pdata.sel_reg_addr,
++					I2C_SMBUS_BYTE_DATA, &data);
++	case 2:
++		buf[0] = mux->pdata.sel_reg_addr >> 8;
++		buf[1] = mux->pdata.sel_reg_addr;
++		buf[2] = val;
++		msg.addr = client->addr;
++		msg.buf = buf;
++		msg.len = mux->pdata.reg_size + 1;
++		msg.flags = 0;
++		return __i2c_transfer(adap, &msg, 1);
++	default:
++		return -EINVAL;
++	}
+ }
+ 
+ static int mlxcpld_mux_select_chan(struct i2c_mux_core *muxc, u32 chan)
+ {
+ 	struct mlxcpld_mux *mux = i2c_mux_priv(muxc);
+-	u32 regval = chan + 1;
++	u32 regval = chan;
+ 	int err = 0;
+ 
++	if (mux->pdata.reg_size == 1)
++		regval += 1;
++
+ 	/* Only select the channel if its different from the last channel */
+ 	if (mux->last_val != regval) {
+ 		err = mlxcpld_mux_reg_write(muxc->parent, mux, regval);
+@@ -103,12 +123,23 @@ static int mlxcpld_mux_probe(struct platform_device *pdev)
  	struct i2c_mux_core *muxc;
--	int num, force;
  	struct mlxcpld_mux *data;
--	int err;
-+	int num, err;
+ 	int num, err;
++	u32 func;
  
  	if (!pdata)
  		return -EINVAL;
-@@ -126,13 +125,7 @@ static int mlxcpld_mux_probe(struct platform_device *pdev)
  
- 	/* Create an adapter for each channel. */
- 	for (num = 0; num < CPLD_MUX_MAX_NCHANS; num++) {
--		if (num >= pdata->num_adaps)
--			/* discard unconfigured channels */
--			break;
--
--		force = pdata->adap_ids[num];
--
--		err = i2c_mux_add_adapter(muxc, force, num, 0);
-+		err = i2c_mux_add_adapter(muxc, 0, pdata->chan_ids[num], 0);
- 		if (err)
- 			goto virt_reg_failed;
- 	}
+-	if (!i2c_check_functionality(client->adapter,
+-				     I2C_FUNC_SMBUS_WRITE_BYTE_DATA))
++	switch (pdata->reg_size) {
++	case 1:
++		func = I2C_FUNC_SMBUS_WRITE_BYTE_DATA;
++		break;
++	case 2:
++		func = I2C_FUNC_I2C;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	if (!i2c_check_functionality(client->adapter, func))
+ 		return -ENODEV;
+ 
+ 	muxc = i2c_mux_alloc(client->adapter, &pdev->dev, CPLD_MUX_MAX_NCHANS,
 diff --git a/include/linux/platform_data/mlxcpld.h b/include/linux/platform_data/mlxcpld.h
-index e6c18bf017dd..04d93c563c04 100644
+index 04d93c563c04..a7bee798d991 100644
 --- a/include/linux/platform_data/mlxcpld.h
 +++ b/include/linux/platform_data/mlxcpld.h
-@@ -11,12 +11,12 @@
- /* Platform data for the CPLD I2C multiplexers */
- 
- /* mlxcpld_mux_plat_data - per mux data, used with i2c_register_board_info
-- * @adap_ids - adapter array
-+ * @chan_ids - channels array
+@@ -14,11 +14,13 @@
+  * @chan_ids - channels array
   * @num_adaps - number of adapters
   * @sel_reg_addr - mux select register offset in CPLD space
++ * @reg_size: register size in bytes
   */
  struct mlxcpld_mux_plat_data {
--	int *adap_ids;
-+	int *chan_ids;
+ 	int *chan_ids;
  	int num_adaps;
  	int sel_reg_addr;
++	u8 reg_size;
  };
+ 
+ #endif /* _LINUX_I2C_MLXCPLD_H */
 -- 
 2.11.0
 
