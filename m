@@ -2,96 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16779311521
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Feb 2021 23:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA26D311602
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Feb 2021 23:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbhBEWYC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 5 Feb 2021 17:24:02 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:53432 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230088AbhBEO1N (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 5 Feb 2021 09:27:13 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 115EosxG001254;
-        Fri, 5 Feb 2021 15:57:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : subject : to
- : cc : references : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=aWDWtjgjvIr2y3zTvyZfIzBb+OyjkthoLMM6dyPBcVE=;
- b=oxIa9uWsFM5obMv0fBgVcd9iyGG0c1i0xPxb4Z2ZRFlbzEF0xK6gqmOeQPvB+U54HasS
- KAmL9hx2l0mTSb7/lfJq8QldK7bT7E4ls2fdAE7CZjk+AZWOgLJ3KoAdHiAeCOZ7T2V5
- Ws8c/e9PIt+HhbVB9cb/XzCrz+vNLM9ck2bPnqXbeiXK2YZmb0p4LzklbDIjXgY3P4sf
- Dz+6MBeul8NArDWkhNO1QbdM9iAe3c2vek80OZbKTD9IuzufBf4HHPrthH4RBAHOvnF7
- bMg+SlFCc3ceT6HFRF4r0AY/6TtLgtlAxTQ1CxB0XUVIZ7Sx6X6yyucSoy3UjJuZhTJw OQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 36ey7hh1j7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Feb 2021 15:57:48 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3BE6B100034;
-        Fri,  5 Feb 2021 15:57:48 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 219BA2402BB;
-        Fri,  5 Feb 2021 15:57:48 +0100 (CET)
-Received: from lmecxl1060.lme.st.com (10.75.127.44) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 5 Feb
- 2021 15:57:47 +0100
-From:   Pierre Yves MORDRET <pierre-yves.mordret@foss.st.com>
-Subject: Re: [PATCH 0/5] i2c: stm32: filter binding support & debug info
-To:     Alain Volmat <alain.volmat@foss.st.com>, <wsa@kernel.org>,
-        <robh+dt@kernel.org>
-CC:     <mark.rutland@arm.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>
-References: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
-Message-ID: <4addb8e0-8fcb-d713-065d-858698f3d493@foss.st.com>
-Date:   Fri, 5 Feb 2021 15:57:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S233299AbhBEWr6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 5 Feb 2021 17:47:58 -0500
+Received: from mga12.intel.com ([192.55.52.136]:60933 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229959AbhBEN2w (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 5 Feb 2021 08:28:52 -0500
+IronPort-SDR: bddQPWHzeoSAMSHsOqoxWeS/RdT8900zcMB6YvYOpHqkI72WAtuVnsB1vTmApN3vPfD9qvbHRd
+ SA16q4rA4zqw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="160589439"
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="scan'208";a="160589439"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 05:24:56 -0800
+IronPort-SDR: exWrynaxi8nwsAbdPFhPyxc/U2dfzuhauTirkVS6W2IifPhiOPeSDsPekze/NI4HnzifAq77Ov
+ 12UU4uW5QArw==
+X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
+   d="scan'208";a="393862627"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 05:24:53 -0800
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 822D7205D2;
+        Fri,  5 Feb 2021 15:24:51 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1l816f-0005GE-9P; Fri, 05 Feb 2021 15:25:05 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v10 1/7] ACPI: scan: Obtain device's desired enumeration power state
+Date:   Fri,  5 Feb 2021 15:24:59 +0200
+Message-Id: <20210205132505.20173-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210205132505.20173-1-sakari.ailus@linux.intel.com>
+References: <20210205132505.20173-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-05_09:2021-02-05,2021-02-05 signatures=0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello all
+Store a device's desired enumeration power state in struct
+acpi_device_power during acpi_device object's initialisation.
 
-Looks good to me
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/acpi/scan.c     | 4 ++++
+ include/acpi/acpi_bus.h | 1 +
+ 2 files changed, 5 insertions(+)
 
-Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-
-Regards
-On 2/5/21 9:51 AM, Alain Volmat wrote:
-> This serie add support for the analog and digital filter binding
-> for the stm32f7 i2c driver.
-> An additional patch add also debug informations, displayed in case
-> of errors.
-> 
-> Alain Volmat (5):
->   i2c: stm32f7: fix configuration of the digital filter
->   i2c: stm32f7: support DT binding i2c-analog-filter
->   i2c: stm32f7: add support for DNF i2c-digital-filter binding
->   ARM: dts: stm32: enable the analog filter for all I2C nodes in
->     stm32mp151
->   i2c: stm32f7: indicate the address being accessed on errors
-> 
->  arch/arm/boot/dts/stm32mp151.dtsi |  6 +++
->  drivers/i2c/busses/i2c-stm32f7.c  | 63 ++++++++++++++++++++-----------
->  2 files changed, 46 insertions(+), 23 deletions(-)
-> 
-
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index 1d7a02ee45e05..cdff32f297122 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -987,6 +987,7 @@ static void acpi_bus_init_power_state(struct acpi_device *device, int state)
+ 
+ static void acpi_bus_get_power_flags(struct acpi_device *device)
+ {
++	unsigned long long dse = ACPI_STATE_D0;
+ 	u32 i;
+ 
+ 	/* Presence of _PS0|_PR0 indicates 'power manageable' */
+@@ -1008,6 +1009,9 @@ static void acpi_bus_get_power_flags(struct acpi_device *device)
+ 	if (acpi_has_method(device->handle, "_DSW"))
+ 		device->power.flags.dsw_present = 1;
+ 
++	acpi_evaluate_integer(device->handle, "_DSE", NULL, &dse);
++	device->power.state_for_enumeration = dse;
++
+ 	/*
+ 	 * Enumerate supported power management states
+ 	 */
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index 02a716a0af5d4..becfc9f57002b 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -276,6 +276,7 @@ struct acpi_device_power {
+ 	int state;		/* Current state */
+ 	struct acpi_device_power_flags flags;
+ 	struct acpi_device_power_state states[ACPI_D_STATE_COUNT];	/* Power states (D0-D3Cold) */
++	u8 state_for_enumeration; /* Maximum power state for enumeration */
+ };
+ 
+ /* Performance Management */
 -- 
---
-~ Py MORDRET
---
+2.20.1
+
