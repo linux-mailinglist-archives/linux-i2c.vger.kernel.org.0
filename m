@@ -2,67 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDBA310334
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Feb 2021 04:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D923E310728
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Feb 2021 09:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbhBEDJS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 4 Feb 2021 22:09:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbhBEDJK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 4 Feb 2021 22:09:10 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12302C06178A;
-        Thu,  4 Feb 2021 19:08:30 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j11so4806535wmi.3;
-        Thu, 04 Feb 2021 19:08:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:sender:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
-        b=qKV6lK/xTrI0xWZI/8Vwj4HWtece1YWaUDe9sPcNOebT0x9iH9t9HcfJIQkpWQqu4j
-         9tLsV973I65GjSCqyS40JivInipCupY+1WZAfBNpdOynDt+97z63FrcpdVze5raYfFI1
-         ELiZ/G9wyN0fnfIjx/4fXB0vrZdvzQZF98iXIaty+2RnmRohcZKyquzcoEI7HJVOKKX+
-         EiIOfD4L+JHLtQCVKSDCCxXZVCK4MxNFtPjEIW4ZVaTqiXLcosgUnVu2mpqrz5slCIU6
-         OojTwfk4ppz8i2nlpZs6lLbHMceui26pWhk6A71VZRttpKbJam5k9i/jzM4/k1VhIFAv
-         //BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:sender:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
-        b=fGZY9xPP13GVBXXMytLVmy4dUT3ZCBl7ro2iO2tzQB9V6NtlHlU1WIffRCKLZpGpFs
-         TunlGsH4Zvq3K0GInppg3DWQ6nFY9zo9OCTlLbfqbcT/PQPkayTxHnhgG2AAoU5/1HfN
-         VVucPa+R3cd9on/7Iwf4zdH1ndpzYsxtKOnL6VSymQawxuZsW8hrz9e2OeLzl/dgaQK9
-         HWox4Vg3ubaB7uc8Cr/eNL0mbPl41XDD6k59/uPPLfyvGi2GihpvQ5611x2QMqQ2sXYc
-         SWixN9YRCcnHIfjyWkM9XdAjD15+wAcu2Pbtukm6aIqL6TRZflV0fIny7xopeB0Td1ei
-         oFpg==
-X-Gm-Message-State: AOAM530acKnINW+aC3ADGhAO15HtsmlJf59mPZLjJWA5yurPXOhlWe0j
-        flfCEAyHDuKpQDhkTU0jfxbUDMcg6nY66w==
-X-Google-Smtp-Source: ABdhPJzMvxq+Dz6Cd25sA4YjrzKq+MpOJZGous+0kvBheLF8WnJDbF6X9Nj/FnREqpI7o/SY4LFdpA==
-X-Received: by 2002:a1c:3185:: with SMTP id x127mr1593295wmx.117.1612494508861;
-        Thu, 04 Feb 2021 19:08:28 -0800 (PST)
-Received: from [192.168.1.6] ([154.124.28.35])
-        by smtp.gmail.com with ESMTPSA id n9sm10836813wrq.41.2021.02.04.19.08.24
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Thu, 04 Feb 2021 19:08:27 -0800 (PST)
-Message-ID: <601cb6ab.1c69fb81.5ea54.2ea9@mx.google.com>
-Sender: Skylar Anderson <barr.markimmbayie@gmail.com>
-From:   calantha camara <sgt.andersonskylar0@gmail.com>
-X-Google-Original-From: calantha camara
-Content-Type: text/plain; charset="iso-8859-1"
+        id S229913AbhBEIyC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 5 Feb 2021 03:54:02 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:14210 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229691AbhBEIxE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 5 Feb 2021 03:53:04 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1158l1WR007611;
+        Fri, 5 Feb 2021 09:52:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=KoN+yQlvSs0QDXzP0LKAFNH9utHipTRcikoBgtIN8lo=;
+ b=e8kOMd+kETgkqyl4sIq8whYdqEBEdZjz+AKVGKs7p6sxePii7iHgmhJU9fRmDfO/Nu9I
+ zazUUpps4ATPiOwzDtfT4q+7RNWA5GgxErCU6rBzqQEMX29DCM2j68RoTh18Vngnz8wq
+ Uwy+WDRKJFIKTcREj1SO3GlG91aC/9mpD+qVsnyDAtiqWYuxTIiL4lmN2MRGZ1ZAfZeS
+ TcLkSbGV1FdyAIUtRjPkJaZfo6oqDu16lfN4ekzBu3O+m6Kjw+rty1mubjTUPV3DQgwq
+ LwtJDsH4hnCpOqHYprvoNoRrw8Mr6SxtMZH+GekcDA4JUWaMhRQoPDCb+NtvLEZc9kXf QQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 36d0nse4kf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Feb 2021 09:52:06 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2BCCF10002A;
+        Fri,  5 Feb 2021 09:52:06 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EC4A8221793;
+        Fri,  5 Feb 2021 09:52:05 +0100 (CET)
+Received: from localhost (10.75.127.45) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 5 Feb 2021 09:52:05
+ +0100
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <wsa@kernel.org>, <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@foss.st.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <alain.volmat@foss.st.com>
+Subject: [PATCH 0/5] i2c: stm32: filter binding support & debug info
+Date:   Fri, 5 Feb 2021 09:51:39 +0100
+Message-ID: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: hi dear
-To:     Recipients <calantha@vger.kernel.org>
-Date:   Fri, 05 Feb 2021 03:08:17 +0000
-Reply-To: calanthac20@gmail.com
-X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-05_06:2021-02-05,2021-02-05 signatures=0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-do you speak Eglish
+This serie add support for the analog and digital filter binding
+for the stm32f7 i2c driver.
+An additional patch add also debug informations, displayed in case
+of errors.
+
+Alain Volmat (5):
+  i2c: stm32f7: fix configuration of the digital filter
+  i2c: stm32f7: support DT binding i2c-analog-filter
+  i2c: stm32f7: add support for DNF i2c-digital-filter binding
+  ARM: dts: stm32: enable the analog filter for all I2C nodes in
+    stm32mp151
+  i2c: stm32f7: indicate the address being accessed on errors
+
+ arch/arm/boot/dts/stm32mp151.dtsi |  6 +++
+ drivers/i2c/busses/i2c-stm32f7.c  | 63 ++++++++++++++++++++-----------
+ 2 files changed, 46 insertions(+), 23 deletions(-)
