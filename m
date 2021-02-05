@@ -2,123 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DCA31155E
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Feb 2021 23:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A6B311575
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Feb 2021 23:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbhBEW3O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 5 Feb 2021 17:29:14 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:51310 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232549AbhBEOVB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 5 Feb 2021 09:21:01 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 115EofUK000447;
-        Fri, 5 Feb 2021 15:59:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=Kmqf4H36jwosTyKxq7uvwp2sNs+1+ieQgvhe5qhxId4=;
- b=4mcLAf1tErID1vGA1tO01tiMTaOWZAAOTPbbfYAU8tP4Me1+VBOLlL2DxCxtS0pclT+S
- zTlJ/ied1CpzmUzuwXkdXdUqjHgE4LkcvCLZ8rJVg+tnWcrWp/FWhiHT79CHkWfOEHtt
- LlnvQiTmYXqaUrzoam/LrfPhD2DihB0X6DFDjXxUcAHL8BcUEKKDllIfdMmN5sbPihJa
- J51oi4QvmYP6udtt5vT/YQ25JwNmeJplbuTZf340LO3aqMGxyO77cComD0MkMZiKJ4Yx
- 2D9hb2Ops4csVpDGVV6aFIY30KeZCleETkmcTWrcJQxPyn66b27W1Txa9sA8ILdoOjsq wQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 36ey7hh1v3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Feb 2021 15:59:46 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 85A0210002A;
-        Fri,  5 Feb 2021 15:59:46 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6E66C2402BC;
-        Fri,  5 Feb 2021 15:59:46 +0100 (CET)
-Received: from lmecxl1060.lme.st.com (10.75.127.45) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 5 Feb
- 2021 15:59:44 +0100
-Subject: Re: [PATCH 5/5] i2c: stm32f7: indicate the address being accessed on
- errors
-To:     Alain Volmat <alain.volmat@foss.st.com>, <wsa@kernel.org>,
-        <robh+dt@kernel.org>
-CC:     <mark.rutland@arm.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>
-References: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
- <1612515104-838-6-git-send-email-alain.volmat@foss.st.com>
-From:   Pierre Yves MORDRET <pierre-yves.mordret@foss.st.com>
-Message-ID: <7b614b4e-2bea-2002-0be3-4b3a0d15a4e9@foss.st.com>
-Date:   Fri, 5 Feb 2021 15:59:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231931AbhBEWcV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 5 Feb 2021 17:32:21 -0500
+Received: from de-deferred2.bosch-org.com ([139.15.180.217]:39766 "EHLO
+        de-deferred2.bosch-org.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232315AbhBEOQK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 5 Feb 2021 09:16:10 -0500
+Received: from de-out1.bosch-org.com (snat-lb41g3-dmz-psi-sl1-maildeferred.fe.ssn.bosch.com [139.15.180.215])
+        by fe0vms0193.rbdmz01.com (Postfix) with ESMTPS id 4DXKhV0dqhzqPN;
+        Fri,  5 Feb 2021 16:53:30 +0100 (CET)
+Received: from fe0vm1650.rbesz01.com (lb41g3-ha-dmz-psi-sl1-mailout.fe.ssn.bosch.com [139.15.230.188])
+        by fe0vms0187.rbdmz01.com (Postfix) with ESMTPS id 4DXKdH1nd8z1XLDQv;
+        Fri,  5 Feb 2021 16:50:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=de.bosch.com;
+        s=key3-intmail; t=1612540243;
+        bh=fP74M6HwZDCum3+vzeaerJPkseKxvj4gZV75mefECbo=; l=10;
+        h=From:Subject:From:Reply-To:Sender;
+        b=BFyuHrASzp3561tTs9ypVNcLBywXr4MmrO95y/5oH8MS0atS6GpZS1diHxcL6YjaV
+         9jEdK/DU2JgykhK6zqDnY5p3+AWQPpGfwi+8TjSUKQUX7cSlvNOhWc0CHEL++tEzqx
+         XmdhOf/c+u1+OBzjti95/wHRyVC0PnBP4kut9DhU=
+Received: from fe0vm7918.rbesz01.com (unknown [10.58.172.176])
+        by fe0vm1650.rbesz01.com (Postfix) with ESMTPS id 4DXKdH1PBKz2HM;
+        Fri,  5 Feb 2021 16:50:43 +0100 (CET)
+X-AuditID: 0a3aad10-b0bff70000002230-42-601d6953e72d
+Received: from fe0vm1652.rbesz01.com ( [10.58.173.29])
+        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by fe0vm7918.rbesz01.com (SMG Outbound) with SMTP id 70.4D.08752.3596D106; Fri,  5 Feb 2021 16:50:43 +0100 (CET)
+Received: from SI-HUB2000.de.bosch.com (si-hub2000.de.bosch.com [10.4.103.108])
+        by fe0vm1652.rbesz01.com (Postfix) with ESMTPS id 4DXKdH0MYtzV16;
+        Fri,  5 Feb 2021 16:50:43 +0100 (CET)
+Received: from luchador.grb-fir.grb.de.bosch.com (10.19.187.97) by
+ SI-HUB2000.de.bosch.com (10.4.103.108) with Microsoft SMTP Server id
+ 15.1.2106.2; Fri, 5 Feb 2021 16:50:42 +0100
+From:   Mark Jonas <mark.jonas@de.bosch.com>
+To:     Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <Adam.Thomson.Opensource@diasemi.com>,
+        <stwiss.opensource@diasemi.com>, <marek.vasut@gmail.com>,
+        <tingquan.ruan@cn.bosch.com>, <hubert.streidl@de.bosch.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Mark Jonas <mark.jonas@de.bosch.com>
+Subject: [PATCH v3] mfd: da9063: Support SMBus and I2C mode
+Date:   Fri, 5 Feb 2021 16:50:06 +0100
+Message-ID: <20210205155006.130458-1-mark.jonas@de.bosch.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1612515104-838-6-git-send-email-alain.volmat@foss.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-05_09:2021-02-05,2021-02-05 signatures=0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLLMWRmVeSWpSXmKPExsXCZbVWVjc4UzbB4O88doul75cyW9z/epTR
+        ouPvF0aLy7vmsFkc3XOP2eLq7/UsFntbLzJb3N0/l9GBw2PFJ32PnbPusntsWtXJ5nHn2h42
+        j8+b5AJYo7hsUlJzMstSi/TtErgyrhzazlbwT7Li69aFrA2Ma0S7GDk5JARMJCZcP8zUxcjF
+        ISQwnUli8do3bBDObkaJ1xNPs0I42xklrt7dwATSwiagJXHzxA5mEFtEIFqi5esJsHZmgVVM
+        EndW7WIHSQgLWEt0zutiBLFZBFQkXpy8AtbMK2Ar8X3rTnaI3fISMy99Z4eIC0qcnPmEBcRm
+        Boo3b53NDGFLSBx88YJ5AiPfLCRls5CUzUJStoCReRWjaFqqQVmuuaWhhV5RUmpxlYGhXnJ+
+        7iZGSAgL7GC83f1B7xAjEwfjIUYJDmYlEd7ENqkEId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwq
+        PBvjhATSE0tSs1NTC1KLYLJMHJxSDUxtYv6f5oU7LfyfMz13YxyzztSEh7tcjNT5a91fz9h0
+        YlUgV7mnRlRz8NWMBO3T271lVhxbdz33nHmc0USH14V/j2+J6Np8Uv1yiGSnwHG1/xd2PXKt
+        +qATtH2fqlTj/7cRAjl73RPlRVPy/rz6PSth1baU0nC3+uhkKQ9rG9FXO+4fbVqp/c1UzKL5
+        clnAl51OG4vk+GanbTpawCou7SzRGPakTlNy88zpSo2qz7h439yPvn92bu0iQacTMYf0WiaI
+        Ftx8vt2oyjUr/f+E3av3mXw+LsuaYXJapyGusuaF5gvGxdd1y36rbUr8PinOWeYZ37P+RRzy
+        W7tW123avldrInPo2QvreCc8naS8dbMSS3FGoqEWc1FxIgDtFBBU0AIAAA==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello all
+From: Hubert Streidl <hubert.streidl@de.bosch.com>
 
-Looks good to me
+By default the PMIC DA9063 2-wire interface is SMBus compliant. This
+means the PMIC will automatically reset the interface when the clock
+signal ceases for more than the SMBus timeout of 35 ms.
 
-Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+If the I2C driver / device is not capable of creating atomic I2C
+transactions, a context change can cause a ceasing of the clock signal.
+This can happen if for example a real-time thread is scheduled. Then
+the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
+a write message could end up in the wrong register. This could cause
+unpredictable system behavior.
 
-Regards
+The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
+interface. This mode does not reset the interface when the clock
+signal ceases. Thus the problem depicted above does not occur.
 
-On 2/5/21 9:51 AM, Alain Volmat wrote:
-> To help debugging issues, add the address of the slave being
-> accessed when getting an error.
-> 
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> ---
->  drivers/i2c/busses/i2c-stm32f7.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-> index f77cd6512a86..ef642fe1eb2c 100644
-> --- a/drivers/i2c/busses/i2c-stm32f7.c
-> +++ b/drivers/i2c/busses/i2c-stm32f7.c
-> @@ -1602,7 +1602,8 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
->  
->  	/* Bus error */
->  	if (status & STM32F7_I2C_ISR_BERR) {
-> -		dev_err(dev, "<%s>: Bus error\n", __func__);
-> +		dev_err(dev, "<%s>: Bus error accessing addr 0x%x\n",
-> +			__func__, f7_msg->addr);
->  		writel_relaxed(STM32F7_I2C_ICR_BERRCF, base + STM32F7_I2C_ICR);
->  		stm32f7_i2c_release_bus(&i2c_dev->adap);
->  		f7_msg->result = -EIO;
-> @@ -1610,13 +1611,15 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
->  
->  	/* Arbitration loss */
->  	if (status & STM32F7_I2C_ISR_ARLO) {
-> -		dev_dbg(dev, "<%s>: Arbitration loss\n", __func__);
-> +		dev_dbg(dev, "<%s>: Arbitration loss accessing addr 0x%x\n",
-> +			__func__, f7_msg->addr);
->  		writel_relaxed(STM32F7_I2C_ICR_ARLOCF, base + STM32F7_I2C_ICR);
->  		f7_msg->result = -EAGAIN;
->  	}
->  
->  	if (status & STM32F7_I2C_ISR_PECERR) {
-> -		dev_err(dev, "<%s>: PEC error in reception\n", __func__);
-> +		dev_err(dev, "<%s>: PEC error in reception accessing addr 0x%x\n",
-> +			__func__, f7_msg->addr);
->  		writel_relaxed(STM32F7_I2C_ICR_PECCF, base + STM32F7_I2C_ICR);
->  		f7_msg->result = -EINVAL;
->  	}
-> 
+This patch tests for the bus functionality "I2C_FUNC_I2C". It can
+reasonably be assumed that the bus cannot obey SMBus timings if
+this functionality is set. SMBus commands most probably are emulated
+in this case which is prone to the latency issue described above.
 
+This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
+otherwise enables the SMBus mode for a native SMBus controller
+which doesn't have I2C_FUNC_I2C set.
+
+Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
+Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
+---
+Changes in v3:
+  - busmode now contains the correct bit DA9063_TWOWIRE_TO
+
+Changes in v2:
+  - Implement proposal by Adam Thomson and Wolfram Sang to check for
+    functionality I2C_FUNC_I2C instead of introducing a new DT property.
+
+ drivers/mfd/da9063-i2c.c             | 15 +++++++++++++++
+ include/linux/mfd/da9063/registers.h |  3 +++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/drivers/mfd/da9063-i2c.c b/drivers/mfd/da9063-i2c.c
+index 3781d0bb7786..4c5e0f69942f 100644
+--- a/drivers/mfd/da9063-i2c.c
++++ b/drivers/mfd/da9063-i2c.c
+@@ -355,6 +355,7 @@ static int da9063_i2c_probe(struct i2c_client *i2c,
+ 			    const struct i2c_device_id *id)
+ {
+ 	struct da9063 *da9063;
++	unsigned int busmode;
+ 	int ret;
+ 
+ 	da9063 = devm_kzalloc(&i2c->dev, sizeof(struct da9063), GFP_KERNEL);
+@@ -442,6 +443,20 @@ static int da9063_i2c_probe(struct i2c_client *i2c,
+ 		return ret;
+ 	}
+ 
++	if (i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C)) {
++		dev_info(da9063->dev, "I2C mode");
++		busmode = 0;
++	} else {
++		dev_info(da9063->dev, "SMBus mode");
++		busmode = DA9063_TWOWIRE_TO;
++	}
++	ret = regmap_update_bits(da9063->regmap, DA9063_REG_CONFIG_J,
++	      DA9063_TWOWIRE_TO, busmode);
++	if (ret < 0) {
++		dev_err(da9063->dev, "Failed to set 2-wire bus mode.\n");
++		return -EIO;
++	}
++
+ 	return da9063_device_init(da9063, i2c->irq);
+ }
+ 
+diff --git a/include/linux/mfd/da9063/registers.h b/include/linux/mfd/da9063/registers.h
+index 1dbabf1b3cb8..6e0f66a2e727 100644
+--- a/include/linux/mfd/da9063/registers.h
++++ b/include/linux/mfd/da9063/registers.h
+@@ -1037,6 +1037,9 @@
+ #define		DA9063_NONKEY_PIN_AUTODOWN	0x02
+ #define		DA9063_NONKEY_PIN_AUTOFLPRT	0x03
+ 
++/* DA9063_REG_CONFIG_J (addr=0x10F) */
++#define DA9063_TWOWIRE_TO			0x40
++
+ /* DA9063_REG_MON_REG_5 (addr=0x116) */
+ #define DA9063_MON_A8_IDX_MASK			0x07
+ #define		DA9063_MON_A8_IDX_NONE		0x00
 -- 
---
-~ Py MORDRET
---
+2.25.1
+
