@@ -2,89 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 520EA311494
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Feb 2021 23:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16779311521
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Feb 2021 23:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbhBEWIR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 5 Feb 2021 17:08:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44342 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232881AbhBEOwM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 5 Feb 2021 09:52:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36E5C64FC9;
-        Fri,  5 Feb 2021 14:04:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612533851;
-        bh=T1jLO24sF0pYkT3lQr2onlwV1fj0AbfnrcXXdUAochg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BZOBBDws+/yhmPTxNLP4zonarclKLQMtK4MPPXtDYExmUzHRLjxXcJnfGq14VQa4L
-         yZhVB9oNHiU0DzaVx6si8j0aXHMHTj1MM3VS8xDsEeLmU5/b+5mHQBkgW7cT1CQKhX
-         bLMDr8tZSM1SipNLwaZFpx+i2Ki4uOTJ99+ziw0o=
-Date:   Fri, 5 Feb 2021 15:04:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        kvm@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jaroslav Kysela <perex@perex.cz>,
-        Eric Anholt <eric@anholt.net>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Takashi Iwai <tiwai@suse.com>,
-        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mike Leach <mike.leach@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        alsa-devel@alsa-project.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, Vladimir Zapolskiy <vz@mleia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        Leo Yan <leo.yan@linaro.org>, dmaengine@vger.kernel.org
-Subject: Re: [PATCH] coresight: etm4x: Fix merge resolution for amba rework
-Message-ID: <YB1QWFWPennQZmjw@kroah.com>
-References: <20210205130848.20009-1-uwe@kleine-koenig.org>
+        id S232845AbhBEWYC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 5 Feb 2021 17:24:02 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:53432 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230088AbhBEO1N (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 5 Feb 2021 09:27:13 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 115EosxG001254;
+        Fri, 5 Feb 2021 15:57:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : subject : to
+ : cc : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=aWDWtjgjvIr2y3zTvyZfIzBb+OyjkthoLMM6dyPBcVE=;
+ b=oxIa9uWsFM5obMv0fBgVcd9iyGG0c1i0xPxb4Z2ZRFlbzEF0xK6gqmOeQPvB+U54HasS
+ KAmL9hx2l0mTSb7/lfJq8QldK7bT7E4ls2fdAE7CZjk+AZWOgLJ3KoAdHiAeCOZ7T2V5
+ Ws8c/e9PIt+HhbVB9cb/XzCrz+vNLM9ck2bPnqXbeiXK2YZmb0p4LzklbDIjXgY3P4sf
+ Dz+6MBeul8NArDWkhNO1QbdM9iAe3c2vek80OZbKTD9IuzufBf4HHPrthH4RBAHOvnF7
+ bMg+SlFCc3ceT6HFRF4r0AY/6TtLgtlAxTQ1CxB0XUVIZ7Sx6X6yyucSoy3UjJuZhTJw OQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 36ey7hh1j7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Feb 2021 15:57:48 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3BE6B100034;
+        Fri,  5 Feb 2021 15:57:48 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 219BA2402BB;
+        Fri,  5 Feb 2021 15:57:48 +0100 (CET)
+Received: from lmecxl1060.lme.st.com (10.75.127.44) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 5 Feb
+ 2021 15:57:47 +0100
+From:   Pierre Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Subject: Re: [PATCH 0/5] i2c: stm32: filter binding support & debug info
+To:     Alain Volmat <alain.volmat@foss.st.com>, <wsa@kernel.org>,
+        <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>
+References: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
+Message-ID: <4addb8e0-8fcb-d713-065d-858698f3d493@foss.st.com>
+Date:   Fri, 5 Feb 2021 15:57:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210205130848.20009-1-uwe@kleine-koenig.org>
+In-Reply-To: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-05_09:2021-02-05,2021-02-05 signatures=0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 02:08:47PM +0100, Uwe Kleine-König wrote:
-> This was non-trivial to get right because commits
-> c23bc382ef0e ("coresight: etm4x: Refactor probing routine") and
-> 5214b563588e ("coresight: etm4x: Add support for sysreg only devices")
-> changed the code flow considerably. With this change the driver can be
-> built again.
+Hello all
+
+Looks good to me
+
+Signed-off-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+
+Regards
+On 2/5/21 9:51 AM, Alain Volmat wrote:
+> This serie add support for the analog and digital filter binding
+> for the stm32f7 i2c driver.
+> An additional patch add also debug informations, displayed in case
+> of errors.
 > 
-> Fixes: 0573d3fa4864 ("Merge branch 'devel-stable' of git://git.armlinux.org.uk/~rmk/linux-arm into char-misc-next")
-> Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
+> Alain Volmat (5):
+>   i2c: stm32f7: fix configuration of the digital filter
+>   i2c: stm32f7: support DT binding i2c-analog-filter
+>   i2c: stm32f7: add support for DNF i2c-digital-filter binding
+>   ARM: dts: stm32: enable the analog filter for all I2C nodes in
+>     stm32mp151
+>   i2c: stm32f7: indicate the address being accessed on errors
+> 
+>  arch/arm/boot/dts/stm32mp151.dtsi |  6 +++
+>  drivers/i2c/busses/i2c-stm32f7.c  | 63 ++++++++++++++++++++-----------
+>  2 files changed, 46 insertions(+), 23 deletions(-)
+> 
 
-Now queued up, thanks!
-
-greg k-h
+-- 
+--
+~ Py MORDRET
+--
