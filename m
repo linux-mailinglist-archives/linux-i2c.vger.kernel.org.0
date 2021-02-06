@@ -2,146 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17260311A0B
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Feb 2021 04:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AAB311E2E
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Feb 2021 15:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbhBFD3E (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 5 Feb 2021 22:29:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43872 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232518AbhBFDV4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 5 Feb 2021 22:21:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B28764F9D;
-        Sat,  6 Feb 2021 01:25:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612574755;
-        bh=/OO95ptKWwAfPKnln79sj7p50JlIFunorcpU1Za6txs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pGgQmtxfWDXFXdKv2lSHbQ8Hffg6ZF3khCddSyZagHNacjnJaiAhbckTqDOXSlJJw
-         smcT7P+JGZSL/MjDF4Cr8Rs6HfFWATUw/sTBGhUPRRRpjDs3haoC8wG9ic1njvO/iK
-         rA1Cyzbi+mBzO9SFOe5WFmN5JDg7RgiYb53u4NFEFWBc78kD1AKiH1wec60VpnljyX
-         5yAvAzFuWeaQAaZ5McL28B12bYT5mLA0y/C30Ug7IchPcpGuxmaACHs+AUk24p6dwI
-         S3tKhxddOqP8c9w+NOQxMKcPulyOZs43cf5XSh7rqi9xUyn0TiyVcGfr8ZD7n7HFTi
-         xaZJjX6p2Okig==
-Date:   Sat, 6 Feb 2021 02:25:51 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Vincent Cheng <vincent.cheng.xh@renesas.com>,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: Fix undocumented compatible strings in
- examples
-Message-ID: <20210206012551.GB3847@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Vincent Cheng <vincent.cheng.xh@renesas.com>,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-watchdog@vger.kernel.org
-References: <20210202205544.24812-1-robh@kernel.org>
+        id S230194AbhBFO5t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 6 Feb 2021 09:57:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230197AbhBFO5J (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 6 Feb 2021 09:57:09 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277BAC061226
+        for <linux-i2c@vger.kernel.org>; Sat,  6 Feb 2021 06:56:08 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id q2so12938676edi.4
+        for <linux-i2c@vger.kernel.org>; Sat, 06 Feb 2021 06:56:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=be9tjb+OWNHJndy1m5EocOdwIhBfISHHXuo03iHvkf99IBeAS2ZIP4zO+CffKoAXli
+         wFT/YxtIr4WF2n1YSMwug96AX6h42NKZrdX6hvIP0FW987zbVxsareo/sU3roaLny3Pm
+         1I0EAvIv2c3c8gMqzIhJboZgHRcl5wu2OT/70suQQY9rPZh+owVr7rQ4YbzNpmhfKrYI
+         /WFKqkkmd6SPcZoTOVzYWmghpUGccg0Q45HGIh3V4O6JvUm92greLImmIug/U0fb2r4r
+         q9VWwZUaDL82BSMDI5DQFGoKkEfp6hQ2o0DuZZGA9TKrtSyCuxJgVwhKlVG9/j3xxq6N
+         +ONA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=CulQZgKtUNcOWWV9HF6yUzabyymeetypPKGVapSOzgrfAxTguII6FwtURLDvC4UQj4
+         cnwSNIcUyzgPpitlLLMV9LPtxO3sFG+9B1mc00Pr9z88ugXbxEXvF6X5BZNQYVeIyM5M
+         pPHVeDY5C81KC8oRmROv01r6lDz0w7ybmi7RaKy+AE09G1Wc+egLB7EmBp2O2HjruuYq
+         YB3WQkiYnPc8LMaWZS4zN5ucAMNCPeeLIWJWl9Bp0wRShWW3xcIqSgpHllJDO0+sQmt/
+         3o8v08W06wuue8igJO8WwgZRJqyVZmHACnnpzAYt4i/zYVV0+hzZjppyeqLfl3qaYLcA
+         axFg==
+X-Gm-Message-State: AOAM5309x2D5RZ0RKZGYQ3phtsYeq4u2cku6q43/p7TY2ST0ddAPwONt
+        BEchvNLSEjZgJ1u4Pyzad01SeD+6yTMyY48A6Hc=
+X-Google-Smtp-Source: ABdhPJwg+95ztD5QblcuO+8CjjIKmoEQ6sWNyKmWrA0wQ2pVp+Zgel1cyodQV1zvNjOO8ObzDtcisUsYne5SMT74xW8=
+X-Received: by 2002:a05:6402:13cd:: with SMTP id a13mr8813735edx.87.1612623366928;
+ Sat, 06 Feb 2021 06:56:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZfOjI3PrQbgiZnxM"
-Content-Disposition: inline
-In-Reply-To: <20210202205544.24812-1-robh@kernel.org>
+Received: by 2002:a17:906:25d0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:56:06
+ -0800 (PST)
+Reply-To: lawyer.nba@gmail.com
+From:   Barrister Daven Bango <stephennbada9@gmail.com>
+Date:   Sat, 6 Feb 2021 15:56:06 +0100
+Message-ID: <CAGSHw-DxGPGtoG1+UQ6TB+LhiET-F_GxGO0MtswtFbtkGe4W1Q@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+--=20
+Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
+ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
+MMF)
+u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
+dodatne informacije
 
---ZfOjI3PrQbgiZnxM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Feb 02, 2021 at 02:55:42PM -0600, Rob Herring wrote:
-> Running 'dt-validate -m' will flag any compatible strings missing a schem=
-a.
-> Fix all the errors found in DT binding examples. Most of these are just
-> typos.
->=20
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Daniel Palmer <daniel@thingy.jp>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Avi Fishman <avifishman70@gmail.com>
-> Cc: Tomer Maimon <tmaimon77@gmail.com>
-> Cc: Tali Perry <tali.perry1@gmail.com>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Andrew Jeffery <andrew@aj.id.au>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Cc: Vincent Cheng <vincent.cheng.xh@renesas.com>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: iommu@lists.linux-foundation.org
-> Cc: linux-watchdog@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
-
-
---ZfOjI3PrQbgiZnxM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAd8B4ACgkQFA3kzBSg
-KbbdSRAAtkrymAGNS5LGn321fm8TqaN3fodZIhNLfeeWULr/eImrk2RJCYzunjC6
-Nb8wJvEywJuB1E4YzkiFTgWxKVeLmFnUFodUSlufnefhzGl4Q+2udtIlUr3CqBaM
-K7b7RS452nISpyzJHTBfdWr4VwEUOHqmrYXG3jLExytI6Enrun7qqY6hu7WwXUIT
-tZ7CUUP30kMy3K1ahkItDx0SGBRf5hWrG+KAzSj9cyZKHFBaIv3WKV/bUMC6OC+Y
-h83LhJP40pBTFZWlk+jwchtr4ZWNF6GG9vuIcXWI35Y9tYUDsX0fWnRj3LSMdp8u
-QMK0sZFo4oIejPXH61NxPWZ6IHVcy21veXay4ZXApxNjsuwyitBb7/aRrJDEoJsr
-MlS6IMR7MXnujHlxwoJ+3sSIvPhRyeWgTC1pmp4qL2LwImDHrooS3pJANxAl7Ws6
-+RKt3Mkf0w5k5r2HiukAHI7Lywkwb74sit3LU3D6awsZicpRT9c/tNlGnTNsl6Hu
-+Mu9JP+//QSe+eRhOsXCnwMl8eEutYWvPadijYg87IbPxat3uDuiQz5E7S5dMTSR
-UerC7itsB9z9Hpb8zDdQAboNPdw04c+kfWn53Mu7cxhvxhzYyf+jZsu8tMIG60Bb
-LheRj95DOtU9bnIaQ8NdiBy3k9LESOW9ULADetyHoQZLM5Qb7Zk=
-=d/1y
------END PGP SIGNATURE-----
-
---ZfOjI3PrQbgiZnxM--
+Advokat: Daven Bango
+Telefon: +22891667276
+(URED MMF-a LOME TOGO)
