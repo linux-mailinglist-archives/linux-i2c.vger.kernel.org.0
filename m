@@ -2,66 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C49312E3F
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Feb 2021 11:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CE9312FBD
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Feb 2021 11:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbhBHJ7v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Feb 2021 04:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbhBHJwS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Feb 2021 04:52:18 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE593C0698C4
-        for <linux-i2c@vger.kernel.org>; Mon,  8 Feb 2021 01:46:29 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id j12so9335933pfj.12
-        for <linux-i2c@vger.kernel.org>; Mon, 08 Feb 2021 01:46:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z7Z/JdX0RhrlgqchmamXWMY47TIIKUp5Zm0+e0J1lMs=;
-        b=EBAN8kT/RdDTitIJIwHViEDhHzNJv4CIWk9rs6YltTkWZ458GA493YyOdSoiZ3kf2I
-         cdNbMkg2fZDvPvkuycg7WSARNJ/puPrDyOFIWKtgjChKMEIfkIP2Q2XVpBk+DA9Lhucn
-         6XQlMQaKQZVW2ZyZN5QBK8n9vbP0QwsOuCEl8YnAfifh/FxrfAzpfX38semmARrCGxh8
-         WFi+25A8lhFcplpes37lwhh0IayXXJWFPkoQ+knUplL4fyj/9WvmsAavsN2O11FqYU0q
-         sXGcgyuoksh1FLpl3IVpUWra/8A8W9zD+TSlCF6rCGoTQRx8E8R9VquYNvg3vN5bAAWe
-         XSXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z7Z/JdX0RhrlgqchmamXWMY47TIIKUp5Zm0+e0J1lMs=;
-        b=FSCUpNb8KtrTkrAp8xOE8wAGMDYSX+W/llcKPJoay7VlT+/LdIwFyJtUHdulFfaa2c
-         /4ciAUo0wa78j733LhL08O7L1yeSKmDcKLk2R91Ywf5FM+GSis2Y1tBelpIGQDSdYrap
-         Pnsi+SbGVizzezjdif6hFInqNfEBQKTyqSBKkPxCG60F582Jy2LKAQpku94meFOeAhgY
-         yt27FxfW0c/N2wAiesh64vrBp9ZXAre0enVDdhI7AJlchLwNVMdnNsYZvHa4w/G6Ogoy
-         sBz2pjlRjzyNq+ldwalNJMHDfy7cu0jC8LS6xz4m/YPONAoNoy/ihgVp5ajoXel82nGl
-         xbaw==
-X-Gm-Message-State: AOAM533mVC28xncYu6qaktPJ8+31/Py9/hqY0icY9g+CV0e5Uksw9/nc
-        BZjK4JYX7R5rVIb7tb5SWFrTp2ZSIhap1nq3dYA=
-X-Google-Smtp-Source: ABdhPJybDL+KhCvXPDIs57vnx74bKnUW7LRfIk9mtYaX6Td3ETIAJUIor6BltYlrl2tm2rDxnhIvTg/8Y9D/vq+/hVc=
-X-Received: by 2002:a63:c84a:: with SMTP id l10mr16253996pgi.159.1612777589348;
- Mon, 08 Feb 2021 01:46:29 -0800 (PST)
+        id S232456AbhBHKyq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Feb 2021 05:54:46 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:12461 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232347AbhBHKvt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Feb 2021 05:51:49 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4DZ2pn6lkHzjJWd;
+        Mon,  8 Feb 2021 18:49:53 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.24) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 8 Feb 2021 18:50:52 +0800
+From:   Weihang Li <liweihang@huawei.com>
+To:     <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mips@vger.kernel.org>
+CC:     <linuxarm@openeuler.org>, Weihang Li <liweihang@huawei.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH] i2c: busses: Replace spin_lock_irqsave with spin_lock in hard IRQ
+Date:   Mon, 8 Feb 2021 18:48:37 +0800
+Message-ID: <1612781317-51815-1-git-send-email-liweihang@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Received: by 2002:a17:90a:5d0a:0:0:0:0 with HTTP; Mon, 8 Feb 2021 01:46:29
- -0800 (PST)
-Reply-To: richadtomm@qq.com
-From:   "Mr.Richard Thomas" <tommiirrrch@gmail.com>
-Date:   Mon, 8 Feb 2021 01:46:29 -0800
-Message-ID: <CAGbSTZMAc0EF+BT96=ag5apRs+Aauw-A-2pin2QX1dEQy+tMew@mail.gmail.com>
-Subject: Re Thanks.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear Friend,
-I will be pleased if you can allow me to invest $104M Dollars in
-Estate Management,in your company or any area you best that will be
-of good profit to both of us
+There is no need to do irqsave and irqrestore in context of hard IRQ.
 
-Please do well to respond including your information for more details.
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Weihang Li <liweihang@huawei.com>
+---
+ drivers/i2c/busses/i2c-digicolor.c | 5 ++---
+ drivers/i2c/busses/i2c-jz4780.c    | 5 ++---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-Thanks.
-Mr.Richard Thomas
+diff --git a/drivers/i2c/busses/i2c-digicolor.c b/drivers/i2c/busses/i2c-digicolor.c
+index f67639d..60c838c 100644
+--- a/drivers/i2c/busses/i2c-digicolor.c
++++ b/drivers/i2c/busses/i2c-digicolor.c
+@@ -160,12 +160,11 @@ static irqreturn_t dc_i2c_irq(int irq, void *dev_id)
+ {
+ 	struct dc_i2c *i2c = dev_id;
+ 	int cmd_status = dc_i2c_cmd_status(i2c);
+-	unsigned long flags;
+ 	u8 addr_cmd;
+ 
+ 	writeb_relaxed(1, i2c->regs + II_INTFLAG_CLEAR);
+ 
+-	spin_lock_irqsave(&i2c->lock, flags);
++	spin_lock(&i2c->lock);
+ 
+ 	if (cmd_status == II_CMD_STATUS_ACK_BAD
+ 	    || cmd_status == II_CMD_STATUS_ABORT) {
+@@ -207,7 +206,7 @@ static irqreturn_t dc_i2c_irq(int irq, void *dev_id)
+ 	}
+ 
+ out:
+-	spin_unlock_irqrestore(&i2c->lock, flags);
++	spin_unlock(&i2c->lock);
+ 	return IRQ_HANDLED;
+ }
+ 
+diff --git a/drivers/i2c/busses/i2c-jz4780.c b/drivers/i2c/busses/i2c-jz4780.c
+index cb4a25e..8509c5f 100644
+--- a/drivers/i2c/busses/i2c-jz4780.c
++++ b/drivers/i2c/busses/i2c-jz4780.c
+@@ -437,9 +437,8 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void *dev_id)
+ 	unsigned short intst;
+ 	unsigned short intmsk;
+ 	struct jz4780_i2c *i2c = dev_id;
+-	unsigned long flags;
+ 
+-	spin_lock_irqsave(&i2c->lock, flags);
++	spin_lock(&i2c->lock);
+ 	intmsk = jz4780_i2c_readw(i2c, JZ4780_I2C_INTM);
+ 	intst = jz4780_i2c_readw(i2c, JZ4780_I2C_INTST);
+ 
+@@ -551,7 +550,7 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void *dev_id)
+ 	}
+ 
+ done:
+-	spin_unlock_irqrestore(&i2c->lock, flags);
++	spin_unlock(&i2c->lock);
+ 	return IRQ_HANDLED;
+ }
+ 
+-- 
+2.8.1
+
