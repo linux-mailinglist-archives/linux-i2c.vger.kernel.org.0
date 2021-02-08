@@ -2,105 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6311312B6B
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Feb 2021 09:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7919312BC4
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Feb 2021 09:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbhBHIDC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Feb 2021 03:03:02 -0500
-Received: from mga11.intel.com ([192.55.52.93]:18280 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230035AbhBHIDB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 8 Feb 2021 03:03:01 -0500
-IronPort-SDR: ZcNOVZe4/w3Z7NYH82bFU6LUYH4nRsA3ohPgEY4xik48UUJLbLlDbYiipSeLP4ft0LRlZY9K+H
- XjAVYb7jlOYA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9888"; a="178165608"
-X-IronPort-AV: E=Sophos;i="5.81,161,1610438400"; 
-   d="scan'208";a="178165608"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 00:01:14 -0800
-IronPort-SDR: TAeApzPzcsHD2nkD1WnSRdfB3aHdH4EvqMFWDF9iS82Szz7Zcm8ei8sWTroW7XKGJkXXa2l5iG
- 3XsPj8VbOElQ==
-X-IronPort-AV: E=Sophos;i="5.81,161,1610438400"; 
-   d="scan'208";a="577574042"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 00:01:10 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id A08E22082C; Mon,  8 Feb 2021 10:01:08 +0200 (EET)
-Date:   Mon, 8 Feb 2021 10:01:08 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v10 3/7] Documentation: ACPI: Document _DSE object usage
- for enum power state
-Message-ID: <20210208080108.GL32460@paasikivi.fi.intel.com>
-References: <20210205132505.20173-1-sakari.ailus@linux.intel.com>
- <20210205132505.20173-4-sakari.ailus@linux.intel.com>
- <4894ef52-71f5-c651-c45b-4788f0e24162@infradead.org>
+        id S230148AbhBHIaS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Feb 2021 03:30:18 -0500
+Received: from smtp-18d.idc2.mandic.com.br ([177.70.124.135]:19146 "EHLO
+        smtp-18.idc2.mandic.com.br" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230012AbhBHIaJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Feb 2021 03:30:09 -0500
+Received: by smtp-18.smtp.mandic.prv (Postfix, from userid 491)
+        id 5BC52607E9FB; Mon,  8 Feb 2021 05:29:22 -0300 (-03)
+Received: from smtp-18.idc2.mandic.com.br (ifsmtp2 [192.168.1.38])
+        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPS id C1044607AAA4;
+        Mon,  8 Feb 2021 05:29:16 -0300 (-03)
+Received: from User (unknown [52.235.38.23])
+        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPA id 78375465E268;
+        Mon,  8 Feb 2021 05:26:42 -0300 (-03)
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <stefy@macrometrica.com.br>
+Subject: Re:reply
+Date:   Mon, 8 Feb 2021 08:29:15 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4894ef52-71f5-c651-c45b-4788f0e24162@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-Mandic-Auth: DYB6x5JcyVot9snxiAasWC73cfc93V+pC3vUrorm87+eXbqAUeEHL0ZNPgpM50IYQeUbiYx0PkMIK2oavHcOOA==
+X-Mandic-Sender: stefy@macrometrica.com.br
+Message-Id: <20210208082916.C1044607AAA4@smtp-18.smtp.mandic.prv>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Randy,
+Hello,
 
-On Fri, Feb 05, 2021 at 04:56:47PM -0800, Randy Dunlap wrote:
-> On 2/5/21 5:25 AM, Sakari Ailus wrote:
-> > Document the use of the _DSE object for setting desirable power state
-> > during probe.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-> > ---
-> >  Documentation/firmware-guide/acpi/index.rst   |  1 +
-> >  .../firmware-guide/acpi/low-power-probe.rst   | 69 +++++++++++++++++++
-> >  2 files changed, 70 insertions(+)
-> >  create mode 100644 Documentation/firmware-guide/acpi/low-power-probe.rst
-> > 
-> 
-> > diff --git a/Documentation/firmware-guide/acpi/low-power-probe.rst b/Documentation/firmware-guide/acpi/low-power-probe.rst
-> > new file mode 100644
-> > index 0000000000000..b96804d959a6c
-> > --- /dev/null
-> > +++ b/Documentation/firmware-guide/acpi/low-power-probe.rst
-> > @@ -0,0 +1,69 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +======================================
-> > +Probing I²C devices in low power state
-> > +======================================
-> > +
-> > +Introduction
-> > +============
-> > +
-> > +In some cases it may be preferred to leave certain devices powered off for the
-> > +entire system bootup if powering on these devices has adverse side effects,
-> > +beyond just powering on the said device.
-> > +
-> > +How it works
-> > +============
-> >
-> 
-> Hi,
-> 
-> Please don't use ============ underlines for all section levels.
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-The sections under the title are intended to be on the same level.
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
--- 
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
 Regards,
-
-Sakari Ailus
+Ms. Reem.
