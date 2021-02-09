@@ -2,94 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41819314D5B
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Feb 2021 11:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50441314D5D
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Feb 2021 11:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbhBIKoo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Feb 2021 05:44:44 -0500
-Received: from sauhun.de ([88.99.104.3]:56182 "EHLO pokefinder.org"
+        id S231790AbhBIKow (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Feb 2021 05:44:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40212 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231196AbhBIKjh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 9 Feb 2021 05:39:37 -0500
-Received: from localhost (p5486c396.dip0.t-ipconnect.de [84.134.195.150])
-        by pokefinder.org (Postfix) with ESMTPSA id 087AB2C04E4;
-        Tue,  9 Feb 2021 11:38:46 +0100 (CET)
-Date:   Tue, 9 Feb 2021 11:38:43 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Vadim Pasternak <vadimp@nvidia.com>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH i2c-next v5 0/6] mux: mlxcpld: Extend driver functionality
-Message-ID: <20210209103843.GA9698@ninjato>
-References: <20210208201606.10620-1-vadimp@nvidia.com>
- <e86e396b-b099-5174-ae0a-393401b1e767@axentia.se>
+        id S231421AbhBIKlr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 9 Feb 2021 05:41:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F331A64E6F;
+        Tue,  9 Feb 2021 10:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612867253;
+        bh=YvkKyU23vYwdJtjO8ln/oqp7oMDgbK2SlLLuxFQCymE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=njJDoRQiZml8JfHAPzXbApAcsPfihX4HU6G6e8MDFp1Be826wWrmhTIB41ANDQeIv
+         6hMilnT9aZ9Z0rGOmdledoTzJoKNko+G4tXirhl1AFDGttXnkll0kcm28y7vX0/Zze
+         lbZrLMmjSMnHtxB5JdD9aEKkX/mIDNXsOS6gng0r7p1coCHOjeM6G2AN5awyPdXibg
+         kAJ2Dt2qxHoa29Rz54yZxWVwnbMjsQTiIcrt4R5wu28W9K4X3LcIGIPmqvvAgE69fm
+         GBnfWk03seW6vGPS8xnYuwxvrFBVo4RRYZmpkdC9BmamS15o8zoYyCr5sC11nLLQfP
+         xK7m4nhay+BPA==
+Date:   Tue, 9 Feb 2021 11:40:50 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Mark Jonas <mark.jonas@de.bosch.com>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Adam.Thomson.Opensource@diasemi.com,
+        stwiss.opensource@diasemi.com, marek.vasut@gmail.com,
+        tingquan.ruan@cn.bosch.com, hubert.streidl@de.bosch.com
+Subject: Re: [PATCH v4] mfd: da9063: Support SMBus and I2C mode
+Message-ID: <20210209104050.GB9698@ninjato>
+References: <20210208152758.13093-1-mark.jonas@de.bosch.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lrZ03NoBR/3+SXJZ"
+        protocol="application/pgp-signature"; boundary="6sX45UoQRIJXqkqR"
 Content-Disposition: inline
-In-Reply-To: <e86e396b-b099-5174-ae0a-393401b1e767@axentia.se>
+In-Reply-To: <20210208152758.13093-1-mark.jonas@de.bosch.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---lrZ03NoBR/3+SXJZ
+--6sX45UoQRIJXqkqR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 08, 2021 at 10:26:08PM +0100, Peter Rosin wrote:
-> Hi!
+On Mon, Feb 08, 2021 at 04:27:58PM +0100, Mark Jonas wrote:
+> From: Hubert Streidl <hubert.streidl@de.bosch.com>
 >=20
-> On 2021-02-08 21:16, Vadim Pasternak wrote:
-> > The patchset adds new features for the existing Mellanox systems.
-> >=20
-> > Patch #1 converts driver to platform driver.
-> > Patch #2 prepare driver for word addressing support.
-> > Patch #3 removes adapter numbers enforcement.
-> > Patch #4 adds support for word address space devices.
-> > Patch #5 extends mux number supported by driver.
-> > Patch #6 adds callback notification about mux creation.
-> >=20
-> > Vadim Pasternak (6):
-> >   i2c: mux: mlxcpld: Convert driver to platform driver
-> >   i2c: mux: mlxcpld: Prepare mux selection infrastructure for two-byte
-> >     support
-> >   i2c: mux: mlxcpld: Get rid of adapter numbers enforcement
-> >   i2c: mux: mlxcpld: Extend driver to support word address space devices
-> >   i2c: mux: mlxcpld: Extend supported mux number
-> >   i2c: mux: mlxcpld: Add callback to notify mux creation completion
-> >=20
-> >  drivers/i2c/muxes/i2c-mux-mlxcpld.c   | 128 ++++++++++++++++++++------=
---------
-> >  include/linux/platform_data/mlxcpld.h |  11 ++-
-> >  2 files changed, 83 insertions(+), 56 deletions(-)
-> >=20
+> By default the PMIC DA9063 2-wire interface is SMBus compliant. This
+> means the PMIC will automatically reset the interface when the clock
+> signal ceases for more than the SMBus timeout of 35 ms.
 >=20
-> I am now happy with this series. All looks good and every patch makes sen=
-se
-> on its own. Thank you for putting in the effort!
+> If the I2C driver / device is not capable of creating atomic I2C
+> transactions, a context change can cause a ceasing of the clock signal.
+> This can happen if for example a real-time thread is scheduled. Then
+> the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
+> a write message could end up in the wrong register. This could cause
+> unpredictable system behavior.
+>=20
+> The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
+> interface. This mode does not reset the interface when the clock
+> signal ceases. Thus the problem depicted above does not occur.
+>=20
+> This patch tests for the bus functionality "I2C_FUNC_I2C". It can
+> reasonably be assumed that the bus cannot obey SMBus timings if
+> this functionality is set. SMBus commands most probably are emulated
+> in this case which is prone to the latency issue described above.
+>=20
+> This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
+> otherwise enables the SMBus mode for a native SMBus controller
+> which doesn't have I2C_FUNC_I2C set.
+>=20
+> Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
+> Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
 
-All applied to for-next, thanks everyone!
+=46rom I2C highlevel view, this looks good:
+
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---lrZ03NoBR/3+SXJZ
+--6sX45UoQRIJXqkqR
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAiZi8ACgkQFA3kzBSg
-KbZHxg/+LHkdgc/ul/h6t7rFn22Iq8/0ffPiN7Djoz9fC5DQc7/hAgvZnNU+4JFX
-rjkowpHgd8x0Kd10ZBxHcdsgjEXcRtb85nRBZ5VnJcOLGW1gWLwNDNRfB+NZwh8B
-n8cCdSKDXS+39v2RdpgqbpzPTcWPagInPVyX7Ic2CYUxBkWDQOXgxGh/gkgWwnxj
-ABf5z13cO91fi/cof9LoF+Gsh0wu47wMVD4v+dGWaVqtV5KBRme9ZJxE5X+3fmhg
-hxi3xbPknc6j1/ldIm0PUCOOj1VwRfzu+zcv+/xfG5cDoKgn4RUQx/+8hOJnsTo2
-yhVAbAaMHjeUZRYyP9JZNaMWS/WDr8UfYkRjmfXhLNxm2R/5DesJ3tKRynIm3Mb4
-F3UlsRxtlJ0JDMg6CspPMDK0hqO5SKvwbyFaKHP+lMmkNZd7PehSgeYsBocJydG/
-FuszeuJ/Zq4ggufWF9FI2/+su4RsLmmRWVJFOUuroeGTLxesPbRtSJntiETMX4js
-O9nCCM3VZgY3zq0THZ3Aj3hibhu3GbuZRsMD2Wp5vPya9L5wHXt1eAcXkqR1nzIt
-h9Ff9w/xG1SnZDAdcmLDOQl0z+ErpuyLsdIiFDObX/SsU1S65WrNLxu48WoODrLK
-6dvfhj6c/6sK4Oxk1T1DL3oveO0/e758jJug4COnBad/s4p3kJQ=
-=aBrR
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAiZrIACgkQFA3kzBSg
+KbatLQ//UULY14lvrfB6i/awuvHEqTSMXT/6zrn1xqndERDVy3I6szmAU9VUDPKJ
+udtnv3Cam1sDZfjTYn1NpeOQ7DoQga9hkoT9j9LsyPLgE0CyA+c1p02unNUlawwQ
+Wvi7B6+7tTFFk6Pw3EOTqt7qP40sLfmhu1wMsST/geeRKZxJ9QQp5PzC52F4byLj
+VJLfZF/ZcV3nzKQK/cSMuwtSOu2c5TAEAi95kMO0GpfAzW9crvEuJNQ6tgWGKiey
+vmW3k1LUyWAuHLzKrWPfXY1hRjCJVaGjSv7rgfbICoMLjWu9LT258zWTna1zZXIR
+TRz7JrOjfXuiNS7tBuSsAkxGpSECGDq3dzZENxKSQZH24v79V3FnJTl6iiRUPPFj
+P/7udPaIB0iu8alxy7o9r6U6uqCL9lg98lR0/IsiaGuCEmc0iD593Czzze/FyLHy
+MjMONDo7VLJEyyuFv5eyW1NFTLz0W2fLmdx5HybrXrEjXD+0OUfbIhw9vWIVNiXE
+m9yklaPV+AKKDOvZxnoC2XpnCPbWSnsbB45WLeYwFFHX41hz7iQJWkheUWA7wfay
+pXd1RS0T8HIOh650Jds+oEMTMy3/XGV12Tw6NBxS6257YPzbznHnkVG8M/aAryXi
+hy5XWIB+rC5/bhfVJ8zA0PCl1epH+7goQVWpGtonD0Cy62DJ5mw=
+=FlX0
 -----END PGP SIGNATURE-----
 
---lrZ03NoBR/3+SXJZ--
+--6sX45UoQRIJXqkqR--
