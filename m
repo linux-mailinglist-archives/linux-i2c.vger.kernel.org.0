@@ -2,128 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9B8314E24
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Feb 2021 12:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D0F314EC4
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Feb 2021 13:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbhBILWF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Feb 2021 06:22:05 -0500
-Received: from www.zeus03.de ([194.117.254.33]:49664 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230226AbhBILUM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 9 Feb 2021 06:20:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=EEBV23pyAIcfqpvksmub813O9b9
-        exoa6A9a9ixnz1DU=; b=3y00j4hhhhxvXUP3gtUOOGOku+KGAXwrN2iQuqFJoEE
-        Yqh6CfSDJ4siu526jblXtARfk4dSX5TfeM6cNn3GFDWLBzz3fFoSG9n14M87S37H
-        AuxCG32x9sf30YFWu8lobAizV+JE0Fv5GZzfZIgzXdG4VNbK4mHflo23iLlIvjFI
-        =
-Received: (qmail 182523 invoked from network); 9 Feb 2021 12:19:31 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Feb 2021 12:19:31 +0100
-X-UD-Smtp-Session: l3s3148p1@WMrddeW6Go0gAwDPXxOiANNsDO+kmtby
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH] i2c: testunit: add support for block process calls
-Date:   Tue,  9 Feb 2021 12:19:27 +0100
-Message-Id: <20210209111927.19169-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.28.0
+        id S229742AbhBIMM0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Feb 2021 07:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229684AbhBIMLw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Feb 2021 07:11:52 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A753C061786;
+        Tue,  9 Feb 2021 04:11:12 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id o193so8100565qke.11;
+        Tue, 09 Feb 2021 04:11:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9b1+FT42iYfcBaXACNqZZ8m0dOYDgpi8jpItwihB888=;
+        b=UGlY2FQWhtT3walGbEZSEZicPmfHAAfnO+Qy2cpBcfFE/eCtSyGhllrt7V3ARb+idi
+         VZmpoIChaC56Wocfdzm1xDhttnJKU2403POE7bOYgWPj0jFttWxJPiUHMEt9Rug7z7/G
+         gZKy8gxFr7zOIt15N98S/AxtUPaWeD5aZRssE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9b1+FT42iYfcBaXACNqZZ8m0dOYDgpi8jpItwihB888=;
+        b=tDB3ftXvRXtf/PJS4HGeUFZV+atoEWHdgmHQu+GIzYmmCZJUZZNTH1jcDQIhNKCWMS
+         Nx4PHEyRXdG7Z+lQKo0kq1xwiL4tEptdS8TDI/IzYOc0lcJyv1cPUM5DMcLJz3NrCD3t
+         2KuTu8BRAKnbG0q2/4MQP6VlSD6uGXo8XNF/T+fCnySRcIYaIy1FVMS4fBOEh4BQp+o0
+         d8q51qXHvLyPvSdzQwQc7g/p2PL9PuhOYMTOBLII1Ogu96n+nwxv1UOVqo0t5JLUKayJ
+         qZTUfLZGbwago+0dl2zVluP3R1WYnsyMT9c/COOWDHBksdA8+zwycvZDWid5Ihd4Gtpb
+         iTEg==
+X-Gm-Message-State: AOAM532fqVxQTIOFb6dV2n5n30RfwhXxUkPjJ4MOl5j39YFNu/qGNBne
+        8Rgn+6cHyyMgTDDk17a6NbOtFNbICOx62wQSGH4=
+X-Google-Smtp-Source: ABdhPJznG+/3DRBuaBXOdhGQaUyUKQ7CvJxjrD65Ucij76t+VNLlWYhA5nJdNKP2loti8FRSBk9GJ1U7fyFVqRwjKmQ=
+X-Received: by 2002:ae9:e314:: with SMTP id v20mr11627616qkf.66.1612872671495;
+ Tue, 09 Feb 2021 04:11:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210112003749.10565-1-jae.hyun.yoo@linux.intel.com>
+ <20210112003749.10565-2-jae.hyun.yoo@linux.intel.com> <20210114193416.GA3432711@robh.at.kernel.org>
+ <4f67358e-58e5-65a5-3680-1cd8e9851faa@linux.intel.com> <CACPK8XcZTE=bnCP1-E9PTA09WnXG9Eduwx0dm-QqmQJUDa_OrQ@mail.gmail.com>
+ <1814b8d1-954c-0988-0745-e95129079708@linux.intel.com> <87ed4085-26e4-98f8-21e3-b1e3c16b0891@linux.intel.com>
+In-Reply-To: <87ed4085-26e4-98f8-21e3-b1e3c16b0891@linux.intel.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 9 Feb 2021 12:10:59 +0000
+Message-ID: <CACPK8XekihpoXEeyUbWSXsRkVMbX1gKG-gSeYgWq=s3UR2gi1g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: aspeed: add buffer and DMA mode
+ transfer support
+To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
+        Cedric Le Goater <clg@kaod.org>, linux-i2c@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Devices offering SMBus block process calls are rare, so add it to the
-testunit. This is also a good test case for testing proper
-I2C_M_RECV_LEN flag handling of I2C bus masters emulating SMBus.
+On Wed, 3 Feb 2021 at 23:03, Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com> wrote:
+>
+> Hi Joel
+>
+> On 1/28/2021 11:36 AM, Jae Hyun Yoo wrote:
+> > Hi Joel
+> >
+> > On 1/27/2021 4:06 PM, Joel Stanley wrote:
+> >>>> All this information doesn't need to be in the binding.
+> >>>>
+> >>>> It's also an oddly structured dts file if this is what you are doing...
+> >>>
+> >>> I removed the default buffer mode settings that I added into
+> >>> 'aspeed-g4.dtsi' and 'aspeed-g5.dtsi' in v1 to avoid touching of the
+> >>> default transfer mode setting, but each bus should use its dedicated
+> >>> SRAM buffer range for enabling buffer mode so I added this information
+> >>> at here as overriding examples instead. I thought that binding document
+> >>> is a right place for providing this information but looks like it's not.
+> >>> Any recommended place for it? Is it good enough if I add it just into
+> >>> the commit message?
+> >>
+> >> I agree with Rob, we don't need this described in the device tree
+> >> (binding or dts). We know what the layout is for a given aspeed
+> >> family, so the driver can have this information hard coded.
+> >>
+> >> (Correct me if I've misinterpted here Rob)
+> >>
+> >
+> > Makes sense. Will add these settings into the driver module as hard
+> > coded per each bus.
+> >
+>
+> Realized that the SRAM buffer range setting should be added into device
+> tree because each bus module should get the dedicated IO resource range.
+> So I'm going to add it to dtsi default reg setting for each I2C bus
+> and will remove this description in binding. Also, I'll add a mode
+> setting property instead to keep the current setting as byte mode.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- Documentation/i2c/slave-testunit-backend.rst | 23 ++++++++++++++++++--
- drivers/i2c/i2c-slave-testunit.c             | 12 ++++++++--
- 2 files changed, 31 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/i2c/slave-testunit-backend.rst b/Documentation/i2c/slave-testunit-backend.rst
-index 2c38e64f0bac..ecfc2abec32d 100644
---- a/Documentation/i2c/slave-testunit-backend.rst
-+++ b/Documentation/i2c/slave-testunit-backend.rst
-@@ -22,8 +22,9 @@ Instantiating the device is regular. Example for bus 0, address 0x30:
- 
- After that, you will have a write-only device listening. Reads will just return
- an 8-bit version number of the testunit. When writing, the device consists of 4
--8-bit registers and all must be written to start a testcase, i.e. you must
--always write 4 bytes to the device. The registers are:
-+8-bit registers and, except for some "partial" commands, all registers must be
-+written to start a testcase, i.e. you usually write 4 bytes to the device. The
-+registers are:
- 
- 0x00 CMD   - which test to trigger
- 0x01 DATAL - configuration byte 1 for the test
-@@ -67,3 +68,21 @@ status word is currently ignored in the Linux Kernel. Example to send a
- notification after 10ms:
- 
- # i2cset -y 0 0x30 0x02 0x42 0x64 0x01 i
-+
-+0x03 SMBUS_BLOCK_PROC_CALL (partial command)
-+   DATAL - must be '1', i.e. one further byte will be written
-+   DATAH - number of bytes to be sent back
-+   DELAY - not applicable, partial command!
-+
-+This test will respond to a block process call as defined by the SMBus
-+specification. The one data byte written specifies how many bytes will be sent
-+back in the following read transfer. Note that in this read transfer, the
-+testunit will prefix the length of the bytes to follow. So, if your host bus
-+driver emulates SMBus calls like the majority does, it needs to support the
-+I2C_M_RECV_LEN flag of an i2c_msg. This is a good testcase for it. The returned
-+data consists of the length first, and then of an array of bytes from length-1
-+to 0. Here is an example which emulates i2c_smbus_block_process_call() using
-+i2ctransfer (you need i2c-tools v4.2 or later):
-+
-+# i2ctransfer -y 0 w3@0x30 0x03 0x01 0x10 r?
-+0x10 0x0f 0x0e 0x0d 0x0c 0x0b 0x0a 0x09 0x08 0x07 0x06 0x05 0x04 0x03 0x02 0x01 0x00
-diff --git a/drivers/i2c/i2c-slave-testunit.c b/drivers/i2c/i2c-slave-testunit.c
-index c288102de324..56dae08dfd48 100644
---- a/drivers/i2c/i2c-slave-testunit.c
-+++ b/drivers/i2c/i2c-slave-testunit.c
-@@ -19,6 +19,7 @@
- enum testunit_cmds {
- 	TU_CMD_READ_BYTES = 1,	/* save 0 for ABORT, RESET or similar */
- 	TU_CMD_HOST_NOTIFY,
-+	TU_CMD_SMBUS_BLOCK_PROC_CALL,
- 	TU_NUM_CMDS
- };
- 
-@@ -88,6 +89,8 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
- 				     enum i2c_slave_event event, u8 *val)
- {
- 	struct testunit_data *tu = i2c_get_clientdata(client);
-+	bool is_proc_call = tu->reg_idx == 3 && tu->regs[TU_REG_DATAL] == 1 &&
-+			    tu->regs[TU_REG_CMD] == TU_CMD_SMBUS_BLOCK_PROC_CALL;
- 	int ret = 0;
- 
- 	switch (event) {
-@@ -118,12 +121,17 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
- 		fallthrough;
- 
- 	case I2C_SLAVE_WRITE_REQUESTED:
-+		memset(tu->regs, 0, TU_NUM_REGS);
- 		tu->reg_idx = 0;
- 		break;
- 
--	case I2C_SLAVE_READ_REQUESTED:
- 	case I2C_SLAVE_READ_PROCESSED:
--		*val = TU_CUR_VERSION;
-+		if (is_proc_call && tu->regs[TU_REG_DATAH])
-+			tu->regs[TU_REG_DATAH]--;
-+		fallthrough;
-+
-+	case I2C_SLAVE_READ_REQUESTED:
-+		*val = is_proc_call ? tu->regs[TU_REG_DATAH] : TU_CUR_VERSION;
- 		break;
- 	}
- 
--- 
-2.28.0
-
+I don't understand. What do you propose adding?
