@@ -2,98 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BA13155D6
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Feb 2021 19:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C813315753
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Feb 2021 21:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbhBISYe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Feb 2021 13:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbhBISV5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Feb 2021 13:21:57 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3B4C06178B
-        for <linux-i2c@vger.kernel.org>; Tue,  9 Feb 2021 10:21:16 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id jj19so33342357ejc.4
-        for <linux-i2c@vger.kernel.org>; Tue, 09 Feb 2021 10:21:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7cdkDnURV9uneBG3FZf4huY2uy2h38N8kqyzGlj6AtI=;
-        b=zYwZZ4NjNSfAiSwsBYVuFR9u8PsuFfwnsy/wdZFz8ssGxdan5DbrHrhRiV8KzLf6tO
-         rNCef+GlVPADxaWfKmY5x7TEuhWk4comNp0sfHsOFQcrmU1MAhJuxD7R9vUmC4rfVyrt
-         ENnQ4xCFZnc99McojJkekPBldx66IiSH0WgOHnVd0yudSSNz8DFcbftNnqV+EXyssyq7
-         Sjxvaya1p3W00HTeGXy2VY0t1Ok2C4M2pfkHR+q012fvgk8EA/hn6zoZniiXOc17j3Uq
-         EC1hcay5GJz34KKl1JM4Hi2xObTc7DOFxKgC5FfoleFg0ml5pPWRGpbjAOXV1mbH+++C
-         QkVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7cdkDnURV9uneBG3FZf4huY2uy2h38N8kqyzGlj6AtI=;
-        b=rcxn7BOHiIZbVoado/MDMp4VmosV2qabvF0kSI7cAp/of1CZDg/DjvgQhSeYhbmMaa
-         2F1jV2ZxNqYcN988qxmMeJruOOlGamIqwYguO5/1d9FZ34JN3INe6ZGPdiUqH+OtpQYC
-         DxraKQp9QS6yF32dy/65CZcdcOsdrsEU/lB3j4VolYokOskqlSGeVxPvxhHfFABnpAEW
-         302X7rFWRLSpvNspDb8bdX7gYuDzYpCj5JLSdQkddObIE6mT1VjXS6eBf9/shvB4J5yP
-         hEgUAS9MkSYfw8dX9tvydKM/KR5BiUx9wCjHf+OZ5aKqwbPJ9GVJ6y8IMgPkRTY6oyFl
-         iBjQ==
-X-Gm-Message-State: AOAM531f1gFdW6BLB7MnCkUpIZQuhYwiG/jUAxhK5z8z8uQm91irdvSR
-        mfP7+jGzQJZjDeHIdC66+ajUbsgYH9oIKGcWQoZISQ==
-X-Google-Smtp-Source: ABdhPJzfO6VJFRZMDFakluIwxGzSS3vgzvTNq1ZZNEEpzZEUvu1Ol2fCOByPa461RddADA9Vpjd5NXJawuBAuX+BuQE=
-X-Received: by 2002:a17:906:4707:: with SMTP id y7mr23481756ejq.445.1612894875564;
- Tue, 09 Feb 2021 10:21:15 -0800 (PST)
+        id S233634AbhBIUAu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Feb 2021 15:00:50 -0500
+Received: from mga07.intel.com ([134.134.136.100]:65188 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233643AbhBITrp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 9 Feb 2021 14:47:45 -0500
+IronPort-SDR: aqZlTnDLpYP24DoIeTBbkkXA7/RCK0UwTkNZYLKOtUa3QLI09GbbcCw46x+2UlwedMvbcDpS9C
+ R6W21kvdGymg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="246010853"
+X-IronPort-AV: E=Sophos;i="5.81,166,1610438400"; 
+   d="scan'208";a="246010853"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2021 11:17:31 -0800
+IronPort-SDR: MxO/TaNgsO9MJwQeVuSDeZorgw79f/mE+ATgYIh8UIY00h59Mhp7oCFKPPRQQErfUUviuKCn6m
+ NrxcRfEOV2Jg==
+X-IronPort-AV: E=Sophos;i="5.81,166,1610438400"; 
+   d="scan'208";a="375068802"
+Received: from yoojae-mobl.amr.corp.intel.com (HELO [10.209.39.4]) ([10.209.39.4])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2021 11:17:30 -0800
+Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: aspeed: add buffer and DMA mode
+ transfer support
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Rob Herring <robh@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
+        Cedric Le Goater <clg@kaod.org>, linux-i2c@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+References: <20210112003749.10565-1-jae.hyun.yoo@linux.intel.com>
+ <20210112003749.10565-2-jae.hyun.yoo@linux.intel.com>
+ <20210114193416.GA3432711@robh.at.kernel.org>
+ <4f67358e-58e5-65a5-3680-1cd8e9851faa@linux.intel.com>
+ <CACPK8XcZTE=bnCP1-E9PTA09WnXG9Eduwx0dm-QqmQJUDa_OrQ@mail.gmail.com>
+ <1814b8d1-954c-0988-0745-e95129079708@linux.intel.com>
+ <87ed4085-26e4-98f8-21e3-b1e3c16b0891@linux.intel.com>
+ <CACPK8XekihpoXEeyUbWSXsRkVMbX1gKG-gSeYgWq=s3UR2gi1g@mail.gmail.com>
+From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Message-ID: <3cb75f5e-43d8-a06c-5149-e69823728325@linux.intel.com>
+Date:   Tue, 9 Feb 2021 11:17:29 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-References: <20210128111343.2295888-1-geert+renesas@glider.be>
- <20210128113353.GN963@ninjato> <CAMuHMdW--A2bwe==+A35_sLAS2OkXzi2hY0Ky_dwL0n8irHMZw@mail.gmail.com>
- <CAMpxmJXcbTnCbseAap=F0QO2Er6ANGSfgPMuoufaD2qQyUbpRA@mail.gmail.com> <CAMuHMdU3g3TaWTu6XvKTUU9cdj6Dnbjcgy4zSRhshzeAhH30GA@mail.gmail.com>
-In-Reply-To: <CAMuHMdU3g3TaWTu6XvKTUU9cdj6Dnbjcgy4zSRhshzeAhH30GA@mail.gmail.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Tue, 9 Feb 2021 19:21:04 +0100
-Message-ID: <CAMpxmJUQQgDoYAqCq23LwyoATjHgTZPYcPb-ruwQECdArf5GxA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: eeprom: at24: Document ROHM BR24G01
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CACPK8XekihpoXEeyUbWSXsRkVMbX1gKG-gSeYgWq=s3UR2gi1g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 9, 2021 at 3:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Bartosz,
->
-> On Fri, Feb 5, 2021 at 11:33 AM Bartosz Golaszewski
-> <bgolaszewski@baylibre.com> wrote:
-> > On Thu, Jan 28, 2021 at 12:59 PM Geert Uytterhoeven
-> > <geert@linux-m68k.org> wrote:
-> > > On Thu, Jan 28, 2021 at 12:33 PM Wolfram Sang
-> > > <wsa+renesas@sang-engineering.com> wrote:
-> > > > On Thu, Jan 28, 2021 at 12:13:43PM +0100, Geert Uytterhoeven wrote:
-> > > > > Document the compatible value for the ROHM Semiconductor BR24G01 I2C bus
-> > > > > EEPROM.
-> > > >
-> > > > What is the difference between those two? Could one also be the fallback
-> > > > of the other (just in the highly unlikely case we need "generic" Rohm
-> > > > handling somewhen)?
-> > >
-> > > Good question.  The datasheets look similar.
-> > > Parametric search on rohm.com says the G-series differs in using
-> > > "Cu wire bonding".
-> >
-> > I'm fine with the current form as it's simpler than using two
-> > fallbacks. Do you want to submit another version anyway or can I pick
-> > it up?
->
-> If you're happy with it, then I'm happy, too ;-)
-> Thanks!
->
+On 2/9/2021 4:10 AM, Joel Stanley wrote:
+> On Wed, 3 Feb 2021 at 23:03, Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com> wrote:
+>>
+>> Hi Joel
+>>
+>> On 1/28/2021 11:36 AM, Jae Hyun Yoo wrote:
+>>> Hi Joel
+>>>
+>>> On 1/27/2021 4:06 PM, Joel Stanley wrote:
+>>>>>> All this information doesn't need to be in the binding.
+>>>>>>
+>>>>>> It's also an oddly structured dts file if this is what you are doing...
+>>>>>
+>>>>> I removed the default buffer mode settings that I added into
+>>>>> 'aspeed-g4.dtsi' and 'aspeed-g5.dtsi' in v1 to avoid touching of the
+>>>>> default transfer mode setting, but each bus should use its dedicated
+>>>>> SRAM buffer range for enabling buffer mode so I added this information
+>>>>> at here as overriding examples instead. I thought that binding document
+>>>>> is a right place for providing this information but looks like it's not.
+>>>>> Any recommended place for it? Is it good enough if I add it just into
+>>>>> the commit message?
+>>>>
+>>>> I agree with Rob, we don't need this described in the device tree
+>>>> (binding or dts). We know what the layout is for a given aspeed
+>>>> family, so the driver can have this information hard coded.
+>>>>
+>>>> (Correct me if I've misinterpted here Rob)
+>>>>
+>>>
+>>> Makes sense. Will add these settings into the driver module as hard
+>>> coded per each bus.
+>>>
+>>
+>> Realized that the SRAM buffer range setting should be added into device
+>> tree because each bus module should get the dedicated IO resource range.
+>> So I'm going to add it to dtsi default reg setting for each I2C bus
+>> and will remove this description in binding. Also, I'll add a mode
+>> setting property instead to keep the current setting as byte mode.
+> 
+> I don't understand. What do you propose adding?
+> 
 
-Applied, thanks!
+I'm going to add reg resource for the SRAM buffer per each bus like
 
-Bartosz
+reg = <0x40 0x40>, <0x800 0x80>;
+
+into the aspeed-g*.dtsi but adding like this will not be a key for
+enabling buffer mode like this v2 does. Also, I'm going to remove the
+'aspeed,dma-buf-size' in this patch series and I'll add fixed DMA length
+as a configuration per each SoC. Instead, I'm going to add a xfer mode
+property e.g. 'aspeed,i2c-xfer-mode' to select 'byte', 'buffer' or 'dma'
+modes.
+
+Thanks,
+Jae
