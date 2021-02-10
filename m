@@ -2,144 +2,141 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43036316153
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Feb 2021 09:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B62A316154
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Feb 2021 09:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbhBJIp3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 10 Feb 2021 03:45:29 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:52996 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230127AbhBJIkc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Feb 2021 03:40:32 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11A8Uspd032146;
-        Wed, 10 Feb 2021 09:39:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=IdIphRq0oo03Upaifx4Sr2lddUG/YQLMaBXzjBtS7BU=;
- b=0YLLFZjDT3TCALs25fy5Dia6PQlM89y1hFyTr9xH1csDL1FClrZcu7NHicXWytBBXhnq
- DBTtzv5gLl+JnY5n8TRI4fR7mTibaaJUNDMJtjIi8VNIRX1q4aNXzL9sCXMW+56zuV0l
- 8GMv9ym9beQXLVombOk8VtrYlGdAQ6p8ScSjOPx3bWgb7H4hsOtw1Dv14xooRARK+4nq
- MOqBc/mWcN1k3zJZk6CQxF0L5TS38O6iYrUCEtSr4lPxM6wEKYggHOTmFZsajyIMgw+w
- lVunJuS/RA1ODu/slEkxlbkKHPaHion/Vs/M3ap1w5WFEGFPl8hYttVdc+rwA9f1h7IP Mg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 36hr2ceg1d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Feb 2021 09:39:33 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0781410002A;
-        Wed, 10 Feb 2021 09:39:33 +0100 (CET)
-Received: from Webmail-eu.st.com (gpxdag2node6.st.com [10.75.127.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E14A921CA9C;
-        Wed, 10 Feb 2021 09:39:32 +0100 (CET)
-Received: from lmecxl1060.lme.st.com (10.75.127.122) by GPXDAG2NODE6.st.com
- (10.75.127.70) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Feb
- 2021 09:39:31 +0100
-Subject: Re: [PATCH 4/5] ARM: dts: stm32: enable the analog filter for all I2C
- nodes in stm32mp151
-To:     Alain Volmat <alain.volmat@foss.st.com>, <wsa@kernel.org>,
-        <robh+dt@kernel.org>
-CC:     <mark.rutland@arm.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>
-References: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
- <1612515104-838-5-git-send-email-alain.volmat@foss.st.com>
-From:   Pierre Yves MORDRET <pierre-yves.mordret@foss.st.com>
-Message-ID: <59aec92b-9e5d-b9e9-0fee-d14d50281d4b@foss.st.com>
-Date:   Wed, 10 Feb 2021 09:39:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230364AbhBJIpr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Feb 2021 03:45:47 -0500
+Received: from mga11.intel.com ([192.55.52.93]:27146 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230144AbhBJInE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 10 Feb 2021 03:43:04 -0500
+IronPort-SDR: Wd7mOY1noQP1TXttbVX4B5VLRPMFxAIl0wLN9GZjbzk06o++J6mp7+RF2PSxqpyvXrD7HR23DL
+ AmHudyQiIyrg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="178525418"
+X-IronPort-AV: E=Sophos;i="5.81,167,1610438400"; 
+   d="scan'208";a="178525418"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 00:41:18 -0800
+IronPort-SDR: YoH+gspjY3sHrBSfpvthur+rWTZN8iyc+XAnaJ0hDleOFJ0PyOzvmgyzqM2g4ROgkdo7pX3HZj
+ lG9CHO9ObDSQ==
+X-IronPort-AV: E=Sophos;i="5.81,167,1610438400"; 
+   d="scan'208";a="436597931"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 00:41:15 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 73038201E1;
+        Wed, 10 Feb 2021 10:41:13 +0200 (EET)
+Date:   Wed, 10 Feb 2021 10:41:13 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v10 7/7] at24: Support probing while off
+Message-ID: <20210210080311.GA3@paasikivi.fi.intel.com>
+References: <20210205132505.20173-1-sakari.ailus@linux.intel.com>
+ <20210205132505.20173-8-sakari.ailus@linux.intel.com>
+ <CAMpxmJU7J9JBSwCN+GLDpuOL=iZ1PH=oZZuGiAyovuf2TQ=o9A@mail.gmail.com>
+ <CAJZ5v0jUqtYDpBn-ezsftCrY=9iD3sAKhyyFf_+CMkthLnsZow@mail.gmail.com>
+ <CAMpxmJW61Bd1SR3-i6=OV6RgafiEdfp4sNN0M6EYa7NSeOTFKg@mail.gmail.com>
+ <20210209162343.GF32460@paasikivi.fi.intel.com>
+ <CAJZ5v0h2=zKNMictJtJE5LuEi9E3n=Uf-xNO3udHxL2hqXL7Fg@mail.gmail.com>
+ <20210209165418.GG32460@paasikivi.fi.intel.com>
+ <CAJZ5v0jc9HZ-Qa9ooN40sgispqo5BUE6ngnVMCqAO3qnUU+uqw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1612515104-838-5-git-send-email-alain.volmat@foss.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.122]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To GPXDAG2NODE6.st.com
- (10.75.127.70)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-10_02:2021-02-09,2021-02-10 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0jc9HZ-Qa9ooN40sgispqo5BUE6ngnVMCqAO3qnUU+uqw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello
-
-Looks good to me
-
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-
-Thx
-Regards
-
-
-On 2/5/21 9:51 AM, Alain Volmat wrote:
-> Enable the analog filter for all I2C nodes of the stm32mp151.
+On Tue, Feb 09, 2021 at 05:58:12PM +0100, Rafael J. Wysocki wrote:
+> On Tue, Feb 9, 2021 at 5:54 PM Sakari Ailus
+> <sakari.ailus@linux.intel.com> wrote:
+> >
+> > On Tue, Feb 09, 2021 at 05:42:45PM +0100, Rafael J. Wysocki wrote:
+> > > On Tue, Feb 9, 2021 at 5:23 PM Sakari Ailus
+> > > <sakari.ailus@linux.intel.com> wrote:
+> > > >
+> > > > Hi Bartosz, Rafael,
+> > > >
+> > > > On Tue, Feb 09, 2021 at 04:49:37PM +0100, Bartosz Golaszewski wrote:
+> > > > > On Mon, Feb 8, 2021 at 5:54 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > > >
+> > > > > > On Mon, Feb 8, 2021 at 5:44 PM Bartosz Golaszewski
+> > > > > > <bgolaszewski@baylibre.com> wrote:
+> > > > > > >
+> > > > > > > On Fri, Feb 5, 2021 at 2:25 PM Sakari Ailus
+> > > > > > > <sakari.ailus@linux.intel.com> wrote:
+> > > > > > > >
+> > > > > > > > In certain use cases (where the chip is part of a camera module, and the
+> > > > > > > > camera module is wired together with a camera privacy LED), powering on
+> > > > > > > > the device during probe is undesirable. Add support for the at24 to
+> > > > > > > > execute probe while being powered off. For this to happen, a hint in form
+> > > > > > > > of a device property is required from the firmware.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > > > > > Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+> > > > > > > > ---
+> > > > > > >
+> > > > > > > I'll ack this but I still claim that the name
+> > > > > > > acpi_dev_state_low_power() is super misleading for this use-case and
+> > > > > > > I've been saying that for 10 versions now with everyone just ignoring
+> > > > > > > my remarks. :/
+> > > > > >
+> > > > > > Well, the function in question simply checks if the current ACPI power
+> > > > > > state of the device is different from "full power", so its name
+> > > > > > appears to be quite adequate to me.
+> > > > > >
+> > > > > > If the way in which it is used is confusing, though, I guess
+> > > > > > explaining what's going on would be welcome.
+> > > > > >
+> > > > >
+> > > > > Yes, I have explained it multiple time already - last time at v9 of this series:
+> > > > >
+> > > > >     https://www.spinics.net/lists/kernel/msg3816807.html
+> > > >
+> > > > How about adding this to the description of acpi_dev_state_low_power():
+> > > >
+> > > > -----------8<--------------
+> > > >  * This function is intended to be used by drivers to tell whether the device
+> > > >  * is in low power state (D1--D3cold) in driver's probe or remove function. See
+> > > >  * Documentation/firmware-guide/acpi/low-power-probe.rst for more information.
+> > > > -----------8<--------------
+> > >
+> > > This information is already there in the kerneldoc description of that
+> > > function AFAICS.
+> >
+> > Ok, the D states are mentioned already. But how to use it is not, nor
+> > there's a reference to the ReST file. I think that wouldn't hurt.
+> >
+> > >
+> > > I was thinking about adding an explanation comment to the caller.
+> >
+> > I think it'd be best if the function name would convey that without a
+> > comment that should then be added to all callers. How about calling the
+> > function e.g. acpi_dev_state_d0() and negating the return value? The D0
+> > state is well defined and we could do this without adding new terms.
 > 
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> ---
->  arch/arm/boot/dts/stm32mp151.dtsi | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-> index 3c75abacb374..558fc8fb38b6 100644
-> --- a/arch/arm/boot/dts/stm32mp151.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp151.dtsi
-> @@ -493,6 +493,7 @@
->  			#size-cells = <0>;
->  			st,syscfg-fmp = <&syscfg 0x4 0x1>;
->  			wakeup-source;
-> +			i2c-analog-filter;
->  			status = "disabled";
->  		};
->  
-> @@ -508,6 +509,7 @@
->  			#size-cells = <0>;
->  			st,syscfg-fmp = <&syscfg 0x4 0x2>;
->  			wakeup-source;
-> +			i2c-analog-filter;
->  			status = "disabled";
->  		};
->  
-> @@ -523,6 +525,7 @@
->  			#size-cells = <0>;
->  			st,syscfg-fmp = <&syscfg 0x4 0x4>;
->  			wakeup-source;
-> +			i2c-analog-filter;
->  			status = "disabled";
->  		};
->  
-> @@ -538,6 +541,7 @@
->  			#size-cells = <0>;
->  			st,syscfg-fmp = <&syscfg 0x4 0x10>;
->  			wakeup-source;
-> +			i2c-analog-filter;
->  			status = "disabled";
->  		};
->  
-> @@ -1533,6 +1537,7 @@
->  			#size-cells = <0>;
->  			st,syscfg-fmp = <&syscfg 0x4 0x8>;
->  			wakeup-source;
-> +			i2c-analog-filter;
->  			status = "disabled";
->  		};
->  
-> @@ -1570,6 +1575,7 @@
->  			#size-cells = <0>;
->  			st,syscfg-fmp = <&syscfg 0x4 0x20>;
->  			wakeup-source;
-> +			i2c-analog-filter;
->  			status = "disabled";
->  		};
->  
-> 
+> That would work for me.
+
+Bartosz, would that work for you?
+
+I'd call the temporary variable in the at24 driver e.g. "full_power".
 
 -- 
---
-~ Py MORDRET
---
+Regards,
+
+Sakari Ailus
