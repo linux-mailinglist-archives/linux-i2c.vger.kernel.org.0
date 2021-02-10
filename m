@@ -2,78 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9F4316F8F
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Feb 2021 20:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECCC316F99
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Feb 2021 20:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbhBJTEz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 10 Feb 2021 14:04:55 -0500
-Received: from spam.auroraoh.com ([24.56.89.101]:49900 "EHLO
-        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234127AbhBJTEk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Feb 2021 14:04:40 -0500
-X-ASG-Debug-ID: 1612983751-112c0d6a799edf0001-PT6Irj
-Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id 5uUbz3ZeGsqrpfdl; Wed, 10 Feb 2021 14:02:31 -0500 (EST)
-X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
-Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
- (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
- 02:41:04 -0500
-Content-Type: text/plain; charset="iso-8859-1"
-X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
+        id S234388AbhBJTFi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Feb 2021 14:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234200AbhBJTFV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Feb 2021 14:05:21 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD33C061793
+        for <linux-i2c@vger.kernel.org>; Wed, 10 Feb 2021 11:04:33 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id z21so1697805iob.7
+        for <linux-i2c@vger.kernel.org>; Wed, 10 Feb 2021 11:04:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=0nz0GUsbRFyNnjWojh4Sd2INZUh1Ds16k3rHdVW/EPA=;
+        b=A2cdovxkIKtELi2w/FD0eh20qFrsRJ9m8bgn04wHsjX39jCePX8BZ0ZYU3gP3A7zik
+         l3kisF+RrDveBqMn1qsCLEfx+RMLL9a12H4LAXL6+MbF9OEzM2yDmfeK+8PZZC9DBm4U
+         N9uHrKzdNQs558nxtHzKK1/05dygx/Cgtr6eLB5ThcIUj6Eh2V3hwVt75RWafjd0Ka4I
+         hVUtlZXXCUYuVnES9G97KHHRWR8B/X11fniQbqJBnXrF18cYbv56MTVzDuldeqRExmqe
+         52D9+k8QuTeF6cfXyf2Nqp5VlApTaDL3yAjKggaERZMgONjnZdzZ1kv7RmvGbzclxOTR
+         dhAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=0nz0GUsbRFyNnjWojh4Sd2INZUh1Ds16k3rHdVW/EPA=;
+        b=NMHAuMZX5HZV9b7CxbBnx7mJ5B+cyem4pdocKP6h5pApu3yTHaRvOhwZ+P7fGvxe39
+         Rvj0rPHKNeSsGdVUmT3DLsQ28fF3v+GGsC+TN6rXgnRg+F565rtIulehQYdSdMaHdgy+
+         pJbe5gfQd44ugYJqVqYpQSwmjHcc7CvTP2svoBXDni2rQkR83ckHyHqKVOuET1xt5C2C
+         aQBC46UH+2k5dWShfK0ftp0X+/D0HuJsIzjqg52lGDMx1taUC2tCgBKSbU3fDKO7ffCM
+         rgjN/SiUpOQKOowrdMe8BJyk7HDCXaF1FrPd74zVDa9YmAFMMzvIONsz86QRO2cndUMH
+         ktyA==
+X-Gm-Message-State: AOAM533BWXUi4Q0l7NJT5cET58THGjyQkoQiAgw0IvKAhWjzxB87cE+f
+        KBziP9twhcWdGMz9DMpBlBojRh6D+UXUG3a5w3VZYGHYzxNWTg==
+X-Google-Smtp-Source: ABdhPJwCLNIQIGoplQHAEFgLkPQrA0HTTzwwWSkq3vsWElwg9LOHRWmF6/PHGXM8tavuVUtm9t7D43llTsjRuR3EJSE=
+X-Received: by 2002:a05:6638:58:: with SMTP id a24mr4910542jap.40.1612983872917;
+ Wed, 10 Feb 2021 11:04:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-To:     Recipients <januskad@auroraoh.com>
-X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-From:   <januskad@auroraoh.com>
-Date:   Tue, 9 Feb 2021 15:40:17 +0800
-Reply-To: <cfolimiited@gmail.com>
-X-Priority: 1 (High)
-X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <d46ecc4f-b603-47c1-83c7-0caec3f47064@COASRV-MAIL2.auroraoh.loc>
-X-Originating-IP: [197.210.29.8]
-X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
- COASRV-MAIL2.auroraoh.loc (10.3.1.15)
-X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
-X-Barracuda-Start-Time: 1612983751
-X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at auroraoh.com
-X-Barracuda-Scan-Msg-Size: 755
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 1.61
-X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87891
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.00 NO_REAL_NAME           From: does not include a real name
-        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
-        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
-                                   Address
-        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
+From:   Alex Qiu <xqiu@google.com>
+Date:   Wed, 10 Feb 2021 11:04:22 -0800
+Message-ID: <CAA_a9x+ysAxT6T11S_M4pKenq2vDO762nnXUvAuXOCL7S9ozxg@mail.gmail.com>
+Subject: Kernel Doc on Navigating I2C Sysfs for I2C Topology
+To:     peda@axentia.se, Wolfram Sang <wsa@kernel.org>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
+Hi Peter and Wolfram,
 
-We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
+I'm looking for some documentation online to guide hardware engineers
+on how to find out what logical I2C bus number to use for i2ctools in
+sysfs when they know the physical I2C topology (BMC physical bus
+number and MUX channels). I read through the doc under
+Documentation/i2c/, but didn't find any. I didn't find much on this by
+searching the Internet, either.
 
-Please contact us for more details;
+Is it some doc that I can add to Documentation/i2c/ or
+Documentation/i2c/i2c-topology.rst? Any suggestions or thoughts?
 
+Thank you!
 
-Kind regards,
-
-Paul McCann
-
--- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
-
+- Alex Qiu
