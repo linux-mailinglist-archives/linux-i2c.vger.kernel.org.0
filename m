@@ -2,59 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EC331AF83
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Feb 2021 07:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3181431B0D0
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Feb 2021 15:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbhBNGqR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Feb 2021 01:46:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
+        id S229818AbhBNOiX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Feb 2021 09:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbhBNGqP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Feb 2021 01:46:15 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ED3C061574;
-        Sat, 13 Feb 2021 22:45:35 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id m2so2408978pgq.5;
-        Sat, 13 Feb 2021 22:45:35 -0800 (PST)
+        with ESMTP id S229892AbhBNOiV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Feb 2021 09:38:21 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5856FC061756;
+        Sun, 14 Feb 2021 06:37:41 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id k13so2613213pfh.13;
+        Sun, 14 Feb 2021 06:37:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Kxieg2fYbmNp08HkGfhgbIDiBi4p+VeYpKohIERpFA8=;
-        b=cK5/G+LROFF73yYorWUTE9ddeKSLK1MjoIvVAuAuaBOZfnEDGu4aJcUFFY3rkzTQb/
-         qxES8JqFUjhEhH1n65QjaMBh5GUnLEztMLVwD6ITj3F0CbUfMKHRyvruMUZFiJVleq+C
-         GFJrcokvWrlqgg0gM1MTh+KNe2glT8eNzhMS3wfpDBFfBC4VyZces0RtKQhzi+yHh4Aj
-         BrJ9muaLabfKRpOhbJiL1MsBPh6oMJUuafST/sZw4nTHpuNnbBGet4o/iJ1eUN5v5jbZ
-         KCv4VKpDesOLs6U75jse3fYp9yOKwBD8njcvOF33KHDw9QvyrWPEvTyzqy9lcFnStmtQ
-         N7SA==
+        bh=QtbVHE2/VZ4Kj1HFV2Xs1zJxAnBnHtTZ1xmCVyYj9tw=;
+        b=sUzWjH0cAlvOg+ziQxfWN7ktsgv5mQwSNNX+PORiTRAd0ova4fLVqsGCanV8W1ygTt
+         LFDXPHiK/rHBsJXPuixSK1nbM+6qiCvaX5KadywL1nttRw51Eop3tBYe8KVa4Xyc9Bxm
+         TUguYX8ufffdTO5RpPOBVRs3J6cmZ2pydeeqQE+3mdr+fLEVoK5L9wIjjWo//jG42+01
+         I4leNVW59ya/U/UqdwT87vCT5TlJdff3t/uiGB0+xaZG1nridclxnZFgaZP3RntBEY6w
+         JlgPFF9RgWxS+GfmyYguCt9yM5jBG8SwR5PJzIoX1lYP6pPJE4JYDumCNTGTr07hM+u1
+         5MSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Kxieg2fYbmNp08HkGfhgbIDiBi4p+VeYpKohIERpFA8=;
-        b=D4bMUS52n8XxGc3UktAnFsSQna1L9vS/zoFksMydlXYEPB4A57Y9bpNb6L5HzRb8cI
-         j7Jxez5ATyM8x9rEVr6gz+xq+9ULDnUDkjDPwLqDiAiZb/wrXnEs7zGntvCpVeFHrofo
-         Rg2VZUlJtB3JaTeqLuz/pE/06V0xXcPICNTXDDi3/dFoY60E4BIOzYMH7E4JpKF3BcgZ
-         UOu3u1MJbk7mQdb0Vx4za1b9dBGpSd7iay+2YUxug4pOCZxZfZ4MjfCk4MDN/+/aMWsD
-         HSM3pfgdnJg4A0Wk4gxfBZDbSwt9oIeBq/gNZnEukBb/DTl/lnBFpQ1xvzxJvruKd9Y0
-         8aeg==
-X-Gm-Message-State: AOAM532Bfo8NvyUYCXKhJa+/Yota2Mn90xX3tgMPmITf5KGr5L7v6Vgq
-        Ls8aIoqFfYZk5F3VsJ6Pqe4=
-X-Google-Smtp-Source: ABdhPJzCNsO51oIyLjKKKo5lArer/lVABNVDwsQaayiH336EQFIH4xLhymm37Cq/09KzzibntLDz9Q==
-X-Received: by 2002:a65:6706:: with SMTP id u6mr10378754pgf.26.1613285134998;
-        Sat, 13 Feb 2021 22:45:34 -0800 (PST)
+        bh=QtbVHE2/VZ4Kj1HFV2Xs1zJxAnBnHtTZ1xmCVyYj9tw=;
+        b=go9vxmoYpm16++DNGkWKfdyVsSQhappfpvZVFoP7Pg+gQT1pvg+uB2yV7Cnm39R0ni
+         sCk7ooV9BdX90QJ0u3X/Bd3eyIGkFYCiocEYYPmRPqGjQ6JtYlSbthTs6h9obbSyQ4xr
+         Gza//HmNsjk6teUR5mFZ41yxMDE6cKUhlOnpbA7NiVwMhZNAAtHCJ/hzlc2d7P/zHDGb
+         W7secXDamwyuHhfDREhDUGaiBy0Pt7Zii5Q3OzYaRxyonJ0E9x2FPAIIQsA/MzSQZJ1+
+         nYGeGNMB6YdFfleXDeWAhkn5RCvCIt4xvMK4+E5t37k8oMs2wIqjZaqBOAsV0uZzQ9Qf
+         51uA==
+X-Gm-Message-State: AOAM532KdLfTtrbaC7CaSjYVf+l8KVzfSwKHQ9xANukJYMhZf8worFg1
+        2+guyb2tjUJ5JH70y+jnzt0=
+X-Google-Smtp-Source: ABdhPJx1E/4PPBAFNf9ozYyjJMOQ4aGIbMQ1Th8IR4h5QCl1aZVQz+Cki8ln1ffxE7rTNF2MCkaoEA==
+X-Received: by 2002:a62:e709:0:b029:1dd:3e55:3ce5 with SMTP id s9-20020a62e7090000b02901dd3e553ce5mr11406217pfh.24.1613313460916;
+        Sun, 14 Feb 2021 06:37:40 -0800 (PST)
 Received: from localhost (185.212.56.4.16clouds.com. [185.212.56.4])
-        by smtp.gmail.com with ESMTPSA id o11sm11736110pjo.43.2021.02.13.22.45.34
+        by smtp.gmail.com with ESMTPSA id np7sm12771573pjb.10.2021.02.14.06.37.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Feb 2021 22:45:34 -0800 (PST)
+        Sun, 14 Feb 2021 06:37:40 -0800 (PST)
 From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, wsa@kernel.org,
-        linux-i2c@vger.kernel.org
+To:     rric@kernel.org, wsa+renesas@sang-engineering.com,
+        jan.glauber@gmail.com, linux-i2c@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH i2c-next] i2c: designware: Consolidate pci_free_irq_vectors to a single place
-Date:   Sun, 14 Feb 2021 14:45:29 +0800
-Message-Id: <20210214064529.481341-1-zhengdejin5@gmail.com>
+Subject: [PATCH] i2c: thunderx: Fix an issue about missing call to 'pci_free_irq_vectors()'
+Date:   Sun, 14 Feb 2021 22:37:34 +0800
+Message-Id: <20210214143734.591789-1-zhengdejin5@gmail.com>
 X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,68 +61,59 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Consolidate pci_free_irq_vectors to a single place using "goto free_irq"
-for simplify the code.
+Call to 'pci_free_irq_vectors()' are missing both in the error handling
+path of the probe function, and in the remove function. So add them.
 
+Fixes: 4c21541d8da17fb ("i2c: thunderx: Replace pci_enable_msix()")
 Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 ---
- drivers/i2c/busses/i2c-designware-pcidrv.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/i2c/busses/i2c-thunderx-pcidrv.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 55c83a7a24f3..f0c82e91870a 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -234,10 +234,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
+index 12c90aa0900e..6a338be4d4b7 100644
+--- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
++++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
+@@ -199,11 +199,11 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
+ 	ret = devm_request_irq(dev, pci_irq_vector(pdev, 0), octeon_i2c_isr, 0,
+ 			       DRV_NAME, i2c);
+ 	if (ret)
+-		goto error;
++		goto error_free_irq;
  
- 	if (controller->setup) {
- 		r = controller->setup(pdev, controller);
--		if (r) {
--			pci_free_irq_vectors(pdev);
--			return r;
--		}
-+		if (r)
-+			goto free_irq;
- 	}
+ 	ret = octeon_i2c_init_lowlevel(i2c);
+ 	if (ret)
+-		goto error;
++		goto error_free_irq;
  
- 	i2c_dw_adjust_bus_speed(dev);
-@@ -246,10 +244,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 		i2c_dw_acpi_configure(&pdev->dev);
+ 	octeon_i2c_set_clock(i2c);
  
- 	r = i2c_dw_validate_speed(dev);
--	if (r) {
--		pci_free_irq_vectors(pdev);
--		return r;
--	}
-+	if (r)
-+		goto free_irq;
+@@ -219,7 +219,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
  
- 	i2c_dw_configure(dev);
+ 	ret = i2c_add_adapter(&i2c->adap);
+ 	if (ret)
+-		goto error;
++		goto error_free_irq;
  
-@@ -269,10 +265,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	adap->nr = controller->bus_num;
+ 	dev_info(i2c->dev, "Probed. Set system clock to %u\n", i2c->sys_freq);
  
- 	r = i2c_dw_probe(dev);
--	if (r) {
--		pci_free_irq_vectors(pdev);
--		return r;
--	}
-+	if (r)
-+		goto free_irq;
- 
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
- 	pm_runtime_use_autosuspend(&pdev->dev);
-@@ -280,6 +274,10 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	pm_runtime_allow(&pdev->dev);
+@@ -229,6 +229,8 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
  
  	return 0;
-+
-+free_irq:
-+	pci_free_irq_vectors(pdev);
-+	return r;
- }
  
- static void i2c_dw_pci_remove(struct pci_dev *pdev)
++error_free_irq:
++	pci_free_irq_vectors(pdev);
+ error:
+ 	thunder_i2c_clock_disable(dev, i2c->clk);
+ 	return ret;
+@@ -238,6 +240,7 @@ static void thunder_i2c_remove_pci(struct pci_dev *pdev)
+ {
+ 	struct octeon_i2c *i2c = pci_get_drvdata(pdev);
+ 
++	pci_free_irq_vectors(pdev);
+ 	thunder_i2c_smbus_remove(i2c);
+ 	thunder_i2c_clock_disable(&pdev->dev, i2c->clk);
+ 	i2c_del_adapter(&i2c->adap);
 -- 
 2.25.0
 
