@@ -2,87 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C5E31C247
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Feb 2021 20:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BFA31C34B
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Feb 2021 21:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbhBOTNT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Feb 2021 14:13:19 -0500
-Received: from smtp1.axis.com ([195.60.68.17]:5355 "EHLO smtp1.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230048AbhBOTNR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 15 Feb 2021 14:13:17 -0500
-X-Greylist: delayed 509 seconds by postgrey-1.27 at vger.kernel.org; Mon, 15 Feb 2021 14:13:15 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1613416396;
-  x=1644952396;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wFNT4rSQCM8LHPCDltTRqOCKD9W6vi98OPConvKvLXY=;
-  b=MQ4bh4Ox9dnYXEryFOKVd5d9KjEAu+73/+YTglVvwMUQ1xUAkVVuFZ5O
-   bZPZIjyqES0kLONLIoApks/CKaa81TXpg/SIXaPPx/WZXG8toVuTfL5aL
-   noy2jm0evg/Jo35Qkmw+ZNEXHxB188oeiTDakCo3lz3wD+E9H0EX8hafm
-   zV1FoBpm891YNi/XVaZrfS+2LMQCez6NXevcmAkakoY06k2lY2VBx8h+H
-   7J8xgSm16VMoX0OsVXUy3hl2wxwazb9j8LhbuBwwv7n/jeD9D34KTuEgW
-   1v+vu6oFjYN5h4PF4uKHfxiGteO+UvR90h0O9UWowa5oq+uInE1x9cu+a
-   A==;
-From:   =?UTF-8?q?M=C3=A5rten=20Lindahl?= <marten.lindahl@axis.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-CC:     <kernel@axis.com>,
-        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <martenli@axis.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] i2c: exynos5: Preserve high speed master code
-Date:   Mon, 15 Feb 2021 20:03:21 +0100
-Message-ID: <20210215190322.22094-1-marten.lindahl@axis.com>
-X-Mailer: git-send-email 2.11.0
+        id S229660AbhBOUzv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Feb 2021 15:55:51 -0500
+Received: from mail-lf1-f52.google.com ([209.85.167.52]:46200 "EHLO
+        mail-lf1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229469AbhBOUzu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Feb 2021 15:55:50 -0500
+Received: by mail-lf1-f52.google.com with SMTP id v5so12523407lft.13;
+        Mon, 15 Feb 2021 12:55:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=whwMqTlS1WBk9AS5zpBCAK3G8DSK1CxTvfiZRNL1dTI=;
+        b=k1HeO8dLyXkPikOGp8cuKd5IS2IQX6E9lpvA99tqqGcZI26e/NiknPZEpmHeaB+N0r
+         NWuk01l+XRvYH/KSpbXYF6jMb5uqnvAUuxUn/aZM3Tc+xdZoIZbfS+TTFMxp/1FU9YJm
+         TLz3iYmAhwbx2o6u98f4Ul837tTvSmbRphjsVgLhVuGhabhFoErEp6ZqUkhx7FSM83VK
+         6GIhc1T0klpnQql9jV+KlXNTFQS05nJkmPyWzH5f1e+l10B17/TL11/k7h4On50EpyEv
+         wcBzAsXblRAE0JWNsLuNIxL38SWdq9qIKtntBkofjV+VKXCTyKJyYIli6sjruynuZ6nu
+         x72Q==
+X-Gm-Message-State: AOAM530EeIQ5bZFVFHXtK5xwECuIgHFGbrYUxTmWs3bD6CgxKLLMVYhU
+        ryMNU4xcS8eJriLr8Gja2CE=
+X-Google-Smtp-Source: ABdhPJzl4f8o29TEkIis3q7JbqLJp6lJCJmwVeq0HyGGLbB9OVwiNeC/gqum50UkbyjMTg9eFj74uw==
+X-Received: by 2002:a19:6b17:: with SMTP id d23mr2984143lfa.103.1613422507756;
+        Mon, 15 Feb 2021 12:55:07 -0800 (PST)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id d4sm2898773lfi.117.2021.02.15.12.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Feb 2021 12:55:07 -0800 (PST)
+Date:   Mon, 15 Feb 2021 21:55:06 +0100
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, helgaas@kernel.org, wsa@kernel.org,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <YCrfqungNSSxe5lK@rocinante>
+References: <20210215181550.714101-1-zhengdejin5@gmail.com>
+ <20210215181550.714101-2-zhengdejin5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210215181550.714101-2-zhengdejin5@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Mårten Lindahl <martenli@axis.com>
+Hi Dejin,
 
-When the controller starts to send a message with the MASTER_ID field
-set (high speed), the whole I2C_ADDR register is overwritten including
-MASTER_ID as the SLV_ADDR_MAS field is set.
+Thank you for all the work here!
 
-This patch preserves already written fields in I2C_ADDR when writing
-SLV_ADDR_MAS.
+The subject and the commit message could be improved to include a little
+more details about why do you want to do it, and what problems does it
+aims to solve.
 
-Signed-off-by: Mårten Lindahl <martenli@axis.com>
----
- drivers/i2c/busses/i2c-exynos5.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> Introduce pcim_alloc_irq_vectors(), a explicit device-managed version of
+> pci_alloc_irq_vectors().
 
-diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
-index 20a9881a0d6c..f2d04c241299 100644
---- a/drivers/i2c/busses/i2c-exynos5.c
-+++ b/drivers/i2c/busses/i2c-exynos5.c
-@@ -606,6 +606,7 @@ static void exynos5_i2c_message_start(struct exynos5_i2c *i2c, int stop)
- 	u32 i2c_ctl;
- 	u32 int_en = 0;
- 	u32 i2c_auto_conf = 0;
-+	u32 i2c_addr = 0;
- 	u32 fifo_ctl;
- 	unsigned long flags;
- 	unsigned short trig_lvl;
-@@ -640,7 +641,12 @@ static void exynos5_i2c_message_start(struct exynos5_i2c *i2c, int stop)
- 		int_en |= HSI2C_INT_TX_ALMOSTEMPTY_EN;
- 	}
+You can probably drop the "explicit" word from the sentence above.
  
--	writel(HSI2C_SLV_ADDR_MAS(i2c->msg->addr), i2c->regs + HSI2C_ADDR);
-+	i2c_addr = HSI2C_SLV_ADDR_MAS(i2c->msg->addr);
-+
-+	if (i2c->op_clock >= I2C_MAX_FAST_MODE_PLUS_FREQ)
-+		i2c_addr |= readl(i2c->regs + HSI2C_ADDR);
-+
-+	writel(i2c_addr, i2c->regs + HSI2C_ADDR);
- 
- 	writel(fifo_ctl, i2c->regs + HSI2C_FIFO_CTL);
- 	writel(i2c_ctl, i2c->regs + HSI2C_CTL);
--- 
-2.11.0
+> +/**
+> + * pcim_alloc_irq_vectors - a device-managed pci_alloc_irq_vectors()
+> + *
+> + * It depends on calling pcim_enable_device() to make irq resources manageable.
+> + */
 
+It would be "IRQ" in the sentence above.  Also see [1] for more details
+about how to make a patch ready to be accepted.
+
+Also, this comment looks like it's intended to be compliant with the
+kernel-doc format, and if so, then you should describe each argument as
+the bare minimum, so that the entire comment would become this function
+documentation making it also a little more useful.  See [2] for an
+example of how to use kernel-doc.
+
+> +int pcim_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+> +				unsigned int max_vecs, unsigned int flags)
+> +{
+> +	struct pci_devres *dr;
+> +
+> +       /*Ensure that the pcim_enable_device() function has been called*/
+
+The comment above has to be correctly aligned and it's also missing
+spaces around the sentence to be properly formatted, see [3].
+
+> +	dr = find_pci_dr(dev);
+> +	if (!dr || !dr->enabled)
+> +		return -EINVAL;
+> +
+> +	return pci_alloc_irq_vectors(dev, min_vecs, max_vecs, flags);
+> +}
+
+Question: wouldn't you need to call pci_free_irq_vectors() somewhere,
+possibly to pcim_release() callback?  Although, I am not sure where the
+right place would be.
+
+I am asking, as the documentation (see [4]) suggests that one would have
+to release allocated IRQ vectors (relevant exceprt):
+
+>> To automatically use MSI or MSI-X interrupt vectors, use the following
+>> function:
+>>
+>>  int pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+>>		unsigned int max_vecs, unsigned int flags);
+>>
+>> which allocates up to max_vecs interrupt vectors for a PCI device.
+>>
+>> (...)
+>>
+>> Any allocated resources should be freed before removing the device using
+>> the following function:
+>>
+>>  void pci_free_irq_vectors(struct pci_dev *dev);
+
+What do you think?
+
+1. https://lore.kernel.org/linux-pci/20171026223701.GA25649@bhelgaas-glaptop.roam.corp.google.com/
+2. https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html
+3. https://www.kernel.org/doc/html/latest/process/coding-style.html
+4. https://www.kernel.org/doc/html/latest/PCI/msi-howto.html
+
+Krzysztof
