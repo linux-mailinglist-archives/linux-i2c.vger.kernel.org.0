@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F8F31CBB7
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Feb 2021 15:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FBD31CBBD
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Feb 2021 15:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbhBPOTT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 Feb 2021 09:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S230031AbhBPOTy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Feb 2021 09:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbhBPOTP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Feb 2021 09:19:15 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417F4C0613D6;
-        Tue, 16 Feb 2021 06:18:35 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id f8so3965710plg.5;
-        Tue, 16 Feb 2021 06:18:35 -0800 (PST)
+        with ESMTP id S229924AbhBPOTm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Feb 2021 09:19:42 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77322C061788;
+        Tue, 16 Feb 2021 06:18:46 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id z15so6221295pfc.3;
+        Tue, 16 Feb 2021 06:18:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IHEaF+WKHnNn5hB+4HbszzyQ9PkeVdXzN3dgFBMQEXo=;
-        b=ef11sgnV/UXxKFcVgxGvL7LE+NNwCeOupgSes75/fQnxnyRpNSNVoVTZcTRKzO7VNS
-         21+ceS3lkMHQjQUEvI8Tpongs/ZGl+IyCKXgUJkm8XvX+TF3nRsoYWzcFT61AUFTqfXv
-         wwJOHh9wCUBmLCE1OudnQ+N4uVJfkFcv9q+KRxBkn9j9odn6Dv7Gep12w6VMqg4Hkpu9
-         qqC92aH12QTGiiW7/Q+1VoWW8CB0w+8k9UiHaFFobTk+H5molyMJTXNLB/ZzBwLNx4lT
-         xHF3iSS7FyVt+Chq4GWgsXsc0p0yFJts5HECHbYlZZbZhPVEHapEnnYl79K8HUvX0Lf2
-         YclA==
+        bh=/buNpyRFgspwU+MkC/Juop3a8WJIqyKWAqKUWxoeJJc=;
+        b=bX6jvJ3UlhD7THO1NdxMHfvVVKKqD2xJWU78jPT3XqLEKcN9VAX88Hw9VOy4mtxRZx
+         jXxNItzb4CCeOlSM44taKtbCJPQ8LO2CY9Y6Ifyk/Oo28tW6n74FLFiaQFcTBkbvvFK1
+         ncYhQXjcnb6Yl+XWz8MGMJnRMyLLu3YawLZA2kHhDrJGt1BCjToBn6sh0veMR8tnIcz0
+         OumaY0jhqiKY8qR2CQJz/FYzjN+7wtNX08ZOL9FvYzFr7tSSLL8DPG2eNhKhSdCRPbRY
+         lmL5PVNWP51e927eOk4RFkTVo4v06kBL0bXyJLueVN6TgnNuzAkzkgo+aNIAk604AosT
+         6//A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IHEaF+WKHnNn5hB+4HbszzyQ9PkeVdXzN3dgFBMQEXo=;
-        b=uBWez7qhPWWQDd3QuVrm2e944SM7xoVqv7dGiBfGQWdClWKD+mSMRk5MsUKQfcfgvK
-         r0wAEP60oMfs2yo2Kv8+sgiQzBCRlV6NYkakorfGwoJq0gTlVhgnOUWzMil6GVw6J1me
-         gNj9b0cKoLuWhuwUCW94dQymxjpiMT7/LePLBVR35pqTQ/1qfnw0C4tKngnYLwXfOUgH
-         jiDWeftYTEvFtygoJGkRgu3hI+k3BYfyONrJvaAALXb/PpoREpIPidUqYJV0Y8x6wTbu
-         5hZ+pxO/ajKBNKXn2r6MpdhyyLfJmax0IzU21unxxpIf1z9M9TV0U/Bv8jdbd0GiGdb1
-         IbrA==
-X-Gm-Message-State: AOAM53346V09c3prgPJrrbibSt6vZYyro2t6vog1AlxNoOxHyKKExWG/
-        Ip2JdVq5llA9c4eiixItqVk=
-X-Google-Smtp-Source: ABdhPJxxmC4O0TZ9mAkEa2i7E+Zrav+9n9oUbTjSNFyTJ6otdgU55STJt4ylH9qnQ28oPxSKXGky1Q==
-X-Received: by 2002:a17:90a:2c9:: with SMTP id d9mr4479856pjd.67.1613485114854;
-        Tue, 16 Feb 2021 06:18:34 -0800 (PST)
+        bh=/buNpyRFgspwU+MkC/Juop3a8WJIqyKWAqKUWxoeJJc=;
+        b=iUyLnVaER0muzwLQWSc9nBdUEuKOpsMHNDKPdsTeXy0rFyx0+kIweMuMSaCUGQL/RM
+         eC8gr43fBw8656ef0K+u3m9GA/bL3EBvKtHkMrHr3MFK2zmREkvFBobPjGyHimdRRjz5
+         ElBCIrhz1JxKtlQfSaRj7J5qOeIUzP+ChHGsFhCAH9PPFMMBr8RDidpWdEbCEB+cBvdH
+         yTHlgSY+9SVXEAizFbrvwM4qXT2wqPf/GQ+tLvCFHu+Qx4nFKEfIiKM6t1Pd9bdV+rin
+         gyqxGAvRLQCIrFwQKqOY+5TlhJ8IoG8XLUswgZyyN9dvCBO8HUS53VSmjTky5Q/n8ic0
+         /Qog==
+X-Gm-Message-State: AOAM531B7tT8vLw1+BxJjyk+6orI0DH0WX7OvgX3KgFzeRLm9Q6xDXEv
+        xkidMOK+DJ34N8rAzJJkPwE=
+X-Google-Smtp-Source: ABdhPJwcy1a0lBl8fNv+FAEpQDdRc5ILxMOYUdvTw8x/8rpkkxifobP8+A7Zgpl+flvdAQSzRb8ong==
+X-Received: by 2002:a63:234f:: with SMTP id u15mr19541929pgm.360.1613485126111;
+        Tue, 16 Feb 2021 06:18:46 -0800 (PST)
 Received: from localhost (185.212.56.4.16clouds.com. [185.212.56.4])
-        by smtp.gmail.com with ESMTPSA id y8sm23911377pfe.36.2021.02.16.06.18.34
+        by smtp.gmail.com with ESMTPSA id c26sm11189077pfj.183.2021.02.16.06.18.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Feb 2021 06:18:34 -0800 (PST)
+        Tue, 16 Feb 2021 06:18:45 -0800 (PST)
 From:   Dejin Zheng <zhengdejin5@gmail.com>
 To:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
         andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
@@ -54,9 +54,9 @@ To:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
         linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-pci@vger.kernel.org, kw@linux.com
 Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH v2 3/4] i2c: designware: Use the correct name of device-managed function
-Date:   Tue, 16 Feb 2021 22:18:09 +0800
-Message-Id: <20210216141810.747678-4-zhengdejin5@gmail.com>
+Subject: [PATCH v2 4/4] i2c: thunderx: Use the correct name of device-managed function
+Date:   Tue, 16 Feb 2021 22:18:10 +0800
+Message-Id: <20210216141810.747678-5-zhengdejin5@gmail.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20210216141810.747678-1-zhengdejin5@gmail.com>
 References: <20210216141810.747678-1-zhengdejin5@gmail.com>
@@ -78,21 +78,21 @@ Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 v1 -> v2:
 	- Modify some commit messages.
 
- drivers/i2c/busses/i2c-designware-pcidrv.c | 2 +-
+ drivers/i2c/busses/i2c-thunderx-pcidrv.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 55c83a7a24f3..444533be49ee 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -219,7 +219,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	if (!dev)
- 		return -ENOMEM;
+diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
+index 12c90aa0900e..63354e9fb726 100644
+--- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
++++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
+@@ -192,7 +192,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
+ 	i2c->hlc_int_enable = thunder_i2c_hlc_int_enable;
+ 	i2c->hlc_int_disable = thunder_i2c_hlc_int_disable;
  
--	r = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
-+	r = pcim_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
- 	if (r < 0)
- 		return r;
+-	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
++	ret = pcim_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
+ 	if (ret < 0)
+ 		goto error;
  
 -- 
 2.25.0
