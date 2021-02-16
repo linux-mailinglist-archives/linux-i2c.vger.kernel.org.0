@@ -2,109 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED67331C701
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Feb 2021 08:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC1B31C88C
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Feb 2021 11:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbhBPHwj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 16 Feb 2021 02:52:39 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]:45170 "EHLO
-        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbhBPHw1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Feb 2021 02:52:27 -0500
-Received: by mail-wr1-f51.google.com with SMTP id v7so11793046wrr.12;
-        Mon, 15 Feb 2021 23:52:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0fp86hP8XzCLHuGk3+2XZ6kJDhLEJjnKSzVrThFlsbw=;
-        b=E0+ar4XNnAV/eIz6jSNhIFZ5G/j11BtVlYHKH1HwzUVejrKWPDAQbhgF5J5OvEt5mr
-         jnjzti5fBTg/5YRZNlgM2YLv1d7F19JB5wdOltymU1MPoF3E2FWqbmuZNuIqE/DlWX/w
-         D7O0lvzWiTkuBT0JhkZPH/72y7uAPlVPCkplmH/6CPvI3Ruk+d8yTKl4I/k+ae7woNVF
-         NZaR0Gd/oYYHMvUtV+YXLAVCdxHGUS84pfBbtOsF9v2SUrJSoS5VW6Cj8TR90g/Y8C5x
-         n+r6uYO4fdOsiKRE4315ryzpAugmzIBbQTfzTC/wPh+Ob0VqU0fZS6aZaNJovhNjbnTn
-         xJ8A==
-X-Gm-Message-State: AOAM532wl3ZtNCLyEozIn0yBQZozAgwe6U2MRooyvOw7VckuDCrF+POX
-        xbQM0JsLaDpAt/fzPXlSi7TEN0r7G1Q=
-X-Google-Smtp-Source: ABdhPJxZQplq5hgJFOOHaEpruNZYVmqScKJ3GZnW80JPQlBfh6iYpJ5WdLw/yzzX7xCl9Y6oJpPddQ==
-X-Received: by 2002:adf:f90d:: with SMTP id b13mr23497953wrr.198.1613461904568;
-        Mon, 15 Feb 2021 23:51:44 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id z5sm4677976wrn.8.2021.02.15.23.51.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Feb 2021 23:51:43 -0800 (PST)
-Date:   Tue, 16 Feb 2021 08:51:41 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     =?utf-8?Q?M=C3=A5rten?= Lindahl <marten.lindahl@axis.com>
-Cc:     kernel@axis.com,
-        =?utf-8?Q?M=C3=A5rten?= Lindahl <martenli@axis.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: exynos5: Preserve high speed master code
-Message-ID: <20210216075141.o4wjnwmmjze2p3cn@kozik-lap>
-References: <20210215190322.22094-1-marten.lindahl@axis.com>
+        id S229958AbhBPKOe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Feb 2021 05:14:34 -0500
+Received: from mga06.intel.com ([134.134.136.31]:36802 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229635AbhBPKOb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 16 Feb 2021 05:14:31 -0500
+IronPort-SDR: b/yNd2HyoCGb7folJNVx6X3zZNfRf3k3afLWfjWzBdLOfj2vV3ucDnXHYhxqcEEGyEVEszrATb
+ W3CSokmjEaUA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="244326940"
+X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
+   d="scan'208";a="244326940"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2021 02:12:44 -0800
+IronPort-SDR: XLG93KlggrUX0euPYCsPsnILxtGtL8+XPNTCDrKysJTbdDbOj2XrG8lV2XJVFMvWM5gPX7+UqW
+ OgqwQpk68tTA==
+X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
+   d="scan'208";a="361582444"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2021 02:12:41 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lBxLT-005RFA-1Z; Tue, 16 Feb 2021 12:12:39 +0200
+Date:   Tue, 16 Feb 2021 12:12:39 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Dejin Zheng <zhengdejin5@gmail.com>, corbet@lwn.net,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, helgaas@kernel.org, wsa@kernel.org,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <YCual+Fq9mcnxbM4@smile.fi.intel.com>
+References: <20210215181550.714101-1-zhengdejin5@gmail.com>
+ <20210215181550.714101-2-zhengdejin5@gmail.com>
+ <YCrfqungNSSxe5lK@rocinante>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20210215190322.22094-1-marten.lindahl@axis.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YCrfqungNSSxe5lK@rocinante>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 15, 2021 at 08:03:21PM +0100, Mårten Lindahl wrote:
-> From: Mårten Lindahl <martenli@axis.com>
+On Mon, Feb 15, 2021 at 09:55:06PM +0100, Krzysztof Wilczyński wrote:
+
+> Question: wouldn't you need to call pci_free_irq_vectors() somewhere,
+> possibly to pcim_release() callback?  Although, I am not sure where the
+> right place would be.
 > 
-> When the controller starts to send a message with the MASTER_ID field
-> set (high speed), the whole I2C_ADDR register is overwritten including
-> MASTER_ID as the SLV_ADDR_MAS field is set.
+> I am asking, as the documentation (see [4]) suggests that one would have
+> to release allocated IRQ vectors (relevant exceprt):
 
-Are you here describing bug in driver or hardware (the controller?)?
-Looking at the code, I think the driver, but description got me
-confused.
+It's done in pcim_release() but not explicitly.
 
-> 
-> This patch preserves already written fields in I2C_ADDR when writing
-> SLV_ADDR_MAS.
-> 
-> Signed-off-by: Mårten Lindahl <martenli@axis.com>
-> ---
->  drivers/i2c/busses/i2c-exynos5.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
-> index 20a9881a0d6c..f2d04c241299 100644
-> --- a/drivers/i2c/busses/i2c-exynos5.c
-> +++ b/drivers/i2c/busses/i2c-exynos5.c
-> @@ -606,6 +606,7 @@ static void exynos5_i2c_message_start(struct exynos5_i2c *i2c, int stop)
->  	u32 i2c_ctl;
->  	u32 int_en = 0;
->  	u32 i2c_auto_conf = 0;
-> +	u32 i2c_addr = 0;
->  	u32 fifo_ctl;
->  	unsigned long flags;
->  	unsigned short trig_lvl;
-> @@ -640,7 +641,12 @@ static void exynos5_i2c_message_start(struct exynos5_i2c *i2c, int stop)
->  		int_en |= HSI2C_INT_TX_ALMOSTEMPTY_EN;
->  	}
->  
-> -	writel(HSI2C_SLV_ADDR_MAS(i2c->msg->addr), i2c->regs + HSI2C_ADDR);
-> +	i2c_addr = HSI2C_SLV_ADDR_MAS(i2c->msg->addr);
-> +
-> +	if (i2c->op_clock >= I2C_MAX_FAST_MODE_PLUS_FREQ)
-> +		i2c_addr |= readl(i2c->regs + HSI2C_ADDR);
+        if (dev->msi_enabled)
+                pci_disable_msi(dev);
+        if (dev->msix_enabled)
+                pci_disable_msix(dev);
 
-Any reason why not "|= MASTER_ID(i2c->adap.nr)" here instead of more
-expensive IO read? It's quite important because your current code will
-bitwise-or old I2C slave address with a new one... This should break
-during tests with multiple I2C slave devices, shouldn't it?
+Maybe above can be replaced by pci_free_irq_vectors() to be sure that any
+future change to PCI IRQ allocation APIs.
 
-On which HW did you test it?
+Yes, I have checked and currently the above code is equivalent to
+pci_free_irq_vectors().
 
-Best regards,
-Krzysztof
+Dejin, please update your patch accordingly.
 
 
-> +
-> +	writel(i2c_addr, i2c->regs + HSI2C_ADDR);
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
