@@ -2,87 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F064E31D6BA
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Feb 2021 09:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0205C31D7B7
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Feb 2021 11:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbhBQIo1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 Feb 2021 03:44:27 -0500
-Received: from mail-wm1-f42.google.com ([209.85.128.42]:50989 "EHLO
-        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbhBQIo0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 Feb 2021 03:44:26 -0500
-Received: by mail-wm1-f42.google.com with SMTP id a132so1251529wmc.0;
-        Wed, 17 Feb 2021 00:44:09 -0800 (PST)
+        id S230030AbhBQKuv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 17 Feb 2021 05:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229720AbhBQKus (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 Feb 2021 05:50:48 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5D2C061574;
+        Wed, 17 Feb 2021 02:50:07 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id fy5so1231609pjb.5;
+        Wed, 17 Feb 2021 02:50:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=fXkbLQATOKndDvfr5Qj7u/6zI0+WmDIYmlBTAHrdBJI=;
+        b=Re5WaqAlVW/yYnQMKI1D7aRaPmDFeZ0xnry8HD//r2RAYzhy9Gtuv9cDaPKRltcqpr
+         pjq1efKzduQz2XnpF2s2gdqtaJCU7TlzYf3NokXArovSHkDOsIDCYONvDYPJfueQH16F
+         8+aMBjuJnGU/edQgLa/+hEkI6/NUUbOvK2aZ0icNXEvLgnkwO5XpDOzFxtP5UQ/pxJ3t
+         rKEfJI8p7pgNl+Bg6Wg/xej1sVzWaasgaoTIbR/FgJg3/SS7FFImrxpvo4cDSeOaLKsP
+         s3PS8C+gS+tEe25IAjTZPI3gb6QOVpPnLJqusLnDDHQS1dx4zf7T0KO1LZbEFXDuYsVG
+         jL6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HM9Ed9VK7QFCdL2LC2Q7uP7A/EnIqoKacM0+9fsn0yQ=;
-        b=tjqGFwY1i8tCXPkd0tEEXdpeZrH7il+UShcI4CLE+Q7gePb8tRgkdMh9aWPJxnmP28
-         wQUQPCNCy3lUVwfHSmr/KkhW8C5eE9iusHlfIlGc+hE9KRtjSwYUXIWEDdzuOZcG4GzG
-         cjHXYu42JFGB/xIKjHFbCEK6Bd6eVhHVW8BK9Y6oD7QCaLXRYqtmXdKskWftMNRBltD/
-         40Yp1kPLiHa2Ton13aTgy+4obYcKOuPjfiBsLaGQIedk/mFzRCm8Jj/3XKnbQk6ml0aC
-         9Acj+Fb00TmKmgiRh6KkcYBjx/C3u0XncxTeeEKS5+hoOh3rQx3W3AGE1ao89fTm5fTc
-         sBEA==
-X-Gm-Message-State: AOAM532MIzsgHkSO5etbPWmlj2/07gZYwwQMPl81p8JBnZ2oIhSCYLd7
-        E+gSFvXGXtNKqoKoNrLQdyg=
-X-Google-Smtp-Source: ABdhPJxA34OFeXKV76dkYXxsHjLutRVnhz+BPRwZ1RWJzc9Pq0sAW49JabygCXoUJ5sMkgRGXRM9lg==
-X-Received: by 2002:a05:600c:414b:: with SMTP id h11mr6149605wmm.125.1613551424165;
-        Wed, 17 Feb 2021 00:43:44 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id q140sm2707349wme.0.2021.02.17.00.43.43
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=fXkbLQATOKndDvfr5Qj7u/6zI0+WmDIYmlBTAHrdBJI=;
+        b=bzsyifd5ERCYPwLRoukMOrg6Ccr+NV4qAIDqzxGkT5WOK0jGYDJH4ft80+IbsRg+CF
+         0jxFbTABUUIr69ueL9qVJYAcjla2cRVWOdl50eYmGEDWAKygf7WzyIQEBvx/PFMpGWg8
+         wEl9yN9PJc+NEyO6NuByKfoYFTC7AiD17EdTiRJlgVjnySTVkEJwftuAO/qkbxPSBAWf
+         BCQq51qri0A6HqcnnwE5OlX15fUKXXTU4RxzyhCWXf7scbGfzUBtoh8Ecwwo8B3/94f9
+         1QavUBBIhTv2Hs7sH7aif2hJaAinEIr5jpsFNpIWzW9Hpp0E3I1xc8z+3rybUtUv9c8S
+         xXPw==
+X-Gm-Message-State: AOAM5316bUJTLbgLLycKLd3i9Xfkkt3WZWdXCqmvwtlARb7QPFdpVWEV
+        v49rhQKn2ClZMN5YEiKpM5o=
+X-Google-Smtp-Source: ABdhPJyUuNLPIvFuTkno50Z8KunBg8GLSaabHpi5Wb+v6bVPPax/PEVJbocspeMf5EIGu0YuhIqq1Q==
+X-Received: by 2002:a17:90a:4606:: with SMTP id w6mr8742831pjg.205.1613559007197;
+        Wed, 17 Feb 2021 02:50:07 -0800 (PST)
+Received: from localhost (89.208.244.53.16clouds.com. [89.208.244.53])
+        by smtp.gmail.com with ESMTPSA id u22sm2053238pfn.62.2021.02.17.02.50.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Feb 2021 00:43:43 -0800 (PST)
-Date:   Wed, 17 Feb 2021 09:43:42 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Jesper Nilsson <jesper.nilsson@axis.com>
-Cc:     =?utf-8?Q?M=C3=A5rten?= Lindahl <Marten.Lindahl@axis.com>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, kernel <kernel@axis.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: exynos5: Preserve high speed master code
-Message-ID: <20210217084342.wqtrdeisfs5gb7wq@kozik-lap>
-References: <20210215190322.22094-1-marten.lindahl@axis.com>
- <20210216075141.o4wjnwmmjze2p3cn@kozik-lap>
- <20210216220933.2wzmft72bhjptzl3@axis.com>
- <20210217080747.a7nqzbotszwlb3dd@kozik-lap>
- <20210217083211.GN30470@axis.com>
+        Wed, 17 Feb 2021 02:50:06 -0800 (PST)
+Date:   Wed, 17 Feb 2021 18:50:04 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, helgaas@kernel.org, wsa@kernel.org,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] Documentation: devres: Add
+ pcim_alloc_irq_vectors()
+Message-ID: <20210217105004.GA766103@nuc8i5>
+References: <20210216160249.749799-1-zhengdejin5@gmail.com>
+ <20210216160249.749799-3-zhengdejin5@gmail.com>
+ <YCv8nCX0ZdAb+CHm@rocinante>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210217083211.GN30470@axis.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YCv8nCX0ZdAb+CHm@rocinante>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 17, 2021 at 09:32:11AM +0100, Jesper Nilsson wrote:
-> On Wed, Feb 17, 2021 at 09:07:47AM +0100, Krzysztof Kozlowski wrote:
-> > On Tue, Feb 16, 2021 at 11:09:33PM +0100, Marten Lindahl wrote:
-> > > > Any reason why not "|= MASTER_ID(i2c->adap.nr)" here instead of more
-> > > > expensive IO read? It's quite important because your current code will
-> > > > bitwise-or old I2C slave address with a new one... This should break
-> > > > during tests with multiple I2C slave devices, shouldn't it?
-> > > > 
-> > > 
-> > > You are correct. It is better to use the macro instead, and yes,
-> > > safer too. I only have one device that supports high speed i2c, but
-> > > I get your point. It could potentially break.
-> > > 
-> > > > On which HW did you test it?
-> > > 
-> > > I used an Artpec development board as master and INA230EVM board
-> > > as slave.
-> > 
-> > Artpec development board with? What SoC?
+On Tue, Feb 16, 2021 at 06:10:52PM +0100, Krzysztof Wilczyński wrote:
+> Hi Dejin,
 > 
-> The ARTPEC-line of SoC:s are Axis Communications own ASICs, in the latest iteration
-> it's a Cortex-53 and includes instances of the exynos5 HSI2C ip.
+> Thank you again for all the work here!
+> 
+> > Add pcim_alloc_irq_vectors(), a device-managed version of
+> > pci_alloc_irq_vectors(). introducing this function can simplify
+> > the error handling path in many drivers.
+> 
+> The second sentence should most likely start with a capital letter.
+> 
+> Having said that, people might ask - how does it simplify the error
+> handling path?
+> 
+> You might have to back this with a line of two to explain how does the
+> change achieved that, so that when someone looks at the commit message
+> it would be clear what the benefits of the change were.
+>
+Hi Krzysztof,
 
-Cool! Good to see that this code is re-used. :)
+The device-managed function is a conventional concept that every developer
+knows. So don't worry about this. And I really can't explain its operation
+mechanism to you in a sentence or two. If you are really interested, you
+can read the relevant code.
 
-Best regards,
-Krzysztof
+I think it is meaningless to add a lot of explanations of general
+concepts in the commit comments. Maybe it will be better let us put more
+energy and time on the code.
 
+BR,
+Dejin
+
+> Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+> 
+> Krzysztof
