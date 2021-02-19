@@ -2,129 +2,231 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADA031FD47
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Feb 2021 17:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F83A31FD60
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Feb 2021 17:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhBSQjy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Feb 2021 11:39:54 -0500
-Received: from de-out1.bosch-org.com ([139.15.230.186]:58708 "EHLO
-        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbhBSQjw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Feb 2021 11:39:52 -0500
-Received: from si0vm1947.rbesz01.com (lb41g3-ha-dmz-psi-sl1-mailout.fe.ssn.bosch.com [139.15.230.188])
-        by fe0vms0187.rbdmz01.com (Postfix) with ESMTPS id 4Dhy2Z3pZQz1XLDQy;
-        Fri, 19 Feb 2021 17:39:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=de.bosch.com;
-        s=key3-intmail; t=1613752742;
-        bh=sXeFcL6If6RssrcOWGRx6kTzKgXs6ITlrhOt7x9JCaM=; l=10;
-        h=From:Subject:From:Reply-To:Sender;
-        b=eqZXUQIoMEHZvE/YElWvoFj3Fj0q5uUchFkfnjIIAKFBNvQXWAH+naFvBeUGp3xF5
-         jcx26oQVlutTjhxD0wd3Vo6vPBItiF1Bj5tkPUyoIBI42B+rv/OHHG8IUUV3njddI9
-         kZE+Q52DFrCf4Ns3ukxjSBssP5V7nE0XZMSA/cCw=
-Received: from fe0vm1740.rbesz01.com (unknown [10.58.172.176])
-        by si0vm1947.rbesz01.com (Postfix) with ESMTPS id 4Dhy2Z3QqQz6CjQgJ;
-        Fri, 19 Feb 2021 17:39:02 +0100 (CET)
-X-AuditID: 0a3aad14-aa3ff70000000912-05-602fe9a6c51d
-Received: from fe0vm1652.rbesz01.com ( [10.58.173.29])
-        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by fe0vm1740.rbesz01.com (SMG Outbound) with SMTP id 9C.60.02322.6A9EF206; Fri, 19 Feb 2021 17:39:02 +0100 (CET)
-Received: from FE-MBX2043.de.bosch.com (fe-mbx2043.de.bosch.com [10.3.231.53])
-        by fe0vm1652.rbesz01.com (Postfix) with ESMTPS id 4Dhy2Z2WmMzV16;
-        Fri, 19 Feb 2021 17:39:02 +0100 (CET)
-Received: from FE-MBX2051.de.bosch.com (10.3.231.61) by
- FE-MBX2043.de.bosch.com (10.3.231.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2176.2; Fri, 19 Feb 2021 17:39:02 +0100
-Received: from FE-MBX2051.de.bosch.com ([fe80::9402:faf1:5852:4e2f]) by
- FE-MBX2051.de.bosch.com ([fe80::9402:faf1:5852:4e2f%6]) with mapi id
- 15.01.2176.004; Fri, 19 Feb 2021 17:39:02 +0100
-From:   "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Support Opensource <Support.Opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Steve Twiss <stwiss.opensource@diasemi.com>,
-        "marek.vasut@gmail.com" <marek.vasut@gmail.com>,
-        "RUAN Tingquan (BT-FIR/ENG1-Zhu)" <Tingquan.Ruan@cn.bosch.com>,
-        "Streidl Hubert (BT-FIR/ENG1-Grb)" <Hubert.Streidl@de.bosch.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
-Subject: AW: [PATCH v4] mfd: da9063: Support SMBus and I2C mode
-Thread-Topic: [PATCH v4] mfd: da9063: Support SMBus and I2C mode
-Thread-Index: AQHW/i8DZH9Zyk+L4UOePGh9RfRJ9apPvvGAgA/8yzA=
-Date:   Fri, 19 Feb 2021 16:39:01 +0000
-Message-ID: <90bd35fa8c6f420fb1656c678c016509@de.bosch.com>
-References: <20210208152758.13093-1-mark.jonas@de.bosch.com>
- <PR3PR10MB41422B90076115ACCE07D2A5808E9@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <PR3PR10MB41422B90076115ACCE07D2A5808E9@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.142.121.124]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S230157AbhBSQrq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Feb 2021 11:47:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229952AbhBSQre (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Feb 2021 11:47:34 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACDAC061574;
+        Fri, 19 Feb 2021 08:46:54 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id d2so4485972pjs.4;
+        Fri, 19 Feb 2021 08:46:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gyD0O44OuFPHQqdM1wRapc1LcuE15W3160bQsjYFhPI=;
+        b=ASvBUnekhY67h1i1Ybkbk48wt4RanRZWV0Lcmwh418bM2g7KLrZYTuhsli69GCqEBT
+         EXlwaqpaikOrF+z1bK8IY+Lc7E0bCoshEPfN0f5cqGMngRLRNlrKVfnHzqYZ9FJqvjGz
+         ztKVBzbkJuXe4pkXRvi8iPILN68yDEDtMfW8J+SCBAOtui87eiMaraEEE94ANfd251aK
+         W809FfZCC7v+SmtufuC6weNGQhDtszS77SP1qRHW4zdAZlni6UPZiCAQ/rs//Cma1b4F
+         GLuMCprbabF6GZZ3tgHjQxUpCtkPNYykqKVedGjl+v55qu7JgiQY29rEyenynTzdzksm
+         BBeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gyD0O44OuFPHQqdM1wRapc1LcuE15W3160bQsjYFhPI=;
+        b=R2XoTmT/yMA4E/VbMZB6mZG+klccTJbEA8mBpODBdp/VBFLzW33w1uWEJ4Q/qhRRG8
+         QGQL3SPgh2Yj8Bnceu56OGSdESxiw7Ws9Gln55xKYXO28Mwd8Q/HY5XsSJETSZX+la3H
+         0k5xLP81OAl91YXW6EETvHKUSU3mdp7CrbxpmoEKCWqrOZNlNrOJ/H95a6ddNGHcXgP7
+         6QgC+hjgYihZ6Dc7peyP+w/aCh2klzFm+J8/JMSeYCJyeF6aMjHkeAHs3o+IZnkJD5mP
+         T/T+dTgbpJRgAlVNk7ojPwvi6dLJfUThMXb/8HylGxtBw2Znpfh73x6bcfkYRTtoWuL8
+         X3Sg==
+X-Gm-Message-State: AOAM531/vDo/Kq27/X2j9CL2jv7JFCYEUAV3LBgJcC7cFT3lRVk6CMuc
+        wtEuzHEvDgQVNAIgSo2N+jU=
+X-Google-Smtp-Source: ABdhPJyRJH/ZakwPj3IEMp53yZ5Z6zpZOZY11vzpn3W+7++rxjyZNd577w7d9F1wgYOTni9PD9hSQA==
+X-Received: by 2002:a17:90b:4d06:: with SMTP id mw6mr9672170pjb.24.1613753213724;
+        Fri, 19 Feb 2021 08:46:53 -0800 (PST)
+Received: from localhost (89.208.244.53.16clouds.com. [89.208.244.53])
+        by smtp.gmail.com with ESMTPSA id u31sm9979605pgl.9.2021.02.19.08.46.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Feb 2021 08:46:52 -0800 (PST)
+Date:   Sat, 20 Feb 2021 00:46:49 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Robert Richter <rric@kernel.org>
+Cc:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        bhelgaas@google.com, wsa@kernel.org, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <20210219164649.GA814637@nuc8i5>
+References: <20210218150458.798347-1-zhengdejin5@gmail.com>
+ <20210218150458.798347-2-zhengdejin5@gmail.com>
+ <YC/NxfsQn2RKkrp8@rric.localdomain>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMIsWRmVeSWpSXmKPExsXCZbVWVnfZS/0Egwm/JC2Wvl/KbHH/61FG
-        i46/XxgtLu+aw2ZxdM89Zourv9ezWOxtvchscXf/XEYHDo8Vn/Q9ds66y+6xaVUnm8eda3vY
-        PD5vkgtgjeKySUnNySxLLdK3S+DKuLvlC2PBer6KifvCGhjPcXcxcnBICJhIHDnC38XIxSEk
-        MJ1J4s+L/0wQzi5Gias9L9khnLeMEud2XmSEcA4wSvy58wuojJODTcBOYv/rN2C2iEA/o8SE
-        c8EgRcwC+5klThzYxgySEBawl/j65w8byD4RAQeJ+euDIOqtJPY//gjWyyKgKnH01ipGEJtX
-        wFpiZct/qGVAM9+8mMQI0sspECux5Jo8SA2jgKzEhg3nwcYzC4hLbHr2nRXElhAQkFiyByIu
-        ISAq8fLxP6i4kkRbWyMTRL2OxILdn9ggbG2JZQtfM0PsFZQ4OfMJywRG8VlIxs5C0jILScss
-        JC0LGFlWMYqmpRqU5RqamxjoFSWlFlcZGOol5+duYoTEq8gOxpM9H/QOMTJxMB5ilOBgVhLh
-        3f5cL0GINyWxsiq1KD++qDQntfgQozQHi5I4rwrPxjghgfTEktTs1NSC1CKYLBMHp1QDk/zm
-        46eTl738rSsgNFGBo23VsranoYxr1hu4bAy7Z9zQzs5/et/h3ZN5rtxu0lmccaz4mdJnsT01
-        TU8/3OtusK7a9yxYkHfub+3WKx96DW7NtJq8Yd2ZfRcWHS1RyM65sZDtU9aiZYc6WH/MEUpO
-        lXwqeFnaad2nzsVrmzXvXzl3jm1accjNPCbGVTtnF+6/976v5pnGX59vLqyHd9lKmWf+unJf
-        9sPT6PLmw1aiCuX3tnwNeZAoyBT0c8qJic1Ll7CdLJx0h+WgweQz8VzPU973Hj6zV7ZEPc1z
-        h4xMYtzDayqdJ85qro25nrztp6F8ccDsFKP6fauzLhTl600s6VStykjP0gsoOrL5239BnyYl
-        luKMREMt5qLiRACHkMWkRgMAAA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YC/NxfsQn2RKkrp8@rric.localdomain>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+On Fri, Feb 19, 2021 at 03:40:05PM +0100, Robert Richter wrote:
+> On 18.02.21 23:04:55, Dejin Zheng wrote:
+> > Introduce pcim_alloc_irq_vectors(), a device-managed version of
+> > pci_alloc_irq_vectors(). Introducing this function can simplify
+> > the error handling path in many drivers.
+> > 
+> > And use pci_free_irq_vectors() to replace some code in pcim_release(),
+> > they are equivalent, and no functional change. It is more explicit
+> > that pcim_alloc_irq_vectors() is a device-managed function.
+> > 
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> > ---
+> > v3 -> v4:
+> > 	- No change
+> > v2 -> v3:
+> > 	- Add some commit comments for replace some codes in
+> > 	  pcim_release() by pci_free_irq_vectors().
+> > v1 -> v2:
+> > 	- Use pci_free_irq_vectors() to replace some code in
+> > 	  pcim_release().
+> > 	- Modify some commit messages.
+> > 
+> >  drivers/pci/pci.c   | 33 +++++++++++++++++++++++++++++----
+> >  include/linux/pci.h |  3 +++
+> >  2 files changed, 32 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index b67c4327d307..db799d089c85 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -1969,10 +1969,7 @@ static void pcim_release(struct device *gendev, void *res)
+> >  	struct pci_devres *this = res;
+> >  	int i;
+> >  
+> > -	if (dev->msi_enabled)
+> > -		pci_disable_msi(dev);
+> > -	if (dev->msix_enabled)
+> > -		pci_disable_msix(dev);
+> > +	pci_free_irq_vectors(dev);
+> >  
+> >  	for (i = 0; i < DEVICE_COUNT_RESOURCE; i++)
+> >  		if (this->region_mask & (1 << i))
+> > @@ -2054,6 +2051,34 @@ void pcim_pin_device(struct pci_dev *pdev)
+> >  }
+> >  EXPORT_SYMBOL(pcim_pin_device);
+> >  
+> > +/**
+> > + * pcim_alloc_irq_vectors - a device-managed pci_alloc_irq_vectors()
+> > + * @dev:		PCI device to operate on
+> > + * @min_vecs:		minimum number of vectors required (must be >= 1)
+> > + * @max_vecs:		maximum (desired) number of vectors
+> > + * @flags:		flags or quirks for the allocation
+> > + *
+> > + * Return the number of vectors allocated, (which might be smaller than
+> > + * @max_vecs) if successful, or a negative error code on error. If less
+> > + * than @min_vecs interrupt vectors are available for @dev the function
+> > + * will fail with -ENOSPC.
+> > + *
+> > + * It depends on calling pcim_enable_device() to make IRQ resources
+> > + * manageable.
+> > + */
+> > +int pcim_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+> > +				unsigned int max_vecs, unsigned int flags)
+> > +{
+> > +	struct pci_devres *dr;
+> > +
+> > +	dr = find_pci_dr(dev);
+> > +	if (!dr || !dr->enabled)
+> > +		return -EINVAL;
+> > +
+> > +	return pci_alloc_irq_vectors(dev, min_vecs, max_vecs, flags);
+> > +}
+> > +EXPORT_SYMBOL(pcim_alloc_irq_vectors);
+> 
+> If it is just about having a pcim-* counterpart why not just an inline
+> function like the one below.
+>
+Robert and Andy,
 
-> > From: Hubert Streidl <hubert.streidl@de.bosch.com>
-> >
-> > By default the PMIC DA9063 2-wire interface is SMBus compliant. This
-> > means the PMIC will automatically reset the interface when the clock
-> > signal ceases for more than the SMBus timeout of 35 ms.
-> >
-> > If the I2C driver / device is not capable of creating atomic I2C
-> > transactions, a context change can cause a ceasing of the clock signal.
-> > This can happen if for example a real-time thread is scheduled. Then
-> > the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
-> > a write message could end up in the wrong register. This could cause
-> > unpredictable system behavior.
-> >
-> > The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
-> > interface. This mode does not reset the interface when the clock
-> > signal ceases. Thus the problem depicted above does not occur.
-> >
-> > This patch tests for the bus functionality "I2C_FUNC_I2C". It can
-> > reasonably be assumed that the bus cannot obey SMBus timings if this
-> > functionality is set. SMBus commands most probably are emulated in
-> > this case which is prone to the latency issue described above.
-> >
-> > This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
-> > otherwise enables the SMBus mode for a native SMBus controller which
-> > doesn't have I2C_FUNC_I2C set.
-> >
-> > Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
-> > Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
->=20
-> Thanks for your efforts. Looks sensible to me, so:
->=20
-> Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+First of all, thank you very much for your suggestions and help.
+I think this is not just a pcim-* counterpart, I may not explain this
+place clearly. In addition to calling pci_alloc_irq_vectors(), the
+pcim_alloc_irq_vectors() function also checks whether the pci device is
+enabled and whether the pci device resource has been managed. If any one
+is wrong, it will return failure. Therefore, I think it should be used
+as a function. For novices, maybe I understand it incorrectly, so I look
+forward to your suggestions.
 
-Is the patch already on the way upstream?
+> > +	dr = find_pci_dr(dev);
+static struct pci_devres *find_pci_dr(struct pci_dev *pdev)
+{
+        if (pci_is_managed(pdev))
+                return devres_find(&pdev->dev, pcim_release, NULL, NULL);                                                         
+        return NULL;
+}
+here checks whether the pci device resource has been managed.
 
-Is https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=3Dfor=
--mfd-next the right place to watch for mainlining progress?
+> > +	if (!dr || !dr->enabled)
+here checks whether the pci device is enabled.
 
-Thanks,
-Mark
+int pcim_enable_device(struct pci_dev *pdev)
+{
+        struct pci_devres *dr;
+        int rc;
+
+        dr = get_pci_dr(pdev);
+        if (unlikely(!dr))
+                return -ENOMEM;
+        if (dr->enabled)
+                return 0;
+
+        rc = pci_enable_device(pdev);
+        if (!rc) {
+                pdev->is_managed = 1;
+                dr->enabled = 1;
+        }
+        return rc;
+}
+
+BR,
+Dejin
+
+> > +
+> >  /*
+> >   * pcibios_add_device - provide arch specific hooks when adding device dev
+> >   * @dev: the PCI device being added
+> > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > index 86c799c97b77..d75ba85ddfc5 100644
+> > --- a/include/linux/pci.h
+> > +++ b/include/linux/pci.h
+> > @@ -1818,6 +1818,9 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+> >  					      NULL);
+> >  }
+> >  
+> > +int pcim_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+> > +				unsigned int max_vecs, unsigned int flags);
+> > +
+> 
+> static inline int pcim_alloc_irq_vectors(struct pci_dev *dev,
+> 	unsigned int min_vecs, unsigned int max_vecs, unsigned int flags)
+> {
+> 	if (!pci_is_managed(dev, min_vecs, max_vecs, flags))
+> 		return -EINVAL;
+> 
+> 	return pci_alloc_irq_vectors(dev, min_vecs, max_vecs, flags);
+> }
+> 
+> All those stub functions with EXPORT_SYMBOLS etc. could be dropped
+> then.
+> 
+> With some macro magic added a list of functions could easily being
+> created that are already managed but just need a pcim* counterpart.
+> 
+> -Robert
+> 
+> >  /* Include architecture-dependent settings and functions */
+> >  
+> >  #include <asm/pci.h>
+> > -- 
+> > 2.25.0
+> > 
