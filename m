@@ -2,87 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5011531F48A
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Feb 2021 05:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 567BB31F848
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Feb 2021 12:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbhBSE45 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Feb 2021 23:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhBSE44 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Feb 2021 23:56:56 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5A5C061574
-        for <linux-i2c@vger.kernel.org>; Thu, 18 Feb 2021 20:56:15 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id f6so4400701iop.11
-        for <linux-i2c@vger.kernel.org>; Thu, 18 Feb 2021 20:56:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vmsnYjF2Jni0yBtFKj2Qb92BPvghFrEm0bQB7L6qNZ8=;
-        b=MU4/dTvfk04RdIlg5Hh5a3m8YON3RCWn4KtwHXp+NZy3lBc7AMZf0XOnv88XDb7C+L
-         mLNpAjVk24CEThadLaC/lCzQ27z/EfldCmyOBLriGMZ7ATe0E9b2Y/y3fS9Ufjg8iO4U
-         UvG7CO2txS72wXc1bDZz2Syh2PNOEiWv3nxKp+x5UHcAhdfdguKKAbn8TxLwCYjnQK9b
-         MOYKJiUlqWMn1jkZv3VEouE+umqa0Q2JcvPUOYh/hC/9v09bcujUIO82sTnRFXHxg4px
-         QA7nEueLgM0L97V7UCxUNAn5gx7PDFnqUqJf9x9UiaUcp5TPDuEtGtRwdZLUeWsvn6NU
-         XoGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vmsnYjF2Jni0yBtFKj2Qb92BPvghFrEm0bQB7L6qNZ8=;
-        b=bIc+UPPul+L1q7Z1yQEUga+C3Clm2ANq4yhKUgIZXiKJo0zPSOaGtdXti0Zi95FEnz
-         aEyE6OBuGq9RvlSJ3YZ+Eaj3lyGtQ9UBqYpCzGEgdJcAcBcJrbdd+BQp0wm0iGeUXBYi
-         7Rus4+nvMvFeV4kHfKyrr6VWsz6wd4yrwK8QqKkda7O7Bx7WrRalAp6H8JiAHJjNoOd2
-         sFqMYl98Gp+2TIKMZ86Ouu6Wx04nVfHGQwERJGuVBD78C/bND9JdFYt8I+ox1gZf166L
-         nwyCkt+CZkTYRuxtp9HbPwbBNUxoGAMPVbGvr/UZO7v0W+/IltuEWq1YjrZ/RruTUj60
-         0GUA==
-X-Gm-Message-State: AOAM531K/HYp+mB/k+KPhZ+78Be2IqexFx/UFVF6Oi5Oxk8Z/CCRNG/x
-        idWKlPA3uNLFKGq/kwcQzkxDi9xMmEt5/mr0bFZTk++xZuZLrQ==
-X-Google-Smtp-Source: ABdhPJylA19VFG7vBg6p1x+VX1OdXgromYXMK1VFZZrbfcJtveOpVuYOHRvD6i6g+TfWteQfCXMfmqVghUHeNHllTWQ=
-X-Received: by 2002:a5e:9612:: with SMTP id a18mr2344266ioq.13.1613710574086;
- Thu, 18 Feb 2021 20:56:14 -0800 (PST)
+        id S230458AbhBSLV0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Feb 2021 06:21:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34470 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229804AbhBSLUH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 19 Feb 2021 06:20:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2CCB464E77;
+        Fri, 19 Feb 2021 11:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613733566;
+        bh=YFg4Atmp59pHQeT8wPbE/amvEYcgx1e0rb0E2V1wsVI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CPQwToA/EWAwk27hMnWle2hs4utfQvNVMPw1h0h7/qLa3RjmZqFsCUAdKuqBxjEjQ
+         yTmpuyV5C1bZEZQHFpRr9SB0d0dXuaxrfTED3E+DWTQkP+ntQDhgehhhqn386QsGP2
+         jvBtwfPVRF2KLV5Eb8ylf6V3hxPOgqwlaMGC0A4x3kIIYgf0W2/JwEu8rDFAxC4pkf
+         /ZUAcJKvqdHgfoB+rrUqCCEgeHPPjZ3R3edCI71vugtkZCWJxwKPSEiw6or/YaBQ5v
+         13BOdBO1SlfmZGzpTXR2pi72xB9WzPoMd1wYX4BrvU6mncI2DbMS8rkJPmgOB4qcKM
+         JLBnXKeqdc3/w==
+Date:   Fri, 19 Feb 2021 12:19:20 +0100
+From:   Robert Richter <rric@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Dejin Zheng <zhengdejin5@gmail.com>, corbet@lwn.net,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        bhelgaas@google.com, wsa@kernel.org, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org, kw@linux.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] Introduce pcim_alloc_irq_vectors()
+Message-ID: <YC+euDIrR5apkAqp@rric.localdomain>
+References: <20210216160249.749799-1-zhengdejin5@gmail.com>
+ <YC41HD422Mjh1IZK@rric.localdomain>
+ <YC5zVHnRog3EX0rl@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <CAA_a9x+ysAxT6T11S_M4pKenq2vDO762nnXUvAuXOCL7S9ozxg@mail.gmail.com>
-In-Reply-To: <CAA_a9x+ysAxT6T11S_M4pKenq2vDO762nnXUvAuXOCL7S9ozxg@mail.gmail.com>
-From:   Alex Qiu <xqiu@google.com>
-Date:   Thu, 18 Feb 2021 20:56:03 -0800
-Message-ID: <CAA_a9x+S5x8o=uisQgSSE1m+v863W6nYW7QPMowadpFWGEgbbQ@mail.gmail.com>
-Subject: Re: Kernel Doc on Navigating I2C Sysfs for I2C Topology
-To:     peda@axentia.se, Wolfram Sang <wsa@kernel.org>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YC5zVHnRog3EX0rl@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 11:04 AM Alex Qiu <xqiu@google.com> wrote:
->
-> Hi Peter and Wolfram,
->
-> I'm looking for some documentation online to guide hardware engineers
-> on how to find out what logical I2C bus number to use for i2ctools in
-> sysfs when they know the physical I2C topology (BMC physical bus
-> number and MUX channels). I read through the doc under
-> Documentation/i2c/, but didn't find any. I didn't find much on this by
-> searching the Internet, either.
->
-> Is it some doc that I can add to Documentation/i2c/ or
-> Documentation/i2c/i2c-topology.rst? Any suggestions or thoughts?
->
-> Thank you!
->
-> - Alex Qiu
+On 18.02.21 16:01:56, Andy Shevchenko wrote:
+> The problem this series solves is an imbalanced API.
 
-Another ping. :)
+This (added) API is bloated and incomplete. It adds functions without
+benefit, the only is to have a single pcim alloc function in addition
+to the pairing of alloc/free functions. I agree, it is hard to detect
+which parts are released if pcim_enable_device() is used.
 
-I had the doc drafted and reviewed internally in Google, and I'm going
-ahead to create a kernel patch on Documentation at some point. Right
-now I think I'm going to add a new page as
-Documentation/i2c/i2c-sysfs.rst.
+Additional, you need to go through pcim_release() to add other
+pcim_*() functions for everything else that is released there.
+Otherwise that new API is still incomplete. But this adds another
+bunch of useless functions.
 
-Thanks!
+> Christoph IIRC was clear that if we want to use PCI IRQ allocation API the
+> caller must know what's going on. Hiding this behind the scenes is not good.
+> And this series unhides that.
 
-- Alex Qiu
+IMO, this is more a documentation issue. pcim_enable_device() must be
+better documented and list all enable/alloc functions that are going
+to be released out of the box later.
+
+Even better, make sure everything is managed and thus all of a pci_dev
+is released, no matter how it was setup (this could even already be
+the case).
+
+In addition you could implement a static code checker.
+
+> Also, you may go and clean up all pci_free_irq_vectors() when
+> pcim_enable_device() is called, but I guess you will get painful process and
+> rejection in a pile of cases.
+
+Why should something be rejected if it is not correctly freed?
+
+Even if pci_free_irq_vectors() is called, pcim_release() will not
+complain if it was already freed before. So using
+pci_free_irq_vectors() is ok even in conjunction with
+pcim_enable_device().
+
+In the end, let's make sure everything is released in pci_dev if it is
+managed and document this.
+
+Thanks,
+
+-Robert
