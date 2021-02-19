@@ -2,61 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA47C31FC5B
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Feb 2021 16:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DA131FCF5
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Feb 2021 17:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbhBSPqe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Feb 2021 10:46:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45688 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229959AbhBSPqZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 19 Feb 2021 10:46:25 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE5AC64E46;
-        Fri, 19 Feb 2021 15:45:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613749540;
-        bh=N4kwTHQ5ETlfn2hxyzF8UDx5W5fNe+tnVx+GjwtOP6M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MRkk6KiJsmsavZwpVvzz5nsz978ZzU/lc46ua697r5zasUloRybA58p6EyFGfn0m4
-         CXORUKsEAUI78yhAHFqAnGfxJJxiyFIcInbgm65vSPGN++wzMGBtC5lsBDPQA+kf1t
-         Qrg7LsUBLeqJncsWAGdNS8e6opCGWIXCXvZMbqp3+MVz654HRnXFQJmVNyxT09c9Lr
-         GVVBP/OnLr3Si+0nU3c7PNnArxfbAq5gkl8uxPjS74+BRjOD/iQxl3Okz3OR/vcicS
-         r+9XadiE96b1pDeRG2c2+mXSUn8kQy94Ud3AotZBAqyBn+fRFu1slpTVSlKIv6fW4C
-         eNdfnTOUVQwVQ==
-Date:   Fri, 19 Feb 2021 16:45:34 +0100
-From:   Robert Richter <rric@kernel.org>
-To:     Dejin Zheng <zhengdejin5@gmail.com>
-Cc:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        bhelgaas@google.com, wsa@kernel.org, linux-doc@vger.kernel.org,
+        id S230080AbhBSQQm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Feb 2021 11:16:42 -0500
+Received: from mail-lj1-f169.google.com ([209.85.208.169]:34483 "EHLO
+        mail-lj1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229804AbhBSQQf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Feb 2021 11:16:35 -0500
+Received: by mail-lj1-f169.google.com with SMTP id r23so22999084ljh.1;
+        Fri, 19 Feb 2021 08:16:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8ihu7RMD09CA5Sxv7Lq20UHk6yx8JzKzN1kPmi0JrkQ=;
+        b=nEW9l4nPugf4QX8uk7cQG1uK7KK9jTGngP6MWX3p5WkC1x6YgFRJJS9Lr24ehVNQQj
+         g7cvDrwOeHoMdVPEkvOR4/DDkOiKGaUob6M7y4xqQmCEFEs+xqIwwpjft+ScGfK3H1+I
+         SqtteKpaoXz0qCU9sonMOk6UFDFTS5MsQEfupXuM2Zja4g+uMznRqbSpwRkid/PKKN+h
+         d+enPziA2MP4QRgKx1UWTZQREx/4gjlg3AbDB/X81CWq+NbPdmr+7U4u4cjhnWpVi9R7
+         vA101hRN0/cSzVtKONPY3LWhypQybBNwZI6TFf7tNvrzM1vp84qj4ZnTOKEK1dLS/pJ9
+         k9+g==
+X-Gm-Message-State: AOAM5336UUya48nb9pzS0u8T48voMHwodlYIFqFiLjb6rPjG8FNfB8X/
+        ibZurruekWPSKUf97IZwMYU=
+X-Google-Smtp-Source: ABdhPJxhNHtPHX8XCP+A4iney0+X7eNHNXGkFLPlnadqWxmrs9zTtSiTyQUTz9iybhncnae+5ihaEA==
+X-Received: by 2002:a05:6512:945:: with SMTP id u5mr5747411lft.229.1613751352019;
+        Fri, 19 Feb 2021 08:15:52 -0800 (PST)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id b11sm967616lfi.174.2021.02.19.08.15.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Feb 2021 08:15:51 -0800 (PST)
+Date:   Fri, 19 Feb 2021 17:15:50 +0100
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Robert Richter <rric@kernel.org>
+Cc:     Dejin Zheng <zhengdejin5@gmail.com>, corbet@lwn.net,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, helgaas@kernel.org,
+        wsa@kernel.org, linux-doc@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] i2c: thunderx: Use the correct name of
- device-managed function
-Message-ID: <YC/dHum90mM6aldt@rric.localdomain>
+Subject: Re: [PATCH v4 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <YC/kNnkusVHg8S0H@rocinante>
 References: <20210218150458.798347-1-zhengdejin5@gmail.com>
- <20210218150458.798347-5-zhengdejin5@gmail.com>
+ <20210218150458.798347-2-zhengdejin5@gmail.com>
+ <YC/NxfsQn2RKkrp8@rric.localdomain>
+ <YC/PoOOgRVHa1HIH@rric.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210218150458.798347-5-zhengdejin5@gmail.com>
+In-Reply-To: <YC/PoOOgRVHa1HIH@rric.localdomain>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 18.02.21 23:04:58, Dejin Zheng wrote:
-> Use the new function pcim_alloc_irq_vectors() to allocate IRQ vectors,
-> the pcim_alloc_irq_vectors() function, an explicit device-managed version
-> of pci_alloc_irq_vectors(). If pcim_enable_device() has been called
-> before, then pci_alloc_irq_vectors() is actually a device-managed
-> function. It is used here as a device-managed function, So replace it
-> with pcim_alloc_irq_vectors().
+Hi Robert,
+
+[...]
+> Obiously this is meant here:
 > 
-> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> 	if (!pci_is_managed(dev))
+[...]
 
-The title of this patch suggests there was something incorrect before
-and this is a fix, which it isn't. Please reword.
+A question to improve my understanding for future reference.  Was the
+previous approach of checking for "enabled" flag from struct pci_devres
+was not a good choice here?
 
-Thanks,
-
--Robert
+Krzysztof
