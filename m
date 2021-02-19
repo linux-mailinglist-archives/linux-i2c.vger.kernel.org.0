@@ -2,130 +2,160 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D303831FA21
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Feb 2021 14:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7CC31FB15
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Feb 2021 15:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbhBSNx6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Feb 2021 08:53:58 -0500
-Received: from mga09.intel.com ([134.134.136.24]:64464 "EHLO mga09.intel.com"
+        id S230339AbhBSOkw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Feb 2021 09:40:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34178 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230177AbhBSNxv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 19 Feb 2021 08:53:51 -0500
-IronPort-SDR: rgeTPppgYXTdSDu3AekE3jDHvYWRaxXYgGRdWWsCcaM9OGYuFAVDVQ2nH8H6J+TRu/gJ1TYzQZ
- 0EMhq3XPfIhA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9899"; a="183960797"
-X-IronPort-AV: E=Sophos;i="5.81,189,1610438400"; 
-   d="scan'208";a="183960797"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2021 05:52:05 -0800
-IronPort-SDR: EK5Wgt/62jce1ymNozB9AcLEBud6htWOyYNWoERO8THhqspUe0CsaFjRRSoEWukDrsRVFVcpjq
- L+uCGTd68/zg==
-X-IronPort-AV: E=Sophos;i="5.81,189,1610438400"; 
-   d="scan'208";a="378874125"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2021 05:52:02 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lD6CN-006DxP-8c; Fri, 19 Feb 2021 15:51:59 +0200
-Date:   Fri, 19 Feb 2021 15:51:59 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Robert Richter <rric@kernel.org>
-Cc:     Dejin Zheng <zhengdejin5@gmail.com>, corbet@lwn.net,
-        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        id S230228AbhBSOkw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 19 Feb 2021 09:40:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CEAE964D9A;
+        Fri, 19 Feb 2021 14:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613745611;
+        bh=kPDjLkzDqMQC2vYnKBAO3peQT2EGftnLubeGjVNTazY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wy8z45n22on2rIUpYib4h1RONCNZ0Lhp7CCAja3deSrtesd5CicxIZFccVlomnsXX
+         knSZv2Ee1Ho+PlOq7RUnxoUUYauFqixsGZsB1yAGwGn/gQ3IrQDc9r9NeNRuaVkwQc
+         Y7c8sVqsTumDnFm4kFixmrBwHvOijrOzaZbNhGA/at6MKrRa5x1QAe86rex+hP6o4w
+         aVggxOgpRYmAaKQc15R9QlXkwS1UUu4jWVdav7HSErguV7+KqICAaxuYx/ZYQcknqF
+         qLPuAC0anFVrGsj7M14esR5r2iBQbV6Kpe5aepyHYcyKRhP5bX0ih9e8+aoG+rtrZp
+         xBKzQzr3YqeDQ==
+Date:   Fri, 19 Feb 2021 15:40:05 +0100
+From:   Robert Richter <rric@kernel.org>
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
         bhelgaas@google.com, wsa@kernel.org, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org, kw@linux.com,
+        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] Introduce pcim_alloc_irq_vectors()
-Message-ID: <YC/CfxHM2RMZLejc@smile.fi.intel.com>
-References: <20210216160249.749799-1-zhengdejin5@gmail.com>
- <YC41HD422Mjh1IZK@rric.localdomain>
- <YC5zVHnRog3EX0rl@smile.fi.intel.com>
- <YC+euDIrR5apkAqp@rric.localdomain>
+Subject: Re: [PATCH v4 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <YC/NxfsQn2RKkrp8@rric.localdomain>
+References: <20210218150458.798347-1-zhengdejin5@gmail.com>
+ <20210218150458.798347-2-zhengdejin5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YC+euDIrR5apkAqp@rric.localdomain>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210218150458.798347-2-zhengdejin5@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Feb 19, 2021 at 12:19:20PM +0100, Robert Richter wrote:
-> On 18.02.21 16:01:56, Andy Shevchenko wrote:
-> > The problem this series solves is an imbalanced API.
+On 18.02.21 23:04:55, Dejin Zheng wrote:
+> Introduce pcim_alloc_irq_vectors(), a device-managed version of
+> pci_alloc_irq_vectors(). Introducing this function can simplify
+> the error handling path in many drivers.
 > 
-> This (added) API is bloated and incomplete. It adds functions without
-> benefit, the only is to have a single pcim alloc function in addition
-> to the pairing of alloc/free functions. I agree, it is hard to detect
-> which parts are released if pcim_enable_device() is used.
-
-No, this API solves the above mentioned problem (what makes so special about
-pci_free_irq_vectors() that it should be present?) Why do we have pcim_iomap*()
-variations and not the rest?
-
-The PCIm API is horrible in the sense of being used properly. Yes, I know how
-it works and I was trying to help with that, the problem is that people didn't
-and don't get how it works and stream of patches like the ones that add
-pci_free_irq_vectors() are coming.
-
-> Additional, you need to go through pcim_release() to add other
-> pcim_*() functions for everything else that is released there.
-> Otherwise that new API is still incomplete.
-
-True. And here is the part that most annoying right now.
-Btw, I never saw you fought against these small clean ups here and there, that
-*add* explicit calls to freeing resources. Also I haven't noticed anybody
-trying to correct documentation.
-
-This series is a step to a right direction.
-
-> But this adds another
-> bunch of useless functions.
-
-Wrong. This is quite useful to have balanced APIs. How many patches you have
-seen related to the PCIm imbalanced APIs? I could tell from my experience, I
-saw plenty and each time I'm trying to explain how it works people don't easily
-get.
-
-> > Christoph IIRC was clear that if we want to use PCI IRQ allocation API the
-> > caller must know what's going on. Hiding this behind the scenes is not good.
-> > And this series unhides that.
+> And use pci_free_irq_vectors() to replace some code in pcim_release(),
+> they are equivalent, and no functional change. It is more explicit
+> that pcim_alloc_irq_vectors() is a device-managed function.
 > 
-> IMO, this is more a documentation issue. pcim_enable_device() must be
-> better documented and list all enable/alloc functions that are going
-> to be released out of the box later.
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> ---
+> v3 -> v4:
+> 	- No change
+> v2 -> v3:
+> 	- Add some commit comments for replace some codes in
+> 	  pcim_release() by pci_free_irq_vectors().
+> v1 -> v2:
+> 	- Use pci_free_irq_vectors() to replace some code in
+> 	  pcim_release().
+> 	- Modify some commit messages.
 > 
-> Even better, make sure everything is managed and thus all of a pci_dev
-> is released, no matter how it was setup (this could even already be
-> the case).
+>  drivers/pci/pci.c   | 33 +++++++++++++++++++++++++++++----
+>  include/linux/pci.h |  3 +++
+>  2 files changed, 32 insertions(+), 4 deletions(-)
 > 
-> In addition you could implement a static code checker.
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index b67c4327d307..db799d089c85 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -1969,10 +1969,7 @@ static void pcim_release(struct device *gendev, void *res)
+>  	struct pci_devres *this = res;
+>  	int i;
+>  
+> -	if (dev->msi_enabled)
+> -		pci_disable_msi(dev);
+> -	if (dev->msix_enabled)
+> -		pci_disable_msix(dev);
+> +	pci_free_irq_vectors(dev);
+>  
+>  	for (i = 0; i < DEVICE_COUNT_RESOURCE; i++)
+>  		if (this->region_mask & (1 << i))
+> @@ -2054,6 +2051,34 @@ void pcim_pin_device(struct pci_dev *pdev)
+>  }
+>  EXPORT_SYMBOL(pcim_pin_device);
+>  
+> +/**
+> + * pcim_alloc_irq_vectors - a device-managed pci_alloc_irq_vectors()
+> + * @dev:		PCI device to operate on
+> + * @min_vecs:		minimum number of vectors required (must be >= 1)
+> + * @max_vecs:		maximum (desired) number of vectors
+> + * @flags:		flags or quirks for the allocation
+> + *
+> + * Return the number of vectors allocated, (which might be smaller than
+> + * @max_vecs) if successful, or a negative error code on error. If less
+> + * than @min_vecs interrupt vectors are available for @dev the function
+> + * will fail with -ENOSPC.
+> + *
+> + * It depends on calling pcim_enable_device() to make IRQ resources
+> + * manageable.
+> + */
+> +int pcim_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+> +				unsigned int max_vecs, unsigned int flags)
+> +{
+> +	struct pci_devres *dr;
+> +
+> +	dr = find_pci_dr(dev);
+> +	if (!dr || !dr->enabled)
+> +		return -EINVAL;
+> +
+> +	return pci_alloc_irq_vectors(dev, min_vecs, max_vecs, flags);
+> +}
+> +EXPORT_SYMBOL(pcim_alloc_irq_vectors);
 
-It's open source, why should we do that and not what we are proposing here?
-Propose your ideas and we will discuss the patches, right?
+If it is just about having a pcim-* counterpart why not just an inline
+function like the one below.
 
-> > Also, you may go and clean up all pci_free_irq_vectors() when
-> > pcim_enable_device() is called, but I guess you will get painful process and
-> > rejection in a pile of cases.
+> +
+>  /*
+>   * pcibios_add_device - provide arch specific hooks when adding device dev
+>   * @dev: the PCI device being added
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 86c799c97b77..d75ba85ddfc5 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1818,6 +1818,9 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+>  					      NULL);
+>  }
+>  
+> +int pcim_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+> +				unsigned int max_vecs, unsigned int flags);
+> +
+
+static inline int pcim_alloc_irq_vectors(struct pci_dev *dev,
+	unsigned int min_vecs, unsigned int max_vecs, unsigned int flags)
+{
+	if (!pci_is_managed(dev, min_vecs, max_vecs, flags))
+		return -EINVAL;
+
+	return pci_alloc_irq_vectors(dev, min_vecs, max_vecs, flags);
+}
+
+All those stub functions with EXPORT_SYMBOLS etc. could be dropped
+then.
+
+With some macro magic added a list of functions could easily being
+created that are already managed but just need a pcim* counterpart.
+
+-Robert
+
+>  /* Include architecture-dependent settings and functions */
+>  
+>  #include <asm/pci.h>
+> -- 
+> 2.25.0
 > 
-> Why should something be rejected if it is not correctly freed?
-
-Why it's not correctly freed? The function is idempotent.
-
-> Even if pci_free_irq_vectors() is called, pcim_release() will not
-> complain if it was already freed before. So using
-> pci_free_irq_vectors() is ok even in conjunction with
-> pcim_enable_device().
-
-No, it's not okay from API namespace / semantics perspective.
-
-> In the end, let's make sure everything is released in pci_dev if it is
-> managed and document this.
-
-Feel free to submit a patch!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
