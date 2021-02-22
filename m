@@ -2,51 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A6A321818
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Feb 2021 14:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42422321821
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Feb 2021 14:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbhBVNKl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Feb 2021 08:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S230225AbhBVNLK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Feb 2021 08:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbhBVNId (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Feb 2021 08:08:33 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCABDC06178A;
-        Mon, 22 Feb 2021 05:07:52 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id v14so18998132wro.7;
-        Mon, 22 Feb 2021 05:07:52 -0800 (PST)
+        with ESMTP id S231421AbhBVNIe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Feb 2021 08:08:34 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED772C06178B;
+        Mon, 22 Feb 2021 05:07:53 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id 7so19034845wrz.0;
+        Mon, 22 Feb 2021 05:07:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FJcro0M+ytwCFMFq3BOIPESMWrpP9oxj2MmSemg8LEw=;
-        b=ZMV6xWwrBQrEWuEKxkJvb6oDFeM2VJFkvddd2dHAka7o/K1BRYtpOqQMoLZWJRYvwd
-         8MXeuK83NEsaL0B3qS6jOh8u3DdHjnZKSP+kmvhj65asROB78EBYta/tUhMo0aoG57fh
-         ADl/r3ItZYcCyakqmjHrfetQCha0gyHJuQNGLwjWYJb//MH26IzOEalbBVr/he4i3s9G
-         iuDKLLEYcr6R0GyFJoCPb1RgE2RdIg/r5ys2Zy7rWhcb7CkQqXl53N5SnbS7RDwlcnue
-         pBHPbmKZ255yMzmeWxSGkw1A7s9nC2rcqYxO0gMtZBDU7gZB7wi15bNMJFkrdWkUucJv
-         shuA==
+        bh=5idc3XlcuWB3pMgqllBLms0ZvbmbONztYRrH6tSskHE=;
+        b=Hx3bsx6H8y7xVcYZDpbxZeP8JECWhmUKvIGyI83ARoWFy+oYGRVInyjqRQlnRiKO1/
+         bj+8JO7L0LzuUhrh1JJ2Ka3lInyJ8USfMhZ+OgPGhSJEIb97kRXL+Qv9Yy2YaLjbcMZa
+         KwB5js/vAp7LdtrIeBuW8wTrRzezBAN1PCM03uLYB492O1m6mti4jNwqsL1Mh6YFCRYx
+         K6X/jwgG3JYWf5nJqJ3vYYUCJQo8SkIY8/0qUA54lDMO7wDt5I2Iw3V2NEhRCs9aM81T
+         Rz20VGnjx8THh/vRjCGTzy5QbR5geon3+ivyIFw5+OPLnnXxttaqOhWEzykhdYlF46p0
+         gbQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FJcro0M+ytwCFMFq3BOIPESMWrpP9oxj2MmSemg8LEw=;
-        b=Gcc81CVcQ74dtpO9/WnR//8HrKQ7YinBGkfHKY1O12cOAe31uxvObZRIt283XUr/8z
-         +5GR8xKXzsD4taAgf2arV5RL6KNxA3xtm6k5CvQ2tR6f3vGmxWnUUhospTcPNQ/Tagw/
-         VimywA0xfCQD1lqAiYvomPL4AhIR8S1tjaotnNeMMXNzHPlrd37yKzuTUoQuIHEWe3fR
-         ZOXNRin2lNXYVWgvCgAjgVO4zIGWR0/axO7PAHKkAiJ0ABls6YZyOhoU9SDvhG7704Sn
-         jWwKQS06YQzHm0EKFOtdInOmD9DYaAZhr4eKhjMk8Xy1JVpjpRI+zF0O6hKDauSWpaq0
-         2J/A==
-X-Gm-Message-State: AOAM530hGr3jlNCcofiujNEZzXETTdSJpCFWAFb3M/9JI3MF+6KJYPna
-        FPp65SiSBHepuXTn8G74Scs=
-X-Google-Smtp-Source: ABdhPJyihhA6n1SWGZYlAOk6ihzKQ5ZFA1SIaPDiVg2PFbN66LAkajUtWccl7dJMQ90I3MjEp7F9uw==
-X-Received: by 2002:adf:82ad:: with SMTP id 42mr21238137wrc.116.1613999271658;
-        Mon, 22 Feb 2021 05:07:51 -0800 (PST)
+        bh=5idc3XlcuWB3pMgqllBLms0ZvbmbONztYRrH6tSskHE=;
+        b=ooeVGkaGOMEgLauYA4hfqoF0kbimXjp2qncN0Hjgy4FeqbbK93zRzFNJcjfTEdnjA8
+         Rp3KE18aNGGuQ+ozKq6GhVFEJBtdZsLW1YNij4NW4wVJXb3+Pe3robTgc1r+JNKtO9nS
+         gY5oB8TBYEFtlJUZ680etkXswJQ8o6AwBQhR7u1Hj1o1iuOQKGWaJkopIo7wGEuDybNB
+         wNzGMFc0ZHJiwI9Gi5g5/0vtPf+566IuiXWQoCMqpE1Vy/GYPj4/lalOVxEG4L0oElc4
+         2ayijvkGVEi9WiaCL55kS6nXl8gUeQ2gMHgJRyG3ITAAl19pElQTOFVKStgrBbC+BxQk
+         TUkg==
+X-Gm-Message-State: AOAM531qss4PPxqmHvIL9eaHFrUipF2wkYJ3Yp5SzTPTcX9tiiZ3aqBG
+        dOEyxoJ/LezFVTb4NO+3hZc=
+X-Google-Smtp-Source: ABdhPJyH+lZSFLDstr8Nhk8znbAULSqN9viQ8iTlO8ZY4Wk3+ciIVfL/6CAU3DA9WMbU3cq3PtBMiQ==
+X-Received: by 2002:adf:f584:: with SMTP id f4mr1959882wro.311.1613999272804;
+        Mon, 22 Feb 2021 05:07:52 -0800 (PST)
 Received: from valhalla.home ([2.31.224.123])
-        by smtp.gmail.com with ESMTPSA id t198sm26575828wmt.7.2021.02.22.05.07.50
+        by smtp.gmail.com with ESMTPSA id t198sm26575828wmt.7.2021.02.22.05.07.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 05:07:51 -0800 (PST)
+        Mon, 22 Feb 2021 05:07:52 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     tfiga@chromium.org, sakari.ailus@linux.intel.com,
         rajmohan.mani@intel.com, rjw@rjwysocki.net, lenb@kernel.org,
@@ -59,10 +59,11 @@ Cc:     andy.shevchenko@linux.intel.com,
         robert.moore@intel.com, erik.kaneda@intel.com, me@fabwu.ch,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devel@acpica.org
-Subject: [PATCH v3 2/6] ACPI: scan: Add function to fetch dependent of acpi device
-Date:   Mon, 22 Feb 2021 13:07:31 +0000
-Message-Id: <20210222130735.1313443-3-djrscally@gmail.com>
+        platform-driver-x86@vger.kernel.org, devel@acpica.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 3/6] i2c: core: Add a format macro for I2C device names
+Date:   Mon, 22 Feb 2021 13:07:32 +0000
+Message-Id: <20210222130735.1313443-4-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210222130735.1313443-1-djrscally@gmail.com>
 References: <20210222130735.1313443-1-djrscally@gmail.com>
@@ -72,86 +73,61 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In some ACPI tables we encounter, devices use the _DEP method to assert
-a dependence on other ACPI devices as opposed to the OpRegions that the
-specification intends. We need to be able to find those devices "from"
-the dependee, so add a callback and a wrapper to walk over the
-acpi_dep_list and return the dependent ACPI device.
+Some places in the kernel allow users to map resources to a device
+using device name (for example, in the struct gpiod_lookup_table).
+Currently this involves waiting for the I2C client to have been registered
+so we can use dev_name(&client->dev). We want to add a function to allow
+users to refer to an I2C device by name before it has been instantiated,
+so create a macro for the format that's accessible outside the I2C layer
+and use it in i2c_dev_set_name().
 
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v3:
-	- Switched from a standalone function to a callback passed to
-	  acpi_walk_dep_device_list().
 
- drivers/acpi/scan.c     | 34 ++++++++++++++++++++++++++++++++++
- include/acpi/acpi_bus.h |  1 +
- 2 files changed, 35 insertions(+)
+	- None
 
-diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index c9e4190316ef..55626925261c 100644
---- a/drivers/acpi/scan.c
-+++ b/drivers/acpi/scan.c
-@@ -2093,6 +2093,21 @@ static void acpi_bus_attach(struct acpi_device *device, bool first_pass)
- 		device->handler->hotplug.notify_online(device);
- }
+ drivers/i2c/i2c-core-base.c | 4 ++--
+ include/linux/i2c.h         | 3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 63ebf722a424..547b8926cac8 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -811,12 +811,12 @@ static void i2c_dev_set_name(struct i2c_adapter *adap,
+ 	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
  
-+static int __acpi_dev_get_dependent_dev(struct acpi_dep_data *dep, void *data)
-+{
-+	struct acpi_device *adev;
-+	int ret;
-+
-+	ret = acpi_bus_get_device(dep->consumer, &adev);
-+	if (ret)
-+		/* If we don't find an adev then we want to continue parsing */
-+		return 0;
-+
-+	*(struct acpi_device **)data = adev;
-+
-+	return 1;
-+}
-+
- static int __acpi_dev_flag_dependency_met(struct acpi_dep_data *dep,
- 					  void *data)
- {
-@@ -2145,6 +2160,25 @@ void acpi_dev_flag_dependency_met(acpi_handle handle)
- }
- EXPORT_SYMBOL_GPL(acpi_dev_flag_dependency_met);
+ 	if (info && info->dev_name) {
+-		dev_set_name(&client->dev, "i2c-%s", info->dev_name);
++		dev_set_name(&client->dev, I2C_DEV_NAME_FORMAT, info->dev_name);
+ 		return;
+ 	}
  
-+/**
-+ * acpi_dev_get_dependent_dev - Return ACPI device dependent on @adev
-+ * @adev: Pointer to the dependee device
-+ *
-+ * Returns the first &struct acpi_device which declares itself dependent on
-+ * @adev via the _DEP buffer, parsed from the acpi_dep_list.
-+ */
-+struct acpi_device *
-+acpi_dev_get_dependent_dev(struct acpi_device *supplier)
-+{
-+	struct acpi_device *adev = NULL;
-+
-+	acpi_walk_dep_device_list(supplier->handle,
-+				  __acpi_dev_get_dependent_dev, &adev);
-+
-+	return adev;
-+}
-+EXPORT_SYMBOL_GPL(acpi_dev_get_dependent_dev);
-+
- /**
-  * acpi_bus_scan - Add ACPI device node objects in a given namespace scope.
-  * @handle: Root of the namespace scope to scan.
-diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-index 91172af3a04d..5b14a9ae4ed5 100644
---- a/include/acpi/acpi_bus.h
-+++ b/include/acpi/acpi_bus.h
-@@ -690,6 +690,7 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
- bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
+ 	if (adev) {
+-		dev_set_name(&client->dev, "i2c-%s", acpi_dev_name(adev));
++		dev_set_name(&client->dev, I2C_DEV_NAME_FORMAT, acpi_dev_name(adev));
+ 		return;
+ 	}
  
- void acpi_dev_flag_dependency_met(acpi_handle handle);
-+struct acpi_device *acpi_dev_get_dependent_dev(struct acpi_device *supplier);
- struct acpi_device *
- acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
- struct acpi_device *
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 56622658b215..4d40a4b46810 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -39,6 +39,9 @@ enum i2c_slave_event;
+ typedef int (*i2c_slave_cb_t)(struct i2c_client *client,
+ 			      enum i2c_slave_event event, u8 *val);
+ 
++/* I2C Device Name Format - to maintain consistency outside the i2c layer */
++#define I2C_DEV_NAME_FORMAT		"i2c-%s"
++
+ /* I2C Frequency Modes */
+ #define I2C_MAX_STANDARD_MODE_FREQ	100000
+ #define I2C_MAX_FAST_MODE_FREQ		400000
 -- 
 2.25.1
 
