@@ -2,54 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5643D3233C7
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Feb 2021 23:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A7A3233D9
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Feb 2021 23:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbhBWWex (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Feb 2021 17:34:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
+        id S229996AbhBWWkH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Feb 2021 17:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbhBWWcf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Feb 2021 17:32:35 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BBBC06174A
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Feb 2021 14:31:28 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id l18so2977932pji.3
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Feb 2021 14:31:28 -0800 (PST)
+        with ESMTP id S232700AbhBWWfr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Feb 2021 17:35:47 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1A5C061574
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Feb 2021 14:35:07 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p5so5884451plo.4
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Feb 2021 14:35:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k1RzooZPZP1J4eGG1QIqaiAicm+Bu37ef5lc5yWEgH4=;
-        b=t4xgPhOx/fSPdt9GfCu0R0De6/bDyWxmpEoRAnUJr3nOJHDifQWPwxokNt7mbELdv/
-         bhXSf11bwUOi27tQcVlvVJPHO1IlOMaYoZugaRUA1LaNr3mDwYkdIZqTisVGAitkICPB
-         SksJBCEwx31Zlzzx9qOeouKee4op1oBaHz6DunH3WeM4GcOaLffIiaxJ27Ae9+YfKPry
-         MCb8qfSwnexxFOFNvhL1BV9lm+5yUsCqGRDaVHYeSjHKah5yInwLAxwbglzR9X7T/AN+
-         uDOEaT977YBIAKlTyM5bpzHZabZwgUGEiJ5ZI/XtQJMq9u9AE+TZe7ellMGmv9G/Ixxn
-         Fbxw==
+         :cc:content-transfer-encoding;
+        bh=6JxJtLrjQ/Nyr5fh6rK5tg3DDo4mCFKKxTbehSm9m2Y=;
+        b=NkdjnqbDYp2asX/uD3vRQ3xJ5e5ui/iQKPk8pI5rD/D8Xtxmw2No/Kz1XWRqhbzLDw
+         /SogjrCeHPL9ShRMpoV7QTtOH0mMtZVjDZmnkJrx3UkdwH5o6xAEhNcPWaylu5Jc/ki1
+         cimr4KXEHNb4vfdUcsRygiPBdre52VB1satKujeT/rt7IbGM20tSs3Bu3m2Sz3ci1HKY
+         yS5DR4R9jvvIbsnU3LUEP+drjhRNdq+W59KLQ/q0n2NVORBtdLSRCq7BhMvMp5jsxos/
+         alRRmw+wZa8+VKmvudNcvbBUs8awZRQDY/o+V967jtgxtMd6Vorl11OYs4dza+AmYTAw
+         HeKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k1RzooZPZP1J4eGG1QIqaiAicm+Bu37ef5lc5yWEgH4=;
-        b=n0+ks6Nn2W7PXSHEM1pOPTXLMqLPJ1Gsy+I3KNegrny0aKn8xBhi8HwxDAEMyUVsma
-         0CXn/Kr9DQ2c59NtrCZQb1Kz7mrFdPDf/iIkrGCpqDlyoyCP6/kelhvPBbue+sIh039o
-         HnJVfzBF4dkjjR2tyI5Ux9VkdKD3BmAR1AUo+Lc6/sgLVq44Ji9iZMxrpjTdvxcorUrs
-         XAtex4ltiXbuqEGczLyh/fD8psY51AaFr61mO2F0PidyLqkGdwFyocHxWAfNIrOzCCOI
-         PaUdenGKzZ27YfSerrdN2zATGMFaelbWXdpuRLev6YIte8iGXOLgXRgAdXYFeqbSNTjv
-         Ed7Q==
-X-Gm-Message-State: AOAM532kO4b5UBUYxCfN/7LnksdmHZ0ZVXRW/xhQlPVS74f1O/FnU+r2
-        t7hO5N0CsthgR6RuOviJbvqhgRuok4v36rg81A1Ekg==
-X-Google-Smtp-Source: ABdhPJz6AeMs16zm2xQVDtus3cuIEyeB5wTXLC2MGx6pelc1e0zKNRbFQm3TdaKPHwXT9D9EujJ0ZjjXUTabbAv7Wqg=
-X-Received: by 2002:a17:90a:e64a:: with SMTP id ep10mr1079603pjb.20.1614119487708;
- Tue, 23 Feb 2021 14:31:27 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6JxJtLrjQ/Nyr5fh6rK5tg3DDo4mCFKKxTbehSm9m2Y=;
+        b=D0gtrGa3VoKkGSeuYuqXzr3PCRCm5xuSeDB/NeHCNoB4agbSv3QpuHu0iIMh8RAQB6
+         vN34luAnLZMCqMgZulSuFRZhTdipSeUG3feSWMOWuZOXtYYw10LCiX8mK9L4YySdn7a8
+         Ffh/PC7huL4vj2xozzOglG9CBpc1pCDesag2cJdM1gqVJgW4jTQlT8BU7NHwlNv5r6yj
+         HqmZLKQEZZNzZcsQKsc7drCo1DmJKXQIpwEu5C7yA86W967sRmPqrT9GdP7pQZ2AFUkt
+         Ticm3YvRKdvwGMQNyQxLHvycruNSmO2OSuPKLhUT3IiGpiJ7y87jEJrcPQCUk5ky3rNL
+         oIaQ==
+X-Gm-Message-State: AOAM533sQILiDaN8oWqdac3i6YY06FnYdnTqsmlzNcAorAJZ1EPzjMzK
+        ktEyzH1zr0dPH6dhBHaT4ezZSU84aIc+kFcwDPXXNw==
+X-Google-Smtp-Source: ABdhPJwffvRJctzUSP0CFLJEA0ALFcFH0gt4tYD2lVrQrJ56VkiXvtTQuK2R2zdN2Dtx0ceMdFzSuDeeuKCvkcHDWrI=
+X-Received: by 2002:a17:90a:e64a:: with SMTP id ep10mr1093167pjb.20.1614119706521;
+ Tue, 23 Feb 2021 14:35:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20210216182735.11639-1-jae.hyun.yoo@linux.intel.com> <20210216182735.11639-2-jae.hyun.yoo@linux.intel.com>
-In-Reply-To: <20210216182735.11639-2-jae.hyun.yoo@linux.intel.com>
+References: <20210216182735.11639-1-jae.hyun.yoo@linux.intel.com> <20210216182735.11639-3-jae.hyun.yoo@linux.intel.com>
+In-Reply-To: <20210216182735.11639-3-jae.hyun.yoo@linux.intel.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 23 Feb 2021 14:31:16 -0800
-Message-ID: <CAFd5g44agiB+d5_RuMmL7=exhzUt=aSMEWMEgEkbAZCgH0JbJA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] dt-bindings: i2c: aspeed: add transfer mode support
+Date:   Tue, 23 Feb 2021 14:34:55 -0800
+Message-ID: <CAFd5g46K4=xPLFnvnAKY0MibU9s87Hd_OpYupYQwZ+Yq=W2-mQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] ARM: dts: aspeed: modify I2C node to support
+ buffer mode
 To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -62,6 +63,7 @@ Cc:     Wolfram Sang <wsa@the-dreams.de>,
         linux-aspeed <linux-aspeed@lists.ozlabs.org>,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -69,8 +71,38 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 On Tue, Feb 16, 2021 at 10:15 AM Jae Hyun Yoo
 <jae.hyun.yoo@linux.intel.com> wrote:
 >
-> Append bindings to support transfer mode.
+> This driver uses byte mode that makes lots of interrupt calls
+> so it's not good for performance. Also, it makes the driver very
+> timing sensitive. To improve performance of the driver, this commit
+> modifies I2C node to support buffer mode which uses I2C SRAM buffer
+> instead of using a single byte buffer.
+>
+> AST2400:
+> It has 2 KBytes (256 Bytes x 8 pages) of I2C SRAM buffer pool from
+> 0x1e78a800 to 0x1e78afff that can be used for all busses with
+> buffer pool manipulation. To simplify implementation for supporting
+> both AST2400 and AST2500, it assigns each 128 Bytes per bus without
+> using buffer pool manipulation so total 1792 Bytes of I2C SRAM
+> buffer will be used.
+>
+> AST2500:
+> It has 16 Bytes of individual I2C SRAM buffer per each bus and its
+> range is from 0x1e78a200 to 0x1e78a2df, so it doesn't have 'buffer
+> page selection' bit field in the Function control register, and
+> neither 'base address pointer' bit field in the Pool buffer control
+> register it has. To simplify implementation for supporting both
+> AST2400 and AST2500, it writes zeros on those register bit fields
+> but it's okay because it does nothing in AST2500.
+>
+> AST2600:
+> It has 32 Bytes of individual I2C SRAM buffer per each bus and its
+> range is from 0x1e78ac00 to 0x1e78adff. Works just like AST2500
+> does.
+>
+> See Documentation/devicetree/bindings/i2c/i2c-aspeed.txt for
+> enabling buffer mode details.
 >
 > Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Reviewed-by: C=C3=A9dric Le Goater <clg@kaod.org>
 
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
