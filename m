@@ -2,78 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A37A932269E
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Feb 2021 08:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A843226C8
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Feb 2021 09:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbhBWHsP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Feb 2021 02:48:15 -0500
-Received: from m12-17.163.com ([220.181.12.17]:35044 "EHLO m12-17.163.com"
+        id S232141AbhBWID6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Feb 2021 03:03:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232008AbhBWHsO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 23 Feb 2021 02:48:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=EQlFb
-        PsFTZi9ewGkDle+g/qeavm7rzg+OmBnQFzqMn8=; b=FeYR2qolkQI8aS4sNCwbv
-        LD6hnD2hBkUU6yBOYGBp+V4kbVdWswAmZgpJfXtK7hpMF7Ts8v/P260WmG0DN40t
-        7uuEPFdhx7/iEoa+S9u4KUOLgA6gwZiR1wkEa2+IMPzcbwilWaA1dk55ad5MvyTA
-        pJT6W/PiMis5d/GTW/RbCQ=
-Received: from COOL-20201222LC.ccdomain.com (unknown [218.94.48.178])
-        by smtp13 (Coremail) with SMTP id EcCowACHPXrSYzRgRuu7mQ--.4187S2;
-        Tue, 23 Feb 2021 10:09:23 +0800 (CST)
-From:   dingsenjie@163.com
-To:     brendanhiggins@google.com, benh@kernel.crashing.org,
-        joel@jms.id.au, andrew@aj.id.au, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dingsenjie <dingsenjie@yulong.com>
-Subject: [PATCH] i2c/busses:remove unneeded variable: "ret"
-Date:   Tue, 23 Feb 2021 10:09:25 +0800
-Message-Id: <20210223020925.22856-1-dingsenjie@163.com>
-X-Mailer: git-send-email 2.21.0.windows.1
+        id S232147AbhBWIDl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Feb 2021 03:03:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C976264DAF;
+        Tue, 23 Feb 2021 08:02:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614067381;
+        bh=jPx4LV2bldX3/+xhN+fFDKFW8lIjZrChpQM5Wnm09qQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YAQTMxw9sO/cekq6q7hkeSF9CuLk9KpT6pOH/OQcYRvwNWGOAIi5b4stdL9qLr2FJ
+         MAr2cxJ0XMh0jyNPWgJ4yjgqLP2i9WHzk9zdRSw8u/xl+run4OV9mA2bCsdOAkyuyW
+         M22hTM3begRWf8Uh731HentmfuP09gIg7wBoioqIRmuSnHX9YIuRBn2hcbXPF7JX/r
+         mXDlG+3r59M5d+g79YGJmNUuRToBeYO6Ybfza7C1EQIlkVrsGxoO9rnfpWBDdWiKDP
+         O+unDD0TL7w4MxTYAtSpkHl4F0zSxVAJRGDVtAWCDaXn/8KLPhC8ml/iZhlkRltpdY
+         75p+g2z6DMmkw==
+Date:   Tue, 23 Feb 2021 09:02:54 +0100
+From:   Robert Richter <rric@kernel.org>
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        bhelgaas@google.com, wsa@kernel.org, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <YDS2rkJu7PTJJiZr@rric.localdomain>
+References: <20210218150458.798347-1-zhengdejin5@gmail.com>
+ <20210218150458.798347-2-zhengdejin5@gmail.com>
+ <YC/NxfsQn2RKkrp8@rric.localdomain>
+ <20210219164649.GA814637@nuc8i5>
+ <YDONyMSHO9FDeY69@rric.localdomain>
+ <20210222151415.GA896979@nuc8i5>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EcCowACHPXrSYzRgRuu7mQ--.4187S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrur43XF4xKw1rur4xWryxAFb_yoWfArX_KF
-        1kW3Z7Gr1DZr95A345A3s8XryDKFyrurn5W3Z5Kay3CFy5Z348XFWDuryfJrs8Xrs7CFnr
-        Zr1UWF47Aw17GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0StC7UUUUU==
-X-Originating-IP: [218.94.48.178]
-X-CM-SenderInfo: 5glqw25hqmxvi6rwjhhfrp/1tbiThNCyFUDH1LYqgAAs+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210222151415.GA896979@nuc8i5>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: dingsenjie <dingsenjie@yulong.com>
+On 22.02.21 23:14:15, Dejin Zheng wrote:
+> On Mon, Feb 22, 2021 at 11:56:08AM +0100, Robert Richter wrote:
+> > On 20.02.21 00:46:49, Dejin Zheng wrote:
+> > > > On 18.02.21 23:04:55, Dejin Zheng wrote:
+> > 
+> > > > > +	if (!dr || !dr->enabled)
+> > > here checks whether the pci device is enabled.
+> > 
+> > What is the purpose of this? The device "is_managed" or not.
+> >
+> The device is managed or not by check whether "dr" is NULL. And
+> check the "dr->enabled" is for the PCI device enable. I think it
+> may not make sense to apply for irq vectors when PCI device is not
+> enabled.
 
-remove unneeded variable: "ret".
+I don't see how a disabled device affects in any way the release of
+the irq vectors during device removal. dr is always non-null in case
+the device is managed, a check isn't needed for that.
 
-Signed-off-by: dingsenjie <dingsenjie@yulong.com>
----
- drivers/i2c/busses/i2c-aspeed.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 724bf30..efad900 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -175,7 +175,6 @@ struct aspeed_i2c_bus {
- static int aspeed_i2c_recover_bus(struct aspeed_i2c_bus *bus)
- {
- 	unsigned long time_left, flags;
--	int ret = 0;
- 	u32 command;
- 
- 	spin_lock_irqsave(&bus->lock, flags);
-@@ -232,7 +231,7 @@ static int aspeed_i2c_recover_bus(struct aspeed_i2c_bus *bus)
- out:
- 	spin_unlock_irqrestore(&bus->lock, flags);
- 
--	return ret;
-+	return 0;
- 
- reset_out:
- 	spin_unlock_irqrestore(&bus->lock, flags);
--- 
-1.9.1
-
-
+-Robert
