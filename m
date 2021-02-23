@@ -2,171 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BB2322A3A
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Feb 2021 13:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D26C322A3D
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Feb 2021 13:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbhBWMFO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Feb 2021 07:05:14 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:36431 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232817AbhBWMCE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Feb 2021 07:02:04 -0500
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id EWNHlxmb0fIMiEWNLluGpF; Tue, 23 Feb 2021 13:01:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1614081671; bh=1hLmo70e6QdzywjzHOXuJ1hUlzuPjRX05cJRBwMEB6I=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=FMCaBCmqpEBnU3Q9S/jXlcwisFIRrO1n6dtWcMQai0POjdZLnNfVQ+L9melF6apPF
-         fdTAJtLb1mG3bftbGTR1PL6HW5ghoRIsi6SJQaARvtoaAwU5K4eb3kg1tNWluwe5G7
-         iyK400JCQaCqA2SLekAe3Lqk5XOSK8gDBfbUaAztPwKTOczWVB9L2Lb+HaWbo/n00G
-         S4JR25FDp0hixtQwPX+SliWlolYnrZJsUxY5hFKibpC/dcjywWZqgf6T7OPqXOgID6
-         mtUc/o6IdN4HebQc3vQqL5kY8l9oIodDWB/lfRQ1l6j5/Ylrxb5hx/Gf6ExJmsgXk5
-         Q3cKPeWgG/E7Q==
-Subject: Re: [PATCH v2] media: i2c: adv7511: remove open coded version of
- SMBus block read
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <20210127103357.5045-1-wsa+renesas@sang-engineering.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <bea536b1-9d81-3f41-8ca5-7fb075422290@xs4all.nl>
-Date:   Tue, 23 Feb 2021 13:01:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.1
+        id S232509AbhBWMFU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Feb 2021 07:05:20 -0500
+Received: from mga01.intel.com ([192.55.52.88]:12810 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232468AbhBWMC3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Feb 2021 07:02:29 -0500
+IronPort-SDR: VEDBMz3yblLb9Se+iAKZeBXHvMOeT0l5snrU2BlzgF0Ole6fs4bg2tnafpOnty4daaH0DJmgpM
+ 1NpTd+LIVa+w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9903"; a="204204601"
+X-IronPort-AV: E=Sophos;i="5.81,200,1610438400"; 
+   d="scan'208";a="204204601"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 04:01:35 -0800
+IronPort-SDR: vArlr3KrePNBRYNfBwiKlzekovfISugTKtVeSAQotiJWMWn7rBgZV9Z/BBRjs+ywQPZ+rbI0DZ
+ z4kqlVJiVX1A==
+X-IronPort-AV: E=Sophos;i="5.81,200,1610438400"; 
+   d="scan'208";a="432679629"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 04:01:29 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1lEWNZ-007Nkk-W1; Tue, 23 Feb 2021 14:01:25 +0200
+Date:   Tue, 23 Feb 2021 14:01:25 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        kieran.bingham+renesas@ideasonboard.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>, me@fabwu.ch,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        devel@acpica.org
+Subject: Re: [PATCH v3 5/6] platform/x86: Add intel_skl_int3472 driver
+Message-ID: <YDTuldAG9FB8+RAd@smile.fi.intel.com>
+References: <20210222130735.1313443-1-djrscally@gmail.com>
+ <20210222130735.1313443-6-djrscally@gmail.com>
+ <CAHp75Vd2Dc2Poq7VNRXRT-0VjkYdEFY2WKpz8fWpAQViQRO4jA@mail.gmail.com>
+ <534849f6-c7b5-19b0-a09f-cd410cde93bd@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210127103357.5045-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfKR18NfCtNTh2IebkSTudHoupJrjs8VOfJOF0Z3JLTiColv51DxZ8YAvJGv1w9wJqios3z5H6MotvoHhHMT+UJnj70vDYYbaT0GTm1gC9tEpsFeq5l27
- hufbUMuV245wzUpQXHGwCY0gohgtJhK0K/VxEzbUcTJi4DnBOq4SfD4wtGhV3bELmiwmwjeLjKgN6+Eh+l0K1RahuV6HKl6UX1K1VU6bbqi0CcDl/KU1JJ5u
- rdQnkNLnbohvBBhg3BIjDsghIHYZYEFV7YOL/BAV+IInTl8Ez5vQPJfEJ5GRuvb+FZFy0RTNtcD1qKUnl9YX58XCZkp2wuJMH1cHlZKd4f4=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <534849f6-c7b5-19b0-a09f-cd410cde93bd@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+On Mon, Feb 22, 2021 at 10:35:44PM +0000, Daniel Scally wrote:
+> On 22/02/2021 14:58, Andy Shevchenko wrote:
+> > On Mon, Feb 22, 2021 at 3:12 PM Daniel Scally <djrscally@gmail.com> wrote:
 
-On 27/01/2021 11:33, Wolfram Sang wrote:
-> The open coded version differs from the one in the core in one way: the
-> buffer will be always copied back, even when the transfer failed. Be
-> more robust: use the block read from the I2C core and propagate a
-> potential errno further to the sanity checks.
+...
+
+> >> +       if (obj->buffer.length > sizeof(*cldb)) {
+> >> +               dev_err(&adev->dev, "The CLDB buffer is too large\n");
+> >> +               ret = -EINVAL;
+> > ENOSPC? ENOMEM?
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> I still think EINVAL actually, as in this case the problem isn't that
+> space couldn't be allocated but that the buffer in the SSDB is larger
+> than I expect it to be, which means the definition of it has changed /
+> this device isn't actually supported.
 
-This looks good.
+OK!
 
-If you want to merge this, then you can add my:
+...
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-
-If you want me to take it, then just let me know and I'll queue it up for 5.13.
-
-Regards,
-
-	Hans
-
-> ---
+> >> +       if (!IS_ERR_OR_NULL(sensor_config) && sensor_config->function_maps) {
+> > Hmm...
+> >
+> > Would
+> >
+> > if (IS_ERR_OR_NULL(sensor_config))
+> >   return 0;
+> >
+> > if (!_maps)
+> >   return 0;
+> >
+> > with respective comments working here?
 > 
-> Changes since v1:
-> * respect 'err' in more code paths
-> * updated comment
+> No, because the absence of either sensor_config or
+> sensor_config->function_maps is not a failure mode. We only need to
+> provide sensor_configs for some platforms, and function_maps for even
+> fewer. So if that check is false, the rest of the function should still
+> execute.
+
+I see, thanks for elaboration.
+
+...
+
+> >> +       if (ares->type != ACPI_RESOURCE_TYPE_GPIO ||
+> >> +           ares->data.gpio.connection_type != ACPI_RESOURCE_GPIO_TYPE_IO)
+> >> +               return 1; /* Deliberately positive so parsing continues */
+> > I don't like to lose control over ACPI_RESOURCE_TYPE_GPIO, i.e.
+> > spreading it over kernel code (yes, I know about one existing TS
+> > case).
+> > Consider to provide a helper in analogue to acpi_gpio_get_irq_resource().
 > 
->  drivers/media/i2c/adv7511-v4l2.c | 58 ++++++++++++++------------------
->  1 file changed, 26 insertions(+), 32 deletions(-)
+> Sure, but I probably name it acpi_gpio_is_io_resource() - a function
+> named "get" which returns a bool seems a bit funny to me.
+
+But don't you need the resource itself?
+
+You may extract and check resource at the same time as
+acpi_gpio_get_irq_resource() does.
+
+...
+
+> >> +       struct int3472_discrete_device *int3472 = platform_get_drvdata(pdev);
+> >> +       if (int3472->gpios.dev_id)
+> >> +               gpiod_remove_lookup_table(&int3472->gpios);
+> > gpiod_remove_lookup_table() is now NULL-aware.
+> > But in any case I guess you don't need the above check.
 > 
-> diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
-> index a3161d709015..9183003ae22d 100644
-> --- a/drivers/media/i2c/adv7511-v4l2.c
-> +++ b/drivers/media/i2c/adv7511-v4l2.c
-> @@ -214,36 +214,25 @@ static inline void adv7511_wr_and_or(struct v4l2_subdev *sd, u8 reg, u8 clr_mask
->  	adv7511_wr(sd, reg, (adv7511_rd(sd, reg) & clr_mask) | val_mask);
->  }
->  
-> -static int adv_smbus_read_i2c_block_data(struct i2c_client *client,
-> -					 u8 command, unsigned length, u8 *values)
-> -{
-> -	union i2c_smbus_data data;
-> -	int ret;
-> -
-> -	if (length > I2C_SMBUS_BLOCK_MAX)
-> -		length = I2C_SMBUS_BLOCK_MAX;
-> -	data.block[0] = length;
-> -
-> -	ret = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-> -			     I2C_SMBUS_READ, command,
-> -			     I2C_SMBUS_I2C_BLOCK_DATA, &data);
-> -	memcpy(values, data.block + 1, length);
-> -	return ret;
-> -}
-> -
-> -static void adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
-> +static int adv7511_edid_rd(struct v4l2_subdev *sd, uint16_t len, uint8_t *buf)
->  {
->  	struct adv7511_state *state = get_adv7511_state(sd);
->  	int i;
-> -	int err = 0;
->  
->  	v4l2_dbg(1, debug, sd, "%s:\n", __func__);
->  
-> -	for (i = 0; !err && i < len; i += I2C_SMBUS_BLOCK_MAX)
-> -		err = adv_smbus_read_i2c_block_data(state->i2c_edid, i,
-> +	for (i = 0; i < len; i += I2C_SMBUS_BLOCK_MAX) {
-> +		s32 ret;
-> +
-> +		ret = i2c_smbus_read_i2c_block_data(state->i2c_edid, i,
->  						    I2C_SMBUS_BLOCK_MAX, buf + i);
-> -	if (err)
-> -		v4l2_err(sd, "%s: i2c read error\n", __func__);
-> +		if (ret < 0) {
-> +			v4l2_err(sd, "%s: i2c read error\n", __func__);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
->  }
->  
->  static inline int adv7511_cec_read(struct v4l2_subdev *sd, u8 reg)
-> @@ -1668,22 +1657,27 @@ static bool adv7511_check_edid_status(struct v4l2_subdev *sd)
->  	if (edidRdy & MASK_ADV7511_EDID_RDY) {
->  		int segment = adv7511_rd(sd, 0xc4);
->  		struct adv7511_edid_detect ed;
-> +		int err;
->  
->  		if (segment >= EDID_MAX_SEGM) {
->  			v4l2_err(sd, "edid segment number too big\n");
->  			return false;
->  		}
->  		v4l2_dbg(1, debug, sd, "%s: got segment %d\n", __func__, segment);
-> -		adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
-> -		adv7511_dbg_dump_edid(2, debug, sd, segment, &state->edid.data[segment * 256]);
-> -		if (segment == 0) {
-> -			state->edid.blocks = state->edid.data[0x7e] + 1;
-> -			v4l2_dbg(1, debug, sd, "%s: %d blocks in total\n", __func__, state->edid.blocks);
-> +		err = adv7511_edid_rd(sd, 256, &state->edid.data[segment * 256]);
-> +		if (!err) {
-> +			adv7511_dbg_dump_edid(2, debug, sd, segment, &state->edid.data[segment * 256]);
-> +			if (segment == 0) {
-> +				state->edid.blocks = state->edid.data[0x7e] + 1;
-> +				v4l2_dbg(1, debug, sd, "%s: %d blocks in total\n",
-> +					 __func__, state->edid.blocks);
-> +			}
->  		}
-> -		if (!edid_verify_crc(sd, segment) ||
-> -		    !edid_verify_header(sd, segment)) {
-> -			/* edid crc error, force reread of edid segment */
-> -			v4l2_err(sd, "%s: edid crc or header error\n", __func__);
-> +
-> +		if (err || !edid_verify_crc(sd, segment) || !edid_verify_header(sd, segment)) {
-> +			/* Couldn't read EDID or EDID is invalid. Force retry! */
-> +			if (!err)
-> +				v4l2_err(sd, "%s: edid crc or header error\n", __func__);
->  			state->have_monitor = false;
->  			adv7511_s_power(sd, false);
->  			adv7511_s_power(sd, true);
-> 
+> Sorry; forgot to call out that I didn't follow that suggestion;
+> int3472->gpios is a _struct_ rather than a pointer, so &int3472->gpios
+> won't be NULL, even if I haven't filled anything in to there yet because
+> it failed before it got to that point. So, not sure that it quite works
+> there.
+
+I think if you initialize the ->list member you can remove without check.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
