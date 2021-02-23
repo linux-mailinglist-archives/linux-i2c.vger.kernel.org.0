@@ -2,99 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5312322C04
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Feb 2021 15:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA63322F8F
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Feb 2021 18:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbhBWOPT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Feb 2021 09:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbhBWOPT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Feb 2021 09:15:19 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAA2C06174A;
-        Tue, 23 Feb 2021 06:14:38 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id g20so9914076plo.2;
-        Tue, 23 Feb 2021 06:14:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NAz5oGVYcUWKWj7ilIWYVUpvhPjHG2laaguLjZqRP8o=;
-        b=cW/jOvMCKFQNYCq1j9v30T1KmflQyKkOVNBaIhjMLQ2FuLE5mIOvfEzb9iWvhabInL
-         uVCstuo4vjdgCZbn2RuSdKKmpzbJb68U9o6gIPYVABWjOJcG/ckPXO0Ej5i1K1z6zpBR
-         SVasaDOe32gqzWtJexnI3+P5/sjuIZNakjayOJ94n9zTljy353qMcXZCLV0RC4YhERds
-         LXebOSOeG26/0WO07oVoj94zAUI7FrtbXFriIulENxwG+YjKcedMaV+t6Pzi0/ja6Aw/
-         VgCS0PFg8o/IXlT/xe0aAa5cpHBTThF8N+tlbaaXOZM6KKSMKhMjZLjel/xHHtu8onpO
-         KC5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NAz5oGVYcUWKWj7ilIWYVUpvhPjHG2laaguLjZqRP8o=;
-        b=bB2BKG6CFT+AD4kG0NDQQr3W8M9kEg9E/ZCxEmjyUajvg/Eyc7zDwAdWA2Jo+ozCPG
-         pdAbd4ypBfGSbPOJsDO8Kt3Ojt7Rkda0AIyAHq/N5X1iyWCg7EZxJLUXsNusb5n8EII8
-         eTBF66iVbidRdSHjDHZQecDLgI34tk92u6GPy4OEOa3HOMax8sB2akqOBawwDDE98IkK
-         B5W6JtB2xNOXoWziMxM/FosG7FSddzD1AJJpNKhTSaw8cbqxTutREgSTGwlCi4JvT8z4
-         EeORZqmNAiviOlZHYWd/CA6xe7kp1fDHLy7KgwkJuNqmGsDVGBK9f3IoVFxTZSDI9C52
-         iBzA==
-X-Gm-Message-State: AOAM5306fyvoQAkDKzxWPt0LcDkx2pmdeo0XllJIaglEHWereFtagcZM
-        mAUjD1/VZwf2KTMUg2WJlPI=
-X-Google-Smtp-Source: ABdhPJwpDlSLX1F3x2EWuFTajfJwbY6ANFjv4aE/YYdaLn/W+WR+mid7xsWJE8V0pQOt9GEUQodqLg==
-X-Received: by 2002:a17:90b:1494:: with SMTP id js20mr11740149pjb.224.1614089678426;
-        Tue, 23 Feb 2021 06:14:38 -0800 (PST)
-Received: from localhost (89.208.244.53.16clouds.com. [89.208.244.53])
-        by smtp.gmail.com with ESMTPSA id 187sm15015544pfd.6.2021.02.23.06.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Feb 2021 06:14:37 -0800 (PST)
-Date:   Tue, 23 Feb 2021 22:14:35 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Robert Richter <rric@kernel.org>
-Cc:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        bhelgaas@google.com, wsa@kernel.org, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] PCI: Introduce pcim_alloc_irq_vectors()
-Message-ID: <20210223141435.GA912403@nuc8i5>
-References: <20210218150458.798347-1-zhengdejin5@gmail.com>
- <20210218150458.798347-2-zhengdejin5@gmail.com>
- <YC/NxfsQn2RKkrp8@rric.localdomain>
- <20210219164649.GA814637@nuc8i5>
- <YDONyMSHO9FDeY69@rric.localdomain>
- <20210222151415.GA896979@nuc8i5>
- <YDS2rkJu7PTJJiZr@rric.localdomain>
+        id S233686AbhBWRY2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Feb 2021 12:24:28 -0500
+Received: from mga03.intel.com ([134.134.136.65]:64882 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233651AbhBWRY2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Feb 2021 12:24:28 -0500
+IronPort-SDR: u9sea2y2pB4UFjpG9226jraQEMfASXlrw+WYdgpkCRnRNqmpJBR8F9/KB1PMZYgwBorO9W940S
+ GIRxYghLhdPQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9904"; a="184936238"
+X-IronPort-AV: E=Sophos;i="5.81,200,1610438400"; 
+   d="scan'208";a="184936238"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 09:22:42 -0800
+IronPort-SDR: We4PIJLG3tPt/lR5PzeWuGUQc6CDC/uZ/bcAwfH/SrB0L5Ut8LwsI6RrxAUpS2tQYmjdF5EUg2
+ 7sxix/ss6U3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,200,1610438400"; 
+   d="scan'208";a="596791789"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Feb 2021 09:22:40 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id F375230E; Tue, 23 Feb 2021 19:22:38 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v1 1/1] i2c: cht-wc: Use fwnode for the controller and IRQ domain
+Date:   Tue, 23 Feb 2021 19:22:31 +0200
+Message-Id: <20210223172231.2224-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YDS2rkJu7PTJJiZr@rric.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 09:02:54AM +0100, Robert Richter wrote:
-> On 22.02.21 23:14:15, Dejin Zheng wrote:
-> > On Mon, Feb 22, 2021 at 11:56:08AM +0100, Robert Richter wrote:
-> > > On 20.02.21 00:46:49, Dejin Zheng wrote:
-> > > > > On 18.02.21 23:04:55, Dejin Zheng wrote:
-> > > 
-> > > > > > +	if (!dr || !dr->enabled)
-> > > > here checks whether the pci device is enabled.
-> > > 
-> > > What is the purpose of this? The device "is_managed" or not.
-> > >
-> > The device is managed or not by check whether "dr" is NULL. And
-> > check the "dr->enabled" is for the PCI device enable. I think it
-> > may not make sense to apply for irq vectors when PCI device is not
-> > enabled.
-> 
-> I don't see how a disabled device affects in any way the release of
-> the irq vectors during device removal. dr is always non-null in case
-> the device is managed, a check isn't needed for that.
->
-Yes, the disabled device does not affect release irq vectors, But
-the disabled device affects apply for irq vectors, It is wrong to apply
-for the irq vectors when the device is not enabled. Add this check can
-facilitate developers to find problems as soon as possible.
+It's better to describe the I²C controller and associated IRQ domain with
+fwnode, so they will find their place in the hierarchy in sysfs and also
+make easier to debug.
 
-> -Robert
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+
+Hans, unfortunately I have no device at hand with INT34D3. This is only compile
+tested in that sense. Also I would like to hear if you like the idea in general.
+
+ drivers/i2c/busses/i2c-cht-wc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-cht-wc.c b/drivers/i2c/busses/i2c-cht-wc.c
+index f80d79e973cd..dbf55842b0dc 100644
+--- a/drivers/i2c/busses/i2c-cht-wc.c
++++ b/drivers/i2c/busses/i2c-cht-wc.c
+@@ -303,6 +303,7 @@ static struct bq24190_platform_data bq24190_pdata = {
+ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct intel_soc_pmic *pmic = dev_get_drvdata(pdev->dev.parent);
++	struct fwnode_handle *fwnode = dev_fwnode(&pdev->dev);
+ 	struct cht_wc_i2c_adap *adap;
+ 	struct i2c_board_info board_info = {
+ 		.type = "bq24190",
+@@ -333,6 +334,7 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
+ 	strlcpy(adap->adapter.name, "PMIC I2C Adapter",
+ 		sizeof(adap->adapter.name));
+ 	adap->adapter.dev.parent = &pdev->dev;
++	set_primary_fwnode(&adap->adapter.dev, fwnode);
+ 
+ 	/* Clear and activate i2c-adapter interrupts, disable client IRQ */
+ 	adap->old_irq_mask = adap->irq_mask = ~CHT_WC_EXTCHGRIRQ_ADAP_IRQMASK;
+@@ -350,8 +352,8 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
+ 		return ret;
+ 
+ 	/* Alloc and register client IRQ */
+-	adap->irq_domain = irq_domain_add_linear(pdev->dev.of_node, 1,
+-						 &irq_domain_simple_ops, NULL);
++	adap->irq_domain = irq_domain_create_linear(fwnode, 1,
++						    &irq_domain_simple_ops, NULL);
+ 	if (!adap->irq_domain)
+ 		return -ENOMEM;
+ 
+-- 
+2.30.0
+
