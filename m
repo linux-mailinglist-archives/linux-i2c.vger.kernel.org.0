@@ -2,118 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3A0323A6C
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Feb 2021 11:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD32323CF1
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Feb 2021 14:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234771AbhBXKVK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 Feb 2021 05:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbhBXKVG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Feb 2021 05:21:06 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0C9C06174A;
-        Wed, 24 Feb 2021 02:20:25 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id v1so1325509wrd.6;
-        Wed, 24 Feb 2021 02:20:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=+ynFYq7eMGJx1ln+zWV+b0o9T/BW44U3HpTLuEIXEk4=;
-        b=gVKwmps2YnnodY5iuPpamwE87ADKZx3WagV/HVFdp48iAk8XKWQKGiE4GnZUjCIbA1
-         ajN2Kgjt/0T8bUxPm/xy3wqPOlgpagzfQoXrDWRYFlkddJH9yCMMfrPxdt7+cr3CO1yN
-         WxSCjeK9sIl3dk1LcxsaQuL2p+D8MxDNL2LjvjH1DwKoxFQ7LYfmkbYH8aStnJNLNJHf
-         M8bzLOToMI6fdSkCTRVeKHSg8ZDAiS+HjbA9NptzWYvnKvrAj2Qgn2b8OqBqFdxU4UKU
-         qqrcYhVyzvgsMUtKiigu8FcPhByLH9+lgpPC5BN00J6XtJ15JRhPhpXrKkpRTWxa2R6q
-         iW6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=+ynFYq7eMGJx1ln+zWV+b0o9T/BW44U3HpTLuEIXEk4=;
-        b=YluFOCGeEHGAuOF8Ax3rkwPnGrI43HIDUI9lJWtt9kTaXauXL1iQF3B9Vh0pDSLc54
-         vcujbN4J3UxUxIobnZlJzQ6lUDkGNE395HmdLzKMK7Ent75S4cICKqguaO6AM8KYbuk9
-         gkkcJnoxkUlLQdOC5GSYaiot+AudIdPtefpb3HXekfGlkUOm/1gQhH35/3a8XzVEX47O
-         iUvZZjTv0fnMmQ6PujDUlB1RhsgNoBXz4685SR57UcNdMZo5nb9hG+aRQVL6MSNNuNt4
-         JsdiHca8F4kesm72MZOF6Zg+JCv6S73MaF1Lk5EygddKa4DVvTuCcauC/JfeIlNp8kA6
-         ykgw==
-X-Gm-Message-State: AOAM533X8Uo2sQtlBItoED8/bjm4/IRKUReCBedTK44/3s6Myll4gxhA
-        bSpvoiemsAmZejCtM75byK0=
-X-Google-Smtp-Source: ABdhPJxyz7gcbh1gakgOpaIkF6ifM7VuSjfCg5KjKbVjLf5UVR1vPE/QJelLB3m3OXr8qA8tTfbJoA==
-X-Received: by 2002:adf:bc01:: with SMTP id s1mr1122726wrg.240.1614162023821;
-        Wed, 24 Feb 2021 02:20:23 -0800 (PST)
-Received: from [192.168.1.211] ([2.31.224.123])
-        by smtp.gmail.com with ESMTPSA id o129sm2117043wme.21.2021.02.24.02.20.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Feb 2021 02:20:23 -0800 (PST)
-Subject: Re: [PATCH v3 5/6] platform/x86: Add intel_skl_int3472 driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        andy.shevchenko@linux.intel.com,
-        kieran.bingham+renesas@ideasonboard.com,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>, me@fabwu.ch,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        devel@acpica.org
-References: <20210222130735.1313443-1-djrscally@gmail.com>
- <20210222130735.1313443-6-djrscally@gmail.com>
- <YDVfyt2d2Nhsa7l3@pendragon.ideasonboard.com>
- <1360fc85-3f39-1dce-eee9-c4e76c2087ae@gmail.com>
- <YDYmv0PpSndAlnDC@pendragon.ideasonboard.com>
- <CAHp75VcKUjnwh4fi-mofooBuBYiqXjXOspU4twKg6-Lfvzf=QA@mail.gmail.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <fff9d990-53b0-0bdb-5127-5d118bfd7e13@gmail.com>
-Date:   Wed, 24 Feb 2021 10:20:22 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231320AbhBXM7g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 Feb 2021 07:59:36 -0500
+Received: from mga18.intel.com ([134.134.136.126]:12671 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235266AbhBXMw5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 24 Feb 2021 07:52:57 -0500
+IronPort-SDR: 4eawBURkoU4OOMLMMXMVEDhXqOVgvGWhLiLkYZhaNahWzE4stpt5Pt/U1nNRkTf13bPcRf72j4
+ MjcK5sNtoAvg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9904"; a="172809157"
+X-IronPort-AV: E=Sophos;i="5.81,203,1610438400"; 
+   d="scan'208";a="172809157"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2021 04:51:11 -0800
+IronPort-SDR: NVhkLXqSmRpTe1KT9ucg9QFiHu/DzGjpEJ0jcAUrAQ0o2WQqR8s0tUDcL5L8XZpveRw1xi3l9F
+ I7IY6T+e61Qg==
+X-IronPort-AV: E=Sophos;i="5.81,203,1610438400"; 
+   d="scan'208";a="499567378"
+Received: from unknown (HELO smile) ([10.237.68.40])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2021 04:51:10 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lEtdD-007lqb-Ky; Wed, 24 Feb 2021 14:51:07 +0200
+Date:   Wed, 24 Feb 2021 14:51:07 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] i2c: cht-wc: Use fwnode for the controller and
+ IRQ domain
+Message-ID: <YDZLuzNivBP4HcPd@smile.fi.intel.com>
+References: <20210223172231.2224-1-andriy.shevchenko@linux.intel.com>
+ <fea7ce9a-01a9-cab8-8675-be5c44cb8a27@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VcKUjnwh4fi-mofooBuBYiqXjXOspU4twKg6-Lfvzf=QA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fea7ce9a-01a9-cab8-8675-be5c44cb8a27@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy, Laurent
+On Tue, Feb 23, 2021 at 08:25:35PM +0100, Hans de Goede wrote:
+> On 2/23/21 6:22 PM, Andy Shevchenko wrote:
+> > It's better to describe the I²C controller and associated IRQ domain with
+> > fwnode, so they will find their place in the hierarchy in sysfs and also
+> > make easier to debug.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> > 
+> > Hans, unfortunately I have no device at hand with INT34D3. This is only compile
+> > tested in that sense. Also I would like to hear if you like the idea in general.
+> > 
+> >  drivers/i2c/busses/i2c-cht-wc.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-cht-wc.c b/drivers/i2c/busses/i2c-cht-wc.c
+> > index f80d79e973cd..dbf55842b0dc 100644
+> > --- a/drivers/i2c/busses/i2c-cht-wc.c
+> > +++ b/drivers/i2c/busses/i2c-cht-wc.c
+> > @@ -303,6 +303,7 @@ static struct bq24190_platform_data bq24190_pdata = {
+> >  static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
+> >  {
+> >  	struct intel_soc_pmic *pmic = dev_get_drvdata(pdev->dev.parent);
+> > +	struct fwnode_handle *fwnode = dev_fwnode(&pdev->dev);
+> 
+> So this will point to the ACPi-companion fwnode of the CHT Whiskey Cove PMIC
+> controller.
 
-On 24/02/2021 10:18, Andy Shevchenko wrote:
-> On Wed, Feb 24, 2021 at 12:16 PM Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com> wrote:
->> On Tue, Feb 23, 2021 at 10:36:18PM +0000, Daniel Scally wrote:
->>> On 23/02/2021 20:04, Laurent Pinchart wrote:
-> ...
->
->>>>> +  get_device(&int3472->sensor->dev);
->>>> I see no corresponding put_device(), am I missing something ? I'm also
->>>> not sure why this is needed.
->>> The put is acpi_dev_put() in skl_int3472_discrete_remove(); there seems
->>> to be no acpi_dev_get() for some reason. We use the sensor acpi_device
->>> to get the clock frequency, and to fetch the sensor module string, so I
->>> thought it ought to hold a reference on those grounds.
->> Shouldn't acpi_dev_get_dependent_dev() increase the reference count
->> then, instead of doing it manually here ?
-> That's what I expected as well.
-> We have plenty of acpi_dev_get_*() and they do increase the reference
-> counter one way or the other.
->
-Okedokey, I'll move the get() to that function and drop it from here.
+Right.
+
+> >  	struct cht_wc_i2c_adap *adap;
+> >  	struct i2c_board_info board_info = {
+> >  		.type = "bq24190",
+> > @@ -333,6 +334,7 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
+> >  	strlcpy(adap->adapter.name, "PMIC I2C Adapter",
+> >  		sizeof(adap->adapter.name));
+> >  	adap->adapter.dev.parent = &pdev->dev;
+> > +	set_primary_fwnode(&adap->adapter.dev, fwnode);
+> 
+> So now we have the main PMIC device i2c-client, the platform-device instantiated
+> for the MFD-cell for the PMIC's builtin I2C-controller; and the device instantiated
+> for the adapter-device all 3 share the same ACPI-companion fwnode.
+
+Okay, this step in this patch maybe not needed (or should be a separate change,
+but I don't see clearly what would be the benefit out of it).
+
+> >  	/* Clear and activate i2c-adapter interrupts, disable client IRQ */
+> >  	adap->old_irq_mask = adap->irq_mask = ~CHT_WC_EXTCHGRIRQ_ADAP_IRQMASK;
+> > @@ -350,8 +352,8 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
+> >  		return ret;
+> >  
+> >  	/* Alloc and register client IRQ */
+> > -	adap->irq_domain = irq_domain_add_linear(pdev->dev.of_node, 1,
+> > -						 &irq_domain_simple_ops, NULL);
+> > +	adap->irq_domain = irq_domain_create_linear(fwnode, 1,
+> > +						    &irq_domain_simple_ops, NULL);
+> 
+> Hmm, not sure this is right, admittedly the old code looks weird too, but now we
+> are creating a second irq_domain at the same level as the irq_domain created for
+> the IRQ-chip part of the PMIC. But this is really more of a child-domain of just
+> the I2C-controller MFD-cell. The IRQ-CHIP part of the PMIC has a single IRQ for the
+> I2C controller which gets raised both on i2c-transfer completions and when the
+> pin on the PMIC which is reserved as input for the IRQ coming out of the charger-chip
+> gets triggered.
+> 
+> IOW we have this:
+> 
+> 
+>                PMIC
+>                  |
+>     ------------------------------
+>     |       |        |           |
+>    IRQ1   IRQ2      IRQ3       I2C-IRQ
+>                                  |
+>                    ----------------------------------
+>                    |        |         |             |
+>                  READIRQ   WRIRQ    NACKIRQ     CLIENT-IRQ
+> 
+> Where READIRQ, WRIRQ and NACKIRQ are directly consumed
+> and the CLIENT-IRQ is being represented as a single IRQ on
+> a new irqchip so that we can pass it along to the i2c-driver
+> for the charger-chip which is connected to the Whiskey Cove's
+> builtin I2C controller.
+> 
+> But doing as you suggest would model the IRQs as:
+> 
+>                PMIC
+>                  |
+>     --------------------------------------------------
+>     |       |        |           |                    |
+>    IRQ1   IRQ2      IRQ3       I2C-IRQ           CLIENT-IRQ
+> 
+> Which is not the same really. I guess it is better then what we
+> have though ?
+
+Hmm... There should not be difference in the hierarchy. add_linear ==
+create_linear. The propagation of *device* (not an IRQ) fwnode is just
+convenient way to have IRQ domain be named (instead of 'unknown-N' or so).
+Maybe I have read __irq_domain_add() code wrongly.
+
+Nevertheless, thinking more about it, why we don't add an IRQ chip via regmap
+IRQ API?
+
+> Note I can test any changes made here, but I'm not 100% convinced that
+> the current version of this patch is correct.
+
+If we settle on the idea first. I'm (slowly) looking forward to check another
+CherryTrail device we have at the lab, but we lack of some (power) equipment
+right now to setup it properly. I hope it may have the Whiskey Cove PMIC there.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
