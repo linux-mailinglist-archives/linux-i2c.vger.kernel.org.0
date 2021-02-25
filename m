@@ -2,108 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1E8324D0D
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Feb 2021 10:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5422324D35
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Feb 2021 10:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbhBYJkX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Feb 2021 04:40:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51450 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234250AbhBYJiv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 25 Feb 2021 04:38:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C513064EBA;
-        Thu, 25 Feb 2021 09:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614245890;
-        bh=5buN3EC107S76JKghAcicRI28n7jlFz14jT62JQaKPU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=euBaOkbadcvUXmfC2VxZUjDjRqbhLRRIGr9iOoFZJ2l82JgzRCpRJBInxlw/tWUJd
-         TTBSPZMLXSAccC+6x2QJmEhQNrCwFx+gvBeZBvNHgMUKRwP8OuPTGerA3pYT0LdxBA
-         kRJCHjgNqA9y/NKEsCAxUbkq86lQ8UJOEHQcS3yHCICalSLAGdqWxdNIzGR5Zrbcbj
-         C5Jf8/8x9yHMliTa7nd0gIsBtmcx8mfv144Vh+jOOjzsiz5MB8fwCJNqYctgvvQ6yj
-         q9/R5rlVpQ6OFSY6IyZY/z/okNFF8w8aKrdzmT49zjKr/AGYdHd6jn1E9Gyk2rJHNA
-         +NPUW4HmrHUrg==
-Date:   Thu, 25 Feb 2021 10:38:01 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Nikolai Kostrigin <nickel@basealt.ru>
-Cc:     linux-i2c@vger.kernel.org,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: Need some help on "Input: elantech - add LEN2146 to SMBus
- blacklist for ThinkPad L13 Gen2"
-Message-ID: <20210225093801.GA1008@ninjato>
-References: <0d1eaadd-5350-63a4-fe6d-f8f357c49504@basealt.ru>
- <CAO-hwJLmByHHULhJF60qOUAqprkqZpSvVh-GFXLZ_ndL0guvPQ@mail.gmail.com>
- <e1fd99ae-8e46-0b21-1011-db73cd75523b@basealt.ru>
+        id S235087AbhBYJwG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Feb 2021 04:52:06 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:41783 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234521AbhBYJvw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Feb 2021 04:51:52 -0500
+Received: by mail-ot1-f42.google.com with SMTP id x9so741212otp.8;
+        Thu, 25 Feb 2021 01:51:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=udWaTMdB+jV7hdmJgJISIo6h7HtA2y/4OhXRlzEy98Q=;
+        b=Ghv3CSxMCXNNcKr52fw1B5OxQ9qdKk6X8XfV1DMzBghHdMu3MtauFLGafnYc4AmyWm
+         L5aE3a9xgT2Pb/QwffskMcrDoPYC4hGz5RLqOzqVny7mRHL+jkLwqNVAg1CQX2ITaXpW
+         VKNgX8bZzqKRhkcRf4M3DgPCZbWQOZuA9Yd0vgJWSng7kXHwKGzjiGCxXCYKlX3jQ2EE
+         muvYvQif8KNNZmvQxQPLDq4ev7lcFN5ZHIr59myQFJ2mrKq2Xtc1PNPrXpKnfOVxsNsA
+         lnxyyFmFfPeBs/ni/BYVbY6DFluMvU3Y/uda0aF8hyPoF+MbEauuAAZPNIlfxn9wWhXv
+         pk8Q==
+X-Gm-Message-State: AOAM530pW1KDSrF3NHkyUf3Hfp4Ti4u6dgOFGJ1QOEPUDXPelAQxitXd
+        4FIsP02OQyhf96+mCdI5qUimJ6SmJ/FBWfdKLvtr4zEG
+X-Google-Smtp-Source: ABdhPJwubBtu6W0oabTdApL+rVZqzkFCdRBoFdIuypeWHxup54OLF85hFgDC1ljHI/rcERkgC8sPJmRz7aFoKjPfjOE=
+X-Received: by 2002:a9d:6382:: with SMTP id w2mr1648590otk.145.1614246669619;
+ Thu, 25 Feb 2021 01:51:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Dxnq1zWXvFF0Q93v"
-Content-Disposition: inline
-In-Reply-To: <e1fd99ae-8e46-0b21-1011-db73cd75523b@basealt.ru>
+References: <20210212164541.8986-1-uli+renesas@fpond.eu>
+In-Reply-To: <20210212164541.8986-1-uli+renesas@fpond.eu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 25 Feb 2021 10:50:58 +0100
+Message-ID: <CAMuHMdVsAgOrf2=4Fud6SWy6T98F5aFvD5aGdiu646=7bLbUZw@mail.gmail.com>
+Subject: Re: [PATCH] i2c: rcar: implement atomic transfers
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Feb 12, 2021 at 5:45 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
+> Implements atomic transfers. Tested by rebooting an r8a7790 Lager board
+> after connecting the i2c-rcar controller to the PMIC in
+> arch/arm/boot/dts/r8a7790-lager.dts like so:
+>
+>                 compatible = "i2c-demux-pinctrl";
+>                 pinctrl-names = "default";
+>                 pinctrl-0 = <&pmic_irq_pins>;
+> -               i2c-parent = <&iic3>, <&i2c3>;
+> +               i2c-parent = <&i2c3>, <&iic3>;
+>                 i2c-bus-name = "i2c-pwr";
+>                 #address-cells = <1>;
+>                 #size-cells = <0>;
+>
+> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
 
---Dxnq1zWXvFF0Q93v
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+LGTM (IANIE = ... No I2C Expert), so
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Hi,
+Gr{oetje,eeting}s,
 
-> I had a preliminary discussion with Benjamin Tissoires and according to
-> our agreement I repost it for wider audience.
-> Blacklisting the device was decided to be a bad idea.
-> But actually I managed to get touchpad totally operational via SMBus
-> using a following hack:
->=20
-> providing a parameter to i2c_i801 driver:
->=20
-> modprobe i2c_i801 disable_features=3D0x2 (i.e. disable the block buffer).
+                        Geert
 
-So, from an I2C perspective, there are two things to mention here:
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-a) I am in the process of extending the I2C core to allow block
-transfers > 32 byte. This is a slow process, though, because we need to
-pay attention to not break userspace ABI. If this is done *and* the i801
-driver supports length > 32 bytes, too, then it would work natively. If
-the i801 can do this, this is a question for Jean Delvare.
-
-b) I don't know Elantech HW but there are devices out there which allow
-configuration for the block size. Something like a bit specifying if
-block transfers > 32 are allowed. Or the SMBus version to support. Block
-transfers > 32 are SMBus 3.0+ only. If your HW does not have that,
-disabling SMBus is an option, too. Disabling it in the i801 driver is
-too much of a hammer, I'd say.
-
-Hope this helps! Happy hacking,
-
-   Wolfram
-
-
---Dxnq1zWXvFF0Q93v
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmA3b/UACgkQFA3kzBSg
-KbZgIw/6Amdf7SNeFb/tzaL4tGkVQsJrbp9bEb04NSYN+KcVlsRlXGz4jV6Uup5s
-jyGQi3Nv64TdPTm0ASUnBEgvBsmniASxiCbLKpmTwpO6IfMp+U94SbeT0l2B5Ezu
-PFrxoRGyX1nnolfi1SL12SlyMJlxPjS2BXtE2ZOnoSGVi8UWTC9hvJ5lNVYIKTQ4
-EdBxhS78ptsrGxetlfao40+8pVFRWDSS7GtaXoNoUU5Ih71GVL4f5xWQYtKGWHJ4
-6TJjHQLHDhU1r978oqC36TTflQCnuwX1uShHqMIIz3cuqiQRbyHp9s8r1acGaKd0
-EtOVlLR0O3bgcdN/pFHzMxJKg6O+l4xQPdX6cD7KA6W8pNAtmRMXCSUvzZeVArO5
-dXL6j1uAtSPp55oc8zGjXtvnKDc1rvsNPtLOKlOK1JD6cMPwFZYfxpWVdjeiUpv5
-O9Kcf3ZW5w8CqSN5HDIU7rlJZUzYUNULGIvpNPMBp6CAcaQl7rray9QNqUM7iN4N
-oraCEkjtF/xa+65wGMpLSN1a03b7iGNTwVwxjNjPEXWT76ikjX6tZM4BXmRdMI/u
-FlpPTDWieZyEp+UEzm1a4HOxsnOQ2KpUW1YlEQk/FC3kRBBOn+DMaD21Mfz2uqCO
-m7oXTTNAI5w2AYfSvmLSqHrPV+ber09CV1T4i4wZUAqZuEU5X1o=
-=ZevR
------END PGP SIGNATURE-----
-
---Dxnq1zWXvFF0Q93v--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
