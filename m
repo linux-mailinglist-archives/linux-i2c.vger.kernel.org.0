@@ -2,60 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4286B3248E7
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Feb 2021 03:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3453324B2F
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Feb 2021 08:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbhBYCgV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 Feb 2021 21:36:21 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:39020 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234554AbhBYCgU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Feb 2021 21:36:20 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R671e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=zhangliguang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0UPUjdrG_1614220530;
-Received: from localhost(mailfrom:zhangliguang@linux.alibaba.com fp:SMTPD_---0UPUjdrG_1614220530)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 25 Feb 2021 10:35:37 +0800
-From:   Liguang Zhang <zhangliguang@linux.alibaba.com>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liguang Zhang <zhangliguang@linux.alibaba.com>
-Subject: [PATCH] i2c: designware: Get right data length
-Date:   Thu, 25 Feb 2021 10:35:28 +0800
-Message-Id: <20210225023528.121135-1-zhangliguang@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
+        id S233291AbhBYHYv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Feb 2021 02:24:51 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:34123 "EHLO mail.JVPinto.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229566AbhBYHYd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 25 Feb 2021 02:24:33 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Wed, 24 Feb 2021 23:20:13 -0800
+Received: from User (51.13.72.83) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Wed, 24 Feb 2021
+ 23:19:55 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Hello okay
+Date:   Thu, 25 Feb 2021 07:20:13 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <2bee6e9d04fe41d6afe289b4526d1e70@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-IC_DATA_CMD[11] indicates the first data byte received after the address
-phase for receive transfer in Master receiver or Slave receiver mode,
-this bit was set in some transfer flow. IC_DATA_CMD[7:0] contains the
-data to be transmitted or received on the I2C bus, so we should use the
-lower 8 bits to get the right data length.
+Hello,
 
-Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
----
- drivers/i2c/busses/i2c-designware-master.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index d6425ad6e6a3..c3cf76f6c607 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -432,7 +432,7 @@ i2c_dw_read(struct dw_i2c_dev *dev)
- 			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
- 			/* Ensure length byte is a valid value */
- 			if (flags & I2C_M_RECV_LEN &&
--			    tmp <= I2C_SMBUS_BLOCK_MAX && tmp > 0) {
-+			    (tmp & 0xff) <= I2C_SMBUS_BLOCK_MAX && tmp > 0) {
- 				len = i2c_dw_recv_len(dev, tmp);
- 			}
- 			*buf++ = tmp;
--- 
-2.19.1.6.gb485710b
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
+Regards,
+Ms. Reem.
