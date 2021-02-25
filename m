@@ -2,154 +2,217 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87453324B26
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Feb 2021 08:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0DA324CB9
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Feb 2021 10:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbhBYHV6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Feb 2021 02:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbhBYHV6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Feb 2021 02:21:58 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09928C061756
-        for <linux-i2c@vger.kernel.org>; Wed, 24 Feb 2021 23:21:17 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id j12so3002713pfj.12
-        for <linux-i2c@vger.kernel.org>; Wed, 24 Feb 2021 23:21:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=sUB9b8mLBADiFLajYbNzAcV1Flm8kvOKL0eDsmGOshw=;
-        b=rRxk3WXAnemwR8JSd7hgJ+KgPv/k+ig/DP9xx2/NLcKoaaoeKX1pxbb6hIEE386jJJ
-         PO48+Dg14MKVC6lLs/ofDX2rnvlLiA/aVqGj82xqxmNwENOmEvaz7BQQ/82oRM2MpRBP
-         Hp0c5j+YpMgsV24eMJFJX9TMfhWdtcCPfpFIkWp8Z1lohgC8m1SmCT0qh4zYDldUZeEY
-         TnylPwDFMED3Pm/M36PBg0t5saa8RuTO6yftzssmVtmumLuJCV1r3D7ei9iq/TeygPwD
-         jlhKF51ZMA7pj3M87TLoclEfbf7ulX0zA38a87Ef8OPMYNYepr4fNfrbLzr2X7RGiO9c
-         6EGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sUB9b8mLBADiFLajYbNzAcV1Flm8kvOKL0eDsmGOshw=;
-        b=gd8B0iWqG6Ipzju9oAzE0CZAqlWkwJescIwNZSXqp8sZOSwaADYOggjPwFmOG1Olus
-         1VxjyHRhuh8yWQaryAVEV2zcfsPhkxXivayTVs+UvlhR/yWXUB+XYB9M500hyIaEHUyO
-         KjAen6CqsuS7DQXjKHzt5Mdu1AzBlUhVNyaTlfYW5EK31GBzXaaZl0ttw8R6lX7NIMqm
-         I+8NXC4sJQxCcUAbtPiPgRh1EMb4/46xb9xBDB7Sww7lNKbLpZjRHgwyXW/IOzouDjks
-         8O8v9D3BxXJXiJTckGylXW/mr4gjzQAIKREZ+UAWR0xJnH0cu4z4pRcaSZ7elaGqPsU9
-         R4Jw==
-X-Gm-Message-State: AOAM530duF1fbhZQDUGelY9czjq9W6YxpM90VGi3aPU1HdwK2rtoyzUq
-        IEbVKXDMajpXYnojV6lXt9A0IA==
-X-Google-Smtp-Source: ABdhPJx8oZkU+Og5AYLAfH4LU1jGQ2+q2vOqBTUuB5deo/hQq51ChcRbg6JbCFV86TRA8rkaSKyNWg==
-X-Received: by 2002:aa7:9e04:0:b029:1ed:996a:abb4 with SMTP id y4-20020aa79e040000b02901ed996aabb4mr1950169pfq.5.1614237677470;
-        Wed, 24 Feb 2021 23:21:17 -0800 (PST)
-Received: from localhost ([122.172.59.240])
-        by smtp.gmail.com with ESMTPSA id k9sm4639497pji.8.2021.02.24.23.21.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Feb 2021 23:21:16 -0800 (PST)
-Date:   Thu, 25 Feb 2021 12:51:14 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
-        wsa+renesas@sang-engineering.com, wsa@kernel.org,
-        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
-        jdelvare@suse.de, Sergey.Semin@baikalelectronics.ru,
-        krzk@kernel.org, rppt@kernel.org, loic.poulain@linaro.org,
-        tali.perry1@gmail.com, bjorn.andersson@linaro.org,
-        shuo.a.liu@intel.com, conghui.chen@intel.com, yu1.wang@intel.com,
-        Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH v4] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210225072114.iwmtaexl3dkihlba@vireshk-i7>
-References: <7c5e44c534b3fd07b855af22d8d4b78bc44cd7a4.1602465440.git.jie.deng@intel.com>
+        id S236161AbhBYJYV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Feb 2021 04:24:21 -0500
+Received: from air.basealt.ru ([194.107.17.39]:45666 "EHLO air.basealt.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236283AbhBYJXq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 25 Feb 2021 04:23:46 -0500
+X-Greylist: delayed 571 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Feb 2021 04:23:45 EST
+Received: by air.basealt.ru (Postfix, from userid 490)
+        id 62BA358943A; Thu, 25 Feb 2021 09:13:33 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on
+        sa.local.altlinux.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.3 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        RP_MATCHES_RCVD autolearn=ham autolearn_force=no version=3.4.1
+Received: from nickel-ws.localdomain (obninsk.basealt.ru [217.15.195.17])
+        by air.basealt.ru (Postfix) with ESMTPSA id 2642C589435;
+        Thu, 25 Feb 2021 09:13:30 +0000 (UTC)
+From:   Nikolai Kostrigin <nickel@basealt.ru>
+Subject: Re: Need some help on "Input: elantech - add LEN2146 to SMBus
+ blacklist for ThinkPad L13 Gen2"
+Reply-To: nickel@basealt.ru
+To:     linux-i2c@vger.kernel.org,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+References: <0d1eaadd-5350-63a4-fe6d-f8f357c49504@basealt.ru>
+ <CAO-hwJLmByHHULhJF60qOUAqprkqZpSvVh-GFXLZ_ndL0guvPQ@mail.gmail.com>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Organization: BaseALT
+Message-ID: <e1fd99ae-8e46-0b21-1011-db73cd75523b@basealt.ru>
+Date:   Thu, 25 Feb 2021 12:13:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7c5e44c534b3fd07b855af22d8d4b78bc44cd7a4.1602465440.git.jie.deng@intel.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CAO-hwJLmByHHULhJF60qOUAqprkqZpSvVh-GFXLZ_ndL0guvPQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 12-10-20, 09:55, Jie Deng wrote:
-> Add an I2C bus driver for virtio para-virtualization.
-> 
-> The controller can be emulated by the backend driver in
-> any device model software by following the virtio protocol.
-> 
-> This driver communicates with the backend driver through a
-> virtio I2C message structure which includes following parts:
-> 
-> - Header: i2c_msg addr, flags, len.
-> - Data buffer: the pointer to the I2C msg data.
-> - Status: the processing result from the backend.
-> 
-> People may implement different backend drivers to emulate
-> different controllers according to their needs. A backend
-> example can be found in the device model of the open source
-> project ACRN. For more information, please refer to
-> https://projectacrn.org.
+Hi, List!
 
-> diff --git a/include/uapi/linux/virtio_i2c.h b/include/uapi/linux/virtio_i2c.h
-> new file mode 100644
-> index 0000000..7413e45
-> --- /dev/null
-> +++ b/include/uapi/linux/virtio_i2c.h
-> @@ -0,0 +1,31 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later OR BSD-3-Clause */
-> +/*
-> + * Definitions for virtio I2C Adpter
-> + *
-> + * Copyright (c) 2020 Intel Corporation. All rights reserved.
-> + */
-> +
-> +#ifndef _UAPI_LINUX_VIRTIO_I2C_H
-> +#define _UAPI_LINUX_VIRTIO_I2C_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/virtio_ids.h>
-> +#include <linux/virtio_config.h>
-> +
-> +/**
-> + * struct virtio_i2c_hdr - the virtio I2C message header structure
-> + * @addr: i2c_msg addr, the slave address
-> + * @flags: i2c_msg flags
-> + * @len: i2c_msg len
-> + */
-> +struct virtio_i2c_hdr {
-> +	__le16 addr;
-> +	__le16 flags;
-> +	__le16 len;
-> +};
+I'd like to draw attention of Elantech and Lenovo engineers to an issue
+of a non-working trackpoint.
+Earlier this month I've discovered that Lenovo Thinkpad L13 trackpoint
+doesn't work on Linux while touchpad does.
+Both use elan_i2c + i2c_i801 drivers. The issue is confirmed for 5.4 and
+5.10 kernels.
 
-Hi Jie,
+I had a preliminary discussion with Benjamin Tissoires and according to
+our agreement I repost it for wider audience.
+Blacklisting the device was decided to be a bad idea.
+But actually I managed to get touchpad totally operational via SMBus
+using a following hack:
 
-I am a bit confused about the header and the format in which data is being
-processed here. When I look at the specification present here:
+providing a parameter to i2c_i801 driver:
 
-https://lists.oasis-open.org/archives/virtio-comment/202009/msg00021.html
+modprobe i2c_i801 disable_features=0x2 (i.e. disable the block buffer).
 
-it talks about 
 
-struct virtio_i2c_out_hdr {
-        le16 addr;
-        le16 padding;
-        le32 flags;
-};
-struct virtio_i2c_in_hdr {
-        u8 status;
-};
+If any additional information is needed I'm ready to provide it.
+Some technical details on the issue we've managed to figure out  by now
+are here-in-after:
 
-struct virtio_i2c_req {
-        struct virtio_i2c_out_hdr out_hdr;
-        u8 write_buf [];
-        u8 read_buf [];
-        struct virtio_i2c_in_hdr in_hdr;
-};
-
-while what we have above is completely different. What am I missing ?
-
+19.02.2021 11:30, Benjamin Tissoires пишет:
+> Hi Nikolai,
+>
+> On Thu, Feb 18, 2021 at 6:05 PM Nikolai Kostrigin <nickel@basealt.ru> wrote:
+>> Hi, Benjamin!
+>>
+>> Sorry for bothering you directly.
+>>
+>> I have a question concerning the work on the issue we were discussing on
+>> linux-input mailing list.
+>>
+>> https://patchwork.kernel.org/project/linux-input/patch/20210208075205.3784059-1-nickel@altlinux.org/
+[...]
+>> With elantech-smbus protocol I was getting persistent messages in dmesg:
+>>
+>> elan_i2c [...] 0000:00:1f.4 failed to read report data: -71
+>>
+>> I managed to track -71 (-EPROTO) error code to drivers/i2c/busses/i2c-i801.c
+>>
+>> Actually I managed to get Touchpad totally operational via SMBus using a
+>> following hack:
+>> providing a parameter to i2c_i801 driver:
+>>
+>> modprobe i2c_i801 disable_features=0x2 (i.e. disable the block buffer).
+> ooh...
+>
+>> This makes code operating in other way and recover from illegal SMBus
+>> block read size (giving warning messages in dmesg though).
+>>
+>>
+>> [ 1270.105103] i801_smbus 0000:00:1f.4: Illegal SMBus block read size
+>> from i801_isr_byte_done 93
+>> [ 1270.119337] i801_smbus 0000:00:1f.4: Illegal SMBus block read size
+>> from i801_isr_byte_done 93
+>> [ 1270.133108] i801_smbus 0000:00:1f.4: Illegal SMBus block read size
+>> from i801_isr_byte_done 93   <- theese are from trackpoint
+>> [ 1270.167344] i801_smbus 0000:00:1f.4: Illegal SMBus block read size
+>> from i801_isr_byte_done 93
+>> [ 1399.869023] i801_smbus 0000:00:1f.4: SMBus block read size is 32
+>> [ 1399.882266] i801_smbus 0000:00:1f.4: SMBus block read size is 32
+>> [ 1399.896619] i801_smbus 0000:00:1f.4: SMBus block read size is 32
+>> [ 1399.909850] i801_smbus 0000:00:1f.4: SMBus block read size is 32
+>> <-  these are from touchpad
+>> [ 1399.924117] i801_smbus 0000:00:1f.4: SMBus block read size is 32
+>>
+>>
+>> We end up in this piece of code that has a built-in workaround and makes
+>> Trackpoint work with SMBus
+>>
+>> NB: pay attention to /* FIXME: Recover */ priv->len = I2C_SMBUS_BLOCK_MAX;
+>> All code snippets are from drivers/i2c/busses/i2c-i801.c here-in-after
+>> (with some debug messages of mine).
+>>
+>> static void i801_isr_byte_done(struct i801_priv *priv)
+>> {
+>>         if (priv->is_read) {
+>>                 /* For SMBus block reads, length is received with first
+>> byte */
+>>                 if (((priv->cmd & 0x1c) == I801_BLOCK_DATA) &&
+>>                     (priv->count == 0)) {
+>>                         priv->len = inb_p(SMBHSTDAT0(priv));
+>>                         if (priv->len < 1 || priv->len >
+>> I2C_SMBUS_BLOCK_MAX) {
+>>                                 dev_err(&priv->pci_dev->dev,
+>>                                         "Illegal SMBus block read size
+>> from i801_isr_byte_done %d\n",
+>>                                         priv->len);
+>>                                 /* FIXME: Recover */
+>>                                 priv->len = I2C_SMBUS_BLOCK_MAX;
+>>                         } else {
+>>                                 dev_dbg(&priv->pci_dev->dev,
+>>                                         "SMBus block read size is %d\n",
+>>                                         priv->len);
+>>                         }
+>>                         priv->data[-1] = priv->len;
+>>                 }
+>>
+>>
+>>
+>> But with no param passed to i2c_i801 driver we end up here due to len=93
+>> with our trackpoint:
+>>
+>> static int i801_block_transaction_by_block(struct i801_priv *priv,
+>>                                            union i2c_smbus_data *data,
+>>                                            char read_write, int command,
+>>                                            int hwpec)
+>> {
+>>
+>> [...]
+>> status = i801_transaction(priv, xact);
+>>         if (status)
+>>                 return status;
+>>
+>>         if (read_write == I2C_SMBUS_READ ||
+>>             command == I2C_SMBUS_BLOCK_PROC_CALL) {
+>>                 len = inb_p(SMBHSTDAT0(priv));
+>>                 if (len < 1 || len > I2C_SMBUS_BLOCK_MAX)
+>>                 {
+>>                         dev_err(&priv->pci_dev->dev,
+>>                                         "!!!! Going to send EPROTO from
+>> i801_block_transaction_by_block len= %d\n",
+>>                                         len);
+>>                         return -EPROTO;
+>>                 }
+>>                 data->block[0] = len;
+>>                 for (i = 0; i < len; i++)
+>>                         data->block[i + 1] = inb_p(SMBBLKDAT(priv));
+>>         }
+>>         return 0;
+>>
+>>
+>> so the question is: whether trackpoint has a buggy firmware which
+>> violates SMBus spec;
+>>                     or it is really an I2C device which was erroneously
+>> wired to SMBus i801 bridge...
+> Good question.
+> Couple of points:
+> - these touchpads can only be used in SMBus as they use the Host
+> Notify functionality
+> - maybe the trackpoint on it should be handled differently
+[...]
+>> Please help me to decide what way to choose while developing a workaround.
+>>
+>> Should I correct trackpoint features list to not mess with 32-byte
+>> buffer, or should I force it not to use SMBus at all and use only I2C
+>> (if this at all possible).
+> I think 2 types of people could help us there:
+> - the elan engineers to give us the 'how this trackpoint is supposed
+> to behave'. We can involve them in the public thread on linux-input
+> - the i2c folks on how we can add a special quirk for these trackpoints.
+[...]
+> Cheers,
+> Benjamin
+>
+>> --
+>> Best regards,
+>> Nikolai Kostrigin
+>> ALT Linux Team
+>>
 -- 
-viresh
+Best regards,
+Nikolai Kostrigin
+
