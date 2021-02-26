@@ -2,80 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D441432614B
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Feb 2021 11:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5412326161
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Feb 2021 11:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbhBZKcD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 Feb 2021 05:32:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47764 "EHLO mail.kernel.org"
+        id S231163AbhBZKgz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 Feb 2021 05:36:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48634 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230495AbhBZKb5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 26 Feb 2021 05:31:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 039B664EF3;
-        Fri, 26 Feb 2021 10:31:15 +0000 (UTC)
+        id S230209AbhBZKew (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 26 Feb 2021 05:34:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DBC2964EF3;
+        Fri, 26 Feb 2021 10:34:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614335476;
-        bh=rvI3gW6tejFx8m330zT52/NRf4E5vx8z0GaMSpp4ou4=;
+        s=k20201202; t=1614335650;
+        bh=SIuXvoyqUYnr8BUATfL804vOgzeqKEzaYbFmE6A/AGo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PKCqNpCL9GnbzoCjb0HAt6McQt5hQMs6/CN6xVhDeMyIrOub2XeGdkT+YsiWkdGLc
-         TUFNpfvtugA1CnmHqaj5gMftDuvl245lX/TuVRWRauDqRm9FBiZ7aIoRm0anFUmwKJ
-         4TRXWCbQrZU1PQW5POOTPCE7rZAFX4S8u16TDz8PFzDDWX5OB+MTwM5qqbujg6ta6Z
-         B/lfq7ut/ChNrweHgTxNk+lXKsYrIli+6cvbgsYS6x9zsnosE1CX6yk0r8yHBNDEX6
-         Xm7zFNXDEXIy7ZoU90TREkxvdDhCIG5RHLCtZgwzR8vQo3I23ZTz98pUCMfjywGln6
-         1eXTlCm5tY0bA==
-Date:   Fri, 26 Feb 2021 11:31:12 +0100
+        b=A77r2pQdIXPQLrVw961zech2JCWrRQEFPnXK1ileQ14G59V8oD4zrgn2NLW9kw4kB
+         hbvrmNVAiP1kALZVg/ClUDcZ4EC6HqTuCnnCn4SVh29X9my4hruff29O+ia0n7+1hW
+         qiewnpk9OrfMdSFJ9LJ5NWMYoH4bMjo/JvRCVhExp5RbZdltaSxdmT8u88G5WTxIHT
+         QmKXdtJrjjUiPaAah5o2jt/ucCbyhz1TlmeIE1pTCw5zxQuAGfEmAftPSWTI3/rIiV
+         Go5Q9YI0L2gzmKNaWu7UVtUNHVnLOLNe9x4KDLXcljSVemta8PrxV4/8vnxUJW2z9U
+         pAP4t7dzIrAhA==
+Date:   Fri, 26 Feb 2021 11:34:07 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-i2c@vger.kernel.org
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] Revert "i2c: i2c-qcom-geni: Add shutdown callback for
- i2c"
-Message-ID: <20210226103112.GE1014@ninjato>
-References: <20210224092313.2238-1-wsa@kernel.org>
+To:     =?utf-8?Q?M=C3=A5rten?= Lindahl <marten.lindahl@axis.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>, kernel@axis.com,
+        =?utf-8?Q?M=C3=A5rten?= Lindahl <martenli@axis.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: exynos5: Preserve high speed master code
+Message-ID: <20210226103407.GF1014@ninjato>
+References: <20210216222538.6427-1-marten.lindahl@axis.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="idY8LE8SD6/8DnRI"
+        protocol="application/pgp-signature"; boundary="GV0iVqYguTV4Q9ER"
 Content-Disposition: inline
-In-Reply-To: <20210224092313.2238-1-wsa@kernel.org>
+In-Reply-To: <20210216222538.6427-1-marten.lindahl@axis.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---idY8LE8SD6/8DnRI
-Content-Type: text/plain; charset=us-ascii
+--GV0iVqYguTV4Q9ER
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 24, 2021 at 10:23:13AM +0100, Wolfram Sang wrote:
-> This reverts commit e0371298ddc51761be257698554ea507ac8bf831. It was
-> accidently applied despite discussion still going on.
+On Tue, Feb 16, 2021 at 11:25:38PM +0100, M=C3=A5rten Lindahl wrote:
+> From: M=C3=A5rten Lindahl <martenli@axis.com>
 >=20
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> When the driver starts to send a message with the MASTER_ID field
+> set (high speed), the whole I2C_ADDR register is overwritten including
+> MASTER_ID as the SLV_ADDR_MAS field is set.
+>=20
+> This patch preserves already written fields in I2C_ADDR when writing
+> SLV_ADDR_MAS.
+>=20
+> Signed-off-by: M=C3=A5rten Lindahl <martenli@axis.com>
 
-Applied to for-current, thanks!
+Looks good. Is there a Fixes-tag we could apply?
 
 
---idY8LE8SD6/8DnRI
+--GV0iVqYguTV4Q9ER
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmA4zfAACgkQFA3kzBSg
-KbanIBAAsTrlkP9m0Hs7QoKF5EnNxCB2V2K29DWkQJLyFL+7ZCv3tHirnR4a8cfi
-Yk2WTL7PvS2AEtMe63JcvW/88L4pJE9g84+qjBVeFcV+PLbW4+vNyZZFUTRefQJw
-yte7LuZRE+QBRdiOXfrvpynwkAew5tUQS6KPV9oVCamA2BB2Lrn300hgt2I2qMlS
-RisJT9RDK7JziKKxX0ZdFeFug/1elREeB93QuUqHdqZcUEDx/83ZAKzQXcs7bo7J
-Xw+IulsW2OgvD16HdkI7t4+10OPzt33CTf39LEpZJhAv2kA6Nr74+e1s0kv9XwhD
-f/kelVQ/XbGtXbJ6PESOcrBM9nKrd6gwqBsE1En7h+Fblm0hENfuQHKOLrJ/jirj
-0o0bxNgmkYl/eSYbgW8jCEuyTCIf2sAnaQtAuqg4/nsfgN9YnAxXmEsvSh6O3JY3
-mIgzW7Unj7pUrHD/D6OA/qUUouzc9bqhjmejNRsovwdumUBWf/1sdCZKrlnhGVhT
-3oqWcia3oE0PJfeB3DJ1jmYAJkwrrnod/7B4e1v/iSCMrvbqZAdPnaJcr1Foo82D
-kPq/aV4vnRLYKu2VWJysBavijRBuijspikc3luXB2HT6rvRQR0EDelSlEoJsxFtV
-MCr/++GVV+sHiFzl5+S7Y2Iah4WrFRt/TrqZcoa7QubwzFc4L9k=
-=l7Ss
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmA4zp8ACgkQFA3kzBSg
+KbauHA/+NmyLBf76UbCWT/9RhQNRyWbVeXT6kyynoPUq9Y4RwM9nCnEK++X2gmyB
+8X64UrUUBImMu9zmWS4rKcqYP2GN7dxEyfxuhTALpcC5kvA3FvukIgmtT+8ZsZID
+ZkO/zF4z3jm8BMC0hHE8DHah60JQF4o2opItiFEaz7hN9na83dWzyF0OM15h6xh6
+k39IkoMgN2ZgzwahqTGA5ohUnakuD4qQdbGDudLyR3+J4KF53WhmTtX8xk3WTr6I
+FtWFxr0KjidHMed4tXYJt09vUacjpx4bPSTRe6AcHH8y3uRkzS2Q5OCinytDzN0y
+5/yXFUPZ63cDzp9HA/CB0qgSCDrRprpabjlD+sTSC5NWQNqMh7MlgEdVKJJS9Dy7
+0QEzi1BUGP5BO6fOZgdti8PAKH+8sUkFJ2Yd+jsxJmG2Z+cutwwN6irNXb1GK8iI
+XHss4SYNua5XzDrkuNzOO6Mg/RQ/1wUUJnXrDiDPpX8c394olae4AiSRk4GZJrFf
+vys3dBz3MxuAaRNFkNnWg9L3mrfiVagat8Acei3lmlTAlwFMgeIkNh27peFkc/tY
+rE/U8uLf4nxOuQcwhw00/RILz4kHNOn4RvIeBVV7wi6B1X4lOeNPBVQKi2Z5YWBR
+MsfZcdeydPYjjvTT9UplaMy3HEnUWfOzhALD2Sb8ioFHYtV56DU=
+=LEVv
 -----END PGP SIGNATURE-----
 
---idY8LE8SD6/8DnRI--
+--GV0iVqYguTV4Q9ER--
