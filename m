@@ -2,97 +2,144 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5967325594
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Feb 2021 19:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DAE325BB7
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Feb 2021 03:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233745AbhBYSfK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Feb 2021 13:35:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32818 "EHLO mail.kernel.org"
+        id S229491AbhBZCqv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Feb 2021 21:46:51 -0500
+Received: from mga05.intel.com ([192.55.52.43]:20339 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233001AbhBYSdj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 25 Feb 2021 13:33:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BAF9264E6C;
-        Thu, 25 Feb 2021 18:32:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614277977;
-        bh=xS7BokRCnvo+IUBPGbI29u2JxzgJKfwVlb4wE8bep3w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JNnz9zloyY5bF4PZ66NsEXroR79NrDtxlBG78Ry242ERkfTx9K5oUKrdWCPYmih28
-         QmZCWSwB8cveWWZpJjKtXOMxQAHdTLmBjAZ5mlIxebTyC5VSCqixe25arttFNdVX50
-         ExQpXQxvrIPOnAcWN/jWjSLb06TaT42EXSY9lfTEyHcbOEZYqOMrpkzUMTM9Fd46ec
-         6ojCEC8BC9WU3W6bOfau0MXhLlvFxF7n/d0JJ7UP0Z8xn7QziQCPTnCW3hka/EgJFh
-         bu0TgopDXCq73cT2p0LPXC9yF+enm3u7FBvKMjqUdORy2WhRuwIILrHiLcUqw03PEs
-         ah0EanLPIU2Mg==
-Date:   Thu, 25 Feb 2021 19:31:55 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH] i2c: brcmstb: Fix brcmstd_send_i2c_cmd condition
-Message-ID: <20210225183155.GA3072@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20210225161101.1856192-1-maxime@cerno.tech>
+        id S229460AbhBZCqv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 25 Feb 2021 21:46:51 -0500
+IronPort-SDR: +CYwmrmbvMnQuqmZznONf+aTcqMaejUSBL9lPO5AnZfevIdrN52yNnEOGYZubW8uu6hwQ34W+p
+ TWe5z4ySUXHA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9906"; a="270727212"
+X-IronPort-AV: E=Sophos;i="5.81,207,1610438400"; 
+   d="scan'208";a="270727212"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2021 18:46:09 -0800
+IronPort-SDR: w314YCxjSH0H8ZlyfaKP5R8op3fGNv6mqVTzXc/AYy9Uw5jSvYiWZXzg+of4kSdh9M3WdQXHFS
+ U+iy9egrEs1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,207,1610438400"; 
+   d="scan'208";a="381839855"
+Received: from unknown (HELO [10.239.154.55]) ([10.239.154.55])
+  by orsmga002.jf.intel.com with ESMTP; 25 Feb 2021 18:46:04 -0800
+Subject: Re: [PATCH v4] i2c: virtio: add a virtio i2c frontend driver
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        wsa+renesas@sang-engineering.com, wsa@kernel.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        jdelvare@suse.de, Sergey.Semin@baikalelectronics.ru,
+        krzk@kernel.org, rppt@kernel.org, loic.poulain@linaro.org,
+        tali.perry1@gmail.com, bjorn.andersson@linaro.org,
+        shuo.a.liu@intel.com, conghui.chen@intel.com, yu1.wang@intel.com,
+        =?UTF-8?Q?Alex_Benn=c3=a9e?= <alex.bennee@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <7c5e44c534b3fd07b855af22d8d4b78bc44cd7a4.1602465440.git.jie.deng@intel.com>
+ <20210225072114.iwmtaexl3dkihlba@vireshk-i7>
+From:   Jie Deng <jie.deng@intel.com>
+Message-ID: <a580de35-787e-4024-3c80-0a101b1a6d3b@intel.com>
+Date:   Fri, 26 Feb 2021 10:46:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
-Content-Disposition: inline
-In-Reply-To: <20210225161101.1856192-1-maxime@cerno.tech>
+In-Reply-To: <20210225072114.iwmtaexl3dkihlba@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---KsGdsel6WgEHnImy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2021/2/25 15:21, Viresh Kumar wrote:
+> On 12-10-20, 09:55, Jie Deng wrote:
+>> Add an I2C bus driver for virtio para-virtualization.
+>>
+>> The controller can be emulated by the backend driver in
+>> any device model software by following the virtio protocol.
+>>
+>> This driver communicates with the backend driver through a
+>> virtio I2C message structure which includes following parts:
+>>
+>> - Header: i2c_msg addr, flags, len.
+>> - Data buffer: the pointer to the I2C msg data.
+>> - Status: the processing result from the backend.
+>>
+>> People may implement different backend drivers to emulate
+>> different controllers according to their needs. A backend
+>> example can be found in the device model of the open source
+>> project ACRN. For more information, please refer to
+>> https://projectacrn.org.
+>> diff --git a/include/uapi/linux/virtio_i2c.h b/include/uapi/linux/virtio_i2c.h
+>> new file mode 100644
+>> index 0000000..7413e45
+>> --- /dev/null
+>> +++ b/include/uapi/linux/virtio_i2c.h
+>> @@ -0,0 +1,31 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-or-later OR BSD-3-Clause */
+>> +/*
+>> + * Definitions for virtio I2C Adpter
+>> + *
+>> + * Copyright (c) 2020 Intel Corporation. All rights reserved.
+>> + */
+>> +
+>> +#ifndef _UAPI_LINUX_VIRTIO_I2C_H
+>> +#define _UAPI_LINUX_VIRTIO_I2C_H
+>> +
+>> +#include <linux/types.h>
+>> +#include <linux/virtio_ids.h>
+>> +#include <linux/virtio_config.h>
+>> +
+>> +/**
+>> + * struct virtio_i2c_hdr - the virtio I2C message header structure
+>> + * @addr: i2c_msg addr, the slave address
+>> + * @flags: i2c_msg flags
+>> + * @len: i2c_msg len
+>> + */
+>> +struct virtio_i2c_hdr {
+>> +	__le16 addr;
+>> +	__le16 flags;
+>> +	__le16 len;
+>> +};
+> Hi Jie,
+>
+> I am a bit confused about the header and the format in which data is being
+> processed here. When I look at the specification present here:
+>
+> https://lists.oasis-open.org/archives/virtio-comment/202009/msg00021.html
+>
+> it talks about
+>
+> struct virtio_i2c_out_hdr {
+>          le16 addr;
+>          le16 padding;
+>          le32 flags;
+> };
+> struct virtio_i2c_in_hdr {
+>          u8 status;
+> };
+>
+> struct virtio_i2c_req {
+>          struct virtio_i2c_out_hdr out_hdr;
+>          u8 write_buf [];
+>          u8 read_buf [];
+>          struct virtio_i2c_in_hdr in_hdr;
+> };
+>
+> while what we have above is completely different. What am I missing ?
 
-On Thu, Feb 25, 2021 at 05:11:01PM +0100, Maxime Ripard wrote:
-> The brcmstb_send_i2c_cmd currently has a condition that is (CMD_RD ||
-> CMD_WR) which always evaluates to true, while the obvious fix is to test
-> whether the cmd variable passed as parameter holds one of these two
-> values.
->=20
-> Reported-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+This v4 was the old version before the specification was acked by the 
+virtio tc.
 
-I got a feeling of deja vu...
+Following is the latest specification.
 
-=2E.. and, in deed, I already fixed this, too, one year ago:
+https://raw.githubusercontent.com/oasis-tcs/virtio-spec/master/virtio-i2c.tex
 
-http://patchwork.ozlabs.org/project/linux-i2c/patch/20200426081211.10876-1-=
-wsa+renesas@sang-engineering.com/
+I will send the v5 since the host/guest ABI changes.
 
-Dunno why it never appeared in a pull request :(
+Thanks.
 
-I'll pick this one, now!
-
-
---KsGdsel6WgEHnImy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmA37RYACgkQFA3kzBSg
-KbYv5Q/+Nuebrs8L6NUzrEcijfMOYa3lDJluGtrp0M/KcTptEK+nL0TVl88t2IQm
-p0Nyn2MdJc6x7Lwt07FUcgm3JTC8ofw8Aqavezin+go+/xE7mbx9/GY9rIO9axxN
-krJSfTBVjduxoIhEBOwCknF0mR6rsAFzm0Qjh4uPPvBuaPnuEuWmweO2+fnNKqc5
-hSDFp3yUno3Sxo93aInlFe2JkZPzRstwhoRM4ZfuuU6If2AZS78AxaQtX66/n5MV
-G5OPduiW3yzw/OtnROyKUbWqqot2ph2VbyRR6vN4ajCUg4EAQZ/jB8yvvGy74vcj
-m0NdVW1RUe3vxVX33Ng3mUpVH4AajrdChj1BjC1TgLdN6IHr6danY6HNieL+9ssH
-LmNvspBHQsWG+suDk6sMX87WZdVLGg1Pg8WgnHzu3am7YLVN3TP4YXuB5/LLQy9H
-NyQNrOuggyN5JkxvM2IQOpe2vIaWxbSHfi7MOm60DE+Dk7YFwLJ+9vqKer8M4E7x
-Xhf8rPDBIJGKovsQXLVYr+K3jL+K46/HXURiLZxMjUp7meR2MB3wbKQ0RBAt3HT2
-Zj8N+SbALH7pd7gdixANPOnXq5BQO5erHxx50vfn9NMIpbs3Ll8qI/vrClqgzy4a
-vY7jNI/nyC7vF9Pa4g2w0guLgm6XiUcvo/9Ftjk4A+ZQ3aeUmIs=
-=p2bg
------END PGP SIGNATURE-----
-
---KsGdsel6WgEHnImy--
