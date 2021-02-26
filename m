@@ -2,85 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5412326161
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Feb 2021 11:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B781326179
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Feb 2021 11:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbhBZKgz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 Feb 2021 05:36:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48634 "EHLO mail.kernel.org"
+        id S230362AbhBZKkz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 Feb 2021 05:40:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230209AbhBZKew (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 26 Feb 2021 05:34:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DBC2964EF3;
-        Fri, 26 Feb 2021 10:34:09 +0000 (UTC)
+        id S230225AbhBZKky (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 26 Feb 2021 05:40:54 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8FF0C64EFA;
+        Fri, 26 Feb 2021 10:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614335650;
-        bh=SIuXvoyqUYnr8BUATfL804vOgzeqKEzaYbFmE6A/AGo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A77r2pQdIXPQLrVw961zech2JCWrRQEFPnXK1ileQ14G59V8oD4zrgn2NLW9kw4kB
-         hbvrmNVAiP1kALZVg/ClUDcZ4EC6HqTuCnnCn4SVh29X9my4hruff29O+ia0n7+1hW
-         qiewnpk9OrfMdSFJ9LJ5NWMYoH4bMjo/JvRCVhExp5RbZdltaSxdmT8u88G5WTxIHT
-         QmKXdtJrjjUiPaAah5o2jt/ucCbyhz1TlmeIE1pTCw5zxQuAGfEmAftPSWTI3/rIiV
-         Go5Q9YI0L2gzmKNaWu7UVtUNHVnLOLNe9x4KDLXcljSVemta8PrxV4/8vnxUJW2z9U
-         pAP4t7dzIrAhA==
-Date:   Fri, 26 Feb 2021 11:34:07 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     =?utf-8?Q?M=C3=A5rten?= Lindahl <marten.lindahl@axis.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>, kernel@axis.com,
-        =?utf-8?Q?M=C3=A5rten?= Lindahl <martenli@axis.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: exynos5: Preserve high speed master code
-Message-ID: <20210226103407.GF1014@ninjato>
-References: <20210216222538.6427-1-marten.lindahl@axis.com>
+        s=k20201202; t=1614336013;
+        bh=qtsNbxlwWusja+8qgfUIhAWUqV+NaDdmvSMT4ORU/CQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GBkGz5QJPyHmuazztCt0WheomivNVsz6a+EE6GjVbz7QUGYOl/8tu8D6GSm3l5CfX
+         MmrOTKLmeAUMq3Avcl4vZzY4kr1sbXasCvKE+jK54PsKtftTikuFfG5n78a5sobKfK
+         mCiM+RA4eQ1U2KKuZFIE1m4hLicsMpN9EPVW0F/YZbXk2MkHYCwAiXZfFdmlVboZlo
+         +n0gRZN+6cxq1OVc2KuUN5r/kYAJIrFGMmmQkpgIx6khPvY9X7ka1kiEvYqJFj2t1o
+         njJbGZbGDhKBYatcAAtHyX462FnRRj8pi49OWTqPLFHHvVjjsbUkh/GLkVabtOlPPU
+         P1UaQKYPZlVHw==
+Received: by mail-ed1-f54.google.com with SMTP id g3so10322678edb.11;
+        Fri, 26 Feb 2021 02:40:13 -0800 (PST)
+X-Gm-Message-State: AOAM530ZCrBtaqPeGeNmQ1NRnDODpJCiZy2/rN22V/qcfGtYhejPwaAq
+        CmTi5g2HwRgGSMhTiHKBX6RpWBuKQA6Xoaj6qcc=
+X-Google-Smtp-Source: ABdhPJzvD8qfYZQ8TNla0DO68ZCxCgmWQRYQNKcyGlyFWTS+CWctTyBGxzSdI/WIW1/CYu1f+fWhUXC4nN3dS3NOMEE=
+X-Received: by 2002:a05:6402:d05:: with SMTP id eb5mr2500229edb.143.1614336012091;
+ Fri, 26 Feb 2021 02:40:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GV0iVqYguTV4Q9ER"
-Content-Disposition: inline
-In-Reply-To: <20210216222538.6427-1-marten.lindahl@axis.com>
+References: <20210216222538.6427-1-marten.lindahl@axis.com> <20210226103407.GF1014@ninjato>
+In-Reply-To: <20210226103407.GF1014@ninjato>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Fri, 26 Feb 2021 11:40:00 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPcx5a7m0ChqA8BimK=JhnzSgm0cx07RhSu+P8D-2YsfWw@mail.gmail.com>
+Message-ID: <CAJKOXPcx5a7m0ChqA8BimK=JhnzSgm0cx07RhSu+P8D-2YsfWw@mail.gmail.com>
+Subject: Re: [PATCH v2] i2c: exynos5: Preserve high speed master code
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     =?UTF-8?Q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>,
+        kernel@axis.com,
+        =?UTF-8?Q?M=C3=A5rten_Lindahl?= <martenli@axis.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, 26 Feb 2021 at 11:34, Wolfram Sang <wsa@kernel.org> wrote:
+>
+> On Tue, Feb 16, 2021 at 11:25:38PM +0100, M=C3=A5rten Lindahl wrote:
+> > From: M=C3=A5rten Lindahl <martenli@axis.com>
+> >
+> > When the driver starts to send a message with the MASTER_ID field
+> > set (high speed), the whole I2C_ADDR register is overwritten including
+> > MASTER_ID as the SLV_ADDR_MAS field is set.
+> >
+> > This patch preserves already written fields in I2C_ADDR when writing
+> > SLV_ADDR_MAS.
+> >
+> > Signed-off-by: M=C3=A5rten Lindahl <martenli@axis.com>
+>
+> Looks good. Is there a Fixes-tag we could apply?
 
---GV0iVqYguTV4Q9ER
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The first commit, 2013 :)
+Fixes: 8a73cd4cfa15 ("i2c: exynos5: add High Speed I2C controller driver")
 
-On Tue, Feb 16, 2021 at 11:25:38PM +0100, M=C3=A5rten Lindahl wrote:
-> From: M=C3=A5rten Lindahl <martenli@axis.com>
->=20
-> When the driver starts to send a message with the MASTER_ID field
-> set (high speed), the whole I2C_ADDR register is overwritten including
-> MASTER_ID as the SLV_ADDR_MAS field is set.
->=20
-> This patch preserves already written fields in I2C_ADDR when writing
-> SLV_ADDR_MAS.
->=20
-> Signed-off-by: M=C3=A5rten Lindahl <martenli@axis.com>
-
-Looks good. Is there a Fixes-tag we could apply?
-
-
---GV0iVqYguTV4Q9ER
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmA4zp8ACgkQFA3kzBSg
-KbauHA/+NmyLBf76UbCWT/9RhQNRyWbVeXT6kyynoPUq9Y4RwM9nCnEK++X2gmyB
-8X64UrUUBImMu9zmWS4rKcqYP2GN7dxEyfxuhTALpcC5kvA3FvukIgmtT+8ZsZID
-ZkO/zF4z3jm8BMC0hHE8DHah60JQF4o2opItiFEaz7hN9na83dWzyF0OM15h6xh6
-k39IkoMgN2ZgzwahqTGA5ohUnakuD4qQdbGDudLyR3+J4KF53WhmTtX8xk3WTr6I
-FtWFxr0KjidHMed4tXYJt09vUacjpx4bPSTRe6AcHH8y3uRkzS2Q5OCinytDzN0y
-5/yXFUPZ63cDzp9HA/CB0qgSCDrRprpabjlD+sTSC5NWQNqMh7MlgEdVKJJS9Dy7
-0QEzi1BUGP5BO6fOZgdti8PAKH+8sUkFJ2Yd+jsxJmG2Z+cutwwN6irNXb1GK8iI
-XHss4SYNua5XzDrkuNzOO6Mg/RQ/1wUUJnXrDiDPpX8c394olae4AiSRk4GZJrFf
-vys3dBz3MxuAaRNFkNnWg9L3mrfiVagat8Acei3lmlTAlwFMgeIkNh27peFkc/tY
-rE/U8uLf4nxOuQcwhw00/RILz4kHNOn4RvIeBVV7wi6B1X4lOeNPBVQKi2Z5YWBR
-MsfZcdeydPYjjvTT9UplaMy3HEnUWfOzhALD2Sb8ioFHYtV56DU=
-=LEVv
------END PGP SIGNATURE-----
-
---GV0iVqYguTV4Q9ER--
+Best regards,
+Krzysztof
