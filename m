@@ -2,61 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA98326DDC
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Feb 2021 17:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA97326F4D
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Feb 2021 23:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbhB0QaF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 27 Feb 2021 11:30:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59642 "EHLO mail.kernel.org"
+        id S230169AbhB0WfD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 27 Feb 2021 17:35:03 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:42077 "EHLO mail.JVPinto.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230153AbhB0Q3x (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 27 Feb 2021 11:29:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id B7D4F64E74;
-        Sat, 27 Feb 2021 16:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614443351;
-        bh=92YNm3i9ct5IHb+PacmgTlsBXvFj60YQ7RHhdYn+LHM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=cnW6DZgZqu3oud17k2WASj3T1e7yVcjZVy9PkhfuL/8P4UWQBZy60iuddxQQGJ2Ci
-         vnCGpIHiUx7ZVN2F0dXUD6fQCVCfHPf3wguqgUgOyGlDiG5zm5lNxVbaORttZcDlgU
-         JudFl0OW1/RJFzPPGbjbUozjtWJ3iL6HiBZh+gVgP8oT0eGamloBArK0y3tSlIbCOf
-         1dAmCxgjcyzLFY8/ZrsL20PqwnVYWhiJoMYaJ9lp7abrUoVzvbSysrdybWiqWUUn3T
-         WABVppZsoGOyLP5I9vdIIDh3SJuwcp6hWl+JSTdCQDx4OSTRU/C6RnEtBNIEEJ3fDH
-         LkDpLP7Qeb7Cw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B19DA60A24;
-        Sat, 27 Feb 2021 16:29:11 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c fixes for v5.12
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210227141223.GA3333@ninjato>
-References: <20210227141223.GA3333@ninjato>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210227141223.GA3333@ninjato>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-X-PR-Tracked-Commit-Id: f4ff0104d4c807a7f96aa3358c03d694895ee8ea
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 580cd7736f6b40dbe1d5514eb59744bc24328e4b
-Message-Id: <161444335171.24634.18369925836226286225.pr-tracker-bot@kernel.org>
-Date:   Sat, 27 Feb 2021 16:29:11 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        id S230001AbhB0We7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 27 Feb 2021 17:34:59 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Sat, 27 Feb 2021 14:33:46 -0800
+Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Sat, 27 Feb 2021
+ 14:33:32 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Hello okay
+Date:   Sat, 27 Feb 2021 22:33:46 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <837a988e66554c5d95b18ae85648d3d7@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sat, 27 Feb 2021 15:12:23 +0100:
+Hello,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/580cd7736f6b40dbe1d5514eb59744bc24328e4b
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-Thank you!
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Regards,
+Ms. Reem.
