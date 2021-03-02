@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F4532B2DA
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Mar 2021 04:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA89932B2B7
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Mar 2021 04:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242288AbhCCBPw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Mar 2021 20:15:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52780 "EHLO mail.kernel.org"
+        id S242222AbhCCBPl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Mar 2021 20:15:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46974 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237788AbhCBMnR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 2 Mar 2021 07:43:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D68DE64F7E;
-        Tue,  2 Mar 2021 11:57:52 +0000 (UTC)
+        id S244198AbhCBMVD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 2 Mar 2021 07:21:03 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 264AC64F14;
+        Tue,  2 Mar 2021 11:58:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614686274;
-        bh=usTZBEyYoeHw+d0qswx2qWUgUYZxRBkXSl4lWppua3E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TMWuaPpADRSIWFtJ8waDecrTR23oGYQVxpzB1AFbJUNjNuDiiBa4jSCTVyD1AnO9p
-         o2u2NhsBp1HzKP1LYohxXb9gUFLQC1klKOVIZCV5RRCKNQEb63xGQrWG/WPMQFWCHx
-         YIrMXGI/3hFqSPrlPpTSHmtyUCenqeuirhVvMoMOXVr0cvjFSH53syy2FrdK0oY0gt
-         rI+PEigDAFKJ1ssFjPYKlqFbHi1f31gZ4geYl5TQqYFkRKSm47ucqB+Z7t5JCyyUMq
-         VoPWzDPfYek2yeRQpyrSr3SYATEkKIl7qlMlX0q97Cfed8wYkPikES3zl1psMnzeQ3
-         3we2ozjsZQzxQ==
+        s=k20201202; t=1614686317;
+        bh=xHXRJThog1hkYwY3dSKNZooLBmgzZ2qlg5ktIXw3/Q0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j1ShV0X5vgMam0HnRvVfhzBy0ZotGymwSBPG32HpECN8LsX693IvB/hRm4B8FWJ/x
+         P6k0TXZCswCY4mUHbz26UOV4Dqs7wpcFyst9uLovO+kQgexjhx5zd2boa1LSz+xzWp
+         d40ZFG7Do+Pxorh6/vGNiz4yqJu5UuhiTczW0NoxZJiUJYnyx0eRQv/O0wSG9j4/Aj
+         bVf8iF8vF+ck/P5teXHj3/j3JC+uAxJH8KW2Sa8tjzCC5CohQG8TYxhI/k1NZZcyxe
+         MQavWcEz4PjDmddO7ZqRUaDh6GQR70rGu1mDio1rh4hc0nHKLO0PFZHy9zcrroFX4U
+         SG6CdGC4l+fCw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -30,12 +30,10 @@ Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         <niklas.soderlund+renesas@ragnatech.se>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 02/33] i2c: rcar: optimize cacheline to minimize HW race condition
-Date:   Tue,  2 Mar 2021 06:57:18 -0500
-Message-Id: <20210302115749.62653-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 01/21] i2c: rcar: optimize cacheline to minimize HW race condition
+Date:   Tue,  2 Mar 2021 06:58:15 -0500
+Message-Id: <20210302115835.63269-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210302115749.62653-1-sashal@kernel.org>
-References: <20210302115749.62653-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -61,10 +59,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index 9d54ae935524..d0c4b3019e41 100644
+index f9029800d399..3ea2ceec676c 100644
 --- a/drivers/i2c/busses/i2c-rcar.c
 +++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -116,6 +116,7 @@ enum rcar_i2c_type {
+@@ -117,6 +117,7 @@ enum rcar_i2c_type {
  };
  
  struct rcar_i2c_priv {
@@ -72,7 +70,7 @@ index 9d54ae935524..d0c4b3019e41 100644
  	void __iomem *io;
  	struct i2c_adapter adap;
  	struct i2c_msg *msg;
-@@ -126,7 +127,6 @@ struct rcar_i2c_priv {
+@@ -127,7 +128,6 @@ struct rcar_i2c_priv {
  
  	int pos;
  	u32 icccr;
