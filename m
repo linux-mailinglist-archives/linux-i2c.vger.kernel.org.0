@@ -2,102 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD4A32B288
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Mar 2021 04:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA1432B28F
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Mar 2021 04:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242152AbhCCBPa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Mar 2021 20:15:30 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:58633 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1838561AbhCBK4x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Mar 2021 05:56:53 -0500
-Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MWzbr-1lJap01VGb-00XIbh; Tue, 02 Mar 2021 11:54:19 +0100
-Received: by mail-wm1-f47.google.com with SMTP id n4so2210381wmq.3;
-        Tue, 02 Mar 2021 02:54:19 -0800 (PST)
-X-Gm-Message-State: AOAM531PfHCGTnwKqf4Xca8S6I4j7fUd6pXrkwopqJwyO5GPhRUNGCUP
-        rQnofa//7fuFoxNYTzaPk53TbSs7qqcyjCaznWE=
-X-Google-Smtp-Source: ABdhPJwSy1Zm9Mymlo1hNSTEvNea2JqPihM0NDsdqQ4z0ab+tRCjmNhlJs5SPzaIvZ02aT2eYQCACTgNAzu/Id76t/U=
-X-Received: by 2002:a05:600c:4f11:: with SMTP id l17mr3405660wmq.38.1614682458937;
- Tue, 02 Mar 2021 02:54:18 -0800 (PST)
+        id S242174AbhCCBPb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Mar 2021 20:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347528AbhCBLbg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Mar 2021 06:31:36 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBC5C061793
+        for <linux-i2c@vger.kernel.org>; Tue,  2 Mar 2021 03:30:32 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id g4so13663681pgj.0
+        for <linux-i2c@vger.kernel.org>; Tue, 02 Mar 2021 03:30:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TKcFkhM8Mf5DiRPH37Ng7ifpctLWMXPxIAc63q2YCdc=;
+        b=STh1OiHiN3RIX3HBgcV9cNh+gyrXDrSjs+yTS/x+kts2F/gPdGop3OxANQsWwz1PTv
+         JTnRE9eMpVVbVq9og+Q5gdkjwX+2PuRATcx+sYWgU5KIYCnXmtL52ehxz79ifFORxLgs
+         eYUjOtMlD8m+37T0fPp+NqB1Qcq07p8BTq5gI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TKcFkhM8Mf5DiRPH37Ng7ifpctLWMXPxIAc63q2YCdc=;
+        b=jJ9KnNGy0890p2bt3CJaac0oNkF5ZeO/qVkqQ863oh4bmVinWyHJEvCIvduW72u+3b
+         R/jPy4v7Ac3K+yObaq+/zw/FemxI+Le6qc3wfXd6Y75sCVOtl4NXhQk3Xs0u2wAvpV4W
+         MOd89PNG/NKs771fHGsFllRkLv20zN9xo9TriVg1FRCxb0EC1RhFPzmOD+cbamWUsYR0
+         8hilcjyXuMvqGrFf+Qcdf03VcRVYch9J9IsZ9Nrp2//ISIlzbuQxZ9j6IKJTRCG33rWk
+         UePXSH8fQL3sFyf/ZHmCjbZ03ypc6SxdYLyVKZ1HABZQ5opZkXJ+pn0zFgdcFChW3JlK
+         LiuQ==
+X-Gm-Message-State: AOAM533D4OHr1zoFlzDkyEf4Unj82afN0Guob1FCxTEAtc0gbiNUz9pG
+        7TGzXLhlYSQdeFK7WaR3h6vrIasuGQj6+MvLcDaJ7w==
+X-Google-Smtp-Source: ABdhPJwBgRaP7xzFKc8KjHOOHQlUJLofabevE4D9pSBMT3XRudmsTh+IeR6puUqZDyGDZajOd3aOQ/x6HgQHHW5CLqc=
+X-Received: by 2002:a63:515a:: with SMTP id r26mr17916655pgl.257.1614684632012;
+ Tue, 02 Mar 2021 03:30:32 -0800 (PST)
 MIME-Version: 1.0
-References: <00f826ffe1b6b4f5fb41de2b55ad6b8783b7ff45.1614579846.git.jie.deng@intel.com>
- <CAK8P3a1ZXbodV07TTErnQunCLWOBnzRiVdLCxBD743fn-6FbXg@mail.gmail.com>
- <56fdef9a-b373-32f2-6dac-e687caa813c8@intel.com> <YD4KovxeoNG/c8QC@stefanha-x1.localdomain>
-In-Reply-To: <YD4KovxeoNG/c8QC@stefanha-x1.localdomain>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 2 Mar 2021 11:54:02 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a23L-Y0vzJTb5w1MkumaYAJQ6Owiq6RZ2XE=i8gBMTUZw@mail.gmail.com>
-Message-ID: <CAK8P3a23L-Y0vzJTb5w1MkumaYAJQ6Owiq6RZ2XE=i8gBMTUZw@mail.gmail.com>
-Subject: Re: [PATCH v5] i2c: virtio: add a virtio i2c frontend driver
-To:     Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     Jie Deng <jie.deng@intel.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        conghui.chen@intel.com, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com,
-        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
-        Tali Perry <tali.perry1@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        yu1.wang@intel.com, shuo.a.liu@intel.com,
-        Viresh Kumar <viresh.kumar@linaro.org>
+References: <1612348525-13364-1-git-send-email-qii.wang@mediatek.com>
+In-Reply-To: <1612348525-13364-1-git-send-email-qii.wang@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Tue, 2 Mar 2021 19:30:21 +0800
+Message-ID: <CAATdQgCoLB-iOcxN2ptDmqD69FnyUen5XeRTq=LCCfXmWkBeWw@mail.gmail.com>
+Subject: Re: [PATCH] i2c: mediatek: Get device clock-stretch time via dts
+To:     qii.wang@mediatek.com
+Cc:     wsa@the-dreams.de, srv_heupstream <srv_heupstream@mediatek.com>,
+        leilk.liu@mediatek.com, open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, linux-i2c@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:gF0XgA0E5NC4LDXr21/b567gTU0xy0MQFYkHv+4rdqtRDoDZiBb
- bI9+BvBZDafPfhbcySdS7YnBoPEkq31Fkfo5z6OnVOnrzncPdsrhBoWlmokCMRLtJULXy7U
- 5+m4xnWEk3w7SmQ+/dV6XH0AEz7GtXYBpDnWq3E1ct1ItUYDxCcBJPDBzNNC99fDTbeMdKD
- a+C2FYpG8ygzJ+R9ZPOMg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vjcPgti2woE=:JBOJcGWnz+Uvvppff19JPY
- eMN1rU3e0Xhd67jckah4dd3wl/kTrzR3Co+OsU7o8DHAX9Ps81aRewDkGLfmDe5qMUNVEhF/x
- Xb9naahW/uSxUo7ze/6x1I0NsTM08wBYrwsNSHi+AnmY4UMSgoAf8rPLFuuFJLsfZjpPUOSNz
- VO0dhjXlnPGMZQN8dA/P3cuxxuPqpb4Cg/Z7Ax9ajm0+2XiV9kMRv2riOL34bTEWVvLCx+Eyw
- Erj3K7e17ZsGJlARuk+ZqQpioITVziD4n747e03IeiVZaiQmyMUugWY8tpOXyrNFecx/Bk6np
- 2zmdvJ7JT93U///nWSq4n/00XQeo3lWXjb2z/qT5hX1V9ueTcF3gWlOiVSTgt4euiQfkRL34o
- 5mf8mO2JF1McAJjdnQibudjdiJvNQgDV9ZkumRUQGGcdGZll+gW7+EX6U8WQVBB/n+hA7ZXOf
- PZ8PtF/T02zo/RpIVhSoKYCX1ovX0YKGWxD5SzoQdUb3TG8hi/KZ6yTxUQAAYpRW6wabap7fZ
- mmZG/1YOOZzBx2oWOXTs7bYfpRb5+m3vR9u01ZVJbq4zbhIowCs0eaWqvCzhQY97g==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 2, 2021 at 10:51 AM Stefan Hajnoczi <stefanha@redhat.com> wrote:
-> On Tue, Mar 02, 2021 at 10:42:06AM +0800, Jie Deng wrote:
-> > > > +/*
-> > > > + * Definitions for virtio I2C Adpter
-> > > > + *
-> > > > + * Copyright (c) 2021 Intel Corporation. All rights reserved.
-> > > > + */
-> > > > +
-> > > > +#ifndef _UAPI_LINUX_VIRTIO_I2C_H
-> > > > +#define _UAPI_LINUX_VIRTIO_I2C_H
-> > > Why is this a uapi header? Can't this all be moved into the driver
-> > > itself?
->
-> Linux VIRTIO drivers provide a uapi header with structs and constants
-> that describe the device interface. This allows other software like
-> QEMU, other operating systems, etc to reuse these headers instead of
-> redefining everything.
->
-> These files should contain:
-> 1. Device-specific feature bits (VIRTIO_<device>_F_<feature>)
-> 2. VIRTIO Configuration Space layout (struct virtio_<device>_config)
-> 3. Virtqueue request layout (struct virtio_<device>_<req/resp>)
->
-> For examples, see <linux/virtio_net.h> and <linux/virtio_blk.h>.
+Hi Qii,
 
-Ok, makes sense. So it's not strictly uapi but just helpful for
-virtio applications to reference these. I suppose it is slightly harder
-when building qemu on other operating systems though, how does
-it get these headers on BSD or Windows?
+On Wed, Feb 3, 2021 at 6:43 PM <qii.wang@mediatek.com> wrote:
+>
+> From: Qii Wang <qii.wang@mediatek.com>
+>
+> tSU,STA/tHD,STA/tSU,STOP maybe out of spec due to device
+> clock-stretching or circuit loss, we could get device
+> clock-stretch time from dts to adjust these parameters
+> to meet the spec via EXT_CONF register.
+>
+> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
+> ---
+>  drivers/i2c/busses/i2c-mt65xx.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+> index 2ffd2f3..47c7255 100644
+> --- a/drivers/i2c/busses/i2c-mt65xx.c
+> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> @@ -245,6 +245,7 @@ struct mtk_i2c {
+>         u16 irq_stat;                   /* interrupt status */
+>         unsigned int clk_src_div;
+>         unsigned int speed_hz;          /* The speed in transfer */
+> +       unsigned int clock_stretch_ns;
+>         enum mtk_trans_op op;
+>         u16 timing_reg;
+>         u16 high_speed_reg;
+> @@ -607,7 +608,8 @@ static int mtk_i2c_check_ac_timing(struct mtk_i2c *i2c,
+>         else
+>                 clk_ns = sample_ns / 2;
+>
+> -       su_sta_cnt = DIV_ROUND_UP(spec->min_su_sta_ns, clk_ns);
+> +       su_sta_cnt = DIV_ROUND_UP(spec->min_su_sta_ns + i2c->clock_stretch_ns,
+> +                                 clk_ns);
+>         if (su_sta_cnt > max_sta_cnt)
+>                 return -1;
+>
+> @@ -1171,6 +1173,8 @@ static int mtk_i2c_parse_dt(struct device_node *np, struct mtk_i2c *i2c)
+>         if (i2c->clk_src_div == 0)
+>                 return -EINVAL;
+>
+> +       of_property_read_u32(np, "clock-stretch-ns", &i2c->clock_stretch_ns);
+> +
 
-       Arnd
+I think this new property "clock-stretch-ns" is for the same purpose of
+"i2c-scl-falling-time-ns" + "i2c-scl-rising-time-ns" defined in
+Documentation/devicetree/bindings/i2c/i2c.txt?
+
+>         i2c->have_pmic = of_property_read_bool(np, "mediatek,have-pmic");
+>         i2c->use_push_pull =
+>                 of_property_read_bool(np, "mediatek,use-push-pull");
+> --
+> 1.9.1
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
