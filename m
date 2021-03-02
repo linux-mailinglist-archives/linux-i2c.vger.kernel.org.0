@@ -2,40 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3C932B26C
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Mar 2021 04:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD4A32B288
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Mar 2021 04:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242141AbhCCBP2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Mar 2021 20:15:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:58996 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1577794AbhCBJxL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Mar 2021 04:53:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614678704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YFm4L6wDlmBpBp9jYOTr6fIaGFcMBM9PSJDWBsVlZjw=;
-        b=eGhRadjpyoWchGXuBvcxa9F69Z4BWW16gKcExenXr7jwG4gavGZnn/GUPV4Ek8eGedgxdv
-        nRFj8LElJJAEARyUcoolCVC15voEGD6t8qFt69bFm01sDpNskmyI4ZLZvZ2nhg8+3RiyZR
-        jtI/KF0l1mALjN/OTMnPj37JwMH+nlM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-480-NosW96qGP9Gpg8C-jeDm1w-1; Tue, 02 Mar 2021 04:51:40 -0500
-X-MC-Unique: NosW96qGP9Gpg8C-jeDm1w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 601AA801995;
-        Tue,  2 Mar 2021 09:51:36 +0000 (UTC)
-Received: from localhost (ovpn-114-138.ams2.redhat.com [10.36.114.138])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DD0586F991;
-        Tue,  2 Mar 2021 09:51:31 +0000 (UTC)
-Date:   Tue, 2 Mar 2021 09:51:30 +0000
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        id S242152AbhCCBPa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Mar 2021 20:15:30 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:58633 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1838561AbhCBK4x (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Mar 2021 05:56:53 -0500
+Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MWzbr-1lJap01VGb-00XIbh; Tue, 02 Mar 2021 11:54:19 +0100
+Received: by mail-wm1-f47.google.com with SMTP id n4so2210381wmq.3;
+        Tue, 02 Mar 2021 02:54:19 -0800 (PST)
+X-Gm-Message-State: AOAM531PfHCGTnwKqf4Xca8S6I4j7fUd6pXrkwopqJwyO5GPhRUNGCUP
+        rQnofa//7fuFoxNYTzaPk53TbSs7qqcyjCaznWE=
+X-Google-Smtp-Source: ABdhPJwSy1Zm9Mymlo1hNSTEvNea2JqPihM0NDsdqQ4z0ab+tRCjmNhlJs5SPzaIvZ02aT2eYQCACTgNAzu/Id76t/U=
+X-Received: by 2002:a05:600c:4f11:: with SMTP id l17mr3405660wmq.38.1614682458937;
+ Tue, 02 Mar 2021 02:54:18 -0800 (PST)
+MIME-Version: 1.0
+References: <00f826ffe1b6b4f5fb41de2b55ad6b8783b7ff45.1614579846.git.jie.deng@intel.com>
+ <CAK8P3a1ZXbodV07TTErnQunCLWOBnzRiVdLCxBD743fn-6FbXg@mail.gmail.com>
+ <56fdef9a-b373-32f2-6dac-e687caa813c8@intel.com> <YD4KovxeoNG/c8QC@stefanha-x1.localdomain>
+In-Reply-To: <YD4KovxeoNG/c8QC@stefanha-x1.localdomain>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 2 Mar 2021 11:54:02 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a23L-Y0vzJTb5w1MkumaYAJQ6Owiq6RZ2XE=i8gBMTUZw@mail.gmail.com>
+Message-ID: <CAK8P3a23L-Y0vzJTb5w1MkumaYAJQ6Owiq6RZ2XE=i8gBMTUZw@mail.gmail.com>
+Subject: Re: [PATCH v5] i2c: virtio: add a virtio i2c frontend driver
+To:     Stefan Hajnoczi <stefanha@redhat.com>
+Cc:     Jie Deng <jie.deng@intel.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         virtualization@lists.linux-foundation.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -49,108 +46,58 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
         Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
         Tali Perry <tali.perry1@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         yu1.wang@intel.com, shuo.a.liu@intel.com,
         Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH v5] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <YD4KovxeoNG/c8QC@stefanha-x1.localdomain>
-References: <00f826ffe1b6b4f5fb41de2b55ad6b8783b7ff45.1614579846.git.jie.deng@intel.com>
- <CAK8P3a1ZXbodV07TTErnQunCLWOBnzRiVdLCxBD743fn-6FbXg@mail.gmail.com>
- <56fdef9a-b373-32f2-6dac-e687caa813c8@intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OcANLzSOtjrbOSo2"
-Content-Disposition: inline
-In-Reply-To: <56fdef9a-b373-32f2-6dac-e687caa813c8@intel.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:gF0XgA0E5NC4LDXr21/b567gTU0xy0MQFYkHv+4rdqtRDoDZiBb
+ bI9+BvBZDafPfhbcySdS7YnBoPEkq31Fkfo5z6OnVOnrzncPdsrhBoWlmokCMRLtJULXy7U
+ 5+m4xnWEk3w7SmQ+/dV6XH0AEz7GtXYBpDnWq3E1ct1ItUYDxCcBJPDBzNNC99fDTbeMdKD
+ a+C2FYpG8ygzJ+R9ZPOMg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vjcPgti2woE=:JBOJcGWnz+Uvvppff19JPY
+ eMN1rU3e0Xhd67jckah4dd3wl/kTrzR3Co+OsU7o8DHAX9Ps81aRewDkGLfmDe5qMUNVEhF/x
+ Xb9naahW/uSxUo7ze/6x1I0NsTM08wBYrwsNSHi+AnmY4UMSgoAf8rPLFuuFJLsfZjpPUOSNz
+ VO0dhjXlnPGMZQN8dA/P3cuxxuPqpb4Cg/Z7Ax9ajm0+2XiV9kMRv2riOL34bTEWVvLCx+Eyw
+ Erj3K7e17ZsGJlARuk+ZqQpioITVziD4n747e03IeiVZaiQmyMUugWY8tpOXyrNFecx/Bk6np
+ 2zmdvJ7JT93U///nWSq4n/00XQeo3lWXjb2z/qT5hX1V9ueTcF3gWlOiVSTgt4euiQfkRL34o
+ 5mf8mO2JF1McAJjdnQibudjdiJvNQgDV9ZkumRUQGGcdGZll+gW7+EX6U8WQVBB/n+hA7ZXOf
+ PZ8PtF/T02zo/RpIVhSoKYCX1ovX0YKGWxD5SzoQdUb3TG8hi/KZ6yTxUQAAYpRW6wabap7fZ
+ mmZG/1YOOZzBx2oWOXTs7bYfpRb5+m3vR9u01ZVJbq4zbhIowCs0eaWqvCzhQY97g==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Mar 2, 2021 at 10:51 AM Stefan Hajnoczi <stefanha@redhat.com> wrote:
+> On Tue, Mar 02, 2021 at 10:42:06AM +0800, Jie Deng wrote:
+> > > > +/*
+> > > > + * Definitions for virtio I2C Adpter
+> > > > + *
+> > > > + * Copyright (c) 2021 Intel Corporation. All rights reserved.
+> > > > + */
+> > > > +
+> > > > +#ifndef _UAPI_LINUX_VIRTIO_I2C_H
+> > > > +#define _UAPI_LINUX_VIRTIO_I2C_H
+> > > Why is this a uapi header? Can't this all be moved into the driver
+> > > itself?
+>
+> Linux VIRTIO drivers provide a uapi header with structs and constants
+> that describe the device interface. This allows other software like
+> QEMU, other operating systems, etc to reuse these headers instead of
+> redefining everything.
+>
+> These files should contain:
+> 1. Device-specific feature bits (VIRTIO_<device>_F_<feature>)
+> 2. VIRTIO Configuration Space layout (struct virtio_<device>_config)
+> 3. Virtqueue request layout (struct virtio_<device>_<req/resp>)
+>
+> For examples, see <linux/virtio_net.h> and <linux/virtio_blk.h>.
 
---OcANLzSOtjrbOSo2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok, makes sense. So it's not strictly uapi but just helpful for
+virtio applications to reference these. I suppose it is slightly harder
+when building qemu on other operating systems though, how does
+it get these headers on BSD or Windows?
 
-On Tue, Mar 02, 2021 at 10:42:06AM +0800, Jie Deng wrote:
->=20
-> On 2021/3/1 23:19, Arnd Bergmann wrote:
-> > On Mon, Mar 1, 2021 at 7:41 AM Jie Deng <jie.deng@intel.com> wrote:
-> >=20
-> > > --- /dev/null
-> > > +++ b/include/uapi/linux/virtio_i2c.h
-> > > @@ -0,0 +1,56 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note=
- */
-
-The uapi VIRTIO header files are BSD licensed so they can be easily used
-by other projects (including other operating systems and hypervisors
-that don't use Linux). Please see the license headers in
-<linux/virtio_net.h> or <linux/virtio_blk.h>.
-
-> > > +/*
-> > > + * Definitions for virtio I2C Adpter
-> > > + *
-> > > + * Copyright (c) 2021 Intel Corporation. All rights reserved.
-> > > + */
-> > > +
-> > > +#ifndef _UAPI_LINUX_VIRTIO_I2C_H
-> > > +#define _UAPI_LINUX_VIRTIO_I2C_H
-> > Why is this a uapi header? Can't this all be moved into the driver
-> > itself?
-
-Linux VIRTIO drivers provide a uapi header with structs and constants
-that describe the device interface. This allows other software like
-QEMU, other operating systems, etc to reuse these headers instead of
-redefining everything.
-
-These files should contain:
-1. Device-specific feature bits (VIRTIO_<device>_F_<feature>)
-2. VIRTIO Configuration Space layout (struct virtio_<device>_config)
-3. Virtqueue request layout (struct virtio_<device>_<req/resp>)
-
-For examples, see <linux/virtio_net.h> and <linux/virtio_blk.h>.
-
-> > > +/**
-> > > + * struct virtio_i2c_req - the virtio I2C request structure
-> > > + * @out_hdr: the OUT header of the virtio I2C message
-> > > + * @write_buf: contains one I2C segment being written to the device
-> > > + * @read_buf: contains one I2C segment being read from the device
-> > > + * @in_hdr: the IN header of the virtio I2C message
-> > > + */
-> > > +struct virtio_i2c_req {
-> > > +       struct virtio_i2c_out_hdr out_hdr;
-> > > +       u8 *write_buf;
-> > > +       u8 *read_buf;
-> > > +       struct virtio_i2c_in_hdr in_hdr;
-> > > +};
-> > In particular, this structure looks like it is only ever usable between
-> > the transfer functions in the driver itself, it is shared with neither
-> > user space nor the virtio host side.
-
-I agree. This struct is not part of the device interface. It's part of
-the Linux driver implementation. This belongs inside the driver code and
-not in include/uapi/ where public headers are located.
-
-Stefan
-
---OcANLzSOtjrbOSo2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmA+CqIACgkQnKSrs4Gr
-c8gEYQf/SkwOouoLMamDCEw2Sy3MNu4tjAtBfi8upE6rayO9k9KfFtOUq6S4oct9
-mLjJDftIwDsJpNeTI9qjLqtwLKsyJa4ZIQ9EFCyiY69Fyf28MdcNZ1exQdmvHoKD
-8BdJIsugcZidzDJDSEzU7JMdqXx72rp7x+ZeXdsh6HV74shf2kjNy7aIL3pYT2gN
-M1+VVwD/2tbGO8W5Dza64x/2rbqU+vdFCbSXUZTlOLvhzMstmwimEe5YKjGYgJtD
-oLWHYQtvkd+1rFRcUeFjhewq0XtyQ4XdFOuwHVjukjfFCwUPg9gO21P4wJNNokG2
-K6vKRdDW+3yQzhulzaWhoPS+K6Dh3w==
-=zjby
------END PGP SIGNATURE-----
-
---OcANLzSOtjrbOSo2--
-
+       Arnd
