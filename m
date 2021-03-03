@@ -2,105 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A3332C242
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Mar 2021 01:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F39032C23F
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Mar 2021 01:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387990AbhCCXIZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 3 Mar 2021 18:08:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1842930AbhCCKWj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Mar 2021 05:22:39 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9912EC08EB22
-        for <linux-i2c@vger.kernel.org>; Wed,  3 Mar 2021 01:38:39 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id o38so15922301pgm.9
-        for <linux-i2c@vger.kernel.org>; Wed, 03 Mar 2021 01:38:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=iUz312iac7LFNx2ya66Z5XkzPT8yJgIVgv7MyKSn4VE=;
-        b=wsvDAZ+Xcf6/ydZfSDPUq/Okd3uBkptJGGE9RJHceUdEF5+vAcEJbCEi51CMol+zqq
-         9rt2UAvNAxwrzFA9kfvMQ56S27ZzM9rcoelSCOVAu/ujrIml3XvOHj4Vd4GUYjhTsIll
-         ySf61ycmoJLJp0Do7bDtNB8zj6/AJhwvu61ZTv6DdMN+XBga+G3UlWwmN/I3HejzcH5J
-         bJa7lpigkf8L94Ca1VYtwPvTJm+BJncEcbPlpLj4M8bJTFtSzfpHn7bhCgD8s0wVPn5b
-         MYA4z+MP+6rg0oub0KuLd7ZcqbmRCzFxVdjOhkhBTASf3VtoVZgMe6SWWf8DqLni274p
-         PLag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iUz312iac7LFNx2ya66Z5XkzPT8yJgIVgv7MyKSn4VE=;
-        b=PhQh0r7C1oT7iLRfKNMMYCKVzcT3AEGbP3HtEPN0pN9ARtsu8IWuacLGUPVh422W8X
-         I8bf/SMjW5uXCe1zSyfewTuJD+GUaWYOhEHXOog7CKgs2uzY5S3RbCQs+X+PY77lkAoN
-         6ttdl2/rf8uCOt7DseF3G/IDKAO/WlDWqeyMgwpiQfXsgMqwVuXkgbOjhYRUe4quF1Oy
-         SOTwKNYNVEr4YahUS7VlVEJd29LFuiyzZnBPBNQf4Cwxr29mpERUvVMoWy8Qr9JDaPn1
-         EuLopuOcpl1U2Q354Df+19QlA8fxVVfmUb8aiacT2KiGbNcp2ynoz5gqJa/4zQROvQMJ
-         tXsQ==
-X-Gm-Message-State: AOAM5308FvV9nPaGaupCGVEhEEZtsaIwB9D7njIKpU7NuTLaMk11nxJ1
-        6tkPhY0bruyvZbu42c+PFBVsVQ==
-X-Google-Smtp-Source: ABdhPJyIymaBHw/Yi0uxQqi7IJAz4uFHceC34phcsMTa1e/8lj0QDSfk15NedkVO7Kk9PIJ9nkKTGA==
-X-Received: by 2002:a63:5647:: with SMTP id g7mr21806900pgm.113.1614764319033;
-        Wed, 03 Mar 2021 01:38:39 -0800 (PST)
-Received: from localhost ([122.171.124.15])
-        by smtp.gmail.com with ESMTPSA id fr23sm5894999pjb.22.2021.03.03.01.38.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Mar 2021 01:38:38 -0800 (PST)
-Date:   Wed, 3 Mar 2021 15:08:36 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, wsa@kernel.org,
-        jasowang@redhat.com, wsa+renesas@sang-engineering.com,
-        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
-        arnd@arndb.de, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
-        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
-        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
-        yu1.wang@intel.com, shuo.a.liu@intel.com,
-        Stefan Hajnoczi <stefanha@redhat.com>
-Subject: Re: [PATCH v5] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210303093836.ftgq62yw7i6cd3q6@vireshk-i7>
-References: <00f826ffe1b6b4f5fb41de2b55ad6b8783b7ff45.1614579846.git.jie.deng@intel.com>
- <20210303075430.n7ewkots6cgbbabi@vireshk-i7>
- <876371c3-ba9a-5176-493b-5a883cba3b07@intel.com>
+        id S1386869AbhCCXIH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 3 Mar 2021 18:08:07 -0500
+Received: from air.basealt.ru ([194.107.17.39]:51952 "EHLO air.basealt.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1582433AbhCCKVh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 3 Mar 2021 05:21:37 -0500
+Received: by air.basealt.ru (Postfix, from userid 490)
+        id 26C8C58943D; Wed,  3 Mar 2021 10:11:52 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on
+        sa.local.altlinux.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.3 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        RP_MATCHES_RCVD autolearn=ham autolearn_force=no version=3.4.1
+Received: from nickel-ws.localdomain (obninsk.basealt.ru [217.15.195.17])
+        by air.basealt.ru (Postfix) with ESMTPSA id 46B3258943B;
+        Wed,  3 Mar 2021 10:11:50 +0000 (UTC)
+Reply-To: nickel@basealt.ru
+Subject: Re: Need some help on "Input: elantech - add LEN2146 to SMBus
+ blacklist for ThinkPad L13 Gen2"
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "jingle.wu" <jingle.wu@emc.com.tw>
+References: <0d1eaadd-5350-63a4-fe6d-f8f357c49504@basealt.ru>
+ <CAO-hwJLmByHHULhJF60qOUAqprkqZpSvVh-GFXLZ_ndL0guvPQ@mail.gmail.com>
+ <e1fd99ae-8e46-0b21-1011-db73cd75523b@basealt.ru>
+ <20210225093801.GA1008@ninjato>
+From:   Nikolai Kostrigin <nickel@basealt.ru>
+Organization: BaseALT
+Message-ID: <3ffc29f8-cdf1-15fe-6406-28872bba5716@basealt.ru>
+Date:   Wed, 3 Mar 2021 13:11:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <876371c3-ba9a-5176-493b-5a883cba3b07@intel.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20210225093801.GA1008@ninjato>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 03-03-21, 16:46, Jie Deng wrote:
-> This is not a problem. My original proposal was to mirror the struct
-> i2c_msg.
-> The code you looked at was based on that.
-> However, the virtio TC prefer not to mirror it. They have some concerns.
-> For example, there is a bit I2C_M_RD in i2c_msg.flag which has the same
-> meaning with
-> the R/W in virtio descriptor. This is a repetition which may cause problems.
-> So the virtio_i2c_out_hdr.flags is used to instead of i2c_msg.flags for
-> extension.
+Hi,
 
-So by default we don't support any of the existing flags except
-I2C_M_RD?
+25.02.2021 12:38, Wolfram Sang пишет:
+> Hi,
+>
+>> I had a preliminary discussion with Benjamin Tissoires and according to
+>> our agreement I repost it for wider audience.
+>> Blacklisting the device was decided to be a bad idea.
+>> But actually I managed to get touchpad totally operational via SMBus
+>> using a following hack:
+>>
+>> providing a parameter to i2c_i801 driver:
+>>
+>> modprobe i2c_i801 disable_features=0x2 (i.e. disable the block buffer).
+> So, from an I2C perspective, there are two things to mention here:
+>
+> a) I am in the process of extending the I2C core to allow block
+> transfers > 32 byte. This is a slow process, though, because we need to
+> pay attention to not break userspace ABI. If this is done *and* the i801
+> driver supports length > 32 bytes, too, then it would work natively. If
+> the i801 can do this, this is a question for Jean Delvare.
+>
+> b) I don't know Elantech HW but there are devices out there which allow
+> configuration for the block size. Something like a bit specifying if
+> block transfers > 32 are allowed. Or the SMBus version to support. Block
+> transfers > 32 are SMBus 3.0+ only. If your HW does not have that,
+> disabling SMBus is an option, too. Disabling it in the i801 driver is
+> too much of a hammer, I'd say.
+>
+> Hope this helps! Happy hacking,
+>
+>    Wolfram
+Thank you for the information, Wolfram!
 
-#define I2C_M_TEN		0x0010	/* this is a ten bit chip address */
-#define I2C_M_RD		0x0001	/* read data, from slave to master */
-#define I2C_M_STOP		0x8000	/* if I2C_FUNC_PROTOCOL_MANGLING */
-#define I2C_M_NOSTART		0x4000	/* if I2C_FUNC_NOSTART */
-#define I2C_M_REV_DIR_ADDR	0x2000	/* if I2C_FUNC_PROTOCOL_MANGLING */
-#define I2C_M_IGNORE_NAK	0x1000	/* if I2C_FUNC_PROTOCOL_MANGLING */
-#define I2C_M_NO_RD_ACK		0x0800	/* if I2C_FUNC_PROTOCOL_MANGLING */
-#define I2C_M_RECV_LEN		0x0400	/* length will be first received byte */
+Finally it turned out that the solution was near me from the very
+beginning, but I failed to check mainline code at that moment (which is
+now 5.11).
+Happily Jingle Wu has pointed me to a couple of  patches of his
+(co-authored by Dmitry Torokhov):
 
-How do we work with clients who want to use such flags now ?
+https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git/commit/?h=next&id=056115daede8d01f71732bc7d778fb85acee8eb6
+
+https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git/commit/?h=next&id=e4c9062717feda88900b566463228d1c4910af6d
+
+I applied those to 5.10.17 and trackpoint works like a charm.
+So I guess theese patches are worth being backported to the longterm
+5.10 branch.
+I'm really sorry for the noise.
 
 -- 
-viresh
+Best regards,
+Nikolai Kostrigin
+
