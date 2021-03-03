@@ -2,72 +2,164 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AAB32B2BB
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Mar 2021 04:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4184232C23C
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Mar 2021 01:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242225AbhCCBPm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Mar 2021 20:15:42 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:32304 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1443647AbhCBMdE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Mar 2021 07:33:04 -0500
-X-UUID: 5fafb8e125d3457daa75546a34b4ad5f-20210302
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=3ZRCi/nRxti+OHB6RGuP2kk8X0Uuta9T9GY8fOIWmF8=;
-        b=uP89SOWI/4awQ9Sr2L5UPRGyaZvTeT0Z8+XtwFDT1Jl/VXo8arBymKJc20gPhe+EzoCvVtMxCcrlWI9EyrzGl2ku7hipqVBSzLKcSU0/mM6D2ELKxrCils4rsJRCSBMls6HUCkTYfVYO9Ls9Bp/1Q9SIKOf/w+O/Taclv4EnWZ0=;
-X-UUID: 5fafb8e125d3457daa75546a34b4ad5f-20210302
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 539081713; Tue, 02 Mar 2021 20:32:14 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 2 Mar
- 2021 20:32:11 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 2 Mar 2021 20:32:11 +0800
-Message-ID: <1614688331.28437.7.camel@mhfsdcap03>
-Subject: Re: [PATCH] i2c: mediatek: Get device clock-stretch time via dts
-From:   Qii Wang <qii.wang@mediatek.com>
-To:     Ikjoon Jang <ikjn@chromium.org>
-CC:     <wsa@the-dreams.de>, srv_heupstream <srv_heupstream@mediatek.com>,
-        <leilk.liu@mediatek.com>, open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Tue, 2 Mar 2021 20:32:11 +0800
-In-Reply-To: <CAATdQgCoLB-iOcxN2ptDmqD69FnyUen5XeRTq=LCCfXmWkBeWw@mail.gmail.com>
-References: <1612348525-13364-1-git-send-email-qii.wang@mediatek.com>
-         <CAATdQgCoLB-iOcxN2ptDmqD69FnyUen5XeRTq=LCCfXmWkBeWw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S245713AbhCCXGz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 3 Mar 2021 18:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1842519AbhCCIGQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Mar 2021 03:06:16 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9FAC061793
+        for <linux-i2c@vger.kernel.org>; Tue,  2 Mar 2021 23:54:34 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id m6so15697602pfk.1
+        for <linux-i2c@vger.kernel.org>; Tue, 02 Mar 2021 23:54:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=1OHNpV5o7TZ/CsTPSnfCsiR7j00EOgl+1+rL+aenzg8=;
+        b=E6aTq4IzcdgHTaVB46rDkYllEEMGl8JV+5cuhSotwMfh09YnMZXpUfd8YJm82ztZaW
+         OI7yYuwqNEo0e77PYkrE9DUEpsxBBKmRRBMs5ug77ekHJlCi7sIkR01rZ2N4OaHIoRwa
+         D7ppHFidESKVcGTKT8xs0bCVQHXSW+WQWNRxKlChMCd68oHpqCwZ0nt2EOqNoYBx1qKS
+         pXubDFViPEkA24rc+T4Dhat/jrdNAqrOizovXnACjoDj1VgddZIc4RAGahfai5nzM211
+         IV36HsDzzAD9Qh6xh1nDD1bik0/5OVqST8j9+6QeLcwVe82k9c4XH5YBJbGl53qels9U
+         aPoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1OHNpV5o7TZ/CsTPSnfCsiR7j00EOgl+1+rL+aenzg8=;
+        b=gNzsZhJdcNegpqaYEJgNH63RljJy878M8OMADD08zLYvbgQgUKDbq2ggUWWmk7IP7Y
+         ZMEZR+Sd6XJyNfFskaf+fd74L9+F5NXLex/xGyfQYgWfB356BtUSTvYFv3hdKQpWKcr0
+         n8ObaI/3rNuLVpTqdTdhNILneUAFGk7i5JBjimdpDJJFL7cGW38fAuOoXFb0/lYAcqhU
+         Gh6BkNkB7BFuc1RnkYqPFABD0izKshnO5iS1QJfA5NwLJm5ZUk3qK8e8MF/7T74NIblu
+         7P8hN9YuDYi8LFk9o+1gazzc5rYmYMME5g4LqRPsk5z2v9xXK2HXMab+Yi/52rxjGlv9
+         YFQQ==
+X-Gm-Message-State: AOAM533lZkz3iuAv6rdbelMVQY444Sq5lecirXgirBoUrbYGPGtFSayA
+        5WJOozfd5wlwVDLPkrTjN4CDDQ==
+X-Google-Smtp-Source: ABdhPJxU2Pb2IsjDSyaYgpyK6YHgNLiha4rdcYZpod8JO49hKBKueY8CQGeH5WDMGK83u6EtOv7DWg==
+X-Received: by 2002:a62:1896:0:b029:197:491c:be38 with SMTP id 144-20020a6218960000b0290197491cbe38mr7006426pfy.15.1614758073259;
+        Tue, 02 Mar 2021 23:54:33 -0800 (PST)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id a23sm23693188pfk.80.2021.03.02.23.54.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 02 Mar 2021 23:54:32 -0800 (PST)
+Date:   Wed, 3 Mar 2021 13:24:30 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jie Deng <jie.deng@intel.com>,
+        Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, wsa@kernel.org,
+        jasowang@redhat.com, wsa+renesas@sang-engineering.com,
+        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
+        arnd@arndb.de, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
+        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
+        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
+        yu1.wang@intel.com, shuo.a.liu@intel.com
+Subject: Re: [PATCH v5] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <20210303075430.n7ewkots6cgbbabi@vireshk-i7>
+References: <00f826ffe1b6b4f5fb41de2b55ad6b8783b7ff45.1614579846.git.jie.deng@intel.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 2EB7B12E6C512922AD6609AB522FD825146F1596765CF85E5FB095D7D12A9FB82000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00f826ffe1b6b4f5fb41de2b55ad6b8783b7ff45.1614579846.git.jie.deng@intel.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGksDQpPbiBUdWUsIDIwMjEtMDMtMDIgYXQgMTk6MzAgKzA4MDAsIElram9vbiBKYW5nIHdyb3Rl
-Og0KPiBIaSBRaWksDQo+ID4NCj4gPiBAQCAtMTE3MSw2ICsxMTczLDggQEAgc3RhdGljIGludCBt
-dGtfaTJjX3BhcnNlX2R0KHN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAsIHN0cnVjdCBtdGtfaTJjICpp
-MmMpDQo+ID4gICAgICAgICBpZiAoaTJjLT5jbGtfc3JjX2RpdiA9PSAwKQ0KPiA+ICAgICAgICAg
-ICAgICAgICByZXR1cm4gLUVJTlZBTDsNCj4gPg0KPiA+ICsgICAgICAgb2ZfcHJvcGVydHlfcmVh
-ZF91MzIobnAsICJjbG9jay1zdHJldGNoLW5zIiwgJmkyYy0+Y2xvY2tfc3RyZXRjaF9ucyk7DQo+
-ID4gKw0KPiANCj4gSSB0aGluayB0aGlzIG5ldyBwcm9wZXJ0eSAiY2xvY2stc3RyZXRjaC1ucyIg
-aXMgZm9yIHRoZSBzYW1lIHB1cnBvc2Ugb2YNCj4gImkyYy1zY2wtZmFsbGluZy10aW1lLW5zIiAr
-ICJpMmMtc2NsLXJpc2luZy10aW1lLW5zIiBkZWZpbmVkIGluDQo+IERvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLnR4dD8NCj4gDQoNCkkgaGF2ZW4ndCBmaW5kIHRoZSBj
-b3JyZXNwb25kaW5nIGluc3RydWN0aW9uczthbmQgdGhpcyBwYXRjaCBpcyBmb3IgdGhlDQpwcm9i
-bGVtIGNhdXNlZCBieSBjbG9jay1zdHJldGNoIHdoZW4gdGhlIHNjbCBpcyBwdWxsZWQuDQoNCj4g
-PiAgICAgICAgIGkyYy0+aGF2ZV9wbWljID0gb2ZfcHJvcGVydHlfcmVhZF9ib29sKG5wLCAibWVk
-aWF0ZWssaGF2ZS1wbWljIik7DQo+ID4gICAgICAgICBpMmMtPnVzZV9wdXNoX3B1bGwgPQ0KPiA+
-ICAgICAgICAgICAgICAgICBvZl9wcm9wZXJ0eV9yZWFkX2Jvb2wobnAsICJtZWRpYXRlayx1c2Ut
-cHVzaC1wdWxsIik7DQo+ID4gLS0NCj4gPiAxLjkuMQ0KPiA+IF9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fDQo+ID4gTGludXgtbWVkaWF0ZWsgbWFpbGluZyBs
-aXN0DQo+ID4gTGludXgtbWVkaWF0ZWtAbGlzdHMuaW5mcmFkZWFkLm9yZw0KPiA+IGh0dHA6Ly9s
-aXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtbWVkaWF0ZWsNCg0K
+On 01-03-21, 14:41, Jie Deng wrote:
+> diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
+> +static int virtio_i2c_send_reqs(struct virtqueue *vq,
+> +				struct virtio_i2c_req *reqs,
+> +				struct i2c_msg *msgs, int nr)
+> +{
+> +	struct scatterlist *sgs[3], out_hdr, msg_buf, in_hdr;
+> +	int i, outcnt, incnt, err = 0;
+> +	u8 *buf;
+> +
+> +	for (i = 0; i < nr; i++) {
+> +		if (!msgs[i].len)
+> +			break;
+> +
+> +		reqs[i].out_hdr.addr = cpu_to_le16(msgs[i].addr << 1);
+> +
+> +		if (i != nr - 1)
+> +			reqs[i].out_hdr.flags |= VIRTIO_I2C_FLAGS_FAIL_NEXT;
+> +
+> +		outcnt = incnt = 0;
+> +		sg_init_one(&out_hdr, &reqs[i].out_hdr, sizeof(reqs[i].out_hdr));
+> +		sgs[outcnt++] = &out_hdr;
+> +
+> +		buf = kzalloc(msgs[i].len, GFP_KERNEL);
+> +		if (!buf)
+> +			break;
+> +
+> +		if (msgs[i].flags & I2C_M_RD) {
+> +			reqs[i].read_buf = buf;
+> +			sg_init_one(&msg_buf, reqs[i].read_buf, msgs[i].len);
+> +			sgs[outcnt + incnt++] = &msg_buf;
+> +		} else {
+> +			reqs[i].write_buf = buf;
+> +			memcpy(reqs[i].write_buf, msgs[i].buf, msgs[i].len);
+> +			sg_init_one(&msg_buf, reqs[i].write_buf, msgs[i].len);
+> +			sgs[outcnt++] = &msg_buf;
+> +		}
+> +
+> +		sg_init_one(&in_hdr, &reqs[i].in_hdr, sizeof(reqs[i].in_hdr));
+> +		sgs[outcnt + incnt++] = &in_hdr;
+> +
+> +		err = virtqueue_add_sgs(vq, sgs, outcnt, incnt, &reqs[i], GFP_KERNEL);
+> +		if (err < 0) {
+> +			pr_err("failed to add msg[%d] to virtqueue.\n", i);
+> +			if (msgs[i].flags & I2C_M_RD) {
+> +				kfree(reqs[i].read_buf);
+> +				reqs[i].read_buf = NULL;
+> +			} else {
+> +				kfree(reqs[i].write_buf);
+> +				reqs[i].write_buf = NULL;
+> +			}
+> +			break;
+> +		}
+> +	}
+> +
+> +	return i;
+> +}
 
+> diff --git a/include/uapi/linux/virtio_i2c.h b/include/uapi/linux/virtio_i2c.h
+> +/**
+> + * struct virtio_i2c_out_hdr - the virtio I2C message OUT header
+> + * @addr: the controlled device address
+> + * @padding: used to pad to full dword
+> + * @flags: used for feature extensibility
+> + */
+> +struct virtio_i2c_out_hdr {
+> +	__le16 addr;
+> +	__le16 padding;
+> +	__le32 flags;
+> +};
+
+Both this code and the virtio spec (which is already merged) are
+missing msgs[i].flags and they are never sent to backend. The only
+flags available here are the ones defined by virtio spec and these are
+not i2c flags.
+
+I also looked at your i2c backend for acrn and it mistakenly copies
+the hdr.flag, which is the virtio flag and not i2c flag.
+
+https://github.com/projectacrn/acrn-hypervisor/blob/master/devicemodel/hw/pci/virtio/virtio_i2c.c#L539
+
+I will send a fix for the specs if you agree that there is a problem
+here.
+
+what am I missing here ? This should have been caught in your testing
+and so I feel I must be missing something.
+
+-- 
+viresh
