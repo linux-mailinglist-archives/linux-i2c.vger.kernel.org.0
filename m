@@ -2,594 +2,577 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4720F32CC19
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Mar 2021 06:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7349932CC53
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Mar 2021 07:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbhCDFlp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 4 Mar 2021 00:41:45 -0500
-Received: from mga09.intel.com ([134.134.136.24]:45026 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234172AbhCDFlm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 4 Mar 2021 00:41:42 -0500
-IronPort-SDR: /8+chDA3CjdISwlBCgaoNzhINOzvo+fguT++dY3mbWqDo7F97yoG6zOQLY/nX0zYpcwP9hHHGd
- VCNP7KawhgxA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9912"; a="187459823"
-X-IronPort-AV: E=Sophos;i="5.81,221,1610438400"; 
-   d="gz'50?scan'50,208,50";a="187459823"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 21:41:01 -0800
-IronPort-SDR: GVyS2PcFqf5c3AGJv4LdvhG7MXRxIJZEZLSOy4X66XrHhfpDAQQWkbmAOj4Ckaf0WGZZCcE8+6
- mEQz9F4I6EYQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,221,1610438400"; 
-   d="gz'50?scan'50,208,50";a="369633633"
-Received: from lkp-server02.sh.intel.com (HELO 2482ff9f8ac0) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 03 Mar 2021 21:40:58 -0800
-Received: from kbuild by 2482ff9f8ac0 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lHgjJ-00022P-E3; Thu, 04 Mar 2021 05:40:57 +0000
-Date:   Thu, 4 Mar 2021 13:40:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
+        id S234025AbhCDGHV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 4 Mar 2021 01:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233896AbhCDGG6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 4 Mar 2021 01:06:58 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA6AC061574
+        for <linux-i2c@vger.kernel.org>; Wed,  3 Mar 2021 22:06:42 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id o10so18224671pgg.4
+        for <linux-i2c@vger.kernel.org>; Wed, 03 Mar 2021 22:06:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lhnMZ4ENoesC9an41W7hRXBlWihDFnBbKFbIgxQO4pM=;
+        b=I2MbN9nodGYFRtkulvpWrrFXJYMV1tWBKV1qB9pqMjDBT8LUXOI6KCn/jrqTHWMCp3
+         gB6ek4/gD56VTatjebaC9Ox0MtutSaCWwGO4kHb/B4H4EwPGCn6F6tSk+tKDm9G8cY1b
+         hZph1RAVBHrbCEhZ7MsKvaxyjfsQhWbPn6lV7sCirzEcGbftwmg/0HEu2nWN6Sd9E0xC
+         +VZ9nyjQxtaAfCVv+CYCtvk2n3nzvrekFX1HgL31Tg2nYMWoS5Xzmpk+gqo85yfHlGl5
+         m0CQe3dICfdVys0IFA7vMUTZodXnNyYgMXTVgB/fIhyDUu0PmjUH1UQzAJ9Qe5iPDQRt
+         Jr4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lhnMZ4ENoesC9an41W7hRXBlWihDFnBbKFbIgxQO4pM=;
+        b=U0AmneT5WWR/aIhLga0UskWtnnxHvKz558gwdeqOwHYKB4HqthG+MSsAfzbRQkxQyd
+         gVIdf5+E+5DptYtvz+siY0mjyy3kUnfA+x+NLHLK8KkjnxzI3PuAUsQWosU4/xCZhOVC
+         d2w98nCnYiJXqc2onN0ZA/EBb+Eo0Se/1AVSuXySxNfvAm2yD9z7n1KZcf84d8W3VTBi
+         f2XZGHE3sF2BQ9+aOrdte6/pxbiHpriJavOgFrtXpHH97Pa2usNbb805eVwbDfibnEsA
+         yetLYPiKNBL4HwtGeZ5FSAEFlxKQ7nQ5ta0V+0MU0EIlKpWAxuNil4yFBVLvYd2OF56i
+         ywrw==
+X-Gm-Message-State: AOAM530/YPju2s6JUoN9BjKweDo2ZAME2+5Eh6LhtmShQCmEJWVoBSN8
+        1Op3NFClDRzoqBrYXs4ZGDe5CA==
+X-Google-Smtp-Source: ABdhPJwZB02aRXTRyS+lOLREuYp+M0bcacHZPUv3knOg87XlfinFf3P176Blsf5vDQlPe8wFo2LeOw==
+X-Received: by 2002:a05:6a00:1345:b029:1e3:d231:49cd with SMTP id k5-20020a056a001345b02901e3d23149cdmr2344636pfu.3.1614838002149;
+        Wed, 03 Mar 2021 22:06:42 -0800 (PST)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id w17sm23288081pgg.41.2021.03.03.22.06.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 03 Mar 2021 22:06:41 -0800 (PST)
+Date:   Thu, 4 Mar 2021 11:36:39 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jie Deng <jie.deng@intel.com>
+Cc:     linux-i2c@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, mst@redhat.com, wsa@kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, wsa@kernel.org,
         jasowang@redhat.com, wsa+renesas@sang-engineering.com,
         andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
-        arnd@arndb.de
+        arnd@arndb.de, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
+        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
+        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
+        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
+        pbonzini@redhat.com,
+        Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
 Subject: Re: [PATCH v6] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <202103041351.SQOxU5YB-lkp@intel.com>
+Message-ID: <20210304060638.7qes424vvdmptz5c@vireshk-i7>
 References: <9a2086f37c0a62069b67c39a3f75941b78a0039c.1614749417.git.jie.deng@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="vtzGhvizbBRQ85DL"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <9a2086f37c0a62069b67c39a3f75941b78a0039c.1614749417.git.jie.deng@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 04-03-21, 09:59, Jie Deng wrote:
+> Add an I2C bus driver for virtio para-virtualization.
+> 
+> The controller can be emulated by the backend driver in
+> any device model software by following the virtio protocol.
+> 
+> The device specification can be found on
+> https://lists.oasis-open.org/archives/virtio-comment/202101/msg00008.html.
+> 
+> By following the specification, people may implement different
+> backend drivers to emulate different controllers according to
+> their needs.
+> 
+> Co-developed-by: Conghui Chen <conghui.chen@intel.com>
+> Signed-off-by: Conghui Chen <conghui.chen@intel.com>
+> Signed-off-by: Jie Deng <jie.deng@intel.com>
+> ---
 
---vtzGhvizbBRQ85DL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Please always supply version history, it makes it difficult to review otherwise.
 
-Hi Jie,
+>  drivers/i2c/busses/Kconfig      |  11 ++
+>  drivers/i2c/busses/Makefile     |   3 +
+>  drivers/i2c/busses/i2c-virtio.c | 289 ++++++++++++++++++++++++++++++++++++++++
+>  include/uapi/linux/virtio_i2c.h |  42 ++++++
+>  include/uapi/linux/virtio_ids.h |   1 +
+>  5 files changed, 346 insertions(+)
+>  create mode 100644 drivers/i2c/busses/i2c-virtio.c
+>  create mode 100644 include/uapi/linux/virtio_i2c.h
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 05ebf75..0860395 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -21,6 +21,17 @@ config I2C_ALI1535
+>  	  This driver can also be built as a module.  If so, the module
+>  	  will be called i2c-ali1535.
+>  
+> +config I2C_VIRTIO
+> +	tristate "Virtio I2C Adapter"
+> +	depends on VIRTIO
 
-Thank you for the patch! Perhaps something to improve:
+depends on I2C as well ?
 
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on vhost/linux-next linux/master linus/master v5.12-rc1 next-20210303]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> +	help
+> +	  If you say yes to this option, support will be included for the virtio
+> +	  I2C adapter driver. The hardware can be emulated by any device model
+> +	  software according to the virtio protocol.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called i2c-virtio.
+> +
+>  config I2C_ALI1563
+>  	tristate "ALI 1563"
+>  	depends on PCI
+> diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+> index 615f35e..b88da08 100644
+> --- a/drivers/i2c/busses/Makefile
+> +++ b/drivers/i2c/busses/Makefile
+> @@ -6,6 +6,9 @@
+>  # ACPI drivers
+>  obj-$(CONFIG_I2C_SCMI)		+= i2c-scmi.o
+>  
+> +# VIRTIO I2C host controller driver
+> +obj-$(CONFIG_I2C_VIRTIO)	+= i2c-virtio.o
+> +
 
-url:    https://github.com/0day-ci/linux/commits/Jie-Deng/i2c-virtio-add-a-virtio-i2c-frontend-driver/20210304-100543
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: xtensa-randconfig-s031-20210304 (attached as .config)
-compiler: xtensa-linux-gcc (GCC) 9.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.3-245-gacc5c298-dirty
-        # https://github.com/0day-ci/linux/commit/bb645653b6d7750a026229726f8d9d0371457ac6
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jie-Deng/i2c-virtio-add-a-virtio-i2c-frontend-driver/20210304-100543
-        git checkout bb645653b6d7750a026229726f8d9d0371457ac6
-        # save the attached .config to linux build tree
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=xtensa 
+Not that it is important but I would have added it towards the end instead of at
+the top of the file..
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>  # PC SMBus host controller drivers
+>  obj-$(CONFIG_I2C_ALI1535)	+= i2c-ali1535.o
+>  obj-$(CONFIG_I2C_ALI1563)	+= i2c-ali1563.o
+> diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
+> new file mode 100644
+> index 0000000..98c0fcc
+> --- /dev/null
+> +++ b/drivers/i2c/busses/i2c-virtio.c
+> @@ -0,0 +1,289 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Virtio I2C Bus Driver
+> + *
+> + * The Virtio I2C Specification:
+> + * https://raw.githubusercontent.com/oasis-tcs/virtio-spec/master/virtio-i2c.tex
+> + *
+> + * Copyright (c) 2021 Intel Corporation. All rights reserved.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/completion.h>
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
 
+> +#include <linux/io.h>
+> +#include <linux/jiffies.h>
 
-"sparse warnings: (new ones prefixed by >>)"
->> drivers/i2c/busses/i2c-virtio.c:78:47: sparse: sparse: invalid assignment: |=
->> drivers/i2c/busses/i2c-virtio.c:78:47: sparse:    left side has type restricted __le32
->> drivers/i2c/busses/i2c-virtio.c:78:47: sparse:    right side has type int
+I don't think above two are required here..
 
-vim +78 drivers/i2c/busses/i2c-virtio.c
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
 
-    59	
-    60	static int virtio_i2c_send_reqs(struct virtqueue *vq,
-    61					struct virtio_i2c_req *reqs,
-    62					struct i2c_msg *msgs, int nr)
-    63	{
-    64		struct scatterlist *sgs[3], out_hdr, msg_buf, in_hdr;
-    65		int i, outcnt, incnt, err = 0;
-    66		u8 *buf;
-    67	
-    68		for (i = 0; i < nr; i++) {
-    69			if (!msgs[i].len)
-    70				break;
-    71	
-    72			/* Only 7-bit mode supported for this moment. For the address format,
-    73			 * Please check the Virtio I2C Specification.
-    74			 */
-    75			reqs[i].out_hdr.addr = cpu_to_le16(msgs[i].addr << 1);
-    76	
-    77			if (i != nr - 1)
-  > 78				reqs[i].out_hdr.flags |= VIRTIO_I2C_FLAGS_FAIL_NEXT;
-    79	
-    80			outcnt = incnt = 0;
-    81			sg_init_one(&out_hdr, &reqs[i].out_hdr, sizeof(reqs[i].out_hdr));
-    82			sgs[outcnt++] = &out_hdr;
-    83	
-    84			buf = kzalloc(msgs[i].len, GFP_KERNEL);
-    85			if (!buf)
-    86				break;
-    87	
-    88			reqs[i].buf = buf;
-    89			sg_init_one(&msg_buf, reqs[i].buf, msgs[i].len);
-    90	
-    91			if (msgs[i].flags & I2C_M_RD) {
-    92				sgs[outcnt + incnt++] = &msg_buf;
-    93			} else {
-    94				memcpy(reqs[i].buf, msgs[i].buf, msgs[i].len);
-    95				sgs[outcnt++] = &msg_buf;
-    96			}
-    97	
-    98			sg_init_one(&in_hdr, &reqs[i].in_hdr, sizeof(reqs[i].in_hdr));
-    99			sgs[outcnt + incnt++] = &in_hdr;
-   100	
-   101			err = virtqueue_add_sgs(vq, sgs, outcnt, incnt, &reqs[i], GFP_KERNEL);
-   102			if (err < 0) {
-   103				pr_err("failed to add msg[%d] to virtqueue.\n", i);
-   104				kfree(reqs[i].buf);
-   105				reqs[i].buf = NULL;
-   106				break;
-   107			}
-   108		}
-   109	
-   110		return i;
-   111	}
-   112	
+> +#include <linux/platform_device.h>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+same here.
 
---vtzGhvizbBRQ85DL
-Content-Type: application/gzip
-Content-Disposition: attachment; filename=".config.gz"
-Content-Transfer-Encoding: base64
+> +#include <linux/wait.h>
 
-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
+same here.
 
---vtzGhvizbBRQ85DL--
+> +
+
+And this blank line as well, since all are standard linux headers.
+
+> +#include <linux/virtio.h>
+> +#include <linux/virtio_i2c.h>
+> +
+> +/**
+> + * struct virtio_i2c - virtio I2C data
+> + * @vdev: virtio device for this controller
+> + * @completion: completion of virtio I2C message
+> + * @adap: I2C adapter for this controller
+> + * @i2c_lock: lock for virtqueue processing
+> + * @vq: the virtio virtqueue for communication
+> + */
+> +struct virtio_i2c {
+> +	struct virtio_device *vdev;
+> +	struct completion completion;
+> +	struct i2c_adapter adap;
+> +	struct mutex i2c_lock;
+
+i2c_ is redundant here. "lock" sounds good enough.
+
+> +	struct virtqueue *vq;
+> +};
+> +
+> +/**
+> + * struct virtio_i2c_req - the virtio I2C request structure
+> + * @out_hdr: the OUT header of the virtio I2C message
+> + * @buf: the buffer into which data is read, or from which it's written
+> + * @in_hdr: the IN header of the virtio I2C message
+> + */
+> +struct virtio_i2c_req {
+> +	struct virtio_i2c_out_hdr out_hdr;
+> +	u8 *buf;
+> +	struct virtio_i2c_in_hdr in_hdr;
+> +};
+> +
+> +static void virtio_i2c_msg_done(struct virtqueue *vq)
+> +{
+> +	struct virtio_i2c *vi = vq->vdev->priv;
+> +
+> +	complete(&vi->completion);
+> +}
+> +
+> +static int virtio_i2c_send_reqs(struct virtqueue *vq,
+> +				struct virtio_i2c_req *reqs,
+> +				struct i2c_msg *msgs, int nr)
+> +{
+> +	struct scatterlist *sgs[3], out_hdr, msg_buf, in_hdr;
+> +	int i, outcnt, incnt, err = 0;
+> +	u8 *buf;
+> +
+> +	for (i = 0; i < nr; i++) {
+> +		if (!msgs[i].len)
+> +			break;
+> +
+> +		/* Only 7-bit mode supported for this moment. For the address format,
+> +		 * Please check the Virtio I2C Specification.
+> +		 */
+
+Please use proper comment style.
+
+                /*
+                 * Only 7-bit mode supported for now, check Virtio I2C
+                 * specification for format of "addr" field.
+                 */
+
+> +		reqs[i].out_hdr.addr = cpu_to_le16(msgs[i].addr << 1);
+> +
+> +		if (i != nr - 1)
+> +			reqs[i].out_hdr.flags |= VIRTIO_I2C_FLAGS_FAIL_NEXT;
+
+Since flags field hasn't been touched anywhere, directly assigning it may be
+better instead of |=, it makes it more readable.
+
+> +
+> +		outcnt = incnt = 0;
+> +		sg_init_one(&out_hdr, &reqs[i].out_hdr, sizeof(reqs[i].out_hdr));
+> +		sgs[outcnt++] = &out_hdr;
+> +
+> +		buf = kzalloc(msgs[i].len, GFP_KERNEL);
+> +		if (!buf)
+> +			break;
+> +
+> +		reqs[i].buf = buf;
+> +		sg_init_one(&msg_buf, reqs[i].buf, msgs[i].len);
+> +
+> +		if (msgs[i].flags & I2C_M_RD) {
+> +			sgs[outcnt + incnt++] = &msg_buf;
+> +		} else {
+> +			memcpy(reqs[i].buf, msgs[i].buf, msgs[i].len);
+> +			sgs[outcnt++] = &msg_buf;
+> +		}
+> +
+> +		sg_init_one(&in_hdr, &reqs[i].in_hdr, sizeof(reqs[i].in_hdr));
+> +		sgs[outcnt + incnt++] = &in_hdr;
+> +
+> +		err = virtqueue_add_sgs(vq, sgs, outcnt, incnt, &reqs[i], GFP_KERNEL);
+> +		if (err < 0) {
+> +			pr_err("failed to add msg[%d] to virtqueue.\n", i);
+> +			kfree(reqs[i].buf);
+> +			reqs[i].buf = NULL;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return i;
+> +}
+> +
+> +static int virtio_i2c_complete_reqs(struct virtqueue *vq,
+> +					struct virtio_i2c_req *reqs,
+> +					struct i2c_msg *msgs, int nr)
+> +{
+> +	struct virtio_i2c_req *req;
+> +	unsigned int len;
+> +	int i;
+> +
+> +	for (i = 0; i < nr; i++) {
+> +		req = (struct virtio_i2c_req *)virtqueue_get_buf(vq, &len);
+
+No need of cast here since return type is void *.
+
+> +		if (!(req && req == &reqs[i])) {
+
+I find this less readable compared to:
+		if (!req || req != &reqs[i]) {
+
+> +			pr_err("msg[%d]: addr=0x%x virtqueue error.\n", i, msgs[i].addr);
+> +			break;
+> +		}
+> +
+> +		if (req->in_hdr.status != VIRTIO_I2C_MSG_OK) {
+> +			pr_err("msg[%d]: addr=0x%x backend error.\n", i, msgs[i].addr);
+> +			break;
+> +		}
+
+For all the above errors where you simply break out, you still need to free the
+memory for buf, right ?
+
+> +
+> +		if (msgs[i].flags & I2C_M_RD)
+> +			memcpy(msgs[i].buf, req->buf, msgs[i].len);
+> +
+> +		kfree(req->buf);
+> +		req->buf = NULL;
+> +	}
+> +
+> +	return i;
+> +}
+> +
+> +static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+> +{
+> +	struct virtio_i2c *vi = i2c_get_adapdata(adap);
+> +	struct virtqueue *vq = vi->vq;
+> +	struct virtio_i2c_req *reqs;
+> +	unsigned long time_left;
+> +	int ret, nr;
+> +
+> +	reqs = kcalloc(num, sizeof(*reqs), GFP_KERNEL);
+> +	if (!reqs)
+> +		return -ENOMEM;
+> +
+> +	mutex_lock(&vi->i2c_lock);
+
+I have never worked with i2c stuff earlier, but I don't think you need a lock
+here. The transactions seem to be serialized by the i2c-core by itself (look at
+i2c_transfer() in i2c-core-base.c), though there is another exported version
+__i2c_transfer() but the comment over it says the callers must take adapter lock
+before calling it.
+
+> +
+> +	ret = virtio_i2c_send_reqs(vq, reqs, msgs, num);
+> +	if (ret == 0)
+> +		goto err_unlock_free;
+> +
+> +	nr = ret;
+> +
+> +	virtqueue_kick(vq);
+> +
+> +	time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
+> +	if (!time_left) {
+> +		dev_err(&adap->dev, "virtio i2c backend timeout.\n");
+> +		ret = -ETIMEDOUT;
+
+You need to free bufs of the requests here as well..
+
+> +		goto err_unlock_free;
+> +	}
+> +
+> +	ret = virtio_i2c_complete_reqs(vq, reqs, msgs, nr);
+> +
+> +	reinit_completion(&vi->completion);
+> +
+> +err_unlock_free:
+> +	mutex_unlock(&vi->i2c_lock);
+> +	kfree(reqs);
+> +	return ret;
+> +}
+> +
+> +static void virtio_i2c_del_vqs(struct virtio_device *vdev)
+> +{
+> +	vdev->config->reset(vdev);
+> +	vdev->config->del_vqs(vdev);
+> +}
+> +
+> +static int virtio_i2c_setup_vqs(struct virtio_i2c *vi)
+> +{
+> +	struct virtio_device *vdev = vi->vdev;
+> +
+> +	vi->vq = virtio_find_single_vq(vdev, virtio_i2c_msg_done, "msg");
+> +	return PTR_ERR_OR_ZERO(vi->vq);
+> +}
+> +
+> +static u32 virtio_i2c_func(struct i2c_adapter *adap)
+> +{
+> +	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+> +}
+> +
+> +static struct i2c_algorithm virtio_algorithm = {
+> +	.master_xfer = virtio_i2c_xfer,
+> +	.functionality = virtio_i2c_func,
+> +};
+> +
+> +static struct i2c_adapter virtio_adapter = {
+> +	.owner = THIS_MODULE,
+> +	.name = "Virtio I2C Adapter",
+> +	.class = I2C_CLASS_DEPRECATED,
+
+Why are we using something that is deprecated here ?
+
+> +	.algo = &virtio_algorithm,
+> +};
+> +
+> +static int virtio_i2c_probe(struct virtio_device *vdev)
+> +{
+> +	struct device *pdev = vdev->dev.parent;
+> +	struct virtio_i2c *vi;
+> +	int ret;
+> +
+> +	vi = devm_kzalloc(&vdev->dev, sizeof(*vi), GFP_KERNEL);
+> +	if (!vi)
+> +		return -ENOMEM;
+> +
+> +	vdev->priv = vi;
+> +	vi->vdev = vdev;
+> +
+> +	mutex_init(&vi->i2c_lock);
+> +	init_completion(&vi->completion);
+> +
+> +	ret = virtio_i2c_setup_vqs(vi);
+> +	if (ret)
+> +		return ret;
+> +
+> +	vi->adap = virtio_adapter;
+> +	i2c_set_adapdata(&vi->adap, vi);
+> +	vi->adap.dev.parent = &vdev->dev;
+
+better add a blank line here.
+
+> +	/* Setup ACPI node for controlled devices which will be probed through ACPI */
+> +	ACPI_COMPANION_SET(&vi->adap.dev, ACPI_COMPANION(pdev));
+> +	vi->adap.timeout = HZ / 10;
+> +
+> +	ret = i2c_add_adapter(&vi->adap);
+> +	if (ret) {
+> +		virtio_i2c_del_vqs(vdev);
+> +		dev_err(&vdev->dev, "failed to add virtio-i2c adapter.\n");
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void virtio_i2c_remove(struct virtio_device *vdev)
+> +{
+> +	struct virtio_i2c *vi = vdev->priv;
+> +
+> +	i2c_del_adapter(&vi->adap);
+> +	virtio_i2c_del_vqs(vdev);
+> +}
+> +
+> +static struct virtio_device_id id_table[] = {
+> +	{ VIRTIO_ID_I2C_ADPTER, VIRTIO_DEV_ANY_ID },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(virtio, id_table);
+> +
+> +static int __maybe_unused virtio_i2c_freeze(struct virtio_device *vdev)
+> +{
+> +	virtio_i2c_del_vqs(vdev);
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused virtio_i2c_restore(struct virtio_device *vdev)
+> +{
+> +	return virtio_i2c_setup_vqs(vdev->priv);
+> +}
+> +
+> +static struct virtio_driver virtio_i2c_driver = {
+> +	.id_table	= id_table,
+> +	.probe		= virtio_i2c_probe,
+> +	.remove		= virtio_i2c_remove,
+> +	.driver	= {
+> +		.name	= "i2c_virtio",
+> +	},
+> +#ifdef CONFIG_PM_SLEEP
+> +	.freeze = virtio_i2c_freeze,
+> +	.restore = virtio_i2c_restore,
+> +#endif
+> +};
+> +module_virtio_driver(virtio_i2c_driver);
+> +
+> +MODULE_DESCRIPTION("Virtio i2c bus driver");
+
+You can add module-author as well here.
+
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/uapi/linux/virtio_i2c.h b/include/uapi/linux/virtio_i2c.h
+> new file mode 100644
+> index 0000000..00f4508
+> --- /dev/null
+> +++ b/include/uapi/linux/virtio_i2c.h
+> @@ -0,0 +1,42 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
+> +/*
+> + * Definitions for virtio I2C Adpter
+> + *
+> + * Copyright (c) 2021 Intel Corporation. All rights reserved.
+> + */
+> +
+> +#ifndef _UAPI_LINUX_VIRTIO_I2C_H
+> +#define _UAPI_LINUX_VIRTIO_I2C_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/virtio_ids.h>
+> +#include <linux/virtio_config.h>
+
+Any file (header or c) should only include what it directly needs and nothing
+else. And so you should need only types.h here and nothing else.
+
+> +
+> +/**
+> + * struct virtio_i2c_out_hdr - the virtio I2C message OUT header
+> + * @addr: the controlled device address
+> + * @padding: used to pad to full dword
+> + * @flags: used for feature extensibility
+> + */
+> +struct virtio_i2c_out_hdr {
+> +	__le16 addr;
+> +	__le16 padding;
+> +	__le32 flags;
+> +};
+
+It might be worth setting __packed for the structures here, even when we have
+taken care of padding ourselves, for both the structures..
+
+> +
+> +/* The bit 0 of the @virtio_i2c_out_hdr.@flags, used to group the requests */
+> +#define VIRTIO_I2C_FLAGS_FAIL_NEXT	0x00000001
+> +
+
+I would define this before the above structure.
+
+> +/**
+> + * struct virtio_i2c_in_hdr - the virtio I2C message IN header
+> + * @status: the processing result from the backend
+> + */
+> +struct virtio_i2c_in_hdr {
+> +	u8 status;
+> +};
+> +
+> +/* The final status written by the device */
+> +#define VIRTIO_I2C_MSG_OK	0
+> +#define VIRTIO_I2C_MSG_ERR	1
+> +
+> +#endif /* _UAPI_LINUX_VIRTIO_I2C_H */
+> diff --git a/include/uapi/linux/virtio_ids.h b/include/uapi/linux/virtio_ids.h
+> index bc1c062..6ae32db 100644
+> --- a/include/uapi/linux/virtio_ids.h
+> +++ b/include/uapi/linux/virtio_ids.h
+> @@ -54,5 +54,6 @@
+>  #define VIRTIO_ID_FS			26 /* virtio filesystem */
+>  #define VIRTIO_ID_PMEM			27 /* virtio pmem */
+>  #define VIRTIO_ID_MAC80211_HWSIM	29 /* virtio mac80211-hwsim */
+> +#define VIRTIO_ID_I2C_ADPTER		34 /* virtio i2c adpter */
+>  
+>  #endif /* _LINUX_VIRTIO_IDS_H */
+
+Thanks for yet another version Jie.
+
+-- 
+viresh
