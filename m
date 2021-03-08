@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26353306DF
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 05:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D29C3306E0
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 05:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbhCHEgS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 7 Mar 2021 23:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
+        id S234157AbhCHEgT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 7 Mar 2021 23:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234180AbhCHEgP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 7 Mar 2021 23:36:15 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2336C06174A
-        for <linux-i2c@vger.kernel.org>; Sun,  7 Mar 2021 20:36:14 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id j6-20020a17090adc86b02900cbfe6f2c96so2385184pjv.1
-        for <linux-i2c@vger.kernel.org>; Sun, 07 Mar 2021 20:36:14 -0800 (PST)
+        with ESMTP id S234182AbhCHEgQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 7 Mar 2021 23:36:16 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A119EC06175F
+        for <linux-i2c@vger.kernel.org>; Sun,  7 Mar 2021 20:36:16 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id lr10-20020a17090b4b8ab02900dd61b95c5eso15840pjb.4
+        for <linux-i2c@vger.kernel.org>; Sun, 07 Mar 2021 20:36:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=frFr0rEwZ1mvFx0ODNHz2Mn0uGUh3IUayStZXkwe3Y4=;
-        b=oS/pZFhfYsLgWpBMD4U3ondO/K8Dlcn5ex9y+wNgTIJbS6v2IOE/SRXl2p6TL8OFGv
-         HUJ1yNbIbYQxJthZQA0Cm41Dx593QLs7qhSoqDrKX9xkwfgHh4TxVYaqB8iyI/q18WOX
-         Kj1yLcZRMuMVX0nYsESD3NORPOnyM9AtN9Gic=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FHYldnLHVjUCtTPUMHFVsgGiL0sQpC3TJ8ogHG6aen8=;
+        b=kf5mR4d+LR5JbmXKw7GBAbezQrJuBbdr23XLj7F4h0q19tZUWG1P3AbEmDtzUGrnZZ
+         QIPpIARW/MuIw3pbo79B7vjypi5C1e/tuJuU40TMB7Z3pesGzJWkJjAohZ2KJdLH+7eK
+         x5rimKui7iYlNXUZegTL0pvXUDliEdJbc8fIw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=frFr0rEwZ1mvFx0ODNHz2Mn0uGUh3IUayStZXkwe3Y4=;
-        b=raKQDHKF0SBGjyA7dAWZQKtgWnFzVjEAHwyfh7uOdMAc2ZF+zTaaTHngKNIZB5aN0U
-         SLrgULzQ4Y46v8LtuBcrl7OU4K8vZE1ZkfLZq/g5miajC8dui/xSP+71u6rV66d20PSc
-         MrtB/odmEA+d5pY7CUIRxh3TIOr8Yx7Uv2VLtWrWBevThIOgaRHxmco9IjqtO/eurHL6
-         f5/TMJkUsGAb8D+pOaXkBZfb/TlWHl3xjTQUIGGogh6HGaO7OkGK06mKkT7b8P7d7Co3
-         UGJzwJH+rNpbgXSbFErFu24rAIMo+irzUj8ryVOaMv2KxqVG0OuU30sBEcYVf9FEVO9Z
-         4vGw==
-X-Gm-Message-State: AOAM530jLedVhVqns+LSLx3TtQo+RApoWF0QlL+vwMZ8EWzyyDDPRczf
-        pAJzqMekTbVrRt2opoiYykWhFg==
-X-Google-Smtp-Source: ABdhPJzjTHgZfblSCwgJ8vilflebyR1Y+UKGgoiG73tGWtfd+EgXsnrLI5gUCZ/UqbMJyjDyZQpraw==
-X-Received: by 2002:a17:90a:1049:: with SMTP id y9mr22687217pjd.173.1615178174280;
-        Sun, 07 Mar 2021 20:36:14 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FHYldnLHVjUCtTPUMHFVsgGiL0sQpC3TJ8ogHG6aen8=;
+        b=fqvf/AvYQmL6J4oFaKPiLgOsvdsHwzT31tKY8rIBcF5PPsZNUSHfbteXS6NFTMK8Kv
+         ayZxuPu17Aip5zq1Wqm1eE3PET2Ng1nYGaD7G0iGglsBcKvQI65kFaAy38h6J9AiwvnQ
+         f7yGbbpq9Nn8YEjEA3DLmu+q+ElNlHyL0cOKvJnMTlw/d86MCMuZkjMqSZ271V2EVNoN
+         yQSr5LLndPxLRJHZre1Bk7AjQhkCde7beLEvm5968ilDUUYgo+j1WnXpKGF+hLWGVtqy
+         XVtfA2KVj5vw9s0Q8ILFhZViGZzhIszxaNtTJ5xMG09OsJkl/292BhwI7Q5h4FmotHWP
+         NHdA==
+X-Gm-Message-State: AOAM533z33E+zBwbzCGegtwTN8TTpL5Ax55RG0/kfHF/XP66sGnZzPGC
+        3T0H3yI/BuG79CmyzzuTqe0+nQ==
+X-Google-Smtp-Source: ABdhPJxfM03eVHY5cSuqb4Q3jnfIMSUxwGHkcMGr83Img4syS9OwBsVqxPVXEldm7tF596anODr1XA==
+X-Received: by 2002:a17:90a:d590:: with SMTP id v16mr22232876pju.118.1615178176205;
+        Sun, 07 Mar 2021 20:36:16 -0800 (PST)
 Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:5da1:da1b:5bcf:2d46])
-        by smtp.gmail.com with ESMTPSA id q2sm8191562pfu.215.2021.03.07.20.36.11
+        by smtp.gmail.com with ESMTPSA id q2sm8191562pfu.215.2021.03.07.20.36.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Mar 2021 20:36:13 -0800 (PST)
+        Sun, 07 Mar 2021 20:36:15 -0800 (PST)
 From:   Hsin-Yi Wang <hsinyi@chromium.org>
 To:     Wolfram Sang <wsa@kernel.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -53,65 +53,44 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-mediatek@lists.infradead.org,
         Bibby Hsieh <bibby.hsieh@mediatek.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: [PATCH v16 0/2] add power control in i2c
-Date:   Mon,  8 Mar 2021 12:36:05 +0800
-Message-Id: <20210308043607.957156-1-hsinyi@chromium.org>
+Subject: [PATCH v16 1/2] dt-binding: i2c: add bus-supply property
+Date:   Mon,  8 Mar 2021 12:36:06 +0800
+Message-Id: <20210308043607.957156-2-hsinyi@chromium.org>
 X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
+In-Reply-To: <20210308043607.957156-1-hsinyi@chromium.org>
+References: <20210308043607.957156-1-hsinyi@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Although in the most platforms, the power of eeprom
-and i2c are alway on, some platforms disable the
-eeprom and i2c power in order to meet low power request.
+From: Bibby Hsieh <bibby.hsieh@mediatek.com>
 
-This patch add the pm_runtime ops to control power to
-support all platforms.
+In some platforms, they disable the power-supply of i2c due
+to power consumption reduction. This patch add bus-supply property.
 
-Changes since v15:
- - Squash the fix[1] for v15.
-[1] https://patchwork.ozlabs.org/project/linux-i2c/patch/20200522101327.13456-1-m.szyprowski@samsung.com/
+Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ Documentation/devicetree/bindings/i2c/i2c.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Changes since v14:
- - change the return value in normal condition
- - access the variable after NULL pointer checking
- - add ack tag
-
-Changes since v13:
- - fixup some logic error
-
-Changes since v12:
- - rebase onto v5.7-rc1
- - change the property description in binding
-
-Changes since v11:
- - use suspend_late/resume_early instead of suspend/resume
- - rebase onto v5.6-rc1
-
-Changes since v10:
- - fixup some worng codes
-
-Changes since v9:
- - fixup build error
- - remove redundant code
-
-Changes since v8:
- - fixup some wrong code
- - remove redundant message
-
-        [... snip ...]
-
-Bibby Hsieh (2):
-  dt-binding: i2c: add bus-supply property
-  i2c: core: support bus regulator controlling in adapter
-
- Documentation/devicetree/bindings/i2c/i2c.txt |  3 +
- drivers/i2c/i2c-core-base.c                   | 93 +++++++++++++++++++
- include/linux/i2c.h                           |  2 +
- 3 files changed, 98 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+index df41f72afc87..88972bd62ce1 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c.txt
++++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+@@ -130,6 +130,9 @@ wants to support one of the below features, it should adapt these bindings.
+ - wakeup-source
+ 	device can be used as a wakeup source.
+ 
++- bus-supply
++	phandle to the regulator that provides power to SCL/SDA.
++
+ Binding may contain optional "interrupts" property, describing interrupts
+ used by the device. I2C core will assign "irq" interrupt (or the very first
+ interrupt if not using interrupt names) as primary interrupt for the slave.
 -- 
 2.30.1.766.gb4fecdf3b7-goog
 
