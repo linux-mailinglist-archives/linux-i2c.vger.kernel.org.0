@@ -2,31 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF758330D45
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 13:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2B7330D41
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 13:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbhCHMUw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S230457AbhCHMUw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Mon, 8 Mar 2021 07:20:52 -0500
-Received: from mga07.intel.com ([134.134.136.100]:3478 "EHLO mga07.intel.com"
+Received: from mga12.intel.com ([192.55.52.136]:52723 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230169AbhCHMUm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S230184AbhCHMUm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
         Mon, 8 Mar 2021 07:20:42 -0500
-IronPort-SDR: Qef8E12BSHAwArql24qevcPZ5OU8KhgJ01nVnY1Y3/0SC3IgYWJOMSnkSvPfJ/1YHlAKC5MxCP
- jtudN8iOZbTA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="252044285"
+IronPort-SDR: PZ5EcfDbbkwuNTBHD7gK4UCo2DL3cJK7ZWXRXrV/X7eUwgBdbjmS/ay3nGTG8OxLFIhp1zFzZG
+ C5RrnkMceafA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="167288037"
 X-IronPort-AV: E=Sophos;i="5.81,232,1610438400"; 
-   d="scan'208";a="252044285"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 04:20:41 -0800
-IronPort-SDR: 2q3WNouO93QO5ykGzfaw+a9Vr4WuKb3dTbqIHNKitQOgq+WsN9clIO/C3nSrxGwM3eaL2KRaye
- uf82+az6QKpw==
+   d="scan'208";a="167288037"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2021 04:20:41 -0800
+IronPort-SDR: fSv4514lS+BwTAYRGvBpsn5EFCTYomMuaTpSj1R21DCWGD1sXJ7lzEfdUIRNcnJcPhrvSMUVRR
+ AMt/kuKR0zNQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,232,1610438400"; 
-   d="scan'208";a="369401482"
+   d="scan'208";a="588032254"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2021 04:20:37 -0800
+  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2021 04:20:37 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 11573263; Mon,  8 Mar 2021 14:20:38 +0200 (EET)
+        id 1E405490; Mon,  8 Mar 2021 14:20:38 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Jean Delvare <jdelvare@suse.de>,
@@ -40,9 +40,9 @@ To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-pci@vger.kernel.org
 Cc:     Jean Delvare <jdelvare@suse.com>, Peter Tyser <ptyser@xes-inc.com>,
         hdegoede@redhat.com, henning.schild@siemens.com
-Subject: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge support library
-Date:   Mon,  8 Mar 2021 14:20:16 +0200
-Message-Id: <20210308122020.57071-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 4/7] mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
+Date:   Mon,  8 Mar 2021 14:20:17 +0200
+Message-Id: <20210308122020.57071-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
 References: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
@@ -52,179 +52,60 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Jonathan Yong <jonathan.yong@intel.com>
+Factor out duplicate code to lpc_ich_enable_spi_write() helper function.
 
-There is already one and at least one more user is coming which
-requires an access to Primary to Sideband bridge (P2SB) in order to
-get IO or MMIO bar hidden by BIOS. Create a library to access P2SB
-for x86 devices.
-
-Signed-off-by: Jonathan Yong <jonathan.yong@intel.com>
-Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pci/Kconfig      |  8 ++++
- drivers/pci/Makefile     |  1 +
- drivers/pci/pci-p2sb.c   | 83 ++++++++++++++++++++++++++++++++++++++++
- include/linux/pci-p2sb.h | 28 ++++++++++++++
- 4 files changed, 120 insertions(+)
- create mode 100644 drivers/pci/pci-p2sb.c
- create mode 100644 include/linux/pci-p2sb.h
+ drivers/mfd/lpc_ich.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-index 0c473d75e625..740e5b30d6fd 100644
---- a/drivers/pci/Kconfig
-+++ b/drivers/pci/Kconfig
-@@ -252,6 +252,14 @@ config PCIE_BUS_PEER2PEER
+diff --git a/drivers/mfd/lpc_ich.c b/drivers/mfd/lpc_ich.c
+index 3bbb29a7e7a5..3a19ed57260e 100644
+--- a/drivers/mfd/lpc_ich.c
++++ b/drivers/mfd/lpc_ich.c
+@@ -1083,12 +1083,21 @@ static int lpc_ich_init_wdt(struct pci_dev *dev)
+ 	return ret;
+ }
  
- endchoice
++static void lpc_ich_test_spi_write(struct pci_dev *dev, unsigned int devfn,
++				   struct intel_spi_boardinfo *info)
++{
++	u32 bcr;
++
++	pci_bus_read_config_dword(dev->bus, devfn, BCR, &bcr);
++	info->writeable = !!(bcr & BCR_WPD);
++}
++
+ static int lpc_ich_init_spi(struct pci_dev *dev)
+ {
+ 	struct lpc_ich_priv *priv = pci_get_drvdata(dev);
+ 	struct resource *res = &intel_spi_res[0];
+ 	struct intel_spi_boardinfo *info;
+-	u32 spi_base, rcba, bcr;
++	u32 spi_base, rcba;
  
-+config PCI_P2SB
-+	bool "Primary to Sideband (P2SB) bridge access support"
-+	depends on PCI && X86
-+	help
-+	  The Primary to Sideband bridge is an interface to some PCI
-+	  devices connected through it. In particular, SPI NOR
-+	  controller in Intel Apollo Lake SoC is one of such devices.
-+
- source "drivers/pci/hotplug/Kconfig"
- source "drivers/pci/controller/Kconfig"
- source "drivers/pci/endpoint/Kconfig"
-diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
-index d62c4ac4ae1b..eee8d5dda7d9 100644
---- a/drivers/pci/Makefile
-+++ b/drivers/pci/Makefile
-@@ -23,6 +23,7 @@ obj-$(CONFIG_PCI_IOV)		+= iov.o
- obj-$(CONFIG_PCI_BRIDGE_EMUL)	+= pci-bridge-emul.o
- obj-$(CONFIG_PCI_LABEL)		+= pci-label.o
- obj-$(CONFIG_X86_INTEL_MID)	+= pci-mid.o
-+obj-$(CONFIG_PCI_P2SB)		+= pci-p2sb.o
- obj-$(CONFIG_PCI_SYSCALL)	+= syscall.o
- obj-$(CONFIG_PCI_STUB)		+= pci-stub.o
- obj-$(CONFIG_PCI_PF_STUB)	+= pci-pf-stub.o
-diff --git a/drivers/pci/pci-p2sb.c b/drivers/pci/pci-p2sb.c
-new file mode 100644
-index 000000000000..68d7dad48cdb
---- /dev/null
-+++ b/drivers/pci/pci-p2sb.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Primary to Sideband bridge (P2SB) access support
-+ *
-+ * Copyright (c) 2017, 2021 Intel Corporation.
-+ *
-+ * Authors: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+ *	    Jonathan Yong <jonathan.yong@intel.com>
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/export.h>
-+#include <linux/pci-p2sb.h>
-+
-+#include <asm/cpu_device_id.h>
-+#include <asm/intel-family.h>
-+
-+#include "pci.h"
-+
-+#define P2SBC_HIDE_BYTE			0xe1
-+#define P2SBC_HIDE_BIT			BIT(0)
-+
-+static const struct x86_cpu_id p2sb_cpu_ids[] = {
-+	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	PCI_DEVFN(13, 0)),
-+	{}
-+};
-+
-+static int pci_p2sb_devfn(unsigned int *devfn)
-+{
-+	const struct x86_cpu_id *id;
-+
-+	id = x86_match_cpu(p2sb_cpu_ids);
-+	if (!id)
-+		return -ENODEV;
-+
-+	*devfn = (unsigned int)id->driver_data;
-+	return 0;
-+}
-+
-+/**
-+ * pci_p2sb_bar - Get Primary to Sideband bridge (P2SB) device BAR
-+ * @pdev:	PCI device to get a PCI bus to communicate with
-+ * @devfn:	PCI slot and function to communicate with
-+ * @mem:	memory resource to be filled in
-+ *
-+ * The BIOS prevents the P2SB device from being enumerated by the PCI
-+ * subsystem, so we need to unhide and hide it back to lookup the BAR.
-+ *
-+ * Caller must provide a valid pointer to @mem.
-+ *
-+ * Locking is handled by pci_rescan_remove_lock mutex.
-+ *
-+ * Return:
-+ * 0 on success or appropriate errno value on error.
-+ */
-+int pci_p2sb_bar(struct pci_dev *pdev, unsigned int devfn, struct resource *mem)
-+{
-+	struct pci_bus *bus = pdev->bus;
-+	unsigned int df;
-+	int ret;
-+
-+	/* Get devfn for P2SB device itself */
-+	ret = pci_p2sb_devfn(&df);
-+	if (ret)
-+		return ret;
-+
-+	pci_lock_rescan_remove();
-+
-+	/* Unhide the P2SB device */
-+	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE, 0);
-+
-+	/* Read the first BAR of the device in question */
-+	__pci_bus_read_base(bus, devfn, pci_bar_unknown, mem, PCI_BASE_ADDRESS_0, true);
-+
-+	/* Hide the P2SB device */
-+	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE, P2SBC_HIDE_BIT);
-+
-+	pci_unlock_rescan_remove();
-+
-+	pci_bus_info(bus, devfn, "BAR: %pR\n", mem);
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(pci_p2sb_bar);
-diff --git a/include/linux/pci-p2sb.h b/include/linux/pci-p2sb.h
-new file mode 100644
-index 000000000000..15dd42737c84
---- /dev/null
-+++ b/include/linux/pci-p2sb.h
-@@ -0,0 +1,28 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Primary to Sideband bridge (P2SB) access support
-+ */
-+
-+#ifndef _PCI_P2SB_H
-+#define _PCI_P2SB_H
-+
-+#include <linux/errno.h>
-+
-+struct pci_dev;
-+struct resource;
-+
-+#if IS_BUILTIN(CONFIG_PCI_P2SB)
-+
-+int pci_p2sb_bar(struct pci_dev *pdev, unsigned int devfn, struct resource *mem);
-+
-+#else /* CONFIG_PCI_P2SB is not set */
-+
-+static inline
-+int pci_p2sb_bar(struct pci_dev *pdev, unsigned int devfn, struct resource *mem)
-+{
-+	return -ENODEV;
-+}
-+
-+#endif /* CONFIG_PCI_P2SB */
-+
-+#endif /* _PCI_P2SB_H */
+ 	info = devm_kzalloc(&dev->dev, sizeof(*info), GFP_KERNEL);
+ 	if (!info)
+@@ -1112,8 +1121,7 @@ static int lpc_ich_init_spi(struct pci_dev *dev)
+ 			res->start = spi_base + SPIBASE_LPT;
+ 			res->end = res->start + SPIBASE_LPT_SZ - 1;
+ 
+-			pci_read_config_dword(dev, BCR, &bcr);
+-			info->writeable = !!(bcr & BCR_WPD);
++			lpc_ich_test_spi_write(dev, dev->devfn, info);
+ 		}
+ 		break;
+ 
+@@ -1134,8 +1142,7 @@ static int lpc_ich_init_spi(struct pci_dev *dev)
+ 			res->start = spi_base & 0xfffffff0;
+ 			res->end = res->start + SPIBASE_APL_SZ - 1;
+ 
+-			pci_bus_read_config_dword(bus, spi, BCR, &bcr);
+-			info->writeable = !!(bcr & BCR_WPD);
++			lpc_ich_test_spi_write(dev, spi, info);
+ 		}
+ 
+ 		pci_bus_write_config_byte(bus, p2sb, 0xe1, 0x1);
 -- 
 2.30.1
 
