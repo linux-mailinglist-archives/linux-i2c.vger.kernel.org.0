@@ -2,122 +2,269 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4663306E8
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 05:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E09F3306EF
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 05:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbhCHEib (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 7 Mar 2021 23:38:31 -0500
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:46082 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232474AbhCHEh4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 7 Mar 2021 23:37:56 -0500
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0D08A891AE;
-        Mon,  8 Mar 2021 17:37:49 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1615178269;
-        bh=NXLFfI7BQjptcdFkSZ0hwO090fqmTSBgkr9D2madENE=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=1412BhugzOdifScxDGYfVQ3ZalUfK4y4p4tdAbJpukHHqDHeiKwB2D8Opa2IPc36P
-         jtS/M3uP5usFbvkT/OMkJoAq1D5F00iienDaeXyWbSQLRbAmA9lDNtFM6LC7ld1n8L
-         MvpShKUftN4eYolZTBEU8WrWveHg/Yo1L/iVnXLhuV05EtoXgXKRJJ0yPhNtTZBKC7
-         TaC4XXiq3vQhSZ/ylQ2hx9zb1eh8BA32NfRgunEl2qRtA7MmSDFGsE/d57WqvsRmDv
-         xLgPR89JfrtDARkpt4GepnDNpzz/Zrru/1e9vegkdq9PQMrbGtldJauS/T/pFE8Kck
-         KHyjuJehuGb1w==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6045aa1c0001>; Mon, 08 Mar 2021 17:37:48 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Mon, 8 Mar 2021 17:37:48 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.012; Mon, 8 Mar 2021 17:37:48 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: Errant readings on LM81 with T2080 SoC
-Thread-Topic: Errant readings on LM81 with T2080 SoC
-Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Sk6p4Y2sAgAAgcACAACSBgA==
-Date:   Mon, 8 Mar 2021 04:37:47 +0000
-Message-ID: <a67ea323-634d-d34e-c63e-b1aaa4737b19@alliedtelesis.co.nz>
-References: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
- <96d660bc-17ab-4e0e-9a94-bce1737a8da1@roeck-us.net>
- <4a1b1494-df96-2d8c-9323-beb2c2ba706b@alliedtelesis.co.nz>
-In-Reply-To: <4a1b1494-df96-2d8c-9323-beb2c2ba706b@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C4C7845C248C3D4EB8EC3956E6D5AD71@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S234234AbhCHEje (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 7 Mar 2021 23:39:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234243AbhCHEjR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 7 Mar 2021 23:39:17 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACACFC06174A
+        for <linux-i2c@vger.kernel.org>; Sun,  7 Mar 2021 20:39:17 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id o11so8619147iob.1
+        for <linux-i2c@vger.kernel.org>; Sun, 07 Mar 2021 20:39:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bsbT519mzZdb7mcw/7+TNYojkJACyFMHn6cRnUT7eX0=;
+        b=PTz+1nw9/NMgAcQ5v/H55nWKHg1I2Z8jcJgMvEMjg6HGSPnYvHylTDKy1hC89hNHro
+         yHtPIYhPZpDRWp+v/va46n/eRPReJ3+tK1rf0I6SgqKPy2z4SGIsyiOPQjkY1XAIWl5Y
+         X9RUDlJPPQYyU10FS6blP9+JMX9tyXUL98WPQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bsbT519mzZdb7mcw/7+TNYojkJACyFMHn6cRnUT7eX0=;
+        b=RzysFeNe7TRI473/88lP10k67tzuuhZQhKNy02ju4m0EUAyUSppqBN3i3nQHWm/Exs
+         xWGZg6QAfYaVnzUmcj3mgHUwjbp+igiMt5tpJIZDMpcF7hDFwKrIYl2hct6MAxeyCkeb
+         FVzCwS6Qp22/T+FAni6u8KNR+CbzrPIwi/FuJb+itkae5TIaEULRLi50PCDEoBaTuPha
+         lqRpvB65G7jwFr/93f3XQWkjlzgjIMfjimw6LfWl2AOa+NPqLUxJdZEhvGyRetFOkmlb
+         Ge7JBSJ+297HpnubEfg1dznzzl7XFroNkKVxEAUR71/+CnBOIADc1T2MgZKNqoRlpmyM
+         Rykw==
+X-Gm-Message-State: AOAM533rD3dWwEze2rCZtVy2Z2nlAsnjDHsQSnf35WQfpdp0T00CifAM
+        UrDq3w8XsT8+IcOzE0/cqsdlAOTXvV12Mnn/TashQg==
+X-Google-Smtp-Source: ABdhPJwXbXBGNNcHdygZ3prUT42NljCsseOPVpwNtukWEbh01trlakkHXGLwXwTQWqw4QSgtc6p7Kc98nEGxgZ5S65w=
+X-Received: by 2002:a5e:d61a:: with SMTP id w26mr17530414iom.40.1615178356732;
+ Sun, 07 Mar 2021 20:39:16 -0800 (PST)
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7uXNjH+ c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10 a=OylRmCEKjCub7zUREboA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+References: <20210305102004.191209-1-hsinyi@chromium.org>
+In-Reply-To: <20210305102004.191209-1-hsinyi@chromium.org>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Mon, 8 Mar 2021 12:38:50 +0800
+Message-ID: <CAJMQK-iDgkETDOnExG3Opuave98q0Nbq2ZK+NpyD_bmB0SrpDA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: core: support bus regulator controlling in adapter
+To:     Wolfram Sang <wsa@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c@vger.kernel.org
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiA4LzAzLzIxIDM6MjcgcG0sIENocmlzIFBhY2toYW0gd3JvdGU6DQo+DQo+IE9uIDgvMDMv
-MjEgMTozMSBwbSwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4+IE9uIDMvNy8yMSAyOjUyIFBNLCBD
-aHJpcyBQYWNraGFtIHdyb3RlOg0KPj4+IEhpLA0KPj4+DQo+Pj4gSSd2ZSBnb3QgYSBzeXN0ZW0g
-dXNpbmcgYSBQb3dlclBDIFQyMDgwIFNvQyBhbmQgYW1vbmcgb3RoZXIgdGhpbmdzIGhhcw0KPj4+
-IGFuIExNODEgaHdtb24gY2hpcC4NCj4+Pg0KPj4+IFVuZGVyIGEgaGlnaCBDUFUgbG9hZCB3ZSBz
-ZWUgZXJyYW50IHJlYWRpbmdzIGZyb20gdGhlIExNODEgYXMgd2VsbCBhcw0KPj4+IGFjdHVhbCBm
-YWlsdXJlcy4gSXQncyB0aGUgZXJyYW50IHJlYWRpbmdzIHRoYXQgY2F1c2UgdGhlIG1vc3QgY29u
-Y2Vybg0KPj4+IHNpbmNlIHdlIGNhbiBlYXNpbHkgaWdub3JlIHRoZSByZWFkIGVycm9ycyBpbiBv
-dXIgbW9uaXRvcmluZyANCj4+PiBhcHBsaWNhdGlvbg0KPj4+IChhbHRob3VnaCBpdCB3b3VsZCBi
-ZSBiZXR0ZXIgaWYgdGhleSB3ZXJlbid0IHRoZXJlIGF0IGFsbCkuDQo+Pj4NCj4+PiBJJ20gYWJs
-ZSB0byByZXByb2R1Y2UgdGhpcyB3aXRoIGEgdGVzdCBhcHBsaWNhdGlvblswXSB0aGF0IGFydGlm
-aWNpYWxseQ0KPj4+IGNyZWF0ZXMgYSBoaWdoIENQVSBsb2FkIHRoZW4gYnkgcmVwZWF0ZWRseSBj
-aGVja2luZyBmb3IgdGhlIGFsbC0xcw0KPj4+IHZhbHVlcyBmcm9tIHRoZSBMTTgxIGRhdGFzaGVl
-dFsxXShwYWdlIDE3KS4gVGhlIGFsbC0xcyByZWFkaW5ncyBzdGljaw0KPj4+IG91dCBhcyB0aGV5
-IGFyZSBvYnZpb3VzbHkgaGlnaGVyIHRoYW4gdGhlIHZvbHRhZ2UgcmFpbHMgdGhhdCBhcmUNCj4+
-PiBjb25uZWN0ZWQgYW5kIGRpc2FncmVlIHdpdGggbWVhc3VyZW1lbnRzIHRha2VuIHdpdGggYSBt
-dWx0aW1ldGVyLg0KPj4+DQo+Pj4gSGVyZSdzIHRoZSBvdXRwdXQgZnJvbSBteSBkZXZpY2UNCj4+
-Pg0KPj4+IFtyb290QGxpbnV4Ym94IH5dIyBjcHVsb2FkIDkwJg0KPj4+IFtyb290QGxpbnV4Ym94
-IH5dIyAod2hpbGUgdHJ1ZTsgZG8gY2F0IA0KPj4+IC9zeXMvY2xhc3MvaHdtb24vaHdtb24wL2lu
-Kl9pbnB1dA0KPj4+IHwgZ3JlcCAnMzMyMFx8NDM4M1x8NjY0MVx8MTU5MzBcfDM1ODYnOyBzbGVl
-cCAxOyBkb25lKSYNCj4+PiAzNTg2DQo+Pj4gMzU4Ng0KPj4+IGNhdDogcmVhZCBlcnJvcjogTm8g
-c3VjaCBkZXZpY2Ugb3IgYWRkcmVzcw0KPj4+IGNhdDogcmVhZCBlcnJvcjogTm8gc3VjaCBkZXZp
-Y2Ugb3IgYWRkcmVzcw0KPj4+IDMzMjANCj4+PiAzMzIwDQo+Pj4gMzU4Ng0KPj4+IDM1ODYNCj4+
-PiA2NjQxDQo+Pj4gNjY0MQ0KPj4+IDQzODMNCj4+PiA0MzgzDQo+Pj4NCj4+PiBGdW5kYW1lbnRh
-bGx5IEkgdGhpbmsgdGhpcyBpcyBhIHByb2JsZW0gd2l0aCB0aGUgZmFjdCB0aGF0IHRoZSBMTTgx
-IGlzDQo+Pj4gYW4gU01CdXMgZGV2aWNlIGJ1dCB0aGUgVDIwODAgKGFuZCBvdGhlciBGcmVlc2Nh
-bGUgU29DcykgdXNlcyBpMmMgDQo+Pj4gYW5kIHdlDQo+Pj4gZW11bGF0ZSBTTUJ1cy4gSSBzdXNw
-ZWN0IHRoZSBlcnJhbnQgcmVhZGluZ3MgYXJlIHdoZW4gd2UgZG9uJ3QgZ2V0IA0KPj4+IHJvdW5k
-DQo+Pj4gdG8gY29tcGxldGluZyB0aGUgcmVhZCB3aXRoaW4gdGhlIHRpbWVvdXQgc3BlY2lmaWVk
-IGJ5IHRoZSBTTUJ1cw0KPj4+IHNwZWNpZmljYXRpb24uIERlcGVuZGluZyBvbiB3aGVuIHRoYXQg
-aGFwcGVucyB3ZSBlaXRoZXIgZmFpbCB0aGUNCj4+PiB0cmFuc2ZlciBvciBpbnRlcnByZXQgdGhl
-IHJlc3VsdCBhcyBhbGwtMXMuDQo+Pj4NCj4+IFRoYXQgaXMgcXVpdGUgdW5saWtlbHkuIE1hbnkg
-c2Vuc29yIGNoaXBzIGFyZSBTTUJ1cyBjaGlwcyBjb25uZWN0ZWQgdG8NCj4+IGkyYyBidXNzZXMu
-IEl0IGlzIG11Y2ggbW9yZSBsaWtlbHkgdGhhdCB0aGVyZSBpcyBhIGJ1ZyBpbiB0aGUgVDIwODAg
-DQo+PiBpMmMgZHJpdmVyLA0KPj4gdGhhdCB0aGUgY2hpcCBkb2Vzbid0IGxpa2UgdGhlIGJ1bGsg
-cmVhZCBjb21tYW5kIGlzc3VlZCB0aHJvdWdoIA0KPj4gcmVnbWFwLCB0aGF0DQo+PiB0aGUgY2hp
-cCBoYXMgcHJvYmxlbXMgd2l0aCB0aGUgaTJjIGJ1cyBzcGVlZCwgb3IgdGhhdCB0aGUgaTJjIGJ1
-cyBpcyANCj4+IG5vaXN5Lg0KPiBQZXJoYXBzIHNvbWV0aGluZyBnZXRzIHVwc2V0IHdoZW4gaW50
-ZXJydXB0IHByb2Nlc3NpbmcgaXMgZGVsYXllZCANCj4gYmVjYXVzZSBvZiBDUFUgbG9hZC4gSSBk
-b24ndCBzZWUgdGhlIHByb2JsZW0gd2hlbiB0aGVyZSBpc24ndCBhIENQVSANCj4gbG9hZCBzbyBJ
-IHRoaW5rIHRoYXQgZWxpbWluYXRlcyBib2FyZCBpc3N1ZXMuDQo+PiBJbiB0aGlzIGNvbnRleHQs
-IHRoZSAiTm8gc3VjaCBkZXZpY2Ugb3IgYWRkcmVzcyIgcmVzcG9uc2VzIGFyZSB2ZXJ5IA0KPj4g
-c3VzcGljaW91cy4NCj4+IFRob3NlIGFyZSByZXBvcnRlZCBieSB0aGUgaTJjIGRyaXZlciwgbm90
-IGJ5IHRoZSBod21vbiBkcml2ZXIsIGFuZCANCj4+IHN1Z2dlc3QNCj4+IHRoYXQgdGhlIGNoaXAg
-ZGlkIG5vdCByZXNwb25kIHRvIGEgcmVhZCByZXF1ZXN0LiBNYXliZSBpdCBoZWxwcyB0byANCj4+
-IGVuYWJsZQ0KPj4gZGVidWdnaW5nIHRvIHRoZSBpMmMgZHJpdmVyIHRvIHNlZSBpZiBpdCByZXBv
-cnRzIGFueXRoaW5nIHVzZWZ1bC4gRXZlbg0KPj4gYmV0dGVyIG1pZ2h0IGJlIHRvIGNvbm5lY3Qg
-YW4gaTJjIGJ1cyBhbmFseXplciB0byB0aGUgaTJjIGJ1cyBhbmQgY2hlY2sNCj4+IHdoYXQgaXMg
-Z29pbmcgb24uDQo+IFRoYXQncyBmcm9tIC1FTlhJTyB3aGljaCBpcyB1c2VkIGluIG9ubHkgb25l
-IHBsYWNlIGluIGkyYy1tcGMuYy4gSSdsbCANCj4gZW5hYmxlIHNvbWUgZGVidWcgYW5kIHNlZSB3
-aGF0IHdlIGdldC4NCg0KRm9yIHRoZSBlcnJhbnQgcmVhZGluZ3MgdGhlcmUgd2FzIG5vdGhpbmcg
-YWJub3JtYWwgcmVwb3J0ZWQgYnkgdGhlIGRyaXZlci4NCg0KRm9yIHRoZSAiTm8gc3VjaCBkZXZp
-Y2Ugb3IgYWRkcmVzcyIgSSBzYXcgIm1wYy1pMmMgZmZlMTE5MDAwLmkyYzogTm8gDQpSWEFLIiB3
-aGljaCBtYXRjaGVzIHVwIHdpdGggdGhlIC1FTlhJTyByZXR1cm4uDQo=
+On Fri, Mar 5, 2021 at 6:20 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> From: Bibby Hsieh <bibby.hsieh@mediatek.com>
+>
+> Although in the most platforms, the bus power of i2c
+> are alway on, some platforms disable the i2c bus power
+> in order to meet low power request.
+>
+> We get and enable bulk regulator in i2c adapter device.
+>
+> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+> This patch is squashed from following patch and tested on mt8183 device
+> which has eeprom at24 client under i2c, so the fix in [2] is also
+> verified.
+> [1] https://patchwork.ozlabs.org/project/linux-i2c/cover/20200519072729.7268-1-bibby.hsieh@mediatek.com/
+> [2] https://patchwork.ozlabs.org/project/linux-i2c/patch/20200522101327.13456-1-m.szyprowski@samsung.com/
+> ---
+
+Sent again with document rebased in v16 here:
+https://patchwork.ozlabs.org/project/linux-i2c/cover/20210308043607.957156-1-hsinyi@chromium.org/
+
+>  drivers/i2c/i2c-core-base.c | 93 +++++++++++++++++++++++++++++++++++++
+>  include/linux/i2c.h         |  2 +
+>  2 files changed, 95 insertions(+)
+>
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 63ebf722a424..667f4a4de7cc 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -439,12 +439,14 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
+>  static int i2c_device_probe(struct device *dev)
+>  {
+>         struct i2c_client       *client = i2c_verify_client(dev);
+> +       struct i2c_adapter      *adap;
+>         struct i2c_driver       *driver;
+>         int status;
+>
+>         if (!client)
+>                 return 0;
+>
+> +       adap = client->adapter;
+>         client->irq = client->init_irq;
+>
+>         if (!client->irq) {
+> @@ -510,6 +512,12 @@ static int i2c_device_probe(struct device *dev)
+>
+>         dev_dbg(dev, "probe\n");
+>
+> +       status = regulator_enable(adap->bus_regulator);
+> +       if (status < 0) {
+> +               dev_err(&adap->dev, "Failed to enable power regulator\n");
+> +               goto err_clear_wakeup_irq;
+> +       }
+> +
+>         status = of_clk_set_defaults(dev->of_node, false);
+>         if (status < 0)
+>                 goto err_clear_wakeup_irq;
+> @@ -550,8 +558,10 @@ static int i2c_device_probe(struct device *dev)
+>  static int i2c_device_remove(struct device *dev)
+>  {
+>         struct i2c_client       *client = to_i2c_client(dev);
+> +       struct i2c_adapter      *adap;
+>         struct i2c_driver       *driver;
+>
+> +       adap = client->adapter;
+>         driver = to_i2c_driver(dev->driver);
+>         if (driver->remove) {
+>                 int status;
+> @@ -564,6 +574,8 @@ static int i2c_device_remove(struct device *dev)
+>         }
+>
+>         dev_pm_domain_detach(&client->dev, true);
+> +       if (!pm_runtime_status_suspended(&client->dev))
+> +               regulator_disable(adap->bus_regulator);
+>
+>         dev_pm_clear_wake_irq(&client->dev);
+>         device_init_wakeup(&client->dev, false);
+> @@ -576,6 +588,80 @@ static int i2c_device_remove(struct device *dev)
+>         return 0;
+>  }
+>
+> +#ifdef CONFIG_PM_SLEEP
+> +static int i2c_resume_early(struct device *dev)
+> +{
+> +       struct i2c_client *client = i2c_verify_client(dev);
+> +       int err;
+> +
+> +       if (!client)
+> +               return 0;
+> +
+> +       if (!pm_runtime_status_suspended(&client->dev)) {
+> +               err = regulator_enable(client->adapter->bus_regulator);
+> +               if (err)
+> +                       return err;
+> +       }
+> +
+> +       return pm_generic_resume_early(&client->dev);
+> +}
+> +
+> +static int i2c_suspend_late(struct device *dev)
+> +{
+> +       struct i2c_client *client = i2c_verify_client(dev);
+> +       int err;
+> +
+> +       if (!client)
+> +               return 0;
+> +
+> +       err = pm_generic_suspend_late(&client->dev);
+> +       if (err)
+> +               return err;
+> +
+> +       if (!pm_runtime_status_suspended(&client->dev))
+> +               return regulator_disable(client->adapter->bus_regulator);
+> +
+> +       return 0;
+> +}
+> +#endif
+> +
+> +#ifdef CONFIG_PM
+> +static int i2c_runtime_resume(struct device *dev)
+> +{
+> +       struct i2c_client *client = i2c_verify_client(dev);
+> +       int err;
+> +
+> +       if (!client)
+> +               return 0;
+> +
+> +       err = regulator_enable(client->adapter->bus_regulator);
+> +       if (err)
+> +               return err;
+> +
+> +       return pm_generic_runtime_resume(&client->dev);
+> +}
+> +
+> +static int i2c_runtime_suspend(struct device *dev)
+> +{
+> +       struct i2c_client *client = i2c_verify_client(dev);
+> +       int err;
+> +
+> +       if (!client)
+> +               return 0;
+> +
+> +       err = pm_generic_runtime_suspend(&client->dev);
+> +       if (err)
+> +               return err;
+> +
+> +       return regulator_disable(client->adapter->bus_regulator);
+> +}
+> +#endif
+> +
+> +static const struct dev_pm_ops i2c_device_pm = {
+> +       SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late, i2c_resume_early)
+> +       SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
+> +};
+> +
+>  static void i2c_device_shutdown(struct device *dev)
+>  {
+>         struct i2c_client *client = i2c_verify_client(dev);
+> @@ -633,6 +719,7 @@ struct bus_type i2c_bus_type = {
+>         .probe          = i2c_device_probe,
+>         .remove         = i2c_device_remove,
+>         .shutdown       = i2c_device_shutdown,
+> +       .pm             = &i2c_device_pm,
+>  };
+>  EXPORT_SYMBOL_GPL(i2c_bus_type);
+>
+> @@ -1446,6 +1533,12 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
+>         if (res)
+>                 goto out_reg;
+>
+> +       adap->bus_regulator = devm_regulator_get(&adap->dev, "bus");
+> +       if (IS_ERR(adap->bus_regulator)) {
+> +               res = PTR_ERR(adap->bus_regulator);
+> +               goto out_reg;
+> +       }
+> +
+>         pm_runtime_no_callbacks(&adap->dev);
+>         pm_suspend_ignore_children(&adap->dev, true);
+>         pm_runtime_enable(&adap->dev);
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index 56622658b215..ec87758d9f40 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -15,6 +15,7 @@
+>  #include <linux/device.h>      /* for struct device */
+>  #include <linux/sched.h>       /* for completion */
+>  #include <linux/mutex.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/rtmutex.h>
+>  #include <linux/irqdomain.h>           /* for Host Notify IRQ */
+>  #include <linux/of.h>          /* for struct device_node */
+> @@ -721,6 +722,7 @@ struct i2c_adapter {
+>         const struct i2c_adapter_quirks *quirks;
+>
+>         struct irq_domain *host_notify_domain;
+> +       struct regulator *bus_regulator;
+>  };
+>  #define to_i2c_adapter(d) container_of(d, struct i2c_adapter, dev)
+>
+> --
+> 2.30.1.766.gb4fecdf3b7-goog
+>
