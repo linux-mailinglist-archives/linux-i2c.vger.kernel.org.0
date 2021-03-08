@@ -2,105 +2,142 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A3333187F
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 21:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9353318BD
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 21:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbhCHU1r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Mar 2021 15:27:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S229471AbhCHUkm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Mar 2021 15:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbhCHU1f (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Mar 2021 15:27:35 -0500
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127ACC06175F
-        for <linux-i2c@vger.kernel.org>; Mon,  8 Mar 2021 12:27:35 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5DA08891AE;
-        Tue,  9 Mar 2021 09:27:31 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1615235251;
-        bh=Onrpr6MuDOllsC8Vd8il2kEwkyXgQ0Z8dtUPbT50kjI=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=X0v/Cm6+HMVBJflFpnyK7E2951V4dmSemJemlO6wYL6f2242lw8iZ47QHwaXEnBX/
-         lSleaA3N9XFNuPmPSMBZwybMMgAOX2PNrglKGBQ5ffiaK/UkNNlRmwIpCzUoAAHrqS
-         LY5Vc0uAOGmts2dyz+r7ZecePgpYvFMj5xaezi8JWp6lbRfaMtfSLhYUnNlHVqCCGB
-         z8sv70kK9uR/g7vUyLErEOgHMioyz432Y9BdFVb4oE6I2GUtJkTi2QymioKyaY5Bvp
-         NBFYnleQ8STqq2dDRsrD09PcC5VfBO+h4YvJkJTTHtpX8vLocdtfVL9GyJV8hTNmK8
-         1S96pjrEO08SQ==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B604688b30001>; Tue, 09 Mar 2021 09:27:31 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Tue, 9 Mar 2021 09:27:31 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.012; Tue, 9 Mar 2021 09:27:30 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: Errant readings on LM81 with T2080 SoC
-Thread-Topic: Errant readings on LM81 with T2080 SoC
-Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Sk6p4Y2sAgAAgcACAACSBgIAABe+AgAEDagA=
-Date:   Mon, 8 Mar 2021 20:27:30 +0000
-Message-ID: <d6074923-ee7e-4499-0e54-383a607d3c41@alliedtelesis.co.nz>
-References: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
- <96d660bc-17ab-4e0e-9a94-bce1737a8da1@roeck-us.net>
- <4a1b1494-df96-2d8c-9323-beb2c2ba706b@alliedtelesis.co.nz>
- <a67ea323-634d-d34e-c63e-b1aaa4737b19@alliedtelesis.co.nz>
- <5709f180-04b5-09b2-e1c4-53eb5c9345d8@roeck-us.net>
-In-Reply-To: <5709f180-04b5-09b2-e1c4-53eb5c9345d8@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1094CD31F910C44BA6BC32182082EAC5@atlnz.lc>
-Content-Transfer-Encoding: base64
+        with ESMTP id S229446AbhCHUk3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Mar 2021 15:40:29 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88303C06174A;
+        Mon,  8 Mar 2021 12:40:29 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id w11so12869930wrr.10;
+        Mon, 08 Mar 2021 12:40:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=o+/dpOFXV6mbnRPaa86MvmeRPVIsGW4+sgQ7UqPkyUk=;
+        b=i9q0Gzq3zGFl6wNaPAxhQ1Wi0FqVf60X5CcXgP3rKsQuOfxkx7dC5sbgciNwGXNAD2
+         9lSVAS1HtuurSJGNxFkKy/NrOdlKx9DxexPyh6b5Eamjih382ibC6pov5WJJ8/PwLtR9
+         3dbFcZf3lG46L+ZNmCcahce/Hke41wBD0bJ66qtBWd1Qtl1H8Gu+TRjuwhmH7Ey6H2B8
+         uJO1kl97PTebKz2Hser77wWtXMskadF+55O/B2eAz7v/UWLs0EPB95T9QZNbXqIPQGtn
+         EMj50GGV1UopVKp/QcKlplfCV3vJs3OpJ3HpOF1FPAN5HiUcFogt7DDcP8h+O+ivUItd
+         wV2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=o+/dpOFXV6mbnRPaa86MvmeRPVIsGW4+sgQ7UqPkyUk=;
+        b=kkMIugTaudqprGq5fL06K1R/BQ3gflS6cRE+ohDdrfFUQM8C70vrL+AFDS60oOiVW8
+         i9GmVdrIuGFDUgdCfqNTl/kt7kSl1tQb8phlxtDsSA8I6gFCz+4Gv2Jjfa8nK9ZFbpif
+         Pgg7gmx8+batyZHXOgzzxXGKiHu1MWYc9CEUaRFJRPPYpmvRbCtCpgYzpMXqVYGuIHSJ
+         PuuB/OwiI96TKc+LhJZwf9vR+FKq8L3Vxrt+74/jO6mAHIzaNb3AuHmxMLV4GtX/8doU
+         snHj81oCfEzSNDjXThsg0RI5hkt+1Ghwgi8AtOLuGr1Z9cXDcO1CV/dHY/+fFsY9vkE+
+         9ouw==
+X-Gm-Message-State: AOAM530s9hpQpdXiYsGoRj8Pant+0jWCBN72wZmn7CWCpvSBPJZrJxp9
+        xopChfvsffD7KuHGQJyijtM=
+X-Google-Smtp-Source: ABdhPJxhGvSvYgGNZNFtcF5uW2ZNoDAv+znKgthZfkcniHOKbaebYxXoanzndIP4HxAd/l8+6kXvxg==
+X-Received: by 2002:a05:6000:1546:: with SMTP id 6mr24364251wry.398.1615236028247;
+        Mon, 08 Mar 2021 12:40:28 -0800 (PST)
+Received: from [192.168.1.211] ([2.26.187.30])
+        by smtp.gmail.com with ESMTPSA id w6sm21630328wrl.49.2021.03.08.12.40.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Mar 2021 12:40:27 -0800 (PST)
+Subject: Re: [PATCH v3 1/6] ACPI: scan: Extend acpi_walk_dep_device_list()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        andy.shevchenko@linux.intel.com,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>, me@fabwu.ch,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>
+References: <20210222130735.1313443-1-djrscally@gmail.com>
+ <20210222130735.1313443-2-djrscally@gmail.com>
+ <CAJZ5v0ib+3oScz2CuFNQdTvo16_fGYgfppZjpVZbtMC-2FK-2w@mail.gmail.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <74e27b1f-b1aa-de84-7832-e76b3207bddc@gmail.com>
+Date:   Mon, 8 Mar 2021 20:40:26 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7uXNjH+ c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10 a=VwQbUJbxAAAA:8 a=aQgbSj5FuRS31VXIRagA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=BPzZvq435JnGatEyYwdK:22
-X-SEG-SpamProfiler-Score: 0
+In-Reply-To: <CAJZ5v0ib+3oScz2CuFNQdTvo16_fGYgfppZjpVZbtMC-2FK-2w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiA4LzAzLzIxIDU6NTkgcG0sIEd1ZW50ZXIgUm9lY2sgd3JvdGU6DQo+IE9uIDMvNy8yMSA4
-OjM3IFBNLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPiBbIC4uLiBdDQo+Pj4gVGhhdCdzIGZyb20g
-LUVOWElPIHdoaWNoIGlzIHVzZWQgaW4gb25seSBvbmUgcGxhY2UgaW4gaTJjLW1wYy5jLiBJJ2xs
-DQo+Pj4gZW5hYmxlIHNvbWUgZGVidWcgYW5kIHNlZSB3aGF0IHdlIGdldC4NCj4+IEZvciB0aGUg
-ZXJyYW50IHJlYWRpbmdzIHRoZXJlIHdhcyBub3RoaW5nIGFibm9ybWFsIHJlcG9ydGVkIGJ5IHRo
-ZSBkcml2ZXIuDQo+Pg0KPj4gRm9yIHRoZSAiTm8gc3VjaCBkZXZpY2Ugb3IgYWRkcmVzcyIgSSBz
-YXcgIm1wYy1pMmMgZmZlMTE5MDAwLmkyYzogTm8NCj4+IFJYQUsiIHdoaWNoIG1hdGNoZXMgdXAg
-d2l0aCB0aGUgLUVOWElPIHJldHVybi4NCj4+DQo+IElkIHN1Z2dlc3QgdG8gY2hlY2sgdGhlIHRp
-bWUgdW50aWwgbm90IGJ1c3kgYW5kIHN0b3AgaW4gbXBjX3hmZXIoKS4NCj4gVGhvc2UgaG90IGxv
-b3BzIGFyZSB1bnVzdWFsLCBhbmQgbWF5IHdlbGwgbWVzcyB1cCB0aGUgY29kZSBlc3BlY2lhbGx5
-DQo+IGlmIHByZWVtcHQgaXMgZW5hYmxlZC4gQWxzbywgYXJlIHlvdSB1c2luZyBpbnRlcnJ1cHRz
-IG9yIHBvbGxpbmcgaW4NCj4geW91ciBzeXN0ZW0gPw0KSSdtIHVzaW5nIGludGVycnVwdHMgYnV0
-IEkgc2VlIHRoZSBzYW1lIGlzc3VlIGlmIEkgY29tbWVudCBvdXQgdGhlIA0KaW50ZXJydXB0cyBp
-biB0aGUgZHRzaSBmaWxlIChpLmUuIGZvcmNlIGl0IHRvIHVzZSBwb2xsaW5nKS4NCj4gVGhlIGlu
-dGVycnVwdCBoYW5kbGVyIGxvb2tzIGEgYml0IG9kZCwgd2l0aCAiUmVhZCBhZ2Fpbg0KPiB0byBh
-bGxvdyByZWdpc3RlciB0byBzdGFiaWxpc2UiLg0KDQpZZWFoIHRoYXQgc3R1Y2sgb3V0IHRvIG1l
-IHRvby4gVGhlIGNvZGUgaW4gcXVlc3Rpb24gcHJlZGF0ZXMgZ2l0LCBJIHdlbnQgDQpzcGVsdW5r
-aW5nIGluIGhpc3RvcnkuZ2l0IGFuZCB0aGUgIlJlYWQgYWdhaW4iIHNlZW1zIHRvIGJlIGluIHRo
-ZSANCmluaXRpYWwgdmVyc2lvblswXS4gSSBkaWQgdHJ5IHRvIGFsdGVyIHRoZSBpbnRlcnJ1cHQg
-aGFuZGxlciBzbyB0aGF0IGl0IA0Kb25seSBkb2VzIG9uZSByZWFkIGJ1dCB0aGF0IGRpZG4ndCBz
-ZWVtIHRvIGNoYW5nZSBhbnl0aGluZy4NCg0KPiBEbyB5b3UgaGF2ZSBmc2wsdGltZW91dCBzZXQg
-aW4gdGhlIGRldmljZXRyZWUgcHJvcGVydGllcyBhbmQsIGlmIHNvLA0KPiBoYXZlIHlvdSBwbGF5
-ZWQgd2l0aCBpdCA/DQpIYXZlbid0IGdvdCBpdCBzZXQgYnV0IEknbGwgaGF2ZSBhIGdvIGF0IHR3
-ZWFraW5nIGl0Lg0KPiBPdGhlciB0aGFuIHRoYXQsIHRoZSBvbmx5IG90aGVyIHJlYWwgaWRlYSBJ
-IGhhdmUgd291bGQgYmUgdG8gbW9uaXRvcg0KPiB0aGUgaTJjIGJ1cy4NCkkgYW0gaW4gdGhlIGZv
-cnR1bmF0ZSBwb3NpdGlvbiBvZiBiZWluZyBhYmxlIHRvIGdvIGludG8gdGhlIG9mZmljZSBhbmQg
-DQpldmVuIGhhcHBlbiB0byBoYXZlIHRoZSBleHBlbnNpdmUgc2NvcGUgYXQgdGhlIG1vbWVudC4g
-Tm93IEkganVzdCBuZWVkIA0KdG8gZmluZCBhIHRhbWUgSFcgZW5naW5lZXIgc28gSSBkb24ndCBi
-dXJuIG15c2VsZiB0cnlpbmcgdG8gYXR0YWNoIHRoZSANCnByb2Jlcy4NCg0KLS0gDQoNClswXSAt
-IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2hpc3Rvcnkv
-aGlzdG9yeS5naXQvY29tbWl0Lz9pZD0xMWIzMjM1ZGMwNGEzMDZmNmE5YmExNGMxYWI2MjFiMmQ1
-NGYyYzU2DQoNCg==
+Hi Rafael
+
+On 08/03/2021 17:46, Rafael J. Wysocki wrote:
+>> +void acpi_walk_dep_device_list(acpi_handle handle,
+>> +                              int (*callback)(struct acpi_dep_data *, void *),
+>> +                              void *data)
+>> +{
+>> +       struct acpi_dep_data *dep, *tmp;
+>> +       int ret;
+>> +
+>>         mutex_lock(&acpi_dep_list_lock);
+>>         list_for_each_entry_safe(dep, tmp, &acpi_dep_list, node) {
+>>                 if (dep->supplier == handle) {
+>> -                       acpi_bus_get_device(dep->consumer, &adev);
+>> -                       if (!adev)
+>> -                               continue;
+>> -
+>> -                       adev->dep_unmet--;
+>> -                       if (!adev->dep_unmet)
+>> -                               acpi_bus_attach(adev, true);
+> The above code in the mainline has changed recently, so you need to
+> rebase the above and adjust for the change of behavior.
+
+
+Yeah, I'll rebase onto 5.12-rc2 before next submission.
+
+>
+>> -
+>> -                       list_del(&dep->node);
+>> -                       kfree(dep);
+>> +                       ret = callback(dep, data);
+>> +                       if (ret)
+>> +                               break;
+>>                 }
+>>         }
+>>         mutex_unlock(&acpi_dep_list_lock);
+>>  }
+>>  EXPORT_SYMBOL_GPL(acpi_walk_dep_device_list);
+>>
+>> +/**
+>> + * acpi_dev_flag_dependency_met() - Inform consumers of @handle that the device
+>> + *                                 is now active
+> No parens here, please, and make it fit one line.
+>
+> Also the description should be something like "Clear dependencies on
+> the given device."
+
+
+OK - no problem
+
