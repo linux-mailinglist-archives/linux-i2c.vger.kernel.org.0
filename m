@@ -2,299 +2,238 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7FD331521
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 18:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3AE3316A7
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 19:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbhCHRqh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Mar 2021 12:46:37 -0500
-Received: from mail-oo1-f50.google.com ([209.85.161.50]:44179 "EHLO
-        mail-oo1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbhCHRqT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Mar 2021 12:46:19 -0500
-Received: by mail-oo1-f50.google.com with SMTP id n19so2376161ooj.11;
-        Mon, 08 Mar 2021 09:46:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rDAxitlThypn1GJEjMqUi6q6zLzkYSdOylaY9ls+Dr0=;
-        b=PHFUt0MV+r/DSlT2Xd6FLGUu6fX57GAo8Olz9xK+iNi3wW8ThMxUx5LbZZkvpnVMnQ
-         0CSRkUEq4agmzRX/U9U4m9MvQKnnvO0XBSkwfc0iFvb9xosePSYJGnzWFHtEZQM/5mK/
-         CdYR+LcZQx0rZ47u4XEXLx/dYhB78i4foVfD4YGKwjdZoKo5kBFHsCC0cX/H47uWJUsB
-         GBFo7Y/7jV0qcPFdfzguMHicQQYXym8dcO5uD7cm4a/Rs0O5kqNKO/FAHWiMBGX14K3q
-         NXK83uKAL/6oWlO0rTYVFJogBnhxEQCAvh/fXv1rf1PcBYJlubyqU5dnFbXyrQFX8csB
-         WApw==
-X-Gm-Message-State: AOAM531e7BAUnx/zwLzNEJerXoGiqWl7CqDAUNF+Hl2CZu+vpc52DA8j
-        miFwsIiTwB2HRIr0VzYllhOmRY2Bn0p9lfKNb/a2654g
-X-Google-Smtp-Source: ABdhPJwyhzOdWoKELxTrgA0osc9usc41t0Uh3CAQo4x3D6Uju9rbSCakCqLvd+w63fkouortpkgO5PacHhfOz4D1934=
-X-Received: by 2002:a4a:d48b:: with SMTP id o11mr4386544oos.2.1615225578823;
- Mon, 08 Mar 2021 09:46:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20210222130735.1313443-1-djrscally@gmail.com> <20210222130735.1313443-2-djrscally@gmail.com>
-In-Reply-To: <20210222130735.1313443-2-djrscally@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 8 Mar 2021 18:46:07 +0100
-Message-ID: <CAJZ5v0ib+3oScz2CuFNQdTvo16_fGYgfppZjpVZbtMC-2FK-2w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] ACPI: scan: Extend acpi_walk_dep_device_list()
-To:     Daniel Scally <djrscally@gmail.com>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>,
+        id S230502AbhCHSwd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Mar 2021 13:52:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59284 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230124AbhCHSwP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 8 Mar 2021 13:52:15 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4989865194;
+        Mon,  8 Mar 2021 18:52:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615229534;
+        bh=guoYBn7p9nzr+d1LI0lqhbhGVLc1u8M5XGr+A6JAp9o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sGYtHZLDFnmQElaBssKCzLrdqg/JH9xxnXuOMoTBVhsWvZVVjoU4MEA5i23enxMpv
+         stK3R9z9hU0kmDBbVoSwQnoVcwf5r0EKok8GGaCcZLbYJOza4nZFtgoX+IBgZ3mDzV
+         5C1lzkQOsAbcYlr6/EDpUTt40N3zv/mLfIvMGF39laFnSnYGvpImNExD7J2q/KRpM3
+         mDu3wounGr7ckmOOiu0pIxXHm6bsrrd7HqSlVgocMmWxS2P13NHKv1F4Jq6G37oMgB
+         KkJJ28nHQg4fHliR13wcNsW2i/0lPKVPOoFWOaT8r/RvwrvE3aHfB5Goo9NN7PXAFi
+         uvHe/uMJY2FCw==
+Date:   Mon, 8 Mar 2021 12:52:12 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
         Lee Jones <lee.jones@linaro.org>,
-        andy.shevchenko@linux.intel.com,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>, me@fabwu.ch,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com,
+        henning.schild@siemens.com
+Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
+ support library
+Message-ID: <20210308185212.GA1790506@bjorn-Precision-5520>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210308122020.57071-4-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 2:07 PM Daniel Scally <djrscally@gmail.com> wrote:
->
-> The acpi_walk_dep_device_list() is not as generalisable as its name
-> implies, serving only to decrement the dependency count for each
-> dependent device of the input. Extend the function to instead accept
-> a callback which can be applied to all the dependencies in acpi_dep_list.
-> Replace all existing calls to the function with calls to a wrapper, passing
-> a callback that applies the same dependency reduction.
->
-> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
-> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+On Mon, Mar 08, 2021 at 02:20:16PM +0200, Andy Shevchenko wrote:
+> From: Jonathan Yong <jonathan.yong@intel.com>
+> 
+> There is already one and at least one more user is coming which
+> requires an access to Primary to Sideband bridge (P2SB) in order to
+> get IO or MMIO bar hidden by BIOS. Create a library to access P2SB
+> for x86 devices.
+
+Can you include a spec reference?  I'm trying to figure out why this
+belongs in drivers/pci/.  It looks very device-specific.
+
+> Signed-off-by: Jonathan Yong <jonathan.yong@intel.com>
+> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
-> Changes in v3:
->         - patch introduced
->
->  drivers/acpi/ec.c                         |  2 +-
->  drivers/acpi/pmic/intel_pmic_chtdc_ti.c   |  2 +-
->  drivers/acpi/scan.c                       | 58 ++++++++++++++++-------
->  drivers/gpio/gpiolib-acpi.c               |  2 +-
->  drivers/i2c/i2c-core-acpi.c               |  2 +-
->  drivers/platform/surface/surface3_power.c |  2 +-
->  include/acpi/acpi_bus.h                   |  7 +++
->  include/linux/acpi.h                      |  4 +-
->  8 files changed, 55 insertions(+), 24 deletions(-)
->
-> diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
-> index 13565629ce0a..a258db713bd2 100644
-> --- a/drivers/acpi/ec.c
-> +++ b/drivers/acpi/ec.c
-> @@ -1627,7 +1627,7 @@ static int acpi_ec_add(struct acpi_device *device)
->         WARN(!ret, "Could not request EC cmd io port 0x%lx", ec->command_addr);
->
->         /* Reprobe devices depending on the EC */
-> -       acpi_walk_dep_device_list(ec->handle);
-> +       acpi_dev_flag_dependency_met(ec->handle);
->
->         acpi_handle_debug(ec->handle, "enumerated.\n");
->         return 0;
-> diff --git a/drivers/acpi/pmic/intel_pmic_chtdc_ti.c b/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
-> index a5101b07611a..59cca504325e 100644
-> --- a/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
-> +++ b/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
-> @@ -117,7 +117,7 @@ static int chtdc_ti_pmic_opregion_probe(struct platform_device *pdev)
->                 return err;
->
->         /* Re-enumerate devices depending on PMIC */
-> -       acpi_walk_dep_device_list(ACPI_HANDLE(pdev->dev.parent));
-> +       acpi_dev_flag_dependency_met(ACPI_HANDLE(pdev->dev.parent));
->         return 0;
->  }
->
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 80b668c80073..c9e4190316ef 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -49,12 +49,6 @@ static DEFINE_MUTEX(acpi_hp_context_lock);
->   */
->  static u64 spcr_uart_addr;
->
-> -struct acpi_dep_data {
-> -       struct list_head node;
-> -       acpi_handle supplier;
-> -       acpi_handle consumer;
-> -};
-> -
->  void acpi_scan_lock_acquire(void)
->  {
->         mutex_lock(&acpi_scan_lock);
-> @@ -2099,30 +2093,58 @@ static void acpi_bus_attach(struct acpi_device *device, bool first_pass)
->                 device->handler->hotplug.notify_online(device);
->  }
->
-> -void acpi_walk_dep_device_list(acpi_handle handle)
-> +static int __acpi_dev_flag_dependency_met(struct acpi_dep_data *dep,
-> +                                         void *data)
->  {
-> -       struct acpi_dep_data *dep, *tmp;
->         struct acpi_device *adev;
->
-> +       acpi_bus_get_device(dep->consumer, &adev);
-> +       if (!adev)
-> +               return 0;
-> +
-> +       adev->dep_unmet--;
-> +       if (!adev->dep_unmet)
-> +               acpi_bus_attach(adev, true);
-> +
-> +       list_del(&dep->node);
-> +       kfree(dep);
-> +       return 0;
-> +}
-> +
-> +void acpi_walk_dep_device_list(acpi_handle handle,
-> +                              int (*callback)(struct acpi_dep_data *, void *),
-> +                              void *data)
-> +{
-> +       struct acpi_dep_data *dep, *tmp;
-> +       int ret;
-> +
->         mutex_lock(&acpi_dep_list_lock);
->         list_for_each_entry_safe(dep, tmp, &acpi_dep_list, node) {
->                 if (dep->supplier == handle) {
-> -                       acpi_bus_get_device(dep->consumer, &adev);
-> -                       if (!adev)
-> -                               continue;
-> -
-> -                       adev->dep_unmet--;
-> -                       if (!adev->dep_unmet)
-> -                               acpi_bus_attach(adev, true);
+>  drivers/pci/Kconfig      |  8 ++++
+>  drivers/pci/Makefile     |  1 +
+>  drivers/pci/pci-p2sb.c   | 83 ++++++++++++++++++++++++++++++++++++++++
+>  include/linux/pci-p2sb.h | 28 ++++++++++++++
+>  4 files changed, 120 insertions(+)
+>  create mode 100644 drivers/pci/pci-p2sb.c
+>  create mode 100644 include/linux/pci-p2sb.h
+> 
+> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+> index 0c473d75e625..740e5b30d6fd 100644
+> --- a/drivers/pci/Kconfig
+> +++ b/drivers/pci/Kconfig
+> @@ -252,6 +252,14 @@ config PCIE_BUS_PEER2PEER
+>  
+>  endchoice
+>  
+> +config PCI_P2SB
+> +	bool "Primary to Sideband (P2SB) bridge access support"
+> +	depends on PCI && X86
+> +	help
+> +	  The Primary to Sideband bridge is an interface to some PCI
+> +	  devices connected through it. In particular, SPI NOR
+> +	  controller in Intel Apollo Lake SoC is one of such devices.
 
-The above code in the mainline has changed recently, so you need to
-rebase the above and adjust for the change of behavior.
+This doesn't sound like a "bridge".  If it's a bridge, what's on the
+primary (upstream) side?  What's on the secondary side?  What
+resources are passed through the bridge, i.e., what transactions does
+it transfer from one side to the other?
 
-> -
-> -                       list_del(&dep->node);
-> -                       kfree(dep);
-> +                       ret = callback(dep, data);
-> +                       if (ret)
-> +                               break;
->                 }
->         }
->         mutex_unlock(&acpi_dep_list_lock);
->  }
->  EXPORT_SYMBOL_GPL(acpi_walk_dep_device_list);
->
-> +/**
-> + * acpi_dev_flag_dependency_met() - Inform consumers of @handle that the device
-> + *                                 is now active
-
-No parens here, please, and make it fit one line.
-
-Also the description should be something like "Clear dependencies on
-the given device."
-
-> + * @handle: acpi_handle for the supplier device
+>  source "drivers/pci/hotplug/Kconfig"
+>  source "drivers/pci/controller/Kconfig"
+>  source "drivers/pci/endpoint/Kconfig"
+> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
+> index d62c4ac4ae1b..eee8d5dda7d9 100644
+> --- a/drivers/pci/Makefile
+> +++ b/drivers/pci/Makefile
+> @@ -23,6 +23,7 @@ obj-$(CONFIG_PCI_IOV)		+= iov.o
+>  obj-$(CONFIG_PCI_BRIDGE_EMUL)	+= pci-bridge-emul.o
+>  obj-$(CONFIG_PCI_LABEL)		+= pci-label.o
+>  obj-$(CONFIG_X86_INTEL_MID)	+= pci-mid.o
+> +obj-$(CONFIG_PCI_P2SB)		+= pci-p2sb.o
+>  obj-$(CONFIG_PCI_SYSCALL)	+= syscall.o
+>  obj-$(CONFIG_PCI_STUB)		+= pci-stub.o
+>  obj-$(CONFIG_PCI_PF_STUB)	+= pci-pf-stub.o
+> diff --git a/drivers/pci/pci-p2sb.c b/drivers/pci/pci-p2sb.c
+> new file mode 100644
+> index 000000000000..68d7dad48cdb
+> --- /dev/null
+> +++ b/drivers/pci/pci-p2sb.c
+> @@ -0,0 +1,83 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Primary to Sideband bridge (P2SB) access support
 > + *
-> + * This function walks through the dependencies list and informs each consumer
-> + * of @handle that their dependency upon it is now met. Devices with no more
-> + * unmet dependencies will be attached to the acpi bus.
+> + * Copyright (c) 2017, 2021 Intel Corporation.
+> + *
+> + * Authors: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> + *	    Jonathan Yong <jonathan.yong@intel.com>
 > + */
-> +void acpi_dev_flag_dependency_met(acpi_handle handle)
-> +{
-> +       acpi_walk_dep_device_list(handle, __acpi_dev_flag_dependency_met, NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(acpi_dev_flag_dependency_met);
 > +
->  /**
->   * acpi_bus_scan - Add ACPI device node objects in a given namespace scope.
->   * @handle: Root of the namespace scope to scan.
-> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-> index e37a57d0a2f0..e4d728fda982 100644
-> --- a/drivers/gpio/gpiolib-acpi.c
-> +++ b/drivers/gpio/gpiolib-acpi.c
-> @@ -1254,7 +1254,7 @@ void acpi_gpiochip_add(struct gpio_chip *chip)
->
->         acpi_gpiochip_request_regions(acpi_gpio);
->         acpi_gpiochip_scan_gpios(acpi_gpio);
-> -       acpi_walk_dep_device_list(handle);
-> +       acpi_dev_flag_dependency_met(handle);
->  }
->
->  void acpi_gpiochip_remove(struct gpio_chip *chip)
-> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> index 37c510d9347a..38647cf34bde 100644
-> --- a/drivers/i2c/i2c-core-acpi.c
-> +++ b/drivers/i2c/i2c-core-acpi.c
-> @@ -283,7 +283,7 @@ void i2c_acpi_register_devices(struct i2c_adapter *adap)
->         if (!handle)
->                 return;
->
-> -       acpi_walk_dep_device_list(handle);
-> +       acpi_dev_flag_dependency_met(handle);
->  }
->
->  static const struct acpi_device_id i2c_acpi_force_400khz_device_ids[] = {
-> diff --git a/drivers/platform/surface/surface3_power.c b/drivers/platform/surface/surface3_power.c
-> index cc4f9cba6856..ad895285d3e9 100644
-> --- a/drivers/platform/surface/surface3_power.c
-> +++ b/drivers/platform/surface/surface3_power.c
-> @@ -478,7 +478,7 @@ static int mshw0011_install_space_handler(struct i2c_client *client)
->                 return -ENOMEM;
->         }
->
-> -       acpi_walk_dep_device_list(handle);
-> +       acpi_dev_flag_dependency_met(handle);
->         return 0;
->  }
->
-> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> index 02a716a0af5d..91172af3a04d 100644
-> --- a/include/acpi/acpi_bus.h
-> +++ b/include/acpi/acpi_bus.h
-> @@ -278,6 +278,12 @@ struct acpi_device_power {
->         struct acpi_device_power_state states[ACPI_D_STATE_COUNT];      /* Power states (D0-D3Cold) */
->  };
->
-> +struct acpi_dep_data {
-> +       struct list_head node;
-> +       acpi_handle supplier;
-> +       acpi_handle consumer;
+> +#include <linux/bitops.h>
+> +#include <linux/export.h>
+> +#include <linux/pci-p2sb.h>
+> +
+> +#include <asm/cpu_device_id.h>
+> +#include <asm/intel-family.h>
+> +
+> +#include "pci.h"
+> +
+> +#define P2SBC_HIDE_BYTE			0xe1
+> +#define P2SBC_HIDE_BIT			BIT(0)
+> +
+> +static const struct x86_cpu_id p2sb_cpu_ids[] = {
+> +	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	PCI_DEVFN(13, 0)),
+> +	{}
 > +};
 > +
->  /* Performance Management */
->
->  struct acpi_device_perf_flags {
-> @@ -683,6 +689,7 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
->
->  bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
->
-> +void acpi_dev_flag_dependency_met(acpi_handle handle);
->  struct acpi_device *
->  acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
->  struct acpi_device *
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 2630c2e953f7..2d5e6e88e8a0 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -655,7 +655,9 @@ extern bool acpi_driver_match_device(struct device *dev,
->                                      const struct device_driver *drv);
->  int acpi_device_uevent_modalias(struct device *, struct kobj_uevent_env *);
->  int acpi_device_modalias(struct device *, char *, int);
-> -void acpi_walk_dep_device_list(acpi_handle handle);
-> +void acpi_walk_dep_device_list(acpi_handle handle,
-> +                              int (*callback)(struct acpi_dep_data *, void *),
-> +                              void *data);
->
->  struct platform_device *acpi_create_platform_device(struct acpi_device *,
->                                                     struct property_entry *);
-> --
-> 2.25.1
->
+> +static int pci_p2sb_devfn(unsigned int *devfn)
+> +{
+> +	const struct x86_cpu_id *id;
+> +
+> +	id = x86_match_cpu(p2sb_cpu_ids);
+> +	if (!id)
+> +		return -ENODEV;
+> +
+> +	*devfn = (unsigned int)id->driver_data;
+> +	return 0;
+> +}
+> +
+> +/**
+> + * pci_p2sb_bar - Get Primary to Sideband bridge (P2SB) device BAR
+> + * @pdev:	PCI device to get a PCI bus to communicate with
+> + * @devfn:	PCI slot and function to communicate with
+> + * @mem:	memory resource to be filled in
+> + *
+> + * The BIOS prevents the P2SB device from being enumerated by the PCI
+> + * subsystem, so we need to unhide and hide it back to lookup the BAR.
+> + *
+> + * Caller must provide a valid pointer to @mem.
+> + *
+> + * Locking is handled by pci_rescan_remove_lock mutex.
+> + *
+> + * Return:
+> + * 0 on success or appropriate errno value on error.
+> + */
+> +int pci_p2sb_bar(struct pci_dev *pdev, unsigned int devfn, struct resource *mem)
+> +{
+> +	struct pci_bus *bus = pdev->bus;
+> +	unsigned int df;
+> +	int ret;
+> +
+> +	/* Get devfn for P2SB device itself */
+> +	ret = pci_p2sb_devfn(&df);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pci_lock_rescan_remove();
+> +
+> +	/* Unhide the P2SB device */
+> +	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE, 0);
+> +
+> +	/* Read the first BAR of the device in question */
+> +	__pci_bus_read_base(bus, devfn, pci_bar_unknown, mem, PCI_BASE_ADDRESS_0, true);
+
+I don't get this.  Apparently this normally hidden device is consuming
+PCI address space.  The PCI core needs to know about this.  If it
+doesn't, the PCI core may assign this space to another device.
+
+> +	/* Hide the P2SB device */
+> +	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE, P2SBC_HIDE_BIT);
+> +
+> +	pci_unlock_rescan_remove();
+> +
+> +	pci_bus_info(bus, devfn, "BAR: %pR\n", mem);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_p2sb_bar);
+> diff --git a/include/linux/pci-p2sb.h b/include/linux/pci-p2sb.h
+> new file mode 100644
+> index 000000000000..15dd42737c84
+> --- /dev/null
+> +++ b/include/linux/pci-p2sb.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Primary to Sideband bridge (P2SB) access support
+> + */
+> +
+> +#ifndef _PCI_P2SB_H
+> +#define _PCI_P2SB_H
+> +
+> +#include <linux/errno.h>
+> +
+> +struct pci_dev;
+> +struct resource;
+> +
+> +#if IS_BUILTIN(CONFIG_PCI_P2SB)
+> +
+> +int pci_p2sb_bar(struct pci_dev *pdev, unsigned int devfn, struct resource *mem);
+> +
+> +#else /* CONFIG_PCI_P2SB is not set */
+> +
+> +static inline
+> +int pci_p2sb_bar(struct pci_dev *pdev, unsigned int devfn, struct resource *mem)
+> +{
+> +	return -ENODEV;
+> +}
+> +
+> +#endif /* CONFIG_PCI_P2SB */
+> +
+> +#endif /* _PCI_P2SB_H */
+> -- 
+> 2.30.1
+> 
