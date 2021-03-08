@@ -2,49 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDAE3314B2
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 18:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7FD331521
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 18:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbhCHRY3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Mar 2021 12:24:29 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:44926 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbhCHRYD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Mar 2021 12:24:03 -0500
-Received: by mail-oi1-f178.google.com with SMTP id w195so5124555oif.11;
-        Mon, 08 Mar 2021 09:24:03 -0800 (PST)
+        id S229580AbhCHRqh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Mar 2021 12:46:37 -0500
+Received: from mail-oo1-f50.google.com ([209.85.161.50]:44179 "EHLO
+        mail-oo1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbhCHRqT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Mar 2021 12:46:19 -0500
+Received: by mail-oo1-f50.google.com with SMTP id n19so2376161ooj.11;
+        Mon, 08 Mar 2021 09:46:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=46Dl+/n5MDXaPsg8pK7iPxr6SdZP0DYwFyO9StPfVU0=;
-        b=BVwUHNbpB1GDF/DPzuq7HfbJGHAhmy5UfUbOmsLkZID6pvX98UnbCr+Km0WlyHEzNM
-         njyjuhDUJCMqdmnYUgfhtr454v/c1AY4oVGfBPyNFBtDiYblWqESmGWGCJoTmqwZ9sqB
-         +EG85f0m+03vBRHBLJ0ZOrWKhCQdYd94vMdP7hZlvMhQ7zrEgw8i3AYUzgz46pyEFajw
-         U76PVM9/x8Xo8/10+gfL0i0+i313LZpxZS9AaUdb7AYfq3jqHch+pOpcqGjUBlIOrN0R
-         w59hCiWTeJ7j+Oz3BxxKu3B0a0to8+NvorQKvJwgCsvbSOD6NHCwBqGO0m4ulsROiXJm
-         ZE5g==
-X-Gm-Message-State: AOAM530CJCcR3vtx1oWe3BIybAEjMqyNNtWgE2r+5X60FfMJmFGDB/si
-        5Jz82lLGBEBt8d0Kg7Qe9PGFrzxwerNy+P69m+w=
-X-Google-Smtp-Source: ABdhPJwMlR4X/o29NrD2vDK13sLOTLewPoMXmTCDSlyg1tEBBcj52cBVPnmXI+TT1Hb829Z/MVg/FVmPbb5+YFhYMjI=
-X-Received: by 2002:aca:3d85:: with SMTP id k127mr18673488oia.157.1615224242728;
- Mon, 08 Mar 2021 09:24:02 -0800 (PST)
+        bh=rDAxitlThypn1GJEjMqUi6q6zLzkYSdOylaY9ls+Dr0=;
+        b=PHFUt0MV+r/DSlT2Xd6FLGUu6fX57GAo8Olz9xK+iNi3wW8ThMxUx5LbZZkvpnVMnQ
+         0CSRkUEq4agmzRX/U9U4m9MvQKnnvO0XBSkwfc0iFvb9xosePSYJGnzWFHtEZQM/5mK/
+         CdYR+LcZQx0rZ47u4XEXLx/dYhB78i4foVfD4YGKwjdZoKo5kBFHsCC0cX/H47uWJUsB
+         GBFo7Y/7jV0qcPFdfzguMHicQQYXym8dcO5uD7cm4a/Rs0O5kqNKO/FAHWiMBGX14K3q
+         NXK83uKAL/6oWlO0rTYVFJogBnhxEQCAvh/fXv1rf1PcBYJlubyqU5dnFbXyrQFX8csB
+         WApw==
+X-Gm-Message-State: AOAM531e7BAUnx/zwLzNEJerXoGiqWl7CqDAUNF+Hl2CZu+vpc52DA8j
+        miFwsIiTwB2HRIr0VzYllhOmRY2Bn0p9lfKNb/a2654g
+X-Google-Smtp-Source: ABdhPJwyhzOdWoKELxTrgA0osc9usc41t0Uh3CAQo4x3D6Uju9rbSCakCqLvd+w63fkouortpkgO5PacHhfOz4D1934=
+X-Received: by 2002:a4a:d48b:: with SMTP id o11mr4386544oos.2.1615225578823;
+ Mon, 08 Mar 2021 09:46:18 -0800 (PST)
 MIME-Version: 1.0
 References: <20210222130735.1313443-1-djrscally@gmail.com> <20210222130735.1313443-2-djrscally@gmail.com>
- <CAHp75VfPuDjt=ZfHkwErF7_6Ks6wpqXO8mtq-2KjV+mU_PXFtg@mail.gmail.com>
- <615bad5e-6e68-43c9-dd0b-f26d2832d52f@gmail.com> <CAHp75Vc2iwvh1RiYmQDPSvgNvGT_gBcGTK67F+MhWgXyoxqn0A@mail.gmail.com>
- <CAJZ5v0ijOhT3PVm6-gqnqycE-YZhD00dGbtK1UEV5nfrOF5Obw@mail.gmail.com>
- <YEYtME2AxpXBq6iF@smile.fi.intel.com> <CAJZ5v0i+suMNWhUc=v0pnpabS-Ew-CMeSH945JB0YKnQAbi4Wg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i+suMNWhUc=v0pnpabS-Ew-CMeSH945JB0YKnQAbi4Wg@mail.gmail.com>
+In-Reply-To: <20210222130735.1313443-2-djrscally@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 8 Mar 2021 18:23:51 +0100
-Message-ID: <CAJZ5v0iyGGLjhYnQxQTokib5Dyiuz_ApvaWb13qz8=U3V44vFg@mail.gmail.com>
+Date:   Mon, 8 Mar 2021 18:46:07 +0100
+Message-ID: <CAJZ5v0ib+3oScz2CuFNQdTvo16_fGYgfppZjpVZbtMC-2FK-2w@mail.gmail.com>
 Subject: Re: [PATCH v3 1/6] ACPI: scan: Extend acpi_walk_dep_device_list()
 To:     Daniel Scally <djrscally@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
+Cc:     Tomasz Figa <tfiga@chromium.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
+        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Len Brown <lenb@kernel.org>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -52,6 +47,7 @@ Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Wolfram Sang <wsa@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
+        andy.shevchenko@linux.intel.com,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -64,88 +60,241 @@ Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 4:45 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Mon, Feb 22, 2021 at 2:07 PM Daniel Scally <djrscally@gmail.com> wrote:
 >
-> On Mon, Mar 8, 2021 at 2:57 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> >
-> > On Mon, Mar 08, 2021 at 02:36:27PM +0100, Rafael J. Wysocki wrote:
-> > > On Sun, Mar 7, 2021 at 9:39 PM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Sun, Mar 7, 2021 at 3:36 PM Daniel Scally <djrscally@gmail.com> wrote:
-> > > > > On 22/02/2021 13:34, Andy Shevchenko wrote:
-> > > > > > On Mon, Feb 22, 2021 at 3:12 PM Daniel Scally <djrscally@gmail.com> wrote:
-> > > > > >> The acpi_walk_dep_device_list() is not as generalisable as its name
-> > > > > >> implies, serving only to decrement the dependency count for each
-> > > > > >> dependent device of the input. Extend the function to instead accept
-> > > > > >> a callback which can be applied to all the dependencies in acpi_dep_list.
-> > > > > >> Replace all existing calls to the function with calls to a wrapper, passing
-> > > > > >> a callback that applies the same dependency reduction.
-> > > > > > The code looks okay to me, if it was the initial idea, feel free to add
-> > > > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> >
-> > ...
-> >
-> > > > > >> +void acpi_dev_flag_dependency_met(acpi_handle handle)
-> >
-> > > > > > Since it's acpi_dev_* namespace, perhaps it should take struct acpi_device here?
-> > > > >
-> > > > > I can do this, but I avoided it because in most of the uses in the
-> > > > > kernel currently there's no struct acpi_device, they're just passing
-> > > > > ACPI_HANDLE(dev) instead, so I'd need to get the adev with
-> > > > > ACPI_COMPANION() in each place. It didn't seem worth it...
-> > >
-> > > It may not even be possible sometimes, because that function may be
-> > > called before creating all of the struct acpi_device objects (like in
-> > > the case of deferred enumeration).
-> > >
-> > > > > but happy to
-> > > > > do it if you'd prefer it that way?
-> > > >
-> > > > I see, let Rafael decide then. I'm not pushing here.
-> > >
-> > > Well, it's a matter of correctness.
-> >
-> > Looking at your above comment it is indeed. Thanks for clarification!
+> The acpi_walk_dep_device_list() is not as generalisable as its name
+> implies, serving only to decrement the dependency count for each
+> dependent device of the input. Extend the function to instead accept
+> a callback which can be applied to all the dependencies in acpi_dep_list.
+> Replace all existing calls to the function with calls to a wrapper, passing
+> a callback that applies the same dependency reduction.
 >
-> Well, actually, the struct device for the object passed to this
-> function should be there already, because otherwise it wouldn't make
-> sense to update the list.  So my comment above is not really
-> applicable to this particular device and the function could take a
-> struct acpi_device pointer argument.  Sorry for the confusion.
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> ---
+> Changes in v3:
+>         - patch introduced
 >
-> > But should we have acpi_dev_*() namespace for this function if it takes handle?
+>  drivers/acpi/ec.c                         |  2 +-
+>  drivers/acpi/pmic/intel_pmic_chtdc_ti.c   |  2 +-
+>  drivers/acpi/scan.c                       | 58 ++++++++++++++++-------
+>  drivers/gpio/gpiolib-acpi.c               |  2 +-
+>  drivers/i2c/i2c-core-acpi.c               |  2 +-
+>  drivers/platform/surface/surface3_power.c |  2 +-
+>  include/acpi/acpi_bus.h                   |  7 +++
+>  include/linux/acpi.h                      |  4 +-
+>  8 files changed, 55 insertions(+), 24 deletions(-)
 >
-> It takes a device object handle.
+> diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
+> index 13565629ce0a..a258db713bd2 100644
+> --- a/drivers/acpi/ec.c
+> +++ b/drivers/acpi/ec.c
+> @@ -1627,7 +1627,7 @@ static int acpi_ec_add(struct acpi_device *device)
+>         WARN(!ret, "Could not request EC cmd io port 0x%lx", ec->command_addr);
 >
-> Anyway, as per the above, it can take a struct acpi_device pointer
-> argument in which case the "acpi_dev_" prefix should be fine.
+>         /* Reprobe devices depending on the EC */
+> -       acpi_walk_dep_device_list(ec->handle);
+> +       acpi_dev_flag_dependency_met(ec->handle);
 >
-> > For time being nothing better than following comes to my mind:
-> >
-> > __acpi_dev_flag_dependency_met() => __acpi_flag_device_dependency_met()
-> > acpi_dev_flag_dependency_met() => acpi_flag_device_dependency_met()
+>         acpi_handle_debug(ec->handle, "enumerated.\n");
+>         return 0;
+> diff --git a/drivers/acpi/pmic/intel_pmic_chtdc_ti.c b/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
+> index a5101b07611a..59cca504325e 100644
+> --- a/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
+> +++ b/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
+> @@ -117,7 +117,7 @@ static int chtdc_ti_pmic_opregion_probe(struct platform_device *pdev)
+>                 return err;
 >
-> The above said, the name is somewhat confusing overall IMV.
+>         /* Re-enumerate devices depending on PMIC */
+> -       acpi_walk_dep_device_list(ACPI_HANDLE(pdev->dev.parent));
+> +       acpi_dev_flag_dependency_met(ACPI_HANDLE(pdev->dev.parent));
+>         return 0;
+>  }
 >
-> Something like acpi_dev_clear_dependencies() might be better.
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 80b668c80073..c9e4190316ef 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -49,12 +49,6 @@ static DEFINE_MUTEX(acpi_hp_context_lock);
+>   */
+>  static u64 spcr_uart_addr;
 >
-> So lets make it something like
+> -struct acpi_dep_data {
+> -       struct list_head node;
+> -       acpi_handle supplier;
+> -       acpi_handle consumer;
+> -};
+> -
+>  void acpi_scan_lock_acquire(void)
+>  {
+>         mutex_lock(&acpi_scan_lock);
+> @@ -2099,30 +2093,58 @@ static void acpi_bus_attach(struct acpi_device *device, bool first_pass)
+>                 device->handler->hotplug.notify_online(device);
+>  }
 >
-> void acpi_dev_clear_dependencies(struct acpi_device *supplier);
+> -void acpi_walk_dep_device_list(acpi_handle handle)
+> +static int __acpi_dev_flag_dependency_met(struct acpi_dep_data *dep,
+> +                                         void *data)
+>  {
+> -       struct acpi_dep_data *dep, *tmp;
+>         struct acpi_device *adev;
+>
+> +       acpi_bus_get_device(dep->consumer, &adev);
+> +       if (!adev)
+> +               return 0;
+> +
+> +       adev->dep_unmet--;
+> +       if (!adev->dep_unmet)
+> +               acpi_bus_attach(adev, true);
+> +
+> +       list_del(&dep->node);
+> +       kfree(dep);
+> +       return 0;
+> +}
+> +
+> +void acpi_walk_dep_device_list(acpi_handle handle,
+> +                              int (*callback)(struct acpi_dep_data *, void *),
+> +                              void *data)
+> +{
+> +       struct acpi_dep_data *dep, *tmp;
+> +       int ret;
+> +
+>         mutex_lock(&acpi_dep_list_lock);
+>         list_for_each_entry_safe(dep, tmp, &acpi_dep_list, node) {
+>                 if (dep->supplier == handle) {
+> -                       acpi_bus_get_device(dep->consumer, &adev);
+> -                       if (!adev)
+> -                               continue;
+> -
+> -                       adev->dep_unmet--;
+> -                       if (!adev->dep_unmet)
+> -                               acpi_bus_attach(adev, true);
 
-To be precise, there are two functions in the patch,
-acpi_dev_flag_dependency_met() which invokes
-acpi_walk_dep_device_list() and __acpi_dev_flag_dependency_met()
-invoked by the latter as a callback.
+The above code in the mainline has changed recently, so you need to
+rebase the above and adjust for the change of behavior.
 
-Above I was talking about the first one.
+> -
+> -                       list_del(&dep->node);
+> -                       kfree(dep);
+> +                       ret = callback(dep, data);
+> +                       if (ret)
+> +                               break;
+>                 }
+>         }
+>         mutex_unlock(&acpi_dep_list_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(acpi_walk_dep_device_list);
+>
+> +/**
+> + * acpi_dev_flag_dependency_met() - Inform consumers of @handle that the device
+> + *                                 is now active
 
-The callback should still take a struct acpi_dep_data pointer argument
-and I would call it acpi_scan_clear_dep() or similar.
+No parens here, please, and make it fit one line.
+
+Also the description should be something like "Clear dependencies on
+the given device."
+
+> + * @handle: acpi_handle for the supplier device
+> + *
+> + * This function walks through the dependencies list and informs each consumer
+> + * of @handle that their dependency upon it is now met. Devices with no more
+> + * unmet dependencies will be attached to the acpi bus.
+> + */
+> +void acpi_dev_flag_dependency_met(acpi_handle handle)
+> +{
+> +       acpi_walk_dep_device_list(handle, __acpi_dev_flag_dependency_met, NULL);
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_dev_flag_dependency_met);
+> +
+>  /**
+>   * acpi_bus_scan - Add ACPI device node objects in a given namespace scope.
+>   * @handle: Root of the namespace scope to scan.
+> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> index e37a57d0a2f0..e4d728fda982 100644
+> --- a/drivers/gpio/gpiolib-acpi.c
+> +++ b/drivers/gpio/gpiolib-acpi.c
+> @@ -1254,7 +1254,7 @@ void acpi_gpiochip_add(struct gpio_chip *chip)
+>
+>         acpi_gpiochip_request_regions(acpi_gpio);
+>         acpi_gpiochip_scan_gpios(acpi_gpio);
+> -       acpi_walk_dep_device_list(handle);
+> +       acpi_dev_flag_dependency_met(handle);
+>  }
+>
+>  void acpi_gpiochip_remove(struct gpio_chip *chip)
+> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> index 37c510d9347a..38647cf34bde 100644
+> --- a/drivers/i2c/i2c-core-acpi.c
+> +++ b/drivers/i2c/i2c-core-acpi.c
+> @@ -283,7 +283,7 @@ void i2c_acpi_register_devices(struct i2c_adapter *adap)
+>         if (!handle)
+>                 return;
+>
+> -       acpi_walk_dep_device_list(handle);
+> +       acpi_dev_flag_dependency_met(handle);
+>  }
+>
+>  static const struct acpi_device_id i2c_acpi_force_400khz_device_ids[] = {
+> diff --git a/drivers/platform/surface/surface3_power.c b/drivers/platform/surface/surface3_power.c
+> index cc4f9cba6856..ad895285d3e9 100644
+> --- a/drivers/platform/surface/surface3_power.c
+> +++ b/drivers/platform/surface/surface3_power.c
+> @@ -478,7 +478,7 @@ static int mshw0011_install_space_handler(struct i2c_client *client)
+>                 return -ENOMEM;
+>         }
+>
+> -       acpi_walk_dep_device_list(handle);
+> +       acpi_dev_flag_dependency_met(handle);
+>         return 0;
+>  }
+>
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index 02a716a0af5d..91172af3a04d 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -278,6 +278,12 @@ struct acpi_device_power {
+>         struct acpi_device_power_state states[ACPI_D_STATE_COUNT];      /* Power states (D0-D3Cold) */
+>  };
+>
+> +struct acpi_dep_data {
+> +       struct list_head node;
+> +       acpi_handle supplier;
+> +       acpi_handle consumer;
+> +};
+> +
+>  /* Performance Management */
+>
+>  struct acpi_device_perf_flags {
+> @@ -683,6 +689,7 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
+>
+>  bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
+>
+> +void acpi_dev_flag_dependency_met(acpi_handle handle);
+>  struct acpi_device *
+>  acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
+>  struct acpi_device *
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 2630c2e953f7..2d5e6e88e8a0 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -655,7 +655,9 @@ extern bool acpi_driver_match_device(struct device *dev,
+>                                      const struct device_driver *drv);
+>  int acpi_device_uevent_modalias(struct device *, struct kobj_uevent_env *);
+>  int acpi_device_modalias(struct device *, char *, int);
+> -void acpi_walk_dep_device_list(acpi_handle handle);
+> +void acpi_walk_dep_device_list(acpi_handle handle,
+> +                              int (*callback)(struct acpi_dep_data *, void *),
+> +                              void *data);
+>
+>  struct platform_device *acpi_create_platform_device(struct acpi_device *,
+>                                                     struct property_entry *);
+> --
+> 2.25.1
+>
