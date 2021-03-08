@@ -2,138 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2A5331274
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 16:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A0A331460
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 18:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbhCHPpY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Mar 2021 10:45:24 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:43707 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbhCHPpX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Mar 2021 10:45:23 -0500
-Received: by mail-ot1-f46.google.com with SMTP id v12so9572523ott.10;
-        Mon, 08 Mar 2021 07:45:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mbsT3/Ouni6Vb8m0SK7QpZ24XnBIwdODUDVR1OBNjiQ=;
-        b=U+ZWC1eKnbbsrZdMotLrIujg6APWVI89ngEuYnHIIkNokj+upzR2POx/LY1jlJyvb9
-         aVFUzVXGnOwIOvG0I7DG49gElIhRAWMGx9PO7yligRjIOENkTJdWkovypGGKBuMYzmdC
-         ZZlUQLazT5HLT0SdHjDVzn788RIGIz4yPB2NnU4jPyyba6PGbvoTdpqPwvzBCiZq+Phy
-         yZYmoiyNHy1Hqb5sP6SRvmfOPW5fTv7uFlUKWxlqRil4JwcSUz69jM7ZSC5q3+NCENio
-         Ex/X5obHfGhIIWYZ9eIqENaqewcuDB8DXkiIm9vdpuVIhlnFEkEpKMtbrvo1U8cXQ/Co
-         cixQ==
-X-Gm-Message-State: AOAM532grdNzwD+nperLfnMN8xtQx1qdMX/rGo5oJDlh77KM/VjO4pxH
-        HyvkmQBdMY89i8LJUyfW3mripsKOpzluGaei4ac5Z/yk49E=
-X-Google-Smtp-Source: ABdhPJyYRGPWxgE1CdRhcwvN59TkRBBYu/cz9uZ2p7vV3ktihFVU1XAMr9A7W3yNtRhrv5M+i/rFQDQrAZWoYS3O4Sg=
-X-Received: by 2002:a05:6830:1e03:: with SMTP id s3mr9783834otr.321.1615218322615;
- Mon, 08 Mar 2021 07:45:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20210222130735.1313443-1-djrscally@gmail.com> <20210222130735.1313443-2-djrscally@gmail.com>
- <CAHp75VfPuDjt=ZfHkwErF7_6Ks6wpqXO8mtq-2KjV+mU_PXFtg@mail.gmail.com>
- <615bad5e-6e68-43c9-dd0b-f26d2832d52f@gmail.com> <CAHp75Vc2iwvh1RiYmQDPSvgNvGT_gBcGTK67F+MhWgXyoxqn0A@mail.gmail.com>
- <CAJZ5v0ijOhT3PVm6-gqnqycE-YZhD00dGbtK1UEV5nfrOF5Obw@mail.gmail.com> <YEYtME2AxpXBq6iF@smile.fi.intel.com>
-In-Reply-To: <YEYtME2AxpXBq6iF@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 8 Mar 2021 16:45:07 +0100
-Message-ID: <CAJZ5v0i+suMNWhUc=v0pnpabS-Ew-CMeSH945JB0YKnQAbi4Wg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] ACPI: scan: Extend acpi_walk_dep_device_list()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        id S230046AbhCHRSB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Mar 2021 12:18:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60420 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229690AbhCHRR4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 8 Mar 2021 12:17:56 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 540B5650E5;
+        Mon,  8 Mar 2021 17:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615223875;
+        bh=Fu/JGQBOiy86rBvW7ExIkK3fJm6AQtgCbYoK8Wp/T5Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W58Q16HEqezuZm4pRNseTZXtJurVK4AuXQNxhvNLEXaYXTDY+FbesGFvspu+sbZyh
+         1QKQZZ80woTEYZS21WQWhOgtpW/V+4oo91z398FqSkZ3GXiD4JD7x7hKiQIj3zOLAu
+         LfgtUigscTWrnHO3AM0fGK6phRYYzZzOI9mKlaCPF+8ReM3itkSrzHmEgKFYGEylf0
+         8ggp3HN0RaET4G4lYgwSHEFE7iMUb/SeKjPH3YWeJ3y8CW59lONIlFVJ5n3Oa0Qd9U
+         nI157hZsvKka1mUgw19OiTpqrFJ3Dm+D86qIC2ww0/6D/82pbxsF4yz14y9jOcGNLs
+         p+aPvW/ZXX3AA==
+Date:   Mon, 8 Mar 2021 17:16:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Wolfram Sang <wsa@kernel.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>, me@fabwu.ch,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-i2c@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH v16 2/2] i2c: core: support bus regulator controlling in
+ adapter
+Message-ID: <20210308171644.GE4656@sirena.org.uk>
+References: <20210308043607.957156-1-hsinyi@chromium.org>
+ <20210308043607.957156-3-hsinyi@chromium.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sfyO1m2EN8ZOtJL6"
+Content-Disposition: inline
+In-Reply-To: <20210308043607.957156-3-hsinyi@chromium.org>
+X-Cookie: Am I SHOPLIFTING?
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 2:57 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Mar 08, 2021 at 02:36:27PM +0100, Rafael J. Wysocki wrote:
-> > On Sun, Mar 7, 2021 at 9:39 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Sun, Mar 7, 2021 at 3:36 PM Daniel Scally <djrscally@gmail.com> wrote:
-> > > > On 22/02/2021 13:34, Andy Shevchenko wrote:
-> > > > > On Mon, Feb 22, 2021 at 3:12 PM Daniel Scally <djrscally@gmail.com> wrote:
-> > > > >> The acpi_walk_dep_device_list() is not as generalisable as its name
-> > > > >> implies, serving only to decrement the dependency count for each
-> > > > >> dependent device of the input. Extend the function to instead accept
-> > > > >> a callback which can be applied to all the dependencies in acpi_dep_list.
-> > > > >> Replace all existing calls to the function with calls to a wrapper, passing
-> > > > >> a callback that applies the same dependency reduction.
-> > > > > The code looks okay to me, if it was the initial idea, feel free to add
-> > > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->
-> ...
->
-> > > > >> +void acpi_dev_flag_dependency_met(acpi_handle handle)
->
-> > > > > Since it's acpi_dev_* namespace, perhaps it should take struct acpi_device here?
-> > > >
-> > > > I can do this, but I avoided it because in most of the uses in the
-> > > > kernel currently there's no struct acpi_device, they're just passing
-> > > > ACPI_HANDLE(dev) instead, so I'd need to get the adev with
-> > > > ACPI_COMPANION() in each place. It didn't seem worth it...
-> >
-> > It may not even be possible sometimes, because that function may be
-> > called before creating all of the struct acpi_device objects (like in
-> > the case of deferred enumeration).
-> >
-> > > > but happy to
-> > > > do it if you'd prefer it that way?
-> > >
-> > > I see, let Rafael decide then. I'm not pushing here.
-> >
-> > Well, it's a matter of correctness.
->
-> Looking at your above comment it is indeed. Thanks for clarification!
 
-Well, actually, the struct device for the object passed to this
-function should be there already, because otherwise it wouldn't make
-sense to update the list.  So my comment above is not really
-applicable to this particular device and the function could take a
-struct acpi_device pointer argument.  Sorry for the confusion.
+--sfyO1m2EN8ZOtJL6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> But should we have acpi_dev_*() namespace for this function if it takes handle?
+On Mon, Mar 08, 2021 at 12:36:07PM +0800, Hsin-Yi Wang wrote:
 
-It takes a device object handle.
+> +	adap->bus_regulator = devm_regulator_get(&adap->dev, "bus");
+> +	if (IS_ERR(adap->bus_regulator)) {
+> +		res = PTR_ERR(adap->bus_regulator);
+> +		goto out_reg;
+> +	}
 
-Anyway, as per the above, it can take a struct acpi_device pointer
-argument in which case the "acpi_dev_" prefix should be fine.
+Idiomatically supplies should be named as they are by the chip datasheet
+rather than just a generic name like this, and I'm guessing that systems
+that have supplies like this will often already have something
+requesting the supply (eg, it's quite common for consumer drivers to do
+this) under that name.  I can see this being a useful thing to factor
+out into the core but it seems like it'd be better to have it enabled by
+having the controllers (or devices) pass a supply name (or possibly
+requested regulator) to the core rather than by just hard coding a name
+in the core so bindings look as expected.
 
-> For time being nothing better than following comes to my mind:
->
-> __acpi_dev_flag_dependency_met() => __acpi_flag_device_dependency_met()
-> acpi_dev_flag_dependency_met() => acpi_flag_device_dependency_met()
+I do also wonder if it's better to put the feature on the clients rather
+than the controller, I don't think it makes much difference though.
 
-The above said, the name is somewhat confusing overall IMV.
+--sfyO1m2EN8ZOtJL6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Something like acpi_dev_clear_dependencies() might be better.
+-----BEGIN PGP SIGNATURE-----
 
-So lets make it something like
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBGW/sACgkQJNaLcl1U
+h9DCqQf5AWoY9ts6hYYjbt4Rs4LUqzM+fet/NEq8b74WOnZgN0CV/Z14n1897bb6
+NfPqKzN5/+39WvYaZN5Bm3DUG7DDbwtvzJY7Xhi33xDkvbE+EFNQH0CbGlE3CdbV
+N5uGr7oYe7fhTzbj28R6Edv1Lc3ZRLR8iMlDGeA04KVgbXg3qP8lowfPkr+GqxjQ
+f5ja8ZTnbG8DvmGAa4x8XT+B7WQ3EIFoeO9O2PiAjAHn0EY6h5EFPxaLJQ+1F6Rf
+Fbtl11qFb/NaefGgEAYN17x2bn+8p1cDv4k6ljOUt07h2alTleDouzbQLQfNzQjH
+oVohYzF4E6HpXzMqJkv7S3p46VrJwQ==
+=VKuM
+-----END PGP SIGNATURE-----
 
-void acpi_dev_clear_dependencies(struct acpi_device *supplier);
+--sfyO1m2EN8ZOtJL6--
