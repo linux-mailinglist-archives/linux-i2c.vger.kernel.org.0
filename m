@@ -2,87 +2,151 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F31331A4C
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Mar 2021 23:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48763331C91
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Mar 2021 02:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbhCHWjp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Mar 2021 17:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbhCHWjg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Mar 2021 17:39:36 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB73C06174A;
-        Mon,  8 Mar 2021 14:39:36 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id f33so10866928otf.11;
-        Mon, 08 Mar 2021 14:39:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wQvIDGso1RBFZCsL6ixTOcS0Wu2YsU6EKE/ysPX9/4E=;
-        b=ek/lewEGWWKcVBwJKjOEuNn4V/El1kvmO132wgQDs0Nop8NdQDvQwIv9UU4wkRowm4
-         olbH+1vBxE7emGSmO1gMGYtgdaz3TdxH2VYQm09srJR7Sdz+v6EiYYb5g/TcGZviL4jx
-         Mn61bmIgJ8XnNEUe1t5RhzdRCKJGvZINrNpaTxyy/0H+6DK0H9rTIGxYgGK/em8Ys0S8
-         Zwxr+tbMU1qRWh7nyOsA4nKhzMVJX4aFkE6LTmgAs1XCQ5GxPuHaOEbxaBxzLYqTHTF+
-         0hQ7Y9mVSmCinX/3jtB0GV/gOGOmDH/EKvHpDYlp3MNRapFnJ08V/2EDb0CDIoZ94JLK
-         H2Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wQvIDGso1RBFZCsL6ixTOcS0Wu2YsU6EKE/ysPX9/4E=;
-        b=nuuli23HmweWKlyv1M5Po1dQuzHKxMjXG65tVFLClYYUfb8I4GUdyHcs6fvp2yGf5o
-         LFkDlpwMkDlg8323c0sIzJDgosx9chEzx640+caIh26uFTWe7HUhC94xx6jBtv012vlf
-         NGrgDEvjGEKTJBmVae4LM0jsSB3QdsBkethjcAmC20UFWEZMITNKVpoZgNynW4fH+oDn
-         wGcSc14NvJ3Zzu/NAZ9dS3s+PEexCeUYRohQYhBpock1tq3RjNDDUxRa6A5/OrqIKcUx
-         cDJBGaEUMl42PicBZYi5Q9PqWNlwTiLajZMjXPTbjLpI3DbJn+8B+bV2E20D2hD0okdG
-         ebBA==
-X-Gm-Message-State: AOAM5304C2zKbgF2pBwsqp75z+8A9Fw8Xd7B/sJxAAYURcRSoW1lI+j/
-        c0kQlsWwxc9puF+HIlfhnbBIdyGtDc4=
-X-Google-Smtp-Source: ABdhPJx8XlOlv8RaO6z9FNUkdOHyEa1MxP3s6FTna3PLeU0s6f4ziWS1rVKlVQvp9Mqc9QeAXg4Ncg==
-X-Received: by 2002:a9d:80e:: with SMTP id 14mr21846215oty.211.1615243175971;
-        Mon, 08 Mar 2021 14:39:35 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h24sm33807otg.20.2021.03.08.14.39.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 08 Mar 2021 14:39:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 8 Mar 2021 14:39:34 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: Errant readings on LM81 with T2080 SoC
-Message-ID: <20210308223934.GD185990@roeck-us.net>
-References: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
- <96d660bc-17ab-4e0e-9a94-bce1737a8da1@roeck-us.net>
- <4a1b1494-df96-2d8c-9323-beb2c2ba706b@alliedtelesis.co.nz>
- <a67ea323-634d-d34e-c63e-b1aaa4737b19@alliedtelesis.co.nz>
- <5709f180-04b5-09b2-e1c4-53eb5c9345d8@roeck-us.net>
- <d6074923-ee7e-4499-0e54-383a607d3c41@alliedtelesis.co.nz>
+        id S229750AbhCIBmw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Mar 2021 20:42:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37194 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229764AbhCIBmX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 8 Mar 2021 20:42:23 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A4F8652A8;
+        Tue,  9 Mar 2021 01:42:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615254143;
+        bh=u6Wt4ZYzeRBKFqq9tL6mnx/3bHT+JgCkJ7w4UKtIQbc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fQKV9/XQvwke5T0B9uo45zNWuiZvdnj37A6jyyE6TU69Mvqp8B7EZnQD3kpNz1TeJ
+         O1RGlFzSuaL+ZV5Bq2kYVzBCXOg5QtYwobGNfL4o1AYAUnsJZI96/+FjfS81q5ehnM
+         5eWsLpw6IafAl+jrDuPZzKkzJufkGEYde/s0Qk1G025ZxRWqvV4J/bPdaLLlq4Po17
+         BX1vdfTsXSqLtsh2oF4b54Fq+3EO3dHKMp/nGdo2saRL52Kr0jbEk0WBu2UawW3zXg
+         mN/Omk4JoldCRBL4o67/I0wEKF2nRXrVldgfL2amrsJAEFdf3OEBZZC7gm3v0/jwSp
+         p8TEIdO3OVoHg==
+Date:   Mon, 8 Mar 2021 19:42:21 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com,
+        henning.schild@siemens.com
+Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
+ support library
+Message-ID: <20210309014221.GA1831206@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d6074923-ee7e-4499-0e54-383a607d3c41@alliedtelesis.co.nz>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <YEZ4IitUa+I9HM5F@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 08, 2021 at 08:27:30PM +0000, Chris Packham wrote:
-[ ... ]
-> > Other than that, the only other real idea I have would be to monitor
-> > the i2c bus.
-> I am in the fortunate position of being able to go into the office and 
-> even happen to have the expensive scope at the moment. Now I just need 
-> to find a tame HW engineer so I don't burn myself trying to attach the 
-> probes.
+On Mon, Mar 08, 2021 at 09:16:50PM +0200, Andy Shevchenko wrote:
+> On Mon, Mar 08, 2021 at 12:52:12PM -0600, Bjorn Helgaas wrote:
+> > On Mon, Mar 08, 2021 at 02:20:16PM +0200, Andy Shevchenko wrote:
+> > > From: Jonathan Yong <jonathan.yong@intel.com>
+> > > 
+> > > There is already one and at least one more user is coming which
+> > > requires an access to Primary to Sideband bridge (P2SB) in order to
+> > > get IO or MMIO bar hidden by BIOS. Create a library to access P2SB
+> > > for x86 devices.
+> > 
+> > Can you include a spec reference?
 > 
-A bit unrelated, but you can get scopes connected through usb which are
-quite low-cost (like in the $100 range) and good enough for i2c testing.
+> I'm not sure I have a public link to the spec. It's the 100 Series PCH [1].
+> The document number to look for is 546955 [2] and there actually a bit of
+> information about this.
 
-Guenter
+This link, found by googling for "p2sb bridge", looks like it might
+have relevant public links:
+
+https://lab.whitequark.org/notes/2017-11-08/accessing-intel-ich-pch-gpios/
+
+I'd prefer if you could dig out the relevant sections because I really
+don't know how to identify them.
+
+> > I'm trying to figure out why this
+> > belongs in drivers/pci/.  It looks very device-specific.
+> 
+> Because it's all about access to PCI configuration spaces of the (hidden)
+> devices.
+
+The PCI core generally doesn't deal with device-specific config
+registers.
+
+> [1]: https://ark.intel.com/content/www/us/en/ark/products/series/98456/intel-100-series-desktop-chipsets.html
+> [2]: https://medium.com/@jacksonchen_43335/bios-gpio-p2sb-70e9b829b403
+> 
+> ...
+> 
+> > > +config PCI_P2SB
+> > > +	bool "Primary to Sideband (P2SB) bridge access support"
+> > > +	depends on PCI && X86
+> > > +	help
+> > > +	  The Primary to Sideband bridge is an interface to some PCI
+> > > +	  devices connected through it. In particular, SPI NOR
+> > > +	  controller in Intel Apollo Lake SoC is one of such devices.
+> > 
+> > This doesn't sound like a "bridge".  If it's a bridge, what's on the
+> > primary (upstream) side?  What's on the secondary side?  What
+> > resources are passed through the bridge, i.e., what transactions does
+> > it transfer from one side to the other?
+> 
+> It's a confusion terminology here. It's a Bridge according to the spec, but
+> it is *not* a PCI Bridge as you may had a first impression.
+
+The code suggests that a register on this device controls whether a
+different device is visible in config space.  I think it will be
+better if we can describe what's happening.
+
+> ...
+> 
+> > > +	/* Unhide the P2SB device */
+> > > +	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE, 0);
+> > > +
+> > > +	/* Read the first BAR of the device in question */
+> > > +	__pci_bus_read_base(bus, devfn, pci_bar_unknown, mem, PCI_BASE_ADDRESS_0, true);
+> > 
+> > I don't get this.  Apparently this normally hidden device is consuming
+> > PCI address space.  The PCI core needs to know about this.  If it
+> > doesn't, the PCI core may assign this space to another device.
+> 
+> Right, it returns all 1:s to any request so PCI core *thinks* it's
+> plugged off (like D3cold or so).
+
+I'm asking about the MMIO address space.  The BAR is a register in
+config space.  AFAICT, clearing P2SBC_HIDE_BYTE makes that BAR
+visible.  The BAR describes a region of PCI address space.  It looks
+like setting P2SBC_HIDE_BIT makes the BAR disappear from config space,
+but it sounds like the PCI address space *described* by the BAR is
+still claimed by the device.  If the device didn't respond to that
+MMIO space, you would have no reason to read the BAR at all.
+
+So what keeps the PCI core from assigning that MMIO space to another
+device?
+
+This all sounds quite irregular from the point of view of the PCI
+core.  If a device responds to address space that is not described by
+a standard PCI BAR, or by an EA capability, or by one of the legacy
+VGA or IDE exceptions, we have a problem.  That space must be
+described *somehow* in a generic way, e.g., ACPI or similar.
+
+What happens if CONFIG_PCI_P2SB is unset?  The device doesn't know
+that, and if it is still consuming MMIO address space that we don't
+know about, that's a problem.
+
+> > > +	/* Hide the P2SB device */
+> > > +	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE, P2SBC_HIDE_BIT);
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
