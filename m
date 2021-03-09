@@ -2,210 +2,176 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7716332061
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Mar 2021 09:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87596332168
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Mar 2021 09:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbhCIIUT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Mar 2021 03:20:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbhCIIUI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Mar 2021 03:20:08 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F958C06174A;
-        Tue,  9 Mar 2021 00:20:08 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id p10so11401576ils.9;
-        Tue, 09 Mar 2021 00:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MSMjMCqP63jDMehRjkPECi23yTB9JQhxuj3AVIVNIhI=;
-        b=Jpb6PBZZPSNdGJ/67sPwdbiWJ+tyIU0KIqh01E0Hn+4QFSzd4XHV3zxmHb2ZFvcrfE
-         qoxW3jsMvEIKfaTGClg3+opJ5SyC9VHykJiuKfKonG7Xhbb+E0c3X210+F3PRUXvV4d7
-         40duBJI0sR3pCCg9MWzWPbaVLqbqBx/DoZvR2cWfvA6iHQNM5RbRhhKBogUAH6gHebKA
-         DhWFKefjGCyJuA5uW/LZ21tOJ9Uy34+LoXK928SI2J4TbnevxXl/TwQmmD8/Rvo2OvJV
-         eOQGnvLkIc375vRgAUCj4BHk1NC24l2/QqkkCmk2mJ24dSkYof6z2pHTmJ1vBc8YxV04
-         VutA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MSMjMCqP63jDMehRjkPECi23yTB9JQhxuj3AVIVNIhI=;
-        b=DlxYSO/hXPIEqDK0z2H0F+RskG37JQBXRO1VZvgFlKFiceCu8hGQcy0WUs9Okc9kDe
-         m35tcGkm9jl2b9Pr6FxbYagCpoHen6yF0o8mNu0FKjmh1R1ioxPf97nqlPQN3JsZGZtk
-         hg6/nv66uZd674eV1FLC4ocWZd+pC+EsHSyMbhtsznUV0y4TEzpAlAXseoI9IRorb/+Y
-         v4fE9fh0dxf+spfzUjcScwP4BREa28sEnSQX/EW6NUXcDxcWjNQbHQT6vn6nFs7qSTcc
-         ulkxwzbGFEnSHos/g9/wCu7T66SO//HuD8GAFVIaItuG6j/gFpHTu42r/06QSMka9gRR
-         uJWQ==
-X-Gm-Message-State: AOAM530nFLGP4XvZuvD4b5nMUExmh5+INxWqViZT7oaby8OkUmFCBz6N
-        BdfKe5pu1nI9PrEedgCYZig156rVWEFleliyUeM=
-X-Google-Smtp-Source: ABdhPJyp8q1w0C35q/KrRn3hEEDi6VIoZhaxT8ePN+NlaJN1rB9ynTKW4tw5Kfz2epmyrDjaNl+f15rVPzEbS04dSsY=
-X-Received: by 2002:a05:6e02:d4e:: with SMTP id h14mr23392685ilj.80.1615278007404;
- Tue, 09 Mar 2021 00:20:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20210208152758.13093-1-mark.jonas@de.bosch.com> <20210308144211.GK4931@dell>
-In-Reply-To: <20210308144211.GK4931@dell>
-From:   Mark Jonas <toertel@gmail.com>
-Date:   Tue, 9 Mar 2021 09:19:56 +0100
-Message-ID: <CAEE5dN3DcULAtmQ=4WjT3nD20AVV2sX=Yx1WSS1UuJsBWTgc3g@mail.gmail.com>
-Subject: Re: [PATCH v4] mfd: da9063: Support SMBus and I2C mode
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Mark Jonas <mark.jonas@de.bosch.com>,
-        Support Opensource <support.opensource@diasemi.com>,
+        id S229495AbhCII5a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Mar 2021 03:57:30 -0500
+Received: from gecko.sbs.de ([194.138.37.40]:35104 "EHLO gecko.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229684AbhCII5N (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 9 Mar 2021 03:57:13 -0500
+X-Greylist: delayed 833 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Mar 2021 03:57:12 EST
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 1298gtX3016215
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 9 Mar 2021 09:42:55 +0100
+Received: from md1za8fc.ad001.siemens.net ([167.87.1.188])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 1298gsBs017101;
+        Tue, 9 Mar 2021 09:42:54 +0100
+Date:   Tue, 9 Mar 2021 09:42:52 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Adam.Thomson.Opensource@diasemi.com, stwiss.opensource@diasemi.com,
-        marek.vasut@gmail.com,
-        "RUAN Tingquan (BT-FIR/ENG1-Zhu)" <tingquan.ruan@cn.bosch.com>,
-        "Streidl Hubert (BT-FIR/ENG1-Grb)" <hubert.streidl@de.bosch.com>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com
+Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
+ support library
+Message-ID: <20210309094252.396b7f2d@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20210309014221.GA1831206@bjorn-Precision-5520>
+References: <YEZ4IitUa+I9HM5F@smile.fi.intel.com>
+        <20210309014221.GA1831206@bjorn-Precision-5520>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Lee,
+Am Mon, 8 Mar 2021 19:42:21 -0600
+schrieb Bjorn Helgaas <helgaas@kernel.org>:
 
-Thank you for having a look at the patch.
+> On Mon, Mar 08, 2021 at 09:16:50PM +0200, Andy Shevchenko wrote:
+> > On Mon, Mar 08, 2021 at 12:52:12PM -0600, Bjorn Helgaas wrote:  
+> > > On Mon, Mar 08, 2021 at 02:20:16PM +0200, Andy Shevchenko wrote:  
+> > > > From: Jonathan Yong <jonathan.yong@intel.com>
+> > > > 
+> > > > There is already one and at least one more user is coming which
+> > > > requires an access to Primary to Sideband bridge (P2SB) in
+> > > > order to get IO or MMIO bar hidden by BIOS. Create a library to
+> > > > access P2SB for x86 devices.  
+> > > 
+> > > Can you include a spec reference?  
+> > 
+> > I'm not sure I have a public link to the spec. It's the 100 Series
+> > PCH [1]. The document number to look for is 546955 [2] and there
+> > actually a bit of information about this.  
+> 
+> This link, found by googling for "p2sb bridge", looks like it might
+> have relevant public links:
+> 
+> https://lab.whitequark.org/notes/2017-11-08/accessing-intel-ich-pch-gpios/
+> 
+> I'd prefer if you could dig out the relevant sections because I really
+> don't know how to identify them.
+> 
+> > > I'm trying to figure out why this
+> > > belongs in drivers/pci/.  It looks very device-specific.  
+> > 
+> > Because it's all about access to PCI configuration spaces of the
+> > (hidden) devices.  
+> 
+> The PCI core generally doesn't deal with device-specific config
+> registers.
+> 
+> > [1]:
+> > https://ark.intel.com/content/www/us/en/ark/products/series/98456/intel-100-series-desktop-chipsets.html
+> > [2]:
+> > https://medium.com/@jacksonchen_43335/bios-gpio-p2sb-70e9b829b403
+> > 
+> > ...
+> >   
+> > > > +config PCI_P2SB
+> > > > +	bool "Primary to Sideband (P2SB) bridge access support"
+> > > > +	depends on PCI && X86
+> > > > +	help
+> > > > +	  The Primary to Sideband bridge is an interface to
+> > > > some PCI
+> > > > +	  devices connected through it. In particular, SPI NOR
+> > > > +	  controller in Intel Apollo Lake SoC is one of such
+> > > > devices.  
+> > > 
+> > > This doesn't sound like a "bridge".  If it's a bridge, what's on
+> > > the primary (upstream) side?  What's on the secondary side?  What
+> > > resources are passed through the bridge, i.e., what transactions
+> > > does it transfer from one side to the other?  
+> > 
+> > It's a confusion terminology here. It's a Bridge according to the
+> > spec, but it is *not* a PCI Bridge as you may had a first
+> > impression.  
+> 
+> The code suggests that a register on this device controls whether a
+> different device is visible in config space.  I think it will be
+> better if we can describe what's happening.
+> 
+> > ...
+> >   
+> > > > +	/* Unhide the P2SB device */
+> > > > +	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE, 0);
+> > > > +
+> > > > +	/* Read the first BAR of the device in question */
+> > > > +	__pci_bus_read_base(bus, devfn, pci_bar_unknown, mem,
+> > > > PCI_BASE_ADDRESS_0, true);  
+> > > 
+> > > I don't get this.  Apparently this normally hidden device is
+> > > consuming PCI address space.  The PCI core needs to know about
+> > > this.  If it doesn't, the PCI core may assign this space to
+> > > another device.  
+> > 
+> > Right, it returns all 1:s to any request so PCI core *thinks* it's
+> > plugged off (like D3cold or so).  
+> 
+> I'm asking about the MMIO address space.  The BAR is a register in
+> config space.  AFAICT, clearing P2SBC_HIDE_BYTE makes that BAR
+> visible.  The BAR describes a region of PCI address space.  It looks
+> like setting P2SBC_HIDE_BIT makes the BAR disappear from config space,
+> but it sounds like the PCI address space *described* by the BAR is
+> still claimed by the device.  If the device didn't respond to that
+> MMIO space, you would have no reason to read the BAR at all.
+> 
+> So what keeps the PCI core from assigning that MMIO space to another
+> device?
 
-> > From: Hubert Streidl <hubert.streidl@de.bosch.com>
-> >
-> > By default the PMIC DA9063 2-wire interface is SMBus compliant. This
-> > means the PMIC will automatically reset the interface when the clock
-> > signal ceases for more than the SMBus timeout of 35 ms.
-> >
-> > If the I2C driver / device is not capable of creating atomic I2C
-> > transactions, a context change can cause a ceasing of the clock signal.
-> > This can happen if for example a real-time thread is scheduled. Then
-> > the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
-> > a write message could end up in the wrong register. This could cause
-> > unpredictable system behavior.
-> >
-> > The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
-> > interface. This mode does not reset the interface when the clock
-> > signal ceases. Thus the problem depicted above does not occur.
-> >
-> > This patch tests for the bus functionality "I2C_FUNC_I2C". It can
-> > reasonably be assumed that the bus cannot obey SMBus timings if
-> > this functionality is set. SMBus commands most probably are emulated
-> > in this case which is prone to the latency issue described above.
-> >
-> > This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
-> > otherwise enables the SMBus mode for a native SMBus controller
-> > which doesn't have I2C_FUNC_I2C set.
-> >
-> > Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
-> > Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
-> > ---
-> > Changes in v4:
-> >   - Remove logging of selected 2-wire bus mode.
-> >
-> > Changes in v3:
-> >   - busmode now contains the correct bit DA9063_TWOWIRE_TO
-> >
-> > Changes in v2:
-> >   - Implement proposal by Adam Thomson and Wolfram Sang to check for
-> >     functionality I2C_FUNC_I2C instead of introducing a new DT property.
-> >
-> >  drivers/mfd/da9063-i2c.c             | 11 +++++++++++
-> >  include/linux/mfd/da9063/registers.h |  3 +++
-> >  2 files changed, 14 insertions(+)
-> >
-> > diff --git a/drivers/mfd/da9063-i2c.c b/drivers/mfd/da9063-i2c.c
-> > index 3781d0bb7786..9450c95a3741 100644
-> > --- a/drivers/mfd/da9063-i2c.c
-> > +++ b/drivers/mfd/da9063-i2c.c
-> > @@ -355,6 +355,7 @@ static int da9063_i2c_probe(struct i2c_client *i2c,
-> >                           const struct i2c_device_id *id)
-> >  {
-> >       struct da9063 *da9063;
-> > +     unsigned int busmode;
-> >       int ret;
-> >
-> >       da9063 = devm_kzalloc(&i2c->dev, sizeof(struct da9063), GFP_KERNEL);
-> > @@ -442,6 +443,16 @@ static int da9063_i2c_probe(struct i2c_client *i2c,
-> >               return ret;
-> >       }
-> >
-> > +     busmode = i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C) ?
-> > +                   0 : DA9063_TWOWIRE_TO;
->
-> Nit: I find ternaries like this tend to complicate matters and
-> harm readability rather than the converse.
+The device will respond to MMIO while being hidden. I am afraid nothing
+stops a collision, except for the assumption that the BIOS is always
+right and PCI devices never get remapped. But just guessing here.
 
-We can send an update of the patch if required.
+I have seen devices with coreboot having the P2SB visible, and most
+likely relocatable. Making it visible in Linux and not hiding it again
+might work, but probably only as long as Linux will not relocate it.
+Which i am afraid might seriously upset the BIOS, depending on what a
+device does with those GPIOs and which parts are implemented in the
+BIOS.
 
-> > +     ret = regmap_update_bits(da9063->regmap, DA9063_REG_CONFIG_J,
-> > +           DA9063_TWOWIRE_TO, busmode);
-> > +     if (ret < 0) {
-> > +             dev_err(da9063->dev, "Failed to set 2-wire bus mode.\n");
-> > +             return -EIO;
-> > +     }
->
-> I'm a little confused by this.  It's likely just me, but I would still
-> like some clarification.
->
-> So you write to the TWOWIRE register despite whether I2C is operable
-> not, which I guess is fine.
+regards,
+Henning
 
-In our understanding at this point the I2C / SMBus is definitely
-operable. Otherwise the call to da9063_get_device_type() would have
-already failed because it reads the chip ID via I2C / SMBus.
+> This all sounds quite irregular from the point of view of the PCI
+> core.  If a device responds to address space that is not described by
+> a standard PCI BAR, or by an EA capability, or by one of the legacy
+> VGA or IDE exceptions, we have a problem.  That space must be
+> described *somehow* in a generic way, e.g., ACPI or similar.
+> 
+> What happens if CONFIG_PCI_P2SB is unset?  The device doesn't know
+> that, and if it is still consuming MMIO address space that we don't
+> know about, that's a problem.
+> 
+> > > > +	/* Hide the P2SB device */
+> > > > +	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE,
+> > > > P2SBC_HIDE_BIT);  
+> > 
+> > -- 
+> > With Best Regards,
+> > Andy Shevchenko
+> > 
+> >   
 
-> But what if I2C is disabled and the update fails.  You seem to complain
-> to the user that a failure occurred and return an error even if the
-> configuration is invalid in the first place.
->
-> Would it not be better to encapsulate the update inside the
-> functionality check?
-
-Do you mean i2c_check_functionality() with "functionality check"? I
-understood that this function is part of the I2C / SMBus subsystem. It
-checks available features of the I2C / SMBus controller. As proposed
-during review of this patch we check for I2C_FUNC_I2C to determine
-whether the controller can do SMBus or if it is limited to I2C
-functionality. If the controller can only do I2C then the DA9063 shall
-not expect SMBus.
-
-By default the DA9063 assumes that it is connected to an SMBus. Thus,
-even with our patch there are potentially still two (get chip ID, set
-2-wire mode) accesses to the DA9063 by an I2C controller but the
-DA9063 assumes SMBus. Yet, our patch closes the window of opportunity
-for something bad to happen from maybe one accesse per second to two
-accesses over the complete lifetime of the driver. I think this is
-already pretty good.
-
-If you have a concrete proposal we could try to improve further. But
-one write access for setting the twowire mode will always be there.
-And without the call to da9063_get_device_type() this would also have
-to be "hard-coded" without the use of the regmap.
-
-I consider our patch being already that much better than the current
-state that it is worth taking it mainline. Without the patch our
-system triggers the fault during normal operation. Even with heavy
-stress testing we have not been able to trigger the fault once our
-patch was applied.
-
-> >       return da9063_device_init(da9063, i2c->irq);
-> >  }
-> >
-> > diff --git a/include/linux/mfd/da9063/registers.h b/include/linux/mfd/da9063/registers.h
-> > index 1dbabf1b3cb8..6e0f66a2e727 100644
-> > --- a/include/linux/mfd/da9063/registers.h
-> > +++ b/include/linux/mfd/da9063/registers.h
-> > @@ -1037,6 +1037,9 @@
-> >  #define              DA9063_NONKEY_PIN_AUTODOWN      0x02
-> >  #define              DA9063_NONKEY_PIN_AUTOFLPRT     0x03
-> >
-> > +/* DA9063_REG_CONFIG_J (addr=0x10F) */
-> > +#define DA9063_TWOWIRE_TO                    0x40
-> > +
-> >  /* DA9063_REG_MON_REG_5 (addr=0x116) */
-> >  #define DA9063_MON_A8_IDX_MASK                       0x07
-> >  #define              DA9063_MON_A8_IDX_NONE          0x00
-
-I am currently out of office. In case of change requirements we'll
-most likely send an updated patch mid of next week.
-
-Cheers,
-Mark
