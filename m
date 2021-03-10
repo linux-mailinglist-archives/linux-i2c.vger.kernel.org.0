@@ -2,73 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A06B33343AD
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Mar 2021 17:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA273344EE
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Mar 2021 18:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbhCJQvF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 10 Mar 2021 11:51:05 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:46135 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbhCJQur (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Mar 2021 11:50:47 -0500
-Received: by mail-ot1-f49.google.com with SMTP id r24so9936754otq.13;
-        Wed, 10 Mar 2021 08:50:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R6oolcrYeb0Yyin4lnT3+FTu+4DQx6lMstBt7PUzwi0=;
-        b=q3T5jhpDRW0arpOr+B2pBpKJ+vNombSvom2iHmPDIOzHaAsXgB8hsd8/tkd2ULCeUv
-         1ST9bqHDeWL6GRqoiEKRHLP8KyQ37mjs6cCBW4BdUwQ2KiC3gqmRWL8E9QQmEzOi8gg/
-         SdbBBi0B+QG7XDjQluu4MfLBKmV8qC1c3fWZJhKO65sA4je0+gNtZUmfPff8LnCpGAIT
-         vOnNKmdvMTnSJptjZbMGjdnDRXIKWcEnm79/CqOlsxJD9HwEwok/GqAjvRJlfo7+IFOu
-         7z8qLoBW/IxmgGN8bXu3xcPMy7nCYDj4fO/doBDlinTznFk0V7XRpZcOPRKBpbI3YDwj
-         kH1g==
-X-Gm-Message-State: AOAM530ygL5p/evcAU3aHkoFrMLdV5QrFPOUTh6CONQqca3lxhQWuAiP
-        QPN+r5ks4PO+QhrbuObjkKFdbmZ8M5gWnoi5CLI=
-X-Google-Smtp-Source: ABdhPJxlV/2wigpev0dSrTzB8wJqeftxRW6Co9lMLbSVPFiscoQ+P0Nnu5Je7p/f5rT4/q41GbjFbv0o9/cGohCEUyU=
-X-Received: by 2002:a05:6830:1e03:: with SMTP id s3mr3331388otr.321.1615395047082;
- Wed, 10 Mar 2021 08:50:47 -0800 (PST)
+        id S232532AbhCJRRI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Mar 2021 12:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231359AbhCJROs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Mar 2021 12:14:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF54CC061760;
+        Wed, 10 Mar 2021 09:14:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EFmV8kT8hWs8Q9WmFJMbPCHSM86NvMO2yar7iZF5S1k=; b=ps7tDs/cMZWiqdJRx+zNuif1HI
+        GAgfTX8IwXp0+C8EFWm88KQVQ2j6bDPCRdKL+hPx3LBtoQmEohxnwyV96rAgxU5pP3uCHHJKsPmXB
+        uhpvEAM1nQ7dOr53t7+lGHZuz157ivitLoMCymQdompBnJXp6dnYUNCddHgTP1BbeMk6x4brgI3KI
+        BESupa9nOBarcPUGNpxhhxAj7Twma/mGuJEL9gvTV2pzj1iGJ/zUfzU4sYhLYw+SBoP50EaaSifi0
+        AsGAGa4e2UPgICaJbj1RzHo8joLv3S2KwMsF6lHfbgtT+3nXoEJT9i8yj3Itol29+XIaZgRfiIkat
+        /3qXUKYA==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lK2Pb-0048tD-QG; Wed, 10 Mar 2021 17:14:20 +0000
+Date:   Wed, 10 Mar 2021 17:14:19 +0000
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com,
+        henning.schild@siemens.com
+Subject: Re: [PATCH v1 2/7] PCI: Convert __pci_read_base() to
+ __pci_bus_read_base()
+Message-ID: <20210310171419.GA981289@infradead.org>
+References: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
+ <20210308122020.57071-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <6660750.UgobAMfxrE@kreacher> <CAJZ5v0gCobMbDGt80exScjpGgjnbo+5kMtB6qsx1wfOf6QyiJQ@mail.gmail.com>
- <20210310160851.GA331077@ninjato>
-In-Reply-To: <20210310160851.GA331077@ninjato>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 10 Mar 2021 17:50:36 +0100
-Message-ID: <CAJZ5v0iOsPuNkmmH2cWY=u6C_1stkPKhUtbYM4DYvwt=EYtNAA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: i2c-scmi: Drop unused ACPI_MODULE_NAME definition
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210308122020.57071-3-andriy.shevchenko@linux.intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 5:08 PM Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Wed, Mar 10, 2021 at 03:47:10PM +0100, Rafael J. Wysocki wrote:
-> > On Fri, Mar 5, 2021 at 7:29 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > The ACPI_MODULE_NAME() definition is only used by the message
-> > > printing macros from ACPICA that are not used by the code in
-> > > question, so it is redundant.  Drop it.
-> > >
-> > > No functional impact.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > If there are no concerns regarding this, I'll queue it up for 5.13 in
-> > the ACPI tree, thanks!
->
-> I'd prefer the I2C tree a tad to avoid conflicts. Any reason for the
-> ACPI tree?
+> +static inline
+>  int __pci_read_base(struct pci_dev *dev, enum pci_bar_type type,
+> +		    struct resource *res, unsigned int reg)
 
-There are some patches doing this type of a cleanup in the ACPI tree,
-but this is the only reason, so please route it through the i2c tree
-if that is preferred.
+This looks weird.  Normal kernel style would be:
+
+static inline int __pci_read_base(struct pci_dev *dev, enum pci_bar_type type,
+		struct resource *res, unsigned int reg)
+
+or
+
+static inline int
+__pci_read_base(struct pci_dev *dev, enum pci_bar_type type,
+
+that being said, there seems to be no good agument to even make this
+and inline function.
+
+> +	return __pci_bus_read_base(dev->bus, dev->devfn, type, res, reg, dev->mmio_always_on);
+
+Please avoid pointless overly long lines.
