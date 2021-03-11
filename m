@@ -2,221 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C35E6337CE6
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Mar 2021 19:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0A5337F84
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Mar 2021 22:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbhCKSrp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 Mar 2021 13:47:45 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:40827 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbhCKSre (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Mar 2021 13:47:34 -0500
-Received: from mail-wm1-f71.google.com ([209.85.128.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lKQLM-0003UD-BH
-        for linux-i2c@vger.kernel.org; Thu, 11 Mar 2021 18:47:32 +0000
-Received: by mail-wm1-f71.google.com with SMTP id f9so4422681wml.0
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Mar 2021 10:47:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=AGhsYhdCQ1elD24yTKdnrXd5i7xOjzN52nW5SEJ7/Fo=;
-        b=Rqik3DXEraMtvTgVwt1ySpRLBQUfj34QaoVg5Kt2EtBfAPSCcfDIB97UXsNzZFq1FB
-         3iw/3jSyU0Ldq39+9Sbhra99/Hxj6YqWhBeY1+RH0xR4kjbUDpP+omnu9XtJpAnXRrZv
-         3TXS3s4anNkqmuhbd9tIl3U/jKbqNyAsq/uvOrjhnRhF/+5waivXhtWeh3jp4MF6WHZv
-         8bzvHvob3aiqBG7Pl3H2gwGk1Y6sFurvUdLKhgfgWrJ9WRWWkcW1j09uVcvbtIkE08CB
-         aE0EpJK+PaSiWjZaBtpPrk+Om0VKHNIwTLE9Le+EB59UdWygmxmNFWmdaOIPdqfWemt1
-         Z3gw==
-X-Gm-Message-State: AOAM532LR0WG5rHN7XRw5m8NklDSCGcmPxj7cVtdWSNhRYG1+l6dub50
-        aHQIOWK6EL3ZlGXIQU+ojGEG1MfU0tj7hfopo+uBojthWFxk7qlwtROUC1bkEwwRUt5meYqoDBw
-        5cN4CCVA3FgKabmY6Kc2/mi5OKFjrCAniHfQbeA==
-X-Received: by 2002:a5d:5141:: with SMTP id u1mr10282893wrt.31.1615488451951;
-        Thu, 11 Mar 2021 10:47:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzEiONe/luicUkBQrryf9RIkvIG+x8+UJPcdgITbiuaICznSQKmKVThfd4wAkfQtdO2oa9H6A==
-X-Received: by 2002:a5d:5141:: with SMTP id u1mr10282871wrt.31.1615488451652;
-        Thu, 11 Mar 2021 10:47:31 -0800 (PST)
-Received: from [192.168.1.116] (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id h6sm4972118wmi.6.2021.03.11.10.47.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Mar 2021 10:47:31 -0800 (PST)
-Subject: Re: [PATCH v3 00/15] arm64 / clk: socfpga: simplifying, cleanups and
- compile testing
-To:     Tom Rix <trix@redhat.com>, Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
-References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
- <f0b90916-9047-d5da-5cde-75d4330cf041@redhat.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <f581f103-270f-90ed-6946-de63b6712e82@canonical.com>
-Date:   Thu, 11 Mar 2021 19:47:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <f0b90916-9047-d5da-5cde-75d4330cf041@redhat.com>
-Content-Type: text/plain; charset=utf-8
+        id S230411AbhCKVSD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 Mar 2021 16:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229490AbhCKVRr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Mar 2021 16:17:47 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAE6C061574
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Mar 2021 13:17:46 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 32FD2891AE;
+        Fri, 12 Mar 2021 10:17:44 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1615497464;
+        bh=1DcFBkSZ1GEMK4IGgLLSPohVm5dNWmmK5gXKKqQb5SE=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=2I4l3FFnAYyE+DGHLdQLbYSxuXARGckSj2PvrusoNEIBwVD97nFEDz8CEAHpO82NE
+         HTgpeW0lzhI0O2CCS3hi0F8mev9yd0qeMfllU/2iMKfZMtZQWCyod5vjlsmn2cbXim
+         n/X189mL9CAZY/VOGf/T7cny7II/DKVTtTVuwBVuBdf2D6NcBxzlVMGXqoVQ0LRoUS
+         Piqvc6LmD8HcAbb0xvvJrt8FQiidwHfOm839d2enaDkds/C+Q527t8EJ8i4lNjhT34
+         hA+mvaIxzApx4tOlg072hdCKv2z+LSZ5Tl5Yo7dACUQ+QJHszj97dwaOhEy4tF022l
+         CmXEeHhh4OlNA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B604a88f80001>; Fri, 12 Mar 2021 10:17:44 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 12 Mar 2021 10:17:43 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.012; Fri, 12 Mar 2021 10:17:43 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Wolfram Sang <wsa@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: Errant readings on LM81 with T2080 SoC
+Thread-Topic: Errant readings on LM81 with T2080 SoC
+Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Sk6p4Y2sAgAAgcACAACSBgIAABe+AgAEDagCAAfS7gIAALq8AgAEX54CAAKWsgIAACmIAgADZp4A=
+Date:   Thu, 11 Mar 2021 21:17:43 +0000
+Message-ID: <94dfa9dc-a80c-98ba-4169-44cce3d810f7@alliedtelesis.co.nz>
+References: <20210311081842.GA1070@ninjato>
+In-Reply-To: <20210311081842.GA1070@ninjato>
+Accept-Language: en-NZ, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <0B4D89C4CA0DE1478530916CB5DE73E1@atlnz.lc>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=N659UExz7-8A:10 a=dESyimp9J3IA:10 a=No7XfMmhj-zxftOn39MA:9 a=pILNOxqGKmIA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 11/03/2021 19:26, Tom Rix wrote:
-> 
-> On 3/11/21 7:25 AM, Krzysztof Kozlowski wrote:
->> Hi,
->>
->> All three Intel arm64 SoCFPGA architectures (Agilex, N5X and Stratix 10)
->> are basically flavors/platforms of the same architecture.  At least from
->> the Linux point of view.  Up to a point that N5X and Agilex share DTSI.
->> Having three top-level architectures for the same one barely makes
->> sense and complicates driver selection.
->>
->> Additionally it was pointed out that ARCH_SOCFPGA name is too generic.
->> There are other vendors making SoC+FPGA designs, so the name should be
->> changed to have real vendor (currently: Intel).
->>
->>
->> Dependencies / merging
->> ======================
->> 1. Patch 1 is used as base, so other changes depend on its hunks.
->>    I put it at beginning as it is something close to a fix, so candidate
->>    for stable (even though I did not mark it like that).
->> 2. Patch 2: everything depends on it.
->>
->> 3. 64-bit path:
->> 3a. Patches 3-7: depend on patch 2, from 64-bit point of view.
->> 3b. Patch 8: depends on 2-7 as it finally removes 64-bit ARCH_XXX
->>     symbols.
->>
->> 4. 32-bit path:
->> 4a. Patches 9-14: depend on 2, from 32-bit point of view.
->> 4b. Patch 15: depends on 9-14 as it finally removes 32-bit ARCH_SOCFPGA
->>     symbol.
->>
->> If the patches look good, proposed merging is via SoC tree (after
->> getting acks from everyone). Sharing immutable branches is also a way.
->>
->>
->> Changes since v2
->> ================
->> 1. Several new patches and changes.
->> 2. Rename ARCH_SOCFPGA to ARCH_INTEL_SOCFPGA on 32-bit and 64-bit.
->> 3. Enable compile testing of 32-bit socfpga clock drivers.
->> 4. Split changes per subsystems for easier review.
->> 5. I already received an ack from Lee Jones, but I did not add it as
->>    there was big refactoring.  Please kindly ack one more time if it
->>    looks good.
->>
->> Changes since v1
->> ================
->> 1. New patch 3: arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64.
->> 2. New patch 4: arm64: intel: merge Agilex and N5X into ARCH_SOCFPGA64.
->> 3. Fix build is.sue reported by kernel test robot (with ARCH_STRATIX10
->>    and COMPILE_TEST but without selecting some of the clocks).
->>
->>
->> RFT
->> ===
->> I tested compile builds on few configurations, so I hope kbuild 0-day
->> will check more options (please give it few days on the lists).
->> I compare the generated autoconf.h and found no issues.  Testing on real
->> hardware would be appreciated.
->>
->> Best regards,
->> Krzysztof
->>
->> Krzysztof Kozlowski (15):
->>   clk: socfpga: allow building N5X clocks with ARCH_N5X
->>   ARM: socfpga: introduce common ARCH_INTEL_SOCFPGA
->>   mfd: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
->>   net: stmmac: merge ARCH_SOCFPGA and ARCH_STRATIX10
->>   clk: socfpga: build together Stratix 10, Agilex and N5X clock drivers
->>   clk: socfpga: merge ARCH_SOCFPGA and ARCH_STRATIX10
->>   EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
->>   arm64: socfpga: merge Agilex and N5X into ARCH_INTEL_SOCFPGA
->>   clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
->>   clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and
->>     compile test)
->>   dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
->>   fpga: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
->>   i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
->>   reset: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
->>   ARM: socfpga: drop ARCH_SOCFPGA
->>
->>  arch/arm/Kconfig                            |  2 +-
->>  arch/arm/Kconfig.debug                      |  6 +++---
->>  arch/arm/Makefile                           |  2 +-
->>  arch/arm/boot/dts/Makefile                  |  2 +-
->>  arch/arm/configs/multi_v7_defconfig         |  2 +-
->>  arch/arm/configs/socfpga_defconfig          |  2 +-
->>  arch/arm/mach-socfpga/Kconfig               |  4 ++--
->>  arch/arm64/Kconfig.platforms                | 17 ++++-------------
->>  arch/arm64/boot/dts/altera/Makefile         |  2 +-
->>  arch/arm64/boot/dts/intel/Makefile          |  6 +++---
->>  arch/arm64/configs/defconfig                |  3 +--
->>  drivers/clk/Kconfig                         |  1 +
->>  drivers/clk/Makefile                        |  4 +---
->>  drivers/clk/socfpga/Kconfig                 | 19 +++++++++++++++++++
->>  drivers/clk/socfpga/Makefile                | 11 +++++------
->>  drivers/dma/Kconfig                         |  2 +-
->>  drivers/edac/Kconfig                        |  2 +-
->>  drivers/edac/altera_edac.c                  | 17 +++++++++++------
->>  drivers/firmware/Kconfig                    |  2 +-
->>  drivers/fpga/Kconfig                        |  8 ++++----
->>  drivers/i2c/busses/Kconfig                  |  2 +-
->>  drivers/mfd/Kconfig                         |  4 ++--
->>  drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
->>  drivers/reset/Kconfig                       |  6 +++---
->>  24 files changed, 71 insertions(+), 59 deletions(-)
->>  create mode 100644 drivers/clk/socfpga/Kconfig
->>
-> Thanks for changing the config name.
-> 
-> Please review checkpatch --strict on this set, the typical complaint is
-> 
-> clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and compile test)    
-> WARNING: please write a paragraph that describes the config symbol fully
-> #35: FILE: drivers/clk/socfpg/Kconfig:11:                       
-> +config CLK_INTEL_SOCFPGA32
 
-This symbol is not visible to the user, not selectable, so documenting
-it more than what is already written in option title (the one going
-after "bool") makes little sense. We don't do it for such drivers.
-Mostly because it would be duplication of the option title or include
-useless information (it's like documenting "int i" with "counter used
-for loop"). The checkpatch complains if this is less than three lines,
-but it is not possible to write here anything meaningful for more than
-one line.
-
-Really, it does not make sense. If you think otherwise, please suggest
-the text which is not duplicating option title and does not include
-common stuff from clocks.
-
-Best regards,
-Krzysztof
+On 11/03/21 9:18 pm, Wolfram Sang wrote:
+>> Bummer. What is really weird is that you see clock stretching under
+>> CPU load. Normally clock stretching is triggered by the device, not
+>> by the host.
+> One example: Some hosts need an interrupt per byte to know if they
+> should send ACK or NACK. If that interrupt is delayed, they stretch the
+> clock.
+>
+It feels like something like that is happening. Looking at the T2080=20
+Reference manual there is an interesting timing diagram (Figure 14-2 if=20
+someone feels like looking it up). It shows SCL low between the ACK for=20
+the address and the data byte. I think if we're delayed in sending the=20
+next byte we could violate Ttimeout or Tlow:mext from the SMBUS spec.=
