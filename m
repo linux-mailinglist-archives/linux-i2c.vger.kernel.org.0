@@ -2,46 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26BD3377BD
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Mar 2021 16:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A09D3377BF
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Mar 2021 16:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbhCKPam (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 Mar 2021 10:30:42 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:34458 "EHLO
+        id S234140AbhCKPan (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 Mar 2021 10:30:43 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:34469 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234046AbhCKPaO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Mar 2021 10:30:14 -0500
-Received: from mail-wm1-f70.google.com ([209.85.128.70])
+        with ESMTP id S234122AbhCKPaY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Mar 2021 10:30:24 -0500
+Received: from mail-ed1-f69.google.com ([209.85.208.69])
         by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lKNE0-0005h8-6y
-        for linux-i2c@vger.kernel.org; Thu, 11 Mar 2021 15:27:44 +0000
-Received: by mail-wm1-f70.google.com with SMTP id v5so4183022wml.9
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Mar 2021 07:27:44 -0800 (PST)
+        id 1lKNE3-0005jW-Aq
+        for linux-i2c@vger.kernel.org; Thu, 11 Mar 2021 15:27:47 +0000
+Received: by mail-ed1-f69.google.com with SMTP id h2so10011068edw.10
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Mar 2021 07:27:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UjkBHzEIXy3Qt0KfyB8W+UTqTimKf+/Z4F2P3MBYO1k=;
-        b=Nmtm8DN9Ctj+SgFAbjJwqGscxFl7+B23GDa3TASg8/Gv2/LfP/0zXRP7z31qZB1Kc0
-         bEj0i1rIxtmx4M8wrTm/qt4Cfpn3YAt+74eJLDxiYcs10/76IS41roPsfysof8zfSAKA
-         5UwJFCDJwHnsg5wGNkVIrDgk5XxVk1sCv8UNZb3PWBItwkAKx6L64XkIyert12Hft9Jq
-         x2AL9grZj8G58KaneGCm8enkDQM/RFQs0VZ0UOXRd+vuigSu9l43VdSYlFc2QbQnceF2
-         83RHbAEeu0uu5ROMdqQDu7eVoZYLmesGqhHeP9hE5OKaNkXcjB8VfKgtlmiW8+4BKthI
-         uBcg==
-X-Gm-Message-State: AOAM531iElzRMQmBfHV+YNhaEE7QT64Jv5GsebAMYwyQTvnqZwmtKSk7
-        h4yDgRL/IzR42PonIaxEOgmAOxiQ01dSw8Sh+Cll6Uctnxb7yYBUW5ZxHFD6fl9PJxjnO0BY6Iu
-        jIfRj2C7T5cjJkzbbxHtonXQei9pJspwkIl24EA==
-X-Received: by 2002:a05:6402:149:: with SMTP id s9mr9105089edu.247.1615476453451;
-        Thu, 11 Mar 2021 07:27:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy9JEFJOCs9xlVCDjG2l3JIb1sIqxzKP3KekIDHOJltUt18JZjWfClKITi/qC3i9sP0ViNxqQ==
-X-Received: by 2002:a05:6402:149:: with SMTP id s9mr9105059edu.247.1615476453282;
-        Thu, 11 Mar 2021 07:27:33 -0800 (PST)
+        bh=LkS1dLaLUNf0Tu13eWfZQBLP6fiimg7+EWMMMS6XyYM=;
+        b=QVN1cABY2Nlw+G8w0UWKjv7JD2J8SsAvl8YKHjD1btbpNOO7E+rqkeSTjSOKVqDt7Z
+         oaAveohPZaD5tvMni7R0QrLg8tCvFcRui5FQP3SEQM7g4q5SksGLzTxdHejOADMhpXi1
+         u6Q2VpfwMy31eGD4TT/n98ytPj2GOjp8nbxOgFNJpzhqNMPf7swR1R8sjlpGRY4jpTzC
+         FDAhiw1X3n9g02BvIUMD6cvFuFcCmu204+F5a02ckW0cyXkHA6eNvnzxEC+/+CQ1m5Ew
+         lMmQVClM3WI268hQJ+SMT0YhQ1UnNKATzlzAwtVXSqLdMGKaKgXzJngls4vOD6HrW/G8
+         Ud9Q==
+X-Gm-Message-State: AOAM533f4nvf7PhAUlZesO07hUbb2u58YD81jT4lPpuAfIVQsbNUdHw3
+        wvjGPqXRZu/TFxt7LWPtWI37MNXRwpffxp1KdmLmf3zAFSE7IbiPxgNVlGukSDz+fRUj9m0VKy9
+        2ktvcNgk+q7pB//d6brIN6iSVM97xohY4Q92ozQ==
+X-Received: by 2002:a05:6402:10c9:: with SMTP id p9mr9186809edu.268.1615476466826;
+        Thu, 11 Mar 2021 07:27:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwiRng9hU7KaBQ9hI2y61WSuJDlIqArf08ScSxAu55vb9/puMamEp/Rnnmw5+yqMGNTUgkwAA==
+X-Received: by 2002:a05:6402:10c9:: with SMTP id p9mr9186761edu.268.1615476466574;
+        Thu, 11 Mar 2021 07:27:46 -0800 (PST)
 Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id t15sm1552389edw.84.2021.03.11.07.27.32
+        by smtp.gmail.com with ESMTPSA id t15sm1518545edc.34.2021.03.11.07.27.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 07:27:32 -0800 (PST)
+        Thu, 11 Mar 2021 07:27:46 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
@@ -69,9 +69,9 @@ To:     Russell King <linux@armlinux.org.uk>,
         linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
         netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v3 11/15] dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
-Date:   Thu, 11 Mar 2021 16:27:31 +0100
-Message-Id: <20210311152731.1318428-1-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 15/15] ARM: socfpga: drop ARCH_SOCFPGA
+Date:   Thu, 11 Mar 2021 16:27:44 +0100
+Message-Id: <20210311152744.1318653-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
 References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
@@ -81,27 +81,70 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-ARCH_SOCFPGA is being renamed to ARCH_INTEL_SOCFPGA so adjust the
-32-bit ARM drivers to rely on new symbol.
+Simplify 32-bit and 64-bit Intel SoCFPGA Kconfig options by having only
+one for both of them.  After conversion of all
+drivers to use the new ARCH_INTEL_SOCFPGA, the remaining ARM option can
+be removed.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/dma/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/configs/multi_v7_defconfig | 2 +-
+ arch/arm/configs/socfpga_defconfig  | 2 +-
+ arch/arm/mach-socfpga/Kconfig       | 8 ++------
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-index 0c2827fd8c19..a0836ffc22e0 100644
---- a/drivers/dma/Kconfig
-+++ b/drivers/dma/Kconfig
-@@ -100,7 +100,7 @@ config AT_XDMAC
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 3823da605430..591b15164e3d 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -79,7 +79,7 @@ CONFIG_ARCH_MSM8960=y
+ CONFIG_ARCH_MSM8974=y
+ CONFIG_ARCH_ROCKCHIP=y
+ CONFIG_ARCH_RENESAS=y
+-CONFIG_ARCH_SOCFPGA=y
++CONFIG_ARCH_INTEL_SOCFPGA=y
+ CONFIG_PLAT_SPEAR=y
+ CONFIG_ARCH_SPEAR13XX=y
+ CONFIG_MACH_SPEAR1310=y
+diff --git a/arch/arm/configs/socfpga_defconfig b/arch/arm/configs/socfpga_defconfig
+index 0c60eb382c80..2d9404ea52c6 100644
+--- a/arch/arm/configs/socfpga_defconfig
++++ b/arch/arm/configs/socfpga_defconfig
+@@ -9,7 +9,7 @@ CONFIG_NAMESPACES=y
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_EMBEDDED=y
+ CONFIG_PROFILING=y
+-CONFIG_ARCH_SOCFPGA=y
++CONFIG_ARCH_INTEL_SOCFPGA=y
+ CONFIG_ARM_THUMBEE=y
+ CONFIG_SMP=y
+ CONFIG_NR_CPUS=2
+diff --git a/arch/arm/mach-socfpga/Kconfig b/arch/arm/mach-socfpga/Kconfig
+index e43ed0ca6860..43ddec677c0b 100644
+--- a/arch/arm/mach-socfpga/Kconfig
++++ b/arch/arm/mach-socfpga/Kconfig
+@@ -1,8 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-menuconfig ARCH_SOCFPGA
++menuconfig ARCH_INTEL_SOCFPGA
+ 	bool "Altera SOCFPGA family"
+ 	depends on ARCH_MULTI_V7
+-	select ARCH_INTEL_SOCFPGA
+ 	select ARCH_SUPPORTS_BIG_ENDIAN
+ 	select ARM_AMBA
+ 	select ARM_GIC
+@@ -20,10 +19,7 @@ menuconfig ARCH_SOCFPGA
+ 	select PL310_ERRATA_753970 if PL310
+ 	select PL310_ERRATA_769419
  
- config AXI_DMAC
- 	tristate "Analog Devices AXI-DMAC DMA support"
--	depends on MICROBLAZE || NIOS2 || ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_SOCFPGA || COMPILE_TEST
-+	depends on MICROBLAZE || NIOS2 || ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA || COMPILE_TEST
- 	select DMA_ENGINE
- 	select DMA_VIRTUAL_CHANNELS
- 	select REGMAP_MMIO
+-if ARCH_SOCFPGA
+-config ARCH_INTEL_SOCFPGA
+-	bool
+-
++if ARCH_INTEL_SOCFPGA
+ config SOCFPGA_SUSPEND
+ 	bool "Suspend to RAM on SOCFPGA"
+ 	help
 -- 
 2.25.1
 
