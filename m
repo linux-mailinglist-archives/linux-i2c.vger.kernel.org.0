@@ -2,182 +2,190 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 587743376D7
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Mar 2021 16:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A7B337722
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Mar 2021 16:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbhCKPUC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 Mar 2021 10:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234008AbhCKPTv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Mar 2021 10:19:51 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63114C061574;
-        Thu, 11 Mar 2021 07:19:49 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id e19-20020a4a73530000b02901b62c0e1bb6so757160oof.11;
-        Thu, 11 Mar 2021 07:19:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=/piWRglIJAAaHxC5K9ZPKIvvXUDdsYSqAMgqNZKw/jQ=;
-        b=CWAlQimVEi4aZHlMgv+kboxx4U4Qxd+3nLBLA7lVUTXXqbCXPv+2sTIpT7N+dbMm+c
-         W1i3lSTVohCI5ds6emYnZqLa1nW3wvqGEAzTsRr3E9eHsh1egJkCKa3Sr/p8lnHyByYU
-         VcCJHb1oQEAJh83uvzXc/KNkni0JdYdRkLSCHdlzzPLlvUuL+6GLq0Mk1KuY2Rhu1qrP
-         9H26F0OPxNTreB5P7U80LmtnWuxbEHigQJoyq68jHjZ8AxE6H1odfeiDiVDuS/YogEhK
-         CiylyMLrqOR9zZ/Yk1DooPNgB1tkRWB/AwLJJAT3Zm3d4Z60nFPU3WQcU8Dc2oZOiqt+
-         GdOQ==
+        id S233997AbhCKPZy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 Mar 2021 10:25:54 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:33794 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234138AbhCKPZx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Mar 2021 10:25:53 -0500
+Received: from mail-ej1-f69.google.com ([209.85.218.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lKNCB-0004jL-F0
+        for linux-i2c@vger.kernel.org; Thu, 11 Mar 2021 15:25:51 +0000
+Received: by mail-ej1-f69.google.com with SMTP id t21so880547ejf.14
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Mar 2021 07:25:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=/piWRglIJAAaHxC5K9ZPKIvvXUDdsYSqAMgqNZKw/jQ=;
-        b=HV+5ldLGnrNfNUHHwkaTEZYZJw4NGLf02iq78vlt2MZsR5jyq0yOQKSexITSKh0C5N
-         eNIa3WW/mFHEBJBXnMtmqvroDaxBybQxifA3TZUOlxcmjQKiKfK3pu9ZN16KQjHTsGTu
-         DB63lPpTZBjBx2Keqeg9nvhd7Yan+AHJhNyoUuOYeSKma4F42XLODLFaOpmVzokjLT9K
-         jyhJ2stBj9RgZxb+lH+dunGLtYhjlYJXGEtlxVr7z7v+cKoc2x5i4cHd0Iy3G0wTqTCx
-         nOxfIcJyNGDKW7NlWs+2gv0t0g3ayymILg3qITiDiqDiA4ybH4pK/S2QguVIAAUJBs4K
-         3HpQ==
-X-Gm-Message-State: AOAM5311/3RXG46lq9BnyA5k5nuS4vx+3hSnu6yvkVKTuPZ0htcuDzVx
-        DMxQai+4i8zj+UQoUygtGkWvmfL9dK8=
-X-Google-Smtp-Source: ABdhPJyVwzcnA6Hzn62Jx7Yc1skAYwfZGFku3JK4XU94sP3VQm3rplxIZPSHN9EVtv/PB/dZkyeYYQ==
-X-Received: by 2002:a4a:ea94:: with SMTP id r20mr7048645ooh.43.1615475988716;
-        Thu, 11 Mar 2021 07:19:48 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p3sm693944otk.9.2021.03.11.07.19.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Mar 2021 07:19:47 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: Errant readings on LM81 with T2080 SoC
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
- <96d660bc-17ab-4e0e-9a94-bce1737a8da1@roeck-us.net>
- <4a1b1494-df96-2d8c-9323-beb2c2ba706b@alliedtelesis.co.nz>
- <a67ea323-634d-d34e-c63e-b1aaa4737b19@alliedtelesis.co.nz>
- <5709f180-04b5-09b2-e1c4-53eb5c9345d8@roeck-us.net>
- <d6074923-ee7e-4499-0e54-383a607d3c41@alliedtelesis.co.nz>
- <1aa0dc23-0706-5902-2f46-0767de0e3ad6@alliedtelesis.co.nz>
- <d5045879-45aa-db38-e6aa-4c8ea3e62f6c@roeck-us.net>
- <b41a802b-2833-13fb-58ad-1762a3507460@alliedtelesis.co.nz>
- <d37a114c-fa3f-40e8-4d85-52eb1ff03c37@roeck-us.net>
- <20210311081842.GA1070@ninjato>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <cafd05ea-088e-c7c8-41f6-beafaa943453@roeck-us.net>
-Date:   Thu, 11 Mar 2021 07:19:44 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HH1upFGS1oxbv+vQ09D6VKarsXku0IAuIjEmvH7R4Kk=;
+        b=En6rkfnsPaNw/igmStwA4c5zJp7FT6j8geGK/wQQkM1sTPyqwDs3yBgNeSLAg1GxnR
+         QFyrAeLiMdVGM72MyNho+rLVwSYnHLeoPTZGfW/0MWMGlP9rRG/n1Fr57lGPL+lm/d2D
+         fEiGW0B4GqI0Y01mKeFoUk030jtSuIN3E6GgczN5DON+3lDOlVxF6OwVvfX3tUWv4hFP
+         kmPhJFCfv6O7MbLL9GkvsZ0l5JUZ74S12rxRiMm2LhavuVRCiLxCEb52FsxDZJG8Kw3W
+         JJgVHk2UKYf08obmoxTIjakqwuhwVe1S0G9tl7jQJCf0hMbYF2fPWlnn+LRgWnyASQWq
+         Wqww==
+X-Gm-Message-State: AOAM532Pye0AET1fOh8dnMDS/M2Vt/rjLU4nXT76JL5Zh2XfniYd9ODp
+        m/ttPbJO7K6poLF/X/pvY8/u4Krj1YMzGQjTR4w3cr9GxW8Let0UnCRZkeBniLd6WcrPNG/s9nz
+        z6WZwm65WIBPGI1iigwb6H+nkpLqUeIqNr45xhA==
+X-Received: by 2002:a17:906:4f8a:: with SMTP id o10mr3653336eju.484.1615476351082;
+        Thu, 11 Mar 2021 07:25:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwl4COb3xR5+Ql8luerMFoHdUQmjQDr8WhPDVtBN8ZjQzZ5RdBWXObNPvxwoLN6Q/QH+U5+ow==
+X-Received: by 2002:a17:906:4f8a:: with SMTP id o10mr3653311eju.484.1615476350782;
+        Thu, 11 Mar 2021 07:25:50 -0800 (PST)
+Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id v25sm1517826edr.18.2021.03.11.07.25.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Mar 2021 07:25:50 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 00/15] arm64 / clk: socfpga: simplifying, cleanups and compile testing
+Date:   Thu, 11 Mar 2021 16:25:30 +0100
+Message-Id: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210311081842.GA1070@ninjato>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="y5JVUJFBvApYWP5Nc2ztCVBdGvK5SakF4"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---y5JVUJFBvApYWP5Nc2ztCVBdGvK5SakF4
-Content-Type: multipart/mixed; boundary="92jJKb1m8tP1DTc8WK4dmwfKHDeWxK3MH"
+Hi,
 
---92jJKb1m8tP1DTc8WK4dmwfKHDeWxK3MH
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+All three Intel arm64 SoCFPGA architectures (Agilex, N5X and Stratix 10)
+are basically flavors/platforms of the same architecture.  At least from
+the Linux point of view.  Up to a point that N5X and Agilex share DTSI.
+Having three top-level architectures for the same one barely makes
+sense and complicates driver selection.
 
-On 3/11/21 12:18 AM, Wolfram Sang wrote:
->=20
->> Bummer. What is really weird is that you see clock stretching under
->> CPU load. Normally clock stretching is triggered by the device, not
->> by the host.
->=20
-> One example: Some hosts need an interrupt per byte to know if they
-> should send ACK or NACK. If that interrupt is delayed, they stretch the=
-
-> clock.
->=20
-
-Indeed, the i2c-mpc driver sends TXAK (only) after receiving
-that interrupt. Since that is running in the context of the user
-process, that may well be delayed substantially on a loaded system.
-
-Maybe the interrupt handler will need to play a more active role
-in the i2c-mpc driver. Alternatively, the transfer function could
-be handled by a high priority kernel thread.
-
-Guenter
+Additionally it was pointed out that ARCH_SOCFPGA name is too generic.
+There are other vendors making SoC+FPGA designs, so the name should be
+changed to have real vendor (currently: Intel).
 
 
---92jJKb1m8tP1DTc8WK4dmwfKHDeWxK3MH--
+Dependencies / merging
+======================
+1. Patch 1 is used as base, so other changes depend on its hunks.
+   I put it at beginning as it is something close to a fix, so candidate
+   for stable (even though I did not mark it like that).
+2. Patch 2: everything depends on it.
 
---y5JVUJFBvApYWP5Nc2ztCVBdGvK5SakF4
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+3. 64-bit path:
+3a. Patches 3-7: depend on patch 2, from 64-bit point of view.
+3b. Patch 8: depends on 2-7 as it finally removes 64-bit ARCH_XXX
+    symbols.
 
------BEGIN PGP SIGNATURE-----
+4. 32-bit path:
+4a. Patches 9-14: depend on 2, from 32-bit point of view.
+4b. Patch 15: depends on 9-14 as it finally removes 32-bit ARCH_SOCFPGA
+    symbol.
 
-iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAmBKNREACgkQyx8mb86f
-mYGvtA/9HeYGnwSG9taI4rA/EX8gnzN3Q5r6OiEWdBybij2Z0nqA6m5tcvRuTbN6
-Df+9IT27KoQIVLV4iyenfJ0mNPvJiGBMrqdtXWOhhlh+lt4fVAB6RvGHohaYeLio
-F/MXQjvDJczgBRnRpsgCL/Yn435n+D4gTP6bR/tql3eHr2Igcj+E3+KqtCFhsFMn
-awLrAsJcKnpu2HEewb8ISoPwzhvLyg2Hk9NUnDVPguJuPNRYeh1j72avH4W5sAH0
-Jvtudqh+ziZHOZNXzbeXQxij+4yz3jSWy9kjufd8cJYLbYdpI1q3q/+jHwqHx3z+
-2jbAKz5fVFHAfuURVM0pdAj841Q+8W30jtnx6ugWa18wtVQTVLSE6dfNtj1ayqUM
-3O3WLnnjlaBj/354c19ghEA09qc962b7LtptHTWybTqzpvnBUQ7kdMtGxR9B5L6n
-zlY/pOVgYrfdD5rPOQ9j1dU/XpuQG+ApCE7o4fQg0EVLdZ+BCv2HmBWcMBFoXu+q
-DUja07O/JQft1Ucx+yOgvupJWI1ix2X3dh3K+UY8y3vJSqDnPihO0DUEtPXga4WX
-kOgnH7DO0vlJtlq5oVrepoUKt3epnh41FNBj05lRlv27HREH2h3+riUH+7eof++P
-FWt3SE8oVxcJx3BfWaXL7Or5vZFHTH7b3N9NXgZYO1JQQ+hERhA=
-=HdHX
------END PGP SIGNATURE-----
+If the patches look good, proposed merging is via SoC tree (after
+getting acks from everyone). Sharing immutable branches is also a way.
 
---y5JVUJFBvApYWP5Nc2ztCVBdGvK5SakF4--
+
+Changes since v2
+================
+1. Several new patches and changes.
+2. Rename ARCH_SOCFPGA to ARCH_INTEL_SOCFPGA on 32-bit and 64-bit.
+3. Enable compile testing of 32-bit socfpga clock drivers.
+4. Split changes per subsystems for easier review.
+5. I already received an ack from Lee Jones, but I did not add it as
+   there was big refactoring.  Please kindly ack one more time if it
+   looks good.
+
+Changes since v1
+================
+1. New patch 3: arm64: socfpga: rename ARCH_STRATIX10 to ARCH_SOCFPGA64.
+2. New patch 4: arm64: intel: merge Agilex and N5X into ARCH_SOCFPGA64.
+3. Fix build is.sue reported by kernel test robot (with ARCH_STRATIX10
+   and COMPILE_TEST but without selecting some of the clocks).
+
+
+RFT
+===
+I tested compile builds on few configurations, so I hope kbuild 0-day
+will check more options (please give it few days on the lists).
+I compare the generated autoconf.h and found no issues.  Testing on real
+hardware would be appreciated.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (15):
+  clk: socfpga: allow building N5X clocks with ARCH_N5X
+  ARM: socfpga: introduce common ARCH_INTEL_SOCFPGA
+  mfd: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+  net: stmmac: merge ARCH_SOCFPGA and ARCH_STRATIX10
+  clk: socfpga: build together Stratix 10, Agilex and N5X clock drivers
+  clk: socfpga: merge ARCH_SOCFPGA and ARCH_STRATIX10
+  EDAC: altera: merge ARCH_SOCFPGA and ARCH_STRATIX10
+  arm64: socfpga: merge Agilex and N5X into ARCH_INTEL_SOCFPGA
+  clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
+  clk: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs (and
+    compile test)
+  dmaengine: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+  fpga: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+  i2c: altera: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+  reset: socfpga: use ARCH_INTEL_SOCFPGA also for 32-bit ARM SoCs
+  ARM: socfpga: drop ARCH_SOCFPGA
+
+ arch/arm/Kconfig                            |  2 +-
+ arch/arm/Kconfig.debug                      |  6 +++---
+ arch/arm/Makefile                           |  2 +-
+ arch/arm/boot/dts/Makefile                  |  2 +-
+ arch/arm/configs/multi_v7_defconfig         |  2 +-
+ arch/arm/configs/socfpga_defconfig          |  2 +-
+ arch/arm/mach-socfpga/Kconfig               |  4 ++--
+ arch/arm64/Kconfig.platforms                | 17 ++++-------------
+ arch/arm64/boot/dts/altera/Makefile         |  2 +-
+ arch/arm64/boot/dts/intel/Makefile          |  6 +++---
+ arch/arm64/configs/defconfig                |  3 +--
+ drivers/clk/Kconfig                         |  1 +
+ drivers/clk/Makefile                        |  4 +---
+ drivers/clk/socfpga/Kconfig                 | 19 +++++++++++++++++++
+ drivers/clk/socfpga/Makefile                | 11 +++++------
+ drivers/dma/Kconfig                         |  2 +-
+ drivers/edac/Kconfig                        |  2 +-
+ drivers/edac/altera_edac.c                  | 17 +++++++++++------
+ drivers/firmware/Kconfig                    |  2 +-
+ drivers/fpga/Kconfig                        |  8 ++++----
+ drivers/i2c/busses/Kconfig                  |  2 +-
+ drivers/mfd/Kconfig                         |  4 ++--
+ drivers/net/ethernet/stmicro/stmmac/Kconfig |  4 ++--
+ drivers/reset/Kconfig                       |  6 +++---
+ 24 files changed, 71 insertions(+), 59 deletions(-)
+ create mode 100644 drivers/clk/socfpga/Kconfig
+
+-- 
+2.25.1
+
