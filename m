@@ -2,71 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3776A338C15
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Mar 2021 12:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09479339CBD
+	for <lists+linux-i2c@lfdr.de>; Sat, 13 Mar 2021 09:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbhCLL6A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 Mar 2021 06:58:00 -0500
-Received: from www.zeus03.de ([194.117.254.33]:39470 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229866AbhCLL5p (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 12 Mar 2021 06:57:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=iaBckEgUieoJW6UiJu5aejon2xH
-        cuC8ygE1XFQ9BWwc=; b=Ep60/7FHkx0JonwGX9Y+Jt/09ThhkCUmxsUlPj6nEZN
-        S5KlhEbUYQyYNv6qZtF4KCwoby1O7LXY/p2o/7eKsouMCNNN5bd8p0MY+ggiXt+t
-        eZhXYYZdrV5ZPr4zwG9enIT8wIzAjysXUUqScVhL5/vEr3MHJGhtSP3WTRbrDSMA
-        =
-Received: (qmail 366347 invoked from network); 12 Mar 2021 12:57:43 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Mar 2021 12:57:43 +0100
-X-UD-Smtp-Session: l3s3148p1@BSiSm1W9oOYgAwDPXwjxAOzndPPvnXZD
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
-Subject: [PATCH] i2c: bail out early when RDWR parameters are wrong
-Date:   Fri, 12 Mar 2021 12:57:34 +0100
-Message-Id: <20210312115734.14022-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.0
+        id S230309AbhCMIE5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 13 Mar 2021 03:04:57 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:56350 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229968AbhCMIEf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 13 Mar 2021 03:04:35 -0500
+X-UUID: c35dee2e5f0140da925f17cf18b31b08-20210313
+X-UUID: c35dee2e5f0140da925f17cf18b31b08-20210313
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1916932198; Sat, 13 Mar 2021 16:04:30 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 13 Mar 2021 16:04:28 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 13 Mar 2021 16:04:28 +0800
+From:   <qii.wang@mediatek.com>
+To:     <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>
+Subject: [RESEND] i2c: mediatek: Get device clock-stretch time via dts
+Date:   Sat, 13 Mar 2021 16:04:24 +0800
+Message-ID: <1615622664-15032-1-git-send-email-qii.wang@mediatek.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The buggy parameters currently get caught later, but emit a noisy WARN.
-Userspace should not be able to trigger this, so add similar checks much
-earlier. Also avoids some unneeded code paths, of course. Apply kernel
-coding stlye to a comment while here.
+From: Qii Wang <qii.wang@mediatek.com>
 
-Reported-by: syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
-Tested-by: syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+tSU,STA/tHD,STA/tSU,STOP maybe out of spec due to device
+clock-stretching or circuit loss, we could get device
+clock-stretch time from dts to adjust these parameters
+to meet the spec via EXT_CONF register.
+
+Signed-off-by: Qii Wang <qii.wang@mediatek.com>
 ---
- drivers/i2c/i2c-dev.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-mt65xx.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index 6ceb11cc4be1..6ef38a8ee95c 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -440,8 +440,13 @@ static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 				   sizeof(rdwr_arg)))
- 			return -EFAULT;
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index 2ffd2f3..47c7255 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -245,6 +245,7 @@ struct mtk_i2c {
+ 	u16 irq_stat;			/* interrupt status */
+ 	unsigned int clk_src_div;
+ 	unsigned int speed_hz;		/* The speed in transfer */
++	unsigned int clock_stretch_ns;
+ 	enum mtk_trans_op op;
+ 	u16 timing_reg;
+ 	u16 high_speed_reg;
+@@ -607,7 +608,8 @@ static int mtk_i2c_check_ac_timing(struct mtk_i2c *i2c,
+ 	else
+ 		clk_ns = sample_ns / 2;
  
--		/* Put an arbitrary limit on the number of messages that can
--		 * be sent at once */
-+		if (!rdwr_arg.msgs || rdwr_arg.nmsgs == 0)
-+			return -EINVAL;
+-	su_sta_cnt = DIV_ROUND_UP(spec->min_su_sta_ns, clk_ns);
++	su_sta_cnt = DIV_ROUND_UP(spec->min_su_sta_ns + i2c->clock_stretch_ns,
++				  clk_ns);
+ 	if (su_sta_cnt > max_sta_cnt)
+ 		return -1;
+ 
+@@ -1171,6 +1173,8 @@ static int mtk_i2c_parse_dt(struct device_node *np, struct mtk_i2c *i2c)
+ 	if (i2c->clk_src_div == 0)
+ 		return -EINVAL;
+ 
++	of_property_read_u32(np, "clock-stretch-ns", &i2c->clock_stretch_ns);
 +
-+		/*
-+		 * Put an arbitrary limit on the number of messages that can
-+		 * be sent at once
-+		 */
- 		if (rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
- 			return -EINVAL;
- 
+ 	i2c->have_pmic = of_property_read_bool(np, "mediatek,have-pmic");
+ 	i2c->use_push_pull =
+ 		of_property_read_bool(np, "mediatek,use-push-pull");
 -- 
-2.30.0
+1.9.1
 
