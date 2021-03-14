@@ -2,271 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A365933A503
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Mar 2021 14:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC2333A82C
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Mar 2021 22:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbhCNNba (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Mar 2021 09:31:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52180 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230078AbhCNNbK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 14 Mar 2021 09:31:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ABAB064E90;
-        Sun, 14 Mar 2021 13:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615728670;
-        bh=fpeXms2XysKoPhdleqm3dgdDokeUjvQH+YSalvw4ZtQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SNlHqofY0tEIg2fjBDh5s4uX3UaNV8nfajt8IldrgKnCBwqGYgkXY0uSoMw3uEKCy
-         kCGeofkYSOweaCsVe2/CR8uzRTMIFwrWxnq76Q+AM2LQIMu4ZnmfGjJr/H0RxqdKc1
-         7bY2yt84zfY/u7a6dLjiAAfJR4KynDPLX7c0umzEJK/KdW6D8MlInzj+LCzD+NY8K4
-         TgsKhqPluwiUhcqG0486oyfyLEwCRu9DKY8gdkJBHPcUc/UB88f++8rpMCAzoGLFBY
-         xKQXY2BWq+LZiSHroY6g/C905RBmOg4MiFcelzQFMl3sDr0DBR75f6oiQ4JoPivkEg
-         3JINZBGeq93BA==
-Date:   Sun, 14 Mar 2021 14:31:06 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 2/2] Adding i2c-cp2615 driver
-Message-ID: <20210314133106.GB913@ninjato>
-References: <CACCVKEHLHJom4k7YEh2ZRfd-yY9FqLskKmjvcAvYkXLeAaiZ0Q@mail.gmail.com>
+        id S229870AbhCNV03 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Mar 2021 17:26:29 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:54052 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231809AbhCNV0S (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Mar 2021 17:26:18 -0400
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CFD87891AE;
+        Mon, 15 Mar 2021 10:26:15 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1615757175;
+        bh=/pKQISzfPtdvOXpOWiYF23Dqp2LL9cwgCcHmFqemZ5w=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=F6TbKPGKNTDWKihXTQjv9qAMSIRJQuN5prDI5f9xlptwFBFfJOIHKevQQansF4LyJ
+         a/Qer9mfDwQSO6UOSSmmQ0zx95mc+RdjwJXAQp/Cjhm6NfAo0v0HO/hBFVzr1ufqab
+         PcKIdXoRNl97eBxizEtYNU2e1/EmBACGhtwbNOalMf/cxT9aYQln49YXsYtORIIPH+
+         Poae46MVxaxsrbr+3iwKXRnGM5xAOz5BNd7XNliF7ycMFBhnpPmNCcqsFCRIQrensy
+         OsWpuVRrqP/FIm7wE3Jo5dSh/Wd7e7wVXDuYXyTNKJ7AQVslS2jdMcxpyS9JleiN2+
+         gA5DUgjWoCxJA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B604e7f770001>; Mon, 15 Mar 2021 10:26:15 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Mon, 15 Mar 2021 10:26:15 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.012; Mon, 15 Mar 2021 10:26:15 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Guenter Roeck' <linux@roeck-us.net>,
+        Wolfram Sang <wsa@kernel.org>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: Errant readings on LM81 with T2080 SoC
+Thread-Topic: Errant readings on LM81 with T2080 SoC
+Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Sk6p4Y2sAgAAgcACAACSBgIAABe+AgAEDagCAAfS7gIAALq8AgAEX54CAAKWsgIAACmIAgADZp4CAAATLAIAAxmqAgAPuLIA=
+Date:   Sun, 14 Mar 2021 21:26:15 +0000
+Message-ID: <ec89dfda-a321-6ec7-9da0-b4949f1f28b5@alliedtelesis.co.nz>
+References: <20210311081842.GA1070@ninjato>
+ <94dfa9dc-a80c-98ba-4169-44cce3d810f7@alliedtelesis.co.nz>
+ <725c5e51-65df-e17d-e2da-0982efacf2d2@roeck-us.net>
+ <1a7d43e6a16c46cdbe63b497b29ac453@AcuMS.aculab.com>
+In-Reply-To: <1a7d43e6a16c46cdbe63b497b29ac453@AcuMS.aculab.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <44B2A31FC39980428A4AE3B88CCB8363@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wq9mPyueHGvFACwf"
-Content-Disposition: inline
-In-Reply-To: <CACCVKEHLHJom4k7YEh2ZRfd-yY9FqLskKmjvcAvYkXLeAaiZ0Q@mail.gmail.com>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10 a=k-jolHMNAAAA:8 a=wT_217q1AAAA:8 a=paiNdLW2YxwV48QS6vYA:9 a=QEXdDO2ut3YA:10 a=yeu0PtCsVa5VB5VCVbnF:22 a=ciXDWJte_DLdwvD8y_1g:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---wq9mPyueHGvFACwf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi!
-
-On Wed, Feb 10, 2021 at 10:08:54PM +0100, Bence Cs=C3=B3k=C3=A1s wrote:
-> For a hardware project, I need the I2C master of SiLabs' CP2615 chip
-> to be visible from under Linux. This patchset adds i2c-cp2615, a
-> driver which sets up an i2c_adapter for said chip.
->=20
-> This is my first contribution, so forgive me (but do let me know) if
-> I've broken habit.
-
-Thank you for your contribution and sorry for the delay (which is
-only because of not enough time and not because of no interest).
-
-First thing is that patch 1 & 2 should be squashed into one patch.
-
-
-> Signed-off-by: Bence Cs=C3=B3k=C3=A1s <bence98@sch.bme.hu>
-> ---
->  drivers/i2c/busses/cp2615_drv.c | 150 ++++++++++++++++++++++++++++++++
->  drivers/i2c/busses/cp2615_iop.c |  32 +++++++
->  drivers/i2c/busses/cp2615_iop.h |  60 +++++++++++++
-
-Then, all these files should go into one file named "i2c-cp2615.c". We
-can factor out stuff later if another user turns up. But for starters,
-all in one file is more convenient.
-
-> +static int
-> +cp2615_i2c_send(struct usb_interface *usbif, struct cp2615_i2c_transfer =
-*i2c_w)
-> +{
-> +    struct cp2615_iop_msg *msg =3D kzalloc(sizeof(struct
-> cp2615_iop_msg), GFP_KERNEL);
-
-The patch look garbled with broken lines; are you using gmail WEB UI?
-Hopefully, this document can help you:
-
-	Documentation/process/email-clients.rst
-
-If it is not garbled, then I can review it better. Some things already.
-
-> +struct i2c_adapter_quirks cp2615_i2c_quirks =3D {
-> +    .max_write_len =3D MAX_I2C_SIZE,
-> +    .max_read_len =3D MAX_I2C_SIZE,
-
-Yes, good, we need quirks. But IIUC these also on top:
-
-	.flags =3D I2C_AQ_COMB_WRITE_THEN_READ,
-	.max_comb_1st_msg_len =3D MAX_I2C_SIZE,
-	.max_comb_2nd_msg_len =3D MAX_I2C_SIZE,
-
-because the datasheet says "The transfer consists of a write cycle
-followed by a read cycle." BTW this is kinda bad for multi-master:
-"Repeated start between the write and read cycles is not supported". But
-I guess this bus will not be really used in multi-master setups.
-However, it should be commented somewhere.
-
-> +static void
-> +cp2615_i2c_remove(struct usb_interface *usbif)
-> +{
-> +    struct i2c_adapter *adap =3D usb_get_intfdata(usbif);
-> +
-> +    usb_set_intfdata(usbif, NULL);
-> +    i2c_del_adapter(adap);
-> +    kfree(adap);
-> +    dev_info(&usbif->dev, "Removed CP2615's I2C bus\n");
-
-This dev_info can go.
-
-> +}
-> +
-> +static int
-> +cp2615_i2c_probe(struct usb_interface *usbif, const struct usb_device_id=
- *id)
-> +{
-> +    int ret =3D 0;
-> +    struct i2c_adapter *adap;
-> +    struct usb_device *usbdev =3D interface_to_usbdev(usbif);
-> +
-> +    ret =3D usb_set_interface(usbdev, IOP_IFN, IOP_ALTSETTING);
-> +    if (ret)
-> +        goto out;
-
-'return ret;' instead of 'goto out;' here and later.
-
-> +
-> +    adap =3D kzalloc(sizeof(struct i2c_adapter), GFP_KERNEL);
-
-devm_kzalloc? Then you can leave out the kfrees.
-
-> +    if (!adap) {
-> +        ret =3D -ENOMEM;
-> +        goto out;
-> +    }
-> +
-> +    strncpy(adap->name, usbdev->serial, sizeof(adap->name));
-> +    adap->owner =3D THIS_MODULE;
-> +    adap->class =3D I2C_CLASS_HWMON | I2C_CLASS_SPD;
-
-I guess you instantiate client devices via sysfs? Then, this line can
-go, too.
-
-> +    adap->dev.parent =3D &usbif->dev;
-> +    adap->dev.of_node =3D usbif->dev.of_node;
-> +    adap->timeout =3D HZ;
-> +    adap->algo =3D &cp2615_i2c_algo;
-> +    adap->quirks =3D &cp2615_i2c_quirks;
-> +    adap->algo_data =3D usbif;
-> +
-> +    ret =3D i2c_add_adapter(adap);
-> +    if (ret) {
-> +        kfree(adap);
-> +        goto out;
-> +    }
-> +
-> +    usb_set_intfdata(usbif, adap);
-> +    dev_info(&usbif->dev, "Added CP2615's I2C bus\n");
-
-This dev_info can go.
-
-> +out:
-> +    return ret;
-> +}
-> +
-> +static const struct usb_device_id id_table[] =3D {
-> +    { USB_DEVICE(CP2615_VID, CP2615_PID) },
-> +    { }
-> +};
-> +
-> +MODULE_DEVICE_TABLE(usb, id_table);
-> +
-> +static struct usb_driver cp2615_i2c_driver =3D {
-> +    .name =3D "i2c-cp2615",
-> +    .probe =3D cp2615_i2c_probe,
-> +    .disconnect =3D cp2615_i2c_remove,
-> +    .id_table =3D id_table,
-> +//    .dev_groups =3D cp2615_groups,
-
-This should go.
-
-> +};
-> +
-> +module_usb_driver(cp2615_i2c_driver);
-> +
-> +MODULE_AUTHOR("Bence Cs=C3=B3k=C3=A1s <bence98@sch.bme.hu>");
-> +MODULE_DESCRIPTION("CP2615 I2C bus driver");
-> +MODULE_LICENSE("GPL");
-
-Please also add an SPDX header at the top. Check other i2c drivers for
-an appropriate.
-
-> +    if (ret) {
-> +        ret->preamble =3D 0x2A2A;
-> +        ret->length =3D htons(data_len+6);
-> +        ret->msg =3D htons(msg);
-> +        if(data && data_len)
-> +            memcpy(&ret->data, data, data_len);
-> +        return 0;
-> +    } else
-> +        return -EINVAL;
-
-Curly braces around 'else' branch. Please run 'scripts/checkpatch' on
-your patch.
-
-> +enum cp2615_iop_msg_type {
-> +    iop_GetAccessoryInfo =3D 0xD100,
-> +    iop_AccessoryInfo =3D 0xA100,
-> +    iop_GetPortConfiguration =3D 0xD203,
-> +    iop_PortConfiguration =3D 0xA203,
-> +    // ...
-
-This should go.
-
-> +    iop_DoI2cTransfer =3D 0xD400,
-> +    iop_I2cTransferResult =3D 0xA400,
-> +    iop_GetSerialState =3D 0xD501,
-> +    iop_SerialState =3D 0xA501
-> +};
-> +struct cp2615_i2c_transfer {
-> +    unsigned char tag, i2caddr, read_len, write_len;
-> +    char data[MAX_I2C_SIZE];
-
-u8?
-
-> +};
-> +
-> +struct cp2615_i2c_transfer_result {
-> +    unsigned char tag, i2caddr, status, read_len;
-> +    char data[MAX_I2C_SIZE];
-
-u8?
-
-> +};
-> +
-
-I am not a USB expert, but maybe someone else can have a look on your
-updated patch.
-
-Despite the comments, looks quite good already.
-
-Happy hacking,
-
-   Wolfram
-
-
---wq9mPyueHGvFACwf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBOEBYACgkQFA3kzBSg
-Kbaslw/6AiYvZGVp4e+OPf4lDYCncc1hRR3Feb/LZMYdG2XpPyH/71PIflxuYVUs
-R6gdd2FchWXL5IFZXwXOBsSEG8L6x9c5UM7JuQC+yKP40Wg9FsrIihEuSCG8tXWo
-/W1SsBJ+CNmu1Dw3f8Mt0rj2Vo+G8EC7QaGc6OaG35XxfUFCQdXqIn/CZR+kpKdU
-3bHrbSmS27WLeQeGnVo26MnlzfbLhgunHgTmntUZLqKnov7eNSS+Tr+WDvNGraaL
-OXcPqGk9ayBUNnYeW/FcUOK4gOcZ90QFTGWaOxEisiEKANevFmdc/xngBo4UbzwG
-jq5IB4iAEA+0UHIeB3RYbbgozqzPDAS8dox8jvZZ40wLo+PnSZ3Ljlyr2MYmEOt5
-3ulDy65LdjzbpQQGa+Ioy3CU9Kb6/y1IBkZ5BO5m7uCYbG5+b1ndPFPagRGu3CkL
-snS/GAR1THWoBzfczdceEqJE8fQ4hwWlF/FbaAr+FDkkfs12pgk3CGIiP3BryoeI
-4C4LB3k4jVaED6o2/cvJvco/ip2YRwjYU6/7MMX7ezVeiX3zmB96RcX10hT4gdN9
-+ZSLttSKGkkuU0aD6Veild91/qq5ERTCfCHgdQPsfhaKaCrQS+NnvWxFnxhKl5LA
-hzgkrpinSNNwMDIVIFw2OpaYr3G7ffgHir2WQJdXTDFgE9PjGAs=
-=XdY0
------END PGP SIGNATURE-----
-
---wq9mPyueHGvFACwf--
+T24gMTIvMDMvMjEgMTA6MjUgcG0sIERhdmlkIExhaWdodCB3cm90ZToNCj4gRnJvbTogTGludXhw
+cGMtZGV2IEd1ZW50ZXIgUm9lY2sNCj4+IFNlbnQ6IDExIE1hcmNoIDIwMjEgMjE6MzUNCj4+DQo+
+PiBPbiAzLzExLzIxIDE6MTcgUE0sIENocmlzIFBhY2toYW0gd3JvdGU6DQo+Pj4gT24gMTEvMDMv
+MjEgOToxOCBwbSwgV29sZnJhbSBTYW5nIHdyb3RlOg0KPj4+Pj4gQnVtbWVyLiBXaGF0IGlzIHJl
+YWxseSB3ZWlyZCBpcyB0aGF0IHlvdSBzZWUgY2xvY2sgc3RyZXRjaGluZyB1bmRlcg0KPj4+Pj4g
+Q1BVIGxvYWQuIE5vcm1hbGx5IGNsb2NrIHN0cmV0Y2hpbmcgaXMgdHJpZ2dlcmVkIGJ5IHRoZSBk
+ZXZpY2UsIG5vdA0KPj4+Pj4gYnkgdGhlIGhvc3QuDQo+Pj4+IE9uZSBleGFtcGxlOiBTb21lIGhv
+c3RzIG5lZWQgYW4gaW50ZXJydXB0IHBlciBieXRlIHRvIGtub3cgaWYgdGhleQ0KPj4+PiBzaG91
+bGQgc2VuZCBBQ0sgb3IgTkFDSy4gSWYgdGhhdCBpbnRlcnJ1cHQgaXMgZGVsYXllZCwgdGhleSBz
+dHJldGNoIHRoZQ0KPj4+PiBjbG9jay4NCj4+Pj4NCj4+PiBJdCBmZWVscyBsaWtlIHNvbWV0aGlu
+ZyBsaWtlIHRoYXQgaXMgaGFwcGVuaW5nLiBMb29raW5nIGF0IHRoZSBUMjA4MA0KPj4+IFJlZmVy
+ZW5jZSBtYW51YWwgdGhlcmUgaXMgYW4gaW50ZXJlc3RpbmcgdGltaW5nIGRpYWdyYW0gKEZpZ3Vy
+ZSAxNC0yIGlmDQo+Pj4gc29tZW9uZSBmZWVscyBsaWtlIGxvb2tpbmcgaXQgdXApLiBJdCBzaG93
+cyBTQ0wgbG93IGJldHdlZW4gdGhlIEFDSyBmb3INCj4+PiB0aGUgYWRkcmVzcyBhbmQgdGhlIGRh
+dGEgYnl0ZS4gSSB0aGluayBpZiB3ZSdyZSBkZWxheWVkIGluIHNlbmRpbmcgdGhlDQo+Pj4gbmV4
+dCBieXRlIHdlIGNvdWxkIHZpb2xhdGUgVHRpbWVvdXQgb3IgVGxvdzptZXh0IGZyb20gdGhlIFNN
+QlVTIHNwZWMuDQo+Pj4NCj4+IEkgdGhpbmsgdGhhdCByZWFsbHkgbGVhdmVzIHlvdSBvbmx5IHR3
+byBvcHRpb25zIHRoYXQgSSBjYW4gc2VlOg0KPj4gUmV3b3JrIHRoZSBkcml2ZXIgdG8gaGFuZGxl
+IGNyaXRpY2FsIGFjdGlvbnMgKHN1Y2ggYXMgc2V0dGluZyBUWEFLLA0KPj4gYW5kIGV2ZXJ5dGhp
+bmcgZWxzZSB0aGF0IG1pZ2h0IHJlc3VsdCBpbiBjbG9jayBzdHJldGNoaW5nKSBpbiB0aGUNCj4+
+IGludGVycnVwdCBoYW5kbGVyLCBvciByZXdvcmsgdGhlIGRyaXZlciB0byBoYW5kbGUgZXZlcnl0
+aGluZyBpbg0KPj4gYSBoaWdoIHByaW9yaXR5IGtlcm5lbCB0aHJlYWQuDQo+IEknbSBub3Qgc3Vy
+ZSBhIGhpZ2ggcHJpb3JpdHkga2VybmVsIHRocmVhZCB3aWxsIGhlbHAuDQo+IFdpdGhvdXQgQ09O
+RklHX1BSRUVNUFQgKHdoaWNoIGhhcyBpdHMgb3duIHNldCBvZiBuYXN0aWVzKQ0KPiBhIFJUIHBy
+b2Nlc3Mgd29uJ3QgYmUgc2NoZWR1bGVkIHVudGlsIHRoZSBwcm9jZXNzb3IgaXQgbGFzdA0KPiBy
+YW4gb24gZG9lcyBhIHJlc2NoZWR1bGUuDQo+IEkgZG9uJ3QgdGhpbmsgYSBrZXJuZWwgdGhyZWFk
+IHdpbGwgYmUgYW55IGRpZmZlcmVudCBmcm9tIGENCj4gdXNlciBwcm9jZXNzIHJ1bm5pbmcgdW5k
+ZXIgdGhlIFJUIHNjaGVkdWxlci4NCj4NCj4gSSdtIHRyeWluZyB0byByZW1lbWJlciB0aGUgc21i
+dXMgc3BlYyAod2l0aG91dCByZW1lbWJlcmluZyB0aGUgSTJDIG9uZSkuDQpGb3IgdGhvc2UgZm9s
+bG93aW5nIGFsb25nIHRoZSBzcGVjIGlzIGF2YWlsYWJsZSBoZXJlWzBdLiBJIGtub3cgdGhlcmUn
+cyANCmEgMy4wIHZlcnNpb25bMV0gYXMgd2VsbCBidXQgdGhlIGRldmljZXMgSSdtIGRlYWxpbmcg
+d2l0aCBhcmUgZnJvbSBhIDIuMCANCnZpbnRhZ2UuDQo+IFdoaWxlIGJhc2ljYWxseSBhIGNsb2Nr
+K2RhdGEgYml0LWJhbmcgdGhlIHNsYXZlIGlzIGFsbG93ZWQgdG8gZHJpdmUNCj4gdGhlIGNsb2Nr
+IGxvdyB0byBleHRlbmQgYSBjeWNsZS4NCj4gSXQgbWF5IGJlIGFsbG93ZWQgdG8gZG8gdGhpcyBh
+dCBhbnkgcG9pbnQ/DQogRnJvbSB3aGF0IEkgY2FuIHNlZSBpdCdzIGFjdHVhbGx5IHRoZSBtYXN0
+ZXIgZXh0ZW5kaW5nIHRoZSBjbG9jay4gT3IgDQptb3JlIGFjY3VyYXRlbHkgaG9sZGluZyBpdCBs
+b3cgYmV0d2VlbiB0aGUgYWRkcmVzcyBhbmQgZGF0YSBieXRlcyAod2hpY2ggDQpmcm9tIHRoZSBU
+MjA4MCByZWZlcmVuY2UgbWFudWFsIGxvb2tzIGV4cGVjdGVkKS4gSSB0aGluayB0aGlzIG1heSBj
+YXVzZSANCmEgc3RyaWN0bHkgY29tcGxpYW50IFNNQlVTIGRldmljZSB0byBkZXRlcm1pbmUgdGhh
+dCBUbG93Om1leHQgaGFzIGJlZW4gDQp2aW9sYXRlZC4NCj4gVGhlIG1hc3RlciBjYW4gZ2VuZXJh
+dGUgdGhlIGRhdGEgYXQgYWxtb3N0IGFueSByYXRlIChiZWxvdyB0aGUgbWF4aW11bSkNCj4gYnV0
+IEkgZG9uJ3QgdGhpbmsgaXQgY2FuIGdvIGRvd24gdG8gemVyby4NCj4gQnV0IEkgZG8gcmVtZW1i
+ZXIgb25lIG9mIHRoZSBzcGVjcyBoYXZpbmcgYSB0aW1lb3V0Lg0KPg0KPiBCdXQgSSdkIGhhdmUg
+dGhvdWdodCB0aGUgc2xhdmUgc2hvdWxkIGFuc3dlciB0aGUgY3ljbGUgY29ycmVjdGx5DQo+IHJl
+Z2FyZGxlc3Mgb2YgYW55ICdyYW5kb20nIGRlbGF5cyB0aGUgbWFzdGVyIGFkZHMgaW4uDQpQcm9i
+YWJseSBkZXBlbmRzIG9uIHRoZSBkZXZpY2UgaW1wbGVtZW50YXRpb24uIEkndmUgZ290IG11bHRp
+cGxlIG90aGVyIA0KSTJDL1NNQlVTIGRldmljZXMgYW5kIHRoZSBMTTgxIHNlZW1zIHRvIGJlIHRo
+ZSBvbmUgdGhhdCBvYmplY3RzLg0KPiBVbmxlc3MgeW91IGFyZSBnZXR0aW5nIGF3YXkgd2l0aCBk
+ZS1hc3NlcnRpbmcgY2hpcHNlbGVjdD8NCj4NCj4gVGhlIG9ubHkgaW1wbGVtZW50YXRpb24gSSd2
+ZSBkb25lIGlzIG9uZSBhbiBGUEdBIHNvIGRvZXNuJ3QgaGF2ZQ0KPiB3b3JyeSBhYm91dCBpbnRl
+cnJ1cHQgbGF0ZW5jaWVzLg0KPiBJdCBkb2Vzbid0IGFjdHVhbGx5IHN1cHBvcnQgY2xvY2sgc3Ry
+ZXRjaGluZzsgaXQgd2Fzbid0IGluIHRoZQ0KPiBjb2RlIEkgc3RhcnRlZCBmcm9tIGFuZCBub25l
+IG9mIHRoZSBzbGF2ZXMgd2UgbmVlZCB0byBjb25uZWN0IHRvDQo+IGV2ZXIgZG9lcyBpdC4NCj4N
+Cj4gCURhdmlkDQoNClswXSAtIGh0dHA6Ly93d3cuc21idXMub3JnL3NwZWNzL3NtYnVzMjAucGRm
+DQpbMV0gLSBodHRwczovL3BtYnVzLm9yZy9Bc3NldHMvUERGUy9QdWJsaWMvU01CdXNfM18wXzIw
+MTQxMjIwLnBkZg0KDQo+DQo+IC0NCj4gUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
+bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQo+IFJlZ2lz
+dHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo+
