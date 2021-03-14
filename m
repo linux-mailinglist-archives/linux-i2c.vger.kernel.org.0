@@ -2,261 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1BE339D6D
-	for <lists+linux-i2c@lfdr.de>; Sat, 13 Mar 2021 10:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1D6339FF0
+	for <lists+linux-i2c@lfdr.de>; Sat, 13 Mar 2021 19:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbhCMJqS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 13 Mar 2021 04:46:18 -0500
-Received: from lizzard.sbs.de ([194.138.37.39]:37057 "EHLO lizzard.sbs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230309AbhCMJqS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 13 Mar 2021 04:46:18 -0500
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by lizzard.sbs.de (8.15.2/8.15.2) with ESMTPS id 12D9k0DI026052
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 13 Mar 2021 10:46:00 +0100
-Received: from md1za8fc.ad001.siemens.net ([139.22.115.33])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 12D9jvnd007966;
-        Sat, 13 Mar 2021 10:45:58 +0100
-Date:   Sat, 13 Mar 2021 10:45:57 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>, <hdegoede@redhat.com>
-Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
- support library
-Message-ID: <20210313104557.321de08e@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20210308122020.57071-4-andriy.shevchenko@linux.intel.com>
-References: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
-        <20210308122020.57071-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S234298AbhCMSgR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Sat, 13 Mar 2021 13:36:17 -0500
+Received: from smtp.econet.co.zw ([77.246.51.158]:65277 "EHLO
+        ironportDMZ.econet.co.zw" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234286AbhCMSf6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 13 Mar 2021 13:35:58 -0500
+X-Greylist: delayed 472 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Mar 2021 13:35:46 EST
+IronPort-SDR: 2VH7uDjPUxuRF84kGIuoHHaISSCuqZi+ufUVCFmh+/0u/DCFCtj5VFDT1b4h9dNnVvA6flspH+
+ 3h9rw6M4gXRTOO/x00E/RP0IaZ5bJ/VFJjak29BaaBMRsZ8SomhBLF6NshxP1CgwykLJQtbFhT
+ f57yb5yFlreJnhCu99okX5fHlhFOs37BIGqeR55agFxRF7WOiDsNKvGtFuzjle44yqE/60PUcB
+ eSRuIQK9gCbtZaBXI6W4OKIxrnCmM+n1gcMJCNZUjbl9kcbsSMLo+94gqXFyBTYwkpasFfSfmL
+ xM0=
+IronPort-HdrOrdr: A9a23:z3onBKxoaNoCa6u/wVCbKrPwgr1zdoIgy1knxilNYDZSddGVkN
+ 3roe8S0gX6hC1UdHYrn92BP6foewK+ybde544NMbC+GDT3oWfAFuFfxKbr3jGIIUPD38FH06
+ MIScRDIfnRKXQ/ssrg+gm/FL8boeWv1Kyzn+/RwzNMYGhRGsddxjx0AAqaDUF6LTMubfFSKL
+ Om6tNDt36cfx0sA/iTPXUZQ/PF4+TCiZOOW29/Ozcc9AKMgTm0gYSULzGk2H4lIkpy6IZn1V
+ Lgmwz9opy5s/ehygLNvlWjiqh+qZ/EwttHCNfksLlwFhzcziKpYIhGfpHqhkFTnMifrG8wkN
+ /WowoxVv4DiU/sQg==
+X-IronPort-AV: E=Sophos;i="5.81,245,1610402400"; 
+   d="scan'208";a="3444522"
+Received: from unknown (HELO WVALE-MB-SVR-05.econetzw.local) ([192.168.101.173])
+  by ironportLAN.econet.co.zw with ESMTP; 13 Mar 2021 20:27:52 +0200
+Received: from WVALE-CAS-SVR-9.econetzw.local (192.168.101.184) by
+ WVALE-MB-SVR-05.econetzw.local (192.168.101.173) with Microsoft SMTP Server
+ (TLS) id 15.0.1473.3; Sat, 13 Mar 2021 20:27:48 +0200
+Received: from User (165.231.148.189) by WVALE-CAS-SVR-9.econetzw.local
+ (10.10.11.230) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Sat, 13 Mar 2021 20:27:59 +0200
+Reply-To: <r19772744@daum.net>
+From:   "Reem E. A" <chawora@econet.co.zw>
+Subject: Re:
+Date:   Sat, 13 Mar 2021 18:27:46 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <96f8ff6fe77b4507830ab5cf78a93340@WVALE-CAS-SVR-9.econetzw.local>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Am Mon, 8 Mar 2021 14:20:16 +0200
-schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+Hello,
 
-> From: Jonathan Yong <jonathan.yong@intel.com>
-> 
-> There is already one and at least one more user is coming which
-> requires an access to Primary to Sideband bridge (P2SB) in order to
-> get IO or MMIO bar hidden by BIOS. Create a library to access P2SB
-> for x86 devices.
-> 
-> Signed-off-by: Jonathan Yong <jonathan.yong@intel.com>
-> Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/pci/Kconfig      |  8 ++++
->  drivers/pci/Makefile     |  1 +
->  drivers/pci/pci-p2sb.c   | 83
-> ++++++++++++++++++++++++++++++++++++++++ include/linux/pci-p2sb.h |
-> 28 ++++++++++++++ 4 files changed, 120 insertions(+)
->  create mode 100644 drivers/pci/pci-p2sb.c
->  create mode 100644 include/linux/pci-p2sb.h
-> 
-> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-> index 0c473d75e625..740e5b30d6fd 100644
-> --- a/drivers/pci/Kconfig
-> +++ b/drivers/pci/Kconfig
-> @@ -252,6 +252,14 @@ config PCIE_BUS_PEER2PEER
->  
->  endchoice
->  
-> +config PCI_P2SB
-> +	bool "Primary to Sideband (P2SB) bridge access support"
-> +	depends on PCI && X86
-> +	help
-> +	  The Primary to Sideband bridge is an interface to some PCI
-> +	  devices connected through it. In particular, SPI NOR
-> +	  controller in Intel Apollo Lake SoC is one of such devices.
-> +
->  source "drivers/pci/hotplug/Kconfig"
->  source "drivers/pci/controller/Kconfig"
->  source "drivers/pci/endpoint/Kconfig"
-> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
-> index d62c4ac4ae1b..eee8d5dda7d9 100644
-> --- a/drivers/pci/Makefile
-> +++ b/drivers/pci/Makefile
-> @@ -23,6 +23,7 @@ obj-$(CONFIG_PCI_IOV)		+= iov.o
->  obj-$(CONFIG_PCI_BRIDGE_EMUL)	+= pci-bridge-emul.o
->  obj-$(CONFIG_PCI_LABEL)		+= pci-label.o
->  obj-$(CONFIG_X86_INTEL_MID)	+= pci-mid.o
-> +obj-$(CONFIG_PCI_P2SB)		+= pci-p2sb.o
->  obj-$(CONFIG_PCI_SYSCALL)	+= syscall.o
->  obj-$(CONFIG_PCI_STUB)		+= pci-stub.o
->  obj-$(CONFIG_PCI_PF_STUB)	+= pci-pf-stub.o
-> diff --git a/drivers/pci/pci-p2sb.c b/drivers/pci/pci-p2sb.c
-> new file mode 100644
-> index 000000000000..68d7dad48cdb
-> --- /dev/null
-> +++ b/drivers/pci/pci-p2sb.c
-> @@ -0,0 +1,83 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Primary to Sideband bridge (P2SB) access support
-> + *
-> + * Copyright (c) 2017, 2021 Intel Corporation.
-> + *
-> + * Authors: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> + *	    Jonathan Yong <jonathan.yong@intel.com>
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/export.h>
-> +#include <linux/pci-p2sb.h>
-> +
-> +#include <asm/cpu_device_id.h>
-> +#include <asm/intel-family.h>
-> +
-> +#include "pci.h"
-> +
-> +#define P2SBC_HIDE_BYTE			0xe1
-> +#define P2SBC_HIDE_BIT			BIT(0)
-> +
-> +static const struct x86_cpu_id p2sb_cpu_ids[] = {
-> +	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,
-> PCI_DEVFN(13, 0)),
-> +	{}
-> +};
-> +
-> +static int pci_p2sb_devfn(unsigned int *devfn)
-> +{
-> +	const struct x86_cpu_id *id;
-> +
-> +	id = x86_match_cpu(p2sb_cpu_ids);
-> +	if (!id)
-> +		return -ENODEV;
-> +
-> +	*devfn = (unsigned int)id->driver_data;
-> +	return 0;
-> +}
-> +
-> +/**
-> + * pci_p2sb_bar - Get Primary to Sideband bridge (P2SB) device BAR
-> + * @pdev:	PCI device to get a PCI bus to communicate with
-> + * @devfn:	PCI slot and function to communicate with
-> + * @mem:	memory resource to be filled in
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (2) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home on their behalf and
+for our "Mutual Benefits".
 
-Do we really need that many arguments to it?
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Turkish Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-Before i had, in a platform driver that never had its own pci_dev or bus
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+reem.alhashimi@yandex.com
 
-  res->start = simatic_ipc_get_membase0(PCI_DEVFN(13, 0));
-  if (res-start == 0)
-    return -ENODEV;
+Regards,
+Ms. Reem.
+This mail was sent through Econet Wireless, a Global telecoms leader.
 
-So helper only asked for the devfn, returned base and no dedicated
-error code.
+DISCLAIMER
 
-With this i need
+The information in this message is confidential and is legally privileged. It is intended solely for the addressee. Access to this message by anyone else is unauthorized. If received in error please accept our apologies and notify the sender immediately. You must also delete the original message from your machine. If you are not the intended recipient, any use, disclosure, copying, distribution or action taken in reliance of it, is prohibited and may be unlawful. The information, attachments, opinions or advice contained in this email are not the views or opinions of Econet Wireless, its subsidiaries or affiliates. Econet Wireless therefore accepts no liability for claims, losses, or damages arising from the inaccuracy, incorrectness, or lack of integrity of such information.
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/AgileBanner.png]
+WORK ISN'T A PLACE
+IT'S WHAT WE DO
+________________________________
 
-  struct pci_bus *bus = pci_find_bus(0, 0);
-  struct pci_dev *pci_dev = bus->self;
-  unsigned int magic_i_do_not_want =  PCI_DEVFN(13, 0);
 
-> + * The BIOS prevents the P2SB device from being enumerated by the PCI
-> + * subsystem, so we need to unhide and hide it back to lookup the
-> BAR.
-> + *
-> + * Caller must provide a valid pointer to @mem.
-> + *
-> + * Locking is handled by pci_rescan_remove_lock mutex.
-> + *
-> + * Return:
-> + * 0 on success or appropriate errno value on error.
-> + */
-> +int pci_p2sb_bar(struct pci_dev *pdev, unsigned int devfn, struct
-> resource *mem) +{
-> +	struct pci_bus *bus = pdev->bus;
 
-if (!pdev)
-	bus = pci_find_bus(0, 0);
 
-Or can we drop the whole arg?
 
-> +	unsigned int df;
-> +	int ret;
-> +
-> +	/* Get devfn for P2SB device itself */
-> +	ret = pci_p2sb_devfn(&df);
-> +	if (ret)
-> +		return ret;
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/telephone.png]
 
-if (!devfn)
-	devfn = df;
 
-I guess that second devfn is for devices behind that bridge. So
-unhiding it might reveal several devices? But when caring about that
-p2sb do i really need to know its devfn. If so i would like to get
 
-EXPORT_SYMBOL(pci_p2sb_devfn);
 
-regards,
-Henning
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/email.png]
 
-> +
-> +	pci_lock_rescan_remove();
-> +
-> +	/* Unhide the P2SB device */
-> +	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE, 0);
-> +
-> +	/* Read the first BAR of the device in question */
-> +	__pci_bus_read_base(bus, devfn, pci_bar_unknown, mem,
-> PCI_BASE_ADDRESS_0, true); +
-> +	/* Hide the P2SB device */
-> +	pci_bus_write_config_byte(bus, df, P2SBC_HIDE_BYTE,
-> P2SBC_HIDE_BIT); +
-> +	pci_unlock_rescan_remove();
-> +
-> +	pci_bus_info(bus, devfn, "BAR: %pR\n", mem);
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(pci_p2sb_bar);
-> diff --git a/include/linux/pci-p2sb.h b/include/linux/pci-p2sb.h
-> new file mode 100644
-> index 000000000000..15dd42737c84
-> --- /dev/null
-> +++ b/include/linux/pci-p2sb.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Primary to Sideband bridge (P2SB) access support
-> + */
-> +
-> +#ifndef _PCI_P2SB_H
-> +#define _PCI_P2SB_H
-> +
-> +#include <linux/errno.h>
-> +
-> +struct pci_dev;
-> +struct resource;
-> +
-> +#if IS_BUILTIN(CONFIG_PCI_P2SB)
-> +
-> +int pci_p2sb_bar(struct pci_dev *pdev, unsigned int devfn, struct
-> resource *mem); +
-> +#else /* CONFIG_PCI_P2SB is not set */
-> +
-> +static inline
-> +int pci_p2sb_bar(struct pci_dev *pdev, unsigned int devfn, struct
-> resource *mem) +{
-> +	return -ENODEV;
-> +}
-> +
-> +#endif /* CONFIG_PCI_P2SB */
-> +
-> +#endif /* _PCI_P2SB_H */
+<mailto:>
 
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/location.png]
+
+
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/website.png]
+
+www.econet.co.zw<https://www.econet.co.zw>
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/inspired.jpg]
