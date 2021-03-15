@@ -2,32 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB50233AB45
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 06:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B31BF33ACD6
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 08:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbhCOFxP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Mar 2021 01:53:15 -0400
-Received: from mga12.intel.com ([192.55.52.136]:35239 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229699AbhCOFxA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 15 Mar 2021 01:53:00 -0400
-IronPort-SDR: SY972kZyzC9P/OPQu2L3Vfr6om02ydiPAugmLorZkDDsBf1guqNx9Ou1RwYk2zkzfYYyJUawu5
- 9pwVZPDYw4RA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9923"; a="168310479"
-X-IronPort-AV: E=Sophos;i="5.81,249,1610438400"; 
-   d="scan'208";a="168310479"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2021 22:53:00 -0700
-IronPort-SDR: Vbn6tI6GeandlErHLWZ2Q0OMzbleTZHw1ExsM5qz1JDna29LuzmP1mXar3JCw9pqCGXbdan6KS
- qlSar8SGB75Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,249,1610438400"; 
-   d="scan'208";a="601313453"
-Received: from unknown (HELO [10.239.154.55]) ([10.239.154.55])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Mar 2021 22:52:54 -0700
+        id S230053AbhCOHxp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 15 Mar 2021 03:53:45 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:37923 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230490AbhCOHxN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Mar 2021 03:53:13 -0400
+Received: from mail-oi1-f174.google.com ([209.85.167.174]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mvbr4-1lbro93JZO-00siaq; Mon, 15 Mar 2021 08:53:12 +0100
+Received: by mail-oi1-f174.google.com with SMTP id w125so5050159oib.13;
+        Mon, 15 Mar 2021 00:53:11 -0700 (PDT)
+X-Gm-Message-State: AOAM530/2VFTefL83eMeQLAF/SnE550b1pFCIsUwSt5YmGobx27vjkUX
+        CIcmi4dYjOgFkYr4soN4pxaL95MqwN8Y1LtIRS4=
+X-Google-Smtp-Source: ABdhPJxqDGNRsuLazrikYSqY8ylkAVcvSJoIRj7d/B6mgsATUAgDvUWymXPVOUo2C8fqtGFewM/hJKdAajbaWjVXu4k=
+X-Received: by 2002:a05:6808:313:: with SMTP id i19mr8744619oie.67.1615794790530;
+ Mon, 15 Mar 2021 00:53:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <cd3b0c9138824b0a5fad9d3bc872d8836e829946.1615554673.git.jie.deng@intel.com>
+ <CAK8P3a0zQG3pH91emqAUsaRx4AZeuOEvSrPzXP9w_XhjU6w3ng@mail.gmail.com>
+ <8070f03d-8233-636b-5ea9-395e723f7a2c@intel.com> <503b88c9-1e82-a3a3-0536-d710ddc834a5@redhat.com>
+ <e388b344-a815-aed3-c076-3651b18c39d1@intel.com>
+In-Reply-To: <e388b344-a815-aed3-c076-3651b18c39d1@intel.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 15 Mar 2021 08:52:53 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0LjcSs7gvU-jRdZJCFrfxQcSUWqL_fgH_71VjC027M0w@mail.gmail.com>
+Message-ID: <CAK8P3a0LjcSs7gvU-jRdZJCFrfxQcSUWqL_fgH_71VjC027M0w@mail.gmail.com>
 Subject: Re: [PATCH v7] i2c: virtio: add a virtio i2c frontend driver
-To:     Jason Wang <jasowang@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+To:     Jie Deng <jie.deng@intel.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
         virtualization@lists.linux-foundation.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "Michael S. Tsirkin" <mst@redhat.com>,
@@ -39,100 +46,50 @@ Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
         Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
         Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
         Tali Perry <tali.perry1@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         yu1.wang@intel.com, shuo.a.liu@intel.com,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-References: <cd3b0c9138824b0a5fad9d3bc872d8836e829946.1615554673.git.jie.deng@intel.com>
- <CAK8P3a0zQG3pH91emqAUsaRx4AZeuOEvSrPzXP9w_XhjU6w3ng@mail.gmail.com>
- <8070f03d-8233-636b-5ea9-395e723f7a2c@intel.com>
- <503b88c9-1e82-a3a3-0536-d710ddc834a5@redhat.com>
-From:   Jie Deng <jie.deng@intel.com>
-Message-ID: <e388b344-a815-aed3-c076-3651b18c39d1@intel.com>
-Date:   Mon, 15 Mar 2021 13:52:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <503b88c9-1e82-a3a3-0536-d710ddc834a5@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:BIrgCmy1rfldfXWXyj/vcSm89E881KI0NZP+gwg1MTy0coAWtpG
+ 1C8788xpaJIQgzNiUU5ZAj6dfbGu40kLTyL445zFnRxWzkiBy+2zr5Rz9G5Jb9IjPagLBeC
+ AuG7WlXMpUfKUUorcYJyW92SIj3NsWZupCGlK3H9Qc570ytncUvAmESBk0O72hbCtrjyuor
+ UlPDZ7/MJEM7GPUUPRICA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Mby2l7qk0+I=:XRr1Iqx/nCwYXRbp73WoPo
+ i5piTO0vEvlWJhm0qRngxbr0Of3CgnNUzdtHkBAIjcYEq0Au6BZ17uroMtHIy+5Ac+yvJrTyk
+ bC16ClVAkkMNlDBDLHy5SVFCD85JcSHsSOWglYj0VvAp4DXdJh09D4Hi3IAKhBmI/q7tM31dB
+ ZrVav8msmWKJ3VPa18qSn9KzNEKkF3crOnGjjGQaQ60D/99LSiqO+t1aHfCpsh07CdjdpZV5N
+ 2eZxKAj+cff1Nwk2ORgf6GYmnMJgC3ssBeEwdlOOZL0vqyaxs6IBnq4/sG5qkJKu7JLqUYJk9
+ ueLQL0TDHdJFV2kUuH8cO70aYHeVy6Ay74OdNW/6VAEaHx/bH+/3cqbp3JGVii9Cf5/C8zUGp
+ 0bob8mV9ED1nBDqEvv9UBsqiqOAFw1nDXlRgV1I38imrug6GDjEKBKMtqMG/t
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, Mar 15, 2021 at 6:54 AM Jie Deng <jie.deng@intel.com> wrote:
+> On 2021/3/15 11:13, Jason Wang wrote:
+> > On 2021/3/15 9:14 上午, Jie Deng wrote:
+> >> On 2021/3/12 16:58, Arnd Bergmann wrote:
+> >
+> Then do you think it is necessary to mark the virtio bufs with
+> ____cacheline_aligned ?
 
-On 2021/3/15 11:13, Jason Wang wrote:
->
-> On 2021/3/15 9:14 上午, Jie Deng wrote:
->>
->> On 2021/3/12 16:58, Arnd Bergmann wrote:
->>> On Fri, Mar 12, 2021 at 2:33 PM Jie Deng <jie.deng@intel.com> wrote:
->>>
->>>> +
->>>> +/**
->>>> + * struct virtio_i2c_req - the virtio I2C request structure
->>>> + * @out_hdr: the OUT header of the virtio I2C message
->>>> + * @buf: the buffer into which data is read, or from which it's 
->>>> written
->>>> + * @in_hdr: the IN header of the virtio I2C message
->>>> + */
->>>> +struct virtio_i2c_req {
->>>> +       struct virtio_i2c_out_hdr out_hdr;
->>>> +       uint8_t *buf;
->>>> +       struct virtio_i2c_in_hdr in_hdr;
->>>> +};
->>> The simpler request structure clearly looks better than the previous 
->>> version,
->>> but I think I found another problem here, at least a theoretical one:
->>>
->>> When you map the headers into the DMA address space, they should
->>> be in separate cache lines, to allow the DMA mapping interfaces to
->>> perform cache management on each one without accidentally clobbering
->>> another member.
->>>
->>> So far I think there is an assumption that virtio buffers are always
->>> on cache-coherent devices, but if you ever have a virtio-i2c device
->>> backend on a physical interconnect that is not cache coherent (e.g. a
->>> microcontroller that shares the memory bus), this breaks down.
->>>
->>> You could avoid this by either allocating arrays of each type 
->>> separately,
->>> or by marking each member that you pass to the device as
->>> ____cacheline_aligned.
->>>
->>>        Arnd
->> The virtio devices are software emulated.
->
->
-> This is not correct. There're already a brunch hardware virtio devices.
->
-> Thanks
->
-Then do you think it is necessary to mark the virtio bufs with 
-____cacheline_aligned ?
+I think so, yes.
 
-I haven't seen any virtio interface being marked yet. If this is a 
-problem, I believe it
+> I haven't seen any virtio interface being marked yet. If this is a
+> problem, I believe it should  be common for all virtio devices, right ?
 
-should  be common for all virtio devices, right ?
+Yes, but it's not a problem if the buffers are allocated separately
+because kmalloc provinces a cachelinen aligned buffer on architectures
+that need it.
 
-Thanks.
+It's only a problem here because there is a single allocation for three
+objects that have different ownership states during the DMA (device
+owned to-device, cpu-owned, device owned to-cpu).
 
-
->
->> The backend software may need to
->> consider this since it may exchange data with physical devices. But I 
->> don't think
->> we need it for this interface, because no DMA operation is involved 
->> between the
->> frontend driver and backend driver.
->>
->> Regards,
->>
->> Jie
->>
->>
->
+       Arnd
