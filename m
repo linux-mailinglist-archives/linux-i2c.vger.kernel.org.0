@@ -2,109 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 500DA33AF9E
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 11:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B5933B1BE
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 12:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbhCOKKu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Mar 2021 06:10:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34950 "EHLO mail.kernel.org"
+        id S230159AbhCOLut (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Mar 2021 07:50:49 -0400
+Received: from www.zeus03.de ([194.117.254.33]:45792 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229524AbhCOKK0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 15 Mar 2021 06:10:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6867A64E99;
-        Mon, 15 Mar 2021 10:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615803026;
-        bh=yiD7LAsgvZAMSeKj5tHXSgb6cP+41vIVRvbaksxKyhk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mf5MwuKNtJPpyrQ54S4ZnRtClTOOM9NgK7ZA11DNQsU0DWfVLEoxIziOZVi0LfIVw
-         CNgZeyT4nDFYYXOSjJHYXXxyQkv1oWbCbWWs2E033DWUQLEG36+FQhiPzR7D2+xPW/
-         MZ8iGQT+yhkopzobrcw5zIlTcHu8WuIeJ2wSWrNPzgkktjpQ0bCgO3i4+VzMU2ywz+
-         llxi10N7OnUBOp2Vzz5KGx6O8ushOxMk4BcRXQuRNhpltj/Z777b9MgadhTGw04f7O
-         YZiOaKxKJ8iwrh/rqhIB98UMgHmHYKu3u9B11gJxKw4I4Rwq3ME5znJ1mPu++KYzvV
-         Gk+rzBzXGyo+w==
-Date:   Mon, 15 Mar 2021 11:10:14 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Klaus Kudielka <klaus.kudielka@gmail.com>
-Cc:     Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        linux-i2c@vger.kernel.org
-Subject: Re: Linux 5.11: i2c: Confusing error message
-Message-ID: <20210315101014.GA1182@ninjato>
-References: <1787a9ee-efae-7e4b-9e6f-d4bf532c6b63@gmail.com>
+        id S230196AbhCOLuX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 15 Mar 2021 07:50:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=iJrqMTwIM3xwIjns29vc+k51vDM
+        wE2a+88javwYN/n0=; b=rmvO14+d4e7cVKd3aoLZwoyEAwoyQJraJkg4FCHiQU4
+        BThco5CnYqrYZnkDGcSdM0S3nPrfpde509F0LTfzXW28/Drd97PcNAhq8LHU24Wy
+        raPsUkdazMtZVGxerQInl/eSBgjEpB8bTDZfxpVuobOxSBH0MH928a5PgI3nzT2Y
+        =
+Received: (qmail 1376454 invoked from network); 15 Mar 2021 12:50:16 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Mar 2021 12:50:16 +0100
+X-UD-Smtp-Session: l3s3148p1@dmJy2pG9vIcgARa4RYTzARykWRFxRPkz
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Klaus Kudielka <klaus.kudielka@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH] i2c: turn recovery error on init to debug
+Date:   Mon, 15 Mar 2021 12:50:08 +0100
+Message-Id: <20210315115008.19110-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dDRMvlgZJXvWKvBx"
-Content-Disposition: inline
-In-Reply-To: <1787a9ee-efae-7e4b-9e6f-d4bf532c6b63@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+In some configurations, recovery is optional. So, don't throw an error
+when it is not used because e.g. pinctrl settings for recovery are not
+provided. Reword the message and make it debug output.
 
---dDRMvlgZJXvWKvBx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reported-by: Klaus Kudielka <klaus.kudielka@gmail.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-Hello Klaus,
+Tested on a Renesas Salvator-XS with R-Car H3 ES2.0. Klaus, let me know
+if you are happy as well.
 
-On Mon, Mar 15, 2021 at 07:58:21AM +0100, Klaus Kudielka wrote:
+ drivers/i2c/i2c-core-base.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Thanks for the report! I am CCing the I2C list, please add it next time,
-too.
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 63ebf722a424..f21362355973 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -378,7 +378,7 @@ static int i2c_gpio_init_recovery(struct i2c_adapter *adap)
+ static int i2c_init_recovery(struct i2c_adapter *adap)
+ {
+ 	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
+-	char *err_str;
++	char *err_str, *err_level = KERN_ERR;
+ 
+ 	if (!bri)
+ 		return 0;
+@@ -387,7 +387,8 @@ static int i2c_init_recovery(struct i2c_adapter *adap)
+ 		return -EPROBE_DEFER;
+ 
+ 	if (!bri->recover_bus) {
+-		err_str = "no recover_bus() found";
++		err_str = "no suitable method provided";
++		err_level = KERN_DEBUG;
+ 		goto err;
+ 	}
+ 
+@@ -414,7 +415,7 @@ static int i2c_init_recovery(struct i2c_adapter *adap)
+ 
+ 	return 0;
+  err:
+-	dev_err(&adap->dev, "Not using recovery: %s\n", err_str);
++	dev_printk(err_level, &adap->dev, "Not using recovery: %s\n", err_str);
+ 	adap->bus_recovery_info = NULL;
+ 
+ 	return -EINVAL;
+-- 
+2.30.0
 
-> Hello,
->=20
-> I recently upgraded my Turris Omnia (Marvell Armada 385) to 5.11, and now
-> get the following error message during boot:
->=20
-> =C2=A0=C2=A0=C2=A0 i2c i2c-0: Not using recovery: no recover_bus() found
->=20
-> As far as I understand the situation:
->=20
->  * After commit 9c7cae2427715502227f823364a6a77828fdf3ea mv64xxx-i2c
->    unconditionally sets bus_recovery_info and bus_recovery_info->pinctrl
->  * The i2c bus node in the turris-omnia DTS does *not* have a pinctrl
->    state "gpio" or "recovery" (like any other Marvell Armada board, AFAIC=
-S)
->  * i2c_gpio_init_recovery() throws a debug message "no gpio or recovery
->    state found for GPIO recovery", which (under normal circumstances)
->    users won't see
->  * After i2c_gpio_init_recovery() returns, i2c_init_recovery() throws
->    above-mentioned error message
->=20
-> Is this the intended behaviour?
-> Personally, I believe an "error" message is quite strong for this common
-> scenario, and a bit misleading.
-
-You are right. The case that a pinctrl is provided but not the necessary
-states for recovery has been overlooked so far.
-
-I will think of something right now.
-
-All the best,
-
-   Wolfram
-
-
---dDRMvlgZJXvWKvBx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBPMoMACgkQFA3kzBSg
-KbYSlg//WkBe0MF28rSdtnZeAtIquBEfkGsYLMvfeTIoNW/atlhQTuM6DmxsX/ws
-Ekb/oO2bPsZmW6tkKWPNwfmo9fQbSpDsZ8OPNTAgviFAJf+BAbPgthzN7pCmycai
-8o5gNpJyLTI2JrU02xv0DIV2kNHafDPeJBodCJC3TK2PS2mXrbqXOyxO9Br4eVwP
-xpw62L9MXYsgQUN0szFViicv72tJyv2mjAJgy3eYewg1Xp64FbQgoHtGbI/N93pu
-oOPYRV/XIhWY8gcrtt9e3hcJkK3eOBRxa5ZDlgQ97B9Gxty8j4nD7ab5AmJex0no
-EPHbdVWt4obOhTQUZlbUYz3giT5B2FyUX7THyp/EyXqH1CseO2bKhXX8V9wIXc5W
-0KJ2nrWe+jbfy6GH3LKAr4Wd7EARFzODVNIVrSUebXy9B3JLVoHVOq5QUUGhDlvG
-iRw2PHk7E2KmejWi1HHqTc5hQawQt/iAPABVt5nm7zdenp0E3viZ78pkyOmkHs++
-0khoegxjyamlV+zi6QOYVJkMxE6F2iBFcL5RdeGwmuHUmxmDIHwioesquWHPOLo+
-djUzqbUfwbZSWkcK440XLrXeZ427nVpk18wo6Vr3R85yo156vb6QVrq8yzt2INNR
-PvFVGjxohU85ZvCzTClwbbO8uSzsYU5cpC099oFQ7IMlrbqUg1A=
-=sfIG
------END PGP SIGNATURE-----
-
---dDRMvlgZJXvWKvBx--
