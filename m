@@ -2,126 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C6133AF2F
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 10:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500DA33AF9E
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 11:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbhCOJqc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Mar 2021 05:46:32 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:26543 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229712AbhCOJq0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Mar 2021 05:46:26 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-219--wsPJDIhO-S4-kB8kWa4gw-1; Mon, 15 Mar 2021 09:46:22 +0000
-X-MC-Unique: -wsPJDIhO-S4-kB8kWa4gw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Mon, 15 Mar 2021 09:46:21 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.012; Mon, 15 Mar 2021 09:46:21 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Chris Packham' <Chris.Packham@alliedtelesis.co.nz>,
-        'Guenter Roeck' <linux@roeck-us.net>,
-        Wolfram Sang <wsa@kernel.org>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: RE: Errant readings on LM81 with T2080 SoC
-Thread-Topic: Errant readings on LM81 with T2080 SoC
-Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Sk6p4Y2sAgAAgcACAACSBgIAABe+AgAEDagCAAfS7gIAALq8AgAEX54CAAKWsgIAACmIAgADZp4CAAATLAIAAxmqAgAPuLICAAaQIUA==
-Date:   Mon, 15 Mar 2021 09:46:21 +0000
-Message-ID: <97910de5fd8c46fea1a17f0bd2b76fbc@AcuMS.aculab.com>
-References: <20210311081842.GA1070@ninjato>
- <94dfa9dc-a80c-98ba-4169-44cce3d810f7@alliedtelesis.co.nz>
- <725c5e51-65df-e17d-e2da-0982efacf2d2@roeck-us.net>
- <1a7d43e6a16c46cdbe63b497b29ac453@AcuMS.aculab.com>
- <ec89dfda-a321-6ec7-9da0-b4949f1f28b5@alliedtelesis.co.nz>
-In-Reply-To: <ec89dfda-a321-6ec7-9da0-b4949f1f28b5@alliedtelesis.co.nz>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S229562AbhCOKKu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Mar 2021 06:10:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34950 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229524AbhCOKK0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 15 Mar 2021 06:10:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6867A64E99;
+        Mon, 15 Mar 2021 10:10:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615803026;
+        bh=yiD7LAsgvZAMSeKj5tHXSgb6cP+41vIVRvbaksxKyhk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mf5MwuKNtJPpyrQ54S4ZnRtClTOOM9NgK7ZA11DNQsU0DWfVLEoxIziOZVi0LfIVw
+         CNgZeyT4nDFYYXOSjJHYXXxyQkv1oWbCbWWs2E033DWUQLEG36+FQhiPzR7D2+xPW/
+         MZ8iGQT+yhkopzobrcw5zIlTcHu8WuIeJ2wSWrNPzgkktjpQ0bCgO3i4+VzMU2ywz+
+         llxi10N7OnUBOp2Vzz5KGx6O8ushOxMk4BcRXQuRNhpltj/Z777b9MgadhTGw04f7O
+         YZiOaKxKJ8iwrh/rqhIB98UMgHmHYKu3u9B11gJxKw4I4Rwq3ME5znJ1mPu++KYzvV
+         Gk+rzBzXGyo+w==
+Date:   Mon, 15 Mar 2021 11:10:14 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Klaus Kudielka <klaus.kudielka@gmail.com>
+Cc:     Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        linux-i2c@vger.kernel.org
+Subject: Re: Linux 5.11: i2c: Confusing error message
+Message-ID: <20210315101014.GA1182@ninjato>
+References: <1787a9ee-efae-7e4b-9e6f-d4bf532c6b63@gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dDRMvlgZJXvWKvBx"
+Content-Disposition: inline
+In-Reply-To: <1787a9ee-efae-7e4b-9e6f-d4bf532c6b63@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-RnJvbTogQ2hyaXMgUGFja2hhbQ0KPiBTZW50OiAxNCBNYXJjaCAyMDIxIDIxOjI2DQo+IA0KPiBP
-biAxMi8wMy8yMSAxMDoyNSBwbSwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KPiA+IEZyb206IExpbnV4
-cHBjLWRldiBHdWVudGVyIFJvZWNrDQo+ID4+IFNlbnQ6IDExIE1hcmNoIDIwMjEgMjE6MzUNCj4g
-Pj4NCj4gPj4gT24gMy8xMS8yMSAxOjE3IFBNLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPiA+Pj4g
-T24gMTEvMDMvMjEgOToxOCBwbSwgV29sZnJhbSBTYW5nIHdyb3RlOg0KPiA+Pj4+PiBCdW1tZXIu
-IFdoYXQgaXMgcmVhbGx5IHdlaXJkIGlzIHRoYXQgeW91IHNlZSBjbG9jayBzdHJldGNoaW5nIHVu
-ZGVyDQo+ID4+Pj4+IENQVSBsb2FkLiBOb3JtYWxseSBjbG9jayBzdHJldGNoaW5nIGlzIHRyaWdn
-ZXJlZCBieSB0aGUgZGV2aWNlLCBub3QNCj4gPj4+Pj4gYnkgdGhlIGhvc3QuDQo+ID4+Pj4gT25l
-IGV4YW1wbGU6IFNvbWUgaG9zdHMgbmVlZCBhbiBpbnRlcnJ1cHQgcGVyIGJ5dGUgdG8ga25vdyBp
-ZiB0aGV5DQo+ID4+Pj4gc2hvdWxkIHNlbmQgQUNLIG9yIE5BQ0suIElmIHRoYXQgaW50ZXJydXB0
-IGlzIGRlbGF5ZWQsIHRoZXkgc3RyZXRjaCB0aGUNCj4gPj4+PiBjbG9jay4NCj4gPj4+Pg0KPiA+
-Pj4gSXQgZmVlbHMgbGlrZSBzb21ldGhpbmcgbGlrZSB0aGF0IGlzIGhhcHBlbmluZy4gTG9va2lu
-ZyBhdCB0aGUgVDIwODANCj4gPj4+IFJlZmVyZW5jZSBtYW51YWwgdGhlcmUgaXMgYW4gaW50ZXJl
-c3RpbmcgdGltaW5nIGRpYWdyYW0gKEZpZ3VyZSAxNC0yIGlmDQo+ID4+PiBzb21lb25lIGZlZWxz
-IGxpa2UgbG9va2luZyBpdCB1cCkuIEl0IHNob3dzIFNDTCBsb3cgYmV0d2VlbiB0aGUgQUNLIGZv
-cg0KPiA+Pj4gdGhlIGFkZHJlc3MgYW5kIHRoZSBkYXRhIGJ5dGUuIEkgdGhpbmsgaWYgd2UncmUg
-ZGVsYXllZCBpbiBzZW5kaW5nIHRoZQ0KPiA+Pj4gbmV4dCBieXRlIHdlIGNvdWxkIHZpb2xhdGUg
-VHRpbWVvdXQgb3IgVGxvdzptZXh0IGZyb20gdGhlIFNNQlVTIHNwZWMuDQo+ID4+Pg0KPiA+PiBJ
-IHRoaW5rIHRoYXQgcmVhbGx5IGxlYXZlcyB5b3Ugb25seSB0d28gb3B0aW9ucyB0aGF0IEkgY2Fu
-IHNlZToNCj4gPj4gUmV3b3JrIHRoZSBkcml2ZXIgdG8gaGFuZGxlIGNyaXRpY2FsIGFjdGlvbnMg
-KHN1Y2ggYXMgc2V0dGluZyBUWEFLLA0KPiA+PiBhbmQgZXZlcnl0aGluZyBlbHNlIHRoYXQgbWln
-aHQgcmVzdWx0IGluIGNsb2NrIHN0cmV0Y2hpbmcpIGluIHRoZQ0KPiA+PiBpbnRlcnJ1cHQgaGFu
-ZGxlciwgb3IgcmV3b3JrIHRoZSBkcml2ZXIgdG8gaGFuZGxlIGV2ZXJ5dGhpbmcgaW4NCj4gPj4g
-YSBoaWdoIHByaW9yaXR5IGtlcm5lbCB0aHJlYWQuDQo+ID4NCj4gPiBJJ20gbm90IHN1cmUgYSBo
-aWdoIHByaW9yaXR5IGtlcm5lbCB0aHJlYWQgd2lsbCBoZWxwLg0KPiA+IFdpdGhvdXQgQ09ORklH
-X1BSRUVNUFQgKHdoaWNoIGhhcyBpdHMgb3duIHNldCBvZiBuYXN0aWVzKQ0KPiA+IGEgUlQgcHJv
-Y2VzcyB3b24ndCBiZSBzY2hlZHVsZWQgdW50aWwgdGhlIHByb2Nlc3NvciBpdCBsYXN0DQo+ID4g
-cmFuIG9uIGRvZXMgYSByZXNjaGVkdWxlLg0KPiA+IEkgZG9uJ3QgdGhpbmsgYSBrZXJuZWwgdGhy
-ZWFkIHdpbGwgYmUgYW55IGRpZmZlcmVudCBmcm9tIGENCj4gPiB1c2VyIHByb2Nlc3MgcnVubmlu
-ZyB1bmRlciB0aGUgUlQgc2NoZWR1bGVyLg0KPiA+DQo+ID4gSSdtIHRyeWluZyB0byByZW1lbWJl
-ciB0aGUgc21idXMgc3BlYyAod2l0aG91dCByZW1lbWJlcmluZyB0aGUgSTJDIG9uZSkuDQoNCj4g
-Rm9yIHRob3NlIGZvbGxvd2luZyBhbG9uZyB0aGUgc3BlYyBpcyBhdmFpbGFibGUgaGVyZVswXS4g
-SSBrbm93IHRoZXJlJ3MNCj4gYSAzLjAgdmVyc2lvblsxXSBhcyB3ZWxsIGJ1dCB0aGUgZGV2aWNl
-cyBJJ20gZGVhbGluZyB3aXRoIGFyZSBmcm9tIGEgMi4wDQo+IHZpbnRhZ2UuDQo+ID4gV2hpbGUg
-YmFzaWNhbGx5IGEgY2xvY2srZGF0YSBiaXQtYmFuZyB0aGUgc2xhdmUgaXMgYWxsb3dlZCB0byBk
-cml2ZQ0KPiA+IHRoZSBjbG9jayBsb3cgdG8gZXh0ZW5kIGEgY3ljbGUuDQo+ID4gSXQgbWF5IGJl
-IGFsbG93ZWQgdG8gZG8gdGhpcyBhdCBhbnkgcG9pbnQ/DQo+DQo+ICBGcm9tIHdoYXQgSSBjYW4g
-c2VlIGl0J3MgYWN0dWFsbHkgdGhlIG1hc3RlciBleHRlbmRpbmcgdGhlIGNsb2NrLiBPcg0KPiBt
-b3JlIGFjY3VyYXRlbHkgaG9sZGluZyBpdCBsb3cgYmV0d2VlbiB0aGUgYWRkcmVzcyBhbmQgZGF0
-YSBieXRlcyAod2hpY2gNCj4gZnJvbSB0aGUgVDIwODAgcmVmZXJlbmNlIG1hbnVhbCBsb29rcyBl
-eHBlY3RlZCkuIEkgdGhpbmsgdGhpcyBtYXkgY2F1c2UNCj4gYSBzdHJpY3RseSBjb21wbGlhbnQg
-U01CVVMgZGV2aWNlIHRvIGRldGVybWluZSB0aGF0IFRsb3c6bWV4dCBoYXMgYmVlbg0KPiB2aW9s
-YXRlZC4NCg0KWWVzLCB0aGUgc3BlYyBkb2VzIHNlZW0gdG8gYXNzdW1lIHRoYXQgaXMgYSBzaWdu
-YWwgaXMgc3RhYmxlDQpmb3IgMjBtcyBzb21ldGhpbmcgaGFzIGdvbmUgJ2hvcnJpYmx5IHdyb25n
-Jy4NCkkgd2Fzbid0IHdvcnJpZXMgYWJvdXQgdGhhdCwgb3VyIGZwZ2EgZG9lcyB0aGUgd2hvbGUg
-dHJhbnNhY3Rpb24NCmFzIGEgc2luZ2xlIGNvbW1hbmQuDQpOb25lIG9mIG91ciBzbGF2ZXMgZ2Vu
-ZXJhdGUgaW50ZXJydXB0cyAtIHNvIGl0IGlzIHB1cmVseSBtYXN0ZXIvc2xhdmUuDQoNCklmIHlv
-dSBydW4geW91ciBwcm9jZXNzIHVuZGVyIHRoZSBSVCBzY2hlZHVsZXIgaXQgaXMgdW5saWtlbHkN
-CnRoYXQgcHJlLWVtcHRpb24gd2lsbCBiZSBkZWxheWVkIGJ5IGxvbmcgZW5vdWdoIHRvIHN0b3Ag
-dGhlIHByb2Nlc3MNCnJ1bm5pbmcgZm9yIDEwbXMuDQpJJ3ZlIHNlZW4gPjFtcyBkZWxheXMgKHRl
-c3RpbmcgUlRQIGF1ZGlvKSwgYnV0IG1vc3Qgb2YgdGhlIGxvbmcNCmxvb3BzIGhhdmUgYSBjb25k
-X3Jlc2NoZWQoKSBpbiB0aGVtLg0KDQouLi4NCg0KPiBQcm9iYWJseSBkZXBlbmRzIG9uIHRoZSBk
-ZXZpY2UgaW1wbGVtZW50YXRpb24uIEkndmUgZ290IG11bHRpcGxlIG90aGVyDQo+IEkyQy9TTUJV
-UyBkZXZpY2VzIGFuZCB0aGUgTE04MSBzZWVtcyB0byBiZSB0aGUgb25lIHRoYXQgb2JqZWN0cy4N
-Cg0KSSBiZXQgbW9zdCBkb24ndCBpbXBsZW1lbnQgYW55IG9mIHRoZSB0aW1lb3V0cy4NCg0KSSBm
-b3VuZCBvbmUgaW50ZXJlc3RpbmcgcG1idXMgZGV2aWNlLg0KU29tZXRpbWVzIGl0IHdvdWxkIGRl
-dGVjdCBhIFNUT1AgY29uZGl0aW9uIGJlY2F1c2UgdGhlIGRhdGEgbGluZQ0Kd2VudCBoaWdoIHdo
-ZW4gaXQgdHJpLXN0YXRlZCBpdHMgb3V0cHV0IGRyaXZlciBpbiByZXNwb25zZSB0byB0aGUNCnJp
-c2luZyBjbG9jayBlZGdlIQ0KU28gaXQgc2F3IHRoZSBzYW1lIGNsb2NrIGVkZ2UgdHdpY2UuDQoN
-Cj4gWzBdIC0gaHR0cDovL3d3dy5zbWJ1cy5vcmcvc3BlY3Mvc21idXMyMC5wZGYNCj4gWzFdIC0g
-aHR0cHM6Ly9wbWJ1cy5vcmcvQXNzZXRzL1BERlMvUHVibGljL1NNQnVzXzNfMF8yMDE0MTIyMC5w
-ZGYNCg0KSSBzaG91bGQgaGF2ZSBib3RoIHRob3NlIC0gSSd2ZSBjb3BpZWQgdGhlbSB0byB0aGUg
-ZGlyZWN0b3J5IHdoZXJlDQpJJ2QgbG9vayBmb3IgdGhlbSBmaXJzdCENCg0KCURhdmlkDQoNCi0N
-ClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBN
-aWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxl
-cykNCg==
 
+--dDRMvlgZJXvWKvBx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Klaus,
+
+On Mon, Mar 15, 2021 at 07:58:21AM +0100, Klaus Kudielka wrote:
+
+Thanks for the report! I am CCing the I2C list, please add it next time,
+too.
+
+> Hello,
+>=20
+> I recently upgraded my Turris Omnia (Marvell Armada 385) to 5.11, and now
+> get the following error message during boot:
+>=20
+> =C2=A0=C2=A0=C2=A0 i2c i2c-0: Not using recovery: no recover_bus() found
+>=20
+> As far as I understand the situation:
+>=20
+>  * After commit 9c7cae2427715502227f823364a6a77828fdf3ea mv64xxx-i2c
+>    unconditionally sets bus_recovery_info and bus_recovery_info->pinctrl
+>  * The i2c bus node in the turris-omnia DTS does *not* have a pinctrl
+>    state "gpio" or "recovery" (like any other Marvell Armada board, AFAIC=
+S)
+>  * i2c_gpio_init_recovery() throws a debug message "no gpio or recovery
+>    state found for GPIO recovery", which (under normal circumstances)
+>    users won't see
+>  * After i2c_gpio_init_recovery() returns, i2c_init_recovery() throws
+>    above-mentioned error message
+>=20
+> Is this the intended behaviour?
+> Personally, I believe an "error" message is quite strong for this common
+> scenario, and a bit misleading.
+
+You are right. The case that a pinctrl is provided but not the necessary
+states for recovery has been overlooked so far.
+
+I will think of something right now.
+
+All the best,
+
+   Wolfram
+
+
+--dDRMvlgZJXvWKvBx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBPMoMACgkQFA3kzBSg
+KbYSlg//WkBe0MF28rSdtnZeAtIquBEfkGsYLMvfeTIoNW/atlhQTuM6DmxsX/ws
+Ekb/oO2bPsZmW6tkKWPNwfmo9fQbSpDsZ8OPNTAgviFAJf+BAbPgthzN7pCmycai
+8o5gNpJyLTI2JrU02xv0DIV2kNHafDPeJBodCJC3TK2PS2mXrbqXOyxO9Br4eVwP
+xpw62L9MXYsgQUN0szFViicv72tJyv2mjAJgy3eYewg1Xp64FbQgoHtGbI/N93pu
+oOPYRV/XIhWY8gcrtt9e3hcJkK3eOBRxa5ZDlgQ97B9Gxty8j4nD7ab5AmJex0no
+EPHbdVWt4obOhTQUZlbUYz3giT5B2FyUX7THyp/EyXqH1CseO2bKhXX8V9wIXc5W
+0KJ2nrWe+jbfy6GH3LKAr4Wd7EARFzODVNIVrSUebXy9B3JLVoHVOq5QUUGhDlvG
+iRw2PHk7E2KmejWi1HHqTc5hQawQt/iAPABVt5nm7zdenp0E3viZ78pkyOmkHs++
+0khoegxjyamlV+zi6QOYVJkMxE6F2iBFcL5RdeGwmuHUmxmDIHwioesquWHPOLo+
+djUzqbUfwbZSWkcK440XLrXeZ427nVpk18wo6Vr3R85yo156vb6QVrq8yzt2INNR
+PvFVGjxohU85ZvCzTClwbbO8uSzsYU5cpC099oFQ7IMlrbqUg1A=
+=sfIG
+-----END PGP SIGNATURE-----
+
+--dDRMvlgZJXvWKvBx--
