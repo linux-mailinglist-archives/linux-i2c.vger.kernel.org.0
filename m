@@ -2,176 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A04633B32B
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 14:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA17733C17D
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 17:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbhCONBV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Mar 2021 09:01:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37186 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229588AbhCONA4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 15 Mar 2021 09:00:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CCF3C64E38;
-        Mon, 15 Mar 2021 13:00:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615813255;
-        bh=uwWz6aWi1jhFKw28wj/LBxRRrhUwhNkyvusOnaoyIbc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ja+NES0ImoZkKrEO/YMBgBi8eb1pBtDIoBJ2SEiJI2DUpSjRyoErqeFixEEyp5HUN
-         0jo91BP1t8G80j45Q96DnSNvaST1I40GVJTxXinnCqjmu0ePLMuhzg+XxnwTa5+kQS
-         AbrWYNGoveE5GkaN6iis2ntFVg/LmyetJ5+4xvagV8kbW6ac+jFakwJVtsIXqhZs+m
-         L4idcgPQ+yXSY66VOzxNh/fotNezbImMjFN2wq6LWWsIxZ5QyF9UXTo5FRiCFCVCFE
-         C7/s3PN8c2oKdhEIoyMFZ5SX2KvWrO75HJrBZ0gWYyrp5d6bLci1+nxu+OJd+198ot
-         etRMtsEivXiUw==
-Date:   Mon, 15 Mar 2021 14:00:50 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     dillon min <dillon.minfei@gmail.com>, pierre-yves.mordret@st.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        p.zabel@pengutronix.de,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Alexandre TORGUE <Alexandre.torgue@foss.st.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-i2c@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 4/4] i2c: stm32f4: Fix stmpe811 get xyz data timeout
- issue
-Message-ID: <20210315130050.GD1182@ninjato>
-References: <1591709203-12106-1-git-send-email-dillon.minfei@gmail.com>
- <1591709203-12106-5-git-send-email-dillon.minfei@gmail.com>
- <CAL9mu0LJPnxA0JSmV3mogvPA5xRRYCO_4=P7pqpAO7R=YaJX5g@mail.gmail.com>
+        id S229510AbhCOQSK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Mar 2021 12:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230150AbhCOQSJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Mar 2021 12:18:09 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13B7C06174A
+        for <linux-i2c@vger.kernel.org>; Mon, 15 Mar 2021 09:18:08 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id g8so8474604wmd.4
+        for <linux-i2c@vger.kernel.org>; Mon, 15 Mar 2021 09:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-transfer-encoding:content-language;
+        bh=4cLf1KJ6GEp0APHfw+FxpyYjKA9+LfQ4yZFrFDAR3W0=;
+        b=ZtkCTZ6RBkgl4Wc7BCEBsbG180OqWkOmUUEPYRAnH8qGHqFexXQWvJliex12kSFd0/
+         1UCxji7hTVYZHeEcJaBeN7qe8GOuKyGdzfJGVBvNP7vrr9uf1OXliI9kyI7HLY90UTEq
+         h/G/nk/fzYTOK7JcAKfv4EPg7RjeSSS4COncHKyAAH93LdUSHlopXY76LesT1zVjrfig
+         HpK5jAEOAHgQqOYfDvOM28esm/jhj55I0qC2ohK8TBUijl+BTniqU18ml1CLhBnBfTTe
+         UTE5Mg/h5eslaYeZSa+TJxVQMBiShgUX9SnKXZsnEJrbn5ci5JztZE5PA7BafQ9J9oA0
+         CUAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=4cLf1KJ6GEp0APHfw+FxpyYjKA9+LfQ4yZFrFDAR3W0=;
+        b=pcr/yMr8kKYelvuYtbupi+5+Jmzzigj8rRHSLhdujvRrypm2Z1Jsldh3CcHFa5w6R+
+         9tE1YdPEBdV1J4PGIqQ7k9GGGThAVvQctIeeBq2JNmNcp947eZcdSSeHwPQjMQfHMdQx
+         1XqI3swOEtbI2n3DfRLVp1cKlw7MEDOTPYzOFpjsZljNSOSieIl+bylu74S/4YAINhPq
+         l+vTPWZUtYVPhozFX3FdX4vV8iwFN+gCbQ8MkUgIeBZmYy9RAyxQBddcesTse0bEv6nA
+         OisLLzPNRm4lMhih+K95jxvqNLfOaX9lagQMAdgFKUJpcUi3tCIKlx2xOeF3B3q8ADR9
+         UojQ==
+X-Gm-Message-State: AOAM532EwQGKGvL3ZUahCci2JTihUgT6xe8h0pIY8lsbpJiB6RatBzoS
+        5KkxWziVsspfMu6/8mucEMNv210VcJM=
+X-Google-Smtp-Source: ABdhPJwS55JtGEXhQVKeNgYr6h2wQpbZRBhplKMh6zS/5E/Yj11yfZSaGmCkTNoC/QlMmpX3ELqlNA==
+X-Received: by 2002:a7b:c755:: with SMTP id w21mr437243wmk.89.1615825087623;
+        Mon, 15 Mar 2021 09:18:07 -0700 (PDT)
+Received: from ?IPv6:2a02:168:6806:0:499d:3dca:5498:583? ([2a02:168:6806:0:499d:3dca:5498:583])
+        by smtp.gmail.com with ESMTPSA id h20sm95329wmp.38.2021.03.15.09.18.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Mar 2021 09:18:07 -0700 (PDT)
+Subject: Re: [PATCH] i2c: turn recovery error on init to debug
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org
+References: <20210315115008.19110-1-wsa+renesas@sang-engineering.com>
+From:   Klaus Kudielka <klaus.kudielka@gmail.com>
+Message-ID: <4017aa36-3831-19a7-c1ad-31ef8bda1076@gmail.com>
+Date:   Mon, 15 Mar 2021 17:18:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Km1U/tdNT/EmXiR1"
-Content-Disposition: inline
-In-Reply-To: <CAL9mu0LJPnxA0JSmV3mogvPA5xRRYCO_4=P7pqpAO7R=YaJX5g@mail.gmail.com>
+In-Reply-To: <20210315115008.19110-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 15.03.21 12:50, Wolfram Sang wrote:
+> In some configurations, recovery is optional. So, don't throw an error
+> when it is not used because e.g. pinctrl settings for recovery are not
+> provided. Reword the message and make it debug output.
+>
+> Reported-by: Klaus Kudielka <klaus.kudielka@gmail.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Tested on a Renesas Salvator-XS with R-Car H3 ES2.0. Klaus, let me know
+> if you are happy as well.
+Tested on a CZ.NIC Turris Omnia (on top of 5.11.6). The error message is
+gone, I2C functionality still ok. I'm happy.
 
---Km1U/tdNT/EmXiR1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Mar 15, 2021 at 08:43:54PM +0800, dillon min wrote:
-> Hi All,
->=20
-> Just a gentle ping.
-
-Pierre-Yves?
-
->=20
-> Regards.
->=20
-> On Tue, Jun 9, 2020 at 9:27 PM <dillon.minfei@gmail.com> wrote:
-> >
-> > From: dillon min <dillon.minfei@gmail.com>
-> >
-> > as stm32f429's internal flash is 2Mbytes and compiled kernel
-> > image bigger than 2Mbytes, so we have to load kernel image
-> > to sdram on stm32f429-disco board which has 8Mbytes sdram space.
-> >
-> > based on above context, as you knows kernel running on external
-> > sdram is more slower than internal flash. besides, we need read 4
-> > bytes to get touch screen xyz(x, y, pressure) coordinate data in
-> > stmpe811 interrupt.
-> >
-> > so, in stm32f4_i2c_handle_rx_done, as i2c read slower than running
-> > in xip mode, have to adjust 'STOP/START bit set position' from last
-> > two bytes to last one bytes. else, will get i2c timeout in reading
-> > touch screen coordinate.
-> >
-> > to not take side effect, introduce IIC_LAST_BYTE_POS to support xip
-> > kernel or has mmu platform.
-> >
-> > Signed-off-by: dillon min <dillon.minfei@gmail.com>
-> > ---
-> >
-> > V4: indroduce 'IIC_LAST_BYTE_POS' to compatible with xipkernel boot
-> >
-> >  drivers/i2c/busses/i2c-stm32f4.c | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-stm32f4.c b/drivers/i2c/busses/i2c-=
-stm32f4.c
-> > index d6a69dfcac3f..97cf42ae7fa0 100644
-> > --- a/drivers/i2c/busses/i2c-stm32f4.c
-> > +++ b/drivers/i2c/busses/i2c-stm32f4.c
-> > @@ -93,6 +93,12 @@
-> >  #define STM32F4_I2C_MAX_FREQ           46U
-> >  #define HZ_TO_MHZ                      1000000
-> >
-> > +#if !defined(CONFIG_MMU) && !defined(CONFIG_XIP_KERNEL)
-> > +#define IIC_LAST_BYTE_POS 1
-> > +#else
-> > +#define IIC_LAST_BYTE_POS 2
-> > +#endif
-> > +
-> >  /**
-> >   * struct stm32f4_i2c_msg - client specific data
-> >   * @addr: 8-bit slave addr, including r/w bit
-> > @@ -439,7 +445,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32=
-f4_i2c_dev *i2c_dev)
-> >         int i;
-> >
-> >         switch (msg->count) {
-> > -       case 2:
-> > +       case IIC_LAST_BYTE_POS:
-> >                 /*
-> >                  * In order to correctly send the Stop or Repeated Start
-> >                  * condition on the I2C bus, the STOP/START bit has to =
-be set
-> > @@ -454,7 +460,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32=
-f4_i2c_dev *i2c_dev)
-> >                 else
-> >                         stm32f4_i2c_set_bits(reg, STM32F4_I2C_CR1_START=
-);
-> >
-> > -               for (i =3D 2; i > 0; i--)
-> > +               for (i =3D IIC_LAST_BYTE_POS; i > 0; i--)
-> >                         stm32f4_i2c_read_msg(i2c_dev);
-> >
-> >                 reg =3D i2c_dev->base + STM32F4_I2C_CR2;
-> > @@ -463,7 +469,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32=
-f4_i2c_dev *i2c_dev)
-> >
-> >                 complete(&i2c_dev->complete);
-> >                 break;
-> > -       case 3:
-> > +       case (IIC_LAST_BYTE_POS+1):
-> >                 /*
-> >                  * In order to correctly generate the NACK pulse after =
-the last
-> >                  * received data byte, we have to enable NACK before re=
-ading N-2
-> > --
-> > 2.7.4
-> >
-
---Km1U/tdNT/EmXiR1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBPWoIACgkQFA3kzBSg
-KbaufQ//Ys3IspQl5ZmHUiYQNXTgpssUevIjsxXi1RZF4eaFk+YV3swvOuYgsRgD
-VAws9zq1iBYtQ1UVJUSYYXOG+fE1hIES4FHHLfD0jvIgkNU7MQEsSlx/4So3ns4d
-DSSYhfam+Ido8zuePoP5QR3MQJRAqG6gg0JCyM/1aSmIOn72sDn57y84swvNSnWc
-0Ej5IFGvPH3CpHrpx3VeVk+TrapWiDaNCIoZbZFfE2br4OxBvRamSS0oNtyW13vQ
-Ui+AEnAsxtjU+I+xWDtLagSAQyiUSAvXdV49OAqXK9iJyQiXSbSCB8KEjzGOTHcn
-0sc0KAVl06ZdpdTQn/X7rgb0pJZ2FR1AqG9EfnDTc3bBOG/I7bwJCR/md7NegGWC
-RB0Xd8mSnkFZsZg5uzjsF88yU3pL/n85pOWz3Cc5cPm5kOQprgOQ/WNhh/49RtWi
-g1VAfPGTKtCY7MA0j/pacIkqCdyMDUCRnmPhW8KhavCiZyene2ROPIVvfQHt0dpl
-f+vZv9PF1nrubIEOLt6iB6T4qnuBOAEJW+YVUtht7HoaINjYQtUoc8IZRFU2az/R
-wU3n1GxN5TNb5u+aXIdt2dwvAwDq7jbu3WVvFMAUWD0Z8ofMefQMaLBw/wocLhMD
-/6wcjf8ViWZUWjPNAn8ahvsGhf649DemH95FBW5Y+S7YjxFnbFQ=
-=t5mo
------END PGP SIGNATURE-----
-
---Km1U/tdNT/EmXiR1--
