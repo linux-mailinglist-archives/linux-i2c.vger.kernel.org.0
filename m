@@ -2,81 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA17733C17D
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 17:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B4933C201
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 17:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbhCOQSK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Mar 2021 12:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbhCOQSJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Mar 2021 12:18:09 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13B7C06174A
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Mar 2021 09:18:08 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id g8so8474604wmd.4
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Mar 2021 09:18:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-transfer-encoding:content-language;
-        bh=4cLf1KJ6GEp0APHfw+FxpyYjKA9+LfQ4yZFrFDAR3W0=;
-        b=ZtkCTZ6RBkgl4Wc7BCEBsbG180OqWkOmUUEPYRAnH8qGHqFexXQWvJliex12kSFd0/
-         1UCxji7hTVYZHeEcJaBeN7qe8GOuKyGdzfJGVBvNP7vrr9uf1OXliI9kyI7HLY90UTEq
-         h/G/nk/fzYTOK7JcAKfv4EPg7RjeSSS4COncHKyAAH93LdUSHlopXY76LesT1zVjrfig
-         HpK5jAEOAHgQqOYfDvOM28esm/jhj55I0qC2ohK8TBUijl+BTniqU18ml1CLhBnBfTTe
-         UTE5Mg/h5eslaYeZSa+TJxVQMBiShgUX9SnKXZsnEJrbn5ci5JztZE5PA7BafQ9J9oA0
-         CUAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=4cLf1KJ6GEp0APHfw+FxpyYjKA9+LfQ4yZFrFDAR3W0=;
-        b=pcr/yMr8kKYelvuYtbupi+5+Jmzzigj8rRHSLhdujvRrypm2Z1Jsldh3CcHFa5w6R+
-         9tE1YdPEBdV1J4PGIqQ7k9GGGThAVvQctIeeBq2JNmNcp947eZcdSSeHwPQjMQfHMdQx
-         1XqI3swOEtbI2n3DfRLVp1cKlw7MEDOTPYzOFpjsZljNSOSieIl+bylu74S/4YAINhPq
-         l+vTPWZUtYVPhozFX3FdX4vV8iwFN+gCbQ8MkUgIeBZmYy9RAyxQBddcesTse0bEv6nA
-         OisLLzPNRm4lMhih+K95jxvqNLfOaX9lagQMAdgFKUJpcUi3tCIKlx2xOeF3B3q8ADR9
-         UojQ==
-X-Gm-Message-State: AOAM532EwQGKGvL3ZUahCci2JTihUgT6xe8h0pIY8lsbpJiB6RatBzoS
-        5KkxWziVsspfMu6/8mucEMNv210VcJM=
-X-Google-Smtp-Source: ABdhPJwS55JtGEXhQVKeNgYr6h2wQpbZRBhplKMh6zS/5E/Yj11yfZSaGmCkTNoC/QlMmpX3ELqlNA==
-X-Received: by 2002:a7b:c755:: with SMTP id w21mr437243wmk.89.1615825087623;
-        Mon, 15 Mar 2021 09:18:07 -0700 (PDT)
-Received: from ?IPv6:2a02:168:6806:0:499d:3dca:5498:583? ([2a02:168:6806:0:499d:3dca:5498:583])
-        by smtp.gmail.com with ESMTPSA id h20sm95329wmp.38.2021.03.15.09.18.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Mar 2021 09:18:07 -0700 (PDT)
-Subject: Re: [PATCH] i2c: turn recovery error on init to debug
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
-References: <20210315115008.19110-1-wsa+renesas@sang-engineering.com>
-From:   Klaus Kudielka <klaus.kudielka@gmail.com>
-Message-ID: <4017aa36-3831-19a7-c1ad-31ef8bda1076@gmail.com>
-Date:   Mon, 15 Mar 2021 17:18:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S229725AbhCOQem (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Mar 2021 12:34:42 -0400
+Received: from de-out1.bosch-org.com ([139.15.230.186]:45224 "EHLO
+        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232363AbhCOQe1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Mar 2021 12:34:27 -0400
+Received: from fe0vm1649.rbesz01.com (lb41g3-ha-dmz-psi-sl1-mailout.fe.ssn.bosch.com [139.15.230.188])
+        by fe0vms0186.rbdmz01.com (Postfix) with ESMTPS id 4Dzhp92g1cz1XLFjX;
+        Mon, 15 Mar 2021 17:34:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=de.bosch.com;
+        s=key3-intmail; t=1615826065;
+        bh=fP74M6HwZDCum3+vzeaerJPkseKxvj4gZV75mefECbo=; l=10;
+        h=From:Subject:From:Reply-To:Sender;
+        b=MIN3BlJNgODXDNSB3/Hku9dYktOxtyonFptukMu1o1hljZ+htCVy9PiFayD+Pr7Sh
+         ebeMpH3cy7hQSFTPFDhiUqsgTqTMcnYKeoOtRrcd/aejipx7IVXo8OmzVfsPA3hf8/
+         /i37zd9AqejkwKYAHZzr5qmkKJBqM7JXYclPAR9Q=
+Received: from fe0vm1740.rbesz01.com (unknown [10.58.172.176])
+        by fe0vm1649.rbesz01.com (Postfix) with ESMTPS id 4Dzhp92K7zz1K5;
+        Mon, 15 Mar 2021 17:34:25 +0100 (CET)
+X-AuditID: 0a3aad14-081ff70000004cbe-59-604f8c91600b
+Received: from si0vm1949.rbesz01.com ( [10.58.173.29])
+        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by fe0vm1740.rbesz01.com (SMG Outbound) with SMTP id 8A.9F.19646.19C8F406; Mon, 15 Mar 2021 17:34:25 +0100 (CET)
+Received: from FE-HUB2000.de.bosch.com (unknown [10.4.103.109])
+        by si0vm1949.rbesz01.com (Postfix) with ESMTPS id 4Dzhp91Xrmz6CjZP7;
+        Mon, 15 Mar 2021 17:34:25 +0100 (CET)
+Received: from luchador.grb-fir.grb.de.bosch.com (10.19.187.97) by
+ FE-HUB2000.de.bosch.com (10.4.103.109) with Microsoft SMTP Server id
+ 15.1.2176.2; Mon, 15 Mar 2021 17:34:24 +0100
+From:   Mark Jonas <mark.jonas@de.bosch.com>
+To:     Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <Adam.Thomson.Opensource@diasemi.com>,
+        <stwiss.opensource@diasemi.com>, <marek.vasut@gmail.com>,
+        <tingquan.ruan@cn.bosch.com>, <hubert.streidl@de.bosch.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Mark Jonas <mark.jonas@de.bosch.com>
+Subject: [PATCH v5] mfd: da9063: Support SMBus and I2C mode
+Date:   Mon, 15 Mar 2021 17:09:03 +0100
+Message-ID: <20210315160903.799426-1-mark.jonas@de.bosch.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210315115008.19110-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrILMWRmVeSWpSXmKPExsXCZbVWVndij3+CwZ5pghZL3y9ltrj/9Sij
+        RcffL4wWl3fNYbO4+ns9i8Xe1ovMFnf3z2V0YPdY8UnfY9OqTjaPO9f2sHl83iQXwBLFZZOS
+        mpNZllqkb5fAlfHs4HP2glbRih9HUhoYNwp2MXJySAiYSMy73csMYgsJTGeSeLBJpYuRC8he
+        xyhx5OZ0dghnB6PEhnmrGEGq2AS0JG6e2AHWISIQLdHy9QQTSBGzwComiTurdrGDJIQFrCVO
+        rvzJBGKzCKhK9K57xwZi8wrYSjQuusgKsVpeYual7+wQcUGJkzOfsIDYzEDx5q2zmSFsCYmD
+        L14wT2Dkm4WkbBaSsllIyhYwMq9iFE1LNSjLNTQ3MdArSkotrjIw1EvOz93ECAlVkR2MJ3s+
+        6B1iZOJgPMQowcGsJML7Wcc3QYg3JbGyKrUoP76oNCe1+BCjNAeLkjivCs/GOCGB9MSS1OzU
+        1ILUIpgsEwenVANToK9LImP+/OpHkdO1k+X3rZ86X+zaqX9H2/ceVbwrsFxewvDrnzU5GVKv
+        RK5qb3n1Z1tbqebrX0ufxhpJXG8w9/NmWfz+x/K+fKGjHMZXM+9ZdF0R/3I35tFHkxPB4Sr5
+        yf8nu8148i+7ffniV5/mX600+Ke3zynB481i2xNmgq8Piz7061F2XfTjmnres+XJQbLp5p+Y
+        G1ZseFB+YRK7fcHx8k+m93O2Ciy6f8eKu9Bn8eJLSj9zdglMzVjw7tOS11VHfOe2Vb9Uabvk
+        m9Jw2XzHmsPR84tkJ52+LrzsY/xDXR73a6vfus7WNZKUjD9VkNxfzLq3+kvqEjWG2MmPnQuY
+        z3iFdM5KOluVM33uYyWW4oxEQy3mouJEAF3tk+TEAgAA
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 15.03.21 12:50, Wolfram Sang wrote:
-> In some configurations, recovery is optional. So, don't throw an error
-> when it is not used because e.g. pinctrl settings for recovery are not
-> provided. Reword the message and make it debug output.
->
-> Reported-by: Klaus Kudielka <klaus.kudielka@gmail.com>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->
-> Tested on a Renesas Salvator-XS with R-Car H3 ES2.0. Klaus, let me know
-> if you are happy as well.
-Tested on a CZ.NIC Turris Omnia (on top of 5.11.6). The error message is
-gone, I2C functionality still ok. I'm happy.
+From: Hubert Streidl <hubert.streidl@de.bosch.com>
+
+By default the PMIC DA9063 2-wire interface is SMBus compliant. This
+means the PMIC will automatically reset the interface when the clock
+signal ceases for more than the SMBus timeout of 35 ms.
+
+If the I2C driver / device is not capable of creating atomic I2C
+transactions, a context change can cause a ceasing of the clock signal.
+This can happen if for example a real-time thread is scheduled. Then
+the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
+a write message could end up in the wrong register. This could cause
+unpredictable system behavior.
+
+The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
+interface. This mode does not reset the interface when the clock
+signal ceases. Thus the problem depicted above does not occur.
+
+This patch tests for the bus functionality "I2C_FUNC_I2C". It can
+reasonably be assumed that the bus cannot obey SMBus timings if
+this functionality is set. SMBus commands most probably are emulated
+in this case which is prone to the latency issue described above.
+
+This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
+otherwise keeps the default SMBus mode.
+
+Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
+Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
+---
+ drivers/mfd/da9063-i2c.c             | 10 ++++++++++
+ include/linux/mfd/da9063/registers.h |  3 +++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/drivers/mfd/da9063-i2c.c b/drivers/mfd/da9063-i2c.c
+index 3781d0bb7786..e8a022e697c5 100644
+--- a/drivers/mfd/da9063-i2c.c
++++ b/drivers/mfd/da9063-i2c.c
+@@ -442,6 +442,16 @@ static int da9063_i2c_probe(struct i2c_client *i2c,
+ 		return ret;
+ 	}
+ 
++	/* If SMBus is not available and only I2C is possible, enter I2C mode */
++	if (i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C)) {
++		ret = regmap_clear_bits(da9063->regmap, DA9063_REG_CONFIG_J,
++			  DA9063_TWOWIRE_TO);
++		if (ret < 0) {
++			dev_err(da9063->dev, "Failed to set Two-Wire Bus Mode.\n");
++			return -EIO;
++		}
++	}
++
+ 	return da9063_device_init(da9063, i2c->irq);
+ }
+ 
+diff --git a/include/linux/mfd/da9063/registers.h b/include/linux/mfd/da9063/registers.h
+index 1dbabf1b3cb8..6e0f66a2e727 100644
+--- a/include/linux/mfd/da9063/registers.h
++++ b/include/linux/mfd/da9063/registers.h
+@@ -1037,6 +1037,9 @@
+ #define		DA9063_NONKEY_PIN_AUTODOWN	0x02
+ #define		DA9063_NONKEY_PIN_AUTOFLPRT	0x03
+ 
++/* DA9063_REG_CONFIG_J (addr=0x10F) */
++#define DA9063_TWOWIRE_TO			0x40
++
+ /* DA9063_REG_MON_REG_5 (addr=0x116) */
+ #define DA9063_MON_A8_IDX_MASK			0x07
+ #define		DA9063_MON_A8_IDX_NONE		0x00
+-- 
+2.25.1
 
