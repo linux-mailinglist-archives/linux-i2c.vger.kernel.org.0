@@ -2,139 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B4933C201
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 17:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D328B33C396
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Mar 2021 18:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbhCOQem (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Mar 2021 12:34:42 -0400
-Received: from de-out1.bosch-org.com ([139.15.230.186]:45224 "EHLO
-        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232363AbhCOQe1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Mar 2021 12:34:27 -0400
-Received: from fe0vm1649.rbesz01.com (lb41g3-ha-dmz-psi-sl1-mailout.fe.ssn.bosch.com [139.15.230.188])
-        by fe0vms0186.rbdmz01.com (Postfix) with ESMTPS id 4Dzhp92g1cz1XLFjX;
-        Mon, 15 Mar 2021 17:34:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=de.bosch.com;
-        s=key3-intmail; t=1615826065;
-        bh=fP74M6HwZDCum3+vzeaerJPkseKxvj4gZV75mefECbo=; l=10;
-        h=From:Subject:From:Reply-To:Sender;
-        b=MIN3BlJNgODXDNSB3/Hku9dYktOxtyonFptukMu1o1hljZ+htCVy9PiFayD+Pr7Sh
-         ebeMpH3cy7hQSFTPFDhiUqsgTqTMcnYKeoOtRrcd/aejipx7IVXo8OmzVfsPA3hf8/
-         /i37zd9AqejkwKYAHZzr5qmkKJBqM7JXYclPAR9Q=
-Received: from fe0vm1740.rbesz01.com (unknown [10.58.172.176])
-        by fe0vm1649.rbesz01.com (Postfix) with ESMTPS id 4Dzhp92K7zz1K5;
-        Mon, 15 Mar 2021 17:34:25 +0100 (CET)
-X-AuditID: 0a3aad14-081ff70000004cbe-59-604f8c91600b
-Received: from si0vm1949.rbesz01.com ( [10.58.173.29])
-        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by fe0vm1740.rbesz01.com (SMG Outbound) with SMTP id 8A.9F.19646.19C8F406; Mon, 15 Mar 2021 17:34:25 +0100 (CET)
-Received: from FE-HUB2000.de.bosch.com (unknown [10.4.103.109])
-        by si0vm1949.rbesz01.com (Postfix) with ESMTPS id 4Dzhp91Xrmz6CjZP7;
-        Mon, 15 Mar 2021 17:34:25 +0100 (CET)
-Received: from luchador.grb-fir.grb.de.bosch.com (10.19.187.97) by
- FE-HUB2000.de.bosch.com (10.4.103.109) with Microsoft SMTP Server id
- 15.1.2176.2; Mon, 15 Mar 2021 17:34:24 +0100
-From:   Mark Jonas <mark.jonas@de.bosch.com>
-To:     Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <Adam.Thomson.Opensource@diasemi.com>,
-        <stwiss.opensource@diasemi.com>, <marek.vasut@gmail.com>,
-        <tingquan.ruan@cn.bosch.com>, <hubert.streidl@de.bosch.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Mark Jonas <mark.jonas@de.bosch.com>
-Subject: [PATCH v5] mfd: da9063: Support SMBus and I2C mode
-Date:   Mon, 15 Mar 2021 17:09:03 +0100
-Message-ID: <20210315160903.799426-1-mark.jonas@de.bosch.com>
-X-Mailer: git-send-email 2.25.1
+        id S230169AbhCORJ4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Mar 2021 13:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234631AbhCORJw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Mar 2021 13:09:52 -0400
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F59C061764
+        for <linux-i2c@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
+Received: by mail-ua1-x942.google.com with SMTP id x8so4417309ual.6
+        for <linux-i2c@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=aXgMsfvJxS8rnPrkFXfXe2FXnX4z8Cqcu/QhnL5Qn1DjMCuOtoNVfGi4EBSS9Iknwn
+         vlNLqDk2YbQyiCk670OLjQr7loetNG1u4FZO8UCDQ2J04lVrlvZVYZ8kX/m2f/vpT8RG
+         ZS2Q72l+5VWjpF0FapEgmyk86Q2RyIYtBwW0g+Kv5gwmZmeSODXVZRu5TrncT2JBKVWl
+         0T4REScA9GLg4vUJnQBLz/6DT44uKbQMn8TCECFL0QnRbFsF40mm5TjkcPcIZSc0whXV
+         T2AgYFv8Od1V+OxvkOJjvUw7wQyrmJeMqbP2Cwhn97vz8cjryp78SHO5Uey9b3DA2nH3
+         +UTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=bbb64vrzyvciRF5YJ7JA4bZJd2KXJUrEZzK5m8G8OusCpFSwr7ypbPn1O10Mpa3nYK
+         O28i8taU6wauK7pKYIOobbHmANInSQOyonpL209p1DUg1USSLhc+WBmjrUgG/C1Jm04L
+         AQ9mQ4L5UXPSiDfUJsbSdbIEt7fu1z8b8cnrEv9jCl0eRLJtTpJgnxCTbrpjbq9VCXLh
+         LOBYE5reOhS6VivcRVH09fuBwxkf4UDnmXstHorbRINlYIuHhZ3KFkkO9aWn3edmQvR/
+         QUdMwi6wOEIH6qiozW7njSdWFI26TPaILfBgU/yJbjq1+llQEzDZNS2nEC2fXBGO7UmF
+         mVNQ==
+X-Gm-Message-State: AOAM533SqCKcojJpdc7bVRjM2/gJtAM9NHUi4zKspgve8sczS9c5+J+d
+        jgiEr6Brb2aZdZJL23EC6V8FBOeu0/DXbJ22Mv4=
+X-Google-Smtp-Source: ABdhPJz279ChG9se2R56+CgC4LM1QaXLH3vfcRaBnVrWnTQpeUm6AYsXRAqStDe2E32gf/IZJ47H7xYnUK1rrffxr7c=
+X-Received: by 2002:ab0:4129:: with SMTP id j38mr5247512uad.39.1615828191432;
+ Mon, 15 Mar 2021 10:09:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrILMWRmVeSWpSXmKPExsXCZbVWVndij3+CwZ5pghZL3y9ltrj/9Sij
-        RcffL4wWl3fNYbO4+ns9i8Xe1ovMFnf3z2V0YPdY8UnfY9OqTjaPO9f2sHl83iQXwBLFZZOS
-        mpNZllqkb5fAlfHs4HP2glbRih9HUhoYNwp2MXJySAiYSMy73csMYgsJTGeSeLBJpYuRC8he
-        xyhx5OZ0dghnB6PEhnmrGEGq2AS0JG6e2AHWISIQLdHy9QQTSBGzwComiTurdrGDJIQFrCVO
-        rvzJBGKzCKhK9K57xwZi8wrYSjQuusgKsVpeYual7+wQcUGJkzOfsIDYzEDx5q2zmSFsCYmD
-        L14wT2Dkm4WkbBaSsllIyhYwMq9iFE1LNSjLNTQ3MdArSkotrjIw1EvOz93ECAlVkR2MJ3s+
-        6B1iZOJgPMQowcGsJML7Wcc3QYg3JbGyKrUoP76oNCe1+BCjNAeLkjivCs/GOCGB9MSS1OzU
-        1ILUIpgsEwenVANToK9LImP+/OpHkdO1k+X3rZ86X+zaqX9H2/ceVbwrsFxewvDrnzU5GVKv
-        RK5qb3n1Z1tbqebrX0ufxhpJXG8w9/NmWfz+x/K+fKGjHMZXM+9ZdF0R/3I35tFHkxPB4Sr5
-        yf8nu8148i+7ffniV5/mX600+Ke3zynB481i2xNmgq8Piz7061F2XfTjmnres+XJQbLp5p+Y
-        G1ZseFB+YRK7fcHx8k+m93O2Ciy6f8eKu9Bn8eJLSj9zdglMzVjw7tOS11VHfOe2Vb9Uabvk
-        m9Jw2XzHmsPR84tkJ52+LrzsY/xDXR73a6vfus7WNZKUjD9VkNxfzLq3+kvqEjWG2MmPnQuY
-        z3iFdM5KOluVM33uYyWW4oxEQy3mouJEAF3tk+TEAgAA
+Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Mon, 15 Mar 2021 10:09:50
+ -0700 (PDT)
+Reply-To: ezbtg22@gmail.com
+From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
+Date:   Mon, 15 Mar 2021 10:09:50 -0700
+Message-ID: <CAH16wSNYh7NNhzrypnhaAQBv8EfF3vGrQ=w1tsAkdJyEQZxf=A@mail.gmail.com>
+Subject: From Mrs.Glenn
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Hubert Streidl <hubert.streidl@de.bosch.com>
-
-By default the PMIC DA9063 2-wire interface is SMBus compliant. This
-means the PMIC will automatically reset the interface when the clock
-signal ceases for more than the SMBus timeout of 35 ms.
-
-If the I2C driver / device is not capable of creating atomic I2C
-transactions, a context change can cause a ceasing of the clock signal.
-This can happen if for example a real-time thread is scheduled. Then
-the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
-a write message could end up in the wrong register. This could cause
-unpredictable system behavior.
-
-The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
-interface. This mode does not reset the interface when the clock
-signal ceases. Thus the problem depicted above does not occur.
-
-This patch tests for the bus functionality "I2C_FUNC_I2C". It can
-reasonably be assumed that the bus cannot obey SMBus timings if
-this functionality is set. SMBus commands most probably are emulated
-in this case which is prone to the latency issue described above.
-
-This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
-otherwise keeps the default SMBus mode.
-
-Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
-Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
----
- drivers/mfd/da9063-i2c.c             | 10 ++++++++++
- include/linux/mfd/da9063/registers.h |  3 +++
- 2 files changed, 13 insertions(+)
-
-diff --git a/drivers/mfd/da9063-i2c.c b/drivers/mfd/da9063-i2c.c
-index 3781d0bb7786..e8a022e697c5 100644
---- a/drivers/mfd/da9063-i2c.c
-+++ b/drivers/mfd/da9063-i2c.c
-@@ -442,6 +442,16 @@ static int da9063_i2c_probe(struct i2c_client *i2c,
- 		return ret;
- 	}
- 
-+	/* If SMBus is not available and only I2C is possible, enter I2C mode */
-+	if (i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C)) {
-+		ret = regmap_clear_bits(da9063->regmap, DA9063_REG_CONFIG_J,
-+			  DA9063_TWOWIRE_TO);
-+		if (ret < 0) {
-+			dev_err(da9063->dev, "Failed to set Two-Wire Bus Mode.\n");
-+			return -EIO;
-+		}
-+	}
-+
- 	return da9063_device_init(da9063, i2c->irq);
- }
- 
-diff --git a/include/linux/mfd/da9063/registers.h b/include/linux/mfd/da9063/registers.h
-index 1dbabf1b3cb8..6e0f66a2e727 100644
---- a/include/linux/mfd/da9063/registers.h
-+++ b/include/linux/mfd/da9063/registers.h
-@@ -1037,6 +1037,9 @@
- #define		DA9063_NONKEY_PIN_AUTODOWN	0x02
- #define		DA9063_NONKEY_PIN_AUTOFLPRT	0x03
- 
-+/* DA9063_REG_CONFIG_J (addr=0x10F) */
-+#define DA9063_TWOWIRE_TO			0x40
-+
- /* DA9063_REG_MON_REG_5 (addr=0x116) */
- #define DA9063_MON_A8_IDX_MASK			0x07
- #define		DA9063_MON_A8_IDX_NONE		0x00
 -- 
-2.25.1
+Dear Beloved,
 
+I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
+in a hospital bed in Israel. I am 59 years and childless; my husband
+is dead. I was diagnosed with terminal cancer. And my doctor just
+predicted that I have but very limited time to live due to damages in
+my system and as a result of that I decided to dispose my 10.5 million
+US dollars to a God-fearing one for the continuation of charitable
+work. This is why I located you.
+
+My guess about you may not be accurate because I came across your
+contact at the humanitarian calendar event of the year but I believe
+in God who divinely directed me to you for this solemn proposal of
+charitable work.
+
+Therefore I wholeheartedly wish to bequeath my fortune to you as a
+God-fearing person for the continuation of charitable work anywhere
+around the world.
+
+I shall be going in for a surgery operations soonest and desire this
+money to be transferred to you as I do not wish to leave this money in
+the bank because bankers might misuse it for their own interest after
+my death.
+
+As soon as I receive your quick reply assuring me that you will
+utilize the money as I instructed you for the benefit of the less
+privilege, I shall give you more details and also instruct my bank to
+release the money to you for the charity project. I hope you receive
+this mail in good health.
+
+Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
+know what will be my situation in next minute,
+
+I am waiting for your reply.
+
+Yours sincerely,
+Mrs Elizabet Glenn.
