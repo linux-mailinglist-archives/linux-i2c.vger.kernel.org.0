@@ -2,161 +2,155 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4D133D4A3
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Mar 2021 14:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5D233D9C7
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Mar 2021 17:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbhCPNOk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 Mar 2021 09:14:40 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:13945 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbhCPNOT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Mar 2021 09:14:19 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4F0DH05m6xzjVkM;
-        Tue, 16 Mar 2021 21:12:44 +0800 (CST)
-Received: from [127.0.0.1] (10.69.38.196) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.498.0; Tue, 16 Mar 2021
- 21:14:08 +0800
-Subject: Re: [Linuxarm] [PATCH v2 1/3] i2c: core: add managed function for
- adding i2c adapters
-To:     "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
-        yangyicong <yangyicong@huawei.com>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-CC:     "linuxarm@openeuler.org" <linuxarm@openeuler.org>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>
-References: <1615296137-14558-1-git-send-email-yangyicong@hisilicon.com>
- <1615296137-14558-2-git-send-email-yangyicong@hisilicon.com>
- <8369a924a36b4a16873cacff5177677f@hisilicon.com>
-From:   Yicong Yang <yangyicong@hisilicon.com>
-Message-ID: <cfc327b9-7b8e-7946-0eae-c3e2e54c6772@hisilicon.com>
-Date:   Tue, 16 Mar 2021 21:14:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S237084AbhCPQsz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Mar 2021 12:48:55 -0400
+Received: from de-out1.bosch-org.com ([139.15.230.186]:55278 "EHLO
+        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236835AbhCPQst (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Mar 2021 12:48:49 -0400
+Received: from fe0vm1649.rbesz01.com (lb41g3-ha-dmz-psi-sl1-mailout.fe.ssn.bosch.com [139.15.230.188])
+        by fe0vms0186.rbdmz01.com (Postfix) with ESMTPS id 4F0K4H17tKz1XLFjP;
+        Tue, 16 Mar 2021 17:48:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=de.bosch.com;
+        s=key3-intmail; t=1615913327;
+        bh=fP74M6HwZDCum3+vzeaerJPkseKxvj4gZV75mefECbo=; l=10;
+        h=From:Subject:From:Reply-To:Sender;
+        b=ZeLKWHlnJJ+gB39tx2cNTI6+V7uo1LisSbu6pDa0ie7dq38NEAFEfD6+irZRD+PS5
+         0PaeUshEXH/QCTnMwteEZ5ez7K/mlWbKEtcZBg17WohLhnwVuJkcqnFug6xD1cJ2py
+         W3uM8TjoUCo+BlUCuFCOMiesLe5OM3FSMX2WXcOU=
+Received: from fe0vm7918.rbesz01.com (unknown [10.58.172.176])
+        by fe0vm1649.rbesz01.com (Postfix) with ESMTPS id 4F0K4H0q36z1bh;
+        Tue, 16 Mar 2021 17:48:47 +0100 (CET)
+X-AuditID: 0a3aad10-e8dff7000000444e-8a-6050e16f62e3
+Received: from fe0vm1652.rbesz01.com ( [10.58.173.29])
+        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by fe0vm7918.rbesz01.com (SMG Outbound) with SMTP id 2D.B5.17486.F61E0506; Tue, 16 Mar 2021 17:48:47 +0100 (CET)
+Received: from FE-HUB2000.de.bosch.com (fe-hub2000.de.bosch.com [10.4.103.109])
+        by fe0vm1652.rbesz01.com (Postfix) with ESMTPS id 4F0K4G71sczV19;
+        Tue, 16 Mar 2021 17:48:46 +0100 (CET)
+Received: from luchador.grb-fir.grb.de.bosch.com (10.19.187.97) by
+ FE-HUB2000.de.bosch.com (10.4.103.109) with Microsoft SMTP Server id
+ 15.1.2176.2; Tue, 16 Mar 2021 17:48:46 +0100
+From:   Mark Jonas <mark.jonas@de.bosch.com>
+To:     Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <Adam.Thomson.Opensource@diasemi.com>,
+        <stwiss.opensource@diasemi.com>, <marek.vasut@gmail.com>,
+        <tingquan.ruan@cn.bosch.com>, <hubert.streidl@de.bosch.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Mark Jonas <mark.jonas@de.bosch.com>
+Subject: [PATCH v6 1/1] mfd: da9063: Support SMBus and I2C mode
+Date:   Tue, 16 Mar 2021 17:22:37 +0100
+Message-ID: <20210316162237.877436-1-mark.jonas@de.bosch.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <8369a924a36b4a16873cacff5177677f@hisilicon.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.38.196]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrELMWRmVeSWpSXmKPExsXCZbVWVjf/YUCCwaXtzBZL3y9ltrj/9Sij
+        RcffL4wWl3fNYbO4+ns9i8Xe1ovMFnf3z2V0YPdY8UnfY9OqTjaPO9f2sHl83iQXwBLFZZOS
+        mpNZllqkb5fAlXFiWi9LwXGJir71DUwNjL0iXYycHBICJhJ3J29j6mLk4hASmM4ksfdPCwuE
+        s5tRYuaP54wgVUICOxglDv5RA7HZBLQkbp7YwQxiiwhES7R8PQHWzSywiknizqpd7CAJYQF7
+        ieZLE8CaWQRUJZZ+XQjWwCtgKzH34hE2iNXyEjMvfWeHiAtKnJz5hAXEZgaKN2+dzQxhS0gc
+        fPGCeQIj3ywkZbOQlM1CUraAkXkVo2haqkFZrrmloYVeUVJqcZWBoV5yfu4mRkiwAn1yu/uD
+        3iFGJg7GQ4wSHMxKIrymeQEJQrwpiZVVqUX58UWlOanFhxilOViUxHlVeDbGCQmkJ5akZqem
+        FqQWwWSZODilGpgSmbnerA/e7nrmUR132a/qN4tfun06/mOd0E9Og10xEqdNFt9Mvbk/5Ei8
+        f8ZD30cdig4M3WY+pQcKNK6tCC6YPyMvMtzK4vOHN/8d2a1SXx9xqez3zq75IGqwj+tKfpZ4
+        SnTRKdan6e3CC8s1NpoG2834/Cnvz1T24FgBrkWdPlvm+zFfmj+FwWTtt+WRjBcP7vLIt3us
+        8erSjrStKzUOL5pz4HHZlpU3SyJ+B7P0m6Vvc68Tn7X8X/ptJa/XZ6bdu6r3reF0VI8ko3mN
+        bR9D0Wv1kg9bRBfwFIV2pK3bU3NB8E7soT/Xd5o2HJysOl9/XcNkDeeJQd+yxVP1+T1yD8s2
+        x+7sdX3RKb7Ds16JpTgj0VCLuag4EQCdmo4VxQIAAA==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2021/3/16 16:56, Song Bao Hua (Barry Song) wrote:
-> 
-> 
->> -----Original Message-----
->> From: Yicong Yang [mailto:yangyicong@hisilicon.com]
->> Sent: Wednesday, March 10, 2021 2:22 AM
->> To: wsa@kernel.org; linux-i2c@vger.kernel.org
->> Cc: linuxarm@openeuler.org; Zengtao (B) <prime.zeng@hisilicon.com>;
->> yangyicong <yangyicong@huawei.com>
->> Subject: [Linuxarm] [PATCH v2 1/3] i2c: core: add managed function for adding
->> i2c adapters
->>
->> Some I2C controller drivers will only unregister the I2C
->> adapter in their .remove() callback, which can be done
->> by simply using a managed variant to add the I2C adapter.
->>
->> So add the managed functions for adding the I2C adapter.
-> 
-> Sounds like a very useful wrapper. We are able to remove
-> some  "remove" callbacks afterwards.
-> We have some similar wrappers like devm_hwrng_register
-> which is always helpful.
+From: Hubert Streidl <hubert.streidl@de.bosch.com>
 
-devm_* are widely used for helping managing the resources
-and simplify the driver in other subsystems, so i think
-i2c core will also benefit from this. :)
-thanks for looking into this patch.
+By default the PMIC DA9063 2-wire interface is SMBus compliant. This
+means the PMIC will automatically reset the interface when the clock
+signal ceases for more than the SMBus timeout of 35 ms.
 
-Regards,
-Yicong
+If the I2C driver / device is not capable of creating atomic I2C
+transactions, a context change can cause a ceasing of the clock signal.
+This can happen if for example a real-time thread is scheduled. Then
+the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
+a write message could end up in the wrong register. This could cause
+unpredictable system behavior.
 
-> 
->>
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->> ---
->>  drivers/i2c/i2c-core-base.c | 39 +++++++++++++++++++++++++++++++++++++++
->>  include/linux/i2c.h         |  1 +
->>  2 files changed, 40 insertions(+)
->>
->> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
->> index 63ebf72..61486dc 100644
->> --- a/drivers/i2c/i2c-core-base.c
->> +++ b/drivers/i2c/i2c-core-base.c
->> @@ -1550,6 +1550,38 @@ int i2c_add_adapter(struct i2c_adapter *adapter)
->>  }
->>  EXPORT_SYMBOL(i2c_add_adapter);
->>
->> +static void devm_i2c_del_adapter(struct device *dev, void *ptr);
->> +
->> +/**
->> + * devm_i2c_add_adapter - device-managed variant of i2c_add_adapter()
->> + * @dev: managing device for adding this I2C adapter
->> + * @adapter: the adapter to add
->> + * Context: can sleep
->> + *
->> + * Add adapter with dynamic bus number, same with i2c_add_adapter()
->> + * but the adapter will be auto deleted on driver detach.
->> + */
->> +int devm_i2c_add_adapter(struct device *dev, struct i2c_adapter *adapter)
->> +{
->> +	struct i2c_adapter **ptr;
->> +	int ret;
->> +
->> +	ptr = devres_alloc(devm_i2c_del_adapter, sizeof(*ptr), GFP_KERNEL);
->> +	if (!ptr)
->> +		return -ENOMEM;
->> +
->> +	ret = i2c_add_adapter(adapter);
->> +	if (!ret) {
->> +		*ptr = adapter;
->> +		devres_add(dev, ptr);
->> +	} else {
->> +		devres_free(ptr);
->> +	}
->> +
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL(devm_i2c_add_adapter);
->> +
->>  /**
->>   * i2c_add_numbered_adapter - declare i2c adapter, use static bus number
->>   * @adap: the adapter to register (with adap->nr initialized)
->> @@ -1703,6 +1735,13 @@ void i2c_del_adapter(struct i2c_adapter *adap)
->>  }
->>  EXPORT_SYMBOL(i2c_del_adapter);
->>
->> +static void devm_i2c_del_adapter(struct device *dev, void *ptr)
->> +{
->> +	struct i2c_adapter *adapter = *((struct i2c_adapter **)ptr);
->> +
->> +	i2c_del_adapter(adapter);
->> +}
->> +
->>  static void i2c_parse_timing(struct device *dev, char *prop_name, u32
->> *cur_val_p,
->>  			    u32 def_val, bool use_def)
->>  {
->> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
->> index 5662265..10bd0b0 100644
->> --- a/include/linux/i2c.h
->> +++ b/include/linux/i2c.h
->> @@ -844,6 +844,7 @@ static inline void i2c_mark_adapter_resumed(struct
->> i2c_adapter *adap)
->>   */
->>  #if IS_ENABLED(CONFIG_I2C)
->>  int i2c_add_adapter(struct i2c_adapter *adap);
->> +int devm_i2c_add_adapter(struct device *dev, struct i2c_adapter *adapter);
->>  void i2c_del_adapter(struct i2c_adapter *adap);
->>  int i2c_add_numbered_adapter(struct i2c_adapter *adap);
->>
->> --
->> 2.8.1
-> 
-> Thanks
-> Barry
-> 
+The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
+interface. This mode does not reset the interface when the clock
+signal ceases. Thus the problem depicted above does not occur.
+
+This patch tests for the bus functionality "I2C_FUNC_I2C". It can
+reasonably be assumed that the bus cannot obey SMBus timings if
+this functionality is set. SMBus commands most probably are emulated
+in this case which is prone to the latency issue described above.
+
+This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
+otherwise keeps the default SMBus mode.
+
+Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
+Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
+---
+Changes in v6:
+  - Fixed checkpatch check 'unaligned broken line'.
+
+Changes in v5:
+  - Restructured according to feedback by Lee Jones.
+
+Changes in v4:
+  - Remove logging of selected 2-wire bus mode.
+
+Changes in v3:
+  - busmode now contains the correct bit DA9063_TWOWIRE_TO
+
+Changes in v2:
+  - Implement proposal by Adam Thomson and Wolfram Sang to check for
+    functionality I2C_FUNC_I2C instead of introducing a new DT property.
+
+ drivers/mfd/da9063-i2c.c             | 10 ++++++++++
+ include/linux/mfd/da9063/registers.h |  3 +++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/drivers/mfd/da9063-i2c.c b/drivers/mfd/da9063-i2c.c
+index 3781d0bb7786..783a14af18e2 100644
+--- a/drivers/mfd/da9063-i2c.c
++++ b/drivers/mfd/da9063-i2c.c
+@@ -442,6 +442,16 @@ static int da9063_i2c_probe(struct i2c_client *i2c,
+ 		return ret;
+ 	}
+ 
++	/* If SMBus is not available and only I2C is possible, enter I2C mode */
++	if (i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C)) {
++		ret = regmap_clear_bits(da9063->regmap, DA9063_REG_CONFIG_J,
++					DA9063_TWOWIRE_TO);
++		if (ret < 0) {
++			dev_err(da9063->dev, "Failed to set Two-Wire Bus Mode.\n");
++			return -EIO;
++		}
++	}
++
+ 	return da9063_device_init(da9063, i2c->irq);
+ }
+ 
+diff --git a/include/linux/mfd/da9063/registers.h b/include/linux/mfd/da9063/registers.h
+index 1dbabf1b3cb8..6e0f66a2e727 100644
+--- a/include/linux/mfd/da9063/registers.h
++++ b/include/linux/mfd/da9063/registers.h
+@@ -1037,6 +1037,9 @@
+ #define		DA9063_NONKEY_PIN_AUTODOWN	0x02
+ #define		DA9063_NONKEY_PIN_AUTOFLPRT	0x03
+ 
++/* DA9063_REG_CONFIG_J (addr=0x10F) */
++#define DA9063_TWOWIRE_TO			0x40
++
+ /* DA9063_REG_MON_REG_5 (addr=0x116) */
+ #define DA9063_MON_A8_IDX_MASK			0x07
+ #define		DA9063_MON_A8_IDX_NONE		0x00
+-- 
+2.25.1
 
