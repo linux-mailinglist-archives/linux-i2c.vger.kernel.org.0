@@ -2,480 +2,150 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7945533CB86
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Mar 2021 03:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEAB33CE8A
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Mar 2021 08:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234627AbhCPCfg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Mar 2021 22:35:36 -0400
-Received: from mga02.intel.com ([134.134.136.20]:52807 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234652AbhCPCfY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 15 Mar 2021 22:35:24 -0400
-IronPort-SDR: mjkOiWKJ2B4KoMQh+I7IoiaJLpPdoY5PYLbnimIpt57ID23tiYEXlSExez724i1JSKLlnsxT5t
- S3UnkBKRyZeg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9924"; a="176318880"
-X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
-   d="scan'208";a="176318880"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2021 19:35:23 -0700
-IronPort-SDR: AG6ELaeW7JwdHjGTc5vpKClQ/TSKopctfFMf+z3TemZYPd75YT0IpA+Y7OsDHh+MI4TgSdAOfJ
- /bQlOnctfBEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,251,1610438400"; 
-   d="scan'208";a="378713047"
-Received: from jiedeng-optiplex-7050.sh.intel.com ([10.239.154.104])
-  by fmsmga007.fm.intel.com with ESMTP; 15 Mar 2021 19:35:18 -0700
-From:   Jie Deng <jie.deng@intel.com>
-To:     linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     mst@redhat.com, wsa@kernel.org, jasowang@redhat.com,
-        wsa+renesas@sang-engineering.com,
-        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
-        arnd@arndb.de, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
-        rppt@kernel.org, jie.deng@intel.com, loic.poulain@linaro.org,
-        tali.perry1@gmail.com, u.kleine-koenig@pengutronix.de,
-        bjorn.andersson@linaro.org, yu1.wang@intel.com,
-        shuo.a.liu@intel.com, viresh.kumar@linaro.org, stefanha@redhat.com,
-        pbonzini@redhat.com
-Subject: [PATCH v8] i2c: virtio: add a virtio i2c frontend driver
-Date:   Tue, 16 Mar 2021 18:35:35 +0800
-Message-Id: <c193b92d8d22ba439bb1b260d26d4b76f57d4840.1615889867.git.jie.deng@intel.com>
-X-Mailer: git-send-email 2.7.4
+        id S233173AbhCPHWR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Mar 2021 03:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229883AbhCPHVr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Mar 2021 03:21:47 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4805BC06174A
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Mar 2021 00:21:47 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id p19so561939wmq.1
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Mar 2021 00:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=3PC4L/ElKOxjRdktmch4SpZkUtmQpCd/z4zTr/LSIf0=;
+        b=dmH4uVYmL9aJZFOiQxa1fPH8t4BIGG879xw4oi2VAdngKyAF4rV8HldmACFGuWZrTz
+         Ok6tcbNiiEANHgyYotM2KoASgWrtFjhlc+InLx/v93IwDNZhRP3Ru2gVC7hNhG58A/Ah
+         peB46rKLF0udJrXH56zJrU16OqFtYDi4awYmDAt6VfJdgf00n+Jkyz77OsIi29QGdn3S
+         ofzfNuHXwIo1jNxqytt8nNs2HlejZJK4DuwVCNNH6lVm/5BqpqSDLY+qZFNKd+1Ail7X
+         yXVy9uGmrXyy8n8KbamcpEJjkN0xnniPc2VHwsRpWsUgUCoa4hJKA3ytpd00kq6Ts3RW
+         NjVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=3PC4L/ElKOxjRdktmch4SpZkUtmQpCd/z4zTr/LSIf0=;
+        b=XNUfyKh9lG+cmBoe9fEoMTVT8UjyiqubE0/LE2Jvec9SpSwEUPxPk688lt/4Um/Fyy
+         fxp5bHX5uiwPN0GkcCfMQeAyAx7qWJnbcUX7acf7Q0AIya/WBv/e2SPNYu/CufDdQhPw
+         Uqmy0YHZPTOH7KlbJj2AE2WvxdXHQIdiRdpiMqaQrFWBop4jvJjy9vpC7NJUZa4KFEMk
+         /tMRs4NNqB/kgJE+Ko3jjZwGP0TG6hnHf1Frhzgq0HQ3xaDWT8QtDvBVMH7B/TDVOE4n
+         pNoj0EkI172wpYfBl0gmRkTkpkKmEs7mGgXZz7Xw/TjQ+8+ZO6PrX8ZPkbJVWJi61JHp
+         dZ1g==
+X-Gm-Message-State: AOAM531YKEIrh1rx7M1A/JR+hF+zivssx8bMhEpjSBlTjSODkeOsgpgg
+        fp06aYP/61/bHZHHL/ahTihdupn3uoReSA==
+X-Google-Smtp-Source: ABdhPJz5cQmfQ4Ehxs4LnAG/W0t/jtMCZLitLYsh7qfZESNmRG8HctRVeDDGKCMarxLEo3bvJfb6cA==
+X-Received: by 2002:a05:600c:290a:: with SMTP id i10mr3240122wmd.91.1615879306045;
+        Tue, 16 Mar 2021 00:21:46 -0700 (PDT)
+Received: from dell ([91.110.221.243])
+        by smtp.gmail.com with ESMTPSA id t8sm20888097wrr.10.2021.03.16.00.21.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 00:21:45 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 07:21:43 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Mark Jonas <mark.jonas@de.bosch.com>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Adam.Thomson.Opensource@diasemi.com, stwiss.opensource@diasemi.com,
+        marek.vasut@gmail.com, tingquan.ruan@cn.bosch.com,
+        hubert.streidl@de.bosch.com, Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH v5] mfd: da9063: Support SMBus and I2C mode
+Message-ID: <20210316072143.GA701493@dell>
+References: <20210315160903.799426-1-mark.jonas@de.bosch.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210315160903.799426-1-mark.jonas@de.bosch.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add an I2C bus driver for virtio para-virtualization.
+On Mon, 15 Mar 2021, Mark Jonas wrote:
 
-The controller can be emulated by the backend driver in
-any device model software by following the virtio protocol.
+> From: Hubert Streidl <hubert.streidl@de.bosch.com>
+> 
+> By default the PMIC DA9063 2-wire interface is SMBus compliant. This
+> means the PMIC will automatically reset the interface when the clock
+> signal ceases for more than the SMBus timeout of 35 ms.
+> 
+> If the I2C driver / device is not capable of creating atomic I2C
+> transactions, a context change can cause a ceasing of the clock signal.
+> This can happen if for example a real-time thread is scheduled. Then
+> the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
+> a write message could end up in the wrong register. This could cause
+> unpredictable system behavior.
+> 
+> The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
+> interface. This mode does not reset the interface when the clock
+> signal ceases. Thus the problem depicted above does not occur.
+> 
+> This patch tests for the bus functionality "I2C_FUNC_I2C". It can
+> reasonably be assumed that the bus cannot obey SMBus timings if
+> this functionality is set. SMBus commands most probably are emulated
+> in this case which is prone to the latency issue described above.
+> 
+> This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
+> otherwise keeps the default SMBus mode.
+> 
+> Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
+> Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
+> ---
+>  drivers/mfd/da9063-i2c.c             | 10 ++++++++++
+>  include/linux/mfd/da9063/registers.h |  3 +++
+>  2 files changed, 13 insertions(+)
 
-The device specification can be found on
-https://lists.oasis-open.org/archives/virtio-comment/202101/msg00008.html.
+Code looks good to me now, thanks.
 
-By following the specification, people may implement different
-backend drivers to emulate different controllers according to
-their needs.
+However, this doesn't look like it would pass checkpatch.
 
-Co-developed-by: Conghui Chen <conghui.chen@intel.com>
-Signed-off-by: Conghui Chen <conghui.chen@intel.com>
-Signed-off-by: Jie Deng <jie.deng@intel.com>
----
-Changes in v8:
-	- Make virtio_i2c.adap a pointer.
-	- Mark members in virtio_i2c_req with ____cacheline_aligned.
- 
-Changes in v7:
-	- Remove unused headers.
-	- Update Makefile and Kconfig.
-	- Add the cleanup after completing reqs.
-	- Avoid memcpy for data marked with I2C_M_DMA_SAFE.
-	- Fix something reported by kernel test robot.
+Have you tried to build with W=1 and checkpatch?
 
-Changes in v6:
-	- Move struct virtio_i2c_req into the driver.
-	- Use only one buf in struct virtio_i2c_req.
+> diff --git a/drivers/mfd/da9063-i2c.c b/drivers/mfd/da9063-i2c.c
+> index 3781d0bb7786..e8a022e697c5 100644
+> --- a/drivers/mfd/da9063-i2c.c
+> +++ b/drivers/mfd/da9063-i2c.c
+> @@ -442,6 +442,16 @@ static int da9063_i2c_probe(struct i2c_client *i2c,
+>  		return ret;
+>  	}
+>  
+> +	/* If SMBus is not available and only I2C is possible, enter I2C mode */
+> +	if (i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C)) {
+> +		ret = regmap_clear_bits(da9063->regmap, DA9063_REG_CONFIG_J,
+> +			  DA9063_TWOWIRE_TO);
+> +		if (ret < 0) {
+> +			dev_err(da9063->dev, "Failed to set Two-Wire Bus Mode.\n");
+> +			return -EIO;
+> +		}
+> +	}
+> +
+>  	return da9063_device_init(da9063, i2c->irq);
+>  }
+>  
+> diff --git a/include/linux/mfd/da9063/registers.h b/include/linux/mfd/da9063/registers.h
+> index 1dbabf1b3cb8..6e0f66a2e727 100644
+> --- a/include/linux/mfd/da9063/registers.h
+> +++ b/include/linux/mfd/da9063/registers.h
+> @@ -1037,6 +1037,9 @@
+>  #define		DA9063_NONKEY_PIN_AUTODOWN	0x02
+>  #define		DA9063_NONKEY_PIN_AUTOFLPRT	0x03
+>  
+> +/* DA9063_REG_CONFIG_J (addr=0x10F) */
+> +#define DA9063_TWOWIRE_TO			0x40
+> +
+>  /* DA9063_REG_MON_REG_5 (addr=0x116) */
+>  #define DA9063_MON_A8_IDX_MASK			0x07
+>  #define		DA9063_MON_A8_IDX_NONE		0x00
 
-Changes in v5:
-	- The first version based on the acked specification.
-
- drivers/i2c/busses/Kconfig      |  11 ++
- drivers/i2c/busses/Makefile     |   3 +
- drivers/i2c/busses/i2c-virtio.c | 289 ++++++++++++++++++++++++++++++++++++++++
- include/uapi/linux/virtio_i2c.h |  40 ++++++
- include/uapi/linux/virtio_ids.h |   1 +
- 5 files changed, 344 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-virtio.c
- create mode 100644 include/uapi/linux/virtio_i2c.h
-
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 05ebf75..cb8d0d8 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -21,6 +21,17 @@ config I2C_ALI1535
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-ali1535.
- 
-+config I2C_VIRTIO
-+	tristate "Virtio I2C Adapter"
-+	select VIRTIO
-+	help
-+	  If you say yes to this option, support will be included for the virtio
-+	  I2C adapter driver. The hardware can be emulated by any device model
-+	  software according to the virtio protocol.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called i2c-virtio.
-+
- config I2C_ALI1563
- 	tristate "ALI 1563"
- 	depends on PCI
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 615f35e..efdd3f3 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -145,4 +145,7 @@ obj-$(CONFIG_I2C_XGENE_SLIMPRO) += i2c-xgene-slimpro.o
- obj-$(CONFIG_SCx200_ACB)	+= scx200_acb.o
- obj-$(CONFIG_I2C_FSI)		+= i2c-fsi.o
- 
-+# VIRTIO I2C host controller driver
-+obj-$(CONFIG_I2C_VIRTIO)	+= i2c-virtio.o
-+
- ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
-diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
-new file mode 100644
-index 0000000..7a54bac
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-virtio.c
-@@ -0,0 +1,289 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Virtio I2C Bus Driver
-+ *
-+ * The Virtio I2C Specification:
-+ * https://raw.githubusercontent.com/oasis-tcs/virtio-spec/master/virtio-i2c.tex
-+ *
-+ * Copyright (c) 2021 Intel Corporation. All rights reserved.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/completion.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/virtio.h>
-+#include <linux/virtio_ids.h>
-+#include <linux/virtio_config.h>
-+#include <linux/virtio_i2c.h>
-+
-+/**
-+ * struct virtio_i2c - virtio I2C data
-+ * @vdev: virtio device for this controller
-+ * @completion: completion of virtio I2C message
-+ * @adap: I2C adapter for this controller
-+ * @i2c_lock: lock for virtqueue processing
-+ * @vq: the virtio virtqueue for communication
-+ */
-+struct virtio_i2c {
-+	struct virtio_device *vdev;
-+	struct completion completion;
-+	struct i2c_adapter *adap;
-+	struct mutex lock;
-+	struct virtqueue *vq;
-+};
-+
-+/**
-+ * struct virtio_i2c_req - the virtio I2C request structure
-+ * @out_hdr: the OUT header of the virtio I2C message
-+ * @buf: the buffer into which data is read, or from which it's written
-+ * @in_hdr: the IN header of the virtio I2C message
-+ */
-+struct virtio_i2c_req {
-+	struct virtio_i2c_out_hdr out_hdr	____cacheline_aligned;
-+	uint8_t *buf				____cacheline_aligned;
-+	struct virtio_i2c_in_hdr in_hdr		____cacheline_aligned;
-+};
-+
-+static void virtio_i2c_msg_done(struct virtqueue *vq)
-+{
-+	struct virtio_i2c *vi = vq->vdev->priv;
-+
-+	complete(&vi->completion);
-+}
-+
-+static int virtio_i2c_send_reqs(struct virtqueue *vq,
-+				struct virtio_i2c_req *reqs,
-+				struct i2c_msg *msgs, int nr)
-+{
-+	struct scatterlist *sgs[3], out_hdr, msg_buf, in_hdr;
-+	int i, outcnt, incnt, err = 0;
-+
-+	for (i = 0; i < nr; i++) {
-+		if (!msgs[i].len)
-+			break;
-+
-+		/*
-+		 * Only 7-bit mode supported for this moment. For the address format,
-+		 * Please check the Virtio I2C Specification.
-+		 */
-+		reqs[i].out_hdr.addr = cpu_to_le16(msgs[i].addr << 1);
-+
-+		if (i != nr - 1)
-+			reqs[i].out_hdr.flags = cpu_to_le32(VIRTIO_I2C_FLAGS_FAIL_NEXT);
-+
-+		outcnt = incnt = 0;
-+		sg_init_one(&out_hdr, &reqs[i].out_hdr, sizeof(reqs[i].out_hdr));
-+		sgs[outcnt++] = &out_hdr;
-+
-+		reqs[i].buf = i2c_get_dma_safe_msg_buf(&msgs[i], 1);
-+		if (!reqs[i].buf)
-+			break;
-+
-+		sg_init_one(&msg_buf, reqs[i].buf, msgs[i].len);
-+
-+		if (msgs[i].flags & I2C_M_RD)
-+			sgs[outcnt + incnt++] = &msg_buf;
-+		else
-+			sgs[outcnt++] = &msg_buf;
-+
-+		sg_init_one(&in_hdr, &reqs[i].in_hdr, sizeof(reqs[i].in_hdr));
-+		sgs[outcnt + incnt++] = &in_hdr;
-+
-+		err = virtqueue_add_sgs(vq, sgs, outcnt, incnt, &reqs[i], GFP_KERNEL);
-+		if (err < 0) {
-+			pr_err("failed to add msg[%d] to virtqueue.\n", i);
-+			i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], false);
-+			break;
-+		}
-+	}
-+
-+	return i;
-+}
-+
-+static int virtio_i2c_complete_reqs(struct virtqueue *vq,
-+					struct virtio_i2c_req *reqs,
-+					struct i2c_msg *msgs, int nr)
-+{
-+	struct virtio_i2c_req *req;
-+	unsigned int len;
-+	int i, j;
-+
-+	for (i = 0; i < nr; i++) {
-+		req = virtqueue_get_buf(vq, &len);
-+		if (!(req && req == &reqs[i])) {
-+			pr_err("msg[%d]: addr=0x%x is out of order.\n", i, msgs[i].addr);
-+			break;
-+		}
-+
-+		if (req->in_hdr.status != VIRTIO_I2C_MSG_OK) {
-+			pr_err("msg[%d]: addr=0x%x backend error.\n", i, msgs[i].addr);
-+			break;
-+		}
-+
-+		i2c_put_dma_safe_msg_buf(req->buf, &msgs[i], true);
-+	}
-+
-+	/*
-+	 * Detach all the used buffers from the vq and
-+	 * Release unused DMA safe buffer if any.
-+	 */
-+	for (j = i; j < nr; j++) {
-+		req = virtqueue_get_buf(vq, &len);
-+		if (req)
-+			i2c_put_dma_safe_msg_buf(req->buf, &msgs[j], false);
-+	}
-+
-+	return i;
-+}
-+
-+static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
-+{
-+	struct virtio_i2c *vi = i2c_get_adapdata(adap);
-+	struct virtqueue *vq = vi->vq;
-+	struct virtio_i2c_req *reqs;
-+	unsigned long time_left;
-+	int ret, nr;
-+
-+	reqs = kcalloc(num, sizeof(*reqs), GFP_KERNEL);
-+	if (!reqs)
-+		return -ENOMEM;
-+
-+	mutex_lock(&vi->lock);
-+
-+	ret = virtio_i2c_send_reqs(vq, reqs, msgs, num);
-+	if (ret == 0)
-+		goto err_unlock_free;
-+
-+	nr = ret;
-+	reinit_completion(&vi->completion);
-+	virtqueue_kick(vq);
-+
-+	time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
-+	if (!time_left) {
-+		dev_err(&adap->dev, "virtio i2c backend timeout.\n");
-+		ret = -ETIMEDOUT;
-+		goto err_unlock_free;
-+	}
-+
-+	ret = virtio_i2c_complete_reqs(vq, reqs, msgs, nr);
-+
-+err_unlock_free:
-+	mutex_unlock(&vi->lock);
-+	kfree(reqs);
-+	return ret;
-+}
-+
-+static void virtio_i2c_del_vqs(struct virtio_device *vdev)
-+{
-+	vdev->config->reset(vdev);
-+	vdev->config->del_vqs(vdev);
-+}
-+
-+static int virtio_i2c_setup_vqs(struct virtio_i2c *vi)
-+{
-+	struct virtio_device *vdev = vi->vdev;
-+
-+	vi->vq = virtio_find_single_vq(vdev, virtio_i2c_msg_done, "msg");
-+	return PTR_ERR_OR_ZERO(vi->vq);
-+}
-+
-+static u32 virtio_i2c_func(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+}
-+
-+static struct i2c_algorithm virtio_algorithm = {
-+	.master_xfer = virtio_i2c_xfer,
-+	.functionality = virtio_i2c_func,
-+};
-+
-+static struct i2c_adapter virtio_adapter = {
-+	.owner = THIS_MODULE,
-+	.name = "Virtio I2C Adapter",
-+	.class = I2C_CLASS_DEPRECATED,
-+	.algo = &virtio_algorithm,
-+};
-+
-+static int virtio_i2c_probe(struct virtio_device *vdev)
-+{
-+	struct device *pdev = vdev->dev.parent;
-+	struct virtio_i2c *vi;
-+	int ret;
-+
-+	vi = devm_kzalloc(&vdev->dev, sizeof(*vi), GFP_KERNEL);
-+	if (!vi)
-+		return -ENOMEM;
-+
-+	vdev->priv = vi;
-+	vi->vdev = vdev;
-+
-+	mutex_init(&vi->lock);
-+	init_completion(&vi->completion);
-+
-+	ret = virtio_i2c_setup_vqs(vi);
-+	if (ret)
-+		return ret;
-+
-+	vi->adap = &virtio_adapter;
-+	i2c_set_adapdata(vi->adap, vi);
-+	vi->adap->dev.parent = &vdev->dev;
-+
-+	/* Setup ACPI node for controlled devices which will be probed through ACPI */
-+	ACPI_COMPANION_SET(&vi->adap->dev, ACPI_COMPANION(pdev));
-+	vi->adap->timeout = HZ / 10;
-+
-+	ret = i2c_add_adapter(vi->adap);
-+	if (ret) {
-+		virtio_i2c_del_vqs(vdev);
-+		dev_err(&vdev->dev, "failed to add virtio-i2c adapter.\n");
-+	}
-+
-+	return ret;
-+}
-+
-+static void virtio_i2c_remove(struct virtio_device *vdev)
-+{
-+	struct virtio_i2c *vi = vdev->priv;
-+
-+	i2c_del_adapter(vi->adap);
-+	virtio_i2c_del_vqs(vdev);
-+}
-+
-+static struct virtio_device_id id_table[] = {
-+	{ VIRTIO_ID_I2C_ADPTER, VIRTIO_DEV_ANY_ID },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(virtio, id_table);
-+
-+static int __maybe_unused virtio_i2c_freeze(struct virtio_device *vdev)
-+{
-+	virtio_i2c_del_vqs(vdev);
-+	return 0;
-+}
-+
-+static int __maybe_unused virtio_i2c_restore(struct virtio_device *vdev)
-+{
-+	return virtio_i2c_setup_vqs(vdev->priv);
-+}
-+
-+static struct virtio_driver virtio_i2c_driver = {
-+	.id_table	= id_table,
-+	.probe		= virtio_i2c_probe,
-+	.remove		= virtio_i2c_remove,
-+	.driver	= {
-+		.name	= "i2c_virtio",
-+	},
-+#ifdef CONFIG_PM_SLEEP
-+	.freeze = virtio_i2c_freeze,
-+	.restore = virtio_i2c_restore,
-+#endif
-+};
-+module_virtio_driver(virtio_i2c_driver);
-+
-+MODULE_AUTHOR("Jie Deng <jie.deng@intel.com>");
-+MODULE_AUTHOR("Conghui Chen <conghui.chen@intel.com>");
-+MODULE_DESCRIPTION("Virtio i2c bus driver");
-+MODULE_LICENSE("GPL");
-diff --git a/include/uapi/linux/virtio_i2c.h b/include/uapi/linux/virtio_i2c.h
-new file mode 100644
-index 0000000..bbcfb2c
---- /dev/null
-+++ b/include/uapi/linux/virtio_i2c.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
-+/*
-+ * Definitions for virtio I2C Adpter
-+ *
-+ * Copyright (c) 2021 Intel Corporation. All rights reserved.
-+ */
-+
-+#ifndef _UAPI_LINUX_VIRTIO_I2C_H
-+#define _UAPI_LINUX_VIRTIO_I2C_H
-+
-+#include <linux/types.h>
-+
-+/* The bit 0 of the @virtio_i2c_out_hdr.@flags, used to group the requests */
-+#define VIRTIO_I2C_FLAGS_FAIL_NEXT	0x00000001
-+
-+/**
-+ * struct virtio_i2c_out_hdr - the virtio I2C message OUT header
-+ * @addr: the controlled device address
-+ * @padding: used to pad to full dword
-+ * @flags: used for feature extensibility
-+ */
-+struct virtio_i2c_out_hdr {
-+	__le16 addr;
-+	__le16 padding;
-+	__le32 flags;
-+};
-+
-+/**
-+ * struct virtio_i2c_in_hdr - the virtio I2C message IN header
-+ * @status: the processing result from the backend
-+ */
-+struct virtio_i2c_in_hdr {
-+	__u8 status;
-+};
-+
-+/* The final status written by the device */
-+#define VIRTIO_I2C_MSG_OK	0
-+#define VIRTIO_I2C_MSG_ERR	1
-+
-+#endif /* _UAPI_LINUX_VIRTIO_I2C_H */
-diff --git a/include/uapi/linux/virtio_ids.h b/include/uapi/linux/virtio_ids.h
-index bc1c062..6ae32db 100644
---- a/include/uapi/linux/virtio_ids.h
-+++ b/include/uapi/linux/virtio_ids.h
-@@ -54,5 +54,6 @@
- #define VIRTIO_ID_FS			26 /* virtio filesystem */
- #define VIRTIO_ID_PMEM			27 /* virtio pmem */
- #define VIRTIO_ID_MAC80211_HWSIM	29 /* virtio mac80211-hwsim */
-+#define VIRTIO_ID_I2C_ADPTER		34 /* virtio i2c adpter */
- 
- #endif /* _LINUX_VIRTIO_IDS_H */
 -- 
-2.7.4
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
