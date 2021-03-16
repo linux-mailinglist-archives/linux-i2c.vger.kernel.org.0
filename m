@@ -2,115 +2,159 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 112EE33D02E
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Mar 2021 09:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC80133D131
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Mar 2021 10:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbhCPI4u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 Mar 2021 04:56:50 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:3479 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbhCPI4k (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Mar 2021 04:56:40 -0400
-Received: from DGGEMM404-HUB.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4F06YT4xNqzR9t6;
-        Tue, 16 Mar 2021 16:54:53 +0800 (CST)
-Received: from dggemm753-chm.china.huawei.com (10.1.198.59) by
- DGGEMM404-HUB.china.huawei.com (10.3.20.212) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Tue, 16 Mar 2021 16:56:36 +0800
-Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
- dggemm753-chm.china.huawei.com (10.1.198.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2106.2; Tue, 16 Mar 2021 16:56:37 +0800
-Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
- dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.2106.013;
- Tue, 16 Mar 2021 16:56:37 +0800
-From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-To:     yangyicong <yangyicong@huawei.com>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-CC:     "linuxarm@openeuler.org" <linuxarm@openeuler.org>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        yangyicong <yangyicong@huawei.com>
-Subject: RE: [Linuxarm]  [PATCH v2 1/3] i2c: core: add managed function for
- adding i2c adapters
-Thread-Topic: [Linuxarm]  [PATCH v2 1/3] i2c: core: add managed function for
- adding i2c adapters
-Thread-Index: AQHXFOevM6gfspJ8+EmcIJeYgz03daqGV8DQ
-Date:   Tue, 16 Mar 2021 08:56:36 +0000
-Message-ID: <8369a924a36b4a16873cacff5177677f@hisilicon.com>
-References: <1615296137-14558-1-git-send-email-yangyicong@hisilicon.com>
- <1615296137-14558-2-git-send-email-yangyicong@hisilicon.com>
-In-Reply-To: <1615296137-14558-2-git-send-email-yangyicong@hisilicon.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.202.32]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S233068AbhCPJy1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Mar 2021 05:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236395AbhCPJyH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Mar 2021 05:54:07 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD488C06174A
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Mar 2021 02:54:06 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id u16so10112920wrt.1
+        for <linux-i2c@vger.kernel.org>; Tue, 16 Mar 2021 02:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=YGgrY+UQz0yyfpooSgNBPEdgM8O/LnKtJy24CPMkDk4=;
+        b=J4hILAogY9NYJY2rQsjTFJ2g2+IXUJYSXzpUiwEn66hrnbJWGmq7soF/FqfWTaUdw/
+         LEHH9dvCE9vu6aT7VtNMzP+C520L81vILqWt2s7WS/GtDw0qIHakVrJ80gQgOP6AfuHW
+         Wj1h/CTcf4WANtB2q6vORaTHqiRoc0d+YP8+FcQ/hWOtjjCnAekHok0dL5FD03BFsn89
+         38OwQhPOSspZgy8XTqvaTa77XtrHmIX5A9SpqrYZ0yxMzM/Q104MW8VnhsouQq9Uh+we
+         uBxO1kbmaMDRFTke4e2aOCfjMOFh/yzUSHT5Ffxkq50aFKrx5XggpFOyCiCaHD8nXU0Q
+         4ENw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=YGgrY+UQz0yyfpooSgNBPEdgM8O/LnKtJy24CPMkDk4=;
+        b=ucvXFB4cxuNdnA2LWGUlEvU5QuEtHkz9xiWPJnhToNqI5H0vbBzfIrfZHTPQFuoOfg
+         6lDUkTv/tXzQIGil9CPWQtjx9o3kaXa25IWtzg3dfITUnpMl7EBjUbkq19ttXes1L0br
+         ZbVgFBIJc+WJeoqW7KuYwwGIU+v5M7yutRIaaBKeeuW7bOHoQhnLBb0AiF6Mfbwq215h
+         Hiq+aLtdCOy91bjG/nzKVLU7XdXzBGfsfjlx2US2ej0g5V192JrZAqwcncF9pdnJ2iu+
+         2MXZ80/jAnCAabJUFhlJ0nA8s6gppTWEtPjzkIhZEN/CDXpc7A5cWDG7pnCI/S553hLT
+         r7jA==
+X-Gm-Message-State: AOAM5328plf9omKPEu3GG1TnKLHxpwOKDVBW9r1NgNokm6ktwx46WaQG
+        7MbIV4c/76INObkNuNef/mVOIQ==
+X-Google-Smtp-Source: ABdhPJwOhbJWr/ukr1KQmlHy6R21fiPxX3G8mrMaAroA5wVQ4ry3KaakIEexLwXRpS1JXDhnOVLjgg==
+X-Received: by 2002:adf:eb0a:: with SMTP id s10mr4053098wrn.6.1615888445464;
+        Tue, 16 Mar 2021 02:54:05 -0700 (PDT)
+Received: from dell ([91.110.221.243])
+        by smtp.gmail.com with ESMTPSA id m11sm21847679wrz.40.2021.03.16.02.54.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 02:54:05 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 09:54:03 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "Adam.Thomson.Opensource@diasemi.com" 
+        <Adam.Thomson.Opensource@diasemi.com>,
+        "stwiss.opensource@diasemi.com" <stwiss.opensource@diasemi.com>,
+        "marek.vasut@gmail.com" <marek.vasut@gmail.com>,
+        "RUAN Tingquan (BT-FIR/ENG1-Zhu)" <Tingquan.Ruan@cn.bosch.com>,
+        "Streidl Hubert (BT-FIR/ENG1-Grb)" <Hubert.Streidl@de.bosch.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH v5] mfd: da9063: Support SMBus and I2C mode
+Message-ID: <20210316095403.GB701493@dell>
+References: <20210315160903.799426-1-mark.jonas@de.bosch.com>
+ <20210316072143.GA701493@dell>
+ <4dbc130e769547508be811e61a348255@de.bosch.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4dbc130e769547508be811e61a348255@de.bosch.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogWWljb25nIFlhbmcgW21h
-aWx0bzp5YW5neWljb25nQGhpc2lsaWNvbi5jb21dDQo+IFNlbnQ6IFdlZG5lc2RheSwgTWFyY2gg
-MTAsIDIwMjEgMjoyMiBBTQ0KPiBUbzogd3NhQGtlcm5lbC5vcmc7IGxpbnV4LWkyY0B2Z2VyLmtl
-cm5lbC5vcmcNCj4gQ2M6IGxpbnV4YXJtQG9wZW5ldWxlci5vcmc7IFplbmd0YW8gKEIpIDxwcmlt
-ZS56ZW5nQGhpc2lsaWNvbi5jb20+Ow0KPiB5YW5neWljb25nIDx5YW5neWljb25nQGh1YXdlaS5j
-b20+DQo+IFN1YmplY3Q6IFtMaW51eGFybV0gW1BBVENIIHYyIDEvM10gaTJjOiBjb3JlOiBhZGQg
-bWFuYWdlZCBmdW5jdGlvbiBmb3IgYWRkaW5nDQo+IGkyYyBhZGFwdGVycw0KPiANCj4gU29tZSBJ
-MkMgY29udHJvbGxlciBkcml2ZXJzIHdpbGwgb25seSB1bnJlZ2lzdGVyIHRoZSBJMkMNCj4gYWRh
-cHRlciBpbiB0aGVpciAucmVtb3ZlKCkgY2FsbGJhY2ssIHdoaWNoIGNhbiBiZSBkb25lDQo+IGJ5
-IHNpbXBseSB1c2luZyBhIG1hbmFnZWQgdmFyaWFudCB0byBhZGQgdGhlIEkyQyBhZGFwdGVyLg0K
-PiANCj4gU28gYWRkIHRoZSBtYW5hZ2VkIGZ1bmN0aW9ucyBmb3IgYWRkaW5nIHRoZSBJMkMgYWRh
-cHRlci4NCg0KU291bmRzIGxpa2UgYSB2ZXJ5IHVzZWZ1bCB3cmFwcGVyLiBXZSBhcmUgYWJsZSB0
-byByZW1vdmUNCnNvbWUgICJyZW1vdmUiIGNhbGxiYWNrcyBhZnRlcndhcmRzLg0KV2UgaGF2ZSBz
-b21lIHNpbWlsYXIgd3JhcHBlcnMgbGlrZSBkZXZtX2h3cm5nX3JlZ2lzdGVyDQp3aGljaCBpcyBh
-bHdheXMgaGVscGZ1bC4NCg0KPiANCj4gU2lnbmVkLW9mZi1ieTogWWljb25nIFlhbmcgPHlhbmd5
-aWNvbmdAaGlzaWxpY29uLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNl
-LmMgfCAzOSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gIGluY2x1
-ZGUvbGludXgvaTJjLmggICAgICAgICB8ICAxICsNCj4gIDIgZmlsZXMgY2hhbmdlZCwgNDAgaW5z
-ZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2Uu
-YyBiL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuYw0KPiBpbmRleCA2M2ViZjcyLi42MTQ4NmRj
-IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNlLmMNCj4gKysrIGIvZHJp
-dmVycy9pMmMvaTJjLWNvcmUtYmFzZS5jDQo+IEBAIC0xNTUwLDYgKzE1NTAsMzggQEAgaW50IGky
-Y19hZGRfYWRhcHRlcihzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXB0ZXIpDQo+ICB9DQo+ICBFWFBP
-UlRfU1lNQk9MKGkyY19hZGRfYWRhcHRlcik7DQo+IA0KPiArc3RhdGljIHZvaWQgZGV2bV9pMmNf
-ZGVsX2FkYXB0ZXIoc3RydWN0IGRldmljZSAqZGV2LCB2b2lkICpwdHIpOw0KPiArDQo+ICsvKioN
-Cj4gKyAqIGRldm1faTJjX2FkZF9hZGFwdGVyIC0gZGV2aWNlLW1hbmFnZWQgdmFyaWFudCBvZiBp
-MmNfYWRkX2FkYXB0ZXIoKQ0KPiArICogQGRldjogbWFuYWdpbmcgZGV2aWNlIGZvciBhZGRpbmcg
-dGhpcyBJMkMgYWRhcHRlcg0KPiArICogQGFkYXB0ZXI6IHRoZSBhZGFwdGVyIHRvIGFkZA0KPiAr
-ICogQ29udGV4dDogY2FuIHNsZWVwDQo+ICsgKg0KPiArICogQWRkIGFkYXB0ZXIgd2l0aCBkeW5h
-bWljIGJ1cyBudW1iZXIsIHNhbWUgd2l0aCBpMmNfYWRkX2FkYXB0ZXIoKQ0KPiArICogYnV0IHRo
-ZSBhZGFwdGVyIHdpbGwgYmUgYXV0byBkZWxldGVkIG9uIGRyaXZlciBkZXRhY2guDQo+ICsgKi8N
-Cj4gK2ludCBkZXZtX2kyY19hZGRfYWRhcHRlcihzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBp
-MmNfYWRhcHRlciAqYWRhcHRlcikNCj4gK3sNCj4gKwlzdHJ1Y3QgaTJjX2FkYXB0ZXIgKipwdHI7
-DQo+ICsJaW50IHJldDsNCj4gKw0KPiArCXB0ciA9IGRldnJlc19hbGxvYyhkZXZtX2kyY19kZWxf
-YWRhcHRlciwgc2l6ZW9mKCpwdHIpLCBHRlBfS0VSTkVMKTsNCj4gKwlpZiAoIXB0cikNCj4gKwkJ
-cmV0dXJuIC1FTk9NRU07DQo+ICsNCj4gKwlyZXQgPSBpMmNfYWRkX2FkYXB0ZXIoYWRhcHRlcik7
-DQo+ICsJaWYgKCFyZXQpIHsNCj4gKwkJKnB0ciA9IGFkYXB0ZXI7DQo+ICsJCWRldnJlc19hZGQo
-ZGV2LCBwdHIpOw0KPiArCX0gZWxzZSB7DQo+ICsJCWRldnJlc19mcmVlKHB0cik7DQo+ICsJfQ0K
-PiArDQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCj4gK0VYUE9SVF9TWU1CT0woZGV2bV9pMmNfYWRk
-X2FkYXB0ZXIpOw0KPiArDQo+ICAvKioNCj4gICAqIGkyY19hZGRfbnVtYmVyZWRfYWRhcHRlciAt
-IGRlY2xhcmUgaTJjIGFkYXB0ZXIsIHVzZSBzdGF0aWMgYnVzIG51bWJlcg0KPiAgICogQGFkYXA6
-IHRoZSBhZGFwdGVyIHRvIHJlZ2lzdGVyICh3aXRoIGFkYXAtPm5yIGluaXRpYWxpemVkKQ0KPiBA
-QCAtMTcwMyw2ICsxNzM1LDEzIEBAIHZvaWQgaTJjX2RlbF9hZGFwdGVyKHN0cnVjdCBpMmNfYWRh
-cHRlciAqYWRhcCkNCj4gIH0NCj4gIEVYUE9SVF9TWU1CT0woaTJjX2RlbF9hZGFwdGVyKTsNCj4g
-DQo+ICtzdGF0aWMgdm9pZCBkZXZtX2kyY19kZWxfYWRhcHRlcihzdHJ1Y3QgZGV2aWNlICpkZXYs
-IHZvaWQgKnB0cikNCj4gK3sNCj4gKwlzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXB0ZXIgPSAqKChz
-dHJ1Y3QgaTJjX2FkYXB0ZXIgKiopcHRyKTsNCj4gKw0KPiArCWkyY19kZWxfYWRhcHRlcihhZGFw
-dGVyKTsNCj4gK30NCj4gKw0KPiAgc3RhdGljIHZvaWQgaTJjX3BhcnNlX3RpbWluZyhzdHJ1Y3Qg
-ZGV2aWNlICpkZXYsIGNoYXIgKnByb3BfbmFtZSwgdTMyDQo+ICpjdXJfdmFsX3AsDQo+ICAJCQkg
-ICAgdTMyIGRlZl92YWwsIGJvb2wgdXNlX2RlZikNCj4gIHsNCj4gZGlmZiAtLWdpdCBhL2luY2x1
-ZGUvbGludXgvaTJjLmggYi9pbmNsdWRlL2xpbnV4L2kyYy5oDQo+IGluZGV4IDU2NjIyNjUuLjEw
-YmQwYjAgMTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvbGludXgvaTJjLmgNCj4gKysrIGIvaW5jbHVk
-ZS9saW51eC9pMmMuaA0KPiBAQCAtODQ0LDYgKzg0NCw3IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCBp
-MmNfbWFya19hZGFwdGVyX3Jlc3VtZWQoc3RydWN0DQo+IGkyY19hZGFwdGVyICphZGFwKQ0KPiAg
-ICovDQo+ICAjaWYgSVNfRU5BQkxFRChDT05GSUdfSTJDKQ0KPiAgaW50IGkyY19hZGRfYWRhcHRl
-cihzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXApOw0KPiAraW50IGRldm1faTJjX2FkZF9hZGFwdGVy
-KHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IGkyY19hZGFwdGVyICphZGFwdGVyKTsNCj4gIHZv
-aWQgaTJjX2RlbF9hZGFwdGVyKHN0cnVjdCBpMmNfYWRhcHRlciAqYWRhcCk7DQo+ICBpbnQgaTJj
-X2FkZF9udW1iZXJlZF9hZGFwdGVyKHN0cnVjdCBpMmNfYWRhcHRlciAqYWRhcCk7DQo+IA0KPiAt
-LQ0KPiAyLjguMQ0KDQpUaGFua3MNCkJhcnJ5DQoNCg==
+On Tue, 16 Mar 2021, Jonas Mark (BT-FIR/ENG1-Grb) wrote:
+
+> Hi Lee,
+> 
+> > Code looks good to me now, thanks.
+> > 
+> > However, this doesn't look like it would pass checkpatch.
+> > 
+> > Have you tried to build with W=1 and checkpatch?
+> 
+> Yes, we used checkpatch.pl.
+> 
+>     $ ./scripts/checkpatch.pl 0001-mfd-da9063-Support-SMBus-and-I2C-mode.v5
+>     total: 0 errors, 0 warnings, 25 lines checked
+> 
+>     0001-mfd-da9063-Support-SMBus-and-I2C-mode.v5 has no obvious style problems and is ready for submission.
+> 
+> Using the option --strict we get a check hint that the broken line
+> of the regmap_clear_bits() is not aligned. We tried but were not
+> able to make the tool happy. This matches our experience with this
+> check hint and previous patches.
+
+Lining up the first char of the broken line with the open parenthesis
+will make checkpatch happy.  It's easier if you configure your editor
+to always do this, rather than with strict tabs.
+
+> Also compiling Linux 5.10.14 with our patch and W=1 does not yield a warning.
+> 
+>     $ make W=1
+>       CALL    scripts/checksyscalls.sh
+>       CALL    scripts/atomic/check-atomics.sh
+>       CHK     include/generated/compile.h
+>       CC [M]  drivers/mfd/da9063-i2c.o
+>       LD [M]  drivers/mfd/da9063.o
+>       Kernel: arch/arm/boot/Image is ready
+>       Kernel: arch/arm/boot/zImage is ready
+>       MODPOST Module.symvers
+>       LD [M]  drivers/mfd/da9063.ko
+> 
+> > > diff --git a/drivers/mfd/da9063-i2c.c b/drivers/mfd/da9063-i2c.c index
+> > > 3781d0bb7786..e8a022e697c5 100644
+> > > --- a/drivers/mfd/da9063-i2c.c
+> > > +++ b/drivers/mfd/da9063-i2c.c
+> > > @@ -442,6 +442,16 @@ static int da9063_i2c_probe(struct i2c_client *i2c,
+> > >  		return ret;
+> > >  	}
+> > >
+> > > +	/* If SMBus is not available and only I2C is possible, enter I2C mode */
+> > > +	if (i2c_check_functionality(i2c->adapter, I2C_FUNC_I2C)) {
+> > > +		ret = regmap_clear_bits(da9063->regmap,
+> > DA9063_REG_CONFIG_J,
+> > > +			  DA9063_TWOWIRE_TO);
+> > > +		if (ret < 0) {
+> > > +			dev_err(da9063->dev, "Failed to set Two-Wire Bus
+> > Mode.\n");
+> > > +			return -EIO;
+> > > +		}
+> > > +	}
+> > > +
+> > >  	return da9063_device_init(da9063, i2c->irq);  }
+> > >
+> > > diff --git a/include/linux/mfd/da9063/registers.h
+> > > b/include/linux/mfd/da9063/registers.h
+> > > index 1dbabf1b3cb8..6e0f66a2e727 100644
+> > > --- a/include/linux/mfd/da9063/registers.h
+> > > +++ b/include/linux/mfd/da9063/registers.h
+> > > @@ -1037,6 +1037,9 @@
+> > >  #define		DA9063_NONKEY_PIN_AUTODOWN	0x02
+> > >  #define		DA9063_NONKEY_PIN_AUTOFLPRT	0x03
+> > >
+> > > +/* DA9063_REG_CONFIG_J (addr=0x10F) */
+> > > +#define DA9063_TWOWIRE_TO			0x40
+> > > +
+> > >  /* DA9063_REG_MON_REG_5 (addr=0x116) */
+> > >  #define DA9063_MON_A8_IDX_MASK			0x07
+> > >  #define		DA9063_MON_A8_IDX_NONE		0x00
+> 
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
