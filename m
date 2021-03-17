@@ -2,225 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5AE933F06B
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Mar 2021 13:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1755933F149
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Mar 2021 14:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbhCQMeN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 Mar 2021 08:34:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59498 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229703AbhCQMds (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 17 Mar 2021 08:33:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C198164F4D;
-        Wed, 17 Mar 2021 12:33:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615984427;
-        bh=13fBqZM159Nk15DrGKOe4nVJ9qsh15FcP3YLOpwqJs0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XWsLKZyCZ1jAGhiE3c0EEV05gM0LZGNOO4JnqrF7EEkCg5RCgKgzCuVdVkpG2ElIL
-         +7uavLxuzO1arVHu1lL/WMBvUI1cHNGSR7HDEwl+kzE+GvL6SZmTKjSUNxrvSzR0dP
-         vD/iVm734LePv43SkjxRWVKf1zvgA0XZ40HFZFeEDE+vd57pRbtCtZai29V0075Zti
-         edpE9rXbq0YCyKSM/H8NFphoUK7dKobYmbTFa96PjzmMmsSqknubztvz5AwFWBsnBr
-         mCAfbvmCS6XnPmGFGX2B7BGQ2+4v35xXS/s2/I/hCTYjMalzVel/net4nfwNon11WG
-         vPZZKcGruMRGg==
-Date:   Wed, 17 Mar 2021 13:33:44 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Adding i2c-cp2615: i2c support for Silicon Labs'
- CP2615 Digital Audio Bridge
-Message-ID: <20210317123344.GD1315@ninjato>
-References: <20210317103021.1913858-1-bence98@sch.bme.hu>
+        id S231215AbhCQNh1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 17 Mar 2021 09:37:27 -0400
+Received: from de-out1.bosch-org.com ([139.15.230.186]:51688 "EHLO
+        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231400AbhCQNhX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 Mar 2021 09:37:23 -0400
+Received: from fe0vm1650.rbesz01.com (lb41g3-ha-dmz-psi-sl1-mailout.fe.ssn.bosch.com [139.15.230.188])
+        by si0vms0217.rbdmz01.com (Postfix) with ESMTPS id 4F0rms1f2xz4f3lwM;
+        Wed, 17 Mar 2021 14:37:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=de.bosch.com;
+        s=key3-intmail; t=1615988237;
+        bh=Fxsn4ql4yXCo0u8sqNLaQxGB281D4q05wUZdcb/7mvo=; l=10;
+        h=From:Subject:From:Reply-To:Sender;
+        b=RPRBj3oSJ9XHCiulkAckZRQ4nv4THKL5SEYisDHPPOu5DFoFLue8ToPDzH6OgMEkV
+         9shYkvVV5oHBGepJFIvjX8Iqdg4OXtLVtPAQV5d3q908tWnQmyYdL+Gc/CMgIZ6UiF
+         xU0JxaH629h59rEozynQs08fg9PnI8YnlYXNYqhs=
+Received: from fe0vm7918.rbesz01.com (unknown [10.58.172.176])
+        by fe0vm1650.rbesz01.com (Postfix) with ESMTPS id 4F0rms1Ht5z1Qq;
+        Wed, 17 Mar 2021 14:37:17 +0100 (CET)
+X-AuditID: 0a3aad10-ea3ff7000000444e-4b-6052060d2ce3
+Received: from fe0vm1651.rbesz01.com ( [10.58.173.29])
+        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by fe0vm7918.rbesz01.com (SMG Outbound) with SMTP id 01.16.17486.D0602506; Wed, 17 Mar 2021 14:37:17 +0100 (CET)
+Received: from FE-MBX2050.de.bosch.com (fe-mbx2050.de.bosch.com [10.3.231.60])
+        by fe0vm1651.rbesz01.com (Postfix) with ESMTPS id 4F0rmr72JPz11ZS;
+        Wed, 17 Mar 2021 14:37:16 +0100 (CET)
+Received: from FE-MBX2051.de.bosch.com (10.3.231.61) by
+ FE-MBX2050.de.bosch.com (10.3.231.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2176.2; Wed, 17 Mar 2021 14:37:16 +0100
+Received: from FE-MBX2051.de.bosch.com ([fe80::9402:faf1:5852:4e2f]) by
+ FE-MBX2051.de.bosch.com ([fe80::9402:faf1:5852:4e2f%6]) with mapi id
+ 15.01.2176.009; Wed, 17 Mar 2021 14:37:16 +0100
+From:   "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
+To:     Lee Jones <lee.jones@linaro.org>,
+        "Adam.Thomson.Opensource@diasemi.com" 
+        <Adam.Thomson.Opensource@diasemi.com>,
+        Wolfram Sang <wsa@kernel.org>
+CC:     Support Opensource <support.opensource@diasemi.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "stwiss.opensource@diasemi.com" <stwiss.opensource@diasemi.com>,
+        "marek.vasut@gmail.com" <marek.vasut@gmail.com>,
+        "RUAN Tingquan (BT-FIR/ENG1-Zhu)" <Tingquan.Ruan@cn.bosch.com>,
+        "Streidl Hubert (BT-FIR/ENG1-Grb)" <Hubert.Streidl@de.bosch.com>,
+        "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
+Subject: AW: [PATCH v6 1/1] mfd: da9063: Support SMBus and I2C mode
+Thread-Topic: [PATCH v6 1/1] mfd: da9063: Support SMBus and I2C mode
+Thread-Index: AQHXGoQ713jP8OAVJ02nOOOCT9bDXKqGx9wAgAFm7UA=
+Date:   Wed, 17 Mar 2021 13:37:16 +0000
+Message-ID: <9d64829d35474258a53b6785c0265e1c@de.bosch.com>
+References: <20210316162237.877436-1-mark.jonas@de.bosch.com>
+ <20210316170722.GF701493@dell>
+In-Reply-To: <20210316170722.GF701493@dell>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.142.168.71]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8w3uRX/HFJGApMzv"
-Content-Disposition: inline
-In-Reply-To: <20210317103021.1913858-1-bence98@sch.bme.hu>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBIsWRmVeSWpSXmKPExsXCZbVWVpeXLSjBYMV2Zoul75cyW9z/epTR
+        ouPvF0aLy7vmsFlc/b2exWJv60Vmi7v75zI6sHus+KTvsWlVJ5vHnWt72Dw+b5ILYInisklJ
+        zcksSy3St0vgyli48jdbwRWBikUz5rE3MM4R6GLk5JAQMJF4+mMtUxcjF4eQwHQmiUv7ZrGB
+        JIQEdjNK3NtqB5F4yyixbG4rI4RzgFHiR8MHVpAqNgE7if2v3zCB2CICkxglVtwxAyliFnjN
+        LLFuxioWkISwgLNEw+2ljBBFLhL7l7UwQ9hWErPfHmbvYuTgYBFQlfjTLA0S5hWwluiYOAfq
+        ijiJv88+gdmcAtoSKyfvB9vFKCArsWHDebAxzALiEpuefWeFeEdAYskeiLiEgKjEy8f/oOKK
+        EgfP/GMCWcUsoCmxfpc+RKuixJTuh+wQawUlTs58wjKBUXwWkqmzEDpmIemYhaRjASPLKkbR
+        tFSDslxzS0MLvaKk1OIqA0O95PzcTYyQyBTYwXi7+4PeIUYmDsZDjBIczEoivKZ5AQlCvCmJ
+        lVWpRfnxRaU5qcWHGKU5WJTEeVV4NsYJCaQnlqRmp6YWpBbBZJk4OKUamGxfFmfN3B1b07fR
+        9eUTvlMRbcbLsvcUBJ+O03Kd7NJn5H1/rZ9AdvnyxAMxbOy2vAnPlqX9FqvIMn93c2LF22+/
+        vXfpyTQ1z5izdJpODK+pxtSPosHZcu5zH8kfaxRVcuFk+TthgbBy3LV88/17ivf9ZDl/M8xG
+        7Kri+2PxSc8al55Y8YWnc27Mt/vLLLZIXNRaUOPB8L8hcm7oBKHCZyIBWhMu/b8ele+cf9U2
+        faeQU5KY0TNvPuevVwJivVdbcfG0Pu7+PXmZXbvTZfktPTPLT6j7hwTOlXjPKxZmX9or+f6N
+        r+eFOEXJq9wa/98evvb/fdzbzWyzHhVX/W2L1BU4adXofnOB9FKl9CQ5JZbijERDLeai4kQA
+        4gKQLDsDAAA=
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---8w3uRX/HFJGApMzv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Mar 17, 2021 at 10:30:21AM +0000, Bence Cs=C3=B3k=C3=A1s wrote:
-> Signed-off-by: Bence Cs=C3=B3k=C3=A1s <bence98@sch.bme.hu>
-
-Thanks, this looks good now and I think we are very close.
-
-> ---
-
-Next, time please provide a small summary of changes since last version.
-I get enough patches that it becomes confusing otherwise.
-
-> --- /dev/null
-> +++ b/drivers/i2c/busses/i2c-cp2615.c
-> @@ -0,0 +1,282 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-
-If you want GPL v2 only, then you need to say in MODULE_LICENSE also
-"GPL v2".
-
-> +#include <linux/string.h>
-> +#include <linux/kernel.h>
-> +#include <linux/errno.h>
-> +#include <linux/i2c.h>
-> +#include <linux/usb.h>
-
-Please sort this to avoid double entries get added in the future.
-
-> +enum cp2615_iop_msg_type {
-> +	iop_GetAccessoryInfo =3D 0xD100,
-> +	iop_AccessoryInfo =3D 0xA100,
-> +	iop_GetPortConfiguration =3D 0xD203,
-> +	iop_PortConfiguration =3D 0xA203,
-> +	// ...
-
-This comment can go?
-
-> +/** Possible values for struct cp2615_i2c_transfer_result.status
-> + *
-> + *  Values extracted from the USBXpress(r) SDK
-> + */
-
-I'd think this can go, too.
-
-> +int cp2615_init_iop_msg(struct cp2615_iop_msg *ret, enum cp2615_iop_msg_=
-type msg, const void *data, size_t data_len)
-
-Please break it into two lines. And please run 'checkpatch --strict' on
-your patch to find things like too long lines and spaces around
-operators etc... I will skip pointing them out here.
-
-> +{
-> +	if (data_len > MAX_IOP_PAYLOAD_SIZE)
-> +		return -EFBIG;
-> +
-> +	if (ret) {
-
-Minor nit:
-	if (!ret)
-		return -EINVAL;
-
-and then save the indentation for the main code path.
-
-> +		ret->preamble =3D 0x2A2A;
-> +		ret->length =3D htons(data_len+6);
-> +		ret->msg =3D htons(msg);
-> +		if(data && data_len)
-> +			memcpy(&ret->data, data, data_len);
-> +        return 0;
-> +	} else {
-> +        return -EINVAL;
-> +	}
-> +}
-> +
-> +int cp2615_init_i2c_msg(struct cp2615_iop_msg *ret, const struct cp2615_=
-i2c_transfer *data)
-> +{
-> +    return cp2615_init_iop_msg(ret, iop_DoI2cTransfer, data, 4 + data->w=
-rite_len);
-> +}
-
-I'll leave it to you but maybe this function can go and
-cp2615_init_iop_msg can be used directly? Both are only called once.
-
-> +
-> +/* Translates status codes to Linux errno's */
-> +int cp2615_check_status(enum cp2615_i2c_status status)
-> +{
-> +	switch (status) {
-> +	case CP2615_SUCCESS:
-> +			return 0;
-> +	case CP2615_BUS_ERROR:
-> +		return -ECOMM;
-
--EIO probably.
-
-We have 'Documentation/i2c/fault-codes.rst' as a guide.
-
-> +	case CP2615_BUS_BUSY:
-> +		return -EAGAIN;
-> +	case CP2615_TIMEOUT:
-> +		return -ETIMEDOUT;
-> +	case CP2615_INVALID_PARAM:
-> +		return -EINVAL;
-> +	case CP2615_CFG_LOCKED:
-> +		return -EPERM;
-> +	}
-> +	/* Unknown error code */
-> +	return -EPROTO;
-> +}
-> +
-
-=2E..
-
-> +/*
-> + * This chip has some limitations: one is that the USB endpoint
-> + * can only receive 64 bytes/transfer, that leaves 54 bytes for
-> + * the I2C transfer. On top of that, EITHER read_len OR write_len
-> + * may be zero, but not both. If both are non-zero, the adapter
-> + * issues a write followed by a read. And the chip does not
-> + * support repeated START between the write and read phases.
-
-Good and useful paragraph!
-
-> + * FIXME: There in no quirk flag for specifying that the adapter
-> + * does not support empty transfers, or that it cannot emit a
-
-Can't we use I2C_AQ_NO_ZERO_LEN here?
-
-> + * START condition between the combined phases.
-
-True! But it makes sense, so we can fix that. We just need to add
-I2C_AQ_NO_REP_START and a short explanation to i2c.h. If you want, you
-can do it in a seperate patch. I can do it, too, if you prefer.
-
-> + */
-> +struct i2c_adapter_quirks cp2615_i2c_quirks =3D {
-> +	.max_write_len =3D MAX_I2C_SIZE,
-> +	.max_read_len =3D MAX_I2C_SIZE,
-> +	.flags =3D I2C_AQ_COMB_WRITE_THEN_READ,
-> +	.max_comb_1st_msg_len =3D MAX_I2C_SIZE,
-> +	.max_comb_2nd_msg_len =3D MAX_I2C_SIZE
-> +};
-
-quirks struct looks good otherwise!
-
-> +static const struct usb_device_id id_table[] =3D {
-> +	{ USB_DEVICE(CP2615_VID, CP2615_PID) },
-
-Maybe skip the defines for VID and PID and use the values directly?
-I am not a USB expert, not really sure what the consistent way is.
-
-So, this and the checkpatch issues and I think we are done.
-
-Thanks,
-
-   Wolfram
-
-
---8w3uRX/HFJGApMzv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBR9yQACgkQFA3kzBSg
-KbY9BxAAgLRxnfLHdIVkAw70WYTSsE3apAqqQbhrErNvoAUYyBnENdPVZa87x0qG
-G57gd++RLJGXUSEQX1pZyWqF+LzS8Gagyhkwr7wV6b/wXeW86z5PleyGZXgnJD6u
-zLVAbaKCb5tNqCI0qpMyZhNbVPoXhdW74fneGu+Js6iUraWozZh129abs/kFF3ts
-ah/jUhG0U3FgD9cu61yz4bqSmRhw6OMqF59N2TW6RPKgqxtbq0uQSJ0tkrC88wX+
-OH8yZAXCR7/HsAhSAOOW+GZ18trJs5HCP++UJ9r26TxxxPrjQg0biMwx5rEwCyZL
-irOeIOhiGvMNzOS2hggXng4yqnUErTwkL2/T96NgS+Ngsr0GXMPL+/uxt5kX0avL
-vhNvf1Vh1vTtoK2ozhTno1bEUJXI7+0TPmQ6f/QqkwlRFVNuEp+LU85LhxMVYub7
-0X30r0iS2D+fXeW5MvNUf4N+0XYhS5MZS4S1woClbdRnyOKcm4pi/Gyip+8sMOTN
-iM4nKfHb9/Y9nDj6EQHADb/i071aDk1Poo0oR3kABBhGK9k+UfCzZZ/b4O9KE+X8
-OmQtW+kYz+iUdmLPm7IdrX5yhy3t3q+aC+9qYyzi0QVCgiLjcUYlZi7wsgMx7wdH
-Iyuljbr06ak1jMEuuT/PsCFcgF6pbEOO+cS5CowpUfkN97fCkvw=
-=x0ac
------END PGP SIGNATURE-----
-
---8w3uRX/HFJGApMzv--
+SGksDQoNCj4gPiBGcm9tOiBIdWJlcnQgU3RyZWlkbCA8aHViZXJ0LnN0cmVpZGxAZGUuYm9zY2gu
+Y29tPg0KPiA+DQo+ID4gQnkgZGVmYXVsdCB0aGUgUE1JQyBEQTkwNjMgMi13aXJlIGludGVyZmFj
+ZSBpcyBTTUJ1cyBjb21wbGlhbnQuIFRoaXMNCj4gPiBtZWFucyB0aGUgUE1JQyB3aWxsIGF1dG9t
+YXRpY2FsbHkgcmVzZXQgdGhlIGludGVyZmFjZSB3aGVuIHRoZSBjbG9jaw0KPiA+IHNpZ25hbCBj
+ZWFzZXMgZm9yIG1vcmUgdGhhbiB0aGUgU01CdXMgdGltZW91dCBvZiAzNSBtcy4NCj4gPg0KPiA+
+IElmIHRoZSBJMkMgZHJpdmVyIC8gZGV2aWNlIGlzIG5vdCBjYXBhYmxlIG9mIGNyZWF0aW5nIGF0
+b21pYyBJMkMNCj4gPiB0cmFuc2FjdGlvbnMsIGEgY29udGV4dCBjaGFuZ2UgY2FuIGNhdXNlIGEg
+Y2Vhc2luZyBvZiB0aGUgY2xvY2sgc2lnbmFsLg0KPiA+IFRoaXMgY2FuIGhhcHBlbiBpZiBmb3Ig
+ZXhhbXBsZSBhIHJlYWwtdGltZSB0aHJlYWQgaXMgc2NoZWR1bGVkLiBUaGVuDQo+ID4gdGhlIERB
+OTA2MyBpbiBTTUJ1cyBtb2RlIHdpbGwgcmVzZXQgdGhlIDItd2lyZSBpbnRlcmZhY2UuIFN1YnNl
+cXVlbnRseQ0KPiA+IGEgd3JpdGUgbWVzc2FnZSBjb3VsZCBlbmQgdXAgaW4gdGhlIHdyb25nIHJl
+Z2lzdGVyLiBUaGlzIGNvdWxkIGNhdXNlDQo+ID4gdW5wcmVkaWN0YWJsZSBzeXN0ZW0gYmVoYXZp
+b3IuDQo+ID4NCj4gPiBUaGUgREE5MDYzIFBNSUMgYWxzbyBzdXBwb3J0cyBhbiBJMkMgY29tcGxp
+YW50IG1vZGUgZm9yIHRoZSAyLXdpcmUNCj4gPiBpbnRlcmZhY2UuIFRoaXMgbW9kZSBkb2VzIG5v
+dCByZXNldCB0aGUgaW50ZXJmYWNlIHdoZW4gdGhlIGNsb2NrDQo+ID4gc2lnbmFsIGNlYXNlcy4g
+VGh1cyB0aGUgcHJvYmxlbSBkZXBpY3RlZCBhYm92ZSBkb2VzIG5vdCBvY2N1ci4NCj4gPg0KPiA+
+IFRoaXMgcGF0Y2ggdGVzdHMgZm9yIHRoZSBidXMgZnVuY3Rpb25hbGl0eSAiSTJDX0ZVTkNfSTJD
+Ii4gSXQgY2FuDQo+ID4gcmVhc29uYWJseSBiZSBhc3N1bWVkIHRoYXQgdGhlIGJ1cyBjYW5ub3Qg
+b2JleSBTTUJ1cyB0aW1pbmdzIGlmIHRoaXMNCj4gPiBmdW5jdGlvbmFsaXR5IGlzIHNldC4gU01C
+dXMgY29tbWFuZHMgbW9zdCBwcm9iYWJseSBhcmUgZW11bGF0ZWQgaW4NCj4gPiB0aGlzIGNhc2Ug
+d2hpY2ggaXMgcHJvbmUgdG8gdGhlIGxhdGVuY3kgaXNzdWUgZGVzY3JpYmVkIGFib3ZlLg0KPiA+
+DQo+ID4gVGhpcyBwYXRjaCBlbmFibGVzIHRoZSBJMkMgYnVzIG1vZGUgaWYgSTJDX0ZVTkNfSTJD
+IGlzIHNldCBvcg0KPiA+IG90aGVyd2lzZSBrZWVwcyB0aGUgZGVmYXVsdCBTTUJ1cyBtb2RlLg0K
+PiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogSHViZXJ0IFN0cmVpZGwgPGh1YmVydC5zdHJlaWRsQGRl
+LmJvc2NoLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBNYXJrIEpvbmFzIDxtYXJrLmpvbmFzQGRl
+LmJvc2NoLmNvbT4NCj4gDQo+IEFwcGxpZWQgd2l0aCBXb2xmcmFtJ3MgUkIsIHRoYW5rcy4NCg0K
+VGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgeW91ciBzdXBwb3J0IHRvIGFsbCByZXZpZXdlcnMuDQoN
+CkNoZWVycywNCk1hcmsNCg==
