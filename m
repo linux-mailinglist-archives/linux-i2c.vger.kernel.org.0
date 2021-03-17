@@ -2,148 +2,366 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7B333ED07
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Mar 2021 10:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB55E33EE25
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Mar 2021 11:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbhCQJae (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 Mar 2021 05:30:34 -0400
-Received: from mail-vi1eur05on2084.outbound.protection.outlook.com ([40.107.21.84]:8865
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229632AbhCQJaN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 17 Mar 2021 05:30:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PM1f7ww2qpw3i9dffPx7FN1HkNPmGeuE0Y3VqjA6i27oLqnNqKx3PJyS3mPgvfykeIGGYoHPqKC0I47FO/Si6J8eNm0hAiOv5bIXLwAztHQS78QUBKjtdbQCS6Z/mbEVZc5lxL2cSDsnyYEkBEJDvLoch42n6nuFpR5AuqXhE3hrMX9H1E135kPOeAMSgwj1SXQYMCl6IRh+uxWBRZahD4vrbkfkj/CoLlL8Yp3eqRN5qjJNp+s105IEf2g5n9hHwMMhYBjyYV0za8tVhYOvhJ9aGLSyd4ixKl6UdIChuNosY2JET7jCUheA39QZUOO57JSfl77OE7Azml+MuEUuiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nCn6xtmpM1e9GgYW39w+gLRL9YLl6q06z7HoqIBkErQ=;
- b=mv2suynce4Tuk4FygtBVYCokw+kzXUL83RvRHcv/zCJhySUnjXOHrI7dGK3CSMiP6cFi4sYb2yVRcHQCQVX/sUEeCbGenqGm8FeOkQ6PTexcoJ5BVCv38oa9UxU5s/kePVOPqEEMUPO8UI8Q6JxNo3ua+nz9ulCQZVHR2dw+WsVxGIkcpjAZAdcAGbOuu0/Gsrpgel0kBs3eE70GAFZ3sJahPKXkozV1Md1kV6r0E8I0jMOCezv4OwkLf0ZiObBv+pqcesP5udN+wP/OsgEmh9yg4qYVR8nmrz6OK4JhVjWnt6rBTUZN7LoUL4gl6ntEYweHoVxlanPyum6AkTeLyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
- dkim=pass header.d=diasemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=dialogsemiconductor.onmicrosoft.com;
- s=selector1-dialogsemiconductor-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nCn6xtmpM1e9GgYW39w+gLRL9YLl6q06z7HoqIBkErQ=;
- b=YmbYdhjPnNDn5eIpGbkc9eJr0Up2dROfXH7VFpMDP+muNyXoOYgR/R6Q4eaIrfpahfCpiv/izEJ4Ly0wY7fyCs8P3CEZxXLWYN+rmKC6O2YN1c/SJ84HGrUoZyA83zVIzyyG4Bf0p4t8/WbMVCZeuywiZBFGBgWvUEimGMe3r24=
-Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:ac::5)
- by PR3PR10MB3914.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:43::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32; Wed, 17 Mar
- 2021 09:30:10 +0000
-Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7040:2788:a951:5f6]) by PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7040:2788:a951:5f6%6]) with mapi id 15.20.3955.018; Wed, 17 Mar 2021
- 09:30:10 +0000
-From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-To:     Mark Jonas <mark.jonas@de.bosch.com>,
-        Support Opensource <Support.Opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Steve Twiss <stwiss.opensource@diasemi.com>,
-        "marek.vasut@gmail.com" <marek.vasut@gmail.com>,
-        "tingquan.ruan@cn.bosch.com" <tingquan.ruan@cn.bosch.com>,
-        "hubert.streidl@de.bosch.com" <hubert.streidl@de.bosch.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: RE: [PATCH v6 1/1] mfd: da9063: Support SMBus and I2C mode
-Thread-Topic: [PATCH v6 1/1] mfd: da9063: Support SMBus and I2C mode
-Thread-Index: AQHXGoQ9q1Qbk9rEZUyKzkmMFfUVGKqH6xwQ
-Date:   Wed, 17 Mar 2021 09:30:10 +0000
-Message-ID: <PR3PR10MB41425F5C553DC7F5E67F6A77806A9@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
-References: <20210316162237.877436-1-mark.jonas@de.bosch.com>
-In-Reply-To: <20210316162237.877436-1-mark.jonas@de.bosch.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: de.bosch.com; dkim=none (message not signed)
- header.d=none;de.bosch.com; dmarc=none action=none header.from=diasemi.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [147.161.166.124]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 38c8ee81-4f38-4161-640a-08d8e92742d8
-x-ms-traffictypediagnostic: PR3PR10MB3914:
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <PR3PR10MB3914C57FBCB58032A37633A2A76A9@PR3PR10MB3914.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Xd84U3BMeXHuIxQ2a5bE3BWPhoO74ncnoHjO16vxts02eipnx33WgmSSsVbBgdqIXR7yoyrISsdx0FlyBFzj0K4iBTwGT9bfqM+af90nO+6Rg7w3O+3izHaeipeqx1LXBRY9OERtshVrNwaRhcvbOgdXRUPjw34yoFJmjlnFYhE8MSYv6qexsYOuGhovJhe5EscGbKpJ2e1tkmo9sNzvDqHogW99TCbpxrIva/twfv4lm3QSmbaVbQOd5aLhfe3vIdOO3+c+1Bib/lAOeVXbM4FKzomOMZpPR0O/VfPqHho2t/0qhQxxNgkOe1cZMaK8qWz0FUojXQb8YGPVTRPigb6XV/LbMBopD07OwRaMDyAYq1N1nT9Gr/285CbH8mqSkBPU0SdT4ayWs9CtnmBLmUKW5fV2WevhZKgMW8Dyr5vwCEtceRn3VY6aVkdFbvCgTtYoekfBiT2T5mUGIIMibVn4htAVcwnrBrY8sWX/ik8NYPeN7oiMfNkYW9G+OnK3adjoXkxnO5tEPwK2EHwuW3MBcr2ro5xsVzeBlMDQrIPJLIU1ARo0voWRL1dbiSh9
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(366004)(346002)(136003)(396003)(376002)(66556008)(66476007)(5660300002)(55016002)(71200400001)(33656002)(26005)(316002)(66446008)(7696005)(8676002)(54906003)(8936002)(110136005)(478600001)(9686003)(53546011)(66946007)(52536014)(64756008)(2906002)(86362001)(76116006)(4326008)(186003)(6506007)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?pn0ikLIJf4JVzG5iD97fjTYGVDLv2HZF1J+tuVutVnLo1oa32AcylItcUag4?=
- =?us-ascii?Q?J1qeVKzZNIEmKABrvdBOBxqORx2Po/puDXFMLOhc8qU1jad0sYy9JnxxGOId?=
- =?us-ascii?Q?/CheDqJ8sTa9aLrNgAqSjaw9HUf8SfL5JBp/0IA1gQC7olToyw704rRW4rFN?=
- =?us-ascii?Q?Wc4r4ydA2VTE4+eGZ2AUtsZX89UjWiRVZw3IR5NYvm1tRPGGrHSZBdFPGz+o?=
- =?us-ascii?Q?nfcTPtE3qYvS4EcTzaWVI62MkNLBC+LB+VFz1jlAfzOSBruLwe04GsyAP6ks?=
- =?us-ascii?Q?4eSJ3EIWvcn2yBJsabE5+o3mIryDupM/iVVdlDtoknLZXwm50BrKP925RiLm?=
- =?us-ascii?Q?TOKW5tmXv+bn6sRZFQb9GaOd4A/GxfSUWcN7wZ7DOXHoMP34Z44uO+UAk9xY?=
- =?us-ascii?Q?i5A9keo6Yz9dFmazdzT33PPXCUJoyLh/tr6dX59DtT16dgyibj+rsBFdKSGj?=
- =?us-ascii?Q?KF0Ni9mf5531Pifv4IPG6pqqZdZ1RVyxMZEc9RCxpAd9elvIPxsP/noet0kR?=
- =?us-ascii?Q?3aDqYcUDCC7Dj3kGcslS38gwP8nijXQHqSQJUChbmLieojup5oya7PMsA4sv?=
- =?us-ascii?Q?XieNL5Lw40Fq0CmGnGhf11MnSih/2svlhqcOHEIEm7VPrR4xuaup+zm8dB5/?=
- =?us-ascii?Q?v/YGcpLwMmWChzjeShB2UTutSa7ZnECex1grrsEZHyi5md7kfHNZ03myhqx7?=
- =?us-ascii?Q?svKXQglA93qu4A3mjZK78YhWxiXoEQegMGtIp/0qRZiMkLOREnUs6PE6FcQo?=
- =?us-ascii?Q?VmDC2f9h51UvXy28oJmi6FKz2v/bZLjdExBBUH0prs9qe9UNnV+KD36UKd0q?=
- =?us-ascii?Q?D0a7GQSqIm54aRWv/JLCanIzwqTuc4AQVH7UfaBiVynfoxK4Hr6CnL6OQTKU?=
- =?us-ascii?Q?Oyz8Mn3yHdrufnXuhoTCnHKX7oz3mmOqFNaBVoTpm2yj0YvBh5IKuo8BW5Vp?=
- =?us-ascii?Q?roNkPZ8a4NI6LzElOXwJlPNVr2Lp0fA7c68ydhYaZrHKt97UD6v9ETkvUZ+7?=
- =?us-ascii?Q?mmiRRonbVO9EsZ9E2Yz8M2WMR3NUjUhq7tQR9vKIQqVMCXkaZpNJevtFPYmy?=
- =?us-ascii?Q?XCjCxiZl1YSUw4Pah8AVCMFx9d9Hn6CtTDcAl+OS8cv2IC9dUDZKj6bgVX0o?=
- =?us-ascii?Q?+mgMdU+tKwUA9Jx7hlMJHv2WzJAmD2sJcD7ZEU0TrZummIPrdM0f7oYJTmsc?=
- =?us-ascii?Q?lwX+ebUOVw0rd6q/k0tp1/IgXa5TWBbfZtOS/xJJymY6nJoFKJZyMElXKzxq?=
- =?us-ascii?Q?PHiHnpcAgZ6amuhaLLeDDG337xT34jprXycACd1lp2WUID++piIt+oqOObmp?=
- =?us-ascii?Q?/q1sHNIad/vIpJ2kY6VeB0as?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S229698AbhCQKNj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 17 Mar 2021 06:13:39 -0400
+Received: from mail.sch.bme.hu ([152.66.249.140]:33830 "EHLO mail.sch.bme.hu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229508AbhCQKNe (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 17 Mar 2021 06:13:34 -0400
+Received: from Exchange2016-1.sch.bme.hu (152.66.249.140) by
+ Exchange2016-1.sch.bme.hu (152.66.249.140) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2176.2; Wed, 17 Mar 2021 11:13:27 +0100
+Received: from Cognitio.sch.bme.hu (152.66.211.220) by
+ Exchange2016-1.sch.bme.hu (152.66.249.140) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Wed, 17 Mar 2021 11:13:27 +0100
+From:   =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <bence98@sch.bme.hu>
+To:     <linux-i2c@vger.kernel.org>
+CC:     =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <bence98@sch.bme.hu>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] Adding i2c-cp2615: i2c support for Silicon Labs' CP2615 Digital Audio Bridge
+Date:   Wed, 17 Mar 2021 10:30:21 +0000
+Message-ID: <20210317103021.1913858-1-bence98@sch.bme.hu>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-OriginatorOrg: diasemi.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38c8ee81-4f38-4161-640a-08d8e92742d8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2021 09:30:10.6045
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: inp9FRoEp8dlAuYNDaUw58qhSqIprvfJnkIhuyXWe4fU0UIauWBYDI3l260JhrKV/duwXtdIiv+wBLvOy77dAxRPU2Ckx6HwM0R9rJ8LJvc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR10MB3914
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 16 March 2021 16:23, Mark Jonas wrote:
+Signed-off-by: Bence Csókás <bence98@sch.bme.hu>
+---
+ drivers/i2c/busses/Kconfig      |  10 ++
+ drivers/i2c/busses/Makefile     |   1 +
+ drivers/i2c/busses/i2c-cp2615.c | 282 ++++++++++++++++++++++++++++++++
+ 3 files changed, 293 insertions(+)
+ create mode 100644 drivers/i2c/busses/i2c-cp2615.c
 
-> From: Hubert Streidl <hubert.streidl@de.bosch.com>
->=20
-> By default the PMIC DA9063 2-wire interface is SMBus compliant. This
-> means the PMIC will automatically reset the interface when the clock
-> signal ceases for more than the SMBus timeout of 35 ms.
->=20
-> If the I2C driver / device is not capable of creating atomic I2C
-> transactions, a context change can cause a ceasing of the clock signal.
-> This can happen if for example a real-time thread is scheduled. Then
-> the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
-> a write message could end up in the wrong register. This could cause
-> unpredictable system behavior.
->=20
-> The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
-> interface. This mode does not reset the interface when the clock
-> signal ceases. Thus the problem depicted above does not occur.
->=20
-> This patch tests for the bus functionality "I2C_FUNC_I2C". It can
-> reasonably be assumed that the bus cannot obey SMBus timings if
-> this functionality is set. SMBus commands most probably are emulated
-> in this case which is prone to the latency issue described above.
->=20
-> This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
-> otherwise keeps the default SMBus mode.
->=20
-> Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
-> Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index a49e0ed4a599..7a0dd18140d3 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -1227,6 +1227,16 @@ config I2C_DLN2
+ 	 This driver can also be built as a module.  If so, the module
+ 	 will be called i2c-dln2.
+ 
++config I2C_CP2615
++	tristate "Silicon Labs CP2615 USB sound card and I2C adapter"
++	depends on USB
++	help
++	  If you say yes to this option, support will be included for Silicon
++	  Labs CP2615's I2C interface.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called i2c-cp2615.
++
+ config I2C_PARPORT
+ 	tristate "Parallel port adapter"
+ 	depends on PARPORT
+diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+index 683c49faca05..adb71d9c9d42 100644
+--- a/drivers/i2c/busses/Makefile
++++ b/drivers/i2c/busses/Makefile
+@@ -127,6 +127,7 @@ obj-$(CONFIG_I2C_ZX2967)	+= i2c-zx2967.o
+ # External I2C/SMBus adapter drivers
+ obj-$(CONFIG_I2C_DIOLAN_U2C)	+= i2c-diolan-u2c.o
+ obj-$(CONFIG_I2C_DLN2)		+= i2c-dln2.o
++obj-$(CONFIG_I2C_CP2615) += i2c-cp2615.o
+ obj-$(CONFIG_I2C_PARPORT)	+= i2c-parport.o
+ obj-$(CONFIG_I2C_ROBOTFUZZ_OSIF)	+= i2c-robotfuzz-osif.o
+ obj-$(CONFIG_I2C_TAOS_EVM)	+= i2c-taos-evm.o
+diff --git a/drivers/i2c/busses/i2c-cp2615.c b/drivers/i2c/busses/i2c-cp2615.c
+new file mode 100644
+index 000000000000..75f76201fbb3
+--- /dev/null
++++ b/drivers/i2c/busses/i2c-cp2615.c
+@@ -0,0 +1,282 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * i2c support for Silicon Labs' CP2615 Digital Audio Bridge
++ *
++ * (c) 2021, Bence Csókás <bence98@sch.bme.hu>
++ */
++
++#include <linux/string.h>
++#include <linux/kernel.h>
++#include <linux/errno.h>
++#include <linux/i2c.h>
++#include <linux/usb.h>
++
++/** CP2615 I/O Protocol implementation */
++
++#define CP2615_VID 0x10c4
++#define CP2615_PID 0xeac1
++
++#define IOP_EP_IN  0x82
++#define IOP_EP_OUT 0x02
++#define IOP_IFN 1
++#define IOP_ALTSETTING 2
++
++#define MAX_IOP_SIZE 64
++#define MAX_IOP_PAYLOAD_SIZE MAX_IOP_SIZE-6
++#define MAX_I2C_SIZE MAX_IOP_PAYLOAD_SIZE-4
++
++enum cp2615_iop_msg_type {
++	iop_GetAccessoryInfo = 0xD100,
++	iop_AccessoryInfo = 0xA100,
++	iop_GetPortConfiguration = 0xD203,
++	iop_PortConfiguration = 0xA203,
++	// ...
++	iop_DoI2cTransfer = 0xD400,
++	iop_I2cTransferResult = 0xA400,
++	iop_GetSerialState = 0xD501,
++	iop_SerialState = 0xA501
++};
++
++struct cp2615_iop_msg {
++	uint16_t preamble, length, msg;
++	uint8_t data[MAX_IOP_PAYLOAD_SIZE];
++};
++
++#define PART_ID_A01 0x1400
++#define PART_ID_A02 0x1500
++
++struct cp2615_iop_accessory_info {
++	uint16_t part_id, option_id, proto_ver;
++};
++
++struct cp2615_i2c_transfer {
++	uint8_t tag, i2caddr, read_len, write_len;
++	uint8_t data[MAX_I2C_SIZE];
++};
++
++/** Possible values for struct cp2615_i2c_transfer_result.status
++ *
++ *  Values extracted from the USBXpress(r) SDK
++ */
++enum cp2615_i2c_status {
++	/* Writing to the internal EEPROM failed, because it is locked */
++	CP2615_CFG_LOCKED = -6,
++	/* read_len or write_len out of range */
++	CP2615_INVALID_PARAM = -4,
++	/* I2C slave did not ACK in time */
++	CP2615_TIMEOUT,
++	/* I2C bus busy */
++	CP2615_BUS_BUSY,
++	/* I2C bus error (ie. device NAK'd the request) */
++	CP2615_BUS_ERROR,
++	CP2615_SUCCESS
++};
++
++struct cp2615_i2c_transfer_result {
++	uint8_t tag, i2caddr;
++	int8_t status;
++	uint8_t read_len;
++	uint8_t data[MAX_I2C_SIZE];
++};
++
++int cp2615_init_iop_msg(struct cp2615_iop_msg *ret, enum cp2615_iop_msg_type msg, const void *data, size_t data_len)
++{
++	if (data_len > MAX_IOP_PAYLOAD_SIZE)
++		return -EFBIG;
++
++	if (ret) {
++		ret->preamble = 0x2A2A;
++		ret->length = htons(data_len+6);
++		ret->msg = htons(msg);
++		if(data && data_len)
++			memcpy(&ret->data, data, data_len);
++        return 0;
++	} else {
++        return -EINVAL;
++	}
++}
++
++int cp2615_init_i2c_msg(struct cp2615_iop_msg *ret, const struct cp2615_i2c_transfer *data)
++{
++    return cp2615_init_iop_msg(ret, iop_DoI2cTransfer, data, 4 + data->write_len);
++}
++
++/* Translates status codes to Linux errno's */
++int cp2615_check_status(enum cp2615_i2c_status status)
++{
++	switch (status) {
++	case CP2615_SUCCESS:
++			return 0;
++	case CP2615_BUS_ERROR:
++		return -ECOMM;
++	case CP2615_BUS_BUSY:
++		return -EAGAIN;
++	case CP2615_TIMEOUT:
++		return -ETIMEDOUT;
++	case CP2615_INVALID_PARAM:
++		return -EINVAL;
++	case CP2615_CFG_LOCKED:
++		return -EPERM;
++	}
++	/* Unknown error code */
++	return -EPROTO;
++}
++
++
++static int
++cp2615_i2c_send(struct usb_interface *usbif, struct cp2615_i2c_transfer *i2c_w)
++{
++	struct cp2615_iop_msg *msg = kzalloc(sizeof(struct cp2615_iop_msg), GFP_KERNEL);
++	struct usb_device *usbdev = interface_to_usbdev(usbif);
++	int res = cp2615_init_i2c_msg(msg, i2c_w);
++	if (!res)
++		res = usb_bulk_msg(usbdev, usb_sndbulkpipe(usbdev, IOP_EP_OUT), msg, ntohs(msg->length), NULL, 0);
++	kfree(msg);
++	return res;
++}
++
++static int
++cp2615_i2c_recv(struct usb_interface *usbif, unsigned char tag, void *buf)
++{
++	struct cp2615_iop_msg *msg = kzalloc(sizeof(struct cp2615_iop_msg), GFP_KERNEL);
++	struct cp2615_i2c_transfer_result *i2c_r = (struct cp2615_i2c_transfer_result*) &msg->data;
++	struct usb_device *usbdev = interface_to_usbdev(usbif);
++	int res = usb_bulk_msg(usbdev, usb_rcvbulkpipe(usbdev, IOP_EP_IN), msg, sizeof(struct cp2615_iop_msg), NULL, 0);
++	if (res < 0)
++		return res;
++
++	if (msg->msg != htons(iop_I2cTransferResult) || i2c_r->tag != tag)
++		return -EIO;
++
++	res = cp2615_check_status(i2c_r->status);
++	if (res < 0)
++		return res;
++
++	memcpy(buf, &i2c_r->data, i2c_r->read_len);
++	kfree(msg);
++	return 0;
++}
++
++static int
++cp2615_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
++{
++	struct usb_interface *usbif = adap->algo_data;
++	int i = 0, ret = 0;
++	struct i2c_msg *msg;
++	struct cp2615_i2c_transfer i2c_w = {0};
++	dev_dbg(&usbif->dev, "Doing %d I2C transactions\n", num);
++
++	for(; !ret && i < num; i++) {
++		msg = &msgs[i];
++
++		i2c_w.tag = 0xdd;
++		i2c_w.i2caddr = i2c_8bit_addr_from_msg(msg);
++		if (msg->flags & I2C_M_RD) {
++			i2c_w.read_len = msg->len;
++			i2c_w.write_len = 0;
++		} else {
++			i2c_w.read_len = 0;
++			i2c_w.write_len = msg->len;
++			memcpy(&i2c_w.data, msg->buf, i2c_w.write_len);
++		}
++		ret = cp2615_i2c_send(usbif, &i2c_w);
++		if (ret)
++			break;
++		ret = cp2615_i2c_recv(usbif, i2c_w.tag, msg->buf);
++	}
++	if (ret < 0)
++		return ret;
++	return i;
++}
++
++static u32
++cp2615_i2c_func(struct i2c_adapter *adap)
++{
++	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
++}
++
++static const struct i2c_algorithm cp2615_i2c_algo = {
++	.master_xfer	= cp2615_i2c_master_xfer,
++	.functionality	= cp2615_i2c_func,
++};
++
++/*
++ * This chip has some limitations: one is that the USB endpoint
++ * can only receive 64 bytes/transfer, that leaves 54 bytes for
++ * the I2C transfer. On top of that, EITHER read_len OR write_len
++ * may be zero, but not both. If both are non-zero, the adapter
++ * issues a write followed by a read. And the chip does not
++ * support repeated START between the write and read phases.
++ *
++ * FIXME: There in no quirk flag for specifying that the adapter
++ * does not support empty transfers, or that it cannot emit a
++ * START condition between the combined phases.
++ */
++struct i2c_adapter_quirks cp2615_i2c_quirks = {
++	.max_write_len = MAX_I2C_SIZE,
++	.max_read_len = MAX_I2C_SIZE,
++	.flags = I2C_AQ_COMB_WRITE_THEN_READ,
++	.max_comb_1st_msg_len = MAX_I2C_SIZE,
++	.max_comb_2nd_msg_len = MAX_I2C_SIZE
++};
++
++static void
++cp2615_i2c_remove(struct usb_interface *usbif)
++{
++	struct i2c_adapter *adap = usb_get_intfdata(usbif);
++
++	usb_set_intfdata(usbif, NULL);
++	i2c_del_adapter(adap);
++}
++
++static int
++cp2615_i2c_probe(struct usb_interface *usbif, const struct usb_device_id *id)
++{
++	int ret = 0;
++	struct i2c_adapter *adap;
++	struct usb_device *usbdev = interface_to_usbdev(usbif);
++
++	ret = usb_set_interface(usbdev, IOP_IFN, IOP_ALTSETTING);
++	if (ret)
++		return ret;
++
++	adap = devm_kzalloc(&usbif->dev, sizeof(struct i2c_adapter), GFP_KERNEL);
++	if (!adap)
++		return -ENOMEM;
++
++	strncpy(adap->name, usbdev->serial, sizeof(adap->name));
++	adap->owner = THIS_MODULE;
++	adap->dev.parent = &usbif->dev;
++	adap->dev.of_node = usbif->dev.of_node;
++	adap->timeout = HZ;
++	adap->algo = &cp2615_i2c_algo;
++	adap->quirks = &cp2615_i2c_quirks;
++	adap->algo_data = usbif;
++
++	ret = i2c_add_adapter(adap);
++	if (ret)
++		return ret;
++
++	usb_set_intfdata(usbif, adap);
++	return ret;
++}
++
++static const struct usb_device_id id_table[] = {
++	{ USB_DEVICE(CP2615_VID, CP2615_PID) },
++	{ }
++};
++
++MODULE_DEVICE_TABLE(usb, id_table);
++
++static struct usb_driver cp2615_i2c_driver = {
++	.name = "i2c-cp2615",
++	.probe = cp2615_i2c_probe,
++	.disconnect = cp2615_i2c_remove,
++	.id_table = id_table,
++};
++
++module_usb_driver(cp2615_i2c_driver);
++
++MODULE_AUTHOR("Bence Csókás <bence98@sch.bme.hu>");
++MODULE_DESCRIPTION("CP2615 I2C bus driver");
++MODULE_LICENSE("GPL");
+-- 
+2.30.1
 
-Thanks for your efforts on this Mark.
