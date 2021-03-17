@@ -2,527 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F0D33EA35
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Mar 2021 07:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7B333ED07
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Mar 2021 10:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbhCQGy4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 Mar 2021 02:54:56 -0400
-Received: from mail-eopbgr80074.outbound.protection.outlook.com ([40.107.8.74]:4100
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        id S229586AbhCQJae (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 17 Mar 2021 05:30:34 -0400
+Received: from mail-vi1eur05on2084.outbound.protection.outlook.com ([40.107.21.84]:8865
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230481AbhCQGya (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 17 Mar 2021 02:54:30 -0400
+        id S229632AbhCQJaN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 17 Mar 2021 05:30:13 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KULyqXTX6EWc8dGvOe5inwA1/K+NGH3FOkTvDZ1MEagNJgWdSodPqai3bRVGDjnX56rZuY6EH0clwFeORANxPm+9+pw+49zQ1IVVlVayN2gn+XrjrVEZf6O++FFFiUTvGQg6n+1kWiAwWM24ymeBmyW2sl7XxdOx2iFaeWI3oKoMZcbymr/muoKYYVe/EIpdwv6ScmUEUrHvFh0lQisG+AJd8/k6eV7SgfXP11Eua0m8dGjUnKpSVZ75hzLDzxAMi9/G+cGTp7+ffU/PMySAN0YpiC1cirsaki7GELhchUHFoVt7Ldn9EmHIw+2LCIBNpwyiJAfJ/YsjcgBYKXS18Q==
+ b=PM1f7ww2qpw3i9dffPx7FN1HkNPmGeuE0Y3VqjA6i27oLqnNqKx3PJyS3mPgvfykeIGGYoHPqKC0I47FO/Si6J8eNm0hAiOv5bIXLwAztHQS78QUBKjtdbQCS6Z/mbEVZc5lxL2cSDsnyYEkBEJDvLoch42n6nuFpR5AuqXhE3hrMX9H1E135kPOeAMSgwj1SXQYMCl6IRh+uxWBRZahD4vrbkfkj/CoLlL8Yp3eqRN5qjJNp+s105IEf2g5n9hHwMMhYBjyYV0za8tVhYOvhJ9aGLSyd4ixKl6UdIChuNosY2JET7jCUheA39QZUOO57JSfl77OE7Azml+MuEUuiA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A9oihh89De+wkg6qHpZDyowrtTKj+Q5qfBUPeufKBGI=;
- b=oSsciypWfA7Wu7ou5z4ahv1/s+vG3NdZNGU6bd7D3RMwDhqMl9UkmMx3dAYlZRkKk9f2Nqy6vId5jqeEUZYcSWhy+F+Dxm5kZCekqfJRJLBZ/N3eP/Tuwvifv1llrE0GDsHS7ZiszCntqC275gLRRf6rtnRX4RDnOHrF17dQ6pXtP1dpHsiVz1m8+a6MSI8JnCDEPV5jcSXEqraS1MMKDK5F/5wzF+SQSuFcEL5SrubNf5wK4gyOjl2Pntwosclo8qOWa+OykcMTOoIlAa3o61GoA301puJ4kEVyK7SeiwMF9ji5JjOuT+KjooEpGg1pMR5JbTd7yNqDiRyW7MsRQQ==
+ bh=nCn6xtmpM1e9GgYW39w+gLRL9YLl6q06z7HoqIBkErQ=;
+ b=mv2suynce4Tuk4FygtBVYCokw+kzXUL83RvRHcv/zCJhySUnjXOHrI7dGK3CSMiP6cFi4sYb2yVRcHQCQVX/sUEeCbGenqGm8FeOkQ6PTexcoJ5BVCv38oa9UxU5s/kePVOPqEEMUPO8UI8Q6JxNo3ua+nz9ulCQZVHR2dw+WsVxGIkcpjAZAdcAGbOuu0/Gsrpgel0kBs3eE70GAFZ3sJahPKXkozV1Md1kV6r0E8I0jMOCezv4OwkLf0ZiObBv+pqcesP5udN+wP/OsgEmh9yg4qYVR8nmrz6OK4JhVjWnt6rBTUZN7LoUL4gl6ntEYweHoVxlanPyum6AkTeLyw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A9oihh89De+wkg6qHpZDyowrtTKj+Q5qfBUPeufKBGI=;
- b=XVLXtVXjGhWqtfQheRHg4Bs4QiVQq77C5ZgO+C7t+KPNaLBFo9q3t+nZ4AMg9cxZHk82Xdpq16QNbl3NN0tL0L2fauMf88WKmbHvY3ZmPM9Qe2lhPhSIg0gL958j5E7I7G26tJg4i5WsoY1sEf3k5HFcLrQwS3EKKk0oYYV+lJM=
-Authentication-Results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB5618.eurprd04.prod.outlook.com (2603:10a6:208:123::11)
- by AM0PR04MB7091.eurprd04.prod.outlook.com (2603:10a6:208:197::9) with
+ bh=nCn6xtmpM1e9GgYW39w+gLRL9YLl6q06z7HoqIBkErQ=;
+ b=YmbYdhjPnNDn5eIpGbkc9eJr0Up2dROfXH7VFpMDP+muNyXoOYgR/R6Q4eaIrfpahfCpiv/izEJ4Ly0wY7fyCs8P3CEZxXLWYN+rmKC6O2YN1c/SJ84HGrUoZyA83zVIzyyG4Bf0p4t8/WbMVCZeuywiZBFGBgWvUEimGMe3r24=
+Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:ac::5)
+ by PR3PR10MB3914.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:43::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31; Wed, 17 Mar
- 2021 06:54:28 +0000
-Received: from AM0PR04MB5618.eurprd04.prod.outlook.com
- ([fe80::69a8:a768:8fa1:7236]) by AM0PR04MB5618.eurprd04.prod.outlook.com
- ([fe80::69a8:a768:8fa1:7236%7]) with mapi id 15.20.3933.032; Wed, 17 Mar 2021
- 06:54:28 +0000
-From:   Clark Wang <xiaoning.wang@nxp.com>
-To:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 11/11] i2c: imx-lpi2c: add edma mode support
-Date:   Wed, 17 Mar 2021 14:53:59 +0800
-Message-Id: <20210317065359.3109394-12-xiaoning.wang@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210317065359.3109394-1-xiaoning.wang@nxp.com>
-References: <20210317065359.3109394-1-xiaoning.wang@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [119.31.174.71]
-X-ClientProxiedBy: HK2PR02CA0215.apcprd02.prod.outlook.com
- (2603:1096:201:20::27) To AM0PR04MB5618.eurprd04.prod.outlook.com
- (2603:10a6:208:123::11)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32; Wed, 17 Mar
+ 2021 09:30:10 +0000
+Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7040:2788:a951:5f6]) by PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7040:2788:a951:5f6%6]) with mapi id 15.20.3955.018; Wed, 17 Mar 2021
+ 09:30:10 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Mark Jonas <mark.jonas@de.bosch.com>,
+        Support Opensource <Support.Opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Steve Twiss <stwiss.opensource@diasemi.com>,
+        "marek.vasut@gmail.com" <marek.vasut@gmail.com>,
+        "tingquan.ruan@cn.bosch.com" <tingquan.ruan@cn.bosch.com>,
+        "hubert.streidl@de.bosch.com" <hubert.streidl@de.bosch.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: RE: [PATCH v6 1/1] mfd: da9063: Support SMBus and I2C mode
+Thread-Topic: [PATCH v6 1/1] mfd: da9063: Support SMBus and I2C mode
+Thread-Index: AQHXGoQ9q1Qbk9rEZUyKzkmMFfUVGKqH6xwQ
+Date:   Wed, 17 Mar 2021 09:30:10 +0000
+Message-ID: <PR3PR10MB41425F5C553DC7F5E67F6A77806A9@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
+References: <20210316162237.877436-1-mark.jonas@de.bosch.com>
+In-Reply-To: <20210316162237.877436-1-mark.jonas@de.bosch.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: de.bosch.com; dkim=none (message not signed)
+ header.d=none;de.bosch.com; dmarc=none action=none header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [147.161.166.124]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 38c8ee81-4f38-4161-640a-08d8e92742d8
+x-ms-traffictypediagnostic: PR3PR10MB3914:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <PR3PR10MB3914C57FBCB58032A37633A2A76A9@PR3PR10MB3914.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Xd84U3BMeXHuIxQ2a5bE3BWPhoO74ncnoHjO16vxts02eipnx33WgmSSsVbBgdqIXR7yoyrISsdx0FlyBFzj0K4iBTwGT9bfqM+af90nO+6Rg7w3O+3izHaeipeqx1LXBRY9OERtshVrNwaRhcvbOgdXRUPjw34yoFJmjlnFYhE8MSYv6qexsYOuGhovJhe5EscGbKpJ2e1tkmo9sNzvDqHogW99TCbpxrIva/twfv4lm3QSmbaVbQOd5aLhfe3vIdOO3+c+1Bib/lAOeVXbM4FKzomOMZpPR0O/VfPqHho2t/0qhQxxNgkOe1cZMaK8qWz0FUojXQb8YGPVTRPigb6XV/LbMBopD07OwRaMDyAYq1N1nT9Gr/285CbH8mqSkBPU0SdT4ayWs9CtnmBLmUKW5fV2WevhZKgMW8Dyr5vwCEtceRn3VY6aVkdFbvCgTtYoekfBiT2T5mUGIIMibVn4htAVcwnrBrY8sWX/ik8NYPeN7oiMfNkYW9G+OnK3adjoXkxnO5tEPwK2EHwuW3MBcr2ro5xsVzeBlMDQrIPJLIU1ARo0voWRL1dbiSh9
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(366004)(346002)(136003)(396003)(376002)(66556008)(66476007)(5660300002)(55016002)(71200400001)(33656002)(26005)(316002)(66446008)(7696005)(8676002)(54906003)(8936002)(110136005)(478600001)(9686003)(53546011)(66946007)(52536014)(64756008)(2906002)(86362001)(76116006)(4326008)(186003)(6506007)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?pn0ikLIJf4JVzG5iD97fjTYGVDLv2HZF1J+tuVutVnLo1oa32AcylItcUag4?=
+ =?us-ascii?Q?J1qeVKzZNIEmKABrvdBOBxqORx2Po/puDXFMLOhc8qU1jad0sYy9JnxxGOId?=
+ =?us-ascii?Q?/CheDqJ8sTa9aLrNgAqSjaw9HUf8SfL5JBp/0IA1gQC7olToyw704rRW4rFN?=
+ =?us-ascii?Q?Wc4r4ydA2VTE4+eGZ2AUtsZX89UjWiRVZw3IR5NYvm1tRPGGrHSZBdFPGz+o?=
+ =?us-ascii?Q?nfcTPtE3qYvS4EcTzaWVI62MkNLBC+LB+VFz1jlAfzOSBruLwe04GsyAP6ks?=
+ =?us-ascii?Q?4eSJ3EIWvcn2yBJsabE5+o3mIryDupM/iVVdlDtoknLZXwm50BrKP925RiLm?=
+ =?us-ascii?Q?TOKW5tmXv+bn6sRZFQb9GaOd4A/GxfSUWcN7wZ7DOXHoMP34Z44uO+UAk9xY?=
+ =?us-ascii?Q?i5A9keo6Yz9dFmazdzT33PPXCUJoyLh/tr6dX59DtT16dgyibj+rsBFdKSGj?=
+ =?us-ascii?Q?KF0Ni9mf5531Pifv4IPG6pqqZdZ1RVyxMZEc9RCxpAd9elvIPxsP/noet0kR?=
+ =?us-ascii?Q?3aDqYcUDCC7Dj3kGcslS38gwP8nijXQHqSQJUChbmLieojup5oya7PMsA4sv?=
+ =?us-ascii?Q?XieNL5Lw40Fq0CmGnGhf11MnSih/2svlhqcOHEIEm7VPrR4xuaup+zm8dB5/?=
+ =?us-ascii?Q?v/YGcpLwMmWChzjeShB2UTutSa7ZnECex1grrsEZHyi5md7kfHNZ03myhqx7?=
+ =?us-ascii?Q?svKXQglA93qu4A3mjZK78YhWxiXoEQegMGtIp/0qRZiMkLOREnUs6PE6FcQo?=
+ =?us-ascii?Q?VmDC2f9h51UvXy28oJmi6FKz2v/bZLjdExBBUH0prs9qe9UNnV+KD36UKd0q?=
+ =?us-ascii?Q?D0a7GQSqIm54aRWv/JLCanIzwqTuc4AQVH7UfaBiVynfoxK4Hr6CnL6OQTKU?=
+ =?us-ascii?Q?Oyz8Mn3yHdrufnXuhoTCnHKX7oz3mmOqFNaBVoTpm2yj0YvBh5IKuo8BW5Vp?=
+ =?us-ascii?Q?roNkPZ8a4NI6LzElOXwJlPNVr2Lp0fA7c68ydhYaZrHKt97UD6v9ETkvUZ+7?=
+ =?us-ascii?Q?mmiRRonbVO9EsZ9E2Yz8M2WMR3NUjUhq7tQR9vKIQqVMCXkaZpNJevtFPYmy?=
+ =?us-ascii?Q?XCjCxiZl1YSUw4Pah8AVCMFx9d9Hn6CtTDcAl+OS8cv2IC9dUDZKj6bgVX0o?=
+ =?us-ascii?Q?+mgMdU+tKwUA9Jx7hlMJHv2WzJAmD2sJcD7ZEU0TrZummIPrdM0f7oYJTmsc?=
+ =?us-ascii?Q?lwX+ebUOVw0rd6q/k0tp1/IgXa5TWBbfZtOS/xJJymY6nJoFKJZyMElXKzxq?=
+ =?us-ascii?Q?PHiHnpcAgZ6amuhaLLeDDG337xT34jprXycACd1lp2WUID++piIt+oqOObmp?=
+ =?us-ascii?Q?/q1sHNIad/vIpJ2kY6VeB0as?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.71) by HK2PR02CA0215.apcprd02.prod.outlook.com (2603:1096:201:20::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18 via Frontend Transport; Wed, 17 Mar 2021 06:54:25 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f3a4034f-270f-4243-10b4-08d8e911823d
-X-MS-TrafficTypeDiagnostic: AM0PR04MB7091:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM0PR04MB7091000671185051204788D8F36A9@AM0PR04MB7091.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WqIN2G/Bt2TWPvS7w5LtLH31A0wgQ4mt8XuVRXBd+YdS9rO1YXf/z7h0W4wuLHbaKV09a8uWkNUzT6X3ouccV7fpcEYzpxmhm6yLQk36fkYpnnK2VYvOfK7VE8UTv+yvsrwYF7XcP7fIPFJ/f8NcDur9IdhbpWOIWkekKZ9p7ECHsLJi+86uoFuCU6/8tn0pxNj5QhYYk/q5m5jJODuEAFCn6PIkgWBOo1irrxlJhXJy+PWdVH1q4kM/vapKXD02XVeGh7ZgBswlOuzl1KBdlfvX+bAZGyv+ppFGghR3Rc/cqCu20AoM0eKZS+JyJq4R+NPgk+7BIyF4n7CeZLDyWhXZy/Cp9rep1oHGKIMUqzbBidZDORskUMBxQFWAW6FKwa63q+sCgV9ODv5Vn3u/cyckySKCBHbxGWOSI6CCz5J+caLzGMpDB917DCCrKdvZ4HgiX0tKLbelfvXM7Qo/SlmIaqLtQtpbt7BiyTix9qyNcAGhDbYsyoOtXDblq6y97JgZ5/yIuoeiU/k8BIPXhAO/BouwRd/pJZ3Yx/zB2RBWB2uMAI/Lxq9PErfbqlaU9hkybMAPsqEz5mkjW9cZeYKbMEEglYtLhkfOMlRommZkaCTs9Y1l8oKdqOMXo6yF
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5618.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(396003)(346002)(39860400002)(136003)(478600001)(66556008)(66476007)(69590400012)(6506007)(66946007)(83380400001)(36756003)(16526019)(5660300002)(2616005)(316002)(2906002)(1076003)(8936002)(26005)(52116002)(186003)(956004)(4326008)(6512007)(6486002)(8676002)(6666004)(86362001)(30864003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?ywpKA9YiXbJM2FR+Jp8PSo3EgW46pI6d88sfJ3JxW14SJFPyEkJOkNWUx9qi?=
- =?us-ascii?Q?sFxULyGbbXRJHRE4IJYgLozX/AsSuRr/tImYPoqS5wj7xYfdCrPu4Q5tVewq?=
- =?us-ascii?Q?3/KXumD4BS0sBqkIn1XA2nELpVTWbuFnzGtFk9as6mXnDRvXqCMf6Hll0dKM?=
- =?us-ascii?Q?AUOJY7a1r/692OtbTcCNhJJD+hy8ax6TqdtpGAN9bsjG3QGfgi5oB/2jNvSA?=
- =?us-ascii?Q?LCgpK0gSd9dOgYWI8cU3ekapJhvj4NdtVtGrNQisIW1vYcIpGyr4EeHvjbys?=
- =?us-ascii?Q?Smw66O98GAZD27QT1ZWj0tgoj/7vvKfcIqDFbmT6bKaVwbE36g/13GxJ84JU?=
- =?us-ascii?Q?TGoJxBdPj7W8iJxjfhdkdzh6kt7XjSmV0IYGPIJRvaAumYeIAghvWopNw5sE?=
- =?us-ascii?Q?OdqZZmEK5mXvmNZR7VjWHYtcUx/BccS6D7kj4+A3my4Lu8V8PHPnMqLau+dW?=
- =?us-ascii?Q?+V+dYupiMwUrIPm1d3WoG8zzu1b7aeZS5xtu03p2vIzd3AOMbUAY0KMJKPUN?=
- =?us-ascii?Q?zAd1/NC6EkwGmxWJ9iPL6qUdhAahliW6CpW2V+p/pUFsyOsoGXHW9C0MqZep?=
- =?us-ascii?Q?iggELjxD7Wrs8oMpWaCZM4HMcChOs9GUofUsmCuVX/b02sW7rlOH0wi8Hc6r?=
- =?us-ascii?Q?8h3xBASVtoSFGqYqatBwWhezHPe5CqlAvwx7atMf7pLH0Qsms7KGhh0LCqe2?=
- =?us-ascii?Q?5CX90SRXWqVi/AbHaTgY9KPd5+TBg51nRQaChQUMCc3qxVPVsnqtZFZz5Qlk?=
- =?us-ascii?Q?Ur0r6ocdplb+AUluP2FU18W/xgm3dK9BqbnOyCcoiz+xx6rXlYRBwBpcdy7f?=
- =?us-ascii?Q?6qRXKo24uPHIyhtqIX6O21f80FnJvTG0x2sGYqTP/5+g4vj+BncHdzJOJ7Ef?=
- =?us-ascii?Q?ukZAbMtoj3zsszTTAzu2WgdJ2IbxyhJimFWdGylKoKRbmBw41dK5bv1c6AGk?=
- =?us-ascii?Q?uLf/vIb6RwZ54PebL1ImNLaOiOg69y4p+8Tu/Rwf+jmdLhhQA+v1gJNRiPF1?=
- =?us-ascii?Q?caoQ+12w50fvOokJNMA/EC88vKyOHb2mtrZoV73A5rlDGVYXgsMiKFIn5URQ?=
- =?us-ascii?Q?ud9mNZi8KUyS+jRRLhjg6BvwhQh3F6a2rqI7GKGlSfc4Um0HTMF+5cbUGu4h?=
- =?us-ascii?Q?DUkO5Bg/dxmmedNxn5zAG2Nin4SJK7zOlakfDgYb081TYhJ0vKFNs1SQSeMq?=
- =?us-ascii?Q?Gz2wzugKuoIbWBM8MROMiDeTV9D/BCdOb6ZzWBvVkh1Xx4Qe9wrZsXs6ursD?=
- =?us-ascii?Q?jgHQpUzNY3kDkU7WKlS/zFWJrUpjAo8HVAHD1EBOl0aG71vnzVmysZ/6JERb?=
- =?us-ascii?Q?lJIizIlMmpEWl7zjqBfwrOdR?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3a4034f-270f-4243-10b4-08d8e911823d
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB5618.eurprd04.prod.outlook.com
+X-OriginatorOrg: diasemi.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2021 06:54:28.3749
+X-MS-Exchange-CrossTenant-AuthSource: PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38c8ee81-4f38-4161-640a-08d8e92742d8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2021 09:30:10.6045
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MQ8/7VbH7+taurY4UfJ4hAt3rIEYEgfTUj8DYOMC9PdUIxzWFD6QBxRzChB2wuRwJtNsy3V0mi7L/vwJl7sshg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7091
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: inp9FRoEp8dlAuYNDaUw58qhSqIprvfJnkIhuyXWe4fU0UIauWBYDI3l260JhrKV/duwXtdIiv+wBLvOy77dAxRPU2Ckx6HwM0R9rJ8LJvc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR10MB3914
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add eDMA receive and send mode support.
-Support to read and write data larger than 256 bytes in one frame.
+On 16 March 2021 16:23, Mark Jonas wrote:
 
-Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-Reviewed-by: Li Jun <jun.li@nxp.com>
----
- drivers/i2c/busses/i2c-imx-lpi2c.c | 291 ++++++++++++++++++++++++++++-
- 1 file changed, 289 insertions(+), 2 deletions(-)
+> From: Hubert Streidl <hubert.streidl@de.bosch.com>
+>=20
+> By default the PMIC DA9063 2-wire interface is SMBus compliant. This
+> means the PMIC will automatically reset the interface when the clock
+> signal ceases for more than the SMBus timeout of 35 ms.
+>=20
+> If the I2C driver / device is not capable of creating atomic I2C
+> transactions, a context change can cause a ceasing of the clock signal.
+> This can happen if for example a real-time thread is scheduled. Then
+> the DA9063 in SMBus mode will reset the 2-wire interface. Subsequently
+> a write message could end up in the wrong register. This could cause
+> unpredictable system behavior.
+>=20
+> The DA9063 PMIC also supports an I2C compliant mode for the 2-wire
+> interface. This mode does not reset the interface when the clock
+> signal ceases. Thus the problem depicted above does not occur.
+>=20
+> This patch tests for the bus functionality "I2C_FUNC_I2C". It can
+> reasonably be assumed that the bus cannot obey SMBus timings if
+> this functionality is set. SMBus commands most probably are emulated
+> in this case which is prone to the latency issue described above.
+>=20
+> This patch enables the I2C bus mode if I2C_FUNC_I2C is set or
+> otherwise keeps the default SMBus mode.
+>=20
+> Signed-off-by: Hubert Streidl <hubert.streidl@de.bosch.com>
+> Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
 
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index 1e26672d47bf..6d920bf0dbd4 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -8,6 +8,8 @@
- #include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/delay.h>
-+#include <linux/dmaengine.h>
-+#include <linux/dma-mapping.h>
- #include <linux/err.h>
- #include <linux/errno.h>
- #include <linux/i2c.h>
-@@ -31,6 +33,7 @@
- #define LPI2C_MCR	0x10	/* i2c contrl register */
- #define LPI2C_MSR	0x14	/* i2c status register */
- #define LPI2C_MIER	0x18	/* i2c interrupt enable */
-+#define LPI2C_MDER	0x1C	/* i2c DMA enable */
- #define LPI2C_MCFGR0	0x20	/* i2c master configuration */
- #define LPI2C_MCFGR1	0x24	/* i2c master configuration */
- #define LPI2C_MCFGR2	0x28	/* i2c master configuration */
-@@ -72,11 +75,15 @@
- #define MCFGR1_AUTOSTOP	BIT(8)
- #define MCFGR1_IGNACK	BIT(9)
- #define MRDR_RXEMPTY	BIT(14)
-+#define MDER_TDDE	BIT(0)
-+#define MDER_RDDE	BIT(1)
- 
- #define I2C_CLK_RATIO	24 / 59
- #define CHUNK_DATA	256
- 
- #define I2C_PM_TIMEOUT		1000 /* ms */
-+#define I2C_DMA_THRESHOLD	16 /* bytes */
-+#define I2C_USE_PIO		(-150)
- 
- enum lpi2c_imx_mode {
- 	STANDARD,	/* <=100Kbps */
-@@ -95,6 +102,7 @@ enum lpi2c_imx_pincfg {
- 
- struct lpi2c_imx_struct {
- 	struct i2c_adapter	adapter;
-+	resource_size_t		phy_addr;
- 	int			irq;
- 	struct clk		*clk_per;
- 	struct clk		*clk_ipg;
-@@ -114,6 +122,17 @@ struct lpi2c_imx_struct {
- 	struct pinctrl *pinctrl;
- 	struct pinctrl_state *pinctrl_pins_default;
- 	struct pinctrl_state *pinctrl_pins_gpio;
-+
-+	bool			can_use_dma;
-+	bool			using_dma;
-+	bool			xferred;
-+	struct i2c_msg		*msg;
-+	dma_addr_t		dma_addr;
-+	struct dma_chan		*dma_tx;
-+	struct dma_chan		*dma_rx;
-+	enum dma_data_direction dma_direction;
-+	u8			*dma_buf;
-+	unsigned int		dma_len;
- };
- 
- static void lpi2c_imx_intctrl(struct lpi2c_imx_struct *lpi2c_imx,
-@@ -289,6 +308,9 @@ static int lpi2c_imx_master_enable(struct lpi2c_imx_struct *lpi2c_imx)
- 	if (ret)
- 		goto rpm_put;
- 
-+	if (lpi2c_imx->can_use_dma)
-+		writel(MDER_TDDE | MDER_RDDE, lpi2c_imx->base + LPI2C_MDER);
-+
- 	temp = readl(lpi2c_imx->base + LPI2C_MCR);
- 	temp |= MCR_MEN;
- 	writel(temp, lpi2c_imx->base + LPI2C_MCR);
-@@ -462,6 +484,154 @@ static void lpi2c_imx_read(struct lpi2c_imx_struct *lpi2c_imx,
- 	lpi2c_imx_intctrl(lpi2c_imx, MIER_RDIE | MIER_NDIE);
- }
- 
-+static void lpi2c_dma_unmap(struct lpi2c_imx_struct *lpi2c_imx)
-+{
-+	struct dma_chan *chan = lpi2c_imx->dma_direction == DMA_FROM_DEVICE
-+				? lpi2c_imx->dma_rx : lpi2c_imx->dma_tx;
-+
-+	dma_unmap_single(chan->device->dev, lpi2c_imx->dma_addr,
-+			 lpi2c_imx->dma_len, lpi2c_imx->dma_direction);
-+
-+	lpi2c_imx->dma_direction = DMA_NONE;
-+}
-+
-+static void lpi2c_cleanup_dma(struct lpi2c_imx_struct *lpi2c_imx)
-+{
-+	if (lpi2c_imx->dma_direction == DMA_NONE)
-+		return;
-+	else if (lpi2c_imx->dma_direction == DMA_FROM_DEVICE)
-+		dmaengine_terminate_all(lpi2c_imx->dma_rx);
-+	else if (lpi2c_imx->dma_direction == DMA_TO_DEVICE)
-+		dmaengine_terminate_all(lpi2c_imx->dma_tx);
-+
-+	lpi2c_dma_unmap(lpi2c_imx);
-+}
-+
-+static void lpi2c_dma_callback(void *data)
-+{
-+	struct lpi2c_imx_struct *lpi2c_imx = (struct lpi2c_imx_struct *)data;
-+
-+	lpi2c_dma_unmap(lpi2c_imx);
-+	writel(GEN_STOP << 8, lpi2c_imx->base + LPI2C_MTDR);
-+	lpi2c_imx->xferred = true;
-+
-+	complete(&lpi2c_imx->complete);
-+}
-+
-+static int lpi2c_dma_submit(struct lpi2c_imx_struct *lpi2c_imx,
-+			   struct i2c_msg *msg)
-+{
-+	bool read = msg->flags & I2C_M_RD;
-+	enum dma_data_direction dir = read ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-+	struct dma_chan *chan = read ? lpi2c_imx->dma_rx : lpi2c_imx->dma_tx;
-+	struct dma_async_tx_descriptor *txdesc;
-+	dma_cookie_t cookie;
-+
-+	lpi2c_imx->dma_len = read ? msg->len - 1 : msg->len;
-+	lpi2c_imx->msg = msg;
-+	lpi2c_imx->dma_direction = dir;
-+
-+	if (IS_ERR(chan))
-+		return PTR_ERR(chan);
-+
-+	lpi2c_imx->dma_addr = dma_map_single(chan->device->dev,
-+					     lpi2c_imx->dma_buf,
-+					     lpi2c_imx->dma_len, dir);
-+	if (dma_mapping_error(chan->device->dev, lpi2c_imx->dma_addr)) {
-+		dev_err(&lpi2c_imx->adapter.dev, "dma map failed, use pio\n");
-+		return -EINVAL;
-+	}
-+
-+	txdesc = dmaengine_prep_slave_single(chan, lpi2c_imx->dma_addr,
-+					lpi2c_imx->dma_len, read ?
-+					DMA_DEV_TO_MEM : DMA_MEM_TO_DEV,
-+					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-+	if (!txdesc) {
-+		dev_err(&lpi2c_imx->adapter.dev, "dma prep slave sg failed, use pio\n");
-+		lpi2c_cleanup_dma(lpi2c_imx);
-+		return -EINVAL;
-+	}
-+
-+	reinit_completion(&lpi2c_imx->complete);
-+	txdesc->callback = lpi2c_dma_callback;
-+	txdesc->callback_param = (void *)lpi2c_imx;
-+
-+	cookie = dmaengine_submit(txdesc);
-+	if (dma_submit_error(cookie)) {
-+		dev_err(&lpi2c_imx->adapter.dev, "submitting dma failed, use pio\n");
-+		lpi2c_cleanup_dma(lpi2c_imx);
-+		return -EINVAL;
-+	}
-+
-+	lpi2c_imx_intctrl(lpi2c_imx, MIER_NDIE);
-+
-+	dma_async_issue_pending(chan);
-+
-+	return 0;
-+}
-+
-+static bool is_use_dma(struct lpi2c_imx_struct *lpi2c_imx, struct i2c_msg *msg)
-+{
-+	if (!lpi2c_imx->can_use_dma)
-+		return false;
-+
-+	if (msg->len < I2C_DMA_THRESHOLD)
-+		return false;
-+
-+	return true;
-+}
-+
-+static int lpi2c_imx_push_rx_cmd(struct lpi2c_imx_struct *lpi2c_imx,
-+				 struct i2c_msg *msg)
-+{
-+	unsigned int temp, rx_remain;
-+	unsigned long orig_jiffies = jiffies;
-+
-+	if ((msg->flags & I2C_M_RD)) {
-+		rx_remain = msg->len;
-+		do {
-+			temp = rx_remain > CHUNK_DATA ?
-+				CHUNK_DATA - 1 : rx_remain - 1;
-+			temp |= (RECV_DATA << 8);
-+			while ((readl(lpi2c_imx->base + LPI2C_MFSR) & 0xff) > 2) {
-+				if (time_after(jiffies, orig_jiffies + msecs_to_jiffies(1000))) {
-+					dev_dbg(&lpi2c_imx->adapter.dev, "txfifo empty timeout\n");
-+					if (lpi2c_imx->adapter.bus_recovery_info)
-+						i2c_recover_bus(&lpi2c_imx->adapter);
-+					return -ETIMEDOUT;
-+				}
-+				schedule();
-+			}
-+			writel(temp, lpi2c_imx->base + LPI2C_MTDR);
-+			rx_remain = rx_remain - (temp & 0xff) - 1;
-+		} while (rx_remain > 0);
-+	}
-+
-+	return 0;
-+}
-+
-+static int lpi2c_dma_xfer(struct lpi2c_imx_struct *lpi2c_imx,
-+			   struct i2c_msg *msg)
-+{
-+	int result;
-+
-+	result = lpi2c_dma_submit(lpi2c_imx, msg);
-+	if (!result) {
-+		result = lpi2c_imx_push_rx_cmd(lpi2c_imx, msg);
-+		if (result)
-+			return result;
-+		result = lpi2c_imx_msg_complete(lpi2c_imx);
-+		return result;
-+	}
-+
-+	/* DMA xfer failed, try to use PIO, clean up dma things */
-+	i2c_put_dma_safe_msg_buf(lpi2c_imx->dma_buf, lpi2c_imx->msg,
-+				 lpi2c_imx->xferred);
-+	lpi2c_cleanup_dma(lpi2c_imx);
-+
-+	return I2C_USE_PIO;
-+}
-+
- static int lpi2c_imx_xfer(struct i2c_adapter *adapter,
- 			  struct i2c_msg *msgs, int num)
- {
-@@ -474,6 +644,9 @@ static int lpi2c_imx_xfer(struct i2c_adapter *adapter,
- 		return result;
- 
- 	for (i = 0; i < num; i++) {
-+		lpi2c_imx->xferred = false;
-+		lpi2c_imx->using_dma = false;
-+
- 		result = lpi2c_imx_start(lpi2c_imx, &msgs[i]);
- 		if (result)
- 			goto disable;
-@@ -482,9 +655,24 @@ static int lpi2c_imx_xfer(struct i2c_adapter *adapter,
- 		if (num == 1 && msgs[0].len == 0)
- 			goto stop;
- 
-+		if (is_use_dma(lpi2c_imx, &msgs[i])) {
-+			lpi2c_imx->using_dma = true;
-+
-+			writel(0x1, lpi2c_imx->base + LPI2C_MFCR);
-+
-+			lpi2c_imx->dma_buf = i2c_get_dma_safe_msg_buf(&msgs[i],
-+							    I2C_DMA_THRESHOLD);
-+			if (lpi2c_imx->dma_buf) {
-+				result = lpi2c_dma_xfer(lpi2c_imx, &msgs[i]);
-+				if (result != I2C_USE_PIO)
-+					goto stop;
-+			}
-+		}
-+
-+		lpi2c_imx->using_dma = false;
- 		lpi2c_imx->delivered = 0;
- 		lpi2c_imx->msglen = msgs[i].len;
--		init_completion(&lpi2c_imx->complete);
-+		reinit_completion(&lpi2c_imx->complete);
- 
- 		if (msgs[i].flags & I2C_M_RD)
- 			lpi2c_imx_read(lpi2c_imx, &msgs[i]);
-@@ -503,7 +691,16 @@ static int lpi2c_imx_xfer(struct i2c_adapter *adapter,
- 	}
- 
- stop:
--	lpi2c_imx_stop(lpi2c_imx);
-+	if (!lpi2c_imx->using_dma)
-+		lpi2c_imx_stop(lpi2c_imx);
-+	else {
-+		i2c_put_dma_safe_msg_buf(lpi2c_imx->dma_buf, lpi2c_imx->msg,
-+					 lpi2c_imx->xferred);
-+		if (result) {
-+			lpi2c_cleanup_dma(lpi2c_imx);
-+			writel(GEN_STOP << 8, lpi2c_imx->base + LPI2C_MTDR);
-+		}
-+	}
- 
- 	temp = readl(lpi2c_imx->base + LPI2C_MSR);
- 	if ((temp & MSR_NDF) && !result)
-@@ -528,6 +725,10 @@ static irqreturn_t lpi2c_imx_isr(int irq, void *dev_id)
- 	temp = readl(lpi2c_imx->base + LPI2C_MSR);
- 
- 	if (temp & MSR_NDF) {
-+		if (lpi2c_imx->using_dma) {
-+			lpi2c_cleanup_dma(lpi2c_imx);
-+			writel(GEN_STOP << 8, lpi2c_imx->base + LPI2C_MTDR);
-+		}
- 		complete(&lpi2c_imx->complete);
- 		goto ret;
- 	}
-@@ -623,20 +824,94 @@ static const struct of_device_id lpi2c_imx_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, lpi2c_imx_of_match);
- 
-+static void lpi2c_dma_exit(struct lpi2c_imx_struct *lpi2c_imx)
-+{
-+	if (lpi2c_imx->dma_rx) {
-+		dma_release_channel(lpi2c_imx->dma_rx);
-+		lpi2c_imx->dma_rx = NULL;
-+	}
-+
-+	if (lpi2c_imx->dma_tx) {
-+		dma_release_channel(lpi2c_imx->dma_tx);
-+		lpi2c_imx->dma_tx = NULL;
-+	}
-+}
-+
-+static int lpi2c_dma_init(struct device *dev,
-+			  struct lpi2c_imx_struct *lpi2c_imx)
-+{
-+	int ret;
-+	struct dma_slave_config dma_sconfig;
-+
-+	/* Prepare for TX DMA: */
-+	lpi2c_imx->dma_tx = dma_request_chan(dev, "tx");
-+	if (IS_ERR(lpi2c_imx->dma_tx)) {
-+		ret = PTR_ERR(lpi2c_imx->dma_tx);
-+		dev_err(dev, "can't get the TX DMA channel, error %d!\n", ret);
-+		lpi2c_imx->dma_tx = NULL;
-+		goto err;
-+	}
-+
-+	dma_sconfig.dst_addr = lpi2c_imx->phy_addr + LPI2C_MTDR;
-+	dma_sconfig.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
-+	dma_sconfig.dst_maxburst = 1;
-+	dma_sconfig.direction = DMA_MEM_TO_DEV;
-+	ret = dmaengine_slave_config(lpi2c_imx->dma_tx, &dma_sconfig);
-+	if (ret < 0) {
-+		dev_err(dev, "can't configure tx channel (%d)\n", ret);
-+		goto fail_tx;
-+	}
-+
-+	/* Prepare for RX DMA: */
-+	lpi2c_imx->dma_rx = dma_request_chan(dev, "rx");
-+	if (IS_ERR(lpi2c_imx->dma_rx)) {
-+		ret = PTR_ERR(lpi2c_imx->dma_rx);
-+		dev_err(dev, "can't get the RX DMA channel, error %d\n", ret);
-+		lpi2c_imx->dma_rx = NULL;
-+		goto fail_tx;
-+	}
-+
-+	dma_sconfig.src_addr = lpi2c_imx->phy_addr + LPI2C_MRDR;
-+	dma_sconfig.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
-+	dma_sconfig.src_maxburst = 1;
-+	dma_sconfig.direction = DMA_DEV_TO_MEM;
-+	ret = dmaengine_slave_config(lpi2c_imx->dma_rx, &dma_sconfig);
-+	if (ret < 0) {
-+		dev_err(dev, "can't configure rx channel (%d)\n", ret);
-+		goto fail_rx;
-+	}
-+
-+	lpi2c_imx->can_use_dma = true;
-+	lpi2c_imx->using_dma = false;
-+
-+	return 0;
-+fail_rx:
-+	dma_release_channel(lpi2c_imx->dma_rx);
-+fail_tx:
-+	dma_release_channel(lpi2c_imx->dma_tx);
-+err:
-+	lpi2c_dma_exit(lpi2c_imx);
-+	lpi2c_imx->can_use_dma = false;
-+	return ret;
-+}
-+
- static int lpi2c_imx_probe(struct platform_device *pdev)
- {
- 	struct lpi2c_imx_struct *lpi2c_imx;
- 	unsigned int temp;
- 	int ret;
-+	struct resource *res;
- 
- 	lpi2c_imx = devm_kzalloc(&pdev->dev, sizeof(*lpi2c_imx), GFP_KERNEL);
- 	if (!lpi2c_imx)
- 		return -ENOMEM;
- 
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	lpi2c_imx->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(lpi2c_imx->base))
- 		return PTR_ERR(lpi2c_imx->base);
- 
-+	lpi2c_imx->phy_addr = (dma_addr_t)res->start;
- 	lpi2c_imx->irq = platform_get_irq(pdev, 0);
- 	if (lpi2c_imx->irq < 0)
- 		return lpi2c_imx->irq;
-@@ -691,6 +966,18 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	if (ret == -EPROBE_DEFER)
- 		goto rpm_disable;
- 
-+	/* Init DMA */
-+	lpi2c_imx->dma_direction = DMA_NONE;
-+	lpi2c_imx->dma_rx = lpi2c_imx->dma_tx = NULL;
-+	ret = lpi2c_dma_init(&pdev->dev, lpi2c_imx);
-+	if (ret) {
-+		dev_err_probe(&pdev->dev, ret, "dma setup error %d, use pio\n", ret);
-+		if (ret == -EPROBE_DEFER)
-+			goto rpm_disable;
-+	}
-+
-+	init_completion(&lpi2c_imx->complete);
-+
- 	ret = i2c_add_adapter(&lpi2c_imx->adapter);
- 	if (ret)
- 		goto rpm_disable;
--- 
-2.25.1
-
+Thanks for your efforts on this Mark.
