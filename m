@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 031E8340400
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 11:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DA83403FE
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 11:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbhCRKzA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S230286AbhCRKzA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Thu, 18 Mar 2021 06:55:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48754 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:48778 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230001AbhCRKyl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 18 Mar 2021 06:54:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 86F6B64EF6;
-        Thu, 18 Mar 2021 10:54:40 +0000 (UTC)
+        id S230079AbhCRKyt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 18 Mar 2021 06:54:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 304AD64EF6;
+        Thu, 18 Mar 2021 10:54:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616064881;
-        bh=AaEM6kJP7hYl/Mke2P2Zf6SgSWc43K5KRU+P44kGtJk=;
+        s=k20201202; t=1616064888;
+        bh=jKNzxVOtluBlw3sWcfi2a8h55RR1kuhcHLwoPXUuXNI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DEeKQ/L/pCvN40iSreXnykHkgcmRdDfUPUjn3Vrlc/C6rlfy23UyJLLJ2pTEWsMi4
-         mqyJxRThSmECucH4YN73BIOjeMKJN6DWWpU5DnrgGl7PHS0aLtAY4mI65lD1iliSv0
-         DCbA10pvEcEetKPM0dT4rCmUt5sB8CHK9txeQQZAChD1O+nRQbAVE7vNJsfdcpnmWx
-         Vib3QdlK0m24VNW1HFjptkxw1/bIZuykKMiu9jfgHxRmCAG+hpWxGHRrKIaOd/cp7a
-         w6RTUeQJf0BHYgYITgmyx0YixukXB6TC5EcSvw0uK2icig0j3de47U/AUc0+fvztoB
-         NOdFWZ89ifMAQ==
-Date:   Thu, 18 Mar 2021 11:54:38 +0100
+        b=DhnnIoJN0lNOxbLTPyMz8PT2FK0UyXjuPbDoNFgyPoo/bEihuxYqr/npgPYt+Eqi4
+         BtjFysjtLHWPqewCE9t8v8leKgW/jDWrcQwklfPiZhk0VR9fk+Cx/KfmY7XCxgZWgP
+         H1Cdpgi5X8Duts8q2od38N5pdcZNvTG8GoulyQpktFYJszJ+xVEISC0bqR7Bb3ZPZM
+         x9XZbOqNVj5LMMvmHUv1+eC/2e+KhHcTokLc0ESH07W2ZkyiHkmYc5uhUctBCImXCC
+         7ANbR6wK257lwVjyZVPe5y97khYwXHdBbCg3KiE2MH/G7+QpSu4mUoIBRUTjnI7MKz
+         TCV53GjyE8WWw==
+Date:   Thu, 18 Mar 2021 11:54:46 +0100
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Alain Volmat <alain.volmat@foss.st.com>
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
@@ -33,52 +33,53 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         fabrice.gasnier@foss.st.com
-Subject: Re: [PATCH 2/5] i2c: stm32f7: support DT binding i2c-analog-filter
-Message-ID: <20210318105438.GD974@ninjato>
+Subject: Re: [PATCH 3/5] i2c: stm32f7: add support for DNF i2c-digital-filter
+ binding
+Message-ID: <20210318105446.GE974@ninjato>
 References: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
- <1612515104-838-3-git-send-email-alain.volmat@foss.st.com>
+ <1612515104-838-4-git-send-email-alain.volmat@foss.st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ycz6tD7Th1CMF4v7"
+        protocol="application/pgp-signature"; boundary="HnQK338I3UIa/qiP"
 Content-Disposition: inline
-In-Reply-To: <1612515104-838-3-git-send-email-alain.volmat@foss.st.com>
+In-Reply-To: <1612515104-838-4-git-send-email-alain.volmat@foss.st.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Ycz6tD7Th1CMF4v7
+--HnQK338I3UIa/qiP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 05, 2021 at 09:51:41AM +0100, Alain Volmat wrote:
-> Replace driver internally coded enabling/disabling of the
-> analog-filter with the DT binding "i2c-analog-filter".
+On Fri, Feb 05, 2021 at 09:51:42AM +0100, Alain Volmat wrote:
+> Add the support for the i2c-digital-filter binding, allowing to enable
+> the digital filter via the device-tree and indicate its value in the DT.
 >=20
 > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 
 Applied to for-next, thanks!
 
 
---Ycz6tD7Th1CMF4v7
+--HnQK338I3UIa/qiP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTMW0ACgkQFA3kzBSg
-KbYMUhAApnGraRQyJ1+nAaJK6wla8KeEgux9k6DBuHr4IjaugpnvcFRER8pYViNZ
-KrJtn0fmcGRv4pGQH/n+pPjsWxWP1rPE0z7aMuYPyXkHgxedAhY6Odu256VYJpwB
-0CKsAF+FFegY3SR6tEEFEGQfI4ofDSckfG/MSExbp2y27b78BRaV2gdHkY9FVPwK
-OJgrDSrvtD1LtN2Kyqyy/KOmodfzByDkE+VB1zrh6Q5p3yWbplJkNPGTxipTEfSQ
-S+JI0YPSrO5p4ksIKwvPsPPL5sVA3GcsweidVvTI/8Fs8DMNY86CtGykWEZTB9QS
-kYfiLfP6cB8xBLYR33dH42cwHjGMtusSb/3dYgsi8BH7GzL8uoRyRMVVZz/gndAs
-8WeV+9R3LjlpalH2OD46onM75X+ax4p8GUgX5bmU2bcKdFyOxomfrtbn0vmORIsc
-VGix7yvYOOGPZ5WSQ2P3lB1HNj2kGq8tEzLwSvY+MI2pa5VwE4AoNi0OmebT13xe
-KvTky6rExZlj8PUeKpiHaiWLI0FomYMgnU3OBaEnBm1g0kt1rRfCLL+98zQqbbuA
-5MHg68bWeiffWybr9EMHNo5JUPNpDeDG9S0M65HokSNJM3cujRORuYyRClHrAM1O
-lFbHsBqkRvy8hYOP1DxobEh3cfcfnpkzt+6OwcPYjnlI5aG4s58=
-=+4F8
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTMXYACgkQFA3kzBSg
+KbZGvg//Qt/rXoaq3I2LSLApIOkG9Zqt6hluxc/ZtzNTzPpac8rf3Pgygn6mFwxK
+POSs9/q1k1rwtQnmmypL4fPvZ/SBiyEUSzGURWcx/hPw28P9kGNxVD2TZgsVzCgt
+TVr8Gj5CmYFxyuDTnhk2hWloPUkCGxmg30+Mv8WZG6LaxQDNBxizxl5TNh5nj5KX
+DOA1rhb8UbM/mV08Ce+2w10Ey5J0rT6xSmjPfFP9yol0+bsf2O5gVddyXWfQoUnf
+Zy0IgVfDrZFbm//4ORn10BuWR0pAexwiUw1wjEn5+Kg76jUHkJMLUMUtgDkhmHKt
+HlenoBaDSCTV3JdWJTeyq4EMeACCK01/DmavasUM7QqFtFiaGs0MxB+A6+NA/0bk
+1joVv8VruYvOeAMEp6sd3IOgU7KKHEkGuWWLHMAgs07NkO1156bbso0S6fBntC1G
+NwLEvdw4QhqDZAMMI/CDOzNfdQuLIEx2O4Dg3PKF/S1iuZmOZbRUDzP1YM5KkXLx
+eOfug+uTKI38fz1R7xzB/Eu+YTJozPiP+SCqn4O/Ji3BAMUO1CTuat/FBTTLCOxt
+n5yeSwtYxuqcu/Q9w3NGdzlgVZPNYa7a+Osm9yuUV1fFJicuYa4iB0huIdeAloEA
+w6sMnkcgop193dfRKUDaJicib7c0qUX+wRI9Tl5gyPePhm8fuiU=
+=HLHK
 -----END PGP SIGNATURE-----
 
---Ycz6tD7Th1CMF4v7--
+--HnQK338I3UIa/qiP--
