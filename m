@@ -2,76 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBD8340438
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 12:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 899B634044F
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 12:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbhCRLJJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Mar 2021 07:09:09 -0400
-Received: from www.zeus03.de ([194.117.254.33]:44162 "EHLO mail.zeus03.de"
+        id S230061AbhCRLMW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Mar 2021 07:12:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229890AbhCRLJB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 18 Mar 2021 07:09:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Uh0xSe7vBl7CPzsQtEmGyApnxkwe
-        KUkmfv4AOAzOqqc=; b=Q1bZcfPzdSBAS3uk+3VV0bHBDxMfH2zZhrzVfFY7c3b5
-        rq9iKpsJnOya6c0xmEBJKaQSQgXfGFP7ESIKJhYdiCnHsO5hw60BcVBKnYxbNxbD
-        nKx8aAM+3ZKVD7EtefLk9T1LH9V8c4AJonYiajatEH6NqIsTk6YGGq0FZdttuaQ=
-Received: (qmail 386134 invoked from network); 18 Mar 2021 12:09:00 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Mar 2021 12:09:00 +0100
-X-UD-Smtp-Session: l3s3148p1@0oZZoM29NrwgARa4RaSzAQBVtUgvoxMO
-Date:   Thu, 18 Mar 2021 12:08:59 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2] media: i2c: adv7511: remove open coded version of
- SMBus block read
-Message-ID: <20210318110859.GJ974@ninjato>
-References: <20210127103357.5045-1-wsa+renesas@sang-engineering.com>
- <bea536b1-9d81-3f41-8ca5-7fb075422290@xs4all.nl>
- <cadc7e6e-377f-db65-514e-7b2e6a40a0ae@xs4all.nl>
- <20210318104330.GB974@ninjato>
- <5f5ea721-c68b-f64e-4398-cd4521c18d77@xs4all.nl>
+        id S231156AbhCRLMJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 18 Mar 2021 07:12:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B664264F2A;
+        Thu, 18 Mar 2021 11:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616065929;
+        bh=UqSQW15bDrrL+cdZcRqJ6fR6MAT53nCPdnQjzPbCIjM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qHvQ1bqSHZInMCqB+dRNptRlP2k4wTv5LTxHqHtO5Nrfa85f34YpF2aB9Mj1ceA4J
+         AlCWDTJISLlX7JyH1ZFDfbZd1CGJHIJ5+UBocpOFzT4twxs+gwU7YQjdIOcIZBqtKm
+         CRAH17Apiio4sMFQjbPE5QRCacja94a4VDERriFjxUIsrp3e0TbFzeDlSIShBNuxE+
+         Bj3RwLeoZyWE7MtbeoHKMuE3l4Fq6dmNjgFz5mZstxMxW1Ef+NAKdc2uR8VZFbR+0Q
+         kNOcCoC9X0Cv6iYeyjKH2PJJ86194DtD6IYDV4TRv1AaCkO2HHt+6tpqdsYVB9KA+4
+         Zkg1R17s9KlYQ==
+Date:   Thu, 18 Mar 2021 12:12:06 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-i2c@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: i2c-scmi: Drop unused ACPI_MODULE_NAME definition
+Message-ID: <20210318111206.GK974@ninjato>
+References: <6660750.UgobAMfxrE@kreacher>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RUqJLqMNe5u4kDWT"
+        protocol="application/pgp-signature"; boundary="BOhpupldhMlYbdva"
 Content-Disposition: inline
-In-Reply-To: <5f5ea721-c68b-f64e-4398-cd4521c18d77@xs4all.nl>
+In-Reply-To: <6660750.UgobAMfxrE@kreacher>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---RUqJLqMNe5u4kDWT
+--BOhpupldhMlYbdva
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Mar 05, 2021 at 07:28:30PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> The ACPI_MODULE_NAME() definition is only used by the message
+> printing macros from ACPICA that are not used by the code in
+> question, so it is redundant.  Drop it.
+>=20
+> No functional impact.
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Applied to for-next, thanks!
 
 
-> I've delegated it to myself in our patchwork system, so it should appear in a PR
-> for 5.13 next week or so.
-
-Thank you!
-
-
---RUqJLqMNe5u4kDWT
+--BOhpupldhMlYbdva
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTNMcACgkQFA3kzBSg
-KbafSQ/4zLHfFL49Gfb1zTA2C2M3yVl0sWZSgDmtIskbMPJU2uNUBfBF7fRqWRia
-Rap686hqXl1Rwnbcepuy69+d0NPHXETQQ6H2AEMLks5u5Vjg8nSCVQ0RFoIKbpws
-jWVH7cCMWisHOg3wVdnz14I9h62Ynw4ay3i9IMnGu2nqXqwYKxadRewSIpVaptdT
-q0+97nbxadxUkZgatGAXQDrGeBkkJsk43rHNM8nVT3kcPizjoxZxUjo+fYIhJPRQ
-8xmJoNT0PK6biNkQiuQ1CEJdSDtz5/pV965pYMefZ+WCdi/lIWDrpYSdug7WKqgl
-ZJKktEzLTwcH/XcIgwc+A9GAfs7pZFhL2/6w+bTfazMpnjHKMKjUlLs+xP6X/veT
-6lrYyTIwWDwDDBrEalaVESHjlhQtBlmpMzG9nky5zA5kAFeHVF5FAtMOL5aC06XR
-Mt0PDXm+RPbhJcWLKuv1g3//38ap2pBNVGT8rTH/XLOFw2PKS/kpvUAKDHwjC2cw
-vUXvEf3Znu0tCBUvRX0QKllzq/jzal7BwRNOuJzu3IJhHdh1dUG3yb1IdkYOPncu
-EWf5fJyeZB6CkBwe2MOvyl6y47uCMKonZkl9yF4uTfOAXZQslDno6okJ/+b1nSYj
-8XH8grgrS+V48rmCouexufc4njsfJAqVTOItryN6UKW7TGiKpA==
-=3a3t
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTNYUACgkQFA3kzBSg
+KbacUA/9F0ROxzF9VeSC9gvbm6/JYUiV2jHwkK0Y7luCqbYxl0o1YDl/OHuL4XBJ
+eIopPGFKcLMxD634C2fhEd+VaI168FG2XrNYavBZpSInTA5jjecWlDrNt08Ayurf
+wLlQFR2JM4/C7NLvEXhmUbpAtYM9YJ9UVPCqhmwcVgK8Z1sHLXa7RYK8Mh6SnUGR
+Kp9F9zP5orGYiAhnAIZLXJXnfhm2Gy2p8TloBpn0JP10/jqIKS/BKthVTus4VuNi
+KvMaUlUn7DTFFHtJjV2UcKK2wtH+o+Y0j/g1JLu0K5cOiCVjYbuJA07f1q0nNwMS
+JMTacp18RTQSkKXLH9Cfl09ABhE57jU4Hxfg+yO73Ab3HVhPd2uEdu+Zxhj5mn/i
+1wee+0qLOlmtnm/Mr6ZGVGLGnqVpnn38NcAwtUtzao5vmF1smT7o4ddNdhwMrTeM
+LQvolBy2iGmNwx0O2ljK9q+gSiy1T18PQr64y3lB4YnMBq+9CZ4/3IGBFGmLRZKw
+jvjzEUz56/F+YOZ1bGfVP9AcunMayGAjhCun53cs5eO0j/MdpqOnSIlSaZia3lum
+cBIS1VshATlToWSFjS/2fk7J1CTDNxLdOP2ufCXi3YD1Qep2VFS3YBVkw8heoqcF
+iLUrbbc+OxR+5aYmfc7PQaEzDe6b35hVnkqsrdJxdWwZ8bwDeg8=
+=VzbQ
 -----END PGP SIGNATURE-----
 
---RUqJLqMNe5u4kDWT--
+--BOhpupldhMlYbdva--
