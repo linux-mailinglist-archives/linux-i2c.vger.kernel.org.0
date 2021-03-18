@@ -2,70 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6108534042E
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 12:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBD8340438
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 12:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbhCRLG6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Mar 2021 07:06:58 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:49097 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230169AbhCRLGx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Mar 2021 07:06:53 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id MqUKlOrbN4XAGMqUNlIE1K; Thu, 18 Mar 2021 12:06:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1616065611; bh=FcT1xJRYYG3zTya3jrkfWF6NJWw6BvsK98mlp9kKcjc=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=QdVSnxRaN0nB4jb90+F8yzawbcuBroe9sDjMeRs+JDHzKB6NfHy1NkOr/x39HssLJ
-         qqg+o9SbqwiZMEF4LYUQHFVHPrEMj6j97v58uLqtZaRGyjLGUeTXh5mEeAdMtQPENo
-         qqzhMitnv4AOSNQtzd1b5UfiXdp8r+CyxT7NHCmYWbsmI4LgAQSSuKnfF1TEZ9PZ6U
-         IHpob+6QBskEZGqRAOnQfYlh0x4ymaKyCcdkLv9jLvEnP6+39fEgO4gC5bN10HEUUI
-         N+YsmGKghybFParr0ChzWJFGo3RYaT3l3Cd0YXgLcBvA8sE/AZDNyLVFX0VWArw412
-         0zb4dKpJjRvbg==
-Subject: Re: [PATCH v2] media: i2c: adv7511: remove open coded version of
- SMBus block read
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+        id S230151AbhCRLJJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Mar 2021 07:09:09 -0400
+Received: from www.zeus03.de ([194.117.254.33]:44162 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229890AbhCRLJB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 18 Mar 2021 07:09:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=Uh0xSe7vBl7CPzsQtEmGyApnxkwe
+        KUkmfv4AOAzOqqc=; b=Q1bZcfPzdSBAS3uk+3VV0bHBDxMfH2zZhrzVfFY7c3b5
+        rq9iKpsJnOya6c0xmEBJKaQSQgXfGFP7ESIKJhYdiCnHsO5hw60BcVBKnYxbNxbD
+        nKx8aAM+3ZKVD7EtefLk9T1LH9V8c4AJonYiajatEH6NqIsTk6YGGq0FZdttuaQ=
+Received: (qmail 386134 invoked from network); 18 Mar 2021 12:09:00 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Mar 2021 12:09:00 +0100
+X-UD-Smtp-Session: l3s3148p1@0oZZoM29NrwgARa4RaSzAQBVtUgvoxMO
+Date:   Thu, 18 Mar 2021 12:08:59 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2] media: i2c: adv7511: remove open coded version of
+ SMBus block read
+Message-ID: <20210318110859.GJ974@ninjato>
 References: <20210127103357.5045-1-wsa+renesas@sang-engineering.com>
  <bea536b1-9d81-3f41-8ca5-7fb075422290@xs4all.nl>
  <cadc7e6e-377f-db65-514e-7b2e6a40a0ae@xs4all.nl>
  <20210318104330.GB974@ninjato>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <5f5ea721-c68b-f64e-4398-cd4521c18d77@xs4all.nl>
-Date:   Thu, 18 Mar 2021 12:06:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.1
+ <5f5ea721-c68b-f64e-4398-cd4521c18d77@xs4all.nl>
 MIME-Version: 1.0
-In-Reply-To: <20210318104330.GB974@ninjato>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfMcIoxqdXTLp+7KIKq07oM6sqgYOlI6Byn4y7u+Wjh3sMhHw/fDnhNwhe0+i6pHj5MJBZAkMWytRk+OV2wZ5vkNV4jv1SVfjZa5mcFJFZSMjHdV46ELw
- Oli2Ugv6Tu/i/TIfrOg7EAFxG5I6MDcjE3YUQaMSR0cOqo6M/FQ9+5ou7TFe+mYd5MroA5rQJIauDHg1iyri/PVcEui4Fqiz0yY90MbGHqZ4q19W0Z3zdc56
- eSKeAK2I+MghgViGso1N6rw/Qbw69xuPn9rRC5Gm24s6YesmBgcZRy2hexeJgT5RcchtNwrfg9Zl00PM4U7GrQdatScwXr/hAN/4+uoUbQk=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RUqJLqMNe5u4kDWT"
+Content-Disposition: inline
+In-Reply-To: <5f5ea721-c68b-f64e-4398-cd4521c18d77@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 18/03/2021 11:43, Wolfram Sang wrote:
-> 
->> I didn't hear back from you, so I'll pick it up for 5.13.
-> 
-> Thank you, Hans!
-> 
-> Can you pick up this one as well?
-> 
-> [PATCH 1/3] media: i2c: adv7842: remove open coded version of SMBus block write
-> 
 
-Ah, I thought you had picked that one up. Miscommunication.
+--RUqJLqMNe5u4kDWT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I've delegated it to myself in our patchwork system, so it should appear in a PR
-for 5.13 next week or so.
 
-Regards,
+> I've delegated it to myself in our patchwork system, so it should appear in a PR
+> for 5.13 next week or so.
 
-	Hans
+Thank you!
+
+
+--RUqJLqMNe5u4kDWT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTNMcACgkQFA3kzBSg
+KbafSQ/4zLHfFL49Gfb1zTA2C2M3yVl0sWZSgDmtIskbMPJU2uNUBfBF7fRqWRia
+Rap686hqXl1Rwnbcepuy69+d0NPHXETQQ6H2AEMLks5u5Vjg8nSCVQ0RFoIKbpws
+jWVH7cCMWisHOg3wVdnz14I9h62Ynw4ay3i9IMnGu2nqXqwYKxadRewSIpVaptdT
+q0+97nbxadxUkZgatGAXQDrGeBkkJsk43rHNM8nVT3kcPizjoxZxUjo+fYIhJPRQ
+8xmJoNT0PK6biNkQiuQ1CEJdSDtz5/pV965pYMefZ+WCdi/lIWDrpYSdug7WKqgl
+ZJKktEzLTwcH/XcIgwc+A9GAfs7pZFhL2/6w+bTfazMpnjHKMKjUlLs+xP6X/veT
+6lrYyTIwWDwDDBrEalaVESHjlhQtBlmpMzG9nky5zA5kAFeHVF5FAtMOL5aC06XR
+Mt0PDXm+RPbhJcWLKuv1g3//38ap2pBNVGT8rTH/XLOFw2PKS/kpvUAKDHwjC2cw
+vUXvEf3Znu0tCBUvRX0QKllzq/jzal7BwRNOuJzu3IJhHdh1dUG3yb1IdkYOPncu
+EWf5fJyeZB6CkBwe2MOvyl6y47uCMKonZkl9yF4uTfOAXZQslDno6okJ/+b1nSYj
+8XH8grgrS+V48rmCouexufc4njsfJAqVTOItryN6UKW7TGiKpA==
+=3a3t
+-----END PGP SIGNATURE-----
+
+--RUqJLqMNe5u4kDWT--
