@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0B0340407
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 11:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947CA34040F
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 11:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbhCRK4G (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Mar 2021 06:56:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49052 "EHLO mail.kernel.org"
+        id S230151AbhCRK6q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Mar 2021 06:58:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230394AbhCRKzl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 18 Mar 2021 06:55:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 56BDD64E07;
-        Thu, 18 Mar 2021 10:55:40 +0000 (UTC)
+        id S230014AbhCRK6o (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 18 Mar 2021 06:58:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B091C64F24;
+        Thu, 18 Mar 2021 10:58:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616064941;
-        bh=DnDnR/amy0tbA1uOOeuAEvRXaySTXCSy8QbqyiVcoFM=;
+        s=k20201202; t=1616065122;
+        bh=H5haXsTyRhLH/Tr8Ot7gpbm3NkcHxuV0oId1CbO3wi8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NbV5iHQfjQjT8vKHPrSs7b0Y4WA2kl9hpA6d2WjiBMnR8aXebHNboo/qZP+7t1//m
-         s6PZ2HxgEXNhGB1yZiRcDwsUavh0q4EnWnxWY1Or8cRgcqv6tYeJeekkdKm/Q1s516
-         Y/c6oIqCsSoCR+1GAHFDs2P6v8xR8BxaQlIV0irfFxQtvEDlRXn9irIovjgPZuyIyx
-         TKGYYm3UtKtYs7FXiKOWV/sPIB46gmaeqBIyN2E+nanPu/5+QMH3U0Yo4xnIA6wuoZ
-         /N4B8IsV5KPALvHYLmJyngLdcWhxNSokVcnodwvhrdLb/PtzFqLoVHUpMMf100KoET
-         UUvzSHMHTiL0g==
-Date:   Thu, 18 Mar 2021 11:55:37 +0100
+        b=UCMC6stWkb2KilpzcwYzrjpiy5n+IpWGdjpEGJcn62LZGF/JEVu/l+o4838XaU4JF
+         33dMvw4nnd8Ab9NYlRZi2stoE3seDxO8q2p2DWJzIFPAJpkWdE0CDEBNZuNmIcxn3Z
+         ReodiIJP1S2W6KP/Bmy+LWtpa9+ppL4L5iegrI1TEWRohlJwMhOQtN/ffdDLbYzwjq
+         WgXsJJkHtaZxDVRXT8H35kBtt2svxImYyiesoMP8jLS1yQkB1FzAd9xpibMj9VtIb9
+         f/Wfj8bgsPXLi7CPqzF+XItZZ0jW4RdLjFsNGiqg/LSNs9gGK49YHjh6MUqwv6M9IY
+         4+kTnXS4WC7Yg==
+Date:   Thu, 18 Mar 2021 11:58:39 +0100
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Alain Volmat <alain.volmat@foss.st.com>
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
@@ -33,53 +33,53 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         fabrice.gasnier@foss.st.com
-Subject: Re: [PATCH 4/5] ARM: dts: stm32: enable the analog filter for all
- I2C nodes in stm32mp151
-Message-ID: <20210318105537.GF974@ninjato>
+Subject: Re: [PATCH 5/5] i2c: stm32f7: indicate the address being accessed on
+ errors
+Message-ID: <20210318105839.GG974@ninjato>
 References: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
- <1612515104-838-5-git-send-email-alain.volmat@foss.st.com>
+ <1612515104-838-6-git-send-email-alain.volmat@foss.st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="K/NRh952CO+2tg14"
+        protocol="application/pgp-signature"; boundary="KIzF6Cje4W/osXrF"
 Content-Disposition: inline
-In-Reply-To: <1612515104-838-5-git-send-email-alain.volmat@foss.st.com>
+In-Reply-To: <1612515104-838-6-git-send-email-alain.volmat@foss.st.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---K/NRh952CO+2tg14
+--KIzF6Cje4W/osXrF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 05, 2021 at 09:51:43AM +0100, Alain Volmat wrote:
-> Enable the analog filter for all I2C nodes of the stm32mp151.
+On Fri, Feb 05, 2021 at 09:51:44AM +0100, Alain Volmat wrote:
+> To help debugging issues, add the address of the slave being
+> accessed when getting an error.
 >=20
 > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 
-I usually don't take DTS patches, but they can go in now via arm-soc as
-I applied the patches to the driver.
+Applied to for-next, thanks!
 
 
---K/NRh952CO+2tg14
+--KIzF6Cje4W/osXrF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTMakACgkQFA3kzBSg
-KbY7aA/9FQ41fh4wwSbiUTFPrcQMfKbF9cQPBfLGXmFBBGN6/baEyWZUxDWcOfFk
-Q+XXFTWInRwTNgsiA0RsXokke2zn8Pq2Bi7Aq2rzmI+sPJMHCSsa4Yvm/rYdFcnR
-ckuOqWr+sifZ/y0yaVyH9V7aFbIbTLcs0TQaqEpi+mvFTRCFQZiJLarHEDLYelU6
-/s5sVO5AKgWP3PSKn2Xpngt3dldXzT16aj3zB/V5K93JtqqsGfIQ+DFeV4/WUnl8
-8cnNRNqQnsXzbw7tsuoBkU1hwZuW2nKWzc0GB2xghHf5mAixBsj2IfPS8ZIUHhF3
-ZTNB9u/3Do22tylCYxrZcJi2QgdW48HxWAsblSgYD8Wx9v+WBeQQZRK0c71+y7nZ
-DXWt8TkiJpOymkbqpI63Z9Qf+4aY1VgO0aNHQevJoX78kLeo+SrIh6Ok3472lybR
-DteS/lkUm4kKHKtJiQPqVOpjkzFIBOHRuCvZgq09TyIz/yKTVw+xkXKPxIhVjzUp
-8ihrc0YgfKRzJTu/5sZLTv4lryQHuIy/M20GkoYxzJLRiwE3FW+SV2oxFjiqu8Am
-n8WtIQpG7wHtsPFlaXIgKotXIibbNlUxxd2aACYX6//FkDhPbdQBEuajfq810Luc
-p/ux85f/vDCzGXFdn/QjTACvCuz84NuTpUKir+d9WW0QQsSC7Oc=
-=kVvg
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTMl8ACgkQFA3kzBSg
+KbYFGhAAqK39kHrbMrNW65/acOoglcf2ZVyUccSvCvlPuqXeheH7V39lIoRoOlwz
+YjKFLQ4/WE8r5YEZfIbQKLxOjTEGCm9M3UILFEV+SL4xiCpsD6hiqjhvHdRponph
+VJcnrF7mvkCC9dvybD7gqHz3LUcMeaC266wvIC/0fUcm1YUkvehIDzilECeweTV6
+N4j33IOlQLd1SJ4IH0x4S0Mrh66Y6XS5dbBBHxmx4MrdSSxfGfVkyPB4JTDZgrsc
+mXWx3+4bMNaZW4OnEa7NbjYEtIGZLOBE7r5NFE3w/RudmabTHOCp7Mg6YCDwKNoe
+CSMQ4EfH5dpiUSEEYu/myNPtiGemyTvWbEjPFk3YYZuuTatiyyIPOPQwBKsBlDAR
+IGs3fmTur/ooCyIvb1HhDIaDD/BXMt5oJcgZKItXQRQQfn3mxoy16Cajz5v3/NQM
+GZkLG4pFOl41Irv1kw5hMhfBqIsqEswO9H+yRpWWjx+KRDXDzgr780fj7fPW+HGL
+MNXydEy8vmf7V3Hx50aWGaVQEkEUx8wORRBdPd+HG/PhIj7b0E0x2z6OkJssf59W
+ZBdKc9kfvz3hm5WzW3iVcG7tMoltGTL+5kex6ufI9TpG7P1qgt2Q/+jz15ErkTkw
+m01+/cxWGPBhdRJCmgwYVGegsLXBPjM/luqJc2f2UhPZmD1Q61A=
+=AQRM
 -----END PGP SIGNATURE-----
 
---K/NRh952CO+2tg14--
+--KIzF6Cje4W/osXrF--
