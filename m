@@ -2,84 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 947CA34040F
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 11:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5060D340411
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 12:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbhCRK6q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Mar 2021 06:58:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49458 "EHLO mail.kernel.org"
+        id S230246AbhCRK7u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Mar 2021 06:59:50 -0400
+Received: from sauhun.de ([88.99.104.3]:40954 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230014AbhCRK6o (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 18 Mar 2021 06:58:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B091C64F24;
-        Thu, 18 Mar 2021 10:58:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616065122;
-        bh=H5haXsTyRhLH/Tr8Ot7gpbm3NkcHxuV0oId1CbO3wi8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UCMC6stWkb2KilpzcwYzrjpiy5n+IpWGdjpEGJcn62LZGF/JEVu/l+o4838XaU4JF
-         33dMvw4nnd8Ab9NYlRZi2stoE3seDxO8q2p2DWJzIFPAJpkWdE0CDEBNZuNmIcxn3Z
-         ReodiIJP1S2W6KP/Bmy+LWtpa9+ppL4L5iegrI1TEWRohlJwMhOQtN/ffdDLbYzwjq
-         WgXsJJkHtaZxDVRXT8H35kBtt2svxImYyiesoMP8jLS1yQkB1FzAd9xpibMj9VtIb9
-         f/Wfj8bgsPXLi7CPqzF+XItZZ0jW4RdLjFsNGiqg/LSNs9gGK49YHjh6MUqwv6M9IY
-         4+kTnXS4WC7Yg==
-Date:   Thu, 18 Mar 2021 11:58:39 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com
-Subject: Re: [PATCH 5/5] i2c: stm32f7: indicate the address being accessed on
- errors
-Message-ID: <20210318105839.GG974@ninjato>
-References: <1612515104-838-1-git-send-email-alain.volmat@foss.st.com>
- <1612515104-838-6-git-send-email-alain.volmat@foss.st.com>
+        id S230105AbhCRK7V (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 18 Mar 2021 06:59:21 -0400
+Received: from localhost (i577BC015.versanet.de [87.123.192.21])
+        by pokefinder.org (Postfix) with ESMTPSA id 0B6EE2C0640;
+        Thu, 18 Mar 2021 11:59:13 +0100 (CET)
+Date:   Thu, 18 Mar 2021 11:59:12 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: rcar: implement atomic transfers
+Message-ID: <20210318105912.GH974@ninjato>
+References: <20210212164541.8986-1-uli+renesas@fpond.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KIzF6Cje4W/osXrF"
+        protocol="application/pgp-signature"; boundary="MGu/vTNewDGZ7tmp"
 Content-Disposition: inline
-In-Reply-To: <1612515104-838-6-git-send-email-alain.volmat@foss.st.com>
+In-Reply-To: <20210212164541.8986-1-uli+renesas@fpond.eu>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---KIzF6Cje4W/osXrF
+--MGu/vTNewDGZ7tmp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 05, 2021 at 09:51:44AM +0100, Alain Volmat wrote:
-> To help debugging issues, add the address of the slave being
-> accessed when getting an error.
+On Fri, Feb 12, 2021 at 05:45:41PM +0100, Ulrich Hecht wrote:
+> Implements atomic transfers. Tested by rebooting an r8a7790 Lager board
+> after connecting the i2c-rcar controller to the PMIC in
+> arch/arm/boot/dts/r8a7790-lager.dts like so:
 >=20
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> 		compatible =3D "i2c-demux-pinctrl";
+> 		pinctrl-names =3D "default";
+> 		pinctrl-0 =3D <&pmic_irq_pins>;
+> -		i2c-parent =3D <&iic3>, <&i2c3>;
+> +		i2c-parent =3D <&i2c3>, <&iic3>;
+> 		i2c-bus-name =3D "i2c-pwr";
+> 		#address-cells =3D <1>;
+> 		#size-cells =3D <0>;
+>=20
+> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
 
 Applied to for-next, thanks!
 
 
---KIzF6Cje4W/osXrF
+--MGu/vTNewDGZ7tmp
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTMl8ACgkQFA3kzBSg
-KbYFGhAAqK39kHrbMrNW65/acOoglcf2ZVyUccSvCvlPuqXeheH7V39lIoRoOlwz
-YjKFLQ4/WE8r5YEZfIbQKLxOjTEGCm9M3UILFEV+SL4xiCpsD6hiqjhvHdRponph
-VJcnrF7mvkCC9dvybD7gqHz3LUcMeaC266wvIC/0fUcm1YUkvehIDzilECeweTV6
-N4j33IOlQLd1SJ4IH0x4S0Mrh66Y6XS5dbBBHxmx4MrdSSxfGfVkyPB4JTDZgrsc
-mXWx3+4bMNaZW4OnEa7NbjYEtIGZLOBE7r5NFE3w/RudmabTHOCp7Mg6YCDwKNoe
-CSMQ4EfH5dpiUSEEYu/myNPtiGemyTvWbEjPFk3YYZuuTatiyyIPOPQwBKsBlDAR
-IGs3fmTur/ooCyIvb1HhDIaDD/BXMt5oJcgZKItXQRQQfn3mxoy16Cajz5v3/NQM
-GZkLG4pFOl41Irv1kw5hMhfBqIsqEswO9H+yRpWWjx+KRDXDzgr780fj7fPW+HGL
-MNXydEy8vmf7V3Hx50aWGaVQEkEUx8wORRBdPd+HG/PhIj7b0E0x2z6OkJssf59W
-ZBdKc9kfvz3hm5WzW3iVcG7tMoltGTL+5kex6ufI9TpG7P1qgt2Q/+jz15ErkTkw
-m01+/cxWGPBhdRJCmgwYVGegsLXBPjM/luqJc2f2UhPZmD1Q61A=
-=AQRM
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTMoAACgkQFA3kzBSg
+KbZJzA//ZGZCpvJlr7Nz/v/JfDwmyh4coWWz8kqKFrsEWj95Q3yPiC5ji+aePeFD
+KE9fXiPWzYur6I+1+uRDnRVtgM1/Z+MnRj6pntjTFZs2b7wcoZmZlXOWflwMYjqy
+7C4k1t75JUNq9jXDIfxw/e7ueIOIdBgvP6bcGbQMLhmpCQGE/fzd6KUoYRB1eGWx
+mzQ00vCPXSr7jW9ZicUhgw93HbAVQs5AgujGQhExx82BNrK9elIsKfbCFSBIvgK8
+U6YJ2JnIUNrgmR2rGxBupiGAcF2/hhP8QpP6CrOM0KlCjADRyIYlLfAPExxWS/lP
+3OE16TURcU7FkSgWWUqzK8DuA9Exys60X0QtvXc1zxhEGV+LKXDh5vW2zff5ab88
+i8/FD0EDlh6sHDTYEQWZbPZhM5pEjscGE7orU2vbrTVE/2i8YavXQU5v0qA7k1YH
+yo1NzZKaTPkhj+bQ8lVzOavCgz7epVCGtK8DXwmN9f6rcBc4JR+EdDrwngmPc0eh
+Z7z1NSbiHIn+6zQi9cpTtRJhXoyI8YNWwSIGTy4G5SJVjU5VzDkl5XEThW9yqc73
+T61dORWau8pTmpWFNl2FYxOjdpzEWaI/c+digzxkiSzRyWW9HWT3a/T+ocEQHt1A
+ibPRSKrmqnPTmLKLcR0IuzRqWcKmRXvcuBbL/bepD2BOrIOTgDM=
+=XEOj
 -----END PGP SIGNATURE-----
 
---KIzF6Cje4W/osXrF--
+--MGu/vTNewDGZ7tmp--
