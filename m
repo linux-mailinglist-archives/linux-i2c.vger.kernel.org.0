@@ -2,82 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 899B634044F
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 12:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5AA34045C
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 12:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbhCRLMW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Mar 2021 07:12:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53738 "EHLO mail.kernel.org"
+        id S230397AbhCRLQJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Mar 2021 07:16:09 -0400
+Received: from www.zeus03.de ([194.117.254.33]:46644 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231156AbhCRLMJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 18 Mar 2021 07:12:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B664264F2A;
-        Thu, 18 Mar 2021 11:12:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616065929;
-        bh=UqSQW15bDrrL+cdZcRqJ6fR6MAT53nCPdnQjzPbCIjM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qHvQ1bqSHZInMCqB+dRNptRlP2k4wTv5LTxHqHtO5Nrfa85f34YpF2aB9Mj1ceA4J
-         AlCWDTJISLlX7JyH1ZFDfbZd1CGJHIJ5+UBocpOFzT4twxs+gwU7YQjdIOcIZBqtKm
-         CRAH17Apiio4sMFQjbPE5QRCacja94a4VDERriFjxUIsrp3e0TbFzeDlSIShBNuxE+
-         Bj3RwLeoZyWE7MtbeoHKMuE3l4Fq6dmNjgFz5mZstxMxW1Ef+NAKdc2uR8VZFbR+0Q
-         kNOcCoC9X0Cv6iYeyjKH2PJJ86194DtD6IYDV4TRv1AaCkO2HHt+6tpqdsYVB9KA+4
-         Zkg1R17s9KlYQ==
-Date:   Thu, 18 Mar 2021 12:12:06 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-i2c@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: i2c-scmi: Drop unused ACPI_MODULE_NAME definition
-Message-ID: <20210318111206.GK974@ninjato>
-References: <6660750.UgobAMfxrE@kreacher>
+        id S230151AbhCRLPs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 18 Mar 2021 07:15:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=D7W2V9Us1sReimH9cESJilgZHJcv
+        2HAGoAn2jgmkeIA=; b=MjTijZjmBfF/drrsGnnGWAMWFTXN/89IVdRwvNQw24CM
+        L/j9YWqd7GciYnCTNt0ur6WL9Hw/YMSLztLX6SHJekfAVc7Rii+FINzMoOzu1UcI
+        s9vSwsUq68X8YKk3ACVOS3rDeTeSAhJLb+grGTehseDoG2yeeBdjA5R9MSLztKk=
+Received: (qmail 388438 invoked from network); 18 Mar 2021 12:15:46 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Mar 2021 12:15:46 +0100
+X-UD-Smtp-Session: l3s3148p1@ScCUuM29tLwgARa4RaSzAQBVtUgvoxMO
+Date:   Thu, 18 Mar 2021 12:15:46 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
+Subject: Re: [PATCH] i2c: bail out early when RDWR parameters are wrong
+Message-ID: <20210318111546.GL974@ninjato>
+References: <20210312115734.14022-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BOhpupldhMlYbdva"
+        protocol="application/pgp-signature"; boundary="NPWyolIJAVLYbHY6"
 Content-Disposition: inline
-In-Reply-To: <6660750.UgobAMfxrE@kreacher>
+In-Reply-To: <20210312115734.14022-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---BOhpupldhMlYbdva
+--NPWyolIJAVLYbHY6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 05, 2021 at 07:28:30PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, Mar 12, 2021 at 12:57:34PM +0100, Wolfram Sang wrote:
+> The buggy parameters currently get caught later, but emit a noisy WARN.
+> Userspace should not be able to trigger this, so add similar checks much
+> earlier. Also avoids some unneeded code paths, of course. Apply kernel
+> coding stlye to a comment while here.
 >=20
-> The ACPI_MODULE_NAME() definition is only used by the message
-> printing macros from ACPICA that are not used by the code in
-> question, so it is redundant.  Drop it.
->=20
-> No functional impact.
->=20
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reported-by: syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
+> Tested-by: syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Applied to for-next, thanks!
 
 
---BOhpupldhMlYbdva
+--NPWyolIJAVLYbHY6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTNYUACgkQFA3kzBSg
-KbacUA/9F0ROxzF9VeSC9gvbm6/JYUiV2jHwkK0Y7luCqbYxl0o1YDl/OHuL4XBJ
-eIopPGFKcLMxD634C2fhEd+VaI168FG2XrNYavBZpSInTA5jjecWlDrNt08Ayurf
-wLlQFR2JM4/C7NLvEXhmUbpAtYM9YJ9UVPCqhmwcVgK8Z1sHLXa7RYK8Mh6SnUGR
-Kp9F9zP5orGYiAhnAIZLXJXnfhm2Gy2p8TloBpn0JP10/jqIKS/BKthVTus4VuNi
-KvMaUlUn7DTFFHtJjV2UcKK2wtH+o+Y0j/g1JLu0K5cOiCVjYbuJA07f1q0nNwMS
-JMTacp18RTQSkKXLH9Cfl09ABhE57jU4Hxfg+yO73Ab3HVhPd2uEdu+Zxhj5mn/i
-1wee+0qLOlmtnm/Mr6ZGVGLGnqVpnn38NcAwtUtzao5vmF1smT7o4ddNdhwMrTeM
-LQvolBy2iGmNwx0O2ljK9q+gSiy1T18PQr64y3lB4YnMBq+9CZ4/3IGBFGmLRZKw
-jvjzEUz56/F+YOZ1bGfVP9AcunMayGAjhCun53cs5eO0j/MdpqOnSIlSaZia3lum
-cBIS1VshATlToWSFjS/2fk7J1CTDNxLdOP2ufCXi3YD1Qep2VFS3YBVkw8heoqcF
-iLUrbbc+OxR+5aYmfc7PQaEzDe6b35hVnkqsrdJxdWwZ8bwDeg8=
-=VzbQ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTNmIACgkQFA3kzBSg
+KbZCiA//Z6gdpfX9h1AOHOe+qg3eJsFvYhLakl0YKLLKELrKATZFkITM0saHgvMz
+0zYQz/2awDVhUOUIijXVRW54uHaJdRmp4lF3FoS8d1zw5FWx1t/zIBfx5YCJIV9U
+bpdrAZ0u616McrWV5yxaVnaFE/qVV1BFAoTa4ga/m+aJOfpfcIm8kThPEUypIFq8
+GHepWN01HfL9pok1WeErmN2cw7Qdbzqg75JZQAsvDYxMZnum7LQcwEcEelLjVg1+
+wVUyCG4D8rJtD1bgRMZHHpjOReD/vCOoU5qZSAwrDVcwADUE64H+pNcd0N1+j28X
+chZGHKbGe4yulX4au3hpqdPszQ2Zx4xoqje5UD2rcDUdS7hcukkr6vfEuPzRD+KS
+oLhQhFbLDII/v3y5zDLAsBNd1l12XMNLMy0Ark3WF1fpv/y8AX78aLpug9S/iKow
+pwjB9XbDrm5Wq9j+/O2pIlxl74ERu7naz6ZBIRiCuyhm6fj1tdUWcFbKOmyT2poj
+HwH9VXQ6ETm1+d3wUd+GkqnBiDp/IueGRaSCKqWeIpnvt7byjwv7ZFVP39t41S2M
+d60azNtoWLBP8xbmZJJwjn6UFFRGYjMwd11y6nC1O2HgtJi+EGQOX7iSaMyY4wkL
+XSIDCEz+fcHtJaIqKF3VAWGk2mbRgdirvVo/6MNVZIjIW6Bz/VQ=
+=OoJ6
 -----END PGP SIGNATURE-----
 
---BOhpupldhMlYbdva--
+--NPWyolIJAVLYbHY6--
