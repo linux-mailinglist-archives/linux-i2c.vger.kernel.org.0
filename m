@@ -2,87 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6055D341875
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Mar 2021 10:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF29034189A
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Mar 2021 10:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbhCSJdf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Mar 2021 05:33:35 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:14405 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbhCSJdG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Mar 2021 05:33:06 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4F1zDL1x0wzkbb0;
-        Fri, 19 Mar 2021 17:31:30 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
- 14.3.498.0; Fri, 19 Mar 2021 17:33:02 +0800
-From:   Tian Tao <tiantao6@hisilicon.com>
-To:     <linux@rempel-privat.de>, <shawnguo@kernel.org>,
-        <s.hauer@pengutronix.de>, <sumit.semwal@linaro.org>,
-        <christian.koenig@amd.com>
-CC:     <linux-i2c@vger.kernel.org>
-Subject: [PATCH] i2c: imx: Use devm_request_irq()
-Date:   Fri, 19 Mar 2021 17:33:40 +0800
-Message-ID: <1616146420-6468-1-git-send-email-tiantao6@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
+        id S229524AbhCSJlI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Mar 2021 05:41:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36818 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229447AbhCSJkw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 19 Mar 2021 05:40:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 24AAC64F1C;
+        Fri, 19 Mar 2021 09:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616146851;
+        bh=+t8vPkSq5K1M4uYZCgDX1PyDYngFCmdFpvYLTGO0UV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mgMcOVvpwkZJpMf7eeFc75PxapvhBF+pev+0RhCnvzBKkn2g+kvAN683e5h7OY7vY
+         0R/CqFqf5bMtHqNMqXGgQswlAt7yDpvwkIzJRrW+aXojzG1Gisw/KrfdcpLSfplfG8
+         lGDPkbSjldHwG8kEoGxvFcp9rRbuI1ZN274lXvk2jEK/sJkH1yPkHRrq0v4i2Z2FA3
+         6al9w5nxRbPIFvOYvQtnk1K0MoEQhw+DZZBOJB3QenpVzvmNBDwA0XApgmJMkoUg+x
+         Iif9Z+xqia2O10cKeQQmY5/1Z8Lv+gNH6L2/aRRE/RJbNuXO9dj7LGTluTvsV78h6x
+         VFwVveCuS6s2Q==
+Date:   Fri, 19 Mar 2021 10:40:24 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Tian Tao <tiantao6@hisilicon.com>
+Cc:     linux@rempel-privat.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: imx: Use devm_request_irq()
+Message-ID: <20210319094024.GA1003@ninjato>
+References: <1616146420-6468-1-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZGiS0Q5IWpPtfppv"
+Content-Disposition: inline
+In-Reply-To: <1616146420-6468-1-git-send-email-tiantao6@hisilicon.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Use devm_request_irq() to get rid of manual unregistration.
 
-Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
----
- drivers/i2c/busses/i2c-imx.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+--ZGiS0Q5IWpPtfppv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index b80fdc1..e377d4a 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1435,8 +1435,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 		goto rpm_disable;
- 
- 	/* Request IRQ */
--	ret = request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
--				   pdev->name, i2c_imx);
-+	ret = devm_request_irq(&pdev->dev, irq, i2c_imx_isr,
-+			       IRQF_SHARED, pdev->name, i2c_imx);
- 	if (ret) {
- 		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
- 		goto rpm_disable;
-@@ -1481,7 +1481,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 
- clk_notifier_unregister:
- 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
--	free_irq(irq, i2c_imx);
- rpm_disable:
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
-@@ -1494,7 +1493,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
- static int i2c_imx_remove(struct platform_device *pdev)
- {
- 	struct imx_i2c_struct *i2c_imx = platform_get_drvdata(pdev);
--	int irq, ret;
-+	int ret;
- 
- 	ret = pm_runtime_get_sync(&pdev->dev);
- 	if (ret < 0)
-@@ -1514,9 +1513,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
- 	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
- 
- 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
--	irq = platform_get_irq(pdev, 0);
--	if (irq >= 0)
--		free_irq(irq, i2c_imx);
- 	clk_disable_unprepare(i2c_imx->clk);
- 
- 	pm_runtime_put_noidle(&pdev->dev);
--- 
-2.7.4
+On Fri, Mar 19, 2021 at 05:33:40PM +0800, Tian Tao wrote:
+> Use devm_request_irq() to get rid of manual unregistration.
+>=20
+> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 
+Please don't send such patches unless you have a deep understanding of
+the hardware. devm and interrupts are a dangerous combination because
+you can get interrupts when the driver is gone already ( =3D=3D OOPS) if you
+don't pay close attention.
+
+For this reason, I won't take janitorial patches with regard to devm and
+interrupts.
+
+
+--ZGiS0Q5IWpPtfppv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBUcYMACgkQFA3kzBSg
+KbYDpA/+OKk/LVXAoO16xJ0ce0IepB6+ZwB0SEh9PnyNkBV3AxjbAh00WFcOnMil
+B1AdSgZSF+a1Uvs8r/UT73aKtqonnkwTcXmUCi6p12gGHImSnvcu438X/Ko3jLqO
+h4kkDlvcI/6gC5wlkcZV3v+GnkQH+Y8K+2O8Isc9Hybi365TGaMgMpBNTfItlCAz
+4UcdR8MUWVf033zCKL45r6MNOvPecYioHpneOwRIrLm/YIr3cGzdf3AUXlHOOY3F
+ImuGMAWhwcO0c+hdGzQ4LCySyaWlb+GYUZ0HqDQjw2Y1S6bGxDJvwUOiFjL164XO
+XM5L0P5umDY50nfsBloOhi3Yeib65qbiqf5TA7AeNojaEf3ced2Hfig5vJdXhz6e
+h9NFoiWdxYMfUUUySQIecGYY1108rZBZ8i1k9a01K1wdTcmAf9yhjf8Kr2g95ZKA
+YKlEHSSnUl9eZhu47S9RjspJhAMrs1zhDVUjXw4A8WLqhjyP/25rPXydcMGxFvjA
+mhLuYD0bBWdTzO3n5RQYz5//EhAT3CGPiFi7kMKNhrBnbsztx0Q2Oj+J2cqaCI/W
+JZArQkqSLo0wgpczpSq3fPMmiNQCBHNUQ9GTVkM9y2KvB9IX8KF+AQ17fTY9rd3s
+5bO6RmGybtG9UX63Ld/bn0GL6fPQZoc493A9mRpksisk/BNxsJ4=
+=8GTT
+-----END PGP SIGNATURE-----
+
+--ZGiS0Q5IWpPtfppv--
