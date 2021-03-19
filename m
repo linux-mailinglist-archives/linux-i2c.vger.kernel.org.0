@@ -2,67 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F77341373
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Mar 2021 04:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A06623413E2
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Mar 2021 04:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbhCSD27 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Mar 2021 23:28:59 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13202 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbhCSD26 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Mar 2021 23:28:58 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F1q7C2HyxzmZTd;
-        Fri, 19 Mar 2021 11:26:31 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.498.0; Fri, 19 Mar 2021 11:28:53 +0800
-From:   Tian Tao <tiantao6@hisilicon.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>
-CC:     <linux-i2c@vger.kernel.org>
-Subject: [PATCH] i2c: qup: move to use request_irq by IRQF_NO_AUTOEN flag
-Date:   Fri, 19 Mar 2021 11:29:31 +0800
-Message-ID: <1616124571-59218-1-git-send-email-tiantao6@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
+        id S233358AbhCSDyp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Mar 2021 23:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233613AbhCSDyj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Mar 2021 23:54:39 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C42AC06175F
+        for <linux-i2c@vger.kernel.org>; Thu, 18 Mar 2021 20:54:39 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y200so4944127pfb.5
+        for <linux-i2c@vger.kernel.org>; Thu, 18 Mar 2021 20:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=narkUsbR5ZUD1XMmhTYoytTDn8nBO3CvEWs/Vsjdzh4=;
+        b=SCqTJyXszA4QtpOWiiaGqTicH6VMbqAXvLD8IEo3iKOG64GQU6qaQrlQuZiMfDrQ2M
+         AV7fsI6pokKg3fwm+gIgwnSYCsJvwSzUmTiguQITXtPMM8XNBFlsc3PFrgEszFIwP31a
+         XDsX4VZLOnQoG34Bm1HwGINs9ilviRRoBxoucehvmHZffLfHtZddjEVCKIiSEIBiIgjH
+         S+IgHh4H8f0Sscg9fTAEDKknzmi7A7YfEbS+ikNbNuaYKEYKMxsCA9W6v/t+jAyp07Bd
+         DSXl3jq9Bl0DdGM3rG2dY3ldEf0iiiRZfCGGMZYQO2ET+3e5V0m3d4KPYA3ErJTmtuGU
+         dwhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=narkUsbR5ZUD1XMmhTYoytTDn8nBO3CvEWs/Vsjdzh4=;
+        b=US6vI5Rv2MqgL7ANhOzjXCvnrBT92uFjQiWRJ5b6gBg85/k0vk29hDTMeK+RX+Tvwd
+         1GmoTQ/YRc9Blya/fmr4mlRkNNCnHH1hM52JZ/mfwLEyVzyIklWxtjDs2ZwmSM0k7bze
+         Tzf03TEVkoUOTGq1BQnLy8ezQk6pLDYQuP8SHZji2a7fHMGZ/LUoegGS10jc+Eilznuo
+         6FvxrWPglJbTb2o6dS/f9qeZwJatlATSjAMTyMJs0dOfQF5Bv0BY2qNyMx6SbKDHAspN
+         b/2sNOEKknZEoej85tDstjGV2bxmroqVylKmzuul7wDDp4ei7o/tPDGs4nxEX9lbYS6y
+         Racg==
+X-Gm-Message-State: AOAM530WBzkYK03lQvaJKci4VFSebKLgmMz4PemCCTV0rH6B9gNZ47mv
+        6F1lCosR7jEMU5O2tca2z7TkTEdPSmd+JQ==
+X-Google-Smtp-Source: ABdhPJygVESN9h44+tNWX3dTnBly9T7ce+LfjxsvZ5WfoERLs08fRAO+nT6RE4PnG82iwDTnqHrkuQ==
+X-Received: by 2002:a62:3503:0:b029:1aa:6f15:b9fe with SMTP id c3-20020a6235030000b02901aa6f15b9femr7100635pfa.65.1616126078954;
+        Thu, 18 Mar 2021 20:54:38 -0700 (PDT)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id bj15sm3609033pjb.9.2021.03.18.20.54.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Mar 2021 20:54:37 -0700 (PDT)
+Date:   Fri, 19 Mar 2021 09:24:35 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
+        Jie Deng <jie.deng@intel.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        conghui.chen@intel.com, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com,
+        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
+        Tali Perry <tali.perry1@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        yu1.wang@intel.com, shuo.a.liu@intel.com,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v8] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <20210319035435.a4reve77hnvjdzwk@vireshk-i7>
+References: <c193b92d8d22ba439bb1b260d26d4b76f57d4840.1615889867.git.jie.deng@intel.com>
+ <20210316074409.2afwsaeqxuwvj7bd@vireshk-i7>
+ <0dfff1ac-50bb-b5bc-72ea-880fd52ed60d@metux.net>
+ <CAK8P3a3f9bKdOOMgrA9TfeObyEd+eeg8JcTVT8AyS1+s=X2AjQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a3f9bKdOOMgrA9TfeObyEd+eeg8JcTVT8AyS1+s=X2AjQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-disable_irq() after request_irq() still has a time gap in which
-interrupts can come. request_irq() with IRQF_NO_AUTOEN flag will
-disable IRQ auto-enable because of requesting.
+On 18-03-21, 15:52, Arnd Bergmann wrote:
+> Allowing multiple virtio-i2c controllers in one system, and multiple i2c
+> devices attached to each controller is clearly something that has to work.
 
-this patch is made base on "add IRQF_NO_AUTOEN for request_irq" which
-is being merged: https://lore.kernel.org/patchwork/patch/1388765/
+Good.
 
-Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
----
- drivers/i2c/busses/i2c-qup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> I don't actually see a limitation though. Viresh, what is the problem
+> you see for having multiple controllers?
 
-diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
-index 61dc20f..324ced7 100644
---- a/drivers/i2c/busses/i2c-qup.c
-+++ b/drivers/i2c/busses/i2c-qup.c
-@@ -1797,12 +1797,12 @@ static int qup_i2c_probe(struct platform_device *pdev)
- 		goto fail;
- 
- 	ret = devm_request_irq(qup->dev, qup->irq, qup_i2c_interrupt,
--			       IRQF_TRIGGER_HIGH, "i2c_qup", qup);
-+			       IRQF_TRIGGER_HIGH | IRQF_NO_AUTOEN,
-+			       "i2c_qup", qup);
- 	if (ret) {
- 		dev_err(qup->dev, "Request %d IRQ failed\n", qup->irq);
- 		goto fail;
- 	}
--	disable_irq(qup->irq);
- 
- 	hw_ver = readl(qup->base + QUP_HW_VERSION);
- 	dev_dbg(qup->dev, "Revision %x\n", hw_ver);
+I thought this would be a problem in that case as we are using the global
+virtio_adapter here.
+
++       vi->adap = &virtio_adapter;
++       i2c_set_adapdata(vi->adap, vi);
+
+Multiple calls to probe() will end up updating the same pointer inside adap.
+
++       vi->adap->dev.parent = &vdev->dev;
+
+Same here, overwrite.
+
++       /* Setup ACPI node for controlled devices which will be probed through ACPI */
++       ACPI_COMPANION_SET(&vi->adap->dev, ACPI_COMPANION(pdev));
++       vi->adap->timeout = HZ / 10;
+
+These may be fine, but still not ideal I believe.
+
++       ret = i2c_add_adapter(vi->adap);
+i
+This should be a problem as well, we must be adding this to some sort of list,
+doing some RPM stuff, etc ?
+
+Jie, the solution is to allocate memory for adap at runtime in probe and remove
+the virtio_adapter structure completely.
+
 -- 
-2.7.4
-
+viresh
