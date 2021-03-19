@@ -2,83 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24471340E22
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Mar 2021 20:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F77341373
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Mar 2021 04:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232587AbhCRTW7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Mar 2021 15:22:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51788 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232680AbhCRTWb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 18 Mar 2021 15:22:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F53064F30;
-        Thu, 18 Mar 2021 19:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616095351;
-        bh=BHUAanqwOsbASIOKCYywfRr2tc5rTzcdgHq4z9RDxy8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GIj9uyZBoYnvbeLn3l5xKmC5HSYSHwu6gYDdWGz7GxhOfai1tYiEsApnvm9Bz3tLL
-         XoiDVH3GIAoJu/xKSBX9+Ij/j+9AtzCA4b/v2HQrZG7TFX8wy8pi0L7h4alixEyuk4
-         jO2gyc7qeEbJ6XLDSGDsvhL0rMzWI80ee+GyeLI1C7Yr8O62ZbuBD4FgrdFriAOgAM
-         KS2/icrNgr/8k6YfaOLH4qJrKenGiPW/NEmPAG9eLUhIJppr4W1oW0kkfiCzo3SQi9
-         sRoa6Xukc2AsmmR8HKcpypf9ATGLjhDz2EZcE5m/taih17azlhntzrB4zQV0ps8Rob
-         qMoS/P/t5wNug==
-Date:   Thu, 18 Mar 2021 20:22:27 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] powerpc/embedded6xx: Remove CONFIG_MV64X60
-Message-ID: <20210318192227.GA2317@ninjato>
-References: <9c2952bcfaec3b1789909eaa36bbce2afbfab7ab.1616085654.git.christophe.leroy@csgroup.eu>
- <19e57d16692dcd1ca67ba880d7273a57fab416aa.1616085654.git.christophe.leroy@csgroup.eu>
+        id S229948AbhCSD27 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Mar 2021 23:28:59 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:13202 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229931AbhCSD26 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Mar 2021 23:28:58 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F1q7C2HyxzmZTd;
+        Fri, 19 Mar 2021 11:26:31 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.498.0; Fri, 19 Mar 2021 11:28:53 +0800
+From:   Tian Tao <tiantao6@hisilicon.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>
+CC:     <linux-i2c@vger.kernel.org>
+Subject: [PATCH] i2c: qup: move to use request_irq by IRQF_NO_AUTOEN flag
+Date:   Fri, 19 Mar 2021 11:29:31 +0800
+Message-ID: <1616124571-59218-1-git-send-email-tiantao6@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fdj2RfSjLxBAspz7"
-Content-Disposition: inline
-In-Reply-To: <19e57d16692dcd1ca67ba880d7273a57fab416aa.1616085654.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+disable_irq() after request_irq() still has a time gap in which
+interrupts can come. request_irq() with IRQF_NO_AUTOEN flag will
+disable IRQ auto-enable because of requesting.
 
---fdj2RfSjLxBAspz7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this patch is made base on "add IRQF_NO_AUTOEN for request_irq" which
+is being merged: https://lore.kernel.org/patchwork/patch/1388765/
 
-On Thu, Mar 18, 2021 at 05:25:07PM +0000, Christophe Leroy wrote:
-> Commit 92c8c16f3457 ("powerpc/embedded6xx: Remove C2K board support")
-> moved the last selector of CONFIG_MV64X60.
->=20
-> As it is not a user selectable config, it can be removed.
->=20
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+---
+ drivers/i2c/busses/i2c-qup.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
+index 61dc20f..324ced7 100644
+--- a/drivers/i2c/busses/i2c-qup.c
++++ b/drivers/i2c/busses/i2c-qup.c
+@@ -1797,12 +1797,12 @@ static int qup_i2c_probe(struct platform_device *pdev)
+ 		goto fail;
+ 
+ 	ret = devm_request_irq(qup->dev, qup->irq, qup_i2c_interrupt,
+-			       IRQF_TRIGGER_HIGH, "i2c_qup", qup);
++			       IRQF_TRIGGER_HIGH | IRQF_NO_AUTOEN,
++			       "i2c_qup", qup);
+ 	if (ret) {
+ 		dev_err(qup->dev, "Request %d IRQ failed\n", qup->irq);
+ 		goto fail;
+ 	}
+-	disable_irq(qup->irq);
+ 
+ 	hw_ver = readl(qup->base + QUP_HW_VERSION);
+ 	dev_dbg(qup->dev, "Revision %x\n", hw_ver);
+-- 
+2.7.4
 
-
---fdj2RfSjLxBAspz7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBTqG8ACgkQFA3kzBSg
-KbbmohAArNDcM8jsah4nKuj2dEoibVzEc+TeWQIgUpiB4KO9oGcBdkjORA/Su7//
-GfQEAxIJAGVfqLRWHEMdZx7B91GNzIfAPm6uMajK8kNShfY5W19gzDVD1tKBRyuY
-Q5xjwI5Ln2RJAVdYYXc3uYAG5ViJeQXug5JBIAlIj0ekVIWaNk3146cuT1p2d9S+
-Awvu7AnrE2+5LwIUzuJURfbNYNmF7OqJIpDU0Wo7CV/7pcy96WCEVTYQYbt8jlyY
-/pS6RddvhTmI3fcLZbXM1u+57ySH4xhLtq5lkqXa5l8xw+8Z7IYaOCVV+upxG6Tc
-J8kf9DAIo1jyOgmfhsLusXiMPrXAlP/GeNRxG3m0Kx9eg31CLn0jCA7u5LddXlSy
-aQ4vWQc/PJ/XGASymVFwONX4cAN/lJiX6SrU/7c59IookElOI9vYKnZw2dfu+xHZ
-PnajCmQPIbugZNnf6JadbSJTyu/AsFOHtCX8ezNPm8rx+Dis3o04Y3SMBiSDto9x
-be+WUqupXtQJAw+zVcgJzqeO/NvzdwUu7Z7vV5GWQPCFnKoD9F8LUQ6Xjmha41uQ
-aOjYlWHsSH8uqXIVD3tjc6n+Ln5g4VyOcj2yqwINd3rFZtPCis0SlCqx0GeDajl/
-IKZ9olgyGT/Zx58AubDDV4K1iQUg77xoo+PP4uk1m6C0EP1ItiE=
-=fzcK
------END PGP SIGNATURE-----
-
---fdj2RfSjLxBAspz7--
