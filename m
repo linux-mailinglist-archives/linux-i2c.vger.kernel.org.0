@@ -2,113 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C76723448DE
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Mar 2021 16:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CBB344921
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Mar 2021 16:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbhCVPLD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Mar 2021 11:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S230097AbhCVPVp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Mar 2021 11:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbhCVPK6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Mar 2021 11:10:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C2EC061762
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 08:10:57 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id y6so19814119eds.1
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 08:10:57 -0700 (PDT)
+        with ESMTP id S230064AbhCVPV2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Mar 2021 11:21:28 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D01C061574
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 08:21:27 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id y1so21506704ljm.10
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 08:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=BblDdmrktMK5tFFD4LOpFP77ijBklviaU26xu4C63tQ=;
-        b=IT2iGJQyBA7Y1+dCJvTIJziErQmWcbn0+kMr4Y273pDNqodHvB6Ww7nGeAozLlDj16
-         AaZFlWmlmAzS7zUACjHtiaCrXpOhiRROiQFyU4auZ+13hpjjdqVYNePQ5Cyp/9DkkrQC
-         b91OFvMWYHKs9MAA7wM3CC0WQRuzxtVRw66hiamNYNrYJOlJE43oIsVGuMZ9kLPAqUbQ
-         nynbvcEhIJeX2PlbMuKhnlTT65dd9GDFO83TYP0QzGcN6dLgdO2DDjR1KDBGvGzAifvT
-         3iM6ErE3HQUX/Nd9uR6OnpKDyBISmiXqsi9ileg7sykq6tbAiP06wPIgKKPW7GTaZvHL
-         iZmA==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GnNcJXlzVtN/IeFct4i+/nqSuBy9qoMVGTHskkkOtO0=;
+        b=pVbZ6c3b0AfT+md2vsz9Y5Ws+NY4VlCNsvyL+g97AXhOHWjwGruknBTFoitiy9LMlH
+         5ciEtFXOO5llt5HVa9r3mp14907+d3O9D9Iyxr8lu433TC+njm2W0ZqXuJU3IapGeg/t
+         8BoxsNdFJkx2+L5G2JtsaQ0qVf1pLcqMEcRp4+hSQONa0+AY/UZBbGVUVb7NMdph7YYC
+         NOXyk8gs+0S/7pAs0GUW7m9ZNDqsbkYkc9AxhqFNwwy9j/mD35dus2KqaGyU4liAQ7DE
+         PJm6M+q7+4RoUlrwtkw2lGRaBwCNkLGbpFHFoZSFxXFfetfCVpDmyCozatBLn5ZJBt3E
+         FSRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=BblDdmrktMK5tFFD4LOpFP77ijBklviaU26xu4C63tQ=;
-        b=qQjJePOHWLoYYcHeXvGBDmHs0BGjYy/Rwsfs/PL+DW31AT/i5rHVhBFwYLUjvariYv
-         yse6mMEnuFCSoMZGJpybvZYhQ/R0MLMGRQo1AxL3eujhKWtCczgEhHKno3/e0ADGmCRq
-         eRptbSM4ZFHlUFbv7Ee7ASu0RXlDKPmKTDbHOLvgGrCri7KNmhe+1OZp6sCHjlwUjYE5
-         QplaGIWK/ftwHgyt3aYEXiBZxu7WmoxOJeTUMLm8ZBP2l4MKkP1el0wxJeirQFGqzniw
-         VNLUE1XA2nre0QMqTARCHtEAo7PxPqWPW+Ae6bu0kge71UB+fbqD2b9TKwF54req0rpm
-         SIlw==
-X-Gm-Message-State: AOAM531YxxSly5/qbwyxplKyUfk9sx/apuDP/HSnzMBRKnXSCS/4eJAg
-        uftmLG/Jg/BasC0mSZZsXcq2tg==
-X-Google-Smtp-Source: ABdhPJwxMVa4A4qij3tXD3Epc4EsEgsbfdMWBHLOdKIarJBUoxpk8xvIYdSjs+oVvVNjC/1HEN64aQ==
-X-Received: by 2002:a05:6402:22b5:: with SMTP id cx21mr26421224edb.27.1616425856228;
-        Mon, 22 Mar 2021 08:10:56 -0700 (PDT)
-Received: from dell ([91.110.221.180])
-        by smtp.gmail.com with ESMTPSA id e4sm9768413ejz.4.2021.03.22.08.10.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Mar 2021 08:10:55 -0700 (PDT)
-Date:   Mon, 22 Mar 2021 15:10:53 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v3 03/15] mfd: altera: merge ARCH_SOCFPGA and
- ARCH_STRATIX10
-Message-ID: <20210322151053.GB2916463@dell>
-References: <20210311152545.1317581-1-krzysztof.kozlowski@canonical.com>
- <20210311152545.1317581-4-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GnNcJXlzVtN/IeFct4i+/nqSuBy9qoMVGTHskkkOtO0=;
+        b=pZ0iQUTu5u/1GMh5dys/aJd2TxOOltN3CxbkDzEOtlH5ZK2qSqtpQITQhMemt5pfpf
+         w+inufc3tvUI9m5/w15aeuc82FkQ4ZBPU7fm1doyrIO5uE1awFj++Wzov00kQyjsCzJO
+         iy3r5e0BuZxzPH8ZzyRWadK8p41kKP1amnJ2BQF1Ba2T2JAjLaJYNPrTXM+4HOp4O4ab
+         BaezzGgen5cD+2A+g2mhfym4HwE95q4LWit9q5MOOMGcL8LqVO2Ka9Hwx6kuhQvwPxHE
+         bFyXFZFGvDjG6ixzCLAeJcfVge0ooeW1CAE/6dPxwRdc6Qa2/XOSDPMd0zzJSl4mkYM9
+         4GJg==
+X-Gm-Message-State: AOAM531dxW0P5SxDZSRGEAcGwl1/u8mTDVYn5hy289T7giKP3dRaadmI
+        7wO5ZANGNbj5zWl/UzN08FQ=
+X-Google-Smtp-Source: ABdhPJw5RJl3ThRDpZ9lRJEzoSMT3wygZK4Osd8agKHeSe+Arj2eOKpgE9q0O0tsBWn9Acmi47iOeA==
+X-Received: by 2002:a2e:7d03:: with SMTP id y3mr105689ljc.0.1616426486406;
+        Mon, 22 Mar 2021 08:21:26 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-47.dynamic.spd-mgts.ru. [109.252.193.47])
+        by smtp.googlemail.com with ESMTPSA id i185sm1598899lfd.279.2021.03.22.08.21.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Mar 2021 08:21:26 -0700 (PDT)
+Subject: Re: [PATCH v3 2/3] i2c: add support for HiSilicon I2C controller
+To:     Yicong Yang <yangyicong@hisilicon.com>, wsa@kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     andriy.shevchenko@linux.intel.com, treding@nvidia.com,
+        jarkko.nikula@linux.intel.com, rmk+kernel@armlinux.org.uk,
+        song.bao.hua@hisilicon.com, john.garry@huawei.com,
+        prime.zeng@huawei.com, linuxarm@huawei.com
+References: <1616411413-7177-1-git-send-email-yangyicong@hisilicon.com>
+ <1616411413-7177-3-git-send-email-yangyicong@hisilicon.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <7801d460-c1f4-5088-0ba0-47a07d187a2a@gmail.com>
+Date:   Mon, 22 Mar 2021 18:21:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <1616411413-7177-3-git-send-email-yangyicong@hisilicon.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210311152545.1317581-4-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 11 Mar 2021, Krzysztof Kozlowski wrote:
+Hello Yicong,
 
-> Simplify 32-bit and 64-bit Intel SoCFPGA Kconfig options by having only
-> one for both of them.  This the common practice for other platforms.
-> Additionally, the ARCH_SOCFPGA is too generic as SoCFPGA designs come
-> from multiple vendors.
+22.03.2021 14:10, Yicong Yang пишет:
+> Add HiSilicon I2C controller driver for the Kunpeng SoC. It provides
+> the access to the i2c busses, which connects to the eeprom, rtc, etc.
 > 
-> The side effect is that the MFD_ALTERA_A10SR will now be available for
-> both 32-bit and 64-bit Intel SoCFPGA, even though it is used only for
-> 32-bit.
+> The driver works with IRQ mode, and supports basic I2C features and 10bit
+> address. The DMA is not supported.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 > ---
->  drivers/mfd/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/i2c/busses/Kconfig    |  10 +
+>  drivers/i2c/busses/Makefile   |   1 +
+>  drivers/i2c/busses/i2c-hisi.c | 525 ++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 536 insertions(+)
+>  create mode 100644 drivers/i2c/busses/i2c-hisi.c
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
+...
+> +
+> +#define NSEC_TO_CYCLES(ns, clk_rate_khz) (DIV_ROUND_UP_ULL((clk_rate_khz) * (ns), NSEC_PER_MSEC))
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+This is a very long line, you should split it into two.
+
+Parens around DIV_ROUND_UP_ULL aren't needed.
+
+...
+> +static void hisi_i2c_enable_int(struct hisi_i2c_controller *ctlr, u32 mask)
+> +{
+> +	writel(mask, ctlr->iobase + HISI_I2C_INT_MASK);
+
+Why you don't use relaxed versions of readl/writel? Do you really need
+to insert memory barriers?
+
+> +}
+> +
+> +static void hisi_i2c_disable_int(struct hisi_i2c_controller *ctlr, u32 mask)
+> +{
+> +	writel((~mask) & HISI_I2C_INT_ALL, ctlr->iobase + HISI_I2C_INT_MASK);
+> +}
+> +
+> +static void hisi_i2c_clear_int(struct hisi_i2c_controller *ctlr, u32 mask)
+> +{
+> +	writel(mask, ctlr->iobase + HISI_I2C_INT_CLR);
+> +}
+> +
+> +static void hisi_i2c_handle_errors(struct hisi_i2c_controller *ctlr)
+> +{
+> +	u32 int_err = ctlr->xfer_err, reg;
+> +
+> +	if (int_err & HISI_I2C_INT_FIFO_ERR) {
+> +		reg = readl(ctlr->iobase + HISI_I2C_FIFO_STATE);
+> +
+> +		if (reg & HISI_I2C_FIFO_STATE_RX_RERR)
+> +			dev_err(ctlr->dev, "rx fifo error read.\n");
+
+The dot "." in the end of error messages is unnecessary.
+
+...
+> +/*
+> + * Initialize the transfer information and start the I2C bus transfer.
+> + * We only configure the transfer and do some pre/post works here, and
+> + * wait for the transfer done. The major transfer process is performed
+> + * in the IRQ handler.
+> + */
+> +static int hisi_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+> +				int num)
+> +{
+> +	struct hisi_i2c_controller *ctlr = i2c_get_adapdata(adap);
+> +	DECLARE_COMPLETION_ONSTACK(done);
+> +	int ret = num;
+> +
+> +	hisi_i2c_reset_xfer(ctlr);
+> +	ctlr->completion = &done;
+> +	ctlr->msg_num = num;
+> +	ctlr->msgs = msgs;
+> +
+> +	hisi_i2c_start_xfer(ctlr);
+> +
+> +	if (!wait_for_completion_timeout(ctlr->completion, adap->timeout)) {
+> +		hisi_i2c_disable_int(ctlr, HISI_I2C_INT_ALL);
+
+This doesn't save you from racing with the interrupt handler. It looks
+like you need to enable/disable IRQ around the completion, similarly to
+what NVIDIA Tegra I2C driver does.
