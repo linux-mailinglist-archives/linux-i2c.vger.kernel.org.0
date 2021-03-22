@@ -2,88 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 603BE343B15
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Mar 2021 08:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4A8343B93
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Mar 2021 09:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbhCVH6x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Mar 2021 03:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbhCVH6Y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Mar 2021 03:58:24 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9FEC061756
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 00:58:24 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id lr1-20020a17090b4b81b02900ea0a3f38c1so10707122pjb.0
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 00:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=sGf+kwZW/wFP+9L+f/Acn8ft874BxO79I+2RdR2Ljro=;
-        b=zYOBtMnDt3uvZ32hAu89RQU4ZZsrmM60m26MQ4CUJ7FsZE28fioehItLrKUI/cVcX9
-         n4dft/MaV2jLEONuV59lCXv2Qw8E1Pb4KjmRECmU0uNnDZsCjEa3+B3VBUUxXtuO63zv
-         HJhdwxgZJrWu/0naL93G7rJvl1n0sLc6ECynFYmlUjXBXdr9Z9ntKakESU55rMuP1NzL
-         fDtD1d7V3U3ldcPmpqlJwCzk8CYc0QtQPFvuigF6pB1DYLMAM/WLRkSOFlmFRGi+eVkt
-         nhOu2psV51aRVVgfBs0HNkWh6Yg3ica4wbnQ9PVlm93vTl+/pFw0VyairmnLC7Tt863C
-         zUbA==
+        id S229574AbhCVITb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Mar 2021 04:19:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22320 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229920AbhCVITa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Mar 2021 04:19:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1616401170;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WoKk7mGrLBFPYHjSxhI5m6ZJ3T1eCo8ygoYac0Rpup8=;
+        b=XdKRA5ppbvlhDYKky+q5phompi7SFKIJptOGbu7MkXRy2qNC4OqI6aZpKPVIps6ajwi6ph
+        c1HoMgP7tW0q9yabrsSYo7XaEDrPCd90vbet9BZddso1xb2OCb5J7IP55Z2XiuTofb61U0
+        2d5AptjC4ecaADbnGN91ZWWsDquW1Yc=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-453-hqsSi4bcMviNqds-lW01Jg-1; Mon, 22 Mar 2021 04:19:28 -0400
+X-MC-Unique: hqsSi4bcMviNqds-lW01Jg-1
+Received: by mail-wr1-f69.google.com with SMTP id x9so25419295wro.9
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 01:19:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sGf+kwZW/wFP+9L+f/Acn8ft874BxO79I+2RdR2Ljro=;
-        b=Vd4H1Gr7fMCDTlgUm5+5pGhIWgDBVz8hTT5sd4pxraiPCT92prreXOKaVORZcYWTkh
-         bCN+4Nrao6ntXjfKiWWCER9WW7SxpFVLLWD1YPLWCZcQ2IRF2tagLuSS3tKDbGNp/JNI
-         2FcN9hBtLt6PC/l9F8JUHhL5r8vxA80CfI0cgM1vTS6A3T+sgrQWEtFtyLCZ6rXg9J+U
-         8jmNy8E8N41RxPPgKejZNOZjHTgjL7JBXyYZKcIQSQ+XhSFWKuXCGwuSIcRQdgv3gs5r
-         bg7eadeVE/bC5hqZmrHKItecFCupzdhCKEoJviRKdfmVx3OCIewbViTFDAqr31n5Ak1x
-         +RLw==
-X-Gm-Message-State: AOAM531VlrK1S9NInHU028ddkNVuwjVIgF9fshViXU9DgbZU+US/uEIu
-        SghafcYnBBmGlFq7P0MR8htHSw==
-X-Google-Smtp-Source: ABdhPJxouYQ82LCmVrc8wz5uT/zuSts5pJLavO1ID85yMTnE8nEYY23D6RDb7vIT3duJwog//o52yA==
-X-Received: by 2002:a17:902:834a:b029:e6:b6bc:f58c with SMTP id z10-20020a170902834ab02900e6b6bcf58cmr26215016pln.85.1616399904057;
-        Mon, 22 Mar 2021 00:58:24 -0700 (PDT)
-Received: from localhost ([122.172.6.13])
-        by smtp.gmail.com with ESMTPSA id z4sm11601770pgv.73.2021.03.22.00.58.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Mar 2021 00:58:23 -0700 (PDT)
-Date:   Mon, 22 Mar 2021 13:28:21 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
+         :mime-version:content-disposition:in-reply-to;
+        bh=WoKk7mGrLBFPYHjSxhI5m6ZJ3T1eCo8ygoYac0Rpup8=;
+        b=VxqZ8t4ZsSxw4BBUuQXdyndbig3PDHAbbv98Na+z9tpDnGyn6Vw++Naun1hx/yaqLb
+         eHuOeI7sUOHRBweoPOYP33PkN6b8JfRMRKGhQJzQQ2wAlkY5YxtsbwkRAAR5LNRydi/s
+         +I6GsQNi8QSva1Q7px3L3WRstO3xifLL7VGLXRNYmRXGYc3xBpVDlzewNc8nzkdRw4v2
+         Iydf9HZsSDC9++Bby7aCP0LcpF5OgYGsXN3e3VrDcO7OoWeHDRIbbdzSl8NMUax6OAlH
+         9rUhFHKrEhALasQ19eaLIYjoBycDcAA82HhdlLQOWlhXgI+DCM5MNcC8XlOXcJpD9JnC
+         //rw==
+X-Gm-Message-State: AOAM531LaL+DpQVKxqBx6AKe0WFZGqLVTYuCJXgldcjCT9YPMNaD/05u
+        xcPItEdCZP/EMG5NyFlSBAAUVpAGPVHyUDnix8BU5IiWoCJ0IYPoz5KM2bhC59bhDy3CcrX2NN1
+        OgcVlUkoY7PJ8gk+1qHZa
+X-Received: by 2002:a7b:c346:: with SMTP id l6mr14925805wmj.34.1616401167060;
+        Mon, 22 Mar 2021 01:19:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy/hGKwIQ8AizOzUTlpxccYR1kU76/f9kIiC5G+j9WI50iF5Kv+8CR5Hj4QZ7N0ojmMTnKJkQ==
+X-Received: by 2002:a7b:c346:: with SMTP id l6mr14925787wmj.34.1616401166932;
+        Mon, 22 Mar 2021 01:19:26 -0700 (PDT)
+Received: from redhat.com ([2a10:800e:f0d3:0:b69b:9fb8:3947:5636])
+        by smtp.gmail.com with ESMTPSA id u15sm14813092wmq.4.2021.03.22.01.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 01:19:26 -0700 (PDT)
+Date:   Mon, 22 Mar 2021 04:19:22 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     Jie Deng <jie.deng@intel.com>
 Cc:     linux-i2c@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, wsa@kernel.org,
-        jasowang@redhat.com, wsa+renesas@sang-engineering.com,
+        linux-kernel@vger.kernel.org, wsa@kernel.org, jasowang@redhat.com,
+        wsa+renesas@sang-engineering.com,
         andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
         arnd@arndb.de, kblaiech@mellanox.com,
         jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
         rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
         u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
-        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
-        pbonzini@redhat.com
+        yu1.wang@intel.com, shuo.a.liu@intel.com, viresh.kumar@linaro.org,
+        stefanha@redhat.com, pbonzini@redhat.com
 Subject: Re: [PATCH v9] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210322075821.x6firpcpnuohf6y2@vireshk-i7>
+Message-ID: <20210322041857-mutt-send-email-mst@kernel.org>
 References: <e09c07532f5456816eb91ef4176bf910284df4ff.1616418890.git.jie.deng@intel.com>
- <20210322064144.y6kpajolwh2kd3lj@vireshk-i7>
- <dbb5dfe9-8ee6-e3f8-3681-d0ec83282930@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dbb5dfe9-8ee6-e3f8-3681-d0ec83282930@intel.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <e09c07532f5456816eb91ef4176bf910284df4ff.1616418890.git.jie.deng@intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 22-03-21, 15:53, Jie Deng wrote:
-> I think your optimization has problems...
-> 
-> 
-> > 	bool err_found = timeout;
+On Mon, Mar 22, 2021 at 09:35:59PM +0800, Jie Deng wrote:
+> diff --git a/include/uapi/linux/virtio_ids.h b/include/uapi/linux/virtio_ids.h
+> index bc1c062..6ae32db 100644
+> --- a/include/uapi/linux/virtio_ids.h
+> +++ b/include/uapi/linux/virtio_ids.h
+> @@ -54,5 +54,6 @@
+>  #define VIRTIO_ID_FS			26 /* virtio filesystem */
+>  #define VIRTIO_ID_PMEM			27 /* virtio pmem */
+>  #define VIRTIO_ID_MAC80211_HWSIM	29 /* virtio mac80211-hwsim */
+> +#define VIRTIO_ID_I2C_ADPTER		34 /* virtio i2c adpter */
 
-While at it, see if you want to rename this variable as well to something
-smaller, like "failed". I didn't touch it as it is a matter of personal choice,
-so leaving it to you..
+ADPTER -> ADAPTER?
+adpter -> adapter?
 
--- 
-viresh
+>  
+>  #endif /* _LINUX_VIRTIO_IDS_H */
+> -- 
+> 2.7.4
+
