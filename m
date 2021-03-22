@@ -2,31 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28137343AF8
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Mar 2021 08:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CDC343B0B
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Mar 2021 08:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbhCVHyD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Mar 2021 03:54:03 -0400
-Received: from mga02.intel.com ([134.134.136.20]:39597 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229913AbhCVHxn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 22 Mar 2021 03:53:43 -0400
-IronPort-SDR: B0Bs9BaNQquaNQIb9rsWegplVZnRs3+itUBgvDmWvA7kj9rUqEpw8u3Hzoa6TIkirehTTlIeXQ
- LGphizkpeOYg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9930"; a="177352916"
-X-IronPort-AV: E=Sophos;i="5.81,268,1610438400"; 
-   d="scan'208";a="177352916"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 00:53:42 -0700
-IronPort-SDR: zgU0rmsxDry5X4QjX4pUlRJvBNvqDip4gkVX7iBQef89oRvoq8EmDs7cC4K5N8zrCNJ1v6z/jT
- UnakFcneIGkw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,268,1610438400"; 
-   d="scan'208";a="414378048"
-Received: from unknown (HELO [10.239.154.55]) ([10.239.154.55])
-  by orsmga008.jf.intel.com with ESMTP; 22 Mar 2021 00:53:37 -0700
-Subject: Re: [PATCH v9] i2c: virtio: add a virtio i2c frontend driver
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        id S229949AbhCVH5Q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Mar 2021 03:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229944AbhCVH5D (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Mar 2021 03:57:03 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29633C061756
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 00:57:03 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id l1so8075790pgb.5
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 00:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=M+2HFgW2jdtORIhlyVvl5rL4yI8zxgxaI/oq1YFfvHs=;
+        b=Sd3qglXwSuRLTMwBSVfK2iULoJm7Z+RpLKgnsODcxzKbCRyQKwUXbShX4bvlVvvTQV
+         MbzrK2wtPyLSgTnvJ0GGwq1uLy5s3sFRfUYVZoF5CPpJahHiFMhJuxAoKj4NsmkRuJH1
+         HWsV8mJDs0WsDh+TszBCSHsPJov6jv1XJgSlN7FPJF4SOoeUWk8AOnSyTTQgyd0uMdWV
+         A6hkDREsIW2r8s+5xR4meFZOw9Dj0ta9Tw3wqRRSFPg+XpF2ED6E0tNchNOKqTGF3PdF
+         0KxlOmYFoqKE8FtE5OTD/EkUF2LD5loR8GpoAnd3FhMWncINdch+Fo4iI0S6i6xt1FyY
+         7u2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=M+2HFgW2jdtORIhlyVvl5rL4yI8zxgxaI/oq1YFfvHs=;
+        b=K+bIfzhzZvZ5Q13AMuZZDUXnGN0zsTWpXiJfX/6r+1uwsLeXeoxGLBcHziTtOxzKpt
+         G4YveqWwdVQ53JdYlIbXzgPjTvPbUiElxRhj3KIk7HfQiei06uSjIuz/gUgq07JVwadu
+         3IVGLPvAAVDckG00M3nWc1o1qOrkHiol2GW8C+tTjKK3pR2jYevpzkOGVQ+CqKYbyOih
+         NmRPoaf2+8OuFtaAdW32bVZBC8pf467N1JzrbnqUYa8aVDuZibFpFZ2g+gHwccstXvcV
+         0ndi6dJZVeljCR+y3Yeo2r3FpFRMMt0511mKKPj1RKkmcHoVezYVftA49xAvEuVEAwF5
+         FQmQ==
+X-Gm-Message-State: AOAM531bx2D6X6uvZtsXEgHGe1eaEGWrpZzSJzRJRKFk8ZyR7LZ6FkdV
+        4U0WQS3UjYuFG3FXP/g6ZH7JOmpoYDs8zQ==
+X-Google-Smtp-Source: ABdhPJzuiciLTGYWRea94KBh93YsOSeq9vB+/9f6I88HY0JTUWaYHO6T2nzIAq7AXnv3sqiO9Wkyug==
+X-Received: by 2002:aa7:96cc:0:b029:202:6873:8ab4 with SMTP id h12-20020aa796cc0000b029020268738ab4mr20445357pfq.42.1616399822659;
+        Mon, 22 Mar 2021 00:57:02 -0700 (PDT)
+Received: from localhost ([122.172.6.13])
+        by smtp.gmail.com with ESMTPSA id gt22sm13328631pjb.35.2021.03.22.00.57.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Mar 2021 00:57:02 -0700 (PDT)
+Date:   Mon, 22 Mar 2021 13:27:00 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jie Deng <jie.deng@intel.com>
 Cc:     linux-i2c@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org, mst@redhat.com, wsa@kernel.org,
@@ -38,160 +61,54 @@ Cc:     linux-i2c@vger.kernel.org,
         u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
         yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
         pbonzini@redhat.com
+Subject: Re: [PATCH v9] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <20210322075700.gzxx6s3jrkv3sfai@vireshk-i7>
 References: <e09c07532f5456816eb91ef4176bf910284df4ff.1616418890.git.jie.deng@intel.com>
  <20210322064144.y6kpajolwh2kd3lj@vireshk-i7>
-From:   Jie Deng <jie.deng@intel.com>
-Message-ID: <dbb5dfe9-8ee6-e3f8-3681-d0ec83282930@intel.com>
-Date:   Mon, 22 Mar 2021 15:53:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.0
+ <dbb5dfe9-8ee6-e3f8-3681-d0ec83282930@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210322064144.y6kpajolwh2kd3lj@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dbb5dfe9-8ee6-e3f8-3681-d0ec83282930@intel.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 22-03-21, 15:53, Jie Deng wrote:
+> On 2021/3/22 14:41, Viresh Kumar wrote:
+> I think your optimization has problems...
+> 
+> 
+> > 	bool err_found = timeout;
+> > 
+> > 	for (i = 0; i < nr; i++) {
+> > 		/* Detach the ith request from the vq */
+> > 		req = virtqueue_get_buf(vq, &len);
+> > 
+> > 		/*
+> > 		 * Condition (req && req == &reqs[i]) should always meet since
+> > 		 * we have total nr requests in the vq.
+> > 		 */
+> > 		if (!err_found &&
+> >                      (WARN_ON(!(req && req == &reqs[i])) ||
+> > 		     (req->in_hdr.status != VIRTIO_I2C_MSG_OK))) {
+> > 			err_found = true;
+> > 			continue;
+> 
+> 
+> Just continue here, the ith buf leaks ?
 
-On 2021/3/22 14:41, Viresh Kumar wrote:
->
->> +/**
->> + * struct virtio_i2c - virtio I2C data
->> + * @vdev: virtio device for this controller
->> + * @completion: completion of virtio I2C message
->> + * @adap: I2C adapter for this controller
->> + * @i2c_lock: lock for virtqueue processing
-> Name mismatch here.
+Ahh, this needs to be dropped. You are fight.
+ 
+> > 		}
+> > 
+> > 		i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], err_found);
+> 
+> 
+> i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], !err_found); ?
 
+Yes again, my mistake :)
 
-Will fix this typo. Thank you.
-
-
->> + * @vq: the virtio virtqueue for communication
->> + */
->> +struct virtio_i2c {
->> +	struct virtio_device *vdev;
->> +	struct completion completion;
->> +	struct i2c_adapter adap;
->> +	struct mutex lock;
->> +	struct virtqueue *vq;
->> +};
->
->> +static int virtio_i2c_complete_reqs(struct virtqueue *vq,
->> +					struct virtio_i2c_req *reqs,
->> +					struct i2c_msg *msgs, int nr,
->> +					bool timeout)
->> +{
->> +	struct virtio_i2c_req *req;
->> +	bool err_found = false;
->> +	unsigned int len;
->> +	int i, j = 0;
->> +
->> +	for (i = 0; i < nr; i++) {
->> +		/* Detach the ith request from the vq */
->> +		req = virtqueue_get_buf(vq, &len);
->> +
->> +		if (timeout || err_found)  {
->> +			i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], false);
->> +			continue;
->> +		}
->> +
->> +		/*
->> +		 * Condition (req && req == &reqs[i]) should always meet since
->> +		 * we have total nr requests in the vq.
->> +		 */
->> +		if (WARN_ON(!(req && req == &reqs[i])) ||
->> +		    (req->in_hdr.status != VIRTIO_I2C_MSG_OK)) {
->> +			err_found = true;
->> +			i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], false);
->> +			continue;
->> +		}
->> +
->> +		i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], true);
->> +		++j;
->> +	}
-> I think you can simplify the code like this here:
-
-
-I think your optimization has problems...
-
-
-> 	bool err_found = timeout;
->
-> 	for (i = 0; i < nr; i++) {
-> 		/* Detach the ith request from the vq */
-> 		req = virtqueue_get_buf(vq, &len);
->
-> 		/*
-> 		 * Condition (req && req == &reqs[i]) should always meet since
-> 		 * we have total nr requests in the vq.
-> 		 */
-> 		if (!err_found &&
->                      (WARN_ON(!(req && req == &reqs[i])) ||
-> 		     (req->in_hdr.status != VIRTIO_I2C_MSG_OK))) {
-> 			err_found = true;
-> 			continue;
-
-
-Just continue here, the ith buf leaks ?
-
-
-> 		}
->
-> 		i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], err_found);
-
-
-i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], !err_found); ?
-
-
->                  if (!err_found)
->                          ++j;
->
->> +
->> +	return (timeout ? -ETIMEDOUT : j);
->> +}
->> +
->> +static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
->> +{
->> +	struct virtio_i2c *vi = i2c_get_adapdata(adap);
->> +	struct virtqueue *vq = vi->vq;
->> +	struct virtio_i2c_req *reqs;
->> +	unsigned long time_left;
->> +	int ret, nr;
->> +
->> +	reqs = kcalloc(num, sizeof(*reqs), GFP_KERNEL);
->> +	if (!reqs)
->> +		return -ENOMEM;
->> +
->> +	mutex_lock(&vi->lock);
->> +
->> +	ret = virtio_i2c_send_reqs(vq, reqs, msgs, num);
->> +	if (ret == 0)
->> +		goto err_unlock_free;
->> +
->> +	nr = ret;
->> +	reinit_completion(&vi->completion);
->> +	virtqueue_kick(vq);
->> +
->> +	time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
->> +	if (!time_left) {
->> +		dev_err(&adap->dev, "virtio i2c backend timeout.\n");
->> +		ret = virtio_i2c_complete_reqs(vq, reqs, msgs, nr, true);
->> +		goto err_unlock_free;
->> +	}
->> +
->> +	ret = virtio_i2c_complete_reqs(vq, reqs, msgs, nr, false);
-> And this can be optimized as well:
->
-> 	time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
-> 	if (!time_left)
-> 		dev_err(&adap->dev, "virtio i2c backend timeout.\n");
->
->          ret = virtio_i2c_complete_reqs(vq, reqs, msgs, nr, !time_left);
-
-
-Good optimization here.
-
-
+-- 
+viresh
