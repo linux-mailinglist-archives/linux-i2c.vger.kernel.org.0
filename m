@@ -2,129 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2278344C14
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Mar 2021 17:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098B7344C60
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Mar 2021 17:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbhCVQp7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Mar 2021 12:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbhCVQpx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Mar 2021 12:45:53 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05F6C061574
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 09:45:52 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id q29so22187170lfb.4
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Mar 2021 09:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bGPclpoLMW2vetsVOkk6/xn8Xws0sXzmlSNtidJfaeE=;
-        b=RYsm4yUJSIW87Uv22dyw0mIP/8nDAsqBKWtC7HkMgiRqO3qR87SH5IVn8yOybtTTkh
-         x79SRV4sI+Msr+IPne1pCx6jK4V10qVBGTowTXH0pYbYsKfCq8HWigI86iSMMCkeiLjl
-         tpKfRmnjZk8fdSKeNe99n5JXZWrI7Mi3VZgXWmjf8b/SYFVgtiJj0/fD3zYhUB2y0jLE
-         26f3CApT6+kTqk5Df9qq39kZ04tYEqXq+JuNrV/E4f0p8+qHoiHeuhlPLsfu2wV+HymH
-         Na8vLEqmM+6pFFtdlrYAASOMSg1jMnAO3sI5C5e9nQTG27+aAGrK/7tdDKWODNov0ASK
-         IItA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bGPclpoLMW2vetsVOkk6/xn8Xws0sXzmlSNtidJfaeE=;
-        b=YHmXWPPODqwzqB/B57KvzYSGp2o8Rl9SLwAPwczsTfBRlCQoxQlTqN9noHgCM/MDYP
-         9Xr7VXWVW2ViDFIXnkXypHQxv9AT3lxlHsAKNnpdxfm5ZmmgUjtXas87BWoVwvoALJWD
-         07ndAHxHdp9sGwBwUJpX/IMzzHsSJflaY1umEd5NrIrnGe9OcRGWpxB17yVb4kqtH+o+
-         vmM43sWl9sknTufFQ9FGAVAEvqqbKLmOG2EyBO43cCGWiD3cXoKxwjWb7w8QlDqTyqPG
-         ydVnS9tO5GxI8rtd7aJoE0NZ6Z4KnLj43EYPZ2K+Bl1wqkW+j/YrzHbt/K2lJhYMbL1X
-         YE3g==
-X-Gm-Message-State: AOAM5309AbEP8+7LI9ICmIWU6ujkBOVMPuKX5aTod3InEXTiJEs8VDAx
-        enYrV2uiMlRGEg2EvXRFihk=
-X-Google-Smtp-Source: ABdhPJwn3JDolid9WAdalQXRvVebpmb7FPjlmpfN6oVtaFMCSVpiWBSaGJk0mwV7L99cDGOzhoNbZA==
-X-Received: by 2002:ac2:5221:: with SMTP id i1mr166418lfl.160.1616431551286;
-        Mon, 22 Mar 2021 09:45:51 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-47.dynamic.spd-mgts.ru. [109.252.193.47])
-        by smtp.googlemail.com with ESMTPSA id a1sm1996055ljb.76.2021.03.22.09.45.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Mar 2021 09:45:50 -0700 (PDT)
-Subject: Re: [PATCH v3 1/3] i2c: core: add managed function for adding i2c
- adapters
-To:     Yicong Yang <yangyicong@hisilicon.com>, wsa@kernel.org,
-        linux-i2c@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, treding@nvidia.com,
-        jarkko.nikula@linux.intel.com, rmk+kernel@armlinux.org.uk,
-        song.bao.hua@hisilicon.com, john.garry@huawei.com,
-        prime.zeng@huawei.com, linuxarm@huawei.com
-References: <1616411413-7177-1-git-send-email-yangyicong@hisilicon.com>
- <1616411413-7177-2-git-send-email-yangyicong@hisilicon.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c306cfc0-8574-9903-af4e-f27b99888d03@gmail.com>
-Date:   Mon, 22 Mar 2021 19:45:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S229979AbhCVQyR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Mar 2021 12:54:17 -0400
+Received: from mga07.intel.com ([134.134.136.100]:24136 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230245AbhCVQyF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 22 Mar 2021 12:54:05 -0400
+IronPort-SDR: qUV44WsYqm8m7SEmCh0PqpdUt5gfg2f2BscWPyZxcHKtf/pjV5Cbtq+AfSyQi2qf9WrCaLxBuC
+ MuGwdrdyL4kA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="254307240"
+X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
+   d="scan'208";a="254307240"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 09:54:04 -0700
+IronPort-SDR: m0hSCsGpgh6MtzsPGDQ2j5rBooSYOC6PQlZV20Im9GI/4gZScYE188dEI/FdaLFqegE9ndQUwm
+ XAtYz3XIXCPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
+   d="scan'208";a="451802365"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 22 Mar 2021 09:53:58 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6019CC5; Mon, 22 Mar 2021 18:54:12 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: [PATCH v1 1/1] i2c: drivers: Use generic definitions for bus frequencies (part 2)
+Date:   Mon, 22 Mar 2021 18:54:05 +0200
+Message-Id: <20210322165405.44980-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <1616411413-7177-2-git-send-email-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-22.03.2021 14:10, Yicong Yang пишет:
-> Some I2C controller drivers will only unregister the I2C
-> adapter in their .remove() callback, which can be done
-> by simply using a managed variant to add the I2C adapter.
-> 
-> So add the managed functions for adding the I2C adapter.
-> 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->  drivers/i2c/i2c-core-base.c | 39 +++++++++++++++++++++++++++++++++++++++
->  include/linux/i2c.h         |  1 +
->  2 files changed, 40 insertions(+)
-> 
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 63ebf72..61486dc 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -1550,6 +1550,38 @@ int i2c_add_adapter(struct i2c_adapter *adapter)
->  }
->  EXPORT_SYMBOL(i2c_add_adapter);
->  
-> +static void devm_i2c_del_adapter(struct device *dev, void *ptr);
-> +
-> +/**
-> + * devm_i2c_add_adapter - device-managed variant of i2c_add_adapter()
-> + * @dev: managing device for adding this I2C adapter
-> + * @adapter: the adapter to add
-> + * Context: can sleep
-> + *
-> + * Add adapter with dynamic bus number, same with i2c_add_adapter()
-> + * but the adapter will be auto deleted on driver detach.
-> + */
-> +int devm_i2c_add_adapter(struct device *dev, struct i2c_adapter *adapter)
-> +{
-> +	struct i2c_adapter **ptr;
-> +	int ret;
-> +
-> +	ptr = devres_alloc(devm_i2c_del_adapter, sizeof(*ptr), GFP_KERNEL);
-> +	if (!ptr)
-> +		return -ENOMEM;
-> +
-> +	ret = i2c_add_adapter(adapter);
-> +	if (!ret) {
-> +		*ptr = adapter;
-> +		devres_add(dev, ptr);
-> +	} else {
-> +		devres_free(ptr);
-> +	}
+Since we have generic definitions for bus frequencies, let's use them.
 
-This could be simplified using devm_add_action_or_reset().
+Cc: Wolfram Sang <wsa@the-dreams.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-mlxbf.c    | 14 ++++----------
+ drivers/i2c/busses/i2c-qcom-cci.c |  4 ++--
+ 2 files changed, 6 insertions(+), 12 deletions(-)
 
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(devm_i2c_add_adapter);
+diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
+index 2fb0532d8a16..80ab831df349 100644
+--- a/drivers/i2c/busses/i2c-mlxbf.c
++++ b/drivers/i2c/busses/i2c-mlxbf.c
+@@ -172,12 +172,6 @@
+ #define MLXBF_I2C_SMBUS_THIGH_MAX_TBUF            0x14
+ #define MLXBF_I2C_SMBUS_SCL_LOW_TIMEOUT           0x18
+ 
+-enum {
+-	MLXBF_I2C_TIMING_100KHZ = 100000,
+-	MLXBF_I2C_TIMING_400KHZ = 400000,
+-	MLXBF_I2C_TIMING_1000KHZ = 1000000,
+-};
+-
+ /*
+  * Defines SMBus operating frequency and core clock frequency.
+  * According to ADB files, default values are compliant to 100KHz SMBus
+@@ -1202,7 +1196,7 @@ static int mlxbf_i2c_init_timings(struct platform_device *pdev,
+ 
+ 	ret = device_property_read_u32(dev, "clock-frequency", &config_khz);
+ 	if (ret < 0)
+-		config_khz = MLXBF_I2C_TIMING_100KHZ;
++		config_khz = I2C_MAX_STANDARD_MODE_FREQ;
+ 
+ 	switch (config_khz) {
+ 	default:
+@@ -1210,15 +1204,15 @@ static int mlxbf_i2c_init_timings(struct platform_device *pdev,
+ 		pr_warn("Illegal value %d: defaulting to 100 KHz\n",
+ 			config_khz);
+ 		fallthrough;
+-	case MLXBF_I2C_TIMING_100KHZ:
++	case I2C_MAX_STANDARD_MODE_FREQ:
+ 		config_idx = MLXBF_I2C_TIMING_CONFIG_100KHZ;
+ 		break;
+ 
+-	case MLXBF_I2C_TIMING_400KHZ:
++	case I2C_MAX_FAST_MODE_FREQ:
+ 		config_idx = MLXBF_I2C_TIMING_CONFIG_400KHZ;
+ 		break;
+ 
+-	case MLXBF_I2C_TIMING_1000KHZ:
++	case I2C_MAX_FAST_MODE_PLUS_FREQ:
+ 		config_idx = MLXBF_I2C_TIMING_CONFIG_1000KHZ;
+ 		break;
+ 	}
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index 1c259b5188de..c63d5545fc2a 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -569,9 +569,9 @@ static int cci_probe(struct platform_device *pdev)
+ 		cci->master[idx].mode = I2C_MODE_STANDARD;
+ 		ret = of_property_read_u32(child, "clock-frequency", &val);
+ 		if (!ret) {
+-			if (val == 400000)
++			if (val == I2C_MAX_FAST_MODE_FREQ)
+ 				cci->master[idx].mode = I2C_MODE_FAST;
+-			else if (val == 1000000)
++			else if (val == I2C_MAX_FAST_MODE_PLUS_FREQ)
+ 				cci->master[idx].mode = I2C_MODE_FAST_PLUS;
+ 		}
+ 
+-- 
+2.30.2
 
-EXPORT_SYMBOL_GPL
