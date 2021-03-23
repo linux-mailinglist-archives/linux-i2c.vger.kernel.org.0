@@ -2,106 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F34D5345A3F
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Mar 2021 10:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A0D345ACD
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Mar 2021 10:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbhCWJBn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Mar 2021 05:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbhCWJBP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Mar 2021 05:01:15 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563BAC061574
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Mar 2021 02:01:15 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id h25so11010237pgm.3
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Mar 2021 02:01:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=fyArqXnJjHDh28MyaKADOf6onNt6E9lEvyDzFgvh3mY=;
-        b=huB/b9BShjggioTljIzh59gfKp/8aJQJxPGUojT0HTsyTXHD4/2zPb6jG2p6/XQfpQ
-         43R74G1FVSkxGlwyk1k//zo1aiDC85P3oFg3K/dmzef79XiRlMofXaMbvDiNNOtt+avy
-         2p/Oczokg/XjDUidP/Uiz473H1LfIaItA976tNqlkkvmF6R0lbMh5z7iJDoaDrL8Sm10
-         E9onDo2jidUJ/7fLthi7uJQHwBS22wNPSqthqENXfLJLYnlHCdiyCUMhxB3rDvX/DFyA
-         yWaAKFjAkZS5WZA/ClDehCG8cOAy+CFc7j0Xo8Qt7IRFw9fUmz3rDDP47QEBIM101jYu
-         3I8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fyArqXnJjHDh28MyaKADOf6onNt6E9lEvyDzFgvh3mY=;
-        b=Z8dIGH9vY60RrBlIQvYpoW43xCy7gQsnNbDncAwSqrqDw9SVZ0+zzdZOAOhIIaWgtX
-         +QnNznNOwHxhd1E6HLtBnI6TfwJxT/pV7ul2PtsepiU24ZBls/O9E82NBa6nvMbtR/i7
-         o9DYqsMgVfV6dE1jLHHZfjp68l5Yf0UOhvYMdP7njnf4livuOzEKwWK/nyQqL/fci+hQ
-         qIs78wbsTfbkXsMr4ISJj7nFnpiIFxUb5EseQZsfP4gutF8utkk1Wu4UzRm2bEgjo2eZ
-         CBfej8rQFXJqPbiDbw+BqWu4bmmEhQo5VjJK+xGaCUY5/OWZhlBh3UJCr6RF9mee3Ye6
-         osag==
-X-Gm-Message-State: AOAM531GYWSpMeBBeU3em0O0o5lGFtiKSbHE+t2Wg2NsyFsH4C3yQhDt
-        2XW7oaUkZ+4BU6T0V5lqJQD7VQ==
-X-Google-Smtp-Source: ABdhPJyM+E6Cf275JkaW7D3hyXAsFBC0en8IOE/onyVB70+iS/E90QG4BL5MINbOcxlEnrYjtXSS4Q==
-X-Received: by 2002:a63:5807:: with SMTP id m7mr3131870pgb.73.1616490074526;
-        Tue, 23 Mar 2021 02:01:14 -0700 (PDT)
-Received: from localhost ([122.172.6.13])
-        by smtp.gmail.com with ESMTPSA id gt22sm1966188pjb.35.2021.03.23.02.01.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Mar 2021 02:01:10 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 14:31:08 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, wsa@kernel.org,
-        jasowang@redhat.com, wsa+renesas@sang-engineering.com,
-        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
-        arnd@arndb.de, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
-        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
-        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
-        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
-        pbonzini@redhat.com
-Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210323090108.ygx76exdgzudeeqi@vireshk-i7>
-References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
+        id S229798AbhCWJ2d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Mar 2021 05:28:33 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:41319 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229574AbhCWJ2Q (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Mar 2021 05:28:16 -0400
+Received: from mail-oi1-f169.google.com ([209.85.167.169]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N2Dgk-1loNuL0uw2-013gLX; Tue, 23 Mar 2021 10:28:15 +0100
+Received: by mail-oi1-f169.google.com with SMTP id a8so16311506oic.11;
+        Tue, 23 Mar 2021 02:28:14 -0700 (PDT)
+X-Gm-Message-State: AOAM531iG1ViPnbVS7RiBltK2uo+l/PFsb+4X0LYI/SxC3tS4WVd2ONu
+        xBJd+0r3yhdPx5soIjHZ3Ly78aOj3bEp7ZGT0S8=
+X-Google-Smtp-Source: ABdhPJyawnqd0rPTfMgWQN81x6KOuu3+lmy+fOx7JqHwDIybakw6kdseTvKueo+vyCC0bOoWLnxxhWHxrRhczxkY/TI=
+X-Received: by 2002:a05:6808:313:: with SMTP id i19mr2540633oie.67.1616491693900;
+ Tue, 23 Mar 2021 02:28:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
+ <20210323072704.rgoelmq62fl2wjjf@vireshk-i7> <a2994a8f-bbf9-b26f-a9d2-eb02df6623b8@intel.com>
+In-Reply-To: <a2994a8f-bbf9-b26f-a9d2-eb02df6623b8@intel.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 23 Mar 2021 10:27:58 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3OBUZC2nxaQ2wyL9EeT3gzXUX9sfJ+ZJfJUiJK_3ZkrA@mail.gmail.com>
+Message-ID: <CAK8P3a3OBUZC2nxaQ2wyL9EeT3gzXUX9sfJ+ZJfJUiJK_3ZkrA@mail.gmail.com>
+Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
+To:     Jie Deng <jie.deng@intel.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        conghui.chen@intel.com, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com,
+        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
+        Tali Perry <tali.perry1@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        yu1.wang@intel.com, shuo.a.liu@intel.com,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:egATLUyzieXtsrQfMRCVYWUZnzImYh/1ascOeVfWMjzEYrrABAz
+ PBWEz0qgkSx6ZEOakggslgdFDLNVhWqAhqLaeIltLrN/06onNAEWkReDeOsLVi22oaEgj6a
+ ZLmy7dwFWkBWATcd3zt1rgiZLNma2nq6wQ3nQIgBN3xQERBiz+P9aronyKYTmQtIJFMEWtd
+ S/XhU9dZmv3A/Q6+TwQjQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TxVTvq3CAGE=:zJysHmGoXxhKAWDtPfQu8j
+ e2DElHex85CLE+l/3c69zXnl6P80O0hwt1a5VgwY2EM06Ri1tq5dWhUujeqEBqTNqhSCOTk5f
+ 6YMg8KhL48OXMItSWEDOA4kavo88cMu7OfbkXN/Jk0TfuN7PzJsovOQ2sihKWYxUiZclvSD5A
+ WLuHAguiAH0Qkz1eJG137CkxsCSgUym8D0+qDnLPGHOCvMfYf/7VdsKOInYGHUY9GntLpe8rd
+ YEjRvPMQyyfiXkjCcQ2NSP1Jaxli4dm11yotmtn4thNbOz0TNRHsSLZYzTFQsvRfZ90su5OBx
+ tlE3lhZ8GoYXmivqYOyAuQD/VL7nu4ayzAu5nn2DwUvs/BpZh0k8uQoTQ9mszCYu7p7zzPiLM
+ ChaDrJCL3Li9RF412jAGMry2vp5sV/7CuhpBdwKvwxc0F9UvPvWRpevawvIxppNvc8EZwRG6D
+ IMxIdlBEw59uUHInujOFY/uiDvKGnxXKcVflVBSwuDgRwC+MByb9d7npZb2G9FrbnG0qeWGu/
+ i56r82WN8ixsh2Ww+J0bnYS/AoC/nVCPd7jlVlXoabsz4x6DGpCzCLW2/I4yr4wNw==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 23-03-21, 22:19, Jie Deng wrote:
-> +static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
-> +{
-> +	struct virtio_i2c *vi = i2c_get_adapdata(adap);
-> +	struct virtqueue *vq = vi->vq;
-> +	struct virtio_i2c_req *reqs;
-> +	unsigned long time_left;
-> +	int ret, nr;
-> +
-> +	reqs = kcalloc(num, sizeof(*reqs), GFP_KERNEL);
-> +	if (!reqs)
-> +		return -ENOMEM;
-> +
-> +	mutex_lock(&vi->lock);
-> +
-> +	ret = virtio_i2c_send_reqs(vq, reqs, msgs, num);
-> +	if (ret == 0)
-> +		goto err_unlock_free;
-> +
-> +	nr = ret;
-> +	reinit_completion(&vi->completion);
+On Tue, Mar 23, 2021 at 9:33 AM Jie Deng <jie.deng@intel.com> wrote:
+>
+> On 2021/3/23 15:27, Viresh Kumar wrote:
+>
+> > On 23-03-21, 22:19, Jie Deng wrote:
+> >> +static int __maybe_unused virtio_i2c_freeze(struct virtio_device *vdev)
+> >> +{
+> >> +    virtio_i2c_del_vqs(vdev);
+> >> +    return 0;
+> >> +}
+> >> +
+> >> +static int __maybe_unused virtio_i2c_restore(struct virtio_device *vdev)
+> >> +{
+> >> +    return virtio_i2c_setup_vqs(vdev->priv);
+> >> +}
+> > Sorry for not looking at this earlier, but shouldn't we enclose the above two
+> > within #ifdef CONFIG_PM_SLEEP instead and drop the __maybe_unused ?
+>
+>
+> I remembered I was suggested to use "__maybe_unused" instead of "#ifdef".
+>
+> You may check this https://lore.kernel.org/patchwork/patch/732981/
+>
+> The reason may be something like that.
 
-I think I may have found a possible bug here. This reinit_completion() must
-happen before we call virtio_i2c_send_reqs(). It is certainly possible (surely
-in corner cases) that virtio_i2c_msg_done() may get called right after
-virtio_i2c_send_reqs() and before we were able to call reinit_completion(). And
-in that case we will never see the completion happen at all.
+I usually recommend the use of __maybe_unused for the suspend/resume
+callbacks for drivers that use SIMPLE_DEV_PM_OPS() or similar helpers
+that hide the exact conditions under which the functions get called.
 
-> +	virtqueue_kick(vq);
+In this driver, there is an explicit #ifdef in the reference to the
+functions, so
+it would make sense to use the same #ifdef around the definition.
 
--- 
-viresh
+A better question to ask is whether you could use the helpers instead,
+and drop the other #ifdef.
+
+       Arnd
