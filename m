@@ -2,115 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FEA3463E2
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Mar 2021 16:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 764733469AF
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Mar 2021 21:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232728AbhCWP5V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Mar 2021 11:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbhCWP4z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Mar 2021 11:56:55 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57DEC061574;
-        Tue, 23 Mar 2021 08:56:54 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y6so24065649eds.1;
-        Tue, 23 Mar 2021 08:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z5Tj5RZrN0i243a4vjp62s31Axnbl+7HM9j4lz54tzo=;
-        b=RRxMZFVjzCjlVEhRi4puR4IwBHEqSAOsL1885yZmq9MSP4e5GIjMbTHzGKZdRdAE3t
-         CQyMY5jqXh186Lc8XKHmmnR4ZJ4VzS8kyJLIEUGNZf2PnUJTtOpZ1wdXm3LVgBJ/P2F5
-         M1w2w/kGbPCPypLweGICTqlqyj4UkcAKGILxLF6X3+3o3nXhGhUNqDKFazrB4Sf3TG0D
-         VWfDqnj3raOZfwewVZyL3LEJgl7YNmZZuFoaRNA3m5QcVKbtb0DFDKnqfcvttA75csW4
-         ZYBvZXR5pXl7BGk558P/MpSBNi5CujNFZ/H6ZMkQpsXaV7Bo/GQdr+e4pdqUOmdlSxzi
-         bGfw==
+        id S233228AbhCWURI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Mar 2021 16:17:08 -0400
+Received: from mail-io1-f54.google.com ([209.85.166.54]:33313 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233274AbhCWUQ4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Mar 2021 16:16:56 -0400
+Received: by mail-io1-f54.google.com with SMTP id n198so19105831iod.0;
+        Tue, 23 Mar 2021 13:16:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z5Tj5RZrN0i243a4vjp62s31Axnbl+7HM9j4lz54tzo=;
-        b=ntagLD8gxTGDce76XvJJcLTg0x6TYwkrektgQIG7Jn9cu8QFklnwYVv9pvSgAeRuYx
-         BCKrCThItSZHxeEczyXxlvlmBkLbnidFPLQAm1MC5Z6mh1is+epo0sVKe9YzciQFkQ8M
-         uHOMWnuVLd5fqHp5GHt30umVj4VgK9VPuU43nyDvM9Zx60O1qW85+TqKD6NSif9mAGOJ
-         eefHbgyWxtk7rTAGYOapXGMhqTORQQnkCtW9KnbPQ7HQ7PEEf+QMh3zT8v8WjJ6zelt/
-         6bU0VWagd4krJTzVRJKzgs+DZ5u5bzYCsDuRMKXm/VdchN51xZKvPwAciOWcSeu61xz4
-         FNTA==
-X-Gm-Message-State: AOAM531+yLilqorZF9BOZ8Jr8HA4zwzY4iNwI8Rzdfxcy64bDXV3sOEe
-        9VFGSIsJxwNwMHTdryCFP+k=
-X-Google-Smtp-Source: ABdhPJxh8W+9ELd4KtZYHNOQjTwnlxHoVUzdGiTXeOpgj83LOiYTtMvvevk2BXDntZUvoj4FGkNUeg==
-X-Received: by 2002:aa7:da46:: with SMTP id w6mr5374313eds.40.1616515013663;
-        Tue, 23 Mar 2021 08:56:53 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id c20sm11453768eja.22.2021.03.23.08.56.52
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=1j8kGtoUQfseUwnDLVw50cgb9xrn2aTuK5d8pgx2u2M=;
+        b=pd9ynP03rEopv+8XXFbKQJapgteyx0f863sDx8rUESsZoV1ZtFAAQykZWQkk/681ac
+         Gj/1OQRmog/aLMtVXSz6R4d6vd6IvjCji3ISL1xa8ZzE6Y8bzQYBNpni2+RkJrfU8wX5
+         nsvn/PMiEXtU1NYL+Gps97JD7DiRYDOOGtYQUXI/+btypvQn4NfngA/FmxtF/M2lyh66
+         0/8jsvBwfXYg2tNopMxnEqi491OHvVK3k8lstLj0cO8LmTQEVW8R+7Lt0ZqLYkOVzqmK
+         n8qLvjZ7ugwnFjTok0/5vwNmppZVMSaCy7GOgawHID1aHvFoiZ45FVdLEzyycZXScrz5
+         yoiQ==
+X-Gm-Message-State: AOAM533I+Qy3q98yXKuNAlNfOtIMAd+jSLOj2toNcFYsxerDh4OVoY8K
+        SmpZvz+uHuHDVcuoS/KufA==
+X-Google-Smtp-Source: ABdhPJzvec4H0WE9VzYEPuEyT4XGyKXjkOQpFHtGQ2GXQqoNh0Si9ptOh8gUJkx5LVJi13EgDQuoMg==
+X-Received: by 2002:a05:6638:d47:: with SMTP id d7mr6254564jak.2.1616530615703;
+        Tue, 23 Mar 2021 13:16:55 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id z10sm122287ilm.19.2021.03.23.13.16.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 08:56:52 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, Timo Alho <talho@nvidia.com>,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH] i2c: tegra: bpmp: Implement better error handling
-Date:   Tue, 23 Mar 2021 16:57:13 +0100
-Message-Id: <20210323155713.513864-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 23 Mar 2021 13:16:55 -0700 (PDT)
+Received: (nullmailer pid 1244765 invoked by uid 1000);
+        Tue, 23 Mar 2021 20:16:47 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     linux-i2c@vger.kernel.org, robh+dt@kernel.org, linux@roeck-us.net,
+        wsa@kernel.org, jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20210323043331.21878-3-chris.packham@alliedtelesis.co.nz>
+References: <20210323043331.21878-1-chris.packham@alliedtelesis.co.nz> <20210323043331.21878-3-chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH 2/6] dt-bindings: i2c: convert i2c-mpc to json-schema
+Date:   Tue, 23 Mar 2021 14:16:47 -0600
+Message-Id: <1616530607.398955.1244764.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Tue, 23 Mar 2021 17:33:27 +1300, Chris Packham wrote:
+> Convert i2c-mpc to YAML.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>  .../devicetree/bindings/i2c/i2c-mpc.txt       | 62 ------------
+>  .../devicetree/bindings/i2c/i2c-mpc.yaml      | 99 +++++++++++++++++++
+>  2 files changed, 99 insertions(+), 62 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-mpc.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mpc.yaml
+> 
 
-Inspect a message's return value upon successful IVC transaction to
-determine if the I2C transaction on the BPMP side was successful.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Heavily based on work by Timo Alho <talho@nvidia.com>.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/i2c/i2c-mpc.yaml:19:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/i2c/i2c-mpc.yaml:20:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/i2c/busses/i2c-tegra-bpmp.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+dtschema/dtc warnings/errors:
 
-diff --git a/drivers/i2c/busses/i2c-tegra-bpmp.c b/drivers/i2c/busses/i2c-tegra-bpmp.c
-index c0c7d01473f2..c934d636f625 100644
---- a/drivers/i2c/busses/i2c-tegra-bpmp.c
-+++ b/drivers/i2c/busses/i2c-tegra-bpmp.c
-@@ -217,7 +217,32 @@ static int tegra_bpmp_i2c_msg_xfer(struct tegra_bpmp_i2c *i2c,
- 	else
- 		err = tegra_bpmp_transfer(i2c->bpmp, &msg);
- 
--	return err;
-+	if (err < 0) {
-+		dev_err(i2c->dev, "failed to transfer message: %d\n", err);
-+		return err;
-+	}
-+
-+	if (msg.rx.ret != 0) {
-+		if (msg.rx.ret == -BPMP_EAGAIN) {
-+			dev_dbg(i2c->dev, "arbitration lost\n");
-+			return -EAGAIN;
-+		}
-+
-+		if (msg.rx.ret == -BPMP_ETIMEDOUT) {
-+			dev_dbg(i2c->dev, "timeout\n");
-+			return -ETIMEDOUT;
-+		}
-+
-+		if (msg.rx.ret == -BPMP_ENXIO) {
-+			dev_dbg(i2c->dev, "NAK\n");
-+			return -ENXIO;
-+		}
-+
-+		dev_err(i2c->dev, "transaction failed: %d\n", msg.rx.ret);
-+		return -EIO;
-+	}
-+
-+	return 0;
- }
- 
- static int tegra_bpmp_i2c_xfer_common(struct i2c_adapter *adapter,
--- 
-2.30.2
+See https://patchwork.ozlabs.org/patch/1457053
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
