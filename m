@@ -2,76 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 047F13475D9
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 11:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE1F3476C3
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 12:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbhCXKVv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 Mar 2021 06:21:51 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:14459 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbhCXKVr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Mar 2021 06:21:47 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F543k5XcSzwQWx;
-        Wed, 24 Mar 2021 18:19:46 +0800 (CST)
-Received: from [127.0.0.1] (10.69.38.196) by DGGEMS413-HUB.china.huawei.com
- (10.3.19.213) with Microsoft SMTP Server id 14.3.498.0; Wed, 24 Mar 2021
- 18:21:36 +0800
-Subject: Re: [PATCH v3 2/3] i2c: add support for HiSilicon I2C controller
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <wsa@kernel.org>, <linux-i2c@vger.kernel.org>, <digetx@gmail.com>,
-        <treding@nvidia.com>, <jarkko.nikula@linux.intel.com>,
-        <rmk+kernel@armlinux.org.uk>, <song.bao.hua@hisilicon.com>,
-        <john.garry@huawei.com>, <prime.zeng@huawei.com>,
-        <linuxarm@huawei.com>
+        id S229508AbhCXLFV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 Mar 2021 07:05:21 -0400
+Received: from mga14.intel.com ([192.55.52.115]:13764 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231546AbhCXLFO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 24 Mar 2021 07:05:14 -0400
+IronPort-SDR: /lhXqndxlx9vE4GBtbAaRmPbyC7c6BqzYAW7J8HHwtp2UVM7tvZaTzZ0ID5N+Y1MxqKoRqsbrM
+ SHAPoWk26xug==
+X-IronPort-AV: E=McAfee;i="6000,8403,9932"; a="190091764"
+X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
+   d="scan'208";a="190091764"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 04:05:14 -0700
+IronPort-SDR: U4/rXhMDc0NZV3AdldCZVVReztUOV/HAIuhXqbnwVhsoCffoESQgKPylKdHaiDf2L0Fh6hftWK
+ 4t3czdWmsCyQ==
+X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
+   d="scan'208";a="452550650"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 04:05:11 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lP1K0-00FeGF-C7; Wed, 24 Mar 2021 13:05:08 +0200
+Date:   Wed, 24 Mar 2021 13:05:08 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org, digetx@gmail.com,
+        treding@nvidia.com, jarkko.nikula@linux.intel.com,
+        rmk+kernel@armlinux.org.uk, song.bao.hua@hisilicon.com,
+        john.garry@huawei.com, prime.zeng@huawei.com, linuxarm@huawei.com
+Subject: Re: [PATCH v3 1/3] i2c: core: add managed function for adding i2c
+ adapters
+Message-ID: <YFsc5PVFbchSNpF4@smile.fi.intel.com>
 References: <1616411413-7177-1-git-send-email-yangyicong@hisilicon.com>
- <1616411413-7177-3-git-send-email-yangyicong@hisilicon.com>
- <YFjOLTpe7fYvE9C1@smile.fi.intel.com>
-From:   Yicong Yang <yangyicong@hisilicon.com>
-Message-ID: <439bfa6f-139a-ee5b-d8c7-324e5084ecb3@hisilicon.com>
-Date:   Wed, 24 Mar 2021 18:21:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+ <1616411413-7177-2-git-send-email-yangyicong@hisilicon.com>
+ <YFjHVQlbygLljCvp@smile.fi.intel.com>
+ <f91c36f4-bcad-ba49-5c30-88c359946f20@hisilicon.com>
 MIME-Version: 1.0
-In-Reply-To: <YFjOLTpe7fYvE9C1@smile.fi.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.69.38.196]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f91c36f4-bcad-ba49-5c30-88c359946f20@hisilicon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2021/3/23 1:04, Andy Shevchenko wrote:
-> On Mon, Mar 22, 2021 at 07:10:12PM +0800, Yicong Yang wrote:
->> Add HiSilicon I2C controller driver for the Kunpeng SoC. It provides
->> the access to the i2c busses, which connects to the eeprom, rtc, etc.
->>
->> The driver works with IRQ mode, and supports basic I2C features and 10bit
->> address. The DMA is not supported.
+On Wed, Mar 24, 2021 at 04:26:54PM +0800, Yicong Yang wrote:
+> On 2021/3/23 0:35, Andy Shevchenko wrote:
+> > On Mon, Mar 22, 2021 at 07:10:11PM +0800, Yicong Yang wrote:
+> >> Some I2C controller drivers will only unregister the I2C
+> >> adapter in their .remove() callback, which can be done
+> >> by simply using a managed variant to add the I2C adapter.
+> >>
+> >> So add the managed functions for adding the I2C adapter.
+> > 
+> > ...
+> > 
+> >> +static void devm_i2c_del_adapter(struct device *dev, void *ptr);
+> > 
+> > Can we instead of forward declaration simply move below to be after
+> > devm_i2c_del_adapter()?
 > 
-> ...
-> 
->> +static const char *hisi_i2c_speed_string(u32 bus_freq_hz)
->> +{
->> +	switch (bus_freq_hz) {
->> +	case I2C_MAX_STANDARD_MODE_FREQ:
->> +		return "100K";
->> +	case I2C_MAX_FAST_MODE_FREQ:
->> +		return "400K";
->> +	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
->> +		return "3.4M";
->> +	default:
->> +		return "unknown";
->> +	}
->> +}
-> 
-> Just realized that if you print the name of the mode (and maybe frequency
-> value) then it can be moved to generic I²C code and other will benefit out of
-> this (DesignWare is the first in my mind).
+> i just want to put the devm variant near i2c_add_adapter, i'll address
+> this if it's unnecessary.
 
-sure, that's good. but the i2c core doesn't make use of the speed mode
-information so maybe print of this information is rather driver depended.
+Please, address.
 
-> 
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
