@@ -2,86 +2,163 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 343F43476EB
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 12:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 634B2347879
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 13:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbhCXLQv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 Mar 2021 07:16:51 -0400
-Received: from mga17.intel.com ([192.55.52.151]:20263 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232239AbhCXLQq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 24 Mar 2021 07:16:46 -0400
-IronPort-SDR: EVGn+vzF2qdPSjRi6c2LcIShfxXd8Tmp+SEQ/AY7P/kxLJRh4Vc01ijdHKtkxfBRU1l4KuPfPU
- 57QKQjzRBHqw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9932"; a="170656594"
-X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
-   d="scan'208";a="170656594"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 04:16:46 -0700
-IronPort-SDR: 5FkzPh59ZIQerq+UR1XzVTQMrDCJlpxrG3QhVno3R2m3ws3cHmi/LqqkjWy88U1gXTKoCjUnSB
- xLf15oSrCh2Q==
-X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
-   d="scan'208";a="452553659"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 04:16:41 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lP1V8-00FeRb-SI; Wed, 24 Mar 2021 13:16:38 +0200
-Date:   Wed, 24 Mar 2021 13:16:38 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org, digetx@gmail.com,
-        treding@nvidia.com, jarkko.nikula@linux.intel.com,
-        rmk+kernel@armlinux.org.uk, song.bao.hua@hisilicon.com,
-        john.garry@huawei.com, prime.zeng@huawei.com, linuxarm@huawei.com
+        id S232536AbhCXM0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 Mar 2021 08:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234499AbhCXM0P (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Mar 2021 08:26:15 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995CDC061763
+        for <linux-i2c@vger.kernel.org>; Wed, 24 Mar 2021 05:26:14 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id g8so24525269lfv.12
+        for <linux-i2c@vger.kernel.org>; Wed, 24 Mar 2021 05:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iT8uCrZuHT3QZDUcvfmjktpdW+qD+ADtTYLgoO7f6Ys=;
+        b=SA9oE0xSQoIp8P7EwHFaO2HG6zjZVZIrTuHkgJay0WRv1Sgj/fzID1oGr9XpeN+fll
+         ZQuXG9ZDZQD7k1Wohn1Y9NdRXflBEaO/Tl5brOhnGSP0hSOQ7NYzB8mzRIQhox8/Ra4u
+         g/zfXZUra67553qyjsJaHXNdvH/Hn6XpldGm7jh7IFzdivi2xEYnmCIr5u4H98uk/iKr
+         qujBa6Yd5/DiUTTg2mkv2HnFuHLLClQRNpeohAUdcqCJqfJ29H03TJivBYrKRNz86g5Z
+         3LtsmgwuQQrRk5mtQt1BAQn/mQtvGuV6vMO50AX4wgIPQxemYHrLpRQkbV8W9CJmCVK5
+         xWcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iT8uCrZuHT3QZDUcvfmjktpdW+qD+ADtTYLgoO7f6Ys=;
+        b=T9t7tVY4GkMal+zSR0sIlOOJO0uyB2BDsM3TUE+379DLiWn63QHcjvlp02/R7Vmmc9
+         kHjoDwEHDpZTflLl9ViYoy4WyiYZKSNPXXMKIMcjm4tMUjWOfWA3hpC9bhBAnoI3v+om
+         Q6oKIDiccnwmuf4e175NRGcowwzrZE//j+YtNr0LnQ40Dj7O3xhDUMVcH6cA2Kf2SlZF
+         XnCOq7utXEG1hhiG0Mt0gHS3Giaa8UZnHP3zHJHNKBTjKSWzGz+cpQhGnMQzpqLMp18u
+         HZJfZcrzXGHg6l/EmfiBzc9jCKMWJqEurlS3giG52/CcUDGq9EiLHM0bcZJ95N0BTXX1
+         smFg==
+X-Gm-Message-State: AOAM532bdOMUZuzk0CVRnWmGPfwDJJHo/VkfiBk9j/6Xcv7TR3YzYLd0
+        nms+22db4R7Q5fup4BdG8vM=
+X-Google-Smtp-Source: ABdhPJw00rBAnipnAPaQNq09hKkJKvsgbFXlrCzJlRI2YMuc6mmlrjDHNJhb0NcOkaBGuc6dkZS3WQ==
+X-Received: by 2002:ac2:5feb:: with SMTP id s11mr1771651lfg.558.1616588773073;
+        Wed, 24 Mar 2021 05:26:13 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-60.dynamic.spd-mgts.ru. [109.252.193.60])
+        by smtp.googlemail.com with ESMTPSA id y8sm318011ljk.9.2021.03.24.05.26.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Mar 2021 05:26:12 -0700 (PDT)
 Subject: Re: [PATCH v3 2/3] i2c: add support for HiSilicon I2C controller
-Message-ID: <YFsfljiMwvlz8aNn@smile.fi.intel.com>
+To:     Yicong Yang <yangyicong@hisilicon.com>, wsa@kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     andriy.shevchenko@linux.intel.com, treding@nvidia.com,
+        jarkko.nikula@linux.intel.com, rmk+kernel@armlinux.org.uk,
+        song.bao.hua@hisilicon.com, john.garry@huawei.com,
+        prime.zeng@huawei.com, linuxarm@huawei.com
 References: <1616411413-7177-1-git-send-email-yangyicong@hisilicon.com>
  <1616411413-7177-3-git-send-email-yangyicong@hisilicon.com>
- <YFjOLTpe7fYvE9C1@smile.fi.intel.com>
- <439bfa6f-139a-ee5b-d8c7-324e5084ecb3@hisilicon.com>
+ <7801d460-c1f4-5088-0ba0-47a07d187a2a@gmail.com>
+ <e18bec78-8913-2d11-00b9-e229688caae6@hisilicon.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <816f8e2d-6e8d-c118-dfd2-af5348c30a48@gmail.com>
+Date:   Wed, 24 Mar 2021 15:26:12 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <e18bec78-8913-2d11-00b9-e229688caae6@hisilicon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <439bfa6f-139a-ee5b-d8c7-324e5084ecb3@hisilicon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 06:21:36PM +0800, Yicong Yang wrote:
-> On 2021/3/23 1:04, Andy Shevchenko wrote:
-> > On Mon, Mar 22, 2021 at 07:10:12PM +0800, Yicong Yang wrote:
-
+24.03.2021 12:30, Yicong Yang пишет:
 ...
-
-> >> +static const char *hisi_i2c_speed_string(u32 bus_freq_hz)
-> >> +{
-> >> +	switch (bus_freq_hz) {
-> >> +	case I2C_MAX_STANDARD_MODE_FREQ:
-> >> +		return "100K";
-> >> +	case I2C_MAX_FAST_MODE_FREQ:
-> >> +		return "400K";
-> >> +	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
-> >> +		return "3.4M";
-> >> +	default:
-> >> +		return "unknown";
-> >> +	}
-> >> +}
-> > 
-> > Just realized that if you print the name of the mode (and maybe frequency
-> > value) then it can be moved to generic I�C code and other will benefit out of
-> > this (DesignWare is the first in my mind).
+>>> +static void hisi_i2c_enable_int(struct hisi_i2c_controller *ctlr, u32 mask)
+>>> +{
+>>> +	writel(mask, ctlr->iobase + HISI_I2C_INT_MASK);
+>>
+>> Why you don't use relaxed versions of readl/writel? Do you really need
+>> to insert memory barriers?
+>>
 > 
-> sure, that's good. but the i2c core doesn't make use of the speed mode
-> information so maybe print of this information is rather driver depended.
+> this will not be used during the transfer process, so a relaxed version of readl/writel
+> will not have performance enhancement.
+> 
+> the barriers are necessary as i want to make the operations in order to avoid potential
+> problems caused by reordering.
 
-Yes, but it's useful. And since we will have at least two users of this it is a
-good justification to use I�C core to keep and provide this API.
+The iomap is strongly ordered, hence register accesses are always
+ordered. The barrier ensures that CPU memory accesses are finished
+before h/w registers are touched. Looks like you don't need to worry
+about the memory barrier in the case of this driver.
 
--- 
-With Best Regards,
-Andy Shevchenko
+>>> +}
+>>> +
+>>> +static void hisi_i2c_disable_int(struct hisi_i2c_controller *ctlr, u32 mask)
+>>> +{
+>>> +	writel((~mask) & HISI_I2C_INT_ALL, ctlr->iobase + HISI_I2C_INT_MASK);
+>>> +}
+>>> +
+>>> +static void hisi_i2c_clear_int(struct hisi_i2c_controller *ctlr, u32 mask)
+>>> +{
+>>> +	writel(mask, ctlr->iobase + HISI_I2C_INT_CLR);
+>>> +}
+>>> +
+>>> +static void hisi_i2c_handle_errors(struct hisi_i2c_controller *ctlr)
+>>> +{
+>>> +	u32 int_err = ctlr->xfer_err, reg;
+>>> +
+>>> +	if (int_err & HISI_I2C_INT_FIFO_ERR) {
+>>> +		reg = readl(ctlr->iobase + HISI_I2C_FIFO_STATE);
+>>> +
+>>> +		if (reg & HISI_I2C_FIFO_STATE_RX_RERR)
+>>> +			dev_err(ctlr->dev, "rx fifo error read.\n");
+>>
+>> The dot "." in the end of error messages is unnecessary.
+>>
+> 
+> i'd like to keep this, as i think this is rather driver specific and not
+> violating any rules.
 
+The common kernel style is *not* to have the dot + some other messages
+in this driver already don't have it. Should be better if you could
+remove it.
 
+>>> +/*
+>>> + * Initialize the transfer information and start the I2C bus transfer.
+>>> + * We only configure the transfer and do some pre/post works here, and
+>>> + * wait for the transfer done. The major transfer process is performed
+>>> + * in the IRQ handler.
+>>> + */
+>>> +static int hisi_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>>> +				int num)
+>>> +{
+>>> +	struct hisi_i2c_controller *ctlr = i2c_get_adapdata(adap);
+>>> +	DECLARE_COMPLETION_ONSTACK(done);
+>>> +	int ret = num;
+>>> +
+>>> +	hisi_i2c_reset_xfer(ctlr);
+>>> +	ctlr->completion = &done;
+>>> +	ctlr->msg_num = num;
+>>> +	ctlr->msgs = msgs;
+>>> +
+>>> +	hisi_i2c_start_xfer(ctlr);
+>>> +
+>>> +	if (!wait_for_completion_timeout(ctlr->completion, adap->timeout)) {
+>>> +		hisi_i2c_disable_int(ctlr, HISI_I2C_INT_ALL);
+>>
+>> This doesn't save you from racing with the interrupt handler. It looks
+>> like you need to enable/disable IRQ around the completion, similarly to
+>> what NVIDIA Tegra I2C driver does.
+>>
+> 
+> thanks for suggestion.
+> 
+> the hardware between tegra and this one is a little different as we don't provide
+> a way to reinit the controller. so {synchronize,disable}_irq() after mask
+> the interrupt here will avoid the race.
+
+The disable/enable will be ideal, but synchronize should be good enough
+as well.
