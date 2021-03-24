@@ -2,125 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2CB3482CD
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 21:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE226348422
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 22:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237906AbhCXUWn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 Mar 2021 16:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
+        id S234315AbhCXVu0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 Mar 2021 17:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237885AbhCXUWi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Mar 2021 16:22:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500BAC06174A
-        for <linux-i2c@vger.kernel.org>; Wed, 24 Mar 2021 13:22:38 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lPA1Q-000225-Th; Wed, 24 Mar 2021 21:22:32 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lPA1Q-0001t3-Br; Wed, 24 Mar 2021 21:22:32 +0100
-Date:   Wed, 24 Mar 2021 21:22:32 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     linux-i2c@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx: Simplify using devm_clk_get_prepared()
-Message-ID: <20210324202232.7pa4vibmhgctvssm@pengutronix.de>
-References: <20210301135053.1462168-1-u.kleine-koenig@pengutronix.de>
- <20210324201223.75921-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S230347AbhCXVt4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Mar 2021 17:49:56 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47630C06174A;
+        Wed, 24 Mar 2021 14:49:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=EX6pAaAKbWbCSvkRWiAK+AYx238ttbosxSDxv0Nxz4U=; b=hGHrdg1tj24JzkN1Jc3s0tKyup
+        ZpPJiZBoeGVJqd5yuSaTmzfnFdn4IuUEZF6RLizT1OlCqVAJGo+c2sOIB7lY3fP6ncA71M58ecW+B
+        /3Cwg+XKraxx++mJJBF+tDAu8ujmg6owsHPEJHKahT6ewC0r1a4z1zGjgCPo7qWGVC/GQmasPORgd
+        8o9b3WKXO9ZCI3uYBaAwTDFeLlA5Xqu+1Hpd1gh28JrT0djvC80eduzlhCxbIWSy31205E0NKnv27
+        4qr2Fy/n4BsiZlUJfXlCYarLW5qcWVuL2y4iHSNzrPm0wPVgcijlF6+rflzspM4hvEE9QouOzEYM8
+        znW76OyQ==;
+Received: from [2601:1c0:6280:3f0::3ba4]
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lPBNw-000Fuc-4M; Wed, 24 Mar 2021 21:49:52 +0000
+Subject: Re: [PATCH] i2c-stm32f4: Mundane typo fix
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, p.zabel@pengutronix.de,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20210324140610.32385-1-unixbhaskar@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <d60fd628-d57a-306a-893f-840b16c5f307@infradead.org>
+Date:   Wed, 24 Mar 2021 14:49:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sjdstcxiluhgstti"
-Content-Disposition: inline
-In-Reply-To: <20210324201223.75921-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20210324140610.32385-1-unixbhaskar@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 3/24/21 7:06 AM, Bhaskar Chowdhury wrote:
+> 
+> s/postion/position/
+> 
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
---sjdstcxiluhgstti
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-On Wed, Mar 24, 2021 at 09:12:23PM +0100, Uwe Kleine-K=F6nig wrote:
-> devm_clk_get_prepared returns the clk already prepared and the
-> automatically called cleanup cares for unpreparing. So simplify .probe
-> and .remove accordingly.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 > ---
-> Hello,
->=20
-> this simplification depends on a patch set that introduces
-> devm_clk_get_prepared() and friends.
->=20
-> The most recent version of this patch set can be found at
->=20
-> 	https://lore.kernel.org/r/20210301135053.1462168-1-u.kleine-koenig@pengu=
-tronix.de
->=20
-> Unfortunately I didn't get any feedback at all from the clk maintainers
-> on it, so I try to make other maintainers aware of it in the expectation
-> that the simplifications are welcome and so lure the clk maintainers to
-> share their thoughts.
->=20
-> Best regards
-> Uwe
->=20
->  drivers/i2c/busses/i2c-imx.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index b80fdc1f0092..c0e18a6caa38 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1405,16 +1405,10 @@ static int i2c_imx_probe(struct platform_device *=
-pdev)
->  	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
-> =20
->  	/* Get I2C clock */
-> -	i2c_imx->clk =3D devm_clk_get(&pdev->dev, NULL);
-> +	i2c_imx->clk =3D devm_clk_get_prepared(&pdev->dev, NULL);
+>  drivers/i2c/busses/i2c-stm32f4.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-stm32f4.c b/drivers/i2c/busses/i2c-stm32f4.c
+> index 937c2c8fd349..4933fc8ce3fd 100644
+> --- a/drivers/i2c/busses/i2c-stm32f4.c
+> +++ b/drivers/i2c/busses/i2c-stm32f4.c
+> @@ -534,7 +534,7 @@ static void stm32f4_i2c_handle_rx_addr(struct stm32f4_i2c_dev *i2c_dev)
+>  	default:
+>  		/*
+>  		 * N-byte reception:
+> -		 * Enable ACK, reset POS (ACK postion) and clear ADDR flag.
+> +		 * Enable ACK, reset POS (ACK position) and clear ADDR flag.
+>  		 * In that way, ACK will be sent as soon as the current byte
+>  		 * will be received in the shift register
+>  		 */
+> --
 
-oops, I got that wrong, this must be devm_clk_get_enabled, not
-devm_clk_get_prepared. So if the clk patches go in, please let me resend
-a fixed patch (or adapt yourself, whatever you prefer).
 
-Best regards
-Uwe
+-- 
+~Randy
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---sjdstcxiluhgstti
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmBbn4QACgkQwfwUeK3K
-7AlfNAf/cUzq/Eg31Gb0Pmz5isxU73bJFkCYDL29vTATKpmxiVkYnrCfs6TpAhsO
-unA+GVEcVYxMADyeDhZruQlIBQrvT1T5uE9mYhb4F/Yy34vSTbeJOcHMe/pf2U6i
-ZibokVFziKd+CuCbU9c+Skl4RIQ+BnJlePAhm1Hw/Rl9HCBLhTr4XDshfP0jPlTs
-MwS5qXr3fEXDh0YK+ww7nWmzVwoSd4f2QKmoZBUI+jrudV43Pi+hMZxFPhbkb4X5
-fZs8U40w9SBfn1FYar44y5aI4pF088E3+dSkz32yREdGyfbC30oruLA3LJquHNrp
-/2df2QP4nR0ZIY+JToulIcFfgiLrmQ==
-=IX9T
------END PGP SIGNATURE-----
-
---sjdstcxiluhgstti--
