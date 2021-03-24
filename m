@@ -2,96 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61430347037
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 04:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA9B347040
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 04:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbhCXDnq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Mar 2021 23:43:46 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:40960 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbhCXDnq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Mar 2021 23:43:46 -0400
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BB58D891AE;
-        Wed, 24 Mar 2021 16:43:43 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1616557423;
-        bh=MlvuM4GZ54JuNtp8slC5y2UBaxE0XHJISV1jRWwPpEk=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=RUmO63bq/huEx9xw385En31UWuXQO8QubsO/9LKmH7fZlf7piCdjqQ3YF6Daf2mDO
-         YpbENQfysCBrgbGIFb4MUcVa6VTQh1DNk42LkGU75mcgiKd6bbONypaJGV5y3t+tCg
-         CtdEcj8/WHjecVanjHm7p/raJcMWaO0zkSiMRZtagneVDd13YqjYxjEdMn4fzeLTc2
-         s6s1SfyszjHXM++7d38AL5akXRRZkRARE3RQvPsBdpMdPGHVE+yU/i06EJDZhj535d
-         TyKwlDNw0kJe3oy17+YrePOBlxX5Jkzmww9AZ+CPGULAmc/YunkfzyJK1KVu0WzA3h
-         rXV74RNjR0MCA==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B605ab56f0001>; Wed, 24 Mar 2021 16:43:43 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 24 Mar 2021 16:43:43 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.012; Wed, 24 Mar 2021 16:43:43 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/6] i2c: mpc: Refactor to improve responsiveness
-Thread-Topic: [PATCH 0/6] i2c: mpc: Refactor to improve responsiveness
-Thread-Index: AQHXH523mfZMZexLwESnYJyd01Nd66qRppyA
-Date:   Wed, 24 Mar 2021 03:43:43 +0000
-Message-ID: <7d6acdfe-87f5-6096-a870-58d7d802f975@alliedtelesis.co.nz>
-References: <20210323043331.21878-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20210323043331.21878-1-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <23E09B1CC76F0A4293EB5F0C879B8922@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S235121AbhCXDwp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Mar 2021 23:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235182AbhCXDwc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Mar 2021 23:52:32 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E884C061763
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Mar 2021 20:52:32 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id h3so16373602pfr.12
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Mar 2021 20:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=3j5OyUrftEzcDXX4MpjT7fR+wbe3Yv5y5R6X/vBZjJQ=;
+        b=SLpHyYmHPpBuZfgEnc7aIx8GyYHbTlCdViwxtR0TEFAqoH6Co57I5/GH6Ghv7gYREK
+         YoZDyi6GiHTtQirA7XKDDFL6oucRys/mzhTATHl/jQnCC/9Z59VS64azThymSHNOyOAP
+         uk2USEmA7qpWhxfDT7ZVH/cevwiBf6lKq1YXy+yqSZKaJuaZi35Gh0IInr5qiVUrru9a
+         LIOLJpqdf9SembDFDJhCW4jZJYj0Jtz4bBpv77+ypTAQlRTOv/ALj+tE1y+ghdzk9nRB
+         t5Y7kdYGbTGolx/nZa15DGpe1a4G7dg9FQyIKVRC4elRXJCdoMr5EuY3ennhf90B5fVr
+         010w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3j5OyUrftEzcDXX4MpjT7fR+wbe3Yv5y5R6X/vBZjJQ=;
+        b=haoujK9aSNUfdC8XK/S58K2kcSATOarhcygflDrddSw5JmgHmV/I7gvFqpJTreHOPV
+         8vcHVJeuWtuV1N1YZXX7p7M58MjaK/Mqqz4fnlIYUA3aDYgAhLtKk5LQX+ao7cTuOThl
+         GBkNsICzYidYOIcqoXtZ5rZzSEnG8eA8X47aB1T6zbLS0yRgRvcOYwb13kLgp616gZoK
+         r9aQRZAkiz85jdq5bADpakH9JRDBZR3psvhQBAWBv7KvmO5aKVZihQoShTxswsrwMdNO
+         1UjjODILLWPZgPC9ZO/H/OgfOTz9q4ITvPl+CnVbD4Hz9SrFSMSQnK3CUn9ysyNB2PKn
+         dpxg==
+X-Gm-Message-State: AOAM5311k8tfHsCKz9wNYp4sVq+shLVrKOGKX+X2yye8d52ztQvn9gED
+        qUbqz8TdmHBko+cBvmDbweegjg==
+X-Google-Smtp-Source: ABdhPJwS7CzKG1KeSya4Uww0J2B7VcOU1nBY8jh4mVwy8qnnMCjeW6O7tPjhMNgQ2e7moAaEbcW9CA==
+X-Received: by 2002:a62:3503:0:b029:1aa:6f15:b9fe with SMTP id c3-20020a6235030000b02901aa6f15b9femr1061153pfa.65.1616557951696;
+        Tue, 23 Mar 2021 20:52:31 -0700 (PDT)
+Received: from localhost ([122.172.6.13])
+        by smtp.gmail.com with ESMTPSA id m5sm623171pfd.96.2021.03.23.20.52.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Mar 2021 20:52:28 -0700 (PDT)
+Date:   Wed, 24 Mar 2021 09:22:25 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jie Deng <jie.deng@intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, wsa@kernel.org,
+        jasowang@redhat.com, wsa+renesas@sang-engineering.com,
+        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
+        arnd@arndb.de, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
+        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
+        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
+        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
+        pbonzini@redhat.com
+Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <20210324035225.skkllxexjl65gs6x@vireshk-i7>
+References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
+ <20210323090108.ygx76exdgzudeeqi@vireshk-i7>
+ <20210323093839.n7cq7f5poebqdwit@vireshk-i7>
+ <5a415dbe-8e3b-2731-cc52-19aeadda1a17@intel.com>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10 a=B-IRwknogWAUFU2Uo84A:9 a=QEXdDO2ut3YA:10 a=fCgQI5UlmZDRPDxm0A3o:22
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a415dbe-8e3b-2731-cc52-19aeadda1a17@intel.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiAyMy8wMy8yMSA1OjMzIHBtLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPiBUaGUgIm1lYXQi
-IG9mIHRoaXMgc2VyaWVzIGlzIGluIHRoZSBsYXN0IHBhdGNoIHdoaWNoIGlzIHRoZSBjaGFuZ2Ug
-dGhhdA0KPiBhY3R1YWxseSBzdGFydHMgbWFraW5nIHVzZSBvZiB0aGUgaW50ZXJydXB0cyB0byBk
-cml2ZSBhIHN0YXRlIG1hY2hpbmUuDQo+IFRoZSBkdC1iaW5kaW5ncyBwYXRjaGVzIGNhbiBwcm9i
-YWJseSBnbyBpbiBhdCBhbnkgdGltZS4gVGhlIHJlc3Qgb2YgdGhlDQo+IHNlcmllcyBpc24ndCBk
-ZXBlbmRlbnQgb24gdGhlbS4NCj4NCj4gSSd2ZSB0ZXN0ZWQgaXQgb24gYSBUMjA4MSBiYXNlZCBz
-eXN0ZW0gd2l0aCBhIG51bWJlciBvZiBpMmMgYW5kIHNtYnVzDQo+IGRldmljZXMuICBJdHMgdGhl
-IGVuZCBvZiBteSB3b3JrIGRheSBzbyBJIGZpZ3VyZWQgSSdkIGdldCB0aGlzIG91dCBub3cNCj4g
-YnV0IEknbGwgZG8gc29tZSBtb3JlIHRlc3Rpbmcgb24gYSBQMjA0MSBib2FyZCBhbmQgYSBmZXcg
-ZGlmZmVyZW50IGkyYw0KPiBkZXZpY2VzIHRvbW9ycm93Lg0KDQpJJ3ZlIGRvbmUgbW9yZSB0ZXN0
-aW5nIG9uIGEgVDIwODEgYW5kIFAyMDQxIGJvYXJkLiBCb3RoIGxvb2sgZ29vZC4NCg0KSSd2ZSBo
-YWQgc29tZSBmZWVkYmFjayBmcm9tIFJvYiBvbiB0aGUgZHQtYmluZGluZ3Mgd2hpY2ggSSB0aGlu
-ayBJJ3ZlIA0KZ290IHNvcnRlZCBub3cuIEkndmUgZ290IGEgY291cGxlIG9mIG1pbm9yIGNvc21l
-dGljIGNoYW5nZXMgdG8gNi82IGJ1dCANCkknbGwgaG9sZCBmaXJlIG9uIHNlbmRpbmcgYSB2MiB0
-byBnaXZlIHBlb3BsZSBhIGNoYW5jZSB0byBsb29rIGF0IHRoZSANCmZ1bmN0aW9uYWwgY2hhbmdl
-cy4NCg0KPiBDaHJpcyBQYWNraGFtICg2KToNCj4gICAgZHQtYmluZGluZ3M6IGkyYy1tcGM6IERv
-Y3VtZW50IGludGVycnVwdCBwcm9wZXJ0eSBhcyByZXF1aXJlZA0KPiAgICBkdC1iaW5kaW5nczog
-aTJjOiBjb252ZXJ0IGkyYy1tcGMgdG8ganNvbi1zY2hlbWENCj4gICAgaTJjOiBtcGM6IE1ha2Ug
-dXNlIG9mIGkyY19yZWNvdmVyX2J1cygpDQo+ICAgIGkyYzogbXBjOiBtYWtlIGludGVycnVwdCBt
-YW5kYXRvcnkgYW5kIHJlbW92ZSBwb2xsaW5nIGNvZGUNCj4gICAgaTJjOiBtcGM6IHVzZSBkZXZp
-Y2UgbWFuYWdlZCBBUElzDQo+ICAgIGkyYzogbXBjOiBJbnRlcnJ1cHQgZHJpdmVuIHRyYW5zZmVy
-DQo+DQo+ICAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2kyYy1tcGMudHh0ICAgICAgIHwg
-IDYyIC0tLQ0KPiAgIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMtbXBjLnlhbWwgICAg
-ICB8ICA5OSArKysrDQo+ICAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tcGMuYyAgICAgICAgICAg
-ICAgICAgIHwgNTEzICsrKysrKysrKystLS0tLS0tLQ0KPiAgIDMgZmlsZXMgY2hhbmdlZCwgMzcz
-IGluc2VydGlvbnMoKyksIDMwMSBkZWxldGlvbnMoLSkNCj4gICBkZWxldGUgbW9kZSAxMDA2NDQg
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMtbXBjLnR4dA0KPiAgIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2ky
-Yy1tcGMueWFtbA0KPg==
+On 24-03-21, 08:53, Jie Deng wrote:
+> 
+> On 2021/3/23 17:38, Viresh Kumar wrote:
+> > On 23-03-21, 14:31, Viresh Kumar wrote:
+> > > On 23-03-21, 22:19, Jie Deng wrote:
+> > > > +static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+> > > > +{
+> > > > +	struct virtio_i2c *vi = i2c_get_adapdata(adap);
+> > > > +	struct virtqueue *vq = vi->vq;
+> > > > +	struct virtio_i2c_req *reqs;
+> > > > +	unsigned long time_left;
+> > > > +	int ret, nr;
+> > > > +
+> > > > +	reqs = kcalloc(num, sizeof(*reqs), GFP_KERNEL);
+> > > > +	if (!reqs)
+> > > > +		return -ENOMEM;
+> > > > +
+> > > > +	mutex_lock(&vi->lock);
+> > > > +
+> > > > +	ret = virtio_i2c_send_reqs(vq, reqs, msgs, num);
+> > > > +	if (ret == 0)
+> > > > +		goto err_unlock_free;
+> > > > +
+> > > > +	nr = ret;
+> > > > +	reinit_completion(&vi->completion);
+> > > I think I may have found a possible bug here. This reinit_completion() must
+> > > happen before we call virtio_i2c_send_reqs(). It is certainly possible (surely
+> > > in corner cases) that virtio_i2c_msg_done() may get called right after
+> > > virtio_i2c_send_reqs() and before we were able to call reinit_completion(). And
+> > > in that case we will never see the completion happen at all.
+> > > 
+> > > > +	virtqueue_kick(vq);
+> > I may have misread this. Can the actually start before virtqueue_kick() is
+> > called ?
+
+I didn't write it properly here. I wanted to say,
+
+"Can the _transfer_ actually start before virtqueue_kick() is called ?"
+ 
+> No. It starts when wait_for_completion_timeout is called.
+
+No, the transfer doesn't have anything to do with wait_for_completion_timeout().
+And if complete() gets called before wait_for_completion_timeout() is called,
+then wait_for_completion_timeout() will simply return back.
+
+> So it should be fine here.
+> 
+> 
+> >   If not, then completion may be fine where it is.
+> > 
+
+-- 
+viresh
