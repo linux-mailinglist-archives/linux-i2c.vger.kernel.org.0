@@ -2,89 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1DC347A2C
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 15:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AEF3482A0
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Mar 2021 21:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235686AbhCXOEv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 Mar 2021 10:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        id S237906AbhCXUM7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 Mar 2021 16:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235859AbhCXOE3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Mar 2021 10:04:29 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ED0C061763;
-        Wed, 24 Mar 2021 07:04:29 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id q3so18070762qkq.12;
-        Wed, 24 Mar 2021 07:04:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CpPLSn6SC+tjm/MP07tit/iX5OAxIHrELjJluCN4+Z4=;
-        b=gK5Mfehw83CQNoo5eO1MGPKzFRwSFCx1vqAA28oFXLRTV77chR4gF8N12l9TMcl97r
-         cWvV5XnWYoGjF6ouRwSJenqexpLsuARyB0/VwUZmMxruLd8c8kxXLjQzV1x1mubb8UGX
-         1aU3vVsN/vvRK0/ygLinYq36Q7Oxr09rXYsAkWHsgc4phugCighwF47+TdD4h8VNYFzv
-         7BsGHqcprnPLKvo/sc4vKNFTA+m3a4VySXoulxk5pmA3cDOZWwdzg6rgVBFQFZEXmdVs
-         2sx0muI+K5n2Eqvp8Ds9THCqMm2lfsC2MCg+NKWQCb6ThIcqOPdEITvJFZnaADU/Opbw
-         z6Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CpPLSn6SC+tjm/MP07tit/iX5OAxIHrELjJluCN4+Z4=;
-        b=l7bjn+IdtXucBCTNWsti8b62OvhBNG7rU9/QlX3KEW3GlmQ+9WYy4OwvPAfcPEpGLf
-         qIEddQocHMeQVlK1cDWz4x3CrYdmFMKBVDfj8ygkLYGz5qPbjBwVa9z3Ha4uy2p2J6JH
-         zx10iGvSO+C7TsKijHrQ4ig4/DWCC9AneZ/HNBKt9fQe7nzmDSs7geUFTXQnk/JKXKmY
-         xVplVEy3nbJvxoqDUaEfyBmGJEfL9QcKb7o29kkHS2ExQXaiAeRDwXXRXiWFjoY5BY8t
-         iDIwJJRr6tx7i4H2CX+4h9HzDLqYQo80pBwQ9AmR5ERYyOsbB+smzgxCUAJGKCc24Rn7
-         wEzQ==
-X-Gm-Message-State: AOAM531RV2f7UHerV1BSDGhGg2ClQd7HwVCee+cE53NEnz3+4sEddmT5
-        +I8QuwluIWdI2h8+KWaYPXs=
-X-Google-Smtp-Source: ABdhPJxvFiADFOynFmLKf93cGd6AwCKXxls8SlNl74wx2zHm5MoUxa6OiY+hjvXImOw9EEkuYUg7Uw==
-X-Received: by 2002:a05:620a:2013:: with SMTP id c19mr3175599qka.403.1616594668546;
-        Wed, 24 Mar 2021 07:04:28 -0700 (PDT)
-Received: from Slackware.localdomain ([156.146.36.138])
-        by smtp.gmail.com with ESMTPSA id s6sm1524096qtn.15.2021.03.24.07.04.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 07:04:27 -0700 (PDT)
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, p.zabel@pengutronix.de,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     rdunlap@infradead.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Subject: [PATCH] i2c-stm32f4: Mundane typo fix
-Date:   Wed, 24 Mar 2021 19:36:10 +0530
-Message-Id: <20210324140610.32385-1-unixbhaskar@gmail.com>
-X-Mailer: git-send-email 2.30.1
+        with ESMTP id S237892AbhCXUMg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Mar 2021 16:12:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482E3C061763
+        for <linux-i2c@vger.kernel.org>; Wed, 24 Mar 2021 13:12:36 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lP9ri-0000nh-Ot; Wed, 24 Mar 2021 21:12:30 +0100
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lP9rg-0001LT-Ke; Wed, 24 Mar 2021 21:12:28 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-clk@vger.kernel.org
+Subject: [PATCH] i2c: imx: Simplify using devm_clk_get_prepared()
+Date:   Wed, 24 Mar 2021 21:12:23 +0100
+Message-Id: <20210324201223.75921-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210301135053.1462168-1-u.kleine-koenig@pengutronix.de>
+References: <20210301135053.1462168-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+devm_clk_get_prepared returns the clk already prepared and the
+automatically called cleanup cares for unpreparing. So simplify .probe
+and .remove accordingly.
 
-s/postion/position/
-
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/i2c/busses/i2c-stm32f4.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello,
 
-diff --git a/drivers/i2c/busses/i2c-stm32f4.c b/drivers/i2c/busses/i2c-stm32f4.c
-index 937c2c8fd349..4933fc8ce3fd 100644
---- a/drivers/i2c/busses/i2c-stm32f4.c
-+++ b/drivers/i2c/busses/i2c-stm32f4.c
-@@ -534,7 +534,7 @@ static void stm32f4_i2c_handle_rx_addr(struct stm32f4_i2c_dev *i2c_dev)
- 	default:
- 		/*
- 		 * N-byte reception:
--		 * Enable ACK, reset POS (ACK postion) and clear ADDR flag.
-+		 * Enable ACK, reset POS (ACK position) and clear ADDR flag.
- 		 * In that way, ACK will be sent as soon as the current byte
- 		 * will be received in the shift register
- 		 */
---
-2.30.1
+this simplification depends on a patch set that introduces
+devm_clk_get_prepared() and friends.
+
+The most recent version of this patch set can be found at
+
+	https://lore.kernel.org/r/20210301135053.1462168-1-u.kleine-koenig@pengutronix.de
+
+Unfortunately I didn't get any feedback at all from the clk maintainers
+on it, so I try to make other maintainers aware of it in the expectation
+that the simplifications are welcome and so lure the clk maintainers to
+share their thoughts.
+
+Best regards
+Uwe
+
+ drivers/i2c/busses/i2c-imx.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index b80fdc1f0092..c0e18a6caa38 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1405,16 +1405,10 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
+ 
+ 	/* Get I2C clock */
+-	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
++	i2c_imx->clk = devm_clk_get_prepared(&pdev->dev, NULL);
+ 	if (IS_ERR(i2c_imx->clk))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
+-				     "can't get I2C clock\n");
+-
+-	ret = clk_prepare_enable(i2c_imx->clk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
+-		return ret;
+-	}
++				     "can't get prepared I2C clock\n");
+ 
+ 	/* Init queue */
+ 	init_waitqueue_head(&i2c_imx->queue);
+@@ -1517,7 +1511,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq >= 0)
+ 		free_irq(irq, i2c_imx);
+-	clk_disable_unprepare(i2c_imx->clk);
+ 
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+-- 
+2.30.2
 
