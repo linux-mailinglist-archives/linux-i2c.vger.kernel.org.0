@@ -2,62 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7EF34BDFB
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Mar 2021 20:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEBF34C151
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 03:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbhC1SHc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 28 Mar 2021 14:07:32 -0400
-Received: from mail.hanoi.gov.vn ([113.160.32.33]:31610 "EHLO
-        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbhC1SHR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Mar 2021 14:07:17 -0400
-X-Greylist: delayed 474 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:01 EDT
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30259EC3D8;
-        Mon, 29 Mar 2021 00:57:51 +0700 (+07)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
-        s=default; t=1616954272;
-        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
-        b=R9blPfqJCHUsZAyZxsyyryS61fl4krmBjYKWM6eGGwB8ZdbTBVPL1mmKOmZXMqNlA
-         7CEqA0MXgUAy+X4oK/wthh4vC9Xoov1Ce8tjf/qJvnL7KGsGNVg9ic0krGeHrdNzGM
-         5cIEKsz0emmHL/izbEfCtadst3HYllOJWdonlm5o=
-X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 50FCBEC3DD;
-        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
-        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
-Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 02AFC7F41B42;
-        Mon, 29 Mar 2021 00:57:44 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 08FE47F41B5D;
-        Mon, 29 Mar 2021 00:57:41 +0700 (+07)
-Received: from mail.hanoi.gov.vn ([127.0.0.1])
-        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1D3oZsOAVsx3; Mon, 29 Mar 2021 00:57:36 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 478CE7F41B59;
-        Mon, 29 Mar 2021 00:57:33 +0700 (+07)
-Date:   Mon, 29 Mar 2021 00:57:33 +0700 (ICT)
-From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
-Reply-To: Mackenzie Scott <propack@propck.net>
-Message-ID: <354204758.25920932.1616954253215.JavaMail.zimbra@hanoi.gov.vn>
-Subject: Congratulations ($ 100,800,000.00)
+        id S230487AbhC2Bwl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 28 Mar 2021 21:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230470AbhC2BwO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Mar 2021 21:52:14 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68EFC0613B5
+        for <linux-i2c@vger.kernel.org>; Sun, 28 Mar 2021 18:52:13 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 184D58364E;
+        Mon, 29 Mar 2021 14:52:08 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1616982728;
+        bh=1nLQSp7vbLAvlN7Fzi+XfVrJA24mf4rcWMaEhiGM8Tc=;
+        h=From:To:Cc:Subject:Date;
+        b=2gKB76rC4hhu4nZ91dmKLBUMRpKgiFJLWN89EWmb7ZGOP6hUCzAQnm238BfH1cA66
+         5u/BFfydtpLy0Pl4fa2Ow2WPuM8v1FjkwQxkC0Kg7bypj+xmf0ElJlnb260JWrofsv
+         gp0zsessYn6dL9U/4lG70maIpUbH7pzBzl2gJPZPQakGMZddaNbMGJrOdIQwl8Sk61
+         CgfplJbdL3es78aTjhW+QbI8cuh/q7y1E4OmvjdlJicTz4HRaWWC2L6nKVlx9erZgW
+         zhLHEhi05NWc7iP7t+4JR6XgSCpaNDNbSrr+nU1Ztb3TsR2Bpg7fdsDbNjUmQu7vzK
+         ZzosK5vOFb6aw==
+Received: from smtp (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B606132c70000>; Mon, 29 Mar 2021 14:52:07 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id 4D7B213EED4;
+        Mon, 29 Mar 2021 14:52:25 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 73096284081; Mon, 29 Mar 2021 14:52:08 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     robh+dt@kernel.org, linux@roeck-us.net, wsa@kernel.org,
+        jdelvare@suse.com
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v2 0/6] i2c: mpc: Refactor to improve responsiveness
+Date:   Mon, 29 Mar 2021 14:52:00 +1300
+Message-Id: <20210329015206.17437-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [185.107.80.217]
-X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
-Thread-Index: ao/APhyKX+JH1nE2Rn/kAmnh2LEgkw==
-Thread-Topic: Congratulations ($ 100,800,000.00)
-To:     undisclosed-recipients:;
-X-TM-AS-GCONF: 00
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=dESyimp9J3IA:10 a=peonOtBRVIPhQsqlob0A:9 a=fCgQI5UlmZDRPDxm0A3o:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The "meat" of this series is in the last patch which is the change that
+actually starts making use of the interrupts to drive a state machine.
+The dt-bindings patches can probably go in at any time, the rest of the
+series isn't dependent on them.
 
+I've tested on T2081 and P2041 based systems with a number of i2c and smb=
+us
+devices.
 
-Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
+Chris Packham (6):
+  dt-bindings: i2c-mpc: Document interrupt property as required
+  dt-bindings: i2c: convert i2c-mpc to json-schema
+  i2c: mpc: Make use of i2c_recover_bus()
+  i2c: mpc: make interrupt mandatory and remove polling code
+  i2c: mpc: use device managed APIs
+  i2c: mpc: Interrupt driven transfer
+
+ .../devicetree/bindings/i2c/i2c-mpc.txt       |  62 ---
+ .../devicetree/bindings/i2c/i2c-mpc.yaml      |  91 +++
+ drivers/i2c/busses/i2c-mpc.c                  | 517 ++++++++++--------
+ 3 files changed, 369 insertions(+), 301 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-mpc.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mpc.yaml
+
+--=20
+2.31.0
+
