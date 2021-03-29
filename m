@@ -2,87 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C6834D7BE
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 21:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5A034D7C3
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 21:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbhC2TFx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Mar 2021 15:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S229955AbhC2TG0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Mar 2021 15:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbhC2TF1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Mar 2021 15:05:27 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D8EC061574;
-        Mon, 29 Mar 2021 12:05:27 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id v10so5130456pfn.5;
-        Mon, 29 Mar 2021 12:05:27 -0700 (PDT)
+        with ESMTP id S231146AbhC2TGO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Mar 2021 15:06:14 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B9CC061574;
+        Mon, 29 Mar 2021 12:06:14 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id s17so17137289ljc.5;
+        Mon, 29 Mar 2021 12:06:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3o+FkO2Qy1s5nSC7B2dEf3QkgKMMmA6C1GTPWCCkaNA=;
-        b=BVBc9iD5vjN7weFys9N2KW4OZ1qrF/fi32fHRVh91yhZuZZZ9htR9QIlJYMmE2QD8J
-         Rsptypg7Smz2Z8XrXQxZpXSvDAdCdl2ZiX78FAI5u6WAAEybZinLqR5ucBrio/krYCXK
-         Gag73vp7pUyPe9ptgfmQYu11CS58JvEr3matYUaFzuoeqmJh/QVWQ/EG+fYJ2QJbA/t6
-         EG9A5N0LChtSPQYu4LLB+rqv0+451Y7PM2SUxFI/Z3TbwMavKAj/cDIUjz6OyzsHcAzL
-         JymDx5c0llAKvUhih+bg/0c8Wlb0l6vUuJCZy2gglvqOznKRQ51glakF7AyVyLA8IChi
-         NKJA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aKWS0aU8jyoXVgDBn/hCQzo9I1d/OWR4aJoN4goeeos=;
+        b=Oa4FP0SkefTa6Se+tHek4r1Tw7YP/bZXJtm+tUdMjsEONH7j2675FgEABAHnpht99t
+         L47fRuaCue2u7tQvT7rAFZQj/SFzq+nHirWGZxFhB1gdFykuEfM45mjgIFNFJaUc5pDE
+         f8UcmCJAUS5fWwIuClsm70MQb7ZWP7DYMI3Mg+cWuuBummVx4b76pruYaPi3EEmzXL0W
+         NgeXpo9rQEap3xj73HZRR3qCyrUQ0NRECse8GJwuccgZZtTGolcItFA3pnT8m84qd6Pi
+         MskaIwfwBlXZTir+z5prJav1gEGI1wTTuilfZHkcmqfrFossleuIu04SVGtSP64ZAPXR
+         pDAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3o+FkO2Qy1s5nSC7B2dEf3QkgKMMmA6C1GTPWCCkaNA=;
-        b=gF2E5MBm5L2dYWf1RONLqgtpudABuPTryhRMbMQrSCkTqrQwRVDvXFwB1q4uPnX61Q
-         4i226XWZsn1DA/XIzivrpWo9R7X3p0Y4TrmP+5AzQbYzD9oUKvY1u+asYy2M5zLeyj/c
-         Bxh84BgXtlNqRgauKZkzl/OXl8Dq4Hukc4sfl0aGqxU/tQiVY/yd3yE3nor8zshDBwD4
-         gK7TxOU828DbKOArm+ZExbLZ6b2snyzG8rZU0VKwzmOYvegD/AytwC0yelZ1lOP5FjoE
-         5v7ikBp8zlDfd12fa/6x/zRaeQcq3TrYkRGEtneocm8kDx+9QVJi5sR43uzE4dagSMUW
-         XfKw==
-X-Gm-Message-State: AOAM533GoGs+5GHZrx+rP60KtT5vg5ZZn/JrjpqJ9e0pd0FO+sqLz5Yc
-        IZbuLi/aiUod2SYe7eNR2ms=
-X-Google-Smtp-Source: ABdhPJy3kJUbM4NI+kqqkd721+NPv874JhLidNgm/a5xMR9JIW52UJW/Higxtt+Xaxtwh+MYq7JtKg==
-X-Received: by 2002:a62:e10f:0:b029:1f5:42b6:7113 with SMTP id q15-20020a62e10f0000b02901f542b67113mr27123737pfh.63.1617044726848;
-        Mon, 29 Mar 2021 12:05:26 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:a82a:a913:988c:7480])
-        by smtp.gmail.com with ESMTPSA id g18sm17793351pfb.178.2021.03.29.12.05.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aKWS0aU8jyoXVgDBn/hCQzo9I1d/OWR4aJoN4goeeos=;
+        b=rdjhZyStjScPmdFBaUr/gfdtmXy9o/rFpzDAj9ouoblDQCeoQTDsSUbFbE2AOtm1vl
+         Va936QWlH7f1DQbRhPB1V+HhNIDALhZrpFhMjp4b9l8PTisEcmRKMjKMO8SdWeSVurP6
+         HdHqmUxiSo1r+6YTi5csoMjMRcGgrENuM2RBMCmuxJgiW0cuk7BjWUS1OZUCrkkopvr4
+         vxN7nR0hkAXwY3nmbSKWm/JWQtJoarpneINlKp7Nl2hEqtZgQXTh7TdZTpwsa5cNm8E9
+         kkXPW2ByXq0Hn7nvxzcIJ1RDXLOHzs9qgmwOTlPsNom86dhXS4XBP48AUn2656H5+Xn+
+         mKWg==
+X-Gm-Message-State: AOAM532I69a9mdwQtpcwqcqIVtw/7D/RVwvhIEIzDJgGJhjA9VDRO+YQ
+        J55WdYrS8p6v8OP1EC7ZrNo=
+X-Google-Smtp-Source: ABdhPJwCrVtJxeAMADz0GR72FOIGRRXOBvgo6/LtznwU9doNf9IxAn1kdD0aIfGeq4I40/eM4M0SWA==
+X-Received: by 2002:a05:651c:212a:: with SMTP id a42mr18299065ljq.505.1617044772740;
+        Mon, 29 Mar 2021 12:06:12 -0700 (PDT)
+Received: from localhost.localdomain ([2a00:1370:814d:b259:a10:76ff:fe69:21b6])
+        by smtp.gmail.com with ESMTPSA id o139sm1923041lfa.129.2021.03.29.12.06.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Mar 2021 12:05:25 -0700 (PDT)
-Date:   Mon, 29 Mar 2021 12:05:23 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        Mon, 29 Mar 2021 12:06:12 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/12] Input: elantech - Prepare a complete software node
- for the device
-Message-ID: <YGIk8+vw01rdVAVx@google.com>
-References: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
- <20210329105047.51033-12-heikki.krogerus@linux.intel.com>
+Subject: [PATCH v1] i2c: tegra: Improve handling of i2c_recover_bus()
+Date:   Mon, 29 Mar 2021 22:05:46 +0300
+Message-Id: <20210329190546.24869-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210329105047.51033-12-heikki.krogerus@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 01:50:46PM +0300, Heikki Krogerus wrote:
-> Creating a software node and supplying that for the device
-> instead of only the device properties in it. A software
-> node was always created in any case to hold the additional
-> device properties, so this change does not have any real
-> effect.
-> 
-> This change makes it possible to remove support for the
-> problematic "dangling" device properties from i2c subsystem,
-> i.e. the "properties" member from struct i2c_board_info. The
-> problems caused by them are not related to this driver.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+The i2c_recover_bus() returns -EOPNOTSUPP if bus recovery isn't wired up,
+which the case for older Tegra SoCs at the moment. This error code is then
+propagated to I2C client and might be confusing, thus return -EIO instead.
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Thanks.
-
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index c883044715f3..cb5e3cc96160 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1196,8 +1196,14 @@ static int tegra_i2c_error_recover(struct tegra_i2c_dev *i2c_dev,
+ 
+ 	/* start recovery upon arbitration loss in single master mode */
+ 	if (i2c_dev->msg_err == I2C_ERR_ARBITRATION_LOST) {
+-		if (!i2c_dev->multimaster_mode)
+-			return i2c_recover_bus(&i2c_dev->adapter);
++		if (!i2c_dev->multimaster_mode) {
++			int err = i2c_recover_bus(&i2c_dev->adapter);
++
++			if (err == -EOPNOTSUPP)
++				return -EIO;
++
++			return err;
++		}
+ 
+ 		return -EAGAIN;
+ 	}
 -- 
-Dmitry
+2.30.2
+
