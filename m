@@ -2,69 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D30334D3DE
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 17:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA25E34D3EA
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 17:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbhC2P2R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Mar 2021 11:28:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35325 "EHLO
+        id S231318AbhC2P2t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Mar 2021 11:28:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42675 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231363AbhC2P16 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Mar 2021 11:27:58 -0400
+        by vger.kernel.org with ESMTP id S231396AbhC2P2R (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Mar 2021 11:28:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617031677;
+        s=mimecast20190719; t=1617031696;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lEl3LAwrgGEoo1YTsPMMD8y2SPYPy6f5+CzBsjGXSQc=;
-        b=UhCxLjReMZg2NZd96CKinNUbLf/SaloaPq7na8egfH3wXolBjkGNPuVABxGSzl/rqV8a1n
-        crSqr39a7w6Nj3XgNNYUYlQp+JtxsgjvIJXvTRNS2wrp0OPuBLvIlg+aE454yp+N2qe4sM
-        6cg5orJB0Jq/cua3rAJt//k5u0NJBqU=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-365-m8h3IrgOOmetDXEVp6KS5w-1; Mon, 29 Mar 2021 11:27:55 -0400
-X-MC-Unique: m8h3IrgOOmetDXEVp6KS5w-1
-Received: by mail-ed1-f69.google.com with SMTP id a2so8749625edx.0
-        for <linux-i2c@vger.kernel.org>; Mon, 29 Mar 2021 08:27:55 -0700 (PDT)
+        bh=O2qGIcL3gPlDmT/SXMBUkWim0YVW929F3PLS859iGE4=;
+        b=EvdI8XInjmPNTQ5xh2HbvhZYH6WQkKI4KR7lTM30vshqih25V/BRvz5ZUsys9b0bzhH4gk
+        qmJQxXKAjlYquJMmh2hh1OzhF7KUnewKAWZtPc4JmDLQk99Vuke6UGKbJx/N6Phqh9WiMZ
+        SydIJDS/DJi+RUuRR25ds0A9CUDYoAc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-523-kpoVucZZPyO_1q_76_vdBQ-1; Mon, 29 Mar 2021 11:28:14 -0400
+X-MC-Unique: kpoVucZZPyO_1q_76_vdBQ-1
+Received: by mail-ed1-f70.google.com with SMTP id cq11so8738775edb.14
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Mar 2021 08:28:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=lEl3LAwrgGEoo1YTsPMMD8y2SPYPy6f5+CzBsjGXSQc=;
-        b=gQt+LJWwQ3Qizt8rRrPfTWHYnrBhbuLtg1sx7KQnkzVM0s0aHwZjz/xaUwjsDUuDHk
-         NlcEeJph7zdVrHWYF1yh0N0V5KtiBZjgHkATwXMjzTNrRy2n3SrRuGSi8Q0fZQq2JBcu
-         bXplrk1eK6RZNFRTpiyDaOKhb3EBuk3UXc5OVGPy4hD99lVRguvnz180NP/8OrHlwQa8
-         7CTk7GsUuSxM9qKW3iWO5qWq9mraQ95rRuz59Pdvwj8/PD+spNn2CtK+/Ue4W+PURUfW
-         BBEsb/ZaWa0y7ylOt2OQurKZvdB8jmzWtpm7ur8013vxJC0h/c6cnosPG3+wOvMx7hjo
-         qf+A==
-X-Gm-Message-State: AOAM530WuBACEMOOSyqJE41T1j9Osw2JpKxi9maBOv7DgmGzZa+EwLAt
-        SL3nRTUeN34hrfyYK0Ym9F8U9viwuuyYa9n37DhawlLSf5sWReea2Y4CuyCpNFhuEoWFVHr1E9E
-        fqmYutNiWKw7RoxDa13Wb
-X-Received: by 2002:aa7:c450:: with SMTP id n16mr28385246edr.16.1617031674227;
-        Mon, 29 Mar 2021 08:27:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzSVQuSRTmU3G+DBc/8KfkXkhsielaLlUVdY52sqIrPlVilj17r2lNEShTTFfNtJLyZh9qN5g==
-X-Received: by 2002:aa7:c450:: with SMTP id n16mr28385229edr.16.1617031674080;
-        Mon, 29 Mar 2021 08:27:54 -0700 (PDT)
+        bh=O2qGIcL3gPlDmT/SXMBUkWim0YVW929F3PLS859iGE4=;
+        b=Sou9W4MIkvv7oIkZbCOsgLGDh6ki/oR6muEfQRI3T9ekRiqdOkv5omB9vonnCvKc4V
+         YfnURRr18qmaMFzo1hmj1q9vdrDZDiU9Ysh/XowNHdkLCtz0bdJQVeDFybhCyRVG9aM2
+         LmoYh7akCYN1g28D+qXfvqKk8cQsQ9X1jEYk4D+S4BDZB0awPVutwU1jvWZo4L2tbYzs
+         vk1lLcDlro8AKdUVPR2x4VxRRMyQJmVEBEvc8vRbT1SkyHSGwHxrvhj2SnRLk5cg6TOS
+         HHm7jURG0NVRFykZhxdBmg+YA+D81AymUf2E+ec6Ly2Eev5utJtgEv37geyLa6PMsr8J
+         mbJA==
+X-Gm-Message-State: AOAM530rOcW+avtnrFNZQkZo0tmkjKIsb6TUMs0VP+3F+7xFC6FcCtJf
+        nORwX6mrcVCGoUI9xGTqN60AA94mvUcedg9vZ1xDljsP9WmomaAF7/i5tDO7965LfaaioV2Dapr
+        syRJUrVSPNBJ6BLczz7iH
+X-Received: by 2002:a17:907:62a7:: with SMTP id nd39mr29228251ejc.510.1617031692271;
+        Mon, 29 Mar 2021 08:28:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwN35hX/sQ1xF+aGTdUEvUTjiZjJvSoyEdPEOyIZez2kJAtO9JX2POrqlOnGoU+JKFMOHXM4w==
+X-Received: by 2002:a17:907:62a7:: with SMTP id nd39mr29228239ejc.510.1617031692156;
+        Mon, 29 Mar 2021 08:28:12 -0700 (PDT)
 Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id gr16sm8587895ejb.44.2021.03.29.08.27.53
+        by smtp.gmail.com with ESMTPSA id s14sm6924976ejm.110.2021.03.29.08.28.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Mar 2021 08:27:53 -0700 (PDT)
-Subject: Re: [PATCH 06/12] platform/x86: intel_cht_int33fe_microb: Constify
- the software node
+        Mon, 29 Mar 2021 08:28:11 -0700 (PDT)
+Subject: Re: [PATCH 07/12] i2c: cht-wc: Constify the software node
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
- <20210329105047.51033-7-heikki.krogerus@linux.intel.com>
+ <20210329105047.51033-8-heikki.krogerus@linux.intel.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <6d4d44d5-c213-1052-16a6-833a7f01a0ee@redhat.com>
-Date:   Mon, 29 Mar 2021 17:27:53 +0200
+Message-ID: <ec0358e7-2545-2723-994d-653bb5c47bde@redhat.com>
+Date:   Mon, 29 Mar 2021 17:28:11 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <20210329105047.51033-7-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20210329105047.51033-8-heikki.krogerus@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -86,40 +85,38 @@ Thanks, patch looks good to me:
 
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-What is the plan for merging this patch / this series ?
-
 Regards,
 
 Hans
 
 
 > ---
->  drivers/platform/x86/intel_cht_int33fe_microb.c | 6 +++++-
+>  drivers/i2c/busses/i2c-cht-wc.c | 6 +++++-
 >  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/platform/x86/intel_cht_int33fe_microb.c b/drivers/platform/x86/intel_cht_int33fe_microb.c
-> index 20b11e0d9a758..673f41cd14b52 100644
-> --- a/drivers/platform/x86/intel_cht_int33fe_microb.c
-> +++ b/drivers/platform/x86/intel_cht_int33fe_microb.c
-> @@ -35,6 +35,10 @@ static const struct property_entry bq27xxx_props[] = {
+> diff --git a/drivers/i2c/busses/i2c-cht-wc.c b/drivers/i2c/busses/i2c-cht-wc.c
+> index f80d79e973cd2..08f491ea21ac9 100644
+> --- a/drivers/i2c/busses/i2c-cht-wc.c
+> +++ b/drivers/i2c/busses/i2c-cht-wc.c
+> @@ -280,6 +280,10 @@ static const struct property_entry bq24190_props[] = {
 >  	{ }
 >  };
 >  
-> +static const struct software_node bq27xxx_node = {
-> +	.properties = bq27xxx_props,
+> +static const struct software_node bq24190_node = {
+> +	.properties = bq24190_props,
 > +};
 > +
->  int cht_int33fe_microb_probe(struct cht_int33fe_data *data)
->  {
->  	struct device *dev = data->dev;
-> @@ -43,7 +47,7 @@ int cht_int33fe_microb_probe(struct cht_int33fe_data *data)
->  	memset(&board_info, 0, sizeof(board_info));
->  	strscpy(board_info.type, "bq27542", ARRAY_SIZE(board_info.type));
->  	board_info.dev_name = "bq27542";
-> -	board_info.properties = bq27xxx_props;
-> +	board_info.swnode = &bq27xxx_node;
->  	data->battery_fg = i2c_acpi_new_device(dev, 1, &board_info);
->  
->  	return PTR_ERR_OR_ZERO(data->battery_fg);
+>  static struct regulator_consumer_supply fusb302_consumer = {
+>  	.supply = "vbus",
+>  	/* Must match fusb302 dev_name in intel_cht_int33fe.c */
+> @@ -308,7 +312,7 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
+>  		.type = "bq24190",
+>  		.addr = 0x6b,
+>  		.dev_name = "bq24190",
+> -		.properties = bq24190_props,
+> +		.swnode = &bq24190_node,
+>  		.platform_data = &bq24190_pdata,
+>  	};
+>  	int ret, reg, irq;
 > 
 
