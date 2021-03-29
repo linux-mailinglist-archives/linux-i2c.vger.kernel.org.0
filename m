@@ -2,83 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5F634D827
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 21:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6D034D8B1
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 21:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbhC2T23 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Mar 2021 15:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S230346AbhC2T6c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Mar 2021 15:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbhC2T2Q (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Mar 2021 15:28:16 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888BBC061574;
-        Mon, 29 Mar 2021 12:28:16 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id u4so17218159ljo.6;
-        Mon, 29 Mar 2021 12:28:16 -0700 (PDT)
+        with ESMTP id S231848AbhC2T6F (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Mar 2021 15:58:05 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71256C061574;
+        Mon, 29 Mar 2021 12:58:05 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id u10so17312532lju.7;
+        Mon, 29 Mar 2021 12:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=GQrZO+7mqiYzqAmSSzQn1gDRn2Mbnb/SUnnWgNTEkqI=;
-        b=bhpsR/F29ROiyh6PG+lxUa+1SbMauPFwXd6L4MfGriKfW+iFzZrL6cCEV+JEPVAPhL
-         FI93iR9dw5yH6DtdcqKRuwE2O7S+VtQDdJ09irdCEUYg0LN45Ch312oKEQMFnUEzfPmC
-         7jggbtriBu65br6BAf0w/nyjamLV0KkAh2R7xGsPfhlrsdlEMACjG6Le72E7sEoyVf9G
-         Ij9Z6sqTLwLXmfI+M34KqilMht+w3V5LKge7WFBwB+/aU07gShDJ/JKCjUTRfBUm05l/
-         kKfwX0R6Nxi1kaUzzgRQTUczMYNjiZTPepfcN1qrCPv8XB0lKnNjTTrw5kfxACpbXxet
-         Tx8A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RihCMK+8NByceB9QnhsNQY0/lGJnKYNyKEF1OBRbMlk=;
+        b=EHyz1zKSBdjjq4bdKEEc59eCxIHWxU5c++UfKeYr8FN2jxClLS5LWQqwejmNs7M0hW
+         0uI4HF0rZoS3HQi5eCYWqZyxX1lMn29CdgKMc6JVeHs9J9xiETEb1pC93Spvyelxcyl5
+         5Egks1mklw3P9pigMBJfH56aziRltXnvHOtprdz/j90gAlxvlRl+EWmCepqR9WsVj2Wg
+         B7VW8I5r3A86FjaaJqEZwKHr1qitmkVwoF4uFU32rhZ1FpxZOKEtfIDKODHQEvhySsPz
+         YIhnwtGSkHZVkOqxa6JZUFeOz0YG8bt8uprcWoE/YmB68JdEOro2YvMZ0cLVhyPyd9au
+         NcQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GQrZO+7mqiYzqAmSSzQn1gDRn2Mbnb/SUnnWgNTEkqI=;
-        b=ZfwkTk0+ieUd3gyv+5hSLAvzBcKNGt4mG22fbzDe2DBZzFfWVk/DAqjQzhxSDeWpS5
-         0nSEw1uOEMY/CI6v1jiBC/D/cZR+96lAJwRv84jHMtnOVoWXvaNIaB3geduNSjcUGgna
-         KsZY7eCRZbWTvV32BK6ZE6nnz0zp5zPmEE4xWcOmFXxhBh9ALa+C3vD9gbDXT61TYPLy
-         RbFLLjIDpc17eeotILMJgRkUy6FNq96SkQrdw3VWoZaF/YmTClZNnPzumR8X+gDEedcy
-         WLnwdb/o7+dkwLSS5etYMvREnP13TBbDwPNcKTp3L+a39nTBYc1DiNDsJw+Zkin9pP+k
-         7MDQ==
-X-Gm-Message-State: AOAM531R5uh6MNf15wiy32TkA9d7jdo11HatfoCUiyvVIxnkjPc01ZQI
-        mJ+pz4uH/zoVcp6QmVhRtmiHjnCJU1E=
-X-Google-Smtp-Source: ABdhPJyNHRDzvCjP4qOOKnZzqdYALof2GTGF9Gkmzwk/dS1OSaDbhKGf1V+NMI9KvKs0wcSYp9viCA==
-X-Received: by 2002:a2e:a48f:: with SMTP id h15mr19093669lji.234.1617046094927;
-        Mon, 29 Mar 2021 12:28:14 -0700 (PDT)
-Received: from ?IPv6:2a00:1370:814d:b259:a10:76ff:fe69:21b6? ([2a00:1370:814d:b259:a10:76ff:fe69:21b6])
-        by smtp.googlemail.com with ESMTPSA id i123sm2526715lji.108.2021.03.29.12.28.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Mar 2021 12:28:14 -0700 (PDT)
-Subject: Re: [PATCH v1] i2c: tegra: Improve handling of i2c_recover_bus()
-To:     Wolfram Sang <wsa@the-dreams.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        bh=RihCMK+8NByceB9QnhsNQY0/lGJnKYNyKEF1OBRbMlk=;
+        b=YASd/JZN4p5zk/LQsUYFuJqmjfid3KzPeuIVJhCbcUbk26oBD2Nv2Yemq44/LxU6bw
+         aFX4LuWawwKLw3PyDyIkfjK7aQCayjTBTlwWRsCuPzds1rN/VuMEHNKc+WUo2rR//MNr
+         tu5y5hPbK8l5N49nkdeFEUOeff2c4vHptn3HfZGJM6zdINvUX7df3L+QKBVW+bveB94y
+         qz/akl24iZ8Evgli7ApmrdSKJU4mUsGmPDopXJNH8N56lfKeeJ61tKq1OZzAhI2388Ic
+         4/t6Epdygr7vhAaJUGRSY9oDD7MVPdvn4XyzPaiBua+tvwKjbHYGEZxPRRUpfDV6eW5a
+         6+Lg==
+X-Gm-Message-State: AOAM530Pl6kZXeX4zrcU3DDrqXzRrkT3AygHhJ55Ws2b57k8agJOshdX
+        Js73dpxnWRDk6qnQ7DicSIM=
+X-Google-Smtp-Source: ABdhPJzZ+b2TPU57SwP/qmNym6r44/GtuUafs/6Veu4Jq6HxHV1NRjrUelEU9SBQfDkoa316Op/diw==
+X-Received: by 2002:a2e:9757:: with SMTP id f23mr12709021ljj.14.1617047884029;
+        Mon, 29 Mar 2021 12:58:04 -0700 (PDT)
+Received: from localhost.localdomain ([2a00:1370:814d:b259:a10:76ff:fe69:21b6])
+        by smtp.gmail.com with ESMTPSA id e11sm2542304ljj.59.2021.03.29.12.58.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Mar 2021 12:58:03 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20210329190546.24869-1-digetx@gmail.com>
- <20210329191531.GA6654@kunai>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <7b5e8060-abee-a9e1-1c88-78f0a20e2e96@gmail.com>
-Date:   Mon, 29 Mar 2021 22:28:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+Subject: [PATCH v1] i2c: Make i2c_recover_bus() to return -EBUSY if bus recovery unimplemented
+Date:   Mon, 29 Mar 2021 22:55:30 +0300
+Message-Id: <20210329195530.1053-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20210329191531.GA6654@kunai>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-29.03.2021 22:15, Wolfram Sang пишет:
-> On Mon, Mar 29, 2021 at 10:05:46PM +0300, Dmitry Osipenko wrote:
->> The i2c_recover_bus() returns -EOPNOTSUPP if bus recovery isn't wired up,
->> which the case for older Tegra SoCs at the moment. This error code is then
->> propagated to I2C client and might be confusing, thus return -EIO instead.
-> 
-> Hmm, makes sense. Maybe we should change it in the core? But with EBUSY
-> instead?
-> 
+The i2c_recover_bus() returns -EOPNOTSUPP if bus recovery isn't wired up
+by the bus driver, which the case for Tegra I2C driver for example. This
+error code is then propagated to I2C client and might be confusing, thus
+make i2c_recover_bus() to return -EBUSY instead.
 
-This also should be a good variant. I'll update the patch, thanks.
+Suggested-by: Wolfram Sang <wsa@the-dreams.de>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/i2c/i2c-core-base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index f21362355973..7039b8a06f3a 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -249,7 +249,7 @@ EXPORT_SYMBOL_GPL(i2c_generic_scl_recovery);
+ int i2c_recover_bus(struct i2c_adapter *adap)
+ {
+ 	if (!adap->bus_recovery_info)
+-		return -EOPNOTSUPP;
++		return -EBUSY;
+ 
+ 	dev_dbg(&adap->dev, "Trying i2c bus recovery\n");
+ 	return adap->bus_recovery_info->recover_bus(adap);
+-- 
+2.30.2
+
