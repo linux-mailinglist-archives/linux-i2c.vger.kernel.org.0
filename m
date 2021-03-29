@@ -2,79 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E874334D02D
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 14:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9281034D33D
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 17:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbhC2Mgd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Mar 2021 08:36:33 -0400
-Received: from mga06.intel.com ([134.134.136.31]:9856 "EHLO mga06.intel.com"
+        id S230258AbhC2PER (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Mar 2021 11:04:17 -0400
+Received: from mga02.intel.com ([134.134.136.20]:40984 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231308AbhC2Mg2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 29 Mar 2021 08:36:28 -0400
-IronPort-SDR: hi8kNdTvqqa6RIsd/iMWzWWqqzipmnl5XZ/SfIDvFdxWoZR0iVNNMsGRO6I0+DsSKRdw+rKGRM
- 9G3sWID7wlOg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9937"; a="252883549"
-X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
-   d="scan'208";a="252883549"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 05:36:24 -0700
-IronPort-SDR: ar9LaWDocC739DTpnXV9AmV0TGJ2lc9QVcD7qUIU5tlyFAKDGE6RCgY6WJpAU5ciJA/rvCxucy
- 4f6BLVIp0Ysg==
-X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
-   d="scan'208";a="411059216"
+        id S229711AbhC2PEE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 29 Mar 2021 11:04:04 -0400
+IronPort-SDR: hCpRzlmiI/2TGJVQ5HQe3QGk8rtq0ERUc++YX6ZS8lt89hR3D7Dab8mpKbjf5U9pB8H0D7sRaU
+ 2Q3N9b5xa0Lg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="178694879"
+X-IronPort-AV: E=Sophos;i="5.81,288,1610438400"; 
+   d="scan'208";a="178694879"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 08:04:02 -0700
+IronPort-SDR: M4gkVW7u/AgypQOBXEwIVeagAuv7wqNZGsC6WKfkjdTrFQWMSX/O65nYfA2mMSx6rwNhPXDKFm
+ N5c9qreGZmnQ==
+X-IronPort-AV: E=Sophos;i="5.81,288,1610438400"; 
+   d="scan'208";a="376458095"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 05:36:22 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 08:03:56 -0700
 Received: from andy by smile with local (Exim 4.94)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lQr7z-00H11y-Kd; Mon, 29 Mar 2021 15:36:19 +0300
-Date:   Mon, 29 Mar 2021 15:36:19 +0300
+        id 1lQtQm-00H3Eu-RE; Mon, 29 Mar 2021 18:03:52 +0300
+Date:   Mon, 29 Mar 2021 18:03:52 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Goswami, Sanket" <Sanket.Goswami@amd.com>
-Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-Subject: Re: [PATCH] i2c: add i2c bus driver for amd navi gpu
-Message-ID: <YGHJwxBl8igqY6VR@smile.fi.intel.com>
-References: <20210309133147.1042775-1-Sanket.Goswami@amd.com>
- <YEeFgZSIY5lb2ubP@smile.fi.intel.com>
- <fa1a59fb-a7fa-44bb-1629-5e726f164b94@amd.com>
- <YFzC19IiGZdmLCOR@smile.fi.intel.com>
- <617d0164-1290-250f-ae34-828c6b4b390a@amd.com>
- <YF26F8IFmbo80rMq@smile.fi.intel.com>
- <0ec22c6a-ec19-774d-bcc7-04a7f69c841c@amd.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, tfiga@chromium.org,
+        sakari.ailus@linux.intel.com, rajmohan.mani@intel.com,
+        rjw@rjwysocki.net, lenb@kernel.org,
+        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, wsa@kernel.org, lee.jones@linaro.org,
+        kieran.bingham+renesas@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com, mgross@linux.intel.com,
+        luzmaximilian@gmail.com, robert.moore@intel.com,
+        erik.kaneda@intel.com, me@fabwu.ch, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        devel@acpica.org
+Subject: Re: [PATCH v3 0/6] Introduce intel_skl_int3472 module
+Message-ID: <YGHsWNXha0i1OwCN@smile.fi.intel.com>
+References: <20210222130735.1313443-1-djrscally@gmail.com>
+ <fd2fbee6-e620-a594-8377-d2f22131af29@redhat.com>
+ <5d336f50-5f25-fce2-04eb-5ad450c9cd5b@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0ec22c6a-ec19-774d-bcc7-04a7f69c841c@amd.com>
+In-Reply-To: <5d336f50-5f25-fce2-04eb-5ad450c9cd5b@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 11:25:58AM +0530, Goswami, Sanket wrote:
-> On 26-Mar-21 16:10, Andy Shevchenko wrote:
-> > On Fri, Mar 26, 2021 at 03:53:34PM +0530, Goswami, Sanket wrote:
-> >> On 25-Mar-21 22:35, Andy Shevchenko wrote:
-> >>> On Mon, Mar 22, 2021 at 10:26:55PM +0530, Goswami, Sanket wrote:
-> >>>> On 09-Mar-21 19:56, Andy Shevchenko wrote:
-> >>>>> On Tue, Mar 09, 2021 at 07:01:47PM +0530, Sanket Goswami wrote:
+On Thu, Mar 04, 2021 at 01:49:14PM +0000, Daniel Scally wrote:
+> On 04/03/2021 13:37, Hans de Goede wrote:
+> > On 2/22/21 2:07 PM, Daniel Scally wrote:
 
 ...
 
-> >>> And I think I already have told you that I prefer to see rather MODEL_ quirk.
-> >>
-> >> I did not find MODEL_ quirk reference in the PCI device tree, It is actually
-> >> used in platform device tree which is completely different from our PCI
-> >> based configuration, can you please provide some reference of MODEL_ quirk
-> >> which will be part of the PCI device tree?
-> > 
-> > I meant the name of new definition for quirk.
+> >> The existing mfd/tps68470.c driver being thus superseded, it is removed.
+> > Thank you for this patch series. Since there have already been a whole
+> > bunch of review-comments, I've not taken a detailed look at this yet.
 > 
-> Can you please elaborate this? i am not able to comprehend.
+> No problem, I'm hoping to do a v3 over the weekend anyway.
 
-Define in the i2c-designware-core.h something like
-#define MODEL_AMD_BLA_BLA_BLA   BIT(FOO)
+Do you mean v4?
+
+I'm just wondering if you need any help.
 
 
 -- 
