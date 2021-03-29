@@ -2,620 +2,187 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D1234C15A
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 03:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F4734C368
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Mar 2021 07:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbhC2Bwm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 28 Mar 2021 21:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbhC2BwS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Mar 2021 21:52:18 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFFAC061574
-        for <linux-i2c@vger.kernel.org>; Sun, 28 Mar 2021 18:52:18 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 16A88891B3;
-        Mon, 29 Mar 2021 14:52:09 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1616982729;
-        bh=VfIJnxwcNa2RILXewSkEVewsjyFvej/86Mpcy5hrZ3Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=LQVfApeMFATI4o/Y/CD4aNlaabjiQW9j/yEK3v6JFz/nesOnswGKjJKNVX6vNTuD4
-         lfu+ygLK6hMx2RYp/XSxreoUMq1hBRqgb+eqt22lz1IgEM8AKQX37mzYWUOOX1IPdE
-         PLnT3ZVQuLNTTel7TIJOfr+k1GDc8AO557vgdWRVZun50fMQp9tFo4bhj/5pfx2JUw
-         Y/aRoaAgVKGjWpuhg+/JXOX9c90NTgp9HFDC5DTTii086d7E26F6fBv90l/ibQkp0y
-         CZkOoMWxVy0KNtOk6qTX3aaAAaxX3dGJ80xDfuu4r7QZ/gD1m7Yjzcwd/v0jZtYN48
-         IzBrErnKNaEqA==
-Received: from smtp (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B606132c80003>; Mon, 29 Mar 2021 14:52:08 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id 430CC13EED4;
-        Mon, 29 Mar 2021 14:52:26 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 6E6D0284081; Mon, 29 Mar 2021 14:52:09 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     robh+dt@kernel.org, linux@roeck-us.net, wsa@kernel.org,
-        jdelvare@suse.com
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v2 6/6] i2c: mpc: Interrupt driven transfer
-Date:   Mon, 29 Mar 2021 14:52:06 +1300
-Message-Id: <20210329015206.17437-7-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20210329015206.17437-1-chris.packham@alliedtelesis.co.nz>
-References: <20210329015206.17437-1-chris.packham@alliedtelesis.co.nz>
+        id S230209AbhC2F4g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Mar 2021 01:56:36 -0400
+Received: from mail-dm6nam11on2049.outbound.protection.outlook.com ([40.107.223.49]:10752
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230243AbhC2F4L (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 29 Mar 2021 01:56:11 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QGpIim3VSPWfU1lhsi+uqR+yS+46odgMddqTrUAh3SGHmA+PJZACCp/PWi/trCm1rWAbcw9PRDBOnqZZs3gganbzslntDDK8f9Va3v1AEO1cl2sOOeE65YLVxK3SuwKA0G7OoDv6BoD6tBWHbQYQCE8C+Yb+/5NDAJK9C0FTK4OhxHGPYfX5f3LgjAffElDHuZNlwcWaQGAymEMBXwNKiMarr2bozHBDEqwYREAIcCsh5P3OW63IOe8h0Ua28NE7OB4XclqyUiC6IHqzL6mb8MMCyj0KiX/wbnhbSSqIRhcbRkKn2PhXSvb2FTlRVeKcOItj6+KsOeD0mqI+l4o8XA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xW2x/Kvrla03X4xkbwvYwSofSayev3a3VlsjkHesv/w=;
+ b=Rn8gsS07AbLdKbKcaB+XOtbyezhoC3iutXSFvqkvxbGhL5koTFKgP7pR3zTB4rNzN1Mba2QBuyBgq4L0N8mz//zew6JAWyXyNOzbt9mstCdoaWgFMNixx6l/7Nldeusm2QpExMNfK7usHMrOSIP5pt8l0h2D2Ul895RlAgx1cVCvIKbAwFKHAeiVGMXkh1Zx7Us7+BPKuSUdacESU0/0QI2bHrbHz8Z2+0V/2b+pcW6+HLVWjr8YC7hvu40/1RmrhDO65y0s4AWPLEbX6vs0reGFmndbWE6e9xNOgEyuWXst1hvP07MKiigqZHeNKX4NmvXKEc8Mfj3o+VK6yBZ7vQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xW2x/Kvrla03X4xkbwvYwSofSayev3a3VlsjkHesv/w=;
+ b=VzfxHv4/WoCOlA4PeDQY2GCxfSfuAVR0Kzrr7GsDiVBKux6vNg6Nt9D/1HYuI7u0C2RDECaRkKqW6CNndiw1j7nqXGF4eOUwwQ0igREh3a/82gJ3cy1gvIaoUAyiGt8eVPrQM+Gz/boSo+/AMi5vUXA9g+4UBjVY5ZovDyx25kw=
+Authentication-Results: amd.com; dkim=none (message not signed)
+ header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB1835.namprd12.prod.outlook.com (2603:10b6:3:10c::9) by
+ DM5PR12MB2503.namprd12.prod.outlook.com (2603:10b6:4:b2::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3977.24; Mon, 29 Mar 2021 05:56:10 +0000
+Received: from DM5PR12MB1835.namprd12.prod.outlook.com
+ ([fe80::508b:bdb3:d353:9052]) by DM5PR12MB1835.namprd12.prod.outlook.com
+ ([fe80::508b:bdb3:d353:9052%10]) with mapi id 15.20.3977.032; Mon, 29 Mar
+ 2021 05:56:09 +0000
+Subject: Re: [PATCH] i2c: add i2c bus driver for amd navi gpu
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+References: <20210309133147.1042775-1-Sanket.Goswami@amd.com>
+ <YEeFgZSIY5lb2ubP@smile.fi.intel.com>
+ <fa1a59fb-a7fa-44bb-1629-5e726f164b94@amd.com>
+ <YFzC19IiGZdmLCOR@smile.fi.intel.com>
+ <617d0164-1290-250f-ae34-828c6b4b390a@amd.com>
+ <YF26F8IFmbo80rMq@smile.fi.intel.com>
+From:   "Goswami, Sanket" <Sanket.Goswami@amd.com>
+Message-ID: <0ec22c6a-ec19-774d-bcc7-04a7f69c841c@amd.com>
+Date:   Mon, 29 Mar 2021 11:25:58 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
+In-Reply-To: <YF26F8IFmbo80rMq@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [165.204.157.251]
+X-ClientProxiedBy: MA1PR01CA0124.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:35::18) To DM5PR12MB1835.namprd12.prod.outlook.com
+ (2603:10b6:3:10c::9)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=dESyimp9J3IA:10 a=uHd7jcRfAAAA:8 a=ddP-MoYzSegZMd1lxcMA:9 a=mY1oRr_fHSe8QUEQ:21 a=bHL7uvjLeGe8lxMK:21 a=W4h6EnClZ8UN7yAF:21 a=Ht9MEGjvesGdgnQqdPSO:22 a=fCgQI5UlmZDRPDxm0A3o:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.136.34.232] (165.204.157.251) by MA1PR01CA0124.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:35::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.25 via Frontend Transport; Mon, 29 Mar 2021 05:56:07 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: c601e6a2-cc35-4d0e-6bc7-08d8f27759c8
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2503:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM5PR12MB25035A91F4232213BCE62B399C7E9@DM5PR12MB2503.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OwHYkD9nLmnCs379eVwDS4YPp49U7GIoexneUY+X2VuWkRqSRWVKD4mt6Z+MysnNCFQ9QWy4uGGPbXR75jj9rJbeqcpRv8g/KJ0VZEgNPZ2EMhX5Tl9128v+AYt+RkwnErGph9eA8vCMddzGbJDo8EdfN/Nw9wYMy1yC2U1cH0vZsqD0sOJZnPEowXIXR9dgkJ+NtXBoltfFvmWyr5cwLiJXqOEU5RY22BjXUw+JF/KOKyNN4Z3CvAGewh+ofBHV604uTyzZRKqLOeaVXv8jLC89n1VJn9lVHYIBunKJghp3ciQnsv/YRfe+XGX9wG9/kZnfdC1VmGJYdhnMILMe/QxiPBznWceiJP08XfpgELr+JaPBiMXpGb+3lDyZYD1p4zY4YNkFTql7tqqxhMjtFQBVKHw5UOrMRGPd3n0WKmjWaBaa9TLMfQLL82+jVUXXhqIBpaWB7C93+ipPm865AuIz6LJHpQi1QnP74umk4CoDVPfuKF2J4XGGjnbWLyYHjHONCCntKLwXs5kdL6/EOL+bAKbcH9lDDWheczLyw807hcmNW/UdNC6hyINBhzw6TXVjduo0Uy7KmdQGcD3vGkmfA5AEkisSALG3NvbtMZoKX7A6aoLptOtlkmoG7qBd0dGRi3RjhVrjCJ8npPUsrINXdSYpIMf7OzEuWKWzPiKCxXEANmFdB8f3rpdIOAhZKC9VONDiFWXvs0nq2RE1bQ9weccovk6U9+6Ky4GIADY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1835.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(376002)(366004)(39860400002)(136003)(5660300002)(316002)(16576012)(54906003)(52116002)(478600001)(31696002)(6486002)(4326008)(31686004)(86362001)(8676002)(36756003)(8936002)(186003)(956004)(2616005)(26005)(38100700001)(6916009)(2906002)(66946007)(83380400001)(53546011)(66476007)(6666004)(16526019)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?Ujc3OWRrbUE2b2wzZ0RvM3ZqWjNaWHErR09OZmdpb2xRZXJJTnhhRlRpaVNW?=
+ =?utf-8?B?eEpNMnFDdUpNM3J3eW1uOGoyUG1tRzA1TGZ0WVBoQ25oVGZzTFZEa3NrUHVO?=
+ =?utf-8?B?blBnTGwrc2JQbnpVWE1Lc29wbjZDNS82Ky9vS2RWbU12QkNWenA1NDg2Zksy?=
+ =?utf-8?B?WHdBelZWYS9PR2ltV1pNa2lpSHJBOGZtaVRzS1V6VTRyL2RyQjRWcVc5Rmdj?=
+ =?utf-8?B?UWpNSXRzSUdkZi9PemFFcEhwN3JocFZFVmpwaTlaZXNwN05aTnRLL2doMi95?=
+ =?utf-8?B?NFgzd3hSclVkeE1TWHdEdmt6b2VRU0h2SU1udGkybUduT1Z4U0ZDcGNIQ01t?=
+ =?utf-8?B?b21Ka2k4WlFxRXU0c0pnQ1J6WDBBU3EweW4wZEQ0RklaN1JFL3dtZ09lY0FQ?=
+ =?utf-8?B?QllHVGNTRTNkM05lWHR6U1A1R3BQSFNsWlBYeXJkQTV6V3hlVFJOOGd5ak5k?=
+ =?utf-8?B?ZlRoTFlsMjBOQTE0SGU3blFyOVV0a2U2TG1nK3hDWVliY2RGSGhnVkhDM2cv?=
+ =?utf-8?B?ckVkdVZPd2xsSks4YmVRTUpUNUtQZ0lNZDk3aDZkSktRTm5TdDEyWFplcytm?=
+ =?utf-8?B?UEVnZ0RWcEVEMFhIUzZqZEhnV1IzNzAwLzN1SWttZlJTeXVucGJBMlJNNm1h?=
+ =?utf-8?B?RDVseEJzOVpaN0hpbjh6RkhXRHFWQktvQ3dVUmJXT0tXcFZMb2lRYXpBMW9j?=
+ =?utf-8?B?alBOZFBHTVZwY1ZJNDFtWUtobmFWR2xrZ0hFNnFqd2ZESWlzcDVOK2IyT01U?=
+ =?utf-8?B?NFZ1bXdBekpNNUNtazl1WVcxZEJGLzNvbGxRZEhXQ3hYTWdDdlVNUER0NGp2?=
+ =?utf-8?B?dHRpWGZObWY4UHdkL0twamlDd1JuMkd3bFNWK3lpc1pUYUNDK3U5YmJSa3I5?=
+ =?utf-8?B?NGtHTkNBazJlS2R0ZjFjbzdkMFBPOFlBc2JVMDZ1N3JNTkVZaFNWMXY0VU9C?=
+ =?utf-8?B?cVBRZ3o0WDIxdVl5eUtZNUEweFJmekNRa2l5ZU9tRWJmVHBvVzFYUnVON3o5?=
+ =?utf-8?B?c2JrRGh3R0dZV2RBbXlvSUJFSS94MFNoclpsV2RYTXIwLzdLdkRBVnVOYmoy?=
+ =?utf-8?B?ZDJjVFZtZUdkUnVNcDhjVmlOT0xCSmY4VWFwNk5TaWVRQUF0SWJCNnBiTWpI?=
+ =?utf-8?B?cHBXblJOOXFSVjc5OUhHalVRSzJiSitMQzBxR1M3QVd4Tm12cGd5OHhUZVNW?=
+ =?utf-8?B?OHpIek0xM0xFZ0ZnMEJ2cUFHK1RTZjEzSWJQN0J4WlorQU5Sd2wvODgyS2g0?=
+ =?utf-8?B?eVBhdTF3U1hoSkgzMGRmSzh0bDEvZnNnYmdMdGdIcWZRQXM2clR2UE9FNlhI?=
+ =?utf-8?B?K1o1SWxrNUZTTnFrUUZPOG5rRDhheDR1UDQ5b1ladGJVeG5WaXl6WTU3a3Y5?=
+ =?utf-8?B?cmd4Wm1BQVlTUWRkZGc2eUYyU0ViUEppVUdtVWpxN1FkQ1FQSW91blZ3U1lv?=
+ =?utf-8?B?dDNUcGdKQVR1bUtwYVJ4QzEwdWs4a1JXdGFiZWlVNHBWekhiRGNkcFZvUkcw?=
+ =?utf-8?B?cENSdnoxS2xZdUY2dGxFck02bitWRkh5ZmxzUVNJOGF6WElFaHFzMG5NdUU1?=
+ =?utf-8?B?cWx5UmpCRGpxeU1GS1ZPL2VNc0hqaTJ1elc2Vmk3UlpJYjcwZ1dIR24vVUdw?=
+ =?utf-8?B?Y1BEdk1aTXNqUWMrcC83REhLREJaYnNQU1FBeTBBOHIzZFpUckorTWJXZjlI?=
+ =?utf-8?B?RkduY2FjMUluUENXOXNiaS9SZ2dCYnJiTXdYQ3lpWEc2UTNvdXU3a1FyMVJM?=
+ =?utf-8?Q?vmLsNPU7HCqI8R9kX6kzY1VssDSAQmNNfrnKI0a?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c601e6a2-cc35-4d0e-6bc7-08d8f27759c8
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1835.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2021 05:56:09.7880
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uxDlrHOJQ+oX3hdoogfumUa+U9ob1dF0h8fX2ilMgxnLRY8GA73sBp7gPRQHZ0XTcAOoszYIq1dTi698lLFR8Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2503
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The fsl-i2c controller will generate an interrupt after every byte
-transferred. Make use of this interrupt to drive a state machine which
-allows the next part of a transfer to happen as soon as the interrupt is
-received. This is particularly helpful with SMBUS devices like the LM81
-which will timeout if we take too long between bytes in a transfer.
+Hi Andy,
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
+Thanks for the review.
 
-Notes:
-    Changes in v2:
-    - add static_assert for state debug strings
-    - remove superfluous space
+On 26-Mar-21 16:10, Andy Shevchenko wrote:
+> [CAUTION: External Email]
+> 
+> On Fri, Mar 26, 2021 at 03:53:34PM +0530, Goswami, Sanket wrote:
+>> On 25-Mar-21 22:35, Andy Shevchenko wrote:
+>>> On Mon, Mar 22, 2021 at 10:26:55PM +0530, Goswami, Sanket wrote:
+>>>> On 09-Mar-21 19:56, Andy Shevchenko wrote:
+>>>>> On Tue, Mar 09, 2021 at 07:01:47PM +0530, Sanket Goswami wrote:
+> 
+> ...
+> 
+>>> And I think I already have told you that I prefer to see rather MODEL_ quirk.
+>>
+>> I did not find MODEL_ quirk reference in the PCI device tree, It is actually
+>> used in platform device tree which is completely different from our PCI
+>> based configuration, can you please provide some reference of MODEL_ quirk
+>> which will be part of the PCI device tree?
+> 
+> I meant the name of new definition for quirk.
 
- drivers/i2c/busses/i2c-mpc.c | 434 +++++++++++++++++++----------------
- 1 file changed, 241 insertions(+), 193 deletions(-)
+Can you please elaborate this? i am not able to comprehend.
 
-diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-index 46cdb36e2f9b..f5c155125de9 100644
---- a/drivers/i2c/busses/i2c-mpc.c
-+++ b/drivers/i2c/busses/i2c-mpc.c
-@@ -1,16 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-- * (C) Copyright 2003-2004
-- * Humboldt Solutions Ltd, adrian@humboldt.co.uk.
--
-  * This is a combined i2c adapter and algorithm driver for the
-  * MPC107/Tsi107 PowerPC northbridge and processors that include
-  * the same I2C unit (8240, 8245, 85xx).
-  *
-- * Release 0.8
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-+ * Copyright (C) 2003-2004 Humboldt Solutions Ltd, adrian@humboldt.co.uk
-+ * Copyright (C) 2021 Allied Telesis Labs
-  */
-=20
- #include <linux/kernel.h>
-@@ -58,11 +53,36 @@
- #define CSR_MIF  0x02
- #define CSR_RXAK 0x01
-=20
-+enum mpc_i2c_action {
-+	MPC_I2C_ACTION_INVALID =3D 0,
-+	MPC_I2C_ACTION_START,
-+	MPC_I2C_ACTION_RESTART,
-+	MPC_I2C_ACTION_READ_BEGIN,
-+	MPC_I2C_ACTION_READ_BYTE,
-+	MPC_I2C_ACTION_WRITE,
-+	MPC_I2C_ACTION_STOP,
-+
-+	__MPC_I2C_ACTION_CNT
-+};
-+
-+static char *action_str[] =3D {
-+	"invalid",
-+	"start",
-+	"restart",
-+	"read begin",
-+	"read",
-+	"write",
-+	"stop",
-+};
-+
-+static_assert(ARRAY_SIZE(action_str) =3D=3D __MPC_I2C_ACTION_CNT);
-+
- struct mpc_i2c {
- 	struct device *dev;
- 	void __iomem *base;
- 	u32 interrupt;
--	wait_queue_head_t queue;
-+	wait_queue_head_t waitq;
-+	spinlock_t lock;
- 	struct i2c_adapter adap;
- 	int irq;
- 	u32 real_clk;
-@@ -70,6 +90,16 @@ struct mpc_i2c {
- 	u8 fdr, dfsrr;
- #endif
- 	struct clk *clk_per;
-+	u32 cntl_bits;
-+	enum mpc_i2c_action action;
-+	struct i2c_msg *msgs;
-+	int num_msgs;
-+	int curr_msg;
-+	u32 byte_posn;
-+	u32 block;
-+	int rc;
-+	int expect_rxack;
-+
- };
-=20
- struct mpc_i2c_divider {
-@@ -86,19 +116,6 @@ static inline void writeccr(struct mpc_i2c *i2c, u32 =
-x)
- 	writeb(x, i2c->base + MPC_I2C_CR);
- }
-=20
--static irqreturn_t mpc_i2c_isr(int irq, void *dev_id)
--{
--	struct mpc_i2c *i2c =3D dev_id;
--	if (readb(i2c->base + MPC_I2C_SR) & CSR_MIF) {
--		/* Read again to allow register to stabilise */
--		i2c->interrupt =3D readb(i2c->base + MPC_I2C_SR);
--		writeb(0, i2c->base + MPC_I2C_SR);
--		wake_up(&i2c->queue);
--		return IRQ_HANDLED;
--	}
--	return IRQ_NONE;
--}
--
- /* Sometimes 9th clock pulse isn't generated, and slave doesn't release
-  * the bus, because it wants to send ACK.
-  * Following sequence of enabling/disabling and sending start/stop gener=
-ates
-@@ -121,45 +138,6 @@ static void mpc_i2c_fixup(struct mpc_i2c *i2c)
- 	}
- }
-=20
--static int i2c_wait(struct mpc_i2c *i2c, unsigned timeout, int writing)
--{
--	u32 cmd_err;
--	int result;
--
--	result =3D wait_event_timeout(i2c->queue,
--			(i2c->interrupt & CSR_MIF), timeout);
--
--	if (unlikely(!(i2c->interrupt & CSR_MIF))) {
--		dev_dbg(i2c->dev, "wait timeout\n");
--		writeccr(i2c, 0);
--		result =3D -ETIMEDOUT;
--	}
--
--	cmd_err =3D i2c->interrupt;
--	i2c->interrupt =3D 0;
--
--	if (result < 0)
--		return result;
--
--	if (!(cmd_err & CSR_MCF)) {
--		dev_dbg(i2c->dev, "unfinished\n");
--		return -EIO;
--	}
--
--	if (cmd_err & CSR_MAL) {
--		dev_dbg(i2c->dev, "MAL\n");
--		return -EAGAIN;
--	}
--
--	if (writing && (cmd_err & CSR_RXAK)) {
--		dev_dbg(i2c->dev, "No RXAK\n");
--		/* generate stop */
--		writeccr(i2c, CCR_MEN);
--		return -ENXIO;
--	}
--	return 0;
--}
--
- #if defined(CONFIG_PPC_MPC52xx) || defined(CONFIG_PPC_MPC512x)
- static const struct mpc_i2c_divider mpc_i2c_dividers_52xx[] =3D {
- 	{20, 0x20}, {22, 0x21}, {24, 0x22}, {26, 0x23},
-@@ -434,168 +412,209 @@ static void mpc_i2c_setup_8xxx(struct device_node=
- *node,
- }
- #endif /* CONFIG_FSL_SOC */
-=20
--static void mpc_i2c_start(struct mpc_i2c *i2c)
-+static void mpc_i2c_finish(struct mpc_i2c *i2c, int rc)
- {
--	/* Clear arbitration */
--	writeb(0, i2c->base + MPC_I2C_SR);
--	/* Start with MEN */
--	writeccr(i2c, CCR_MEN);
-+	i2c->rc =3D rc;
-+	i2c->block =3D 0;
-+	i2c->cntl_bits =3D CCR_MEN;
-+	writeccr(i2c, i2c->cntl_bits);
-+	wake_up(&i2c->waitq);
- }
-=20
--static void mpc_i2c_stop(struct mpc_i2c *i2c)
-+static void mpc_i2c_do_action(struct mpc_i2c *i2c)
- {
--	writeccr(i2c, CCR_MEN);
--}
-+	struct i2c_msg *msg =3D &i2c->msgs[i2c->curr_msg];
-+	int dir =3D 0;
-+	int recv_len =3D 0;
-+	u8 byte;
-+
-+	dev_dbg(i2c->dev, "%s: action =3D %s\n", __func__,
-+		action_str[i2c->action]);
-+
-+	i2c->cntl_bits &=3D ~(CCR_RSTA | CCR_MTX | CCR_TXAK);
-+
-+	if (msg->flags & I2C_M_RD)
-+		dir =3D 1;
-+	if (msg->flags & I2C_M_RECV_LEN)
-+		recv_len =3D 1;
-+
-+	switch (i2c->action) {
-+	case MPC_I2C_ACTION_RESTART:
-+		i2c->cntl_bits |=3D CCR_RSTA;
-+		fallthrough;
-+
-+	case MPC_I2C_ACTION_START:
-+		i2c->cntl_bits |=3D CCR_MSTA | CCR_MTX;
-+		writeccr(i2c, i2c->cntl_bits);
-+		writeb((msg->addr << 1) | dir, i2c->base + MPC_I2C_DR);
-+		i2c->expect_rxack =3D 1;
-+		i2c->action =3D dir ? MPC_I2C_ACTION_READ_BEGIN : MPC_I2C_ACTION_WRITE=
-;
-+		break;
-+
-+	case MPC_I2C_ACTION_READ_BEGIN:
-+		if (msg->len) {
-+			if (msg->len =3D=3D 1 && !(msg->flags & I2C_M_RECV_LEN))
-+				i2c->cntl_bits |=3D CCR_TXAK;
-+
-+			writeccr(i2c, i2c->cntl_bits);
-+			/* Dummy read */
-+			readb(i2c->base + MPC_I2C_DR);
-+		}
-+		i2c->action =3D MPC_I2C_ACTION_READ_BYTE;
-+		break;
-=20
--static int mpc_write(struct mpc_i2c *i2c, int target,
--		     const u8 *data, int length, int restart)
--{
--	int i, result;
--	unsigned timeout =3D i2c->adap.timeout;
--	u32 flags =3D restart ? CCR_RSTA : 0;
-+	case MPC_I2C_ACTION_READ_BYTE:
-+		if (i2c->byte_posn || !recv_len) {
-+			/* Generate txack on next to last byte */
-+			if (i2c->byte_posn =3D=3D msg->len - 2)
-+				i2c->cntl_bits |=3D CCR_TXAK;
-+			/* Do not generate stop on last byte */
-+			if (i2c->byte_posn =3D=3D msg->len - 1)
-+				i2c->cntl_bits |=3D CCR_MTX;
-=20
--	/* Start as master */
--	writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA | CCR_MTX | flags);
--	/* Write target byte */
--	writeb((target << 1), i2c->base + MPC_I2C_DR);
-+			writeccr(i2c, i2c->cntl_bits);
-+		}
-=20
--	result =3D i2c_wait(i2c, timeout, 1);
--	if (result < 0)
--		return result;
-+		byte =3D readb(i2c->base + MPC_I2C_DR);
-=20
--	for (i =3D 0; i < length; i++) {
--		/* Write data byte */
--		writeb(data[i], i2c->base + MPC_I2C_DR);
-+		if (i2c->byte_posn =3D=3D 0 && recv_len) {
-+			if (byte =3D=3D 0 || byte > I2C_SMBUS_BLOCK_MAX) {
-+				mpc_i2c_finish(i2c, -EPROTO);
-+				return;
-+			}
-+			msg->len +=3D byte;
-+			/*
-+			 * For block reads, generate txack here if data length
-+			 * is 1 byte (total length is 2 bytes).
-+			 */
-+			if (msg->len =3D=3D 2) {
-+				i2c->cntl_bits |=3D CCR_TXAK;
-+				writeccr(i2c, i2c->cntl_bits);
-+			}
-+		}
-=20
--		result =3D i2c_wait(i2c, timeout, 1);
--		if (result < 0)
--			return result;
-+		dev_dbg(i2c->dev, "%s: %s %02x\n", __func__,
-+			action_str[i2c->action], byte);
-+		msg->buf[i2c->byte_posn++] =3D byte;
-+		break;
-+
-+	case MPC_I2C_ACTION_WRITE:
-+		dev_dbg(i2c->dev, "%s: %s %02x\n", __func__,
-+			action_str[i2c->action], msg->buf[i2c->byte_posn]);
-+		writeb(msg->buf[i2c->byte_posn++], i2c->base + MPC_I2C_DR);
-+		i2c->expect_rxack =3D 1;
-+		break;
-+
-+	case MPC_I2C_ACTION_STOP:
-+		mpc_i2c_finish(i2c, 0);
-+		break;
-+
-+	case MPC_I2C_ACTION_INVALID:
-+	default:
-+		BUG();
-+		break;
- 	}
-=20
--	return 0;
-+	if (msg->len =3D=3D i2c->byte_posn) {
-+		i2c->curr_msg++;
-+		i2c->byte_posn =3D 0;
-+
-+		if (i2c->curr_msg =3D=3D i2c->num_msgs) {
-+			i2c->action =3D MPC_I2C_ACTION_STOP;
-+			/*
-+			 * We don't get another interrupt on read so
-+			 * finish the transfer now
-+			 */
-+			if (dir)
-+				mpc_i2c_finish(i2c, 0);
-+		} else {
-+			i2c->action =3D MPC_I2C_ACTION_RESTART;
-+		}
-+	}
- }
-=20
--static int mpc_read(struct mpc_i2c *i2c, int target,
--		    u8 *data, int length, int restart, bool recv_len)
-+static void mpc_i2c_do_intr(struct mpc_i2c *i2c, u8 status)
- {
--	unsigned timeout =3D i2c->adap.timeout;
--	int i, result;
--	u32 flags =3D restart ? CCR_RSTA : 0;
-+	unsigned long flags;
-=20
--	/* Switch to read - restart */
--	writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA | CCR_MTX | flags);
--	/* Write target address byte - this time with the read flag set */
--	writeb((target << 1) | 1, i2c->base + MPC_I2C_DR);
-+	spin_lock_irqsave(&i2c->lock, flags);
-=20
--	result =3D i2c_wait(i2c, timeout, 1);
--	if (result < 0)
--		return result;
-+	if (!(status & CSR_MCF)) {
-+		dev_dbg(i2c->dev, "unfinished\n");
-+		mpc_i2c_finish(i2c, -EIO);
-+		goto out;
-+	}
-=20
--	if (length) {
--		if (length =3D=3D 1 && !recv_len)
--			writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA | CCR_TXAK);
--		else
--			writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA);
--		/* Dummy read */
--		readb(i2c->base + MPC_I2C_DR);
-+	if (status & CSR_MAL) {
-+		dev_dbg(i2c->dev, "arbiritration lost\n");
-+		mpc_i2c_finish(i2c, -EAGAIN);
-+		goto out;
- 	}
-=20
--	for (i =3D 0; i < length; i++) {
--		u8 byte;
-+	if (i2c->expect_rxack && (status & CSR_RXAK)) {
-+		dev_dbg(i2c->dev, "no RXAK\n");
-+		mpc_i2c_finish(i2c, -ENXIO);
-+		goto out;
-+	}
-+	i2c->expect_rxack =3D 0;
-=20
--		result =3D i2c_wait(i2c, timeout, 0);
--		if (result < 0)
--			return result;
-+	mpc_i2c_do_action(i2c);
-=20
--		/*
--		 * For block reads, we have to know the total length (1st byte)
--		 * before we can determine if we are done.
--		 */
--		if (i || !recv_len) {
--			/* Generate txack on next to last byte */
--			if (i =3D=3D length - 2)
--				writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA
--					 | CCR_TXAK);
--			/* Do not generate stop on last byte */
--			if (i =3D=3D length - 1)
--				writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA
--					 | CCR_MTX);
--		}
-+out:
-+	spin_unlock_irqrestore(&i2c->lock, flags);
-+}
-=20
--		byte =3D readb(i2c->base + MPC_I2C_DR);
-+static irqreturn_t mpc_i2c_isr(int irq, void *dev_id)
-+{
-+	struct mpc_i2c *i2c =3D dev_id;
-+	u8 status =3D readb(i2c->base + MPC_I2C_SR);
-=20
--		/*
--		 * Adjust length if first received byte is length.
--		 * The length is 1 length byte plus actually data length
--		 */
--		if (i =3D=3D 0 && recv_len) {
--			if (byte =3D=3D 0 || byte > I2C_SMBUS_BLOCK_MAX)
--				return -EPROTO;
--			length +=3D byte;
--			/*
--			 * For block reads, generate txack here if data length
--			 * is 1 byte (total length is 2 bytes).
--			 */
--			if (length =3D=3D 2)
--				writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA
--					 | CCR_TXAK);
--		}
--		data[i] =3D byte;
-+	if (status & CSR_MIF) {
-+		writeb(0, i2c->base + MPC_I2C_SR);
-+		mpc_i2c_do_intr(i2c, status);
-+		return IRQ_HANDLED;
- 	}
-+	return IRQ_NONE;
-+}
-+
-+static void mpc_i2c_wait_for_completion(struct mpc_i2c *i2c)
-+{
-+	long time_left;
-=20
--	return length;
-+	time_left =3D wait_event_timeout(i2c->waitq, !i2c->block, i2c->adap.tim=
-eout);
-+
-+	if (!time_left)
-+		i2c->rc =3D -ETIMEDOUT;
-+	else if (time_left < 0)
-+		i2c->rc =3D time_left;
- }
-=20
--static int mpc_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int =
-num)
-+static int mpc_i2c_execute_msg(struct mpc_i2c *i2c)
- {
--	struct i2c_msg *pmsg;
--	int i;
--	int ret =3D 0;
--	unsigned long orig_jiffies =3D jiffies;
--	struct mpc_i2c *i2c =3D i2c_get_adapdata(adap);
-+	unsigned long orig_jiffies;
-+	unsigned long flags;
-=20
--	mpc_i2c_start(i2c);
-+	spin_lock_irqsave(&i2c->lock, flags);
-=20
--	/* Allow bus up to 1s to become not busy */
--	while (readb(i2c->base + MPC_I2C_SR) & CSR_MBB) {
--		if (signal_pending(current)) {
--			dev_dbg(i2c->dev, "Interrupted\n");
--			writeccr(i2c, 0);
--			return -EINTR;
--		}
--		if (time_after(jiffies, orig_jiffies + HZ)) {
--			u8 status =3D readb(i2c->base + MPC_I2C_SR);
-+	i2c->curr_msg =3D 0;
-+	i2c->rc =3D 0;
-+	i2c->byte_posn =3D 0;
-+	i2c->block =3D 1;
-+	i2c->action =3D MPC_I2C_ACTION_START;
-=20
--			dev_dbg(i2c->dev, "timeout\n");
--			if ((status & (CSR_MCF | CSR_MBB | CSR_RXAK)) !=3D 0) {
--				writeb(status & ~CSR_MAL,
--				       i2c->base + MPC_I2C_SR);
--				i2c_recover_bus(&i2c->adap);
--			}
--			return -EIO;
--		}
--		schedule();
--	}
-+	i2c->cntl_bits =3D CCR_MEN | CCR_MIEN;
-+	writeb(0, i2c->base + MPC_I2C_SR);
-+	writeccr(i2c, i2c->cntl_bits);
-+
-+	mpc_i2c_do_action(i2c);
-+
-+	spin_unlock_irqrestore(&i2c->lock, flags);
-+
-+	mpc_i2c_wait_for_completion(i2c);
-+
-+	if (i2c->rc =3D=3D -EIO || i2c->rc =3D=3D -EAGAIN || i2c->rc =3D=3D -ET=
-IMEDOUT)
-+		i2c_recover_bus(&i2c->adap);
-=20
--	for (i =3D 0; ret >=3D 0 && i < num; i++) {
--		pmsg =3D &msgs[i];
--		dev_dbg(i2c->dev,
--			"Doing %s %d bytes to 0x%02x - %d of %d messages\n",
--			pmsg->flags & I2C_M_RD ? "read" : "write",
--			pmsg->len, pmsg->addr, i + 1, num);
--		if (pmsg->flags & I2C_M_RD) {
--			bool recv_len =3D pmsg->flags & I2C_M_RECV_LEN;
--
--			ret =3D mpc_read(i2c, pmsg->addr, pmsg->buf, pmsg->len, i,
--				       recv_len);
--			if (recv_len && ret > 0)
--				pmsg->len =3D ret;
--		} else {
--			ret =3D
--			    mpc_write(i2c, pmsg->addr, pmsg->buf, pmsg->len, i);
--		}
--	}
--	mpc_i2c_stop(i2c); /* Initiate STOP */
- 	orig_jiffies =3D jiffies;
- 	/* Wait until STOP is seen, allow up to 1 s */
- 	while (readb(i2c->base + MPC_I2C_SR) & CSR_MBB) {
-@@ -612,7 +631,35 @@ static int mpc_xfer(struct i2c_adapter *adap, struct=
- i2c_msg *msgs, int num)
- 		}
- 		cond_resched();
- 	}
--	return (ret < 0) ? ret : num;
-+
-+	return i2c->rc;
-+}
-+
-+static int mpc_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int =
-num)
-+{
-+	int rc, ret =3D num;
-+	struct mpc_i2c *i2c =3D i2c_get_adapdata(adap);
-+	int i;
-+
-+	dev_dbg(i2c->dev, "%s: num =3D %d\n", __func__, num);
-+	for (i =3D 0; i < num; i++)
-+		dev_dbg(i2c->dev, "  addr =3D %02x, flags =3D %02x, len =3D %d, %*ph\n=
-",
-+			msgs[i].addr, msgs[i].flags, msgs[i].len,
-+			msgs[i].flags & I2C_M_RD ? 0 : msgs[i].len,
-+			msgs[i].buf);
-+
-+	BUG_ON(i2c->msgs !=3D NULL);
-+	i2c->msgs =3D msgs;
-+	i2c->num_msgs =3D num;
-+
-+	rc =3D mpc_i2c_execute_msg(i2c);
-+	if (rc < 0)
-+		ret =3D rc;
-+
-+	i2c->num_msgs =3D 0;
-+	i2c->msgs =3D NULL;
-+
-+	return ret;
- }
-=20
- static u32 mpc_functionality(struct i2c_adapter *adap)
-@@ -667,7 +714,8 @@ static int fsl_i2c_probe(struct platform_device *op)
-=20
- 	i2c->dev =3D &op->dev; /* for debug and error output */
-=20
--	init_waitqueue_head(&i2c->queue);
-+	init_waitqueue_head(&i2c->waitq);
-+	spin_lock_init(&i2c->lock);
-=20
- 	i2c->base =3D devm_platform_ioremap_resource(op, 0);
- 	if (IS_ERR(i2c->base)) {
---=20
-2.31.0
+> ...
+> 
+>>>>> Also why (1) and this can't be instantiated from ACPI / DT?
+>>>> It is in line with the existing PCIe-based DesignWare driver,
+>>>> A similar approach is used by the various vendors.
+>>>
+>>> Here is no answer to the question. What prevents you to fix your ACPI tables or
+>>> DT?
+>>>
+>>> We already got rid of FIFO hard coded values, timings are harder to achieve,
+>>> but we expect that new firmwares will provide values in the ACPI tables.
+>>
+>> AMD NAVI GPU card is the PCI initiated driver, not ACPI initiated,
+> 
+> Which doesn't prevent to have an ACPI companion (via description in the
+> tables).
+> 
+>> and also
+>> It does not contain a corresponding ACPI match table.
+> 
+> Yes, that's what should be done in the firmware.
+> At least for the new version of firmware consider to add proper data into the
+> tables.
+> 
+>> Moreover, AMD  NAVI GPU
+>> based products are already in the commercial market hence going by this
+>> approach will break the functionalities for the same.
+> 
+> This is quite bad and unfortunate. So, you have to elaborate this in the commit
+> message.
 
+Sure, will take care of this as part of commit message of v3.
+> 
+> --
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
+Thanks,
+Sanket
