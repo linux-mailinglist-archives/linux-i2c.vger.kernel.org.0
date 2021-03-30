@@ -2,94 +2,143 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B57834F0CE
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Mar 2021 20:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BC234F39E
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Mar 2021 23:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbhC3SSd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Mar 2021 14:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbhC3SSP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Mar 2021 14:18:15 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A74CC061574
-        for <linux-i2c@vger.kernel.org>; Tue, 30 Mar 2021 11:18:14 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lRIwJ-0007hy-Pr; Tue, 30 Mar 2021 20:18:07 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lRIwI-0000E3-Vz; Tue, 30 Mar 2021 20:18:06 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 5/6] i2c: imx: Simplify using devm_clk_get_enableded()
-Date:   Tue, 30 Mar 2021 20:17:54 +0200
-Message-Id: <20210330181755.204339-6-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210330181755.204339-1-u.kleine-koenig@pengutronix.de>
-References: <20210330181755.204339-1-u.kleine-koenig@pengutronix.de>
+        id S231579AbhC3VhN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 30 Mar 2021 17:37:13 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:5116 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232641AbhC3Vgr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Mar 2021 17:36:47 -0400
+Received: from DGGEML401-HUB.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4F92ll0CTWzYQFB;
+        Wed, 31 Mar 2021 05:34:43 +0800 (CST)
+Received: from dggema774-chm.china.huawei.com (10.1.198.216) by
+ DGGEML401-HUB.china.huawei.com (10.3.17.32) with Microsoft SMTP Server (TLS)
+ id 14.3.498.0; Wed, 31 Mar 2021 05:36:37 +0800
+Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
+ dggema774-chm.china.huawei.com (10.1.198.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2106.2; Wed, 31 Mar 2021 05:36:37 +0800
+Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
+ dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.2106.013;
+ Wed, 31 Mar 2021 05:36:37 +0800
+From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+To:     yangyicong <yangyicong@huawei.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "Sergey.Semin@baikalelectronics.ru" 
+        <Sergey.Semin@baikalelectronics.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "digetx@gmail.com" <digetx@gmail.com>,
+        "treding@nvidia.com" <treding@nvidia.com>,
+        "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
+        "rmk+kernel@armlinux.org.uk" <rmk+kernel@armlinux.org.uk>,
+        John Garry <john.garry@huawei.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Linuxarm <linuxarm@huawei.com>
+Subject: RE: [PATCH 5/5] i2c: designware: Switch over to
+ i2c_freq_mode_string()
+Thread-Topic: [PATCH 5/5] i2c: designware: Switch over to
+ i2c_freq_mode_string()
+Thread-Index: AQHXJXAQhX+a0hiUXkCpTQNzS4ZJoKqdC6Iw
+Date:   Tue, 30 Mar 2021 21:36:36 +0000
+Message-ID: <baa1c622040745b0b13e99e3f7bf2cd3@hisilicon.com>
+References: <1617113966-40498-1-git-send-email-yangyicong@hisilicon.com>
+ <1617113966-40498-6-git-send-email-yangyicong@hisilicon.com>
+In-Reply-To: <1617113966-40498-6-git-send-email-yangyicong@hisilicon.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.126.202.63]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-devm_clk_get_enabled() returns the clk already (prepared and) enabled
-and the automatically called cleanup cares for disabling (and
-unpreparing). So simplify .probe() and .remove() accordingly.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/i2c/busses/i2c-imx.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index b80fdc1f0092..aa156ecc616d 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1405,16 +1405,10 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
- 
- 	/* Get I2C clock */
--	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
-+	i2c_imx->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(i2c_imx->clk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
--				     "can't get I2C clock\n");
--
--	ret = clk_prepare_enable(i2c_imx->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
--		return ret;
--	}
-+				     "can't get prepared I2C clock\n");
- 
- 	/* Init queue */
- 	init_waitqueue_head(&i2c_imx->queue);
-@@ -1517,7 +1511,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq >= 0)
- 		free_irq(irq, i2c_imx);
--	clk_disable_unprepare(i2c_imx->clk);
- 
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
--- 
-2.30.2
+> -----Original Message-----
+> From: yangyicong
+> Sent: Wednesday, March 31, 2021 3:19 AM
+> To: wsa@kernel.org; andriy.shevchenko@linux.intel.com;
+> linux-i2c@vger.kernel.org; Sergey.Semin@baikalelectronics.ru;
+> linux-kernel@vger.kernel.org
+> Cc: digetx@gmail.com; treding@nvidia.com; jarkko.nikula@linux.intel.com;
+> rmk+kernel@armlinux.org.uk; Song Bao Hua (Barry Song)
+> <song.bao.hua@hisilicon.com>; John Garry <john.garry@huawei.com>;
+> mika.westerberg@linux.intel.com; yangyicong <yangyicong@huawei.com>; Zengtao
+> (B) <prime.zeng@hisilicon.com>; Linuxarm <linuxarm@huawei.com>
+> Subject: [PATCH 5/5] i2c: designware: Switch over to i2c_freq_mode_string()
+> 
+> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Use generic i2c_freq_mode_string() helper to print chosen bus speed.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>  drivers/i2c/busses/i2c-designware-master.c | 20 ++++----------------
+>  1 file changed, 4 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-master.c
+> b/drivers/i2c/busses/i2c-designware-master.c
+> index dd27b9d..b64c4c8 100644
+> --- a/drivers/i2c/busses/i2c-designware-master.c
+> +++ b/drivers/i2c/busses/i2c-designware-master.c
+> @@ -35,10 +35,10 @@ static void i2c_dw_configure_fifo_master(struct dw_i2c_dev
+> *dev)
+> 
+>  static int i2c_dw_set_timings_master(struct dw_i2c_dev *dev)
+>  {
+> -	const char *mode_str, *fp_str = "";
+>  	u32 comp_param1;
+>  	u32 sda_falling_time, scl_falling_time;
+>  	struct i2c_timings *t = &dev->timings;
+> +	const char *fp_str = "";
+>  	u32 ic_clk;
+>  	int ret;
+> 
+> @@ -153,22 +153,10 @@ static int i2c_dw_set_timings_master(struct dw_i2c_dev
+> *dev)
+> 
+>  	ret = i2c_dw_set_sda_hold(dev);
+>  	if (ret)
+> -		goto out;
+> -
+> -	switch (dev->master_cfg & DW_IC_CON_SPEED_MASK) {
+> -	case DW_IC_CON_SPEED_STD:
+> -		mode_str = "Standard Mode";
+> -		break;
+> -	case DW_IC_CON_SPEED_HIGH:
+> -		mode_str = "High Speed Mode";
+> -		break;
+> -	default:
+> -		mode_str = "Fast Mode";
+> -	}
+> -	dev_dbg(dev->dev, "Bus speed: %s%s\n", mode_str, fp_str);
+> +		return ret;
+> 
+> -out:
+> -	return ret;
+> +	dev_dbg(dev->dev, "Bus speed: %s\n",
+> i2c_freq_mode_string(t->bus_freq_hz));
+
+Weird the original code was printing both mode and fp.
+And you are printing mode only.
+
+> +	return 0;
+>  }
+> 
+>  /**
+> --
+> 2.8.1
 
