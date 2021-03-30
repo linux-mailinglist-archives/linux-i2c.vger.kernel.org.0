@@ -2,96 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D20B634E924
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Mar 2021 15:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFFF34E964
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Mar 2021 15:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbhC3Nac (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Mar 2021 09:30:32 -0400
-Received: from mga02.intel.com ([134.134.136.20]:46460 "EHLO mga02.intel.com"
+        id S232184AbhC3Njt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Mar 2021 09:39:49 -0400
+Received: from mga03.intel.com ([134.134.136.65]:23566 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231924AbhC3Na3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 30 Mar 2021 09:30:29 -0400
-IronPort-SDR: ruYYUtQ8IyXUMptB0RzME9GLcMEgMh5eQfdhRZAGskKdnkGoRgIDTamJ8ZOjWu9vD5vhKtHH8F
- 9ILulcZMFh1Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="178896658"
+        id S232066AbhC3NjT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 30 Mar 2021 09:39:19 -0400
+IronPort-SDR: PrfpChyIvN36fzQkMK+cLda2BjOdXoH5q3In/spj1n6unQaQDQ+LhlqqDF8LSXJW/dlUFL4wdW
+ mjvmulxglI4Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="191796410"
 X-IronPort-AV: E=Sophos;i="5.81,290,1610438400"; 
-   d="scan'208";a="178896658"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 06:30:29 -0700
-IronPort-SDR: A2wk+C0R48vMT+bJBk9kuBX7NgeFTSBndVW/nG9arapSHMKd9xsykUtN5apntb8DUUM8mjckKR
- i/+E1q0Lwy8Q==
+   d="scan'208";a="191796410"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 06:39:11 -0700
+IronPort-SDR: ASyF6wG85LHS5Df9Uj2pMmyMtD7Q96EeTc+i7s4DumQBFsZ2wiGwOLjHJynNIKHZfh485veMnD
+ X0qwkX6a1ZTw==
 X-IronPort-AV: E=Sophos;i="5.81,290,1610438400"; 
-   d="scan'208";a="415814211"
+   d="scan'208";a="445133796"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 06:30:26 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 06:39:08 -0700
 Received: from andy by smile with local (Exim 4.94)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lRERr-00HL2o-85; Tue, 30 Mar 2021 16:30:23 +0300
-Date:   Tue, 30 Mar 2021 16:30:23 +0300
+        id 1lREaH-00HL7g-8Z; Tue, 30 Mar 2021 16:39:05 +0300
+Date:   Tue, 30 Mar 2021 16:39:05 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Yicong Yang <yangyicong@hisilicon.com>
 Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org, digetx@gmail.com,
         treding@nvidia.com, jarkko.nikula@linux.intel.com,
         rmk+kernel@armlinux.org.uk, song.bao.hua@hisilicon.com,
         john.garry@huawei.com, prime.zeng@huawei.com, linuxarm@huawei.com
-Subject: Re: [PATCH v4 2/4] i2c: core: add api to provide frequency mode
- strings
-Message-ID: <YGMn71ePF3N03IkW@smile.fi.intel.com>
+Subject: Re: [PATCH v4 0/4] Add support for HiSilicon I2C controller
+Message-ID: <YGMp+X9Ntuc3jd3J@smile.fi.intel.com>
 References: <1617109549-4013-1-git-send-email-yangyicong@hisilicon.com>
- <1617109549-4013-3-git-send-email-yangyicong@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1617109549-4013-3-git-send-email-yangyicong@hisilicon.com>
+In-Reply-To: <1617109549-4013-1-git-send-email-yangyicong@hisilicon.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 09:05:47PM +0800, Yicong Yang wrote:
-> Some I2C drivers like Designware and HiSilicon will print the
-> bus frequency mode information, so add a public one that everyone
-> can make use of.
-
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->  include/linux/i2c.h | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+On Tue, Mar 30, 2021 at 09:05:45PM +0800, Yicong Yang wrote:
+> Add driver and MAINTAINERS for HiSilicon I2C controller on Kunpeng SoC. Also
+> provide the devm_*() variants for adding the I2C adapters and a public
+> api to provide I2C frequency mode strings.
 > 
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index 10bd0b0..6837e64 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -47,6 +47,26 @@ typedef int (*i2c_slave_cb_t)(struct i2c_client *client,
->  #define I2C_MAX_HIGH_SPEED_MODE_FREQ	3400000
->  #define I2C_MAX_ULTRA_FAST_MODE_FREQ	5000000
->  
-> +static inline const char *i2c_freq_mode_string(u32 bus_freq_hz)
-> +{
-> +	switch (bus_freq_hz) {
-> +	case I2C_MAX_STANDARD_MODE_FREQ:
-> +		return "Standard Mode(100KHz)";
-> +	case I2C_MAX_FAST_MODE_FREQ:
-> +		return "Fast Mode(400KHz)";
-> +	case I2C_MAX_FAST_MODE_PLUS_FREQ:
-> +		return "Fast Mode Plus(1.0MHz)";
-> +	case I2C_MAX_TURBO_MODE_FREQ:
-> +		return "Turbo Mode(1.4MHz)";
-> +	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
-> +		return "High Speed Mode(3.4MHz)";
-> +	case I2C_MAX_ULTRA_FAST_MODE_FREQ:
-> +		return "Ultra Fast Mode(5.0MHz)";
-> +	default:
-> +		return "Unknown Mode";
-> +	}
-> +}
-> +
->  struct module;
->  struct property_entry;
->  
+> Change since v3:
+
+> - split the bus mode string api to I2C as suggested by Andy
+
+I have prepared patch to convert i2c designware to use it.
+So, feel free to attach to your series in v5.
+
+> - simplify the devm variants and change the export format
+> - address the comments of the HiSilicon I2C driver from Andy and Dmitry, thanks!
+> Link: https://lore.kernel.org/linux-i2c/1616411413-7177-1-git-send-email-yangyicong@hisilicon.com/
+> 
+> Change since v2:
+> - handle -EPROBE_DEFER case when get irq number by platform_get_irq()
+> Link: https://lore.kernel.org/linux-i2c/1615296137-14558-1-git-send-email-yangyicong@hisilicon.com/
+> 
+> Change since v1:
+> - fix compile test error on 32bit arch, reported by intel lkp robot:
+>   64 bit division without using kernel wrapper in probe function.
+> Link:https://lore.kernel.org/linux-i2c/1615016946-55670-1-git-send-email-yangyicong@hisilicon.com/
+> 
+> Yicong Yang (4):
+>   i2c: core: add managed function for adding i2c adapters
+>   i2c: core: add api to provide frequency mode strings
+>   i2c: add support for HiSilicon I2C controller
+>   MAINTAINERS: Add maintainer for HiSilicon I2C driver
+> 
+>  MAINTAINERS                   |   7 +
+>  drivers/i2c/busses/Kconfig    |  10 +
+>  drivers/i2c/busses/Makefile   |   1 +
+>  drivers/i2c/busses/i2c-hisi.c | 510 ++++++++++++++++++++++++++++++++++++++++++
+>  drivers/i2c/i2c-core-base.c   |  26 +++
+>  include/linux/i2c.h           |  21 ++
+>  6 files changed, 575 insertions(+)
+>  create mode 100644 drivers/i2c/busses/i2c-hisi.c
+> 
 > -- 
 > 2.8.1
 > 
