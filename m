@@ -2,89 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F73734EDF2
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Mar 2021 18:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B57834F0CE
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Mar 2021 20:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbhC3Qdo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Mar 2021 12:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S232654AbhC3SSd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Mar 2021 14:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbhC3QdO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Mar 2021 12:33:14 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177C2C061574;
-        Tue, 30 Mar 2021 09:33:14 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id r20so20605503ljk.4;
-        Tue, 30 Mar 2021 09:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CT8db4cvO7S02JvPSHxU5rkG2mfIf4ddG0qsyFVMwQg=;
-        b=mYtNOivmhosBZV9pv9FPhOg6FFD+pM7ldsuKQzXr7p7pN6zuP0nFJSRyMX9EcUKFM7
-         iggu3rh8l3o/6NHebtNDsK1ENf8iI7IS3jnrOr+0Re0DaZXQAyvc0hVT1KUsHWfMzFYt
-         yNrpFyMlV0zD4cOSXOvwJqkq1npPS9bLvSb+jRUbGvumByujBqp7DJZu++PrBOwslY83
-         eQRocwOMM/bAGE0PO0VNyUPngEZv6wCdaOL8ZDfzA8vz7aMXVjznX3HKiMVH0ZCdrWxj
-         uHV8CrDjt2EliaF6h3CnUwkwQypNNtPMlj5iBgGg+scKNveI+3/b7PpfFHo7SNf4pv55
-         7HgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CT8db4cvO7S02JvPSHxU5rkG2mfIf4ddG0qsyFVMwQg=;
-        b=nldW6lJYuDYgzeE85RHG3RMDWndCfHPTqd12eNxRdYv64WEL+RWso9DWL9n9MmxzHL
-         Lg1Z3Q+w3OZy9ALcVzRRLSb5659WVgqznQoLvPwbtZKcCM1q+RSk/5Pt7Z6e4vTwfc/G
-         71FklMqmf/ejpWdSGe1I35ioJKaVw22/dL9wVGh85g1tExbjgvc4dA8cIUEIcaEZ97bT
-         NNx+8rQm6F64eza73bXDcpRYhdKBpjIwJtZe2q3D3c/quVD8yjcMfj38APtHOUz3aI1F
-         ja4jyRh86ysu7ZCHBLU1ewYUU3No7hqvbAQ+19Vrga+DDSnurT3ol1bIrfU+WPGYTrEb
-         xlXQ==
-X-Gm-Message-State: AOAM531vmz2AhF8qn/8ihu8CR0lrfuk/SURgpZHZzoOp5eapIrn6MrYd
-        vVHYLfYMjrlOlX8TOQ+786I=
-X-Google-Smtp-Source: ABdhPJymTtBBXGNFYKmCOj16/tNmr/vkk/fDO+rYKifgTio/eBbOMNYIW9Ui9B361DJ/bQJMEJwmUA==
-X-Received: by 2002:a2e:581d:: with SMTP id m29mr22237461ljb.97.1617121992676;
-        Tue, 30 Mar 2021 09:33:12 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-98.dynamic.spd-mgts.ru. [109.252.193.98])
-        by smtp.googlemail.com with ESMTPSA id t13sm2847634ljk.47.2021.03.30.09.33.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Mar 2021 09:33:12 -0700 (PDT)
-Subject: Re: [PATCH v5 3/5] i2c: add support for HiSilicon I2C controller
-To:     Yicong Yang <yangyicong@hisilicon.com>, wsa@kernel.org,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org
-Cc:     treding@nvidia.com, jarkko.nikula@linux.intel.com,
-        rmk+kernel@armlinux.org.uk, song.bao.hua@hisilicon.com,
-        john.garry@huawei.com, mika.westerberg@linux.intel.com,
-        prime.zeng@huawei.com, linuxarm@huawei.com
-References: <1617113966-40498-1-git-send-email-yangyicong@hisilicon.com>
- <1617113966-40498-4-git-send-email-yangyicong@hisilicon.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <58a43540-155c-36d0-94ca-453313dc005c@gmail.com>
-Date:   Tue, 30 Mar 2021 19:33:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        with ESMTP id S232757AbhC3SSP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Mar 2021 14:18:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A74CC061574
+        for <linux-i2c@vger.kernel.org>; Tue, 30 Mar 2021 11:18:14 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lRIwJ-0007hy-Pr; Tue, 30 Mar 2021 20:18:07 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lRIwI-0000E3-Vz; Tue, 30 Mar 2021 20:18:06 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v4 5/6] i2c: imx: Simplify using devm_clk_get_enableded()
+Date:   Tue, 30 Mar 2021 20:17:54 +0200
+Message-Id: <20210330181755.204339-6-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210330181755.204339-1-u.kleine-koenig@pengutronix.de>
+References: <20210330181755.204339-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <1617113966-40498-4-git-send-email-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-30.03.2021 17:19, Yicong Yang пишет:
-> Add HiSilicon I2C controller driver for the Kunpeng SoC. It provides
-> the access to the i2c busses, which connects to the eeprom, rtc, etc.
-> 
-> The driver works with IRQ mode, and supports basic I2C features and 10bit
-> address. The DMA is not supported.
-> 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->  drivers/i2c/busses/Kconfig    |  10 +
->  drivers/i2c/busses/Makefile   |   1 +
->  drivers/i2c/busses/i2c-hisi.c | 506 ++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 517 insertions(+)
->  create mode 100644 drivers/i2c/busses/i2c-hisi.c
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+devm_clk_get_enabled() returns the clk already (prepared and) enabled
+and the automatically called cleanup cares for disabling (and
+unpreparing). So simplify .probe() and .remove() accordingly.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/i2c/busses/i2c-imx.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index b80fdc1f0092..aa156ecc616d 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1405,16 +1405,10 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
+ 
+ 	/* Get I2C clock */
+-	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
++	i2c_imx->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(i2c_imx->clk))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
+-				     "can't get I2C clock\n");
+-
+-	ret = clk_prepare_enable(i2c_imx->clk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
+-		return ret;
+-	}
++				     "can't get prepared I2C clock\n");
+ 
+ 	/* Init queue */
+ 	init_waitqueue_head(&i2c_imx->queue);
+@@ -1517,7 +1511,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq >= 0)
+ 		free_irq(irq, i2c_imx);
+-	clk_disable_unprepare(i2c_imx->clk);
+ 
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+-- 
+2.30.2
+
