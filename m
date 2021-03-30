@@ -2,322 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFDD34EDF5
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Mar 2021 18:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F73734EDF2
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Mar 2021 18:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbhC3Qdo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S231874AbhC3Qdo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Tue, 30 Mar 2021 12:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbhC3QdO (ORCPT
+        with ESMTP id S231532AbhC3QdO (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Mar 2021 12:33:14 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C13C061764;
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177C2C061574;
         Tue, 30 Mar 2021 09:33:14 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id E14F21F4512D
-Subject: Re: [PATCH 10/12] platform/chrome: chromeos_laptop - Prepare complete
- software nodes
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>
-References: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
- <20210329105047.51033-11-heikki.krogerus@linux.intel.com>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <7e3b0ed4-c646-c58b-7afc-035b274716e4@collabora.com>
-Date:   Tue, 30 Mar 2021 18:33:09 +0200
+Received: by mail-lj1-x22a.google.com with SMTP id r20so20605503ljk.4;
+        Tue, 30 Mar 2021 09:33:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CT8db4cvO7S02JvPSHxU5rkG2mfIf4ddG0qsyFVMwQg=;
+        b=mYtNOivmhosBZV9pv9FPhOg6FFD+pM7ldsuKQzXr7p7pN6zuP0nFJSRyMX9EcUKFM7
+         iggu3rh8l3o/6NHebtNDsK1ENf8iI7IS3jnrOr+0Re0DaZXQAyvc0hVT1KUsHWfMzFYt
+         yNrpFyMlV0zD4cOSXOvwJqkq1npPS9bLvSb+jRUbGvumByujBqp7DJZu++PrBOwslY83
+         eQRocwOMM/bAGE0PO0VNyUPngEZv6wCdaOL8ZDfzA8vz7aMXVjznX3HKiMVH0ZCdrWxj
+         uHV8CrDjt2EliaF6h3CnUwkwQypNNtPMlj5iBgGg+scKNveI+3/b7PpfFHo7SNf4pv55
+         7HgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CT8db4cvO7S02JvPSHxU5rkG2mfIf4ddG0qsyFVMwQg=;
+        b=nldW6lJYuDYgzeE85RHG3RMDWndCfHPTqd12eNxRdYv64WEL+RWso9DWL9n9MmxzHL
+         Lg1Z3Q+w3OZy9ALcVzRRLSb5659WVgqznQoLvPwbtZKcCM1q+RSk/5Pt7Z6e4vTwfc/G
+         71FklMqmf/ejpWdSGe1I35ioJKaVw22/dL9wVGh85g1tExbjgvc4dA8cIUEIcaEZ97bT
+         NNx+8rQm6F64eza73bXDcpRYhdKBpjIwJtZe2q3D3c/quVD8yjcMfj38APtHOUz3aI1F
+         ja4jyRh86ysu7ZCHBLU1ewYUU3No7hqvbAQ+19Vrga+DDSnurT3ol1bIrfU+WPGYTrEb
+         xlXQ==
+X-Gm-Message-State: AOAM531vmz2AhF8qn/8ihu8CR0lrfuk/SURgpZHZzoOp5eapIrn6MrYd
+        vVHYLfYMjrlOlX8TOQ+786I=
+X-Google-Smtp-Source: ABdhPJymTtBBXGNFYKmCOj16/tNmr/vkk/fDO+rYKifgTio/eBbOMNYIW9Ui9B361DJ/bQJMEJwmUA==
+X-Received: by 2002:a2e:581d:: with SMTP id m29mr22237461ljb.97.1617121992676;
+        Tue, 30 Mar 2021 09:33:12 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-98.dynamic.spd-mgts.ru. [109.252.193.98])
+        by smtp.googlemail.com with ESMTPSA id t13sm2847634ljk.47.2021.03.30.09.33.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Mar 2021 09:33:12 -0700 (PDT)
+Subject: Re: [PATCH v5 3/5] i2c: add support for HiSilicon I2C controller
+To:     Yicong Yang <yangyicong@hisilicon.com>, wsa@kernel.org,
+        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org
+Cc:     treding@nvidia.com, jarkko.nikula@linux.intel.com,
+        rmk+kernel@armlinux.org.uk, song.bao.hua@hisilicon.com,
+        john.garry@huawei.com, mika.westerberg@linux.intel.com,
+        prime.zeng@huawei.com, linuxarm@huawei.com
+References: <1617113966-40498-1-git-send-email-yangyicong@hisilicon.com>
+ <1617113966-40498-4-git-send-email-yangyicong@hisilicon.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <58a43540-155c-36d0-94ca-453313dc005c@gmail.com>
+Date:   Tue, 30 Mar 2021 19:33:11 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210329105047.51033-11-heikki.krogerus@linux.intel.com>
+In-Reply-To: <1617113966-40498-4-git-send-email-yangyicong@hisilicon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heikki,
-
-Thank you for your patch.
-
-On 29/3/21 12:50, Heikki Krogerus wrote:
-> The older device property API is going to be removed soon
-> and that will affect also I2C subystem. Supplying complete
-> software nodes instead of only the properties in them for
-> the I2C devices.
+30.03.2021 17:19, Yicong Yang пишет:
+> Add HiSilicon I2C controller driver for the Kunpeng SoC. It provides
+> the access to the i2c busses, which connects to the eeprom, rtc, etc.
 > 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-
-Acked-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-
+> The driver works with IRQ mode, and supports basic I2C features and 10bit
+> address. The DMA is not supported.
+> 
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 > ---
->  drivers/platform/chrome/chromeos_laptop.c | 100 +++++++++++++---------
->  1 file changed, 60 insertions(+), 40 deletions(-)
-> 
-> diff --git a/drivers/platform/chrome/chromeos_laptop.c b/drivers/platform/chrome/chromeos_laptop.c
-> index 472a03daa8693..4e14b4d6635d7 100644
-> --- a/drivers/platform/chrome/chromeos_laptop.c
-> +++ b/drivers/platform/chrome/chromeos_laptop.c
-> @@ -52,12 +52,15 @@ struct i2c_peripheral {
->  	enum i2c_adapter_type type;
->  	u32 pci_devid;
->  
-> +	const struct property_entry *properties;
-> +
->  	struct i2c_client *client;
->  };
->  
->  struct acpi_peripheral {
->  	char hid[ACPI_ID_LEN];
-> -	const struct property_entry *properties;
-> +	struct software_node swnode;
-> +	struct i2c_client *client;
->  };
->  
->  struct chromeos_laptop {
-> @@ -68,7 +71,7 @@ struct chromeos_laptop {
->  	struct i2c_peripheral *i2c_peripherals;
->  	unsigned int num_i2c_peripherals;
->  
-> -	const struct acpi_peripheral *acpi_peripherals;
-> +	struct acpi_peripheral *acpi_peripherals;
->  	unsigned int num_acpi_peripherals;
->  };
->  
-> @@ -161,7 +164,7 @@ static void chromeos_laptop_check_adapter(struct i2c_adapter *adapter)
->  
->  static bool chromeos_laptop_adjust_client(struct i2c_client *client)
->  {
-> -	const struct acpi_peripheral *acpi_dev;
-> +	struct acpi_peripheral *acpi_dev;
->  	struct acpi_device_id acpi_ids[2] = { };
->  	int i;
->  	int error;
-> @@ -175,8 +178,7 @@ static bool chromeos_laptop_adjust_client(struct i2c_client *client)
->  		memcpy(acpi_ids[0].id, acpi_dev->hid, ACPI_ID_LEN);
->  
->  		if (acpi_match_device(acpi_ids, &client->dev)) {
-> -			error = device_add_properties(&client->dev,
-> -						      acpi_dev->properties);
-> +			error = device_add_software_node(&client->dev, &acpi_dev->swnode);
->  			if (error) {
->  				dev_err(&client->dev,
->  					"failed to add properties: %d\n",
-> @@ -184,6 +186,8 @@ static bool chromeos_laptop_adjust_client(struct i2c_client *client)
->  				break;
->  			}
->  
-> +			acpi_dev->client = client;
-> +
->  			return true;
->  		}
->  	}
-> @@ -193,15 +197,28 @@ static bool chromeos_laptop_adjust_client(struct i2c_client *client)
->  
->  static void chromeos_laptop_detach_i2c_client(struct i2c_client *client)
->  {
-> +	struct acpi_peripheral *acpi_dev;
->  	struct i2c_peripheral *i2c_dev;
->  	int i;
->  
-> -	for (i = 0; i < cros_laptop->num_i2c_peripherals; i++) {
-> -		i2c_dev = &cros_laptop->i2c_peripherals[i];
-> +	if (has_acpi_companion(&client->dev))
-> +		for (i = 0; i < cros_laptop->num_acpi_peripherals; i++) {
-> +			acpi_dev = &cros_laptop->acpi_peripherals[i];
->  
-> -		if (i2c_dev->client == client)
-> -			i2c_dev->client = NULL;
-> -	}
-> +			if (acpi_dev->client == client) {
-> +				acpi_dev->client = NULL;
-> +				return;
-> +			}
-> +		}
-> +	else
-> +		for (i = 0; i < cros_laptop->num_i2c_peripherals; i++) {
-> +			i2c_dev = &cros_laptop->i2c_peripherals[i];
-> +
-> +			if (i2c_dev->client == client) {
-> +				i2c_dev->client = NULL;
-> +				return;
-> +			}
-> +		}
->  }
->  
->  static int chromeos_laptop_i2c_notifier_call(struct notifier_block *nb,
-> @@ -302,28 +319,26 @@ static struct i2c_peripheral chromebook_pixel_peripherals[] __initdata = {
->  		.board_info	= {
->  			I2C_BOARD_INFO("atmel_mxt_ts",
->  					ATMEL_TS_I2C_ADDR),
-> -			.properties	=
-> -				chromebook_atmel_touchscreen_props,
->  			.flags		= I2C_CLIENT_WAKE,
->  		},
->  		.dmi_name	= "touchscreen",
->  		.irqflags	= IRQF_TRIGGER_FALLING,
->  		.type		= I2C_ADAPTER_PANEL,
->  		.alt_addr	= ATMEL_TS_I2C_BL_ADDR,
-> +		.properties	= chromebook_atmel_touchscreen_props,
->  	},
->  	/* Touchpad. */
->  	{
->  		.board_info	= {
->  			I2C_BOARD_INFO("atmel_mxt_tp",
->  					ATMEL_TP_I2C_ADDR),
-> -			.properties	=
-> -				chromebook_pixel_trackpad_props,
->  			.flags		= I2C_CLIENT_WAKE,
->  		},
->  		.dmi_name	= "trackpad",
->  		.irqflags	= IRQF_TRIGGER_FALLING,
->  		.type		= I2C_ADAPTER_VGADDC,
->  		.alt_addr	= ATMEL_TP_I2C_BL_ADDR,
-> +		.properties	= chromebook_pixel_trackpad_props,
->  	},
->  	/* Light Sensor. */
->  	{
-> @@ -414,8 +429,6 @@ static struct i2c_peripheral acer_c720_peripherals[] __initdata = {
->  		.board_info	= {
->  			I2C_BOARD_INFO("atmel_mxt_ts",
->  					ATMEL_TS_I2C_ADDR),
-> -			.properties	=
-> -				chromebook_atmel_touchscreen_props,
->  			.flags		= I2C_CLIENT_WAKE,
->  		},
->  		.dmi_name	= "touchscreen",
-> @@ -423,6 +436,7 @@ static struct i2c_peripheral acer_c720_peripherals[] __initdata = {
->  		.type		= I2C_ADAPTER_DESIGNWARE,
->  		.pci_devid	= PCI_DEVID(0, PCI_DEVFN(0x15, 0x2)),
->  		.alt_addr	= ATMEL_TS_I2C_BL_ADDR,
-> +		.properties	= chromebook_atmel_touchscreen_props,
->  	},
->  	/* Touchpad. */
->  	{
-> @@ -498,12 +512,16 @@ static struct acpi_peripheral samus_peripherals[] __initdata = {
->  	/* Touchpad */
->  	{
->  		.hid		= "ATML0000",
-> -		.properties	= samus_trackpad_props,
-> +		.swnode		= {
-> +			.properties = samus_trackpad_props,
-> +		},
->  	},
->  	/* Touchsceen */
->  	{
->  		.hid		= "ATML0001",
-> -		.properties	= chromebook_atmel_touchscreen_props,
-> +		.swnode		= {
-> +			.properties = chromebook_atmel_touchscreen_props,
-> +		},
->  	},
->  };
->  DECLARE_ACPI_CROS_LAPTOP(samus);
-> @@ -512,12 +530,16 @@ static struct acpi_peripheral generic_atmel_peripherals[] __initdata = {
->  	/* Touchpad */
->  	{
->  		.hid		= "ATML0000",
-> -		.properties	= chromebook_pixel_trackpad_props,
-> +		.swnode		= {
-> +			.properties = chromebook_pixel_trackpad_props,
-> +		},
->  	},
->  	/* Touchsceen */
->  	{
->  		.hid		= "ATML0001",
-> -		.properties	= chromebook_atmel_touchscreen_props,
-> +		.swnode		= {
-> +			.properties = chromebook_atmel_touchscreen_props,
-> +		},
->  	},
->  };
->  DECLARE_ACPI_CROS_LAPTOP(generic_atmel);
-> @@ -743,12 +765,11 @@ chromeos_laptop_prepare_i2c_peripherals(struct chromeos_laptop *cros_laptop,
->  		if (error)
->  			goto err_out;
->  
-> -		/* We need to deep-copy properties */
-> -		if (info->properties) {
-> -			info->properties =
-> -				property_entries_dup(info->properties);
-> -			if (IS_ERR(info->properties)) {
-> -				error = PTR_ERR(info->properties);
-> +		/* Create primary fwnode for the device - copies everything */
-> +		if (i2c_dev->properties) {
-> +			info->fwnode = fwnode_create_software_node(i2c_dev->properties, NULL);
-> +			if (IS_ERR(info->fwnode)) {
-> +				error = PTR_ERR(info->fwnode);
->  				goto err_out;
->  			}
->  		}
-> @@ -760,8 +781,8 @@ chromeos_laptop_prepare_i2c_peripherals(struct chromeos_laptop *cros_laptop,
->  	while (--i >= 0) {
->  		i2c_dev = &cros_laptop->i2c_peripherals[i];
->  		info = &i2c_dev->board_info;
-> -		if (info->properties)
-> -			property_entries_free(info->properties);
-> +		if (!IS_ERR_OR_NULL(info->fwnode))
-> +			fwnode_remove_software_node(info->fwnode);
->  	}
->  	kfree(cros_laptop->i2c_peripherals);
->  	return error;
-> @@ -801,11 +822,11 @@ chromeos_laptop_prepare_acpi_peripherals(struct chromeos_laptop *cros_laptop,
->  		*acpi_dev = *src_dev;
->  
->  		/* We need to deep-copy properties */
-> -		if (src_dev->properties) {
-> -			acpi_dev->properties =
-> -				property_entries_dup(src_dev->properties);
-> -			if (IS_ERR(acpi_dev->properties)) {
-> -				error = PTR_ERR(acpi_dev->properties);
-> +		if (src_dev->swnode.properties) {
-> +			acpi_dev->swnode.properties =
-> +				property_entries_dup(src_dev->swnode.properties);
-> +			if (IS_ERR(acpi_dev->swnode.properties)) {
-> +				error = PTR_ERR(acpi_dev->swnode.properties);
->  				goto err_out;
->  			}
->  		}
-> @@ -821,8 +842,8 @@ chromeos_laptop_prepare_acpi_peripherals(struct chromeos_laptop *cros_laptop,
->  err_out:
->  	while (--i >= 0) {
->  		acpi_dev = &acpi_peripherals[i];
-> -		if (acpi_dev->properties)
-> -			property_entries_free(acpi_dev->properties);
-> +		if (!IS_ERR_OR_NULL(acpi_dev->swnode.properties))
-> +			property_entries_free(acpi_dev->swnode.properties);
->  	}
->  
->  	kfree(acpi_peripherals);
-> @@ -833,21 +854,20 @@ static void chromeos_laptop_destroy(const struct chromeos_laptop *cros_laptop)
->  {
->  	const struct acpi_peripheral *acpi_dev;
->  	struct i2c_peripheral *i2c_dev;
-> -	struct i2c_board_info *info;
->  	int i;
->  
->  	for (i = 0; i < cros_laptop->num_i2c_peripherals; i++) {
->  		i2c_dev = &cros_laptop->i2c_peripherals[i];
-> -		info = &i2c_dev->board_info;
-> -
->  		i2c_unregister_device(i2c_dev->client);
-> -		property_entries_free(info->properties);
->  	}
->  
->  	for (i = 0; i < cros_laptop->num_acpi_peripherals; i++) {
->  		acpi_dev = &cros_laptop->acpi_peripherals[i];
->  
-> -		property_entries_free(acpi_dev->properties);
-> +		if (acpi_dev->client)
-> +			device_remove_software_node(&acpi_dev->client->dev);
-> +
-> +		property_entries_free(acpi_dev->swnode.properties);
->  	}
->  
->  	kfree(cros_laptop->i2c_peripherals);
-> 
+>  drivers/i2c/busses/Kconfig    |  10 +
+>  drivers/i2c/busses/Makefile   |   1 +
+>  drivers/i2c/busses/i2c-hisi.c | 506 ++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 517 insertions(+)
+>  create mode 100644 drivers/i2c/busses/i2c-hisi.c
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
