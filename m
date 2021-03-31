@@ -2,105 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7F134F9A8
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 09:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59B034F9AB
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 09:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbhCaHSu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 Mar 2021 03:18:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39562 "EHLO mail.kernel.org"
+        id S233992AbhCaHTW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 31 Mar 2021 03:19:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39718 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231523AbhCaHSj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 31 Mar 2021 03:18:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 04B08619AB;
-        Wed, 31 Mar 2021 07:18:37 +0000 (UTC)
+        id S233973AbhCaHSz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 31 Mar 2021 03:18:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5DEF861968;
+        Wed, 31 Mar 2021 07:18:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617175118;
-        bh=8beEdFjtCAW+MZgiUCa4tYu3TEKJK3jHtRssNTqgmzg=;
+        s=k20201202; t=1617175135;
+        bh=N2JjB3jNqEmrn0NuKsX95DfSg268p13rhdllb3wldik=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CXCYOT31EaTt/xV9uUEkFHglHFUrw+VWuEQuvaHKqZLdUmbw7D7kdlu9IROqbck16
-         iA7R7qVtoxa28s/80+yANQSBa4vLQfdPkD/iWkjPPG+1kYascbEQfdg9Rto3bx2m+I
-         CDAF7HKX1FPEdK1soNI08hOeMLDQaRaPoRgkDH17T6TStzwfw8Jr8T4c0v1NGSZ0am
-         Kr3WqslciQUHKP9sTrjz/swTsIs0CvKu5KTNwxyboH3lRA7n1BmCdwQHICgF8q36bU
-         pnISfbtIxzIkgkpIhsOp9Wv3pdwjLMehEFIIzokDUIKi04qe4d4MHSA/8eubIzNCXC
-         YHx/BtlWydN7g==
-Date:   Wed, 31 Mar 2021 09:18:35 +0200
+        b=Wjy46zLz0XIEREnbAeDaBmvBDTxx3EBV9yIgOAqA0HDXtwFj+85m457xFPqwUO16i
+         6yqqYg60onx8RaVMa+4yTNkLpex4dAzJF9NBvrCWUsGjHCe5OmUDvQ0iwrtY+m8lqm
+         koQjJjrm4ZeYwoNq1Cc/0mWXx6RKxlR3hjtN5l4m8GYOW+on1xGK3vFzji2XYXkx8v
+         Oh2NtNtNa2xF3I107g1vfnI406nNtvwFsBSe0109OmXsJ8DnbDzJFVL/6SucuXN+7T
+         sEaaL3b0BPXeibEqcXKBTd7zXz1TD9MvXTLtY1RAYoNC3TU+epHiP9T0VleUugV5w1
+         KK0PXs1/5di3g==
+Date:   Wed, 31 Mar 2021 09:18:52 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Cc:     paul@crapouillou.net, stable@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, sernia.zhou@foxmail.com
-Subject: Re: [PATCH] I2C: JZ4780: Fix bug for Ingenic X1000.
-Message-ID: <20210331071835.GB1025@ninjato>
-References: <1616084743-112402-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1616084743-112402-2-git-send-email-zhouyanjie@wanyeetech.com>
- <20210318170623.GA1961@ninjato>
- <644d19d8-9444-4dde-a891-c9dfd523389e@wanyeetech.com>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     paul@crapouillou.net, linux-mips@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com, ywltyut@sina.cn,
+        sernia.zhou@foxmail.com
+Subject: Re: [PATCH v2] I2C: JZ4780: Fix bug for Ingenic X1000.
+Message-ID: <20210331071852.GC1025@ninjato>
+References: <1616148733-15154-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1616148733-15154-2-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4SFOXa2GPu3tIq4H"
+        protocol="application/pgp-signature"; boundary="wxDdMuZNg1r63Hyj"
 Content-Disposition: inline
-In-Reply-To: <644d19d8-9444-4dde-a891-c9dfd523389e@wanyeetech.com>
+In-Reply-To: <1616148733-15154-2-git-send-email-zhouyanjie@wanyeetech.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---4SFOXa2GPu3tIq4H
-Content-Type: text/plain; charset=us-ascii
+--wxDdMuZNg1r63Hyj
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,=20
+On Fri, Mar 19, 2021 at 06:12:13PM +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
+ Yanjie) wrote:
+> Only send "X1000_I2C_DC_STOP" when last byte, or it will cause
+> error when I2C write operation.
+>=20
+> Fixes: 21575a7a8d4c ("I2C: JZ4780: Add support for the X1000.")
+>=20
+> Reported-by: =E6=9D=A8=E6=96=87=E9=BE=99 (Yang Wenlong) <ywltyut@sina.cn>
+> Tested-by: =E6=9D=A8=E6=96=87=E9=BE=99 (Yang Wenlong) <ywltyut@sina.cn>
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
+eetech.com>
 
-> > Any write operation? I wonder then why nobody noticed before?
->=20
->=20
-> The standard I2C communication should look like this:
->=20
-> Read:
->=20
-> device_addr + w, reg_addr, device_addr + r, data;
->=20
-> Write:
->=20
-> device_addr + w, reg_addr, data;
->=20
->=20
-> But without this patch, it looks like this:
->=20
-> Read:
->=20
-> device_addr + w, reg_addr, device_addr + r, data;
->=20
-> Write:
->=20
-> device_addr + w, reg_addr, device_addr + w, data;
->=20
-> This is clearly not correct.
-
-Thanks for the additional information! I understand now. I added a bit
-of this to the commit message of v2 to explain the situation.
+Applied to for-current with updated commit message, thanks!
 
 
---4SFOXa2GPu3tIq4H
+--wxDdMuZNg1r63Hyj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBkIksACgkQFA3kzBSg
-KbZykQ//eDkcN/ZQvGDP0emgsNO6lU3HtajHI/lRiW/APQ3o+w69CqfEgOtbnJ00
-5Kf0rOkFKeeuMNlv7xZNLOxJoq+V52e1g0S5m5DsVkFFL5rxmfYfBdOAChGoCzHp
-6AfwU+QJjG0ETWgEq/4Wh8wqPbIYeYtATkJA8FcFQEu1bAA5JyGr/xuNNToTd/ln
-PDpoJ0laVjU5ADjQJUBZSctEW07TfdOPumwVYmmpoAtmbc/O26aGp9R/ptZGMxVV
-vTSVI2ghYL70Maoom42YfBQHUNVgqyU14jBw24Jkhu3+lB/B2IHszjG/qyRlEjTM
-gHcu1wSPrXtKGjcicqFU/DVcJviOOZqni2la1ExLkuXE3xVOERAfcMZWZ05C410P
-kB+YWBa5qE3iZllEgDN7f55SXZNX4kT7QpV6o/KGtJ6kPmQtPAb5X/9yTe69ogSe
-PSaNpicjhmiUmgKh+Zu3ttxDREZNmhIbX6h1YMkYN1Ocz8PG9l42zRuFRLnqqRND
-zcSIlK2PfO2XWYXaSNqo3weN66/oLX6kRjJSsTLpsfkuMU0SqE3LFjjqeCJRIEtP
-v2okUgzFcqL9YuyQrwklbUxZ9fe4/cXpsHqwzpFPqlbgyqa16oxzIuNOQ/AG0M3S
-m7s+bQ566uplLlH/VWW+Kg5Ak70k4tuAZCNB5Z2TaTRmpVO/02Y=
-=cthv
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBkIlwACgkQFA3kzBSg
+Kba/7g/+IZVhVSJWA/1RcD9OjQRJmbGOXo8QkVyU3swFMIyPEqIVHyE8LFDs9De9
+ayTZd9+FYDQrEBtyryKSQzmmCBZk3d0WtCQSE7JhK3Mz97RMhh2a6D2x5Jm9FlH0
+O+6IV9ba1uCxm+7bT+c4mBwNUZSSWbWWf/mFzfKfMTz8G5/lKmcIdrxitlt80lVW
++mK+IHl1uAvhbaW+vLXS9PAii82vYmzWZYEwCmWoNBR00YIsF+tzUivSdX3BS25S
+AHsatMqm7CiZXt6AD6E59si2vYYqmDqh1Ql/hDoNHgz2NmvrYYmdsiCVl07Bx1Qa
+vmSzGVA0TM9Cy815ZgxRsdPlEGcv/lCUwMuX+2MC7f/+rasHbB4WBCRZ8cEvgQH9
+3u94guNNbzS0CQVJv2pEA+P4C8LJEwpSktrHA3VnHux5Cx1nuVa2/PoX1qh7HZPP
+Tijl1X35Jxzlp6/9G4gP/lcfA33FCmYKZABf9p8OB7jlsk7sN7A/k0PXSpme6tU3
+/+K8oOpjVJfVnsE+Ux8UN04Z/AbGguxOcew0989EtV4AiW6VHiYyw7KEkUHfPg0K
+ZQL1CLx70j7s4gIW4sMyGH2XHTUgBVCM72B+iDSpdOpwuftbikW4Ju4/BLJZ7FmF
+BaPn7Z0vPmPQ7kCIB8RUoRxYrOmpXldnaXTrmHXOyE1BWnf2/SM=
+=xRou
 -----END PGP SIGNATURE-----
 
---4SFOXa2GPu3tIq4H--
+--wxDdMuZNg1r63Hyj--
