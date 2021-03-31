@@ -2,122 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3582C34FAC7
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 09:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0400234FADF
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 09:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbhCaHwS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 Mar 2021 03:52:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52160 "EHLO mail.kernel.org"
+        id S234120AbhCaHz2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 31 Mar 2021 03:55:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53004 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234223AbhCaHwE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 31 Mar 2021 03:52:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 97186619B1;
-        Wed, 31 Mar 2021 07:52:03 +0000 (UTC)
+        id S234108AbhCaHzT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 31 Mar 2021 03:55:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9470061582;
+        Wed, 31 Mar 2021 07:55:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617177124;
-        bh=SBWU4dqOXVDNxMJ1NxfDjDKlQqbBSpOivYvLi5omI6A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dS+Op3aAACQjBgeMBsRuRinn6b/CxFaKbiAN4Ay9D/L4urD9fMK3CdBdiL3MLLlcj
-         AAJEo4Xr28+ARM7cnMpQbHhlnJbncXEplF+gMgYeLtvP5cmo+8OBoJnEHn2Wcd4X9j
-         7cRCQMLashn4nnZRHXsAHKmemMS98q5XxuHmJO+EYXZSvejHBH8+5sUNZyQSR5XlYi
-         A4FlAD5s6zlnTqm4RDHRszFpwlXL1SCELq8s6RYtrWkquGwDaTLX9ePai2xJnYz77l
-         1XMDttwjtQAYS33vfzblWOLuYKRqDqJTuX74wRPiQQ9O7UTaVgN7RIwub9F38xg9Pn
-         3LUMcbvT1mCQw==
+        s=k20201202; t=1617177319;
+        bh=EzitGg86srFNwq2ybWNTNEkYH5cOxpBgx7ICUgiY5yo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HoEE25OE8avfFADAgHRysi5TbL9Q2GJYNdipPYMDvqhA1KarMfxqZpV9Uoyafa0bG
+         RZLpwqxufdgARkTFbMWqqqv2xkNdcdUfakfMbdxfguce9XtIrsT70N3gtFEWQw9yod
+         2RVA9yaHSQqHXt+rgqdBf0Zg2mU/cfzWyBDRcGiLFiPFWeLztE88cFMSAYtvYVoMXZ
+         MHwyzwGQkiGOSuirfKPNj57lYlHvQB1QNoW1frAPZ0eHOiY7HSPl9DSSJewmjlpW/e
+         zHUarypb4raAyvxr/hPfPXifCNGp5XZtEuq7+jL3gMXaw1342sCMA3FmLaNgztXyXq
+         aBZlCjym0+BFg==
+Date:   Wed, 31 Mar 2021 09:55:16 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RFT 2/2] i2c: tegra-bpmp: make some functions void
-Date:   Wed, 31 Mar 2021 09:51:41 +0200
-Message-Id: <20210331075141.22227-3-wsa@kernel.org>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210331075141.22227-1-wsa@kernel.org>
-References: <20210331075141.22227-1-wsa@kernel.org>
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Cc:     pierre-yves.mordret@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, p.zabel@pengutronix.de,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rdunlap@infradead.org
+Subject: Re: [PATCH] i2c-stm32f4: Mundane typo fix
+Message-ID: <20210331075516.GF1025@ninjato>
+References: <20210324140610.32385-1-unixbhaskar@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CXFpZVxO6m2Ol4tQ"
+Content-Disposition: inline
+In-Reply-To: <20210324140610.32385-1-unixbhaskar@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-They return 0 always, so save some lines and code.
 
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
----
- drivers/i2c/busses/i2c-tegra-bpmp.c | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
+--CXFpZVxO6m2Ol4tQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/busses/i2c-tegra-bpmp.c b/drivers/i2c/busses/i2c-tegra-bpmp.c
-index 295286ad6d6c..3680d608698b 100644
---- a/drivers/i2c/busses/i2c-tegra-bpmp.c
-+++ b/drivers/i2c/busses/i2c-tegra-bpmp.c
-@@ -38,7 +38,7 @@ struct tegra_bpmp_i2c {
-  * firmware I2C driver to avoid any issues in future if Linux I2C flags are
-  * changed.
-  */
--static int tegra_bpmp_xlate_flags(u16 flags, u16 *out)
-+static void tegra_bpmp_xlate_flags(u16 flags, u16 *out)
- {
- 	if (flags & I2C_M_TEN)
- 		*out |= SERIALI2C_TEN;
-@@ -63,8 +63,6 @@ static int tegra_bpmp_xlate_flags(u16 flags, u16 *out)
- 
- 	if (flags & I2C_M_RECV_LEN)
- 		*out |= SERIALI2C_RECV_LEN;
--
--	return 0;
- }
- 
- /**
-@@ -81,22 +79,19 @@ static int tegra_bpmp_xlate_flags(u16 flags, u16 *out)
-  *
-  * See deserialize_i2c documentation for the data format in the other direction.
-  */
--static int tegra_bpmp_serialize_i2c_msg(struct tegra_bpmp_i2c *i2c,
-+static void tegra_bpmp_serialize_i2c_msg(struct tegra_bpmp_i2c *i2c,
- 					struct mrq_i2c_request *request,
- 					struct i2c_msg *msgs,
- 					unsigned int num)
- {
- 	char *buf = request->xfer.data_buf;
- 	unsigned int i, j, pos = 0;
--	int err;
- 
- 	for (i = 0; i < num; i++) {
- 		struct i2c_msg *msg = &msgs[i];
- 		u16 flags = 0;
- 
--		err = tegra_bpmp_xlate_flags(msg->flags, &flags);
--		if (err < 0)
--			return err;
-+		tegra_bpmp_xlate_flags(msg->flags, &flags);
- 
- 		buf[pos++] = msg->addr & 0xff;
- 		buf[pos++] = (msg->addr & 0xff00) >> 8;
-@@ -112,8 +107,6 @@ static int tegra_bpmp_serialize_i2c_msg(struct tegra_bpmp_i2c *i2c,
- 	}
- 
- 	request->xfer.data_size = pos;
--
--	return 0;
- }
- 
- /**
-@@ -247,12 +240,7 @@ static int tegra_bpmp_i2c_xfer_common(struct i2c_adapter *adapter,
- 	memset(&request, 0, sizeof(request));
- 	memset(&response, 0, sizeof(response));
- 
--	err = tegra_bpmp_serialize_i2c_msg(i2c, &request, msgs, num);
--	if (err < 0) {
--		dev_err(i2c->dev, "failed to serialize message: %d\n", err);
--		return err;
--	}
--
-+	tegra_bpmp_serialize_i2c_msg(i2c, &request, msgs, num);
- 	err = tegra_bpmp_i2c_msg_xfer(i2c, &request, &response, atomic);
- 	if (err < 0) {
- 		dev_err(i2c->dev, "failed to transfer message: %d\n", err);
--- 
-2.30.0
+On Wed, Mar 24, 2021 at 07:36:10PM +0530, Bhaskar Chowdhury wrote:
+>=20
+> s/postion/position/
+>=20
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
+Applied to for-current, thanks! Please check older commits to this
+driver for the proper subject prefix, i.e. "i2c: <driver>" in I2C.
+
+
+--CXFpZVxO6m2Ol4tQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBkKuAACgkQFA3kzBSg
+KbZcNg/+Kgz6fUXwT8UG1T6AI2mSbxrDvEf1HZabVoWUXqfAUzW70AOuupu6rANv
+ZALbbp5LgXqd9mlB6SsLgZb2Fu+KH2HHfb8Vb+3MoyVPRPxY4hz0ISqGohy4cWH0
+3WRpT7ZKYwxjHj/0YFaQxrVSa3Vxpy/iifohlnezxqWYcKm/WVoRvpUXPAqT53w5
+buqBb+CY133IjNtPg3GVrV/7yPuPM2hQAapY0PsbwPz4Krq2G6jsuhQ8V5vHIaTm
+Y8DJiRDvAzgDgTUKu/Ndi4JD1g8InykBnLRqAbdk84ktM1vuGEpvk7/LbbybBKj3
+ZezZCW9Ux/1X69t17Z8l/R8S85xRXiRcXjO04+rVHjnsMMPVyiarGQEptejqY3CH
+nQjiVNdCUh6uzkQcD6zdUgIeqrdq/IAConxpk5BAKmMqQfVkM85oY20AMZP/gEtg
+yBVkQdXVpvltbIvxtcP7Zxf2X90PpSVfexJpqHBx45MGy7FkEnu29gwo4SZ+q81S
+Y+sXwxxuyL3KvxFibgnLTLf2lcpTVGpcC5N6VZjOrAf3pfWxgx3QvJ0LqtQrYcwB
+lNZiq1C+a5eGpOdBEnEmpc69YTTs40ry4fBkTnnzOdPCJVkDsdn4ZTDp5cAnyy2E
+VKGky1q77+EEI2EIjmquoP6f/u+yQNf3In2VZbaYZjXz+kckDPM=
+=P84I
+-----END PGP SIGNATURE-----
+
+--CXFpZVxO6m2Ol4tQ--
