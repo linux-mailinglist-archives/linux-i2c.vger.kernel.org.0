@@ -2,167 +2,425 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C89F93501ED
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 16:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0032335020E
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 16:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235976AbhCaOKN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 Mar 2021 10:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235993AbhCaOKG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 Mar 2021 10:10:06 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E36C061574
-        for <linux-i2c@vger.kernel.org>; Wed, 31 Mar 2021 07:10:05 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id c204so14659690pfc.4
-        for <linux-i2c@vger.kernel.org>; Wed, 31 Mar 2021 07:10:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uMG7IEiavzSRE2X65Zsaw36Y4uyy2Xzq3ejd+JY938s=;
-        b=GHmHIPTSsfyLpfQNVBmNXMEoTEEoJBQCa6SHoFWfehh/SO3pVcMb35t+adcflzrdBa
-         LO1T9zk9wRSKcElAOxg9OSQEC2RkHt0uXE8zVSBp2phhiWVBPbixUGiz+NZU820xY10H
-         AJj5HoJ3R2Se45St+dHwoYNVckc34k2nMKl+duxIPGzuVCwj89B/CSR49fdI4CR5h/M9
-         XQ0OYnlhoqDUOHBMAnKRPAKC0DY2wsUMN7JZqQrH9k58dEJHPmt/LkYSSjbnnXhYTl+D
-         +NOMsjQFKhVD4a/F7GenIPOL69GnGO1oeqOTPHUgCY7VD6I9VkZUD5OhCP2QsOoAgz4f
-         rYXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uMG7IEiavzSRE2X65Zsaw36Y4uyy2Xzq3ejd+JY938s=;
-        b=IGfQb5lTKSp3FRNTVC9AdYjpfvSsByK2SDycRFCkfC6Ea2FXq8oAQpATlMth+noXj+
-         uFE5Be71+zMAGe1n0rjyoy3VvP7KUlfrU5cCRCpLUB0MoChZm+Q9zmmJntbQ2312rsmz
-         ZUMC3WXyFFmaO+okctkr59A2cvCOvND83xyJQvsaN+15SpUDkFmOMusOUTvF94GSVrIC
-         biy6UqNDBSlvmZzCmU4ID+5+l1oVyCIwxWO+/O27qMqlqxv2Fgnr4G0AR4ZDjzhpnglE
-         Bhg6MYRBovpDx3rEwzzloz+u8FjW0skIqyKsKD4VQHGQwOvTeCs11vR05YlDP6JlRXSJ
-         juIg==
-X-Gm-Message-State: AOAM532Q+Q10l8xcER9p2iaZ6smlwtFw/lJeW3B2/QcVZAYit9cVa7y4
-        BCSadTvst5KnNTRGIQktPZfjW7C4c4szDoJDCmCuVw==
-X-Google-Smtp-Source: ABdhPJzV2NlH20rN2slIH3t2yEuNNhBQjJpDqRJFy64EHQl/Nn2Dm+/keOoqb3l/wQYM8tURyLvI1RfnId1vEWlnN2E=
-X-Received: by 2002:a62:80cf:0:b029:1f3:1959:2e42 with SMTP id
- j198-20020a6280cf0000b02901f319592e42mr3171023pfd.39.1617199804922; Wed, 31
- Mar 2021 07:10:04 -0700 (PDT)
+        id S235835AbhCaOT4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 31 Mar 2021 10:19:56 -0400
+Received: from mga12.intel.com ([192.55.52.136]:25411 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236101AbhCaOTX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 31 Mar 2021 10:19:23 -0400
+IronPort-SDR: uYcsX6iOCzlSVbtCe17emogWsovB1tiFCUhKBPyh/CJM1cWUGmBw7dGtf/91/HoIKiJ+wpuJ9t
+ +zdCXyAktksA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9940"; a="171428736"
+X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
+   d="scan'208";a="171428736"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 07:19:22 -0700
+IronPort-SDR: 1IJ9U49tZyes7rDzg9rqFwKFSXrdEJkj5eIUoEaQ5WKaBH6PmPZNxD5VbIUV+iRyXM1v7IpFVF
+ 32EurUDBrWSg==
+X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
+   d="scan'208";a="394054396"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 07:19:19 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lRbgi-00025b-Ql; Wed, 31 Mar 2021 17:19:16 +0300
+Date:   Wed, 31 Mar 2021 17:19:16 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sanket Goswami <Sanket.Goswami@amd.com>
+Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+Subject: Re: [PATCH v4] i2c: designware: Add driver support for AMD NAVI GPU
+Message-ID: <YGSE5C+3E6BNR997@smile.fi.intel.com>
+References: <20210331140730.2058967-1-Sanket.Goswami@amd.com>
 MIME-Version: 1.0
-References: <20210331104622.84657-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20210331104622.84657-1-andriy.shevchenko@linux.intel.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Wed, 31 Mar 2021 16:09:53 +0200
-Message-ID: <CAG3jFyufem_LrhmYar==qzWmEhOp_Q3LLErchzLBJeEjfRb0Zg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] i2c: drivers: Use generic definitions for bus
- frequencies (part 2)
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-i2c@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210331140730.2058967-1-Sanket.Goswami@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hey Andy,
+On Wed, Mar 31, 2021 at 07:37:30PM +0530, Sanket Goswami wrote:
+> The Latest AMD NAVI GPU card has an integrated Type-C controller and
+> Designware I2C with PCI Interface. The PD controller for USB Type-C can
+> be accessed over I2C. The client driver is part of the USB Type-C UCSI
+> driver.
+> 
+> Also, there exists a couple of notable IP limitations that are dealt as
+> workarounds:
+> - I2C transaction work on a polling mode as IP does not generate
+> interrupt.
+> - I2C read command sent twice to address the IP issues.
+> - AMD NAVI GPU based products are already in the commercial market,
+>   hence some of the I2C parameters are statically programmed as they
+>   can not be part of the ACPI table.
 
-This patch looks good to me.
+Looks good enough to me, thanks.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-
-On Wed, 31 Mar 2021 at 12:46, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Since we have generic definitions for bus frequencies, let's use them.
->
-> Cc: Wolfram Sang <wsa@the-dreams.de>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Khalil Blaiech <kblaiech@nvidia.com>
+> Reviewed-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+> Co-developed-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+> Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+> Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
 > ---
-> v2: added tag (Khalil), converted one missed place in DesignWare driver
->  drivers/i2c/busses/i2c-designware-master.c |  2 +-
->  drivers/i2c/busses/i2c-mlxbf.c             | 14 ++++----------
->  drivers/i2c/busses/i2c-qcom-cci.c          |  4 ++--
->  3 files changed, 7 insertions(+), 13 deletions(-)
->
+> Changes in v4:
+> - Fixes review comments given by Andy. 
+> 
+> Changes in v3:
+> - Fixes runtime PM issue.
+> - Addressed review comments were given by Jarkko and Andy.
+> 
+> Changes in v2:
+> - Utilized existing functionality of i2c_dw_xfer_init to configure I2C
+>   bus.
+> - Removed i2c_dw_populate_client and rewrrient navi_amd_register_client
+>   to deduplicate from existing drivers.
+> - Addressed review comments were given by Andy.
+> 
+>  drivers/i2c/busses/i2c-designware-common.c |   3 +
+>  drivers/i2c/busses/i2c-designware-core.h   |   8 ++
+>  drivers/i2c/busses/i2c-designware-master.c | 133 +++++++++++++++++++++
+>  drivers/i2c/busses/i2c-designware-pcidrv.c |  61 ++++++++++
+>  4 files changed, 205 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+> index 3c19aada4b30..fdc34d9e3702 100644
+> --- a/drivers/i2c/busses/i2c-designware-common.c
+> +++ b/drivers/i2c/busses/i2c-designware-common.c
+> @@ -150,6 +150,9 @@ int i2c_dw_init_regmap(struct dw_i2c_dev *dev)
+>  	reg = readl(dev->base + DW_IC_COMP_TYPE);
+>  	i2c_dw_release_lock(dev);
+>  
+> +	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU)
+> +		map_cfg.max_register = AMD_UCSI_INTR_REG;
+> +
+>  	if (reg == swab32(DW_IC_COMP_TYPE_VALUE)) {
+>  		map_cfg.reg_read = dw_reg_read_swab;
+>  		map_cfg.reg_write = dw_reg_write_swab;
+> diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+> index 5392b82f68a4..6a53f75abf7c 100644
+> --- a/drivers/i2c/busses/i2c-designware-core.h
+> +++ b/drivers/i2c/busses/i2c-designware-core.h
+> @@ -295,8 +295,16 @@ struct dw_i2c_dev {
+>  
+>  #define MODEL_MSCC_OCELOT	BIT(8)
+>  #define MODEL_BAIKAL_BT1	BIT(9)
+> +#define MODEL_AMD_NAVI_GPU	BIT(10)
+>  #define MODEL_MASK		GENMASK(11, 8)
+>  
+> +/*
+> + * Enable UCSI interrupt by writing 0xd at register
+> + * offset 0x474 specified in hardware specification.
+> + */
+> +#define AMD_UCSI_INTR_REG	0x474
+> +#define AMD_UCSI_INTR_EN	0xd
+> +
+>  int i2c_dw_init_regmap(struct dw_i2c_dev *dev);
+>  u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset);
+>  u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset);
 > diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-> index dd27b9dbe931..3f4d2124e0fc 100644
+> index dd27b9dbe931..e288b654cb47 100644
 > --- a/drivers/i2c/busses/i2c-designware-master.c
 > +++ b/drivers/i2c/busses/i2c-designware-master.c
-> @@ -78,7 +78,7 @@ static int i2c_dw_set_timings_master(struct dw_i2c_dev *dev)
->          * difference is the timing parameter values since the registers are
->          * the same.
->          */
-> -       if (t->bus_freq_hz == 1000000) {
-> +       if (t->bus_freq_hz == I2C_MAX_FAST_MODE_PLUS_FREQ) {
->                 /*
->                  * Check are Fast Mode Plus parameters available. Calculate
->                  * SCL timing parameters for Fast Mode Plus if not set.
-> diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-> index 2fb0532d8a16..80ab831df349 100644
-> --- a/drivers/i2c/busses/i2c-mlxbf.c
-> +++ b/drivers/i2c/busses/i2c-mlxbf.c
-> @@ -172,12 +172,6 @@
->  #define MLXBF_I2C_SMBUS_THIGH_MAX_TBUF            0x14
->  #define MLXBF_I2C_SMBUS_SCL_LOW_TIMEOUT           0x18
->
-> -enum {
-> -       MLXBF_I2C_TIMING_100KHZ = 100000,
-> -       MLXBF_I2C_TIMING_400KHZ = 400000,
-> -       MLXBF_I2C_TIMING_1000KHZ = 1000000,
-> -};
-> -
+> @@ -23,6 +23,10 @@
+>  
+>  #include "i2c-designware-core.h"
+>  
+> +#define AMD_TIMEOUT_MIN_US	25
+> +#define AMD_TIMEOUT_MAX_US	250
+> +#define AMD_MASTERCFG_MASK	GENMASK(15, 0)
+> +
+>  static void i2c_dw_configure_fifo_master(struct dw_i2c_dev *dev)
+>  {
+>  	/* Configure Tx/Rx FIFO threshold levels */
+> @@ -259,6 +263,108 @@ static void i2c_dw_xfer_init(struct dw_i2c_dev *dev)
+>  	regmap_write(dev->map, DW_IC_INTR_MASK, DW_IC_INTR_MASTER_MASK);
+>  }
+>  
+> +static int i2c_dw_check_stopbit(struct dw_i2c_dev *dev)
+> +{
+> +	u32 val;
+> +	int ret;
+> +
+> +	ret = regmap_read_poll_timeout(dev->map, DW_IC_INTR_STAT, val,
+> +				       !(val & DW_IC_INTR_STOP_DET),
+> +					1100, 20000);
+> +	if (ret)
+> +		dev_err(dev->dev, "i2c timeout error %d\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+> +static int i2c_dw_status(struct dw_i2c_dev *dev)
+> +{
+> +	int status;
+> +
+> +	status = i2c_dw_wait_bus_not_busy(dev);
+> +	if (status)
+> +		return status;
+> +
+> +	return i2c_dw_check_stopbit(dev);
+> +}
+> +
+> +/*
+> + * Initiate and continue master read/write transaction with polling
+> + * based transfer routine afterward write messages into the Tx buffer.
+> + */
+> +static int amd_i2c_dw_xfer_quirk(struct i2c_adapter *adap, struct i2c_msg *msgs, int num_msgs)
+> +{
+> +	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
+> +	int msg_wrt_idx, msg_itr_lmt, buf_len, data_idx;
+> +	int cmd = 0, status;
+> +	u8 *tx_buf;
+> +	u32 val;
+> +
+> +	/*
+> +	 * In order to enable the interrupt for UCSI i.e. AMD NAVI GPU card,
+> +	 * it is mandatory to set the right value in specific register
+> +	 * (offset:0x474) as per the hardware IP specification.
+> +	 */
+> +	regmap_write(dev->map, AMD_UCSI_INTR_REG, AMD_UCSI_INTR_EN);
+> +
+> +	dev->msgs = msgs;
+> +	dev->msgs_num = num_msgs;
+> +	i2c_dw_xfer_init(dev);
+> +	i2c_dw_disable_int(dev);
+> +
+> +	/* Initiate messages read/write transaction */
+> +	for (msg_wrt_idx = 0; msg_wrt_idx < num_msgs; msg_wrt_idx++) {
+> +		tx_buf = msgs[msg_wrt_idx].buf;
+> +		buf_len = msgs[msg_wrt_idx].len;
+> +
+> +		if (!(msgs[msg_wrt_idx].flags & I2C_M_RD))
+> +			regmap_write(dev->map, DW_IC_TX_TL, buf_len - 1);
+> +		/*
+> +		 * Initiate the i2c read/write transaction of buffer length,
+> +		 * and poll for bus busy status. For the last message transfer,
+> +		 * update the command with stopbit enable.
+> +		 */
+> +		for (msg_itr_lmt = buf_len; msg_itr_lmt > 0; msg_itr_lmt--) {
+> +			if (msg_wrt_idx == num_msgs - 1 && msg_itr_lmt == 1)
+> +				cmd |= BIT(9);
+> +
+> +			if (msgs[msg_wrt_idx].flags & I2C_M_RD) {
+> +				/* Due to hardware bug, need to write the same command twice. */
+> +				regmap_write(dev->map, DW_IC_DATA_CMD, 0x100);
+> +				regmap_write(dev->map, DW_IC_DATA_CMD, 0x100 | cmd);
+> +				if (cmd) {
+> +					regmap_write(dev->map, DW_IC_TX_TL, 2 * (buf_len - 1));
+> +					regmap_write(dev->map, DW_IC_RX_TL, 2 * (buf_len - 1));
+> +					/*
+> +					 * Need to check the stop bit. However, it cannot be
+> +					 * detected from the registers so we check it always
+> +					 * when read/write the last byte.
+> +					 */
+> +					status = i2c_dw_status(dev);
+> +					if (status)
+> +						return status;
+> +
+> +					for (data_idx = 0; data_idx < buf_len; data_idx++) {
+> +						regmap_read(dev->map, DW_IC_DATA_CMD, &val);
+> +						tx_buf[data_idx] = val;
+> +					}
+> +					status = i2c_dw_check_stopbit(dev);
+> +					if (status)
+> +						return status;
+> +				}
+> +			} else {
+> +				regmap_write(dev->map, DW_IC_DATA_CMD, *tx_buf++ | cmd);
+> +				usleep_range(AMD_TIMEOUT_MIN_US, AMD_TIMEOUT_MAX_US);
+> +			}
+> +		}
+> +		status = i2c_dw_check_stopbit(dev);
+> +		if (status)
+> +			return status;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
 >  /*
->   * Defines SMBus operating frequency and core clock frequency.
->   * According to ADB files, default values are compliant to 100KHz SMBus
-> @@ -1202,7 +1196,7 @@ static int mlxbf_i2c_init_timings(struct platform_device *pdev,
->
->         ret = device_property_read_u32(dev, "clock-frequency", &config_khz);
->         if (ret < 0)
-> -               config_khz = MLXBF_I2C_TIMING_100KHZ;
-> +               config_khz = I2C_MAX_STANDARD_MODE_FREQ;
->
->         switch (config_khz) {
->         default:
-> @@ -1210,15 +1204,15 @@ static int mlxbf_i2c_init_timings(struct platform_device *pdev,
->                 pr_warn("Illegal value %d: defaulting to 100 KHz\n",
->                         config_khz);
->                 fallthrough;
-> -       case MLXBF_I2C_TIMING_100KHZ:
-> +       case I2C_MAX_STANDARD_MODE_FREQ:
->                 config_idx = MLXBF_I2C_TIMING_CONFIG_100KHZ;
->                 break;
->
-> -       case MLXBF_I2C_TIMING_400KHZ:
-> +       case I2C_MAX_FAST_MODE_FREQ:
->                 config_idx = MLXBF_I2C_TIMING_CONFIG_400KHZ;
->                 break;
->
-> -       case MLXBF_I2C_TIMING_1000KHZ:
-> +       case I2C_MAX_FAST_MODE_PLUS_FREQ:
->                 config_idx = MLXBF_I2C_TIMING_CONFIG_1000KHZ;
->                 break;
->         }
-> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index 1c259b5188de..c63d5545fc2a 100644
-> --- a/drivers/i2c/busses/i2c-qcom-cci.c
-> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -569,9 +569,9 @@ static int cci_probe(struct platform_device *pdev)
->                 cci->master[idx].mode = I2C_MODE_STANDARD;
->                 ret = of_property_read_u32(child, "clock-frequency", &val);
->                 if (!ret) {
-> -                       if (val == 400000)
-> +                       if (val == I2C_MAX_FAST_MODE_FREQ)
->                                 cci->master[idx].mode = I2C_MODE_FAST;
-> -                       else if (val == 1000000)
-> +                       else if (val == I2C_MAX_FAST_MODE_PLUS_FREQ)
->                                 cci->master[idx].mode = I2C_MODE_FAST_PLUS;
->                 }
->
-> --
-> 2.30.2
->
+>   * Initiate (and continue) low level master read/write transaction.
+>   * This function is only called from i2c_dw_isr, and pumping i2c_msg
+> @@ -462,6 +568,16 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+>  
+>  	pm_runtime_get_sync(dev->dev);
+>  
+> +	/*
+> +	 * Initiate I2C message transfer when AMD NAVI GPU card is enabled,
+> +	 * As it is polling based transfer mechanism, which does not support
+> +	 * interrupt based functionalities of existing DesignWare driver.
+> +	 */
+> +	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
+> +		ret = amd_i2c_dw_xfer_quirk(adap, msgs, num);
+> +		goto done_nolock;
+> +	}
+> +
+>  	if (dev_WARN_ONCE(dev->dev, dev->suspended, "Transfer while suspended\n")) {
+>  		ret = -ESHUTDOWN;
+>  		goto done_nolock;
+> @@ -738,6 +854,20 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+>  	return 0;
+>  }
+>  
+> +static int amd_i2c_adap_quirk(struct dw_i2c_dev *dev)
+> +{
+> +	struct i2c_adapter *adap = &dev->adapter;
+> +	int ret;
+> +
+> +	pm_runtime_get_noresume(dev->dev);
+> +	ret = i2c_add_numbered_adapter(adap);
+> +	if (ret)
+> +		dev_err(dev->dev, "Failed to add adapter: %d\n", ret);
+> +	pm_runtime_put_noidle(dev->dev);
+> +
+> +	return ret;
+> +}
+> +
+>  int i2c_dw_probe_master(struct dw_i2c_dev *dev)
+>  {
+>  	struct i2c_adapter *adap = &dev->adapter;
+> @@ -774,6 +904,9 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
+>  	adap->dev.parent = dev->dev;
+>  	i2c_set_adapdata(adap, dev);
+>  
+> +	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU)
+> +		return amd_i2c_adap_quirk(dev);
+> +
+>  	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
+>  		irq_flags = IRQF_NO_SUSPEND;
+>  	} else {
+> diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> index 55c83a7a24f3..7ca0017883a6 100644
+> --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> @@ -26,6 +26,7 @@
+>  #include "i2c-designware-core.h"
+>  
+>  #define DRIVER_NAME "i2c-designware-pci"
+> +#define AMD_CLK_RATE_HZ	100000
+>  
+>  enum dw_pci_ctl_id_t {
+>  	medfield,
+> @@ -34,6 +35,7 @@ enum dw_pci_ctl_id_t {
+>  	cherrytrail,
+>  	haswell,
+>  	elkhartlake,
+> +	navi_amd,
+>  };
+>  
+>  struct dw_scl_sda_cfg {
+> @@ -78,11 +80,23 @@ static struct dw_scl_sda_cfg hsw_config = {
+>  	.sda_hold = 0x9,
+>  };
+>  
+> +/* NAVI-AMD HCNT/LCNT/SDA hold time */
+> +static struct dw_scl_sda_cfg navi_amd_config = {
+> +	.ss_hcnt = 0x1ae,
+> +	.ss_lcnt = 0x23a,
+> +	.sda_hold = 0x9,
+> +};
+> +
+>  static u32 mfld_get_clk_rate_khz(struct dw_i2c_dev *dev)
+>  {
+>  	return 25000;
+>  }
+>  
+> +static u32 navi_amd_get_clk_rate_khz(struct dw_i2c_dev *dev)
+> +{
+> +	return AMD_CLK_RATE_HZ;
+> +}
+> +
+>  static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+>  {
+>  	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
+> @@ -104,6 +118,35 @@ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+>  	return -ENODEV;
+>  }
+>  
+> + /*
+> +  * TODO find a better way how to deduplicate instantiation
+> +  * of USB PD slave device from nVidia GPU driver.
+> +  */
+> +static int navi_amd_register_client(struct dw_i2c_dev *dev)
+> +{
+> +	struct i2c_board_info	info;
+> +
+> +	memset(&info, 0, sizeof(struct i2c_board_info));
+> +	strscpy(info.type, "ccgx-ucsi", I2C_NAME_SIZE);
+> +	info.addr = 0x08;
+> +	info.irq = dev->irq;
+> +
+> +	dev->slave = i2c_new_client_device(&dev->adapter, &info);
+> +	if (!dev->slave)
+> +		return -ENODEV;
+> +
+> +	return 0;
+> +}
+> +
+> +static int navi_amd_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+> +{
+> +	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
+> +
+> +	dev->flags |= MODEL_AMD_NAVI_GPU;
+> +	dev->timings.bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
+> +	return 0;
+> +}
+> +
+>  static int mrfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+>  {
+>  	/*
+> @@ -155,6 +198,12 @@ static struct dw_pci_controller dw_pci_controllers[] = {
+>  		.bus_num = -1,
+>  		.get_clk_rate_khz = ehl_get_clk_rate_khz,
+>  	},
+> +	[navi_amd] = {
+> +		.bus_num = -1,
+> +		.scl_sda_cfg = &navi_amd_config,
+> +		.setup =  navi_amd_setup,
+> +		.get_clk_rate_khz = navi_amd_get_clk_rate_khz,
+> +	},
+>  };
+>  
+>  #ifdef CONFIG_PM
+> @@ -274,6 +323,14 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+>  		return r;
+>  	}
+>  
+> +	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
+> +		r = navi_amd_register_client(dev);
+> +		if (r) {
+> +			dev_err(dev->dev, "register client failed with %d\n", r);
+> +			return r;
+> +		}
+> +	}
+> +
+>  	pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
+>  	pm_runtime_use_autosuspend(&pdev->dev);
+>  	pm_runtime_put_autosuspend(&pdev->dev);
+> @@ -337,6 +394,10 @@ static const struct pci_device_id i2_designware_pci_ids[] = {
+>  	{ PCI_VDEVICE(INTEL, 0x4bbe), elkhartlake },
+>  	{ PCI_VDEVICE(INTEL, 0x4bbf), elkhartlake },
+>  	{ PCI_VDEVICE(INTEL, 0x4bc0), elkhartlake },
+> +	{ PCI_VDEVICE(ATI,  0x7314), navi_amd },
+> +	{ PCI_VDEVICE(ATI,  0x73a4), navi_amd },
+> +	{ PCI_VDEVICE(ATI,  0x73e4), navi_amd },
+> +	{ PCI_VDEVICE(ATI,  0x73c4), navi_amd },
+>  	{ 0,}
+>  };
+>  MODULE_DEVICE_TABLE(pci, i2_designware_pci_ids);
+> -- 
+> 2.25.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
