@@ -2,100 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D71350892
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 22:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7C935099E
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 23:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbhCaUzX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 Mar 2021 16:55:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50686 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232690AbhCaUzU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 31 Mar 2021 16:55:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 19D5361075;
-        Wed, 31 Mar 2021 20:55:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617224119;
-        bh=pJT5gjTTfqCWP+YyIpkhXwfsnZvDOF+ZqFbwATowrqM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vQrYsoDAjcr28337pzGluXdg4Hodfa27jANRxL+5PMPmPnD9gP4XfFlLQGigrLSIF
-         5M8PFYJMcyiKoSbfOKgOqw/w8svms2e4ISL3J2I9G6uEkFr4gFLgSZQPtRdli5oGNx
-         Nqb+Q3pAxOSbEPOW1Cmp8QuLHHPzOw3T5CPpmEJ/6gSwEtHOP6lYokR8uLXxobTiXJ
-         ymf9wmeBrKDgd64Zkxn/obBV9kZQDjDiHnUbORtPlsgRx/udEp6RBsl+MM4puYn4Ud
-         x2GoX/XOnhoWOVKhdFrGe5yhvbT4OW3xoy/0pYNZ0zqPhEGlzvQsgJb5R6qIsl1JpJ
-         rA/CVGbQXc+RQ==
-Date:   Wed, 31 Mar 2021 22:55:13 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] Adding i2c-cp2615: i2c support for Silicon Labs'
- CP2615 Digital Audio Bridge
-Message-ID: <20210331205513.GA994@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210318115210.2014204-1-bence98@sch.bme.hu>
- <20210318115210.2014204-3-bence98@sch.bme.hu>
- <20210331095820.GA29323@ninjato>
- <CACCVKEHYdUgx1QuJqUz3=OettOJHQWuA1O+ve1ZUDPAWz+n0aA@mail.gmail.com>
+        id S231676AbhCaVhr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 31 Mar 2021 17:37:47 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:3511 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232685AbhCaVho (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 Mar 2021 17:37:44 -0400
+Received: from DGGEML404-HUB.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4F9fkV382pzRX2b;
+        Thu,  1 Apr 2021 05:35:46 +0800 (CST)
+Received: from dggema773-chm.china.huawei.com (10.1.198.217) by
+ DGGEML404-HUB.china.huawei.com (10.3.17.39) with Microsoft SMTP Server (TLS)
+ id 14.3.498.0; Thu, 1 Apr 2021 05:37:41 +0800
+Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
+ dggema773-chm.china.huawei.com (10.1.198.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2106.2; Thu, 1 Apr 2021 05:37:41 +0800
+Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
+ dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.2106.013;
+ Thu, 1 Apr 2021 05:37:41 +0800
+From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        yangyicong <yangyicong@huawei.com>
+Subject: RE: [PATCH v1 1/1] i2c: designware: Adjust bus_freq_hz when refuse
+ high speed mode set
+Thread-Topic: [PATCH v1 1/1] i2c: designware: Adjust bus_freq_hz when refuse
+ high speed mode set
+Thread-Index: AQHXJh2955I5oqU49UuEJBCnbAaQ8aqenc/g
+Date:   Wed, 31 Mar 2021 21:37:41 +0000
+Message-ID: <07b6264280314d919f2747290bb80b01@hisilicon.com>
+References: <20210331110510.67523-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210331110510.67523-1-andriy.shevchenko@linux.intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.126.203.26]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="J/dobhs11T7y2rNN"
-Content-Disposition: inline
-In-Reply-To: <CACCVKEHYdUgx1QuJqUz3=OettOJHQWuA1O+ve1ZUDPAWz+n0aA@mail.gmail.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---J/dobhs11T7y2rNN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
+> -----Original Message-----
+> From: Andy Shevchenko [mailto:andriy.shevchenko@linux.intel.com]
+> Sent: Thursday, April 1, 2021 12:05 AM
+> To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>; Serge Semin
+> <Sergey.Semin@baikalelectronics.ru>; linux-i2c@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>; Mika Westerberg
+> <mika.westerberg@linux.intel.com>; wsa@kernel.org; yangyicong
+> <yangyicong@huawei.com>; Song Bao Hua (Barry Song) <song.bao.hua@hisilicon.com>
+> Subject: [PATCH v1 1/1] i2c: designware: Adjust bus_freq_hz when refuse high
+> speed mode set
+> 
+> When hardware doesn't support High Speed Mode, we forget bus_freq_hz
+> timing adjustment. This makes the timings and real registers being
+> unsynchronized. Adjust bus_freq_hz when refuse high speed mode set.
+> 
+> Fixes: b6e67145f149 ("i2c: designware: Enable high speed mode")
+> Reported-by: "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 
-> > drivers/i2c/busses/i2c-cp2615.c:78:5: warning: symbol 'cp2615_init_iop_msg' was not declared. Should it be static?
-> > drivers/i2c/busses/i2c-cp2615.c:96:5: warning: symbol 'cp2615_init_i2c_msg' was not declared. Should it be static?
-> > drivers/i2c/busses/i2c-cp2615.c:102:5: warning: symbol 'cp2615_check_status' was not declared. Should it be static?
-> I can forward declare these (copying from the header I used in v1 of
-> the patch), but I'm not sure I understand the rationale behind these
-> warnings...
+Thanks for fixing that.
 
-Just make them static and all is good.
+Reviewed-by: Barry Song <song.bao.hua@hisilicon.com>
 
-> > drivers/i2c/busses/i2c-cp2615.c:212:27: warning: symbol 'cp2615_i2c_quirks' was not declared. Should it be static?
-> Especially this. I think I will make this static instead, since it
-> won't ever be exported to any other module.
+>  drivers/i2c/busses/i2c-designware-master.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-master.c
+> b/drivers/i2c/busses/i2c-designware-master.c
+> index 34bb4e21bcc3..9bfa06e31eec 100644
+> --- a/drivers/i2c/busses/i2c-designware-master.c
+> +++ b/drivers/i2c/busses/i2c-designware-master.c
+> @@ -129,6 +129,7 @@ static int i2c_dw_set_timings_master(struct dw_i2c_dev
+> *dev)
+>  		if ((comp_param1 & DW_IC_COMP_PARAM_1_SPEED_MODE_MASK)
+>  			!= DW_IC_COMP_PARAM_1_SPEED_MODE_HIGH) {
+>  			dev_err(dev->dev, "High Speed not supported!\n");
+> +			t->bus_freq_hz = I2C_MAX_FAST_MODE_FREQ;
+>  			dev->master_cfg &= ~DW_IC_CON_SPEED_MASK;
+>  			dev->master_cfg |= DW_IC_CON_SPEED_FAST;
+>  			dev->hs_hcnt = 0;
+> --
+> 2.30.2
 
-Exactly.
-
-> > The missing 'static' are what buildbot also reported and are correct.
-> The lkp bot complained about MODULE_DEVICE_TABLE and MODULE_AUTHOR,
-> which, again, I don't see what is wrong with it.
-
-Yeah, that may be a false positive.
-
-> I will now send an updated patch, with  few additions too.
-
-Cool, thanks!
-
-
---J/dobhs11T7y2rNN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBk4a4ACgkQFA3kzBSg
-Kbazzw//aMs/GVJGCLrvn9s+1KBViH7ko8NtKI9KLzbIkMKT2YWYHHbej3w+ZNTc
-Lh0wnDo0A2g5UR3ncn1TkAVF1XJALVPfod1wC7ffD8sElw9mpf9sQZOlMo61f3k7
-SFPa+gIYEZXxbFH1AEz6OY44frroBj5f5m4nVTuggzv1zLftntC90UN5c9gyGO5f
-BTNy72vzZEoovq9ZwK5nJoEhUYkF2GrZMrOf+jpk7+g2Yf1mZs0v6iYy/YL3HzbC
-w6ifLeFECp9CyIgnpeFWJx6xFu06ZpxTi38sSc4abZQ95gE73pbXJSBoX6/CeZYD
-aX+UmUZV97cEORG4DsDof6Kui5h5JYrVHHAZrRxhyDJgQMBcV6eS/ey6bChAIoct
-Gu03pcs1GOXh458kOjlrzVEFJKfB6qbHu6f3O5fPp6Nf67grAqwvjesnYjvIYK5/
-AqN3cULx33FYfdI6HZalLHzbJt3e6p7Rc5JNwlKw9mpLwxu19r05+h0AvrBDCuFF
-vT6upSNgdSVY8yKhDuZXFIBNBUiXFJMoptYO4NG02c/Xw9ASjx3fWeIpGqklvv6y
-uSoGMdTR/FJXpJtgZwjmXL3T+teTYWPVkfLMcbBu1PSTa2KFZiWTienkY4CB66YQ
-hz6UbHWcko3Qn0ztrCschk2scEva+MLxX+7cEChm0lfIZiwysFU=
-=pTwX
------END PGP SIGNATURE-----
-
---J/dobhs11T7y2rNN--
