@@ -2,95 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EDC34FBF3
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 10:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1047C34FC98
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 11:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbhCaIxQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 Mar 2021 04:53:16 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:3510 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbhCaIxF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 Mar 2021 04:53:05 -0400
-Received: from DGGEML402-HUB.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4F9KmD01rbzRSWg;
-        Wed, 31 Mar 2021 16:51:08 +0800 (CST)
-Received: from dggema774-chm.china.huawei.com (10.1.198.216) by
- DGGEML402-HUB.china.huawei.com (10.3.17.38) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Wed, 31 Mar 2021 16:53:03 +0800
-Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
- dggema774-chm.china.huawei.com (10.1.198.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Wed, 31 Mar 2021 16:53:02 +0800
-Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
- dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.2106.013;
- Wed, 31 Mar 2021 16:53:02 +0800
-From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     yangyicong <yangyicong@huawei.com>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "Sergey.Semin@baikalelectronics.ru" 
-        <Sergey.Semin@baikalelectronics.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "digetx@gmail.com" <digetx@gmail.com>,
-        "treding@nvidia.com" <treding@nvidia.com>,
-        "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
-        "rmk+kernel@armlinux.org.uk" <rmk+kernel@armlinux.org.uk>,
-        John Garry <john.garry@huawei.com>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH 5/5] i2c: designware: Switch over to
- i2c_freq_mode_string()
-Thread-Topic: [PATCH 5/5] i2c: designware: Switch over to
- i2c_freq_mode_string()
-Thread-Index: AQHXJXAQhX+a0hiUXkCpTQNzS4ZJoKqdC6Iw//+Ck4CAAITk4IAAAadwgAAQg4CAAKJI0A==
-Date:   Wed, 31 Mar 2021 08:53:02 +0000
-Message-ID: <793f587a5bc744b393cf677258bce50e@hisilicon.com>
-References: <1617113966-40498-1-git-send-email-yangyicong@hisilicon.com>
- <1617113966-40498-6-git-send-email-yangyicong@hisilicon.com>
- <baa1c622040745b0b13e99e3f7bf2cd3@hisilicon.com>
- <CAHp75VdY58Tm0FDcoVDWuw0LBKUFWC_hBCb5t=4WX_MPzsLvZw@mail.gmail.com>
- <7e82e13b245a4b11917a2e0191acdb1a@hisilicon.com>
- <CAHp75VeTj-wk3WP2-Unoti0+Cajx33b8NOUbBiSBQLmJHn=YAg@mail.gmail.com>
-In-Reply-To: <CAHp75VeTj-wk3WP2-Unoti0+Cajx33b8NOUbBiSBQLmJHn=YAg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.202.63]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S234641AbhCaJXH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 31 Mar 2021 05:23:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44798 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234545AbhCaJWf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 31 Mar 2021 05:22:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9F8F66198F;
+        Wed, 31 Mar 2021 09:22:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617182555;
+        bh=RytI4b+szUa9Y8qjxl14EVaICLgMoNA/tChtgCeTrQ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pWd+5T4hnabsrqVRV7AG2Kgj6zbqAhCbb83wxY90N+uoqGK3ZYpdTwt4t/WR1gNiB
+         IV5y5akKmiWL8BkI0ZOuSp5VB9hzzDCiSrA9/0+Ey7w8bDTIPGYgJH1FDTCqBIxn4U
+         lW4AcmQ+4180h8lESKlEkgNLUie/Svl2q91XIcv7n69cVDdKrpJhPXqANYcX415eyS
+         ynuB5LPc9rIx4oNcRmtQX+xilFT6nkzUIh8ojMzWOBQBIVYniaY/xiqO5Pz873DYYy
+         4xRtefrmcXh5DrPldde5/h6j5yZVZpWWvUmAJv5MskrCkF0jz60CNHq2SGS/KW3oY4
+         0q8QBhoUCcIbw==
+Date:   Wed, 31 Mar 2021 11:22:32 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/12] i2c: Adding support for software nodes
+Message-ID: <20210331092232.GL1025@ninjato>
+References: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FnOKg9Ah4tDwTfQS"
+Content-Disposition: inline
+In-Reply-To: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQo+IE5vLCBwbGVhc2UgcmVhZCB0aGUgY29kZSBjYXJlZnVsbHkuDQo+IFdlIGNhbiBkdXBsaWNh
-dGUgY29uZGl0aW9uYWwsIGJ1dCBpdCBicmluZ3MgYSBiaXQgb2YgaW5jb25zaXN0ZW5jeSB0byBo
-b3cgdGhlIGNvdW50ZXJzIGFyZSBwcmludGVkLg0KDQpUaGFua3MgZm9yIGNsYXJpZmljYXRpb24s
-IEkgYW0gc3RpbGwgY29uZnVzZWQgYXMgdGhlIG9yaWdpbmFsDQpjb2RlIHByaW50IHRoZSByZWFs
-IG1vZGUgYmFzZWQgb24gZGV2LT5tYXN0ZXJfY2ZnLCB0aGUgbmV3DQpjb2RlIGlzIHByaW50aW5n
-IG1vZGUgYmFzZWQgb24gZnJlcXVlbmN5Lg0KDQpNeSB1bmRlcnN0YW5kaW5nIGlzIHRoZSBvcmln
-aW5hbCBjb2RlIGNvdWxkIGZhbGwgYmFjayB0byBhIGxvd2VyDQpzcGVlZCB3aGVuIGhpZ2hlciBz
-cGVlZCBtb2RlcyB3ZXJlIG5vdCBzZXQgc3VjY2Vzc2Z1bGx5LiBGb3INCmV4YW1wbGUsIGhpZ2gg
-c3BlZWQgbW9kZSBmYWxscyBiYWNrIHRvIGZhc3QgbW9kZToNCg0KaWYgKChkZXYtPm1hc3Rlcl9j
-ZmcgJiBEV19JQ19DT05fU1BFRURfTUFTSykgPT0NCgkJRFdfSUNfQ09OX1NQRUVEX0hJR0gpIHsN
-CgkJaWYgKChjb21wX3BhcmFtMSAmIERXX0lDX0NPTVBfUEFSQU1fMV9TUEVFRF9NT0RFX01BU0sp
-DQoJCQkhPSBEV19JQ19DT01QX1BBUkFNXzFfU1BFRURfTU9ERV9ISUdIKSB7DQoJCQlkZXZfZXJy
-KGRldi0+ZGV2LCAiSGlnaCBTcGVlZCBub3Qgc3VwcG9ydGVkIVxuIik7DQoJCQlkZXYtPm1hc3Rl
-cl9jZmcgJj0gfkRXX0lDX0NPTl9TUEVFRF9NQVNLOw0KCQkJZGV2LT5tYXN0ZXJfY2ZnIHw9IERX
-X0lDX0NPTl9TUEVFRF9GQVNUOw0KCQkJZGV2LT5oc19oY250ID0gMDsNCgkJCWRldi0+aHNfbGNu
-dCA9IDA7DQoJCX0NCg0KdGhlIG9yaWdpbmFsIGNvZGUgd2FzIHByaW50aW5nIHRoZSBtb2RlIGJh
-c2VkIG9uIHRoZSBuZXcNCmZhbGxiYWNrIGRldi0+bWFzdGVyX2NmZyBidXQgbm90IHRoZSBtb2Rl
-IGNhbGN1bGF0ZWQgZnJvbQ0KZnJlcXVlbmN5Og0KDQoJc3dpdGNoIChkZXYtPm1hc3Rlcl9jZmcg
-JiBEV19JQ19DT05fU1BFRURfTUFTSykgew0KCWNhc2UgRFdfSUNfQ09OX1NQRUVEX1NURDoNCgkJ
-bW9kZV9zdHIgPSAiU3RhbmRhcmQgTW9kZSI7DQoJCWJyZWFrOw0KCWNhc2UgRFdfSUNfQ09OX1NQ
-RUVEX0hJR0g6DQoJCW1vZGVfc3RyID0gIkhpZ2ggU3BlZWQgTW9kZSI7DQoJCWJyZWFrOw0KCWRl
-ZmF1bHQ6DQoJCW1vZGVfc3RyID0gIkZhc3QgTW9kZSI7DQoJfQ0KDQo+ID4gK8KgIMKgIMKgcmV0
-dXJuIDA7DQo+ID7CoCB9DQo+ID4NCj4gPsKgIC8qKg0KPiA+IC0tDQo+ID4gMi44LjENCj4gDQo+
-IA0KPiAtLQ0KPiBXaXRoIEJlc3QgUmVnYXJkcywNCj4gQW5keSBTaGV2Y2hlbmtvDQoNCg0KLS0g
-DQpXaXRoIEJlc3QgUmVnYXJkcywNCkFuZHkgU2hldmNoZW5rbw0KDQo=
+
+--FnOKg9Ah4tDwTfQS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
+> The old device property API (device_add_properties()) is going to be
+> removed. These prepare the i2c subsystem and drivers for the change.
+> The change is fairly trivial in case of i2c. All we need to do is add
+> complete software nodes to the devices instead of only the device
+> properties in those nodes.
+
+This looks like a nice cleanup!
+
+Reviewed-by: Wolfram Sang <wsa@kernel.org> # for the I2C parts
+
+Which tree should this go into? I can offer I2C but am also fine with
+another one...
+
+
+--FnOKg9Ah4tDwTfQS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBkP1QACgkQFA3kzBSg
+Kbaw6A//ekld1xJ32sOmWlFDDXcO1Mm24LzRLE6F9yiNwiAYvWgqew3z+vQ62Q7W
+NxoQuBS/3Qq9ccj1DyS4oylFYGG6taoruy9YLjIH/vFgqc6lbl5ekrYKFCWe61sB
+BcwbJB9O8u2WTYSLg2mgzcz9xVCoFCCaQLskx+5LvoLS3xHrO341UlD3nFviJk3W
+qGD9lB0DmaOOmGhhTXM/Qdv4oy/slGB4GhO2tMfbYV462vbhjdxSxRmCGkbkI0Hs
+Rtc0zL1PKZvR+QgpQTu7BKdnneU07697p+D2sRiXwkR79TW9hhJh9t4c3IbbUl8s
+a8QwJaNRxSiKSXhfAojeLSgz0RvaMRrYXSQnkCbctqxOrmnAV46DCoo86jmecBbt
+wrruCQVsBoZOs9OvurJgxBdRb1+9d1PJu9nW2pNkb0MMKjbdnWvhPayl0xwoi9Ip
+Jd4H76wxxt3sx1IEsRhXyfRQ6iuLxUAFTwfSqU/NStLvw4oxWws9p6sZ9419MiUz
+1of8a0lt44DjD+kf/3+dHACCIBLR9dGBx3n8eSO6wuUOQSEhntCN81vkFiTfNyCS
+1yqRxf/RnIS6igkeo0EI/J+hn6Ky8K0oH9ZClHzKBwwscpIOCkhfnUiv6g5fblNL
+n4hdqOUK9ObDZKOgxooe+jdphYe8jhYmzkQRbyKw49uMlpQNqXI=
+=d4SE
+-----END PGP SIGNATURE-----
+
+--FnOKg9Ah4tDwTfQS--
