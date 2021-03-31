@@ -2,92 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC50A34FDDD
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 12:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC2B34FDE2
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 Mar 2021 12:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234876AbhCaKOb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 Mar 2021 06:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234890AbhCaKOM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 Mar 2021 06:14:12 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF46EC061574;
-        Wed, 31 Mar 2021 03:14:05 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id f2-20020a17090a4a82b02900c67bf8dc69so917732pjh.1;
-        Wed, 31 Mar 2021 03:14:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F1YkyOMP0wJPgBURTtt63CrNTQAoys/vYKd1J6GUTeQ=;
-        b=e0ryJIaBfp29NpDIsf8uc3dX1SM61cv4hdDMQP4gpwqgQA0QeL/tWTPOZTEqjh24+E
-         CwokC7cgqpYfGJEt+AxTH1odHbWLH/3TbSTLFr7FiCQr5rYh+7XybZGrrawNmjIwWfwv
-         w5nH9Ik9/NcWiZgDO3kIdSpgrRkU9UBos4bogb9zFekdkBxzH9FVavDshSEMarlswrmY
-         IbUUT5tj04retqZ8nH/rE/oOO5sXfow8V4sOdm4L8DO8qSzyPt29xcqTJd5GRr9EzRQw
-         aXjC0VJWWO6j+s5iFgwFJUOlv4kdpaC3Gf5Q3kRVxMp6fFOYvbTG8lXDe7mIFyYr9RlM
-         Y5HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F1YkyOMP0wJPgBURTtt63CrNTQAoys/vYKd1J6GUTeQ=;
-        b=PkdZuY/wn32PxIdnnOXy9+R5p+bHW+490hMtSaKle46PSvpG7HpgvSUjWRksE8XVk/
-         YTG+2O85LtgvHe5LSBypPyWCzUqHKei2Zj3Brzs9ULFOh8DVvloEv5p43xx5elCHIG/2
-         bNfUeTEJKOLzcTccK/RBpXRzX1+bPrlQLJeJQSyXh1rKJbEt1yKzCzv4VRQTHAV1RNCd
-         Yv47kf57Dv+cuce4L4uPHmtTAb3mzlI/ZhmwSzuGYE0E4FjJM3VPDGd1DVyNRNfJcpld
-         a0M3E1sJczav266Cu3S7Ps7VSygxKCzTZL7Ov/edzOsSV1XlcD69QFXXd0cdxdFVQo9U
-         cmTg==
-X-Gm-Message-State: AOAM531hjEA1vLIWLxvaohTDHoaa8xnl40V47kIK8EIPJHQZz927nJcH
-        hUx8HZkS6IjDTlV7cNC5BZAHSgQ4ylf2CauCEyM=
-X-Google-Smtp-Source: ABdhPJx1HDeLlxyvmhGidVheMaey/qhxP6V63IqjsHWGkeVi05wC3/bYFGgWJMFNvt3TXsjCcDwuBHQaCWb08h+DSMw=
-X-Received: by 2002:a17:90a:e454:: with SMTP id jp20mr2860644pjb.129.1617185645305;
- Wed, 31 Mar 2021 03:14:05 -0700 (PDT)
+        id S234935AbhCaKRN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 31 Mar 2021 06:17:13 -0400
+Received: from mga09.intel.com ([134.134.136.24]:23079 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234860AbhCaKRF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 31 Mar 2021 06:17:05 -0400
+IronPort-SDR: xJFtICqJWGVklP00BnsgpCh0Zh1K/08wp+Um/lD01rTEI2932GfcOi2WUXHSPfEtaPM9/sf9nA
+ yKxRkfNf2+Yg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="192076449"
+X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
+   d="scan'208";a="192076449"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 03:17:04 -0700
+IronPort-SDR: 7a+WPhz86lGLshlF/+hswA4/OUk0s30sW7IdotTiZ5JAXAxOMkOn+KV5lsA1fKSwHom1yAvraz
+ 64ClYVfoorWg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
+   d="scan'208";a="516833785"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 31 Mar 2021 03:17:02 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Mar 2021 13:17:01 +0300
+Date:   Wed, 31 Mar 2021 13:17:01 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/12] i2c: Adding support for software nodes
+Message-ID: <YGRMHf63aHniHIJW@kuha.fi.intel.com>
+References: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
+ <20210331092232.GL1025@ninjato>
 MIME-Version: 1.0
-References: <20210330134633.29889-1-andriy.shevchenko@linux.intel.com> <4631eddd-1855-566e-7d3c-591e5d559cf8@linux.intel.com>
-In-Reply-To: <4631eddd-1855-566e-7d3c-591e5d559cf8@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 31 Mar 2021 13:13:48 +0300
-Message-ID: <CAHp75VdCXuprrRpF6-DihSNJr=ghp5TuJVqh4rMs=GG7fBfd_A@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] i2c: designware: Switch over to i2c_freq_mode_string()
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yicong Yang <yangyicong@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210331092232.GL1025@ninjato>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 11:42 AM Jarkko Nikula
-<jarkko.nikula@linux.intel.com> wrote:
->
-> On 3/30/21 4:46 PM, Andy Shevchenko wrote:
-> > Use generic i2c_freq_mode_string() helper to print chosen bus speed.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> > Depends on the "Add support for HiSilicon I2C controller" series.
-> > Message-Id - 1617109549-4013-1-git-send-email-yangyicong@hisilicon.com
-> > Yicong, feel free to attach to your new version of it.
-> >
-> >   drivers/i2c/busses/i2c-designware-master.c | 20 ++++----------------
-> >   1 file changed, 4 insertions(+), 16 deletions(-)
-> >
-> Please note kernel test robot <lkp@intel.com> reported some issues with
-> this patch before included in this series.
+On Wed, Mar 31, 2021 at 11:22:32AM +0200, Wolfram Sang wrote:
+> 
+> > The old device property API (device_add_properties()) is going to be
+> > removed. These prepare the i2c subsystem and drivers for the change.
+> > The change is fairly trivial in case of i2c. All we need to do is add
+> > complete software nodes to the devices instead of only the device
+> > properties in those nodes.
+> 
+> This looks like a nice cleanup!
+> 
+> Reviewed-by: Wolfram Sang <wsa@kernel.org> # for the I2C parts
+> 
+> Which tree should this go into? I can offer I2C but am also fine with
+> another one...
 
-Report due to absence of dependencies.
+I think these go via I2C tree.
 
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-
-Thanks!
-
+thanks,
 
 -- 
-With Best Regards,
-Andy Shevchenko
+heikki
