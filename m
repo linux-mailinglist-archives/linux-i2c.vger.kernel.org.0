@@ -2,35 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD212351EAD
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Apr 2021 20:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB1B351EAA
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Apr 2021 20:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235400AbhDASpQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Apr 2021 14:45:16 -0400
-Received: from mga05.intel.com ([192.55.52.43]:63637 "EHLO mga05.intel.com"
+        id S235093AbhDASpO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Apr 2021 14:45:14 -0400
+Received: from mga17.intel.com ([192.55.52.151]:21588 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237593AbhDASho (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 1 Apr 2021 14:37:44 -0400
-IronPort-SDR: DBRHA8ad8cfXh7D8L2eIVs4X6MpbWGm8fln6prJF3nNbWB2ljPZQ8VzC3i7kkCvrkRe/xIzLh3
- u/r9L/6m8kaQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="277457339"
+        id S239257AbhDASfj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 1 Apr 2021 14:35:39 -0400
+IronPort-SDR: tXO/dxmlE5sqd1abhq/7nn/2XptM3h5IpMnQ6tsBCsPJRlAOfWs3a87FqDV+pmd6RLyHt4oF/i
+ jaEYdmYFPIJg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="172302385"
 X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="277457339"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 08:43:18 -0700
-IronPort-SDR: 2pgC/2XvpsQ6arvCckvZv4G5JVCsE5cF0RoD2BuJXuxZuisHgV7En4ZsKMzypSTd1o8j+9m2q3
- +K0odndjwu2w==
+   d="scan'208";a="172302385"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 08:45:09 -0700
+IronPort-SDR: 9JIoGX7euufyX4xQWwr0Nz8ALNgrGaxn0Oao/n8CFrYiEl1uSjPYxQOBJdkMAJKtCd5w6N1DlZ
+ 2Mm0sBPNEIiQ==
 X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="446315995"
+   d="scan'208";a="377743107"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 08:43:14 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 08:45:05 -0700
 Received: from andy by smile with local (Exim 4.94)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lRzTT-000ID7-8B; Thu, 01 Apr 2021 18:43:11 +0300
-Date:   Thu, 1 Apr 2021 18:43:11 +0300
+        id 1lRzVG-000IET-2U; Thu, 01 Apr 2021 18:45:02 +0300
+Date:   Thu, 1 Apr 2021 18:45:02 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Jean Delvare <jdelvare@suse.de>,
         Lee Jones <lee.jones@linaro.org>,
         Tan Jui Nee <jui.nee.tan@intel.com>,
@@ -39,65 +40,67 @@ Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Bjorn Helgaas <bhelgaas@google.com>,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
+        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com
 Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
  support library
-Message-ID: <YGXqDxSJhCO9bD1X@smile.fi.intel.com>
-References: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
- <20210308122020.57071-4-andriy.shevchenko@linux.intel.com>
- <20210313104557.321de08e@md1za8fc.ad001.siemens.net>
+Message-ID: <YGXqfvBv37eLL28Z@smile.fi.intel.com>
+References: <YEZ4IitUa+I9HM5F@smile.fi.intel.com>
+ <20210309014221.GA1831206@bjorn-Precision-5520>
+ <20210309094252.396b7f2d@md1za8fc.ad001.siemens.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210313104557.321de08e@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20210309094252.396b7f2d@md1za8fc.ad001.siemens.net>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Mar 13, 2021 at 10:45:57AM +0100, Henning Schild wrote:
-> Am Mon, 8 Mar 2021 14:20:16 +0200
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+On Tue, Mar 09, 2021 at 09:42:52AM +0100, Henning Schild wrote:
+> Am Mon, 8 Mar 2021 19:42:21 -0600
+> schrieb Bjorn Helgaas <helgaas@kernel.org>:
+> > On Mon, Mar 08, 2021 at 09:16:50PM +0200, Andy Shevchenko wrote:
+> > > On Mon, Mar 08, 2021 at 12:52:12PM -0600, Bjorn Helgaas wrote:  
+> > > > On Mon, Mar 08, 2021 at 02:20:16PM +0200, Andy Shevchenko wrote:  
 
 ...
 
-> > + * pci_p2sb_bar - Get Primary to Sideband bridge (P2SB) device BAR
-> > + * @pdev:	PCI device to get a PCI bus to communicate with
-> > + * @devfn:	PCI slot and function to communicate with
-> > + * @mem:	memory resource to be filled in
+> > > > > +	/* Read the first BAR of the device in question */
+> > > > > +	__pci_bus_read_base(bus, devfn, pci_bar_unknown, mem,
+> > > > > PCI_BASE_ADDRESS_0, true);  
+> > > > 
+> > > > I don't get this.  Apparently this normally hidden device is
+> > > > consuming PCI address space.  The PCI core needs to know about
+> > > > this.  If it doesn't, the PCI core may assign this space to
+> > > > another device.  
+> > > 
+> > > Right, it returns all 1:s to any request so PCI core *thinks* it's
+> > > plugged off (like D3cold or so).  
+> > 
+> > I'm asking about the MMIO address space.  The BAR is a register in
+> > config space.  AFAICT, clearing P2SBC_HIDE_BYTE makes that BAR
+> > visible.  The BAR describes a region of PCI address space.  It looks
+> > like setting P2SBC_HIDE_BIT makes the BAR disappear from config space,
+> > but it sounds like the PCI address space *described* by the BAR is
+> > still claimed by the device.  If the device didn't respond to that
+> > MMIO space, you would have no reason to read the BAR at all.
+> > 
+> > So what keeps the PCI core from assigning that MMIO space to another
+> > device?
 > 
-> Do we really need that many arguments to it?
+> The device will respond to MMIO while being hidden. I am afraid nothing
+> stops a collision, except for the assumption that the BIOS is always
+> right and PCI devices never get remapped. But just guessing here.
 > 
-> Before i had, in a platform driver that never had its own pci_dev or bus
-> 
->   res->start = simatic_ipc_get_membase0(PCI_DEVFN(13, 0));
->   if (res-start == 0)
->     return -ENODEV;
-> 
-> So helper only asked for the devfn, returned base and no dedicated
-> error code.
-> 
-> With this i need
-> 
->   struct pci_bus *bus = pci_find_bus(0, 0);
->   struct pci_dev *pci_dev = bus->self;
->   unsigned int magic_i_do_not_want =  PCI_DEVFN(13, 0);
+> I have seen devices with coreboot having the P2SB visible, and most
+> likely relocatable. Making it visible in Linux and not hiding it again
+> might work, but probably only as long as Linux will not relocate it.
+> Which i am afraid might seriously upset the BIOS, depending on what a
+> device does with those GPIOs and which parts are implemented in the
+> BIOS.
 
-What confuses me is the use for SPI NOR controller on Broxton. And I think
-we actually can indeed hide all this under the hood by exposing P2SB to the OS.
-
-Mika, what do you think?
-
-> I guess that second devfn is for devices behind that bridge. So
-> unhiding it might reveal several devices?
-
-Good question. I need a device where actually this happens (hidden P2SB stuff
-with let's say SPI NOR there) to see how it looks like in such case. I only
-understood the GPIO part. But I'm not so sure anymore.
-
-> But when caring about that
-> p2sb do i really need to know its devfn. If so i would like to get
+So the question is, do we have knobs in PCI core to mark device fixes in terms
+of BARs, no relocation must be applied, no other devices must have the region?
 
 -- 
 With Best Regards,
