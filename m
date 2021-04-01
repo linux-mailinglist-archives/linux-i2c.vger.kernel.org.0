@@ -2,108 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB1B351EAA
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Apr 2021 20:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5EA351CE2
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Apr 2021 20:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235093AbhDASpO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Apr 2021 14:45:14 -0400
-Received: from mga17.intel.com ([192.55.52.151]:21588 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239257AbhDASfj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 1 Apr 2021 14:35:39 -0400
-IronPort-SDR: tXO/dxmlE5sqd1abhq/7nn/2XptM3h5IpMnQ6tsBCsPJRlAOfWs3a87FqDV+pmd6RLyHt4oF/i
- jaEYdmYFPIJg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="172302385"
-X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="172302385"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 08:45:09 -0700
-IronPort-SDR: 9JIoGX7euufyX4xQWwr0Nz8ALNgrGaxn0Oao/n8CFrYiEl1uSjPYxQOBJdkMAJKtCd5w6N1DlZ
- 2Mm0sBPNEIiQ==
-X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
-   d="scan'208";a="377743107"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 08:45:05 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lRzVG-000IET-2U; Thu, 01 Apr 2021 18:45:02 +0300
-Date:   Thu, 1 Apr 2021 18:45:02 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com
-Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
- support library
-Message-ID: <YGXqfvBv37eLL28Z@smile.fi.intel.com>
-References: <YEZ4IitUa+I9HM5F@smile.fi.intel.com>
- <20210309014221.GA1831206@bjorn-Precision-5520>
- <20210309094252.396b7f2d@md1za8fc.ad001.siemens.net>
+        id S237238AbhDASW6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Apr 2021 14:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239699AbhDASQr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Apr 2021 14:16:47 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13075C031178;
+        Thu,  1 Apr 2021 10:09:39 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id n140so2443399oig.9;
+        Thu, 01 Apr 2021 10:09:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+aXNjJuVUumi5TRfsImw8Zt0yNPvfmonu1KMDych7KE=;
+        b=bsKpMqDArH3IKklMaeKoURaLp4jrZj8Qm2GRNbx1pyJrRQ9PY4t2DuObUD0WbcmmVF
+         YI/B+TfsS3VucSts2J78A9x0feiMxC7KE9MF74OyceydekNUkmu0zw1Yg49C/Wf81ulM
+         naJiFMn0GnMvMU14NoQHoRYC2/Wjv2TSWQ4/bX4xjBJ4X7+eLw82g6HwEm3UwMwnfr1J
+         bgsphZATRsTvELWFxAnrjOldSCLpg1SlRkhZPISpUI6O0qms6SsXTivQmZ2NR8u8ENpn
+         fttNL8Onj2N4aS/x453oEDdGhI5k901V32nzfrIPUr9C6LH4td4HjApBxM2rKJFGTf6L
+         v6Gg==
+X-Gm-Message-State: AOAM530eN2JKUi9utcJ1fC0mTsqIB3TzuDHbxoQs1CURQAIG/XwQw4GB
+        KY+7roAJogiJ7nJXv6gVtQ==
+X-Google-Smtp-Source: ABdhPJx8VdMpHnlAiOBeHsNkwA82OIfkMjQjd799V7gJHykNelnxJL3Z4wK3Gyo/lsR35Rm1qdYsig==
+X-Received: by 2002:a05:6808:146:: with SMTP id h6mr6901775oie.118.1617296975408;
+        Thu, 01 Apr 2021 10:09:35 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g21sm1219961ooa.15.2021.04.01.10.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 10:09:34 -0700 (PDT)
+Received: (nullmailer pid 623796 invoked by uid 1000);
+        Thu, 01 Apr 2021 17:09:33 -0000
+Date:   Thu, 1 Apr 2021 12:09:33 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Corey Minyard <minyard@acm.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Wolfram Sang <wsa@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v2 3/3] bindings: ipmi: Add binding for Aspeed SSIF BMC
+ driver
+Message-ID: <20210401170933.GA622142@robh.at.kernel.org>
+References: <20210330141029.20412-1-quan@os.amperecomputing.com>
+ <20210330141029.20412-4-quan@os.amperecomputing.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210309094252.396b7f2d@md1za8fc.ad001.siemens.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210330141029.20412-4-quan@os.amperecomputing.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Mar 09, 2021 at 09:42:52AM +0100, Henning Schild wrote:
-> Am Mon, 8 Mar 2021 19:42:21 -0600
-> schrieb Bjorn Helgaas <helgaas@kernel.org>:
-> > On Mon, Mar 08, 2021 at 09:16:50PM +0200, Andy Shevchenko wrote:
-> > > On Mon, Mar 08, 2021 at 12:52:12PM -0600, Bjorn Helgaas wrote:  
-> > > > On Mon, Mar 08, 2021 at 02:20:16PM +0200, Andy Shevchenko wrote:  
-
-...
-
-> > > > > +	/* Read the first BAR of the device in question */
-> > > > > +	__pci_bus_read_base(bus, devfn, pci_bar_unknown, mem,
-> > > > > PCI_BASE_ADDRESS_0, true);  
-> > > > 
-> > > > I don't get this.  Apparently this normally hidden device is
-> > > > consuming PCI address space.  The PCI core needs to know about
-> > > > this.  If it doesn't, the PCI core may assign this space to
-> > > > another device.  
-> > > 
-> > > Right, it returns all 1:s to any request so PCI core *thinks* it's
-> > > plugged off (like D3cold or so).  
-> > 
-> > I'm asking about the MMIO address space.  The BAR is a register in
-> > config space.  AFAICT, clearing P2SBC_HIDE_BYTE makes that BAR
-> > visible.  The BAR describes a region of PCI address space.  It looks
-> > like setting P2SBC_HIDE_BIT makes the BAR disappear from config space,
-> > but it sounds like the PCI address space *described* by the BAR is
-> > still claimed by the device.  If the device didn't respond to that
-> > MMIO space, you would have no reason to read the BAR at all.
-> > 
-> > So what keeps the PCI core from assigning that MMIO space to another
-> > device?
+On Tue, Mar 30, 2021 at 09:10:29PM +0700, Quan Nguyen wrote:
+> Add device tree binding document for the Aspeed SSIF BMC driver.
 > 
-> The device will respond to MMIO while being hidden. I am afraid nothing
-> stops a collision, except for the assumption that the BIOS is always
-> right and PCI devices never get remapped. But just guessing here.
-> 
-> I have seen devices with coreboot having the P2SB visible, and most
-> likely relocatable. Making it visible in Linux and not hiding it again
-> might work, but probably only as long as Linux will not relocate it.
-> Which i am afraid might seriously upset the BIOS, depending on what a
-> device does with those GPIOs and which parts are implemented in the
-> BIOS.
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> ---
+>  .../bindings/ipmi/aspeed-ssif-bmc.txt          | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.txt
 
-So the question is, do we have knobs in PCI core to mark device fixes in terms
-of BARs, no relocation must be applied, no other devices must have the region?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Same comment as you ignored on v1.
