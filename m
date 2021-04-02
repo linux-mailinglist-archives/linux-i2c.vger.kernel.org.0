@@ -2,23 +2,23 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2743435254D
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Apr 2021 04:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1FB352820
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Apr 2021 11:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbhDBCAR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Apr 2021 22:00:17 -0400
-Received: from mail-bn8nam12on2095.outbound.protection.outlook.com ([40.107.237.95]:35521
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S235060AbhDBJH6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 2 Apr 2021 05:07:58 -0400
+Received: from mail-dm6nam10on2090.outbound.protection.outlook.com ([40.107.93.90]:24288
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231179AbhDBCAQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 1 Apr 2021 22:00:16 -0400
+        id S234975AbhDBJHx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 2 Apr 2021 05:07:53 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=esm7jbPTN5+dUoGj7e9giAK8S4FlXHa1XBEvEfIo+Bpk/l70Y/jxErdkhZrCIn6xR8hUacSVZCPaD53EgS4TIQqsng/MgqeTqoAeKvjo2To8QOG90vCEb6DW+kxYS6WPSxSeLoa7mevLQ0GXA4J14gwn1J9d1k+rb7E0F4oSKbSMa6oLslT0p+NJ2w8J5f3dRWwMSZtQ1GgCRvHoB4LlhVhENjmtA041QPIeWS/IMxMM5wZeVqbDNa2XIQ3xHkZMJI2gI8Os1yd5Siw7wx7zYywU+w7oj+ONxAw+9hc4hx4r3BSM3hL5tuvlW0YlRwAyxWwDluyKeNzd7lGVCdn+OQ==
+ b=IsYfy1P64v3p0ThBkNC3iCLK/05o8uvNGqi5sbDsvfOJVWKkNUODX+yFYzHf38uDY1wNODhDnHBPc59eDhudEl+ZFKhmd4FJz3S03maIJkEHBdp/smv7JOwYL0wPEDZK9w8KwSqNkPi4N3OrQVyEr1AbMAwH+VaXYKKrF35pwZW7xNvntHvUqR6H59RxNxC+uDmWgAgd2lQF6anedKV0h/z0A8RygNmzKEUlopQGAEeFZbZgWN+RrxnqArI0/51+4QA/W1osVcFTMEXcAitopAYHjqHqXPRm7sqZ4TK0sKYF0BCOT+U8S+M5LQ+8Cf+7KMtMrev3R5xnJ6nEvKxPPA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hkdy81hfJcSZtZrQEavKcj0JmezxiyNDIfikQhOzEVM=;
- b=Dy595ZtVfDtlTxNazJ5zyyeY15TyHY7Ef/zoUA8SublL2x0K5BLMbiE3YR8gok38+x69aF+7hQzbUBgStVr22HsapZAeCLHZDyW7o4T1K0/iWAgXzcx+s8/69/VXKoC6ZaZUGphvQJwBBdEMRFDJv+inAGo5/7UEFVdRnoURSoiLyFgqbCfCCi2dz4MRIlw3o69gvRKLQez7QhPtyRXZNLTuTosSdBP5ccyxkVZmctpUMhR62rMZSsV1560R/hn1vVGqcVEKMBHihys0LUwfruBPDh8TA95TJ/EHVuD2Uxjgq5qKIUBFF9vyNpTOPXb1hel69ppCUp0MkHeaKyrsFg==
+ bh=OvloSivmijiHKfQne5a7I41PrcMF16roAk/XHMOvbRI=;
+ b=mqGZT/dozrmU29R3kzxswTllKdYm79LVDYL41/ziiwoHcZNvOFhoswTgwQ6IXDeEEQ64D2sAAOkA2oTjnv51M82gGOnZUZUi6PNYE0+QNN1YEtMvZp9Gpic9OV3NoiJ+WXI8753SPFfrKeSGybP9hkJAz5bIYidDLRT8Ysx/swYQssN1BMPrj35ysn+sU2jm/MbxLUxbjXCEmyXSrYafKGNNXUuemT9866Ua6V7sn9oC86ZrITrm2jBLhSG96Jbh/AaCatlfFo+dMIvPi0vptnWe70MCQ8GO5ToSAzMRxDt4CVWrC6F5OWD5AZkQ/ZWarjE/5uZhF2RYT3+xGUIGHA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -26,128 +26,465 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hkdy81hfJcSZtZrQEavKcj0JmezxiyNDIfikQhOzEVM=;
- b=QUDyr+EdFqacfapK9zcYbWyg0tbhFDgfxqqUrA+FDB/EMd3rYnMWd8BIOMLWnN3zN/dDplR09EzMKlUuuvfCtogt01xYAwbWBxrBgsrGw+tpfsxoiPs3J0gbB66VcAm49T6GvhL9Ml3xforKGhnU1wyOVGZcYoFEPhbdosESo6M=
+ bh=OvloSivmijiHKfQne5a7I41PrcMF16roAk/XHMOvbRI=;
+ b=XceAnJ113SxOO+tMGPZbCWSNEuTJn8D5zEXgRdWvboHwF+hqxkdfxZjJ6eGPcNWMKjQRjxN2vlm8hacYFDP9e24rL8rIz9m1YVn68WgWuIoX9fdwJ+TzMdU+eQfqWkLn9nLEQjUAw+Ik7yg+hfMWbdGEs1VaBeeat/D0ZdjfNOc=
 Authentication-Results: os.amperecomputing.com; dkim=none (message not signed)
  header.d=none;os.amperecomputing.com; dmarc=none action=none
  header.from=os.amperecomputing.com;
 Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- CO2PR01MB2197.prod.exchangelabs.com (2603:10b6:102:8::22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3999.28; Fri, 2 Apr 2021 02:00:10 +0000
+ MW4PR01MB6179.prod.exchangelabs.com (2603:10b6:303:67::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3999.26; Fri, 2 Apr 2021 09:07:48 +0000
 Received: from MW2PR0102MB3482.prod.exchangelabs.com
  ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
  ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.3977.033; Fri, 2 Apr 2021
- 02:00:10 +0000
-Subject: Re: [PATCH v2 3/3] bindings: ipmi: Add binding for Aspeed SSIF BMC
- driver
-To:     Rob Herring <robh@kernel.org>
-Cc:     Corey Minyard <minyard@acm.org>, Joel Stanley <joel@jms.id.au>,
+ 09:07:48 +0000
+Subject: Re: [PATCH v1 2/3] drivers: char: ipmi: Add Aspeed SSIF BMC driver
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
         Andrew Jeffery <andrew@aj.id.au>,
         Wolfram Sang <wsa@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
         Open Source Submission <patches@amperecomputing.com>,
         Phong Vo <phong@os.amperecomputing.com>,
         "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20210330141029.20412-1-quan@os.amperecomputing.com>
- <20210330141029.20412-4-quan@os.amperecomputing.com>
- <20210401170933.GA622142@robh.at.kernel.org>
+References: <20210329121759.5644-1-quan@os.amperecomputing.com>
+ <20210329121759.5644-3-quan@os.amperecomputing.com>
+ <CACPK8Xf5d67-KR9AQ9QMcyT2Or9ieF_Q+_RbMMTHt4ckiKi6_A@mail.gmail.com>
 From:   Quan Nguyen <quan@os.amperecomputing.com>
-Message-ID: <62acc395-de5b-fd5c-c74f-d7d713b43377@os.amperecomputing.com>
-Date:   Fri, 2 Apr 2021 08:59:58 +0700
+Message-ID: <e0016596-9ac8-8a54-68bf-42a6959e78be@os.amperecomputing.com>
+Date:   Fri, 2 Apr 2021 16:07:34 +0700
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
  Gecko/20100101 Thunderbird/78.9.0
-In-Reply-To: <20210401170933.GA622142@robh.at.kernel.org>
+In-Reply-To: <CACPK8Xf5d67-KR9AQ9QMcyT2Or9ieF_Q+_RbMMTHt4ckiKi6_A@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [118.69.219.201]
-X-ClientProxiedBy: HK0PR03CA0100.apcprd03.prod.outlook.com
- (2603:1096:203:b0::16) To MW2PR0102MB3482.prod.exchangelabs.com
+X-ClientProxiedBy: HKAPR03CA0016.apcprd03.prod.outlook.com
+ (2603:1096:203:c8::21) To MW2PR0102MB3482.prod.exchangelabs.com
  (2603:10b6:302:c::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.0.100] (118.69.219.201) by HK0PR03CA0100.apcprd03.prod.outlook.com (2603:1096:203:b0::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.26 via Frontend Transport; Fri, 2 Apr 2021 02:00:04 +0000
+Received: from [192.168.0.100] (118.69.219.201) by HKAPR03CA0016.apcprd03.prod.outlook.com (2603:1096:203:c8::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.8 via Frontend Transport; Fri, 2 Apr 2021 09:07:44 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e82e0e80-3981-4066-a228-08d8f57b0b9f
-X-MS-TrafficTypeDiagnostic: CO2PR01MB2197:
+X-MS-Office365-Filtering-Correlation-Id: 4b557966-526e-41ec-8d7a-08d8f5b6c93d
+X-MS-TrafficTypeDiagnostic: MW4PR01MB6179:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CO2PR01MB2197F8B4D840F35B8066B880F27A9@CO2PR01MB2197.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-Microsoft-Antispam-PRVS: <MW4PR01MB61790981612EB910D0C7D388F27A9@MW4PR01MB6179.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qhbFWGCCRP/XkXDEpmbYuNdHvrSipz2Olr+KILkK2aU2XR4CTrB0BWx9zrTXsteNlXpZSMt2ISx0rq0T1JPse9bqvR+QNfuCydsoDl/aExH7YIbL3zIOHzfhW9MXHHt+QXRzoVHsyZoyk8tX1Ls+Nc95cBXXyT9FTYbaRPgpNPZhs+yFjxw2J/9bMh/tBtWFwiNR1mvYOKgJ002sgsS/rjsTngV0SMwq9/WzCjobNl9x+prgMEVBsq42Lb6JdVEJVnvajAR5UEuw0tYkBT1Y1xOLDJLPCDX1CDD0Sd+sBe+aTXuMyr8p2COt2Bdvm/abN8xUqJNusAnTs5ypfTIMc1FVyp6j5nfSZ2aMQi5P7RRSGj2a2ivegyg7Jz/WupC4x5ljpxGVMWUoSGntlUT2IdmHMKaDiDYjttVL/65VhXEVFq29XgbgASnbH26sjYQoqjL0GUaFHr/gw3HpPz44zYc2mgxp9/5Lo3pda7ZWDjcW6ociYzXdUija4gs/vI19d5MM9x1VlYcyqyxkmzPRSmOkQkjwxRvSQVZ7xWsG7l4DtZfEiuZhwV0dLWpqt5DSFG5Vfec3HUnpHQLZTSj29klaa0R1iejcZOIAMiN+B6e42qPE9KX8F93fvcGu0hT/gT7hQmj8wMWfA3IiHjHn22z+BIhzZr/nBoUxizxcH4Bbc+VRDQlFIY0PhDmr+1IEAvDDLd0DGSA5t4gu7o638/7Bll6985s8lZQLK2+q/GE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(136003)(39850400004)(346002)(376002)(86362001)(6916009)(478600001)(31696002)(2906002)(956004)(38100700001)(2616005)(6486002)(8676002)(8936002)(4744005)(83380400001)(16526019)(186003)(5660300002)(26005)(31686004)(16576012)(66556008)(7416002)(66476007)(66946007)(6666004)(4326008)(54906003)(52116002)(53546011)(316002)(107886003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?V1VoTkc0RThWUjVHdjl4KzNtaWdoWDBjajh6eWk3Q1lKL0hPK2xKbDVwTzJy?=
- =?utf-8?B?bXU4L2lyY3RRTGhMVlArSFRuOGkxd2srYnczMXNodThmYWdWT09DZEVoUlZo?=
- =?utf-8?B?VUVWc3JqQnI5UXcrZm9JcC9TNW8vQ0pZTW9DbFNtTjQ4QXM2WFh3WTlUSFVO?=
- =?utf-8?B?Tk5kYWNOVFhoc2FlYTNrdUJlTWNibmNuZEVaZnBiYmZiU010T1FLK2NjRkpo?=
- =?utf-8?B?RWs4V3REVk1pYVZuTjVkbE0yc0dsUW5IUC95SXBNYU1UMU5DVk5jNU5FRFFC?=
- =?utf-8?B?ay9CL3VOWnV2ZmhoYTE1QzQxVFM0TzRjNXNBK2wvQ01odzZYVEtkQkFqZzMx?=
- =?utf-8?B?R2dpLzFLYk1yMXlXMitWa2lHK0J2UWc5dUdTdHdwcTltaGh0VEozRVZsRG1Y?=
- =?utf-8?B?NjZscVhhSGxoVkxqUFdPdzlFaTlnYWpFRC93dHR3dWloNURyMU1uSVVXZ2VI?=
- =?utf-8?B?Z2c1dTAvVHJUQmMyaVZaQmJTWlpYUUQrYkpwNkJlT1lsVTdUUnFqenZXVzRN?=
- =?utf-8?B?aWpZZXBiUTFJc1JoVC9vbisxUDMySUEzU1RDN0JDTHVhK0QvWENua1MzZllo?=
- =?utf-8?B?SElzR21ycUdDOUgwNDRKZlFpYnlycW8rNzRGalJ3Z09YUjNBbkh2WHhha09J?=
- =?utf-8?B?MDJRdnp5MnE2eUNZaHRZVEdMSVFrc1Q0eUhxcDN4WDZzeGVZT0grcWtBazZT?=
- =?utf-8?B?SGxORkR2MnhPaVpyZVdiV0Z2SVY3WG0zZCt1YlN1MHBnWWxjbXJVL1d0VWNW?=
- =?utf-8?B?THJGbHJwSkVJcFhRT0pwQUU1azQ3VmRUZFZVRWsxRUNHVDN1cTEyNHFURGV4?=
- =?utf-8?B?U3dZbU9GR2xUdEZCbGQzUHZranZ4WnlJNjhjRW83NDlZNUplTnRFM09ZQ0U5?=
- =?utf-8?B?Vmd6bXNzL2dVTGtKSlhRMWY5STlxd3UxZVJpaVBxeG5Ib2ZXSFFEZWpIM0hK?=
- =?utf-8?B?Q1E2SW5RM0JPQUNiOXZYby9hSER5YWlRQWlhTkNwYUhLdkpUeVhTbWVjN3hh?=
- =?utf-8?B?dkoyZUw1eFZWSnhZWWRSTCtSQ0pRTE5md0hCWHpSOGRmbEMwM3BYSnREb1pt?=
- =?utf-8?B?MWZoclh6UEd4Q29IMUFSRXNFcFBqSzlUWWk4dytNMWMrRTM5VGhsNmhpYXY1?=
- =?utf-8?B?VnFsTytYVnViMGdiYlgyYTIyUlhFM2VlZU83YjV0OHROeWc0VisvMVJpa1lT?=
- =?utf-8?B?NGFsa1lPcmlCVnNhSDQ4dFN4OXNnM0hJNHorZUI5QVhWeEN0STY4Uk5wVXdZ?=
- =?utf-8?B?RGhyMklnL2lhRTZtTVBuaFJqVlc3QWtObDhtUnIwR29FYy94bko3RnFSd3Yv?=
- =?utf-8?B?ejk0Snl0b0VSWUZzeGNvTzlNMkNiTHJ3ZHR2aDVFYU5LbEV4Nk4zUW5mS0p0?=
- =?utf-8?B?enI1RE5Od1FZV0tzK0pCcXpKNk1RTTIyZlUyd2E3UVh2RTk5a1BRNXcxWDRW?=
- =?utf-8?B?VE5uN0R0MnVDbUo4RDZta2hWcG1uaVhVWXVNOU03N09mQjdjRnBqeDVIZllQ?=
- =?utf-8?B?YnhOTTRpRHBSalVPbzRYWmVsVDRBL1pmR0hGRmgvMDlZU2FaMjFkRkZRaUdT?=
- =?utf-8?B?NUpLcHBxSlJ0UUpoSy9YdkZUYnlQaVRBOXlyUDNRMVNqb0VjaUNJNkNnYjJJ?=
- =?utf-8?B?VVlvblZ4TG9maXdFVTB1QkdOQ3BhZTN3aUdiZVdyNkhnLzNZMW14TW5YeFJR?=
- =?utf-8?B?d3NpTklwV0JRSVJwNG9UTGVsSGs5cmMybStBWGtpemRlK2ROSkVEQXJaODkv?=
- =?utf-8?Q?mdCEDCYMDZeV71LL2GM203Wkkwz5zjgRvJT+H0h?=
+X-Microsoft-Antispam-Message-Info: cEV6kW+wpNGouOxTloiTuEKKWycdmtPcuJ6M4T5FP4IoQwYAvxkxgDTKpJNTjdMXYh0RyrYroouysPrwpZ09ASYaG4tFoz3nHpDINqd5iUo2FXt2XJhP3QhfIWnud9s0mdCVPETJa7CYP2pxvbx4RM4eOj9bHl9Z5yjp+qbpSg2+vpP/n2sOXiQlM/fqHs9yLj3jzmBsuBEdsq6XHV1ILoaeXld5Ihlt0kPnkWxrXuHW1+elIKU/XzgoWwFWiw/C9SBxjX7htaIDmmsi1UXsXTuPZsFZt6lf/0zblLdZh7Npeq/63d8rBQbDkwKFUjopRaPqn4Jhwnrw9VTAK+VKLOhZoL95hEOm8n0m1l4Y+wvRRvLKnGLPdFqQBNa+XYpeZ4TmtXnIhgYDgSQ84R5z8zJ5sk1xasr6f7QRzJXddy0mRr3Okj/t9xySpRLq+StsI+OrVZvMkJ2JciCwgounQNVmwZcQlS5Hm8tTAikGfZZr4i0IFiFNvXnfYybWkL7xKZLFCoFWi+sMabPx8jDSYfR4XuW88NDshz14gKZZKjFGWRyRAWG8ny3RWeh6zsrHNuATkKFyjlkLEn8RV5sCPkl2bumZeyxGgreIya5Jz8mI0HU24m9MsV9qYsFEPdxUkSNzwSblE5wR87W+JTAJkQXDavudZ9BUc2YzuKSx2QWZU/+XKrgCIrBpyAKhWvXQy70VitxTL56QIKd2neIFughIkCsIw8Zzb8z9VKKu1EhXEDQakwzmpm/roNQKrjPodPeJSuzMLlz5g9ZIFqQr516nI97+UrM0bKSrF9Oh/YnlA6WpQLOSfjHt25j3z9wy
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(346002)(376002)(396003)(39850400004)(136003)(6916009)(2616005)(956004)(54906003)(66946007)(66476007)(66556008)(8676002)(6666004)(186003)(86362001)(16576012)(5660300002)(52116002)(316002)(30864003)(53546011)(31686004)(6486002)(478600001)(83380400001)(26005)(38100700001)(16526019)(8936002)(107886003)(2906002)(31696002)(7416002)(4326008)(2004002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?ZHRXaGIzZ3dqQXlDRlZOTnZYUm14a2JHaWNwSkUvNC9oZWZGUkp2MWhOMS9Z?=
+ =?utf-8?B?bThhUTA3RmNoaGNhZTJkZTJMRG5GMmZweWdOZ2c2d1VWZHBSc3FQSno3UDRJ?=
+ =?utf-8?B?d3Z6R3QydUlXVDg1Y21GUFVsZUFRbDJ2NHBHeC9OSjNZNGdiYWVxc0taYVVT?=
+ =?utf-8?B?dWxnN2RwZVFsbWJxRi9LSXpLOFZWVzc3YWtvc2FFZktDTGczd09DdGFtbUpR?=
+ =?utf-8?B?UEg0Y3U3U1FrN2tpKzllMjdwYm16SHRkUWVXQ3IzaHlIUUYwL0FqamdXR3Y3?=
+ =?utf-8?B?aXljOGdnTm9uRlBMWWwwR2h0aFBDZGMxQ2NGeVpReFhmZTFxK3d2ZlBYUkVH?=
+ =?utf-8?B?VXJvM2hwakRhTk8xajA5QzMzeUtySENRdThrd1RGc2o1VStFbjEyVFRvdU0y?=
+ =?utf-8?B?REVCK1doWnNmOFpScFJEVkxadytpbklqcFljTmRmOFBjRlVMaDZpbll1dzRh?=
+ =?utf-8?B?QkNPY0RVdjlyanYya1hCOTJLTzB3dVorOEp6bE1WMG1ZaDJLQWRJQktiK2da?=
+ =?utf-8?B?OFNXejVtVVE5L29abSswaENTMkVobXFCL0RvTXY4dWo4VCtYMlo4VHg0YlFp?=
+ =?utf-8?B?UVNwaWJuK3ByQXJXbEFJOW00NlZRSnN4Z3dnallxUmJBYTJpTkJhT2hFeXRY?=
+ =?utf-8?B?TDd4YU1lditUY3VDN1lSUUhIdXNWSURvclJvUDFsUUlBc3BHeXpicFc0bmZs?=
+ =?utf-8?B?QkhzSE5wVXZWLzk0cVFQWXRNMXpBSnI4MUZxeXlYdmxuTFROZmljQjFzWStD?=
+ =?utf-8?B?V1ZLRzZiM2Z3elM3Nll6MzllNFQyM3JWSVkwdDU3bTMxTjBnRk13WnB5V08w?=
+ =?utf-8?B?NG9TTlEvU0NIWSthYWlhNFV5Mkw4QTU0V3JscUFJbkpFd1MrNUk4OWZTLzRL?=
+ =?utf-8?B?UktUT2t6VHllZThoWURRdFRQZ2lsVnhGTVdMU09UUEcxY1ZJWDRoSXcyWU0w?=
+ =?utf-8?B?WURHRVdxalByL0ErbzI5d25PYjJwbGFCclYyWlhLTThoTEZyZmxMekxBUUdT?=
+ =?utf-8?B?VnhvWC9JcUJzV0dOZ0tyVzlLS3F1aHJoemlOVUEwMzBCUE5iSG9vWDhsS25L?=
+ =?utf-8?B?U3R0elRPODQ1V0JleEpETDQydndjMUN2ZkdZUzBScnpVU2xjdVhzVEs1b2Nl?=
+ =?utf-8?B?dkgxeDZ2Uzd4bERGTStnNWk5RG9RbGtJZzRqd0NzaWFJZHRONGFJb2MyTXc3?=
+ =?utf-8?B?MmhQd0crcGRmdmlyS21KcHRuM25zaXZLMjJNQWd1THRBb1d2YytPeXdoQlBk?=
+ =?utf-8?B?MHJCUTZVdTRNRUFHUi9Rc2NNTW9hdG50bU94dWhLcnhqLzl0YXA4TTJ0RXBs?=
+ =?utf-8?B?MDc2dUtTRFByUi9xVXQ2eHNsWmdSeDdZWEdnWTFmYktFNFFFTUZrTFFXZkU0?=
+ =?utf-8?B?b1pQeDNnbWk0QXkvcTdUOUprbFRsRmxNRnN3UHloUERheGsyS3FRc1RGS3FO?=
+ =?utf-8?B?RHRnY25MN2xta08wU0tmdk1WOGxnbGZnYytrdUpVZi91aTdaa3pabGJEM0Ey?=
+ =?utf-8?B?c0xQMkNvWDVESWVFcGJaOUx2L2tsVDRYQjlEYURoaCtLanN6YytBLzd0ZEpY?=
+ =?utf-8?B?eVZEb0orZ2Q1UjhybkxiRGlVWEczOTdEOHE1N0lCRkxwbUgrZmtsWE5zeUhW?=
+ =?utf-8?B?bXVLTnFRdjNnYWhLb29MbTRjcFE0T09YWXoyanVpa0tGUXZlTVJDZVZ4L1FG?=
+ =?utf-8?B?YmZHQU13UFc5SmJ4MzAzVTM3YVJtTXZTbFNYTUxpc0FrbFNyNnV3R2VoaENl?=
+ =?utf-8?Q?DnQHukp9EkPYG6PO6jgmpd+OeeVIyIx7wcR/Xmz?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e82e0e80-3981-4066-a228-08d8f57b0b9f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b557966-526e-41ec-8d7a-08d8f5b6c93d
 X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2021 02:00:10.0487
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2021 09:07:48.5790
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: n2CFn5yZ7zkfKv5zGtFP+yWqfGEHcCxKGSV51Qr/eyXrCm/Le9hAuaipr+eYfA9xr8ERUS2nbL8ntmITfxqDUSMjnkHqviWdz3kCEpO4938=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO2PR01MB2197
+X-MS-Exchange-CrossTenant-UserPrincipalName: I+/kt/6b71RhZ9g59fX6SRV+CjFdbb/tIitGO4j0bZwep/iwm+INm76rH25V0V1hS9W04YXKsOT0rSVEqao7j6I5xloR4+WhTW5Q0bSTr5A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6179
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 02/04/2021 00:09, Rob Herring wrote:
-> On Tue, Mar 30, 2021 at 09:10:29PM +0700, Quan Nguyen wrote:
->> Add device tree binding document for the Aspeed SSIF BMC driver.
+On 31/03/2021 14:21, Joel Stanley wrote:
+> On Mon, 29 Mar 2021 at 12:18, Quan Nguyen <quan@os.amperecomputing.com> wrote:
+>>
+>> The SMBus system interface (SSIF) IPMI BMC driver can be used to perform
+>> in-band IPMI communication with their host in management (BMC) side.
+>>
+>> This commits adds support specifically for Aspeed AST2500 which commonly
+>> used as Board Management Controllers.
 >>
 >> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> 
+> I don't have any SSIF or IPMI related feedback on your patch, but some
+> general things I noticed when reading it.
+> 
+
+Thank you, Joel,
+I'm really appreciate your comments for this patch series.
+
+And, as there is a compilation error detected by kernel robot test, I 
+was hurry to send out v2 just to fix that just before your email 
+arrived. So I'd like to address all comments in my upcoming v3.
+
+
 >> ---
->>   .../bindings/ipmi/aspeed-ssif-bmc.txt          | 18 ++++++++++++++++++
->>   1 file changed, 18 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.txt
+>>   drivers/char/ipmi/Kconfig           |  22 +
+>>   drivers/char/ipmi/Makefile          |   2 +
+>>   drivers/char/ipmi/ssif_bmc.c        | 645 ++++++++++++++++++++++++++++
+>>   drivers/char/ipmi/ssif_bmc.h        |  92 ++++
+>>   drivers/char/ipmi/ssif_bmc_aspeed.c | 132 ++++++
+>>   5 files changed, 893 insertions(+)
+>>   create mode 100644 drivers/char/ipmi/ssif_bmc.c
+>>   create mode 100644 drivers/char/ipmi/ssif_bmc.h
+>>   create mode 100644 drivers/char/ipmi/ssif_bmc_aspeed.c
 > 
-> Same comment as you ignored on v1.
+> It would make sense to split the aspeed implementation into a separate
+> patch form the ssif framework.
+> 
+Yes, will do in next version
+
+>> +++ b/drivers/char/ipmi/ssif_bmc.c
+>> @@ -0,0 +1,645 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * The driver for BMC side of SSIF interface
+>> + *
+>> + * Copyright (c) 2021, Ampere Computing LLC
+>> + *
+>> + * This program is free software; you can redistribute it and/or
+>> + * modify it under the terms of the GNU General Public License as
+>> + * published by the Free Software Foundation; either version 2 of
+>> + * the License, or (at your option) any later version.
+>> + *
+>> + * This program is distributed in the hope that it will be useful,
+>> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+>> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+>> + * GNU General Public License for more details.
+>> + *
+>> + * You should have received a copy of the GNU General Public License
+>> + * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+> 
+> You should omit the licence text; it is replaced by the SPDX tags.
+> 
+My bad, will remove in next version
+
+>> +static int send_ssif_bmc_response(struct ssif_bmc_ctx *ssif_bmc, bool non_blocking)
+>> +{
+>> +       unsigned long flags;
+>> +       int ret;
+>> +
+>> +       if (!non_blocking) {
+>> +retry:
+>> +               ret = wait_event_interruptible(ssif_bmc->wait_queue,
+>> +                                              !ssif_bmc->response_in_progress);
+>> +               if (ret)
+>> +                       return ret;
+>> +       }
+>> +
+>> +       spin_lock_irqsave(&ssif_bmc->lock, flags);
+> 
+> What's the lock doing here? We've just waited for response_in_progress
+> to be false, so we then take the lock to check what value it is?
+> Should it also be sending some data in this function?
+> 
+The lock is to make sure ssif_bmc->response_in_progress are completely 
+processed, ie: when the lock already released.
+My concern is that reference to that value without acquiring lock may 
+not be true as it is under other possess.
+
+In fact, the lock here is for the whole data pointed by ssif_bmc 
+pointer. Hence, every reference/modify to this data must be done with 
+the lock acquired.
+
+>> +       if (ssif_bmc->response_in_progress) {
+>> +               spin_unlock_irqrestore(&ssif_bmc->lock, flags);
+>> +               if (non_blocking)
+>> +                       return -EAGAIN;
+>> +
+>> +               goto retry;
+> 
+> The goto threw me, so I tried re-writing it without. Again, I don't
+> quite follow what the spinlock is doing.
+> 
+> while (1) {
+>      if (blocking) {
+>          ret = wait_event_interruptible();
+>          if (ret)
+>               return ret;
+>      }
+> 
+>       spin_lock_irqsave()
+>       if (ssif_bmc->response_in_progress) {
+>           spin_lock_irqrestore()
+>           if (!blocking)
+>               return -EAGAIN;
+>       } else {
+>          spin_lock_irqrestore()
+>          break;
+>       }
+> }
+> 
+> 
+I'm afraid we would need to re-acquire the lock before modifying 
+ssif_bmc->is_singlepart_read and ssif_bmc->response_in_progress below.
+
+>> +       }
+>> +
+>> +       /*
+>> +        * Check the response data length from userspace to determine the type
+>> +        * of the response message whether it is single-part or multi-part.
+>> +        */
+>> +       ssif_bmc->is_singlepart_read =
+>> +               (ssif_msg_len(&ssif_bmc->response) <= (MAX_PAYLOAD_PER_TRANSACTION + 1)) ?
+>> +               true : false; /* 1: byte of length */
+> 
+> I don't follow the 1: byte of length comment, what is it telling me?
+> 
+> The ternary operator is a bit messy here, I'd go for a good old if statement.
+> 
+The comment indeed does not provide any info here. Will change back to 
+if else statement and add more meaningful comment if necessary in next 
+version.
+
+>> +
+>> +       ssif_bmc->response_in_progress = true;
+>> +       spin_unlock_irqrestore(&ssif_bmc->lock, flags);
+>> +
+>> +       return 0;
+>> +}
+> 
+>> +/* Handle SSIF message that will be sent to user */
+>> +static ssize_t ssif_bmc_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+>> +{
+>> +       struct ssif_bmc_ctx *ssif_bmc = to_ssif_bmc(file);
+>> +       struct ssif_msg msg;
+>> +       unsigned long flags;
+>> +       ssize_t ret;
+>> +
+>> +       mutex_lock(&ssif_bmc->file_mutex);
+> 
+> ->file_mutex is protecting the device against more than one user of
+> the character device? Can you enforce that in open() instead?
 > 
 
-Dear Rob,
-I really did not mean to do that.
+The current use is to serialize access among read()/write()/poll().
 
-What happen is that there was a compilation error complaint by kernel 
-robot test on my v1. So I tried to send my v2 to fix that issue asap. 
-Unfortunately, your reply on my v1 arrived just right after I hit "git 
-send-email" to send out my v2.
+About enforcing open() to return -EBUSY to protect the device against 
+more than one user, we can either implement follow example of 
+drivers/char/ipmi/kcs_bmc.c OR drivers/char/ipmi/bt-bmc.c
 
-For this comment, I'll switch to use yaml file in next version.
+But I'm still wonder what should be better between atomic_t open_count 
+(bt_bmc.c) or simply reuse the file_mutex similar with kcs_bmc.c.
 
-- Quan
+>> +
+>> +       ret = receive_ssif_bmc_request(ssif_bmc, file->f_flags & O_NONBLOCK);
+>> +       if (ret < 0)
+>> +               goto out;
+>> +
+>> +       spin_lock_irqsave(&ssif_bmc->lock, flags);
+>> +       count = min_t(ssize_t, count, ssif_msg_len(&ssif_bmc->request));
+> 
+> count is user controlled, so I assume ssif_msg_len will always be less
+> than or equal to struct ssif_msg?
+> 
+
+The size of struct ssif_msg is 255 bytes, and the ssif_msg_len() should 
+always return less than this number unless the ssif_msg->len is wrong 
+and exceeded the size of struct ssif_msg.
+
+For safe I think it should be changed to the min among count, 
+sizeof(struct ssif_msg), and return value of 
+ssif_msg_len(&ssif_bmc->request).
+ie:
+count = min_t(ssize_t, count, min_t(ssize_t, sizeof(struct ssif_msg), 
+ssif_msg_len(&ssif_bmc->request));
+
+>> +       memcpy(&msg, &ssif_bmc->request, count);
+>> +       ssif_bmc->request_available = false;
+>> +       spin_unlock_irqrestore(&ssif_bmc->lock, flags);
+>> +
+>> +       ret = copy_to_user(buf, &msg, count);
+>> +out:
+>> +       mutex_unlock(&ssif_bmc->file_mutex);
+>> +
+>> +       return (ret < 0) ? ret : count;
+>> +}
+>> +
+>> +/* Handle SSIF message that is written by user */
+>> +static ssize_t ssif_bmc_write(struct file *file, const char __user *buf, size_t count,
+>> +                             loff_t *ppos)
+>> +{
+>> +       struct ssif_bmc_ctx *ssif_bmc = to_ssif_bmc(file);
+>> +       struct ssif_msg msg;
+>> +       unsigned long flags;
+>> +       ssize_t ret;
+>> +
+>> +       if (count > sizeof(struct ssif_msg))
+>> +               return -EINVAL;
+>> +
+>> +       mutex_lock(&ssif_bmc->file_mutex);
+>> +
+>> +       ret = copy_from_user(&msg, buf, count);
+>> +       if (ret)
+>> +               goto out;
+>> +
+>> +       spin_lock_irqsave(&ssif_bmc->lock, flags);
+>> +       if (count >= ssif_msg_len(&ssif_bmc->response))
+> 
+> Is that test correct?
+> 
+As the "if (count > sizeof(struct ssif_msg))" above ensure the data will 
+not exceeded the size of buffer, ie: sizeof ssif_msg, we can now to make 
+sure the actually data size to agree with ssif_msg->len, ie: the return 
+of ssif_msg_len().
+
+But as this test looked "not easy to read" so I think I will fix this to:
+
+    if (count < ssif_msg_len(&ssif_bmc->response))
+         ret = -EINVAL;
+    else
+         memcpy(...);
+
+Hope this way made it easier to read.
+
+>> +               memcpy(&ssif_bmc->response, &msg, count);
+>> +       else
+>> +               ret = -EINVAL;
+>> +       spin_unlock_irqrestore(&ssif_bmc->lock, flags);
+>> +
+>> +       if (ret)
+>> +               goto out;
+>> +
+>> +       ret = send_ssif_bmc_response(ssif_bmc, file->f_flags & O_NONBLOCK);
+>> +       if (!ret && ssif_bmc->set_ssif_bmc_status)
+>> +               ssif_bmc->set_ssif_bmc_status(ssif_bmc, SSIF_BMC_READY);
+>> +out:
+>> +       mutex_unlock(&ssif_bmc->file_mutex);
+>> +
+>> +       return (ret < 0) ? ret : count;
+>> +}
+>> +
+>> +static long ssif_bmc_ioctl(struct file *file, unsigned int cmd, unsigned long param)
+>> +{
+> 
+> If you're not using this I suspect you should omit the callback.
+> 
+Will remove this in next version
+
+>> +       return 0;
+>> +}
+>> +
+>> +static unsigned int ssif_bmc_poll(struct file *file, poll_table *wait)
+>> +{
+>> +       struct ssif_bmc_ctx *ssif_bmc = to_ssif_bmc(file);
+>> +       unsigned int mask = 0;
+>> +
+>> +       mutex_lock(&ssif_bmc->file_mutex);
+>> +       poll_wait(file, &ssif_bmc->wait_queue, wait);
+>> +
+>> +       /*
+>> +        * The request message is now available so userspace application can
+>> +        * get the request
+>> +        */
+>> +       if (ssif_bmc->request_available)
+>> +               mask |= POLLIN;
+>> +
+>> +       mutex_unlock(&ssif_bmc->file_mutex);
+>> +       return mask;
+>> +}
+>> +
+>> +/*
+>> + * System calls to device interface for user apps
+>> + */
+>> +static const struct file_operations ssif_bmc_fops = {
+>> +       .owner          = THIS_MODULE,
+>> +       .read           = ssif_bmc_read,
+>> +       .write          = ssif_bmc_write,
+>> +       .poll           = ssif_bmc_poll,
+>> +       .unlocked_ioctl = ssif_bmc_ioctl,
+>> +};
+>> +
+>> +/* Called with ssif_bmc->lock held. */
+>> +static int handle_request(struct ssif_bmc_ctx *ssif_bmc)
+> 
+> Could return void.
+> 
+Will do in next version
+
+>> +{
+>> +       if (ssif_bmc->set_ssif_bmc_status)
+>> +               ssif_bmc->set_ssif_bmc_status(ssif_bmc, SSIF_BMC_BUSY);
+>> +
+>> +       /* Request message is available to process */
+>> +       ssif_bmc->request_available = true;
+>> +       /*
+>> +        * This is the new READ request.
+>> +        * Clear the response buffer of the previous transaction
+>> +        */
+>> +       memset(&ssif_bmc->response, 0, sizeof(struct ssif_msg));
+>> +       wake_up_all(&ssif_bmc->wait_queue);
+>> +       return 0;
+>> +}
+>> +
+>> +/* Called with ssif_bmc->lock held. */
+>> +static int complete_response(struct ssif_bmc_ctx *ssif_bmc)
+> 
+> Could return void.
+>
+Will do in next version
+
+>> +{
+>> +       /* Invalidate response in buffer to denote it having been sent. */
+>> +       ssif_bmc->response.len = 0;
+>> +       ssif_bmc->response_in_progress = false;
+>> +       ssif_bmc->nbytes_processed = 0;
+>> +       ssif_bmc->remain_len = 0;
+>> +       memset(&ssif_bmc->response_buf, 0, MAX_PAYLOAD_PER_TRANSACTION);
+>> +       wake_up_all(&ssif_bmc->wait_queue);
+>> +       return 0;
+>> +}
+>> +
+>> +static void set_multipart_response_buffer(struct ssif_bmc_ctx *ssif_bmc, u8 *val)
+>> +{
+> 
+>> +       default:
+>> +               /* Do not expect to go to this case */
+>> +               pr_err("Error: Unexpected SMBus command received 0x%x\n", ssif_bmc->smbus_cmd);
+> 
+> Use dev_err if you can, so the message is associated with the device.
+> 
+
+Will try to use dev_err() in next version
+
+>> +               break;
+>> +       }
+>> +
+>> +       ssif_bmc->nbytes_processed += response_len;
+>> +}
+>> +
+
