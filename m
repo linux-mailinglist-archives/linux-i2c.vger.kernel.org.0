@@ -2,124 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A167D352A75
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Apr 2021 14:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C868C352AF0
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Apr 2021 15:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235285AbhDBMCJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 2 Apr 2021 08:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235207AbhDBMCI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Apr 2021 08:02:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3912FC0613E6
-        for <linux-i2c@vger.kernel.org>; Fri,  2 Apr 2021 05:02:07 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1lSIUg-0007y7-6w; Fri, 02 Apr 2021 14:01:42 +0200
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1lSIUb-0007gY-Hi; Fri, 02 Apr 2021 14:01:37 +0200
-Date:   Fri, 2 Apr 2021 14:01:37 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Wolfram Sang <wsa@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v2 2/3] drivers: char: ipmi: Add Aspeed SSIF BMC driver
-Message-ID: <20210402120137.GA26002@pengutronix.de>
-References: <20210330141029.20412-1-quan@os.amperecomputing.com>
- <20210330141029.20412-3-quan@os.amperecomputing.com>
+        id S234628AbhDBNJs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 2 Apr 2021 09:09:48 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:48029 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229599AbhDBNJr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Apr 2021 09:09:47 -0400
+Received: from [192.168.1.155] ([95.118.52.208]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N8nnU-1le53k17OI-015muv; Fri, 02 Apr 2021 15:09:14 +0200
+Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge support
+ library
+To:     Henning Schild <henning.schild@siemens.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com
+References: <YEZ4IitUa+I9HM5F@smile.fi.intel.com>
+ <20210309014221.GA1831206@bjorn-Precision-5520>
+ <20210309094252.396b7f2d@md1za8fc.ad001.siemens.net>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Message-ID: <3f33a178-3002-e93e-89f1-8cf05097da25@metux.net>
+Date:   Fri, 2 Apr 2021 15:09:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210330141029.20412-3-quan@os.amperecomputing.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 13:57:27 up 43 days, 15:21, 66 users,  load average: 0.04, 0.10,
- 0.09
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20210309094252.396b7f2d@md1za8fc.ad001.siemens.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: tl
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:qZV6mIhgXObuBpZgSvHSXjywNlqq9WbY2cBpn38k0pJsi3MaE5F
+ yWBotVtrQZZEYNtw61C35krJaRk0sP16OqempjfG+mHz+0ecg/yCGr9qVSmrnhbqd1zly25
+ fqNTaIoRGVaMrz/HLMe1VQaSJC+wd+5fuGvqAO0qy4GmdQJrSz/Hsqp+FQLkEjPnigmuz/g
+ kPmErT6S/m130vB4tit7w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NW3GNz6Sf+U=:nXaOc7MCz6gkRbVCQEeuJZ
+ e1fDhARtYkTYv5YNmn9V3SKfXGXZ1thv/97ZnkteZf+MkTSN7flnmsqDuHMiq8IswWnAXbi/R
+ QdXBOzxFJ7c/KyykzRHsn4Pk/1hZNOT66Ltdcyi3+besb1ZMSn2CPs2MD3krRvdVH/10s8JgQ
+ ijCO9l1omcVzbmYIQ/MHivT5JDRPCMblaZ5q4JyCTJi7b5vGw+PivMrqMQU+Bl0ganIVHFzTy
+ dvTRc5uD+s4NZJ4D0mpA9e99p98Np3ZFr1PONzoPjTGvIUBNqeio3gtquQ5sMdrWf2J7cCZXo
+ 2XE34uPP0LsOqkl8Pk8PwJgHgxVwVI9+0uLpAkFJVA+IcSZLVwqnIHwE943z3RocqD7J5LYrC
+ xwdxsGZKfQTwVD1Sm/7UC3ikVtkbC6PJgxCMZbpIBIAsFzpE7HzI8Q8kDj1bk27DzY3nxj3W7
+ uHQu23Hv/5N5MeK6c088L/dPT3s278QXRbMoZmxEYL7HNYOMPKnM
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Quan,
+On 09.03.21 09:42, Henning Schild wrote:
 
-On Tue, Mar 30, 2021 at 09:10:28PM +0700, Quan Nguyen wrote:
-> The SMBus system interface (SSIF) IPMI BMC driver can be used to perform
-> in-band IPMI communication with their host in management (BMC) side.
-> 
-> This commits adds support specifically for Aspeed AST2500 which commonly
-> used as Board Management Controllers.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
-[...]
-> diff --git a/drivers/char/ipmi/ssif_bmc_aspeed.c b/drivers/char/ipmi/ssif_bmc_aspeed.c
-> new file mode 100644
-> index 000000000000..a563fcff5acc
-> --- /dev/null
-> +++ b/drivers/char/ipmi/ssif_bmc_aspeed.c
-> @@ -0,0 +1,132 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * The driver for BMC side of Aspeed SSIF interface
-> + *
-> + * Copyright (c) 2021, Ampere Computing LLC
-> + *
-> + * This program is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU General Public License as
-> + * published by the Free Software Foundation; either version 2 of
-> + * the License, or (at your option) any later version.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> + * GNU General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU General Public License
-> + * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/module.h>
-> +#include <linux/poll.h>
-> +#include <linux/iopoll.h>
-> +
-> +#include "ssif_bmc.h"
-> +
-> +struct aspeed_i2c_bus {
-> +	struct i2c_adapter              adap;
-> +	struct device                   *dev;
+> The device will respond to MMIO while being hidden. I am afraid nothing
+> stops a collision, except for the assumption that the BIOS is always
+> right and PCI devices never get remapped. But just guessing here.
 
-This device handle is apparently unused.
+What could go wrong if it is remapped, except that this driver would
+write to the wrong mmio space ?
 
-> +	void __iomem                    *base;
-> +	struct reset_control            *rst;
+If it's unhidden, pci-core should see it and start the usual probing,
+right ?
 
-This reset control handle is unused as well.
 
-> +	/* Synchronizes I/O mem access to base. */
-> +	spinlock_t                      lock;
-> +};
+--mtx
 
-regards
-Philipp
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
