@@ -2,79 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0CB352D82
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Apr 2021 18:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE00C353947
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Apr 2021 19:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235291AbhDBPak (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 2 Apr 2021 11:30:40 -0400
-Received: from out28-172.mail.aliyun.com ([115.124.28.172]:56979 "EHLO
-        out28-172.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbhDBPak (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 2 Apr 2021 11:30:40 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1216449|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.00690669-0.000830163-0.992263;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047209;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.JuCJUHM_1617377433;
-Received: from 192.168.88.133(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.JuCJUHM_1617377433)
-          by smtp.aliyun-inc.com(10.147.40.26);
-          Fri, 02 Apr 2021 23:30:33 +0800
-Subject: Re: [PATCH] I2C: JZ4780: Fix bug for Ingenic X1000.
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     paul@crapouillou.net, stable@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, sernia.zhou@foxmail.com
-References: <1616084743-112402-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1616084743-112402-2-git-send-email-zhouyanjie@wanyeetech.com>
- <20210318170623.GA1961@ninjato>
- <644d19d8-9444-4dde-a891-c9dfd523389e@wanyeetech.com>
- <20210331071835.GB1025@ninjato>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <b93bf84f-73fd-f0f9-c25b-d7063be76987@wanyeetech.com>
-Date:   Fri, 2 Apr 2021 23:30:32 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S230494AbhDDR6x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 4 Apr 2021 13:58:53 -0400
+Received: from mxout01.lancloud.ru ([45.84.86.81]:59166 "EHLO
+        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229861AbhDDR6w (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 4 Apr 2021 13:58:52 -0400
+X-Greylist: delayed 354 seconds by postgrey-1.27 at vger.kernel.org; Sun, 04 Apr 2021 13:58:52 EDT
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 17E0A206FFD0
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omprussia.ru>
+Subject: [PATCH] i2c: rcar: add IRQ check
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        <linux-i2c@vger.kernel.org>
+Organization: Open Mobile Platform, LLC
+CC:     <linux-renesas-soc@vger.kernel.org>
+Message-ID: <8a05ea84-28e6-4d76-4f6d-55fb0a0cdf24@omprussia.ru>
+Date:   Sun, 4 Apr 2021 20:52:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210331071835.GB1025@ninjato>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1908.lancloud.ru (fd00:f066::208)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+The driver neglects to check the result of platform_get_irq()'s call and
+blithely passes the negative error codes to devm_request_irq() (which
+takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding
+an original error code.  Stop calling devm_request_irq() with the
+invalid IRQ #s.
 
-On 2021/3/31 下午3:18, Wolfram Sang wrote:
-> Hi,
->
->>> Any write operation? I wonder then why nobody noticed before?
->>
->> The standard I2C communication should look like this:
->>
->> Read:
->>
->> device_addr + w, reg_addr, device_addr + r, data;
->>
->> Write:
->>
->> device_addr + w, reg_addr, data;
->>
->>
->> But without this patch, it looks like this:
->>
->> Read:
->>
->> device_addr + w, reg_addr, device_addr + r, data;
->>
->> Write:
->>
->> device_addr + w, reg_addr, device_addr + w, data;
->>
->> This is clearly not correct.
-> Thanks for the additional information! I understand now. I added a bit
-> of this to the commit message of v2 to explain the situation.
->
+Fixes: 6ccbe607132b ("i2c: add Renesas R-Car I2C driver")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omprussia.ru>
 
-Thanks!
+---
+ drivers/i2c/busses/i2c-rcar.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-
-Best regards!
-
+Index: linux/drivers/i2c/busses/i2c-rcar.c
+===================================================================
+--- linux.orig/drivers/i2c/busses/i2c-rcar.c
++++ linux/drivers/i2c/busses/i2c-rcar.c
+@@ -1027,7 +1027,9 @@ static int rcar_i2c_probe(struct platfor
+ 	if (of_property_read_bool(dev->of_node, "smbus"))
+ 		priv->flags |= ID_P_HOST_NOTIFY;
+ 
+-	priv->irq = platform_get_irq(pdev, 0);
++	priv->irq = ret = platform_get_irq(pdev, 0);
++	if (ret < 0)
++		goto out_pm_disable;
+ 	ret = devm_request_irq(dev, priv->irq, irqhandler, irqflags, dev_name(dev), priv);
+ 	if (ret < 0) {
+ 		dev_err(dev, "cannot get irq %d\n", priv->irq);
