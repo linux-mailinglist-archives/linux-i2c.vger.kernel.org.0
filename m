@@ -2,93 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86ECE3547CA
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Apr 2021 22:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B913547DF
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Apr 2021 22:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235848AbhDEUuv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Apr 2021 16:50:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55884 "EHLO mail.kernel.org"
+        id S237351AbhDEUzD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Apr 2021 16:55:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57930 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232860AbhDEUuu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 5 Apr 2021 16:50:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 52752613AD;
-        Mon,  5 Apr 2021 20:50:43 +0000 (UTC)
+        id S236040AbhDEUzC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 5 Apr 2021 16:55:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 69DB161019;
+        Mon,  5 Apr 2021 20:54:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617655844;
-        bh=+wGRlzta/c+bjiOYd0eragT1f7GQIkNEGJwhNvEisXA=;
+        s=k20201202; t=1617656096;
+        bh=TZECcf04A+kZXqwkIon0Qe2mhbm/d9UADh5U5/niO2Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T7tkwCweFIZZQHILi2ONZGvApGW1bJSGb9h8KJSwBZXmDtbZJwgliGS/2Tadj+ia+
-         QMdXCIRSwsfFb1J5ErA3T90ZEadlPoSsihzT1Kk8kw9Cd3XkVdf7R+AgGIDbh+V8En
-         8SsvpeIsmGuiH4KaXgoDGUOg7CJLpbuhIS1s6u99kBoqAQf1C+4cKFSrZtdUBWHayY
-         ycwjL89EjSzSJG16AAdlVXkjf9j90w6yDw19zRGku2Ih5qwf6cSArn+weCDfLkJPu+
-         yYYYCTW4OPm2cQjVeXeyAALD9rAOvsItpKX1mR5+y4zDfJc2rdKBbS6zxrLmlKOLau
-         xYAC8252NMdUQ==
-Date:   Mon, 5 Apr 2021 22:50:40 +0200
+        b=tg2M6LMYvMaN/q6MpkbS21TzTuSuzQiCGU4H4i75lMhc33tS97B/r/edS235IjCUo
+         +reYZogjlEfW7l8FA3Likvu9ad9ZaLFIMEdRuiuhpOyrLTivoW7FNSOEouZi0a1eiY
+         +Gy53dj8p0y0dmK340MKn0SBJ8zKzfruMgWCExBjHWMHLR7HVfeF4vS98yoe1F8a6f
+         MV9icQ5zGSv1lvhhi8N8/Ec03LRuPmx2vF0Y6bFcoaMfyWK96zLQffDUkcAq3dp9GR
+         OzZhcoRd6x6nJl5Unm49oRCpMYgwsvV0teqI0zey3TW376GFD+UrqN1+o6vwOmfUJi
+         9s2zKPJCNE77g==
+Date:   Mon, 5 Apr 2021 22:54:52 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH v1 1/1] i2c: designware: Adjust bus_freq_hz when refuse
- high speed mode set
-Message-ID: <20210405205040.GC3945@kunai>
+To:     Sanket Goswami <Sanket.Goswami@amd.com>
+Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+Subject: Re: [PATCH v4] i2c: designware: Add driver support for AMD NAVI GPU
+Message-ID: <20210405205452.GD3945@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-References: <20210331110510.67523-1-andriy.shevchenko@linux.intel.com>
+        Sanket Goswami <Sanket.Goswami@amd.com>,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+References: <20210331140730.2058967-1-Sanket.Goswami@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+xNpyl7Qekk2NvDX"
+        protocol="application/pgp-signature"; boundary="9UV9rz0O2dU/yYYn"
 Content-Disposition: inline
-In-Reply-To: <20210331110510.67523-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210331140730.2058967-1-Sanket.Goswami@amd.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---+xNpyl7Qekk2NvDX
+--9UV9rz0O2dU/yYYn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 31, 2021 at 02:05:10PM +0300, Andy Shevchenko wrote:
-> When hardware doesn't support High Speed Mode, we forget bus_freq_hz
-> timing adjustment. This makes the timings and real registers being
-> unsynchronized. Adjust bus_freq_hz when refuse high speed mode set.
+On Wed, Mar 31, 2021 at 07:37:30PM +0530, Sanket Goswami wrote:
+> The Latest AMD NAVI GPU card has an integrated Type-C controller and
+> Designware I2C with PCI Interface. The PD controller for USB Type-C can
+> be accessed over I2C. The client driver is part of the USB Type-C UCSI
+> driver.
 >=20
-> Fixes: b6e67145f149 ("i2c: designware: Enable high speed mode")
-> Reported-by: "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Also, there exists a couple of notable IP limitations that are dealt as
+> workarounds:
+> - I2C transaction work on a polling mode as IP does not generate
+> interrupt.
+> - I2C read command sent twice to address the IP issues.
+> - AMD NAVI GPU based products are already in the commercial market,
+>   hence some of the I2C parameters are statically programmed as they
+>   can not be part of the ACPI table.
+>=20
+> Reviewed-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+> Co-developed-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+> Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+> Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
 
 
---+xNpyl7Qekk2NvDX
+--9UV9rz0O2dU/yYYn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBreCAACgkQFA3kzBSg
-KbZijA//XZg/kk/T3SObfzobXjACtyQNCYADrtrwzsso66VX+KoWn030w+vq39pm
-5kNYak5j8pY0aFESyx5UCtbI3e4KN2uPR81LfUIFPtxFCTV6NSmo2FrAUktvHgvH
-AWgkDYFEvxYWQQlbeKnobFgYbAFd1r37ZTRyVxUC2fyibJAIiFWsp6XnuMOErgXZ
-Ni8SlRTOLKEOw5X+810qii9cIVy2mQvyESyTOcAynw7as491s1DB3afPAYY0j/rt
-Gq6vxg+GyfihOG6Mn99ML/Iu+z2b0xle1J/2Nxe5IAUSNydOOZMvyy0OUXdUYFo7
-ddUQXUbTxD1BW+VPn9S0lw853dwBvB2HTrzJATBD/qjqrp43LU8yq9zWZwBZhw7w
-utg7agYkrwMgdV6jeCpF/REFRh8Xk3p+fgtvZxGvOjf6OEBYkh+qi7+PFqKTxF3w
-TJ2746Hxwt7M8Oi24EinaMP39r5tLwDdstMvnB5/HdK4WqMMR5ISezR2iM3WKjIO
-bimQkDkTPyuwHEqtQ2rBLN95ROmmZeLIP2528+qI4IXQDCkaQJ98aeCG/o6xsSqz
-jXw+47XyDPWCQFhbh9MT+3U5MhPaWkCcIKEXo6XJ4E8cpYQrEe+h202dCpWOwIFT
-Rv6BUu9qZHtW7T5v0E+S1nMPwQ9gYj04Ken8FFXGjM50FtsFtTU=
-=k6+i
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBreRwACgkQFA3kzBSg
+KbZpmQ/+M/EzdpGfiogWWOy774LR7sr7Ie5c1RuEa4hbEFdltiTs997CJ09Xofsw
+VJigg6qFdYMFIRB8K2fdMN++hlHu4kPVK3TGtHcQ9pWT66eCiCQ9Wj1yhcQgJL1U
+yKU+BNyX/S/FBfYqEZMXymB0pTyoXYpbHdIE3PUGdqhvTrkpW6qvckkVgq4zVndn
+SD2M6c0VPNG+6Q/E+ghR/HczZYuzQnzvJb7pFdJ9nYcbIv3je9AURh7QMrkHCVNH
+hfyYTxEWNRHYkvhjiVkBEKrQFVb15xomVpi+ANSKTiFbFJ3/CaVeROJ6xja/83ZF
+J1yJ96B4Yt34jKycwuhOATOCGGh14lztbVfDNYL4mOjy96+ElxAqEENpSJ+mIMSH
+uLqkEj5g/Rbot+KRy+gUNaQJ/3v4uo3B7XgvQNYHnXKOE9qvklupy4e8qEn4D0lm
+B0N1u/pfNe4VdI3b3mfKVHCa0qjg7BII7IIQZVSaeiKB++r53Hhrp5fY9dSFOWxa
+zfbIS5k5LNykqxJI4QMkg8ivPraHategI8GofGj46xmd2t9jTLfI+qCLp/y3RY93
+9dmSEteXy/CKth4ua3M9NJ96pCYt8we078Tko6ethIgsdPN7UKZXNBvJj82yJ5+A
+3wBTQMl4yIQQx0rVXdBaxh06Af3Iq7nEn5u2A2sJcOFwH2sEl20=
+=J46Q
 -----END PGP SIGNATURE-----
 
---+xNpyl7Qekk2NvDX--
+--9UV9rz0O2dU/yYYn--
