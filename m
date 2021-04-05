@@ -2,79 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C24353E09
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Apr 2021 12:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77493541E2
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Apr 2021 13:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237702AbhDEJDe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Apr 2021 05:03:34 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:15541 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237683AbhDEJDd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Apr 2021 05:03:33 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FDPky3y7lzPnpf
-        for <linux-i2c@vger.kernel.org>; Mon,  5 Apr 2021 17:00:42 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 5 Apr 2021 17:03:24 +0800
-From:   Tian Tao <tiantao6@hisilicon.com>
-To:     <linux-i2c@vger.kernel.org>
-Subject: [PATCH drivers/i2c 3/3] i2c: nomadik: Fix space errors
-Date:   Mon, 5 Apr 2021 17:03:50 +0800
-Message-ID: <1617613430-11921-4-git-send-email-tiantao6@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1617613430-11921-1-git-send-email-tiantao6@hisilicon.com>
-References: <1617613430-11921-1-git-send-email-tiantao6@hisilicon.com>
+        id S235091AbhDELzQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Apr 2021 07:55:16 -0400
+Received: from mga18.intel.com ([134.134.136.126]:3197 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233778AbhDELzP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 5 Apr 2021 07:55:15 -0400
+IronPort-SDR: 8OKhLOOrVILWGUlPpnk79x9SOfr6O8ZFC/3Jthdy1FmuDf8g6mg22RswVlYZrkNACtI/vfgQV4
+ rvshMRSyEmBg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9944"; a="180369817"
+X-IronPort-AV: E=Sophos;i="5.81,306,1610438400"; 
+   d="scan'208";a="180369817"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 04:55:09 -0700
+IronPort-SDR: lvCz5YQ3hu6F1EWnO35gp0ow77sH81xKQI7b+ZXGY+9LY1hKA8E9c62igLvEGcFyW7H+qMMKva
+ f0JQkS2Z9n0w==
+X-IronPort-AV: E=Sophos;i="5.81,306,1610438400"; 
+   d="scan'208";a="395785573"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 04:55:07 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lTNou-001Pml-E5; Mon, 05 Apr 2021 14:55:04 +0300
+Date:   Mon, 5 Apr 2021 14:55:04 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        yangyicong <yangyicong@huawei.com>
+Subject: Re: [PATCH v1 1/1] i2c: designware: Adjust bus_freq_hz when refuse
+ high speed mode set
+Message-ID: <YGr6mGz+DZ5y8eNA@smile.fi.intel.com>
+References: <20210331110510.67523-1-andriy.shevchenko@linux.intel.com>
+ <07b6264280314d919f2747290bb80b01@hisilicon.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <07b6264280314d919f2747290bb80b01@hisilicon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Fix the following checkpatch errors:
+On Wed, Mar 31, 2021 at 09:37:41PM +0000, Song Bao Hua (Barry Song) wrote:
+> > From: Andy Shevchenko [mailto:andriy.shevchenko@linux.intel.com]
+> > Sent: Thursday, April 1, 2021 12:05 AM
+> > To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>; Serge Semin
+> > <Sergey.Semin@baikalelectronics.ru>; linux-i2c@vger.kernel.org;
+> > linux-kernel@vger.kernel.org
 
-  ERROR: space prohibited before that ',' (ctx:WxW)
-  #280: FILE: drivers/i2c/busses/i2c-nomadik.c:280:
-  +	i2c_clr_bit(dev->virtbase + I2C_CR , I2C_CR_PE);
-  	                                   ^
-  ERROR: space prohibited before that ',' (ctx:WxW)
-  #528: FILE: drivers/i2c/busses/i2c-nomadik.c:528:
-  +	i2c_set_bit(dev->virtbase + I2C_CR , I2C_CR_PE);
- 	                                   ^
+...
 
-No functional changes.
+> > Fixes: b6e67145f149 ("i2c: designware: Enable high speed mode")
+> > Reported-by: "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Thanks for fixing that.
+> 
+> Reviewed-by: Barry Song <song.bao.hua@hisilicon.com>
 
-Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
-Signed-off-by: Zihao Tang <tangzihao1@hisilicon.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/i2c/busses/i2c-nomadik.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks!
+Wolfram, can be this applied for v5.12-rc7?
 
-diff --git a/drivers/i2c/busses/i2c-nomadik.c b/drivers/i2c/busses/i2c-nomadik.c
-index a3363b2..dc77e1c 100644
---- a/drivers/i2c/busses/i2c-nomadik.c
-+++ b/drivers/i2c/busses/i2c-nomadik.c
-@@ -277,7 +277,7 @@ static int init_hw(struct nmk_i2c_dev *dev)
- 		goto exit;
- 
- 	/* disable the controller */
--	i2c_clr_bit(dev->virtbase + I2C_CR , I2C_CR_PE);
-+	i2c_clr_bit(dev->virtbase + I2C_CR, I2C_CR_PE);
- 
- 	disable_all_interrupts(dev);
- 
-@@ -525,7 +525,7 @@ static int write_i2c(struct nmk_i2c_dev *dev, u16 flags)
- 			dev->virtbase + I2C_CR);
- 
- 	/* enable the controller */
--	i2c_set_bit(dev->virtbase + I2C_CR , I2C_CR_PE);
-+	i2c_set_bit(dev->virtbase + I2C_CR, I2C_CR_PE);
- 
- 	init_completion(&dev->xfer_complete);
- 
 -- 
-2.7.4
+With Best Regards,
+Andy Shevchenko
+
 
