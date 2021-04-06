@@ -2,68 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E564E354DFC
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 09:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC36A354EBF
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 10:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbhDFHiI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Apr 2021 03:38:08 -0400
-Received: from mail-ua1-f50.google.com ([209.85.222.50]:36418 "EHLO
-        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235239AbhDFHiH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Apr 2021 03:38:07 -0400
-Received: by mail-ua1-f50.google.com with SMTP id c2so4343717uaj.3;
-        Tue, 06 Apr 2021 00:37:59 -0700 (PDT)
+        id S244379AbhDFIgd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Apr 2021 04:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244373AbhDFIgc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Apr 2021 04:36:32 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AD1C061756
+        for <linux-i2c@vger.kernel.org>; Tue,  6 Apr 2021 01:36:23 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id f12so7267713wro.0
+        for <linux-i2c@vger.kernel.org>; Tue, 06 Apr 2021 01:36:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=krjAm4n3Rnt70NLkaNWfCxyQ3doFaMr0UZa20qd2rtE=;
+        b=J59oBO2VELBcORoIjQjQOHCx0RQmxyAmhThXoVPu0WdA4ant2pnnnbkxr095eQcs97
+         eIpJlZBcVU/dz7k4NWuEmfGKeWbTBv+Lh8UKzb6KfvvhtmGBywpQOCDPb7WIM7jT03rW
+         +s+rNVxueQJzb/iPmJWTyj0d/0ijCJqZIAdZ2D2URnlYR6uMPA3oYuhvzv05MLmb1smy
+         nbFyW0bo3zJDoRDomXqDk0hT4d2y5YwfZ1Ad/7wDwCBnNsgZdLNkHKqaafQ0iXfXO2FM
+         xjLPSNXeCUrwB52pr5yobYHWrecbmmHAjenoVo01/NVNBOoWN+/SlulHplKWEfFqDajb
+         JWyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RmRsbR6XoOklkvHZIGsoCASISOykeREojhdN/th0xeU=;
-        b=d9fv5rp2KU9klt/8h1HPPLIrAPaTqikVAnV8K1E3unPlbqC4PonB8HxWJ1igPGeIMd
-         VykxYSB56itZfQlS/mu7Ke7L2tJ4X2w97noYfOhgKtlMOZ7sYwQZIJHK+Kr+woIC3OOz
-         yIWQSG8JPHGy5MBwgVHd5AJmoOyUtDb1ypi6e8rkKFBXxzxhC7HcxAlv7denzqLiMiL7
-         mFlYNaxV1oj57bWVp6vILn9p+lGmu5JZjYZVSuEhSbXLCkDjamJ2tgNHWa3WxfMUIfUT
-         +KS5LOWHT0nNox1P6JCBpVVyYytSMvBcQqqyK+svEH8cqu4fMPkCQCF1y49Mzme8TKBx
-         ftdg==
-X-Gm-Message-State: AOAM532mXFWHPWRZvKIHVTBJkOPgTfUgxEWvEEONujykEx5tFL/S5p8L
-        4E5j5msu3lW26g9xbYfVUPy/yYGp8MT9ODGqgfaFJiwG
-X-Google-Smtp-Source: ABdhPJwBAcEvgUy0SJsFz657tKqVXuHXYcg+qi5kZI+ZT3alsEhZPo1PwvrcuVBEGmDS00nt6FHywjqtWBzRHtOX4zM=
-X-Received: by 2002:ab0:2c16:: with SMTP id l22mr16316731uar.100.1617694678850;
- Tue, 06 Apr 2021 00:37:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=krjAm4n3Rnt70NLkaNWfCxyQ3doFaMr0UZa20qd2rtE=;
+        b=fsnUBp03kjY80cOAGQ+RtWZaA/3barP3DEreFfQ6monkVWmViNHRq2p6VXtDIZvjaT
+         ApG+UcONaEZVU63FBssyjrtu40ldxAj+mdg/sQfn8d877m4x0f1z5cgHiLxRBihCIv+i
+         egVYotDxY5pCmy9frsBqdkWts4CbV2PJ7KbYF4WnKl31RJYWufsiEODGqphxzcgBy3VX
+         v4qi/syG/AtYF+gglx+eXWBHUVoSreHGXLUbwyBfYjchOGjnO3Gi0W9mtJ5vBp6xZE5J
+         BEFTJaNSP87c8gqVdM3q6AOX/biqy5xyBH2KzKfcCut0ZkkHxTws/rO7RWWsSgUgSiFE
+         I+7Q==
+X-Gm-Message-State: AOAM5329eYC8BOphFYdxasYOuIq60z14gwq6xI7glBydVvr+T1iTpqf3
+        t2IlJZFkJuwhY4R1XVs8AimPBA==
+X-Google-Smtp-Source: ABdhPJy003W91hWNgbbo6oxoleK1/QXTVfHjUu8gALMBCd+eezArxHj1A3ZYOv1QqBgEcZZgK/rFIQ==
+X-Received: by 2002:adf:ff84:: with SMTP id j4mr2783587wrr.271.1617698182609;
+        Tue, 06 Apr 2021 01:36:22 -0700 (PDT)
+Received: from dell ([91.110.221.193])
+        by smtp.gmail.com with ESMTPSA id y22sm2383984wmc.18.2021.04.06.01.36.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Apr 2021 01:36:22 -0700 (PDT)
+Date:   Tue, 6 Apr 2021 09:36:20 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] mfd: =?iso-8859-1?Q?int?=
+ =?iso-8859-1?Q?el=5Fquark=5Fi2c=5Fgpio=3A_Convert_I=B2?= =?iso-8859-1?Q?C?=
+ to use software nodes
+Message-ID: <20210406083620.GP2916463@dell>
+References: <20210331154851.8456-1-andriy.shevchenko@linux.intel.com>
+ <20210331154851.8456-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <8a05ea84-28e6-4d76-4f6d-55fb0a0cdf24@omprussia.ru>
-In-Reply-To: <8a05ea84-28e6-4d76-4f6d-55fb0a0cdf24@omprussia.ru>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Apr 2021 09:37:47 +0200
-Message-ID: <CAMuHMdXYAcSQm5BDUK+WSjnMRNhmNtdD+h+UiH14321wBsdpBQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: rcar: add IRQ check
-To:     Sergey Shtylyov <s.shtylyov@omprussia.ru>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210331154851.8456-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Apr 4, 2021 at 7:53 PM Sergey Shtylyov <s.shtylyov@omprussia.ru> wrote:
-> The driver neglects to check the result of platform_get_irq()'s call and
-> blithely passes the negative error codes to devm_request_irq() (which
-> takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding
-> an original error code.  Stop calling devm_request_irq() with the
-> invalid IRQ #s.
->
-> Fixes: 6ccbe607132b ("i2c: add Renesas R-Car I2C driver")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omprussia.ru>
+On Wed, 31 Mar 2021, Andy Shevchenko wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> The driver can provide a software node group instead of
+> passing legacy platform data. This will allow to drop
+> the legacy platform data structures along with unifying
+> a child device driver to use same interface for all
+> property providers, i.e. Device Tree, ACPI, and board files.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/mfd/intel_quark_i2c_gpio.c | 41 +++++++++++++++++++-----------
+>  1 file changed, 26 insertions(+), 15 deletions(-)
 
-Gr{oetje,eeting}s,
+For my own reference (apply this as-is to your sign-off block):
 
-                        Geert
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
