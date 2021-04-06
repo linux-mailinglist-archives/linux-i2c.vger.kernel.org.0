@@ -2,130 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4C3354D77
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 09:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E564E354DFC
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 09:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbhDFHMe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Apr 2021 03:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233462AbhDFHMc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Apr 2021 03:12:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C92C06175F
-        for <linux-i2c@vger.kernel.org>; Tue,  6 Apr 2021 00:12:24 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lTfsj-0005GZ-VY; Tue, 06 Apr 2021 09:12:13 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lTfsj-00040C-1f; Tue, 06 Apr 2021 09:12:13 +0200
-Date:   Tue, 6 Apr 2021 09:12:13 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>, kernel@pengutronix.de,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4.1 5/6] i2c: imx: Simplify using
- devm_clk_get_enableded()
-Message-ID: <20210406071213.dxwucpggq6m7hfxi@pengutronix.de>
-References: <20210330181755.204339-6-u.kleine-koenig@pengutronix.de>
- <20210406064618.24194-1-uwe@kleine-koenig.org>
+        id S235295AbhDFHiI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Apr 2021 03:38:08 -0400
+Received: from mail-ua1-f50.google.com ([209.85.222.50]:36418 "EHLO
+        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235239AbhDFHiH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Apr 2021 03:38:07 -0400
+Received: by mail-ua1-f50.google.com with SMTP id c2so4343717uaj.3;
+        Tue, 06 Apr 2021 00:37:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RmRsbR6XoOklkvHZIGsoCASISOykeREojhdN/th0xeU=;
+        b=d9fv5rp2KU9klt/8h1HPPLIrAPaTqikVAnV8K1E3unPlbqC4PonB8HxWJ1igPGeIMd
+         VykxYSB56itZfQlS/mu7Ke7L2tJ4X2w97noYfOhgKtlMOZ7sYwQZIJHK+Kr+woIC3OOz
+         yIWQSG8JPHGy5MBwgVHd5AJmoOyUtDb1ypi6e8rkKFBXxzxhC7HcxAlv7denzqLiMiL7
+         mFlYNaxV1oj57bWVp6vILn9p+lGmu5JZjYZVSuEhSbXLCkDjamJ2tgNHWa3WxfMUIfUT
+         +KS5LOWHT0nNox1P6JCBpVVyYytSMvBcQqqyK+svEH8cqu4fMPkCQCF1y49Mzme8TKBx
+         ftdg==
+X-Gm-Message-State: AOAM532mXFWHPWRZvKIHVTBJkOPgTfUgxEWvEEONujykEx5tFL/S5p8L
+        4E5j5msu3lW26g9xbYfVUPy/yYGp8MT9ODGqgfaFJiwG
+X-Google-Smtp-Source: ABdhPJwBAcEvgUy0SJsFz657tKqVXuHXYcg+qi5kZI+ZT3alsEhZPo1PwvrcuVBEGmDS00nt6FHywjqtWBzRHtOX4zM=
+X-Received: by 2002:ab0:2c16:: with SMTP id l22mr16316731uar.100.1617694678850;
+ Tue, 06 Apr 2021 00:37:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210406064618.24194-1-uwe@kleine-koenig.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:08:48 up 124 days, 21:15, 44 users,  load average: 0.07, 0.04,
- 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+References: <8a05ea84-28e6-4d76-4f6d-55fb0a0cdf24@omprussia.ru>
+In-Reply-To: <8a05ea84-28e6-4d76-4f6d-55fb0a0cdf24@omprussia.ru>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 6 Apr 2021 09:37:47 +0200
+Message-ID: <CAMuHMdXYAcSQm5BDUK+WSjnMRNhmNtdD+h+UiH14321wBsdpBQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: rcar: add IRQ check
+To:     Sergey Shtylyov <s.shtylyov@omprussia.ru>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 06, 2021 at 08:46:18AM +0200, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> devm_clk_get_enabled() returns the clk already (prepared and) enabled
-> and the automatically called cleanup cares for disabling (and
-> unpreparing). So simplify .probe() and .remove() accordingly.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Sun, Apr 4, 2021 at 7:53 PM Sergey Shtylyov <s.shtylyov@omprussia.ru> wrote:
+> The driver neglects to check the result of platform_get_irq()'s call and
+> blithely passes the negative error codes to devm_request_irq() (which
+> takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding
+> an original error code.  Stop calling devm_request_irq() with the
+> invalid IRQ #s.
+>
+> Fixes: 6ccbe607132b ("i2c: add Renesas R-Car I2C driver")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omprussia.ru>
 
-Enthusiastically Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I hope devm_clk_get_enabled() will go mainline, it reduces dramatically
-code and makes my life a lot better ;)
+Gr{oetje,eeting}s,
 
-> ---
->  drivers/i2c/busses/i2c-imx.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index b80fdc1f0092..d6594358cf83 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1405,16 +1405,10 @@ static int i2c_imx_probe(struct platform_device *pdev)
->  	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
->  
->  	/* Get I2C clock */
-> -	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
-> +	i2c_imx->clk = devm_clk_get_enabled(&pdev->dev, NULL);
->  	if (IS_ERR(i2c_imx->clk))
->  		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
-> -				     "can't get I2C clock\n");
-> -
-> -	ret = clk_prepare_enable(i2c_imx->clk);
-> -	if (ret) {
-> -		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
-> -		return ret;
-> -	}
-> +				     "can't get prepared I2C clock\n");
->  
->  	/* Init queue */
->  	init_waitqueue_head(&i2c_imx->queue);
-> @@ -1487,7 +1481,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
->  	pm_runtime_disable(&pdev->dev);
->  	pm_runtime_set_suspended(&pdev->dev);
->  	pm_runtime_dont_use_autosuspend(&pdev->dev);
-> -	clk_disable_unprepare(i2c_imx->clk);
->  	return ret;
->  }
->  
-> @@ -1517,7 +1510,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
->  	irq = platform_get_irq(pdev, 0);
->  	if (irq >= 0)
->  		free_irq(irq, i2c_imx);
-> -	clk_disable_unprepare(i2c_imx->clk);
->  
->  	pm_runtime_put_noidle(&pdev->dev);
->  	pm_runtime_disable(&pdev->dev);
-> -- 
-> 2.30.2
-> 
-> 
-> 
+                        Geert
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
