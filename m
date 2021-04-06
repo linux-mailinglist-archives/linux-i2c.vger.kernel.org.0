@@ -2,88 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0533554FB
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 15:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5778235558E
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 15:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344404AbhDFNYX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Apr 2021 09:24:23 -0400
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:42773 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344396AbhDFNYU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Apr 2021 09:24:20 -0400
-Received: by mail-ot1-f49.google.com with SMTP id c24-20020a9d6c980000b02902662e210895so14091889otr.9;
-        Tue, 06 Apr 2021 06:24:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=3Z6VfoQf/cVhFTnKPgFjS1QLBhGZOrLUYnwWlVNrobE=;
-        b=YNTpEwYxtWvVqJN5ThbmerRtGETpsfijUSV4+uJuzsnZMBaVfuO3pHiAuq0BKV89eC
-         SQR6+0ZR5wKsdReuwvwyPna0xQKAsHOKMOS/BAT2sXA7EJOSoNyT2wDug0cVy8OAUE+B
-         F+m0Bjg2Q8QIkBhJdw3U9/8cLhMF9ipHBWf38e2lMpHt8lHxAD5L0PMxVvUJQcSMuawx
-         LDUmxJWOSKlyVDmebKJyLbruWABpqfaMlAM4uweIg3qnqhqIZkeCxzsAIEYwq/hLWBHm
-         wmwnWyNzcqlLJ4P/ADsXIQOx//cK6u/p+laSy7UPhPxd8+A7gjMZj3eMPA3RxsUWBGPF
-         KCoQ==
-X-Gm-Message-State: AOAM531gHIQS5qPpEBL3yR1ao9E9h9UM8pju5C/Lo/K5EH8gUQ6H15Bs
-        W/mhre00tDbv9PL0DolpaQ==
-X-Google-Smtp-Source: ABdhPJxUvGiUrGMiWqNC3Ye0jO+bTj11rgCpxHtjebTMf+Kxs23vcd19hfUsQVD5BlolI6tJnJJVZg==
-X-Received: by 2002:a9d:f06:: with SMTP id 6mr26373689ott.13.1617715452341;
-        Tue, 06 Apr 2021 06:24:12 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v23sm4677850ots.63.2021.04.06.06.24.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 06:24:11 -0700 (PDT)
-Received: (nullmailer pid 1674502 invoked by uid 1000);
-        Tue, 06 Apr 2021 13:24:05 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Clark Wang <xiaoning.wang@nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        linux-imx@nxp.com, linux-i2c@vger.kernel.org, festevam@gmail.com,
-        aisheng.dong@nxp.com, shawnguo@kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20210406113306.2633595-12-xiaoning.wang@nxp.com>
-References: <20210406113306.2633595-1-xiaoning.wang@nxp.com> <20210406113306.2633595-12-xiaoning.wang@nxp.com>
-Subject: Re: [PATCH V2 11/18] dt-bindings: i2c: imx-lpi2c: Add bus recovery example
-Date:   Tue, 06 Apr 2021 08:24:05 -0500
-Message-Id: <1617715445.188566.1674501.nullmailer@robh.at.kernel.org>
+        id S1344675AbhDFNor (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Apr 2021 09:44:47 -0400
+Received: from lizzard.sbs.de ([194.138.37.39]:43233 "EHLO lizzard.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344659AbhDFNon (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 6 Apr 2021 09:44:43 -0400
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by lizzard.sbs.de (8.15.2/8.15.2) with ESMTPS id 136DhfCQ018008
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Apr 2021 15:43:41 +0200
+Received: from md1za8fc.ad001.siemens.net ([167.87.42.66])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 136De2KZ031989;
+        Tue, 6 Apr 2021 15:40:02 +0200
+Date:   Tue, 6 Apr 2021 15:40:01 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        "Lee Jones" <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        "Jim Quinlan" <james.quinlan@broadcom.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>, <hdegoede@redhat.com>
+Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
+ support library
+Message-ID: <20210406154001.3eec0698@md1za8fc.ad001.siemens.net>
+In-Reply-To: <3f33a178-3002-e93e-89f1-8cf05097da25@metux.net>
+References: <YEZ4IitUa+I9HM5F@smile.fi.intel.com>
+        <20210309014221.GA1831206@bjorn-Precision-5520>
+        <20210309094252.396b7f2d@md1za8fc.ad001.siemens.net>
+        <3f33a178-3002-e93e-89f1-8cf05097da25@metux.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 06 Apr 2021 19:32:59 +0800, Clark Wang wrote:
-> Add i2c bus recovery configuration example.
+Am Fri, 2 Apr 2021 15:09:12 +0200
+schrieb "Enrico Weigelt, metux IT consult" <lkml@metux.net>:
+
+> On 09.03.21 09:42, Henning Schild wrote:
 > 
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> ---
-> V2 changes:
->  - New patch added in V2
-> ---
->  .../devicetree/bindings/i2c/i2c-imx-lpi2c.yaml     | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> > The device will respond to MMIO while being hidden. I am afraid
+> > nothing stops a collision, except for the assumption that the BIOS
+> > is always right and PCI devices never get remapped. But just
+> > guessing here.  
 > 
+> What could go wrong if it is remapped, except that this driver would
+> write to the wrong mmio space ?
+> 
+> If it's unhidden, pci-core should see it and start the usual probing,
+> right ?
 
-My bot found errors running 'make dt_binding_check' on your patch:
+I have seen this guy exposed to Linux on coreboot machines. No issues.
+But i can imagine BIOSs that somehow make use of the device and assume
+it wont move. So we would at least need a parameter to allow keeping
+that device hidden, or "fixed" in memory.
 
-yamllint warnings/errors:
+Henning
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.example.dts:31.37-38 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:377: Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1414: dt_binding_check] Error 2
-
-See https://patchwork.ozlabs.org/patch/1462762
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+> 
+> --mtx
+> 
 
