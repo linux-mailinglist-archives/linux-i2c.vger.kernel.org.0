@@ -2,92 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69112355C50
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 21:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39EC355C53
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 21:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234889AbhDFTja (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Apr 2021 15:39:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56448 "EHLO mail.kernel.org"
+        id S233712AbhDFTkn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Apr 2021 15:40:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57368 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234417AbhDFTj3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 6 Apr 2021 15:39:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 255DA613CF;
-        Tue,  6 Apr 2021 19:39:20 +0000 (UTC)
+        id S233580AbhDFTkm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 6 Apr 2021 15:40:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EC2E061158;
+        Tue,  6 Apr 2021 19:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617737961;
-        bh=ts9JtR3quosQkuNpl4wcpdEuY8gfyNZlGdGooLlEDjk=;
+        s=k20201202; t=1617738034;
+        bh=Opuv6raurAGHlrasaechyldQhD5+uBJDErm4ArvhcIM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MszAd2yl+VtKM08rPZTgARBfIOs7LAgwmvxyYmyZNuTyVvIv9n+tkf0ebowIGj4Ww
-         N0LUD7cAMp8EnZAWOIuhHLhus+tNy1Zr4JiPQg+LELHib0JS+ZojFYlLkf0TyQX4Ol
-         +KaAg/IKeeY0wqVQxK0Ii2jeRwV5ktGQcFYJuSFi5ZtVBrvTA9IBxhmo9kkaEp4nDV
-         pyHBke9DkrVLiB7CGrkHvF6inPXs1Ruc5Ehxi8whh+q3u3w1A0ZLlbSayPtLqkqhJ8
-         SZJxDqfaRi1B39kzMK1lEYr9ojNyIhZCbZWRrmgs0FzPIyiE+qqZKLYzo9XhAQSSD+
-         ZUZrBVtJKpMcA==
-Date:   Tue, 6 Apr 2021 21:39:17 +0200
+        b=IfIYU2KPrJePCVWfzs6tIdO/g6OO28wbyU7bVAof7HyY1F5WUjCPjecAEzEi11+4q
+         +kG8bDwGFXfaKFM4nIPoNc/vFbPG0Ty4tvtBOS3OhrJxhv+r9AyPi9r5plkCHPqA0c
+         /aTVdRKYl0NW48gW4cVEJQU4aJpLk/MN+FtmuWwtH4h/PcmKnlvvo0ahYoyrsP3ZYP
+         fN20JkM/DRDupX0aGUbeucdbU6FUQFDwPhDQyA4CpE46GsDk0vkMxzCWf+O54odJYg
+         nGg1Df/HCWTcbDv+BSPdzoxOUZRTAe06UiIcdGKLW4yIDD1CHSsKstLhqrA50NokEf
+         FZ01i+dvo1vZg==
+Date:   Tue, 6 Apr 2021 21:40:30 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@cam.ac.uk>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH 04/12] ARM: pxa: stargate2: Constify the software node
-Message-ID: <20210406193917.GC3122@kunai>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/12] ARM: s3c: mini2440: Constify the software node
+Message-ID: <20210406194030.GD3122@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@cam.ac.uk>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
- <20210329105047.51033-5-heikki.krogerus@linux.intel.com>
+ <20210329105047.51033-6-heikki.krogerus@linux.intel.com>
+ <709e434f-9e35-bdd1-7785-1938b2fb80ee@kernel.org>
+ <YGHIyRu625C/kgRL@kuha.fi.intel.com>
+ <c326cef1-523a-0ce8-70a1-5cf89bde35f2@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+xNpyl7Qekk2NvDX"
+        protocol="application/pgp-signature"; boundary="9UV9rz0O2dU/yYYn"
 Content-Disposition: inline
-In-Reply-To: <20210329105047.51033-5-heikki.krogerus@linux.intel.com>
+In-Reply-To: <c326cef1-523a-0ce8-70a1-5cf89bde35f2@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---+xNpyl7Qekk2NvDX
+--9UV9rz0O2dU/yYYn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Mar 29, 2021 at 01:50:39PM +0300, Heikki Krogerus wrote:
-> Additional device properties are always just a part of a
-> software fwnode. If the device properties are constant, the
-> software node can also be constant.
->=20
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Jonathan Cameron <jic23@cam.ac.uk>
-> Cc: Daniel Mack <daniel@zonque.org>
-> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-
-I like to apply it soon. Can we get an ack, please?
 
 
---+xNpyl7Qekk2NvDX
+> Thanks for explanation. The follow up question is - can I take it
+> independently via ARM Samsung/S3C tree?
+
+Is it possible to just ack it, so I can take this all via I2C? Or will
+there be merge conflicts. I can provide an immutable branch, of course.
+
+
+--9UV9rz0O2dU/yYYn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBsuOUACgkQFA3kzBSg
-KbbrDQ/+Nr6QyRue2/UUBbJkyRdE3opr8kpatSpVt68js9AlYEMDsZX+V4Y1/EsO
-uv5+abnNH6iHiHTr0bNgCrml+elknmmYM4cs3ozahvxjoo/bbvjPsBgQZfRfDfC3
-Jh5DedUBXLHKf6wZmB3M1VSoGI1KN6D8yz+wl0sGhy6VoEcqNnUM19jdZrGXcAEl
-FI7eTwC1YX4fg1L2TrK199DA7JI0Cr+HPWHSNmF4FUacKBAPm7S9a+QBTLjrM9TC
-5RPEazK16VvibjFdhPIJjRRcUateC114i/j4tqGPwBfBeX1x9juZQj3GLn9A8dz9
-7o2mM8xf+M+CzEslcW5coY7WYqLn+WPYN9s3Iiu+tjP6IbaPXjHysCbiQxrk3bYH
-dBv6CW0n9ggW5Q/NuSkvmrF7cFNqFoY/O9HfJmOwN8fVYp2dQC/V8AHb9C9aFTKf
-7tuCClUsD8xMadr21rOab0E1cBzX/SlM/FIjNmQ4QrSB1GqjI6MF9Bc6+qVnMpVs
-EXvQdvE6W/80m2jqXB5NOQAQml73CxNqUZLo9SSX1qr61NsDOQ8ijR0Cqf8T51ZV
-2JPykhhzrleELLgEK0iGKsKlFBi5A67SqmY5m/bmv5iX9YkPDDDo2e2dwuuvHT+d
-z0odSNnDSBzoV4fJKcAJ13beYLi+Q/oLfwOIDbYPyKOemqAe2vI=
-=xBWT
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBsuS4ACgkQFA3kzBSg
+KbajTg//cZnUB68yjCCqBZLP3FgjbRz702c1a/jUsttFznXRZvQ/kcScN/0kkIIu
+uQJ7u4QioKtxCeCYiAUz2BYxqOKBxije1tJXs8tcgJSNkzuHe6dWsoaeK9MnapcZ
+c5PdWCQAqmt0I12moxJw1rdrVEV1WHIMilMISYREirePk5JXQ98GzwdtvHiQFsJ0
+1ad5vPKQBXvQBI2JXMZaRnSrmPYVteM3+hQWdnLQrdZB/c1MnrcwZNWEjroROoo7
+mdK6nmmz0gdorp79g8lp+GlcPhzprtIOpk4kpYBumTf7XsxzZQxrIQJGsc+LJU9x
+Qxo+0j9+AeTSNnvHWrkV2B37X4DJ4uFYCjJBUb4HninNZ+p2FvTPadG+IyVHOctW
+Ll4/P+P6RraUi6prwnUIOgG2Ry0qTA39CFH0YCBAgrlWmRNVKGXTrzx03eKUpT2g
+Ya+ZBFtgM6ukhzyUmcUn5+bn1gqQlueATyije3Hx5NySgnTeCGgSBmyo0L3Llu1L
+qAMzxrqe7DJs2Ib/A81uoLMwBJUl4CkFgZmcPEfnxx3z0GebKK66aZKvxPa/szON
+H/7Qx2JqC93kAhL/Nga6eqTGMee81NHkWGcPUpyPeYEzpKRp7MK3o2XCPSKqWHLQ
+M/a9Y+PMzEFHe1KaG+4fKGj9dmTRkrnKlbbf4ay8bESR79UrG08=
+=mMtN
 -----END PGP SIGNATURE-----
 
---+xNpyl7Qekk2NvDX--
+--9UV9rz0O2dU/yYYn--
