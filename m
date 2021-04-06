@@ -2,91 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27064355CC9
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 22:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA0F355CD9
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 22:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241590AbhDFUSv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Apr 2021 16:18:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34512 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231339AbhDFUSu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 6 Apr 2021 16:18:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A793613C2;
-        Tue,  6 Apr 2021 20:18:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617740322;
-        bh=p30de2zwEyR+6P5P00MqZLCxzCiE2AKM4h3UU+dzDsk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fdpuF0Q0JrnbJv8Vy5mbvP9T/NBw18A8AoCl0teGvZN6MsomecVMj8X2HZY6hR6bJ
-         n5jj7oRGTCTLZkiO38zF+XuUEO8o3Bd6CEG1p12LxOiXtAES83p2zZ+ehQ8tpzVnsZ
-         MjYdh59GcsK9hvYTnbJJSeBXkxHK6OT3AWN/iJ/dvhbPwYFJkhfuWy1Gjr+9JrYC8b
-         y0oRPJ9sEoQL6r7FttPGsDtQ/1zA09bfjlMD3hYlVb6z3mS9vW283Vy2vcieA3L/3c
-         RNEumEb/+x1dpsjp+cpH2A7bkWIHXJCYckadXr+HLUPal9+DieCZE4yn2lNPriHisk
-         dCwz5livqH8xg==
-Date:   Tue, 6 Apr 2021 22:18:38 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-Cc:     andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org,
-        digetx@gmail.com, treding@nvidia.com,
-        jarkko.nikula@linux.intel.com, rmk+kernel@armlinux.org.uk,
-        song.bao.hua@hisilicon.com, john.garry@huawei.com,
-        mika.westerberg@linux.intel.com, prime.zeng@huawei.com,
-        linuxarm@huawei.com
-Subject: Re: [PATCH v6 0/5] Add support for HiSilicon I2C controller
-Message-ID: <20210406201838.GA3804@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org,
-        digetx@gmail.com, treding@nvidia.com, jarkko.nikula@linux.intel.com,
-        rmk+kernel@armlinux.org.uk, song.bao.hua@hisilicon.com,
-        john.garry@huawei.com, mika.westerberg@linux.intel.com,
-        prime.zeng@huawei.com, linuxarm@huawei.com
-References: <1617197790-30627-1-git-send-email-yangyicong@hisilicon.com>
+        id S236165AbhDFU2b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Apr 2021 16:28:31 -0400
+Received: from mail-wm1-f54.google.com ([209.85.128.54]:45907 "EHLO
+        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231650AbhDFU23 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Apr 2021 16:28:29 -0400
+Received: by mail-wm1-f54.google.com with SMTP id o20-20020a05600c4fd4b0290114265518afso51191wmq.4;
+        Tue, 06 Apr 2021 13:28:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hrYOdHV1N7sd29gTwxVKedrBhxXnAdYApAMdqUkuEFc=;
+        b=SMRCy+gjowIQSbjqrbTG3p99b1G08EMsj/D9olNqWYYPFdDOkN1DINZpTzr+CIfEhO
+         tYwFsCtmg/JARJu3QWRgx7rN/Q3ZtFBN2Qhs9M2W/PBz8hSHWgjxIeghda9riZix+uCs
+         KzJ/fzPbxPIbTnow7qoBi/kW16KBOQkiLLq6kYRHLTrToulODHPW+yqCqOyWRhECOLPQ
+         /p/ab6B+2W69WdkOGeJL/ET9POGcouCB0kq8xS23PLcAdiupudDGAS9QN+KAUqkvGQz5
+         xi2wxGRtGg+UV76KitMYRHMoylvADAOt0IoZ4ut69a4S3EGa6YIOnemohC/obukttcxj
+         W/Zw==
+X-Gm-Message-State: AOAM531T9w8/AlVS42VursEdCdZoxzAfZ49HyFLdvqooVKjlQ8Dkbmz4
+        6NSPrgH6b+tZynvn2vC8c75PTxZ2nU6EDg==
+X-Google-Smtp-Source: ABdhPJzR+voEN9b+yT4iM9TsQyRWWYqRcHOjQadmyFyXtXboVOw+/pOeZYgiqp2rk4kbRMr/ZIlwtQ==
+X-Received: by 2002:a1c:9853:: with SMTP id a80mr4485485wme.44.1617740898637;
+        Tue, 06 Apr 2021 13:28:18 -0700 (PDT)
+Received: from [192.168.1.115] (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
+        by smtp.googlemail.com with ESMTPSA id 91sm37074489wrl.20.2021.04.06.13.28.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Apr 2021 13:28:17 -0700 (PDT)
+Subject: Re: [PATCH 05/12] ARM: s3c: mini2440: Constify the software node
+To:     Wolfram Sang <wsa@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
+ <20210329105047.51033-6-heikki.krogerus@linux.intel.com>
+ <709e434f-9e35-bdd1-7785-1938b2fb80ee@kernel.org>
+ <YGHIyRu625C/kgRL@kuha.fi.intel.com>
+ <c326cef1-523a-0ce8-70a1-5cf89bde35f2@kernel.org>
+ <20210406194030.GD3122@kunai>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Message-ID: <f9a95bcf-78ee-db22-3431-62d0702d1044@kernel.org>
+Date:   Tue, 6 Apr 2021 22:28:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HcAYCG3uE/tztfnV"
-Content-Disposition: inline
-In-Reply-To: <1617197790-30627-1-git-send-email-yangyicong@hisilicon.com>
+In-Reply-To: <20210406194030.GD3122@kunai>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 06/04/2021 21:40, Wolfram Sang wrote:
+> 
+>> Thanks for explanation. The follow up question is - can I take it
+>> independently via ARM Samsung/S3C tree?
+> 
+> Is it possible to just ack it, so I can take this all via I2C? Or will
+> there be merge conflicts. I can provide an immutable branch, of course.
+> 
 
---HcAYCG3uE/tztfnV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Mar 31, 2021 at 09:36:25PM +0800, Yicong Yang wrote:
-> Add driver and MAINTAINERS for HiSilicon I2C controller on Kunpeng SoC. Also
-> provide the devm_*() variants for adding the I2C adapters. Add a public
-> api to provide I2C frequency mode strings and convert designware driver
-> to use it.
-
-Thanks, this series is in a very good condition. One question about
-patch 2, the rest are minor nits (see the patches themselves). It will
-make it for 5.13.
+Sure, ack is possible (from my currently used email):
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 
---HcAYCG3uE/tztfnV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBswh4ACgkQFA3kzBSg
-Kbbn4A//bwuqrVFhOnSusi+RukQsO87iAMNGVa8JLZE7097JLQIryYROAvrfQB+X
-4Y5rTf3/+Von/P/wGTCqhiqD6YfNdK8FbIF+VOfOJXDnbiW2a22GdOy4Y2qFdmLo
-6yKF/46gF+nWogGg8m+9wtAf0AYg17UhCAWLOA3R/c5eGfVs2pXdTtXq8koH2/Ea
-HP093jc9MTppr88yjsVbJjn41A7xBsEfPsQMqEfTH9FtTCF3ZAPHZQZ5T9QaU9wv
-Wmk+TrDD/kkX+gQT59rrL0N8TQ8brdM7J8d5nz2AeKX6YA7O8dYOMJ5vTqE7my1k
-cSaBjitdd96Mo9ju8fpHFMZPF6yU2k9ZApmMxpdLnFhsNZ/dv0PlkKx0QY/hS08f
-HGmw81ifYUMX51VJnCT0fF9xGRVf9S3WXC2i2br3zgjCA1Rm/3KhNaQlXt9qZ3cS
-ZjZiZXVdOefkY9yiDqIirwy6YMKg/1JxYeEVoqS/CEPD1vmpak8rnt7CIUt7Vnhh
-CDoh0ga6yZ0DDXY5vGNMk8qKzSyXeTDDjN13Q+AmCX9jt9/yOzl3dfmGVGZosSed
-HNmEURoWCYyE/HM/a8Eyy4W0ovKpWzVNctIn6taZktJX/rlLlSIMqpg7EhktzqIJ
-VUQJXRu8cqx1gWRZazEmVuyhgv995bU7ydmbzL0YLo5UZufhS7o=
-=Re6t
------END PGP SIGNATURE-----
-
---HcAYCG3uE/tztfnV--
+Best regards,
+Krzysztof
