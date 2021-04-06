@@ -2,89 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD912355C8A
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 21:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161C9355C92
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 21:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237153AbhDFTuJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Apr 2021 15:50:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22923 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234611AbhDFTuJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Apr 2021 15:50:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617738601;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wTzJR7XbmiabDROWf/tRvtql+2pagdo8Q0WmLPBWbq4=;
-        b=TpITg+U20MqWENftZ+0nBjaE2HDm80kXqLfrRDZ2Vuj+9rzVv1iA6iuaTrqtLZdFnWhTIk
-        uiNQjC8DKZDMN9I9BNyPj+0fuvju9igpgonhCB6QZsZ5mOT8VBCb+FT9BIxtq2zjUcWwHK
-        Wqt5yyo2KQ0mfELLkCtr4UR0Vj2u7LI=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-435-UyvVLWn2OB2eU93i82T1SA-1; Tue, 06 Apr 2021 15:49:58 -0400
-X-MC-Unique: UyvVLWn2OB2eU93i82T1SA-1
-Received: by mail-ej1-f72.google.com with SMTP id zn19so2028231ejb.14
-        for <linux-i2c@vger.kernel.org>; Tue, 06 Apr 2021 12:49:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wTzJR7XbmiabDROWf/tRvtql+2pagdo8Q0WmLPBWbq4=;
-        b=FMv0XGqcnZWjLQDm4wb/k3+Vgegj2W8aYeWJsQ//sUJPhESgeSITbSN/H4QXcFapCw
-         Pr37CiBq7w8xhijpBkCcKoQaAYVSYeTH2JD9n2ysgM09hQgSuBuicAksX69wXnuKDv/B
-         UO0tRYB0qh8jJJPN4CtNplvDl9zN0WSdaIVaquPDfHsgiZqNmB7BlzhQC2kyrbcvDcut
-         +WirmnoB4Be7hzBReT31+GCKJXAta9XecsMkHT/Gxc0Zifn/lAmnzaJEhVV3xtNThgqe
-         T6hWh9oh9EOLVchFzWaRN0EQkmp2kGgkB/0iglODHAgBo0SbAK9GLGHw38BHvKtHYnJl
-         TyRw==
-X-Gm-Message-State: AOAM5318Z4SpE0p0d7iwH0xv7P3ggqWMXSc3O1RUACJyTiWgvj8HJmiG
-        DFMwzr/rS5eDGlLz14Y2OQ8yB5r44D9pmJvSlo0Yy2gA2ZlkmW7w9vKp51C34TWB7bGZIz4M2m1
-        w/G1vREy5nNe9U0ymcPdy
-X-Received: by 2002:a17:906:9a48:: with SMTP id aj8mr607447ejc.468.1617738597679;
-        Tue, 06 Apr 2021 12:49:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyL1KgXNz1wkNd91JTXhCUZ04j/NggKY8Jpwy3qKfXSHUf+T3424HY/NzfCNDC/sswxM9NLsA==
-X-Received: by 2002:a17:906:9a48:: with SMTP id aj8mr607437ejc.468.1617738597561;
-        Tue, 06 Apr 2021 12:49:57 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id s7sm6182940ejd.106.2021.04.06.12.49.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 12:49:57 -0700 (PDT)
-Subject: Re: [PATCH 06/12] platform/x86: intel_cht_int33fe_microb: Constify
- the software node
-To:     Wolfram Sang <wsa@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
- <20210329105047.51033-7-heikki.krogerus@linux.intel.com>
- <6d4d44d5-c213-1052-16a6-833a7f01a0ee@redhat.com>
- <20210406194059.GE3122@kunai>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <e0266f36-5d9f-4d1b-714c-94e15c1b4d5e@redhat.com>
-Date:   Tue, 6 Apr 2021 21:49:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S234547AbhDFTy2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Apr 2021 15:54:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59954 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233018AbhDFTy1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 6 Apr 2021 15:54:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F2AAB613B8;
+        Tue,  6 Apr 2021 19:54:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617738859;
+        bh=25ULw3TRgMm3UNuExmKYaO/DK9UkholrM5ZS8OqPuj0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kUQOxf8NdNC4hX/NzA5uGhEeRHK9VNh9GlnhcRB1wnSehVRKjvvlggO7VO8M91GRY
+         2VusDJv+iVFZtQr2zZnapxPcAaQoBjy3C3Suos4fdCXUhxoTwo/HY83DhWxHAY/7oe
+         dQGPoFZu+Kr2C0j3m62tc/OmNq59J2PdaQkj1In/aV6Vwo9tjk7Xs/QU+fUiXe0hl/
+         7h8MVmFReeOZp9nVqOrJIi9ABkunKI3Qg0uA2pGujpGin6dJhOYmdXj33NoXc+UppB
+         ZGmUzlTfRlVYe1qRDUuQ/D6i8wrgjtFii4LFVHFtxYRD+8u38jKJP7B+C2qYuCf9vy
+         blESEQJX6EWFg==
+Date:   Tue, 6 Apr 2021 21:54:14 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org,
+        digetx@gmail.com, treding@nvidia.com,
+        jarkko.nikula@linux.intel.com, rmk+kernel@armlinux.org.uk,
+        song.bao.hua@hisilicon.com, john.garry@huawei.com,
+        mika.westerberg@linux.intel.com, prime.zeng@huawei.com,
+        linuxarm@huawei.com
+Subject: Re: [PATCH v6 2/5] i2c: core: add api to provide frequency mode
+ strings
+Message-ID: <20210406195414.GG3122@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org,
+        digetx@gmail.com, treding@nvidia.com, jarkko.nikula@linux.intel.com,
+        rmk+kernel@armlinux.org.uk, song.bao.hua@hisilicon.com,
+        john.garry@huawei.com, mika.westerberg@linux.intel.com,
+        prime.zeng@huawei.com, linuxarm@huawei.com
+References: <1617197790-30627-1-git-send-email-yangyicong@hisilicon.com>
+ <1617197790-30627-3-git-send-email-yangyicong@hisilicon.com>
 MIME-Version: 1.0
-In-Reply-To: <20210406194059.GE3122@kunai>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Qf1oXS95uex85X0R"
+Content-Disposition: inline
+In-Reply-To: <1617197790-30627-3-git-send-email-yangyicong@hisilicon.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
 
-On 4/6/21 9:40 PM, Wolfram Sang wrote:
-> 
->> What is the plan for merging this patch / this series ?
-> 
-> I'll take the series via I2C.
+--Qf1oXS95uex85X0R
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ok, that works for me.
 
-Regards,
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index 10bd0b0..7268180 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -47,6 +47,26 @@ typedef int (*i2c_slave_cb_t)(struct i2c_client *clien=
+t,
+>  #define I2C_MAX_HIGH_SPEED_MODE_FREQ	3400000
+>  #define I2C_MAX_ULTRA_FAST_MODE_FREQ	5000000
+> =20
+> +static inline const char *i2c_freq_mode_string(u32 bus_freq_hz)
+> +{
+> +	switch (bus_freq_hz) {
+> +	case I2C_MAX_STANDARD_MODE_FREQ:
+> +		return "Standard Mode (100 kHz)";
+> +	case I2C_MAX_FAST_MODE_FREQ:
+> +		return "Fast Mode (400 kHz)";
+> +	case I2C_MAX_FAST_MODE_PLUS_FREQ:
+> +		return "Fast Mode Plus (1.0 MHz)";
+> +	case I2C_MAX_TURBO_MODE_FREQ:
+> +		return "Turbo Mode (1.4 MHz)";
+> +	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
+> +		return "High Speed Mode (3.4 MHz)";
+> +	case I2C_MAX_ULTRA_FAST_MODE_FREQ:
+> +		return "Ultra Fast Mode (5.0 MHz)";
+> +	default:
+> +		return "Unknown Mode";
+> +	}
+> +}
 
-Hans
+Any reason ehy this is an inline function? My gut feeling says it would
+be better added to the core?
 
+
+--Qf1oXS95uex85X0R
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBsvGYACgkQFA3kzBSg
+KbYCQA/+PdT6HVc/TnzGzmFsTSdFke1JlOrp/s6hCmRd/o5jLfbqm5csefgkiKpc
+A7EmrpisZtmzUSMhPgTbfjTnb4/FReCwc9cSljFAVv962tPFtKXDgJPtfMVrIMWo
+xjeHJk/pXNvTYH518vCzCoCzDETcY3J74rddiUjug7EV34/R//UpLfSA21DphCfd
+y0rd9cPyMeXvCeTJeCnltzU9TcM2RuCHrG9BibxXOiX875c++L5kZsMX77v5LolL
+lf2h2m++TxqcTu/bs9+LoS1UkrSWYJsQ6GsV/QSM//T+Y1uqoj2JppDMnI07GoXW
+UMeK9C/nQASvvkYHrG1eTj6OzaA5ucMa1oBVh3i7LP+uRRSIY6Iy72rbdiUm2DAj
+zjVtdEW3uy9r9HgCe5gChLkb3OJLxW0elHk2ZYqpp9aYzuhYpsoOr/lHOtszdadw
+GTe8msD+XaqjNPm2LaXNbOYYMIYdfzn3B5DrjivlSyq9TdYr22cmuXvAcvpvLdmk
+QPhpwj5x+r++ipOeuk1M/AbF7srYmA24BXg4PQYcipNviO2j1na4LcktBRqra62Z
+5C5R6tHApO30CFi4J6ueGB4PVl/qG2AK3krudOCjdUFK+4olbk2/4HHMQHbpBas4
+f6pfiaNVXwKTIUpB3rVsdtVG1t9PlCRAC019f+fUSLGs9Gs2pX4=
+=jouF
+-----END PGP SIGNATURE-----
+
+--Qf1oXS95uex85X0R--
