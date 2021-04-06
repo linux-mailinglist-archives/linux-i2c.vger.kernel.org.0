@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8DC355CA6
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 22:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFCD355CC6
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 22:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238239AbhDFUDC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Apr 2021 16:03:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32874 "EHLO mail.kernel.org"
+        id S232628AbhDFUQb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Apr 2021 16:16:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34162 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234411AbhDFUDC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 6 Apr 2021 16:03:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BE8D46136A;
-        Tue,  6 Apr 2021 20:02:52 +0000 (UTC)
+        id S241590AbhDFUQb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 6 Apr 2021 16:16:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BB3D61242;
+        Tue,  6 Apr 2021 20:16:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617739373;
-        bh=P889avgBFB0bi2ojrpin8Uk1g11A/55qILssYLXrdyg=;
+        s=k20201202; t=1617740183;
+        bh=Q+bsfrSpQMad2Oj6IlmFmbe1qijNOago3pvCd7BWU3Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IRODlppE4u/hQX7UdelwAg6h8sw6WEQUc1R0QNj2frM7lFX0mSvgr2H5RChOeFcyx
-         bLPu6AYe4TMHteN6XNRFn1oPcIC0hs1wru3W7DHLGHY95SVqve7EcF3TGQopxWDMnt
-         agT93iaU+BIH8VNvb9Tn/BswbxoddGgVxMEh3Bl+dYRzw270mCgctFZQK9KY/0KpoX
-         TIfqD6i2jKVQcZeTP4gtJIb2/GVjDAG2CyPTRuX3SL7bQcyLsMYjT+WHsxSAJzK6av
-         aSpNZm6rRKMNzQqkOxDh9CmM6LmwD8NME6I/VGsYNPQlSTDdBPBwxxeLRc+2ZKemYO
-         l2OksajcNsp9w==
-Date:   Tue, 6 Apr 2021 22:02:48 +0200
+        b=GkcddUvLXSbzGodBCdqWpB+FwyGzTS/hnYOu/+GL3ttEPuqLhmEniu8go7EqBcCx6
+         q00AZ7bGxTkE2OnHNj28u3TDvbPq8AVmTGXIFK+XE22mWQgVHxQEswItRl7iZiyjGd
+         wKeHTJW+iT0bWCHOgW7efe5fqxzNPF1TiNEKyalsQU6Hb4SL63cUU80qztPgx6RvFp
+         GV/badnawRn9I9VdLXZl9aKiEdxJQgF16ZTV9zLYhHEtMJfcetsr9cOzTJFz4cKhXn
+         nVjwL2NoBvTGhNbdHL/7bj+cTaHYHyycq3+ykVeRBapQSMUTNEuqPeCVt3Xp8ihQDw
+         fYEs//8AFamgQ==
+Date:   Tue, 6 Apr 2021 22:16:16 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Yicong Yang <yangyicong@hisilicon.com>
 Cc:     andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
@@ -33,8 +33,9 @@ Cc:     andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
         song.bao.hua@hisilicon.com, john.garry@huawei.com,
         mika.westerberg@linux.intel.com, prime.zeng@huawei.com,
         linuxarm@huawei.com
-Subject: Re: [PATCH v6 3/5] i2c: add support for HiSilicon I2C controller
-Message-ID: <20210406200248.GH3122@kunai>
+Subject: Re: [PATCH v6 1/5] i2c: core: add managed function for adding i2c
+ adapters
+Message-ID: <20210406201616.GI3122@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Yicong Yang <yangyicong@hisilicon.com>,
         andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
@@ -44,53 +45,58 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         john.garry@huawei.com, mika.westerberg@linux.intel.com,
         prime.zeng@huawei.com, linuxarm@huawei.com
 References: <1617197790-30627-1-git-send-email-yangyicong@hisilicon.com>
- <1617197790-30627-4-git-send-email-yangyicong@hisilicon.com>
+ <1617197790-30627-2-git-send-email-yangyicong@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y9PDtDHaFrXNoMPU"
+        protocol="application/pgp-signature"; boundary="81JctsDUVPekGcy+"
 Content-Disposition: inline
-In-Reply-To: <1617197790-30627-4-git-send-email-yangyicong@hisilicon.com>
+In-Reply-To: <1617197790-30627-2-git-send-email-yangyicong@hisilicon.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---y9PDtDHaFrXNoMPU
+--81JctsDUVPekGcy+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Mar 31, 2021 at 09:36:26PM +0800, Yicong Yang wrote:
+> Some I2C controller drivers will only unregister the I2C
+> adapter in their .remove() callback, which can be done
+> by simply using a managed variant to add the I2C adapter.
+>=20
+> So add the managed functions for adding the I2C adapter.
+
+Yes, I think we can do this. We just need to pay attention that people
+make sure interrupts are disabled and/or freed when the adapter gets
+removed. But this is also true for the current situation. I.e. removing
+the adapter manually in remove() and then relying on devm_ to free the
+interrupt is a bit dangerous.
+
+> +	return devm_add_action_or_reset(dev, devm_i2c_del_adapter, adapter);
+
+Cool, I didn't know this function.
 
 
-Only super minor stuff. Thanks to all the contributors and reviewers!
-
-> +#define HZ_PER_KHZ	1000
-
-KHZ_PER_HZ?
-
-> +	ret = devm_i2c_add_adapter(dev, adapter);
-> +	if (ret) {
-> +		dev_err(dev, "failed to add i2c adapter, ret = %d\n", ret);
-
-No need to print that. The core prints messages on failures.
-
-
---y9PDtDHaFrXNoMPU
+--81JctsDUVPekGcy+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBsvmgACgkQFA3kzBSg
-KbZ0Nw//boFzeFDX9pJMYnU9ZpW5WHJO7lXahbT9MjrWEw9/pILqtOQvdbYuU5jk
-U+NWcQ3iyzI+9P0OqfZIub5MnqgMBbE/uEAoJt3+btv/OEw6sf5zux7wa0nEQAP+
-JdXjaMNGKm7wP7LJv5GgStsNoDzHNrtyH18BfDYL8hHVJq5cvmFwI4JyK4Wj3tVJ
-MnHK0o+7HqxyDzgUZY6FU+/oJMCYW5WIE7JI7Gqa0EKcsc3HUfgZG3EvA0tnrv5K
-dG6552xRFDHNLGwdNsSnOEedRPIar0fjHvbHQwi6rE75r/FXO/8qzXITLMXU6q9X
-8cY/U4vNxTl4GlMUnIZRioeA3MWTspAl/DWeeYaELc+uLdhEFzu9h2Rg6oDKV5St
-YGKblb5r8JCO+/59aSWqjiGQPzDETlhrXQe1zCUBHq7KEdH41sLGDsGEG4dug4Yp
-bz751h0LbzYhGL8Rzuu3aF+JbCNQQLC/Z7yjKTG+GzwGP2wnznGQTpejDwjEYzmE
-Qma/SnBZqMR1ulEor47mslRdBuS1/v1vljTGqv+n4hWrsuSmTwsCqXjsr8nDcgpQ
-26puJE1padPiaba9XqpSIZUEpZMMIXRkjIbmKEtUQVU+8ddT2aaCJocY3yol2XMX
-FMCdTee++Ekcoaw1xG08zxwAlJeMtHa/I0+UhGVyZirqQ9WwV2k=
-=QjPO
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBswYwACgkQFA3kzBSg
+KbZAThAAjudLvS6fgjLwvEb7tOv/mrV3nRRLxgPY/d33iJD5FJJylNcXlL6eX3Pt
+cSDZFLFOtbJkQZ8Sp9myn2TcXFnLotD5Xs4flz/vP5q0ExDqa74ekZKp9mJrCuJU
+L271j9Mfp01WV+C6YNcuxgwvJtL6tSw01Y6kEUddxLyCajS6atRbspqR/nLBE2/T
+00BaL3CTuTsAoPGWbffrr7nJ5TS3tmUVJG7+6nsukmQ0R6oXK3nze4YhRnVOmCWD
+r3JUQ4W9syZGnyEx+nTRMo+0j9v5GTJH9W2yBYzpWMaB1UOJmvrPv/OrA33i6wrd
+Cr8ZjlnFlklRQBslvKEU4ZBxiZeqhW2HmK6v/L1AuUqdniUqTTARLL9s/eq0OCDu
+FgviwNVlQd5PUa+BcGAfAY+Ia6Uh8pyTiJOr9csc4be7oIsZIFzYepLalU1ZmCgc
+p4W+AGKawAQP6czZXFhZ7heWKLLxAyB1xHXsSotfW32Lq/9WhtiCJqYAy+Ns0kYo
+r/XotLsS+zymzvBKTC0+0s6/ppGj3U4kOZP5GLmTgWVNiem7RRfhaCM9RcC0j2oH
+drkFqu6UKm+nDdec1v4nI5xoi2EFwcweiZIx1aYQHW2RBZL9y+BzPjA7TFKGrtHx
+Fb1+8tdlM12yrXdkiQQOUt0E0tWUFaJM0IXF78iAtGgD1ql4eEE=
+=ufDL
 -----END PGP SIGNATURE-----
 
---y9PDtDHaFrXNoMPU--
+--81JctsDUVPekGcy+--
