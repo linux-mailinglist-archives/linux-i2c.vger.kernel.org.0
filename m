@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 161C9355C92
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 21:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8DC355CA6
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 22:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234547AbhDFTy2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Apr 2021 15:54:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59954 "EHLO mail.kernel.org"
+        id S238239AbhDFUDC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Apr 2021 16:03:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32874 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233018AbhDFTy1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 6 Apr 2021 15:54:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F2AAB613B8;
-        Tue,  6 Apr 2021 19:54:17 +0000 (UTC)
+        id S234411AbhDFUDC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 6 Apr 2021 16:03:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BE8D46136A;
+        Tue,  6 Apr 2021 20:02:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617738859;
-        bh=25ULw3TRgMm3UNuExmKYaO/DK9UkholrM5ZS8OqPuj0=;
+        s=k20201202; t=1617739373;
+        bh=P889avgBFB0bi2ojrpin8Uk1g11A/55qILssYLXrdyg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kUQOxf8NdNC4hX/NzA5uGhEeRHK9VNh9GlnhcRB1wnSehVRKjvvlggO7VO8M91GRY
-         2VusDJv+iVFZtQr2zZnapxPcAaQoBjy3C3Suos4fdCXUhxoTwo/HY83DhWxHAY/7oe
-         dQGPoFZu+Kr2C0j3m62tc/OmNq59J2PdaQkj1In/aV6Vwo9tjk7Xs/QU+fUiXe0hl/
-         7h8MVmFReeOZp9nVqOrJIi9ABkunKI3Qg0uA2pGujpGin6dJhOYmdXj33NoXc+UppB
-         ZGmUzlTfRlVYe1qRDUuQ/D6i8wrgjtFii4LFVHFtxYRD+8u38jKJP7B+C2qYuCf9vy
-         blESEQJX6EWFg==
-Date:   Tue, 6 Apr 2021 21:54:14 +0200
+        b=IRODlppE4u/hQX7UdelwAg6h8sw6WEQUc1R0QNj2frM7lFX0mSvgr2H5RChOeFcyx
+         bLPu6AYe4TMHteN6XNRFn1oPcIC0hs1wru3W7DHLGHY95SVqve7EcF3TGQopxWDMnt
+         agT93iaU+BIH8VNvb9Tn/BswbxoddGgVxMEh3Bl+dYRzw270mCgctFZQK9KY/0KpoX
+         TIfqD6i2jKVQcZeTP4gtJIb2/GVjDAG2CyPTRuX3SL7bQcyLsMYjT+WHsxSAJzK6av
+         aSpNZm6rRKMNzQqkOxDh9CmM6LmwD8NME6I/VGsYNPQlSTDdBPBwxxeLRc+2ZKemYO
+         l2OksajcNsp9w==
+Date:   Tue, 6 Apr 2021 22:02:48 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Yicong Yang <yangyicong@hisilicon.com>
 Cc:     andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
@@ -33,9 +33,8 @@ Cc:     andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
         song.bao.hua@hisilicon.com, john.garry@huawei.com,
         mika.westerberg@linux.intel.com, prime.zeng@huawei.com,
         linuxarm@huawei.com
-Subject: Re: [PATCH v6 2/5] i2c: core: add api to provide frequency mode
- strings
-Message-ID: <20210406195414.GG3122@kunai>
+Subject: Re: [PATCH v6 3/5] i2c: add support for HiSilicon I2C controller
+Message-ID: <20210406200248.GH3122@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Yicong Yang <yangyicong@hisilicon.com>,
         andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
@@ -45,74 +44,53 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         john.garry@huawei.com, mika.westerberg@linux.intel.com,
         prime.zeng@huawei.com, linuxarm@huawei.com
 References: <1617197790-30627-1-git-send-email-yangyicong@hisilicon.com>
- <1617197790-30627-3-git-send-email-yangyicong@hisilicon.com>
+ <1617197790-30627-4-git-send-email-yangyicong@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Qf1oXS95uex85X0R"
+        protocol="application/pgp-signature"; boundary="y9PDtDHaFrXNoMPU"
 Content-Disposition: inline
-In-Reply-To: <1617197790-30627-3-git-send-email-yangyicong@hisilicon.com>
+In-Reply-To: <1617197790-30627-4-git-send-email-yangyicong@hisilicon.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Qf1oXS95uex85X0R
+--y9PDtDHaFrXNoMPU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
 
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index 10bd0b0..7268180 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -47,6 +47,26 @@ typedef int (*i2c_slave_cb_t)(struct i2c_client *clien=
-t,
->  #define I2C_MAX_HIGH_SPEED_MODE_FREQ	3400000
->  #define I2C_MAX_ULTRA_FAST_MODE_FREQ	5000000
-> =20
-> +static inline const char *i2c_freq_mode_string(u32 bus_freq_hz)
-> +{
-> +	switch (bus_freq_hz) {
-> +	case I2C_MAX_STANDARD_MODE_FREQ:
-> +		return "Standard Mode (100 kHz)";
-> +	case I2C_MAX_FAST_MODE_FREQ:
-> +		return "Fast Mode (400 kHz)";
-> +	case I2C_MAX_FAST_MODE_PLUS_FREQ:
-> +		return "Fast Mode Plus (1.0 MHz)";
-> +	case I2C_MAX_TURBO_MODE_FREQ:
-> +		return "Turbo Mode (1.4 MHz)";
-> +	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
-> +		return "High Speed Mode (3.4 MHz)";
-> +	case I2C_MAX_ULTRA_FAST_MODE_FREQ:
-> +		return "Ultra Fast Mode (5.0 MHz)";
-> +	default:
-> +		return "Unknown Mode";
-> +	}
-> +}
+Only super minor stuff. Thanks to all the contributors and reviewers!
 
-Any reason ehy this is an inline function? My gut feeling says it would
-be better added to the core?
+> +#define HZ_PER_KHZ	1000
+
+KHZ_PER_HZ?
+
+> +	ret = devm_i2c_add_adapter(dev, adapter);
+> +	if (ret) {
+> +		dev_err(dev, "failed to add i2c adapter, ret = %d\n", ret);
+
+No need to print that. The core prints messages on failures.
 
 
---Qf1oXS95uex85X0R
+--y9PDtDHaFrXNoMPU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBsvGYACgkQFA3kzBSg
-KbYCQA/+PdT6HVc/TnzGzmFsTSdFke1JlOrp/s6hCmRd/o5jLfbqm5csefgkiKpc
-A7EmrpisZtmzUSMhPgTbfjTnb4/FReCwc9cSljFAVv962tPFtKXDgJPtfMVrIMWo
-xjeHJk/pXNvTYH518vCzCoCzDETcY3J74rddiUjug7EV34/R//UpLfSA21DphCfd
-y0rd9cPyMeXvCeTJeCnltzU9TcM2RuCHrG9BibxXOiX875c++L5kZsMX77v5LolL
-lf2h2m++TxqcTu/bs9+LoS1UkrSWYJsQ6GsV/QSM//T+Y1uqoj2JppDMnI07GoXW
-UMeK9C/nQASvvkYHrG1eTj6OzaA5ucMa1oBVh3i7LP+uRRSIY6Iy72rbdiUm2DAj
-zjVtdEW3uy9r9HgCe5gChLkb3OJLxW0elHk2ZYqpp9aYzuhYpsoOr/lHOtszdadw
-GTe8msD+XaqjNPm2LaXNbOYYMIYdfzn3B5DrjivlSyq9TdYr22cmuXvAcvpvLdmk
-QPhpwj5x+r++ipOeuk1M/AbF7srYmA24BXg4PQYcipNviO2j1na4LcktBRqra62Z
-5C5R6tHApO30CFi4J6ueGB4PVl/qG2AK3krudOCjdUFK+4olbk2/4HHMQHbpBas4
-f6pfiaNVXwKTIUpB3rVsdtVG1t9PlCRAC019f+fUSLGs9Gs2pX4=
-=jouF
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBsvmgACgkQFA3kzBSg
+KbZ0Nw//boFzeFDX9pJMYnU9ZpW5WHJO7lXahbT9MjrWEw9/pILqtOQvdbYuU5jk
+U+NWcQ3iyzI+9P0OqfZIub5MnqgMBbE/uEAoJt3+btv/OEw6sf5zux7wa0nEQAP+
+JdXjaMNGKm7wP7LJv5GgStsNoDzHNrtyH18BfDYL8hHVJq5cvmFwI4JyK4Wj3tVJ
+MnHK0o+7HqxyDzgUZY6FU+/oJMCYW5WIE7JI7Gqa0EKcsc3HUfgZG3EvA0tnrv5K
+dG6552xRFDHNLGwdNsSnOEedRPIar0fjHvbHQwi6rE75r/FXO/8qzXITLMXU6q9X
+8cY/U4vNxTl4GlMUnIZRioeA3MWTspAl/DWeeYaELc+uLdhEFzu9h2Rg6oDKV5St
+YGKblb5r8JCO+/59aSWqjiGQPzDETlhrXQe1zCUBHq7KEdH41sLGDsGEG4dug4Yp
+bz751h0LbzYhGL8Rzuu3aF+JbCNQQLC/Z7yjKTG+GzwGP2wnznGQTpejDwjEYzmE
+Qma/SnBZqMR1ulEor47mslRdBuS1/v1vljTGqv+n4hWrsuSmTwsCqXjsr8nDcgpQ
+26puJE1padPiaba9XqpSIZUEpZMMIXRkjIbmKEtUQVU+8ddT2aaCJocY3yol2XMX
+FMCdTee++Ekcoaw1xG08zxwAlJeMtHa/I0+UhGVyZirqQ9WwV2k=
+=QjPO
 -----END PGP SIGNATURE-----
 
---Qf1oXS95uex85X0R--
+--y9PDtDHaFrXNoMPU--
