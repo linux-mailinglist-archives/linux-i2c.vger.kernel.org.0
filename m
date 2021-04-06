@@ -2,68 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C474F35544E
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 14:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0533554FB
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Apr 2021 15:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243371AbhDFMzt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Apr 2021 08:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243380AbhDFMzs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Apr 2021 08:55:48 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568EEC06175F
-        for <linux-i2c@vger.kernel.org>; Tue,  6 Apr 2021 05:55:40 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id k25so8512488iob.6
-        for <linux-i2c@vger.kernel.org>; Tue, 06 Apr 2021 05:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Hbwd+YCIGcArHXDLOaOgaDXtF1rGTjl7XVhRNNFoySo=;
-        b=QFEDsRbCyPVDmQm5QpFyxb7BE39ncBLFfPomgSIHQjrM+p7DEnnvsyqNYUUQFhWJWJ
-         ZIvjuhSZfcFTreHkj+Dfj1CTZo0kNCzay5yb0aGMoRyxKa8QcggXrT2iFtChL2n2CZQz
-         eR5wdBvPdv7F53cBM44XkTMTTpEYly6y3dtVQeKy2q13GJjupy7qLg4ii2F9nJ4dHxFx
-         AbF4TYtvqkNtKuWEOD4lOkZz/Cvsv8d4slQDfN4sJQnYvhsOiEmWr2/npntQWiNEFHYe
-         UMfnnRPNac17kQUTbgNqwO3HhVTTl40jWvWpFJgAcAavfTfDVm4Zzkf/hPEJXlAyuX7j
-         1IZw==
+        id S1344404AbhDFNYX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Apr 2021 09:24:23 -0400
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:42773 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344396AbhDFNYU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Apr 2021 09:24:20 -0400
+Received: by mail-ot1-f49.google.com with SMTP id c24-20020a9d6c980000b02902662e210895so14091889otr.9;
+        Tue, 06 Apr 2021 06:24:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Hbwd+YCIGcArHXDLOaOgaDXtF1rGTjl7XVhRNNFoySo=;
-        b=IZ8ae/TEofLC70JkJA6Z7dmCWPBV9U0huP+cfs+/A4ML7/596pQpAY72jVTqLfL8cO
-         vMEtxdV9ij8yGWfBHRO1Hrayt4rnCBq3j8Vl1WvHW35aUn78ZWzzZ+xZEfWkjBJMXhHy
-         JnOHwkqs5+HhqdGA+UHRnkiZGNjU/iCUImmYVifDzHKHR8uVbvMc/iB6xh/v7m6B1azr
-         Nk/v3o0HqX5Je0MRddkI0UVnnF3sEvmee9mQCQSw9N6Ell4jkb7qCJnXAbnIBoNwG4Y+
-         hMdV09qFeYnmXkQzSlfvrdJyWTxguv1Wn5o+P9dc/68VXu3DEIlFXXgSSKRltP7rK2rB
-         ROEw==
-X-Gm-Message-State: AOAM532i5p4QcdqR5c45oHZOAOOh2mT8Q90yv/G9C2TJ8X6I1Wm4xWW3
-        GN+QB/JB9azk4SuMiLrlYDnrfJfGJS0Ap0IWr7U=
-X-Google-Smtp-Source: ABdhPJzetg9Pb512p5grRZPAKl7L9IyXC5Me9/FtTtKAdn4Tm2QPuLywVJ2/TLve5FVEiaoJRaM6T/qcFl0Q00oZ7AY=
-X-Received: by 2002:a6b:c997:: with SMTP id z145mr22992631iof.36.1617713739452;
- Tue, 06 Apr 2021 05:55:39 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a02:2b09:0:0:0:0:0 with HTTP; Tue, 6 Apr 2021 05:55:38 -0700 (PDT)
-Reply-To: sroomf70@gmail.com
-From:   "Prof. Dr Diane" <dflint909@gmail.com>
-Date:   Tue, 6 Apr 2021 05:55:38 -0700
-Message-ID: <CAFe5QT3nx89Vf5Yv1qQr_VByV5JLeMA66y4WMi4KYigsUHxW5Q@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=3Z6VfoQf/cVhFTnKPgFjS1QLBhGZOrLUYnwWlVNrobE=;
+        b=YNTpEwYxtWvVqJN5ThbmerRtGETpsfijUSV4+uJuzsnZMBaVfuO3pHiAuq0BKV89eC
+         SQR6+0ZR5wKsdReuwvwyPna0xQKAsHOKMOS/BAT2sXA7EJOSoNyT2wDug0cVy8OAUE+B
+         F+m0Bjg2Q8QIkBhJdw3U9/8cLhMF9ipHBWf38e2lMpHt8lHxAD5L0PMxVvUJQcSMuawx
+         LDUmxJWOSKlyVDmebKJyLbruWABpqfaMlAM4uweIg3qnqhqIZkeCxzsAIEYwq/hLWBHm
+         wmwnWyNzcqlLJ4P/ADsXIQOx//cK6u/p+laSy7UPhPxd8+A7gjMZj3eMPA3RxsUWBGPF
+         KCoQ==
+X-Gm-Message-State: AOAM531gHIQS5qPpEBL3yR1ao9E9h9UM8pju5C/Lo/K5EH8gUQ6H15Bs
+        W/mhre00tDbv9PL0DolpaQ==
+X-Google-Smtp-Source: ABdhPJxUvGiUrGMiWqNC3Ye0jO+bTj11rgCpxHtjebTMf+Kxs23vcd19hfUsQVD5BlolI6tJnJJVZg==
+X-Received: by 2002:a9d:f06:: with SMTP id 6mr26373689ott.13.1617715452341;
+        Tue, 06 Apr 2021 06:24:12 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v23sm4677850ots.63.2021.04.06.06.24.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Apr 2021 06:24:11 -0700 (PDT)
+Received: (nullmailer pid 1674502 invoked by uid 1000);
+        Tue, 06 Apr 2021 13:24:05 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        linux-imx@nxp.com, linux-i2c@vger.kernel.org, festevam@gmail.com,
+        aisheng.dong@nxp.com, shawnguo@kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20210406113306.2633595-12-xiaoning.wang@nxp.com>
+References: <20210406113306.2633595-1-xiaoning.wang@nxp.com> <20210406113306.2633595-12-xiaoning.wang@nxp.com>
+Subject: Re: [PATCH V2 11/18] dt-bindings: i2c: imx-lpi2c: Add bus recovery example
+Date:   Tue, 06 Apr 2021 08:24:05 -0500
+Message-Id: <1617715445.188566.1674501.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
--- 
-Greetings,
-From Prof. Dr Diane, we notify you through our official mail but no
-respond from you before sending you with this private email hope you
-Received the Fund that was paid to your account? do not hesitate to
-keep us notice as soon as possible to enable us make the balance
-transfer into your nominated account. awaiting your urgent
-notification.
+On Tue, 06 Apr 2021 19:32:59 +0800, Clark Wang wrote:
+> Add i2c bus recovery configuration example.
+> 
+> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+> ---
+> V2 changes:
+>  - New patch added in V2
+> ---
+>  .../devicetree/bindings/i2c/i2c-imx-lpi2c.yaml     | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
 
-Best regards
-Prof. Dr Diane
-Head of Foreign Operation
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.example.dts:31.37-38 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:377: Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1414: dt_binding_check] Error 2
+
+See https://patchwork.ozlabs.org/patch/1462762
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
