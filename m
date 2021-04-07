@@ -2,71 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7254D3566E2
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Apr 2021 10:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F1D356894
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Apr 2021 11:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244864AbhDGIcj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Apr 2021 04:32:39 -0400
-Received: from mga01.intel.com ([192.55.52.88]:49711 "EHLO mga01.intel.com"
+        id S236185AbhDGJ73 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Apr 2021 05:59:29 -0400
+Received: from muru.com ([72.249.23.125]:51862 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244949AbhDGIci (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 7 Apr 2021 04:32:38 -0400
-IronPort-SDR: 26woun6F62rJtDQ9RnOjQHC7NiO+3jFNPeansRZ/F80Cu0DN4NvPn++cyr/sqyPIbfObQiu1cp
- Y8yieMcWQpLg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9946"; a="213648064"
-X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
-   d="scan'208";a="213648064"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2021 01:32:14 -0700
-IronPort-SDR: NbSLsRqgo5vTWbDeh7/ht5zJtyo1Nt8F8KOD6rhNicoY4gaYZuKIwDKuvV1SYo3ukSTb2yGDeV
- +4LIOjHKeavQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
-   d="scan'208";a="421598177"
-Received: from mylly.fi.intel.com (HELO [10.237.72.57]) ([10.237.72.57])
-  by orsmga008.jf.intel.com with ESMTP; 07 Apr 2021 01:32:11 -0700
-Subject: Re: [PATCH v6 3/5] i2c: add support for HiSilicon I2C controller
-To:     Yicong Yang <yangyicong@hisilicon.com>, wsa@kernel.org,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org
-Cc:     digetx@gmail.com, treding@nvidia.com, rmk+kernel@armlinux.org.uk,
-        song.bao.hua@hisilicon.com, john.garry@huawei.com,
-        mika.westerberg@linux.intel.com, prime.zeng@huawei.com,
-        linuxarm@huawei.com
-References: <1617197790-30627-1-git-send-email-yangyicong@hisilicon.com>
- <1617197790-30627-4-git-send-email-yangyicong@hisilicon.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <f1d50200-93f5-2c35-933a-01a1e7622983@linux.intel.com>
-Date:   Wed, 7 Apr 2021 11:32:10 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S230220AbhDGJ73 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 7 Apr 2021 05:59:29 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 64C2880A7;
+        Wed,  7 Apr 2021 10:00:28 +0000 (UTC)
+Date:   Wed, 7 Apr 2021 12:59:15 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>, kjlu@umn.edu,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: omap: Fix rumtime PM imbalance on error
+Message-ID: <YG2Cc+0rl4ndtGX4@atomide.com>
+References: <20210407033030.13419-1-dinghao.liu@zju.edu.cn>
+ <e2b5dc55-e084-c4e5-4eb0-749e2922a602@ti.com>
+ <YG1Qt56QSjyFqZxd@atomide.com>
+ <30ed0224-fba3-75c6-c4aa-e2d0724c291b@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <1617197790-30627-4-git-send-email-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30ed0224-fba3-75c6-c4aa-e2d0724c291b@ti.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
+* Vignesh Raghavendra <vigneshr@ti.com> [210407 07:46]:
+> Hi,
+> 
+> On 4/7/21 11:57 AM, Tony Lindgren wrote:
+> > * Vignesh Raghavendra <vigneshr@ti.com> [210407 06:20]:
+> >> Do we need a Fixes: tag to enable stable backports?
+> > 
+> > Well pm_runtime_resume_and_get() was introduced quite recently, and
+> > we already handle the error and bail out. And likely after an error
+> > not much works anyways :) So it might be better to add just a stable
+> > tag v5.10 and later as further backports are not likely needed.
+> > 
+> 
+> Agree this is not a critical patch for backport. But I do know that
+> pm_runtime_resume_and_get() is backported to v5.4 stable kernel at least
+> [1]. So stable tag with v5.4 perhaps would probably help tools looking
+> for patches to backport.
 
-On 3/31/21 4:36 PM, Yicong Yang wrote:
-> +	ret = device_property_read_u64(dev, "clk_rate", &ctlr->clk_rate_khz);
-> +	if (ret) {
-> +		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(ctlr->clk_rate_khz, HZ_PER_KHZ);
-> +
+OK no objections to adding a fixes tag.
 
-I'd use a temp variable here for reading the "clk_rate" property in 
-Hertz and calculating the derived kHz value from it. As a bonus allow to 
-use u32 for clk_rate_khz instead of u64. u32 will still provide plenty 
-of headroom :-)
+Regards,
 
-Reason for temp variable is for me it's confusing to see statement like 
-"rate_khz = rate_khz / 1000".
+Tony
 
-Jarkko
+> [1] https://lkml.org/lkml/2020/12/28/588
