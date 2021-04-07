@@ -2,89 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E88E3565AC
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Apr 2021 09:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46267356653
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Apr 2021 10:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244730AbhDGHqC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Apr 2021 03:46:02 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:51680 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240787AbhDGHqB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Apr 2021 03:46:01 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1377jaR1054304;
-        Wed, 7 Apr 2021 02:45:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1617781536;
-        bh=xJ+7JHvMKy97Iq5jhZv0GDQP4glZmSZPs3NNd9WqIz4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ckOZwBH2lAxhmYfiaQMvHZvGCMcCXLo6tVH2Rw46LA510qJ9FYLYcY8sCgk3FE1nx
-         RBRzB3ryvmyrmSBksXNusl5ugom/5swL/M12vVCCphlpXwWs8aQK9QpCJh0pBvMWoi
-         8eRCoAENZz3zWSenfUeoo81MWgdYHNmcPgzNAyKA=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1377jas6013696
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 7 Apr 2021 02:45:36 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 7 Apr
- 2021 02:45:36 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Wed, 7 Apr 2021 02:45:36 -0500
-Received: from [10.250.234.120] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1377jXEN005249;
-        Wed, 7 Apr 2021 02:45:34 -0500
-Subject: Re: [PATCH] i2c: omap: Fix rumtime PM imbalance on error
-To:     Tony Lindgren <tony@atomide.com>
-CC:     Dinghao Liu <dinghao.liu@zju.edu.cn>, <kjlu@umn.edu>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        <linux-omap@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20210407033030.13419-1-dinghao.liu@zju.edu.cn>
- <e2b5dc55-e084-c4e5-4eb0-749e2922a602@ti.com> <YG1Qt56QSjyFqZxd@atomide.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <30ed0224-fba3-75c6-c4aa-e2d0724c291b@ti.com>
-Date:   Wed, 7 Apr 2021 13:15:32 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S238637AbhDGIS4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Apr 2021 04:18:56 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:16808 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239849AbhDGISz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Apr 2021 04:18:55 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FFcg45l8gz7tPr;
+        Wed,  7 Apr 2021 16:16:32 +0800 (CST)
+Received: from [127.0.0.1] (10.69.38.196) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.498.0; Wed, 7 Apr 2021
+ 16:18:37 +0800
+Subject: Re: [PATCH v6 3/5] i2c: add support for HiSilicon I2C controller
+To:     Wolfram Sang <wsa@kernel.org>, <andriy.shevchenko@linux.intel.com>,
+        <linux-i2c@vger.kernel.org>, <Sergey.Semin@baikalelectronics.ru>,
+        <linux-kernel@vger.kernel.org>, <digetx@gmail.com>,
+        <treding@nvidia.com>, <jarkko.nikula@linux.intel.com>,
+        <rmk+kernel@armlinux.org.uk>, <song.bao.hua@hisilicon.com>,
+        <john.garry@huawei.com>, <mika.westerberg@linux.intel.com>,
+        <prime.zeng@huawei.com>, <linuxarm@huawei.com>
+References: <1617197790-30627-1-git-send-email-yangyicong@hisilicon.com>
+ <1617197790-30627-4-git-send-email-yangyicong@hisilicon.com>
+ <20210406200248.GH3122@kunai>
+From:   Yicong Yang <yangyicong@hisilicon.com>
+Message-ID: <5c64a396-05ca-d19f-04ca-a3770e82c009@hisilicon.com>
+Date:   Wed, 7 Apr 2021 16:18:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-In-Reply-To: <YG1Qt56QSjyFqZxd@atomide.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+In-Reply-To: <20210406200248.GH3122@kunai>
+Content-Type: text/plain; charset="windows-1252"
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Originating-IP: [10.69.38.196]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
-
-On 4/7/21 11:57 AM, Tony Lindgren wrote:
-> * Vignesh Raghavendra <vigneshr@ti.com> [210407 06:20]:
->> Do we need a Fixes: tag to enable stable backports?
+On 2021/4/7 4:02, Wolfram Sang wrote:
 > 
-> Well pm_runtime_resume_and_get() was introduced quite recently, and
-> we already handle the error and bail out. And likely after an error
-> not much works anyways :) So it might be better to add just a stable
-> tag v5.10 and later as further backports are not likely needed.
+> Only super minor stuff. Thanks to all the contributors and reviewers!
 > 
-
-Agree this is not a critical patch for backport. But I do know that
-pm_runtime_resume_and_get() is backported to v5.4 stable kernel at least
-[1]. So stable tag with v5.4 perhaps would probably help tools looking
-for patches to backport.
-
-[1] https://lkml.org/lkml/2020/12/28/588
-
-> Naturally nothing stopping doing separate backports if really needed
-> though.
+>> +#define HZ_PER_KHZ	1000
 > 
-> Regards,
+> KHZ_PER_HZ?
+
+that doesn't match what we want. we want the count of HZs per one KHZ.
+
 > 
-> Tony
+>> +	ret = devm_i2c_add_adapter(dev, adapter);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to add i2c adapter, ret = %d\n", ret);
+> 
+> No need to print that. The core prints messages on failures.
 > 
 
-Regards
-Vignesh
+i check the code and find a little difference. the print in the core doesn't
+have the device prefix so it may not tell us which device's registeration fails.
+but considering we have device name embedded in the adapter name for this
+driver, it's ok to remove this message.
+
