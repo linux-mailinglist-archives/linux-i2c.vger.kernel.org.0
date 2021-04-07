@@ -2,95 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5A535698D
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Apr 2021 12:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50763356AD3
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Apr 2021 13:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbhDGKZf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Apr 2021 06:25:35 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:16014 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbhDGKZM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Apr 2021 06:25:12 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FFgS712NvzPnx7;
-        Wed,  7 Apr 2021 18:22:15 +0800 (CST)
-Received: from [127.0.0.1] (10.69.38.196) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.498.0; Wed, 7 Apr 2021
- 18:24:54 +0800
-Subject: Re: [PATCH v6 2/5] i2c: core: add api to provide frequency mode
- strings
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Wolfram Sang <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
-        <Sergey.Semin@baikalelectronics.ru>,
-        <linux-kernel@vger.kernel.org>, <digetx@gmail.com>,
-        <treding@nvidia.com>, <jarkko.nikula@linux.intel.com>,
-        <rmk+kernel@armlinux.org.uk>, <song.bao.hua@hisilicon.com>,
-        <john.garry@huawei.com>, <mika.westerberg@linux.intel.com>,
-        <prime.zeng@huawei.com>, <linuxarm@huawei.com>
-References: <1617197790-30627-1-git-send-email-yangyicong@hisilicon.com>
- <1617197790-30627-3-git-send-email-yangyicong@hisilicon.com>
- <20210406195414.GG3122@kunai>
- <0d48f447-d1f2-1c86-27f4-3c8b23dcaf30@hisilicon.com>
- <YG2EjHuMb92mX5G5@smile.fi.intel.com>
-From:   Yicong Yang <yangyicong@hisilicon.com>
-Message-ID: <3fc130fe-e34a-4aaa-05bf-23db60b3b9f1@hisilicon.com>
-Date:   Wed, 7 Apr 2021 18:24:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S243046AbhDGLLg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Apr 2021 07:11:36 -0400
+Received: from mga04.intel.com ([192.55.52.120]:62600 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232994AbhDGLLb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 7 Apr 2021 07:11:31 -0400
+IronPort-SDR: lY34MZcNGHHO3lvqMBxPwYIfcYMg2+w+HAPSbIeGS8Z+Mn/UeW8iZmYSj2HfYbJH4FMHpiph6o
+ s5LWMV+OfUXQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9946"; a="191122092"
+X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
+   d="scan'208";a="191122092"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2021 04:11:19 -0700
+IronPort-SDR: uVRW1BMEqcGLGKtEctf4WFkeryvwDZMZWXLHWqESmJ2fwQ8Dso3yFQGjIr5iZIuJ9hAk5fItVL
+ kY8RhHcwuDuA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,203,1613462400"; 
+   d="scan'208";a="421659132"
+Received: from mylly.fi.intel.com (HELO [10.237.72.57]) ([10.237.72.57])
+  by orsmga008.jf.intel.com with ESMTP; 07 Apr 2021 04:11:17 -0700
+Subject: Re: [PATCH -next v2] i2c: designware: Fix return value check in
+ navi_amd_register_client()
+To:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Sanket Goswami <Sanket.Goswami@amd.com>
+Cc:     linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Hulk Robot <hulkci@huawei.com>
+References: <20210407031137.2750993-1-weiyongjun1@huawei.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <d0db9434-76a4-d8a3-f73c-8229c69b1e8f@linux.intel.com>
+Date:   Wed, 7 Apr 2021 14:11:16 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-In-Reply-To: <YG2EjHuMb92mX5G5@smile.fi.intel.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20210407031137.2750993-1-weiyongjun1@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.38.196]
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2021/4/7 18:08, Andy Shevchenko wrote:
-> On Wed, Apr 07, 2021 at 04:29:29PM +0800, Yicong Yang wrote:
->> On 2021/4/7 3:54, Wolfram Sang wrote:
->>>
->>>> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
->>>> index 10bd0b0..7268180 100644
->>>> --- a/include/linux/i2c.h
->>>> +++ b/include/linux/i2c.h
->>>> @@ -47,6 +47,26 @@ typedef int (*i2c_slave_cb_t)(struct i2c_client *client,
->>>>  #define I2C_MAX_HIGH_SPEED_MODE_FREQ	3400000
->>>>  #define I2C_MAX_ULTRA_FAST_MODE_FREQ	5000000
->>>>  
->>>> +static inline const char *i2c_freq_mode_string(u32 bus_freq_hz)
->>>> +{
->>>> +	switch (bus_freq_hz) {
->>>> +	case I2C_MAX_STANDARD_MODE_FREQ:
->>>> +		return "Standard Mode (100 kHz)";
->>>> +	case I2C_MAX_FAST_MODE_FREQ:
->>>> +		return "Fast Mode (400 kHz)";
->>>> +	case I2C_MAX_FAST_MODE_PLUS_FREQ:
->>>> +		return "Fast Mode Plus (1.0 MHz)";
->>>> +	case I2C_MAX_TURBO_MODE_FREQ:
->>>> +		return "Turbo Mode (1.4 MHz)";
->>>> +	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
->>>> +		return "High Speed Mode (3.4 MHz)";
->>>> +	case I2C_MAX_ULTRA_FAST_MODE_FREQ:
->>>> +		return "Ultra Fast Mode (5.0 MHz)";
->>>> +	default:
->>>> +		return "Unknown Mode";
->>>> +	}
->>>> +}
->>>
->>> Any reason ehy this is an inline function? My gut feeling says it would
->>> be better added to the core?
->>>
->>
->> it's not a complicated function so i didn't think it'll make much difference,
->> so i just put it in the header along with the coresponding macro definitions.
->> do you want me to move it to the core?
+On 4/7/21 6:11 AM, Wei Yongjun wrote:
+> In case of error, the function i2c_new_client_device() returns
+> ERR_PTR() and never returns NULL. The NULL test in the return
+> value check should be replaced with IS_ERR().
 > 
-> I guess exporting will save few dozens of bytes if the function is used more
-> than once. (All strings will be duplicated or multiplied in that case)
+> Fixes: 17631e8ca2d3 ("i2c: designware: Add driver support for AMD NAVI GPU")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> ---
+> v1 -> v2: fix description format.
+> ---
+>   drivers/i2c/busses/i2c-designware-pcidrv.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-
-yes, that's one concern. since we don't need this to perform fast, an inline
-one maybe unnecessary.
-
+> diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> index 7ca0017883a6..0f409a4c2da0 100644
+> --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> @@ -132,8 +132,8 @@ static int navi_amd_register_client(struct dw_i2c_dev *dev)
+>   	info.irq = dev->irq;
+>   
+>   	dev->slave = i2c_new_client_device(&dev->adapter, &info);
+> -	if (!dev->slave)
+> -		return -ENODEV;
+> +	if (IS_ERR(dev->slave))
+> +		return PTR_ERR(dev->slave);
+>   
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
