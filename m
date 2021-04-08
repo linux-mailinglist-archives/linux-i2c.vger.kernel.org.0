@@ -2,85 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 556343579FF
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Apr 2021 04:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACF8357B2B
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Apr 2021 06:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbhDHCAw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Apr 2021 22:00:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56398 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230334AbhDHCAw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 7 Apr 2021 22:00:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A3B23611AF;
-        Thu,  8 Apr 2021 02:00:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617847241;
-        bh=cw5M6pxU6yZtM1xJOgHtmP/1L3ZF1wzsAoIgeeXdZV0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Oj6lBGs0n1L5Q9414P7yA84LveZniVZvi1TL9P3HmGcsdRjRroyLno8buZgcPHpGw
-         KNZAYv8ar2SBCQ8AwKfdwvNikhzW6mEY527rikBLE81hUYbrk+wfF9RtAbOVh7tr+w
-         i5sgFjcZpQ7N9iTLTreXPNGDJwf8+x/ChwuRfUeM9ejiLnkanfrE+aDjf2BlsXMKA6
-         weFVQ2iBysXOFNFysvYkpp1U5cFhSV4FvWbVfg10o/rFKxr4Zud5HOivRpdiL7r6tN
-         iuGoNOZ5VDh7qHSjdhWVWO7yfrfo8r6Pp1riwSaElqF684ZlESisUzRek244m04GXA
-         sjy77gZOAsY/g==
-From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-To:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Ondrej Jirman <megous@megous.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH] i2c: mv64xxx: Fix random system lock caused by runtime PM
-Date:   Thu,  8 Apr 2021 04:00:00 +0200
-Message-Id: <20210408020000.21914-1-kabel@kernel.org>
-X-Mailer: git-send-email 2.26.2
+        id S229552AbhDHEVg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Apr 2021 00:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229530AbhDHEVd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Apr 2021 00:21:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6698C061761
+        for <linux-i2c@vger.kernel.org>; Wed,  7 Apr 2021 21:21:22 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lUMAT-00072i-9w; Thu, 08 Apr 2021 06:21:21 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lUMAS-0006iR-VQ; Thu, 08 Apr 2021 06:21:20 +0200
+Date:   Thu, 8 Apr 2021 06:21:20 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH] i2c: imx: mention Oleksij as maintainer of the binding
+ docs
+Message-ID: <20210408042120.szqkl7jg3yymrg3k@pengutronix.de>
+References: <20210407183532.2682-1-wsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210407183532.2682-1-wsa@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 06:20:41 up 126 days, 18:27, 38 users,  load average: 0.15, 0.10,
+ 0.02
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I noticed a weird bug with this driver on Marvell CN9130 Customer
-Reference Board.
+On Wed, Apr 07, 2021 at 08:35:32PM +0200, Wolfram Sang wrote:
+> When I removed myself as a maintainer of the yaml file, I missed that
+> some maintainer is required. Oleksij is already listed in MAINTAINERS
+> for this file, so add him here as well.
+> 
+> Fixes: 1ae6b3780848 ("i2c: imx: drop me as maintainer of binding docs")
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Sometime after boot, the system locks with the following message:
- [104.071363] i2c i2c-0: mv64xxx: I2C bus locked, block: 1, time_left: 0
+Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-The system does not respond afterwards, only warns about RCU stalls.
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-imx.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
+> index f33c6b29966b..3592d49235e0 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
+> @@ -6,6 +6,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+>  title: Freescale Inter IC (I2C) and High Speed Inter IC (HS-I2C) for i.MX
+>  
+> +maintainers:
+> +  - Oleksij Rempel <o.rempel@pengutronix.de>
+> +
+>  allOf:
+>    - $ref: /schemas/i2c/i2c-controller.yaml#
+>  
+> -- 
+> 2.29.2
+> 
+> 
 
-This first appeared with commit e5c02cf54154 ("i2c: mv64xxx: Add runtime
-PM support").
-
-With further experimentation I discovered that adding a delay into
-mv64xxx_i2c_hw_init() fixes this issue. This function is called before
-every xfer, due to how runtime PM works in this driver. It seems that in
-order to work correctly, a delay is needed after the bus is reset in
-this function.
-
-Since there already is a known erratum with this controller needing a
-delay, I assume that this is just another place this needs to be
-applied. Therefore I apply the delay only if errata_delay is true.
-
-Signed-off-by: Marek Behún <kabel@kernel.org>
----
- drivers/i2c/busses/i2c-mv64xxx.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
-index c590d36b5fd1..5c8e94b6cdb5 100644
---- a/drivers/i2c/busses/i2c-mv64xxx.c
-+++ b/drivers/i2c/busses/i2c-mv64xxx.c
-@@ -221,6 +221,10 @@ mv64xxx_i2c_hw_init(struct mv64xxx_i2c_data *drv_data)
- 	writel(0, drv_data->reg_base + drv_data->reg_offsets.ext_addr);
- 	writel(MV64XXX_I2C_REG_CONTROL_TWSIEN | MV64XXX_I2C_REG_CONTROL_STOP,
- 		drv_data->reg_base + drv_data->reg_offsets.control);
-+
-+	if (drv_data->errata_delay)
-+		udelay(5);
-+
- 	drv_data->state = MV64XXX_I2C_STATE_IDLE;
- }
- 
 -- 
-2.26.2
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
