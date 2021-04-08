@@ -2,89 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F47358ED5
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Apr 2021 22:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE835358EEA
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Apr 2021 23:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbhDHU5P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Apr 2021 16:57:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55284 "EHLO mail.kernel.org"
+        id S232305AbhDHVCd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Apr 2021 17:02:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231862AbhDHU5P (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 8 Apr 2021 16:57:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F1E806113C;
-        Thu,  8 Apr 2021 20:57:02 +0000 (UTC)
+        id S232091AbhDHVCd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 8 Apr 2021 17:02:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9DDC761175;
+        Thu,  8 Apr 2021 21:02:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617915423;
-        bh=Grq6Y9MFG8kVBMy6GU/tIw8EwcjcXAza1EvJmSR9xNA=;
+        s=k20201202; t=1617915741;
+        bh=i8z9rDDdDV7hBs5qJqiCKju0kSeY9bCPPllda9z7oAg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m1bxWkAgUJC/tP0r2tMDhQ39UofnJzPefAAvsI7wCvsanPAoNkINyF2MpcCV0mzq7
-         EX7OT6llUUBWW+fSZ2DWb6TW990BD/UOWn2mbOp7kkq94urVexg9L4Al51WElz4YzU
-         pXFMpTcycnZ0I6GeMgcQDlsHaTiezohmWBbbIILIHstwHjqZf1Df+AYov+VzYEt6Nr
-         8qi+PnarS4rlNTEpwmqENUuqQ6ihWWbqBMREUdnaLhf+jneglzetPhVvMZmFiguqBW
-         CmlYC4L+toEaqvqlVk0pslt1c9DhxW9wC67E7P/1wRoHju7pdHxmH/d2ODCWoR0V33
-         AcnpV4c/+oTwg==
-Date:   Thu, 8 Apr 2021 22:57:00 +0200
+        b=SwuMcV8HNkLJ2lHnlnFS54AMZvjvgOluPUbTOYvwhYOISJ82lDNwa3v8YjCi8arY3
+         sJIT7ZpFO4l1r9gI9Fl3OqzBh8ue84W/qx1IsPXo+Ii9H1gQ8HdYWMIRO0DGrv9Wfp
+         bHxaYJwS9FItT4SNM78qP7a/ZJbGzyzX66LUDMCj1vKS2Kr0UX9VSPEyFkrneeQ2Yc
+         7wAxiXYp4qytnHe7wbziuIBm+MQ0qr64OCaRHcgQUJUwCCAXoawOt8yosE9psm3LBX
+         hM4aEhl9XgeHLkMCCzK6ZfL0I6wPI0J2axtFx1DLY6JTLdQ5Vr1MOwTqM+y+FckqsU
+         tFjNz8VoDHsBQ==
+Date:   Thu, 8 Apr 2021 23:02:18 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Yicong Yang <yangyicong@hisilicon.com>
-Cc:     andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org,
-        digetx@gmail.com, treding@nvidia.com,
-        jarkko.nikula@linux.intel.com, rmk+kernel@armlinux.org.uk,
-        song.bao.hua@hisilicon.com, john.garry@huawei.com,
-        mika.westerberg@linux.intel.com, prime.zeng@huawei.com,
-        linuxarm@huawei.com
-Subject: Re: [PATCH v7 4/5] MAINTAINERS: Add maintainer for HiSilicon I2C
- driver
-Message-ID: <20210408205700.GE1900@kunai>
+Cc:     linux-i2c@vger.kernel.org, digetx@gmail.com,
+        andriy.shevchenko@linux.intel.com, prime.zeng@huawei.com,
+        tiantao6@hisilicon.com, linuxarm@huawei.com
+Subject: Re: [PATCH] i2c: core: simplify devm_i2c_new_dummy_device()
+Message-ID: <20210408210218.GF1900@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org,
-        digetx@gmail.com, treding@nvidia.com, jarkko.nikula@linux.intel.com,
-        rmk+kernel@armlinux.org.uk, song.bao.hua@hisilicon.com,
-        john.garry@huawei.com, mika.westerberg@linux.intel.com,
-        prime.zeng@huawei.com, linuxarm@huawei.com
-References: <1617880641-664-1-git-send-email-yangyicong@hisilicon.com>
- <1617880641-664-5-git-send-email-yangyicong@hisilicon.com>
+        Yicong Yang <yangyicong@hisilicon.com>, linux-i2c@vger.kernel.org,
+        digetx@gmail.com, andriy.shevchenko@linux.intel.com,
+        prime.zeng@huawei.com, tiantao6@hisilicon.com, linuxarm@huawei.com
+References: <1617884260-15461-1-git-send-email-yangyicong@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Q8BnQc91gJZX4vDc"
+        protocol="application/pgp-signature"; boundary="TU+u6i6jrDPzmlWF"
 Content-Disposition: inline
-In-Reply-To: <1617880641-664-5-git-send-email-yangyicong@hisilicon.com>
+In-Reply-To: <1617884260-15461-1-git-send-email-yangyicong@hisilicon.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Q8BnQc91gJZX4vDc
+--TU+u6i6jrDPzmlWF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 08, 2021 at 07:17:20PM +0800, Yicong Yang wrote:
-> Add maintainer for HiSilicon I2C driver.
+On Thu, Apr 08, 2021 at 08:17:40PM +0800, Yicong Yang wrote:
+> Use devm_add_action_or_reset() instead of devres_alloc() and
+> devres_add(), which works the same. This will simplify the
+> code. There is no functional change.
+>=20
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 
-Only if you need to resend, then you can squash this into the previous
-patch. If not, I can do it when applying.
+Yes, really nice! Applied to for-next, thanks!
 
 
---Q8BnQc91gJZX4vDc
+--TU+u6i6jrDPzmlWF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBvbhwACgkQFA3kzBSg
-KbY7FhAAsOoIwl4uxCZCL8cun/DjFNuMm/pe4k9rjr2ecX1SampE3Ku25c9cdSLs
-LSviBlf5j4zw2YNPltD0+pLKH15eqGKNrXGJC06BZwMNqJOc0LqC0qD7MK/KVy9k
-paTpvYoA3Wy9QR4Q2ESExnTo/FyVibsFqt+xvrneGoQawbwhYZIVQ+4PEE9k/IEI
-RsH0Sohrw0QD1hc1WsUA91vgDos8YvsfJclcJy+giT0zaTOHKIMJGYRbIzu78b52
-m7JGRc4q+ktdsKS01LAwhsJPpvKj2eUY5Vw85MNWT3PLIYOUL7BHVK11r7bti6cJ
-Vb2jY0w0+A30U8K7VyfFRoXvm8fp7uM6QKEIttjYfdK+H4OQ3edlVeLefox0yFe+
-hkpG6LBWtE69/KIDhR9GT+vp+uW8jdIDCDoy1ozrMBGGp7zo38Jy5xcW1k+dlLkL
-J86mzLTLkTXZ4BHfNJ0unQ7GOC8Ik9pgUMmjz2v1oWisCEtSSqtIAvjR2PKETXQo
-4dNI/9up7x3okOqFK9ZmIkU0YZPajizWwvUg4Od+4sX2kZaMwh4MbSXg1NH819CI
-k47NImvmSsop0U1nCq6PtLNaLiD6e2bZ8z4Avllf3LobF5FXnr/KUdRpyvGMq/4b
-0Zp5E20azctQPwMWtRit/vOOZOVvz3ZC12YeXW2UWFKPaQ6mkEo=
-=1HHz
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBvb1oACgkQFA3kzBSg
+KbZrHg/+MrWHoIiqffvToQ5Ox8eCfKHedLQa+E0YwcUwCJwCcSUbZwb35xHFRX9s
+Th+3p1k7VDeiGvvl1EfgpbiBfZXxcBx82ZRr/kFpvi/WYdqrS1hhok9a7RsgX8Qs
+UVuvmhq5Col0HuJsM0GDBUp5IDQbOiFcwzisOgdlHuivP8uiDGOaIDNYzwNwtwY0
+J+tJGRCnXYtodJb5LSioV3rUq+uEzVMWAaU2DkwAKbSTyHrGd8rzg+XiGq1mrOQs
+ZjXkjFjBHV59IKUIZQ4B7+bd18t6ic/7GV3WD/2nVrKZ5qHJpFMg0JFesXolcrNs
+QtnIqsD2svlqLOnUxqMRqfpaFdFbdWlRL1mxmgPWTHK0s+5mp3yOLjeJPmWVt/R0
+5vi1Fr8mBQmndH4H7NRUh81EKvU/fy/A++cCz4EF/SGwmqLjbK33+EgJmIIM+t4C
+S7w0wunKEbKPVih3qO7PHDCcWNuRDTdaRHP0pJLuCjbcpXfgPqAB00iBprwFBN+9
+CxCt4XmE+lizuYhNnxv3/ueooRuXnRwcdfHVsq6qyDVNFJNTUMtVMeiXvQ/AfXgz
+QR8tjvLRZ/v2tBu2KSlsSDIbFkDmgE0kUB5fitPELZI/VVivKE7WngUn6W4JtcjX
+R0kP9ECetEml0bDqPd3nIPOvpBJVw98J/o++3mw0y2wKsim3I4E=
+=hWxF
 -----END PGP SIGNATURE-----
 
---Q8BnQc91gJZX4vDc--
+--TU+u6i6jrDPzmlWF--
