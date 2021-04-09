@@ -2,89 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7E2359D88
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Apr 2021 13:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895E4359D95
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Apr 2021 13:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbhDILhl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Apr 2021 07:37:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47462 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231127AbhDILhi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 9 Apr 2021 07:37:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 296866115B;
-        Fri,  9 Apr 2021 11:37:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617968245;
-        bh=nnrOYQIZO76MFSXHXzAGR6dVO/7TTti1Cc6F2cB7Qsc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KvqgB0dZmDuDOGIuuo8E9MY9L1/8IzKia97v+uiw25iu6yTHGZsCrRthza1aDEPdW
-         PzWqn5V/Ah3ncMrfItbYl7rLAwHyyoI9DyGN1IhS/3LCRKRbYUDbnL0COWfj5/AarB
-         h+VQef+5vXBqnx5w58a5Xg5q/69HYKjOqowRCxYNoj4+7e+KJUwDncbjSzmFkvvasn
-         /S+6H4TKWV1DZ/wjKqwaKg7pDLbY4WaFEFUkT+El4++xrr3Kv4OgTCBvrCqBVGnLf9
-         V+bPNSWLHPcTiGbWqhltKBoR2Q/xem+xxnDFg2MoNCE2W8HGOpHJZ3QvcCwsBqOZNu
-         Y8c4Oa0sC1WeA==
-Date:   Fri, 9 Apr 2021 13:37:22 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>, linux-i2c@vger.kernel.org,
-        Sergey.Semin@baikalelectronics.ru, linux-kernel@vger.kernel.org,
-        digetx@gmail.com, treding@nvidia.com,
-        jarkko.nikula@linux.intel.com, rmk+kernel@armlinux.org.uk,
-        song.bao.hua@hisilicon.com, john.garry@huawei.com,
-        mika.westerberg@linux.intel.com, prime.zeng@huawei.com,
-        linuxarm@huawei.com
-Subject: Re: [PATCH v7 2/5] i2c: core: add api to provide frequency mode
- strings
-Message-ID: <20210409113722.GB879@ninjato>
+        id S233137AbhDILlB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Apr 2021 07:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231402AbhDILlB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Apr 2021 07:41:01 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10333C061760;
+        Fri,  9 Apr 2021 04:40:48 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id q5so4043689pfh.10;
+        Fri, 09 Apr 2021 04:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=toHEXdnaNBk9GHY+VmwU6VmVbCpteUHLPGolOIUVXZU=;
+        b=fivWDPUPTx3qLdVc6swehdu5IUGBcWhBZBgV9JvJvG1olAGiSuV8ZX2m66fe+NJmqy
+         WRFeQjrVGgVAC0MVMfCayQ2KwW1swsItadGv6JN5uX8OdSSKgBW2hROY8qwBzcLHAXYH
+         +W9KLPr+5pEIB2XdW1P0ZiVnbjvdPP0Ega2bAxp5HUI7oAsnS812RNksw202p/+8HEcT
+         gxN3kaMRY9id8buLOl/8g9lUq+iRkpzmOA6taKq+e3nx3UrN7phKaRHx9tJ5IKU13UbW
+         pIyGUsSnsrfPktYMJS9C1F8RNXnOSpJBuawhJlBqTenBh/Qjbht16B/qYXiM00Oz3HW2
+         H3qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=toHEXdnaNBk9GHY+VmwU6VmVbCpteUHLPGolOIUVXZU=;
+        b=hlnBrFp44oHZ2V8ITlk5zy5KSLPwYqsr6V4UZzsoQPgITwG3+lMx5+RlXqtdBTtSKS
+         9HVsGd/S5jMo88/BnpNW/O7DRUvavDp84/Tm8le12hZjU0KzOWG+oE97IoFCvx+Z3Qw6
+         O/cogdmdWjue6YrMAzQHZEy0Y4h9fiEaoNSN2lDvY5xrDwxRfSnc0IDEDj9XHtmE4CkP
+         ScXnvYss9WL3iPR4GjEOaQh7tUEqrxJTVYZ5FxDQtonY0FjsuAKOXM9+4ILRfcJYEh5B
+         uJO6h57Nq7ZEnabQTgo+xDH7KaW8TJtCu2K8YmrpFPREeNFS6h816KfxdlVq7MHxoYFu
+         Wc3A==
+X-Gm-Message-State: AOAM533nEMpgtXjgYEx/UpFQ7EQxh4rQyhTX78UAnpgRYunaF6H6EGJI
+        X/wUxdwaVElhCWzd0g7M/vIsqc5dvLK2zAukkAg=
+X-Google-Smtp-Source: ABdhPJxZ1c6ZYJLhBGv46wgI88JUOoELcZ4LPISFJM8mX+x6+60ZX7Bk5Wv5+VjX2vsWkDom0SDStJZwibljqBZ+W6M=
+X-Received: by 2002:aa7:8593:0:b029:246:c18b:ff16 with SMTP id
+ w19-20020aa785930000b0290246c18bff16mr2811312pfn.40.1617968447497; Fri, 09
+ Apr 2021 04:40:47 -0700 (PDT)
+MIME-Version: 1.0
 References: <1617880641-664-1-git-send-email-yangyicong@hisilicon.com>
  <1617880641-664-3-git-send-email-yangyicong@hisilicon.com>
- <20210408205551.GD1900@kunai>
- <YHAuIdwKMjZuDmXU@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qlTNgmc+xy1dBmNv"
-Content-Disposition: inline
-In-Reply-To: <YHAuIdwKMjZuDmXU@smile.fi.intel.com>
+ <20210408205551.GD1900@kunai> <YHAuIdwKMjZuDmXU@smile.fi.intel.com> <20210409113722.GB879@ninjato>
+In-Reply-To: <20210409113722.GB879@ninjato>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 9 Apr 2021 14:40:31 +0300
+Message-ID: <CAHp75VekZKo-45Pc7mp9Pfwzx=jS7L2SBhb564acWkuAo5cPAQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/5] i2c: core: add api to provide frequency mode strings
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        prime.zeng@huawei.com, Linuxarm <linuxarm@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Apr 9, 2021 at 2:37 PM Wolfram Sang <wsa@kernel.org> wrote:
+>
+>
+> > Can we add this later if needed?
+> > Because in such case additionally printing bus_freq_hz will be fine, no?
+>
+> Yes, we can do that.
+>
+> > But putting max to each frequency representation in the list of strings sounds
+> > good to me.
+>
+> It is not important to me if we are going to change that later anyhow.
+> I'll leave it to you guys.
 
---qlTNgmc+xy1dBmNv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks, I think the series is okay to go as is.
 
-
-> Can we add this later if needed?
-> Because in such case additionally printing bus_freq_hz will be fine, no?
-
-Yes, we can do that.
-
-> But putting max to each frequency representation in the list of strings sounds
-> good to me.
-
-It is not important to me if we are going to change that later anyhow.
-I'll leave it to you guys.
-
-
---qlTNgmc+xy1dBmNv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBwPG8ACgkQFA3kzBSg
-KbacFxAAl6vhaJv/H5OfIXdMfcZoxfI4GfBHhGi+BVOQujo0NFNEM5ym6qf+/Z83
-FYBlXphyqbkp0Qn2cNhYHawEHg8WgoMHh3MRtXdaLBJYv4Nna6OZrVsw7VviwbyC
-Cwjk3yaIPhFepaNA05lPndofOd71IGhrmwMJDq61TYe+QyDip6MriQum3SHlCdz0
-t0Q6IBHIwwsc3jcQ7TpFKaBzj42p/cDfTn8VMsATaqcsPIaESbH5iBd1aeI6MW1F
-zjeh3wuFKbVdb9zMiGsF+InDxHjdUv+y0Mhx6+L74g3z7i6jNrdTKYxNPh8Ay08m
-a1Usrfc8xGtIDG6uADJRPIRq4l/tfpW439bMVaham8WjDlYuR7YFTo/hT91+G038
-BJVAjBUPovrFK8h7vpl/ubpdd2ChAKH9sicmDUPcZKu69zk4sRv+7bex1NDqWikE
-q7f6PHHa0DI3ZCq5hpwugplPW+hCNEarbGcioOWOMKq+1CoY2OYLTP/1ePal6Zz3
-WeepZdioFW6mGBNx44lc2MPJJDibx/xw50rXAJIk7ZGIoYT30cVmbiBUq8+0cWz+
-4baWZGcZuT2P6h0dgbHeic9uycxubVDUUBaQU57WREp6wjzIPSVHLydZM1KBYqVX
-O8lFAGIJlFcYU8K+gGynjjKc9cWfw62c3f6dppvlGfw/D2sfza4=
-=b81N
------END PGP SIGNATURE-----
-
---qlTNgmc+xy1dBmNv--
+-- 
+With Best Regards,
+Andy Shevchenko
