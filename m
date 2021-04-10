@@ -2,91 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254EA35ABD5
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Apr 2021 10:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BA835ABD9
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Apr 2021 10:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbhDJIOv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 10 Apr 2021 04:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbhDJIOt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Apr 2021 04:14:49 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22D8C061762;
-        Sat, 10 Apr 2021 01:14:33 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id g17so9384886ejp.8;
-        Sat, 10 Apr 2021 01:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=iFkUvHDAIonvghUhNjShz3kgfmi52q6g6pOPNuEyy2Q=;
-        b=ibzlsCZHwQG6TRiEh3aMXUzAQE0TGDic//8r3jxOv44J1MESfnvguYGuE/VDdzBvgB
-         IYQk213UuqP2aTA7DdIpxb/5qkGqV9tWVNKeRZf8/7d7TkpeGfbWiITwE2H9L8uRXwKG
-         lEC0BrG7RWKkbgWBohSy+pKeosbJfK8ok+2plwlYIjmlszp+kXYDwIfq3FK7AH6zyNDP
-         OeJ83DWqUA/7ChRqZqUoL1E4ebKFmNVvgLKrO4vaGDQ5qOfLeSpmGhNT0V0zOOphzstF
-         omHFlnG6T6mlVENn4El0PoWsUvkj4wF7ndpjxxfYIXo6GfcrGmsngMGTZAekoaEZ+bF8
-         1cJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:references:date
-         :in-reply-to:message-id:user-agent:mime-version;
-        bh=iFkUvHDAIonvghUhNjShz3kgfmi52q6g6pOPNuEyy2Q=;
-        b=e66oCHI69Rnqs8mFYOWs6HNOSY7EWuH2IPf058fMmqrGvVcTOz511XnSbWNzcRAvjk
-         EU+w6ApbOPR76tQRVJTCky8fFRMmpNAKO1kKOWNq3m9PwdAiHYH6J+AmoMnZcalEwfan
-         hYA8aqaijtCizLCMZO76JQG5mQsttuMeVBW5F1wLASfn90CZ+7mLj3kodieMUei03Uoh
-         OIkmHD5jPowNI/mAPG1yh8jCX6krFJamA0MCgdbNEIiUdiSoN9B4uLlaTP5WZ0kHjm13
-         usD0d0GIozskgaoL4t/CQuw38RoVHH9BZST7vkDIH+dpDzO2QyasAAYvTYq+IgxooOTy
-         C55w==
-X-Gm-Message-State: AOAM531NjU9V2yko5/r+IWHaBNzt/QhmebkJ7dpimIXjuHeERrNiy9rG
-        rTpf1GEOP4o0RGkRfbQc67FUWW0b6Zw=
-X-Google-Smtp-Source: ABdhPJxXFT1AjQCeqSyg+7+b2oqkH1uyI+9DgyPOMO5o3onKySUKphQI37H0tMrS0IQPrdOhjGXGAA==
-X-Received: by 2002:a17:906:c290:: with SMTP id r16mr385717ejz.241.1618042472430;
-        Sat, 10 Apr 2021 01:14:32 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
-        by smtp.gmail.com with ESMTPSA id hz24sm2303254ejc.119.2021.04.10.01.14.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Apr 2021 01:14:31 -0700 (PDT)
-Sender: Peter Korsgaard <jacmet@gmail.com>
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
-        (envelope-from <peter@korsgaard.com>)
-        id 1lV8lD-0004eI-6W; Sat, 10 Apr 2021 10:14:31 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH i2c-tools] Revert "tools: i2ctransfer: add check for returned length from driver"
-References: <20210209110556.18814-1-wsa+renesas@sang-engineering.com>
-        <20210226174337.63a9c2a6@endymion> <20210310204648.GA332643@ninjato>
-Date:   Sat, 10 Apr 2021 10:14:31 +0200
-In-Reply-To: <20210310204648.GA332643@ninjato> (Wolfram Sang's message of
-        "Wed, 10 Mar 2021 21:46:48 +0100")
-Message-ID: <87tuoe5zfc.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S234076AbhDJIRL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 10 Apr 2021 04:17:11 -0400
+Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:26245 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234045AbhDJIRL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Apr 2021 04:17:11 -0400
+Received: from belgarion ([90.11.64.244])
+        by mwinf5d03 with ME
+        id qwGj240055GBUJa03wGlRY; Sat, 10 Apr 2021 10:16:56 +0200
+X-ME-Helo: belgarion
+X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
+X-ME-Date: Sat, 10 Apr 2021 10:16:56 +0200
+X-ME-IP: 90.11.64.244
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <jic23@cam.ac.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>
+Subject: Re: [PATCH 04/12] ARM: pxa: stargate2: Constify the software node
+References: <20210329105047.51033-1-heikki.krogerus@linux.intel.com>
+        <20210329105047.51033-5-heikki.krogerus@linux.intel.com>
+        <20210406193917.GC3122@kunai>
+X-URL:  http://belgarath.falguerolles.org/
+Date:   Sat, 10 Apr 2021 10:16:42 +0200
+In-Reply-To: <20210406193917.GC3122@kunai> (Wolfram Sang's message of "Tue, 6
+        Apr 2021 21:39:17 +0200")
+Message-ID: <87eefituz9.fsf@belgarion.home>
+User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
->>>>> "Wolfram" == Wolfram Sang <wsa+renesas@sang-engineering.com> writes:
+Wolfram Sang <wsa@kernel.org> writes:
 
- >> We don't usually do minor version updates for bug fixes. Instead, what
- >> I do is maintain a list of such "must have" fixes, that package
- >> maintainers can refer to. Look for "Recommended patches" at:
- >> 
- >> https://i2c.wiki.kernel.org/index.php/I2C_Tools
- >> 
- >> There's no section for version 4.2 yet, but we can add one as soon as
- >> the commit hits the public repository.
+> On Mon, Mar 29, 2021 at 01:50:39PM +0300, Heikki Krogerus wrote:
+>> Additional device properties are always just a part of a
+>> software fwnode. If the device properties are constant, the
+>> software node can also be constant.
+>> 
+>> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>> Cc: Jonathan Cameron <jic23@cam.ac.uk>
+>> Cc: Daniel Mack <daniel@zonque.org>
+>> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
+>> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+>
+> I like to apply it soon. Can we get an ack, please?
+Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
 
- > I added a section now for the 4.2 release. And (finally!) started
- > cleaning up the wiki a little.
-
-Thanks! As a packager, I must say that this way of handling bugfixes
-isn't great - I only just noticed this now by accident.
-
-What is the issue with making bugfix releases?
+Cheers.
 
 -- 
-Bye, Peter Korsgaard
+Robert
