@@ -2,49 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9CC35A72D
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Apr 2021 21:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A6B35AA9B
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Apr 2021 05:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbhDITdu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Apr 2021 15:33:50 -0400
-Received: from mxout02.lancloud.ru ([45.84.86.82]:45208 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234705AbhDITdt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Apr 2021 15:33:49 -0400
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru DC9052295719
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] i2c: rcar: add IRQ check
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        <linux-i2c@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>
-References: <8a05ea84-28e6-4d76-4f6d-55fb0a0cdf24@omprussia.ru>
- <20210408210448.GG1900@kunai>
-From:   Sergey Shtylyov <s.shtylyov@omprussia.ru>
-Organization: Open Mobile Platform, LLC
-Message-ID: <570dbccf-ccb4-05ac-742b-f443f82e12de@omprussia.ru>
-Date:   Fri, 9 Apr 2021 22:33:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S234242AbhDJDvr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Apr 2021 23:51:47 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:16880 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234229AbhDJDvq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Apr 2021 23:51:46 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FHLbp2Lmxzkjvy;
+        Sat, 10 Apr 2021 11:49:42 +0800 (CST)
+Received: from huawei.com (10.174.28.241) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.498.0; Sat, 10 Apr 2021
+ 11:51:25 +0800
+From:   Bixuan Cui <cuibixuan@huawei.com>
+To:     <cuibixuan@huawei.com>, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Dejin Zheng" <zhengdejin5@gmail.com>,
+        Linhua Xu <linhua.xu@unisoc.com>
+CC:     <linux-i2c@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
+Subject: [PATCH -next] i2c: sprd: Add missing MODULE_DEVICE_TABLE
+Date:   Sat, 10 Apr 2021 11:50:44 +0800
+Message-ID: <20210410035044.11418-1-cuibixuan@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20210408210448.GG1900@kunai>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
+Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1908.lancloud.ru (fd00:f066::208)
+X-Originating-IP: [10.174.28.241]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 4/9/21 12:04 AM, Wolfram Sang wrote:
+This patch adds missing MODULE_DEVICE_TABLE definition which generates
+correct modalias for automatic loading of this driver when it is built
+as an external module.
 
->> +	priv->irq = ret = platform_get_irq(pdev, 0);
-> 
-> Please no double assignments. Otherwise good catch!
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
+---
+ drivers/i2c/busses/i2c-sprd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-   OK, I'll come back with 5 more patches for the similar problems. :-)
+diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
+index 2917fecf6c80..9f77d1ddbaf8 100644
+--- a/drivers/i2c/busses/i2c-sprd.c
++++ b/drivers/i2c/busses/i2c-sprd.c
+@@ -640,6 +640,7 @@ static const struct of_device_id sprd_i2c_of_match[] = {
+ 	{ .compatible = "sprd,sc9860-i2c", },
+ 	{},
+ };
++MODULE_DEVICE_TABLE(of, sprd_i2c_of_match);
+ 
+ static struct platform_driver sprd_i2c_driver = {
+ 	.probe = sprd_i2c_probe,
 
-MBR, Sergei
