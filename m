@@ -2,60 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E6435D387
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 00:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C302435D391
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 00:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343920AbhDLWz5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Apr 2021 18:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S238138AbhDLW6e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Apr 2021 18:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343902AbhDLWzz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Apr 2021 18:55:55 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50370C06175F;
-        Mon, 12 Apr 2021 15:55:36 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d8so7162429plh.11;
-        Mon, 12 Apr 2021 15:55:36 -0700 (PDT)
+        with ESMTP id S236485AbhDLW6d (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Apr 2021 18:58:33 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6F3C061574;
+        Mon, 12 Apr 2021 15:58:14 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id b26so5019745pfr.3;
+        Mon, 12 Apr 2021 15:58:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SD2piBdrDkHdIsFcssPgit+YzlJAswwz9oFQNtIobk4=;
-        b=nZya3UXmlWe4SdNcQzNO26AY5IIgyIfTbs7gA/gcb/CXaJZAoDo4DR+FbQVywPeUkj
-         5TuhLV+au/4FarSWqKc3xtL+SUVWl7fQd140edi3at5delN9UkNMBtvzGSjxgacyqajS
-         pEqSpc2Ql1DmDVRk0/jLXGhr9IvUmjqfYflxLTD7fO791XHfUeDGF3XtX+/Dt8V5sP+A
-         0o0ZuC27rYFdPznzyV/T9O3NSZUXXI3hZPz5kucqnq2CflhL5HLjlcXJd9EgrORrULAj
-         TO4yixjCFDuHRlrTPW++hdxCdoe/JVxNi93y4zzacusfwD6TCMasv5tzhZkD0cmer14f
-         37bg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=vlE5aDFgqgMcsQqlh2ZHX4ihklVwx8oRdyTN4QegRGo=;
+        b=b5au25wKKskWzPty1ySlsXauJ6wbkGSKLBrI7q/Wt07LUgA6nW4Q6MSX3HAmEj/TW/
+         IPFA1MaR1s7IueSBwSgtGZhf5QD+bYkGer84qJER9h8mLd/CdjAR8qdS319DUHSHNVdZ
+         1pLVXlbCVR15kNRBXkR47YN47U7AJl5REpf/IoEG6FzgeYi94C0NxzuwmMtGbSJdkSmJ
+         NaZrD2DMC7Un/ZuvTPmWyHA/RCegZogT/VeblDO4LbxBZHgA+RFpCF3Jo0Sc3VLLgtEC
+         eUzJZsyPPM4F3Ym6ojDfIrOvtczlIEVIBADaQIpK1VWraJ+52rqwvBtz1R6pTJU53wcc
+         +Puw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SD2piBdrDkHdIsFcssPgit+YzlJAswwz9oFQNtIobk4=;
-        b=elFwdnpIgffzjgWRGKhmifEmxqlIXg3zqk7zQnQNG3ewKRoY4rRA0gF00Qcld3PTQb
-         icwpqUsNbYZev5ZktShK7UT0vR1m8/2zlcGgaPNZw1BkGsbJln84khl/vO2k1piaqafA
-         IhhYkNN2vQ3Jata6F4HWLWkVMiTQvJqwnzypAbGKpJRyt3WiIpCxax3WOF5v++FR8AqL
-         Z66tnEMEpjg3S6/DJq23tywh5/DrX1bilN3J/c9b+5VwI99Kq3sgV493UOmDMUIo2Qkw
-         qSDobOYaIm6Lc9lTcqJcIBCtxlEjrz7DYJJnwwOciReNG+CrDZ1PoBRgruc6/hZgKUVT
-         DwNA==
-X-Gm-Message-State: AOAM532xD/9GQleRtCCoML/C2P9U9OpFWzQNNm642SFRdarE8CXcX4CX
-        Au1fOB3UpdqT7WyJeKtfmoipiw3+xCgFvaSZ7vM=
-X-Google-Smtp-Source: ABdhPJyCQ2BQabpLB8huut11v2VL6r3i49FMlyNzf9zBO+OxJDBXiL+ud+Kkm/x3yIZuDBenoZSS2r7tcINCgoGd5AE=
-X-Received: by 2002:a17:902:e803:b029:e9:1f79:2427 with SMTP id
- u3-20020a170902e803b02900e91f792427mr29069401plg.21.1618268135835; Mon, 12
- Apr 2021 15:55:35 -0700 (PDT)
+         :message-id:subject:to;
+        bh=vlE5aDFgqgMcsQqlh2ZHX4ihklVwx8oRdyTN4QegRGo=;
+        b=nfqavmhCw4QTs2Q43dWKw+9xUnMi95Gwz9/uwONMHSkJkc0aQ8gzaSgFny+dNqLeQc
+         rAl9bvP0Rga/ghjLRr9oXRmCGkdUJ0OiEM7R4BYOz6nhrIdgxx3M6RFgweqDvIfBaD9r
+         v9A3POHCJ3xEzHdVfndSlhtngNIUFberclUHo6Iyvv8G13gKbz4882ue3GXhebvFDrqz
+         vFmVz8emX/dxhDmDRvh7Jxnd+Xzhsjjrw0yhdnOB+JEDpZzTV4HNp4kBLgtzEUvo/AAi
+         TF93P07oAumcGwsjB7tGvhlTdqmq6JRiaSThcD2X5k8GLTLNZPtTlMRlluMs6zhb/dmp
+         HwFQ==
+X-Gm-Message-State: AOAM531w9J3O39N3k6l7gEyOFonVZdB2XpRgtO65JshcYUnjkaBFMA9H
+        ZX1ZEFeR38AIxmaFivRUG8TUZZMHBnK6eY/l570Aczkx+Ec=
+X-Google-Smtp-Source: ABdhPJzs/QkhxjMpWrpUyimFo2z6ioHUlCdT5P+qIkzHmzvLyBpQ2oFna7kQmmf3Bc+WOMxCN2Aysi+PNYsmjyIljOA=
+X-Received: by 2002:a62:528e:0:b029:1f5:c5ee:a487 with SMTP id
+ g136-20020a62528e0000b02901f5c5eea487mr26303424pfb.7.1618268294266; Mon, 12
+ Apr 2021 15:58:14 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210329015206.17437-1-chris.packham@alliedtelesis.co.nz>
- <20210329015206.17437-6-chris.packham@alliedtelesis.co.nz> <CAHp75VfRXeeP0uQFDBUS6=n2TvG+_5=pe8rWp6BpbDNMz6=OSg@mail.gmail.com>
-In-Reply-To: <CAHp75VfRXeeP0uQFDBUS6=n2TvG+_5=pe8rWp6BpbDNMz6=OSg@mail.gmail.com>
+ <20210329015206.17437-7-chris.packham@alliedtelesis.co.nz> <20210410201302.GC2471@kunai>
+In-Reply-To: <20210410201302.GC2471@kunai>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 13 Apr 2021 01:55:19 +0300
-Message-ID: <CAHp75VeQbtOOoK9M-bz7Phgd_k9tyB-9nnqc_9tNRXYGyB3=bQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] i2c: mpc: use device managed APIs
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+Date:   Tue, 13 Apr 2021 01:57:58 +0300
+Message-ID: <CAHp75VcB6sBxVRaJiER96_XGkDuN2sbJDhoPQW1=4NeVCE=8EA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] i2c: mpc: Interrupt driven transfer
+To:     Wolfram Sang <wsa@kernel.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Rob Herring <robh+dt@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Wolfram Sang <wsa@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         linux-i2c <linux-i2c@vger.kernel.org>,
         devicetree <devicetree@vger.kernel.org>,
@@ -65,19 +64,30 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 1:52 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Sat, Apr 10, 2021 at 11:15 PM Wolfram Sang <wsa@kernel.org> wrote:
 >
-> On Mon, Mar 29, 2021 at 4:54 AM Chris Packham
-> <chris.packham@alliedtelesis.co.nz> wrote:
+> On Mon, Mar 29, 2021 at 02:52:06PM +1300, Chris Packham wrote:
+> > The fsl-i2c controller will generate an interrupt after every byte
+> > transferred. Make use of this interrupt to drive a state machine which
+> > allows the next part of a transfer to happen as soon as the interrupt is
+> > received. This is particularly helpful with SMBUS devices like the LM81
+> > which will timeout if we take too long between bytes in a transfer.
 > >
-> > Use device managed functions an clean up error handling.
+> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 >
-> For the god sake how have you tested this?
-> The patch is broken.
+> Okay, this change is too large and HW specific for a detailed review.
+> But I trust you and hope you will be around to fix regressions if I
+> apply it for 5.13? That kind of leads to the question if you want to
+> step up as the maintainer for this driver?
+>
+> Only thing I noticed was a "BUG" and "BUG_ON" and wonder if we really
+> need to halt the kernel in that case. Maybe WARN is enough?
+>
+> I'll apply the first five patches now, they look good to me.
 
-Looking into i2c-next and taking into account we are at rc7 I think we
-must revert this.
+And now is the time to revert the fifth one (at least, I don't know
+the state of the rest).
+It's obviously the series has not been tested (to some extent).
 
 -- 
 With Best Regards,
