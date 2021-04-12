@@ -2,139 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2A535CF97
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Apr 2021 19:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BFE35D01C
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Apr 2021 20:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243989AbhDLRmF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Apr 2021 13:42:05 -0400
-Received: from mga03.intel.com ([134.134.136.65]:28457 "EHLO mga03.intel.com"
+        id S241769AbhDLSSK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Apr 2021 14:18:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49978 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238649AbhDLRmF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 12 Apr 2021 13:42:05 -0400
-IronPort-SDR: TDHSBR1HeWKHYMPSKBf7byDc4TuQC5AP9bV+nRtgmFPaT+kARw4Gk7FKF+IUUUIACoX+8yQEGs
- SNP6B/jVy6+g==
-X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="194276228"
-X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="194276228"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 10:41:46 -0700
-IronPort-SDR: 0+Ip22y9x2IL5Rv+7mQQP04rLPAGoGitSlHG76msZHZ8uJTklhG1gqh3fcOp8C7gxJ/dyoyHyV
- hMAvQKeEuOIw==
-X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="531963624"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 10:41:43 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lW0Z9-003WWF-Pt; Mon, 12 Apr 2021 20:41:39 +0300
-Date:   Mon, 12 Apr 2021 20:41:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com
-Subject: Re: [PATCH v1 6/7] mfd: lpc_ich: Add support for pinctrl in non-ACPI
- system
-Message-ID: <YHSGU1fOa1AWYJGr@smile.fi.intel.com>
-References: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
- <20210308122020.57071-7-andriy.shevchenko@linux.intel.com>
- <20210412180106.7dc524e8@md1za8fc.ad001.siemens.net>
- <YHR6njWCHn77v7lQ@smile.fi.intel.com>
- <20210412192714.617d18b0@md1za8fc.ad001.siemens.net>
+        id S239725AbhDLSSK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 12 Apr 2021 14:18:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 665B76023C;
+        Mon, 12 Apr 2021 18:17:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618251471;
+        bh=uJJRifarGIODCUzPS4eMxH7H3QpnpG5zaKsq/qAvQR0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gGg2lmmV5P5rw9Y2lZ4iL9Cgq9FUeg3+YrzkUmnIQKXN8X5ywIT1zha2vACEebnsC
+         wXHcYmhlqo+4elfDpgeodriEKOblNSMtF2XUhfyxpGuUVJV4ewaswrpdnwALBs0EfC
+         4nDIwHsebnd2ojxA4oulJkqH63cS99d5bmzWPXwA7E+5Ivlfy7SvmNdJPMIGj1v8Xm
+         LoSxG+OgrzDqX9zBU3jlW5OKkUg6qmz0Q+KrGifycZ9tOKAfCvCYZGnLQMdcOXpZI7
+         iPOOfziUycauIXON+4lznfGD18oWCaf8KzH0RSnDTDyZlhk6JKBatVDdbAaTLQ9hNe
+         5sfRXC79V/Aaw==
+Date:   Mon, 12 Apr 2021 20:17:42 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 6/6] i2c: mpc: Interrupt driven transfer
+Message-ID: <20210412181742.GA3175@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210329015206.17437-1-chris.packham@alliedtelesis.co.nz>
+ <20210329015206.17437-7-chris.packham@alliedtelesis.co.nz>
+ <20210410201302.GC2471@kunai>
+ <723acaa7-ff57-40c2-a733-a520c5899800@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x+6KMIRAuhnl3hBn"
 Content-Disposition: inline
-In-Reply-To: <20210412192714.617d18b0@md1za8fc.ad001.siemens.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <723acaa7-ff57-40c2-a733-a520c5899800@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Apr 12, 2021 at 07:27:14PM +0200, Henning Schild wrote:
-> Am Mon, 12 Apr 2021 19:51:42 +0300
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > On Mon, Apr 12, 2021 at 06:01:06PM +0200, Henning Schild wrote:
-> > > Am Mon, 8 Mar 2021 14:20:19 +0200
-> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
 
-...
+--x+6KMIRAuhnl3hBn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > > +#define APL_GPIO_NORTH_OFFSET		0xc50000
-> > > > +#define APL_GPIO_NORTH_SIZE		0x76c  
-> > > 
-> > > drivers/pinctrl/intel/pinctrl-broxton.c:653
-> > > BXT_COMMUNITY(0, 77),
-> > >   
-> > > > +#define APL_GPIO_WEST_OFFSET		0xc70000
-> > > > +#define APL_GPIO_WEST_SIZE		0x674  
-> > > 
-> > > All these sizes correlate with 4 magic numbers from pinctrl-broxton.
-> > > 
-> > > SIZE - 0x500 (pad_base?) - 4 (no clue) / 8
-> > > 
-> > > It might be worth basing both numbers on a define and giving the
-> > > magic numbers some names.  
-> > 
-> > I didn't get this, sorry. The numbers above just precise sizes of the
-> > resources. Actually they all one page anyway, so, I can drop magic of
-> > SIZEs and leave only offsets.
-> 
-> That precise size is also in the broxton driver, i think. Say we did
-> have
-> 
-> #define BXT_NORTH_COUNT 77
-> #define PAD_BASE 0x500
-> 
-> in some central place
-> 
-> then we could use
-> 
-> size = 0x500 + 8 * BXT_NORTH_COUNT + 4 (no clue what that is)
-> 
-> the same pattern would work for all those sizes and their
-> BXT_COMMUNITY(0, XX) counterparts
-> 
-> So the real size seems to be a function of the magic numbers in
-> BXT_COMMUNITY(0, XX)
-> 
-> Or simply take one page as you say.
+Hi Chris,
 
-No, not this way. We are really trying hard *not* to put *that* magic into
-the code. Just FYI that SIZEs I have calculated myself, but these SIZEs
-are *not* the same as the ones used in pinctrl-broxton *semantically*.
+> Yep I plan on being around. I've got access to a couple of designs with=
+=20
+> P2040 and T2081 so hopefully that's sufficient to deal with any=20
+> regressions. One issue is a lack of different i2c devices (the systems=20
+> we have tend to use the same devices) but hopefully any reports of=20
+> regression will be from people with access to such devices.
 
-One if for resource provider, one is for consumer. They are simply different
-in this sense.
+Sounds very good to me.
 
-> > > But all this seems like duplication of pinctrl-broxton, maybe the
-> > > pinctrl driver should unhide the p2sb ...  
-> > 
-> > Definitely should not. It's not a business of the pin control driver
-> > to know how it has to be instantiated (or from what data). These
-> > offsets belong to the platform description and since firmware hides
-> > the device without given an appropriate ACPI device node, we have
-> > only one choice (assuming firmware is carved in stone) -- board files.
-> > 
-> > P2SB on the other hand is a slice of many (independent) devices.
-> > There is no "proper" place to unhide it except some core part of x86
-> > / PCI.
-> 
-> Got it, still the fact that there are 4 regions/communities is also part
-> of the broxton driver so there is duplication.
+> > That kind of leads to the question if you want to
+> > step up as the maintainer for this driver?
+> Sure can do. It'd be nice if it was someone from NXP but I think they've=
+=20
+> lost interest in the PowerPC based SoCs. Should I send a patch for=20
+> MAINTAINERS? If so does that go through the i2c tree?
 
-See above. I guess here is a misunderstanding behind meaning of the (same)
-numbers in different parts. Technically we may unify them, but it will be
-a layering violation.
+Yes, please send a patch and I will merge it via I2C. I don't have hope
+for someone from NXP because it was difficult enough to get maintainers
+for the actively sold SoCs.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > Only thing I noticed was a "BUG" and "BUG_ON" and wonder if we really
+> > need to halt the kernel in that case. Maybe WARN is enough?
+>=20
+> Yeah I think they can both be WARN variants. The one in mpc_xfer() can=20
+> happily continue. It's a little less clear what I should do in=20
+> mpc_i2c_do_action() if the WARN is ever hit but in theory it should be=20
+> an unreachable case anyway so the only thing that could get there is=20
+> some kind of memory corruption which would likely cause a crash elsewhere.
+
+Yeah, please change to WARN.
+
+> Do you want me to send a V3 of just that patch?
+
+Yes, plus the MAINTAINERS patch, please.
+
+Happy hacking,
+
+   Wolfram
 
 
+--x+6KMIRAuhnl3hBn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB0jsIACgkQFA3kzBSg
+KbYeIBAAissVnxsuTbOn2jT37M9pIfqXU+Gl91o9naCeVYf4xJzreGcyyKYXTofj
+QXNLPfeZcJU6cPZjOwpdE/J7dLtHsTN21AdyR28COAdOCiktIaN6kHIWYxjmGMHj
+dTT7pXnYB+/yUyogVJvWJMMfSG1OPK7Cq6sSgElV+c9e4mEpnQfurwjsGF9Tdzt4
+RHvXmNZTlVTW9XikvtqOTDDx/1D5Ajfof0X3PvQ0k3LfKOz3Z8Nf9k7hNwjgVRdZ
+ZCrCtNdQWasc55PjDQFcX316cwVPdAViY5lMH4pldqn20XgpLnze2BR5V7m5WVha
+NttS+qBCIdSx90Bv43NYWpp9xLQhXHGzoR4IrpE9BfYenMlLAG6Zu+xqPHdqQu/l
+rGShMFBkuSOk8BtNc9n56wMN7CEyAwIzUKbVWqQi3u3w877cvgKSpqO4xeXHj6nC
+oHFhdGUhgSha0UXOM6+1OHzcDb2Oh6mQzDYxbrdpTJyPZnMHy8JC6FqV2KMBrGXW
+AaojiFm0C5S9zAJPzhDc5EoToxXsjuFvS4aLas996moCJmplFLVSzxKvhc+Aqt1j
+yo197bjgkQtytoKWKYFeUQwwu3eSNSDb+dSKmTED03Q4pUouVJZmkldGhD8I3J6Z
+vtXslgL2smvgHkA//CFFrWiSbpsB8za9yeAHkwHUBR7AwWDVZV8=
+=4Ind
+-----END PGP SIGNATURE-----
+
+--x+6KMIRAuhnl3hBn--
