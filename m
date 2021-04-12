@@ -2,32 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D341E35CF88
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Apr 2021 19:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2A535CF97
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Apr 2021 19:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240002AbhDLRfM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Apr 2021 13:35:12 -0400
-Received: from mga14.intel.com ([192.55.52.115]:59905 "EHLO mga14.intel.com"
+        id S243989AbhDLRmF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Apr 2021 13:42:05 -0400
+Received: from mga03.intel.com ([134.134.136.65]:28457 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239298AbhDLRfL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 12 Apr 2021 13:35:11 -0400
-IronPort-SDR: +rCKRX1l6hIpehkJeu6ro5WmhqNSUhY7y58mihrx1tzNoiAxrFvkEbFAwEOeY/46w0ClH4qdXr
- 1gS0tv4gAfRw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="193804990"
+        id S238649AbhDLRmF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 12 Apr 2021 13:42:05 -0400
+IronPort-SDR: TDHSBR1HeWKHYMPSKBf7byDc4TuQC5AP9bV+nRtgmFPaT+kARw4Gk7FKF+IUUUIACoX+8yQEGs
+ SNP6B/jVy6+g==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="194276228"
 X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="193804990"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 10:34:53 -0700
-IronPort-SDR: VgP71Ev+CcKJ5sC+DXWVvwvpybjKlEAKWOxSqwfG0chYSKxuZ4aoZdud530kY6M2Lv5o3cSZ8T
- y0CDpI8rlRKg==
+   d="scan'208";a="194276228"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 10:41:46 -0700
+IronPort-SDR: 0+Ip22y9x2IL5Rv+7mQQP04rLPAGoGitSlHG76msZHZ8uJTklhG1gqh3fcOp8C7gxJ/dyoyHyV
+ hMAvQKeEuOIw==
 X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="460255052"
+   d="scan'208";a="531963624"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 10:34:49 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 10:41:43 -0700
 Received: from andy by smile with local (Exim 4.94)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lW0ST-003WRL-KB; Mon, 12 Apr 2021 20:34:45 +0300
-Date:   Mon, 12 Apr 2021 20:34:45 +0300
+        id 1lW0Z9-003WWF-Pt; Mon, 12 Apr 2021 20:41:39 +0300
+Date:   Mon, 12 Apr 2021 20:41:39 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Henning Schild <henning.schild@siemens.com>
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -42,61 +42,96 @@ Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com
 Subject: Re: [PATCH v1 6/7] mfd: lpc_ich: Add support for pinctrl in non-ACPI
  system
-Message-ID: <YHSEtc1660b+qXKG@smile.fi.intel.com>
+Message-ID: <YHSGU1fOa1AWYJGr@smile.fi.intel.com>
 References: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
  <20210308122020.57071-7-andriy.shevchenko@linux.intel.com>
  <20210412180106.7dc524e8@md1za8fc.ad001.siemens.net>
- <20210412184001.2fc359c1@md1za8fc.ad001.siemens.net>
- <YHR8Wd5oShhTricb@smile.fi.intel.com>
- <20210412191653.0a53985d@md1za8fc.ad001.siemens.net>
+ <YHR6njWCHn77v7lQ@smile.fi.intel.com>
+ <20210412192714.617d18b0@md1za8fc.ad001.siemens.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210412191653.0a53985d@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20210412192714.617d18b0@md1za8fc.ad001.siemens.net>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Apr 12, 2021 at 07:16:53PM +0200, Henning Schild wrote:
-> Am Mon, 12 Apr 2021 19:59:05 +0300
+On Mon, Apr 12, 2021 at 07:27:14PM +0200, Henning Schild wrote:
+> Am Mon, 12 Apr 2021 19:51:42 +0300
 > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > On Mon, Apr 12, 2021 at 06:40:01PM +0200, Henning Schild wrote:
-> > > Tan or Andy,
+> > On Mon, Apr 12, 2021 at 06:01:06PM +0200, Henning Schild wrote:
+> > > Am Mon, 8 Mar 2021 14:20:19 +0200
+> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+
+...
+
+> > > > +#define APL_GPIO_NORTH_OFFSET		0xc50000
+> > > > +#define APL_GPIO_NORTH_SIZE		0x76c  
 > > > 
-> > > maybe you can point me to a user of that patch. I guess there might
-> > > be an out-of-tree driver or userland code on how to use the GPIOs
-> > > from there.  
+> > > drivers/pinctrl/intel/pinctrl-broxton.c:653
+> > > BXT_COMMUNITY(0, 77),
+> > >   
+> > > > +#define APL_GPIO_WEST_OFFSET		0xc70000
+> > > > +#define APL_GPIO_WEST_SIZE		0x674  
+> > > 
+> > > All these sizes correlate with 4 magic numbers from pinctrl-broxton.
+> > > 
+> > > SIZE - 0x500 (pad_base?) - 4 (no clue) / 8
+> > > 
+> > > It might be worth basing both numbers on a define and giving the
+> > > magic numbers some names.  
 > > 
-> > I'm confused. User of this patch is pinctrl-broxton driver.
-> > It's in upstream.
+> > I didn't get this, sorry. The numbers above just precise sizes of the
+> > resources. Actually they all one page anyway, so, I can drop magic of
+> > SIZEs and leave only offsets.
 > 
-> Should this appear in /sys/class/gpio as chip so that pins can be
-> exported?
-
-No. Sysfs interface is deprecated. It should appear as /dev/gpiochip0 or so.
-
-> That is what i tried and failed with.
+> That precise size is also in the broxton driver, i think. Say we did
+> have
 > 
-> > Using GPIOs from it is something as done in a few drivers already
-> > (Assuming we have no resources described in the ACPI). I.e. you need
-> > to register in board file the GPIO mapping table with help of
-> > devm_acpi_dev_add_driver_gpios() and use one of gpiod_get() family of
-> > functions to request it.
+> #define BXT_NORTH_COUNT 77
+> #define PAD_BASE 0x500
+> 
+> in some central place
+> 
+> then we could use
+> 
+> size = 0x500 + 8 * BXT_NORTH_COUNT + 4 (no clue what that is)
+> 
+> the same pattern would work for all those sizes and their
+> BXT_COMMUNITY(0, XX) counterparts
+> 
+> So the real size seems to be a function of the magic numbers in
+> BXT_COMMUNITY(0, XX)
+> 
+> Or simply take one page as you say.
+
+No, not this way. We are really trying hard *not* to put *that* magic into
+the code. Just FYI that SIZEs I have calculated myself, but these SIZEs
+are *not* the same as the ones used in pinctrl-broxton *semantically*.
+
+One if for resource provider, one is for consumer. They are simply different
+in this sense.
+
+> > > But all this seems like duplication of pinctrl-broxton, maybe the
+> > > pinctrl driver should unhide the p2sb ...  
 > > 
-> > In case of LEDs you simple describe GPIO device name in lookup table
-> > and that's it. The drivers/platform/x86/pcengines-apuv2.c not the
-> > best but will give you an idea how to use "leds-gpio" driver in board
-> > files.
+> > Definitely should not. It's not a business of the pin control driver
+> > to know how it has to be instantiated (or from what data). These
+> > offsets belong to the platform description and since firmware hides
+> > the device without given an appropriate ACPI device node, we have
+> > only one choice (assuming firmware is carved in stone) -- board files.
+> > 
+> > P2SB on the other hand is a slice of many (independent) devices.
+> > There is no "proper" place to unhide it except some core part of x86
+> > / PCI.
 > 
-> I am aware of that driver and had a look at it. In order to figure out
-> the arguments for the macros/functions i was hoping for userland gpio
-> "export", but maybe that does not work here ...
-> For now i will assume that it does not show up in sysfs and can maybe
-> still be used, and try to build on top.
+> Got it, still the fact that there are 4 regions/communities is also part
+> of the broxton driver so there is duplication.
 
-Just switch to use libgpiod and associated tools / bindings in user space.
-Sysfs ABI is not being developed anymore.
+See above. I guess here is a misunderstanding behind meaning of the (same)
+numbers in different parts. Technically we may unify them, but it will be
+a layering violation.
 
 -- 
 With Best Regards,
