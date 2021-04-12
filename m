@@ -2,65 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA9235C5DF
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Apr 2021 14:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A1135C7D1
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Apr 2021 15:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239850AbhDLMDp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Apr 2021 08:03:45 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:21408 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237718AbhDLMDn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Apr 2021 08:03:43 -0400
-X-UUID: 3c5422fa0b1444acbab3ca09c068501e-20210412
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=xjIpJFHcvYjgEZJlihOq0w4qVxnmy2ixpDuQuCRxIzY=;
-        b=OMOwPMoMGgd2PQpew6blRmRm5tPg487EzvFFjRV8puBSekNrMfhWCpRssgcIAROkww5l2LWAMUSolHEiY9X+2MLZ9/peGRlGYoJd40y8lRsQC0yT1rCn26FXQayEjxK9oGLYB6NpNBar5o7dLQjYFaXyOKNuiWHXYuPMPIJTv7o=;
-X-UUID: 3c5422fa0b1444acbab3ca09c068501e-20210412
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <qii.wang@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1622231637; Mon, 12 Apr 2021 20:03:21 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 12 Apr
- 2021 20:03:15 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 12 Apr 2021 20:03:14 +0800
-Message-ID: <1618228994.32225.3.camel@mhfsdcap03>
-Subject: Re: [RESEND] i2c: mediatek: Get device clock-stretch time via dts
-From:   Qii Wang <qii.wang@mediatek.com>
-To:     Wolfram Sang <wsa@the-dreams.de>
-CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>
-Date:   Mon, 12 Apr 2021 20:03:14 +0800
-In-Reply-To: <20210407181936.GA1614@kunai>
-References: <1615622664-15032-1-git-send-email-qii.wang@mediatek.com>
-         <20210406194856.GF3122@kunai> <1617797706.32076.1.camel@mhfsdcap03>
-         <20210407181936.GA1614@kunai>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S239012AbhDLNlh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Apr 2021 09:41:37 -0400
+Received: from mga05.intel.com ([192.55.52.43]:31875 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238881AbhDLNlh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 12 Apr 2021 09:41:37 -0400
+IronPort-SDR: pDJqdX8qTEd9ZSeVm7ZlUMBfolybDEduhTrUbSYDhg+N4eLYFFhHzMI33ywQEeYbxh9Chtos41
+ Tk7x7KcLhnEA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="279493377"
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="279493377"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 06:41:19 -0700
+IronPort-SDR: eBVxvxVrRurWKdhoOf2gCsIc04+NHjxPllMFMbA0LgnT36+pnlMLcmlhYOUeB+xAnf2EcDCrFl
+ mSSYZAaWNSXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="451468589"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.184])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Apr 2021 06:41:18 -0700
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH] i2c: i801: Add support for Intel Alder Lake PCH-M
+Date:   Mon, 12 Apr 2021 16:41:12 +0300
+Message-Id: <20210412134112.71752-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: A7CFFEEEB61B385686FB02EAD7F2826708C53DF7161DB026B3C8B8AD5232F5922000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gV2VkLCAyMDIxLTA0LTA3IGF0IDIwOjE5ICswMjAwLCBXb2xmcmFtIFNhbmcgd3JvdGU6DQo+
-ID4gRHVlIHRvIGNsb2NrIHN0cmV0Y2gsIG91ciBIVyBJUCBjYW5ub3QgbWVldCB0aGUgYWMtdGlt
-aW5nDQo+ID4gc3BlYyh0U1U7U1RBLHRTVTtTVE8pLiANCj4gPiBUaGVyZSBpc24ndCBhIHNhbWUg
-ZGVsYXkgZm9yIGNsb2NrIHN0cmV0Y2hpbmcsIHNvIHdlIG5lZWQgcGFzcyBhDQo+ID4gcGFyYW1l
-dGVyIHdoaWNoIGNhbiBiZSBmb3VuZCB0aHJvdWdoIG1lYXN1cmVtZW50IHRvIG1lZXQgbW9zdA0K
-PiA+IGNvbmRpdGlvbnMuDQo+IA0KPiBXaGF0IGFib3V0IHVzaW5nIHRoaXMgZXhpc3RpbmcgYmlu
-ZGluZz8NCj4gDQo+IC0gaTJjLXNjbC1pbnRlcm5hbC1kZWxheS1ucw0KPiAgICAgICAgIE51bWJl
-ciBvZiBuYW5vc2Vjb25kcyB0aGUgSVAgY29yZSBhZGRpdGlvbmFsbHkgbmVlZHMgdG8gc2V0dXAg
-U0NMLg0KPiANCg0KSSBjYW4ndCBzZWUgdGhlIHJlbGF0aW9uc2hpcCBiZXR3ZWVuICJpMmMtc2Ns
-LWZhbGxpbmctdGltZS1ucyIgYW5kIGNsb2NrDQpzdHJldGNoaW5nLCBpcyB0aGVyZSBhIHBhcmFt
-ZXRlciByZWxhdGVkIHRvIGNsb2NrIHN0cmV0Y2hpbmc/DQpJZiB5b3UgdGhpbmsgYm90aCBvZiB0
-aGVtIHdpbGwgYWZmZWN0IHRoZSBhYy10aW1pbmcgb2YgU0NMLCBhdCB0aGlzDQpwb2ludCwgImky
-Yy1zY2wtZmFsbGluZy10aW1lLW5zIiBtYXliZSBhIGdvb2QgY2hvaWNlLg0KDQo=
+Add PCI ID of SMBus controller on Intel Alder Lake PCH-M.
+
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 526a5e88c791..f074c007e202 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -74,6 +74,7 @@
+  * Comet Lake-V (PCH)		0xa3a3	32	hard	yes	yes	yes
+  * Alder Lake-S (PCH)		0x7aa3	32	hard	yes	yes	yes
+  * Alder Lake-P (PCH)		0x51a3	32	hard	yes	yes	yes
++ * Alder Lake-M (PCH)		0x54a3	32	hard	yes	yes	yes
+  *
+  * Features supported by this driver:
+  * Software PEC				no
+@@ -232,6 +233,7 @@
+ #define PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS		0x4b23
+ #define PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS		0x4da3
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS		0x51a3
++#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS		0x54a3
+ #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
+ #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
+@@ -1090,6 +1092,7 @@ static const struct pci_device_id i801_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS) },
+ 	{ 0, }
+ };
+ 
+@@ -1775,6 +1778,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	case PCI_DEVICE_ID_INTEL_EBG_SMBUS:
+ 	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS:
+ 	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS:
++	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS:
+ 		priv->features |= FEATURE_BLOCK_PROC;
+ 		priv->features |= FEATURE_I2C_BLOCK_READ;
+ 		priv->features |= FEATURE_IRQ;
+-- 
+2.30.2
 
