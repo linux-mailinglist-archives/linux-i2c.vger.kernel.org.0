@@ -2,48 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5A435C5C7
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Apr 2021 13:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA9235C5DF
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Apr 2021 14:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240687AbhDLL5P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Apr 2021 07:57:15 -0400
-Received: from mail.sch.bme.hu ([152.66.249.140]:25082 "EHLO mail.sch.bme.hu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240622AbhDLL5O (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 12 Apr 2021 07:57:14 -0400
-Received: from mail-lf1-f47.google.com (209.85.167.47) by
- Exchange2016-1.sch.bme.hu (152.66.249.140) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2176.2; Mon, 12 Apr 2021 13:56:55 +0200
-Received: by mail-lf1-f47.google.com with SMTP id x13so10783849lfr.2;
-        Mon, 12 Apr 2021 04:56:55 -0700 (PDT)
-X-Gm-Message-State: AOAM532UEud3TMvdRESMd0e7mc6wuNRdnt6Lua2oCgdbrZ2AyRgn2Huy
-        szzlBfXTB4Pu0u1Vqfwd3dKmZsmWqz+IkDn7jbE=
-X-Google-Smtp-Source: ABdhPJzsgMVtHC/qdZLmU9vS3FCbAZxt8qW14PudyfBvduxe1m6zO8ygByHAx6ugH6ci4saRoBTSy72geMB63zTb7CQ=
-X-Received: by 2002:ac2:5ccd:: with SMTP id f13mr16239768lfq.596.1618228614130;
- Mon, 12 Apr 2021 04:56:54 -0700 (PDT)
-MIME-Version: 1.0
-From:   =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <bence98@sch.bme.hu>
-Date:   Mon, 12 Apr 2021 13:56:42 +0200
-X-Gmail-Original-Message-ID: <CACCVKEHwBnP+Q0XtHNJLkWfHN_HG4FYWt8MPW-Qt1SwqihKHng@mail.gmail.com>
-Message-ID: <CACCVKEHwBnP+Q0XtHNJLkWfHN_HG4FYWt8MPW-Qt1SwqihKHng@mail.gmail.com>
-Subject: Usage of get_random_bytes() in i2c-cp2615
-To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+        id S239850AbhDLMDp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Apr 2021 08:03:45 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:21408 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S237718AbhDLMDn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Apr 2021 08:03:43 -0400
+X-UUID: 3c5422fa0b1444acbab3ca09c068501e-20210412
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=xjIpJFHcvYjgEZJlihOq0w4qVxnmy2ixpDuQuCRxIzY=;
+        b=OMOwPMoMGgd2PQpew6blRmRm5tPg487EzvFFjRV8puBSekNrMfhWCpRssgcIAROkww5l2LWAMUSolHEiY9X+2MLZ9/peGRlGYoJd40y8lRsQC0yT1rCn26FXQayEjxK9oGLYB6NpNBar5o7dLQjYFaXyOKNuiWHXYuPMPIJTv7o=;
+X-UUID: 3c5422fa0b1444acbab3ca09c068501e-20210412
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1622231637; Mon, 12 Apr 2021 20:03:21 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 12 Apr
+ 2021 20:03:15 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 12 Apr 2021 20:03:14 +0800
+Message-ID: <1618228994.32225.3.camel@mhfsdcap03>
+Subject: Re: [RESEND] i2c: mediatek: Get device clock-stretch time via dts
+From:   Qii Wang <qii.wang@mediatek.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>
+Date:   Mon, 12 Apr 2021 20:03:14 +0800
+In-Reply-To: <20210407181936.GA1614@kunai>
+References: <1615622664-15032-1-git-send-email-qii.wang@mediatek.com>
+         <20210406194856.GF3122@kunai> <1617797706.32076.1.camel@mhfsdcap03>
+         <20210407181936.GA1614@kunai>
 Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [209.85.167.47]
-X-ClientProxiedBy: Exchange2016-1.sch.bme.hu (152.66.249.140) To
- Exchange2016-1.sch.bme.hu (152.66.249.140)
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: A7CFFEEEB61B385686FB02EAD7F2826708C53DF7161DB026B3C8B8AD5232F5922000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Normally, `cp2615_i2c_transfer.tag` is a random number that identifies
-a given request-reply pair (the chip sends its response with the same
-tag it got in the request). Currently, for the sake of ease, my driver
-sends its requests with a fixed tag of 0xDD for all requests. This
-defeats the purpose of the tag system. Should I use
-`get_random_bytes()` instead? My concerns are that generating a random
-value for each I2C transfer may lead to the entropy pool being used
-up, especially since - if I understand correctly -
-`get_random_bytes()` always generates 32 bit random words and discards
-any extra bytes if `length%4 != 0`, and I only need 1 byte each time.
+T24gV2VkLCAyMDIxLTA0LTA3IGF0IDIwOjE5ICswMjAwLCBXb2xmcmFtIFNhbmcgd3JvdGU6DQo+
+ID4gRHVlIHRvIGNsb2NrIHN0cmV0Y2gsIG91ciBIVyBJUCBjYW5ub3QgbWVldCB0aGUgYWMtdGlt
+aW5nDQo+ID4gc3BlYyh0U1U7U1RBLHRTVTtTVE8pLiANCj4gPiBUaGVyZSBpc24ndCBhIHNhbWUg
+ZGVsYXkgZm9yIGNsb2NrIHN0cmV0Y2hpbmcsIHNvIHdlIG5lZWQgcGFzcyBhDQo+ID4gcGFyYW1l
+dGVyIHdoaWNoIGNhbiBiZSBmb3VuZCB0aHJvdWdoIG1lYXN1cmVtZW50IHRvIG1lZXQgbW9zdA0K
+PiA+IGNvbmRpdGlvbnMuDQo+IA0KPiBXaGF0IGFib3V0IHVzaW5nIHRoaXMgZXhpc3RpbmcgYmlu
+ZGluZz8NCj4gDQo+IC0gaTJjLXNjbC1pbnRlcm5hbC1kZWxheS1ucw0KPiAgICAgICAgIE51bWJl
+ciBvZiBuYW5vc2Vjb25kcyB0aGUgSVAgY29yZSBhZGRpdGlvbmFsbHkgbmVlZHMgdG8gc2V0dXAg
+U0NMLg0KPiANCg0KSSBjYW4ndCBzZWUgdGhlIHJlbGF0aW9uc2hpcCBiZXR3ZWVuICJpMmMtc2Ns
+LWZhbGxpbmctdGltZS1ucyIgYW5kIGNsb2NrDQpzdHJldGNoaW5nLCBpcyB0aGVyZSBhIHBhcmFt
+ZXRlciByZWxhdGVkIHRvIGNsb2NrIHN0cmV0Y2hpbmc/DQpJZiB5b3UgdGhpbmsgYm90aCBvZiB0
+aGVtIHdpbGwgYWZmZWN0IHRoZSBhYy10aW1pbmcgb2YgU0NMLCBhdCB0aGlzDQpwb2ludCwgImky
+Yy1zY2wtZmFsbGluZy10aW1lLW5zIiBtYXliZSBhIGdvb2QgY2hvaWNlLg0KDQo=
+
