@@ -2,88 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5CC35DF5F
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 14:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1AB35DF7B
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 14:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236591AbhDMMvA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Apr 2021 08:51:00 -0400
-Received: from mail-vk1-f172.google.com ([209.85.221.172]:37510 "EHLO
-        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345905AbhDMMsq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Apr 2021 08:48:46 -0400
-Received: by mail-vk1-f172.google.com with SMTP id p206so1060810vkd.4;
-        Tue, 13 Apr 2021 05:48:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BPCwCEu/tlD0sPdVV7Acf3Q88fdnLj8wuh/uaB99fZ0=;
-        b=SxSg1XYx4RyYpuIGG8o9w0PpfCiC/84tJy6jumMgo888duy0YbQFzbvt4yUji2H89h
-         lBLyIUiruh+dIMQC/YPCPiL90s5aEBe5FjsjaZHc1WN1MBxrP2112yy4sMTxd8csHGFm
-         404tXIc9leiIb04bO+lm+hudoOnhTdiRhLg0wdE9y/7/oi1hvTV/oUdoQxnZkpjnquuy
-         Gt+tebNdPfwmPubPrIx3beAxjjT8yOKLqNuqe+6cM/5K+PVv6mwqIopJebHkY7OjtHRG
-         oRwM7PUSk/wXn8HsvSBuj99IJXx9AlZM/89fONfmo4ciKOHy3UaaF1/i+63/BFLxWZQW
-         fEdg==
-X-Gm-Message-State: AOAM5311/P1x8gka0sSnmoDXvIXdG6qLTn1U6Xp0C61SZ6QrrCp9y/HZ
-        DCPM8CqhMv/aWp8eg/sii9q/xnWTiQDqzF14icg=
-X-Google-Smtp-Source: ABdhPJzV+Q6RQgrKzEVEruhMtyqX3cZ+hfIXaRTxVkQJ4gAkFfCxaCbMerKFjzCqhoZqkiQzh4ee87eJb2p6DQ1CyqQ=
-X-Received: by 2002:a1f:1f81:: with SMTP id f123mr567276vkf.6.1618318106468;
- Tue, 13 Apr 2021 05:48:26 -0700 (PDT)
+        id S229832AbhDMMzO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Apr 2021 08:55:14 -0400
+Received: from www.zeus03.de ([194.117.254.33]:34860 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345974AbhDMMy4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Apr 2021 08:54:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=ZLoIUc/VJj4tIEfO9c9oO0foIDsS
+        2ZQvnhQFyKBaY2s=; b=Bd7qjvxX+uL43MrerDHO+jXLge5/z/BR6Novapu+Neu/
+        329li5yLb8T8QYfyPXIi81BWZLBq3aHsPKjQ+PFAJ2De8P89YInorlcVhr5uCQEl
+        RmHaUPld/bKJjCtK+o3IJw3qgKJZj/i51bihwwq4tERXAgyO6QTnyi1ysfcke4k=
+Received: (qmail 969714 invoked from network); 13 Apr 2021 14:54:35 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Apr 2021 14:54:35 +0200
+X-UD-Smtp-Session: l3s3148p1@dg7VIdq/sLMgAwDPXxBXAHZ7k2jwKqUG
+Date:   Tue, 13 Apr 2021 14:54:33 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Peter Korsgaard <peter@korsgaard.com>
+Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH i2c-tools] Revert "tools: i2ctransfer: add check for
+ returned length from driver"
+Message-ID: <20210413125433.GA9879@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20210209110556.18814-1-wsa+renesas@sang-engineering.com>
+ <20210226174337.63a9c2a6@endymion>
+ <20210310204648.GA332643@ninjato>
+ <87tuoe5zfc.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
-References: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
- <YHWQaQaw53eZtYzn@smile.fi.intel.com>
-In-Reply-To: <YHWQaQaw53eZtYzn@smile.fi.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 13 Apr 2021 14:48:15 +0200
-Message-ID: <CAMuHMdX29zQHaC9UgGyGad-LxRRK=hBKVHVZ5+9_Cawqk=NMtA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: I2C_HISI should depend on ARCH_HISI && ACPI
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OXfL5xGRrasGEqWY"
+Content-Disposition: inline
+In-Reply-To: <87tuoe5zfc.fsf@dell.be.48ers.dk>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy,
 
-On Tue, Apr 13, 2021 at 2:37 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Tue, Apr 13, 2021 at 02:26:15PM +0200, Geert Uytterhoeven wrote:
-> > The HiSilicon Kunpeng I2C controller is only present on HiSilicon
-> > Kunpeng SoCs, and its driver relies on ACPI to probe for its presence.
-> > Hence add dependencies on ARCH_HISI and ACPI, to prevent asking the user
-> > about this driver when configuring a kernel without Hisilicon platform
-> > or ACPI firmware support.
->
-> I don't by the ACPI dependency, sorry.
->
-> The driver is a pure platform driver that can be enumerated on ACPI enabled
-> devices, but otherwise it can be used as a platform one.
+--OXfL5xGRrasGEqWY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sure, you can manually instantiate a platform device with a matching
-name, and set up the "clk_rate" device property.
-But would it make sense to do that? Would anyone ever do that?
 
-The corresponding SPI_HISI_KUNPENG depends on ACPI, too.
+>  > I added a section now for the 4.2 release. And (finally!) started
+>  > cleaning up the wiki a little.
+>=20
+> Thanks! As a packager, I must say that this way of handling bugfixes
+> isn't great - I only just noticed this now by accident.
+>=20
+> What is the issue with making bugfix releases?
 
-> If you remove ACPI dependency, feel free to add my
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Instead of a minor 4.2.1 we could maybe also simply do a 4.3?
 
-Thanks! ;-)
 
-Gr{oetje,eeting}s,
+--OXfL5xGRrasGEqWY
+Content-Type: application/pgp-signature; name="signature.asc"
 
-                        Geert
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB1lIUACgkQFA3kzBSg
+KbZDnA//RdR0gA9yqpiiv9fD7VkV0NcswetgwSvK4lNzAPVkZ89AOrr4EvNf/9NX
+oEEDrd1IfezNqzrA4CacpZJ2k+xf9BiPfFaHVp9EVn86OjIHCLBmHWgV4IfxDL4h
+nN9BXGIBmySyxeeEdgaLVvkkACOs1yEogTWcQE4XfIOaeKhFAbdx4i77luBx+NAW
+OU8WweDWqcr+IiJzkbec3CA0OvmQ0ctrUm2UwIGFNIFSYL2W0p8xquj4Pn3zuK9h
+seYNRT0y43eQhsPoxrG9MU1mzXnY2MjDuoNRI+1nZPG4i544Lp52rcIxBHXTAV0L
+mybZyGi/Y0I42A/ISdwM3EqVV1xrNwKOZ1+QBLBI/dmk7AYCZGKHZWFQPLfuM5ls
+TdPJ0M1O5SnlCO1ZKYFlJ9iLAeFCdu6a3H9l0cauPOCikd6kWKj7yovGu9ZZruCM
+uG3ux4yYCxkW2Y2649AjADgi6w06cEIyU5KlAZI/8YIAKa7qlSI3pGML6Amvau70
+/lKF93yIJWSdutfDa+ghGfeAyqZfHxVAwBPWU8DjCofaBFlKf01Zj4U3fSm3hDtB
+bmaJHjIt5uPgn+u/83NYg/V8JybmFzbsNjApRsW+4WOhkmKUtoCOBxYxtyQjj1lj
+WXVy8YpoRU0JY2xrz5W4j5N6XV3MQyueXmjOt1fMyGQhqxdK2EU=
+=myYE
+-----END PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--OXfL5xGRrasGEqWY--
