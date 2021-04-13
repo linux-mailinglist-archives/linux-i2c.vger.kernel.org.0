@@ -2,618 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1FF35D6D2
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 07:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0465335D6D5
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 07:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242397AbhDMFK0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Apr 2021 01:10:26 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:39520 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhDMFK0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Apr 2021 01:10:26 -0400
+        id S242405AbhDMFKa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Apr 2021 01:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242498AbhDMFK1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Apr 2021 01:10:27 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D37C06138C
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Apr 2021 22:10:07 -0700 (PDT)
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 73306891AF;
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8BF52891B0;
         Tue, 13 Apr 2021 17:10:03 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
         s=mail181024; t=1618290603;
-        bh=6QcXZCVtMLG4eteVBblZPqjErHFef3laEmZeiM4nMK8=;
+        bh=i8Y1w1YcAAqAO7yzemekLbBaT++sUFSmMqKY8VBlQw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=G4o/OsCZ0Fb28ZnqiavPZUItDhxgLpzvpCHTX/+WiUu9voM4j7GPIGz3UtJDzCKic
-         9WWKavdaM/aBrNxb4ifMwI64cmNo1nkHZzgA6IdtFJ83pg26JiKl7s2scqmA8W2bmZ
-         8dn28aUi8wZFizOeHXIDKfcH9Nwi8my7k+WmOlb5RjSYjS3EA8cVQZo7Ejb82wnZq5
-         NPavv5eP/kkinahm8Liq1dp9f3d0+TXXwED5lciPa1wDWnKOcK/Zw3Rj/192faD8pQ
-         J8hGMUz4tDYs9r5lh29wDGwHHRXYltGHwedbsHKrg0+14Dj+1hiyJ4oNMOzezOw/1g
-         sDoMnavXyhjmg==
+        b=bpiaGOwEoO9XfDKAdmsVYHSVqDY8dXge2RFrzG7EhTRadqmbbu0pCqXpPCOJB/MYT
+         o48PhUjMZ90R3t0v05tIYBCn4x73IBo5l/s+6NslCxgdJKWRt2YckPgHjSm2GVOruP
+         9Cz+dJZRaEHLVWSGCYcbEhu1gvYTb3gQWUrD+nLYUj2/crKgy+QZdeH2GqBO1ZWMDL
+         MWMVgEumI2Xy7Rbizr8VpJDDEwcMGCpATVyXftE/LYtMBlQZLjSspJsG5lyjLcq++G
+         bQknVIxWxpgi+Mhz+YCcTlGbMoAHfnBX7XW1Du8aQDuhQkl/RQ7H+p9xYEv9DKxaSS
+         DfjnpgslB0oPg==
 Received: from smtp (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B607527ab0002>; Tue, 13 Apr 2021 17:10:03 +1200
+        id <B607527ab0003>; Tue, 13 Apr 2021 17:10:03 +1200
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id 8ABE213EEED;
+        by smtp (Postfix) with ESMTP id AB7DB13EEED;
         Tue, 13 Apr 2021 17:10:23 +1200 (NZST)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 52721284083; Tue, 13 Apr 2021 17:10:03 +1200 (NZST)
+        id 7355F284083; Tue, 13 Apr 2021 17:10:03 +1200 (NZST)
 From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v3 2/4] i2c: mpc: Interrupt driven transfer
-Date:   Tue, 13 Apr 2021 17:09:53 +1200
-Message-Id: <20210413050956.23264-3-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v3 3/4] i2c: mpc: Remove redundant NULL check
+Date:   Tue, 13 Apr 2021 17:09:54 +1200
+Message-Id: <20210413050956.23264-4-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210413050956.23264-1-chris.packham@alliedtelesis.co.nz>
 References: <20210413050956.23264-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=NaGYKFL4 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=3YhXtTcJ-WEA:10 a=uHd7jcRfAAAA:8 a=ddP-MoYzSegZMd1lxcMA:9 a=oJuOa2ycd7grNvSL:21 a=Aa-_d-w_HiXCPvey:21 a=W4h6EnClZ8UN7yAF:21 a=Ht9MEGjvesGdgnQqdPSO:22
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=NaGYKFL4 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=3YhXtTcJ-WEA:10 a=VwQbUJbxAAAA:8 a=HTRbRoXyaG4WaP6nMdIA:9 a=AjGcO6oz07-iQ99wixmX:22
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The fsl-i2c controller will generate an interrupt after every byte
-transferred. Make use of this interrupt to drive a state machine which
-allows the next part of a transfer to happen as soon as the interrupt is
-received. This is particularly helpful with SMBUS devices like the LM81
-which will timeout if we take too long between bytes in a transfer.
+In mpc_i2c_get_fdr_8xxx div is assigned as we iterate through the
+mpc_i2c_dividers_8xxx array. By the time we exit the loop div will
+either have the value that matches the requested speed or be pointing at
+the last entry in mpc_i2c_dividers_8xxx. Checking for div being NULL
+after the loop is redundant so remove the check.
 
+Reported-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
-
-Notes:
-    Changes in v3:
-    - use WARN/WARN_ON instead of BUG/BUG_ON
-    Changes in v2:
-    - add static_assert for state debug strings
-    - remove superfluous space
-
- drivers/i2c/busses/i2c-mpc.c | 434 +++++++++++++++++++----------------
- 1 file changed, 241 insertions(+), 193 deletions(-)
+ drivers/i2c/busses/i2c-mpc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-index 6e5614acebac..9818f9f6a553 100644
+index 9818f9f6a553..c30687483147 100644
 --- a/drivers/i2c/busses/i2c-mpc.c
 +++ b/drivers/i2c/busses/i2c-mpc.c
-@@ -1,16 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-- * (C) Copyright 2003-2004
-- * Humboldt Solutions Ltd, adrian@humboldt.co.uk.
--
-  * This is a combined i2c adapter and algorithm driver for the
-  * MPC107/Tsi107 PowerPC northbridge and processors that include
-  * the same I2C unit (8240, 8245, 85xx).
-  *
-- * Release 0.8
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2. This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-+ * Copyright (C) 2003-2004 Humboldt Solutions Ltd, adrian@humboldt.co.uk
-+ * Copyright (C) 2021 Allied Telesis Labs
-  */
-=20
- #include <linux/kernel.h>
-@@ -58,11 +53,36 @@
- #define CSR_MIF  0x02
- #define CSR_RXAK 0x01
-=20
-+enum mpc_i2c_action {
-+	MPC_I2C_ACTION_INVALID =3D 0,
-+	MPC_I2C_ACTION_START,
-+	MPC_I2C_ACTION_RESTART,
-+	MPC_I2C_ACTION_READ_BEGIN,
-+	MPC_I2C_ACTION_READ_BYTE,
-+	MPC_I2C_ACTION_WRITE,
-+	MPC_I2C_ACTION_STOP,
-+
-+	__MPC_I2C_ACTION_CNT
-+};
-+
-+static char *action_str[] =3D {
-+	"invalid",
-+	"start",
-+	"restart",
-+	"read begin",
-+	"read",
-+	"write",
-+	"stop",
-+};
-+
-+static_assert(ARRAY_SIZE(action_str) =3D=3D __MPC_I2C_ACTION_CNT);
-+
- struct mpc_i2c {
- 	struct device *dev;
- 	void __iomem *base;
- 	u32 interrupt;
--	wait_queue_head_t queue;
-+	wait_queue_head_t waitq;
-+	spinlock_t lock;
- 	struct i2c_adapter adap;
- 	int irq;
- 	u32 real_clk;
-@@ -70,6 +90,16 @@ struct mpc_i2c {
- 	u8 fdr, dfsrr;
- #endif
- 	struct clk *clk_per;
-+	u32 cntl_bits;
-+	enum mpc_i2c_action action;
-+	struct i2c_msg *msgs;
-+	int num_msgs;
-+	int curr_msg;
-+	u32 byte_posn;
-+	u32 block;
-+	int rc;
-+	int expect_rxack;
-+
- };
-=20
- struct mpc_i2c_divider {
-@@ -86,19 +116,6 @@ static inline void writeccr(struct mpc_i2c *i2c, u32 =
-x)
- 	writeb(x, i2c->base + MPC_I2C_CR);
- }
-=20
--static irqreturn_t mpc_i2c_isr(int irq, void *dev_id)
--{
--	struct mpc_i2c *i2c =3D dev_id;
--	if (readb(i2c->base + MPC_I2C_SR) & CSR_MIF) {
--		/* Read again to allow register to stabilise */
--		i2c->interrupt =3D readb(i2c->base + MPC_I2C_SR);
--		writeb(0, i2c->base + MPC_I2C_SR);
--		wake_up(&i2c->queue);
--		return IRQ_HANDLED;
--	}
--	return IRQ_NONE;
--}
--
- /* Sometimes 9th clock pulse isn't generated, and slave doesn't release
-  * the bus, because it wants to send ACK.
-  * Following sequence of enabling/disabling and sending start/stop gener=
-ates
-@@ -121,45 +138,6 @@ static void mpc_i2c_fixup(struct mpc_i2c *i2c)
- 	}
- }
-=20
--static int i2c_wait(struct mpc_i2c *i2c, unsigned timeout, int writing)
--{
--	u32 cmd_err;
--	int result;
--
--	result =3D wait_event_timeout(i2c->queue,
--			(i2c->interrupt & CSR_MIF), timeout);
--
--	if (unlikely(!(i2c->interrupt & CSR_MIF))) {
--		dev_dbg(i2c->dev, "wait timeout\n");
--		writeccr(i2c, 0);
--		result =3D -ETIMEDOUT;
--	}
--
--	cmd_err =3D i2c->interrupt;
--	i2c->interrupt =3D 0;
--
--	if (result < 0)
--		return result;
--
--	if (!(cmd_err & CSR_MCF)) {
--		dev_dbg(i2c->dev, "unfinished\n");
--		return -EIO;
--	}
--
--	if (cmd_err & CSR_MAL) {
--		dev_dbg(i2c->dev, "MAL\n");
--		return -EAGAIN;
--	}
--
--	if (writing && (cmd_err & CSR_RXAK)) {
--		dev_dbg(i2c->dev, "No RXAK\n");
--		/* generate stop */
--		writeccr(i2c, CCR_MEN);
--		return -ENXIO;
--	}
--	return 0;
--}
--
- #if defined(CONFIG_PPC_MPC52xx) || defined(CONFIG_PPC_MPC512x)
- static const struct mpc_i2c_divider mpc_i2c_dividers_52xx[] =3D {
- 	{20, 0x20}, {22, 0x21}, {24, 0x22}, {26, 0x23},
-@@ -434,168 +412,209 @@ static void mpc_i2c_setup_8xxx(struct device_node=
- *node,
- }
- #endif /* CONFIG_FSL_SOC */
-=20
--static void mpc_i2c_start(struct mpc_i2c *i2c)
-+static void mpc_i2c_finish(struct mpc_i2c *i2c, int rc)
- {
--	/* Clear arbitration */
--	writeb(0, i2c->base + MPC_I2C_SR);
--	/* Start with MEN */
--	writeccr(i2c, CCR_MEN);
-+	i2c->rc =3D rc;
-+	i2c->block =3D 0;
-+	i2c->cntl_bits =3D CCR_MEN;
-+	writeccr(i2c, i2c->cntl_bits);
-+	wake_up(&i2c->waitq);
- }
-=20
--static void mpc_i2c_stop(struct mpc_i2c *i2c)
-+static void mpc_i2c_do_action(struct mpc_i2c *i2c)
- {
--	writeccr(i2c, CCR_MEN);
--}
-+	struct i2c_msg *msg =3D &i2c->msgs[i2c->curr_msg];
-+	int dir =3D 0;
-+	int recv_len =3D 0;
-+	u8 byte;
-+
-+	dev_dbg(i2c->dev, "%s: action =3D %s\n", __func__,
-+		action_str[i2c->action]);
-+
-+	i2c->cntl_bits &=3D ~(CCR_RSTA | CCR_MTX | CCR_TXAK);
-+
-+	if (msg->flags & I2C_M_RD)
-+		dir =3D 1;
-+	if (msg->flags & I2C_M_RECV_LEN)
-+		recv_len =3D 1;
-+
-+	switch (i2c->action) {
-+	case MPC_I2C_ACTION_RESTART:
-+		i2c->cntl_bits |=3D CCR_RSTA;
-+		fallthrough;
-+
-+	case MPC_I2C_ACTION_START:
-+		i2c->cntl_bits |=3D CCR_MSTA | CCR_MTX;
-+		writeccr(i2c, i2c->cntl_bits);
-+		writeb((msg->addr << 1) | dir, i2c->base + MPC_I2C_DR);
-+		i2c->expect_rxack =3D 1;
-+		i2c->action =3D dir ? MPC_I2C_ACTION_READ_BEGIN : MPC_I2C_ACTION_WRITE=
-;
-+		break;
-+
-+	case MPC_I2C_ACTION_READ_BEGIN:
-+		if (msg->len) {
-+			if (msg->len =3D=3D 1 && !(msg->flags & I2C_M_RECV_LEN))
-+				i2c->cntl_bits |=3D CCR_TXAK;
-+
-+			writeccr(i2c, i2c->cntl_bits);
-+			/* Dummy read */
-+			readb(i2c->base + MPC_I2C_DR);
-+		}
-+		i2c->action =3D MPC_I2C_ACTION_READ_BYTE;
-+		break;
-=20
--static int mpc_write(struct mpc_i2c *i2c, int target,
--		     const u8 *data, int length, int restart)
--{
--	int i, result;
--	unsigned timeout =3D i2c->adap.timeout;
--	u32 flags =3D restart ? CCR_RSTA : 0;
-+	case MPC_I2C_ACTION_READ_BYTE:
-+		if (i2c->byte_posn || !recv_len) {
-+			/* Generate txack on next to last byte */
-+			if (i2c->byte_posn =3D=3D msg->len - 2)
-+				i2c->cntl_bits |=3D CCR_TXAK;
-+			/* Do not generate stop on last byte */
-+			if (i2c->byte_posn =3D=3D msg->len - 1)
-+				i2c->cntl_bits |=3D CCR_MTX;
-=20
--	/* Start as master */
--	writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA | CCR_MTX | flags);
--	/* Write target byte */
--	writeb((target << 1), i2c->base + MPC_I2C_DR);
-+			writeccr(i2c, i2c->cntl_bits);
-+		}
-=20
--	result =3D i2c_wait(i2c, timeout, 1);
--	if (result < 0)
--		return result;
-+		byte =3D readb(i2c->base + MPC_I2C_DR);
-=20
--	for (i =3D 0; i < length; i++) {
--		/* Write data byte */
--		writeb(data[i], i2c->base + MPC_I2C_DR);
-+		if (i2c->byte_posn =3D=3D 0 && recv_len) {
-+			if (byte =3D=3D 0 || byte > I2C_SMBUS_BLOCK_MAX) {
-+				mpc_i2c_finish(i2c, -EPROTO);
-+				return;
-+			}
-+			msg->len +=3D byte;
-+			/*
-+			 * For block reads, generate txack here if data length
-+			 * is 1 byte (total length is 2 bytes).
-+			 */
-+			if (msg->len =3D=3D 2) {
-+				i2c->cntl_bits |=3D CCR_TXAK;
-+				writeccr(i2c, i2c->cntl_bits);
-+			}
-+		}
-=20
--		result =3D i2c_wait(i2c, timeout, 1);
--		if (result < 0)
--			return result;
-+		dev_dbg(i2c->dev, "%s: %s %02x\n", __func__,
-+			action_str[i2c->action], byte);
-+		msg->buf[i2c->byte_posn++] =3D byte;
-+		break;
-+
-+	case MPC_I2C_ACTION_WRITE:
-+		dev_dbg(i2c->dev, "%s: %s %02x\n", __func__,
-+			action_str[i2c->action], msg->buf[i2c->byte_posn]);
-+		writeb(msg->buf[i2c->byte_posn++], i2c->base + MPC_I2C_DR);
-+		i2c->expect_rxack =3D 1;
-+		break;
-+
-+	case MPC_I2C_ACTION_STOP:
-+		mpc_i2c_finish(i2c, 0);
-+		break;
-+
-+	case MPC_I2C_ACTION_INVALID:
-+	default:
-+		WARN(1, "Unexpected action %d\n", i2c->action);
-+		break;
+@@ -377,7 +377,7 @@ static int mpc_i2c_get_fdr_8xxx(struct device_node *n=
+ode, u32 clock,
  	}
 =20
--	return 0;
-+	if (msg->len =3D=3D i2c->byte_posn) {
-+		i2c->curr_msg++;
-+		i2c->byte_posn =3D 0;
-+
-+		if (i2c->curr_msg =3D=3D i2c->num_msgs) {
-+			i2c->action =3D MPC_I2C_ACTION_STOP;
-+			/*
-+			 * We don't get another interrupt on read so
-+			 * finish the transfer now
-+			 */
-+			if (dir)
-+				mpc_i2c_finish(i2c, 0);
-+		} else {
-+			i2c->action =3D MPC_I2C_ACTION_RESTART;
-+		}
-+	}
+ 	*real_clk =3D fsl_get_sys_freq() / prescaler / div->divider;
+-	return div ? (int)div->fdr : -EINVAL;
++	return (int)div->fdr;
  }
 =20
--static int mpc_read(struct mpc_i2c *i2c, int target,
--		    u8 *data, int length, int restart, bool recv_len)
-+static void mpc_i2c_do_intr(struct mpc_i2c *i2c, u8 status)
- {
--	unsigned timeout =3D i2c->adap.timeout;
--	int i, result;
--	u32 flags =3D restart ? CCR_RSTA : 0;
-+	unsigned long flags;
-=20
--	/* Switch to read - restart */
--	writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA | CCR_MTX | flags);
--	/* Write target address byte - this time with the read flag set */
--	writeb((target << 1) | 1, i2c->base + MPC_I2C_DR);
-+	spin_lock_irqsave(&i2c->lock, flags);
-=20
--	result =3D i2c_wait(i2c, timeout, 1);
--	if (result < 0)
--		return result;
-+	if (!(status & CSR_MCF)) {
-+		dev_dbg(i2c->dev, "unfinished\n");
-+		mpc_i2c_finish(i2c, -EIO);
-+		goto out;
-+	}
-=20
--	if (length) {
--		if (length =3D=3D 1 && !recv_len)
--			writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA | CCR_TXAK);
--		else
--			writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA);
--		/* Dummy read */
--		readb(i2c->base + MPC_I2C_DR);
-+	if (status & CSR_MAL) {
-+		dev_dbg(i2c->dev, "arbiritration lost\n");
-+		mpc_i2c_finish(i2c, -EAGAIN);
-+		goto out;
- 	}
-=20
--	for (i =3D 0; i < length; i++) {
--		u8 byte;
-+	if (i2c->expect_rxack && (status & CSR_RXAK)) {
-+		dev_dbg(i2c->dev, "no RXAK\n");
-+		mpc_i2c_finish(i2c, -ENXIO);
-+		goto out;
-+	}
-+	i2c->expect_rxack =3D 0;
-=20
--		result =3D i2c_wait(i2c, timeout, 0);
--		if (result < 0)
--			return result;
-+	mpc_i2c_do_action(i2c);
-=20
--		/*
--		 * For block reads, we have to know the total length (1st byte)
--		 * before we can determine if we are done.
--		 */
--		if (i || !recv_len) {
--			/* Generate txack on next to last byte */
--			if (i =3D=3D length - 2)
--				writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA
--					 | CCR_TXAK);
--			/* Do not generate stop on last byte */
--			if (i =3D=3D length - 1)
--				writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA
--					 | CCR_MTX);
--		}
-+out:
-+	spin_unlock_irqrestore(&i2c->lock, flags);
-+}
-=20
--		byte =3D readb(i2c->base + MPC_I2C_DR);
-+static irqreturn_t mpc_i2c_isr(int irq, void *dev_id)
-+{
-+	struct mpc_i2c *i2c =3D dev_id;
-+	u8 status =3D readb(i2c->base + MPC_I2C_SR);
-=20
--		/*
--		 * Adjust length if first received byte is length.
--		 * The length is 1 length byte plus actually data length
--		 */
--		if (i =3D=3D 0 && recv_len) {
--			if (byte =3D=3D 0 || byte > I2C_SMBUS_BLOCK_MAX)
--				return -EPROTO;
--			length +=3D byte;
--			/*
--			 * For block reads, generate txack here if data length
--			 * is 1 byte (total length is 2 bytes).
--			 */
--			if (length =3D=3D 2)
--				writeccr(i2c, CCR_MIEN | CCR_MEN | CCR_MSTA
--					 | CCR_TXAK);
--		}
--		data[i] =3D byte;
-+	if (status & CSR_MIF) {
-+		writeb(0, i2c->base + MPC_I2C_SR);
-+		mpc_i2c_do_intr(i2c, status);
-+		return IRQ_HANDLED;
- 	}
-+	return IRQ_NONE;
-+}
-+
-+static void mpc_i2c_wait_for_completion(struct mpc_i2c *i2c)
-+{
-+	long time_left;
-=20
--	return length;
-+	time_left =3D wait_event_timeout(i2c->waitq, !i2c->block, i2c->adap.tim=
-eout);
-+
-+	if (!time_left)
-+		i2c->rc =3D -ETIMEDOUT;
-+	else if (time_left < 0)
-+		i2c->rc =3D time_left;
- }
-=20
--static int mpc_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int =
-num)
-+static int mpc_i2c_execute_msg(struct mpc_i2c *i2c)
- {
--	struct i2c_msg *pmsg;
--	int i;
--	int ret =3D 0;
--	unsigned long orig_jiffies =3D jiffies;
--	struct mpc_i2c *i2c =3D i2c_get_adapdata(adap);
-+	unsigned long orig_jiffies;
-+	unsigned long flags;
-=20
--	mpc_i2c_start(i2c);
-+	spin_lock_irqsave(&i2c->lock, flags);
-=20
--	/* Allow bus up to 1s to become not busy */
--	while (readb(i2c->base + MPC_I2C_SR) & CSR_MBB) {
--		if (signal_pending(current)) {
--			dev_dbg(i2c->dev, "Interrupted\n");
--			writeccr(i2c, 0);
--			return -EINTR;
--		}
--		if (time_after(jiffies, orig_jiffies + HZ)) {
--			u8 status =3D readb(i2c->base + MPC_I2C_SR);
-+	i2c->curr_msg =3D 0;
-+	i2c->rc =3D 0;
-+	i2c->byte_posn =3D 0;
-+	i2c->block =3D 1;
-+	i2c->action =3D MPC_I2C_ACTION_START;
-=20
--			dev_dbg(i2c->dev, "timeout\n");
--			if ((status & (CSR_MCF | CSR_MBB | CSR_RXAK)) !=3D 0) {
--				writeb(status & ~CSR_MAL,
--				       i2c->base + MPC_I2C_SR);
--				i2c_recover_bus(&i2c->adap);
--			}
--			return -EIO;
--		}
--		schedule();
--	}
-+	i2c->cntl_bits =3D CCR_MEN | CCR_MIEN;
-+	writeb(0, i2c->base + MPC_I2C_SR);
-+	writeccr(i2c, i2c->cntl_bits);
-+
-+	mpc_i2c_do_action(i2c);
-+
-+	spin_unlock_irqrestore(&i2c->lock, flags);
-+
-+	mpc_i2c_wait_for_completion(i2c);
-+
-+	if (i2c->rc =3D=3D -EIO || i2c->rc =3D=3D -EAGAIN || i2c->rc =3D=3D -ET=
-IMEDOUT)
-+		i2c_recover_bus(&i2c->adap);
-=20
--	for (i =3D 0; ret >=3D 0 && i < num; i++) {
--		pmsg =3D &msgs[i];
--		dev_dbg(i2c->dev,
--			"Doing %s %d bytes to 0x%02x - %d of %d messages\n",
--			pmsg->flags & I2C_M_RD ? "read" : "write",
--			pmsg->len, pmsg->addr, i + 1, num);
--		if (pmsg->flags & I2C_M_RD) {
--			bool recv_len =3D pmsg->flags & I2C_M_RECV_LEN;
--
--			ret =3D mpc_read(i2c, pmsg->addr, pmsg->buf, pmsg->len, i,
--				       recv_len);
--			if (recv_len && ret > 0)
--				pmsg->len =3D ret;
--		} else {
--			ret =3D
--			    mpc_write(i2c, pmsg->addr, pmsg->buf, pmsg->len, i);
--		}
--	}
--	mpc_i2c_stop(i2c); /* Initiate STOP */
- 	orig_jiffies =3D jiffies;
- 	/* Wait until STOP is seen, allow up to 1 s */
- 	while (readb(i2c->base + MPC_I2C_SR) & CSR_MBB) {
-@@ -612,7 +631,35 @@ static int mpc_xfer(struct i2c_adapter *adap, struct=
- i2c_msg *msgs, int num)
- 		}
- 		cond_resched();
- 	}
--	return (ret < 0) ? ret : num;
-+
-+	return i2c->rc;
-+}
-+
-+static int mpc_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int =
-num)
-+{
-+	int rc, ret =3D num;
-+	struct mpc_i2c *i2c =3D i2c_get_adapdata(adap);
-+	int i;
-+
-+	dev_dbg(i2c->dev, "%s: num =3D %d\n", __func__, num);
-+	for (i =3D 0; i < num; i++)
-+		dev_dbg(i2c->dev, "  addr =3D %02x, flags =3D %02x, len =3D %d, %*ph\n=
-",
-+			msgs[i].addr, msgs[i].flags, msgs[i].len,
-+			msgs[i].flags & I2C_M_RD ? 0 : msgs[i].len,
-+			msgs[i].buf);
-+
-+	WARN_ON(i2c->msgs !=3D NULL);
-+	i2c->msgs =3D msgs;
-+	i2c->num_msgs =3D num;
-+
-+	rc =3D mpc_i2c_execute_msg(i2c);
-+	if (rc < 0)
-+		ret =3D rc;
-+
-+	i2c->num_msgs =3D 0;
-+	i2c->msgs =3D NULL;
-+
-+	return ret;
- }
-=20
- static u32 mpc_functionality(struct i2c_adapter *adap)
-@@ -667,7 +714,8 @@ static int fsl_i2c_probe(struct platform_device *op)
-=20
- 	i2c->dev =3D &op->dev; /* for debug and error output */
-=20
--	init_waitqueue_head(&i2c->queue);
-+	init_waitqueue_head(&i2c->waitq);
-+	spin_lock_init(&i2c->lock);
-=20
- 	i2c->base =3D devm_platform_ioremap_resource(op, 0);
- 	if (IS_ERR(i2c->base)) {
+ static void mpc_i2c_setup_8xxx(struct device_node *node,
 --=20
 2.31.1
 
