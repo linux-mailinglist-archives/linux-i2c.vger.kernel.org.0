@@ -2,92 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9D035DEFC
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 14:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328B535DEFE
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 14:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbhDMMfx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Apr 2021 08:35:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47576 "EHLO mail.kernel.org"
+        id S229768AbhDMMhZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Apr 2021 08:37:25 -0400
+Received: from mga04.intel.com ([192.55.52.120]:33328 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229730AbhDMMfx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Apr 2021 08:35:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D9CA6128E;
-        Tue, 13 Apr 2021 12:35:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618317333;
-        bh=jZq27WHtD28iaDPaxdRQdCiW4Fnh0dePIgDdkXHZc3M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LAv+3hMeHEqlxWgwh6oyJugxWohxTict/My9171bvPww47HspB15sgTu7FAbfAJoI
-         fIRUwOOq2RSB3GojIDBUfvktn78o0tZ5e8JTsJf5+jbsIfTl0fhOJ8yNZpSW7wGG7R
-         nxN3bnyaR90N1SRP5d75tOSGizN+lZjJyC0XWoGV5Qhx5ESKxw5DSelZdhrk4J+whr
-         mD4oOeM9GcQdHbUeZbBcOsl7o/ZW+4HNjK7N6G5MRKv0uhX19IvORo6lReP4PnKV76
-         tGIf+CHXt9VgS975Ohn7vDRsEXv1N9G1QtjCxWqRupWB6WU/e5adpQfEu0LYaNRAFq
-         liGbHPstqKOow==
-Date:   Tue, 13 Apr 2021 14:35:30 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Bixuan Cui <cuibixuan@huawei.com>
-Cc:     Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Linhua Xu <linhua.xu@unisoc.com>, linux-i2c@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] i2c: sprd: Add missing MODULE_DEVICE_TABLE
-Message-ID: <20210413123530.GF1553@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Bixuan Cui <cuibixuan@huawei.com>, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Linhua Xu <linhua.xu@unisoc.com>, linux-i2c@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <20210410035044.11418-1-cuibixuan@huawei.com>
+        id S229900AbhDMMhY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Apr 2021 08:37:24 -0400
+IronPort-SDR: SCFi7eA8/LaUd+Q09PWJOle6/dCMfpmZtYCHO+X1MWSMXnnDiE7De89fhHo71VY/pIuUvn35l0
+ tjjP+v046gzw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="192275051"
+X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
+   d="scan'208";a="192275051"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 05:37:02 -0700
+IronPort-SDR: EftD6PGd6kRAx7iMLM+mfW7kd+FeJfLBMWizENmewb7XA3QgXhEGs5iYRxhMbqOFtbNGo3LpQO
+ BqRFct8SPUIw==
+X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
+   d="scan'208";a="398759106"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 05:37:00 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lWIHp-003l5j-Or; Tue, 13 Apr 2021 15:36:57 +0300
+Date:   Tue, 13 Apr 2021 15:36:57 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Yicong Yang <yangyicong@hisilicon.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: I2C_HISI should depend on ARCH_HISI && ACPI
+Message-ID: <YHWQaQaw53eZtYzn@smile.fi.intel.com>
+References: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HCdXmnRlPgeNBad2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210410035044.11418-1-cuibixuan@huawei.com>
+In-Reply-To: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Apr 13, 2021 at 02:26:15PM +0200, Geert Uytterhoeven wrote:
+> The HiSilicon Kunpeng I2C controller is only present on HiSilicon
+> Kunpeng SoCs, and its driver relies on ACPI to probe for its presence.
+> Hence add dependencies on ARCH_HISI and ACPI, to prevent asking the user
+> about this driver when configuring a kernel without Hisilicon platform
+> or ACPI firmware support.
 
---HCdXmnRlPgeNBad2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't by the ACPI dependency, sorry.
 
-On Sat, Apr 10, 2021 at 11:50:44AM +0800, Bixuan Cui wrote:
-> This patch adds missing MODULE_DEVICE_TABLE definition which generates
-> correct modalias for automatic loading of this driver when it is built
-> as an external module.
->=20
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
+The driver is a pure platform driver that can be enumerated on ACPI enabled
+devices, but otherwise it can be used as a platform one.
 
-Applied to for-next, thanks!
+If you remove ACPI dependency, feel free to add my
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Fixes: d62fbdb99a85730a ("i2c: add support for HiSilicon I2C controller")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/i2c/busses/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index b5b4e0d0ff4dd0bc..3ead6d9e130b2ebc 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -647,7 +647,7 @@ config I2C_HIGHLANDER
+>  
+>  config I2C_HISI
+>  	tristate "HiSilicon I2C controller"
+> -	depends on ARM64 || COMPILE_TEST
+> +	depends on (ARM64 && ARCH_HISI && ACPI) || COMPILE_TEST
+>  	help
+>  	  Say Y here if you want to have Hisilicon I2C controller support
+>  	  available on the Kunpeng Server.
+> -- 
+> 2.25.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---HCdXmnRlPgeNBad2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB1kBIACgkQFA3kzBSg
-KbZDrA/9FvLooUUs4AsjyGRYipNco5Ol7z7YKTI0xXJmFyAo3kKTGFpQH8YTgd0Z
-6D4XwZYhd24uMewRDSzlmCLBI85oDkC/6FV1dIOY/7P62lwkkjYOCw7UvA3sfPq9
-M871GHF4w1OAKTylSL/ZAi7llH0ReofkE1n/2L8ALnX7iI38xMwc3BeCdgMc2HFc
-nuGvOwOcJLzByakfawWB1Q/hiDZy49DpkhLexw+cXNtYBS6y9zRdyjiZisgGS/mT
-XduvW18Mv/2Xm/qz8RGKwdWR8HDd0g8KVZ4ZcQm4LsiuxO8fnHftTpMcmzrsgbOF
-KMbJdIC6l2KPPDlk3LCm1bmdIvqtlb6dPeFkx0u65FXi6mr5JaPEqPXLhzrXZ4YN
-JmPspVHwk7BfcRIlJ+H6ZmbWJn85xV4d07jfUvg0QQA+KHGroRoG6GGxg8/Y6BWQ
-OKdr4X5sERgm7/3OgL2Ka1GjOr4sggLZTw9J9IBkZIByzto8qNiZWe5Zhuweb1ix
-O2kvnVtF3iQMUJGgLt1unLQeDgwBVB7vrrTvlN/gmurTjQi2ClLtIiBP3NARBf7C
-8x5+nkbyCXhmH41GtfFbnSdl9QPJZOwhUWwCBvUAxbEAJ+n+QtElSB3sY6ZKh1Gb
-hX794odocfaC0pyJ4MzNFlWw/GtP5XGZ2+Hw1+h5AlQOah541o8=
-=LBNi
------END PGP SIGNATURE-----
-
---HCdXmnRlPgeNBad2--
