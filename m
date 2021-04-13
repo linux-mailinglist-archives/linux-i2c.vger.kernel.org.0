@@ -2,580 +2,153 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D4235E852
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 23:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977BF35E903
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 00:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbhDMVdY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Apr 2021 17:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
+        id S1347276AbhDMW2n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Apr 2021 18:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbhDMVdY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Apr 2021 17:33:24 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBFFC061574
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Apr 2021 14:33:04 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id y16so12311184pfc.5
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Apr 2021 14:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xglfNpRinMf4/9d03bIz9KnoYNOg/9ex7eKu69v9d5U=;
-        b=K8ibB/oLgM0I4UxMUCrtLbyV73oY3Hid3SBYpzCPTN/b26Fup8Wji2WFelxp65qzhD
-         ZbJpypC6egqltCi17cOclWU58ZXTcE89OJRaM1H6XKhEmqrvy4RRjRxSVtzTbovmUa4U
-         U0vf5ldYYOy/xbx+pATSrFdj5Wa1b/pJTYQ4hAASuQoA3vf7SFeThbS3mtocFx15wgq/
-         vMSdxpB7cqezJmWrR/1uU5ZQumt14FuS/pFtZpez+B/TfPJNcjFHnHM/IqwDBhuWioS3
-         CKjfsB4SALAJJFTbjDDaMrEsPNPioZEMR5hJc4IKd4zGW8erlRGhcpVRdrejEdkYXx4I
-         tRqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xglfNpRinMf4/9d03bIz9KnoYNOg/9ex7eKu69v9d5U=;
-        b=uhT+yQd8d2KVqodsWvGrBgPrT81mXiLsvRH9y5fC7x9vWVFYRt11+oItI19IYBIVrs
-         7UBeKR648IRmUGuJC03Jy+CAG+EBkjH3jPpkuax3Nzx9kaXkwNfB0KgJK6ekpd5cFEOq
-         cwhncz8syXgngDgTq4dxgowx3L3lo61YcT8o7MQ3TL4F1Q1pX9p5PXCwhrUmTgpHiqTz
-         gIbfVjS6PiY2Ipz7HLxt/uxSXVLu7E+e/OnnnLxUwc/H47uwcWtz3dbTCeuk90BGCTIp
-         ZNpYZMZBvB4x7Jn/NXIzmmHz2SHuts1n0gB9Liz7rankF/CVAqOOpgXyRmfnlbSY7myP
-         MnrQ==
-X-Gm-Message-State: AOAM533k03O0WQ02w8xLx9XB22iBmrgi5Vn/t3ylN1t1S9AW/MJRWQGv
-        2SWBcPn8PrLZLMSvpd6GambYCPy+SR68t8SmBfHdjQ==
-X-Google-Smtp-Source: ABdhPJw1+z8SZDWOybscVVCj7lbhBXUXgGsXn+Jfl5TY721VmNCPODKHFmzqqnEHN5JzFfdolGLP6f5NZH0ibi9njrc=
-X-Received: by 2002:a63:e509:: with SMTP id r9mr34957890pgh.384.1618349583323;
- Tue, 13 Apr 2021 14:33:03 -0700 (PDT)
+        with ESMTP id S1345557AbhDMW2m (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Apr 2021 18:28:42 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D18C061574
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Apr 2021 15:28:21 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 83C94891AE;
+        Wed, 14 Apr 2021 10:28:18 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1618352898;
+        bh=RxrNCKMwhAy/Fnw4Mqa90d74D72/M5uhkvxBLfVuIpE=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=sy278UyoHWq9WGpL2I13Rm1Z0AKjsl02z0XyS+VjY0hLnk9ZU/X3iRPSJg4tgF6Jc
+         LmsvUMht8QTyWCVake34uT5jbKS0AzEP1tzgvs9I6iP3caob2ODizaPRQgf7+JteuP
+         mB6AlneQDw6iJvN4PZmlSyiHxI6UeRcIXs/ZPUcs9qJo6iNYleROhRxhGDdCoWfKG/
+         ql0BivYJvDwwzqZcrNR4CaWzREt93tbjMU5lF/1mRZtJpvFaWPDF6fIPPHPmpQ9N5r
+         gou0Wxe1f70iLhxncr27y/P86kTFQIKxeWpKFJ41/DTFvJm7+BjuDLBwUW3sk60FCU
+         74FFj4WW28EWQ==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60761b020001>; Wed, 14 Apr 2021 10:28:18 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 14 Apr 2021 10:28:18 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.012; Wed, 14 Apr 2021 10:28:18 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Wolfram Sang <wsa@kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/4] i2c: mpc: Interrupt driven transfer
+Thread-Topic: [PATCH v3 2/4] i2c: mpc: Interrupt driven transfer
+Thread-Index: AQHXMCNCEeDrN5NOHkKnCG2Hfg5PhKqxrvOAgACQNYA=
+Date:   Tue, 13 Apr 2021 22:28:17 +0000
+Message-ID: <09f636b8-c126-af14-fbc3-9d6becb15df5@alliedtelesis.co.nz>
+References: <20210413050956.23264-1-chris.packham@alliedtelesis.co.nz>
+ <20210413050956.23264-3-chris.packham@alliedtelesis.co.nz>
+ <CAHp75VfR2zNmstvqCSRC2=0hf2DRV7sMdmy9-TDkO07KHwLjGA@mail.gmail.com>
+In-Reply-To: <CAHp75VfR2zNmstvqCSRC2=0hf2DRV7sMdmy9-TDkO07KHwLjGA@mail.gmail.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AB84BF9A6EA3E94B92BF6C3C137A0BA9@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20210224191720.7724-1-jae.hyun.yoo@linux.intel.com> <20210224191720.7724-5-jae.hyun.yoo@linux.intel.com>
-In-Reply-To: <20210224191720.7724-5-jae.hyun.yoo@linux.intel.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 13 Apr 2021 14:32:52 -0700
-Message-ID: <CAFd5g46eAcnSVFuUrXTuJmP-s_hsXDJ9x4QSQUM5JqfxFNwJVw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] i2c: aspeed: add DMA mode transfer support
-To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
-        Cedric Le Goater <clg@kaod.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=NaGYKFL4 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=3YhXtTcJ-WEA:10 a=AUvUAFASbHWzQvhM9VkA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 11:04 AM Jae Hyun Yoo
-<jae.hyun.yoo@linux.intel.com> wrote:
->
-> This commit adds DMA mode transfer support.
->
-> Only AST2500 and later versions support DMA mode.
->
-> AST2500 has these restrictions:
->   - If one of these controllers is enabled
->       * UHCI host controller
->       * MCTP controller
->     I2C has to use buffer mode or byte mode instead
->     since these controllers run only in DMA mode and
->     I2C is sharing the same DMA H/W with them.
->   - If one of these controllers uses DMA mode, I2C
->     can't use DMA mode
->       * SD/eMMC
->       * Port80 snoop
->
-> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> ---
-> Changes since v3:
-> - None
->
-> Changes since v2:
-> - Refined SoC family dependent xfer mode configuration functions.
->
-> Changes since v1:
-> - Updated commit message and comments.
-> - Refined using abstract functions.
->
->  drivers/i2c/busses/i2c-aspeed.c | 265 ++++++++++++++++++++++++++------
->  1 file changed, 216 insertions(+), 49 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> index ffc52937df26..3e3bb014b027 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -10,6 +10,8 @@
->  #include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/completion.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/dmapool.h>
->  #include <linux/err.h>
->  #include <linux/errno.h>
->  #include <linux/i2c.h>
-> @@ -47,6 +49,8 @@
->  #define ASPEED_I2C_DEV_ADDR_REG                                0x18
->  #define ASPEED_I2C_BUF_CTRL_REG                                0x1c
->  #define ASPEED_I2C_BYTE_BUF_REG                                0x20
-> +#define ASPEED_I2C_DMA_ADDR_REG                                0x24
-> +#define ASPEED_I2C_DMA_LEN_REG                         0x28
->
->  /* Device Register Definition */
->  /* 0x00 : I2CD Function Control Register  */
-> @@ -111,6 +115,8 @@
->  #define ASPEED_I2CD_BUS_RECOVER_CMD                    BIT(11)
->
->  /* Command Bit */
-> +#define ASPEED_I2CD_RX_DMA_ENABLE                      BIT(9)
-> +#define ASPEED_I2CD_TX_DMA_ENABLE                      BIT(8)
->  #define ASPEED_I2CD_RX_BUFF_ENABLE                     BIT(7)
->  #define ASPEED_I2CD_TX_BUFF_ENABLE                     BIT(6)
->  #define ASPEED_I2CD_M_STOP_CMD                         BIT(5)
-> @@ -136,6 +142,14 @@
->  #define ASPEED_I2CD_BUF_TX_COUNT_MASK                  GENMASK(15, 8)
->  #define ASPEED_I2CD_BUF_OFFSET_MASK                    GENMASK(5, 0)
->
-> +/* 0x24 : I2CD DMA Mode Buffer Address Register */
-> +#define ASPEED_I2CD_DMA_ADDR_MASK                      GENMASK(31, 2)
-> +#define ASPEED_I2CD_DMA_ALIGN                          4
-> +
-> +/* 0x28 : I2CD DMA Transfer Length Register */
-> +#define ASPEED_I2CD_DMA_LEN_SHIFT                      0
-> +#define ASPEED_I2CD_DMA_LEN_MASK                       GENMASK(11, 0)
-> +
->  enum aspeed_i2c_master_state {
->         ASPEED_I2C_MASTER_INACTIVE,
->         ASPEED_I2C_MASTER_PENDING,
-> @@ -161,6 +175,7 @@ struct aspeed_i2c_config {
->         u32 (*get_clk_reg_val)(struct device *dev, u32 divisor);
->         int (*enable_sram)(void);
->         int (*set_buf_xfer_mode)(struct device *dev);
-> +       int (*set_dma_xfer_mode)(struct device *dev);
->  };
->
->  struct aspeed_i2c_bus {
-> @@ -190,6 +205,12 @@ struct aspeed_i2c_bus {
->         void __iomem                    *buf_base;
->         u8                              buf_offset;
->         u8                              buf_page;
-> +       /* DMA mode */
-> +       struct dma_pool                 *dma_pool;
-> +       dma_addr_t                      dma_handle;
-> +       u8                              *dma_buf;
-> +       size_t                          dma_len;
-> +       /* Buffer/DMA mode */
->         size_t                          buf_size;
->  #if IS_ENABLED(CONFIG_I2C_SLAVE)
->         struct i2c_client               *slave;
-> @@ -272,9 +293,13 @@ static inline void
->  aspeed_i2c_slave_handle_rx_done(struct aspeed_i2c_bus *bus, u32 irq_status,
->                                 u8 *value)
->  {
-> -       if (bus->buf_base &&
-> +       if (bus->dma_buf &&
->             bus->slave_state == ASPEED_I2C_SLAVE_WRITE_RECEIVED &&
->             !(irq_status & ASPEED_I2CD_INTR_NORMAL_STOP))
-> +               *value = bus->dma_buf[0];
-> +       else if (bus->buf_base &&
-> +                bus->slave_state == ASPEED_I2C_SLAVE_WRITE_RECEIVED &&
-> +                !(irq_status & ASPEED_I2CD_INTR_NORMAL_STOP))
->                 *value = readb(bus->buf_base);
->         else
->                 *value = readl(bus->base + ASPEED_I2C_BYTE_BUF_REG) >> 8;
-> @@ -288,7 +313,18 @@ aspeed_i2c_slave_handle_normal_stop(struct aspeed_i2c_bus *bus, u32 irq_status,
->
->         if (bus->slave_state == ASPEED_I2C_SLAVE_WRITE_RECEIVED &&
->             irq_status & ASPEED_I2CD_INTR_RX_DONE) {
-> -               if (bus->buf_base) {
-> +               if (bus->dma_buf) {
-> +                       len = bus->buf_size -
-> +                             FIELD_GET(ASPEED_I2CD_DMA_LEN_MASK,
-> +                                       readl(bus->base +
-> +                                             ASPEED_I2C_DMA_LEN_REG));
-> +                       for (i = 0; i < len; i++) {
-> +                               *value = bus->dma_buf[i];
-> +                               i2c_slave_event(bus->slave,
-> +                                               I2C_SLAVE_WRITE_RECEIVED,
-> +                                               value);
-> +                       }
-> +               } else if (bus->buf_base) {
->                         len = FIELD_GET(ASPEED_I2CD_BUF_RX_COUNT_MASK,
->                                         readl(bus->base +
->                                               ASPEED_I2C_BUF_CTRL_REG));
-> @@ -305,7 +341,14 @@ aspeed_i2c_slave_handle_normal_stop(struct aspeed_i2c_bus *bus, u32 irq_status,
->  static inline void
->  aspeed_i2c_slave_handle_write_requested(struct aspeed_i2c_bus *bus, u8 *value)
->  {
-> -       if (bus->buf_base) {
-> +       if (bus->dma_buf) {
-> +               writel(bus->dma_handle & ASPEED_I2CD_DMA_ADDR_MASK,
-> +                      bus->base + ASPEED_I2C_DMA_ADDR_REG);
-> +               writel(FIELD_PREP(ASPEED_I2CD_DMA_LEN_MASK, bus->buf_size),
-> +                      bus->base + ASPEED_I2C_DMA_LEN_REG);
-> +               writel(ASPEED_I2CD_RX_DMA_ENABLE,
-> +                      bus->base + ASPEED_I2C_CMD_REG);
-> +       } else if (bus->buf_base) {
->                 writel(FIELD_PREP(ASPEED_I2CD_BUF_RX_SIZE_MASK,
->                                   bus->buf_size - 1) |
->                        FIELD_PREP(ASPEED_I2CD_BUF_OFFSET_MASK,
-> @@ -321,7 +364,23 @@ aspeed_i2c_slave_handle_write_received(struct aspeed_i2c_bus *bus, u8 *value)
->  {
->         int i, len;
->
-> -       if (bus->buf_base) {
-> +       if (bus->dma_buf) {
-> +               len = bus->buf_size -
-> +                     FIELD_GET(ASPEED_I2CD_DMA_LEN_MASK,
-> +                               readl(bus->base +
-> +                                     ASPEED_I2C_DMA_LEN_REG));
-> +               for (i = 1; i < len; i++) {
-> +                       *value = bus->dma_buf[i];
-> +                       i2c_slave_event(bus->slave, I2C_SLAVE_WRITE_RECEIVED,
-> +                                       value);
-> +               }
-> +               writel(bus->dma_handle & ASPEED_I2CD_DMA_ADDR_MASK,
-> +                      bus->base + ASPEED_I2C_DMA_ADDR_REG);
-> +               writel(FIELD_PREP(ASPEED_I2CD_DMA_LEN_MASK, bus->buf_size),
-> +                      bus->base + ASPEED_I2C_DMA_LEN_REG);
-> +               writel(ASPEED_I2CD_RX_DMA_ENABLE,
-> +                      bus->base + ASPEED_I2C_CMD_REG);
-> +       } else if (bus->buf_base) {
->                 len = FIELD_GET(ASPEED_I2CD_BUF_RX_COUNT_MASK,
->                                 readl(bus->base +
->                                       ASPEED_I2C_BUF_CTRL_REG));
-> @@ -451,7 +510,15 @@ aspeed_i2c_prepare_rx_buf(struct aspeed_i2c_bus *bus, struct i2c_msg *msg)
->                 command |= ASPEED_I2CD_M_S_RX_CMD_LAST;
->         }
->
-> -       if (bus->buf_base) {
-> +       if (bus->dma_buf) {
-> +               command |= ASPEED_I2CD_RX_DMA_ENABLE;
-> +
-> +               writel(bus->dma_handle & ASPEED_I2CD_DMA_ADDR_MASK,
-> +                      bus->base + ASPEED_I2C_DMA_ADDR_REG);
-> +               writel(FIELD_PREP(ASPEED_I2CD_DMA_LEN_MASK, len),
-> +                      bus->base + ASPEED_I2C_DMA_LEN_REG);
-> +               bus->dma_len = len;
-> +       } else {
->                 command |= ASPEED_I2CD_RX_BUFF_ENABLE;
->
->                 writel(FIELD_PREP(ASPEED_I2CD_BUF_RX_SIZE_MASK, len - 1) |
-> @@ -474,7 +541,18 @@ aspeed_i2c_prepare_tx_buf(struct aspeed_i2c_bus *bus, struct i2c_msg *msg)
->         else
->                 len = msg->len + 1;
->
-> -       if (bus->buf_base) {
-> +       if (bus->dma_buf) {
-> +               command |= ASPEED_I2CD_TX_DMA_ENABLE;
-> +
-> +               bus->dma_buf[0] = slave_addr;
-> +               memcpy(bus->dma_buf + 1, msg->buf, len);
-> +
-> +               writel(bus->dma_handle & ASPEED_I2CD_DMA_ADDR_MASK,
-> +                      bus->base + ASPEED_I2C_DMA_ADDR_REG);
-> +               writel(FIELD_PREP(ASPEED_I2CD_DMA_LEN_MASK, len),
-> +                      bus->base + ASPEED_I2C_DMA_LEN_REG);
-> +               bus->dma_len = len;
-> +       } else {
->                 u8 wbuf[4];
->                 int i;
->
-> @@ -527,18 +605,19 @@ static void aspeed_i2c_do_start(struct aspeed_i2c_bus *bus)
->         if (msg->flags & I2C_M_RD) {
->                 command |= ASPEED_I2CD_M_RX_CMD;
->                 if (!(msg->flags & I2C_M_RECV_LEN)) {
-> -                       if (msg->len && bus->buf_base)
-> +                       if (msg->len && (bus->dma_buf || bus->buf_base))
->                                 command |= aspeed_i2c_prepare_rx_buf(bus, msg);
->
->                         /* Need to let the hardware know to NACK after RX. */
->                         if (msg->len <= 1)
->                                 command |= ASPEED_I2CD_M_S_RX_CMD_LAST;
->                 }
-> -       } else if (msg->len && bus->buf_base) {
-> +       } else if (msg->len && (bus->dma_buf || bus->buf_base)) {
->                 command |= aspeed_i2c_prepare_tx_buf(bus, msg);
->         }
->
-> -       if (!(command & ASPEED_I2CD_TX_BUFF_ENABLE))
-> +       if (!(command & (ASPEED_I2CD_TX_BUFF_ENABLE |
-> +                        ASPEED_I2CD_TX_DMA_ENABLE)))
->                 writel(i2c_8bit_addr_from_msg(msg),
->                        bus->base + ASPEED_I2C_BYTE_BUF_REG);
->         writel(command, bus->base + ASPEED_I2C_CMD_REG);
-> @@ -581,42 +660,55 @@ aspeed_i2c_master_handle_tx_first(struct aspeed_i2c_bus *bus,
->  {
->         u32 command = 0;
->
-> -       if (bus->buf_base) {
-> -               u8 wbuf[4];
-> +       if (bus->dma_buf || bus->buf_base) {
->                 int len;
-> -               int i;
->
->                 if (msg->len - bus->buf_index > bus->buf_size)
->                         len = bus->buf_size;
->                 else
->                         len = msg->len - bus->buf_index;
->
-> -               command |= ASPEED_I2CD_TX_BUFF_ENABLE;
-> +               if (bus->dma_buf) {
-> +                       command |= ASPEED_I2CD_TX_DMA_ENABLE;
->
-> -               if (msg->len - bus->buf_index > bus->buf_size)
-> -                       len = bus->buf_size;
-> -               else
-> -                       len = msg->len - bus->buf_index;
-> +                       memcpy(bus->dma_buf, msg->buf + bus->buf_index, len);
->
-> -               /*
-> -                * Looks bad here again but use dword writings to avoid data
-> -                * corruption of byte writing on remapped I2C SRAM.
-> -                */
-> -               for (i = 0; i < len; i++) {
-> -                       wbuf[i % 4] = msg->buf[bus->buf_index + i];
-> -                       if (i % 4 == 3)
-> +                       writel(bus->dma_handle & ASPEED_I2CD_DMA_ADDR_MASK,
-> +                              bus->base + ASPEED_I2C_DMA_ADDR_REG);
-> +                       writel(FIELD_PREP(ASPEED_I2CD_DMA_LEN_MASK, len),
-> +                              bus->base + ASPEED_I2C_DMA_LEN_REG);
-> +                       bus->dma_len = len;
-> +               } else {
-> +                       u8 wbuf[4];
-> +                       int i;
-> +
-> +                       command |= ASPEED_I2CD_TX_BUFF_ENABLE;
-> +
-> +                       if (msg->len - bus->buf_index > bus->buf_size)
-> +                               len = bus->buf_size;
-> +                       else
-> +                               len = msg->len - bus->buf_index;
-> +
-> +                       /*
-> +                        * Looks bad here again but use dword writings to avoid
-> +                        * data corruption of byte writing on remapped I2C SRAM.
-> +                        */
-> +                       for (i = 0; i < len; i++) {
-> +                               wbuf[i % 4] = msg->buf[bus->buf_index + i];
-> +                               if (i % 4 == 3)
-> +                                       writel(*(u32 *)wbuf,
-> +                                              bus->buf_base + i - 3);
-> +                       }
-> +                       if (--i % 4 != 3)
->                                 writel(*(u32 *)wbuf,
-> -                                      bus->buf_base + i - 3);
-> -               }
-> -               if (--i % 4 != 3)
-> -                       writel(*(u32 *)wbuf,
-> -                              bus->buf_base + i - (i % 4));
-> +                                      bus->buf_base + i - (i % 4));
->
-> -               writel(FIELD_PREP(ASPEED_I2CD_BUF_TX_COUNT_MASK,
-> -                                 len - 1) |
-> -                      FIELD_PREP(ASPEED_I2CD_BUF_OFFSET_MASK,
-> -                                 bus->buf_offset),
-> -                      bus->base + ASPEED_I2C_BUF_CTRL_REG);
-> +                       writel(FIELD_PREP(ASPEED_I2CD_BUF_TX_COUNT_MASK,
-> +                                         len - 1) |
-> +                              FIELD_PREP(ASPEED_I2CD_BUF_OFFSET_MASK,
-> +                                         bus->buf_offset),
-> +                              bus->base + ASPEED_I2C_BUF_CTRL_REG);
-> +               }
->
->                 bus->buf_index += len;
->         } else {
-
-Some of these functions are getting really complex and most of the
-logic for the different modes is in different if-else blocks. Could
-you look into splitting this into separate functions based on which
-mode is being used?
-
-Otherwise, this patch looks good.
-
-> @@ -633,7 +725,14 @@ aspeed_i2c_master_handle_rx(struct aspeed_i2c_bus *bus, struct i2c_msg *msg)
->         u8 recv_byte;
->         int len;
->
-> -       if (bus->buf_base) {
-> +       if (bus->dma_buf) {
-> +               len = bus->dma_len -
-> +                     FIELD_GET(ASPEED_I2CD_DMA_LEN_MASK,
-> +                               readl(bus->base + ASPEED_I2C_DMA_LEN_REG));
-> +
-> +               memcpy(msg->buf + bus->buf_index, bus->dma_buf, len);
-> +               bus->buf_index += len;
-> +       } else if (bus->buf_base) {
->                 len = FIELD_GET(ASPEED_I2CD_BUF_RX_COUNT_MASK,
->                                 readl(bus->base + ASPEED_I2C_BUF_CTRL_REG));
->                 memcpy_fromio(msg->buf + bus->buf_index, bus->buf_base, len);
-> @@ -650,7 +749,7 @@ aspeed_i2c_master_handle_rx_next(struct aspeed_i2c_bus *bus,
->  {
->         u32 command = 0;
->
-> -       if (bus->buf_base) {
-> +       if (bus->dma_buf || bus->buf_base) {
->                 int len;
->
->                 if (msg->len - bus->buf_index > bus->buf_size) {
-> @@ -660,14 +759,24 @@ aspeed_i2c_master_handle_rx_next(struct aspeed_i2c_bus *bus,
->                         command |= ASPEED_I2CD_M_S_RX_CMD_LAST;
->                 }
->
-> -               command |= ASPEED_I2CD_RX_BUFF_ENABLE;
-> +               if (bus->dma_buf) {
-> +                       command |= ASPEED_I2CD_RX_DMA_ENABLE;
->
-> -               writel(FIELD_PREP(ASPEED_I2CD_BUF_RX_SIZE_MASK,
-> -                                 len - 1) |
-> -                      FIELD_PREP(ASPEED_I2CD_BUF_TX_COUNT_MASK, 0) |
-> -                      FIELD_PREP(ASPEED_I2CD_BUF_OFFSET_MASK,
-> -                                 bus->buf_offset),
-> -                      bus->base + ASPEED_I2C_BUF_CTRL_REG);
-> +                       writel(bus->dma_handle & ASPEED_I2CD_DMA_ADDR_MASK,
-> +                              bus->base + ASPEED_I2C_DMA_ADDR_REG);
-> +                       writel(FIELD_PREP(ASPEED_I2CD_DMA_LEN_MASK, len),
-> +                              bus->base + ASPEED_I2C_DMA_LEN_REG);
-> +                       bus->dma_len = len;
-> +               } else {
-> +                       command |= ASPEED_I2CD_RX_BUFF_ENABLE;
-> +
-> +                       writel(FIELD_PREP(ASPEED_I2CD_BUF_RX_SIZE_MASK,
-> +                                         len - 1) |
-> +                              FIELD_PREP(ASPEED_I2CD_BUF_TX_COUNT_MASK, 0) |
-> +                              FIELD_PREP(ASPEED_I2CD_BUF_OFFSET_MASK,
-> +                                         bus->buf_offset),
-> +                              bus->base + ASPEED_I2C_BUF_CTRL_REG);
-> +               }
->         } else {
->                 if (bus->buf_index + 1 == msg->len)
->                         command |= ASPEED_I2CD_M_S_RX_CMD_LAST;
-> @@ -1287,22 +1396,63 @@ static int aspeed_i2c_25xx_set_buf_xfer_mode(struct device *dev)
->         return bus->buf_size ? 0 : -EINVAL;
->  }
->
-> +static int aspeed_i2c_24xx_set_dma_xfer_mode(struct device *dev)
-> +{
-> +       /* AST24xx doesn't support DMA mode */
-> +
-> +       return -EBADR;
-> +}
-> +
-> +static int aspeed_i2c_25xx_set_dma_xfer_mode(struct device *dev)
-> +{
-> +       struct platform_device *pdev = to_platform_device(dev);
-> +       struct aspeed_i2c_bus *bus = platform_get_drvdata(pdev);
-> +       int ret;
-> +
-> +       ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
-> +       if (!ret) {
-> +               bus->buf_size = ASPEED_I2CD_DMA_LEN_MASK >>
-> +                               ASPEED_I2CD_DMA_LEN_SHIFT;
-> +               bus->dma_pool = dma_pool_create("i2c-aspeed",
-> +                                               &pdev->dev,
-> +                                               bus->buf_size,
-> +                                               ASPEED_I2CD_DMA_ALIGN,
-> +                                               0);
-> +               if (bus->dma_pool)
-> +                       bus->dma_buf = dma_pool_alloc(bus->dma_pool,
-> +                                                     GFP_KERNEL,
-> +                                                     &bus->dma_handle);
-> +
-> +               if (!bus->dma_buf) {
-> +                       ret = -ENOMEM;
-> +                       bus->buf_size = 0;
-> +                       dev_dbg(&pdev->dev, "Cannot allocate DMA buffer\n");
-> +                       dma_pool_destroy(bus->dma_pool);
-> +               }
-> +       }
-> +
-> +       return ret;
-> +}
-> +
->  static const struct aspeed_i2c_config ast24xx_config = {
->         .get_clk_reg_val = aspeed_i2c_24xx_get_clk_reg_val,
->         .enable_sram = aspeed_i2c_24xx_enable_sram,
->         .set_buf_xfer_mode = aspeed_i2c_24xx_set_buf_xfer_mode,
-> +       .set_dma_xfer_mode = aspeed_i2c_24xx_set_dma_xfer_mode,
->  };
->
->  static const struct aspeed_i2c_config ast25xx_config = {
->         .get_clk_reg_val = aspeed_i2c_25xx_get_clk_reg_val,
->         .enable_sram = aspeed_i2c_25xx_enable_sram,
->         .set_buf_xfer_mode = aspeed_i2c_25xx_set_buf_xfer_mode,
-> +       .set_dma_xfer_mode = aspeed_i2c_25xx_set_dma_xfer_mode,
->  };
->
->  static const struct aspeed_i2c_config ast26xx_config = {
->         .get_clk_reg_val = aspeed_i2c_25xx_get_clk_reg_val,
->         .enable_sram = aspeed_i2c_24xx_enable_sram,
->         .set_buf_xfer_mode = aspeed_i2c_25xx_set_buf_xfer_mode,
-> +       .set_dma_xfer_mode = aspeed_i2c_25xx_set_dma_xfer_mode,
->  };
->
->  static const struct of_device_id aspeed_i2c_bus_of_table[] = {
-> @@ -1324,8 +1474,12 @@ static void aspeed_i2c_set_xfer_mode(struct aspeed_i2c_bus *bus)
->                 return;
->
->         ret = bus->config->enable_sram();
-> -       if (!ret && !strncasecmp(mode, "buf", 3))
-> -               ret = bus->config->set_buf_xfer_mode(bus->dev);
-> +       if (!ret) {
-> +               if (!strncasecmp(mode, "buf", 3))
-> +                       ret = bus->config->set_buf_xfer_mode(bus->dev);
-> +               else if (!strncasecmp(mode, "dma", 3))
-> +                       ret = bus->config->set_dma_xfer_mode(bus->dev);
-> +       }
->
->         if (ret)
->                 dev_dbg(&pdev->dev, "Use default (byte) xfer mode\n");
-> @@ -1400,22 +1554,31 @@ static int aspeed_i2c_probe_bus(struct platform_device *pdev)
->          */
->         ret = aspeed_i2c_init(bus, pdev);
->         if (ret < 0)
-> -               return ret;
-> +               goto out_free_dma_buf;
->
->         irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
->         ret = devm_request_irq(&pdev->dev, irq, aspeed_i2c_bus_irq,
->                                0, dev_name(&pdev->dev), bus);
->         if (ret < 0)
-> -               return ret;
-> +               goto out_free_dma_buf;
->
->         ret = i2c_add_adapter(&bus->adap);
->         if (ret < 0)
-> -               return ret;
-> +               goto out_free_dma_buf;
->
->         dev_info(bus->dev, "i2c bus %d registered (%s mode), irq %d\n",
-> -                bus->adap.nr, bus->buf_base ? "buf" : "byte", irq);
-> +                bus->adap.nr, bus->dma_buf ? "dma" :
-> +                                             bus->buf_base ? "buf" : "byte",
-> +                irq);
->
->         return 0;
-> +
-> +out_free_dma_buf:
-> +       if (bus->dma_buf)
-> +               dma_pool_free(bus->dma_pool, bus->dma_buf, bus->dma_handle);
-> +       dma_pool_destroy(bus->dma_pool);
-> +
-> +       return ret;
->  }
->
->  static int aspeed_i2c_remove_bus(struct platform_device *pdev)
-> @@ -1433,6 +1596,10 @@ static int aspeed_i2c_remove_bus(struct platform_device *pdev)
->
->         reset_control_assert(bus->rst);
->
-> +       if (bus->dma_buf)
-> +               dma_pool_free(bus->dma_pool, bus->dma_buf, bus->dma_handle);
-> +       dma_pool_destroy(bus->dma_pool);
-> +
->         i2c_del_adapter(&bus->adap);
->
->         return 0;
-> --
-> 2.17.1
->
+DQpPbiAxNC8wNC8yMSAxOjUyIGFtLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6DQo+IE9uIFR1ZSwg
+QXByIDEzLCAyMDIxIGF0IDg6MTAgQU0gQ2hyaXMgUGFja2hhbQ0KPiA8Y2hyaXMucGFja2hhbUBh
+bGxpZWR0ZWxlc2lzLmNvLm56PiB3cm90ZToNCj4+IFRoZSBmc2wtaTJjIGNvbnRyb2xsZXIgd2ls
+bCBnZW5lcmF0ZSBhbiBpbnRlcnJ1cHQgYWZ0ZXIgZXZlcnkgYnl0ZQ0KPj4gdHJhbnNmZXJyZWQu
+IE1ha2UgdXNlIG9mIHRoaXMgaW50ZXJydXB0IHRvIGRyaXZlIGEgc3RhdGUgbWFjaGluZSB3aGlj
+aA0KPj4gYWxsb3dzIHRoZSBuZXh0IHBhcnQgb2YgYSB0cmFuc2ZlciB0byBoYXBwZW4gYXMgc29v
+biBhcyB0aGUgaW50ZXJydXB0IGlzDQo+PiByZWNlaXZlZC4gVGhpcyBpcyBwYXJ0aWN1bGFybHkg
+aGVscGZ1bCB3aXRoIFNNQlVTIGRldmljZXMgbGlrZSB0aGUgTE04MQ0KPj4gd2hpY2ggd2lsbCB0
+aW1lb3V0IGlmIHdlIHRha2UgdG9vIGxvbmcgYmV0d2VlbiBieXRlcyBpbiBhIHRyYW5zZmVyLg0K
+PiBBbHNvIHNlZSBteSBvdGhlciBjb21tZW50cyBiZWxvdy4NCj4NCj4gLi4uDQo+DQo+PiArLy8g
+U1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4gSSB0aGluayBpdCBpcyBiZXR0ZXIg
+dG8gc3BsaXQgdGhpcyB3aXRoIGEgcmVtb3ZhbCBvZiBvbGQgc3R1ZmYgYW5kDQo+IHVwZGF0aW5n
+IGEgY29weXJpZ2h0IG5vdGljZSBhbmQgZ28gYXMgYSBsYXN0IG9uZSBpbiB0aGUgc2VyaWVzLg0K
+Pg0KPiAuLi4NCkhhdmUgc3BsaXQgb3V0IGludG8gbmV3IHBhdGNoLg0KPj4gK3N0YXRpYyBjaGFy
+ICphY3Rpb25fc3RyW10gPSB7DQo+IHN0YXRpYyBjb25zdCBjaGFyICogY29uc3QgYWN0aW9uX3N0
+cltdDQpBY2suDQo+PiArICAgICAgICJpbnZhbGlkIiwNCj4+ICsgICAgICAgInN0YXJ0IiwNCj4+
+ICsgICAgICAgInJlc3RhcnQiLA0KPj4gKyAgICAgICAicmVhZCBiZWdpbiIsDQo+PiArICAgICAg
+ICJyZWFkIiwNCj4+ICsgICAgICAgIndyaXRlIiwNCj4+ICsgICAgICAgInN0b3AiLA0KPj4gK307
+DQo+IC4uLg0KPg0KPj4gKyAgICAgICBkZXZfZGJnKGkyYy0+ZGV2LCAiJXM6IGFjdGlvbiA9ICVz
+XG4iLCBfX2Z1bmNfXywNCj4+ICsgICAgICAgICAgICAgICBhY3Rpb25fc3RyW2kyYy0+YWN0aW9u
+XSk7DQo+IERyb3AgdXNlbGVzcyBfX2Z1bmNfXy4gV2l0aCBEeW5hbWljIERlYnVnIGVuYWJsZWQg
+aXQgY2FuIGJlIHR1cm5lZCBvbg0KPiBhbmQgb2ZmIGF0IHJ1biB0aW1lLg0KDQpBY2suIE90aGVy
+IGluc3RhbmNlcyBvZiBfX2Z1bmNfXyBhbHNvLg0KDQo+DQo+IC4uLg0KPg0KPj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgLyogR2VuZXJhdGUgdHhhY2sgb24gbmV4dCB0byBsYXN0IGJ5dGUgKi8N
+Cj4gVHggQUNLID8gRGl0dG8gZm9yIG90aGVyIGNvbW1lbnRzLg0KPg0KPiAuLi4NCkFDSy4NCj4N
+Cj4+ICsgICAgICAgICAgICAgICBkZXZfZGJnKGkyYy0+ZGV2LCAiJXM6ICVzICUwMnhcbiIsIF9f
+ZnVuY19fLA0KPj4gKyAgICAgICAgICAgICAgICAgICAgICAgYWN0aW9uX3N0cltpMmMtPmFjdGlv
+bl0sIGJ5dGUpOw0KPiBZb3UgYWxyZWFkeSBwcmludGVkIGFjdGlvbi4gQW55dGhpbmcgY2hhbmdl
+ZD8NCkl0J3MgbWFpbmx5IHRoZSBhZGRpdGlvbiBvZiB0aGUgYnl0ZSByZWFkLiBJIGNvdWxkbid0
+IGZpZ3VyZSBvdXQgYSANCnNlbnNpYmxlIHdheSBvZiBhbHdheXMgcHJpbnRpbmcgdGhlIGFjdGlv
+biB0aGVuIGFwcGVuZGluZyB0aGUgZGF0YSBpbiANCnRoZSByZWFkL3dyaXRlIGNhc2UuIE9wZW4g
+dG8gc3VnZ2VzdGlvbnMuDQo+DQo+PiArICAgICAgICAgICAgICAgZGV2X2RiZyhpMmMtPmRldiwg
+IiVzOiAlcyAlMDJ4XG4iLCBfX2Z1bmNfXywNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgIGFj
+dGlvbl9zdHJbaTJjLT5hY3Rpb25dLCBtc2ctPmJ1ZltpMmMtPmJ5dGVfcG9zbl0pOw0KPiBEZWR1
+cGxpY2F0ZSB0aGlzLiBQZXJoYXBzIGF0IHRoZSBlbmQgb2Ygc3dpdGNoLWNhc2UgcHJpbnQgb25j
+ZSB3aXRoDQo+IHdoYXRldmVyIHRlbXBvcmFyeSB2YXJpYWJsZSB2YWx1ZSB5b3Ugd2FudCB0by4N
+Cj4NCj4gLi4uDQpJIHRob3VnaHQgYWJvdXQgdGhpcyBidXQgZGVjaWRlZCBub3QgdG8gYmVjYXVz
+ZSBpbiB0aGUgd3JpdGUgY2FzZSBpdCdzIA0KcHJpbnRlZCBiZWZvcmUgZ29pbmcgdG8gaGFyZHdh
+cmUgYW5kIGluIHRoZSByZWFkIGNhc2UgaXQncyBhZnRlci4gSWYgSSANCm1vdmVkIGl0IGFmdGVy
+IHRoZSBjYXNlIEknZCBoYXZlIHRvIHVzZSBzb21ldGhpbmcgb3RoZXIgdGhhbiANCmkyYy0+Ynl0
+ZV9wb3NuIHdoaWNoIHNlZW1lZCBlcnJvciBwcm9uZS4NCj4NCj4+ICsgICAgICAgY2FzZSBNUENf
+STJDX0FDVElPTl9JTlZBTElEOg0KPj4gKyAgICAgICBkZWZhdWx0Og0KPiBEb2VzIHRoZSBmaXJz
+dCBvbmUgZGVzZXJ2ZSBsb3VkIFdBUk4/DQo+IE90aGVyd2lzZSwgd2h5IGlzIGl0IGRlZmluZWQg
+YXQgYWxsPw0KSSBhZGRlZCBNUENfSTJDX0FDVElPTl9JTlZBTElEIHRvIG1ha2Ugc3VyZSB0aGF0
+IGEgdmFsdWUgb2YgMCB3YXMgbm90IA0Kc29tZXRoaW5nIHRoYXQgd291bGQgbmF0dXJhbGx5IGhh
+cHBlbiB2aWEgYSB6ZXJvZWQgaW5pdGlhbGl6YXRpb24uIEkgDQpjb3VsZCBwcm9iYWJseSBhY2hp
+ZXZlIHRoZSBzYW1lIHRoaW5nIGJ5IG1ha2luZyBNUENfSTJDX0FDVElPTl9TVEFSVCA9IDEuDQo+
+PiArICAgICAgICAgICAgICAgV0FSTigxLCAiVW5leHBlY3RlZCBhY3Rpb24gJWRcbiIsIGkyYy0+
+YWN0aW9uKTsNCj4+ICsgICAgICAgICAgICAgICBicmVhazsNCj4gLi4uDQo+DQo+PiArc3RhdGlj
+IHZvaWQgbXBjX2kyY19kb19pbnRyKHN0cnVjdCBtcGNfaTJjICppMmMsIHU4IHN0YXR1cykNCj4+
+ICAgew0KPj4gKyAgICAgICBzcGluX2xvY2tfaXJxc2F2ZSgmaTJjLT5sb2NrLCBmbGFncyk7DQo+
+IFdoeSBfaXJxc2F2ZT8NCj4NCj4gLi4uDQpQcmltYXJpbHkgYmVjYXVzZSBpdCdzIHRoZSBvbmx5
+IG9uZSBJJ3ZlIGV2ZXIgdXNlZCBhbmQgaXQgd2FzIHRoZSBvbmUgDQpzaW1pbGFyIGkyYyBkcml2
+ZXJzIHVzZWQgd2hlbiBJIHN0YXJ0ZWQgdGhpcyB3b3JrLiBJIHNlZSB0aGV5J3ZlIG5vdyANCmJl
+ZW4gdXBkYXRlZCBzbyBJIGRvbid0IHRoaW5rIHRoZXJlIHdpbGwgYmUgYSBwcm9ibGVtIHN3aXRj
+aGluZyB0byANCnNwaW5fbG9jaygpLg0KPj4gKyAgICAgICAgICAgICAgIGRldl9kYmcoaTJjLT5k
+ZXYsICJhcmJpcml0cmF0aW9uIGxvc3RcbiIpOw0KPiBhcmJpdHJhdGlvbg0KQWNrLg0KPiAuLi4N
+Cj4NCj4+ICsgICAgICAgaWYgKGkyYy0+ZXhwZWN0X3J4YWNrICYmIChzdGF0dXMgJiBDU1JfUlhB
+SykpIHsNCj4+ICsgICAgICAgICAgICAgICBkZXZfZGJnKGkyYy0+ZGV2LCAibm8gUlhBS1xuIik7
+DQo+IFlvdSBzZWUsIHlvdSBoYXZlIHRvIGJlIGNvbnNpc3RlbnQgaW4gY29tbWVudHMgYW5kIG1l
+c3NhZ2VzLg0KPiBFaXRoZXIgdXNlIFRYQUsvUlhBSywgb3IgbW9yZSB2ZXJib3NlICdUeCBBQ0sv
+UnggQUNLJyBldmVyeXdoZXJlLg0KPg0KPiAuLi4NClVwZGF0ZWQgdG8gIlJ4IEFDSyIuIEkgdGhp
+bmsgSSd2ZSBnb3QgdGhlbSBhbGwgbm93Lg0KPg0KPj4gK291dDoNCj4gb3V0X3VubG9jazoNCj4N
+Cj4+ICsgICAgICAgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmaTJjLT5sb2NrLCBmbGFncyk7DQo+
+IC4uLg0KPg0KPj4gK3N0YXRpYyBpcnFyZXR1cm5fdCBtcGNfaTJjX2lzcihpbnQgaXJxLCB2b2lk
+ICpkZXZfaWQpDQo+PiArew0KPj4gKyAgICAgICBzdHJ1Y3QgbXBjX2kyYyAqaTJjID0gZGV2X2lk
+Ow0KPj4gKyAgICAgICB1OCBzdGF0dXMgPSByZWFkYihpMmMtPmJhc2UgKyBNUENfSTJDX1NSKTsN
+Cj4gSSB3b3VsZCBzcGxpdCB0aGlzIGFzc2lnbm1lbnQsIHNvIGl0IHdpbGwgYmUgY2xvc2VyIHRv
+IGl0cyB1c2VyLg0KQWNrLg0KPj4gKyAgICAgICBpZiAoc3RhdHVzICYgQ1NSX01JRikgew0KPj4g
+KyAgICAgICAgICAgICAgIHdyaXRlYigwLCBpMmMtPmJhc2UgKyBNUENfSTJDX1NSKTsNCj4+ICsg
+ICAgICAgICAgICAgICBtcGNfaTJjX2RvX2ludHIoaTJjLCBzdGF0dXMpOw0KPj4gKyAgICAgICAg
+ICAgICAgIHJldHVybiBJUlFfSEFORExFRDsNCj4+ICAgICAgICAgIH0NCj4+ICsgICAgICAgcmV0
+dXJuIElSUV9OT05FOw0KPj4gK30NCj4gLi4uDQo+DQo+PiArICAgICAgIHRpbWVfbGVmdCA9IHdh
+aXRfZXZlbnRfdGltZW91dChpMmMtPndhaXRxLCAhaTJjLT5ibG9jaywgaTJjLT5hZGFwLnRpbWVv
+dXQpOw0KPj4gKw0KPiBObyBuZWVkIGZvciBhIGJsYW5rIGxpbmUgaGVyZS4NCkFjay4NCj4+ICsg
+ICAgICAgaWYgKCF0aW1lX2xlZnQpDQo+PiArICAgICAgICAgICAgICAgaTJjLT5yYyA9IC1FVElN
+RURPVVQ7DQo+PiArICAgICAgIGVsc2UgaWYgKHRpbWVfbGVmdCA8IDApDQo+IFJlZHVuZGFudCAn
+ZWxzZScNCkFjay4NCj4+ICsgICAgICAgICAgICAgICBpMmMtPnJjID0gdGltZV9sZWZ0Ow0KPiBD
+YW4ndCB5b3UgcmV0dXJuIGFuIGVycm9yIGNvZGUgZnJvbSBoZXJlLCByYXRoZXIgdGhhbiBpbmpl
+Y3RpbmcgaXQNCj4gc29tZXdoZXJlIHdoZXJlIGl0IGRvZXNuJ3QgYmVsb25nIHRvPw0KWWVzIEkg
+dGhpbmsgc28uIElmIEkgbWFrZSBtcGNfaTJjX3dhaXRfZm9yX2NvbXBsZXRpb24oKSByZXR1cm4g
+YW4gaW50IA0KdGhlbiBoYXZlIG1wY19pMmNfZXhlY3V0ZV9tc2coKSBjaGVjayBpdCBhbmQgc2V0
+IGkyYy0+cmMgaWYgbmVlZGVkLg0KPj4gICB9DQo+IC0tDQo+IFdpdGggQmVzdCBSZWdhcmRzLA0K
+PiBBbmR5IFNoZXZjaGVua28=
