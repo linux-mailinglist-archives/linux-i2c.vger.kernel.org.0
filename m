@@ -2,91 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 328B535DEFE
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 14:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5CC35DF5F
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 14:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbhDMMhZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Apr 2021 08:37:25 -0400
-Received: from mga04.intel.com ([192.55.52.120]:33328 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229900AbhDMMhY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Apr 2021 08:37:24 -0400
-IronPort-SDR: SCFi7eA8/LaUd+Q09PWJOle6/dCMfpmZtYCHO+X1MWSMXnnDiE7De89fhHo71VY/pIuUvn35l0
- tjjP+v046gzw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="192275051"
-X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
-   d="scan'208";a="192275051"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 05:37:02 -0700
-IronPort-SDR: EftD6PGd6kRAx7iMLM+mfW7kd+FeJfLBMWizENmewb7XA3QgXhEGs5iYRxhMbqOFtbNGo3LpQO
- BqRFct8SPUIw==
-X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
-   d="scan'208";a="398759106"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 05:37:00 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lWIHp-003l5j-Or; Tue, 13 Apr 2021 15:36:57 +0300
-Date:   Tue, 13 Apr 2021 15:36:57 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
+        id S236591AbhDMMvA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Apr 2021 08:51:00 -0400
+Received: from mail-vk1-f172.google.com ([209.85.221.172]:37510 "EHLO
+        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345905AbhDMMsq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Apr 2021 08:48:46 -0400
+Received: by mail-vk1-f172.google.com with SMTP id p206so1060810vkd.4;
+        Tue, 13 Apr 2021 05:48:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BPCwCEu/tlD0sPdVV7Acf3Q88fdnLj8wuh/uaB99fZ0=;
+        b=SxSg1XYx4RyYpuIGG8o9w0PpfCiC/84tJy6jumMgo888duy0YbQFzbvt4yUji2H89h
+         lBLyIUiruh+dIMQC/YPCPiL90s5aEBe5FjsjaZHc1WN1MBxrP2112yy4sMTxd8csHGFm
+         404tXIc9leiIb04bO+lm+hudoOnhTdiRhLg0wdE9y/7/oi1hvTV/oUdoQxnZkpjnquuy
+         Gt+tebNdPfwmPubPrIx3beAxjjT8yOKLqNuqe+6cM/5K+PVv6mwqIopJebHkY7OjtHRG
+         oRwM7PUSk/wXn8HsvSBuj99IJXx9AlZM/89fONfmo4ciKOHy3UaaF1/i+63/BFLxWZQW
+         fEdg==
+X-Gm-Message-State: AOAM5311/P1x8gka0sSnmoDXvIXdG6qLTn1U6Xp0C61SZ6QrrCp9y/HZ
+        DCPM8CqhMv/aWp8eg/sii9q/xnWTiQDqzF14icg=
+X-Google-Smtp-Source: ABdhPJzV+Q6RQgrKzEVEruhMtyqX3cZ+hfIXaRTxVkQJ4gAkFfCxaCbMerKFjzCqhoZqkiQzh4ee87eJb2p6DQ1CyqQ=
+X-Received: by 2002:a1f:1f81:: with SMTP id f123mr567276vkf.6.1618318106468;
+ Tue, 13 Apr 2021 05:48:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
+ <YHWQaQaw53eZtYzn@smile.fi.intel.com>
+In-Reply-To: <YHWQaQaw53eZtYzn@smile.fi.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 13 Apr 2021 14:48:15 +0200
+Message-ID: <CAMuHMdX29zQHaC9UgGyGad-LxRRK=hBKVHVZ5+9_Cawqk=NMtA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: I2C_HISI should depend on ARCH_HISI && ACPI
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Yicong Yang <yangyicong@hisilicon.com>,
         Wei Xu <xuwei5@hisilicon.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: I2C_HISI should depend on ARCH_HISI && ACPI
-Message-ID: <YHWQaQaw53eZtYzn@smile.fi.intel.com>
-References: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        Dmitry Osipenko <digetx@gmail.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 02:26:15PM +0200, Geert Uytterhoeven wrote:
-> The HiSilicon Kunpeng I2C controller is only present on HiSilicon
-> Kunpeng SoCs, and its driver relies on ACPI to probe for its presence.
-> Hence add dependencies on ARCH_HISI and ACPI, to prevent asking the user
-> about this driver when configuring a kernel without Hisilicon platform
-> or ACPI firmware support.
+Hi Andy,
 
-I don't by the ACPI dependency, sorry.
+On Tue, Apr 13, 2021 at 2:37 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Tue, Apr 13, 2021 at 02:26:15PM +0200, Geert Uytterhoeven wrote:
+> > The HiSilicon Kunpeng I2C controller is only present on HiSilicon
+> > Kunpeng SoCs, and its driver relies on ACPI to probe for its presence.
+> > Hence add dependencies on ARCH_HISI and ACPI, to prevent asking the user
+> > about this driver when configuring a kernel without Hisilicon platform
+> > or ACPI firmware support.
+>
+> I don't by the ACPI dependency, sorry.
+>
+> The driver is a pure platform driver that can be enumerated on ACPI enabled
+> devices, but otherwise it can be used as a platform one.
 
-The driver is a pure platform driver that can be enumerated on ACPI enabled
-devices, but otherwise it can be used as a platform one.
+Sure, you can manually instantiate a platform device with a matching
+name, and set up the "clk_rate" device property.
+But would it make sense to do that? Would anyone ever do that?
 
-If you remove ACPI dependency, feel free to add my
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The corresponding SPI_HISI_KUNPENG depends on ACPI, too.
 
-> Fixes: d62fbdb99a85730a ("i2c: add support for HiSilicon I2C controller")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/i2c/busses/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index b5b4e0d0ff4dd0bc..3ead6d9e130b2ebc 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -647,7 +647,7 @@ config I2C_HIGHLANDER
->  
->  config I2C_HISI
->  	tristate "HiSilicon I2C controller"
-> -	depends on ARM64 || COMPILE_TEST
-> +	depends on (ARM64 && ARCH_HISI && ACPI) || COMPILE_TEST
->  	help
->  	  Say Y here if you want to have Hisilicon I2C controller support
->  	  available on the Kunpeng Server.
-> -- 
-> 2.25.1
-> 
+> If you remove ACPI dependency, feel free to add my
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Thanks! ;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
