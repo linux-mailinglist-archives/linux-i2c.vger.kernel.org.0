@@ -2,104 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF7835E784
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 22:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D93135E793
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Apr 2021 22:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbhDMUSD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Apr 2021 16:18:03 -0400
-Received: from sauhun.de ([88.99.104.3]:39832 "EHLO pokefinder.org"
+        id S232342AbhDMUZe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Apr 2021 16:25:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49580 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231886AbhDMUSD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Apr 2021 16:18:03 -0400
-Received: from localhost (p54b33d59.dip0.t-ipconnect.de [84.179.61.89])
-        by pokefinder.org (Postfix) with ESMTPSA id E9D332C0570;
-        Tue, 13 Apr 2021 22:17:40 +0200 (CEST)
-Date:   Tue, 13 Apr 2021 22:17:40 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Qii Wang <qii.wang@mediatek.com>
-Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com
-Subject: Re: [RESEND] i2c: mediatek: Get device clock-stretch time via dts
-Message-ID: <20210413201740.GC2751@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Qii Wang <qii.wang@mediatek.com>, matthias.bgg@gmail.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        srv_heupstream@mediatek.com, leilk.liu@mediatek.com
-References: <1615622664-15032-1-git-send-email-qii.wang@mediatek.com>
- <20210406194856.GF3122@kunai>
- <1617797706.32076.1.camel@mhfsdcap03>
- <20210407181936.GA1614@kunai>
- <1618228994.32225.3.camel@mhfsdcap03>
+        id S232014AbhDMUZd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Apr 2021 16:25:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 02608613C7;
+        Tue, 13 Apr 2021 20:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618345513;
+        bh=BnHFaN98HC+CL19YfI1WOcczJ1j+DxoFEqLvR369Cdo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=th9jq2jOaXz+IcA1Q4x1kLwwvceAsKsomEcWByE06mdcwLqAVEa/BLUKpCcXal+72
+         Xi0P4058/LILcYtbeABS4hOMy1+vWveX8ccjEn9g2iWT3A6zem2ak6PwBuYQUQMo3U
+         raXCkGLycXXKSkTlNiJc6I5vccQjEGu9bVUxwkvRFiQtOhbdv7kqQMXzvSRfXTfNEG
+         0KFR9M7fOsQTxa4/OVVIeGX0crYOkEGl1Fp74w+So9Y9vhztzSzIBoZwxGHyCu+Uue
+         tXeEbX2JuzcYejfpFCd5kaEfZGyrJgrANZ+t93FWZR4xly4Scsrsqxz7d/h//Ignmb
+         tm6LPshks8wvQ==
+Date:   Tue, 13 Apr 2021 22:25:03 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Tian Tao <tiantao6@hisilicon.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH drivers/i2c 1/3] i2c: amd8111: Fix coding style issues
+Message-ID: <20210413202503.GD2751@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Tian Tao <tiantao6@hisilicon.com>, linux-i2c@vger.kernel.org
+References: <1617613430-11921-1-git-send-email-tiantao6@hisilicon.com>
+ <1617613430-11921-2-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dkEUBIird37B8yKS"
+        protocol="application/pgp-signature"; boundary="cHMo6Wbp1wrKhbfi"
 Content-Disposition: inline
-In-Reply-To: <1618228994.32225.3.camel@mhfsdcap03>
+In-Reply-To: <1617613430-11921-2-git-send-email-tiantao6@hisilicon.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---dkEUBIird37B8yKS
+--cHMo6Wbp1wrKhbfi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 12, 2021 at 08:03:14PM +0800, Qii Wang wrote:
-> On Wed, 2021-04-07 at 20:19 +0200, Wolfram Sang wrote:
-> > > Due to clock stretch, our HW IP cannot meet the ac-timing
-> > > spec(tSU;STA,tSU;STO).=20
-> > > There isn't a same delay for clock stretching, so we need pass a
-> > > parameter which can be found through measurement to meet most
-> > > conditions.
-> >=20
-> > What about using this existing binding?
-> >=20
-> > - i2c-scl-internal-delay-ns
-> >         Number of nanoseconds the IP core additionally needs to setup S=
-CL.
-> >=20
+On Mon, Apr 05, 2021 at 05:03:48PM +0800, Tian Tao wrote:
+> Fix the following checkpatch errors:
 >=20
-> I can't see the relationship between "i2c-scl-falling-time-ns" and clock
-> stretching, is there a parameter related to clock stretching?
+>   ERROR: "foo * bar" should be "foo *bar"
+>   #189: FILE: drivers/i2c/busses/i2c-amd8111.c:189:
+>=20
+>   ERROR: "foo * bar" should be "foo *bar"
+>   #191: FILE: drivers/i2c/busses/i2c-amd8111.c:191:
+>=20
+>   ERROR: switch and case should be at the same indent
+>   #201: FILE: drivers/i2c/busses/i2c-amd8111.c:201:
+>=20
+>   ERROR: switch and case should be at the same indent
+>   #359: FILE: drivers/i2c/busses/i2c-amd8111.c:359:
+>=20
+> No functional changes.
+>=20
+> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+> Signed-off-by: Zihao Tang <tangzihao1@hisilicon.com>
+> Cc: Jean Delvare <jdelvare@suse.com>
 
-( you wrote "i2c-scl-falling-time-ns" above, didn't you mean
-"i2c-scl-internal-delay-ns" instead? )
-
-Not yet, and I wonder if there can be one. In I2C (not SMBus), devices
-are allowed to stretch the clock as long as they want, so what should be
-specified here?
-
-I suggesteed "internal-delay" because AFAIU your hardware needs this
-delay to be able to cope with clock stretching.
-
-> If you think both of them will affect the ac-timing of SCL, at this
-> point, "i2c-scl-falling-time-ns" maybe a good choice.
-
-Do you mean "i2c-scl-falling-time-ns" or "i2c-scl-internal-delay-ns"?
+Is the binary after the patch applied equal to the binary before your
+patch? Same question for patch 2.
 
 
---dkEUBIird37B8yKS
+--cHMo6Wbp1wrKhbfi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB1/GQACgkQFA3kzBSg
-KbaUfw//WWDtCLJl71HVdmHWvPxYnsr5Q4WBAWP/wumIKyK7zaRS3r65zjoNv2d5
-ozx5g3tlGjdfZWqa46V/y4M6V+7/UyREfhO+SEbz8UGE4Ch81+pDhLuc4lZMa5B7
-tmt+mrZi1aHk0YsVxSXlPzTCfjbz4FbKDvNeOIsOyMj05Ar42RPBGnpeEKII9iJR
-MmU9CpYv9y2kdejX/GiLwCwOihra71aahOwpR9iBsMTbC3ffFr4Xp6mhkWQaX7nG
-8hhZbSomeBvgfQuLbVrzMbX0MzCh8W7Jy42xmLjJeJALt7EziJl6la+ANy16XqM0
-azhtH6wLzPJnmrqN80EfEU43zENk3A1wpgEhz4iacoj/06sPinN8SXl10Ofeknzq
-iFBK/kBcI9gtUsfs6q05uqS4sWvkZz6xZeRRAkSDRr7WKIt3np+o8tVQXX9tHBWz
-/YnXwrbx4Vph5LO7dAF1RX3bfoBql9ElBPNsFexuEmNG54f6gBH5HEUoVfN9Vy2R
-qxAcXgYPmZe5c9JpgASu9ehRYDCa2iVPTiSaxfYfbv+cZEtP40PaLrKnrnycOIi9
-wMl4Dzr1llwrPqsCQpk5PvmZk4z5mEtCEKkTMn1lKTUF7xBVf9RPJbj588M8wLem
-YrcqHgG4fmYb45AwlZEq4P66P9cuUowM1WVndjEBLPJO9pIM9hs=
-=RODH
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB1/h8ACgkQFA3kzBSg
+KbaADA/9FZz6hGS7gMAf4VOPRfyJQIOUDM/PI+ccpG0EeGEyBClxhHLND3j7FGPG
+XD+S+ncNSkhozkC5DDhCfo1p6jNQ0374YR/HErZQK58MttzObP1ksRdf4+f1Rau4
+OWWxTVHTRCZootmO13+72wuxwiUYLZ4XkZ1bB3VIGd71Makeyy9xVDZ3A9KJMm3R
+JwSMF4wBxth7nOcUAmRL+7LXqawc2O8mIGPkPoQRM569QmEamQj4okBuIau0MfwN
+iU1P341SLPaPKMIsnLY4ffaEsYmyr5PM6IIvfSAH5yaJPYmTbmbNsZA/vi6Mu8UJ
+KfBQIPVpGTQP7X1Tbmcln0kkkRCDk2gZSYm/lezwx/rfip3vDRmFpu6UpopJIn0m
+SJ06/bLihA4pJVazVZSS7vZviYMRPgiQ8AH3862jFO29flb7rGMGYJcvE4QgFNht
+i1BOiBOD7X9xx8pgv5d2W7NoY7nZ5EmAX5uefSiY3mt/DYgkutIYaHPGn4tGPgxk
+zRn0jjcjmvpBKebfSnMGW0jLG+en8HGTCAeXlVMrbKCzWDCj9r7sQETlxyUTYNuF
++GmWtWKN2uIn0QP75O0gWW4SUUUJKRZlSjQ+vrVfOLqGHSbGmDie9p+KNI49OB9o
+rikzTJjbLm4+CgGhiZhUAuAsB3iDvhSj0qahXenz3NuDofmpHxU=
+=3lVz
 -----END PGP SIGNATURE-----
 
---dkEUBIird37B8yKS--
+--cHMo6Wbp1wrKhbfi--
