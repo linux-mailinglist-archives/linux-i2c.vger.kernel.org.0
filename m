@@ -2,89 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5825935EB90
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 05:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B13D35EEC7
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 09:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244296AbhDNDxB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Apr 2021 23:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbhDNDw5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Apr 2021 23:52:57 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936CEC061574
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Apr 2021 20:52:35 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id em21-20020a17090b0155b029014e204a81e6so2342476pjb.1
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Apr 2021 20:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WuM+BaGUNuiUixC5dEfTXZqVl+1vqYpTV8zTf1r96dc=;
-        b=DrPgtQvrjPfgRjo21QhMAAagaQr1LUefazxADfNJEjZ+aJPvKfA8z2Q+O6imzvFAMe
-         H7op5V15/i8W52VTLu1gxjhW67jaf9nOmsmISIpo2JNoHF4CaIKEtS4p/hiq6J/nDHSL
-         DoMxIiv5G549XWQ5N7XDN6AvciWoiB46NnijP+HJMJubofcjK13AaY6g6v7Squ3LXqtk
-         9Nr5mxY2B7bMmGzYCFQp0ZRc/2qKczW3BYD1Kn8o+YSz+TPAA1EXmXMYpAYQzkxLsHlv
-         9CdKtl9TaQMN6btSmWetPnr9lQjMm9PKgKT5r4GjTwwxb6Irc0csWR3OflbdyqyfLzYF
-         J8sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WuM+BaGUNuiUixC5dEfTXZqVl+1vqYpTV8zTf1r96dc=;
-        b=QxOHTOAZIC3YB3SVgujRnRbm0yB5KT8jPTzWKLsrQ3/8tObfgpZBls4jZNVT1IR3jO
-         yxkCjeK39MibKIVTD9DGmk0ntqwppRuFdO5s/bdBOKnxKEk3xB8/O+PuTzNRKUu1wzYu
-         bJ1BXeePOMWG+im2WY6Kh8uhEJD7EtjqDsyalIsYworNihsJMxnQnnEx8XEqhNDCf266
-         yT3cER6VaskZBF7jaaEs3wFVug9yZXkHlz1EVzNm+gUMcKmv1gMj9tw4s3hqGUz9fNf/
-         dMtlrWb8AGXYm5kiLramRgVzldL3QyVGZYTJmZ97P2659sa1mXfXYRjqzyZIRurNNgBm
-         +nyg==
-X-Gm-Message-State: AOAM5315saQ2nF2KN6cGZolHtDObuyY9dZSliz7I6jYGwN/hJ8x3U4Mp
-        LKVMgqoRrc8nN/IuI3FKTjOTDg==
-X-Google-Smtp-Source: ABdhPJywZ4E18fDVCmXhLJVB51NirppKni0+fNhFPzV/YR/qlI7pVw+352j61hTBsZbhQ81AtdzbbA==
-X-Received: by 2002:a17:902:ed87:b029:eb:a96:7892 with SMTP id e7-20020a170902ed87b02900eb0a967892mr11365626plj.47.1618372354979;
-        Tue, 13 Apr 2021 20:52:34 -0700 (PDT)
-Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id l25sm16769568pgu.72.2021.04.13.20.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Apr 2021 20:52:34 -0700 (PDT)
-Date:   Wed, 14 Apr 2021 09:22:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     wsa@kernel.org, wsa@the-dreams.de, mst@redhat.com,
-        linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, jasowang@redhat.com,
-        wsa+renesas@sang-engineering.com,
-        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
-        arnd@arndb.de, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
-        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
-        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
-        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com
-Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210414035229.7uqfdcd6dy2ryg3s@vireshk-i7>
-References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
- <e93836c3-d444-0b8c-c9df-559de0d5f27e@intel.com>
+        id S232528AbhDNHv4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Apr 2021 03:51:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36870 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348092AbhDNHvx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 14 Apr 2021 03:51:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0C7B1601FE;
+        Wed, 14 Apr 2021 07:51:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618386692;
+        bh=zojRrA+SEVZVplxBJb0vmN6/7XHw2L494AoVKdAZjdo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YjXZBIfzmd7krID9ftFF5zj6n3QXwljc5UVtlmUIp1qczKposRteSwRn1SCkkSB79
+         xXDGH2kHe1xw88jPPcIKqX/aQL/sEOupEL0rHQV3jBcXXswbsCU+L/kGFhuHeir97M
+         5A5IjzfNLtrRAh6PR6VqgTW+LxljS986sk1epPKBI8cB1o9VwzIEV+Bt3Nxl0G8T+L
+         LLvqn0bGE46cJtctKu9AZHUWOrZd/7AcXJocdzWCXBOD3EvBVCwglCq2qz9UIMuKw5
+         omyLVHoSitohTApoN36vTizS4duxBYm5B5NTV9plqWGVBVmzZS+s2txkDtQUxc7JKa
+         jq5jPwKzpLyrg==
+Date:   Wed, 14 Apr 2021 09:51:27 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Qinglang Miao <miaoqinglang@huawei.com>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Vignesh R <vigneshr@ti.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Tony Lindgren <tony@atomide.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] i2c: fix reference leak when pm_runtime_get_sync
+ fails
+Message-ID: <20210414075127.GA2180@ninjato>
+References: <20201201092924.112461-1-miaoqinglang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="opJtzjQTFsWo+cga"
 Content-Disposition: inline
-In-Reply-To: <e93836c3-d444-0b8c-c9df-559de0d5f27e@intel.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20201201092924.112461-1-miaoqinglang@huawei.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 14-04-21, 10:07, Jie Deng wrote:
-> Hi maintainers,
-> 
-> What's the status of this patch based on the review comments you got ?
 
-I was expecting a new version to be honest..
+--opJtzjQTFsWo+cga
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Is i2c/for-next the right tree to merge it
-> ?
+On Tue, Dec 01, 2020 at 05:29:24PM +0800, Qinglang Miao wrote:
+> pm_runtime_get_sync will increment the PM reference count
+> even failed. Forgetting to putting operation will result
+> in a reference leak here.=20
+>=20
+> Replace it with pm_runtime_resume_and_get to keep usage
+> counter balanced.=20
+>=20
+> BTW, pm_runtime_resume_and_get is introduced in v5.10-rc5 as
+> dd8088d5a896 ("PM: runtime: Add  pm_runtime_resume_and_get
+> to dealwith usage counter")
+>=20
+> Qinglang Miao (8):
+>   i2c: cadence: fix reference leak when pm_runtime_get_sync fails
+>   i2c: img-scb: fix reference leak when pm_runtime_get_sync fails
+>   i2c: imx-lpi2c: fix reference leak when pm_runtime_get_sync fails
+>   i2c: imx: fix reference leak when pm_runtime_get_sync fails
+>   i2c: omap: fix reference leak when pm_runtime_get_sync fails
+>   i2c: sprd: fix reference leak when pm_runtime_get_sync fails
+>   i2c: stm32f7: fix reference leak when pm_runtime_get_sync fails
+>   i2c: xiic: fix reference leak when pm_runtime_get_sync fails
 
-It should be.
+I applied this series now to for-next, thanks!
 
--- 
-viresh
+
+--opJtzjQTFsWo+cga
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2nvsACgkQFA3kzBSg
+KbbCtw/+NcMmI6QKvhWoRpGzsqS4JR3ve8xPWFEaYBcBABOFAJ3OtQeYoeFXyFv5
+xJVaL0EqvTsppo22meJ8HGSDgp8cnGupdpwZhIWUxEAdwV2XPabWGQM0IOhq5fIo
+EXDs+bWvDeo0FqHi/fnc3ykUYXeEo2eh2te+rdhrQy8/l9HdzeFJhx7zOvu2bl/y
+F5sindz+A6+JxmDGrv5ocmCKDV0/ESIQG4QKadxtRrvNM55hkR7HLBo/XC3iwZx/
+XSAJwJNwTxCLhIE2YHhSvO0vnMbXD/rcia9nJ+KcNRSDzNRu/KnECzM1r5HZ4k/8
+iWKGyC5eZDfeBMDGDtBs3puS5lktt5bdeBJevXHkSch5Vjaa30fojPbAwHo7paHk
+v5ojLq1mXX38TkeVvofFBjF7XVyiNuiUwxcIFPHiu38AeSQdkAPRLczyRuU+1yNU
+uZ7fRS7UPZYy3twjnvgiAdSqiZXa3Z30pgD/bULDwZA39fsXiqg47/vh8pVUI9A6
+fz/I3LOyn7qwxxGrLxvErdyAJXazGvEF+pouaAF0XKNgB7iokFV3t1YGTV7IZoWd
+Cg29vCPjjUsFTnaj1HNIjN0KDYD7kDjqzeYRQzzfPStheExujd2I5qtyZVhOKRal
++AkE/oTuRAlxrmNH6/N3pgLdayySwS70gZ4mOGSO8bE/xV/bL+Q=
+=dXOi
+-----END PGP SIGNATURE-----
+
+--opJtzjQTFsWo+cga--
