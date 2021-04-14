@@ -2,95 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D94935F346
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 14:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8DA35F4DD
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 15:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbhDNMPD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Apr 2021 08:15:03 -0400
-Received: from mga02.intel.com ([134.134.136.20]:41034 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232115AbhDNMPC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Apr 2021 08:15:02 -0400
-IronPort-SDR: erWDTNAOGSuKjHTas5TzE1JK+g0W/i9xBXagtgSRRey8yj2Uetf9Cyt4EBlrzRd9LvhcCiR6XI
- maFz7k3TiBhQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9953"; a="181747258"
-X-IronPort-AV: E=Sophos;i="5.82,222,1613462400"; 
-   d="scan'208";a="181747258"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2021 05:14:40 -0700
-IronPort-SDR: wlRRmUGh48IO7CJMUGQEAnyLkoEgVJbk8WL+w4oYcmJdkMj6KUXvAUyBoqFMzRWGqZpbk/I6VU
- +NpR9N+vzcEw==
-X-IronPort-AV: E=Sophos;i="5.82,222,1613462400"; 
-   d="scan'208";a="399165092"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2021 05:14:38 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lWePj-003zOj-L6; Wed, 14 Apr 2021 15:14:35 +0300
-Date:   Wed, 14 Apr 2021 15:14:35 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Subject: Re: [PATCH v1 2/4] i2c: mpc: Remove CONFIG_PM_SLEEP ifdeffery
-Message-ID: <YHbcq31AVvuFq/9A@smile.fi.intel.com>
-References: <20210413143756.60138-1-andriy.shevchenko@linux.intel.com>
- <20210413143756.60138-2-andriy.shevchenko@linux.intel.com>
- <c6bae18f-a83f-675d-78a3-a4441b8c46f3@alliedtelesis.co.nz>
+        id S1351361AbhDNN2w convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 14 Apr 2021 09:28:52 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:57139 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232690AbhDNN2o (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Apr 2021 09:28:44 -0400
+Received: from localhost (lfbn-lyo-1-1679-174.w90-65.abo.wanadoo.fr [90.65.110.174])
+        (Authenticated sender: gregory.clement@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 322B1240011;
+        Wed, 14 Apr 2021 13:28:18 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Ondrej Jirman <megous@megous.com>
+Subject: Re: [PATCH] i2c: mv64xxx: Fix random system lock caused by runtime PM
+In-Reply-To: <20210413195854.GB2751@kunai>
+References: <20210408020000.21914-1-kabel@kernel.org>
+ <20210413195854.GB2751@kunai>
+Date:   Wed, 14 Apr 2021 15:28:18 +0200
+Message-ID: <87mtu1atcd.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c6bae18f-a83f-675d-78a3-a4441b8c46f3@alliedtelesis.co.nz>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 11:43:25PM +0000, Chris Packham wrote:
-> On 14/04/21 2:37 am, Andy Shevchenko wrote:
-> > Use __maybe_unused for the suspend()/resume() hooks and get rid of
-> > the CONFIG_PM_SLEEP ifdeffery to improve the code.
+> On Thu, Apr 08, 2021 at 04:00:00AM +0200, Marek Beh√∫n wrote:
+>> I noticed a weird bug with this driver on Marvell CN9130 Customer
+>> Reference Board.
+>> 
+>> Sometime after boot, the system locks with the following message:
+>>  [104.071363] i2c i2c-0: mv64xxx: I2C bus locked, block: 1, time_left: 0
+>> 
+>> The system does not respond afterwards, only warns about RCU stalls.
+>> 
+>> This first appeared with commit e5c02cf54154 ("i2c: mv64xxx: Add runtime
+>> PM support").
+>> 
+>> With further experimentation I discovered that adding a delay into
+>> mv64xxx_i2c_hw_init() fixes this issue. This function is called before
+>> every xfer, due to how runtime PM works in this driver. It seems that in
+>> order to work correctly, a delay is needed after the bus is reset in
+>> this function.
 
-> This has a trivial conflict with my series because I'm also touching 
-> struct mpc_i2c. git am -3 seems to deal with it but would it be easier 
-> if I picked up these 4 changes and included them with my next submission?
+Marek,
 
-It would be ideal to me!
+As you mentioned it was related to reset and the issue occurred with the
+support of runtime PM. Did you try to add the delay only in the function
+mv64xxx_i2c_runtime_resume(), just after the mv64xxx_i2c_hw_init() call ?
 
-> > -#define MPC_I2C_PM_OPS	(&mpc_i2c_pm_ops)
-> > -#else
-> > -#define MPC_I2C_PM_OPS	NULL
-> > -#endif
-> >   
-> >   static const struct mpc_i2c_data mpc_i2c_data_512x = {
-> >   	.setup = mpc_i2c_setup_512x,
-> 
-> There's a reference to MPC_I2C_PM_OPS in mpc_i2c_driver which needs 
-> changing I think the following is needed
+>> 
+>> Since there already is a known erratum with this controller needing a
+>> delay, I assume that this is just another place this needs to be
+>> applied. Therefore I apply the delay only if errata_delay is true.
+>> 
+>> Signed-off-by: Marek Beh√∫n <kabel@kernel.org>
+>
+> Gregory? Looks reasonable to me and if so, we should have this in 5.12
+> already. Comments from others are welcome, too, of course.
 
-True. sorry that my build test had been broken.
-Tell me if you want v2 with this fixed or you may fold that change since the
-above agreement.
+Hello Wolfram,
 
-> diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-> index 1308f749dc75..7fde13472c09 100644
-> --- a/drivers/i2c/busses/i2c-mpc.c
-> +++ b/drivers/i2c/busses/i2c-mpc.c
-> @@ -862,7 +862,7 @@ static struct platform_driver mpc_i2c_driver = {
->  ††††††† .driver = {
->  ††††††††††††††† .name = DRV_NAME,
->  ††††††††††††††† .of_match_table = mpc_i2c_of_match,
-> -†††††††††††††† .pm = MPC_I2C_PM_OPS,
-> +†††††††††††††† .pm = &mpc_i2c_pm_ops,
->  ††††††† },
->  †};
-> 
-> 
+I don't have this specific platform. However, as you said it looks
+reasonable and as it fixes an issue. And even if I had a pending
+question, it is just an optimisation so you can add my
+
+Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+
+Gregory
+
+
+>
+>> ---
+>>  drivers/i2c/busses/i2c-mv64xxx.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>> 
+>> diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
+>> index c590d36b5fd1..5c8e94b6cdb5 100644
+>> --- a/drivers/i2c/busses/i2c-mv64xxx.c
+>> +++ b/drivers/i2c/busses/i2c-mv64xxx.c
+>> @@ -221,6 +221,10 @@ mv64xxx_i2c_hw_init(struct mv64xxx_i2c_data *drv_data)
+>>  	writel(0, drv_data->reg_base + drv_data->reg_offsets.ext_addr);
+>>  	writel(MV64XXX_I2C_REG_CONTROL_TWSIEN | MV64XXX_I2C_REG_CONTROL_STOP,
+>>  		drv_data->reg_base + drv_data->reg_offsets.control);
+>> +
+>> +	if (drv_data->errata_delay)
+>> +		udelay(5);
+>> +
+>>  	drv_data->state = MV64XXX_I2C_STATE_IDLE;
+>>  }
+>>  
+>> -- 
+>> 2.26.2
+>> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
