@@ -2,132 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B7335F9E1
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 19:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2332035FA42
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 20:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350393AbhDNRaK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Apr 2021 13:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350807AbhDNRaG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Apr 2021 13:30:06 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE64C061348
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Apr 2021 10:29:40 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id t23so10618863pjy.3
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Apr 2021 10:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=70dSAhdvNf9rW7naVyB8FacZo/tKpmgYTIzZpzN71Cs=;
-        b=LsiMLszNVSqTMFSOmT7Vt7BL2HWjYpQnn9/Ah8Ahmt14VXi38iwnxuRRnAMd7nV+F4
-         L8OiYKIW4vYpw8N0fUeTwgUCiDMq5+HbPF+3sOym2H36ZFwtvq4PnCKSeplaTzdczwh+
-         M1/M+ijlrnFtXNjeEsgG7aN63y8Ce7LLt8uSE=
+        id S1352215AbhDNSG4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Apr 2021 14:06:56 -0400
+Received: from mail-ua1-f51.google.com ([209.85.222.51]:34308 "EHLO
+        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352231AbhDNSGy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Apr 2021 14:06:54 -0400
+Received: by mail-ua1-f51.google.com with SMTP id s2so6687834uap.1;
+        Wed, 14 Apr 2021 11:06:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=70dSAhdvNf9rW7naVyB8FacZo/tKpmgYTIzZpzN71Cs=;
-        b=QnJ5RwriPtPvLOSrxPPTG11V37HjeQw1NqVEDYcMmDCRXWLdyiwWAY36UtaCGUWFQ7
-         mrYE1a2Pdrvf8vrEDSq/MUmM8div4P1WPCraIQ4sz0hfPB3WTzToRGy8RTLhFyWFY3hW
-         rKVuo+OA6903MJ7N4shgB25JfPgftlieJWP1BhHYfTi9m8EKSNxbZWKvNNs60f3WzCjc
-         tEuq0TyMLiu99SvWrDhJEHVggqHViT1zSVrcsbWLKVU6kqv3hA7qnvZe8IcqhaDHFdlp
-         qgNi8ffAA7boFADwr2GZgulVry6yC2syxf0GRYCCwIMkYXgAH3EDSNZusWkHJVsU1wyG
-         MiBw==
-X-Gm-Message-State: AOAM532jMK1EJkCQ5gu1SmQt/+ZPyXsAFBxtnK/pxCpzf1f8Awb947Du
-        fQK2Ej7lrQZ6ecNFJTqr/AfnIg==
-X-Google-Smtp-Source: ABdhPJwqy6xfsxSkXZwh4yhPlR+yx5Kxrr/lleQqawAAaqaYA9AZc2k7rgE80MSaJDQAOD1ejSDS8w==
-X-Received: by 2002:a17:90a:ca83:: with SMTP id y3mr4896192pjt.191.1618421380273;
-        Wed, 14 Apr 2021 10:29:40 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:bae3:4af0:9792:1539])
-        by smtp.gmail.com with ESMTPSA id e31sm63460pjk.4.2021.04.14.10.29.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Apr 2021 10:29:39 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     linux-i2c@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org
-Subject: [PATCH v19 6/6] drm/i915/selftests: Rename functions names
-Date:   Thu, 15 Apr 2021 01:29:16 +0800
-Message-Id: <20210414172916.2689361-7-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
-In-Reply-To: <20210414172916.2689361-1-hsinyi@chromium.org>
-References: <20210414172916.2689361-1-hsinyi@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ddZGfKqAYJDSmmTLgKzl1rH2bdN0rcG8HZTEhXiTMnU=;
+        b=n3dP8ciU/K9e+trEaq8hDq9aGdvoWJ9rmD4p4v4ZOgG3wj3scTnJ2lW4m/gXG7O9p2
+         I+CzjeUgG7pzM88mDXhDl8i0BchObUT3JFeN52qx4ykqK1C6HpR8GN41h1lQDN+ZApzE
+         yiYSaZ2/NZyYh/7/mcAVjoJgtKDHzXHtw3XjG4G4iSswpS0w2z8qY09GomeAfFYJH60x
+         AxXoOz/sAULGM9hwvoyp0+ZFIzpzOQ00OFYnGdaNxKOmVFsB5hqeo1jPe6BKiXWbuPhL
+         483JO2NF9WI5PyZ5f27+sAF4Cg8Sl0Af1Zs5jdkLpxEDItR8UzK0AYVsBD67KbKX44y4
+         faiA==
+X-Gm-Message-State: AOAM531eaUuKbbBJ1IIXqznUFmfOp8IOUNUUXrm2Xopq3oJwV4mvJwwt
+        UlKgiRtoyIGXhRcB50e5bm+3zqRgLHG8nYmgXQE=
+X-Google-Smtp-Source: ABdhPJyQPiBIV7uNy1l3QbwhYpaInf6c0VDMaKzClso+F1JYYipmeo7WYJuYhq6oSfUqeWVNS7cdTumYrdOqNv8F0h8=
+X-Received: by 2002:ab0:6306:: with SMTP id a6mr28267964uap.2.1618423590460;
+ Wed, 14 Apr 2021 11:06:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
+ <bd8db435-24e1-5ab3-6b35-1d4d8a292a7e@hisilicon.com>
+In-Reply-To: <bd8db435-24e1-5ab3-6b35-1d4d8a292a7e@hisilicon.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 14 Apr 2021 20:06:18 +0200
+Message-ID: <CAMuHMdVouD+e4GpN_Dur8HSop4B8HVosGSYw7vfTpBEi_inMbw@mail.gmail.com>
+Subject: Re: [PATCH] i2c: I2C_HISI should depend on ARCH_HISI && ACPI
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-pm_resume and pm_suspend might be conflict with the ones defined in
-include/linux/suspend.h. Rename pm_resume{suspend} to
-i915_pm_resume{suspend} since they are only used here.
+Hi Yicong,
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reported-by: kernel test robot <lkp@intel.com>
----
- drivers/gpu/drm/i915/selftests/i915_gem.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+On Wed, Apr 14, 2021 at 11:24 AM Yicong Yang <yangyicong@hisilicon.com> wrote:
+> On 2021/4/13 20:26, Geert Uytterhoeven wrote:
+> > The HiSilicon Kunpeng I2C controller is only present on HiSilicon
+> > Kunpeng SoCs, and its driver relies on ACPI to probe for its presence.
+> > Hence add dependencies on ARCH_HISI and ACPI, to prevent asking the user
+> > about this driver when configuring a kernel without Hisilicon platform
+> > or ACPI firmware support.
+>
+> this is a public IP which doesn't specifically depend on ARCH_HISI. I'm
+> not sure all the platform this IP on has ARCH_HISI configured. The driver
+> will not be compiled by default config. This is not correct to have
+> this dependence.
 
-diff --git a/drivers/gpu/drm/i915/selftests/i915_gem.c b/drivers/gpu/drm/i915/selftests/i915_gem.c
-index dc394fb7ccfa..525afda9d31f 100644
---- a/drivers/gpu/drm/i915/selftests/i915_gem.c
-+++ b/drivers/gpu/drm/i915/selftests/i915_gem.c
-@@ -94,7 +94,7 @@ static int pm_prepare(struct drm_i915_private *i915)
- 	return 0;
- }
- 
--static void pm_suspend(struct drm_i915_private *i915)
-+static void i915_pm_suspend(struct drm_i915_private *i915)
- {
- 	intel_wakeref_t wakeref;
- 
-@@ -116,7 +116,7 @@ static void pm_hibernate(struct drm_i915_private *i915)
- 	}
- }
- 
--static void pm_resume(struct drm_i915_private *i915)
-+static void i915_pm_resume(struct drm_i915_private *i915)
- {
- 	intel_wakeref_t wakeref;
- 
-@@ -152,12 +152,12 @@ static int igt_gem_suspend(void *arg)
- 	if (err)
- 		goto out;
- 
--	pm_suspend(i915);
-+	i915_pm_suspend(i915);
- 
- 	/* Here be dragons! Note that with S3RST any S3 may become S4! */
- 	simulate_hibernate(i915);
- 
--	pm_resume(i915);
-+	i915_pm_resume(i915);
- 
- 	err = switch_to_context(ctx);
- out:
-@@ -192,7 +192,7 @@ static int igt_gem_hibernate(void *arg)
- 	/* Here be dragons! */
- 	simulate_hibernate(i915);
- 
--	pm_resume(i915);
-+	i915_pm_resume(i915);
- 
- 	err = switch_to_context(ctx);
- out:
+Thanks for your answer!
+
+I guess it's still fine to add a dependency on ACPI?
+
+Thanks again!
+
+> > Fixes: d62fbdb99a85730a ("i2c: add support for HiSilicon I2C controller")
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+> >  drivers/i2c/busses/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> > index b5b4e0d0ff4dd0bc..3ead6d9e130b2ebc 100644
+> > --- a/drivers/i2c/busses/Kconfig
+> > +++ b/drivers/i2c/busses/Kconfig
+> > @@ -647,7 +647,7 @@ config I2C_HIGHLANDER
+> >
+> >  config I2C_HISI
+> >       tristate "HiSilicon I2C controller"
+> > -     depends on ARM64 || COMPILE_TEST
+> > +     depends on (ARM64 && ARCH_HISI && ACPI) || COMPILE_TEST
+> >       help
+> >         Say Y here if you want to have Hisilicon I2C controller support
+> >         available on the Kunpeng Server.
+\
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.31.1.295.g9ea45b61b8-goog
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
