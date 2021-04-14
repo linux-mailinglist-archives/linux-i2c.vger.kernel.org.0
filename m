@@ -2,88 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC58435EF76
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C30535EFAD
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349964AbhDNIXK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Apr 2021 04:23:10 -0400
-Received: from www.zeus03.de ([194.117.254.33]:47556 "EHLO mail.zeus03.de"
+        id S230500AbhDNIbs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Apr 2021 04:31:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47232 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349952AbhDNIXK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Apr 2021 04:23:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=2iL4tCIneCpn4SmM0M3Refp2Ot9p
-        z3eawuOR7oYf+eI=; b=TLEFk81N3oowj3OzJV2VJ5fURdhQSJB+AJORkw84d5Jq
-        elzQdi6pGg+S3zPzVdugiGpV33MEIj0ka2MB41ekcAwtr3X3+II7IsNhl+NxSf4V
-        8lLMIQryavEECIUEPBUnXmRtqkqeRa67c/byd66j0fEQWiCH+Cza5nhf/QGpePE=
-Received: (qmail 1266527 invoked from network); 14 Apr 2021 10:22:47 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Apr 2021 10:22:47 +0200
-X-UD-Smtp-Session: l3s3148p1@v4+kc+q/2rkgARa4RUbaAViwQhp+rF7q
-Date:   Wed, 14 Apr 2021 10:22:46 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Sergey Shtylyov <s.shtylyov@omprussia.ru>
-Cc:     linux-i2c@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/6] Stop calling devm_request_irq() with invalid IRQs
- in the I2C bus drivers
-Message-ID: <20210414082246.GK2180@ninjato>
-References: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
+        id S230373AbhDNIbs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 14 Apr 2021 04:31:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 76E47613C0;
+        Wed, 14 Apr 2021 08:31:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618389087;
+        bh=oP4zzryECD7J5pXO9mtg7ISNTzP4sd+9qxOtZGNrTV4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z9+kalaPKeJSXeTxGEENllh21coepFwzcMEbSgE+piv4YMxZVP09y5XQvJkqPN4+B
+         5xmobS0RTmYKtfMgtRqeaVKHkt68dvvXWkt5M/SxFAgrsuvHYTKi2A9QYyFOAX2mFg
+         GY990c7SV461K8BtgZUxYzomuRk3RhLhSPLHhQA3BJY0Gz22G2K0Vq2QHpoH39yVo0
+         f3S/CFT360yHzJlVAPTvqdpfY5mPOYKdgtoxaOm4HsJ2uSPnbBSYrcIiHmC1Qw7FvQ
+         tOydQSN7s+pzmRRZBJONo8pr+xaSa5AKl8+uNdXZ00eS5iBmRs24BgkC5ZbFBOXzlr
+         3/R3HyXeir3bg==
+Date:   Wed, 14 Apr 2021 10:31:24 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     "tiantao (H)" <tiantao6@huawei.com>
+Cc:     Tian Tao <tiantao6@hisilicon.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH drivers/i2c 1/3] i2c: amd8111: Fix coding style issues
+Message-ID: <20210414083124.GL2180@ninjato>
+References: <1617613430-11921-1-git-send-email-tiantao6@hisilicon.com>
+ <1617613430-11921-2-git-send-email-tiantao6@hisilicon.com>
+ <20210413202503.GD2751@kunai>
+ <4aeba72c-46bd-35be-a1e8-2739f1825d92@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="asNXdz5DenlsLVVk"
+        protocol="application/pgp-signature"; boundary="SqfawxHnX56H7Ukl"
 Content-Disposition: inline
-In-Reply-To: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
+In-Reply-To: <4aeba72c-46bd-35be-a1e8-2739f1825d92@huawei.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---asNXdz5DenlsLVVk
-Content-Type: text/plain; charset=us-ascii
+--SqfawxHnX56H7Ukl
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 10, 2021 at 11:11:59PM +0300, Sergey Shtylyov wrote:
-> Here are 6 patches against the 'master' branch of Martin Petersen's 'scsi=
-=2Egit' repo.
-> The affected drivers call platform_get_irq() but largely ignore its resul=
-t -- they
-> blithely pass the negative error codes to devm_request_irq() which expect=
-s *unsinged*
-> IRQ #s. Stop doing that by checking what exactly platform_get_irq() retur=
-ns.
+
+> > Is the binary after the patch applied equal to the binary before your
+> > patch? Same question for patch 2.
 >=20
-> [1/6] i2c: cadence: add IRQ check
-> [2/6] i2c: emev2: add IRQ check
-> [3/6] i2c: jz4780: add IRQ check
-> [4/6] i2c: mlxbf: add IRQ check
-> [5/6] i2c: rcar: add IRQ check
-> [6/6] i2c: sh7760: add IRQ check
+> The MD5 value of binary is the same before and after the patch is
+> merged=EF=BC=8Cthe log is as below=EF=BC=9A
 
-Applied to for-next, thanks!
+Thanks for checking! What about patch 2?
 
 
---asNXdz5DenlsLVVk
+--SqfawxHnX56H7Ukl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2plIACgkQFA3kzBSg
-Kbboag//a5PtzuJjX3Zshqcl9BmZ7YilNzlFuZcyb0Blgkmt4cvUhpQksKHDYYqj
-8AbqAsUUxB7wfMuKZ6GGbdhgJ7ZsT/ryqQX8PHhID1Ij+bnjmogXblyQFt2eg2YV
-yNjE9PStiYJaBfsdsmTcOuflqZTwGgAYFAsEVemM9Ynec9IWciYkLbfzrbPIu4Zp
-bKYIMX+frmfN7xKRSTCdZhyOqjHEH3j1a2Gtv7wGkjWT/2jyZ4jBaBs9n/+NVffI
-WvMgKJW1eJy2hN8Z/LM3B9lddAjJRmlOP/O4XY6rL4kN1p58eS0vbIUJr3Dwdzie
-xP8+7h56wjGAH/Cf+52Rro71Y6E+UjlOAPsH4EMSCzD6Aec7ONl3ABAMuxIzTWYV
-Mjj/u8ofo91ZPxWeY0RM7tZNMYOh2R61mYC9d59U+RaqUR4nBrodL1Dtytb7DZ1D
-5VYLRXvWuvkYuF3QXFfNaRvP1nSOCvam4TZJpKiEhIW4LTcaAyLtOWGeI6Hi64FF
-teNWxwQMNPoy8jkS0V7NPJ2omfxXFzAvrljwTesDZ3dzoscNMzzc1fUjuw780jRD
-lm91j74IAuN+jMPqrrxf+Q8nj7wZBUFG39+Q8G9owfFvoDn7eqUCfv4xCogMlAf3
-SbyRbrs/lkRGisTck85c72/QlhsZImg5scDXymqhM5AahRLTpyo=
-=Q2Aq
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2qFwACgkQFA3kzBSg
+KbYOqxAAmPNdd+lglasSeBK7hoSlOu2uxXZxnbW3ePGtnd2Evurv7tGtPiO/Fa/Z
+0f1Lbe0/fxT4f83TuLxBZD4oS45lMReeNiAgipbwzb0Zrpjg+Uvvva8AoDRqtonp
+VFDl1fQZHVf1fOVRP53Auoz7uXkTh2pVf0ex6owSIlpJrAy2E1bA+giV2/9CdYUH
+lWbWSBSXzo7JNN+3bK0JGhTSAwi9TkOHL6mR9OINAbzdqu2HFRjfRYmkcgFo1oXv
+jjc87qLb4GMWHsLi+y9QUln5zDvNmJIEVXmbILYJP0qXR9eS1KB1CZGtDPM9afdX
+PiWFDEonUsVmot7iUXoSxZucTI71MnLW+Kvg0b90r4aBNtIBLKye2twgSCvB2mOP
+QTtl0hmpIVJsRUykF00Az9pMlvTi1k6INotVuxmn9toA6KQlAxg5aiBRLR1sR3dM
+DIPmg3bT6FRuIMsitljO2zcNSkCsCeMDQWsmncklqRrMuxBeCNXQl21P1VvWeM2j
+Juy3Y2Ae090vX3aWWcv0iyJnYF2QHimEd46P7kx7x3ule/QXPGagQ/Qar1RcxDvC
+83urO7lsKGWZ685JTyDkHB6Lua60eXhlu/16TFmAK77pZ+b7x1CKyJJKU2DKhPJf
+L+KvPe3OuI39nPzUFV1Za5HiCQaH1rNhzrh+w007V45+APBTeu8=
+=RAeJ
 -----END PGP SIGNATURE-----
 
---asNXdz5DenlsLVVk--
+--SqfawxHnX56H7Ukl--
