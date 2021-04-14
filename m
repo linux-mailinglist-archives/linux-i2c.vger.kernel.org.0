@@ -2,100 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7882E35FD0F
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 23:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2126435FDB1
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 00:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbhDNVS3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Apr 2021 17:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbhDNVS2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Apr 2021 17:18:28 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00AFC061574
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Apr 2021 14:18:05 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C7EE7891AE;
-        Thu, 15 Apr 2021 09:17:59 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1618435079;
-        bh=jj0BPZvY3W5uUaK47/HeoEBDslu2QxZ23CCxkeSWl3M=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=HBDc8bXPHPzPLGC3CVGMne7f4OY49WAHJZln+8urA50ledu33Ode6phxm7CpeDlO1
-         yU9slimxy1vB6DrOyzaqlGsbxpN1BG/Hdhsl01UM78hUu5Mea5FPPmlmICBWXtN8ez
-         gqzsipYHEJCIYYQkNlHaBwotm0157C8ABI4ky5HHrMRo7LKnAnHh+77q8GcMfd5hMq
-         TkmiKF2I2Q1VLzz+ZM6bxTHYyaTCzjeQ2EYDy2azSHsTnV45vhbjkE6Y4Js1EBHV0K
-         LaiEV1hrAga7ouyj4jzDk4uD7IGWb2EvF11I9aB8K2UfhdFQhMb4yM/xS6ZbGHXpgY
-         kkuZdEUgx4Ovw==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B60775c070001>; Thu, 15 Apr 2021 09:17:59 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Thu, 15 Apr 2021 09:17:59 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.015; Thu, 15 Apr 2021 09:17:59 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Subject: Re: [PATCH v1 2/4] i2c: mpc: Remove CONFIG_PM_SLEEP ifdeffery
-Thread-Topic: [PATCH v1 2/4] i2c: mpc: Remove CONFIG_PM_SLEEP ifdeffery
-Thread-Index: AQHXMHKa81ZV92D9rkOWsO5qOgYw4qqyU4eAgADR4ICAAJfTgA==
-Date:   Wed, 14 Apr 2021 21:17:59 +0000
-Message-ID: <1a41249d-997e-9ba6-6e78-19f7d22463f4@alliedtelesis.co.nz>
-References: <20210413143756.60138-1-andriy.shevchenko@linux.intel.com>
- <20210413143756.60138-2-andriy.shevchenko@linux.intel.com>
- <c6bae18f-a83f-675d-78a3-a4441b8c46f3@alliedtelesis.co.nz>
- <YHbcq31AVvuFq/9A@smile.fi.intel.com>
-In-Reply-To: <YHbcq31AVvuFq/9A@smile.fi.intel.com>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <62F8BE64B0A40C43998887F1ABC8A3CA@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S231699AbhDNWTu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Apr 2021 18:19:50 -0400
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:44772 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229911AbhDNWTu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Apr 2021 18:19:50 -0400
+Received: by mail-oi1-f169.google.com with SMTP id e66so6935522oif.11;
+        Wed, 14 Apr 2021 15:19:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=shhxLQuTrS6CU0G16xzkxHsbk3trBrwF7tum2COVf1Q=;
+        b=ECOjp2jCDFesyp9HbcmutF6IqPnktJvmu8XagCT1tUf0+RFlRGUcjTzG8xo3RIdy/X
+         GvqZpCeRK3ejOKFSA8iraEUkp7BggRyg1Fs+6JCOyxEouNDBQ5iVxwuidxne/IPLYCVY
+         tPSso4g5G8ScE9t3d0BsbTaJ2O6QKnp5UuJyGeiB522KwloX8oY7Yl3X7IXeX9G4MVZq
+         Ty7uH3qJuguiKM3hnqw6fOwoDYYa3WiW5s/9iauKBsbSNsSC+s+Ui1KOimVU/KARfFpH
+         oGhV4mPkG0P41Xv+/qHUkna9iqbB+1VmytjtX4OB7Cko71N5qU7p3ohYf9BsbM1YMp04
+         9z8g==
+X-Gm-Message-State: AOAM532kDPkxYIYk9bui7bc9ljpcuLb2rt310K59qdTmwReVa6HLfT8M
+        ZnPaf80wtYQ4b2qMQ67Byg==
+X-Google-Smtp-Source: ABdhPJx6GppsvAcMfhCc/TcWFOcFYEwW+XxDXo6r8z6IJFxygHtL17xNAfoh1RHqI7F2eLpl2oyvAw==
+X-Received: by 2002:aca:b787:: with SMTP id h129mr372861oif.58.1618438768152;
+        Wed, 14 Apr 2021 15:19:28 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id i4sm195366oik.21.2021.04.14.15.19.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Apr 2021 15:19:27 -0700 (PDT)
+Received: (nullmailer pid 69085 invoked by uid 1000);
+        Wed, 14 Apr 2021 22:19:26 -0000
+Date:   Wed, 14 Apr 2021 17:19:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        intel-gfx@lists.freedesktop.org, devicetree@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Qii Wang <qii.wang@mediatek.com>, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Subject: Re: [Intel-gfx] [PATCH v19 2/6] dt-binding: i2c: mt65xx: add
+ vbus-supply property
+Message-ID: <20210414221926.GA69036@robh.at.kernel.org>
+References: <20210414172916.2689361-1-hsinyi@chromium.org>
+ <20210414172916.2689361-3-hsinyi@chromium.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=NaGYKFL4 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=3YhXtTcJ-WEA:10 a=uBRA9nhwTqNYg-qt4OQA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210414172916.2689361-3-hsinyi@chromium.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiAxNS8wNC8yMSAxMjoxNCBhbSwgQW5keSBTaGV2Y2hlbmtvIHdyb3RlOg0KPiBPbiBUdWUs
-IEFwciAxMywgMjAyMSBhdCAxMTo0MzoyNVBNICswMDAwLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0K
-Pj4gT24gMTQvMDQvMjEgMjozNyBhbSwgQW5keSBTaGV2Y2hlbmtvIHdyb3RlOg0KPj4+IFVzZSBf
-X21heWJlX3VudXNlZCBmb3IgdGhlIHN1c3BlbmQoKS9yZXN1bWUoKSBob29rcyBhbmQgZ2V0IHJp
-ZCBvZg0KPj4+IHRoZSBDT05GSUdfUE1fU0xFRVAgaWZkZWZmZXJ5IHRvIGltcHJvdmUgdGhlIGNv
-ZGUuDQo+PiBUaGlzIGhhcyBhIHRyaXZpYWwgY29uZmxpY3Qgd2l0aCBteSBzZXJpZXMgYmVjYXVz
-ZSBJJ20gYWxzbyB0b3VjaGluZw0KPj4gc3RydWN0IG1wY19pMmMuIGdpdCBhbSAtMyBzZWVtcyB0
-byBkZWFsIHdpdGggaXQgYnV0IHdvdWxkIGl0IGJlIGVhc2llcg0KPj4gaWYgSSBwaWNrZWQgdXAg
-dGhlc2UgNCBjaGFuZ2VzIGFuZCBpbmNsdWRlZCB0aGVtIHdpdGggbXkgbmV4dCBzdWJtaXNzaW9u
-Pw0KPiBJdCB3b3VsZCBiZSBpZGVhbCB0byBtZSENCk9LIEkndmUgcGlja2VkIHRoZW0gdXAuDQo+
-Pj4gLSNkZWZpbmUgTVBDX0kyQ19QTV9PUFMJKCZtcGNfaTJjX3BtX29wcykNCj4+PiAtI2Vsc2UN
-Cj4+PiAtI2RlZmluZSBNUENfSTJDX1BNX09QUwlOVUxMDQo+Pj4gLSNlbmRpZg0KPj4+ICAgIA0K
-Pj4+ICAgIHN0YXRpYyBjb25zdCBzdHJ1Y3QgbXBjX2kyY19kYXRhIG1wY19pMmNfZGF0YV81MTJ4
-ID0gew0KPj4+ICAgIAkuc2V0dXAgPSBtcGNfaTJjX3NldHVwXzUxMngsDQo+PiBUaGVyZSdzIGEg
-cmVmZXJlbmNlIHRvIE1QQ19JMkNfUE1fT1BTIGluIG1wY19pMmNfZHJpdmVyIHdoaWNoIG5lZWRz
-DQo+PiBjaGFuZ2luZyBJIHRoaW5rIHRoZSBmb2xsb3dpbmcgaXMgbmVlZGVkDQo+IFRydWUuIHNv
-cnJ5IHRoYXQgbXkgYnVpbGQgdGVzdCBoYWQgYmVlbiBicm9rZW4uDQo+IFRlbGwgbWUgaWYgeW91
-IHdhbnQgdjIgd2l0aCB0aGlzIGZpeGVkIG9yIHlvdSBtYXkgZm9sZCB0aGF0IGNoYW5nZSBzaW5j
-ZSB0aGUNCj4gYWJvdmUgYWdyZWVtZW50Lg0KPg0KSSBjYW4gZm9sZCB0aGUgZml4IGJlbG93IGlu
-LiBObyBuZWVkIGZvciBhIHYyIGZyb20geW91Lg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJj
-L2J1c3Nlcy9pMmMtbXBjLmMgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1wYy5jDQo+PiBpbmRl
-eCAxMzA4Zjc0OWRjNzUuLjdmZGUxMzQ3MmMwOSAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvaTJj
-L2J1c3Nlcy9pMmMtbXBjLmMNCj4+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXBjLmMN
-Cj4+IEBAIC04NjIsNyArODYyLDcgQEAgc3RhdGljIHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIgbXBj
-X2kyY19kcml2ZXIgPSB7DQo+PiAgIMKgwqDCoMKgwqDCoMKgIC5kcml2ZXIgPSB7DQo+PiAgIMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAubmFtZSA9IERSVl9OQU1FLA0KPj4gICDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLm9mX21hdGNoX3RhYmxlID0gbXBjX2kyY19vZl9t
-YXRjaCwNCj4+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC5wbSA9IE1QQ19JMkNfUE1f
-T1BTLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLnBtID0gJm1wY19pMmNfcG1f
-b3BzLA0KPj4gICDCoMKgwqDCoMKgwqDCoCB9LA0KPj4gICDCoH07DQo+Pg0KPj4=
+On Thu, 15 Apr 2021 01:29:12 +0800, Hsin-Yi Wang wrote:
+> Add vbus-supply property for mt65xx. The regulator can be passed into
+> core and turned off during suspend/sleep to reduce power consumption.
+> 
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>
