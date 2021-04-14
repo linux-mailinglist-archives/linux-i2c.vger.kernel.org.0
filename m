@@ -2,86 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CB835EEFB
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B8135EF09
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349831AbhDNIBv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Apr 2021 04:01:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53410 "EHLO mail.kernel.org"
+        id S1349881AbhDNIEo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Apr 2021 04:04:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60204 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349824AbhDNIBn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Apr 2021 04:01:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BDCCF601FE;
-        Wed, 14 Apr 2021 08:01:21 +0000 (UTC)
+        id S1349887AbhDNIEg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 14 Apr 2021 04:04:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BDEB61179;
+        Wed, 14 Apr 2021 08:04:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618387282;
-        bh=A17+YvYKeT74dwM5NvpYH2hMlwLgSEqUmsE8h5iCq7E=;
+        s=k20201202; t=1618387455;
+        bh=TG4nP5Bkld2PjnN/8JUb328aNVrDFABId/IvxQvT2g8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fSX6jBuLw2uXn3nPd1pScagSSVO6HZLk44dMSHJEMQpzlA1praHv3HMbQAJwVMAVv
-         as1vgm/DByYWPi+HxzMxsVLUA2w6PY5EMa/CmRk2rd6kQomag4VTCCkYQbN2sCeTHC
-         /WUxn/YdBgcamrNoIBiyEHhR/2n4PFDnOSeHK8ZRhO5VlUI9IoZI9otcw7xBU+q5qj
-         yTn0bwEpndUH/jkQ87Uw9UclAygJ22IkyekBbMOwacRf2uwVAUUQTIDKHc9a3bs14y
-         TiM/gv8fBqOIPrSGdA5HDPa3/c0M/t+VAAdRXCRFJxD5CV0jSZFZT9FDG9/KoZi4sl
-         vyOKBTY0jGlYw==
-Date:   Wed, 14 Apr 2021 10:01:19 +0200
+        b=Mb/UywYWL3DXr8vyJn1hemUOkNZ2cNavGmuapnJg4Vb8asObE5JKsmBEAGzbhmjKn
+         aJ5nKuoGTkZ9Qly4rZ2ot3Kfji6ki6Juj7UJ+XJrPYD1ZxyA+8fEHsRvcSnx+f3/gl
+         IZqWiue02pI0OMrzf3WkXg5E3BXpOWlVQotF653aLHbXGC9fPd5W+dyZ1rJbu26x7Y
+         gAUjzZ0g/sXFqWWRjxv7SzAN6woXfQr0fOResW8p0AMLL/2MZh+kp1FswFEfLX0XIe
+         8SIf/KngGnO60ngMluBTv6PKaG9JIj+eEq2fA5ZNTZFoI86z6MsoswEl57FMjZfL/j
+         eng/82NUELumA==
+Date:   Wed, 14 Apr 2021 10:04:12 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Li Huafei <lihuafei1@huawei.com>
-Cc:     vigneshr@ti.com, tony@atomide.com, aaro.koskinen@iki.fi,
-        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+To:     Ye Weihua <yeweihua4@huawei.com>
+Cc:     linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, yangjihong1@huawei.com,
         zhangjinhao2@huawei.com
-Subject: Re: [PATCH -next] i2c: omap: fix PM reference leak in
- omap_i2c_probe()
-Message-ID: <20210414080119.GH2180@ninjato>
-References: <20210408125648.136519-1-lihuafei1@huawei.com>
+Subject: Re: [PATCH -next] i2c: imx: Fix PM reference leak in
+ i2c_imx_reg_slave()
+Message-ID: <20210414080412.GI2180@ninjato>
+References: <20210408110638.200761-1-yeweihua4@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vkEkAx9hr54EJ73W"
+        protocol="application/pgp-signature"; boundary="++alDQ2ROsODg1x+"
 Content-Disposition: inline
-In-Reply-To: <20210408125648.136519-1-lihuafei1@huawei.com>
+In-Reply-To: <20210408110638.200761-1-yeweihua4@huawei.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---vkEkAx9hr54EJ73W
+--++alDQ2ROsODg1x+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 08, 2021 at 08:56:48PM +0800, Li Huafei wrote:
-> pm_runtime_get_sync will increment pm usage counter even it failed.
-> Forgetting to putting operation will result in reference leak here. Fix
-> it by replacing it with pm_runtime_resume_and_get to keep usage counter
+On Thu, Apr 08, 2021 at 07:06:38PM +0800, Ye Weihua wrote:
+> The PM reference count is not expected to be incremented on return in
+> these functions.
+>=20
+> However, pm_runtime_get_sync() will increment the PM reference count
+> even on failure. forgetting to put the reference again will result in
+> a leak.
+>=20
+> Replace it with pm_runtime_resume_and_get() to keep the usage counter
 > balanced.
 >=20
 > Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> Signed-off-by: Ye Weihua <yeweihua4@huawei.com>
 
-Thanks, yet I applied this series now:
+After rebasing, only one hunk was left:
 
-http://patchwork.ozlabs.org/project/linux-i2c/list/?series=3D217733&state=
-=3D*
+> @@ -801,7 +801,7 @@ static int i2c_imx_reg_slave(struct i2c_client *clien=
+t)
+>  	i2c_imx->last_slave_event =3D I2C_SLAVE_STOP;
+> =20
+>  	/* Resume */
+> -	ret =3D pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
+> +	ret =3D pm_runtime_resume_and_get(i2c_imx->adapter.dev.parent);
+>  	if (ret < 0) {
+>  		dev_err(&i2c_imx->adapter.dev, "failed to resume i2c controller");
+>  		return ret;
+
+I applied this to for-next, thanks!
 
 
---vkEkAx9hr54EJ73W
+--++alDQ2ROsODg1x+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2oU8ACgkQFA3kzBSg
-KbajnQ//YhDJxuRkElFaaDkaZtFneMSAu9lzddsixSEr6XBiuFq7fOMtQFuO1KX0
-phbObJkYzN5ZmS4Ew3qr+pEjY3xcpSyEevtUbDHsTFeiyXkosestDcMDHuwsAvi1
-DEIf2kk985o91ficI186zA5xl+4lEccpuQXw/oJHmupT+4vtCUe92DOEuhjHHCPQ
-uINfCdGxGsK7tOdIS3ErwKCuCbdgQdde8vcyY7KvhPWMRDUC9hTBqXphRDMkHI6y
-XzVS6VC64PfiU873IcarwtFuXmPtwA2u/9PMBCLeON7/XP2cKUScb8WoY0TA4Yi4
-Y7JVpwYvPgxcB/FVhN1X3OY64cjt1xZYnG/E5bctGkFmRC0F0ghVVypbOIPxwbX4
-U6twNKfWUSjpMRPzqlfC3FfgOxYugidhdUGZf16zA0TfqVS70lbgyDzCUfLFjv++
-5n6lICh9M7tcr4bPTRbQq0ZVH4sUCnUM7EAgaHhK4zRMSsf9GhT7eJUcwHxs/9gD
-0ctHQBtMQZLnxp1ewitC2zRGZMyaUJORIpcdlchZtvuJCzZ71WwmncJcujVG1CCi
-ghakMnyhbcWp2x9Kd40Pl6scLGxILQqGdgR/53t3H/lk2SLOUlZKYTMw4+k7L6/s
-wQt4splKRzhzml0zKHquWgRDYS3c2fE7WizjM6n+uXhbWTszfEc=
-=/cPS
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2ofwACgkQFA3kzBSg
+Kba2ABAAqCYKxzJHnfOMkaWfNU6FGvFtUmEybjPv4Bnw3Vq7FXUQJCLmSCVXM57B
+jMgCqk8lQX9fRRSKz7ux8Gq1XJcl3f+66EY2RRB2TzWR18qqa0aUwCxxajoo8qPp
+u6rLf4KbErJtAYoma0+W54AYdgWoy6gxnw82yC0xMv39MK8XxlzEbRkVxIovbzxD
+/m/XSUtjsDybPN9l7aoESsPXzASXikhH0yNOmffsZCybZ6Xk6V47QBdJz2uHqg0O
+y/8V9X1+vE0lqn7mEM+9ShghkZCXUZFifmjIGGoO4SmsCa0mKk6Iq53qL0+OHlKi
+vrBQMb8R+t7a2nZnijSLsGHcNx2Kx9HMmn3HY57g4Schlnegin0LRlinMQd6qhuQ
+NPkqeeaXdogZxqTXep5udxPht8SjhSex9/L2sAJafrbaNI3FCusQGYu5aFgELJ2p
+sQa6BLXctvkSHib8Nfkec7TaX/4mk/vheKpQDpMpYoQ85SgHDd2QCC7ixw4h/ZK9
+h2lBp/2vTSUmh6HlUSon+hwulSQdv/nVOK9NL51JaojQ6BP/EJbzMEqPr+ky2O2y
+n2C2iv78fMd6SxNCX+5UouqyR0zrk7DlhJr78MkLuvEYdQVwd8ySRlTJH0S+/N3p
+YYZhwD3JCurWpOBtR+mekZXfhpJkiQvcG5Qt7oaMe2SsN0wRrMc=
+=jEO4
 -----END PGP SIGNATURE-----
 
---vkEkAx9hr54EJ73W--
+--++alDQ2ROsODg1x+--
