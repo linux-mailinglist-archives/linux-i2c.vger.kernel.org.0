@@ -2,80 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C30535EFAD
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C6935EFB0
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbhDNIbs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Apr 2021 04:31:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47232 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230373AbhDNIbs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Apr 2021 04:31:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 76E47613C0;
-        Wed, 14 Apr 2021 08:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618389087;
-        bh=oP4zzryECD7J5pXO9mtg7ISNTzP4sd+9qxOtZGNrTV4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z9+kalaPKeJSXeTxGEENllh21coepFwzcMEbSgE+piv4YMxZVP09y5XQvJkqPN4+B
-         5xmobS0RTmYKtfMgtRqeaVKHkt68dvvXWkt5M/SxFAgrsuvHYTKi2A9QYyFOAX2mFg
-         GY990c7SV461K8BtgZUxYzomuRk3RhLhSPLHhQA3BJY0Gz22G2K0Vq2QHpoH39yVo0
-         f3S/CFT360yHzJlVAPTvqdpfY5mPOYKdgtoxaOm4HsJ2uSPnbBSYrcIiHmC1Qw7FvQ
-         tOydQSN7s+pzmRRZBJONo8pr+xaSa5AKl8+uNdXZ00eS5iBmRs24BgkC5ZbFBOXzlr
-         3/R3HyXeir3bg==
-Date:   Wed, 14 Apr 2021 10:31:24 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "tiantao (H)" <tiantao6@huawei.com>
-Cc:     Tian Tao <tiantao6@hisilicon.com>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH drivers/i2c 1/3] i2c: amd8111: Fix coding style issues
-Message-ID: <20210414083124.GL2180@ninjato>
-References: <1617613430-11921-1-git-send-email-tiantao6@hisilicon.com>
- <1617613430-11921-2-git-send-email-tiantao6@hisilicon.com>
- <20210413202503.GD2751@kunai>
- <4aeba72c-46bd-35be-a1e8-2739f1825d92@huawei.com>
+        id S1350066AbhDNIdu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Apr 2021 04:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350061AbhDNIdu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Apr 2021 04:33:50 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF13C061574
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Apr 2021 01:33:27 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id mh2so8568210ejb.8
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Apr 2021 01:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=xtZyGhp+r8KyQsgdY6dvRyvGM+PA3hhprK2XIk+e5iI=;
+        b=Zj9BoZa5Uwmd4GL7iOxvoxDCYIDkBLMsPKxvvHMbB1HNmv7WTmCQn98J+/uaMsrcRq
+         ZkPgT5N6ZWiEAm/ALL2zIJbRgOCD3jUZSCo0w77xt3EC23R6OxD3yVjXnb+G/tw2+42i
+         qFplRAZA5uspzQg+9yeCYCVXTjXM5ktK/JbEPt7Lqvu6MLC1UjSyHAxqo6UkdHabLFGz
+         JOkI6DJfOha1nxKrD7Ej2L2jw/w+iOJJjgsxXz43d6iqWkO5l6Z5Re83zyy204g4hQCM
+         fTlELbrJbjxTtFUzWjNIQvP4CshhLLgT2Jtffti0KJfMGP36JZuenngJ4bQqW7GgqbTn
+         /qOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=xtZyGhp+r8KyQsgdY6dvRyvGM+PA3hhprK2XIk+e5iI=;
+        b=Tvrx/DpFPX8NPaqTvSIuoGJQV6E/uSOc0plJCpnSFMYX9YT2DNypX9HqySnSOJ+WtY
+         kGI5KAlc4w062o0RKYRSXAWudYOMT493GRBaoAfSnNsnPUMsfe/Yw4dXLIlfZWXmI3SV
+         7rqCY7WT/l6aIE6eAUNmVwuBKg4MBVuvaHRvoeo4FeOCHbhnO5vadifvFYo0YG5d3Vwo
+         9qO70LznNf57oeGWAJiS67BNrBJsDDml31AjKV5MPwOpeaxYiG0dI8NrLrpamPuq/8/e
+         C41LjC3fcKtcxkAYFj2H4/exCUnuxnFhDnWYGwoFjbtbUITHGz76El+AljnWtTe7N8Ix
+         RxVw==
+X-Gm-Message-State: AOAM532BQvwlCSaQca+1Sphcc6AtM2o/7UlkasV/kVs7IVDQOodgC8sS
+        rDuL3A50Cz5Cs+4orN3i4HOAdA==
+X-Google-Smtp-Source: ABdhPJyyf637F4yQJ1Y0LSg5vfXoU2bVseY3Mb+2LCpWkgQmQAK501PeDMSQhDbEtOeAXEcGERd00Q==
+X-Received: by 2002:a17:906:86c2:: with SMTP id j2mr25434581ejy.257.1618389206394;
+        Wed, 14 Apr 2021 01:33:26 -0700 (PDT)
+Received: from dell ([91.110.221.215])
+        by smtp.gmail.com with ESMTPSA id ga27sm1577044ejc.87.2021.04.14.01.33.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Apr 2021 01:33:25 -0700 (PDT)
+Date:   Wed, 14 Apr 2021 09:33:24 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] mfd: =?iso-8859-1?Q?int?=
+ =?iso-8859-1?Q?el=5Fquark=5Fi2c=5Fgpio=3A_Convert_I=B2?= =?iso-8859-1?Q?C?=
+ to use software nodes
+Message-ID: <20210414083324.GE4869@dell>
+References: <20210331154851.8456-1-andriy.shevchenko@linux.intel.com>
+ <20210331154851.8456-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SqfawxHnX56H7Ukl"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4aeba72c-46bd-35be-a1e8-2739f1825d92@huawei.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210331154851.8456-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, 31 Mar 2021, Andy Shevchenko wrote:
 
---SqfawxHnX56H7Ukl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The driver can provide a software node group instead of
+> passing legacy platform data. This will allow to drop
+> the legacy platform data structures along with unifying
+> a child device driver to use same interface for all
+> property providers, i.e. Device Tree, ACPI, and board files.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/mfd/intel_quark_i2c_gpio.c | 41 +++++++++++++++++++-----------
+>  1 file changed, 26 insertions(+), 15 deletions(-)
 
+Applied, thanks.
 
-> > Is the binary after the patch applied equal to the binary before your
-> > patch? Same question for patch 2.
->=20
-> The MD5 value of binary is the same before and after the patch is
-> merged=EF=BC=8Cthe log is as below=EF=BC=9A
-
-Thanks for checking! What about patch 2?
-
-
---SqfawxHnX56H7Ukl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2qFwACgkQFA3kzBSg
-KbYOqxAAmPNdd+lglasSeBK7hoSlOu2uxXZxnbW3ePGtnd2Evurv7tGtPiO/Fa/Z
-0f1Lbe0/fxT4f83TuLxBZD4oS45lMReeNiAgipbwzb0Zrpjg+Uvvva8AoDRqtonp
-VFDl1fQZHVf1fOVRP53Auoz7uXkTh2pVf0ex6owSIlpJrAy2E1bA+giV2/9CdYUH
-lWbWSBSXzo7JNN+3bK0JGhTSAwi9TkOHL6mR9OINAbzdqu2HFRjfRYmkcgFo1oXv
-jjc87qLb4GMWHsLi+y9QUln5zDvNmJIEVXmbILYJP0qXR9eS1KB1CZGtDPM9afdX
-PiWFDEonUsVmot7iUXoSxZucTI71MnLW+Kvg0b90r4aBNtIBLKye2twgSCvB2mOP
-QTtl0hmpIVJsRUykF00Az9pMlvTi1k6INotVuxmn9toA6KQlAxg5aiBRLR1sR3dM
-DIPmg3bT6FRuIMsitljO2zcNSkCsCeMDQWsmncklqRrMuxBeCNXQl21P1VvWeM2j
-Juy3Y2Ae090vX3aWWcv0iyJnYF2QHimEd46P7kx7x3ule/QXPGagQ/Qar1RcxDvC
-83urO7lsKGWZ685JTyDkHB6Lua60eXhlu/16TFmAK77pZ+b7x1CKyJJKU2DKhPJf
-L+KvPe3OuI39nPzUFV1Za5HiCQaH1rNhzrh+w007V45+APBTeu8=
-=RAeJ
------END PGP SIGNATURE-----
-
---SqfawxHnX56H7Ukl--
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
