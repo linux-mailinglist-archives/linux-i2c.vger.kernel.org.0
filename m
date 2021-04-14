@@ -2,102 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B8135EF09
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA7235EF4D
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349881AbhDNIEo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Apr 2021 04:04:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60204 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349887AbhDNIEg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Apr 2021 04:04:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BDEB61179;
-        Wed, 14 Apr 2021 08:04:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618387455;
-        bh=TG4nP5Bkld2PjnN/8JUb328aNVrDFABId/IvxQvT2g8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mb/UywYWL3DXr8vyJn1hemUOkNZ2cNavGmuapnJg4Vb8asObE5JKsmBEAGzbhmjKn
-         aJ5nKuoGTkZ9Qly4rZ2ot3Kfji6ki6Juj7UJ+XJrPYD1ZxyA+8fEHsRvcSnx+f3/gl
-         IZqWiue02pI0OMrzf3WkXg5E3BXpOWlVQotF653aLHbXGC9fPd5W+dyZ1rJbu26x7Y
-         gAUjzZ0g/sXFqWWRjxv7SzAN6woXfQr0fOResW8p0AMLL/2MZh+kp1FswFEfLX0XIe
-         8SIf/KngGnO60ngMluBTv6PKaG9JIj+eEq2fA5ZNTZFoI86z6MsoswEl57FMjZfL/j
-         eng/82NUELumA==
-Date:   Wed, 14 Apr 2021 10:04:12 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Ye Weihua <yeweihua4@huawei.com>
-Cc:     linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, yangjihong1@huawei.com,
-        zhangjinhao2@huawei.com
-Subject: Re: [PATCH -next] i2c: imx: Fix PM reference leak in
- i2c_imx_reg_slave()
-Message-ID: <20210414080412.GI2180@ninjato>
-References: <20210408110638.200761-1-yeweihua4@huawei.com>
+        id S1348369AbhDNIOb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Apr 2021 04:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349497AbhDNIO1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Apr 2021 04:14:27 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FB6C061574
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Apr 2021 01:14:06 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id m3so22597695edv.5
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Apr 2021 01:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=60MgZkgdupIaq4FjE6yGCb3EuEbMNyi/9UEBc0w0nvM=;
+        b=H96J3fXR0tGnZfOtZM2BuIKNda6VczXUgKYfOdRvfQe+lEge5tZpP2SaCBEuqxA3rT
+         R0uIfxI6va1nia/Zv5/8OmjRzApNQY+7AdGpjdLMDe+SBbUdKu6sysOf008B6PBfA6Ua
+         Zv500YeaTJ+onlB8bARq+fRHM5UZ5VTr9M+7u0gmR+J+SumG7sgJqgAJ/09+Ezr02tYy
+         35W6wvDG0z3KnuKQCxCWPd4abtj4CIJtmmAkJ7qP3RWa+mg5cMeFIkDlno/Vvg22SXoQ
+         l+nYWsWZh79AwcyBRRD1aAnWRdsxBQP2bEWtnNFCsZGBE7kmS1la82AqsbN3s0rjZXO7
+         VnBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=60MgZkgdupIaq4FjE6yGCb3EuEbMNyi/9UEBc0w0nvM=;
+        b=E1ZzmzKLxKGypOibIsDCB2P91Ibr6/LevWV13z5PmUSKy5m1Fp9uENxMN1NG/KGbio
+         fUgvCzrCLDcoRryvUmfhy3fgPv4gt0Q9QbryjGc/7zCuTH1bTqMxkFS8dIuzH3NBbu43
+         biuAJzhkcnzQ/8y2kG8LdO89Bq18oYUvPUabA/VihE5dZlrRdN8fhg0QxrjgaeIl6gIX
+         0AlF6T3Kh9djHHX+eEKroNf9wvZZt5ucoRPgECicenvL65NSOiOuSrLcHZuCGYrY1ILa
+         g+Cpd6I2qmB4NbC0k+bNojmCPXWc0b6u/Ycun4kKOz64wLpnDEzOIZhrc/ggYiDERGms
+         lo3w==
+X-Gm-Message-State: AOAM533Dv7dHqjA5r82hiE06LHomLkSdgEHM3TKZL1Q4VjSZXjlUHCyS
+        Ojzzoilyo8M96KsHSn4yGNMAwPJNXNLVpA==
+X-Google-Smtp-Source: ABdhPJz/W4uA9Mok7bPfdy6oPcWnQcZgojvLSJtHh2dDav1IjtMz1LGIHMZCfkf6m9sXzwtxHqJnLg==
+X-Received: by 2002:a05:6402:94b:: with SMTP id h11mr33648969edz.180.1618388045582;
+        Wed, 14 Apr 2021 01:14:05 -0700 (PDT)
+Received: from dell ([91.110.221.215])
+        by smtp.gmail.com with ESMTPSA id e12sm11240556edv.11.2021.04.14.01.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Apr 2021 01:14:05 -0700 (PDT)
+Date:   Wed, 14 Apr 2021 09:14:03 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v1 2/2] i2c: designware: Get rid of legacy platform data
+Message-ID: <20210414081403.GD4869@dell>
+References: <20210331154851.8456-1-andriy.shevchenko@linux.intel.com>
+ <20210331154851.8456-3-andriy.shevchenko@linux.intel.com>
+ <20210406104927.GA3532@ninjato>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="++alDQ2ROsODg1x+"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210408110638.200761-1-yeweihua4@huawei.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210406104927.GA3532@ninjato>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, 06 Apr 2021, Wolfram Sang wrote:
 
---++alDQ2ROsODg1x+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed, Mar 31, 2021 at 06:48:51PM +0300, Andy Shevchenko wrote:
+> > Platform data is a legacy interface to supply device properties
+> > to the driver. In this case we don't have anymore in-kernel users
+> > for it. Just remove it for good.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Acked-by: Wolfram Sang <wsa@kernel.org>
 
-On Thu, Apr 08, 2021 at 07:06:38PM +0800, Ye Weihua wrote:
-> The PM reference count is not expected to be incremented on return in
-> these functions.
->=20
-> However, pm_runtime_get_sync() will increment the PM reference count
-> even on failure. forgetting to put the reference again will result in
-> a leak.
->=20
-> Replace it with pm_runtime_resume_and_get() to keep the usage counter
-> balanced.
->=20
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Ye Weihua <yeweihua4@huawei.com>
+Do you require an immutable branch?
 
-After rebasing, only one hunk was left:
-
-> @@ -801,7 +801,7 @@ static int i2c_imx_reg_slave(struct i2c_client *clien=
-t)
->  	i2c_imx->last_slave_event =3D I2C_SLAVE_STOP;
-> =20
->  	/* Resume */
-> -	ret =3D pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
-> +	ret =3D pm_runtime_resume_and_get(i2c_imx->adapter.dev.parent);
->  	if (ret < 0) {
->  		dev_err(&i2c_imx->adapter.dev, "failed to resume i2c controller");
->  		return ret;
-
-I applied this to for-next, thanks!
-
-
---++alDQ2ROsODg1x+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2ofwACgkQFA3kzBSg
-Kba2ABAAqCYKxzJHnfOMkaWfNU6FGvFtUmEybjPv4Bnw3Vq7FXUQJCLmSCVXM57B
-jMgCqk8lQX9fRRSKz7ux8Gq1XJcl3f+66EY2RRB2TzWR18qqa0aUwCxxajoo8qPp
-u6rLf4KbErJtAYoma0+W54AYdgWoy6gxnw82yC0xMv39MK8XxlzEbRkVxIovbzxD
-/m/XSUtjsDybPN9l7aoESsPXzASXikhH0yNOmffsZCybZ6Xk6V47QBdJz2uHqg0O
-y/8V9X1+vE0lqn7mEM+9ShghkZCXUZFifmjIGGoO4SmsCa0mKk6Iq53qL0+OHlKi
-vrBQMb8R+t7a2nZnijSLsGHcNx2Kx9HMmn3HY57g4Schlnegin0LRlinMQd6qhuQ
-NPkqeeaXdogZxqTXep5udxPht8SjhSex9/L2sAJafrbaNI3FCusQGYu5aFgELJ2p
-sQa6BLXctvkSHib8Nfkec7TaX/4mk/vheKpQDpMpYoQ85SgHDd2QCC7ixw4h/ZK9
-h2lBp/2vTSUmh6HlUSon+hwulSQdv/nVOK9NL51JaojQ6BP/EJbzMEqPr+ky2O2y
-n2C2iv78fMd6SxNCX+5UouqyR0zrk7DlhJr78MkLuvEYdQVwd8ySRlTJH0S+/N3p
-YYZhwD3JCurWpOBtR+mekZXfhpJkiQvcG5Qt7oaMe2SsN0wRrMc=
-=jEO4
------END PGP SIGNATURE-----
-
---++alDQ2ROsODg1x+--
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
