@@ -2,88 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D939B35EF5A
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC58435EF76
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Apr 2021 10:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350002AbhDNIQJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Apr 2021 04:16:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34916 "EHLO mail.kernel.org"
+        id S1349964AbhDNIXK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Apr 2021 04:23:10 -0400
+Received: from www.zeus03.de ([194.117.254.33]:47556 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349970AbhDNIQJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 14 Apr 2021 04:16:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A540B61222;
-        Wed, 14 Apr 2021 08:15:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618388148;
-        bh=PdUJpTD8ilcyCJQ6/S6HTkjevJMYma5jYsiT50huv+E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V0LPdC6pF9qbKbE2RHxjnf6rF6mz0kumqmp+AtLBqOAQcMRgpsp8dhWi5uJeAVCUo
-         vhx5V7V+O7uBawLea5a8TzeWej8E2l9YugFzaulGrG8Kqj8RtwCBW6ODFMw0YZUOmA
-         QDIExFI6gl0uxBSLk767ycW2wcbPDKzIphKIJC2mhsjG6EiBCOpk7RzhxXEgL9jskD
-         wPHk17CL/t61aC0HArIlXwItfxnv58U0BSfxhajvwjvb0/NFFS/OTydatUD32DAD+f
-         q2J0/aXt8JlOtdixftqN5HlxK9KPXsOGV3QBjsG5gyvJjaN/C5vxIc3zjyrMvgQOa7
-         x1pEk0FQZMrlA==
-Date:   Wed, 14 Apr 2021 10:15:45 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v1 2/2] i2c: designware: Get rid of legacy platform data
-Message-ID: <20210414081545.GJ2180@ninjato>
-References: <20210331154851.8456-1-andriy.shevchenko@linux.intel.com>
- <20210331154851.8456-3-andriy.shevchenko@linux.intel.com>
- <20210406104927.GA3532@ninjato>
- <20210414081403.GD4869@dell>
+        id S1349952AbhDNIXK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 14 Apr 2021 04:23:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=2iL4tCIneCpn4SmM0M3Refp2Ot9p
+        z3eawuOR7oYf+eI=; b=TLEFk81N3oowj3OzJV2VJ5fURdhQSJB+AJORkw84d5Jq
+        elzQdi6pGg+S3zPzVdugiGpV33MEIj0ka2MB41ekcAwtr3X3+II7IsNhl+NxSf4V
+        8lLMIQryavEECIUEPBUnXmRtqkqeRa67c/byd66j0fEQWiCH+Cza5nhf/QGpePE=
+Received: (qmail 1266527 invoked from network); 14 Apr 2021 10:22:47 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Apr 2021 10:22:47 +0200
+X-UD-Smtp-Session: l3s3148p1@v4+kc+q/2rkgARa4RUbaAViwQhp+rF7q
+Date:   Wed, 14 Apr 2021 10:22:46 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Sergey Shtylyov <s.shtylyov@omprussia.ru>
+Cc:     linux-i2c@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 0/6] Stop calling devm_request_irq() with invalid IRQs
+ in the I2C bus drivers
+Message-ID: <20210414082246.GK2180@ninjato>
+References: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rfwNdt5cNUUjB/69"
+        protocol="application/pgp-signature"; boundary="asNXdz5DenlsLVVk"
 Content-Disposition: inline
-In-Reply-To: <20210414081403.GD4869@dell>
+In-Reply-To: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---rfwNdt5cNUUjB/69
+--asNXdz5DenlsLVVk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > > Platform data is a legacy interface to supply device properties
-> > > to the driver. In this case we don't have anymore in-kernel users
-> > > for it. Just remove it for good.
-> > >=20
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> >=20
-> > Acked-by: Wolfram Sang <wsa@kernel.org>
+On Sat, Apr 10, 2021 at 11:11:59PM +0300, Sergey Shtylyov wrote:
+> Here are 6 patches against the 'master' branch of Martin Petersen's 'scsi=
+=2Egit' repo.
+> The affected drivers call platform_get_irq() but largely ignore its resul=
+t -- they
+> blithely pass the negative error codes to devm_request_irq() which expect=
+s *unsinged*
+> IRQ #s. Stop doing that by checking what exactly platform_get_irq() retur=
+ns.
 >=20
-> Do you require an immutable branch?
+> [1/6] i2c: cadence: add IRQ check
+> [2/6] i2c: emev2: add IRQ check
+> [3/6] i2c: jz4780: add IRQ check
+> [4/6] i2c: mlxbf: add IRQ check
+> [5/6] i2c: rcar: add IRQ check
+> [6/6] i2c: sh7760: add IRQ check
 
-Nope, but thanks for asking.
+Applied to for-next, thanks!
 
 
---rfwNdt5cNUUjB/69
+--asNXdz5DenlsLVVk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2pLEACgkQFA3kzBSg
-KbYH4g//SeQ3sNVjDQ6d/7gzamniyxyOOHfgRNTZ/zFz1t0Q+VAl4QyW+pO79pKO
-XdT8zZXP2d8W5WKQLB/g4bJ4FDb8x+c24ZK5KAXCgCul5auk09SaktpqElaeTr9e
-L5zbV7PWZg3JFKbDoWIU2uhEBhiDIcBCD69CPZ0g4jWLaV7QFT6MKFufRBsmoJ+l
-Gt0nMt333LedjnAefhDNfZMpazH4SmM5BULtmAJeBV9odzQWx/Ze5Nilu+a8Pm+H
-i0d0Fz5LNeUTBvJnLuVM9Ra3d9z+7+iYU5A2NGZ41ITWpAqC/If5FqDZLIFjOBwh
-VdXrIsfwhvaSZ9Kl/2NDHkCI6+rRjZzjbM8UCFG+aWXT9vwPiUorzqBUWL8CVzPY
-5BKt4VIk3es8eHSB4zrfmHUUjq/SJVLVUhcpljD8mrKmV+Dv/XSOlEtsu+7bgEkK
-taIu9J8Ac1+H2z+grY0oCbDQZb9JO2W3D/FvyYL6BaMLL2W4X76J9RD4ALgtkxVS
-TyUeguZVMiOuGd0+bK+XYu7x4lkd02Y6KB+nfJUX5zxU9uKljuds+Ca1UNxFrzy8
-V/RC5UNLqJJZ1+TLEXilKFp3m3On6GGHf1saB7ibTG3dERo5Uu1W7aJ/y8oGNVAJ
-wTNjtf+3CYacYgM2NrE01MLwMjSJnitGKSYw/ax7JOdEOdMCPQc=
-=sywS
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB2plIACgkQFA3kzBSg
+Kbboag//a5PtzuJjX3Zshqcl9BmZ7YilNzlFuZcyb0Blgkmt4cvUhpQksKHDYYqj
+8AbqAsUUxB7wfMuKZ6GGbdhgJ7ZsT/ryqQX8PHhID1Ij+bnjmogXblyQFt2eg2YV
+yNjE9PStiYJaBfsdsmTcOuflqZTwGgAYFAsEVemM9Ynec9IWciYkLbfzrbPIu4Zp
+bKYIMX+frmfN7xKRSTCdZhyOqjHEH3j1a2Gtv7wGkjWT/2jyZ4jBaBs9n/+NVffI
+WvMgKJW1eJy2hN8Z/LM3B9lddAjJRmlOP/O4XY6rL4kN1p58eS0vbIUJr3Dwdzie
+xP8+7h56wjGAH/Cf+52Rro71Y6E+UjlOAPsH4EMSCzD6Aec7ONl3ABAMuxIzTWYV
+Mjj/u8ofo91ZPxWeY0RM7tZNMYOh2R61mYC9d59U+RaqUR4nBrodL1Dtytb7DZ1D
+5VYLRXvWuvkYuF3QXFfNaRvP1nSOCvam4TZJpKiEhIW4LTcaAyLtOWGeI6Hi64FF
+teNWxwQMNPoy8jkS0V7NPJ2omfxXFzAvrljwTesDZ3dzoscNMzzc1fUjuw780jRD
+lm91j74IAuN+jMPqrrxf+Q8nj7wZBUFG39+Q8G9owfFvoDn7eqUCfv4xCogMlAf3
+SbyRbrs/lkRGisTck85c72/QlhsZImg5scDXymqhM5AahRLTpyo=
+=Q2Aq
 -----END PGP SIGNATURE-----
 
---rfwNdt5cNUUjB/69--
+--asNXdz5DenlsLVVk--
