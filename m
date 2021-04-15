@@ -2,56 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E7336029B
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 08:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C17E3602CD
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 08:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbhDOGqE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Apr 2021 02:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbhDOGqE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Apr 2021 02:46:04 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AFEC061756
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Apr 2021 23:45:41 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id s14so6696720pjl.5
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Apr 2021 23:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ISz3TyCn2/uIV44d4r1X/5cuqYAQkTLj0NPgFtRUo2I=;
-        b=ZkNXqgXt17/0WJ4uQEF9j6e/5EMQTJWO4jWtpcFp26A0tT3EGv9X7opfYTgaLaA7kN
-         GJo6U3f0Id4pHUfxCIEXDZQP9NxPYLneOAYwpovFXcIw+UHB3CUIPAlaFgQvRrsoze4N
-         ccHbzbI0j2UaRVNnRvCrTmbeD40PEy2ObsDc1shrBjwtRnh/FUIt994nEOcHAbNpb24H
-         /c/2k2xvA4c7eg2hLT7ltJbJyeOpM+Hk0rRwk4Bcoek5J7x+OYH7nWDK6CuiqbckOU3p
-         vBKsiufpBAHBwBdj9QsrdaYeX3QvoifBnoAY+dLWoVW+bUCn5aAFsi2E/CBvg9cq9ABq
-         aaWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ISz3TyCn2/uIV44d4r1X/5cuqYAQkTLj0NPgFtRUo2I=;
-        b=fx/AL2t5r/84q/AvHmIWh7F+mR43j3YYERSYFt6acOfJ1gaQ0EJgXOWxKYU/4irF9/
-         kEOfe1G9DvhmDqm/h4sXGQIkk50uoew1/BsPPKFv7pQUxR93FbVhMkcIC4e6vFtgWZhM
-         iKzz6ZwSHK5S0eQfQLZxVDpDjC/PHZUzvl3MklDV6u6jUBVmdz5az3XA6Hw0IAe2AJRc
-         bheLvqYqGueuYMTLYufmNn6BrV4jIowFl4imyjx7sZ1Jh03VWHAdrPh6IuUcQPa/TCiC
-         znSl48p+G/6NKApYS1672UXRw5joJ2C3MXSrneazomLJZ45mUhcLlTN6n8PYfmOQkdgA
-         c0VA==
-X-Gm-Message-State: AOAM532FrcVyY05RF8pVqzLOVgjqqn4Pn64KRNy4GB0OPvYaIOcF309B
-        ksLCbe38PnfeLSqEVGOksAiQaw==
-X-Google-Smtp-Source: ABdhPJxkskB8P0tKMWapxuD4NGGfvFGy45KJl/a5vd6yWCCWrv6b9XsNU0j5YzeODTXO0B57rwGdkw==
-X-Received: by 2002:a17:90a:5910:: with SMTP id k16mr2266235pji.207.1618469141190;
-        Wed, 14 Apr 2021 23:45:41 -0700 (PDT)
-Received: from localhost ([136.185.154.93])
-        by smtp.gmail.com with ESMTPSA id p3sm1184591pfq.136.2021.04.14.23.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Apr 2021 23:45:40 -0700 (PDT)
-Date:   Thu, 15 Apr 2021 12:15:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jie Deng <jie.deng@intel.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
+        id S231143AbhDOG4u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Apr 2021 02:56:50 -0400
+Received: from mga11.intel.com ([192.55.52.93]:61848 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231217AbhDOG4s (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 15 Apr 2021 02:56:48 -0400
+IronPort-SDR: wlPK8LC7MEzJP45FvSXsHhoUjzfjZ4WGktWWr4MNmlOXoYNcxPfZqar9WgbvjQ/r++1UnoNwyK
+ 57ITdyR4AmLw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9954"; a="191612089"
+X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
+   d="scan'208";a="191612089"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2021 23:56:25 -0700
+IronPort-SDR: IwNtvxqKG63G2Vyzj1z8gOzo293FGZE5KxdLe37XiCPZJxNVvEdCvfuLv0RPGJtDm3JpTVBr92
+ Rdj06eOGq6Ig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
+   d="scan'208";a="421596188"
+Received: from dengjie-mobl1.ccr.corp.intel.com (HELO [10.239.154.55]) ([10.239.154.55])
+  by orsmga007.jf.intel.com with ESMTP; 14 Apr 2021 23:56:19 -0700
+Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
         virtualization@lists.linux-foundation.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "Michael S. Tsirkin" <mst@redhat.com>,
@@ -64,40 +41,51 @@ Cc:     Jie Deng <jie.deng@intel.com>,
         Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
         Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
         Tali Perry <tali.perry1@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         yu1.wang@intel.com, shuo.a.liu@intel.com,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210415064538.a4vf7egk6l3u6zfz@vireshk-i7>
 References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
  <20210323072704.rgoelmq62fl2wjjf@vireshk-i7>
  <a2994a8f-bbf9-b26f-a9d2-eb02df6623b8@intel.com>
  <CAK8P3a3OBUZC2nxaQ2wyL9EeT3gzXUX9sfJ+ZJfJUiJK_3ZkrA@mail.gmail.com>
+ <20210415064538.a4vf7egk6l3u6zfz@vireshk-i7>
+From:   Jie Deng <jie.deng@intel.com>
+Message-ID: <b25d1f4e-f17f-8a14-e7e6-7577d25be877@intel.com>
+Date:   Thu, 15 Apr 2021 14:56:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a3OBUZC2nxaQ2wyL9EeT3gzXUX9sfJ+ZJfJUiJK_3ZkrA@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20210415064538.a4vf7egk6l3u6zfz@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 23-03-21, 10:27, Arnd Bergmann wrote:
-> I usually recommend the use of __maybe_unused for the suspend/resume
-> callbacks for drivers that use SIMPLE_DEV_PM_OPS() or similar helpers
-> that hide the exact conditions under which the functions get called.
-> 
-> In this driver, there is an explicit #ifdef in the reference to the
-> functions, so
-> it would make sense to use the same #ifdef around the definition.
 
-Jie,
+On 2021/4/15 14:45, Viresh Kumar wrote:
+> On 23-03-21, 10:27, Arnd Bergmann wrote:
+>> I usually recommend the use of __maybe_unused for the suspend/resume
+>> callbacks for drivers that use SIMPLE_DEV_PM_OPS() or similar helpers
+>> that hide the exact conditions under which the functions get called.
+>>
+>> In this driver, there is an explicit #ifdef in the reference to the
+>> functions, so
+>> it would make sense to use the same #ifdef around the definition.
+> Jie,
+>
+> I was talking about this comment when I said I was expecting a new
+> version. I think you still need to make this change.
 
-I was talking about this comment when I said I was expecting a new
-version. I think you still need to make this change.
 
--- 
-viresh
+I didn't forget this. It is a very small change. I'm not sure if the 
+maintainer Wolfram
+
+has any comments so that I can address them together in one version.
+
+Thanks.
+
+
