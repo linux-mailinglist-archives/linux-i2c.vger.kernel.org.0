@@ -2,83 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7CB361333
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 21:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E0D361350
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 22:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235035AbhDOT5k (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Apr 2021 15:57:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58442 "EHLO mail.kernel.org"
+        id S235240AbhDOUJ7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Apr 2021 16:09:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36346 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234815AbhDOT5i (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 15 Apr 2021 15:57:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 97BBB61074;
-        Thu, 15 Apr 2021 19:57:13 +0000 (UTC)
+        id S235282AbhDOUJz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 15 Apr 2021 16:09:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CB98D610E6;
+        Thu, 15 Apr 2021 20:09:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618516634;
-        bh=fvl2J8C1Tb1CVsiiGTCJrirl+LKajjlAOZwUzhfHlJo=;
+        s=k20201202; t=1618517372;
+        bh=e/gUe1PEZqxNuH4A9nYQSWV6y+9lQUySaH6Y23bYtsA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PCivh8yO4uwvsUK/SyYxwX7gvX5x+pnrL5Y1mY9oDPgSClJvAhoGlliircvWtEPFA
-         f1bnA8yEn1VkapD8ztl4nZsf4y52/cpuCdEV2iIAJfQ8UDQss5ZR82SguV+2x4GjO4
-         1fEeEq8s7hFotOklWJKGbIlwkbBw+//pRERvVAjhdkWxNBtp5q5TWAAi4IIduII/nP
-         wSWRKkiwcIJbdkjulb3S+StWX96O/HbC8YueY+Nu/hzY5r9G2Mih/sUid9TE19bzzK
-         4sLoF40JhJFLkdVC/HPdNpMFjs+JhEkh2VUloMv/lYga4tMDQvhu10whjAzG3LZL9k
-         cHqUbdxdXP1rw==
-Date:   Thu, 15 Apr 2021 21:57:08 +0200
+        b=Prw2VaGCHfswogZ4rloufawxncBWtI4QapaNxpB2ED/ASQndB91uazK1r1fNEqJZ7
+         y9bA3LJEzocNY0vo5/GJxPN9pVh51gQRFIjIwFslctf5XaLjSVDocsbLM7aCvjo6cw
+         3kKet9oy6dYFtuu9ARHRndZZT9Yi3hJw05oXItg5yLhkdg7T36pbg/5tgXDckn58rW
+         Lmj4+r5/7Re9sMS3Pw31fWFpLZlF1gkmQo9dGFA5arpOmDgA2aV2oKR5G4AwuTxAiU
+         k6wa8i+CH9U87j/3s0mN7HEPpUeB+g1NuFOZaR9f5GbRBkEfzhLYq2BkotDXcL9j6+
+         89kIIScG12Hig==
+Date:   Thu, 15 Apr 2021 22:09:28 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Sergey Shtylyov <s.shtylyov@omprussia.ru>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] i2c: sh7760: add IRQ check
-Message-ID: <20210415195708.GA2360@kunai>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/6] i2c: mpc: Refactor to improve responsiveness
+Message-ID: <20210415200928.GC2360@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omprussia.ru>,
-        linux-i2c@vger.kernel.org
-References: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
- <4cbffdae-f4c3-04b2-ca9b-387e7721386d@omprussia.ru>
- <58fe3ab6-7b9d-98a4-39a0-98344097f805@omprussia.ru>
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210414223325.23352-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oyUTqETQ0mS9luUI"
+        protocol="application/pgp-signature"; boundary="1SQmhf2mF2YjsYvc"
 Content-Disposition: inline
-In-Reply-To: <58fe3ab6-7b9d-98a4-39a0-98344097f805@omprussia.ru>
+In-Reply-To: <20210414223325.23352-1-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---oyUTqETQ0mS9luUI
+--1SQmhf2mF2YjsYvc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > -	id->irq =3D platform_get_irq(pdev, 0);
-> > +	ret =3D platform_get_irq(pdev, 0);
-> > +	if (ret < 0)
-> > +		return ret;
+On Thu, Apr 15, 2021 at 10:33:19AM +1200, Chris Packham wrote:
+> I've tested on T2081 and P2041 based systems with a number of i2c and smb=
+us
+> devices.
 >=20
->    Should have been *goto* out3. Sorry for my overlook! :-/
+> I've included some clean ups provided by Andy Shevchenko to make applying=
+ the
+> series easier.
 
-Please send an incremental patch. Thanks!
+Applied to for-next, thanks!
 
 
---oyUTqETQ0mS9luUI
+--1SQmhf2mF2YjsYvc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB4mpAACgkQFA3kzBSg
-KbaWqQ/+LHfDFEqrtxMzrO9858MpkMWANu1Pzy12pF3VWggzOFsELmYKIa6gfK/g
-N7a8wCDbaOuOCvZtrjyf9mk64gNTxFAYRCmWTbYoB1kvpB9257nal7bYRAccQFTj
-ZcHpHXa7De3i2QuWJ7aFj9GlwhXaCZSSRlqsgzL0jPXEY2MMrjWMTziS3+BoTi/r
-v5N94nwx71k3WsDtPrFsTTl2GMDBdfvfU3HJ7ttY45w8DzJODwCKnMttfiGSLuvn
-L1jmHqldtMGD38sqlWiCqEqScERJAnmUn/o/eA13zBA0gNYEnW0NtI+0XGx8GhMH
-98U21DIlO3arb5dst2Swe+95mUgwYvGcrv30HzqDgGO7OykNPFlYsgQW1XZGoHfY
-pcZTKtyKro9Ugrfilc3bhgNnEzXjpHLSKEfYq+hRyS/mH+vRS91V4rsWJCnsEp4/
-3Qn6WxshEXWfZYHHL1xxKs5zDsfDZHiMYaMswOJl0FODL4fwHBiLc4uZJY26jWoC
-RzqyUbq7MbD373mqiLtpiArE7fIfuQsS6VILWaix+PMb2+HSEnBHU8bj6r3cOmgM
-VPuX1yeU5OSz4WPbbwhvC7HQveBm8Y+OCglVkvXgaLkeUHMi1pVmz2IZ1lpuIG0+
-inDmkIyVskwvWFpeqh+hX+QqYVFzo13CYQiEGEY/K9CeP3Itzog=
-=vGhb
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB4nXgACgkQFA3kzBSg
+KbbpuA/9GUAKGAr4Saj1JcWgv1ni/f/nIeao+b/K2FFb6IcNRkIwICYHKQHdNDg0
+SaZVmR5fFDMuje0qfqWjFYAvbyQL1hKFC5KSjF4emi/jdQwY+L2CXegTGju371Rf
+KkczdWXRIv9+x6JO5rn+KXyvvbg8L0eTg1UwggoBVdLCVi5FcppAYNgUNptWH/5L
+C6rxzi3sq7pjHv+8r6EiWXGHG/s4apALrrn+hgeda4ki8fXdttnWz8ze9D1XCsg0
+Iyv8BYaDU5CPQC9v0D663Kd1GUneMdzBXVFTJQG8a9YPkt2qe3y3qCyFvguatxxG
+NBY5MN+NDE5gGkQRnAs44NAprP6dmTdRqFG/j0VuvKiQwJwRmsZAJeJ1C7ZaqIeP
+ZEQpQcTFh+unJQHKjjxJQ1WJNgdHOiEHcSdkY7kWpha3k+Ez7L3F8LHi0AsbhbtY
+KiIrhu8s3fL75P6LHokmLR97+291Mc6nmYuke9Xkp7x8gbaJJYHbDhxqRxODVxcq
+btyzN8OqMAKF0PX3nOdY2oKeWVjXFNwZfcxDIZJE/iikkyQ2ieBgTMhAiOPMh6uR
+CaXgMzVXYRLYopvmqUCEyJbS73DUoT1YR2O+sRu/Vv9CpHB0u0umJHX7qnjPPk+d
+XBwLMT5uG9cLqMK13qf1HCwe9Y/aY1rnHVre+8PAmPEB8yxl8DY=
+=YiHi
 -----END PGP SIGNATURE-----
 
---oyUTqETQ0mS9luUI--
+--1SQmhf2mF2YjsYvc--
