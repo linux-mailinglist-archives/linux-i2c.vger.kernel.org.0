@@ -2,54 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC49360616
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 11:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 798CE360742
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 12:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbhDOJpy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Apr 2021 05:45:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35246 "EHLO mail.kernel.org"
+        id S232364AbhDOKg4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Apr 2021 06:36:56 -0400
+Received: from mga07.intel.com ([134.134.136.100]:25587 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231614AbhDOJpx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 15 Apr 2021 05:45:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5EB0D61166;
-        Thu, 15 Apr 2021 09:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618479929;
-        bh=mHUO7q4YvF+53ZYq0pQFLbZx8vFSz2zouLM+2LlidfU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=YPEm9qCqJC4JDRH/aghhEkUciuEY6MwfRW9090WGKTseKblzftczluysGbJHsALvt
-         44N/Am9hdQZrxt6Ulyb7av6c/XGbVEFgQGt4wlWiaqR3Y6NSNYt32p+eIg84SXt6uK
-         f0wQVGC/ZtYPE7XuCo51SSIfUzttu4UnqZxqBktzBobKAt7PB2wpMDmcaQtg9vY+G5
-         uvC1cexTsf5ffMhFf3XdVU0OKAlK16MlpD9zuVztOxTBkHz++J3cKxqWmQmJPzrhHu
-         e/bJF3bHO05b9Pq0vP5M2c7EFnRUtSSZdR3leJlXmB11L7d4swfGraXMRXmu29QIEH
-         tZnTGFCme3dlw==
-Subject: Re: [PATCH 1/2] i2c: s3c2410: simplify getting of_device_id match
- data
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andrzej Hajda <a.hajda@samsung.com>
-References: <20210415093803.162673-1-krzysztof.kozlowski@canonical.com>
-From:   Sylwester Nawrocki <snawrocki@kernel.org>
-Message-ID: <acb1c39f-8098-1457-c996-05f647bfa25f@kernel.org>
-Date:   Thu, 15 Apr 2021 11:45:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S232233AbhDOKgy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 15 Apr 2021 06:36:54 -0400
+IronPort-SDR: IEnvXnyjXYVYrezVu2r7nicDeVzAtyb8S0rdydNq79UhbqEiDRsnPpEXbaXNmKs2Px+FIh7zcE
+ U5zbpfhWH4FQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9954"; a="258789617"
+X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
+   d="scan'208";a="258789617"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 03:36:30 -0700
+IronPort-SDR: JWGyp9+PPSR53zav66bKAZd/Xsmd/rWmwo2rlRUx4L7nniUkwlQUJOrKA7mp+07hmz2SRoJI37
+ Rul1GLppECHQ==
+X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
+   d="scan'208";a="399530258"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2021 03:36:27 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lWzMG-004DhB-5Q; Thu, 15 Apr 2021 13:36:24 +0300
+Date:   Thu, 15 Apr 2021 13:36:24 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yicong Yang <yangyicong@hisilicon.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>
+Subject: Re: [PATCH] i2c: I2C_HISI should depend on ARCH_HISI && ACPI
+Message-ID: <YHgXKHvjnC5qzDPy@smile.fi.intel.com>
+References: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
+ <bd8db435-24e1-5ab3-6b35-1d4d8a292a7e@hisilicon.com>
+ <CAMuHMdVouD+e4GpN_Dur8HSop4B8HVosGSYw7vfTpBEi_inMbw@mail.gmail.com>
+ <21d833f0-b1b8-9732-21c7-3a73676e07d3@hisilicon.com>
+ <39f6bbed-9eea-963a-1ef1-a83248f162aa@hisilicon.com>
 MIME-Version: 1.0
-In-Reply-To: <20210415093803.162673-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39f6bbed-9eea-963a-1ef1-a83248f162aa@hisilicon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-On 15.04.2021 11:38, Krzysztof Kozlowski wrote:
-> Use of_device_get_match_data() to make the code slightly smaller.
+On Thu, Apr 15, 2021 at 05:04:39PM +0800, Yicong Yang wrote:
+> On 2021/4/15 16:18, Yicong Yang wrote:
+> > On 2021/4/15 2:06, Geert Uytterhoeven wrote:
+> >> On Wed, Apr 14, 2021 at 11:24 AM Yicong Yang <yangyicong@hisilicon.com> wrote:
+> >>> On 2021/4/13 20:26, Geert Uytterhoeven wrote:
+> >>>> The HiSilicon Kunpeng I2C controller is only present on HiSilicon
+> >>>> Kunpeng SoCs, and its driver relies on ACPI to probe for its presence.
+> >>>> Hence add dependencies on ARCH_HISI and ACPI, to prevent asking the user
+> >>>> about this driver when configuring a kernel without Hisilicon platform
+> >>>> or ACPI firmware support.
+> >>>
+> >>> this is a public IP which doesn't specifically depend on ARCH_HISI. I'm
+> >>> not sure all the platform this IP on has ARCH_HISI configured. The driver
+> >>> will not be compiled by default config. This is not correct to have
+> >>> this dependence.
+> >>
+> >> Thanks for your answer!
+> >>
+> >> I guess it's still fine to add a dependency on ACPI?
+> > 
+> > yes. currently we only use this driver through ACPI. So at least
+> > for this driver, it make sense to keep the dependency.
+> > 
 > 
-> Signed-off-by: Krzysztof Kozlowski<krzysztof.kozlowski@canonical.com>
+> sorry. i was a little mess about this. I dropped this in [1].
+> so just keep it as is.
+> 
+> [1] https://lore.kernel.org/linux-i2c/YGMntYT2iz72wgrd@smile.fi.intel.com/
 
-Reviewed-by: Sylwester Nawrocki <snawrocki@kernel.org>
+If you think that ACPI dependency is good to have there, go ahead, not my
+worries of the consequences. I just consider that as unneeded dependencies.
+
+The proper fix would be to have a split in Kbuild infra for compile
+dependencies and run-time dependencies.
+
++Cc: Masahiro for the discussion, maybe it had already taken place and there is
+an impediment to do so.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
