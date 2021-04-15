@@ -2,103 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC79F36135A
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 22:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1019361361
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 22:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbhDOUNz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Apr 2021 16:13:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36964 "EHLO mail.kernel.org"
+        id S235169AbhDOUUD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Apr 2021 16:20:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37486 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235169AbhDOUNy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 15 Apr 2021 16:13:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5311D6102A;
-        Thu, 15 Apr 2021 20:13:30 +0000 (UTC)
+        id S235326AbhDOUUB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 15 Apr 2021 16:20:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B3AF6101C;
+        Thu, 15 Apr 2021 20:19:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618517611;
-        bh=94WZR1LHxahR8QKXAmKrFgoKjdP49hcJPqTuA3CfEAA=;
+        s=k20201202; t=1618517978;
+        bh=yAbWbMoOThDBMD78Afb1Hhb0xzAEM3MhGqdKoiAqF9E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dVXIDgpVyKsk63P9FDIRwXbdJAKp/E5W0zdiNWxAM7ACNomOIsmVnbtwjxesJGOzQ
-         vhorok07zcJoOsGe8OW/TyMzCn7V3EnMu4nH5diFcqh4D94/jv37ZW7fEi+ofnEG0J
-         ysSDEmAmQam5YrmooBHY+V0Fjytzl47wzDSi62OW6hZWEtcSaMcYKhM0EiAW3NHG+e
-         hJTRyOm21I4PE4/1P5O3c19Ew7S5vt9LX1BIJM39wSQm5aCHJfpsRUMA3OSmdRKZUJ
-         anVZEdinqaRhWaC6LMLnoUb+uVQG9AHgGW0R5RiEinrXImu9lzQkitklhfcIfn7U2v
-         XlF0U3hUxC1Pw==
-Date:   Thu, 15 Apr 2021 22:13:27 +0200
+        b=ASGiOXybLGBN9jky71hzUL63CN23ZTbqiyqPyd7trogRfIBbUJ94NZUfXaGzL3qao
+         M22ns77dO0DGQjlD4aSJrUDrnJRA5gvGnMlQAXV88TLRUB7QaKqK3LQohhS1AZgQZK
+         TWIeT3cURYQ1AebYCwegPMUw8vj7eH/Ag1EDVr6i4/rXjU+GQVZuDRvvn0YBeZcuMI
+         f0h/1rH+4I3rzaTYoIjy79kIkyVe/908IujhGGDfKmY/Ur32F0bMv22FpyLV86oE39
+         VZwEhKAfDER1L+AMqUA4MOxzFOn0W4HaAn8i/Yt7VA9LIqdqHLxEUQZJoAELU6qsna
+         WzbspCNRt7GqQ==
+Date:   Thu, 15 Apr 2021 22:19:26 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Cc:     linux-i2c@vger.kernel.org,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Ondrej Jirman <megous@megous.com>
-Subject: Re: [PATCH] i2c: mv64xxx: Fix random system lock caused by runtime PM
-Message-ID: <20210415201327.GD2360@kunai>
+To:     Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Fix 'assignment to __be16' warning
+Message-ID: <20210415201926.GE2360@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-i2c@vger.kernel.org,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Ondrej Jirman <megous@megous.com>
-References: <20210408020000.21914-1-kabel@kernel.org>
+        Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210412115302.95686-1-bence98@sch.bme.hu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VV4b6MQE+OnNyhkM"
+        protocol="application/pgp-signature"; boundary="EgVrEAR5UttbsTXg"
 Content-Disposition: inline
-In-Reply-To: <20210408020000.21914-1-kabel@kernel.org>
+In-Reply-To: <20210412115302.95686-1-bence98@sch.bme.hu>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---VV4b6MQE+OnNyhkM
+--EgVrEAR5UttbsTXg
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 08, 2021 at 04:00:00AM +0200, Marek Beh=C3=BAn wrote:
-> I noticed a weird bug with this driver on Marvell CN9130 Customer
-> Reference Board.
->=20
-> Sometime after boot, the system locks with the following message:
->  [104.071363] i2c i2c-0: mv64xxx: I2C bus locked, block: 1, time_left: 0
->=20
-> The system does not respond afterwards, only warns about RCU stalls.
->=20
-> This first appeared with commit e5c02cf54154 ("i2c: mv64xxx: Add runtime
-> PM support").
->=20
-> With further experimentation I discovered that adding a delay into
-> mv64xxx_i2c_hw_init() fixes this issue. This function is called before
-> every xfer, due to how runtime PM works in this driver. It seems that in
-> order to work correctly, a delay is needed after the bus is reset in
-> this function.
->=20
-> Since there already is a known erratum with this controller needing a
-> delay, I assume that this is just another place this needs to be
-> applied. Therefore I apply the delay only if errata_delay is true.
->=20
-> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
+Hi Bence,
 
-Applied to for-current, thanks!
+On Mon, Apr 12, 2021 at 11:53:02AM +0000, Bence Cs=C3=B3k=C3=A1s wrote:
+> While the preamble field _is_ technically big-endian, its value is always=
+ 0x2A2A,
+> which is the same in either endianness, therefore it should be u16 instea=
+d.
+
+Why should it be u16? I don't see it.
+
+I thought the fix would be to add the suffix 'U' to 0x2A2A when it is
+assigned to preamble?
+
+Also, please use "i2c: cp2615: <patch header>" in the $subject
+
+Happy hacking,
+
+   Wolfram
 
 
---VV4b6MQE+OnNyhkM
+--EgVrEAR5UttbsTXg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB4nmcACgkQFA3kzBSg
-KbbVLA//Q1Nk9/+tQcpibycDe3U7EQ+KusF4W2lpVst4/bGMLxpbqp0CEFv8XhWP
-xpdjX8YUnq5vy0lXklt4HYtaGo7zRg92AGFLo5SSGw8DRnDp6+nVYMd68di/A/6G
-k/0wYG2pZUqxAv8B3AiJeBl4XKbXlwuaxPL8tRJOgbecAh7BUGYMO4CEIP7daHLT
-xSEVUntP66itg2n7l9MbSoT2yEN2HI0rTfDMDAWaYwBQWs7xh7Qd3zUyYsY2Miq+
-H+OkcLTTfVik2s6boBW+UWa1A6CfnFPneBH4WNVs42BlfZM4yxVTXix6EJ0fxi5T
-q1khpqPezDa+15rCAyPi6a2+1YLzZnA/AhP15yH3ppjWCuTApdok90ZRvyordPaL
-a8cfPbEPxz93FjW59Cor0xXir2B3yPyrT/npQUlmDi6EXxNxtRcR+TTAVU3Yapnb
-Sv2/c+yU9+bNPrB9X0Pa8hFZpAitRSm/owI8ctnPlqecG23hpkIR+lmjzC0FBQLu
-M0NvP/c07fWCzsNd9uFg0nn07VrKxlyyXEkxOPdEB3Zo7iTn9GaQcG35LxUfWeP1
-dzBrAhVKoAVB7PeMw6kSQz8C/W13gaW0vE9m/U4CrozaxU5FPCm4MbDd8/rxSt+i
-OQCsXb5aYOnMikf+QVymVuTYHtdFFhKD2Xrx9H11SCjFNVvYWpI=
-=FEu1
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB4n80ACgkQFA3kzBSg
+KbaIyw//QJqkdQCzK2VDX58T2MDqDK7YvdjmX1PpBnj4ioPj9LVkr4ewykmliTRS
+m+CkGtxNplY3jila/8m4GDmqepAfZKRTGkS2rh2ndYKIJ8IYDlPhMEtDGoQeF2Ya
+1GMVo++AMcdxMZ6FuXXT55YDqZsknpZnFXUhDRzorexfhqL4rjA9tmXu69bC9Vzb
+mtlY+Ge6gNyL0PFupPUm0s6vZtfQ5GYo6rv3VMHk9SG0GBMLdeL+3BrGZWILDOIs
+LOhFeqCFz6UMGoFW28qj3lERRVZ63p3+1qnqZ5opU591oDoGcvFqKjormGSuimd2
+5TnCMXr9iLa3J7JJRfg763OAzkC2oWuzLO+IPkl60UVprzkenbkpxUGE/qwqpmwp
+aLzyngu5t77NJK7SMg4e0XkcRVheB76Yn5GroxEAF8UaVchFdaT6xhaQ7EqMPXVP
+AYUyGZ9GMZNvcWJxcsZpwqcCe/3/VB1XXvuNBh/UIo1iqk8ZtLAWvVDhWqGv8ge0
+mti9N79lDbkYI0Cgij/jtmyUGIjCUghWKgY7mr73L9R/AFdNibuP1wnpGc3zZ4W2
+1u5mNerAxtRbesbAC/hqjLQSan47/oEqAP464V1xD83UbKpnUk7H4TBpxcWpxYlf
+1JMAL5NJbetQMs6jTUA3Zl2hXO/a0KokHVEHxShHIkhv/IuJEbk=
+=WjyG
 -----END PGP SIGNATURE-----
 
---VV4b6MQE+OnNyhkM--
+--EgVrEAR5UttbsTXg--
