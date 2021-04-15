@@ -2,110 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB4C360536
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 11:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3604E3605F9
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Apr 2021 11:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbhDOJFM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Apr 2021 05:05:12 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:15685 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbhDOJFM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Apr 2021 05:05:12 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FLYHj6D7vzpY5v;
-        Thu, 15 Apr 2021 17:01:53 +0800 (CST)
-Received: from [127.0.0.1] (10.69.38.196) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.498.0; Thu, 15 Apr 2021
- 17:04:39 +0800
-Subject: Re: [PATCH] i2c: I2C_HISI should depend on ARCH_HISI && ACPI
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>
-References: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
- <bd8db435-24e1-5ab3-6b35-1d4d8a292a7e@hisilicon.com>
- <CAMuHMdVouD+e4GpN_Dur8HSop4B8HVosGSYw7vfTpBEi_inMbw@mail.gmail.com>
- <21d833f0-b1b8-9732-21c7-3a73676e07d3@hisilicon.com>
-From:   Yicong Yang <yangyicong@hisilicon.com>
-Message-ID: <39f6bbed-9eea-963a-1ef1-a83248f162aa@hisilicon.com>
-Date:   Thu, 15 Apr 2021 17:04:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S231732AbhDOJii (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Apr 2021 05:38:38 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:40252 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231415AbhDOJih (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Apr 2021 05:38:37 -0400
+Received: from mail-ed1-f71.google.com ([209.85.208.71])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lWyRy-0005zO-Ee
+        for linux-i2c@vger.kernel.org; Thu, 15 Apr 2021 09:38:14 +0000
+Received: by mail-ed1-f71.google.com with SMTP id l22-20020a0564021256b0290384ebfba68cso1039887edw.2
+        for <linux-i2c@vger.kernel.org>; Thu, 15 Apr 2021 02:38:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l7z2ouZqcZvLyEOcdE7FnfhcpFO/282ITnfmb7UR/10=;
+        b=LIBU+orW1mlPuMgtK8cNf30o1MjTNS0X0PfiPvp2u70H5U0/LEsAaZf8LDhY8F4tce
+         SBCzSbQmNTwgpBrgWIZJjNenq2LG3C5XHoR+l2ohVY8q391Z35llt4R2XxDpGKHQkVP9
+         MtTOMIkgaeO6RKuxhTxx/FchlMo5cYWHjYWf3MDTov/l+QuGG6+uKsKz4MhfY6S1aV90
+         OLxrstiDhcjF6HK3BgR9Yl58gFKnPnhRW4scXyfYCeru1nZs9U6tztuodMS/BKgcpqaB
+         XUkNK18rF2HiKMY2E1J804rwJE1P5KuX2NZLJ7EPVqIO8ikvm84jMr2oZetg8ax6LhI2
+         jU4g==
+X-Gm-Message-State: AOAM531hYUxNvMl/Rzhf1Xk74nhiuT6dDLpFzzWESG7Hao3NRSu/hhRD
+        vBMez8Ox725e/L/PtCtxztg4AbVgUdfuYExC1c9HO9gmn69zqiG6NV4Ji7QveuTHuBmQ2FHzbD3
+        UNmWLD18NVaZ4nkDR5nq/dKpvrEfNxMEpb+KcFw==
+X-Received: by 2002:a05:6402:441:: with SMTP id p1mr3050357edw.298.1618479493845;
+        Thu, 15 Apr 2021 02:38:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzjTWhXTydv5lD8MaRLQ1f9/d9f9dV/fzvHNm6rGHF/jEEPA7jl/HaK9McUQpiTlM0C77cbrw==
+X-Received: by 2002:a05:6402:441:: with SMTP id p1mr3050341edw.298.1618479493689;
+        Thu, 15 Apr 2021 02:38:13 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
+        by smtp.gmail.com with ESMTPSA id cq26sm1954088edb.60.2021.04.15.02.38.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Apr 2021 02:38:13 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andrzej Hajda <a.hajda@samsung.com>
+Subject: [PATCH 1/2] i2c: s3c2410: simplify getting of_device_id match data
+Date:   Thu, 15 Apr 2021 11:38:02 +0200
+Message-Id: <20210415093803.162673-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <21d833f0-b1b8-9732-21c7-3a73676e07d3@hisilicon.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.38.196]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2021/4/15 16:18, Yicong Yang wrote:
-> On 2021/4/15 2:06, Geert Uytterhoeven wrote:
->> Hi Yicong,
->>
->> On Wed, Apr 14, 2021 at 11:24 AM Yicong Yang <yangyicong@hisilicon.com> wrote:
->>> On 2021/4/13 20:26, Geert Uytterhoeven wrote:
->>>> The HiSilicon Kunpeng I2C controller is only present on HiSilicon
->>>> Kunpeng SoCs, and its driver relies on ACPI to probe for its presence.
->>>> Hence add dependencies on ARCH_HISI and ACPI, to prevent asking the user
->>>> about this driver when configuring a kernel without Hisilicon platform
->>>> or ACPI firmware support.
->>>
->>> this is a public IP which doesn't specifically depend on ARCH_HISI. I'm
->>> not sure all the platform this IP on has ARCH_HISI configured. The driver
->>> will not be compiled by default config. This is not correct to have
->>> this dependence.
->>
->> Thanks for your answer!
->>
->> I guess it's still fine to add a dependency on ACPI?
-> 
-> yes. currently we only use this driver through ACPI. So at least
-> for this driver, it make sense to keep the dependency.
-> 
+Use of_device_get_match_data() to make the code slightly smaller.
 
-sorry. i was a little mess about this. I dropped this in [1].
-so just keep it as is.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ drivers/i2c/busses/i2c-s3c2410.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-[1] https://lore.kernel.org/linux-i2c/YGMntYT2iz72wgrd@smile.fi.intel.com/
-
->>
->> Thanks again!
->>
->>>> Fixes: d62fbdb99a85730a ("i2c: add support for HiSilicon I2C controller")
->>>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->>>> ---
->>>>  drivers/i2c/busses/Kconfig | 2 +-
->>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
->>>> index b5b4e0d0ff4dd0bc..3ead6d9e130b2ebc 100644
->>>> --- a/drivers/i2c/busses/Kconfig
->>>> +++ b/drivers/i2c/busses/Kconfig
->>>> @@ -647,7 +647,7 @@ config I2C_HIGHLANDER
->>>>
->>>>  config I2C_HISI
->>>>       tristate "HiSilicon I2C controller"
->>>> -     depends on ARM64 || COMPILE_TEST
->>>> +     depends on (ARM64 && ARCH_HISI && ACPI) || COMPILE_TEST
->>>>       help
->>>>         Say Y here if you want to have Hisilicon I2C controller support
->>>>         available on the Kunpeng Server.
->> \
->> Gr{oetje,eeting}s,
->>
->>                         Geert
->>
-> 
-> 
-> .
-> 
+diff --git a/drivers/i2c/busses/i2c-s3c2410.c b/drivers/i2c/busses/i2c-s3c2410.c
+index 62a903fbe912..ab928613afba 100644
+--- a/drivers/i2c/busses/i2c-s3c2410.c
++++ b/drivers/i2c/busses/i2c-s3c2410.c
+@@ -24,6 +24,7 @@
+ #include <linux/slab.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
++#include <linux/of_device.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/mfd/syscon.h>
+@@ -156,12 +157,8 @@ MODULE_DEVICE_TABLE(of, s3c24xx_i2c_match);
+  */
+ static inline kernel_ulong_t s3c24xx_get_device_quirks(struct platform_device *pdev)
+ {
+-	if (pdev->dev.of_node) {
+-		const struct of_device_id *match;
+-
+-		match = of_match_node(s3c24xx_i2c_match, pdev->dev.of_node);
+-		return (kernel_ulong_t)match->data;
+-	}
++	if (pdev->dev.of_node)
++		return (kernel_ulong_t)of_device_get_match_data(&pdev->dev);
+ 
+ 	return platform_get_device_id(pdev)->driver_data;
+ }
+-- 
+2.25.1
 
