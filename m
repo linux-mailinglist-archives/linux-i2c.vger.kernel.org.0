@@ -2,109 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 090FB363156
-	for <lists+linux-i2c@lfdr.de>; Sat, 17 Apr 2021 19:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240583631EC
+	for <lists+linux-i2c@lfdr.de>; Sat, 17 Apr 2021 21:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236620AbhDQRSv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 17 Apr 2021 13:18:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60336 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236595AbhDQRSt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 17 Apr 2021 13:18:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EA5946109F;
-        Sat, 17 Apr 2021 17:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618679902;
-        bh=tUjr+wYEDYEirs0FaCMyY4V7y5/vSgKdEpgImqlsWck=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OE+huC054Q3wjgUhwGMJRbC+gatDqXHydoxEU5hO1YfKJHB53A5WSWUSqj0WXIb2x
-         u93yJJh5k/VB+b8As2xx72rxS/HJNfp6d8+tj2fj/BTs/lSJfy1G8USG3RkcbNjR9i
-         qkn7yMyt9Uz0CwAwCAoEs4cwocoV42bwrCJUvsnT3lolk5wDcYfrFNBWG2cG7euSDk
-         q99Ybvmx87ncRsIMd268Agh7z5IAwuiDiBop8Vo2Wr5bHDSMThSVtSQzuyYo2g826U
-         sqbSeKFESi0DMjoKftKy4PaEJi5p/tmdw9g8f39mJXU5d+8fkI2HhaiThsf9wJa5+6
-         kn0d9EMb4VwPg==
-Date:   Sat, 17 Apr 2021 19:18:16 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for 5.12
-Message-ID: <20210417171816.GA2369@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        id S235234AbhDQTFi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 17 Apr 2021 15:05:38 -0400
+Received: from mxout02.lancloud.ru ([45.84.86.82]:56088 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230064AbhDQTFi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 17 Apr 2021 15:05:38 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru D79BF2077B6F
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omprussia.ru>
+Subject: [PATCH] i2c: sh7760: fix IRQ error path
+To:     <linux-i2c@vger.kernel.org>
+References: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
+Organization: Open Mobile Platform, LLC
+Message-ID: <5b81bf63-edc4-bb62-3aff-4ae9432e339b@omprussia.ru>
+Date:   Sat, 17 Apr 2021 22:05:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HcAYCG3uE/tztfnV"
-Content-Disposition: inline
+In-Reply-To: <7995bba1-61dd-baa3-51ea-0fb2fccc19a0@omprussia.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1908.lancloud.ru (fd00:f066::208)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+While adding the invalid IRQ check after calling platform_get_irq(),
+I managed to overlook that the driver has a complex error path in its
+probe() method, thus a simple *return* couldn't be used.  Use a proper
+*goto* instead!
 
---HcAYCG3uE/tztfnV
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: e5b2e3e74201 ("i2c: sh7760: add IRQ check")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omprussia.ru>
 
-Linus,
+---
+This patch is against the '2c/for-next' branch of Wolfram's 'linux.git' repo.
+I wasn't even able to complie-test it though...
 
-here is one more driver bugfix for I2C.
+ drivers/i2c/busses/i2c-sh7760.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please pull.
-
-Thanks,
-
-   Wolfram
-
-
-The following changes since commit d434405aaab7d0ebc516b68a8fc4100922d7f5ef:
-
-  Linux 5.12-rc7 (2021-04-11 15:16:13 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-curre=
-nt
-
-for you to fetch changes up to 39930213e7779b9c4257499972b8afb8858f1a2d:
-
-  i2c: mv64xxx: Fix random system lock caused by runtime PM (2021-04-15 22:=
-13:19 +0200)
-
-----------------------------------------------------------------
-Marek Beh=C3=BAn (1):
-      i2c: mv64xxx: Fix random system lock caused by runtime PM
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Samuel Holland (1):
-      (Rev.) i2c: mv64xxx: Fix random system lock caused by runtime PM
-
- drivers/i2c/busses/i2c-mv64xxx.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
---HcAYCG3uE/tztfnV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmB7GFQACgkQFA3kzBSg
-KbYRShAAo5WyglJcxPLFTWJBuOecptUEv0d5QJWt2lLW0wV4d2Sr7Xq+P20TTBz5
-3p+zJemHohXzPA1eZz6XtOZj5RsptiSCVFzH/Vqvj48MbOZoOF5XtcAMIix218Il
-gAcXhke9SAtiBwVpmul3BJorti/+5ciQe/f5vaLRrBcXhpRg+9HqG8SUdjNiU9KH
-rHAu8N2ViZjwknjQv8rbcShJMkTzPQ0AJFYWZnMKVIK7z/GNmPO6e9PKLAk7JkUg
-/04oW0lAaoD+ccTPUP1F4anK6+mdXqiMcbN8gNT5cMhNdudQtoOfGyyQPCQaFblc
-P3+uTlFHg2ed2Umwn+pVgPAcMDrPGcyZeTr48bV75OtIWLlbdTOh6tnDISAwKPLB
-rRgT/aa1oO1NIhFlxgcnLho4nDHwffCvo7zmWnODs6c8DaYr7xGX6MCNegWs9puF
-Ur/L9CZADPXmn0KUZEQWO8iD73+qO96gY5swDYMu3afkzGfHMo2SoKt1Wej3baoF
-wdJAZxPYTAEgE6UkIkqTbUpYu8yhK1/Ke9CUMkYukn+1eZ+ns2O+EUuLXRIY7am/
-O6XeZK/gp/STlYEIUmiGEtd5ZS/d1oWMHmzx51RgEJEi6WZhYSEi5tkelkhWWNhB
-CU1NaYhgfuatYwm4jT0Dw5PcUsUtqpgPgHNytLRQ9Y+dRkIm/PA=
-=3wOJ
------END PGP SIGNATURE-----
-
---HcAYCG3uE/tztfnV--
+Index: linux/drivers/i2c/busses/i2c-sh7760.c
+===================================================================
+--- linux.orig/drivers/i2c/busses/i2c-sh7760.c
++++ linux/drivers/i2c/busses/i2c-sh7760.c
+@@ -473,7 +473,7 @@ static int sh7760_i2c_probe(struct platf
+ 
+ 	ret = platform_get_irq(pdev, 0);
+ 	if (ret < 0)
+-		return ret;
++		goto out3;
+ 	id->irq = ret;
+ 
+ 	id->adap.nr = pdev->id;
