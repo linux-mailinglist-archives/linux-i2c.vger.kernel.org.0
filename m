@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F4F364C00
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Apr 2021 22:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E65364C24
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Apr 2021 22:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240257AbhDSUsQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Apr 2021 16:48:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54916 "EHLO mail.kernel.org"
+        id S237742AbhDSUs6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Apr 2021 16:48:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55468 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242655AbhDSUqN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 19 Apr 2021 16:46:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A8FA761369;
-        Mon, 19 Apr 2021 20:45:07 +0000 (UTC)
+        id S242768AbhDSUq5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 19 Apr 2021 16:46:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 72C97613D2;
+        Mon, 19 Apr 2021 20:45:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618865108;
+        s=k20201202; t=1618865131;
         bh=M+N2MxbnGQjhURZ3gS5hwFCV7PfmBdMis2chExCLoZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g64W9gIfxwa9PIQeVkw0WepEvbGvEfe+NRaWNiXKv83nheMzTdoHECSUrpAtCOzFp
-         wm7kwsyuYhSxFNmu/JblTpqn3wvy5rlYWSDnP+YNtetPSrtj8+efWB8M5RgbUV8NRy
-         UK0MFKh9BDbbxjGci/Go7EtVa05zidpKyRNJLf6PP1R2t9xCBTreIMmpTYXkFx9Cq3
-         JmnehzzP4rRtjX9J0U3QtmhufX1BqJ67X/yY64LwYhif0LN5ME3QKcXmvLiZqQLlRD
-         3cejFjg9BJeGjtJLCeQ3klol3OPFniyBc7dHFB+t7o6mUc1n4rgay/7kODfH0hAZla
-         E5E3ZRR3LLPrg==
+        b=pP1vUPtZy9RxyYyh3YdMrJPQcyAV+pU6O1Cb7NSH89RaqsAzaDUhfN+sgv382U0LU
+         wd1cZ4oriTWkG61brUOIBLSPfVUW7aved8ajwg2plfImyt6spDxP5dwI0uuyHvlFmW
+         DSIsiin+JrHi4a7s/Yjn+nUk0revfAt1Os5raxME6WjB67MYDr7iG7zxM12e1LXgv0
+         nt63/fAIMzFlaofx5Dl4Xao9iNV9D7IUs7X4t7KzkcAsNL7iYi7ABpDPzoUz91Zp8I
+         PjFcT4KbWrwLts29Io+wTwCQsryQFW1pAe1h3HmWFWD0xws2/AVES0HWq4yiIQxncd
+         N52UoVcGNLpBw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
@@ -30,12 +30,12 @@ Cc:     =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
         Samuel Holland <samuel@sholland.org>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 09/14] i2c: mv64xxx: Fix random system lock caused by runtime PM
-Date:   Mon, 19 Apr 2021 16:44:49 -0400
-Message-Id: <20210419204454.6601-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 09/12] i2c: mv64xxx: Fix random system lock caused by runtime PM
+Date:   Mon, 19 Apr 2021 16:45:14 -0400
+Message-Id: <20210419204517.6770-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210419204454.6601-1-sashal@kernel.org>
-References: <20210419204454.6601-1-sashal@kernel.org>
+In-Reply-To: <20210419204517.6770-1-sashal@kernel.org>
+References: <20210419204517.6770-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
