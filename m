@@ -2,79 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD543638DB
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Apr 2021 02:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C8B363B5C
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Apr 2021 08:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbhDSArN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 18 Apr 2021 20:47:13 -0400
-Received: from mbox.abcom.al ([217.73.143.249]:36166 "EHLO mbox.abcom.al"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232973AbhDSArN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 18 Apr 2021 20:47:13 -0400
-X-Greylist: delayed 984 seconds by postgrey-1.27 at vger.kernel.org; Sun, 18 Apr 2021 20:47:13 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 47CDD12265035;
-        Mon, 19 Apr 2021 02:24:30 +0200 (CEST)
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id DvcmG8LyRP9h; Mon, 19 Apr 2021 02:24:30 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 79CE81226F1F8;
-        Mon, 19 Apr 2021 02:24:29 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al 79CE81226F1F8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
-        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618791869;
-        bh=p2Sn/5BeV1TeOpE0g2OnXyVNOPHFXRN2kak+hb1GY3o=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=BE9SlduoLFAAaysV4oEtMNAG2qJTujjyzYWPHy/d2o5+OSDGrdtarAqgd/qHJyxY/
-         6RnwpLNzgWGN2lQ3bhIJV4bMaa3nMHQWLZfN/oCiVSrLrlf0zE0ATtNhx3608jK7yn
-         lLWLv5K8eGsS1w545CJD09qhLQX8EoCyhai0klJHQdSZrKmm+IJARS1YheNiWWUIss
-         51ItOOG/CrCkH4umuaRQqRl6meSoWkuqYA0UF1w4bJJ4tcjojyreGLGCmMq4cKNm1p
-         unPm4eeg45IFlnetQcRkIR5dbSIekzmsAphjsNEHBWImSwvuBUGomx9Zm4XAVjUO4s
-         4zS9CkqYR8ZzQ==
-X-Virus-Scanned: amavisd-new at mbox.abcom.al
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id nfz_VZq3FiqQ; Mon, 19 Apr 2021 02:24:29 +0200 (CEST)
-Received: from [192.168.43.60] (unknown [105.4.4.115])
-        by mbox.abcom.al (Postfix) with ESMTPSA id B15021221FE44;
-        Mon, 19 Apr 2021 02:24:21 +0200 (CEST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Hallo=2C_Sie_haben_eine_Spende_von_=E2=82=AC_2=2E000=2E000=2C00?=
-To:     Recipients <abashi@abcom.al>
-From:   <abashi@abcom.al>
-Date:   Mon, 19 Apr 2021 02:23:46 +0200
-Reply-To: billlawrencedonationorg@yahoo.com
-Message-Id: <20210419002421.B15021221FE44@mbox.abcom.al>
+        id S237360AbhDSGSv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Apr 2021 02:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229840AbhDSGSu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Apr 2021 02:18:50 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB1FC06174A;
+        Sun, 18 Apr 2021 23:18:21 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id w4so28928884wrt.5;
+        Sun, 18 Apr 2021 23:18:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Tr6F7ybjQeVI2xqj6bIFk+x8CxQvHKZTlU9GCzqyZ6c=;
+        b=VEDIxhpqpHgYntVRGwIxixy2ecSfhkHydEE8KYT8Bg6jXy5HhOsPv/ltjgME0PFlQb
+         QVvJ00mTXPGQo9ClGxb0tdtKtjqlalxRp7jRRfwCgYLxJ60euJaD2z0Xw3J52sBSEarg
+         vmOMBBI9PJcS1NN1ohkvuQEfbPSarJxp0+yXLfq8hYHVwCeob0oC3EJ0nhfZ//8ikEv4
+         DxriggBydqBhNdCeS4BD3IF2qhS9R9IkxWQcsh0Ach9g6p+Jp34PMQqSsVpjUJ2i47TX
+         XdkiK+57U94Q5cocPsl4Ps/zoQKmDzUHCi87n8KP5NUmiX/wvBEnajyo0o9kP5qyWoX3
+         P1RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Tr6F7ybjQeVI2xqj6bIFk+x8CxQvHKZTlU9GCzqyZ6c=;
+        b=XGuvBeUZ4soQH+81vr8BMrtKXDOa85dnNUWoScMqLB1wmmBjPmcYztzSytKeVmkbMn
+         3+GPqaVZjLsrKsI9oL24JfbY8pBYW706ISvibwh+3VB1ISAnHUiC5RSBPztWGTfs/Kzx
+         qE9PVhWqR5jUijRCJkEqsSSNpSaQx9Of9iseX83YvASkGrwGqTQI+S7yERU8la8vdPeW
+         KfY41XPO3IjZcjhYmxY1ru0w/DQQTkZ9ax8ITiFEPfTIyXL80pZhrkCDWocbwYUrFFsN
+         ABqbSXlk+Rt8XWJCXQZimhb/cRX4ciRPjqmGwrQ0sIGudXNPvDZ9lgO2KkiwA6gs1Ik7
+         BANw==
+X-Gm-Message-State: AOAM531oyIGX6j+YKwLWexMOu6Y9XF1Al8uhyFOKINih2AR2kBCIqZjE
+        Xfnuhaijm2EIUNHmy2mmH6g=
+X-Google-Smtp-Source: ABdhPJxSVnkOXGq4BEKoVGMDD49h9sU6df8QAQzU9QM9ga9rLs2pDP6wG6hBV0Che8tFK0y5yO/WtQ==
+X-Received: by 2002:a5d:4b12:: with SMTP id v18mr12495721wrq.45.1618813099877;
+        Sun, 18 Apr 2021 23:18:19 -0700 (PDT)
+Received: from felia.fritz.box ([2001:16b8:2dc6:900:a414:a08d:9e82:6738])
+        by smtp.gmail.com with ESMTPSA id 2sm16821601wmi.19.2021.04.18.23.18.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Apr 2021 23:18:19 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust to removing i2c designware platform data
+Date:   Mon, 19 Apr 2021 08:18:09 +0200
+Message-Id: <20210419061809.15045-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Sehr geehrter Herr / Frau
-Ich gr=C3=BC=C3=9Fe Sie im Namen des Herrn. Diese Nachricht wird Ihnen als =
-Benachrichtigung gesendet, dass Sie ausgew=C3=A4hlt wurden, um von meinem W=
-ohlt=C3=A4tigkeitsprojekt zu profitieren, das darauf abzielt, Leben zu ber=
-=C3=BChren und denen zu helfen, die ich auf der ganzen Welt kann, wie Gott =
-mich gesegnet hat.
-Ich habe die Powerball-Lotterie in H=C3=B6he von 150 Millionen USD am 16. D=
-ezember 2019 gewonnen und ich habe mich freiwillig entschlossen, Ihnen eine=
-n Betrag von (2.000.000,00 =E2=82=AC) als Wohlt=C3=A4tigkeitsorganisation z=
-u spenden. Ich versuche, zuf=C3=A4llige Menschen aus verschiedenen Quellen =
-und Moden zu erreichen, um das Leben aus verschiedenen Quellen zu ber=C3=BC=
-hren Winkel. Deshalb erhalten Sie hier die Nachricht.
-Sie wurden als einer der gl=C3=BCcklichen Empf=C3=A4nger registriert, die 2=
- Millionen Euro erhalten haben. Diese Spende wird Ihnen gegeben, damit Sie =
-Ihre pers=C3=B6nlichen Probleme versch=C3=A4rfen und uns zum gro=C3=9Fen Te=
-il gro=C3=9Fz=C3=BCgig dabei helfen k=C3=B6nnen, die weniger gl=C3=BCcklich=
-en Waisen und gemeinn=C3=BCtzigen Organisationen in Ihrem Land zu unterst=
-=C3=BCtzen Nachbarschaftslokalit=C3=A4t
-Zur =C3=9Cberpr=C3=BCfung: //www.powerball.com/winner-story/150-million-pow=
-erball-ticket-claimed
+Commit 5a517b5bf687 ("i2c: designware: Get rid of legacy platform data")
+removes ./include/linux/platform_data/i2c-designware.h, but misses to
+adjust the SYNOPSYS DESIGNWARE I2C DRIVER section in MAINTAINERS.
 
-Kontaktieren Sie mich erneut, um Spenden zu erhalten. E-Mail: billlawrenced=
-onationorg@yahoo.com
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
 
-Vielen Dank, Bill Lawrence
+  warning: no file matches F: include/linux/platform_data/i2c-designware.h
+
+Remove the file entry to this removed file as well.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+applies cleanly on next-20210419
+
+Andy, please ack.
+Lee, please pick this minor patch on your -next tree.
+
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bbe356508f29..6b903aad27f4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17667,7 +17667,6 @@ R:	Mika Westerberg <mika.westerberg@linux.intel.com>
+ L:	linux-i2c@vger.kernel.org
+ S:	Maintained
+ F:	drivers/i2c/busses/i2c-designware-*
+-F:	include/linux/platform_data/i2c-designware.h
+ 
+ SYNOPSYS DESIGNWARE MMC/SD/SDIO DRIVER
+ M:	Jaehoon Chung <jh80.chung@samsung.com>
+-- 
+2.17.1
+
