@@ -2,114 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD753363D81
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Apr 2021 10:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CE5364247
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Apr 2021 15:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237914AbhDSIeD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Apr 2021 04:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbhDSIeC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Apr 2021 04:34:02 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF65C06174A;
-        Mon, 19 Apr 2021 01:33:33 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id s14so12635773pjl.5;
-        Mon, 19 Apr 2021 01:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nXAoRa2UrIlJ9e5z4Yh7wHRJrkulXwyDRq9azWs4mI4=;
-        b=tcDJiiAaxA0dU93gfmr0LZLp9z/rM9gWZsFKV3PaUmgedMvwGUChDHYNcCGZips99Q
-         nKMXRzt6rZWssNoc6wACqWd9jc/I4dE4z3/Y99R07wuMhuvHzT1eV5S13C/7Wl39OiOF
-         Qo5kq134S6beNxc3T6uBjZc1NVeeGy/lvj1eQpQdYFoT1nWG/zMq+fGkkqEytlzWCv4h
-         b252RS68O6zGyIPypaFTvMkn/7uQjDopHYIL/ZrrtI6UHG36yqMjVOi+8kEQnjxg3nvE
-         0S58IASMYLtt9kpCED76AAogbW5n2mlQS797P00c6gx222k6uIittr/ABetbLkbJT6Pz
-         yVvQ==
+        id S237956AbhDSNDV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Apr 2021 09:03:21 -0400
+Received: from mail-ua1-f46.google.com ([209.85.222.46]:40559 "EHLO
+        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229666AbhDSNDS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Apr 2021 09:03:18 -0400
+Received: by mail-ua1-f46.google.com with SMTP id 33so10885690uaa.7;
+        Mon, 19 Apr 2021 06:02:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nXAoRa2UrIlJ9e5z4Yh7wHRJrkulXwyDRq9azWs4mI4=;
-        b=jIlcA8YPQ/DJOPR3IB9c6qKymlmNblvKqsiDVRPs+XtrxRWbzcB5rbOGvq2Et1mXvF
-         90wil5B6gXRJP+yMilhokNeuY+GhEs328rQJIaMbqBOCYo6oorDdcIQ/m5EL1OeyIUPh
-         GQlX30zuOS4g+36IzDAyMQh6JCj0F0z7nZjG4lDd6jY+0u0wXPpBB+RjBLQQj7AYxX9P
-         GDwTK2zV3yLZ35dIKTRPxhSFg544m4fr/s5Aca9FxHSFle1fPu2YDcLLIUkxp8ZUu7Ox
-         zjvrwNg5m7KT9IuMbq39OayQXPZGfyH+z9nBLWO03zYwrTCEpBzkZ4t/9Zcnkz5t3Pdu
-         TO9A==
-X-Gm-Message-State: AOAM530IbhjNERX+UmOy6guJ2A0glPq3o6IB21iTBv4HURFG5s/0Cgqw
-        jeNKXXtBoBSgjQgnZ13gMFX+xytdAEbJ7akVgeM=
-X-Google-Smtp-Source: ABdhPJwROB/iJmK7Xs/KjcTfZrbHMvrMFtU2QwFubPDWfZ7jv31T9D9ukhfbCNSDO1gqTbHnAV0337hKngeBrgeiRm4=
-X-Received: by 2002:a17:90b:1184:: with SMTP id gk4mr18380884pjb.129.1618821212898;
- Mon, 19 Apr 2021 01:33:32 -0700 (PDT)
+        bh=dlYTi69m/lucb/NhBgsBMz9vGz1CoOt1FLG0EfInMDA=;
+        b=Rt8Ev9ZeqpvLQ9rxlNJrkjpOid0d0n08NFDtadvS/T7qjGVm/0JfDcrH/zntjXF71B
+         NnZdnZlvyuxamZ+w91TLWanBRMoKB1zA9vRsF4FaXrJpJxrudlOiwHvUe1hHbLmY7CEv
+         GH0HeIMc91Mdja7u9frsh7O9QbLUbRB9X9HT6NnCyMvZUR5q1851FODlzVYaK1HIvuaj
+         +xEaRttgGGJrfns3djX2tUCcdOcaBIgYvwbeFDPwlZ1Sn2oG6eDeR7merKBpxc7s3ooo
+         Qi21gUNzM7dqh1l0z9JncPfQqowdqQSPWRwi+agiWQx96NdJy4birkGorEJgrGtLx6GP
+         SKEg==
+X-Gm-Message-State: AOAM531TYvBm/5+P2ByNv5xS2m1HSSvszc+4olQngqisQsYLw5WsbZEw
+        GOt/VCqv7ihytyHMUVcQh3rCVIGodRDaqTcJE8M=
+X-Google-Smtp-Source: ABdhPJz9Kxz4+ejzvydG/k+ZmWgbyoBOzyfzx61YEoFRlVktAwHjkfxBSE3792S3lKv1vU3pJtwyMTxmyHMxCOnnf4o=
+X-Received: by 2002:ab0:6306:: with SMTP id a6mr6678856uap.2.1618837367038;
+ Mon, 19 Apr 2021 06:02:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210419061809.15045-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20210419061809.15045-1-lukas.bulwahn@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 19 Apr 2021 11:33:16 +0300
-Message-ID: <CAHp75Vfv0FQGXrmpDveOf-cBahoDK3uSPHjPU2RNh6mhFxN7vQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: adjust to removing i2c designware platform data
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <26db9291095c1dfd81c73b0f5f1434f9b399b1f5.1618316565.git.geert+renesas@glider.be>
+ <bd8db435-24e1-5ab3-6b35-1d4d8a292a7e@hisilicon.com> <CAMuHMdVouD+e4GpN_Dur8HSop4B8HVosGSYw7vfTpBEi_inMbw@mail.gmail.com>
+ <YHcx+QPbkTA0bv9V@smile.fi.intel.com> <CAMuHMdUkDcdZk5YYnkMH+VD4JXFq4khR2dn8wBdSXs1GCT9UMQ@mail.gmail.com>
+ <YHc+/MOWA6rO+1Wy@smile.fi.intel.com> <CAMuHMdWZz6QNQbN53Whjfi122PWesM4_+K0_m=np8L=E+=io6g@mail.gmail.com>
+ <CAHp75VcFjRBO+0578jWam3+sc24KvKArTtQV+nRCCbV1E++Nsg@mail.gmail.com>
+In-Reply-To: <CAHp75VcFjRBO+0578jWam3+sc24KvKArTtQV+nRCCbV1E++Nsg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 19 Apr 2021 15:02:35 +0200
+Message-ID: <CAMuHMdVu4VRgJzfM=P8OBi55rsCMFB1vmSepTvSyv1DLjw9Vcw@mail.gmail.com>
+Subject: Re: [PATCH] i2c: I2C_HISI should depend on ARCH_HISI && ACPI
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Apr 19, 2021 at 9:38 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> Commit 5a517b5bf687 ("i2c: designware: Get rid of legacy platform data")
-> removes ./include/linux/platform_data/i2c-designware.h, but misses to
-> adjust the SYNOPSYS DESIGNWARE I2C DRIVER section in MAINTAINERS.
->
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
->
->   warning: no file matches F: include/linux/platform_data/i2c-designware.h
->
-> Remove the file entry to this removed file as well.
+Hi Andy,
 
-Oops, I was under the impression I grepped all occurrences, but I have not.
+On Thu, Apr 15, 2021 at 10:50 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Thu, Apr 15, 2021 at 3:43 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Wed, Apr 14, 2021 at 9:14 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Wed, Apr 14, 2021 at 08:55:21PM +0200, Geert Uytterhoeven wrote:
+> > > > On Wed, Apr 14, 2021 at 8:18 PM Andy Shevchenko
+> > > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > > On Wed, Apr 14, 2021 at 08:06:18PM +0200, Geert Uytterhoeven wrote:
+> > > > > > On Wed, Apr 14, 2021 at 11:24 AM Yicong Yang <yangyicong@hisilicon.com> wrote:
+>
+> ...
+>
+> > > > > > I guess it's still fine to add a dependency on ACPI?
+> > > > >
+> > > > > But why?
+> > > >
+> > > > Please tell me how/when the driver is used when CONFIG_ACPI=n.
+> > >
+> > > I'm not using it at all. Ask the author :-)
+> > >
+> > > But if we follow your logic, then we need to mark all the _platform_ drivers
+> > > for x86 world as ACPI dependent? This sounds ugly.
+> >
+> > Do all other x86 platform drivers have (1) an .acpi_match_table[] and
+> > (2) no other way of instantiating their devices?
+> > The first driver from the top of my memory I looked at is rtc-cmos:
+> > it has no .acpi_match_table[], and the rtc-cmos device is instantiated
+> > from arch/x86/kernel/rtc.c.
+> >
+> > For drivers with only an .of_match_table(), and no legacy users
+> > instantiating platform devices, we do have dependencies on OF.
+>
+> This is not true. Entire IIO subsystem is an example.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Do you care to elaborate?
+Three quarters of the IIO drivers are I2C and SPI drivers, and thus not
+subject to the above.
 
-Thanks for the catch!
+Gr{oetje,eeting}s,
 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> applies cleanly on next-20210419
->
-> Andy, please ack.
-> Lee, please pick this minor patch on your -next tree.
->
->  MAINTAINERS | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index bbe356508f29..6b903aad27f4 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17667,7 +17667,6 @@ R:      Mika Westerberg <mika.westerberg@linux.intel.com>
->  L:     linux-i2c@vger.kernel.org
->  S:     Maintained
->  F:     drivers/i2c/busses/i2c-designware-*
-> -F:     include/linux/platform_data/i2c-designware.h
->
->  SYNOPSYS DESIGNWARE MMC/SD/SDIO DRIVER
->  M:     Jaehoon Chung <jh80.chung@samsung.com>
-> --
-> 2.17.1
->
-
+                        Geert
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
