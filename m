@@ -2,160 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F150364E8D
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Apr 2021 01:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F6936525F
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Apr 2021 08:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhDSXW2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Apr 2021 19:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbhDSXW1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Apr 2021 19:22:27 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DD0C06138A
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Apr 2021 16:21:56 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id g16so10951695pfq.5
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Apr 2021 16:21:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lTXVzOlOEiCu/x5YV8po+6uFDpU/Gnvba9Ryw/CBpDM=;
-        b=ZJyb1R+5bJFnqwF3bQmGCPzsnXZi3BRzYioz/NexC7553PawPQ4hN81uwcxrl5jYwh
-         44KnRZxy5l3BtVmRR0fKQ1HSNamXhaz0j3rRjCXElrfWqpARK+BlLxuqng04RnupdHCV
-         ouqKIYNxXJZCz7vgyumEtJwA5s3ihMYTulQ3fXYvqyuF+r6Ie1MYI1PJ+OCqoUWHAbd6
-         ugeaIZlRwyE5yE81dug1aMAHGyJAODJ/C9FE3cnATcft6jMTij84CRLgxVNPYOEibWQw
-         lQCsnRDNMaS2I1shMJNXZ1aq1enDKn2Rw4t96KTiGTChE000tJ7+kcEXAnsrWtw4L5n9
-         CLgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lTXVzOlOEiCu/x5YV8po+6uFDpU/Gnvba9Ryw/CBpDM=;
-        b=rie2vdeb7WntrRu1mPHD0lhbts7oVy7TjXJFWElNPrrP79V9nY5AfMJUBHxFYjKabB
-         Xnt4ZdU+c/npxuxaKu3yRV2KSAybseRJoNHCtfIQBYvJxf2nzVW+bm2LRGA+1f4MPxD6
-         c3z06gL0mZ2dJhcjQ1vl5mvG+XDthIO/mF4bqQlgWdsqmNPpNJ52YyDZY/jkuQ6zlx5V
-         85b4DUQDkSSLcUZDDxJlRi16DBuSgIlQvmcU7HlGAx9qZbRomNGuafd0uWuWK/rPYZvU
-         DX+bP2pXahSoTJ9t4sGdavufqhSi8uFAR2XPr51lb2n8n0aPOY6VcQNjmfgoNNlkuWAf
-         AUtQ==
-X-Gm-Message-State: AOAM530+k4y2Z6gswPTN7h1KjVm6EaYBEMIv1YDAmmYkEH+mUJEUIxQ3
-        VIMm9UnQqVXv+EFqIaJfTE3GxlU/D+nj/178u58lpA==
-X-Google-Smtp-Source: ABdhPJzsPHdZ6m2OrgGWPr4K75bxd1by1RdKGIUuNZzqLN0SBU3Lr+re4qvr2NPbNXKYNUG76KA+mrxWCCSIV0F3xDM=
-X-Received: by 2002:a63:b515:: with SMTP id y21mr5324980pge.253.1618874515638;
- Mon, 19 Apr 2021 16:21:55 -0700 (PDT)
+        id S229985AbhDTGb0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 20 Apr 2021 02:31:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46876 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229577AbhDTGbZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 20 Apr 2021 02:31:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 660E060FE9;
+        Tue, 20 Apr 2021 06:30:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618900254;
+        bh=bNLAzuB8oghzTz0+vfdUjOTR5H53WWRBLlLPmnfJv/M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YXKj8RCSA/AwHfC/CAXZJkh2G/K+N76SjqNWbgH1HTcUiQ4Z7AtD4DclnecmdesGA
+         NO2xhNoFeoPT3yZRMtj5Jsk5JulwRMn/olL/kbSZG93JorpYXf13a+/+SQivQwBBsl
+         C5nQh8pyJgw130Xvg0UYTWGyowr2NbXA/adFfsh9dPCZJD/UUYEw5SWxjGHuhOL35/
+         kbyX2M5dg9fVvS+czW1PYUfR5rjrf3GN11fbA1+Q5SdcrnMKfUCiEzPgTvTxwivdm9
+         ZgB+SfMN3ipbffCV5xjmg2S2i/5mYAgJ9cR77GzwkiN1r7gyGwoUKiDnT86LeHe3hB
+         AfUKO203F7DCA==
+Date:   Tue, 20 Apr 2021 08:30:50 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.11 17/23] i2c: mv64xxx: Fix random system lock
+ caused by runtime PM
+Message-ID: <20210420083050.09375c3b@thinkpad>
+In-Reply-To: <20210419204343.6134-17-sashal@kernel.org>
+References: <20210419204343.6134-1-sashal@kernel.org>
+        <20210419204343.6134-17-sashal@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20210407185039.621248-1-varmam@google.com> <20210407185039.621248-2-varmam@google.com>
- <20210409183415.GA3919775@robh.at.kernel.org>
-In-Reply-To: <20210409183415.GA3919775@robh.at.kernel.org>
-From:   Manish Varma <varmam@google.com>
-Date:   Mon, 19 Apr 2021 16:21:44 -0700
-Message-ID: <CAMyCerLy2bA_D=8j9C+pAUe7fDHh9DYJwXQWGgKGnD-dadnewg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: add "dev-name" property to
- assign specific device name
-To:     Rob Herring <robh@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rob,
+On Mon, 19 Apr 2021 16:43:36 -0400
+Sasha Levin <sashal@kernel.org> wrote:
 
-Thanks for the inputs.
+> This first appeared with commit e5c02cf54154 ("i2c: mv64xxx: Add runtime
+> PM support").
 
-On Fri, Apr 9, 2021 at 11:34 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, Apr 07, 2021 at 11:50:38AM -0700, Manish Varma wrote:
-> > I2C devices currently are named dynamically using
-> > <adapter_id>-<device_address> convention, unless they are instantiated
-> > through ACPI.
-> >
-> > This means the device name may vary for the same device across different
-> > systems, infact even on the same system if the I2C bus enumeration order
-> > changes, i.e. because of device tree modifications.
-> >
-> > By adding an optional "dev-name" property, it provides a mechanism to
-> > set consistent and easy to recognize names for I2C devices.
->
-> So? Why do you need 'easy to recognize names'?
->
+I forgot to add Fixes: tag to this commit. But the bug first appeared with
+commit
+  e5c02cf54154 ("i2c: mv64xxx: Add runtime PM support")
+which is in 5.12, but not 5.11 or any others.
 
-From the cover letter:
+So this fix is not needed for the stable releases (althogh it does not
+break anything on those...).
 
-"Currently I2C device names are assigned dynamically unless they are
-instantiated through ACPI, this names are based on adapter_id and
-device_address. While device_address will remain constant for a given
-device, the adapter_id may vary across different systems and hence,
-overall, the device name won't be unique for the same I2C device."
-
-Basically, the motivation here is to provide a mechanism to allow overriding
-those names to easy to recognize names (e.g. <vendor_name_dev_name>
-or <device part number> which leaves more information compared to just
-device name in the form of numbers such as "2-001f").
-
-These (device) names are further used by different module e.g. system
-wakeup events framework, and hence this presents difficulties debug/identify
-issues at various levels in the software stack.
-
-So, the idea was to address it at the lowest level possible.
-
-> Why is I2C special? If we wanted this in DT, it wouldn't be I2C specific
-> and we probably would have added it long ago.
->
-
-"Unlike PCI or USB devices, I2C devices are not enumerated at the hardware
-level. Instead, the software must know which devices are connected on each
-I2C bus segment, and what address these devices are using. For this
-reason, the kernel code must instantiate I2C devices explicitly."
-
-Reference: https://www.kernel.org/doc/Documentation/i2c/instantiating-devices
-
-There are various ways to instantiate I2C devices e.g. through board_info
-interface, ACPI and device tree etc.
-
-While board_info and ACPI both allow specifying device name, I find no such
-provision to assign device names for the I2C devices instantiated through
-device tree interface.
-
-> > Signed-off-by: Manish Varma <varmam@google.com>
-> > ---
-> >  Documentation/devicetree/bindings/i2c/i2c.txt | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-> > index df41f72afc87..6fb03f464b81 100644
-> > --- a/Documentation/devicetree/bindings/i2c/i2c.txt
-> > +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-> > @@ -130,6 +130,11 @@ wants to support one of the below features, it should adapt these bindings.
-> >  - wakeup-source
-> >       device can be used as a wakeup source.
-> >
-> > +- dev-name
-> > +     Name of the device.
-> > +     Overrides the default device name which is in the form of
-> > +     <busnr>-<addr>.
->
-> What's 'busnr'? No such thing in DT.
->
-
-Right! dev-name introduced to hold the string value for overriding
-device names assigned by the kernel. Currently, kernel assigns the device
-name in the form of <busnr>-<addr>.
-
-Reference:
-https://www.kernel.org/doc/html/latest/driver-api/i2c.html?highlight=i2c_board_info#c.i2c_board_info
-
-> > +
-> >  Binding may contain optional "interrupts" property, describing interrupts
-> >  used by the device. I2C core will assign "irq" interrupt (or the very first
-> >  interrupt if not using interrupt names) as primary interrupt for the slave.
-> > --
-> > 2.31.1.295.g9ea45b61b8-goog
-> >
-
-Hope the explanation provided above answers your questions.
-
-Thanks,
-Manish
+Marek
