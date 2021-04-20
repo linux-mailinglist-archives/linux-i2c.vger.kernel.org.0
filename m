@@ -2,287 +2,165 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D328A365750
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Apr 2021 13:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0267A3659E4
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Apr 2021 15:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbhDTLPT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 20 Apr 2021 07:15:19 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:51381 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbhDTLPS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 20 Apr 2021 07:15:18 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 20 Apr 2021 04:14:47 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 20 Apr 2021 04:14:44 -0700
-X-QCInternal: smtphost
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 20 Apr 2021 16:43:59 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id 18D5ABE0; Tue, 20 Apr 2021 16:43:57 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, skananth@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH V9] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-Date:   Tue, 20 Apr 2021 16:43:55 +0530
-Message-Id: <20210420111355.18462-1-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.29.0
+        id S231769AbhDTNYR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 20 Apr 2021 09:24:17 -0400
+Received: from mail-dm3nam07on2075.outbound.protection.outlook.com ([40.107.95.75]:39691
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230479AbhDTNYQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 20 Apr 2021 09:24:16 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l8WXiIQdpSviNq8OCq6Ic9racEPUC4g/Y/wKTrfu1dfaCQxV24ClAEBWUPqaNRVe23nbgkaql42C7ll4ZeomPK31HlYFEPVHC2KfuBg/db+P+6EDJctgzNxqCaKyRGPZybNQojPhQZ1KwEiFm7zmx5RGspw/LqyAnE+TlUeoyERhbvSymTZIxt8WdFhlpuTOqiZgzepbM7BOFtppO33Z67qgA4d/gjjwIN9gWJqy0Z09uW26ch/DD/KWyYk5EowRwwtmgSz0l2odWxPmcLL5BhHrpuo6fSNpF5TqpH4zdtMhAX9yvHCxfcnTyxuIPQKgiBke2AfGNIW0DloBTk9BgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kufzEhFuXE77VO06a9cGj45bqJ0SwW7UZJEUgmPPo/I=;
+ b=KdAwinT1T/IBWlVUVMPPl5mDrXW4UrVSA1vdqAAJUDXLT2fIP9Yd8sfxxz+NWfJwiRInDn5CNvK5n7jkcn2nlu40iiq/5pINXUr0DglwBmZdCH9/1cIR67WeaqedHxgmILFVt3hMc1bfl4atPyhrWFobNzrAeLF4gYtfOXlbHZ0NWs5JakA/vUMj/Pa+lCipuJtodRLPO+IBkEMSFs2gE4cWg8xWE4XaDv67fH8KOPEXT126FhoAAUzmPzgvU1Kgxl6jFxAttlh7CAlYFR1Cg7/mc59PTuu4t58+xJCt3Iq2HeMa+zN5QnX8Sxn8SCHkDPdaHwGJRtoFmw0keSNiBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kufzEhFuXE77VO06a9cGj45bqJ0SwW7UZJEUgmPPo/I=;
+ b=YiJuBCqp79tQN92XzE786eAVKKcL8yzKBYupaNKRyePjdXIXJColweVvr+682HAByvV0b0d9RrxdmlRF6EoE806zOyQg3Ze5d/knuk88aCc25WOKgUNnOC51GcdsQ4dgK+mG1Ganf8XivvowY8x2KufSN8k6RhiCMx50XY8KemY=
+Received: from SA9PR13CA0144.namprd13.prod.outlook.com (2603:10b6:806:27::29)
+ by CH2PR02MB7046.namprd02.prod.outlook.com (2603:10b6:610:8c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16; Tue, 20 Apr
+ 2021 13:23:44 +0000
+Received: from SN1NAM02FT034.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:27:cafe::b1) by SA9PR13CA0144.outlook.office365.com
+ (2603:10b6:806:27::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.7 via Frontend
+ Transport; Tue, 20 Apr 2021 13:23:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT034.mail.protection.outlook.com (10.152.72.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4042.19 via Frontend Transport; Tue, 20 Apr 2021 13:23:43 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 20 Apr 2021 06:23:36 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2106.2 via Frontend Transport; Tue, 20 Apr 2021 06:23:36 -0700
+Envelope-to: linux-i2c@vger.kernel.org,
+ robert.hancock@calian.com
+Received: from [172.30.17.109] (port=57626)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1lYqLo-0008H9-4t; Tue, 20 Apr 2021 06:23:36 -0700
+Subject: Re: [PATCH] i2c: cadence: Add standard bus recovery support
+To:     Robert Hancock <robert.hancock@calian.com>,
+        <michal.simek@xilinx.com>
+CC:     <linux-i2c@vger.kernel.org>, Chirag Parekh <chiragp@xilinx.com>
+References: <20210415232532.4070366-1-robert.hancock@calian.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <33112554-474c-0740-27b4-42b2f8755daa@xilinx.com>
+Date:   Tue, 20 Apr 2021 15:23:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210415232532.4070366-1-robert.hancock@calian.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 56aa08d7-5f3c-4232-268f-08d903ff8567
+X-MS-TrafficTypeDiagnostic: CH2PR02MB7046:
+X-Microsoft-Antispam-PRVS: <CH2PR02MB7046DA786BF274D724B31569C6489@CH2PR02MB7046.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LP4iH3xvsIqCoXIMnbfzfcBOOg9gjDkffvzEmITBJjVCq55E6J+Dl6/Of3DM6ON/1j5zFS6yJGkdw1MbHA/Kdqo7G6cqcS9YGQr31JzXU0OV4mNA10dxJLHj0sRAi2o+IBVD/NHJlPTU4cd5f3qb+ycAq5SyYysjtzIkw7KKUvuCIh0Gu+nHlHaVVVkAWd4tyJY0hZmjH1qwxDV94TYNFEIqDHijKcGV0knOOp3/gCjWnC0uXW9yRftg9GIzo3oED46oFYA3qWrGP5boUzftW187DetiwKxDmex/+l9efSCY/ujgjrGFAPwQGjLoaj3Z4AZohUEzFZNHKEyWzvqQmfa0oPcqJuaUyVk0TMQize1RspDTWY3XZpTya8KhGbawG1EmncObO/hOwZO6JW1n5nIAU/NytCiBGw7jQQUwdj/YdwmZm42uCa5VSkwN6hoipy/jQKSdUtUQQ94x63Z7Aaa+uQUzfZify/UuxAki6XS6XP2qpg+H5UTt8tHggoW34B9B+2p3zx2YrNsGfbg86j94AnonvvljoP7e89mxhSa1BK/hhXVFWpfyAPcXuUluBM1ExV6+Zk88EIfNrl0jZg71udN6x1KQAlZEozpyqADrGn92Rpt+t0BmYyszi9YABNR2m2Zh0ca4RXn1gAsY4aWJvvDRe9VREYYPQph0JnRn2eRTb5RHDU2Cbosz88kKrSx00ckyXuF5Ai7WRBNWsQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(39860400002)(136003)(376002)(396003)(346002)(36840700001)(46966006)(36906005)(47076005)(356005)(36756003)(54906003)(31696002)(478600001)(9786002)(5660300002)(7636003)(36860700001)(2906002)(336012)(107886003)(83380400001)(110136005)(8676002)(70586007)(186003)(70206006)(2616005)(26005)(426003)(82310400003)(4326008)(44832011)(316002)(53546011)(82740400003)(31686004)(8936002)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2021 13:23:43.8490
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56aa08d7-5f3c-4232-268f-08d903ff8567
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT034.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB7046
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If the hardware is still accessing memory after SMMU translation
-is disabled (as part of smmu shutdown callback), then the
-IOVAs (I/O virtual address) which it was using will go on the bus
-as the physical addresses which will result in unknown crashes
-like NoC/interconnect errors.
+Hi,
 
-So, implement shutdown callback to i2c driver to stop on-going transfer
-and unmap DMA mappings during system "reboot" or "shutdown".
+On 4/16/21 1:25 AM, Robert Hancock wrote:
+> Hook up the standard GPIO/pinctrl-based recovery support for this
+> driver.
+> 
+> Based on a patch "i2c: cadence: Recover bus after controller reset" by
+> Chirag Parekh in the Xilinx kernel Git tree, but simplified to make use
+> of more common code.
+> 
+> Cc: Chirag Parekh <chiragp@xilinx.com>
+> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+> ---
+>  drivers/i2c/busses/i2c-cadence.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+> index c1bbc4caeb5c..d017bc64e759 100644
+> --- a/drivers/i2c/busses/i2c-cadence.c
+> +++ b/drivers/i2c/busses/i2c-cadence.c
+> @@ -178,6 +178,7 @@ enum cdns_i2c_slave_state {
+>   * @clk:		Pointer to struct clk
+>   * @clk_rate_change_nb:	Notifier block for clock rate changes
+>   * @quirks:		flag for broken hold bit usage in r1p10
+> + * @rinfo:		Structure holding recovery information.
+>   * @ctrl_reg_diva_divb: value of fields DIV_A and DIV_B from CR register
+>   * @slave:		Registered slave instance.
+>   * @dev_mode:		I2C operating role(master/slave).
+> @@ -202,6 +203,7 @@ struct cdns_i2c {
+>  	struct clk *clk;
+>  	struct notifier_block clk_rate_change_nb;
+>  	u32 quirks;
+> +	struct i2c_bus_recovery_info rinfo;
+>  #if IS_ENABLED(CONFIG_I2C_SLAVE)
+>  	u16 ctrl_reg_diva_divb;
+>  	struct i2c_client *slave;
+> @@ -752,6 +754,7 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+>  	/* Wait for the signal of completion */
+>  	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
+>  	if (time_left == 0) {
+> +		i2c_recover_bus(adap);
+>  		cdns_i2c_master_reset(adap);
+>  		dev_err(id->adap.dev.parent,
+>  				"timeout waiting on completion\n");
+> @@ -1212,6 +1215,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+>  	id->adap.retries = 3;		/* Default retry value. */
+>  	id->adap.algo_data = id;
+>  	id->adap.dev.parent = &pdev->dev;
+> +	id->adap.bus_recovery_info = &id->rinfo;
+>  	init_completion(&id->xfer_done);
+>  	snprintf(id->adap.name, sizeof(id->adap.name),
+>  		 "Cadence I2C at %08lx", (unsigned long)r_mem->start);
+> 
 
-Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the Qualcomm GENI I2C controller")
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
----
-Changes in V2:
- - As per Stephen's comments added seperate function for stop transfer,
-   fixed minor nitpicks.
- - As per Stephen's comments, changed commit text.
+My colleague sent pinctrl driver for ZynqMP already. This driver can be
+used on Zynq where pinctrl driver already exists upstream.
 
-Changes in V3:
- - As per Stephen's comments, squashed patch 1 into patch 2, added Fixes tag.
- - As per Akash's comments, included FIFO case in stop_xfer, fixed minor nitpicks.
+It looks quite nice.
 
-Changes in V4:
- - As per Stephen's comments cleaned up geni_i2c_stop_xfer function,
-   added dma_buf in geni_i2c_dev struct to call i2c_put_dma_safe_msg_buf()
-   from other functions, removed "iova" check in geni_se_rx_dma_unprep()
-   and geni_se_tx_dma_unprep() functions.
- - Added two helper functions geni_i2c_rx_one_msg_done() and
-   geni_i2c_tx_one_msg_done() to unwrap the things after rx/tx FIFO/DMA
-   transfers, so that the same can be used in geni_i2c_stop_xfer() function
-   during shutdown callback. Updated commit text accordingly.
- - Checking whether it is tx/rx transfer using I2C_M_RD which is valid for both
-   FIFO and DMA cases, so dropped DMA_RX_ACTIVE and DMA_TX_ACTIVE bit checking
+Acked-by: Michal Simek <michal.simek@xilinx.com>
 
-Changes in V5:
- - As per Stephen's comments, added spin_lock_irqsave & spin_unlock_irqsave in
-   geni_i2c_stop_xfer() function.
-
-Changes in V6:
- - As per Stephen's comments, taken care of unsafe lock order in
-   geni_i2c_stop_xfer().
- - Moved spin_lock/unlock to geni_i2c_rx_msg_cleanup() and
-   geni_i2c_tx_msg_cleanup() functions.
-
-Changes in V7:
- - No changes
-
-Changes in V8:
- - As per Wolfram Sang comment, removed goto and modified geni_i2c_stop_xfer()
-   accordingly.
-
-Changes in V9:
- - Fixed possbile race by protecting gi2c->cur and calling geni_i2c_abort_xfer()
-   with adding another parameter to differentiate from which sequence is the
-   geni_i2c_abort_xfer() called and handle the spin_lock/spin_unlock accordingly
-   inside geni_i2c_abort_xfer(). For this added two macros ABORT_XFER and
-   STOP_AND_ABORT_XFER.
- - Added a bool variable "stop_xfer" in geni_i2c_dev struct, used to put stop
-   to upcoming geni_i2c_rx_one_msg() and geni_i2c_tx_one_msg() calls once we
-   recieve the shutdown call.
- - Added gi2c->cur == NULL check in geni_i2c_irq() to not to process the irq
-   even if any transfer is queued and shutdown to HW received.
-
- drivers/i2c/busses/i2c-qcom-geni.c | 71 +++++++++++++++++++++++++++---
- 1 file changed, 64 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 214b4c913a13..8ae17ccad99e 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -71,6 +71,8 @@ enum geni_i2c_err_code {
- #define ABORT_TIMEOUT		HZ
- #define XFER_TIMEOUT		HZ
- #define RST_TIMEOUT		HZ
-+#define ABORT_XFER		0
-+#define STOP_AND_ABORT_XFER	1
- 
- struct geni_i2c_dev {
- 	struct geni_se se;
-@@ -89,6 +91,7 @@ struct geni_i2c_dev {
- 	void *dma_buf;
- 	size_t xfer_len;
- 	dma_addr_t dma_addr;
-+	bool stop_xfer;
- };
- 
- struct geni_i2c_err_log {
-@@ -215,6 +218,11 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
- 	struct i2c_msg *cur;
- 
- 	spin_lock(&gi2c->lock);
-+	if (!gi2c->cur) {
-+		dev_err(gi2c->se.dev, "Can't process irq, gi2c->cur is NULL\n");
-+		spin_unlock(&gi2c->lock);
-+		return IRQ_HANDLED;
-+	}
- 	m_stat = readl_relaxed(base + SE_GENI_M_IRQ_STATUS);
- 	rx_st = readl_relaxed(base + SE_GENI_RX_FIFO_STATUS);
- 	dm_tx_st = readl_relaxed(base + SE_DMA_TX_IRQ_STAT);
-@@ -222,8 +230,7 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
- 	dma = readl_relaxed(base + SE_GENI_DMA_MODE_EN);
- 	cur = gi2c->cur;
- 
--	if (!cur ||
--	    m_stat & (M_CMD_FAILURE_EN | M_CMD_ABORT_EN) ||
-+	if (m_stat & (M_CMD_FAILURE_EN | M_CMD_ABORT_EN) ||
- 	    dm_rx_st & (DM_I2C_CB_ERR)) {
- 		if (m_stat & M_GP_IRQ_1_EN)
- 			geni_i2c_err(gi2c, NACK);
-@@ -301,17 +308,19 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
- 	return IRQ_HANDLED;
- }
- 
--static void geni_i2c_abort_xfer(struct geni_i2c_dev *gi2c)
-+static void geni_i2c_abort_xfer(struct geni_i2c_dev *gi2c, bool is_stop_xfer)
- {
- 	u32 val;
- 	unsigned long time_left = ABORT_TIMEOUT;
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&gi2c->lock, flags);
-+	if (!is_stop_xfer)
-+		spin_lock_irqsave(&gi2c->lock, flags);
- 	geni_i2c_err(gi2c, GENI_TIMEOUT);
- 	gi2c->cur = NULL;
- 	geni_se_abort_m_cmd(&gi2c->se);
--	spin_unlock_irqrestore(&gi2c->lock, flags);
-+	if (!is_stop_xfer)
-+		spin_unlock_irqrestore(&gi2c->lock, flags);
- 	do {
- 		time_left = wait_for_completion_timeout(&gi2c->done, time_left);
- 		val = readl_relaxed(gi2c->se.base + SE_GENI_M_IRQ_STATUS);
-@@ -375,6 +384,38 @@ static void geni_i2c_tx_msg_cleanup(struct geni_i2c_dev *gi2c,
- 	}
- }
- 
-+static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
-+{
-+	int ret;
-+	u32 geni_status;
-+	struct i2c_msg *cur;
-+	unsigned long flags;
-+
-+	/* Resume device, as runtime suspend can happen anytime during transfer */
-+	ret = pm_runtime_get_sync(gi2c->se.dev);
-+	if (ret < 0) {
-+		dev_err(gi2c->se.dev, "Failed to resume device: %d\n", ret);
-+		return;
-+	}
-+
-+	spin_lock_irqsave(&gi2c->lock, flags);
-+	gi2c->stop_xfer = 1;
-+	geni_status = readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
-+	if (geni_status & M_GENI_CMD_ACTIVE) {
-+		cur = gi2c->cur;
-+		geni_i2c_abort_xfer(gi2c, STOP_AND_ABORT_XFER);
-+		spin_unlock_irqrestore(&gi2c->lock, flags);
-+		if (cur->flags & I2C_M_RD)
-+			geni_i2c_rx_msg_cleanup(gi2c, cur);
-+		else
-+			geni_i2c_tx_msg_cleanup(gi2c, cur);
-+	} else {
-+		spin_unlock_irqrestore(&gi2c->lock, flags);
-+	}
-+
-+	pm_runtime_put_sync_suspend(gi2c->se.dev);
-+}
-+
- static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 				u32 m_param)
- {
-@@ -407,7 +448,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	cur = gi2c->cur;
- 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
- 	if (!time_left)
--		geni_i2c_abort_xfer(gi2c);
-+		geni_i2c_abort_xfer(gi2c, ABORT_XFER);
- 
- 	geni_i2c_rx_msg_cleanup(gi2c, cur);
- 
-@@ -449,7 +490,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	cur = gi2c->cur;
- 	time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
- 	if (!time_left)
--		geni_i2c_abort_xfer(gi2c);
-+		geni_i2c_abort_xfer(gi2c, ABORT_XFER);
- 
- 	geni_i2c_tx_msg_cleanup(gi2c, cur);
- 
-@@ -462,6 +503,7 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- {
- 	struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
- 	int i, ret;
-+	unsigned long flags;
- 
- 	gi2c->err = 0;
- 	reinit_completion(&gi2c->done);
-@@ -480,7 +522,13 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 
- 		m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
- 
-+		spin_lock_irqsave(&gi2c->lock, flags);
-+		if (gi2c->stop_xfer) {
-+			spin_unlock_irqrestore(&gi2c->lock, flags);
-+			break;
-+		}
- 		gi2c->cur = &msgs[i];
-+		spin_unlock_irqrestore(&gi2c->lock, flags);
- 		if (msgs[i].flags & I2C_M_RD)
- 			ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
- 		else
-@@ -624,6 +672,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 	dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
- 
- 	gi2c->suspended = 1;
-+	gi2c->stop_xfer = 0;
- 	pm_runtime_set_suspended(gi2c->se.dev);
- 	pm_runtime_set_autosuspend_delay(gi2c->se.dev, I2C_AUTO_SUSPEND_DELAY);
- 	pm_runtime_use_autosuspend(gi2c->se.dev);
-@@ -650,6 +699,13 @@ static int geni_i2c_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static void  geni_i2c_shutdown(struct platform_device *pdev)
-+{
-+	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
-+
-+	geni_i2c_stop_xfer(gi2c);
-+}
-+
- static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
- {
- 	int ret;
-@@ -714,6 +770,7 @@ MODULE_DEVICE_TABLE(of, geni_i2c_dt_match);
- static struct platform_driver geni_i2c_driver = {
- 	.probe  = geni_i2c_probe,
- 	.remove = geni_i2c_remove,
-+	.shutdown = geni_i2c_shutdown,
- 	.driver = {
- 		.name = "geni_i2c",
- 		.pm = &geni_i2c_pm_ops,
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
-
+Thanks,
+Michal
