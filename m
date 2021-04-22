@@ -2,105 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF43367A58
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Apr 2021 08:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F7E367E55
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Apr 2021 12:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234797AbhDVG6O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Apr 2021 02:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
+        id S230270AbhDVKHn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Apr 2021 06:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbhDVG6N (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Apr 2021 02:58:13 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B05C06174A
-        for <linux-i2c@vger.kernel.org>; Wed, 21 Apr 2021 23:57:39 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lZTHK-0006Te-Bz; Thu, 22 Apr 2021 08:57:34 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lZTHJ-0003OO-HT; Thu, 22 Apr 2021 08:57:33 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH v5 5/6] i2c: imx: Simplify using devm_clk_get_enableded()
-Date:   Thu, 22 Apr 2021 08:57:25 +0200
-Message-Id: <20210422065726.1646742-6-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210422065726.1646742-1-u.kleine-koenig@pengutronix.de>
-References: <20210422065726.1646742-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S230365AbhDVKHn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Apr 2021 06:07:43 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3316EC06174A
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Apr 2021 03:07:07 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id x11so45641702qkp.11
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Apr 2021 03:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=xJb4hGBU2zyruykPY09HTLQGSAod0VRQ/AVTprWO+6c=;
+        b=QBX/8CcI4pbBiALod3jnXKAHwqcqF4ev3zGuyCC+j9kk+rFxlTVDm/Bq+aKq/56JWT
+         Uz0weKZrwc0TuItGFTQ82tqIV86wRRcI2Ak4H80dz0zC3+rF9jK5kkL32dVwK1iTUR0o
+         sI2st37EtQjBdFhOGncxTDRytdLyQSD1ptQUQxWAB09qd1In7UKaW7d3lb/DA3jzLppt
+         gjG9oXnZgjw/ohge9sMpE9MwG+FE4Va5z0IwFZGofU0I/VQaTMoRFCrwuJejz4wPPFmn
+         2tYnWSMzaSED9vFhGqNZY3xi89xHQEMGZyECPsyrtrrFPgmgTpjDb66kJ/T+yErgU885
+         T3wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=xJb4hGBU2zyruykPY09HTLQGSAod0VRQ/AVTprWO+6c=;
+        b=Th200JX2nClSN2V6XNPK6fW2+x7/Vh9ymuJZ5fpWe/8I84ztUCYs9B42CqAZJnPbCs
+         6uwlQE2H6Bu4+Ml/LOXNKAPy0kNqduuWrL109Sn+3TxQIbUpzZwUgRnO/xaqIw8TM4S8
+         ZAU2irlPIB+xZyO2i+FO7zNih1VolXA0cvNxT8+85M+8kweY6UML+WVgLvI9wzROPjk2
+         A0pSW/WWgFLKPm5F+pTjVnlJqU51ZwBbsn4VrVHdjxoHMG1EUaEh3mYWgoShTrYleIM6
+         B+KMJYCwUJupqCmlDBdfkBeYCKhENDuP2MHvTiSYNfqiTEA2giaRecq8a6DSQcBSpcA/
+         NLGw==
+X-Gm-Message-State: AOAM532hll5wljX+8g9dlOUgLhep4SsBDwH6gf319fpvu7qHNgAdagGR
+        tx3myxsA8W/e7/ZoV5+uC3RUW6Yu+ByesEQ7A/0=
+X-Google-Smtp-Source: ABdhPJzfM+Vy1RbQWta7BAnRKETQgijabMHXVS48iR9N/LVGuUm6dHzzp6X0o4S/sKtUgJ2BLYF01CtzT9/0AA+fkMo=
+X-Received: by 2002:a05:620a:22e:: with SMTP id u14mr2778773qkm.354.1619086026299;
+ Thu, 22 Apr 2021 03:07:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Received: by 2002:a05:6214:1227:0:0:0:0 with HTTP; Thu, 22 Apr 2021 03:07:05
+ -0700 (PDT)
+From:   "Dr. Jeff Jones" <dr.jeffjones01@gmail.com>
+Date:   Thu, 22 Apr 2021 10:07:05 +0000
+Message-ID: <CAF9h4fz+w9FB1iXKUW6wLYnqxqS+YutYqYqte_ejgCZiQseTqg@mail.gmail.com>
+Subject: UNITED NATION COVID-19 DONATION FUND.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-devm_clk_get_enabled() returns the clk already (prepared and) enabled
-and the automatically called cleanup cares for disabling (and
-unpreparing). So simplify .probe() and .remove() accordingly.
+ATTENTION: BENEFICIARY,
 
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Acked-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/i2c/busses/i2c-imx.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+IN THE WAKE OF THE GLOBAL COVID-19 PANDEMIC, I WISH TO BRING YOU THE
+GOOD NEWS OF HOPE. I AM DR JEFF JONES, DIRECTOR OF THE CENTERS FOR
+DISEASE CONTROL AND PREVENTION. I WRITE TO OFFICIALLY INFORM YOU THAT
+YOU HAVE BEEN SELECTED TO RECEIVE THE UN COVID-19 STIMULUS PACKAGE
+WORTH $150,000.00 USD. THE SELECTION PROCESS WAS CARRIED OUT THROUGH
+THE UNITED NATIONS (UN) COMPUTERIZED EMAIL SELECTION SYSTEM, FROM A
+DATABASE OF OVER 79,980,000 EMAIL ADDRESSES OBTAINED FROM ALL
+CONTINENTS OF THE WORLD, WHICH YOUR EMAIL ADDRESS WAS SELECTED AMONG.
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index b80fdc1f0092..d6594358cf83 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1405,16 +1405,10 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
- 
- 	/* Get I2C clock */
--	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
-+	i2c_imx->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(i2c_imx->clk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
--				     "can't get I2C clock\n");
--
--	ret = clk_prepare_enable(i2c_imx->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
--		return ret;
--	}
-+				     "can't get prepared I2C clock\n");
- 
- 	/* Init queue */
- 	init_waitqueue_head(&i2c_imx->queue);
-@@ -1487,7 +1481,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
--	clk_disable_unprepare(i2c_imx->clk);
- 	return ret;
- }
- 
-@@ -1517,7 +1510,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq >= 0)
- 		free_irq(irq, i2c_imx);
--	clk_disable_unprepare(i2c_imx->clk);
- 
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
--- 
-2.30.2
+WE ARE DELIGHTED TO INFORM YOU THAT DUE TO MIXED UP OF NAMES AND
+NUMBERS, YOUR EMAIL ATTACHED TO APPROVED NUMBER UN6MM020/COVID-19,
+WHICH CONSEQUENTLY FALL ON OUR INTERNATIONAL CHAPTER, THEREFORE, YOU
+ARE ADVISED TO CONTACT THE UNITED NATIONS COVID-19 COORDINATOR AND
+GRANTS MANAGER ( HON BARR. HENRY ), WITH HIS CONTACT INFORMATION
+BELOW, TO CLAIM YOUR $150,000.00 USD WITHOUT ANY DELAY.
 
+CONTACT PERSON: HON BARR. HENRY
+E-MAIL: (henrylawchambers1@gmail.com)
+TEL:      (+228) 986 222 15
+
+REMEMBER TO FORWARD HIM YOUR FULL INFORMATION AS REQUIRED BELOW TO
+ENABLE HIM LOCATE YOUR PAYMENT FILE AND ATTEND TO YOU IMMEDIATELY.
+
+1. YOUR FULL NAME:
+2. ADDRESS:
+3. AGE:
+4. OCCUPATION:
+5. MOBIL NUMBER:
+6. CITY/COUNTRY:
+
+NOTE: THAT THE AMOUNT TO BE PAID TO YOU IS (USD150, 000.00), WE EXPECT
+YOUR URGENT RESPONSE TO THIS EMAIL TO ENABLE US MONITOR THE
+TRANSACTION EFFECTIVELY.
+
+BEST REGARDS
+DR JEFF JONES
+UNITED NATION CORDINATOR.
