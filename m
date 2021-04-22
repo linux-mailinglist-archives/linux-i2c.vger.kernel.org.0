@@ -2,95 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 892123684F2
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Apr 2021 18:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06733685CC
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Apr 2021 19:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbhDVQgT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Apr 2021 12:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236459AbhDVQgS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Apr 2021 12:36:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FADC06138B
-        for <linux-i2c@vger.kernel.org>; Thu, 22 Apr 2021 09:35:43 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lZcIk-00069o-2S; Thu, 22 Apr 2021 18:35:38 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lZcIj-0003QK-E1; Thu, 22 Apr 2021 18:35:37 +0200
-Date:   Thu, 22 Apr 2021 18:35:37 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>, linux-clk@vger.kernel.org,
+        id S236660AbhDVRYE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Apr 2021 13:24:04 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54176 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236287AbhDVRYD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Apr 2021 13:24:03 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 3EF8B1F4361F
+Message-ID: <7d1f197d868ae84a8bc475f1f48178d2737518c1.camel@collabora.com>
+Subject: Re: [PATCH v1 4/5] arm64: dts: rockchip: add core dtsi for RK3568
+ SoC
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        cl@rock-chips.com
+Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
+        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
         linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH v5 5/6] i2c: imx: Simplify using devm_clk_get_enableded()
-Message-ID: <20210422163537.skhdsfafweel6sti@pengutronix.de>
-References: <20210422065726.1646742-1-u.kleine-koenig@pengutronix.de>
- <20210422065726.1646742-6-u.kleine-koenig@pengutronix.de>
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        kever.yang@rock-chips.com
+Date:   Thu, 22 Apr 2021 14:23:15 -0300
+In-Reply-To: <11131098.F0gNSz5aLb@diego>
+References: <20210421065921.23917-1-cl@rock-chips.com>
+         <20210421065921.23917-5-cl@rock-chips.com> <11131098.F0gNSz5aLb@diego>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rta62bqblgeq3fll"
-Content-Disposition: inline
-In-Reply-To: <20210422065726.1646742-6-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Liang,
 
---rta62bqblgeq3fll
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm very impressed Rockchip is pushing patches so early, thanks a lot!
 
-On Thu, Apr 22, 2021 at 08:57:25AM +0200, Uwe Kleine-K=F6nig wrote:
-> devm_clk_get_enabled() returns the clk already (prepared and) enabled
-> and the automatically called cleanup cares for disabling (and
-> unpreparing). So simplify .probe() and .remove() accordingly.
->=20
-> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Acked-by: Wolfram Sang <wsa@kernel.org>
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+See below.
 
-A propos typos: This patch needs $Subject ~=3D s/enableded/enabled/
+On Wed, 2021-04-21 at 11:13 +0200, Heiko Stübner wrote:
+> Hi Liang,
+> 
+> Am Mittwoch, 21. April 2021, 08:59:20 CEST schrieb cl@rock-chips.com:
+> > From: Liang Chen <cl@rock-chips.com>
+> > 
+> > RK3568 is a high-performance and low power quad-core application processor
+> > designed for personal mobile internet device and AIoT equipments.
+> > 
+> > This patch add basic core dtsi file for it.
+> > 
+> > Signed-off-by: Liang Chen <cl@rock-chips.com>
+> 
+> this is a first round of basic stuff :-) .
+> 
+> First of all, I really like the move of moving the pretty standardized
+> pinconfig entries to the rockchip-pinconf.dtsi .
+> 
+> (1) But please move this into a separate patch to make that more visible
+> and maybe even convert _some_ or all arm64 Rockchip socs to use that
+> as well
+> 
+> "arm64: dts: rockchip: add generic pinconfig settings used by most Rockchip socs
+> 
+> The pinconfig settings for Rockchip SoCs are pretty similar on all socs,
+> so move them to a shared dtsi to be included, instead of redefining them
+> for each soc"
+> 
+> (2) I also like the external rk3568-pinctrl approach with the dtsi getting
+> auto-generated. This will probably help us in keeping pinctrl settings
+> synchronous between mainline and the vendor kernel.
+> 
+> (3) From my basic understanding the rk3568 is basically a rk3566 + more
+> peripherals, so ideally they would share the basic ones in a rk3566.dtsi
+> which the rk3568.dtsi then could include and extend with its additional
+> peripherals.
+> 
+> With at least the pine64 boards being based on the rk3566, there probably
+> will be quite a mainline use of it as well.
+> 
+> Or is there something that would prevent this?
+> 
 
-Will fix this for the next submission round.
+I agree with having a rk3566.dtsi, and rk3568.dtsi on top, instead of the
+other way around. We have some RK3566 boards here, so we can surely test
+the RK3566.dtsi patches very quickly.
 
-Best regards
-Uwe
+Also, it's fine if you want to send v2 with just these minimal peripherals.
+However, I think you could include GMAC and TS-ADC:
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+https://lore.kernel.org/linux-rockchip/31c2e531-96d0-a1c1-644c-28c60eb40cf4@gmail.com/T/#t
+https://lore.kernel.org/linux-rockchip/20210421203409.40717-1-ezequiel@collabora.com/T/#t
 
---rta62bqblgeq3fll
-Content-Type: application/pgp-signature; name="signature.asc"
+These should work right out of the box!
 
------BEGIN PGP SIGNATURE-----
+Thanks!
+Ezequiel
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCBpdYACgkQwfwUeK3K
-7AkQPwf/YZqvojGSf/Z3Wd+QijlXwG9Dmubxl3H62+3zMdMXWS9nVKTf6vG+2Ova
-g5YxQHa1endIKFYdDXnNncwLzRsvo70AdZb+/zGygRnirPdY++JMueL0cB+4g4kk
-G0zGCtuw6LxOznPx/S1cNNeYJNWu943NBVPurcCp8UB6gjfs592l8UiEDZkUP/A0
-PD6XUE3byoLT8itXRHl8ae/FyDoQzyLRNI3+9YlIB4i9++TjZPt5DDYqQC/PoLFA
-AZN0rTQ9fYsFOdcIIQsMikJseG3HxSEbgS9F1nvfBNR0Eh6jL1rRhg6PuWLOUepp
-LqYDxI1+Mh7ELQ6KLzZ4X6bGmWEdsA==
-=qzO+
------END PGP SIGNATURE-----
-
---rta62bqblgeq3fll--
