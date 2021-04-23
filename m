@@ -2,148 +2,176 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C91368A28
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Apr 2021 03:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161803695CD
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Apr 2021 17:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240002AbhDWBD3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Apr 2021 21:03:29 -0400
-Received: from lucky1.263xmail.com ([211.157.147.130]:49234 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240007AbhDWBD3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Apr 2021 21:03:29 -0400
-Received: from localhost (unknown [192.168.167.223])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 4DBABD1973;
-        Fri, 23 Apr 2021 09:02:41 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-SKE-CHECKED: 0
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from [172.16.12.120] (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P22004T139994620753664S1619139755396305_;
-        Fri, 23 Apr 2021 09:02:40 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <a423a9ca8790f90aefedb609e5c1ae5d>
-X-RL-SENDER: kever.yang@rock-chips.com
-X-SENDER: yk@rock-chips.com
-X-LOGIN-NAME: kever.yang@rock-chips.com
-X-FST-TO: huangtao@rock-chips.com
-X-RCPT-COUNT: 26
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-Subject: Re: [PATCH v1 4/5] arm64: dts: rockchip: add core dtsi for RK3568 SoC
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        cl@rock-chips.com
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com
-References: <20210421065921.23917-1-cl@rock-chips.com>
- <20210421065921.23917-5-cl@rock-chips.com> <11131098.F0gNSz5aLb@diego>
- <7d1f197d868ae84a8bc475f1f48178d2737518c1.camel@collabora.com>
-From:   Kever Yang <kever.yang@rock-chips.com>
-Message-ID: <1e0cb95e-e040-d34b-6443-ae93668962ec@rock-chips.com>
-Date:   Fri, 23 Apr 2021 09:02:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S242946AbhDWPN2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Apr 2021 11:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242917AbhDWPN1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Apr 2021 11:13:27 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2F4C06174A
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Apr 2021 08:12:51 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id k25so49493139oic.4
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Apr 2021 08:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ObtCFyu1lxrPCFSgoh4NgfCuSYVXboqEwODlVJ1EKvI=;
+        b=DaGiJ/QYUDjhqCMpf3AGbghtfWxCFA62bxDROcqSkUHOAZwGWSLMsALpnd/x6wP0z+
+         DZpGEan86jPhPdfNikC5zz3TQ2VEFkCZDch9NaxaUXuRX31Wt6DQf3HPqsSL9WG2lkUh
+         dkxsFtLiOCRhwG7OPIrxQowcXHoEyAE4BeIadEYqe4CuKd88Ben4bQ9aWwDln6X6KEVN
+         u0McF18b47lFDh8bpnZc4bcy2Rd8Zsp/6KfNPqBlDy+bLqTnhiwaCK4ede5HllTREAjx
+         wf9eYHiYNrn85IM+yl8tCmd3n7vgJ/cscLzVfmXhyFBf235qPJOlnBvX7SDtDq4jH52R
+         kdsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ObtCFyu1lxrPCFSgoh4NgfCuSYVXboqEwODlVJ1EKvI=;
+        b=WMykEzD6tzNjAfOyoHJ+6wNoccXwSWq/JNrivM06eej6rOL/PNVdxJDKcTQjm0mjdV
+         tZ7MIQhbQCEqMZLtSrOjL6OqNERTGRX7Zo+sbRylgUYnW8yiTX2LPMN61F9KKJ5Ff8F+
+         S1mu1af9x81s9tt6nZfnKeB/Aht3G5eYGczo5FIZ06doK5KOb9ZeGIkL4Ce2v18XjIRJ
+         c4wB7Ayypuvm/5RmrpocivbVAPY6fpwUt1no+QQD2+1axfsz1v0X1GnIo5YEbhbYm6+7
+         r1bOSsRr/Z8IxZcFA9Gqt5YuxB4d6mRyqgxM9PIzmC0dVb4w7Gb2z6BXJ/xlaUeV7dxy
+         rOLQ==
+X-Gm-Message-State: AOAM533cReT4wDN7842J60sLm+5aGKp2F5pxz4j4yF59uKB4cJtpxEUO
+        KqO78uxfFz7BDyLyr+Ax1H79qw==
+X-Google-Smtp-Source: ABdhPJzXAb/hpVXGVKnRkSPipF2bDQHNGTN4HtZ+Whgs/tUaVIWd8s3Cbs+BY52N8zwzBcQCdpa2vw==
+X-Received: by 2002:aca:49d2:: with SMTP id w201mr4532456oia.154.1619190770043;
+        Fri, 23 Apr 2021 08:12:50 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id k24sm1300408oic.51.2021.04.23.08.12.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Apr 2021 08:12:49 -0700 (PDT)
+Date:   Fri, 23 Apr 2021 10:12:47 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Douglas Anderson <dianders@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Stephen Boyd <swboyd@chromium.org>, robdclark@chromium.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        linux-arm-msm@vger.kernel.org, Linus W <linus.walleij@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 21/27] i2c: i2c-core-of: Fix corner case of finding
+ adapter by node
+Message-ID: <YILj76yJsntm9Ma1@builder.lan>
+References: <20210416223950.3586967-1-dianders@chromium.org>
+ <20210416153909.v4.21.Ib7e3a4af2f3e2cb3bd8e4adbac3bcfc966f27791@changeid>
 MIME-Version: 1.0
-In-Reply-To: <7d1f197d868ae84a8bc475f1f48178d2737518c1.camel@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210416153909.v4.21.Ib7e3a4af2f3e2cb3bd8e4adbac3bcfc966f27791@changeid>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heiko, Ezequiel,
+On Fri 16 Apr 17:39 CDT 2021, Douglas Anderson wrote:
 
-On 2021/4/23 上午1:23, Ezequiel Garcia wrote:
-> Hi Liang,
->
-> I'm very impressed Rockchip is pushing patches so early, thanks a lot!
->
-> See below.
->
-> On Wed, 2021-04-21 at 11:13 +0200, Heiko Stübner wrote:
->> Hi Liang,
->>
->> Am Mittwoch, 21. April 2021, 08:59:20 CEST schrieb cl@rock-chips.com:
->>> From: Liang Chen <cl@rock-chips.com>
->>>
->>> RK3568 is a high-performance and low power quad-core application processor
->>> designed for personal mobile internet device and AIoT equipments.
->>>
->>> This patch add basic core dtsi file for it.
->>>
->>> Signed-off-by: Liang Chen <cl@rock-chips.com>
->> this is a first round of basic stuff :-) .
->>
->> First of all, I really like the move of moving the pretty standardized
->> pinconfig entries to the rockchip-pinconf.dtsi .
->>
->> (1) But please move this into a separate patch to make that more visible
->> and maybe even convert _some_ or all arm64 Rockchip socs to use that
->> as well
->>
->> "arm64: dts: rockchip: add generic pinconfig settings used by most Rockchip socs
->>
->> The pinconfig settings for Rockchip SoCs are pretty similar on all socs,
->> so move them to a shared dtsi to be included, instead of redefining them
->> for each soc"
->>
->> (2) I also like the external rk3568-pinctrl approach with the dtsi getting
->> auto-generated. This will probably help us in keeping pinctrl settings
->> synchronous between mainline and the vendor kernel.
->>
->> (3) From my basic understanding the rk3568 is basically a rk3566 + more
->> peripherals, so ideally they would share the basic ones in a rk3566.dtsi
->> which the rk3568.dtsi then could include and extend with its additional
->> peripherals.
->>
->> With at least the pine64 boards being based on the rk3566, there probably
->> will be quite a mainline use of it as well.
->>
->> Or is there something that would prevent this?
->>
-> I agree with having a rk3566.dtsi, and rk3568.dtsi on top, instead of the
-> other way around. We have some RK3566 boards here, so we can surely test
-> the RK3566.dtsi patches very quickly.
-We consider rk3568 as a full implementation and rk3566 is a subset, all 
-the dts compatible string for
-driver should go with string 'rk3568', and rk3568 will be the long term 
-version and definitely have more
-boards  in next few years. So we would like to upstream rk3568 first and 
-follow the implement mode
-of PX30+RK3326, which can also cover the need by RK3566.
+> The of_find_i2c_adapter_by_node() could end up failing to find an
+> adapter in certain conditions. Specifically it's possible that
+> of_dev_or_parent_node_match() could end up finding an I2C client in
+> the list and cause bus_find_device() to stop early even though an I2C
+> adapter was present later in the list.
+> 
+> Let's move the i2c_verify_adapter() into the predicate function to
+> prevent this. Now we'll properly skip over the I2C client and be able
+> to find the I2C adapter.
+> 
+> This issue has always been a potential problem if a single device tree
+> node could represent both an I2C client and an adapter. I believe this
+> is a sane thing to do if, for instance, an I2C-connected DP bridge
+> chip is present. The bridge chip is an I2C client but it can also
+> provide an I2C adapter (DDC tunneled over AUX channel). We don't want
+> to have to create a sub-node just so a panel can link to it with the
+> "ddc-i2c-bus" property.
+> 
+> I believe that this problem got worse, however, with commit
+> e814e688413a ("i2c: of: Try to find an I2C adapter matching the
+> parent"). Starting at that commit it would be even easier to
+> accidentally miss finding the adapter.
+> 
 
-We can have a rk3566.dtsi like rk3326.dtsi.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> This commit is sorta just jammed into the middle of my series. It has
+> no dependencies on the earlier patches in the series and I think it
+> can land independently in the i2c tree. Later patches in the series
+> won't work right without this one, but they won't crash. If we can't
+> find the i2c bus we'll just fall back to the hardcoded panel modes
+> which, at least today, all panels have.
+> 
 
-Thanks,
-- Kever
->
-> Also, it's fine if you want to send v2 with just these minimal peripherals.
-> However, I think you could include GMAC and TS-ADC:
->
-> https://lore.kernel.org/linux-rockchip/31c2e531-96d0-a1c1-644c-28c60eb40cf4@gmail.com/T/#t
-> https://lore.kernel.org/linux-rockchip/20210421203409.40717-1-ezequiel@collabora.com/T/#t
->
-> These should work right out of the box!
->
-> Thanks!
-> Ezequiel
->
->
->
+@Wolfram, I know it's late, but perhaps you could consider picking this
+up for 5.13? It has no dependencies on the other patches in the series
+and would simplify merging the rest in the next cycle.
 
+Regards,
+Bjorn
 
+> I'll also note that part of me wonders if we should actually fix this
+> further to run two passes through everything: first look to see if we
+> find an exact match and only look at the parent pointer if there is no
+> match. I don't currently have a need for that and it's a slightly
+> bigger change, but it seems conceivable that it could affect someone?
+> 
+> (no changes since v1)
+> 
+>  drivers/i2c/i2c-core-of.c | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index 3ed74aa4b44b..de0bf5fce3a2 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -124,6 +124,14 @@ static int of_dev_or_parent_node_match(struct device *dev, const void *data)
+>  	return 0;
+>  }
+>  
+> +static int of_i2c_adapter_match(struct device *dev, const void *data)
+> +{
+> +	if (!of_dev_or_parent_node_match(dev, data))
+> +		return 0;
+> +
+> +	return !!i2c_verify_adapter(dev);
+> +}
+> +
+>  /* must call put_device() when done with returned i2c_client device */
+>  struct i2c_client *of_find_i2c_device_by_node(struct device_node *node)
+>  {
+> @@ -146,18 +154,13 @@ EXPORT_SYMBOL(of_find_i2c_device_by_node);
+>  struct i2c_adapter *of_find_i2c_adapter_by_node(struct device_node *node)
+>  {
+>  	struct device *dev;
+> -	struct i2c_adapter *adapter;
+>  
+>  	dev = bus_find_device(&i2c_bus_type, NULL, node,
+> -			      of_dev_or_parent_node_match);
+> +			      of_i2c_adapter_match);
+>  	if (!dev)
+>  		return NULL;
+>  
+> -	adapter = i2c_verify_adapter(dev);
+> -	if (!adapter)
+> -		put_device(dev);
+> -
+> -	return adapter;
+> +	return to_i2c_adapter(dev);
+>  }
+>  EXPORT_SYMBOL(of_find_i2c_adapter_by_node);
+>  
+> -- 
+> 2.31.1.368.gbe11c130af-goog
+> 
