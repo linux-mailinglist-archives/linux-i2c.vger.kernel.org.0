@@ -2,165 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0431336B073
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Apr 2021 11:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFBE36B278
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Apr 2021 13:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbhDZJWh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Apr 2021 05:22:37 -0400
-Received: from regular1.263xmail.com ([211.150.70.205]:59360 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbhDZJWg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Apr 2021 05:22:36 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by regular1.263xmail.com (Postfix) with ESMTP id 6A2857D3;
-        Mon, 26 Apr 2021 17:21:37 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-Received: from [172.16.12.151] (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P2752T140649347385088S1619428893484164_;
-        Mon, 26 Apr 2021 17:21:35 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <0b6518d01a4b44141c73aba3d00c4597>
-X-RL-SENDER: cl@rock-chips.com
-X-SENDER: cl@rock-chips.com
-X-LOGIN-NAME: cl@rock-chips.com
-X-FST-TO: linux-watchdog@vger.kernel.org
-X-RCPT-COUNT: 30
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-Cc:     cl@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org,
-        jagan@amarulasolutions.com, wens@csie.org, uwe@kleine-koenig.org,
-        mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] arm64: dts: rockchip: add core dtsi for RK3568 SoC
-To:     Marc Zyngier <maz@kernel.org>
-References: <20210425094216.25724-1-cl@rock-chips.com>
- <20210425094439.25895-1-cl@rock-chips.com> <87mttmslni.wl-maz@kernel.org>
-From:   =?UTF-8?B?6ZmI5Lqu?= <cl@rock-chips.com>
-Message-ID: <ee4172da-13a4-2a94-446f-cfdd937574c3@rock-chips.com>
-Date:   Mon, 26 Apr 2021 17:21:33 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S232504AbhDZLrJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Apr 2021 07:47:09 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41333 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231903AbhDZLrH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Apr 2021 07:47:07 -0400
+X-UUID: 94edfb9fe81e4423bea3d297853337f0-20210426
+X-UUID: 94edfb9fe81e4423bea3d297853337f0-20210426
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <qii.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1069741018; Mon, 26 Apr 2021 19:46:23 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 26 Apr 2021 19:46:22 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 26 Apr 2021 19:46:19 +0800
+From:   <qii.wang@mediatek.com>
+To:     <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>
+Subject: [PATCH] i2c: mediatek: Rename i2c irq name
+Date:   Mon, 26 Apr 2021 19:46:15 +0800
+Message-ID: <1619437575-23482-1-git-send-email-qii.wang@mediatek.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-In-Reply-To: <87mttmslni.wl-maz@kernel.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Marc,
+From: Qii Wang <qii.wang@mediatek.com>
 
-ÔÚ 2021/4/25 ÏÂÎç6:28, Marc Zyngier Ð´µÀ:
-> As I reviewed a previous version of this series, please have the
-> courtesy of cc'ing me on further revisions of this series.
-I am really sorry, i will add you to the cc list on further revisions.
->
-> On Sun, 25 Apr 2021 10:44:39 +0100,
-> <cl@rock-chips.com> wrote:
->> From: Liang Chen <cl@rock-chips.com>
->>
->> RK3568 is a high-performance and low power quad-core application processor
->> designed for personal mobile internet device and AIoT equipments. This patch
->> add basic core dtsi file for it.
->>
->> We use scmi_clk for cortex-a55 instead of standard ARMCLK, so that
->> kernel/uboot/rtos can change cpu clk with the same code in ATF, and we will
->> enalbe a special high-performacne PLL when high frequency is required. The
->> smci_clk code is in ATF, and clkid for cpu is 0, as below:
->>
->>      cpu0: cpu@0 {
->>          device_type = "cpu";
->>          compatible = "arm,cortex-a55";
->>          reg = <0x0 0x0>;
->>          clocks = <&scmi_clk 0>;
->>      };
->>
->> Signed-off-by: Liang Chen <cl@rock-chips.com>
->> ---
->>   .../boot/dts/rockchip/rk3568-pinctrl.dtsi     | 3119 +++++++++++++++++
->>   arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  812 +++++
->>   2 files changed, 3931 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
->>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3568.dtsi
-> [...]
->
->> diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
->> new file mode 100644
->> index 000000000000..66cb50218ca1
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
->> @@ -0,0 +1,812 @@
-> [...]
->
->> +	timer {
->> +		compatible = "arm,armv8-timer";
->> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH>,
->> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH>,
->> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH>,
->> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> +		arm,no-tick-in-suspend;
-> My questions on this property still stand [1].
+Rename i2c irq name with dev_name() which can provide unique
+naming in /proc/interrupts for each instance of the I2C IP core.
 
-Yes, rk3568 will lose the system counter in suspend mode, we must 
-retrieve system time from RTC.
+Signed-off-by: Qii Wang <qii.wang@mediatek.com>
+---
+ drivers/i2c/busses/i2c-mt65xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-rk3588 will fix this issue.
-
->
->> +	};
->> +
->> +	xin24m: xin24m {
->> +		compatible = "fixed-clock";
->> +		clock-frequency = <24000000>;
->> +		clock-output-names = "xin24m";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	xin32k: xin32k {
->> +		compatible = "fixed-clock";
->> +		clock-frequency = <32768>;
->> +		clock-output-names = "xin32k";
->> +		pinctrl-0 = <&clk32k_out0>;
->> +		pinctrl-names = "default";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	gic: interrupt-controller@fd400000 {
->> +		compatible = "arm,gic-v3";
->> +		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */
->> +		      <0x0 0xfd460000 0 0xc0000>; /* GICR */
->> +		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> +		interrupt-controller;
->> +		#interrupt-cells = <3>;
->> +		#address-cells = <2>;
->> +		#size-cells = <2>;
->> +		ranges;
-> My request for a full description of the GICA region still stands [1].
-Thanks, i will test MSIs with "mbi-alias", then add relative property in 
-the next version.
->
-> Thanks,
->
-> 	M.
->
-> [1] https://lore.kernel.org/r/87o8e2sm1u.wl-maz@kernel.org
->
-
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index 5ddfa4e..ea337ba 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -1281,7 +1281,7 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+ 
+ 	ret = devm_request_irq(&pdev->dev, irq, mtk_i2c_irq,
+ 			       IRQF_NO_SUSPEND | IRQF_TRIGGER_NONE,
+-			       I2C_DRV_NAME, i2c);
++			       dev_name(&pdev->dev), i2c);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev,
+ 			"Request I2C IRQ %d fail\n", irq);
+-- 
+1.9.1
 
