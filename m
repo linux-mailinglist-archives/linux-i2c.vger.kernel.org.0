@@ -2,178 +2,229 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D03636BEF5
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Apr 2021 07:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E0D36C050
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Apr 2021 09:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbhD0FhY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 27 Apr 2021 01:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
+        id S234917AbhD0Hmf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 27 Apr 2021 03:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbhD0FhT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Apr 2021 01:37:19 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C1BC061761
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Apr 2021 22:36:36 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id w6so26061809pfc.8
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Apr 2021 22:36:36 -0700 (PDT)
+        with ESMTP id S235054AbhD0Hmd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Apr 2021 03:42:33 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F5BC06175F;
+        Tue, 27 Apr 2021 00:41:46 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id s15so68806286edd.4;
+        Tue, 27 Apr 2021 00:41:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Mf+Xin/ho3m/2nW1BN5PGSEYhY3Bvm9mBCODztoibK0=;
-        b=mFo6Q6astEid9lzM4tH2tLTIfuRO8190tH4pQby7aD6Xjz3iEcdD4+CaGJNRQS40Zv
-         NGpPcx/yldF9N9pornYCYSWrB4wRH4VhlC6YyGjAGdqTHKqMKSbvSUrJc/ycmOsxXp37
-         b1dtQNKNuf0hLaUu6O2C5/GdQGQXe3VNQUFjM=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jOHpNKh1HTjasyN4XJNLgqTp4hVmVQAAzXgA0kDhz08=;
+        b=XilaRLgG4z7jtAP1K1nwwywk6vXmjxVmuHvxQCk5mSk7JfDFK5iAJ4qw9YJyYZVPE4
+         B4CUsFEuFGWCMoxYDIcR1R+oDjYn/rxp/yyde8qWZ2y8BujKLm/rvudYRc1T43br5eEE
+         GA5lNbbCMExfmHzyBLJ4d5+yVpW2O5X6U30g/JDZ4ykGqiHgwnlQfU4pQTshEBNI3HAi
+         /R+7X0wl1D7iF5IU5TwIKJC5UQ8ebt69G/JvzuSH1A6pkZj6j9s0bJOxFlTKA97IBs0J
+         7R32IZUy0KLSxDipYeyUrb1jUDXXjHf1jBN+PzuXadJxH/5Dzp/M8rm0x2BWEVw19WUI
+         YoOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Mf+Xin/ho3m/2nW1BN5PGSEYhY3Bvm9mBCODztoibK0=;
-        b=nSjik+KdGPl84Xf4SM2VoA570lIV6Ecl47BJPU2Gx6fqvHQrHT46TV+XolCee5W3qB
-         Ana8KLLwo5aTEa13WKZ3w4ihLr9VgpnbEi6hTXF0tP+fTeMDI0di/OwK0K8ta5/La5jj
-         00BNVct6pTd1YXJI9cIxElmcMKAFK0TBOOkNN2Vflb/CUQG/FSkxSLTwU+9OmoswTGGv
-         LXQbpez7+6Y9NRrUyNfKV/n4fxWtKFNTtlZkzZZCNbmV9kgVyqFcKSdUfzto1MFm4JO+
-         4f0JcVkZlUvpZBsZmLiFd3g97HgVyMO/bENVt38jJZZJEph1NazSBekPXILH0o0F7DXA
-         0f2w==
-X-Gm-Message-State: AOAM532MA4zoeyN8cTfKtwp+iGm+/SZtDJ9joHdV9OAyZw4UxeA0rntO
-        Qk67GHa72l+mOJLFMcZ+WpUTNw==
-X-Google-Smtp-Source: ABdhPJw7IUrkT9sMt8TQGVJztlGXNlq68D0ZPwkzlCLKxbhYQpzkQtPHPlRFY443XD+KQKDrcIPjuQ==
-X-Received: by 2002:a63:3c59:: with SMTP id i25mr19819929pgn.366.1619501796147;
-        Mon, 26 Apr 2021 22:36:36 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:3984:c4f5:8612:6b3e])
-        by smtp.gmail.com with ESMTPSA id gc15sm993529pjb.2.2021.04.26.22.36.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Apr 2021 22:36:35 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     linux-i2c@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v20 5/5] arm64: dts: mt8183: add supply name for eeprom
-Date:   Tue, 27 Apr 2021 13:36:17 +0800
-Message-Id: <20210427053617.27972-6-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
-In-Reply-To: <20210427053617.27972-1-hsinyi@chromium.org>
-References: <20210427053617.27972-1-hsinyi@chromium.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jOHpNKh1HTjasyN4XJNLgqTp4hVmVQAAzXgA0kDhz08=;
+        b=FHhj1aMuk4/1/1RfH/pQ4elePnX02q6s/qv6P302yPOgrCFmRooQud/1o89Y7LV4kQ
+         s5i2eTx0NeRmC0nifUqHVVeWiaNr0Q3/eryhYDHzfIS3SyRDuUe8nm+dEAquVcfGwLfb
+         rnYcXxmQW+X4NAjsw3J4fs8kWlhdQUpzssThXOQBsgKJV7LXjZNx8goN6YD7FYPaVu6g
+         7HQXmqQ3U+uHAi1Ha4nsAzhB+NYNM2UHAUEHgSdrzsK0TklTO4iddwhKM2hHhAvpDQtc
+         vrZ4eBeXUVbyuqKaC0rmzBK25noZoV/2hFk3mnQnZxLl3nhlmk5vvOaymVPsXFg0zfAO
+         GWUw==
+X-Gm-Message-State: AOAM532Q/uHzLz8WmOg/ZbDaqZsMYO9Cahc2j5BV5BSbofATzDOiQBus
+        95xtQKinqVNeWuE3KbkmFJJJSe8QBLAH+aTi
+X-Google-Smtp-Source: ABdhPJxxYgiGZAbNM0IERzUdIhVwLuzii5Ng242BVgzibHt+OJkKlsutNVXxDRLTuGvg6x5UDfJ0nw==
+X-Received: by 2002:a05:6402:51cd:: with SMTP id r13mr2786656edd.116.1619509304721;
+        Tue, 27 Apr 2021 00:41:44 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id t1sm12922627eju.88.2021.04.27.00.41.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Apr 2021 00:41:44 -0700 (PDT)
+Subject: Re: [PATCH v2 6/7] arm64: dts: rockchip: add core dtsi for RK3568 SoC
+To:     cl@rock-chips.com, heiko@sntech.de
+Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
+        uwe@kleine-koenig.org, mail@david-bauer.net,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org
+References: <20210425094216.25724-1-cl@rock-chips.com>
+ <20210425094439.25895-1-cl@rock-chips.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+Message-ID: <16908f63-4e20-ba1b-3b5c-39b4c4db242b@gmail.com>
+Date:   Tue, 27 Apr 2021 09:41:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210425094439.25895-1-cl@rock-chips.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add supplies for eeprom for mt8183 boards.
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
- arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi | 4 ++++
- arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi | 4 ++++
- arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi  | 4 ++++
- 3 files changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
-index b442e38a3156..28966a65391b 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
-@@ -88,11 +88,13 @@ &i2c2 {
- 	pinctrl-0 = <&i2c2_pins>;
- 	status = "okay";
- 	clock-frequency = <400000>;
-+	vbus-supply = <&mt6358_vcamio_reg>;
- 
- 	eeprom@58 {
- 		compatible = "atmel,24c32";
- 		reg = <0x58>;
- 		pagesize = <32>;
-+		vcc-supply = <&mt6358_vcama2_reg>;
- 	};
- };
- 
-@@ -101,11 +103,13 @@ &i2c4 {
- 	pinctrl-0 = <&i2c4_pins>;
- 	status = "okay";
- 	clock-frequency = <400000>;
-+	vbus-supply = <&mt6358_vcn18_reg>;
- 
- 	eeprom@54 {
- 		compatible = "atmel,24c32";
- 		reg = <0x54>;
- 		pagesize = <32>;
-+		vcc-supply = <&mt6358_vcn18_reg>;
- 	};
- };
- 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
-index 2f5234a16ead..3aa79403c0c2 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama.dtsi
-@@ -62,11 +62,13 @@ &i2c2 {
- 	pinctrl-0 = <&i2c2_pins>;
- 	status = "okay";
- 	clock-frequency = <400000>;
-+	vbus-supply = <&mt6358_vcamio_reg>;
- 
- 	eeprom@58 {
- 		compatible = "atmel,24c64";
- 		reg = <0x58>;
- 		pagesize = <32>;
-+		vcc-supply = <&mt6358_vcamio_reg>;
- 	};
- };
- 
-@@ -75,11 +77,13 @@ &i2c4 {
- 	pinctrl-0 = <&i2c4_pins>;
- 	status = "okay";
- 	clock-frequency = <400000>;
-+	vbus-supply = <&mt6358_vcn18_reg>;
- 
- 	eeprom@54 {
- 		compatible = "atmel,24c64";
- 		reg = <0x54>;
- 		pagesize = <32>;
-+		vcc-supply = <&mt6358_vcn18_reg>;
- 	};
- };
- 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
-index fbc471ccf805..30c183c96a54 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-krane.dtsi
-@@ -71,11 +71,13 @@ &i2c2 {
- 	pinctrl-0 = <&i2c2_pins>;
- 	status = "okay";
- 	clock-frequency = <400000>;
-+	vbus-supply = <&mt6358_vcamio_reg>;
- 
- 	eeprom@58 {
- 		compatible = "atmel,24c32";
- 		reg = <0x58>;
- 		pagesize = <32>;
-+		vcc-supply = <&mt6358_vcama2_reg>;
- 	};
- };
- 
-@@ -84,11 +86,13 @@ &i2c4 {
- 	pinctrl-0 = <&i2c4_pins>;
- 	status = "okay";
- 	clock-frequency = <400000>;
-+	vbus-supply = <&mt6358_vcn18_reg>;
- 
- 	eeprom@54 {
- 		compatible = "atmel,24c32";
- 		reg = <0x54>;
- 		pagesize = <32>;
-+		vcc-supply = <&mt6358_vcn18_reg>;
- 	};
- };
- 
--- 
-2.31.1.498.g6c1eba8ee3d-goog
+On 4/25/21 11:44 AM, cl@rock-chips.com wrote:
+> From: Liang Chen <cl@rock-chips.com>
+> 
+> RK3568 is a high-performance and low power quad-core application processor
+> designed for personal mobile internet device and AIoT equipments. This patch
+> add basic core dtsi file for it.
+> 
+> We use scmi_clk for cortex-a55 instead of standard ARMCLK, so that
+> kernel/uboot/rtos can change cpu clk with the same code in ATF, and we will
+> enalbe a special high-performacne PLL when high frequency is required. The
+> smci_clk code is in ATF, and clkid for cpu is 0, as below:
+> 
+>     cpu0: cpu@0 {
+>         device_type = "cpu";
+>         compatible = "arm,cortex-a55";
+>         reg = <0x0 0x0>;
+>         clocks = <&scmi_clk 0>;
+>     };
+> 
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> ---
+>  .../boot/dts/rockchip/rk3568-pinctrl.dtsi     | 3119 +++++++++++++++++
+>  arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  812 +++++
+>  2 files changed, 3931 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi b/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
+> new file mode 100644
+> index 000000000000..94ee3c2c38af
+> --- /dev/null
 
+[..]
+
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> new file mode 100644
+> index 000000000000..66cb50218ca1
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> @@ -0,0 +1,812 @@
+
+[..]
+
+> +
+> +	pmugrf: syscon@fdc20000 {
+
+> +		compatible = "rockchip,rk3568-pmugrf", "syscon", "simple-mfd";
+
+TODO:
+
+> +		reg = <0x0 0xfdc20000 0x0 0x10000>;
+> +
+> +		reboot_mode: reboot-mode {
+> +			compatible = "syscon-reboot-mode";
+> +			mode-bootloader = <BOOT_BL_DOWNLOAD>;
+> +			mode-fastboot = <BOOT_FASTBOOT>;
+> +			mode-loader = <BOOT_BL_DOWNLOAD>;
+> +			mode-normal = <BOOT_NORMAL>;
+> +			mode-recovery = <BOOT_RECOVERY>;
+> +			offset = <0x200>;
+> +		};
+> +	};
+> +
+> +	grf: syscon@fdc60000 {
+
+> +		compatible = "rockchip,rk3568-grf", "syscon", "simple-mfd";
+
+TODO:
+
+> +		reg = <0x0 0xfdc60000 0x0 0x10000>;
+> +	};
+> +
+> +	pmucru: clock-controller@fdd00000 {
+> +		compatible = "rockchip,rk3568-pmucru";
+> +		reg = <0x0 0xfdd00000 0x0 0x1000>;
+
+> +		rockchip,grf = <&grf>;
+> +		rockchip,pmugrf = <&pmugrf>;
+
+clock-controller@fdd00000: 'rockchip,grf', 'rockchip,pmugrf' do not
+match any of the regexes: 'pinctrl-[0-9]+'
+
+Currently clk.c has only support for:
+
+	ctx->grf = syscon_regmap_lookup_by_phandle(ctx->cru_node,
+						   "rockchip,grf");
+
+Manufacturer tree:
+
+	ctx->pmugrf = syscon_regmap_lookup_by_phandle(ctx->cru_node,
+						   "rockchip,pmugrf");
+		case branch_muxpmugrf:
+			clk = rockchip_clk_register_muxgrf(list->name,
+				list->parent_names, list->num_parents,
+				flags, ctx->pmugrf, list->muxdiv_offset,
+				list->mux_shift, list->mux_width,
+				list->mux_flags);
+			break;
+
+
+	MUXPMUGRF(SCLK_32K_IOE, "clk_32k_ioe", clk_32k_ioe_p,  0,
+			RK3568_PMU_GRF_SOC_CON0, 0, 1, MFLAGS)
+
+Do we need a fix?
+
+> +		#clock-cells = <1>;
+> +		#reset-cells = <1>;
+> +	};
+> +
+> +	cru: clock-controller@fdd20000 {
+> +		compatible = "rockchip,rk3568-cru";
+> +		reg = <0x0 0xfdd20000 0x0 0x1000>;
+
+> +		rockchip,grf = <&grf>;
+
+clock-controller@fdd20000: 'assigned-clock-parents',
+'assigned-clock-rates', 'assigned-clocks', 'rockchip,grf' do not match
+any of the regexes:
+
+Add more properties to rockchip,rk3568-cru.yaml
+
+> +		#clock-cells = <1>;
+> +		#reset-cells = <1>;
+> +
+> +		assigned-clocks =
+> +			<&pmucru CLK_RTC_32K>, <&pmucru PLL_PPLL>,
+> +			<&pmucru PCLK_PMU>, <&cru PLL_CPLL>,
+> +			<&cru PLL_GPLL>, <&cru ACLK_BUS>,
+> +			<&cru PCLK_BUS>, <&cru ACLK_TOP_HIGH>,
+> +			<&cru ACLK_TOP_LOW>, <&cru HCLK_TOP>,
+> +			<&cru PCLK_TOP>, <&cru ACLK_PERIMID>,
+> +			<&cru HCLK_PERIMID>, <&cru PLL_NPLL>,
+> +			<&cru ACLK_PIPE>, <&cru PCLK_PIPE>,
+> +			<&cru ACLK_VOP>;
+> +		assigned-clock-rates =
+> +			<32768>, <200000000>,
+> +			<100000000>, <1000000000>,
+> +			<1188000000>, <150000000>,
+> +			<100000000>, <500000000>,
+> +			<400000000>, <150000000>,
+> +			<100000000>, <300000000>,
+> +			<150000000>, <1200000000>,
+> +			<400000000>, <100000000>,
+> +			<500000000>;
+> +		assigned-clock-parents =
+> +			<&pmucru CLK_RTC32K_FRAC>;
+> +	};
