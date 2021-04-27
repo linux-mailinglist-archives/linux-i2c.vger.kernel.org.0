@@ -2,106 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9021836B49C
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Apr 2021 16:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E5E36BE09
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Apr 2021 05:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbhDZOSU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Apr 2021 10:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbhDZOSU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Apr 2021 10:18:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97486C061574
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Apr 2021 07:17:38 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lb23L-0002KR-Dc; Mon, 26 Apr 2021 16:17:35 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lb23K-0005nm-Ib; Mon, 26 Apr 2021 16:17:34 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH v6 5/6] i2c: imx: Simplify using devm_clk_get_enabled()
-Date:   Mon, 26 Apr 2021 16:17:29 +0200
-Message-Id: <20210426141730.2826832-6-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
-References: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
+        id S234055AbhD0Dwq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Apr 2021 23:52:46 -0400
+Received: from regular1.263xmail.com ([211.150.70.198]:58494 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231363AbhD0Dwq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Apr 2021 23:52:46 -0400
+X-Greylist: delayed 386 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Apr 2021 23:52:44 EDT
+Received: from localhost (unknown [192.168.167.172])
+        by regular1.263xmail.com (Postfix) with ESMTP id C28E3821;
+        Tue, 27 Apr 2021 11:45:06 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-SKE-CHECKED: 1
+X-ABS-CHECKED: 1
+Received: from [172.16.12.120] (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P18449T140669945366272S1619495102882982_;
+        Tue, 27 Apr 2021 11:45:04 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <22259d9076cbe0cb39d4db175022df51>
+X-RL-SENDER: kever.yang@rock-chips.com
+X-SENDER: yk@rock-chips.com
+X-LOGIN-NAME: kever.yang@rock-chips.com
+X-FST-TO: linux-watchdog@vger.kernel.org
+X-RCPT-COUNT: 29
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+Subject: Re: [PATCH v2 6/7] arm64: dts: rockchip: add core dtsi for RK3568 SoC
+To:     Johan Jonker <jbx6244@gmail.com>, cl@rock-chips.com,
+        heiko@sntech.de
+Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
+        uwe@kleine-koenig.org, mail@david-bauer.net,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org
+References: <20210425094216.25724-1-cl@rock-chips.com>
+ <20210425094439.25895-1-cl@rock-chips.com>
+ <3d584cdc-020e-5aae-cae3-59ef45e64a9f@gmail.com>
+From:   Kever Yang <kever.yang@rock-chips.com>
+Message-ID: <c2e96d99-3af5-3f22-78de-f6eff18b9c24@rock-chips.com>
+Date:   Tue, 27 Apr 2021 11:45:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <3d584cdc-020e-5aae-cae3-59ef45e64a9f@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-devm_clk_get_enabled() returns the clk already (prepared and) enabled
-and the automatically called cleanup cares for disabling (and
-unpreparing). So simplify .probe() and .remove() accordingly.
+Hi Johan, Heiko,
 
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Acked-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/i2c/busses/i2c-imx.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+On 2021/4/26 下午8:16, Johan Jonker wrote:
+> ===
+>
+> compatible = "rockchip,rk3568";
+> Maybe add this together with other rkXXXX SoCs to rockchip.yaml on top
+> of board list ???
+> Please advise.
+This rockchip.yaml is now describe boards without any sort, it would be 
+better to refactor and sort in two level:
+- soc level
+- board level base on the same soc.
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index b80fdc1f0092..d6594358cf83 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1405,16 +1405,10 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
- 
- 	/* Get I2C clock */
--	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
-+	i2c_imx->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(i2c_imx->clk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
--				     "can't get I2C clock\n");
--
--	ret = clk_prepare_enable(i2c_imx->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
--		return ret;
--	}
-+				     "can't get prepared I2C clock\n");
- 
- 	/* Init queue */
- 	init_waitqueue_head(&i2c_imx->queue);
-@@ -1487,7 +1481,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
--	clk_disable_unprepare(i2c_imx->clk);
- 	return ret;
- }
- 
-@@ -1517,7 +1510,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq >= 0)
- 		free_irq(irq, i2c_imx);
--	clk_disable_unprepare(i2c_imx->clk);
- 
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
--- 
-2.30.2
+This will need a separate patch to do the clean up, maybe goes after the 
+rk3568.dtsi?
+
+
+Thanks,
+- Kever
+
 
