@@ -2,90 +2,145 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E5E36BE09
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Apr 2021 05:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A115F36BEEA
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Apr 2021 07:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234055AbhD0Dwq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Apr 2021 23:52:46 -0400
-Received: from regular1.263xmail.com ([211.150.70.198]:58494 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbhD0Dwq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Apr 2021 23:52:46 -0400
-X-Greylist: delayed 386 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Apr 2021 23:52:44 EDT
-Received: from localhost (unknown [192.168.167.172])
-        by regular1.263xmail.com (Postfix) with ESMTP id C28E3821;
-        Tue, 27 Apr 2021 11:45:06 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-Received: from [172.16.12.120] (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P18449T140669945366272S1619495102882982_;
-        Tue, 27 Apr 2021 11:45:04 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <22259d9076cbe0cb39d4db175022df51>
-X-RL-SENDER: kever.yang@rock-chips.com
-X-SENDER: yk@rock-chips.com
-X-LOGIN-NAME: kever.yang@rock-chips.com
-X-FST-TO: linux-watchdog@vger.kernel.org
-X-RCPT-COUNT: 29
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-Subject: Re: [PATCH v2 6/7] arm64: dts: rockchip: add core dtsi for RK3568 SoC
-To:     Johan Jonker <jbx6244@gmail.com>, cl@rock-chips.com,
-        heiko@sntech.de
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
-        linux-watchdog@vger.kernel.org
-References: <20210425094216.25724-1-cl@rock-chips.com>
- <20210425094439.25895-1-cl@rock-chips.com>
- <3d584cdc-020e-5aae-cae3-59ef45e64a9f@gmail.com>
-From:   Kever Yang <kever.yang@rock-chips.com>
-Message-ID: <c2e96d99-3af5-3f22-78de-f6eff18b9c24@rock-chips.com>
-Date:   Tue, 27 Apr 2021 11:45:03 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229550AbhD0FhK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 27 Apr 2021 01:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229636AbhD0FhI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Apr 2021 01:37:08 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A05C06175F
+        for <linux-i2c@vger.kernel.org>; Mon, 26 Apr 2021 22:36:23 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id f6-20020a17090a6546b029015088cf4a1eso6604817pjs.2
+        for <linux-i2c@vger.kernel.org>; Mon, 26 Apr 2021 22:36:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aTHnAMIQD5s8JadjAbGJIjLqhqT66XAtuscyCUM1Exg=;
+        b=iDVXwOEZxmA8fOzgfknudnogPZoKYmxt3u8dTcHSHwypV0CykQKeRziphRLC3veOyJ
+         AnOIFpfBBOdlNpdVwEX7841ZSHmTd/+D00vrCuLcizuefC4WPLuMgL6v9IyHllx2fhBm
+         qc1fJPhDE1Z3eibkPtW/NYxlStO0vq/IeLVNc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aTHnAMIQD5s8JadjAbGJIjLqhqT66XAtuscyCUM1Exg=;
+        b=tYf6UNM03YhyWuLzvFkBoDovorB4Aq42bh8y4cVNU/7bmzTptKVTkDs01BCItJAGNH
+         BKj4DIpHHZsn3YczsDC2hSVeabTkwpOGsaOsSY+mIwiR5RXRebS2B88WL2u8TzwmX1Gl
+         dllcPQndZMm+0ze85CweuQj4JV4/JaOYcRAu4uS5MXlEOOIIxJkUikPu16E2lGba7iNK
+         YotAgwY+3Yv0PQ1AAMf2H4ceNRYhBnFOujze4ftQMCiJXWjgMXU1JcfA6O208GVaHD7M
+         n9XJQxi+l8jHYUZOMa9zhGXcLYG0X76v9vksFpUAshddNhX43NHQH35S03uihf6iHCFc
+         3how==
+X-Gm-Message-State: AOAM5304pKwG8hMN74CE2CBrV8JvokI2z4F86cisRYOmtnv/v2AH5zvb
+        dVKCykqhyaFSYRurmPxMhbi32A==
+X-Google-Smtp-Source: ABdhPJwhDlroLXq4uzG2AtyLbgaJBtpApsdyh91sUIMYLFNmkYl6oY9Myfj40DiDCM4x+JYA/8iPoA==
+X-Received: by 2002:a17:90a:5907:: with SMTP id k7mr3159032pji.197.1619501782729;
+        Mon, 26 Apr 2021 22:36:22 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:3984:c4f5:8612:6b3e])
+        by smtp.gmail.com with ESMTPSA id gc15sm993529pjb.2.2021.04.26.22.36.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Apr 2021 22:36:22 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     linux-i2c@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v20 0/5] add power control in i2c
+Date:   Tue, 27 Apr 2021 13:36:12 +0800
+Message-Id: <20210427053617.27972-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
 MIME-Version: 1.0
-In-Reply-To: <3d584cdc-020e-5aae-cae3-59ef45e64a9f@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Johan, Heiko,
+Although in the most platforms, the power of eeprom
+and i2c are alway on, some platforms disable the
+eeprom and i2c power in order to meet low power request.
 
-On 2021/4/26 下午8:16, Johan Jonker wrote:
-> ===
->
-> compatible = "rockchip,rk3568";
-> Maybe add this together with other rkXXXX SoCs to rockchip.yaml on top
-> of board list ???
-> Please advise.
-This rockchip.yaml is now describe boards without any sort, it would be 
-better to refactor and sort in two level:
-- soc level
-- board level base on the same soc.
+This patch add the pm_runtime ops to control power to
+support all platforms.
 
-This will need a separate patch to do the clean up, maybe goes after the 
-rk3568.dtsi?
+Changes since v19:
+ - resend v19 with fix tag added.
+
+Changes since v18:
+ - Fix a function name conflict with drivers/gpu/drm/i915/selftests/i915_gem.c
+
+Changes since v17:
+ - Add a patch to fix unbalanced regulator disabling.
+ - Add dts patch.
+
+Changes since v16:
+ - request regulator in device instead of in the core.
+ - control regulator only if it's provided.
+
+Changes since v15:
+ - Squash the fix[1] for v15.
+[1] https://patchwork.ozlabs.org/project/linux-i2c/patch/20200522101327.13456-1-m.szyprowski@samsung.com/
+
+Changes since v14:
+ - change the return value in normal condition
+ - access the variable after NULL pointer checking
+ - add ack tag
+
+Changes since v13:
+ - fixup some logic error
+
+Changes since v12:
+ - rebase onto v5.7-rc1
+ - change the property description in binding
+
+Changes since v11:
+ - use suspend_late/resume_early instead of suspend/resume
+ - rebase onto v5.6-rc1
+
+Changes since v10:
+ - fixup some worng codes
+
+Changes since v9:
+ - fixup build error
+ - remove redundant code
+
+Changes since v8:
+ - fixup some wrong code
+ - remove redundant message
+
+[... snip ...]
 
 
-Thanks,
-- Kever
+Bibby Hsieh (1):
+  i2c: core: support bus regulator controlling in adapter
 
+Hsin-Yi Wang (4):
+  dt-binding: i2c: mt65xx: add vbus-supply property
+  i2c: mediatek: mt65xx: add optional vbus-supply
+  misc: eeprom: at24: check suspend status before disable regulator
+  arm64: dts: mt8183: add supply name for eeprom
+
+ .../devicetree/bindings/i2c/i2c-mt65xx.txt    |  1 +
+ .../dts/mediatek/mt8183-kukui-kakadu.dtsi     |  4 +
+ .../dts/mediatek/mt8183-kukui-kodama.dtsi     |  4 +
+ .../boot/dts/mediatek/mt8183-kukui-krane.dtsi |  4 +
+ drivers/i2c/busses/i2c-mt65xx.c               |  7 ++
+ drivers/i2c/i2c-core-base.c                   | 88 +++++++++++++++++++
+ drivers/misc/eeprom/at24.c                    |  6 +-
+ include/linux/i2c.h                           |  2 +
+ 8 files changed, 114 insertions(+), 2 deletions(-)
+
+-- 
+2.31.1.498.g6c1eba8ee3d-goog
 
