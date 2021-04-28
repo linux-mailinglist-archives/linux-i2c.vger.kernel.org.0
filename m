@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B19636D8A2
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Apr 2021 15:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 522AC36D8B9
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Apr 2021 15:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239931AbhD1Ntb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 28 Apr 2021 09:49:31 -0400
-Received: from lucky1.263xmail.com ([211.157.147.132]:53392 "EHLO
+        id S238444AbhD1NuI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 28 Apr 2021 09:50:08 -0400
+Received: from lucky1.263xmail.com ([211.157.147.134]:41986 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239675AbhD1Nta (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Apr 2021 09:49:30 -0400
+        with ESMTP id S232120AbhD1NuI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Apr 2021 09:50:08 -0400
 Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id A8E5FF3822;
-        Wed, 28 Apr 2021 21:48:10 +0800 (CST)
+        by lucky1.263xmail.com (Postfix) with ESMTP id CC5E5C8503;
+        Wed, 28 Apr 2021 21:49:16 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
 X-ANTISPAM-LEVEL: 2
 X-ABS-CHECKED: 0
 Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P2750T140649007400704S1619617681633012_;
-        Wed, 28 Apr 2021 21:48:10 +0800 (CST)
+        by smtp.263.net (postfix) whith ESMTP id P2750T140648770434816S1619617754742274_;
+        Wed, 28 Apr 2021 21:49:17 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <7185ae63b5b0517c005d303060098782>
+X-UNIQUE-TAG: <a0ae6742c15251dbe44910355d775bac>
 X-RL-SENDER: cl@rock-chips.com
 X-SENDER: cl@rock-chips.com
 X-LOGIN-NAME: cl@rock-chips.com
@@ -47,9 +47,9 @@ Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
         zhangqing@rock-chips.com, huangtao@rock-chips.com,
         cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
         jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
-Subject: [PATCH v3 04/10] dt-bindings: watchdog: dw-wdt: add description for rk3568
-Date:   Wed, 28 Apr 2021 21:47:53 +0800
-Message-Id: <20210428134759.22076-5-cl@rock-chips.com>
+Subject: [PATCH v3 05/10] dt-bindings: pwm: rockchip: add description for rk3568
+Date:   Wed, 28 Apr 2021 21:49:13 +0800
+Message-Id: <20210428134913.22246-1-cl@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210428134759.22076-1-cl@rock-chips.com>
 References: <20210428134759.22076-1-cl@rock-chips.com>
@@ -59,26 +59,26 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Liang Chen <cl@rock-chips.com>
 
-add "rockchip,rk3568-wdt", "snps,dw-wdt" for watchdog nodes on
-a rk3568 platform to snps,dw-wdt.yaml.
+add "rockchip,rk3568-pwm", "rockchip,rk3328-pwm" for pwm nodes on
+a rk3568 platform to pwm-rockchip.yaml.
 
 Signed-off-by: Liang Chen <cl@rock-chips.com>
 ---
- Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
+ Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-index b58596b1831d..6461eb4f4a27 100644
---- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-@@ -27,6 +27,7 @@ properties:
-               - rockchip,rk3328-wdt
-               - rockchip,rk3368-wdt
-               - rockchip,rk3399-wdt
-+              - rockchip,rk3568-wdt
-               - rockchip,rv1108-wdt
-           - const: snps,dw-wdt
+diff --git a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+index 5596bee70509..81a54a4e8e3e 100644
+--- a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
++++ b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+@@ -29,6 +29,7 @@ properties:
+           - enum:
+               - rockchip,px30-pwm
+               - rockchip,rk3308-pwm
++              - rockchip,rk3568-pwm
+           - const: rockchip,rk3328-pwm
  
+   reg:
 -- 
 2.17.1
 
