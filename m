@@ -2,187 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EDF36D8D8
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Apr 2021 15:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E7E36DAC7
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Apr 2021 17:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240035AbhD1NvO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 28 Apr 2021 09:51:14 -0400
-Received: from lucky1.263xmail.com ([211.157.147.135]:46800 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbhD1NvK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Apr 2021 09:51:10 -0400
-Received: from localhost (unknown [192.168.167.139])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 6A7C8AB8ED;
-        Wed, 28 Apr 2021 21:50:18 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P12770T140230526973696S1619617815817424_;
-        Wed, 28 Apr 2021 21:50:17 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <c3bba5f15271e6e891445d12a788c6d1>
-X-RL-SENDER: cl@rock-chips.com
-X-SENDER: cl@rock-chips.com
-X-LOGIN-NAME: cl@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-RCPT-COUNT: 30
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   <cl@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
-Subject: [PATCH v3 10/10] arm64: dts: rockchip: add basic dts for RK3568 EVB
-Date:   Wed, 28 Apr 2021 21:50:14 +0800
-Message-Id: <20210428135014.22593-1-cl@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210428134759.22076-1-cl@rock-chips.com>
-References: <20210428134759.22076-1-cl@rock-chips.com>
+        id S236873AbhD1PCp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 28 Apr 2021 11:02:45 -0400
+Received: from mga05.intel.com ([192.55.52.43]:9545 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236545AbhD1PCN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 28 Apr 2021 11:02:13 -0400
+IronPort-SDR: zWJsv+pPFoLVbp4NFHFHzuSMhU05jK8B/uXA1e3RRvt19cZxzoon16CeIQZwO0JY+2DLTTbliN
+ z/jBlRMlAfow==
+X-IronPort-AV: E=McAfee;i="6200,9189,9968"; a="282097142"
+X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
+   d="scan'208";a="282097142"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 07:57:38 -0700
+IronPort-SDR: z6Fw6mL6Mhk2EwL1TurbzTPFO8wLTVrQ0KaTyuWpG8njT+0ExV9zsNwBe5sjtvxyTm23G1gitS
+ RdvhG7uSuZmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
+   d="scan'208";a="616059694"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Apr 2021 07:57:36 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8C7593C8; Wed, 28 Apr 2021 17:57:55 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] i2c: core: Make debug message even more debuggish
+Date:   Wed, 28 Apr 2021 17:57:51 +0300
+Message-Id: <20210428145751.4934-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Liang Chen <cl@rock-chips.com>
+One may notice that dev_printk(KERN_DEBUG ...) is *not* an equivalent
+to dev_dbg(). It will be printed whenever loglevel is high enough.
+And currently it will be the only message in the I²C core in some
+configurations that got printed under above conditions.
 
-This patch add rk3568-evb1-v10.dts for RK3568 evaluation board.
-add uart/emmc/i2c/rk809 node for basic function.
+Moving to dev_dbg() will hide it in the configurations where Dynamic Debug
+is enabled and hence align with all other debug messages in the I²C core..
 
-Signed-off-by: Liang Chen <cl@rock-chips.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- .../devicetree/bindings/arm/rockchip.yaml     |  5 ++
- arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../boot/dts/rockchip/rk3568-evb1-v10.dts     | 80 +++++++++++++++++++
- 3 files changed, 86 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
+ drivers/i2c/i2c-core-base.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 4a6f772c1043..6546b015fc62 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -600,6 +600,11 @@ properties:
-           - const: zkmagic,a95x-z2
-           - const: rockchip,rk3318
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 5a97e4a02fa2..7f711853d464 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -399,7 +399,8 @@ static int i2c_gpio_init_recovery(struct i2c_adapter *adap)
+ static int i2c_init_recovery(struct i2c_adapter *adap)
+ {
+ 	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
+-	char *err_str, *err_level = KERN_ERR;
++	bool error_or_debug = true;
++	char *err_str;
  
-+      - description: Rockchip RK3568 Evaluation board
-+        items:
-+          - const: rockchip,rk3568-evb1-v10
-+          - const: rockchip,rk3568
-+
- additionalProperties: true
+ 	if (!bri)
+ 		return 0;
+@@ -409,7 +410,7 @@ static int i2c_init_recovery(struct i2c_adapter *adap)
  
- ...
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index c3e00c0e2db7..7fdb41de01ec 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -51,3 +51,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire-excavator.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-new file mode 100644
-index 000000000000..33a97ce03c84
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
-+ *
-+ */
-+
-+/dts-v1/;
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/rockchip.h>
-+#include "rk3568.dtsi"
-+
-+/ {
-+	model = "Rockchip RK3568 EVB1 DDR4 V10 Board";
-+	compatible = "rockchip,rk3568-evb1-v10", "rockchip,rk3568";
-+
-+	chosen: chosen {
-+		stdout-path = "serial2:1500000n8";
-+	};
-+
-+	dc_12v: dc-12v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "dc_12v";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <12000000>;
-+		regulator-max-microvolt = <12000000>;
-+	};
-+
-+	vcc3v3_sys: vcc3v3-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&dc_12v>;
-+	};
-+
-+	vcc5v0_sys: vcc5v0-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc5v0_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&dc_12v>;
-+	};
-+
-+	vcc3v3_lcd0_n: vcc3v3-lcd0-n {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_lcd0_n";
-+		regulator-boot-on;
-+
-+		regulator-state-mem {
-+			regulator-off-in-suspend;
-+		};
-+	};
-+
-+	vcc3v3_lcd1_n: vcc3v3-lcd1-n {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_lcd1_n";
-+		regulator-boot-on;
-+
-+		regulator-state-mem {
-+			regulator-off-in-suspend;
-+		};
-+	};
-+};
-+
-+&sdhci {
-+	bus-width = <8>;
-+	max-frequency = <200000000>;
-+	non-removable;
-+	rockchip,txclk-tapnum = <0x8>;
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
+ 	if (!bri->recover_bus) {
+ 		err_str = "no suitable method provided";
+-		err_level = KERN_DEBUG;
++		error_or_debug = false;
+ 		goto err;
+ 	}
+ 
+@@ -436,7 +437,10 @@ static int i2c_init_recovery(struct i2c_adapter *adap)
+ 
+ 	return 0;
+  err:
+-	dev_printk(err_level, &adap->dev, "Not using recovery: %s\n", err_str);
++	if (error_or_debug)
++		dev_err(&adap->dev, "Not using recovery: %s\n", err_str);
++	else
++		dev_dbg(&adap->dev, "Not using recovery: %s\n", err_str);
+ 	adap->bus_recovery_info = NULL;
+ 
+ 	return -EINVAL;
 -- 
-2.17.1
-
-
+2.30.2
 
