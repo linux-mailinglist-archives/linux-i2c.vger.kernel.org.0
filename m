@@ -2,127 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CB336D74B
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Apr 2021 14:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFCB36D8A6
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Apr 2021 15:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235096AbhD1M2w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 28 Apr 2021 08:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234674AbhD1M2w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Apr 2021 08:28:52 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7EEC061574;
-        Wed, 28 Apr 2021 05:28:06 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id z16so3671951pga.1;
-        Wed, 28 Apr 2021 05:28:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=FCc5BZu5iRztXIUiSt2+3FhaGtDlfucfxXcqT01eExc=;
-        b=s1ybdI7WecLYnVPXzIG8r2ufsshTyUG6UBIgf5iZ9rQliaO9QErsrYXIa/i4JeqNQF
-         NTu9m1+eajP/7Ozit9TFqR+4pw8P2Ja2s3PWyb+f91pWvvAARcpkSa+HnfVT/C/YVfvh
-         n1crgTzs3K/MEAN/PW2chwCa1hS4loARDIabSVxomFETp3p/GHQ6A7vKf+mCo2pRHjPk
-         iP54a/IAcobV9YjClrPOCz7bYoxN5yAG9KY9zz4dLEAwBwpm4yB+RkP4st+duj5Hhhcm
-         mIXNDw134CsfCAfh/20N4PNaO70pYYZV7Z7MtExQtmJLlziHJgb6W+q0lVqgn0RcmV85
-         /Olg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=FCc5BZu5iRztXIUiSt2+3FhaGtDlfucfxXcqT01eExc=;
-        b=AFGPKFtmgN0uyEycfjqp3+A+2w/4LFfmATcCpYLvtMcZjbWVfLYFfIs5STReNQVkD4
-         bVmSQhW7apFRWMA3IJsdKtI4wvZDiljL4ywJvbO1l8CBAev1z7obOf7jXki/sKBqakZw
-         hNz+BTt4ATvI6Tjb2uBIeC2/lEzYtHZiQaEcpE2vt3wfDJY7+yH0DYGOila1eF3rIxG4
-         nhBUV+LTKiRcgX0Vsg7noTo2XbB08MJEAW05oKE9KPW96b8JFTX7fOqP3tYWSBO7ZD2B
-         8jywk7cmCvut/BWrdHINOA5lfdt9i2i9h3sNMhC4062D2NmZ6XI56lQ/PrCxJebQZtGY
-         LmvQ==
-X-Gm-Message-State: AOAM533nCtsKzuLctaEcCf8P4NftDHyrBxXUOrvyCu2eMeGB5xyEOxFE
-        XsxvasTX90FFPRn2GJbaGjc=
-X-Google-Smtp-Source: ABdhPJzFwvuMniv8ai0SvEHoZynqHjurs4c0D6rOCMpJ54ptB8lK6dKuU/popa6Id15ZLDpegNO2ww==
-X-Received: by 2002:a65:6085:: with SMTP id t5mr26835510pgu.201.1619612884496;
-        Wed, 28 Apr 2021 05:28:04 -0700 (PDT)
-Received: from localhost ([157.45.56.196])
-        by smtp.gmail.com with ESMTPSA id l3sm4868719pju.44.2021.04.28.05.28.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 28 Apr 2021 05:28:03 -0700 (PDT)
-Date:   Wed, 28 Apr 2021 17:57:55 +0530
-From:   Shubhankar Kuranagatti <shubhankarvk@gmail.com>
-To:     wsa@kernel.org
-Cc:     sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH] drivers: i2c: i2c-core-smbus.c: Fix alignment of comment
-Message-ID: <20210428122755.2s56uotb225rezcw@kewl-virtual-machine>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
+        id S239936AbhD1Ntc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 28 Apr 2021 09:49:32 -0400
+Received: from lucky1.263xmail.com ([211.157.147.131]:41978 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239304AbhD1Nta (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Apr 2021 09:49:30 -0400
+Received: from localhost (unknown [192.168.167.235])
+        by lucky1.263xmail.com (Postfix) with ESMTP id EDA42B9FF2;
+        Wed, 28 Apr 2021 21:48:03 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P2750T140649007400704S1619617681633012_;
+        Wed, 28 Apr 2021 21:48:03 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <9f4b7bf97fe250e292465ec654eab734>
+X-RL-SENDER: cl@rock-chips.com
+X-SENDER: cl@rock-chips.com
+X-LOGIN-NAME: cl@rock-chips.com
+X-FST-TO: heiko@sntech.de
+X-RCPT-COUNT: 30
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   <cl@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
+        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
+        jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
+Subject: [PATCH v3 00/10] arm64: dts: rockchip: add basic dtsi/dts files for RK3568 SoC
+Date:   Wed, 28 Apr 2021 21:47:49 +0800
+Message-Id: <20210428134759.22076-1-cl@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Multi line comment have been aligned starting with a *
-The closing */ has been shifted to a new line.
-Single space replaced with tab space
-This is done to maintain code uniformity.
+From: Liang Chen <cl@rock-chips.com>
 
-Signed-off-by: Shubhankar Kuranagatti <shubhankarvk@gmail.com>
----
- drivers/i2c/i2c-core-smbus.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+v1:
+1. add some dt-bindings for RK3568 devices.
+2. add core dtsi for RK3568 SoC.
+3. add basic dts for RK3568 EVB
 
-diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-index d2d32c0fd8c3..205750518c21 100644
---- a/drivers/i2c/i2c-core-smbus.c
-+++ b/drivers/i2c/i2c-core-smbus.c
-@@ -66,10 +66,11 @@ static inline void i2c_smbus_add_pec(struct i2c_msg *msg)
- }
- 
- /* Return <0 on CRC error
--   If there was a write before this read (most cases) we need to take the
--   partial CRC from the write part into account.
--   Note that this function does modify the message (we need to decrease the
--   message length to hide the CRC byte from the caller). */
-+ * If there was a write before this read (most cases) we need to take the
-+ * partial CRC from the write part into account.
-+ * Note that this function does modify the message (we need to decrease the
-+ * message length to hide the CRC byte from the caller).
-+ */
- static int i2c_smbus_check_pec(u8 cpec, struct i2c_msg *msg)
- {
- 	u8 rpec = msg->buf[--msg->len];
-@@ -113,7 +114,7 @@ EXPORT_SYMBOL(i2c_smbus_read_byte);
- s32 i2c_smbus_write_byte(const struct i2c_client *client, u8 value)
- {
- 	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--	                      I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
-+			I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
- }
- EXPORT_SYMBOL(i2c_smbus_write_byte);
- 
-@@ -387,7 +388,8 @@ static s32 i2c_smbus_xfer_emulated(struct i2c_adapter *adapter, u16 addr,
- 		if (read_write == I2C_SMBUS_READ) {
- 			msg[1].flags |= I2C_M_RECV_LEN;
- 			msg[1].len = 1; /* block length will be added by
--					   the underlying bus driver */
-+					 * the underlying bus driver
-+					 */
- 			i2c_smbus_try_get_dmabuf(&msg[1], 0);
- 		} else {
- 			msg[0].len = data->block[0] + 2;
-@@ -418,7 +420,8 @@ static s32 i2c_smbus_xfer_emulated(struct i2c_adapter *adapter, u16 addr,
- 
- 		msg[1].flags |= I2C_M_RECV_LEN;
- 		msg[1].len = 1; /* block length will be added by
--				   the underlying bus driver */
-+				 * the underlying bus driver
-+				 */
- 		i2c_smbus_try_get_dmabuf(&msg[1], 0);
- 		break;
- 	case I2C_SMBUS_I2C_BLOCK_DATA:
+v2:
+1. sort device nodes by some rules.
+
+v3:
+1. make ARCH=arm64 dtbs_check, then fix some errors and add some documents.
+
+Liang Chen (10):
+  dt-bindings: i2c: i2c-rk3x: add description for rk3568
+  dt-bindings: serial: snps-dw-apb-uart: add description for rk3568
+  dt-bindings: mmc: rockchip-dw-mshc: add description for rk3568
+  dt-bindings: watchdog: dw-wdt: add description for rk3568
+  dt-bindings: pwm: rockchip: add description for rk3568
+  dt-bindings: gpio: change items restriction of clock for
+    rockchip,gpio-bank
+  dt-bindings: soc: rockchip: Convert grf.txt to YAML
+  arm64: dts: rockchip: add generic pinconfig settings used by most
+    Rockchip socs
+  arm64: dts: rockchip: add core dtsi for RK3568 SoC
+  arm64: dts: rockchip: add basic dts for RK3568 EVB
+
+ .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+ .../bindings/gpio/rockchip,gpio-bank.yaml     |    3 +-
+ .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
+ .../bindings/mmc/rockchip-dw-mshc.yaml        |    9 +-
+ .../devicetree/bindings/pwm/pwm-rockchip.yaml |    1 +
+ .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
+ .../devicetree/bindings/soc/rockchip/grf.txt  |   61 -
+ .../devicetree/bindings/soc/rockchip/grf.yaml |   58 +
+ .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+ .../boot/dts/rockchip/rk3568-evb1-v10.dts     |   80 +
+ .../boot/dts/rockchip/rk3568-pinctrl.dtsi     | 3111 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  789 +++++
+ .../boot/dts/rockchip/rockchip-pinconf.dtsi   |  344 ++
+ 14 files changed, 4395 insertions(+), 70 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3568.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rockchip-pinconf.dtsi
+
 -- 
 2.17.1
+
+
 
