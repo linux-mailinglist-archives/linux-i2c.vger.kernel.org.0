@@ -2,186 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9C036E6E7
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Apr 2021 10:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3CC36ED57
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Apr 2021 17:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239310AbhD2IPA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 29 Apr 2021 04:15:00 -0400
-Received: from lucky1.263xmail.com ([211.157.147.135]:56822 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240071AbhD2IOw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Apr 2021 04:14:52 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 2D3FBAB07F;
-        Thu, 29 Apr 2021 16:14:03 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P2750T140649173088000S1619684039890516_;
-        Thu, 29 Apr 2021 16:14:02 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <8be1fc234b6a271c6098fd643acf5a13>
-X-RL-SENDER: cl@rock-chips.com
-X-SENDER: cl@rock-chips.com
-X-LOGIN-NAME: cl@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-RCPT-COUNT: 30
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   <cl@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
-Subject: [PATCH v4 10/10] arm64: dts: rockchip: add basic dts for RK3568 EVB
-Date:   Thu, 29 Apr 2021 16:13:58 +0800
-Message-Id: <20210429081358.18057-1-cl@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210429081151.17558-1-cl@rock-chips.com>
-References: <20210429081151.17558-1-cl@rock-chips.com>
+        id S240705AbhD2P0J (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 29 Apr 2021 11:26:09 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:45970 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240701AbhD2P0I (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Apr 2021 11:26:08 -0400
+Received: by mail-ot1-f43.google.com with SMTP id f75-20020a9d03d10000b0290280def9ab76so56582774otf.12;
+        Thu, 29 Apr 2021 08:25:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=i0xoMhXwtne9LnlYePyFNsxRYqWjGV7vCqvSAINSLGU=;
+        b=RfEp4CUW0pqNhQDpLk/Aq1jI/lMXjcOSpVw2PNUm/v6ssViZcYx3H2OTWqnAo1iPVx
+         OdvpVeobtSgynEGy/Alr9BKJ9HW28RtR+hOfQf/kWp9I4ga8VqV4G4BoXHU9EIJg0muA
+         vl7fi314upJtnjUtf2CO6DDjdTa9THhJHwoivVL48j2psGIf6MXZyaOpXUa1ZJbp99px
+         g6ufrymb8/b3Ck4DSfibNsk4J9UVsMI3Rs2dvixvhVu788UZevMwVlhJnpINmt9ovP9Y
+         1t4TUcgveT5YFB1pW0vEYEV9kEU31kqOvWdnV4Z/50efMDbhGSWXJScROVwTAWVM4tgk
+         q2fA==
+X-Gm-Message-State: AOAM533JTZt9RffmYM3oNuX4OMo9BxV5DOPUR9qpZl255bB4CfqIFj53
+        /9L5zewyNS5ucZBCgqIO0w==
+X-Google-Smtp-Source: ABdhPJxEU28Uo1HsSxBn20WvETdomdWerhn4crR+liE7z6I2O6zQ+ZVGdv7UMW7On1mtAFTke7piXQ==
+X-Received: by 2002:a05:6830:2456:: with SMTP id x22mr28339399otr.262.1619709920279;
+        Thu, 29 Apr 2021 08:25:20 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id m5sm25975ots.13.2021.04.29.08.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Apr 2021 08:25:19 -0700 (PDT)
+Received: (nullmailer pid 1303438 invoked by uid 1000);
+        Thu, 29 Apr 2021 15:25:15 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     cl@rock-chips.com
+Cc:     zhangqing@rock-chips.com, uwe@kleine-koenig.org, heiko@sntech.de,
+        jensenhuang@friendlyarm.com, devicetree@vger.kernel.org,
+        linux@roeck-us.net, michael@amarulasolutions.com,
+        linux-watchdog@vger.kernel.org, jay.xu@rock-chips.com,
+        mail@david-bauer.net, linux-rockchip@lists.infradead.org,
+        wens@csie.org, linux-serial@vger.kernel.org,
+        ulf.hansson@linaro.org, jamie@jamieiles.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, jbx6244@gmail.com, linux-i2c@vger.kernel.org,
+        wim@linux-watchdog.org, shawn.lin@rock-chips.com,
+        jagan@amarulasolutions.com, david.wu@rock-chips.com,
+        cnsztl@gmail.com, gregkh@linuxfoundation.org,
+        huangtao@rock-chips.com, maz@kernel.org, linux-mmc@vger.kernel.org
+In-Reply-To: <20210429081321.17855-1-cl@rock-chips.com>
+References: <20210429081151.17558-1-cl@rock-chips.com> <20210429081321.17855-1-cl@rock-chips.com>
+Subject: Re: [PATCH v4 07/10] dt-bindings: soc: rockchip: Convert grf.txt to YAML
+Date:   Thu, 29 Apr 2021 10:25:15 -0500
+Message-Id: <1619709915.260424.1303436.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Liang Chen <cl@rock-chips.com>
+On Thu, 29 Apr 2021 16:13:21 +0800, cl@rock-chips.com wrote:
+> From: Liang Chen <cl@rock-chips.com>
+> 
+> Current dts files with 'grf' nodes are manually verified. In order to
+> automate this process grf.txt has to be converted to YAML.
+> 
+> Add new descriptions for:
+> "rockchip,rk3568-grf", "syscon", "simple-mfd"
+> "rockchip,rk3568-pmugrf", "syscon", "simple-mfd"
+> 
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> ---
+>  .../devicetree/bindings/soc/rockchip/grf.txt  | 61 -------------------
+>  .../devicetree/bindings/soc/rockchip/grf.yaml | 60 ++++++++++++++++++
+>  2 files changed, 60 insertions(+), 61 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.txt
+>  create mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> 
 
-This patch add rk3568-evb1-v10.dts for RK3568 evaluation board.
-add uart/emmc/i2c/rk809 node for basic function.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Signed-off-by: Liang Chen <cl@rock-chips.com>
----
- .../devicetree/bindings/arm/rockchip.yaml     |  5 ++
- arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../boot/dts/rockchip/rk3568-evb1-v10.dts     | 79 +++++++++++++++++++
- 3 files changed, 85 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
+yamllint warnings/errors:
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 4a6f772c1043..6546b015fc62 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -600,6 +600,11 @@ properties:
-           - const: zkmagic,a95x-z2
-           - const: rockchip,rk3318
- 
-+      - description: Rockchip RK3568 Evaluation board
-+        items:
-+          - const: rockchip,rk3568-evb1-v10
-+          - const: rockchip,rk3568
-+
- additionalProperties: true
- 
- ...
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index c3e00c0e2db7..7fdb41de01ec 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -51,3 +51,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire-excavator.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-new file mode 100644
-index 000000000000..69786557093d
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
-+ *
-+ */
-+
-+/dts-v1/;
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/rockchip.h>
-+#include "rk3568.dtsi"
-+
-+/ {
-+	model = "Rockchip RK3568 EVB1 DDR4 V10 Board";
-+	compatible = "rockchip,rk3568-evb1-v10", "rockchip,rk3568";
-+
-+	chosen: chosen {
-+		stdout-path = "serial2:1500000n8";
-+	};
-+
-+	dc_12v: dc-12v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "dc_12v";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <12000000>;
-+		regulator-max-microvolt = <12000000>;
-+	};
-+
-+	vcc3v3_sys: vcc3v3-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&dc_12v>;
-+	};
-+
-+	vcc5v0_sys: vcc5v0-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc5v0_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&dc_12v>;
-+	};
-+
-+	vcc3v3_lcd0_n: vcc3v3-lcd0-n {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_lcd0_n";
-+		regulator-boot-on;
-+
-+		regulator-state-mem {
-+			regulator-off-in-suspend;
-+		};
-+	};
-+
-+	vcc3v3_lcd1_n: vcc3v3-lcd1-n {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_lcd1_n";
-+		regulator-boot-on;
-+
-+		regulator-state-mem {
-+			regulator-off-in-suspend;
-+		};
-+	};
-+};
-+
-+&sdhci {
-+	bus-width = <8>;
-+	max-frequency = <200000000>;
-+	non-removable;
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
--- 
-2.17.1
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/rockchip/grf.yaml: properties:compatible: [{'items': [{'enum': ['rockchip,px30-grf', 'rockchip,px30-pmugrf', 'rockchip,px30-usb2phy-grf', 'rockchip,rk3036-grf', 'rockchip,rk3066-grf', 'rockchip,rk3188-grf', 'rockchip,rk3228-grf', 'rockchip,rk3288-grf', 'rockchip,rk3288-sgrf', 'rockchip,rk3308-core-grf', 'rockchip,rk3308-detect-grf', 'rockchip,rk3308-grf', 'rockchip,rk3328-grf', 'rockchip,rk3328-usb2phy-grf', 'rockchip,rk3368-grf', 'rockchip,rk3368-pmugrf', 'rockchip,rk3399-grf', 'rockchip,rk3399-pmugrf', 'rockchip,rk3568-grf', 'rockchip,rk3568-pmugrf', 'rockchip,rv1108-grf', 'rockchip,rv1108-usbgrf']}, {'const': 'syscon'}, {'const': 'simple-mfd'}]}] is not of type 'object', 'boolean'
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/rockchip/grf.yaml: ignoring, error in schema: properties: compatible
+warning: no schema found in file: ./Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+Documentation/devicetree/bindings/soc/rockchip/grf.example.dt.yaml:0:0: /example-0/syscon@ff320000: failed to match any schema with compatible: ['rockchip,rk3399-pmugrf', 'syscon', 'simple-mfd']
+Documentation/devicetree/bindings/soc/rockchip/grf.example.dt.yaml:0:0: /example-0/syscon@ff770000: failed to match any schema with compatible: ['rockchip,rk3399-grf', 'syscon', 'simple-mfd']
 
+See https://patchwork.ozlabs.org/patch/1471595
 
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
