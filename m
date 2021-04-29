@@ -2,117 +2,142 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F9E36E571
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Apr 2021 09:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B41636E630
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Apr 2021 09:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237558AbhD2HDF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 29 Apr 2021 03:03:05 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:33592 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbhD2HDE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Apr 2021 03:03:04 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619679738; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=qpzpGKT4MyOa6zZRIZKS8uAlvV/UNPjibYLAdYfWu/8=;
- b=X58fppStAsP+5YEawgMwbErJc3VJkEA4bKt8k8uthiCO7xlMypQb47NPtgXgup8Ti0bKn9Jq
- Zi/9E3WwarRYmA5T1GGpa9o5UuW5tSa6mWQv7C7xdGA2H7gxMfJ5YWPqyfiBolwJ/eEMm7zL
- rus6+vmfuIOMBKU+xlVHAsrAogQ=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 608a59f52cc44d3aeabc1cc8 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Apr 2021 07:02:13
- GMT
-Sender: rojay=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E753BC4479C; Thu, 29 Apr 2021 07:02:12 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        id S232714AbhD2Hlk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 29 Apr 2021 03:41:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231889AbhD2Hld (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 29 Apr 2021 03:41:33 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: rojay)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 99B8AC43143;
-        Thu, 29 Apr 2021 07:02:11 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 29 Apr 2021 12:32:11 +0530
-From:   rojay@codeaurora.org
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>, akashast@codeaurora.org,
-        msavaliy@qti.qualcomm.com, parashar@codeaurora.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/3] i2c: i2c-qcom-geni: Add support for
- 'assigned-performance-states'
-In-Reply-To: <cfd90d2a05aa0411ee7a976a89a361af@codeaurora.org>
-References: <20201224111210.1214-1-rojay@codeaurora.org>
- <20201224111210.1214-4-rojay@codeaurora.org> <YAGqKfDfB7EEuZVn@builder.lan>
- <6bfec3e6-3d26-7ade-d836-032273856ce2@codeaurora.org>
- <CAPDyKFqF0NE3QRAEfiqj5QOXXH2om4CpyyeudeqoovANfvjsaQ@mail.gmail.com>
- <20210119110516.fgbbllyg7lxwwfdz@vireshk-i7>
- <CAPDyKFogrWt=K3VtEZVH5bPL_fYt7rgdm5wGgq+QHtzX-n0z7g@mail.gmail.com>
- <29b30a2c0c4d7292747a073d23daaa70@codeaurora.org>
- <cfd90d2a05aa0411ee7a976a89a361af@codeaurora.org>
-Message-ID: <594e3849329abcacb69bef0901fef607@codeaurora.org>
-X-Sender: rojay@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        by mail.kernel.org (Postfix) with ESMTPSA id 093BB613BD;
+        Thu, 29 Apr 2021 07:40:47 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lc1Hw-009zNf-QY; Thu, 29 Apr 2021 08:40:44 +0100
+Date:   Thu, 29 Apr 2021 08:40:43 +0100
+Message-ID: <87eeeto7wk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     =?UTF-8?B?6ZmI5Lqu?= <cl@rock-chips.com>
+Cc:     heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com,
+        wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net,
+        jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v3 09/10] arm64: dts: rockchip: add core dtsi for RK3568 SoC
+In-Reply-To: <3401442c-24a1-e8f8-fc4a-fa44d94b903b@rock-chips.com>
+References: <20210428134759.22076-1-cl@rock-chips.com>
+        <20210428135002.22528-1-cl@rock-chips.com>
+        <87h7jqo3d2.wl-maz@kernel.org>
+        <3401442c-24a1-e8f8-fc4a-fa44d94b903b@rock-chips.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: cl@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, jensenhuang@friendlyarm.com, michael@amarulasolutions.com, cnsztl@gmail.com, devicetree@vger.kernel.org, ulf.hansson@linaro.org, linux-mmc@vger.kernel.org, gregkh@linuxfoundation.org, linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org, jay.xu@rock-chips.com, shawn.lin@rock-chips.com, david.wu@rock-chips.com, zhangqing@rock-chips.com, huangtao@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com, linux-watchdog@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2021-04-01 12:09, rojay@codeaurora.org wrote:
-> On 2021-02-12 14:51, rojay@codeaurora.org wrote:
->> On 2021-01-20 19:01, Ulf Hansson wrote:
->>> On Tue, 19 Jan 2021 at 12:05, Viresh Kumar <viresh.kumar@linaro.org> 
->>> wrote:
->>>> 
->>>> On 19-01-21, 12:02, Ulf Hansson wrote:
->>>> > As a matter of fact this was quite recently discussed [1], which also
->>>> > pointed out some issues when using the "required-opps" in combination,
->>>> > but perhaps that got resolved? Viresh?
->>>> 
->>>> Perhaps we never did anything there ..
->>> 
->>> Okay. Looks like we should pick up that discussion again, to conclude
->>> on how to move forward.
->>> 
->> 
->> Soft Reminder!
->> 
+On Thu, 29 Apr 2021 02:13:35 +0100,
+陈亮 <cl@rock-chips.com> wrote:
 > 
-> Request Viresh, Uffe to discuss on the way forward.
+> Hi Marc,
 > 
+> 在 2021/4/28 下午11:06, Marc Zyngier 写道:
+> > On Wed, 28 Apr 2021 14:50:02 +0100,
+> > <cl@rock-chips.com> wrote:
+> >> From: Liang Chen <cl@rock-chips.com>
+> >> 
+> >> RK3568 is a high-performance and low power quad-core application processor
+> >> designed for personal mobile internet device and AIoT equipment. This patch
+> >> add basic core dtsi file for it.
+> >> 
+> >> We use scmi_clk for cortex-a55 instead of standard ARMCLK, so that
+> >> kernel/uboot/rtos can change cpu clk with the same code in ATF, and we will
+> >> enalbe a special high-performance PLL when high frequency is required. The
+> >> smci_clk code is in ATF, and clkid for cpu is 0, as below:
+> >> 
+> >>      cpu0: cpu@0 {
+> >>          device_type = "cpu";
+> >>          compatible = "arm,cortex-a55";
+> >>          reg = <0x0 0x0>;
+> >>          clocks = <&scmi_clk 0>;
+> >>      };
+> >> 
+> >> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> >> ---
+> >>   .../boot/dts/rockchip/rk3568-pinctrl.dtsi     | 3111 +++++++++++++++++
+> >>   arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  779 +++++
+> >>   2 files changed, 3890 insertions(+)
+> >>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
+> >>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> > [...]
+> > 
+> >> +	gic: interrupt-controller@fd400000 {
+> >> +		compatible = "arm,gic-v3";
+> >> +		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */
+> >> +		      <0x0 0xfd460000 0 0xc0000>; /* GICR */
+> > If this SoC has 4 CPUs, that's 4 redistributors. Given that GIC600
+> > doesn't implement VLPIs, that's 128kB per redistributors. Why is GICR
+> > large enough for 6 CPUs here? Is that copy-pasted from another SoC?
+> Copy from rk3399, sorry.
+> >> +		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> >> +		interrupt-controller;
+> >> +		#interrupt-cells = <3>;
+> >> +		mbi-alias = <0x0 0xfd400000>;
+> >> +		mbi-ranges = <296 24>;
+> >> +		msi-controller;
+> >> +	};
+> > Glad to see that you found some spare SPIs to get MSIs going
+> > 
+> > However, the whole point of mbi-alias (aka GICA in GIC600) is to be
+> > different from GICD and provide some isolation via an IOMMU.  If I
+> > trust the TRM, if should be at 0xfd10000 in your implementation.
+> 
+> But in the ./devicetree/bindings/interrupt-controller/arm,gic-v3.yaml, say:
+> 
+>   mbi-alias:
+>     description:
+>       Address property. Base address of an alias of the *GICD* region
+> containing
+>       only the {SET,CLR}SPI registers to be used if isolation is required,
+>       and if supported by the HW.
 
-Hi Viresh, Uffe, looking forward for your discussion/updates.
 
-Thanks,
-Roja
+[recurring theme: I happen to know about this section of the binding,
+having written the original myself]
 
->>>> 
->>>> --
->>>> viresh
->>> 
->>> Kind regards
->>> Uffe
->> 
->> - Roja
+How does that contradict my comment? GIC600's GICA page only contains
+the four {SET,CLR}_SPI registers, as expected (see section 4.3 in the
+TRM[1]), and the address is computed using table 4-1 "Register map
+pages" of the same document.
+
+Please either fix the DT or explain why the GICA distributor alias
+isn't usable.
+
+	M.
+
+[1] https://documentation-service.arm.com/static/5e7ddddacbfe76649ba53034
+
+-- 
+Without deviation from the norm, progress is not possible.
