@@ -2,324 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FA336F8BF
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Apr 2021 12:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D2036FED6
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Apr 2021 18:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbhD3K70 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Apr 2021 06:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbhD3K7Z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Apr 2021 06:59:25 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB70AC06174A;
-        Fri, 30 Apr 2021 03:58:35 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id i24so22531560edy.8;
-        Fri, 30 Apr 2021 03:58:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8xWBaV10Gk5zTcf0lrE/jDunsZwOFiT6TlpRJiJ0iIY=;
-        b=aQFnixQurTO584qp0DZsR5R/Wc5Z5fm7hR/X9+wixuIhA95Wmy8ZO3VszL+nU52Um3
-         k+4Wwry05NUwbcBYvNWxfTfwUoLSnLyHxUP+JlMTJmDJ1SRsIqlhGQiL1ZMD/knFFeal
-         8V9PqpbAaVGwSB3dTSeMWooBGFGpujnkjOtwZ0oVkscjSMheVFewo6JDphhpWVJR9/Fu
-         16/0MH2Y9cKnJTGrLRMK/+yxg9ST5mQMWiUtMFazg8syjjnpAeg3IjEgBPIuxjWGDLJd
-         QUMUSUG2EwU7iO6UNSnMT2H03vXyDCbKGw+Bth0FaviumTUDEOwNGydzkQiQtP7gMj3j
-         F+ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8xWBaV10Gk5zTcf0lrE/jDunsZwOFiT6TlpRJiJ0iIY=;
-        b=bucUEJUixXj/MDdSlDscUMoUi9TE94YHq7wXPoUf0DFQ2t/PetpIgFqjlVKrc2dYhy
-         CCUkYZohIToPBaoM34jFmN51NvQ0HQCt2AKxFooGcm7vA4VGtNcnozi+cfXdvkiINjxW
-         ycIy3GUqoWVgutWq9L9Swr08GvseaSZxtgzBrM7PnX+dCfefWYlWGU5IpfgQn8F0sdfY
-         cbXoivpZizXNIib9CFCY8hqu9S6RM9qNyzGBIWZSGNN04F6iHTL23UeTu+uJaZymT0Lt
-         xF3oLGIf80brfjSQplXXEvo7aBPZMoIKVBHw34gONn0Tf+ZaMw79JgntMALUIPZD/lvr
-         P7Gg==
-X-Gm-Message-State: AOAM531BuyQIRYa6W14OsWreOJyoR92/TVmlGpvjGhpC2cPg5Pd+bY6q
-        XwTNtIxVWYWmC2cVQCK7pGI=
-X-Google-Smtp-Source: ABdhPJzEZgBgxrLbBy1c75XIgzs3f76jZHE+f6Wo2RFq5MUv8/4LZSZg2o9jG/a8kIGmh/jVYiWidA==
-X-Received: by 2002:a05:6402:3109:: with SMTP id dc9mr5137491edb.13.1619780314537;
-        Fri, 30 Apr 2021 03:58:34 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id x20sm958240edd.58.2021.04.30.03.58.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Apr 2021 03:58:34 -0700 (PDT)
-Subject: Re: [RESEND PATCH v4 07/10] dt-bindings: soc: rockchip: Convert
- grf.txt to YAML
-To:     cl@rock-chips.com, heiko@sntech.de
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
-        linux-watchdog@vger.kernel.org, maz@kernel.org
-References: <20210429081151.17558-1-cl@rock-chips.com>
- <20210430005708.1821-1-cl@rock-chips.com>
-From:   Johan Jonker <jbx6244@gmail.com>
-Message-ID: <953e4240-77ea-ce1c-00a5-0625111ab2cd@gmail.com>
-Date:   Fri, 30 Apr 2021 12:58:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S229750AbhD3Qpa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Apr 2021 12:45:30 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:1293 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229712AbhD3Qpa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Apr 2021 12:45:30 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13UGg75S027242;
+        Fri, 30 Apr 2021 18:44:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=selector1; bh=leoHlgkF/ftolIMzLKhMrrl72r2iOxgjIvSScbSBRN8=;
+ b=P2xA66nm+lyPghzA1IvbW3luuYOcb7CKSQjbDDx02reWWoY19bCbuSoXdxk3JK0C1SxF
+ Blj+Enak4P5kvjGqg1T5+DhAjAd4Wh/jc+/KDf2JX8RDJgFX2mSQBmuPOwV8609z2eeu
+ TBHX0pb+bM6cqT8gdtyKDU+g8KSnn8EQxIKg8eGKztmsHVbUNz/+xXYcmqg2FAd5purF
+ 6x8BJtSkr6WOFa8IWCq/Sjh+re3oR97iqQRbf25LI+rFIg6C2mmmTbtm3D4nYDY4B5b5
+ J+B/LQBl2BZocKZ0FNSs0w7kN2wfiyVja4zgnEmUChoClE3CxM+AiN+W53w/FvaJ17SF kQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3881rpqb4m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Apr 2021 18:44:26 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 89B8910002A;
+        Fri, 30 Apr 2021 18:44:25 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6AC1C2C4205;
+        Fri, 30 Apr 2021 18:44:25 +0200 (CEST)
+Received: from gnbcxd0016.gnb.st.com (10.75.127.44) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 30 Apr
+ 2021 18:44:25 +0200
+Date:   Fri, 30 Apr 2021 18:44:13 +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <wsa@kernel.org>, <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@foss.st.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>
+Subject: Re: [PATCH v3 0/2] i2c: stm32f7: add SMBus-Alert support
+Message-ID: <20210430164413.GA3426@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: wsa@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com
+References: <1616998145-28278-1-git-send-email-alain.volmat@foss.st.com>
 MIME-Version: 1.0
-In-Reply-To: <20210430005708.1821-1-cl@rock-chips.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1616998145-28278-1-git-send-email-alain.volmat@foss.st.com>
+X-Disclaimer: ce message est personnel / this message is private
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-30_10:2021-04-30,2021-04-30 signatures=0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Liang,
+Hi Wolfram,
 
-On 4/30/21 2:57 AM, cl@rock-chips.com wrote:
-> From: Liang Chen <cl@rock-chips.com>
-> 
-> Current dts files with 'grf' nodes are manually verified. In order to
-> automate this process grf.txt has to be converted to YAML.
-> 
-> Add new descriptions for:
-> "rockchip,rk3568-grf", "syscon", "simple-mfd"
-> "rockchip,rk3568-pmugrf", "syscon", "simple-mfd"
+Gentle reminder about this serie about SMBus-Alert. Could you have
+a look at it ?
 
-"rockchip,rv1108-pmugrf", "syscon"
+Thanks
+Alain
 
+On Mon, Mar 29, 2021 at 08:09:03AM +0200, Alain Volmat wrote:
+> This serie adds support for SMBus Alert on the STM32F7.
+> A new binding st,smbus-alert is added in order to differenciate
+> with the existing smbus binding.
 > 
-> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> SMBA alert control and status logic must be enabled along with
+> SMBALERT# pin configured via pinctrl in the device tree. This is the
+> rational for adding "st,smbus-alert" property.
+> 
 > ---
->  .../devicetree/bindings/soc/rockchip/grf.txt  | 61 -------------------
->  .../devicetree/bindings/soc/rockchip/grf.yaml | 60 ++++++++++++++++++
->  2 files changed, 60 insertions(+), 61 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.txt
->  create mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> v3:
+> use lore.kernel.org links instead of marc.info
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.txt b/Documentation/devicetree/bindings/soc/rockchip/grf.txt
-> deleted file mode 100644
-> index f96511aa3897..000000000000
-> --- a/Documentation/devicetree/bindings/soc/rockchip/grf.txt
-> +++ /dev/null
-> @@ -1,61 +0,0 @@
-> -* Rockchip General Register Files (GRF)
-> -
-> -The general register file will be used to do static set by software, which
-> -is composed of many registers for system control.
-> -
-> -From RK3368 SoCs, the GRF is divided into two sections,
-> -- GRF, used for general non-secure system,
-> -- SGRF, used for general secure system,
-> -- PMUGRF, used for always on system
-> -
-> -On RK3328 SoCs, the GRF adds a section for USB2PHYGRF,
-> -
-> -ON RK3308 SoC, the GRF is divided into four sections:
-> -- GRF, used for general non-secure system,
-> -- SGRF, used for general secure system,
-> -- DETECTGRF, used for audio codec system,
-> -- COREGRF, used for pvtm,
-> -
-> -Required Properties:
-> -
-> -- compatible: GRF should be one of the following:
-> -   - "rockchip,px30-grf", "syscon": for px30
-> -   - "rockchip,rk3036-grf", "syscon": for rk3036
-> -   - "rockchip,rk3066-grf", "syscon": for rk3066
-> -   - "rockchip,rk3188-grf", "syscon": for rk3188
-> -   - "rockchip,rk3228-grf", "syscon": for rk3228
-> -   - "rockchip,rk3288-grf", "syscon": for rk3288
-> -   - "rockchip,rk3308-grf", "syscon": for rk3308
-> -   - "rockchip,rk3328-grf", "syscon": for rk3328
-> -   - "rockchip,rk3368-grf", "syscon": for rk3368
-> -   - "rockchip,rk3399-grf", "syscon": for rk3399
-> -   - "rockchip,rv1108-grf", "syscon": for rv1108
-> -- compatible: DETECTGRF should be one of the following:
-> -   - "rockchip,rk3308-detect-grf", "syscon": for rk3308
-> -- compatilbe: COREGRF should be one of the following:
-> -   - "rockchip,rk3308-core-grf", "syscon": for rk3308
-> -- compatible: PMUGRF should be one of the following:
-> -   - "rockchip,px30-pmugrf", "syscon": for px30
-> -   - "rockchip,rk3368-pmugrf", "syscon": for rk3368
-> -   - "rockchip,rk3399-pmugrf", "syscon": for rk3399
-> -- compatible: SGRF should be one of the following:
-> -   - "rockchip,rk3288-sgrf", "syscon": for rk3288
-> -- compatible: USB2PHYGRF should be one of the following:
-> -   - "rockchip,px30-usb2phy-grf", "syscon": for px30
-> -   - "rockchip,rk3328-usb2phy-grf", "syscon": for rk3328
-> -- compatible: USBGRF should be one of the following:
-> -   - "rockchip,rv1108-usbgrf", "syscon": for rv1108
-> -- reg: physical base address of the controller and length of memory mapped
-> -  region.
-> -
-> -Example: GRF and PMUGRF of RK3399 SoCs
-> -
-> -	pmugrf: syscon@ff320000 {
-> -		compatible = "rockchip,rk3399-pmugrf", "syscon";
-> -		reg = <0x0 0xff320000 0x0 0x1000>;
-> -	};
-> -
-> -	grf: syscon@ff770000 {
-> -		compatible = "rockchip,rk3399-grf", "syscon";
-> -		reg = <0x0 0xff770000 0x0 0x10000>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-> new file mode 100644
-> index 000000000000..21a67b9ae59c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/rockchip/grf.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Rockchip General Register Files
-> +
-> +maintainers:
-> +  - Heiko Stuebner <heiko@sntech.de>
-> +
-
-syscon.yaml uses select if compatible contains "syscon", so use select
-here too ??
-
-> +properties:
-
-> +  compatible:
-> +    items:
-
-When there are no other combinations then with syscon and simple-mfd
-then there's no need for "oneOf", but a look in the build log shows
-there are 2 (3) exceptions:
-
-#cat build-dtbs-1471909.log | grep short
-rv1108-elgin-r1.dt.yaml: syscon@202a0000: compatible:
-['rockchip,rv1108-usbgrf', 'syscon'] is too short
-rk3288-evb-act8846.dt.yaml: syscon@ff740000: compatible:
-['rockchip,rk3288-sgrf', 'syscon'] is too short
-
-https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20210430005708.1821-1-cl@rock-chips.com/
-
-===
-
-
-	pmugrf: syscon@20060000 {
-
-		compatible = "rockchip,rv1108-pmugrf", "syscon";
-
-rockchip,rv1108-pmugrf was never added to a document.
-
-		reg = <0x20060000 0x1000>;
-	};
-
-	usbgrf: syscon@202a0000 {
-		compatible = "rockchip,rv1108-usbgrf", "syscon";
-		reg = <0x202a0000 0x1000>;
-	};
-===
-
-  compatible:
-    oneOf:
-      - items:
-          - enum:
-              - rockchip,rk3288-sgrf
-===
-              - rockchip,rv1108-pmugrf
-===
-              - rockchip,rv1108-usbgrf
-          - const: syscon
-      - items:
-          - enum:
-              - rockchip,px30-grf
-              - rockchip,px30-pmugrf
-              - rockchip,px30-usb2phy-grf
-              - rockchip,rk3036-grf
-              - rockchip,rk3066-grf
-              - rockchip,rk3188-grf
-              - rockchip,rk3228-grf
-              - rockchip,rk3288-grf
-              - rockchip,rk3308-core-grf
-              - rockchip,rk3308-detect-grf
-              - rockchip,rk3308-grf
-              - rockchip,rk3328-grf
-              - rockchip,rk3328-usb2phy-grf
-              - rockchip,rk3368-grf
-              - rockchip,rk3368-pmugrf
-              - rockchip,rk3399-grf
-              - rockchip,rk3399-pmugrf
-              - rockchip,rk3568-grf
-              - rockchip,rk3568-pmugrf
-              - rockchip,rv1108-grf
-          - const: syscon
-          - const: simple-mfd
-
-> +      - enum:
-> +          - rockchip,px30-grf
-> +          - rockchip,px30-pmugrf
-> +          - rockchip,px30-usb2phy-grf
-> +          - rockchip,rk3036-grf
-> +          - rockchip,rk3066-grf
-> +          - rockchip,rk3188-grf
-> +          - rockchip,rk3228-grf
-> +          - rockchip,rk3288-grf
-> +          - rockchip,rk3288-sgrf
-> +          - rockchip,rk3308-core-grf
-> +          - rockchip,rk3308-detect-grf
-> +          - rockchip,rk3308-grf
-> +          - rockchip,rk3328-grf
-> +          - rockchip,rk3328-usb2phy-grf
-> +          - rockchip,rk3368-grf
-> +          - rockchip,rk3368-pmugrf
-> +          - rockchip,rk3399-grf
-> +          - rockchip,rk3399-pmugrf
-> +          - rockchip,rk3568-grf
-> +          - rockchip,rk3568-pmugrf
-> +          - rockchip,rv1108-grf
-> +          - rockchip,rv1108-usbgrf
-> +      - const: syscon
-> +      - const: simple-mfd
-
-> +
-> +  reg:> +    maxItems: 1
-
-"#address-cells":
-  const: 1
-
-"#size-cells":
-  const: 1
-
-rk3228-evb.dt.yaml: syscon@11000000: '#address-cells', '#size-cells',
-'io-domains', 'usb2-phy@760', 'usb2-phy@800' do not match any of the
-regexes: 'pinctrl-[0-9]+'
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-
-> +additionalProperties: false
-
-additionalProperties: true
-
-> +
-> +examples:
-> +  - |
-> +    pmugrf: syscon@ff320000 {
-> +       compatible = "rockchip,rk3399-pmugrf", "syscon", "simple-mfd";
-> +       reg = <0xff320000 0x1000>;
-> +    };
-> +
-> +    grf: syscon@ff770000 {
-> +       compatible = "rockchip,rk3399-grf", "syscon", "simple-mfd";
-> +       reg = <0xff770000 0x10000>;
-> +    };
+> v2:
+> When SMBUS alert isn't available on the board (SMBA unused), this
+> logic musn't be enabled. Enabling it unconditionally wrongly lead to get
+> SMBA interrupts.
+> So, add "st,smbus-alert" dedicated binding to have a smbus alert with a
+> consistent pin configuration in DT.
+> 
+> Alain Volmat (2):
+>   dt-bindings: i2c: stm32f7: add st,smbus-alert binding for SMBus Alert
+>   i2c: stm32f7: add SMBus-Alert support
+> 
+>  .../devicetree/bindings/i2c/st,stm32-i2c.yaml |  5 ++
+>  drivers/i2c/busses/i2c-stm32f7.c              | 73 +++++++++++++++++++
+>  2 files changed, 78 insertions(+)
+> 
+> -- 
+> 2.17.1
 > 
