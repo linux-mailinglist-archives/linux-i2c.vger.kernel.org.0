@@ -2,213 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9842636F34C
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Apr 2021 02:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E5636F359
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Apr 2021 02:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbhD3A6L (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 29 Apr 2021 20:58:11 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:34590 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbhD3A6K (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Apr 2021 20:58:10 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id AB885C8384;
-        Fri, 30 Apr 2021 08:57:13 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P2750T140649254856448S1619744230489242_;
-        Fri, 30 Apr 2021 08:57:12 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <c119bfe221fbe0f0567aca69b659593d>
-X-RL-SENDER: cl@rock-chips.com
-X-SENDER: cl@rock-chips.com
-X-LOGIN-NAME: cl@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-RCPT-COUNT: 30
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   <cl@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
-Subject: [RESEND PATCH v4 07/10] dt-bindings: soc: rockchip: Convert grf.txt to YAML
-Date:   Fri, 30 Apr 2021 08:57:08 +0800
-Message-Id: <20210430005708.1821-1-cl@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210429081151.17558-1-cl@rock-chips.com>
-References: <20210429081151.17558-1-cl@rock-chips.com>
+        id S229832AbhD3A7q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 29 Apr 2021 20:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229519AbhD3A7q (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Apr 2021 20:59:46 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B491C06138D
+        for <linux-i2c@vger.kernel.org>; Thu, 29 Apr 2021 17:58:57 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id b21so6252902ljf.11
+        for <linux-i2c@vger.kernel.org>; Thu, 29 Apr 2021 17:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ug9+khgowmMqU2OH1VgDimh2CfwPCpiExOxiCSc2h0I=;
+        b=UxYUIpC8zsej/AXMWEHLS+xgrFyIWrbe7S8c1+dqc6mKLDjUldq5OrdhSuTcgwyGvX
+         EKur9XF+1qsoYmcQmJdKijXOXA5igWdz5sgsZ7NURwA0CR0W3b1Jl2E9pixlRFIfjyLn
+         it+7n6Dz5UefHeJ3m1vDdsE2T22SE+/8blWlA6RTpDRqmlxsX8wPwlRRsSnVtBcxMXsp
+         RELuSlLchmV/w47kuL3vicmHMyaRa6u36BXD3257xyrLaRtMPNwkYDNbDQ+XT4n+4Ktl
+         K1viEypW8UvyiH61oVCc3HvBUjmC4UUWD+hkdEW3HwU3Jkc5lkk4pbfoeT4ytnx+7Rp/
+         cbMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ug9+khgowmMqU2OH1VgDimh2CfwPCpiExOxiCSc2h0I=;
+        b=rXOJVQiNF8Ygdf+alLmFiQhmr7wpIsvV26z5JR8VcKV8JgIzmQDdNd+qNtqMsEeG1q
+         OqAZYvE9xU8yACd3YPWXpvHe7Uju+EwdLbu/RYy9+XASj8/znk8mPN0b7d5Ejm/L+/9j
+         cM3tcgC2VmZFfxGJjxhMVpCN00pkqCo/+0gt5NlF5gUSGrVSXPVAlBWWfJ5tOn0m3sNu
+         Uk6M3v2wl6kaf0I6KCS7QNEE8755Gk61tuhSLeukrlvvnw5JnaX50hgfa1cRFQw1PoB6
+         z9IN23D2d+1140oVwGYUMqRQ+SgGbANtGctU0OdHC7S6e3waevHqckHzapGWFeok+FE1
+         38PA==
+X-Gm-Message-State: AOAM531X5P7aP/bQLrKwHikzbAQ1ozV1/QScCE8zKj2J1cySws07SNIe
+        HhibzicEgtnFXMBLBxwVv+ld2iNIFrWaJtvOqJHLAQ==
+X-Google-Smtp-Source: ABdhPJwlDZuKaqC8sT7GBS1lf5GJl0FtZXQZiW32Kva3RDd+ccG2UGF9RZliYJHFvIg1Ax8Qelrh/y+Im6KaZthl1FQ=
+X-Received: by 2002:a05:651c:503:: with SMTP id o3mr1774994ljp.368.1619744336001;
+ Thu, 29 Apr 2021 17:58:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210423165906.2504169-1-dianders@chromium.org> <20210423095743.v5.1.I9e6af2529d6c61e5daf86a15a1211121c5223b9a@changeid>
+In-Reply-To: <20210423095743.v5.1.I9e6af2529d6c61e5daf86a15a1211121c5223b9a@changeid>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 30 Apr 2021 02:58:45 +0200
+Message-ID: <CACRpkdYkRFLvCRPSYNzYQG58QgPfhvjtHb+FBQZadyrnjC8=1A@mail.gmail.com>
+Subject: Re: [PATCH v5 01/20] drm/panel: panel-simple: Add missing
+ pm_runtime_disable() calls
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Sam Ravnborg <sam@ravnborg.org>, Wolfram Sang <wsa@kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Liang Chen <cl@rock-chips.com>
+On Fri, Apr 23, 2021 at 6:59 PM Douglas Anderson <dianders@chromium.org> wrote:
 
-Current dts files with 'grf' nodes are manually verified. In order to
-automate this process grf.txt has to be converted to YAML.
+> In commit 3235b0f20a0a ("drm/panel: panel-simple: Use runtime pm to
+> avoid excessive unprepare / prepare") we started using pm_runtime, but
+> my patch neglected to add the proper pm_runtime_disable(). Doh! Add
+> them now.
+>
+> Fixes: 3235b0f20a0a ("drm/panel: panel-simple: Use runtime pm to avoid excessive unprepare / prepare")
+> Reported-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Add new descriptions for:
-"rockchip,rk3568-grf", "syscon", "simple-mfd"
-"rockchip,rk3568-pmugrf", "syscon", "simple-mfd"
+This patch as such:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Signed-off-by: Liang Chen <cl@rock-chips.com>
----
- .../devicetree/bindings/soc/rockchip/grf.txt  | 61 -------------------
- .../devicetree/bindings/soc/rockchip/grf.yaml | 60 ++++++++++++++++++
- 2 files changed, 60 insertions(+), 61 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.txt
- create mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+Notice however: you turn on pm runtime pm_runtime_enable()
+in panel_simple_probe() but are you ever turning it off in
+panel_simple_remove()?
 
-diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.txt b/Documentation/devicetree/bindings/soc/rockchip/grf.txt
-deleted file mode 100644
-index f96511aa3897..000000000000
---- a/Documentation/devicetree/bindings/soc/rockchip/grf.txt
-+++ /dev/null
-@@ -1,61 +0,0 @@
--* Rockchip General Register Files (GRF)
--
--The general register file will be used to do static set by software, which
--is composed of many registers for system control.
--
--From RK3368 SoCs, the GRF is divided into two sections,
--- GRF, used for general non-secure system,
--- SGRF, used for general secure system,
--- PMUGRF, used for always on system
--
--On RK3328 SoCs, the GRF adds a section for USB2PHYGRF,
--
--ON RK3308 SoC, the GRF is divided into four sections:
--- GRF, used for general non-secure system,
--- SGRF, used for general secure system,
--- DETECTGRF, used for audio codec system,
--- COREGRF, used for pvtm,
--
--Required Properties:
--
--- compatible: GRF should be one of the following:
--   - "rockchip,px30-grf", "syscon": for px30
--   - "rockchip,rk3036-grf", "syscon": for rk3036
--   - "rockchip,rk3066-grf", "syscon": for rk3066
--   - "rockchip,rk3188-grf", "syscon": for rk3188
--   - "rockchip,rk3228-grf", "syscon": for rk3228
--   - "rockchip,rk3288-grf", "syscon": for rk3288
--   - "rockchip,rk3308-grf", "syscon": for rk3308
--   - "rockchip,rk3328-grf", "syscon": for rk3328
--   - "rockchip,rk3368-grf", "syscon": for rk3368
--   - "rockchip,rk3399-grf", "syscon": for rk3399
--   - "rockchip,rv1108-grf", "syscon": for rv1108
--- compatible: DETECTGRF should be one of the following:
--   - "rockchip,rk3308-detect-grf", "syscon": for rk3308
--- compatilbe: COREGRF should be one of the following:
--   - "rockchip,rk3308-core-grf", "syscon": for rk3308
--- compatible: PMUGRF should be one of the following:
--   - "rockchip,px30-pmugrf", "syscon": for px30
--   - "rockchip,rk3368-pmugrf", "syscon": for rk3368
--   - "rockchip,rk3399-pmugrf", "syscon": for rk3399
--- compatible: SGRF should be one of the following:
--   - "rockchip,rk3288-sgrf", "syscon": for rk3288
--- compatible: USB2PHYGRF should be one of the following:
--   - "rockchip,px30-usb2phy-grf", "syscon": for px30
--   - "rockchip,rk3328-usb2phy-grf", "syscon": for rk3328
--- compatible: USBGRF should be one of the following:
--   - "rockchip,rv1108-usbgrf", "syscon": for rv1108
--- reg: physical base address of the controller and length of memory mapped
--  region.
--
--Example: GRF and PMUGRF of RK3399 SoCs
--
--	pmugrf: syscon@ff320000 {
--		compatible = "rockchip,rk3399-pmugrf", "syscon";
--		reg = <0x0 0xff320000 0x0 0x1000>;
--	};
--
--	grf: syscon@ff770000 {
--		compatible = "rockchip,rk3399-grf", "syscon";
--		reg = <0x0 0xff770000 0x0 0x10000>;
--	};
-diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-new file mode 100644
-index 000000000000..21a67b9ae59c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/rockchip/grf.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip General Register Files
-+
-+maintainers:
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - rockchip,px30-grf
-+          - rockchip,px30-pmugrf
-+          - rockchip,px30-usb2phy-grf
-+          - rockchip,rk3036-grf
-+          - rockchip,rk3066-grf
-+          - rockchip,rk3188-grf
-+          - rockchip,rk3228-grf
-+          - rockchip,rk3288-grf
-+          - rockchip,rk3288-sgrf
-+          - rockchip,rk3308-core-grf
-+          - rockchip,rk3308-detect-grf
-+          - rockchip,rk3308-grf
-+          - rockchip,rk3328-grf
-+          - rockchip,rk3328-usb2phy-grf
-+          - rockchip,rk3368-grf
-+          - rockchip,rk3368-pmugrf
-+          - rockchip,rk3399-grf
-+          - rockchip,rk3399-pmugrf
-+          - rockchip,rk3568-grf
-+          - rockchip,rk3568-pmugrf
-+          - rockchip,rv1108-grf
-+          - rockchip,rv1108-usbgrf
-+      - const: syscon
-+      - const: simple-mfd
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    pmugrf: syscon@ff320000 {
-+       compatible = "rockchip,rk3399-pmugrf", "syscon", "simple-mfd";
-+       reg = <0xff320000 0x1000>;
-+    };
-+
-+    grf: syscon@ff770000 {
-+       compatible = "rockchip,rk3399-grf", "syscon", "simple-mfd";
-+       reg = <0xff770000 0x10000>;
-+    };
--- 
-2.17.1
+I think pm_runtime_disable(); need to be added there?
 
-
-
+Yours,
+Linus Walleij
