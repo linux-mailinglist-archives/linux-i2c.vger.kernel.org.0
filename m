@@ -2,208 +2,177 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78486370213
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Apr 2021 22:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAA0370299
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Apr 2021 23:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235948AbhD3U37 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Apr 2021 16:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
+        id S231316AbhD3VFp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Apr 2021 17:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234471AbhD3U37 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Apr 2021 16:29:59 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C31EC06174A;
-        Fri, 30 Apr 2021 13:29:10 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id n2so107086455ejy.7;
-        Fri, 30 Apr 2021 13:29:10 -0700 (PDT)
+        with ESMTP id S231287AbhD3VFo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Apr 2021 17:05:44 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81092C06174A
+        for <linux-i2c@vger.kernel.org>; Fri, 30 Apr 2021 14:04:55 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id k127so16579745qkc.6
+        for <linux-i2c@vger.kernel.org>; Fri, 30 Apr 2021 14:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Wrp/1A4Vx3OcbB2pr/PEDNHt/zuDZ0QGymHwI8CKIHg=;
-        b=EY+IEzBUu9oW5ND5WvGXq8irviGV51BVZB/O3Zuztl09Q1rCW+7Ytf+kbvQ8J/IONX
-         sa5FRjyjdK7CfM7edv5v87pTGvSmtSQhm/I9n/IFA6ydKhNL6Pdy4S7zNIWx3F5XKMh4
-         QqQYDMQ4KB08czfy3KaNmEagCc92tSObszTsL7tWA9k1Rm/bt/u17BnmBG3fF2J1dwok
-         rDWwmQvPFWagsI4tIfva00Jqe4fYsPb56e+ZqYE/EDGbUVI0Pd0mayzLN8H4j3z7lFKg
-         H3PpdOHA4dygCIzqWgRCYQBdIVQTC1H7N0gtUv0BcKjlu+mONsymqkgR3tItKiXoHXVg
-         tKKA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ydzc/UQSfGeVQNFG/QnxGDWnpFhecwtLoJxqG8ZG8Cg=;
+        b=Ov5R523poXhFI1+DTO58fwJyVG5rNJSwtnBjJkc2d0NfuddPNjyjVNuQDvPuV3xvSz
+         HvpREttduQPxVSPQAOIyOYBQxfZyhIf/3wphxaf8asWM5RUMbVBRfrz5KxXU54bvlJws
+         Xz7/VHZ58xLOEFJrCnt8mUt8eX7GqtBE7DXmA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Wrp/1A4Vx3OcbB2pr/PEDNHt/zuDZ0QGymHwI8CKIHg=;
-        b=S5e4j6QPspDYeebRDfUVCXhIZrafdnzM1W0f6G0F74ZQNc/icg2uP6+IMUEoBhj0gR
-         HQBvvP9HA92BSM3sfBvYlAv6gyJ01EcBZJOT1QAhXyFVZy5ReZY+piwsigz06Iq+iWwF
-         /jxPkBW+ly0zuqVD0SInTn9FZduuAEJR+PBAYDU3zVMljPt+rSJscgWvNWX/R4PlDv0S
-         T8ywuSIFgLsZB++qDe/daIDs/Lc7GEOSdvdO23vnL4wercWjvSya3/JelyAZSQym+Thr
-         uGoiIY+5C0JTVbGTRi5YHzMB2OuOBlNPEco4p6b3wylAhyah5509jcE7+q5NyG9vO2Dq
-         LbCg==
-X-Gm-Message-State: AOAM5315eIWAar515tg8lUgM3NUM4lxpwuCZXKwcX1fJub2Oyezc+EKW
-        bHsPZ2tw8KBPa5Lj2rgMXk8=
-X-Google-Smtp-Source: ABdhPJzx0kI7Y5mCHmBcgoMkoXDcdMXPnCoSKVhqyWYiLS59obUrogmNsVukVf6Nz96RySLz4B/BRQ==
-X-Received: by 2002:a17:907:1b1e:: with SMTP id mp30mr6448680ejc.532.1619814548930;
-        Fri, 30 Apr 2021 13:29:08 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id da25sm2568034edb.38.2021.04.30.13.29.06
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ydzc/UQSfGeVQNFG/QnxGDWnpFhecwtLoJxqG8ZG8Cg=;
+        b=LqCN9Z+P+K0atuYNeZLCzfKz2nuIDmmRGR0C6dWYKEnGM0Q/r4eb70R4hMuKmAcoiz
+         Ua1WCgUlqxjjnlk3ca9ynf1X6qKBwo7P4v0vn4YNvxwh3+HzdTAQWpUUWnMnVe+DbdJC
+         rkCRKLrArBWQ81RDFtKNEe1rZ3VwVTSJaNg7isGHzoBWKLLrbVfcN+l/dposDbeUTcVa
+         +jbYsRazDWK2s3EZjFOyLRMNc24XLzNTcPt54w+8uhKn2RPJi728VxT8i4y3oduZOQHw
+         hNGzq2TgmTTBb4VsbDe4xNX8ffv3n3LcLDSWR9t1ZdaZp2EN/NeC0OtJxhZcWEHaGaGP
+         F3SA==
+X-Gm-Message-State: AOAM533dshACzgdHgLigoE76OKgIcBXMo2SbHj7o43DVAIkkqM4aGR/4
+        uFNjCyMR3+CeKcEbQv+DtuYDcP3K49XOxA==
+X-Google-Smtp-Source: ABdhPJyhzPg50iSOksKKWhAw46NY/wBBW/WhVlUqwxWUc0Vm5KJDHwyTsYyeVVj3UAlq+fIQI/yFcQ==
+X-Received: by 2002:a37:42d3:: with SMTP id p202mr5931557qka.456.1619816694309;
+        Fri, 30 Apr 2021 14:04:54 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id d10sm2420655qki.122.2021.04.30.14.04.52
+        for <linux-i2c@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Apr 2021 13:29:08 -0700 (PDT)
-Subject: Re: [PATCH v4 07/10] dt-bindings: soc: rockchip: Convert grf.txt to
- YAML
-To:     Rob Herring <robh@kernel.org>, cl@rock-chips.com
-Cc:     heiko@sntech.de, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
-        linux-watchdog@vger.kernel.org, maz@kernel.org
-References: <20210429081151.17558-1-cl@rock-chips.com>
- <20210429081321.17855-1-cl@rock-chips.com>
- <20210429212413.GA1794356@robh.at.kernel.org>
-From:   Johan Jonker <jbx6244@gmail.com>
-Message-ID: <c4130ba7-5f28-57e9-f391-89b6539fb29c@gmail.com>
-Date:   Fri, 30 Apr 2021 22:29:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        Fri, 30 Apr 2021 14:04:52 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id g38so84839414ybi.12
+        for <linux-i2c@vger.kernel.org>; Fri, 30 Apr 2021 14:04:52 -0700 (PDT)
+X-Received: by 2002:a25:6088:: with SMTP id u130mr10217798ybb.257.1619816691670;
+ Fri, 30 Apr 2021 14:04:51 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210429212413.GA1794356@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210423165906.2504169-1-dianders@chromium.org>
+ <20210423095743.v5.1.I9e6af2529d6c61e5daf86a15a1211121c5223b9a@changeid>
+ <CACRpkdYkRFLvCRPSYNzYQG58QgPfhvjtHb+FBQZadyrnjC8=1A@mail.gmail.com>
+ <CAD=FV=UX683grZ=poTwKXxSqYBCLdLAOCxOPhE_xVVgKbe36Mw@mail.gmail.com> <CACRpkdYfugrJ4WGn=w+viGXE6s5cdHjLC++jHPLVy_QH09KA8Q@mail.gmail.com>
+In-Reply-To: <CACRpkdYfugrJ4WGn=w+viGXE6s5cdHjLC++jHPLVy_QH09KA8Q@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 30 Apr 2021 14:04:39 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XXxTz8hi92y6p3hX7iVEHuqKHsrKPSnX_a__WCEQRAKw@mail.gmail.com>
+Message-ID: <CAD=FV=XXxTz8hi92y6p3hX7iVEHuqKHsrKPSnX_a__WCEQRAKw@mail.gmail.com>
+Subject: Re: [PATCH v5 01/20] drm/panel: panel-simple: Add missing
+ pm_runtime_disable() calls
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Sam Ravnborg <sam@ravnborg.org>, Wolfram Sang <wsa@kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 4/29/21 11:24 PM, Rob Herring wrote:
-> On Thu, Apr 29, 2021 at 04:13:21PM +0800, cl@rock-chips.com wrote:
->> From: Liang Chen <cl@rock-chips.com>
->>
->> Current dts files with 'grf' nodes are manually verified. In order to
->> automate this process grf.txt has to be converted to YAML.
->>
->> Add new descriptions for:
->> "rockchip,rk3568-grf", "syscon", "simple-mfd"
->> "rockchip,rk3568-pmugrf", "syscon", "simple-mfd"
->>
->> Signed-off-by: Liang Chen <cl@rock-chips.com>
->> ---
-
-[..]
-
->> +properties:
->> +  compatible:
->> +    - items:
-> 
-> The '-' is the source of your error.
-> 
->> +        - enum:
->> +            - rockchip,px30-grf
->> +            - rockchip,px30-pmugrf
->> +            - rockchip,px30-usb2phy-grf
->> +            - rockchip,rk3036-grf
->> +            - rockchip,rk3066-grf
->> +            - rockchip,rk3188-grf
->> +            - rockchip,rk3228-grf
->> +            - rockchip,rk3288-grf
->> +            - rockchip,rk3288-sgrf
->> +            - rockchip,rk3308-core-grf
->> +            - rockchip,rk3308-detect-grf
->> +            - rockchip,rk3308-grf
->> +            - rockchip,rk3328-grf
->> +            - rockchip,rk3328-usb2phy-grf
->> +            - rockchip,rk3368-grf
->> +            - rockchip,rk3368-pmugrf
->> +            - rockchip,rk3399-grf
->> +            - rockchip,rk3399-pmugrf
->> +            - rockchip,rk3568-grf
->> +            - rockchip,rk3568-pmugrf
->> +            - rockchip,rv1108-grf
->> +            - rockchip,rv1108-usbgrf
->> +        - const: syscon
->> +        - const: simple-mfd
-> 
-
-> 'simple-mfd' was not in the old binding. That implies you have child 
-> nodes, and if so, they need to be documented. I imagine that will mean 
-> splitting this into multiple schemas if that's the case.
-> 
-
 Hi,
 
-Question for rob+dt:
+On Thu, Apr 29, 2021 at 6:28 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Fri, Apr 30, 2021 at 3:25 AM Doug Anderson <dianders@chromium.org> wrote:
+>
+> > > I think pm_runtime_disable(); need to be added there?
+> >
+> > I'm a bit confused. You're saying that I need to add
+> > pm_runtime_disable() to panel_simple_remove()? Doesn't this patch do
+> > that?
+>
+> It does, sorry, too late at night :D
+>
+> I was looking at the previous patch and mixed up which was the
+> patch and the patch to the patch...
+>
+> Thanks, apply this!
 
-Given that a number of txt documents still are in need for YAML
-conversion. Which is a bit beyond the author of this serie.
-The core rk3568.dtsi is needed for other series to base on.
+Pushed this one patch. Rest of the series is pending adult
+supervision. Overall summary:
 
-To speed things up a bit and reduce the work load:
-Is it possible to add the grf compatibles in use first and do the rest
-of the subnodes for various SoCs later?
+1. I could probably push some of the early sn65dsi86 cleanup patches
+in this series since they have Bjorn's review and are pretty much
+no-ops / simple cleanups, but there's probably not tons gained for
+shoving those in early.
 
-Is it possible to add for now to reduce notification output:
+2. The whole concept of breaking up the patch into sub-drivers has no
+official Reviewed-by tags yet. Presumably Bjorn will give those a
+re-review when he has time again. Assuming nobody is really upset
+about it, I could land those which might unblock some of Bjorn's
+future PWM work. It would probably be good to get an extra set of eyes
+on them, though, just so someone else agrees that they're not "too
+hacky" or anything. IMO it's actually a pretty nice solution, but I'm
+biased!
 
-additionalProperties: true
+3. Laurent and I had a big discussion on #dri-devel yesterday about
+the EDID reading. He's not totally convinced with the idea of doing
+this in the panel when the bridge could just do it by itself, but it
+sounded like he might be coming around. Right now this is waiting on
+Laurent to have time to get back to this.
 
-and then later:
+My summary of the IRC discussion with Laurent (please correct if I got
+this wrong):
 
-additionalProperties: false
+a) In general I argued that it was important to be able to provide the
+EDID and the DDC bus to the panel driver. Providing the EDID to the
+panel driver allows the panel driver is one of the prerequisites for
+my proposal for solving the "panel second sourcing" problem [1]. Being
+able to provide the DDC bus to the panel will likely be important in
+the eventual solution to Rajeev's problem [2].
 
+b) Today, if we provide the DDC bus to simple-panel then simple-panel
+will assume it's in charge of reading the EDID.
 
-===
+c) Having the panel driver involved in reading the EDID feels like it
+makes sense to me. The panel driver knows how to power the panel on
+enough to read the EDID. It also might know extra quirks needed to
+read the EDID on a given panel. This feels a little cleaner (to me)
+than just re-using the panel's "prepare" and assuming that a prepared
+panel was ready for EDID read, though I can see that both may have
+their advantages.
 
-From build log:
+d) Laurent proposed that some eDP controllers might have special ways
+to read an EDID but might not be able to provide a DDC bus or an i2c
+bus. If we run into controllers like this then we would be painted
+into a corner and we'd have to come up with a new solution. This is
+definitely a good point, though it remains to be seen if this is
+common with eDP (like Laurent says it is for HDMI). Some eDP panels
+need custom DDC commands in order to be configured and so hopefully
+all eDP bridges out there at least provide a DDC bus. It does feel
+like this could be solved later, though. My patch series is leveraging
+the existing concept that the panel driver is in charge of reading the
+EDID if it's given the DDC bus, so it's not creating a new mechanism
+but instead just continuing to use the existing mechanism. If the
+existing mechanism doesn't work then it can be improved when there is
+a need.
 
-#address-cells
-#size-cells
-reboot-mode
-io-domains
-usb2-phy@100
-mipi-dphy-rx0
-pcie-phy
-phy@f780
-edp-phy
-usbphy
-lvds
-power-controller
-grf-gpio
+e) Laurent worried about circular dependencies and wanted to see my
+solution to the problem before deciding if it was too big of a hack.
+Hopefully it looks OK since it solves not only this problem but also
+the HPD GPIO problem and will be important for when Bjorn exports the
+PWM from the bridge chip.
 
-===
+[1] https://lore.kernel.org/lkml/CAD=FV=VZYOMPwQZzWdhJGh5cjJWw_EcM-wQVEivZ-bdGXjPrEQ@mail.gmail.com/
+[2] https://lore.kernel.org/r/78c4bd291bd4a17ae2a1d02d0217de43@codeaurora.org
 
-Example for rk3399:
+OK, I'll shut up now. ;-)
 
-	grf: syscon@ff770000 {
-		compatible = "rockchip,rk3399-grf", "syscon", "simple-mfd";
-
-		io_domains: io-domains {
-			compatible = "rockchip,rk3399-io-voltage-domain"; //
-rockchip-io-domain.txt
-		};
-
-		mipi_dphy_rx0: mipi-dphy-rx0 {
-			compatible = "rockchip,rk3399-mipi-dphy-rx0"; //
-rockchip-mipi-dphy-rx0.yaml
-		};
-
-		u2phy0: usb2-phy@e450 {
-			compatible = "rockchip,rk3399-usb2phy"; // phy-rockchip-inno-usb2.yaml
-		};
-
-		u2phy1: usb2-phy@e460 {
-			compatible = "rockchip,rk3399-usb2phy"; // phy-rockchip-inno-usb2.yaml
-		};
-
-		emmc_phy: phy@f780 {
-			compatible = "rockchip,rk3399-emmc-phy"; // rockchip-emmc-phy.txt
-		};
-
-		pcie_phy: pcie-phy {
-			compatible = "rockchip,rk3399-pcie-phy"; // rockchip-pcie-phy.txt
-		};
-	};
+-Doug
