@@ -2,81 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 323AF370315
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Apr 2021 23:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2404370718
+	for <lists+linux-i2c@lfdr.de>; Sat,  1 May 2021 13:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbhD3VlM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Apr 2021 17:41:12 -0400
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:37644 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbhD3VlL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Apr 2021 17:41:11 -0400
-Received: by mail-oi1-f180.google.com with SMTP id k25so71404371oic.4;
-        Fri, 30 Apr 2021 14:40:22 -0700 (PDT)
+        id S231878AbhEAMAJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 1 May 2021 08:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231886AbhEAMAI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 May 2021 08:00:08 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF485C06138C
+        for <linux-i2c@vger.kernel.org>; Sat,  1 May 2021 04:59:18 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id b23so1084181lfv.8
+        for <linux-i2c@vger.kernel.org>; Sat, 01 May 2021 04:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QLxSp/ePlciHnCzVMGdXgyEZo0R6BmfwYtxDKjI/pqU=;
+        b=jcIi+kb7+jywxzREwePLOZyikDcoPK0Z0M1f/JhBnLif3jWV6ATJl0nXzhuKTa72Qm
+         PQMeKbrrwBH5qU6RcI+NNhRgPjaBrwIYgPMpQvGGv4MtxK1r7IIEWX/CQ02RVRl1iFbP
+         P42ki89fVr+tczmJUY02sjARyeOt/wHldYK1fffQ9dF5dcWQqYv7a03b2KoKkb/yXUB7
+         czOvMyriPuA18ukQogxg9Z3Yk57cksDHyHt43PE/7IA3zPwZH4HW8aFNpNk1EGarsOXl
+         pUjfQOfyivF2OAuny4eJEDvj7wVkpPBX0oatWIhPAKVSouQyEufzyxJr1bzere5HjMFs
+         edJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HyP+/B8IS6YJDID6abklHLjJCypbL5+nqtHOxB04MIc=;
-        b=k54vnJW994xRKr+75Pg/7okBbsygXKE7CwkLrqiE8KkxEmCFd43xupVC0vlFXYoY0j
-         DepL77rIsvIW89gCOyECurtu3ey5mvutd0i9RdiBGsnBiHstXknmgk1Qn3aZEY6EcmYk
-         FKzYc1NOCk2qaHbo4WsOvOlHFU4CHSHqdUVpU92zuK86uMHoIi5WLG20xXHDmJ5P3505
-         F+t3J2Kxmwnepg8UGrJ+tbNKCN1jAlmu/XMEtvTK5MYNnTqSQMhRd9I0VwIYiIBuCzB/
-         LEDyWEU0QAIJVRyRFvmGQndhx9p7S4CBPTAJAevoDYQMx0IDA+fKnI4+gdW7SFSst8/P
-         z1+g==
-X-Gm-Message-State: AOAM533ZADvg3m6mf5rSrHYvgYfR19mcSJQDq7y3+bFYLrcwTJaGey+J
-        oYp7NUB83DDYSuwGkEt3+zYK8XZyuQ==
-X-Google-Smtp-Source: ABdhPJzdPPDNaaPujlksMqGMKWRckmWYPJeon7Q6a4hGNPO4H4oDJeevftRsqwFKpyxgJV+kULFuyw==
-X-Received: by 2002:aca:f008:: with SMTP id o8mr5635930oih.106.1619818821938;
-        Fri, 30 Apr 2021 14:40:21 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 10sm972253oiq.48.2021.04.30.14.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Apr 2021 14:40:21 -0700 (PDT)
-Received: (nullmailer pid 3946462 invoked by uid 1000);
-        Fri, 30 Apr 2021 21:40:19 -0000
-Date:   Fri, 30 Apr 2021 16:40:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     cl@rock-chips.com
-Cc:     jamie@jamieiles.com, jbx6244@gmail.com, linux@roeck-us.net,
-        wens@csie.org, linux-watchdog@vger.kernel.org, robh+dt@kernel.org,
-        jay.xu@rock-chips.com, gregkh@linuxfoundation.org,
-        zhangqing@rock-chips.com, jagan@amarulasolutions.com,
-        huangtao@rock-chips.com, ulf.hansson@linaro.org,
-        wim@linux-watchdog.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        maz@kernel.org, cnsztl@gmail.com, linux-i2c@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, mail@david-bauer.net,
-        shawn.lin@rock-chips.com, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org, heiko@sntech.de, uwe@kleine-koenig.org,
-        jensenhuang@friendlyarm.com, david.wu@rock-chips.com,
-        michael@amarulasolutions.com
-Subject: Re: [PATCH v4 10/10] arm64: dts: rockchip: add basic dts for RK3568
- EVB
-Message-ID: <20210430214019.GA3946409@robh.at.kernel.org>
-References: <20210429081151.17558-1-cl@rock-chips.com>
- <20210429081358.18057-1-cl@rock-chips.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QLxSp/ePlciHnCzVMGdXgyEZo0R6BmfwYtxDKjI/pqU=;
+        b=ZPYysllQAZb3bm8BdDQDk43oVWuXbAH35b+J1nYDyBq12skrU8K/jz9qDFOox6MIkR
+         6XIZ2X3ZhKgWAuCtXtvRC8u8Mc06WNcniICqH6OKRkXBD/Pe0PKAu1fgLe1108+1D8Vi
+         c54NoPIdC3UdLSXmXtDSSxqL0G69rG+1ZsTDNCGRAcS7mWLm1oABWRsukJBoZ8W8z61q
+         WpDxkMFJYdvK09QG/4DmTAGD6y/D1la9qjmJyLHvnrTxsTtaHsEf+mhm3lx2xf554oeE
+         t/GUFM2i+ZctAlOMVS5nn4dqaWWvwWXvP4xR6WJa2BGdTJVzbEDb9mbqtmi9NsSep3DT
+         Ochw==
+X-Gm-Message-State: AOAM533qaC8Uca5B4H70VbxLlGsT7/Pw/epXlT1oRfh1LXE1cSjFuk9S
+        DyNHdjmfTXCVtfyIOeFPEEaUynzqFewzIwzIWqGFNw==
+X-Google-Smtp-Source: ABdhPJw+F9WmElJwhUk24Nw7bpvwEd3U15o9b5hWV9qrpBy3C0X7Zj7MCbUNd4hF1kIE4C9w9FMOjoMDoXiThg28GGk=
+X-Received: by 2002:a05:6512:3e1f:: with SMTP id i31mr6880595lfv.29.1619870357179;
+ Sat, 01 May 2021 04:59:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210429081358.18057-1-cl@rock-chips.com>
+References: <20210423165906.2504169-1-dianders@chromium.org> <20210423095743.v5.9.I3e68fa38c4ccbdbdf145cad2b01e83a1e5eac302@changeid>
+In-Reply-To: <20210423095743.v5.9.I3e68fa38c4ccbdbdf145cad2b01e83a1e5eac302@changeid>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 1 May 2021 13:59:06 +0200
+Message-ID: <CACRpkdbZxauBFLvR_MMx4WD+K6DftK19Fivt_mkE=+Xr2EPUvQ@mail.gmail.com>
+Subject: Re: [PATCH v5 09/20] drm/bridge: ti-sn65dsi86: Break GPIO and
+ MIPI-to-eDP bridge into sub-drivers
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Sam Ravnborg <sam@ravnborg.org>, Wolfram Sang <wsa@kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 29 Apr 2021 16:13:58 +0800, cl@rock-chips.com wrote:
-> From: Liang Chen <cl@rock-chips.com>
-> 
-> This patch add rk3568-evb1-v10.dts for RK3568 evaluation board.
-> add uart/emmc/i2c/rk809 node for basic function.
-> 
-> Signed-off-by: Liang Chen <cl@rock-chips.com>
-> ---
->  .../devicetree/bindings/arm/rockchip.yaml     |  5 ++
->  arch/arm64/boot/dts/rockchip/Makefile         |  1 +
->  .../boot/dts/rockchip/rk3568-evb1-v10.dts     | 79 +++++++++++++++++++
->  3 files changed, 85 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-> 
+On Fri, Apr 23, 2021 at 6:59 PM Douglas Anderson <dianders@chromium.org> wrote:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> Let's use the newly minted aux bus to break up the driver into sub
+> drivers. We're not doing a full breakup here: all the code is still in
+> the same file and remains largely untouched. The big goal here of
+> using sub-drivers is to allow part of our code to finish probing even
+> if some other code needs to defer. This can solve some chicken-and-egg
+> problems. Specifically:
+> - In commit 48834e6084f1 ("drm/panel-simple: Support hpd-gpios for
+>   delaying prepare()") we had to add a bit of a hack to simpel-panel
+>   to support HPD showing up late. We can get rid of that hack now
+>   since the GPIO part of our driver can finish probing early.
+> - We have a desire to expose our DDC bus to simple-panel (and perhaps
+>   to a backlight driver?). That will end up with the same
+>   chicken-and-egg problem. A future patch to move this to a sub-driver
+>   will fix it.
+> - If/when we support the PWM functionality present in the bridge chip
+>   for a backlight we'll end up with another chicken-and-egg
+>   problem. If we allow the PWM to be a sub-driver too then it solves
+>   this problem.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+> Changes in v5:
+> - Fix module compile problems (Bjorn + kbuild bot)
+> - Remove useless MODULE_DEVICE_TABLE (Bjorn).
+
+This is generally a good idea. I have no idea when to use
+auxbus or MFD but I trust that you researched that so:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
