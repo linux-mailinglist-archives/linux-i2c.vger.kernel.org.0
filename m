@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DAC3722C9
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 May 2021 23:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5A73722CA
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 May 2021 23:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbhECWAP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 May 2021 18:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
+        id S229839AbhECWAQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 May 2021 18:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbhECWAO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 May 2021 18:00:14 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8380C061573
-        for <linux-i2c@vger.kernel.org>; Mon,  3 May 2021 14:59:19 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id s22so4800707pgk.6
-        for <linux-i2c@vger.kernel.org>; Mon, 03 May 2021 14:59:19 -0700 (PDT)
+        with ESMTP id S229866AbhECWAP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 May 2021 18:00:15 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD82C061574
+        for <linux-i2c@vger.kernel.org>; Mon,  3 May 2021 14:59:21 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id m12so4792379pgr.9
+        for <linux-i2c@vger.kernel.org>; Mon, 03 May 2021 14:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OLRAd85FpiCGL7CjVpp3wCjW21owJByefcDimF6o1bg=;
-        b=ZKgdlah1kveIQ9x2aFXM3KuIDDChTMuTehQ0kFmNWwFr5kC1kQ/FLgHBOifnNrw/ap
-         J8iNIGQ7yYqR7es5TgP0Gc0jRKlPrJNAE/NGCe3oKBf/9/Y1vyXly4E++eVU16FBa6QT
-         X1i2/gHXu2Zhb+kGxQ5xuWct5i94o+zXup2Pk=
+        bh=W77IZHCnR8zsUGkGNcdPd69iBZZWTodBrQgHGoIvISw=;
+        b=M7TZCmAyoUuDzEvPoOmNkr6tBJGvDOg1aR4s7KOllc0EReHc789CdHc4KLzYms9sUR
+         5Z3DYDxMXHvWz9wnmzsO7ur2w+WrdPQ52D5E2adcrhy4EhUKeKsS24hkgcqEMF3ndr6w
+         o4dBqj+CG6w1Wz63Tlq4h2sjgbhp2vayV4yfM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OLRAd85FpiCGL7CjVpp3wCjW21owJByefcDimF6o1bg=;
-        b=Q55t97QOCaG+BZmZfYNn2x80RaSLem0OxItnPcwzyYW9j/jPfpe2xlbl+91HU1S3nO
-         Q8FqkATvLgdbgZ9v7/0fI3TfcOkqAGjWkf8HDArtYyxpAXcs88hREvUJbrptB8mMY6Wp
-         +XGYRHt9s4tFLiHtU0x4lPqR+FurOFhrktF/46rZBqu9ZaWl6jdD2ps0uehS0JBL5pYB
-         0d8teAs0cDt8NZHrnmWFEg9SOfdg4MRiVJa+OUC27qOaRfTZ4+9Oyi/xgWKdZfxlVkTs
-         cL1YDFn2rkYJuQxSlvomQyRSoHZW9Jj6xrhfX9N9R4n+p6v5/79d/zuE4r+6wmgSqU7m
-         h+Dg==
-X-Gm-Message-State: AOAM531k3dEEW4G02dSUrx6d/CViusVSRhWwITDdDi7znHj90gDt/up2
-        DMbIuOFS25tmi79Z3VzNVJbYaA==
-X-Google-Smtp-Source: ABdhPJziERAcDvCaD51oo2Yz/xVTskdMxyYTmx9XU0nuCyMaLlBksQpPqh1APqYrMH6TD39N1TGa/Q==
-X-Received: by 2002:a17:90a:4404:: with SMTP id s4mr892137pjg.218.1620079159424;
-        Mon, 03 May 2021 14:59:19 -0700 (PDT)
+        bh=W77IZHCnR8zsUGkGNcdPd69iBZZWTodBrQgHGoIvISw=;
+        b=WWoAbRRJVdIlBAhCX3UYcfuPn3mtcyf5tOwRzebW5WDhQABPsIY9MQHrs1bcTN9Nl0
+         7c+eDITePHzBJqYJrL+CkYVDPTbMh+12J7pof8tVlZAKkYd1tRqcLyzvCmYJ68VBdJxy
+         9XGP4q796bi5u2Lw8WFL0Rg/qqTwGVbsIC33ulaWkjK1STEpNr1aagSANYl+MsJil5Mi
+         Z9pDSlrdANz4u2rOLfwG/wthb9WvwBj+fNO0jMBDx2Qxp7SBF2BgiZoP3xRRT219NuK7
+         ukpRKX2Ff/kL2MMcrQoPP6uDlrpQ7h3RTjIfyZ9bgkFHx+e5GZqMJePngxHF+5dNvVpW
+         2IsQ==
+X-Gm-Message-State: AOAM532RQrw8Mwn3BPvnPit6PyBBZWVql++ngfyXhT3Iy59C/1QBeMbA
+        r5/xKsgQdCPbsXQfp3iblAZ4TQ==
+X-Google-Smtp-Source: ABdhPJwUwZpD0ml7xZSSGB8YnVak9g4AclMeV/DUQkle3+bQBr3hT0aM54E9KH7HNRBu5lUO+G4fog==
+X-Received: by 2002:a17:90a:440f:: with SMTP id s15mr943884pjg.192.1620079161254;
+        Mon, 03 May 2021 14:59:21 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:a592:ac50:b17b:5c43])
-        by smtp.gmail.com with ESMTPSA id w1sm639186pgp.31.2021.05.03.14.59.17
+        by smtp.gmail.com with ESMTPSA id w1sm639186pgp.31.2021.05.03.14.59.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 May 2021 14:59:19 -0700 (PDT)
+        Mon, 03 May 2021 14:59:20 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Andrzej Hajda <a.hajda@samsung.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
@@ -63,12 +63,11 @@ Cc:     Lyude Paul <lyude@redhat.com>, Steev Klimaszewski <steev@kali.org>,
         Douglas Anderson <dianders@chromium.org>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        Robert Foss <robert.foss@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 2/5] drm/dp: Allow an early call to register DDC i2c bus
-Date:   Mon,  3 May 2021 14:58:41 -0700
-Message-Id: <20210503145750.v6.2.Iff8f2957d86af40f2bfcfb5a7163928481fccea4@changeid>
+Subject: [PATCH v6 3/5] drm/bridge: ti-sn65dsi86: Promote the AUX channel to its own sub-dev
+Date:   Mon,  3 May 2021 14:58:42 -0700
+Message-Id: <20210503145750.v6.3.If89144992cb9d900f8c91a8d1817dbe00f543720@changeid>
 X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
 In-Reply-To: <20210503215844.2996320-1-dianders@chromium.org>
 References: <20210503215844.2996320-1-dianders@chromium.org>
@@ -78,141 +77,183 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-It can be helpful to fully register the AUX channel as an i2c bus even
-before the bridge is created. Let's optionally allow bridges to do
-that.
-
-Specifically the case we're running into:
-- The panel driver wants to get its DDC bus at probe time.
+We'd like to be able to expose the DDC-over-AUX channel bus to our
+panel. This gets into a chicken-and-egg problem because:
+- The panel wants to get its DDC bus at probe time.
 - The ti-sn65dsi86 MIPI-to-eDP bridge code, which provides the DDC
   bus, wants to get the panel at probe time.
 
-The next patches ("drm/bridge: ti-sn65dsi86: Promote the AUX channel
-to its own sub-dev") solves the chicken-and-egg problem by breaking
-the ti-sn65dsi86 driver into sub-devices, but in order for it to
-actually work we need the i2c bus to get registered at probe time and
-not in bridge attach time.
+By using a sub device we can fully create the AUX channel bits so that
+the panel can get them. Then the panel can finish probing and the
+bridge can probe.
 
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Thierry Reding <treding@nvidia.com>
+To accomplish this, we use the new functions introduced in ("drm/dp:
+Allow an early call to register DDC i2c bus") to register the i2c bus
+early.
+
+NOTE: there's a little bit of a trick here. Though the AUX channel can
+run without the MIPI-to-eDP bits of the code, the MIPI-to-eDP bits
+can't run without the AUX channel. We could come up a complicated
+signaling scheme (have the MIPI-to-eDP bits return EPROBE_DEFER for a
+while or wait on some sort of completion), but it seems simple enough
+to just not even bother creating the bridge device until the AUX
+channel probes. That's what we'll do.
+
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
+Commit 6cba3fe43341 ("drm/dp: Add backpointer to drm_device in
+drm_dp_aux") made it very explicit that it's not OK to fully register
+the aux device until we have the bridge, but hopefully just getting
+the i2c bits early is OK?
 
 Changes in v6:
-- ("drm/dp: Allow an early call to register DDC i2c bus") new for v6.
+- Use new drm_dp_aux_register_ddc() calls.
 
- drivers/gpu/drm/drm_dp_helper.c | 67 +++++++++++++++++++++++++++------
- include/drm/drm_dp_helper.h     |  2 +
- 2 files changed, 57 insertions(+), 12 deletions(-)
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c | 77 +++++++++++++++++++++++----
+ 1 file changed, 66 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
-index cb56d74e9d38..830294f0b341 100644
---- a/drivers/gpu/drm/drm_dp_helper.c
-+++ b/drivers/gpu/drm/drm_dp_helper.c
-@@ -1757,6 +1757,49 @@ void drm_dp_aux_init(struct drm_dp_aux *aux)
- }
- EXPORT_SYMBOL(drm_dp_aux_init);
+diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+index db027528febd..594aac57bdbc 100644
+--- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
++++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+@@ -116,6 +116,7 @@
+  * struct ti_sn65dsi86 - Platform data for ti-sn65dsi86 driver.
+  * @bridge_aux:   AUX-bus sub device for MIPI-to-eDP bridge functionality.
+  * @gpio_aux:     AUX-bus sub device for GPIO controller functionality.
++ * @aux_aux:      AUX-bus sub device for eDP AUX channel functionality.
+  *
+  * @dev:          Pointer to the top level (i2c) device.
+  * @regmap:       Regmap for accessing i2c.
+@@ -148,6 +149,7 @@
+ struct ti_sn65dsi86 {
+ 	struct auxiliary_device		bridge_aux;
+ 	struct auxiliary_device		gpio_aux;
++	struct auxiliary_device		aux_aux;
  
-+/**
-+ * drm_dp_aux_register_ddc() - register the DDC parts of the aux channel
-+ * @aux: DisplayPort AUX channel
-+ *
-+ * This can be called after drm_dp_aux_init() to fully register the ddc bus
-+ * as an i2c adapter with the rest of Linux.
-+ *
-+ * If you don't explicitly call this function it will be done implicitly as
-+ * part of drm_dp_aux_register().
-+ *
-+ * Returns 0 on success or a negative error code on failure.
-+ */
-+int drm_dp_aux_register_ddc(struct drm_dp_aux *aux)
-+{
-+	WARN_ON_ONCE(!aux->dev);
-+
-+	aux->ddc.class = I2C_CLASS_DDC;
-+	aux->ddc.owner = THIS_MODULE;
-+	aux->ddc.dev.parent = aux->dev;
-+
-+	strlcpy(aux->ddc.name, aux->name ? aux->name : dev_name(aux->dev),
-+		sizeof(aux->ddc.name));
-+
-+	return i2c_add_adapter(&aux->ddc);
-+}
-+EXPORT_SYMBOL(drm_dp_aux_register_ddc);
-+
-+/**
-+ * drm_dp_aux_unregister_ddc() - unregister the DDC parts of the aux channel
-+ *
-+ * This is useful if you called drm_dp_aux_register_ddc(). If you let
-+ * drm_dp_aux_register() implicitly register the DDC for you then you don't
-+ * need to worry about calling this yourself.
-+ *
-+ * @aux: DisplayPort AUX channel
-+ */
-+void drm_dp_aux_unregister_ddc(struct drm_dp_aux *aux)
-+{
-+	i2c_del_adapter(&aux->ddc);
-+	aux->ddc.dev.parent = NULL;
-+}
-+EXPORT_SYMBOL(drm_dp_aux_unregister_ddc);
-+
- /**
-  * drm_dp_aux_register() - initialise and register aux channel
-  * @aux: DisplayPort AUX channel
-@@ -1793,20 +1836,19 @@ int drm_dp_aux_register(struct drm_dp_aux *aux)
- 	if (!aux->ddc.algo)
- 		drm_dp_aux_init(aux);
- 
--	aux->ddc.class = I2C_CLASS_DDC;
--	aux->ddc.owner = THIS_MODULE;
--	aux->ddc.dev.parent = aux->dev;
--
--	strlcpy(aux->ddc.name, aux->name ? aux->name : dev_name(aux->dev),
--		sizeof(aux->ddc.name));
-+	/*
-+	 * Implicitly register if drm_dp_aux_register_ddc() wasn't already
-+	 * called (as evidenced by a NULL parent pointer).
-+	 */
-+	if (!aux->ddc.dev.parent) {
-+		ret = drm_dp_aux_register_ddc(aux);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	ret = drm_dp_aux_register_devnode(aux);
--	if (ret)
--		return ret;
--
--	ret = i2c_add_adapter(&aux->ddc);
- 	if (ret) {
--		drm_dp_aux_unregister_devnode(aux);
-+		drm_dp_aux_unregister_ddc(aux);
+ 	struct device			*dev;
+ 	struct regmap			*regmap;
+@@ -1331,11 +1333,6 @@ static int ti_sn_bridge_probe(struct auxiliary_device *adev,
+ 	if (ret)
  		return ret;
+ 
+-	pdata->aux.name = "ti-sn65dsi86-aux";
+-	pdata->aux.dev = pdata->dev;
+-	pdata->aux.transfer = ti_sn_aux_transfer;
+-	drm_dp_aux_init(&pdata->aux);
+-
+ 	pdata->bridge.funcs = &ti_sn_bridge_funcs;
+ 	pdata->bridge.of_node = np;
+ 
+@@ -1430,6 +1427,50 @@ static int ti_sn65dsi86_add_aux_device(struct ti_sn65dsi86 *pdata,
+ 	return ret;
+ }
+ 
++static void ti_sn65dsi86_unregister_dp_aux_ddc(void *data)
++{
++	drm_dp_aux_unregister_ddc(data);
++}
++
++static int ti_sn_aux_probe(struct auxiliary_device *adev,
++			   const struct auxiliary_device_id *id)
++{
++	struct ti_sn65dsi86 *pdata = dev_get_drvdata(adev->dev.parent);
++	int ret;
++
++	pdata->aux.name = "ti-sn65dsi86-aux";
++	pdata->aux.dev = pdata->dev;
++	pdata->aux.transfer = ti_sn_aux_transfer;
++	drm_dp_aux_init(&pdata->aux);
++
++	ret = drm_dp_aux_register_ddc(&pdata->aux);
++	if (ret < 0) {
++		drm_err(pdata, "Failed to register AUX DDC channel: %d\n", ret);
++		return ret;
++	}
++	ret = devm_add_action_or_reset(&adev->dev,
++				       ti_sn65dsi86_unregister_dp_aux_ddc, &pdata->aux);
++	if (ret)
++		return ret;
++
++	/*
++	 * The eDP to MIPI bridge parts don't work until the AUX channel is
++	 * setup so we don't add it in the main driver probe, we add it now.
++	 */
++	return ti_sn65dsi86_add_aux_device(pdata, &pdata->bridge_aux, "bridge");
++}
++
++static const struct auxiliary_device_id ti_sn_aux_id_table[] = {
++	{ .name = "ti_sn65dsi86.aux", },
++	{},
++};
++
++static struct auxiliary_driver ti_sn_aux_driver = {
++	.name = "aux",
++	.probe = ti_sn_aux_probe,
++	.id_table = ti_sn_aux_id_table,
++};
++
+ static int ti_sn65dsi86_probe(struct i2c_client *client,
+ 			      const struct i2c_device_id *id)
+ {
+@@ -1488,10 +1529,11 @@ static int ti_sn65dsi86_probe(struct i2c_client *client,
+ 	 * motiviation here is to solve the chicken-and-egg problem of probe
+ 	 * ordering. The bridge wants the panel to be there when it probes.
+ 	 * The panel wants its HPD GPIO (provided by sn65dsi86 on some boards)
+-	 * when it probes. There will soon be other devices (DDC I2C bus, PWM)
+-	 * that have the same problem. Having sub-devices allows the some sub
+-	 * devices to finish probing even if others return -EPROBE_DEFER and
+-	 * gets us around the problems.
++	 * when it probes. The panel and maybe backlight might want the DDC
++	 * bus. Soon the PWM provided by the bridge chip will have the same
++	 * problem. Having sub-devices allows the some sub devices to finish
++	 * probing even if others return -EPROBE_DEFER and gets us around the
++	 * problems.
+ 	 */
+ 
+ 	if (IS_ENABLED(CONFIG_OF_GPIO)) {
+@@ -1500,7 +1542,13 @@ static int ti_sn65dsi86_probe(struct i2c_client *client,
+ 			return ret;
  	}
  
-@@ -1821,7 +1863,8 @@ EXPORT_SYMBOL(drm_dp_aux_register);
- void drm_dp_aux_unregister(struct drm_dp_aux *aux)
- {
- 	drm_dp_aux_unregister_devnode(aux);
--	i2c_del_adapter(&aux->ddc);
-+	if (aux->ddc.dev.parent)
-+		drm_dp_aux_unregister_ddc(aux);
+-	return ti_sn65dsi86_add_aux_device(pdata, &pdata->bridge_aux, "bridge");
++	/*
++	 * NOTE: At the end of the AUX channel probe we'll add the aux device
++	 * for the bridge. This is because the bridge can't be used until the
++	 * AUX channel is there and this is a very simple solution to the
++	 * dependency problem.
++	 */
++	return ti_sn65dsi86_add_aux_device(pdata, &pdata->aux_aux, "aux");
  }
- EXPORT_SYMBOL(drm_dp_aux_unregister);
  
-diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
-index e932b2c40095..d4d2d5e25bb7 100644
---- a/include/drm/drm_dp_helper.h
-+++ b/include/drm/drm_dp_helper.h
-@@ -2021,6 +2021,8 @@ bool drm_dp_lttpr_pre_emphasis_level_3_supported(const u8 caps[DP_LTTPR_PHY_CAP_
+ static struct i2c_device_id ti_sn65dsi86_id[] = {
+@@ -1537,12 +1585,18 @@ static int __init ti_sn65dsi86_init(void)
+ 	if (ret)
+ 		goto err_main_was_registered;
  
- void drm_dp_remote_aux_init(struct drm_dp_aux *aux);
- void drm_dp_aux_init(struct drm_dp_aux *aux);
-+int drm_dp_aux_register_ddc(struct drm_dp_aux *aux);
-+void drm_dp_aux_unregister_ddc(struct drm_dp_aux *aux);
- int drm_dp_aux_register(struct drm_dp_aux *aux);
- void drm_dp_aux_unregister(struct drm_dp_aux *aux);
+-	ret = auxiliary_driver_register(&ti_sn_bridge_driver);
++	ret = auxiliary_driver_register(&ti_sn_aux_driver);
+ 	if (ret)
+ 		goto err_gpio_was_registered;
  
++	ret = auxiliary_driver_register(&ti_sn_bridge_driver);
++	if (ret)
++		goto err_aux_was_registered;
++
+ 	return 0;
+ 
++err_aux_was_registered:
++	auxiliary_driver_unregister(&ti_sn_aux_driver);
+ err_gpio_was_registered:
+ 	ti_sn_gpio_unregister();
+ err_main_was_registered:
+@@ -1555,6 +1609,7 @@ module_init(ti_sn65dsi86_init);
+ static void __exit ti_sn65dsi86_exit(void)
+ {
+ 	auxiliary_driver_unregister(&ti_sn_bridge_driver);
++	auxiliary_driver_unregister(&ti_sn_aux_driver);
+ 	ti_sn_gpio_unregister();
+ 	i2c_del_driver(&ti_sn65dsi86_driver);
+ }
 -- 
 2.31.1.527.g47e6f16901-goog
 
