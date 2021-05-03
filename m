@@ -2,173 +2,169 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CA33721BF
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 May 2021 22:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A06B43722BC
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 May 2021 23:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbhECUmQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 May 2021 16:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
+        id S229657AbhECWAK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 May 2021 18:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbhECUmN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 May 2021 16:42:13 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAE1C06174A
-        for <linux-i2c@vger.kernel.org>; Mon,  3 May 2021 13:41:19 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id m17so3624870vsn.10
-        for <linux-i2c@vger.kernel.org>; Mon, 03 May 2021 13:41:19 -0700 (PDT)
+        with ESMTP id S229603AbhECWAJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 May 2021 18:00:09 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD55FC06174A
+        for <linux-i2c@vger.kernel.org>; Mon,  3 May 2021 14:59:15 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q10so4816933pgj.2
+        for <linux-i2c@vger.kernel.org>; Mon, 03 May 2021 14:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BVEWhYBD+xtNsbo3lAuegOEINH/TnK8x6KkSQvrHSkc=;
-        b=maWCCqkx0oH1zSZ/q/GRT9vao0fkAFsVj063WxGPB1qM8s/UjGnuJdKNRT6bMP4kiw
-         L4+J9CU69hnWD+bOSoUADl1jrTF4/psQ7Di/8qRinh3NO5KHgbf6pU9EjtVGOwIETAec
-         L/cXPywRZw9M6rUEbphDnPpsXBS7J0droG0iU=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7XeQvyBWVKf0skvGUDMoW46+5itY3Fyc7Jw/oYmvtIY=;
+        b=H2ea2bGlnrHk4qW8bhoexRGleeKJrdwsxjY0tTeNoasXxX+IKlVRsmEalrXV+m7p8+
+         aVHEygDDJi7N4xXnLTikV6Hw9H9SiJhyCTvm8v8ZSj03PJbvAiEp1vXbawBNW7ImJSFA
+         be03HIV39CqugEOR2d6Eqgbsfb7QFX5OLns2g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BVEWhYBD+xtNsbo3lAuegOEINH/TnK8x6KkSQvrHSkc=;
-        b=nSgLzANzzzb9ywcjLd0DWuMRVQDPmEU4NctnMLzthScofyCNsmBFX460X5EbY/YTEM
-         oCFHoE3OlQsdt8mRk1dABWSBw5qqTZhRG31Fe4SXCezvidWL64oxzMt7dYEh4ZNHyR6t
-         83KeG3XJhHX4ITvCVDPWOsm692wxWzjA8lsqyh8GRCd6aiAma8GWas7VdiozQvcmtBy4
-         2Q7ACMECfLR4DOJwCHUAYGj+Bd/w0a0Xe+A4ARDKeov0uTIUK+pxrSeIzsT7XTLbXKyo
-         1BTkXUYHbHK5K69uPzzXzV65APB8vqdSZBMW9JRtJ1+1qFPRyvghyvhoNCN/bUJwBQDr
-         RGUA==
-X-Gm-Message-State: AOAM530f/ftENTfr2lnhzti5bIl7Xe5QMKr0m82988GTJlN8YElCerSc
-        3Zt7gpgxaIjFrXt0fb81i1ZlnBJWubxPVw==
-X-Google-Smtp-Source: ABdhPJx2fIvPBcp6H2zWLjHXn7ap9HjRwCx6A8jkcATpbG73eEz4Mkikc4ioFSHuAIDbcC0d+4FFrg==
-X-Received: by 2002:a67:ebd2:: with SMTP id y18mr6992936vso.7.1620074478202;
-        Mon, 03 May 2021 13:41:18 -0700 (PDT)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id t22sm75541vso.25.2021.05.03.13.41.16
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 May 2021 13:41:17 -0700 (PDT)
-Received: by mail-ua1-f42.google.com with SMTP id z7so2356838uav.4
-        for <linux-i2c@vger.kernel.org>; Mon, 03 May 2021 13:41:16 -0700 (PDT)
-X-Received: by 2002:a9f:2183:: with SMTP id 3mr17021447uac.0.1620074475074;
- Mon, 03 May 2021 13:41:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210423165906.2504169-1-dianders@chromium.org>
- <20210423095743.v5.1.I9e6af2529d6c61e5daf86a15a1211121c5223b9a@changeid>
- <CACRpkdYkRFLvCRPSYNzYQG58QgPfhvjtHb+FBQZadyrnjC8=1A@mail.gmail.com>
- <CAD=FV=UX683grZ=poTwKXxSqYBCLdLAOCxOPhE_xVVgKbe36Mw@mail.gmail.com>
- <CACRpkdYfugrJ4WGn=w+viGXE6s5cdHjLC++jHPLVy_QH09KA8Q@mail.gmail.com>
- <CAD=FV=XXxTz8hi92y6p3hX7iVEHuqKHsrKPSnX_a__WCEQRAKw@mail.gmail.com> <CACRpkdZVH=h37hSjvjcNmRwV-RoBB-nvUbrOT80DoLr7n81R3Q@mail.gmail.com>
-In-Reply-To: <CACRpkdZVH=h37hSjvjcNmRwV-RoBB-nvUbrOT80DoLr7n81R3Q@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 3 May 2021 13:41:03 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Vzn0ih_RqR_ySJzFtq0B0x_4a-Uwjk56GeLyUZtTEXrQ@mail.gmail.com>
-Message-ID: <CAD=FV=Vzn0ih_RqR_ySJzFtq0B0x_4a-Uwjk56GeLyUZtTEXrQ@mail.gmail.com>
-Subject: Re: [PATCH v5 01/20] drm/panel: panel-simple: Add missing
- pm_runtime_disable() calls
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andrzej Hajda <a.hajda@samsung.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7XeQvyBWVKf0skvGUDMoW46+5itY3Fyc7Jw/oYmvtIY=;
+        b=UVnk6D35y68sVHsXdWg8i9t0/9k99Vk1/CnNb0nUFCs5cHI+U/Jyuezy4CSihgyIDP
+         ZRQCo+NashxpQhWh7Mz6UakGD9oCYpvKtFgE9x6zvXxpyB5tNmryQN0RH5fCcgUY2a5j
+         hFaoFBbbTsKStiZGhMYoVJdIMGUGUZr5pHOL9s9dDp1dSKUIeq/BimZWMqpdBj++BkJW
+         8WI9JBfsoxcZe7GEXQBe+XliVk3oDtmbNi717bThcsLgZ3IZ0svouXYPQAZZ5DPdXPPB
+         6ge5hjn/2WZEHxUXvnR20zH3sEvnmsCxTRXJM11DjTDduk6nveq3T+ntK9ezMCbs2BvF
+         odvQ==
+X-Gm-Message-State: AOAM532yJrijRczlUDobY/A9y3ydYKSOKj49npBQIlQjx6G2b+K1lWSk
+        +/0M0DVDYhIHlSqWSV/poRsAVg==
+X-Google-Smtp-Source: ABdhPJwalh66tJUrM/p0Z5iQ0SbnYg85Q29PsA9CRlkQ2sJN+bz79V9/rdyANt1QbA7FDn4F6uZDqg==
+X-Received: by 2002:a63:a62:: with SMTP id z34mr19857861pgk.189.1620079155125;
+        Mon, 03 May 2021 14:59:15 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:a592:ac50:b17b:5c43])
+        by smtp.gmail.com with ESMTPSA id w1sm639186pgp.31.2021.05.03.14.59.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 May 2021 14:59:14 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Andrzej Hajda <a.hajda@samsung.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
         Jonas Karlman <jonas@kwiboo.se>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
-        Sam Ravnborg <sam@ravnborg.org>, Wolfram Sang <wsa@kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     Lyude Paul <lyude@redhat.com>, Steev Klimaszewski <steev@kali.org>,
         Stephen Boyd <swboyd@chromium.org>,
-        Steev Klimaszewski <steev@kali.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Linus W <linus.walleij@linaro.org>, robdclark@chromium.org,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Thierry Reding <treding@nvidia.com>, linux-i2c@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/5] drm: Fix EDID reading on ti-sn65dsi86; solve some chicken-and-egg problems
+Date:   Mon,  3 May 2021 14:58:39 -0700
+Message-Id: <20210503215844.2996320-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+The primary goal of this series is to try to properly fix EDID reading
+for eDP panels using the ti-sn65dsi86 bridge.
 
-On Sat, May 1, 2021 at 5:07 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> Hi Doug,
->
-> On Fri, Apr 30, 2021 at 11:04 PM Doug Anderson <dianders@chromium.org> wrote:
->
-> > Pushed this one patch. Rest of the series is pending adult
-> > supervision. Overall summary:
-> >
-> > 1. I could probably push some of the early sn65dsi86 cleanup patches
-> > in this series since they have Bjorn's review and are pretty much
-> > no-ops / simple cleanups, but there's probably not tons gained for
-> > shoving those in early.
->
-> Those look good to me as well. I'd say just apply them.
->
-> To me it looks like up until and including patch 18?
-> Feel free to add my
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
->
-> On these.
+Previously we had a patch that added EDID reading but it turned out
+not to work at bootup. This caused some extra churn at bootup as we
+tried (and failed) to read the EDID several times and also ended up
+forcing us to use the hardcoded mode at boot. With this patch series I
+believe EDID reading is reliable at boot now and we never use the
+hardcoded mode.
 
-OK, thanks! I've just pushed these patches to drm-misc-next with your Ack:
+This series is the logical successor to the 3-part series containing
+the patch ("drm/bridge: ti-sn65dsi86: Properly get the EDID, but only
+if refclk") [1].
 
-63358e24ee79 drm/panel: panel-simple: Cache the EDID as long as we retain power
-31e25395d8b7 drm/panel: panel-simple: Power the panel when reading the EDID
-4318ea406e02 drm/panel: panel-simple: Remove extra call:
-drm_connector_update_edid_property()
-b137406d9679 drm/bridge: ti-sn65dsi86: If refclk, DP AUX can happen
-w/out pre-enable
-f7a5ee2cd3e2 drm/bridge: ti-sn65dsi86: Code motion of refclk
-management functions
-9bede63127c6 drm/bridge: ti-sn65dsi86: Use pm_runtime autosuspend
-5c4381eeb709 drm/panel: panel-simple: Get rid of hacky HPD chicken-and-egg code
-bf73537f411b drm/bridge: ti-sn65dsi86: Break GPIO and MIPI-to-eDP
-bridge into sub-drivers
-bef236a5206c drm/bridge: ti-sn65dsi86: Move all the chip-related init
-to the start
-f94eb8a32863 drm/bridge: ti-sn65dsi86: Cleanup managing of drvdata
-3636fc25f760 drm/bridge: ti-sn65dsi86: Add local var for "dev" to simplify probe
-52d54819c8ae drm/bridge: ti-sn65dsi86: Clean debugfs code
-dea2500a820c drm/bridge: ti-sn65dsi86: Use devm to do our runtime_disable
-905d66d08d0f drm/bridge: ti-sn65dsi86: More renames in prep for sub-devices
-db0036db4851 drm/bridge: ti-sn65dsi86: Rename the main driver data structure
+At v6 now, this patch series is smaller as I have landed most of the
+cleanup patches. I've previously sent out a summary [2]. Now it just
+has the i2c fix and some of the more controversial parts.
 
-Things not pushed:
+This patch was developed agains linuxnext (next-20210416) with
+drm-misc-next (as of 20210503) merged in on a sc7180-trogdor-lazor
+device. To get things booting for me, I had to use Stephen's patch [3]
+to keep from crashing but otherwise all the patches I needed were
+here.
 
-[v5,15/20] i2c: i2c-core-of: Fix corner case of finding adapter by node
--> Can't push i2c things
+Primary change between v2 and v3 is to stop doing the EDID caching in
+the core. I also added Andrzej's review tags.
 
-[v5,14/20] drm/bridge: ti-sn65dsi86: Promote the AUX channel to its own sub-dev
--> Won't work without rework. See [1]
+Between v3 and v4 this series grew a whole lot. I changed it so that
+the EDID reading is actually driven by the panel driver now as was
+suggested by Andrzej. While I still believe that the old approach
+wasn't too bad I'm still switching. Why?
 
-[v5,19/20] drm/bridge: ti-sn65dsi86: Don't read EDID blob over DDC
--> Needs Laurent and also patch 14/20 to be resolved.
+The main reason is that I think it's useful in general for the panel
+code to have access to the DDC bus and to be able to read the
+EDID. This may allow us to more easily have the panel code support
+multiple sources of panels--it can read the EDID and possibly adjust
+timings based on the model ID. It also allows the panel code (or
+perhaps backlight code?) to send DDC commands if they are need for a
+particular panel.
 
-[v5,20/20] arm64: dts: qcom: Link the panel to the bridge's DDC bus
--> Needs all the rest resolved.
+At the moment, once the panel is provided the DDC bus then existing
+code will assume that it should be in charge of reading the
+EDID. While it doesn't have to work that way, it seems sane to build
+on what's already there.
 
-Let me see if I can find a way to work around the AUX channel stuff
-and then I'll push a v6 of just what's left.
+In order to expose the DDC bus to the panel, I had to solve a bunch of
+chicken-and-egg problems in terms of probe ordering between the bridge
+and the panel. I've broken the bridge driver into several sub drivers
+to make this happen. At the moment the sub-drivers are just there to
+solve the probe problem, but conceivably someone could use them to
+break the driver up in the future if need be.
 
-> Just to keep you busy and make sure you don't run out of work
-> (haha) I noticed that the gpio_chip in this driver can use
-> the new GPIO_REGMAP helper library with the fixes just
-> landed in Torvald's tree.
->
-> At your convenience and when you think there is too little
-> stuff in your sn65dsi86 TODO, check out
-> pinctrl-bcm63xx.c for an example of select GPIO_REGMAP
-> made very simple (this works fine as long as they are bit
-> offsets starting from 0).
+Between v4 and v5, high-level view of changes.
+- Some of the early patches landed, so dropped from series.
+- New pm_runtime_disable() fix (fixed a patch that already landed).
+- Added Bjorn's tags to most patches
+- Fixed problems when building as a module.
+- Reordered debugfs patch and fixed error handling there.
+- Dropped last patch. I'm not convinced it's safe w/out more work.
 
-I seem to recall you mentioning something like this. When I looked at
-it in the past I wasn't convinced it would be easy. See my response
-[2]. The rough summary is that I didn't think the helpers were happy
-with the pm_runtime() model that I'm using. Did I get that wrong?
+Between v5 and v6 this patch added the patch ("drm/dp: Allow an early
+call to register DDC i2c bus") and only includes the patches that
+haven't already landed.
 
-[1] https://lore.kernel.org/dri-devel/CAD=FV=UTmOP8LDaf-Tyx17OORQK6pJH6O_w3cP0Bu-KRYaHkYw@mail.gmail.com/
-[2] https://lore.kernel.org/r/CAD=FV=VqD-dY=v23KYuTqy8aRNQJJzJ7h_UOcdEBYuK9X51MQQ@mail.gmail.com
+[1] https://lore.kernel.org/r/20210304155144.3.I60a7fb23ce4589006bc95c64ab8d15c74b876e68@changeid/
+[2] https://lore.kernel.org/dri-devel/CAD=FV=Vzn0ih_RqR_ySJzFtq0B0x_4a-Uwjk56GeLyUZtTEXrQ@mail.gmail.com/
+[3] https://lore.kernel.org/r/161706912161.3012082.17313817257247946143@swboyd.mtv.corp.google.com/
 
--Doug
+Changes in v6:
+- ("drm/dp: Allow an early call to register DDC i2c bus") new for v6.
+- Use new drm_dp_aux_register_ddc() calls.
+
+Douglas Anderson (5):
+  i2c: i2c-core-of: Fix corner case of finding adapter by node
+  drm/dp: Allow an early call to register DDC i2c bus
+  drm/bridge: ti-sn65dsi86: Promote the AUX channel to its own sub-dev
+  drm/bridge: ti-sn65dsi86: Don't read EDID blob over DDC
+  arm64: dts: qcom: Link the panel to the bridge's DDC bus
+
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi |  1 +
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c        | 99 +++++++++++++-------
+ drivers/gpu/drm/drm_dp_helper.c              | 67 ++++++++++---
+ drivers/i2c/i2c-core-of.c                    | 17 ++--
+ include/drm/drm_dp_helper.h                  |  2 +
+ 5 files changed, 134 insertions(+), 52 deletions(-)
+
+-- 
+2.31.1.527.g47e6f16901-goog
+
