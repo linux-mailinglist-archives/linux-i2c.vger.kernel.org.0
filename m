@@ -2,84 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C930F372FAB
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 May 2021 20:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7343A37310A
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 May 2021 21:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbhEDSYc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 May 2021 14:24:32 -0400
-Received: from mail-ua1-f49.google.com ([209.85.222.49]:36698 "EHLO
-        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbhEDSYc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 May 2021 14:24:32 -0400
-Received: by mail-ua1-f49.google.com with SMTP id x9so3359982uao.3;
-        Tue, 04 May 2021 11:23:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3kCi7il0d+3nsw+AljeEXtKK4PHHIL4TmkvDsGM75V8=;
-        b=m3UoJErGmT/WfUem4W9fKOcEafzekWHr14EPx7yMhPIVJO29jstGRpWTn3U1wXPAoh
-         VJaSZj6mbtBcEmRJ2R4F7Oh+L1Tel0NwX4a5qdHX9hp9YODUGAkkltYsE8zI0A6DTab/
-         8DGT5S8Fb9+e0lIv/W16UNZzkSNO+d2a3+AQcS/d8C7Y07v1ajpuVtloDrgf2pYPzD6g
-         hXGkV2AVcXOusHayiFBBmaRRahsYjuLY04G3v2rXCqNBSTaaFAThiP1EzCt7lbq0MQHV
-         t23kIOPQa9dTVqD3vHub9aDG7s4ckc6b1O4aZcASxHsa8KyQwjcceTTSxhbuCZU994Ob
-         8DzA==
-X-Gm-Message-State: AOAM531jRwhCfXOUazgiD91DED6TNvdYg0ArSrMMMwZ/+oQIsLQ+ybIa
-        Gez/ijeQ1hYDYL73+SKDZhEnJp0zNV0fZZI9i1JjRTxA3Hk=
-X-Google-Smtp-Source: ABdhPJxjaTqOrV8Avg7BlIVuRVuRcJHODKU3sgjJMcMCnRvgpJMa5S9kVu60npCdeiW2KFrbJCxRplfsKC5hHxB6yM4=
-X-Received: by 2002:ab0:3157:: with SMTP id e23mr21500212uam.106.1620152616701;
- Tue, 04 May 2021 11:23:36 -0700 (PDT)
+        id S232560AbhEDTwn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 May 2021 15:52:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59252 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232209AbhEDTwn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 4 May 2021 15:52:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0737D611AC;
+        Tue,  4 May 2021 19:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620157907;
+        bh=SWUJv5d4872tU6nW6iDKKGKvOjvlmLsvLCPi+Eg57iM=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=ou89yEXMMKesNONxn4RdobCYPoCbcezZxAwm5qtcmQihSOY5qnJf2B9tMTD7NLC1v
+         wLuETiCCgpmD/IFjoJ8OJKYerqmsQmf/eAG1/RMkzbXn+wOVdsqBHzXD80ew7Y164i
+         HBaSZHE1lrvzm+qZRGACjRkEW/HzAMChLor09h0qnrlbxnmheLXmQgaMBF2tv9N4/U
+         jJL/gMCjsH0fuoOtRG+wIp46GUMoI/NXemv454aFiCdnfoly7bLOkwMnnK5lgWdWAi
+         cF80BDPiyQpwpjvJZltsuY92ayzEgJQ90Cl6kJwpiUrZ4g6zpPMZV4xcOXLCxCyyaG
+         r5NAaTsFcID8w==
+Date:   Tue, 4 May 2021 21:51:40 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     robh+dt@kernel.org, mark.rutland@arm.com,
+        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com
+Subject: Re: [PATCH v3 0/2] i2c: stm32f7: add SMBus-Alert support
+Message-ID: <20210504195140.GA1783@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, robh+dt@kernel.org,
+        mark.rutland@arm.com, pierre-yves.mordret@foss.st.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com
+References: <1616998145-28278-1-git-send-email-alain.volmat@foss.st.com>
+ <20210430164413.GA3426@gnbcxd0016.gnb.st.com>
 MIME-Version: 1.0
-References: <cover.1620139307.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1620139307.git.geert+renesas@glider.be>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 4 May 2021 20:23:25 +0200
-Message-ID: <CAMuHMdWJ40hcw9L=MAKH0dTByjW_a8NbLxZ6GDV81MiH+gAk3Q@mail.gmail.com>
-Subject: Re: [PATCH 0/2] ARM: dts: r8a7745,r8a7794: Remove generic compatible
- strings from iic blocks
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Chris Paterson <chris.paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OgqxwSJOaUobr8KG"
+Content-Disposition: inline
+In-Reply-To: <20210430164413.GA3426@gnbcxd0016.gnb.st.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 4, 2021 at 4:49 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
-> This patch series fixes the first issues discovered by[1], and removes
-> the generic compatible strings from the IIC blocks on the R-Car E2 and
-> RZ/G1E SoCs, as they do not have the automatic transmission registers.
-> More follow-up patches are expected, when IIC will have dislosed all of
-> its secrets...
->
-> Thanks for your comments!
->
-> [1] "[PATCH/RFC 4/6] dt-bindings: i2c: renesas,iic: Convert to json-schema"
->     lore.kernel.org/r/ecfaf6be5e8c285db2bcc823bb1dd89931fa5c29.1620138454.git.geert+renesas@glider.be
->
-> Geert Uytterhoeven (2):
->   ARM: dts: r8a7745: Remove generic compatible strings from iic blocks
->   ARM: dts: r8a7794: Remove generic compatible strings from iic blocks
->
->  arch/arm/boot/dts/r8a7745.dtsi | 8 ++------
->  arch/arm/boot/dts/r8a7794.dtsi | 8 ++------
 
-While drivers/i2c/busses/i2c-sh_mobile.c already has a match entry for
-"renesas,iic-r8a7794", it does not have one for "renesas,iic-r8a7745"
-yet.  Hence patch 2/2 depends on a to-be-sent patch to update the
-driver.
+--OgqxwSJOaUobr8KG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Gr{oetje,eeting}s,
 
-                        Geert
+> Gentle reminder about this serie about SMBus-Alert. Could you have
+> a look at it ?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Yes. I first thought to do this after increasing SMBus Block length to
+255. But because of the userspace ABI problems, it probably makes sense
+to work on this first. Here, no userspace is involved.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+--OgqxwSJOaUobr8KG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCRpcgACgkQFA3kzBSg
+KbakzQ/+N25uj+rj94z+nfTHAwsOaC98K1SzwArTqt0eQGltp+bYYnOuH10WYnot
+NbvWEGTdhs324Ww5pak8EdBAqmYAR0Rj1g+kFNMRO5W4pglTRW5IMGsI/CR85VcF
+jg2DPnBABV4+IcTIYFS+/uXhrevG8vZEqeGutxiYSNgeKbciy/CzL0G75sZgsA/D
+V94M+MgmEIQFEgFZ6mJmhvtvLzU5Xu1nm8SBZ+GHpQZAt9llAhGCj3wNKh8YS9+z
+GjTscv6PPlll8K7vB+ON5a/OzH1IDo3P2ctdG2Xp41w2VnZtaUqN6xI10Ync5tbW
+cC6LKmolWHsNCCczHUr1iFKWe8PO1bKyHzceYhiU7ES+XATvX9IcPzJ4UR/phw9D
+7z6AjAitwABPQmXhLSr52hy2itVFjJ9F2fshxphmdoF4fKNIk2xZEYOAdlRU0Eay
+JfHdSwJmGwMD82KFqm4eYrZidVqO8Y9rD1YloaI/nVpaWHumEoAUthEhcx4Pi9kE
+Z0cPmRIPs6FWowdTzyxHJ0X9UoJOiGX8YkjDYL0WSWvFMALrcBn3q0kTFYEfcE8N
+Qkv+Faq1kvvanNgk8RrPL8YtNAQDCjbrqLlZcLnd8I64e9EFdd8/ACBWbDTpnfXT
+ysFkR+mkRxXbGIDNbnevX5A0/bLWubx2SxAdKL7LctditeHzDa0=
+=i/1G
+-----END PGP SIGNATURE-----
+
+--OgqxwSJOaUobr8KG--
