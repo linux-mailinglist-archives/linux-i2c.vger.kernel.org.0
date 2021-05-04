@@ -2,89 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F013727FA
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 May 2021 11:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3054B372B5F
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 May 2021 15:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbhEDJTI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 May 2021 05:19:08 -0400
-Received: from mga04.intel.com ([192.55.52.120]:63075 "EHLO mga04.intel.com"
+        id S231127AbhEDNxL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 May 2021 09:53:11 -0400
+Received: from smtp1.axis.com ([195.60.68.17]:46183 "EHLO smtp1.axis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230158AbhEDJTH (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 4 May 2021 05:19:07 -0400
-IronPort-SDR: mxWGmA0n1XCdf2m4OJQI+/o9Ce3xfdQHNnaeACLdO9a/I3xAOwHfAn2rpPcrFej1QE+F2PK/bQ
- 5SkrTpvEPucw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9973"; a="195884067"
-X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="195884067"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 02:18:00 -0700
-IronPort-SDR: 7draSFrfvY/hi9a8M9XFlwwgRXE1qfj2CvQILS/v7WyYJkAJ8oSaPm5EuEcdH+6i7wDqYGwWcB
- KAWKm7gjPL2Q==
-X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="396062620"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 02:17:58 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ldrBj-009VMz-Qd; Tue, 04 May 2021 12:17:55 +0300
-Date:   Tue, 4 May 2021 12:17:55 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: I2C_HISI should depend on ACPI
-Message-ID: <YJERQ8WYOvR+kucp@smile.fi.intel.com>
-References: <22d124a7f12f2c8b280a9cc7f3b766351c9a8d64.1620119167.git.geert+renesas@glider.be>
+        id S231138AbhEDNxL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 4 May 2021 09:53:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1620136336;
+  x=1651672336;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1iENLt//KBfg17reazfrU60VwtlexWbd03KEL50ys7Q=;
+  b=k6rjHqd16FOul5iqZNJzBbNvUty2p94jl/uiWb1gAPb3dDa8rR602ku6
+   9hy07oXrgyecInAQeKbTqnnnnHAF/u8Gru70NgDKX77gC+p5ThVrA5Uia
+   TZqU0ICP3uLDnidBn5R+8JVfXDEpSF2A3hYHlZ1WGI8u13uZXHqQ8gm98
+   obeVG07mmGWZU3/YFLV7Z+glP/5gKtVFdQaoW8Cbc2wlP/GgAWZhj+0o4
+   Sc5DEmJMLEb4N5q/kdTUNvfQkIHKyLI6FTMLdM02LvtFCyitNHCIsYhNu
+   UnPzZE3L306NFp4ouu4oFKJfCzg9LzWUbLnQGGnWGJNNCgB4+DJ7Q3xUc
+   Q==;
+From:   =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
+To:     <wsa@kernel.org>
+CC:     <linux-i2c@vger.kernel.org>, <kernel@axis.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>
+Subject: [PATCH] i2c: slave-eeprom: add an of_match_table
+Date:   Tue, 4 May 2021 15:52:09 +0200
+Message-ID: <20210504135209.4757-1-bjorn.ardo@axis.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22d124a7f12f2c8b280a9cc7f3b766351c9a8d64.1620119167.git.geert+renesas@glider.be>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 04, 2021 at 11:06:32AM +0200, Geert Uytterhoeven wrote:
-> The HiSilicon Kunpeng I2C controller driver relies on ACPI to probe for
-> its presence.  Hence add a dependency on ACPI, to prevent asking the
-> user about this driver when configuring a kernel without ACPI firmware
-> support.
+This is needed since commit af503716ac14 ("i2c: core: report OF style
+module alias for devices registered via OF").
 
-As promised, okay from me.
-Thanks!
+Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
+---
+ drivers/i2c/i2c-slave-eeprom.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-> Fixes: d62fbdb99a85730a ("i2c: add support for HiSilicon I2C controller")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v2:
->   - Drop dependency on ARCH_HISI, as this is a public IP which doesn't
->     specifically depend on ARCH_HISI.
-> ---
->  drivers/i2c/busses/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index b5b4e0d0ff4dd0bc..226c0b79eac030fa 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -647,7 +647,7 @@ config I2C_HIGHLANDER
->  
->  config I2C_HISI
->  	tristate "HiSilicon I2C controller"
-> -	depends on ARM64 || COMPILE_TEST
-> +	depends on (ARM64 && ACPI) || COMPILE_TEST
->  	help
->  	  Say Y here if you want to have Hisilicon I2C controller support
->  	  available on the Kunpeng Server.
-> -- 
-> 2.25.1
-> 
-
+diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
+index 5c7ae421cacf..89274b72b369 100644
+--- a/drivers/i2c/i2c-slave-eeprom.c
++++ b/drivers/i2c/i2c-slave-eeprom.c
+@@ -204,9 +204,23 @@ static const struct i2c_device_id i2c_slave_eeprom_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, i2c_slave_eeprom_id);
+ 
++static const struct of_device_id i2c_slave_eeprom_match[] = {
++	{ .compatible = "linux,slave-24c02", },
++	{ .compatible = "linux,slave-24c02ro", },
++	{ .compatible = "linux,slave-24c32", },
++	{ .compatible = "linux,slave-24c32ro", },
++	{ .compatible = "linux,slave-24c64", },
++	{ .compatible = "linux,slave-24c64ro", },
++	{ .compatible = "linux,slave-24c512", },
++	{ .compatible = "linux,slave-24c512ro", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, i2c_slave_eeprom_match);
++
+ static struct i2c_driver i2c_slave_eeprom_driver = {
+ 	.driver = {
+ 		.name = "i2c-slave-eeprom",
++		.of_match_table = i2c_slave_eeprom_match,
+ 	},
+ 	.probe = i2c_slave_eeprom_probe,
+ 	.remove = i2c_slave_eeprom_remove,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.20.1
 
