@@ -2,471 +2,307 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CE8373379
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 03:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C613737339B
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 03:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbhEEBOC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 May 2021 21:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
+        id S232126AbhEEBjE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 May 2021 21:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbhEEBOB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 May 2021 21:14:01 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE2AC061574
-        for <linux-i2c@vger.kernel.org>; Tue,  4 May 2021 18:13:06 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id a8-20020a62d4080000b029028db7db58adso474456pfh.22
-        for <linux-i2c@vger.kernel.org>; Tue, 04 May 2021 18:13:06 -0700 (PDT)
+        with ESMTP id S232098AbhEEBjD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 May 2021 21:39:03 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66502C061763
+        for <linux-i2c@vger.kernel.org>; Tue,  4 May 2021 18:38:07 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id c8-20020a9d78480000b0290289e9d1b7bcso364587otm.4
+        for <linux-i2c@vger.kernel.org>; Tue, 04 May 2021 18:38:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=5xXxxML/ct2Ri9d6cxArcql/6PFqOTDmr0diZjIGSNo=;
-        b=kdeAs8wNreHq28FjNk2fZiACBsHch/Yoi/PPOtoVV2LfUQ6C4i9Jg1x3OAZVDOutB1
-         Wa98XqHHatnWMxE0YeBpuMk7vEbipF/V7t2/uh5X0TYvAHckmlycdu2ywX2aQb4ctN8+
-         I3aXWyJF5MaJRswiPu4nY1LUTKEDnqS18HQhJwFgerot+uQxKRcx7xxDCj3wGYTuYTBd
-         f+JFsym0IgP+GNLrpiu7AMVoYjhGhoS0mDb1efILmdGVaHjc7meiv4vzVFAVgFITFBzH
-         Isx77uVRX4U9iyuV/IFccXzd62kxq9UCs8fpSlfbbB9jLKjsCVrCSWmVXiy00gE0l71W
-         qpJw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=lX6vTVdP28sAUcsZAx6P7d8fEnuW4SnnYR6kFB2r4Dk=;
+        b=PziAM8UzWWk2O/fAzTSdFRXR7VcbJ09nbjUox6Gj//Qu/D9P8KlV8l6Au+ElQtRw6X
+         8T8bE2mwD02yOI1opc3c1rt4s5Ex9Iad+xA8TfnCoKIdoe/LnfsTFq+5m5hVVkxJGjxk
+         LTm7cuzIh7Xb0zG00C464iaHUBYkOtxO/4ces=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=5xXxxML/ct2Ri9d6cxArcql/6PFqOTDmr0diZjIGSNo=;
-        b=b137zUQGOLhvHSo7EsrorxkxfpujQ/qmD89Dqd+yF0dUue9SR93I8zrAObcLrDkXfH
-         s/xCXRT3l07zkeaKZjNsY4yTVcQSDx74nNZc09UXl3QBx5Z84ZTSwY9fhZfLvPZDhCCu
-         9pzXYtCstgZGRhELxjic5K3bPLQqPzkZ3FzAWI4ooo4DCqzvYVT56dmbN/XfIa4UpwKj
-         m5869JOI4XFyZddbwoqdg6978is95hrItpjM3mDXaJwkrLC2oJhNulDnz/z59jhfO+Sm
-         3qZFgisWbXE7O5zNJeEyiDuQN9tXK+8m5HFaKyL2naOLEZ6VTHzPglsDrB3tRyd6bZF7
-         5h+w==
-X-Gm-Message-State: AOAM532BJt5MdoR5CCuTn9Ie78yk3HbKtdZVZKcnH2mwfQWP4uP+mO4W
-        40OyJBxrSpsyPoVod7GfwGbSSkcD
-X-Google-Smtp-Source: ABdhPJxzBym5ZiqM4GEnLZLYzCRb0/k8PIQYxFu1Uwbx5eX0+hwExk4qHYJZ9CVTYBghVobXDyrMLiDO
-X-Received: from alexq.svl.corp.google.com ([2620:15c:2c5:13:37aa:bffc:7592:1682])
- (user=xqiu job=sendgmr) by 2002:a17:902:b687:b029:eb:6491:b3f7 with SMTP id
- c7-20020a170902b687b02900eb6491b3f7mr28916778pls.38.1620177185687; Tue, 04
- May 2021 18:13:05 -0700 (PDT)
-Date:   Tue,  4 May 2021 18:12:36 -0700
-Message-Id: <20210505011236.3264393-1-xqiu@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
-Subject: [PATCH] Documentation: i2c: Add doc for I2C sysfs
-From:   Alex Qiu <xqiu@google.com>
-To:     wsa@kernel.org
-Cc:     linux-i2c@vger.kernel.org, Alex Qiu <xqiu@google.com>,
-        Guenter Roeck <linux@roeck-us.net>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=lX6vTVdP28sAUcsZAx6P7d8fEnuW4SnnYR6kFB2r4Dk=;
+        b=egc6Un7fgYkLtpmNr3PBzSSFzTbiegi9WyFG21eewgEQd9eBcBFa2+8NX6D6bfBHWw
+         kkrhQ+mSbxrWwo3d+AOhkpxk4CoXyexcrJKqRkNFv/8xlRGBqvvi6t/2BQj8YDHoJsW3
+         ABJbjjM2A2J2ypdSMra936LNUJSpNoo8DVfYkR5zDnizS9Vm55W97QYlXq279Txip4UE
+         D2YjFCKmHv/qV3VK5/SLzBb4Qkg4Wa9isHTi6rJnBfjwYxrqHltpd+8ohW28FCLaETP5
+         km9Jm+pyIxguSpZw2ueTZd6bhhPAR/3ZZiUYrOGRjPINHfWdW28TT7UTlczWODo2Wuqi
+         L2lA==
+X-Gm-Message-State: AOAM532bvmI8q1BVaCpbaXvvZZRtYAR63BLmTrFvtRwWviMZZqVCrRVF
+        Rt5n4bQ7iwNxjbFIyEfiYmrOXCUBkzFUZAtmDIKoMLgtZz4=
+X-Google-Smtp-Source: ABdhPJzro2JKCy5vcnXa+onhPlmyRkPLgrndLJM9Va0ydjoM12Zj8/ZTtsjIG2ChK4qCSQ+1i5lO2Rxulpu23l1dX20=
+X-Received: by 2002:a9d:1ea9:: with SMTP id n38mr22439486otn.233.1620178686562;
+ Tue, 04 May 2021 18:38:06 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 4 May 2021 21:38:05 -0400
+MIME-Version: 1.0
+In-Reply-To: <20210420111355.18462-1-rojay@codeaurora.org>
+References: <20210420111355.18462-1-rojay@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 4 May 2021 21:38:05 -0400
+Message-ID: <CAE-0n51iyNgVW4Vra2C_4FAqQECU-aqAHLWZ+kB2Xv3i-inxiQ@mail.gmail.com>
+Subject: Re: [PATCH V9] i2c: i2c-qcom-geni: Add shutdown callback for i2c
+To:     Roja Rani Yarubandi <rojay@codeaurora.org>, wsa@kernel.org
+Cc:     dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
+        gregkh@linuxfoundation.org, mka@chromium.org,
+        skananth@codeaurora.org, msavaliy@qti.qualcomm.com,
+        skakit@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This doc helps Linux users navigate through I2C sysfs and learn
-the system I2C topology.
+Quoting Roja Rani Yarubandi (2021-04-20 04:13:55)
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 214b4c913a13..8ae17ccad99e 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -71,6 +71,8 @@ enum geni_i2c_err_code {
+>  #define ABORT_TIMEOUT          HZ
+>  #define XFER_TIMEOUT           HZ
+>  #define RST_TIMEOUT            HZ
+> +#define ABORT_XFER             0
+> +#define STOP_AND_ABORT_XFER    1
 
-Signed-off-by: Alex Qiu <xqiu@google.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
----
- Documentation/i2c/i2c-sysfs.rst | 394 ++++++++++++++++++++++++++++++++
- 1 file changed, 394 insertions(+)
- create mode 100644 Documentation/i2c/i2c-sysfs.rst
+These should be an enum.
 
-diff --git a/Documentation/i2c/i2c-sysfs.rst b/Documentation/i2c/i2c-sysfs.rst
-new file mode 100644
-index 000000000000..58a90af8d966
---- /dev/null
-+++ b/Documentation/i2c/i2c-sysfs.rst
-@@ -0,0 +1,394 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+===============
-+Linux I2C Sysfs
-+===============
-+
-+Overview
-+========
-+
-+I2C topology can be complex because of the existence of I2C MUX. The Linux
-+kernel abstracts the MUX channels into logical I2C bus numbers. However, there
-+is a gap of knowledge to map from the I2C bus physical number and MUX topology
-+to logical I2C bus number. This doc is aimed to fill in this gap, so the
-+audience (hardware engineers and new software developers for example) can learn
-+the concept of logical I2C buses in the kernel, by knowing the physical I2C
-+topology and navigating through the I2C sysfs in Linux shell. This knowledge is
-+useful and essential to use ``i2c-tools`` for the purpose of development and
-+debugging.
-+
-+Target audience
-+---------------
-+
-+People who need to use Linux shell to interact with I2C subsystem on a system
-+which the Linux is running on.
-+
-+Prerequisites
-+-------------
-+
-+1.  Knowledge of general Linux shell file system commands and operations.
-+
-+2.  General knowledge of I2C, I2C MUX and I2C topology.
-+
-+Location of I2C Sysfs
-+=====================
-+
-+Typically, the Linux Sysfs filesystem is mounted at the ``/sys`` directory,
-+so you can find the I2C Sysfs under ``/sys/bus/i2c/devices``
-+where you can directly ``cd`` to it.
-+There is a list of symbolic links under that directory. The links that
-+start with ``i2c-`` are I2C buses, which may be either physical or logical. The
-+other links that begin with numbers and end with numbers are I2C devices, where
-+the first number is I2C bus number, and the second number is I2C address.
-+
-+Google Pixel 3 phone for example::
-+
-+  blueline:/sys/bus/i2c/devices $ ls
-+  0-0008  0-0061  1-0028  3-0043  4-0036  4-0041  i2c-1  i2c-3
-+  0-000c  0-0066  2-0049  4-000b  4-0040  i2c-0   i2c-2  i2c-4
-+
-+``i2c-2`` is an I2C bus whose number is 2, and ``2-0049`` is an I2C device
-+on bus 2 address 0x49 bound with a kernel driver.
-+
-+Terminologies
-+=============
-+
-+First, let us define a couple of terminologies to avoid confusions in the later
-+sections.
-+
-+(Physical) I2C Bus Controller
-+-----------------------------
-+
-+The hardware system that the Linux kernel is running on may have multiple
-+physical I2C bus controllers. The controllers are hardware and physical, and the
-+system may define multiple registers in the memory space to manipulate the
-+controllers. Linux kernel has I2C bus drivers under source directory
-+``drivers/i2c/busses`` to translate kernel I2C API into register
-+operations for different systems. This terminology is not limited to Linux
-+kernel only.
-+
-+I2C Bus Physical Number
-+-----------------------
-+
-+For each physical I2C bus controller, the system vendor may assign a physical
-+number to each controller. For example, the first I2C bus controller which has
-+the lowest register addresses may be called ``I2C-0``.
-+
-+Logical I2C Bus
-+---------------
-+
-+Every I2C bus number you see in Linux I2C Sysfs is a logical I2C bus with a
-+number assigned. This is similar to the fact that software code is usually
-+written upon virtual memory space, instead of physical memory space.
-+
-+Each logical I2C bus may be an abstraction of a physical I2C bus controller, or
-+an abstraction of a channel behind an I2C MUX. In case it is an abstraction of a
-+MUX channel, whenever we access an I2C device via a such logical bus, the kernel
-+will switch the I2C MUX for you to the proper channel as part of the
-+abstraction.
-+
-+Physical I2C Bus
-+----------------
-+
-+If the logical I2C bus is a direct abstraction of a physical I2C bus controller,
-+let us call it a physical I2C bus.
-+
-+Caveat
-+------
-+
-+This may be a confusing part for people who only know about the physical I2C
-+design of a board. It is actually possible to rename the I2C bus physical number
-+to a different number in logical I2C bus level in Device Tree Source (DTS) under
-+section ``aliases``. See
-+`arch/arm/boot/dts/nuvoton-npcm730-gsj.dts
-+<../../arch/arm/boot/dts/nuvoton-npcm730-gsj.dts>`_
-+for an example of DTS file.
-+
-+Best Practice: **(To kernel software developers)** It is better to keep the I2C
-+bus physical number the same as their corresponding logical I2C bus number,
-+instead of renaming or mapping them, so that it may be less confusing to other
-+users. These physical I2C buses can be served as good starting points for I2C
-+MUX fanouts. For the following examples, we will assume that the physical I2C
-+bus has a number same as their I2C bus physical number.
-+
-+Walk through Logical I2C Bus
-+============================
-+
-+For the following content, we will use a more complex I2C topology as an
-+example. Here is a brief graph for the I2C topology. If you do not understand
-+this graph at the first glance, do not be afraid to continue reading this doc
-+and review it when you finish reading.
-+
-+::
-+
-+  i2c-7 (physical I2C bus controller 7)
-+  `-- 7-0071 (4-channel I2C MUX at 0x71)
-+      |-- i2c-60 (channel-0)
-+      |-- i2c-73 (channel-1)
-+      |   |-- 73-0040 (I2C sensor device with hwmon directory)
-+      |   |-- 73-0070 (I2C MUX at 0x70, exists in DTS, but failed to probe)
-+      |   `-- 73-0072 (8-channel I2C MUX at 0x72)
-+      |       |-- i2c-78 (channel-0)
-+      |       |-- ... (channel-1...6, i2c-79...i2c-84)
-+      |       `-- i2c-85 (channel-7)
-+      |-- i2c-86 (channel-2)
-+      `-- i2c-203 (channel-3)
-+
-+Distinguish Physical and Logical I2C Bus
-+----------------------------------------
-+
-+One simple way to distinguish between a physical I2C bus and a logical I2C bus,
-+is to read the symbolic link ``device`` under the I2C bus directory by using
-+command ``ls -l`` or ``readlink``.
-+
-+An alternative symbolic link to check is ``mux_device``. This link only exists
-+in logical I2C bus directory which is fanned out from another I2C bus.
-+Reading this link will also tell you which I2C MUX device created
-+this logical I2C bus.
-+
-+If the symbolic link points to a directory ending with ``.i2c``, it should be a
-+physical I2C bus, directly abstracting a physical I2C bus controller. For
-+example::
-+
-+  $ readlink /sys/bus/i2c/devices/i2c-7/device
-+  ../../f0087000.i2c
-+  $ ls /sys/bus/i2c/devices/i2c-7/mux_device
-+  ls: /sys/bus/i2c/devices/i2c-7/mux_device: No such file or directory
-+
-+In this case, ``i2c-7`` is a physical I2C bus, so it does not have the symbolic
-+link ``mux_device`` under its directory. And if the kernel software developer
-+follows the common practice by not renaming physical I2C buses, this should also
-+mean the physical I2C bus controller 7 of the system.
-+
-+On the other hand, if the symbolic link points to another I2C bus, the I2C bus
-+presented by the current directory has to be a logical bus. The I2C bus pointed
-+by the link is the parent bus which may be either a physical I2C bus or a
-+logical one. In this case, the I2C bus presented by the current directory
-+abstracts an I2C MUX channel under the parent bus.
-+
-+For example::
-+
-+  $ readlink /sys/bus/i2c/devices/i2c-73/device
-+  ../../i2c-7
-+  $ readlink /sys/bus/i2c/devices/i2c-73/mux_device
-+  ../7-0071
-+
-+``i2c-73`` is a logical bus fanout by an I2C MUX under ``i2c-7``
-+whose I2C address is 0x71.
-+Whenever we access an I2C device with bus 73, the kernel will always
-+switch the I2C MUX addressed 0x71 to the proper channel for you as part of the
-+abstraction.
-+
-+Finding out Logical I2C Bus Number
-+----------------------------------
-+
-+In this section, we will describe how to find out the logical I2C bus number
-+representing certain I2C MUX channels based on the knowledge of physical
-+hardware I2C topology.
-+
-+In this example, we have a system which has a physical I2C bus 7 and not renamed
-+in DTS. There is a 4-channel MUX at address 0x71 on that bus. There is another
-+8-channel MUX at address 0x72 behind the channel 1 of the 0x71 MUX. Let us
-+navigate through Sysfs and find out the logical I2C bus number of the channel 3
-+of the 0x72 MUX.
-+
-+First of all, let us go to the directory of ``i2c-7``::
-+
-+  ~$ cd /sys/bus/i2c/devices/i2c-7
-+  /sys/bus/i2c/devices/i2c-7$ ls
-+  7-0071         i2c-60         name           subsystem
-+  delete_device  i2c-73         new_device     uevent
-+  device         i2c-86         of_node
-+  i2c-203        i2c-dev        power
-+
-+There, we see the 0x71 MUX as ``7-0071``. Go inside it::
-+
-+  /sys/bus/i2c/devices/i2c-7$ cd 7-0071/
-+  /sys/bus/i2c/devices/i2c-7/7-0071$ ls -l
-+  channel-0   channel-3   modalias    power
-+  channel-1   driver      name        subsystem
-+  channel-2   idle_state  of_node     uevent
-+
-+Read the link ``channel-1`` using ``readlink`` or ``ls -l``::
-+
-+  /sys/bus/i2c/devices/i2c-7/7-0071$ readlink channel-1
-+  ../i2c-73
-+
-+We find out that the channel 1 of 0x71 MUX on ``i2c-7`` is assigned
-+with a logical I2C bus number of 73.
-+Let us continue the journey to directory ``i2c-73`` in either ways::
-+
-+  # cd to i2c-73 under I2C Sysfs root
-+  /sys/bus/i2c/devices/i2c-7/7-0071$ cd /sys/bus/i2c/devices/i2c-73
-+  /sys/bus/i2c/devices/i2c-73$
-+
-+  # cd the channel symbolic link
-+  /sys/bus/i2c/devices/i2c-7/7-0071$ cd channel-1
-+  /sys/bus/i2c/devices/i2c-7/7-0071/channel-1$
-+
-+  # cd the link content
-+  /sys/bus/i2c/devices/i2c-7/7-0071$ cd ../i2c-73
-+  /sys/bus/i2c/devices/i2c-7/i2c-73$
-+
-+Either ways, you will end up in the directory of ``i2c-73``. Similar to above,
-+we can now find the 0x72 MUX and what logical I2C bus numbers
-+that its channels are assigned::
-+
-+  /sys/bus/i2c/devices/i2c-73$ ls
-+  73-0040        device         i2c-83         new_device
-+  73-004e        i2c-78         i2c-84         of_node
-+  73-0050        i2c-79         i2c-85         power
-+  73-0070        i2c-80         i2c-dev        subsystem
-+  73-0072        i2c-81         mux_device     uevent
-+  delete_device  i2c-82         name
-+  /sys/bus/i2c/devices/i2c-73$ cd 73-0072
-+  /sys/bus/i2c/devices/i2c-73/73-0072$ ls
-+  channel-0   channel-4   driver      of_node
-+  channel-1   channel-5   idle_state  power
-+  channel-2   channel-6   modalias    subsystem
-+  channel-3   channel-7   name        uevent
-+  /sys/bus/i2c/devices/i2c-73/73-0072$ readlink channel-3
-+  ../i2c-81
-+
-+There, we find out the logical I2C bus number of the channel 3 of the 0x72 MUX
-+is 81. We can later use this number to switch to its own I2C Sysfs directory or
-+issue ``i2c-tools`` commands.
-+
-+Tip: Once you understand the I2C topology with MUX, command
-+`i2cdetect -l
-+<https://manpages.debian.org/unstable/i2c-tools/i2cdetect.8.en.html>`_
-+in
-+`I2C Tools
-+<https://i2c.wiki.kernel.org/index.php/I2C_Tools>`_
-+can give you
-+an overview of the I2C topology easily, if it is available on your system. For
-+example::
-+
-+  $ i2cdetect -l | grep -e '\-73' -e _7 | sort -V
-+  i2c-7   i2c             npcm_i2c_7                              I2C adapter
-+  i2c-73  i2c             i2c-7-mux (chan_id 1)                   I2C adapter
-+  i2c-78  i2c             i2c-73-mux (chan_id 0)                  I2C adapter
-+  i2c-79  i2c             i2c-73-mux (chan_id 1)                  I2C adapter
-+  i2c-80  i2c             i2c-73-mux (chan_id 2)                  I2C adapter
-+  i2c-81  i2c             i2c-73-mux (chan_id 3)                  I2C adapter
-+  i2c-82  i2c             i2c-73-mux (chan_id 4)                  I2C adapter
-+  i2c-83  i2c             i2c-73-mux (chan_id 5)                  I2C adapter
-+  i2c-84  i2c             i2c-73-mux (chan_id 6)                  I2C adapter
-+  i2c-85  i2c             i2c-73-mux (chan_id 7)                  I2C adapter
-+
-+Pinned Logical I2C Bus Number
-+-----------------------------
-+
-+If not specified in DTS, when an I2C MUX driver is applied and the MUX device is
-+successfully probed, the kernel will assign the MUX channels with a logical bus
-+number based on the current biggest logical bus number incrementally. For
-+example, if the system has ``i2c-15`` as the highest logical bus number, and a
-+4-channel MUX is applied successfully, we will have ``i2c-16`` for the
-+MUX channel 0, and all the way to ``i2c-19`` for the MUX channel 3.
-+
-+The kernel software developer is able to pin the fanout MUX channels to a static
-+logical I2C bus number in the DTS. This doc will not go through the details on
-+how to implement this in DTS, but we can see an example in:
-+`arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts
-+<../../arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts>`_
-+
-+In the above example, there is an 8-channel I2C MUX at address 0x70 on physical
-+I2C bus 2. The channel 2 of the MUX is defined as ``imux18`` in DTS,
-+and pinned to logical I2C bus number 18 with the line of ``i2c18 = &imux18;``
-+in section ``aliases``.
-+
-+Take it further, it is possible to design a logical I2C bus number schema that
-+can be easily remembered by humans or calculated arithmetically. For example, we
-+can pin the fanout channels of a MUX on bus 3 to start at 30. So 30 will be the
-+logical bus number of the channel 0 of the MUX on bus 3, and 37 will be the
-+logical bus number of the channel 7 of the MUX on bus 3.
-+
-+I2C Devices
-+===========
-+
-+In previous sections, we mostly covered the I2C bus. In this section, let us see
-+what we can learn from the I2C device directory whose link name is in the format
-+of ``${bus}-${addr}``. The ``${bus}`` part in the name is a logical I2C bus
-+decimal number, while the ``${addr}`` part is a hex number of the I2C address
-+of each device.
-+
-+I2C Device Directory Content
-+----------------------------
-+
-+Inside each I2C device directory, there is a file named ``name``.
-+This file tells what device name it was used for the kernel driver to
-+probe this device. Use command ``cat`` to read its content. For example::
-+
-+  /sys/bus/i2c/devices/i2c-73$ cat 73-0040/name
-+  ina230
-+  /sys/bus/i2c/devices/i2c-73$ cat 73-0070/name
-+  pca9546
-+  /sys/bus/i2c/devices/i2c-73$ cat 73-0072/name
-+  pca9547
-+
-+There is a symbolic link named ``driver`` to tell what Linux kernel driver was
-+used to probe this device::
-+
-+  /sys/bus/i2c/devices/i2c-73$ readlink -f 73-0040/driver
-+  /sys/bus/i2c/drivers/ina2xx
-+  /sys/bus/i2c/devices/i2c-73$ readlink -f 73-0072/driver
-+  /sys/bus/i2c/drivers/pca954x
-+
-+But if the link ``driver`` does not exist at the first place,
-+it may mean that the kernel driver failed to probe this device due to
-+some errors. The error may be found in ``dmesg``::
-+
-+  /sys/bus/i2c/devices/i2c-73$ ls 73-0070/driver
-+  ls: 73-0070/driver: No such file or directory
-+  /sys/bus/i2c/devices/i2c-73$ dmesg | grep 73-0070
-+  pca954x 73-0070: probe failed
-+  pca954x 73-0070: probe failed
-+
-+Depending on what the I2C device is and what kernel driver was used to probe the
-+device, we may have different content in the device directory.
-+
-+I2C MUX Device
-+--------------
-+
-+While you may be already aware of this in previous sections, an I2C MUX device
-+will have symbolic link ``channel-*`` inside its device directory.
-+These symbolic links point to their logical I2C bus directories::
-+
-+  /sys/bus/i2c/devices/i2c-73$ ls -l 73-0072/channel-*
-+  lrwxrwxrwx ... 73-0072/channel-0 -> ../i2c-78
-+  lrwxrwxrwx ... 73-0072/channel-1 -> ../i2c-79
-+  lrwxrwxrwx ... 73-0072/channel-2 -> ../i2c-80
-+  lrwxrwxrwx ... 73-0072/channel-3 -> ../i2c-81
-+  lrwxrwxrwx ... 73-0072/channel-4 -> ../i2c-82
-+  lrwxrwxrwx ... 73-0072/channel-5 -> ../i2c-83
-+  lrwxrwxrwx ... 73-0072/channel-6 -> ../i2c-84
-+  lrwxrwxrwx ... 73-0072/channel-7 -> ../i2c-85
-+
-+I2C Sensor Device / Hwmon
-+-------------------------
-+
-+I2C sensor device is also common to see. If they are bound by a kernel hwmon
-+(Hardware Monitoring) driver successfully, you will see a ``hwmon`` directory
-+inside the I2C device directory. Keep digging into it, you will find the Hwmon
-+Sysfs for the I2C sensor device::
-+
-+  /sys/bus/i2c/devices/i2c-73/73-0040/hwmon/hwmon17$ ls
-+  curr1_input        in0_lcrit_alarm    name               subsystem
-+  device             in1_crit           power              uevent
-+  in0_crit           in1_crit_alarm     power1_crit        update_interval
-+  in0_crit_alarm     in1_input          power1_crit_alarm
-+  in0_input          in1_lcrit          power1_input
-+  in0_lcrit          in1_lcrit_alarm    shunt_resistor
-+
-+For more info on the Hwmon Sysfs, refer to the doc:
-+
-+`Naming and data format standards for sysfs files
-+<../hwmon/sysfs-interface.rst>`_
-+
-+Instantiate I2C Devices in I2C Sysfs
-+------------------------------------
-+
-+Refer to the doc:
-+
-+`How to instantiate I2C devices, Method 4: Instantiate from user-space
-+<instantiating-devices.rst#method-4-instantiate-from-user-space>`_
--- 
-2.31.1.527.g47e6f16901-goog
+>
+>  struct geni_i2c_dev {
+>         struct geni_se se;
+> @@ -89,6 +91,7 @@ struct geni_i2c_dev {
+>         void *dma_buf;
+>         size_t xfer_len;
+>         dma_addr_t dma_addr;
+> +       bool stop_xfer;
+>  };
+>
+>  struct geni_i2c_err_log {
+> @@ -215,6 +218,11 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
+>         struct i2c_msg *cur;
+>
+>         spin_lock(&gi2c->lock);
+> +       if (!gi2c->cur) {
+> +               dev_err(gi2c->se.dev, "Can't process irq, gi2c->cur is NULL\n");
 
+This error message is worthless. The user won't know what to do and then
+we return IRQ_HANDLED? If the device is misbehaving we should return
+IRQ_NONE and shut down the irq storm that will soon be upon us, not
+print an error message and hope for the best.
+
+> +               spin_unlock(&gi2c->lock);
+> +               return IRQ_HANDLED;
+> +       }
+>         m_stat = readl_relaxed(base + SE_GENI_M_IRQ_STATUS);
+>         rx_st = readl_relaxed(base + SE_GENI_RX_FIFO_STATUS);
+>         dm_tx_st = readl_relaxed(base + SE_DMA_TX_IRQ_STAT);
+> @@ -222,8 +230,7 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
+>         dma = readl_relaxed(base + SE_GENI_DMA_MODE_EN);
+>         cur = gi2c->cur;
+>
+> -       if (!cur ||
+> -           m_stat & (M_CMD_FAILURE_EN | M_CMD_ABORT_EN) ||
+> +       if (m_stat & (M_CMD_FAILURE_EN | M_CMD_ABORT_EN) ||
+>             dm_rx_st & (DM_I2C_CB_ERR)) {
+>                 if (m_stat & M_GP_IRQ_1_EN)
+>                         geni_i2c_err(gi2c, NACK);
+> @@ -301,17 +308,19 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
+>         return IRQ_HANDLED;
+>  }
+>
+> -static void geni_i2c_abort_xfer(struct geni_i2c_dev *gi2c)
+> +static void geni_i2c_abort_xfer(struct geni_i2c_dev *gi2c, bool is_stop_xfer)
+
+The bool should be an enum, but a better approach would be to have a
+locked and unlocked version of this function.
+
+>  {
+>         u32 val;
+>         unsigned long time_left = ABORT_TIMEOUT;
+>         unsigned long flags;
+>
+> -       spin_lock_irqsave(&gi2c->lock, flags);
+> +       if (!is_stop_xfer)
+> +               spin_lock_irqsave(&gi2c->lock, flags);
+>         geni_i2c_err(gi2c, GENI_TIMEOUT);
+>         gi2c->cur = NULL;
+>         geni_se_abort_m_cmd(&gi2c->se);
+> -       spin_unlock_irqrestore(&gi2c->lock, flags);
+> +       if (!is_stop_xfer)
+> +               spin_unlock_irqrestore(&gi2c->lock, flags);
+
+Please no conditional locking. It's too hard to reason about.
+
+>         do {
+>                 time_left = wait_for_completion_timeout(&gi2c->done, time_left);
+>                 val = readl_relaxed(gi2c->se.base + SE_GENI_M_IRQ_STATUS);
+> @@ -375,6 +384,38 @@ static void geni_i2c_tx_msg_cleanup(struct geni_i2c_dev *gi2c,
+>         }
+>  }
+>
+> +static void geni_i2c_stop_xfer(struct geni_i2c_dev *gi2c)
+> +{
+> +       int ret;
+> +       u32 geni_status;
+> +       struct i2c_msg *cur;
+> +       unsigned long flags;
+> +
+> +       /* Resume device, as runtime suspend can happen anytime during transfer */
+
+This comment doesn't make any sense. Hopefully a suspend can't happen
+during a transfer, but only before or after a transfer. Otherwise, the
+transfer code is broken and isn't properly keeping the device runtime
+resumed during the transfer.
+
+> +       ret = pm_runtime_get_sync(gi2c->se.dev);
+> +       if (ret < 0) {
+> +               dev_err(gi2c->se.dev, "Failed to resume device: %d\n", ret);
+> +               return;
+> +       }
+> +
+> +       spin_lock_irqsave(&gi2c->lock, flags);
+> +       gi2c->stop_xfer = 1;
+> +       geni_status = readl_relaxed(gi2c->se.base + SE_GENI_STATUS);
+> +       if (geni_status & M_GENI_CMD_ACTIVE) {
+> +               cur = gi2c->cur;
+> +               geni_i2c_abort_xfer(gi2c, STOP_AND_ABORT_XFER);
+> +               spin_unlock_irqrestore(&gi2c->lock, flags);
+> +               if (cur->flags & I2C_M_RD)
+> +                       geni_i2c_rx_msg_cleanup(gi2c, cur);
+> +               else
+> +                       geni_i2c_tx_msg_cleanup(gi2c, cur);
+> +       } else {
+> +               spin_unlock_irqrestore(&gi2c->lock, flags);
+> +       }
+
+Please unlock outside of an if condition. A local variable can be used
+outside of the unlock, but then the code is easier to follow
+
+	spin_lock_irqsave(&gi2c->lock, flags);
+	if (geni_status & M_GENI_CMD_ACTIVE) {
+		cur = gic2->cur;
+		geni_i2c_abort_xfer(....);
+	}
+	spin_unlock_irqrestore(gi2c->lock, flags);
+
+	if (cur) {
+		if (cur->flags & I2C_M_RD)
+			...
+		else
+			...
+	}
+
+And then I don't really know if grabbing 'cur' out of the struct and
+then messing with it outside the lock is correct.
+
+> +
+> +       pm_runtime_put_sync_suspend(gi2c->se.dev);
+> +}
+> +
+>  static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>                                 u32 m_param)
+>  {
+> @@ -407,7 +448,7 @@ static int geni_i2c_rx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>         cur = gi2c->cur;
+>         time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+>         if (!time_left)
+> -               geni_i2c_abort_xfer(gi2c);
+> +               geni_i2c_abort_xfer(gi2c, ABORT_XFER);
+
+So this would say geni_i2c_abort_xfer() but the one above would say
+geni_i2c_abort_xfer_locked() because the lock is already held.
+
+>
+>         geni_i2c_rx_msg_cleanup(gi2c, cur);
+>
+> @@ -449,7 +490,7 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>         cur = gi2c->cur;
+>         time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+>         if (!time_left)
+> -               geni_i2c_abort_xfer(gi2c);
+> +               geni_i2c_abort_xfer(gi2c, ABORT_XFER);
+>
+>         geni_i2c_tx_msg_cleanup(gi2c, cur);
+>
+> @@ -462,6 +503,7 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+>  {
+>         struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
+>         int i, ret;
+> +       unsigned long flags;
+>
+>         gi2c->err = 0;
+>         reinit_completion(&gi2c->done);
+> @@ -480,7 +522,13 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+>
+>                 m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
+>
+> +               spin_lock_irqsave(&gi2c->lock, flags);
+> +               if (gi2c->stop_xfer) {
+> +                       spin_unlock_irqrestore(&gi2c->lock, flags);
+> +                       break;
+> +               }
+>                 gi2c->cur = &msgs[i];
+> +               spin_unlock_irqrestore(&gi2c->lock, flags);
+
+Is this to jump into the transfer real fast and break out if we're in
+the middle of a transfer?
+
+>                 if (msgs[i].flags & I2C_M_RD)
+>                         ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
+>                 else
+> @@ -624,6 +672,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>         dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
+>
+>         gi2c->suspended = 1;
+> +       gi2c->stop_xfer = 0;
+>         pm_runtime_set_suspended(gi2c->se.dev);
+>         pm_runtime_set_autosuspend_delay(gi2c->se.dev, I2C_AUTO_SUSPEND_DELAY);
+>         pm_runtime_use_autosuspend(gi2c->se.dev);
+> @@ -650,6 +699,13 @@ static int geni_i2c_remove(struct platform_device *pdev)
+>         return 0;
+>  }
+>
+> +static void  geni_i2c_shutdown(struct platform_device *pdev)
+> +{
+> +       struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
+> +
+> +       geni_i2c_stop_xfer(gi2c);
+
+It would read better as
+
+	geni_i2c_plug_xfer(gi2c);
+
+or
+
+	geni_i2c_flush_and_teardown(gi2c);
+
+or
+
+	geni_i2c_teardown_tx_rx(gi2c);
+
+Something that says we're waiting for any transfer to complete, and then
+plugging the queue and removing the i2c bus entirely.
+
+In fact, where is that code? I'd expect to see i2c_del_adapter() in here
+so we know the adapter can't accept transfers anymore. Maybe
+i2c_del_adapter() could be called, and then there's nothing to do after
+that? This whole patch is trying to rip the adapter out from under the
+i2c core framework, when we should take the opposite approach and remove
+it from the core framework so that it can't transfer anything anymore
+and thus the IOMMU can remove the mapping.
+
+> +}
+> +
+>  static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
+>  {
+>         int ret;
