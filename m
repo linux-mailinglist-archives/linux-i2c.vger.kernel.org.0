@@ -2,90 +2,471 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 832ED37310F
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 May 2021 21:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CE8373379
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 03:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbhEDTys (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 May 2021 15:54:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60032 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232209AbhEDTys (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 4 May 2021 15:54:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 27CF4611CB;
-        Tue,  4 May 2021 19:53:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620158032;
-        bh=0r/j8p/v0WMfwl7qORsmq6s2OTxkG5aV8XkOqLqw72Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZDO27gy4lnDgiHSPEYDc8pkPgY7LqE9sm34xJn7XG1luMHes+6XjCwdLbhnJxJoih
-         xidjKRzDFx6FzlTmAxcfvcDPPcebe5KOyTg4kmdifo6+FJ2WTeEhbctDgHJ6LWdXU8
-         TxkHd//qRzJvwE4yNyXiuFWves3HyPOfzTCmBeNlkT7IJ/F67tuQ0FaLWvzxxLCjT7
-         KVzSrXEKErcuPzODm6zmeuZdIYisFLR7jr5FwH/XmqMjg1OZkVJY94tx2LqFfH4wEE
-         uc+edw9HeUsckvPz+w66qKjyH50SXlcLSKMNDvD9ah09Z62ePeew4M9oaNp6jE2K5J
-         lI+m4RWho/nQA==
-Date:   Tue, 4 May 2021 21:53:48 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com
-Subject: Re: [PATCH v3 1/2] dt-bindings: i2c: stm32f7: add st,smbus-alert
- binding for SMBus Alert
-Message-ID: <20210504195348.GB1783@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Alain Volmat <alain.volmat@foss.st.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, pierre-yves.mordret@foss.st.com,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com
-References: <1616998145-28278-1-git-send-email-alain.volmat@foss.st.com>
- <1616998145-28278-2-git-send-email-alain.volmat@foss.st.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jho1yZJdad60DJr+"
-Content-Disposition: inline
-In-Reply-To: <1616998145-28278-2-git-send-email-alain.volmat@foss.st.com>
+        id S231738AbhEEBOC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 May 2021 21:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231706AbhEEBOB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 May 2021 21:14:01 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE2AC061574
+        for <linux-i2c@vger.kernel.org>; Tue,  4 May 2021 18:13:06 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id a8-20020a62d4080000b029028db7db58adso474456pfh.22
+        for <linux-i2c@vger.kernel.org>; Tue, 04 May 2021 18:13:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=5xXxxML/ct2Ri9d6cxArcql/6PFqOTDmr0diZjIGSNo=;
+        b=kdeAs8wNreHq28FjNk2fZiACBsHch/Yoi/PPOtoVV2LfUQ6C4i9Jg1x3OAZVDOutB1
+         Wa98XqHHatnWMxE0YeBpuMk7vEbipF/V7t2/uh5X0TYvAHckmlycdu2ywX2aQb4ctN8+
+         I3aXWyJF5MaJRswiPu4nY1LUTKEDnqS18HQhJwFgerot+uQxKRcx7xxDCj3wGYTuYTBd
+         f+JFsym0IgP+GNLrpiu7AMVoYjhGhoS0mDb1efILmdGVaHjc7meiv4vzVFAVgFITFBzH
+         Isx77uVRX4U9iyuV/IFccXzd62kxq9UCs8fpSlfbbB9jLKjsCVrCSWmVXiy00gE0l71W
+         qpJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=5xXxxML/ct2Ri9d6cxArcql/6PFqOTDmr0diZjIGSNo=;
+        b=b137zUQGOLhvHSo7EsrorxkxfpujQ/qmD89Dqd+yF0dUue9SR93I8zrAObcLrDkXfH
+         s/xCXRT3l07zkeaKZjNsY4yTVcQSDx74nNZc09UXl3QBx5Z84ZTSwY9fhZfLvPZDhCCu
+         9pzXYtCstgZGRhELxjic5K3bPLQqPzkZ3FzAWI4ooo4DCqzvYVT56dmbN/XfIa4UpwKj
+         m5869JOI4XFyZddbwoqdg6978is95hrItpjM3mDXaJwkrLC2oJhNulDnz/z59jhfO+Sm
+         3qZFgisWbXE7O5zNJeEyiDuQN9tXK+8m5HFaKyL2naOLEZ6VTHzPglsDrB3tRyd6bZF7
+         5h+w==
+X-Gm-Message-State: AOAM532BJt5MdoR5CCuTn9Ie78yk3HbKtdZVZKcnH2mwfQWP4uP+mO4W
+        40OyJBxrSpsyPoVod7GfwGbSSkcD
+X-Google-Smtp-Source: ABdhPJxzBym5ZiqM4GEnLZLYzCRb0/k8PIQYxFu1Uwbx5eX0+hwExk4qHYJZ9CVTYBghVobXDyrMLiDO
+X-Received: from alexq.svl.corp.google.com ([2620:15c:2c5:13:37aa:bffc:7592:1682])
+ (user=xqiu job=sendgmr) by 2002:a17:902:b687:b029:eb:6491:b3f7 with SMTP id
+ c7-20020a170902b687b02900eb6491b3f7mr28916778pls.38.1620177185687; Tue, 04
+ May 2021 18:13:05 -0700 (PDT)
+Date:   Tue,  4 May 2021 18:12:36 -0700
+Message-Id: <20210505011236.3264393-1-xqiu@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
+Subject: [PATCH] Documentation: i2c: Add doc for I2C sysfs
+From:   Alex Qiu <xqiu@google.com>
+To:     wsa@kernel.org
+Cc:     linux-i2c@vger.kernel.org, Alex Qiu <xqiu@google.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+This doc helps Linux users navigate through I2C sysfs and learn
+the system I2C topology.
 
---jho1yZJdad60DJr+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Alex Qiu <xqiu@google.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+---
+ Documentation/i2c/i2c-sysfs.rst | 394 ++++++++++++++++++++++++++++++++
+ 1 file changed, 394 insertions(+)
+ create mode 100644 Documentation/i2c/i2c-sysfs.rst
 
+diff --git a/Documentation/i2c/i2c-sysfs.rst b/Documentation/i2c/i2c-sysfs.rst
+new file mode 100644
+index 000000000000..58a90af8d966
+--- /dev/null
++++ b/Documentation/i2c/i2c-sysfs.rst
+@@ -0,0 +1,394 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++===============
++Linux I2C Sysfs
++===============
++
++Overview
++========
++
++I2C topology can be complex because of the existence of I2C MUX. The Linux
++kernel abstracts the MUX channels into logical I2C bus numbers. However, there
++is a gap of knowledge to map from the I2C bus physical number and MUX topology
++to logical I2C bus number. This doc is aimed to fill in this gap, so the
++audience (hardware engineers and new software developers for example) can learn
++the concept of logical I2C buses in the kernel, by knowing the physical I2C
++topology and navigating through the I2C sysfs in Linux shell. This knowledge is
++useful and essential to use ``i2c-tools`` for the purpose of development and
++debugging.
++
++Target audience
++---------------
++
++People who need to use Linux shell to interact with I2C subsystem on a system
++which the Linux is running on.
++
++Prerequisites
++-------------
++
++1.  Knowledge of general Linux shell file system commands and operations.
++
++2.  General knowledge of I2C, I2C MUX and I2C topology.
++
++Location of I2C Sysfs
++=====================
++
++Typically, the Linux Sysfs filesystem is mounted at the ``/sys`` directory,
++so you can find the I2C Sysfs under ``/sys/bus/i2c/devices``
++where you can directly ``cd`` to it.
++There is a list of symbolic links under that directory. The links that
++start with ``i2c-`` are I2C buses, which may be either physical or logical. The
++other links that begin with numbers and end with numbers are I2C devices, where
++the first number is I2C bus number, and the second number is I2C address.
++
++Google Pixel 3 phone for example::
++
++  blueline:/sys/bus/i2c/devices $ ls
++  0-0008  0-0061  1-0028  3-0043  4-0036  4-0041  i2c-1  i2c-3
++  0-000c  0-0066  2-0049  4-000b  4-0040  i2c-0   i2c-2  i2c-4
++
++``i2c-2`` is an I2C bus whose number is 2, and ``2-0049`` is an I2C device
++on bus 2 address 0x49 bound with a kernel driver.
++
++Terminologies
++=============
++
++First, let us define a couple of terminologies to avoid confusions in the later
++sections.
++
++(Physical) I2C Bus Controller
++-----------------------------
++
++The hardware system that the Linux kernel is running on may have multiple
++physical I2C bus controllers. The controllers are hardware and physical, and the
++system may define multiple registers in the memory space to manipulate the
++controllers. Linux kernel has I2C bus drivers under source directory
++``drivers/i2c/busses`` to translate kernel I2C API into register
++operations for different systems. This terminology is not limited to Linux
++kernel only.
++
++I2C Bus Physical Number
++-----------------------
++
++For each physical I2C bus controller, the system vendor may assign a physical
++number to each controller. For example, the first I2C bus controller which has
++the lowest register addresses may be called ``I2C-0``.
++
++Logical I2C Bus
++---------------
++
++Every I2C bus number you see in Linux I2C Sysfs is a logical I2C bus with a
++number assigned. This is similar to the fact that software code is usually
++written upon virtual memory space, instead of physical memory space.
++
++Each logical I2C bus may be an abstraction of a physical I2C bus controller, or
++an abstraction of a channel behind an I2C MUX. In case it is an abstraction of a
++MUX channel, whenever we access an I2C device via a such logical bus, the kernel
++will switch the I2C MUX for you to the proper channel as part of the
++abstraction.
++
++Physical I2C Bus
++----------------
++
++If the logical I2C bus is a direct abstraction of a physical I2C bus controller,
++let us call it a physical I2C bus.
++
++Caveat
++------
++
++This may be a confusing part for people who only know about the physical I2C
++design of a board. It is actually possible to rename the I2C bus physical number
++to a different number in logical I2C bus level in Device Tree Source (DTS) under
++section ``aliases``. See
++`arch/arm/boot/dts/nuvoton-npcm730-gsj.dts
++<../../arch/arm/boot/dts/nuvoton-npcm730-gsj.dts>`_
++for an example of DTS file.
++
++Best Practice: **(To kernel software developers)** It is better to keep the I2C
++bus physical number the same as their corresponding logical I2C bus number,
++instead of renaming or mapping them, so that it may be less confusing to other
++users. These physical I2C buses can be served as good starting points for I2C
++MUX fanouts. For the following examples, we will assume that the physical I2C
++bus has a number same as their I2C bus physical number.
++
++Walk through Logical I2C Bus
++============================
++
++For the following content, we will use a more complex I2C topology as an
++example. Here is a brief graph for the I2C topology. If you do not understand
++this graph at the first glance, do not be afraid to continue reading this doc
++and review it when you finish reading.
++
++::
++
++  i2c-7 (physical I2C bus controller 7)
++  `-- 7-0071 (4-channel I2C MUX at 0x71)
++      |-- i2c-60 (channel-0)
++      |-- i2c-73 (channel-1)
++      |   |-- 73-0040 (I2C sensor device with hwmon directory)
++      |   |-- 73-0070 (I2C MUX at 0x70, exists in DTS, but failed to probe)
++      |   `-- 73-0072 (8-channel I2C MUX at 0x72)
++      |       |-- i2c-78 (channel-0)
++      |       |-- ... (channel-1...6, i2c-79...i2c-84)
++      |       `-- i2c-85 (channel-7)
++      |-- i2c-86 (channel-2)
++      `-- i2c-203 (channel-3)
++
++Distinguish Physical and Logical I2C Bus
++----------------------------------------
++
++One simple way to distinguish between a physical I2C bus and a logical I2C bus,
++is to read the symbolic link ``device`` under the I2C bus directory by using
++command ``ls -l`` or ``readlink``.
++
++An alternative symbolic link to check is ``mux_device``. This link only exists
++in logical I2C bus directory which is fanned out from another I2C bus.
++Reading this link will also tell you which I2C MUX device created
++this logical I2C bus.
++
++If the symbolic link points to a directory ending with ``.i2c``, it should be a
++physical I2C bus, directly abstracting a physical I2C bus controller. For
++example::
++
++  $ readlink /sys/bus/i2c/devices/i2c-7/device
++  ../../f0087000.i2c
++  $ ls /sys/bus/i2c/devices/i2c-7/mux_device
++  ls: /sys/bus/i2c/devices/i2c-7/mux_device: No such file or directory
++
++In this case, ``i2c-7`` is a physical I2C bus, so it does not have the symbolic
++link ``mux_device`` under its directory. And if the kernel software developer
++follows the common practice by not renaming physical I2C buses, this should also
++mean the physical I2C bus controller 7 of the system.
++
++On the other hand, if the symbolic link points to another I2C bus, the I2C bus
++presented by the current directory has to be a logical bus. The I2C bus pointed
++by the link is the parent bus which may be either a physical I2C bus or a
++logical one. In this case, the I2C bus presented by the current directory
++abstracts an I2C MUX channel under the parent bus.
++
++For example::
++
++  $ readlink /sys/bus/i2c/devices/i2c-73/device
++  ../../i2c-7
++  $ readlink /sys/bus/i2c/devices/i2c-73/mux_device
++  ../7-0071
++
++``i2c-73`` is a logical bus fanout by an I2C MUX under ``i2c-7``
++whose I2C address is 0x71.
++Whenever we access an I2C device with bus 73, the kernel will always
++switch the I2C MUX addressed 0x71 to the proper channel for you as part of the
++abstraction.
++
++Finding out Logical I2C Bus Number
++----------------------------------
++
++In this section, we will describe how to find out the logical I2C bus number
++representing certain I2C MUX channels based on the knowledge of physical
++hardware I2C topology.
++
++In this example, we have a system which has a physical I2C bus 7 and not renamed
++in DTS. There is a 4-channel MUX at address 0x71 on that bus. There is another
++8-channel MUX at address 0x72 behind the channel 1 of the 0x71 MUX. Let us
++navigate through Sysfs and find out the logical I2C bus number of the channel 3
++of the 0x72 MUX.
++
++First of all, let us go to the directory of ``i2c-7``::
++
++  ~$ cd /sys/bus/i2c/devices/i2c-7
++  /sys/bus/i2c/devices/i2c-7$ ls
++  7-0071         i2c-60         name           subsystem
++  delete_device  i2c-73         new_device     uevent
++  device         i2c-86         of_node
++  i2c-203        i2c-dev        power
++
++There, we see the 0x71 MUX as ``7-0071``. Go inside it::
++
++  /sys/bus/i2c/devices/i2c-7$ cd 7-0071/
++  /sys/bus/i2c/devices/i2c-7/7-0071$ ls -l
++  channel-0   channel-3   modalias    power
++  channel-1   driver      name        subsystem
++  channel-2   idle_state  of_node     uevent
++
++Read the link ``channel-1`` using ``readlink`` or ``ls -l``::
++
++  /sys/bus/i2c/devices/i2c-7/7-0071$ readlink channel-1
++  ../i2c-73
++
++We find out that the channel 1 of 0x71 MUX on ``i2c-7`` is assigned
++with a logical I2C bus number of 73.
++Let us continue the journey to directory ``i2c-73`` in either ways::
++
++  # cd to i2c-73 under I2C Sysfs root
++  /sys/bus/i2c/devices/i2c-7/7-0071$ cd /sys/bus/i2c/devices/i2c-73
++  /sys/bus/i2c/devices/i2c-73$
++
++  # cd the channel symbolic link
++  /sys/bus/i2c/devices/i2c-7/7-0071$ cd channel-1
++  /sys/bus/i2c/devices/i2c-7/7-0071/channel-1$
++
++  # cd the link content
++  /sys/bus/i2c/devices/i2c-7/7-0071$ cd ../i2c-73
++  /sys/bus/i2c/devices/i2c-7/i2c-73$
++
++Either ways, you will end up in the directory of ``i2c-73``. Similar to above,
++we can now find the 0x72 MUX and what logical I2C bus numbers
++that its channels are assigned::
++
++  /sys/bus/i2c/devices/i2c-73$ ls
++  73-0040        device         i2c-83         new_device
++  73-004e        i2c-78         i2c-84         of_node
++  73-0050        i2c-79         i2c-85         power
++  73-0070        i2c-80         i2c-dev        subsystem
++  73-0072        i2c-81         mux_device     uevent
++  delete_device  i2c-82         name
++  /sys/bus/i2c/devices/i2c-73$ cd 73-0072
++  /sys/bus/i2c/devices/i2c-73/73-0072$ ls
++  channel-0   channel-4   driver      of_node
++  channel-1   channel-5   idle_state  power
++  channel-2   channel-6   modalias    subsystem
++  channel-3   channel-7   name        uevent
++  /sys/bus/i2c/devices/i2c-73/73-0072$ readlink channel-3
++  ../i2c-81
++
++There, we find out the logical I2C bus number of the channel 3 of the 0x72 MUX
++is 81. We can later use this number to switch to its own I2C Sysfs directory or
++issue ``i2c-tools`` commands.
++
++Tip: Once you understand the I2C topology with MUX, command
++`i2cdetect -l
++<https://manpages.debian.org/unstable/i2c-tools/i2cdetect.8.en.html>`_
++in
++`I2C Tools
++<https://i2c.wiki.kernel.org/index.php/I2C_Tools>`_
++can give you
++an overview of the I2C topology easily, if it is available on your system. For
++example::
++
++  $ i2cdetect -l | grep -e '\-73' -e _7 | sort -V
++  i2c-7   i2c             npcm_i2c_7                              I2C adapter
++  i2c-73  i2c             i2c-7-mux (chan_id 1)                   I2C adapter
++  i2c-78  i2c             i2c-73-mux (chan_id 0)                  I2C adapter
++  i2c-79  i2c             i2c-73-mux (chan_id 1)                  I2C adapter
++  i2c-80  i2c             i2c-73-mux (chan_id 2)                  I2C adapter
++  i2c-81  i2c             i2c-73-mux (chan_id 3)                  I2C adapter
++  i2c-82  i2c             i2c-73-mux (chan_id 4)                  I2C adapter
++  i2c-83  i2c             i2c-73-mux (chan_id 5)                  I2C adapter
++  i2c-84  i2c             i2c-73-mux (chan_id 6)                  I2C adapter
++  i2c-85  i2c             i2c-73-mux (chan_id 7)                  I2C adapter
++
++Pinned Logical I2C Bus Number
++-----------------------------
++
++If not specified in DTS, when an I2C MUX driver is applied and the MUX device is
++successfully probed, the kernel will assign the MUX channels with a logical bus
++number based on the current biggest logical bus number incrementally. For
++example, if the system has ``i2c-15`` as the highest logical bus number, and a
++4-channel MUX is applied successfully, we will have ``i2c-16`` for the
++MUX channel 0, and all the way to ``i2c-19`` for the MUX channel 3.
++
++The kernel software developer is able to pin the fanout MUX channels to a static
++logical I2C bus number in the DTS. This doc will not go through the details on
++how to implement this in DTS, but we can see an example in:
++`arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts
++<../../arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts>`_
++
++In the above example, there is an 8-channel I2C MUX at address 0x70 on physical
++I2C bus 2. The channel 2 of the MUX is defined as ``imux18`` in DTS,
++and pinned to logical I2C bus number 18 with the line of ``i2c18 = &imux18;``
++in section ``aliases``.
++
++Take it further, it is possible to design a logical I2C bus number schema that
++can be easily remembered by humans or calculated arithmetically. For example, we
++can pin the fanout channels of a MUX on bus 3 to start at 30. So 30 will be the
++logical bus number of the channel 0 of the MUX on bus 3, and 37 will be the
++logical bus number of the channel 7 of the MUX on bus 3.
++
++I2C Devices
++===========
++
++In previous sections, we mostly covered the I2C bus. In this section, let us see
++what we can learn from the I2C device directory whose link name is in the format
++of ``${bus}-${addr}``. The ``${bus}`` part in the name is a logical I2C bus
++decimal number, while the ``${addr}`` part is a hex number of the I2C address
++of each device.
++
++I2C Device Directory Content
++----------------------------
++
++Inside each I2C device directory, there is a file named ``name``.
++This file tells what device name it was used for the kernel driver to
++probe this device. Use command ``cat`` to read its content. For example::
++
++  /sys/bus/i2c/devices/i2c-73$ cat 73-0040/name
++  ina230
++  /sys/bus/i2c/devices/i2c-73$ cat 73-0070/name
++  pca9546
++  /sys/bus/i2c/devices/i2c-73$ cat 73-0072/name
++  pca9547
++
++There is a symbolic link named ``driver`` to tell what Linux kernel driver was
++used to probe this device::
++
++  /sys/bus/i2c/devices/i2c-73$ readlink -f 73-0040/driver
++  /sys/bus/i2c/drivers/ina2xx
++  /sys/bus/i2c/devices/i2c-73$ readlink -f 73-0072/driver
++  /sys/bus/i2c/drivers/pca954x
++
++But if the link ``driver`` does not exist at the first place,
++it may mean that the kernel driver failed to probe this device due to
++some errors. The error may be found in ``dmesg``::
++
++  /sys/bus/i2c/devices/i2c-73$ ls 73-0070/driver
++  ls: 73-0070/driver: No such file or directory
++  /sys/bus/i2c/devices/i2c-73$ dmesg | grep 73-0070
++  pca954x 73-0070: probe failed
++  pca954x 73-0070: probe failed
++
++Depending on what the I2C device is and what kernel driver was used to probe the
++device, we may have different content in the device directory.
++
++I2C MUX Device
++--------------
++
++While you may be already aware of this in previous sections, an I2C MUX device
++will have symbolic link ``channel-*`` inside its device directory.
++These symbolic links point to their logical I2C bus directories::
++
++  /sys/bus/i2c/devices/i2c-73$ ls -l 73-0072/channel-*
++  lrwxrwxrwx ... 73-0072/channel-0 -> ../i2c-78
++  lrwxrwxrwx ... 73-0072/channel-1 -> ../i2c-79
++  lrwxrwxrwx ... 73-0072/channel-2 -> ../i2c-80
++  lrwxrwxrwx ... 73-0072/channel-3 -> ../i2c-81
++  lrwxrwxrwx ... 73-0072/channel-4 -> ../i2c-82
++  lrwxrwxrwx ... 73-0072/channel-5 -> ../i2c-83
++  lrwxrwxrwx ... 73-0072/channel-6 -> ../i2c-84
++  lrwxrwxrwx ... 73-0072/channel-7 -> ../i2c-85
++
++I2C Sensor Device / Hwmon
++-------------------------
++
++I2C sensor device is also common to see. If they are bound by a kernel hwmon
++(Hardware Monitoring) driver successfully, you will see a ``hwmon`` directory
++inside the I2C device directory. Keep digging into it, you will find the Hwmon
++Sysfs for the I2C sensor device::
++
++  /sys/bus/i2c/devices/i2c-73/73-0040/hwmon/hwmon17$ ls
++  curr1_input        in0_lcrit_alarm    name               subsystem
++  device             in1_crit           power              uevent
++  in0_crit           in1_crit_alarm     power1_crit        update_interval
++  in0_crit_alarm     in1_input          power1_crit_alarm
++  in0_input          in1_lcrit          power1_input
++  in0_lcrit          in1_lcrit_alarm    shunt_resistor
++
++For more info on the Hwmon Sysfs, refer to the doc:
++
++`Naming and data format standards for sysfs files
++<../hwmon/sysfs-interface.rst>`_
++
++Instantiate I2C Devices in I2C Sysfs
++------------------------------------
++
++Refer to the doc:
++
++`How to instantiate I2C devices, Method 4: Instantiate from user-space
++<instantiating-devices.rst#method-4-instantiate-from-user-space>`_
+-- 
+2.31.1.527.g47e6f16901-goog
 
-> +        st,smbus-alert:
-
-After reading the specs again, I think we can make this a generic
-binding. SMBusAlert is optional. So, we can say it is not covered by the
-"smbus" binding and needs a seperate one. Makes sense?
-
-
---jho1yZJdad60DJr+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCRpkwACgkQFA3kzBSg
-Kba/8g//fDwD9sm7N+HAiL7vPmZr0Uock8CYReRf6YpDV+9Yrhh7MVqURaDwtor8
-sIXzxCIeW+HfNXOVjWgEEYwW+NIhjqerMTl+1bG5SLJq+R0gvlsEo7IIAoZ9TdYh
-Urt2LEYuR5yXwD38zkpG110NeqvzgMbYnXk7l8t8+FOCLYfhR3FH1VVM5c5/rPy1
-P5IY/V+z6Kq+YzMpxUreBg/erR14SxUfy3it1cSSJn2TpiSiUuHooV15orA3+VLR
-2VpQLmVBpN86UFHLEHpgSwIYTiOvDu0tF86eZQPCUo3l3blCuId/RhX5ysroAA1s
-R/QwP787hLZHrCbvwfFPFMWi9/Yety6/BLWVDHpp22eR9kHtBhQ1tVvn/Fhy+qaz
-UZnLlVDMqi6N7tQoKDNYF8tzpz7kyhXMCLT4ZoSlxiFIkCACmYZs+Q8+5CSJKo7A
-yuRoVgvy0XG4mTmqDQNda6l2p+SQyQxTri9gSEGczKS6nO8vv/Gb+WZfTyuXe7dW
-SPsckWowrvq7Mq0Ea51YqvdRDN3YpvSUEGeBc0hIgOsqRgpsdBAflM97PLV1BktQ
-6Ee4/xaVDhrjplvpqVwXJZdslRMQO9iawelqngz0P4xVnMJxNzM73ZHOWIM8AP4S
-SreuL3RNm/pPROdtld4xb66OK/mm/cHxgvjy3cLhtbtLrVt/zrk=
-=W6P4
------END PGP SIGNATURE-----
-
---jho1yZJdad60DJr+--
