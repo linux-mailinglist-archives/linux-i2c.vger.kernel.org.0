@@ -2,101 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F203373BB7
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 14:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34275373C29
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 15:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbhEEMw0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 May 2021 08:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbhEEMwZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 May 2021 08:52:25 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB30FC06174A
-        for <linux-i2c@vger.kernel.org>; Wed,  5 May 2021 05:51:27 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id v6so2291869ljj.5
-        for <linux-i2c@vger.kernel.org>; Wed, 05 May 2021 05:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5ZKINt+24vkgq+jtEeRzmpva+N3VhWpG25a6HCCDQLg=;
-        b=lsqTsl7XXHy6S6on3u5XAyk4I5ko7hEiejMokpIADhU8TTGOHuBxi28EfYt8Jf7FV/
-         OnGwPXxfbb2dKPzov0N0V6NLD0nonHQEVWfTyW02sRnjp85USPGekyOLAQKJFWp9fF8E
-         hqkQ/ym/tBF1B6XEQnez1qYEpgs7V6bTtplIPN8B/Ji0Uc1VvPaIIJbB6dxkhLrH3AqL
-         3UtMnEuE9F6FZUX2A6rX80PBuBmh84a54AcIhfZ3QZ8F4adFMGl4Pe5TjEyqDS5EGFmn
-         on3hpo4FRiMNfsvx4bzbW3vZtc2TN6Ndl2ZTM44H5dPIxkf925BYAYWpGTMK9970dbWN
-         jpDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5ZKINt+24vkgq+jtEeRzmpva+N3VhWpG25a6HCCDQLg=;
-        b=VZ1/Vufpzd7oOQwWrJeXJUkUU5NMqTWDbBU/kf3uU4euINCwO5SwV5IDC4DaZZfJQs
-         LA6l7PrIAB69Zza2wfnzO1PJlo/Ci/1LMA8lyhYj6SMEJx5x/PKGzPAjI7biJT5aDR0e
-         wNlyiYG8NZNLrMv6WiCWSgwjbnBMAolzwD7UcYoKc0LrSe0UKfK9SgliLv/6JgqAVbVX
-         3YkfrNk2LRmZ5DiBrp3YA3bNS7fCW5Dc5EenxxRTg1hhx5oauFsGxCj/zZtf+HemJGq5
-         lIN6i04jqLaau2/wQ+9wE8PI5vyKshjXsPetnWMfrvJdAgE6I4DIBHf0fV+yXgXOKHm0
-         LC4Q==
-X-Gm-Message-State: AOAM531Wx4/A9MIrl12c8NQZclmZWX+fo1NohE7JgXFo6ZLLqICiVy/k
-        jOC5U+5t8eeSunig0dcxZQfJG1JJAoPBqRSdkLfvyQ==
-X-Google-Smtp-Source: ABdhPJyQJiePbgT7/Tp3x1+jnfQmk7ukJ4HB+fh/IcgCx7MW+Kkyq/ARSBbLSXWU82nXtNazzReNnDeM6ZGufQXDZ/A=
-X-Received: by 2002:a2e:a54c:: with SMTP id e12mr21964567ljn.326.1620219086062;
- Wed, 05 May 2021 05:51:26 -0700 (PDT)
+        id S232541AbhEENSd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 May 2021 09:18:33 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:5536 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229606AbhEENSc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 May 2021 09:18:32 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 145DHMeS022118;
+        Wed, 5 May 2021 15:17:23 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=oKWdkh59xaWBXpAlbJc3K7xKwP0fD1UPO9YaA7JF6dk=;
+ b=XELtC+voQP/UEhp6mOTj0IhYvZm9YYViaUf3ZgfQTviRfFHehe63ZMXfylx63UJuUsfm
+ BY7/n9BK8VSY7PNM30BaZ3D+HFS3cbwW2ReDumx1M0yL+fRKDsCiYFsZnzX88TLRlM4J
+ n3+x7gyjmmUmDuzuiJwUnk62sY8/CC5Ir2XVBd3q7HBpHMu91ExY7OvgjMCiK70HmVMs
+ 331yNAMJEeuy1F+kRhDNy9YO9dmgX2uGOW+w6EDRleFIL7b8TB0/4wkOdMGLZYWIKnIg
+ MqToVwA4Cl6Tk2DXMTzSZO55v4TmsXrI70yzdVNlCi7QVJrQobnkHV3mc9JiwTucS4/S aw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 38bea3vd3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 May 2021 15:17:23 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DE7E510002A;
+        Wed,  5 May 2021 15:17:21 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AA7D22C4206;
+        Wed,  5 May 2021 15:17:21 +0200 (CEST)
+Received: from localhost (10.75.127.51) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 5 May 2021 15:17:21
+ +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <wsa@kernel.org>, <robh+dt@kernel.org>
+CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@foss.st.com>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <alain.volmat@foss.st.com>
+Subject: [PATCH v4 0/2] i2c: stm32f7: add SMBus-Alert support
+Date:   Wed, 5 May 2021 15:14:37 +0200
+Message-ID: <1620220479-2647-1-git-send-email-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20210423165906.2504169-1-dianders@chromium.org>
- <20210423095743.v5.1.I9e6af2529d6c61e5daf86a15a1211121c5223b9a@changeid>
- <CACRpkdYkRFLvCRPSYNzYQG58QgPfhvjtHb+FBQZadyrnjC8=1A@mail.gmail.com>
- <CAD=FV=UX683grZ=poTwKXxSqYBCLdLAOCxOPhE_xVVgKbe36Mw@mail.gmail.com>
- <CACRpkdYfugrJ4WGn=w+viGXE6s5cdHjLC++jHPLVy_QH09KA8Q@mail.gmail.com>
- <CAD=FV=XXxTz8hi92y6p3hX7iVEHuqKHsrKPSnX_a__WCEQRAKw@mail.gmail.com>
- <CACRpkdZVH=h37hSjvjcNmRwV-RoBB-nvUbrOT80DoLr7n81R3Q@mail.gmail.com> <CAD=FV=Vzn0ih_RqR_ySJzFtq0B0x_4a-Uwjk56GeLyUZtTEXrQ@mail.gmail.com>
-In-Reply-To: <CAD=FV=Vzn0ih_RqR_ySJzFtq0B0x_4a-Uwjk56GeLyUZtTEXrQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 5 May 2021 14:51:14 +0200
-Message-ID: <CACRpkdbOpJtoaX7Jayr1-QRvZOjKbt-D0XVy+Xvxga9RULoh1w@mail.gmail.com>
-Subject: Re: [PATCH v5 01/20] drm/panel: panel-simple: Add missing
- pm_runtime_disable() calls
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andrzej Hajda <a.hajda@samsung.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Sam Ravnborg <sam@ravnborg.org>, Wolfram Sang <wsa@kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-05_07:2021-05-05,2021-05-05 signatures=0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 3, 2021 at 10:41 PM Doug Anderson <dianders@chromium.org> wrote:
+This serie adds support for SMBus Alert on the STM32F7.
+A new binding smbus-alert is added in order to differenciate
+with the existing smbus binding.
 
-> > At your convenience and when you think there is too little
-> > stuff in your sn65dsi86 TODO, check out
-> > pinctrl-bcm63xx.c for an example of select GPIO_REGMAP
-> > made very simple (this works fine as long as they are bit
-> > offsets starting from 0).
->
-> I seem to recall you mentioning something like this. When I looked at
-> it in the past I wasn't convinced it would be easy. See my response
-> [2]. The rough summary is that I didn't think the helpers were happy
-> with the pm_runtime() model that I'm using. Did I get that wrong?
+SMBus-Alert is an optional SMBus feature and SMBA alert control
+and status logic must be enabled along with SMBALERT# pin
+configured via pinctrl in the device tree. This is the
+rational for adding "smbus-alert" property.
 
-Yeah good point. It does seem a bit too complex for that.
-Sorry for not remembering.
+---
+v4:
+add a new generic smbus-alert property instead of st,smbus-alert
+update driver to use smbus-alert instead of st,smbus-alert
 
-Yours,
-Linus Walleij
+v3:
+use lore.kernel.org links instead of marc.info
+
+v2:
+When SMBUS alert isn't available on the board (SMBA unused), this
+logic musn't be enabled. Enabling it unconditionally wrongly lead to get
+SMBA interrupts.
+So, add "st,smbus-alert" dedicated binding to have a smbus alert with a
+consistent pin configuration in DT.
+
+Alain Volmat (2):
+  i2c: add binding to mark a bus as supporting SMBus-Alert
+  i2c: stm32f7: add SMBus-Alert support
+
+ Documentation/devicetree/bindings/i2c/i2c.txt |  7 ++-
+ drivers/i2c/busses/i2c-stm32f7.c              | 73 +++++++++++++++++++++++++++
+ 2 files changed, 78 insertions(+), 2 deletions(-)
+
+-- 
+2.7.4
+
