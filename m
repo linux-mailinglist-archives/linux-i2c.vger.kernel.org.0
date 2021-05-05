@@ -2,38 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB7A37427A
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 18:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01723743C3
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 19:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235683AbhEEQq7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 May 2021 12:46:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49344 "EHLO mail.kernel.org"
+        id S233943AbhEEQvr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 May 2021 12:51:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49346 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235766AbhEEQo6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 5 May 2021 12:44:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E41F61926;
-        Wed,  5 May 2021 16:35:37 +0000 (UTC)
+        id S234954AbhEEQsk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 May 2021 12:48:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2BFB26195F;
+        Wed,  5 May 2021 16:37:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232538;
-        bh=yMMHeJwtOjSzzGJkzTq+5P1IroFA0qOOWeJTB7p5iqE=;
+        s=k20201202; t=1620232628;
+        bh=fxnDPLlPWYLf9/KzTkxHvikDC9lWN6ga0dBvtKr5d2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OniYxozPZPpI48XA5CgtTsKWJEQ6Zj5RIk/r2x5oBqBDi/B28w662fT+p7WZNTw4e
-         kSzFSpdxui28nUlcnXMA/hkprk9RSBqtQ4CpujyyX9exRUjmwChq/91l4c1/dleNc6
-         6oZHcs/RRzj7D9yuSvBjzjm3138bLF+p/3rroryDemKRc8+vcn/YlWMQHLP6WlRcr0
-         Z9MDe7aPGcoKLvA/mIORFWdGjSGYzNGBpbui7yRu+WMSmEup8jAkjfCP5wtDqti/jj
-         V+pDtNQljYKM3p9rCLt+UEkheSL2zaH1FUXbJTxdFU9mXsNcU0cvz4t5HlWWxDknB4
-         pOQJsjaZv1vbQ==
+        b=FrnQTzMbyk23ZFA4HoeesDdZIrxteFZQ5gjAzsD9c1c3vkvJa6rDENM4T6KEw4aSX
+         bRjb0PSIUpNOn2MY3hhglMXIqopJAiynup/NKubav8maxIpdAYWkqim5R4jWKxdJnL
+         0iq4xzFnChKYD69uO1S2ENqVAcm+fLnChMwvJX2reWmukxdPVJmwEDylHO6t193DCH
+         1Lmkdt6qOcQLNYp9yo2xswliMfT/UJKPKgnBBV1+Xn6VTFpXODYba9bJGUjnLMbhlc
+         bVWQUT4mwXDdBX6WEkU0p/bMY/jl2/K+wnJhCENz0B9kX+JC4TItNJR6JUAMlfZ4dl
+         uwOZQofPJCL9A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ye Weihua <yeweihua4@huawei.com>, Hulk Robot <hulkci@huawei.com>,
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.11 058/104] i2c: imx: Fix PM reference leak in i2c_imx_reg_slave()
-Date:   Wed,  5 May 2021 12:33:27 -0400
-Message-Id: <20210505163413.3461611-58-sashal@kernel.org>
+        linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 13/85] i2c: bail out early when RDWR parameters are wrong
+Date:   Wed,  5 May 2021 12:35:36 -0400
+Message-Id: <20210505163648.3462507-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210505163413.3461611-1-sashal@kernel.org>
-References: <20210505163413.3461611-1-sashal@kernel.org>
+In-Reply-To: <20210505163648.3462507-1-sashal@kernel.org>
+References: <20210505163648.3462507-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,37 +43,44 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Ye Weihua <yeweihua4@huawei.com>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[ Upstream commit c4b1fcc310e655fa8414696c38a84d36c00684c8 ]
+[ Upstream commit 71581562ee36032d2d574a9b23ad4af6d6a64cf7 ]
 
-pm_runtime_get_sync() will increment the PM reference count even on
-failure. Forgetting to put the reference again will result in a leak.
+The buggy parameters currently get caught later, but emit a noisy WARN.
+Userspace should not be able to trigger this, so add similar checks much
+earlier. Also avoids some unneeded code paths, of course. Apply kernel
+coding stlye to a comment while here.
 
-Replace it with pm_runtime_resume_and_get() to keep the usage counter
-balanced.
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Ye Weihua <yeweihua4@huawei.com>
+Reported-by: syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
+Tested-by: syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/i2c-dev.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index a8e8af57e33f..56c5a9f8c138 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -763,7 +763,7 @@ static int i2c_imx_reg_slave(struct i2c_client *client)
- 	i2c_imx->slave = client;
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index 6ceb11cc4be1..6ef38a8ee95c 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -440,8 +440,13 @@ static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 				   sizeof(rdwr_arg)))
+ 			return -EFAULT;
  
- 	/* Resume */
--	ret = pm_runtime_get_sync(i2c_imx->adapter.dev.parent);
-+	ret = pm_runtime_resume_and_get(i2c_imx->adapter.dev.parent);
- 	if (ret < 0) {
- 		dev_err(&i2c_imx->adapter.dev, "failed to resume i2c controller");
- 		return ret;
+-		/* Put an arbitrary limit on the number of messages that can
+-		 * be sent at once */
++		if (!rdwr_arg.msgs || rdwr_arg.nmsgs == 0)
++			return -EINVAL;
++
++		/*
++		 * Put an arbitrary limit on the number of messages that can
++		 * be sent at once
++		 */
+ 		if (rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
+ 			return -EINVAL;
+ 
 -- 
 2.30.2
 
