@@ -2,234 +2,175 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70369373C2B
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 15:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2383A373FC1
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 18:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbhEENSe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 May 2021 09:18:34 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:50208 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231265AbhEENSd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 May 2021 09:18:33 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 145DGkIV011934;
-        Wed, 5 May 2021 15:17:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=MQTZxYDV16ztBDB126pWN/m/7nOz9QM2k/Fh46U45vs=;
- b=xuhqFovH0A2/NDZ/G/6A5pY74WBd4Ofsdc+BFufiD+JQXOmupfhEdcOnrW6xV6IURVU4
- +1hluCexB83d77qToT0uloRo1V1M6i7yBGhxOF7kgtlC60AnUUvLGqG7j5nVOvPJKza5
- qfUBccm1U1Aqc/ur7n4GKsvAgRe1KyfesEZjr/Tfb/OGY5RHXenBNd8AhSViDSuWq+Zm
- 2VJv1/NoSzW+6ORag5xCFvdHmgLeNIjBddpOYEdClYFw0UIuOXWOuYLLSbDNEq1c89v2
- fWWEywNA50mzwkWDg0gl1+ty1NFRBHC3VqRKC9c4KeF273Af/ge5+mZz/zI+IGUfZH72 eg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 38be9svcqs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 May 2021 15:17:23 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 93E63100039;
-        Wed,  5 May 2021 15:17:22 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 854F32C4206;
-        Wed,  5 May 2021 15:17:22 +0200 (CEST)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 5 May 2021 15:17:22
- +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <wsa@kernel.org>, <robh+dt@kernel.org>
-CC:     <mark.rutland@arm.com>, <pierre-yves.mordret@foss.st.com>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <alain.volmat@foss.st.com>
-Subject: [PATCH v4 2/2] i2c: stm32f7: add SMBus-Alert support
-Date:   Wed, 5 May 2021 15:14:39 +0200
-Message-ID: <1620220479-2647-3-git-send-email-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1620220479-2647-1-git-send-email-alain.volmat@foss.st.com>
-References: <1620220479-2647-1-git-send-email-alain.volmat@foss.st.com>
+        id S234069AbhEEQ2R (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 May 2021 12:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233826AbhEEQ2Q (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 May 2021 12:28:16 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB05DC061574;
+        Wed,  5 May 2021 09:27:19 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id m190so2199276pga.2;
+        Wed, 05 May 2021 09:27:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QuiR/14QIg+HRSrKvEjh46+17/5lNNOb1LFG1tZkvKk=;
+        b=Ybzgvm+TW5ke7Xovz8fGkdanRRv9DbfloS5P8GgCKJvz3I+a/qdAt8lp3QtW3DxsW2
+         n08xOIuhEBO+sJpt6Pv/ShxACZMAvdHS3YW76LcauNQRkK4U61mqnLOPPstocp0TmcuU
+         53PhamcsqOFRYss7CSb0ruqosRkO1bKqgDbJgyJA9wAZQphq5bRT9cP1ez1o6wwTlg3J
+         Ce6ufn/4Q1JXcA8NppP570P+EcW1rhLTdQAR7eeoEBu68wSbKroIUBCUh7X09j/L7exz
+         v9c6Vp1d1r6JEEMIVZY0PED5vYVkZ6hdi5OovPNkAy9iT+tFb00qIwDwkjCaXdg5V4Oz
+         asYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QuiR/14QIg+HRSrKvEjh46+17/5lNNOb1LFG1tZkvKk=;
+        b=gW36iZa1THe5UPDSbBN07OfpqwzyL0sDrbkoozUBM+UXTSNrkYQFWyBlJA8jx/Lah1
+         wrwTSI+p2P13bv1Ul+egYXZfg9JkhJM3u7WceXkOI7DegwuLKyfcruWJMT3/6MStd/Tc
+         kyO/+9Mhrs4VDq48uOZ7MeWWgKl9+b9Dg/eCQQVV9z3P5DyP9z9WITWhk8trRxw0DtsZ
+         L8IMJetOuzY5YuLyimdXZBLwsaK75t5aCmXVt8KutITCI/K9S9fsAfYlkeCV9Kb9z9RU
+         FmLlmncluNOBV8OyBS2kFgimXUfF0+ltcXg1IsfrMbpH6bvadxanm9lPfXzr1cSetEUg
+         30Tg==
+X-Gm-Message-State: AOAM532RQPFvkE6EfS5iWS4ykXAgt3gsxv9ZNjAy3ZSwJlpPf7xs0eRI
+        wo4V5Miv3sO1a9FbZ61xj18=
+X-Google-Smtp-Source: ABdhPJwP9jGwbq3oB08OjZQ6UPlB63GLE9oGR3t0CF3D5eUfWqFyX3MAuFoEnI/tFyP6VFrLA8S2RQ==
+X-Received: by 2002:a62:8208:0:b029:289:112f:d43d with SMTP id w8-20020a6282080000b0290289112fd43dmr27878538pfd.61.1620232039350;
+        Wed, 05 May 2021 09:27:19 -0700 (PDT)
+Received: from localhost (185.212.56.149.16clouds.com. [185.212.56.149])
+        by smtp.gmail.com with ESMTPSA id 128sm15552248pfy.194.2021.05.05.09.27.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 May 2021 09:27:18 -0700 (PDT)
+Date:   Thu, 6 May 2021 00:27:16 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     corbet@lwn.net, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, bhelgaas@google.com, wsa@kernel.org,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Gordeev <agordeev@redhat.com>,
+        Jonathan Derrick <jonathan.derrick@intel.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Logan Gunthorpe <logang@deltatee.com>
+Subject: Re: [PATCH v5 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <20210505162716.GB1851@nuc8i5>
+References: <20210226155056.1068534-2-zhengdejin5@gmail.com>
+ <20210323224710.GA610170@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-05_07:2021-05-05,2021-05-05 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210323224710.GA610170@bjorn-Precision-5520>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for the SMBus-Alert protocol to the STM32F7 that has
-dedicated control and status logic.
+On Tue, Mar 23, 2021 at 05:47:10PM -0500, Bjorn Helgaas wrote:
+> [+cc Christoph, Thomas, Alexander, in case you're interested]
+> [+cc Jonathan, Kurt, Logan: vmd.c and switchtec.c use managed resources
+> and pci_alloc_irq_vectors()]
+> 
+> On Fri, Feb 26, 2021 at 11:50:53PM +0800, Dejin Zheng wrote:
+> > Introduce pcim_alloc_irq_vectors(), a device-managed version of
+> > pci_alloc_irq_vectors(). Introducing this function can simplify
+> > the error handling path in many drivers.
+> > 
+> > And use pci_free_irq_vectors() to replace some code in pcim_release(),
+> > they are equivalent, and no functional change. It is more explicit
+> > that pcim_alloc_irq_vectors() is a device-managed function.
+> > 
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> 
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Let me know if you'd like me to take the series.
+>
+Hi Bjorn,
 
-If SMBus-Alert is used, the SMBALERT# pin must be configured as alternate
-function for I2C Alert.
+These patches are still invisible on the mainline, could you help me to
+take it? Thanks very much!
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
-v4: - check for smbus-alert property
-v2: - rely on st,smbus-alert binding instead of smbus
----
- drivers/i2c/busses/i2c-stm32f7.c | 73 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+BR,
+Dejin
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 0138317ea600..b9b19a2a2ffa 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -51,6 +51,7 @@
- 
- /* STM32F7 I2C control 1 */
- #define STM32F7_I2C_CR1_PECEN			BIT(23)
-+#define STM32F7_I2C_CR1_ALERTEN			BIT(22)
- #define STM32F7_I2C_CR1_SMBHEN			BIT(20)
- #define STM32F7_I2C_CR1_WUPEN			BIT(18)
- #define STM32F7_I2C_CR1_SBC			BIT(16)
-@@ -125,6 +126,7 @@
- 				(((n) & STM32F7_I2C_ISR_ADDCODE_MASK) >> 17)
- #define STM32F7_I2C_ISR_DIR			BIT(16)
- #define STM32F7_I2C_ISR_BUSY			BIT(15)
-+#define STM32F7_I2C_ISR_ALERT			BIT(13)
- #define STM32F7_I2C_ISR_PECERR			BIT(11)
- #define STM32F7_I2C_ISR_ARLO			BIT(9)
- #define STM32F7_I2C_ISR_BERR			BIT(8)
-@@ -138,6 +140,7 @@
- #define STM32F7_I2C_ISR_TXE			BIT(0)
- 
- /* STM32F7 I2C Interrupt Clear */
-+#define STM32F7_I2C_ICR_ALERTCF			BIT(13)
- #define STM32F7_I2C_ICR_PECCF			BIT(11)
- #define STM32F7_I2C_ICR_ARLOCF			BIT(9)
- #define STM32F7_I2C_ICR_BERRCF			BIT(8)
-@@ -279,6 +282,17 @@ struct stm32f7_i2c_msg {
- };
- 
- /**
-+ * struct stm32f7_i2c_alert - SMBus alert specific data
-+ * @setup: platform data for the smbus_alert i2c client
-+ * @ara: I2C slave device used to respond to the SMBus Alert with Alert
-+ * Response Address
-+ */
-+struct stm32f7_i2c_alert {
-+	struct i2c_smbus_alert_setup setup;
-+	struct i2c_client *ara;
-+};
-+
-+/**
-  * struct stm32f7_i2c_dev - private data of the controller
-  * @adap: I2C adapter for this controller
-  * @dev: device for this controller
-@@ -310,6 +324,7 @@ struct stm32f7_i2c_msg {
-  * @analog_filter: boolean to indicate enabling of the analog filter
-  * @dnf_dt: value of digital filter requested via dt
-  * @dnf: value of digital filter to apply
-+ * @alert: SMBus alert specific data
-  */
- struct stm32f7_i2c_dev {
- 	struct i2c_adapter adap;
-@@ -341,6 +356,7 @@ struct stm32f7_i2c_dev {
- 	bool analog_filter;
- 	u32 dnf_dt;
- 	u32 dnf;
-+	struct stm32f7_i2c_alert *alert;
- };
- 
- /*
-@@ -1624,6 +1640,13 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
- 		f7_msg->result = -EINVAL;
- 	}
- 
-+	if (status & STM32F7_I2C_ISR_ALERT) {
-+		dev_dbg(dev, "<%s>: SMBus alert received\n", __func__);
-+		writel_relaxed(STM32F7_I2C_ICR_ALERTCF, base + STM32F7_I2C_ICR);
-+		i2c_handle_smbus_alert(i2c_dev->alert->ara);
-+		return IRQ_HANDLED;
-+	}
-+
- 	if (!i2c_dev->slave_running) {
- 		u32 mask;
- 		/* Disable interrupts */
-@@ -1990,6 +2013,42 @@ static void stm32f7_i2c_disable_smbus_host(struct stm32f7_i2c_dev *i2c_dev)
- 	}
- }
- 
-+static int stm32f7_i2c_enable_smbus_alert(struct stm32f7_i2c_dev *i2c_dev)
-+{
-+	struct stm32f7_i2c_alert *alert;
-+	struct i2c_adapter *adap = &i2c_dev->adap;
-+	struct device *dev = i2c_dev->dev;
-+	void __iomem *base = i2c_dev->base;
-+
-+	alert = devm_kzalloc(dev, sizeof(*alert), GFP_KERNEL);
-+	if (!alert)
-+		return -ENOMEM;
-+
-+	alert->ara = i2c_new_smbus_alert_device(adap, &alert->setup);
-+	if (IS_ERR(alert->ara))
-+		return PTR_ERR(alert->ara);
-+
-+	i2c_dev->alert = alert;
-+
-+	/* Enable SMBus Alert */
-+	stm32f7_i2c_set_bits(base + STM32F7_I2C_CR1, STM32F7_I2C_CR1_ALERTEN);
-+
-+	return 0;
-+}
-+
-+static void stm32f7_i2c_disable_smbus_alert(struct stm32f7_i2c_dev *i2c_dev)
-+{
-+	struct stm32f7_i2c_alert *alert = i2c_dev->alert;
-+	void __iomem *base = i2c_dev->base;
-+
-+	if (alert) {
-+		/* Disable SMBus Alert */
-+		stm32f7_i2c_clr_bits(base + STM32F7_I2C_CR1,
-+				     STM32F7_I2C_CR1_ALERTEN);
-+		i2c_unregister_device(alert->ara);
-+	}
-+}
-+
- static u32 stm32f7_i2c_func(struct i2c_adapter *adap)
- {
- 	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
-@@ -2173,6 +2232,16 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	if (of_property_read_bool(pdev->dev.of_node, "smbus-alert")) {
-+		ret = stm32f7_i2c_enable_smbus_alert(i2c_dev);
-+		if (ret) {
-+			dev_err(i2c_dev->dev,
-+				"failed to enable SMBus alert protocol (%d)\n",
-+				ret);
-+			goto i2c_disable_smbus_host;
-+		}
-+	}
-+
- 	dev_info(i2c_dev->dev, "STM32F7 I2C-%d bus adapter\n", adap->nr);
- 
- 	pm_runtime_mark_last_busy(i2c_dev->dev);
-@@ -2180,6 +2249,9 @@ static int stm32f7_i2c_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+i2c_disable_smbus_host:
-+	stm32f7_i2c_disable_smbus_host(i2c_dev);
-+
- i2c_adapter_remove:
- 	i2c_del_adapter(adap);
- 
-@@ -2214,6 +2286,7 @@ static int stm32f7_i2c_remove(struct platform_device *pdev)
- {
- 	struct stm32f7_i2c_dev *i2c_dev = platform_get_drvdata(pdev);
- 
-+	stm32f7_i2c_disable_smbus_alert(i2c_dev);
- 	stm32f7_i2c_disable_smbus_host(i2c_dev);
- 
- 	i2c_del_adapter(&i2c_dev->adap);
--- 
-2.7.4
-
+> > ---
+> > v4 -> v5:
+> > 	- Remove the check of enable device in pcim_alloc_irq_vectors()
+> > 	  and make it as a static line function.
+> > v3 -> v4:
+> > 	- No change
+> > v2 -> v3:
+> > 	- Add some commit comments for replace some codes in
+> > 	  pcim_release() by pci_free_irq_vectors().
+> > v1 -> v2:
+> > 	- Use pci_free_irq_vectors() to replace some code in
+> > 	  pcim_release().
+> > 	- Modify some commit messages.
+> > 
+> >  drivers/pci/pci.c   |  5 +----
+> >  include/linux/pci.h | 24 ++++++++++++++++++++++++
+> >  2 files changed, 25 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 16a17215f633..fecfdc0add2f 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -1969,10 +1969,7 @@ static void pcim_release(struct device *gendev, void *res)
+> >  	struct pci_devres *this = res;
+> >  	int i;
+> >  
+> > -	if (dev->msi_enabled)
+> > -		pci_disable_msi(dev);
+> > -	if (dev->msix_enabled)
+> > -		pci_disable_msix(dev);
+> > +	pci_free_irq_vectors(dev);
+> >  
+> >  	for (i = 0; i < DEVICE_COUNT_RESOURCE; i++)
+> >  		if (this->region_mask & (1 << i))
+> > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > index 86c799c97b77..5cafd7d65fd7 100644
+> > --- a/include/linux/pci.h
+> > +++ b/include/linux/pci.h
+> > @@ -1818,6 +1818,30 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+> >  					      NULL);
+> >  }
+> >  
+> > +/**
+> > + * pcim_alloc_irq_vectors - a device-managed pci_alloc_irq_vectors()
+> > + * @dev:		PCI device to operate on
+> > + * @min_vecs:		minimum number of vectors required (must be >= 1)
+> > + * @max_vecs:		maximum (desired) number of vectors
+> > + * @flags:		flags or quirks for the allocation
+> > + *
+> > + * Return the number of vectors allocated, (which might be smaller than
+> > + * @max_vecs) if successful, or a negative error code on error. If less
+> > + * than @min_vecs interrupt vectors are available for @dev the function
+> > + * will fail with -ENOSPC.
+> > + *
+> > + * It depends on calling pcim_enable_device() to make IRQ resources
+> > + * manageable.
+> > + */
+> > +static inline int
+> > +pcim_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+> > +			unsigned int max_vecs, unsigned int flags)
+> > +{
+> > +	if (!pci_is_managed(dev))
+> > +		return -EINVAL;
+> > +	return pci_alloc_irq_vectors(dev, min_vecs, max_vecs, flags);
+> > +}
+> > +
+> >  /* Include architecture-dependent settings and functions */
+> >  
+> >  #include <asm/pci.h>
+> > -- 
+> > 2.25.0
+> > 
