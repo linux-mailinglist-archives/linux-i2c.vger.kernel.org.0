@@ -2,106 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AF7373BA3
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 14:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F203373BB7
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 14:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbhEEMor (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 May 2021 08:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S232658AbhEEMw0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 May 2021 08:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbhEEMoU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 May 2021 08:44:20 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1103CC061574
-        for <linux-i2c@vger.kernel.org>; Wed,  5 May 2021 05:43:23 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id l4so2581010ejc.10
-        for <linux-i2c@vger.kernel.org>; Wed, 05 May 2021 05:43:22 -0700 (PDT)
+        with ESMTP id S230034AbhEEMwZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 May 2021 08:52:25 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB30FC06174A
+        for <linux-i2c@vger.kernel.org>; Wed,  5 May 2021 05:51:27 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id v6so2291869ljj.5
+        for <linux-i2c@vger.kernel.org>; Wed, 05 May 2021 05:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=1kk2RB1dnhjkEapRULI8O9YYzpV07dBfo5vy8Z/B2lI=;
-        b=hVpqdPipjK7Ns5TO7yJseLdD2iv4hAtxgGuYrpcJjA9fkimTWCeKVV5vMQB4HxMznv
-         d6EUonhGgIuplRhBkidMHN3bTwKfPOw04dN57tg1fj0wcE/DOcXrvGaVYbvcB1r3Kb8y
-         t1ZSz93+nBNLt6r/88xusDAYVvysqT+9vQxwqOs741U+9PwZpVZk+ogb9nL0PDv878Gb
-         ZnkipqrMGkH5CgOaPuhK+drQDFtulcwRLY0t1H/VSXN1p2ZdqL+XBJzaq346PtchJNhN
-         w/11+rJLBHz1ALKP9Nfg9Ir0dFhdIwCfODPc62iP21kVmwzROCPXmG9KnaXYHz2lov4W
-         6IIQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5ZKINt+24vkgq+jtEeRzmpva+N3VhWpG25a6HCCDQLg=;
+        b=lsqTsl7XXHy6S6on3u5XAyk4I5ko7hEiejMokpIADhU8TTGOHuBxi28EfYt8Jf7FV/
+         OnGwPXxfbb2dKPzov0N0V6NLD0nonHQEVWfTyW02sRnjp85USPGekyOLAQKJFWp9fF8E
+         hqkQ/ym/tBF1B6XEQnez1qYEpgs7V6bTtplIPN8B/Ji0Uc1VvPaIIJbB6dxkhLrH3AqL
+         3UtMnEuE9F6FZUX2A6rX80PBuBmh84a54AcIhfZ3QZ8F4adFMGl4Pe5TjEyqDS5EGFmn
+         on3hpo4FRiMNfsvx4bzbW3vZtc2TN6Ndl2ZTM44H5dPIxkf925BYAYWpGTMK9970dbWN
+         jpDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=1kk2RB1dnhjkEapRULI8O9YYzpV07dBfo5vy8Z/B2lI=;
-        b=RZrFmRUmfci74cGn+fMT10c+b3m2mxNvYFeXCXtqCstM0X8k7TjVs8avvYF7TUG2rC
-         I+qLbOvbzR53N9GwhEqMsr5QDf0tUITIGgqvmLzv0+eeYOpw16cOieMRJM1+Q6a4dOuC
-         1+tKELesJobARlhl+/iQPNzdkN8x2g61lMZvYQS4YgnNB+aiqIKuXFX4+5gzSTFvZ4KJ
-         In6AZe37cAE6GCc3JsFOopYPP937G8GqbKqaFvDXyMpFFn6MlhohUcXQ4bYSRK2LH9lr
-         Sxs7DK7eWbQGJCOPZD7dAwqNqujtjrUHTr+cCz+yrmix46ldE4xXzq/7SkX36A1VI2k0
-         YCfg==
-X-Gm-Message-State: AOAM531C+cw7cZ6ETI2LOQuF9AY+SZUl1PYn0mOsQWCdbG3Uq2OeoSzr
-        qyggz3YsEKW9qfXnzhcPBnkY5APOVhV0ADGY11w=
-X-Google-Smtp-Source: ABdhPJyUZSInWxD8qLNPz5ZxtXRQaFBYgbuTry3fudL8/HxVNLIMo+bBghuP6q5cQXwM+fNlzAVapRT7g4FdVZHEbdI=
-X-Received: by 2002:a17:907:397:: with SMTP id ss23mr26107297ejb.298.1620218601811;
- Wed, 05 May 2021 05:43:21 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5ZKINt+24vkgq+jtEeRzmpva+N3VhWpG25a6HCCDQLg=;
+        b=VZ1/Vufpzd7oOQwWrJeXJUkUU5NMqTWDbBU/kf3uU4euINCwO5SwV5IDC4DaZZfJQs
+         LA6l7PrIAB69Zza2wfnzO1PJlo/Ci/1LMA8lyhYj6SMEJx5x/PKGzPAjI7biJT5aDR0e
+         wNlyiYG8NZNLrMv6WiCWSgwjbnBMAolzwD7UcYoKc0LrSe0UKfK9SgliLv/6JgqAVbVX
+         3YkfrNk2LRmZ5DiBrp3YA3bNS7fCW5Dc5EenxxRTg1hhx5oauFsGxCj/zZtf+HemJGq5
+         lIN6i04jqLaau2/wQ+9wE8PI5vyKshjXsPetnWMfrvJdAgE6I4DIBHf0fV+yXgXOKHm0
+         LC4Q==
+X-Gm-Message-State: AOAM531Wx4/A9MIrl12c8NQZclmZWX+fo1NohE7JgXFo6ZLLqICiVy/k
+        jOC5U+5t8eeSunig0dcxZQfJG1JJAoPBqRSdkLfvyQ==
+X-Google-Smtp-Source: ABdhPJyQJiePbgT7/Tp3x1+jnfQmk7ukJ4HB+fh/IcgCx7MW+Kkyq/ARSBbLSXWU82nXtNazzReNnDeM6ZGufQXDZ/A=
+X-Received: by 2002:a2e:a54c:: with SMTP id e12mr21964567ljn.326.1620219086062;
+ Wed, 05 May 2021 05:51:26 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a55:8753:0:b029:dc:32a9:7a2 with HTTP; Wed, 5 May 2021
- 05:43:21 -0700 (PDT)
-Reply-To: grayanna718@gmail.com
-From:   gray anna <labijeremie5@gmail.com>
-Date:   Wed, 5 May 2021 05:43:21 -0700
-Message-ID: <CAFUy-BADKeuhTTD_9-Hbz4CuqaZ4Jq8gbBC6tpigxZdHrFwKsw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20210423165906.2504169-1-dianders@chromium.org>
+ <20210423095743.v5.1.I9e6af2529d6c61e5daf86a15a1211121c5223b9a@changeid>
+ <CACRpkdYkRFLvCRPSYNzYQG58QgPfhvjtHb+FBQZadyrnjC8=1A@mail.gmail.com>
+ <CAD=FV=UX683grZ=poTwKXxSqYBCLdLAOCxOPhE_xVVgKbe36Mw@mail.gmail.com>
+ <CACRpkdYfugrJ4WGn=w+viGXE6s5cdHjLC++jHPLVy_QH09KA8Q@mail.gmail.com>
+ <CAD=FV=XXxTz8hi92y6p3hX7iVEHuqKHsrKPSnX_a__WCEQRAKw@mail.gmail.com>
+ <CACRpkdZVH=h37hSjvjcNmRwV-RoBB-nvUbrOT80DoLr7n81R3Q@mail.gmail.com> <CAD=FV=Vzn0ih_RqR_ySJzFtq0B0x_4a-Uwjk56GeLyUZtTEXrQ@mail.gmail.com>
+In-Reply-To: <CAD=FV=Vzn0ih_RqR_ySJzFtq0B0x_4a-Uwjk56GeLyUZtTEXrQ@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 5 May 2021 14:51:14 +0200
+Message-ID: <CACRpkdbOpJtoaX7Jayr1-QRvZOjKbt-D0XVy+Xvxga9RULoh1w@mail.gmail.com>
+Subject: Re: [PATCH v5 01/20] drm/panel: panel-simple: Add missing
+ pm_runtime_disable() calls
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Sam Ravnborg <sam@ravnborg.org>, Wolfram Sang <wsa@kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---=20
-V=C3=A1=C5=BEen=C3=BD cenn=C3=BD v=C3=ADt=C4=9Bzi
+On Mon, May 3, 2021 at 10:41 PM Doug Anderson <dianders@chromium.org> wrote:
 
-V=C3=A1=C5=BEen=C3=BD v=C3=BDherce, p=C3=AD=C5=A1u v=C3=A1m, abych v=C3=A1s=
- informoval o va=C5=A1em ned=C3=A1vn=C3=A9m fondu,
-kter=C3=BD vyhr=C3=A1la va=C5=A1e e-mailov=C3=A1 adresa. Jsme tu, abychom v=
-=C3=A1s informovali,
-=C5=BEe va=C5=A1e e-mailov=C3=A1 adresa byla vybr=C3=A1na jako jeden z v=C3=
-=ADt=C4=9Bz=C5=AF tohoto
-roku(Molottery 2021). jste z=C3=ADskali (1 800 000 000)
-milion osm set tis=C3=ADc dolar=C5=AF spojen=C3=BDch st=C3=A1t=C5=AF v leto=
-=C5=A1n=C3=ADm roce. mus=C3=ADte
-kontaktovat pan=C3=AD Annu Grayovou, pr=C3=A1voplatnou mana=C5=BEerku spole=
-=C4=8Dnosti
-molottery na jej=C3=AD e-mailov=C3=A9 adrese at(grayanna718@gmail.com), aby=
- v=C3=A1s
-nasm=C4=9Brovala a poskytla v=C3=A1m pokyny a postupy, jak z=C3=ADskat v=C3=
-=ADt=C4=9Bzn=C3=BD fond.
-my
-pora=C4=8Fte, abyste znovu potvrdili sv=C3=A9 =C3=BAdaje n=C3=AD=C5=BEe.
+> > At your convenience and when you think there is too little
+> > stuff in your sn65dsi86 TODO, check out
+> > pinctrl-bcm63xx.c for an example of select GPIO_REGMAP
+> > made very simple (this works fine as long as they are bit
+> > offsets starting from 0).
+>
+> I seem to recall you mentioning something like this. When I looked at
+> it in the past I wasn't convinced it would be easy. See my response
+> [2]. The rough summary is that I didn't think the helpers were happy
+> with the pm_runtime() model that I'm using. Did I get that wrong?
 
-1) Va=C5=A1e cel=C3=A9 jm=C3=A9no:
-2) Va=C5=A1e =C3=BApln=C3=A1 adresa:
-3) Kontaktn=C3=AD telefon a fax =C4=8D.:
-3) Va=C5=A1e profese, v=C4=9Bk a rodinn=C3=BD stav:
-4) Jak=C3=A1koli platn=C3=A1 forma va=C5=A1eho pr=C5=AFkazu toto=C5=BEnosti=
-/=C5=99idi=C4=8Dsk=C3=A9ho pr=C5=AFkazu:
-5 Va=C5=A1e zem=C4=9B
-6) Va=C5=A1e m=C4=9Bsto:
-7) V=C3=A1=C5=A1 st=C3=A1t:
-8) Telefonn=C3=AD =C4=8D=C3=ADslo:
-9) Va=C5=A1e =C4=8D=C3=ADslo Whatsapp:
+Yeah good point. It does seem a bit too complex for that.
+Sorry for not remembering.
 
-Je dobr=C3=A9 kontaktovat pan=C3=AD Annu Grayovou (vedouc=C3=AD zpracov=C3=
-=A1n=C3=AD)
-Jej=C3=AD e-mailov=C3=A1 adresa (grayanna718@gmail.com)
-pro dal=C5=A1=C3=AD zpracov=C3=A1n=C3=AD a odesl=C3=A1n=C3=AD va=C5=A1=C3=
-=AD karty na va=C5=A1i nominovanou adresu.
-
-Jm=C3=A9nem fondu spole=C4=8Dnosti Molottery, Sv=C4=9Btov=C3=A9 banky a
-Centr=C3=A1ln=C3=AD banka Evropy pod touto sou=C4=8Dasnou spr=C3=A1vou,
-omlouv=C3=A1me se za nep=C5=99=C3=ADjemnosti a zpo=C5=BEd=C4=9Bn=C3=AD plat=
-by.
-
-D=C4=9Bkuji za pochopen=C3=AD.
-
-S pozdravem, pane ALMERICHU ADALHARDE.
+Yours,
+Linus Walleij
