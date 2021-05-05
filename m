@@ -2,38 +2,39 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 769DB374188
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 18:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D446374273
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 May 2021 18:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235059AbhEEQi6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 May 2021 12:38:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54440 "EHLO mail.kernel.org"
+        id S235407AbhEEQq4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 May 2021 12:46:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37290 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234764AbhEEQg6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 5 May 2021 12:36:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D27C1613FE;
-        Wed,  5 May 2021 16:33:21 +0000 (UTC)
+        id S235381AbhEEQlq (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 May 2021 12:41:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A90861623;
+        Wed,  5 May 2021 16:34:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232402;
-        bh=7lPYU2+h32CIcM9NYvFnxpmwJr7/yHwrz8ZZlc+O1is=;
+        s=k20201202; t=1620232479;
+        bh=fxnDPLlPWYLf9/KzTkxHvikDC9lWN6ga0dBvtKr5d2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m/2MZocsAn2iXYQXnNlX1qsETvX15fgB+0AVpPX2I2usyDmDio2dJmw2vSBR81zu9
-         X695XgvNWIBxGH9Y6fkcBIJbk8DNsits/UcpHwPIFXsoqikuG09VUbji8wHt82E54g
-         FYRWj3R0PGeY2glMNluP2dXO7qWh3hT7XEypSKxVr8fC+ZupuhWtd7lYj5UO7Cv+9S
-         PBpTcfKMSv83kWu6gglpsaS68Oa/a/qMyK+S6ZR8iFAAq0vTw/DPFuODVWh2Xltc1J
-         dAQ5pY9W7f+97PxosRjZjXhncSidyOIUUODRqpvMiLoq3VehnMwj3TWxANUcQLueAa
-         p0dAgMLwfrJyw==
+        b=JpqCsLV3GzYy0CCDHYqiah3s1PJFX8NHBM95678pcWTYvHWCg0U+vlGzbh8YKq6Za
+         qnNku6HqhO+1iM3kEYpjKK+CwbhPFk5gSE97L08U3+TPXOsUYKR47+rsYverHMU2kE
+         KRN2p0r/Q762lWNz8W0UmmOX32CHoR3gyCMPWfy2DMG/OefBgL7o7dVsD3xuznXRBY
+         AQRLc5DCaSe66IFuGfXMwpcsqQDyQ38MtS7MmOnHM2CI/jKoc0hphTrq4rFGZKAU0m
+         0PA+sGLhAaLQ7JMSXVB+GG/yPmZAp/+VS+qdW+IR6rUoMevi4/8CaSueYwocDqDdGa
+         WxKR0Gwczxh3g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 083/116] i2c: i801: Add support for Intel Alder Lake PCH-M
-Date:   Wed,  5 May 2021 12:30:51 -0400
-Message-Id: <20210505163125.3460440-83-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.11 018/104] i2c: bail out early when RDWR parameters are wrong
+Date:   Wed,  5 May 2021 12:32:47 -0400
+Message-Id: <20210505163413.3461611-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210505163125.3460440-1-sashal@kernel.org>
-References: <20210505163125.3460440-1-sashal@kernel.org>
+In-Reply-To: <20210505163413.3461611-1-sashal@kernel.org>
+References: <20210505163413.3461611-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,55 +43,44 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[ Upstream commit 8f51c1763ae98bb63fc04627ceae383aa0e8ff7b ]
+[ Upstream commit 71581562ee36032d2d574a9b23ad4af6d6a64cf7 ]
 
-Add PCI ID of SMBus controller on Intel Alder Lake PCH-M.
+The buggy parameters currently get caught later, but emit a noisy WARN.
+Userspace should not be able to trigger this, so add similar checks much
+earlier. Also avoids some unneeded code paths, of course. Apply kernel
+coding stlye to a comment while here.
 
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Reported-by: syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
+Tested-by: syzbot+ffb0b3ffa6cfbc7d7b3f@syzkaller.appspotmail.com
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-i801.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/i2c/i2c-dev.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 4acee6f9e5a3..99d446763530 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -73,6 +73,7 @@
-  * Comet Lake-V (PCH)		0xa3a3	32	hard	yes	yes	yes
-  * Alder Lake-S (PCH)		0x7aa3	32	hard	yes	yes	yes
-  * Alder Lake-P (PCH)		0x51a3	32	hard	yes	yes	yes
-+ * Alder Lake-M (PCH)		0x54a3	32	hard	yes	yes	yes
-  *
-  * Features supported by this driver:
-  * Software PEC				no
-@@ -230,6 +231,7 @@
- #define PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS		0x4b23
- #define PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS		0x4da3
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS		0x51a3
-+#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS		0x54a3
- #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
- #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
-@@ -1087,6 +1089,7 @@ static const struct pci_device_id i801_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS) },
- 	{ 0, }
- };
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index 6ceb11cc4be1..6ef38a8ee95c 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -440,8 +440,13 @@ static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 				   sizeof(rdwr_arg)))
+ 			return -EFAULT;
  
-@@ -1771,6 +1774,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	case PCI_DEVICE_ID_INTEL_EBG_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS:
-+	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS:
- 		priv->features |= FEATURE_BLOCK_PROC;
- 		priv->features |= FEATURE_I2C_BLOCK_READ;
- 		priv->features |= FEATURE_IRQ;
+-		/* Put an arbitrary limit on the number of messages that can
+-		 * be sent at once */
++		if (!rdwr_arg.msgs || rdwr_arg.nmsgs == 0)
++			return -EINVAL;
++
++		/*
++		 * Put an arbitrary limit on the number of messages that can
++		 * be sent at once
++		 */
+ 		if (rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
+ 			return -EINVAL;
+ 
 -- 
 2.30.2
 
