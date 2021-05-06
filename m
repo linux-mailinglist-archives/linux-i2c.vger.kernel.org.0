@@ -2,74 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BB8375C80
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 May 2021 22:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A17375C88
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 May 2021 23:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbhEFU6W (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 May 2021 16:58:22 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:42538 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbhEFU6V (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 May 2021 16:58:21 -0400
-Received: by mail-ot1-f51.google.com with SMTP id g15-20020a9d128f0000b02902a7d7a7bb6eso6101118otg.9;
-        Thu, 06 May 2021 13:57:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bp5RtdBBe2ku1w14VHF5wWt/pMonE6P5FU8yha9Qjiw=;
-        b=PNl0NpCB5vT5w9EnGu3sLyDabryPmReu9O2f/Cuk7C/fgPWVlVArVUvaJUnYAiSAPC
-         dIBv4G+bj2aJQsOtA3XbbzwaOOfPkhql8UVFQw+z/q+Gysk7CMD5mNVT+A+6+so66W0j
-         F6vjqWKfPHLxegiVLCYUrG0dBUTlN/aKiasCPVSbHgG7n5CM1kErx+JwcgQqAdJ6rmg7
-         6jjNngPl/p/iuif9/2CQvppDjWjwulUamV4d7zxFWvxxMTvD2E/7MwAXZYOwE2XjFfK8
-         StVLAleWRYQ7d1COYXC9I+62Y63pUCStS0CDTwagIpzB1LBSzuiDQEcdciX1YN/o0kML
-         dAwg==
-X-Gm-Message-State: AOAM533YTuxUMXttF912o0o1glr2mu1lF4QVR0rcyAsDRWyPzwMCIoyV
-        zQsVM2mMVt86OzeB9rxNQg==
-X-Google-Smtp-Source: ABdhPJxGWV9UXRuzfIx+dZRZ51NNQHx3iD/Z5WX9PfNcGr1bWcFyXenYzfJcadHL3ofARshMGMHmQw==
-X-Received: by 2002:a9d:6a18:: with SMTP id g24mr5166911otn.368.1620334640613;
-        Thu, 06 May 2021 13:57:20 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id z9sm818582otj.44.2021.05.06.13.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 May 2021 13:57:20 -0700 (PDT)
-Received: (nullmailer pid 789013 invoked by uid 1000);
-        Thu, 06 May 2021 20:57:19 -0000
-Date:   Thu, 6 May 2021 15:57:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 6/6] dt-bindings: i2c: renesas,iic-emev2: Convert to
- json-schema
-Message-ID: <20210506205719.GA788962@robh.at.kernel.org>
-References: <cover.1620138454.git.geert+renesas@glider.be>
- <3a72f4353b24c4d790a216bfde1b284800b3029a.1620138454.git.geert+renesas@glider.be>
+        id S229582AbhEFVFD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 May 2021 17:05:03 -0400
+Received: from thorn.bewilderbeest.net ([71.19.156.171]:38261 "EHLO
+        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229544AbhEFVFD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 May 2021 17:05:03 -0400
+X-Greylist: delayed 562 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 May 2021 17:05:03 EDT
+Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 0ADC7475;
+        Thu,  6 May 2021 13:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1620334482;
+        bh=vNoReDMKLGxtVQ/HUO76L61RXlajosDXB81QNCQh3t4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UqSiwV1TYfmc9tMThAqiUf57dvCOYSLJQ72d9rXD293X2le3KSui72Bi7EaXgth+F
+         SZ3XSRkNJD1pRIK+AEvFsuLzpDYNjYAnAYEXHbh12wL+eLVM/m8BzDMiJetd+iLt/k
+         HtvwZnY/7/g/PsZBOupIujs+EK+8ymakCOnzKruE=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Zev Weiss <zev@bewilderbeest.net>, Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] i2c: aspeed: disable additional device addresses on ast2[56]xx
+Date:   Thu,  6 May 2021 15:54:19 -0500
+Message-Id: <20210506205419.26294-1-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a72f4353b24c4d790a216bfde1b284800b3029a.1620138454.git.geert+renesas@glider.be>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 04 May 2021 16:51:13 +0200, Geert Uytterhoeven wrote:
-> Convert the Renesas EMMA Mobile EV2 IIC Interface (IIC) Device Tree
-> binding documentation to json-schema.
-> 
-> Document missing properties.
-> Update the example to match reality.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  .../bindings/i2c/renesas,iic-emev2.txt        | 22 --------
->  .../bindings/i2c/renesas,iic-emev2.yaml       | 54 +++++++++++++++++++
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 55 insertions(+), 23 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/i2c/renesas,iic-emev2.txt
->  create mode 100644 Documentation/devicetree/bindings/i2c/renesas,iic-emev2.yaml
-> 
+The ast25xx and ast26xx have, respectively, two and three configurable
+slave device addresses to the ast24xx's one.  We only support using
+one at a time, but the others may come up in an indeterminate state
+depending on hardware/bootloader behavior, so we need to make sure we
+disable them so as to avoid ending up with phantom devices on the bus.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+---
+
+Changes since v1 [0]:
+ - reduced to simplified approach suggested by Joel
+
+[0] https://lore.kernel.org/linux-arm-kernel/20200915184525.29665-1-zev@bewilderbeest.net/
+
+ drivers/i2c/busses/i2c-aspeed.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index 724bf30600d6..67e8b97c0c95 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -727,10 +727,14 @@ static void __aspeed_i2c_reg_slave(struct aspeed_i2c_bus *bus, u16 slave_addr)
+ {
+ 	u32 addr_reg_val, func_ctrl_reg_val;
+ 
+-	/* Set slave addr. */
+-	addr_reg_val = readl(bus->base + ASPEED_I2C_DEV_ADDR_REG);
+-	addr_reg_val &= ~ASPEED_I2CD_DEV_ADDR_MASK;
+-	addr_reg_val |= slave_addr & ASPEED_I2CD_DEV_ADDR_MASK;
++	/*
++	 * Set slave addr.  Reserved bits can all safely be written with zeros
++	 * on all of ast2[456]00, so zero everything else to ensure we only
++	 * enable a single slave address (ast2500 has two, ast2600 has three,
++	 * the enable bits for which are also in this register) so that we don't
++	 * end up with additional phantom devices responding on the bus.
++	 */
++	addr_reg_val = slave_addr & ASPEED_I2CD_DEV_ADDR_MASK;
+ 	writel(addr_reg_val, bus->base + ASPEED_I2C_DEV_ADDR_REG);
+ 
+ 	/* Turn on slave mode. */
+-- 
+2.31.1
+
