@@ -2,107 +2,151 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CD237697B
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 19:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469C0376A19
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 20:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbhEGR0U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 May 2021 13:26:20 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:45282 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbhEGR0T (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 May 2021 13:26:19 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 147HPA4M066732;
-        Fri, 7 May 2021 12:25:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1620408310;
-        bh=Mfe3VzxO5eVTgpcrjkbuWFbFY3AOvc+A6TkDDBQODfw=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=wxkOJ9i3ToJ/P/tUmQgTIBndTsX7BGuoRHm4aSOLU+yK2W8nJ4qHCB3Z4w3SHGjFB
-         0QSBLPalZP6KnIZyQ/qHWY/8vl2ZPezMEGJ65dJtpqQuwphIBOQrWcTbk6VqXqSRc2
-         rWc8kFZ+sULQooEDGjtm3FepemCYpNf7wVlRKckU=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 147HPAlJ042114
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 7 May 2021 12:25:10 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 7 May
- 2021 12:25:10 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 7 May 2021 12:25:09 -0500
-Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 147HP62T106353;
-        Fri, 7 May 2021 12:25:06 -0500
-Subject: Re: [PATCH v2] dt-bindings: i2c: Move i2c-omap.txt to YAML format
-To:     Andreas Kemnade <andreas@kemnade.info>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     Rob Herring <robh+dt@kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>
-References: <20210506140026.31254-1-vigneshr@ti.com>
- <f7570cb4-8c21-2fa5-bd26-1388f2a4bd6b@ti.com>
- <429a740a-c2b9-1cf8-ed2b-0fb7b1bea422@ti.com> <20210507163602.219894f4@aktux>
-From:   Grygorii Strashko <grygorii.strashko@ti.com>
-Message-ID: <1ef076ac-e0de-a0df-a918-aeb8ed6c5956@ti.com>
-Date:   Fri, 7 May 2021 20:24:59 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229470AbhEGSjF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 May 2021 14:39:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43315 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229482AbhEGSjF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 May 2021 14:39:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1620412684;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1k6eq9jPcs1/rUuIMW2P4M5PT4z4+pXOzj/IObfRD18=;
+        b=X3O0Wfk28wLvIKc9BGq2UPFq0CBB9NYaiD92sot5OUY6ja1kGW0BvJbgky2fhpz7qcmDHr
+        OvmIrV9DSGl0O0sR2CIj/p/cSDrhXVzVrl6HTHYrSBClD8oBnNeO0gmL8znTOpK6vfBsz2
+        +M8B0Za8/gHkF/roI/vqDuKjG1z2Em0=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-507-TY85slWiNeW5EXEPCYYLBA-1; Fri, 07 May 2021 14:38:02 -0400
+X-MC-Unique: TY85slWiNeW5EXEPCYYLBA-1
+Received: by mail-qt1-f200.google.com with SMTP id h4-20020ac858440000b029019d657b9f21so6319998qth.9
+        for <linux-i2c@vger.kernel.org>; Fri, 07 May 2021 11:38:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1k6eq9jPcs1/rUuIMW2P4M5PT4z4+pXOzj/IObfRD18=;
+        b=crtNrufQC6xShrS6lOBjOkaawy9jI2cQDOCW5MiFI9F35oDnyTNzmZ7YknzRLUtCZw
+         N01qfiUfYjyj/LxPdURI2gcg2V4dOTuRFWoxLPb0KnGzTd27on3IjQg5dNXIFr3HN/Wv
+         ZRxFolSeMx52RNFqau1/FW/iP8ce/DHEA6FODjkqjLNaRzyj4usWdfpCvl8eZlSBBApo
+         20DXU8eqYNeEoeoVfRs1GFMfpTV2uXnEp+53S89H77nPNEO1ZjjuvnXjZZOY31L+Ooq0
+         vfEBapfATRiDZw4hA0Se+C/8jB+I7Wn8NKTC1vvRIrtf8g/+OJ/upjox8ZkzCzY1pYwr
+         /hPQ==
+X-Gm-Message-State: AOAM532TyXxmiFBrR/ScfibnPngzmRmj2GMqoLwL3XPmP0j5YqUan1uu
+        WJE47EwX2HvuPm+cc9Zf8nCpRFIYkvubLqRmkgDi2PRbTZezb9SIvQa1X9VRQ8/GKbBLBcyvWhM
+        HBfp0H+PR9ARn+mzxVhEJ
+X-Received: by 2002:a37:4017:: with SMTP id n23mr10328951qka.338.1620412682483;
+        Fri, 07 May 2021 11:38:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwcasrcawhbP+7zVi8omyoDWPuKGLAwmdSq3xmIbEg+FiBTtNoZWmFJja8xDruM9cbUDbsfUA==
+X-Received: by 2002:a37:4017:: with SMTP id n23mr10328937qka.338.1620412682253;
+        Fri, 07 May 2021 11:38:02 -0700 (PDT)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id s21sm1048679qks.114.2021.05.07.11.38.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 May 2021 11:38:01 -0700 (PDT)
+From:   trix@redhat.com
+To:     michael.zaidman@gmail.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com
+Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] HID: ft260: improve error handling of ft260_hid_feature_report_get()
+Date:   Fri,  7 May 2021 11:37:57 -0700
+Message-Id: <20210507183757.68810-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-In-Reply-To: <20210507163602.219894f4@aktux>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Tom Rix <trix@redhat.com>
 
+Static analysis reports this representative problem
 
-On 07/05/2021 17:36, Andreas Kemnade wrote:
-> On Fri, 7 May 2021 19:45:45 +0530
-> Vignesh Raghavendra <vigneshr@ti.com> wrote:
-> 
->> On 5/7/21 12:24 PM, Grygorii Strashko wrote:
->>>
->>>
->>> On 06/05/2021 17:00, Vignesh Raghavendra wrote:
->>>> Convert i2c-omap.txt to YAML schema for better checks and documentation.
->>>>
->>>> Following properties were used in DT but were not documented in txt
->>>> bindings and has been included in YAML schema:
->>>> 1. Include ti,am4372-i2c compatible
->>>> 2. Include dmas property used in few OMAP dts files
->>>
->>> The DMA is not supported by i2c-omap driver, so wouldn't be better to
->>> just drop dmas from DTBs to avoid confusions?
->>> It can be added later.
->>>    
->>
->> Will do.. I will also send patches dropping dmas from dts that currently
->> have them populated.
->>
-> hmm, we have
-> - DO attempt to make bindings complete even if a driver doesn't support some
->    features. For example, if a device has an interrupt, then include the
->    'interrupts' property even if the driver is only polled mode.
-> 
-> in Documentation/devicetree/bindings/writing-bindings.rst
-> Shouln't the dma stay there if the hardware supports it? Devicetree
-> should describe the hardware not the driver if I understood things
-> right.
+hid-ft260.c:787:9: warning: 4th function call argument is an
+  uninitialized value
+        return scnprintf(buf, PAGE_SIZE, "%hi\n", *field);
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-True.  But my above statement is also valid - it introduces confusion from user point of view.
-More over, 'dmas' is not part of original binding and were randomly added to some SoCs.
-And it's much more easy to extend binding (in the future) then remove something after.
+Uses of ft260_hid_feature_report_get() check if the return size matches
+the requested size.  But the function can also fail with at least -ENOMEM.
+Add the < 0 checks.
 
-I leave it to Vignesh, Tony to decide.
+In ft260_hid_feature_report_get(), do not do the memcpy to the caller's
+buffer if there is an error.
 
+Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/hid/hid-ft260.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
+index 7a9ba984a75a..628fa664a10b 100644
+--- a/drivers/hid/hid-ft260.c
++++ b/drivers/hid/hid-ft260.c
+@@ -249,7 +249,8 @@ static int ft260_hid_feature_report_get(struct hid_device *hdev,
+ 
+ 	ret = hid_hw_raw_request(hdev, report_id, buf, len, HID_FEATURE_REPORT,
+ 				 HID_REQ_GET_REPORT);
+-	memcpy(data, buf, len);
++	if (ret == len)
++		memcpy(data, buf, len);
+ 	kfree(buf);
+ 	return ret;
+ }
+@@ -295,12 +296,16 @@ static int ft260_xfer_status(struct ft260_device *dev)
+ 	struct hid_device *hdev = dev->hdev;
+ 	struct ft260_get_i2c_status_report report;
+ 	int ret;
++	int len = sizeof(report);
+ 
+ 	ret = ft260_hid_feature_report_get(hdev, FT260_I2C_STATUS,
+-					   (u8 *)&report, sizeof(report));
+-	if (ret < 0) {
++					   (u8 *)&report, len);
++	if (ret != len) {
+ 		hid_err(hdev, "failed to retrieve status: %d\n", ret);
+-		return ret;
++		if (ret >= 0)
++			return -EIO;
++		else
++			return ret;
+ 	}
+ 
+ 	dev->clock = le16_to_cpu(report.clock);
+@@ -728,6 +733,8 @@ static int ft260_get_system_config(struct hid_device *hdev,
+ 		hid_err(hdev, "failed to retrieve system status\n");
+ 		if (ret >= 0)
+ 			return -EIO;
++		else
++			return ret;
+ 	}
+ 	return 0;
+ }
+@@ -782,6 +789,8 @@ static int ft260_byte_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+ 	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
+ 	if (ret != len && ret >= 0)
+ 		return -EIO;
++	else if (ret < 0)
++		return  ret;
+ 
+ 	return scnprintf(buf, PAGE_SIZE, "%hi\n", *field);
+ }
+@@ -794,6 +803,8 @@ static int ft260_word_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+ 	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
+ 	if (ret != len && ret >= 0)
+ 		return -EIO;
++	else if (ret < 0)
++		return ret;
+ 
+ 	return scnprintf(buf, PAGE_SIZE, "%hi\n", le16_to_cpu(*field));
+ }
 -- 
-Best regards,
-grygorii
+2.26.3
+
