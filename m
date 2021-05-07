@@ -2,102 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EEB376824
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 17:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CD237697B
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 19:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbhEGPiP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 May 2021 11:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbhEGPiN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 May 2021 11:38:13 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D10C061574;
-        Fri,  7 May 2021 08:37:13 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id b21so780108pft.10;
-        Fri, 07 May 2021 08:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=arEMVevpyfNHH/qKMg3yLIl1/YDAxyNNmu5V8KzMUSk=;
-        b=GWEq3bdFqNNhtl5fHbSPpJ7yFRro9yFokHjw4eJm4xLLJazOMoKDaraWO1ULYGc0m7
-         GjM80DiZd0zibt2JnV9oOudaFUhpl/Qs1vbzyzShMcBBn9N+AjzT4Yr+PmpmhaM4kwvF
-         UHlPujwPbbQhCMHspQlGKDKAna0MuFJ4Zgqo7gaOxdo02ulwh02ojHGoeQqZBAb9rtUc
-         q0sFvqD8Gn40aegbJJKFgliebJPJg0n6w8SRV6+B8bFN9Row/4f5uLhCKGy3aGg4OpmA
-         wo59/4o1iPvfDpx6Q0POE9t56dGdgB4LDSW9xkknfPBEBha3CKrpADZW9SL087XOwrE8
-         f/0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=arEMVevpyfNHH/qKMg3yLIl1/YDAxyNNmu5V8KzMUSk=;
-        b=D3MVHkkH6hf6Ls4NVgmfHgNKgVz2IGHnjTv7FG/bicmTWuQTIQjiuAYm0GkMSwBoMG
-         6Us66x8BbdCMevJsiK851Tx6IhpoMtrwFkzu7Boaz6pPef2h3esrrPIQypEu0Qtgwx8w
-         SSbqRywl1/kOctXz+Vb05HuFOC3hDqKyS9Wy1xbtS+JUUvWvRMm1AhXEombp7ltiQOQe
-         FPNe+2w0DNnvaFnb9u4G6XWOPjZbLM+RfcwkSy6RLbhSgH/xMU+zrPlFPnKne3BrbO3P
-         zZoVkGZeAdI6zHkfh/IyZku40ITnBmEdxJG7ohDuultlmyBGtEQBY8nLp7vOoffEn8ex
-         WwiA==
-X-Gm-Message-State: AOAM531Op7XgJDE0oEYgufajln2ex4n7Gumybh1p01Hd6SzuFRGeZflS
-        RXlwbzsT8KKB0ZrcjdwWR90oDBok+goWVXcsU7l8dfve4kCEug==
-X-Google-Smtp-Source: ABdhPJymffkPy/9Ej0f2meeRjcH9XIOQPO6hDH33U8Em3hMH2tQpFpejULIgrr6AUmXOnMKVfWzierHL1k3xkQJY2ss=
-X-Received: by 2002:a62:e50f:0:b029:214:8e4a:ae46 with SMTP id
- n15-20020a62e50f0000b02902148e4aae46mr10872897pff.73.1620401832435; Fri, 07
- May 2021 08:37:12 -0700 (PDT)
+        id S230486AbhEGR0U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 May 2021 13:26:20 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:45282 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232915AbhEGR0T (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 May 2021 13:26:19 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 147HPA4M066732;
+        Fri, 7 May 2021 12:25:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1620408310;
+        bh=Mfe3VzxO5eVTgpcrjkbuWFbFY3AOvc+A6TkDDBQODfw=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=wxkOJ9i3ToJ/P/tUmQgTIBndTsX7BGuoRHm4aSOLU+yK2W8nJ4qHCB3Z4w3SHGjFB
+         0QSBLPalZP6KnIZyQ/qHWY/8vl2ZPezMEGJ65dJtpqQuwphIBOQrWcTbk6VqXqSRc2
+         rWc8kFZ+sULQooEDGjtm3FepemCYpNf7wVlRKckU=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 147HPAlJ042114
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 7 May 2021 12:25:10 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 7 May
+ 2021 12:25:10 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Fri, 7 May 2021 12:25:09 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 147HP62T106353;
+        Fri, 7 May 2021 12:25:06 -0500
+Subject: Re: [PATCH v2] dt-bindings: i2c: Move i2c-omap.txt to YAML format
+To:     Andreas Kemnade <andreas@kemnade.info>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     Rob Herring <robh+dt@kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>
+References: <20210506140026.31254-1-vigneshr@ti.com>
+ <f7570cb4-8c21-2fa5-bd26-1388f2a4bd6b@ti.com>
+ <429a740a-c2b9-1cf8-ed2b-0fb7b1bea422@ti.com> <20210507163602.219894f4@aktux>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <1ef076ac-e0de-a0df-a918-aeb8ed6c5956@ti.com>
+Date:   Fri, 7 May 2021 20:24:59 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20210507004047.4454-1-chris.packham@alliedtelesis.co.nz>
- <20210507004047.4454-4-chris.packham@alliedtelesis.co.nz> <CAHp75VcEzgKjOD6WQ1=YAwK_hhZr=XtcmXZL8rK78gb7iXDbDg@mail.gmail.com>
- <c4fa78e8f2c43da240c932618b87b34ba2d1d046.camel@infinera.com>
-In-Reply-To: <c4fa78e8f2c43da240c932618b87b34ba2d1d046.camel@infinera.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 7 May 2021 18:36:56 +0300
-Message-ID: <CAHp75Vcu-k=uzY_JYhtMp=Oe7fph3jH=t41pStUGc+bpSZeA3w@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] i2c: mpc: implement erratum A-004447 workaround
-To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-Cc:     "chris.packham@alliedtelesis.co.nz" 
-        <chris.packham@alliedtelesis.co.nz>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210507163602.219894f4@aktux>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, May 7, 2021 at 5:52 PM Joakim Tjernlund
-<Joakim.Tjernlund@infinera.com> wrote:
-> On Fri, 2021-05-07 at 14:46 +0300, Andy Shevchenko wrote:
-> > On Fri, May 7, 2021 at 3:40 AM Chris Packham
-> > <chris.packham@alliedtelesis.co.nz> wrote:
 
-...
 
-> > So, now you may shrink it even further, i.e.
-> >
-> >        void __iomem *sr = i2c->base + MPC_I2C_SR;
-> >        u8 val;
-> >
-> >        return readb_poll_timeout(sr, val, val & mask, 0, 100);
-> >
->
-> val looks uninitialised before use?
+On 07/05/2021 17:36, Andreas Kemnade wrote:
+> On Fri, 7 May 2021 19:45:45 +0530
+> Vignesh Raghavendra <vigneshr@ti.com> wrote:
+> 
+>> On 5/7/21 12:24 PM, Grygorii Strashko wrote:
+>>>
+>>>
+>>> On 06/05/2021 17:00, Vignesh Raghavendra wrote:
+>>>> Convert i2c-omap.txt to YAML schema for better checks and documentation.
+>>>>
+>>>> Following properties were used in DT but were not documented in txt
+>>>> bindings and has been included in YAML schema:
+>>>> 1. Include ti,am4372-i2c compatible
+>>>> 2. Include dmas property used in few OMAP dts files
+>>>
+>>> The DMA is not supported by i2c-omap driver, so wouldn't be better to
+>>> just drop dmas from DTBs to avoid confusions?
+>>> It can be added later.
+>>>    
+>>
+>> Will do.. I will also send patches dropping dmas from dts that currently
+>> have them populated.
+>>
+> hmm, we have
+> - DO attempt to make bindings complete even if a driver doesn't support some
+>    features. For example, if a device has an interrupt, then include the
+>    'interrupts' property even if the driver is only polled mode.
+> 
+> in Documentation/devicetree/bindings/writing-bindings.rst
+> Shouln't the dma stay there if the hardware supports it? Devicetree
+> should describe the hardware not the driver if I understood things
+> right.
 
-Nope.
+True.  But my above statement is also valid - it introduces confusion from user point of view.
+More over, 'dmas' is not part of original binding and were randomly added to some SoCs.
+And it's much more easy to extend binding (in the future) then remove something after.
 
-Thinking about naming, perhaps
-
-        void __iomem *addr = i2c->base + MPC_I2C_SR;
-        u8 sr; // or leave as val?
-
-        return readb_poll_timeout(addr, sr, sr & mask, 0, 100);
-
-would be more clear.
+I leave it to Vignesh, Tony to decide.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+grygorii
