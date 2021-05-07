@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF6D3765D7
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 15:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCC43765D8
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 15:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbhEGNPP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 May 2021 09:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
+        id S237146AbhEGNPT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 May 2021 09:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237126AbhEGNPN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 May 2021 09:15:13 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803CAC061761
-        for <linux-i2c@vger.kernel.org>; Fri,  7 May 2021 06:14:12 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id b14-20020a17090a6e0eb0290155c7f6a356so4595340pjk.0
-        for <linux-i2c@vger.kernel.org>; Fri, 07 May 2021 06:14:12 -0700 (PDT)
+        with ESMTP id S237131AbhEGNPP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 May 2021 09:15:15 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0908CC061761
+        for <linux-i2c@vger.kernel.org>; Fri,  7 May 2021 06:14:15 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id p17so5096609plf.12
+        for <linux-i2c@vger.kernel.org>; Fri, 07 May 2021 06:14:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sCOlyOIFiZk09QTc1wpSf9iIiwmNKJWxQ3gP9jIAbQE=;
-        b=mSpLQhA/xa8vnl35yPqcyaIJv5x2iKpQ79RnozczBUFtCog64lxWk+cW6iEUvnFZR5
-         lXSMgIKXAE+diRkzI4rU8zgP6i0MQrZOM4NA32+kAechGNEOToZDzav/4bI5gQVttTG+
-         v8FkMm6GIZHzU8+QlMXwDkCy0gAB50XFsATUM=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zc6/3/VfcHCcsyhsjpHk83+1mY6bLdnDzZw5bgOgDug=;
+        b=POFBgKAPpYfOQn+zGMU4zVvD61ln1R7Iz0VNQU2NOPqLsRwHWA0+/KzHDjiO1lNzqv
+         4J6S2UVlB6iJlyJGqsqZpq3NIO/ApK6zBKw2VG/t8PDkBUxhKDxcGujl0t6c04E1nuLj
+         vYdZiHUwIhNPWwUl2zdKlWd2cZwpgEih3zPOQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sCOlyOIFiZk09QTc1wpSf9iIiwmNKJWxQ3gP9jIAbQE=;
-        b=qo3AHP48ySLuREHdySmViYqkS10tO+cVG6raKtTjUJml5ac5HAHO/0S0GiSmAhS/cD
-         i1slhnyWi7GhLqlTBeFpBhVoqoKj3gMQlRz07TdljZV0A9Vow9MgVD5N2CW3k1JUB6Le
-         5fMys0RLV2VUbEJ3pWlWnzy2paH5dS8JlG3Y6rVObSc7CJn9o5VpUDxys6iIHV17KIrZ
-         OlvGzdF78tMq5XGYfF5FF+XGzRcMsuIsxInxdMH0uSyz1UA6mZR62ZB9I7CsVidhevH6
-         dPwVBOCH08xurtG2taVk4Z+YLun6XY6xOaQwvBhMZrHmjMBnaJonWa9e1NEokkLjoJ4f
-         uzww==
-X-Gm-Message-State: AOAM531LfGvYZOxXio0fNMCV+vJ14yGF189CMiYm1j/AJd2DnpwtZqy2
-        87BMhRiqgsfwiF+LezitAVOYIw==
-X-Google-Smtp-Source: ABdhPJy9qeTIxg0nqdJ7guKT0auSMto/VTPsSqmgPnb9RJpyRnb5vWAaDpYKTMsGNe7bTpd2JRQCJQ==
-X-Received: by 2002:a17:90a:a589:: with SMTP id b9mr10307171pjq.80.1620393251736;
-        Fri, 07 May 2021 06:14:11 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zc6/3/VfcHCcsyhsjpHk83+1mY6bLdnDzZw5bgOgDug=;
+        b=GaFAeBGcLvt548mc9DRCl58x2eLp05YjDmhJ2QshB6e9gsRmyVV2sD/Z+uv6rKbSTu
+         15X9AWg+3tXUqwrdhRqmxyk2Ezjr1rMsoQhFP8HX+S+3xrvBhL6qPOhrkkDYrhyzKHCr
+         KEIsNZia4r0HaLyShIl+vmjhv4ruQGGayRYcWDMyB5mBwU2nU6ISbkpRp0WjvtdSXW3Q
+         pWnoDmNuXigGFukdQRpi0xCWjCRzxkY6iR8omxTo9pAu8JFm7iMcSRGlvXRK2PXGXHM1
+         9IZYUDVXcgnjoiUyS6k4QNjQ3FrUyGW7nWRZ7oIjG/FnegGj6K+ZCPp/Wl0/UC/bLZf6
+         Hcdg==
+X-Gm-Message-State: AOAM533WINfZMaMK9NUhyz+rn6tKJs+AJEGkjKnMMd85VpkFOv1ShOHv
+        rcgFCbLu4uQOc+7NdPVwb2B5Bg==
+X-Google-Smtp-Source: ABdhPJxqT7U6uQjQoBNiFS/tGiuwtuAfj3Zop0aaTEvptjo8FjdlTzjrtlDJlNmeXJAXIlPVuDDk+Q==
+X-Received: by 2002:a17:90a:cc11:: with SMTP id b17mr10270349pju.119.1620393254578;
+        Fri, 07 May 2021 06:14:14 -0700 (PDT)
 Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:711f:8553:a124:a19])
-        by smtp.gmail.com with ESMTPSA id z29sm4656539pga.52.2021.05.07.06.14.09
+        by smtp.gmail.com with ESMTPSA id z29sm4656539pga.52.2021.05.07.06.14.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 May 2021 06:14:11 -0700 (PDT)
+        Fri, 07 May 2021 06:14:14 -0700 (PDT)
 From:   Hsin-Yi Wang <hsinyi@chromium.org>
 To:     Wolfram Sang <wsa@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -57,93 +57,204 @@ Cc:     linux-i2c@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Bibby Hsieh <bibby.hsieh@mediatek.com>,
         Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v21 0/5] add power control in i2c
-Date:   Fri,  7 May 2021 21:14:01 +0800
-Message-Id: <20210507131406.2224177-1-hsinyi@chromium.org>
+Subject: [PATCH v21 1/5] i2c: core: support bus regulator controlling in adapter
+Date:   Fri,  7 May 2021 21:14:02 +0800
+Message-Id: <20210507131406.2224177-2-hsinyi@chromium.org>
 X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
+In-Reply-To: <20210507131406.2224177-1-hsinyi@chromium.org>
+References: <20210507131406.2224177-1-hsinyi@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Although in the most platforms, the power of eeprom
-and i2c are alway on, some platforms disable the
-eeprom and i2c power in order to meet low power request.
+From: Bibby Hsieh <bibby.hsieh@mediatek.com>
 
-This patch add the pm_runtime ops to control power to
-support all platforms.
+Although in the most platforms, the bus power of i2c
+are alway on, some platforms disable the i2c bus power
+in order to meet low power request.
 
-Changes since v20:
- - fix regulator check logic in suspend/resume.
+We can control bulk regulator if it is provided in i2c
+adapter device.
 
-Changes since v19:
- - resend v19 with fix tag added.
+Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ drivers/i2c/i2c-core-base.c | 95 +++++++++++++++++++++++++++++++++++++
+ include/linux/i2c.h         |  2 +
+ 2 files changed, 97 insertions(+)
 
-Changes since v18:
- - Fix a function name conflict with drivers/gpu/drm/i915/selftests/i915_gem.c
-
-Changes since v17:
- - Add a patch to fix unbalanced regulator disabling.
- - Add dts patch.
-
-Changes since v16:
- - request regulator in device instead of in the core.
- - control regulator only if it's provided.
-
-Changes since v15:
- - Squash the fix[1] for v15.
-[1] https://patchwork.ozlabs.org/project/linux-i2c/patch/20200522101327.13456-1-m.szyprowski@samsung.com/
-
-Changes since v14:
- - change the return value in normal condition
- - access the variable after NULL pointer checking
- - add ack tag
-
-Changes since v13:
- - fixup some logic error
-
-Changes since v12:
- - rebase onto v5.7-rc1
- - change the property description in binding
-
-Changes since v11:
- - use suspend_late/resume_early instead of suspend/resume
- - rebase onto v5.6-rc1
-
-Changes since v10:
- - fixup some worng codes
-
-Changes since v9:
- - fixup build error
- - remove redundant code
-
-Changes since v8:
- - fixup some wrong code
- - remove redundant message
-
-[... snip ...]
-
-
-Bibby Hsieh (1):
-  i2c: core: support bus regulator controlling in adapter
-
-Hsin-Yi Wang (4):
-  dt-binding: i2c: mt65xx: add vbus-supply property
-  i2c: mediatek: mt65xx: add optional vbus-supply
-  misc: eeprom: at24: check suspend status before disable regulator
-  arm64: dts: mt8183: add supply name for eeprom
-
- .../devicetree/bindings/i2c/i2c-mt65xx.txt    |  1 +
- .../dts/mediatek/mt8183-kukui-kakadu.dtsi     |  4 +
- .../dts/mediatek/mt8183-kukui-kodama.dtsi     |  4 +
- .../boot/dts/mediatek/mt8183-kukui-krane.dtsi |  4 +
- drivers/i2c/busses/i2c-mt65xx.c               |  7 ++
- drivers/i2c/i2c-core-base.c                   | 95 +++++++++++++++++++
- drivers/misc/eeprom/at24.c                    |  6 +-
- include/linux/i2c.h                           |  2 +
- 8 files changed, 121 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 5a97e4a02fa2..23bc7c269184 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -461,12 +461,14 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
+ static int i2c_device_probe(struct device *dev)
+ {
+ 	struct i2c_client	*client = i2c_verify_client(dev);
++	struct i2c_adapter	*adap;
+ 	struct i2c_driver	*driver;
+ 	int status;
+ 
+ 	if (!client)
+ 		return 0;
+ 
++	adap = client->adapter;
+ 	client->irq = client->init_irq;
+ 
+ 	if (!client->irq) {
+@@ -532,6 +534,14 @@ static int i2c_device_probe(struct device *dev)
+ 
+ 	dev_dbg(dev, "probe\n");
+ 
++	if (adap->bus_regulator) {
++		status = regulator_enable(adap->bus_regulator);
++		if (status < 0) {
++			dev_err(&adap->dev, "Failed to enable bus regulator\n");
++			goto err_clear_wakeup_irq;
++		}
++	}
++
+ 	status = of_clk_set_defaults(dev->of_node, false);
+ 	if (status < 0)
+ 		goto err_clear_wakeup_irq;
+@@ -589,8 +599,10 @@ static int i2c_device_probe(struct device *dev)
+ static int i2c_device_remove(struct device *dev)
+ {
+ 	struct i2c_client	*client = to_i2c_client(dev);
++	struct i2c_adapter      *adap;
+ 	struct i2c_driver	*driver;
+ 
++	adap = client->adapter;
+ 	driver = to_i2c_driver(dev->driver);
+ 	if (driver->remove) {
+ 		int status;
+@@ -605,6 +617,8 @@ static int i2c_device_remove(struct device *dev)
+ 	devres_release_group(&client->dev, client->devres_group_id);
+ 
+ 	dev_pm_domain_detach(&client->dev, true);
++	if (!pm_runtime_status_suspended(&client->dev) && adap->bus_regulator)
++		regulator_disable(adap->bus_regulator);
+ 
+ 	dev_pm_clear_wake_irq(&client->dev);
+ 	device_init_wakeup(&client->dev, false);
+@@ -617,6 +631,86 @@ static int i2c_device_remove(struct device *dev)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_PM_SLEEP
++static int i2c_resume_early(struct device *dev)
++{
++	struct i2c_client *client = i2c_verify_client(dev);
++	int err;
++
++	if (!client)
++		return 0;
++
++	if (pm_runtime_status_suspended(&client->dev) &&
++		client->adapter->bus_regulator) {
++		err = regulator_enable(client->adapter->bus_regulator);
++		if (err)
++			return err;
++	}
++
++	return pm_generic_resume_early(&client->dev);
++}
++
++static int i2c_suspend_late(struct device *dev)
++{
++	struct i2c_client *client = i2c_verify_client(dev);
++	int err;
++
++	if (!client)
++		return 0;
++
++	err = pm_generic_suspend_late(&client->dev);
++	if (err)
++		return err;
++
++	if (!pm_runtime_status_suspended(&client->dev) &&
++		client->adapter->bus_regulator)
++		return regulator_disable(client->adapter->bus_regulator);
++
++	return 0;
++}
++#endif
++
++#ifdef CONFIG_PM
++static int i2c_runtime_resume(struct device *dev)
++{
++	struct i2c_client *client = i2c_verify_client(dev);
++	int err;
++
++	if (!client)
++		return 0;
++
++	if (client->adapter->bus_regulator) {
++		err = regulator_enable(client->adapter->bus_regulator);
++		if (err)
++			return err;
++	}
++
++	return pm_generic_runtime_resume(&client->dev);
++}
++
++static int i2c_runtime_suspend(struct device *dev)
++{
++	struct i2c_client *client = i2c_verify_client(dev);
++	int err;
++
++	if (!client)
++		return 0;
++
++	err = pm_generic_runtime_suspend(&client->dev);
++	if (err)
++		return err;
++
++	if (client->adapter->bus_regulator)
++		return regulator_disable(client->adapter->bus_regulator);
++	return 0;
++}
++#endif
++
++static const struct dev_pm_ops i2c_device_pm = {
++	SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late, i2c_resume_early)
++	SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
++};
++
+ static void i2c_device_shutdown(struct device *dev)
+ {
+ 	struct i2c_client *client = i2c_verify_client(dev);
+@@ -674,6 +768,7 @@ struct bus_type i2c_bus_type = {
+ 	.probe		= i2c_device_probe,
+ 	.remove		= i2c_device_remove,
+ 	.shutdown	= i2c_device_shutdown,
++	.pm		= &i2c_device_pm,
+ };
+ EXPORT_SYMBOL_GPL(i2c_bus_type);
+ 
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index e8f2ac8c9c3d..953a4eecb88f 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -15,6 +15,7 @@
+ #include <linux/device.h>	/* for struct device */
+ #include <linux/sched.h>	/* for completion */
+ #include <linux/mutex.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/rtmutex.h>
+ #include <linux/irqdomain.h>		/* for Host Notify IRQ */
+ #include <linux/of.h>		/* for struct device_node */
+@@ -729,6 +730,7 @@ struct i2c_adapter {
+ 	const struct i2c_adapter_quirks *quirks;
+ 
+ 	struct irq_domain *host_notify_domain;
++	struct regulator *bus_regulator;
+ };
+ #define to_i2c_adapter(d) container_of(d, struct i2c_adapter, dev)
+ 
 -- 
 2.31.1.607.g51e8a6a459-goog
 
