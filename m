@@ -2,206 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E45375DFA
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 02:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FAE375E19
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 02:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233910AbhEGAly (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 May 2021 20:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233891AbhEGAly (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 May 2021 20:41:54 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050D8C0613ED
-        for <linux-i2c@vger.kernel.org>; Thu,  6 May 2021 17:40:54 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 976C3891B0;
-        Fri,  7 May 2021 12:40:49 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1620348049;
-        bh=SO+lHWQ0abXFaV9Cz/yXHo494Ql7LPIXaNzUMjnBELA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=MQuig/g2O6pGdo/5pvRXM6QlA37/dQbz7GnvJHrbTUA4NJ4HvvdaPKeKlNc56YMTq
-         ZJxhqiK0cl8Lj78LMeiEh9h6hB7FQoY04MNAaGYZOh1Xdjf6vVFjsLQFjnKdhwf9EN
-         xjKuKfZG0FDbruFcOYi4CjIZoqEju0QyaqALA96CxHsC1h0GJtP2EhtWL2fQ7C7rJ4
-         V63+Lhg3ESBO3WwiGXZMOSLHomI/5iSnXC7xmCSu0UnxrBEeJDMiHgrz4ykgc1FaGE
-         tcQB8inTRgzvH3Bn2p/zDcYun4RnGxlsybgE19ARCPv2IWezN0Z9RQCuJwS1h6VL8H
-         2wOA0Ml6lKbiA==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B60948c910000>; Fri, 07 May 2021 12:40:49 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by pat.atlnz.lc (Postfix) with ESMTP id 10F4013ECA5;
-        Fri,  7 May 2021 12:40:49 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 0C584283A61; Fri,  7 May 2021 12:40:49 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     wsa@kernel.org, andriy.shevchenko@linux.intel.com,
-        andy.shevchenko@gmail.com, robh+dt@kernel.org, mpe@ellerman.id.au
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v2 3/3] i2c: mpc: implement erratum A-004447 workaround
-Date:   Fri,  7 May 2021 12:40:47 +1200
-Message-Id: <20210507004047.4454-4-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210507004047.4454-1-chris.packham@alliedtelesis.co.nz>
-References: <20210507004047.4454-1-chris.packham@alliedtelesis.co.nz>
+        id S232987AbhEGA4S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 May 2021 20:56:18 -0400
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:39728 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229650AbhEGA4S (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 May 2021 20:56:18 -0400
+Received: by mail-ot1-f52.google.com with SMTP id 65-20020a9d03470000b02902808b4aec6dso6581466otv.6;
+        Thu, 06 May 2021 17:55:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LOi26ePLcMhTv9NBLT2b9h8iasffGUoNExW6gEB59Hg=;
+        b=nkZPUIgYWEnvyDe8ZKAwFGnqhTuwIZBstfOuvoMmLC/7BMdYFENqOh18wPjuUZ+R5+
+         FRuGUAegWiA175Z00mYQvHg2OgaQ/toD/KJbkx04aLxFd4sf5sL0nXqptzTQuWbYzgKe
+         HUOaMyoqnJ9oI0LbKNNyHRscimMOkZSpNO9/yqY70cOJXXEahcUk53WmlWievkM8ZvlD
+         JoiO27X6tNluin+rT1GgsDHvx/OxCgJuxfuARu58ne2ooF1oD+atcdpMJQZQhfWxRYm7
+         ERCS3JxeMFZqckcsuz/k1JMyN4X0+WK5VdHskbL6u3cjfcgYphIXO/ogwHTsuZ7hzk0X
+         SXqg==
+X-Gm-Message-State: AOAM533ibCcWjZPVPNxUBB+UJ012+wviYX/AJLTIKW8OUt9eiBad9u21
+        2OiEvuadVeR67YOQC1e++o7E4EXUwQ==
+X-Google-Smtp-Source: ABdhPJxeyomDM66blWkjlzllouut9B4dA4muWExmIjhFAk5mmRPq+Z8eGugC9Zp/pbuJPuBLvSakTA==
+X-Received: by 2002:a9d:6244:: with SMTP id i4mr5796115otk.182.1620348919518;
+        Thu, 06 May 2021 17:55:19 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g9sm805749oop.30.2021.05.06.17.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 May 2021 17:55:18 -0700 (PDT)
+Received: (nullmailer pid 1101099 invoked by uid 1000);
+        Fri, 07 May 2021 00:55:17 -0000
+Date:   Thu, 6 May 2021 19:55:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Alain Volmat <alain.volmat@foss.st.com>
+Cc:     wsa@kernel.org, mark.rutland@arm.com,
+        pierre-yves.mordret@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com
+Subject: Re: [PATCH v4 1/2] i2c: add binding to mark a bus as supporting
+ SMBus-Alert
+Message-ID: <20210507005517.GA1098665@robh.at.kernel.org>
+References: <1620220479-2647-1-git-send-email-alain.volmat@foss.st.com>
+ <1620220479-2647-2-git-send-email-alain.volmat@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=K6Jc4BeI c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=5FLXtPjwQuUA:10 a=w4j1xu5M8ypyE8uBZIYA:9
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1620220479-2647-2-git-send-email-alain.volmat@foss.st.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The P2040/P2041 has an erratum where the normal i2c recovery mechanism
-does not work. Implement the alternative recovery mechanism documented
-in the P2040 Chip Errata Rev Q.
+On Wed, May 05, 2021 at 03:14:38PM +0200, Alain Volmat wrote:
+> Since SMBus-Alert is an optional feature of SMBUS which
+> requires an additional pin, the smbus binding cannot be
+> used to indicate its support.
+> 
+> Add an additional smbus-alert binding specific for it and
+> update the description text of smbus to avoid mentioning
+> SMBus-Alert
+> 
+> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c.txt | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
+This needs to be added to i2c-bus.yaml too.
 
-Notes:
-    Changes in v2:
-    - Use readb_poll_timeout instead of open-coded loop
+Acked-by: Rob Herring <robh@kernel.org>
 
- drivers/i2c/busses/i2c-mpc.c | 84 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 82 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-index 30d9e89a3db2..44e88a13a9e3 100644
---- a/drivers/i2c/busses/i2c-mpc.c
-+++ b/drivers/i2c/busses/i2c-mpc.c
-@@ -19,6 +19,7 @@
-=20
- #include <linux/clk.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/fsl_devices.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -45,6 +46,7 @@
- #define CCR_MTX  0x10
- #define CCR_TXAK 0x08
- #define CCR_RSTA 0x04
-+#define CCR_RSVD 0x02
-=20
- #define CSR_MCF  0x80
- #define CSR_MAAS 0x40
-@@ -97,7 +99,7 @@ struct mpc_i2c {
- 	u32 block;
- 	int rc;
- 	int expect_rxack;
--
-+	bool has_errata_A004447;
- };
-=20
- struct mpc_i2c_divider {
-@@ -136,6 +138,78 @@ static void mpc_i2c_fixup(struct mpc_i2c *i2c)
- 	}
- }
-=20
-+static int i2c_mpc_wait_sr(struct mpc_i2c *i2c, int mask)
-+{
-+	int ret;
-+	u8 val;
-+
-+	ret =3D readb_poll_timeout(i2c->base + MPC_I2C_SR, val,
-+				 val & mask, 0, 100);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Workaround for Erratum A004447. From the P2040CE Rev Q
-+ *
-+ * 1.  Set up the frequency divider and sampling rate.
-+ * 2.  I2CCR - a0h
-+ * 3.  Poll for I2CSR[MBB] to get set.
-+ * 4.  If I2CSR[MAL] is set (an indication that SDA is stuck low), then =
-go to
-+ *     step 5. If MAL is not set, then go to step 13.
-+ * 5.  I2CCR - 00h
-+ * 6.  I2CCR - 22h
-+ * 7.  I2CCR - a2h
-+ * 8.  Poll for I2CSR[MBB] to get set.
-+ * 9.  Issue read to I2CDR.
-+ * 10. Poll for I2CSR[MIF] to be set.
-+ * 11. I2CCR - 82h
-+ * 12. Workaround complete. Skip the next steps.
-+ * 13. Issue read to I2CDR.
-+ * 14. Poll for I2CSR[MIF] to be set.
-+ * 15. I2CCR - 80h
-+ */
-+static void mpc_i2c_fixup_A004447(struct mpc_i2c *i2c)
-+{
-+	int ret;
-+	u32 val;
-+
-+	writeccr(i2c, CCR_MEN | CCR_MSTA);
-+	ret =3D i2c_mpc_wait_sr(i2c, CSR_MBB);
-+	if (ret) {
-+		dev_err(i2c->dev, "timeout waiting for CSR_MBB\n");
-+		return;
-+	}
-+
-+	val =3D readb(i2c->base + MPC_I2C_SR);
-+
-+	if (val & CSR_MAL) {
-+		writeccr(i2c, 0x00);
-+		writeccr(i2c, CCR_MSTA | CCR_RSVD);
-+		writeccr(i2c, CCR_MEN | CCR_MSTA | CCR_RSVD);
-+		ret =3D i2c_mpc_wait_sr(i2c, CSR_MBB);
-+		if (ret) {
-+			dev_err(i2c->dev, "timeout waiting for CSR_MBB\n");
-+			return;
-+		}
-+		val =3D readb(i2c->base + MPC_I2C_DR);
-+		ret =3D i2c_mpc_wait_sr(i2c, CSR_MIF);
-+		if (ret) {
-+			dev_err(i2c->dev, "timeout waiting for CSR_MIF\n");
-+			return;
-+		}
-+		writeccr(i2c, CCR_MEN | CCR_RSVD);
-+	} else {
-+		val =3D readb(i2c->base + MPC_I2C_DR);
-+		ret =3D i2c_mpc_wait_sr(i2c, CSR_MIF);
-+		if (ret) {
-+			dev_err(i2c->dev, "timeout waiting for CSR_MIF\n");
-+			return;
-+		}
-+		writeccr(i2c, CCR_MEN);
-+	}
-+}
-+
- #if defined(CONFIG_PPC_MPC52xx) || defined(CONFIG_PPC_MPC512x)
- static const struct mpc_i2c_divider mpc_i2c_dividers_52xx[] =3D {
- 	{20, 0x20}, {22, 0x21}, {24, 0x22}, {26, 0x23},
-@@ -670,7 +744,10 @@ static int fsl_i2c_bus_recovery(struct i2c_adapter *=
-adap)
- {
- 	struct mpc_i2c *i2c =3D i2c_get_adapdata(adap);
-=20
--	mpc_i2c_fixup(i2c);
-+	if (i2c->has_errata_A004447)
-+		mpc_i2c_fixup_A004447(i2c);
-+	else
-+		mpc_i2c_fixup(i2c);
-=20
- 	return 0;
- }
-@@ -767,6 +844,9 @@ static int fsl_i2c_probe(struct platform_device *op)
- 	}
- 	dev_info(i2c->dev, "timeout %u us\n", mpc_ops.timeout * 1000000 / HZ);
-=20
-+	if (of_property_read_bool(op->dev.of_node, "fsl,i2c-erratum-a004447"))
-+		i2c->has_errata_A004447 =3D true;
-+
- 	i2c->adap =3D mpc_ops;
- 	scnprintf(i2c->adap.name, sizeof(i2c->adap.name),
- 		  "MPC adapter (%s)", of_node_full_name(op->dev.of_node));
---=20
-2.31.1
-
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+> index df41f72afc87..b864916e087f 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+> @@ -89,8 +89,11 @@ wants to support one of the below features, it should adapt these bindings.
+>  
+>  - smbus
+>  	states that additional SMBus restrictions and features apply to this bus.
+> -	Examples of features are SMBusHostNotify and SMBusAlert. Examples of
+> -	restrictions are more reserved addresses and timeout definitions.
+> +	An example of feature is SMBusHostNotify. Examples of restrictions are
+> +	more reserved addresses and timeout definitions.
+> +
+> +- smbus-alert
+> +	states that the optional SMBus-Alert feature apply to this bus.
+>  
+>  Required properties (per child device)
+>  --------------------------------------
+> -- 
+> 2.7.4
+> 
