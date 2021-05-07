@@ -2,79 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F6F376AE6
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 21:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B711F376B0D
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 22:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbhEGT6d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 May 2021 15:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S230125AbhEGUKX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 May 2021 16:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbhEGT6d (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 May 2021 15:58:33 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4170BC061574
-        for <linux-i2c@vger.kernel.org>; Fri,  7 May 2021 12:57:32 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id b3so5807486plg.11
-        for <linux-i2c@vger.kernel.org>; Fri, 07 May 2021 12:57:32 -0700 (PDT)
+        with ESMTP id S230011AbhEGUKX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 May 2021 16:10:23 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B524C061763
+        for <linux-i2c@vger.kernel.org>; Fri,  7 May 2021 13:09:22 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id g15-20020a9d128f0000b02902a7d7a7bb6eso8921778otg.9
+        for <linux-i2c@vger.kernel.org>; Fri, 07 May 2021 13:09:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uIAfCugvv6DirQSOC8Meh100tr5jk83OTp42czR55xU=;
-        b=PYWbUgy/7guKQxkZCsOb5rWv0hyfvGf5JhVAeuu0AQvD0doZk6RvnW+Gg5uf1FDYsx
-         AH/QnsVCrKgj2xiz+b4qzbuA74E67z7lRcgVciDIYE6VD7rwoYXc+d1DCxtUnNtzto86
-         MkAQJz/4YdUX3xahIKFkOSY8wSsXPwhgSwMEjgt3N49+2vmYOdvrS5wThkuEqKlI+iY8
-         fKZq9STvVxdflWMsFuSygBxxEMyOtF8EwiylWV4torqaTRoQwERAoNdYmTCg6k8nGMO6
-         0zKbou5rO9PToGyxiahdKXDdqfubCm9bcsPpt6e6cjM7scpXoRUyTy2fZ/9UzG+Lga99
-         i6Wg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=r1kPto3KzlNbAX0lDy+fl0HZN7GLrSQn6mvGXMGR828=;
+        b=oNy6r+suTKQ6IrZyOFUnSIXNr8ggFi3mCsRTPsy9sJPYKtAWUVzfbztR29TBqVsAxb
+         /G4Ac8umSTo9PlhWtWoYkKZt552l80dDgB7oqf//7tWNlU+1WCu5JTQQsybILeF7Zcsj
+         DrP/vJDQ+kqU47Yv1cEL7MpZRHQmwD8NE6ONE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uIAfCugvv6DirQSOC8Meh100tr5jk83OTp42czR55xU=;
-        b=qp+0MnRO7p/NfiQou3IhTgigTGPwxErd5b/Mpp+TEX6Ug9h1vofWQiNoPeqnC+u9Lw
-         2xZWpZcosuxjqtE1vYeXMdBmz+KoGKAfQVMUbXUqYB9eSpfvxvjWdBgMfSRscu53FzXm
-         9/xQXdADnqOlyUCenJjRNDAT+NqFKBMzlIWf5X++5CdbAeoJEaVp2RhF9rKqZe2l0aVk
-         LbXaoJI6YBp5wAmhFqVpoJAHGD7+iIYMeZIKebNkEaBHlgFkAloDNfXFYGxwGxCUyvim
-         84JPH7u13V1b4LZr7+Ymn3bb4M40p91UQ41SGyURVmeT8GN/tWCAKCNIlJg/qP6vUFOm
-         76nw==
-X-Gm-Message-State: AOAM532DYU3O0riwq7sMmapXmK0hxnBzprRycK6D2GwkCfPd6dgUidk3
-        PfikvI0FhPs+170EBDI4lmG6ximYuKLL3ooz5XM+1g==
-X-Google-Smtp-Source: ABdhPJz9wKX5WGS2h0k3XqhaJYqzyGFcZaZ4Q33Hno1JgZWxJwPRA4R0mdpWPLYUI4JNiIFvQg7KyW+HguEjm3YtvWU=
-X-Received: by 2002:a17:90a:7306:: with SMTP id m6mr25318877pjk.217.1620417451576;
- Fri, 07 May 2021 12:57:31 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=r1kPto3KzlNbAX0lDy+fl0HZN7GLrSQn6mvGXMGR828=;
+        b=Ai/x099QDggVLg1uclH6fRKW0eIlfiHVlJc0ZUdYhIyGyueMsPZfBbMjWRErsAN2YH
+         D4+yPORF/L+gLhGx/xJUh8daxwW2POEyYNXpJmDA48KOhgJlD3m1WBzIqmhFiANfd5FY
+         JdBzko/lz8HZoXCVKrei4CuDer5blq2V7ZMfMBWn1EztoSj8YDMNbFYhayPjOPKIQVQC
+         j7fDEWI3rrRFP5T4TNqFPus5utkHEZRp3GEbD1USVPCbQ/UOWgayzcySx3d357LYFZNi
+         YHpc8+z9o1qxiRzWxlkxP6/0UEPi2OHeNu2DbUzlNFyNlw66PmfcZcP4C/41Z/vsSNvN
+         DVqQ==
+X-Gm-Message-State: AOAM533INw5n2WsAwJtzmMHl9/vZE+wok9lsFIRZ47EsknnHyXP1JU56
+        g/aeULNSM7bWjCLeSKAtiAxXq1s6IYXWkHN64ZmUKw==
+X-Google-Smtp-Source: ABdhPJxZ061OkNR2+KyMC9fMqg6AIYlmIWzLNJjFE2lr/X9A/aJT0ru5fvuT3lGqLqrk9nSCuasHw9RrjklcTKZIICc=
+X-Received: by 2002:a9d:1ea9:: with SMTP id n38mr10001438otn.233.1620418161680;
+ Fri, 07 May 2021 13:09:21 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 7 May 2021 13:09:21 -0700
 MIME-Version: 1.0
-References: <20210506205419.26294-1-zev@bewilderbeest.net>
-In-Reply-To: <20210506205419.26294-1-zev@bewilderbeest.net>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 7 May 2021 12:57:20 -0700
-Message-ID: <CAFd5g46TEFLWdBN80RxGwZfoyD-70C0pP59mhrynvD5ODd2wrg@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: aspeed: disable additional device addresses on ast2[56]xx
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+In-Reply-To: <d23263dcb0f1535275ff37524b0203b2@codeaurora.org>
+References: <d23263dcb0f1535275ff37524b0203b2@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Fri, 7 May 2021 13:09:21 -0700
+Message-ID: <CAE-0n51YQf=NZxnw9+FLU=PSG8di7Ztp5pP03JdLXgEWGM0AZg@mail.gmail.com>
+Subject: Re: [PATCH V9] i2c: i2c-qcom-geni: Add shutdown callback for i2c
+To:     rojay@codeaurora.org
+Cc:     wsa@kernel.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, skananth@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, May 6, 2021 at 1:54 PM Zev Weiss <zev@bewilderbeest.net> wrote:
+Quoting rojay@codeaurora.org (2021-05-07 03:07:42)
+> On 2021-05-05 07:08, Stephen Boyd wrote:
+> > Quoting Roja Rani Yarubandi (2021-04-20 04:13:55)
 >
-> The ast25xx and ast26xx have, respectively, two and three configurable
-> slave device addresses to the ast24xx's one.  We only support using
-> one at a time, but the others may come up in an indeterminate state
-> depending on hardware/bootloader behavior, so we need to make sure we
-> disable them so as to avoid ending up with phantom devices on the bus.
+> > In fact, where is that code? I'd expect to see i2c_del_adapter() in
+> > here
+> > so we know the adapter can't accept transfers anymore. Maybe
+> > i2c_del_adapter() could be called, and then there's nothing to do after
+> > that? This whole patch is trying to rip the adapter out from under the
+> > i2c core framework, when we should take the opposite approach and
+> > remove
+> > it from the core framework so that it can't transfer anything anymore
+> > and thus the IOMMU can remove the mapping.
+> >
 >
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> IIUC about probe/remove/shutdown calls, during "remove" we will unplug
+> the
+> device with opposite calls to "probe's" plug operations.
+> For example i2c_add_adapter() from 'probe' and i2c_del_adapter() from
+> 'remove'.
+> For "shutdown", as system is going to shutdown, there is no need of
+> unplug
+> operations to be done.
+>
+> And also, I had a glance on other upstream i2c drivers, and noticed
+> "i2c-i801.c"
+> driver has i2c_del_adapter() called from remove callback but not from
+> shutdown
+> callback.
 
-Looks great! No concerns from me.
+Sure, other drivers could also be broken.
 
-Nevertheless, I am not in a position to test this at this time. Joel,
-or Andrew could one of you (or someone else on the mailing list) test
-this?
+>
+> And actually I tried calling i2c_del_adapter() from geni_i2c_shutdown(),
+> and it resulted in below WARNING trace
+> [   90.320282] Call trace:
+> [   90.322807]  _regulator_put+0xc4/0xcc
+> [   90.326583]  regulator_bulk_free+0x48/0x6c
+> [   90.330808]  devm_regulator_bulk_release+0x20/0x2c
+> [   90.335744]  release_nodes+0x1d0/0x244
+> [   90.339609]  devres_release_all+0x3c/0x54
+> [   90.343735]  device_release_driver_internal+0x108/0x194
+> [   90.349109]  device_release_driver+0x24/0x30
+> [   90.353510]  bus_remove_device+0xd0/0xf4
+> [   90.357548]  device_del+0x1a8/0x2f8
+> [   90.361143]  device_unregister+0x1c/0x34
+> [   90.365181]  __unregister_client+0x78/0x88
+> [   90.369397]  device_for_each_child+0x64/0xb4
+> [   90.373797]  i2c_del_adapter+0xf0/0x1d4
+> [   90.377745]  geni_i2c_shutdown+0x9c/0xc0
+> [   90.381783]  platform_drv_shutdown+0x28/0x34
+> [   90.386182]  device_shutdown+0x148/0x1f0
+>
+> Can you please suggest me what might be missing here?
+>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+It looks like some device that is on the i2c bus is putting a regulator
+in the remove path without disabling it. Can you print out which device
+driver it is and fix that driver to call regulator_disable() on the
+driver remove path? I'll try locally and see if I can find the driver
+too.
