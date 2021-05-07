@@ -2,170 +2,221 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA15375EEA
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 04:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979F63760B5
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 May 2021 08:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbhEGC4Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 May 2021 22:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbhEGC4Y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 May 2021 22:56:24 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBEDC061574;
-        Thu,  6 May 2021 19:55:24 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id c3so6538095ils.5;
-        Thu, 06 May 2021 19:55:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8cTSVQulBeITLa2/m1dmitAiZk9XtTtJnEzh3hUGeoU=;
-        b=cT2ueQbZYQ5FJAitvJOWcefEXBE/+kkX/R4/Kq67RZRWnT/5Uww8mZr34d6Tp9V7oR
-         IZtosX+BEeg7jtZg8NZUeSj13AoRPf9hZZjreEJ2q3niNvpcjOQ9HYP8xvf87w6dynH+
-         1tgraxqqCO8fZSn8m2y7m1mHoWWTurzSyvUJuWftsFrnIckGyWw4wAY1/DppiCOGnT2s
-         P4s1EJgQIoYUCpxIZSB5QuU0rpv7xCfl/+916ySp9TcPw3Uy61U7fUA6Cw3pAy34FYOV
-         DN2PgcGtJTQrQmi3V0IL7MVr9QuZJ1ZyhetBAScR2IC8FeSPc9m3j1RR2FS7ZOKm6yTQ
-         HMNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8cTSVQulBeITLa2/m1dmitAiZk9XtTtJnEzh3hUGeoU=;
-        b=P7QfdETbsjC5xE8eqizvyzSuylmN35awYOFLVf69GC0HmMIbm8ipJksJfdOo41mIMp
-         vWAWEyXLdR6aZsTfeHZYqqLlAgU4+Y3pC8gYdg4z2F8BL62yr1bYH+nwLZv8T9Hqo88U
-         ZnbxVFX+0h7MMF2IaLUYbAzOzMZhLOnrIPRoRiu59C4rEmG3uEuRCUgM61+L9tZrzhyP
-         jCOeqGZ+WMX4YzlQfcgmevUAhNKm4VF0RvUMPW5kAv2wBSEOQ+11kUPvV1JeWd7YNxJh
-         KrGhP5puP1GrbFcilZhlK0vttLBtmkF3jQ7XT2Qcrt7s6AIvOT1f5bwpXG1YHmTeF3Mv
-         AHLw==
-X-Gm-Message-State: AOAM532a1wKGZDctd6h0uQ517s0ymWZvZDnoh0X+/EjWCAcJEcbf1upr
-        r+XVQSC6hJTBVU1uvX/2yulSb8FRepdhxf+EatU=
-X-Google-Smtp-Source: ABdhPJw2RBOr2b1dAal8DBdHKDFJPjaMT1E1faSTNgTk5hI83mVNs5XiUZDhlNQbktQ/l4JJRdV37hjRqUN1IaKqYAU=
-X-Received: by 2002:a05:6e02:e0d:: with SMTP id a13mr7322226ilk.270.1620356123603;
- Thu, 06 May 2021 19:55:23 -0700 (PDT)
+        id S233735AbhEGG4A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 May 2021 02:56:00 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:33892 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232974AbhEGG4A (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 May 2021 02:56:00 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1476sq6p096425;
+        Fri, 7 May 2021 01:54:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1620370492;
+        bh=VAN1Vd/sK3NjIpKhnp9GxcBNEoE+IcjghrLeUIAM22M=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=NI6H9pIWmfofQTdit3zQxH910Cyw1ZRmneucEaGOiUWpOuMCoO9ns1WCQ6XmHlh5A
+         4K5ZVlhwVOGzx3ykPZPvYGMFode1bZhxPYoUNfd3gqhwvtGPxQ+ECGlOCgiQuA20N4
+         hLV/xiKx5Wo6jafGUH4IRhlhbKOQyFhVria6B1PA=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1476sqP1098397
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 7 May 2021 01:54:52 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 7 May
+ 2021 01:54:52 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Fri, 7 May 2021 01:54:51 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1476smS2045388;
+        Fri, 7 May 2021 01:54:49 -0500
+Subject: Re: [PATCH v2] dt-bindings: i2c: Move i2c-omap.txt to YAML format
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-omap@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>
+References: <20210506140026.31254-1-vigneshr@ti.com>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <f7570cb4-8c21-2fa5-bd26-1388f2a4bd6b@ti.com>
+Date:   Fri, 7 May 2021 09:54:49 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <1591709203-12106-1-git-send-email-dillon.minfei@gmail.com>
- <1591709203-12106-5-git-send-email-dillon.minfei@gmail.com>
- <CAL9mu0LJPnxA0JSmV3mogvPA5xRRYCO_4=P7pqpAO7R=YaJX5g@mail.gmail.com> <20210315130050.GD1182@ninjato>
-In-Reply-To: <20210315130050.GD1182@ninjato>
-From:   dillon min <dillon.minfei@gmail.com>
-Date:   Fri, 7 May 2021 10:54:47 +0800
-Message-ID: <CAL9mu0LnHAUSMXmQpZK78QAccqrc58cyFC2GD4cBkTNW41rvKA@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] i2c: stm32f4: Fix stmpe811 get xyz data timeout issue
-To:     Wolfram Sang <wsa@kernel.org>, pierre-yves.mordret@foss.st.com,
-        alain.volmat@foss.st.com
-Cc:     pierre-yves.mordret@st.com, Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        p.zabel@pengutronix.de,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Alexandre TORGUE <Alexandre.torgue@foss.st.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-i2c@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210506140026.31254-1-vigneshr@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Pierre-Yves, Alain
 
-Could you help to take a look?
-i really appreciate it.
 
-Thanks,
+On 06/05/2021 17:00, Vignesh Raghavendra wrote:
+> Convert i2c-omap.txt to YAML schema for better checks and documentation.
+> 
+> Following properties were used in DT but were not documented in txt
+> bindings and has been included in YAML schema:
+> 1. Include ti,am4372-i2c compatible
+> 2. Include dmas property used in few OMAP dts files
 
-Best Regards
-Dillon
+The DMA is not supported by i2c-omap driver, so wouldn't be better to just drop dmas from DTBs to avoid confusions?
+It can be added later.
 
-On Mon, Mar 15, 2021 at 9:00 PM Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Mon, Mar 15, 2021 at 08:43:54PM +0800, dillon min wrote:
-> > Hi All,
-> >
-> > Just a gentle ping.
->
-> Pierre-Yves?
->
-> >
-> > Regards.
-> >
-> > On Tue, Jun 9, 2020 at 9:27 PM <dillon.minfei@gmail.com> wrote:
-> > >
-> > > From: dillon min <dillon.minfei@gmail.com>
-> > >
-> > > as stm32f429's internal flash is 2Mbytes and compiled kernel
-> > > image bigger than 2Mbytes, so we have to load kernel image
-> > > to sdram on stm32f429-disco board which has 8Mbytes sdram space.
-> > >
-> > > based on above context, as you knows kernel running on external
-> > > sdram is more slower than internal flash. besides, we need read 4
-> > > bytes to get touch screen xyz(x, y, pressure) coordinate data in
-> > > stmpe811 interrupt.
-> > >
-> > > so, in stm32f4_i2c_handle_rx_done, as i2c read slower than running
-> > > in xip mode, have to adjust 'STOP/START bit set position' from last
-> > > two bytes to last one bytes. else, will get i2c timeout in reading
-> > > touch screen coordinate.
-> > >
-> > > to not take side effect, introduce IIC_LAST_BYTE_POS to support xip
-> > > kernel or has mmu platform.
-> > >
-> > > Signed-off-by: dillon min <dillon.minfei@gmail.com>
-> > > ---
-> > >
-> > > V4: indroduce 'IIC_LAST_BYTE_POS' to compatible with xipkernel boot
-> > >
-> > >  drivers/i2c/busses/i2c-stm32f4.c | 12 +++++++++---
-> > >  1 file changed, 9 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/i2c/busses/i2c-stm32f4.c b/drivers/i2c/busses/i2c-stm32f4.c
-> > > index d6a69dfcac3f..97cf42ae7fa0 100644
-> > > --- a/drivers/i2c/busses/i2c-stm32f4.c
-> > > +++ b/drivers/i2c/busses/i2c-stm32f4.c
-> > > @@ -93,6 +93,12 @@
-> > >  #define STM32F4_I2C_MAX_FREQ           46U
-> > >  #define HZ_TO_MHZ                      1000000
-> > >
-> > > +#if !defined(CONFIG_MMU) && !defined(CONFIG_XIP_KERNEL)
-> > > +#define IIC_LAST_BYTE_POS 1
-> > > +#else
-> > > +#define IIC_LAST_BYTE_POS 2
-> > > +#endif
-> > > +
-> > >  /**
-> > >   * struct stm32f4_i2c_msg - client specific data
-> > >   * @addr: 8-bit slave addr, including r/w bit
-> > > @@ -439,7 +445,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32f4_i2c_dev *i2c_dev)
-> > >         int i;
-> > >
-> > >         switch (msg->count) {
-> > > -       case 2:
-> > > +       case IIC_LAST_BYTE_POS:
-> > >                 /*
-> > >                  * In order to correctly send the Stop or Repeated Start
-> > >                  * condition on the I2C bus, the STOP/START bit has to be set
-> > > @@ -454,7 +460,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32f4_i2c_dev *i2c_dev)
-> > >                 else
-> > >                         stm32f4_i2c_set_bits(reg, STM32F4_I2C_CR1_START);
-> > >
-> > > -               for (i = 2; i > 0; i--)
-> > > +               for (i = IIC_LAST_BYTE_POS; i > 0; i--)
-> > >                         stm32f4_i2c_read_msg(i2c_dev);
-> > >
-> > >                 reg = i2c_dev->base + STM32F4_I2C_CR2;
-> > > @@ -463,7 +469,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32f4_i2c_dev *i2c_dev)
-> > >
-> > >                 complete(&i2c_dev->complete);
-> > >                 break;
-> > > -       case 3:
-> > > +       case (IIC_LAST_BYTE_POS+1):
-> > >                 /*
-> > >                  * In order to correctly generate the NACK pulse after the last
-> > >                  * received data byte, we have to enable NACK before reading N-2
-> > > --
-> > > 2.7.4
-> > >
+> 3. Document clocks property
+> 
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+> v2:
+> Fix issues with make dt_bindings_check
+> Add description on usage of ti,hwmods
+> 
+>   .../devicetree/bindings/i2c/i2c-omap.txt      | 37 ---------
+>   .../devicetree/bindings/i2c/ti,omap4-i2c.yaml | 80 +++++++++++++++++++
+>   2 files changed, 80 insertions(+), 37 deletions(-)
+>   delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-omap.txt
+>   create mode 100644 Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-omap.txt b/Documentation/devicetree/bindings/i2c/i2c-omap.txt
+> deleted file mode 100644
+> index a425b91af48f..000000000000
+> --- a/Documentation/devicetree/bindings/i2c/i2c-omap.txt
+> +++ /dev/null
+> @@ -1,37 +0,0 @@
+> -I2C for OMAP platforms
+> -
+> -Required properties :
+> -- compatible : Must be
+> -	"ti,omap2420-i2c" for OMAP2420 SoCs
+> -	"ti,omap2430-i2c" for OMAP2430 SoCs
+> -	"ti,omap3-i2c" for OMAP3 SoCs
+> -	"ti,omap4-i2c" for OMAP4+ SoCs
+> -	"ti,am654-i2c", "ti,omap4-i2c" for AM654 SoCs
+> -	"ti,j721e-i2c", "ti,omap4-i2c" for J721E SoCs
+> -	"ti,am64-i2c", "ti,omap4-i2c" for AM64 SoCs
+> -- ti,hwmods : Must be "i2c<n>", n being the instance number (1-based)
+> -- #address-cells = <1>;
+> -- #size-cells = <0>;
+> -
+> -Recommended properties :
+> -- clock-frequency : Desired I2C bus clock frequency in Hz. Otherwise
+> -  the default 100 kHz frequency will be used.
+> -
+> -Optional properties:
+> -- Child nodes conforming to i2c bus binding
+> -
+> -Note: Current implementation will fetch base address, irq and dma
+> -from omap hwmod data base during device registration.
+> -Future plan is to migrate hwmod data base contents into device tree
+> -blob so that, all the required data will be used from device tree dts
+> -file.
+> -
+> -Examples :
+> -
+> -i2c1: i2c@0 {
+> -    compatible = "ti,omap3-i2c";
+> -    #address-cells = <1>;
+> -    #size-cells = <0>;
+> -    ti,hwmods = "i2c1";
+> -    clock-frequency = <400000>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml b/Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml
+> new file mode 100644
+> index 000000000000..eb11e3025b37
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/ti,omap4-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Bindings for I2C controllers on TI's OMAP and K3 SoCs
+> +
+> +maintainers:
+> +  - Vignesh Raghavendra <vigneshr@ti.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: ti,omap2420-i2c
+> +      - const: ti,omap2430-i2c
+> +      - const: ti,omap3-i2c
+> +      - const: ti,omap4-i2c
+> +      - items:
+> +          - enum:
+> +              - ti,am4372-i2c
+> +              - ti,am64-i2c
+> +              - ti,am654-i2c
+> +              - ti,j721e-i2c
+> +          - const: ti,omap4-i2c
+> +
+> +  ti,hwmods:
+> +    description:
+> +      (DEPRECATED) Must be "i2c<n>", n being the instance number (1-based).
+> +      This property is applicable only on legacy platforms mainly omap2/3
+> +      and ti81xx and should not be used on other platforms.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    items:
+> +      - pattern: "^i2c([1-9])$"
+> +
+> +  dmas:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  dma-names:
+> +    items:
+> +      - const: tx
+> +      - const: rx
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: fck
+> +
+> +  clock-frequency: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    main_i2c0: i2c@2000000 {
+> +            compatible = "ti,j721e-i2c", "ti,omap4-i2c";
+> +            reg = <0x2000000 0x100>;
+> +            interrupts = <GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +         };
+> 
+
+-- 
+Best regards,
+grygorii
