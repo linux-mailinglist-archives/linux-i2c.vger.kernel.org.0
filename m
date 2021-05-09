@@ -2,175 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4B93773DC
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 May 2021 21:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB40E377899
+	for <lists+linux-i2c@lfdr.de>; Sun,  9 May 2021 23:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbhEHTku (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 May 2021 15:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbhEHTkt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 May 2021 15:40:49 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1683C061574;
-        Sat,  8 May 2021 12:39:47 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id o6-20020a05600c4fc6b029015ec06d5269so263590wmq.0;
-        Sat, 08 May 2021 12:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/aT2AFj/W6pt+Y3HFn5Q+rY7c1xeC8Z2fMPQBVN+RjI=;
-        b=S3ej4r8Wmp0240zqQhmNsHAcsH5gByygrKd1YQd6wNG9zlPJaYkHCWWWNcfHQkIWY5
-         2KwNDcmYIfKy3qAgjLmeZw/YlI6t1E5OjY06XmhKiHbwuTjS02SOh0WUcQ8cYHCZg05P
-         +a7LkBZZJDGOyUHuY0Rw8002AK6qc/V6I7QmGzbxnAuZjJxiRaAlONwu7/eRTmSZcxHk
-         hGI1i0MFgDrET1zhnEn/ztqetpdbowmKh1SWYo9UwZeupiH445Mycnyq4w5l/Z8omqs5
-         vb9iMnGOYQkgjZ52ma3/SYCeKMtMh2tnetJCKBxSJwBqQO2eqP4lzj1s4yRvA4MGulev
-         YeYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/aT2AFj/W6pt+Y3HFn5Q+rY7c1xeC8Z2fMPQBVN+RjI=;
-        b=J5RMs/6TfhJbwX5isQc+ZJjOH0Lg1lx5xU9M+INaoVDxAFNd+ODnJ1V06E8Ox/mgww
-         2lXiYrqWfR2iFRHduOp79zA34TUu/a924nunkGz8ZEDj3CBBn317BBu+Iw0Jl+iBLpV2
-         jfRMD9MXj0VwHj0nuUDDmIFakOPQPQT0gdOBUWQzRnZvvq5fj3CZ0hbjf+d4e5etqko1
-         4ZrR/o9gMOg7FnI0wQ7Y4AQj3pVmUkYevTYGRV53/j6Zi7JD/SmHoxLiLWwBSEXJEz/X
-         n/hFgPy5vX77i2WMH0hLTOR5/xw7ugf6qcAWSSleiVO8aKfG5ECQJk489fJ1l8HcoVtq
-         8jhw==
-X-Gm-Message-State: AOAM5311/zde8/KzH6ejgSx8v3lI6g3mn/BjZRV0kXmp4n/DOVI3rSje
-        +rfdIYg7r9SDAeQTwHdtQsP7X0k/pk47dQ==
-X-Google-Smtp-Source: ABdhPJwFwC43on281PSVJ9/z+oV3EVuqNO4OKfwmHJwMU2KxkyH+ddQmClfeBUPVbt5B0Z8GGcR2DQ==
-X-Received: by 2002:a1c:b38b:: with SMTP id c133mr4649652wmf.8.1620502786282;
-        Sat, 08 May 2021 12:39:46 -0700 (PDT)
-Received: from michael-VirtualBox (cbl217-132-244-50.bb.netvision.net.il. [217.132.244.50])
-        by smtp.gmail.com with ESMTPSA id d3sm1000822wrs.41.2021.05.08.12.39.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 May 2021 12:39:45 -0700 (PDT)
-Date:   Sat, 8 May 2021 22:39:43 +0300
-From:   Michael Zaidman <michael.zaidman@gmail.com>
-To:     trix@redhat.com
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, michael.zaidman@gmail.com
-Subject: Re: [PATCH] HID: ft260: improve error handling of
- ft260_hid_feature_report_get()
-Message-ID: <20210508193943.GA1581@michael-VirtualBox>
-References: <20210507183757.68810-1-trix@redhat.com>
+        id S229948AbhEIVJp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 9 May 2021 17:09:45 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:43633 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229950AbhEIVJp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 May 2021 17:09:45 -0400
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8D174891B0;
+        Mon, 10 May 2021 09:08:36 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1620594516;
+        bh=gwyWwlOedwTZ6Qk1pSQVLv+Osb7HqVKaJ97ijXxKaUk=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=YlfHPHTZd6J0Owo+q8RJBiCk/EmQuAuXBv5ec1Xh+gv7hjOg/ctIewnqPbjWDLxQa
+         H1qBgwK0CeA7YsSAVsvvYq6tj8K/BrwgN+r5gIS7gFT1Nr5cWOaBbA/iOLakuuehRJ
+         LiXq0v/+y00hKn+wu+FxJr+j2MqdvMLNGMLL5kGIOKMBzKG8MuaEgXTtAiQI2Flf+Z
+         7DdKmaI5qE2NvzO0/Xnjk4yC0qdTUlfmQ6sb/7FQOQv6nZfHa0p2u7QqLXdIwobM/D
+         zLpi28dquCQ43X72qJlGlO0J2F19V0VoIqiALgs+pBJBbSThTy9Q2yqV8Fy5b8sBej
+         RumlAF3/MrqiQ==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60984f540001>; Mon, 10 May 2021 09:08:36 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Mon, 10 May 2021 09:08:36 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.015; Mon, 10 May 2021 09:08:36 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Rob Herring <robh@kernel.org>
+CC:     "wsa@kernel.org" <wsa@kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Joakim Tjernlund" <Joakim.Tjernlund@infinera.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: mpc: Add fsl,i2c-erratum-a004447
+ flag
+Thread-Topic: [PATCH v2 1/3] dt-bindings: i2c: mpc: Add
+ fsl,i2c-erratum-a004447 flag
+Thread-Index: AQHXQtmffNncPI25V0+wQHr03rbg2qrXxuAAgAMZNIA=
+Date:   Sun, 9 May 2021 21:08:35 +0000
+Message-ID: <c5d6f8d0-9b8a-b3bf-b7c3-884f03f7ecee@alliedtelesis.co.nz>
+References: <20210507004047.4454-1-chris.packham@alliedtelesis.co.nz>
+ <20210507004047.4454-2-chris.packham@alliedtelesis.co.nz>
+ <20210507214936.GA2944698@robh.at.kernel.org>
+In-Reply-To: <20210507214936.GA2944698@robh.at.kernel.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F24E3822AA20C54591FDF2772ABBD145@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210507183757.68810-1-trix@redhat.com>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=K6Jc4BeI c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=5FLXtPjwQuUA:10 a=W3TmjN9C7xaUWysyWacA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, May 07, 2021 at 11:37:57AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Static analysis reports this representative problem
-> 
-> hid-ft260.c:787:9: warning: 4th function call argument is an
->   uninitialized value
->         return scnprintf(buf, PAGE_SIZE, "%hi\n", *field);
->                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Uses of ft260_hid_feature_report_get() check if the return size matches
-> the requested size.  But the function can also fail with at least -ENOMEM.
-> Add the < 0 checks.
-
-Hi Tom, thanks for catching and fixing it!
-
-I applied the patch, built the driver, and run some tests on my HW setup -
-no regression so far. But I think the fix can be improved even more, by
-reducing the number of questions to one in the successful case where the
-performance matters. Please see the proposal below inline.
-
-> 
-> In ft260_hid_feature_report_get(), do not do the memcpy to the caller's
-> buffer if there is an error.
-> 
-> Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/hid/hid-ft260.c | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
-> index 7a9ba984a75a..628fa664a10b 100644
-> --- a/drivers/hid/hid-ft260.c
-> +++ b/drivers/hid/hid-ft260.c
-> @@ -249,7 +249,8 @@ static int ft260_hid_feature_report_get(struct hid_device *hdev,
->  
->  	ret = hid_hw_raw_request(hdev, report_id, buf, len, HID_FEATURE_REPORT,
->  				 HID_REQ_GET_REPORT);
-> -	memcpy(data, buf, len);
-> +	if (ret == len)
-> +		memcpy(data, buf, len);
->  	kfree(buf);
->  	return ret;
->  }
-> @@ -295,12 +296,16 @@ static int ft260_xfer_status(struct ft260_device *dev)
->  	struct hid_device *hdev = dev->hdev;
->  	struct ft260_get_i2c_status_report report;
->  	int ret;
-> +	int len = sizeof(report);
->  
->  	ret = ft260_hid_feature_report_get(hdev, FT260_I2C_STATUS,
-> -					   (u8 *)&report, sizeof(report));
-> -	if (ret < 0) {
-> +					   (u8 *)&report, len);
-> +	if (ret != len) {
->  		hid_err(hdev, "failed to retrieve status: %d\n", ret);
-> -		return ret;
-> +		if (ret >= 0)
-> +			return -EIO;
-> +		else
-> +			return ret;
->  	}
->  
->  	dev->clock = le16_to_cpu(report.clock);
-> @@ -728,6 +733,8 @@ static int ft260_get_system_config(struct hid_device *hdev,
->  		hid_err(hdev, "failed to retrieve system status\n");
->  		if (ret >= 0)
->  			return -EIO;
-> +		else
-> +			return ret;
->  	}
->  	return 0;
->  }
-> @@ -782,6 +789,8 @@ static int ft260_byte_show(struct hid_device *hdev, int id, u8 *cfg, int len,
->  	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
->  	if (ret != len && ret >= 0)
->  		return -EIO;
-> +	else if (ret < 0)
-> +		return  ret;
-
-Please consider the below code to reduce the number of questions to one in the "likely" case
-and two in the worst-case scenario.
-
-	if (ret != len) {
-	        if (ret >= 0)
-                        return -EIO;
-                else
-                        return ret;
-        }
-
->  
->  	return scnprintf(buf, PAGE_SIZE, "%hi\n", *field);
->  }
-> @@ -794,6 +803,8 @@ static int ft260_word_show(struct hid_device *hdev, int id, u8 *cfg, int len,
->  	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
->  	if (ret != len && ret >= 0)
->  		return -EIO;
-> +	else if (ret < 0)
-> +		return ret;
-
-The same.
-
->  
->  	return scnprintf(buf, PAGE_SIZE, "%hi\n", le16_to_cpu(*field));
->  }
-> -- 
-> 2.26.3
-> 
+DQpPbiA4LzA1LzIxIDk6NDkgYW0sIFJvYiBIZXJyaW5nIHdyb3RlOg0KPiBPbiBGcmksIE1heSAw
+NywgMjAyMSBhdCAxMjo0MDo0NVBNICsxMjAwLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4gRG9j
+dW1lbnQgdGhlIGZzbCxpMmMtZXJyYXR1bS1hMDA0NDQ3IGZsYWcgd2hpY2ggaW5kaWNhdGVzIHRo
+ZSBwcmVzZW5jZQ0KPj4gb2YgYW4gaTJjIGVycmF0dW0gb24gc29tZSBRb3JJUSBTb0NzLg0KPj4N
+Cj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVs
+ZXNpcy5jby5uej4NCj4+IC0tLQ0KPj4gICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
+Z3MvaTJjL2kyYy1tcGMueWFtbCB8IDcgKysrKysrKw0KPj4gICAxIGZpbGUgY2hhbmdlZCwgNyBp
+bnNlcnRpb25zKCspDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
+ZS9iaW5kaW5ncy9pMmMvaTJjLW1wYy55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
+bmRpbmdzL2kyYy9pMmMtbXBjLnlhbWwNCj4+IGluZGV4IDdiNTUzZDU1OWM4My4uOThjNmZjZjdi
+ZjI2IDEwMDY0NA0KPj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2ky
+Yy9pMmMtbXBjLnlhbWwNCj4+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
+cy9pMmMvaTJjLW1wYy55YW1sDQo+PiBAQCAtNDYsNiArNDYsMTMgQEAgcHJvcGVydGllczoNCj4+
+ICAgICAgIGRlc2NyaXB0aW9uOiB8DQo+PiAgICAgICAgIEkyQyBidXMgdGltZW91dCBpbiBtaWNy
+b3NlY29uZHMNCj4+ICAgDQo+PiArICBmc2wsaTJjLWVycmF0dW0tYTAwNDQ0NzoNCj4+ICsgICAg
+JHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvZmxhZw0KPj4gKyAgICBkZXNj
+cmlwdGlvbjogfA0KPj4gKyAgICAgIEluZGljYXRlcyB0aGUgcHJlc2VuY2Ugb2YgUW9ySVEgZXJy
+YXR1bSBBLTAwNDQ0Nywgd2hpY2gNCj4+ICsgICAgICBzYXlzIHRoYXQgdGhlIHN0YW5kYXJkIGky
+YyByZWNvdmVyeSBzY2hlbWUgbWVjaGFuaXNtIGRvZXMNCj4+ICsgICAgICBub3Qgd29yayBhbmQg
+YW4gYWx0ZXJuYXRlIGltcGxlbWVudGF0aW9uIGlzIG5lZWRlZC4NCj4gVGhlIHByb2JsZW0gd2l0
+aCBhZGRpbmcgYSBwcm9wZXJ0eSBmb3IgYW4gZXJyYXRhIGlzIHlvdSBoYXZlIHRvIHVwZGF0ZQ0K
+PiB0aGUgZHRiLiBJZiB5b3UgdXNlIHRoZSBjb21wYXRpYmxlIHN0cmluZywgdGhlbiBvbmx5IGFu
+IE9TIHVwZGF0ZSBpcw0KPiBuZWVkZWQuIFRoYXQgYXNzdW1lcyB5b3UgaGF2ZSBzcGVjaWZpYyBl
+bm91Z2ggY29tcGF0aWJsZSBzdHJpbmdzLg0KDQpJIHdhcyBmb2xsb3dpbmcgdGhlIHN0eWxlIG9m
+IHRoZSBleGlzdGluZyBmc2wsdXNiLWVycmF0dW0tYTAwNzc5MiBvciANCmZzbCxlcnJhdHVtLWEw
+MDg1ODUgcHJvcGVydGllcy4gQnV0IHRoYXQncyBub3QgcmVhbGx5IGEgY29tcGVsbGluZyByZWFz
+b24uDQoNClRoZSBleGlzdGluZyBjb21wYXRpYmxlIHN0cmluZyBpcyAiZnNsLWkyYyIgYW5kIGl0
+J3MgdXNlZCBieSBwcmV0dHkgbXVjaCANCmV2ZXJ5IHBvd2VycGMgUW9ySVEgU29DLiBUaGVyZSBh
+cmUgc29tZSBzcGVjaWZpYyBjb21wYXRpYmxlIHN0cmluZ3MgaW4gDQp0aGUgZHJpdmVyIGZvciBz
+b21lIG9mIHRoZSBvbGRlciBtcGMgU29Dcy4gQSBtb3JlIHNwZWNpZmljIGNvbXBhdGlibGUgDQpz
+dHJpbmcgd2lsbCB3b3JrIGFsdGhvdWdoIGRldGVybWluaW5nIHdoaWNoIG9uZXMgYXJlIGFmZmVj
+dGVkIG1pZ2h0IGJlIGEgDQpiaXQgdHJvdWJsZXNvbWUuIFRoYXQgd2Uga25vdyBvZiB0aGUgUDIw
+NDEgYW5kIFAxMDEwIGFyZSBhZmZlY3RlZCBidXQgSSANCnN1c3BlY3QgdGhlcmUgbWF5IGJlIG1v
+cmUuIE9uZSBkaXNhZHZhbnRhZ2Ugb2YgdXNpbmcgdGhlIGNvbXBhdGlibGUgDQpzdHJpbmcgaXMg
+dGhhdCBhcyBhZmZlY3RlZCBTb0NzIGFyZSBpZGVudGlmaWVkIHdlJ2xsIGhhdmUgdG8gdXBkYXRl
+IHRoZSANCmRyaXZlciB0byBrbm93IHRoYXQgU29DIGlzIGFmZmVjdGVkIGFuZCB1cGRhdGUgdGhl
+IGR0YiB0byB1c2UgaXQuIFdpdGggDQp0aGUgcHJvcGVydHkgd2UnZCBqdXN0IGhhdmUgdG8gdXBk
+YXRlIHRoZSBkdGIuDQoNCkknbSBub3QgdG9vIGZ1c3NlZCBlaXRoZXIgd2F5IHNvIGlmIHRoYXQn
+cyBhIGhhcmQgTkFDSyBvbiB0aGUgcHJvcGVydHkgSSANCmNhbiBzZW5kIGEgdmVyc2lvbiB0aGF0
+IHVzZXMgY29tcGF0aWJsZSBzdHJpbmdzIGluc3RlYWQuDQo=
