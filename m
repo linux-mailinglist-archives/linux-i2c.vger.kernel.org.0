@@ -2,191 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BD23794A0
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 May 2021 18:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301F137962B
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 May 2021 19:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbhEJQyq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 May 2021 12:54:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34903 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232123AbhEJQyo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 May 2021 12:54:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620665618;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KhvWaxNul7zu4EnuoMFRJR12b+F35ScbSngpii8z+GA=;
-        b=RIPwKh9QFgYmCj1OegxC96KnMaGVuJQfC18i+HozfQvR+GPUMkWVhW+BSF6tg6lTEn6xUS
-        EspDKtcBhX3Eh+2T/dvmRidkFuWl8iVOpmdszDfFm4tq9fzwGM5lRF7rZA379GmlHseDTb
-        v0Qi58yyeSeajcH50Ym8vSTzHzXtLqE=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-354-LAYHDtGKMRmDD5G1cNRTnA-1; Mon, 10 May 2021 12:53:35 -0400
-X-MC-Unique: LAYHDtGKMRmDD5G1cNRTnA-1
-Received: by mail-qv1-f70.google.com with SMTP id a6-20020a0ce3460000b02901c4f39aa36aso13080987qvm.21
-        for <linux-i2c@vger.kernel.org>; Mon, 10 May 2021 09:53:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KhvWaxNul7zu4EnuoMFRJR12b+F35ScbSngpii8z+GA=;
-        b=IP9FvD9nSXJxQp1yMBYZPY/sGp4BxlH7qGZsJJdM8YbRYzNnsQJ2989hamVuBLMoJT
-         JVWEMdc6TiOzevIpbk+YmrNmGotTn8hfe8VJ8QAF2hP0YMKLgPfuSsPgd9RFoiEahLEw
-         ACBzuxLx6+LYp7gkcUklt990Cu8PoS8kj3wWP1yHEPBujoJUghfU47/oPHgSB2hgWhX9
-         VbsUOdg4oInffrjYGL475tmKaNEQsl9W1Is2bnKe8q/B+es93TeY83pozsGwYcgjtxrO
-         7G6WIAziUyNacsdfi/Sd0UDRfCU1dtMHoms+MInO5i3sLvGBN3Fnzsn9UX1EU0zULVio
-         ymbw==
-X-Gm-Message-State: AOAM530HwpMvVVQ1eO5F9khW+MAZmd9VdxlXEUGOrEUSmSvOcRaM8rOg
-        Khmy86X9jo+Mu4kEv0wkL6e62I3yO8KIfDCdLK8a+zDaJ6i5ZVbmhvs8yLpt08RkhTk/uvbcae/
-        FgHadMdyafU2OWb0cVl4j
-X-Received: by 2002:a37:5dc5:: with SMTP id r188mr24280986qkb.303.1620665614867;
-        Mon, 10 May 2021 09:53:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyy/aNGwBNNYJA7jYo55sda7QCqZpfEGujpq5EF8HL1Nlg1L8bDXLDyKNBNmhfJKd2+O/OS0A==
-X-Received: by 2002:a37:5dc5:: with SMTP id r188mr24280976qkb.303.1620665614691;
-        Mon, 10 May 2021 09:53:34 -0700 (PDT)
-Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id d19sm11624587qtd.29.2021.05.10.09.53.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 09:53:34 -0700 (PDT)
-From:   trix@redhat.com
-To:     michael.zaidman@gmail.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com
-Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] HID: ft260: improve error handling of ft260_hid_feature_report_get()
-Date:   Mon, 10 May 2021 09:53:29 -0700
-Message-Id: <20210510165329.664909-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        id S231594AbhEJRnC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 May 2021 13:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231631AbhEJRnC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 May 2021 13:43:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AB2C061574
+        for <linux-i2c@vger.kernel.org>; Mon, 10 May 2021 10:41:57 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lg9uh-0005HN-92; Mon, 10 May 2021 19:41:51 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lg9ug-0006af-AM; Mon, 10 May 2021 19:41:50 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-clk@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v7 5/6] i2c: imx: Simplify using devm_clk_get_enabled()
+Date:   Mon, 10 May 2021 19:41:41 +0200
+Message-Id: <20210510174142.986250-6-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+devm_clk_get_enabled() returns the clk already (prepared and) enabled
+and the automatically called cleanup cares for disabling (and
+unpreparing). So simplify .probe() and .remove() accordingly.
 
-Static analysis reports this representative problem
-
-hid-ft260.c:787:9: warning: 4th function call argument is an
-  uninitialized value
-        return scnprintf(buf, PAGE_SIZE, "%hi\n", *field);
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Uses of ft260_hid_feature_report_get() check if the return size matches
-the requested size.  But the function can also fail with at least -ENOMEM.
-Add the < 0 checks.
-
-In ft260_hid_feature_report_get(), do not do the memcpy to the caller's
-buffer if there is an error.
-
-Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
-Signed-off-by: Tom Rix <trix@redhat.com>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Acked-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
-v2:  add unlikely()'s for error conditions
----
- drivers/hid/hid-ft260.c | 39 ++++++++++++++++++++++++++++-----------
- 1 file changed, 28 insertions(+), 11 deletions(-)
+ drivers/i2c/busses/i2c-imx.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
-index 7a9ba984a75a..7e881799d074 100644
---- a/drivers/hid/hid-ft260.c
-+++ b/drivers/hid/hid-ft260.c
-@@ -249,7 +249,8 @@ static int ft260_hid_feature_report_get(struct hid_device *hdev,
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index dc5ca71906db..13241401ad88 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1405,16 +1405,10 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
  
- 	ret = hid_hw_raw_request(hdev, report_id, buf, len, HID_FEATURE_REPORT,
- 				 HID_REQ_GET_REPORT);
--	memcpy(data, buf, len);
-+	if (likely(ret == len))
-+		memcpy(data, buf, len);
- 	kfree(buf);
+ 	/* Get I2C clock */
+-	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
++	i2c_imx->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(i2c_imx->clk))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
+-				     "can't get I2C clock\n");
+-
+-	ret = clk_prepare_enable(i2c_imx->clk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
+-		return ret;
+-	}
++				     "can't get prepared I2C clock\n");
+ 
+ 	/* Init queue */
+ 	init_waitqueue_head(&i2c_imx->queue);
+@@ -1487,7 +1481,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+-	clk_disable_unprepare(i2c_imx->clk);
  	return ret;
  }
-@@ -295,12 +296,16 @@ static int ft260_xfer_status(struct ft260_device *dev)
- 	struct hid_device *hdev = dev->hdev;
- 	struct ft260_get_i2c_status_report report;
- 	int ret;
-+	int len = sizeof(report);
  
- 	ret = ft260_hid_feature_report_get(hdev, FT260_I2C_STATUS,
--					   (u8 *)&report, sizeof(report));
--	if (ret < 0) {
-+					   (u8 *)&report, len);
-+	if (unlikely(ret != len)) {
- 		hid_err(hdev, "failed to retrieve status: %d\n", ret);
--		return ret;
-+		if (ret >= 0)
-+			return -EIO;
-+		else
-+			return ret;
- 	}
+@@ -1517,7 +1510,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq >= 0)
+ 		free_irq(irq, i2c_imx);
+-	clk_disable_unprepare(i2c_imx->clk);
  
- 	dev->clock = le16_to_cpu(report.clock);
-@@ -724,10 +729,12 @@ static int ft260_get_system_config(struct hid_device *hdev,
- 
- 	ret = ft260_hid_feature_report_get(hdev, FT260_SYSTEM_SETTINGS,
- 					   (u8 *)cfg, len);
--	if (ret != len) {
-+	if (unlikely(ret != len)) {
- 		hid_err(hdev, "failed to retrieve system status\n");
- 		if (ret >= 0)
- 			return -EIO;
-+		else
-+			return ret;
- 	}
- 	return 0;
- }
-@@ -780,8 +787,12 @@ static int ft260_byte_show(struct hid_device *hdev, int id, u8 *cfg, int len,
- 	int ret;
- 
- 	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
--	if (ret != len && ret >= 0)
--		return -EIO;
-+	if (unlikely(ret != len)) {
-+		if (ret >= 0)
-+			return -EIO;
-+		else
-+			return  ret;
-+	}
- 
- 	return scnprintf(buf, PAGE_SIZE, "%hi\n", *field);
- }
-@@ -792,8 +803,12 @@ static int ft260_word_show(struct hid_device *hdev, int id, u8 *cfg, int len,
- 	int ret;
- 
- 	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
--	if (ret != len && ret >= 0)
--		return -EIO;
-+	if (unlikely(ret != len)) {
-+		if (ret >= 0)
-+			return -EIO;
-+		else
-+			return ret;
-+	}
- 
- 	return scnprintf(buf, PAGE_SIZE, "%hi\n", le16_to_cpu(*field));
- }
-@@ -919,6 +934,7 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	struct ft260_device *dev;
- 	struct ft260_get_chip_version_report version;
- 	int ret;
-+	int len;
- 
- 	dev = devm_kzalloc(&hdev->dev, sizeof(*dev), GFP_KERNEL);
- 	if (!dev)
-@@ -942,9 +958,10 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		goto err_hid_stop;
- 	}
- 
-+	len = sizeof(version);
- 	ret = ft260_hid_feature_report_get(hdev, FT260_CHIP_VERSION,
--					   (u8 *)&version, sizeof(version));
--	if (ret != sizeof(version)) {
-+					   (u8 *)&version, len);
-+	if (unlikely(ret != len)) {
- 		hid_err(hdev, "failed to retrieve chip version\n");
- 		if (ret >= 0)
- 			ret = -EIO;
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
 -- 
-2.26.3
+2.30.2
 
