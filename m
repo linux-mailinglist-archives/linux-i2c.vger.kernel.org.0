@@ -2,122 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8C8379D39
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 May 2021 04:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BB637A449
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 May 2021 12:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbhEKDA2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 May 2021 23:00:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47692 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229586AbhEKDA2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 10 May 2021 23:00:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4402161409;
-        Tue, 11 May 2021 02:59:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620701962;
-        bh=D98gr128iCknJvrYh3HPBX/ArmUrzeHsUO9oS/+HIxA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LFnOdH/XTxr483Gjd5sa6LOfticp+DoM1ZEN/nEUjEmtIw7KE7jDXp+vI3fhNRVs7
-         1RuAK0dozfloep7HNIwDx2c9BP8yGzdy/JG1SIWxUPxKjYAiVmiAzt/RLdYShKnhkh
-         1hQj9a6Rhd18xxThdRAZwgs0RHmWZIEiS3DWenOtu2k2g6euRwlSxQ7seBxbRp7L38
-         a8RFOrOgP6rYWT5EYp54SXQyNzqevFv4JCXghAV9GGC7IwwZu6b8p9N9aTcfrc72WG
-         wEd5P9IswBv7VcD3gwAJ2ycYJX2d9aZbBmhxfcLKX1nUTNIFMlK5i+RS+IhEZn+8ka
-         u38HC8B7lHhKw==
-Date:   Tue, 11 May 2021 10:59:11 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Clark Wang <xiaoning.wang@nxp.com>
-Cc:     aisheng.dong@nxp.com, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 05/18] ARM64: dts: imx8: add the missing lpi2c ipg
- clock
-Message-ID: <20210511025911.GF3425@dragon>
-References: <20210406113306.2633595-1-xiaoning.wang@nxp.com>
- <20210406113306.2633595-6-xiaoning.wang@nxp.com>
+        id S231432AbhEKKH7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 May 2021 06:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231204AbhEKKH7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 May 2021 06:07:59 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B570C061574;
+        Tue, 11 May 2021 03:06:52 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id v12so19500819wrq.6;
+        Tue, 11 May 2021 03:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c2WVbfAVqJcL+REqbX0YpO9uYgKY9glSk3kcY+TpGLg=;
+        b=CLuDvEpM3aoLoo6URBinpv+XxdSvKbVEhi+rM3DXkpBb1On2rr2Rc5Ryydipxns/7W
+         J/BihtFNpBMPDUZXQpXLUQyuC+2M18/GY49sw6Mdg3kRFUGKPw6a8wP8DoKxDtlkU0Vv
+         k7rbsUTq9iGHsSkGjUxRzg2NUdhyP3ZsCcdBygYutaKqVyAbn/Y5osGGsawJ8RvtNQrE
+         p4XT4Q0oXppYPkKSSamfZz5tXbricf2cdPRkB8VgWlQb/ew4grrt0n6+NC+PEbsv5+XP
+         MQjmWnV6HFdrZc4EXQpqgMuAMM/rnpW9JNhKaKgpMqh2FtvFo+UNoFvFsTgNj+mk86oQ
+         iq3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c2WVbfAVqJcL+REqbX0YpO9uYgKY9glSk3kcY+TpGLg=;
+        b=cSGhgKfsIlnrW6N4dMNwL6403YO3GHPvysmq6s6Nh7XdFEzJwPsiUWyWHzfn+52CbH
+         G9gdFbfysrFrLdFOSpUYHpojAuuLMe6orDXc+wYcK8iHMyozlHLm7eHIkupSKnDy8OOL
+         V/NmM4Y159k0KPSg3lryEAMtYWZR0fpPxQlblQRsrxT4mDpCtNePt+ZggMB/7hNH/9u4
+         +lNmD20A2XpSkZFdQlTJ9PkxVSD6GGO/gnyZdcnDmCJlo9oqV5/32y1BUuTF+FnKAmzV
+         bpmeAS+ctAEGnsu6iRmT9bb73ox0XW6VjA8Cmcw5wSfWp2XMAhZXGyPVNZlEMrFnXFIG
+         b0yw==
+X-Gm-Message-State: AOAM5321JyRyKRjFG/lLWIQbKrqV7KMehHyKUQ0kbocgug4Xg4mQwldb
+        tp1wDX0vDbU/xW09BNyZO3E=
+X-Google-Smtp-Source: ABdhPJwhqZ4PpItyOqNGBZqT+MmWAkofsgKBZYJ9WwZj2DQHPHW3XZY472j3ptZBh1MvZIHYlBJS5A==
+X-Received: by 2002:adf:f7d2:: with SMTP id a18mr38324156wrq.198.1620727610765;
+        Tue, 11 May 2021 03:06:50 -0700 (PDT)
+Received: from michael-VirtualBox.xsight.ent (cbl217-132-244-50.bb.netvision.net.il. [217.132.244.50])
+        by smtp.googlemail.com with ESMTPSA id 61sm30079581wrm.52.2021.05.11.03.06.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 May 2021 03:06:50 -0700 (PDT)
+From:   Michael Zaidman <michael.zaidman@gmail.com>
+To:     trix@redhat.com, jikos@kernel.org, benjamin.tissoires@redhat.com
+Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Michael Zaidman <michael.zaidman@gmail.com>
+Subject: [PATCH v3] HID: ft260: improve error handling of ft260_hid_feature_report_get()
+Date:   Tue, 11 May 2021 13:06:34 +0300
+Message-Id: <20210511100634.16278-1-michael.zaidman@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210406113306.2633595-6-xiaoning.wang@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 06, 2021 at 07:32:53PM +0800, Clark Wang wrote:
-> The lpi2c driver has add the missing ipg clock.
-> So add the ipg clock here for all lpi2c nodes.
-> 
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
 
-Historically, we use 'arm64: dts: ...' as subject prefix for arm64 DTS
-patch, and 'ARM: dts: ...' for arm.
+The ft260_hid_feature_report_get() checks if the return size matches
+the requested size. But the function can also fail with at least -ENOMEM.
+Add the < 0 checks.
 
-Shawn
+In ft260_hid_feature_report_get(), do not do the memcpy to the caller's
+buffer if there is an error.
 
-> ---
-> V2 changes:
->  - New patch added in V2
-> ---
->  .../arm64/boot/dts/freescale/imx8-ss-dma.dtsi | 24 ++++++++++++-------
->  1 file changed, 16 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-> index 960a802b8b6e..b5ed12a06538 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-> @@ -111,8 +111,10 @@ uart3_lpcg: clock-controller@5a490000 {
->  	i2c0: i2c@5a800000 {
->  		reg = <0x5a800000 0x4000>;
->  		interrupts = <GIC_SPI 220 IRQ_TYPE_LEVEL_HIGH>;
-> -		clocks = <&i2c0_lpcg IMX_LPCG_CLK_0>;
-> -		clock-names = "per";
-> +		interrupt-parent = <&gic>;
-> +		clocks = <&i2c0_lpcg IMX_LPCG_CLK_0>,
-> +			 <&i2c0_lpcg IMX_LPCG_CLK_4>;
-> +		clock-names = "per", "ipg";
->  		assigned-clocks = <&clk IMX_SC_R_I2C_0 IMX_SC_PM_CLK_PER>;
->  		assigned-clock-rates = <24000000>;
->  		power-domains = <&pd IMX_SC_R_I2C_0>;
-> @@ -122,8 +124,10 @@ i2c0: i2c@5a800000 {
->  	i2c1: i2c@5a810000 {
->  		reg = <0x5a810000 0x4000>;
->  		interrupts = <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>;
-> -		clocks = <&i2c1_lpcg IMX_LPCG_CLK_0>;
-> -		clock-names = "per";
-> +		interrupt-parent = <&gic>;
-> +		clocks = <&i2c1_lpcg IMX_LPCG_CLK_0>,
-> +			 <&i2c1_lpcg IMX_LPCG_CLK_4>;
-> +		clock-names = "per", "ipg";
->  		assigned-clocks = <&clk IMX_SC_R_I2C_1 IMX_SC_PM_CLK_PER>;
->  		assigned-clock-rates = <24000000>;
->  		power-domains = <&pd IMX_SC_R_I2C_1>;
-> @@ -133,8 +137,10 @@ i2c1: i2c@5a810000 {
->  	i2c2: i2c@5a820000 {
->  		reg = <0x5a820000 0x4000>;
->  		interrupts = <GIC_SPI 222 IRQ_TYPE_LEVEL_HIGH>;
-> -		clocks = <&i2c2_lpcg IMX_LPCG_CLK_0>;
-> -		clock-names = "per";
-> +		interrupt-parent = <&gic>;
-> +		clocks = <&i2c2_lpcg IMX_LPCG_CLK_0>,
-> +			 <&i2c2_lpcg IMX_LPCG_CLK_4>;
-> +		clock-names = "per", "ipg";
->  		assigned-clocks = <&clk IMX_SC_R_I2C_2 IMX_SC_PM_CLK_PER>;
->  		assigned-clock-rates = <24000000>;
->  		power-domains = <&pd IMX_SC_R_I2C_2>;
-> @@ -144,8 +150,10 @@ i2c2: i2c@5a820000 {
->  	i2c3: i2c@5a830000 {
->  		reg = <0x5a830000 0x4000>;
->  		interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
-> -		clocks = <&i2c3_lpcg IMX_LPCG_CLK_0>;
-> -		clock-names = "per";
-> +		interrupt-parent = <&gic>;
-> +		clocks = <&i2c3_lpcg IMX_LPCG_CLK_0>,
-> +			 <&i2c3_lpcg IMX_LPCG_CLK_4>;
-> +		clock-names = "per", "ipg";
->  		assigned-clocks = <&clk IMX_SC_R_I2C_3 IMX_SC_PM_CLK_PER>;
->  		assigned-clock-rates = <24000000>;
->  		power-domains = <&pd IMX_SC_R_I2C_3>;
-> -- 
-> 2.25.1
-> 
+Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
+Signed-off-by: Tom Rix <trix@redhat.com>
+
+---
+v3   Simplify and optimize the changes
+---
+v2:  add unlikely()'s for error conditions
+---
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
+---
+ drivers/hid/hid-ft260.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
+index 047aa85a7c83..7f4cb823129e 100644
+--- a/drivers/hid/hid-ft260.c
++++ b/drivers/hid/hid-ft260.c
+@@ -249,7 +249,10 @@ static int ft260_hid_feature_report_get(struct hid_device *hdev,
+ 
+ 	ret = hid_hw_raw_request(hdev, report_id, buf, len, HID_FEATURE_REPORT,
+ 				 HID_REQ_GET_REPORT);
+-	memcpy(data, buf, len);
++	if (likely(ret == len))
++		memcpy(data, buf, len);
++	else if (ret >= 0)
++		ret = -EIO;
+ 	kfree(buf);
+ 	return ret;
+ }
+@@ -298,7 +301,7 @@ static int ft260_xfer_status(struct ft260_device *dev)
+ 
+ 	ret = ft260_hid_feature_report_get(hdev, FT260_I2C_STATUS,
+ 					   (u8 *)&report, sizeof(report));
+-	if (ret < 0) {
++	if (unlikely(ret < 0)) {
+ 		hid_err(hdev, "failed to retrieve status: %d\n", ret);
+ 		return ret;
+ 	}
+@@ -720,10 +723,9 @@ static int ft260_get_system_config(struct hid_device *hdev,
+ 
+ 	ret = ft260_hid_feature_report_get(hdev, FT260_SYSTEM_SETTINGS,
+ 					   (u8 *)cfg, len);
+-	if (ret != len) {
++	if (ret < 0) {
+ 		hid_err(hdev, "failed to retrieve system status\n");
+-		if (ret >= 0)
+-			return -EIO;
++		return ret;
+ 	}
+ 	return 0;
+ }
+@@ -776,8 +778,8 @@ static int ft260_byte_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+ 	int ret;
+ 
+ 	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
+-	if (ret != len && ret >= 0)
+-		return -EIO;
++	if (ret < 0)
++		return ret;
+ 
+ 	return scnprintf(buf, PAGE_SIZE, "%hi\n", *field);
+ }
+@@ -788,8 +790,8 @@ static int ft260_word_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+ 	int ret;
+ 
+ 	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
+-	if (ret != len && ret >= 0)
+-		return -EIO;
++	if (ret < 0)
++		return ret;
+ 
+ 	return scnprintf(buf, PAGE_SIZE, "%hi\n", le16_to_cpu(*field));
+ }
+@@ -940,10 +942,8 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 
+ 	ret = ft260_hid_feature_report_get(hdev, FT260_CHIP_VERSION,
+ 					   (u8 *)&version, sizeof(version));
+-	if (ret != sizeof(version)) {
++	if (ret < 0) {
+ 		hid_err(hdev, "failed to retrieve chip version\n");
+-		if (ret >= 0)
+-			ret = -EIO;
+ 		goto err_hid_close;
+ 	}
+ 
+-- 
+2.25.1
+
