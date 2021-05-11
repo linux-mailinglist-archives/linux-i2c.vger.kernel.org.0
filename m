@@ -2,190 +2,180 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 604D437A73B
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 May 2021 14:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C43C37A754
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 May 2021 15:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbhEKM7f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 May 2021 08:59:35 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:61892 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbhEKM7f (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 May 2021 08:59:35 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1620737909; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=lYaVpUKqUhk7AZILQOBcBVn1o1hxlbG/qfA0IIbmC/o=;
- b=WzaF7Qqm3+Pu+VYMtCB9GAaOep394k00I9Qh2EMe7UyNgU0R9LTYkqA+q4M28Hbk8rQMCLf7
- 4VJlIOEDNLzGYQA/IvzWJ8hRbO7msDXXq5gqDSR/vbDyHcIS8cUkcsYEbueEhLh3HOzsqESs
- /t5LcOwvCr+wy11avZV0FCL9Q74=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 609a7f6de0211609c436956c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 11 May 2021 12:58:21
- GMT
-Sender: rojay=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2C3D6C43145; Tue, 11 May 2021 12:58:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: rojay)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0EE92C4338A;
-        Tue, 11 May 2021 12:58:19 +0000 (UTC)
+        id S230494AbhEKNLu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 May 2021 09:11:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39626 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231545AbhEKNLu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 May 2021 09:11:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1620738643;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6HCQfvoIASrghQvvK7Is6JLJJjGZ2bT2esu83liAjqc=;
+        b=NZhAZ7ILLtYtEREO02kaSNPveQ3ekDmhNkoJ2BLt/s06qLShtU+Zcasat0tLslL28DAFrd
+        AWK770ukKAojWVqFGJwRfhKZLQxRd2NZeZFcgavJ0yNjJrfxxAcRtXcgU8ZYO1axtFnlWB
+        SdwDVP0fABc33aN3tQApLvpGd39F93U=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-441-WxH_kwOLPB6w7sl0gn2W4w-1; Tue, 11 May 2021 09:10:39 -0400
+X-MC-Unique: WxH_kwOLPB6w7sl0gn2W4w-1
+Received: by mail-qv1-f72.google.com with SMTP id r11-20020a0cb28b0000b02901c87a178503so15385540qve.22
+        for <linux-i2c@vger.kernel.org>; Tue, 11 May 2021 06:10:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=6HCQfvoIASrghQvvK7Is6JLJJjGZ2bT2esu83liAjqc=;
+        b=qYxqnTtVU1EpVeDKOOP5lunZ9HJtD6A4SzM/TRv+k6RJmOBviqkoVSYaKKyKcG4nql
+         m1ELFcs455WNCx7ju/7pvoBZ+p4Em4myNmyPesouzFDgoBjALyymyEVm8JlmDb8sscZn
+         LOv9TKCLpmZES2kc2e3RG1dBkiyvpi9K+NbOu9AL3ymGAawng3S/QqOxgzhUG8J/SQ9t
+         e7TA6qQuSpzzs3jThy4XR4GzbBapRZqo+xVHIaO+KU1C+9fvMUzomCr/f5Phj7C3/cNL
+         N05BmEYGKRtd7hSCLUc0VawNth1I8nzQM+vBcE5SSxuJDqsknxsE9QP/SesL5+74Mn2U
+         MQyg==
+X-Gm-Message-State: AOAM532c8ZrTnvBfHAleuMAd8xYDzCDSebLTBl597fohftg1JxytfXqr
+        KFPi4F49SVulkuI01IEZtvzFBIhJoa/tR+WxC+r5PakIcSHZcCXzsiwUEleK4VyvXe78AfIa0cQ
+        mlOTGuByBlUla4Qcwanoy
+X-Received: by 2002:ac8:a83:: with SMTP id d3mr28224428qti.91.1620738639382;
+        Tue, 11 May 2021 06:10:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzEZ5tNPYrjIraCKXmdZ443CE4WBgkEGbd/ff83gpIz8ttT9XvzVyRKWhgF3tZNB7YIa9RPZw==
+X-Received: by 2002:ac8:a83:: with SMTP id d3mr28224415qti.91.1620738639193;
+        Tue, 11 May 2021 06:10:39 -0700 (PDT)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id a195sm13548173qkg.101.2021.05.11.06.10.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 May 2021 06:10:38 -0700 (PDT)
+Subject: Re: [PATCH v4] HID: ft260: improve error handling of
+ ft260_hid_feature_report_get()
+To:     Michael Zaidman <michael.zaidman@gmail.com>, jikos@kernel.org,
+        benjamin.tissoires@redhat.com
+Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210511101208.16401-1-michael.zaidman@gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <30c2857d-5094-402e-25a8-48f5be83fa3f@redhat.com>
+Date:   Tue, 11 May 2021 06:10:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <20210511101208.16401-1-michael.zaidman@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 11 May 2021 18:28:19 +0530
-From:   rojay@codeaurora.org
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     wsa@kernel.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, skananth@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH V9] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-In-Reply-To: <CAE-0n51MEJ_+7QKpBKenjjB+rwdGN-=vxx=4oo8_-P=_yJe+jQ@mail.gmail.com>
-References: <d23263dcb0f1535275ff37524b0203b2@codeaurora.org>
- <CAE-0n51YQf=NZxnw9+FLU=PSG8di7Ztp5pP03JdLXgEWGM0AZg@mail.gmail.com>
- <CAE-0n51MEJ_+7QKpBKenjjB+rwdGN-=vxx=4oo8_-P=_yJe+jQ@mail.gmail.com>
-Message-ID: <84d603d86a74efeb78b78f5812d3921c@codeaurora.org>
-X-Sender: rojay@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2021-05-08 13:26, Stephen Boyd wrote:
-> Quoting Stephen Boyd (2021-05-07 13:09:21)
->> Quoting rojay@codeaurora.org (2021-05-07 03:07:42)
->> > On 2021-05-05 07:08, Stephen Boyd wrote:
->> > > Quoting Roja Rani Yarubandi (2021-04-20 04:13:55)
->> >
->> > > In fact, where is that code? I'd expect to see i2c_del_adapter() in
->> > > here
->> > > so we know the adapter can't accept transfers anymore. Maybe
->> > > i2c_del_adapter() could be called, and then there's nothing to do after
->> > > that? This whole patch is trying to rip the adapter out from under the
->> > > i2c core framework, when we should take the opposite approach and
->> > > remove
->> > > it from the core framework so that it can't transfer anything anymore
->> > > and thus the IOMMU can remove the mapping.
->> > >
->> >
->> > IIUC about probe/remove/shutdown calls, during "remove" we will unplug
->> > the
->> > device with opposite calls to "probe's" plug operations.
->> > For example i2c_add_adapter() from 'probe' and i2c_del_adapter() from
->> > 'remove'.
->> > For "shutdown", as system is going to shutdown, there is no need of
->> > unplug
->> > operations to be done.
->> >
->> > And also, I had a glance on other upstream i2c drivers, and noticed
->> > "i2c-i801.c"
->> > driver has i2c_del_adapter() called from remove callback but not from
->> > shutdown
->> > callback.
->> 
->> Sure, other drivers could also be broken.
-> 
-> What does it have in the shutdown callback? I see that it is wrong to
-> delete the adapter in shutdown because this problem happens. First
-> shutdown is called for various i2c clients, then shutdown is called for
-> the adapter. If the adapter shutdown calls i2c_del_adapter(), then
-> remove is called for the various i2c clients. The i2c clients aren't
-> expecting this and start doing double frees and stuff. It's really 
-> quite
-> a mess. I suspect i2c shutdown should probably block remove from being
-> called on it entirely. Either way, it's the wrong approach.
-> 
-> Instead, I think we should merely suspend the i2c bus like this. Then 
-> we
-> can hunt down the various drivers that try to access the bus after the
-> i2c bus has been removed. I've already done that for rt5682 (see the
-> patch link later).
-> 
+Generally change is fine.
 
-Ok. I will proceed with the current approach only then
-(not calling i2c_del_adapter() in shutdown). I will post the
-patch with the other comments answered.
+a nit below.
 
-> ----8<---
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c
-> b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 20216e382b4c..af3ed808ba2e 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -655,6 +655,14 @@ static int geni_i2c_remove(struct platform_device 
-> *pdev)
->  	return 0;
->  }
-> 
-> +static void geni_i2c_shutdown(struct platform_device *pdev)
-> +{
-> +	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
-> +
-> +	/* Make client i2c transfers start failing */
-> +	i2c_mark_adapter_suspended(&gi2c->adap);
-> +}
-> +
->  static int __maybe_unused geni_i2c_runtime_suspend(struct device *dev)
->  {
->  	int ret;
-> @@ -719,6 +727,7 @@ MODULE_DEVICE_TABLE(of, geni_i2c_dt_match);
->  static struct platform_driver geni_i2c_driver = {
->  	.probe  = geni_i2c_probe,
->  	.remove = geni_i2c_remove,
-> +	.shutdown = geni_i2c_shutdown,
->  	.driver = {
->  		.name = "geni_i2c",
->  		.pm = &geni_i2c_pm_ops,
-> 
->> 
->> >
->> > And actually I tried calling i2c_del_adapter() from geni_i2c_shutdown(),
->> > and it resulted in below WARNING trace
->> > [   90.320282] Call trace:
->> > [   90.322807]  _regulator_put+0xc4/0xcc
->> > [   90.326583]  regulator_bulk_free+0x48/0x6c
->> > [   90.330808]  devm_regulator_bulk_release+0x20/0x2c
->> > [   90.335744]  release_nodes+0x1d0/0x244
->> > [   90.339609]  devres_release_all+0x3c/0x54
->> > [   90.343735]  device_release_driver_internal+0x108/0x194
->> > [   90.349109]  device_release_driver+0x24/0x30
->> > [   90.353510]  bus_remove_device+0xd0/0xf4
->> > [   90.357548]  device_del+0x1a8/0x2f8
->> > [   90.361143]  device_unregister+0x1c/0x34
->> > [   90.365181]  __unregister_client+0x78/0x88
->> > [   90.369397]  device_for_each_child+0x64/0xb4
->> > [   90.373797]  i2c_del_adapter+0xf0/0x1d4
->> > [   90.377745]  geni_i2c_shutdown+0x9c/0xc0
->> > [   90.381783]  platform_drv_shutdown+0x28/0x34
->> > [   90.386182]  device_shutdown+0x148/0x1f0
->> >
->> > Can you please suggest me what might be missing here?
->> >
->> 
->> It looks like some device that is on the i2c bus is putting a 
->> regulator
->> in the remove path without disabling it. Can you print out which 
->> device
->> driver it is and fix that driver to call regulator_disable() on the
->> driver remove path? I'll try locally and see if I can find the driver
->> too.
-> 
-> I see that it's the rt5682 driver. I sent
-> https://lore.kernel.org/r/20210508075151.1626903-2-swboyd@chromium.org
-> for this in case you want to look, but it won't be necessary.
+On 5/11/21 3:12 AM, Michael Zaidman wrote:
+> Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
+>
+> The ft260_hid_feature_report_get() checks if the return size matches
+> the requested size. But the function can also fail with at least -ENOMEM.
+> Add the < 0 checks.
+>
+> In ft260_hid_feature_report_get(), do not do the memcpy to the caller's
+> buffer if there is an error.
+>
+> ---
+> v4   Fixed commit message
+> ---
+> v3   Simplify and optimize the changes
+> ---
+> v2:  add unlikely()'s for error conditions
+> ---
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
+> ---
+>   drivers/hid/hid-ft260.c | 24 ++++++++++++------------
+>   1 file changed, 12 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
+> index 047aa85a7c83..7f4cb823129e 100644
+> --- a/drivers/hid/hid-ft260.c
+> +++ b/drivers/hid/hid-ft260.c
+> @@ -249,7 +249,10 @@ static int ft260_hid_feature_report_get(struct hid_device *hdev,
+>   
+>   	ret = hid_hw_raw_request(hdev, report_id, buf, len, HID_FEATURE_REPORT,
+>   				 HID_REQ_GET_REPORT);
+> -	memcpy(data, buf, len);
+> +	if (likely(ret == len))
+> +		memcpy(data, buf, len);
+> +	else if (ret >= 0)
+> +		ret = -EIO;
+>   	kfree(buf);
+>   	return ret;
+>   }
+> @@ -298,7 +301,7 @@ static int ft260_xfer_status(struct ft260_device *dev)
+>   
+>   	ret = ft260_hid_feature_report_get(hdev, FT260_I2C_STATUS,
+>   					   (u8 *)&report, sizeof(report));
+> -	if (ret < 0) {
+> +	if (unlikely(ret < 0)) {
+>   		hid_err(hdev, "failed to retrieve status: %d\n", ret);
+>   		return ret;
+>   	}
+> @@ -720,10 +723,9 @@ static int ft260_get_system_config(struct hid_device *hdev,
+>   
+>   	ret = ft260_hid_feature_report_get(hdev, FT260_SYSTEM_SETTINGS,
+>   					   (u8 *)cfg, len);
+> -	if (ret != len) {
+> +	if (ret < 0) {
+
+nit: should be consistent and use unlikely(ret < 0) for this and other 
+similar checks.
+
+Tom
+
+>   		hid_err(hdev, "failed to retrieve system status\n");
+> -		if (ret >= 0)
+> -			return -EIO;
+> +		return ret;
+>   	}
+>   	return 0;
+>   }
+> @@ -776,8 +778,8 @@ static int ft260_byte_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+>   	int ret;
+>   
+>   	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
+> -	if (ret != len && ret >= 0)
+> -		return -EIO;
+> +	if (ret < 0)
+> +		return ret;
+>   
+>   	return scnprintf(buf, PAGE_SIZE, "%hi\n", *field);
+>   }
+> @@ -788,8 +790,8 @@ static int ft260_word_show(struct hid_device *hdev, int id, u8 *cfg, int len,
+>   	int ret;
+>   
+>   	ret = ft260_hid_feature_report_get(hdev, id, cfg, len);
+> -	if (ret != len && ret >= 0)
+> -		return -EIO;
+> +	if (ret < 0)
+> +		return ret;
+>   
+>   	return scnprintf(buf, PAGE_SIZE, "%hi\n", le16_to_cpu(*field));
+>   }
+> @@ -940,10 +942,8 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>   
+>   	ret = ft260_hid_feature_report_get(hdev, FT260_CHIP_VERSION,
+>   					   (u8 *)&version, sizeof(version));
+> -	if (ret != sizeof(version)) {
+> +	if (ret < 0) {
+>   		hid_err(hdev, "failed to retrieve chip version\n");
+> -		if (ret >= 0)
+> -			ret = -EIO;
+>   		goto err_hid_close;
+>   	}
+>   
+
