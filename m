@@ -2,59 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BB637A449
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 May 2021 12:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7701937A45C
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 May 2021 12:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbhEKKH7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 May 2021 06:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
+        id S231339AbhEKKN3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 May 2021 06:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbhEKKH7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 May 2021 06:07:59 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B570C061574;
-        Tue, 11 May 2021 03:06:52 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id v12so19500819wrq.6;
-        Tue, 11 May 2021 03:06:51 -0700 (PDT)
+        with ESMTP id S231177AbhEKKN3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 May 2021 06:13:29 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AE4C061574;
+        Tue, 11 May 2021 03:12:22 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id n84so10824252wma.0;
+        Tue, 11 May 2021 03:12:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=c2WVbfAVqJcL+REqbX0YpO9uYgKY9glSk3kcY+TpGLg=;
-        b=CLuDvEpM3aoLoo6URBinpv+XxdSvKbVEhi+rM3DXkpBb1On2rr2Rc5Ryydipxns/7W
-         J/BihtFNpBMPDUZXQpXLUQyuC+2M18/GY49sw6Mdg3kRFUGKPw6a8wP8DoKxDtlkU0Vv
-         k7rbsUTq9iGHsSkGjUxRzg2NUdhyP3ZsCcdBygYutaKqVyAbn/Y5osGGsawJ8RvtNQrE
-         p4XT4Q0oXppYPkKSSamfZz5tXbricf2cdPRkB8VgWlQb/ew4grrt0n6+NC+PEbsv5+XP
-         MQjmWnV6HFdrZc4EXQpqgMuAMM/rnpW9JNhKaKgpMqh2FtvFo+UNoFvFsTgNj+mk86oQ
-         iq3w==
+        bh=yycjFgbB6++8FfDR2a0SYMKkib7VSh+fxdoVw7JnnlI=;
+        b=uTm8lLy485DrhpF6TDFZ6Yq5Uo/c1/8UArG+whHuSSYuMmtio4/zuwd5OhozoCGnLP
+         TLTroSjQ5Oc1leU6eX0Z7LFNh27M+b0yi7vIBpicdmFk1fT2NN2Mn81YPSj+xC/SY5gl
+         yDgU4EAc11VBrrD3pc6lkJHuUs+v3x+z7hXUDO173c8MMNUW4hNVpSQiDtolJB0xYEcU
+         NwuqMTcXW/9QCQpLvoLuAwZYACGiEuMJ8/aCbmwOLeEteeEOJtQtWAe3voSzxQBYNdNt
+         atSSY+AQzd9WoBtIAROoV5P/0UN6lzdbiSNaL+X4uXJwmnDLhlTU8KwXZgM9RpN+vJSU
+         0Edw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=c2WVbfAVqJcL+REqbX0YpO9uYgKY9glSk3kcY+TpGLg=;
-        b=cSGhgKfsIlnrW6N4dMNwL6403YO3GHPvysmq6s6Nh7XdFEzJwPsiUWyWHzfn+52CbH
-         G9gdFbfysrFrLdFOSpUYHpojAuuLMe6orDXc+wYcK8iHMyozlHLm7eHIkupSKnDy8OOL
-         V/NmM4Y159k0KPSg3lryEAMtYWZR0fpPxQlblQRsrxT4mDpCtNePt+ZggMB/7hNH/9u4
-         +lNmD20A2XpSkZFdQlTJ9PkxVSD6GGO/gnyZdcnDmCJlo9oqV5/32y1BUuTF+FnKAmzV
-         bpmeAS+ctAEGnsu6iRmT9bb73ox0XW6VjA8Cmcw5wSfWp2XMAhZXGyPVNZlEMrFnXFIG
-         b0yw==
-X-Gm-Message-State: AOAM5321JyRyKRjFG/lLWIQbKrqV7KMehHyKUQ0kbocgug4Xg4mQwldb
-        tp1wDX0vDbU/xW09BNyZO3E=
-X-Google-Smtp-Source: ABdhPJwhqZ4PpItyOqNGBZqT+MmWAkofsgKBZYJ9WwZj2DQHPHW3XZY472j3ptZBh1MvZIHYlBJS5A==
-X-Received: by 2002:adf:f7d2:: with SMTP id a18mr38324156wrq.198.1620727610765;
-        Tue, 11 May 2021 03:06:50 -0700 (PDT)
+        bh=yycjFgbB6++8FfDR2a0SYMKkib7VSh+fxdoVw7JnnlI=;
+        b=eVae1JH3Plcv4y2V49UHEU/yk0ro/pRcTprUcYMlvNVOKBXRMIsUFnuDi8BstuyApn
+         tunp4fE+O++fwKgs3mTeaYIxq+2z/X+x1zCA0n36N5aUwOBzSretVm7YBYBXT2v+K2R+
+         m0maORx1jGDvONNjFUnr5MKJzcG7ohbooLXI27MFuAXSyqgs4B84ipxei2dfHqvaEPG3
+         NzmMjLoQUvxB4xG91BktoJW+yAmBdiQtZ1W6mdYItg/2LLNtHLYykXu+h0ItFGaCwrOK
+         N6KvukKmU6ROmsTaTd1+K+JQDSCfqrTFF7643WfZKhKHTm+TUwf1dxugqnSBNcromfnZ
+         hk5Q==
+X-Gm-Message-State: AOAM530aBjW1TOhMvPlEHoEcz52FFtOJap566ceWpHA+I6HLinA3/OMF
+        wNmgFHY47YRTZzs9XFtO5XQ=
+X-Google-Smtp-Source: ABdhPJxqFAKv38utcX0KHG3ZH/EH1jArGTeSsn9R5iYAXMjMfzPlsDO32mDGedmZOg2VdMzzUpIY/A==
+X-Received: by 2002:a05:600c:4f0f:: with SMTP id l15mr4482464wmq.143.1620727941224;
+        Tue, 11 May 2021 03:12:21 -0700 (PDT)
 Received: from michael-VirtualBox.xsight.ent (cbl217-132-244-50.bb.netvision.net.il. [217.132.244.50])
-        by smtp.googlemail.com with ESMTPSA id 61sm30079581wrm.52.2021.05.11.03.06.48
+        by smtp.googlemail.com with ESMTPSA id y14sm26691084wrs.64.2021.05.11.03.12.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 May 2021 03:06:50 -0700 (PDT)
+        Tue, 11 May 2021 03:12:20 -0700 (PDT)
 From:   Michael Zaidman <michael.zaidman@gmail.com>
 To:     trix@redhat.com, jikos@kernel.org, benjamin.tissoires@redhat.com
 Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Michael Zaidman <michael.zaidman@gmail.com>
-Subject: [PATCH v3] HID: ft260: improve error handling of ft260_hid_feature_report_get()
-Date:   Tue, 11 May 2021 13:06:34 +0300
-Message-Id: <20210511100634.16278-1-michael.zaidman@gmail.com>
+Subject: [PATCH v4] HID: ft260: improve error handling of ft260_hid_feature_report_get()
+Date:   Tue, 11 May 2021 13:12:08 +0300
+Message-Id: <20210511101208.16401-1-michael.zaidman@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -71,9 +71,8 @@ Add the < 0 checks.
 In ft260_hid_feature_report_get(), do not do the memcpy to the caller's
 buffer if there is an error.
 
-Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
-Signed-off-by: Tom Rix <trix@redhat.com>
-
+---
+v4   Fixed commit message
 ---
 v3   Simplify and optimize the changes
 ---
