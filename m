@@ -2,101 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D81637BB56
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 May 2021 12:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B910937BBAB
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 May 2021 13:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbhELK4K convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 12 May 2021 06:56:10 -0400
-Received: from mail.sch.bme.hu ([152.66.249.140]:18200 "EHLO mail.sch.bme.hu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230196AbhELK4K (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 12 May 2021 06:56:10 -0400
-Received: from mail-lj1-f178.google.com (209.85.208.178) by
- Exchange2016-1.sch.bme.hu (152.66.249.140) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2176.14; Wed, 12 May 2021 12:54:59 +0200
-Received: by mail-lj1-f178.google.com with SMTP id f12so16432210ljp.2;
-        Wed, 12 May 2021 03:54:59 -0700 (PDT)
-X-Gm-Message-State: AOAM5324pQ9Uc3zzquDVayvN5lIB/KCQN0SB0nJt8X69zjtYXK6S6/8C
-        coiXyGuFv+eEEvUtZf96IaHE8RNisksv4y7NIW8=
-X-Google-Smtp-Source: ABdhPJxCtb0TD+42FcE0cZYUuEqaxROPclfBlGeGdTWRDSJ/jk5GxsPmbIb0WJXK3TTrbOhf4r2Ah6Km4/TikNaPo0U=
-X-Received: by 2002:a2e:8e21:: with SMTP id r1mr28462101ljk.166.1620816898710;
- Wed, 12 May 2021 03:54:58 -0700 (PDT)
+        id S230097AbhELLVg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 May 2021 07:21:36 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:28592 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230037AbhELLVg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 May 2021 07:21:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1620818428; x=1652354428;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=e9KmMbZuSSlzBn/N4FUkcfVbRkHPnnXmcXBrvKKR3VI=;
+  b=vNwr/tlfsqQ8IEbV+DTkg0DTKvaGiC8t56M+Ak/zXc+tzVLnudwwrEED
+   6mrJddGikmPW4FffKR4yQYBDrXYGfNx3uIBxFtsR0l/XSTIwvTdA5Nlow
+   lkoESqkhk4evDfKjZUeXhweiDcCzTKvps3EpSDsIKKCzGJD1y8ZLL3BPF
+   /S8yK5IAAqEDm92dKZArAXVOoXEcBKhlRVcil+3l77JWCs0R/ElY7xXjq
+   6FfGc/W/jxsLrj544py/qLWGMDcj1xxoUT1j7vdrBDojeuq77V2bOcfVg
+   zHpNdubm1Ar4ggTU+I7iwt3L7Uvkvfb1nMbtsWm1o6SPVsNb2zGj3ec2n
+   A==;
+IronPort-SDR: hWLDeCOnMw8rMFAskiZvfCEF630IvMqPnvcDlBQ+aVc3ac6pzGScUBJCqWaT9BZHJTSmulcGia
+ 44oyN5lmp4r0FXdyMoCY3EjGa7SirtEyD7mcCu5RjMkX2VRJG/IhHa3gL6CnuEMN6EZcNOzxO6
+ aNbnQ4RhupSVg187nr6JTW0gsud8hxBfVeY3zoD7HFUSo8tiVPZCIYn1X9CvTbrj/FNGw6C6SC
+ 9yttFyjF1MGdPFCN6tFwYXbNLJMbm8yWm0Sa2xBRk572QCm9Uax5JnMWh+qxzNmXEavkyzCBEu
+ Yws=
+X-IronPort-AV: E=Sophos;i="5.82,293,1613458800"; 
+   d="scan'208";a="55295635"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 May 2021 04:20:27 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 12 May 2021 04:20:27 -0700
+Received: from daire-ubuntu.school.villiers.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Wed, 12 May 2021 04:20:24 -0700
+From:   <daire.mcnamara@microchip.com>
+To:     <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <palmer@dabbelt.com>, <cyril.jean@microchip.com>,
+        <padmarao.begari@microchip.com>, <lewis.hanly@microchip.com>,
+        <conor.dooley@microchip.com>, <david.abdurachmanov@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>
+Subject: [PATCH v1 0/2] i2c: microchip: Add driver for PolarFire SoC
+Date:   Wed, 12 May 2021 12:20:22 +0100
+Message-ID: <20210512112024.1651757-1-daire.mcnamara@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <YJuosd6rew91vlyX@mwanda>
-In-Reply-To: <YJuosd6rew91vlyX@mwanda>
-From:   =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <bence98@sch.bme.hu>
-Date:   Wed, 12 May 2021 12:54:47 +0200
-X-Gmail-Original-Message-ID: <CACCVKEEQViw1FaSA4dZoy3KbZydxDyxdx+uf=zQW1Q=R5kRAcg@mail.gmail.com>
-Message-ID: <CACCVKEEQViw1FaSA4dZoy3KbZydxDyxdx+uf=zQW1Q=R5kRAcg@mail.gmail.com>
-Subject: Re: [PATCH] i2c: cp2615: check for allocation failure in cp2615_i2c_recv()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-CC:     Wolfram Sang <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [209.85.208.178]
-X-ClientProxiedBy: Exchange2016-1.sch.bme.hu (152.66.249.140) To
- Exchange2016-1.sch.bme.hu (152.66.249.140)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dan Carpenter <dan.carpenter@oracle.com> ezt írta (időpont: 2021. máj.
-12., Sze, 12:07):
->
-> We need to add a check for if the kzalloc() fails.
+From: Daire McNamara <daire.mcnamara@microchip.com>
 
-That is correct, I missed that :/
+This patchset adds support for the Microchip PolarFire SoC I2C
+hardware block.
 
->
-> Fixes: 4a7695429ead ("i2c: cp2615: add i2c driver for Silicon Labs' CP2615 Digital Audio Bridge")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/i2c/busses/i2c-cp2615.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-cp2615.c b/drivers/i2c/busses/i2c-cp2615.c
-> index 78cfecd1ea76..3ded28632e4c 100644
-> --- a/drivers/i2c/busses/i2c-cp2615.c
-> +++ b/drivers/i2c/busses/i2c-cp2615.c
-> @@ -138,17 +138,23 @@ cp2615_i2c_send(struct usb_interface *usbif, struct cp2615_i2c_transfer *i2c_w)
->  static int
->  cp2615_i2c_recv(struct usb_interface *usbif, unsigned char tag, void *buf)
->  {
-> -       struct cp2615_iop_msg *msg = kzalloc(sizeof(*msg), GFP_KERNEL);
-> -       struct cp2615_i2c_transfer_result *i2c_r = (struct cp2615_i2c_transfer_result *)&msg->data;
+Daire McNamara (2):
+  dt-bindings: i2c: microchip: Add Microchip PolarFire host binding
+  i2c: microchip: Add driver for Microchip PolarFire SoC
 
-These two lines could stay as-is, since the invalid i2c_r will never be used.
+ .../bindings/i2c/microchip,mpfs-i2c.yaml      |  74 +++
+ drivers/i2c/busses/Kconfig                    |   6 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-microchip.c            | 519 ++++++++++++++++++
+ 4 files changed, 600 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+ create mode 100755 drivers/i2c/busses/i2c-microchip.c
 
->         struct usb_device *usbdev = interface_to_usbdev(usbif);
-> -       int res = usb_bulk_msg(usbdev, usb_rcvbulkpipe(usbdev, IOP_EP_IN),
-> -                              msg, sizeof(struct cp2615_iop_msg), NULL, 0);
-> +       struct cp2615_iop_msg *msg;
-> +       struct cp2615_i2c_transfer_result *i2c_r;
-> +       int res;
-> +
-> +       msg = kzalloc(sizeof(*msg), GFP_KERNEL);
-> +       if (!msg)
-> +               return -ENOMEM;
 
-You will want to also make `cp2615_init_iop_msg()` return -ENOMEM
-instead of -EINVAL, for consistency's sake.
+base-commit: acd3d28594536e9096c1ea76c5867d8a68babef6
+prerequisite-patch-id: 6f7f70120adfa8e938b97517f0c664e43e8745a0
+prerequisite-patch-id: 4ea37008d23838aa2e0658811fe15462f6cdbd87
+prerequisite-patch-id: 378c9d7495e56454b7bffbdbc430185dc4e36b90
+prerequisite-patch-id: b547bbdf0a800c652cdd1a542b8ce725dfd6fcc9
+prerequisite-patch-id: 26afc006e51cf743902bf609b537e1558e70f69c
+prerequisite-patch-id: 55e615f1af62373acc71366ceb4c27fbcecec60d
+prerequisite-patch-id: 6bda20a1c98622e33f3bf0126ae696716c963e4b
+-- 
+2.25.1
 
->
-> +       res = usb_bulk_msg(usbdev, usb_rcvbulkpipe(usbdev, IOP_EP_IN), msg,
-> +                          sizeof(struct cp2615_iop_msg), NULL, 0);
->         if (res < 0) {
->                 kfree(msg);
->                 return res;
->         }
->
-> +       i2c_r = (struct cp2615_i2c_transfer_result *)&msg->data;
->         if (msg->msg != htons(iop_I2cTransferResult) || i2c_r->tag != tag) {
->                 kfree(msg);
->                 return -EIO;
-> --
-> 2.30.2
->
-
-Otherwise, the patch looks good, I shall sign off on the next version
