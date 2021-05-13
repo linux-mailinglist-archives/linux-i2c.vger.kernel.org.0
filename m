@@ -2,88 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1173637F32E
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 May 2021 08:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D4A37F675
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 May 2021 13:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbhEMGrg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 May 2021 02:47:36 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:51266 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbhEMGrf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 May 2021 02:47:35 -0400
-Received: from localhost (unknown [192.168.167.223])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 87E12C8699;
-        Thu, 13 May 2021 14:46:11 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P22004T139994226214656S1620888367858788_;
-        Thu, 13 May 2021 14:46:10 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <33e9ab100598d444a69fb444c920c885>
-X-RL-SENDER: cl@rock-chips.com
-X-SENDER: cl@rock-chips.com
-X-LOGIN-NAME: cl@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-RCPT-COUNT: 30
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   <cl@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
-Subject: [RESEND PATCH v4 06/10] dt-bindings: gpio: change items restriction of clock for rockchip,gpio-bank
-Date:   Thu, 13 May 2021 14:46:06 +0800
-Message-Id: <20210513064606.18397-1-cl@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210429081151.17558-1-cl@rock-chips.com>
-References: <20210429081151.17558-1-cl@rock-chips.com>
+        id S231803AbhEMLKT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 May 2021 07:10:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59774 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232957AbhEMLKR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 13 May 2021 07:10:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D47CA61422;
+        Thu, 13 May 2021 11:09:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620904148;
+        bh=uoluFBaduD5lLVV4XzN00NtHyh9peG4uBDHAHqnWv8o=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=M1wGDTMKy1JRRL4gmij6N2CDAmH/WNMowt8QqCeFvj1GA88YVvXSxqRhM4cCEnrdq
+         8aC4N3MvF7e6MZd2xAJkSqPp2tI2PDgwUMW81v9Xxgi2SoTi58cJLuOnslYZXqIu3q
+         9im0/s4exVXCQciNOfNZmjRe/1/njdMeP73nmHvTV61QdeZO4R55p38NfMmr0H4iKl
+         98xBUKRNjWQKPS3/nhysSswwwD0L7H1xXeBNIq8PX1hD/Y/BwjwTTCWvvxTOhXkR9R
+         jdeKLVWaRD5Bup9p+FkCqjbfSyRcc2ax8fsq6xUjfoIW92h9OlI4sflBSDjxYeEKfR
+         IWzHRz9iqP/KQ==
+Date:   Thu, 13 May 2021 13:09:04 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Michael Zaidman <michael.zaidman@gmail.com>
+cc:     trix@redhat.com, benjamin.tissoires@redhat.com,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] HID: ft260: improve error handling of
+ ft260_hid_feature_report_get()
+In-Reply-To: <20210511101208.16401-1-michael.zaidman@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2105131308260.28378@cbobk.fhfr.pm>
+References: <20210511101208.16401-1-michael.zaidman@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Liang Chen <cl@rock-chips.com>
+On Tue, 11 May 2021, Michael Zaidman wrote:
 
-The clock property need 2 items on some rockchip chips.
+> Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
+> 
+> The ft260_hid_feature_report_get() checks if the return size matches
+> the requested size. But the function can also fail with at least -ENOMEM.
+> Add the < 0 checks.
+> 
+> In ft260_hid_feature_report_get(), do not do the memcpy to the caller's
+> buffer if there is an error.
+> 
+> ---
+> v4   Fixed commit message
+> ---
+> v3   Simplify and optimize the changes
+> ---
+> v2:  add unlikely()'s for error conditions
+> ---
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
 
-Signed-off-by: Liang Chen <cl@rock-chips.com>
----
- Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Who should be the author of the git commit?
 
-diff --git a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-index d993e00..0d62c28 100644
---- a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-+++ b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-@@ -22,7 +22,10 @@ properties:
-     maxItems: 1
- 
-   clocks:
--    maxItems: 1
-+    minItems: 1
-+    items:
-+      - description: APB interface clock source
-+      - description: GPIO debounce reference clock source
- 
-   gpio-controller: true
- 
+Thanks,
+
 -- 
-2.7.4
-
-
+Jiri Kosina
+SUSE Labs
 
