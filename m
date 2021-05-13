@@ -2,107 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1E637F873
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 May 2021 15:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DDB37FCF9
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 May 2021 19:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbhEMNRD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 May 2021 09:17:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38896 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233293AbhEMNRB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 May 2021 09:17:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620911743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qsfYYVuA4z4/qDu23wSBRsngQvHS7+tVBTsrP7EpQa4=;
-        b=cbNmWUDmPJI8AsNCR7j6MFnyXHyl8iG5qMOULumNH/9P93AvMH41b8ezjbz3TRKBV2xX6X
-        DqBx83xDtm9RysUm0bOScvqPk33xKGxILTBPK9kIbjWPIvvzBU1ip8EWLBRIvaXykBMrR+
-        GKEHmHnJSm/madsRpbqjsTvKzMr0qv8=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-560-le027oWTNamV8T2J8HwKGA-1; Thu, 13 May 2021 09:15:41 -0400
-X-MC-Unique: le027oWTNamV8T2J8HwKGA-1
-Received: by mail-qt1-f200.google.com with SMTP id s4-20020ac85cc40000b02901b59d9c0986so17925697qta.19
-        for <linux-i2c@vger.kernel.org>; Thu, 13 May 2021 06:15:41 -0700 (PDT)
+        id S231579AbhEMR5Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 May 2021 13:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231555AbhEMR5K (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 May 2021 13:57:10 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8F0C0613ED
+        for <linux-i2c@vger.kernel.org>; Thu, 13 May 2021 10:55:56 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id f29so14098846qka.0
+        for <linux-i2c@vger.kernel.org>; Thu, 13 May 2021 10:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=marek-ca.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G6cunyyCAgFMO8WDuEbxdeQNabsoZvGD6x3wsqvioTQ=;
+        b=HyrbNR3fsh4EG0A55QAyn5sRwI6IQPua85FUNamY/gY5lzI3leCTQdkonmPO4sKNU+
+         8UO2l2vGtUzqXLr9fLE1v8TzWIfz1LAvbwOx+AkisxDO/lji5ddjM42rniKHuX8FBZp1
+         Rx4cdtnAExzCBkW27jbPXOgL/08YTu+BjwqL9FFtme+tio5w5eW7ftpbe2TDEdAQdNIo
+         onhRYs0spK2w66UpW4ggUJuUyjRLctLRKOcM/dZ2XjjhBsXo8dfQwm5AOsZSTF1C7VK+
+         pG66ub4+spOoZ2YyQuXCH8X00s6SERuaT/5xFOdkaRUkVA9T6YAoQ75ABB7SVpWU4qks
+         KBWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=qsfYYVuA4z4/qDu23wSBRsngQvHS7+tVBTsrP7EpQa4=;
-        b=YRc2NF9ScDMxV530rP3tVUBTs/ctDgwqSIgkvewqMu9aZBcMTN3mJeyq/VPthTrkTr
-         iiVDcc805tbDsx5b9xtLjIUAJ7S8dnSMCS8DXP7F6nf6XQTXlrlkfvg+/t5UOUOmIcC/
-         vYe9jCMRX6qNuBYRmGp3DXSnzNZnV4k0Tav/Q+0OLhTDQFIV7Y1v4SDoiaAx4T6OF5uB
-         ETzkLlVKGxl8JPx2jJ0LV+VrBGqOHvYT5H9qTIjsZ0AlPOqUot82HUL7DQOOkLoOpkHA
-         MblBzjhWzTviT/0ykn7/EXtDP8eJSv6aSkWyvFX9KOKcCmgqWY6xioq9MNwfNok2xtHX
-         BPsA==
-X-Gm-Message-State: AOAM531458M+xpYQIjNEcLJFjByYDyLok9W6MNdZiLyXZTucgEF8DaMA
-        xH1rnD0i/xM93Y4ubKiHg8KcFsayELVemscVoe+qU4wFAqh1IpOeYydkN9k8+EfcAUh1OVdMUt2
-        xv2KkzW0FXgGIX+69Nm0l
-X-Received: by 2002:a05:622a:341:: with SMTP id r1mr9994081qtw.307.1620911741379;
-        Thu, 13 May 2021 06:15:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzwEjyY3u1J/G6+Cm8z9/t8ewZ6vW2TOaD0qCa1us8rfNgrCbblKdYRP+6ulsrYSiTB+uVbAA==
-X-Received: by 2002:a05:622a:341:: with SMTP id r1mr9994062qtw.307.1620911741198;
-        Thu, 13 May 2021 06:15:41 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id l10sm2519572qtn.28.2021.05.13.06.15.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 May 2021 06:15:40 -0700 (PDT)
-Subject: Re: [PATCH v4] HID: ft260: improve error handling of
- ft260_hid_feature_report_get()
-To:     Jiri Kosina <jikos@kernel.org>,
-        Michael Zaidman <michael.zaidman@gmail.com>
-Cc:     benjamin.tissoires@redhat.com, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210511101208.16401-1-michael.zaidman@gmail.com>
- <nycvar.YFH.7.76.2105131308260.28378@cbobk.fhfr.pm>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <8c48cdcc-ee47-3352-4023-db24b7a94759@redhat.com>
-Date:   Thu, 13 May 2021 06:15:38 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G6cunyyCAgFMO8WDuEbxdeQNabsoZvGD6x3wsqvioTQ=;
+        b=AMy7bZQjenytI6NCcszps/w1+PiFnDfMdHzNa6kOZCBdrIZECbgOR4zyXnIONggeRU
+         F+WZsHI+A74ROwEuUnTk6P2UF/YDDuKkvtRqz5S18abKyfIQAanpongRJN2vxCE03E/I
+         Li7hm1xxDGKr3FLQHT1hemhPZM2ACA6Wtnr9E7sP3DH3bZ7uPKoaIxTi2M+dclHr8r+I
+         M0wILvEndRUbAGrv680tt5bQFbTVEdBh3c99iRzRCkFSeuCvOGrsXVS5O5A9RAopR+AI
+         8qfKtPk4LaoObhuzlorxP4yJoUzXpuxdUXONOsqJhqcpzS0fMxH+6YV+aOtEC8fwZIAR
+         OW/Q==
+X-Gm-Message-State: AOAM531TSJ6K9Bp1mGPlnykpK2kEEoJFRlQskIkFYD9oBVu3Mz7oNEAN
+        bVObgM8E3JkUFbwhXrywOtxtPA==
+X-Google-Smtp-Source: ABdhPJzHv12G0x5hOV8M/Sof7AYXqEPgmkJQppEK1BFjto9Iyv6o8I7Jg25n8IpHNG3aiGWE2BmxWg==
+X-Received: by 2002:a37:9707:: with SMTP id z7mr39366330qkd.407.1620928555624;
+        Thu, 13 May 2021 10:55:55 -0700 (PDT)
+Received: from localhost.localdomain (modemcable068.184-131-66.mc.videotron.ca. [66.131.184.68])
+        by smtp.gmail.com with ESMTPSA id 44sm2899114qtb.45.2021.05.13.10.55.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 May 2021 10:55:55 -0700 (PDT)
+From:   Jonathan Marek <jonathan@marek.ca>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     robert.foss@linaro.org, andrey.konovalov@linaro.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org (open list:QUALCOMM I2C CCI DRIVER),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] i2c: qcom-cci: add sm8250 compatible
+Date:   Thu, 13 May 2021 13:55:17 -0400
+Message-Id: <20210513175518.6023-1-jonathan@marek.ca>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
-In-Reply-To: <nycvar.YFH.7.76.2105131308260.28378@cbobk.fhfr.pm>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+SM8250 CCI is the same as SDM845, add an equivalent compatible for SM8250.
 
-On 5/13/21 4:09 AM, Jiri Kosina wrote:
-> On Tue, 11 May 2021, Michael Zaidman wrote:
->
->> Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
->>
->> The ft260_hid_feature_report_get() checks if the return size matches
->> the requested size. But the function can also fail with at least -ENOMEM.
->> Add the < 0 checks.
->>
->> In ft260_hid_feature_report_get(), do not do the memcpy to the caller's
->> buffer if there is an error.
->>
->> ---
->> v4   Fixed commit message
->> ---
->> v3   Simplify and optimize the changes
->> ---
->> v2:  add unlikely()'s for error conditions
->> ---
->>
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
-> Who should be the author of the git commit?
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+---
+ Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt | 5 +++--
+ drivers/i2c/busses/i2c-qcom-cci.c                      | 1 +
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Go with the latest patch's author, Micheal.
-
-Tom
-
->
-> Thanks,
->
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
+index c6668b7c66e6..7b9fc0c22eaf 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
++++ b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
+@@ -9,6 +9,7 @@ PROPERTIES:
+ 		"qcom,msm8916-cci"
+ 		"qcom,msm8996-cci"
+ 		"qcom,sdm845-cci"
++		"qcom,sm8250-cci"
+ 
+ - reg
+ 	Usage: required
+@@ -41,8 +42,8 @@ PROPERTIES:
+ 
+ SUBNODES:
+ 
+-The CCI provides I2C masters for one (msm8916) or two i2c busses (msm8996 and
+-sdm845), described as subdevices named "i2c-bus@0" and "i2c-bus@1".
++The CCI provides I2C masters for one (msm8916) or two i2c busses (msm8996,
++sdm845 and sm8250), described as subdevices named "i2c-bus@0" and "i2c-bus@1".
+ 
+ PROPERTIES:
+ 
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index c63d5545fc2a..c1de8eb66169 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -769,6 +769,7 @@ static const struct of_device_id cci_dt_match[] = {
+ 	{ .compatible = "qcom,msm8916-cci", .data = &cci_v1_data},
+ 	{ .compatible = "qcom,msm8996-cci", .data = &cci_v2_data},
+ 	{ .compatible = "qcom,sdm845-cci", .data = &cci_v2_data},
++	{ .compatible = "qcom,sm8250-cci", .data = &cci_v2_data},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, cci_dt_match);
+-- 
+2.26.1
 
