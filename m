@@ -2,154 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DDE386B27
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 May 2021 22:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA7A386C7C
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 May 2021 23:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237425AbhEQUTh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 May 2021 16:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
+        id S238170AbhEQVpI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 May 2021 17:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243706AbhEQUTd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 May 2021 16:19:33 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88AAC061573
-        for <linux-i2c@vger.kernel.org>; Mon, 17 May 2021 13:18:16 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id g15-20020a9d128f0000b02902a7d7a7bb6eso6654887otg.9
-        for <linux-i2c@vger.kernel.org>; Mon, 17 May 2021 13:18:16 -0700 (PDT)
+        with ESMTP id S230508AbhEQVpH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 May 2021 17:45:07 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E98C061573;
+        Mon, 17 May 2021 14:43:50 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id u4-20020a05600c00c4b02901774b80945cso329557wmm.3;
+        Mon, 17 May 2021 14:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4npjzmtC1fi2rBbQF51lCYO1znRO3Y5vzRV2CUdYnQc=;
-        b=mo4MtdIdBaqbn0rvbr8Al9VDijDLMpxhpo1BvG5iLNvjR/wDHjiz9muEDpBrRiJwhq
-         40AbhDao1bx3W+JWbGgI5nfwUcteM8Zd+n+cdxkHNVLJIhCrfPxsrrDyOXCzkoFa631r
-         y569Dmf48XwRvjZOlRusp5uwaGn3EwmBMfYdk=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kT6r2KItAdyXr6Yj4HdvbNeNJJn3Kyatb3yqGTbZ49U=;
+        b=t774CtYem/0kL0GO8c0Bs8Binz7Qh2ivYr4qAbt8k4M/ZEpxVwVSn7PxZKdCCfDPWI
+         XIgkJMHsFbL7qrWvQPHwg5hv+RiSmkr2GUqw7gLFzExzf0ujDt6WqjWkeDL9ZlT/DeY1
+         8MlFE+jjXUFRRdXRsPWDlpZnZZYIAaZNXHiKwek3g/XSWHNQrIQ0zem5rm9WEZ/Gzxap
+         Djjllf7Hbput/A9u2DDd2elcAwPIxBQMY3ST6R3TRtUat/N3bz6agPjrcHVswLkdXStY
+         vMDLot3oqKh8L0fMl2fNZTlUullwqPLKCJsEz/s2g++bn7UXXm3/RimqHr7fisUEpRQk
+         bEDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4npjzmtC1fi2rBbQF51lCYO1znRO3Y5vzRV2CUdYnQc=;
-        b=Qkaa/b+jOJFm9Z1llAnVKJfX1nnTSgFt+NhMWk2hYr4S/rJFQ42QsA12IN9f23TWvM
-         mKvWrhLLlSKnG75UH4kLyh2XJVerrkOD12K4Eb1ww3r/UDJ2grsoyokT40hCanQduCYn
-         Jp23bm4gVibmYAaPxlB7APkN0ANQV6FKYDCsbR5F7Ze9TGUToBYC7oNq0aBVVxocbZXk
-         lop31nbpwo+zaKq/k3vq7EmE++Nw2aPpzW5ebS/hT6E66UopX+hMgYI+LdojqykBuRDk
-         Z2CkLhZPHZ9qojA/x9G9r7gD8sP1wdkk9uVApAIgQyow7411qV2xOlkR3qhQpz83VvNS
-         IRXQ==
-X-Gm-Message-State: AOAM531zh8M32nrLGmAF0lnyUNthK4gn2M5+NmUzdio5TdSsub4hzfJA
-        1k52Q2GLzpXD6VMrPBj3Cmb4d7/h6x0Ufw==
-X-Google-Smtp-Source: ABdhPJwjEkuEUpFQ7sOyjb0xZDl4UH4kskVlqwVGAtzio+woBdvECmGo0m3zcKVXRXqGvN6jdM+/VQ==
-X-Received: by 2002:a05:6830:cc:: with SMTP id x12mr1101175oto.343.1621282696121;
-        Mon, 17 May 2021 13:18:16 -0700 (PDT)
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com. [209.85.161.42])
-        by smtp.gmail.com with ESMTPSA id x18sm982775oia.49.2021.05.17.13.18.15
-        for <linux-i2c@vger.kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kT6r2KItAdyXr6Yj4HdvbNeNJJn3Kyatb3yqGTbZ49U=;
+        b=Haqh+uZSyT7eQyzZd/oRGqdlal2DB3M8phbyTBljlIbKluaX5LYIhXv9Vxd4B5cVSd
+         o7U1pTvkFq4fYHDuRyCO4ERh/020vy12EijRdJNIGPHPVOqZOpooeUs855lFQUj+7e5n
+         sGZb5DBIdVHodKEJhAa+V0Ax9G00+7krJ75QOixE3AMinzfp9/R5Zb8RMoq2BWQI+1fy
+         KkIOFfxBsXOtU2Tq5ms5UonvNa/Z8T5nImCNWT0DO7rQoVECIuZHQxvnQY4tyil3V53g
+         2v4LNlv304VvoS6hxSe8jGJIU1rmLrW/W5x3CZ4o/NxGV2+x5q+v+KYtNAoDvo5oUYOX
+         PqNw==
+X-Gm-Message-State: AOAM533BopXfV16uHThuzvHBXwAeBkh/90fZt/55kYXs7aDkr+Mp/JSg
+        H8E4sKVFmtsWlk9GixAb0eCgnebUUxHMmQ==
+X-Google-Smtp-Source: ABdhPJz2ABsZ8o6YhIcD0a0iLMmS93uLHc4hH1gSeT5wk1jKbW0GKfSe05V0FUr/5hs+hSkuknD6vw==
+X-Received: by 2002:a1c:f303:: with SMTP id q3mr1079231wmq.9.1621287829079;
+        Mon, 17 May 2021 14:43:49 -0700 (PDT)
+Received: from [192.168.1.158] ([91.110.20.117])
+        by smtp.gmail.com with ESMTPSA id u16sm748429wmj.27.2021.05.17.14.43.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 May 2021 13:18:15 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id e27-20020a056820061bb029020da48eed5cso1736290oow.10
-        for <linux-i2c@vger.kernel.org>; Mon, 17 May 2021 13:18:15 -0700 (PDT)
-X-Received: by 2002:a05:6902:1023:: with SMTP id x3mr2203165ybt.79.1621282684676;
- Mon, 17 May 2021 13:18:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210503215844.2996320-1-dianders@chromium.org>
- <20210503145750.v6.2.Iff8f2957d86af40f2bfcfb5a7163928481fccea4@changeid>
- <8eedeb02dc56ecaed5d2f3cb8d929a3675b2c3da.camel@redhat.com>
- <20210507220036.GI2484@yoga> <22632aba5bc118f5e96e155f240445b1547733c7.camel@redhat.com>
- <871ra9tvje.fsf@intel.com>
-In-Reply-To: <871ra9tvje.fsf@intel.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 17 May 2021 13:17:51 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VkwMjXz_vrMHOk1ZOx-gg5yq8cDbRWA-iXojUf+Ffddg@mail.gmail.com>
-Message-ID: <CAD=FV=VkwMjXz_vrMHOk1ZOx-gg5yq8cDbRWA-iXojUf+Ffddg@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] drm/dp: Allow an early call to register DDC i2c bus
-To:     Jani Nikula <jani.nikula@intel.com>
-Cc:     Lyude Paul <lyude@redhat.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@redhat.com>,
-        Ville Syrjala <ville.syrjala@intel.com>,
-        Rob Clark <robdclark@chromium.org>,
+        Mon, 17 May 2021 14:43:48 -0700 (PDT)
+Subject: Re: [PATCH v3 5/6] platform/x86: Add intel_skl_int3472 driver
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Wolfram Sang <wsa@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thierry Reding <treding@nvidia.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Lee Jones <lee.jones@linaro.org>,
+        kieran.bingham+renesas@ideasonboard.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>, me@fabwu.ch,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        devel@acpica.org
+References: <20210222130735.1313443-1-djrscally@gmail.com>
+ <20210222130735.1313443-6-djrscally@gmail.com>
+ <CAHp75Vd2Dc2Poq7VNRXRT-0VjkYdEFY2WKpz8fWpAQViQRO4jA@mail.gmail.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <0241df24-11cb-fd3b-12a5-f98dea55fac5@gmail.com>
+Date:   Mon, 17 May 2021 22:43:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAHp75Vd2Dc2Poq7VNRXRT-0VjkYdEFY2WKpz8fWpAQViQRO4jA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Hi Andy
 
-On Fri, May 14, 2021 at 4:16 AM Jani Nikula <jani.nikula@intel.com> wrote:
->
-> On Fri, 07 May 2021, Lyude Paul <lyude@redhat.com> wrote:
-> > On Fri, 2021-05-07 at 17:00 -0500, Bjorn Andersson wrote:
-> >> On Fri 07 May 16:18 CDT 2021, Lyude Paul wrote:
-> >>
-> >> > Adding ville from Intel to also get their take on this.
-> >> >
-> >> > In general we've been trying to move DRM to a design where we don't expose
-> >> > any
-> >> > devices until everything is ready. That's pretty much the main reason that
-> >> > we
-> >> > register things during bridge attach time. Note though that even before
-> >> > the
-> >> > DDC bus is registered it should still be usable, just things like
-> >> > get_device()
-> >> > won't work.
-> >> >
-> >> > This isn't the first time we've run into a problem like the one you're
-> >> > trying
-> >> > to solve though, Tegra currently has a similar issue. Something we
-> >> > discussed
-> >> > as a possible long-term solution for this was splitting i2c_add_adapter()
-> >> > into
-> >> > a minimal initialization function and a registration function. Linux's
-> >> > device
-> >> > core already allows for this (device_initialize() and device_add(), which
-> >> > are
-> >> > called together when device_register() is called). Would this be a
-> >> > solution
-> >> > that might work for you (and even better, would you possibly be willing to
-> >> > write the patches? :)
-> >> >
-> >>
-> >> It's not enough that the adapter is half-baked, because the bridge's
-> >> initialization depends on that the panel device is done probing, and the
-> >> panel driver will only complete its probe if it can find it's resources.
-> >>
-> >> So we need a mechanism to fully create the resources exposed by the
-> >> bridge chip (i2c bus, gpio chip and (soon) a pwm chip), then allow the
-> >> panel to probe and after that initialize the bridge.
-> >>
-> >> We did discuss possible ways to register these resources and then
-> >> "sleep for a while" before resolving the panel, but what we came up with
-> >> was definitely suboptimal - and ugly.
-> >
-> > Sigh, I'm really starting to wonder if we should reconsider the rules on
-> > exposing ddc adapters early...
-> >
-> > Danvet, Jani, and/or airlied: can I get your take on this?
->
-> Granted, I did not study this in detail, but it sounds like we'd need to
-> be able to add and use an i2c adapter in kernel, before deciding to
-> register it with the userspace. But that does not seem to be as trivial
-> as making it possible to call the now-static i2c_register_adapter()
-> separately.
+On 22/02/2021 14:58, Andy Shevchenko wrote
+>> +#include <linux/clk-provider.h>
+> 
+> This is definitely not for *.h. (Not all C files needed this)
+> 
+>> +#include <linux/gpio/machine.h>
+> 
+> Ditto.
+> 
+>> +#include <linux/regulator/driver.h>
+>> +#include <linux/regulator/machine.h>
+> 
+> Ditto.
 
-To close the loop: I think the point is now moot in v7. Now crossing
-my fingers that approach can gain momentum. If not, I might come back
-here. ;-)
-
--Doug
+Bit more delayed than I wanted to be, but I'm just finishing off the v4
+of this. For these includes, I'm using the actual structs from them
+rather than pointers, so removing these would mean moving the definition
+of struct int3472_discrete_device into one of the source files; you're
+happy with that?
