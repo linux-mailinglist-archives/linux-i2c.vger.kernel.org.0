@@ -2,32 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B62163889B8
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 May 2021 10:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCC6388A56
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 May 2021 11:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343628AbhESIvS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 May 2021 04:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S1344750AbhESJTJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 May 2021 05:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238621AbhESIvR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 04:51:17 -0400
+        with ESMTP id S1344745AbhESJTI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 05:19:08 -0400
 Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0502CC06175F;
-        Wed, 19 May 2021 01:49:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6335C061760;
+        Wed, 19 May 2021 02:17:48 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id BD4C23FA28;
-        Wed, 19 May 2021 08:49:49 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 5844C3FA28;
+        Wed, 19 May 2021 09:17:45 +0000 (UTC)
 From:   Hector Martin <marcan@marcan.st>
 To:     Jean Delvare <jdelvare@suse.com>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hector Martin <marcan@marcan.st>, stable@vger.kernel.org
-Subject: [PATCH] i2c: i801: Safely share SMBus with BIOS/ACPI
-Date:   Wed, 19 May 2021 17:49:38 +0900
-Message-Id: <20210519084938.90041-1-marcan@marcan.st>
+Subject: [PATCH v2] i2c: i801: Safely share SMBus with BIOS/ACPI
+Date:   Wed, 19 May 2021 18:17:07 +0900
+Message-Id: <20210519091707.7248-1-marcan@marcan.st>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -80,15 +80,17 @@ This fixes the regression introduced by 01590f361e, and further allows
 safely sharing the SMBus on 2015 iMacs. Tested by running `i2cdump` in a
 loop while changing backlight levels via the ACPI video device.
 
-Fixes: 01590f361e
+v2: Add missing usleep_range() in the lock acquire loop
+
+Fixes: 01590f361e ("i2c: i801: Instantiate SPD EEPROMs automatically")
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- drivers/i2c/busses/i2c-i801.c | 98 +++++++++++++++++++++++++++++------
- 1 file changed, 81 insertions(+), 17 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 99 +++++++++++++++++++++++++++++------
+ 1 file changed, 82 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 99d446763530..b46ea09bd299 100644
+index 99d446763530..3512df9759cc 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
 @@ -287,11 +287,18 @@ struct i801_priv {
@@ -113,7 +115,7 @@ index 99d446763530..b46ea09bd299 100644
  	struct mutex acpi_lock;
  };
  
-@@ -856,10 +863,36 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+@@ -856,10 +863,37 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
  	int hwpec;
  	int block = 0;
  	int ret = 0, xact = 0;
@@ -134,6 +136,7 @@ index 99d446763530..b46ea09bd299 100644
 +				priv->inuse_stuck = true;
 +				break;
 +			}
++			usleep_range(250, 500);
 +		}
 +	}
 +
@@ -151,7 +154,7 @@ index 99d446763530..b46ea09bd299 100644
  		mutex_unlock(&priv->acpi_lock);
  		return -EBUSY;
  	}
-@@ -980,6 +1013,9 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+@@ -980,6 +1014,9 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
  	}
  
  out:
@@ -161,7 +164,7 @@ index 99d446763530..b46ea09bd299 100644
  	pm_runtime_mark_last_busy(&priv->pci_dev->dev);
  	pm_runtime_put_autosuspend(&priv->pci_dev->dev);
  	mutex_unlock(&priv->acpi_lock);
-@@ -1638,6 +1674,16 @@ static bool i801_acpi_is_smbus_ioport(const struct i801_priv *priv,
+@@ -1638,6 +1675,16 @@ static bool i801_acpi_is_smbus_ioport(const struct i801_priv *priv,
  	       address <= pci_resource_end(priv->pci_dev, SMBBAR);
  }
  
@@ -178,7 +181,7 @@ index 99d446763530..b46ea09bd299 100644
  static acpi_status
  i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
  		     u64 *value, void *handler_context, void *region_context)
-@@ -1647,17 +1693,38 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
+@@ -1647,17 +1694,38 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
  	acpi_status status;
  
  	/*
@@ -225,7 +228,7 @@ index 99d446763530..b46ea09bd299 100644
  
  		/*
  		 * BIOS is accessing the host controller so prevent it from
-@@ -1666,10 +1733,7 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
+@@ -1666,10 +1734,7 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
  		pm_runtime_get_sync(&pdev->dev);
  	}
  
@@ -237,7 +240,7 @@ index 99d446763530..b46ea09bd299 100644
  
  	mutex_unlock(&priv->acpi_lock);
  
-@@ -1705,7 +1769,7 @@ static void i801_acpi_remove(struct i801_priv *priv)
+@@ -1705,7 +1770,7 @@ static void i801_acpi_remove(struct i801_priv *priv)
  		ACPI_ADR_SPACE_SYSTEM_IO, i801_acpi_io_handler);
  
  	mutex_lock(&priv->acpi_lock);
