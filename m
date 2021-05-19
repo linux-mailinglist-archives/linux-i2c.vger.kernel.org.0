@@ -2,141 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B2C389988
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 00:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A443899D8
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 01:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbhESXBI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 May 2021 19:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S229556AbhESXaK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 May 2021 19:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229465AbhESXBH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 19:01:07 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8167EC061574;
-        Wed, 19 May 2021 15:59:47 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id k4so3352133qkd.0;
-        Wed, 19 May 2021 15:59:47 -0700 (PDT)
+        with ESMTP id S229465AbhESXaK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 19:30:10 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FD6C061574;
+        Wed, 19 May 2021 16:28:49 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id i5so7274356qkf.12;
+        Wed, 19 May 2021 16:28:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FL4A84RnGL9eXsLReJXIYBVZb+CRyoUol9pEHr5O5qY=;
-        b=Dvq29lHaaHrwBS8AFWZSoJCdqQsSj5w0bo8XghtBLAZTBjrQf4RXb+AY3jd8EtUP94
-         KVMw8BwVB+j9N56QZ2bUXRwSkx94v24XrW5t9yTBPEk2Eg1E/sjej0T/YJ+UN8/hVyf2
-         eZl8fwg+VCSsuIKKXAIvKGBmJaQlJRJsra5j8=
+        bh=+sRe31lrHGcUgSFKKGzM5XKzbij36J+nU6GLQsIGJJk=;
+        b=HAOlx4M74XjBWQ8LN2fsuibOmX34Rxz0V7tqxzf7ZIWM+X+lRP/M7KyCNN/h19Q2ze
+         ou41sL+m6NfWT9Y4u75hnp/iUQWwcpgGnc3lU4BxL1BpRf14BKJUseUHnAKYSRbMoIbB
+         8WFQrW9H6mTEzhMJ8n8yJGvDHvomUkP+pmbBM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FL4A84RnGL9eXsLReJXIYBVZb+CRyoUol9pEHr5O5qY=;
-        b=f2MF1XTJ4TP4mVLdJEJH4ivR1W0r5aA1UerFQf/J8SNX7TmWcT2l91ZFSKbEZZlsym
-         YfL34ypIXdd5Qf66VIDTmbORlUUsLQbu6k6Uivz/7x2bu3tl8UjUMDqI/nDo91t1zC0o
-         h0rJUIkNq67EMpULB/yGKMV621MdNuHbMGfCPhIfzsv7w5ld8R14uKdhY4WPHCj2otZ3
-         XZIrb05PsJdfuVx/jx7ZQXO6CTGfSJl2cejQBpuZB0crrtZTkxogyijNLWXz2bfxE/VF
-         Kfv6g09a05eEmIUVqqn4gpqys1jslJm9RZp9x7nQpvgGl8QMp+jLxLnBcW8glvfTp79m
-         fGxA==
-X-Gm-Message-State: AOAM531Hkzp0ZzHXBqzdA3mKlppLPticZRmeD9Izg1JszLY9n2qzPh/y
-        h1+j7OrgVhymPXhS7aHY+DBz6Jy6HSRBeb0sYqg=
-X-Google-Smtp-Source: ABdhPJySEJL2SSIhxhurMKhfYZmnqZskBqtE2XkdoVEbVmUuDFR04avlb3/LIVd+WzCgLE4Ok6LLOCaBZg/S+B/hSKw=
-X-Received: by 2002:a37:424c:: with SMTP id p73mr1926220qka.465.1621465186642;
- Wed, 19 May 2021 15:59:46 -0700 (PDT)
+        bh=+sRe31lrHGcUgSFKKGzM5XKzbij36J+nU6GLQsIGJJk=;
+        b=N/oEgRtPDEvJtuXqZsTOSKT2iaWB4aLwls+w3pgOvh0r2XhHq72RMLj/zJSB+d5PMq
+         50i9q8oO6VXX2APcOkE/hZVGUCdABx59Rd+v0NJ8ioXLZHu66ys7sRD2I/Vn8G0Yz7U+
+         OcoiNNCg2rGbnqA++5ZPDqEOzVT0MHJf2kqZtyAk5z7e3bwvOI8+RCukEiS+gq15H/g4
+         WZzABH9nefnpY8lKeV8kvQXihoIHJl/yM3Vnioptwl3eJp/cTk7U6jonI0UmYEvmmubL
+         61OCFbnQeklMIQai5vGdKjGZXf0M6kZqW0mtt6fqqtUvLGAd4rbs+XsUMWRTeZouYokd
+         3s6Q==
+X-Gm-Message-State: AOAM5317/x0bovv9+MbE1wGqK4VmDOwmbrCWJ3lt8smaGrBUUXKPvE6N
+        GXAP9lD6s97JeJAgu4VhN7ICE6jlsRiU6tA/XRw=
+X-Google-Smtp-Source: ABdhPJzs/PNVyZHXiN60/U4ROwriKRalRsyur5ioWhvG9uZxMJo/oQyw0WnlQ0RLEb2ucWzVwat0FQEtGAkFU+vY1FU=
+X-Received: by 2002:a05:620a:704:: with SMTP id 4mr1279089qkc.66.1621466929079;
+ Wed, 19 May 2021 16:28:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210519080436.18975-1-jamin_lin@aspeedtech.com> <20210519080436.18975-2-jamin_lin@aspeedtech.com>
-In-Reply-To: <20210519080436.18975-2-jamin_lin@aspeedtech.com>
+References: <20210519074934.20712-1-quan@os.amperecomputing.com> <20210519074934.20712-4-quan@os.amperecomputing.com>
+In-Reply-To: <20210519074934.20712-4-quan@os.amperecomputing.com>
 From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 19 May 2021 22:59:34 +0000
-Message-ID: <CACPK8XdNXiGMQZOtsfMMK+w_PSvO20XT8B9MG+rGhdjYoV4ZuQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] i2c: aspeed: avoid new registers definition of AST2600
-To:     Jamin Lin <jamin_lin@aspeedtech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
+Date:   Wed, 19 May 2021 23:28:37 +0000
+Message-ID: <CACPK8XeFsuEXeCvG9DC0z+tiri6ptjOFOXe3x+COEZTVqUbVFg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/7] i2c: aspeed: Fix unhandled Tx done with NAK
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
         Brendan Higgins <brendanhiggins@google.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Rayn Chen <rayn_chen@aspeedtech.com>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        "Chia-Wei, Wang" <chiawei_wang@aspeedtech.com>,
-        Troy Lee <troy_lee@aspeedtech.com>, steven_lee@aspeedtech.com
+        Wolfram Sang <wsa@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 19 May 2021 at 08:05, Jamin Lin <jamin_lin@aspeedtech.com> wrote:
+Ryan, can you please review this change?
+
+On Wed, 19 May 2021 at 07:50, Quan Nguyen <quan@os.amperecomputing.com> wrote:
 >
-> The register definition between AST2600 A2 and A3 is different.
-> This patch avoid new registers definition of AST2600 to use
-> this driver. We will submit the path for the new registers
-> definition of AST2600.
+> It is observed that in normal condition, when the last byte sent by
+> slave, the Tx Done with NAK irq will raise.
+> But it is also observed that sometimes master issues next transaction
+> too quick while the slave irq handler is not yet invoked and Tx Done
+> with NAK irq of last byte of previous READ PROCESSED was not ack'ed.
+> This Tx Done with NAK irq is raised together with the Slave Match and
+> Rx Done irq of the next coming transaction from master.
+> Unfortunately, the current slave irq handler handles the Slave Match and
+> Rx Done only in higher priority and ignore the Tx Done with NAK, causing
+> the complain as below:
+> "aspeed-i2c-bus 1e78a040.i2c-bus: irq handled != irq. expected
+> 0x00000086, but was 0x00000084"
+>
+> This commit handles this case by emitting a Slave Stop event for the
+> Tx Done with NAK before processing Slave Match and Rx Done for the
+> coming transaction from master.
 
-The AST2600 v9 datasheet says that bit 2 selects between old and new
-register sets, and that the old register set is the default.
+It sounds like this patch is independent of the rest of the series,
+and can go in on it's own. Please send it separately to the i2c
+maintainers and add a suitable Fixes line, such as:
 
-Has the default changed for the A3?, and the datasheet is incorrect?
-
-Does the A3 still support the old register set?
+  Fixes: f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed I2C driver")
 
 >
-> Signed-off-by: Jamin Lin <jamin_lin@aspeedtech.com>
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
 > ---
->  drivers/i2c/busses/i2c-aspeed.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
+> v3:
+>   + First introduce in v3 [Quan]
+>
+>  drivers/i2c/busses/i2c-aspeed.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
 > diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> index 724bf30600d6..007309077d9f 100644
+> index 724bf30600d6..3fb37c3f23d4 100644
 > --- a/drivers/i2c/busses/i2c-aspeed.c
 > +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -19,14 +19,20 @@
->  #include <linux/irqchip/chained_irq.h>
->  #include <linux/irqdomain.h>
->  #include <linux/kernel.h>
-> +#include <linux/mfd/syscon.h>
->  #include <linux/module.h>
->  #include <linux/of_address.h>
->  #include <linux/of_irq.h>
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
-> +#include <linux/regmap.h>
->  #include <linux/reset.h>
->  #include <linux/slab.h>
+> @@ -254,6 +254,11 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
 >
-> +/* I2C Global Registers */
-> +/* 0x0c : I2CG Global Control Register (AST2500)  */
-> +#define ASPEED_I2CG_GLOBAL_CTRL_REG                    0x0c
-> +
->  /* I2C Register */
->  #define ASPEED_I2C_FUN_CTRL_REG                                0x00
->  #define ASPEED_I2C_AC_TIMING_REG1                      0x04
-> @@ -973,6 +979,22 @@ static int aspeed_i2c_probe_bus(struct platform_device *pdev)
->         struct resource *res;
->         int irq, ret;
->
-> +       if (of_device_is_compatible(pdev->dev.of_node,
-> +                                   "aspeed,ast2600-i2c-bus")) {
-> +               u32 global_ctrl;
-> +               struct regmap *gr_regmap;
-> +
-> +               gr_regmap = syscon_regmap_lookup_by_compatible("aspeed,ast2600-i2c-global");
-> +
-> +               if (IS_ERR(gr_regmap)) {
-> +                       ret = PTR_ERR(gr_regmap);
-> +               } else {
-> +                       regmap_read(gr_regmap, ASPEED_I2CG_GLOBAL_CTRL_REG, &global_ctrl);
-> +                       if (global_ctrl & BIT(2))
-> +                               return -EIO;
+>         /* Slave was requested, restart state machine. */
+>         if (irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH) {
+
+Can you explain why you need to do this handing inside the SLAVE_MATCH case?
+
+Could you instead move the TX_NAK handling to be above the SLAVE_MATCH case?
+
+> +               if (irq_status & ASPEED_I2CD_INTR_TX_NAK &&
+> +                   bus->slave_state == ASPEED_I2C_SLAVE_READ_PROCESSED) {
+
+Either way, this needs a comment to explain what we're working around.
+
+> +                       irq_handled |= ASPEED_I2CD_INTR_TX_NAK;
+> +                       i2c_slave_event(slave, I2C_SLAVE_STOP, &value);
 > +               }
-> +       }
-> +
->         bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
->         if (!bus)
->                 return -ENOMEM;
+>                 irq_handled |= ASPEED_I2CD_INTR_SLAVE_MATCH;
+>                 bus->slave_state = ASPEED_I2C_SLAVE_START;
+>         }
 > --
-> 2.17.1
+> 2.28.0
 >
