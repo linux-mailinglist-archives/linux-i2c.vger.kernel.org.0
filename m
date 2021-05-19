@@ -2,108 +2,171 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D14B387BC7
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 May 2021 16:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457D3388897
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 May 2021 09:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244703AbhERO6r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 May 2021 10:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240578AbhERO6q (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 May 2021 10:58:46 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACF3C06138A
-        for <linux-i2c@vger.kernel.org>; Tue, 18 May 2021 07:57:25 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id z17so10551045wrq.7
-        for <linux-i2c@vger.kernel.org>; Tue, 18 May 2021 07:57:25 -0700 (PDT)
+        id S237750AbhESHvm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 May 2021 03:51:42 -0400
+Received: from mail-bn8nam11on2130.outbound.protection.outlook.com ([40.107.236.130]:40833
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236360AbhESHvl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 19 May 2021 03:51:41 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C5Ofs9DiV3HM7R4zcK9DP4Taw4TgDOeJAxW0/iQriSMa8KG3VkOtWOmQ5H/t+wFWZ3hbF9E5vkwSoJZo7hGVUyGnMdwpup7ZZ5ILGgdo1RhuS6X5wq80NCgYEmYWGgdvZVi5DqcI2B/joP3ZCDf50/z2DB3+ey/R2U+kVpiQbSzED/iZz3vKp9wRI2oee0tIbCB/Op7GLjHjrKKVgKAZ8tgowujsR2++/Vlnm/NBoQEk+SmsiRaYZoOXoeb+OEx+4OTZ5yIqdlTO6A02dbbPFmM2CQXz9m6Ls7GuI0gUVaNAP6Huahk4zl+nbEHlnvXPxBGPepxkL+ThTVccDsWrzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xMzGIKuhioI5dKKj4UXaGOHki/qKge3G2HGDlIHJmJM=;
+ b=FNL/PtlVQLZETLcqiXV3vjKM+TUo0lHim9yotoMsR9MDVOaIEHPalwq5kb+rE3thg9NKxkTs1FBmyZoa1PWKuiMzxdV6W58o/PSZGafZy+WdYjt5/0KGHxO8c5y9wQzahOg0RIwBbwiqZTDhas0/EkLAbPeJKb584/Co+lJdI2QghKwFCJjwijzWTclbU8YNiHnRpP400Dw6WRM0TQVzIoJqyqBsAnEWXb0cB+3SOcooKBNvjdZn8FZ92A0aJGDKtncWkFu850bYhgMT4HGsmadgcwArGheWHi3cuCMwrZhJqlQhv3Gwce4dyzDqfmWdjJo5zDqpqaBm+R6HYg25YA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vurGL64Q3SxR/3rC1VvdPqxLLlL5m2GaEVxxxuUXcnk=;
-        b=ADC6wtP2Uy28k6oVzgFz3m7h+EKlhA/HZv6l3f85y9KwFUpxLWRtNp4Z2S1XCyYiNn
-         /MtYGElEOf3XT15Zb16RvoCYb26HsPmfLLWh0ioZPt1KUHckECCiqmzk3uCRt6XRpNOL
-         x+ijhif8boPjZQkpGhW85RTvrPjyd/NgsEB2C7CrCLiLdBmiQS2iGl6oaUFyjgUcZ5hF
-         0dK4ktiJL6shb6c//mDf6Q6i3UyXvqP8cuBzioqFIcRxw80SzzbWKFpnS8QAmkNhhSGl
-         P/qYAbILrnu6yKoQWTDtAS1WXwp7/uoalDTBj6Y3wDaSnygUAZIcHQfr5/+eEbFnZejv
-         BVBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vurGL64Q3SxR/3rC1VvdPqxLLlL5m2GaEVxxxuUXcnk=;
-        b=G8Z2Ed8pRq89CdxLK3QqzQT83e153ZTs5/i2Eo40lPv8lGqHDHR9wnZmC2Nvyq/7q1
-         6PLg4AcLKfZrNHrtzBFHWdkTa3xZkhYmKc6jQQit/DE9wNyKqato2ZHXjzW04HWstqZV
-         WkcX0mAcCfMiIi2oRkzT666zp93BkZthKHV2KseupuRm/Oq4AE4K4bgfUg2gC55BE2MY
-         k+oprYtlSFRcKD+WgXPIoq55K1xx2fCRYPgrbkQ8AigFWZqRx8N/69a2PyuMyvhw/ckX
-         4EAdTTbQ2EEItEBVzq4G3hi36suGERaVAua7TPNH7+RquadUk9dZMrR8WD1Pdc4gP1gF
-         Wx1g==
-X-Gm-Message-State: AOAM530Rx46Tl+Be+of867E3qkVjhhB07L4M0f04T8lHIFYC2oEYoLvK
-        lJzScCcrVNmJj5zT8sIu0Btk8A==
-X-Google-Smtp-Source: ABdhPJzudJFc0nj4LYsR4FvoPi7DZDUoXDJbEP/PWcHdFQceggrOdrlOub2/IYm5mnnfPtyt8yv/Ig==
-X-Received: by 2002:a5d:5249:: with SMTP id k9mr3866068wrc.301.1621349843897;
-        Tue, 18 May 2021 07:57:23 -0700 (PDT)
-Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id a18sm2928386wmb.13.2021.05.18.07.57.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 May 2021 07:57:23 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     mkorpershoek@baylibre.com, Fabien Parent <fparent@baylibre.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] i2c: i2c-mt65xx: add MT8365 SoC support
-Date:   Tue, 18 May 2021 16:55:22 +0200
-Message-Id: <20210518145522.2420135-3-fparent@baylibre.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210518145522.2420135-1-fparent@baylibre.com>
-References: <20210518145522.2420135-1-fparent@baylibre.com>
-MIME-Version: 1.0
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xMzGIKuhioI5dKKj4UXaGOHki/qKge3G2HGDlIHJmJM=;
+ b=ZcagqrcP7E/DGZkcVZyXhWAfBp9yaUlYYkrHbVydvpDz0kmecJz9ZwCuFw3baxlqjhkQPeStuxjKYk0cXFpeT8EBRf0tcQmEodZR4AB4shDXeZNYg/Q9ScM2Rd5u3zsOAi10fSwRoAVQ2pQD87nvSY0ZXKaeGAfC6aLM/Hl5XLM=
+Authentication-Results: acm.org; dkim=none (message not signed)
+ header.d=none;acm.org; dmarc=none action=none
+ header.from=os.amperecomputing.com;
+Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
+ MW2PR0102MB3451.prod.exchangelabs.com (2603:10b6:302:10::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4129.28; Wed, 19 May 2021 07:50:16 +0000
+Received: from MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.4129.032; Wed, 19 May 2021
+ 07:50:15 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
+        openbmc@lists.ozlabs.org
+Subject: [PATCH v3 0/7] Add Aspeed SSIF BMC driver
+Date:   Wed, 19 May 2021 14:49:27 +0700
+Message-Id: <20210519074934.20712-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.28.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [118.69.219.201]
+X-ClientProxiedBy: HK2PR04CA0081.apcprd04.prod.outlook.com
+ (2603:1096:202:15::25) To MW2PR0102MB3482.prod.exchangelabs.com
+ (2603:10b6:302:c::32)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from hcm-sw-17.amperecomputing.com (118.69.219.201) by HK2PR04CA0081.apcprd04.prod.outlook.com (2603:1096:202:15::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.25 via Frontend Transport; Wed, 19 May 2021 07:50:11 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4b64fa7f-f974-4f92-1693-08d91a9abd15
+X-MS-TrafficTypeDiagnostic: MW2PR0102MB3451:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MW2PR0102MB34515934BD192F5A6C4F1803F22B9@MW2PR0102MB3451.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ksnt2QQ8Y3z1deR/dYJGCaIpFivW2U6uwYxH1H+5nPCOVcdgbVFRYMv0TQg1luhylipfMcD3wUY0PF67agnlhGIouFEB65OvCPI32eGfk70Yd3iknzLQiSTmVeBtbYDNORIPpVUeMEoaDo/1LJuIQWMTUqSjBCsUKAZiFIZ7IiQZCNDa7yH5cWUX1sEIR32EFYyoCT+shHZAukQ7jh44qs23Wh+EZW8+ZI+dS2dOKz8WqJWNw+61PEgXfooKYgkYj2wWSQsYaprvKT/RRe4QqExOrMdBheH08SuHPIVEy5fz+vC2gGE8Vjo8WuGT2yoeu5BmRK4GU5YOTpKx/bJzFELmTT2Tx62eOIA2v3OotAITei70ACYeitEUBfeIqxAi6Av9i4F+bZflBetT4mAoLLC+ib5f8Abe09kZ4+DpAsZpiQpoLO/ezWWYK1WXBaSihJSkVm0B4Vx1LIikqzlPAO9luXDAzS9V10tQkn/efHlEAnzzvArFCsjadtpVUhlbAi9miYVEZKvMm8VgWpK9ygf+lEu2A6k9/fkR3l3mH8ZjKA4ET1o2/KboH0s4aE/TlkbNxHTC0KOqHME9gDxeBobZfA3ua+hflYsQMxl/ID5hPvzpn+7/dKy4Opb18uli/0IXk+SwFuI20LOAOzzIGEv5xnwxt7btp8tLW749kGQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39850400004)(376002)(366004)(396003)(346002)(83380400001)(7416002)(8676002)(2906002)(921005)(6512007)(478600001)(38100700002)(8936002)(186003)(16526019)(38350700002)(52116002)(5660300002)(956004)(2616005)(4326008)(110136005)(54906003)(316002)(66556008)(66476007)(66946007)(6486002)(6506007)(1076003)(26005)(86362001)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?Vliqi79pWnJuaAvUsAEf2F90MxOAy0oGVEof5NIjm0bQ+UzcmffP8KqNNiN4?=
+ =?us-ascii?Q?yD4kq6IIy0HHcVFn3er0Gpnxsg9cZ1JqERAPgAvYKMx3fRkNNaxrNZpY0lIU?=
+ =?us-ascii?Q?d6C3b0Qjc+UJsB7E+5KDhGsc7aE+cZ4D8Rg6u7AlJs5zbklNTVR3LRlchljJ?=
+ =?us-ascii?Q?mJO2xht4w6C+4rHXtpxfKDSsnMjWva5W96oVJKv43jDIV+138EqnLq021xN0?=
+ =?us-ascii?Q?wQArxOWONyLtmNCfKYUs9BTNt44vlW8nK3fIi2Jno5NeiBIrbhXWWLh468i0?=
+ =?us-ascii?Q?ccwfYbyQ/SSBre66SC09hz6GI60H51dmprXFm7gJ5/g6dEII241uFTDx5mPl?=
+ =?us-ascii?Q?u9/cOgeAXJ2b+Ftu75CecAqUdJfJKh2v2iDOJM9KB3lh0gEb48D4kGIc8Q23?=
+ =?us-ascii?Q?MQDzmT+vCPyKru8OshuMjujMtACA2baTQMNNI5dNSq9UYuaBTHpYn9Dt26tv?=
+ =?us-ascii?Q?vbvaqEzYFBlXMNA7bXXN4NO5CknCx8q00sv39kZFnt4fitrdFbhXur7g9EH0?=
+ =?us-ascii?Q?oSin8wcCPSqKO9/Kj4BmfA64CSJpl3IURYmgGyuxaeU/YaGQziiFZyEJMOtc?=
+ =?us-ascii?Q?UnuFCR+7E2hmX6O4lkT/6rCeiN9Qjt0eND5yY2QfOl7kR6LYMowTa9Y6jlBQ?=
+ =?us-ascii?Q?ZEDW+Djtp9+3NwCDQCFVJcol1YxL0wv/+LR1956ALndA6zNxtIYO76p1weBA?=
+ =?us-ascii?Q?5y/OI3IaoJs1X+3HFPftZ2EU7twxiFH2pZPeb5PTmrbqzVa+bbaqBsPkvyDK?=
+ =?us-ascii?Q?2K/HQE3JXm27STUuNrQKgQztu640vIHdzO7jS7UWPH/jkCm5hUsA5J4o4XQ7?=
+ =?us-ascii?Q?f143ebgBltqtUJvzVeIL1WoPm4x+EqcbyayccViajyYGvfcsIQWrQ7ZuuDk5?=
+ =?us-ascii?Q?3c1Pcrh8WuBZXGYYfEuh+bXnn7SMxIyvcsoThcjn6/hBZmDKsWa7pb8WWB8f?=
+ =?us-ascii?Q?iUWnQT590e4GZ/AsSMR6P0Fmlics+6A3Lr17aAKw3PYa/c7nHU4mfffFK1Mt?=
+ =?us-ascii?Q?zJNpKR83m4Lm98LUA9T7aypx02jOE0B1FXdISS+x3jL/TYHGEqq7BmPvYsWi?=
+ =?us-ascii?Q?nruFxgjovG+ji6qpgCgcqhKjTzMUC8DIs/TmkGwCaKipLh1Lt6SDWZe9YW3I?=
+ =?us-ascii?Q?sP1tsscotMxzwgNGQwUPEy1s8sIvx/0/dqC+3JLDuQcoIbmYOCeJxne4Q/Oj?=
+ =?us-ascii?Q?Zr3/+3ZloIBLUrqOJUCLSRkTHl7+DaT6nWp5lZnnHdZQUUU91knv1R6ng0NO?=
+ =?us-ascii?Q?Ko5/XmRg8J3YXvw+3Vfjz/Z/XEYfHIY8HGCWeaTffYlqQ2d7F4XW3NphHL/0?=
+ =?us-ascii?Q?DRLD8L2WyRsHJYOGzynllYIi?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b64fa7f-f974-4f92-1693-08d91a9abd15
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2021 07:50:15.4354
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: L2Tce9SYQ5hlRUHkEIcbAmbxXV0HMeRnJX9xIRioTlO4ScCgiHGj8EwTmSnPSK5ahlafF/HRAbZ0o+t1IHzq+NziCeUDUmvwDFO2ylmfBRY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR0102MB3451
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for I2C on MT8365 SoCs.
+This series add support for the Aspeed specific SSIF BMC driver which
+is to perform in-band IPMI communication with the host in management
+(BMC) side.
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
- drivers/i2c/busses/i2c-mt65xx.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+v3:
+  + Switched binding doc to use DT schema format [Rob]
+  + Splited into generic ssif_bmc and aspeed-specific [Corey, Joel]
+  + Removed redundant license info [Joel]
+  + Switched to use traditional if-else [Joel]
+  + Removed unused ssif_bmc_ioctl() [Joel]
+  + Made handle_request()/complete_response() to return void [Joel]
+  + Refactored send_ssif_bmc_response()/receive_ssif_bmc_request() [Corey]
+  + Remove mutex [Corey]
+  + Use spin_lock/unlock_irqsave/restore in callback [Corey]
+  + Removed the unnecessary memset [Corey]
+  + Switch to use dev_err() [Corey]
+  + Combine mask/unmask two interrupts together [Corey]
+  + Fixed unhandled Tx done with NAK [Quan]
+  + Late ack'ed Tx done w/wo Ack irq [Quan]
+  + Use aspeed-specific exported aspeed_set_slave_busy() when slave busy
+to fix the deadlock [Graeme, Philipp, Quan]
+  + Clean buffer for last multipart read [Quan]
+  + Handle unknown incoming command [Quan]
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 5ddfa4e56ee2..0e6ad84e0e47 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -404,6 +404,19 @@ static const struct mtk_i2c_compatible mt8192_compat = {
- 	.max_dma_support = 36,
- };
- 
-+static const struct mtk_i2c_compatible mt8365_compat = {
-+	.regs = mt_i2c_regs_v1,
-+	.pmic_i2c = 0,
-+	.dcm = 1,
-+	.auto_restart = 1,
-+	.aux_len_reg = 1,
-+	.timing_adjust = 1,
-+	.dma_sync = 1,
-+	.ltiming_adjust = 0,
-+	.apdma_sync = 0,
-+	.max_dma_support = 33,
-+};
-+
- static const struct of_device_id mtk_i2c_of_match[] = {
- 	{ .compatible = "mediatek,mt2712-i2c", .data = &mt2712_compat },
- 	{ .compatible = "mediatek,mt6577-i2c", .data = &mt6577_compat },
-@@ -412,6 +425,7 @@ static const struct of_device_id mtk_i2c_of_match[] = {
- 	{ .compatible = "mediatek,mt8173-i2c", .data = &mt8173_compat },
- 	{ .compatible = "mediatek,mt8183-i2c", .data = &mt8183_compat },
- 	{ .compatible = "mediatek,mt8192-i2c", .data = &mt8192_compat },
-+	{ .compatible = "mediatek,mt8365-i2c", .data = &mt8365_compat },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, mtk_i2c_of_match);
+v2:
+  + Fixed compiling error with COMPILE_TEST for arc
+
+Quan Nguyen (7):
+  i2c: i2c-core-smbus: Expose PEC calculate function for generic use
+  ipmi: ssif_bmc: Add SSIF BMC driver
+  i2c: aspeed: Fix unhandled Tx done with NAK
+  i2c: aspeed: Acknowledge Tx done w/wo ACK irq late
+  i2c: aspeed: Add aspeed_set_slave_busy()
+  ipmi: ssif_bmc: Add Aspeed SSIF BMC driver
+  bindings: ipmi: Add binding for Aspeed SSIF BMC driver
+
+ .../bindings/ipmi/aspeed-ssif-bmc.yaml        |  33 +
+ drivers/char/ipmi/Kconfig                     |  22 +
+ drivers/char/ipmi/Makefile                    |   2 +
+ drivers/char/ipmi/ssif_bmc.c                  | 605 ++++++++++++++++++
+ drivers/char/ipmi/ssif_bmc.h                  |  93 +++
+ drivers/char/ipmi/ssif_bmc_aspeed.c           |  75 +++
+ drivers/i2c/busses/i2c-aspeed.c               |  51 +-
+ drivers/i2c/i2c-core-smbus.c                  |  12 +-
+ include/linux/i2c.h                           |   1 +
+ 9 files changed, 884 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.yaml
+ create mode 100644 drivers/char/ipmi/ssif_bmc.c
+ create mode 100644 drivers/char/ipmi/ssif_bmc.h
+ create mode 100644 drivers/char/ipmi/ssif_bmc_aspeed.c
+
 -- 
-2.31.1
+2.28.0
 
