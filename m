@@ -2,145 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A420A388E26
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 May 2021 14:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447B7388E70
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 May 2021 14:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346441AbhESMfY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 May 2021 08:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
+        id S1346567AbhESM7F (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 May 2021 08:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbhESMfY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 08:35:24 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D98C061760;
-        Wed, 19 May 2021 05:34:04 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id j75so12910201oih.10;
-        Wed, 19 May 2021 05:34:04 -0700 (PDT)
+        with ESMTP id S232671AbhESM7E (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 08:59:04 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F22C06175F;
+        Wed, 19 May 2021 05:57:45 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id 124so243083qkh.10;
+        Wed, 19 May 2021 05:57:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VrjofVBqpi4EHgG9TcMkr4kH1OnwVdI3jKjQrhy1Fug=;
-        b=WSbmTBjMuGsiyyywp5Dh3Q3mVYW2nbZQjg0K6XpN0ym7Jrl7a5IQuCF3IA3QXe4shk
-         Ng8JJSYbNTWhKXk9LZm6Ks6Q4VkQ67uzl+BHacClNTEsfVOw/4DTeqzd/8NTDS2Xbk0Z
-         ta+hXBtHynyG4MWZyKPg6/es2FymwlidZMkU7Z+7qGt2kU16NoC7yi0X/hKPBlybJxLS
-         nW30UfL3+CWamV4v6eEu79DvmCx7vOijxZNl6iGcLa6U530GJ6DakL3VwL2DteDB0c9M
-         xoJXf0W7rhuoTQrHKa1N7zPYAfPaMS9yiITcKYvZaU4xDeDvS0H6OHndrcIElujRWsT0
-         j8+A==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aipg9oIDAuCQSbPEUtZjOrYb0WaeP7Y8nbKSRmG50Bc=;
+        b=Pa4ogUhOF7OBZJ6ZHNl0MgR59SkKIlnoGrDNn/lcOBGbuPpPz34+2AOEpjE6KcRep0
+         3rhPml2WgX1tHOgnE1NyFZrFzIlt51EJmUSsfjrkf10trdA60D+Zcz73YlqdI0rdL3D0
+         KrGwfkNaKB0U/YzFPmg3WUmOjWMfEjOBenyI3ohJ8Lx3B0u5X/nxD0NtpdaB9371Y0md
+         dCOkLqkLT/f7QItk5bUjTi6/SI7VFvvOngKItIaipenTMH6IuuHpoeOaIaVv7YRKCb5q
+         /YNW293ujFUdLxhJ07r8jesWtFVEBcPP9Nu7eWr+ikxPxIpnIJhQQ8mwpXU3mKa6ib6s
+         AOpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition:in-reply-to;
-        bh=VrjofVBqpi4EHgG9TcMkr4kH1OnwVdI3jKjQrhy1Fug=;
-        b=TwBGtqkPxxYQkCBgm+7AxeQuNqihyDhR8AIujeE/pXteuIpfAbDotYEe3DAPYkEhAj
-         fcr6jpdFOw3aux34XphR9wpx5KnR1b5x8j/8XfYCKfnPmsCT1qVmItYjO/iJLhxuxA+q
-         zD0Da4qpgFQRdToiEuiGnC4LoG3ld0T0szG6pD3UWxkYvHaJVtmrCEm4DUmNoYfaml9L
-         HlJEpgl3lkICqRArffqCt6rumDgSu3Oeid1FUuwTZm10IUljH0yJhNXHVStwvprNAT7E
-         gwPDQTfr1UWx4aca6WrL+S1h1b0RmhMzHgyqLl4sRXvRD+sXfkd93qUVGL26uEB4dp2X
-         pEBQ==
-X-Gm-Message-State: AOAM531WZeqO4L+iNFQVt/a5J435qtOHYZRPOWiWwJWedbSqCNmBvI5e
-        q8SuVPPqq8Eib9WDqHusjg==
-X-Google-Smtp-Source: ABdhPJzF+Fy8did2QXIYwMFyj+Pr3q+myW/DhiifWrK0n5h2AtQhvpL+QDG4LfcQO07Tc5btOdZCGg==
-X-Received: by 2002:aca:b5c4:: with SMTP id e187mr8250914oif.149.1621427643980;
-        Wed, 19 May 2021 05:34:03 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.156.158])
-        by smtp.gmail.com with ESMTPSA id x78sm888530ooa.15.2021.05.19.05.34.03
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=aipg9oIDAuCQSbPEUtZjOrYb0WaeP7Y8nbKSRmG50Bc=;
+        b=aitEj7gaMK7SlQFHyL4ZJqICAwNKQ8/sAH8Lajw2UpHAEgDNDm2hvNEGfuZgUfSXZL
+         HF1NM1kZiMEB/drVjZMKQPhtzjqojO97eKKQIPJunGa7Q5rAQa4T26kAxV9j+ihMuYnu
+         rtmhDLYJzbjg9FbQms9XTW/oJgVmNFGucR7LFXvV72Kvsn8/N3RzDKMbQCdlBYRiP1XI
+         zz5W5anZx81TjtZfM3JIZ0EE1bwd7IyAxauDTCiAQc1wiKtuWBbS6kwFcz8H7b3BneO1
+         ZW9XJP8HMu5joxpXGamBK0jbnAXRl7kmLU4lfgt2RVhWmNx23M8p2LuenJ+vMyxUM9X2
+         eGrw==
+X-Gm-Message-State: AOAM531KaiNXRANXgkNXuWTshkUt3O6hLowmUpJIOR2SnLM1OUcBhIzh
+        Uq/3tjjYpriObzEYbYfcPDI=
+X-Google-Smtp-Source: ABdhPJzaymXiwmNRUJ76y5xNhS+pauWT0YHJrip4/vT9Q++zTymq3niN2b7yOKjYqwJx982fyC8aoA==
+X-Received: by 2002:ae9:c016:: with SMTP id u22mr11911036qkk.114.1621429063845;
+        Wed, 19 May 2021 05:57:43 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d11sm15252598qke.61.2021.05.19.05.57.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 May 2021 05:34:03 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:9144:ba66:ea13:f260])
-        by serve.minyard.net (Postfix) with ESMTPSA id 93A3618000C;
-        Wed, 19 May 2021 12:34:02 +0000 (UTC)
-Date:   Wed, 19 May 2021 07:34:01 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v3 0/7] Add Aspeed SSIF BMC driver
-Message-ID: <20210519123401.GG2921206@minyard.net>
-Reply-To: minyard@acm.org
-References: <20210519074934.20712-1-quan@os.amperecomputing.com>
+        Wed, 19 May 2021 05:57:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 19 May 2021 05:57:41 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     cl@rock-chips.com
+Cc:     heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com,
+        wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net,
+        jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org, maz@kernel.org
+Subject: Re: [PATCH v4 04/10] dt-bindings: watchdog: dw-wdt: add description
+ for rk3568
+Message-ID: <20210519125741.GA2241939@roeck-us.net>
+References: <20210429081151.17558-1-cl@rock-chips.com>
+ <20210429081151.17558-5-cl@rock-chips.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210519074934.20712-1-quan@os.amperecomputing.com>
+In-Reply-To: <20210429081151.17558-5-cl@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 19, 2021 at 02:49:27PM +0700, Quan Nguyen wrote:
-> This series add support for the Aspeed specific SSIF BMC driver which
-> is to perform in-band IPMI communication with the host in management
-> (BMC) side.
+On Thu, Apr 29, 2021 at 04:11:45PM +0800, cl@rock-chips.com wrote:
+> From: Liang Chen <cl@rock-chips.com>
 > 
-> v3:
->   + Switched binding doc to use DT schema format [Rob]
->   + Splited into generic ssif_bmc and aspeed-specific [Corey, Joel]
->   + Removed redundant license info [Joel]
->   + Switched to use traditional if-else [Joel]
->   + Removed unused ssif_bmc_ioctl() [Joel]
->   + Made handle_request()/complete_response() to return void [Joel]
->   + Refactored send_ssif_bmc_response()/receive_ssif_bmc_request() [Corey]
->   + Remove mutex [Corey]
->   + Use spin_lock/unlock_irqsave/restore in callback [Corey]
->   + Removed the unnecessary memset [Corey]
->   + Switch to use dev_err() [Corey]
->   + Combine mask/unmask two interrupts together [Corey]
->   + Fixed unhandled Tx done with NAK [Quan]
->   + Late ack'ed Tx done w/wo Ack irq [Quan]
->   + Use aspeed-specific exported aspeed_set_slave_busy() when slave busy
-> to fix the deadlock [Graeme, Philipp, Quan]
->   + Clean buffer for last multipart read [Quan]
->   + Handle unknown incoming command [Quan]
+> add "rockchip,rk3568-wdt", "snps,dw-wdt" for watchdog nodes on
+> a rk3568 platform to snps,dw-wdt.yaml.
 > 
-> v2:
->   + Fixed compiling error with COMPILE_TEST for arc
-> 
-> Quan Nguyen (7):
->   i2c: i2c-core-smbus: Expose PEC calculate function for generic use
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Note that for this I2C-specific change, I will need acks from the I2C
-maintainers to be able to include this in my tree.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
->   ipmi: ssif_bmc: Add SSIF BMC driver
->   i2c: aspeed: Fix unhandled Tx done with NAK
-
-For the aspeed changes, they don't really belong here, they belong in
-the aspeed tree.  I see that you need them for the device to work
-correctly, though.  I'll need acks from maintainers to include them.
-
->   i2c: aspeed: Acknowledge Tx done w/wo ACK irq late
->   i2c: aspeed: Add aspeed_set_slave_busy()
->   ipmi: ssif_bmc: Add Aspeed SSIF BMC driver
->   bindings: ipmi: Add binding for Aspeed SSIF BMC driver
+> ---
+>  Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->  .../bindings/ipmi/aspeed-ssif-bmc.yaml        |  33 +
->  drivers/char/ipmi/Kconfig                     |  22 +
->  drivers/char/ipmi/Makefile                    |   2 +
->  drivers/char/ipmi/ssif_bmc.c                  | 605 ++++++++++++++++++
->  drivers/char/ipmi/ssif_bmc.h                  |  93 +++
->  drivers/char/ipmi/ssif_bmc_aspeed.c           |  75 +++
->  drivers/i2c/busses/i2c-aspeed.c               |  51 +-
->  drivers/i2c/i2c-core-smbus.c                  |  12 +-
->  include/linux/i2c.h                           |   1 +
->  9 files changed, 884 insertions(+), 10 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.yaml
->  create mode 100644 drivers/char/ipmi/ssif_bmc.c
->  create mode 100644 drivers/char/ipmi/ssif_bmc.h
->  create mode 100644 drivers/char/ipmi/ssif_bmc_aspeed.c
-> 
-> -- 
-> 2.28.0
-> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> index b58596b1831d..6461eb4f4a27 100644
+> --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> @@ -27,6 +27,7 @@ properties:
+>                - rockchip,rk3328-wdt
+>                - rockchip,rk3368-wdt
+>                - rockchip,rk3399-wdt
+> +              - rockchip,rk3568-wdt
+>                - rockchip,rv1108-wdt
+>            - const: snps,dw-wdt
+>  
