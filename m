@@ -2,52 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A40389811
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 May 2021 22:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B2C389988
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 00:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbhESUji (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 May 2021 16:39:38 -0400
-Received: from mx0b-00268f01.pphosted.com ([148.163.159.192]:8640 "EHLO
-        mx0b-00268f01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229437AbhESUjh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 16:39:37 -0400
-X-Greylist: delayed 5699 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 May 2021 16:39:37 EDT
-Received: from pps.filterd (m0165121.ppops.net [127.0.0.1])
-        by mx0b-00268f01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14JIrQIi001497;
-        Wed, 19 May 2021 19:02:54 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
-        by mx0b-00268f01.pphosted.com with ESMTP id 38n53f8rue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 May 2021 19:02:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cCsOYuzsLiS/Ev8HBLFh2tQKIKn4ZnDtyPijFRFF7IzJ1oqs8WDPUCx8dbdUPm3FHr/8EjVdZFXc98QJ8qZufr/eSCbNz3kBzUBjQSqea3HhxADB9LSqe05oHe4BVs9MePWcr8QECTL2TNAnpD3s7FFrNiiJPCrOtDCEKJ4Qu1W8jZSgR6UWD3rxSO1fhmt9IoZ/8bTIVatGvgbODKCfgpGMBSLK9YOhIN618/HJ0Zls50EQmRZ82o7dieG773Z4AMAkudCh0V6IQAZmPrrTo9tr458t9KJtV7Gi6vqtBrT9XSXFNmf2/CY1GgCLWgXyfjSbr7yMRzmEQ5KZ6wFrJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kvoCsGU2nQjTYgbXdS5nzV22tJWDyVf+C2DmIiz8KGY=;
- b=MQz2ukTuGzE1KUQtHk2lSCvjWNP+nuArwlHBayu0Zj2w8rFPdglfK3kYJasSLXXWp7eMgM/IU5F03v/kQXxDFQPsvKoLaunnJLxWkZ1WoUQ3FXYCAf7sxxqKVwO0QJk77+LqLj32rGUYFNtIHPPifeixg+fD9pNn16afy+gVe2znzrdDKdhDz1x7EsiOaDUcvdFdu5qtsrEJ/L6FSemkkHrdNvgm3CkjV2nq/15WdLqmrRQkizYwqzk0beO088iANkAEMIysrD6l5K5ZW7aLbLZUIZKtIx9Cj8CIxpflow/zHBE6iuKeSAJ1BJOrDqpSkSnfYaMfsO1rRYE5iLFKzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=equinix.com; dmarc=pass action=none header.from=equinix.com;
- dkim=pass header.d=equinix.com; arc=none
+        id S229498AbhESXBI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 May 2021 19:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229465AbhESXBH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 19:01:07 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8167EC061574;
+        Wed, 19 May 2021 15:59:47 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id k4so3352133qkd.0;
+        Wed, 19 May 2021 15:59:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=equinixinc.onmicrosoft.com; s=selector2-equinixinc-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kvoCsGU2nQjTYgbXdS5nzV22tJWDyVf+C2DmIiz8KGY=;
- b=G70Mr8hNK4MUvJHRVwYADZSPMqtWo7GTP2un1AWyUvHTppH6SzdqGo2wuqUOBf3UY2O0GlaRJt/AVrD+fYdpkYMo+QqoSDWV7aoocj6ilCmqLXrsPPyeoxZvkcRzesJ3x0I9EnUffi3wKJckjHLc4pvhYzus6+dEip+C5Xuig9g=
-Received: from DM5PR04MB0762.namprd04.prod.outlook.com (2603:10b6:3:f3::13) by
- DM6PR04MB5532.namprd04.prod.outlook.com (2603:10b6:5:12d::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4129.28; Wed, 19 May 2021 19:02:51 +0000
-Received: from DM5PR04MB0762.namprd04.prod.outlook.com
- ([fe80::d9ba:6e7f:b51e:6cab]) by DM5PR04MB0762.namprd04.prod.outlook.com
- ([fe80::d9ba:6e7f:b51e:6cab%2]) with mapi id 15.20.4129.033; Wed, 19 May 2021
- 19:02:50 +0000
-From:   Zev Weiss <zweiss@equinix.com>
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FL4A84RnGL9eXsLReJXIYBVZb+CRyoUol9pEHr5O5qY=;
+        b=Dvq29lHaaHrwBS8AFWZSoJCdqQsSj5w0bo8XghtBLAZTBjrQf4RXb+AY3jd8EtUP94
+         KVMw8BwVB+j9N56QZ2bUXRwSkx94v24XrW5t9yTBPEk2Eg1E/sjej0T/YJ+UN8/hVyf2
+         eZl8fwg+VCSsuIKKXAIvKGBmJaQlJRJsra5j8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FL4A84RnGL9eXsLReJXIYBVZb+CRyoUol9pEHr5O5qY=;
+        b=f2MF1XTJ4TP4mVLdJEJH4ivR1W0r5aA1UerFQf/J8SNX7TmWcT2l91ZFSKbEZZlsym
+         YfL34ypIXdd5Qf66VIDTmbORlUUsLQbu6k6Uivz/7x2bu3tl8UjUMDqI/nDo91t1zC0o
+         h0rJUIkNq67EMpULB/yGKMV621MdNuHbMGfCPhIfzsv7w5ld8R14uKdhY4WPHCj2otZ3
+         XZIrb05PsJdfuVx/jx7ZQXO6CTGfSJl2cejQBpuZB0crrtZTkxogyijNLWXz2bfxE/VF
+         Kfv6g09a05eEmIUVqqn4gpqys1jslJm9RZp9x7nQpvgGl8QMp+jLxLnBcW8glvfTp79m
+         fGxA==
+X-Gm-Message-State: AOAM531Hkzp0ZzHXBqzdA3mKlppLPticZRmeD9Izg1JszLY9n2qzPh/y
+        h1+j7OrgVhymPXhS7aHY+DBz6Jy6HSRBeb0sYqg=
+X-Google-Smtp-Source: ABdhPJySEJL2SSIhxhurMKhfYZmnqZskBqtE2XkdoVEbVmUuDFR04avlb3/LIVd+WzCgLE4Ok6LLOCaBZg/S+B/hSKw=
+X-Received: by 2002:a37:424c:: with SMTP id p73mr1926220qka.465.1621465186642;
+ Wed, 19 May 2021 15:59:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210519080436.18975-1-jamin_lin@aspeedtech.com> <20210519080436.18975-2-jamin_lin@aspeedtech.com>
+In-Reply-To: <20210519080436.18975-2-jamin_lin@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 19 May 2021 22:59:34 +0000
+Message-ID: <CACPK8XdNXiGMQZOtsfMMK+w_PSvO20XT8B9MG+rGhdjYoV4ZuQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] i2c: aspeed: avoid new registers definition of AST2600
 To:     Jamin Lin <jamin_lin@aspeedtech.com>
-CC:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
+Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
         Brendan Higgins <brendanhiggins@google.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Rayn Chen <rayn_chen@aspeedtech.com>,
         "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
@@ -57,163 +61,82 @@ CC:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
         <linux-aspeed@lists.ozlabs.org>,
         open list <linux-kernel@vger.kernel.org>,
         "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
-        "steven_lee@aspeedtech.com" <steven_lee@aspeedtech.com>,
-        "chiawei_wang@aspeedtech.com" <chiawei_wang@aspeedtech.com>,
-        "troy_lee@aspeedtech.com" <troy_lee@aspeedtech.com>,
-        "ryan_chen@aspeedtech.com" <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH 1/3] i2c: aspeed: avoid new registers definition of
- AST2600
-Thread-Topic: [PATCH 1/3] i2c: aspeed: avoid new registers definition of
- AST2600
-Thread-Index: AQHXTOGQ+04th/dwT0i8Ccm8YNu1Cw==
-Date:   Wed, 19 May 2021 19:02:50 +0000
-Message-ID: <YKVg2Kfbex3DYbNI@packtop>
-References: <20210519080436.18975-1-jamin_lin@aspeedtech.com>
- <20210519080436.18975-2-jamin_lin@aspeedtech.com>
-In-Reply-To: <20210519080436.18975-2-jamin_lin@aspeedtech.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: aspeedtech.com; dkim=none (message not signed)
- header.d=none;aspeedtech.com; dmarc=none action=none header.from=equinix.com;
-x-originating-ip: [24.181.166.149]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f83a6770-f627-4288-3300-08d91af8b324
-x-ms-traffictypediagnostic: DM6PR04MB5532:
-x-microsoft-antispam-prvs: <DM6PR04MB5532A50BF223C8ACA86B6910C32B9@DM6PR04MB5532.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: o0klEahC8/xfDOGVZ+y/xugA+ddS+D9mkiSdlLJp6lqex5UK9g0Y1wnWbjAfz+BDu8R34aVAlDNX3+3B5i8A0NglRseLRepKnGUJzLqwe/hLwjXe6+JhYgFkKREiOe9aDGDqVdHR+k+0Ju/mvuzsAAYzeDVts+EbUjFi2xkwCFralcsuj726EnNVYMNr2vBIn31xLPt7jz2xyHxIiMq6fbTw/+svga7bCw36Foxszf7e1JCSbIGBPvgrdqriycO6buYtWpbGIeaXaxfNZ/BLp8VgeP6jns0cq/2BG2hwlqbccMfDUVoabgIV8xEd59DFclz7jHTJLHnyCqEbLKY8TNlblJvUUGIetOvSJkO/NN1qiZrY7DcUkH6WglBYY+A+M2oAN8RT53QPVwNs3W15ZDtWhKYYwVDgXg+yeO4AZTj9ptL5FXQpou8Ba1oLirp4leYquzYrAG/Vpyq8rv+xB2Q3hxno7K9onln33i7jShZEtm0SOUTkfFCepjh5REIOT0i9P4AEwsjLa2J5MrekjzbYe0VvG0w/wofQNHCA0McAF+MbTxStSb6+vIOzn5PdVE9H4IAlSM9Gh/RQzi7Ri5/m5tRJnoYZovA4O5oZ0sE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR04MB0762.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(376002)(136003)(396003)(346002)(39860400002)(366004)(4326008)(478600001)(54906003)(8936002)(8676002)(316002)(6916009)(86362001)(91956017)(7416002)(66946007)(6486002)(5660300002)(76116006)(122000001)(6512007)(71200400001)(9686003)(26005)(186003)(66556008)(66476007)(64756008)(66446008)(38100700002)(33716001)(6506007)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?YPZUePZVPDx0O51aDq5UGtkk0XLS4WQfuV/sNJHKhO6Hpb01+20LGgeuplwI?=
- =?us-ascii?Q?yYNd6uMu2S19ySiBs8xKOhWUk73ZWtaiXa0DhrVv1zRaVSLvs/YvVzu3Yx0B?=
- =?us-ascii?Q?tWKoPKyBfCQqjfsJ5YiTo/vmFEdGxVavht3WjG2w4La3sPogUPi3yxXbOaR9?=
- =?us-ascii?Q?Es9BNihUxq8Pib7t4lGsAin7q2/CX+o7AmkGFt28LG1Y/OiRzxZZ3cEy2s7c?=
- =?us-ascii?Q?T/ZTeJZHDBv1zKaRonWucRZpKe+QRynagI2tQWDMYCE0aZ6c50x54jvZGtVy?=
- =?us-ascii?Q?woc2wwoHJ50YT7BAPRY3wCxXB6ZjlKFJzZt/jjKLIK61IKhLD5OaZAQVds9t?=
- =?us-ascii?Q?RQoAtVsWFjmDpNiVk+Lisxts5WYrUGd1cnTIaOr9tbnULI+vhNNyG/j5M5ct?=
- =?us-ascii?Q?3ScsL48AIGWdflRPsekxzZBwOk+5gUMsQ2W6rzOIbTppjn24edXHbWcYV/oy?=
- =?us-ascii?Q?JNFjH2al3xfVbQy6qfMG5/+s6crsb8G9LLzN643RplPBnW7xOnDCA0d2RMER?=
- =?us-ascii?Q?c2kYov7DL2xCbqkG0unQBjmo7R/lNJ95Uh4XCDosMRDTcPVnjvBvhOERKt3i?=
- =?us-ascii?Q?zxzJUEb5Yj78phUODW3JMI4CaVgFPnt+0EKth6HpzSevSvI4LDCvbw500yGU?=
- =?us-ascii?Q?5Y2HgLCL8VOJq4z0SzLg43pHRy4S3t35mkpRwMwbohrXIHqB4RNbxqvTT8FA?=
- =?us-ascii?Q?T4lgr5TK0NsHt/sdXR7gaVmK+hSkJ2+z7niwwFjZRCKo0/5a9ZpJWfiZ6imj?=
- =?us-ascii?Q?sGFlkKvH5jxm6yNHc0TlgHvLMLxcld5v3o7n4Paqk59HvZkgnJghlYAzwK/p?=
- =?us-ascii?Q?HScOQa6TMG46FXURY1PK/jcvBVVugvVe+Acn6iTNowfN/xOLsaTWK/7of3wR?=
- =?us-ascii?Q?bfZzFl+TMiATVVV3A8MAbteY5XlEjMJ67VWXlz+BFiuo+0GqLjlwnOv8yzve?=
- =?us-ascii?Q?a4afsI92JaxsmR6+mbQ0MUS+HDz8OMtSOcWyJ9g+ox14dShTJp5EAbFgxw3g?=
- =?us-ascii?Q?YkocReRTy//ZvFbkrcmcuxHLBofbJWiSYEupIMbVP/sZd9+tDXiMmYPl0B+y?=
- =?us-ascii?Q?q5O+FYvDGzgvm3n2fum+0hP+ZJ04fo249uR55iBztQOlK9xphnDEFLYSU0IA?=
- =?us-ascii?Q?3vPZCNiVjBAFUCzFc9bkNjNc+UrgQyVDAqwyExyWrpwnYdV45nX5eRPZmlTu?=
- =?us-ascii?Q?PVW8m+yBzoQnuK6a+wncIaaETT5uEzM4qyg4p33XBM5+IzEgM7JR51q2i/6H?=
- =?us-ascii?Q?o/5LWIRFkeSnKrIoQrgCmZn/miVMYyUVhfEEYa7AAkp7Td76m9Rt3ZeK01Az?=
- =?us-ascii?Q?Z4AJ1iN0WnmbWOkRi/JzhH3K/kLGQUw9/zyjOPkpdZzKOQ=3D=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <84F50A129A8DAD49B76EF596CB752539@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: equinix.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR04MB0762.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f83a6770-f627-4288-3300-08d91af8b324
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2021 19:02:50.8511
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72adb271-2fc7-4afe-a5ee-9de6a59f6bfb
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zDuP14UVcLw+WRfwC3DERIqIJVUsl+QU2gFiThZxkWypGLngxDBgujxc4z4wpx2XmQ6aJxycWTRPzCuYenCgsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5532
-X-Proofpoint-ORIG-GUID: wMwPn8DyDFsX_YFW7eiXhh4qf4UDxt8Y
-X-Proofpoint-GUID: wMwPn8DyDFsX_YFW7eiXhh4qf4UDxt8Y
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-19_09:2021-05-19,2021-05-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 impostorscore=0 phishscore=0 spamscore=0 clxscore=1011
- malwarescore=0 bulkscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2105190115
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        "Chia-Wei, Wang" <chiawei_wang@aspeedtech.com>,
+        Troy Lee <troy_lee@aspeedtech.com>, steven_lee@aspeedtech.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 19, 2021 at 03:04:27AM CDT, Jamin Lin wrote:
->The register definition between AST2600 A2 and A3 is different.
->This patch avoid new registers definition of AST2600 to use
->this driver. We will submit the path for the new registers
->definition of AST2600.
+On Wed, 19 May 2021 at 08:05, Jamin Lin <jamin_lin@aspeedtech.com> wrote:
 >
->Signed-off-by: Jamin Lin <jamin_lin@aspeedtech.com>
->---
-> drivers/i2c/busses/i2c-aspeed.c | 22 ++++++++++++++++++++++
-> 1 file changed, 22 insertions(+)
+> The register definition between AST2600 A2 and A3 is different.
+> This patch avoid new registers definition of AST2600 to use
+> this driver. We will submit the path for the new registers
+> definition of AST2600.
+
+The AST2600 v9 datasheet says that bit 2 selects between old and new
+register sets, and that the old register set is the default.
+
+Has the default changed for the A3?, and the datasheet is incorrect?
+
+Does the A3 still support the old register set?
+
 >
->diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspe=
-ed.c
->index 724bf30600d6..007309077d9f 100644
->--- a/drivers/i2c/busses/i2c-aspeed.c
->+++ b/drivers/i2c/busses/i2c-aspeed.c
->@@ -19,14 +19,20 @@
-> #include <linux/irqchip/chained_irq.h>
-> #include <linux/irqdomain.h>
-> #include <linux/kernel.h>
->+#include <linux/mfd/syscon.h>
-> #include <linux/module.h>
-> #include <linux/of_address.h>
-> #include <linux/of_irq.h>
-> #include <linux/of_platform.h>
-> #include <linux/platform_device.h>
->+#include <linux/regmap.h>
-> #include <linux/reset.h>
-> #include <linux/slab.h>
+> Signed-off-by: Jamin Lin <jamin_lin@aspeedtech.com>
+> ---
+>  drivers/i2c/busses/i2c-aspeed.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 >
->+/* I2C Global Registers */
->+/* 0x0c : I2CG Global Control Register (AST2500)  */
->+#define ASPEED_I2CG_GLOBAL_CTRL_REG			0x0c
->+
-> /* I2C Register */
-> #define ASPEED_I2C_FUN_CTRL_REG				0x00
-> #define ASPEED_I2C_AC_TIMING_REG1			0x04
->@@ -973,6 +979,22 @@ static int aspeed_i2c_probe_bus(struct platform_devic=
-e *pdev)
-> 	struct resource *res;
-> 	int irq, ret;
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+> index 724bf30600d6..007309077d9f 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -19,14 +19,20 @@
+>  #include <linux/irqchip/chained_irq.h>
+>  #include <linux/irqdomain.h>
+>  #include <linux/kernel.h>
+> +#include <linux/mfd/syscon.h>
+>  #include <linux/module.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_irq.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+>  #include <linux/reset.h>
+>  #include <linux/slab.h>
 >
->+	if (of_device_is_compatible(pdev->dev.of_node,
->+				    "aspeed,ast2600-i2c-bus")) {
->+		u32 global_ctrl;
->+		struct regmap *gr_regmap;
->+
->+		gr_regmap =3D syscon_regmap_lookup_by_compatible("aspeed,ast2600-i2c-gl=
-obal");
->+
->+		if (IS_ERR(gr_regmap)) {
->+			ret =3D PTR_ERR(gr_regmap);
->+		} else {
->+			regmap_read(gr_regmap, ASPEED_I2CG_GLOBAL_CTRL_REG, &global_ctrl);
->+			if (global_ctrl & BIT(2))
->+				return -EIO;
-
-A macro definition might be a bit nicer than a raw BIT(2) here I'd
-think.
-
-Also, it seems a bit unfortunate to just bail on the device entirely if
-we find this bit set (seems like a good way for a bootloader to
-inadvertently DoS the kernel), though I guess poking global syscon bits
-in the bus probe function might not be ideal.  Could/should we consider
-some module-level init code to ensure that bit is cleared?
-
-
-Zev
-
->+		}
->+	}
->+
-> 	bus =3D devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
-> 	if (!bus)
-> 		return -ENOMEM;
->--=20
->2.17.1
->=
+> +/* I2C Global Registers */
+> +/* 0x0c : I2CG Global Control Register (AST2500)  */
+> +#define ASPEED_I2CG_GLOBAL_CTRL_REG                    0x0c
+> +
+>  /* I2C Register */
+>  #define ASPEED_I2C_FUN_CTRL_REG                                0x00
+>  #define ASPEED_I2C_AC_TIMING_REG1                      0x04
+> @@ -973,6 +979,22 @@ static int aspeed_i2c_probe_bus(struct platform_device *pdev)
+>         struct resource *res;
+>         int irq, ret;
+>
+> +       if (of_device_is_compatible(pdev->dev.of_node,
+> +                                   "aspeed,ast2600-i2c-bus")) {
+> +               u32 global_ctrl;
+> +               struct regmap *gr_regmap;
+> +
+> +               gr_regmap = syscon_regmap_lookup_by_compatible("aspeed,ast2600-i2c-global");
+> +
+> +               if (IS_ERR(gr_regmap)) {
+> +                       ret = PTR_ERR(gr_regmap);
+> +               } else {
+> +                       regmap_read(gr_regmap, ASPEED_I2CG_GLOBAL_CTRL_REG, &global_ctrl);
+> +                       if (global_ctrl & BIT(2))
+> +                               return -EIO;
+> +               }
+> +       }
+> +
+>         bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
+>         if (!bus)
+>                 return -ENOMEM;
+> --
+> 2.17.1
+>
