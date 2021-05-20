@@ -2,108 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E95FD389BF0
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 05:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1780A389F9B
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 10:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbhETDi0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 May 2021 23:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S230478AbhETIQe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 May 2021 04:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbhETDiZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 23:38:25 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B378BC06175F
-        for <linux-i2c@vger.kernel.org>; Wed, 19 May 2021 20:37:04 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 194CF84487;
-        Thu, 20 May 2021 15:36:59 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1621481819;
-        bh=VRbO4+naf38qOxw5jDMURFAeVwM1Gn4WAr6oIe/Om1Q=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=IvlORQazLNUXOxWwca6w0GSF/LVUilQq1KeoC5OsjkvkYhSWiohrXByKd4bikWAoc
-         puuOF8foJdJQiD/ZFbzhVtPz5B23V25hX64edzsVFw/oiwh8zrTG9+PufAKpOB4RRQ
-         ZO6Rux5xpqjxYL0lsCgVDh7K/yvuKhF4RnCJF0C4qa12ScAiMh/YrUzzgQugFHui+9
-         Nj2kwGDRTR4VtYg+D9vHPpBJuP5GlCZPemxCWr1q6T9QNpqnXRZCW5xJdy7bNUyj9K
-         BUgYQtUhHZaCxuQpnRodTXWeXWKIb2BSj9fp5VvuVfTNn+OhZgVvfnGsPTHVpLF1hK
-         JRkX8tLfRX1hg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B60a5d95b0000>; Thu, 20 May 2021 15:36:59 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 20 May 2021 15:36:58 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.018; Thu, 20 May 2021 15:36:58 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "wsa@kernel.org" <wsa@kernel.org>,
-        Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-CC:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/4] P2040/P2041 i2c recovery erratum
-Thread-Topic: [PATCH v3 0/4] P2040/P2041 i2c recovery erratum
-Thread-Index: AQHXRquHhXA6XgnPF0OPgP79h3OVQ6reDlyAgAA9BACAAHfVAIAAZZwAgAvTcoA=
-Date:   Thu, 20 May 2021 03:36:58 +0000
-Message-ID: <ae39c62a-7dc7-81f5-ea10-edfdbf905e9d@alliedtelesis.co.nz>
-References: <20210511212052.27242-1-chris.packham@alliedtelesis.co.nz>
- <b90f48cfdc31af08190e7a8eaa71b7bd488fcbaa.camel@infinera.com>
- <ec3cdcc8-5869-9e7d-30c0-59ff4ec67a58@alliedtelesis.co.nz>
- <4e96247275d559bab133d6c318276fa6be4d7be0.camel@infinera.com>
- <20210512150118.GA1004@ninjato>
-In-Reply-To: <20210512150118.GA1004@ninjato>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <458C7B1C38153849A89C7527D57D2E44@atlnz.lc>
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229536AbhETIQc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 04:16:32 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB42C061760
+        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 01:15:11 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id s19so15643621oic.7
+        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 01:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=nMDQIGNN2athUw77QzoxbIIxTVnjEUXN1gVmGUELkVE=;
+        b=SsQfc1zR+XeSGQo7ATvGLAygCqAoQdAKJ10BQbNRTAdGZbHXkP5E2SeBTa/fmozrtr
+         BW1ch1lrmrOquATIbjBBJQ3qB7nz2vMpT+teZq42SgeJ1AlWZPQW7JZSQePDVYDQhZNQ
+         /3xuFjIu65ZqHjnqpsHTH4b61QayocPTbNdrw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=nMDQIGNN2athUw77QzoxbIIxTVnjEUXN1gVmGUELkVE=;
+        b=omOmJhLwwfnQvPOA0DQj74lgnKtkRJO2o/UtXJpYWqrreHNwvEgiy7ucWwOxNS6FR7
+         GqWOvT9obIL8D1CUQ9cAVXj4VWa5fma4FGDxGl4okZMwVbvQZlsNRuZDZvKFYJd2kXbu
+         wZc9UOE0/9J4yV/xtQWWzQMQPlV6IVJFOVaqQx4VjosWenEdL7xCC1JywvB1PdpUSjnc
+         5yulRkBASkiZK2MsWyiaU0EcSn+jxTYL1j3DAa6/63KKl192HeBWP4jTIEx3uvyAp08S
+         ljLcwQI94uax8vysQMkMSyTLjvMpSLwECSPYf6SuhbFBh2zieloDglrFKTendiB8026Z
+         VsrQ==
+X-Gm-Message-State: AOAM53025nDEhDY2Xl+fkMMQf+pu0HLL5iwywZVvzWIxp7eaPtF8xVEK
+        EMVjwMNxY9BDl56FxImqFI5xcGYDXTlqYQgZePlp1A==
+X-Google-Smtp-Source: ABdhPJwxsXmfJTVN1Dt1DE1hOOnvh3huMgzuBaqFM49Psm1tLnZS6IREr/TfQ24FfmOw3l4L4vqvrWbtroEWNUiP9Ek=
+X-Received: by 2002:aca:654d:: with SMTP id j13mr2566246oiw.125.1621498511160;
+ Thu, 20 May 2021 01:15:11 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 20 May 2021 04:15:10 -0400
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=WOcBoUkR c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=N659UExz7-8A:10 a=5FLXtPjwQuUA:10 a=VwQbUJbxAAAA:8 a=T-qbRSzZqTrywjUDPykA:9 a=pILNOxqGKmIA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
+In-Reply-To: <70a90d229551bcec21ed74cfd1350b9b@codeaurora.org>
+References: <20210512082220.7137-1-rojay@codeaurora.org> <CAE-0n52D-K1T0QgxA-S7BXxE3Qk807F9edNyR+2RL4YxRyigMg@mail.gmail.com>
+ <70a90d229551bcec21ed74cfd1350b9b@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Thu, 20 May 2021 04:15:10 -0400
+Message-ID: <CAE-0n50o1XRnV3HSAM7uhfS8M3kf_m0DrTkqCfYGdnSjpF6Xfg@mail.gmail.com>
+Subject: Re: [PATCH V10] i2c: i2c-qcom-geni: Add shutdown callback for i2c
+To:     rojay@codeaurora.org
+Cc:     wsa@kernel.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, skananth@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-On 13/05/21 3:01 am, wsa@kernel.org wrote:
->>> I've been doing my recent work with a P2040 and prior to that I did tes=
-t
->>> out the recovery on a T2081 (which isn't documented to have this
->>> erratum) when I was re-working the driver. The "new" recovery actually
->>> seems better but I don't have a reliably faulty i2c device so that's
->>> only based on me writing some code to manually trigger the recovery
->>> (using the snippet below) and observing it with an oscilloscope.
->> You don't need a faulty device, just an aborted I2C read/write op.
-> If you can wire GPIOs to the bus, you can use the I2C fault injector:
+Quoting rojay@codeaurora.org (2021-05-16 23:32:50)
+> Hi Stephen,
 >
-> 	Documentation/i2c/gpio-fault-injection.rst
+> Now, I have made the changes, calling i2c_mark_adapter_suspended() in
+> shutdown() and i2c_mark_adapter_suspended()/_resumed() from runtime
+> suspend/resume also and validated the changes. I have also picked
+> your patch [1] for this validation.
 >
-> There are already two "incomplete transfer" injectors.
+> During the device boot up I am seeing multiple traces shown below.
+> Are these expected now and needs to be fixed from rt5682/respective
+> client driver?
 >
-Just giving this thread a poke. I have been looking at my options for=20
-triggering an i2c recovery but haven't really had time to do much. I=20
-think the best option given what I've got access to is a modified SFP=20
-that grounds the SDA line but I need to find a system where I can attach=20
-an oscilloscope (should be a few of these in the office when I can get=20
-on-site).
+> Trace1:
+> [   11.709477] i2c i2c-9: Transfer while suspended
+> [   11.905595] Call trace:
+> [   11.908124]  __i2c_transfer+0xb8/0x38c
+> [   11.911984]  i2c_transfer+0xa0/0xf4
+> [   11.915569]  i2c_transfer_buffer_flags+0x68/0x9c
+> [   11.920314]  regmap_i2c_write+0x34/0x64
+> [   11.924255]  _regmap_raw_write_impl+0x4e8/0x7bc
+> [   11.928911]  _regmap_bus_raw_write+0x70/0x8c
+> [   11.933301]  _regmap_write+0x100/0x150
+> [   11.937152]  regmap_write+0x54/0x78
+> [   11.940744]  soc_component_write_no_lock+0x34/0xa8
+> [   11.945666]  snd_soc_component_write+0x3c/0x5c
+> [   11.950242]  rt5682_set_component_pll+0x1e4/0x2b4 [snd_soc_rt5682]
+> [   11.956588]  snd_soc_component_set_pll+0x50/0xa8
+> [   11.961328]  snd_soc_dai_set_pll+0x74/0xc8
+> [   11.965542]  sc7180_snd_startup+0x9c/0x120 [snd_soc_sc7180]
+> [   11.971262]  snd_soc_link_startup+0x34/0x88
+> [   11.975557]  soc_pcm_open+0x100/0x538
+> [   11.979323]  snd_pcm_open_substream+0x530/0x704
+> [   11.983980]  snd_pcm_open+0xc8/0x210
+> [   11.987653]  snd_pcm_playback_open+0x50/0x80
+> [   11.992049]  snd_open+0x120/0x150
+> [   11.995462]  chrdev_open+0xb8/0x1a4
+> [   11.999056]  do_dentry_open+0x238/0x358
+> [   12.003001]  vfs_open+0x34/0x40
+> [   12.006235]  path_openat+0x9e8/0xd60
+> [   12.009913]  do_filp_open+0x90/0x10c
+> [   12.013587]  do_sys_open+0x148/0x314
+> [   12.017260]  __arm64_compat_sys_openat+0x28/0x34
+> [   12.022009]  el0_svc_common+0xa4/0x16c
+> [   12.025860]  el0_svc_compat_handler+0x2c/0x40
+> [   12.030337]  el0_svc_compat+0x8/0x10
+> [   12.034018] ---[ end trace 745ead557fcbb5dc ]---
 
-I can confirm that when manually triggered the existing recovery and the=20
-new erratum workaround produce what I'd expect to observe on an=20
-oscilloscope.
+Ah I see. Maybe it isn't correct to mark the device as suspended in
+runtime PM operations because the bus will be resumed during the
+transfer? So only mark it suspended during system wide suspend/resume
+transitions?
 
-I haven't explored Joakim's alternative recovery but I don't think that=20
-should hold up these changes, any improvement to the existing recovery=20
-can be done later as a follow-up.
+-Stephen
+
+> [   12.040151] rt5682 9-001a: ASoC: error at soc_component_write_no_lock
+> on rt5682.9-001a: -108
+> [   12.049055] rt5682 9-001a: ASoC: error at soc_component_write_no_lock
+> on rt5682.9-001a: -108
+> [   12.057742] rt5682 9-001a: ASoC: error at
+> snd_soc_component_update_bits on rt5682.9-001a: -108
+>
+> Trace2:
+> [    3.515390] i2c i2c-2: Transfer while suspended
+> [    3.606749] Call trace:
+> [    3.606751]  __i2c_transfer+0xb8/0x38c
+> [    3.606752]  i2c_transfer+0xa0/0xf4
+> [    3.606754]  i2c_transfer_buffer_flags+0x68/0x9c
+> [    3.639599] hub 2-1.4:1.0: USB hub found
+> [    3.644375]  regmap_i2c_write+0x34/0x64
+> [    3.644376]  _regmap_raw_write_impl+0x4e8/0x7bc
+> [    3.644378]  _regmap_bus_raw_write+0x70/0x8c
+> [    3.644379]  _regmap_write+0x100/0x150
+> [    3.644381]  regmap_write+0x54/0x78
+> [    3.644383]  ti_sn_aux_transfer+0x90/0x244
+> [    3.650695] hub 2-1.4:1.0: 4 ports detected
+> [    3.655288]  drm_dp_dpcd_access+0x8c/0x11c
+> [    3.655289]  drm_dp_dpcd_read+0x64/0x10c
+> [    3.655290]  ti_sn_bridge_enable+0x5c/0x824
+> [    3.655292]  drm_atomic_bridge_chain_enable+0x78/0xa0
+> [    3.655294]  drm_atomic_helper_commit_modeset_enables+0x198/0x238
+> [    3.655295]  msm_atomic_commit_tail+0x324/0x714
+> [    3.655297]  commit_tail+0xa4/0x108
+> [    3.664985] usb 1-1.4: new high-speed USB device number 4 using
+> xhci-hcd
+> [    3.666204]  drm_atomic_helper_commit+0xf4/0xfc
+> [    3.666205]  drm_atomic_commit+0x50/0x5c
+> [    3.666206]  drm_atomic_helper_set_config+0x64/0x98
+> [    3.666208]  drm_mode_setcrtc+0x26c/0x590
+> [    3.666209]  drm_ioctl_kernel+0x9c/0x114
+> [    3.701074] hub 2-1.4:1.0: USB hub found
+> [    3.703347]  drm_ioctl+0x288/0x420
+> [    3.703349]  drm_compat_ioctl+0xd0/0xe0
+> [    3.703351]  __arm64_compat_sys_ioctl+0x100/0x2108
+> [    3.703354]  el0_svc_common+0xa4/0x16c
+> [    3.708499] hub 2-1.4:1.0: 4 ports detected
+> [    3.711588]  el0_svc_compat_handler+0x2c/0x40
+> [    3.711590]  el0_svc_compat+0x8/0x10
+> [    3.711591] ---[ end trace 745ead557fcbb5db ]---
+> [    3.772120] usb 1-1.4: New USB device found, idVendor=0bda,
+> idProduct=5411, bcdDevice= 1.04
+> [    3.794990] ti_sn65dsi86 2-002d: [drm:ti_sn_bridge_enable] *ERROR*
+> Can't read lane count (-108); assuming 4
+>
+> [1]
+> https://lore.kernel.org/r/20210508075151.1626903-2-swboyd@chromium.org
+>
