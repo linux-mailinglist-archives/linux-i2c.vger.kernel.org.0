@@ -2,172 +2,201 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1780A389F9B
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 10:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2305738AA25
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 13:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbhETIQe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 May 2021 04:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbhETIQc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 04:16:32 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB42C061760
-        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 01:15:11 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id s19so15643621oic.7
-        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 01:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=nMDQIGNN2athUw77QzoxbIIxTVnjEUXN1gVmGUELkVE=;
-        b=SsQfc1zR+XeSGQo7ATvGLAygCqAoQdAKJ10BQbNRTAdGZbHXkP5E2SeBTa/fmozrtr
-         BW1ch1lrmrOquATIbjBBJQ3qB7nz2vMpT+teZq42SgeJ1AlWZPQW7JZSQePDVYDQhZNQ
-         /3xuFjIu65ZqHjnqpsHTH4b61QayocPTbNdrw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=nMDQIGNN2athUw77QzoxbIIxTVnjEUXN1gVmGUELkVE=;
-        b=omOmJhLwwfnQvPOA0DQj74lgnKtkRJO2o/UtXJpYWqrreHNwvEgiy7ucWwOxNS6FR7
-         GqWOvT9obIL8D1CUQ9cAVXj4VWa5fma4FGDxGl4okZMwVbvQZlsNRuZDZvKFYJd2kXbu
-         wZc9UOE0/9J4yV/xtQWWzQMQPlV6IVJFOVaqQx4VjosWenEdL7xCC1JywvB1PdpUSjnc
-         5yulRkBASkiZK2MsWyiaU0EcSn+jxTYL1j3DAa6/63KKl192HeBWP4jTIEx3uvyAp08S
-         ljLcwQI94uax8vysQMkMSyTLjvMpSLwECSPYf6SuhbFBh2zieloDglrFKTendiB8026Z
-         VsrQ==
-X-Gm-Message-State: AOAM53025nDEhDY2Xl+fkMMQf+pu0HLL5iwywZVvzWIxp7eaPtF8xVEK
-        EMVjwMNxY9BDl56FxImqFI5xcGYDXTlqYQgZePlp1A==
-X-Google-Smtp-Source: ABdhPJwxsXmfJTVN1Dt1DE1hOOnvh3huMgzuBaqFM49Psm1tLnZS6IREr/TfQ24FfmOw3l4L4vqvrWbtroEWNUiP9Ek=
-X-Received: by 2002:aca:654d:: with SMTP id j13mr2566246oiw.125.1621498511160;
- Thu, 20 May 2021 01:15:11 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 20 May 2021 04:15:10 -0400
+        id S238860AbhETLKb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 May 2021 07:10:31 -0400
+Received: from mail-eopbgr1320105.outbound.protection.outlook.com ([40.107.132.105]:42720
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239309AbhETLIB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 20 May 2021 07:08:01 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=acfIEirOecbRkQgBx4FJewjnbwJC99EoIty2cqp2DWG1keLTzBVHU9GzjTyy4C+XndV24I1cFR0Bsknj9BSVwrchYUjvMzb3i9L2av8kWhlVP+oikDST6G8RKRZPYjY4hJu8RufCmkSv9jz2d6FuIXjL89QDRghWFT0zSG+zxrcdbuEgV8hmxBRUOD5X9N3xkaZ7nYPPa9Si/1xaZScBmXu9jjiL5sBccD+7C9SHDBzjCYMtmcRIBBezgTTsH3V1THcz5u43OfKb3SlzFJMhD1ylzjo/eQAAACZ+LtYOl/Do0VlKLvCzj5u0E6AdQcJzZTueFCWGH+SWYxeDhFYQug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PpFp5dDCTLU/n/fANNVDayB4RHXBgyU28su+zc0Jh7g=;
+ b=RvBQlSKnmf52XYSVJmxQ4oob3tjU/GZjx4bFVgpoBD81pUcx4nH0z54cQlFV7MYaz3yjV62H+zD5yq+xvBA157M6Gb/Dgg0xpmaIGH/xhvtjgEc7le2SpsZRgXR90Knmtp7fmaAOkrhFb4k8F4N8g434X0Rq6W1wG17NqdrS+rHrvR81cNbW+XUAyDkLDtWp6u9FPJohOvtmVy1W42L8XLRHfYKmSI3vWV+4fTkr+4bz7IFTUhvqJtccYv0zMsWCC+Hf65kqsL0/b7Hynwfc8yeVt9OCiGbQ7ddga8+XoYlghfmdfZG4Tln9AueAJiIaTjdnsGnQ6Ji2eMhrcEFPew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PpFp5dDCTLU/n/fANNVDayB4RHXBgyU28su+zc0Jh7g=;
+ b=egksinNRUCuUPv0La0VcuYWjurgVLzdFgjaT0zZGSpe7gVfSmrG4tT/wojs7WkqWFIMdsSEwse2fXdTJsagmNCiRGBlUDCxeYCNvDWR3rngUptki+balWzMVFEQzUZvD63Bj6YjPHNm5pV2aR2J4w7Cy6KThGUGA9vVYLK5Hoe+Q/IWpprrWyMIE7KlXZkXvsnbi+BONLr+5yzsPGIOePfYQS9L3mHgsPaQM4tFYVEiL07FXpqM+YJ1cNZ4ELtIRCxPVqEr91CObSDx2Nf0NALoDpEcvQBO4qz3ur0qYBhdmaSGDSvIvssPBrx84R/gG49hlHHV8fNX0AjACErjCzQ==
+Received: from HK0PR06MB3380.apcprd06.prod.outlook.com (2603:1096:203:82::18)
+ by HK2PR06MB3313.apcprd06.prod.outlook.com (2603:1096:202:3c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.29; Thu, 20 May
+ 2021 11:06:37 +0000
+Received: from HK0PR06MB3380.apcprd06.prod.outlook.com
+ ([fe80::2984:f1bd:e1f9:5ed6]) by HK0PR06MB3380.apcprd06.prod.outlook.com
+ ([fe80::2984:f1bd:e1f9:5ed6%7]) with mapi id 15.20.4129.033; Thu, 20 May 2021
+ 11:06:36 +0000
+From:   Ryan Chen <ryan_chen@aspeedtech.com>
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Corey Minyard <minyard@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+CC:     Open Source Submission <patches@amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: RE: [PATCH v3 5/7] i2c: aspeed: Add aspeed_set_slave_busy()
+Thread-Topic: [PATCH v3 5/7] i2c: aspeed: Add aspeed_set_slave_busy()
+Thread-Index: AQHXTIQCISnhT+/XbEiDVKSu2FVXwqrsNmDA
+Date:   Thu, 20 May 2021 11:06:36 +0000
+Message-ID: <HK0PR06MB3380BFA9FD9EF8F51F9DCC23F22A9@HK0PR06MB3380.apcprd06.prod.outlook.com>
+References: <20210519074934.20712-1-quan@os.amperecomputing.com>
+ <20210519074934.20712-6-quan@os.amperecomputing.com>
+In-Reply-To: <20210519074934.20712-6-quan@os.amperecomputing.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: os.amperecomputing.com; dkim=none (message not signed)
+ header.d=none;os.amperecomputing.com; dmarc=none action=none
+ header.from=aspeedtech.com;
+x-originating-ip: [211.20.114.70]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c8d57627-b93e-47d6-af56-08d91b7f5626
+x-ms-traffictypediagnostic: HK2PR06MB3313:
+x-microsoft-antispam-prvs: <HK2PR06MB3313A857F435615262D5F676F22A9@HK2PR06MB3313.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BcYzV4OWQ4ZoEc6VgGFNkxneATjNGJMCcwA9rr23xEcgk1yYqQI469v6MANIOkvkppgV6GPuvi4Yeb9XMZjDju9FBCNPPIRpKesU7F4patYs0XzQyXYR/HaBHLZeIppI0IhJvUFlbQpuq1EHw2SdGsx8eraLRa1ZN3rLqj4al2LMdeyxgdYdQCS7XPjokIb8zOPXVfvgHipEY2UkbZWuXXmKevG8KjCXvt1R+G/2pkCiG/2+qSWM3XVPpmBii8ZisFAK4nIPbIhh6RVi53ugxNI+7w10RNTkCe2UmU8n6FmWXtx2UyqtTakFiNjfJoBICzHYxImwhXk5hIk8C7v/tYBPkdl+5tRTCCgDKkamMp8Yb0gq/cAaQFWdXTM6RMEVQw3aZIzRAla/4A8G//QgWybcV2c6EWBpxFlmsBD5MlCNV59jb99AvenB2MhQBxJH3z8ZV/bq0QSWQErcZmH3liZZo6IO573r5CW/QHeVeB1Mx8ZoFDALcR6goxCg3TKWnmM7h2XMilf8AJ0lBWTYc0shpFkkrtNsL0EJd7XleEGt9lDTVBTSuo3bo48WzFKuPhjsBs8WKdTSXvbW1NX96mxQDOa+saevJ149VBA5GFC9aGHgBT6vNtsEIyIRenABqaVkvP6dJDYCI/bbfAi9Yw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3380.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(396003)(39850400004)(366004)(346002)(376002)(7696005)(316002)(86362001)(186003)(7416002)(110136005)(9686003)(54906003)(55016002)(6506007)(55236004)(83380400001)(53546011)(2906002)(76116006)(38100700002)(71200400001)(33656002)(66556008)(66476007)(921005)(26005)(66946007)(122000001)(478600001)(4326008)(5660300002)(64756008)(8676002)(66446008)(8936002)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?WoHRyKJqhjWT6xFq2CY3RiC0ikig1fwljBWpiE38zIX0n7B9yZoTNmcX/KT9?=
+ =?us-ascii?Q?+XlqKihoZ2O81Ox0YPhdJqII7k8W/xChSB1HW+wKZouE5wOlpj2lhTTS8lF3?=
+ =?us-ascii?Q?qNPSR9ox3P40mRoQ9nCHCCUyAwjzNO8N0R9OVBbx9mUQOXzq5TqebG9vAhrc?=
+ =?us-ascii?Q?RxBxr33XsHax8wYjePHBQStznu2GzQuVErBwa93ef649BxIW3zOWTnu2hath?=
+ =?us-ascii?Q?wiEAtipjx0QnXImV1yKIbApGuI2nuV+6L+3hkX0nQIco+y8+7hcL3oXwdnnS?=
+ =?us-ascii?Q?dGahFzu01EoMu0R8eoFncDPUhYY6oDnsYaOcM1UwDw9g90JcZQFhCujz6i2b?=
+ =?us-ascii?Q?fg+AMMGpyLhOGMTnGDI0exUL59LaPv5PaodP5yNo1n7cJYFqXp4NPvRi27xx?=
+ =?us-ascii?Q?lUMmQ3WBplU/hCfxn8fSVB9XRHoRXtSynP5f/58gf4TN/JySQ2VYw2AzFkbp?=
+ =?us-ascii?Q?cO1aCJedbixAJCKDVVpVa8eyMSyBJjd9gfiAotB0wZsCoZHN8HOUpg3SRd1/?=
+ =?us-ascii?Q?fEBB2/W833OQmH/6Dy2zBX9uK2bfXR7sksC5GmbPwj7w6juikwBamXyHd4wA?=
+ =?us-ascii?Q?wFSha02DTT4tGYkJmExoY1Qd/tSPVLD/piiGrxni7PjbV4UC0kLtsraCtH90?=
+ =?us-ascii?Q?053kEsYDmve+1JK6rZoIQRk705b9heic6FH5PDL02LNzT0nvDu3h1k+KPSjX?=
+ =?us-ascii?Q?OlHO6uwuYhL++HHD04HX1JjdVnnHDJEuBN9IZwbcTuA58qfXoXkdK6a48c9/?=
+ =?us-ascii?Q?Vp+1u5vsRBS1yzdlI9L38pyG8ZOB8S0Zi3DIjQ6Y0OYbcXquanucyNZowsKq?=
+ =?us-ascii?Q?2C3r1WNI4Hm7w/vHuqlEvu3rzKRPA9NOYOScxIyx2va3fRdnFxjFpqdV32g/?=
+ =?us-ascii?Q?Na3/moLpi+NxjNXp/wPfInvd7/86oq4ZoafX/tAI2tDetN8fFgFx7o++RHSb?=
+ =?us-ascii?Q?fD5MAmFQaamZPk3OkdqO8gbkN9Gak9NkmW+Eo+QhiWA3jS1yxhQTiCXppGzx?=
+ =?us-ascii?Q?zssi/s1ftdFUR61WPYtRA7fFtRq7wSuXRsdZE6qdUcE4+XhvfqJnyueZVMkm?=
+ =?us-ascii?Q?zNde3dSqzbI8YM9FpqgXLIDT2nn0hPfRBbgeEFdHngkYy9qyZv8UhxTwS0UO?=
+ =?us-ascii?Q?cknqEt9/xnLIPV4zIs4fId4DHAQdOLelkhQBldFWWZ+5cRoeGP3zen8Eqi98?=
+ =?us-ascii?Q?iEwtbfIlYCSQAp0PNWWCJ8QAxIwq/9UF67R1XJz7Z+c7yQYIVKgfRqvD13O2?=
+ =?us-ascii?Q?WxDDqmWxxd7N9Ytsjd4FF7UFjJ9AhBYe7sHxIWQkdc2w69l2RyzQZZ7LJdD9?=
+ =?us-ascii?Q?VJRJPMJ0iUIPcYtAx6FS2brx?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <70a90d229551bcec21ed74cfd1350b9b@codeaurora.org>
-References: <20210512082220.7137-1-rojay@codeaurora.org> <CAE-0n52D-K1T0QgxA-S7BXxE3Qk807F9edNyR+2RL4YxRyigMg@mail.gmail.com>
- <70a90d229551bcec21ed74cfd1350b9b@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Thu, 20 May 2021 04:15:10 -0400
-Message-ID: <CAE-0n50o1XRnV3HSAM7uhfS8M3kf_m0DrTkqCfYGdnSjpF6Xfg@mail.gmail.com>
-Subject: Re: [PATCH V10] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-To:     rojay@codeaurora.org
-Cc:     wsa@kernel.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, skananth@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3380.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8d57627-b93e-47d6-af56-08d91b7f5626
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2021 11:06:36.8548
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eygZ4tMay3FlkM6zPUBqyQBwsgavD6Nqn/UxQ8c4hdQQR5RQEdA5MxotXhdwRZx46TG2utPxPXbt7XXK8rJaBSuUUMHXGfUTRlXjChTNi+Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR06MB3313
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Quoting rojay@codeaurora.org (2021-05-16 23:32:50)
-> Hi Stephen,
->
-> Now, I have made the changes, calling i2c_mark_adapter_suspended() in
-> shutdown() and i2c_mark_adapter_suspended()/_resumed() from runtime
-> suspend/resume also and validated the changes. I have also picked
-> your patch [1] for this validation.
->
-> During the device boot up I am seeing multiple traces shown below.
-> Are these expected now and needs to be fixed from rt5682/respective
-> client driver?
->
-> Trace1:
-> [   11.709477] i2c i2c-9: Transfer while suspended
-> [   11.905595] Call trace:
-> [   11.908124]  __i2c_transfer+0xb8/0x38c
-> [   11.911984]  i2c_transfer+0xa0/0xf4
-> [   11.915569]  i2c_transfer_buffer_flags+0x68/0x9c
-> [   11.920314]  regmap_i2c_write+0x34/0x64
-> [   11.924255]  _regmap_raw_write_impl+0x4e8/0x7bc
-> [   11.928911]  _regmap_bus_raw_write+0x70/0x8c
-> [   11.933301]  _regmap_write+0x100/0x150
-> [   11.937152]  regmap_write+0x54/0x78
-> [   11.940744]  soc_component_write_no_lock+0x34/0xa8
-> [   11.945666]  snd_soc_component_write+0x3c/0x5c
-> [   11.950242]  rt5682_set_component_pll+0x1e4/0x2b4 [snd_soc_rt5682]
-> [   11.956588]  snd_soc_component_set_pll+0x50/0xa8
-> [   11.961328]  snd_soc_dai_set_pll+0x74/0xc8
-> [   11.965542]  sc7180_snd_startup+0x9c/0x120 [snd_soc_sc7180]
-> [   11.971262]  snd_soc_link_startup+0x34/0x88
-> [   11.975557]  soc_pcm_open+0x100/0x538
-> [   11.979323]  snd_pcm_open_substream+0x530/0x704
-> [   11.983980]  snd_pcm_open+0xc8/0x210
-> [   11.987653]  snd_pcm_playback_open+0x50/0x80
-> [   11.992049]  snd_open+0x120/0x150
-> [   11.995462]  chrdev_open+0xb8/0x1a4
-> [   11.999056]  do_dentry_open+0x238/0x358
-> [   12.003001]  vfs_open+0x34/0x40
-> [   12.006235]  path_openat+0x9e8/0xd60
-> [   12.009913]  do_filp_open+0x90/0x10c
-> [   12.013587]  do_sys_open+0x148/0x314
-> [   12.017260]  __arm64_compat_sys_openat+0x28/0x34
-> [   12.022009]  el0_svc_common+0xa4/0x16c
-> [   12.025860]  el0_svc_compat_handler+0x2c/0x40
-> [   12.030337]  el0_svc_compat+0x8/0x10
-> [   12.034018] ---[ end trace 745ead557fcbb5dc ]---
+> -----Original Message-----
+> From: openbmc
+> <openbmc-bounces+ryan_chen=3Daspeedtech.com@lists.ozlabs.org> On Behalf
+> Of Quan Nguyen
+> Sent: Wednesday, May 19, 2021 3:50 PM
+> To: Corey Minyard <minyard@acm.org>; Rob Herring <robh+dt@kernel.org>;
+> Joel Stanley <joel@jms.id.au>; Andrew Jeffery <andrew@aj.id.au>; Brendan
+> Higgins <brendanhiggins@google.com>; Benjamin Herrenschmidt
+> <benh@kernel.crashing.org>; Wolfram Sang <wsa@kernel.org>; Philipp Zabel
+> <p.zabel@pengutronix.de>; openipmi-developer@lists.sourceforge.net;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org;
+> linux-i2c@vger.kernel.org
+> Cc: Open Source Submission <patches@amperecomputing.com>; Thang Q .
+> Nguyen <thang@os.amperecomputing.com>; Phong Vo
+> <phong@os.amperecomputing.com>; openbmc@lists.ozlabs.org
+> Subject: [PATCH v3 5/7] i2c: aspeed: Add aspeed_set_slave_busy()
+>=20
+> Slave i2c device on AST2500 received a lot of slave irq while it is busy
+> processing the response. To handle this case, adds and exports
+> aspeed_set_slave_busy() for controller to temporary stop slave irq while =
+slave
+> is handling the response, and re-enable them again when the response is r=
+eady.
+>=20
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> ---
+> v3:
+>   + First introduce in v3 [Quan]
+>=20
+>  drivers/i2c/busses/i2c-aspeed.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-asp=
+eed.c
+> index b2e9c8f0ddf7..9926d04831a2 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -944,6 +944,26 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus
+> *bus,
+>  	return 0;
+>  }
+>=20
+> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
+> +void aspeed_set_slave_busy(struct i2c_adapter *adap, bool busy) {
+> +	struct aspeed_i2c_bus *bus =3D i2c_get_adapdata(adap);
+> +	unsigned long current_mask, flags;
+> +
+> +	spin_lock_irqsave(&bus->lock, flags);
+> +
+> +	current_mask =3D readl(bus->base + ASPEED_I2C_INTR_CTRL_REG);
+> +	if (busy)
+> +		current_mask &=3D ~(ASPEED_I2CD_INTR_RX_DONE |
+> ASPEED_I2CD_INTR_SLAVE_MATCH);
+> +	else
+> +		current_mask |=3D ASPEED_I2CD_INTR_RX_DONE |
+> ASPEED_I2CD_INTR_SLAVE_MATCH;
+> +	writel(current_mask, bus->base + ASPEED_I2C_INTR_CTRL_REG);
+> +
+> +	spin_unlock_irqrestore(&bus->lock, flags); }
+> +EXPORT_SYMBOL_GPL(aspeed_set_slave_busy);
+> +#endif
+> +
+>  static int aspeed_i2c_reset(struct aspeed_i2c_bus *bus)  {
+>  	struct platform_device *pdev =3D to_platform_device(bus->dev);
+> --
+> 2.28.0
 
-Ah I see. Maybe it isn't correct to mark the device as suspended in
-runtime PM operations because the bus will be resumed during the
-transfer? So only mark it suspended during system wide suspend/resume
-transitions?
+Hello,
+	The better idea is use disable i2c slave mode.=20
+	Due to if i2c controller running in slave will get slave match, and latch =
+the SCL.
+	Until cpu clear interrupt status.=20
+Ryan
 
--Stephen
-
-> [   12.040151] rt5682 9-001a: ASoC: error at soc_component_write_no_lock
-> on rt5682.9-001a: -108
-> [   12.049055] rt5682 9-001a: ASoC: error at soc_component_write_no_lock
-> on rt5682.9-001a: -108
-> [   12.057742] rt5682 9-001a: ASoC: error at
-> snd_soc_component_update_bits on rt5682.9-001a: -108
->
-> Trace2:
-> [    3.515390] i2c i2c-2: Transfer while suspended
-> [    3.606749] Call trace:
-> [    3.606751]  __i2c_transfer+0xb8/0x38c
-> [    3.606752]  i2c_transfer+0xa0/0xf4
-> [    3.606754]  i2c_transfer_buffer_flags+0x68/0x9c
-> [    3.639599] hub 2-1.4:1.0: USB hub found
-> [    3.644375]  regmap_i2c_write+0x34/0x64
-> [    3.644376]  _regmap_raw_write_impl+0x4e8/0x7bc
-> [    3.644378]  _regmap_bus_raw_write+0x70/0x8c
-> [    3.644379]  _regmap_write+0x100/0x150
-> [    3.644381]  regmap_write+0x54/0x78
-> [    3.644383]  ti_sn_aux_transfer+0x90/0x244
-> [    3.650695] hub 2-1.4:1.0: 4 ports detected
-> [    3.655288]  drm_dp_dpcd_access+0x8c/0x11c
-> [    3.655289]  drm_dp_dpcd_read+0x64/0x10c
-> [    3.655290]  ti_sn_bridge_enable+0x5c/0x824
-> [    3.655292]  drm_atomic_bridge_chain_enable+0x78/0xa0
-> [    3.655294]  drm_atomic_helper_commit_modeset_enables+0x198/0x238
-> [    3.655295]  msm_atomic_commit_tail+0x324/0x714
-> [    3.655297]  commit_tail+0xa4/0x108
-> [    3.664985] usb 1-1.4: new high-speed USB device number 4 using
-> xhci-hcd
-> [    3.666204]  drm_atomic_helper_commit+0xf4/0xfc
-> [    3.666205]  drm_atomic_commit+0x50/0x5c
-> [    3.666206]  drm_atomic_helper_set_config+0x64/0x98
-> [    3.666208]  drm_mode_setcrtc+0x26c/0x590
-> [    3.666209]  drm_ioctl_kernel+0x9c/0x114
-> [    3.701074] hub 2-1.4:1.0: USB hub found
-> [    3.703347]  drm_ioctl+0x288/0x420
-> [    3.703349]  drm_compat_ioctl+0xd0/0xe0
-> [    3.703351]  __arm64_compat_sys_ioctl+0x100/0x2108
-> [    3.703354]  el0_svc_common+0xa4/0x16c
-> [    3.708499] hub 2-1.4:1.0: 4 ports detected
-> [    3.711588]  el0_svc_compat_handler+0x2c/0x40
-> [    3.711590]  el0_svc_compat+0x8/0x10
-> [    3.711591] ---[ end trace 745ead557fcbb5db ]---
-> [    3.772120] usb 1-1.4: New USB device found, idVendor=0bda,
-> idProduct=5411, bcdDevice= 1.04
-> [    3.794990] ti_sn65dsi86 2-002d: [drm:ti_sn_bridge_enable] *ERROR*
-> Can't read lane count (-108); assuming 4
->
-> [1]
-> https://lore.kernel.org/r/20210508075151.1626903-2-swboyd@chromium.org
->
