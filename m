@@ -2,276 +2,221 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDD038B163
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 16:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245DA38B13F
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 16:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbhETONm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 May 2021 10:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237559AbhETOMm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 10:12:42 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BB8C061373;
-        Thu, 20 May 2021 07:09:53 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id d11so17800287wrw.8;
-        Thu, 20 May 2021 07:09:53 -0700 (PDT)
+        id S243206AbhETOMz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 May 2021 10:12:55 -0400
+Received: from mail-co1nam11on2124.outbound.protection.outlook.com ([40.107.220.124]:12897
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237471AbhETOMD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 20 May 2021 10:12:03 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K26ULtCzB3+f0tT9Nf2QoD23veRRoeKuRhtNHbdX3ODgetx1BbDYHTXW1X07l894vgfJD94lmryNX4D5D1Fy1AlbWWe0OMFQvSRU0epWV7t6BnIZ08IL9rY5Ol0Ls0NB5Eg4BwM49Kb3I7EJXu8S9TSCWWMjQPh16/QIJqKIojp7zZYu1NcA7X050wbNJUE07wQG/Hl95AYTuk1FHizUgWJcV+uJrx0xVmEKhlD3lwSwpODPZR96RK4FZnuQLNko8T6UJO/VDnfw2+4BXCaXj/qXx/5+Z+atJRtNRyCN12VFiqllU2t76X/PHANJFa07JOZDnreAmmIPdHYAfrB7nQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3GE86ePyOSJRCi3OwXbN7VwYhAoaN3TRx06w3gkUP+w=;
+ b=k4gE5ANqu+n21FLzrEmNab3f6WDBle4qMnoaOvoGoL8LZ2kAezQo9PGmSdaxUk4TueAn/MNJDztmyXZSY3hkjMZhZj6BXxMX9sBYNd+Wtac6gs0iwr3UkLYjb1AzodKSEAk0DRduqp+QimydHnZ5oEnzkr/eINJtvPz2g+/pxWtRK5mySTkgYVpT5TCpupn+CpvurUKd3t4RTptmAjNxCxEkuTbIs98uWsoKV6eb4ZLdWYL+t3Syfoy26mgO3xOSV6KF0A+6bdmF4MFWe8d2UVn+4S6wPiyRNWqO2S83flMVy0Ku4u4AYK3c0uQnKYJri9BLw9wbfe7DlxXHkYmE4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yjDsyccgx95yt9RzzidTLsNAX8yZMrQ+XHQIqoQUo80=;
-        b=Zj84UjEuUFeFLrtOfNkQTUHfM7f+NonQZMp8l4yuQfBjn9qaWTRDmwH7BQTbrNG7WC
-         RDFdLRCQ4sPsxDySU1L9uJcPFVfISjaMMDQY2tjOM0AFP7yMPEdGWLqul1DW+z9csRxa
-         6lsJ3P5Eu5A/RmFN1gtZTzMUei2GeVVnXyXhfSEal2Ob3rvR/lWAqQ90BRmeIiT/bP6M
-         MN+Mc3yQVG53rrUxnkTsX+8jiDAu8iZhVKtbylsCu/W5WTeNqx6XVxSuK2yQLGPYOGr6
-         BJkK/4nKJ6Gwzt0/V7oI4+650AvQVga7JPmNhWgiU16GFoXWBydCLqOxKKF2uCajjOdA
-         G2zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yjDsyccgx95yt9RzzidTLsNAX8yZMrQ+XHQIqoQUo80=;
-        b=FJPT/w4yuNMVZf4B9Ns7R4OF84hUReaY0/Hl3LoolxKTAlugRgOZdkMbDMWBatrfco
-         HAq5haJhg5GLqt5X2gUrUclaIMWEAfU3Zo5m6BLpkvMSn0pKw3R6Tod78cBcS2vSZFqa
-         goP5NjCCrIA5+jb0MSmPL3+7NKhCMeuxAzwh0BiKpkN3/sWBJvfoYkghWL+vzTAWz49T
-         iLmLqrgbtZT/P8W7JGaImtvEgS3eARfTuygRIdSaGQ+pecw7avvr/bwwmkAiFTLqAQCK
-         KndxrKRYRO6IAwdnmAE5gm9tWCvJ7W1oQK5D+bkZPJmSoogiH4mUpo5aTRT0cBTh1Gik
-         FRRg==
-X-Gm-Message-State: AOAM531q0FcnOYbbaNvlUejV3KOEF+IeKIBGmEaSz70a4GEoCaVkr7kz
-        CCrtJGdSfVoFZrLqUDqkZKg=
-X-Google-Smtp-Source: ABdhPJyKS8Yj0VhuVVnqYHumuHPCARTH05E8Qok5qkhQwihhA1SnL5SE5L1yjyFyfA2az0wfBRNeyA==
-X-Received: by 2002:a5d:40cd:: with SMTP id b13mr4596854wrq.356.1621519790002;
-        Thu, 20 May 2021 07:09:50 -0700 (PDT)
-Received: from valhalla.home ([91.110.20.117])
-        by smtp.gmail.com with ESMTPSA id m6sm8411974wml.3.2021.05.20.07.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 07:09:49 -0700 (PDT)
-From:   Daniel Scally <djrscally@gmail.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3GE86ePyOSJRCi3OwXbN7VwYhAoaN3TRx06w3gkUP+w=;
+ b=Yfx4aMmgQQJOnVsug0qV1iwImmZHiVmfdno13EJrZQU4smKE8NE1UictkiBZijKLO6HWZ3Do+eMV7vnjZ5vXJrlL797XkQLxyewfLpqqsP/+vdbcgE/YMN+B3KobiuyW0Yfk+r6GFBNvzNCBC/brxp9maQCnb6wxl2e9QsXQgOE=
+Authentication-Results: lists.ozlabs.org; dkim=none (message not signed)
+ header.d=none;lists.ozlabs.org; dmarc=none action=none
+ header.from=os.amperecomputing.com;
+Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
+ MW4PR01MB6146.prod.exchangelabs.com (2603:10b6:303:7c::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4129.28; Thu, 20 May 2021 14:10:39 +0000
+Received: from MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.4129.034; Thu, 20 May 2021
+ 14:10:39 +0000
+Subject: Re: [PATCH v3 5/7] i2c: aspeed: Add aspeed_set_slave_busy()
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Corey Minyard <minyard@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        devel@acpica.org
-Cc:     Len Brown <lenb@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v4 8/8] mfd: tps68470: Remove tps68470 MFD driver
-Date:   Thu, 20 May 2021 15:09:28 +0100
-Message-Id: <20210520140928.3252671-9-djrscally@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210520140928.3252671-1-djrscally@gmail.com>
-References: <20210520140928.3252671-1-djrscally@gmail.com>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+References: <20210519074934.20712-1-quan@os.amperecomputing.com>
+ <20210519074934.20712-6-quan@os.amperecomputing.com>
+ <HK0PR06MB3380BFA9FD9EF8F51F9DCC23F22A9@HK0PR06MB3380.apcprd06.prod.outlook.com>
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+Message-ID: <3eba7d01-2507-17c6-2b27-7f1a7e286413@os.amperecomputing.com>
+Date:   Thu, 20 May 2021 21:10:21 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.2
+In-Reply-To: <HK0PR06MB3380BFA9FD9EF8F51F9DCC23F22A9@HK0PR06MB3380.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2402:800:623c:5f9b:6031:ff4f:8fc2:44d0]
+X-ClientProxiedBy: HK2P15301CA0005.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:202:1::15) To MW2PR0102MB3482.prod.exchangelabs.com
+ (2603:10b6:302:c::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2402:800:623c:5f9b:6031:ff4f:8fc2:44d0] (2402:800:623c:5f9b:6031:ff4f:8fc2:44d0) by HK2P15301CA0005.APCP153.PROD.OUTLOOK.COM (2603:1096:202:1::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.2 via Frontend Transport; Thu, 20 May 2021 14:10:34 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 988d9efb-bffa-4853-948d-08d91b990b77
+X-MS-TrafficTypeDiagnostic: MW4PR01MB6146:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MW4PR01MB6146687931BE44C97194397DF22A9@MW4PR01MB6146.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jN2oCI6Jfy2etBIpJnUE5zIfWlrcUKRJp8fpzqM4lqDqReYtMdEkGAQ1DmSp8k7u2S+WFZUuyeHAmQtqrLYzH+OFxcdYmHQVvPidHS2Q6TGTyzS8HrJHFIWo6olgC8vjX2XLrE7e9yC49q1LBy7CHji2sdmIxk4CkkJO6PYhz2i8x8TFWco2R/9wtbzcduK1pRWM3gAmWwltbSGf+wHblbDIJHScA2CpP84s5H9K5LSXr7KczLIARz2I/bD1f9BaC7rzN4BOTIdOovxmstIbA5/1EcOejWQB6Qw62dmRl72fXBhV9G5OAV9xjgXAS7kx5Bk/Mbjyd/nCJ/GiZFr/gw0CM5CjQCAdMELaiFzN+fpmKnHRJGNIn0KE7bYGdvpGk/K/Yb6Xjd0o62USokURLmn1PL8H68lXQNEscxI5IlMeJSa3KPW8YVDaNJL9/vQUTr6InCbdL1kwPsqRuQk7DvG141W7eLlKeqYqnTfReg7CR1bDJbxiL3Syklm9OmY+I4Y9DS5yD8dWEC2LjRsrErAe2CYBn0v3A2skpwREfT36OBKliOwyeU9ZAW34XkccAjdizEEYfKFk1s+6z8XcZ9uxf8MvAy9mXtj4Wz7yco/kZwO+tJH9Jv9r2iUEc34KgrkWWeAsDCKI16SGcS6+O93c1kwPbbK95JbG92G+oeOjqnNg5nw+xrMRtLexolsobscmzjDYGbPmCuK6FNdYlQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39840400004)(376002)(136003)(396003)(366004)(16526019)(316002)(8936002)(86362001)(186003)(53546011)(7416002)(52116002)(66476007)(6666004)(38100700002)(83380400001)(4326008)(2616005)(5660300002)(6486002)(66556008)(478600001)(8676002)(54906003)(31696002)(66946007)(2906002)(31686004)(921005)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?bHg5dmNTK3FpSUd0RGVhaDRvZ28vcUlZVzJrUnc0QU9wVnFjaHRiS1g1cE9D?=
+ =?utf-8?B?S1BwR21Gbmk1K3ltVEtZTGQ1M09wWi85VWJRcG1mVDhBUm9adWJ5dk5sVWph?=
+ =?utf-8?B?VGtiVmNGakszZUdLL2dsQ25RaVFLYjR0anNGQ3BuSWJmdjdHR1R2Q1ZqeHl1?=
+ =?utf-8?B?eEJieVNFaHVoUVNKZTZNckdoSEtTaVcvNC96ZUVJeER6VkVwWGNXM2FSYllR?=
+ =?utf-8?B?VlVXMGl3ZGpxUVV1cVVDWWM1N3h2YkJFSDZuMndlYmZlVGdteTJLeFJoSE03?=
+ =?utf-8?B?d3gzUUZSL3cranpYbkFES3p3K2lBYk5UcjNieG4yVFMrVFowUVJjMXVlaXRQ?=
+ =?utf-8?B?ZmRWdjBYVzdUcXAxQjlxdzI4clJwYTEvU0lKYjRUM3Zvdjc5VWQzNnRiV1dl?=
+ =?utf-8?B?ZndoeUEzMlBJMS9MSjZvcU45anhqbDdzbk5MYTdHWUN1cEpmd1R5YzJzUzBz?=
+ =?utf-8?B?RVBqNEYrcmxBUE55eDg5QkJxVUlmQk0zWlBDOFg2c3Vnc1dVVEJmbHNLRTRI?=
+ =?utf-8?B?WElHWUhtUGlCenFHVlIzb1NjeDVKc0ptVExTOUluQzhGeWJWdmorZDhJZ1No?=
+ =?utf-8?B?dFVjaEx1cVBPU29tcVpGTGRSelR2dnRxWHBIaXYrSFNBSldJWUVWUnQxZXRt?=
+ =?utf-8?B?ZTBTMWswaXd6cG9HRXc3QUVoaS8yZTNCcEkrSWFOUmYyV3NHOHNsMFhHL0Fj?=
+ =?utf-8?B?WnBLME5mNDE5OEhxVFZKTjdXUWdpd1dpYkpyT1dicUdKMTN0dVBpT2JrcUxx?=
+ =?utf-8?B?dHRXTWt3c2ZSUnZlektTSXdkSXBSVlF4S3BlUktCWDJCVWFJdENUTGNvN01t?=
+ =?utf-8?B?Rm1CeFFrdmdnYWJKVms4NWtuYUprbVNXaFNoeStyOHpiTnRJMWh6NnpjdFR4?=
+ =?utf-8?B?WjM0c2M4aER5TkpyVUdWUE5WQkZFa2hDMWNKd3AxQ1JQR0hhdzNEU2NKQXRj?=
+ =?utf-8?B?aXljdSsxZXNDMnh5ZEFaay92SEdHcmdQOFQvQTJsRGE0SitHbzlDcWhIT0gv?=
+ =?utf-8?B?Vitvc0M2MWVnT3dkU2x4T1RkNWxMTHpsU3JLaTVNMnFzS3ltUXJqV09wM1U3?=
+ =?utf-8?B?ZldrTkhYTk5PMjhTTy9ubFhVdCsyOEFkWjd2YVN2VmhaRWhLUk5jelUvb2hX?=
+ =?utf-8?B?LzlFNWYxWWhscVRVKzBpZC9MMjJDWmVnTEh4VCtBVFJIenRGc2l0NHRXbEw2?=
+ =?utf-8?B?ZG9rUWNmT0hpelppc3NNWlFkVnhoMHl0ZHZWUGIxRHVqb1B1V1BESTdTZWhL?=
+ =?utf-8?B?UGpwM2dTaStsN3pQcWFXWU4xZTBBbnlFa1Y0aU5wTEd5RjZ5RFh0ZHk3a05i?=
+ =?utf-8?B?Mk52VGYxZjdKS1ZacURxNGpuQnp4R0R0dDhFWmVPMXg0NUN5ZStTbUJvS0Rw?=
+ =?utf-8?B?ZkpTK29KNXJ4WStLRTBocDlmdUZLOUxpL3pPNnN0TGw3cXZLeDJBU2cyNjBZ?=
+ =?utf-8?B?bWtHZEdjR2tUbmp2Vm5CVWFBNVZkRFg4eWR6WXNoU0kzWWJpZnJBVHlNR1JP?=
+ =?utf-8?B?SWFkVS8zRFF6ZU80bmpKa25MOGpsV2JLd1FEWjl1QzlaZCs1eEI2dVd5YmRQ?=
+ =?utf-8?B?VVVjdXVOT3EyaUdpalBwSXJRZm5oSzhKdDFxODhmT3JKUklzNXVzL3JyblZ3?=
+ =?utf-8?B?aGVpMTJ0WVNpVzY2S0hDUHRadFZzQ3FXcFlneWN4cGV0WFNLTW9RdGVVUm1E?=
+ =?utf-8?B?eGtkWTBZdTFiVjl1YTYwSXhCVUNGOVJzdDdQSXNyY0xPeVJDdzNZQzUxWkNO?=
+ =?utf-8?B?NC9wajErWTgwdHdCWEc3VDBtTW1vWjBmOGRUY3FsQjZBVGRQaEcwTTMxSjJu?=
+ =?utf-8?B?bnRjUndscVNXNHF2NEZnTlhGWUZMZXl2dDMyMG1QUnNlWHV1UDlQSHdrbytr?=
+ =?utf-8?Q?Ptmbnfr1mfGt5?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 988d9efb-bffa-4853-948d-08d91b990b77
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2021 14:10:39.4123
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 63T0X4gcnmbvlNKVNydmCE7ZyUiC7sdWITt2rT4W9xnH/bnCu157GAQ4Ti6pNqL7zNFlbhUTdeuFpv8X4T07KQ9ctAdBSBmVEoFnajPWBfI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6146
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This driver only covered one scenario in which ACPI devices with _HID
-INT3472 are found, and its functionality has been taken over by the
-intel-skl-int3472 module, so remove it.
+On 20/05/2021 18:06, Ryan Chen wrote:
+>> -----Original Message-----
+>> From: openbmc
+>> <openbmc-bounces+ryan_chen=aspeedtech.com@lists.ozlabs.org> On Behalf
+>> Of Quan Nguyen
+>> Sent: Wednesday, May 19, 2021 3:50 PM
+>> To: Corey Minyard <minyard@acm.org>; Rob Herring <robh+dt@kernel.org>;
+>> Joel Stanley <joel@jms.id.au>; Andrew Jeffery <andrew@aj.id.au>; Brendan
+>> Higgins <brendanhiggins@google.com>; Benjamin Herrenschmidt
+>> <benh@kernel.crashing.org>; Wolfram Sang <wsa@kernel.org>; Philipp Zabel
+>> <p.zabel@pengutronix.de>; openipmi-developer@lists.sourceforge.net;
+>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org;
+>> linux-i2c@vger.kernel.org
+>> Cc: Open Source Submission <patches@amperecomputing.com>; Thang Q .
+>> Nguyen <thang@os.amperecomputing.com>; Phong Vo
+>> <phong@os.amperecomputing.com>; openbmc@lists.ozlabs.org
+>> Subject: [PATCH v3 5/7] i2c: aspeed: Add aspeed_set_slave_busy()
+>>
+>> Slave i2c device on AST2500 received a lot of slave irq while it is busy
+>> processing the response. To handle this case, adds and exports
+>> aspeed_set_slave_busy() for controller to temporary stop slave irq while slave
+>> is handling the response, and re-enable them again when the response is ready.
+>>
+>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>> ---
+>> v3:
+>>    + First introduce in v3 [Quan]
+>>
+>>   drivers/i2c/busses/i2c-aspeed.c | 20 ++++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+>> index b2e9c8f0ddf7..9926d04831a2 100644
+>> --- a/drivers/i2c/busses/i2c-aspeed.c
+>> +++ b/drivers/i2c/busses/i2c-aspeed.c
+>> @@ -944,6 +944,26 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus
+>> *bus,
+>>   	return 0;
+>>   }
+>>
+>> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
+>> +void aspeed_set_slave_busy(struct i2c_adapter *adap, bool busy) {
+>> +	struct aspeed_i2c_bus *bus = i2c_get_adapdata(adap);
+>> +	unsigned long current_mask, flags;
+>> +
+>> +	spin_lock_irqsave(&bus->lock, flags);
+>> +
+>> +	current_mask = readl(bus->base + ASPEED_I2C_INTR_CTRL_REG);
+>> +	if (busy)
+>> +		current_mask &= ~(ASPEED_I2CD_INTR_RX_DONE |
+>> ASPEED_I2CD_INTR_SLAVE_MATCH);
+>> +	else
+>> +		current_mask |= ASPEED_I2CD_INTR_RX_DONE |
+>> ASPEED_I2CD_INTR_SLAVE_MATCH;
+>> +	writel(current_mask, bus->base + ASPEED_I2C_INTR_CTRL_REG);
+>> +
+>> +	spin_unlock_irqrestore(&bus->lock, flags); }
+>> +EXPORT_SYMBOL_GPL(aspeed_set_slave_busy);
+>> +#endif
+>> +
+>>   static int aspeed_i2c_reset(struct aspeed_i2c_bus *bus)  {
+>>   	struct platform_device *pdev = to_platform_device(bus->dev);
+>> --
+>> 2.28.0
+> 
+> Hello,
+> 	The better idea is use disable i2c slave mode.
+> 	Due to if i2c controller running in slave will get slave match, and latch the SCL.
+> 	Until cpu clear interrupt status.
+> Ryan
+> 
+Thanks Ryan,
 
-Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Acked-by: Lee Jones <lee.jones@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Daniel Scally <djrscally@gmail.com>
----
-Changes since v3:
+Do you mean to enable/disable slave function as per example code below ?
 
-	- None
+         /* Turn on slave mode. */
+         func_ctrl_reg_val = readl(bus->base + ASPEED_I2C_FUN_CTRL_REG);
+         func_ctrl_reg_val |= ASPEED_I2CD_SLAVE_EN;
+         writel(func_ctrl_reg_val, bus->base + ASPEED_I2C_FUN_CTRL_REG);
 
- drivers/acpi/pmic/Kconfig |  2 +-
- drivers/gpio/Kconfig      |  2 +-
- drivers/mfd/Kconfig       | 18 --------
- drivers/mfd/Makefile      |  1 -
- drivers/mfd/tps68470.c    | 97 ---------------------------------------
- 5 files changed, 2 insertions(+), 118 deletions(-)
- delete mode 100644 drivers/mfd/tps68470.c
-
-diff --git a/drivers/acpi/pmic/Kconfig b/drivers/acpi/pmic/Kconfig
-index 56bbcb2ce61b..f84b8f6038dc 100644
---- a/drivers/acpi/pmic/Kconfig
-+++ b/drivers/acpi/pmic/Kconfig
-@@ -52,7 +52,7 @@ endif	# PMIC_OPREGION
- 
- config TPS68470_PMIC_OPREGION
- 	bool "ACPI operation region support for TPS68470 PMIC"
--	depends on MFD_TPS68470
-+	depends on INTEL_SKL_INT3472
- 	help
- 	  This config adds ACPI operation region support for TI TPS68470 PMIC.
- 	  TPS68470 device is an advanced power management unit that powers
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 1dd0ec6727fd..10228abeee56 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1367,7 +1367,7 @@ config GPIO_TPS65912
- 
- config GPIO_TPS68470
- 	bool "TPS68470 GPIO"
--	depends on MFD_TPS68470
-+	depends on INTEL_SKL_INT3472
- 	help
- 	  Select this option to enable GPIO driver for the TPS68470
- 	  chip family.
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 5c7f2b100191..99c4e1a80ae0 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -1499,24 +1499,6 @@ config MFD_TPS65217
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called tps65217.
- 
--config MFD_TPS68470
--	bool "TI TPS68470 Power Management / LED chips"
--	depends on ACPI && PCI && I2C=y
--	depends on I2C_DESIGNWARE_PLATFORM=y
--	select MFD_CORE
--	select REGMAP_I2C
--	help
--	  If you say yes here you get support for the TPS68470 series of
--	  Power Management / LED chips.
--
--	  These include voltage regulators, LEDs and other features
--	  that are often used in portable devices.
--
--	  This option is a bool as it provides an ACPI operation
--	  region, which must be available before any of the devices
--	  using this are probed. This option also configures the
--	  designware-i2c driver to be built-in, for the same reason.
--
- config MFD_TI_LP873X
- 	tristate "TI LP873X Power Management IC"
- 	depends on I2C
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 4f6d2b8a5f76..8b322d89a0c5 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -105,7 +105,6 @@ obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o
- obj-$(CONFIG_MFD_TPS65912)	+= tps65912-core.o
- obj-$(CONFIG_MFD_TPS65912_I2C)	+= tps65912-i2c.o
- obj-$(CONFIG_MFD_TPS65912_SPI)  += tps65912-spi.o
--obj-$(CONFIG_MFD_TPS68470)	+= tps68470.o
- obj-$(CONFIG_MFD_TPS80031)	+= tps80031.o
- obj-$(CONFIG_MENELAUS)		+= menelaus.o
- 
-diff --git a/drivers/mfd/tps68470.c b/drivers/mfd/tps68470.c
-deleted file mode 100644
-index 4a4df4ffd18c..000000000000
---- a/drivers/mfd/tps68470.c
-+++ /dev/null
-@@ -1,97 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * TPS68470 chip Parent driver
-- *
-- * Copyright (C) 2017 Intel Corporation
-- *
-- * Authors:
-- *	Rajmohan Mani <rajmohan.mani@intel.com>
-- *	Tianshu Qiu <tian.shu.qiu@intel.com>
-- *	Jian Xu Zheng <jian.xu.zheng@intel.com>
-- *	Yuning Pu <yuning.pu@intel.com>
-- */
--
--#include <linux/acpi.h>
--#include <linux/delay.h>
--#include <linux/i2c.h>
--#include <linux/init.h>
--#include <linux/mfd/core.h>
--#include <linux/mfd/tps68470.h>
--#include <linux/regmap.h>
--
--static const struct mfd_cell tps68470s[] = {
--	{ .name = "tps68470-gpio" },
--	{ .name = "tps68470_pmic_opregion" },
--};
--
--static const struct regmap_config tps68470_regmap_config = {
--	.reg_bits = 8,
--	.val_bits = 8,
--	.max_register = TPS68470_REG_MAX,
--};
--
--static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
--{
--	unsigned int version;
--	int ret;
--
--	/* Force software reset */
--	ret = regmap_write(regmap, TPS68470_REG_RESET, TPS68470_REG_RESET_MASK);
--	if (ret)
--		return ret;
--
--	ret = regmap_read(regmap, TPS68470_REG_REVID, &version);
--	if (ret) {
--		dev_err(dev, "Failed to read revision register: %d\n", ret);
--		return ret;
--	}
--
--	dev_info(dev, "TPS68470 REVID: 0x%x\n", version);
--
--	return 0;
--}
--
--static int tps68470_probe(struct i2c_client *client)
--{
--	struct device *dev = &client->dev;
--	struct regmap *regmap;
--	int ret;
--
--	regmap = devm_regmap_init_i2c(client, &tps68470_regmap_config);
--	if (IS_ERR(regmap)) {
--		dev_err(dev, "devm_regmap_init_i2c Error %ld\n",
--			PTR_ERR(regmap));
--		return PTR_ERR(regmap);
--	}
--
--	i2c_set_clientdata(client, regmap);
--
--	ret = tps68470_chip_init(dev, regmap);
--	if (ret < 0) {
--		dev_err(dev, "TPS68470 Init Error %d\n", ret);
--		return ret;
--	}
--
--	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE, tps68470s,
--			      ARRAY_SIZE(tps68470s), NULL, 0, NULL);
--	if (ret < 0) {
--		dev_err(dev, "devm_mfd_add_devices failed: %d\n", ret);
--		return ret;
--	}
--
--	return 0;
--}
--
--static const struct acpi_device_id tps68470_acpi_ids[] = {
--	{"INT3472"},
--	{},
--};
--
--static struct i2c_driver tps68470_driver = {
--	.driver = {
--		   .name = "tps68470",
--		   .acpi_match_table = tps68470_acpi_ids,
--	},
--	.probe_new = tps68470_probe,
--};
--builtin_i2c_driver(tps68470_driver);
--- 
-2.25.1
-
+Will try this idea.
+- Quan
