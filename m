@@ -2,177 +2,235 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 305673899FC
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 01:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28719389A46
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 02:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbhESXoo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 May 2021 19:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229465AbhESXon (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 19:44:43 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78163C061574;
-        Wed, 19 May 2021 16:43:21 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id 82so3150720qki.8;
-        Wed, 19 May 2021 16:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jZj61H+nZldX9VF8Rk7SoLRZEnhdWQ15nrHYMIdlXL8=;
-        b=hV289Pn1fzt0l5vYzw9Zco9XFbeqr0tKlwl117wL+ReIbVLezHs/xFwIcMKafGIL/r
-         Ceq9AJkQHisWMOwWZVoe+E3BdzypGyKrbGtP5GVg+wjxmevjIE5q30D1Z3rQCTBmbzyl
-         JopSkzzu13aCRFAkE3C3pYN93lb/AFgpuiOcI=
+        id S230048AbhETACz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 May 2021 20:02:55 -0400
+Received: from mail-oo1-f41.google.com ([209.85.161.41]:44922 "EHLO
+        mail-oo1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229525AbhETACz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 20:02:55 -0400
+Received: by mail-oo1-f41.google.com with SMTP id s24-20020a4aead80000b02901fec6deb28aso3393407ooh.11;
+        Wed, 19 May 2021 17:01:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jZj61H+nZldX9VF8Rk7SoLRZEnhdWQ15nrHYMIdlXL8=;
-        b=lp61uGh8Hi7ghuYkGlyKVBIBYtXo81zHvu83/yEYPxuGl0V6SC5xvEMDX69NMdeQo+
-         SmTmaWdybKle19AZbz3pHQYb79aGXegDIaoor97qCmBgXUU4VuLU6joIxnBsjKSK0t7E
-         ODq9vHxpJ0LYoP2d1x6vgmZPX6jnGqh1crUM6USvjx88kJKNN2jM9bwyyp/CeDz3X0zx
-         C76Wyfuy1R2O5uan39xGCV9swGTB8zcPje4fNbjS6jZjT4YdBfuLbEb7ECs/eoNwcAc9
-         tb0vX6yNwTOvG8dxaG9mRCnKcYOtRL33pwMtyun17LDB5BwmA9c/1GFVG1WbkrB853mJ
-         TVvw==
-X-Gm-Message-State: AOAM53317Vs6W6Mi4Cra3YLZSRjLWcnefHfKOzOkZHUJObQHc06W0k+D
-        pCKirJrVUlprkdUJjsEUk2zRvFe3E14Tjk+x0gM=
-X-Google-Smtp-Source: ABdhPJyUszWiuobnzOy5L9VplXiMBG9qLzJjbpbR0WfzIFw8cspGiZ3PnAV6tV3oDvUEgCvPn/rTmcBK9mwiyYTq9ws=
-X-Received: by 2002:a05:620a:704:: with SMTP id 4mr1331345qkc.66.1621467800517;
- Wed, 19 May 2021 16:43:20 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2U0DOJOGr7PoXGKnZ0Spg2cVP5PlFJxyFrW88+PvagA=;
+        b=Cf12aPrtPElUGrkitM0fVu1aegksUw7DZuWDT1qHaalHvlgM3hJQto5sOrE9UntAa2
+         /yMS6lvC1+Y6IqEsqGm/RqbpH+bRGwmAr2SZJgaC/1mJKQPzPxknP4OWK5Cl0pswEq67
+         GuxCNBVBT97dGo8GUaSI69QHKpEA5/YoJcIE+VdgpO20CEwHLFUsoGhRkBjMxLi/SiTU
+         E8I6O6bLGiNrAaIg1Wx3wZRcqyeHty14Ooy4q1RuSF7rAYSk6T5IlQFH8Rp/Fk+Do/ce
+         ZJORjDySfENdClvcv0HxgfseE6pi9BNGWqXIfAWLil2bUASNVTeRB2Rmk8JvPu90TFYV
+         9vtw==
+X-Gm-Message-State: AOAM533ZbjFRs3s5rFjczyHQAHTquSsja1kH+HR13WGmGwvyJ0o6neaF
+        8+1D2R/Jed6U49SAHa0INQ==
+X-Google-Smtp-Source: ABdhPJyQF5l4eHcp4L7RXu6jr6/fpAFevlq2eho73arvZOu/0DaVFPj7KYJmgNi/dXV6RHYxVKAVUQ==
+X-Received: by 2002:a05:6820:100a:: with SMTP id v10mr1520942oor.55.1621468894345;
+        Wed, 19 May 2021 17:01:34 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id x65sm287790otb.59.2021.05.19.17.01.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 May 2021 17:01:33 -0700 (PDT)
+Received: (nullmailer pid 3920159 invoked by uid 1000);
+        Thu, 20 May 2021 00:01:32 -0000
+Date:   Wed, 19 May 2021 19:01:32 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Fabien Parent <fparent@baylibre.com>
+Cc:     Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        mkorpershoek@baylibre.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: i2c: i2c-mt65xx: convert doc to yaml
+ schema format
+Message-ID: <20210520000132.GA3914592@robh.at.kernel.org>
+References: <20210518145522.2420135-1-fparent@baylibre.com>
 MIME-Version: 1.0
-References: <20210519074934.20712-1-quan@os.amperecomputing.com> <20210519074934.20712-5-quan@os.amperecomputing.com>
-In-Reply-To: <20210519074934.20712-5-quan@os.amperecomputing.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 19 May 2021 23:43:08 +0000
-Message-ID: <CACPK8XdyQT=cuSr9KBqC0PBkOLgBUBpyz3kZEA3JuOuZsQN_Rw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/7] i2c: aspeed: Acknowledge Tx done w/wo ACK irq late
-To:     Quan Nguyen <quan@os.amperecomputing.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210518145522.2420135-1-fparent@baylibre.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 19 May 2021 at 07:50, Quan Nguyen <quan@os.amperecomputing.com> wrote:
->
-> With Tx done w/wo ACK are ack'ed early at beginning of irq handler,
-
-Is w/wo a typo? If not, please write the full words ("with and without")
-
-> it is observed that, usually, the Tx done with Ack irq raises in the
-> READ REQUESTED state. This is unexpected and complaint as below appear:
-> "Unexpected Ack on read request"
->
-> Assumed that Tx done should only be ack'ed once it was truly processed,
-> switch to late ack'ed this two irqs and seen this issue go away through
-> test with AST2500..
-
-Please read Guneter's commit message
-2be6b47211e17e6c90ead40d24d2a5cc815f2d5c to confirm that your changes
-do not invalidate the fix that they made.  Add them to CC for review.
-
-Again, this is a fix that is independent of the ssif work. Please send
-it separately with a Fixes line.
-
->
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+On Tue, May 18, 2021 at 04:55:20PM +0200, Fabien Parent wrote:
+> Convert the binding documentation for i2c-mt65xx driver to the
+> YAML schema format.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
 > ---
-> v3:
->   + First introduce in v3 [Quan]
->
->  drivers/i2c/busses/i2c-aspeed.c | 26 ++++++++++++++++++--------
->  1 file changed, 18 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> index 3fb37c3f23d4..b2e9c8f0ddf7 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -606,8 +606,12 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
->
->         spin_lock(&bus->lock);
->         irq_received = readl(bus->base + ASPEED_I2C_INTR_STS_REG);
-> -       /* Ack all interrupts except for Rx done */
-> -       writel(irq_received & ~ASPEED_I2CD_INTR_RX_DONE,
-> +       /*
-> +        * Ack all interrupts except for Rx done and
-> +        * Tx done with/without ACK
+>  .../devicetree/bindings/i2c/i2c-mt65xx.txt    | 49 ----------
+>  .../devicetree/bindings/i2c/i2c-mt65xx.yaml   | 97 +++++++++++++++++++
+>  2 files changed, 97 insertions(+), 49 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+> deleted file mode 100644
+> index 7f0194fdd0cc..000000000000
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.txt
+> +++ /dev/null
+> @@ -1,49 +0,0 @@
+> -* MediaTek's I2C controller
+> -
+> -The MediaTek's I2C controller is used to interface with I2C devices.
+> -
+> -Required properties:
+> -  - compatible: value should be either of the following.
+> -      "mediatek,mt2701-i2c", "mediatek,mt6577-i2c": for MediaTek MT2701
+> -      "mediatek,mt2712-i2c": for MediaTek MT2712
+> -      "mediatek,mt6577-i2c": for MediaTek MT6577
+> -      "mediatek,mt6589-i2c": for MediaTek MT6589
+> -      "mediatek,mt6797-i2c", "mediatek,mt6577-i2c": for MediaTek MT6797
+> -      "mediatek,mt7622-i2c": for MediaTek MT7622
+> -      "mediatek,mt7623-i2c", "mediatek,mt6577-i2c": for MediaTek MT7623
+> -      "mediatek,mt7629-i2c", "mediatek,mt2712-i2c": for MediaTek MT7629
+> -      "mediatek,mt8173-i2c": for MediaTek MT8173
+> -      "mediatek,mt8183-i2c": for MediaTek MT8183
+> -      "mediatek,mt8192-i2c": for MediaTek MT8192
+> -      "mediatek,mt8516-i2c", "mediatek,mt2712-i2c": for MediaTek MT8516
+> -  - reg: physical base address of the controller and dma base, length of memory
+> -    mapped region.
+> -  - interrupts: interrupt number to the cpu.
+> -  - clock-div: the fixed value for frequency divider of clock source in i2c
+> -    module. Each IC may be different.
+> -  - clocks: clock name from clock manager
+> -  - clock-names: Must include "main" and "dma", "arb" is for multi-master that
+> -    one bus has more than two i2c controllers, if enable have-pmic need include
+> -    "pmic" extra.
+> -
+> -Optional properties:
+> -  - clock-frequency: Frequency in Hz of the bus when transfer, the default value
+> -    is 100000.
+> -  - mediatek,have-pmic: platform can control i2c form special pmic side.
+> -    Only mt6589 and mt8135 support this feature.
+> -  - mediatek,use-push-pull: IO config use push-pull mode.
+> -
+> -Example:
+> -
+> -	i2c0: i2c@1100d000 {
+> -			compatible = "mediatek,mt6577-i2c";
+> -			reg = <0x1100d000 0x70>,
+> -			      <0x11000300 0x80>;
+> -			interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_LOW>;
+> -			clock-frequency = <400000>;
+> -			mediatek,have-pmic;
+> -			clock-div = <16>;
+> -			clocks = <&i2c0_ck>, <&ap_dma_ck>;
+> -			clock-names = "main", "dma";
+> -	};
+> -
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+> new file mode 100644
+> index 000000000000..0f445d2ab727
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+> @@ -0,0 +1,97 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/i2c/i2c-mt65xx.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: MediaTek I2C Controller
+> +
+> +maintainers:
+> +  - Qii Wang <qii.wang@mediatek.com>
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^i2c[0-9]*@[0-9a-f]+$"
 
-Nit: this comment can be on one line.
-
-
-> +        */
-> +       writel(irq_received &
-> +              ~(ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_TX_ACK | ASPEED_I2CD_INTR_TX_NAK),
->                bus->base + ASPEED_I2C_INTR_STS_REG);
->         readl(bus->base + ASPEED_I2C_INTR_STS_REG);
->         irq_received &= ASPEED_I2CD_INTR_RECV_MASK;
-> @@ -652,12 +656,18 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
->                         "irq handled != irq. expected 0x%08x, but was 0x%08x\n",
->                         irq_received, irq_handled);
->
-> -       /* Ack Rx done */
-> -       if (irq_received & ASPEED_I2CD_INTR_RX_DONE) {
-> -               writel(ASPEED_I2CD_INTR_RX_DONE,
-> -                      bus->base + ASPEED_I2C_INTR_STS_REG);
-> -               readl(bus->base + ASPEED_I2C_INTR_STS_REG);
-> -       }
-> +       /* Ack Rx done and Tx done with/without ACK */
-> +       /* Note: Re-use irq_handled variable */
-
-I'm not sure what this note means.
-
-> +       irq_handled = 0;
-> +       if (irq_received & ASPEED_I2CD_INTR_RX_DONE)
-> +               irq_handled |= ASPEED_I2CD_INTR_RX_DONE;
-> +       if (irq_received & ASPEED_I2CD_INTR_TX_ACK)
-> +               irq_handled |= ASPEED_I2CD_INTR_TX_ACK;
-> +       if (irq_received & ASPEED_I2CD_INTR_TX_NAK)
-> +               irq_handled |= ASPEED_I2CD_INTR_TX_NAK;
-> +       writel(irq_handled, bus->base + ASPEED_I2C_INTR_STS_REG);
-
-Are you intentionally only acking the bits that are set when we read
-from STS_REG at the start of the handler? If not, we could write this
-instead:
-
-writel(ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_TX_ACK |
-ASPEED_I2CD_INTR_TX_NAK,
-        bus->base + ASPEED_I2C_INTR_STS_REG);
-
-If you only want to ack the bits that are set, then do this:
-
-  writel(irq_received &
-            (ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_TX_ACK |
-ASPEED_I2CD_INTR_TX_NAK),
-         bus->base + ASPEED_I2C_INTR_STS_REG);
-
-That way, you can avoid all of the tests.
-
-> +       readl(bus->base + ASPEED_I2C_INTR_STS_REG);
-
-When you move this, please add a comment that reminds us why we do a
-write-then-read (see commit c926c87b8e36dcc0ea5c2a0a0227ed4f32d0516a).
+Drop '[0-9]*'. The base name should be just 'i2c'. 
 
 > +
->         spin_unlock(&bus->lock);
->         return irq_remaining ? IRQ_NONE : IRQ_HANDLED;
->  }
-> --
-> 2.28.0
->
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - mediatek,mt2712-i2c
+> +          - mediatek,mt6577-i2c
+> +          - mediatek,mt6589-i2c
+> +          - mediatek,mt7622-i2c
+> +          - mediatek,mt8173-i2c
+> +          - mediatek,mt8183-i2c
+> +          - mediatek,mt8192-i2c
+> +      - items:
+> +          - const: mediatek,mt2701-i2c
+> +          - const: mediatek,mt6577-i2c
+> +      - items:
+> +          - const: mediatek,mt6797-i2c
+> +          - const: mediatek,mt6577-i2c
+> +      - items:
+> +          - const: mediatek,mt7623-i2c
+> +          - const: mediatek,mt6577-i2c
+> +      - items:
+> +          - const: mediatek,mt7629-i2c
+> +          - const: mediatek,mt2712-i2c
+> +      - items:
+> +          - const: mediatek,mt8516-i2c
+> +          - const: mediatek,mt2712-i2c
+
+This can be simplified a bit like the other binding.
+
+> +
+> +  clocks:
+> +    minItems: 2
+> +    maxItems: 4
+> +    items:
+> +      - description: Controller clock
+> +      - description: DMA clock
+> +      - description: ARB clock for multi-master when a bus has more than
+> +          one i2c controllers
+> +      - description: PMIC clock. Only when mediatek,have-pmic is set.
+> +
+> +  clock-names:
+> +    minItems: 2
+> +    maxItems: 4
+> +    items:
+> +      - const: main
+> +      - const: dma
+> +      - const: arb
+> +      - const: pmic
+> +
+> +  mediatek,have-pmic:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: Platform can control I2C from the PMIC
+> +
+> +  mediatek,use-push-pull:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: IO config use push-pull mode.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - clock-div
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    i2c0: i2c@1100d000 {
+> +            compatible = "mediatek,mt6577-i2c";
+> +            reg = <0x1100d000 0x70>,
+> +                  <0x11000300 0x80>;
+> +            interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_LOW>;
+> +            clock-frequency = <400000>;
+> +            mediatek,have-pmic;
+> +            clock-div = <16>;
+> +            clocks = <&i2c0_ck>, <&ap_dma_ck>;
+> +            clock-names = "main", "dma";
+> +    };
+> -- 
+> 2.31.1
+> 
