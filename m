@@ -2,63 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C08F38B68E
+	by mail.lfdr.de (Postfix) with ESMTP id 51B9D38B68F
 	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 21:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237398AbhETTC6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 May 2021 15:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S237460AbhETTC7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 May 2021 15:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236877AbhETTCo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 15:02:44 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0750CC0613ED
-        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 12:01:22 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id y14so16635780wrm.13
-        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 12:01:21 -0700 (PDT)
+        with ESMTP id S236896AbhETTCp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 15:02:45 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4205DC06138B
+        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 12:01:23 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id f6-20020a1c1f060000b0290175ca89f698so6023270wmf.5
+        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 12:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SBAKKQalOJHvEKpRKihiee3lgyfHDvw81EwoK2O6KMU=;
-        b=TOvjUnExrJkfS1a45A6elsHA3Nl0rygE9dkkcvcFh7uIdhijihhEW8zz9F8JQcWqPR
-         kvAVumtrWHiDB8TqE6unzMoO12ejgb5og9J8YLybBHJUDy7sgnIqJZsImgJEdH6I48kT
-         +WLUmf3bQC8ISrYcCGnO25lOmgOJ60bVSo5aJu8sYffcdHdFmBWxtXJEJ/JCU8d1DzIn
-         et09Sl6fYThOAIVhfqyZBsDepD2VA+Nxy9HMXXamTsLFUElmIWlTUeGR8jdX5M1AUC8y
-         /h/c74ZlUYgJQRJl3cEgJr7yikN8q8eMcnajBiKVQvUpvC2lPlxt7tNsxJpNaRDpzCBD
-         xh6A==
+        bh=zNl0TWlb/d8Kz2EbzgNPnXTHheMEm6iTFjb4mkLXVgg=;
+        b=cweL21sTrIdENzyBjbborhA49uE2ipRCdgcwxowe9KOMrycs2dDLqF52GV+t90hRys
+         IoJFqt7C4RAHRco24xXERn5nErc3/2rKcViylH/knoA36dFnenR8Yk7fa5K9LJyvLZPG
+         +zl0Yye1+p0am3ozSkKClsbDZf9FATUp7VcvtMudJNq8zxdrja1ue5QMFoy/JoPG/L4P
+         5aCGsvvB4nM4CnJW5XwcOSMmKGRBlEzvrmFh9w0X07ywQuRY/fgrrbVmThddpI9T84rp
+         C9x0JnIxFl5iAxMV6ozehCNRcPzX2mZWaRDgXhXham+/jdMdcWRa6PhjlnmEq4xSt1DT
+         134A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SBAKKQalOJHvEKpRKihiee3lgyfHDvw81EwoK2O6KMU=;
-        b=Wmv2qPKAo2FSHyEYSURC7SnyCZy6p+ieCVcEU7cL4IzKvAVO4jfZNMaeSbfMRltx2G
-         IWDxmoRKGdE3fJLRBebtXuZqd1+DyauNNp5oPzMKs3ozTKlCAkoROHs/hsKoxts/tMXd
-         92e4SaSRHCeM3jMY5lRAhGGlaVYmGrc61vg9KFkVSXGEOTEt3o7Y5lMZIV3DI7qLM7LR
-         XkbTjAtOTVDmIj5iL2Vn47ket7JInMas7Ek8+b1zZegS7b2gQezQHR6Gw8Mvjes9Dmoi
-         sB3OecoI8rEozr3txA2I2CqZM3xV3KlqVpS9juCyPA66vbocxvdyYXw6MbDZ73M9L9ls
-         bX0g==
-X-Gm-Message-State: AOAM533BQF13QfKVWh6fGYSZyzD5Ip1/J+jQOK3RXYj2yYsB4CZzgwXW
-        QU7zoNPz7OMhfRrZwfacIFqalg==
-X-Google-Smtp-Source: ABdhPJz+/a10pqf8oJ6E1JvsxS0ZPNJkmppgFWPCA+O5Gqw1gs8ZbTONZBJ3SYcvJc2naOp2wIYlFQ==
-X-Received: by 2002:a5d:4046:: with SMTP id w6mr5792880wrp.15.1621537280605;
-        Thu, 20 May 2021 12:01:20 -0700 (PDT)
+        bh=zNl0TWlb/d8Kz2EbzgNPnXTHheMEm6iTFjb4mkLXVgg=;
+        b=sbfmTLiyyhipqQTnblykeB8vNT6ZkuaU6AIIgavBU2o9fUxVecLvBJFZNvsPwq6YQ4
+         BD3wmpYYvjynxtD5Y22G0jKdjlcCLLfIvlVfjB9mjSXIzxCoud0HTB5tIbbSA5npz8EU
+         yRS0EDoI3ArHrjPhMjjM+mFbEzdpabXVItbE+QH6xjMKzkRAPpOsVhwzR1IeMVHeBRuo
+         gkeRUgzL+qpCKI5Buy3dP1KRYOTE6o14ESn1lQFZttlBDEaQuJgHT5yfa+oXednUL/Fw
+         4zLpex27vgxZiL0/gN6awtzfs5BtLnPxNuN6Qac7VwWKZW1WhpHxQM2Ub3b0uK+93HIB
+         1iZA==
+X-Gm-Message-State: AOAM532K0iROvtAsAmZdumjoOiXNq8h6mvZxZNgOJbJkNxb0vPujMKYI
+        BTSCztAxscW9wYWgYHS84vuAnQ==
+X-Google-Smtp-Source: ABdhPJzxHkukShLJhUeulLdekCTyvrfuCDAywra0MTyFXRdW/ggmRXuGa47tGMYh9e/r2Cojvnu4XA==
+X-Received: by 2002:a05:600c:ad9:: with SMTP id c25mr4876956wmr.56.1621537281856;
+        Thu, 20 May 2021 12:01:21 -0700 (PDT)
 Received: from dell.default ([91.110.221.215])
-        by smtp.gmail.com with ESMTPSA id p20sm9011899wmq.10.2021.05.20.12.01.19
+        by smtp.gmail.com with ESMTPSA id p20sm9011899wmq.10.2021.05.20.12.01.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 12:01:20 -0700 (PDT)
+        Thu, 20 May 2021 12:01:21 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andreas Larsson <andreas@gaisler.com>,
-        linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH 10/16] i2c: busses: i2c-ocores: Place the expected function names into the documentation headers
-Date:   Thu, 20 May 2021 20:00:59 +0100
-Message-Id: <20210520190105.3772683-11-lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Vladimir Zapolskiy <vz@mleia.com>,
+        Dennis Kovalev <dkovalev@ru.mvista.com>,
+        Vitaly Wool <vwool@ru.mvista.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: [PATCH 11/16] i2c: busses: i2c-pnx: Provide descriptions for 'alg_data' data structure
+Date:   Thu, 20 May 2021 20:01:00 +0100
+Message-Id: <20210520190105.3772683-12-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210520190105.3772683-1-lee.jones@linaro.org>
 References: <20210520190105.3772683-1-lee.jones@linaro.org>
@@ -70,63 +67,65 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/i2c/busses/i2c-ocores.c:253: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- drivers/i2c/busses/i2c-ocores.c:267: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- drivers/i2c/busses/i2c-ocores.c:299: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- drivers/i2c/busses/i2c-ocores.c:347: warning: expecting prototype for It handles an IRQ(). Prototype was for ocores_process_polling() instead
+ drivers/i2c/busses/i2c-pnx.c:147: warning: Function parameter or member 'alg_data' not described in 'i2c_pnx_start'
+ drivers/i2c/busses/i2c-pnx.c:147: warning: Excess function parameter 'adap' description in 'i2c_pnx_start'
+ drivers/i2c/busses/i2c-pnx.c:202: warning: Function parameter or member 'alg_data' not described in 'i2c_pnx_stop'
+ drivers/i2c/busses/i2c-pnx.c:202: warning: Excess function parameter 'adap' description in 'i2c_pnx_stop'
+ drivers/i2c/busses/i2c-pnx.c:231: warning: Function parameter or member 'alg_data' not described in 'i2c_pnx_master_xmit'
+ drivers/i2c/busses/i2c-pnx.c:231: warning: Excess function parameter 'adap' description in 'i2c_pnx_master_xmit'
+ drivers/i2c/busses/i2c-pnx.c:301: warning: Function parameter or member 'alg_data' not described in 'i2c_pnx_master_rcv'
+ drivers/i2c/busses/i2c-pnx.c:301: warning: Excess function parameter 'adap' description in 'i2c_pnx_master_rcv'
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Andreas Larsson <andreas@gaisler.com>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Dennis Kovalev <dkovalev@ru.mvista.com>
+Cc: Vitaly Wool <vwool@ru.mvista.com>
+Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-i2c@vger.kernel.org
-Cc: linux-riscv@lists.infradead.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/i2c/busses/i2c-ocores.c | 8 ++++----
+ drivers/i2c/busses/i2c-pnx.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index 273222e38056e..a0af027db04c1 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -250,7 +250,7 @@ static irqreturn_t ocores_isr(int irq, void *dev_id)
- }
- 
+diff --git a/drivers/i2c/busses/i2c-pnx.c b/drivers/i2c/busses/i2c-pnx.c
+index 8c4ec7f13f5ab..50f21cdbe90d3 100644
+--- a/drivers/i2c/busses/i2c-pnx.c
++++ b/drivers/i2c/busses/i2c-pnx.c
+@@ -138,7 +138,7 @@ static inline void i2c_pnx_arm_timer(struct i2c_pnx_algo_data *alg_data)
  /**
-- * Process timeout event
-+ * ocores_process_timeout() - Process timeout event
-  * @i2c: ocores I2C device instance
+  * i2c_pnx_start - start a device
+  * @slave_addr:		slave address
+- * @adap:		pointer to adapter structure
++ * @alg_data:		pointer to local driver data structure
+  *
+  * Generate a START signal in the desired mode.
   */
- static void ocores_process_timeout(struct ocores_i2c *i2c)
-@@ -264,7 +264,7 @@ static void ocores_process_timeout(struct ocores_i2c *i2c)
- }
+@@ -194,7 +194,7 @@ static int i2c_pnx_start(unsigned char slave_addr,
  
  /**
-- * Wait until something change in a given register
-+ * ocores_wait() - Wait until something change in a given register
-  * @i2c: ocores I2C device instance
-  * @reg: register to query
-  * @mask: bitmask to apply on register value
-@@ -296,7 +296,7 @@ static int ocores_wait(struct ocores_i2c *i2c,
- }
- 
- /**
-- * Wait until is possible to process some data
-+ * ocores_poll_wait() - Wait until is possible to process some data
-  * @i2c: ocores I2C device instance
+  * i2c_pnx_stop - stop a device
+- * @adap:		pointer to I2C adapter structure
++ * @alg_data:		pointer to local driver data structure
   *
-  * Used when the device is in polling mode (interrupts disabled).
-@@ -334,7 +334,7 @@ static int ocores_poll_wait(struct ocores_i2c *i2c)
- }
+  * Generate a STOP signal to terminate the master transaction.
+  */
+@@ -223,7 +223,7 @@ static void i2c_pnx_stop(struct i2c_pnx_algo_data *alg_data)
  
  /**
-- * It handles an IRQ-less transfer
-+ * ocores_process_polling() - It handles an IRQ-less transfer
-  * @i2c: ocores I2C device instance
+  * i2c_pnx_master_xmit - transmit data to slave
+- * @adap:		pointer to I2C adapter structure
++ * @alg_data:		pointer to local driver data structure
   *
-  * Even if IRQ are disabled, the I2C OpenCore IP behavior is exactly the same
+  * Sends one byte of data to the slave
+  */
+@@ -293,7 +293,7 @@ static int i2c_pnx_master_xmit(struct i2c_pnx_algo_data *alg_data)
+ 
+ /**
+  * i2c_pnx_master_rcv - receive data from slave
+- * @adap:		pointer to I2C adapter structure
++ * @alg_data:		pointer to local driver data structure
+  *
+  * Reads one byte data from the slave
+  */
 -- 
 2.31.1
 
