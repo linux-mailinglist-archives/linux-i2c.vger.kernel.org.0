@@ -2,179 +2,474 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4990C38B1A1
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 16:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEAA38B508
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 19:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbhETO0N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 May 2021 10:26:13 -0400
-Received: from mail-bn8nam11on2116.outbound.protection.outlook.com ([40.107.236.116]:30977
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232781AbhETO0M (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 20 May 2021 10:26:12 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ThQc8l5cPAxt0X8UDgMAhzhNFjkJfFjJs6na7vGkFze03dzEAF+fISHwG360YktOZgsTrOD7ROEjcQetKoZ61BR2jRg666xCCB34366KeJvascW9WM06fv8bNdZWYdcEtBMll75r/9kxkdRoj87itn2u9fokyZWzFc84FWw4Ss4+eamKW+35QMKd0lrg5HPgMQ2IqkB7EZcV3HDytUSWJG0SY+SmqgW1ej7tqrNU+0jb5S1swXHKdcrtoPkbDTQD9XMitsaU8kc4BzVeYYkwzSrVC3SGcqSoq8kkFb1PaVl/l63hxcL06a0IKmzunzKSv5B/hJK4l3l8Vt/2ODcFEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Czb2tMM+hL8/ExpxHxdKem2pI+LOhiqEXGR/6kZRt0I=;
- b=iqdCf5x7ktXLsUUuOVE84MBUjzY0urblTpkdjfvELAj0vMG1XscYcM1Y0lA5BffZTq8bwlcr1F1LgIO65udrNzAkapQAJ4xrwyDtk18zwSsPUWUcdz//EtAUUO9IbrhwuoHozGJkCVuWkwGSX2u9tD8JIY0wUY+K1CmZKOwrMvIKhjVq1pa7y2uZXA5HeqxrGIkVCJaiWfd6PG+cy8BRSf3cc2SEZ4lvMco/1a5DNsKzCNe0Dpz/y5gUAyOE01vl3cJhICq28qgEtf15Zb1BEwzRdaXnj+XvGFnsIbOshzHjR7Ts9wTcBGcTFehOZwtkBY3Ns5lCx9m2kqfc10c9wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        id S231984AbhETRRM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 May 2021 13:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231730AbhETRRL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 13:17:11 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86977C061574;
+        Thu, 20 May 2021 10:15:48 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id v5so20665549ljg.12;
+        Thu, 20 May 2021 10:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Czb2tMM+hL8/ExpxHxdKem2pI+LOhiqEXGR/6kZRt0I=;
- b=SS8uEUg0w+1+NFsKpUa+TKqSwKhgg89uiTByxxnZThzIBmmDDk7swquiMbqhAZRmx3BnByB6PeUgVDCpsJSu4NwxWM4Eeipz/93x0R6/J9ks5LXdCZs/Els3txLLw5DT9r/Nx84S1uNx/aflm574ihBeR4J60ZwQAVqlhZ9KdUc=
-Authentication-Results: google.com; dkim=none (message not signed)
- header.d=none;google.com; dmarc=none action=none
- header.from=os.amperecomputing.com;
-Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- MW4PR01MB6146.prod.exchangelabs.com (2603:10b6:303:7c::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4129.28; Thu, 20 May 2021 14:24:49 +0000
-Received: from MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.4129.034; Thu, 20 May 2021
- 14:24:49 +0000
-Subject: Re: [PATCH v3 7/7] bindings: ipmi: Add binding for Aspeed SSIF BMC
- driver
-To:     Rob Herring <robh@kernel.org>
-Cc:     openbmc@lists.ozlabs.org, Wolfram Sang <wsa@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Open Source Submission <patches@amperecomputing.com>,
-        openipmi-developer@lists.sourceforge.net,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        devicetree@vger.kernel.org, Corey Minyard <minyard@acm.org>,
-        Joel Stanley <joel@jms.id.au>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Phong Vo <phong@os.amperecomputing.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-aspeed@lists.ozlabs.org,
-        Brendan Higgins <brendanhiggins@google.com>
-References: <20210519074934.20712-1-quan@os.amperecomputing.com>
- <20210519074934.20712-8-quan@os.amperecomputing.com>
- <1621438164.118346.3134230.nullmailer@robh.at.kernel.org>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-Message-ID: <d935935e-018d-f2b2-d129-60a37f85926b@os.amperecomputing.com>
-Date:   Thu, 20 May 2021 21:24:27 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.2
-In-Reply-To: <1621438164.118346.3134230.nullmailer@robh.at.kernel.org>
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8UntUDVRfwnEoeyjfPLkHlrpgLCNDzHfGZ6apTXUlJE=;
+        b=VM3RegV4gafGKmsWWFpc/u9jVFfAMu07tN2vbBLL3Cja3Y+t83FYwElzp/le2rZfn1
+         XVd8T8uXJR1k7e3PZdoN/GHEaA4dAwN7WsPJUVsDDr75FYgqedlNBNkQh6yFt6QQRP7Y
+         a/UkuHXL5EDVjfGgUzNtUHwBXXy6CI9Id060arlf9n1R3LB43+XYwJJNWsKhVg3IpP3k
+         Ai6XpJwkp5P1Rj5Kb7tXeu2uuCRDxRj14yfNFEE5CrbKHNkoAU6THgkcrbHT6233Dqpz
+         52UCoW3/pcLxQ91ZZXpMFGiB5Z26iIW3Lo1z17gDM2ApSqnGHt6NWl49/UtJz5JR9ZNz
+         yoHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8UntUDVRfwnEoeyjfPLkHlrpgLCNDzHfGZ6apTXUlJE=;
+        b=RIKtGmQ42AO02O2zHT4Nk3BlzIDePXiyNxUDslM9loT33nasCKTzR/WEwdVKo54zTn
+         kDhGa2jWW2l+Sg9B/fLJDdZiCe9NTnac7RIBUUVlUfnZb5vGyDxKJmJvqTMf8Om+Ga+3
+         hOsM6nO1fdzze1C1rDOP5sVGMx9ne6FzjKr/C4Bi3zQMYZjPgFVUioP82UWRVTUrsoa2
+         yulsEu/1So8+O+EtsWaMb3f92rTQ5qWuoheqROrS9/HoFhByemFhAbjxWVvfE3XeBx1Y
+         4g+2nRu4haRyUjX7Tro4cYYzGotNT8jtqvupWnQfYJfF8q5P+lgmuO8aZYTcNq5bEHWn
+         tbeA==
+X-Gm-Message-State: AOAM533o0kUV6pPNGeST9Ja/UypvF+O4fUVj7ArfZSUq3LVf19dAxYmo
+        ZetTOUwVPxgkj1HgckvAvVSIV/oHW34=
+X-Google-Smtp-Source: ABdhPJxcdqYZGOnYHnNGFiS2Aw9LUwa6LW3DMkFUQqpJNzqIeP1CW1D51wntoEyzI1HyKmLzSZos4Q==
+X-Received: by 2002:a05:651c:1189:: with SMTP id w9mr3868611ljo.4.1621530946821;
+        Thu, 20 May 2021 10:15:46 -0700 (PDT)
+Received: from [10.20.0.16] ([37.58.58.229])
+        by smtp.gmail.com with ESMTPSA id y24sm330302lfg.232.2021.05.20.10.15.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 May 2021 10:15:46 -0700 (PDT)
+Subject: Re: [PATCH v4 1/8] ACPI: scan: Extend acpi_walk_dep_device_list()
+To:     Daniel Scally <djrscally@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        devel@acpica.org
+Cc:     Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com
+References: <20210520140928.3252671-1-djrscally@gmail.com>
+ <20210520140928.3252671-2-djrscally@gmail.com>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+Message-ID: <8af5e1d6-4697-3429-6e62-1ca2812e6fd8@gmail.com>
+Date:   Thu, 20 May 2021 19:15:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20210520140928.3252671-2-djrscally@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [2402:800:623c:5f9b:6031:ff4f:8fc2:44d0]
-X-ClientProxiedBy: HK2PR02CA0216.apcprd02.prod.outlook.com
- (2603:1096:201:20::28) To MW2PR0102MB3482.prod.exchangelabs.com
- (2603:10b6:302:c::32)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2402:800:623c:5f9b:6031:ff4f:8fc2:44d0] (2402:800:623c:5f9b:6031:ff4f:8fc2:44d0) by HK2PR02CA0216.apcprd02.prod.outlook.com (2603:1096:201:20::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.23 via Frontend Transport; Thu, 20 May 2021 14:24:44 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 51846f47-9d21-45b1-0ff7-08d91b9b060c
-X-MS-TrafficTypeDiagnostic: MW4PR01MB6146:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MW4PR01MB6146E89270DBCF6318AF5CECF22A9@MW4PR01MB6146.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Cgm8s571/mWlq+4z3Qclmz3ggY4d1dMqfzaCKvyHIWrIw9HJlCu5mEKRbwU0zWiGLoW3FyEXeomtzHHGo6I7f+AxrimCOsu6pnj1MkfTb373f13mn8Ux6Fmg1gfzPq9WuoOE7Uj+eHZhlVRIpGw7GATF2tlpOZ+hacZg6CXXCFsWM6JN1algnVrrzEvrmyCeIg2Q5fo4XBWPipEFuqj1z06arYltfuUbJRgQC0thXF28Py6dY9utOTRDQK0kEhtPuV/WketIMx5G7uhIzD0o7Ei1E0EaXHS220B7WlCEKTwm3RFekHVAstrIUlm2Cgva2zfbYrvQ/lV86piC0+QTtkDaYhld/rLWk9B4qcGBFeBqmoIKLXwR90REWJbHGO2MYstfZv+FqkDnBSpfL8HMedyuQBUvNM7xGpPw54qHiFZKu8HA/v+i7rihag1DIVo3pkKgWLlGX+sNHfqc/cR0fFrYS23mTVAkNcHBtMrC8OOW0GS7og4CvzJnMfxCYCPus+TUxqMeHTb4aXMBdbciN2F+DK0IHXUPJFnuHD+0l6++VLa6kze+UyIGGH+a8BoUaMWAGF0q0B7ImwT14Wo6i6XfLx8+uSEUet8RqybFkMBD8bI45jvYi6CpLxALPgpRIhFVqgEpwc+Vc+bG5E3/q/C/kBraZtUIcdhWGt2rwh0nXLLSePiyKSZaimFv0VLhFD9YfEGBYUaci21szAaqKAx2GtD1WOWGsQzlHmuGalZ8g4OMi65tdWH/J2124VgJiKFqpklsxOgkWAVe5vULGQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39840400004)(376002)(136003)(396003)(366004)(16526019)(966005)(316002)(8936002)(86362001)(186003)(53546011)(7416002)(52116002)(66476007)(6666004)(38100700002)(83380400001)(4326008)(2616005)(6916009)(5660300002)(6486002)(66556008)(478600001)(8676002)(54906003)(31696002)(66946007)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?VWUxTmw5ZTVoUU1OeUlSenp5ZnUyR0hMSi9UQ0I0ZG0zcFc5M1VROUhSSHV3?=
- =?utf-8?B?c2IwSUpLc003c0ZWWFltS3BaUWI2bWpYWEJnblhzRkxXbUN0ZkpWMGxPV2lO?=
- =?utf-8?B?WVM1Y2lLNk5wSGhFTG1WNUVvT3p1ZkZxMWJocnB2QlBWWDg0d2s2TkpXWFU5?=
- =?utf-8?B?SDA2cm1LRm9sbHpTSm13RTE3RXR4Mm1xbkRhSTM2TkhaRFkwa3FsVVlJVkti?=
- =?utf-8?B?M0JuTjNLNkJCWG5zLzZFNjhtOVowdG5GN0lYT2dwbGFoQ0xNUFJyc3VrWHZ6?=
- =?utf-8?B?S2RPZytIRmgwbkdVR2VUWlhJMUlhTjZYdzQ5NTc0dDRjQjNlNm0vcnFpTjZ4?=
- =?utf-8?B?eXJ5aTUvMzd1TC8zcW5XOWVjWEtaVjNSbU5tTWlzcWhlb1FoWXpBenVCSmUx?=
- =?utf-8?B?emo1T3RDREU0R2MxbFVuNlN2S3d3aWhrM2NRZ0VWUUVIZ1F3RjRkOVJjWkM3?=
- =?utf-8?B?STRJdkJzK0xYcnFQQ2J4azdGWWthWTkxSmxGWisycTlvTnFTT2hrZTltbDdF?=
- =?utf-8?B?a2Q2dnFMYTFCdWJ0V1hScnlDTERUYVRqcUZISzFyZFpMVFRyaXl2TC9JTTdx?=
- =?utf-8?B?MGdsUUw1bWg3QVVZaUxkU2RCWWNiTDh4dHR5cElYeDZJank5eEJrS3VsQzlI?=
- =?utf-8?B?VFNhWHF0WXI4RFFCNlo4WkhEaE85Z2p5TlVDeU5tVm5idDRXT1FrcXpoWUhp?=
- =?utf-8?B?U00xSFBoT0h1ZlM0T3AvM2lkRDU0K0F0Y0thc0VuOXFiQVZ5RXV6V1FMd3U5?=
- =?utf-8?B?WmIwVHN6TE1OemdHMU1TdGZTMTA1MG45WWJZL2NpQ2M4ZFlKUU9DNVhkbkxj?=
- =?utf-8?B?ZFRVZEZWNE10NXk4b3dZZjZHbGE4U1VMYjk2VnduK0p0V2xXTWVpcmt5MEV5?=
- =?utf-8?B?SVcwdDQwTXZlWVFKL205MW4zMnA5MTRLdC8wdDNZWGtwWGVrUHNWS1ZNMFFB?=
- =?utf-8?B?L3ZMR0pPRDFadHBtZlQwZjUyTVRVTzRiOUFHaDgzaHh6VkVkd0ZCRHdnT1Nh?=
- =?utf-8?B?ZkVwNk5XTGlOVlJRUkE5NHppOE8xamoyaFdzL3AzUEFHUmpGMkJsMy9EeFdF?=
- =?utf-8?B?bjd0OE9LMkFueEU5UDJyc1JIbW56ZlkzM3NmeTB6WEhzQUhDd2QweHhxcGJ2?=
- =?utf-8?B?Z0NBN2RNTFR0bHNNdFZ3TkF4eW83ZCs4aW5WTll4VHRLd0czWmxHdnhoZjRz?=
- =?utf-8?B?dUdwVW9BNVYxRXFSQ0E0UDAvZ3VXcnVZMURLSDYxNy81SVNTbjVMY09tVVkw?=
- =?utf-8?B?TDJKVEJiaS9Yb3FDNnU1Z1ZMcW5jVHFWcXl3QjBleWw0aE9ZL0tNMldLdlRF?=
- =?utf-8?B?MkNZRUxhOGMzUldnaGlZcjBlRzdoQk03dU95S0hrcXlZcGFDYXcrcUJXRjkv?=
- =?utf-8?B?RnZxcVVzWldVUldMU3hvL1BxQmJlNUgyeWlzZ0Y2MFdRRUlMUHdGVlRZSnhX?=
- =?utf-8?B?U1VqWXcxZzBDbjA4NU5pazdOaHRQcTdmbVlsbzZXZ0hJNVVHRTFOYXRQTUg0?=
- =?utf-8?B?QXB4T0NiTG9vME5odW1YZmFHeGIwWEM0MUZwNG1DdGppaDZlOERUeUdMUFdp?=
- =?utf-8?B?T282VGtZdTJtUzNrYnN4ajJlbk9CbW0ySHZZWCtKd2pTZE8zdU1IY1FDWkM2?=
- =?utf-8?B?dG02NXNPZm5wZ2V6QU9DWHM4Q3dJM2E4SXhYL1RydVphYlZTamw5Qk14ZldP?=
- =?utf-8?B?UnhjYUtxaFFIbGc1blVtN3UwanQ4NjBqU3RmTm9naW4wbXU5Q2IwaTRqUGZE?=
- =?utf-8?B?c2l4Z2s4d0hWbVBURDNPZlFxcjFOSC80NlhaYlgyT1ZBandpYXY4bEhMekRv?=
- =?utf-8?B?dDZuWjhnR0MzL0M1c0R1YWkya1VGNnJxRWNYU1l3N3dNWXpZcGlMTjE1WWZJ?=
- =?utf-8?Q?yRXW7yhYMsjQQ?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51846f47-9d21-45b1-0ff7-08d91b9b060c
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2021 14:24:48.8428
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Yw+BgjxxQKv8OI4FxOPN15npAQfSJO+287eiAQv+DWKqcTFbxpsFA1+jEAiHHGM8zZR3hZTGKYFDb9BNH0z8u3kIGH72ttf6VsbYsAb3TOs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6146
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 19/05/2021 22:29, Rob Herring wrote:
-> On Wed, 19 May 2021 14:49:34 +0700, Quan Nguyen wrote:
->> Add device tree binding document for the Aspeed SSIF BMC driver.
->>
->> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->> ---
->> v3:
->>    + Switched to use DT schema format [Rob]
->>
->>   .../bindings/ipmi/aspeed-ssif-bmc.yaml        | 33 +++++++++++++++++++
->>   1 file changed, 33 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.yaml
->>
+On 5/20/21 4:09 PM, Daniel Scally wrote:
+> The acpi_walk_dep_device_list() is not as generalisable as its name
+> implies, serving only to decrement the dependency count for each
+> dependent device of the input. Extend the function to instead accept
+> a callback which can be applied to all the dependencies in acpi_dep_list.
+> Replace all existing calls to the function with calls to a wrapper, passing
+> a callback that applies the same dependency reduction.
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.example.dts:21.13-26: Warning (reg_format): /example-0/ssif-bmc@10:reg: property has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
-> Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.example.dt.yaml: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.example.dt.yaml: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.example.dt.yaml: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.example.dt.yaml: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/ipmi/aspeed-ssif-bmc.example.dt.yaml: example-0: ssif-bmc@10:reg:0: [16] is too short
-> 	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
-> 
-> See https://patchwork.ozlabs.org/patch/1480727
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
-Thanks,
-Will fix in next version.
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
 
-- Quan
+Acked-by: Maximilian Luz <luzmaximilian@gmail.com>  # for platform/surface parts
+
+> ---
+> changes since v3:
+> 
+> 	- Most of the functions got renamed
+> 	- acpi_dev_get_dependent_dev() was altered to take a struct acpi_device
+> 	This had some repurcussions in the other files, mostly switching from
+> 	ACPI_HANDLE() to ACPI_COMPANION().
+> 	- acpi_walk_dep_device_list() was altered to check the return value of
+> 	the callback on each iteration of the loop, to allow for error handling
+> 	of the callbacks or breaking the loop early to save time. Andy, Wolfram,
+> 	I thought this change was significant enough to drop your R-b and Ack.
+> 
+>   drivers/acpi/ec.c                             |  2 +-
+>   drivers/acpi/pmic/intel_pmic_chtdc_ti.c       |  2 +-
+>   drivers/acpi/scan.c                           | 69 ++++++++++++++-----
+>   drivers/gpio/gpiolib-acpi.c                   | 10 +--
+>   drivers/i2c/i2c-core-acpi.c                   |  8 +--
+>   drivers/platform/surface/aggregator/core.c    |  6 +-
+>   drivers/platform/surface/surface3_power.c     | 22 +++---
+>   .../platform/surface/surface_acpi_notify.c    |  7 +-
+>   include/acpi/acpi_bus.h                       |  7 ++
+>   include/linux/acpi.h                          |  4 +-
+>   10 files changed, 90 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
+> index 13565629ce0a..3f7680a007a3 100644
+> --- a/drivers/acpi/ec.c
+> +++ b/drivers/acpi/ec.c
+> @@ -1627,7 +1627,7 @@ static int acpi_ec_add(struct acpi_device *device)
+>   	WARN(!ret, "Could not request EC cmd io port 0x%lx", ec->command_addr);
+>   
+>   	/* Reprobe devices depending on the EC */
+> -	acpi_walk_dep_device_list(ec->handle);
+> +	acpi_dev_clear_dependencies(device);
+>   
+>   	acpi_handle_debug(ec->handle, "enumerated.\n");
+>   	return 0;
+> diff --git a/drivers/acpi/pmic/intel_pmic_chtdc_ti.c b/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
+> index a5101b07611a..fef7831d0d63 100644
+> --- a/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
+> +++ b/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
+> @@ -117,7 +117,7 @@ static int chtdc_ti_pmic_opregion_probe(struct platform_device *pdev)
+>   		return err;
+>   
+>   	/* Re-enumerate devices depending on PMIC */
+> -	acpi_walk_dep_device_list(ACPI_HANDLE(pdev->dev.parent));
+> +	acpi_dev_clear_dependencies(ACPI_COMPANION(pdev->dev.parent));
+>   	return 0;
+>   }
+>   
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 453eff8ec8c3..195635c3462b 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -47,12 +47,6 @@ static DEFINE_MUTEX(acpi_hp_context_lock);
+>    */
+>   static u64 spcr_uart_addr;
+>   
+> -struct acpi_dep_data {
+> -	struct list_head node;
+> -	acpi_handle supplier;
+> -	acpi_handle consumer;
+> -};
+> -
+>   void acpi_scan_lock_acquire(void)
+>   {
+>   	mutex_lock(&acpi_scan_lock);
+> @@ -2111,30 +2105,69 @@ static void acpi_bus_attach(struct acpi_device *device, bool first_pass)
+>   		device->handler->hotplug.notify_online(device);
+>   }
+>   
+> -void acpi_walk_dep_device_list(acpi_handle handle)
+> +static int acpi_scan_clear_dep(struct acpi_dep_data *dep, void *data)
+>   {
+> -	struct acpi_dep_data *dep, *tmp;
+>   	struct acpi_device *adev;
+>   
+> +	acpi_bus_get_device(dep->consumer, &adev);
+> +
+> +	if (adev) {
+> +		adev->dep_unmet--;
+> +		if (!adev->dep_unmet)
+> +			acpi_bus_attach(adev, true);
+> +	}
+> +
+> +	list_del(&dep->node);
+> +	kfree(dep);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * acpi_walk_dep_device_list - Apply a callback to every entry in acpi_dep_list
+> + * @handle:	The ACPI handle of the supplier device
+> + * @callback:	Pointer to the callback function to apply
+> + * @data:	Pointer to some data to pass to the callback
+> + *
+> + * The return value of the callback determines this function's behaviour. If 0
+> + * is returned we continue to iterate over acpi_dep_list. If a positive value
+> + * is returned then the loop is broken but this function returns 0. If a
+> + * negative value is returned by the callback then the loop is broken and that
+> + * value is returned as the final error.
+> + */
+> +int acpi_walk_dep_device_list(acpi_handle handle,
+> +			      int (*callback)(struct acpi_dep_data *, void *),
+> +			      void *data)
+> +{
+> +	struct acpi_dep_data *dep, *tmp;
+> +	int ret;
+> +
+>   	mutex_lock(&acpi_dep_list_lock);
+>   	list_for_each_entry_safe(dep, tmp, &acpi_dep_list, node) {
+>   		if (dep->supplier == handle) {
+> -			acpi_bus_get_device(dep->consumer, &adev);
+> -
+> -			if (adev) {
+> -				adev->dep_unmet--;
+> -				if (!adev->dep_unmet)
+> -					acpi_bus_attach(adev, true);
+> -			}
+> -
+> -			list_del(&dep->node);
+> -			kfree(dep);
+> +			ret = callback(dep, data);
+> +			if (ret)
+> +				break;
+>   		}
+>   	}
+>   	mutex_unlock(&acpi_dep_list_lock);
+> +
+> +	return ret > 0 ? 0 : ret;
+>   }
+>   EXPORT_SYMBOL_GPL(acpi_walk_dep_device_list);
+>   
+> +/**
+> + * acpi_dev_clear_dependencies - Inform consumers that the device is now active
+> + * @supplier: Pointer to the supplier &struct acpi_device
+> + *
+> + * Clear dependencies on the given device.
+> + */
+> +void acpi_dev_clear_dependencies(struct acpi_device *supplier)
+> +{
+> +	acpi_walk_dep_device_list(supplier->handle, acpi_scan_clear_dep, NULL);
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
+> +
+>   /**
+>    * acpi_bus_scan - Add ACPI device node objects in a given namespace scope.
+>    * @handle: Root of the namespace scope to scan.
+> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> index 3ef22a3c104d..5b4111e4be3f 100644
+> --- a/drivers/gpio/gpiolib-acpi.c
+> +++ b/drivers/gpio/gpiolib-acpi.c
+> @@ -1233,14 +1233,14 @@ static void acpi_gpiochip_scan_gpios(struct acpi_gpio_chip *achip)
+>   void acpi_gpiochip_add(struct gpio_chip *chip)
+>   {
+>   	struct acpi_gpio_chip *acpi_gpio;
+> -	acpi_handle handle;
+> +	struct acpi_device *adev;
+>   	acpi_status status;
+>   
+>   	if (!chip || !chip->parent)
+>   		return;
+>   
+> -	handle = ACPI_HANDLE(chip->parent);
+> -	if (!handle)
+> +	adev = ACPI_COMPANION(chip->parent);
+> +	if (!adev)
+>   		return;
+>   
+>   	acpi_gpio = kzalloc(sizeof(*acpi_gpio), GFP_KERNEL);
+> @@ -1254,7 +1254,7 @@ void acpi_gpiochip_add(struct gpio_chip *chip)
+>   	INIT_LIST_HEAD(&acpi_gpio->events);
+>   	INIT_LIST_HEAD(&acpi_gpio->deferred_req_irqs_list_entry);
+>   
+> -	status = acpi_attach_data(handle, acpi_gpio_chip_dh, acpi_gpio);
+> +	status = acpi_attach_data(adev->handle, acpi_gpio_chip_dh, acpi_gpio);
+>   	if (ACPI_FAILURE(status)) {
+>   		dev_err(chip->parent, "Failed to attach ACPI GPIO chip\n");
+>   		kfree(acpi_gpio);
+> @@ -1263,7 +1263,7 @@ void acpi_gpiochip_add(struct gpio_chip *chip)
+>   
+>   	acpi_gpiochip_request_regions(acpi_gpio);
+>   	acpi_gpiochip_scan_gpios(acpi_gpio);
+> -	acpi_walk_dep_device_list(handle);
+> +	acpi_dev_clear_dependencies(adev);
+>   }
+>   
+>   void acpi_gpiochip_remove(struct gpio_chip *chip)
+> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> index 8ceaa88dd78f..6f0aa0ed3241 100644
+> --- a/drivers/i2c/i2c-core-acpi.c
+> +++ b/drivers/i2c/i2c-core-acpi.c
+> @@ -259,8 +259,8 @@ static acpi_status i2c_acpi_add_device(acpi_handle handle, u32 level,
+>    */
+>   void i2c_acpi_register_devices(struct i2c_adapter *adap)
+>   {
+> +	struct acpi_device *adev;
+>   	acpi_status status;
+> -	acpi_handle handle;
+>   
+>   	if (!has_acpi_companion(&adap->dev))
+>   		return;
+> @@ -275,11 +275,11 @@ void i2c_acpi_register_devices(struct i2c_adapter *adap)
+>   	if (!adap->dev.parent)
+>   		return;
+>   
+> -	handle = ACPI_HANDLE(adap->dev.parent);
+> -	if (!handle)
+> +	adev = ACPI_COMPANION(adap->dev.parent);
+> +	if (!adev)
+>   		return;
+>   
+> -	acpi_walk_dep_device_list(handle);
+> +	acpi_dev_clear_dependencies(adev);
+>   }
+>   
+>   static const struct acpi_device_id i2c_acpi_force_400khz_device_ids[] = {
+> diff --git a/drivers/platform/surface/aggregator/core.c b/drivers/platform/surface/aggregator/core.c
+> index 8dc2c267bcd6..517f774a6e60 100644
+> --- a/drivers/platform/surface/aggregator/core.c
+> +++ b/drivers/platform/surface/aggregator/core.c
+> @@ -621,8 +621,8 @@ static const struct acpi_gpio_mapping ssam_acpi_gpios[] = {
+>   
+>   static int ssam_serial_hub_probe(struct serdev_device *serdev)
+>   {
+> +	struct acpi_device *ssh = ACPI_COMPANION(&serdev->dev);
+>   	struct ssam_controller *ctrl;
+> -	acpi_handle *ssh = ACPI_HANDLE(&serdev->dev);
+>   	acpi_status astatus;
+>   	int status;
+>   
+> @@ -652,7 +652,7 @@ static int ssam_serial_hub_probe(struct serdev_device *serdev)
+>   	if (status)
+>   		goto err_devopen;
+>   
+> -	astatus = ssam_serdev_setup_via_acpi(ssh, serdev);
+> +	astatus = ssam_serdev_setup_via_acpi(ssh->handle, serdev);
+>   	if (ACPI_FAILURE(astatus)) {
+>   		status = -ENXIO;
+>   		goto err_devinit;
+> @@ -706,7 +706,7 @@ static int ssam_serial_hub_probe(struct serdev_device *serdev)
+>   	 *       For now let's thus default power/wakeup to false.
+>   	 */
+>   	device_set_wakeup_capable(&serdev->dev, true);
+> -	acpi_walk_dep_device_list(ssh);
+> +	acpi_dev_clear_dependencies(ssh);
+>   
+>   	return 0;
+>   
+> diff --git a/drivers/platform/surface/surface3_power.c b/drivers/platform/surface/surface3_power.c
+> index cc4f9cba6856..dea82aa1abd4 100644
+> --- a/drivers/platform/surface/surface3_power.c
+> +++ b/drivers/platform/surface/surface3_power.c
+> @@ -446,12 +446,12 @@ mshw0011_space_handler(u32 function, acpi_physical_address command,
+>   
+>   static int mshw0011_install_space_handler(struct i2c_client *client)
+>   {
+> -	acpi_handle handle;
+> +	struct acpi_device *adev;
+>   	struct mshw0011_handler_data *data;
+>   	acpi_status status;
+>   
+> -	handle = ACPI_HANDLE(&client->dev);
+> -	if (!handle)
+> +	adev = ACPI_COMPANION(&client->dev);
+> +	if (!adev)
+>   		return -ENODEV;
+>   
+>   	data = kzalloc(sizeof(struct mshw0011_handler_data),
+> @@ -460,25 +460,25 @@ static int mshw0011_install_space_handler(struct i2c_client *client)
+>   		return -ENOMEM;
+>   
+>   	data->client = client;
+> -	status = acpi_bus_attach_private_data(handle, (void *)data);
+> +	status = acpi_bus_attach_private_data(adev->handle, (void *)data);
+>   	if (ACPI_FAILURE(status)) {
+>   		kfree(data);
+>   		return -ENOMEM;
+>   	}
+>   
+> -	status = acpi_install_address_space_handler(handle,
+> -				ACPI_ADR_SPACE_GSBUS,
+> -				&mshw0011_space_handler,
+> -				NULL,
+> -				data);
+> +	status = acpi_install_address_space_handler(adev->handle,
+> +						    ACPI_ADR_SPACE_GSBUS,
+> +						    &mshw0011_space_handler,
+> +						    NULL,
+> +						    data);
+>   	if (ACPI_FAILURE(status)) {
+>   		dev_err(&client->dev, "Error installing i2c space handler\n");
+> -		acpi_bus_detach_private_data(handle);
+> +		acpi_bus_detach_private_data(adev->handle);
+>   		kfree(data);
+>   		return -ENOMEM;
+>   	}
+>   
+> -	acpi_walk_dep_device_list(handle);
+> +	acpi_dev_clear_dependencies(adev);
+>   	return 0;
+>   }
+>   
+> diff --git a/drivers/platform/surface/surface_acpi_notify.c b/drivers/platform/surface/surface_acpi_notify.c
+> index ef9c1f8e8336..8339988d95c1 100644
+> --- a/drivers/platform/surface/surface_acpi_notify.c
+> +++ b/drivers/platform/surface/surface_acpi_notify.c
+> @@ -798,7 +798,7 @@ static int san_consumer_links_setup(struct platform_device *pdev)
+>   
+>   static int san_probe(struct platform_device *pdev)
+>   {
+> -	acpi_handle san = ACPI_HANDLE(&pdev->dev);
+> +	struct acpi_device *san = ACPI_COMPANION(&pdev->dev);
+>   	struct ssam_controller *ctrl;
+>   	struct san_data *data;
+>   	acpi_status astatus;
+> @@ -821,7 +821,8 @@ static int san_probe(struct platform_device *pdev)
+>   
+>   	platform_set_drvdata(pdev, data);
+>   
+> -	astatus = acpi_install_address_space_handler(san, ACPI_ADR_SPACE_GSBUS,
+> +	astatus = acpi_install_address_space_handler(san->handle,
+> +						     ACPI_ADR_SPACE_GSBUS,
+>   						     &san_opreg_handler, NULL,
+>   						     &data->info);
+>   	if (ACPI_FAILURE(astatus))
+> @@ -835,7 +836,7 @@ static int san_probe(struct platform_device *pdev)
+>   	if (status)
+>   		goto err_install_dev;
+>   
+> -	acpi_walk_dep_device_list(san);
+> +	acpi_dev_clear_dependencies(san);
+>   	return 0;
+>   
+>   err_install_dev:
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index 3a82faac5767..0b2c4f170f4d 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -280,6 +280,12 @@ struct acpi_device_power {
+>   	struct acpi_device_power_state states[ACPI_D_STATE_COUNT];	/* Power states (D0-D3Cold) */
+>   };
+>   
+> +struct acpi_dep_data {
+> +	struct list_head node;
+> +	acpi_handle supplier;
+> +	acpi_handle consumer;
+> +};
+> +
+>   /* Performance Management */
+>   
+>   struct acpi_device_perf_flags {
+> @@ -685,6 +691,7 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
+>   
+>   bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
+>   
+> +void acpi_dev_clear_dependencies(struct acpi_device *supplier);
+>   struct acpi_device *
+>   acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
+>   struct acpi_device *
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index c60745f657e9..170b9bebdb2b 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -666,7 +666,9 @@ extern bool acpi_driver_match_device(struct device *dev,
+>   				     const struct device_driver *drv);
+>   int acpi_device_uevent_modalias(struct device *, struct kobj_uevent_env *);
+>   int acpi_device_modalias(struct device *, char *, int);
+> -void acpi_walk_dep_device_list(acpi_handle handle);
+> +int acpi_walk_dep_device_list(acpi_handle handle,
+> +			      int (*callback)(struct acpi_dep_data *, void *),
+> +			      void *data);
+>   
+>   struct platform_device *acpi_create_platform_device(struct acpi_device *,
+>   						    struct property_entry *);
+> 
