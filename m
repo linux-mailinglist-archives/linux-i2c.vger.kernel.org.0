@@ -2,283 +2,194 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEFB38B0EC
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 16:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC67538B139
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 16:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235151AbhETOGY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 May 2021 10:06:24 -0400
-Received: from mail-mw2nam10on2126.outbound.protection.outlook.com ([40.107.94.126]:15488
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242685AbhETOFN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 20 May 2021 10:05:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MfmMetX4YWCM+hZ0s2oEhRsjT1xqOQu8mjU7VviEBbrMJvIjIrP50r7b3WnVD4cxQxDI2BqxoKzHkPaquZaUtKhdYJYPu4jhDTf7dXExvezI14iiD3v7HBWJ9nNQwouFCjqMhqpAtJvSxO7MVq5zXKAqZSZrUkzDQFqPuUlMcfvDF4wFX0cbQu2wCiXsFH5czIjktzIfSInQLJUx9jbzYs904Jzq0aV69X6Ihe6oOdXHkLSpkKbFpERkkpIvCNVBxF9bO7pne5i8kW84xCZ6jmwXaqHQQ9TiO8EsaUMB4C+QXu+ESnmGBQyFSeV/UAmgyEq4Y8cnOCvLDU1lr6Hjkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lyql9MaMdh47OJgpYDRPts7soSiw2EHAounFyrEltV0=;
- b=PpDqTnSZDiIazKprJmL9dGjc7lGFWULn70di6sJzMZLw7dENBOI+ARyLyxHwOF6ifjLVzRGmbMgvdnG2ZM16WH2ish22Vl7Kulgz9VB+KQuCyPqCujTx3kU0/cQNuiILRAOKk2efuLE75E/UTkWQDqRl5CZYhOHNhfzjE7ZNo7AjHBr2t4sQ/TiRykfeUPS57Ze+e3Cg5sRN1MxzEodkdnSNSbFecEBBNuKkGdTR9L8olFttx2GzwqcXyrpfp+xGr29xQzl45Uxli80xRjl0w+lSqYT9vz3WSsgVm0VwJ1/jLeeW971Gd8c0gqxTdo5DBkMrEheuoKj8cgjz5uj4Rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        id S237239AbhETOMy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 May 2021 10:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237114AbhETOMB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 10:12:01 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0421C061352;
+        Thu, 20 May 2021 07:09:41 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id x8so17818890wrq.9;
+        Thu, 20 May 2021 07:09:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lyql9MaMdh47OJgpYDRPts7soSiw2EHAounFyrEltV0=;
- b=O8vNssRH1rSaDThpwcuwEXEes8+HZi+Q5hWtOhIzZngQDNuU4D//K6Shigz45TiMB2PqrmL8+HhIxmJMnoThHqfThcaFgGAoy6NYd/rvmhZjF58FkuTINl4Z9Cb+0Jp3SEsFBCYYOLwMfHqVx6T/pRurDYylJP1/aTxKe7YfJoc=
-Authentication-Results: lists.ozlabs.org; dkim=none (message not signed)
- header.d=none;lists.ozlabs.org; dmarc=none action=none
- header.from=os.amperecomputing.com;
-Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- MWHPR01MB2672.prod.exchangelabs.com (2603:10b6:300:f2::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4150.23; Thu, 20 May 2021 14:03:48 +0000
-Received: from MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.4129.034; Thu, 20 May 2021
- 14:03:47 +0000
-Subject: Re: [PATCH v3 4/7] i2c: aspeed: Acknowledge Tx done w/wo ACK irq late
-To:     Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>
-Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ITSUS5r5hEUj7pr1CVlQCx/8PA216WAC5CyHFDa3mzk=;
+        b=Q+syC+MSVJ4dladQif2oXzxSVW5bVDYGTzkmbqFKqcGtGamw+E/idAExrlrsLn3dDS
+         SIlVlOv2T/WB+GrZ9OPyfNuyWtNptJRs597wboRr9l7q2mCzuZCDvNBUyJjX6jiW0EwD
+         TFiZ6HNYI+Wwk1U+b7L6SlHuLGGPShG35f10R3xwoC1e9GrIpR4zdQGF2xz+2t1izsca
+         j5q6bpO5Q6QS9vGoO7/tIASNo2puxpTqSM7vJcLCLA2u4lmNJCP/J/tENj5Ne5R08uei
+         L2eYL6DVltK8ybr1w9Eyh4SKA3uZl1I0WIA6f6tkreFKWqC/aaIU4F0w+lky+WmWEgya
+         /Cbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ITSUS5r5hEUj7pr1CVlQCx/8PA216WAC5CyHFDa3mzk=;
+        b=RQ9qwWK0HZ/O3YhL2wR+AMlYYyUkgvjmZOrwEc+9c6nIlo5Ptb0BHRcebAIrxrbQl5
+         U+WfaAaGA6EyNrs/k1Nq+QTARNEbNdtkA1NPoZRAcZ/pGvmFUVriAAfPbOR3yzEOGjpc
+         RhcxTatEHxfh9oLCH61p4qN4JfGGlt1ZxPRr3DChNSAq987d4rDT7ug/evdLXHaV9FR+
+         Fk3Fc00pWQ+ENfyrxYGIYaFqelvsvS16aHxKzZItM1kzRzi3LRlL1m4WwzKEBkNNKJA5
+         dUgYW7t6uA2IrUjvrGv6mNS2WVDq9QuC4zzX3q7bDI2zOMnelkBxX0Uk7XIOomK9OeYO
+         Y+SQ==
+X-Gm-Message-State: AOAM5312fyM9RiBOlVfI6Lmd9S0kq3dfqYCEDEhjq+1AdGrMatpqxxVO
+        cq4dhYoVfndlPe/CwaN6HM8=
+X-Google-Smtp-Source: ABdhPJyHTPqgQZdYYUho5mvrJ11+g7aF0gXsjQ4KRURic/VMsnbNjl4CETAc0oAYdIj7n5UCphPcgQ==
+X-Received: by 2002:adf:cc81:: with SMTP id p1mr4435946wrj.175.1621519780487;
+        Thu, 20 May 2021 07:09:40 -0700 (PDT)
+Received: from valhalla.home ([91.110.20.117])
+        by smtp.gmail.com with ESMTPSA id m6sm8411974wml.3.2021.05.20.07.09.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 07:09:40 -0700 (PDT)
+From:   Daniel Scally <djrscally@gmail.com>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
         Wolfram Sang <wsa@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-References: <20210519074934.20712-1-quan@os.amperecomputing.com>
- <20210519074934.20712-5-quan@os.amperecomputing.com>
- <CACPK8XdyQT=cuSr9KBqC0PBkOLgBUBpyz3kZEA3JuOuZsQN_Rw@mail.gmail.com>
- <414a51e8-0973-0007-9ffc-2949f3c7b0f8@roeck-us.net>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-Message-ID: <f7b8ee1d-61dc-68a8-f60e-25f99e104c04@os.amperecomputing.com>
-Date:   Thu, 20 May 2021 21:03:33 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.2
-In-Reply-To: <414a51e8-0973-0007-9ffc-2949f3c7b0f8@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [2402:800:623c:5f9b:6031:ff4f:8fc2:44d0]
-X-ClientProxiedBy: HK2PR02CA0199.apcprd02.prod.outlook.com
- (2603:1096:201:20::11) To MW2PR0102MB3482.prod.exchangelabs.com
- (2603:10b6:302:c::32)
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        devel@acpica.org
+Cc:     Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com
+Subject: [PATCH v4 0/8] Introduce intel_skl_int3472 module
+Date:   Thu, 20 May 2021 15:09:20 +0100
+Message-Id: <20210520140928.3252671-1-djrscally@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2402:800:623c:5f9b:6031:ff4f:8fc2:44d0] (2402:800:623c:5f9b:6031:ff4f:8fc2:44d0) by HK2PR02CA0199.apcprd02.prod.outlook.com (2603:1096:201:20::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.23 via Frontend Transport; Thu, 20 May 2021 14:03:43 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9c373ca7-6ea2-4650-30b0-08d91b981676
-X-MS-TrafficTypeDiagnostic: MWHPR01MB2672:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR01MB26724707C44289B435517C81F22A9@MWHPR01MB2672.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lScz7btVUYbqeQPrvviWcyZmoxnASf9wXSzbBFmdYw0iftLQn7hz9VNzQSw/U0kl0w1uYrNLWHNM+naU1lfMELb3RejzvSjGqfDnlGDyQvO3p9yWOgbltBCmWyhtf+9RFvJ9UnUimyJIlLMwIzVsNseFvBI+bOOKu+Y95Te5cd3+nJSPb1nbrqtXeZrJ92eTLxbkHH5uZKOs8h28HAUD3BjY9z1JBgYCviY6EFe23T7JPi71qWLj6oMIGsk44qkTZC6I1PyO5xoKGbbJD7PBYu50zah0s39C8y6c+nbKcWGfXNhAcCVkYWtvCG5Vd6EbliG7CV2oz8jnUsZNR0+/DtrSZzIjor6XZPOJUMv5DValSuR2GIW1+efWsljj3/6fUaQlcu8vg4rtN5rD2/PKbV3Ivyv12HHzvgONsnf1nnIVNuMfb4CTnPGlF000wNOT/ef6SVmq9hsgS7CGhawm/3iQnPNHrZpWATuT6ztzveki3cBEuNzmc5YhZF2jfrcVph83y+mEPLmF3UJrbUK4itIm9A75rvcQOVQFqhcOUpa9DnYM1PHjfoXx/8Df7y6Uq7ujptn3tn9l24z7mvU5Kwvp2OJwTPB53lLxDvZA3dVIZZM+0MV3lTeWWZXtAg18SoHyJcmqp+Y+NzhKmFq5aGDV4tuOd3m7YSPzzs14onMMPSnUEQs4nYLkVHFbKFJk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39840400004)(366004)(346002)(136003)(396003)(16526019)(86362001)(186003)(7416002)(83380400001)(52116002)(66556008)(66476007)(31696002)(53546011)(66946007)(6666004)(478600001)(2616005)(31686004)(8936002)(38100700002)(316002)(54906003)(8676002)(6486002)(110136005)(5660300002)(4326008)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?cGVnaUIvL0o4NFV3SHA1S01UQVpsbTk4Uk5pclpBWEZDVERxZlR5TFFDOW41?=
- =?utf-8?B?c3ZJWmxkSFBhbHp5Qmk5czBROTE4TjNjVVdiay9DWE9qZU4zTTJZK1FLOXMr?=
- =?utf-8?B?RGY4MDFzZ1p3clFlVGhkUDVqazFmN1FGdFFzekZieFhZS2JPTFU4Z0h6YlNF?=
- =?utf-8?B?ZllWUkhYRVhueFhDNGlvMGtLRTBBVC9HRS8wRnlHdzZsVzZsRGQxbGx0M0kx?=
- =?utf-8?B?OXI4K0pjU1FLLzVGRUppekhGbDJtK3UzT1U1ZUd2Z1NlM2NnTVdGcGllTklL?=
- =?utf-8?B?aWVaODhQZTlDRkFHUGg3MzBRUk5SVU1qRklHaWt2N0JaRkkyT21QVjh1NjIr?=
- =?utf-8?B?UTdsRURsc1Fta082STdHTWZUT3Q3eU85OHZLUkUwYWdRUExKZVBleUdWVEY3?=
- =?utf-8?B?clVTcWI4MCtVNEEwbm55YlNDZnM1OG1FdGhTY2RnUXpHdU56N3VPWHBiWFNB?=
- =?utf-8?B?cGRZQ2xobTJCM1dFVlZZaTVjekxqbkNMSHlMKzk2MFZzKzg1TE51UnAweDFB?=
- =?utf-8?B?aHJTV29sNXpVbTZUam5ONzJma3pzWGtXR2laNE1mQTZwcGkwZXBwczYrZ3BT?=
- =?utf-8?B?MUdjVUFFSU8wRHpBZ3lIV0FnMjliMnM5Q1NTRjFHUTd6MmVleTAyK3lzenZm?=
- =?utf-8?B?UVcxbU9aWmorQ2lxaG9XeGhIOUVtZVMrN3crQzd1SFB3dXpWdUNWSVFUak5G?=
- =?utf-8?B?QVI0Vm1USDU5MENoU2Z0SUxScGEzUmlvdlZUUEhOdjRZcHJCY2k4SXFzdi9r?=
- =?utf-8?B?RGhxN24yUmpVbkhCVGZqMkx5UUZuUjEzSnZwMDd3d3IvVzJYTlN2eDlObkVs?=
- =?utf-8?B?TWtnNVFRdld3Q2RPRFNFQmNJZHdQYXFnYWxWSHdUUyt3RTFSaVZBL1RmZ2xr?=
- =?utf-8?B?aHRQOEtid2NRd3BuMzFibWNpRjFDQ1JqVzRKN0dWNk5kWG54YTdTUUFQS1pX?=
- =?utf-8?B?WXlMd09VK2tPUkpRb0x6OHZUejFseEpRSWwycVFzclBJdVFTSjFyemFEWENH?=
- =?utf-8?B?ci9qcEJ2MXBHZm51SVo5YWFadHVYYnFxckdoUXBlU2licG1ETHdSV1dWdEdn?=
- =?utf-8?B?RUkxUCtKZnQ5VmxuTHI0OEw0MFZhdzlkZS9wN3pGdVBJdWtYUkF2NE9Damkr?=
- =?utf-8?B?TllBdXQ0ZmlvM0Y3NFhHRXcrQmg4NnQrRjB3Mm5YYnNnaldkam1KRy93M2li?=
- =?utf-8?B?SUs1YkQxeDZLQVdYTmtwVWN3a3NLMDVWVStqUElOTEhDQ3FzN1RSZ044cDU1?=
- =?utf-8?B?TUMxTWJlZEZ0L0xLVGpYSWFmQzNZNjdtcURjN0wyTEJDZCt0MXd3Y1FQQ1dv?=
- =?utf-8?B?Z0s2MnFLMWN6a3RMU1dKSlA4TUxUa0FsaHZCLzdLQm04dmE0K05HT3ZCM0Vp?=
- =?utf-8?B?Ukgrek9hTi9aN3FCOHV5SmVOVWcyZVdwTUkzdWJKcXhwRU5HZ0pabUdjcXNF?=
- =?utf-8?B?cDBTUXFoRFZWSHhOTjdlT1JXTmprUEIvbStpcEk4cS8zd3FWa1llbnlnZmda?=
- =?utf-8?B?NHFTZkhWb2NhOHQ2SWh4UXU1L0lzRlNVb2VyLys0dFQ5QTIwOERFY2MxUzRq?=
- =?utf-8?B?dU0vN2pZbkZQaVJReEFvMUN5OThhalZGT1VIUzY1UG9Ndk5sVVdWMi9QMVJp?=
- =?utf-8?B?K0tqL3NyTEF4T05PanQyQk9LRVplMC9qSHpyWDNaVEJSOXFIcE4yY1FOSkZy?=
- =?utf-8?B?REkrajZxRVN5SDJjN0NoZ1VaSHBLTGo3NytweFJEMmRLN0FPajJxMUV4WjNq?=
- =?utf-8?B?WVRlVUUxb3E4TXJsb2N4RzhjcEt3OGROa2JxbDIwRm16WlRyVGhpUThVZlNw?=
- =?utf-8?B?K0pUcXZhNDVDQ0U5U3kvMVFRcW5kVzFLbGcxN01Pc0ZFOTdYZTRpQ2wzeWow?=
- =?utf-8?Q?SITIDzb1w5/h3?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c373ca7-6ea2-4650-30b0-08d91b981676
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2021 14:03:47.8407
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /WqiZg7nkrXqekyb6VcDW0LQ4YYZt8V3LiTRqcElkn9nlHsC2I5vun29vmk+TQf7OWnZk0FhVQgQJ+ZX3gE7Yu5/JUMzLStcen3aHy7J5pE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR01MB2672
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 20/05/2021 08:19, Guenter Roeck wrote:
-> On 5/19/21 4:43 PM, Joel Stanley wrote:
->> On Wed, 19 May 2021 at 07:50, Quan Nguyen 
->> <quan@os.amperecomputing.com> wrote:
->>>
->>> With Tx done w/wo ACK are ack'ed early at beginning of irq handler,
->>
->> Is w/wo a typo? If not, please write the full words ("with and without")
->>
->>> it is observed that, usually, the Tx done with Ack irq raises in the
->>> READ REQUESTED state. This is unexpected and complaint as below appear:
->>> "Unexpected Ack on read request"
->>>
->>> Assumed that Tx done should only be ack'ed once it was truly processed,
->>> switch to late ack'ed this two irqs and seen this issue go away through
->>> test with AST2500..
->>
->> Please read Guneter's commit message
->> 2be6b47211e17e6c90ead40d24d2a5cc815f2d5c to confirm that your changes
->> do not invalidate the fix that they made.  Add them to CC for review.
->>
-> 
-> This might re-introduce a race condition if the code that is handling
-> Tx done sends another byte without acknowledging the original interrupt,
-> and another Tx done (or Tx nack) interrupt is received before the interrupt
-> handler returns. If that happens, the second Tx done interrupt would be
-> acknowledged but not be handled, and transmit would stall. That may well be
-> what I had observed at the time but it is too long ago to remember, sorry.
-> 
-My assumption is that HW will start sending another byte as soon as the 
-Tx done of the previous byte is ack'ed. So if it was ack'ed early before 
-the slave irq handler to actually prepare the next byte to send, garbage 
-value might be sent out instead.
-I'm not sure if my assumption is correct but this patch do help in this 
-case.
-Please help with your comment.
+Hello all
 
->> Again, this is a fix that is independent of the ssif work. Please send
->> it separately with a Fixes line.
->>
->>>
->>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->>> ---
->>> v3:
->>>    + First introduce in v3 [Quan]
->>>
->>>   drivers/i2c/busses/i2c-aspeed.c | 26 ++++++++++++++++++--------
->>>   1 file changed, 18 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/drivers/i2c/busses/i2c-aspeed.c 
->>> b/drivers/i2c/busses/i2c-aspeed.c
->>> index 3fb37c3f23d4..b2e9c8f0ddf7 100644
->>> --- a/drivers/i2c/busses/i2c-aspeed.c
->>> +++ b/drivers/i2c/busses/i2c-aspeed.c
->>> @@ -606,8 +606,12 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, 
->>> void *dev_id)
->>>
->>>          spin_lock(&bus->lock);
->>>          irq_received = readl(bus->base + ASPEED_I2C_INTR_STS_REG);
->>> -       /* Ack all interrupts except for Rx done */
->>> -       writel(irq_received & ~ASPEED_I2CD_INTR_RX_DONE,
->>> +       /*
->>> +        * Ack all interrupts except for Rx done and
->>> +        * Tx done with/without ACK
->>
->> Nit: this comment can be on one line.
->>
->>
->>> +        */
->>> +       writel(irq_received &
->>> +              ~(ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_TX_ACK | 
->>> ASPEED_I2CD_INTR_TX_NAK),
->>>                 bus->base + ASPEED_I2C_INTR_STS_REG);
->>>          readl(bus->base + ASPEED_I2C_INTR_STS_REG);
->>>          irq_received &= ASPEED_I2CD_INTR_RECV_MASK;
->>> @@ -652,12 +656,18 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, 
->>> void *dev_id)
->>>                          "irq handled != irq. expected 0x%08x, but 
->>> was 0x%08x\n",
->>>                          irq_received, irq_handled);
->>>
->>> -       /* Ack Rx done */
->>> -       if (irq_received & ASPEED_I2CD_INTR_RX_DONE) {
->>> -               writel(ASPEED_I2CD_INTR_RX_DONE,
->>> -                      bus->base + ASPEED_I2C_INTR_STS_REG);
->>> -               readl(bus->base + ASPEED_I2C_INTR_STS_REG);
->>> -       }
->>> +       /* Ack Rx done and Tx done with/without ACK */
->>> +       /* Note: Re-use irq_handled variable */
->>
->> I'm not sure what this note means.
->>
->>> +       irq_handled = 0;
->>> +       if (irq_received & ASPEED_I2CD_INTR_RX_DONE)
->>> +               irq_handled |= ASPEED_I2CD_INTR_RX_DONE;
->>> +       if (irq_received & ASPEED_I2CD_INTR_TX_ACK)
->>> +               irq_handled |= ASPEED_I2CD_INTR_TX_ACK;
->>> +       if (irq_received & ASPEED_I2CD_INTR_TX_NAK)
->>> +               irq_handled |= ASPEED_I2CD_INTR_TX_NAK;
->>> +       writel(irq_handled, bus->base + ASPEED_I2C_INTR_STS_REG);
->>
->> Are you intentionally only acking the bits that are set when we read
->> from STS_REG at the start of the handler? If not, we could write this
->> instead:
->>
->> writel(ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_TX_ACK |
->> ASPEED_I2CD_INTR_TX_NAK,
->>          bus->base + ASPEED_I2C_INTR_STS_REG);
->>
-> 
-> This would clear those bits unconditionally even if they were not handled.
-> 
->> If you only want to ack the bits that are set, then do this:
->>
->>    writel(irq_received &
->>              (ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_TX_ACK |
->> ASPEED_I2CD_INTR_TX_NAK),
->>           bus->base + ASPEED_I2C_INTR_STS_REG);
->>
->> That way, you can avoid all of the tests.
->>
-> Or
->      irq_handled = irq_received &
->          (ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_TX_ACK | 
-> ASPEED_I2CD_INTR_TX_NAK);
->      writel(irq_handled, bus->base + ASPEED_I2C_INTR_STS_REG);
-> 
-> if the idea was to avoid the long statement.
-> 
-> Guenter
-> 
-Thanks Guenter,
-Will apply in next version.
+Apologies for the long delay since the last version of this series; the time I
+had free to work on it became somewhat restrained.
 
->>> +       readl(bus->base + ASPEED_I2C_INTR_STS_REG);
->>
->> When you move this, please add a comment that reminds us why we do a
->> write-then-read (see commit c926c87b8e36dcc0ea5c2a0a0227ed4f32d0516a).
->>
->>> +
->>>          spin_unlock(&bus->lock);
->>>          return irq_remaining ? IRQ_NONE : IRQ_HANDLED;
->>>   }
->>> -- 
->>> 2.28.0
->>>
-> 
+v1 for this series was originally 14-18 of this series:
+https://lore.kernel.org/linux-media/20201130133129.1024662-1-djrscally@gmail.com/T/#m91934e12e3d033da2e768e952ea3b4a125ee3e67
+
+v2 was here:
+https://lore.kernel.org/platform-driver-x86/20210118003428.568892-1-djrscally@gmail.com/
+
+v3 was here:
+https://lore.kernel.org/lkml/20210222130735.1313443-1-djrscally@gmail.com/
+
+Series level changelog:
+
+	- Added patch 5/8 to make clkdev_drop() NULL aware to simplify error
+	handling.
+	- Added patch 6/8 to add acpi_gpio_get_io_resource().
+
+This has been tested on a number of devices, but currently **not** on a device
+designed for ChromeOS, which we ideally need to do to ensure no regression
+caused by replacing the tps68470 MFD driver. Unfortunately, I don't have a
+device to test it on myself.
+
+=========== Original Cover Letter ===========
+
+At the moment in the kernel the ACPI _HID INT3472 is taken by the tps68470
+MFD driver, but that driver can only handle some of the cases of that _HID
+that we see. There are at least these three possibilities:
+
+1. INT3472 devices that provide GPIOs through the usual framework and run
+   power and clocks through an operation region; this is the situation that
+   the current module handles and is seen on ChromeOS devices
+2. INT3472 devices that provide GPIOs, plus clocks and regulators that are
+   meant to be driven through the usual frameworks, usually seen on devices
+   designed to run Windows
+3. INT3472 devices that don't actually represent a physical tps68470, but
+   are being used as a convenient way of grouping a bunch of system GPIO
+   lines that are intended to enable power and clocks for sensors which
+   are called out as dependent on them. Also seen on devices designed to
+   run Windows.
+
+This series introduces a new module which registers:
+
+1. An i2c driver that determines which scenario (#1 or #2) applies to the
+   machine and registers platform devices to be bound to GPIO, OpRegion,
+   clock and regulator drivers as appropriate.
+2. A platform driver that binds to the dummy INT3472 devices described in
+   #3
+
+The platform driver for the dummy device registers the GPIO lines that
+enable the clocks and regulators to the sensors via those frameworks so
+that sensor drivers can consume them in the usual fashion. The existing
+GPIO and OpRegion tps68470 drivers will work with the i2c driver that's
+registered. Clock and regulator drivers are available but have not so far been
+tested, so aren't part of this series.
+
+The existing mfd/tps68470.c driver being thus superseded, it is removed.
+
+Thanks
+Dan
+
+Daniel Scally (8):
+  ACPI: scan: Extend acpi_walk_dep_device_list()
+  ACPI: scan: Add function to fetch dependent of acpi device
+  i2c: core: Add a format macro for I2C device names
+  gpiolib: acpi: Export acpi_get_gpiod()
+  clkdev: Make clkdev_drop() null aware
+  gpiolib: acpi: Add acpi_gpio_get_io_resource()
+  platform/x86: Add intel_skl_int3472 driver
+  mfd: tps68470: Remove tps68470 MFD driver
+
+ MAINTAINERS                                   |   5 +
+ drivers/acpi/ec.c                             |   2 +-
+ drivers/acpi/pmic/Kconfig                     |   2 +-
+ drivers/acpi/pmic/intel_pmic_chtdc_ti.c       |   2 +-
+ drivers/acpi/scan.c                           | 107 ++++-
+ drivers/clk/clkdev.c                          |   3 +
+ drivers/gpio/Kconfig                          |   2 +-
+ drivers/gpio/gpiolib-acpi.c                   |  61 ++-
+ drivers/i2c/i2c-core-acpi.c                   |   8 +-
+ drivers/i2c/i2c-core-base.c                   |   4 +-
+ drivers/mfd/Kconfig                           |  18 -
+ drivers/mfd/Makefile                          |   1 -
+ drivers/mfd/tps68470.c                        |  97 -----
+ drivers/platform/surface/aggregator/core.c    |   6 +-
+ drivers/platform/surface/surface3_power.c     |  22 +-
+ .../platform/surface/surface_acpi_notify.c    |   7 +-
+ drivers/platform/x86/Kconfig                  |   2 +
+ drivers/platform/x86/Makefile                 |   1 +
+ drivers/platform/x86/intel-int3472/Kconfig    |  31 ++
+ drivers/platform/x86/intel-int3472/Makefile   |   5 +
+ .../intel_skl_int3472_clk_and_regulator.c     | 195 +++++++++
+ .../intel-int3472/intel_skl_int3472_common.c  | 106 +++++
+ .../intel-int3472/intel_skl_int3472_common.h  | 113 +++++
+ .../intel_skl_int3472_discrete.c              | 409 ++++++++++++++++++
+ .../intel_skl_int3472_tps68470.c              | 109 +++++
+ include/acpi/acpi_bus.h                       |   8 +
+ include/linux/acpi.h                          |  11 +-
+ include/linux/gpio/consumer.h                 |   2 +
+ include/linux/i2c.h                           |   3 +
+ 29 files changed, 1175 insertions(+), 167 deletions(-)
+ delete mode 100644 drivers/mfd/tps68470.c
+ create mode 100644 drivers/platform/x86/intel-int3472/Kconfig
+ create mode 100644 drivers/platform/x86/intel-int3472/Makefile
+ create mode 100644 drivers/platform/x86/intel-int3472/intel_skl_int3472_clk_and_regulator.c
+ create mode 100644 drivers/platform/x86/intel-int3472/intel_skl_int3472_common.c
+ create mode 100644 drivers/platform/x86/intel-int3472/intel_skl_int3472_common.h
+ create mode 100644 drivers/platform/x86/intel-int3472/intel_skl_int3472_discrete.c
+ create mode 100644 drivers/platform/x86/intel-int3472/intel_skl_int3472_tps68470.c
+
+-- 
+2.25.1
 
