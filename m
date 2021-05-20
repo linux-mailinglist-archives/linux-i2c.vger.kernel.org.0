@@ -2,111 +2,260 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BE838AE1D
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 14:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AA638B05D
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 15:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbhETMZX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 May 2021 08:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbhETMZR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 08:25:17 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BA3C0AF781
-        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 04:21:13 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id u5-20020a7bc0450000b02901480e40338bso4865627wmc.1
-        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 04:21:13 -0700 (PDT)
+        id S237195AbhETNt5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 May 2021 09:49:57 -0400
+Received: from mail-dm6nam10on2124.outbound.protection.outlook.com ([40.107.93.124]:24929
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239530AbhETNt4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 20 May 2021 09:49:56 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ifB88yCJYQEWB1qlW7PVz4D9uc2NQugMETgtBsMO/IlbzV6PrIXJH+GLaqs2KJk2aL8FpQmAJr35soHSoLQljOR4XRideofHW+MR2sTiQ3OTFPAJmerNdYChIuSM5CifIhFvdAphdLOQefM83WHv6/iI6KwwuYOjeEPbmmGoCmqTEgjbto6McXdo6UKJ9hVzxEZSmeMPpIq7qWVrRg3q1udKKC1aYLY7e8NSwBrRqvLL8V7PPYx0SiC4YjUuXIMsPVs+0CfU5je7zPFNDB+jd/Hgk+lxXKaFaVZLZn8HoA2RdKv47dMKc7k9cY3tIq+sO92a7sm22UIm58PACoXAnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TrKWV+2RxRaXCa7k/htcqM0z38S9dsSMzpPixHdE1A4=;
+ b=Cf7sZi7CxpFY1jQVqpVHZ574AK8xyyX2huPOExKl0eQfo7+Roo+IHuKn8cqGDGBmHl9jL3L/siScUaOkoNBUxLsNSimgz4oI56r80BeFuWUPU3FmBkXFQtXM/qW2awqn1sP00RgD045+V320nbe2LoKqKTdZf3QjCoxqgvvQ03hF+mry3Z1hxQjAn9KzQ5012n2mzJCKpfCongwLc1t7U2rQOZtUBe1D0IW40Ta25aUm0A0+91Y5nomcIz4Ulqr2xhga+wY4tRmAOTK44mSz89FFGTt99NtspoPiqAGVg0T0DcwXNr6xJJY6CvRIyMBcLFxfJ4W6JkjzuTTYTGq68w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SYtTHed5+bcflT7W1MwJxVtTplHwdof5DPlJCzKg/GU=;
-        b=wHzSjTiwKXBcRbEJoWYfBbHsBACdQyin173EJ35ibk/Le84pDQz22+ydLN+s2rjISy
-         I+JQrHpSULjWpslolZhZ5oNzuFn6Jm4Xfez874QzyEF3o1vjZLDKl5RfL6iEpjDpTU6E
-         GsWAE200CVFWmzZB0jBnSHQiysNZqmuHA4QBYeUZNk7kY6BB8Z9W7JH+a6/3a+lWNf1q
-         aiDoJJPNe7khmZ6EHXZO1bhn6GXd4F7Hp/o3NyaiFDPEhbKCcue5aqXjPfe0cBmp8TKB
-         DNHKneadShb9fVu0FQOnKh4P481VVKGXrk6C+/s6sN3zz62tMKeeqha/+VCFc2gHYup/
-         yVdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SYtTHed5+bcflT7W1MwJxVtTplHwdof5DPlJCzKg/GU=;
-        b=oyxDM/bWqAzxho5h/7ON4eo5QhnW5BQ4SJFohB8Y+cfYWN68P8T+GdYqn+fyNNjivu
-         Wgfss6OmcMYAWUGs6tugtQ8y5o2/W01Q5/PAYNhE90BcNxOCizZAPiWFPQ3x2F4dNi6f
-         J+/Tr9xo350uNLZuX/Go5aVFY6ekKNKNVOfgwnQQk6BfZwnrXl/Zav/8A6wbe8YeQp2F
-         Qg7Ew4MwjBiK5yPPlmUiNAQf+Nufilmtyk8eHNKp4lV3Pms/kohd3pQOaX1vw0PX2TwY
-         uaI3zsAXnWLPYn9ryqwcZhDc8XuKROFJijLtYzi1MScK+O3y1+ue9zX1WE2KMBBRtsry
-         5wLA==
-X-Gm-Message-State: AOAM53234BlO7Lycr+31cG3yg6csatgDaHtMpYCi2SjF5CodN2e0j+29
-        fLH9AR0MJdIfdab++1N+MHKS5g==
-X-Google-Smtp-Source: ABdhPJwvuM5ZR01Iie6YuQBaMHLb3duG28paxLrXOheP+cO3HgcEo+2Qn9ejUUvRZNq2JhTAWP7/DQ==
-X-Received: by 2002:a05:600c:5c1:: with SMTP id p1mr1599688wmd.10.1621509671651;
-        Thu, 20 May 2021 04:21:11 -0700 (PDT)
-Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id o11sm2756646wrq.93.2021.05.20.04.21.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 04:21:11 -0700 (PDT)
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     mkorpershoek@baylibre.com, Fabien Parent <fparent@baylibre.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/4] i2c: i2c-mt65xx: add MT8365 SoC support
-Date:   Thu, 20 May 2021 13:21:04 +0200
-Message-Id: <20210520112106.77190-3-fparent@baylibre.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210520112106.77190-1-fparent@baylibre.com>
-References: <20210520112106.77190-1-fparent@baylibre.com>
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TrKWV+2RxRaXCa7k/htcqM0z38S9dsSMzpPixHdE1A4=;
+ b=qtU9oqYZnwxyObL2z1XFhK/q5AVI1mFwl9Qi4m63dmzNWednEHkbvmeiLH9udVNqVD0aZC1DVgxhMwdJGmZgKb5EIzGbmHigrFsyRZJcaROdUMTzTkJte8ToGB7kAsAY18LYVLNbWwYXxdHvEJGJIAfbNAoM/jmG3ERxq890LDM=
+Authentication-Results: lists.ozlabs.org; dkim=none (message not signed)
+ header.d=none;lists.ozlabs.org; dmarc=none action=none
+ header.from=os.amperecomputing.com;
+Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
+ MW2PR0102MB3450.prod.exchangelabs.com (2603:10b6:302:2::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4129.28; Thu, 20 May 2021 13:48:30 +0000
+Received: from MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.4129.034; Thu, 20 May 2021
+ 13:48:30 +0000
+Subject: Re: [PATCH v3 3/7] i2c: aspeed: Fix unhandled Tx done with NAK
+To:     Joel Stanley <joel@jms.id.au>, Ryan Chen <ryan_chen@aspeedtech.com>
+Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+References: <20210519074934.20712-1-quan@os.amperecomputing.com>
+ <20210519074934.20712-4-quan@os.amperecomputing.com>
+ <CACPK8XeFsuEXeCvG9DC0z+tiri6ptjOFOXe3x+COEZTVqUbVFg@mail.gmail.com>
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+Message-ID: <211c8380-8909-4acd-5b7e-9ba2a0f20834@os.amperecomputing.com>
+Date:   Thu, 20 May 2021 20:48:08 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.2
+In-Reply-To: <CACPK8XeFsuEXeCvG9DC0z+tiri6ptjOFOXe3x+COEZTVqUbVFg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2402:800:623c:5f9b:6031:ff4f:8fc2:44d0]
+X-ClientProxiedBy: HK2PR0401CA0021.apcprd04.prod.outlook.com
+ (2603:1096:202:2::31) To MW2PR0102MB3482.prod.exchangelabs.com
+ (2603:10b6:302:c::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2402:800:623c:5f9b:6031:ff4f:8fc2:44d0] (2402:800:623c:5f9b:6031:ff4f:8fc2:44d0) by HK2PR0401CA0021.apcprd04.prod.outlook.com (2603:1096:202:2::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.23 via Frontend Transport; Thu, 20 May 2021 13:48:25 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 54db8243-2b4c-4273-a8ed-08d91b95f33b
+X-MS-TrafficTypeDiagnostic: MW2PR0102MB3450:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MW2PR0102MB3450F7D7631AAF19E750B495F22A9@MW2PR0102MB3450.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Y0qn++om+sriSy/q+EQwBpS1++ww61X+3+gjzDT+l4EwFMvvBHLj9W8fswhi9MKpni7Q/6RNsStOy6qiLlI8Z9mw05KKIk8qgw9AyVgN+Bb2vQpTpPDIQnn0AU/4w3VHhTgUVSS378aNBXg1+FiYI488t0TETZGbUcaghtcQjWTDD3R2WqDfOPBtgLwUsOxhW9yy50yApiP0m330bccVsMTj/BrWlH8o7VlwsAbaBZLu6xfmYMI8UT2+tHxA18UEfPC8dug2cAgXQd367G2oEbxIPqLNp7GvlFbfqhbUf9TSeZN+RCb1Yu1ptry7EC1PLimL2UziKcl7ddfEj8PQ197AljvkY4JhJiPjz33x2jHzyKfZdGR++IrfDQR2FngmGJxjAMamZq+jCdKaQzYCQzMDz4SMNGXxqdeX30v623zFNdJESAqzzDSC8ismp+/EQ7t4tLXGBsSwevKLlwYWQ+DFDs7fVLDVGFhh3BwCrNOocN6VYWcDpIctV3VoISDAdDgghJW9bHadhqGizfTjxpH1fwGP3rRLv1Q/avcee33qggl7zoWHz2FuFDpcHsY0R1CMVZHzjjEuVBmU2a7kCSscaGcR3oL/wYUvIn86kVPeNzDw7so3b3/PTfX++MZkcGKJu8eQDwTxNdavtk2gwfcZ6b+kKlKnoAeA505ofdxdtyp3f12jPRoqeCINT8cP
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39830400003)(346002)(396003)(376002)(136003)(8936002)(16526019)(2616005)(4326008)(86362001)(8676002)(53546011)(38100700002)(2906002)(186003)(316002)(7416002)(31686004)(6486002)(478600001)(31696002)(66946007)(54906003)(83380400001)(110136005)(5660300002)(66476007)(52116002)(66556008)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?TXpjbnlIMFNaenAwOWFJaC9nV0wwdHgrdjYyTUZ6V0taWUs4RElJZGNkYlFP?=
+ =?utf-8?B?RjYwbURWR0NLOHN2Rll6cCsrbWZIUkdvQWI1dFVqbDFNb21HZWZFY3lhZUNZ?=
+ =?utf-8?B?dlFBVU95N2FLZUx1NXRyMXpnbGFMR0RUWm1Od0dmemZTNzlVVVdmUGY2cVJK?=
+ =?utf-8?B?WlA4dnE5VDNjYUdPdVpJbTB4eFJ5Unc5VVZYWE5SUnIrR3cwRDFHc2lWWHZN?=
+ =?utf-8?B?Ri9IYitIQXZVbFRYWTJla0NTSGpzNGcrbTVVQ1I4bWZCcHluRUZjQTdROG80?=
+ =?utf-8?B?c3pZSVhrazJsWG5nMUFxWG4xcXdzbTRqUU9FRnVveTZ0VGVzSGdPMFEwUXY1?=
+ =?utf-8?B?Nzgxc0haV0tKL0Q0N29KUDZmcVpKNkRaWUwwU1Z1ejBuMmtNSm1vUXhwRzJX?=
+ =?utf-8?B?dS9LdnlaS293SStpTFBWNDNTaGsxR2dlY1pKQnA5U0xPKzlIdUlvQzJpWGIw?=
+ =?utf-8?B?ZlRKUW1QM04zclI2cG5xdmJyUFJ2ekhwSStwYis3dmNkK0t6d3ZCMFFSTWZy?=
+ =?utf-8?B?Nmx0NUpkTURyMjhGYVhDYkl1Tk5vMGhkUGNBZktONXZMNW53NGV1RE1vdHdp?=
+ =?utf-8?B?bUNsTGptQ0gxSlNVOTF3MzlaZ0gzYVZZNkdVUUxONFBjN1pUcndRQ1B3N1F2?=
+ =?utf-8?B?MThWMlhzWHlxTkFnL1BQUldZdnc5WW93UVRMRk56eFlOOG8zdm13MWlpNVB3?=
+ =?utf-8?B?NkxTb0NJMWZLTkRZV3N2Y2lJOG5xMDE1YlIvZFlLOURNUEgrQ2F0WUREMnZI?=
+ =?utf-8?B?OFhYVUxsYkNaeThJei91TmF5QUEvTUhzNDdGejZpTnNtUmNkT3pUQ0pVTkxC?=
+ =?utf-8?B?MU96UHBSVlYrWjFjUEJvZ1FMU2xOQ1AzditMYzcrMTU1L1NXWFdzZlFqTE8x?=
+ =?utf-8?B?KzNJbDI4V05kV3dEQkNlYTcyVkR2RFNOMTRUZTVDbEViUDVaakFibjEydm5x?=
+ =?utf-8?B?Z1hvZmZ3a2J1OE5Hb0lORHVBd1RXQytTTGRIT001ZEZ3dWloNXkwSFNzMmEz?=
+ =?utf-8?B?RDZjVW14QkpVMzdWSDJReGZkc1Zhdm1sN25jRUtYbk1KQWZLbi9DYithbzJ0?=
+ =?utf-8?B?NW8wRkd3K1RuZUF1SlN4MGxuRWltWDFueDFJMHMwemxaV044MGlPTGt5Y3FM?=
+ =?utf-8?B?d2E5Q0NDck5nSG5SNW1qTm90VzI2b2daazhCeVlUZk5aY0FjbVZoTUF1Tlpp?=
+ =?utf-8?B?d3R1a2dxYWtaTExOZTFLMGs1NW5ZVjM5UzV3S1VLNEFieWhPOVVRRjRibGp5?=
+ =?utf-8?B?dnNrbzZIbW1SQytGdHgxeEpwTUphNVlTdStqdGQyRjZRUEJoZHNsd2xwMlpo?=
+ =?utf-8?B?Rzc5S3hmaXFwa3lkZTFZT09RZVZzT1l1ZVZmbGVaL05JUFhZckNRRmVNOG9z?=
+ =?utf-8?B?d2ludVFUNHpMMVA0YVBUS0RmNXhENGRTR0F5L2RhSkVrNWZqOUNaU1U3a3hU?=
+ =?utf-8?B?NEdwbjJwOEYvdEZscTh0VUI3Wmt1ZnBYRCtnSUJBQ1ZzRDBpMTU1U0dtc00x?=
+ =?utf-8?B?SDgzaVU5ZzcxenMxcWdLYWNIb0tRMklhd3NwZFZCamRuekxpbmZIaDh0RlQv?=
+ =?utf-8?B?VGVXTWhXbmdQa0JYSVpSdStIRXBXVnlBVFpZZmhja3RJTStMOEpXaXpCUk5J?=
+ =?utf-8?B?SzNta2Zvc2l6M2JtenpWRFo0M3pNZkRCdS9MMHhMN21FSUdBUWk2MjdkcFJp?=
+ =?utf-8?B?R3M1dlBVTkxRUVRmTEFvVHFaS0FZN0NOU0NHSmdlZjgwTEdma242Qi9PK0Vy?=
+ =?utf-8?B?all6b3RHeENYUytGWGM3TC8wZkNJZk1qYmMzMVlWcmEwaWRjQkV2UnNjMmVX?=
+ =?utf-8?B?SVZnSnJKV0ViVk1DVnBZNnp0L2JVMXoxY1JGaWtUT3RTM2FmREpwUE5EdlNL?=
+ =?utf-8?Q?YktzNHY+K+Uqf?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54db8243-2b4c-4273-a8ed-08d91b95f33b
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2021 13:48:29.8184
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gjdloSw5GK5Xd/uZGhps00mClcI10lcxDVMr/N+ifoVFrcEHqPwFwlyWp6qfqRMHwvfL9Jin/NugGmFEQvdklSKdJJUdusESi66gE39tf+I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR0102MB3450
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for I2C on MT8365 SoCs.
+On 20/05/2021 06:28, Joel Stanley wrote:
+> Ryan, can you please review this change?
+> 
+> On Wed, 19 May 2021 at 07:50, Quan Nguyen <quan@os.amperecomputing.com> wrote:
+>>
+>> It is observed that in normal condition, when the last byte sent by
+>> slave, the Tx Done with NAK irq will raise.
+>> But it is also observed that sometimes master issues next transaction
+>> too quick while the slave irq handler is not yet invoked and Tx Done
+>> with NAK irq of last byte of previous READ PROCESSED was not ack'ed.
+>> This Tx Done with NAK irq is raised together with the Slave Match and
+>> Rx Done irq of the next coming transaction from master.
+>> Unfortunately, the current slave irq handler handles the Slave Match and
+>> Rx Done only in higher priority and ignore the Tx Done with NAK, causing
+>> the complain as below:
+>> "aspeed-i2c-bus 1e78a040.i2c-bus: irq handled != irq. expected
+>> 0x00000086, but was 0x00000084"
+>>
+>> This commit handles this case by emitting a Slave Stop event for the
+>> Tx Done with NAK before processing Slave Match and Rx Done for the
+>> coming transaction from master.
+> 
+> It sounds like this patch is independent of the rest of the series,
+> and can go in on it's own. Please send it separately to the i2c
+> maintainers and add a suitable Fixes line, such as:
+> 
+>    Fixes: f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed I2C driver")
+> 
+Will separate this patch into independent series in next version.
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
+>>
+>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>> ---
+>> v3:
+>>    + First introduce in v3 [Quan]
+>>
+>>   drivers/i2c/busses/i2c-aspeed.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+>> index 724bf30600d6..3fb37c3f23d4 100644
+>> --- a/drivers/i2c/busses/i2c-aspeed.c
+>> +++ b/drivers/i2c/busses/i2c-aspeed.c
+>> @@ -254,6 +254,11 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
+>>
+>>          /* Slave was requested, restart state machine. */
+>>          if (irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH) {
+> 
+> Can you explain why you need to do this handing inside the SLAVE_MATCH case?
 
-v2: No change
+> Could you instead move the TX_NAK handling to be above the SLAVE_MATCH case?
+>
+>> +               if (irq_status & ASPEED_I2CD_INTR_TX_NAK &&
+>> +                   bus->slave_state == ASPEED_I2C_SLAVE_READ_PROCESSED) {
+> 
+> Either way, this needs a comment to explain what we're working around.
+>
+Let me explain with the two examples below in normal case and the case 
+where this patch is for:
 
- drivers/i2c/busses/i2c-mt65xx.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+In normal case:
+The first transaction is Slave send (Master read):
+    20(addr) 03(singlepart read) 03 1c 2e d5
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 5ddfa4e56ee2..0e6ad84e0e47 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -404,6 +404,19 @@ static const struct mtk_i2c_compatible mt8192_compat = {
- 	.max_dma_support = 36,
- };
- 
-+static const struct mtk_i2c_compatible mt8365_compat = {
-+	.regs = mt_i2c_regs_v1,
-+	.pmic_i2c = 0,
-+	.dcm = 1,
-+	.auto_restart = 1,
-+	.aux_len_reg = 1,
-+	.timing_adjust = 1,
-+	.dma_sync = 1,
-+	.ltiming_adjust = 0,
-+	.apdma_sync = 0,
-+	.max_dma_support = 33,
-+};
-+
- static const struct of_device_id mtk_i2c_of_match[] = {
- 	{ .compatible = "mediatek,mt2712-i2c", .data = &mt2712_compat },
- 	{ .compatible = "mediatek,mt6577-i2c", .data = &mt6577_compat },
-@@ -412,6 +425,7 @@ static const struct of_device_id mtk_i2c_of_match[] = {
- 	{ .compatible = "mediatek,mt8173-i2c", .data = &mt8173_compat },
- 	{ .compatible = "mediatek,mt8183-i2c", .data = &mt8183_compat },
- 	{ .compatible = "mediatek,mt8192-i2c", .data = &mt8192_compat },
-+	{ .compatible = "mediatek,mt8365-i2c", .data = &mt8365_compat },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, mtk_i2c_of_match);
--- 
-2.31.1
+Then the second Master write follow as below:
+    20(addr) 02(singlepart write) 02 18 08 59
+
+The irq will raise in sequence below:
+
+  irq      data  from-state      to-state
+00000084  20    INACTIVE        WRITE_RECEIVED
+00000004  03    WRITE_RECEIVED  WRITE_RECEIVED <= RX_DONE
+00000084  03    WRITE_RECEIVED  READ_PROCESSED
+00000001  1c    READ_PROCESSED  READ_PROCESSED <= TX_ACK
+00000001  2e    READ_PROCESSED  READ_PROCESSED
+00000001  d5    READ_PROCESSED  READ_PROCESSED
+00000002  xx    READ_PROCESSED  INACTIVE       <= TX_NAK
+
+00000084  20    INACTIVE        WRITE_RECEIVED <= SLAVE_MATCH & RX_DONE
+00000004  02    WRITE_RECEIVED  WRITE_RECEIVED
+00000084  02    WRITE_RECEIVED  WRITE_RECEIVED
+00000004  18    WRITE_RECEIVED  WRITE_RECEIVED
+00000004  08    WRITE_RECEIVED  WRITE_RECEIVED
+00000004  59    WRITE_RECEIVED  WRITE_RECEIVED
+00000010  xx    WRITE_RECEIVED  INACTIVE
+
+But sometimes:
+The first transaction is Slave send (Master read):
+    20(addr) 03(singlepart read) 03 1c 42 cc a5
+
+Then the second Master write follow as below:
+    20(addr) 02(singlepart write) 03 18 42 0c 63
+
+The irq will raise in sequence below:
+
+  irq      data  from-state      to-state
+00000084  20    INACTIVE        WRITE_RECEIVED
+00000004  03    WRITE_RECEIVED  WRITE_RECEIVED
+00000084  03    WRITE_RECEIVED  READ_PROCESSED
+00000001  1c    READ_PROCESSED  READ_PROCESSED
+00000001  42    READ_PROCESSED  READ_PROCESSED
+00000001  0c    READ_PROCESSED  READ_PROCESSED
+00000001  63    READ_PROCESSED  READ_PROCESSED
+
+00000086  20    READ_PROCESSED  WRITE_RECEIVED <= both 3 irqs raised
+00000004  02    WRITE_RECEIVED  WRITE_RECEIVED
+00000084  03    WRITE_RECEIVED  WRITE_RECEIVED
+00000004  18    WRITE_RECEIVED  WRITE_RECEIVED
+00000004  42    WRITE_RECEIVED  WRITE_RECEIVED
+00000004  0c    WRITE_RECEIVED  WRITE_RECEIVED
+00000004  63    WRITE_RECEIVED  WRITE_RECEIVED
+00000010  xx    WRITE_RECEIVED  INACTIVE
+
+This patch is to address this case where TX_NAK, SLAVE_MATCH and RX_DONE 
+are raised together.
+
+>> +                       irq_handled |= ASPEED_I2CD_INTR_TX_NAK;
+>> +                       i2c_slave_event(slave, I2C_SLAVE_STOP, &value);
+>> +               }
+>>                  irq_handled |= ASPEED_I2CD_INTR_SLAVE_MATCH;
+>>                  bus->slave_state = ASPEED_I2C_SLAVE_START;
+>>          }
+>> --
+>> 2.28.0
+>>
 
