@@ -2,59 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDB638B67D
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 21:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BC838B681
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 21:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236585AbhETTCf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 May 2021 15:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S236501AbhETTCk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 May 2021 15:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236547AbhETTCe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 15:02:34 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB68AC061574
-        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 12:01:12 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id u4-20020a05600c00c4b02901774b80945cso6031251wmm.3
-        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 12:01:12 -0700 (PDT)
+        with ESMTP id S236596AbhETTCg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 15:02:36 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F796C0613ED
+        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 12:01:14 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id b7so9204680wmh.5
+        for <linux-i2c@vger.kernel.org>; Thu, 20 May 2021 12:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OpCSticW7YPgZgJxCE8cbDx0EqQrxetbzAKz9peYyF8=;
-        b=rum12OCXNeB91NHK8OZ7C8IAuERyHFgpqirkg8+/GdO9/4Aqq8IK2bdHC5hQnrQPCn
-         8g6i/4sSK6ecIyG4wKapN0uXY2UnUBPijUZQtY2IotooG+y8Tr7zN2mCfUfDV/lmWZUc
-         DTDDMadcQ1MT2W586OkIW4NRqrL5l8WgwoLgEAlaC17MNWCMg/0w1VlbejargJLBCcvA
-         nwtTTBZ+MeZOZ4n/S33TEw98bUEG5PYdJxxo0BeJbdQc7lHrCyDnyJD0k88gHJY96KNv
-         ftQUFOsluDrJCq/PcOdhz+AmD/mcOpn03wA125vbu9661mXoRiuJQC9sTPhBQ2fOkPy7
-         61pg==
+        bh=mF+neKU2nq/1Cqlbfk4p91mZ7XsnhSwAAnZLGFP4jWc=;
+        b=UO+ZfIg1/rbFgC/rxYs43xG92URmTgboCXxX4QkHVvyCJXxBea2TdOJaIacV1SvMyE
+         kPZ/IXOmszn+XMPvv1Rj4J6huJl9VZBSuPbQy0Aubx9GP5yopCAokNSxXtHnIeX/TaxQ
+         Jy45Uu8jNkeBK/d59ZTOgnCtqwl4OtKKenGs6pO1pSmaIMUGKgDlgXDNHD+CUkB4f0D9
+         h1m9POgGbPolO2iaudn/w++yHMNGAyBfXnsGFbb5JZA6b1gUYyZl6Nx183uMjISWZWgW
+         HzqG+3p6WSUS+EBn9AAD57M5+gX1hLFhpg5Dx8r/+KBeD+4qy9e5HfhN0spzPU5VlCOq
+         /jwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OpCSticW7YPgZgJxCE8cbDx0EqQrxetbzAKz9peYyF8=;
-        b=Iuu8CO6cO3440SLK/Do22Ydr7lOTMx4euyH8koFAiovvSIkaRwQLhAeFd+FkYTMfk8
-         3ks93hL4OXcRVgQTQggicGh09yyckIWMM3TXgrNt3IoipJxsIO+8hsmuZCvZBNecZHmd
-         2pEan8F7F3bIMxUE9X7NNeiClvg1nyu6zXVvVQUPmgY57j+gfCi+x3PFdVnQAeMnUBgJ
-         3L3k1QzuCsOWDu8eVe7/dotN0NnxZ3aXqdGO+e7D+hQm0a0pF8+UhCvuEadyrufY15/X
-         0V+jZYTKi4mhYvoE27x6qEM0IBq24CNDq+NWV8yt3gvwOE67GbexdXl54deywu5Umcq9
-         dYvw==
-X-Gm-Message-State: AOAM530Nm0X3rVefPJ+5OH8o3hVWSFiQCwTLGuNlDxED5joJvMWFrk3y
-        qMCbikW+amODKwi07XL/MzCG5A==
-X-Google-Smtp-Source: ABdhPJyfYaIzCTa4ubV3n/89Vo1inkTDbjpp3dXp4x3SwQVTQl/7uPVasMjzAWaTRF2315tqrJfY3A==
-X-Received: by 2002:a05:600c:b58:: with SMTP id k24mr5373590wmr.155.1621537271597;
-        Thu, 20 May 2021 12:01:11 -0700 (PDT)
+        bh=mF+neKU2nq/1Cqlbfk4p91mZ7XsnhSwAAnZLGFP4jWc=;
+        b=otDuRVc8dSxC+kmGi5x5WVGxbiduC3pC7SlXvChRDDfOuDFmx8eQ9IvbfoKObZETAr
+         DKl1CdvZPxUWagCS073kjwe6RXUZ0PsBCcSZxMBna5OqqjOdC3P+LCqZcuCwCt1Pjlav
+         D7N+dZROdrI16Le07KIhOUJFvH/+z6HX2y4JBKmv2KpZpyXJHGy6WPrWC2pAeOVmSsAx
+         Qh5dPwcRj3quQy8xFRaWqsk3w31rEWziRUwflKE3HsiFRAALi0huzAHzjU9VFDXvUG+F
+         L6NzbUGwcl5lPF+jhGQkb98upe1V/x5tuK4Mnj2E5b7PRo7CC+W5XRnq9lo3Pit30LjK
+         9+pg==
+X-Gm-Message-State: AOAM5317WRUSwIANSW6RoPnuM9VKMNetHEDY6xah4X6G8bP2DXx/CzGJ
+        H7GN8ArJbCjhmphTU0BrvMfDyw==
+X-Google-Smtp-Source: ABdhPJyKdaLixRRCkMu5juEutDyMmkcIctbTLgtHpTAMBF4yk/PMJyNxmvUP7RtSWEPFOLFpYsEeVA==
+X-Received: by 2002:a1c:35c2:: with SMTP id c185mr4973761wma.54.1621537273071;
+        Thu, 20 May 2021 12:01:13 -0700 (PDT)
 Received: from dell.default ([91.110.221.215])
-        by smtp.gmail.com with ESMTPSA id p20sm9011899wmq.10.2021.05.20.12.01.10
+        by smtp.gmail.com with ESMTPSA id p20sm9011899wmq.10.2021.05.20.12.01.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 12:01:11 -0700 (PDT)
+        Thu, 20 May 2021 12:01:12 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH 02/16] i2c: muxes: i2c-arb-gpio-challenge: Demote non-conformant kernel-doc headers
-Date:   Thu, 20 May 2021 20:00:51 +0100
-Message-Id: <20210520190105.3772683-3-lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Rudolf Marek <r.marek@assembler.cz>, linux-i2c@vger.kernel.org
+Subject: [PATCH 03/16] i2c: busses: i2c-ali1563: File headers are not good candidates for kernel-doc
+Date:   Thu, 20 May 2021 20:00:52 +0100
+Message-Id: <20210520190105.3772683-4-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210520190105.3772683-1-lee.jones@linaro.org>
 References: <20210520190105.3772683-1-lee.jones@linaro.org>
@@ -66,41 +65,27 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/i2c/muxes/i2c-arb-gpio-challenge.c:43: warning: Function parameter or member 'muxc' not described in 'i2c_arbitrator_select'
- drivers/i2c/muxes/i2c-arb-gpio-challenge.c:43: warning: Function parameter or member 'chan' not described in 'i2c_arbitrator_select'
- drivers/i2c/muxes/i2c-arb-gpio-challenge.c:86: warning: Function parameter or member 'muxc' not described in 'i2c_arbitrator_deselect'
- drivers/i2c/muxes/i2c-arb-gpio-challenge.c:86: warning: Function parameter or member 'chan' not described in 'i2c_arbitrator_deselect'
+ drivers/i2c/busses/i2c-ali1563.c:24: warning: expecting prototype for i2c(). Prototype was for ALI1563_MAX_TIMEOUT() instead
 
-Cc: Peter Rosin <peda@axentia.se>
-Cc: Doug Anderson <dianders@chromium.org>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Rudolf Marek <r.marek@assembler.cz>
 Cc: linux-i2c@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/i2c/muxes/i2c-arb-gpio-challenge.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-ali1563.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/muxes/i2c-arb-gpio-challenge.c b/drivers/i2c/muxes/i2c-arb-gpio-challenge.c
-index 6dc88902c189f..1c78657631f4f 100644
---- a/drivers/i2c/muxes/i2c-arb-gpio-challenge.c
-+++ b/drivers/i2c/muxes/i2c-arb-gpio-challenge.c
-@@ -34,7 +34,7 @@ struct i2c_arbitrator_data {
- };
- 
- 
+diff --git a/drivers/i2c/busses/i2c-ali1563.c b/drivers/i2c/busses/i2c-ali1563.c
+index 4d12e3da12f0d..55a9e93fbfeb5 100644
+--- a/drivers/i2c/busses/i2c-ali1563.c
++++ b/drivers/i2c/busses/i2c-ali1563.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
 -/**
 +/*
-  * i2c_arbitrator_select - claim the I2C bus
+  *	i2c-ali1563.c - i2c driver for the ALi 1563 Southbridge
   *
-  * Use the GPIO-based signalling protocol; return -EBUSY if we fail.
-@@ -77,7 +77,7 @@ static int i2c_arbitrator_select(struct i2c_mux_core *muxc, u32 chan)
- 	return -EBUSY;
- }
- 
--/**
-+/*
-  * i2c_arbitrator_deselect - release the I2C bus
-  *
-  * Release the I2C bus using the GPIO-based signalling protocol.
+  *	Copyright (C) 2004 Patrick Mochel
 -- 
 2.31.1
 
