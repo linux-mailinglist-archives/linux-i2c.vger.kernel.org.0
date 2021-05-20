@@ -2,135 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2370F389BE3
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 05:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95FD389BF0
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 05:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbhETDdO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 19 May 2021 23:33:14 -0400
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:17729 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhETDdO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 23:33:14 -0400
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 14K3JA4S041222;
-        Thu, 20 May 2021 11:19:11 +0800 (GMT-8)
-        (envelope-from jamin_lin@aspeedtech.com)
-Received: from aspeedtech.com (192.168.100.253) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 20 May
- 2021 11:31:48 +0800
-Date:   Thu, 20 May 2021 11:31:41 +0800
-From:   Jamin Lin <jamin_lin@aspeedtech.com>
-To:     Joel Stanley <joel@jms.id.au>
-CC:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Rayn Chen <rayn_chen@aspeedtech.com>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        "ChiaWei Wang" <chiawei_wang@aspeedtech.com>,
-        Troy Lee <troy_lee@aspeedtech.com>,
-        Steven Lee <steven_lee@aspeedtech.com>
-Subject: Re: [PATCH 1/3] i2c: aspeed: avoid new registers definition of
- AST2600
-Message-ID: <20210520033140.GA3656@aspeedtech.com>
-References: <20210519080436.18975-1-jamin_lin@aspeedtech.com>
- <20210519080436.18975-2-jamin_lin@aspeedtech.com>
- <CACPK8XdNXiGMQZOtsfMMK+w_PSvO20XT8B9MG+rGhdjYoV4ZuQ@mail.gmail.com>
+        id S230325AbhETDi0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 May 2021 23:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230310AbhETDiZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 May 2021 23:38:25 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B378BC06175F
+        for <linux-i2c@vger.kernel.org>; Wed, 19 May 2021 20:37:04 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 194CF84487;
+        Thu, 20 May 2021 15:36:59 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1621481819;
+        bh=VRbO4+naf38qOxw5jDMURFAeVwM1Gn4WAr6oIe/Om1Q=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=IvlORQazLNUXOxWwca6w0GSF/LVUilQq1KeoC5OsjkvkYhSWiohrXByKd4bikWAoc
+         puuOF8foJdJQiD/ZFbzhVtPz5B23V25hX64edzsVFw/oiwh8zrTG9+PufAKpOB4RRQ
+         ZO6Rux5xpqjxYL0lsCgVDh7K/yvuKhF4RnCJF0C4qa12ScAiMh/YrUzzgQugFHui+9
+         Nj2kwGDRTR4VtYg+D9vHPpBJuP5GlCZPemxCWr1q6T9QNpqnXRZCW5xJdy7bNUyj9K
+         BUgYQtUhHZaCxuQpnRodTXWeXWKIb2BSj9fp5VvuVfTNn+OhZgVvfnGsPTHVpLF1hK
+         JRkX8tLfRX1hg==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60a5d95b0000>; Thu, 20 May 2021 15:36:59 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 20 May 2021 15:36:58 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.018; Thu, 20 May 2021 15:36:58 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "wsa@kernel.org" <wsa@kernel.org>,
+        Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+CC:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/4] P2040/P2041 i2c recovery erratum
+Thread-Topic: [PATCH v3 0/4] P2040/P2041 i2c recovery erratum
+Thread-Index: AQHXRquHhXA6XgnPF0OPgP79h3OVQ6reDlyAgAA9BACAAHfVAIAAZZwAgAvTcoA=
+Date:   Thu, 20 May 2021 03:36:58 +0000
+Message-ID: <ae39c62a-7dc7-81f5-ea10-edfdbf905e9d@alliedtelesis.co.nz>
+References: <20210511212052.27242-1-chris.packham@alliedtelesis.co.nz>
+ <b90f48cfdc31af08190e7a8eaa71b7bd488fcbaa.camel@infinera.com>
+ <ec3cdcc8-5869-9e7d-30c0-59ff4ec67a58@alliedtelesis.co.nz>
+ <4e96247275d559bab133d6c318276fa6be4d7be0.camel@infinera.com>
+ <20210512150118.GA1004@ninjato>
+In-Reply-To: <20210512150118.GA1004@ninjato>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <458C7B1C38153849A89C7527D57D2E44@atlnz.lc>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <CACPK8XdNXiGMQZOtsfMMK+w_PSvO20XT8B9MG+rGhdjYoV4ZuQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [192.168.100.253]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 14K3JA4S041222
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=WOcBoUkR c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=N659UExz7-8A:10 a=5FLXtPjwQuUA:10 a=VwQbUJbxAAAA:8 a=T-qbRSzZqTrywjUDPykA:9 a=pILNOxqGKmIA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The 05/19/2021 22:59, Joel Stanley wrote:
-> On Wed, 19 May 2021 at 08:05, Jamin Lin <jamin_lin@aspeedtech.com> wrote:
-> >
-> > The register definition between AST2600 A2 and A3 is different.
-> > This patch avoid new registers definition of AST2600 to use
-> > this driver. We will submit the path for the new registers
-> > definition of AST2600.
-> 
-> The AST2600 v9 datasheet says that bit 2 selects between old and new
-> register sets, and that the old register set is the default.
-> 
-> Has the default changed for the A3?, and the datasheet is incorrect?
-> 
-> Does the A3 still support the old register set?
-> 
-We suggest user to use the new i2c driver for AST2600 and we will sumbit
-it. This driver is used to AST2500 and AST2400 SOCs. Change this
-driver to check global register of i2c to avoid user build the wrong driver. 
 
-> >
-> > Signed-off-by: Jamin Lin <jamin_lin@aspeedtech.com>
-> > ---
-> >  drivers/i2c/busses/i2c-aspeed.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> > index 724bf30600d6..007309077d9f 100644
-> > --- a/drivers/i2c/busses/i2c-aspeed.c
-> > +++ b/drivers/i2c/busses/i2c-aspeed.c
-> > @@ -19,14 +19,20 @@
-> >  #include <linux/irqchip/chained_irq.h>
-> >  #include <linux/irqdomain.h>
-> >  #include <linux/kernel.h>
-> > +#include <linux/mfd/syscon.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of_address.h>
-> >  #include <linux/of_irq.h>
-> >  #include <linux/of_platform.h>
-> >  #include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> >  #include <linux/reset.h>
-> >  #include <linux/slab.h>
-> >
-> > +/* I2C Global Registers */
-> > +/* 0x0c : I2CG Global Control Register (AST2500)  */
-> > +#define ASPEED_I2CG_GLOBAL_CTRL_REG                    0x0c
-> > +
-> >  /* I2C Register */
-> >  #define ASPEED_I2C_FUN_CTRL_REG                                0x00
-> >  #define ASPEED_I2C_AC_TIMING_REG1                      0x04
-> > @@ -973,6 +979,22 @@ static int aspeed_i2c_probe_bus(struct platform_device *pdev)
-> >         struct resource *res;
-> >         int irq, ret;
-> >
-> > +       if (of_device_is_compatible(pdev->dev.of_node,
-> > +                                   "aspeed,ast2600-i2c-bus")) {
-> > +               u32 global_ctrl;
-> > +               struct regmap *gr_regmap;
-> > +
-> > +               gr_regmap = syscon_regmap_lookup_by_compatible("aspeed,ast2600-i2c-global");
-> > +
-> > +               if (IS_ERR(gr_regmap)) {
-> > +                       ret = PTR_ERR(gr_regmap);
-> > +               } else {
-> > +                       regmap_read(gr_regmap, ASPEED_I2CG_GLOBAL_CTRL_REG, &global_ctrl);
-> > +                       if (global_ctrl & BIT(2))
-> > +                               return -EIO;
-> > +               }
-> > +       }
-> > +
-> >         bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
-> >         if (!bus)
-> >                 return -ENOMEM;
-> > --
-> > 2.17.1
-> >
+On 13/05/21 3:01 am, wsa@kernel.org wrote:
+>>> I've been doing my recent work with a P2040 and prior to that I did tes=
+t
+>>> out the recovery on a T2081 (which isn't documented to have this
+>>> erratum) when I was re-working the driver. The "new" recovery actually
+>>> seems better but I don't have a reliably faulty i2c device so that's
+>>> only based on me writing some code to manually trigger the recovery
+>>> (using the snippet below) and observing it with an oscilloscope.
+>> You don't need a faulty device, just an aborted I2C read/write op.
+> If you can wire GPIOs to the bus, you can use the I2C fault injector:
+>
+> 	Documentation/i2c/gpio-fault-injection.rst
+>
+> There are already two "incomplete transfer" injectors.
+>
+Just giving this thread a poke. I have been looking at my options for=20
+triggering an i2c recovery but haven't really had time to do much. I=20
+think the best option given what I've got access to is a modified SFP=20
+that grounds the SDA line but I need to find a system where I can attach=20
+an oscilloscope (should be a few of these in the office when I can get=20
+on-site).
+
+I can confirm that when manually triggered the existing recovery and the=20
+new erratum workaround produce what I'd expect to observe on an=20
+oscilloscope.
+
+I haven't explored Joakim's alternative recovery but I don't think that=20
+should hold up these changes, any improvement to the existing recovery=20
+can be done later as a follow-up.
