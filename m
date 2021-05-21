@@ -2,97 +2,135 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 496FD38C926
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 May 2021 16:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968C038C99C
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 May 2021 16:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbhEUOZT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 21 May 2021 10:25:19 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:37464 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235963AbhEUOZT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 May 2021 10:25:19 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14LENHaX030258;
-        Fri, 21 May 2021 16:23:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=selector1; bh=lL+yc546IS3foLyCv0kJ/gh3raOXR1LK1upLy8mi55c=;
- b=M09HXp1t5I7vpcH4KWR49a1X2fuCvNK3ziYx13rrNjhqR7TuTS3ngeEFXw37JQzAFkUH
- W4bZ/H/bl4phbXeaw4gq119FgY7S0Wyz4+3Zyima9xcbBYS027mrVMMNWjHRiA4G1lB1
- 0Dm2Z4wA2NCigzSLKXNb8VTMnw74LF7puBVez44nJvUYZb9CkCzZ2RYFQZm/yx6Cnbyu
- UAgOjspHmXSKIM5L3XtNEb5SG2VE6rYlMCvD9wJ45v+fQPEo1vCDPfLX6RTjlVg6gtaG
- lhfCfa4TmalAnh/45CaHUX5VMNRr5kzMwgi3Y7TyukeKBU+GGIeVNdHfGehuSPqfcGk+ 8w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 38p2tc3m9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 May 2021 16:23:51 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7DF0710002A;
-        Fri, 21 May 2021 16:23:51 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 74A52226795;
-        Fri, 21 May 2021 16:23:51 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.46) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 21 May
- 2021 16:23:50 +0200
-Date:   Fri, 21 May 2021 16:23:49 +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     Lee Jones <lee.jones@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <maxime.coquelin@st.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 16/16] i2c: busses: i2c-st: trivial: Fix spelling issue
- 'enmpty => empty'
-Message-ID: <20210521142349.GD17641@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: Lee Jones <lee.jones@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <maxime.coquelin@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-References: <20210520190105.3772683-1-lee.jones@linaro.org>
- <20210520190105.3772683-17-lee.jones@linaro.org>
+        id S233032AbhEUPAC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 21 May 2021 11:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232049AbhEUPAC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 21 May 2021 11:00:02 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EECC061574
+        for <linux-i2c@vger.kernel.org>; Fri, 21 May 2021 07:58:38 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id a4so21421486wrr.2
+        for <linux-i2c@vger.kernel.org>; Fri, 21 May 2021 07:58:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ON3Ax4AhK2BLd8xBY8apWmbzaZJYmeJZ32DPmpTdXHI=;
+        b=rOpJO9U4VYkYBrrOqb96FauIVkR26Ua5IbXyv1ig8lXJ4v9OU2XVfY2EawH42rWU0v
+         EzuyFmtdpTY8anbuugg5nxxCekbWpA4sUwaVI5bDyfFKGoOc1pV+aly++rXGpJCeHT7S
+         /qtBb/iA1k5oESf2V/XUgznmoSr4ORA84yBb07OiGIf7NWJ8kYBv+oSBXlkispWJ6b/z
+         Iv4cmXj2ND6ed7wxkSpNceTRU0caV1lgCsR63fnyhBb00RwfDl4c5aNTizzLfD1OpqTv
+         79pcQO7HmEUZ8fEAuxtRJlUTg2lHM+wKfZhPNcRgNtWGgPHXZtf1pmOIKf7HTYIa2buM
+         YbgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ON3Ax4AhK2BLd8xBY8apWmbzaZJYmeJZ32DPmpTdXHI=;
+        b=Xi5KkaXIujOHrMI9+sOoJIvdXiKsJpGm46n3DcbgOX8ic1924b0rmf+WZqmY/0xx2Q
+         Pcd8VHqDxC4T/D59VSDskmtNA6hqs1T4o+hn43ADPSE4mzPIxzyLQ27vHzZBKDSWzhiC
+         CCgfsFrZ8TQWS+RHxGXP6MRgSYjGb0EXQITNEi6es7CqH7ZYYDunKEzyAVXR/pcRSZgS
+         AKUfcJvTXebkTaMh+M6J8Lm6+i3woSJ6jLmEp0q/jbNAhUlgcE6MXOoUhpQvKTwJo8Ei
+         B/g0YXmX1xogA35kY2pZ/gv+79T40OhuPH2l5RNIorASfjfcKre+nWxhrdpXsnkJYAZy
+         xVQA==
+X-Gm-Message-State: AOAM532N3c87b9wlyWeY9ckFgKDuIWxHNFp+HPkRs81CL+DZ5nogUgAx
+        R6apC39s5eBZEvA7fh30sQGy8T/pHa8=
+X-Google-Smtp-Source: ABdhPJy0daG6MKpmugULd6Y5jxvTOiVgsNUkekzKOFV/wOE57FCrZaydDcXoZXArwlPPe2yFhiU2QQ==
+X-Received: by 2002:a5d:4843:: with SMTP id n3mr9814032wrs.411.1621609117530;
+        Fri, 21 May 2021 07:58:37 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8f38:4600:9d15:18e:4e9:7e3? (p200300ea8f3846009d15018e04e907e3.dip0.t-ipconnect.de. [2003:ea:8f38:4600:9d15:18e:4e9:7e3])
+        by smtp.googlemail.com with ESMTPSA id m11sm2234958wri.44.2021.05.21.07.58.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 May 2021 07:58:36 -0700 (PDT)
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>
+References: <a9ad7cb4-ca40-1c25-9c9a-f7f167ad8be9@gmail.com>
+ <b61f2014-fa9d-f63a-7ea2-3c9226411a58@gmail.com>
+ <dcb18f97-fdb5-516b-bbad-c61defd23915@linux.intel.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: i801_smbus: no runtime pm since a9c8088c7988 ("i2c: i801: Don't
+ restore config registers on runtime PM")
+Message-ID: <edf5ff46-834a-86dc-a9f9-7682e1ecb346@gmail.com>
+Date:   Fri, 21 May 2021 16:58:30 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210520190105.3772683-17-lee.jones@linaro.org>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-21_05:2021-05-20,2021-05-21 signatures=0
+In-Reply-To: <dcb18f97-fdb5-516b-bbad-c61defd23915@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thanks for the patch.
-
-Reviewed-by: Alain Volmat <alain.volmat@foss.st.com>
-
-On Thu, May 20, 2021 at 08:01:05PM +0100, Lee Jones wrote:
-> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-> Cc: Maxime Coquelin <maxime.coquelin@st.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-i2c@vger.kernel.org
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/i2c/busses/i2c-st.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 21.05.2021 16:09, Jarkko Nikula wrote:
+> Hi
 > 
-> diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
-> index 30089b38044b5..88482316d22a0 100644
-> --- a/drivers/i2c/busses/i2c-st.c
-> +++ b/drivers/i2c/busses/i2c-st.c
-> @@ -524,7 +524,7 @@ static void st_i2c_handle_write(struct st_i2c_dev *i2c_dev)
->  }
->  
->  /**
-> - * st_i2c_handle_read() - Handle FIFO enmpty interrupt in case of read
-> + * st_i2c_handle_read() - Handle FIFO empty interrupt in case of read
->   * @i2c_dev: Controller's private data
->   */
->  static void st_i2c_handle_read(struct st_i2c_dev *i2c_dev)
-> -- 
-> 2.31.1
+> On 5/21/21 4:26 PM, Heiner Kallweit wrote:
+>> On 21.05.2021 10:19, Heiner Kallweit wrote:
+>>> Before the referenced commit we used i801_suspend and i801_resume also as
+>>> runtime pm callbacks. That's no longer the case, and at least on my
+>>> platform the SMBus controller PCI device doesn't support PM. Therefore
+>>> PCI core can't do what it would do for other devices: bring them to D3hot
+>>> or D3cold.
+>>> Having said that effectively there is no runtime pm any longer. Not sure
+>>> whether there are SMBus controller versions where the PCI device supports
+>>> PM.
+>>>
+> About commit a9c8088c7988 which removes the runtime PM callbacks: It indeed had a runtime PM regression but is fixed by commit c5eb1190074c ("PCI / PM: Allow runtime PM without callback functions").
 > 
+>>> So my questions are:
+>>> Does the SMBus controller support any power-saving modes?
+>>> i801_suspend() just sets SMBHSTCFG to the value it had when the driver
+>>> was loaded. Means if SMBHSTCFG_HST_EN was enabled already, we won't clear
+>>> it. And this bit may have an impact on some internal PLL's (just guessing).
+>>> If there's no good-enough power-saving option, then runtime pm support
+>>> could be removed completely, or?
+>>>
+>>>
+>>> 00:1f.4 SMBus: Intel Corporation Cannon Lake PCH SMBus Controller (rev 10)
+>>>          DeviceName: Onboard - Other
+>>>          Subsystem: ASUSTeK Computer Inc. Device 8694
+>>>          Flags: medium devsel, IRQ 16
+>>>          Memory at a1316000 (64-bit, non-prefetchable) [size=256]
+>>>          I/O ports at efa0 [size=32]
+>>>          Kernel driver in use: i801_smbus
+>>>          Kernel modules: i2c_i801
+>>>
+> It's not entirely clear to me either is it HW or FW specific what platform supports PCI PM for the SMBus controller. But usually what I've seen Core based platforms don't have it while *some* Atom based does have.
+> 
+> I saw your message earlier today and was looking at from our lab machines which have it. I'm quite sure but not absolutely one Apollo Lake one had it but today didn't see it. Need to check with colleagues did they change BIOS etc. Or I just remember wrong :-)
+> 
+> Fortunately one Braswell based have the PM. Here's the lspic output from kernel 5.13.0-rc2:
+> 
+> # lspci -s 00:1f.3 -vv
+> 00:1f.3 SMBus: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx SMBus Controller (rev 31)
+>     Subsystem: Intel Corporation Atom/Celeron/Pentium Processor x5-E8000/J3xxx/N3xxx SMBus Controller
+>     Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
+>     Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+>     Interrupt: pin B routed to IRQ 18
+>     Region 0: Memory at 9191c000 (32-bit, non-prefetchable) [size=32]
+>     Region 4: I/O ports at 2040 [size=32]
+>     Capabilities: [50] Power Management version 3
+>         Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0-,D1-,D2-,D3hot-,D3cold-)
+>         Status: D3 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+>     Kernel driver in use: i801_smbus
+>     Kernel modules: i2c_i801
+> 
+> So the PCI device needs to have Power Management capability and here the current status is SMBus controller is suspended to D3 state.
+> 
+Thanks for the quick reply. Good to know there are actually some SMBus controllers in the family that
+support PCI PM. Theoretically we could add PCI PM support to the feature bitmap and enable runtime pm
+based on the feature, but this may not be worth the effort (as it doesn't really hurt on other systems).
+
+
+> Jarkko
+
+Heiner
