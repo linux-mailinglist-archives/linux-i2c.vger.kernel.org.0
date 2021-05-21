@@ -2,154 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B141138B939
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 May 2021 23:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BD338BC29
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 May 2021 04:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbhETVxv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 20 May 2021 17:53:51 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:48878 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230178AbhETVxv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 20 May 2021 17:53:51 -0400
-Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1ljqah-0001n2-4H; Thu, 20 May 2021 23:52:27 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     lee.jones@linaro.org, Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Max Schwarz <max.schwarz@online.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 12/16] i2c: busses: i2c-rk3x: Demote unworthy headers and help more complete ones
-Date:   Thu, 20 May 2021 23:52:26 +0200
-Message-ID: <6083609.GXAFRqVoOG@diego>
-In-Reply-To: <20210520190105.3772683-13-lee.jones@linaro.org>
-References: <20210520190105.3772683-1-lee.jones@linaro.org> <20210520190105.3772683-13-lee.jones@linaro.org>
+        id S238099AbhEUCCE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 20 May 2021 22:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238093AbhEUCCB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 20 May 2021 22:02:01 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42C4C061763;
+        Thu, 20 May 2021 19:00:39 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n8so4915191plf.7;
+        Thu, 20 May 2021 19:00:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9fB9txKIQZNMl67yv7ERq72Q+6wcnvrLhnIU26tnTf4=;
+        b=An1xKWU/mWO08cY0cP24LyKkNnOv5zCCLUdnglRtraCTvQQzxVh9tTfYP1YanUjoR8
+         gFtYTxBnypDtTZJxyxQ1tMDJtzdMMTs5rHApnAEd/aQWzVn+hLHmzuypSaML2xrdpRCW
+         +atdTnZ2DCoPjdD9qdm1EhlEDGaoVnmocolZmRF7sErnz5ofewaQGpXASxT8QxwUiUai
+         nj86+/F36GPfLpYIIDyoKPdhyetIbbr07I+lFT1YwrnBmgBe0t2Svn7GZ5BNKqRlLY2/
+         CGzlvZ+aIKnYSNNGv4xYAR9uUG2Ao2Igzhd1uppZXRCZB6hTlZNwDp4EPHaQ6nKsT/a/
+         loIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9fB9txKIQZNMl67yv7ERq72Q+6wcnvrLhnIU26tnTf4=;
+        b=rGDRJXOnkNPwOFcApTQTF4Rik5rpOF5f5VX5RGPBomGki5XoA9LO/x8nFPHMPFAell
+         lH+OYtMX6j7EqntVxFRCYfsgjmpqXAtVSHMfCAsTBVyjGESzMe8e0KcGLnnpHvVjwF7+
+         6xGKOO4LblKmkjb2gaOX9JIOu+Z0DWeygM4AuWBP27kAApEKJhTyrLnzWtB1meIDCMfR
+         u6BGW3q6q21E1yYvQ1h8JsrszPWtpsos8h3kIjOt+IhIQVRFqYXaoU9w327qPmPGZxDa
+         W7xFQeAV9rZGptnmpXmU/8UqXet0WEqwxrYZ86T/A4akD530eC9n9K3kt0Nd5WlbFPuZ
+         Mw3w==
+X-Gm-Message-State: AOAM53199GkBLg4N9iRGWnv27o9l/XKa3/iT6PG36TxTc7d/Y9MVbY7b
+        KneKbwIDzCDBrD/3FcM+JJY=
+X-Google-Smtp-Source: ABdhPJwBofzBAXoo5pDmXX4ye8/TsvSpB7pKcMIb3pVYhLkIdagqbQ5wvHtXHUJZRNsbTl2FgNx8tA==
+X-Received: by 2002:a17:90a:f811:: with SMTP id ij17mr8130069pjb.63.1621562439317;
+        Thu, 20 May 2021 19:00:39 -0700 (PDT)
+Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id w74sm2869555pfd.209.2021.05.20.19.00.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 20 May 2021 19:00:39 -0700 (PDT)
+Date:   Thu, 20 May 2021 19:00:34 -0700
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Jamin Lin <jamin_lin@aspeedtech.com>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rayn Chen <rayn_chen@aspeedtech.com>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        Steven Lee <steven_lee@aspeedtech.com>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 1/3] i2c: aspeed: avoid new registers definition of
+ AST2600
+Message-ID: <20210521020033.GB19153@taoren-ubuntu-R90MNF91>
+References: <20210519080436.18975-1-jamin_lin@aspeedtech.com>
+ <20210519080436.18975-2-jamin_lin@aspeedtech.com>
+ <CACPK8XdNXiGMQZOtsfMMK+w_PSvO20XT8B9MG+rGhdjYoV4ZuQ@mail.gmail.com>
+ <20210520033140.GA3656@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210520033140.GA3656@aspeedtech.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Lee,
+Hi Jamin,
 
-Am Donnerstag, 20. Mai 2021, 21:01:01 CEST schrieb Lee Jones:
-> Fixes the following W=1 kernel build warning(s):
-> 
->  drivers/i2c/busses/i2c-rk3x.c:242: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  drivers/i2c/busses/i2c-rk3x.c:261: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  drivers/i2c/busses/i2c-rk3x.c:304: warning: Function parameter or member 'i2c' not described in 'rk3x_i2c_prepare_read'
->  drivers/i2c/busses/i2c-rk3x.c:304: warning: expecting prototype for Setup a read according to i2c(). Prototype was for rk3x_i2c_prepare_read() instead
->  drivers/i2c/busses/i2c-rk3x.c:335: warning: Function parameter or member 'i2c' not described in 'rk3x_i2c_fill_transmit_buf'
->  drivers/i2c/busses/i2c-rk3x.c:335: warning: expecting prototype for Fill the transmit buffer with data from i2c(). Prototype was for rk3x_i2c_fill_transmit_buf() instead
->  drivers/i2c/busses/i2c-rk3x.c:535: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  drivers/i2c/busses/i2c-rk3x.c:552: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  drivers/i2c/busses/i2c-rk3x.c:713: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  drivers/i2c/busses/i2c-rk3x.c:963: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  drivers/i2c/busses/i2c-rk3x.c:973: warning: Function parameter or member 'i2c' not described in 'rk3x_i2c_setup'
-> 
-> Cc: Heiko Stuebner <heiko@sntech.de>
-> Cc: Max Schwarz <max.schwarz@online.de>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-rockchip@lists.infradead.org
-> Cc: linux-i2c@vger.kernel.org
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/i2c/busses/i2c-rk3x.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-> index 819ab4ee517e1..1dfbd1185aefc 100644
-> --- a/drivers/i2c/busses/i2c-rk3x.c
-> +++ b/drivers/i2c/busses/i2c-rk3x.c
-> @@ -238,7 +238,7 @@ static inline void rk3x_i2c_clean_ipd(struct rk3x_i2c *i2c)
->  	i2c_writel(i2c, REG_INT_ALL, REG_IPD);
->  }
->  
-> -/**
-> +/*
->   * Generate a START condition, which triggers a REG_INT_START interrupt.
->   */
->  static void rk3x_i2c_start(struct rk3x_i2c *i2c)
-> @@ -257,7 +257,7 @@ static void rk3x_i2c_start(struct rk3x_i2c *i2c)
->  	i2c_writel(i2c, val, REG_CON);
->  }
->  
-> -/**
-> +/*
->   * Generate a STOP condition, which triggers a REG_INT_STOP interrupt.
+On Thu, May 20, 2021 at 11:31:41AM +0800, Jamin Lin wrote:
+> The 05/19/2021 22:59, Joel Stanley wrote:
+> > On Wed, 19 May 2021 at 08:05, Jamin Lin <jamin_lin@aspeedtech.com> wrote:
+> > >
+> > > The register definition between AST2600 A2 and A3 is different.
+> > > This patch avoid new registers definition of AST2600 to use
+> > > this driver. We will submit the path for the new registers
+> > > definition of AST2600.
+> > 
+> > The AST2600 v9 datasheet says that bit 2 selects between old and new
+> > register sets, and that the old register set is the default.
+> > 
+> > Has the default changed for the A3?, and the datasheet is incorrect?
+> > 
+> > Does the A3 still support the old register set?
+> > 
+> We suggest user to use the new i2c driver for AST2600 and we will sumbit
+> it. This driver is used to AST2500 and AST2400 SOCs. Change this
+> driver to check global register of i2c to avoid user build the wrong driver. 
 
-what made you decide between demoting and completing comments?
-I.e. here you demot the "static void rk3x_i2c_stop()", while below
-you for example complete the "static rk3x_i2c_get_spec()".
+If I understand correctly, the answer implies old register set is still
+supported in A3 although aspeed suggest people using the new driver/mode?
 
-So I somehow do not yet see the pattern ;-)
-
-Heiko
+Can you please share more context behind the suggestion? Such as new
+register mode has better performance? Or some known issues that were
+deteted in old mode are fixed in new register mode?
 
 
->   *
->   * @error: Error code to return in rk3x_i2c_xfer
-> @@ -297,7 +297,7 @@ static void rk3x_i2c_stop(struct rk3x_i2c *i2c, int error)
->  	}
->  }
->  
-> -/**
-> +/*
->   * Setup a read according to i2c->msg
->   */
->  static void rk3x_i2c_prepare_read(struct rk3x_i2c *i2c)
-> @@ -328,7 +328,7 @@ static void rk3x_i2c_prepare_read(struct rk3x_i2c *i2c)
->  	i2c_writel(i2c, len, REG_MRXCNT);
->  }
->  
-> -/**
-> +/*
->   * Fill the transmit buffer with data from i2c->msg
->   */
->  static void rk3x_i2c_fill_transmit_buf(struct rk3x_i2c *i2c)
-> @@ -532,7 +532,7 @@ static irqreturn_t rk3x_i2c_irq(int irqno, void *dev_id)
->  }
->  
->  /**
-> - * Get timing values of I2C specification
-> + * rk3x_i2c_get_spec() - Get timing values of I2C specification
->   *
->   * @speed: Desired SCL frequency
->   *
-> @@ -549,7 +549,7 @@ static const struct i2c_spec_values *rk3x_i2c_get_spec(unsigned int speed)
->  }
->  
->  /**
-> - * Calculate divider values for desired SCL frequency
-> + * rk3x_i2c_v0_calc_timings() - Calculate divider values for desired SCL frequency
->   *
->   * @clk_rate: I2C input clock rate
->   * @t: Known I2C timing information
-> @@ -710,7 +710,7 @@ static int rk3x_i2c_v0_calc_timings(unsigned long clk_rate,
->  }
->  
->  /**
-> - * Calculate timing values for desired SCL frequency
-> + * rk3x_i2c_v1_calc_timings() - Calculate timing values for desired SCL frequency
->   *
->   * @clk_rate: I2C input clock rate
->   * @t: Known I2C timing information
-> @@ -959,8 +959,8 @@ static int rk3x_i2c_clk_notifier_cb(struct notifier_block *nb, unsigned long
->  	}
->  }
->  
-> -/**
-> - * Setup I2C registers for an I2C operation specified by msgs, num.
-> +/*
-> + * rk3x_i2c_setup() - Setup I2C registers for an I2C operation specified by msgs, num.
->   *
->   * Must be called with i2c->lock held.
->   *
-> 
+Cheers,
 
-
-
-
+Tao
