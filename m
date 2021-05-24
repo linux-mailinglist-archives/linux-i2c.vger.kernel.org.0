@@ -2,130 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0876038D790
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 May 2021 23:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BF238DEFB
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 May 2021 03:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbhEVVr6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 May 2021 17:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbhEVVr5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 May 2021 17:47:57 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AB4C061574
-        for <linux-i2c@vger.kernel.org>; Sat, 22 May 2021 14:46:31 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id x7so4867639wrt.12
-        for <linux-i2c@vger.kernel.org>; Sat, 22 May 2021 14:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=a94n0AzDEz5MaaOGtCdPfEc89IwRWTJup38m/m/bSk4=;
-        b=Vw+eQCjezLkI6UtAmwZb0KUq/cpjVZUaZra6AjbFGZwp2w29GK7zI1EWo+SaBr9ZFh
-         fQHTwalNNJIJ8fjwKPB2+lnzUYex3iJk0+IHg79wxPcrVj+E1BoPlNqymtSorUwW++25
-         7xwl8pu7BCmdLItGZ5cGGDdiidorysPQGFybGllRrsBAEMQchupbVYgQYavPsL8OSgT2
-         FksZ9tOB1KfjmSFG/SeVSxr3CODt6atti6189GMu1QjNGWxsXwmnDwJmf0w1SctAzq+T
-         +fPjzChdxaLkYRy5JSCy1vv+kJ/EsolKWYUOBKk860U7lDLg8eqQhI09T8KsPXokBvfd
-         HhCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=a94n0AzDEz5MaaOGtCdPfEc89IwRWTJup38m/m/bSk4=;
-        b=EgjN4Dk8hEIZkWRflFhrh4CTun6kVF9JB8hJcQZppi0gHacSRv026uLERD6Hram8+H
-         c5zzp56KKlE2m5u2cnDt1TQDitYTpr85voFvl9rTzvio5J6JlFZD8vFFb0IK5ALgJ7MB
-         Dz6d3OlUrFjSPg/zoHJ6OtvKbVoEc/YR9ypTL6FRBvgovLHNF5bKNTW4lNocNWFx/qmF
-         stYJrAu8CWxb+huGVusXpd2yXe6e/Eyw6v6Fz5yZQ/a9OPg2RywrwDqHKDf4N/gN6Uh6
-         +N3VBVgI3R0feOc2m4W7Bc9Q+66BChi5jcQeQlTIyaTCSGjcYU95VW8jbzXfXw47OTDD
-         W02Q==
-X-Gm-Message-State: AOAM530bLip+FRlfgHQIcIDSvDUnFmgNnJhjXnCSUoa3mmXKYsBLIdAD
-        T21aBiSY1vSxOBUmauPAuOVGKaz25UE=
-X-Google-Smtp-Source: ABdhPJyVvWpBkDBNJnBLS65VsIpBYuFhQR59S5eoyyPwjB1nw0sov0fb5ss8iige5aO1UFhzXecfXQ==
-X-Received: by 2002:a05:6000:c2:: with SMTP id q2mr15802997wrx.288.1621719989350;
-        Sat, 22 May 2021 14:46:29 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8f38:4600:5191:238c:90fd:2bab? (p200300ea8f3846005191238c90fd2bab.dip0.t-ipconnect.de. [2003:ea:8f38:4600:5191:238c:90fd:2bab])
-        by smtp.googlemail.com with ESMTPSA id z12sm6561254wrv.68.2021.05.22.14.46.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 May 2021 14:46:28 -0700 (PDT)
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] i2c: i801: Use standard PCI constants instead of own ones
-Message-ID: <a4b704b1-278c-20bc-854f-8e1177a530f5@gmail.com>
-Date:   Sat, 22 May 2021 23:46:20 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        id S231867AbhEXByr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 23 May 2021 21:54:47 -0400
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:45341 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231765AbhEXByr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 23 May 2021 21:54:47 -0400
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 14O1eLhp073824;
+        Mon, 24 May 2021 09:40:21 +0800 (GMT-8)
+        (envelope-from jamin_lin@aspeedtech.com)
+Received: from aspeedtech.com (192.168.100.253) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 24 May
+ 2021 09:53:14 +0800
+Date:   Mon, 24 May 2021 09:53:11 +0800
+From:   Jamin Lin <jamin_lin@aspeedtech.com>
+To:     Tao Ren <rentao.bupt@gmail.com>
+CC:     Joel Stanley <joel@jms.id.au>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Rayn Chen <rayn_chen@aspeedtech.com>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        Steven Lee <steven_lee@aspeedtech.com>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 1/3] i2c: aspeed: avoid new registers definition of
+ AST2600
+Message-ID: <20210524015310.GA2591@aspeedtech.com>
+References: <20210519080436.18975-1-jamin_lin@aspeedtech.com>
+ <20210519080436.18975-2-jamin_lin@aspeedtech.com>
+ <CACPK8XdNXiGMQZOtsfMMK+w_PSvO20XT8B9MG+rGhdjYoV4ZuQ@mail.gmail.com>
+ <20210520033140.GA3656@aspeedtech.com>
+ <20210521020033.GB19153@taoren-ubuntu-R90MNF91>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20210521020033.GB19153@taoren-ubuntu-R90MNF91>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [192.168.100.253]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 14O1eLhp073824
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Layout of these registers is part of the PCI standard. Therefore use
-the constants defined by the PCI subsystem.
-
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/i2c/busses/i2c-i801.c | 20 ++++++--------------
- 1 file changed, 6 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 738204d77..f6d7866f1 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -131,8 +131,6 @@
- 
- /* PCI Address Constants */
- #define SMBBAR		4
--#define SMBPCICTL	0x004
--#define SMBPCISTS	0x006
- #define SMBHSTCFG	0x040
- #define TCOBASE		0x050
- #define TCOCTL		0x054
-@@ -141,12 +139,6 @@
- #define SBREG_SMBCTRL		0xc6000c
- #define SBREG_SMBCTRL_DNV	0xcf000c
- 
--/* Host status bits for SMBPCISTS */
--#define SMBPCISTS_INTS		BIT(3)
--
--/* Control bits for SMBPCICTL */
--#define SMBPCICTL_INTDIS	BIT(10)
--
- /* Host configuration bits for SMBHSTCFG */
- #define SMBHSTCFG_HST_EN	BIT(0)
- #define SMBHSTCFG_SMB_SMI_EN	BIT(1)
-@@ -648,8 +640,8 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
- 	u8 status;
- 
- 	/* Confirm this is our interrupt */
--	pci_read_config_word(priv->pci_dev, SMBPCISTS, &pcists);
--	if (!(pcists & SMBPCISTS_INTS))
-+	pci_read_config_word(priv->pci_dev, PCI_STATUS, &pcists);
-+	if (!(pcists & PCI_STATUS_INTERRUPT))
- 		return IRQ_NONE;
- 
- 	if (priv->features & FEATURE_HOST_NOTIFY) {
-@@ -1866,13 +1858,13 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		u16 pcictl, pcists;
- 
- 		/* Complain if an interrupt is already pending */
--		pci_read_config_word(priv->pci_dev, SMBPCISTS, &pcists);
--		if (pcists & SMBPCISTS_INTS)
-+		pci_read_config_word(priv->pci_dev, PCI_STATUS, &pcists);
-+		if (pcists & PCI_STATUS_INTERRUPT)
- 			dev_warn(&dev->dev, "An interrupt is pending!\n");
- 
- 		/* Check if interrupts have been disabled */
--		pci_read_config_word(priv->pci_dev, SMBPCICTL, &pcictl);
--		if (pcictl & SMBPCICTL_INTDIS) {
-+		pci_read_config_word(priv->pci_dev, PCI_COMMAND, &pcictl);
-+		if (pcictl & PCI_COMMAND_INTX_DISABLE) {
- 			dev_info(&dev->dev, "Interrupts are disabled\n");
- 			priv->features &= ~FEATURE_IRQ;
- 		}
--- 
-2.31.1
-
+The 05/21/2021 02:00, Tao Ren wrote:
+> Hi Jamin,
+> 
+> On Thu, May 20, 2021 at 11:31:41AM +0800, Jamin Lin wrote:
+> > The 05/19/2021 22:59, Joel Stanley wrote:
+> > > On Wed, 19 May 2021 at 08:05, Jamin Lin <jamin_lin@aspeedtech.com> wrote:
+> > > >
+> > > > The register definition between AST2600 A2 and A3 is different.
+> > > > This patch avoid new registers definition of AST2600 to use
+> > > > this driver. We will submit the path for the new registers
+> > > > definition of AST2600.
+> > > 
+> > > The AST2600 v9 datasheet says that bit 2 selects between old and new
+> > > register sets, and that the old register set is the default.
+> > > 
+> > > Has the default changed for the A3?, and the datasheet is incorrect?
+> > > 
+> > > Does the A3 still support the old register set?
+> > > 
+> > We suggest user to use the new i2c driver for AST2600 and we will sumbit
+> > it. This driver is used to AST2500 and AST2400 SOCs. Change this
+> > driver to check global register of i2c to avoid user build the wrong driver. 
+> 
+> If I understand correctly, the answer implies old register set is still
+> supported in A3 although aspeed suggest people using the new driver/mode?
+> 
+> Can you please share more context behind the suggestion? Such as new
+> register mode has better performance? Or some known issues that were
+> deteted in old mode are fixed in new register mode?
+>
+Yes, AST2600 A1, A2 and A3 support both old and new register set. The difference
+between old and new register set are the register address and supported registers.
+User can choose to use both old and new register set. However, ASPEED would like to 
+change new register set by default for AST2600.
+Thanks-Jamin
+> 
+> Cheers,
+> 
+> Tao
