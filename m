@@ -2,148 +2,272 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A7A38E43F
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 May 2021 12:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318E938E48E
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 May 2021 12:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbhEXKni (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 May 2021 06:43:38 -0400
-Received: from mga17.intel.com ([192.55.52.151]:22376 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232397AbhEXKnh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 24 May 2021 06:43:37 -0400
-IronPort-SDR: jqsX0OJ0tawZCVVMo7QM9SqKe6dNG32IymqvojXaIoQOYcIoQQ2WtTrk8ppwEELdNCbuOMp2QG
- tJHB+tgQrs6A==
-X-IronPort-AV: E=McAfee;i="6200,9189,9993"; a="182223133"
-X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="182223133"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 03:42:10 -0700
-IronPort-SDR: aZ07CTHFdhREBHG1GTjjNZd70hed56DxA7NMR89eRamzNJJOq/drq622ZqwQrJ4t7ILMEP8KEZ
- s56sWlFposIA==
-X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="478472334"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 03:42:08 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ll829-00EIXA-NI; Mon, 24 May 2021 13:42:05 +0300
-Date:   Mon, 24 May 2021 13:42:05 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     syzbot <syzbot+b4d3fd1dfd53e90afd79@syzkaller.appspotmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [syzbot] KASAN: out-of-bounds Read in i801_isr
-Message-ID: <YKuC/f8abGyyMG5M@smile.fi.intel.com>
-References: <00000000000038de1d05c215bf23@google.com>
- <20210521154820.1ce1d84d@endymion>
- <20210524111652.79e397d7@endymion>
+        id S232596AbhEXKuT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 May 2021 06:50:19 -0400
+Received: from mail-mw2nam10on2098.outbound.protection.outlook.com ([40.107.94.98]:8832
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232574AbhEXKuS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 24 May 2021 06:50:18 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OgSHIW665QOr9ECwBpoYrXNX6G/p72o4MCBTVsa/taEq62glYk7GevAmGFCoEvOHhAsJnqt1plYpGy9utoK3fVa87/hFOMbcxQnSvuOhbJspG2oyzZa59ws1Gfe8AIkIWLQG60Rx72eJI8//sKIFpr5D4/qjmBsBLAerTMCB3PZBJBxmZwbNxZYwLTspdWwU+N2XE6VjXCOZgemNQmMO3gQTdFW5R03voJh9h3zF/wPwPNmmTMraooV9GKKBUFDDLDcz/vF5clu9/8gvKaBRo/me1n+z5rLl8q06vyWhd2wenONkaMAE+vFG2rO6Ror66qDjuero7yH5sQbk933P4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=brwWNJcuj78QpoWCn9TF7n2MA+rHQmFSdWsuiRUmVNQ=;
+ b=ZLFK9dXkdHDNwXYPQD5cKTMnaQnUHVysxUj+vBSVZqi+6oEAvEQLZ3A23wyNSnrmQwXCp0Uo0VLwT5jVpfwK1DGRMTbFe2Jj/tAv9TMA9mZwgEUJLLRNXXiQTFc1JbifI54CAlMpK7eMVEm97RncXoqTkFo+ibRLCzLWDJ2uuEvtaySgjEFcoiyliXFz7z5yi5mt+77Q+gHvFsH7PXkheWSrnAPZljW6SA9BReazH3BfUsPysrSovKvBuhaqnN7Ky8zlfMNSR6SOYczjdgZO2zS8mfFAvfcLMGpPr+3jpKHy0wnFWR/8LTQBRAx8dmPhXyp76JxQjH9E3Au3bqOWXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=brwWNJcuj78QpoWCn9TF7n2MA+rHQmFSdWsuiRUmVNQ=;
+ b=EAFV1EUCHGX+UhnHHqcFX55vCvAsuSX4Jp337OEhC2yx4aoAx1tgdUIE4oMghRCLKvHrk2yMm2MkjHKkvl/HLroC6Bw4YZVe1/rQ2zvijNeHhXiW2t/gdb/9qaPZsVKpF5T1D4Pb5OWpjod5+Lm7bzanHnwkw7b6nXbqLZJP+gs=
+Authentication-Results: lists.ozlabs.org; dkim=none (message not signed)
+ header.d=none;lists.ozlabs.org; dmarc=none action=none
+ header.from=os.amperecomputing.com;
+Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
+ MW2PR0102MB3546.prod.exchangelabs.com (2603:10b6:302:2::30) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4150.27; Mon, 24 May 2021 10:48:48 +0000
+Received: from MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::1905:a396:9968:3a5]) by MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::1905:a396:9968:3a5%5]) with mapi id 15.20.4150.027; Mon, 24 May 2021
+ 10:48:48 +0000
+Subject: Re: [PATCH v3 5/7] i2c: aspeed: Add aspeed_set_slave_busy()
+To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        Corey Minyard <minyard@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+References: <20210519074934.20712-1-quan@os.amperecomputing.com>
+ <20210519074934.20712-6-quan@os.amperecomputing.com>
+ <HK0PR06MB3380FD2B7649CFB48BEA2D4FF2269@HK0PR06MB3380.apcprd06.prod.outlook.com>
+ <1648966e-3e45-9661-c5dc-5ac2f40e2581@os.amperecomputing.com>
+ <HK0PR06MB338093E5E0D0DBA9EA7C1168F2269@HK0PR06MB3380.apcprd06.prod.outlook.com>
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+Message-ID: <917237ce-98f8-df5f-32b6-b4145ac47ac9@os.amperecomputing.com>
+Date:   Mon, 24 May 2021 17:48:38 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.2
+In-Reply-To: <HK0PR06MB338093E5E0D0DBA9EA7C1168F2269@HK0PR06MB3380.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [118.69.219.201]
+X-ClientProxiedBy: HK2P15301CA0014.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:202:1::24) To MW2PR0102MB3482.prod.exchangelabs.com
+ (2603:10b6:302:c::32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210524111652.79e397d7@endymion>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.38.33.138] (118.69.219.201) by HK2P15301CA0014.APCP153.PROD.OUTLOOK.COM (2603:1096:202:1::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.2 via Frontend Transport; Mon, 24 May 2021 10:48:43 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1729d4ce-64bf-4f50-4861-08d91ea182d9
+X-MS-TrafficTypeDiagnostic: MW2PR0102MB3546:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MW2PR0102MB3546BE02889C8D457318E9EDF2269@MW2PR0102MB3546.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a4KBT2bMOKOnRf+5vv+o/DLJOtFpYgHTzhNvpCrdKFuAzE2q4xb/ZX5acZlmI88wl0i/wDcX6zcEWudFKo1XqMjYX9dBz+lI++BV0g+9hCjtB4YnutEQyiJNjpCRQfatReePf3telonl1bUae04hHl8q3CnAxpLVAh/GgC1uspwQ9WYusXHJ1Vh1uKmar8zenmYt6yYUFHeG4oTyt0PIvW31ee/os7HyyzUY6jaRl24RSkIbpS0X0oorP+f+3a1/140mJR02dzW9RFJEynkvnTtTo8mSwR7O5JYZQ26BUhChFIcN6uPtP8jqtS5YFvrrTy4zWkp9HOZMk+Jlxv0bJ+31IBPwXaMfGcCb2tQX/ugjKtxKt9oyvpee8uB6yo3wnCNqyMzTuXNrztg1acuR4WAwQugKXeEegHFpy3pZjbpwxflBGHBTg+3BdKTLnRKCAI7llH3HSmFCDyXHyxqwhqLFBago6MeplK9E6rUm+ODqzP2HxezyFhG7ZkOyvdPwJOSnbTV2kfZjFp2kGGqyv42+RX5pI5RGEI+p6tea8VMOuYRm24TY02zNRGTw7wW1omrkyo0RgrylaVziWur6LmsxtNUGHUy7VDjP5qTXnqag5FUbZImqDS1V2wVGKeyOy6npvls9MlDaJhZuq1jLGTR1A2qgehBvDru8c/K7KMcOO0268T+9yxjo8lCvwt4RSTdMhuJ0a7cmMkicSRI6abZ0GuxGoSvbKJeRVUZe4Hg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(376002)(39850400004)(346002)(366004)(26005)(7416002)(38350700002)(2616005)(66556008)(8936002)(956004)(66946007)(38100700002)(52116002)(86362001)(921005)(53546011)(66476007)(6666004)(83380400001)(16526019)(16576012)(54906003)(5660300002)(31686004)(4326008)(2906002)(316002)(186003)(8676002)(478600001)(31696002)(110136005)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?YTFLVHZzMEMzRW5Xclp4VjhTTTRRV3pXUkg2eDd6QjR0VlRLNXE0bVdnTkhK?=
+ =?utf-8?B?L3NFVGhKcEJvVWRlVTRzQUZzdkp5UkRmazh6Wk14WDhHNjUydDRZUEpYWDNx?=
+ =?utf-8?B?RGp4WFJDTTRFVVdxOEVjM1VOenpJODQ4TDJKVk1lNG1oN0tBV1hUWGg3bkd3?=
+ =?utf-8?B?NUV2MjU4eFFSMVorWklZeXc2M2htRWhYcldTeU1BRElJM285WnhtN2o3L1VY?=
+ =?utf-8?B?b0VncVdoTmI1a0tpY3g0OFhKcjJFYjYxdFZnaWkzcjdUb2Ftb0c2Kyt6b21P?=
+ =?utf-8?B?Q2hvRTIvYnVCQnVNdHh3TDBmYmxIQUNWVWc3OS9rdldXWitoTVVGZ2RmdndO?=
+ =?utf-8?B?dXBQZG1KbEp5VHZ3bEt5Yy80dWJ3Y0k4M3lOS0haTVg0VkUvaUJic1Job3ZH?=
+ =?utf-8?B?cGVoVFBrTkVGSlBQMFhoOXZXdDhPSk0xMkhCTnJzWmd5Mzkyd1BDbzFTSFBY?=
+ =?utf-8?B?T0JXTlZLWW1leWJUeFd0czMrTkljWjQvczBielBLQlpvS1g3TWkwN21ERU5u?=
+ =?utf-8?B?VTZGclZxMzJ5U3loemhPNHl4WU9NU1RDbVRhUmlaYWE4WXdyRzNBbmRCS2M3?=
+ =?utf-8?B?cnp3YWFZUitDbVJXNzltck8ycjJCek9tS2kvSVdhZXpxb1pacXZIWGZTeUdh?=
+ =?utf-8?B?YWs0WHMzcEpROGsyd0tOS2ZoVUtGTnFtanVLV00xU1F1bVpUd09GVjBjSmxQ?=
+ =?utf-8?B?ZVRqSGk0VytIcGljSFM4UVFHdWdkSHZ6OHkxVmtYUzdPWmV3NW9Pd1JweUZC?=
+ =?utf-8?B?bHQxNEdteS9ERUZVNXdKVEZWcmJVMTRnZFFJcmlEd2FjSDUzY3pyc1Q1UU9r?=
+ =?utf-8?B?dEgvM1doOGJoWHZUcWRldS9UbEt4Z2granZyTnBQNnJNOVc3VEU0bUZwR2Zt?=
+ =?utf-8?B?eUtMSkloZjZ6c1oxTkRud3NxaHd2QXZFcGhxUDVTSTRZNW9yeXdRNEJ4TVZ6?=
+ =?utf-8?B?Yjc5bVMrcTJXWVBDU3VYYXpaWWlQQmNvaXRpUkRrdFZid2J2K1FUMjBocG5O?=
+ =?utf-8?B?eUxNK2lWS2ZkQmpDVi9FNjZJL0tjY04xbk52UGpsdXVRb2NEeWl5OWlnNmNN?=
+ =?utf-8?B?WldTTVJxS2tCcDVBVU9LWFU2aC8xZEErakVyTG9LRmFaYUdCWHJzUTNtTW05?=
+ =?utf-8?B?SXUvcXpvL2svRy8vd05UTWRMR3F0OENrajVONW53RHJ0ZUtxbUR0ZjBVVFdC?=
+ =?utf-8?B?N0FkS3huMjZlK0tDVDMxYzdCWVNkUG1HV3h6QnJUd0hJU1NSMm1PbzZFeTdP?=
+ =?utf-8?B?cnRGVnM0Zms1OWdSdDVmbzRPdjZ6MW5MVlVieUgzeThGWk4zaDlTTnJXTEdN?=
+ =?utf-8?B?ZTR0WFhzM1hZN20vdjVNL3R6TGNwOWsrdkhXL243RUFzUnhJSWRCM3h6SUdY?=
+ =?utf-8?B?b3A2RUhjTFNUTXdnckx6UjZ6b2w1L00vSjNERUdteTBDaEs3QWljcDR5WFBG?=
+ =?utf-8?B?dTNoOG5NcC83ZWdHSi91YTdJNWVEUFdXT1A3a0UzYzJ2UGg0d2Q4Sk00TGV5?=
+ =?utf-8?B?Q0VEUExXOGxMK2FZdUIyMnZ4a0R0VjVKa0k1V0RpeUxKM2I5VG13TUhzOHZB?=
+ =?utf-8?B?Uldqd1psWVUzZi9TWjRYamlPT1RDbWpla1pBRS9YTVZLWmJGdlFTSWtPNzMy?=
+ =?utf-8?B?VGE4d2UyenVONmJINkhzcS9MUXJzK0syY0tiaXFJM2pFd0JuZzF1aXNKdHQ4?=
+ =?utf-8?B?UlNlb1FFdnBJa2MvclRzcnN6QkJ6ek5ZMEM1R1ZlckNQMXBVWlh5aElDKzdV?=
+ =?utf-8?Q?e2UZjERuR3JfnC8xzBzKsxbsFUDDSJuiELrkvyQ?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1729d4ce-64bf-4f50-4861-08d91ea182d9
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2021 10:48:48.7029
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 54AZQNochgV0ywASIGMsxIcV0m/kVnwRGudASBNF5N9iHxtYSOSfNF99uSanVpr4JDtgS/f+/5Xi9Q2/3MF3jb2r1KsC+lrv7IdQGmh8n+g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR0102MB3546
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 24, 2021 at 11:16:52AM +0200, Jean Delvare wrote:
-> On Fri, 21 May 2021 15:48:20 +0200, Jean Delvare wrote:
-> > Looking at the ICH9 datasheet, I see the following description for the
-> > KILL bit (which is what we try to use to reset the SMBus controller):
-> > 
-> >   "Kills the current host transaction taking place, sets the FAILED
-> >    status bit, and asserts the interrupt (or SMI#)."
-> > 
-> > At the time the recovery code was written, i2c-i801 was a polling-only
-> > driver, interrupts were not supported, so asserting the interrupt had
-> > no effect. Now that the driver does support interrupts, this would call
-> > i801_isr(), right?
+On 24/05/2021 17:36, Ryan Chen wrote:
+>> -----Original Message-----
+>> From: Quan Nguyen <quan@os.amperecomputing.com>
+>> Sent: Monday, May 24, 2021 6:20 PM
+>> To: Ryan Chen <ryan_chen@aspeedtech.com>; Corey Minyard
+>> <minyard@acm.org>; Rob Herring <robh+dt@kernel.org>; Joel Stanley
+>> <joel@jms.id.au>; Andrew Jeffery <andrew@aj.id.au>; Brendan Higgins
+>> <brendanhiggins@google.com>; Benjamin Herrenschmidt
+>> <benh@kernel.crashing.org>; Wolfram Sang <wsa@kernel.org>; Philipp Zabel
+>> <p.zabel@pengutronix.de>; openipmi-developer@lists.sourceforge.net;
+>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org;
+>> linux-i2c@vger.kernel.org
+>> Cc: Open Source Submission <patches@amperecomputing.com>; Thang Q .
+>> Nguyen <thang@os.amperecomputing.com>; Phong Vo
+>> <phong@os.amperecomputing.com>; openbmc@lists.ozlabs.org
+>> Subject: Re: [PATCH v3 5/7] i2c: aspeed: Add aspeed_set_slave_busy()
+>>
+>> On 24/05/2021 17:06, Ryan Chen wrote:
+>>>> -----Original Message-----
+>>>> From: openbmc
+>>>> <openbmc-bounces+ryan_chen=aspeedtech.com@lists.ozlabs.org> On
+>> Behalf
+>>>> Of Quan Nguyen
+>>>> Sent: Wednesday, May 19, 2021 3:50 PM
+>>>> To: Corey Minyard <minyard@acm.org>; Rob Herring
+>>>> <robh+dt@kernel.org>; Joel Stanley <joel@jms.id.au>; Andrew Jeffery
+>>>> <andrew@aj.id.au>; Brendan Higgins <brendanhiggins@google.com>;
+>>>> Benjamin Herrenschmidt <benh@kernel.crashing.org>; Wolfram Sang
+>>>> <wsa@kernel.org>; Philipp Zabel <p.zabel@pengutronix.de>;
+>>>> openipmi-developer@lists.sourceforge.net;
+>>>> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>>>> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org;
+>>>> linux-i2c@vger.kernel.org
+>>>> Cc: Open Source Submission <patches@amperecomputing.com>; Thang Q .
+>>>> Nguyen <thang@os.amperecomputing.com>; Phong Vo
+>>>> <phong@os.amperecomputing.com>; openbmc@lists.ozlabs.org
+>>>> Subject: [PATCH v3 5/7] i2c: aspeed: Add aspeed_set_slave_busy()
+>>>>
+>>>> Slave i2c device on AST2500 received a lot of slave irq while it is
+>>>> busy processing the response. To handle this case, adds and exports
+>>>> aspeed_set_slave_busy() for controller to temporary stop slave irq
+>>>> while slave is handling the response, and re-enable them again when the
+>> response is ready.
+>>>>
+>>>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>>>> ---
+>>>> v3:
+>>>>     + First introduce in v3 [Quan]
+>>>>
+>>>>    drivers/i2c/busses/i2c-aspeed.c | 20 ++++++++++++++++++++
+>>>>    1 file changed, 20 insertions(+)
+>>>>
+>>>> diff --git a/drivers/i2c/busses/i2c-aspeed.c
+>>>> b/drivers/i2c/busses/i2c-aspeed.c index b2e9c8f0ddf7..9926d04831a2
+>>>> 100644
+>>>> --- a/drivers/i2c/busses/i2c-aspeed.c
+>>>> +++ b/drivers/i2c/busses/i2c-aspeed.c
+>>>> @@ -944,6 +944,26 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus
+>>>> *bus,
+>>>>    	return 0;
+>>>>    }
+>>>>
+>>>> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
+>>>> +void aspeed_set_slave_busy(struct i2c_adapter *adap, bool busy) {
+>>>> +	struct aspeed_i2c_bus *bus = i2c_get_adapdata(adap);
+>>>> +	unsigned long current_mask, flags;
+>>>> +
+>>>> +	spin_lock_irqsave(&bus->lock, flags);
+>>>> +
+>>>> +	current_mask = readl(bus->base + ASPEED_I2C_INTR_CTRL_REG);
+>>> Hello
+>>> 	Where the bus->base to be remap?
+>>>
+>>
+>> Hi Ryan,
+>>
+>> In "[PATCH v3 6/7] ipmi: ssif_bmc: Add Aspeed SSIF BMC driver", the
+>> ->priv is retrieved by calling i2c_get_adapdata(client->adapter). And in
+>> aspeed_set_ssif_bmc_status(), call the exported aspeed_set_slave_busy()
+>> using ->priv pointer as code below.
+>>
+> Yes, I see the probe function " ssif_bmc->priv = i2c_get_adapdata(client->adapter);" to get priv.
+> But my question I don’t see the bus->base address be assigned.
 > 
-> I modified the i2c-i801 driver to simulate a timeout once in a while,
-> and I can confirm that i801_isr() gets called when the KILL bit is set.
-> 
-> > So my theory is that our attempt to kill a timed-out byte-by-byte block
-> > transaction triggers an interrupt, which calls in i801_isr() with the
-> > SMBHSTSTS_BYTE_DONE bit set. This in turn causes i801_isr_byte_done()
-> > to be called while we are absolutely not ready nor even supposed to
-> > process the next data byte.
-> 
-> I can also report that I'm reproducing the bug reported by syzbot when
-> this happens, by running decode-dimms with my modified i2c-i801 driver.
-> I have 4 SPD EEPROMs instantiated for my DIMMs, so decode-dimms
-> triggers a lot of calls to i2c_smbus_read_i2c_block_data().
-> 
-> > I guess we should clear SMBHSTSTS_BYTE_DONE before issuing a
-> > SMBHSTCNT_KILL. Alternatively we could add a check at the beginning of
-> > i801_isr() to bail out immediately if SMBHSTCNT_KILL is set. While
-> > possibly more robust, this approach has the drawback of increasing the
-> > processing time of all interrupts, even standard/legitimate ones. So
-> > maybe just clearing SMBHSTSTS_BYTE_DONE is more reasonable. Something
-> > like:
-> > 
-> > --- linux-5.11.orig/drivers/i2c/busses/i2c-i801.c
-> > +++ linux-5.11/drivers/i2c/busses/i2c-i801.c
-> > @@ -393,6 +393,8 @@ static int i801_check_post(struct i801_p
-> >  		dev_err(&priv->pci_dev->dev, "Transaction timeout\n");
-> >  		/* try to stop the current command */
-> >  		dev_dbg(&priv->pci_dev->dev, "Terminating the current operation\n");
-> > +		/* Clear BYTE_DONE so as to not confuse i801_isr() */
-> > +		outb_p(SMBHSTSTS_BYTE_DONE, SMBHSTSTS(priv));
-> >  		outb_p(inb_p(SMBHSTCNT(priv)) | SMBHSTCNT_KILL,
-> >  		       SMBHSTCNT(priv));
-> >  		usleep_range(1000, 2000);
-> 
-> I ended up with a different approach. Clearing BYTE_DONE would possibly
-> avoid the problem immediately at hand, however the interrupt would
-> still be triggered, even for other (not byte-by-byte) transactions,
-> causing us to fiddle with the status register. I don't think it's
-> needed, and it could have unintended side effects.
-> 
-> So instead I tried the alternative approach of checking the KILL bit in
-> i801_isr() and returning immediately if it is set. While it does work,
-> I noticed that i801_isr() is in fact called in a loop for the whole
-> duration of the usleep_range(1000, 2000) before we clear the KILL bit.
-> While better than an out-of-bounds memory access, an interrupt flood is
-> still not ideal.
-> 
-> > I must say I wonder why SMBHSTCNT_KILL generates an interrupt in the
-> > first place, I can't see who would need this.
-> 
-> Which made me think... The interrupt is being generated because we
-> *ask* for it. It doesn't have to be generated if we aren't interested
-> in it. So the fix would be very simple: don't bother preserving the
-> other bits in HST_CNT, they will be set properly again for the next
-> transaction anyway, only set the KILL bit to 1. In particular don't
-> preserve the INTREN bit, so no interrupt will be generated.
-> 
-> @@ -395,11 +401,9 @@ static int i801_check_post(struct i801_p
->  		dev_err(&priv->pci_dev->dev, "Transaction timeout\n");
->  		/* try to stop the current command */
->  		dev_dbg(&priv->pci_dev->dev, "Terminating the current operation\n");
-> -		outb_p(inb_p(SMBHSTCNT(priv)) | SMBHSTCNT_KILL,
-> -		       SMBHSTCNT(priv));
-> +		outb_p(SMBHSTCNT_KILL, SMBHSTCNT(priv));
->  		usleep_range(1000, 2000);
-> -		outb_p(inb_p(SMBHSTCNT(priv)) & (~SMBHSTCNT_KILL),
-> -		       SMBHSTCNT(priv));
-> +		outb_p(0, SMBHSTCNT(priv));
->  
->  		/* Check if it worked */
->  		status = inb_p(SMBHSTSTS(priv));
-> 
-> This works for me. If there are no objections I'll post a proper patch.
+Hi Ryan,
 
-No objection from me, thanks for conducting a research and developing the fix!
-Feel free to add mine
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-to whatever solution you consider the best.
+In drivers/i2c/busses/i2c-aspeed.c:
+struct aspeed_i2c_bus {
+         struct i2c_adapter              adap;
+         struct device                   *dev;
+         void __iomem                    *base;
+         struct reset_control            *rst;
+         /* Synchronizes I/O mem access to base. */
+         spinlock_t                      lock;
 
--- 
-With Best Regards,
-Andy Shevchenko
+So when "struct aspeed_i2c_bus *bus = i2c_get_adapdata(adap);", the 
+bus->base should point to the base of the aspeed_i2c_bus, which is 
+already initialized by the aspeed i2c bus driver.
 
+Do I miss something?
+
+- Quan
+
+
+>> +extern void aspeed_set_slave_busy(struct i2c_adapter *adap, bool busy);
+>> +static void aspeed_set_ssif_bmc_status(struct ssif_bmc_ctx *ssif_bmc,
+>> unsigned int status)
+>> +{
+>> +	if (status & SSIF_BMC_BUSY)
+>> +		aspeed_set_slave_busy((struct i2c_adapter *)ssif_bmc->priv, true);
+>> +	else if (status & SSIF_BMC_READY)
+>> +		aspeed_set_slave_busy((struct i2c_adapter *)ssif_bmc->priv, false); }
+>> +
+>> +static int ssif_bmc_probe(struct i2c_client *client, const struct
+>> i2c_device_id *id)
+>> +{
+>> +	struct ssif_bmc_ctx *ssif_bmc;
+>> +
+>> +	ssif_bmc = ssif_bmc_alloc(client, 0);
+>> +	if (IS_ERR(ssif_bmc))
+>> +		return PTR_ERR(ssif_bmc);
+>> +
+>> +	ssif_bmc->priv = i2c_get_adapdata(client->adapter);
+>> +	ssif_bmc->set_ssif_bmc_status = aspeed_set_ssif_bmc_status;
+>> +
+>> +	return 0;
+>> +}
+>>
+>> - Quan
+>>
+>>
+> 
 
