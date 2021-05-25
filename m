@@ -2,99 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD15B390A78
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 May 2021 22:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE4D390A97
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 May 2021 22:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbhEYUcZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 May 2021 16:32:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33968 "EHLO mail.kernel.org"
+        id S233313AbhEYUht (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 May 2021 16:37:49 -0400
+Received: from www.zeus03.de ([194.117.254.33]:36720 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229643AbhEYUcZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 May 2021 16:32:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9BA8A613EC;
-        Tue, 25 May 2021 20:30:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621974655;
-        bh=YB5s9KqU3I3U0EwmlQEZQw1u1H5+l4vhQZio8tQDxYs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l/kSEVjzzpoSmDZtXwhyPpiLBWJFOMLiiJdkZnUkEnjVxIP+ymjMljIoA6VJxwL7f
-         6oHEtmU95MjYLld20dbrEUhyRA5a05j5LdrpfZ1SoSD+sNzvAeJj/L+x4UOLzJAMS7
-         jKhmGmaIqQUsWjxLEHCeJKHhYbQ7DLvN2m7scGtHFauO0fr53Y2S2j1EiuQcwC2/Vk
-         iYl3Wl6Ge54GPYeQONO0Tgm40jtbkOUI63JYunfQuFF0kzdTPv08bgrSWHJxWDl8Dx
-         ATTJniz3W3LO7Yyo3MkohMzYa407hq0Lp2pVYkkutpEObLKqUhHBmG4z72z+ZS9Uu8
-         8JDPTeCNf/1mw==
-Date:   Tue, 25 May 2021 22:30:52 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Sean Nyekjaer <sean@geanix.com>, trix@redhat.com, lars@metafoo.de,
-        andy.shevchenko@gmail.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] iio: accel: fxls8962af: conditionally compile
- fxls8962af_i2c_raw_read_errata3()
-Message-ID: <YK1efL7DMOVZSPuz@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Sean Nyekjaer <sean@geanix.com>, trix@redhat.com, lars@metafoo.de,
-        andy.shevchenko@gmail.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20210518234828.1930387-1-trix@redhat.com>
- <a3329058-2b2d-415a-5d2a-0bdf2f97d23d@geanix.com>
- <20210521175406.274f713b@jic23-huawei>
+        id S233263AbhEYUht (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 May 2021 16:37:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=4Siig0ZdmDeZkvLkh70DL0A+cdl0
+        oIQXSWBY2PK2Pv4=; b=dPcvhB/OvzgWgKr5Xog6iWFhG9CgtN8LJXCMN7XUTIAp
+        apAjDgE8V9en5WiUK3vIYx8oZkl+EDHNz8QVCh7cLqeOtFPK1ychi0RxX3II2Ys+
+        nDihUoTH3u9l4cmfiJ+xPhpLc0NkSkn1wYdUJZzuo5VX+DuEf+AjIjm7pg18cCo=
+Received: (qmail 1380845 invoked from network); 25 May 2021 22:36:16 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 May 2021 22:36:16 +0200
+X-UD-Smtp-Session: l3s3148p1@bfZLei3DMt0gAwDPXxHuAKg5HweM3jRU
+Date:   Tue, 25 May 2021 22:36:16 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Peter Korsgaard <peter@korsgaard.com>, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH i2c-tools] Revert "tools: i2ctransfer: add check for
+ returned length from driver"
+Message-ID: <YK1fwC4aR5RKTPcB@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Peter Korsgaard <peter@korsgaard.com>, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20210209110556.18814-1-wsa+renesas@sang-engineering.com>
+ <20210226174337.63a9c2a6@endymion>
+ <20210310204648.GA332643@ninjato>
+ <87tuoe5zfc.fsf@dell.be.48ers.dk>
+ <20210413125433.GA9879@kunai>
+ <20210521132158.6e0689c0@endymion>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v0fj/HaOmU5lDP4H"
+        protocol="application/pgp-signature"; boundary="cZLVD47e/zI65E/b"
 Content-Disposition: inline
-In-Reply-To: <20210521175406.274f713b@jic23-huawei>
+In-Reply-To: <20210521132158.6e0689c0@endymion>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---v0fj/HaOmU5lDP4H
+--cZLVD47e/zI65E/b
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
 
-> > > The build is failing with this link error
-> > > ld: fxls8962af-core.o: in function `fxls8962af_fifo_transfer':
-> > > fxls8962af-core.c: undefined reference to `i2c_verify_client'
-> > >=20
-> > > This is needed for the i2c variant, not the spi variant. So
-> > > conditionally compile based on CONFIG_FXLS8962AF_I2C.
-> > >  =20
-> > Fixes: 68068fad0e1c ("iio: accel: fxls8962af: fix errata bug E3 - I2C b=
-urst reads")
-> > > Signed-off-by: Tom Rix <trix@redhat.com> =20
-> > Reviewed-by: Sean Nyekjaer <sean@geanix.com>
->=20
-> Given the purpose of that check is to verify it was an i2c_client
-> should we be looking to instead provide a stub for the case where
-> we don't have CONFIG_I2C?
->=20
-> +CC Wolfram and linux-i2c list for input.
+> release, OTOH we have a regression in one of the tools, which is
+> something rare (thankfully) and problematic enough to justify a rush of
+> schedule.
 
-Such a stub sounds reasonable.
+Yeah. Sorry about the regression!
+
+> I'll take care of that ASAP if that's OK with you. If you have any
+> other change that should make it into 4.3, now is the time to commit it.
+
+Thank you. I don't have any patches left but I will review the ones
+waiting in patchwork right now.
 
 
---v0fj/HaOmU5lDP4H
+--cZLVD47e/zI65E/b
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCtXncACgkQFA3kzBSg
-KbaGzg/+PC+EeK4TZxKGveYd0I11gaP37dNvJKXHqjBQO8pzsZnBpWzzprDPvrt7
-7+hC6jYXPErO5okEMg+Dj+LC0T94F+YoNG7zvq4Q3BZ9aar6F8pmACeXKCTxU+di
-NmBDqGVqGUqu6YQY/0Ya3XBewc4OXfAJtFvtxydVJjwZ4U1r0gKssXoT2QD9GY1r
-0MzNUtP6Vqgqu65wOGmtp36+hsxJQ+kesKA9YQhV/NyNwKKwO5+PRbUMeyNjAGIr
-nUsw7N+Y7K8jdinauJguJmwa75ff3ZL8fGj0hTJR4V+twKP+u0OwRHxNYi0jLNQF
-Zq7/4K+ktNEupCl0yJenrQyGTwdS6F5lpr3trPm8uY03SZBdnUZHUmmzpviX251l
-uyIv272uWq8PQVXQ203VjeOxbnvK6OUfOkc+yDoA5B22AWlrL/Q7HBWStZj8iVCr
-yjADh39qnZjdAbggBCkcL54hKumFhiHcIXP6tGsrtx64uAOoo7ndnqKDLVKPbuz7
-qZaggAabA18Pi6o3+y+jE8u8xSxoU2JRGu+WdsFvfCZaYkIAnP4mVgD/duhumWww
-vC+x4XxSWVvR9bGX/FK5P3sh0J3kQF+Re7ysreydNBLiHlniVZ60Z7AhwetIw7eR
-wwP2oeNwHfkF60289uRYcCtSCuwCfUBaY0w3TnP/PqUMXrvW98U=
-=XRTq
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCtX8AACgkQFA3kzBSg
+KbbS2A/+KFVjU09Qwp7IkZR747xGagVLJIHWLDEsD/xbZXg5mJOGZvqO5twyeTxZ
+nldkGDYBfgGkBNNzeXW/vvqV5ZbkCjs4g4bf9Hgmw5j5bG0fa7AEE/kOHJJa3Q4T
+mDlta2V41YHBgtwARkIHXfzEG3FZz3TWYsfNc1QIoz+J8se7tru2ugj6L8LbByfn
++NjN/IenvYYx17JbL1g9pcXEA0HhoSVl1tPkG69nNXNts0Z4gmjfPfsZGKl+Jbgh
+JZdgBYaoib1asToYIxz/37VBxd1VwBbgcdlQn0YKk/BNjYjv8QzSE40IzFDOCOWb
+uH3ymXh4T+7oj+NifvQFmic3semo5DrYQQVgkKUTBAjeW7HBWSPgQNmYcR6Pzdgg
+GsmW8nxF10qO0tRWrOnabwSZOUhoOmc3Y4CO4l1nd+rWtUuZgW2A/G3Fg0IDK3LK
+z2e6h9FGvBThb4RJq3inHCE+BNykc4LXfg0S987cW+7E6lLLz6vNa48mxRwSXPFT
+/Gc3Vgk6OeDXK1cLhPx1RZ8J9XiIlEHGBJknfrETr7i+AnNVLn7cdPlXWwSV437K
+hh0EsIMi0U5IABRQRsWTY/bp1JRUL90O+Dc615+bG7f6zyFodENBU3L1oWKJDVzG
+PmunQ/1WdVfbbVvGo59bVDsdmmrwhzVBYwFjaC3iM/w7LEP7ha0=
+=qzqe
 -----END PGP SIGNATURE-----
 
---v0fj/HaOmU5lDP4H--
+--cZLVD47e/zI65E/b--
