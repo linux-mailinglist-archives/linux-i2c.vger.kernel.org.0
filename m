@@ -2,121 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64093390A52
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 May 2021 22:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD15B390A78
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 May 2021 22:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbhEYUJD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 May 2021 16:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbhEYUJC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 May 2021 16:09:02 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5583C061574
-        for <linux-i2c@vger.kernel.org>; Tue, 25 May 2021 13:07:31 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id z17so33490077wrq.7
-        for <linux-i2c@vger.kernel.org>; Tue, 25 May 2021 13:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=qvKiuBDY+VgAAoPV6KAc3s0HADINjeNcDBw9g070Usg=;
-        b=OqqieHDcXRSSiTgYAMgaFC1ODM/uLnfZ/GapIWcoMKaXmqsl1LA9ZsMQlcnbOTEZ7M
-         +bJ8Ys5uTIas1pARKKiH/zpaq48VUsUyTQ0p2VXiZg+A1MRzPrskKsAjgJi4fWIGmaSO
-         I5IlSsGb8RTWAT+0rc50bkDjYAshSSOc9h0N6mgrD+BNHViE/ZF12USfOy4JuDmuTg+L
-         zFfsV6K9zM2K/fp8wSiFoMevZbxkQVYWLbcf6b5CSyBVw5Ith3qkGhKlndtI4wZlhvbb
-         emBnFuY+rQlIO/tYOKm8RQTcAum8ZQW1ZQdhyp79x+5bwk876cz9hWjZbCDD7RqKAn+B
-         Nd4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=qvKiuBDY+VgAAoPV6KAc3s0HADINjeNcDBw9g070Usg=;
-        b=FWLyDPBGmTQDF47Y7hmNWYyCSZhQ++xpeV0+aqgJIXXIYtpeJ9p/NNgkn3ZFflQhvT
-         TpPU/DlOAhVGaGLaXaT7kDEhmMBKDT36wW/tdvnWnEM+F35XBtdSoKt8bPTFpDzEqbcK
-         T/nQnLB3oEa9O7TAPFeFBbLvx6B/XDR+F1ItmvDjKx4pMQZ6XC/qdBlsjTEnLV2yce39
-         PB/IUPCoeYOmV4sIqazgL3wlL/W+sFDnWTslVyIZo60yI/WtXawxapIUf/eR0oqpPvyl
-         WTiL72eJn8sPbRTnbj35Nm/8Cp2lvPpzoO9kr8n0Jx9EggAEscSdUTbh1LkGT0V/TTKH
-         BzlA==
-X-Gm-Message-State: AOAM532VepcpbEVgtD9ylnGGT2wVGg+NrPgTsF9i5YDpyuUGemuc3o4i
-        RWvCCxlZeo+Wb1EEa6v+EIUa2QdSKzk=
-X-Google-Smtp-Source: ABdhPJwLwWapt5KsxLJKMEU5vOIz9pdy5scH/9+K1P8hM8zkigxwQaJ4+SjP0MqFPS+Rkg1StC3F4w==
-X-Received: by 2002:a5d:5008:: with SMTP id e8mr28757946wrt.386.1621973250024;
-        Tue, 25 May 2021 13:07:30 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8f38:4600:a053:ef5d:7e3e:e120? (p200300ea8f384600a053ef5d7e3ee120.dip0.t-ipconnect.de. [2003:ea:8f38:4600:a053:ef5d:7e3e:e120])
-        by smtp.googlemail.com with ESMTPSA id r14sm17071816wrx.74.2021.05.25.13.07.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 May 2021 13:07:29 -0700 (PDT)
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] i2c: i801: Improve i801_setup_hstcfg
-Message-ID: <d5ec9de2-dd54-6ee2-a791-13ca510bcd43@gmail.com>
-Date:   Tue, 25 May 2021 22:07:17 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        id S233245AbhEYUcZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 May 2021 16:32:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33968 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229643AbhEYUcZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 May 2021 16:32:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9BA8A613EC;
+        Tue, 25 May 2021 20:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621974655;
+        bh=YB5s9KqU3I3U0EwmlQEZQw1u1H5+l4vhQZio8tQDxYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l/kSEVjzzpoSmDZtXwhyPpiLBWJFOMLiiJdkZnUkEnjVxIP+ymjMljIoA6VJxwL7f
+         6oHEtmU95MjYLld20dbrEUhyRA5a05j5LdrpfZ1SoSD+sNzvAeJj/L+x4UOLzJAMS7
+         jKhmGmaIqQUsWjxLEHCeJKHhYbQ7DLvN2m7scGtHFauO0fr53Y2S2j1EiuQcwC2/Vk
+         iYl3Wl6Ge54GPYeQONO0Tgm40jtbkOUI63JYunfQuFF0kzdTPv08bgrSWHJxWDl8Dx
+         ATTJniz3W3LO7Yyo3MkohMzYa407hq0Lp2pVYkkutpEObLKqUhHBmG4z72z+ZS9Uu8
+         8JDPTeCNf/1mw==
+Date:   Tue, 25 May 2021 22:30:52 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Sean Nyekjaer <sean@geanix.com>, trix@redhat.com, lars@metafoo.de,
+        andy.shevchenko@gmail.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] iio: accel: fxls8962af: conditionally compile
+ fxls8962af_i2c_raw_read_errata3()
+Message-ID: <YK1efL7DMOVZSPuz@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Sean Nyekjaer <sean@geanix.com>, trix@redhat.com, lars@metafoo.de,
+        andy.shevchenko@gmail.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20210518234828.1930387-1-trix@redhat.com>
+ <a3329058-2b2d-415a-5d2a-0bdf2f97d23d@geanix.com>
+ <20210521175406.274f713b@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v0fj/HaOmU5lDP4H"
+Content-Disposition: inline
+In-Reply-To: <20210521175406.274f713b@jic23-huawei>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-i801_setup_hstcfg() leaves the bits in priv->original_hstcfg that
-we're interested in intact. Therefore we can remove the return value
-from the function and use priv->original_hstcfg directly.
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/i2c/busses/i2c-i801.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+--v0fj/HaOmU5lDP4H
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 54d84b9ef..047f73f1a 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1692,19 +1692,17 @@ static inline int i801_acpi_probe(struct i801_priv *priv) { return 0; }
- static inline void i801_acpi_remove(struct i801_priv *priv) { }
- #endif
- 
--static unsigned char i801_setup_hstcfg(struct i801_priv *priv)
-+static void i801_setup_hstcfg(struct i801_priv *priv)
- {
- 	unsigned char hstcfg = priv->original_hstcfg;
- 
- 	hstcfg &= ~SMBHSTCFG_I2C_EN;	/* SMBus timing */
- 	hstcfg |= SMBHSTCFG_HST_EN;
- 	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hstcfg);
--	return hstcfg;
- }
- 
- static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- {
--	unsigned char temp;
- 	int err, i;
- 	struct i801_priv *priv;
- 
-@@ -1827,16 +1825,16 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	}
- 
- 	pci_read_config_byte(priv->pci_dev, SMBHSTCFG, &priv->original_hstcfg);
--	temp = i801_setup_hstcfg(priv);
-+	i801_setup_hstcfg(priv);
- 	if (!(priv->original_hstcfg & SMBHSTCFG_HST_EN))
- 		dev_info(&dev->dev, "Enabling SMBus device\n");
- 
--	if (temp & SMBHSTCFG_SMB_SMI_EN) {
-+	if (priv->original_hstcfg & SMBHSTCFG_SMB_SMI_EN) {
- 		dev_dbg(&dev->dev, "SMBus using interrupt SMI#\n");
- 		/* Disable SMBus interrupt feature if SMBus using SMI# */
- 		priv->features &= ~FEATURE_IRQ;
- 	}
--	if (temp & SMBHSTCFG_SPD_WD)
-+	if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
- 		dev_info(&dev->dev, "SPD Write Disable is set\n");
- 
- 	/* Clear special mode bits */
--- 
-2.31.1
 
+> > > The build is failing with this link error
+> > > ld: fxls8962af-core.o: in function `fxls8962af_fifo_transfer':
+> > > fxls8962af-core.c: undefined reference to `i2c_verify_client'
+> > >=20
+> > > This is needed for the i2c variant, not the spi variant. So
+> > > conditionally compile based on CONFIG_FXLS8962AF_I2C.
+> > >  =20
+> > Fixes: 68068fad0e1c ("iio: accel: fxls8962af: fix errata bug E3 - I2C b=
+urst reads")
+> > > Signed-off-by: Tom Rix <trix@redhat.com> =20
+> > Reviewed-by: Sean Nyekjaer <sean@geanix.com>
+>=20
+> Given the purpose of that check is to verify it was an i2c_client
+> should we be looking to instead provide a stub for the case where
+> we don't have CONFIG_I2C?
+>=20
+> +CC Wolfram and linux-i2c list for input.
+
+Such a stub sounds reasonable.
+
+
+--v0fj/HaOmU5lDP4H
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCtXncACgkQFA3kzBSg
+KbaGzg/+PC+EeK4TZxKGveYd0I11gaP37dNvJKXHqjBQO8pzsZnBpWzzprDPvrt7
+7+hC6jYXPErO5okEMg+Dj+LC0T94F+YoNG7zvq4Q3BZ9aar6F8pmACeXKCTxU+di
+NmBDqGVqGUqu6YQY/0Ya3XBewc4OXfAJtFvtxydVJjwZ4U1r0gKssXoT2QD9GY1r
+0MzNUtP6Vqgqu65wOGmtp36+hsxJQ+kesKA9YQhV/NyNwKKwO5+PRbUMeyNjAGIr
+nUsw7N+Y7K8jdinauJguJmwa75ff3ZL8fGj0hTJR4V+twKP+u0OwRHxNYi0jLNQF
+Zq7/4K+ktNEupCl0yJenrQyGTwdS6F5lpr3trPm8uY03SZBdnUZHUmmzpviX251l
+uyIv272uWq8PQVXQ203VjeOxbnvK6OUfOkc+yDoA5B22AWlrL/Q7HBWStZj8iVCr
+yjADh39qnZjdAbggBCkcL54hKumFhiHcIXP6tGsrtx64uAOoo7ndnqKDLVKPbuz7
+qZaggAabA18Pi6o3+y+jE8u8xSxoU2JRGu+WdsFvfCZaYkIAnP4mVgD/duhumWww
+vC+x4XxSWVvR9bGX/FK5P3sh0J3kQF+Re7ysreydNBLiHlniVZ60Z7AhwetIw7eR
+wwP2oeNwHfkF60289uRYcCtSCuwCfUBaY0w3TnP/PqUMXrvW98U=
+=XRTq
+-----END PGP SIGNATURE-----
+
+--v0fj/HaOmU5lDP4H--
