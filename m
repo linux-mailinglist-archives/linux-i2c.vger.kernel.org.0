@@ -2,63 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD06390C7B
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 May 2021 00:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD52390CAD
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 May 2021 01:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbhEYWy5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 May 2021 18:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S231837AbhEYXE5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 May 2021 19:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbhEYWy4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 May 2021 18:54:56 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E69C061574;
-        Tue, 25 May 2021 15:53:24 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id f20-20020a05600c4e94b0290181f6edda88so7488962wmq.2;
-        Tue, 25 May 2021 15:53:24 -0700 (PDT)
+        with ESMTP id S230103AbhEYXE5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 May 2021 19:04:57 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D54C061574;
+        Tue, 25 May 2021 16:03:26 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id u4-20020a05600c00c4b02901774b80945cso14411752wmm.3;
+        Tue, 25 May 2021 16:03:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=reDM3jFc19oKCFJlz500fPCv9/GS7ihZ1/NylsFXAi8=;
-        b=raQd9OTH9uCIvVlLRCoa5+T4rvcKEsectlqRKDUA/KMhSkZEEp2mX5+83qTKq46eUM
-         uIwB+2XdUVPQ0gMseEIUgUpnZE9f1wg9GYGNbYQTSWE6/nv6CQT65096mWPCF65oYVxn
-         9L8O9Oc5Mb7n/Ia38As1ZkwDaVJqfTThDiHKQzCItVXEdqg7LtmjixaXuMMgCK6Ig3Ff
-         4QZ32erEQ0H555qyt2xKLH3yjXzXCnWnmnrTvb1Ceseqs9y2pMeuLc5ztkxTB2gQjEYG
-         eyRqx9IbkOwTi8xUeqvLkHfqIyc0oKg2PAGK1gZfwHTUl5uhWFLnwRr5ZMvZujTPDdJl
-         2k+Q==
+        bh=4EHmYkGshIC3oll6QN+CKRJkNhLPbP3P/9v9afF8x4A=;
+        b=Ci3AD0CWjfzF7rZgPEbDvs1YbkQ45yIUGn4YZErB3sstloTsd4ygxR+f6pvNRhtKex
+         BN+p5mg4PxrR3SNOvHUHtLDPnH1bcfvxtnnda/TRbykUEoqoF6igXvOU8sgBGGRGT7y7
+         VVzKiFcelsXTYzcKPv1TO1zAFbLStb/W5jmpwoumzxlCeUSxHJJZcAHgh6FCSAynFdBo
+         80smj1sJoJLWKCg+DgsW+gju1QdI0phCgNgq6VWucqZKqpp5+JUtgxOlhrraqQmjczE9
+         /hW+M/TvW/8dLEbaMPTx2HXsn57geMk8dACo53u1jtc5fKN+bLkaTDZwG+MqlI6zOVUk
+         N4WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=reDM3jFc19oKCFJlz500fPCv9/GS7ihZ1/NylsFXAi8=;
-        b=roXn1kG2o3Qq057WHXBKjeJ0xmeQw7rZTj4FbQC8ao/lV3TLpU8XJ6dOqUd1sOr+v5
-         DUlUii2Hy3otg1NtvH5aqTGlaLG+6MlnsA5wCviqz++TH0iz8nX1KwGIk15VgTQfam/i
-         2Wc5uQB4BhCS4rQsGzy1wtINvrEgiqVy8817Vy9uhhAETI8+3cQyqOwLDUhgPMXbcHuA
-         Ubh5v0uQILnOVKuJSs2GtVankQuVo69TnLW5wjDVgr6WhBj7Wmesr+8FkiDvCdQgjwD+
-         WQBPQVymPUtFcpLGRkrtS6WNoCyn/d3GPrJyujceCE7hisU5sy5+b5z0wARlaEHgdWy1
-         XH4g==
-X-Gm-Message-State: AOAM531JWxuKWKNIQo3gF9VVBte/G641Khg4B49SZTSSIksxRY+UwjQ1
-        yWaTm7Gg9KfdW1TwrZfo9dPGvDntAXs=
-X-Google-Smtp-Source: ABdhPJw546gEmZ1nK6tk1g/lyiMMiRk3FHagS3+zvR+uDwiNQ85UPv2DV/NENvTbCsLZ9hgKYh/Pjg==
-X-Received: by 2002:a1c:6a0f:: with SMTP id f15mr23961465wmc.29.1621983203295;
-        Tue, 25 May 2021 15:53:23 -0700 (PDT)
+        bh=4EHmYkGshIC3oll6QN+CKRJkNhLPbP3P/9v9afF8x4A=;
+        b=gJVHi9xlZSeQnUvVguLQBQDWrtfwuDGLAmOUkdJstdzA1WZJmXpwlg3KHbu/jWKagQ
+         wSTtBEM580SMhBOmd38gNVDmXU6FOrJv/pmJIfMuBqREQXeNxewG+J5mqPK1yrSBaquL
+         fIvNemwnCHYE0OLtwL1NJSzPO3E7sSTn3zc04iJXt0kGJv4MyvTUr31owCNXZfxciX2r
+         BVvHe8hjo69SxTbPla35TPjxTddoD8Q6gBFOoGxyA4cQEbWVQipNF2wMAJHQYplYw/lL
+         F7l3TnECurmwZekLhZ2hITE50dF12pSc+BbAf+W9NHZxa2/KnkFj0Sc7g3gA2gh0Mnmy
+         ZoCw==
+X-Gm-Message-State: AOAM533VKGLG76sHfE2WVJ50buhccS5oYn3iYyBL0w9rPq25vZYrPXxs
+        uv9GgH0sz5oaNRBm1w+4GG4=
+X-Google-Smtp-Source: ABdhPJx51rBU/rVj68kvEO6PrNXeyN6VkTRmnWmI/0fJneiHByBt+MxfL1RT/Bf31Mt5NVigNKjyEQ==
+X-Received: by 2002:a7b:c20b:: with SMTP id x11mr26634411wmi.150.1621983804609;
+        Tue, 25 May 2021 16:03:24 -0700 (PDT)
 Received: from [192.168.1.211] ([91.110.20.117])
-        by smtp.gmail.com with ESMTPSA id r7sm11905348wmq.18.2021.05.25.15.53.22
+        by smtp.gmail.com with ESMTPSA id s15sm21429865wrt.54.2021.05.25.16.03.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 May 2021 15:53:22 -0700 (PDT)
-Subject: Re: [PATCH v4 7/8] platform/x86: Add intel_skl_int3472 driver
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Tue, 25 May 2021 16:03:24 -0700 (PDT)
+Subject: Re: [PATCH v4 0/8] Introduce intel_skl_int3472 module
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Wolfram Sang <wsa@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
         Maximilian Luz <luzmaximilian@gmail.com>,
         linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        devel@acpica.org, Len Brown <lenb@kernel.org>,
+        devel@acpica.org
+Cc:     Len Brown <lenb@kernel.org>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Russell King <linux@armlinux.org.uk>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -68,15 +69,14 @@ Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Erik Kaneda <erik.kaneda@intel.com>,
         laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com
 References: <20210520140928.3252671-1-djrscally@gmail.com>
- <20210520140928.3252671-8-djrscally@gmail.com>
- <YKeuQM/O9+jDZFpb@smile.fi.intel.com>
+ <f2d8e74f-f33b-2489-1b90-b11bf7465d19@redhat.com>
 From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <6294177b-d6e1-8bbd-d313-5cce1c498604@gmail.com>
-Date:   Tue, 25 May 2021 23:53:21 +0100
+Message-ID: <f4664310-0975-335d-8dc3-95726f53ab67@gmail.com>
+Date:   Wed, 26 May 2021 00:03:23 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <YKeuQM/O9+jDZFpb@smile.fi.intel.com>
+In-Reply-To: <f2d8e74f-f33b-2489-1b90-b11bf7465d19@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -84,170 +84,87 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy - thanks for comments
+Hi Hans
 
-On 21/05/2021 13:57, Andy Shevchenko wrote:
-
->> +/*
->> + * The regulators have to have .ops to be valid, but the only ops we actually
->> + * support are .enable and .disable which are handled via .ena_gpiod. Pass an
->> + * empty struct to clear the check without lying about capabilities.
->> + */
->> +static const struct regulator_ops int3472_gpio_regulator_ops;
-> Hmm... Can you use 'reg-fixed-voltage' platform device instead?
+On 25/05/2021 14:10, Hans de Goede wrote:
+> Hi Daniel,
 >
-> One example, although gone from upstream, but available in the tree, I can
-> point to is this:
+> On 5/20/21 4:09 PM, Daniel Scally wrote:
+>> Hello all
+>>
+>> Apologies for the long delay since the last version of this series; the time I
+>> had free to work on it became somewhat restrained.
+> No worries, thank you for all the work you are putting into this.
+
+
+My pleasure
+
+> I have not taken a close look at the code yet, but I see that Andy has and
+> the amount of remarks which he has on patch 7/8 which is the big one seems
+> to be limited, so I believe that we are getting close to this being ready
+> for merging.
 >
->   git log -p -- arch/x86/platform/intel-mid/device_libs/platform_bcm43xx.c
+> This touches a lot of subsystems, so we need to come up with a plan to
+> merge this. Here is my proposal for how to do this:
 >
-> It uses constant structures, but I think you may dynamically generate the
-> necessary ones.
+> 1/8   ACPI: scan: Extend acpi_walk_dep_device_list()
+> 2/8   ACPI: scan: Add function to fetch dependent of acpi device
+> 3/8   i2c: core: Add a format macro for I2C device names
+> 4/8   gpiolib: acpi: Export acpi_get_gpiod()
+> 5/8   clkdev: Make clkdev_drop() null aware
+> 6/8   gpiolib: acpi: Add acpi_gpio_get_io_resource()
+> 7/8   platform/x86: Add intel_skl_int3472 driver
+> 8/8   mfd: tps68470: Remove tps68470 MFD driver
 >
-
-I can experiment with this, though one thing is we have no actual idea
-what voltages these are supplying...it doesn't look like that matters
-from drivers/regulator/fixed.c, but I'd have to try it to be sure.
-
-> +
-> +static int skl_int3472_clk_enable(struct clk_hw *hw)
-> +{
-> +	/*
-> +	 * We're just turning a GPIO on to enable the clock, which operation
-> +	 * has the potential to sleep. Given .enable() cannot sleep, but
-> +	 * .prepare() can, we toggle the GPIO in .prepare() instead. Thus,
-> +	 * nothing to do here.
-> +	 */
-> It's a nice comment, but you are using non-sleeping GPIO value setters. Perhaps
-> you need to replace them with gpiod_set_value_cansleep()?
+> Rafael already indicated that he wants to merge 1/8 (and presumably also 2/8)
+> through his tree and that he will provide an immutable branch with those
+> for merging into the pdx86 tree.
 
 
-That would make sense!
+I'll send a v5 with the renames asap, might try and do the other changes
+and send the whole series, depends how much time I get to work on it
+over the next few days...
+
+> 4/8 and 6/8 are both gpiolib-acpi patches and seem to be ready for merging
+> now, perhaps the gpiolib-acpi maintainers can already merge these and also
+> provide an immutable branch ?  Andy/Mika ?
 
 
->> +static unsigned int skl_int3472_get_clk_frequency(struct int3472_discrete_device *int3472)
->> +{
->> +	union acpi_object *obj;
->> +	unsigned int freq;
->> +
->> +	obj = skl_int3472_get_acpi_buffer(int3472->sensor, "SSDB");
->> +	if (IS_ERR(obj))
->> +		return 0; /* report rate as 0 on error */
->> +
->> +	if (obj->buffer.length < CIO2_SENSOR_SSDB_MCLKSPEED_OFFSET + sizeof(u32)) {
->> +		dev_err(int3472->dev, "The buffer is too small\n");
->> +		goto out_free_buff;
-> First of all, freq will be uninitialized here.
+So, Andy, you'd prefer I re-order these so they're consecutive...did I
+understand that right?
+
+> 3/8 and 5/8 seem to be nice cleanups, but not really necessary. IMHO it
+> would be best to park these cleanups for later and for 3/8 add the following
+> where necessary for now:
 >
-> I'm wondering if you can simple drop the goto and replace it with direct steps, i.e.
-> 	kfree(obj);
-> 	return 0;
-
-
-Sure, I have no real preference; I'll do that instead.
-
-
->> +static const struct int3472_sensor_config *
->> +skl_int3472_get_sensor_module_config(struct int3472_discrete_device *int3472)
->> +{
->> +	const struct int3472_sensor_config *ret;
->> +	union acpi_object *obj;
->> +	unsigned int i;
->> +
->> +	obj = acpi_evaluate_dsm_typed(int3472->sensor->handle,
->> +				      &cio2_sensor_module_guid, 0x00,
->> +				      0x01, NULL, ACPI_TYPE_STRING);
->> +
->> +	if (!obj) {
->> +		dev_err(int3472->dev,
->> +			"Failed to get sensor module string from _DSM\n");
->> +		return ERR_PTR(-ENODEV);
->> +	}
->> +
->> +	if (obj->string.type != ACPI_TYPE_STRING) {
->> +		dev_err(int3472->dev,
->> +			"Sensor _DSM returned a non-string value\n");
->> +		ret = ERR_PTR(-EINVAL);
->> +		goto out_free_obj;
->> +	}
->> +	ret = ERR_PTR(-EINVAL);
->> +	for (i = 0; i < ARRAY_SIZE(int3472_sensor_configs); i++) {
->> +		if (!strcmp(int3472_sensor_configs[i].sensor_module_name,
->> +			    obj->string.pointer)) {
->> +			ret = &int3472_sensor_configs[i];
->> +			break;
->> +		}
->> +	}
-> Can be refactored like this:
+> /* FIXME drop this once the I2C_DEV_NAME_FORMAT macro has been added to include/linux/i2c.h */
+> #ifndef I2C_DEV_NAME_FORMAT
+> #define I2C_DEV_NAME_FORMAT		"i2c-%s"
+> #endif
 >
-> 	for (i = 0; i < ARRAY_SIZE(int3472_sensor_configs); i++) {
-> 		if (!strcmp(int3472_sensor_configs[i].sensor_module_name,
-> 			    obj->string.pointer))
-> 			break;
-> 	}
+> This is not the prettiest but it reduces all the subsys cross-deps and things
+> like this have been done before for similar reasons.
 >
-> 	ACPI_FREE(obj);
+> Likewise it would be good if you can add if (foo) as condition before any
+> clkdev_drop(foo) calls in this patch-set and then merge
+> 5/8 "clkdev: Make clkdev_drop() null aware" independently of this and then
+> once both are in Linux tree follow-up with a cleanup patch dropping the if (foo)
+> guards.
+
+
+This is fine by me if people are happy for it to go in like that; I'll
+just fix it up later.
+
+> So this would leave as deps for 7/8 just the 2 ACPI and 2 gpiolib-acpi patches
+> which I can hopefully pull-in via immutable branches and then we are good.
 >
-> 	if (i >= ARRAY_SIZE(int3472_sensor_configs))
-> 		return ERR_PTR(-EINVAL);
+> AFAICT patch 8/8 can be merged independently once 7/8 hits for-next (IOW once
+> we are sure the next kernel will have 7/8).
 >
-> 	return &int3472_sensor_configs[i];
-
-
-Yeah ok, I like this better than the ret = ERR_PTR(-EINVAL) before the
-loop; thank you.
-
-
->> + * Return:
->> + * * 0		- When all resources found are handled properly.
-> Positive number ... ?
->> +	if (!acpi_gpio_get_io_resource(ares, &agpio))
->> +		return 1; /* Deliberately positive so parsing continues */
-> Move it to description above?
-
-
-oops, yes, I'll add those to the comment.
-
-
->> +	if (int3472->clock.ena_gpio) {
->> +		ret = skl_int3472_register_clock(int3472);
->> +		if (ret)
->> +			goto out_free_res_list;
->> +	} else {
-> Hmm... Have I got it correctly that we can't have ena_gpio && led_gpio together?
-
-
-No, just that we can only have led_gpio if we also have ena_gpio (at
-least that's the intention...)
-
-
->> +	if (ret)
->> +		ret = devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_NONE,
-> This I don't like. Since we get a returned variable with different meaning, can
-> we use a specific variable name for it? On top of that, I would rather see
-> something like this:
 >
-> 	whatever = skl_...(...);
-> 	switch (whatever) {
-> 	case WHATEVER_ONE_CASE:
-> 		if (cldb.control_logic_type != 2) {
-> 			dev_err(&client->dev, "Unsupported control logic type %u\n",
-> 				cldb.control_logic_type);
-> 			return -EINVAL;
-> 		}
-> 		cells_data = tps68470_win;
-> 		cells_size = ARRAY_SIZE(tps68470_win);
-> 		break;
-> 	case WHATEVER_ANOTHER_CASE:
-> 		...
-> 		break;
-> 	default:
-> 		...Oops...
-> 		break; // or return -ERRNO
-> 	}
 >
-> 	return devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_NONE,
-> 				    cells_data, cells_size, NULL, 0, NULL);
->
-Yeah I guess that's a bit obscure at first glance; alright, I'll follow
-this to make it clearer what's happening there.
+> Or alternatively one of the involved subsys maintainers just merges the entire
+> set (once it is ready) and then provides an immutable branch with the entire set
+> on top of 5.13-rc1 (or 5.14-rc1). But that requires acks from all the other
+> subsys maintainers. Note I'm fine with either approach.
+
