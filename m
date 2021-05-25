@@ -2,97 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74706390487
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 May 2021 17:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E9A390934
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 May 2021 20:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbhEYPFK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 May 2021 11:05:10 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60154 "EHLO mx2.suse.de"
+        id S231319AbhEYSvI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 May 2021 14:51:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43206 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229939AbhEYPFJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 25 May 2021 11:05:09 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1621955017; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=atPLvUWkGW5/fQz9JbdL6mzZye26xPXevOs0tFAjR04=;
-        b=1Mfw3GcMiKNryOCRKkhZxX71o8zNdOeLvqwt4WzzUt+cjkkibz2/QiMXf/KALtr7H4cPwD
-        pCJvOT3dXwC+zSWnyChPQ+CkHZGApFQ5ooPTpeLsURmhFgVJG2VaNWK0sZRMHMZ7bR2hHV
-        QTdX3RgC/Z2KI3JtmHJz8iZYwqRf+fM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1621955017;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=atPLvUWkGW5/fQz9JbdL6mzZye26xPXevOs0tFAjR04=;
-        b=xRtl2Qcbq0MxH2/9W4PXLx0YIJi7XVhtY15xMAsVT10/nzgiZRHDBvoFTNZmZHt1A3MVmv
-        Yep3DS0MiPkuixCA==
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 90E52AE5C;
-        Tue, 25 May 2021 15:03:37 +0000 (UTC)
-Date:   Tue, 25 May 2021 17:03:36 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linux I2C <linux-i2c@vger.kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] i2c: i801: Don't generate an interrupt on bus reset
-Message-ID: <20210525170336.213a19b4@endymion>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S229704AbhEYSvI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 25 May 2021 14:51:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6444761249;
+        Tue, 25 May 2021 18:49:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621968578;
+        bh=LKdcmj5xf+yFErAth6zsRB6/eMGCN48nWrCCNpMz7iY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UXf/KkIUPu3dHjYGzOcDXQus+geltLjUHC+6VZZnILWWtcA8W+HRyrFWL53f7LEuf
+         +sZxUmygs50hlc1IXsROKvZ5GMbsuxOzNCYBLLgkcCeDvl9bSQZr4Iw38rwUTpYANX
+         Z7Ki5YOuiQyqteQ46O/1Ma8ZXjeE70LxQU9ijzzujrl97SNbu6Ia6NrQB7SnAPvwNm
+         w+uQU5LJtsc0ZgNAvFwIEDlvhvgQlEwnmz0mcNlucx79ZIMspmY8FOFZg4LOn5+gck
+         UVuuCPw/cBctPG68SEIVvEQQjNmZGbvvQ3Bkm00BvfGa5wCB1HYpsdunu8WgC5JceL
+         HR4cjXTqIVEkw==
+Date:   Tue, 25 May 2021 20:49:28 +0200
+From:   "wsa@kernel.org" <wsa@kernel.org>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/4] P2040/P2041 i2c recovery erratum
+Message-ID: <YK1GuD8o7k+jDLFZ@kunai>
+Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
+        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210511212052.27242-1-chris.packham@alliedtelesis.co.nz>
+ <b90f48cfdc31af08190e7a8eaa71b7bd488fcbaa.camel@infinera.com>
+ <ec3cdcc8-5869-9e7d-30c0-59ff4ec67a58@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="M6Zv91vJLKCj4+lw"
+Content-Disposition: inline
+In-Reply-To: <ec3cdcc8-5869-9e7d-30c0-59ff4ec67a58@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Now that the i2c-i801 driver supports interrupts, setting the KILL bit
-in a attempt to recover from a timed out transaction triggers an
-interrupt. Unfortunately, the interrupt handler (i801_isr) is not
-prepared for this situation and will try to process the interrupt as
-if it was signaling the end of a successful transaction. In the case
-of a block transaction, this can result in an out-of-range memory
-access.
 
-This condition was reproduced several times by syzbot:
-https://syzkaller.appspot.com/bug?extid=ed71512d469895b5b34e
-https://syzkaller.appspot.com/bug?extid=8c8dedc0ba9e03f6c79e
-https://syzkaller.appspot.com/bug?extid=c8ff0b6d6c73d81b610e
-https://syzkaller.appspot.com/bug?extid=33f6c360821c399d69eb
-https://syzkaller.appspot.com/bug?extid=be15dc0b1933f04b043a
-https://syzkaller.appspot.com/bug?extid=b4d3fd1dfd53e90afd79
+--M6Zv91vJLKCj4+lw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So disable interrupts while trying to reset the bus. Interrupts will
-be enabled again for the following transaction.
 
-Fixes: 636752bcb517 ("i2c-i801: Enable IRQ for SMBus transactions")
-Reported-by: syzbot+b4d3fd1dfd53e90afd79@syzkaller.appspotmail.com
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
- drivers/i2c/busses/i2c-i801.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+> For those reading along the v2 mentioned in that thread was posted as=20
+> https://lore.kernel.org/linux-i2c/20170511122033.22471-1-joakim.tjernlund=
+@infinera.com/=20
+> there was a bit of discussion but it seemed to die out without reaching=
+=20
+> a conclusion.
+>=20
+> The i2c-mpc driver is now using the generic recovery mechanism so that=20
+> addresses one bit of feedback from the original thread.
 
---- linux-5.12.orig/drivers/i2c/busses/i2c-i801.c	2021-05-24 12:00:59.307576983 +0200
-+++ linux-5.12/drivers/i2c/busses/i2c-i801.c	2021-05-24 12:04:10.230998259 +0200
-@@ -401,11 +401,9 @@ static int i801_check_post(struct i801_p
- 		dev_err(&priv->pci_dev->dev, "Transaction timeout\n");
- 		/* try to stop the current command */
- 		dev_dbg(&priv->pci_dev->dev, "Terminating the current operation\n");
--		outb_p(inb_p(SMBHSTCNT(priv)) | SMBHSTCNT_KILL,
--		       SMBHSTCNT(priv));
-+		outb_p(SMBHSTCNT_KILL, SMBHSTCNT(priv));
- 		usleep_range(1000, 2000);
--		outb_p(inb_p(SMBHSTCNT(priv)) & (~SMBHSTCNT_KILL),
--		       SMBHSTCNT(priv));
-+		outb_p(0, SMBHSTCNT(priv));
- 
- 		/* Check if it worked */
- 		status = inb_p(SMBHSTSTS(priv));
+Yes, and the generic recovery has been improved since then. There is an
+"incomplete_write_byte" fault injector now and the generic recovery
+handles it correctly meanwhile. Before, it actually could cause a write
+to happen but we are sending STOPs now.
 
--- 
-Jean Delvare
-SUSE L3 Support
+
+--M6Zv91vJLKCj4+lw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCtRrQACgkQFA3kzBSg
+KbaY4Q//Z/AUf2L648u1FyKxiUMz7Bk1yhGNT95n1p3QU0z2pK4egbXmcfJWxU7p
+zNQDFUFeMDROP4kSlnVz/xbY2Y1DHX+aarmFmIxWq7m5OJs+PErShPp8mpoWaexW
+xoBieaadYbjZtcA46sQd4gxr3WI+Vl404/4wWTkQgIEUj5WttH0WvfbzPdBwt1Rg
+laG97k4NbeZaf7IPTkQnjbQvxOeWtLRQSD6PBJETlIin+Dygecv55jFnoVd+fm3+
+l1k9trK+rnpekqyopIxr2mXK/6821FmZZI8isHX6FKtW8HRdXJwZH6lkIh1AJ4/m
+V89xF65s/PDkP8rFT0U9dOsVX35cdF9FJlQRedm3y5V7OkpOIi+1wC7TxyCC680s
+DdUw3yFO+UwV+iPfQRBTGbDrfcSPNX1GLsImJ8mniK/NcV+Dll8+Q8ShsIKWqFYo
+N8G/fgL1QVkQM3RYGB2+MIfg8AJ4oXlWZSMc5fDNgxx5MYGDBxMswSncO4PlWELq
+NFfG1Q9X02KY4JQLNtVYm1v07JVXOTt6oLTLYqI1yRGCAYoKaXeRamwykoHPvikh
+S1WiM2CtfCVG+OJB3S+q8JEhJYyYmSSvgFrAzVA3K93NoujpoA4w4TWHY6DUjOoM
+3h19gXeeWLKRF8AUqjG2dX9hkTQJ23vW15NZR17apyh70FgbusU=
+=kqR6
+-----END PGP SIGNATURE-----
+
+--M6Zv91vJLKCj4+lw--
