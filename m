@@ -2,70 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89601391171
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 May 2021 09:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C853911A0
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 May 2021 09:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbhEZHlB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 May 2021 03:41:01 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47816 "EHLO mx2.suse.de"
+        id S232006AbhEZH4X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 May 2021 03:56:23 -0400
+Received: from mga17.intel.com ([192.55.52.151]:1698 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232617AbhEZHlA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 26 May 2021 03:41:00 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1622014763; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3+MOQOdgoMylUu0XYROaZ4kbW9U4q/l15X6XcNkUedg=;
-        b=eCpy8aLDbauUbTvFXXKZKCkGo1F6v4R3Vc4XPR5HWGlFWeJ6iPw8UyYLSvhHKesEusMBFb
-        jOrVUUsLR09PX92c6tr6H5VUShay/2uoWOuh1cYGrdvzLV75fG6PiEvNX8Kf4J7Nf4iIqL
-        YSzHx+WGkINquz53ACSan+LbJFtBk0s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1622014763;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3+MOQOdgoMylUu0XYROaZ4kbW9U4q/l15X6XcNkUedg=;
-        b=zY0GPSh6VOi8OmXz4wFw4p6AN4eJ548IJpcTL7kVh3yerQE0bZQFxrD24Pi18Xvuh3kffm
-        2dVz882A/qFYkRDQ==
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 3790DAE20;
-        Wed, 26 May 2021 07:39:23 +0000 (UTC)
-Date:   Wed, 26 May 2021 09:39:18 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [i2c-tools PATCH] tools: i2cbusses: Handle bus names like
- /dev/i2c-0
-Message-ID: <20210526093918.73c40482@endymion>
-In-Reply-To: <20210525090612.26157-1-chris.packham@alliedtelesis.co.nz>
-References: <20210525090612.26157-1-chris.packham@alliedtelesis.co.nz>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S231998AbhEZH4W (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 26 May 2021 03:56:22 -0400
+IronPort-SDR: nxpnwqmksiAezhgL5EXgcKsxf47edoQYs+zF+X67YCaWAXHl7o28PNp7lbyynyI8j6Hln74Xqm
+ yrmCv8GszZtQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9995"; a="182732023"
+X-IronPort-AV: E=Sophos;i="5.82,330,1613462400"; 
+   d="scan'208";a="182732023"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 00:54:50 -0700
+IronPort-SDR: BOWpYMucKBb3PRHow4HJKfeFxbQ+pJKhFKY5nU+pkjl7zsFefbeEHbETfh1r5dRm5uMGJqIp9W
+ Suf9sRUeo7HA==
+X-IronPort-AV: E=Sophos;i="5.82,330,1613462400"; 
+   d="scan'208";a="464672901"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 00:54:43 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lloND-00EkYe-AH; Wed, 26 May 2021 10:54:39 +0300
+Date:   Wed, 26 May 2021 10:54:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        devel@acpica.org, Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v4 7/8] platform/x86: Add intel_skl_int3472 driver
+Message-ID: <YK3+vxmWfD0mhjU0@smile.fi.intel.com>
+References: <20210520140928.3252671-1-djrscally@gmail.com>
+ <20210520140928.3252671-8-djrscally@gmail.com>
+ <YKeuQM/O9+jDZFpb@smile.fi.intel.com>
+ <6294177b-d6e1-8bbd-d313-5cce1c498604@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6294177b-d6e1-8bbd-d313-5cce1c498604@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Chris,
+On Tue, May 25, 2021 at 11:53:21PM +0100, Daniel Scally wrote:
+> On 21/05/2021 13:57, Andy Shevchenko wrote:
 
-On Tue, 25 May 2021 21:06:12 +1200, Chris Packham wrote:
-> File based tab completion means it's easy to do something like
-> i2cdump /dev/i2c-0 0x52. Accept this method of specifying the i2c bus
-> device.
+...
 
-I can't really see the value of this change, sorry. You want to use a
-longer parameter so you can tab-complete it. The original parameter was
-a 1- or 2-digit number, which is faster to type than /d<tab>i2<tab>.
-Plus if you have multiple i2c buses, tab completion can't guess which
-one you want anyway, so you'll have to type the bus number eventually.
+> >> +static const struct regulator_ops int3472_gpio_regulator_ops;
+> > Hmm... Can you use 'reg-fixed-voltage' platform device instead?
+> >
+> > One example, although gone from upstream, but available in the tree, I can
+> > point to is this:
+> >
+> >   git log -p -- arch/x86/platform/intel-mid/device_libs/platform_bcm43xx.c
+> >
+> > It uses constant structures, but I think you may dynamically generate the
+> > necessary ones.
+> >
+> 
+> I can experiment with this, though one thing is we have no actual idea
+> what voltages these are supplying...it doesn't look like that matters
+> from drivers/regulator/fixed.c, but I'd have to try it to be sure.
 
-So, what do we actually win here?
+I believe it is likely 1.8v. But I can check if I have the schematics of a
+reference design for something like this.
+
+...
+
+> >> +	if (int3472->clock.ena_gpio) {
+> >> +		ret = skl_int3472_register_clock(int3472);
+> >> +		if (ret)
+> >> +			goto out_free_res_list;
+> >> +	} else {
+> > Hmm... Have I got it correctly that we can't have ena_gpio && led_gpio together?
+> 
+> 
+> No, just that we can only have led_gpio if we also have ena_gpio (at
+> least that's the intention...)
+
+Okay, perhaps then a comment above?
 
 -- 
-Jean Delvare
-SUSE L3 Support
+With Best Regards,
+Andy Shevchenko
+
+
