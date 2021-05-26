@@ -2,68 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9AC391030
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 May 2021 07:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C75391103
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 May 2021 08:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbhEZFxX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 May 2021 01:53:23 -0400
-Received: from mga11.intel.com ([192.55.52.93]:4954 "EHLO mga11.intel.com"
+        id S233071AbhEZGyQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 May 2021 02:54:16 -0400
+Received: from muru.com ([72.249.23.125]:60546 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229552AbhEZFxW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 26 May 2021 01:53:22 -0400
-IronPort-SDR: OHQXJokI9nLpDp+hTkBObex5XTeD8c9mJLnttLUp1pKAsXgW2nBwp6/edkiqQK2hX8LyAtkQzC
- 3WG0LH038zqQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9995"; a="199333441"
-X-IronPort-AV: E=Sophos;i="5.82,330,1613462400"; 
-   d="scan'208";a="199333441"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2021 22:51:48 -0700
-IronPort-SDR: x1NU05lizJzYgEHOeYdp2a3BbwQIfALeVCwpM2NHLy9iG5Exljf7iW2wNnUvAwNgkFdl63/Z9u
- 7OwpXXDXdnag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,330,1613462400"; 
-   d="scan'208";a="409071590"
-Received: from unknown (HELO [10.237.72.166]) ([10.237.72.166])
-  by fmsmga007.fm.intel.com with ESMTP; 25 May 2021 22:51:47 -0700
-Subject: Re: [PATCH] i2c: designware: Fix kernel-doc
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1621998623-14846-1-git-send-email-yang.lee@linux.alibaba.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <350759ac-bcea-77ac-f005-f227f01d88ab@linux.intel.com>
-Date:   Wed, 26 May 2021 08:51:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S233035AbhEZGyG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 26 May 2021 02:54:06 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 0D2C080AE;
+        Wed, 26 May 2021 06:52:38 +0000 (UTC)
+Date:   Wed, 26 May 2021 09:52:30 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Rob Herring <robh+dt@kernel.org>, linux-omap@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Nishanth Menon <nm@ti.com>
+Subject: Re: [PATCH v2] dt-bindings: i2c: Move i2c-omap.txt to YAML format
+Message-ID: <YK3wLgJSy0sVUn51@atomide.com>
+References: <20210506140026.31254-1-vigneshr@ti.com>
+ <f7570cb4-8c21-2fa5-bd26-1388f2a4bd6b@ti.com>
+ <429a740a-c2b9-1cf8-ed2b-0fb7b1bea422@ti.com>
+ <20210507163602.219894f4@aktux>
+ <1ef076ac-e0de-a0df-a918-aeb8ed6c5956@ti.com>
+ <e4fbdf7b-6556-eeba-c1b8-9d48f718437a@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <1621998623-14846-1-git-send-email-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4fbdf7b-6556-eeba-c1b8-9d48f718437a@ti.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
+* Vignesh Raghavendra <vigneshr@ti.com> [210510 11:06]:
+> What do you prefer here? Removing dmas from schema would mean I would
+> have to delete dmas property from omap2/3 dtsi files that list dmas
+> property today? Note that driver does not support DMA mode today.
 
-On 5/26/21 6:10 AM, Yang Li wrote:
-> Fix function name in i2c-designware-master.c kernel-doc comment
-> to remove a warning found by clang_w1.
-> 
-> drivers/i2c/busses/i2c-designware-master.c:176: warning: expecting
-> prototype for i2c_dw_init(). Prototype was for i2c_dw_init_master()
-> instead.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Fixes: 'commit 21bf440ce18e ("i2c: designware: Make HW init functions
-> static")'
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->   drivers/i2c/busses/i2c-designware-master.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-Lee Jones sent a fix for this last week:
+If the dma channels are not used by the driver, and not in the binding,
+it's unlikely they will ever get used. Sure the dma channels describe
+the hardware, and there's a slim chance some other OS needs them, but I
+doubt it.
 
-https://www.spinics.net/lists/linux-i2c/msg51612.html
+It seems weird we stop describing hardware in the devicetree to avoid
+binding check warnings though. Up to you to figure out what you want
+to do as far as I'm concerned.
 
-Jarkko
+Regards,
+
+Tony
