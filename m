@@ -2,83 +2,209 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F96E391799
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 May 2021 14:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1C3391AAF
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 May 2021 16:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbhEZMpL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 May 2021 08:45:11 -0400
-Received: from mga14.intel.com ([192.55.52.115]:46596 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234731AbhEZMox (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 26 May 2021 08:44:53 -0400
-IronPort-SDR: 1USzK07JjAKewNr5TSTJO8TeayNUceycYLE8UpmFSagqKF/dhzviurrP4g9iNSTXzcinJUsctR
- JFffmW6t53uQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9995"; a="202210458"
-X-IronPort-AV: E=Sophos;i="5.82,331,1613462400"; 
-   d="scan'208";a="202210458"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 05:43:15 -0700
-IronPort-SDR: 1X5vo9M7VygZNZQSa1VCQhMAvfKUuQ+yiCMQhPP03UkoKZhzAY6Zy5Ytx6wke9sl7Ulb4tGi5O
- fBGx0etEZC4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,331,1613462400"; 
-   d="scan'208";a="443019366"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 26 May 2021 05:43:11 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7B8E199D; Wed, 26 May 2021 15:43:30 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v1 6/6] staging: atomisp: Remove unused port_enabled variable
-Date:   Wed, 26 May 2021 15:43:22 +0300
-Message-Id: <20210526124322.48915-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210526124322.48915-1-andriy.shevchenko@linux.intel.com>
-References: <20210526124322.48915-1-andriy.shevchenko@linux.intel.com>
+        id S234259AbhEZOtm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 May 2021 10:49:42 -0400
+Received: from mail-ua1-f46.google.com ([209.85.222.46]:41542 "EHLO
+        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234893AbhEZOtm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 May 2021 10:49:42 -0400
+Received: by mail-ua1-f46.google.com with SMTP id 105so905474uak.8;
+        Wed, 26 May 2021 07:48:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ylnTZPq3+ze+TGLTY2mrWfCbd/vE+r5fhyKK1lOY+Mc=;
+        b=EdaltyescWZljJQOF/q+DPnBw7Y5X4GE2dIIOgURcUmsnBB5ET94nTWn4dZHYd6ELf
+         17s1/Kbe/CS/klsyNauBKdrCre1E4r5DE5xxsbtG/DkOXvdAWPLp5evDO+tpwjOD4q3u
+         fYXugxDF6F+5diFC8BVqyfOpQJ29wNuBc/DjrOey2Ynk4Dik9q9wNJ/I2CO/DGDXhfg6
+         jW5oXYJRgRicMuweWgQyEf2+9Q/0to81ewWoBqTHbZ2dS1tdi0nWH2oZvm+Me9ci0nVj
+         5+7/wVGYl6+mNJIdnGLnH3bbeZqzBUTD4KFQzKxi+5EU9Hsg1BD3GLUaqeJU1iEsPztP
+         LmQw==
+X-Gm-Message-State: AOAM533bnfjJKtdPW+y8nembrLO+R/3ZYrvCCPys6prazQg3VD/0OI1s
+        lnwXfnUc1EMU1FydtRewZqoawcy6JKUQZ+PpGko=
+X-Google-Smtp-Source: ABdhPJxybmaI9gniqBmGtWHou7ZayOIDh+er2tJlRdFGyu64kbLHSCsjsHLUqUwdJMKMykAP0oipBoCIFgr79+3RD8U=
+X-Received: by 2002:ab0:2a8b:: with SMTP id h11mr33538192uar.4.1622040490016;
+ Wed, 26 May 2021 07:48:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1620138454.git.geert+renesas@glider.be> <ecfaf6be5e8c285db2bcc823bb1dd89931fa5c29.1620138454.git.geert+renesas@glider.be>
+ <20210505073327.GE1009@ninjato>
+In-Reply-To: <20210505073327.GE1009@ninjato>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 26 May 2021 16:47:58 +0200
+Message-ID: <CAMuHMdX3jw_Cm4hrg4QLr5H45nydmdbJzd7Rd-HY-rncOoKxvQ@mail.gmail.com>
+Subject: Re: [PATCH/RFC 4/6] dt-bindings: i2c: renesas,iic: Convert to json-schema
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Remove unused port_enabled variable in ia_css_isys_rx_configure().
+On Wed, May 5, 2021 at 9:33 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > Possible alternative interpretations of the note are:
+> >   - Only IIC3 has the automatic transmission registers.  But the
+> >     automatic transmission feature is not useful as the SoCs lack DVFS
+> >     support.
+>
+> I immediately thought "yeah, this is it", but had to do some resarch
+> where my assumption comes from. I found it in older H2 datasheets
+> (v0.9). Here in 56.1:
+>
+> "Automatic transmission for PMIC control: The IIC3 module of the R-Car
+> H2 and M2 supports automatic data transmission under PMIC control
+> (DVFS)."
+>
+> Or table 56.8:
+>
+> "Registers of IIC Command for Automatic Transmission Mode (IIC3 only)
+> [R-CarH2, M2, and V2H]"
+>
+>
+> This all is a strong indication for IIC3 only. Which SoCs that have is
+> still confusing. Table 56.8 mentions V2H but 56.1 doesn't. Then again, I
+> could imagine that V2H has it but simply DVFS is not advertised for V2H.
+> And in the later documents, DVFS advertisement was removed for H2 and M2
+> as well.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/staging/media/atomisp/pci/runtime/isys/src/rx.c | 3 ---
- 1 file changed, 3 deletions(-)
+From off-list experiments checking for the presence of automatic
+transmission registers by writing to them, and seeing if they retain their
+values, we know that all IIC instances checked on R-Car Gen2
+SoCs do have these registers.  The same is true for R-Car E3, which
+is explicitly documented _not_ to have the registers...
+In addition, Wolfram tried transmitting something on R-Car H2 from
+the U-Boot prompt, and noticed the ICINT.ADTE bit is set afterwards,
+indicating success.
 
-diff --git a/drivers/staging/media/atomisp/pci/runtime/isys/src/rx.c b/drivers/staging/media/atomisp/pci/runtime/isys/src/rx.c
-index 29486dcc9a04..79e82fc08aa9 100644
---- a/drivers/staging/media/atomisp/pci/runtime/isys/src/rx.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/isys/src/rx.c
-@@ -490,7 +490,6 @@ unsigned int ia_css_csi2_calculate_input_system_alignment(
- void ia_css_isys_rx_configure(const rx_cfg_t *config,
- 			      const enum ia_css_input_mode input_mode)
- {
--	bool port_enabled[N_MIPI_PORT_ID];
- 	bool any_port_enabled = false;
- 	enum mipi_port_id port;
- 
-@@ -527,8 +526,6 @@ void ia_css_isys_rx_configure(const rx_cfg_t *config,
- 					_HRT_CSS_RECEIVER_2400_RX_COUNT_REG_IDX,
- 					config->rxcount);
- 
--		port_enabled[port] = true;
--
- 		if (input_mode != IA_CSS_INPUT_MODE_BUFFERED_SENSOR) {
- 			/* MW: A bit of a hack, straight wiring of the capture
- 			 * units,assuming they are linearly enumerated. */
+So I went one step further, and hooked up a logic analyzer, to see
+if anything is actually transmitted.
+
+Koelsch (R-Car M2-W):
+
+  - IIC1 (I2C8) IIC1_SCL_C (GP6_22) EXIO Connector C pin 37
+                IIC1_SDA_C (GP6_23) EXIO Connector C pin 39
+
+    # Configure pinctrl for IIC1
+    mw.l e6060000 f77fffff
+    mw.l e6060098 08800000
+    mw.l e6060000 ffffedff
+    mw.l e6060058 00001200
+    mw.l e6060000 3000c0c0
+    mw.l e606001c cfff3f3f
+
+    # Enable IIC0-2 clocks in SMSTPCR3
+    mw e615013c ff7bfffe
+
+    # Reset using ICCR clears all ICINT flags
+    mw.b e6510004 1
+
+    # Set up clock (ICC[LH])
+    mw.b e6510010 0x69
+    mw.b e6510014 0x1e
+
+    # Write dummy data to ICATD00
+    mw.b e6510100 bf
+
+    # ICSTART.AutoStart = 1
+    mw.b e6510070 80
+
+    # Logic Analyzer says: S / P / P / P => broken?
+
+    # Check ICINT; 01 => ADTE
+    md.b e6510054 1
+
+
+  - IIC3 (I2C6 DVFS) IIC3_SCL EXIO Connector C pin 19
+                     IIC3_SDA EXIO Connector C pin 21
+
+    # Enable IIC3 clock in SMSTPCR9
+    mw e6150994 fbffffff
+
+    # Reset using ICCR clears all ICINT flags
+    mw.b e60b0004 1
+
+    # Set up clock (ICC[LH])
+    mw.b e60b0010 0x1b
+    mw.b e60b0014 0x14
+
+    # Write dummy data to ICATD00
+    mw.b e60b0100 de
+
+    # ICSTART.AutoStart = 1
+    mw.b e60b0070 80
+
+    # Logic Analyzer: S / Address: 0x6f / W / NACK => Good!
+
+    # Check ICINT; 01 => ADTE
+    md.b e60b0054 1
+
+
+Ebisu (R-Car E3):
+
+  - IIC (DVFS) IIC_SCL EXIO Connector D pin 75
+               IIC_SDA EXIO Connector D pin 77
+
+    # Enable IIC clock in SMSTPCR9
+    mw e6150994 fbffffff
+
+    # Reset using ICCR clears all ICINT flags
+    mw.b e60b0004 1
+
+    # Set up clock (ICC[LH])
+    mw.b e60b0010 0x1b
+    mw.b e60b0014 0x14
+
+    # Write dummy data to ICATD00
+    mw.b e60b0100 ad
+
+    # ICSTART.AutoStart = 1
+    mw.b e60b0070 80
+
+    # Logic Analyzer: S / Address: 0x56 / R / NACK => Good!
+
+    # Check ICINT; 01 => ADTE
+    md.b e60b0054 1
+
+
+Preliminary conclusions:
+  1. Automatic transmission works on the last IIC instance on R-Car
+     Gen2, which was originally intended for DVFS (which is not
+     implemented, as of Hardware User's Manual Rev. 2.00).
+     It works partially/not on other IIC instances. Perhaps I did
+     something wrong in my setup?
+
+  2. Despite the Hardware User's Manual stating the single IIC instance
+     on R-Car E3 does not have the automatic transmission registers,
+     the feature seems to be present and working.  So we can declare
+     it to be compatible with the generic version.
+
+As the Linux (or other OS?) i2c driver doesn't use automatic
+transmission, and it's very unlikely it ever will (anyone with a
+use case?), I'm inclined to simplify, and declare all IIC instances
+compatible with the generic version.
+If we ever want to implement support for automatic transmission,
+we can still differentiate by the SoC-specific compatible values,
+as they are present anyway, and may have to resort to checking
+e.g. instance base addresses anyway.
+
+Thoughts? Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.30.2
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
