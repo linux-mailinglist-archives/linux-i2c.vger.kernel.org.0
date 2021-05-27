@@ -2,93 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C70C393698
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 21:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE3B3936AE
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 21:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbhE0Tsh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 May 2021 15:48:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58080 "EHLO mail.kernel.org"
+        id S235288AbhE0TzL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 May 2021 15:55:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58808 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235348AbhE0Tsh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 27 May 2021 15:48:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 48F606124C;
-        Thu, 27 May 2021 19:47:02 +0000 (UTC)
+        id S234847AbhE0TzL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 27 May 2021 15:55:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B37561284;
+        Thu, 27 May 2021 19:53:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622144823;
-        bh=7TxnJJnNtwAUGZlPXh3fsE0Uo6KwnuA5yZH8z0w+sjU=;
+        s=k20201202; t=1622145218;
+        bh=7iGJS3rGmNjwNAFKUj1DAV7UgRQ88ngVvWvNYWXGUKY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p9SqVy1QqWu0JV2zeKQ/gJlaS7FOcPgVN11Mx+qq+SpXvUCCTUU/QAo2svWSZr2Bd
-         Chdw9cls7OUGp3k6MZawfXS5M2NltR+SbS4QgBiaoDnRyvHoeNexjCzkWMkdIUc+Mb
-         vLabP1cXff/fLaFxHCFqfWA48zDMTuTruccKdpAEC5Aoo7w+WJzrygsc2L6cnKTi7j
-         KQUpOnADIsvR6JJMxJ7RjpK7azQLK6TsacwPFPSkoULJLgjvbTtzqfzVc55pYwf86F
-         OyOo8UkD+7bnaGzJj/qA9jw1eUy4LoPSThi6pcTwFByZ6XSwEl5zo64WUWWCtes17h
-         vHcJf5UnfmJBw==
-Date:   Thu, 27 May 2021 21:46:59 +0200
+        b=LIw+N207MJU9jaPOoUDHNfNm9YvYu35ktrOtPCJxKcQT/1YqLFGLcBIQuoIyV21wE
+         qdQo3sd2Z/qjEExXmJ6C3e9aRcr7liZPN6gpNGps4r5YUqTxylBzwnyMiftJx/92lw
+         saozaZq1DnCDw/y10HPIBqOKIpX7C15IitzaYNNAil8+7AB46MSAD8t86PQPx272yn
+         +LaiTd5YgBPZyNSdw3S5iGiB/udPhs0aDfU5uf1keCJ5LpcdTkh8NjwbbonGDOnyM7
+         PwYlNrYZiiupB0t0t35RXyF6lTrw2BLoBJdQI51pycFHUvh5QKL45VrJaNt13zrlwB
+         5MQ7leL/XfLBw==
+Date:   Thu, 27 May 2021 21:53:34 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: aspeed: disable additional device addresses on
- ast2[56]xx
-Message-ID: <YK/3M94uwuLQNwbz@kunai>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        andriy.shevchenko@linux.intel.com, andy.shevchenko@gmail.com,
+        robh+dt@kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] P2040/P2041 i2c recovery erratum
+Message-ID: <YK/4vuq0o1td4Zhl@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Zev Weiss <zev@bewilderbeest.net>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20210506205419.26294-1-zev@bewilderbeest.net>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        andriy.shevchenko@linux.intel.com, andy.shevchenko@gmail.com,
+        robh+dt@kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <20210511212052.27242-1-chris.packham@alliedtelesis.co.nz>
+ <YK1HqE+3ILtGXZ7E@kunai>
+ <87zgwigvd6.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JB9G8qcO/AQ7ihJy"
+        protocol="application/pgp-signature"; boundary="j+byiAwReNWa+GwK"
 Content-Disposition: inline
-In-Reply-To: <20210506205419.26294-1-zev@bewilderbeest.net>
+In-Reply-To: <87zgwigvd6.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---JB9G8qcO/AQ7ihJy
+--j+byiAwReNWa+GwK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 06, 2021 at 03:54:19PM -0500, Zev Weiss wrote:
-> The ast25xx and ast26xx have, respectively, two and three configurable
-> slave device addresses to the ast24xx's one.  We only support using
-> one at a time, but the others may come up in an indeterminate state
-> depending on hardware/bootloader behavior, so we need to make sure we
-> disable them so as to avoid ending up with phantom devices on the bus.
+On Wed, May 26, 2021 at 11:02:45AM +1000, Michael Ellerman wrote:
+> Wolfram Sang <wsa@kernel.org> writes:
+> > On Wed, May 12, 2021 at 09:20:48AM +1200, Chris Packham wrote:
+> >> The P2040/P2041 has an erratum where the i2c recovery scheme
+> >> documented in the reference manual (and currently implemented
+> >> in the i2c-mpc.c driver) does not work. The errata document
+> >> provides an alternative that does work. This series implements
+> >> that alternative and uses a property in the devicetree to
+> >> decide when the alternative mechanism is needed.
+> >
+> > The series looks good to me. Usually, I don't take DTS patches. This
+> > time I'd make an exception and apply all patches to for-current because
+> > this is clearly a bugfix. For that, I'd need an ack from PPC
+> > maintainers. Could I have those for patches 2+3?
 >=20
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Yep, done.
 
-Applied to for-next, thanks!
+Thanks! Series applied to for-current.
 
 
---JB9G8qcO/AQ7ihJy
+--j+byiAwReNWa+GwK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv9zMACgkQFA3kzBSg
-KbYoaw/+K6TmK5yofJdaPXVDzkuK9GycZAqgbQp7fiCMVeCJi9sp4sZfOC/qJHDl
-i+d/1nqKttII/RjpHvzcQDnzXK7Mx/KaolUoQGIRRUoXI5PT2Rsc1qjOGxswicee
-ncF/nG2SKuKQoiFfEchL9/OWsKn8JysNhrGRsBpK8S2bINXajAHf/3NHSuIB8hT8
-LHdFtx+P5yRB2t7NLwGx1OTv5keCUEpzVnuzYcYdvfwUcbcLgSaybvDmkjyx/LHv
-xwFBvls6D24yd526D5kOfedxA2zZPnxfS5vYSnfL4Qsek21QSK28PuOtF4bbNHwp
-wBddF4z3Ba1ZCmXp93FsH7HmzzB9X2gnQhOaK1lyf0Qd7UL1qJXsWoN0D38VAzG8
-pvxotK7zbPcLU+9Jfu7I6p37ff64MVz66+nblGDjttSR767uic7jlL/Hgyim8V16
-HeT5nrjHjJW7jeTLsDz8UZU3xzGNmZzpRTWreNm+TBJl9Kv7gPR5j1z3Z5cQ5jf8
-MstxERJwFnMBlb1ma5PrQm7iyddy3cKyp+jKic0adN/tLwtl9mfwi/tQgEjsCw9m
-O6AcGxtfwIFeysjtgI0DjZUo+IQii/o9CcUPmFu4xsOZSsWwISFimP+LwVZDx6MM
-bgATzrQ0pKryV+AD4W8TP9XI42w2u7eSW/5NBRjkkJAZ+p5d6Bk=
-=dwZ9
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv+L4ACgkQFA3kzBSg
+Kbaccg//U0FSkmTl8Shy+mkH05iCQ7dM++sZ0S6Zn+tMKSW8773bwEJp4nfYEo/d
+FTo5Z5b3tcAXho8jgOf5dY21uTGnXPiExKweICAaxIAbXqVkBzlVN+PoRXQe5PCx
+cqCEkgeyMALeS8CRpprb4Vst5YTX1nld6w/cNPWERphNImNBvV0lqomgU39JmoP5
+3CqeRrBUpjwmpTwX1r+sgfJ797EVAygGd1lWvq9qOnP/oojT94B69s6QDuZrgT3J
+vrzxGkuMZpBFnWTOQuYeYS64UYB7P6/wTas0RU1f4Pfl8wo0Y+JixtjD6kVQbceJ
+6qIOretW5JZOvs9b8Qu10dMMuOij+VnJsHu8kl1CkXupXUCw00qIjL02uqN2tv6V
+49Z3Qd2b8eXBrMIZCN6F09ZiA4Q6uPvhpsqN3WoDi1HqgdTW/DGlzJjtElG75zkW
+4sM/q2u7X95s+zy6KsNHnUrtdjEIKIjTzjDcdW6ZnVHatTVXzRJBqEaN/BZpFRoI
+0WdIEAT7k4LXVSeHR/+5EPYZK74Ltqi2sVJJBu+j3+YG3DvcSwfrTqSuh5N3e+j2
+A4vUewuGZ0uQcXkGNEW9FkDcTax3Em12JALcHNp6p1++i/RRoblFY0xDJI3o5yTh
+hsb5A4L0hPBBrok08lOeW7rjXaQnrABNGss7UatOSHEKcBbR5LY=
+=J+s0
 -----END PGP SIGNATURE-----
 
---JB9G8qcO/AQ7ihJy--
+--j+byiAwReNWa+GwK--
