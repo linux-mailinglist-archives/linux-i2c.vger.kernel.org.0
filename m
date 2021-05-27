@@ -2,109 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE6939365B
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 21:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6B6393668
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 21:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234847AbhE0ThB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 May 2021 15:37:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55690 "EHLO mail.kernel.org"
+        id S235266AbhE0Tju (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 May 2021 15:39:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56418 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234834AbhE0ThA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 27 May 2021 15:37:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7100F6124B;
-        Thu, 27 May 2021 19:35:26 +0000 (UTC)
+        id S235262AbhE0Tjt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 27 May 2021 15:39:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B749E6124C;
+        Thu, 27 May 2021 19:38:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622144127;
-        bh=U2Ze2Z48ItKiHpTqteWjO2nJqG7zIKVcG2c08EhvewQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CD+uXfgaxYOXJUBTPXIPNeg+T4KdnGkSTyOwAjvb7nVfclpNSRweZKgKK1h/LTVHD
-         KX1t/PuDrv2QCBm51LLEvCGTdUnJrLhUhFUiyZASGiNLhesrw1bT8IlzgsC/VaNq/3
-         bCs0IWcVqUHULH+YToBd7EUp5XQh6SwhGopgmEuW3nMg5AbV4jkTpLzdzJMWw9iruy
-         LAjZUjtRVAVZJeTBtZhC4aBrbdAc/xJ2l+saExvjwk7NcLdcFAdSiVsieqyocvEb9Q
-         uHjSYGIvs+9ycKLL6GhuJZJBncZ9bB23AQ5H9zrrHZ6U8aWHAjr748ExY/578lLbyT
-         i5jy8ZZnqPDnA==
-Date:   Thu, 27 May 2021 21:35:23 +0200
+        s=k20201202; t=1622144296;
+        bh=6yCYrb3lWShCqZYfxBU/X/so5AzWEYFsM0Feb0Sb1yE=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=NqxKvcsD2OT2Y0refy57h04VkZxL4T2ToC9MQY76pNz3Ew+Y7evxxdpJ26r7K5HQO
+         5s5wSGuLW3B47jYIpFZiYGT1p5hx3kZIkK5DjULnNyd/zsLq+4xw8jMiq4FYZIDqQQ
+         /vPqWqRKkcm1XBsSxpdIYjB1Fy81oXkvjU+oTKCwSrTj1S8b/IAmLhCyvn3QDfnRak
+         m1MC4nIvD9FdiuVkHcOhA9Yg6q+RBE3evZIYlOIWDbvhcynwXIXCgEgk5Eixqq2n7P
+         XIxd+BWkNdW31E5XmlGNjWYd5XcpdxpRYeok8yF7A3nBaua02NUDYR5DldcV0fw5PJ
+         9y7vwoWMd9whA==
+Date:   Thu, 27 May 2021 21:38:13 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Cedric Madianga <cedric.madianga@gmail.com>,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 14/16] i2c: busses: i2c-stm32f4: Remove incorrectly
- placed ' ' from function name
-Message-ID: <YK/0ey8dDl8kuOZq@kunai>
+To:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <maxime.coquelin@st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 16/16] i2c: busses: i2c-st: trivial: Fix spelling issue
+ 'enmpty => empty'
+Message-ID: <YK/1JX62ClfRQYfX@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Cedric Madianga <cedric.madianga@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <maxime.coquelin@st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
 References: <20210520190105.3772683-1-lee.jones@linaro.org>
- <20210520190105.3772683-15-lee.jones@linaro.org>
+ <20210520190105.3772683-17-lee.jones@linaro.org>
+ <20210521142349.GD17641@gnbcxd0016.gnb.st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="S7uyhsFHR0thk5i6"
+        protocol="application/pgp-signature"; boundary="JCQv7L2LO5Px3hvq"
 Content-Disposition: inline
-In-Reply-To: <20210520190105.3772683-15-lee.jones@linaro.org>
+In-Reply-To: <20210521142349.GD17641@gnbcxd0016.gnb.st.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---S7uyhsFHR0thk5i6
+--JCQv7L2LO5Px3hvq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 20, 2021 at 08:01:03PM +0100, Lee Jones wrote:
-> Fixes the following W=3D1 kernel build warning(s):
+On Fri, May 21, 2021 at 04:23:49PM +0200, Alain Volmat wrote:
+> Thanks for the patch.
 >=20
->  drivers/i2c/busses/i2c-stm32f4.c:321: warning: expecting prototype for s=
-tm32f4_i2c_write_ byte()(). Prototype was for stm32f4_i2c_write_byte() inst=
-ead
+> Reviewed-by: Alain Volmat <alain.volmat@foss.st.com>
 >=20
-> Cc: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-> Cc: Alain Volmat <alain.volmat@foss.st.com>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Cedric Madianga <cedric.madianga@gmail.com>
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> On Thu, May 20, 2021 at 08:01:05PM +0100, Lee Jones wrote:
+> > Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+> > Cc: Maxime Coquelin <maxime.coquelin@st.com>
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-i2c@vger.kernel.org
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
 
-Applied to for-current, thanks!
+Squashed the patch into the other one for i2c-st. Thanks!
 
 
---S7uyhsFHR0thk5i6
+--JCQv7L2LO5Px3hvq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv9HsACgkQFA3kzBSg
-KbYbFA//S1EmqAqycU4fQVwttYYM2h36NbcLlkfMWsKPxSZv1LZ0wyxiCehpR7mt
-JmFbV+SnTonx85xv5xYW349Lu6ol4J/7tMs+dFIVyW4y3S/fqMo+9BkVXicc3BeY
-nxQ0a4VDIp5c3+mAwJVtoUF6UWkYhIYvOxc2Q7ZlcG1dmEppNrNyi/61ZtEEsZ4m
-xaIdW+OlClETZtZfudSF114LKikQExSToiByPA5yvhcpsMY+umPqJkzSMl8Fd4Sw
-6BhHDpxpHYC+MKPqCnjW1JHZNRDLuV19J4gH8W/rEfSld3WBQwKJTn9UT83HbDCS
-L+n5qEx4HJEJdXFOcjxGNwyKYiy1DlzDk4rH73zUxT+K0x3qDLTTAdLMk1mbmIOI
-Dgy4SdeloOwAIpF6Bo1jWjosMWnFv+xy6UOXSG0AT6oHMEN4DwJIn4cplXAcfj3R
-Ekj3TyOugmP/Zdi7HVVU4viUavbDBaygxL0XJLLp1KDhPRxN7+tKoGtVTAzEzb2h
-pDaBmiU/iJ2BXOZ7/u3Vutfid58eqw1kLGu9v2VCfPaDBofMmYotV/366UBbj2QK
-AFBv/4VN33MXzlRPDa9hRRrLMqd2gHN86g81qMaj43gM/3eYO4hmXjehpn9wmPx/
-zSGaIFH6MHw5P5mfwoSa9FPZnlNfyXb+4vO4mJ3gedlQ29KuLFU=
-=ZtQd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv9SUACgkQFA3kzBSg
+KbY77xAAgdbQSQreMsVlkRrmLqfbPB3NxMl4WrSUMSENNcBfY8Jn26sX378Z9374
+yuD1JxqH3Ue4OQC4lvsP9N98DCQPjachray0LEEnZmtx+cIp97HYyF66niUg+DiR
+FLYez/GaLnt8zPbUdJIk9VPTBnsPiuTGQ2xjGeOaRbp9XLi3c/KZGbDnBB1p7TTN
+seP4o98LrZparAfk5btQ08PPDovz552ZY0mf7tYvBeM1kQ5uaA9WOxUSrZ5oHyOv
+FZLLmFP34dJXuMmn2wYYvhqbm/7HSFgElOF5kDzqdJpdydLTjwNKcVT+3PTwcwlk
+TyKDjvp9+4cs6USsXgvP4C8RA/bmyMFZQvCYxsaC//osc+J8l28/C55pgZbN1Cjf
+XVE2cP1V+mpepcAXZ/CPZGIEK2uVRKSwajH1m8RpcUgU7hMHJMvZKaEc7nHOKFYt
+/2CvTOc0HKMZjLrdl7SfyKkAsz9i2PTIzWhzS+8CywL5u2SYFYc3jhpkLEl5jYj+
+/b9U9X47kfwK+6XUIPjpFqriNxVdLcxxUJbYOEhFlhNY3nNlgRoZdwfztxC6Eg4V
+wI6QLZ/4dHOWeUcxYM8onEw68g//+A+oc8WrOb6c/AMRylt4nmf344Ql5hCptedq
+BxwdbtNFVUQ5zhQuPqlLbvET3VO1U+H052sJQkO7Fd3cu2/7XY8=
+=y1z6
 -----END PGP SIGNATURE-----
 
---S7uyhsFHR0thk5i6--
+--JCQv7L2LO5Px3hvq--
