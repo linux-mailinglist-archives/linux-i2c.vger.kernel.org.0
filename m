@@ -2,81 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9923936D8
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 22:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F1D3936FE
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 22:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbhE0UL5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 May 2021 16:11:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34274 "EHLO mail.kernel.org"
+        id S235774AbhE0UWN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 May 2021 16:22:13 -0400
+Received: from sauhun.de ([88.99.104.3]:33244 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235034AbhE0UL5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 27 May 2021 16:11:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 55077613D4;
-        Thu, 27 May 2021 20:10:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622146224;
-        bh=1b52DRB5CF3Toz7AYZE3/kXkFMkmvSw6GiqwSIxRLog=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LQWf9DHRWuEgTtUl8S/ltyB9zg58YRXEFzSBYgZAi9+nFcLMR5yXmGsb6gF/i1iG0
-         7MJRRzA8ejEo1ITZgHp/lu5UvWgewhc19zzT00ol0opgxGCf0tp7AS+O9mAoxuDqaA
-         u5h8LPQJPN1Hb4f6MhXyyyUruQPfh8xjxWIoL2GxhvDEse0D8G3dWYgDc23DqYubmD
-         mnyOdcKkzBpgH9KvPe+K6fYJV1d++Bjjo1FOva8UATMHMIyeRbLnWRYBRjueJe84iW
-         ghes4AiAyPGhb+yHREXqC/f4KNTtNZ+aHp2oQXwO4trh2Wz61sxBRLbgaP186qfVtR
-         iNyMZuKlfIeKw==
-Date:   Thu, 27 May 2021 22:10:21 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: i801: Use standard PCI constants instead of own ones
-Message-ID: <YK/8rQHz1FcFzS1T@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <a4b704b1-278c-20bc-854f-8e1177a530f5@gmail.com>
+        id S235528AbhE0UWN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 27 May 2021 16:22:13 -0400
+Received: from localhost (p5486cb85.dip0.t-ipconnect.de [84.134.203.133])
+        by pokefinder.org (Postfix) with ESMTPSA id 1CCC82C0548;
+        Thu, 27 May 2021 22:13:02 +0200 (CEST)
+Date:   Thu, 27 May 2021 22:13:01 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     qii.wang@mediatek.com
+Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        leilk.liu@mediatek.com
+Subject: Re: [RESEND] i2c: mediatek: Rename i2c irq name
+Message-ID: <YK/9TUCeJ4KK2iOT@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>, qii.wang@mediatek.com,
+        matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        leilk.liu@mediatek.com
+References: <1622115110-7051-1-git-send-email-qii.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1lE8SfwvMPj46qiu"
+        protocol="application/pgp-signature"; boundary="sILsGz3QvM1DFVBY"
 Content-Disposition: inline
-In-Reply-To: <a4b704b1-278c-20bc-854f-8e1177a530f5@gmail.com>
+In-Reply-To: <1622115110-7051-1-git-send-email-qii.wang@mediatek.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---1lE8SfwvMPj46qiu
+--sILsGz3QvM1DFVBY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 22, 2021 at 11:46:20PM +0200, Heiner Kallweit wrote:
-> Layout of these registers is part of the PCI standard. Therefore use
-> the constants defined by the PCI subsystem.
+On Thu, May 27, 2021 at 07:31:50PM +0800, qii.wang@mediatek.com wrote:
+> From: Qii Wang <qii.wang@mediatek.com>
 >=20
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Rename i2c irq name with dev_name() which can provide unique
+> naming in /proc/interrupts for each instance of the I2C IP core.
+>=20
+> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
 
 Applied to for-next, thanks!
 
 
---1lE8SfwvMPj46qiu
+--sILsGz3QvM1DFVBY
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv/K0ACgkQFA3kzBSg
-KbaIAw//QNy2SbbCYLQaXzNWWTwPRZoZGC9z4xMkqlR/S+PN/z2dkR+AxpElMWuV
-LwRN/XkqDcAev1cmo39LrnGTfanDbbbv5Mcnp32QHGrRTZ7uyaTRSBpNpx1jGXZu
-gc4utZSe0luX/lNvGiDu0B4c/te5WUoIaGwDbUtXEW9qMa9ODK15EqL82gIHUgUj
-fgcAZdH7bqULs4aoybN6eyH6Ge+l48MRocUpUCFVxx3mLAmshQJsJvOyRAbDYUHV
-tWDN+Rn+Yj4lra98dLcfN15NAqqHNePl4/MQHyH/QrYkgqTi0f4bCpRAf1qK0Ooi
-v7s2sMgSiIw1IqvvHsuy70VSAU13JTCMdg6SI+TN5AIWJvmWifpxI/zhtONn8nb6
-Dt1LGDCSTiMeU41QHhGNAa98FaQ21vXm9FQuGRkFLrS6YaXgRkD1egsCPZQC8ERa
-vI49JdXz4TGPKUNj+kbNUGy1KiaBkisrpY18gGsirOFqNqgKb6tjQXhv5VWFCFWC
-0GGXILunRQurjk1wjYVt4ai/Cska79A9SZF5pFYhfxLYJ7Hr7p9FJcFioadEj+n9
-UQdg0GNDYA7ItfW8dnKAEX6QCHBZaX/3v0bjieU7FHZrKgGEq58iubCHSx+VYfyF
-8QipjdZZo7oyHocB/mbgfeHqoQb7Tojxp7h4vyJWco1ADocvO/U=
-=JHhN
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv/U0ACgkQFA3kzBSg
+KbYx6BAAkWj58w1lFsKaQkAp5AXfhbhvCamckXfqayy0Ezqeo3McWRJ/xndBAP2M
+kr+SatOISl5dFYUm6QKcoOxfzCHtz+BqSFW/Qi8lr141mizyc4dR3Pw9Zdjuj08E
+D1IIT7xEK6OCCDpgpgh2fr/gsaZ6vLWeeA8775Wc/2KN5XVDdP7lVIFVG1adTXEH
+ucip2ZHgzI0LXYoVQaFyQZuDccBgkqX2iIHvlFkW+f3ikI5x43APXwX4++Kt1cGw
+y3Jpjsy7Mu7e4m/AW77CqE0YSkAXRqG+ka8eSCtuT6wB8rVSZNOJnLVubt8muOic
+yJcPy6Dp9gv6PwD+TNttz6sDB2ZO2I6ENqNFE/RZQRziGCBAMhAm23zuir0wHbyY
+WbK5HZ0Ge5nHixHNUUezwKuQFusTf7aXV+ZIl0H86N8cMgPrWvH+0GSjeApH+Aq9
+zfrDLOIL1Dzx1HWkmeEqXA3S0ZmlDhCLOdP/gi3gkPoOJU8PdYkbonFQxgeCdEiJ
+1e/sMvpe0PSwAc+I0W84FEIyxCnhZTgi4Vf4GSWYjC9Y/3hDXri0flAa1grBxezN
+4yAoC63A6Payws0xWLtPzUrHTQsNFm9zHuTo5ehVYBi71kEpViXZAHmnWle6lOGJ
+PuSspzq81THiIxCSRwSwSTmyOt/JG/gEeSrk1CHMD3IZmGCq9F4=
+=lM8p
 -----END PGP SIGNATURE-----
 
---1lE8SfwvMPj46qiu--
+--sILsGz3QvM1DFVBY--
