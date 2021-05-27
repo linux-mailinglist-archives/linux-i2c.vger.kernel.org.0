@@ -2,74 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1AE3926EE
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 07:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322BD392800
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 08:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbhE0Fju (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 May 2021 01:39:50 -0400
-Received: from first.geanix.com ([116.203.34.67]:51024 "EHLO first.geanix.com"
+        id S234119AbhE0GvF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 May 2021 02:51:05 -0400
+Received: from mga02.intel.com ([134.134.136.20]:29272 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229500AbhE0Fjr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 27 May 2021 01:39:47 -0400
-Received: from [192.168.64.199] (unknown [185.17.218.86])
-        by first.geanix.com (Postfix) with ESMTPSA id 3D58E46261A;
-        Thu, 27 May 2021 05:38:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1622093891; bh=Ea4RLXzKpmKcbvvfHICx48KNrLLyjPII0nhUV1PdrgU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=KRKlcCafVU9MyTGoRrlNcArOK6OJ771dNJvCEiWYz9FP/MpGk5DpCqvT1sy0LCmmG
-         TdWLWk3IXRunt7uVnwhz0PDSFD1b60vNgd+UTuEaXqu9HHbOdz5u/bA1mtCSgyRGTz
-         Z0mXiRsC5B6xWfSR0KJhZman6LlIkvuLLCq1Me7wp5UBzNyi99kvFYwfbzK6LHMEly
-         EphN/AllDTtK8fNOzLP7/mHoQtyxLnEYEWJtEYAVS1/u4pnCb9wFD4Sy+5Yz155/+5
-         vyanLhzg93VHBvxXzTiMerGVmxRJlWJMxNinrDcFXKHw9rwNLeYKu6MJaqwDHyHwzf
-         gBXN318S8r+QA==
-Subject: Re: [PATCH] i2c: core: Add stub for i2c_verify_client() if
- !CONFIG_I2C
-To:     Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Tom Rix <trix@redhat.com>, Wolfram Sang <wsa@kernel.org>
-References: <20210526174436.2208277-1-jic23@kernel.org>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <e7029066-f66f-b345-adfd-5807d376de2e@geanix.com>
-Date:   Thu, 27 May 2021 07:38:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S229635AbhE0GvE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 27 May 2021 02:51:04 -0400
+IronPort-SDR: JXnUHM/qNB1gHTDYhRx7oCrE2R/totQ9B/YK4Rcd8vyEX1+fCDzo6JZ/pXYuRssC7ZvUJr0r63
+ LsVR8FM0aPvg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9996"; a="189783144"
+X-IronPort-AV: E=Sophos;i="5.82,334,1613462400"; 
+   d="scan'208";a="189783144"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 23:49:31 -0700
+IronPort-SDR: JfprkGlafku4ogdusz3p4L1MW8Y58pPf0ZTIzntLxSROntVCtCRzbr6y4tBl0Vz5h0mJ6W04SU
+ DVSs3ObhFQBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,334,1613462400"; 
+   d="scan'208";a="477353474"
+Received: from unknown (HELO [10.239.154.58]) ([10.239.154.58])
+  by orsmga001.jf.intel.com with ESMTP; 26 May 2021 23:49:26 -0700
+Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
+To:     Wolfram Sang <wsa@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        conghui.chen@intel.com, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com,
+        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
+        Tali Perry <tali.perry1@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        yu1.wang@intel.com, shuo.a.liu@intel.com,
+        Stefan Hajnoczi <stefanha@redhat.com>
+References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
+ <20210323072704.rgoelmq62fl2wjjf@vireshk-i7>
+ <a2994a8f-bbf9-b26f-a9d2-eb02df6623b8@intel.com>
+ <CAK8P3a3OBUZC2nxaQ2wyL9EeT3gzXUX9sfJ+ZJfJUiJK_3ZkrA@mail.gmail.com>
+ <20210415064538.a4vf7egk6l3u6zfz@vireshk-i7>
+ <b25d1f4e-f17f-8a14-e7e6-7577d25be877@intel.com>
+ <20210415072131.GA1006@kunai> <20210415072431.apntpcwrk5hp6zg4@vireshk-i7>
+ <20210415072823.GB1006@kunai>
+ <6849a8f0-204a-362a-ed97-e910065ab14f@intel.com>
+ <20210415081828.GD1006@kunai>
+From:   Jie Deng <jie.deng@intel.com>
+Message-ID: <e6523755-b0ac-c31f-d640-dd016fb8eff1@intel.com>
+Date:   Thu, 27 May 2021 14:49:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210526174436.2208277-1-jic23@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <20210415081828.GD1006@kunai>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        URIBL_BLOCKED autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on 93bd6fdb21b5
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 26/05/2021 19.44, Jonathan Cameron wrote:
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> If I2C is not compiled, there is no way we should see a call to
-> i2c_verify_client() on a device that is an i2c client. As such,
-> provide a stub to return NULL to resolve an associated build failure.
-> 
-> The build is failing with this link error
-> ld: fxls8962af-core.o: in function `fxls8962af_fifo_transfer':
-> fxls8962af-core.c: undefined reference to `i2c_verify_client'
-> 
-> Reported-by: Tom Rix <trix@redhat.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Fixes: 68068fad0e1c ("iio: accel: fxls8962af: fix errata bug E3 - I2C burst reads")
-> Cc: Sean Nyekjaer <sean@geanix.com>
-> Cc: Wolfram Sang <wsa@kernel.org>
-Reviewed-by: Sean Nyekjaer <sean@geanix.com>
-> ---
-> 
-> Note the broken patch is only in the IIO/togreg branch at the moment.
 
-Didn't quite get that the stub was should go in linux/i2c.h, thought I had to make a stub in the driver.
-But this seems appropriate :)
+On 2021/4/15 16:18, Wolfram Sang wrote:
+> On Thu, Apr 15, 2021 at 04:15:07PM +0800, Jie Deng wrote:
+>> On 2021/4/15 15:28, Wolfram Sang wrote:
+>>
+>>>> Now that we were able to catch you, I will use the opportunity to
+>>>> clarify the doubts I had.
+>>>>
+>>>> - struct mutex lock in struct virtio_i2c, I don't think this is
+>>>>     required since the core takes care of locking in absence of this.
+>>> This is likely correct.
+>> OK. Then I will remove the lock.
+> Let me have a look first, please.
 
-/Sean
+
+Hi Wolfram,
+
+I didn't receive your feedback yet. Do you have any more comments ?
+
+Thanks.
+
+
