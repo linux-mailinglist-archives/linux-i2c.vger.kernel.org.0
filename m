@@ -2,84 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E653936D2
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 22:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A173936D5
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 22:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235375AbhE0UK5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 May 2021 16:10:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33842 "EHLO mail.kernel.org"
+        id S235508AbhE0ULH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 May 2021 16:11:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33936 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235263AbhE0UK4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 27 May 2021 16:10:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B15AA613CC;
-        Thu, 27 May 2021 20:09:22 +0000 (UTC)
+        id S235753AbhE0ULG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 27 May 2021 16:11:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 55E12613CC;
+        Thu, 27 May 2021 20:09:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622146163;
-        bh=UdOSMJhiWdMFuMPyZC8SgDIJ+u21cVkCCXaws8FpHNk=;
+        s=k20201202; t=1622146173;
+        bh=MD4J2hpk1xeU5cl0nEaJO2dPSwTZQkm0OHsvyW7KBjE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=djGJNcrw6YV/UdDdiCPi2k4Mn9afOaZuYC803YugvpoJJCl0bSps3PPluNh30iN1P
-         dvA9MWw6Fv+3Bz9grT/Nlhotijvr/Lb8RO0kLXY4pDOmy5us4wLgEIes6L2HDkwLAt
-         Tho+5PToeoGsuad97pevI8QUlmuWWRZpDrD4WKnlnOOU4vzhbsAiApe/5XvU/Uj3dD
-         Ja0DFCUGyPT+VDOish72tDn+Q5h1pvrdczYx7XcrGzpp6zcv70W8UPG2TW7gUizPuC
-         cR+HGpEPwlpBdlf3+3VEPjWsFtvYCnkW2e1+BarvFqPkYxEEnISKicA3Z2P5CgAF9w
-         MHYLD9Q0RNWVA==
-Date:   Thu, 27 May 2021 22:09:20 +0200
+        b=aN8V4ufVBu0eueuZ2UlQIzQ+cVPjxlYfThohv/w/dGFbIm4ncmuY5PEoROltvyK+h
+         adSDHexpfqhtWpPiQxajvLJaOnKvC0rZbdRE21MdaWswVizvnUDj5P93xz8en2Q1XA
+         83aPgHhiHK039mtOXsWya6hRdATAhztsNGHC35JVzHZwfV8i+zrPtW8FMO2zrP/kcj
+         hSbnQHHpXkHI6VHo+siruekRATxzZtCBkbtv8TXmmaGp3ByijvCrTZJsLhPsM32nfJ
+         VUMKb4zNOLxogXf6SyxypGZ5xcXE2A4id8rfdyvW0GnpAqdr9FtpEHL+6mMBNBBNdG
+         GhxvAHTUOFGnw==
+Date:   Thu, 27 May 2021 22:09:30 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: i801: Remove unneeded warning after
- wait_event_timeout timeout
-Message-ID: <YK/8cIogwcLg1sFz@kunai>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH 2/2] i2c: i801: Replace waitqueue with completion API
+Message-ID: <YK/8ev7JeGSE/HZu@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 References: <561b74ab-b020-b0c7-c1ad-b7c3326245e3@gmail.com>
- <103951a0-4233-bbaf-2192-ac140469b07e@gmail.com>
- <20210525120012.1ea1d5f1@endymion>
+ <1d1054de-8b47-a6bb-a264-8456705e5875@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4ThZwLgsyJjpHNNu"
+        protocol="application/pgp-signature"; boundary="09G5ccVIPj4rFcDU"
 Content-Disposition: inline
-In-Reply-To: <20210525120012.1ea1d5f1@endymion>
+In-Reply-To: <1d1054de-8b47-a6bb-a264-8456705e5875@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---4ThZwLgsyJjpHNNu
+--09G5ccVIPj4rFcDU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 25, 2021 at 12:00:12PM +0200, Jean Delvare wrote:
-> On Sat, 22 May 2021 00:00:28 +0200, Heiner Kallweit wrote:
-> > When passing -ETIMEDOUT to i801_check_post() it will emit a timeout
-> > error message. I don't see much benefit in an additional warning
-> > stating more or less the same.
-> >=20
-> > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+On Sat, May 22, 2021 at 12:02:43AM +0200, Heiner Kallweit wrote:
+> Using the completion API is more intuitive and it allows to simplify
+> the code. Note that we don't have to set priv->status =3D 0 any longer
+> with the completion API.
+>=20
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 Applied to for-next, thanks!
 
 
---4ThZwLgsyJjpHNNu
+--09G5ccVIPj4rFcDU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv/GsACgkQFA3kzBSg
-Kbb7OBAApY3e2SLHLGvkrZAYiN6Hyw1/5FQiMXNOXYVu03mxk40vyUA2SLrNXlnP
-bzCQLJDcfUtaL1lwKXPiQK75xYxEff3y3wCsNepPXvtH+1GV2ahz/+IHaZZJt+fz
-aFWGeMFZ8z7Sp+5jTMevYirjRhZQr5aiOzPbkknnHsBO9DvHz0pCjzr0EW2CzC9Y
-5w9oW+MC8TUnTVzkZLlZfQuAzbiya6pf0aoEzIm3YI8pA/pRbH2a3Ohd6+twRwlB
-GFiBwxE6yZuGNiuvoIeobCfcweOY0hGDc1n/G2/aQ9zIQdWzMYFwZPtNe1dfjugx
-cKk/PZENLvVndzQQxYsfihPsb5AR7YKxA2vFDzmvXpSYMFnS9gpdOdE5fA6x3lZI
-M+d+AI7sVWkMD9wxNDtcwN1SUnPbLQ6dNbW/ZWaSMgHslgIljSNRDB3/pl3FeI/J
-5Nl0B1tRqncgJ9N0KNPGJBJpUHDVF2kq6JiwEFPWnxkoeSQzLEGgtF048gz8jDny
-sdx7/+nOeKeNgbRV1RV+u1ocALOwus4S/Tl+Xi38BVEQ6uJ1WNAG5T16XVF2t3cE
-4pkHq9vo06E+fW8bJTr7n3Xq/X/YwAlQ9uW0l7kObzKgiXCA66OtS1QQJpUDkHN4
-XtL+ZWupvidUtVVm7xKMwRTDaKuMNxPEpjvt2W7J0F1JLsmKBXE=
-=iO7/
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv/HoACgkQFA3kzBSg
+KbatQw/8DBNJjvw+XgoG5dBxdGGPWghwG4Ktq5bn5VCQ0E2Zum0vKr3FGo+cS5+A
++yW7FreZSRZi1ZyysHDSLdF1/FUKjxTJvnu22wk4YYgUfNlNcSZwgHQrQOFh5KIg
+NT+hK1wGNR3SHiafLagMw8SM7nBd8owTKS788GgIuxHTxvK0iNUtEe1g7vVB+oKh
+NGlymMSBHHcen5RDo85Ipd3kKfzUxZRKtZpHD3SHrYub9ZktC2w1Jf+ad5D5uQQY
+eIa/Hg0LaZ+gIVlUkEjD6OPDH/SaN+BTWXxa9v6kMoiS+isriA11Yu06B3ftt73k
+VbdtBhMgWWI6FmGR0Nw4OhoMbz20PhoMXQE3lWEQvqrLm/36+Qk0VX4SU0D6r7lv
+yDS9YBS9mPXb+xzyHtfh/f9xdk0epsBJQoecPoccMuZhqwJx1J95Mk8RFpKYN/9E
+Xz+yZlPuRcBbUAPML8lEtabtQzWFEHFtJArZi1JXxk+W/YGkn+ol3TuCsws5xkl+
+zBjyRisnGIjny1LiAQakkgS58wZ6Lb4hVVrj+hC+XA301sqqBMFyP3InUgNQJuZZ
+LmLu48MM17riUnn19k8Rf8WLb7s9kb5R3lWBqpaMnfOi+KJjan1uzdL9h5rdMjYp
+2ZFWMo0045lnmnUsQb8iQ+KUKCo7XE99cbP/4dSdIQx7tns1HLA=
+=+IuX
 -----END PGP SIGNATURE-----
 
---4ThZwLgsyJjpHNNu--
+--09G5ccVIPj4rFcDU--
