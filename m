@@ -2,83 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EED63936FD
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 22:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEE3393718
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 22:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbhE0UWN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 May 2021 16:22:13 -0400
-Received: from sauhun.de ([88.99.104.3]:33242 "EHLO pokefinder.org"
+        id S236829AbhE0UZU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 May 2021 16:25:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41352 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235508AbhE0UWN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 27 May 2021 16:22:13 -0400
-X-Greylist: delayed 456 seconds by postgrey-1.27 at vger.kernel.org; Thu, 27 May 2021 16:22:12 EDT
-Received: from localhost (p5486cb85.dip0.t-ipconnect.de [84.134.203.133])
-        by pokefinder.org (Postfix) with ESMTPSA id DB29E2C05E0;
-        Thu, 27 May 2021 22:14:56 +0200 (CEST)
-Date:   Thu, 27 May 2021 22:14:56 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     qii.wang@mediatek.com
-Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com
-Subject: Re: [PATCH] i2c: mediatek: Disable i2c start_en and clear intr_stat
- brfore reset
-Message-ID: <YK/9wMhoACc0beN/@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>, qii.wang@mediatek.com,
-        matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        leilk.liu@mediatek.com
-References: <1622117044-7583-1-git-send-email-qii.wang@mediatek.com>
+        id S236501AbhE0UZL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 27 May 2021 16:25:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A30E613CC;
+        Thu, 27 May 2021 20:23:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622147017;
+        bh=cb3jt8nhfjvJuxgiaw2svdE299MPdHIy5rcv+d11iYI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GiHznEruEg9ySCtBN/2heqSWqyYtvsyYPczx075KqbNFwXEEotDtZRidcu+niHbXI
+         dIt2VqNals1oUhBFt6F9CWC96UcOHGeAGxsZgQWW0YZCXNaNfosV6gPks4ccRVAmcx
+         pBWxWrHWwKuQnnEA1FnHCKZfRF2oVcoOYzJ65uMP8ac66daaE5ektcGQyRqS8h81Dh
+         n2IKvrya9ltOSviRvGtANzAShJVqpjQAWxlt7uU/zOSm+IEWrBlIlcfSlm7o+KIXwB
+         KBCJJ8YMA8mqHxBv4ovxzv4AGai5a9f5Vfs+KZ/WyWpS0wtdCYTcymBGsfVqowJDk0
+         43+tbp3+P/19w==
+Date:   Thu, 27 May 2021 22:23:34 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tom Rix <trix@redhat.com>, Sean Nyekjaer <sean@geanix.com>
+Subject: Re: [PATCH] i2c: core: Add stub for i2c_verify_client() if
+ !CONFIG_I2C
+Message-ID: <YK//xmqZCZRT1VVD@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tom Rix <trix@redhat.com>, Sean Nyekjaer <sean@geanix.com>
+References: <20210526174436.2208277-1-jic23@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="I0LEN5JYjbsQxSJJ"
+        protocol="application/pgp-signature"; boundary="FvCZ/2o9yGuPX0OU"
 Content-Disposition: inline
-In-Reply-To: <1622117044-7583-1-git-send-email-qii.wang@mediatek.com>
+In-Reply-To: <20210526174436.2208277-1-jic23@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---I0LEN5JYjbsQxSJJ
+--FvCZ/2o9yGuPX0OU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 27, 2021 at 08:04:04PM +0800, qii.wang@mediatek.com wrote:
-> From: Qii Wang <qii.wang@mediatek.com>
+Hi Jonathan,
+
+> Fixes: 68068fad0e1c ("iio: accel: fxls8962af: fix errata bug E3 - I2C bur=
+st reads")
+> Cc: Sean Nyekjaer <sean@geanix.com>
+> Cc: Wolfram Sang <wsa@kernel.org>
+> ---
 >=20
-> The i2c controller driver do dma reset after transfer timeout,
-> but sometimes dma reset will trigger an unexpected DMA_ERR irq.
-> It will cause the i2c controller to continuously send interrupts
-> to the system and cause soft lock-up. So we need to disable i2c
-> start_en and clear intr_stat to stop i2c controller before dma
-> reset when transfer timeout.
+> Note the broken patch is only in the IIO/togreg branch at the moment.
+
+Then the fixes tag should be removed. It is only for upstream commits.
+It means we will have a merge dependency the next cycle, so I will send
+my pull request early.
+
 >=20
-> Signed-off-by: Qii Wang <qii.wang@mediatek.com>
+>  include/linux/i2c.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index e8f2ac8c9c3d..aa52738b9c46 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -343,7 +343,14 @@ struct i2c_client {
+>  };
+>  #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
+> =20
+> +#if IS_ENABLED(CONFIG_I2C)
 
-Is there a suitable Fixes tag for this?
+Hmm, can't we move this into an already existing IS_ENABLED block?
 
 
---I0LEN5JYjbsQxSJJ
+--FvCZ/2o9yGuPX0OU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv/cAACgkQFA3kzBSg
-KbYFkA/8C40P82jqIEVljzAwazQ69azdDrsZ15whJ7MYNsuDsA2AZEDMn2LbI1KV
-OgpanxfkKMY2q+3c6A6A8gJcKSGNFZMPLynIAUTNNS7bZH0WVe/O2IPCXEuWZE7P
-jBFC7BOkSCMGpmbAwB2FnjGS3ns711st4VhMKRKEINvtFyXx5KyyBRLUxh3YnL6w
-y4zj/i/dpvD4Hpppwam1xCKdJIKFscSr3GQsd2i58/ulSaHuC+e+mVI0O7M229vy
-vRy9NSSM6p1kmzFsRrjBdsg1iqD5Jl+UazqDWpbHlqKw8/Q1EKVpjVibHrArNyZM
-I4GwQDOkMqUmvse+YUe2WQKawH9r57Il0MnQTE02DmJcv9wzHJOYLwwEQXhyIuUM
-7QrZ0CTsPeifWGbOinagLO3omauXAxGs4TocEIaOsyJKR+nrAsSCyB7azNsyILjr
-SswVSmcASpGBzbu30ezENrDlZCTsho+e7Elj8slCD7i0M1ZGCaLVNSmH+n94RInD
-qO1Ybpd0UxRrzMngUawMQxkzD5T9iGXrz/hzukm1C7jFP46Fqpe0j0T+vHZpF4D5
-PgyE/aPc04h4wS5l0Mzlu0LTNPg1nc1sIqa8rQYZPejGSwkHqa1ekc8h50tRVkBW
-E1gSM4n4akF814nH4JuJgnPG7lFmX5VhYEOd2wxoD9QH+DUXt34=
-=AaA0
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv/8YACgkQFA3kzBSg
+KbZRyQ//cfgNMHzWq42WIf+cvU/nm0jhy3nvc4stw+mnFUf3rbcCQlXptlv8Nyus
+0KD63wFONyhXAHjmxQ8DxSInAeNNn7QajATAsjjHPg3QQAalIQIXvpOTtFZaa+25
+OTARmc+l0iFhoY4uu1HBk6J8EzEhFxlgYIZXevU2usF0kkdz4xvxuZzke93hqERN
+Dl6BrCrYnkzU5hzsBjclBhZiz3yaYCfGzQlemLCMpq/hWJmD5jeYkXA6mXdiwRgX
+EgT7A5MXr5LCdoTkw1faMQ3uuWOtR0NGszIt5vxqc7u9GtsLrxY6WcEiXUI2Qf1c
+3Fzp/jJwUZoOQiOMQF3RmEF7IfQgkQquOPuGcSr2STwGiS/ktKJriMccOZSDxJ8Q
+/FZdm7MmKwNuuHcisujykxRC/OkoOmSsHZ3Qzv78HnyehG17jOo9GgzIVt3Omrwz
+rOXzG7xMQtlafsJ1bURD5p4kDVyysF3Ctj3JtjYlIxHD0Q6Y2v6xAWzf/n719zYA
+M1/MkhxKduIDmxy09RV6M3hmN9qiD8Yu0iOEAv6+C0GohMhEYOZRuuG2T0NzkJCQ
+Nlm1RbBWeKSL3oUGJxAAYzqiWXwM1f3r8W/bQxW1yaxLKyhnVeOS0m6neRDLzgKg
+TD82QNyISZDBx5vSGhtZ/HoaRUNzHzjxN7xMm/0c+KrikxBPcWw=
+=JZs8
 -----END PGP SIGNATURE-----
 
---I0LEN5JYjbsQxSJJ--
+--FvCZ/2o9yGuPX0OU--
