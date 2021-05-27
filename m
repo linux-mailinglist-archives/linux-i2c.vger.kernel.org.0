@@ -2,93 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 966F539364D
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 21:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C7B393653
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 21:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbhE0Teq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 May 2021 15:34:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54964 "EHLO mail.kernel.org"
+        id S235140AbhE0TfU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 May 2021 15:35:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55214 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234187AbhE0Ten (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 27 May 2021 15:34:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F9096124B;
-        Thu, 27 May 2021 19:33:09 +0000 (UTC)
+        id S235064AbhE0TfT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 27 May 2021 15:35:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DC8AF6124C;
+        Thu, 27 May 2021 19:33:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622143989;
-        bh=zJ0Poo9fQrYedBcdGQkfLIoW3zdHCoyHuqth3Q8U460=;
+        s=k20201202; t=1622144026;
+        bh=TvQZ16/UGmoa9yxvoMiQl+XBpYesXD1RGo48P0vJEeU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fBqzNktYq5lkaJ6Ovt+LiAroRv+Nfi1tv+dZplmLj4r8jzcpMs9JxCYFNAcP29rQl
-         ornBf/DDVN4UIxPIgPmS1JFcAm8kl59PxRoNZwvLuLHOQN4/Xnfic3ywgQU9e3m0Md
-         dSBb4PLnVyLu5TuVvIEozb/a3YDPIqbLVDKDeSRmfYXcRdyz3K7tuVsDCqvGC5ycLn
-         zvHWaUttX5Oz93Th6ZsjhWnnW67PM6CJH0Hu8HZAk1wO+XztWmy4B5vKJpjOn4z7xO
-         7T8iw8ruCSK4m0F95WE/FWArgXLbhPqwuEHjn8SRZF4KKa10w/jiTIU0sZ8E3hiaqI
-         Q3QOH+2XUeVPA==
-Date:   Thu, 27 May 2021 21:33:06 +0200
+        b=S8A/J1Wt9kaUM+cefTWoR0OhWmkX0nmg3+xppq7liq4bpSS31c84M+JNC+DzzbeK6
+         E2nSIEs+V8coYUj04xCK89JhMSViUn4q35afuqzJMjvnjkgfCy8QVwhmanQ40F5tnB
+         EjwNYmY1jBOO1KGS+sEvpgnx35f+RtfLjJu/MwqHUneu+Mma2JXk4bXAMnvgun2v2G
+         C/6JpG0yKCVOTIVNGDpxBmq6DnIrh+DFhxEWf5OkF5Ec1Wuc9aqLAyzzVTlhAv5AKk
+         x69E1iDmpBR9IFzJwzSeCW0e8cERIfXm2yqfFiAEwKQhHXxV+rwTSSDEYsJMiDYQkX
+         YYnAbMWIn89IQ==
+Date:   Thu, 27 May 2021 21:33:43 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-kernel@vger.kernel.org,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Tomoya MORINAGA <tomoya.rohm@gmail.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 08/16] i2c: busses: i2c-eg20t: Fix 'bad line' issue and
- provide description for 'msgs' param
-Message-ID: <YK/z8o86kCE2ghUD@kunai>
+        Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andreas Larsson <andreas@gaisler.com>,
+        linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 10/16] i2c: busses: i2c-ocores: Place the expected
+ function names into the documentation headers
+Message-ID: <YK/0F1Usuccf90Ls@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Tomoya MORINAGA <tomoya.rohm@gmail.com>, linux-i2c@vger.kernel.org
+        Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andreas Larsson <andreas@gaisler.com>, linux-i2c@vger.kernel.org,
+        linux-riscv@lists.infradead.org
 References: <20210520190105.3772683-1-lee.jones@linaro.org>
- <20210520190105.3772683-9-lee.jones@linaro.org>
+ <20210520190105.3772683-11-lee.jones@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SkWKZY6NMJB/6A9i"
+        protocol="application/pgp-signature"; boundary="Cf+dOQDvq50YH7O5"
 Content-Disposition: inline
-In-Reply-To: <20210520190105.3772683-9-lee.jones@linaro.org>
+In-Reply-To: <20210520190105.3772683-11-lee.jones@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---SkWKZY6NMJB/6A9i
+--Cf+dOQDvq50YH7O5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 20, 2021 at 08:00:57PM +0100, Lee Jones wrote:
+On Thu, May 20, 2021 at 08:00:59PM +0100, Lee Jones wrote:
 > Fixes the following W=3D1 kernel build warning(s):
 >=20
->  drivers/i2c/busses/i2c-eg20t.c:151: warning: bad line:                  =
-        PCH i2c controller
->  drivers/i2c/busses/i2c-eg20t.c:369: warning: Function parameter or membe=
-r 'msgs' not described in 'pch_i2c_writebytes'
+>  drivers/i2c/busses/i2c-ocores.c:253: warning: This comment starts with '=
+/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-=
+doc.rst
+>  drivers/i2c/busses/i2c-ocores.c:267: warning: This comment starts with '=
+/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-=
+doc.rst
+>  drivers/i2c/busses/i2c-ocores.c:299: warning: This comment starts with '=
+/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-=
+doc.rst
+>  drivers/i2c/busses/i2c-ocores.c:347: warning: expecting prototype for It=
+ handles an IRQ(). Prototype was for ocores_process_polling() instead
 >=20
-> Cc: Wolfram Sang <wsa@kernel.org>
-> Cc: Vaibhav Gupta <vaibhavgupta40@gmail.com>
-> Cc: Tomoya MORINAGA <tomoya.rohm@gmail.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Andreas Larsson <andreas@gaisler.com>
 > Cc: linux-i2c@vger.kernel.org
+> Cc: linux-riscv@lists.infradead.org
 > Signed-off-by: Lee Jones <lee.jones@linaro.org>
 
 Applied to for-current, thanks!
 
 
---SkWKZY6NMJB/6A9i
+--Cf+dOQDvq50YH7O5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv8/IACgkQFA3kzBSg
-KbY9Fg/+LB64xvDNkWPopQnwtPnu91na9S6Z+CmtnCs9AUsIgOZApaOj+r8buupF
-NAEPWtbFKoWGIItskoQQA9MgPXv1ahGaCcH4vqOky0mfC+B0PJ6wuXnLEMXKySyA
-Lz1akDTvgwLsYnbhr2xlzMvcBzV8OAfIDPza8o7W/uj9FTgBuJsr8fyhnDgx7YmB
-yvQnZqwTdE/wM88tb+/DvDji1DO7+vDCKbc7/plmOv9VdTSdKQLeo3tzOGUlmsqW
-aqKsGZg/5JPTEOEpttOR6pCtEUix26Ub/+bWCznxsZPmnN5MfD/ofUH/97Bavwld
-oAmnosEa9EPO8X+MCcoFNidNbwx0aEc6VTnlxSlQYWLlTSkjINep1hO8VNPrTwvX
-/4GEO1msnFKoTuFDqwjLhBnp4LhNxfhFP2IDLyfWKdoFkEh8VVLS/TxHdszPbnpE
-W5ieFulOqcQaENdxb/tggSq/k1k6OrRDwVzeW4FpqRuWBNA13BqPKmk6Wc26y507
-0R4dR0l376VilwS0udrAkrVX6m6FhysZlXr1lMLnZPfCLYsvv5oxijrC8OEWau9r
-8xxNcb/KU6rnEpQ4HOXDejo9vCE6aG7ZF3gIbVudKXpeMKgh6FCt/S/DdK60K6l0
-ca6VmgA5f5n0Qeo8LhS5BHgBXYV3m7NllptAKVjqJcn+aVKNIzY=
-=SNeE
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv9BcACgkQFA3kzBSg
+KbZS7g//fLenLeqiftxDzn+Nkh+gHetgSFVjKOHR3pDLvod+2crf9gy4YORAeMOb
+JN1kmpunXMagFfp3K3YGHZneFXWb1cEg18HDH3a+GlA6lf/IUpd3+mrnO5arFgOR
+i1tODQo+WmgT0s/fdkKkX6BwX1Ygf9GYXnVQ6tQ3Tu8UVxUAv0bir7EZaFnlFsd9
+oEcBBA+jW9Mu7LAkAaGnGglxDa1GtSdI3zc5XwpW2K4mx/ieaA8yyIpnSyLaIk5F
+UnSmiQkmBvXyS/wZUWZ1Myhs4ChmDA/M5yx1mGsfIDvQ4ZNBribRPMb5rESBNxJi
+0lPXfB5pUwZ7oB9IyJh5XDBat2LxQjuBQO6C6db4QqOT4IOLlIxl0UVcyf6+VyTQ
+UPwZTXWSLV0ce9Q9VemkchMvV31MBb/iROORtuEAXuSXwA9MMJYviR+PXuxjejIh
+aqmzjOhSQ10BH3qwget7vRi5RqACIFjfbTO4hB8kG0u3JPDDxw24vXGyDN8EweaY
+arSb1K6DdxMLGANAMV65jvqw6EiMWAAt47xpZxBX4ytdYwA64o75NlNNOou4Fcog
+TApQR7b2GZ3P4KGPJj+byQMVtJYVnwmxSpl8IPEm6+vLjdtIKDyLiVttB77X+lSn
+KY3ROKLq3RuuV29eJZdqJIaRRDW6uBt7oGNoNsAzy0hgZbkz7CM=
+=FkD1
 -----END PGP SIGNATURE-----
 
---SkWKZY6NMJB/6A9i--
+--Cf+dOQDvq50YH7O5--
