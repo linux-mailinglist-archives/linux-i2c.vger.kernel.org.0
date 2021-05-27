@@ -2,92 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6B6393668
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 21:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C70C393698
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 May 2021 21:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbhE0Tju (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 May 2021 15:39:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56418 "EHLO mail.kernel.org"
+        id S235731AbhE0Tsh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 May 2021 15:48:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58080 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235262AbhE0Tjt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 27 May 2021 15:39:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B749E6124C;
-        Thu, 27 May 2021 19:38:15 +0000 (UTC)
+        id S235348AbhE0Tsh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 27 May 2021 15:48:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 48F606124C;
+        Thu, 27 May 2021 19:47:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622144296;
-        bh=6yCYrb3lWShCqZYfxBU/X/so5AzWEYFsM0Feb0Sb1yE=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=NqxKvcsD2OT2Y0refy57h04VkZxL4T2ToC9MQY76pNz3Ew+Y7evxxdpJ26r7K5HQO
-         5s5wSGuLW3B47jYIpFZiYGT1p5hx3kZIkK5DjULnNyd/zsLq+4xw8jMiq4FYZIDqQQ
-         /vPqWqRKkcm1XBsSxpdIYjB1Fy81oXkvjU+oTKCwSrTj1S8b/IAmLhCyvn3QDfnRak
-         m1MC4nIvD9FdiuVkHcOhA9Yg6q+RBE3evZIYlOIWDbvhcynwXIXCgEgk5Eixqq2n7P
-         XIxd+BWkNdW31E5XmlGNjWYd5XcpdxpRYeok8yF7A3nBaua02NUDYR5DldcV0fw5PJ
-         9y7vwoWMd9whA==
-Date:   Thu, 27 May 2021 21:38:13 +0200
+        s=k20201202; t=1622144823;
+        bh=7TxnJJnNtwAUGZlPXh3fsE0Uo6KwnuA5yZH8z0w+sjU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p9SqVy1QqWu0JV2zeKQ/gJlaS7FOcPgVN11Mx+qq+SpXvUCCTUU/QAo2svWSZr2Bd
+         Chdw9cls7OUGp3k6MZawfXS5M2NltR+SbS4QgBiaoDnRyvHoeNexjCzkWMkdIUc+Mb
+         vLabP1cXff/fLaFxHCFqfWA48zDMTuTruccKdpAEC5Aoo7w+WJzrygsc2L6cnKTi7j
+         KQUpOnADIsvR6JJMxJ7RjpK7azQLK6TsacwPFPSkoULJLgjvbTtzqfzVc55pYwf86F
+         OyOo8UkD+7bnaGzJj/qA9jw1eUy4LoPSThi6pcTwFByZ6XSwEl5zo64WUWWCtes17h
+         vHcJf5UnfmJBw==
+Date:   Thu, 27 May 2021 21:46:59 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <maxime.coquelin@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 16/16] i2c: busses: i2c-st: trivial: Fix spelling issue
- 'enmpty => empty'
-Message-ID: <YK/1JX62ClfRQYfX@kunai>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: aspeed: disable additional device addresses on
+ ast2[56]xx
+Message-ID: <YK/3M94uwuLQNwbz@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <maxime.coquelin@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-References: <20210520190105.3772683-1-lee.jones@linaro.org>
- <20210520190105.3772683-17-lee.jones@linaro.org>
- <20210521142349.GD17641@gnbcxd0016.gnb.st.com>
+        Zev Weiss <zev@bewilderbeest.net>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20210506205419.26294-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JCQv7L2LO5Px3hvq"
+        protocol="application/pgp-signature"; boundary="JB9G8qcO/AQ7ihJy"
 Content-Disposition: inline
-In-Reply-To: <20210521142349.GD17641@gnbcxd0016.gnb.st.com>
+In-Reply-To: <20210506205419.26294-1-zev@bewilderbeest.net>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---JCQv7L2LO5Px3hvq
+--JB9G8qcO/AQ7ihJy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 21, 2021 at 04:23:49PM +0200, Alain Volmat wrote:
-> Thanks for the patch.
+On Thu, May 06, 2021 at 03:54:19PM -0500, Zev Weiss wrote:
+> The ast25xx and ast26xx have, respectively, two and three configurable
+> slave device addresses to the ast24xx's one.  We only support using
+> one at a time, but the others may come up in an indeterminate state
+> depending on hardware/bootloader behavior, so we need to make sure we
+> disable them so as to avoid ending up with phantom devices on the bus.
 >=20
-> Reviewed-by: Alain Volmat <alain.volmat@foss.st.com>
->=20
-> On Thu, May 20, 2021 at 08:01:05PM +0100, Lee Jones wrote:
-> > Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-> > Cc: Maxime Coquelin <maxime.coquelin@st.com>
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-i2c@vger.kernel.org
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 
-Squashed the patch into the other one for i2c-st. Thanks!
+Applied to for-next, thanks!
 
 
---JCQv7L2LO5Px3hvq
+--JB9G8qcO/AQ7ihJy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv9SUACgkQFA3kzBSg
-KbY77xAAgdbQSQreMsVlkRrmLqfbPB3NxMl4WrSUMSENNcBfY8Jn26sX378Z9374
-yuD1JxqH3Ue4OQC4lvsP9N98DCQPjachray0LEEnZmtx+cIp97HYyF66niUg+DiR
-FLYez/GaLnt8zPbUdJIk9VPTBnsPiuTGQ2xjGeOaRbp9XLi3c/KZGbDnBB1p7TTN
-seP4o98LrZparAfk5btQ08PPDovz552ZY0mf7tYvBeM1kQ5uaA9WOxUSrZ5oHyOv
-FZLLmFP34dJXuMmn2wYYvhqbm/7HSFgElOF5kDzqdJpdydLTjwNKcVT+3PTwcwlk
-TyKDjvp9+4cs6USsXgvP4C8RA/bmyMFZQvCYxsaC//osc+J8l28/C55pgZbN1Cjf
-XVE2cP1V+mpepcAXZ/CPZGIEK2uVRKSwajH1m8RpcUgU7hMHJMvZKaEc7nHOKFYt
-/2CvTOc0HKMZjLrdl7SfyKkAsz9i2PTIzWhzS+8CywL5u2SYFYc3jhpkLEl5jYj+
-/b9U9X47kfwK+6XUIPjpFqriNxVdLcxxUJbYOEhFlhNY3nNlgRoZdwfztxC6Eg4V
-wI6QLZ/4dHOWeUcxYM8onEw68g//+A+oc8WrOb6c/AMRylt4nmf344Ql5hCptedq
-BxwdbtNFVUQ5zhQuPqlLbvET3VO1U+H052sJQkO7Fd3cu2/7XY8=
-=y1z6
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCv9zMACgkQFA3kzBSg
+KbYoaw/+K6TmK5yofJdaPXVDzkuK9GycZAqgbQp7fiCMVeCJi9sp4sZfOC/qJHDl
+i+d/1nqKttII/RjpHvzcQDnzXK7Mx/KaolUoQGIRRUoXI5PT2Rsc1qjOGxswicee
+ncF/nG2SKuKQoiFfEchL9/OWsKn8JysNhrGRsBpK8S2bINXajAHf/3NHSuIB8hT8
+LHdFtx+P5yRB2t7NLwGx1OTv5keCUEpzVnuzYcYdvfwUcbcLgSaybvDmkjyx/LHv
+xwFBvls6D24yd526D5kOfedxA2zZPnxfS5vYSnfL4Qsek21QSK28PuOtF4bbNHwp
+wBddF4z3Ba1ZCmXp93FsH7HmzzB9X2gnQhOaK1lyf0Qd7UL1qJXsWoN0D38VAzG8
+pvxotK7zbPcLU+9Jfu7I6p37ff64MVz66+nblGDjttSR767uic7jlL/Hgyim8V16
+HeT5nrjHjJW7jeTLsDz8UZU3xzGNmZzpRTWreNm+TBJl9Kv7gPR5j1z3Z5cQ5jf8
+MstxERJwFnMBlb1ma5PrQm7iyddy3cKyp+jKic0adN/tLwtl9mfwi/tQgEjsCw9m
+O6AcGxtfwIFeysjtgI0DjZUo+IQii/o9CcUPmFu4xsOZSsWwISFimP+LwVZDx6MM
+bgATzrQ0pKryV+AD4W8TP9XI42w2u7eSW/5NBRjkkJAZ+p5d6Bk=
+=dwZ9
 -----END PGP SIGNATURE-----
 
---JCQv7L2LO5Px3hvq--
+--JB9G8qcO/AQ7ihJy--
