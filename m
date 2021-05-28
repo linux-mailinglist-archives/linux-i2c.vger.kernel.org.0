@@ -2,90 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7AE393E50
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 10:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E28B1393E62
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 10:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbhE1ICw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 May 2021 04:02:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40052 "EHLO mail.kernel.org"
+        id S235514AbhE1IFR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 May 2021 04:05:17 -0400
+Received: from www.zeus03.de ([194.117.254.33]:50654 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235665AbhE1ICc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 28 May 2021 04:02:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1BE8F613AC;
-        Fri, 28 May 2021 08:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622188817;
-        bh=2QLfINpPaMrmx47UIMP8ocbL6I/Btkrp3YTv2iLJbz0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ecJI5zkG7oPN3wsHi+qeqoSgFp7FDFAAfHPEcRFJGN5ZxGvVhnmZEld8o4jvJ8fkZ
-         IXhg04nl/ik7Ct4xHBsbGaHyPGAR4BLI7bH+43OApJv9PF8nVBENyhPwKC6biVwXAz
-         vhfbRYHjRw7etOpbRgPeOzMhWlCuyZ+ybmcqutRfEI27YJzqFOwYi2ePVRLUTfNS7L
-         5g6fVxpYOGYNff3roBg5m5VG2XRlpCCERuiMvsMMVuEC8RKNtKB2nmLgEmmNEbLvT/
-         jP2p/onSaU+hqC+KQO2T5jH5YhtkPMO2SExtmrzWK/P7fvkkthidkO/x5YHFqmiZA+
-         eNywW+iNjJp/g==
-Date:   Fri, 28 May 2021 10:00:12 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Srinidhi Kasagar <srinidhi.kasagar@stericsson.com>,
-        Sachin Verma <sachin.verma@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 01/16] i2c: busses: i2c-nomadik: Fix formatting issue
- pertaining to 'timeout'
-Message-ID: <YLCjDHmAG0FcePyJ@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Srinidhi Kasagar <srinidhi.kasagar@stericsson.com>,
-        Sachin Verma <sachin.verma@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-References: <20210520190105.3772683-1-lee.jones@linaro.org>
- <20210520190105.3772683-2-lee.jones@linaro.org>
- <YK/yyypWeOnBNc4K@kunai>
- <20210528075806.GM543307@dell>
+        id S235640AbhE1IFL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 May 2021 04:05:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=VXoMljVzEVECXgf9hg23lFboUn+W
+        cDV1QOZKJ8wCwiw=; b=lgsBQ9tct0/9jmHNfPbqEzEAkyAuccG9HDUIr9BOemcf
+        2r/FVjPp2cjBcAmpWaOB70nUcQIOz+XGHWNRlOVZkjVIf2pGuHeOCcEa0+j4ic2P
+        3f1ZwqIYu8SpzJEICwmDcDRAl5QEARIs/UOmmWqouyPstLaqJInP3cWk9f0fDl4=
+Received: (qmail 2275190 invoked from network); 28 May 2021 10:03:35 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 May 2021 10:03:35 +0200
+X-UD-Smtp-Session: l3s3148p1@6HEJUF/D3N4gAwDPXwoXAEGfoBQqamfc
+Date:   Fri, 28 May 2021 10:03:35 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Chris Paterson <chris.paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH 0/2] ARM: dts: r8a7745,r8a7794: Remove generic compatible
+ strings from iic blocks
+Message-ID: <YLCj11FAJuIyTnIC@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Chris Paterson <chris.paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+References: <cover.1620139307.git.geert+renesas@glider.be>
+ <CAMuHMdWJ40hcw9L=MAKH0dTByjW_a8NbLxZ6GDV81MiH+gAk3Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0+YYiPaeSV+yAhVM"
+        protocol="application/pgp-signature"; boundary="T/jI5RAeG32tZ8Av"
 Content-Disposition: inline
-In-Reply-To: <20210528075806.GM543307@dell>
+In-Reply-To: <CAMuHMdWJ40hcw9L=MAKH0dTByjW_a8NbLxZ6GDV81MiH+gAk3Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---0+YYiPaeSV+yAhVM
+--T/jI5RAeG32tZ8Av
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
 
-> > Applied to for-current, thanks!
->=20
-> Thanks for these buddy.
+> While drivers/i2c/busses/i2c-sh_mobile.c already has a match entry for
+> "renesas,iic-r8a7794", it does not have one for "renesas,iic-r8a7745"
+> yet.  Hence patch 2/2 depends on a to-be-sent patch to update the
+> driver.
 
-You're welcome. The rest will also land in 5.13, but I want to give the
-driver maintainers one week more time.
+For the record, this patch was never sent because we are still
+investigating the presence of those registers in IIC revisions.
 
 
---0+YYiPaeSV+yAhVM
+--T/jI5RAeG32tZ8Av
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCwowwACgkQFA3kzBSg
-KbaLuBAAnMVOJmD7QuK+C+ERMzimWNk4Rp+tItMwvwImUGZ2i/QIdFp4Vip8yIYd
-Ms2bi/k6oJ/Fjmo9KS4NdRh4SmzWKrfN3XiNpBsZbvyA2yecxUVez5JgNsbre+oC
-L94f1DjQjVJZHRNN+Xw+xIloe/L6mqOOCwySCBtOUX/Xf9asP5aFFhW4fNOOa54N
-WLXGdslvbylvyKzgjNF/lKhHs9N8WLt8uQ3Zp37dONIra+Y8i3n2ouHcyycJZki5
-rNi5kDVbGsTKR02Yp0yMMEhn3BTW7aB1w1uGBpmsKMCnnnNdqUNK8mpTASsRy17k
-kkD7GW5D0oTA/NtorpsPcnFzUY5eXerMgYNmiAj0v/0qITLveNvOGhQDMTGmbSDV
-ofMGRq57rDwVs1a92Sc9dmUGvLXIm39AcH/Fb6B5HdI7Ck8tBRwGl1Y5Vn2I+tom
-aOPyxoEHmaY7kkum57osPvLLWp7SLwBZwsHFsXsqlVj7845XjbksQbvM9TQQ7APE
-K/W/ijEekcREm5S6EnuMD8OOhII37uC1Q5/fhKfzVUTJNH3UiYhjMFIYcLxahhRn
-dhjBOTUz/X+inWt3wTR+NX1vUDB0CE2T6SEw+yRwDiFtK5ZXl94/pPbSFWSzDs+w
-/yzu019vGsW9g1XXGu+cphk/4PT4nM1MIlfFEwkAjSVYr8GQIjI=
-=Q2Ke
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCwo9cACgkQFA3kzBSg
+KbYPAg/8D4Yj2kaT4/LWhAoixE3PjUzuhzmQyhYj/UietofbPwyRtrftEW/lr0jR
+SLRKVZK3Uc1C+tN594MiKDqhW7EO0a4bNN/PJmjtN8qlU21pmqFZdzHIwN/64NYe
+MTw2cNlQXtvEDPpu+yTTAQSUFCXxBtYt4XwI2e8yr02zEGvgvg50oi1kzZAeVMaQ
+vc93IaotHhtdOu2W8ljx/3DObrIw3TptnZlXZofqQlgdD+YU7TXw50NrWMPu4Hv3
+cSUk4fzsU5DQGlkkgSArHRp8UnHJEWe0YsXe8PsZ/Ff7axIw+sWVfKHDRRlFBkpD
+VOP2LfXcL5qImv6isnteDoXzED6jXROX14/PLOW7MfjgQiHynIiuqKm2xEPSQsuu
+JShoiYA/EGE0/QaoREOpoi5o+SGU99ast92TTiv32s2blq0LAayFmSr/dNaJS1J1
+Cf1CwLHdoAH8hC0O8sefBZHwFuLrP/4lCHlosjjxyZbLkuf21kb4TjFPwFj7hpfK
+rTdEd6pISSXghRqR2Ewi1+S5gdZldX2MIj+rkU1yf7J3uSQL8/u9VZ0/LOWFw4Ww
+6dHw+PkwDFfUijNyrcQPWfzZaAuNzFhftxpyDvw8wQxCfLS6r28ylm8HH1NLcyuz
+OiPRCVquq3d+/F06tW7Am6RBy1ZYlqiO+4swW2auwoM1xQloteg=
+=hniX
 -----END PGP SIGNATURE-----
 
---0+YYiPaeSV+yAhVM--
+--T/jI5RAeG32tZ8Av--
