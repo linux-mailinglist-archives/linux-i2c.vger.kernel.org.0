@@ -2,86 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E28B1393E62
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 10:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF74393E73
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 10:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235514AbhE1IFR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 May 2021 04:05:17 -0400
-Received: from www.zeus03.de ([194.117.254.33]:50654 "EHLO mail.zeus03.de"
+        id S235665AbhE1INC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 May 2021 04:13:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43314 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235640AbhE1IFL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 28 May 2021 04:05:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=VXoMljVzEVECXgf9hg23lFboUn+W
-        cDV1QOZKJ8wCwiw=; b=lgsBQ9tct0/9jmHNfPbqEzEAkyAuccG9HDUIr9BOemcf
-        2r/FVjPp2cjBcAmpWaOB70nUcQIOz+XGHWNRlOVZkjVIf2pGuHeOCcEa0+j4ic2P
-        3f1ZwqIYu8SpzJEICwmDcDRAl5QEARIs/UOmmWqouyPstLaqJInP3cWk9f0fDl4=
-Received: (qmail 2275190 invoked from network); 28 May 2021 10:03:35 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 May 2021 10:03:35 +0200
-X-UD-Smtp-Session: l3s3148p1@6HEJUF/D3N4gAwDPXwoXAEGfoBQqamfc
-Date:   Fri, 28 May 2021 10:03:35 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Chris Paterson <chris.paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 0/2] ARM: dts: r8a7745,r8a7794: Remove generic compatible
- strings from iic blocks
-Message-ID: <YLCj11FAJuIyTnIC@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Chris Paterson <chris.paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-References: <cover.1620139307.git.geert+renesas@glider.be>
- <CAMuHMdWJ40hcw9L=MAKH0dTByjW_a8NbLxZ6GDV81MiH+gAk3Q@mail.gmail.com>
+        id S230187AbhE1INB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 May 2021 04:13:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AE723613D4;
+        Fri, 28 May 2021 08:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622189487;
+        bh=nTpZYj8T50obfP/gOWNJZOk7cTQMZWYDkJeXsHFzFt4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hAuswPccSd5PNajb21LhrXERffLP1B2ZQPKooIljM6YgSYm+/U9IVAhYOhPZ8rh/R
+         7WaGTPIX17NIS5GT06DuRHz+osEnYdWgdcxllLr3fKZ4HQvsj6ept6lbQH3nt0zf6n
+         qKKikdcVHcP/XBjvjpugzqf5wOXEYFGfNcq6h4N2V6ldAVNktj/uEd1YJ+uM1apKx8
+         DeW9erXiKubD6XycrnX/J2JW2El1OBguew5Ndl7MJoKPyGwdKqE9I6GVkk+rUX203p
+         Vgl82LbpUpN/U+R/am3yP+I3ydncLSmDNibwQfyb8G/7kycyIzBai3vuvHrYsSwyeB
+         Oe9T85pZO+ffw==
+Date:   Fri, 28 May 2021 10:11:23 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Roja Rani Yarubandi <rojay@codeaurora.org>
+Cc:     swboyd@chromium.org, dianders@chromium.org,
+        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
+        mka@chromium.org, skananth@codeaurora.org,
+        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
+        rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH V11 1/2] i2c: i2c-qcom-geni: Add shutdown callback for i2c
+Message-ID: <YLClq6hZKUA1Y4ZW@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>, swboyd@chromium.org,
+        dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
+        gregkh@linuxfoundation.org, mka@chromium.org,
+        skananth@codeaurora.org, msavaliy@qti.qualcomm.com,
+        skakit@codeaurora.org, rnayak@codeaurora.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org
+References: <20210525131051.31250-1-rojay@codeaurora.org>
+ <20210525131051.31250-2-rojay@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T/jI5RAeG32tZ8Av"
+        protocol="application/pgp-signature"; boundary="ek337UlQrmDDG+TY"
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdWJ40hcw9L=MAKH0dTByjW_a8NbLxZ6GDV81MiH+gAk3Q@mail.gmail.com>
+In-Reply-To: <20210525131051.31250-2-rojay@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---T/jI5RAeG32tZ8Av
+--ek337UlQrmDDG+TY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 25, 2021 at 06:40:50PM +0530, Roja Rani Yarubandi wrote:
+> If the hardware is still accessing memory after SMMU translation
+> is disabled (as part of smmu shutdown callback), then the
+> IOVAs (I/O virtual address) which it was using will go on the bus
+> as the physical addresses which will result in unknown crashes
+> like NoC/interconnect errors.
+>=20
+> So, implement shutdown callback for i2c driver to suspend the bus
+> during system "reboot" or "shutdown".
+>=20
+> Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the Qualcomm=
+ GENI I2C controller")
+> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+
+Do we need patch 1 after patch 2 was applied? I always thought all
+devices are suspended before shutdown/reboot?
+
+Nice to see that 'mark_adapter_suspended' becomes useful again!
 
 
-> While drivers/i2c/busses/i2c-sh_mobile.c already has a match entry for
-> "renesas,iic-r8a7794", it does not have one for "renesas,iic-r8a7745"
-> yet.  Hence patch 2/2 depends on a to-be-sent patch to update the
-> driver.
-
-For the record, this patch was never sent because we are still
-investigating the presence of those registers in IIC revisions.
-
-
---T/jI5RAeG32tZ8Av
+--ek337UlQrmDDG+TY
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCwo9cACgkQFA3kzBSg
-KbYPAg/8D4Yj2kaT4/LWhAoixE3PjUzuhzmQyhYj/UietofbPwyRtrftEW/lr0jR
-SLRKVZK3Uc1C+tN594MiKDqhW7EO0a4bNN/PJmjtN8qlU21pmqFZdzHIwN/64NYe
-MTw2cNlQXtvEDPpu+yTTAQSUFCXxBtYt4XwI2e8yr02zEGvgvg50oi1kzZAeVMaQ
-vc93IaotHhtdOu2W8ljx/3DObrIw3TptnZlXZofqQlgdD+YU7TXw50NrWMPu4Hv3
-cSUk4fzsU5DQGlkkgSArHRp8UnHJEWe0YsXe8PsZ/Ff7axIw+sWVfKHDRRlFBkpD
-VOP2LfXcL5qImv6isnteDoXzED6jXROX14/PLOW7MfjgQiHynIiuqKm2xEPSQsuu
-JShoiYA/EGE0/QaoREOpoi5o+SGU99ast92TTiv32s2blq0LAayFmSr/dNaJS1J1
-Cf1CwLHdoAH8hC0O8sefBZHwFuLrP/4lCHlosjjxyZbLkuf21kb4TjFPwFj7hpfK
-rTdEd6pISSXghRqR2Ewi1+S5gdZldX2MIj+rkU1yf7J3uSQL8/u9VZ0/LOWFw4Ww
-6dHw+PkwDFfUijNyrcQPWfzZaAuNzFhftxpyDvw8wQxCfLS6r28ylm8HH1NLcyuz
-OiPRCVquq3d+/F06tW7Am6RBy1ZYlqiO+4swW2auwoM1xQloteg=
-=hniX
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCwpasACgkQFA3kzBSg
+KbYxaQ//ZoP6wYYkxIedf6wA51iLmKm16cI2fTF5PkMosb8js+bEB0ffK5NryrVX
+zPdkmFNLHC9TsKp003YeBSdfJIAv8QQwdB9gHq4rscCcZyuFRgmjGxPPOlZzL7ce
+qddFnVVond15qVi1DcdW/gap6OqK0QvjX4ZMEDhi38QpXtLC+cZEiZgjQkqNxwXG
+eeVYE/nEO5I368PBfIfTRtjWSlVoJnWKYzfEoysm+cgkaANQwxp2ElI3c2P3qXTU
+VwCPZFAS2cDk1LQSdmMq4ugqEyekBkBFxubTFDeCPQR7XBlNE1VqecTF1h5GGU+X
+ZgCHltEjukcPyPbr1ocY7gtUnH8xpwDjyWa1yKjariIO9IwtMAgSgYI+Nt0ieQZv
+3snvjuVVcvmFYteRfXf4u4CK+/52bSLKsie/bcI3Nhrk58hC0zdTO2OXyvr9LeBg
+GzcIQoRbc+PIS0auopwnSXehNDesDLhVO3E0KQ1qu+et2z1vCchypCJVauzT97Al
+n4JuK0KTBvVejTy2Z/VaMQBHBbjkFcP+X64jyezJMvyV4NMjkBOWZ44ckHWjfxbs
+/7C6YPhC+BLxcQN82lpZrK/+cPAjaqga7i1OJyKit1iWWowHpU8lRsYMySUAf97w
+L7N/etgPoDeIjotZNWZ0GUeXilAH3/CaczUuh7lLe+kL9Vsb1O0=
+=3DXB
 -----END PGP SIGNATURE-----
 
---T/jI5RAeG32tZ8Av--
+--ek337UlQrmDDG+TY--
