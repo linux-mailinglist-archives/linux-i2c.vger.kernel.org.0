@@ -2,49 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5383943E7
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 16:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB1B394431
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 16:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbhE1OQs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 May 2021 10:16:48 -0400
-Received: from mail-ua1-f41.google.com ([209.85.222.41]:41638 "EHLO
-        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbhE1OQs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 May 2021 10:16:48 -0400
-Received: by mail-ua1-f41.google.com with SMTP id g34so2203418uah.8;
-        Fri, 28 May 2021 07:15:13 -0700 (PDT)
+        id S233298AbhE1O10 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 May 2021 10:27:26 -0400
+Received: from mail-ua1-f45.google.com ([209.85.222.45]:40953 "EHLO
+        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232426AbhE1O10 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 May 2021 10:27:26 -0400
+Received: by mail-ua1-f45.google.com with SMTP id j2so2215974uak.7;
+        Fri, 28 May 2021 07:25:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=qBo7OeIX4Ym22FQ+QNowtCfIZyHTAuCXsUMFxid9Jlw=;
-        b=sVQyOeJ7UVTJM8YpFfJf/ld0wI87HPT5M5P2LTNxCVvOYD2ac8M1dEBc2pzggMm0RU
-         tYaDZju7bS3sRmAFleKgKJapsz+UOWm7EhJmxSI2sTsTREcsCdnJGvidvIIZRf4ejFo0
-         CTYnL26CcTHMAUTaKDIPRYRPTVpfSqCPdPhkvao/ScbLH0oGTZ59bw7mWWIbIYX6alqd
-         eRzslY8JUOhOe38EuCEfEOuvKqxP7nkrSYHLAsTlItfT1dr851LjdvxjfvQolcw1QKHe
-         7/UFOh8WyjlIn8BgTzVNU/UrYAl975/BaGck8U+xl0H8T9HL7qSbacFSZrZaMXi/Efxc
-         c7aQ==
-X-Gm-Message-State: AOAM531NRgWv9rUvN0vCmeDQyJK1UYzrSg3U7zyQbuGkjnt4JYoZb/Qs
-        hT7NvtKuthANZYmtd1avjKHkUtCMO0LXyjjgJ4c=
-X-Google-Smtp-Source: ABdhPJzivupCL8G870iZ6lPRvpqaM8xb7SKT8hcQYpeOkiuVxE6lfutGg2ALVN95bnJJ4xuriujHuU3lcW2PODdIYaE=
-X-Received: by 2002:ab0:284a:: with SMTP id c10mr3352249uaq.106.1622211310248;
- Fri, 28 May 2021 07:15:10 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=I6AUYDbxGcKMjp7sXFSR6vCeNgCP0VTfXlRJ7azZ9Yc=;
+        b=R2xcStw61XH0kP+f1L+YbumTSxfdw0Y1Kiv2kbOlPGYxeF2DebbxmV6Bg6IcUJD06d
+         x5gDb19eP8dbfa8cYl1fJDB0/HMygX1uORXXZnQ2vdZz+su3jpEzvgXhiVgKmG4oNXIR
+         Aa+NhpHH9u1Piitsp/fVrDeSbUhp5bRYn4zzXaN22zYfY8QVxq8Y8BnMtxUP9e1fJZPK
+         96yYZvFB0DU0xV+fr9crArtjLYWjjEKK3i8JbJl0QyCSR0+KLzgxSHV7/NYa7e08vLRH
+         7YkrQfK0AlTmh1WWJesh28Frj9TWKfwCnted66MQlfPH5YMYwQvNVqCvKKVtmM0WmN8F
+         oxnA==
+X-Gm-Message-State: AOAM530ZJWlX620qm39tCxrvr/IN1pQ0KtXJQqdUPkU0xfkySLXlSZvo
+        toT8DmoacGNucE6k8pLfsIUeu/a6hkb8oZUB9WZbdyJcwG8=
+X-Google-Smtp-Source: ABdhPJzzA0Dh9P7rJswZkR6by0dwxYDrLbI36caf2MZ4Fa1d7tKltSdC+IF8drbLGdzZ03soNoXAFaGO2MFG1a8O4s4=
+X-Received: by 2002:ab0:2242:: with SMTP id z2mr3111908uan.58.1622211951116;
+ Fri, 28 May 2021 07:25:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1620138454.git.geert+renesas@glider.be> <ecfaf6be5e8c285db2bcc823bb1dd89931fa5c29.1620138454.git.geert+renesas@glider.be>
- <20210505073327.GE1009@ninjato> <CAMuHMdX3jw_Cm4hrg4QLr5H45nydmdbJzd7Rd-HY-rncOoKxvQ@mail.gmail.com>
- <YLD1dCO8O6uZppEV@kunai>
-In-Reply-To: <YLD1dCO8O6uZppEV@kunai>
+References: <20210528111049.1804800-1-geert@linux-m68k.org> <YLD5N1OMXFg3yHp9@kunai>
+In-Reply-To: <YLD5N1OMXFg3yHp9@kunai>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 May 2021 16:14:58 +0200
-Message-ID: <CAMuHMdWsX=jaZVpbMeFp0kgKppbTyE9RwUX7oWNabcP3m9EQbA@mail.gmail.com>
-Subject: Re: [PATCH/RFC 4/6] dt-bindings: i2c: renesas,iic: Convert to json-schema
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
+Date:   Fri, 28 May 2021 16:25:39 +0200
+Message-ID: <CAMuHMdXKtbp3zVO6OY3NugVA3wUQjmvy5rLKJPrTjOuYS2wMOg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: i2c: i2c-mux: Remove reset-active-low from
+ ssd1307fb examples
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Peter Rosin <peda@axentia.se>, Maxime Ripard <mripard@kernel.org>,
         Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
@@ -52,36 +49,53 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Wolfram,
 
-On Fri, May 28, 2021 at 3:51 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > In addition, Wolfram tried transmitting something on R-Car H2 from
-> > the U-Boot prompt, and noticed the ICINT.ADTE bit is set afterwards,
-> > indicating success.
->
-> Note that I tested this basic test on E2 as well.
->
-> > As the Linux (or other OS?) i2c driver doesn't use automatic
-> > transmission, and it's very unlikely it ever will (anyone with a
-> > use case?), I'm inclined to simplify, and declare all IIC instances
-> > compatible with the generic version.
-> > If we ever want to implement support for automatic transmission,
-> > we can still differentiate by the SoC-specific compatible values,
-> > as they are present anyway, and may have to resort to checking
-> > e.g. instance base addresses anyway.
+On Fri, May 28, 2021 at 4:07 PM Wolfram Sang <wsa@kernel.org> wrote:
+> On Fri, May 28, 2021 at 01:10:49PM +0200, Geert Uytterhoeven wrote:
+> > The "reset-active-low" property was removed from the ssd1307fb bindings
+> > in commit 519b4dba586198ee ("fbdev: ssd1307fb: Remove reset-active-low
+> > from the DT binding document") and from the ssd1307fb binding examples
+> > in commit 7d7e58d30e046d34 ("dt-bindings: display: ssd1307fb: Remove
+> > reset-active-low from examples").
 > >
-> > Thoughts? Thanks!
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 >
-> I agree. So, if nobody speaks up in the next days, I will apply this
-> patch as is.
+> Now we have a conflict with this series from Rob: "[PATCH v2 0/6]
+> dt-bindings: Convert mux bindings to schema"
 
-Actually I'm more inclined to drop the special handling for the compatible
-values in the fourth set of items.  I.e. move them to the second and third
-set, and update the DTS files....
+Sorry, I had checked that my patch applies to today's linux-next,
+and wasn't aware of Rob's series.
 
-> Thanks for your investigating!
+> My suggestion would be that Rob adds this on top of his series?
+> Or he provides an immutable branch for me, so I can apply this patch on
+> top then?
 
-You're welcome.
-Have a nice weekend!
+Alternatively, can you just drop the second chunk?
+
+> > --- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
+> > +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
+> > @@ -62,7 +62,6 @@ Example:
+> >                               reg = <0x3c>;
+> >                               pwms = <&pwm 4 3000>;
+> >                               reset-gpios = <&gpio2 7 1>;
+> > -                             reset-active-low;
+> >                       };
+> >               };
+
+This one is still valid.
+
+> > --- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt
+> > +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt
+> > @@ -80,7 +80,6 @@ Example:
+> >                               reg = <0x3c>;
+> >                               pwms = <&pwm 4 3000>;
+> >                               reset-gpios = <&gpio2 7 1>;
+> > -                             reset-active-low;
+> >                       };
+> >               };
+
+This one no longer is, as Rob dropped the example during the conversion.
+
+Thanks!
 
 Gr{oetje,eeting}s,
 
