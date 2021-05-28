@@ -2,112 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD2E393FCF
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 11:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAAF8393FD4
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 11:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234520AbhE1JYn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 May 2021 05:24:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50940 "EHLO mail.kernel.org"
+        id S235991AbhE1JZP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 May 2021 05:25:15 -0400
+Received: from mga11.intel.com ([192.55.52.93]:63633 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230205AbhE1JYn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 28 May 2021 05:24:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 57F896127A;
-        Fri, 28 May 2021 09:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622193789;
-        bh=MjONBw7wRUJTyBcaMGUBEu7fsH8mQc/WqqIXCP5czV8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ddzvog6ftfvS2jFuWUTZJrqBMCMsIQ5RnXMAX6ZXWdl51PumQv/6ac+tiArzNG1D0
-         9bwz/Dl/oOt8qKaRnVbtm6zy66cgCK0aC9YH5Ms8IM1H8gWpKWiCimtYDl/oING8zw
-         pRaZkn2OymFwpH7QTMdutQlXEalGJ8+iJFbnStSY+Ry72u40qrQHwjYLiyBICaca7s
-         /HvE8CuONVPdZw+e33Iu1yxoQ8WamgS7EAsoH+GIHTlCezJh2sJcXLJhZrrPXBLBKV
-         AycmSI+1TlaZurn+JlgyFmZXQL4UKAhsLnIfQvKHkF3zTIRGtAcsRefW2Bsi0huYZ8
-         QQCx8meKaYA6A==
-Date:   Fri, 28 May 2021 11:23:06 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        devicetree@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Scott Branden <sbranden@broadcom.com>
-Subject: Re: [PATCH] dt-bindings: i2c: brcm,iproc-i2c: convert to the
- json-schema
-Message-ID: <YLC2en7Mj7kurlCd@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        devicetree@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Scott Branden <sbranden@broadcom.com>
-References: <20210512160750.15183-1-zajec5@gmail.com>
- <1620844516.523024.204087.nullmailer@robh.at.kernel.org>
+        id S236007AbhE1JZP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 May 2021 05:25:15 -0400
+IronPort-SDR: YyqMaewHJMiDRaROYAaP+F7muYyAgTzM/y8OSWhn5OGN9l4Q4N+dkSPqzLz6OkI6iShznyqt81
+ 8zbTCFMt7DbA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9997"; a="199887478"
+X-IronPort-AV: E=Sophos;i="5.83,229,1616482800"; 
+   d="scan'208";a="199887478"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2021 02:23:36 -0700
+IronPort-SDR: OYJiS7GMVN3kdCP0T3Fk5QW14KYnzMOD98Qg35WhHpFHrXVXzw//2E/90UMf61risilBjandaz
+ r9+dIO/YD33g==
+X-IronPort-AV: E=Sophos;i="5.83,229,1616482800"; 
+   d="scan'208";a="465818184"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2021 02:23:33 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lmYiJ-00FHHv-24; Fri, 28 May 2021 12:23:31 +0300
+Date:   Fri, 28 May 2021 12:23:31 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 1/6] i2c: acpi: Export i2c_acpi_find_client_by_adev()
+ for users
+Message-ID: <YLC2k/5hqNNBnN6e@smile.fi.intel.com>
+References: <20210526124322.48915-1-andriy.shevchenko@linux.intel.com>
+ <YLAAedlB6UaJQh0X@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sU1nzSdQCIUU5nt7"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1620844516.523024.204087.nullmailer@robh.at.kernel.org>
+In-Reply-To: <YLAAedlB6UaJQh0X@kunai>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, May 27, 2021 at 10:26:33PM +0200, Wolfram Sang wrote:
+> On Wed, May 26, 2021 at 03:43:17PM +0300, Andy Shevchenko wrote:
+> > There is at least one user that will gain from the
+> > i2c_acpi_find_client_by_adev() being exported.
+> 
+> No objections per se. But as the user is in staging, I want to ask if
+> the use there is really a solution we would also accept outside of
+> staging? Or is it a hack?
 
---sU1nzSdQCIUU5nt7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The similar OF API is exported for users, although amount of users and their
+locations are different. The AtomISP driver is not in the best shape, I agree,
+but for now any possible steps to make it better would be good steps in my
+opinion. Later we may see if we can do this piece of code differently (IIRC
+current way is probably the best taking into account legacy platforms support).
 
-Hi Rob,
-
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->=20
-> yamllint warnings/errors:
->=20
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/i2c/brcm,iproc-i2c.example.dt.yaml:0:0:=
- /example-0/i2c@18008000/wm8750@1a: failed to match any schema with compati=
-ble: ['wlf,wm8750']
-
-A generic question:
-
-So sound/wm8750.txt was not converted yet. However, if this conversion
-is fine otherwise, I'd vote to apply it nonetheless because it is one
-conversion less to do then. Alternatively, we could change the example
-to include a simple EEPROM which has an already converted binding doc.
-
-What is the procedure here?
-
-All the best and thanks for your work!
-
-   Wolfram
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---sU1nzSdQCIUU5nt7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCwtnYACgkQFA3kzBSg
-KbY50g//Z/96gKh+DxM8IicUGujbkEgNAgF6V5iKIFkGtFN83AvfB1uoCcF1vGts
-oSnOdiyYqtFbQi+6rWYqsApEYwywKBdeLNOLvFHMgC9dvbl+pw6Q0URFsl7IvXab
-RWIJFv5FakRdGLRHqE0i2zWkKFjxzuyj32inqpx2HXHF2tQ4UpZnH11lD/oIJqul
-WKG+5fuWNVwjd8hqTca+3fQNyZzOlPyk815JNR5ZUVd3vZ5U+IymIQBc9q0KudgQ
-K5GfP85dVk28vMxzuM5eih6hnCmkaD1WCKeclroesPFIbLnm4LhUANLpMn/lIaEZ
-pfAQoi5NBciVG65up8vFJ6onGBCGh+TsEn05djsJjO2y2qRzpAlz/sGEb/UpyegM
-ZhzSQmvOLn5Ic3PRqCM0ZzGj2UgIglo+rb6wP34j3j4TlTPqpOEsu+hGHuou9+7p
-kP5T9APqYxFmtW/5RHQVxnEjxVxt+7jxSHrfNuVj+iJOiS6epcIWzo28RXna/Cei
-h+Yf03aRWCIx6B64VO6921qJzgROcSgpSSS62EB2xFHHrpzjGzHOLuf58eukjGyb
-NbekCRn6ttQrRAdbxXfnGWX+egDLpvxMKvHPbbFqBtHqZRhLOr47LcO/3/PHEs++
-lBLL+2fqKn0VsvGrPhi6U/pOghA27HdmOJ7jrkj6bGyb1gpFCSE=
-=Ylob
------END PGP SIGNATURE-----
-
---sU1nzSdQCIUU5nt7--
