@@ -2,126 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C393943CE
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 16:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5383943E7
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 16:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbhE1OJa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 May 2021 10:09:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44390 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236436AbhE1OJ3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 28 May 2021 10:09:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 84BE8611CA;
-        Fri, 28 May 2021 14:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622210875;
-        bh=iyB+zXEfKoOLUBLJ6l4+sNK6lu0AcC+Ota61YjKmV18=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=thpUzJ2MbVAqlNv/rs5x+TXe91Knga76ol/gJhZkfU84tLH39Uh1qS+UUy0ByFGDf
-         LlTUK6yc5lyCg6seLj+EfA/js+k/rHOiQZZREMBqfxLldh6usxKeeTeT0SW7wkumXO
-         LzagjgBCInJsq58ToMjr8WNui7RXObyVp/iHDUXJ036GCyBhtGj8EGOpFuO0nhBWbw
-         NwLZmarT3Nt7pPS/xcazaNRFradlJElJKoTFLOFuHDKAu33ynum68GcdYJFgQ+VcRb
-         wpGc0XNRQN7Uo/0y3cBooAGrRMvBqXIK48oIKw7WkczhYS9b+HmbkYKS6L4gISCk48
-         /b9uskLlN8BTQ==
-Date:   Fri, 28 May 2021 16:07:51 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Peter Rosin <peda@axentia.se>, Maxime Ripard <mripard@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: i2c-mux: Remove reset-active-low from
- ssd1307fb examples
-Message-ID: <YLD5N1OMXFg3yHp9@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Maxime Ripard <mripard@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20210528111049.1804800-1-geert@linux-m68k.org>
+        id S235266AbhE1OQs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 May 2021 10:16:48 -0400
+Received: from mail-ua1-f41.google.com ([209.85.222.41]:41638 "EHLO
+        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230080AbhE1OQs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 May 2021 10:16:48 -0400
+Received: by mail-ua1-f41.google.com with SMTP id g34so2203418uah.8;
+        Fri, 28 May 2021 07:15:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=qBo7OeIX4Ym22FQ+QNowtCfIZyHTAuCXsUMFxid9Jlw=;
+        b=sVQyOeJ7UVTJM8YpFfJf/ld0wI87HPT5M5P2LTNxCVvOYD2ac8M1dEBc2pzggMm0RU
+         tYaDZju7bS3sRmAFleKgKJapsz+UOWm7EhJmxSI2sTsTREcsCdnJGvidvIIZRf4ejFo0
+         CTYnL26CcTHMAUTaKDIPRYRPTVpfSqCPdPhkvao/ScbLH0oGTZ59bw7mWWIbIYX6alqd
+         eRzslY8JUOhOe38EuCEfEOuvKqxP7nkrSYHLAsTlItfT1dr851LjdvxjfvQolcw1QKHe
+         7/UFOh8WyjlIn8BgTzVNU/UrYAl975/BaGck8U+xl0H8T9HL7qSbacFSZrZaMXi/Efxc
+         c7aQ==
+X-Gm-Message-State: AOAM531NRgWv9rUvN0vCmeDQyJK1UYzrSg3U7zyQbuGkjnt4JYoZb/Qs
+        hT7NvtKuthANZYmtd1avjKHkUtCMO0LXyjjgJ4c=
+X-Google-Smtp-Source: ABdhPJzivupCL8G870iZ6lPRvpqaM8xb7SKT8hcQYpeOkiuVxE6lfutGg2ALVN95bnJJ4xuriujHuU3lcW2PODdIYaE=
+X-Received: by 2002:ab0:284a:: with SMTP id c10mr3352249uaq.106.1622211310248;
+ Fri, 28 May 2021 07:15:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9xSq53ETjVfImI7D"
-Content-Disposition: inline
-In-Reply-To: <20210528111049.1804800-1-geert@linux-m68k.org>
+References: <cover.1620138454.git.geert+renesas@glider.be> <ecfaf6be5e8c285db2bcc823bb1dd89931fa5c29.1620138454.git.geert+renesas@glider.be>
+ <20210505073327.GE1009@ninjato> <CAMuHMdX3jw_Cm4hrg4QLr5H45nydmdbJzd7Rd-HY-rncOoKxvQ@mail.gmail.com>
+ <YLD1dCO8O6uZppEV@kunai>
+In-Reply-To: <YLD1dCO8O6uZppEV@kunai>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 28 May 2021 16:14:58 +0200
+Message-ID: <CAMuHMdWsX=jaZVpbMeFp0kgKppbTyE9RwUX7oWNabcP3m9EQbA@mail.gmail.com>
+Subject: Re: [PATCH/RFC 4/6] dt-bindings: i2c: renesas,iic: Convert to json-schema
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
---9xSq53ETjVfImI7D
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, May 28, 2021 at 3:51 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > In addition, Wolfram tried transmitting something on R-Car H2 from
+> > the U-Boot prompt, and noticed the ICINT.ADTE bit is set afterwards,
+> > indicating success.
+>
+> Note that I tested this basic test on E2 as well.
+>
+> > As the Linux (or other OS?) i2c driver doesn't use automatic
+> > transmission, and it's very unlikely it ever will (anyone with a
+> > use case?), I'm inclined to simplify, and declare all IIC instances
+> > compatible with the generic version.
+> > If we ever want to implement support for automatic transmission,
+> > we can still differentiate by the SoC-specific compatible values,
+> > as they are present anyway, and may have to resort to checking
+> > e.g. instance base addresses anyway.
+> >
+> > Thoughts? Thanks!
+>
+> I agree. So, if nobody speaks up in the next days, I will apply this
+> patch as is.
 
-On Fri, May 28, 2021 at 01:10:49PM +0200, Geert Uytterhoeven wrote:
-> The "reset-active-low" property was removed from the ssd1307fb bindings
-> in commit 519b4dba586198ee ("fbdev: ssd1307fb: Remove reset-active-low
-> from the DT binding document") and from the ssd1307fb binding examples
-> in commit 7d7e58d30e046d34 ("dt-bindings: display: ssd1307fb: Remove
-> reset-active-low from examples").
->=20
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Actually I'm more inclined to drop the special handling for the compatible
+values in the fourth set of items.  I.e. move them to the second and third
+set, and update the DTS files....
 
-Now we have a conflict with this series from Rob: "[PATCH v2 0/6]
-dt-bindings: Convert mux bindings to schema"
+> Thanks for your investigating!
 
-My suggestion would be that Rob adds this on top of his series?
-Or he provides an immutable branch for me, so I can apply this patch on
-top then?
+You're welcome.
+Have a nice weekend!
 
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt  | 1 -
->  Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt | 1 -
->  2 files changed, 2 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt b/Doc=
-umentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
-> index 21da3ecbb3700c06..1bf267302251bb63 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
-> @@ -62,7 +62,6 @@ Example:
->  				reg =3D <0x3c>;
->  				pwms =3D <&pwm 4 3000>;
->  				reset-gpios =3D <&gpio2 7 1>;
-> -				reset-active-low;
->  			};
->  		};
-> =20
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt b/Do=
-cumentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt
-> index 8b444b94e92fde83..51356fdf2becc3f6 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt
-> @@ -80,7 +80,6 @@ Example:
->  				reg =3D <0x3c>;
->  				pwms =3D <&pwm 4 3000>;
->  				reset-gpios =3D <&gpio2 7 1>;
-> -				reset-active-low;
->  			};
->  		};
-> =20
-> --=20
-> 2.25.1
->=20
+Gr{oetje,eeting}s,
 
---9xSq53ETjVfImI7D
-Content-Type: application/pgp-signature; name="signature.asc"
+                        Geert
 
------BEGIN PGP SIGNATURE-----
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCw+TcACgkQFA3kzBSg
-KbaRqg/8Dh7X/oMDCos5e9jW2tODdCiw0+2xG9KHq7eNYI9Na9R2P9WkDLqkOMpk
-VIs+1uvtSAP0O2ZlsdbvCGkyZD7Eqjg/bU1MKmSAwtPoVO+mjxFbdSQqKTxfsMOw
-rhYTBlW/Y/Be5DbwJYPNuKL0RuC2UzVMRE/vr5jOb8rb65fMpoyz4hpZtWLBuavH
-PGl5CznG18azNM+P1JV9V4BfrzF4kFqgpLew+tSDOgZ4rhpqDh9SdsdDw5w8XAxM
-yLEduVinEqwNn3gV5vXKbbgrbXSDUZzpmlqItDSQa+O0BYYv5ryJLCFjSslxr3q4
-vN6lJaRxYmhP/ddwzjYkrVsnEl8QszLFVrL8D9RuAfjM0/BKCCx2Pw92XECJ76oh
-nx8tbz3MbQPF+irH1VpmGrJ9/VHWGNrp1Lqfn+v0ptXogdEEjHHg8zGTQiQkilwV
-mBjxnE3GafZiXq0GHS2c5ZCt4+/lFrHxYJOH6dZcqdX4wSB5LS0QQzYlJr4FpNH+
-Lqu1pbS0VJqwMU9ye6GpRLdcH/5itAuW0/rfVZ6AWh1W47ly02W94tRV2+VD2Ya1
-LoojuUoaZNzSCU548Xc6DkIaj5CZfseJJpRu0RpwAg/roS+3/h7FYEX3+SEWBx3H
-HeCrv3uRlNS+QNPPKCO6Ri65iDceDp91lWNmpghdxY+Y45bd7/I=
-=zijl
------END PGP SIGNATURE-----
-
---9xSq53ETjVfImI7D--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
