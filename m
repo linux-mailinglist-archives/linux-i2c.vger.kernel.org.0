@@ -2,82 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA933943B9
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 16:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C393943CE
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 16:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbhE1OD3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 May 2021 10:03:29 -0400
-Received: from www.zeus03.de ([194.117.254.33]:59474 "EHLO mail.zeus03.de"
+        id S236474AbhE1OJa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 May 2021 10:09:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44390 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233627AbhE1ODZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 28 May 2021 10:03:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=mosejSqzfpsohsvt8TG8Cc+GV5Rf
-        j8NU3vRUE9MBWu4=; b=zRu65FuPBkZuHU1NXnv4uvnDOD7VcXFAncyB0pYoD65Y
-        7tFkWbsjKXPiUPgnABoTbfhLFk2AJsuWKCJrdG7W4gr1K7bEv9t+Essbz4/O0ZRp
-        7SjgchpP+yMrzWMV9MwnFaJI7cayCcuTA+rh8kJ3F0iLU2ym28Ade1D2fuOgVYo=
-Received: (qmail 2395082 invoked from network); 28 May 2021 16:01:48 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 May 2021 16:01:48 +0200
-X-UD-Smtp-Session: l3s3148p1@kSccUWTDQuEgAwDPXwoXAEGfoBQqamfc
-Date:   Fri, 28 May 2021 16:01:47 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] i2c: core: Make debug message even more debuggish
-Message-ID: <YLD3y3rtMI4jAxxu@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210528091351.70699-1-andriy.shevchenko@linux.intel.com>
+        id S236436AbhE1OJ3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 May 2021 10:09:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 84BE8611CA;
+        Fri, 28 May 2021 14:07:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622210875;
+        bh=iyB+zXEfKoOLUBLJ6l4+sNK6lu0AcC+Ota61YjKmV18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=thpUzJ2MbVAqlNv/rs5x+TXe91Knga76ol/gJhZkfU84tLH39Uh1qS+UUy0ByFGDf
+         LlTUK6yc5lyCg6seLj+EfA/js+k/rHOiQZZREMBqfxLldh6usxKeeTeT0SW7wkumXO
+         LzagjgBCInJsq58ToMjr8WNui7RXObyVp/iHDUXJ036GCyBhtGj8EGOpFuO0nhBWbw
+         NwLZmarT3Nt7pPS/xcazaNRFradlJElJKoTFLOFuHDKAu33ynum68GcdYJFgQ+VcRb
+         wpGc0XNRQN7Uo/0y3cBooAGrRMvBqXIK48oIKw7WkczhYS9b+HmbkYKS6L4gISCk48
+         /b9uskLlN8BTQ==
+Date:   Fri, 28 May 2021 16:07:51 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Peter Rosin <peda@axentia.se>, Maxime Ripard <mripard@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: i2c-mux: Remove reset-active-low from
+ ssd1307fb examples
+Message-ID: <YLD5N1OMXFg3yHp9@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Maxime Ripard <mripard@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20210528111049.1804800-1-geert@linux-m68k.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WWhmVuFii2NK0j4u"
+        protocol="application/pgp-signature"; boundary="9xSq53ETjVfImI7D"
 Content-Disposition: inline
-In-Reply-To: <20210528091351.70699-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210528111049.1804800-1-geert@linux-m68k.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---WWhmVuFii2NK0j4u
-Content-Type: text/plain; charset=utf-8
+--9xSq53ETjVfImI7D
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 28, 2021 at 12:13:50PM +0300, Andy Shevchenko wrote:
-> One may notice that dev_printk(KERN_DEBUG ...) is *not* an equivalent
-> to dev_dbg(). It will be printed whenever loglevel is high enough.
-> And currently it will be the only message in the I=C2=B2C core in some
-> configurations that got printed under above conditions.
+On Fri, May 28, 2021 at 01:10:49PM +0200, Geert Uytterhoeven wrote:
+> The "reset-active-low" property was removed from the ssd1307fb bindings
+> in commit 519b4dba586198ee ("fbdev: ssd1307fb: Remove reset-active-low
+> from the DT binding document") and from the ssd1307fb binding examples
+> in commit 7d7e58d30e046d34 ("dt-bindings: display: ssd1307fb: Remove
+> reset-active-low from examples").
 >=20
-> Moving to dev_dbg() will hide it in the configurations where Dynamic Debug
-> is enabled and hence align with all other debug messages in the I=C2=B2C =
-core..
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Now we have a conflict with this series from Rob: "[PATCH v2 0/6]
+dt-bindings: Convert mux bindings to schema"
+
+My suggestion would be that Rob adds this on top of his series?
+Or he provides an immutable branch for me, so I can apply this patch on
+top then?
+
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt  | 1 -
+>  Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt | 1 -
+>  2 files changed, 2 deletions(-)
 >=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt b/Doc=
+umentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
+> index 21da3ecbb3700c06..1bf267302251bb63 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
+> @@ -62,7 +62,6 @@ Example:
+>  				reg =3D <0x3c>;
+>  				pwms =3D <&pwm 4 3000>;
+>  				reset-gpios =3D <&gpio2 7 1>;
+> -				reset-active-low;
+>  			};
+>  		};
+> =20
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt b/Do=
+cumentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt
+> index 8b444b94e92fde83..51356fdf2becc3f6 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.txt
+> @@ -80,7 +80,6 @@ Example:
+>  				reg =3D <0x3c>;
+>  				pwms =3D <&pwm 4 3000>;
+>  				reset-gpios =3D <&gpio2 7 1>;
+> -				reset-active-low;
+>  			};
+>  		};
+> =20
+> --=20
+> 2.25.1
+>=20
 
-Applied to for-next, thanks!
-
-
---WWhmVuFii2NK0j4u
+--9xSq53ETjVfImI7D
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCw98sACgkQFA3kzBSg
-KbamaA//eNoMbrQMeNh/xy5vPj5eREfsvtuucQ48SVbDdFIT9SE4ZOj55FDiPFoy
-6d/hDukvfJG7WtsBXuueZjdhc/90UFCRU/Yt4e1No+30MHn+j5cak/AyHkB2Id6E
-M5cP2m6ZwmH2CcRqTO5F5JijG03emU5YR5c2zaJaz8+jLeIwkn1hOJmiQgZ7kkzw
-FuITDMwDU1QH3LVdsBmcDk1LUdZ613tp1J84Y8+HpcdSw1Fupn0N9I57hB0S0/jf
-gky7W4OcJ3ZkWHhCrwLOadGoIMORQEsbxlni/1625v3zpOl+zuvBbisptqV+qFlA
-+dV9EzTQhfAbTb9d1PDj9KApnMa/PsiUacr0xMpjCXTGx5zYVkiYGVKV/J1B4QpU
-zYb+mhzs5uI8yjm/YfjC2UZ+dccCBGEPkkRAUCrlHuwpcsBPw4MeJ+v26FNw+ieL
-ZuYSR/yjG8XjU/M1HCVRx3d2F/RoV+y5LSR2CNYnuAKrq9CCifcO1K16HiEgnAX+
-TekHpkLMW/86H0xpKvASX/kFyiVE4uhWIQNfmag9/1NBEHfpQdqrpM9aIfjmtgla
-cG75dEYswbpToPSKvPum/eBuKxEP3/cmPAXp852IQ2TaQetevdnD485FglwcxPUa
-4U5BVE80F7E/yPq1RdRJNtaUEGOYsOwaUWwAMwQjgrwBac0KKBI=
-=x/EN
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCw+TcACgkQFA3kzBSg
+KbaRqg/8Dh7X/oMDCos5e9jW2tODdCiw0+2xG9KHq7eNYI9Na9R2P9WkDLqkOMpk
+VIs+1uvtSAP0O2ZlsdbvCGkyZD7Eqjg/bU1MKmSAwtPoVO+mjxFbdSQqKTxfsMOw
+rhYTBlW/Y/Be5DbwJYPNuKL0RuC2UzVMRE/vr5jOb8rb65fMpoyz4hpZtWLBuavH
+PGl5CznG18azNM+P1JV9V4BfrzF4kFqgpLew+tSDOgZ4rhpqDh9SdsdDw5w8XAxM
+yLEduVinEqwNn3gV5vXKbbgrbXSDUZzpmlqItDSQa+O0BYYv5ryJLCFjSslxr3q4
+vN6lJaRxYmhP/ddwzjYkrVsnEl8QszLFVrL8D9RuAfjM0/BKCCx2Pw92XECJ76oh
+nx8tbz3MbQPF+irH1VpmGrJ9/VHWGNrp1Lqfn+v0ptXogdEEjHHg8zGTQiQkilwV
+mBjxnE3GafZiXq0GHS2c5ZCt4+/lFrHxYJOH6dZcqdX4wSB5LS0QQzYlJr4FpNH+
+Lqu1pbS0VJqwMU9ye6GpRLdcH/5itAuW0/rfVZ6AWh1W47ly02W94tRV2+VD2Ya1
+LoojuUoaZNzSCU548Xc6DkIaj5CZfseJJpRu0RpwAg/roS+3/h7FYEX3+SEWBx3H
+HeCrv3uRlNS+QNPPKCO6Ri65iDceDp91lWNmpghdxY+Y45bd7/I=
+=zijl
 -----END PGP SIGNATURE-----
 
---WWhmVuFii2NK0j4u--
+--9xSq53ETjVfImI7D--
