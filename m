@@ -2,107 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7B939439B
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 15:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA933943B9
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 May 2021 16:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236076AbhE1Nx0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 May 2021 09:53:26 -0400
-Received: from www.zeus03.de ([194.117.254.33]:57012 "EHLO mail.zeus03.de"
+        id S235874AbhE1OD3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 May 2021 10:03:29 -0400
+Received: from www.zeus03.de ([194.117.254.33]:59474 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235676AbhE1Nx0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 28 May 2021 09:53:26 -0400
+        id S233627AbhE1ODZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 28 May 2021 10:03:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=nU0ILsvL1e7YkX+Q6Ium0QVVH0WE
-        +8p12XWu7kbQ4Z4=; b=CtOSCC26lJEJAI5FBtolb1D4QokvistWYY7olov2uqRN
-        WrG2R5/92SCcjIGzhHq3FyU6IWx+XVFnhmsSj5ervVvXlOoD7XUqzaFFh2HALiRT
-        bFLtQZTRSEo06Wn48SRTNHcPLxN1t1XJeSPDFcvHVxILH9nngaWZf48t5OKa/9U=
-Received: (qmail 2391605 invoked from network); 28 May 2021 15:51:50 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 May 2021 15:51:50 +0200
-X-UD-Smtp-Session: l3s3148p1@cadsLWTDDOEgAwDPXwoXAEGfoBQqamfc
-Date:   Fri, 28 May 2021 15:51:48 +0200
+        :content-type:in-reply-to; s=k1; bh=mosejSqzfpsohsvt8TG8Cc+GV5Rf
+        j8NU3vRUE9MBWu4=; b=zRu65FuPBkZuHU1NXnv4uvnDOD7VcXFAncyB0pYoD65Y
+        7tFkWbsjKXPiUPgnABoTbfhLFk2AJsuWKCJrdG7W4gr1K7bEv9t+Essbz4/O0ZRp
+        7SjgchpP+yMrzWMV9MwnFaJI7cayCcuTA+rh8kJ3F0iLU2ym28Ade1D2fuOgVYo=
+Received: (qmail 2395082 invoked from network); 28 May 2021 16:01:48 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 May 2021 16:01:48 +0200
+X-UD-Smtp-Session: l3s3148p1@kSccUWTDQuEgAwDPXwoXAEGfoBQqamfc
+Date:   Fri, 28 May 2021 16:01:47 +0200
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH/RFC 4/6] dt-bindings: i2c: renesas,iic: Convert to
- json-schema
-Message-ID: <YLD1dCO8O6uZppEV@kunai>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] i2c: core: Make debug message even more debuggish
+Message-ID: <YLD3y3rtMI4jAxxu@kunai>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
-References: <cover.1620138454.git.geert+renesas@glider.be>
- <ecfaf6be5e8c285db2bcc823bb1dd89931fa5c29.1620138454.git.geert+renesas@glider.be>
- <20210505073327.GE1009@ninjato>
- <CAMuHMdX3jw_Cm4hrg4QLr5H45nydmdbJzd7Rd-HY-rncOoKxvQ@mail.gmail.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210528091351.70699-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5GjH/ziWN9sQFeFH"
+        protocol="application/pgp-signature"; boundary="WWhmVuFii2NK0j4u"
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdX3jw_Cm4hrg4QLr5H45nydmdbJzd7Rd-HY-rncOoKxvQ@mail.gmail.com>
+In-Reply-To: <20210528091351.70699-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---5GjH/ziWN9sQFeFH
-Content-Type: text/plain; charset=us-ascii
+--WWhmVuFii2NK0j4u
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Geert,
-
-> In addition, Wolfram tried transmitting something on R-Car H2 from
-> the U-Boot prompt, and noticed the ICINT.ADTE bit is set afterwards,
-> indicating success.
-
-Note that I tested this basic test on E2 as well.
-
-> As the Linux (or other OS?) i2c driver doesn't use automatic
-> transmission, and it's very unlikely it ever will (anyone with a
-> use case?), I'm inclined to simplify, and declare all IIC instances
-> compatible with the generic version.
-> If we ever want to implement support for automatic transmission,
-> we can still differentiate by the SoC-specific compatible values,
-> as they are present anyway, and may have to resort to checking
-> e.g. instance base addresses anyway.
+On Fri, May 28, 2021 at 12:13:50PM +0300, Andy Shevchenko wrote:
+> One may notice that dev_printk(KERN_DEBUG ...) is *not* an equivalent
+> to dev_dbg(). It will be printed whenever loglevel is high enough.
+> And currently it will be the only message in the I=C2=B2C core in some
+> configurations that got printed under above conditions.
 >=20
-> Thoughts? Thanks!
+> Moving to dev_dbg() will hide it in the configurations where Dynamic Debug
+> is enabled and hence align with all other debug messages in the I=C2=B2C =
+core..
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I agree. So, if nobody speaks up in the next days, I will apply this
-patch as is.
-
-Thanks for your investigating!
-
-   Wolfram
+Applied to for-next, thanks!
 
 
---5GjH/ziWN9sQFeFH
+--WWhmVuFii2NK0j4u
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCw9XQACgkQFA3kzBSg
-Kba/HhAAtJgl3fiOwtLIOh1PQZjPGi28Q8kpmhka3f4ADiMw/NE8NKiNPPQdyQvU
-5Z4PTqnNUANvgRK5DDdNJmtTwDgnEm74kqmk+ONlu7BaoAbqsXJlcrxzRV0Rrdl4
-qUgxJD6B/m9hKs7yN5a04I7knUvtjRcEQ+mIPfkapDZApPOCfUnY6/InqahteOEl
-1HhNUgTVmAgLzKMm4VMyxXwM39EH2iyAti7l2Iab6lDiu6j/YrVK83ezN2B+EEgq
-oOqRcM/uH8Veucoa3BSnzplw+fwJx9nGDJsTx90OinjUK7WIAxEW3+rPsYNM91OG
-iIqL7cBjAh+ce9pGLUFnir5mu2wMOlRRqclkZ6r5GqAgkK1MxG50BNENXA8bxMx4
-MCAv3EMpTxrc2lJnDNUFPXFIDiyrIF+9WxOy4JvZuvVQa1+Faka+9KoYzfsrrQD4
-PhMs300u5bZm8nkXgu6SdUR3hSHO7eaXQCBHGvhqk6jpzCiWWhJcj0XTHSVRa35/
-cnITW1vQGYAhsv5wf49XDNttxlPIkfWrDRNrph73okanfaAMqYBWovSqkpPFkCIP
-btuleyL8nsC3xpz/qEFqOs6SmR3y23Ur4PKEqIOU5t/c4aIl4DjYx5tUs0c8p9+2
-Q8oBRhwvXDn4TexaWIV6xtK3JWkZ8h10/LvxT2mM99ryU3ukV3k=
-=OhYB
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCw98sACgkQFA3kzBSg
+KbamaA//eNoMbrQMeNh/xy5vPj5eREfsvtuucQ48SVbDdFIT9SE4ZOj55FDiPFoy
+6d/hDukvfJG7WtsBXuueZjdhc/90UFCRU/Yt4e1No+30MHn+j5cak/AyHkB2Id6E
+M5cP2m6ZwmH2CcRqTO5F5JijG03emU5YR5c2zaJaz8+jLeIwkn1hOJmiQgZ7kkzw
+FuITDMwDU1QH3LVdsBmcDk1LUdZ613tp1J84Y8+HpcdSw1Fupn0N9I57hB0S0/jf
+gky7W4OcJ3ZkWHhCrwLOadGoIMORQEsbxlni/1625v3zpOl+zuvBbisptqV+qFlA
++dV9EzTQhfAbTb9d1PDj9KApnMa/PsiUacr0xMpjCXTGx5zYVkiYGVKV/J1B4QpU
+zYb+mhzs5uI8yjm/YfjC2UZ+dccCBGEPkkRAUCrlHuwpcsBPw4MeJ+v26FNw+ieL
+ZuYSR/yjG8XjU/M1HCVRx3d2F/RoV+y5LSR2CNYnuAKrq9CCifcO1K16HiEgnAX+
+TekHpkLMW/86H0xpKvASX/kFyiVE4uhWIQNfmag9/1NBEHfpQdqrpM9aIfjmtgla
+cG75dEYswbpToPSKvPum/eBuKxEP3/cmPAXp852IQ2TaQetevdnD485FglwcxPUa
+4U5BVE80F7E/yPq1RdRJNtaUEGOYsOwaUWwAMwQjgrwBac0KKBI=
+=x/EN
 -----END PGP SIGNATURE-----
 
---5GjH/ziWN9sQFeFH--
+--WWhmVuFii2NK0j4u--
