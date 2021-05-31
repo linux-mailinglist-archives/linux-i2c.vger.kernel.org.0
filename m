@@ -2,93 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E59395508
-	for <lists+linux-i2c@lfdr.de>; Mon, 31 May 2021 07:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4F6395ABB
+	for <lists+linux-i2c@lfdr.de>; Mon, 31 May 2021 14:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbhEaF0K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 31 May 2021 01:26:10 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:28103 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbhEaF0J (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 31 May 2021 01:26:09 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1622438670; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=FkvZYbRbC/cAozRjP4BPGysEfk7mZXUuzUP30C8/JvY=;
- b=wi/LXyYkTYGnZ8vgzoqspxCuTt2vwfhnXLyQoApoiLvt9060phgVwMOY8z3ikEh84ScQE9+t
- WEIYLjMng+uwXGnZre8nrAcBSNFzPy/FlRE8AG74NCIpw4MZdot1kr/FVwoiXbubHQcTrUHd
- Vk4cr8GYsE93mV8AarXvx5BzTbA=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 60b47301e27c0cc77f0df7b4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 31 May 2021 05:24:17
- GMT
-Sender: rojay=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3AA25C4323A; Mon, 31 May 2021 05:24:17 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: rojay)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 866C0C4338A;
-        Mon, 31 May 2021 05:24:16 +0000 (UTC)
+        id S231501AbhEaMlh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 31 May 2021 08:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231327AbhEaMlg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 31 May 2021 08:41:36 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A109DC061574;
+        Mon, 31 May 2021 05:39:55 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id b17so13388550ede.0;
+        Mon, 31 May 2021 05:39:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:mime-version:content-transfer-encoding
+         :content-description:subject:to:from:date:reply-to;
+        bh=0b+RuiQoyEiCtXoor62bBGfumNTUO/BbXP6ZI1Era6U=;
+        b=p1sJBkLEwqLoQGK5FtasmPMu0bz/tuz9D+u8IufCFdk9Qu669tNwwD8TGTOlcLxt00
+         pvYdSSw+4gq+QofMP8PBX0Am6RUf/XEt4z/IiAQoqM738hAT6uLeZupkGevcFZH/xCJi
+         2HyRFCTn5PGmpG+YXrwis3XFi99Fs+Cbxj0uborq0AglioY2kBeAyYXHUT+zKzEjjZPd
+         JGtlIsiy3LxR1+SEdZfCXlOIA6JhdiGrDetKOKi5e9dDUu4BUsd5Hzax84AnAVrpvbF1
+         QuImrmrGBAsPtLvtw1k85gfXJ/awsZ4DhVtG/51VrIeF4we0s5DFRyJrofG+9SrV0H3L
+         erWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:content-description:subject:to:from:date
+         :reply-to;
+        bh=0b+RuiQoyEiCtXoor62bBGfumNTUO/BbXP6ZI1Era6U=;
+        b=AO/dLNdKc6vSG1X37Y80YHsi5CU48G7zlnVzkjkAkVO35+SnRJdSUofII4ZK9aa4pa
+         ZT2z3A9U+wzWD9ACW19NnWodEuYCe6CymrMnVgknfIIF4mPazVkIzBjLJc7T2n7rsGHZ
+         fzqYKgLl073rv9ICQLHUsC5XT184gq+JSPcWP4MM+uk5lyrXwsTkJHHsVzaVSO2ANDNR
+         a7vs7oI6WjRjibHRUTHIXV81ge/Oc/8YrOgEl64Cl9Mf2tUIpdG+QcnEFMmu590+jD/r
+         ke1SEi7uG5b9j8qk9iRvfZYaD8wj5c6T5sxxdaCdjR/J9nJM769mBGkHcTt2VDgGzPGk
+         IMag==
+X-Gm-Message-State: AOAM532foHeQr9izax02+3mtW6kVQpdnCDW53a9nBIhS/nym6dOn9LGG
+        LOBZ7QGKK8RAkqQJt5nnTJsiZBqyYhI=
+X-Google-Smtp-Source: ABdhPJx9AvbMYx+3dc9z4U3hBVl4jiABaPKa43+9iW9o8Y9TeDuzRgkzgGmKuEqQEeIIIa8FuxWAjA==
+X-Received: by 2002:aa7:dc17:: with SMTP id b23mr25001665edu.359.1622464794327;
+        Mon, 31 May 2021 05:39:54 -0700 (PDT)
+Received: from [10.5.50.90] ([196.170.43.166])
+        by smtp.gmail.com with ESMTPSA id k7sm4332682edq.80.2021.05.31.05.39.50
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 31 May 2021 05:39:53 -0700 (PDT)
+Message-ID: <60b4d919.1c69fb81.80335.5e76@mx.google.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 31 May 2021 10:54:16 +0530
-From:   rojay@codeaurora.org
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, skananth@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH V11 1/2] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-In-Reply-To: <YLClq6hZKUA1Y4ZW@kunai>
-References: <20210525131051.31250-1-rojay@codeaurora.org>
- <20210525131051.31250-2-rojay@codeaurora.org> <YLClq6hZKUA1Y4ZW@kunai>
-Message-ID: <f6cb21107dd7e7104bb40aabb8d2bf90@codeaurora.org>
-X-Sender: rojay@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hey!
+To:     Recipients <sultat655@gmail.com>
+From:   "Mr Jamie George" <sultat655@gmail.com>
+Date:   Mon, 31 May 2021 12:39:43 +0000
+Reply-To: jmgrge@gmail.com
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2021-05-28 13:41, Wolfram Sang wrote:
-> On Tue, May 25, 2021 at 06:40:50PM +0530, Roja Rani Yarubandi wrote:
->> If the hardware is still accessing memory after SMMU translation
->> is disabled (as part of smmu shutdown callback), then the
->> IOVAs (I/O virtual address) which it was using will go on the bus
->> as the physical addresses which will result in unknown crashes
->> like NoC/interconnect errors.
->> 
->> So, implement shutdown callback for i2c driver to suspend the bus
->> during system "reboot" or "shutdown".
->> 
->> Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the 
->> Qualcomm GENI I2C controller")
->> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
-> 
-> Do we need patch 1 after patch 2 was applied? I always thought all
-> devices are suspended before shutdown/reboot?
-> 
-
-Yes, both patch 1 and patch 2 are required.
-Devices are not suspended during shutdown/reboot.
-
-> Nice to see that 'mark_adapter_suspended' becomes useful again!
-
-Thanks,
-Roja
+Can i talk to you?
