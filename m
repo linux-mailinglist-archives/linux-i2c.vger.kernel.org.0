@@ -2,128 +2,218 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3696D395BDE
-	for <lists+linux-i2c@lfdr.de>; Mon, 31 May 2021 15:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D17C395BCA
+	for <lists+linux-i2c@lfdr.de>; Mon, 31 May 2021 15:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbhEaNZ3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 31 May 2021 09:25:29 -0400
-Received: from mail-dm6nam11on2047.outbound.protection.outlook.com ([40.107.223.47]:50945
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231863AbhEaNXW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 31 May 2021 09:23:22 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m/geMpUFZiXO1whXdsjF+N/OwKHs4MwRAFpJh+wKOAX54rz7eQd7sfB/aTEaSyFGTXYhP47RVEotT5gcLbgs54q+nPbftAdPn/lA4j3A+1/juWsaZ1+x54rq7+fFJrpWEUwA56I2Qjok/CXx1mShzT9vgHOG2Kje6j0h6ukaOvSxQKA/UfE/BLHhq70vNa8oEj9gso++vdR5RQsCbzi9+z5/Q1PzoKrN3Kcye/+pG4qhOftRU3YF5WaeKh2tzp3yqu37GwNcsdWTyQI2BUxpQUmVr3sh++lzCE20/8lVP+t19N6QqsMG8VvvLCP1sxCk4qpK9tPta6kzJBS/TWyk8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fceQhCbbjjHjSbwTjg3JBB4MQnsiiMuBzljwTv3hnx0=;
- b=ca46etrM12Z91G5U/OBzX1d68oLouZvVl/cSqB+1/rN8NSrfI10Q+tcurOAc0h9Tc23DFMHKTKbCAyHzHqRZpYG9npfWgGRYhk39Kf0K3r6cROAr+SY+AWskEFWKOlaJP4hPDsOuJ8AUqYG8ID5xBAULTs0XuN0vNO+GQmi/D5LKGKRbNy1u9c7p1QqvS0yNmam+mnd4jkqc8iR91FUyoFH0h0HJ1gg8PdS+a/k770t5XPrGpDp2ipRol6N93pPJEGyPfwYIVk7WlgJ76HuSXKldx4y2B9ETRxYBVqQNaTk/yVoM6Bq4vIcmppJARC5h38AhCRTzSUuRGD1tTt6gew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fceQhCbbjjHjSbwTjg3JBB4MQnsiiMuBzljwTv3hnx0=;
- b=qSDECWIoHr9kU1ipLipT9j4dT7+EF62Lfo9m2swsIDEfn0uhdQ19O8RynVCn54fj+LdTEO1hIEW9KF2Bp4TR39TF4VwlMA8ZG+As6RrpksKlxrQpgc3zt8eSmEbZy7W9BzAUKrU0Tuk0bgF/LMsJERx+xpKQp8z0h9DoN0WD7A0=
-Received: from BN9PR03CA0367.namprd03.prod.outlook.com (2603:10b6:408:f7::12)
- by BN7PR02MB5123.namprd02.prod.outlook.com (2603:10b6:408:22::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.20; Mon, 31 May
- 2021 13:21:39 +0000
-Received: from BN1NAM02FT051.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:f7:cafe::b6) by BN9PR03CA0367.outlook.office365.com
- (2603:10b6:408:f7::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.22 via Frontend
- Transport; Mon, 31 May 2021 13:21:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT051.mail.protection.outlook.com (10.13.2.159) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4150.30 via Frontend Transport; Mon, 31 May 2021 13:21:39 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 31 May 2021 06:21:18 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Mon, 31 May 2021 06:21:18 -0700
-Envelope-to: git@xilinx.com,
- linux-i2c@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- marex@denx.de
-Received: from [10.140.6.25] (port=53014 helo=xhdnagasure40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <raviteja.narayanam@xilinx.com>)
-        id 1lnhr2-0004GE-OO; Mon, 31 May 2021 06:21:17 -0700
-From:   Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-To:     <linux-i2c@vger.kernel.org>, <michal.simek@xilinx.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>, <marex@denx.de>,
-        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-Subject: [PATCH 10/10] i2c: xiic: Update compatible with new IP version
-Date:   Mon, 31 May 2021 07:19:48 -0600
-Message-ID: <20210531131948.19477-11-raviteja.narayanam@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210531131948.19477-1-raviteja.narayanam@xilinx.com>
-References: <20210531131948.19477-1-raviteja.narayanam@xilinx.com>
+        id S232088AbhEaNYp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 31 May 2021 09:24:45 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:60568 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232281AbhEaNWp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 31 May 2021 09:22:45 -0400
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14VDGG8h017742;
+        Mon, 31 May 2021 15:20:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=a2HRjUDuOdBPvwc+9z9T/CFX3ODxZ1xmC88BSw9xlJg=;
+ b=lcPQNuc9ZE4ed4uCmXixNOTR7xg9H2S7d+bRAvdugGyN0soEYxPgICLqbxlp/Vjqd085
+ AREIzrdxyk/YwFrnYMBJ6OfyEPfFRny74oIhP5M2GcHgQXtsVwVFZDiexAweUzzoAPL8
+ lYM4e5quAMtNhvURIKvCxuy0hhJGTbSdO9NEeMdwWHssyasbFuYGjP012uNKMIhko7GS
+ CbUu1E1kT7tIDNf/JQiCDeOvqfhh5I/ssBgWJViCu/x7B5TIGGLHnbNcZP2mgZZc3uTw
+ WSyppcyE0ZQJwKVGTvxMxjtDWuvsjsnSfM9gfNo1zPQGIpyv4xRDebXpXeM14yY61qv4 xw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 38vbah4var-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 May 2021 15:20:45 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 11F4410002A;
+        Mon, 31 May 2021 15:20:45 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EA73924187E;
+        Mon, 31 May 2021 15:20:44 +0200 (CEST)
+Received: from lmecxl0573.lme.st.com (10.75.127.46) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 31 May
+ 2021 15:20:43 +0200
+Subject: Re: [PATCH 0/4] Fix the i2c/clk bug of stm32 mcu platform
+To:     <dillon.minfei@gmail.com>, <pierre-yves.mordret@foss.st.com>,
+        <alain.volmat@foss.st.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <sumit.semwal@linaro.org>,
+        <christian.koenig@amd.com>, <mturquette@baylibre.com>
+CC:     <sboyd@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-clk@vger.kernel.org>
+References: <1620990152-19255-1-git-send-email-dillon.minfei@gmail.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+Message-ID: <401eb514-27bd-03f6-f7a5-22604882b28a@foss.st.com>
+Date:   Mon, 31 May 2021 15:20:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 603eb692-12d7-4846-4488-08d924370638
-X-MS-TrafficTypeDiagnostic: BN7PR02MB5123:
-X-Microsoft-Antispam-PRVS: <BN7PR02MB5123CADCBF5EBCAAFBA15065CA3F9@BN7PR02MB5123.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:1122;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vfIqXX1XVFhDp+vCjLBhFkcwAUYXwYMR6qMAnxaX/vaBYUU3mjjndYqUshw7wb9Rz8fHnCu9CnZ3ZlPPZaAVq/HtU6fuc/CE9YU8SF6yD6Ay7Nx97G9xnBfeilRrnyb5mwTVkXiRy8Lgk/+AcPebuVt99mX8XvYEFUDmtnqSV4YEh5J4JqAKV/AAahs+0j86oJTloHudtO9AQi5upHaxdqUF5WLCHeDRFgVOqJaFfFbuvq+BJQismpyYsup3etxRj7kimv2bNaU1HMhSCr4LJCj8bXEBBBoL3kAV60woD0Yz6MKenSQDXAYlBCTLyCzsq2YJfIUrd5quw4lgGkIMjl8p5+0ZljCGZNiutThxlGZCOLlisTRo45HP8yBFLlPVYgb4R6gBnF7/8CGBzQ0/0jqgeLG54IILC6vZtwLdEFV+eFJpX3EW1uLfif2IqifqWudvVnqRlakOpCRdaN2aGysYHqQ5KTWgFGx0AOBAexKUMUtEvRKjHRCqbAPg78T3iNEDoUHZSC0V9bwcgjaovuLQdprL/F7Qodog+kiSnhdqqplDme8lLevbFLrIVagxK4f9JGGQJrIwL8IgeG5LzRChEFLc/54xQneb6dyw5Rx2ql25l8WI1iiek+pGL2szDzZ+LkdqyD9Kl8iyOg3gB2G4VSZTwBG/3x1ptEZbUS0Q2LRejCoDy2WMzm0G+5SQ
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(396003)(39860400002)(136003)(376002)(46966006)(36840700001)(356005)(82740400003)(47076005)(7636003)(2616005)(82310400003)(478600001)(5660300002)(83380400001)(26005)(1076003)(2906002)(186003)(6636002)(70206006)(6666004)(336012)(8676002)(44832011)(70586007)(9786002)(426003)(7696005)(110136005)(54906003)(4744005)(107886003)(36756003)(316002)(8936002)(36860700001)(15650500001)(4326008)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2021 13:21:39.4228
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 603eb692-12d7-4846-4488-08d924370638
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT051.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR02MB5123
+In-Reply-To: <1620990152-19255-1-git-send-email-dillon.minfei@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-31_08:2021-05-31,2021-05-31 signatures=0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Xilinx AXI I2C IP is updated with a bug fix for dynamic mode reads.
-Older IPs are handled with a workaround in which they are using
-xiic standard mode for all these effected use cases.
-Added the new IP version to compatible.
+Hi Dillon
 
-Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
----
- drivers/i2c/busses/i2c-xiic.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index f022a1885b6a..45bd3b1a4c22 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -1130,6 +1130,7 @@ static const struct xiic_version_data xiic_2_00 = {
- #if defined(CONFIG_OF)
- static const struct of_device_id xiic_of_match[] = {
- 	{ .compatible = "xlnx,xps-iic-2.00.a", .data = &xiic_2_00 },
-+	{ .compatible = "xlnx,axi-iic-2.1", },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, xiic_of_match);
--- 
-2.17.1
 
+On 5/14/21 1:02 PM, dillon.minfei@gmail.com wrote:
+> From: Dillon Min <dillon.minfei@gmail.com>
+> 
+> This seriese fix three i2c/clk bug for stm32 f4/f7
+> - kernel runing in sdram, i2c driver get data timeout
+> - ltdc clk turn off after kernel console active
+> - kernel hang in set ltdc clock rate
+> 
+> clk bug found on stm32f429/f469-disco board
+> 
+> Hi Patrice:
+> below is the guide to verify the patch:
+> 
+> setup test env with following files(link at below 'files link'):
+> [1] u-boot-dtb.bin
+> [2] rootfs zip file (used in kernel initramfs)
+> [3] u-boot's mkimage to create itb file
+> [4] kernel config file
+> [5] my itb with-or-without i2c patch
+> 
+> This patch based on kernel commit:
+> 88b06399c9c766c283e070b022b5ceafa4f63f19
+> 
+> Note:
+> panel-ilitek-ili9341.c is the driver which was submitted last year, but not
+> get accepted. it's used to setup touch screen calibration, then test i2c.
+> 
+> create itb file(please correct path of 'data'):
+> ./mkimage -f stm32.its stm32.itb
+> 
+> HW setup:
+> console:
+>        PA9, PA10
+>        usart0
+>        serial@40011000
+>        115200 8n1
+> 
+> -- flash u-boot.bin to stm32f429-disco on PC
+> $ sudo openocd -f board/stm32f429discovery.cfg -c \
+>   '{PATH-TO-YOUR-UBOOT}/u-boot-dtb.bin 0x08000000 exit reset'
+> 
+> -- setup kernel load bootargs at u-boot
+> U-Boot > setenv bootargs 'console=tty0 console=ttySTM0,115200
+>                     root=/dev/ram rdinit=/linuxrc loglevel=8 fbcon=rotate:2'
+> U-Boot > loady;bootm
+> (download stm32.dtb or your kernel with itb format, or download zImage, dtb)
+> 
+
+
+Thanks for these informations
+I was able to load and boot DTB and uImage directly in SDRAM as you suggested, 
+i saw Linux logo and kernel log on the STM32F429-disco display, 
+but i can't reach the login.
+
+The last kernel log i got is :
+
+Starting kernel ...
+
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 5.13.0-rc1-00082-g9dbbd5cb6240-dirty (nxp11987@lmecxl0573.lme1
+[    0.000000] CPU: ARMv7-M [410fc241] revision 1 (ARMv7M), cr=00000000
+[    0.000000] CPU: unknown data cache, unknown instruction cache
+[    0.000000] OF: fdt: Machine model: STMicroelectronics STM32F429i-DISCO board
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000090000000-0x00000000907fffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+
+[...]
+
+[    2.637564] printk: console [ttySTM0] enabled
+[    2.747984] panel-ilitek-ili9341 spi0.1: get optional vcc failed
+[    2.758986] spi_stm32 40015000.spi: driver initialized
+[    2.795733] i2c /dev entries driver
+[    2.849955] stmpe-i2c 0-0041: stmpe811 detected, chip id: 0x811
+[    2.922030] stmpe-ts stmpe-ts: DMA mask not set
+[    2.965729] input: stmpe-ts as /devices/platform/soc/40005c00.i2c/i2c-0/0-0041/stmpe-ts0
+[    2.991570] stm32f4-i2c 40005c00.i2c: STM32F4 I2C driver registered
+[    3.058262] [drm] Initialized stm 1.0.0 20170330 for 40016800.display-controller on min0
+[    3.665951] panel-ilitek-ili9341 spi0.1: initialized display rgb interface
+[    3.765208] Console: switching to colour frame buffer device 30x40
+[    4.014269] stm32-display 40016800.display-controller: [drm] fb0: stmdrmfb frame buffere
+[    4.212737] Freeing unused kernel memory: 324K
+[    4.287300] This architecture does not have kernel memory protection.
+[    4.401202] Run /linuxrc as init process
+[    4.478622]   with arguments:
+[    4.555069]     /linuxrc
+[    4.595406]   with environment:
+[    4.672213]     HOME=/
+[    4.712511]     TERM=linux
+[  206.785289] random: crng init done
+
+
+I can't test your I2C patch.
+
+Patrice
+
+
+> -- setup ts_calibrate running env on stm32f429-disco
+> / # export TSLIB_CONFFILE=/etc/ts.conf
+> / # export TSLIB_TSDEVICE=/dev/input/event0
+> / # export TSLIB_CONSOLEDEVICE=none
+> / # export TSLIB_FBDEVICE=/dev/fb0
+> 
+> -- clear screen
+> / # ./fb
+> 
+> -- run ts_calibrate 
+> / # ts_calibrate
+> (you can calibrate touchscreen now, and get below errors)
+> 
+> [  113.942087] stmpe-i2c0-0041: failed to read regs 0x52: -110
+> [  114.063598] stmpe-i2c 0-0041: failed to read reg 0x4b: -16
+> [  114.185629] stmpe-i2c 0-0041: failed to read reg 0x40: -16
+> [  114.307257] stmpe-i2c 0-0041: failed to write reg 0xb: -16
+> 
+> ...
+> with i2c patch applied, you will find below logs:
+> 
+> RAW---------------------> 3164 908 183 118.110884
+> TS_READ_RAW----> x = 3164, y =908, pressure = 183
+> RAW---------------------> 3166 922 126 118.138946
+> TS_READ_RAW----> x = 3166, y = 922, pressure = 126
+> ....
+> 
+> files link:
+> https://drive.google.com/drive/folders/1qNbjChcB6UGtKzne2F5x9_WG_sZFyo3o?usp=sharing
+> 
+> 
+> 
+> 
+> Dillon Min (4):
+>   drm/panel: Add ilitek ili9341 panel driver
+>   i2c: stm32f4: Fix stmpe811 get xyz data timeout issue
+>   clk: stm32: Fix stm32f429's ltdc driver hang in set clock rate
+>   clk: stm32: Fix ltdc's clock turn off by clk_disable_unused() after
+>     kernel startup
+> 
+>  drivers/clk/clk-stm32f4.c                    |   10 +-
+>  drivers/gpu/drm/panel/Kconfig                |   12 +
+>  drivers/gpu/drm/panel/Makefile               |    1 +
+>  drivers/gpu/drm/panel/panel-ilitek-ili9341.c | 1285 ++++++++++++++++++++++++++
+>  drivers/i2c/busses/i2c-stm32f4.c             |   12 +-
+>  5 files changed, 1310 insertions(+), 10 deletions(-)
+>  create mode 100755 drivers/gpu/drm/panel/panel-ilitek-ili9341.c
+> 
