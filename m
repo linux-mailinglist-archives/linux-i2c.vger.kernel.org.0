@@ -2,269 +2,402 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 632143977E8
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jun 2021 18:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63028397B81
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jun 2021 23:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbhFAQZa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Jun 2021 12:25:30 -0400
-Received: from mail-eopbgr80083.outbound.protection.outlook.com ([40.107.8.83]:21637
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231918AbhFAQZa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 1 Jun 2021 12:25:30 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gposCFLcfoGE1ZK2JoRHpYT8BmZ0azhaYzr3JZ3D+Y7vBASyxyP2uclHrJ6WWsLMVPvpm5GVJxG/uu48agqfwJM/wGYbY/xo7oQeK5TMuggn4P0apzPvWCatucOJxTNbGFMBFD38GIqtKH0r6xBSsIwRe5n6ZlHc4LNjCC/sRrP5OZ1kewoN5JzRccUe5ljgUYSuCPN/lSIHGQ1GJ7wKXh6ynfw75vQ+KnyFklk4WmxYQ+Ml4Fjab9vOzmk3vaS0LjO1UIugKJ23XdqS3mg6bQo3Z2KfeG21xpPEZ8zlPTfQL/lCu6bUS02UOhmezWGTRob67VUHB0YVDAq7v7PF2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D0SIuaY5EVCfH1/IJQ+dnqhff615y28hCMQdfCyV6cU=;
- b=AK3yyhxRAT0zTDZwo8URHvYOpqACBObsWC2f6Lp1K6uBSAmav5mshDIiIDxCvPbFCOkHdXEVRIxQNVe4wNBslzRNZvdvcdKSoHjEaKsASQR0ClFAY0s8bqT10I1LuYq91FpdtV489+CtNQ5Im1XL1mmxrqVlbm4VU2cKOoRRRYqessUr162uDQQAx8iggJKOzgNBZ8VchSBD2JHQWBzGj5PJEChvL/eYwFpBE1G+MJtzgpPbEVIIXt/Fsod5i801wRCp1Nx77NecgESoR7dBSIkWX3f9YhywojXOyMB6DVd3Q07E9i9BMZmY2aDSe7GERrkqS6MqsvXdumC68azNEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=spinetix.com; dmarc=pass action=none header.from=spinetix.com;
- dkim=pass header.d=spinetix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=spinetix.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D0SIuaY5EVCfH1/IJQ+dnqhff615y28hCMQdfCyV6cU=;
- b=OrO2voykp+ReO6arZ38Xun/BMAvZEYN7H8v+dYhlEr/a07c9vf59xLhHlYL4jQ/XrlyN64QtnX2knLuCwVyf095/zXPgKCjv/4VnAHzLx8vCYlyn61H7JT0xIDGPgWB3swOEESwgi9mZue2rIm+Mpz5zbPznOFnxrL2iRChBGuU=
-Received: from HE1PR0102MB2634.eurprd01.prod.exchangelabs.com
- (2603:10a6:7:17::23) by HE1PR0101MB2137.eurprd01.prod.exchangelabs.com
- (2603:10a6:3:1d::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.21; Tue, 1 Jun
- 2021 16:23:44 +0000
-Received: from HE1PR0102MB2634.eurprd01.prod.exchangelabs.com
- ([fe80::921:9f66:e26d:fee]) by HE1PR0102MB2634.eurprd01.prod.exchangelabs.com
- ([fe80::921:9f66:e26d:fee%7]) with mapi id 15.20.4173.030; Tue, 1 Jun 2021
- 16:23:44 +0000
-From:   Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
-To:     Alexander Fomichev <fomichev.ru@gmail.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-CC:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "linux@yadro.com" <linux@yadro.com>
-Subject: RE: [PATCH] misc: eeprom: at24: fix NVMEM name with custom AT24
- device name
-Thread-Topic: [PATCH] misc: eeprom: at24: fix NVMEM name with custom AT24
- device name
-Thread-Index: AQHXVt/b0GxWW0SorUWPczWozx79har/HiFQ
-Date:   Tue, 1 Jun 2021 16:23:44 +0000
-Message-ID: <HE1PR0102MB26344A26F83308A03A0FF5DA883E9@HE1PR0102MB2634.eurprd01.prod.exchangelabs.com>
-References: <20201203214703.18258-1-Diego.SantaCruz () spinetix ! com>
- <20210601121542.a6gboyskhthd2bbv@yadro.com>
-In-Reply-To: <20210601121542.a6gboyskhthd2bbv@yadro.com>
-Accept-Language: en-GB, fr-CH, fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=spinetix.com;
-x-originating-ip: [178.198.240.12]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6e36cba1-bdb1-4ed8-b3cf-08d92519a064
-x-ms-traffictypediagnostic: HE1PR0101MB2137:
-x-microsoft-antispam-prvs: <HE1PR0101MB2137CEA8C44327CC73239A3B883E9@HE1PR0101MB2137.eurprd01.prod.exchangelabs.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +sXx0nGiWfaMGyXw6MouSSmsR+2Don09I7ge1Bk2UQ3QO2SYtFNgLgwpm+DrJhxHAb0EwQ4wSMlcxfgpmDlUGX/nsJ6zMJ14oKmSJMeUhrL8iog4Hb5wJRCNqNRATeiBM0tu6Tg4Ng/qf7tWMpom8bxrnUMUhvS/q/V+I0TGNzsefs7YPemjnGbVgqGXHb+HHBv9yvoTvN2ViMVd3Ql9ZqjT+VpwvMgJOTykvAYX2c9LYBhAUYRQig+TfFM2VtY46dh0uM+/w8iOJmA9EEWWXeLu/i+/VkiNFlVUri0l6KKQ9FiRytt6wW2KJEoKjYFhD6MrEGk85RbTPIa5dHO+h/LsDO6zozFdgim1G0yj/vqDrB3bEDjB+Qux6g1RrxH/QsBrZpKCNy3TMXrMH9FCHMVk74lCUD7ERJHO70kXTsdvOtEJcUEkgxXjmgSExGhhyd2egjWsMgVKnZUoCVJ0siV7hoNZp+8yNxqEEb77bT3fSOvcguEQsrKh7y7/NRE5G/fWiHsDNHyfDO+y6mGb8u+Dh92h5wa5a+okeoYyA50ATCJBlK3BfoRE6UBhzeK78jXvR5A3sZDb1r8qoFwe0tMirp11q0+9uBE5JCoFP2M=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0102MB2634.eurprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(346002)(53546011)(9686003)(8936002)(86362001)(6506007)(66556008)(64756008)(38100700002)(66446008)(76116006)(186003)(508600001)(52536014)(7696005)(33656002)(110136005)(4326008)(71200400001)(55016002)(8676002)(5660300002)(54906003)(122000001)(26005)(66476007)(83380400001)(66946007)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?fNGsFWYyKmSXrtNQoItDou0sR6rgGL/8eIf9hV3UZlqbI4hw+qN6E/46Wq53?=
- =?us-ascii?Q?FYqik/P5F5CBlAEGPxM8iyMM2k1qWXaaVv8dbc6cw5gHCWZ8MV00tlpZzIJf?=
- =?us-ascii?Q?oSlv5e78KUQ0RbS8oVlwXL7/vYgpO9yFDQobn30NeusIVeof0NFT566En4Wq?=
- =?us-ascii?Q?NRkZbRgXXdswen0LvwTq+H++LX2VdSkQPG2YquTv6QlFj3n21ZJremAGC4C0?=
- =?us-ascii?Q?0iog1KTloP01BXUGGcaGqwqiP9/sTBh/1tkbeKfbZXAH7B0QZ6OYEsaKwKZQ?=
- =?us-ascii?Q?dOJh9mKYTbm8IkGx/zXTXzGWI/XvTBXuxjQHbw7UiY94K2VBtmyRRXxKSlr9?=
- =?us-ascii?Q?T9SHhRNLvdj/viBksqYUnuq7YYYTrPF/NpDAUrmXbLFVDbsOx4L0z/nqq8XT?=
- =?us-ascii?Q?fCFRo51Qf3BbZU7kBgMLwr44gmTqT9pjDojT8EdgiQuzXAvmvFNubAsQF3hl?=
- =?us-ascii?Q?M7gf84MVq0vFTtZaARdB9u8CNt7Ifu99+pcTArWDaHFHJRnfhKd4b9ZjjQ+0?=
- =?us-ascii?Q?6HGuFI0/dgF3GkkoJiY6m4PDUjv163SUBGI37OmH58u9O2mKX/7A4HtlauAA?=
- =?us-ascii?Q?P+Rep60k76KqKpwjcY/eot4pJReGqLWrOtOctCp8UqSc/sultIKA21trMy4b?=
- =?us-ascii?Q?a9Sjcbe2tMTOeDLFa9Wh9Y+o5CarUb6XKjNSbN+9YCUHPVJY8ZlPC3Ow/JjL?=
- =?us-ascii?Q?S8eScNvUyT/tbQ9GdkuMYDnecW0KCKP6zYx1zRp+wZfcKTv1iG5htZ/T5E9L?=
- =?us-ascii?Q?F6TFWIlHzEXMXBOTxriljfaG7NHHgjMAJxo2jOB1K71ii6Z0pwBis86tMRgV?=
- =?us-ascii?Q?05ZoyuWuYug4qRitBIHDzLSWbi5olFBpfftOBJHhGqKX16iC2NRE29PF6MaJ?=
- =?us-ascii?Q?6n8wPLWirkeqNgoTlaD7gU15mm5eGqt+bU0ACO0uKzzfAhgUXuSQ+h+Lscee?=
- =?us-ascii?Q?I7DrwNiCxv6OSgOhZBbkJrrIA4AlO27K1MeL+eMaELnh03ucRYG9yvjXpMQu?=
- =?us-ascii?Q?XTBg2TlAz7LLJw1wSYl/oL77hgTVQZmUw00bToXgn0S+E8No7l+ikDU/Qpig?=
- =?us-ascii?Q?74BFhmJZ3T3r2AxGyA1SrY6M8PQlwN6Xs0hnLioQ9PNmN5K1rdkZvVkt2X8I?=
- =?us-ascii?Q?ultLiII+k8lmojccspHzb44xW09pczT4jdqP+tHVP7dZ0lD6iZHRHDq4EdhT?=
- =?us-ascii?Q?rbZLtllfBQsI8HrYmoIk01zT1wuot6FeiN3+vzAeb/L3p9eqFK48edAYVRWK?=
- =?us-ascii?Q?TYWcd2NCNtT9jW+3YVKbowWpMU8aeSUtLvL8jelgwUpfjN5JNaXgbogCs2Sh?=
- =?us-ascii?Q?RJ9S8oup/jXJz9OZFRugeQ9K?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S234818AbhFAVE7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Jun 2021 17:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234638AbhFAVE6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Jun 2021 17:04:58 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE32C06174A
+        for <linux-i2c@vger.kernel.org>; Tue,  1 Jun 2021 14:03:17 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id r1so378220pgk.8
+        for <linux-i2c@vger.kernel.org>; Tue, 01 Jun 2021 14:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to;
+        bh=1MaKy6RY91ySEi5deBULB+4bgTNjV5ZWjWSg2oJ0kWE=;
+        b=dM7la/oCecumeGb9p0uyBAO1T1l1l1RDFhfvsGARG8xuTdzuVSMCZ5FSCQQEbdQjQw
+         A8fRcOYgLUBM90Aa3XxSOguqQwtGNT/2hZobj+jQSIaKEh+CDq4tF81o2ZmNMoOd910R
+         sz+KndjqsI/wwt601xAypd3fQHsBlvWawjFL4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to;
+        bh=1MaKy6RY91ySEi5deBULB+4bgTNjV5ZWjWSg2oJ0kWE=;
+        b=eipxMGUUuYqAap3UYhVglO+3vtUfodR0qoJPqHmd5Ez+chuKjRxJhwe/igBHs5eSRv
+         hybKFM46rVDtg7CmAI2OaWOBBcYuNkTf8T8bc9StTSr3jjMm6rwLWrBvm5sRwR8Zosui
+         Z/AoaO80dovmNw4mq3Xtmj3YAgwsieI+OGQsYMey+FpoyMgMU1YDOK99bJSfuH+8J2XD
+         L6W9k7lPxywh7ALhmvqnyJgySXJ9fcNipHYven3v2J7EZvrX1veTyjFZKx3DSFi9nyFb
+         +THF51kaM58aa8FKyNCIAU54xxMOAfnOl0vAtcZ5Y1vNYbmKq9HPzLfbyMTQN/QHU+MA
+         oVhQ==
+X-Gm-Message-State: AOAM530PuV5E8YfM9uDnpJC69dYtD5zpbDo+iFHF5qBt62Yzq5Aw/9DG
+        NrrYoMUJ8Wd/5suFHHIXW8PdJg==
+X-Google-Smtp-Source: ABdhPJwKlf85FuSd7ZiNEELPtZN9EmbyJHUXCeHzFacY6L783pLFiEsut79wWbhkeOEiBfbrY9nmdQ==
+X-Received: by 2002:a63:4f47:: with SMTP id p7mr30486001pgl.52.1622581396185;
+        Tue, 01 Jun 2021 14:03:16 -0700 (PDT)
+Received: from [10.136.8.240] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id 189sm8540163pfu.84.2021.06.01.14.03.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Jun 2021 14:03:15 -0700 (PDT)
+Subject: Re: [PATCH] i2c: bcm-iproc: Add i2c recovery support
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>, wsa@kernel.org,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Richard Laing <richard.laing@alliedtelesis.co.nz>
+References: <20210530225659.17138-1-chris.packham@alliedtelesis.co.nz>
+From:   Ray Jui <ray.jui@broadcom.com>
+Message-ID: <7962c2ae-f3c6-66a4-e976-f7edbf80781c@broadcom.com>
+Date:   Tue, 1 Jun 2021 14:03:06 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-X-OriginatorOrg: spinetix.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0102MB2634.eurprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e36cba1-bdb1-4ed8-b3cf-08d92519a064
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2021 16:23:44.3541
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5f4034fa-ed2d-4840-a93f-acb1e9633b93
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XRASVqR4RRTLL0DEesJ8gErc+gegtZrhpONoUrcZjiQBMp/YeNLNlbTP5+hYXWq6OkEJYmo2zPeah1yzzOjYdSDjU1AocHH5/kWxJtJ+Ww8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0101MB2137
+In-Reply-To: <20210530225659.17138-1-chris.packham@alliedtelesis.co.nz>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000c7514005c3baab7f"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> -----Original Message-----
-> From: Alexander Fomichev <fomichev.ru@gmail.com>
-> Sent: 01 June 2021 14:16
-> To: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>; linux-
-> i2c@vger.kernel.org
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>; linux@yadro.com
-> Subject: Re: [PATCH] misc: eeprom: at24: fix NVMEM name with custom
-> AT24 device name
->=20
-> On Thu, Dec 03, 2020 at 09:47:03PM +0000, Diego Santa Cruz wrote:
-> > When the "label" property is set on the AT24 EEPROM the NVMEM devid is
-> > set to NVMEM_DEVID_NONE, but it is not effective since there is a
-> > leftover line setting it back to NVMEM_DEVID_AUTO a few lines after.
-> >
-> > Fixes: 61f764c307f6 ("eeprom: at24: Support custom device names for AT2=
-4
-> EEPROMs")
-> > Signed-off-by: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
-> > ---
-> >  drivers/misc/eeprom/at24.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-> > index 35fabaf539b7..fbf69148b5ad 100644
-> > --- a/drivers/misc/eeprom/at24.c
-> > +++ b/drivers/misc/eeprom/at24.c
-> > @@ -704,7 +704,6 @@ static int at24_probe(struct i2c_client *client)
-> >
-> >  	nvmem_config.type =3D NVMEM_TYPE_EEPROM;
-> >  	nvmem_config.dev =3D dev;
-> > -	nvmem_config.id =3D NVMEM_DEVID_AUTO;
-> >  	nvmem_config.read_only =3D !writable;
-> >  	nvmem_config.root_only =3D !(flags & AT24_FLAG_IRUGO);
-> >  	nvmem_config.owner =3D THIS_MODULE;
->=20
-> This commit (4e302c3b568eaf2aeebba804c07aba5d921a8c9e) makes a
-> regress
-> on powerpc64 systems. Tested on YADRO VESNIN (POWER8) and
-> SuperMicro/IBM
-> 9006-22P (POWER9) servers.
->=20
-
-That commit is only making the previous commit 61f764c307f6 ("eeprom: at24:=
- Support custom device names for AT24 EEPROMs") take its intended effect in=
- full.
-And if I get 61f764c307f6 correctly it makes the name from the "label" prop=
-erty and sets the id to NVMEM_DEVID_NONE, and commit 4e302c3b568e just remo=
-ves the leftover override to NVMEM_DEVID_AUTO so that 61f764c307f6 does wha=
-t was intended.
-
-The -17 is actually EEXIST, so probably the name is already being used by a=
-nother device.
-Although reverting 4e302c3b568e fixes the issue, it is probably not the cor=
-rect solution. At a minimum the line that sets the id to NVMEM_DEVID_NONE w=
-ould have to be removed and the comments from 61f764c307f6 adjusted to refl=
-ect reality.
-
-I have no powerpc64 systems nor any knowledge to find the real issue, altho=
-ugh I expect a better solution can be found.=20
-
-> The error is logged multiple times in dmesg as following fragment:
->=20
-> [    5.164711] CPU: 26 PID: 1532 Comm: systemd-udevd Tainted: G        W
-> 5.12.0-at24-catch+ #10
-> [    5.164714] Call Trace:
-> [    5.164715] [c000000052e2f010] [c000000000913610]
-> dump_stack+0xc4/0x114 (unreliable)
-> [    5.164721] [c000000052e2f060] [c00000000061bb88]
-> sysfs_warn_dup+0x88/0xc0
-> [    5.164726] [c000000052e2f0e0] [c00000000061c2ac]
-> sysfs_do_create_link_sd+0x17c/0x190
-> [    5.164730] [c000000052e2f130] [c000000000ac1854]
-> bus_add_device+0x94/0x1d0
-> [    5.164735] [c000000052e2f1b0] [c000000000abcff8]
-> device_add+0x428/0xb90
-> [    5.164738] [c000000052e2f2a0] [c000000000dea270]
-> nvmem_register+0x220/0xe00
-> [    5.164743] [c000000052e2f390] [c000000000deaeac]
-> devm_nvmem_register+0x5c/0xc0
-> [    5.164747] [c000000052e2f3d0] [c008000016ca0c1c]
-> at24_probe+0x664/0x8d0 [at24]
-> [    5.164753] [c000000052e2f650] [c000000000cfd404]
-> i2c_device_probe+0x194/0x650
-> [    5.164757] [c000000052e2f6f0] [c000000000ac357c]
-> really_probe+0x1cc/0x790
-> [    5.164761] [c000000052e2f790] [c000000000ac3c9c]
-> driver_probe_device+0x15c/0x200
-> [    5.164766] [c000000052e2f810] [c000000000ac470c]
-> device_driver_attach+0x11c/0x130
-> [    5.164771] [c000000052e2f850] [c000000000ac4810]
-> __driver_attach+0xf0/0x200
-> [    5.164775] [c000000052e2f8d0] [c000000000abf998]
-> bus_for_each_dev+0xa8/0x130
-> [    5.164779] [c000000052e2f930] [c000000000ac2944]
-> driver_attach+0x34/0x50
-> [    5.164783] [c000000052e2f950] [c000000000ac1e30]
-> bus_add_driver+0x1b0/0x2f0
-> [    5.164788] [c000000052e2f9e0] [c000000000ac58f4]
-> driver_register+0xb4/0x1c0
-> [    5.164792] [c000000052e2fa50] [c000000000cfcbc8]
-> i2c_register_driver+0x78/0x120
-> [    5.164796] [c000000052e2fad0] [c008000016ca11f0] at24_init+0x6c/0x88
-> [at24]
-> [    5.164801] [c000000052e2fb30] [c0000000000122c0]
-> do_one_initcall+0x60/0x2c0
-> [    5.164805] [c000000052e2fc00] [c000000000253bdc]
-> do_init_module+0x7c/0x350
-> [    5.164809] [c000000052e2fc90] [c000000000257d24]
-> __do_sys_finit_module+0xd4/0x160
-> [    5.164813] [c000000052e2fdb0] [c00000000002bfb4]
-> system_call_exception+0xf4/0x200
-> [    5.164817] [c000000052e2fe10] [c00000000000cf70]
-> system_call_vectored_common+0xf0/0x268
-> [    5.164821] --- interrupt: 3000 at 0x7f35ee3fb4c4
-> [    5.164823] NIP:  00007f35ee3fb4c4 LR: 0000000000000000 CTR:
-> 0000000000000000
-> [    5.164825] REGS: c000000052e2fe80 TRAP: 3000   Tainted: G        W
-> (5.12.0-at24-catch+)
-> [    5.164828] MSR:  900000000280f033
-> <SF,HV,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 44222884  XER: 00000000
-> [    5.164842] IRQMASK: 0
->                GPR00: 0000000000000161 00007ffffbf36390 00007f35ee4e7000
-> 0000000000000006
->                GPR04: 00007f35ee6ab510 0000000000000000 0000000000000006
-> 0000000000000000
->                GPR08: 0000000000000000 0000000000000000 0000000000000000
-> 0000000000000000
->                GPR12: 0000000000000000 00007f35ee78e680 0000000020000000
-> 0000000000000000
->                GPR16: 0000000000000000 00000c0344781980 00000c0344781a18
-> 00000c0344781948
->                GPR20: 0000000000000000 00000c0350142a20 00007ffffbf365f0
-> 00000c03501b4d90
->                GPR24: 0000000000000000 00000c0350142a20 0000000000020000
-> 00000c0350139830
->                GPR28: 00007f35ee6ab510 0000000000020000 0000000000000000
-> 00000c0350142a20
-> [    5.164883] NIP [00007f35ee3fb4c4] 0x7f35ee3fb4c4
-> [    5.164885] LR [0000000000000000] 0x0
-> [    5.164887] --- interrupt: 3000
-> [    5.165102] at24: probe of 8-0057 failed with error -17
->=20
->=20
-> Reverting the patch solves the issue.
->=20
->=20
-> Reported-by: Alexander Fomichev <fomichev.ru@gmail.com>
-> CC: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> CC: linux@yadro.com
->=20
-> --
-> Regards,
->   Alexander
---=20
-Diego Santa Cruz, PhD
-Technology Architect
-spinetix.com
+--000000000000c7514005c3baab7f
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
 
+
+On 5/30/2021 3:56 PM, Chris Packham wrote:
+> From: Richard Laing <richard.laing@alliedtelesis.co.nz>
+> 
+> The bcm-iproc controller can put the SDA/SCL lines into bit-bang mode,
+> make use of this to support i2c bus recovery.
+> 
+> Signed-off-by: Richard Laing <richard.laing@alliedtelesis.co.nz>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Richard did most of the work on this. I'm just cleaning it up to get it
+>     upstream.
+> 
+>  drivers/i2c/busses/i2c-bcm-iproc.c | 115 +++++++++++++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+> index cceaf69279a9..d63a286c1660 100644
+> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
+> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+> @@ -26,6 +26,7 @@
+>  #define CFG_RESET_SHIFT              31
+>  #define CFG_EN_SHIFT                 30
+>  #define CFG_SLAVE_ADDR_0_SHIFT       28
+> +#define CFG_BIT_BANG_SHIFT           29
+
+move this up one line (to be consistent with existing bit order)
+
+>  #define CFG_M_RETRY_CNT_SHIFT        16
+>  #define CFG_M_RETRY_CNT_MASK         0x0f
+>  
+> @@ -66,6 +67,12 @@
+>  #define S_FIFO_RX_THLD_SHIFT         8
+>  #define S_FIFO_RX_THLD_MASK          0x3f
+>  
+> +#define M_BB_CTRL_OFFSET             0x14
+> +#define M_BB_SMBCLK_IN               31
+
+M_BB_CTRL_CLK_IN_SHIFT, ket is to have '_SHIFT' to be consistent with
+existing code
+
+> +#define M_BB_SMBCLK_OUT_EN           30
+
+M_BB_CTRL_CLK_OUT_SHIFT
+
+> +#define M_BB_SMBDAT_IN               29
+
+M_BB_CTRL_DATA_IN_SHIFT
+
+> +#define M_BB_SMBDAT_OUT_EN           28
+
+M_BB_CTRL_DATA_OUT_SHIFT
+
+> +
+>  #define M_CMD_OFFSET                 0x30
+>  #define M_CMD_START_BUSY_SHIFT       31
+>  #define M_CMD_STATUS_SHIFT           25
+> @@ -713,6 +720,112 @@ static void bcm_iproc_i2c_enable_disable(struct bcm_iproc_i2c_dev *iproc_i2c,
+>  	iproc_i2c_wr_reg(iproc_i2c, CFG_OFFSET, val);
+>  }
+>  
+> +static void bcm_iproc_i2c_reset(struct bcm_iproc_i2c_dev *iproc_i2c)
+> +{
+> +	u32 tmp;
+> +
+> +	tmp = readl(iproc_i2c->base + CFG_OFFSET);
+> +	tmp |= BIT(CFG_RESET_SHIFT);
+> +	writel(tmp, iproc_i2c->base + CFG_OFFSET);
+> +	udelay(100);
+
+This puts the controller in reset and hold it there, but never brings
+the controller out of reset (bcm_iproc_i2c_init called in unprepare
+brings the controller out of reset)
+
+Calling it a "reset" function is a bit misleading to me. My expectation
+of a reset function is that you generate a reset pulse, ie.g., reset ->
+delay -> out of reset.
+
+Why don't you simply put this seuquence of code in the prepare_recovery
+function below, instead of calling this a reset function?
+
+> +
+> +}
+> +
+> +static void bcm_iproc_i2c_prepare_recovery(struct i2c_adapter *adap)
+> +{
+> +	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(adap);
+> +	u32 tmp;
+> +
+> +	dev_dbg(iproc_i2c->device, "Prepare recovery\n");
+> +
+> +	/* Disable interrupts */
+> +	writel(0, iproc_i2c->base + IE_OFFSET);
+> +	readl(iproc_i2c->base + IE_OFFSET);
+> +	synchronize_irq(iproc_i2c->irq);
+> +
+> +	bcm_iproc_i2c_reset(iproc_i2c);
+> +
+> +	/* Switch to bit-bang mode */
+> +	tmp = readl(iproc_i2c->base + CFG_OFFSET);
+> +	tmp |= BIT(CFG_BIT_BANG_SHIFT);
+> +	writel(tmp, iproc_i2c->base + CFG_OFFSET);
+
+add usleep_range(100, 200) here, required delay after switching to bit
+bang based on spec.
+
+> +}
+> +
+> +static void bcm_iproc_i2c_unprepare_recovery(struct i2c_adapter *adap)
+> +{
+> +	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(adap);
+> +	u32 tmp;
+> +
+> +	/* Switch to normal mode */
+> +	tmp = readl(iproc_i2c->base + CFG_OFFSET);
+> +	tmp &= ~BIT(CFG_BIT_BANG_SHIFT);
+> +	writel(tmp, iproc_i2c->base + CFG_OFFSET);
+> +	udelay(100);
+> +
+> +	bcm_iproc_i2c_init(iproc_i2c);
+
+Add sequence to re-configure to desired bus speed here after the reset
+sequence (someone else in our team tested this is required to resume to
+proper bus speed).
+
+> +	bcm_iproc_i2c_enable_disable(iproc_i2c, true);
+> +
+> +	dev_dbg(iproc_i2c->device, "Recovery complete\n");
+> +}
+> +
+> +static int bcm_iproc_i2c_get_scl(struct i2c_adapter *adap)
+> +{
+> +	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(adap);
+> +	u32 tmp;
+> +
+> +	tmp = readl(iproc_i2c->base + M_BB_CTRL_OFFSET);
+> +
+> +	return !!(tmp & BIT(M_BB_SMBCLK_IN));
+> +}
+> +
+> +static void bcm_iproc_i2c_set_scl(struct i2c_adapter *adap, int val)
+> +{
+> +	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(adap);
+> +	u32 tmp;
+> +
+> +	tmp = readl(iproc_i2c->base + M_BB_CTRL_OFFSET);
+> +	if (val)
+> +		tmp |= BIT(M_BB_SMBCLK_OUT_EN);
+> +	else
+> +		tmp &= ~BIT(M_BB_SMBCLK_OUT_EN);
+> +
+> +	writel(tmp, iproc_i2c->base + M_BB_CTRL_OFFSET);
+> +}
+> +
+> +static void bcm_iproc_i2c_set_sda(struct i2c_adapter *adap, int val)
+> +{
+> +	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(adap);
+> +	u32 tmp;
+> +
+> +	tmp = readl(iproc_i2c->base + M_BB_CTRL_OFFSET);
+> +	if (val)
+> +		tmp |= BIT(M_BB_SMBDAT_OUT_EN);
+> +	else
+> +		tmp &= ~BIT(M_BB_SMBDAT_OUT_EN);
+> +
+> +	writel(tmp, iproc_i2c->base + M_BB_CTRL_OFFSET);
+> +}
+> +
+> +static int bcm_iproc_i2c_get_sda(struct i2c_adapter *adap)
+> +{
+> +	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(adap);
+> +	u32 tmp;
+> +
+> +	tmp = readl(iproc_i2c->base + M_BB_CTRL_OFFSET);
+> +
+> +	return !!(tmp & BIT(M_BB_SMBDAT_IN));
+> +}
+> +
+> +static struct i2c_bus_recovery_info bcm_iproc_recovery_info = {
+
+static const struct ...
+
+> +	.recover_bus = i2c_generic_scl_recovery,
+> +	.prepare_recovery = bcm_iproc_i2c_prepare_recovery,
+> +	.unprepare_recovery = bcm_iproc_i2c_unprepare_recovery,
+> +	.set_scl = bcm_iproc_i2c_set_scl,
+> +	.get_scl = bcm_iproc_i2c_get_scl,
+> +	.set_sda = bcm_iproc_i2c_set_sda,
+> +	.get_sda = bcm_iproc_i2c_get_sda,
+> +};
+> +
+>  static int bcm_iproc_i2c_check_status(struct bcm_iproc_i2c_dev *iproc_i2c,
+>  				      struct i2c_msg *msg)
+>  {
+> @@ -839,6 +952,7 @@ static int bcm_iproc_i2c_xfer_internal(struct bcm_iproc_i2c_dev *iproc_i2c,
+>  	if (!!(iproc_i2c_rd_reg(iproc_i2c,
+>  				M_CMD_OFFSET) & BIT(M_CMD_START_BUSY_SHIFT))) {
+>  		dev_warn(iproc_i2c->device, "bus is busy\n");
+> +		i2c_recover_bus(&iproc_i2c->adapter);
+
+'i2c_recover_bus' should not be ALWAYS called here. You don't know if
+bus is actually locked up or it's other issues that caused this.
+
+We need a logic to detect and confirm the lock up condition before
+committing to recover operation:
+
+/* Check if bus lockup occurred, and invoke recovery if so. */
+static void iproc_i2c_lockup_recover(struct bcm_iproc_i2c_dev *iproc_i2c)
+{
+	/*
+	 * assume bus lockup if SDA line is low;
+	 * note that there is no need to switch to
+	 * bit-bang mode for this check.
+	 */
+	if (!bcm_iproc_i2c_get_sda(&iproc_i2c->adapter)) {
+		/* locked up - invoke i2c bus recovery. */
+		int ret = i2c_recover_bus(&iproc_i2c->adapter);
+			if (ret)
+				dev_err(iproc_i2c->device,
+					"bus recovery: error %d\n",
+					ret);
+	}
+}
+
+'iproc_i2c_lockup_recover' should be called in two locations in the driver:
+
+1. After 'transaction timed out' (and after flush both TX/RX FIFOS)
+2. After 'bcm_iproc_i2c_check_status' failures (and after flush both
+TX/RX FIFOs).
+
+>  		return -EBUSY;
+>  	}
+>  
+> @@ -1111,6 +1225,7 @@ static int bcm_iproc_i2c_probe(struct platform_device *pdev)
+>  		of_node_full_name(iproc_i2c->device->of_node));
+>  	adap->algo = &bcm_iproc_algo;
+>  	adap->quirks = &bcm_iproc_i2c_quirks;
+> +	adap->bus_recovery_info = &bcm_iproc_recovery_info;
+>  	adap->dev.parent = &pdev->dev;
+>  	adap->dev.of_node = pdev->dev.of_node;
+>  
+> 
+
+Thanks,
+
+Ray
+
+--000000000000c7514005c3baab7f
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+Pi3DQoJNNR5cV1dw3cNMKQyHRziEjFTVmILshClu9AljdXzCUoHXDUbge8TIJ/fK36qTGCYWwA01
+rTB3drVX3FZq/Uqo0JnVcyP1dtYVzQIDAQABo4IB1TCCAdEwDgYDVR0PAQH/BAQDAgWgMIGjBggr
+BgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9j
+YWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8v
+b2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBE
+MEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20v
+cmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2Jh
+bHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAfBgNVHREEGDAWgRRyYXku
+anVpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdb
+NHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU5E1VdIocTRYIpXh6e6OnGvwfrEgwDQYJKoZIhvcNAQEL
+BQADggEBADcZteuA4mZVmXNzp/tJky+9TS87L/xAogg4z+0bFDomA2JdNGKjraV7jE3LKHUyCQzU
+Bvp8xXjxCndLBgltr+2Fn/Dna/f29iAs4mPBxgPKhqnqpQuTo2DLID2LWU1SLI9ewIlROY57UCvO
+B6ni+9NcOot0MbKF2A1TnzJjWyd127CVyU5vL3un1/tbtmjiT4Ku8ZDoBEViuuWyhdB6TTEQiwDo
+2NxZdezRkkkq+RoNek6gmtl8IKmXsmr1dKIsRBtLQ0xu+kdX+zYJbAQymI1mkq8qCmFAe5aJkrNM
+NbsYBZGZlcox4dHWayCpn4sK+41xyJsmGrygY3zghqBuHPUxggJtMIICaQIBATBrMFsxCzAJBgNV
+BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdD
+QyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxnTAexrtwIst251kUwDQYJYIZIAWUDBAIBBQCg
+gdQwLwYJKoZIhvcNAQkEMSIEIETytuAQbun1n+MeBaTWi4egCYb/eIHOBD/cn2KGGbCuMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIxMDYwMTIxMDMxNlowaQYJKoZI
+hvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
+9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEF
+AASCAQBj12M6sxiDpJPvAoqHiMOatvr9bsRsFjfruWUDQokX4ug07HDEk/t52qzCtXlv6HOyFydu
+CQftGQQE+P9htRKah8I7Ty/5MbNNK/EByZed/3zhf0lAerAR48RnbCaY+ua8QPDAp1joYZR9Xe7v
+5XZmz3WTTtvwFKxreldjglNJJjVbVgO9RiqYIS+OqONy6lCdTvOWGBpR1g8hwcn4AUNezaObGxkm
+DoRzM1FpnAgpb5Q7Ga1kQMTQNvOvtvUHFSAvwSjqVc70EJ+YLgVrhug1wiDz8zCjUbcENhTTaPbC
+JAMUKJDkobKxQQbEb1+R4xze4KDNQT7s2C0A+TdqmvT7
+--000000000000c7514005c3baab7f--
