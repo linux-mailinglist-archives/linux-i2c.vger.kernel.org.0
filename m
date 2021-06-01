@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E4D397387
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jun 2021 14:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37271397398
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Jun 2021 14:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233922AbhFAMuQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Jun 2021 08:50:16 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:60434 "EHLO
+        id S233657AbhFAMxS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Jun 2021 08:53:18 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:22124 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233906AbhFAMuP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Jun 2021 08:50:15 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 151Clde2004573;
-        Tue, 1 Jun 2021 14:48:13 +0200
+        by vger.kernel.org with ESMTP id S232965AbhFAMxS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Jun 2021 08:53:18 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 151CktPD021929;
+        Tue, 1 Jun 2021 14:51:23 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=z1+Wnvit74uNghN0bCNQj3HecsTBaLmiImgMis/YHwU=;
- b=m6qN6D0NZd1nY03SCvG9oPy643X1C31egKw8bmra2oATxq+McoF7xMx2fOlta7uFfA2h
- PJFzo40m6sYSPuNf8l3wa5gp5AlmfObcpWO4M2D8DwzIaCgsqAnDvk/SpeH5beTUNtnP
- 1SQXU3hREOMkH8J1vIcpHxu8yPpC4/CHdbtzJwRA1M6zcQ0Ot1eNSGPxg8udNQIhGE0W
- txycQaNThTJrCMgPeGH4MSCrIAOdVsX2t6lgoJYueHn1luimRFtraLnEDfvDvbFzSGZf
- RpZEGF6XCbR9VGrjjC47fcx0bd6USzk8vuuGB+tIdput8Zwts+gVBUNz7g6VxbcevsWt HA== 
+ bh=jqYpN/UNu3odHWLK+8p7H6TTeD/AucvmO3pBsH3xEGk=;
+ b=dcu7aBTpLB8gfc/6zSSIreMCIE4wNpje96Qm7bcjrqpKv98z+V0GfkZfTXot/Z0rTeDD
+ Vky3EopOpjCng3tSjdPWwYoj6cGathGfAgIlAmd7IZa5KCbsJjBae7x0hQSjjTIEYN4/
+ KFlK6Xq+DcgtkjOdKYEr/V1/kBRsRmkvhnn3efI7mocG+qzdOC3AaN/6m3OWpMTu58vs
+ LITHPNCy6Z6JWQex7TSKWDkyJ5v5/qB7cLE27qUIfc3yROcLUKOvK+rMFdAkaDkrXFpW
+ j3jbSjetSVMmb/+G2ihjY5lF3euzI7ANsz3D1MVPk7cK2QjXv31P16oVlS56OnV0GC6v 9A== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 38wjdg0xth-1
+        by mx07-00178001.pphosted.com with ESMTP id 38w0y7nbbp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Jun 2021 14:48:13 +0200
+        Tue, 01 Jun 2021 14:51:23 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3C7BC10002A;
-        Tue,  1 Jun 2021 14:48:12 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2B97210002A;
+        Tue,  1 Jun 2021 14:51:22 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2565322176F;
-        Tue,  1 Jun 2021 14:48:12 +0200 (CEST)
-Received: from lmecxl0573.lme.st.com (10.75.127.44) by SFHDAG2NODE3.st.com
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 127BA221775;
+        Tue,  1 Jun 2021 14:51:22 +0200 (CEST)
+Received: from lmecxl0573.lme.st.com (10.75.127.46) by SFHDAG2NODE3.st.com
  (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Jun
- 2021 14:48:11 +0200
-Subject: Re: [PATCH 3/4] clk: stm32: Fix stm32f429's ltdc driver hang in set
- clock rate
+ 2021 14:51:20 +0200
+Subject: Re: [PATCH 4/4] clk: stm32: Fix ltdc's clock turn off by
+ clk_disable_unused() after kernel startup
 To:     <dillon.minfei@gmail.com>, <pierre-yves.mordret@foss.st.com>,
         <alain.volmat@foss.st.com>, <mcoquelin.stm32@gmail.com>,
         <alexandre.torgue@foss.st.com>, <sumit.semwal@linaro.org>,
@@ -49,19 +49,19 @@ CC:     <sboyd@kernel.org>, <linux-i2c@vger.kernel.org>,
         <dri-devel@lists.freedesktop.org>,
         <linaro-mm-sig@lists.linaro.org>, <linux-clk@vger.kernel.org>
 References: <1620990152-19255-1-git-send-email-dillon.minfei@gmail.com>
- <1620990152-19255-4-git-send-email-dillon.minfei@gmail.com>
+ <1620990152-19255-5-git-send-email-dillon.minfei@gmail.com>
 From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-Message-ID: <6ecedc1d-3b80-0eba-a5f0-8feb3eae16cf@foss.st.com>
-Date:   Tue, 1 Jun 2021 14:48:10 +0200
+Message-ID: <6915fa2a-e211-476f-8317-6825e280c322@foss.st.com>
+Date:   Tue, 1 Jun 2021 14:51:20 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1620990152-19255-4-git-send-email-dillon.minfei@gmail.com>
+In-Reply-To: <1620990152-19255-5-git-send-email-dillon.minfei@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE3.st.com
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG2NODE3.st.com
  (10.75.127.6)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-06-01_06:2021-05-31,2021-06-01 signatures=0
@@ -74,48 +74,62 @@ Hi Dillon
 On 5/14/21 1:02 PM, dillon.minfei@gmail.com wrote:
 > From: Dillon Min <dillon.minfei@gmail.com>
 > 
-> This is due to misuse ‘PLL_VCO_SAI' and'PLL_SAI' in clk-stm32f4.c
-> 'PLL_SAI' is 2, 'PLL_VCO_SAI' is 7(defined in
-> include/dt-bindings/clock/stm32fx-clock.h).
+> stm32's clk driver register two ltdc gate clk to clk core by
+> clk_hw_register_gate() and clk_hw_register_composite()
 > 
-> 'post_div' point to 'post_div_data[]', 'post_div->pll_num'
-> is PLL_I2S or PLL_SAI.
+> first: 'stm32f429_gates[]', clk name is 'ltdc', which no user to use.
+> second: 'stm32f429_aux_clk[]', clk name is 'lcd-tft', used by ltdc driver
 > 
-> 'clks[PLL_VCO_SAI]' has valid 'struct clk_hw* ' return
-> from stm32f4_rcc_register_pll() but, at line 1777 of
-> driver/clk/clk-stm32f4.c, use the 'clks[post_div->pll_num]',
-> equal to 'clks[PLL_SAI]', this is invalid array member at that time.
+> both of them point to the same offset of stm32's RCC register. after
+> kernel enter console, clk core turn off ltdc's clk as 'stm32f429_gates[]'
+> is no one to use. but, actually 'stm32f429_aux_clk[]' is in use.
 > 
-> Fixes: 517633ef630e ("clk: stm32f4: Add post divisor for I2S & SAI PLLs")
+> Fixes: daf2d117cbca ("clk: stm32f4: Add lcd-tft clock")
 > Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
 > Acked-by: Stephen Boyd <sboyd@kernel.org>
-> Link: https://lore.kernel.org/linux-arm-kernel/1590564453-24499-6-git-send-email-dillon.minfei@gmail.com/
+> Link: https://lore.kernel.org/linux-arm-kernel/1590564453-24499-7-git-send-email-dillon.minfei@gmail.com/
 > ---
->  drivers/clk/clk-stm32f4.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/clk/clk-stm32f4.c | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
 > diff --git a/drivers/clk/clk-stm32f4.c b/drivers/clk/clk-stm32f4.c
-> index 18117ce5ff85..42ca2dd86aea 100644
+> index 42ca2dd86aea..f4156a8a6041 100644
 > --- a/drivers/clk/clk-stm32f4.c
 > +++ b/drivers/clk/clk-stm32f4.c
-> @@ -557,13 +557,13 @@ static const struct clk_div_table post_divr_table[] = {
+> @@ -129,7 +129,6 @@ static const struct stm32f4_gate_data stm32f429_gates[] __initconst = {
+>  	{ STM32F4_RCC_APB2ENR, 20,	"spi5",		"apb2_div" },
+>  	{ STM32F4_RCC_APB2ENR, 21,	"spi6",		"apb2_div" },
+>  	{ STM32F4_RCC_APB2ENR, 22,	"sai1",		"apb2_div" },
+> -	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div" },
+>  };
 >  
->  #define MAX_POST_DIV 3
->  static const struct stm32f4_pll_post_div_data  post_div_data[MAX_POST_DIV] = {
-> -	{ CLK_I2SQ_PDIV, PLL_I2S, "plli2s-q-div", "plli2s-q",
-> +	{ CLK_I2SQ_PDIV, PLL_VCO_I2S, "plli2s-q-div", "plli2s-q",
->  		CLK_SET_RATE_PARENT, STM32F4_RCC_DCKCFGR, 0, 5, 0, NULL},
+>  static const struct stm32f4_gate_data stm32f469_gates[] __initconst = {
+> @@ -211,7 +210,6 @@ static const struct stm32f4_gate_data stm32f469_gates[] __initconst = {
+>  	{ STM32F4_RCC_APB2ENR, 20,	"spi5",		"apb2_div" },
+>  	{ STM32F4_RCC_APB2ENR, 21,	"spi6",		"apb2_div" },
+>  	{ STM32F4_RCC_APB2ENR, 22,	"sai1",		"apb2_div" },
+> -	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div" },
+>  };
 >  
-> -	{ CLK_SAIQ_PDIV, PLL_SAI, "pllsai-q-div", "pllsai-q",
-> +	{ CLK_SAIQ_PDIV, PLL_VCO_SAI, "pllsai-q-div", "pllsai-q",
->  		CLK_SET_RATE_PARENT, STM32F4_RCC_DCKCFGR, 8, 5, 0, NULL },
+>  static const struct stm32f4_gate_data stm32f746_gates[] __initconst = {
+> @@ -286,7 +284,6 @@ static const struct stm32f4_gate_data stm32f746_gates[] __initconst = {
+>  	{ STM32F4_RCC_APB2ENR, 21,	"spi6",		"apb2_div" },
+>  	{ STM32F4_RCC_APB2ENR, 22,	"sai1",		"apb2_div" },
+>  	{ STM32F4_RCC_APB2ENR, 23,	"sai2",		"apb2_div" },
+> -	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div" },
+>  };
 >  
-> -	{ NO_IDX, PLL_SAI, "pllsai-r-div", "pllsai-r", CLK_SET_RATE_PARENT,
-> +	{ NO_IDX, PLL_VCO_SAI, "pllsai-r-div", "pllsai-r", CLK_SET_RATE_PARENT,
->  		STM32F4_RCC_DCKCFGR, 16, 2, 0, post_divr_table },
+>  static const struct stm32f4_gate_data stm32f769_gates[] __initconst = {
+> @@ -364,7 +361,6 @@ static const struct stm32f4_gate_data stm32f769_gates[] __initconst = {
+>  	{ STM32F4_RCC_APB2ENR, 21,	"spi6",		"apb2_div" },
+>  	{ STM32F4_RCC_APB2ENR, 22,	"sai1",		"apb2_div" },
+>  	{ STM32F4_RCC_APB2ENR, 23,	"sai2",		"apb2_div" },
+> -	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div" },
+>  	{ STM32F4_RCC_APB2ENR, 30,	"mdio",		"apb2_div" },
 >  };
 >  
 > 
+
 Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
 Thanks
