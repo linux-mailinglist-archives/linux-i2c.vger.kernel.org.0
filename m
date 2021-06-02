@@ -2,119 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB91E3982E2
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jun 2021 09:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C2B398491
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jun 2021 10:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbhFBH0u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Jun 2021 03:26:50 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:35232 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbhFBH0t (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Jun 2021 03:26:49 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7A0262193D;
-        Wed,  2 Jun 2021 07:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1622618706; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9tlErMlZM5gf9xuILziR0oHxxVeVriIq/h6p4G9Guyc=;
-        b=DPAd51ju/GSD/M4wI7Cjpfs7DTnLDLiAq8+La+hCXEEwHwFauXdDxBcOz6PPylHb7IqvG9
-        dro3dEC7dXmBX6pFcdtLzB8xjtNP5bb3VHTOjh2WY5UTICG4qS5cmubgkyohhGn2RN7gSm
-        C4zXJALKuDttSGANogd+uXE8DnbsfYM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1622618706;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9tlErMlZM5gf9xuILziR0oHxxVeVriIq/h6p4G9Guyc=;
-        b=/IpsYidIa2sx3/5yO0/mRyAqL3kBK7JqRbffXFAu9mbtdGgxzuK9aMqIvmVkZVxkHfb5CH
-        NJIgMZmM8cqPaTDQ==
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id 3F6E1118DD;
-        Wed,  2 Jun 2021 07:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1622618706; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9tlErMlZM5gf9xuILziR0oHxxVeVriIq/h6p4G9Guyc=;
-        b=DPAd51ju/GSD/M4wI7Cjpfs7DTnLDLiAq8+La+hCXEEwHwFauXdDxBcOz6PPylHb7IqvG9
-        dro3dEC7dXmBX6pFcdtLzB8xjtNP5bb3VHTOjh2WY5UTICG4qS5cmubgkyohhGn2RN7gSm
-        C4zXJALKuDttSGANogd+uXE8DnbsfYM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1622618706;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9tlErMlZM5gf9xuILziR0oHxxVeVriIq/h6p4G9Guyc=;
-        b=/IpsYidIa2sx3/5yO0/mRyAqL3kBK7JqRbffXFAu9mbtdGgxzuK9aMqIvmVkZVxkHfb5CH
-        NJIgMZmM8cqPaTDQ==
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id pCKBDVIyt2DfXQAALh3uQQ
-        (envelope-from <jdelvare@suse.de>); Wed, 02 Jun 2021 07:25:06 +0000
-Date:   Wed, 2 Jun 2021 09:25:04 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [i2c-tools PATCH] tools: i2cbusses: Handle bus names like
- /dev/i2c-0
-Message-ID: <20210602092504.462bc28e@endymion>
-In-Reply-To: <a9bce37a-085b-f863-e1b0-5f5faa91f063@alliedtelesis.co.nz>
-References: <20210525090612.26157-1-chris.packham@alliedtelesis.co.nz>
- <20210526093918.73c40482@endymion>
- <a9bce37a-085b-f863-e1b0-5f5faa91f063@alliedtelesis.co.nz>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S232844AbhFBIxC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Jun 2021 04:53:02 -0400
+Received: from mga04.intel.com ([192.55.52.120]:29864 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232840AbhFBIxC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 2 Jun 2021 04:53:02 -0400
+IronPort-SDR: Gq9nV6jLliQbKpXHOxdKqgqhTV9v4+mdayAw9/LBf7OjSWOFVpEN7xKSvFcHPjDT/DTKRE7UxM
+ 9J3QIYLp/1xQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10002"; a="201881011"
+X-IronPort-AV: E=Sophos;i="5.83,241,1616482800"; 
+   d="scan'208";a="201881011"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2021 01:51:18 -0700
+IronPort-SDR: 7O3HAkimY4ZMDtM0oGELnrPG3JJ6fXO1KDNJb2CPEYDECtirmOnx2RVej2XYigb/qgbPgmuRq5
+ fuuHuCOm5+JA==
+X-IronPort-AV: E=Sophos;i="5.83,241,1616482800"; 
+   d="scan'208";a="438328450"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2021 01:51:13 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1loMak-00GfA7-SC; Wed, 02 Jun 2021 11:51:10 +0300
+Date:   Wed, 2 Jun 2021 11:51:10 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, corbet@lwn.net,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, bhelgaas@google.com, wsa@kernel.org,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Gordeev <agordeev@redhat.com>,
+        Jonathan Derrick <jonathan.derrick@intel.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Logan Gunthorpe <logang@deltatee.com>
+Subject: Re: [PATCH v5 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <YLdGfmrk6+FbTbNN@smile.fi.intel.com>
+References: <20210226155056.1068534-2-zhengdejin5@gmail.com>
+ <20210323224710.GA610170@bjorn-Precision-5520>
+ <20210505162716.GB1851@nuc8i5>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210505162716.GB1851@nuc8i5>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Chris,
+On Thu, May 06, 2021 at 12:27:16AM +0800, Dejin Zheng wrote:
+> On Tue, Mar 23, 2021 at 05:47:10PM -0500, Bjorn Helgaas wrote:
+> > [+cc Christoph, Thomas, Alexander, in case you're interested]
+> > [+cc Jonathan, Kurt, Logan: vmd.c and switchtec.c use managed resources
+> > and pci_alloc_irq_vectors()]
 
-On Wed, 26 May 2021 21:23:07 +0000, Chris Packham wrote:
-> On 26/05/21 7:39 pm, Jean Delvare wrote:
-> > I can't really see the value of this change, sorry. You want to use a
-> > longer parameter so you can tab-complete it. The original parameter was
-> > a 1- or 2-digit number, which is faster to type than /d<tab>i2<tab>.
-> > Plus if you have multiple i2c buses, tab completion can't guess which
-> > one you want anyway, so you'll have to type the bus number eventually.
+> > On Fri, Feb 26, 2021 at 11:50:53PM +0800, Dejin Zheng wrote:
+> > > Introduce pcim_alloc_irq_vectors(), a device-managed version of
+> > > pci_alloc_irq_vectors(). Introducing this function can simplify
+> > > the error handling path in many drivers.
+> > > 
+> > > And use pci_free_irq_vectors() to replace some code in pcim_release(),
+> > > they are equivalent, and no functional change. It is more explicit
+> > > that pcim_alloc_irq_vectors() is a device-managed function.
+> > > 
+> > > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> > 
+> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> > 
+> > Let me know if you'd like me to take the series.
 > >
-> > So, what do we actually win here?  
+> Hi Bjorn,
 > 
-> My main motivation was to replace an in-house tool that is provides 
-> similar functionality but it currently takes the bus as a path. At first 
-> I even thought there was a bug because I thought "or an I2C bus name" 
-> meant the path, it wasn't until I looked at the code that I realised 
-> this was the name used in the kernel.
+> These patches are still invisible on the mainline, could you help me to
+> take it? Thanks very much!
 
-OK, that's a better explanation. But I'm still not convinced by the
-benefit. I'm sure you guys can learn quickly to pass just the i2c bus
-number as the first parameter. Plus I don't like your implementation
-for various technical reasons anyway (like allocating extra memory for
-every bus when you may never actually need it, and hard-coding the
-/dev/i2c-<N> pattern when there's at least one alternative supported by
-i2c-tools at the moment - although I'm unsure if anyone still uses it).
-So I'm not going to apply your patch, sorry.
-
-> One advantage I can see is that the /d<tab>/i2<tab> implicitly validates 
-> that the bus actually exists (assuming /dev is managed by devtmpfs 
-> and/or udev).
-
-That's not an advantage. Running the command on the wrong I2C bus could
-have bad consequences. The only safe way to use the tool without
-checking the list of available i2c buses first is to select the I2C bus
-by name.
+I guess you have to rebase them on top of the latest rc (or PCI for-next) and
+send with a cover letter.
 
 -- 
-Jean Delvare
-SUSE L3 Support
+With Best Regards,
+Andy Shevchenko
+
+
