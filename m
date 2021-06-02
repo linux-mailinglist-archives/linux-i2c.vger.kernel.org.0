@@ -2,101 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A1639808F
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jun 2021 07:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB91E3982E2
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jun 2021 09:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbhFBFJM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Jun 2021 01:09:12 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:47906 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbhFBFJK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Jun 2021 01:09:10 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1622610448; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=FkvZYbRbC/cAozRjP4BPGysEfk7mZXUuzUP30C8/JvY=;
- b=h1uVrM6GMHr2pUzreugYpqY/5tmacvBf1X6zxeA8IXDAWeZTZZ4kFeQq9t++AgD8U3K2IW6K
- Bc82bLJ7SBv13KXrE4VYTasPtuy+ac+6vycDTHYAJ51LeJ/aPTBUF/U2TiOas9rYJOkdUXhc
- yYe9qCUbgC09UhFj03knQ7KpQJw=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZGU3NiIsICJsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 60b7120f6ddc3305c4ccc9d3 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 02 Jun 2021 05:07:27
- GMT
-Sender: rojay=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 95E2AC4323A; Wed,  2 Jun 2021 05:07:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        id S231566AbhFBH0u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Jun 2021 03:26:50 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:35232 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230454AbhFBH0t (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Jun 2021 03:26:49 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: rojay)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id DC05FC433F1;
-        Wed,  2 Jun 2021 05:07:25 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7A0262193D;
+        Wed,  2 Jun 2021 07:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1622618706; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9tlErMlZM5gf9xuILziR0oHxxVeVriIq/h6p4G9Guyc=;
+        b=DPAd51ju/GSD/M4wI7Cjpfs7DTnLDLiAq8+La+hCXEEwHwFauXdDxBcOz6PPylHb7IqvG9
+        dro3dEC7dXmBX6pFcdtLzB8xjtNP5bb3VHTOjh2WY5UTICG4qS5cmubgkyohhGn2RN7gSm
+        C4zXJALKuDttSGANogd+uXE8DnbsfYM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1622618706;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9tlErMlZM5gf9xuILziR0oHxxVeVriIq/h6p4G9Guyc=;
+        b=/IpsYidIa2sx3/5yO0/mRyAqL3kBK7JqRbffXFAu9mbtdGgxzuK9aMqIvmVkZVxkHfb5CH
+        NJIgMZmM8cqPaTDQ==
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id 3F6E1118DD;
+        Wed,  2 Jun 2021 07:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1622618706; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9tlErMlZM5gf9xuILziR0oHxxVeVriIq/h6p4G9Guyc=;
+        b=DPAd51ju/GSD/M4wI7Cjpfs7DTnLDLiAq8+La+hCXEEwHwFauXdDxBcOz6PPylHb7IqvG9
+        dro3dEC7dXmBX6pFcdtLzB8xjtNP5bb3VHTOjh2WY5UTICG4qS5cmubgkyohhGn2RN7gSm
+        C4zXJALKuDttSGANogd+uXE8DnbsfYM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1622618706;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9tlErMlZM5gf9xuILziR0oHxxVeVriIq/h6p4G9Guyc=;
+        b=/IpsYidIa2sx3/5yO0/mRyAqL3kBK7JqRbffXFAu9mbtdGgxzuK9aMqIvmVkZVxkHfb5CH
+        NJIgMZmM8cqPaTDQ==
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id pCKBDVIyt2DfXQAALh3uQQ
+        (envelope-from <jdelvare@suse.de>); Wed, 02 Jun 2021 07:25:06 +0000
+Date:   Wed, 2 Jun 2021 09:25:04 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [i2c-tools PATCH] tools: i2cbusses: Handle bus names like
+ /dev/i2c-0
+Message-ID: <20210602092504.462bc28e@endymion>
+In-Reply-To: <a9bce37a-085b-f863-e1b0-5f5faa91f063@alliedtelesis.co.nz>
+References: <20210525090612.26157-1-chris.packham@alliedtelesis.co.nz>
+ <20210526093918.73c40482@endymion>
+ <a9bce37a-085b-f863-e1b0-5f5faa91f063@alliedtelesis.co.nz>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 02 Jun 2021 10:37:25 +0530
-From:   rojay@codeaurora.org
-To:     wsa@kernel.org
-Cc:     swboyd@chromium.org, dianders@chromium.org,
-        saiprakash.ranjan@codeaurora.org, gregkh@linuxfoundation.org,
-        mka@chromium.org, skananth@codeaurora.org,
-        msavaliy@qti.qualcomm.com, skakit@codeaurora.org,
-        rnayak@codeaurora.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH V11 1/2] i2c: i2c-qcom-geni: Add shutdown callback for i2c
-Mail-Followup-To: wsa@kernel.org, swboyd@chromium.org,
- dianders@chromium.org, saiprakash.ranjan@codeaurora.org,
- gregkh@linuxfoundation.org, mka@chromium.org, skananth@codeaurora.org,
- msavaliy@qti.qualcomm.com, skakit@codeaurora.org, rnayak@codeaurora.org,
- agross@kernel.org, bjorn.andersson@linaro.org,
- linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, sumit.semwal@linaro.org,
- linux-media@vger.kernel.org
-In-Reply-To: <YLClq6hZKUA1Y4ZW@kunai>
-References: <20210525131051.31250-1-rojay@codeaurora.org>
- <20210525131051.31250-2-rojay@codeaurora.org> <YLClq6hZKUA1Y4ZW@kunai>
-Message-ID: <f0b92d196a92201696b7f8984ab34523@codeaurora.org>
-X-Sender: rojay@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2021-05-28 13:41, Wolfram Sang wrote:
-> On Tue, May 25, 2021 at 06:40:50PM +0530, Roja Rani Yarubandi wrote:
->> If the hardware is still accessing memory after SMMU translation
->> is disabled (as part of smmu shutdown callback), then the
->> IOVAs (I/O virtual address) which it was using will go on the bus
->> as the physical addresses which will result in unknown crashes
->> like NoC/interconnect errors.
->> 
->> So, implement shutdown callback for i2c driver to suspend the bus
->> during system "reboot" or "shutdown".
->> 
->> Fixes: 37692de5d523 ("i2c: i2c-qcom-geni: Add bus driver for the 
->> Qualcomm GENI I2C controller")
->> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+Hi Chris,
+
+On Wed, 26 May 2021 21:23:07 +0000, Chris Packham wrote:
+> On 26/05/21 7:39 pm, Jean Delvare wrote:
+> > I can't really see the value of this change, sorry. You want to use a
+> > longer parameter so you can tab-complete it. The original parameter was
+> > a 1- or 2-digit number, which is faster to type than /d<tab>i2<tab>.
+> > Plus if you have multiple i2c buses, tab completion can't guess which
+> > one you want anyway, so you'll have to type the bus number eventually.
+> >
+> > So, what do we actually win here?  
 > 
-> Do we need patch 1 after patch 2 was applied? I always thought all
-> devices are suspended before shutdown/reboot?
-> 
+> My main motivation was to replace an in-house tool that is provides 
+> similar functionality but it currently takes the bus as a path. At first 
+> I even thought there was a bug because I thought "or an I2C bus name" 
+> meant the path, it wasn't until I looked at the code that I realised 
+> this was the name used in the kernel.
 
-Yes, both patch 1 and patch 2 are required.
-Devices are not suspended during shutdown/reboot.
+OK, that's a better explanation. But I'm still not convinced by the
+benefit. I'm sure you guys can learn quickly to pass just the i2c bus
+number as the first parameter. Plus I don't like your implementation
+for various technical reasons anyway (like allocating extra memory for
+every bus when you may never actually need it, and hard-coding the
+/dev/i2c-<N> pattern when there's at least one alternative supported by
+i2c-tools at the moment - although I'm unsure if anyone still uses it).
+So I'm not going to apply your patch, sorry.
 
-> Nice to see that 'mark_adapter_suspended' becomes useful again!
+> One advantage I can see is that the /d<tab>/i2<tab> implicitly validates 
+> that the bus actually exists (assuming /dev is managed by devtmpfs 
+> and/or udev).
 
-Thanks,
-Roja
+That's not an advantage. Running the command on the wrong I2C bus could
+have bad consequences. The only safe way to use the tool without
+checking the list of available i2c buses first is to select the I2C bus
+by name.
+
+-- 
+Jean Delvare
+SUSE L3 Support
