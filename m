@@ -2,116 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F215399E37
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jun 2021 11:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA0F399FBB
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jun 2021 13:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbhFCJ7I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Jun 2021 05:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbhFCJ7H (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Jun 2021 05:59:07 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4279EC06174A;
-        Thu,  3 Jun 2021 02:57:23 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id A1BEC81FB2;
-        Thu,  3 Jun 2021 11:57:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1622714241;
-        bh=SSZQam37MvjdV92UuVrQYX1iZ4LDAER928vqdf2wtvg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=mAm39BGWDCGZSGf7fMTpbX/lRe+3AidPstqZkPHZEY/AL926F0LBAOsifvFSxuhVo
-         EPfHsHPEF16sShwBP/b8U1Uspr7LfvJMbNArMTd1FAR/leDaL7F94ks48SfZHUDXL4
-         fd1B0+Xm8KM7CNoY0SyAThSmkCCA9GG1GYr2NLlG4LSuMjXG2RXyiE8+Td1YeObfQe
-         OpH1y7B4s19Ka+g6TLWgEJv3F/ezycGfk/i7Sv335lA3CrX6KXeU0unDWViSmV19WG
-         umkY2wmCvfIka0hPwOYVzd4FZzSVVnReTSz4F0MKCSXCcdKOYzED50e3lixFkCGydB
-         GsYM+T8Z3ZPIg==
-Subject: Re: [PATCH 02/10] i2c: xiic: Add standard mode support for > 255 byte
- read transfers
-To:     Raviteja Narayanam <rna@xilinx.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Michal Simek <michals@xilinx.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>
-References: <20210531131948.19477-1-raviteja.narayanam@xilinx.com>
- <20210531131948.19477-3-raviteja.narayanam@xilinx.com>
- <0f167c21-6bc7-0806-a536-55658a199a5b@denx.de>
- <SN6PR02MB4093F1992FA306C027D01448CA3C9@SN6PR02MB4093.namprd02.prod.outlook.com>
-From:   Marek Vasut <marex@denx.de>
-Message-ID: <df5d8f33-1fe0-5760-b19d-300c1f99344e@denx.de>
-Date:   Thu, 3 Jun 2021 11:57:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S229747AbhFCL0Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Jun 2021 07:26:24 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3138 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229697AbhFCL0Y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Jun 2021 07:26:24 -0400
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FwjsQ0W5sz6J9TD;
+        Thu,  3 Jun 2021 19:12:10 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 3 Jun 2021 13:24:37 +0200
+Received: from localhost (10.52.126.9) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 3 Jun 2021
+ 12:24:37 +0100
+Date:   Thu, 3 Jun 2021 12:24:36 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Wolfram Sang <wsa@kernel.org>
+CC:     Jonathan Cameron <jic23@kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, Tom Rix <trix@redhat.com>,
+        Sean Nyekjaer <sean@geanix.com>
+Subject: Re: [PATCH] i2c: core: Add stub for i2c_verify_client() if
+ !CONFIG_I2C
+Message-ID: <20210603122436.00003539@Huawei.com>
+In-Reply-To: <YK//xmqZCZRT1VVD@kunai>
+References: <20210526174436.2208277-1-jic23@kernel.org>
+        <YK//xmqZCZRT1VVD@kunai>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
 MIME-Version: 1.0
-In-Reply-To: <SN6PR02MB4093F1992FA306C027D01448CA3C9@SN6PR02MB4093.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.102.4 at phobos.denx.de
-X-Virus-Status: Clean
+X-Originating-IP: [10.52.126.9]
+X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 6/3/21 7:33 AM, Raviteja Narayanam wrote:
-[...]
->>> +	if (i2c->dynamic) {
->>> +		u8 bytes;
->>> +		u16 val;
->>> +
->>> +		/* Clear and enable Rx full interrupt. */
->>> +		xiic_irq_clr_en(i2c, XIIC_INTR_RX_FULL_MASK |
->>> +				XIIC_INTR_TX_ERROR_MASK);
->>> +
->>> +		/*
->>> +		 * We want to get all but last byte, because the TX_ERROR
->> IRQ
->>> +		 * is used to indicate error ACK on the address, and
->>> +		 * negative ack on the last received byte, so to not mix
->>> +		 * them receive all but last.
->>> +		 * In the case where there is only one byte to receive
->>> +		 * we can check if ERROR and RX full is set at the same time
->>> +		 */
->>> +		rx_watermark = msg->len;
->>> +		bytes = min_t(u8, rx_watermark, IIC_RX_FIFO_DEPTH);
->>> +		bytes--;
->>> +
->>> +		xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET, bytes);
->>> +
->>> +		local_irq_save(flags);
->>> +		if (!(msg->flags & I2C_M_NOSTART))
->>> +			/* write the address */
->>> +			xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET,
->>> +				      i2c_8bit_addr_from_msg(msg) |
->>> +				      XIIC_TX_DYN_START_MASK);
->>> +
->>> +		xiic_irq_clr_en(i2c, XIIC_INTR_BNB_MASK);
->>> +
->>> +		/* If last message, include dynamic stop bit with length */
->>> +		val = (i2c->nmsgs == 1) ? XIIC_TX_DYN_STOP_MASK : 0;
->>> +		val |= msg->len;
->>> +
->>> +		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, val);
->>> +		local_irq_restore(flags);
->>
->> Is local_irq_save()/local_irq_restore() used here to prevent concurrent
->> access to the XIIC ?
+On Thu, 27 May 2021 22:23:34 +0200
+Wolfram Sang <wsa@kernel.org> wrote:
+
+> Hi Jonathan,
 > 
-> These were used to fix the timing constraint between two register writes to the IP.
-> As we have discussed last time, these are removed in " [PATCH 08/10] i2c: xiic: Remove interrupt enable/disable in Rx path".
-> Now they are no longer needed since our IP is fixed.
-> For legacy IP versions, driver is switching to 'AXI I2C standard mode' of operation in
-> " [PATCH 07/10] i2c: xiic: Switch to Xiic standard mode for i2c-read".
+> > Fixes: 68068fad0e1c ("iio: accel: fxls8962af: fix errata bug E3 - I2C burst reads")
+> > Cc: Sean Nyekjaer <sean@geanix.com>
+> > Cc: Wolfram Sang <wsa@kernel.org>
+> > ---
+> > 
+> > Note the broken patch is only in the IIO/togreg branch at the moment.  
+> 
+> Then the fixes tag should be removed. It is only for upstream commits.
 
-I see, I would expect such fixes to be at the beginning of the series, 
-so they can be picked into linux-stable.
+Ok, so that is there because my assumption was that mostly like I'd take
+this patch through IIO, in which case it's directly valid and necessary
+for backport information purposes.  I'm guessing this one is unlikely to
+cause merge conflicts given how localized it is...
 
-In fact, now that you mention the bugfixes which I posted a year ago, 
-they also fixed a multitude of locking issues on SMP in the xiic driver. 
-Has this series been tested on SMP Zynq or ZynqMP extensively ?
+You would do an immutable branch that I can pull into IIO. I'd really like
+to avoid rebasing the IIO tree unless absolutely necessary as people are
+working on top if it.
+ 
+> It means we will have a merge dependency the next cycle, so I will send
+> my pull request early.
+
+Doesn't work.  There is a high chance the original patch will get ported
+back to earlier kernels and there is no reference to let anyone know they
+also need this one to avoid potential build issues on the stable kernel.
+
+So, if you want to take this through I2C, the path forwards would be.
+1) You take this one through I2C
+2) I apply the original fix (which #ifdefs the relevant code out in the
+   driver).
+3) Once (1) is in mainline next cycle, I can revert (2) on the basis
+   it is no longer necessary.
+
+I'm fine with doing it this way as it avoids any cross dependencies.
+
+> 
+> > 
+> >  include/linux/i2c.h | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> > index e8f2ac8c9c3d..aa52738b9c46 100644
+> > --- a/include/linux/i2c.h
+> > +++ b/include/linux/i2c.h
+> > @@ -343,7 +343,14 @@ struct i2c_client {
+> >  };
+> >  #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
+> >  
+> > +#if IS_ENABLED(CONFIG_I2C)  
+> 
+> Hmm, can't we move this into an already existing IS_ENABLED block?
+
+There aren't any similar #if / #else blocks for CONFIG_I2C in i2c.h
+so it seemed neater to just add one around this individual element
+and not destroy the general organization of the file.
+
+Jonathan
+
+
+
+> 
+> 
+
