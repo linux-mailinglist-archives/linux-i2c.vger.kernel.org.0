@@ -2,89 +2,189 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FDE399522
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Jun 2021 23:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A8F39979C
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jun 2021 03:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbhFBVGD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Jun 2021 17:06:03 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:47098 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbhFBVGC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Jun 2021 17:06:02 -0400
-Received: by mail-oi1-f177.google.com with SMTP id x15so4010212oic.13;
-        Wed, 02 Jun 2021 14:04:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oVR3AvDB5YuftfnirDS6S655YqBrktVMLOvolfq9ZGQ=;
-        b=k8V2KqFQ8/l8Fvs0pOqGB2YZbdiFtQz3PDNwTIr6Jidpuz280VRboaF47Vr8GYrP6A
-         TMrQecDqv7L1D1Qu8KQEe9/N6C7yK12JLMNQj3EP+N+UnAZ8QvIw4vRFRsPxqM9pb82O
-         oK+aEbUFG/EqMEFevYlc7a1xb8Kfaxmi/C045AiuthVINKAjb5ANqRQEXb+bet/2D1kq
-         +ZN9gjUQKZrhGD34c1OT1Ji02tdx868bTryCCNvtRqPMoU/9Qldj2Vg+cswuAxmEnlE2
-         ZqK0qPfzTGbOnYVf8w/ul6T7gbEn73hr6lmM6Mx9Y3eR2J4X0hGZhHmcKEMBwZ+VUIwj
-         Em/Q==
-X-Gm-Message-State: AOAM530pox7+TffCzNKEdx1l87TimqmGEAEuZE8SHQtA8J1TDOOqjkrS
-        6fnYj5i5f0bw4oyXrySAug==
-X-Google-Smtp-Source: ABdhPJzyeoycgDbLMad+zV8zeFpz+fpMbATJOAz+M+rhuXu7mrVC5TLXcW3DEdGSxZh8+Iy2RdiLxg==
-X-Received: by 2002:a05:6808:1c9:: with SMTP id x9mr23365339oic.109.1622667843191;
-        Wed, 02 Jun 2021 14:04:03 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x14sm241146oic.3.2021.06.02.14.04.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 14:04:02 -0700 (PDT)
-Received: (nullmailer pid 4038638 invoked by uid 1000);
-        Wed, 02 Jun 2021 21:04:00 -0000
-Date:   Wed, 2 Jun 2021 16:04:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Keerthy <j-keerthy@ti.com>, Nishanth Menon <nm@ti.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH 04/12] dt-bindings: clock: update ti,sci-clk.yaml
- references
-Message-ID: <20210602210400.GA4038575@robh.at.kernel.org>
-References: <cover.1622648507.git.mchehab+huawei@kernel.org>
- <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
+        id S229617AbhFCBsU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Jun 2021 21:48:20 -0400
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:22310 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229567AbhFCBsU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Jun 2021 21:48:20 -0400
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 1531X0kq099798;
+        Thu, 3 Jun 2021 09:33:00 +0800 (GMT-8)
+        (envelope-from jamin_lin@aspeedtech.com)
+Received: from aspeedtech.com (192.168.100.253) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 3 Jun
+ 2021 09:46:28 +0800
+Date:   Thu, 3 Jun 2021 09:46:26 +0800
+From:   Jamin Lin <jamin_lin@aspeedtech.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        "Brendan Higgins" <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Rayn Chen <rayn_chen@aspeedtech.com>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        "Chin-Ting Kuo" <chin-ting_kuo@aspeedtech.com>,
+        Troy Lee <troy_lee@aspeedtech.com>,
+        Steven Lee <steven_lee@aspeedtech.com>
+Subject: Re: [PATCH v2 1/1] dt-bindings: aspeed-i2c: Convert txt to yaml
+ format
+Message-ID: <20210603014625.GA1759@aspeedtech.com>
+References: <20210527102512.20684-1-jamin_lin@aspeedtech.com>
+ <20210527102512.20684-2-jamin_lin@aspeedtech.com>
+ <20210602201720.GA3910963@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20210602201720.GA3910963@robh.at.kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [192.168.100.253]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 1531X0kq099798
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 02 Jun 2021 17:43:10 +0200, Mauro Carvalho Chehab wrote:
-> Changeset a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
-> renamed: Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-> to: Documentation/devicetree/bindings/clock/ti,sci-clk.yaml.
+The 06/02/2021 20:17, Rob Herring wrote:
+> On Thu, May 27, 2021 at 06:25:05PM +0800, Jamin Lin wrote:
+> > Convert aspeed i2c to yaml.
+> > 
+> > Signed-off-by: Jamin Lin <jamin_lin@aspeedtech.com>
+> > ---
+> >  .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 86 +++++++++++++++++++
+> >  .../devicetree/bindings/i2c/i2c-aspeed.txt    | 49 -----------
+> >  2 files changed, 86 insertions(+), 49 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+> >  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-aspeed.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+> > new file mode 100644
+> > index 000000000000..1f7064d77708
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+> > @@ -0,0 +1,86 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/i2c/aspeed,i2c.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: ASPEED I2C on the AST24XX, AST25XX, and AST26XX SoCs Device Tree Bindings
+> > +
+> > +maintainers:
+> > +  - Rayn Chen <rayn_chen@aspeedtech.com>
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - aspeed,ast2400-i2c-bus
+> > +      - aspeed,ast2500-i2c-bus
+> > +      - aspeed,ast2600-i2c-bus
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > +  "#address-cells":
+> > +    const: 1
 > 
-> Update the cross-references accordingly.
+> These 2 are covered by i2c-controller.yaml.
+>
+Will remove them.
+> > +
+> > +  reg:
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +    items:
+> > +      - description: address offset and range of bus
+> > +      - description: address offset and range of bus buffer
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +    description: interrupt number
 > 
-> Fixes: a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/devicetree/bindings/gpio/gpio-davinci.txt | 2 +-
->  Documentation/devicetree/bindings/i2c/i2c-davinci.txt   | 2 +-
->  Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt | 2 +-
->  Documentation/devicetree/bindings/net/can/c_can.txt     | 2 +-
->  Documentation/devicetree/bindings/spi/spi-davinci.txt   | 2 +-
->  MAINTAINERS                                             | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
+> Drop. Not a useful description.
 > 
+Will remove it.
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +    description:
+> > +      root clock of bus, should reference the APB
+> > +      clock in the second cell
+> > +
+> > +  reset:
+> 
+> resets
+> 
+Thanks to find the typo.
+> > +    maxItems: 1
+> > +    description: phandle to reset controller with the reset number in
+> > +      the second cell
+> 
+> No need to describe the format of 'resets'.
+> 
+> > +
+> > +  bus-frequency:
+> > +    minimum: 500
+> > +    maximum: 4000000
+> > +    default: 100000
+> > +    description: frequency of the bus clock in Hz defaults to 100 kHz when not
+> > +      specified
+> > +
+> > +  multi-master:
+> > +    type: boolean
+> > +    description:
+> > +      states that there is another master active on this bus
+> > +
+> > +required:
+> > +  - reg
+> > +  - compatible
+> > +  - clocks
+> > +  - resets
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/aspeed-clock.h>
+> > +    i2c0: i2c-bus@40 {
+> > +      #address-cells = <1>;
+> > +      #size-cells = <0>;
+> > +      #interrupt-cells = <1>;
+> > +      reg = <0x40 0x40>;
+> > +      compatible = "aspeed,ast2500-i2c-bus";
+> 
+> Convention is compatible first in the list of properties.
+>
+Will move compatible first in the list of properties.
+> > +      clocks = <&syscon ASPEED_CLK_APB>;
+> > +      resets = <&syscon ASPEED_RESET_I2C>;
+> > +      bus-frequency = <100000>;
+> > +      interrupts = <0>;
+> > +      interrupt-parent = <&i2c_ic>;
+> > +      status = "disabled";
+> 
+> Don't show status in examples especially when disabling disables some 
+> validation...
+> 
+Will remove it.
+> > +      /* Does not need pinctrl properties */
+> > +    };
+Thanks for your suggestion. I will send v3 patch.
 
-Applied, thanks!
