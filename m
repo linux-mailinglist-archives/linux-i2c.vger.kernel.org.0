@@ -2,85 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C4939A524
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jun 2021 17:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52A739A522
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jun 2021 17:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbhFCQAi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Jun 2021 12:00:38 -0400
-Received: from mga07.intel.com ([134.134.136.100]:44027 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229692AbhFCQAh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        id S229752AbhFCQAh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Thu, 3 Jun 2021 12:00:37 -0400
-IronPort-SDR: +oDJh2ACPQfw9pgIMXf8tM23yUm7Pu0afU4PlbUSDEC/34cpHzV+kr++o3/vADKBh+5Xwu6R4j
- NJzQ+PAQc7gQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10004"; a="267937931"
+Received: from mga06.intel.com ([134.134.136.31]:7663 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229617AbhFCQAh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 3 Jun 2021 12:00:37 -0400
+IronPort-SDR: 7BHMdEX90RlQRzwr5LvIZwQJhOb323ZHE+cCkV57U/KFBN0d82uIXvQRVgoVstqor2CfpZN+87
+ GW7sJXY288ww==
+X-IronPort-AV: E=McAfee;i="6200,9189,10004"; a="265246018"
 X-IronPort-AV: E=Sophos;i="5.83,246,1616482800"; 
-   d="scan'208";a="267937931"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2021 08:58:52 -0700
-IronPort-SDR: 3AmhiBndD5HRvHScAb/vzslKKjaUTZctjEY0b3QQjqF4uFahohc/ianMSQfCkc7ZXegh3TSTia
- HlM+vvfBFsUQ==
+   d="scan'208";a="265246018"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2021 08:58:52 -0700
+IronPort-SDR: DOYAGUr7ughbwibZrQLLhEIOGwknrBNIzGL+fRzP+ks9jKeXyVKthUoTFqquMpWYU31e+l5ouG
+ HL7wOLX2kAZQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,246,1616482800"; 
-   d="scan'208";a="468012119"
+   d="scan'208";a="475122847"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Jun 2021 08:58:50 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Jun 2021 08:58:50 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id DBDC1269; Thu,  3 Jun 2021 18:59:13 +0300 (EEST)
+        id E78D71FC; Thu,  3 Jun 2021 18:59:13 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         wsas@kernel.org
-Subject: [PATCH v1 1/3] units: Add SI metric prefix definitions
-Date:   Thu,  3 Jun 2021 18:59:08 +0300
-Message-Id: <20210603155910.35530-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/3] i2c: designware: Use DIV_ROUND_CLOSEST() macro
+Date:   Thu,  3 Jun 2021 18:59:09 +0300
+Message-Id: <20210603155910.35530-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210603155910.35530-1-andriy.shevchenko@linux.intel.com>
+References: <20210603155910.35530-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Sometimes it's useful to have well-defined SI metric prefix to be used
-to self-describe the formulas or equations.
+Instead of open-coding DIV_ROUND_CLOSEST() and similar use the macros directly.
+While at it, replace numbers with predefined SI metric prefixes.
 
-List most popular ones in the units.h.
+No functional change intended.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/units.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/i2c/busses/i2c-designware-common.c  | 8 ++++----
+ drivers/i2c/busses/i2c-designware-platdrv.c | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/units.h b/include/linux/units.h
-index dcc30a53fa93..7366fcd45ec2 100644
---- a/include/linux/units.h
-+++ b/include/linux/units.h
-@@ -4,6 +4,22 @@
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index fdc34d9e3702..9df101d1a34f 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -24,6 +24,7 @@
+ #include <linux/regmap.h>
+ #include <linux/swab.h>
+ #include <linux/types.h>
++#include <linux/units.h>
  
- #include <linux/math.h>
+ #include "i2c-designware-core.h"
  
-+/* Metric prefixes in accordance with Système international (d'unités) */
-+#define PETA	1000000000000000LL
-+#define TERA	1000000000000LL
-+#define GIGA	1000000000L
-+#define MEGA	1000000L
-+#define KILO	1000L
-+#define HECTO	100L
-+#define DECA	10L
-+#define DECI	10L
-+#define CENTI	100L
-+#define MILLI	1000L
-+#define MICRO	1000000L
-+#define NANO	1000000000L
-+#define PICO	1000000000000LL
-+#define FEMTO	1000000000000000LL
-+
- #define MILLIWATT_PER_WATT	1000L
- #define MICROWATT_PER_MILLIWATT	1000L
- #define MICROWATT_PER_WATT	1000000L
+@@ -350,7 +351,7 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
+ 		 *
+ 		 * If your hardware is free from tHD;STA issue, try this one.
+ 		 */
+-		return (ic_clk * tSYMBOL + 500000) / 1000000 - 8 + offset;
++		return DIV_ROUND_CLOSEST(ic_clk * tSYMBOL, MEGA) - 8 + offset;
+ 	else
+ 		/*
+ 		 * Conditional expression:
+@@ -366,8 +367,7 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
+ 		 * The reason why we need to take into account "tf" here,
+ 		 * is the same as described in i2c_dw_scl_lcnt().
+ 		 */
+-		return (ic_clk * (tSYMBOL + tf) + 500000) / 1000000
+-			- 3 + offset;
++		return DIV_ROUND_CLOSEST(ic_clk * (tSYMBOL + tf), MEGA) - 3 + offset;
+ }
+ 
+ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
+@@ -383,7 +383,7 @@ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
+ 	 * account the fall time of SCL signal (tf).  Default tf value
+ 	 * should be 0.3 us, for safety.
+ 	 */
+-	return ((ic_clk * (tLOW + tf) + 500000) / 1000000) - 1 + offset;
++	return DIV_ROUND_CLOSEST(ic_clk * (tLOW + tf), MEGA) - 1 + offset;
+ }
+ 
+ int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev)
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 4b37f28ec0c6..099e303d22bb 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -31,12 +31,13 @@
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/suspend.h>
++#include <linux/units.h>
+ 
+ #include "i2c-designware-core.h"
+ 
+ static u32 i2c_dw_get_clk_rate_khz(struct dw_i2c_dev *dev)
+ {
+-	return clk_get_rate(dev->clk)/1000;
++	return clk_get_rate(dev->clk) / KILO;
+ }
+ 
+ #ifdef CONFIG_ACPI
+@@ -269,8 +270,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 		clk_khz = dev->get_clk_rate_khz(dev);
+ 
+ 		if (!dev->sda_hold_time && t->sda_hold_ns)
+-			dev->sda_hold_time =
+-				div_u64(clk_khz * t->sda_hold_ns + 500000, 1000000);
++			dev->sda_hold_time = DIV_S64_ROUND_CLOSEST(clk_khz * t->sda_hold_ns, MEGA);
+ 	}
+ 
+ 	adap = &dev->adapter;
 -- 
 2.30.2
 
