@@ -2,48 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2001F39AE4E
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jun 2021 00:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D96A39AE33
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jun 2021 00:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbhFCWn0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Jun 2021 18:43:26 -0400
-Received: from mail-wr1-f43.google.com ([209.85.221.43]:42708 "EHLO
-        mail-wr1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbhFCWn0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Jun 2021 18:43:26 -0400
-Received: by mail-wr1-f43.google.com with SMTP id c5so7337648wrq.9;
-        Thu, 03 Jun 2021 15:41:24 -0700 (PDT)
+        id S229803AbhFCWmY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Jun 2021 18:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229704AbhFCWmY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Jun 2021 18:42:24 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CF0C06174A;
+        Thu,  3 Jun 2021 15:40:26 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id b145-20020a1c80970000b029019c8c824054so6767140wmd.5;
+        Thu, 03 Jun 2021 15:40:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Kmp6dSBMRLiq8EO1sTf6qChRpauTe2dmrjHETj38s2U=;
-        b=Q1tjpkAdYyR3Hk2RMnBthVZMhmaIQZ4b0k87Z3jNPTj+44FOAZRytw2yyZpmFnWlaW
-         cXp610ctBOV7CBq/ueEGdhM01CbNo3SARSU/8VnnJwheRDRpQn8dnJ0UEzVOKLcSKuqe
-         TiU/Q6G6YO9XGRZ0PSlqCmARuFzCE/sbI/vTUwRyVRvbc/6IH+MISv39zHItESdH+ZDG
-         9ToXHQB8vQi1V9XQ/9NYFXA9zPvV+zhdq3NiEaE7yMItpS7Fv8hbcwkXeGuW//MrOdWr
-         V7OcP9dQat4tTLOtEMT+KLclIWTizuLx/h274rT7iKIralGYKdY1tu0FVzAEP/6zQpof
-         wqmA==
+        bh=9bSfSMQxktukE2bkFT53oq75scSeKdwwSpf8Uvj1M/U=;
+        b=MzlWxnd2BvsZFZ8024ZTALS1je1zPZkCqP70AnL0JswJnOjzEdugOeY1JH0peylslc
+         tv9T/QyHwC9P9iK4XUr82xk/b2oyJPCELFhgo0zLVhglRQZXx0wSicmbdXWOaQlgYw1s
+         w5BaReBCQRkit6RDLLnIu7ivwaFf07rAUmUIwYqWKBQtS8ZyoV+EWLctY/tZNo5MeJv3
+         SlZtjRMV4AVMqJr/sCkUMqwItrpIZR8Zh3mij9zIbcbuIYPAtKl5L62obxtrTLhS2CeB
+         knHgCyCOPe0nitYiuavZhJAVnhGDD7NHgn9eiZyJ+vqOWVR1P2rLEjsjp1wNiG1Gq8Yn
+         joeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Kmp6dSBMRLiq8EO1sTf6qChRpauTe2dmrjHETj38s2U=;
-        b=IrCg4ViJc6WJ57RwOXbYoeGMLDhH/ihxbzR7mh+hxtAIvQ71HbpdsnfvX39Nb39eHS
-         Qhn++earBwM1pLv5TXwKw77Zcnr3qTYNqiL14X9ctvUWZpHB0JYpjp/GTsvP6vwvBQFJ
-         Nx+B3PgmadYqVO66IsFuHO+Ac8U123WJhF2ehBDIcH2qIgBo2rNtLPbICDwCtXT56eI1
-         dMnlTFx3HEjOwUpCiJCETnKwSRZu8n6Djj7zg6Fmm0Ker5vDSTk7d+ZvzirOZxWCo6yW
-         tNHO8nbilDr3s0aj0YXzyx4JWKOmKKcSisWoaZqlX17c0bJmvCdVb5RZWbWm7CYha0u8
-         Xfiw==
-X-Gm-Message-State: AOAM531DgyVHkU/RSki4X91XRhmSEut0ebPsRto15eFhzqPdYVY/Ot4c
-        k3ZblyweEQO8t+eBE89JNt8=
-X-Google-Smtp-Source: ABdhPJyoBD+gzNGPlwurXFCGJJQgxkpRtARpcMsaH2I3nIg+SviaNB4pCapmAZM/YGd+mHUMvU/FPA==
-X-Received: by 2002:a5d:664c:: with SMTP id f12mr659229wrw.206.1622760023745;
-        Thu, 03 Jun 2021 15:40:23 -0700 (PDT)
+        bh=9bSfSMQxktukE2bkFT53oq75scSeKdwwSpf8Uvj1M/U=;
+        b=VoV2KQQ+02+caT8ub9/+oM8mVVl+YhVyCYW9wphl4bpJ4KHl77+nG2hiWsO1luyrXO
+         cn53l32r8ae5ahdq4j4JaiWdtMlPNHYeMZYLAsmjnhr22iT0K1Y8Bhnmd569rmUCYngE
+         N21FzKvtL9QbQHPi/9o9J++dpyEZEdqS2JiGSqmOpGf2v26FdPDfHre0HYlPyxDqA7BU
+         l2dU0G67GjiEq9DnmwAe9wW9RVhM/9AfyDidjR9ho1tmSjQPhym3s6H2AUQ19FyhOZuR
+         x9g0rpVxG/FJN7QzwgxpJJUgtXwuFIAT4AG9CDGjUx6KUiL0B79X2Uew5tCq1T5JoM5F
+         3Pfw==
+X-Gm-Message-State: AOAM530UI3zyQQB2ZWDACzDtoPXETfTXspAjIn+5VeNZVNIgUkcpFdyP
+        4QLfaAtZ4+CZVCcQxw0rxHM=
+X-Google-Smtp-Source: ABdhPJwSTyy/UEJQ5uIrxum+kq4DojYedsdQto1Q/RdQRtly0MAoQIPvCRI7CPKWSvqg6p6/oJRYKw==
+X-Received: by 2002:a05:600c:2194:: with SMTP id e20mr557589wme.173.1622760024967;
+        Thu, 03 Jun 2021 15:40:24 -0700 (PDT)
 Received: from valhalla.home ([91.110.88.218])
-        by smtp.gmail.com with ESMTPSA id f14sm4612103wry.40.2021.06.03.15.40.22
+        by smtp.gmail.com with ESMTPSA id f14sm4612103wry.40.2021.06.03.15.40.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 15:40:23 -0700 (PDT)
+        Thu, 03 Jun 2021 15:40:24 -0700 (PDT)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,11 +65,10 @@ Cc:     Len Brown <lenb@kernel.org>,
         Mark Gross <mgross@linux.intel.com>,
         Robert Moore <robert.moore@intel.com>,
         Erik Kaneda <erik.kaneda@intel.com>,
-        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v5 3/6] gpiolib: acpi: Export acpi_get_gpiod()
-Date:   Thu,  3 Jun 2021 23:40:04 +0100
-Message-Id: <20210603224007.120560-4-djrscally@gmail.com>
+        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com
+Subject: [PATCH v5 4/6] gpiolib: acpi: Add acpi_gpio_get_io_resource()
+Date:   Thu,  3 Jun 2021 23:40:05 +0100
+Message-Id: <20210603224007.120560-5-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210603224007.120560-1-djrscally@gmail.com>
 References: <20210603224007.120560-1-djrscally@gmail.com>
@@ -76,77 +78,78 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-We need to be able to translate GPIO resources in an ACPI device's _CRS
-into GPIO descriptor array. Those are represented in _CRS as a pathname
-to a GPIO device plus the pin's index number: the acpi_get_gpiod()
-function is perfect for that purpose.
+Add a function to verify that a given acpi_resource represents an IO
+type GPIO resource, and return it if so.
 
-As it's currently only used internally within the GPIO layer, provide and
-export a wrapper function that additionally holds a reference to the GPIO
-device.
-
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes since v4:
 	- None
 
- drivers/gpio/gpiolib-acpi.c   | 28 ++++++++++++++++++++++++++++
- include/linux/gpio/consumer.h |  2 ++
+ drivers/gpio/gpiolib-acpi.c | 23 +++++++++++++++++++++++
+ include/linux/acpi.h        |  7 +++++++
  2 files changed, 30 insertions(+)
 
 diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-index 5b4111e4be3f..684ddb35d83b 100644
+index 684ddb35d83b..9887bb684575 100644
 --- a/drivers/gpio/gpiolib-acpi.c
 +++ b/drivers/gpio/gpiolib-acpi.c
-@@ -128,6 +128,34 @@ static struct gpio_desc *acpi_get_gpiod(char *path, int pin)
- 	return gpiochip_get_desc(chip, pin);
+@@ -196,6 +196,29 @@ bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
  }
+ EXPORT_SYMBOL_GPL(acpi_gpio_get_irq_resource);
  
 +/**
-+ * acpi_get_and_request_gpiod() - Translate ACPI GPIO pin to GPIO descriptor
-+ *                               and hold a refcount to the GPIO device.
-+ * @path:      ACPI GPIO controller full path name, (e.g. "\\_SB.GPO1")
-+ * @pin:       ACPI GPIO pin number (0-based, controller-relative)
-+ * @label:     Label to pass to gpiod_request()
-+ *
-+ * This function is a simple pass-through to acpi_get_gpiod(), except that
-+ * as it is intended for use outside of the GPIO layer (in a similar fashion to
-+ * gpiod_get_index() for example) it also holds a reference to the GPIO device.
++ * acpi_gpio_get_io_resource - Fetch details of an ACPI resource if it is a GPIO
++ *			       I/O resource or return False if not.
++ * @ares:	Pointer to the ACPI resource to fetch
++ * @agpio:	Pointer to a &struct acpi_resource_gpio to store the output pointer
 + */
-+struct gpio_desc *acpi_get_and_request_gpiod(char *path, int pin, char *label)
++bool acpi_gpio_get_io_resource(struct acpi_resource *ares,
++			       struct acpi_resource_gpio **agpio)
 +{
-+	struct gpio_desc *gpio;
-+	int ret;
++	struct acpi_resource_gpio *gpio;
 +
-+	gpio = acpi_get_gpiod(path, pin);
-+	if (IS_ERR(gpio))
-+		return gpio;
++	if (ares->type != ACPI_RESOURCE_TYPE_GPIO)
++		return false;
 +
-+	ret = gpiod_request(gpio, label);
-+	if (ret)
-+		return ERR_PTR(ret);
++	gpio = &ares->data.gpio;
++	if (gpio->connection_type != ACPI_RESOURCE_GPIO_TYPE_IO)
++		return false;
 +
-+	return gpio;
++	*agpio = gpio;
++	return true;
 +}
-+EXPORT_SYMBOL_GPL(acpi_get_and_request_gpiod);
++EXPORT_SYMBOL_GPL(acpi_gpio_get_io_resource);
 +
- static irqreturn_t acpi_gpio_irq_handler(int irq, void *data)
+ static void acpi_gpiochip_request_irq(struct acpi_gpio_chip *acpi_gpio,
+ 				      struct acpi_gpio_event *event)
  {
- 	struct acpi_gpio_event *event = data;
-diff --git a/include/linux/gpio/consumer.h b/include/linux/gpio/consumer.h
-index c73b25bc9213..566feb56601f 100644
---- a/include/linux/gpio/consumer.h
-+++ b/include/linux/gpio/consumer.h
-@@ -692,6 +692,8 @@ int devm_acpi_dev_add_driver_gpios(struct device *dev,
- 				   const struct acpi_gpio_mapping *gpios);
- void devm_acpi_dev_remove_driver_gpios(struct device *dev);
- 
-+struct gpio_desc *acpi_get_and_request_gpiod(char *path, int pin, char *label);
-+
- #else  /* CONFIG_GPIOLIB && CONFIG_ACPI */
- 
- struct acpi_device;
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 170b9bebdb2b..e8ba7063c000 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -1098,6 +1098,8 @@ void __acpi_handle_debug(struct _ddebug *descriptor, acpi_handle handle, const c
+ #if defined(CONFIG_ACPI) && defined(CONFIG_GPIOLIB)
+ bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
+ 				struct acpi_resource_gpio **agpio);
++bool acpi_gpio_get_io_resource(struct acpi_resource *ares,
++			       struct acpi_resource_gpio **agpio);
+ int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name, int index);
+ #else
+ static inline bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
+@@ -1105,6 +1107,11 @@ static inline bool acpi_gpio_get_irq_resource(struct acpi_resource *ares,
+ {
+ 	return false;
+ }
++static inline bool acpi_gpio_get_io_resource(struct acpi_resource *ares,
++					     struct acpi_resource_gpio **agpio)
++{
++	return false;
++}
+ static inline int acpi_dev_gpio_irq_get_by(struct acpi_device *adev,
+ 					   const char *name, int index)
+ {
 -- 
 2.25.1
 
