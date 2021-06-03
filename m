@@ -2,119 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA7739AB94
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jun 2021 22:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4651139ABC1
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Jun 2021 22:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbhFCUKv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Jun 2021 16:10:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39754 "EHLO mail.kernel.org"
+        id S229665AbhFCU11 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Jun 2021 16:27:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230083AbhFCUKu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 3 Jun 2021 16:10:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8EBE8611C9;
-        Thu,  3 Jun 2021 20:09:04 +0000 (UTC)
+        id S229640AbhFCU10 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 3 Jun 2021 16:27:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CE3466108D;
+        Thu,  3 Jun 2021 20:25:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622750945;
-        bh=vouxc5KMLEMa3QrqPqXja2Z4KHWtjXXf/sVDLuzgUZE=;
+        s=k20201202; t=1622751941;
+        bh=14e4ANwC5usN+7RNn9d1zueQxt3zXg2RzNznhChwp28=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UYeXhRQkhsFG2wW4pMFx1ENgilnnfZtGlHetX3wkENSTPOwGglvuReS2frt1cjTtl
-         JLKCPkpKMa+NFqpLVPYTtBPL0W7QDpwuraSUhXTED5ruFCTZ9l/ZX9j2f0fTHd72HX
-         kez6g1QVBsDVie8+Ol70lWcbLUVi1CXU1PW0xR/2pCdlEh0uFsIt5t1odTPh3MK5Rr
-         a5Km3PlwQZ/OU5n1g2kWDQQWpus4Z5O11Vo1RXQubZjb3F/M7e1Zij82vHdp1Vv0Lw
-         PNnhqdSX0wMy7B0BUu9GlN4yLxGGR/WG4yMmJYO7tsywLyQGMS7Po49eXeaSRMo1qA
-         +IfEKzjVtpXVQ==
-Date:   Thu, 3 Jun 2021 22:09:02 +0200
+        b=AO4Smmr1c730nbLDhch/dZyD7ed0xEprHQ/ZTN7v7dZbgbyyF+5B8w+0IVWh5g2gW
+         ThGqfU1oN0IracroeMGZLW/tHFx8WAZ4vcHbp37hITyghxsoD/YFSXuIJAMRcYDSJa
+         LaaOWdECV6o1nEjqc1WUKwZnFYEa8Z4lDbpqTmhjZmZe+L1Ek2544WAO4UlsiRvJbh
+         qXhir2ged+fzXrvlR3HBHfsi89/V7GHapL+f/gxwlo7WSjAcCgIiPn8DRMI9872eJU
+         Nw3AG03gT9TlMDEsTI/O276pMq6qRL4SXEFO9gyZ3N39g9OswqV936a7/XH3rGmDwE
+         5KK9ejPg17pdQ==
+Date:   Thu, 3 Jun 2021 22:25:38 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jakub Kicinski <kuba@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 04/12] dt-bindings: clock: update ti,sci-clk.yaml
- references
-Message-ID: <YLk23rrWN9ze+zru@kunai>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 04/16] i2c: busses: i2c-altera: Fix formatting issue in
+ struct and demote unworthy kernel-doc headers
+Message-ID: <YLk6wgE0o9f9WQCT@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jakub Kicinski <kuba@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Tero Kristo <kristo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wolfgang Grandegger <wg@grandegger.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, netdev@vger.kernel.org
-References: <cover.1622648507.git.mchehab+huawei@kernel.org>
- <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+References: <20210520190105.3772683-1-lee.jones@linaro.org>
+ <20210520190105.3772683-5-lee.jones@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HwDyggedf9K45ZIg"
+        protocol="application/pgp-signature"; boundary="/sWLq9UAENoQS1je"
 Content-Disposition: inline
-In-Reply-To: <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20210520190105.3772683-5-lee.jones@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---HwDyggedf9K45ZIg
+--/sWLq9UAENoQS1je
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 02, 2021 at 05:43:10PM +0200, Mauro Carvalho Chehab wrote:
-> Changeset a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json s=
-chema")
-> renamed: Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-> to: Documentation/devicetree/bindings/clock/ti,sci-clk.yaml.
+On Thu, May 20, 2021 at 08:00:53PM +0100, Lee Jones wrote:
+> Fixes the following W=3D1 kernel build warning(s):
 >=20
-> Update the cross-references accordingly.
+>  drivers/i2c/busses/i2c-altera.c:74: warning: cannot understand function =
+prototype: 'struct altr_i2c_dev '
+>  drivers/i2c/busses/i2c-altera.c:180: warning: Function parameter or memb=
+er 'idev' not described in 'altr_i2c_transfer'
+>  drivers/i2c/busses/i2c-altera.c:180: warning: Function parameter or memb=
+er 'data' not described in 'altr_i2c_transfer'
+>  drivers/i2c/busses/i2c-altera.c:193: warning: Function parameter or memb=
+er 'idev' not described in 'altr_i2c_empty_rx_fifo'
+>  drivers/i2c/busses/i2c-altera.c:209: warning: Function parameter or memb=
+er 'idev' not described in 'altr_i2c_fill_tx_fifo'
 >=20
-> Fixes: a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json sche=
-ma")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Cc: Thor Thayer <thor.thayer@linux.intel.com>
+> Cc: linux-i2c@vger.kernel.org
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+Applied to for-current, thanks!
 
 
---HwDyggedf9K45ZIg
+--/sWLq9UAENoQS1je
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmC5Nt4ACgkQFA3kzBSg
-KbYA5BAAmxrTszpFm+SFwkhyzevlAeZO+O6tTPRp2hAT0FogM2Us0fUzfwLEFgWP
-dR+9Lw8BinKXs9tNQwP3RGM6/azDSnS8tL5a1l0aaI52mxwwu0zGKPZmCvvMizT2
-AQX51DP3llTCDdTc85P1C7TYhRyhYy1GWPJrfhAxfUBS+maMcJJ3VX7rfnmQlAWG
-6FOy1eZaCP2d2DxVZNlMi0TXsYuudltp75a0T7k8wesRQv+BEEE4MpyfFwDquX/N
-3BtPLsuwSDnSQ1hL3gEPEbrm++yG+3g0PHdhWxdrDeRV/eRW8EM4rjJ0xHutgimp
-LyQ0SnSdM6/EMF0h4jjQ2CPLGedDPpKkBdXsAH0yU8GqD2P5mijVUJHZqqyCKdz4
-8elfRdDzaLOrwvZrqTQYqGpeup/953O/m8mbKfy0zhkc2X0Ceqmqb2iKDzvemODe
-OpVnrneL06Fo3k9Mi0c828teZf7T4kZPBFI896XMP8MYeT7ghBaOrRBt6mIaefTN
-dCZGUE9vm2SbKqBOJ88QHbyFwDwHDj7UU4O9uhZH77nUj3kzQC+yfp0xLhkkT3lE
-ME9gAuT18XacriGNwHQVpMUPTvMAcLUWeHqfYIvPVd/HQRNMwV/IB2paBkGThO7/
-gzP8cd9cYoh9D2thXE0J/EnXq+MPeo6KVP9Uirz9eSo6jxKoggM=
-=2IA3
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmC5OsIACgkQFA3kzBSg
+KbYwlxAAjtOk+RWF1LLBMIWxdpvmoiZG3q0c6jlyKGUXyni+ZxT8Y0r70YOqLL1A
+PAkI4P3+r6b9fdpd37G5T71MmwUfFk9WUWKe/v4iGDy9XwQLCmUMrQm9efDjvOmu
+Fbhsgb+Q1DHyQ3YfpjaeJYf+ufeYot7ZclNEKUkHzE1cDOfigNXXJ2zI945uUkFh
+DtJVCAZJ8EJv+6BO6ccSuXytL3TJIV08dwbMiDUROs5DoXy+9aECwKBUyCvt/j2L
+oshNd1shanwp/+VKXgjPIwo81ji2nPKPbICVDcJ14taV5lmR3H75mpBhtAobHtUx
+YC8zMaCL7lU0ByoH1ROVJKf+PQBGumh0BSTiUSf4VUBSGaObu5PeqCTxwbkfGp0I
+PwuWXvdTWPsGK/ee7HolQqA+vc9QnieqGRPMDhER5lhL3Hw02LP6UUlZuaWv2UKz
+Ac9zHc4DZlauAFaGGVm+USCwcuv4NIIYSne21kfMPf6hct41yl39Shd7QtsqE9q4
+n2SqctQj/N7sKlMid+rpK+SWKui89Sg7kK1q+RoLDiqScO5OGMaKfabhz3IC7kvz
+963XjX0x6wssOvo2WKUmDXfVOVifNdq0hbK5zfM8f3YGTyQb+qaMfXzRv+OAXei5
+wGyruv8vvmBdWUtRIVQYJCj0OYp2Lgy96AKt0M3sFEsc9GI8MwM=
+=3bbQ
 -----END PGP SIGNATURE-----
 
---HwDyggedf9K45ZIg--
+--/sWLq9UAENoQS1je--
