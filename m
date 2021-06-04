@@ -2,106 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFA739C25E
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jun 2021 23:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD12F39C2F8
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jun 2021 23:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbhFDV35 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Jun 2021 17:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbhFDV3z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Jun 2021 17:29:55 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27CEC061767
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Jun 2021 14:27:54 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id s14so7475472pfd.9
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Jun 2021 14:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k6+JhCiXHMPptaq8dstrlpJoFisp6qwsWO9lqwpe7Ns=;
-        b=JbgRSycJNWnTQTpB1DrYHX598c2UPc0fYDleVX7zCHOXHb9zRZYWferfq+RmtREbVu
-         VDI26Ka93DxZ83ESmPBNcdSwPYz8EHR8a5/MVYxG/1Pyev5RSgR4qHWUAEJkEwMGpsU1
-         kIfswNPeAdZlSJiNrZrVtqpA8hXVb20upxqU0=
+        id S230281AbhFDVxD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Jun 2021 17:53:03 -0400
+Received: from mail-oo1-f54.google.com ([209.85.161.54]:33385 "EHLO
+        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231623AbhFDVw5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Jun 2021 17:52:57 -0400
+Received: by mail-oo1-f54.google.com with SMTP id j17-20020a4ad6d10000b02901fef5280522so2599226oot.0;
+        Fri, 04 Jun 2021 14:50:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k6+JhCiXHMPptaq8dstrlpJoFisp6qwsWO9lqwpe7Ns=;
-        b=Z8ufjxabC4N/YtcU93g5WsJBqLLJjyXehyBZYM73OKXBhq+MdV55Rr1aPUkfOSlKuL
-         7IUd7vfSitLaP/+0rmkL7UFB6USnAIM587T0TnysFJzetKnfRFKNuDbc3IIb2Af+g0Pj
-         aRqpvxcEKv1A1gfVkU4nmp0Y2gyDbwisv0RV3DSpcnBqOiTS9XDkEj4CRxHs29P2bzuJ
-         Ib16yXwTxX2fubpdR9pr9l6yTtFRagMjWX2R4F3dY8BJQkVCVtBXluRaDzJZbeLy7YNi
-         G+UYmI2VrVZCswRP498I9InRbeb5m4K2rjUgli1GiGS9X8r8cnBqt1SzkQ4DqQlq3une
-         6EZA==
-X-Gm-Message-State: AOAM531ofxrlnuRyE7x/Q/VIjni7754Biyc+Np+icRiNzI757mYEC1Ow
-        a/1rXJPxbSlV+gE1mKHMala+WQ==
-X-Google-Smtp-Source: ABdhPJxO29hLqt+Eq3Gcu/LLFVxKElptcm5ZWMw2pb+oePPV6ODRTZmOr92ZkhMXQu8JWYbFLy1FUg==
-X-Received: by 2002:a63:fc11:: with SMTP id j17mr6749649pgi.355.1622842074427;
-        Fri, 04 Jun 2021 14:27:54 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:fb56:4f6a:ea47:556b])
-        by smtp.gmail.com with ESMTPSA id k15sm5768043pjf.32.2021.06.04.14.27.53
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RablGP30AWym6iX311SHiz1tVC3w/+g5lgfSDAXTcog=;
+        b=qNfjNkXcHzG8u9HSavAcOpi8O3AHbFmEUmiGNbCZm4JZSW8ukDSnHSb5KeN8W58QFH
+         YJ8j3uI19/oip3xOlJIoDqDyYR9QHXYWgrcKwmwYiI3Q7fRmxhSf9RdAgGxhqIBVlBmd
+         RPUWeblIvRA903i0hgrGqDCfkcVgGjNUY3YsntRVJHk1+44QrVO3du+fFMukDAwWy6Z/
+         b8jiiNzyTIOxQNDH0+onN/MVGNVscvQzG43QndnWNgvVhTbnyG++mFAgOoNYgr9zImmg
+         1YLB1aCO8gGvH6UP9f3PkgjgM/DE+jfKUTpxPSdsOB9M/JuwcXm1/pis6vccoiKcRysL
+         9CLw==
+X-Gm-Message-State: AOAM530DdGttVJYg0TLwzo2dX5WQGid1Wl4Y04UHJrF5DvPDT416bI0z
+        1IXgpn60y2o4t14OguV2dg==
+X-Google-Smtp-Source: ABdhPJy+5KLpJ+PqBF8N3RxF+W0QEpeQ2BkwoGqc/1cJSpZt/cxNXfzm9ZuR3bsuLIH7dRU4dac7CQ==
+X-Received: by 2002:a4a:55c1:: with SMTP id e184mr5319694oob.74.1622843457146;
+        Fri, 04 Jun 2021 14:50:57 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g24sm727252otp.17.2021.06.04.14.50.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 14:27:54 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c: core: Disable client irq on reboot/shutdown
-Date:   Fri,  4 Jun 2021 14:27:52 -0700
-Message-Id: <20210604212752.3547301-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
+        Fri, 04 Jun 2021 14:50:56 -0700 (PDT)
+Received: (nullmailer pid 3987100 invoked by uid 1000);
+        Fri, 04 Jun 2021 21:50:55 -0000
+Date:   Fri, 4 Jun 2021 16:50:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, x86@kernel.org,
+        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: ce4100: Replace "ti,pcf8575" by
+ "nxp,pcf8575"
+Message-ID: <20210604215055.GA3985497@robh.at.kernel.org>
+References: <cover.1622560799.git.geert+renesas@glider.be>
+ <9b560b7f5ded90430c989a211f2aee009aefc595.1622560799.git.geert+renesas@glider.be>
+ <YLqMsCPSCvisGyGF@kunai>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YLqMsCPSCvisGyGF@kunai>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+On Fri, Jun 04, 2021 at 10:27:28PM +0200, Wolfram Sang wrote:
+> On Tue, Jun 01, 2021 at 05:25:44PM +0200, Geert Uytterhoeven wrote:
+> > The TI part is equivalent to the NXP part, and its compatible value is
+> > not documented in the DT bindings.
+> > 
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> 
+> I'd think I pick this individually? Or shall it all go via some tree?
 
-If an i2c client receives an interrupt during reboot or shutdown it may
-be too late to service it by making an i2c transaction on the bus
-because the i2c controller has already been shutdown. This can lead to
-system hangs if the i2c controller tries to make a transfer that is
-doomed to fail because the access to the i2c pins is already shut down,
-or an iommu translation has been torn down so i2c controller register
-access doesn't work.
+Yes, you can take it.
 
-Let's simply disable the irq if there isn't a shutdown callback for an
-i2c client when there is an irq associated with the device. This will
-make sure that irqs don't come in later than the time that we can handle
-it. We don't do this if the i2c client device already has a shutdown
-callback because presumably they're doing the right thing and quieting
-the device so irqs don't come in after the shutdown callback returns.
-
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-[swboyd@chromium.org: Dropped newline, added commit text]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
-
-Dmitry, please add Signed-off-by
-
-This supersedes https://lore.kernel.org/r/20210510220012.2003285-1-swboyd@chromium.org
-
- drivers/i2c/i2c-core-base.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5a97e4a02fa2..7ea5d7cc5974 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -627,6 +627,8 @@ static void i2c_device_shutdown(struct device *dev)
- 	driver = to_i2c_driver(dev->driver);
- 	if (driver->shutdown)
- 		driver->shutdown(client);
-+	else if (client->irq > 0)
-+		disable_irq(client->irq);
- }
- 
- static void i2c_client_dev_release(struct device *dev)
-
-base-commit: 8124c8a6b35386f73523d27eacb71b5364a68c4c
--- 
-https://chromeos.dev
-
+Reviewed-by: Rob Herring <robh@kernel.org>
