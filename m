@@ -2,94 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4060E39C3B7
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 01:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F5839C3E4
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 01:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbhFDXMI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Jun 2021 19:12:08 -0400
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:33631 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbhFDXMI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Jun 2021 19:12:08 -0400
-Received: by mail-oi1-f182.google.com with SMTP id t140so6079984oih.0
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Jun 2021 16:10:21 -0700 (PDT)
+        id S230424AbhFDXaq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Jun 2021 19:30:46 -0400
+Received: from mail-pj1-f45.google.com ([209.85.216.45]:54863 "EHLO
+        mail-pj1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229873AbhFDXaq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Jun 2021 19:30:46 -0400
+Received: by mail-pj1-f45.google.com with SMTP id g24so6356948pji.4
+        for <linux-i2c@vger.kernel.org>; Fri, 04 Jun 2021 16:28:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=du6aRGfX4SI86kYShqUWR1TDu1w5UdQuTWF6MyIxIRY=;
-        b=NbrraKsJQeXPFVM7Eorm2jhGhe/xf/js0Fuy/gLvHQA/P57w7ccteCjE4aGRLEnr2Z
-         dlI0ptIoyfAJutgfWZj13qCquhp/o/It7Ky8uQ7O3DJLqdIOrDHVDKXEn5BBxLwtz76j
-         pRYW3LQAEXydTU36si0M/QHWzem//g1AG6lmU=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Yso64/11K/NVoM1kuoUluh2W7Yq6bZwBUsc8+1WoqA=;
+        b=Ia3/eX/3L13jjBWzDZuwOM3NO8zMtT+5VxJV8tyWEyA8n0xYAsylEpt5kKg+nCFdSl
+         b0G4bvWjyxNwTzu6+T0YMcc22fyNxhd8Cj3oIi5+AplIabkpWDw+CTrC/99SnGp6nqxs
+         b9bdwn1ANly7ZiJ2W8206qbgn3rwQ4YKY1Iog=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=du6aRGfX4SI86kYShqUWR1TDu1w5UdQuTWF6MyIxIRY=;
-        b=QFnAe/g2lTKUjtnqt9/AJ6+3eIlRFMLWH8e8nQ8c5UjcJCVlVuCYyEASrU++R49tW6
-         2Fvb6Y7WG2PyISkFd4A18907H0m3Qz0jMNAyglCvEJgBmswb1zfkLUI2u2gcbUq5VRZQ
-         CSEPHeUaR/c0A5F1Msqn9kBF0I7XbP2d1X4FS3mLV2i/XtNetFCoDYQgQHJ+PHD5wO+M
-         OrPgJf6y/FDfprcZjHo2Ecb0WZsgSBpRFX0OqzOM4GKgFqQGaR1BqQ86OTlRULEEpSxS
-         jhCdl2AcB4GwX1IaTN/c5VTxwW8DTFlvvHM1Oyo7gLptRiJNpWTNfaglrLgn7DU74NYM
-         TTIg==
-X-Gm-Message-State: AOAM531fe8SLe63GahybPb/Vh4OCdKkYgc9XQ3UhxQKMJtsFMXNqD2UQ
-        fz5c9vyz+ofJRESrABDY6kwCLGIo4brJg/H0Ih4FaA==
-X-Google-Smtp-Source: ABdhPJzshQRhetJ7fG/nA9zbn3qMtWPZUUgQnF9azZgf7YfHohZsKcLRZN75T8UorNN3FrOy5Y8IGzU4bgnYkfqaWUg=
-X-Received: by 2002:aca:654d:: with SMTP id j13mr12631266oiw.125.1622848161433;
- Fri, 04 Jun 2021 16:09:21 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 4 Jun 2021 23:09:21 +0000
-MIME-Version: 1.0
-In-Reply-To: <202106050612.FyaqyhTf-lkp@intel.com>
-References: <20210604212752.3547301-1-swboyd@chromium.org> <202106050612.FyaqyhTf-lkp@intel.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Yso64/11K/NVoM1kuoUluh2W7Yq6bZwBUsc8+1WoqA=;
+        b=qSbi263RHrt+a8M2PTMWlANNWXYwN+jwqgoDI2SHnSaMgBTuyhP4GQynopKN0BOnNl
+         OIW4UnhPqkB1mIFU23m21rqY0C4Njg2oC2TBJdC6yJRv5AMUdmAISEubhkcQg58oYvBr
+         dm+GvA9HJq58I9eRoDlqHj0yr0LJJ5lcAW9u6QicPG6AAORK12TaViJ0aEFdoqSLmG7p
+         gYvtdC/MaXEPdeHefjJXVJlENbwXmH1RLk9LgZzYdCmxPsBGLWpHrbXGhW5BbH/nk33i
+         Wloy/o23vZGw/97hSIgq17MUp/CC2NKI+8017oAwuvBsjvJtRVsOfyfos3LAMYOuQTR/
+         8jlg==
+X-Gm-Message-State: AOAM533QyVXFliuqChAbAtKTKp4ABuP5E0JNGb+MSQomLe+5g0L3BijQ
+        7BdRUoQSKnWPu2xSdiUNlllWcw==
+X-Google-Smtp-Source: ABdhPJw8D+6MHYgsOiDgLITaObaSsvLTQ7xCT0gLqec7W77m9834sj0d2tmYuttbPEuUKEWT5OoSjg==
+X-Received: by 2002:a17:902:8b8a:b029:108:7849:dae0 with SMTP id ay10-20020a1709028b8ab02901087849dae0mr6614283plb.36.1622849266212;
+        Fri, 04 Jun 2021 16:27:46 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:fb56:4f6a:ea47:556b])
+        by smtp.gmail.com with ESMTPSA id t24sm5411155pji.56.2021.06.04.16.27.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Jun 2021 16:27:45 -0700 (PDT)
 From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Fri, 4 Jun 2021 23:09:21 +0000
-Message-ID: <CAE-0n50aeyb4g8f4aGhFWB4JFNue__CL8OPM0m3bUdEhMV1UCw@mail.gmail.com>
-Subject: Re: [PATCH] i2c: core: Disable client irq on reboot/shutdown
-To:     Wolfram Sang <wsa-dev@sang-engineering.com>,
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v2] i2c: core: Disable client irq on reboot/shutdown
+Date:   Fri,  4 Jun 2021 16:27:44 -0700
+Message-Id: <20210604232744.1259150-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Quoting kernel test robot (2021-06-04 16:01:32)
-> Hi Stephen,
->
-> I love your patch! Yet something to improve:
->
-> [auto build test ERROR on 8124c8a6b35386f73523d27eacb71b5364a68c4c]
->
-> url:    https://github.com/0day-ci/linux/commits/Stephen-Boyd/i2c-core-Disable-client-irq-on-reboot-shutdown/20210605-052848
-> base:   8124c8a6b35386f73523d27eacb71b5364a68c4c
-> config: nios2-randconfig-s031-20210604 (attached as .config)
-> compiler: nios2-linux-gcc (GCC) 9.3.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.3-341-g8af24329-dirty
->         # https://github.com/0day-ci/linux/commit/2fb1417bc9d82a335db5ed8a1446be74bffae440
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Stephen-Boyd/i2c-core-Disable-client-irq-on-reboot-shutdown/20210605-052848
->         git checkout 2fb1417bc9d82a335db5ed8a1446be74bffae440
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' W=1 ARCH=nios2
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->    drivers/i2c/i2c-core-base.c: In function 'i2c_device_shutdown':
-> >> drivers/i2c/i2c-core-base.c:631:3: error: implicit declaration of function 'disable_irq'; did you mean 'disable_srat'? [-Werror=implicit-function-declaration]
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Must need interrupt.h, which I must have got implicitly somehow.
+If an i2c client receives an interrupt during reboot or shutdown it may
+be too late to service it by making an i2c transaction on the bus
+because the i2c controller has already been shutdown. This can lead to
+system hangs if the i2c controller tries to make a transfer that is
+doomed to fail because the access to the i2c pins is already shut down,
+or an iommu translation has been torn down so i2c controller register
+access doesn't work.
 
->      631 |   disable_irq(client->irq);
->          |   ^~~~~~~~~~~
->          |   disable_srat
+Let's simply disable the irq if there isn't a shutdown callback for an
+i2c client when there is an irq associated with the device. This will
+make sure that irqs don't come in later than the time that we can handle
+it. We don't do this if the i2c client device already has a shutdown
+callback because presumably they're doing the right thing and quieting
+the device so irqs don't come in after the shutdown callback returns.
+
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+[swboyd@chromium.org: Dropped newline, added commit text, added
+interrupt.h for robot build error]
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+
+Dmitry, please add Signed-off-by so this can be merged through i2c
+
+This supersedes https://lore.kernel.org/r/20210510220012.2003285-1-swboyd@chromium.org
+
+Changes from v1 (https://lore.kernel.org/r/20210604212752.3547301-1-swboyd@chromium.org)
+ * Add interrupt.h include for robot
+
+ drivers/i2c/i2c-core-base.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 5a97e4a02fa2..e314ccaf114a 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -24,6 +24,7 @@
+ #include <linux/i2c-smbus.h>
+ #include <linux/idr.h>
+ #include <linux/init.h>
++#include <linux/interrupt.h>
+ #include <linux/irqflags.h>
+ #include <linux/jump_label.h>
+ #include <linux/kernel.h>
+@@ -627,6 +628,8 @@ static void i2c_device_shutdown(struct device *dev)
+ 	driver = to_i2c_driver(dev->driver);
+ 	if (driver->shutdown)
+ 		driver->shutdown(client);
++	else if (client->irq > 0)
++		disable_irq(client->irq);
+ }
+ 
+ static void i2c_client_dev_release(struct device *dev)
+
+base-commit: 8124c8a6b35386f73523d27eacb71b5364a68c4c
+-- 
+https://chromeos.dev
+
