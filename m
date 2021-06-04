@@ -2,139 +2,171 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7C639BA62
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jun 2021 15:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E1339BAB8
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Jun 2021 16:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbhFDN65 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Jun 2021 09:58:57 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:46778 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbhFDN64 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Jun 2021 09:58:56 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 44AF521A26;
-        Fri,  4 Jun 2021 13:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1622815029; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z2+UtbdG0K09sdy6OOI7W2NBVk+QSBaf9EwZA0VYAWA=;
-        b=ucABSgfv2DJdtPbeWzmBbNRlyIJpI0Y1FcavX0LTspEAd+mS1EP+L9crWgkuecgNJfKe2S
-        ZPUu8YKP59e/cykz92nwOP+OkxFXK7yqO+lHCkrGoAaGzVAtsbXoW2Z6TWFbT/xmcyGY6W
-        ho54hOwOxu053m6LCH+Ofg8MkMMkTY8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1622815029;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z2+UtbdG0K09sdy6OOI7W2NBVk+QSBaf9EwZA0VYAWA=;
-        b=MVKCYJDw7id0+hMlEEolREH/eisaZ1AyYtHJWCpPV5fz7JCjap40Gv/mKcgts0kLcxniAw
-        /Fq+eHgzu4thdvBQ==
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id EFF92118DD;
-        Fri,  4 Jun 2021 13:57:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1622815029; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z2+UtbdG0K09sdy6OOI7W2NBVk+QSBaf9EwZA0VYAWA=;
-        b=ucABSgfv2DJdtPbeWzmBbNRlyIJpI0Y1FcavX0LTspEAd+mS1EP+L9crWgkuecgNJfKe2S
-        ZPUu8YKP59e/cykz92nwOP+OkxFXK7yqO+lHCkrGoAaGzVAtsbXoW2Z6TWFbT/xmcyGY6W
-        ho54hOwOxu053m6LCH+Ofg8MkMMkTY8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1622815029;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z2+UtbdG0K09sdy6OOI7W2NBVk+QSBaf9EwZA0VYAWA=;
-        b=MVKCYJDw7id0+hMlEEolREH/eisaZ1AyYtHJWCpPV5fz7JCjap40Gv/mKcgts0kLcxniAw
-        /Fq+eHgzu4thdvBQ==
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id tO3MNzQxumCbZAAALh3uQQ
-        (envelope-from <jdelvare@suse.de>); Fri, 04 Jun 2021 13:57:08 +0000
-Date:   Fri, 4 Jun 2021 15:57:08 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Peter Korsgaard <peter@korsgaard.com>, linux-i2c@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH i2c-tools] Revert "tools: i2ctransfer: add check for
- returned length from driver"
-Message-ID: <20210604155708.14159db0@endymion>
-In-Reply-To: <YLew8cFWTRQKrBuk@kunai>
-References: <20210209110556.18814-1-wsa+renesas@sang-engineering.com>
-        <20210226174337.63a9c2a6@endymion>
-        <20210310204648.GA332643@ninjato>
-        <87tuoe5zfc.fsf@dell.be.48ers.dk>
-        <20210413125433.GA9879@kunai>
-        <20210521132158.6e0689c0@endymion>
-        <YK1fwC4aR5RKTPcB@kunai>
-        <20210602110332.73f9cbc1@endymion>
-        <YLew8cFWTRQKrBuk@kunai>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S231185AbhFDOMH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Jun 2021 10:12:07 -0400
+Received: from mail-wm1-f44.google.com ([209.85.128.44]:42979 "EHLO
+        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231164AbhFDOMH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Jun 2021 10:12:07 -0400
+Received: by mail-wm1-f44.google.com with SMTP id o2-20020a05600c4fc2b029019a0a8f959dso5710536wmq.1;
+        Fri, 04 Jun 2021 07:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=MYbOHTjKAIubB26NWy6blCn6jMexjYelF/SCF4KLYBM=;
+        b=NnchJqNSeEqijUeniIVorUZChIr8whszcRfqCmiLBNGPVl0S1YfS3y1q6HCu43oLRe
+         /7fPueHOA6y833aDNjkfwwN+6CggiT5ViFI9AKufKs2gjLrj/wwBvNX3KOQfVoa67NkH
+         QJ5/Mr/lriaJlx4bOk2J0AElKoaVF7cZ5ZJZycCPR0DhA0VbEUICCeR3Zz83/OqGaHvs
+         lRE3H+98+vAO7gfNb30V6LAZ2p/IlLg4Z3xzUSsv4BT1fvlBqmSk34lwU6yX2XSeC9jF
+         WmrLGVkoqPfnjnYYA70Z3NZw/7EPclgZmY8AGho1QzophphwX18CywCl6TT3vaaZNLOf
+         FJkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=MYbOHTjKAIubB26NWy6blCn6jMexjYelF/SCF4KLYBM=;
+        b=U79D27SNrnC6CYuoSD+SY9Fcl0gsAsnqTv7WTQPkKihyLRgdJM+j9xxi0kP3wjdQEa
+         mtFvDIsRv4pIcqFCIlqV3WiKfaTvI4JkgG6jWn21egsgtCdRznGj3wAIz1nwE8cGfioH
+         qz2cdAQYFU44+tJ4xNxa3vfVjn6yxyGvEk8Yt2kh8h0Ott4HnwJnYnUV56EnFWI15nrq
+         YkV5tTSnXIdelZnIcfky6sstfaXqPuO2dud4CFdiM+8ke2BDqawAE99/wLXTZTPySIOM
+         B5sMmDjgyUSeiA7wKgJ8m1b6AHRzlt+HFSyByBYl9NGmys9jR1D1Opyk7ZgeSGlYAw2c
+         3nUA==
+X-Gm-Message-State: AOAM530AzrJTEdIEmj0GX458zxVU89kG8frzBwiy4Cp8luRg1K+ut2aV
+        R/5cNKXZ7cMQp1tciVv+8mg=
+X-Google-Smtp-Source: ABdhPJwp4iUyQA0gJMy7m2YEEOSu8/w15silx0ciWQYwyyo+fqOsulsICwzmNa/aG6DRCiptYCvQzw==
+X-Received: by 2002:a1c:a484:: with SMTP id n126mr3950601wme.34.1622815759578;
+        Fri, 04 Jun 2021 07:09:19 -0700 (PDT)
+Received: from [192.168.1.211] ([2.29.20.84])
+        by smtp.gmail.com with ESMTPSA id i16sm5912553wmm.9.2021.06.04.07.09.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Jun 2021 07:09:19 -0700 (PDT)
+Subject: Re: [PATCH v5 3/6] gpiolib: acpi: Export acpi_get_gpiod()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, devel@acpica.org,
+        Len Brown <lenb@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com
+References: <20210603224007.120560-1-djrscally@gmail.com>
+ <20210603224007.120560-4-djrscally@gmail.com>
+ <YLojymirRB5HpFQY@smile.fi.intel.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <d8eb43b6-c842-6b1f-5840-f558d54f1498@gmail.com>
+Date:   Fri, 4 Jun 2021 15:09:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <YLojymirRB5HpFQY@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 2 Jun 2021 18:25:21 +0200, Wolfram Sang wrote:
-> Well, I thought mainly about this patch "tools: i2cbusses: Handle bus
-> names like /dev/i2c-0" but you took care of it faster than I did.
-> 
-> There is only one patch left in patchwork from 2016:
-> 
-> http://patchwork.ozlabs.org/project/linux-i2c/patch/044b3af6a47dfa92e047f0ff57e39a5b61e00058.1463165295.git.leonard.crestez@intel.com/
-> "[i2c-tools] i2cget: Add support for i2c block data"
-> 
-> That's all what's left in patchwork.
-> 
-> Dunno if you care about the old patch, but I think we are good to go for
-> a release.
+Hi Andy
 
-Yes I do care. Apparently I wasn't Cc'd on that thread so I wasn't even
-aware that patch existed. It would be very nice if you could bump the
-thread to me (unless there's a way to retrieve it from patchwork that I
-didn't find?)
+On 04/06/2021 13:59, Andy Shevchenko wrote:
+> On Thu, Jun 03, 2021 at 11:40:04PM +0100, Daniel Scally wrote:
+>> We need to be able to translate GPIO resources in an ACPI device's _CRS
+>> into GPIO descriptor array. Those are represented in _CRS as a pathname
+>> to a GPIO device plus the pin's index number: the acpi_get_gpiod()
+>> function is perfect for that purpose.
+>>
+>> As it's currently only used internally within the GPIO layer, provide and
+>> export a wrapper function that additionally holds a reference to the GPIO
+>> device.
+> The subject is wrong, it should be "Introduce acpi_get_and_request_gpiod()
+> helper" or so. I can fix when applying.
 
-I read the thread, my initial answer would have matched Guenter's (as
-always...) but the contributor has a point, the range option is not
-supported by i2cdump in I2C block mode. Whether it's better to add
-support for it there, or in i2cget, I'll see.
 
-I think i2cget has my preference, because i2cdump pretty much assumes
-that I2C block reads retrieve successive 8-bit register values, so you
-can have block boundaries anywhere without changing the result. As a
-matter of fact, while i2cdump attempts to make 32-byte I2C block reads,
-it will transparently handle short reads by issuing additional block
-reads at arbitrary offsets. This works nicely for EEPROMs but could
-fail for other devices.
+Ah! That was sloppy, sorry.
 
-If we only want *one* I2C block read at a specified offset then i2cget
-seems more appropriate indeed.
+> Btw, do I understand correctly that I may push GPIO ACPI patches independently
+> (of the ACPI changes)?
 
-Looking at the code, I see that i2cdump already supports SMBus block
-mode, in a way which is very similar to what the contributor asked for,
-i.e. it doesn't really dump the chip's registers, but merely reads one
-SMBus block at a specific offset. It's questionable why this should
-belong to i2cdump in the first place, beyond the fact that it returns
-several values when i2cget typically returns only one value.
 
-So one option would be get rid of "s" mode in i2cdump, and add support
-for both I2C and SMBus block read to i2cget.
+They're independent yes.
 
-Might be possible to add support for range limitation to I2C block
-reads in i2cdump nevertheless, as it could be useful to read only
-portions of EEPROMs.
-
--- 
-Jean Delvare
-SUSE L3 Support
+>
+>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+>> ---
+>> Changes since v4:
+>> 	- None
+>>
+>>  drivers/gpio/gpiolib-acpi.c   | 28 ++++++++++++++++++++++++++++
+>>  include/linux/gpio/consumer.h |  2 ++
+>>  2 files changed, 30 insertions(+)
+>>
+>> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+>> index 5b4111e4be3f..684ddb35d83b 100644
+>> --- a/drivers/gpio/gpiolib-acpi.c
+>> +++ b/drivers/gpio/gpiolib-acpi.c
+>> @@ -128,6 +128,34 @@ static struct gpio_desc *acpi_get_gpiod(char *path, int pin)
+>>  	return gpiochip_get_desc(chip, pin);
+>>  }
+>>  
+>> +/**
+>> + * acpi_get_and_request_gpiod() - Translate ACPI GPIO pin to GPIO descriptor
+>> + *                               and hold a refcount to the GPIO device.
+>> + * @path:      ACPI GPIO controller full path name, (e.g. "\\_SB.GPO1")
+>> + * @pin:       ACPI GPIO pin number (0-based, controller-relative)
+>> + * @label:     Label to pass to gpiod_request()
+>> + *
+>> + * This function is a simple pass-through to acpi_get_gpiod(), except that
+>> + * as it is intended for use outside of the GPIO layer (in a similar fashion to
+>> + * gpiod_get_index() for example) it also holds a reference to the GPIO device.
+>> + */
+>> +struct gpio_desc *acpi_get_and_request_gpiod(char *path, int pin, char *label)
+>> +{
+>> +	struct gpio_desc *gpio;
+>> +	int ret;
+>> +
+>> +	gpio = acpi_get_gpiod(path, pin);
+>> +	if (IS_ERR(gpio))
+>> +		return gpio;
+>> +
+>> +	ret = gpiod_request(gpio, label);
+>> +	if (ret)
+>> +		return ERR_PTR(ret);
+>> +
+>> +	return gpio;
+>> +}
+>> +EXPORT_SYMBOL_GPL(acpi_get_and_request_gpiod);
+>> +
+>>  static irqreturn_t acpi_gpio_irq_handler(int irq, void *data)
+>>  {
+>>  	struct acpi_gpio_event *event = data;
+>> diff --git a/include/linux/gpio/consumer.h b/include/linux/gpio/consumer.h
+>> index c73b25bc9213..566feb56601f 100644
+>> --- a/include/linux/gpio/consumer.h
+>> +++ b/include/linux/gpio/consumer.h
+>> @@ -692,6 +692,8 @@ int devm_acpi_dev_add_driver_gpios(struct device *dev,
+>>  				   const struct acpi_gpio_mapping *gpios);
+>>  void devm_acpi_dev_remove_driver_gpios(struct device *dev);
+>>  
+>> +struct gpio_desc *acpi_get_and_request_gpiod(char *path, int pin, char *label);
+>> +
+>>  #else  /* CONFIG_GPIOLIB && CONFIG_ACPI */
+>>  
+>>  struct acpi_device;
+>> -- 
+>> 2.25.1
+>>
