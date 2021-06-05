@@ -2,117 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F5839C3E4
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 01:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E16039C605
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 07:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbhFDXaq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Jun 2021 19:30:46 -0400
-Received: from mail-pj1-f45.google.com ([209.85.216.45]:54863 "EHLO
-        mail-pj1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbhFDXaq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Jun 2021 19:30:46 -0400
-Received: by mail-pj1-f45.google.com with SMTP id g24so6356948pji.4
-        for <linux-i2c@vger.kernel.org>; Fri, 04 Jun 2021 16:28:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6Yso64/11K/NVoM1kuoUluh2W7Yq6bZwBUsc8+1WoqA=;
-        b=Ia3/eX/3L13jjBWzDZuwOM3NO8zMtT+5VxJV8tyWEyA8n0xYAsylEpt5kKg+nCFdSl
-         b0G4bvWjyxNwTzu6+T0YMcc22fyNxhd8Cj3oIi5+AplIabkpWDw+CTrC/99SnGp6nqxs
-         b9bdwn1ANly7ZiJ2W8206qbgn3rwQ4YKY1Iog=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6Yso64/11K/NVoM1kuoUluh2W7Yq6bZwBUsc8+1WoqA=;
-        b=qSbi263RHrt+a8M2PTMWlANNWXYwN+jwqgoDI2SHnSaMgBTuyhP4GQynopKN0BOnNl
-         OIW4UnhPqkB1mIFU23m21rqY0C4Njg2oC2TBJdC6yJRv5AMUdmAISEubhkcQg58oYvBr
-         dm+GvA9HJq58I9eRoDlqHj0yr0LJJ5lcAW9u6QicPG6AAORK12TaViJ0aEFdoqSLmG7p
-         gYvtdC/MaXEPdeHefjJXVJlENbwXmH1RLk9LgZzYdCmxPsBGLWpHrbXGhW5BbH/nk33i
-         Wloy/o23vZGw/97hSIgq17MUp/CC2NKI+8017oAwuvBsjvJtRVsOfyfos3LAMYOuQTR/
-         8jlg==
-X-Gm-Message-State: AOAM533QyVXFliuqChAbAtKTKp4ABuP5E0JNGb+MSQomLe+5g0L3BijQ
-        7BdRUoQSKnWPu2xSdiUNlllWcw==
-X-Google-Smtp-Source: ABdhPJw8D+6MHYgsOiDgLITaObaSsvLTQ7xCT0gLqec7W77m9834sj0d2tmYuttbPEuUKEWT5OoSjg==
-X-Received: by 2002:a17:902:8b8a:b029:108:7849:dae0 with SMTP id ay10-20020a1709028b8ab02901087849dae0mr6614283plb.36.1622849266212;
-        Fri, 04 Jun 2021 16:27:46 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:fb56:4f6a:ea47:556b])
-        by smtp.gmail.com with ESMTPSA id t24sm5411155pji.56.2021.06.04.16.27.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 16:27:45 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] i2c: core: Disable client irq on reboot/shutdown
-Date:   Fri,  4 Jun 2021 16:27:44 -0700
-Message-Id: <20210604232744.1259150-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
+        id S229660AbhFEFTY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Sat, 5 Jun 2021 01:19:24 -0400
+Received: from mail.sch.bme.hu ([152.66.249.140]:16984 "EHLO mail.sch.bme.hu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229544AbhFEFTX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 5 Jun 2021 01:19:23 -0400
+Received: from mail-lj1-f181.google.com (209.85.208.181) by
+ Exchange2016-1.sch.bme.hu (152.66.249.140) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2176.14; Sat, 5 Jun 2021 07:17:35 +0200
+Received: by mail-lj1-f181.google.com with SMTP id n24so74169lji.2;
+        Fri, 04 Jun 2021 22:17:35 -0700 (PDT)
+X-Gm-Message-State: AOAM5332Xluz9iJEaAXybUoqjSviRuja7yXM8Iw9ubsRyQPWaqKuB6Pk
+        MfJNDjt7d8LsWJEpsPqCZtHiPkAhJpua+WvxHVo=
+X-Google-Smtp-Source: ABdhPJw5LFtYMOrygotozaR7xW0HDr+ScX/qniX2SReclZzmD6wvdVrcqrdjh8JymwxezCLedK8bphcMh4WAugo6wP0=
+X-Received: by 2002:a2e:7f16:: with SMTP id a22mr6185676ljd.360.1622870254662;
+ Fri, 04 Jun 2021 22:17:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <YJuosd6rew91vlyX@mwanda> <YLqQw6Yc07RecKZs@kunai>
+In-Reply-To: <YLqQw6Yc07RecKZs@kunai>
+From:   =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <bence98@sch.bme.hu>
+Date:   Sat, 5 Jun 2021 07:17:23 +0200
+X-Gmail-Original-Message-ID: <CACCVKEHuT9gHYazLt7+RFrP7hBJCZvisstJay_DEweGGKx6svA@mail.gmail.com>
+Message-ID: <CACCVKEHuT9gHYazLt7+RFrP7hBJCZvisstJay_DEweGGKx6svA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: cp2615: check for allocation failure in cp2615_i2c_recv()
+To:     Wolfram Sang <wsa@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        <linux-i2c@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [209.85.208.181]
+X-ClientProxiedBy: Exchange2016-1.sch.bme.hu (152.66.249.140) To
+ Exchange2016-1.sch.bme.hu (152.66.249.140)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Sure, though I had hoped Dan would update his patch so that all
+allocation failures return -ENOMEM... Oh well.
 
-If an i2c client receives an interrupt during reboot or shutdown it may
-be too late to service it by making an i2c transaction on the bus
-because the i2c controller has already been shutdown. This can lead to
-system hangs if the i2c controller tries to make a transfer that is
-doomed to fail because the access to the i2c pins is already shut down,
-or an iommu translation has been torn down so i2c controller register
-access doesn't work.
+Signed-off-by: Bence Csókás<bence98@sch.bme.hu>
 
-Let's simply disable the irq if there isn't a shutdown callback for an
-i2c client when there is an irq associated with the device. This will
-make sure that irqs don't come in later than the time that we can handle
-it. We don't do this if the i2c client device already has a shutdown
-callback because presumably they're doing the right thing and quieting
-the device so irqs don't come in after the shutdown callback returns.
 
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-[swboyd@chromium.org: Dropped newline, added commit text, added
-interrupt.h for robot build error]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
-
-Dmitry, please add Signed-off-by so this can be merged through i2c
-
-This supersedes https://lore.kernel.org/r/20210510220012.2003285-1-swboyd@chromium.org
-
-Changes from v1 (https://lore.kernel.org/r/20210604212752.3547301-1-swboyd@chromium.org)
- * Add interrupt.h include for robot
-
- drivers/i2c/i2c-core-base.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5a97e4a02fa2..e314ccaf114a 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -24,6 +24,7 @@
- #include <linux/i2c-smbus.h>
- #include <linux/idr.h>
- #include <linux/init.h>
-+#include <linux/interrupt.h>
- #include <linux/irqflags.h>
- #include <linux/jump_label.h>
- #include <linux/kernel.h>
-@@ -627,6 +628,8 @@ static void i2c_device_shutdown(struct device *dev)
- 	driver = to_i2c_driver(dev->driver);
- 	if (driver->shutdown)
- 		driver->shutdown(client);
-+	else if (client->irq > 0)
-+		disable_irq(client->irq);
- }
- 
- static void i2c_client_dev_release(struct device *dev)
-
-base-commit: 8124c8a6b35386f73523d27eacb71b5364a68c4c
--- 
-https://chromeos.dev
-
+Wolfram Sang <wsa@kernel.org> ezt írta (időpont: 2021. jún. 4., P 22:45):
+>
+> On Wed, May 12, 2021 at 01:06:41PM +0300, Dan Carpenter wrote:
+> > We need to add a check for if the kzalloc() fails.
+> >
+> > Fixes: 4a7695429ead ("i2c: cp2615: add i2c driver for Silicon Labs' CP2615 Digital Audio Bridge")
+> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+>
+> Bence, are you okay with applying this patch as it fixes a bug?
+>
