@@ -2,132 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2472C39CAA1
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 21:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2A739CB4F
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 23:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbhFETKe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Jun 2021 15:10:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50012 "EHLO mail.kernel.org"
+        id S230022AbhFEVsY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Jun 2021 17:48:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36974 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229994AbhFETKd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 5 Jun 2021 15:10:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C76CD61073;
-        Sat,  5 Jun 2021 19:08:39 +0000 (UTC)
+        id S230010AbhFEVsY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 5 Jun 2021 17:48:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1D6EF60231;
+        Sat,  5 Jun 2021 21:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622920125;
-        bh=tTJEbMfaqLm+MQIdZ6b17P+wEJbY3/9z+X1SQ27izYw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JkQm3FNW5iQVYmgT/Gt9sN9r1LoTem2cqXUl0EjU+fiv82NY1pLAYU3Bw6unpEki9
-         JXsjuSgQIFHSyh38wM93iu29TbJXvLcRhJNrLaI3uPlTWuv27IKsdkFioKL4INshFP
-         X6wWHZCeoF+O8iMlmhkcXx84GYrwHdtLzik9jQie2+N1FEL3MtfoR0dRqJZtRSpa3B
-         75ZFgP9ntAFhWGSiwsFlzS8kJV4vdjx4gNxci+2IKGEj7omJo8VOW1W/h4rNmExnEf
-         Cyd+38BTHzfhwZ6TVmr+dpfprstE/6hddhXmgX9dnEe4dYMoT8QPViKF/MrmqKI8pR
-         fNqEWypa3GLOg==
-Date:   Sat, 5 Jun 2021 21:08:36 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     "=?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <n@nfraprado.net>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        coresight@lists.linaro.org, devicetree@vger.kernel.org,
-        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
-Message-ID: <20210605210836.540577d4@coco.lan>
-In-Reply-To: <20210605151109.axm3wzbcstsyxczp@notapiano>
-References: <cover.1622898327.git.mchehab+huawei@kernel.org>
-        <20210605151109.axm3wzbcstsyxczp@notapiano>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        s=k20201202; t=1622929595;
+        bh=Qyi9Y5m7xQPuhNEwqQYAzAGEfdfpPg1sP7cJRaNcc0g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CwJ1ybigf36P8KBz+o1OT03HtQaYfoDCY1GnKEjZ/OmPViqw1e7VxMvWTxwFTGCxi
+         gO4Us4tkLnQVR0oPE00FEI1ERMUMvvIlE+8mbjnkOUc/nsW58rl7xReK7OHh5+MSWG
+         ZiUc3LZoG0tzfBip8qb84FUhquAnCGpu2Sdg1ZcneLoxht9FtxqnNLgpxFjXgEsXHW
+         FK/SkGeXIGTbaiPXgo1pC8jULHVecDgj4N3KvvDzXC+ZGhd40ba0pHYjktNObZ4KXg
+         yvNES4H+dv7a+e8L5+AZr4FQNcCsGbWxyMIdpsKM+B3dbeNeYPQUzaRTeh9kDawVK2
+         NWjzbKgZmXbaA==
+Date:   Sat, 5 Jun 2021 23:46:29 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.13-rc5
+Message-ID: <YLvwtW3JuDU0MC8E@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WjXbV/mJbe9rlxvt"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Em Sat, 5 Jun 2021 12:11:09 -0300
-N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
 
-> Hi Mauro,
->=20
-> On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
-> > As discussed at:
-> > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
-> >=20
-> > It is better to avoid using :doc:`foo` to refer to Documentation/foo.rs=
-t, as the
-> > automarkup.py extension should handle it automatically, on most cases.
-> >=20
-> > There are a couple of exceptions to this rule:
-> >=20
-> > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
-> > 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
-> >=20
-> > It should also be noticed that automarkup.py has currently an issue:
-> > if one use a markup like:
-> >=20
-> > 	Documentation/dev-tools/kunit/api/test.rst
-> > 	  - documents all of the standard testing API excluding mocking
-> > 	    or mocking related features.
-> >=20
-> > or, even:
-> >=20
-> > 	Documentation/dev-tools/kunit/api/test.rst
-> > 	    documents all of the standard testing API excluding mocking
-> > 	    or mocking related features.
-> > =09
-> > The automarkup.py will simply ignore it. Not sure why. This patch series
-> > avoid the above patterns (which is present only on 4 files), but it wou=
-ld be
-> > nice to have a followup patch fixing the issue at automarkup.py. =20
->=20
-> What I think is happening here is that we're using rST's syntax for defin=
-ition
-> lists [1]. automarkup.py ignores literal nodes, and perhaps a definition =
-is
-> considered a literal by Sphinx. Adding a blank line after the Documentati=
-on/...
-> or removing the additional indentation makes it work, like you did in your
-> 2nd and 3rd patch, since then it's not a definition anymore, although the=
-n the
-> visual output is different as well.
+--WjXbV/mJbe9rlxvt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A literal has a different output. I think that this is not the case, but I=
-=20
-didn't check the python code from docutils/Sphinx.
-=20
-> I'm not sure this is something we need to fix. Does it make sense to use
-> definition lists for links like that? If it does, I guess one option woul=
-d be to
-> whitelist definition lists so they aren't ignored by automarkup, but I fe=
-el
-> this could get ugly really quickly.
+Linus,
 
-Yes, we should avoid handling literal blocks, as this can be a nightmare.
+here are some more bugfixes from I2C for v5.13. Usual stuff.
 
-> FWIW note that it's also possible to use relative paths to docs with auto=
-markup.
+Please pull.
 
-Not sure if you meant to say using something like ../driver-api/foo.rst.
-If so, relative paths are a problem, as it will pass unnoticed by this scri=
-pt:
+Thanks,
 
-	./scripts/documentation-file-ref-check
+   Wolfram
 
-which is meant to warn when a file is moved to be elsewhere. Ok, it
-could be taught to use "../" to identify paths, but I suspect that this
-could lead to false positives, like here:
 
-	Documentation/usb/gadget-testing.rst:  # ln -s ../../uncompressed/u
-	Documentation/usb/gadget-testing.rst:  # cd ../../class/fs
-	Documentation/usb/gadget-testing.rst:  # ln -s ../../header/h
+The following changes since commit 8124c8a6b35386f73523d27eacb71b5364a68c4c:
 
-If you meant, instead, :doc:`../foo`, this series address those too.
+  Linux 5.13-rc4 (2021-05-30 11:58:25 -1000)
 
-Regards,
-Mauro
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to 57648e860485de39c800a89f849fdd03c2d31d15:
+
+  i2c: qcom-geni: Suspend and resume the bus during SYSTEM_SLEEP_PM ops (2021-06-04 22:32:58 +0200)
+
+----------------------------------------------------------------
+Lee Jones (2):
+      i2c: altera: Fix formatting issue in struct and demote unworthy kernel-doc headers
+      i2c: tegra-bpmp: Demote kernel-doc abuses
+
+Roja Rani Yarubandi (2):
+      i2c: qcom-geni: Add shutdown callback for i2c
+      i2c: qcom-geni: Suspend and resume the bus during SYSTEM_SLEEP_PM ops
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Stephen Boyd (2):
+      (Rev.) i2c: qcom-geni: Suspend and resume the bus during SYSTEM_SLEEP_PM ops
+      (Rev.) i2c: qcom-geni: Add shutdown callback for i2c
+
+ drivers/i2c/busses/i2c-altera.c     |  9 ++++-----
+ drivers/i2c/busses/i2c-qcom-geni.c  | 21 ++++++++++++++++++++-
+ drivers/i2c/busses/i2c-tegra-bpmp.c |  4 ++--
+ 3 files changed, 26 insertions(+), 8 deletions(-)
+
+--WjXbV/mJbe9rlxvt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmC78LAACgkQFA3kzBSg
+KbbKjw/8CLEOA1VNscRcEg/i7fjBtkNnvoJwxdpBPiVtPL/kArqARkoL6GbACw4b
+YRji9e0SDQ49Zh6VhM4S7cluCNHFxAB9m6fo6RVvbgN7vswJk70q/euhxfx0vO1R
+KC1yAlB702cbqcjhzW4Vszkc1pOBv89gDToUTB08fXpRgTlQqMlquBrbjmwvseiZ
+1Rajcfl3vrPxQ0tMTGxwXx0T1UhNPQjkmgNtq0yFRRdJviQucCgiwud//avUZuui
+HUew5tZ/zHAtPa28pW/Ti6Poz95/2s/SZYVlDYcy5UUlLQAQeAz9wOVIv12BIKGR
+wk5LnkBWMnh6IbtxH9VsVWCDR7YJpyVF7ot+k84yvZ10XmaKYajJOv++NOelg0vc
+XHVhbhXnIGtoMcNazoHtAfh0rTv6JF7dmWsbBSYvt/3XRX1DPYuPcceB+52mN1hm
+KwYTr0f0ozBiPzjj1iYFdEZgCeFzdRnckLZV7wzJXN+L3V2gFrLhtf8eEEC09mnm
+VCF8rxNNtN0hcOiEYstsfljEcCIGNTvZfudESwbEv6Ri0j46LwVwtB9MRx4+UukQ
+fkALKtGtv7RnK9QtptdW29kQz0azyqp4uyVAUM8Y2lgF+LJF1vqwANwSMiBUhNc0
+ckMc2VtQcYHcKrq0IAQz5njyocaBzh9vOPNAC18adaqCQziB6wc=
+=zyKU
+-----END PGP SIGNATURE-----
+
+--WjXbV/mJbe9rlxvt--
