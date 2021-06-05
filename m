@@ -2,60 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E16039C605
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 07:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6671439C6D9
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 10:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbhFEFTY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Sat, 5 Jun 2021 01:19:24 -0400
-Received: from mail.sch.bme.hu ([152.66.249.140]:16984 "EHLO mail.sch.bme.hu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229544AbhFEFTX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 5 Jun 2021 01:19:23 -0400
-Received: from mail-lj1-f181.google.com (209.85.208.181) by
- Exchange2016-1.sch.bme.hu (152.66.249.140) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2176.14; Sat, 5 Jun 2021 07:17:35 +0200
-Received: by mail-lj1-f181.google.com with SMTP id n24so74169lji.2;
-        Fri, 04 Jun 2021 22:17:35 -0700 (PDT)
-X-Gm-Message-State: AOAM5332Xluz9iJEaAXybUoqjSviRuja7yXM8Iw9ubsRyQPWaqKuB6Pk
-        MfJNDjt7d8LsWJEpsPqCZtHiPkAhJpua+WvxHVo=
-X-Google-Smtp-Source: ABdhPJw5LFtYMOrygotozaR7xW0HDr+ScX/qniX2SReclZzmD6wvdVrcqrdjh8JymwxezCLedK8bphcMh4WAugo6wP0=
-X-Received: by 2002:a2e:7f16:: with SMTP id a22mr6185676ljd.360.1622870254662;
- Fri, 04 Jun 2021 22:17:34 -0700 (PDT)
+        id S229930AbhFEIoV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Jun 2021 04:44:21 -0400
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:44944 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229864AbhFEIoV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Jun 2021 04:44:21 -0400
+Received: by mail-oo1-f67.google.com with SMTP id o5-20020a4a2c050000b0290245d6c7b555so2824311ooo.11
+        for <linux-i2c@vger.kernel.org>; Sat, 05 Jun 2021 01:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=m+jeKDB2NQv+vJueZ++Zdaerk3mMTr/ZrjPm3mnverk=;
+        b=mt5+ntKreokraycS/MWRY0mOE/7W57cOp8oXHul3KHQfwaWsgzaCvuTgZDOn2aGSA/
+         Bv88EsZ4IlYpg4WSFNphitquHM5uYEMJAlug2IHV7b7a650BYLnJ0Rwl0d8WH5wMPSUd
+         WBlv+UEsziKrx2cEsCdTrgCDmzRi6VEt/yga/aWYmpva79M0OXf8eHc8uBhddE7dnbhY
+         DUHyuuECSkY2zof3AtToww5ewLjWHEy20GK3TQobw68wYuWCT0XxYuQVmGv3grvjbFAc
+         W/V63EG9YRW7fKxjHHr2vYouMPrnAXuFmkwSrc01/lsd0nH2zycQbKvGqyJw+fdNCbos
+         as3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=m+jeKDB2NQv+vJueZ++Zdaerk3mMTr/ZrjPm3mnverk=;
+        b=UZt+IgIpi+Rb7p3jjS9LO1e8J22IpV/kVODBPub7G3pnpbKKsW7bkCXhpZ5uhk7CSt
+         Kw0M4U2hIq6A/vWFvUZubcv/oK8C5Zkhg7tUeu1iSMbfCdnWECtpv3neInC3dRvXG/ND
+         HUY9KP0B0fe4s+EmFP/82FNabGu9lv4YORu5Lm+5dpqrUmrbBiWXHnpgJaQaUAEzH5hT
+         3h+mqH/J7nW9DlF+Vkk9KSyL8K1b4YV5B8DqG0DJ0Mj25BIZwyN9IpgMeYB7B0D7v0OR
+         5uTBoeR13/wclrtnUDszDfJT5BXopBwDXtnGvjM9bZRa+aeJmVDoG04dyA/pKmqUVpYu
+         2m/Q==
+X-Gm-Message-State: AOAM532YWJvj9r7KsXjjLdc+UvO9PL+nT7IcwvDUz1ZLpkyr6/1qwalc
+        G4YDJ1pT/Hzo0z7uAp3PaPGK+qXRD6JFnxPv9s8=
+X-Google-Smtp-Source: ABdhPJzoQZ4yAKSDlM7Owfg3a8mwFonsRkE2Z0cBXwaOZ6yrFxEUwAyKw+RZgboABOP+fqQj54hoTFIjbeTaPkVjFDM=
+X-Received: by 2002:a4a:315a:: with SMTP id v26mr6635152oog.75.1622882493739;
+ Sat, 05 Jun 2021 01:41:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <YJuosd6rew91vlyX@mwanda> <YLqQw6Yc07RecKZs@kunai>
-In-Reply-To: <YLqQw6Yc07RecKZs@kunai>
-From:   =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <bence98@sch.bme.hu>
-Date:   Sat, 5 Jun 2021 07:17:23 +0200
-X-Gmail-Original-Message-ID: <CACCVKEHuT9gHYazLt7+RFrP7hBJCZvisstJay_DEweGGKx6svA@mail.gmail.com>
-Message-ID: <CACCVKEHuT9gHYazLt7+RFrP7hBJCZvisstJay_DEweGGKx6svA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: cp2615: check for allocation failure in cp2615_i2c_recv()
-To:     Wolfram Sang <wsa@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <bence98@sch.bme.hu>,
-        <linux-i2c@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
+Sender: finer591@gmail.com
+Received: by 2002:a05:6838:c20a:0:0:0:0 with HTTP; Sat, 5 Jun 2021 01:41:33
+ -0700 (PDT)
+From:   Aisha Al-Qaddafi <aishaqaddafi633@gmail.com>
+Date:   Sat, 5 Jun 2021 08:41:33 +0000
+X-Google-Sender-Auth: j__00aKZ68obkUP4E9NFAPioftk
+Message-ID: <CABhtDTu3xwutU0qg3HNVfDWZuTPm7hx7dOm+ynMmjLAoya87Pg@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [209.85.208.181]
-X-ClientProxiedBy: Exchange2016-1.sch.bme.hu (152.66.249.140) To
- Exchange2016-1.sch.bme.hu (152.66.249.140)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Sure, though I had hoped Dan would update his patch so that all
-allocation failures return -ENOMEM... Oh well.
-
-Signed-off-by: Bence Csókás<bence98@sch.bme.hu>
-
-
-Wolfram Sang <wsa@kernel.org> ezt írta (időpont: 2021. jún. 4., P 22:45):
->
-> On Wed, May 12, 2021 at 01:06:41PM +0300, Dan Carpenter wrote:
-> > We need to add a check for if the kzalloc() fails.
-> >
-> > Fixes: 4a7695429ead ("i2c: cp2615: add i2c driver for Silicon Labs' CP2615 Digital Audio Bridge")
-> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
->
-> Bence, are you okay with applying this patch as it fixes a bug?
->
+ Dear Friend,
+With due respect to your person and much sincerity of purpose I wish
+to write to you today for our mutual benefit in this investment
+transaction.
+My name is Mrs.Al-Qaddafi Aisha a single Mother and a widow with three
+Children. I am the only biological Daughter of the late Libyan
+President (Late Colonel Muammar Gaddafi). I have an investment funds
+worth Twenty Seven Million Five Hundred Thousand United State Dollar
+($27.500.000.00 ) and i need an investment Manager/Partner and because
+of the asylum status i will authorize you the ownership of the funds,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build a business relationship
+in the near future.
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits. If you are
+willing to handle this project kindly reply urgently to enable me to
+provide you more information about the investment funds.
+Your urgent reply will be appreciated if only you are interested in
+this investment project.
+Best Regards
+Mrs.Al-Qaddafi Aisha.
