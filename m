@@ -2,86 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9E639C96A
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 17:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2472C39CAA1
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 21:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbhFEPPm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Jun 2021 11:15:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50772 "EHLO mail.kernel.org"
+        id S230060AbhFETKe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Jun 2021 15:10:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50012 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229930AbhFEPPl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 5 Jun 2021 11:15:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E446D613DF;
-        Sat,  5 Jun 2021 15:13:52 +0000 (UTC)
+        id S229994AbhFETKd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 5 Jun 2021 15:10:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C76CD61073;
+        Sat,  5 Jun 2021 19:08:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622906033;
-        bh=q32TmPFHFLcbVcbZPuwKpHBVSsjdVYl/vMKBcDp23I8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VTrjaJV3bhae6c+jmXmQY3npLh/jqazRkfYlJFz0el613zy6L50Ye76zcepOPG0+m
-         bbYI5kUKSbIi9pcGrQ2nW6/6zJokKvYCirpRV59voLTbhpmul2ipxWsi5iMYsNd4CY
-         3/mXsRGH90DinAz5A71h9ZApqSiZiMXldPvRRPM+a2NrdUJg7jSEwMwjjo2+6TCuK1
-         nIUDfDNMIFvIUJYc+Ko8IOHZXFpwMUQrmhuu5B/cVLToQxcjnsmVRIe9RyO4/Fh0lf
-         sNFQeA+/3p1sqq3Si1wh6RIkqOPqbK2xcfkTY1HNEyDWyIKgWBDrwMrWgyRJ+Yud/h
-         4M6VYnV8OGOZg==
-Date:   Sat, 5 Jun 2021 17:13:43 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        s=k20201202; t=1622920125;
+        bh=tTJEbMfaqLm+MQIdZ6b17P+wEJbY3/9z+X1SQ27izYw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JkQm3FNW5iQVYmgT/Gt9sN9r1LoTem2cqXUl0EjU+fiv82NY1pLAYU3Bw6unpEki9
+         JXsjuSgQIFHSyh38wM93iu29TbJXvLcRhJNrLaI3uPlTWuv27IKsdkFioKL4INshFP
+         X6wWHZCeoF+O8iMlmhkcXx84GYrwHdtLzik9jQie2+N1FEL3MtfoR0dRqJZtRSpa3B
+         75ZFgP9ntAFhWGSiwsFlzS8kJV4vdjx4gNxci+2IKGEj7omJo8VOW1W/h4rNmExnEf
+         Cyd+38BTHzfhwZ6TVmr+dpfprstE/6hddhXmgX9dnEe4dYMoT8QPViKF/MrmqKI8pR
+         fNqEWypa3GLOg==
+Date:   Sat, 5 Jun 2021 21:08:36 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     "=?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <n@nfraprado.net>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 23/34] docs: i2c: avoid using ReSt :doc:`foo` markup
-Message-ID: <YLuUpxl6tGmym4Qs@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
+Message-ID: <20210605210836.540577d4@coco.lan>
+In-Reply-To: <20210605151109.axm3wzbcstsyxczp@notapiano>
 References: <cover.1622898327.git.mchehab+huawei@kernel.org>
- <88f7b2e2299cdfba4c3d00d623c852f18650d1bc.1622898327.git.mchehab+huawei@kernel.org>
+        <20210605151109.axm3wzbcstsyxczp@notapiano>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="B8Piwll8ivrSiePv"
-Content-Disposition: inline
-In-Reply-To: <88f7b2e2299cdfba4c3d00d623c852f18650d1bc.1622898327.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Em Sat, 5 Jun 2021 12:11:09 -0300
+N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
 
---B8Piwll8ivrSiePv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, Jun 05, 2021 at 03:18:22PM +0200, Mauro Carvalho Chehab wrote:
-> The :doc:`foo` tag is auto-generated via automarkup.py.
-> So, use the filename at the sources, instead of :doc:`foo`.
+> Hi Mauro,
 >=20
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
+> > As discussed at:
+> > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+> >=20
+> > It is better to avoid using :doc:`foo` to refer to Documentation/foo.rs=
+t, as the
+> > automarkup.py extension should handle it automatically, on most cases.
+> >=20
+> > There are a couple of exceptions to this rule:
+> >=20
+> > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+> > 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+> >=20
+> > It should also be noticed that automarkup.py has currently an issue:
+> > if one use a markup like:
+> >=20
+> > 	Documentation/dev-tools/kunit/api/test.rst
+> > 	  - documents all of the standard testing API excluding mocking
+> > 	    or mocking related features.
+> >=20
+> > or, even:
+> >=20
+> > 	Documentation/dev-tools/kunit/api/test.rst
+> > 	    documents all of the standard testing API excluding mocking
+> > 	    or mocking related features.
+> > =09
+> > The automarkup.py will simply ignore it. Not sure why. This patch series
+> > avoid the above patterns (which is present only on 4 files), but it wou=
+ld be
+> > nice to have a followup patch fixing the issue at automarkup.py. =20
+>=20
+> What I think is happening here is that we're using rST's syntax for defin=
+ition
+> lists [1]. automarkup.py ignores literal nodes, and perhaps a definition =
+is
+> considered a literal by Sphinx. Adding a blank line after the Documentati=
+on/...
+> or removing the additional indentation makes it work, like you did in your
+> 2nd and 3rd patch, since then it's not a definition anymore, although the=
+n the
+> visual output is different as well.
 
-Thanks for doing this!
+A literal has a different output. I think that this is not the case, but I=
+=20
+didn't check the python code from docutils/Sphinx.
+=20
+> I'm not sure this is something we need to fix. Does it make sense to use
+> definition lists for links like that? If it does, I guess one option woul=
+d be to
+> whitelist definition lists so they aren't ignored by automarkup, but I fe=
+el
+> this could get ugly really quickly.
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+Yes, we should avoid handling literal blocks, as this can be a nightmare.
 
+> FWIW note that it's also possible to use relative paths to docs with auto=
+markup.
 
---B8Piwll8ivrSiePv
-Content-Type: application/pgp-signature; name="signature.asc"
+Not sure if you meant to say using something like ../driver-api/foo.rst.
+If so, relative paths are a problem, as it will pass unnoticed by this scri=
+pt:
 
------BEGIN PGP SIGNATURE-----
+	./scripts/documentation-file-ref-check
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmC7lKMACgkQFA3kzBSg
-KbaLaRAAgL3qwWjkIDARr7I5Oe2cIwUWRMHv8ndxbjCDfVDzaTnKMhkb1StLZBSy
-ePpAz+HnLGYqV4zSVfadHsrS/RP5WDNGLhaqydEknfd329eIQ63tcCOCvPZknEqu
-xHuJdf9CUmSimIL4ZJc5rsHDpBRCGVYxZpa0OAR0SgvajNjm1L9PFnwqgrDOZFjt
-J6Lf55trqHf6QkDdulMVI4kU4SmUI0HyOJaIiuRxnjupc5S7OZaysDJGmtYKB5vk
-uuRAaQ07VJdVlcbxN1e6d+0ThZgSkplsgcZs8LZPE4R+SgFxelUDqp1ukOJEF39Q
-MSRhwM2xrE8VwG1gHpPq6ZbqRA27MEIQHSUJn+s7BiMM8YZeNPVmYF9SfR+7+4ek
-hcY6YXKlWaYXqJXTLbIQjVpn3MAcz+uGiiC9rWUbyDsMJX5pN9koQqvAtBlyti8o
-rWhPONwAcHpDrV2Wv7l4ovKkfZlWP0qejXplqrd5fMzbP+Bp6LmOFeTv2gj710Vy
-f0sXsdfCid84MKJHUxwRhyeOE/Qo8+X81KyqorT+wsPBTtIMXv5cKYTctBAnQjbJ
-LWfQ+rFfU1t0iXidvzBavApc4tQdpV8DbLDy/GMy+S4xUvDwo56G0qv+FEczcbjI
-vWYSPP7A9kh38EsQzYg2Yvw9GYX2uvGY/XvZ6bhtnr4htfeHOB8=
-=3GSv
------END PGP SIGNATURE-----
+which is meant to warn when a file is moved to be elsewhere. Ok, it
+could be taught to use "../" to identify paths, but I suspect that this
+could lead to false positives, like here:
 
---B8Piwll8ivrSiePv--
+	Documentation/usb/gadget-testing.rst:  # ln -s ../../uncompressed/u
+	Documentation/usb/gadget-testing.rst:  # cd ../../class/fs
+	Documentation/usb/gadget-testing.rst:  # ln -s ../../header/h
+
+If you meant, instead, :doc:`../foo`, this series address those too.
+
+Regards,
+Mauro
