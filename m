@@ -2,32 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A92A439C8DD
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 15:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CAD39C963
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Jun 2021 17:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbhFENi5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Jun 2021 09:38:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38832 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229931AbhFENi5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 5 Jun 2021 09:38:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C23286135F;
-        Sat,  5 Jun 2021 13:37:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622900229;
-        bh=vVFuxJcc2zxGSbB7UdD22Ei/qbdSpSclZeHlTn/3YhU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YvYT6g2uMiGoR+6sy8adxF2RKOKdLfZwZM1lQ2XSeGEmVRPfj+lL9GfMuDZZyN5sW
-         owde4vG3yj7p7pLXeq7cT8Quzu5K2oje+SVTkxIFZzcqSZ8hnMEW22eBk76FE287fo
-         4UO5rHWF2ckQlxw3LXeqP9dl2lb4h/WYP8nTAjJYJK6XJoYk/G411kYe/F/2iQJhoD
-         xXRTDbDCKLXwoKXPmi6Vr+WyuZ3ew8qcXU3FezEQ7yPGxTwls2XhX7YcBJMW4KIq4h
-         iQEMQ7FEZy5AfH5qZZbVs3RolIS66jPxDTIm3nQXafdQE5dr92NhDgnKsUXTMjPJ2E
-         9HOoolYpwluWw==
-Date:   Sat, 5 Jun 2021 15:37:01 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     "Jonathan Corbet" <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        id S229989AbhFEPNw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Jun 2021 11:13:52 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:37381 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229930AbhFEPNv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Jun 2021 11:13:51 -0400
+Received: (Authenticated sender: n@nfraprado.net)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 8D0E020002;
+        Sat,  5 Jun 2021 15:11:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nfraprado.net;
+        s=gm1; t=1622905920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vv4/s0oEatJqm6xOhfhv4SCtKvstG4qCMEYIIpldPy0=;
+        b=c3g7o4uEF0JTLo7vMH1ksgmeTVLRz9pP7cqUyB/h+W5DpIymRZemkGu49jcerS4uE/XJQf
+        trJLU85vbJBVfZWGFuOsMTCnYVhfSXPxbndF40vAAuKJ0CB9s0KsBjrJ/9zkVZxSK1kZX7
+        WPbrr1BsDbMi3udCw9RD6VTWhB3rbd/s8FPEH1mqg/QoOWJo+2T2Gjzqe5dJfYUoJ5uWJi
+        mYxE058i/H4Cq0cW3G8Q81eikJU5bVOUF0NbPJeQ/P3UbZMAhOkhJpLRUvntlO2RvnJ5ez
+        x1AXAnbGKQtYTh67G2z/msrTC09lBJ7xVdF4ukLxuwInJgcg+Ro9QEyCJg7rbQ==
+Date:   Sat, 5 Jun 2021 12:11:09 -0300
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <n@nfraprado.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         coresight@lists.linaro.org, devicetree@vger.kernel.org,
         kunit-dev@googlegroups.com, kvm@vger.kernel.org,
         linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -37,36 +41,25 @@ Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
         netdev@vger.kernel.org
 Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
-Message-ID: <20210605153701.56a8e2d8@coco.lan>
-In-Reply-To: <cover.1622898327.git.mchehab+huawei@kernel.org>
+Message-ID: <20210605151109.axm3wzbcstsyxczp@notapiano>
 References: <cover.1622898327.git.mchehab+huawei@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1622898327.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Em Sat,  5 Jun 2021 15:17:59 +0200
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
+Hi Mauro,
 
+On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
 > As discussed at:
 > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
 > 
 > It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
 > automarkup.py extension should handle it automatically, on most cases.
-
-Forgot to mention:
-
-1. this series is against docs-next branch;
-2. maintainers bcc, as otherwise the e-mail would be rejected,
-   due to the number of c/c. I opted to keep c/c the mailing
-   lists.
-
-Regards,
-Mauro
-
 > 
 > There are a couple of exceptions to this rule:
 > 
@@ -89,6 +82,26 @@ Mauro
 > The automarkup.py will simply ignore it. Not sure why. This patch series
 > avoid the above patterns (which is present only on 4 files), but it would be
 > nice to have a followup patch fixing the issue at automarkup.py.
+
+What I think is happening here is that we're using rST's syntax for definition
+lists [1]. automarkup.py ignores literal nodes, and perhaps a definition is
+considered a literal by Sphinx. Adding a blank line after the Documentation/...
+or removing the additional indentation makes it work, like you did in your
+2nd and 3rd patch, since then it's not a definition anymore, although then the
+visual output is different as well.
+
+I'm not sure this is something we need to fix. Does it make sense to use
+definition lists for links like that? If it does, I guess one option would be to
+whitelist definition lists so they aren't ignored by automarkup, but I feel
+this could get ugly really quickly.
+
+FWIW note that it's also possible to use relative paths to docs with automarkup.
+
+Thanks,
+Nícolas
+
+[1] https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#definition-lists
+
 > 
 > On this series:
 > 
@@ -208,8 +221,7 @@ Mauro
 >  Documentation/x86/mtrr.rst                    |  2 +-
 >  55 files changed, 217 insertions(+), 183 deletions(-)
 > 
-
-
-
-Thanks,
-Mauro
+> -- 
+> 2.31.1
+> 
+> 
