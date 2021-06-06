@@ -2,60 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B6939CDCC
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Jun 2021 09:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE0B39CDD3
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Jun 2021 09:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbhFFHHT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 6 Jun 2021 03:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbhFFHHT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Jun 2021 03:07:19 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A13C061766;
-        Sun,  6 Jun 2021 00:05:30 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id n12so11321785pgs.13;
-        Sun, 06 Jun 2021 00:05:30 -0700 (PDT)
+        id S230208AbhFFHIj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Jun 2021 03:08:39 -0400
+Received: from mail-pf1-f170.google.com ([209.85.210.170]:34539 "EHLO
+        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229478AbhFFHIi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Jun 2021 03:08:38 -0400
+Received: by mail-pf1-f170.google.com with SMTP id g6so10732378pfq.1;
+        Sun, 06 Jun 2021 00:06:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Wu9gAwlAOwgKiPmTDPbi3wWguWilh1MHvLSLhPDONu4=;
-        b=Oef098bUXUmCFjfJdLdw3CRK0xzTkHa7Xwq8DgY7PtmZYyaDguYw22UNe/f7dJmmVd
-         XtF/lMEmL1M3tB+XFuctn/HFVfirB5JS94/45WzcvUrouktg6lGp8yz0ryeKs/z50cwY
-         W6r5MHozgBDCYYzCDb55tQk6UIuqU5imqjA21yCSVwEYydlQFXdtYGC4GULATkFloCxo
-         kgx8Atfzl0GPHAWcPOoeEJoPU+6j3XWqWx7eIHid4nAgyw6/Tb3UWoz4/k0QbBVCEbq2
-         fcSZL053MlwOO7L+EFqNbfOfAyja7WfhAjrc3j19m59sBhG+C1Z8ofHIT8S/ijDY8131
-         hV4g==
+        bh=J66R96VtW8mDJcT/ONY8la0SES4Mp5OfgngGRV1e+uk=;
+        b=ltrbs7IsuU4rxW0IuBq8ZcSDmgXcvj6QkaagoafdrzFvzuunQ546pBuc4JU1gJGyOZ
+         /bbDkmXHzMlZhE8neVmq0/T5o27L9UkrvZCagQEtrJyGtpJ3tPZOqTYQ90pFxgrQ42iU
+         4ibBiG3yumJmfZbBSTUooG0seI1RIVLo5Ci7Klpm0IxlIbengCS7ZrTvlcNQqd+gKNNO
+         inOWm6zANk+GJ8zwgFziPS/eh7HTHFBBS4iIctNnbQMqviPgFnUNKluD4r9oxGPZqjuc
+         aVDTYjoGtgB3+6IIuyllodJtjRrQp+4UaznGaqmQSgbT2wgKFWhsNg2GJ5h/ZB9TCE4C
+         sQSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Wu9gAwlAOwgKiPmTDPbi3wWguWilh1MHvLSLhPDONu4=;
-        b=VtN9yi7HBZqlKBuWlekcYc07FTZAH6cNhB0tX4l7dhdLAzNcmiD8CXT8VZYlmB62h4
-         m04BWZbtokwRP/ztEfak+VtmL5DS1RdxOyKprEM9C6LCqD0w/ky4s2T9XIzjxRcrHyiP
-         nYMKxxHGOe8SeeKtWUZ+Yk/4QxMUBPMJVP5kxDHCxgasPntAqpToblK6xXng74a9vrVP
-         ZMwIYx/I1BqoipH08VOyWuc1tS8RR9ravCtfG5mG8v9bqonK/uwb3zIISAZRZiOZ+rNB
-         BwN/mb7TL2F6kBLTqmfXLgdENgRiTPAWAYMLmsPbWkxs3d3n5hSkqhJLcy9Qp1GhxmdA
-         EhMQ==
-X-Gm-Message-State: AOAM532SEJLi3eWLcQseqitl8ZGkNobIhDi6luDJAJVhDxFAIb1Vknec
-        Z1JyOO8uSZTLFPH9znIV4zw=
-X-Google-Smtp-Source: ABdhPJx8MzSJB7AjQGaenY8cmsSrTjG4AD6oVrcO5Gg4F+DIdVlxhFKTTN0ZeCD4WSIMHimnZFayhw==
-X-Received: by 2002:a62:5288:0:b029:2e3:fd7d:267a with SMTP id g130-20020a6252880000b02902e3fd7d267amr12260409pfb.21.1622963128174;
-        Sun, 06 Jun 2021 00:05:28 -0700 (PDT)
+        bh=J66R96VtW8mDJcT/ONY8la0SES4Mp5OfgngGRV1e+uk=;
+        b=QTkNLVQ/de+VvsVMloUevdxnivMxVKpLp+DINOpEwffP0hSECsWvUV/BcAHqzTQYP1
+         Oxksxm+UTq/AjN6bnXtQvXoPZxG1T96FUEtPMCs/p0dxNXYnUbJCfmAzyXuY+/dxyqzr
+         GKtBdl+4F17V0AShP7mDR6xr7U1nIgozBbfrcMd+JBBO5Ni/Lazgt8PRPTJtdY3/8nX9
+         PM+Cy0+Xg7sSQKOTpkdW+xtDTkK2APhKsLIw230zAsMHjxS/j2fbvuasXC0BgGSeYfHj
+         B9i4xdu4KcQAADZY1zezHrPgf5HAEvpDo+kxfuHGOciXVZA57IzGUaW6y9fvOVwm0S3G
+         kZpw==
+X-Gm-Message-State: AOAM530GWK/4k5/XQkwb6U/S7/4FJnJeixxcArR+8VwHXFzwfESn8vBA
+        gmDMuXZ+4SnzeWzgBk1KcPA=
+X-Google-Smtp-Source: ABdhPJx7OClakPR3VGNnt9/EOTYx/4ErJNqw79iJSYkGFxZ20rHXgLaRwkw1G7FKE/PNubW2gD18pQ==
+X-Received: by 2002:a62:1743:0:b029:2ef:6014:62d5 with SMTP id 64-20020a6217430000b02902ef601462d5mr1375817pfx.63.1622963133427;
+        Sun, 06 Jun 2021 00:05:33 -0700 (PDT)
 Received: from localhost (185.212.56.112.16clouds.com. [185.212.56.112])
-        by smtp.gmail.com with ESMTPSA id s13sm207808pgi.36.2021.06.06.00.05.27
+        by smtp.gmail.com with ESMTPSA id k9sm5735976pgq.27.2021.06.06.00.05.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Jun 2021 00:05:27 -0700 (PDT)
+        Sun, 06 Jun 2021 00:05:33 -0700 (PDT)
 From:   Dejin Zheng <zhengdejin5@gmail.com>
 To:     helgaas@kernel.org, corbet@lwn.net, jarkko.nikula@linux.intel.com,
         andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
         rric@kernel.org, bhelgaas@google.com, linux-doc@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH v6 3/4] i2c: designware: Use pcim_alloc_irq_vectors() to allocate IRQ vectors
-Date:   Sun,  6 Jun 2021 15:05:10 +0800
-Message-Id: <20210606070511.778487-4-zhengdejin5@gmail.com>
+Subject: [PATCH v6 4/4] i2c: thunderx: Use pcim_alloc_irq_vectors() to allocate IRQ vectors
+Date:   Sun,  6 Jun 2021 15:05:11 +0800
+Message-Id: <20210606070511.778487-5-zhengdejin5@gmail.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210606070511.778487-1-zhengdejin5@gmail.com>
 References: <20210606070511.778487-1-zhengdejin5@gmail.com>
@@ -69,13 +66,9 @@ The pcim_alloc_irq_vectors() function, an explicit device-managed version
 of pci_alloc_irq_vectors(). If pcim_enable_device() has been called
 before, then pci_alloc_irq_vectors() is actually a device-managed
 function. It is used here as a device-managed function, So replace it
-with pcim_alloc_irq_vectors(). At the same time, Remove the
-pci_free_irq_vectors() function to simplify the error handling path.
-the freeing resources will take automatically when device is gone.
+with pcim_alloc_irq_vectors().
 
-Reviewed-by: Robert Richter <rric@kernel.org>
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Acked-by: Robert Richter <rric@kernel.org>
 Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 ---
 v5 -> v6:
@@ -83,72 +76,28 @@ v5 -> v6:
 v4 -> v5:
 	- Modify the subject name.
 v3 -> v4:
-	- add some commit comments.
+	- No change.
 v2 -> v3:
-	- simplify the error handling path.
+	- No change.
 v1 -> v2:
 	- Modify some commit messages.
 
- drivers/i2c/busses/i2c-designware-pcidrv.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+ drivers/i2c/busses/i2c-thunderx-pcidrv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 0f409a4c2da0..2b1ef0934445 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -268,7 +268,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	if (!dev)
- 		return -ENOMEM;
+diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
+index 12c90aa0900e..63354e9fb726 100644
+--- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
++++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
+@@ -192,7 +192,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
+ 	i2c->hlc_int_enable = thunder_i2c_hlc_int_enable;
+ 	i2c->hlc_int_disable = thunder_i2c_hlc_int_disable;
  
--	r = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
-+	r = pcim_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
- 	if (r < 0)
- 		return r;
+-	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
++	ret = pcim_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
+ 	if (ret < 0)
+ 		goto error;
  
-@@ -283,10 +283,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 
- 	if (controller->setup) {
- 		r = controller->setup(pdev, controller);
--		if (r) {
--			pci_free_irq_vectors(pdev);
-+		if (r)
- 			return r;
--		}
- 	}
- 
- 	i2c_dw_adjust_bus_speed(dev);
-@@ -295,10 +293,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 		i2c_dw_acpi_configure(&pdev->dev);
- 
- 	r = i2c_dw_validate_speed(dev);
--	if (r) {
--		pci_free_irq_vectors(pdev);
-+	if (r)
- 		return r;
--	}
- 
- 	i2c_dw_configure(dev);
- 
-@@ -318,10 +314,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	adap->nr = controller->bus_num;
- 
- 	r = i2c_dw_probe(dev);
--	if (r) {
--		pci_free_irq_vectors(pdev);
-+	if (r)
- 		return r;
--	}
- 
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
- 		r = navi_amd_register_client(dev);
-@@ -349,7 +343,6 @@ static void i2c_dw_pci_remove(struct pci_dev *pdev)
- 
- 	i2c_del_adapter(&dev->adapter);
- 	devm_free_irq(&pdev->dev, dev->irq, dev);
--	pci_free_irq_vectors(pdev);
- }
- 
- /* work with hotplug and coldplug */
 -- 
 2.30.1
 
