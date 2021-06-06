@@ -2,102 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE0B39CDD3
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Jun 2021 09:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4248B39CF5B
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Jun 2021 15:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbhFFHIj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 6 Jun 2021 03:08:39 -0400
-Received: from mail-pf1-f170.google.com ([209.85.210.170]:34539 "EHLO
-        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbhFFHIi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Jun 2021 03:08:38 -0400
-Received: by mail-pf1-f170.google.com with SMTP id g6so10732378pfq.1;
-        Sun, 06 Jun 2021 00:06:33 -0700 (PDT)
+        id S230050AbhFFNnE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Jun 2021 09:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230003AbhFFNnD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Jun 2021 09:43:03 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4A2C061766;
+        Sun,  6 Jun 2021 06:41:13 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id h22-20020a05600c3516b02901a826f84095so3393427wmq.5;
+        Sun, 06 Jun 2021 06:41:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=J66R96VtW8mDJcT/ONY8la0SES4Mp5OfgngGRV1e+uk=;
-        b=ltrbs7IsuU4rxW0IuBq8ZcSDmgXcvj6QkaagoafdrzFvzuunQ546pBuc4JU1gJGyOZ
-         /bbDkmXHzMlZhE8neVmq0/T5o27L9UkrvZCagQEtrJyGtpJ3tPZOqTYQ90pFxgrQ42iU
-         4ibBiG3yumJmfZbBSTUooG0seI1RIVLo5Ci7Klpm0IxlIbengCS7ZrTvlcNQqd+gKNNO
-         inOWm6zANk+GJ8zwgFziPS/eh7HTHFBBS4iIctNnbQMqviPgFnUNKluD4r9oxGPZqjuc
-         aVDTYjoGtgB3+6IIuyllodJtjRrQp+4UaznGaqmQSgbT2wgKFWhsNg2GJ5h/ZB9TCE4C
-         sQSQ==
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=K/BommlWMPKscL8eOATJT+GKm2n8M7OIw/NGyaEKOIg=;
+        b=Bi7Bs/UcnhaErbR2w9utGtknJEt20Ksf2gTejYDAuxzhhs20woYdv3fca94o2K0ZB8
+         VXG9Vkwbng82oL5djc6HrtUIa8slRo+iYx1ayaJK7glftlSngRpCHwaQvk3A9VF0KyOO
+         TsEVzynb5UgvJWQntrgTPaeCh5SyPEUWgV99tDUsU83ePu30HM91KXrtjfrKcnSY1joD
+         edfaE6+emgpbTXZ52GUioJyLwqtw16LuEqGszN81nyWqs6SNQOFh6GgIO/XNFx8P8i7l
+         vx49lUyL5EvseJV/dJkLCf3tazfRjC2pqPSP/wi1YG6d05yvDYDBzUifENlPAAuf040e
+         Av9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=J66R96VtW8mDJcT/ONY8la0SES4Mp5OfgngGRV1e+uk=;
-        b=QTkNLVQ/de+VvsVMloUevdxnivMxVKpLp+DINOpEwffP0hSECsWvUV/BcAHqzTQYP1
-         Oxksxm+UTq/AjN6bnXtQvXoPZxG1T96FUEtPMCs/p0dxNXYnUbJCfmAzyXuY+/dxyqzr
-         GKtBdl+4F17V0AShP7mDR6xr7U1nIgozBbfrcMd+JBBO5Ni/Lazgt8PRPTJtdY3/8nX9
-         PM+Cy0+Xg7sSQKOTpkdW+xtDTkK2APhKsLIw230zAsMHjxS/j2fbvuasXC0BgGSeYfHj
-         B9i4xdu4KcQAADZY1zezHrPgf5HAEvpDo+kxfuHGOciXVZA57IzGUaW6y9fvOVwm0S3G
-         kZpw==
-X-Gm-Message-State: AOAM530GWK/4k5/XQkwb6U/S7/4FJnJeixxcArR+8VwHXFzwfESn8vBA
-        gmDMuXZ+4SnzeWzgBk1KcPA=
-X-Google-Smtp-Source: ABdhPJx7OClakPR3VGNnt9/EOTYx/4ErJNqw79iJSYkGFxZ20rHXgLaRwkw1G7FKE/PNubW2gD18pQ==
-X-Received: by 2002:a62:1743:0:b029:2ef:6014:62d5 with SMTP id 64-20020a6217430000b02902ef601462d5mr1375817pfx.63.1622963133427;
-        Sun, 06 Jun 2021 00:05:33 -0700 (PDT)
-Received: from localhost (185.212.56.112.16clouds.com. [185.212.56.112])
-        by smtp.gmail.com with ESMTPSA id k9sm5735976pgq.27.2021.06.06.00.05.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Jun 2021 00:05:33 -0700 (PDT)
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     helgaas@kernel.org, corbet@lwn.net, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        rric@kernel.org, bhelgaas@google.com, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH v6 4/4] i2c: thunderx: Use pcim_alloc_irq_vectors() to allocate IRQ vectors
-Date:   Sun,  6 Jun 2021 15:05:11 +0800
-Message-Id: <20210606070511.778487-5-zhengdejin5@gmail.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210606070511.778487-1-zhengdejin5@gmail.com>
-References: <20210606070511.778487-1-zhengdejin5@gmail.com>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=K/BommlWMPKscL8eOATJT+GKm2n8M7OIw/NGyaEKOIg=;
+        b=LdCi5/lkAOQp+KZSffr4NWUXZ5WZf0UDrgP40m/LjdyyEad3WU9dXUVZnyejpEKmaJ
+         W92dN/aFMQzOvsIPfMBcVi+vCcCrAb9VuhCdbVpJYlmm+IEfovDcz0xU8UDqXTCQZn4x
+         9YertRNGo1Eq9sTePLJHWkWHtNEMSEQ3g2OMZJXU0WcnHraG1CLpZJJJeZ2ON105gxq/
+         qVcGVdTTbRJUU45DnYAMJ/YlLc5PwIb6cNIoMwtv4tkZyN0bKmpjP+YWgr/avpE6Qia0
+         /JwzPBvvI/YYGLe4/Vrex2PpQZ3qsH6Ws9fe9VD7BFsql8Oh2GJcnL5u/k10ZOkhHAvQ
+         KK1A==
+X-Gm-Message-State: AOAM532XADv5XDbkhloGPbYlvyfqq4Q66p7GXX0lWd1UwBfmpg/0mO1A
+        b96QdKi4lBj+7cCHLEUk5bYxGCJMfOI=
+X-Google-Smtp-Source: ABdhPJymeaYhwC80Zrv8C3/eqI/0X8deIJyOfjz7MldsNCuVqAuStVI1ONBQYNTQmyZM32VldU1DIQ==
+X-Received: by 2002:a05:600c:1d1b:: with SMTP id l27mr1863510wms.62.1622986871183;
+        Sun, 06 Jun 2021 06:41:11 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8f2f:c00:49c:cca9:867d:9b13? (p200300ea8f2f0c00049ccca9867d9b13.dip0.t-ipconnect.de. [2003:ea:8f2f:c00:49c:cca9:867d:9b13])
+        by smtp.googlemail.com with ESMTPSA id c7sm13988783wrc.42.2021.06.06.06.41.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Jun 2021 06:41:10 -0700 (PDT)
+To:     Jean Delvare <jdelvare@suse.de>, Hector Martin <marcan@marcan.st>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH] i2c: i801: Ensure that SMBHSTSTS_INUSE_STS is cleared when
+ leaving i801_access
+Message-ID: <d012221b-9a44-eb77-f7c2-4e498ef5f933@gmail.com>
+Date:   Sun, 6 Jun 2021 15:41:03 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pcim_alloc_irq_vectors() function, an explicit device-managed version
-of pci_alloc_irq_vectors(). If pcim_enable_device() has been called
-before, then pci_alloc_irq_vectors() is actually a device-managed
-function. It is used here as a device-managed function, So replace it
-with pcim_alloc_irq_vectors().
+As explained in [0] currently we may leave SMBHSTSTS_INUSE_STS set,
+thus potentially breaking ACPI/BIOS usage of the SMBUS device.
 
-Acked-by: Robert Richter <rric@kernel.org>
-Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+Seems patch [0] needs a little bit more of review effort, therefore
+I'd suggest to apply a part of it as quick win. Just clearing
+SMBHSTSTS_INUSE_STS when leaving i801_access() should fix the
+referenced issue and leaves more time for discussing a more
+sophisticated locking handling.
+
+[0] https://www.spinics.net/lists/linux-i2c/msg51558.html
+
+Fixes: 01590f361e94 ("i2c: i801: Instantiate SPD EEPROMs automatically")
+Suggested-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
-v5 -> v6:
-	- rebase to 5.13-rc4
-v4 -> v5:
-	- Modify the subject name.
-v3 -> v4:
-	- No change.
-v2 -> v3:
-	- No change.
-v1 -> v2:
-	- Modify some commit messages.
+ drivers/i2c/busses/i2c-i801.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- drivers/i2c/busses/i2c-thunderx-pcidrv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index 12c90aa0900e..63354e9fb726 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -192,7 +192,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 	i2c->hlc_int_enable = thunder_i2c_hlc_int_enable;
- 	i2c->hlc_int_disable = thunder_i2c_hlc_int_disable;
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index c7d96cf5e..ab3470e77 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -948,6 +948,9 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+ 	}
  
--	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
-+	ret = pcim_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
- 	if (ret < 0)
- 		goto error;
- 
+ out:
++	/* Unlock the SMBus device for use by BIOS/ACPI */
++	outb_p(SMBHSTSTS_INUSE_STS, SMBHSTSTS(priv));
++
+ 	pm_runtime_mark_last_busy(&priv->pci_dev->dev);
+ 	pm_runtime_put_autosuspend(&priv->pci_dev->dev);
+ 	mutex_unlock(&priv->acpi_lock);
 -- 
-2.30.1
+2.31.1
 
