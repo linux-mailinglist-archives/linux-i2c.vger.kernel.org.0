@@ -2,163 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AAD39CB9F
-	for <lists+linux-i2c@lfdr.de>; Sun,  6 Jun 2021 01:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFEA39CDBB
+	for <lists+linux-i2c@lfdr.de>; Sun,  6 Jun 2021 08:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbhFEXJx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Jun 2021 19:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbhFEXJw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Jun 2021 19:09:52 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BA5C061766;
-        Sat,  5 Jun 2021 16:08:04 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id f17so7541328wmf.2;
-        Sat, 05 Jun 2021 16:08:04 -0700 (PDT)
+        id S230088AbhFFGyV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Jun 2021 02:54:21 -0400
+Received: from mail-pf1-f171.google.com ([209.85.210.171]:42773 "EHLO
+        mail-pf1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229525AbhFFGyU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Jun 2021 02:54:20 -0400
+Received: by mail-pf1-f171.google.com with SMTP id s14so9818978pfd.9;
+        Sat, 05 Jun 2021 23:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=XWQOeDNetl8UqnHPJUQjjvOHA7LNu8Ic6TyUbdOorqs=;
-        b=oUDh7JiDO9mrLvD61KvsDx0GFNTAXwpE+Ch5LrxM86ifXgveP3JG94hrc+fldZUAQC
-         hJfu8LGpFHLffvN2fHZA1toSHHzPlFRw+SKq45jrBI+1v3wLXp0reM9l4G4ZzxLua1qP
-         81hyKfbsyFcMRgWnE/bJr0fTa9c3Ze3/Fczg0tg9KBh42O5baQ55OG0K3u88NS85OQbq
-         wYEXupbbKfQWHEgcyiCZxq3ZXYFs9/D1TPHOg4JZ5iGplwLhDNshek6FAh3sahfe9eNH
-         11SUZIenfH+NWWoPScGa/+ht1jysI0nkOv7MvIypdzxrrK2vPY+7P3+QhOR+yl8WVU1z
-         OV1Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GSJgNOcL/Z+5ft4U7oxqLqn4lSGnAiuWQnkxsMTyq3Y=;
+        b=KH/cH/QrIKfjMmlZXQM5lBBhOkfuZqBTCiMqS60oqkYGg8yV3BxbtR9+8yNMONe4UF
+         aaTQHUMcgSobcV1Avvv3oV1ssixF6Fc4FmyILu48D/ViADGPVdyYic452w1FJjUcmII8
+         VY2LvrUHZdsG0pwmtYXg7r427BPR9GY7qY9ScMPUgqhg7BMGkizqASlY59d7nDEvujLj
+         RrUAEeXdHvc9mNdjk/Z7xDFZUfZYQiQywpNnL+VSezEnxsCwM4XPLyKbi6027JGLt4+j
+         Ca/WRfXbeoAWhwuZORpV6zusC5sCjWZ939jkV19wMaXtc11ux+efnPdBjvGDG2ex6L5n
+         7DHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=XWQOeDNetl8UqnHPJUQjjvOHA7LNu8Ic6TyUbdOorqs=;
-        b=BHU2FOK2b0anLKxhK11ents7rTWAoZe1JouggSTEIiQWWPdtMy66sXa7ooAtPNpqtT
-         iARxRQ4JkXzjTkb2C4ADtdrb/wHzOQhmaRIKpuwT92UgB1Aa3DWYTn52tpVWUI61pAvD
-         zO+e/Qgkd/p30Cm/qm8baTGDBhg2KhKQ8tQpverlO/po4aKdFkFvphTGpQHi1i+tjSg2
-         1eNs4TKekenFDGedcgq886CyzfoOEoSE+yt/QaXQXeO0vFqtVv1xOHxNHycS2P6EOcW0
-         koF72Gq3JH2lzitviXzfvdU8zV7xfgE6mZdDxaNlLDapEMH9boom2LoeCe/V1LOPqZMK
-         pQhQ==
-X-Gm-Message-State: AOAM5323r4Q69MpNYkn6w3/CtECQiTUcGJ9q8Jw/NgEoKDNLzLtHOFY6
-        jdBIE2Al/yqwms5ZqpiBG6c=
-X-Google-Smtp-Source: ABdhPJw6+lZPeYszBUn8aMQkKy6foGfI99/ILAywZKofFSvRh4OwezEb5re6agR0nLf9aArqwNBvEg==
-X-Received: by 2002:a1c:b783:: with SMTP id h125mr10019551wmf.182.1622934478325;
-        Sat, 05 Jun 2021 16:07:58 -0700 (PDT)
-Received: from [192.168.1.211] ([2.29.20.84])
-        by smtp.gmail.com with ESMTPSA id q11sm9561009wmq.1.2021.06.05.16.07.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Jun 2021 16:07:57 -0700 (PDT)
-Subject: Re: [PATCH v5 5/6] platform/x86: Add intel_skl_int3472 driver
-To:     kernel test robot <lkp@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-References: <20210603224007.120560-6-djrscally@gmail.com>
- <202106040951.xabRueHQ-lkp@intel.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <68dcb60a-be0b-9bb6-b661-03a629e52f70@gmail.com>
-Date:   Sun, 6 Jun 2021 00:07:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GSJgNOcL/Z+5ft4U7oxqLqn4lSGnAiuWQnkxsMTyq3Y=;
+        b=Tv00LtXujVHsLhBdZ6LLXtqkRtbseiaRTuGA9yvDbGzU9Bp8r9MGirfCmX4YjrajF0
+         omUjXbszuHtyd0NbVFjnZbfM88cwE5EjU2ldXkvKNAwUDc8mxQWWQVpNlXxbzahrrXAA
+         G8qzvgOENYRVXRNJ2Gk3ZiUsNrzDbhPT+8mxoCEGWFQyqWJu6Z/3XxxX+XK0gkyzyvpm
+         SxZjtwgA3ucbLfP7L9BA9Q4P8JTcq3rSplkYARmhUrFBmEFfzBDyXk/HDzif9FNONXFe
+         RO2fQ1XFD4LPiFYEkq7IhFJecATXcm9qOtJbsLS7CXgtEky3l9A3cNz9MqxE8RMiyPi+
+         YV3A==
+X-Gm-Message-State: AOAM531kkdmey9H9ZwbISmBZXyW7e4he+odB6ylAt9IulZK+q+3kVqKg
+        OwmxVSJ2GyAAeDMDah/fHevc5NxGSVYrXPm0
+X-Google-Smtp-Source: ABdhPJxef16XBir6T5Jyl/5LZnWZt3EJcUJP5zUhUp38ZYmYZtuJx6WmecvjlVLp1TKM/QmBJGu3Lg==
+X-Received: by 2002:a63:e703:: with SMTP id b3mr12854701pgi.36.1622962291645;
+        Sat, 05 Jun 2021 23:51:31 -0700 (PDT)
+Received: from localhost (185.212.56.112.16clouds.com. [185.212.56.112])
+        by smtp.gmail.com with ESMTPSA id e188sm5114990pfe.23.2021.06.05.23.51.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Jun 2021 23:51:31 -0700 (PDT)
+Date:   Sun, 6 Jun 2021 14:51:29 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, corbet@lwn.net,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, bhelgaas@google.com, wsa@kernel.org,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Gordeev <agordeev@redhat.com>,
+        Jonathan Derrick <jonathan.derrick@intel.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Logan Gunthorpe <logang@deltatee.com>
+Subject: Re: [PATCH v5 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <20210606064805.GA778208@nuc8i5>
+References: <20210226155056.1068534-2-zhengdejin5@gmail.com>
+ <20210323224710.GA610170@bjorn-Precision-5520>
+ <20210505162716.GB1851@nuc8i5>
+ <YLdGfmrk6+FbTbNN@smile.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <202106040951.xabRueHQ-lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YLdGfmrk6+FbTbNN@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Ah - forgot to make the function static, let me sent another of this patch.
+On Wed, Jun 02, 2021 at 11:51:10AM +0300, Andy Shevchenko wrote:
+> On Thu, May 06, 2021 at 12:27:16AM +0800, Dejin Zheng wrote:
+> > On Tue, Mar 23, 2021 at 05:47:10PM -0500, Bjorn Helgaas wrote:
+> > > [+cc Christoph, Thomas, Alexander, in case you're interested]
+> > > [+cc Jonathan, Kurt, Logan: vmd.c and switchtec.c use managed resources
+> > > and pci_alloc_irq_vectors()]
+> 
+> > > On Fri, Feb 26, 2021 at 11:50:53PM +0800, Dejin Zheng wrote:
+> > > > Introduce pcim_alloc_irq_vectors(), a device-managed version of
+> > > > pci_alloc_irq_vectors(). Introducing this function can simplify
+> > > > the error handling path in many drivers.
+> > > > 
+> > > > And use pci_free_irq_vectors() to replace some code in pcim_release(),
+> > > > they are equivalent, and no functional change. It is more explicit
+> > > > that pcim_alloc_irq_vectors() is a device-managed function.
+> > > > 
+> > > > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> > > 
+> > > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> > > 
+> > > Let me know if you'd like me to take the series.
+> > >
+> > Hi Bjorn,
+> > 
+> > These patches are still invisible on the mainline, could you help me to
+> > take it? Thanks very much!
+> 
+> I guess you have to rebase them on top of the latest rc (or PCI for-next) and
+> send with a cover letter.
+>
+Andy, thanks for your reminder, I will do it.
 
-On 04/06/2021 02:31, kernel test robot wrote:
-> Hi Daniel,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on pm/linux-next]
-> [also build test WARNING on lee-mfd/for-mfd-next linus/master v5.13-rc4 next-20210603]
-> [cannot apply to gpio/for-next]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Daniel-Scally/Introduce-intel_skl_int3472-module/20210604-064345
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-> config: x86_64-allyesconfig (attached as .config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/0day-ci/linux/commit/3edcad8c200f211063a35d125e9fd350a2efeb40
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Daniel-Scally/Introduce-intel_skl_int3472-module/20210604-064345
->         git checkout 3edcad8c200f211063a35d125e9fd350a2efeb40
->         # save the attached .config to linux build tree
->         make W=1 ARCH=x86_64 
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/platform/x86/intel-int3472/intel_skl_int3472_tps68470.c:76:5: warning: no previous prototype for 'skl_int3472_tps68470_calc_type' [-Wmissing-prototypes]
->       76 | int skl_int3472_tps68470_calc_type(struct acpi_device *adev)
->          |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
->
-> vim +/skl_int3472_tps68470_calc_type +76 drivers/platform/x86/intel-int3472/intel_skl_int3472_tps68470.c
->
->     52	
->     53	/** skl_int3472_tps68470_calc_type: Check what platform a device is designed for
->     54	 * @adev: A pointer to a &struct acpi_device
->     55	 *
->     56	 * Check CLDB buffer against the PMIC's adev. If present, then we check
->     57	 * the value of control_logic_type field and follow one of the
->     58	 * following scenarios:
->     59	 *
->     60	 *	1. No CLDB - likely ACPI tables designed for ChromeOS. We
->     61	 *	create platform devices for the GPIOs and OpRegion drivers.
->     62	 *
->     63	 *	2. CLDB, with control_logic_type = 2 - probably ACPI tables
->     64	 *	made for Windows 2-in-1 platforms. Register pdevs for GPIO,
->     65	 *	Clock and Regulator drivers to bind to.
->     66	 *
->     67	 *	3. Any other value in control_logic_type, we should never have
->     68	 *	gotten to this point; fail probe and return.
->     69	 *
->     70	 * Return:
->     71	 * * 1		Device intended for ChromeOS
->     72	 * * 2		Device intended for Windows
->     73	 * * -EINVAL	Where @adev has an object named CLDB but it does not conform to
->     74	 *		our expectations
->     75	 */
->   > 76	int skl_int3472_tps68470_calc_type(struct acpi_device *adev)
->     77	{
->     78		struct int3472_cldb cldb = { 0 };
->     79		int ret;
->     80	
->     81		/*
->     82		 * A CLDB buffer that exists, but which does not match our expectations
->     83		 * should trigger an error so we don't blindly continue.
->     84		 */
->     85		ret = skl_int3472_fill_cldb(adev, &cldb);
->     86		if (ret && ret != -ENODEV)
->     87			return ret;
->     88	
->     89		if (ret)
->     90			return DESIGNED_FOR_CHROMEOS;
->     91	
->     92		if (cldb.control_logic_type != 2)
->     93			return -EINVAL;
->     94	
->     95		return DESIGNED_FOR_WINDOWS;
->     96	}
->     97	
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
