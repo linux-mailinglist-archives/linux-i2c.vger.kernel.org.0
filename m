@@ -2,88 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB34139E10F
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 17:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2EB39E14D
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 17:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbhFGPo5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Jun 2021 11:44:57 -0400
-Received: from smtprelay0029.hostedemail.com ([216.40.44.29]:41378 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231582AbhFGPo5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Jun 2021 11:44:57 -0400
-Received: from omf08.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 24B06837F24A;
-        Mon,  7 Jun 2021 15:43:05 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 1BA771A29F9;
-        Mon,  7 Jun 2021 15:43:03 +0000 (UTC)
-Message-ID: <dbcd926e934dc66e17cc35c4c0d2b867474379e5.camel@perches.com>
-Subject: Re: [PATCH v2 1/3] units: Add SI metric prefix definitions
-From:   Joe Perches <joe@perches.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        id S230363AbhFGP7I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Jun 2021 11:59:08 -0400
+Received: from mga18.intel.com ([134.134.136.126]:40134 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230197AbhFGP7H (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 7 Jun 2021 11:59:07 -0400
+IronPort-SDR: x2OkIVTSiRqXAUxR4TbRXg6dqvlr8d9Tzg9zWXTRKTKOPrLI/9ynccbyspHe02SlHAU6RcJRMG
+ QXh7wwmnHnaQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="191976191"
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="191976191"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 08:57:15 -0700
+IronPort-SDR: Mjg2ogYAsPiGswkaDtMJ8xZZa5NW5nWMk2JGKsvQc1jmoc2pVOR5/TX8TS1B4Vlt1OStTfaGP5
+ I884SzezzcwA==
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="449136178"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 08:57:13 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lqHck-000INZ-MJ; Mon, 07 Jun 2021 18:57:10 +0300
+Date:   Mon, 7 Jun 2021 18:57:10 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         wsa@kernel.org
-Date:   Mon, 07 Jun 2021 08:43:02 -0700
-In-Reply-To: <20210607152344.57458-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/3] units: Add SI metric prefix definitions
+Message-ID: <YL5B1tIPNpQiWrQ/@smile.fi.intel.com>
 References: <20210607152344.57458-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+ <dbcd926e934dc66e17cc35c4c0d2b867474379e5.camel@perches.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.90
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 1BA771A29F9
-X-Stat-Signature: mrgkembcckokhd5c6m9siy7a4ij7piwc
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+dXr/s0DMQTspylw0p8uO+ItJW9kzTZv0=
-X-HE-Tag: 1623080583-985749
+In-Reply-To: <dbcd926e934dc66e17cc35c4c0d2b867474379e5.camel@perches.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 2021-06-07 at 18:23 +0300, Andy Shevchenko wrote:
-> Sometimes it's useful to have well-defined SI metric prefix to be used
-> to self-describe the formulas or equations.
+On Mon, Jun 07, 2021 at 08:43:02AM -0700, Joe Perches wrote:
+> On Mon, 2021-06-07 at 18:23 +0300, Andy Shevchenko wrote:
+> > Sometimes it's useful to have well-defined SI metric prefix to be used
+> > to self-describe the formulas or equations.
+
+...
+
+> > +/* Metric prefixes in accordance with Système international (d'unités) */
+> > +#define PETA	1000000000000000LL
+> > +#define TERA	1000000000000LL
+> > +#define GIGA	1000000000L
+> > +#define MEGA	1000000L
+> > +#define KILO	1000L
+> > +#define HECTO	100L
+> > +#define DECA	10L
+> > +#define DECI	10L
+> > +#define CENTI	100L
+> > +#define MILLI	1000L
+> > +#define MICRO	1000000L
+> > +#define NANO	1000000000L
+> > +#define PICO	1000000000000LL
+> > +#define FEMTO	1000000000000000LL
+
+> Somewhat surprisingly to me, this seems safe.
 > 
-> List most popular ones in the units.h.
-[]
-> diff --git a/include/linux/units.h b/include/linux/units.h
-[]
-> @@ -4,6 +4,22 @@
->  
->  #include <linux/math.h>
->  
-> +/* Metric prefixes in accordance with Système international (d'unités) */
-> +#define PETA	1000000000000000LL
-> +#define TERA	1000000000000LL
-> +#define GIGA	1000000000L
-> +#define MEGA	1000000L
-> +#define KILO	1000L
-> +#define HECTO	100L
-> +#define DECA	10L
-> +#define DECI	10L
-> +#define CENTI	100L
-> +#define MILLI	1000L
-> +#define MICRO	1000000L
-> +#define NANO	1000000000L
-> +#define PICO	1000000000000LL
-> +#define FEMTO	1000000000000000LL
-> +
->  #define MILLIWATT_PER_WATT	1000L
->  #define MICROWATT_PER_MILLIWATT	1000L
->  #define MICROWATT_PER_WATT	1000000L
+> (though I suggest using UL and ULL rather than L and LL)
 
-Somewhat surprisingly to me, this seems safe.
+Okay.
 
-(though I suggest using UL and ULL rather than L and LL)
+> The only use of any of these seems to be:
+> 
+> sound/pcmcia/vx/vxp_ops.c:      [VX_MICRO]      = 0x0c,         // MICRO
+> sound/pcmcia/vx/vxp_ops.c:              vx_outb(chip, MICRO, level);
+> sound/pcmcia/vx/vxp_ops.c:                      vx_outb(chip, MICRO, vx_compute_mic_level(chip->mic_level));
+> 
+> and these vx_outb uses are themselves macros that prepend VX_ to the 2nd arg.
 
-The only use of any of these seems to be:
+Is it a real issue there?
 
-sound/pcmcia/vx/vxp_ops.c:      [VX_MICRO]      = 0x0c,         // MICRO
-sound/pcmcia/vx/vxp_ops.c:              vx_outb(chip, MICRO, level);
-sound/pcmcia/vx/vxp_ops.c:                      vx_outb(chip, MICRO, vx_compute_mic_level(chip->mic_level));
+(Yes, I saw it, but I didn't check compilation in the assumption that units.h
+ is not anyhow included in that file).
 
-and these vx_outb uses are themselves macros that prepend VX_ to the 2nd arg.
+Okay, I have compiled it, no problems registered.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
