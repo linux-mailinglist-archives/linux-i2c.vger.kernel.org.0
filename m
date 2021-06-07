@@ -2,75 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B40339E511
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 19:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B35339E73F
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 21:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbhFGRQq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Jun 2021 13:16:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41438 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230504AbhFGRQp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 7 Jun 2021 13:16:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 40FB960FF2;
-        Mon,  7 Jun 2021 17:14:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623086093;
-        bh=9jfypPKUdKJ4TKMPL0HZ70TpD4lRTMsAT/7JugcEW+g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VVntAZBJCrFxdag/Jatlnwr8jFp5Nx5XPaS8INk7lj8ha+sgfZkm1atn0T+zkwa1o
-         WnG9n54Sk9Rc+0oErXhzgKHmhPtAb6P+w9e8Dg/RpEISs3INHv+Y6ei59mdcyL+Rmr
-         /XSOytZls8BZwBVLQfN1kMRkOc6gHeLe0SB375T6Fy9tOpG4NyQcnAEFHMzemCDNLO
-         FZfNlhzYTyPKFeDfA0kDvCL1hJYVSA0kMRgoM8imOR9kA10IXCqj7+JLEGAUAY0NUL
-         q3LX212U1Qi1A0ODnfrZezYIhRSf6vvQF3CxG1NwIm5JI4mDDUDS32qEPDGMPgFLzg
-         JeCQb3atcLEtg==
-Date:   Mon, 7 Jun 2021 12:14:51 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dejin Zheng <zhengdejin5@gmail.com>, corbet@lwn.net,
-        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        rric@kernel.org, bhelgaas@google.com, wsa@kernel.org,
-        Sanket.Goswami@amd.com, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v7 1/4] PCI: Introduce pcim_alloc_irq_vectors()
-Message-ID: <20210607171451.GA2507298@bjorn-Precision-5520>
+        id S230353AbhFGTLx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Jun 2021 15:11:53 -0400
+Received: from smtprelay0022.hostedemail.com ([216.40.44.22]:38712 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230282AbhFGTLx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Jun 2021 15:11:53 -0400
+Received: from omf13.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id CA628182CF66C;
+        Mon,  7 Jun 2021 19:10:00 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id B71321124F3;
+        Mon,  7 Jun 2021 19:09:59 +0000 (UTC)
+Message-ID: <ae919bae6c21e23b0a1ed0c9327738e59dd90aa0.camel@perches.com>
+Subject: Re: [PATCH v2 1/3] units: Add SI metric prefix definitions
+From:   Joe Perches <joe@perches.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        wsa@kernel.org
+Date:   Mon, 07 Jun 2021 12:09:58 -0700
+In-Reply-To: <20210607152344.57458-1-andriy.shevchenko@linux.intel.com>
+References: <20210607152344.57458-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YL5FcivbsIBnVvo0@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.90
+X-Stat-Signature: 8wbx163o9au6somidwb8kb4psryybbse
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: B71321124F3
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19gfuYGN0sZkfT6xaxuUJ3RaO+6FpeJDuo=
+X-HE-Tag: 1623092999-824842
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 07:12:34PM +0300, Andy Shevchenko wrote:
-> On Mon, Jun 07, 2021 at 11:39:13PM +0800, Dejin Zheng wrote:
-> > Introduce pcim_alloc_irq_vectors(), a device-managed version of
-> > pci_alloc_irq_vectors(). Introducing this function can simplify
-> > the error handling path in many drivers.
-> > 
-> > And use pci_free_irq_vectors() to replace some code in pcim_release(),
-> > they are equivalent, and no functional change. It is more explicit
-> > that pcim_alloc_irq_vectors() is a device-managed function.
+On Mon, 2021-06-07 at 18:23 +0300, Andy Shevchenko wrote:
+> Sometimes it's useful to have well-defined SI metric prefix to be used
+> to self-describe the formulas or equations.
 > 
-> ...
-> 
-> > When CONFIG_PCI=n, there is no stub for pci_is_managed(), but
-> > pcim_alloc_irq_vectors() will use it, so add one like other similar stubs.
-> > Otherwise there can be build errors, as here by kernel test robot
-> > reported:
-> > include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
-> > >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
-> >     1847 |  if (!pci_is_managed(dev))
-> >          |       ^~~~~~~~~~~~~~
-> 
-> This is rather changelog related material. No need to pollute commit message
-> with this.
-> 
-> ...
-> 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> 
-> It's new functionality. Why this tag is here?
-> Use comments (similar location than changelog) to give a credit if you wish.
+> List most popular ones in the units.h.
 
-Agreed, I'll tidy that up, so no need to repost for this.
+trivia:
+
+> diff --git a/include/linux/units.h b/include/linux/units.h
+[]
+> @@ -4,6 +4,22 @@
+>  
+> 
+>  #include <linux/math.h>
+>  
+> +/* Metric prefixes in accordance with Système international (d'unités) */
+> +#define PETA	1000000000000000LL
+> +#define TERA	1000000000000LL
+> +#define GIGA	1000000000L
+> +#define MEGA	1000000L
+> +#define KILO	1000L
+
+It's perhaps more legible to avoid the long sequences of zeros by
+using preprocessor mechanisms.
+
+#define KILO (1000UL)
+#define MEGA (KILO * 1000)
+#define GIGA (MEGA * 1000)
+#define TERA (GIGA * 1000ULL)
+#define PETA (TERA * 1000)
+
+or maybe:
+
+#define KILO (1000UL)
+#define MEGA (1000UL * 1000UL)
+#define GIGA (1000UL * 1000UL * 1000UL)
+#define TERA (1000ULL * 1000ULL * 1000ULL * 1000ULL)
+#define PETA (1000ULL * 1000ULL * 1000ULL * 1000ULL * 1000ULL)
+
+etc...
+
+> +#define HECTO 100L
+> +#define DECA 10L
+
+Should it be DECA or DEKA or both?
+
+https://www.nist.gov/pml/weights-and-measures/metric-si-prefixes
+deka Example: dekameter da 	10**1 	Ten
+
+> +#define DECI	10L
+> +#define CENTI	100L
+> +#define MILLI	1000L
+> +#define MICRO	1000000L
+> +#define NANO	1000000000L
+> +#define PICO	1000000000000LL
+> +#define FEMTO	1000000000000000LL
+
+IMO: Might as well include all the prefixes up to 10**24
+
+EXA ZETTA YOTTA, ATTA ZEPTO YOCTO
+
+And how do people avoid using MILLI for KILO, MEGA for MICRO, etc...
+The compiler won't care but usage could look odd.
+
+
