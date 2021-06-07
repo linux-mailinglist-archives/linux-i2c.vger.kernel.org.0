@@ -2,78 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 334CA39E492
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 18:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B40339E511
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 19:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbhFGQ5n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Jun 2021 12:57:43 -0400
-Received: from mga12.intel.com ([192.55.52.136]:19124 "EHLO mga12.intel.com"
+        id S230444AbhFGRQq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Jun 2021 13:16:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41438 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230250AbhFGQ5n (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 7 Jun 2021 12:57:43 -0400
-IronPort-SDR: HJUWde+KnLhLwVPxlQjIFxtFEmatFn5nONiLPyLErv/oOK5bwiICeXTR4RUtmlCFsYCq8wCMFH
- GVapl37Gi6WQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="184344400"
-X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
-   d="scan'208";a="184344400"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 09:55:48 -0700
-IronPort-SDR: w7321Y0by9hBWrMjP8VMMQ6whsw8We7vxDuXYvcBCy0xUWLCDBUYx5LQyh5GovCjjJrhcsslz/
- xkdc2e2AUgPQ==
-X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
-   d="scan'208";a="484842525"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 09:55:46 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lqIXO-000JBP-OX; Mon, 07 Jun 2021 19:55:42 +0300
-Date:   Mon, 7 Jun 2021 19:55:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        wsa@kernel.org
-Subject: Re: [PATCH v2 1/3] units: Add SI metric prefix definitions
-Message-ID: <YL5PjhvfTXhUavSa@smile.fi.intel.com>
-References: <20210607152344.57458-1-andriy.shevchenko@linux.intel.com>
- <dbcd926e934dc66e17cc35c4c0d2b867474379e5.camel@perches.com>
- <YL5B1tIPNpQiWrQ/@smile.fi.intel.com>
- <e84d2094a6fc3c827e157b325addce4aa10b871f.camel@perches.com>
+        id S230504AbhFGRQp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 7 Jun 2021 13:16:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 40FB960FF2;
+        Mon,  7 Jun 2021 17:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623086093;
+        bh=9jfypPKUdKJ4TKMPL0HZ70TpD4lRTMsAT/7JugcEW+g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VVntAZBJCrFxdag/Jatlnwr8jFp5Nx5XPaS8INk7lj8ha+sgfZkm1atn0T+zkwa1o
+         WnG9n54Sk9Rc+0oErXhzgKHmhPtAb6P+w9e8Dg/RpEISs3INHv+Y6ei59mdcyL+Rmr
+         /XSOytZls8BZwBVLQfN1kMRkOc6gHeLe0SB375T6Fy9tOpG4NyQcnAEFHMzemCDNLO
+         FZfNlhzYTyPKFeDfA0kDvCL1hJYVSA0kMRgoM8imOR9kA10IXCqj7+JLEGAUAY0NUL
+         q3LX212U1Qi1A0ODnfrZezYIhRSf6vvQF3CxG1NwIm5JI4mDDUDS32qEPDGMPgFLzg
+         JeCQb3atcLEtg==
+Date:   Mon, 7 Jun 2021 12:14:51 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Dejin Zheng <zhengdejin5@gmail.com>, corbet@lwn.net,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, bhelgaas@google.com, wsa@kernel.org,
+        Sanket.Goswami@amd.com, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v7 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <20210607171451.GA2507298@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e84d2094a6fc3c827e157b325addce4aa10b871f.camel@perches.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <YL5FcivbsIBnVvo0@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 09:00:41AM -0700, Joe Perches wrote:
-> On Mon, 2021-06-07 at 18:57 +0300, Andy Shevchenko wrote:
-> > On Mon, Jun 07, 2021 at 08:43:02AM -0700, Joe Perches wrote:
-> > > On Mon, 2021-06-07 at 18:23 +0300, Andy Shevchenko wrote:
-> > > > Sometimes it's useful to have well-defined SI metric prefix to be used
-> > > > to self-describe the formulas or equations.
-> -=
-> > > The only use of any of these seems to be:
-> > > 
-> > > sound/pcmcia/vx/vxp_ops.c:      [VX_MICRO]      = 0x0c,         // MICRO
-> > > sound/pcmcia/vx/vxp_ops.c:              vx_outb(chip, MICRO, level);
-> > > sound/pcmcia/vx/vxp_ops.c:                      vx_outb(chip, MICRO, vx_compute_mic_level(chip->mic_level));
-> > > 
-> > > and these vx_outb uses are themselves macros that prepend VX_ to the 2nd arg.
+On Mon, Jun 07, 2021 at 07:12:34PM +0300, Andy Shevchenko wrote:
+> On Mon, Jun 07, 2021 at 11:39:13PM +0800, Dejin Zheng wrote:
+> > Introduce pcim_alloc_irq_vectors(), a device-managed version of
+> > pci_alloc_irq_vectors(). Introducing this function can simplify
+> > the error handling path in many drivers.
 > > 
-> > Is it a real issue there?
+> > And use pci_free_irq_vectors() to replace some code in pcim_release(),
+> > they are equivalent, and no functional change. It is more explicit
+> > that pcim_alloc_irq_vectors() is a device-managed function.
 > 
-> No, it's all good.
+> ...
+> 
+> > When CONFIG_PCI=n, there is no stub for pci_is_managed(), but
+> > pcim_alloc_irq_vectors() will use it, so add one like other similar stubs.
+> > Otherwise there can be build errors, as here by kernel test robot
+> > reported:
+> > include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
+> > >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
+> >     1847 |  if (!pci_is_managed(dev))
+> >          |       ^~~~~~~~~~~~~~
+> 
+> This is rather changelog related material. No need to pollute commit message
+> with this.
+> 
+> ...
+> 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> 
+> It's new functionality. Why this tag is here?
+> Use comments (similar location than changelog) to give a credit if you wish.
 
-Thanks for confirming!
-
-So, I will send v3 (I guess tomorrow) with L->UL and LL accordingly.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Agreed, I'll tidy that up, so no need to repost for this.
