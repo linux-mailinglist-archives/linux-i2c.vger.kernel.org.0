@@ -2,66 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4C139D2B7
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 03:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AC939D33D
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 05:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbhFGBtw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 6 Jun 2021 21:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbhFGBtw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Jun 2021 21:49:52 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA34DC061766
-        for <linux-i2c@vger.kernel.org>; Sun,  6 Jun 2021 18:48:01 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 7142A42762;
-        Mon,  7 Jun 2021 01:47:57 +0000 (UTC)
-Subject: Re: [PATCH v2] i2c: i801: Ensure that SMBHSTSTS_INUSE_STS is cleared
- when leaving i801_access
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <cefbeb76-5f7f-036b-fa0e-1e339d261c35@gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <399040d5-7310-03e3-9963-c8bdf4f65913@marcan.st>
-Date:   Mon, 7 Jun 2021 10:47:54 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        id S230178AbhFGDE0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 6 Jun 2021 23:04:26 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:4329 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230147AbhFGDE0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 6 Jun 2021 23:04:26 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Fyyj51S6Dz1BJnb;
+        Mon,  7 Jun 2021 10:57:45 +0800 (CST)
+Received: from dggemi762-chm.china.huawei.com (10.1.198.148) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2176.2; Mon, 7 Jun 2021 11:02:33 +0800
+Received: from linux-lmwb.huawei.com (10.175.103.112) by
+ dggemi762-chm.china.huawei.com (10.1.198.148) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Mon, 7 Jun 2021 11:02:32 +0800
+From:   Zou Wei <zou_wei@huawei.com>
+To:     <jdelvare@suse.com>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Zou Wei <zou_wei@huawei.com>
+Subject: [PATCH -next] i2c: Fix missing pci_disable_device() on error in ali1535_setup()
+Date:   Mon, 7 Jun 2021 11:21:08 +0800
+Message-ID: <1623036068-30668-1-git-send-email-zou_wei@huawei.com>
+X-Mailer: git-send-email 2.6.2
 MIME-Version: 1.0
-In-Reply-To: <cefbeb76-5f7f-036b-fa0e-1e339d261c35@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.103.112]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggemi762-chm.china.huawei.com (10.1.198.148)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 06/06/2021 22.55, Heiner Kallweit wrote:
-> As explained in [0] currently we may leave SMBHSTSTS_INUSE_STS set,
-> thus potentially breaking ACPI/BIOS usage of the SMBUS device.
-> 
-> Seems patch [0] needs a little bit more of review effort, therefore
-> I'd suggest to apply a part of it as quick win. Just clearing
-> SMBHSTSTS_INUSE_STS when leaving i801_access() should fix the
-> referenced issue and leaves more time for discussing a more
-> sophisticated locking handling.
+Fix the missing pci_disable_device() before return
+from ali1535_setup() in the error handling case.
 
->   out:
-> +	/* Unlock the SMBus device for use by BIOS/ACPI */
-> +	outb_p(SMBHSTSTS_INUSE_STS, SMBHSTSTS(priv));
-> +
->   	pm_runtime_mark_last_busy(&priv->pci_dev->dev);
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zou Wei <zou_wei@huawei.com>
+---
+ drivers/i2c/busses/i2c-ali1535.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yup, I was thinking of suggesting just this part if the rest of the 
-patch were deemed more controversial. Thanks :)
-
-Reviewed-by: Hector Martin <marcan@marcan.st>
-
+diff --git a/drivers/i2c/busses/i2c-ali1535.c b/drivers/i2c/busses/i2c-ali1535.c
+index fb93152..bdbaf79 100644
+--- a/drivers/i2c/busses/i2c-ali1535.c
++++ b/drivers/i2c/busses/i2c-ali1535.c
+@@ -206,6 +206,7 @@ static int ali1535_setup(struct pci_dev *dev)
+ exit_free:
+ 	release_region(ali1535_smba, ALI1535_SMB_IOSIZE);
+ exit:
++	pci_disable_device(dev);
+ 	return retval;
+ }
+ 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.6.2
+
