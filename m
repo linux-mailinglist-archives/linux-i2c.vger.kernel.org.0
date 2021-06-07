@@ -2,105 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E833239E0CE
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 17:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB34139E10F
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 17:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbhFGPmd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Jun 2021 11:42:33 -0400
-Received: from mail-pj1-f41.google.com ([209.85.216.41]:53780 "EHLO
-        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbhFGPm3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Jun 2021 11:42:29 -0400
-Received: by mail-pj1-f41.google.com with SMTP id ei4so10093418pjb.3;
-        Mon, 07 Jun 2021 08:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NCCUVu48/YxKe+76n8oOpi5HhiU1MccRKkRryIWRGrY=;
-        b=OS4EcGoksInG36ZFqUT7ibl0i7seCqXy34Y1Yaqw4UU6mQnLyBhyO4oxgvwaV757eO
-         3OOVg7Etfn6Ovn5a/wyGap4jFt3oQA3YF2kBfNhNi6BzLu77XttKckkx2ww85i1apfhQ
-         ekuhbXt/9/gRFTG9/z7PmOPeVdjAZMSK9sfxC5/zv2NK7nIIQGGeorVw0T+W8sM1Vazf
-         PSiDe0Oc9zru+52WAzgE+xrwkqxcwvcCcvGYkyCeO7uLpD0B3/BWirwS1VN2DF/puR0T
-         7s4mIxBw+X+t9IRUAA9Lbdef5ch4WVMffx7hQSSIycfuyA3cG85MH9ZIPY9aGRqGsvUh
-         Z5EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NCCUVu48/YxKe+76n8oOpi5HhiU1MccRKkRryIWRGrY=;
-        b=gtzmYWu6qeFSxqEELrP3O2AD8vaGH+F5A5etAnejBILMvD4he2mTHpnCPRy/I+ETMI
-         SkNWFWPU2N9u5X97dYKW0UKFpqqXYeHNCtzzxkJF7NC8AKLJcvKr5AB8LbGKcMdP9Pci
-         ijI1OtRPii7Xrrioce/heCZBRQUfI/hUNm0lqG0aMHdnTm1ZzHqA51Tdx/SfsJXEciMm
-         5V4ylHMBJnzx8rnzp7X45xPBhVvTe9qHq7GXaZXmxA64GjvRaaReskvjNO36OqnCuPQ4
-         cVAvsBBvIff19UHdVi3n9gVhiFil5sY4rJDiF2IQf0hvJHA9oBMb3UkoG1P4GLvx9NRs
-         qzYA==
-X-Gm-Message-State: AOAM530Qdqlcl3LmnW/sWCoQIK9pGcJl2H4XIzRbyoVkV4vI+vhZ4glA
-        PqEFN7LVl/FGCrMfdpzAQlBLkAa+wKbrN3j/
-X-Google-Smtp-Source: ABdhPJwMNKP15oGyesPtOeAnFeRGAZFrCrotHvaDZsVsbwycnY7O+X2WS5POBmPAdxJocubb2Bu3KQ==
-X-Received: by 2002:a17:90a:db4e:: with SMTP id u14mr20775908pjx.43.1623080377825;
-        Mon, 07 Jun 2021 08:39:37 -0700 (PDT)
-Received: from localhost (185.212.56.112.16clouds.com. [185.212.56.112])
-        by smtp.gmail.com with ESMTPSA id j3sm8696259pfe.98.2021.06.07.08.39.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 08:39:37 -0700 (PDT)
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     helgaas@kernel.org, corbet@lwn.net, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        rric@kernel.org, bhelgaas@google.com, wsa@kernel.org,
-        Sanket.Goswami@amd.com, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH v7 4/4] i2c: thunderx: Use pcim_alloc_irq_vectors() to allocate IRQ vectors
-Date:   Mon,  7 Jun 2021 23:39:16 +0800
-Message-Id: <20210607153916.1021016-5-zhengdejin5@gmail.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210607153916.1021016-1-zhengdejin5@gmail.com>
-References: <20210607153916.1021016-1-zhengdejin5@gmail.com>
+        id S231566AbhFGPo5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Jun 2021 11:44:57 -0400
+Received: from smtprelay0029.hostedemail.com ([216.40.44.29]:41378 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231582AbhFGPo5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Jun 2021 11:44:57 -0400
+Received: from omf08.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 24B06837F24A;
+        Mon,  7 Jun 2021 15:43:05 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 1BA771A29F9;
+        Mon,  7 Jun 2021 15:43:03 +0000 (UTC)
+Message-ID: <dbcd926e934dc66e17cc35c4c0d2b867474379e5.camel@perches.com>
+Subject: Re: [PATCH v2 1/3] units: Add SI metric prefix definitions
+From:   Joe Perches <joe@perches.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        wsa@kernel.org
+Date:   Mon, 07 Jun 2021 08:43:02 -0700
+In-Reply-To: <20210607152344.57458-1-andriy.shevchenko@linux.intel.com>
+References: <20210607152344.57458-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.90
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 1BA771A29F9
+X-Stat-Signature: mrgkembcckokhd5c6m9siy7a4ij7piwc
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+dXr/s0DMQTspylw0p8uO+ItJW9kzTZv0=
+X-HE-Tag: 1623080583-985749
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pcim_alloc_irq_vectors() function, an explicit device-managed version
-of pci_alloc_irq_vectors(). If pcim_enable_device() has been called
-before, then pci_alloc_irq_vectors() is actually a device-managed
-function. It is used here as a device-managed function, So replace it
-with pcim_alloc_irq_vectors().
+On Mon, 2021-06-07 at 18:23 +0300, Andy Shevchenko wrote:
+> Sometimes it's useful to have well-defined SI metric prefix to be used
+> to self-describe the formulas or equations.
+> 
+> List most popular ones in the units.h.
+[]
+> diff --git a/include/linux/units.h b/include/linux/units.h
+[]
+> @@ -4,6 +4,22 @@
+>  
+>  #include <linux/math.h>
+>  
+> +/* Metric prefixes in accordance with Système international (d'unités) */
+> +#define PETA	1000000000000000LL
+> +#define TERA	1000000000000LL
+> +#define GIGA	1000000000L
+> +#define MEGA	1000000L
+> +#define KILO	1000L
+> +#define HECTO	100L
+> +#define DECA	10L
+> +#define DECI	10L
+> +#define CENTI	100L
+> +#define MILLI	1000L
+> +#define MICRO	1000000L
+> +#define NANO	1000000000L
+> +#define PICO	1000000000000LL
+> +#define FEMTO	1000000000000000LL
+> +
+>  #define MILLIWATT_PER_WATT	1000L
+>  #define MICROWATT_PER_MILLIWATT	1000L
+>  #define MICROWATT_PER_WATT	1000000L
 
-Acked-by: Robert Richter <rric@kernel.org>
-Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
----
-v6 -> v7:
-	- rebase to PCI next branch
-v5 -> v6:
-	- rebase to 5.13-rc4
-v4 -> v5:
-	- Modify the subject name.
-v3 -> v4:
-	- No change.
-v2 -> v3:
-	- No change.
-v1 -> v2:
-	- Modify some commit messages.
+Somewhat surprisingly to me, this seems safe.
 
- drivers/i2c/busses/i2c-thunderx-pcidrv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+(though I suggest using UL and ULL rather than L and LL)
 
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index 12c90aa0900e..63354e9fb726 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -192,7 +192,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 	i2c->hlc_int_enable = thunder_i2c_hlc_int_enable;
- 	i2c->hlc_int_disable = thunder_i2c_hlc_int_disable;
- 
--	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
-+	ret = pcim_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSIX);
- 	if (ret < 0)
- 		goto error;
- 
--- 
-2.30.1
+The only use of any of these seems to be:
+
+sound/pcmcia/vx/vxp_ops.c:      [VX_MICRO]      = 0x0c,         // MICRO
+sound/pcmcia/vx/vxp_ops.c:              vx_outb(chip, MICRO, level);
+sound/pcmcia/vx/vxp_ops.c:                      vx_outb(chip, MICRO, vx_compute_mic_level(chip->mic_level));
+
+and these vx_outb uses are themselves macros that prepend VX_ to the 2nd arg.
+
 
