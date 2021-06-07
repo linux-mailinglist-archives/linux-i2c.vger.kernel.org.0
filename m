@@ -2,242 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E25939DEA9
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 16:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F7639DEBA
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 16:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbhFGO0y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Jun 2021 10:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbhFGO0x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Jun 2021 10:26:53 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04018C061766;
-        Mon,  7 Jun 2021 07:25:02 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id g4so489315pjk.0;
-        Mon, 07 Jun 2021 07:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QmGFcYwtnti0Kimuy1kQWFpXTGjTW9qbFTJ4jXOu9+s=;
-        b=IfTeDBJryqVzwRoDBX0VVWxA8JOq4sCjgI4C6Vj7vldDQ4aCBYS/CzHHEDsNEkuEGQ
-         aZ+2bsSmnMupyuu0E/VUUU0Y6xbUTjqhcyXYpg42Z38YPao0ITfuQxQAo5V8uq75Ov1I
-         ZV7QI486bKS+rgsxVull2JDoI9W3GVwnGQKOSVHaC8zCjkhL25Ka214hc9DfdYUgDM9P
-         GDAzBFdQ/LoPwwz1cgRJSa41jeHW4euhFrz7VcuVKG0L/WBzKoNPSiai0WEqd7w8cq6x
-         SpS/bCM47OMToa/kvGhuhJZjR+AYkt12/puLjzxbw5TTfhY7piYt2h91rP0rHo0aCPu7
-         c/hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QmGFcYwtnti0Kimuy1kQWFpXTGjTW9qbFTJ4jXOu9+s=;
-        b=pPZtm2/c8SjCqmU+Fq/0kcjDcOKzIBKwlPaRlVgqqx76MTHELQevkGUlIa9A0uZEOy
-         TsgdYW77bP+Y7rgv9PXiJB0NvH/uhs1DYQEiVbq7XHr7YrZcZi8wSbtnZ5anQiqhVxO2
-         aTA+Z5kDuvx2iYuhh74xgDE4TBWlnPom/TiaiQ7lC1uSeZunwWPCmtAYAnP5ARiQP6G2
-         QNv1I5rpGolGqvmRRGbU/rpCn+OckJXk4Zc0RGOBaypih7GfLmHGzBEixsmxEXAmwmu/
-         jWRm+fRjVfmRS5lbPQ8zlY/eoVQwf6yMhC8BVzYC4pWC0w3+lFfvNL9Y3wtVpBl9xLBv
-         fEjA==
-X-Gm-Message-State: AOAM5306FzjmpSXsbyOV+PEWXfVUoi6lKLt/+PNVMugf+aJQf8E0KiYQ
-        ymxzEi5lFP/gQ3pzL5B0YTarBM36Vk2zChAl
-X-Google-Smtp-Source: ABdhPJxxtXUst3+N2+MgBsKDhbCzPNDWFCnjtJfwF1riqHGtEn0wO4qLW26VUsHQzUCxrddDyHgReg==
-X-Received: by 2002:a17:902:a586:b029:fe:459b:2ce0 with SMTP id az6-20020a170902a586b02900fe459b2ce0mr18267310plb.40.1623075901570;
-        Mon, 07 Jun 2021 07:25:01 -0700 (PDT)
-Received: from localhost (185.212.56.112.16clouds.com. [185.212.56.112])
-        by smtp.gmail.com with ESMTPSA id b20sm8955032pgm.30.2021.06.07.07.25.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 07:25:00 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 22:24:58 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     helgaas@kernel.org, corbet@lwn.net, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        rric@kernel.org, bhelgaas@google.com, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-        kbuild-all@lists.01.org
-Subject: Re: [PATCH v6 1/4] PCI: Introduce pcim_alloc_irq_vectors()
-Message-ID: <20210607142458.GA821146@nuc8i5>
-References: <20210606070511.778487-2-zhengdejin5@gmail.com>
- <202106070313.1cUfhXdg-lkp@intel.com>
+        id S230282AbhFGOam (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Jun 2021 10:30:42 -0400
+Received: from mail-bn7nam10on2057.outbound.protection.outlook.com ([40.107.92.57]:26464
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230203AbhFGOal (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 7 Jun 2021 10:30:41 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fi1D5WFdKt75uVCmSgoDB3PeI/BOuzbdmW4xhIYvdgDzuFvsOb0kKR/zCdjXbHiKucj0HVWmrOExjdhPNjpgAgPL6WhJxV1ip37j0vCeCQrYe4esvbjKvH6pVSTkU1sSppVKXtS3omWdmpnXqMKJ3dra1sFpCTyCt4UvOB7JUL8qYX0hG8E9aXb7MJ7eZhE5gDlnROR0xlW2+EoTO9JOlzvGQ0BfqZHTvI1YaTZp6kjZrnQESzQJuAf4gGuHL7thAW8rvBVpClppytNlEzhwQGv69feA8HKnJjyyttoFcK09HyHy9zrz8t6wt8UrVx83o1L+/7hOF/4PCQac850RoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v8Ff2upB7hXJAcNugwwmTORHiPFt5IyggTm4oCFt2B4=;
+ b=f9Nku15xknglDsrT+BQOZ+jhpLSZmLOepLb2eicHgVaq7cIrzokT+jZozs4uxslKL9rA3RrqsqzX6OsbloyLJihDbLEgKe0QZonYwZsZAVCnuinBFFWdUFH90hExXwjCtxMeAp3p0UvnXBlgnKYdCKEE0wyAOz9X7dDd/4peSW+LdUcvZFrQt74NTh6W7mAnxdZ8BYEDvddU4c/+/mB4F0xJ87rVujYETq/cQU6aybOfKFd0mHRL0Eji2LK8irYkU91BEBrXna31pQL1uU/ZVD5NJbQ+NQLbblKN5bbZB1dieDboPHq3gkIbDWdwpV2Q5pteukvck3JLGpKiEtplgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v8Ff2upB7hXJAcNugwwmTORHiPFt5IyggTm4oCFt2B4=;
+ b=DTl7MwWwUMo9TdtMndI3V8e313uRVySScm38zLiSDgYqqteLJyY4nCl7RxRrOoUvIEjaWgTtiQ944KKQBtY+Hc+64gPn3CoHsqlxqaMMcBnkYwIi3/5VV1wnO13BWX8e8mXuHfUMMCTJrSs/gnk8unugdISOx4c5aLtzhUy2nCgjLrmu+5MfGdwshy6vPVL5GsIhmYqK3D5p8wCFw8eLXOsC8WvGRNl2FKhxo1GF80niW5rdTYSrTvOKc+q6J1SSlWyRkTj7c8+v5q4SI3dcorPHvXPaYqqRy9PgZ4TUld2vpWOwsqquCgItKpWRWWJ44PLe89UaAr74rzZ9AAWnkw==
+Received: from BN9PR03CA0880.namprd03.prod.outlook.com (2603:10b6:408:13c::15)
+ by MN2PR12MB4094.namprd12.prod.outlook.com (2603:10b6:208:15f::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.24; Mon, 7 Jun
+ 2021 14:28:49 +0000
+Received: from BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13c:cafe::a4) by BN9PR03CA0880.outlook.office365.com
+ (2603:10b6:408:13c::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.20 via Frontend
+ Transport; Mon, 7 Jun 2021 14:28:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ BN8NAM11FT037.mail.protection.outlook.com (10.13.177.182) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4195.22 via Frontend Transport; Mon, 7 Jun 2021 14:28:49 +0000
+Received: from [10.26.49.10] (172.20.187.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Jun
+ 2021 14:28:47 +0000
+Subject: Re: [PATCH] eeprom: at24: Support custom device names for AT24
+ EEPROMs
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Alexander Fomichev <fomichev.ru@gmail.com>
+CC:     linux-i2c <linux-i2c@vger.kernel.org>, <linux@yadro.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thierry Reding <treding@nvidia.com>
+References: <20210602170823.vnshp2gfrcay35nx@yadro.com>
+ <CAMpxmJWa0ZXN--2S84B-Un0WSKM16eKAiWUtKD4V_szZPEi+gg@mail.gmail.com>
+ <b2b7be69-eebb-b325-1962-4d45e6d5f088@nvidia.com>
+ <CAMpxmJUnn1e-grUxiMm4T84xBYRi7jQOtOODfSoiBtLmsSjodA@mail.gmail.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <4ed2ae95-f2f8-0852-2606-d6315ed4cd4b@nvidia.com>
+Date:   Mon, 7 Jun 2021 15:28:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202106070313.1cUfhXdg-lkp@intel.com>
+In-Reply-To: <CAMpxmJUnn1e-grUxiMm4T84xBYRi7jQOtOODfSoiBtLmsSjodA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.187.5]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3c9804f7-10aa-403a-48a8-08d929c09108
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4094:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB4094602D64F04D0BF5BCBD4ED9389@MN2PR12MB4094.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OC2rhk4y72eftKOyUGtMXXDJ5VsjwrDBHrrqaX1VyaSMcaZI4vmqMhqP+D2QBp1x+DRNg/QjGUtv6VocGv3iW1L4HS+l6iumFWZ8iSpGP6S6Eu5dTOXlOvd8oFZu9NTjkdhU6cL4E7d51DcTfv4xnlr4tECZ3DNs45sMG9ki0iydCD47X9OnDkvSaO9Zq1iq2/SnxOoc/JOUTonh+J8h/paoU1o5ZBI6f1VJNgmuPgfVYULlzhS9u29Fx93t39/SHYt7qQ6NMiJFPAwr4pPPinBcUzZESxeXZ5fSFKk4NPEAVvpj4bgRfUERPBGSCo0dxhWPICNhW6b7qRuNkTgy14mJg7aBdNSBwajoNlvLnpt8XPvQPqZmzmaDmnEc+EPJuvpUSHlghNfuF6BjK8OfdSBD5/Fa8aih/ltfU5ZuvBmc1aADY0q6wE4dllHb3FXmnhpyZUVID/HBJU3qE9pLFc05BMZPTOgPXF2MllFQRwG4rZFggX2GnZRbXOihbuEjFqQdu235V8f0DE/JCckafOoVVQrevg45FPzMfhaYxhsoo49bYKCBaOFKc1aN2SXOhit6+nNZDWGUh5bSP/VMHlUMc7kg4TNTQdgezzZ4KKr0pZUC8SusAg2ONRUpsPVu+lLpVnZUX2lsnL5gX/IcpMpGW/2iFQriYC5lgehbv1bI03E48rrY41uXeyUKG8Jk
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(39860400002)(396003)(376002)(136003)(346002)(36840700001)(46966006)(16576012)(82740400003)(8936002)(316002)(107886003)(31696002)(26005)(4744005)(426003)(16526019)(82310400003)(186003)(47076005)(70206006)(70586007)(36756003)(356005)(478600001)(36860700001)(4326008)(110136005)(54906003)(5660300002)(86362001)(2906002)(53546011)(36906005)(336012)(8676002)(2616005)(31686004)(7636003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2021 14:28:49.1473
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c9804f7-10aa-403a-48a8-08d929c09108
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4094
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 03:31:04AM +0800, kernel test robot wrote:
-> Hi Dejin,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on pci/next]
-> [also build test ERROR on wsa/i2c/for-next lwn/docs-next linus/master v5.13-rc4 next-20210604]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Dejin-Zheng/Introduce-pcim_alloc_irq_vectors/20210606-150730
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-> config: sparc-randconfig-c004-20210606 (attached as .config)
-> compiler: sparc64-linux-gcc (GCC) 9.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/7b311110dce8729956f7545d1f11b2bbd60f6193
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Dejin-Zheng/Introduce-pcim_alloc_irq_vectors/20210606-150730
->         git checkout 7b311110dce8729956f7545d1f11b2bbd60f6193
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=sparc 
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from net/core/rtnetlink.c:37:
->    include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
-> >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
->     1847 |  if (!pci_is_managed(dev))
->          |       ^~~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
-> --
 
-Thanks very much for Kernel test robot, I got the root cause of this build error.
-I will send a new patch version for fix it.
+On 07/06/2021 14:31, Bartosz Golaszewski wrote:
 
-The sparc defconfig disable PCI, so it can not found the CONFIG_PCI in pci.h,
-and the pci_is_managed() function only exists in the pci.h when enable PCI.
-so it will report builld this error when disable PCI.
+...
 
-BR,
-Dejin
->    In file included from arch/sparc/lib/iomap.c:5:
->    include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
-> >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
->     1847 |  if (!pci_is_managed(dev))
->          |       ^~~~~~~~~~~~~~
->    cc1: all warnings being treated as errors
-> --
->    In file included from drivers/gpu/drm/drm_file.c:38:
->    include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
-> >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
->     1847 |  if (!pci_is_managed(dev))
->          |       ^~~~~~~~~~~~~~
->    drivers/gpu/drm/drm_file.c: At top level:
->    drivers/gpu/drm/drm_file.c:789:6: warning: no previous prototype for 'drm_send_event_helper' [-Wmissing-prototypes]
->      789 | void drm_send_event_helper(struct drm_device *dev,
->          |      ^~~~~~~~~~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
-> --
->    In file included from drivers/ide/ide-proc.c:25:
->    include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
-> >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
->     1847 |  if (!pci_is_managed(dev))
->          |       ^~~~~~~~~~~~~~
->    At top level:
->    drivers/ide/ide-proc.c:457:37: warning: 'ide_media_proc_fops' defined but not used [-Wunused-const-variable=]
->      457 | static const struct file_operations ide_media_proc_fops = {
->          |                                     ^~~~~~~~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
-> --
->    In file included from include/linux/ide.h:18,
->                     from drivers/ide/ide-cd_ioctl.c:13:
->    include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
-> >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
->     1847 |  if (!pci_is_managed(dev))
->          |       ^~~~~~~~~~~~~~
->    drivers/ide/ide-cd_ioctl.c: In function 'ide_cdrom_select_speed':
->    drivers/ide/ide-cd_ioctl.c:212:6: warning: variable 'stat' set but not used [-Wunused-but-set-variable]
->      212 |  int stat;
->          |      ^~~~
->    cc1: some warnings being treated as errors
-> --
->    In file included from drivers/ata/ahci.h:22,
->                     from drivers/ata/ahci_platform.c:21:
->    include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
-> >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
->     1847 |  if (!pci_is_managed(dev))
->          |       ^~~~~~~~~~~~~~
->    In file included from drivers/ata/ahci_platform.c:21:
->    drivers/ata/ahci_platform.c: At top level:
->    drivers/ata/ahci.h:388:16: warning: initialized field overwritten [-Woverride-init]
->      388 |  .can_queue  = AHCI_MAX_CMDS,   \
->          |                ^~~~~~~~~~~~~
->    drivers/ata/ahci_platform.c:40:2: note: in expansion of macro 'AHCI_SHT'
->       40 |  AHCI_SHT(DRV_NAME),
->          |  ^~~~~~~~
->    drivers/ata/ahci.h:388:16: note: (near initialization for 'ahci_platform_sht.can_queue')
->      388 |  .can_queue  = AHCI_MAX_CMDS,   \
->          |                ^~~~~~~~~~~~~
->    drivers/ata/ahci_platform.c:40:2: note: in expansion of macro 'AHCI_SHT'
->       40 |  AHCI_SHT(DRV_NAME),
->          |  ^~~~~~~~
->    drivers/ata/ahci.h:392:17: warning: initialized field overwritten [-Woverride-init]
->      392 |  .sdev_attrs  = ahci_sdev_attrs
->          |                 ^~~~~~~~~~~~~~~
->    drivers/ata/ahci_platform.c:40:2: note: in expansion of macro 'AHCI_SHT'
->       40 |  AHCI_SHT(DRV_NAME),
->          |  ^~~~~~~~
->    drivers/ata/ahci.h:392:17: note: (near initialization for 'ahci_platform_sht.sdev_attrs')
->      392 |  .sdev_attrs  = ahci_sdev_attrs
->          |                 ^~~~~~~~~~~~~~~
->    drivers/ata/ahci_platform.c:40:2: note: in expansion of macro 'AHCI_SHT'
->       40 |  AHCI_SHT(DRV_NAME),
->          |  ^~~~~~~~
->    cc1: some warnings being treated as errors
-> --
->    In file included from drivers/usb/host/xhci.c:11:
->    include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
-> >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
->     1847 |  if (!pci_is_managed(dev))
->          |       ^~~~~~~~~~~~~~
->    drivers/usb/host/xhci.c: In function 'xhci_unmap_temp_buf':
->    drivers/usb/host/xhci.c:1349:15: warning: variable 'len' set but not used [-Wunused-but-set-variable]
->     1349 |  unsigned int len;
->          |               ^~~
->    cc1: some warnings being treated as errors
+>> I would need to check if appending a suffix then has ramifications for
+>> what we were trying to achieve.
 > 
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for LOCKDEP
->    Depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && (FRAME_POINTER || MIPS || PPC || S390 || MICROBLAZE || ARM || ARC || X86)
->    Selected by
->    - PROVE_LOCKING && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
->    - DEBUG_LOCK_ALLOC && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
-> 
-> 
-> vim +/pci_is_managed +1847 include/linux/pci.h
-> 
->   1827	
->   1828	/**
->   1829	 * pcim_alloc_irq_vectors - a device-managed pci_alloc_irq_vectors()
->   1830	 * @dev:		PCI device to operate on
->   1831	 * @min_vecs:		minimum number of vectors required (must be >= 1)
->   1832	 * @max_vecs:		maximum (desired) number of vectors
->   1833	 * @flags:		flags or quirks for the allocation
->   1834	 *
->   1835	 * Return the number of vectors allocated, (which might be smaller than
->   1836	 * @max_vecs) if successful, or a negative error code on error. If less
->   1837	 * than @min_vecs interrupt vectors are available for @dev the function
->   1838	 * will fail with -ENOSPC.
->   1839	 *
->   1840	 * It depends on calling pcim_enable_device() to make IRQ resources
->   1841	 * manageable.
->   1842	 */
->   1843	static inline int
->   1844	pcim_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
->   1845				unsigned int max_vecs, unsigned int flags)
->   1846	{
-> > 1847		if (!pci_is_managed(dev))
->   1848			return -EINVAL;
->   1849		return pci_alloc_irq_vectors(dev, min_vecs, max_vecs, flags);
->   1850	}
->   1851	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> One alternative would be to use the label "as is" for the first device
+> and then append ".x" for each subsequent device with a repeating
+> label. Does this make sense?
 
 
+Sounds like a good option to me (assuming this is really needed).
+
+Jon
+
+-- 
+nvpublic
