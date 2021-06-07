@@ -2,133 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E582239DFD1
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 16:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2554839E033
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Jun 2021 17:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbhFGO7d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Jun 2021 10:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbhFGO72 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Jun 2021 10:59:28 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52728C061766
-        for <linux-i2c@vger.kernel.org>; Mon,  7 Jun 2021 07:57:26 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id n17-20020a7bc5d10000b0290169edfadac9so12957158wmk.1
-        for <linux-i2c@vger.kernel.org>; Mon, 07 Jun 2021 07:57:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nuviainc-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VlCXU9+MFpUy7SArdgNYI/tiU14CG8Xgo06o1Uxsr38=;
-        b=rggAUTyKTufq+dvlwzacJo9pgOVEdDk5fs3Ote0eHa9Ikr22ppYaRz2a4Jb4/ToGE9
-         pJkiZO7GFVstggttfUpKJid5MIj7MBT1ehm0kb1rXd+jJXGbHfBu1nJAIo31+xmCh7U/
-         qb+/J8pqkPvJ6Ej8kejnhPDprATZqkAHu1JjTInwUK9LZVOHnCjoQltUVh0qxxonZAQc
-         Fu0WUKtDF2ECtEiAb9FDHkz7hTvmHveDDsQt3NyItj3IsxEReE4aEjQ5lm5VTo+Zkzbu
-         lzBFaZn6VV0tk1fhsqtHtys6OoAI3vchKxv3CWnDoo4Gf3/RInJRII3o9R4/UDEFbizy
-         vVsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VlCXU9+MFpUy7SArdgNYI/tiU14CG8Xgo06o1Uxsr38=;
-        b=MQzpgKVZLQG8sGaI6Rdt2nWL9kzYQCTqfUOhpVY1/OzxbIoG6k1IlpWyL6+5tuZFV5
-         s6p0lXKVg3PSMKmbjOQzuXrNlAMwiyCCHB42a2aDSQXcgWPhtfH+jyL5ifqtpnWSFLK/
-         yQU9bubh6XMY7nAZehVZDugYK5DsszKaDfgKisTkiBAuFh11yNhL8M9wMgBZZ+1l6gRv
-         P/XWz8QBM81PORB+ZF5c1jw3TdxSiwIlmH8INxqm1NlfYAZsevZiDs+SFbpg9zY7Q9w4
-         J8i/vXxNEc+tlBanvUsTXKncS2kISxFUd2kcU5JJaNqqoN08H4GluioDaEHhvL3FO7Ck
-         BxbA==
-X-Gm-Message-State: AOAM531MAEA7WXZ4b8JAbfVxbkFI3eqJu2hx7mi2ykk8C1oy4CBub7Ea
-        ZTFy2T91n/n4SJscYJP8wod/YA==
-X-Google-Smtp-Source: ABdhPJx6fGlVL5stxlu2ekuhuN/NXsWIomGXGgkt/9+9iT+k+wju9j4eewvseyJ0aY+TeXuGEd/cuQ==
-X-Received: by 2002:a7b:c7cd:: with SMTP id z13mr16901621wmk.54.1623077844897;
-        Mon, 07 Jun 2021 07:57:24 -0700 (PDT)
-Received: from ggregory-linuxws ([2a02:8010:64d6:5343:6309:485e:2524:388a])
-        by smtp.gmail.com with ESMTPSA id f14sm15953806wry.40.2021.06.07.07.57.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 07:57:24 -0700 (PDT)
-Date:   Mon, 7 Jun 2021 15:57:22 +0100
-From:   Graeme Gregory <graeme@nuviainc.com>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v3 5/7] i2c: aspeed: Add aspeed_set_slave_busy()
-Message-ID: <20210607145722.GA2682@ggregory-linuxws>
-References: <20210519074934.20712-1-quan@os.amperecomputing.com>
- <20210519074934.20712-6-quan@os.amperecomputing.com>
+        id S230212AbhFGPYg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Jun 2021 11:24:36 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:54320 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230422AbhFGPYf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Jun 2021 11:24:35 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A93081FD30;
+        Mon,  7 Jun 2021 15:22:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1623079363; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IHrxrqjI2FD4f2RsK+Y33pAZtcLIFXMBKuPbbrRe2es=;
+        b=Xzlszo05kM5sLH9EhVtYvcRcNYqh/kTyr3Sllei4UBx5ZyZJ/rXYT6xs/B1k1ydOW1vSdl
+        2xbyoUeqs1PWz0NyDrY0Dy+tG92hiaTQKWH1s02ld4H+Cbv4r1hz+ipZ+xH44U6oeAyPqE
+        Ojlidr+d1PdoNXL4+GX1+n1aCL4zijQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1623079363;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IHrxrqjI2FD4f2RsK+Y33pAZtcLIFXMBKuPbbrRe2es=;
+        b=Ne6NgIz9WdQahMijtxV4jE8sEZPhRckEqzOi0zC6uc+NwABjgkwZotuZ4o7yQRSZjOOpwc
+        RIHS1vu1uFUDvjBQ==
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id 6B7C6118DD;
+        Mon,  7 Jun 2021 15:22:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1623079363; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IHrxrqjI2FD4f2RsK+Y33pAZtcLIFXMBKuPbbrRe2es=;
+        b=Xzlszo05kM5sLH9EhVtYvcRcNYqh/kTyr3Sllei4UBx5ZyZJ/rXYT6xs/B1k1ydOW1vSdl
+        2xbyoUeqs1PWz0NyDrY0Dy+tG92hiaTQKWH1s02ld4H+Cbv4r1hz+ipZ+xH44U6oeAyPqE
+        Ojlidr+d1PdoNXL4+GX1+n1aCL4zijQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1623079363;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IHrxrqjI2FD4f2RsK+Y33pAZtcLIFXMBKuPbbrRe2es=;
+        b=Ne6NgIz9WdQahMijtxV4jE8sEZPhRckEqzOi0zC6uc+NwABjgkwZotuZ4o7yQRSZjOOpwc
+        RIHS1vu1uFUDvjBQ==
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id yU8NGMM5vmDgaQAALh3uQQ
+        (envelope-from <jdelvare@suse.de>); Mon, 07 Jun 2021 15:22:43 +0000
+Date:   Mon, 7 Jun 2021 17:22:42 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Hector Martin <marcan@marcan.st>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: i801: Ensure that SMBHSTSTS_INUSE_STS is
+ cleared when leaving i801_access
+Message-ID: <20210607172242.564bcd38@endymion>
+In-Reply-To: <cefbeb76-5f7f-036b-fa0e-1e339d261c35@gmail.com>
+References: <cefbeb76-5f7f-036b-fa0e-1e339d261c35@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210519074934.20712-6-quan@os.amperecomputing.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 19, 2021 at 02:49:32PM +0700, Quan Nguyen wrote:
-> Slave i2c device on AST2500 received a lot of slave irq while it is
-> busy processing the response. To handle this case, adds and exports
-> aspeed_set_slave_busy() for controller to temporary stop slave irq
-> while slave is handling the response, and re-enable them again when
-> the response is ready.
+Hi Heiner, Hector,
+
+On Sun, 6 Jun 2021 15:55:55 +0200, Heiner Kallweit wrote:
+> As explained in [0] currently we may leave SMBHSTSTS_INUSE_STS set,
+> thus potentially breaking ACPI/BIOS usage of the SMBUS device.
 > 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> Seems patch [0] needs a little bit more of review effort, therefore
+> I'd suggest to apply a part of it as quick win. Just clearing
+> SMBHSTSTS_INUSE_STS when leaving i801_access() should fix the
+> referenced issue and leaves more time for discussing a more
+> sophisticated locking handling.
+> 
+> [0] https://www.spinics.net/lists/linux-i2c/msg51558.html
+> 
+> Fixes: 01590f361e94 ("i2c: i801: Instantiate SPD EEPROMs automatically")
+> Cc: stable@vger.kernel.org
+> Suggested-by: Hector Martin <marcan@marcan.st>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 > ---
-> v3:
->   + First introduce in v3 [Quan]
+> v2:
+> - add proper stable tag
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
->  drivers/i2c/busses/i2c-aspeed.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> index b2e9c8f0ddf7..9926d04831a2 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -944,6 +944,26 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
->  	return 0;
->  }
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index c7d96cf5e..ab3470e77 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -948,6 +948,9 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+>  	}
 >  
-> +#if IS_ENABLED(CONFIG_I2C_SLAVE)
-> +void aspeed_set_slave_busy(struct i2c_adapter *adap, bool busy)
-> +{
-> +	struct aspeed_i2c_bus *bus = i2c_get_adapdata(adap);
-> +	unsigned long current_mask, flags;
+>  out:
+> +	/* Unlock the SMBus device for use by BIOS/ACPI */
+> +	outb_p(SMBHSTSTS_INUSE_STS, SMBHSTSTS(priv));
 > +
-> +	spin_lock_irqsave(&bus->lock, flags);
+>  	pm_runtime_mark_last_busy(&priv->pci_dev->dev);
+>  	pm_runtime_put_autosuspend(&priv->pci_dev->dev);
+>  	mutex_unlock(&priv->acpi_lock);
 
-This as far as I can see is still a recursive spinlock, and the spinlock
-debugger seems to agree with me.
+Good idea.
 
-Graeme
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Tested-by: Jean Delvare <jdelvare@suse.de>
 
-> +
-> +	current_mask = readl(bus->base + ASPEED_I2C_INTR_CTRL_REG);
-> +	if (busy)
-> +		current_mask &= ~(ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_SLAVE_MATCH);
-> +	else
-> +		current_mask |= ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_SLAVE_MATCH;
-> +	writel(current_mask, bus->base + ASPEED_I2C_INTR_CTRL_REG);
-> +
-> +	spin_unlock_irqrestore(&bus->lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(aspeed_set_slave_busy);
-> +#endif
-> +
->  static int aspeed_i2c_reset(struct aspeed_i2c_bus *bus)
->  {
->  	struct platform_device *pdev = to_platform_device(bus->dev);
-> -- 
-> 2.28.0
-> 
+Hector, can you please rebase your patch on top of this one? I'll
+review it later when I have more time to allocate to the task.
+
+Thanks,
+-- 
+Jean Delvare
+SUSE L3 Support
