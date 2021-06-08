@@ -2,105 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3C339F8FA
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Jun 2021 16:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8F239FA57
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Jun 2021 17:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233279AbhFHO0g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Jun 2021 10:26:36 -0400
-Received: from mail-pg1-f177.google.com ([209.85.215.177]:33340 "EHLO
-        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbhFHO0f (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Jun 2021 10:26:35 -0400
-Received: by mail-pg1-f177.google.com with SMTP id e20so4691977pgg.0;
-        Tue, 08 Jun 2021 07:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AY6lStx8IvJJTinWVzlaubjc28iru7pvjmXtwIOc384=;
-        b=sWNsP8BIeVhMMdC/38iOhQQcoJRNKxXK+1Rqkq2Ykx7cijY3X/AxV5qNXsaaG5ZQIf
-         1wUIUyFlWR2c5ziHCftKI2gD9D+135nI8xlM0UNwMcimAmrvxJbetNO8nop9WgPW2XkZ
-         45caja5UTDAsV9LEg3KcmAVlQFXekm0CnhJ01k4SlQqWSwG0jNm9uMbeLXJoHwr8ULIB
-         XNyOnNbPK/M82QKjQOcKMyJhM8EX+U/Mgw/FSU7DgfxMzQykW6Sa2I5iwoC/5fHldd/6
-         3lQHWej1y2H4jBlr8Ri0/M8+FIeqkeB5jK2VCEu2yH/86b+1gKotPS2+Vf77D9CigjVO
-         opsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AY6lStx8IvJJTinWVzlaubjc28iru7pvjmXtwIOc384=;
-        b=DTS6AMM2f8cFVRlnYE9mr8/B6g8OyzGJAeEeSW9r9uGQZByHuY/H+OP9VsObFC1hH8
-         ZQ6tVMaQhTjV+X1tKWcyX2uQRYFrs4DYNrWJnT4WF5vFRAgZnc6HaeS1tFGlJ0wxYq9K
-         xYLkD50qZXWWRbjzeemgmmMlK5blb/q4PUznDKixCTVjwM6Y3DQtShIib13234O20qXH
-         CUAn55L1hfAIu3Fx28JxJhdeQDAVe1c9U8SMMzDw/c5R+cQHw2GRqUpSmNVju34ciRC5
-         T+KZvqgjMT7Bi4VwLjvUHDxrcO6Uaef6/UVPlA+bGrULx8x8RsQS9qgoM1Q8pHDV8t2I
-         Xf8A==
-X-Gm-Message-State: AOAM5310Jf4VY7ySqPdHU9NR/WOYjaDmx0SKLkPTMroAWv+h4b0hFHZ2
-        sJJe181y1McPsxKtj9otbiQ=
-X-Google-Smtp-Source: ABdhPJz8zUoQhEIBV01BhCslFdLJaI+QfNzP0GAPOgM41cSlY9OBAyMV3W1Sj3ig1Y2d+/dUtD2mxA==
-X-Received: by 2002:a63:d347:: with SMTP id u7mr23205468pgi.434.1623162222347;
-        Tue, 08 Jun 2021 07:23:42 -0700 (PDT)
-Received: from localhost (185.212.56.112.16clouds.com. [185.212.56.112])
-        by smtp.gmail.com with ESMTPSA id s11sm2692034pjz.42.2021.06.08.07.23.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 07:23:42 -0700 (PDT)
-Date:   Tue, 8 Jun 2021 22:23:38 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        corbet@lwn.net, jarkko.nikula@linux.intel.com,
-        mika.westerberg@linux.intel.com, rric@kernel.org,
-        bhelgaas@google.com, wsa@kernel.org, Sanket.Goswami@amd.com,
-        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v7 1/4] PCI: Introduce pcim_alloc_irq_vectors()
-Message-ID: <20210608142338.GB1030842@nuc8i5>
-References: <YL5FcivbsIBnVvo0@smile.fi.intel.com>
- <20210607171451.GA2507298@bjorn-Precision-5520>
+        id S231485AbhFHPZx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Jun 2021 11:25:53 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:50606 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229536AbhFHPZd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Jun 2021 11:25:33 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 66F2E219C4;
+        Tue,  8 Jun 2021 15:23:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1623165819; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m7SkvhDJYjhIqs/TGZRZ9+zZiVlQqOJz/x5h/Ljnld4=;
+        b=fm1Kdb//NWkPAEcRAeiczsNH+I0YbBRx7JQuJA1WqOwAiEoDFOeP2ZCXPJhJvtl7Cy6Ca+
+        dau1wsFrC0gM9ZfllCBsDpffC0HDQfnJgvK6xwipTr9uVwQYjUyoZTjx+q1B042h7AiU9A
+        PqM/vxNr4CBzvgenU+0L0rLQdBwe1Bc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1623165819;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m7SkvhDJYjhIqs/TGZRZ9+zZiVlQqOJz/x5h/Ljnld4=;
+        b=ulmRUmPJIrbhY5W77NzLLU8pHMXE5IjnVDq4Ie9MwGcrdCmp1H14p06Gz08vhF162+vL+j
+        2+FOXasNhAwXoMAg==
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id 30152118DD;
+        Tue,  8 Jun 2021 15:23:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1623165819; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m7SkvhDJYjhIqs/TGZRZ9+zZiVlQqOJz/x5h/Ljnld4=;
+        b=fm1Kdb//NWkPAEcRAeiczsNH+I0YbBRx7JQuJA1WqOwAiEoDFOeP2ZCXPJhJvtl7Cy6Ca+
+        dau1wsFrC0gM9ZfllCBsDpffC0HDQfnJgvK6xwipTr9uVwQYjUyoZTjx+q1B042h7AiU9A
+        PqM/vxNr4CBzvgenU+0L0rLQdBwe1Bc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1623165819;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m7SkvhDJYjhIqs/TGZRZ9+zZiVlQqOJz/x5h/Ljnld4=;
+        b=ulmRUmPJIrbhY5W77NzLLU8pHMXE5IjnVDq4Ie9MwGcrdCmp1H14p06Gz08vhF162+vL+j
+        2+FOXasNhAwXoMAg==
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id dJbMCXuLv2DcLwAALh3uQQ
+        (envelope-from <jdelvare@suse.de>); Tue, 08 Jun 2021 15:23:39 +0000
+Date:   Tue, 8 Jun 2021 17:23:38 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Linux I2C <linux-i2c@vger.kernel.org>
+Cc:     Crestez Dan Leonard <leonard.crestez@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 0/7] Rework block read support among i2cget and i2cdump
+Message-ID: <20210608172338.0cf520a1@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210607171451.GA2507298@bjorn-Precision-5520>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 12:14:51PM -0500, Bjorn Helgaas wrote:
-> On Mon, Jun 07, 2021 at 07:12:34PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jun 07, 2021 at 11:39:13PM +0800, Dejin Zheng wrote:
-> > > Introduce pcim_alloc_irq_vectors(), a device-managed version of
-> > > pci_alloc_irq_vectors(). Introducing this function can simplify
-> > > the error handling path in many drivers.
-> > > 
-> > > And use pci_free_irq_vectors() to replace some code in pcim_release(),
-> > > they are equivalent, and no functional change. It is more explicit
-> > > that pcim_alloc_irq_vectors() is a device-managed function.
-> > 
-> > ...
-> > 
-> > > When CONFIG_PCI=n, there is no stub for pci_is_managed(), but
-> > > pcim_alloc_irq_vectors() will use it, so add one like other similar stubs.
-> > > Otherwise there can be build errors, as here by kernel test robot
-> > > reported:
-> > > include/linux/pci.h: In function 'pcim_alloc_irq_vectors':
-> > > >> include/linux/pci.h:1847:7: error: implicit declaration of function 'pci_is_managed' [-Werror=implicit-function-declaration]
-> > >     1847 |  if (!pci_is_managed(dev))
-> > >          |       ^~~~~~~~~~~~~~
-> > 
-> > This is rather changelog related material. No need to pollute commit message
-> > with this.
-> > 
-> > ...
-> > 
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > It's new functionality. Why this tag is here?
-> > Use comments (similar location than changelog) to give a credit if you wish.
-> 
-> Agreed, I'll tidy that up, so no need to repost for this.
+Hi all,
 
-Bjorn, Thank you very much, you are so nice!
+This is my attempt to improve the block read support in i2c-tools,
+specifically i2cget and i2cdump. The base of this series is the
+submission by Crestez Dan Leonard 5 years ago. Sorry for the delay ;-)
 
-BR,
-Dejin
+First we add support of both I2C and SMBus block read to i2cget:
+
+[PATCH 1/7] i2cget: Add support for I2C block data
+[PATCH 2/7] i2cget: Document the support of I2C block reads
+[PATCH 3/7] i2cget: Add support for SMBus block read
+
+Then we add support for range selection in I2C block mode to i2cdump:
+
+[PATCH 4/7] i2cdump: Remove dead code
+[PATCH 5/7] i2cdump: Add range support with mode i (I2C block)
+
+Lastly we deprecate and eventually remove support for SMBus block mode
+from i2cdump:
+
+[PATCH 6/7] i2cdump: Deprecate SMBus block mode
+[PATCH 7/7] i2cdump: Remove support for SMBus block mode
+
+The idea would be to get the first 6 patches in the upcoming i2c-tools
+v4.3, and apply the 7th patch "later" (either immediately after that
+release, or some time later, I'm not sure).
+
+-- 
+Jean Delvare
+SUSE L3 Support
