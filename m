@@ -2,93 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2F639F4FD
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Jun 2021 13:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED6939F66A
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Jun 2021 14:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbhFHLcj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Jun 2021 07:32:39 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:3471 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbhFHLcj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Jun 2021 07:32:39 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Fznz20fLnz6tv8;
-        Tue,  8 Jun 2021 19:27:42 +0800 (CST)
-Received: from dggemi762-chm.china.huawei.com (10.1.198.148) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Tue, 8 Jun 2021 19:30:45 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- dggemi762-chm.china.huawei.com (10.1.198.148) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Tue, 8 Jun 2021 19:30:38 +0800
-Subject: Re: [PATCH -next] i2c: Fix missing pci_disable_device() on error in
- ali1535_setup()
-To:     Jean Delvare <jdelvare@suse.de>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1623036068-30668-1-git-send-email-zou_wei@huawei.com>
- <20210608114636.65512e28@endymion>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <f88681e2-8156-5824-8d03-f5004dc489f3@huawei.com>
-Date:   Tue, 8 Jun 2021 19:30:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S232483AbhFHMYG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Jun 2021 08:24:06 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:41226 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232259AbhFHMYF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Jun 2021 08:24:05 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1A8531FD2A;
+        Tue,  8 Jun 2021 12:22:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1623154932; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlvttj5juPRcCGmuxcN2NqahzfXUE80nEbCgRSx6Tzs=;
+        b=jF2YytS2Z9UihgNFqK4jbRkxSGeUpg/V1gBVZKJdyRX9UG24lkghVTp4XLM6jM0cGFVxV2
+        UNf2gKO0jigr1rF5mLs/LPuxiivk/FBJzCSpYCvuUFiXed3z8eAo/NitKFLjisp29JzVUr
+        Z0ZugEnU1jJImS9P7L97Te2s0avwiEw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1623154932;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlvttj5juPRcCGmuxcN2NqahzfXUE80nEbCgRSx6Tzs=;
+        b=0pPUXWOE1PNBX4loUSeBpOsIwkFePfKuQ0rOD2Jt0zMjy/MuugmZBbvwecXXP8aaCW44Zu
+        +WU3tTMzdgQkmxDg==
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id D4CA8118DD;
+        Tue,  8 Jun 2021 12:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1623154932; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlvttj5juPRcCGmuxcN2NqahzfXUE80nEbCgRSx6Tzs=;
+        b=jF2YytS2Z9UihgNFqK4jbRkxSGeUpg/V1gBVZKJdyRX9UG24lkghVTp4XLM6jM0cGFVxV2
+        UNf2gKO0jigr1rF5mLs/LPuxiivk/FBJzCSpYCvuUFiXed3z8eAo/NitKFLjisp29JzVUr
+        Z0ZugEnU1jJImS9P7L97Te2s0avwiEw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1623154932;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlvttj5juPRcCGmuxcN2NqahzfXUE80nEbCgRSx6Tzs=;
+        b=0pPUXWOE1PNBX4loUSeBpOsIwkFePfKuQ0rOD2Jt0zMjy/MuugmZBbvwecXXP8aaCW44Zu
+        +WU3tTMzdgQkmxDg==
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id mgD+MfNgv2AQQQAALh3uQQ
+        (envelope-from <jdelvare@suse.de>); Tue, 08 Jun 2021 12:22:11 +0000
+Date:   Tue, 8 Jun 2021 14:22:11 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Peter Korsgaard <peter@korsgaard.com>, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH i2c-tools] Revert "tools: i2ctransfer: add check for
+ returned length from driver"
+Message-ID: <20210608142211.6aa9ad4f@endymion>
+In-Reply-To: <YLp9Lc5Ondu3Gicg@kunai>
+References: <20210209110556.18814-1-wsa+renesas@sang-engineering.com>
+        <20210226174337.63a9c2a6@endymion>
+        <20210310204648.GA332643@ninjato>
+        <87tuoe5zfc.fsf@dell.be.48ers.dk>
+        <20210413125433.GA9879@kunai>
+        <20210521132158.6e0689c0@endymion>
+        <YK1fwC4aR5RKTPcB@kunai>
+        <20210602110332.73f9cbc1@endymion>
+        <YLew8cFWTRQKrBuk@kunai>
+        <20210604155708.14159db0@endymion>
+        <YLp9Lc5Ondu3Gicg@kunai>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20210608114636.65512e28@endymion>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggemi762-chm.china.huawei.com (10.1.198.148)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jean,
+On Fri, 4 Jun 2021 21:21:17 +0200, Wolfram Sang wrote:
+> > If we only want *one* I2C block read at a specified offset then i2cget
+> > seems more appropriate indeed.  
+> 
+> I don't have a clear opinion here. On the one hand, if we want just one
+> block read, this is more a "get" than a "dump". On the other hand,
+> i2cdump already has a range-parameter. So, from a user perspective,
+> keeping i2cget to single values and update the range parameter in
+> i2cdump might be least confusing?
 
-Thanks for your review and detailed explanation.
+The feature doesn't clearly fit in either tool but could be made to fit
+in both ;-) Which isn't a situation I like.
 
-On 2021/6/8 17:46, Jean Delvare wrote:
-> Hi Wei,
-> 
-> On Mon, 07 Jun 2021 11:21:08 +0800, Zou Wei wrote:
->> Fix the missing pci_disable_device() before return
->> from ali1535_setup() in the error handling case.
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Zou Wei <zou_wei@huawei.com>
->> ---
->>   drivers/i2c/busses/i2c-ali1535.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/i2c/busses/i2c-ali1535.c b/drivers/i2c/busses/i2c-ali1535.c
->> index fb93152..bdbaf79 100644
->> --- a/drivers/i2c/busses/i2c-ali1535.c
->> +++ b/drivers/i2c/busses/i2c-ali1535.c
->> @@ -206,6 +206,7 @@ static int ali1535_setup(struct pci_dev *dev)
->>   exit_free:
->>   	release_region(ali1535_smba, ALI1535_SMB_IOSIZE);
->>   exit:
->> +	pci_disable_device(dev);
->>   	return retval;
->>   }
->>   
-> 
-> We don't actually want to disable the PCI device. Maybe it was already
-> enabled before the driver was loaded, and maybe the BIOS needs the
-> device when the system is being shut down. You'll notice that we do not
-> call pci_disable_device(dev) in ali1535_remove(), so there's no reason
-> to do it in the error path.
-> 
-> As a matter of fact the i2c-i801 driver, which is used on the same kind
-> of hardware, has the following note in its remove function:
-> 
-> 	/*
-> 	 * do not call pci_disable_device(dev) since it can cause hard hangs on
-> 	 * some systems during power-off (eg. Fujitsu-Siemens Lifebook E8010)
-> 	 */
-> 
-> So this is a nack from me, sorry.
-> 
+I think this is really a conceptual difference. For certain devices
+(like EEPROMs) I2C Block read means reading from a range of register
+addresses, which is i2cdump's realm. But for other devices, I2C Block
+read means reading multiple register values from a single address
+(which is typically what _SMBus_ Block reads are always about, but
+nothing prevents devices from using I2C Block reads for the same
+purpose). Which is more like i2cget's realm.
+
+The problem is that, depending on which device our users are working
+with, they will *expect* the feature to be in one tool or the other.
+And most probably won't even have the idea of trying the other. Of
+course we could add a redirection note in the manual page, but users
+will have wasted time already. If they read the manual page at all. And
+even then, the way the data is presented could be confusing if they
+need to use the "other" tool.
+
+As a matter of fact, I have at least two more records of people asking
+for this very feature without realizing it was already (partially)
+available in another tool (Aleksandr Amelkin in 2015 and Gina Ko in
+2019). The fact that i2cset does support Block writes (since 2011!)
+when i2cget does not support Block reads is definitely confusing.
+
+So I'm actually tempted to add the feature to *both* tools. Crestez's
+patch would be the base for the i2cget implementation, to which I would
+happily add SMBus block read support. For i2cdump, it's about adding
+support for register range to the "i" mode. I took a quick look already
+and it seems fairly trivial to implement.
+
+Stay tuned,
+-- 
+Jean Delvare
+SUSE L3 Support
