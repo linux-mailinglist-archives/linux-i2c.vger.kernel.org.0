@@ -2,69 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685223A15C1
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Jun 2021 15:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7203A1BCD
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Jun 2021 19:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236449AbhFINiO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Jun 2021 09:38:14 -0400
-Received: from flippie-beckerswealth-sa.xyz ([62.173.147.2]:33642 "EHLO
-        host.flippie-beckerswealth-sa.xyz" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236423AbhFINiO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Jun 2021 09:38:14 -0400
-X-Greylist: delayed 4081 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Jun 2021 09:38:13 EDT
-Received: from flippie-beckerswealth-sa.xyz (ec2-3-131-99-163.us-east-2.compute.amazonaws.com [3.131.99.163])
-        by host.flippie-beckerswealth-sa.xyz (Postfix) with ESMTPA id B08813120A44
-        for <linux-i2c@vger.kernel.org>; Wed,  9 Jun 2021 15:10:27 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz B08813120A44
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240629;
-        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=QQ4QFT0k/tK9xUyqd4fU5c3NAB8x+BK+SpKDQXmWkjnczYGhf9JTI6hy4qbQxwD/V
-         7ykI5xZuvITkG6zBXfOtnF0YwM+A6aMpoivCsNDI5m0sj/Iej51fKfwqwyuYaW9m+k
-         s7EzTEZqbm7mntJ8l3qNe5Mdr9So2/IGwPCb40z4=
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz B08813120A44
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240629;
-        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=QQ4QFT0k/tK9xUyqd4fU5c3NAB8x+BK+SpKDQXmWkjnczYGhf9JTI6hy4qbQxwD/V
-         7ykI5xZuvITkG6zBXfOtnF0YwM+A6aMpoivCsNDI5m0sj/Iej51fKfwqwyuYaW9m+k
-         s7EzTEZqbm7mntJ8l3qNe5Mdr9So2/IGwPCb40z4=
-Reply-To: jmasuku40@flippiebeckerwealthservices.com
-From:   Jotham Masuku <jmasuku40@flippie-beckerswealth-sa.xyz>
-To:     linux-i2c@vger.kernel.org
-Subject: Proposal
-Date:   09 Jun 2021 12:10:27 +0000
-Message-ID: <20210609121027.7EA7195C8211B575@flippie-beckerswealth-sa.xyz>
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        id S229957AbhFIRcS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Jun 2021 13:32:18 -0400
+Received: from mga14.intel.com ([192.55.52.115]:27500 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229961AbhFIRcS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 9 Jun 2021 13:32:18 -0400
+IronPort-SDR: 1ZjXi/olLDN+krB6eCcakL8J/TKg/EGWe3+eUstKHHxMHGxEV+KdrKbK1p9GrLDYZ5vPFvDI28
+ BSsoIJWpc6zw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="204937086"
+X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
+   d="scan'208";a="204937086"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 10:30:23 -0700
+IronPort-SDR: JYaEUtInlXRxvx9R42ABSyWPD5FldFMAlV9OB3wYCFEChl8YEcR+1ketRibhSBtVS6vUS1whrj
+ 1Fct8FFaLa5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
+   d="scan'208";a="552051340"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 09 Jun 2021 10:30:21 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9A2DAE7; Wed,  9 Jun 2021 20:30:45 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>, wsa@kernel.org
+Subject: [PATCH v2 1/1] i2c: cht-wc: Replace of_node by NULL
+Date:   Wed,  9 Jun 2021 20:30:35 +0300
+Message-Id: <20210609173035.83777-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello there,
+The driver is run on the platforms where OF node is always NULL.
+The confusion comes from IRQ domain APIs that take either OF or
+firmware node as input parameter. Since fwnode is not used here
+either, replace of_node by NULL.
 
-I hope this message finds you in good spirits especially during=20
-this challenging time of coronavirus pandemic. I hope you and=20
-your family are well and keeping safe. Anyway, I am Jotham=20
-Masuku, a broker working with Flippiebecker Wealth. I got your=20
-contact (along with few other contacts) through an online=20
-business directory and I thought I should contact you to see if=20
-you are interested in this opportunity. I am contacting you=20
-because one of my high profile clients is interested in investing=20
-abroad and has asked me to look for individuals and companies=20
-with interesting business ideas and projects that he can invest=20
-in. He wants to invest a substantial amount of asset abroad.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: rewrote in order to pass NULL instead of of_node (Hans)
+ drivers/i2c/busses/i2c-cht-wc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Please kindly respond back to this email if you are interested in=20
-this opportunity. Once I receive your response, I will give you=20
-more details and we can plan a strategy that will be beneficial=20
-to all parties.
+diff --git a/drivers/i2c/busses/i2c-cht-wc.c b/drivers/i2c/busses/i2c-cht-wc.c
+index 08f491ea21ac..1cf68f85b2e1 100644
+--- a/drivers/i2c/busses/i2c-cht-wc.c
++++ b/drivers/i2c/busses/i2c-cht-wc.c
+@@ -354,8 +354,7 @@ static int cht_wc_i2c_adap_i2c_probe(struct platform_device *pdev)
+ 		return ret;
+ 
+ 	/* Alloc and register client IRQ */
+-	adap->irq_domain = irq_domain_add_linear(pdev->dev.of_node, 1,
+-						 &irq_domain_simple_ops, NULL);
++	adap->irq_domain = irq_domain_add_linear(NULL, 1, &irq_domain_simple_ops, NULL);
+ 	if (!adap->irq_domain)
+ 		return -ENOMEM;
+ 
+-- 
+2.30.2
 
-Best regards
-
-J Masuku
-Flippiebecker Wealth
