@@ -2,163 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 179843A2DAB
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jun 2021 16:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753463A314D
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Jun 2021 18:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbhFJOGd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Jun 2021 10:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbhFJOGd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Jun 2021 10:06:33 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5892AC061574;
-        Thu, 10 Jun 2021 07:04:24 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id e1so1063245pld.13;
-        Thu, 10 Jun 2021 07:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8AXVPJv+STNoawo/hNoKgr2It26kqyxsee+omAIhuCE=;
-        b=Pblo01v+18qR3ohOngCf7O5Lf57Bak5rnsArtW8TpCcZ5gFyyMRgaScW8AJqX/e2wd
-         1+FvP4+0hLwScfEKxFIuONv38mpwYP3RLcERwYiFquQkLrDc+H1hqXFj8goJry5G788d
-         /V+cxqiB+0KJCgDFuppfuS8zKTZv4Ow947Mst4kKmVAYTNkAv1Gunts0SMde2SZIaRAY
-         J+X6WG1rOr3FdE5Uh40V7S6fX1CzhIhF9huXxpqPFkdDydkkH+xi5lYClmSshOWZT3/1
-         iqDqAKbgSFsluvrwyyK6JQTTShoM8TvnUJDn6Ekgw5alPYM9VhGg3ibyroavpheukBAO
-         lJPg==
+        id S230291AbhFJQtR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Jun 2021 12:49:17 -0400
+Received: from mail-oo1-f52.google.com ([209.85.161.52]:40541 "EHLO
+        mail-oo1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231572AbhFJQtI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Jun 2021 12:49:08 -0400
+Received: by mail-oo1-f52.google.com with SMTP id j17-20020a0568200231b029024900620310so37501oob.7;
+        Thu, 10 Jun 2021 09:47:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8AXVPJv+STNoawo/hNoKgr2It26kqyxsee+omAIhuCE=;
-        b=PDReWEIoDSIy0+PMdgLCbujbk1oGDZsb1wxS0KCYdWFwJbUn1UMTr8kTr+mc6xNvDU
-         mmiJiXR9hzEDcUmSwF/ca3qCbngwp562gJ3em5+CHdAa72Ii8LOSSzUFIqhoWzf96to4
-         LY67QJx33R3Y/LmGUTnqDSUlCQqS4VaFys5raKrMz7HiwPyKiaiMVRJZ76RtWmC9UL9c
-         JCiTuL1Yc+D4BBGgZXJFTqKOsiZ9sKqFRQsuCGRHIaBxsVWnggjiSkBVIxbJO1Ltwl/l
-         ECxvh0Z4clykWxwsPP6T337wFCUBJwaNaDTS/VCKcLkiYg+emc/j6oVnRjkodDFEv4e4
-         JDYA==
-X-Gm-Message-State: AOAM531N/Q2gdsVHtg7jzcuhjo9fit2YzhatiHBJEuTPtAQaNz9r0Cow
-        auIT1uIkpe8PCkarnPubCgT5M7u7quP31+qCp4s=
-X-Google-Smtp-Source: ABdhPJwRG7Ppgud2JWSXgRGFUJr3Gmrg5A9IuHOTOnLAbtkk5l7MCotx04GbH2Sg6kNle680OM7CThPTeRNR0Q6Iudw=
-X-Received: by 2002:a17:90a:17ad:: with SMTP id q42mr3589906pja.181.1623333863845;
- Thu, 10 Jun 2021 07:04:23 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+ubLQ+O50XgkD8kDtM8dzYJ4xypd9X1QKHEX8Kl94HM=;
+        b=rZIJsBarjp4b3mZk6qLeteoTk8jbjOnEak0ikgsuvDWIG09TU/rQ8zdIGVxQPjtXof
+         bKKkTTjV904dJBNPZhXeB3tg3O7Jtg4tT9/KfRZofVJSzRw7DCod459D2Ci53dtsqk53
+         iCIotbpVQQOP02x4lbROTNMv5q9eYMgYtj30gWHFur+a3Y9GbW9OuRyMO2ure9WfuVTk
+         tQQeYIxZS1oIpimf7YusTuZftetoc3GWjYUrAmGuxi8ZHQm1lMMXKMNrQWuYIhl1I6y2
+         yYn1rALQC7/ySpCJliE+K3PqsrYvoNfBdaz1E8EU9dtm3fOWKI+wS4aFQbXOCWodH0i4
+         rsmQ==
+X-Gm-Message-State: AOAM5311vMVhB1fhLelAxb84i4ezE2pq1d0Uz5fDkrB3cnzE5o6MuHBC
+        I76hip7VKL2e0/CvR4xnUQ==
+X-Google-Smtp-Source: ABdhPJzxSFuHoIzFy98YSEdLyG+PwlYC3ijHdZ/99LwLKJKM5Op6VYOn58+LDzA1pg8ehbA127p5ww==
+X-Received: by 2002:a4a:4c8f:: with SMTP id a137mr3039036oob.65.1623343631396;
+        Thu, 10 Jun 2021 09:47:11 -0700 (PDT)
+Received: from robh.at.kernel.org ([172.58.99.113])
+        by smtp.gmail.com with ESMTPSA id o20sm687010otl.2.2021.06.10.09.47.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Jun 2021 09:47:10 -0700 (PDT)
+Received: (nullmailer pid 1948111 invoked by uid 1000);
+        Thu, 10 Jun 2021 16:47:06 -0000
+Date:   Thu, 10 Jun 2021 11:47:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jamin Lin <jamin_lin@aspeedtech.com>
+Cc:     Andrew Jeffery <andrew@aj.id.au>, chin-ting_kuo@aspeedtech.com,
+        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        steven_lee@aspeedtech.com,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>, troy_lee@aspeedtech.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        Rayn Chen <rayn_chen@aspeedtech.com>, ryan_chen@aspeedtech.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [PATCH v3 1/1] dt-bindings: aspeed-i2c: Convert txt to yaml
+ format
+Message-ID: <20210610164706.GA1948040@robh.at.kernel.org>
+References: <20210603024839.27976-1-jamin_lin@aspeedtech.com>
+ <20210603024839.27976-2-jamin_lin@aspeedtech.com>
 MIME-Version: 1.0
-References: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
- <20210610110211.0e239af6@md1za8fc.ad001.siemens.net> <CAHp75VeYy0tyP-OLZX5dbYFZM1C_K5eALo64_nb4rSvH7-93FA@mail.gmail.com>
- <20210610154844.06e1e733@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20210610154844.06e1e733@md1za8fc.ad001.siemens.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 10 Jun 2021 17:04:07 +0300
-Message-ID: <CAHp75VdaZc4yXtd1ggUgEooQfHPteded_Ba_kGpQx4c5TJ9-5g@mail.gmail.com>
-Subject: Re: [rfc, PATCH v1 0/7] PCI: introduce p2sb helper
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210603024839.27976-2-jamin_lin@aspeedtech.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 4:48 PM Henning Schild
-<henning.schild@siemens.com> wrote:
->
-> Am Thu, 10 Jun 2021 13:14:49 +0300
-> schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
->
-> > On Thu, Jun 10, 2021 at 12:14 PM Henning Schild
-> > <henning.schild@siemens.com> wrote:
-> > >
-> > > Am Mon, 8 Mar 2021 14:20:13 +0200
-> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > >
-> > > > There are a few users and even at least one more is coming
-> > > > that would like to utilize p2sb mechanisms like hide/unhide
-> > > > a device from PCI configuration space.
-> > > >
-> > > > Here is the series to deduplicate existing users and provide
-> > > > a generic way for new comers.
-> > > >
-> > > > It also includes a patch to enable GPIO controllers on Apollo Lake
-> > > > when it's used with ABL bootloader w/o ACPI support.
-> > >
-> > > That bit is especially interesting. Making pinctl*lake initialize
-> > > when ACPI IDs are missing and p2sb is hidden.
-> > >
-> > > However i have seen pinctl-broxton get confused because it was
-> > > trying to come up twice on a system that has the ACPI entries. Once
-> > > as "INT3452" and second as "apollolake-pinctrl". They should
-> > > probably mutually exclude each other. And the two different names
-> > > for "the same"? thing make it impossible to write a driver using
-> > > those GPIOs.
-> >
-> > Then it's clearly told that BIOS provides confusing data, it exposes
-> > the ACPI device and hides it in p2sb, how is it even supposed to work?
->
-> The patchset works fine on a machine with hidden p2sb and no ACPI,
-> except for the NULL pointer issue i sent that patch for.
->
-> The problem appeared with the patchset being used on a machine having
-> ACPI entries and a visible p2sb.
+On Thu, 03 Jun 2021 10:48:19 +0800, Jamin Lin wrote:
+> Convert aspeed i2c to yaml.
+> 
+> Signed-off-by: Jamin Lin <jamin_lin@aspeedtech.com>
+> ---
+>  .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 75 +++++++++++++++++++
+>  .../devicetree/bindings/i2c/i2c-aspeed.txt    | 49 ------------
+>  2 files changed, 75 insertions(+), 49 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-aspeed.txt
+> 
 
-Yep, got it. So, basically we have to do something like call
-acpi_dev_present() and forbid the platform device enumeration in this
-case.
-
-> > I consider only these are valid:
-> >  - ACPI device is provided and it's enabled (status = 15) => work with
-> > ACPI enumeration
-> >  - no ACPI device provided and it's hidden or not by p2sb => work via
-> > board file
-> >  - no ACPI device provided and no device needed / present => no
-> > driver is needed
-> >
-> > > Unless it would try and look up both variants or not looking up with
-> > > gpiochip.label.
-> > >
-> > > I would also need that "enable GPIO w/o ACPI" for skylake.
-> >
-> > Not a problem to add a platform driver name there or actually for all
-> > of the Intel pin control drivers (depends what suits better to the
-> > current design).
-> >
-> > >  I think it
-> > > would be generally useful if the GPIO controllers would be enabled
-> > > not depending on ACPI, and coming up with only one "label" to build
-> > > on top.
-> >
-> > I didn't get what 'label' means here...
->
-> The name of the gpiochip /sys/class/gpiochipxxx/label or the first arg
-> to GPIO_LOOKUP_IDX
-> It seems to me that the very same device driver can come up as
-> "apollolake-pinctrl.0" or "INT3452.0" depending on ACPI table entries.
-
-Which is not a problem. Or is it? The proper way is to use character
-devices and find the controller based on other means than the device
-instance name, but user space also can cope with these two, Since we
-never had a platform that did it in the upstream there is no formal
-ABI breakage or so.
-
-> > > > Please, comment on the approach and individual patches.
-> > > >
-> > > > (Since it's cross subsystem, the PCI seems like a main one and
-> > > >  I think it makes sense to route it thru it with immutable tag
-> > > >  or branch provided for the others).
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Applied, thanks!
