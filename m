@@ -2,105 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA803A5E4B
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Jun 2021 10:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3F03A66BD
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Jun 2021 14:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbhFNIWn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Jun 2021 04:22:43 -0400
-Received: from mail-wm1-f44.google.com ([209.85.128.44]:35675 "EHLO
-        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232568AbhFNIWm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Jun 2021 04:22:42 -0400
-Received: by mail-wm1-f44.google.com with SMTP id k5-20020a05600c1c85b02901affeec3ef8so12412847wms.0
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Jun 2021 01:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=LnyZct2DknKWMe0DrvvVwa4q+qiNZ1cnJSHPV8njmHg=;
-        b=gcL5i7lv7XQSoR2mGCFsUxne/Mm5adkEW0IpITDX+aZt6afsabyLAoi1r5M1TbfyVd
-         NsK8XIIe9l/JSjAR4TbfrprHbUoAmFcPtOeKgp/qRSXIfH4PcWda2sOmhsjcMrG2WQe7
-         WZd9pb1dPR7ADI9up7l/QUxsDGVJ3tLzgHxD4QuvkJHViufAqA/Bmapx4e6bfGr6C3Kh
-         ypelF+rrIPp2TL3tkq/GCKkv+0c4iVHHcnG8NiMJUUSiYYGbnJk2RSHPMJYVvKGw6CwY
-         vpxygbZrjQa+6kU7b4+uzd1Ys++PzYd5rpA9cvJh+qqVkSrIVdU+/OMxA3XpVIUJoNnd
-         dTdQ==
+        id S233072AbhFNMkk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Jun 2021 08:40:40 -0400
+Received: from mail-ua1-f54.google.com ([209.85.222.54]:44587 "EHLO
+        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233023AbhFNMki (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Jun 2021 08:40:38 -0400
+Received: by mail-ua1-f54.google.com with SMTP id e7so1338878uaj.11;
+        Mon, 14 Jun 2021 05:38:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LnyZct2DknKWMe0DrvvVwa4q+qiNZ1cnJSHPV8njmHg=;
-        b=moYancDHnpcpsW848+Axp1k52Ipr7RUPRMrn5OR4056riErfxwmUL1PxjV4kUNGOiL
-         BzR2YX1k5wxE+ArbFdliBCpnmb/ReCKh9FUBM95z+HJbUNwTv5meVtryMBz8SQ3GGLJz
-         vpCsm66zQdQCqWUNRhlOHTItma6GNYlxprB5y8dImjYO/yBIYnmr7rvgdl0mJs7iTt3q
-         jjnLQ4s3FUL5a0hjrsyCbzN8rcnO2XZUu2Fw0LAkcUDYlrlgsptOvCNv/XxBeDJks4Il
-         KHQ+KuLWeTooEzmbhRfmZ0MG7iU3tlMcl5SGLUOFw6K9llCq+ke51186LRLIj8+ph00t
-         XSCA==
-X-Gm-Message-State: AOAM532iraDPqbpevrf+3AVSZiKvOZAsGO9ea5XdnKhdTacpsI9q2R6e
-        0fOe31I+cs86hyX/k2hNqhqBi4jpvLk+qQ++
-X-Google-Smtp-Source: ABdhPJx+hBxfgyrM2GohZAizyI5qpBrzMSBJQ/tABRCmbQQK68yQrqfbNBLKeh4+v1WEjfnpbNTNvA==
-X-Received: by 2002:a7b:c25a:: with SMTP id b26mr15467485wmj.31.1623658766848;
-        Mon, 14 Jun 2021 01:19:26 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:82c:5f0:85ed:406e:1bc4:a268])
-        by smtp.gmail.com with ESMTPSA id p16sm16011227wrs.52.2021.06.14.01.19.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 14 Jun 2021 01:19:26 -0700 (PDT)
-From:   Loic Poulain <loic.poulain@linaro.org>
-To:     wsa@kernel.org, andriy.shevchenko@linux.intel.com
-Cc:     linux-i2c@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>
-Subject: [PATCH] i2c: qcom-cci: add sm8250 compatible
-Date:   Mon, 14 Jun 2021 10:29:01 +0200
-Message-Id: <1623659341-21954-1-git-send-email-loic.poulain@linaro.org>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OvZoV5ZvCwgOZO5i1pZIEG1t7OHbYFkezPxKRjXkMck=;
+        b=mv8VPseM3QYrcq9y22g4EU6hs+4THtpRN1LxrgZ/vDybnuPBuNpkhXFNElOL9yleBY
+         unmPHkCfv9rcpOThpAz6upWJ3/y83LKsAXZxkghwoCxTe9Fs8F+Zb7LMBlh8NkvyHg91
+         lJREaNcFXTFt+VyvXtL6uGKYUoikNyKV3uUpQ//Y/Dku53aCTv4sWSpDarLEqTXzOj3Z
+         tGGeuk96+4yIu7pczLYiAlDpEqSr83sSiRf2fgFs4kcoOxK1defsrZY2TxV1upvKTUHI
+         oDTQfFdEWoTZaBF6lEOT+8f+SjxQo/dzB6UTeo5IPUD/pAH8+Rm6N4DoLjl1KXX0Z+4W
+         Kwng==
+X-Gm-Message-State: AOAM530tgh1t8vKttGB4AsElgt+8Xk+VAUEfLSNF8GK24qhD7E0oRWBy
+        EAhFRFZdGyp5mus24ufj9Mb0FzOb450oEMxSKXN6xzlZv69V3g==
+X-Google-Smtp-Source: ABdhPJzp5CiHc8rTp6N0GqZD/yH1UJa6Qov4HyfgO5s3kpV0pS3vIo6n+cALEJ+WGENLepzP6N2w80gzsAMbFlnhxio=
+X-Received: by 2002:ab0:708c:: with SMTP id m12mr11714187ual.4.1623674314900;
+ Mon, 14 Jun 2021 05:38:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210611165624.30749-1-biju.das.jz@bp.renesas.com> <20210611165624.30749-4-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20210611165624.30749-4-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Jun 2021 14:38:23 +0200
+Message-ID: <CAMuHMdWWgehDTxTcm8=ooq2-4BkY0jgo+hwfrM_PHc6iw6aP8A@mail.gmail.com>
+Subject: Re: [PATCH 3/5] i2c: riic: Add RZ/G2L support
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Khalil Blaiech <kblaiech@mellanox.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Jonathan Marek <jonathan@marek.ca>
+Hi Biju,
 
-SM8250 CCI is the same as SDM845, add an equivalent compatible for SM8250.
+On Fri, Jun 11, 2021 at 6:56 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> RZ/G2L i2c controller is compatible with RZ/A i2c controller.
+> By default IP is in reset state, so need to perform release
+> reset before accessing any register.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt | 5 +++--
- drivers/i2c/busses/i2c-qcom-cci.c                      | 1 +
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Thanks for your patch!
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-index c6668b7..7b9fc0c 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
-@@ -9,6 +9,7 @@ PROPERTIES:
- 		"qcom,msm8916-cci"
- 		"qcom,msm8996-cci"
- 		"qcom,sdm845-cci"
-+		"qcom,sm8250-cci"
- 
- - reg
- 	Usage: required
-@@ -41,8 +42,8 @@ PROPERTIES:
- 
- SUBNODES:
- 
--The CCI provides I2C masters for one (msm8916) or two i2c busses (msm8996 and
--sdm845), described as subdevices named "i2c-bus@0" and "i2c-bus@1".
-+The CCI provides I2C masters for one (msm8916) or two i2c busses (msm8996,
-+sdm845 and sm8250), described as subdevices named "i2c-bus@0" and "i2c-bus@1".
- 
- PROPERTIES:
- 
-diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-index c63d554..c1de8eb 100644
---- a/drivers/i2c/busses/i2c-qcom-cci.c
-+++ b/drivers/i2c/busses/i2c-qcom-cci.c
-@@ -769,6 +769,7 @@ static const struct of_device_id cci_dt_match[] = {
- 	{ .compatible = "qcom,msm8916-cci", .data = &cci_v1_data},
- 	{ .compatible = "qcom,msm8996-cci", .data = &cci_v2_data},
- 	{ .compatible = "qcom,sdm845-cci", .data = &cci_v2_data},
-+	{ .compatible = "qcom,sm8250-cci", .data = &cci_v2_data},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, cci_dt_match);
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -941,6 +941,7 @@ config I2C_QUP
+>  config I2C_RIIC
+>         tristate "Renesas RIIC adapter"
+>         depends on ARCH_RENESAS || COMPILE_TEST
+> +       select RESET_CONTROLLER
+
+if ARCH_R9A07G044?
+
+> --- a/drivers/i2c/busses/i2c-riic.c
+> +++ b/drivers/i2c/busses/i2c-riic.c
+_kzalloc(&pdev->dev, sizeof(*riic), GFP_KERNEL);
+>         if (!riic)
+> @@ -412,6 +421,17 @@ static int riic_i2c_probe(struct platform_device *pdev)
+>                 return PTR_ERR(riic->clk);
+>         }
+>
+> +       type = (enum riic_type)of_device_get_match_data(&pdev->dev);
+> +       if (type == RIIC_RZ_G2L) {
+> +               rstc = devm_reset_control_get(&pdev->dev, NULL);
+> +               if (IS_ERR(rstc)) {
+> +                       dev_err(&pdev->dev, "Error: missing reset ctrl\n");
+> +                       return PTR_ERR(rstc);
+> +               }
+> +
+> +               reset_control_deassert(rstc);
+
+Just wondering: does it harm if the driver is unloaded or unbounded,
+and rebound while the I2C controller is not in reset state?
+
+> +       }
+> +
+>         for (i = 0; i < ARRAY_SIZE(riic_irqs); i++) {
+>                 res = platform_get_resource(pdev, IORESOURCE_IRQ, riic_irqs[i].res_num);
+>                 if (!res)
+> @@ -472,6 +492,7 @@ static int riic_i2c_remove(struct platform_device *pdev)
+>  }
+>
+>  static const struct of_device_id riic_i2c_dt_ids[] = {
+> +       { .compatible = "renesas,riic-r9a07g044", .data = (void *)RIIC_RZ_G2L },
+>         { .compatible = "renesas,riic-rz" },
+
+Please fill in .data, to avoid relying implicitly on RIIC_RZ_A being zero.
+
+>         { /* Sentinel */ },
+>  };
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.7.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
