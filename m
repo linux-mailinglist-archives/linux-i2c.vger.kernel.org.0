@@ -2,106 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B568A3A6821
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Jun 2021 15:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0013A69FA
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Jun 2021 17:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbhFNNlB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Jun 2021 09:41:01 -0400
-Received: from mail-vs1-f47.google.com ([209.85.217.47]:43755 "EHLO
-        mail-vs1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233831AbhFNNlA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Jun 2021 09:41:00 -0400
-Received: by mail-vs1-f47.google.com with SMTP id s22so7778446vsl.10;
-        Mon, 14 Jun 2021 06:38:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Srsjp840VggaoNkzRjTFCPDT+rmpC0UhVopX3aik3tM=;
-        b=ude9YwTzulrzvW8p9+p7rWmJBERKZaQwHgW/DUGUqvONYWua5DNHbnFW84ANNC0iKp
-         T0T/35jCLavrodZiDwQavAOckis5KTwAfW2G6wEuZ63ormu7jG9sJ7QLHAfuC4dd67Yx
-         QdFKTNotKzRrTxQvIfzmyVgDsuY9IwaIplxJ8lJH7ejtqI2Rbvza4mxKJ2EdkBWDXmxt
-         /F6D1MwkvTsmAjpUQe9eH/90IoT/UQUW9W4sJE0+U2Am6Sc+pI8rU+7sFdSYPPH2Adar
-         kpxRJbFK/JdlDbxz8c3WDl01sAZGJ+pUgXnWjPqHLtmX3+ygk/xlOTiNiVHIhtrioELg
-         ec2Q==
-X-Gm-Message-State: AOAM533JwfbqvTdYuf1+XOdAqJkqUOcxmxyctuTYgmMdEy2eD9yEcHlS
-        79wDbdJkUgGADh7Wn5xHfTwAWtCZH70wthXDKgo=
-X-Google-Smtp-Source: ABdhPJx97oky1ZwrJX0c/4Qy2YcGcngumr5Im3ypUrm2ZoEwxbiukdVchCQuPF42TLlsZqwZ1ZxefRjSGVCG5YJe760=
-X-Received: by 2002:a67:3c2:: with SMTP id 185mr17785480vsd.42.1623677937099;
- Mon, 14 Jun 2021 06:38:57 -0700 (PDT)
+        id S233484AbhFNPYA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Jun 2021 11:24:00 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:43982 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233414AbhFNPYA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Jun 2021 11:24:00 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E79231FD29;
+        Mon, 14 Jun 2021 15:21:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1623684116; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w+r8seE4NHQfLRfDTc0phHUKQ5iMOVHoPlxNy/7+CYE=;
+        b=zM09CkaM5HiSWDENHaZmCL2/J2avr8dANxUljoCydDj14xKkEGCtAOANfvcPCyR9MXfMOY
+        lj0y5FCaZLg9OixIkuBiQ7Pogi/jLK+JN5qDiF4jUsIDx1rDFNs08Qk4Nb0jnvZqmA7UMX
+        cWFv3/EfRNy7wsQU5xzuvIvnVkAvvJ8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1623684116;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w+r8seE4NHQfLRfDTc0phHUKQ5iMOVHoPlxNy/7+CYE=;
+        b=/4Xnj19rEMew03xoiMv2nRQF3rHNkyc6llgJhc8xyu7hz614s5jMyztOTRDUXuO+38XvjG
+        I7/yYmlmkfThZRAA==
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id B3EAD118DD;
+        Mon, 14 Jun 2021 15:21:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1623684116; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w+r8seE4NHQfLRfDTc0phHUKQ5iMOVHoPlxNy/7+CYE=;
+        b=zM09CkaM5HiSWDENHaZmCL2/J2avr8dANxUljoCydDj14xKkEGCtAOANfvcPCyR9MXfMOY
+        lj0y5FCaZLg9OixIkuBiQ7Pogi/jLK+JN5qDiF4jUsIDx1rDFNs08Qk4Nb0jnvZqmA7UMX
+        cWFv3/EfRNy7wsQU5xzuvIvnVkAvvJ8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1623684116;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w+r8seE4NHQfLRfDTc0phHUKQ5iMOVHoPlxNy/7+CYE=;
+        b=/4Xnj19rEMew03xoiMv2nRQF3rHNkyc6llgJhc8xyu7hz614s5jMyztOTRDUXuO+38XvjG
+        I7/yYmlmkfThZRAA==
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id ck3CKRR0x2DaIgAALh3uQQ
+        (envelope-from <jdelvare@suse.de>); Mon, 14 Jun 2021 15:21:56 +0000
+Date:   Mon, 14 Jun 2021 17:21:55 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: Improve status polling
+Message-ID: <20210614172155.21b33a82@endymion>
+In-Reply-To: <4147230b-e88f-52e8-1241-ad343f77628f@gmail.com>
+References: <4147230b-e88f-52e8-1241-ad343f77628f@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20210611165624.30749-1-biju.das.jz@bp.renesas.com>
- <20210611165624.30749-4-biju.das.jz@bp.renesas.com> <67e00c18b71875a0aaa7a8a02b2b0507f5d7a575.camel@pengutronix.de>
-In-Reply-To: <67e00c18b71875a0aaa7a8a02b2b0507f5d7a575.camel@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Jun 2021 15:38:45 +0200
-Message-ID: <CAMuHMdX_-93MGi9X-m8PdMgjWDp=azP0mN+M7ReyokDqEbTVBQ@mail.gmail.com>
-Subject: Re: [PATCH 3/5] i2c: riic: Add RZ/G2L support
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Khalil Blaiech <kblaiech@mellanox.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <bence98@sch.bme.hu>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Philipp,
+Hi Heiner,
 
-On Mon, Jun 14, 2021 at 3:27 PM Philipp Zabel <p.zabel@pengutronix.de> wrote:
-> On Fri, 2021-06-11 at 17:56 +0100, Biju Das wrote:
-> > RZ/G2L i2c controller is compatible with RZ/A i2c controller.
-> > By default IP is in reset state, so need to perform release
-> > reset before accessing any register.
-> >
-> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  drivers/i2c/busses/Kconfig    |  1 +
-> >  drivers/i2c/busses/i2c-riic.c | 21 +++++++++++++++++++++
-> >  2 files changed, 22 insertions(+)
-> >
-> > diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> > index 281a65d9b44b..5da09288b461 100644
-> > --- a/drivers/i2c/busses/Kconfig
-> > +++ b/drivers/i2c/busses/Kconfig
-> > @@ -941,6 +941,7 @@ config I2C_QUP
-> >  config I2C_RIIC
-> >       tristate "Renesas RIIC adapter"
-> >       depends on ARCH_RENESAS || COMPILE_TEST
-> > +     select RESET_CONTROLLER
->
-> There's no need for this. The reset API defines inline stubs so this can
-> be compiled without RESET_CONTROLLER enabled.
+On Tue, 25 May 2021 21:59:05 +0200, Heiner Kallweit wrote:
+> Polling uses the same timeout as irq mode: 400 * 500us = 200ms = HZ / 5.
+> So let's use the adapter->timeout value also for polling. This has the
+> advantage that userspace can control the timeout value for polling as
+> well. In addition change the code to make it better readable.
+> Last but not least remove the timeout debug messages. Calls to both
+> functions are followed by a call to i801_check_post() that will print
+> an error message in case of timeout.
 
-AFAIK, the issue is that RIIC on RZ/G2L requires reset support,
-so it must be enabled when building a kernel for RZ/G2L.
-As RZ/A does not need or use it, and may run from SRAM, I'd like to
-leave it disabled when building a kernel not including RZ/G2L support.
+I think that the intent was to differentiate between regular polling
+and BYTE_DONE polling. But I agree it's not really important, as the
+caller probably already knows which type of transaction failed (simple
+or block).
 
-Gr{oetje,eeting}s,
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 36 +++++++++++++----------------------
+>  1 file changed, 13 insertions(+), 23 deletions(-)
+> (...)
 
-                        Geert
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Tested-by: Jean Delvare <jdelvare@suse.de>
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Jean Delvare
+SUSE L3 Support
