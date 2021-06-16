@@ -2,46 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4A83A924B
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 08:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B787A3A926C
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 08:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbhFPG34 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Jun 2021 02:29:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59684 "EHLO mail.kernel.org"
+        id S231949AbhFPGaK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Jun 2021 02:30:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60184 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231391AbhFPG3x (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 16 Jun 2021 02:29:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE9C5613BF;
-        Wed, 16 Jun 2021 06:27:47 +0000 (UTC)
+        id S231652AbhFPG3y (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 16 Jun 2021 02:29:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8EF0661410;
+        Wed, 16 Jun 2021 06:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623824867;
-        bh=HFXY5XjspzH1kzu2GrbFUWzI5z4ecY6jF7OZRuh585A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=i8M85VxHQbZ50V8fMJseWf0vWBO55h7qx/5DDF1AEmTSMWhUjzMvzzmjKrtF8AKcR
-         jwPUkMGj6skaSwKc3Nb/ClX/mf9rqCBl4EoOzg6hiQVc5LWnY4qtyfrSEJ7VphRRWH
-         KduL0CAw/YrDU6ESOYozK0J7Mwh6gXRMtkihQq/zF3LS+B2iz9xXROxs8p6G/3birc
-         rMWLHc4+eJCtsbE9xfUQ8QL3jC1cqZQSUtH6lpM1ZAmA6n8MNE4ItYkhgEns7gOcfF
-         tDqXX7qE2sdpEWYSQWyUHfCyD8Rd8Zrw4MW3EN7CUxyupE2Yrivwa8Z0A4F/HN3xgi
-         IJ4MvA1+etqjg==
+        s=k20201202; t=1623824868;
+        bh=s5phVl8oZV+l0jXJRR0YubysAsYGTgD50ZDKsIxUKuI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tRScV6M/50Olg4gS0FMkV/wbOSXS8Z7VqKNQ89m3V07EqUCwTm5LCQ/daKwmfktGQ
+         m/Wh8w52HlfRnzmUJm7+P7ZaGtztc1ovhiZtKuQrB81wmEcwTF4pPzZdzHCQtc9/MU
+         cLLR97HhdqfWLoWT+ZTWZzgkzMjoDH5+xWxG92jbMhtkJBjhi4NEECHupt/vuZqBNc
+         YD0/Pxc8TDO7HBGn8wzu1++sfLoX6Qkb+8rLryLDCLtZYgvu64zaVLfvAIH65ybmkm
+         j1vlRDb1oCRZAvve3v0LKbnK6HY0f1LrBdHPnOYhbhcQp9MfepGRpezcIcQ9schkhY
+         sNQbjdXKO4KGA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1ltP1d-004kIJ-Rv; Wed, 16 Jun 2021 08:27:45 +0200
+        id 1ltP1e-004kJS-Q9; Wed, 16 Jun 2021 08:27:46 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        coresight@lists.linaro.org, devicetree@vger.kernel.org,
-        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v2 00/29] docs: avoid using ReST :doc:`foo` tag
-Date:   Wed, 16 Jun 2021 08:27:15 +0200
-Message-Id: <cover.1623824363.git.mchehab+huawei@kernel.org>
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 18/29] docs: i2c: avoid using ReST :doc:`foo` markup
+Date:   Wed, 16 Jun 2021 08:27:33 +0200
+Message-Id: <569722e3f7d73d746c145ea78d2b4fbe5defee90.1623824363.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1623824363.git.mchehab+huawei@kernel.org>
+References: <cover.1623824363.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -49,133 +45,59 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-(Maintainers bcc, to avoid too many recipient troubles)
+The :doc:`foo` tag is auto-generated via automarkup.py.
+So, use the filename at the sources, instead of :doc:`foo`.
 
-As discussed at:
-	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
-
-It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
-automarkup.py extension should handle it automatically, on most cases.
-
-There are a couple of exceptions to this rule:
-
-1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
-2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
-
-On this series:
-
-Patch 1 manually adjust the references inside driver-api/pm/devices.rst,
-as there it uses :file:`foo` to refer to some Documentation/ files;
-
-Patch 2 converts a table at Documentation/dev-tools/kunit/api/index.rst
-into a list, carefully avoiding the 
-
-The remaining patches convert the other occurrences via a replace script.
-They were manually edited, in order to honour 80-columns where possible.
-
-This series based on docs-next branch. In order to avoid merge conflicts,
-I rebased it internally against yesterday's linux-next, dropping a patch
-and a hunk that would have caused conflicts there.
-
-I'll re-send the remaining patch (plus another patch) with conflicting
-changes, together with any other doc:`filename` reference that might
-still be upstream by 5.14-rc1.
-
+Acked-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
+ Documentation/i2c/instantiating-devices.rst | 2 +-
+ Documentation/i2c/old-module-parameters.rst | 3 ++-
+ Documentation/i2c/smbus-protocol.rst        | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-v2:
-   - dropped media patches (as I merged via my own tree);
-   - removed one patch that would conflict at linux-next (adm1177.rst);
-   - removed one hunk fron kunit patch that would also conflict at
-     linux-next.
-
-Mauro Carvalho Chehab (29):
-  docs: devices.rst: better reference documentation docs
-  docs: dev-tools: kunit: don't use a table for docs name
-  docs: admin-guide: pm: avoid using ReST :doc:`foo` markup
-  docs: admin-guide: hw-vuln: avoid using ReST :doc:`foo` markup
-  docs: admin-guide: sysctl: avoid using ReST :doc:`foo` markup
-  docs: block: biodoc.rst: avoid using ReST :doc:`foo` markup
-  docs: bpf: bpf_lsm.rst: avoid using ReST :doc:`foo` markup
-  docs: core-api: avoid using ReST :doc:`foo` markup
-  docs: dev-tools: testing-overview.rst: avoid using ReST :doc:`foo`
-    markup
-  docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
-  docs: devicetree: bindings: submitting-patches.rst: avoid using ReST
-    :doc:`foo` markup
-  docs: doc-guide: avoid using ReST :doc:`foo` markup
-  docs: driver-api: avoid using ReST :doc:`foo` markup
-  docs: driver-api: gpio: using-gpio.rst: avoid using ReST :doc:`foo`
-    markup
-  docs: driver-api: surface_aggregator: avoid using ReST :doc:`foo`
-    markup
-  docs: driver-api: usb: avoid using ReST :doc:`foo` markup
-  docs: firmware-guide: acpi: avoid using ReST :doc:`foo` markup
-  docs: i2c: avoid using ReST :doc:`foo` markup
-  docs: kernel-hacking: hacking.rst: avoid using ReST :doc:`foo` markup
-  docs: networking: devlink: avoid using ReST :doc:`foo` markup
-  docs: PCI: endpoint: pci-endpoint-cfs.rst: avoid using ReST :doc:`foo`
-    markup
-  docs: PCI: pci.rst: avoid using ReST :doc:`foo` markup
-  docs: process: submitting-patches.rst: avoid using ReST :doc:`foo`
-    markup
-  docs: security: landlock.rst: avoid using ReST :doc:`foo` markup
-  docs: trace: coresight: coresight.rst: avoid using ReST :doc:`foo`
-    markup
-  docs: trace: ftrace.rst: avoid using ReST :doc:`foo` markup
-  docs: userspace-api: landlock.rst: avoid using ReST :doc:`foo` markup
-  docs: virt: kvm: s390-pv-boot.rst: avoid using ReST :doc:`foo` markup
-  docs: x86: avoid using ReST :doc:`foo` markup
-
- .../PCI/endpoint/pci-endpoint-cfs.rst         |  2 +-
- Documentation/PCI/pci.rst                     |  6 +--
- .../special-register-buffer-data-sampling.rst |  3 +-
- Documentation/admin-guide/pm/intel_idle.rst   | 16 +++++---
- Documentation/admin-guide/pm/intel_pstate.rst |  9 +++--
- Documentation/admin-guide/sysctl/abi.rst      |  2 +-
- Documentation/admin-guide/sysctl/kernel.rst   | 37 ++++++++++---------
- Documentation/block/biodoc.rst                |  2 +-
- Documentation/bpf/bpf_lsm.rst                 | 13 ++++---
- .../core-api/bus-virt-phys-mapping.rst        |  2 +-
- Documentation/core-api/dma-api.rst            |  5 ++-
- Documentation/core-api/dma-isa-lpc.rst        |  2 +-
- Documentation/core-api/index.rst              |  4 +-
- Documentation/dev-tools/kunit/api/index.rst   |  8 ++--
- Documentation/dev-tools/kunit/faq.rst         |  2 +-
- Documentation/dev-tools/kunit/index.rst       | 14 +++----
- Documentation/dev-tools/kunit/start.rst       |  4 +-
- Documentation/dev-tools/kunit/tips.rst        |  5 ++-
- Documentation/dev-tools/kunit/usage.rst       |  8 ++--
- Documentation/dev-tools/testing-overview.rst  | 16 ++++----
- .../bindings/submitting-patches.rst           | 11 +++---
- Documentation/doc-guide/contributing.rst      |  8 ++--
- Documentation/driver-api/gpio/using-gpio.rst  |  4 +-
- Documentation/driver-api/ioctl.rst            |  2 +-
- Documentation/driver-api/pm/devices.rst       |  8 ++--
- .../surface_aggregator/clients/index.rst      |  3 +-
- .../surface_aggregator/internal.rst           | 15 ++++----
- .../surface_aggregator/overview.rst           |  6 ++-
- Documentation/driver-api/usb/dma.rst          |  6 +--
- .../acpi/dsd/data-node-references.rst         |  3 +-
- .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
- .../firmware-guide/acpi/enumeration.rst       |  7 ++--
- Documentation/i2c/instantiating-devices.rst   |  2 +-
- Documentation/i2c/old-module-parameters.rst   |  3 +-
- Documentation/i2c/smbus-protocol.rst          |  4 +-
- Documentation/kernel-hacking/hacking.rst      |  4 +-
- .../networking/devlink/devlink-region.rst     |  2 +-
- .../networking/devlink/devlink-trap.rst       |  4 +-
- Documentation/process/submitting-patches.rst  | 32 ++++++++--------
- Documentation/security/landlock.rst           |  3 +-
- Documentation/trace/coresight/coresight.rst   |  8 ++--
- Documentation/trace/ftrace.rst                |  2 +-
- Documentation/userspace-api/landlock.rst      | 11 +++---
- Documentation/virt/kvm/s390-pv-boot.rst       |  2 +-
- Documentation/x86/boot.rst                    |  4 +-
- Documentation/x86/mtrr.rst                    |  2 +-
- 46 files changed, 171 insertions(+), 147 deletions(-)
-
+diff --git a/Documentation/i2c/instantiating-devices.rst b/Documentation/i2c/instantiating-devices.rst
+index e558e0a77e0c..890c9360ce19 100644
+--- a/Documentation/i2c/instantiating-devices.rst
++++ b/Documentation/i2c/instantiating-devices.rst
+@@ -59,7 +59,7 @@ Declare the I2C devices via ACPI
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+ ACPI can also describe I2C devices. There is special documentation for this
+-which is currently located at :doc:`../firmware-guide/acpi/enumeration`.
++which is currently located at Documentation/firmware-guide/acpi/enumeration.rst.
+ 
+ 
+ Declare the I2C devices in board files
+diff --git a/Documentation/i2c/old-module-parameters.rst b/Documentation/i2c/old-module-parameters.rst
+index 38e55829dee8..b08b6daabce9 100644
+--- a/Documentation/i2c/old-module-parameters.rst
++++ b/Documentation/i2c/old-module-parameters.rst
+@@ -17,7 +17,8 @@ address), ``force`` (to forcibly attach the driver to a given device) and
+ With the conversion of the I2C subsystem to the standard device driver
+ binding model, it became clear that these per-module parameters were no
+ longer needed, and that a centralized implementation was possible. The new,
+-sysfs-based interface is described in :doc:`instantiating-devices`, section
++sysfs-based interface is described in
++Documentation/i2c/instantiating-devices.rst, section
+ "Method 4: Instantiate from user-space".
+ 
+ Below is a mapping from the old module parameters to the new interface.
+diff --git a/Documentation/i2c/smbus-protocol.rst b/Documentation/i2c/smbus-protocol.rst
+index 64689d19dd51..9e07e6bbe6a3 100644
+--- a/Documentation/i2c/smbus-protocol.rst
++++ b/Documentation/i2c/smbus-protocol.rst
+@@ -27,8 +27,8 @@ a different protocol operation entirely.
+ Each transaction type corresponds to a functionality flag. Before calling a
+ transaction function, a device driver should always check (just once) for
+ the corresponding functionality flag to ensure that the underlying I2C
+-adapter supports the transaction in question. See :doc:`functionality` for
+-the details.
++adapter supports the transaction in question. See
++Documentation/i2c/functionality.rst for the details.
+ 
+ 
+ Key to symbols
 -- 
 2.31.1
-
 
