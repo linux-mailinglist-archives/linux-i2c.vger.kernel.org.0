@@ -2,146 +2,180 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 831273A919F
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 08:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4A83A924B
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 08:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbhFPGIF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Jun 2021 02:08:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59250 "EHLO mail.kernel.org"
+        id S231705AbhFPG34 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Jun 2021 02:29:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59684 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229543AbhFPGIE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 16 Jun 2021 02:08:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BD9161350;
-        Wed, 16 Jun 2021 06:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623823558;
-        bh=wj+fnX135Oi/RuBZlfcRXEj82T4M+/zm2RKoeLfcdHI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gHZLhaFOGuJEdFzGD8ad6/WT9r+ZqPlWGvOwJoE3JRn+pqz1O74eBVMbWjjeG87Dj
-         TPvrvUCNWbz/7lixm1DsLz03lLNe9Um44ZNofR+Fgv+slwMtNQEfvKCMrcTThWdf6e
-         F+7I/PxIo72YidQoQbZHHngOc0S41uEQR6nyNaRA=
-Date:   Wed, 16 Jun 2021 08:05:52 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-Message-ID: <YMmUwCsdy4OaQCiU@kroah.com>
-References: <20210615191543.1043414-1-robh@kernel.org>
+        id S231391AbhFPG3x (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 16 Jun 2021 02:29:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AE9C5613BF;
+        Wed, 16 Jun 2021 06:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623824867;
+        bh=HFXY5XjspzH1kzu2GrbFUWzI5z4ecY6jF7OZRuh585A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i8M85VxHQbZ50V8fMJseWf0vWBO55h7qx/5DDF1AEmTSMWhUjzMvzzmjKrtF8AKcR
+         jwPUkMGj6skaSwKc3Nb/ClX/mf9rqCBl4EoOzg6hiQVc5LWnY4qtyfrSEJ7VphRRWH
+         KduL0CAw/YrDU6ESOYozK0J7Mwh6gXRMtkihQq/zF3LS+B2iz9xXROxs8p6G/3birc
+         rMWLHc4+eJCtsbE9xfUQ8QL3jC1cqZQSUtH6lpM1ZAmA6n8MNE4ItYkhgEns7gOcfF
+         tDqXX7qE2sdpEWYSQWyUHfCyD8Rd8Zrw4MW3EN7CUxyupE2Yrivwa8Z0A4F/HN3xgi
+         IJ4MvA1+etqjg==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1ltP1d-004kIJ-Rv; Wed, 16 Jun 2021 08:27:45 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v2 00/29] docs: avoid using ReST :doc:`foo` tag
+Date:   Wed, 16 Jun 2021 08:27:15 +0200
+Message-Id: <cover.1623824363.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 01:15:43PM -0600, Rob Herring wrote:
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
-> 
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
-> 
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Jassi Brar <jassisinghbrar@gmail.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Vivien Didelot <vivien.didelot@gmail.com>
-> Cc: Vladimir Oltean <olteanv@gmail.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+(Maintainers bcc, to avoid too many recipient troubles)
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+As discussed at:
+	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+
+It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
+automarkup.py extension should handle it automatically, on most cases.
+
+There are a couple of exceptions to this rule:
+
+1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+
+On this series:
+
+Patch 1 manually adjust the references inside driver-api/pm/devices.rst,
+as there it uses :file:`foo` to refer to some Documentation/ files;
+
+Patch 2 converts a table at Documentation/dev-tools/kunit/api/index.rst
+into a list, carefully avoiding the 
+
+The remaining patches convert the other occurrences via a replace script.
+They were manually edited, in order to honour 80-columns where possible.
+
+This series based on docs-next branch. In order to avoid merge conflicts,
+I rebased it internally against yesterday's linux-next, dropping a patch
+and a hunk that would have caused conflicts there.
+
+I'll re-send the remaining patch (plus another patch) with conflicting
+changes, together with any other doc:`filename` reference that might
+still be upstream by 5.14-rc1.
+
+---
+
+v2:
+   - dropped media patches (as I merged via my own tree);
+   - removed one patch that would conflict at linux-next (adm1177.rst);
+   - removed one hunk fron kunit patch that would also conflict at
+     linux-next.
+
+Mauro Carvalho Chehab (29):
+  docs: devices.rst: better reference documentation docs
+  docs: dev-tools: kunit: don't use a table for docs name
+  docs: admin-guide: pm: avoid using ReST :doc:`foo` markup
+  docs: admin-guide: hw-vuln: avoid using ReST :doc:`foo` markup
+  docs: admin-guide: sysctl: avoid using ReST :doc:`foo` markup
+  docs: block: biodoc.rst: avoid using ReST :doc:`foo` markup
+  docs: bpf: bpf_lsm.rst: avoid using ReST :doc:`foo` markup
+  docs: core-api: avoid using ReST :doc:`foo` markup
+  docs: dev-tools: testing-overview.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
+  docs: devicetree: bindings: submitting-patches.rst: avoid using ReST
+    :doc:`foo` markup
+  docs: doc-guide: avoid using ReST :doc:`foo` markup
+  docs: driver-api: avoid using ReST :doc:`foo` markup
+  docs: driver-api: gpio: using-gpio.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: driver-api: surface_aggregator: avoid using ReST :doc:`foo`
+    markup
+  docs: driver-api: usb: avoid using ReST :doc:`foo` markup
+  docs: firmware-guide: acpi: avoid using ReST :doc:`foo` markup
+  docs: i2c: avoid using ReST :doc:`foo` markup
+  docs: kernel-hacking: hacking.rst: avoid using ReST :doc:`foo` markup
+  docs: networking: devlink: avoid using ReST :doc:`foo` markup
+  docs: PCI: endpoint: pci-endpoint-cfs.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: PCI: pci.rst: avoid using ReST :doc:`foo` markup
+  docs: process: submitting-patches.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: security: landlock.rst: avoid using ReST :doc:`foo` markup
+  docs: trace: coresight: coresight.rst: avoid using ReST :doc:`foo`
+    markup
+  docs: trace: ftrace.rst: avoid using ReST :doc:`foo` markup
+  docs: userspace-api: landlock.rst: avoid using ReST :doc:`foo` markup
+  docs: virt: kvm: s390-pv-boot.rst: avoid using ReST :doc:`foo` markup
+  docs: x86: avoid using ReST :doc:`foo` markup
+
+ .../PCI/endpoint/pci-endpoint-cfs.rst         |  2 +-
+ Documentation/PCI/pci.rst                     |  6 +--
+ .../special-register-buffer-data-sampling.rst |  3 +-
+ Documentation/admin-guide/pm/intel_idle.rst   | 16 +++++---
+ Documentation/admin-guide/pm/intel_pstate.rst |  9 +++--
+ Documentation/admin-guide/sysctl/abi.rst      |  2 +-
+ Documentation/admin-guide/sysctl/kernel.rst   | 37 ++++++++++---------
+ Documentation/block/biodoc.rst                |  2 +-
+ Documentation/bpf/bpf_lsm.rst                 | 13 ++++---
+ .../core-api/bus-virt-phys-mapping.rst        |  2 +-
+ Documentation/core-api/dma-api.rst            |  5 ++-
+ Documentation/core-api/dma-isa-lpc.rst        |  2 +-
+ Documentation/core-api/index.rst              |  4 +-
+ Documentation/dev-tools/kunit/api/index.rst   |  8 ++--
+ Documentation/dev-tools/kunit/faq.rst         |  2 +-
+ Documentation/dev-tools/kunit/index.rst       | 14 +++----
+ Documentation/dev-tools/kunit/start.rst       |  4 +-
+ Documentation/dev-tools/kunit/tips.rst        |  5 ++-
+ Documentation/dev-tools/kunit/usage.rst       |  8 ++--
+ Documentation/dev-tools/testing-overview.rst  | 16 ++++----
+ .../bindings/submitting-patches.rst           | 11 +++---
+ Documentation/doc-guide/contributing.rst      |  8 ++--
+ Documentation/driver-api/gpio/using-gpio.rst  |  4 +-
+ Documentation/driver-api/ioctl.rst            |  2 +-
+ Documentation/driver-api/pm/devices.rst       |  8 ++--
+ .../surface_aggregator/clients/index.rst      |  3 +-
+ .../surface_aggregator/internal.rst           | 15 ++++----
+ .../surface_aggregator/overview.rst           |  6 ++-
+ Documentation/driver-api/usb/dma.rst          |  6 +--
+ .../acpi/dsd/data-node-references.rst         |  3 +-
+ .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
+ .../firmware-guide/acpi/enumeration.rst       |  7 ++--
+ Documentation/i2c/instantiating-devices.rst   |  2 +-
+ Documentation/i2c/old-module-parameters.rst   |  3 +-
+ Documentation/i2c/smbus-protocol.rst          |  4 +-
+ Documentation/kernel-hacking/hacking.rst      |  4 +-
+ .../networking/devlink/devlink-region.rst     |  2 +-
+ .../networking/devlink/devlink-trap.rst       |  4 +-
+ Documentation/process/submitting-patches.rst  | 32 ++++++++--------
+ Documentation/security/landlock.rst           |  3 +-
+ Documentation/trace/coresight/coresight.rst   |  8 ++--
+ Documentation/trace/ftrace.rst                |  2 +-
+ Documentation/userspace-api/landlock.rst      | 11 +++---
+ Documentation/virt/kvm/s390-pv-boot.rst       |  2 +-
+ Documentation/x86/boot.rst                    |  4 +-
+ Documentation/x86/mtrr.rst                    |  2 +-
+ 46 files changed, 171 insertions(+), 147 deletions(-)
+
+-- 
+2.31.1
+
+
