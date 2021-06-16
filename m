@@ -2,91 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C34003A9911
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 13:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52B53A995A
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 13:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbhFPLZ5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Jun 2021 07:25:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34764 "EHLO mail.kernel.org"
+        id S230262AbhFPLhc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Jun 2021 07:37:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36978 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229502AbhFPLZ4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 16 Jun 2021 07:25:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 854F3610A3;
-        Wed, 16 Jun 2021 11:23:49 +0000 (UTC)
+        id S229503AbhFPLhb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 16 Jun 2021 07:37:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 558336128B;
+        Wed, 16 Jun 2021 11:35:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623842630;
-        bh=g6CqKpNssfWZS4xgbu0WGWsz163g70EJdFAHWCTqK4k=;
+        s=k20201202; t=1623843325;
+        bh=PzV2MEWSbQ8RK/gPkQQ7OF/Cwl0iVSmSTAcJaSf9HHM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eYOCzbD/nX7TWuCbm9XrKjA3/oTWm6M6tGglF53tP+LfRTkhTPg1lEcDPvvAN/5kv
-         TpvEmqiPZ7ocHODbT9grKxc7NCB9VgrVl5YOqLOQs+v6Kmqa7P27AT2DsuVumcXYkn
-         eJYr041l67RPIFdp43ga8cCd2GQztUYPutlltYe5nYtMJCzctQKO4NL2j7qqOOCFRj
-         QdLcPChjteGN9a8JLCTkIlykZ+sdRwpOO4/ddsFo3rRz1Dpf4rPGW9k2oiGGRGX0We
-         SLcaxoqprWifV2sk+hu7OHqudgTBgIM3MyHKAAHwlixdjjdUdOXboI5HAplwQ0Iijd
-         cu+AgqnqLHKjQ==
-Date:   Wed, 16 Jun 2021 12:23:30 +0100
+        b=hcVyna82yqf0QpgsHmlXZCfcqXyqANV2sngCLxXyovF5ec4EpbSaRSBeAZMu3edfq
+         fbp7+WZUexMcF0Dduh4K5dTyGyQln3zx7IF92hUn/hntdLwpHGTN6AvPmSUPeVQUl9
+         Yyhni9Oob8e+ObQ4tGjUd04d+SzJOijbTv/tqL4pJoqk62pQl1RblM7MQqaO/kE78t
+         hSFvjUnso4csJ7qamyHLPszyUu5EykkHjrBHFVQljnc7H1ocRemOaNUmkH78yUZJG8
+         g5mf5Lr/I8ordIfwBAN+CJGkBO/PTXA5NM8Y2E/y1vVCqF/4Ws/syEypQgv0hixOBq
+         5WP7Gv+nDM7Mw==
+Date:   Wed, 16 Jun 2021 12:35:05 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-Message-ID: <20210616112330.GA6418@sirena.org.uk>
-References: <20210615191543.1043414-1-robh@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] spi: spi-geni-qcom: Add support for GPI dma
+Message-ID: <20210616113505.GB6418@sirena.org.uk>
+References: <20210111151651.1616813-1-vkoul@kernel.org>
+ <20210111151651.1616813-5-vkoul@kernel.org>
+ <20210111163504.GD4728@sirena.org.uk>
+ <YMm7ZWXnJyb8QT1u@vkoul-mobl>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="45Z9DzgjV8m4Oswq"
+        protocol="application/pgp-signature"; boundary="uZ3hkaAS1mZxFaxD"
 Content-Disposition: inline
-In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
+In-Reply-To: <YMm7ZWXnJyb8QT1u@vkoul-mobl>
 X-Cookie: Revenge is a form of nostalgia.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -94,31 +53,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---45Z9DzgjV8m4Oswq
+--uZ3hkaAS1mZxFaxD
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 15, 2021 at 01:15:43PM -0600, Rob Herring wrote:
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
+On Wed, Jun 16, 2021 at 02:20:45PM +0530, Vinod Koul wrote:
 
-Acked-by: Mark Brown <broonie@kernel.org>
+> Looking at the code, that is ideal case. Only issue I can see is that
+> core DMA mapping device being used is incorrect. The core would use
+> ctlr->dev.parent which is the spi0 device here.
 
---45Z9DzgjV8m4Oswq
+Why would the parent of the controller be a SPI device?
+
+> But in this case, that wont work. We have a parent qup device which is
+> the parent for both spi and dma device and needs to be used for
+> dma-mapping!=20
+
+> If we allow drivers to set dma mapping device and use that, then I can
+> reuse the core. Let me know if that is agreeable to you and I can hack
+> this up. Maybe add a new member in spi_controller which is filled by
+> drivers in can_dma() callback?
+
+Possibly, I'd need to see the code.
+
+--uZ3hkaAS1mZxFaxD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDJ3y8ACgkQJNaLcl1U
-h9Ac0wf/WFBwvLz68FdAbuGM6JaAVtj45x3dKG5mcCVhDjM9pWq37W7dh2WVOmud
-k/ZhAI8WJni++qhNgTpWx5KNYWv7CezEiO3chs59PI3WF8rHTlWmiJDhQKQDDZNv
-JhvaSLDPwUaqSCB9Xu6ig804/2ucfzH6InVeCVKXBwTWybMqgTzdbH8JPRmwzUSV
-zC8N/oZNAxV9xFHjybuA2tx/GepXnBC89tySI6RfgzD+TpxrKVILAKfDi6Q9omrc
-bfiQD+8wZVng2UO520jPulyhnLJf79DYzb7AFiMfYJNib8OMH6hLfixqhZXKhcVg
-5tNkJeyp8UZUf1UiAr9jVR9VyjR45g==
-=hlC7
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDJ4ekACgkQJNaLcl1U
+h9Af1wf/XUOdANnfcSkgc6h7gVWBBmYYK7XBQctlluQOJxB4547Z5GJBEqISj560
+Fn5NhyLDpooG5dGnHVv9434n1mPZiU7SwUbi1fwwauNe9prWjvZnC4NpUbobm1XX
+KFczLzgQZ2QiiVDcry2XQz5+GsmHWDPlcBvN9B2EcM37BUXooUTLoAJmwYbB4kHu
+LmY6Su4yZFynekXxcCuZN+8wlCGQEcX89lppEyRH62cyimARLoh4psPJuLBRNwbD
+xw+FCLQxBkNVWYZD5v3t2KWCIqewSGUS1YTAAJUCiPftepbsH91CragR2sC6AewR
+EXh4LGNP8gNAt38ftvgzwKFGIBC7TA==
+=VcFe
 -----END PGP SIGNATURE-----
 
---45Z9DzgjV8m4Oswq--
+--uZ3hkaAS1mZxFaxD--
