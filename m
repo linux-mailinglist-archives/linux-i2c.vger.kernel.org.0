@@ -2,102 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B787A3A926C
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 08:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA5F3A954C
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 10:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbhFPGaK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Jun 2021 02:30:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60184 "EHLO mail.kernel.org"
+        id S232038AbhFPIwz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Jun 2021 04:52:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44154 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231652AbhFPG3y (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 16 Jun 2021 02:29:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8EF0661410;
-        Wed, 16 Jun 2021 06:27:48 +0000 (UTC)
+        id S231318AbhFPIwz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 16 Jun 2021 04:52:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 90DE86115B;
+        Wed, 16 Jun 2021 08:50:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623824868;
-        bh=s5phVl8oZV+l0jXJRR0YubysAsYGTgD50ZDKsIxUKuI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tRScV6M/50Olg4gS0FMkV/wbOSXS8Z7VqKNQ89m3V07EqUCwTm5LCQ/daKwmfktGQ
-         m/Wh8w52HlfRnzmUJm7+P7ZaGtztc1ovhiZtKuQrB81wmEcwTF4pPzZdzHCQtc9/MU
-         cLLR97HhdqfWLoWT+ZTWZzgkzMjoDH5+xWxG92jbMhtkJBjhi4NEECHupt/vuZqBNc
-         YD0/Pxc8TDO7HBGn8wzu1++sfLoX6Qkb+8rLryLDCLtZYgvu64zaVLfvAIH65ybmkm
-         j1vlRDb1oCRZAvve3v0LKbnK6HY0f1LrBdHPnOYhbhcQp9MfepGRpezcIcQ9schkhY
-         sNQbjdXKO4KGA==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1ltP1e-004kJS-Q9; Wed, 16 Jun 2021 08:27:46 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        s=k20201202; t=1623833449;
+        bh=0RiZqdL/N3p9wsukY1cKqE3It2WhUjFIue2G+sKSwRs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o5D1UmSsCdG/nTX7zN1ZUAxjBIyR9Pug2ZB9dETlxGKdoU2Z87qMz18bljY/QR0FC
+         kk7+pbZby6Clz/OSqx/Yl4EdKRcX7WnneW0pSgcCYK7A7NSDpFPOtY0IckVfFlrKLQ
+         wqsd+YD0lg7u1WiCCb59eBau9fEzxPURFODhVymLMFTJnYEeHqcBS82IcC4Ruunr9R
+         nJcp0nNynW98it74rzdjKnAxmZqn8Hc3cPkBBCq8RvdRPC6tBRRy5IkN7cDAhNJcA0
+         x+4N6zN7rnRr/CVG2+7eQZStuZV8befS2yEg3meSa8PLY/1SAal2i/C58Dd7a0CPVZ
+         brZY5465JG81A==
+Date:   Wed, 16 Jun 2021 14:20:45 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 18/29] docs: i2c: avoid using ReST :doc:`foo` markup
-Date:   Wed, 16 Jun 2021 08:27:33 +0200
-Message-Id: <569722e3f7d73d746c145ea78d2b4fbe5defee90.1623824363.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1623824363.git.mchehab+huawei@kernel.org>
-References: <cover.1623824363.git.mchehab+huawei@kernel.org>
+Subject: Re: [PATCH 4/7] spi: spi-geni-qcom: Add support for GPI dma
+Message-ID: <YMm7ZWXnJyb8QT1u@vkoul-mobl>
+References: <20210111151651.1616813-1-vkoul@kernel.org>
+ <20210111151651.1616813-5-vkoul@kernel.org>
+ <20210111163504.GD4728@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210111163504.GD4728@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The :doc:`foo` tag is auto-generated via automarkup.py.
-So, use the filename at the sources, instead of :doc:`foo`.
+Hi Mark,
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/i2c/instantiating-devices.rst | 2 +-
- Documentation/i2c/old-module-parameters.rst | 3 ++-
- Documentation/i2c/smbus-protocol.rst        | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+On 11-01-21, 16:35, Mark Brown wrote:
+> On Mon, Jan 11, 2021 at 08:46:48PM +0530, Vinod Koul wrote:
+> 
+> > +static int get_xfer_mode(struct spi_master *spi)
+> > +{
+> > +	struct spi_geni_master *mas = spi_master_get_devdata(spi);
+> > +	struct geni_se *se = &mas->se;
+> > +	int mode = GENI_SE_FIFO;
+> 
+> Why not use the core DMA mapping support?
 
-diff --git a/Documentation/i2c/instantiating-devices.rst b/Documentation/i2c/instantiating-devices.rst
-index e558e0a77e0c..890c9360ce19 100644
---- a/Documentation/i2c/instantiating-devices.rst
-+++ b/Documentation/i2c/instantiating-devices.rst
-@@ -59,7 +59,7 @@ Declare the I2C devices via ACPI
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
- ACPI can also describe I2C devices. There is special documentation for this
--which is currently located at :doc:`../firmware-guide/acpi/enumeration`.
-+which is currently located at Documentation/firmware-guide/acpi/enumeration.rst.
- 
- 
- Declare the I2C devices in board files
-diff --git a/Documentation/i2c/old-module-parameters.rst b/Documentation/i2c/old-module-parameters.rst
-index 38e55829dee8..b08b6daabce9 100644
---- a/Documentation/i2c/old-module-parameters.rst
-+++ b/Documentation/i2c/old-module-parameters.rst
-@@ -17,7 +17,8 @@ address), ``force`` (to forcibly attach the driver to a given device) and
- With the conversion of the I2C subsystem to the standard device driver
- binding model, it became clear that these per-module parameters were no
- longer needed, and that a centralized implementation was possible. The new,
--sysfs-based interface is described in :doc:`instantiating-devices`, section
-+sysfs-based interface is described in
-+Documentation/i2c/instantiating-devices.rst, section
- "Method 4: Instantiate from user-space".
- 
- Below is a mapping from the old module parameters to the new interface.
-diff --git a/Documentation/i2c/smbus-protocol.rst b/Documentation/i2c/smbus-protocol.rst
-index 64689d19dd51..9e07e6bbe6a3 100644
---- a/Documentation/i2c/smbus-protocol.rst
-+++ b/Documentation/i2c/smbus-protocol.rst
-@@ -27,8 +27,8 @@ a different protocol operation entirely.
- Each transaction type corresponds to a functionality flag. Before calling a
- transaction function, a device driver should always check (just once) for
- the corresponding functionality flag to ensure that the underlying I2C
--adapter supports the transaction in question. See :doc:`functionality` for
--the details.
-+adapter supports the transaction in question. See
-+Documentation/i2c/functionality.rst for the details.
- 
- 
- Key to symbols
+Sorry I seemed to have missed replying to this one.
+
+Looking at the code, that is ideal case. Only issue I can see is that
+core DMA mapping device being used is incorrect. The core would use
+ctlr->dev.parent which is the spi0 device here.
+
+But in this case, that wont work. We have a parent qup device which is
+the parent for both spi and dma device and needs to be used for
+dma-mapping! 
+
+If we allow drivers to set dma mapping device and use that, then I can
+reuse the core. Let me know if that is agreeable to you and I can hack
+this up. Maybe add a new member in spi_controller which is filled by
+drivers in can_dma() callback?
+
+Thanks
 -- 
-2.31.1
-
+~Vinod
