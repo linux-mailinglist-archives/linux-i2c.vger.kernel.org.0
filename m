@@ -2,191 +2,146 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E44F83A8F2E
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 05:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831273A919F
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Jun 2021 08:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbhFPDNT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Jun 2021 23:13:19 -0400
-Received: from mail-bn8nam12on2103.outbound.protection.outlook.com ([40.107.237.103]:16864
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230299AbhFPDNS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 15 Jun 2021 23:13:18 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GmnLmGOVeFmSHgC2T66BrIqQXQwmo4i2+nbV1tKFLhHtdUuXzHSHTEId7YoFFBEqZnwJcojb4G5ZravcjNbvlfHVNmERrsdH4DNHsx269Vox93b843mU9u8bE/11QNdlx80VuH9KnOHi0MhEalUT8TNFS16d3i9fiquN/kACqY8OjEH8aLSKxD9uyxSEo0duU5rhPrwRMCrc7CIPZzGwsufEXIENA6Vnr0Ng2wej+LN6v24826+MlJA0DtsZXcPS2Bfl45bHf/65JI2RkrE2FqtAPjj+qvz+p0VPUtQhUzbRzWu6eCb8ov9ZwW8nAw0qSokRPuN3CWn/GylEBURitA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UaAf3KD4+QzGmbP8YE4+XWgkw1HmY388wpKZqZVh/AY=;
- b=CwHPKm1vpt18fvMQVkdaGBZVHEx/EtmjY/JciZozKhqm/a+HOKKTl8AW/o6yowBjH9scz0CDzSy4u4byNuD1JS6/KuYW8aRc72vdh/dI5VgAMKuyPiRKbwXC1NvLQCskTXRcBxvUOSHNZ28sewgGT80cw360yWTBG4oYi01jLqH/rn2jYwpdiZcvxr3pQSCod8NtGkUKI1zSQaP8x1e2BimW9EhrlI7XTUNItPte2ae+puJucrAOQrJgAuj+pNC70tAXK4farW6QRSDoIDYNx0u0eCV1y0h6oQJmAILruFdeMCDsaYPXEuHvAiphDDVHF+pEgZRlEi3qILvxmGNpLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UaAf3KD4+QzGmbP8YE4+XWgkw1HmY388wpKZqZVh/AY=;
- b=br96KjgjF0ZhLQYzVaB2t/WoZBjCXrwP3Xgsdn2O4FY8j/OpjsxWkLnEeGIKcGhjZYiMjNjelPr7mmiic3o/wcXvFXiWkA2MhVZcPqjG7W1n6aqVeW2Gbrjmd5y1Dmbb/IuLAFxoNqVcdEcAZr9KClS9NKryBOgC52T+2/2rBeE=
-Authentication-Results: google.com; dkim=none (message not signed)
- header.d=none;google.com; dmarc=none action=none
- header.from=os.amperecomputing.com;
-Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- CO2PR01MB2200.prod.exchangelabs.com (2603:10b6:102:7::26) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4219.24; Wed, 16 Jun 2021 03:11:11 +0000
-Received: from MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::452a:24fb:12cb:9d7e]) by MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::452a:24fb:12cb:9d7e%5]) with mapi id 15.20.4219.026; Wed, 16 Jun 2021
- 03:11:11 +0000
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: [PATCH v2 2/2] i2c: aspeed: Acknowledge Tx done with and without ACK irq late
-Date:   Wed, 16 Jun 2021 10:10:46 +0700
-Message-Id: <20210616031046.2317-3-quan@os.amperecomputing.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210616031046.2317-1-quan@os.amperecomputing.com>
-References: <20210616031046.2317-1-quan@os.amperecomputing.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [118.69.219.201]
-X-ClientProxiedBy: HKAPR03CA0001.apcprd03.prod.outlook.com
- (2603:1096:203:c8::6) To MW2PR0102MB3482.prod.exchangelabs.com
- (2603:10b6:302:c::32)
+        id S230370AbhFPGIF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Jun 2021 02:08:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59250 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229543AbhFPGIE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 16 Jun 2021 02:08:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BD9161350;
+        Wed, 16 Jun 2021 06:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623823558;
+        bh=wj+fnX135Oi/RuBZlfcRXEj82T4M+/zm2RKoeLfcdHI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gHZLhaFOGuJEdFzGD8ad6/WT9r+ZqPlWGvOwJoE3JRn+pqz1O74eBVMbWjjeG87Dj
+         TPvrvUCNWbz/7lixm1DsLz03lLNe9Um44ZNofR+Fgv+slwMtNQEfvKCMrcTThWdf6e
+         F+7I/PxIo72YidQoQbZHHngOc0S41uEQR6nyNaRA=
+Date:   Wed, 16 Jun 2021 08:05:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+Message-ID: <YMmUwCsdy4OaQCiU@kroah.com>
+References: <20210615191543.1043414-1-robh@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from hcm-sw-17.amperecomputing.com (118.69.219.201) by HKAPR03CA0001.apcprd03.prod.outlook.com (2603:1096:203:c8::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.9 via Frontend Transport; Wed, 16 Jun 2021 03:11:07 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6b9b62b8-f427-4ff0-db3a-08d930746447
-X-MS-TrafficTypeDiagnostic: CO2PR01MB2200:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CO2PR01MB2200E8C7A6359A09EFED6045F20F9@CO2PR01MB2200.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PqwNLb1VQHWBGzZJz9OfKgF5Ew0LNYdzRa3LSMQXUeoVmeFOfx+NAPh0CgVyj08s6/NnfBOxVRHf949jzhGyEC1PxYiHGEB6t4oi68oFcZ3F5cJzhRs81yFleZrZ1eB3cpaZqF4svAWcmrOAN4cIX4jEcookWjCoFUy2JpqZjbWAmqw4WBdABaJSbqawVzgGYLkZQL77/2DrzlWYyWhZvTc8r/O2BEofA3iC793X0tTY6ddr3VhDY2P4uqcEFK3nDxmVGfDyxXFdyZWFg3CZ8SOiA4rY0a2Zcd92y9K7GydM5vq10c37mmwGAO2e/ErHDkKJxKA2ajj/qN8+zkk1TaQa+4qKzcbfC+oW/mvZDWS33nndhYCMEvlCcGGUaMOkXF7R9lvE4HLXKB6DPoR9GaVLisuNbn4mbWjRpKwkIw95XgKoD63P3vabx80WzD7G6/LrwyMIk4QecWNtWig3pG8DcTFcOIUbOpirdyfH7cCwDjgk7BugyYxvxu5GBIHtrCuf2dVGkKHHGM1jO0NaWwVKr+8hE1Wukj0w+aP1CLdFB2PN0+SyLGeagYNz0hXggWv1g/6MUZmZtMEzKmWaoXhLx8HKvn1cxMFd9YbfaFNjHjXsctkHF/6XdSe+GUORfHtuLZdDL+MSM3ceStXojvxtERjzcMfu3yy27y+g7cND+KmmqDsJ1sQCTXAsUjoHyeWVnKDYUHN1OKvUSFND7nqPrGTfTEz/eW6YzLxl5XVKsffQm57OIpqnOn/87xw3J3aACUsxvXy3leGK78YvwiGjIkNdN/Jg5F/oSEN7Nzw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(39840400004)(396003)(366004)(346002)(376002)(136003)(66946007)(956004)(1076003)(186003)(16526019)(921005)(2616005)(38100700002)(38350700002)(6512007)(5660300002)(7416002)(83380400001)(8676002)(2906002)(6506007)(107886003)(4326008)(110136005)(54906003)(26005)(6666004)(6486002)(478600001)(52116002)(966005)(8936002)(86362001)(316002)(66476007)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PZtlynXgUlcbgq+bxkQECUP0m4/3l6s0ukGkkFzTug9NdKMlu5Ed81+wUa0i?=
- =?us-ascii?Q?GEuFMWOyu134xa/ghSL+qkDVvOOjXPCSAVL7by7Md3Y+AE1BK5jAd1B7EkfK?=
- =?us-ascii?Q?s0Id5xK1z+MYui1gzef2cEjB6llmdHArD8qrsyJoUxkWqZdSu7RNH0FZNei+?=
- =?us-ascii?Q?rfBTuTNB+ZdWsWiB21VB3IGOUGj01Hm/oQa5GeeSVJiVEpFippGyygHSMphV?=
- =?us-ascii?Q?cm9qEsQEVZFR7nMe/IZEW7PlysAhuwtKQ1prulROiZkuFFkfxJP4spf9S2hP?=
- =?us-ascii?Q?9NJfGFn/byalE7l0VOJIeCsBQ5ko7PZlU/gHweuyPxGvurN6O7YMXxdml6y6?=
- =?us-ascii?Q?2k3rA8325FTnWrVByB1AH3U/6jeNpne1oYUEwaPiAmqSPqg+BrZrbqcTMt5y?=
- =?us-ascii?Q?/RqeULTyv4JTl/L7Y+Zd/rNKFOuHbAyJCPDXuy2IdtA2Xv93K2KFbdLhJhIC?=
- =?us-ascii?Q?eJeoiE/gUoxl1N0mAzwd6rJJqUDI073dV5dnRm8XUiWBkn6tjXOzanpyDMBD?=
- =?us-ascii?Q?p4125BCqmDTxaSrOhMHC3OT7cAtUw9C+riDIszFkdy3Ecm5DLrgrz9YHr4zq?=
- =?us-ascii?Q?en570uHwuK15VXTKFc40zknruw9S72wJ4OzEwh8PIfrc7RvSgjb/20loTS/6?=
- =?us-ascii?Q?udAI3wkC7QVaZfLJzF5GVr/1NEIKBe/spOdACRnQtlvCZAk8cf7e0DoI3APH?=
- =?us-ascii?Q?vaPQmOsO3f52YGUyqkcd0HMKqGama5SF67hnqb3Gi3xSNLdEYl0pWmuoPBjO?=
- =?us-ascii?Q?Vb5xFMsX7F2LEavtjSCT+GEXDL/8vHbVhTTaQggKPiNvrV3j7g8y3zVZ5Cp1?=
- =?us-ascii?Q?yHzjsj+6vFdieYnJSjWbkMRAsesdAhi7pZ4HyTifa1idrB+BgSkdRl1N3/mi?=
- =?us-ascii?Q?D4qceokqCyZZ3Cn19eWKEK0iNAvMwDqABRhmKp05ysHlm2IdkZNVXn0Hc/xA?=
- =?us-ascii?Q?aI2GAsBX7PZiM9WMWjs7RtG52sjvAxnuSV2chYckzweh2pz2DleOmXbASDtF?=
- =?us-ascii?Q?tf0v26vHATc+hS9rkxnkGUbHd9OEUwKeNOkknMhyPg/WTbaccxjOLAF+/IZk?=
- =?us-ascii?Q?oYUrYiHeI2Fi0213Y2OPQL1cb1abDADlkbxs7hFq+aEOCBBGpNmtynokfx12?=
- =?us-ascii?Q?XzwQrXTGWpW5BBZN6OwQJ0yK1YUc3I4Tze4L8ZNW8fAQyyGSSlCpV1UidjxA?=
- =?us-ascii?Q?SZXRvXglOEbGRCYckVqXypAU+JC8f/GbjVkt0aA3HIs0WBDmkPfl6uHIbNbN?=
- =?us-ascii?Q?jTS5E8HUlxcJm0Xloy8p3j9XLkZ/ll9qDtahbSJ90eWE+9SsoYVO7bdlQ3p2?=
- =?us-ascii?Q?eqFzVyb/r8CF4o8Wa6gc+xzq?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6b9b62b8-f427-4ff0-db3a-08d930746447
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2021 03:11:11.2192
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W9q9KKdJTR42CsC0jJZgDNVpXm7jWoLbRxsrcS6bB3cOCFCBt9bgPJmVcbAvNPfFNckrqgqZYE4FWkmWqH1oeiYlMUTu/vhssoLA5f/Unno=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO2PR01MB2200
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Commit 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early in
-interrupt handler") acknowledges most interrupts early before the slave
-irq handler is executed, except for the "Receive Done Interrupt status"
-which is acknowledged late in the interrupt.
-However, it is observed that the early acknowledgment of "Transmit Done
-Interrupt Status" (with ACK or NACK) often causes the interrupt to be
-raised in READ REQUEST state, resulting in "Unexpected ACK on read
-request." complaint messages.
+On Tue, Jun 15, 2021 at 01:15:43PM -0600, Rob Herring wrote:
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooling
+> will fixup the final schema adding any unspecified minItems/maxItems.
+> 
+> This condition is partially checked with the meta-schema already, but
+> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> An improved meta-schema is pending.
+> 
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Jassi Brar <jassisinghbrar@gmail.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Vivien Didelot <vivien.didelot@gmail.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Assuming that the "Transmit Done" interrupt should only be acknowledged
-once it is truly processed, this commit fixes this issue by acknowledging
-this interrupt for both ACK and NACK cases late in the interrupt handler
-also.
-
-Fixes: 2be6b47211e1 (i2c: aspeed: Acknowledge most interrupts early in interrupt handler)
-Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
----
-v2:
-  + Split to separate series [Joel]
-  + Added the Fixes line [Joel]
-  + Fixed multiline comment [Joel]
-  + Refactor irq clearing code [Joel, Guenter]
-  + Revised commit message [Joel]
-  + Revised commit message [Quan]
-  + About a note to remind why the readl() should immediately follow the
-  writel() to fix the race condition when clearing irq status from
-  commit c926c87b8e36 ("i2c: aspeed: Avoid i2c interrupt status clear race
-  condition"), I think it looks straight forward in this patch and decided
-  not to add that note. [Joel]
-
-v1:
-  + First introduced in https://lkml.org/lkml/2021/5/19/205
-
- drivers/i2c/busses/i2c-aspeed.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 3fb37c3f23d4..0f82b46866a8 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -606,8 +606,9 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
- 
- 	spin_lock(&bus->lock);
- 	irq_received = readl(bus->base + ASPEED_I2C_INTR_STS_REG);
--	/* Ack all interrupts except for Rx done */
--	writel(irq_received & ~ASPEED_I2CD_INTR_RX_DONE,
-+	/* Ack all interrupts except for Rx done and Tx done with/without ACK */
-+	writel(irq_received &
-+	       ~(ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_TX_ACK | ASPEED_I2CD_INTR_TX_NAK),
- 	       bus->base + ASPEED_I2C_INTR_STS_REG);
- 	readl(bus->base + ASPEED_I2C_INTR_STS_REG);
- 	irq_received &= ASPEED_I2CD_INTR_RECV_MASK;
-@@ -652,12 +653,12 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
- 			"irq handled != irq. expected 0x%08x, but was 0x%08x\n",
- 			irq_received, irq_handled);
- 
--	/* Ack Rx done */
--	if (irq_received & ASPEED_I2CD_INTR_RX_DONE) {
--		writel(ASPEED_I2CD_INTR_RX_DONE,
--		       bus->base + ASPEED_I2C_INTR_STS_REG);
--		readl(bus->base + ASPEED_I2C_INTR_STS_REG);
--	}
-+	/* Ack Rx done and Tx done with/without ACK */
-+	writel(irq_received &
-+	       (ASPEED_I2CD_INTR_RX_DONE | ASPEED_I2CD_INTR_TX_ACK | ASPEED_I2CD_INTR_TX_NAK),
-+	       bus->base + ASPEED_I2C_INTR_STS_REG);
-+	readl(bus->base + ASPEED_I2C_INTR_STS_REG);
-+
- 	spin_unlock(&bus->lock);
- 	return irq_remaining ? IRQ_NONE : IRQ_HANDLED;
- }
--- 
-2.28.0
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
