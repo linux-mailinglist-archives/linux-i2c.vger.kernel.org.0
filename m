@@ -2,96 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66813AB17C
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Jun 2021 12:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B713AB28D
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Jun 2021 13:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbhFQKjT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Jun 2021 06:39:19 -0400
-Received: from mga14.intel.com ([192.55.52.115]:47103 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229868AbhFQKjS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 17 Jun 2021 06:39:18 -0400
-IronPort-SDR: HMqzS92VmNmeOyLbr1mce4LCXsK/Z44uRQ+iCsOiMHeKiAgENrS1my1qNzX9KoV7TYJnEGF1Ka
- WD5uO9bt47RQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10017"; a="206163266"
-X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
-   d="scan'208";a="206163266"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 03:37:10 -0700
-IronPort-SDR: 2PuCF4bAZ+esssDVmmcjwCVsseGKNTfBNg7OYii1MRpg6OfOV1PUiZnSC5HZrbj40EdeeCwvl5
- rHTKc6JGGrYw==
-X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
-   d="scan'208";a="404609716"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 03:37:04 -0700
-Received: from andy by smile with local (Exim 4.94.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ltpON-003Hgz-VB; Thu, 17 Jun 2021 13:36:59 +0300
-Date:   Thu, 17 Jun 2021 13:36:59 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jamin Lin <jamin_lin@aspeedtech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Khalil Blaiech <kblaiech@mellanox.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Bence =?iso-8859-1?B?Q3Pza+Fz?= <bence98@sch.bme.hu>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        chiawei_wang@aspeedtech.com, troy_lee@aspeedtech.com,
-        steven_lee@aspeedtech.com
-Subject: Re: [PATCH 3/3] i2c:support new register set for ast2600
-Message-ID: <YMslyzUKp/7J0ncu@smile.fi.intel.com>
-References: <20210617094424.27123-1-jamin_lin@aspeedtech.com>
- <20210617094424.27123-4-jamin_lin@aspeedtech.com>
+        id S231927AbhFQLaM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 17 Jun 2021 07:30:12 -0400
+Received: from 6-200-5-45.rpnnetprovedor.com.br ([45.5.200.6]:59009 "EHLO
+        srv01.rpnnetprovedor.com.br" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229783AbhFQLaM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Jun 2021 07:30:12 -0400
+Received: from [84.38.130.143] (helo=IP-130-143.dataclub.eu)
+        by srv01.rpnnetprovedor.com.br with esmtpa (Exim 4.92.2)
+        (envelope-from <robertnellsona@citromail.hu>)
+        id 1ltkuH-0000uk-8Y
+        for linux-i2c@vger.kernel.org; Thu, 17 Jun 2021 02:49:37 -0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210617094424.27123-4-jamin_lin@aspeedtech.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: CAN YOU INVEST WITH ME?...6
+To:     linux-i2c@vger.kernel.org
+From:   "Mr.  Robert" <robertnellsona@citromail.hu>
+Date:   Thu, 17 Jun 2021 08:49:29 +0300
+Reply-To: robertnellsona@citromail.hu
+Message-Id: <E1ltkuH-0000uk-8Y@srv01.rpnnetprovedor.com.br>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 05:43:40PM +0800, Jamin Lin wrote:
-> Add i2c new driver to support new register set for AST2600.
-> AST2600 support three modes for data transfer which are
-> byte mode, buffer mode and dma mode, respectively.
-> The global driver of i2c is used to set the new register
-> mode and define the base clock frequency
-> of baseclk_1~baseclk_4.
-> 
-> Signed-off-by: Jamin Lin <jamin_lin@aspeedtech.com>
-> ---
->  drivers/i2c/busses/Kconfig              |   11 +
->  drivers/i2c/busses/Makefile             |    1 +
->  drivers/i2c/busses/ast2600-i2c-global.c |  205 +++
->  drivers/i2c/busses/ast2600-i2c-global.h |   25 +
->  drivers/i2c/busses/i2c-new-aspeed.c     | 1796 +++++++++++++++++++++++
 
-I commented _something_ (but read comments carefully, they will cover much
-more). The overall it seems you have to:
- - shrink the code base by at least ~15% (it's possible), i.e. -200 LOCs
- - rethink how you do calculations and bit operations
- - better code style
+ATTENTION; linux-i2c@vger.kernel.org,
 
--- 
-With Best Regards,
-Andy Shevchenko
+IMPORTANT INVESTMENT INFORMATION
 
+We have a good investment program going on now.
+We have $95m USD for Investment in your Country.
+We use this opportunity to invest you to join the investment program and you will never regret it.
+Please kindly invest with us and you will be receiving monthly income/return/profit every month.
+We can also give you Loan, 
 
+We have: 
+
+1. Short Term Loan, 
+
+2. Medium Term Loan 
+
+3. and Long Term Loan, 
+
+There is no need of collateral security. We will use our company to sign agreement and guarantee on your behalf and our Lawyer will sign on your behalf.
+
+Reply for more detail.
+
+Thank you Sir.
+
+Robert Nellson.
+INVESTMENT MANAGER.
