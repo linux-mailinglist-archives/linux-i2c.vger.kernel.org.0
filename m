@@ -2,322 +2,336 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 118E53AB80C
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Jun 2021 17:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699D43AB8DA
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Jun 2021 18:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbhFQQAc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Jun 2021 12:00:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35558 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231941AbhFQQAc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 17 Jun 2021 12:00:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5758361351;
-        Thu, 17 Jun 2021 15:58:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623945504;
-        bh=Q6/JU/E0btuKwbG5TetUX1vsUfsVbPrY8xkHBDYqwIc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Y26Ymu84AfR2wvDLO2NKU00KsE3y8ppLK6t25Mr+96EKQMjfAyQue3hVQAfa5cq8A
-         77mwrdQIEjuudC7Egcuw+ovgpEFNEK1EbmFhlyldkQldKq98S6R4LPW8i3HPrxb9Cd
-         rKRlLTlmFISd1+JEJmGPVw5Em8MPVJ/vActCqEV1PHsckAjDNDk4Clpd8rVnOI/Pf1
-         gHZ5Edw1o7iVo+bpsClulUKqWKtP5JpdPBBRF0M0n7VMHc71brfUNkd7guxN5TdSgs
-         kkeUZbcrQuN7j6hee4H0jLVUzwRThTJSFCL12b9vE9UPa2eqaLAHuEn22dzKFPdYI+
-         n27q+2q17Oi/g==
-Date:   Thu, 17 Jun 2021 10:58:23 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Dejin Zheng <zhengdejin5@gmail.com>, corbet@lwn.net,
-        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        rric@kernel.org, bhelgaas@google.com, wsa@kernel.org,
-        Sanket.Goswami@amd.com, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v7 1/4] PCI: Introduce pcim_alloc_irq_vectors()
-Message-ID: <20210617155823.GA3077181@bjorn-Precision-5520>
+        id S233826AbhFQQK6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Jun 2021 12:10:58 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:37854 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233682AbhFQQKB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Jun 2021 12:10:01 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 15HG62FL083373;
+        Thu, 17 Jun 2021 11:06:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1623945962;
+        bh=LVkWEpy5e6cRZkuXdEoUXgk9+WHo500mtyYaCdD+Lf0=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=jeALzHLk3n7+qQeuxED/H4L5B0pUGfd+IKm4cHUnNDcbGNi/N/vECD6HccgWs8Rdc
+         A79ZIeBKglC2uQcNptT6Rqq9rI3jaHqWmNvG1vKe80Rl9RF+rCyfhlpGUEyO1JBVae
+         q2yQKhqF9u2BVEw+7gi7jwzlSE7Jbm56DgmZH8PQ=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 15HG60jb058606
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 17 Jun 2021 11:06:01 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 17
+ Jun 2021 11:06:00 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Thu, 17 Jun 2021 11:06:00 -0500
+Received: from [10.250.36.147] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 15HG5xDj116986;
+        Thu, 17 Jun 2021 11:05:59 -0500
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+To:     Rob Herring <robh@kernel.org>, <devicetree@vger.kernel.org>
+CC:     Andrew Lunn <andrew@lunn.ch>, <alsa-devel@alsa-project.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-iio@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-ide@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>,
+        Lee Jones <lee.jones@linaro.org>, <linux-clk@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        David Airlie <airlied@linux.ie>,
+        <linux-serial@vger.kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        <linux-media@vger.kernel.org>, Ohad Ben-Cohen <ohad@wizery.com>,
+        <linux-pwm@vger.kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-watchdog@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, <netdev@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-usb@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        <linux-crypto@vger.kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <dmaengine@vger.kernel.org>, Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <jic23@kernel.org>
+References: <20210615191543.1043414-1-robh@kernel.org>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <bb8c18f6-139d-76be-87e7-0c93e03cc92c@ti.com>
+Date:   Thu, 17 Jun 2021 11:05:59 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YMtMELqsY0O7djB4@smile.fi.intel.com>
+In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 04:20:16PM +0300, Andy Shevchenko wrote:
-> On Wed, Jun 16, 2021 at 02:25:43PM -0500, Bjorn Helgaas wrote:
-> > On Fri, Jun 11, 2021 at 12:37:22PM +0300, Andy Shevchenko wrote:
-> > > On Thu, Jun 10, 2021 at 05:41:43PM -0500, Bjorn Helgaas wrote:
-> > > > On Mon, Jun 07, 2021 at 11:39:13PM +0800, Dejin Zheng wrote:
-> > > > > Introduce pcim_alloc_irq_vectors(), a device-managed version of
-> > > > > pci_alloc_irq_vectors(). Introducing this function can simplify
-> > > > > the error handling path in many drivers.
-> > > > > 
-> > > > > And use pci_free_irq_vectors() to replace some code in pcim_release(),
-> > > > > they are equivalent, and no functional change. It is more explicit
-> > > > > that pcim_alloc_irq_vectors() is a device-managed function.
-> > > 
-> > > ...
-> > > 
-> > > > > @@ -1989,10 +1989,7 @@ static void pcim_release(struct device *gendev, void *res)
-> > > > >  	struct pci_devres *this = res;
-> > > > >  	int i;
-> > > > >  
-> > > > > -	if (dev->msi_enabled)
-> > > > > -		pci_disable_msi(dev);
-> > > > > -	if (dev->msix_enabled)
-> > > > > -		pci_disable_msix(dev);
-> > > > > +	pci_free_irq_vectors(dev);
-> > > > 
-> > > > If I understand correctly, this hunk is a nice simplification, but
-> > > > actually has nothing to do with making pcim_alloc_irq_vectors().  I
-> > > > have it split to a separate patch in my local tree.  Or am I wrong
-> > > > about that?
-> > > 
-> > > It's a good simplification that had to be done when pci_free_irq_vectors()
-> > > appeared.
-> > 
-> > Sorry to be pedantic.  You say the simplification "had to be done,"
-> > but AFAICT there was no actual *requirement* for this simplification
-> > to be done since pci_free_irq_vectors() is functionally identical to
-> > the previous code.
-> > I think we should do it because it's a little
-> > simpler, but not because it *fixes* anything.
+Hi Rob,
+
+On 6/15/21 2:15 PM, Rob Herring wrote:
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooling
+> will fixup the final schema adding any unspecified minItems/maxItems.
 > 
-> It makes things more straightforward. So it definitely "fixes" something, but
-> not the code in this case, rather how we maintain this code.
+> This condition is partially checked with the meta-schema already, but
+> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> An improved meta-schema is pending.
 > 
-> > > But here is the fact that indirectly it's related to the pcim_*()
-> > > APIs, i.e. pcim_alloc_irq_vectors(), because you may noticed this is inside
-> > > pcim_release().
-> > 
-> > Yes.  For posterity, my notes about the call chain (after applying
-> > this patch):
-> > 
-> >   pci_alloc_irq_vectors
-> >     pci_alloc_irq_vectors_affinity
-> >       __pci_enable_msix_range                 # MSI-X path
-> >         __pci_enable_msix
-> >           msix_capability_init
-> >             msix_setup_entries
-> >               for (...)
-> >                 entry = alloc_msi_entry
-> >                   kzalloc(msi_desc)           <--- alloc
-> >                   kmemdup(msi_desc->affinity) <--- alloc
-> >             dev->msix_enabled = 1             # MSI-X enabled
-> >       __pci_enable_msi_range                  # MSI path
-> >         msi_capability_init
-> >           msi_setup_entry
-> >             alloc_msi_entry                   <--- alloc
-> >           dev->msi_enabled = 1                # MSI enabled
-> > 
-> >   pcim_release
-> >     pci_free_irq_vectors
-> >       pci_disable_msix                        # MSI-X
-> >         if (!dev->msix_enabled)
-> >           return
-> >         pci_msix_shutdown
-> >           dev->msix_enabled = 0               # MSI-X disabled
-> >         free_msi_irqs
-> >           list_for_each_entry_safe(..., msi_list, ...)
-> >             free_msi_entry
-> >               kfree(msi_desc->affinity)       <--- free
-> >               kfree(msi_desc)                 <--- free
-> >       pci_disable_msi                         # MSI
-> >         if (!dev->msi_enabled)
-> >           return
-> >         pci_msi_shutdown
-> >           dev->msi_enabled = 0                # MSI disabled
-> >         free_msi_irqs                         <--- free
-> > 
-> > So I *think* (correct me if I'm wrong):
-> > 
-> >   - If a driver calls pcim_enable_device(), we will call
-> >     pcim_release() when the last reference to the device is dropped.
-> > 
-> >   - pci_alloc_irq_vectors() allocates msi_desc and irq_affinity_desc
-> >     structures via msix_setup_entries() or msi_setup_entry().
-> > 
-> >   - pcim_release() will free those msi_desc and irq_affinity_desc
-> >     structures.
-> > 
-> >   - Even before this series, pcim_release() frees msi_desc and
-> >     irq_affinity_desc structures by calling pci_disable_msi() and
-> >     pci_disable_msix().
-> > 
-> >   - Calling pci_free_irq_vectors() (or pci_disable_msi() or
-> >     pci_disable_msix()) twice is unnecessary but probably harmless
-> >     because they bail out early.
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Jassi Brar <jassisinghbrar@gmail.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Vivien Didelot <vivien.didelot@gmail.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/ata/nvidia,tegra-ahci.yaml          | 1 -
+>  .../devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml  | 2 --
+>  .../devicetree/bindings/clock/qcom,gcc-apq8064.yaml         | 1 -
+>  Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml | 2 --
+>  .../devicetree/bindings/clock/qcom,gcc-sm8350.yaml          | 2 --
+>  .../devicetree/bindings/clock/sprd,sc9863a-clk.yaml         | 1 -
+>  .../devicetree/bindings/crypto/allwinner,sun8i-ce.yaml      | 2 --
+>  Documentation/devicetree/bindings/crypto/fsl-dcp.yaml       | 1 -
+>  .../display/allwinner,sun4i-a10-display-backend.yaml        | 6 ------
+>  .../bindings/display/allwinner,sun6i-a31-mipi-dsi.yaml      | 1 -
+>  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml      | 4 ----
+>  .../bindings/display/allwinner,sun8i-a83t-hdmi-phy.yaml     | 2 --
+>  .../bindings/display/allwinner,sun8i-r40-tcon-top.yaml      | 2 --
+>  .../devicetree/bindings/display/bridge/cdns,mhdp8546.yaml   | 2 --
+>  .../bindings/display/rockchip/rockchip,dw-hdmi.yaml         | 2 --
+>  Documentation/devicetree/bindings/display/st,stm32-dsi.yaml | 2 --
+>  .../devicetree/bindings/display/st,stm32-ltdc.yaml          | 1 -
+>  .../devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml | 4 ----
+>  .../devicetree/bindings/dma/renesas,rcar-dmac.yaml          | 1 -
+>  .../devicetree/bindings/edac/amazon,al-mc-edac.yaml         | 2 --
+>  Documentation/devicetree/bindings/eeprom/at24.yaml          | 1 -
+>  Documentation/devicetree/bindings/example-schema.yaml       | 2 --
+>  Documentation/devicetree/bindings/gpu/brcm,bcm-v3d.yaml     | 1 -
+>  Documentation/devicetree/bindings/gpu/vivante,gc.yaml       | 1 -
+>  Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml | 1 -
+>  .../devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml        | 2 --
+>  .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml         | 1 -
+>  .../devicetree/bindings/iio/adc/amlogic,meson-saradc.yaml   | 1 -
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 2 --
+>  .../bindings/interrupt-controller/fsl,irqsteer.yaml         | 1 -
+>  .../bindings/interrupt-controller/loongson,liointc.yaml     | 1 -
+>  Documentation/devicetree/bindings/iommu/arm,smmu-v3.yaml    | 1 -
+>  .../devicetree/bindings/iommu/renesas,ipmmu-vmsa.yaml       | 1 -
+>  .../devicetree/bindings/mailbox/st,stm32-ipcc.yaml          | 2 --
+>  .../devicetree/bindings/media/amlogic,gx-vdec.yaml          | 1 -
+>  Documentation/devicetree/bindings/media/i2c/adv7604.yaml    | 1 -
+>  .../devicetree/bindings/media/marvell,mmp2-ccic.yaml        | 1 -
+>  .../devicetree/bindings/media/qcom,sc7180-venus.yaml        | 1 -
+>  .../devicetree/bindings/media/qcom,sdm845-venus-v2.yaml     | 1 -
+>  .../devicetree/bindings/media/qcom,sm8250-venus.yaml        | 1 -
+>  Documentation/devicetree/bindings/media/renesas,drif.yaml   | 1 -
+>  .../bindings/memory-controllers/mediatek,smi-common.yaml    | 6 ++----
+>  .../bindings/memory-controllers/mediatek,smi-larb.yaml      | 1 -
+>  .../devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml    | 2 --
+>  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml    | 1 -
+>  Documentation/devicetree/bindings/mmc/mtk-sd.yaml           | 2 --
+>  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml     | 2 --
+>  Documentation/devicetree/bindings/mmc/sdhci-am654.yaml      | 1 -
+>  Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml        | 1 -
+>  .../devicetree/bindings/net/amlogic,meson-dwmac.yaml        | 2 --
+>  .../devicetree/bindings/net/brcm,bcm4908-enet.yaml          | 2 --
+>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml  | 2 --
+>  Documentation/devicetree/bindings/net/dsa/brcm,sf2.yaml     | 2 --
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml       | 2 --
+>  Documentation/devicetree/bindings/net/stm32-dwmac.yaml      | 1 -
+>  Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml    | 2 --
+>  Documentation/devicetree/bindings/pci/loongson.yaml         | 1 -
+>  .../devicetree/bindings/pci/mediatek-pcie-gen3.yaml         | 1 -
+>  .../devicetree/bindings/pci/microchip,pcie-host.yaml        | 2 --
+>  Documentation/devicetree/bindings/perf/arm,cmn.yaml         | 1 -
+>  .../devicetree/bindings/phy/brcm,bcm63xx-usbh-phy.yaml      | 1 -
+>  .../devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml       | 3 ---
+>  Documentation/devicetree/bindings/phy/brcm,sata-phy.yaml    | 1 -
+>  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml    | 2 --
+>  .../devicetree/bindings/phy/phy-cadence-sierra.yaml         | 2 --
+>  .../devicetree/bindings/phy/phy-cadence-torrent.yaml        | 4 ----
+>  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml    | 1 -
+>  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml    | 1 -
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml     | 1 -
+>  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml   | 2 --
+>  Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml | 2 --
+>  Documentation/devicetree/bindings/phy/renesas,usb3-phy.yaml | 1 -
+>  .../devicetree/bindings/pinctrl/actions,s500-pinctrl.yaml   | 1 -
+>  .../devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml    | 1 -
+>  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml    | 1 -
+>  .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml      | 2 --
+>  .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml     | 1 -
+>  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml  | 1 -
+>  Documentation/devicetree/bindings/reset/fsl,imx-src.yaml    | 1 -
+>  .../devicetree/bindings/riscv/sifive-l2-cache.yaml          | 1 -
+>  .../devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml    | 1 -
+>  Documentation/devicetree/bindings/rtc/imxdi-rtc.yaml        | 1 -
+>  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml    | 2 --
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml  | 1 -
+>  .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml          | 1 -
+>  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml      | 2 --
+>  .../bindings/sound/nvidia,tegra-audio-graph-card.yaml       | 1 -
+>  .../devicetree/bindings/sound/nvidia,tegra210-i2s.yaml      | 2 --
+>  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml   | 3 ---
+>  .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml     | 1 -
+>  .../devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml          | 2 --
+>  .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml          | 2 --
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml   | 1 -
+>  .../bindings/timer/allwinner,sun5i-a13-hstimer.yaml         | 1 -
+>  Documentation/devicetree/bindings/timer/arm,arch_timer.yaml | 1 -
+>  .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml      | 2 --
+>  .../devicetree/bindings/timer/intel,ixp4xx-timer.yaml       | 1 -
+>  .../devicetree/bindings/usb/maxim,max3420-udc.yaml          | 2 --
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml          | 4 ----
+>  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml    | 3 ---
+>  .../devicetree/bindings/watchdog/st,stm32-iwdg.yaml         | 1 -
+>  101 files changed, 2 insertions(+), 163 deletions(-)
 > 
-> > So this series actually does not fix any problems whatsoever.
-> 
-> I tend to disagree.
-> 
-> The PCI managed API is currently inconsistent and what you got is
-> what I already know and had been using until (see below) Christoph
-> told not to do [1].
-> 
-> Even do you as PCI maintainer it took some time to figure this out.
-> But current APIs make it hard for mere users who wants to use it in
-> the drivers.
-> 
-> So, main point of fix here is _API inconsistency_ [0].
-> 
-> But hey, I believe you have been Cc'ed to the initial submission of
-> the pci_*_irq_vector*() rework done by Christoph [2] (hmm... don't
-> see your name there). And he updated documentation as well [3].
-> 
-> Moreover, he insisted to use pci_free_irq_vectors() whenever we are
-> using pci_alloc_irq_vectors(). And he suggested if we want to avoid
-> this we have to make pcim_ variant of the API (see [1] again).
 
-I'd like to consider this, but it's hard without a reference :)
+[snip]
 
-I do think it would be helpful to have clear guidance about when
-drivers need to use pci_free_irq_vectors().  The existing text in
-msi-howto.rst doesn't address pcim_ at all.
+> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> index 6070456a7b67..f399743b631b 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> @@ -57,7 +57,6 @@ properties:
+>  
+>    memory-region:
+>      minItems: 2
+> -    maxItems: 8
+>      description: |
+>        phandle to the reserved memory nodes to be associated with the remoteproc
+>        device. There should be at least two reserved memory nodes defined. The
 
-> Maybe you, guys, should got some agreement and clarify it in the
-> documentation?
+Does this enforce the maxItems to be 2 only now? Or should this be dropping the
+minItems here which matches the length of items instead of maxItems?
 
-I agree that the pcim_*() API is confusing at best and it would be
-nice to improve it and document it, but I don't think this series
-really does it.
+I have originally listed the individual item list only for the mandatory items
+and rest are scalable. I provided this through "additionalItems: true" under
+this property.
 
-There are several MSI-related interfaces that use alloc_msi_entry()
-and hence magically become managed if we call pcim_enable_device():
+Also, have the exact same usage in
+Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml as well which
+is not included in this patch.
 
-  pci_alloc_irq_vectors()            # ~150 callers
-  pci_alloc_irq_vectors_affinity()   #  ~10 callers
-  pci_enable_msix_exact()            #  ~20 callers (deprecated)
-  pci_enable_msix_range()            #  ~50 callers (deprecated)
-  pci_enable_msi()                   # ~100 callers (deprecated)
+> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+> index 73400bc6e91d..75161f191ac3 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+> @@ -116,7 +116,6 @@ properties:
+>        list, in the specified order, each representing the corresponding
+>        internal RAM memory region.
+>      minItems: 1
+> -    maxItems: 3
+>      items:
+>        - const: l2ram
+>        - const: l1pram
 
-This series adds pcim_alloc_irq_vectors(), which sort of fixes *one*
-of them and makes this sequence look nice:
 
-  pcim_enable_device();
-  pcim_alloc_irq_vectors();
+[snip]
 
-but all the others are still potentially managed even though the name
-doesn't indicate it.  And it really doesn't improve the documentation.
+> diff --git a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+> index dbc62821c60b..9790617af1bc 100644
+> --- a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+> +++ b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+> @@ -100,7 +100,6 @@ patternProperties:
+>      properties:
+>        reg:
+>          minItems: 2 # On AM437x one of two PRUSS units don't contain Shared RAM.
+> -        maxItems: 3
+>          items:
+>            - description: Address and size of the Data RAM0.
+>            - description: Address and size of the Data RAM1.
+> @@ -111,7 +110,6 @@ patternProperties:
+>  
+>        reg-names:
+>          minItems: 2
+> -        maxItems: 3
+>          items:
+>            - const: dram0
+>            - const: dram1
 
-Possible steps forward:
 
-  - Add comments in include/linux/pci.h to indicate deprecation
-    (AFAICS, deprecation is currently only mentioned in
-    msi-howto.rst).
-
-  - Migrate callers away from deprecated interfaces (a lot of work).
-
-  - Remove deprecated interfaces.
-
-  - Add pcim_ variants of remaining interfaces (I think only
-    pci_alloc_*()).  Consider returning error for pci_alloc_*() usage
-    by managed drivers.
-
-  - Convert managed callers from pci_alloc_*() to pcim_alloc_*() and
-    remove usage of pci_free_irq_vectors(), pci_disable_msi(),
-    pci_disable_msix().
-
-> [0]: We have a few functions with pcim_ prefix, few without and some from the
->      latter group imply to behave _differently_ when pcim_enable_device() had
->      been called.
-> [1]: I'm not able to find the archive of the mailing, but I remember that it
->      was something like that IIRC during 8250_lpss.c development.
-> [2]: https://lore.kernel.org/linux-pci/1467621574-8277-1-git-send-email-hch@lst.de/
-> [3]: https://www.kernel.org/doc/html/latest/PCI/msi-howto.html#using-msi
-> 
-> > It *does* remove unnecessary pci_free_irq_vectors() calls from
-> > i2c-designware-pcidrv.c.
-> > 
-> > But because pci_alloc_irq_vectors() and related interfaces are
-> > *already* managed as soon as a driver calls pcim_enable_device(),
-> > we can simply remove the pci_free_irq_vectors() without doing anything
-> > else.
-> > 
-> > I don't think we *should* do anything else.
-> 
-> See above.
-> 
-> > There are many callers of
-> > pcim_enable_device() that also call pci_alloc_irq_vectors(),
-> > pci_enable_msix_range(), etc.  We don't have pcim_enable_msix_range(),
-> > pcim_enable_msi(), pcim_alloc_irq_vectors_affinity(), etc.  I don't
-> > think it's worth the churn of adding all those and changing all the
-> > callers to use pcim_*() (as in patch 4/4 here).
-> > 
-> > Browsing the output of this:
-> > 
-> >   git grep -En "pcim_enable_device|pci_alloc_irq_vectors|pci_enable_msix_|pci_free_irq_vectors|pci_disable_msi"
-> > 
-> > leads me to believe there are similar calls of pci_free_irq_vectors()
-> > that could be removed here:
-> > 
-> >   mtip_pci_probe
-> >   sp_pci_probe
-> >   dw_edma_pcie_probe
-> >   hisi_dma_probe
-> >   ioat_pci_probe
-> >   plx_dma_probe
-> >   cci_pci_probe
-> >   hibmc_pci_probe
-> >   ...
-> > 
-> > and many more, but I got tired of looking.
-> > 
-> > > > > +/**
-> > > > > + * pcim_alloc_irq_vectors - a device-managed pci_alloc_irq_vectors()
-> > > > > + * @dev:		PCI device to operate on
-> > > > > + * @min_vecs:		minimum number of vectors required (must be >= 1)
-> > > > > + * @max_vecs:		maximum (desired) number of vectors
-> > > > > + * @flags:		flags or quirks for the allocation
-> > > > > + *
-> > > > > + * Return the number of vectors allocated, (which might be smaller than
-> > > > > + * @max_vecs) if successful, or a negative error code on error. If less
-> > > > > + * than @min_vecs interrupt vectors are available for @dev the function
-> > > > > + * will fail with -ENOSPC.
-> > > > > + *
-> > > > > + * It depends on calling pcim_enable_device() to make IRQ resources
-> > > > > + * manageable.
-> > > > > + */
-> > > > > +static inline int
-> > > > > +pcim_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
-> > > > > +			unsigned int max_vecs, unsigned int flags)
-> > > > > +{
-> > > > > +	if (!pci_is_managed(dev))
-> > > > > +		return -EINVAL;
-> > > > > +	return pci_alloc_irq_vectors(dev, min_vecs, max_vecs, flags);
-> > > > 
-> > > > This is great, but can you explain how pci_alloc_irq_vectors()
-> > > > magically becomes a managed interface if we've already called
-> > > > pcim_enable_device()?
-> > > > 
-> > > > I certainly believe it does; I'd just like to put a hint in the commit
-> > > > log since my 5 minutes of grepping around didn't make it obvious to
-> > > > me.
-> > > > 
-> > > > I see that pcim_enable_device() sets pdev->is_managed, but I didn't
-> > > > find the connection between that and pci_alloc_irq_vectors().
-> > > 
-> > > One needs to read and understand the code, I agree. The explanation is spread
-> > > between pcim_release() and __pci_enable_msi/x_range().
-> > > 
-> > > The call chain is
-> > > 
-> > > msi_capability_init() / msix_capability_init()
-> > >   ...
-> > >   <- __pci_enable_msi/x_range()
-> > >     <- pci_alloc_irq_vectors_affinity()
-> > >       <- pci_alloc_irq_vectors()
-> > > 
-> > > where device msi_enabled / msix_enabled is set.
-> > > 
-> > > So, it may deserve to be explained in the commit message.
-> > > 
-> > > > > +}
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+regards
+Suman
