@@ -2,301 +2,280 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9663AB21A
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Jun 2021 13:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416713AB483
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Jun 2021 15:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbhFQLQd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Jun 2021 07:16:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45132 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231189AbhFQLQ3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Jun 2021 07:16:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623928461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UShfFP0yGU8xaRFO0Sd23m6zKnfLcJDtjSbsNFViaSE=;
-        b=WvBQyp3vt5f/bCBr0L1sHphC4TR5H2W2GEbhDZutqM7VTn+7RaJ4SWwPvhXS+HSXska3zf
-        R7lvbp/7wib2qU2zLeUdF3JPEsIzZlxxg2hIt24W7McGG3fDDfy2IEuH0t5wqF+xxZwY8w
-        bzX7jUGA94tdaD3YltI573Qs2YWN8j4=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-279-KEJ0YY8jNfyHkx7X977yiQ-1; Thu, 17 Jun 2021 07:14:17 -0400
-X-MC-Unique: KEJ0YY8jNfyHkx7X977yiQ-1
-Received: by mail-ej1-f69.google.com with SMTP id q7-20020a1709063607b02903f57f85ac45so184884ejb.15
-        for <linux-i2c@vger.kernel.org>; Thu, 17 Jun 2021 04:14:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UShfFP0yGU8xaRFO0Sd23m6zKnfLcJDtjSbsNFViaSE=;
-        b=g4thOVqZmeVyFPi2l3tzU3rHZIx0fmP1/Yh4wK5muoq93HyEl2Rtr5hITMZPrzogSD
-         sVXx+dGdnfA/Tg8OzVLfo6gkXp41MbXpctc58PDUlKDS5e6GtpnqEJgQUtmq29O8I+KB
-         wTWfPITUYoAOj9YtpE7tQq9se/dPAD3bLMmRz1zmQtzcH+qvIGObJ6g90Qi6FP+3FaYB
-         i8DqIStU1tx+FKLdI5YVLRKdbePmXEWxRaNrvjKtkUanvHLmwdHn03EXyVvP4oDfGkj4
-         QHe7PPaOoSBuWOLK2vuOxTVeZi4kWBe66lfFUBOo34w9zKLShX2YrtLg4SS88vEapyWb
-         eCpw==
-X-Gm-Message-State: AOAM531mEPE4Jfme5f8Xfi3EQd9IiDCkEW/lq+7h563p64e3e3mp2QfO
-        WP/TdDvfD7z0QLvwqICihdYpkm+EbU4XF2DF2DVKdV5hn+j5MK0vfXQQW+jtIzAtUmZpCbrat4D
-        FEFFwPaENcfxpJ28Txxkx
-X-Received: by 2002:a05:6402:518a:: with SMTP id q10mr5854955edd.198.1623928455769;
-        Thu, 17 Jun 2021 04:14:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyIW5ArmRxaDEzKHF3ObIivFWgmTxdnHyFD1/J1dazYNKKybZCVI/wY7eL/o+yNC93TJ0levw==
-X-Received: by 2002:a05:6402:518a:: with SMTP id q10mr5854931edd.198.1623928455570;
-        Thu, 17 Jun 2021 04:14:15 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id m11sm607521ejl.102.2021.06.17.04.14.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jun 2021 04:14:14 -0700 (PDT)
-Subject: Re: [PATCH v5 6/6] mfd: tps68470: Remove tps68470 MFD driver
-To:     Daniel Scally <djrscally@gmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devel@acpica.org
-Cc:     Len Brown <lenb@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20210603224007.120560-1-djrscally@gmail.com>
- <20210603224007.120560-7-djrscally@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <4083819a-eabf-fb2d-2ce8-5f6a409c69a0@redhat.com>
-Date:   Thu, 17 Jun 2021 13:14:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S231704AbhFQNWc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Jun 2021 09:22:32 -0400
+Received: from mga04.intel.com ([192.55.52.120]:14628 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230055AbhFQNWc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 17 Jun 2021 09:22:32 -0400
+IronPort-SDR: 3oEi7EdTOgqseg7T7GrDmZNzrH89bRsVstF9qYc6u+XQXo1DI3PoZsIUAwbSRlc0MMMA0e0K93
+ H1YHU7NejmdQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10017"; a="204537506"
+X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
+   d="scan'208";a="204537506"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 06:20:23 -0700
+IronPort-SDR: 8WURhsTDt+xN53Ko5Zw1xe0BJ+xNJ/Aic8zwvq6jP5cjLrsIZgB/aHgX7KEb4BePKOES2oVot4
+ It9/EjH2IP5w==
+X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
+   d="scan'208";a="404640873"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 06:20:19 -0700
+Received: from andy by smile with local (Exim 4.94.2)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ltrwO-003Lrr-GE; Thu, 17 Jun 2021 16:20:16 +0300
+Date:   Thu, 17 Jun 2021 16:20:16 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>, Christoph Hellwig <hch@lst.de>
+Cc:     Dejin Zheng <zhengdejin5@gmail.com>, corbet@lwn.net,
+        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, bhelgaas@google.com, wsa@kernel.org,
+        Sanket.Goswami@amd.com, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v7 1/4] PCI: Introduce pcim_alloc_irq_vectors()
+Message-ID: <YMtMELqsY0O7djB4@smile.fi.intel.com>
+References: <YMMu0kgEn1emRQvo@smile.fi.intel.com>
+ <20210616192543.GA2924004@bjorn-Precision-5520>
 MIME-Version: 1.0
-In-Reply-To: <20210603224007.120560-7-djrscally@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210616192543.GA2924004@bjorn-Precision-5520>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Dejin, why Christoph's email suddenly disappeared during updating?
 
-On 6/4/21 12:40 AM, Daniel Scally wrote:
-> This driver only covered one scenario in which ACPI devices with _HID
-> INT3472 are found, and its functionality has been taken over by the
-> intel-skl-int3472 module, so remove it.
+On Wed, Jun 16, 2021 at 02:25:43PM -0500, Bjorn Helgaas wrote:
+> On Fri, Jun 11, 2021 at 12:37:22PM +0300, Andy Shevchenko wrote:
+> > On Thu, Jun 10, 2021 at 05:41:43PM -0500, Bjorn Helgaas wrote:
+> > > On Mon, Jun 07, 2021 at 11:39:13PM +0800, Dejin Zheng wrote:
+> > > > Introduce pcim_alloc_irq_vectors(), a device-managed version of
+> > > > pci_alloc_irq_vectors(). Introducing this function can simplify
+> > > > the error handling path in many drivers.
+> > > > 
+> > > > And use pci_free_irq_vectors() to replace some code in pcim_release(),
+> > > > they are equivalent, and no functional change. It is more explicit
+> > > > that pcim_alloc_irq_vectors() is a device-managed function.
+> > 
+> > ...
+> > 
+> > > > @@ -1989,10 +1989,7 @@ static void pcim_release(struct device *gendev, void *res)
+> > > >  	struct pci_devres *this = res;
+> > > >  	int i;
+> > > >  
+> > > > -	if (dev->msi_enabled)
+> > > > -		pci_disable_msi(dev);
+> > > > -	if (dev->msix_enabled)
+> > > > -		pci_disable_msix(dev);
+> > > > +	pci_free_irq_vectors(dev);
+> > > 
+> > > If I understand correctly, this hunk is a nice simplification, but
+> > > actually has nothing to do with making pcim_alloc_irq_vectors().  I
+> > > have it split to a separate patch in my local tree.  Or am I wrong
+> > > about that?
+> > 
+> > It's a good simplification that had to be done when pci_free_irq_vectors()
+> > appeared.
 > 
-> Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Acked-by: Lee Jones <lee.jones@linaro.org>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> Sorry to be pedantic.  You say the simplification "had to be done,"
+> but AFAICT there was no actual *requirement* for this simplification
+> to be done since pci_free_irq_vectors() is functionally identical to
+> the previous code.
+> I think we should do it because it's a little
+> simpler, but not because it *fixes* anything.
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+It makes things more straightforward. So it definitely "fixes" something, but
+not the code in this case, rather how we maintain this code.
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-> ---
-> Changes since v4:
-> 	- None
+> > But here is the fact that indirectly it's related to the pcim_*()
+> > APIs, i.e. pcim_alloc_irq_vectors(), because you may noticed this is inside
+> > pcim_release().
 > 
->  drivers/acpi/pmic/Kconfig |  2 +-
->  drivers/gpio/Kconfig      |  2 +-
->  drivers/mfd/Kconfig       | 18 --------
->  drivers/mfd/Makefile      |  1 -
->  drivers/mfd/tps68470.c    | 97 ---------------------------------------
->  5 files changed, 2 insertions(+), 118 deletions(-)
->  delete mode 100644 drivers/mfd/tps68470.c
+> Yes.  For posterity, my notes about the call chain (after applying
+> this patch):
 > 
-> diff --git a/drivers/acpi/pmic/Kconfig b/drivers/acpi/pmic/Kconfig
-> index 56bbcb2ce61b..f84b8f6038dc 100644
-> --- a/drivers/acpi/pmic/Kconfig
-> +++ b/drivers/acpi/pmic/Kconfig
-> @@ -52,7 +52,7 @@ endif	# PMIC_OPREGION
->  
->  config TPS68470_PMIC_OPREGION
->  	bool "ACPI operation region support for TPS68470 PMIC"
-> -	depends on MFD_TPS68470
-> +	depends on INTEL_SKL_INT3472
->  	help
->  	  This config adds ACPI operation region support for TI TPS68470 PMIC.
->  	  TPS68470 device is an advanced power management unit that powers
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 1dd0ec6727fd..10228abeee56 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -1367,7 +1367,7 @@ config GPIO_TPS65912
->  
->  config GPIO_TPS68470
->  	bool "TPS68470 GPIO"
-> -	depends on MFD_TPS68470
-> +	depends on INTEL_SKL_INT3472
->  	help
->  	  Select this option to enable GPIO driver for the TPS68470
->  	  chip family.
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 5c7f2b100191..99c4e1a80ae0 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1499,24 +1499,6 @@ config MFD_TPS65217
->  	  This driver can also be built as a module.  If so, the module
->  	  will be called tps65217.
->  
-> -config MFD_TPS68470
-> -	bool "TI TPS68470 Power Management / LED chips"
-> -	depends on ACPI && PCI && I2C=y
-> -	depends on I2C_DESIGNWARE_PLATFORM=y
-> -	select MFD_CORE
-> -	select REGMAP_I2C
-> -	help
-> -	  If you say yes here you get support for the TPS68470 series of
-> -	  Power Management / LED chips.
-> -
-> -	  These include voltage regulators, LEDs and other features
-> -	  that are often used in portable devices.
-> -
-> -	  This option is a bool as it provides an ACPI operation
-> -	  region, which must be available before any of the devices
-> -	  using this are probed. This option also configures the
-> -	  designware-i2c driver to be built-in, for the same reason.
-> -
->  config MFD_TI_LP873X
->  	tristate "TI LP873X Power Management IC"
->  	depends on I2C
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 4f6d2b8a5f76..8b322d89a0c5 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -105,7 +105,6 @@ obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o
->  obj-$(CONFIG_MFD_TPS65912)	+= tps65912-core.o
->  obj-$(CONFIG_MFD_TPS65912_I2C)	+= tps65912-i2c.o
->  obj-$(CONFIG_MFD_TPS65912_SPI)  += tps65912-spi.o
-> -obj-$(CONFIG_MFD_TPS68470)	+= tps68470.o
->  obj-$(CONFIG_MFD_TPS80031)	+= tps80031.o
->  obj-$(CONFIG_MENELAUS)		+= menelaus.o
->  
-> diff --git a/drivers/mfd/tps68470.c b/drivers/mfd/tps68470.c
-> deleted file mode 100644
-> index 4a4df4ffd18c..000000000000
-> --- a/drivers/mfd/tps68470.c
-> +++ /dev/null
-> @@ -1,97 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/*
-> - * TPS68470 chip Parent driver
-> - *
-> - * Copyright (C) 2017 Intel Corporation
-> - *
-> - * Authors:
-> - *	Rajmohan Mani <rajmohan.mani@intel.com>
-> - *	Tianshu Qiu <tian.shu.qiu@intel.com>
-> - *	Jian Xu Zheng <jian.xu.zheng@intel.com>
-> - *	Yuning Pu <yuning.pu@intel.com>
-> - */
-> -
-> -#include <linux/acpi.h>
-> -#include <linux/delay.h>
-> -#include <linux/i2c.h>
-> -#include <linux/init.h>
-> -#include <linux/mfd/core.h>
-> -#include <linux/mfd/tps68470.h>
-> -#include <linux/regmap.h>
-> -
-> -static const struct mfd_cell tps68470s[] = {
-> -	{ .name = "tps68470-gpio" },
-> -	{ .name = "tps68470_pmic_opregion" },
-> -};
-> -
-> -static const struct regmap_config tps68470_regmap_config = {
-> -	.reg_bits = 8,
-> -	.val_bits = 8,
-> -	.max_register = TPS68470_REG_MAX,
-> -};
-> -
-> -static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
-> -{
-> -	unsigned int version;
-> -	int ret;
-> -
-> -	/* Force software reset */
-> -	ret = regmap_write(regmap, TPS68470_REG_RESET, TPS68470_REG_RESET_MASK);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = regmap_read(regmap, TPS68470_REG_REVID, &version);
-> -	if (ret) {
-> -		dev_err(dev, "Failed to read revision register: %d\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	dev_info(dev, "TPS68470 REVID: 0x%x\n", version);
-> -
-> -	return 0;
-> -}
-> -
-> -static int tps68470_probe(struct i2c_client *client)
-> -{
-> -	struct device *dev = &client->dev;
-> -	struct regmap *regmap;
-> -	int ret;
-> -
-> -	regmap = devm_regmap_init_i2c(client, &tps68470_regmap_config);
-> -	if (IS_ERR(regmap)) {
-> -		dev_err(dev, "devm_regmap_init_i2c Error %ld\n",
-> -			PTR_ERR(regmap));
-> -		return PTR_ERR(regmap);
-> -	}
-> -
-> -	i2c_set_clientdata(client, regmap);
-> -
-> -	ret = tps68470_chip_init(dev, regmap);
-> -	if (ret < 0) {
-> -		dev_err(dev, "TPS68470 Init Error %d\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE, tps68470s,
-> -			      ARRAY_SIZE(tps68470s), NULL, 0, NULL);
-> -	if (ret < 0) {
-> -		dev_err(dev, "devm_mfd_add_devices failed: %d\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static const struct acpi_device_id tps68470_acpi_ids[] = {
-> -	{"INT3472"},
-> -	{},
-> -};
-> -
-> -static struct i2c_driver tps68470_driver = {
-> -	.driver = {
-> -		   .name = "tps68470",
-> -		   .acpi_match_table = tps68470_acpi_ids,
-> -	},
-> -	.probe_new = tps68470_probe,
-> -};
-> -builtin_i2c_driver(tps68470_driver);
+>   pci_alloc_irq_vectors
+>     pci_alloc_irq_vectors_affinity
+>       __pci_enable_msix_range                 # MSI-X path
+>         __pci_enable_msix
+>           msix_capability_init
+>             msix_setup_entries
+>               for (...)
+>                 entry = alloc_msi_entry
+>                   kzalloc(msi_desc)           <--- alloc
+>                   kmemdup(msi_desc->affinity) <--- alloc
+>             dev->msix_enabled = 1             # MSI-X enabled
+>       __pci_enable_msi_range                  # MSI path
+>         msi_capability_init
+>           msi_setup_entry
+>             alloc_msi_entry                   <--- alloc
+>           dev->msi_enabled = 1                # MSI enabled
 > 
+>   pcim_release
+>     pci_free_irq_vectors
+>       pci_disable_msix                        # MSI-X
+>         if (!dev->msix_enabled)
+>           return
+>         pci_msix_shutdown
+>           dev->msix_enabled = 0               # MSI-X disabled
+>         free_msi_irqs
+>           list_for_each_entry_safe(..., msi_list, ...)
+>             free_msi_entry
+>               kfree(msi_desc->affinity)       <--- free
+>               kfree(msi_desc)                 <--- free
+>       pci_disable_msi                         # MSI
+>         if (!dev->msi_enabled)
+>           return
+>         pci_msi_shutdown
+>           dev->msi_enabled = 0                # MSI disabled
+>         free_msi_irqs                         <--- free
+> 
+> So I *think* (correct me if I'm wrong):
+> 
+>   - If a driver calls pcim_enable_device(), we will call
+>     pcim_release() when the last reference to the device is dropped.
+> 
+>   - pci_alloc_irq_vectors() allocates msi_desc and irq_affinity_desc
+>     structures via msix_setup_entries() or msi_setup_entry().
+> 
+>   - pcim_release() will free those msi_desc and irq_affinity_desc
+>     structures.
+> 
+>   - Even before this series, pcim_release() frees msi_desc and
+>     irq_affinity_desc structures by calling pci_disable_msi() and
+>     pci_disable_msix().
+> 
+>   - Calling pci_free_irq_vectors() (or pci_disable_msi() or
+>     pci_disable_msix()) twice is unnecessary but probably harmless
+>     because they bail out early.
+
+> So this series actually does not fix any problems whatsoever.
+
+I tend to disagree.
+
+The PCI managed API is currently inconsistent and what you got is what I
+already know and had been using until (see below) Christoph told not to do [1].
+
+Even do you as PCI maintainer it took some time to figure this out. But current
+APIs make it hard for mere users who wants to use it in the drivers.
+
+So, main point of fix here is _API inconsistency_ [0].
+
+But hey, I believe you have been Cc'ed to the initial submission of the
+pci_*_irq_vector*() rework done by Christoph [2] (hmm... don't see your
+name there). And he updated documentation as well [3].
+
+Moreover, he insisted to use pci_free_irq_vectors() whenever we are using
+pci_alloc_irq_vectors(). And he suggested if we want to avoid this we have to
+make pcim_ variant of the API (see [1] again).
+
+Maybe you, guys, should got some agreement and clarify it in the documentation?
+
+[0]: We have a few functions with pcim_ prefix, few without and some from the
+     latter group imply to behave _differently_ when pcim_enable_device() had
+     been called.
+[1]: I'm not able to find the archive of the mailing, but I remember that it
+     was something like that IIRC during 8250_lpss.c development.
+[2]: https://lore.kernel.org/linux-pci/1467621574-8277-1-git-send-email-hch@lst.de/
+[3]: https://www.kernel.org/doc/html/latest/PCI/msi-howto.html#using-msi
+
+> It *does* remove unnecessary pci_free_irq_vectors() calls from
+> i2c-designware-pcidrv.c.
+> 
+> But because pci_alloc_irq_vectors() and related interfaces are
+> *already* managed as soon as a driver calls pcim_enable_device(),
+> we can simply remove the pci_free_irq_vectors() without doing anything
+> else.
+> 
+> I don't think we *should* do anything else.
+
+See above.
+
+> There are many callers of
+> pcim_enable_device() that also call pci_alloc_irq_vectors(),
+> pci_enable_msix_range(), etc.  We don't have pcim_enable_msix_range(),
+> pcim_enable_msi(), pcim_alloc_irq_vectors_affinity(), etc.  I don't
+> think it's worth the churn of adding all those and changing all the
+> callers to use pcim_*() (as in patch 4/4 here).
+> 
+> Browsing the output of this:
+> 
+>   git grep -En "pcim_enable_device|pci_alloc_irq_vectors|pci_enable_msix_|pci_free_irq_vectors|pci_disable_msi"
+> 
+> leads me to believe there are similar calls of pci_free_irq_vectors()
+> that could be removed here:
+> 
+>   mtip_pci_probe
+>   sp_pci_probe
+>   dw_edma_pcie_probe
+>   hisi_dma_probe
+>   ioat_pci_probe
+>   plx_dma_probe
+>   cci_pci_probe
+>   hibmc_pci_probe
+>   ...
+> 
+> and many more, but I got tired of looking.
+> 
+> > > > +/**
+> > > > + * pcim_alloc_irq_vectors - a device-managed pci_alloc_irq_vectors()
+> > > > + * @dev:		PCI device to operate on
+> > > > + * @min_vecs:		minimum number of vectors required (must be >= 1)
+> > > > + * @max_vecs:		maximum (desired) number of vectors
+> > > > + * @flags:		flags or quirks for the allocation
+> > > > + *
+> > > > + * Return the number of vectors allocated, (which might be smaller than
+> > > > + * @max_vecs) if successful, or a negative error code on error. If less
+> > > > + * than @min_vecs interrupt vectors are available for @dev the function
+> > > > + * will fail with -ENOSPC.
+> > > > + *
+> > > > + * It depends on calling pcim_enable_device() to make IRQ resources
+> > > > + * manageable.
+> > > > + */
+> > > > +static inline int
+> > > > +pcim_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+> > > > +			unsigned int max_vecs, unsigned int flags)
+> > > > +{
+> > > > +	if (!pci_is_managed(dev))
+> > > > +		return -EINVAL;
+> > > > +	return pci_alloc_irq_vectors(dev, min_vecs, max_vecs, flags);
+> > > 
+> > > This is great, but can you explain how pci_alloc_irq_vectors()
+> > > magically becomes a managed interface if we've already called
+> > > pcim_enable_device()?
+> > > 
+> > > I certainly believe it does; I'd just like to put a hint in the commit
+> > > log since my 5 minutes of grepping around didn't make it obvious to
+> > > me.
+> > > 
+> > > I see that pcim_enable_device() sets pdev->is_managed, but I didn't
+> > > find the connection between that and pci_alloc_irq_vectors().
+> > 
+> > One needs to read and understand the code, I agree. The explanation is spread
+> > between pcim_release() and __pci_enable_msi/x_range().
+> > 
+> > The call chain is
+> > 
+> > msi_capability_init() / msix_capability_init()
+> >   ...
+> >   <- __pci_enable_msi/x_range()
+> >     <- pci_alloc_irq_vectors_affinity()
+> >       <- pci_alloc_irq_vectors()
+> > 
+> > where device msi_enabled / msix_enabled is set.
+> > 
+> > So, it may deserve to be explained in the commit message.
+> > 
+> > > > +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
