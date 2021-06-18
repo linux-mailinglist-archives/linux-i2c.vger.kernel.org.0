@@ -2,318 +2,585 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15ABB3ABEA7
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Jun 2021 00:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E133AC1A5
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Jun 2021 05:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbhFQWTQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Jun 2021 18:19:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232088AbhFQWTM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 17 Jun 2021 18:19:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F0DD6613B4;
-        Thu, 17 Jun 2021 22:17:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623968224;
-        bh=8lLNvAQJFBYHcwyHgNEpUKH4liF//tJL8IXh/++g2VQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=huvrHHpH2Av8vejTexiFgCIX8gaey/rp/0fjLnRAt1uHvre0POa9FMvPn6CSKF4vP
-         c1dyDYSMYo16eAP+y8b7jCtqCSK/GxM08QdxX1G394l3E8JBesdgSfezsVwCObf+XY
-         7aWLgTlzsBBO6TKNEHxE7nsZ/+OgD85yLW8ohdjh7wOtV4YkqobaNmS5taze+KHWCO
-         fK6lrJ8I7DNEWJB2YicAQ/PLhU6Y66Is1uaJonoeXzDn/9t9wK0lIH/tQqckcXFuET
-         u5Swl2hwja6dodRo6iE7Vpv+Vl8JR6ZLXVJxbLuKQjO/HsCiolAUliP6AHbf478B1T
-         ZnwiO+IrhijxQ==
-Received: by mail-ej1-f42.google.com with SMTP id g8so12572868ejx.1;
-        Thu, 17 Jun 2021 15:17:03 -0700 (PDT)
-X-Gm-Message-State: AOAM533H3WTBiNxJM6fB2cmYC7GQaa7pmWFlsaU47n2KIwiQ92m1Lq8f
-        UK4pz+k6qhTXDxkxwrDizAPdZXHPBGMyCwOnhw==
-X-Google-Smtp-Source: ABdhPJxzgkf6C07sPN7yjl1phyvHCv9pAxXmIQ1iuWsb7n6aw/LK46UKCpGaWvweVtQco41YaA9gmDx268LBgSxFl4o=
-X-Received: by 2002:a17:907:264b:: with SMTP id ar11mr7391845ejc.525.1623968222450;
- Thu, 17 Jun 2021 15:17:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210615191543.1043414-1-robh@kernel.org> <bb8c18f6-139d-76be-87e7-0c93e03cc92c@ti.com>
-In-Reply-To: <bb8c18f6-139d-76be-87e7-0c93e03cc92c@ti.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 17 Jun 2021 16:16:50 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+-ggeBMT_507HN+mM1KirM+w2ZnhZNe+Q7tRsFRJxDOw@mail.gmail.com>
-Message-ID: <CAL_Jsq+-ggeBMT_507HN+mM1KirM+w2ZnhZNe+Q7tRsFRJxDOw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-To:     Suman Anna <s-anna@ti.com>
-Cc:     devicetree@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        David Airlie <airlied@linux.ie>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        linux-can@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
+        id S231565AbhFRDz6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Jun 2021 23:55:58 -0400
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:21269 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230137AbhFRDz6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Jun 2021 23:55:58 -0400
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 15I3dJlV019961;
+        Fri, 18 Jun 2021 11:39:19 +0800 (GMT-8)
+        (envelope-from jamin_lin@aspeedtech.com)
+Received: from aspeedtech.com (192.168.100.253) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 18 Jun
+ 2021 11:53:42 +0800
+Date:   Fri, 18 Jun 2021 11:53:41 +0800
+From:   Jamin Lin <jamin_lin@aspeedtech.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        "Andrew Jeffery" <andrew@aj.id.au>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        iommu@lists.linux-foundation.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dmaengine@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Cameron <jic23@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Jean Delvare" <jdelvare@suse.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Khalil Blaiech <kblaiech@mellanox.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        ChiaWei Wang <chiawei_wang@aspeedtech.com>,
+        Troy Lee <troy_lee@aspeedtech.com>,
+        Steven Lee <steven_lee@aspeedtech.com>
+Subject: Re: [PATCH 3/3] i2c:support new register set for ast2600
+Message-ID: <20210618035340.GA31659@aspeedtech.com>
+References: <20210617094424.27123-1-jamin_lin@aspeedtech.com>
+ <20210617094424.27123-4-jamin_lin@aspeedtech.com>
+ <YMslFSOrnUc5b+zP@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <YMslFSOrnUc5b+zP@smile.fi.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [192.168.100.253]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 15I3dJlV019961
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 10:06 AM Suman Anna <s-anna@ti.com> wrote:
+The 06/17/2021 10:33, Andy Shevchenko wrote:
+> On Thu, Jun 17, 2021 at 05:43:40PM +0800, Jamin Lin wrote:
+> > Add i2c new driver to support new register set for AST2600.
+> > AST2600 support three modes for data transfer which are
+> > byte mode, buffer mode and dma mode, respectively.
+> 
+> DMA
+Will update
+> 
+> > The global driver of i2c is used to set the new register
+> > mode and define the base clock frequency
+> > of baseclk_1~baseclk_4.
+> 
+> ...
+> 
+> > +config I2C_NEW_ASPEED
+> > +	bool "Aspeed New I2C Controller"
+> 
+> Why can't be module?
 >
-> Hi Rob,
+Will update tristate
+> > +	depends on ARCH_ASPEED || MACH_ASPEED_G6
+> 
+> COMPILE_TEST?
+> 
+Will add ARCH_ASPEED || MACH_ASPEED_G6 || COMPILE_TEST
+> > +	select I2C_SMBUS
+> 
+> ...
+> 
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + *  Aspeed I2C Interrupt Controller.
+> > + *
+> > + *	Copyright (C) ASPEED Technology Inc.
+> > + *	Ryan Chen <ryan_chen@aspeedtech.com>
+> 
+> > + *
+> > + *  This program is free software; you can redistribute it and/or modify
+> > + *  it under the terms of the GNU General Public License version 2 as
+> > + *  published by the Free Software Foundation.
+> 
+> SPDX covers this.
 >
-> On 6/15/21 2:15 PM, Rob Herring wrote:
-> > If a property has an 'items' list, then a 'minItems' or 'maxItems' with=
- the
-> > same size as the list is redundant and can be dropped. Note that is DT
-> > schema specific behavior and not standard json-schema behavior. The too=
-ling
-> > will fixup the final schema adding any unspecified minItems/maxItems.
-> >
-> > This condition is partially checked with the meta-schema already, but
-> > only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> > An improved meta-schema is pending.
-> >
-> > Cc: Jens Axboe <axboe@kernel.dk>
-> > Cc: Stephen Boyd <sboyd@kernel.org>
-> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: David Airlie <airlied@linux.ie>
-> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > Cc: Vinod Koul <vkoul@kernel.org>
-> > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > Cc: Kamal Dasu <kdasu.kdev@gmail.com>
-> > Cc: Jonathan Cameron <jic23@kernel.org>
-> > Cc: Lars-Peter Clausen <lars@metafoo.de>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> > Cc: Joerg Roedel <joro@8bytes.org>
-> > Cc: Jassi Brar <jassisinghbrar@gmail.com>
-> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Wolfgang Grandegger <wg@grandegger.com>
-> > Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> > Cc: Andrew Lunn <andrew@lunn.ch>
-> > Cc: Vivien Didelot <vivien.didelot@gmail.com>
-> > Cc: Vladimir Oltean <olteanv@gmail.com>
-> > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: "Uwe Kleine-K=C3=B6nig" <u.kleine-koenig@pengutronix.de>
-> > Cc: Lee Jones <lee.jones@linaro.org>
-> > Cc: Ohad Ben-Cohen <ohad@wizery.com>
-> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > Cc: Albert Ou <aou@eecs.berkeley.edu>
-> > Cc: Alessandro Zummo <a.zummo@towertech.it>
-> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Mark Brown <broonie@kernel.org>
-> > Cc: Zhang Rui <rui.zhang@intel.com>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../devicetree/bindings/ata/nvidia,tegra-ahci.yaml          | 1 -
-> >  .../devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml  | 2 --
-> >  .../devicetree/bindings/clock/qcom,gcc-apq8064.yaml         | 1 -
-> >  Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml | 2 --
-> >  .../devicetree/bindings/clock/qcom,gcc-sm8350.yaml          | 2 --
-> >  .../devicetree/bindings/clock/sprd,sc9863a-clk.yaml         | 1 -
-> >  .../devicetree/bindings/crypto/allwinner,sun8i-ce.yaml      | 2 --
-> >  Documentation/devicetree/bindings/crypto/fsl-dcp.yaml       | 1 -
-> >  .../display/allwinner,sun4i-a10-display-backend.yaml        | 6 ------
-> >  .../bindings/display/allwinner,sun6i-a31-mipi-dsi.yaml      | 1 -
-> >  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml      | 4 ----
-> >  .../bindings/display/allwinner,sun8i-a83t-hdmi-phy.yaml     | 2 --
-> >  .../bindings/display/allwinner,sun8i-r40-tcon-top.yaml      | 2 --
-> >  .../devicetree/bindings/display/bridge/cdns,mhdp8546.yaml   | 2 --
-> >  .../bindings/display/rockchip/rockchip,dw-hdmi.yaml         | 2 --
-> >  Documentation/devicetree/bindings/display/st,stm32-dsi.yaml | 2 --
-> >  .../devicetree/bindings/display/st,stm32-ltdc.yaml          | 1 -
-> >  .../devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml | 4 ----
-> >  .../devicetree/bindings/dma/renesas,rcar-dmac.yaml          | 1 -
-> >  .../devicetree/bindings/edac/amazon,al-mc-edac.yaml         | 2 --
-> >  Documentation/devicetree/bindings/eeprom/at24.yaml          | 1 -
-> >  Documentation/devicetree/bindings/example-schema.yaml       | 2 --
-> >  Documentation/devicetree/bindings/gpu/brcm,bcm-v3d.yaml     | 1 -
-> >  Documentation/devicetree/bindings/gpu/vivante,gc.yaml       | 1 -
-> >  Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml | 1 -
-> >  .../devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml        | 2 --
-> >  .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml         | 1 -
-> >  .../devicetree/bindings/iio/adc/amlogic,meson-saradc.yaml   | 1 -
-> >  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 2 --
-> >  .../bindings/interrupt-controller/fsl,irqsteer.yaml         | 1 -
-> >  .../bindings/interrupt-controller/loongson,liointc.yaml     | 1 -
-> >  Documentation/devicetree/bindings/iommu/arm,smmu-v3.yaml    | 1 -
-> >  .../devicetree/bindings/iommu/renesas,ipmmu-vmsa.yaml       | 1 -
-> >  .../devicetree/bindings/mailbox/st,stm32-ipcc.yaml          | 2 --
-> >  .../devicetree/bindings/media/amlogic,gx-vdec.yaml          | 1 -
-> >  Documentation/devicetree/bindings/media/i2c/adv7604.yaml    | 1 -
-> >  .../devicetree/bindings/media/marvell,mmp2-ccic.yaml        | 1 -
-> >  .../devicetree/bindings/media/qcom,sc7180-venus.yaml        | 1 -
-> >  .../devicetree/bindings/media/qcom,sdm845-venus-v2.yaml     | 1 -
-> >  .../devicetree/bindings/media/qcom,sm8250-venus.yaml        | 1 -
-> >  Documentation/devicetree/bindings/media/renesas,drif.yaml   | 1 -
-> >  .../bindings/memory-controllers/mediatek,smi-common.yaml    | 6 ++----
-> >  .../bindings/memory-controllers/mediatek,smi-larb.yaml      | 1 -
-> >  .../devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml    | 2 --
-> >  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml    | 1 -
-> >  Documentation/devicetree/bindings/mmc/mtk-sd.yaml           | 2 --
-> >  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml     | 2 --
-> >  Documentation/devicetree/bindings/mmc/sdhci-am654.yaml      | 1 -
-> >  Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml        | 1 -
-> >  .../devicetree/bindings/net/amlogic,meson-dwmac.yaml        | 2 --
-> >  .../devicetree/bindings/net/brcm,bcm4908-enet.yaml          | 2 --
-> >  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml  | 2 --
-> >  Documentation/devicetree/bindings/net/dsa/brcm,sf2.yaml     | 2 --
-> >  Documentation/devicetree/bindings/net/snps,dwmac.yaml       | 2 --
-> >  Documentation/devicetree/bindings/net/stm32-dwmac.yaml      | 1 -
-> >  Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml    | 2 --
-> >  Documentation/devicetree/bindings/pci/loongson.yaml         | 1 -
-> >  .../devicetree/bindings/pci/mediatek-pcie-gen3.yaml         | 1 -
-> >  .../devicetree/bindings/pci/microchip,pcie-host.yaml        | 2 --
-> >  Documentation/devicetree/bindings/perf/arm,cmn.yaml         | 1 -
-> >  .../devicetree/bindings/phy/brcm,bcm63xx-usbh-phy.yaml      | 1 -
-> >  .../devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml       | 3 ---
-> >  Documentation/devicetree/bindings/phy/brcm,sata-phy.yaml    | 1 -
-> >  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml    | 2 --
-> >  .../devicetree/bindings/phy/phy-cadence-sierra.yaml         | 2 --
-> >  .../devicetree/bindings/phy/phy-cadence-torrent.yaml        | 4 ----
-> >  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml    | 1 -
-> >  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml    | 1 -
-> >  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml     | 1 -
-> >  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml   | 2 --
-> >  Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml | 2 --
-> >  Documentation/devicetree/bindings/phy/renesas,usb3-phy.yaml | 1 -
-> >  .../devicetree/bindings/pinctrl/actions,s500-pinctrl.yaml   | 1 -
-> >  .../devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml    | 1 -
-> >  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml    | 1 -
-> >  .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml      | 2 --
-> >  .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml     | 1 -
-> >  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml  | 1 -
-> >  Documentation/devicetree/bindings/reset/fsl,imx-src.yaml    | 1 -
-> >  .../devicetree/bindings/riscv/sifive-l2-cache.yaml          | 1 -
-> >  .../devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml    | 1 -
-> >  Documentation/devicetree/bindings/rtc/imxdi-rtc.yaml        | 1 -
-> >  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml    | 2 --
-> >  Documentation/devicetree/bindings/serial/samsung_uart.yaml  | 1 -
-> >  .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml          | 1 -
-> >  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml      | 2 --
-> >  .../bindings/sound/nvidia,tegra-audio-graph-card.yaml       | 1 -
-> >  .../devicetree/bindings/sound/nvidia,tegra210-i2s.yaml      | 2 --
-> >  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml   | 3 ---
-> >  .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml     | 1 -
-> >  .../devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml          | 2 --
-> >  .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml          | 2 --
-> >  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml   | 1 -
-> >  .../bindings/timer/allwinner,sun5i-a13-hstimer.yaml         | 1 -
-> >  Documentation/devicetree/bindings/timer/arm,arch_timer.yaml | 1 -
-> >  .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml      | 2 --
-> >  .../devicetree/bindings/timer/intel,ixp4xx-timer.yaml       | 1 -
-> >  .../devicetree/bindings/usb/maxim,max3420-udc.yaml          | 2 --
-> >  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml          | 4 ----
-> >  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml    | 3 ---
-> >  .../devicetree/bindings/watchdog/st,stm32-iwdg.yaml         | 1 -
-> >  101 files changed, 2 insertions(+), 163 deletions(-)
-> >
->
-> [snip]
->
-> > diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rpr=
-oc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
-> > index 6070456a7b67..f399743b631b 100644
-> > --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
-> > +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
-> > @@ -57,7 +57,6 @@ properties:
-> >
-> >    memory-region:
-> >      minItems: 2
-> > -    maxItems: 8
-> >      description: |
-> >        phandle to the reserved memory nodes to be associated with the r=
-emoteproc
-> >        device. There should be at least two reserved memory nodes defin=
-ed. The
->
-> Does this enforce the maxItems to be 2 only now? Or should this be droppi=
-ng the
-> minItems here which matches the length of items instead of maxItems?
->
-> I have originally listed the individual item list only for the mandatory =
-items
-> and rest are scalable. I provided this through "additionalItems: true" un=
-der
-> this property.
+Will change as following what do you think?
+// SPDX-License-Identifier: GPL-2.0-or-later
+/*
+ *  Aspeed I2C Interrupt Controller.
+ * Copyright (C) ASPEED Technology Inc.
+ * Ryan Chen <ryan_chen@aspeedtech.com>
+ */
+> 
+> ...
+> 
+> > +#include <linux/clk.h>
+> > +#include <linux/irq.h>
+> > +#include <linux/irqchip.h>
+> > +#include <linux/irqchip/chained_irq.h>
+> > +#include <linux/irqdomain.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of_platform.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/of_address.h>
+> > +#include <linux/of_irq.h>
+> > +#include <linux/io.h>
+> > +#include <linux/reset.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/clk-provider.h>
+> > +#include "ast2600-i2c-global.h"
+> 
+> > +static const struct of_device_id aspeed_i2c_ic_of_match[] = {
+> > +	{ .compatible = "aspeed,ast2600-i2c-global", .data = (void *)0},
+> 
+> > +	{ },
+> 
+> No need to have comma for terminator line.
+> 
+Will update
+> > +};
+> 
+> No MODULE_DEVICE_TABLE()?
+> 
+> ...
+> 
+> > +static const struct aspeed_i2c_base_clk i2c_base_clk[BASE_CLK_COUNT] = {
+> > +	/* name	target_freq */
+> > +	{  "base_clk0",	1000000 },	/* 1M */
+> > +	{  "base_clk1",	4000000 },	/* 4M */
+> > +	{  "base_clk2",	10000000 },	/* 10M */
+> > +	{  "base_clk3",	40000000 },	/* 40M */
+> > +};
+> 
+> Why it's not provided as the clock provider(s)?
+> 
+> ...
+According to the design of ASPEED AST2600 SOC, the I2C bus is connected to PHB bus.
+The clock driver provides PHB clock and its default frequency is 100MHZ.
+AST2600 support the bus frequency of I2C from 0.1kbps to 5Mbps if PHB clock is 50MHZ.
+To meet the different bus frequency of I2C, we use this programmer to calculate the divider to 
+change the base clock.
+For example, 
+It calculates divider to change base_clock 1 to 1M to support I2C bus frequency 100KHZ
+It calculates divider to change base_clock 2 to 4M to support I2C bus frequency 400KHZ 
 
-Good catch. This should be dropped. The meta-schema doesn't enforce
-this if "additionalItems: true" which is rarely used.
+> 
+> > +static u32 aspeed_i2c_ic_get_new_clk_divider(unsigned long	base_clk, struct device_node *node)
+> > +{
+> > +	struct clk_hw_onecell_data *onecell;
+> > +	struct clk_hw *hw;
+> > +	int err;
+> > +	u32 clk_divider = 0;
+> > +	int i, j;
+> > +	unsigned long base_freq;
+> 
+> Use reversed xmas tree order for all these blocks.
+> 
+> The rule of thumb, btw, that any comment applies to all similar places by
+> default (independently on which line it was given against).
+>
+Do you mena change as following?
+struct clk_hw_onecell_data *onecell;
+unsigned long base_freq;
+u32 clk_divider = 0;
+struct clk_hw *hw;
+int err;
+int i;
+int j;
 
-> Also, have the exact same usage in
-> Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml as well=
- which
-> is not included in this patch.
-
-Yeah, I just missed this one. I've double checked and there aren't any more=
-.
-
-Rob
+> > +	onecell = kzalloc(sizeof(*onecell) +
+> > +			  (BASE_CLK_COUNT * sizeof(struct clk_hw *)),
+> 
+> Check overflow.h for useful macros.
+> 
+Will check
+> > +			  GFP_KERNEL);
+> 
+> > +
+> 
+> Redundant blank line.
+> 
+Will update
+> > +	if (!onecell) {
+> 
+> > +		pr_err("allocate clk_hw\n");
+> 
+> Drop all these noisy useless messages.
+> 
+Will update
+> > +		return 0;
+> > +	}
+> > +
+> > +	onecell->num = BASE_CLK_COUNT;
+> > +
+> > +	pr_debug("base_clk %ld\n", base_clk);
+> 
+> This...
+> 
+Will update
+> > +	for (j = 0; j < BASE_CLK_COUNT; j++) {
+> > +		pr_debug("target clk : %ld\n", i2c_base_clk[j].base_freq);
+> 
+> ...and this and so on...
+> 
+Will update
+> > +		for (i = 0; i < 0xff; i++) {
+> > +			/*
+> > +			 * i maps to div:
+> > +			 * 0x00: div 1
+> > +			 * 0x01: div 1.5
+> > +			 * 0x02: div 2
+> > +			 * 0x03: div 2.5
+> > +			 * 0x04: div 3
+> > +			 * ...
+> > +			 * 0xFE: div 128
+> > +			 * 0xFF: div 128.5
+> > +			 */
+> > +			base_freq = base_clk * 2 / (2 + i);
+> > +			if (base_freq <= i2c_base_clk[j].base_freq)
+> > +				break;
+> > +		}
+> 
+> oAre yuo sure you can't eliminate the entire for-loop? Think about it a bit,
+> please.
+>
+What do you think if we use "lookup table" instaed of above for loop?
+> > +		pr_info("i2cg - %s : %ld\n", i2c_base_clk[j].name, base_freq);
+> > +		hw = clk_hw_register_fixed_rate(NULL, i2c_base_clk[j].name, NULL, 0, base_freq);
+> > +		if (IS_ERR(hw)) {
+> > +			pr_err("failed to register input clock: %ld\n", PTR_ERR(hw));
+> > +			break;
+> > +		}
+> > +		onecell->hws[j] = hw;
+> 
+> > +		clk_divider |= (i << (8 * j));
+> 
+> See above.
+Will think a solution
+> > +	}
+> > +
+> > +	err = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, onecell);
+> > +	if (err)
+> > +		pr_err("failed to add i2c base clk provider: %d\n", err);
+> > +
+> > +	return clk_divider;
+> > +}
+> 
+> ...
+> 
+> > +static int aspeed_i2c_global_probe(struct platform_device *pdev)
+> > +{
+> > +	struct aspeed_i2c_ic *i2c_ic;
+> > +	struct device_node *node = pdev->dev.of_node;
+> > +	const struct of_device_id *match;
+> > +	struct clk *parent_clk;
+> > +	unsigned long	parent_clk_frequency;
+> > +	u32 clk_divider;
+> > +	int ret = 0;
+> 
+> > +	match = of_match_node(aspeed_i2c_ic_of_match, node);
+> > +	if (!match)
+> > +		return -ENOMEM;
+> 
+> device_get_match_data()
+will update
+> > +	i2c_ic = kzalloc(sizeof(*i2c_ic), GFP_KERNEL);
+> 
+> devm_kzalloc()
+will update
+> > +	if (!i2c_ic)
+> > +		return -ENOMEM;
+> > +
+> > +	i2c_ic->base = of_iomap(node, 0);
+> 
+> platform_get_resource
+will update
+> > +	if (!i2c_ic->base) {
+> > +		ret = -ENOMEM;
+> > +		goto err_free_ic;
+> > +	}
+> 
+> > +	i2c_ic->bus_num = (int)match->data;
+> 
+> Why not auto?
+Will try it
+> > +	if (i2c_ic->bus_num) {
+> > +		i2c_ic->parent_irq = irq_of_parse_and_map(node, 0);
+> 
+> platform_get_irq()
+Will update
+> > +		if (i2c_ic->parent_irq < 0) {
+> > +			ret = i2c_ic->parent_irq;
+> > +			goto err_iounmap;
+> > +		}
+> > +	}
+> 
+> > +	i2c_ic->rst = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+> 
+> > +
+> 
+> Redundant.
+Will update
+> > +	if (IS_ERR(i2c_ic->rst)) {
+> 
+> > +		dev_dbg(&pdev->dev,
+> > +			"missing or invalid reset controller device tree entry");
+> 
+> Make it optional.
+Can I change to use "dev_err"?
+> > +	} else {
+> > +		/* SCU I2C Reset */
+> > +		reset_control_assert(i2c_ic->rst);
+> > +		udelay(3);
+> > +		reset_control_deassert(i2c_ic->rst);
+> > +	}
+> > +
+> > +	/* ast2600 init */
+> > +	writel(ASPEED_I2CG_SLAVE_PKT_NAK |
+> > +	       ASPEED_I2CG_CTRL_NEW_REG |
+> > +	       ASPEED_I2CG_CTRL_NEW_CLK_DIV,
+> > +	       i2c_ic->base + ASPEED_I2CG_CTRL);
+> > +	parent_clk = devm_clk_get(&pdev->dev, NULL);
+> > +	if (IS_ERR(parent_clk))
+> > +		return PTR_ERR(parent_clk);
+> > +	parent_clk_frequency = clk_get_rate(parent_clk);
+> > +	pr_debug("parent_clk_frequency %ld\n", parent_clk_frequency);
+> > +	clk_divider = aspeed_i2c_ic_get_new_clk_divider(parent_clk_frequency, node);
+> > +	writel(clk_divider, i2c_ic->base + ASPEED_I2CG_CLK_DIV_CTRL);
+> > +
+> > +	pr_info("i2c global registered\n");
+> > +
+> > +	return 0;
+> > +
+> > +err_iounmap:
+> > +	iounmap(i2c_ic->base);
+> > +err_free_ic:
+> > +	kfree(i2c_ic);
+> > +	return ret;
+> > +}
+> 
+> ...
+> 
+> > +#ifndef AST2600_I2C_GLOBAL_H
+> > +#define AST2600_I2C_GLOBAL_H 1
+> 
+> Missed bits.h
+> 
+Will update as following
+#ifndef AST2600_I2C_GLOBAL_H
+#define AST2600_I2C_GLOBAL_H
+#include <linux/bits.h>
+> > +#endif /* AST2600_I2C_GLOBAL_H */
+> 
+> ...
+> 
+> > +/*
+> > + * i2c-new-aspeed.c - I2C driver for the Aspeed SoC
+> 
+> It's a bad idea to put file name inside the file.
+> 
+Thanks for suggestion
+Will update to "I2C driver for the Aspeed SoC"
+> > + *
+> > + * Copyright (C) ASPEED Technology Inc.
+> > + * Ryan Chen <ryan_chen@aspeedtech.com>
+> > + *
+> > + */
+> 
+> ...
+> 
+> > +#define AST_I2CC_TX_DIR_MASK			(0x7 << 29)
+> 
+> GENMASK()
+> 
+> ...
+> 
+> > +#define AST_I2CC_GET_RX_BUF_LEN(x)		(((x) >> 24) & 0x3f)
+> > +#define AST_I2CC_SET_RX_BUF_LEN(x)		((((x) - 1) & 0x1f) << 16)
+> > +#define AST_I2CC_SET_TX_BUF_LEN(x)		((((x) - 1) & 0x1f) << 8)
+> > +#define AST_I2CC_GET_TX_BUF_LEN(x)		((((x) >> 8) & 0x1f) + 1)
+> 
+> Ditto.
+> 
+Will update and try to use GENMASK
+> ...
+> 
+> > +static struct ast_i2c_timing_table aspeed_old_i2c_timing_table[] = {
+> 
+> What the ... is this for?!
+AST2600 support old/new register set for I2C controller.
+This lookup table is used to find the divisor for the specific I2C bus
+frequency for AST2600 I2C controller with old register set.
+For example
+If I2C bus frequency is 100KHZ and PHB clock is 100MHZ, it will find this table
+because 100000000/1024 < 100000
+"{ 1024, 0x00000300 | (0x5) | (0xf << 20) | (0xf << 16) | (0xf << 12) }"
+> 
+> > +	/* Divisor : Base Clock : tCKHighMin : tCK High : tCK Low  */
+> > +	/* Divisor :	  [3:0] : [23: 20]   :   [19:16]:   [15:12] */
+> > +	{ 6, 0x00000300 | (0x0) | (0x2 << 20) | (0x2 << 16) | (0x2 << 12) },
+> > +	{ 7, 0x00000300 | (0x0) | (0x3 << 20) | (0x3 << 16) | (0x2 << 12) },
+> > +	{ 8, 0x00000300 | (0x0) | (0x3 << 20) | (0x3 << 16) | (0x3 << 12) },
+> > +	{ 9, 0x00000300 | (0x0) | (0x4 << 20) | (0x4 << 16) | (0x3 << 12) },
+> > +	{ 10, 0x00000300 | (0x0) | (0x4 << 20) | (0x4 << 16) | (0x4 << 12) },
+> > +	{ 11, 0x00000300 | (0x0) | (0x5 << 20) | (0x5 << 16) | (0x4 << 12) },
+> > +	{ 12, 0x00000300 | (0x0) | (0x5 << 20) | (0x5 << 16) | (0x5 << 12) },
+> > +	{ 13, 0x00000300 | (0x0) | (0x6 << 20) | (0x6 << 16) | (0x5 << 12) },
+> > +	{ 14, 0x00000300 | (0x0) | (0x6 << 20) | (0x6 << 16) | (0x6 << 12) },
+> > +	{ 15, 0x00000300 | (0x0) | (0x7 << 20) | (0x7 << 16) | (0x6 << 12) },
+> > +	{ 16, 0x00000300 | (0x0) | (0x7 << 20) | (0x7 << 16) | (0x7 << 12) },
+> > +	{ 17, 0x00000300 | (0x0) | (0x8 << 20) | (0x8 << 16) | (0x7 << 12) },
+> > +	{ 18, 0x00000300 | (0x0) | (0x8 << 20) | (0x8 << 16) | (0x8 << 12) },
+> > +	{ 19, 0x00000300 | (0x0) | (0x9 << 20) | (0x9 << 16) | (0x8 << 12) },
+> > +	{ 20, 0x00000300 | (0x0) | (0x9 << 20) | (0x9 << 16) | (0x9 << 12) },
+> > +	{ 21, 0x00000300 | (0x0) | (0xa << 20) | (0xa << 16) | (0x9 << 12) },
+> > +	{ 22, 0x00000300 | (0x0) | (0xa << 20) | (0xa << 16) | (0xa << 12) },
+> > +	{ 23, 0x00000300 | (0x0) | (0xb << 20) | (0xb << 16) | (0xa << 12) },
+> > +	{ 24, 0x00000300 | (0x0) | (0xb << 20) | (0xb << 16) | (0xb << 12) },
+> > +	{ 25, 0x00000300 | (0x0) | (0xc << 20) | (0xc << 16) | (0xb << 12) },
+> > +	{ 26, 0x00000300 | (0x0) | (0xc << 20) | (0xc << 16) | (0xc << 12) },
+> > +	{ 27, 0x00000300 | (0x0) | (0xd << 20) | (0xd << 16) | (0xc << 12) },
+> > +	{ 28, 0x00000300 | (0x0) | (0xd << 20) | (0xd << 16) | (0xd << 12) },
+> > +	{ 29, 0x00000300 | (0x0) | (0xe << 20) | (0xe << 16) | (0xd << 12) },
+> > +	{ 30, 0x00000300 | (0x0) | (0xe << 20) | (0xe << 16) | (0xe << 12) },
+> > +	{ 31, 0x00000300 | (0x0) | (0xf << 20) | (0xf << 16) | (0xe << 12) },
+> > +	{ 32, 0x00000300 | (0x0) | (0xf << 20) | (0xf << 16) | (0xf << 12) },
+> > +
+> > +	{ 34, 0x00000300 | (0x1) | (0x8 << 20) | (0x8 << 16) | (0x7 << 12) },
+> > +	{ 36, 0x00000300 | (0x1) | (0x8 << 20) | (0x8 << 16) | (0x8 << 12) },
+> > +	{ 38, 0x00000300 | (0x1) | (0x9 << 20) | (0x9 << 16) | (0x8 << 12) },
+> > +	{ 40, 0x00000300 | (0x1) | (0x9 << 20) | (0x9 << 16) | (0x9 << 12) },
+> > +	{ 42, 0x00000300 | (0x1) | (0xa << 20) | (0xa << 16) | (0x9 << 12) },
+> > +	{ 44, 0x00000300 | (0x1) | (0xa << 20) | (0xa << 16) | (0xa << 12) },
+> > +	{ 46, 0x00000300 | (0x1) | (0xb << 20) | (0xb << 16) | (0xa << 12) },
+> > +	{ 48, 0x00000300 | (0x1) | (0xb << 20) | (0xb << 16) | (0xb << 12) },
+> > +	{ 50, 0x00000300 | (0x1) | (0xc << 20) | (0xc << 16) | (0xb << 12) },
+> > +	{ 52, 0x00000300 | (0x1) | (0xc << 20) | (0xc << 16) | (0xc << 12) },
+> > +	{ 54, 0x00000300 | (0x1) | (0xd << 20) | (0xd << 16) | (0xc << 12) },
+> > +	{ 56, 0x00000300 | (0x1) | (0xd << 20) | (0xd << 16) | (0xd << 12) },
+> > +	{ 58, 0x00000300 | (0x1) | (0xe << 20) | (0xe << 16) | (0xd << 12) },
+> > +	{ 60, 0x00000300 | (0x1) | (0xe << 20) | (0xe << 16) | (0xe << 12) },
+> > +	{ 62, 0x00000300 | (0x1) | (0xf << 20) | (0xf << 16) | (0xe << 12) },
+> > +	{ 64, 0x00000300 | (0x1) | (0xf << 20) | (0xf << 16) | (0xf << 12) },
+> > +
+> > +	{ 68, 0x00000300 | (0x2) | (0x8 << 20) | (0x8 << 16) | (0x7 << 12) },
+> > +	{ 72, 0x00000300 | (0x2) | (0x8 << 20) | (0x8 << 16) | (0x8 << 12) },
+> > +	{ 76, 0x00000300 | (0x2) | (0x9 << 20) | (0x9 << 16) | (0x8 << 12) },
+> > +	{ 80, 0x00000300 | (0x2) | (0x9 << 20) | (0x9 << 16) | (0x9 << 12) },
+> > +	{ 84, 0x00000300 | (0x2) | (0xa << 20) | (0xa << 16) | (0x9 << 12) },
+> > +	{ 88, 0x00000300 | (0x2) | (0xa << 20) | (0xa << 16) | (0xa << 12) },
+> > +	{ 92, 0x00000300 | (0x2) | (0xb << 20) | (0xb << 16) | (0xa << 12) },
+> > +	{ 96, 0x00000300 | (0x2) | (0xb << 20) | (0xb << 16) | (0xb << 12) },
+> > +	{ 100, 0x00000300 | (0x2) | (0xc << 20) | (0xc << 16) | (0xb << 12) },
+> > +	{ 104, 0x00000300 | (0x2) | (0xc << 20) | (0xc << 16) | (0xc << 12) },
+> > +	{ 108, 0x00000300 | (0x2) | (0xd << 20) | (0xd << 16) | (0xc << 12) },
+> > +	{ 112, 0x00000300 | (0x2) | (0xd << 20) | (0xd << 16) | (0xd << 12) },
+> > +	{ 116, 0x00000300 | (0x2) | (0xe << 20) | (0xe << 16) | (0xd << 12) },
+> > +	{ 120, 0x00000300 | (0x2) | (0xe << 20) | (0xe << 16) | (0xe << 12) },
+> > +	{ 124, 0x00000300 | (0x2) | (0xf << 20) | (0xf << 16) | (0xe << 12) },
+> > +	{ 128, 0x00000300 | (0x2) | (0xf << 20) | (0xf << 16) | (0xf << 12) },
+> > +
+> > +	{ 136, 0x00000300 | (0x3) | (0x8 << 20) | (0x8 << 16) | (0x7 << 12) },
+> > +	{ 144, 0x00000300 | (0x3) | (0x8 << 20) | (0x8 << 16) | (0x8 << 12) },
+> > +	{ 152, 0x00000300 | (0x3) | (0x9 << 20) | (0x9 << 16) | (0x8 << 12) },
+> > +	{ 160, 0x00000300 | (0x3) | (0x9 << 20) | (0x9 << 16) | (0x9 << 12) },
+> > +	{ 168, 0x00000300 | (0x3) | (0xa << 20) | (0xa << 16) | (0x9 << 12) },
+> > +	{ 176, 0x00000300 | (0x3) | (0xa << 20) | (0xa << 16) | (0xa << 12) },
+> > +	{ 184, 0x00000300 | (0x3) | (0xb << 20) | (0xb << 16) | (0xa << 12) },
+> > +	{ 192, 0x00000300 | (0x3) | (0xb << 20) | (0xb << 16) | (0xb << 12) },
+> > +	{ 200, 0x00000300 | (0x3) | (0xc << 20) | (0xc << 16) | (0xb << 12) },
+> > +	{ 208, 0x00000300 | (0x3) | (0xc << 20) | (0xc << 16) | (0xc << 12) },
+> > +	{ 216, 0x00000300 | (0x3) | (0xd << 20) | (0xd << 16) | (0xc << 12) },
+> > +	{ 224, 0x00000300 | (0x3) | (0xd << 20) | (0xd << 16) | (0xd << 12) },
+> > +	{ 232, 0x00000300 | (0x3) | (0xe << 20) | (0xe << 16) | (0xd << 12) },
+> > +	{ 240, 0x00000300 | (0x3) | (0xe << 20) | (0xe << 16) | (0xe << 12) },
+> > +	{ 248, 0x00000300 | (0x3) | (0xf << 20) | (0xf << 16) | (0xe << 12) },
+> > +	{ 256, 0x00000300 | (0x3) | (0xf << 20) | (0xf << 16) | (0xf << 12) },
+> > +
+> > +	{ 272, 0x00000300 | (0x4) | (0x8 << 20) | (0x8 << 16) | (0x7 << 12) },
+> > +	{ 288, 0x00000300 | (0x4) | (0x8 << 20) | (0x8 << 16) | (0x8 << 12) },
+> > +	{ 304, 0x00000300 | (0x4) | (0x9 << 20) | (0x9 << 16) | (0x8 << 12) },
+> > +	{ 320, 0x00000300 | (0x4) | (0x9 << 20) | (0x9 << 16) | (0x9 << 12) },
+> > +	{ 336, 0x00000300 | (0x4) | (0xa << 20) | (0xa << 16) | (0x9 << 12) },
+> > +	{ 352, 0x00000300 | (0x4) | (0xa << 20) | (0xa << 16) | (0xa << 12) },
+> > +	{ 368, 0x00000300 | (0x4) | (0xb << 20) | (0xb << 16) | (0xa << 12) },
+> > +	{ 384, 0x00000300 | (0x4) | (0xb << 20) | (0xb << 16) | (0xb << 12) },
+> > +	{ 400, 0x00000300 | (0x4) | (0xc << 20) | (0xc << 16) | (0xb << 12) },
+> > +	{ 416, 0x00000300 | (0x4) | (0xc << 20) | (0xc << 16) | (0xc << 12) },
+> > +	{ 432, 0x00000300 | (0x4) | (0xd << 20) | (0xd << 16) | (0xc << 12) },
+> > +	{ 448, 0x00000300 | (0x4) | (0xd << 20) | (0xd << 16) | (0xd << 12) },
+> > +	{ 464, 0x00000300 | (0x4) | (0xe << 20) | (0xe << 16) | (0xd << 12) },
+> > +	{ 480, 0x00000300 | (0x4) | (0xe << 20) | (0xe << 16) | (0xe << 12) },
+> > +	{ 496, 0x00000300 | (0x4) | (0xf << 20) | (0xf << 16) | (0xe << 12) },
+> > +	{ 512, 0x00000300 | (0x4) | (0xf << 20) | (0xf << 16) | (0xf << 12) },
+> > +
+> > +	{ 544, 0x00000300 | (0x5) | (0x8 << 20) | (0x8 << 16) | (0x7 << 12) },
+> > +	{ 576, 0x00000300 | (0x5) | (0x8 << 20) | (0x8 << 16) | (0x8 << 12) },
+> > +	{ 608, 0x00000300 | (0x5) | (0x9 << 20) | (0x9 << 16) | (0x8 << 12) },
+> > +	{ 640, 0x00000300 | (0x5) | (0x9 << 20) | (0x9 << 16) | (0x9 << 12) },
+> > +	{ 672, 0x00000300 | (0x5) | (0xa << 20) | (0xa << 16) | (0x9 << 12) },
+> > +	{ 704, 0x00000300 | (0x5) | (0xa << 20) | (0xa << 16) | (0xa << 12) },
+> > +	{ 736, 0x00000300 | (0x5) | (0xb << 20) | (0xb << 16) | (0xa << 12) },
+> > +	{ 768, 0x00000300 | (0x5) | (0xb << 20) | (0xb << 16) | (0xb << 12) },
+> > +	{ 800, 0x00000300 | (0x5) | (0xc << 20) | (0xc << 16) | (0xb << 12) },
+> > +	{ 832, 0x00000300 | (0x5) | (0xc << 20) | (0xc << 16) | (0xc << 12) },
+> > +	{ 864, 0x00000300 | (0x5) | (0xd << 20) | (0xd << 16) | (0xc << 12) },
+> > +	{ 896, 0x00000300 | (0x5) | (0xd << 20) | (0xd << 16) | (0xd << 12) },
+> > +	{ 928, 0x00000300 | (0x5) | (0xe << 20) | (0xe << 16) | (0xd << 12) },
+> > +	{ 960, 0x00000300 | (0x5) | (0xe << 20) | (0xe << 16) | (0xe << 12) },
+> > +	{ 992, 0x00000300 | (0x5) | (0xf << 20) | (0xf << 16) | (0xe << 12) },
+> > +	{ 1024, 0x00000300 | (0x5) | (0xf << 20) | (0xf << 16) | (0xf << 12) },
+> > +
+> > +	{ 1088, 0x00000300 | (0x6) | (0x8 << 20) | (0x8 << 16) | (0x7 << 12) },
+> > +	{ 1152, 0x00000300 | (0x6) | (0x8 << 20) | (0x8 << 16) | (0x8 << 12) },
+> > +	{ 1216, 0x00000300 | (0x6) | (0x9 << 20) | (0x9 << 16) | (0x8 << 12) },
+> > +	{ 1280, 0x00000300 | (0x6) | (0x9 << 20) | (0x9 << 16) | (0x9 << 12) },
+> > +	{ 1344, 0x00000300 | (0x6) | (0xa << 20) | (0xa << 16) | (0x9 << 12) },
+> > +	{ 1408, 0x00000300 | (0x6) | (0xa << 20) | (0xa << 16) | (0xa << 12) },
+> > +	{ 1472, 0x00000300 | (0x6) | (0xb << 20) | (0xb << 16) | (0xa << 12) },
+> > +	{ 1536, 0x00000300 | (0x6) | (0xb << 20) | (0xb << 16) | (0xb << 12) },
+> > +	{ 1600, 0x00000300 | (0x6) | (0xc << 20) | (0xc << 16) | (0xb << 12) },
+> > +	{ 1664, 0x00000300 | (0x6) | (0xc << 20) | (0xc << 16) | (0xc << 12) },
+> > +	{ 1728, 0x00000300 | (0x6) | (0xd << 20) | (0xd << 16) | (0xc << 12) },
+> > +	{ 1792, 0x00000300 | (0x6) | (0xd << 20) | (0xd << 16) | (0xd << 12) },
+> > +	{ 1856, 0x00000300 | (0x6) | (0xe << 20) | (0xe << 16) | (0xd << 12) },
+> > +	{ 1920, 0x00000300 | (0x6) | (0xe << 20) | (0xe << 16) | (0xe << 12) },
+> > +	{ 1984, 0x00000300 | (0x6) | (0xf << 20) | (0xf << 16) | (0xe << 12) },
+> > +	{ 2048, 0x00000300 | (0x6) | (0xf << 20) | (0xf << 16) | (0xf << 12) },
+> > +
+> > +	{ 2176, 0x00000300 | (0x7) | (0x8 << 20) | (0x8 << 16) | (0x7 << 12) },
+> > +	{ 2304, 0x00000300 | (0x7) | (0x8 << 20) | (0x8 << 16) | (0x8 << 12) },
+> > +	{ 2432, 0x00000300 | (0x7) | (0x9 << 20) | (0x9 << 16) | (0x8 << 12) },
+> > +	{ 2560, 0x00000300 | (0x7) | (0x9 << 20) | (0x9 << 16) | (0x9 << 12) },
+> > +	{ 2688, 0x00000300 | (0x7) | (0xa << 20) | (0xa << 16) | (0x9 << 12) },
+> > +	{ 2816, 0x00000300 | (0x7) | (0xa << 20) | (0xa << 16) | (0xa << 12) },
+> > +	{ 2944, 0x00000300 | (0x7) | (0xb << 20) | (0xb << 16) | (0xa << 12) },
+> > +	{ 3072, 0x00000300 | (0x7) | (0xb << 20) | (0xb << 16) | (0xb << 12) },
+> > +};
+> 
+> ...
+> 
+> > +enum xfer_mode {
+> > +	BYTE_MODE = 0,
+> > +	BUFF_MODE,
+> > +	DMA_MODE,
+> 
+> > +
+> 
+> Redundant blank line.
+> 
+Will update
+> > +};
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
