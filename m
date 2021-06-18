@@ -2,103 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 595D23AC1B2
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Jun 2021 05:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7195D3AC477
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Jun 2021 09:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbhFREBQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Jun 2021 00:01:16 -0400
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:14923 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229466AbhFREBQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Jun 2021 00:01:16 -0400
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 15I3ic7p020343;
-        Fri, 18 Jun 2021 11:44:38 +0800 (GMT-8)
-        (envelope-from jamin_lin@aspeedtech.com)
-Received: from aspeedtech.com (192.168.100.253) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 18 Jun
- 2021 11:59:01 +0800
-Date:   Fri, 18 Jun 2021 11:58:55 +0800
-From:   Jamin Lin <jamin_lin@aspeedtech.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        "Andrew Jeffery" <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Jean Delvare" <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Khalil Blaiech <kblaiech@mellanox.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        ChiaWei Wang <chiawei_wang@aspeedtech.com>,
-        Troy Lee <troy_lee@aspeedtech.com>,
-        Steven Lee <steven_lee@aspeedtech.com>
-Subject: Re: [PATCH 3/3] i2c:support new register set for ast2600
-Message-ID: <20210618035855.GB31659@aspeedtech.com>
-References: <20210617094424.27123-1-jamin_lin@aspeedtech.com>
- <20210617094424.27123-4-jamin_lin@aspeedtech.com>
- <YMslyzUKp/7J0ncu@smile.fi.intel.com>
+        id S232059AbhFRHEe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Jun 2021 03:04:34 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:41946 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231826AbhFRHEe (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 18 Jun 2021 03:04:34 -0400
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1lu8Vs-00006s-P5; Fri, 18 Jun 2021 09:02:00 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     cl <cl@rock-chips.com>,
+        "jay.xu@rock-chips.com" <jay.xu@rock-chips.com>
+Cc:     robh+dt <robh+dt@kernel.org>, jagan <jagan@amarulasolutions.com>,
+        wens <wens@csie.org>, uwe <uwe@kleine-koenig.org>,
+        mail <mail@david-bauer.net>, Johan Jonker <jbx6244@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        jensenhuang <jensenhuang@friendlyarm.com>,
+        michael <michael@amarulasolutions.com>,
+        cnsztl <cnsztl@gmail.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        "ulf. hansson" <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        =?utf-8?B?5p6X5rabKOW6leWxguW5s+WPsCk=?= <shawn.lin@rock-chips.com>,
+        =?utf-8?B?5ZC06L6+6LaF?= <david.wu@rock-chips.com>,
+        zhangqing <zhangqing@rock-chips.com>,
+        Tao Huang <huangtao@rock-chips.com>, cl <cl@rock-chips.com>,
+        wim <wim@linux-watchdog.org>, linux <linux@roeck-us.net>,
+        jamie <jamie@jamieiles.com>,
+        linux-watchdog <linux-watchdog@vger.kernel.org>,
+        maz <maz@kernel.org>
+Subject: Re: [RESEND PATCH v4 06/10] dt-bindings: gpio: change items restriction of clock for rockchip,gpio-bank
+Date:   Fri, 18 Jun 2021 09:01:59 +0200
+Message-ID: <3493815.vrqWZg68TM@diego>
+In-Reply-To: <2021061814414460293612@rock-chips.com>
+References: <20210429081151.17558-1-cl@rock-chips.com> <5026524.44csPzL39Z@phil> <2021061814414460293612@rock-chips.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <YMslyzUKp/7J0ncu@smile.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [192.168.100.253]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 15I3ic7p020343
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The 06/17/2021 10:36, Andy Shevchenko wrote:
-> On Thu, Jun 17, 2021 at 05:43:40PM +0800, Jamin Lin wrote:
-> > Add i2c new driver to support new register set for AST2600.
-> > AST2600 support three modes for data transfer which are
-> > byte mode, buffer mode and dma mode, respectively.
-> > The global driver of i2c is used to set the new register
-> > mode and define the base clock frequency
-> > of baseclk_1~baseclk_4.
-> > 
-> > Signed-off-by: Jamin Lin <jamin_lin@aspeedtech.com>
-> > ---
-> >  drivers/i2c/busses/Kconfig              |   11 +
-> >  drivers/i2c/busses/Makefile             |    1 +
-> >  drivers/i2c/busses/ast2600-i2c-global.c |  205 +++
-> >  drivers/i2c/busses/ast2600-i2c-global.h |   25 +
-> >  drivers/i2c/busses/i2c-new-aspeed.c     | 1796 +++++++++++++++++++++++
-> 
-> I commented _something_ (but read comments carefully, they will cover much
-> more). The overall it seems you have to:
->  - shrink the code base by at least ~15% (it's possible), i.e. -200 LOCs
-Can you describe it more detail?
-Do you mean I should separate the patch file to fix size limitation? 
->  - rethink how you do calculations and bit operations
->  - better code style
->
-Thanks for your review and very good suggestion
-I will update them and sent patch again.
-By the way, I received test failed email from Robot due to compiling
-warning. I will fix them, too. 
+Hi Jay,
 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+Am Freitag, 18. Juni 2021, 08:41:45 CEST schrieb jay.xu@rock-chips.com:
+> Hi Heiko
 > 
+> --------------
+> jay.xu@rock-chips.com
+> >Hi,
+> >
+> >Am Donnerstag, 13. Mai 2021, 08:46:06 CEST schrieb cl@rock-chips.com:
+> >> From: Liang Chen <cl@rock-chips.com>
+> >>
+> >> The clock property need 2 items on some rockchip chips.
+> >>
+> >> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> >
+> >this patch should definitly move over to Jianquns gpio driver series,
+> >as it introduces the usage of these new clocks.
+> >
+> >Also while the single-clock variant definitly doesn't need it,
+> >I think we may want clock-names "apb_pclk", "debounce-ref" for the
+> >2-clock variants?
+> > 
+> Okay, I think it's very good idea, 
+> but is it possible to post the reg-name patch after these dts serial and gpio serial patches ?
+
+You're already creating a new binding when changing the max-items.
+So when we change that again later, in theory you'd need to support both
+cases (with and without clock-names)
+
+So I'd really prefer to get the binding right the first time and
+identifying multiple clocks by clock-names instead of an implicit ordering
+is way better in the long run as well.
+
+Heiko
+
+
+
+
 > 
+> >
+> >Heiko
+> >
+> >> ---
+> >>  Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml | 5 ++++-
+> >>  1 file changed, 4 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
+> >> index d993e00..0d62c28 100644
+> >> --- a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
+> >> +++ b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
+> >> @@ -22,7 +22,10 @@ properties:
+> >>      maxItems: 1
+> >> 
+> >>    clocks:
+> >> -    maxItems: 1
+> >> +    minItems: 1
+> >> +    items:
+> >> +      - description: APB interface clock source
+> >> +      - description: GPIO debounce reference clock source
+> >> 
+> >>    gpio-controller: true
+> >> 
+> >>
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> 
+
+
+
+
