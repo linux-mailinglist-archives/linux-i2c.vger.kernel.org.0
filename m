@@ -2,107 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 398CB3AE091
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 23:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C873AE099
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 23:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbhFTVK5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Jun 2021 17:10:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33506 "EHLO mail.kernel.org"
+        id S230211AbhFTVPJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Jun 2021 17:15:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34098 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230211AbhFTVK5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 20 Jun 2021 17:10:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8CF3C610EA;
-        Sun, 20 Jun 2021 21:08:43 +0000 (UTC)
+        id S230051AbhFTVPI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 20 Jun 2021 17:15:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21E5F610CA;
+        Sun, 20 Jun 2021 21:12:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624223324;
-        bh=RV1dRe0q665rCNfncnH89ttrqFNtElN2unqX84acxys=;
+        s=k20201202; t=1624223573;
+        bh=BmY/iYTrW8sHMSRkIF2F4/gZ+S0AVwlDGhLakMHc8Pg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vCmKbaXvanXPec+PW1+BZooyGCUSyt4KNHWz5AQ/cxQrd8zooIkSvV3NVjDcVy1M0
-         lev8GonTnS6dA5tZcayI4PxkXuJhnhljHIVpA/itbL6f3Hy3rM1srP/s0yFR9mn71h
-         sOSjfQcEtX2rtb29fvtC0W7he5nriw5NU4S2j9lLX8OvqFWdfH4XpfMRbiVpmk7wb0
-         HS4RbaWpQMLswvjL3fLh9kmIKF0YfQcdAbDM97gN/oDe1GVh7/nT2WozhPr1wJb486
-         zORZrhVcBf5n1i4hJzCl6xrqGOTily1gQrpBUnIfn+Oamgvj6keBnnso+aDJA9lK6X
-         D5Sd9fuYoMXiw==
-Date:   Sun, 20 Jun 2021 23:08:41 +0200
+        b=IBdvRDYjHsFsV1MiJU8B5LLAxwh3acgs/kTE9eQMKbeWJ9h8rB3StA1ZloSZNS79z
+         qqOwHESQOdy3+Q0je7i/XlLBb3wqPsX7LsLbJ8eW7VMbOh6N7urvb4zGHJveR5QAsD
+         vtB8bm1Y5zxkDZ/Zp5I/MFE13Ys+SctOM2xdTKmEMmD18qks7SSF0jzC+FoBs755pR
+         ie6bED8WYI8nuGde8eefM2U4V7b4WH0slBpm3og0FzqMbYUPA0lFf98bmtcgjngY+8
+         RdEiIDpeS0rgab9a6TDcc3JNhe62J5qALiM6rRmUv8Kv8AB/Fm5XvvfE0emsuwDNgb
+         xLYzJLEDltISA==
+Date:   Sun, 20 Jun 2021 23:12:50 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, x86@kernel.org,
-        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: ce4100: Replace "ti,pcf8575" by
- "nxp,pcf8575"
-Message-ID: <YM+uWXoCvi7Y/s24@kunai>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] i2c: cp2615: check for allocation failure in
+ cp2615_i2c_recv()
+Message-ID: <YM+vUsFRWiGOqGVN@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, x86@kernel.org,
-        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-References: <cover.1622560799.git.geert+renesas@glider.be>
- <9b560b7f5ded90430c989a211f2aee009aefc595.1622560799.git.geert+renesas@glider.be>
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <YJuosd6rew91vlyX@mwanda>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yGK4jxv6o8Tg62fU"
+        protocol="application/pgp-signature"; boundary="okIF8e36h8BpM+kW"
 Content-Disposition: inline
-In-Reply-To: <9b560b7f5ded90430c989a211f2aee009aefc595.1622560799.git.geert+renesas@glider.be>
+In-Reply-To: <YJuosd6rew91vlyX@mwanda>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---yGK4jxv6o8Tg62fU
+--okIF8e36h8BpM+kW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 01, 2021 at 05:25:44PM +0200, Geert Uytterhoeven wrote:
-> The TI part is equivalent to the NXP part, and its compatible value is
-> not documented in the DT bindings.
+On Wed, May 12, 2021 at 01:06:41PM +0300, Dan Carpenter wrote:
+> We need to add a check for if the kzalloc() fails.
 >=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Fixes: 4a7695429ead ("i2c: cp2615: add i2c driver for Silicon Labs' CP261=
+5 Digital Audio Bridge")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Applied to for-next, thanks!
+Applied to for-current, thanks!
 
 
---yGK4jxv6o8Tg62fU
+--okIF8e36h8BpM+kW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPrlkACgkQFA3kzBSg
-KbZFSRAAlvHQWYn7WuznFBAm3WzUAuqHEpUbbz32vQiJxtrX+3RgQ2ylWfaEi30P
-LwMnfIUuQxQYUhNF5f+Q/zYIdcHyscL8YdYlbMl2grtmKa68Lm1SeUZj0kJbBZ6c
-0hv7k4yT0/2wRFc3pNOi2E5fnU9oKKKdXEB+7J5zrfotCIcyOfMSmekVfcg7e/Lc
-dPm3MxH4Aixm2eNxuPRiXAXRvn4WXaf42EEdwERYx/OTIEe+ndm+OmhoQFB4PsqP
-7aglnSl+5mCrlGw3mU6/qt9gE+zXd36c1Y1DOMdu6ArMOc0zRugPon57oBSWrAA1
-IwvTDnrCAtY2Z8MnDFyYT+BCrxeWHs6y66nFT1M/w9m2t6YBB0r2ZsbstRkYHzK6
-4YE3UcZc6bvulO2ds+LZPSdLD6U0CqWjMi/Wv/1tsIz1eHuwl54J/SSneY4R+fU1
-k7pzOZF6sVk1MwvZ7iGKIxXakQ0q5YLgTFHrX1XTSAmO9tKFWwaz5tP1qrP7psnY
-p6BBWNdxYDqYnyGyzV/ujdoLT/OOHWizJceV+afJNL24fj5NDJU0ERpEH+HnwA0U
-vdubHHZN7Feqm059L3EFEA/B5f9yNSpfc359yCR4jE7HbIRiFz5fgVwIF78Q8RUf
-Dbf03mWpY2Z4GKdcxPxS7D3Pmq9qtxoLF1tK+ENHSbY1mZ9QvS8=
-=fIsi
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPr04ACgkQFA3kzBSg
+KbYxTA/9E1vfdqgGn1HCNHaXW0Oy7WPWUVowANRpEqEFaImyQRBF/VRIkbOuhgrA
+zPijdyJu9EL1bYGDm7q7xNbDcMqvYXKSgBpd2ex1f7uzASAGlNmpyS5zoeRnucul
+pIBugO74fZsqTueP65gGvJH7OpVyRpBup/u2qqvzepIT7RqFonvgZ7beOe1mwT5C
+n0+EnpYm9qCsBfGhDKiwM4bJbyhs67a7mreD4xhfuS+wifUuEV50o2/+xndN2PS7
+kScFrHrRYI6orSOfj4Vb085ZjlQV7ZTZS/bP0QyODf07jczvyaapXkFSi3c/pn3z
+SjX06sM+VJuZEVTXmJ2hQj2yeBuU+ODHtyweqpqeab6jPLuNZoZn525MVeE+clzr
+EZr+NjgPLAeWvxf2yW3Rs8U3d2bToB67HiD9iIhMkN89w3FHCvOtQQP6z5K8bXF1
+tAGgxHsuoajC/cVGjrLMQul1NZAgcB0pw+KCZrgkmMmfXJpMpZZyiWrdiGlbYDbe
+ZPg0BaWpvU5xr4GExoStfEeZHhX6z9xE9FxCc/5k19CKMpB162Ekib87Av0QcY8e
+lM/YWOzbGCZgh5BjiaKj69sPDvbdaCqhNuCouWWuztlpq2yneCEfYTedrLcCxXy/
+/19oFmOYEAg/47IbrmhY28ci8ilnZXmzXTOcRpgChpKgZo5vmNc=
+=RV3R
 -----END PGP SIGNATURE-----
 
---yGK4jxv6o8Tg62fU--
+--okIF8e36h8BpM+kW--
