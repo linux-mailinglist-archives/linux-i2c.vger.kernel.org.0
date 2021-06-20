@@ -2,102 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D0E3AE084
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 23:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398CB3AE091
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 23:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbhFTVGj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Jun 2021 17:06:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32782 "EHLO mail.kernel.org"
+        id S230283AbhFTVK5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Jun 2021 17:10:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33506 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229845AbhFTVGj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 20 Jun 2021 17:06:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0BF966052B;
-        Sun, 20 Jun 2021 21:04:25 +0000 (UTC)
+        id S230211AbhFTVK5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 20 Jun 2021 17:10:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8CF3C610EA;
+        Sun, 20 Jun 2021 21:08:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624223066;
-        bh=ffFwCRSzLLjjq9FwdvPYYwFdJF9+0LtokTDChUJ5Lhk=;
+        s=k20201202; t=1624223324;
+        bh=RV1dRe0q665rCNfncnH89ttrqFNtElN2unqX84acxys=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UHhy+L0s6JDvzMtHJu1o3xYQwyq2JFoue0xrtBsI9HDDkWEuld72GAmQilQoKPSde
-         XeVHdwZCcXlKqhQwwTynw1QzvLFUpQVc/EWygiI0aPwwgCH/fPBQIUBOIxIt1XPbd3
-         2x4RgsYb0IHcxKBeVlWDneKyMQm743vINT0dv9weGecI6YypbdQ1Z4mbPU8QJwuFlA
-         TIoRQMA0iRnSKNIjGQflD4kdwrAvUtn0264fcVMGacPRuFm3ihcjTQRPOIUAR1z9gn
-         3bsO/yWPxUMGMcXK5VEFRjgaCtGzQ/8wEEiuoK44HLoofrSdAqm1DgNq/S1fntNjQT
-         8Zp1WtObtvwbg==
-Date:   Sun, 20 Jun 2021 23:04:23 +0200
+        b=vCmKbaXvanXPec+PW1+BZooyGCUSyt4KNHWz5AQ/cxQrd8zooIkSvV3NVjDcVy1M0
+         lev8GonTnS6dA5tZcayI4PxkXuJhnhljHIVpA/itbL6f3Hy3rM1srP/s0yFR9mn71h
+         sOSjfQcEtX2rtb29fvtC0W7he5nriw5NU4S2j9lLX8OvqFWdfH4XpfMRbiVpmk7wb0
+         HS4RbaWpQMLswvjL3fLh9kmIKF0YfQcdAbDM97gN/oDe1GVh7/nT2WozhPr1wJb486
+         zORZrhVcBf5n1i4hJzCl6xrqGOTily1gQrpBUnIfn+Oamgvj6keBnnso+aDJA9lK6X
+         D5Sd9fuYoMXiw==
+Date:   Sun, 20 Jun 2021 23:08:41 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] i2c: core: Disable client irq on reboot/shutdown
-Message-ID: <YM+tV9zH9SC+TQcW@kunai>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, x86@kernel.org,
+        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: ce4100: Replace "ti,pcf8575" by
+ "nxp,pcf8575"
+Message-ID: <YM+uWXoCvi7Y/s24@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20210604232744.1259150-1-swboyd@chromium.org>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, x86@kernel.org,
+        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <cover.1622560799.git.geert+renesas@glider.be>
+ <9b560b7f5ded90430c989a211f2aee009aefc595.1622560799.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eGP/TfyAsjMxFXWH"
+        protocol="application/pgp-signature"; boundary="yGK4jxv6o8Tg62fU"
 Content-Disposition: inline
-In-Reply-To: <20210604232744.1259150-1-swboyd@chromium.org>
+In-Reply-To: <9b560b7f5ded90430c989a211f2aee009aefc595.1622560799.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---eGP/TfyAsjMxFXWH
+--yGK4jxv6o8Tg62fU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 04, 2021 at 04:27:44PM -0700, Stephen Boyd wrote:
-> From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+On Tue, Jun 01, 2021 at 05:25:44PM +0200, Geert Uytterhoeven wrote:
+> The TI part is equivalent to the NXP part, and its compatible value is
+> not documented in the DT bindings.
 >=20
-> If an i2c client receives an interrupt during reboot or shutdown it may
-> be too late to service it by making an i2c transaction on the bus
-> because the i2c controller has already been shutdown. This can lead to
-> system hangs if the i2c controller tries to make a transfer that is
-> doomed to fail because the access to the i2c pins is already shut down,
-> or an iommu translation has been torn down so i2c controller register
-> access doesn't work.
->=20
-> Let's simply disable the irq if there isn't a shutdown callback for an
-> i2c client when there is an irq associated with the device. This will
-> make sure that irqs don't come in later than the time that we can handle
-> it. We don't do this if the i2c client device already has a shutdown
-> callback because presumably they're doing the right thing and quieting
-> the device so irqs don't come in after the shutdown callback returns.
->=20
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> [swboyd@chromium.org: Dropped newline, added commit text, added
-> interrupt.h for robot build error]
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I think this is for-current material because it fixes hangs. Or better
-for-next to check for side-effects?
+Applied to for-next, thanks!
 
 
---eGP/TfyAsjMxFXWH
+--yGK4jxv6o8Tg62fU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPrVcACgkQFA3kzBSg
-Kbb2JA/8DCFgeCoLZunw4uFkcW3ia2gSGs1h1R5nv2r/RZzK2+2d3FSrnSAhRjZE
-3yq0oYiCmgsHXwOy987rNdKA5K5ZYqFfl7RWS7R5AlC0rC2dxXk4M25JkLfHS2fR
-bxqAsjRXIgm0SQR8IS5ScZ+49JIP5PV0MdZLMRrdCXbdoMJmOzurpAjniGLOrthm
-yunqtWRfF1ul6UszgwUWWpRzHe3NCBGk/I7JSSzo7yBDqN+V0BlFCiLbRL5jdpih
-jlrhZ0nVnjAArLlRQQMoG68oHn9D3AbicEQUlxOSFfPGt8jmN8PpZuxHfRP+20GV
-tkh8A8uTmb5a2uBXAYhzlmhzu/p4mJs297w+nZqWLkeevSzmbwO/qXww00hioRtX
-BVaRCeOxvQnGFQUhhKnNHcSbVKJ6x36J1TvnspddRTEfAoODBrpqAoSgxASSuyae
-NUjRFsMyevf7VeyhNjlgGwYz5DWKv031igBwhZJUV2oae/OYhgknVpiTApdvJmra
-KkxG/6495KBbCbcoMsRlILieZhlJy24I/c66Vx8S+Y8WqnRMRstLYn01IHZ2cBmt
-h6ZP6dPnqxNt++DHDUzGtjUmj45r5c55lMQ4JFgWmXrAxcdcaI3/gMz2k6CzGTWk
-78mUXLhXOOXZtZMmVYtcbGY3D633aV3VEWpXJzBpGqGz2saM6+w=
-=aOFK
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPrlkACgkQFA3kzBSg
+KbZFSRAAlvHQWYn7WuznFBAm3WzUAuqHEpUbbz32vQiJxtrX+3RgQ2ylWfaEi30P
+LwMnfIUuQxQYUhNF5f+Q/zYIdcHyscL8YdYlbMl2grtmKa68Lm1SeUZj0kJbBZ6c
+0hv7k4yT0/2wRFc3pNOi2E5fnU9oKKKdXEB+7J5zrfotCIcyOfMSmekVfcg7e/Lc
+dPm3MxH4Aixm2eNxuPRiXAXRvn4WXaf42EEdwERYx/OTIEe+ndm+OmhoQFB4PsqP
+7aglnSl+5mCrlGw3mU6/qt9gE+zXd36c1Y1DOMdu6ArMOc0zRugPon57oBSWrAA1
+IwvTDnrCAtY2Z8MnDFyYT+BCrxeWHs6y66nFT1M/w9m2t6YBB0r2ZsbstRkYHzK6
+4YE3UcZc6bvulO2ds+LZPSdLD6U0CqWjMi/Wv/1tsIz1eHuwl54J/SSneY4R+fU1
+k7pzOZF6sVk1MwvZ7iGKIxXakQ0q5YLgTFHrX1XTSAmO9tKFWwaz5tP1qrP7psnY
+p6BBWNdxYDqYnyGyzV/ujdoLT/OOHWizJceV+afJNL24fj5NDJU0ERpEH+HnwA0U
+vdubHHZN7Feqm059L3EFEA/B5f9yNSpfc359yCR4jE7HbIRiFz5fgVwIF78Q8RUf
+Dbf03mWpY2Z4GKdcxPxS7D3Pmq9qtxoLF1tK+ENHSbY1mZ9QvS8=
+=fIsi
 -----END PGP SIGNATURE-----
 
---eGP/TfyAsjMxFXWH--
+--yGK4jxv6o8Tg62fU--
