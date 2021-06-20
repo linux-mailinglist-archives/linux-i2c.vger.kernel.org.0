@@ -2,82 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2231C3AE077
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 22:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34B23AE07D
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 22:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbhFTU5q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Jun 2021 16:57:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59664 "EHLO mail.kernel.org"
+        id S230136AbhFTU6f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Jun 2021 16:58:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229845AbhFTU5q (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 20 Jun 2021 16:57:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E88C7610A3;
-        Sun, 20 Jun 2021 20:55:32 +0000 (UTC)
+        id S229845AbhFTU6f (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 20 Jun 2021 16:58:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D7E5F60FD8;
+        Sun, 20 Jun 2021 20:56:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624222533;
-        bh=59LUUr6nErsBsaU2fmG3vG8o5YV7k9K6QtvNmnF3STQ=;
+        s=k20201202; t=1624222582;
+        bh=7JkHbkKiDCtK/Umx8fMmteeeI7kYXvj2Qq4PUm848qk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BlVqj01Z2UbEYiW9wbROagge+jkPslOGNdLJnEMTa+v7vg6yAK/aYjZL7mwwi+Sqn
-         e0tzIqo4wdQsigACfqI/NvdrYo2z35r7eyv4GFL7ioF9yelo/Ox9mSkhdsClEsxlnG
-         Jr+50YJ+D9gvyGXsw79c751QxWBGFQ0OAVKjM8VjxjUmnUBIbs7ByyhA9r07EhlY1w
-         aLTnO1yBujF5NcbPQRWZGrpoivrRXrqP35+uTASyJDgR9zV/kG0AgnNwjYQYhgNGBd
-         Spqppyb9MCbMbe77+zX+hdH7zStoCPN8o0uF+uRtgufSAraQuHYDtbqt58NoCkzami
-         g1jXGlXhq2OIw==
-Date:   Sun, 20 Jun 2021 22:55:30 +0200
+        b=WGfU2W61vW7aDTbLaxz1BwW4gHdrrbFRC5KZAC+4HA2O41eMn6mYMfT7JuOz41cgd
+         1zXGC0RO1r+e8XaYbHqOauVUjzFxYsNBt9Nkj5IbBx2NnOjwzrzmck1SKqiwJdJ88v
+         vMk/fwBE4n42p7d/SgW3ZoHFi6BiwjoBzpKMgE+XXgrVDZ9Yd+Qs4z6tgKHcxZ+30w
+         i+QPbLY0XME1fPy0EGC1gUCRYarYLc0998vcMEjSIp6SwxPvYNRxkpeoFBRWyI+37y
+         /P8ZBKjgiNMEI9M4dJfjL9djLWe7XWmRp5WVRO0auKBAckkjan8nX+16wFzAoE9wKn
+         ifGR9LGzrFdxA==
+Date:   Sun, 20 Jun 2021 22:56:18 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Heiner Kallweit <hkallweit1@gmail.com>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: i801: Use driver name constant instead of function
- dev_driver_string
-Message-ID: <YM+rQgnxOiS3CZer@kunai>
+Subject: Re: [PATCH] i2c: i801: Improve i801_setup_hstcfg
+Message-ID: <YM+rci2DsswSLl5i@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <089c47ad-1519-947e-ac31-290da37159d7@gmail.com>
+References: <d5ec9de2-dd54-6ee2-a791-13ca510bcd43@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="L+HcRBztMCfXGWaI"
+        protocol="application/pgp-signature"; boundary="nHDjHHPKg8kD9b7v"
 Content-Disposition: inline
-In-Reply-To: <089c47ad-1519-947e-ac31-290da37159d7@gmail.com>
+In-Reply-To: <d5ec9de2-dd54-6ee2-a791-13ca510bcd43@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---L+HcRBztMCfXGWaI
+--nHDjHHPKg8kD9b7v
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 25, 2021 at 10:04:23PM +0200, Heiner Kallweit wrote:
-> We are the driver, so we can use the driver name directly instead of
-> retrieving it by calling dev_driver_string().
+On Tue, May 25, 2021 at 10:07:17PM +0200, Heiner Kallweit wrote:
+> i801_setup_hstcfg() leaves the bits in priv->original_hstcfg that
+> we're interested in intact. Therefore we can remove the return value
+> from the function and use priv->original_hstcfg directly.
 >=20
 > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 Applied to for-next, thanks!
 
 
---L+HcRBztMCfXGWaI
+--nHDjHHPKg8kD9b7v
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPq0IACgkQFA3kzBSg
-KbZlwQ//SoADMF943WhKjjGMx5vCqKcEiwsa4fqZbR0B3gsS4t6Nmxtwn06cQFQa
-3ejEtlPw2jz8JRj//d5C0v2+uyU+ze3HjqzTVY/TymzG5q35v88yHbiRUYDU93u2
-S+Z8l8FUTeT3aR8BOUsb4hVX5S23Kbg6nOHTUgxhiOOwhL6XXi5Q7eKY+sS6MwyN
-SJGFzDVCRm1p6sHK7Voj0/OTYDfBL8RdLH/kaHpqI0kxu0cLs/WbhF9bFmlkjKnE
-A7mWp7xfufW/ZPXZscoreRAD+oHXwE4637HvKPnjJEASds2CH6D6xOx/Urvz832s
-J1SDVh4tJddqU1qsGIPl1C/KV7m0hgFoRZZKqTgcfut8fjHR24WJUSVwODsQAjoO
-nZ/sFuEqsbiqT0tIbtlnSndDlZAzRD2OyvGS9tfCXGFTX717Nqd0KS8U0vzNoutT
-zBtEglf+8Fm31qZmj4XaQ5JfvbyMaMoQjwn2TKDkojggNMxxEFrN/X9ln1fX/XeT
-A6ok5/Hggs2zZHpK+kNplcPf0TFEat97gHscWhKEbKSsyj9TOtz+B4xiGKIcBPYW
-kvorIGgQaOsxuBSLGwzqXgzUSzShiwtPWOcCRIHtwEWhnjfQdWQ4HY0v0+Ut5mfx
-hW5ZODc84TBzMp9cXQcS9rlbDGZXa87f4EgeNKJUq+65T6gyJJo=
-=GdvN
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPq3IACgkQFA3kzBSg
+KbaMNg/+KlmFaxca5NKF2STNZZU5F7SAiu2JibudxbXKAiNSBcYyTsYyt1P0/Y1d
+v4Lsxa9T/48oJVFQZQUxurG2+Pv66qtc6R2rIoFHFWKNV39cpwnOvHnTGghSwZls
+CDzX9GFnd6tZNSxG8FzcS1n5X+azNY/u5kfJwV7r994rCK3RVoGOqMpzy5bEpnMm
+fkVOA90gyGqfjm8yD7YVLMqz6FFwafxuSlWMwNfC1BEcFczqW6+0hMeK17wsF1di
+5UzIa3pEL42+gW+zueEp6jaUUgi4vrgqzYvkO9IwOeXV5rgAFU1gqKNeUWKZyOh8
+LwGM+GgRbBB/x+1gTN4mEf1lSKVLIE6rtubphms+A6f+GndqbwfOPf3aeNf7AUlb
+DKlA0EwpN2wX9E9VFO0eg9SMZvN+gLxod11bMSpVr4kEFz7U/MBE0vrSn48paRUT
+KS3KcwpGMudi6++uJuJikr2okoNzzBzVK9N1zF2iSSwLNoiEgC+mAep7BaIlLtR4
+JB34KKwjzLLOc7da4uSuMx5vJhS1HGFqF7QK/O2+57jHYtmD1EKx4sSoCVdyVtPy
+0u7t5ubLiCEp7GUssflQYhDYjCJnjos1mpr/5jPoMaAOimJKeqTYuxMo6PPVgPij
+vf8hBtt1EsuMPgvcVjc1UZWfPLl9GN02KblPO053Ytidi0Ri9ec=
+=Zb2f
 -----END PGP SIGNATURE-----
 
---L+HcRBztMCfXGWaI--
+--nHDjHHPKg8kD9b7v--
