@@ -2,91 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBCC3AE066
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 22:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A14A3AE06B
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 22:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbhFTUo2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Jun 2021 16:44:28 -0400
-Received: from www.zeus03.de ([194.117.254.33]:50926 "EHLO mail.zeus03.de"
+        id S229632AbhFTUsN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Jun 2021 16:48:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57538 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229901AbhFTUo2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 20 Jun 2021 16:44:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=q4kklcMSCjeEZDRjP4J0pXWVCBBy
-        8pf2UT874XhCs34=; b=ZcM7c4rFxYQWsv5x4HbTNE3VDCivh/I/GJr+VjwchRRa
-        qfV2tFBR7r4JTkOHm2KWASFjgUdZz0ozltARvxErxudJ1CY/cCOt+D/A8npzffCP
-        9i3cC2FtuvrD0xUqJKWw8gCYV53oDd3+He1/zpqcMvf/tOkvIRxDV2dVoTsBAyA=
-Received: (qmail 1498487 invoked from network); 20 Jun 2021 22:42:14 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Jun 2021 22:42:14 +0200
-X-UD-Smtp-Session: l3s3148p1@mQV6lzjFvKAgAwDPXzseADJuEzJK6i8P
-Date:   Sun, 20 Jun 2021 22:42:13 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 5/5] dt-bindings: i2c: renesas,iic: Convert to
- json-schema
-Message-ID: <YM+oJa0XQUXv6oU/@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Rob Herring <robh@kernel.org>
-References: <cover.1624013699.git.geert+renesas@glider.be>
- <8fc6fdb175d65306e601a4209944a99e1e6fcb09.1624013699.git.geert+renesas@glider.be>
+        id S230031AbhFTUsN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 20 Jun 2021 16:48:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DC596108E;
+        Sun, 20 Jun 2021 20:45:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624221960;
+        bh=naTIKEbPfHq0PGsbC0nXabesWxO/GoVYUNgYk01R+ms=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H/4aEpgPRQ47y5roOIfnGdkeQsCs02zox8cuM2obPM4tUaJjQZHdOYNlyRJCByGy8
+         dV1sPsLReNjfaOuA+pr3r7CqgmZ7O3ghQ2yT14+zjgPgRtMioi/rbjF1cHoN3Imwqd
+         6uHQhJZP9kckV17uXqUkKjKe6N3Fy/DaTrKxlPCG2l6ZRCXw7AtRkYhJt3W4SWxNte
+         3cgsEgXhgNdY6cd+AmIX8apDnPL/LPWtf6uMDcA2lifJhpIGVTsOuEWShfknbm8+sE
+         bt/VImy0hXdUdZTrTjS1GLG/gwIBKZGFI3RM630BzuyYUJ2GO62zCOEKjZHhQenjRB
+         SyaHvDBi77b8w==
+Date:   Sun, 20 Jun 2021 22:45:57 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Loic Poulain <loic.poulain@linaro.org>
+Cc:     andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        Jonathan Marek <jonathan@marek.ca>
+Subject: Re: [PATCH] i2c: qcom-cci: add sm8250 compatible
+Message-ID: <YM+pBQzIO27FPKVt@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        Jonathan Marek <jonathan@marek.ca>
+References: <1623659341-21954-1-git-send-email-loic.poulain@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nNEq9FDnwdehK7cS"
+        protocol="application/pgp-signature"; boundary="IAGS9dtNf0nmirDq"
 Content-Disposition: inline
-In-Reply-To: <8fc6fdb175d65306e601a4209944a99e1e6fcb09.1624013699.git.geert+renesas@glider.be>
+In-Reply-To: <1623659341-21954-1-git-send-email-loic.poulain@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---nNEq9FDnwdehK7cS
+--IAGS9dtNf0nmirDq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 18, 2021 at 01:04:11PM +0200, Geert Uytterhoeven wrote:
-> Convert the Renesas R-Mobile I2C Bus Interface (IIC) Device Tree binding
-> documentation to json-schema.
+On Mon, Jun 14, 2021 at 10:29:01AM +0200, Loic Poulain wrote:
+> From: Jonathan Marek <jonathan@marek.ca>
 >=20
-> Document missing properties.
-> R-Mobile A1 and SH-Mobile have multiple interrupts.
-> Update the example to match reality.
+> SM8250 CCI is the same as SDM845, add an equivalent compatible for SM8250.
 >=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+> Reviewed-by: Vinod Koul <vkoul@kernel.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Applied to for-next, thanks!
+This patch is in -next since 2021-05-25. But I forgot to send the mail
+saying so. Sorry!
 
 
---nNEq9FDnwdehK7cS
+--IAGS9dtNf0nmirDq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPqCQACgkQFA3kzBSg
-KbYCqw/+MQaqPvtGgBaK6TjJgAhsIqknfi978bFzU/JthXHRohVUwKuFpkrXY7U1
-6hfnOxB2OR8FcASt06anQ7yeAZmx58EJU0DN5iwEvYolwb6O6eoAeGV3uR8cRxVu
-xfFigO2g+s8fsdhoFgQOgAC5G5mjJWm1HXLSTAh4yXkJD344SUcb7KauK78SokH5
-y+7U/DGnZGTqpRXPHurMoSR9Yy5KnU/YjNSIbdS3ELbMOv1oh47mPERqR1y47fwx
-EdqbvNjx31mIraW0reTUE4DXZfzJNnxUHERZscz7cdSZmMKNgURHJsrdgaFcfKTK
-1qZUxcJQnh1JD5JIb3NsmKDXlA7eene07gNQJ29FzlLP+czqDFePZ7okuwK1WNqg
-4WZjhBPMWXOF83AqzxwBzFRlf0KXHE+v8E7Ph4MHohqFcfG0BFulBMaKW1zx1VJq
-BFTCZO0zluczQH29W8zy9jPeg4RJrSq+o/LFQqouklTxGJvBuxfgG9ULENYjwhWc
-hlHFQhleR2C1Jl7/U/t6u0wD4H5Dd7Ohu1TDuIh243XfBjPJpubvAXHvkXjHAdTB
-R0uNpZWFSXMfPLI9/Cu6a5J43/9C1BuaJ+Qt9/uzyPNOdyLK7Ygr9yyVkfIIh9mg
-flhYLCjgO+6tgMQUlQmEeKQqnu5ljbPC46wqdq/bbGboajNRrPY=
-=S18R
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPqQQACgkQFA3kzBSg
+KbYIlw//Yx85vOuXCRtMZvdsMKBAJRnfW7um/NRfQAhyqr4GC5bCwPxQRHtF8O8N
+O/qZjWg9Om1wgS7EwtqjqKF4Ytiag2+CqpHDCI6ksvXfmsZP/85pTTA//qXHm99P
+tpxu9x1iRl/GqYoVTu7nCCJDWwJq9XcyLTVnjUZgM5S7u7GLAaw8s2B/6K5GHPCu
+DXdBMDN/L+v+iLaXLYFUrbABLZlqC61nf3iL0I95dg72Uz8weRr5QDV1e6Jw493t
+InRKkt3lMf5fKdOkrQFII27ECDb0zbMdEi1hdGzwHEEwwe+lcluv6sk8IJsAvaoX
+DiGVqruaUMwxiLJudZZm0ipvYJaBZO7Cdo7nWs3LHUko9Gmfvz+d3IxBenzz4AMF
+4BP64R76u8EAwoEosk3xNvzWQQTGg4wSZ7EUlns6YTOZ+R3tpZxt3L7Sbpbjz4tc
+5ULYjOQcNzCYEiM7m2tk3CiWk9gc1n0dCo3OCgh2sb1REfN3u4MO5U1atBdQWS3e
+othz/xMTCOMhOXCbNdn+tpa3w4bPmkdUqM90N0dQgdbvclXoKnYugvcneIVzOcsE
+GpHGoA6gvOf6wswIQUbzGNkRr0AcGOQIWWtwVkzMoMkXTU3aVLpegsBCwXeNDwfY
+o06nyWhkkBr0NYZ3xu0Vg4Ii4I8q2CHBvUICpF0KxzZtjTpPHkc=
+=F6fK
 -----END PGP SIGNATURE-----
 
---nNEq9FDnwdehK7cS--
+--IAGS9dtNf0nmirDq--
