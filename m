@@ -2,87 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9058A3AE073
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 22:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92D13AE074
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 22:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbhFTUzW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Jun 2021 16:55:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59124 "EHLO mail.kernel.org"
+        id S229901AbhFTU4C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Jun 2021 16:56:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59240 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229845AbhFTUzW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 20 Jun 2021 16:55:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C755610A3;
-        Sun, 20 Jun 2021 20:53:08 +0000 (UTC)
+        id S229845AbhFTU4C (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 20 Jun 2021 16:56:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DD112610A3;
+        Sun, 20 Jun 2021 20:53:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624222389;
-        bh=ZnHA0Xq3HcBQHq3Y5jNt+1+CFr97C73z6OIAzo7jye0=;
+        s=k20201202; t=1624222429;
+        bh=8inU7eQ1OtyZRKsjx26IlpMBMI+uspehUyz3W8X1zrI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rm1eQQV3sqve8xpyBO9hD09k0B9nVuMDfDWgr7yXetRzs3TgRzNqUcgnvxhndD9ZW
-         SwK8o5FwMF8mCECxdWuNVFfrDKN1GOfSivwT4SMTJj2MaiLLrtGk+ok0v68eVxW6EH
-         Ak6iRX9GT/9TtJ2/Osqtjm+sbUi3w/JYNdXlfQMu28ne1+OUc6tQ1IdBHYxw96f3uJ
-         zBGJ6Apqn5CGLYpYiJoVws5LPZpLOQxwPGKNxkiZusTuAwdHvBBu7CemaThAdqLNou
-         IAMSAv/hodz8ft5jY47vlmCXKzyD4+PAtXAx4y7CPVCnveJAmILiIhWHcsTxUTtedz
-         4VGEe9I0wRftw==
-Date:   Sun, 20 Jun 2021 22:53:06 +0200
+        b=ibfaLhC+H0S/WhyTN1tfKE6U+hQkR3aTdrHRCIv9u1GGDxHk5PyqBNMd/Z2GxTvhW
+         1EEwln0zQ1c7+BP9E7BWATBL+715hgfYgPkD8kg+v0+bQmj8vguz07MI6kN9xee8pU
+         GP1EL/Xli885bdaHY1rc41baHaSLmet4ahQkKZKFBfzMGqnBGRAr4kZbFmZXaUp3q3
+         /gG30SzVwiC9xYOXi1dtsZR7OiNbK2TJ9EJsuYPY5H9yPmsnU5nZ+LY3jHEqLpkZbN
+         hrj2Cq11ZPmdX0TLjImIvUFMcjVxs+dqhqMxfNCM38opP3XPcOp7933XUCJ58bOcSK
+         4CyrxUYVaJB/Q==
+Date:   Sun, 20 Jun 2021 22:53:46 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Heiner Kallweit <hkallweit1@gmail.com>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: i801: Improve status polling
-Message-ID: <YM+qsq7Vg7wNfAAu@kunai>
+Subject: Re: [PATCH] i2c: i801: Simplify initialization of i2c_board_info in
+ i801_probe_optional_slaves
+Message-ID: <YM+q2gTYePDOB+7C@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <4147230b-e88f-52e8-1241-ad343f77628f@gmail.com>
+References: <c2c797f9-7c5c-9545-0cac-675a191c7e40@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="51cSOQb/e0keEIz/"
+        protocol="application/pgp-signature"; boundary="tR0BJDfvNHugKDDm"
 Content-Disposition: inline
-In-Reply-To: <4147230b-e88f-52e8-1241-ad343f77628f@gmail.com>
+In-Reply-To: <c2c797f9-7c5c-9545-0cac-675a191c7e40@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---51cSOQb/e0keEIz/
+--tR0BJDfvNHugKDDm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 25, 2021 at 09:59:05PM +0200, Heiner Kallweit wrote:
-> Polling uses the same timeout as irq mode: 400 * 500us =3D 200ms =3D HZ /=
- 5.
-> So let's use the adapter->timeout value also for polling. This has the
-> advantage that userspace can control the timeout value for polling as
-> well. In addition change the code to make it better readable.
-> Last but not least remove the timeout debug messages. Calls to both
-> functions are followed by a call to i801_check_post() that will print
-> an error message in case of timeout.
+On Tue, May 25, 2021 at 10:01:31PM +0200, Heiner Kallweit wrote:
+> Why shall we bother to open-code something that the compiler can do for u=
+s.
 >=20
 > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 Applied to for-next, thanks!
 
+> +			.type =3D "fujitsu_apanel"
 
---51cSOQb/e0keEIz/
+I added the "," here.
+
+
+--tR0BJDfvNHugKDDm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPqrIACgkQFA3kzBSg
-KbYXsRAApBwTFF5vCMz1MJAlDUOFr9f1t5ISq2AsUYIZuEDlbAN5jiwqogAEqtyU
-NAG6aGUyfGFNEo3ffeOQNeFRFxMezsb13HuPhuhIIvQX+B1jIN3gQmRhaLS4Y+vb
-ae5aK9GOQzfjhyaUuh6V+ZIzhAQiyVlsK4+w0Kc7yKwUAGRRqYBoktEkyjS9419P
-TQXeNDj7ChBihCmfN64MovfCXi9eSShNjpDE1dasDsjIAASsGgmz9EldrRPLhW2d
-xD1JG2UgunmAu+RC7YKRti/ufzEu16a2FxZUtYYzZHOv339xcjgD2wE0pYdHzWNE
-AJ1LLWb04m48IoPJxdyxeEGENEUtgwvUiEnualkmVMq1rUR57xzITkUm+180STkQ
-BXBgV0iKexbM9bHuE3mPOkkWjJ4KcC8kOFdPoVfsbMcdNse4EY06MTdy0xFKeMET
-n8oDQp6q+9vgNtWzIhpBIFl4dF/T4an2hGm9v20r9yfNbFpTT2ncPhs6jFkIa2SD
-K/WrT1szNqf9bhJd4VOBJMONsifH09JE/ALTZYla1bx1GEdGay3EGuY9NTzkiT05
-Q5H2lnAkiMloX2UpgYWciofhJan3SH0tt9AmQs/oD33fbThyRAiBT+fvn1rwVae8
-OilyoIG0bfTRDYA93Sscy9jAd+dnUbfqVtvg6q3YJ852COXQv8Y=
-=uyAs
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPqtkACgkQFA3kzBSg
+KbZYJA/8Cp+bKTG/VFUj8lv762u6w+lT3fWfzhrBQHCRGHof4rKSvUBY2vLU4sY1
+Th3zGGgQFryoq6ILvdasnwgYx2+40DqTP9j+FImYIoR8c+O6Ey35bRLufhu4DO/b
+IHC6Zo3GClV6cERZUG909G7CPHQ3vdGHNfI3s0D8a99q8+8Le/zWtYH+FlOcKH05
+oz9VmCWistJ0JfaRno2cJYaBNespFdrPl5eAPIR0n7akcg7sBxRlI1vxUYjAKabO
+Omf4xDgWAvUfLOgTeRvkq05voDfs5S1tpd2oxTtpADc42Bl4CfVXtDImQDtIbWks
+qKrwNi28UHUznFV1V9kklw2whsGmhAz/sW2P3TolWL06qLdPXR2bwI89HVXJlFdk
+0A/sdR+9j9Eo1lE54IRiiUB38wFNLXqD+WrH/Lj1Y8vaSrHr/JpF+gAEc0DKqnJc
+IUElFkCTfuI2sDf7O66SVG4e7FIKW4tCmQRzG/lSkwEg3fv3GuJ/Y2N+z+PC9VNT
+uZlSqDDSV6fhA0tYhCxuugFK+070QBa/okYSkco6NdqhpRgOYrIJxv5ZvbUgkpET
+/XZPg59ZgMvvPm23LPCsXcPA7IVpfKNtJ5ZO4AvQ9vNwHbKV4nxTxqzsLvKsUGeV
+e8QMaBS6LShcSk3canZuB21z4O63zrkgJRLazkrFAkNTmfBqI3w=
+=DaK7
 -----END PGP SIGNATURE-----
 
---51cSOQb/e0keEIz/--
+--tR0BJDfvNHugKDDm--
