@@ -2,83 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3534E3AE070
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 22:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9058A3AE073
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 22:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbhFTUuD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Jun 2021 16:50:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57992 "EHLO mail.kernel.org"
+        id S229877AbhFTUzW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Jun 2021 16:55:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59124 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229905AbhFTUuD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 20 Jun 2021 16:50:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F10B06108E;
-        Sun, 20 Jun 2021 20:47:49 +0000 (UTC)
+        id S229845AbhFTUzW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 20 Jun 2021 16:55:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C755610A3;
+        Sun, 20 Jun 2021 20:53:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624222070;
-        bh=Bp8cnLr7xfqy+UKnnykADt2ZO35GTyUrsLstokF0RNg=;
+        s=k20201202; t=1624222389;
+        bh=ZnHA0Xq3HcBQHq3Y5jNt+1+CFr97C73z6OIAzo7jye0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MI+FE/u3nf6Isuo06cjBFROaYAOqk3WUkfMKaSaWv0HbKKLbmKvxVaQP44IkbQhhN
-         vxkcXCzJV2TAQoGAH4jDhTM9J4H03DGva9eXn+GZvBdqn96d4FaohLXibXGtdw/9A5
-         359EbzJHwZVpdPRafLLY+Em0rd7g7a+8QllrxD3BM+X3tX4GsGSvkFLM6X3eBWrIQZ
-         Iy6WgXkhoDS2P7kxbhhx/sKgk5RJ0lB1BSPhB9Fo3O/jzLHkQonLrkFaSIDeBbVZue
-         hi68mDoudMO3PrK7k84ydKL5tz1Xfn+dWkzBOCbY290A7GCrKr4QYZaa40CtseeeHp
-         lO1Cb7ynqOVkA==
-Date:   Sun, 20 Jun 2021 22:47:46 +0200
+        b=rm1eQQV3sqve8xpyBO9hD09k0B9nVuMDfDWgr7yXetRzs3TgRzNqUcgnvxhndD9ZW
+         SwK8o5FwMF8mCECxdWuNVFfrDKN1GOfSivwT4SMTJj2MaiLLrtGk+ok0v68eVxW6EH
+         Ak6iRX9GT/9TtJ2/Osqtjm+sbUi3w/JYNdXlfQMu28ne1+OUc6tQ1IdBHYxw96f3uJ
+         zBGJ6Apqn5CGLYpYiJoVws5LPZpLOQxwPGKNxkiZusTuAwdHvBBu7CemaThAdqLNou
+         IAMSAv/hodz8ft5jY47vlmCXKzyD4+PAtXAx4y7CPVCnveJAmILiIhWHcsTxUTtedz
+         4VGEe9I0wRftw==
+Date:   Sun, 20 Jun 2021 22:53:06 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v2 1/1] i2c: cht-wc: Replace of_node by NULL
-Message-ID: <YM+pcm7WaK0LvtQQ@kunai>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: i801: Improve status polling
+Message-ID: <YM+qsq7Vg7wNfAAu@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20210609173035.83777-1-andriy.shevchenko@linux.intel.com>
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <4147230b-e88f-52e8-1241-ad343f77628f@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sAMmsqq1V/mM7NId"
+        protocol="application/pgp-signature"; boundary="51cSOQb/e0keEIz/"
 Content-Disposition: inline
-In-Reply-To: <20210609173035.83777-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <4147230b-e88f-52e8-1241-ad343f77628f@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---sAMmsqq1V/mM7NId
+--51cSOQb/e0keEIz/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 09, 2021 at 08:30:35PM +0300, Andy Shevchenko wrote:
-> The driver is run on the platforms where OF node is always NULL.
-> The confusion comes from IRQ domain APIs that take either OF or
-> firmware node as input parameter. Since fwnode is not used here
-> either, replace of_node by NULL.
+On Tue, May 25, 2021 at 09:59:05PM +0200, Heiner Kallweit wrote:
+> Polling uses the same timeout as irq mode: 400 * 500us =3D 200ms =3D HZ /=
+ 5.
+> So let's use the adapter->timeout value also for polling. This has the
+> advantage that userspace can control the timeout value for polling as
+> well. In addition change the code to make it better readable.
+> Last but not least remove the timeout debug messages. Calls to both
+> functions are followed by a call to i801_check_post() that will print
+> an error message in case of timeout.
 >=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 Applied to for-next, thanks!
 
 
---sAMmsqq1V/mM7NId
+--51cSOQb/e0keEIz/
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPqXIACgkQFA3kzBSg
-Kbbq2A/6AsBLgI8X0UQSGvFG5aemun6SOI01KYa2LM1B33EF6VStN+YipkX5ced6
-M/JiBWtb6B06rqCAZzQuKab+s3R/wp3xAIwRcJHxdMrE+nsww0PwWc5AfyZjd5+9
-BUdt8hkmK5FD7cXUXIe1vQ4CdYc6kkMtK6sR1j2tfeBhuB7cclXKEBHYjh7AGvY7
-PGrCMboPAIBMey6GGfiRp2ixpoxiRALf/2OmJxBJIwKFzVvgL3KnkYDcOLAK7abp
-R5kzZQROAeAFT/TTKY//bh6LbinuSCUQIAtxTizxkNVpu9hlwyS3YTPdlzqc4yOM
-OFHtBV5b1PpnkCCq5xJYZfcAh0+1vWbPWn1nJ940mFed1d1BM1A47otKnMHrY97C
-LnT64lrr6z4uG6Ohdq/3uVjiMTb3d6cXL03414uezjqN2+m4zfDcTERP8wXYmC9j
-2m06Ti9lP+8U57sXtfDtXGCkxEd96DW0GBuxkQZ0slakbxh7aK14/a6yzQZwYxCh
-4KoU4cHwG3mPfnCv8wXbhzylVHZiUZPqev7vIW1489xSMUqTD0rKa5u2W//L5nlU
-bM1u/gPijW/dFp4n3fx2k66EvASB8AvkHEVqw4CfxufJFxl3jDiZXWkcQDFsFk+Z
-5QXhqUBjF4DZJp9jxNStUekoDnTIuIwcPHD/hbfLfdeHkLCMnU8=
-=2uBb
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPqrIACgkQFA3kzBSg
+KbYXsRAApBwTFF5vCMz1MJAlDUOFr9f1t5ISq2AsUYIZuEDlbAN5jiwqogAEqtyU
+NAG6aGUyfGFNEo3ffeOQNeFRFxMezsb13HuPhuhIIvQX+B1jIN3gQmRhaLS4Y+vb
+ae5aK9GOQzfjhyaUuh6V+ZIzhAQiyVlsK4+w0Kc7yKwUAGRRqYBoktEkyjS9419P
+TQXeNDj7ChBihCmfN64MovfCXi9eSShNjpDE1dasDsjIAASsGgmz9EldrRPLhW2d
+xD1JG2UgunmAu+RC7YKRti/ufzEu16a2FxZUtYYzZHOv339xcjgD2wE0pYdHzWNE
+AJ1LLWb04m48IoPJxdyxeEGENEUtgwvUiEnualkmVMq1rUR57xzITkUm+180STkQ
+BXBgV0iKexbM9bHuE3mPOkkWjJ4KcC8kOFdPoVfsbMcdNse4EY06MTdy0xFKeMET
+n8oDQp6q+9vgNtWzIhpBIFl4dF/T4an2hGm9v20r9yfNbFpTT2ncPhs6jFkIa2SD
+K/WrT1szNqf9bhJd4VOBJMONsifH09JE/ALTZYla1bx1GEdGay3EGuY9NTzkiT05
+Q5H2lnAkiMloX2UpgYWciofhJan3SH0tt9AmQs/oD33fbThyRAiBT+fvn1rwVae8
+OilyoIG0bfTRDYA93Sscy9jAd+dnUbfqVtvg6q3YJ852COXQv8Y=
+=uyAs
 -----END PGP SIGNATURE-----
 
---sAMmsqq1V/mM7NId--
+--51cSOQb/e0keEIz/--
