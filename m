@@ -2,66 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2E73ADFF9
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 21:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BD53AE05D
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Jun 2021 22:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbhFTTdt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Jun 2021 15:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbhFTTds (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Jun 2021 15:33:48 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E67C061574
-        for <linux-i2c@vger.kernel.org>; Sun, 20 Jun 2021 12:31:34 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id j2so26443215lfg.9
-        for <linux-i2c@vger.kernel.org>; Sun, 20 Jun 2021 12:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
-        b=bkPS4yFR98020frGZuTqkshvNSWXl0Z6aTQyqDBQOYRNn8mNj5ss4TtiudbSrK7ff/
-         QNZJY25CiO+MAZJaIbw2u0HDwtyse9WT3A0cEIgMb7BhAc5Gi6ayNLOmqZZccWa+fNBh
-         k61qS4LmcyXeqJul4RPlYtrHntUAvOZQNCldFK4euecaucVDQIZPJo6OCRHDFo8n8io6
-         y/wykfU9I/qPBsaSVZvRbHpzbXcDYmsqOM+wVrXUhyO/jptCVxl1LpxYgYbXKqQg0pGJ
-         jrhELtWISoo7lLKraKAHFp1ru6KpHU4ePpKhtD5yFuFfQm9+elaj+smp5+MyUD/KdPaP
-         Ef2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
-        b=K7kVpvy+kI9QQ6yhwrYDISWbJSyIjVi9NdL76tZYzxLupOH3TJQ8ZMxUDNrEsn3L3k
-         1RbaUDD7MfhHRuGrNIRH+ypthlfY7lTd0qzEvc0u5VuQKiqAWiq6XZuYgJpBVwAbYMGK
-         gm+yH/leKGuOONHsIKFjlVmqWFKwl4meMcwk6RYtyFIAkPdjF1FE1qzoQd46SoNNwzN3
-         z6c5wcP2RmTyelqvRNHTHmvgqm5lCS/4ngThS+kx/t5Ps8OYRNDPWLQweq2ZsOWzOZoD
-         ePIYUnWN628E/V5qfoLRCoDGqW8sSih8vuSazzeIMF7UDoGjCxh5BBuEBfFRnKp4XVM0
-         0lBA==
-X-Gm-Message-State: AOAM531NrS0DWM4wqz7fNzr2H0yWxfIQdHSf0Ry2FXzMNx0ERp8VgkUB
-        HaJpGf9sFax4UGNufjTIvRwX/Tiul5qluNWTrjw=
-X-Google-Smtp-Source: ABdhPJyRr8xkKh1v74sSXR4glyEviCtgGMwIox16xrJwn4HhjsAH3AQXF/kC87XZ0K1UcvikGGPprpK4pH75Np6p+uM=
-X-Received: by 2002:ac2:499d:: with SMTP id f29mr6724142lfl.602.1624217492479;
- Sun, 20 Jun 2021 12:31:32 -0700 (PDT)
+        id S229905AbhFTUoI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Jun 2021 16:44:08 -0400
+Received: from www.zeus03.de ([194.117.254.33]:50776 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229632AbhFTUoI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 20 Jun 2021 16:44:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=oGBDtaLCRYxKLuiNto47hLrUe6iq
+        IFEyq3rpq71mPPw=; b=Ya4JIrn7xQfJhGVbRb0futYX5TQvnfaaFCwYZyYroYyl
+        lwXcS22qLFHHzLdmYuY8hp+Ky4EQRYYiT/IkkCQENoihgpWBwvmBUXA8Ex/YE8WB
+        MwLnYHbDDI+mIC2176gT4UU3Au+2a4alcfGC1iyWx6nYM5VXKtXzM/vzkng3Xvs=
+Received: (qmail 1498167 invoked from network); 20 Jun 2021 22:41:52 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Jun 2021 22:41:52 +0200
+X-UD-Smtp-Session: l3s3148p1@U3gJljjFtqAgAwDPXzseADJuEzJK6i8P
+Date:   Sun, 20 Jun 2021 22:41:48 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: i2c: renesas,riic: Document RZ/G2L
+ I2C controller
+Message-ID: <YM+oDO6MiTdwTopm@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+References: <20210615085400.4251-1-biju.das.jz@bp.renesas.com>
+ <20210615085400.4251-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Received: by 2002:aa6:da47:0:b029:fa:6d7d:24c with HTTP; Sun, 20 Jun 2021
- 12:31:32 -0700 (PDT)
-Reply-To: contactcenter@gnbinvestorsb.com
-From:   Gnb Investors Bank <sandraquntoo@gmail.com>
-Date:   Sun, 20 Jun 2021 22:31:32 +0300
-Message-ID: <CAPu=tC5n-=M7EGJZV++m9omRBkAZZ+M9gcWgQjJkA4Y9N6hVBQ@mail.gmail.com>
-Subject: Brauchen Sie einen Kredit?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yWTRkghC0kLYN4EP"
+Content-Disposition: inline
+In-Reply-To: <20210615085400.4251-2-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---=20
-Brauchen Sie einen Kredit? Unsere Bank vergibt Kredite zu einem Zinssatz vo=
-n 2%
 
-Melden Sie sich f=C3=BCr weitere Informationen bei uns.
+--yWTRkghC0kLYN4EP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-E-Mail: contactcenter@gnbinvestorsb.com
+On Tue, Jun 15, 2021 at 09:53:59AM +0100, Biju Das wrote:
+> Document RZ/G2L I2C controller bindings.
+>=20
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Applied to for-next, thanks!
+
+
+--yWTRkghC0kLYN4EP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDPqAQACgkQFA3kzBSg
+KbacnQ/9HliN5XI+gKNE0BXrLs01J0lK5nKzsRWtHuFbLfy4tjU+YXrs1VN7jTI0
+Xaj+wiOCWkm4GiFc+RvUBw0/GhYX9iVMwtEhl4ZZjOIEQMUX4PNvxM7gIiTaMznq
+NHZ0ThLwr0eCIW/tIRycgvRlyJDYsBKa8+37RJMI4/V46VHBrEFfrCNPugxqNBQO
+KK0n5DKQuLR4vKdvLvc72KsMqrQdPqBx9VzXZM8j4/BdN0iDNiByk30YKNhnspfo
+FwXXuwu2o1ez+0fUaPyjjfb5iFMn+goyDM57AmLcemnaO4+mcYIkoU3SeVzUMfBL
+IO4VwNreRzNCoXqkJyMAOGJwTPqvyjhNibEW92FSRx3ealrxJ9Cp2nUQ9HYml5wx
+SlCcmEchOk9F/BZMnEu8YHEypBL3Wu2Wo69jE7bz4uOJdQQcPwh/yHYdWEW2fQYI
+UcWKacfjOcyU5xuhySdmnlSp5GKrhE4iuF8awL8n3n5ITMdRpUPO3UEbc+SkOyeD
+qd+KG09nBB5SIjyNqCLmMuIAj9/ba5ARewfWZjwK/IER3vTiziDlQdkzhmpENwy9
+GgLcTTWT82BpPj3wTCmlpX/zD+Ld+D4tB5kCBfNLmA3TTbZtUOCsmFGwpIh3nfDu
+8w/PsMaErSNkqZZovOk20veFNaZlkKGiPmLMkKki9sgyiBZeBug=
+=pMD+
+-----END PGP SIGNATURE-----
+
+--yWTRkghC0kLYN4EP--
