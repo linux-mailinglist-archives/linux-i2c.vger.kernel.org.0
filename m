@@ -2,104 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB3B3AE2A6
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jun 2021 07:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFB63AE2C1
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Jun 2021 07:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbhFUFRI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 21 Jun 2021 01:17:08 -0400
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:18364 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbhFUFRH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Jun 2021 01:17:07 -0400
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 15L50DTC006012;
-        Mon, 21 Jun 2021 13:00:13 +0800 (GMT-8)
-        (envelope-from jamin_lin@aspeedtech.com)
-Received: from aspeedtech.com (192.168.100.253) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 21 Jun
- 2021 13:14:48 +0800
-Date:   Mon, 21 Jun 2021 13:14:46 +0800
-From:   Jamin Lin <jamin_lin@aspeedtech.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        "Andrew Jeffery" <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Jean Delvare" <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Khalil Blaiech <kblaiech@mellanox.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        ChiaWei Wang <chiawei_wang@aspeedtech.com>,
-        Troy Lee <troy_lee@aspeedtech.com>,
-        Steven Lee <steven_lee@aspeedtech.com>
-Subject: Re: [PATCH 3/3] i2c:support new register set for ast2600
-Message-ID: <20210621051446.GB27876@aspeedtech.com>
-References: <20210617094424.27123-1-jamin_lin@aspeedtech.com>
- <20210617094424.27123-4-jamin_lin@aspeedtech.com>
- <YMslyzUKp/7J0ncu@smile.fi.intel.com>
- <20210618035855.GB31659@aspeedtech.com>
- <YMxuz03aTijWH6uj@smile.fi.intel.com>
+        id S229837AbhFUF2h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 21 Jun 2021 01:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229487AbhFUF2h (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 21 Jun 2021 01:28:37 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63776C061574;
+        Sun, 20 Jun 2021 22:26:23 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id c7-20020a17090ad907b029016faeeab0ccso965292pjv.4;
+        Sun, 20 Jun 2021 22:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U/MHR9YQ2Ua8msJh3uQYWhxg2F3CX/5avj9hpJqmUuI=;
+        b=kPepjuHRyKGF1csJZqMnCdsllAVUrpMaotDpdWrHJONmwtFupcYDDbVl+cN1oVlFIu
+         pNB54Y6KuIZhcBLxMoiIykrjovHO3lGe566SlR8decSJR9D0X9jwZPp3iPx0QRJZezRR
+         lZC0Lf5IzsscifnVT5s9FTZUFcrNHeiH7jeytpe6D7SYMNNcVYBoKX1s5HQxWiTKXfdb
+         NLckMyJg4UiiMmmuw48jim3vNAaspVjKUBnIeUrLxgSdXsLqVeFQx1kRkoissePntHpP
+         QVQulsDIsJLEgQsOYVWZfL43PhwBZTI6KRsw2DFM5V9az7rOVyxAAr/oQbhBtM2wCahP
+         UT2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U/MHR9YQ2Ua8msJh3uQYWhxg2F3CX/5avj9hpJqmUuI=;
+        b=QHGhGX3wI0s+SJExvRHKbtJmdAAdwI7K0bLgmJH6CLVzwhSZu+MUblZ8+ihT+psgxd
+         TjN86IWJN/q4x7DFTg1Yi3kyven0ohrPrQiCb7rJbby0eIanTpwLdBnMAZCX9NLKLagr
+         che4aQhLn+d0aZUXrKEUMceoVK1OX5R8mK9YWuGVat7drOA0tOtJX0e8GW34Ux6Y+eDX
+         9Pt8qVBWS2LV3QxtrtmNNB7Ze7HN8py3wanojuzaxzIjZOkKudwsomtcCeAFJ1fMFfLJ
+         rFa6CZnfpqAJYxarBhAHWAP7hNn40MSgZsTexlcC4btayHFWiZRHpMwXOzcFZrIhKztj
+         HZmQ==
+X-Gm-Message-State: AOAM5335j8pohb3AihQihkRi5nETV4+fadNDgMcq6kpRMOcPiUPQFU6y
+        A1EKF6MUXtvkHAO7qeShwi0=
+X-Google-Smtp-Source: ABdhPJzfdE3KCuEjVA1qRn/qPCk/koiZcWwZYT7Bl+rfeX748SxkFbZl01BxOO5mV3MuM+2A2EkJSg==
+X-Received: by 2002:a17:90b:4b49:: with SMTP id mi9mr35300122pjb.219.1624253182897;
+        Sun, 20 Jun 2021 22:26:22 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:df5a:b40e:40c9:a3e7])
+        by smtp.gmail.com with ESMTPSA id c5sm2155806pfv.47.2021.06.20.22.26.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Jun 2021 22:26:22 -0700 (PDT)
+Date:   Sun, 20 Jun 2021 22:26:19 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Wolfram Sang <wsa@kernel.org>, Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] i2c: core: Disable client irq on reboot/shutdown
+Message-ID: <YNAi++CNZbZLuJRO@google.com>
+References: <20210604232744.1259150-1-swboyd@chromium.org>
+ <YM+tV9zH9SC+TQcW@kunai>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YMxuz03aTijWH6uj@smile.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [192.168.100.253]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 15L50DTC006012
+In-Reply-To: <YM+tV9zH9SC+TQcW@kunai>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The 06/18/2021 10:00, Andy Shevchenko wrote:
-> On Fri, Jun 18, 2021 at 11:58:55AM +0800, Jamin Lin wrote:
-> > The 06/17/2021 10:36, Andy Shevchenko wrote:
-> > > On Thu, Jun 17, 2021 at 05:43:40PM +0800, Jamin Lin wrote:
-> > > > Add i2c new driver to support new register set for AST2600.
-> > > > AST2600 support three modes for data transfer which are
-> > > > byte mode, buffer mode and dma mode, respectively.
-> > > > The global driver of i2c is used to set the new register
-> > > > mode and define the base clock frequency
-> > > > of baseclk_1~baseclk_4.
+On Sun, Jun 20, 2021 at 11:04:23PM +0200, Wolfram Sang wrote:
+> On Fri, Jun 04, 2021 at 04:27:44PM -0700, Stephen Boyd wrote:
+> > From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > 
+> > If an i2c client receives an interrupt during reboot or shutdown it may
+> > be too late to service it by making an i2c transaction on the bus
+> > because the i2c controller has already been shutdown. This can lead to
+> > system hangs if the i2c controller tries to make a transfer that is
+> > doomed to fail because the access to the i2c pins is already shut down,
+> > or an iommu translation has been torn down so i2c controller register
+> > access doesn't work.
+> > 
+> > Let's simply disable the irq if there isn't a shutdown callback for an
+> > i2c client when there is an irq associated with the device. This will
+> > make sure that irqs don't come in later than the time that we can handle
+> > it. We don't do this if the i2c client device already has a shutdown
+> > callback because presumably they're doing the right thing and quieting
+> > the device so irqs don't come in after the shutdown callback returns.
+> > 
+> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > [swboyd@chromium.org: Dropped newline, added commit text, added
+> > interrupt.h for robot build error]
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 > 
-> > >  - shrink the code base by at least ~15% (it's possible), i.e. -200 LOCs
-> > Can you describe it more detail?
-> > Do you mean I should separate the patch file to fix size limitation? 
+> I think this is for-current material because it fixes hangs. Or better
+> for-next to check for side-effects?
 > 
-> No. Based on my brief review you introduce to many redundant LOCs (lines of
-> code). Remove them, refactor the code, make it small and neat and easy to read
-> and understand. It is possible to achieve!
->
-Will fix
-Thanks
-> > >  - rethink how you do calculations and bit operations
-> > >  - better code style
-> > >
-> > Thanks for your review and very good suggestion
-> > I will update them and sent patch again.
-> > By the way, I received test failed email from Robot due to compiling
-> > warning. I will fix them, too.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+
+We lived with this issue for many years, so letting it cook in next will
+not hurt us IMO.
+
+Thanks.
+
+-- 
+Dmitry
