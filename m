@@ -2,168 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2DA3AFEF5
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Jun 2021 10:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C943B0156
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Jun 2021 12:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbhFVIUA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Jun 2021 04:20:00 -0400
-Received: from mail-vs1-f54.google.com ([209.85.217.54]:46782 "EHLO
-        mail-vs1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbhFVIT7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Jun 2021 04:19:59 -0400
-Received: by mail-vs1-f54.google.com with SMTP id z15so10758892vsn.13;
-        Tue, 22 Jun 2021 01:17:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s0hVMlLFV5eIwzuXXBEJWEV7FxMfuDBGtQwv1PuAfDc=;
-        b=Yc8JShUBMH1dnjUYyQ4i3CS2+y2GF6q1YtRwv/bRUTq4JGwOzFH8jz0/QYnr8ZuDpr
-         HcEesiBUGFsp/umSzAQ1ucxKn54tANWqVfYyhNDVX62VWxoC03W6vKFzSWDS1INIUujo
-         EfpD0ZvANCW00iJ41ZnsyYqUYQ7WKnBJFLN0taGCgErNoNfbEbrJRexR6AwIwIKT2Knb
-         /0emor8cfQJbNOnIXhfpVS1iQMsX9FEwTZTkt2w2NsDGz2POO5RqhJxIgP7TG7ACSbj/
-         GkkcJgg3HdSB+eNLe7DKVV3GNyEiHob+PVe9RVIKAdqt1PMr45YhOFebl4O9XRmtiOlY
-         SQDQ==
-X-Gm-Message-State: AOAM530BLNzCLpsQ3ZsdxG/iSlElsnvEgk5f19JQOeLC0TziQs7pI7vp
-        kFMx7YZsKONrP5YDTSXRni3TndxcwI12ri99DDk=
-X-Google-Smtp-Source: ABdhPJz3clw2O8tsVFk5F4OGcaBfo9Z8eHqvoF8LwYXAPGollSTCOREHx1S0f08A9nsiznMjaM5G5srL4UVXlJSotsU=
-X-Received: by 2002:a05:6102:2011:: with SMTP id p17mr21421376vsr.40.1624349860512;
- Tue, 22 Jun 2021 01:17:40 -0700 (PDT)
+        id S229810AbhFVK3d (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Jun 2021 06:29:33 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:42046 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229807AbhFVK31 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 22 Jun 2021 06:29:27 -0400
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1lvdcE-00030O-By; Tue, 22 Jun 2021 12:26:46 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     jay.xu@rock-chips.com, "cl@rock-chips.com" <cl@rock-chips.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, jamie@jamieiles.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        jagan@amarulasolutions.com, huangtao@rock-chips.com, wens@csie.org,
+        jbx6244@gmail.com, wim@linux-watchdog.org, uwe@kleine-koenig.org,
+        david.wu@rock-chips.com, jensenhuang@friendlyarm.com,
+        linux-kernel@vger.kernel.org, maz@kernel.org,
+        zhangqing@rock-chips.com, linux-rockchip@lists.infradead.org,
+        linux@roeck-us.net, linux-i2c@vger.kernel.org,
+        linux-mmc@vger.kernel.org, ulf.hansson@linaro.org,
+        robh+dt@kernel.org, cnsztl@gmail.com,
+        linux-arm-kernel@lists.infradead.org, shawn.lin@rock-chips.com,
+        linux-watchdog@vger.kernel.org, gregkh@linuxfoundation.org,
+        michael@amarulasolutions.com, mail@david-bauer.net
+Subject: Re: (subset) [PATCH v5 0/4] arm64: dts: rockchip: add basic dtsi/dts files for RK3568 SoC
+Date:   Tue, 22 Jun 2021 12:26:30 +0200
+Message-Id: <162435742917.99007.5058927510330896859.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210622020517.13100-1-cl@rock-chips.com>
+References: <20210622020517.13100-1-cl@rock-chips.com>
 MIME-Version: 1.0
-References: <20210615191543.1043414-1-robh@kernel.org>
-In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Jun 2021 10:17:28 +0200
-Message-ID: <CAMuHMdUGXu8yj3JWKwM8mt7axkrzGMiowC1t0PHrbpxRCBME3w@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-To:     Rob Herring <robh@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-can@vger.kernel.org,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-rtc@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rob,
+On Tue, 22 Jun 2021 10:05:13 +0800, cl@rock-chips.com wrote:
+> v1:
+> 1. add some dt-bindings for RK3568 devices.
+> 2. add core dtsi for RK3568 SoC.
+> 3. add basic dts for RK3568 EVB
+> 
+> v2:
+> 1. sort device nodes by some rules.
+> 
+> [...]
 
-On Tue, Jun 15, 2021 at 9:16 PM Rob Herring <robh@kernel.org> wrote:
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
->
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
+Applied, thanks!
 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+I've dropped the pwm and watchdog nodes as their binding changes
+haven't been applied yet - see followup patches I'll post in a minute.
 
-> --- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-> @@ -46,7 +46,6 @@ properties:
->
->    clocks:
->      minItems: 3
-> -    maxItems: 5
->      items:
->        - description: GMAC main clock
->        - description: MAC TX clock
+I've also droppen the debounce clocks from the gpio nodes, as Jianqun
+is still working on that.
 
-While resolving the conflict with commit fea99822914039c6
-("dt-bindings: net: document ptp_ref clk in dwmac") in soc/for-next,
-I noticed the following construct for clock-names:
+That way the yaml dtbscheck is pretty happy with the result :-)
 
-  clock-names:
-    minItems: 3
-    maxItems: 6
-    contains:
-      enum:
-        - stmmaceth
-        - mac-clk-tx
-        - mac-clk-rx
-        - ethstp
-        - eth-ck
-        - ptp_ref
+Let's see if this can still make it into 5.14.
 
-Should this use items instead of enum, and drop maxItems, or is this
-a valid construct to support specifying the clocks in random order?
-If the latter, it does mean that the order of clock-names may not
-match the order of the clock descriptions.
+[2/4] arm64: dts: rockchip: add generic pinconfig settings used by most Rockchip socs
+      commit: ef0bff8ba8dfa53780fca0fd5c369f9c78fc30cf
+[3/4] arm64: dts: rockchip: add core dtsi for RK3568 SoC
+      commit: a3adc0b9071d880dcceb78b5e921843502f272bd
+[4/4] arm64: dts: rockchip: add basic dts for RK3568 EVB
+      commit: 01610a24cefa182b155a17e38cd0b84f8a3f0529
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
