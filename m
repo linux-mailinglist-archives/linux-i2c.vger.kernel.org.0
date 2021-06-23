@@ -2,88 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E454B3B1198
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 04:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AB83B142C
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 08:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbhFWCPd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Jun 2021 22:15:33 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:54220 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbhFWCPd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Jun 2021 22:15:33 -0400
-Received: from localhost (unknown [192.168.167.130])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 82696CEFFD;
-        Wed, 23 Jun 2021 10:13:08 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P12974T140333956974336S1624414385256154_;
-        Wed, 23 Jun 2021 10:13:07 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <3edf8aa85aeee3a88cab6900d58ac85a>
-X-RL-SENDER: cl@rock-chips.com
-X-SENDER: cl@rock-chips.com
-X-LOGIN-NAME: cl@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-RCPT-COUNT: 34
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   <cl@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        jamie@jamieiles.com, linux-watchdog@vger.kernel.org,
-        maz@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-pwm@vger.kernel.org
-Subject: [RESEND PATCH v5 1/4] dt-bindings: pwm: rockchip: add description for rk3568
-Date:   Wed, 23 Jun 2021 10:13:03 +0800
-Message-Id: <20210623021303.28015-1-cl@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210622020517.13100-1-cl@rock-chips.com>
-References: <20210622020517.13100-1-cl@rock-chips.com>
+        id S229902AbhFWGtp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Jun 2021 02:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229929AbhFWGtp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Jun 2021 02:49:45 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258DFC06175F
+        for <linux-i2c@vger.kernel.org>; Tue, 22 Jun 2021 23:47:27 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id a11so2212208lfg.11
+        for <linux-i2c@vger.kernel.org>; Tue, 22 Jun 2021 23:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=L0V3tEWU6RXdv4sHk2WURUiKYv8hNk/3Vb4RrbCcOlY=;
+        b=NNIzqOYwBynenFN8vdGe7ySNHqpxvPYp40UtycV+u8T0/DzkDVfGebaNJZTiaaxs+m
+         JU6BZtFEM+HuMoMcE39KG4wkvyg47pX2Ig/bJUMkQJysrHm190UO9m0ELxSjtzgBoDFH
+         LllrbCzSCCPP5t7i9+O3zUpTdOkbvrEVjh7cFRiAL7/gcTbCRRnHL6xVysl7hiJc6uI7
+         9KerAOtBaoDnpJ58zK82F2gZpU5aph+Gqik30tAJYLZO7bfKAVPjV67u2Os3OFylcSWY
+         0pugdGNSNUzyJ+g6yGZSYsGJWIlHafV+8X7hs5Iuoly01+Awvd11KQ8phRHUdf9fzjD3
+         FGPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=L0V3tEWU6RXdv4sHk2WURUiKYv8hNk/3Vb4RrbCcOlY=;
+        b=ENhutBsgUdT6ouqZNHADwBMFeXaaHxU797dOiOUSE7LOf5p+cde4AxZORaf/qEKOgt
+         8uQd1z0D8Y5GVLn75nb9VeJeUfgFJc8735D7VUng7LzdTiAPhlfYKFTExFYZjdB3d/XX
+         6bhNWAxvODzoa8J3pjiJruiwyCPX0j2OKq3WTS1oO1Q4I+F2vPJ/C3XXtnhYN9Uv34f6
+         7hhFwSKLXKsdMJYBVan05yQZjJ2NXh7KqOx3M7vG28pfyOA93Klvvfg11zfqeNUUxOdB
+         DyqNtso6yRQTosZHXw2o//sG/EuTk6MD13y69mfIepkWUhtqr0W45FiGjGAAdSq2RjE7
+         u4KA==
+X-Gm-Message-State: AOAM531OyybepFz986pVkOQsehB7mdCiG4a7NYlxnW7dNhq57oytUohR
+        yuspHUY8aGhCMsRmdaySqj8zg3CYptYdol6EKOs=
+X-Google-Smtp-Source: ABdhPJy9apBlfTn2BeeCKJqE69QfF6t+fc5zVTWNpl9YEMabMnNCtaqklFziqU3NEPkK+ry8npgV2bfHEOdbzSAis7g=
+X-Received: by 2002:a19:e301:: with SMTP id a1mr1615623lfh.468.1624430845089;
+ Tue, 22 Jun 2021 23:47:25 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6512:31c2:0:0:0:0 with HTTP; Tue, 22 Jun 2021 23:47:24
+ -0700 (PDT)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <mrmusakabore17@gmail.com>
+Date:   Tue, 22 Jun 2021 23:47:24 -0700
+Message-ID: <CA+jaZSAZ8KSVCZxAk9eGzynYbqM6ncQympNZqAH61KLkAEX+4w@mail.gmail.com>
+Subject: Liebster Freund,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Liang Chen <cl@rock-chips.com>
+--=20
+Liebster Freund,
 
-add "rockchip,rk3568-pwm", "rockchip,rk3328-pwm" for pwm nodes on
-a rk3568 platform to pwm-rockchip.yaml.
+Im Namen Gottes, des gn=C3=A4digsten, barmherzigsten.
 
-Signed-off-by: Liang Chen <cl@rock-chips.com>
----
- Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Friede sei mit dir und Barmherzigkeit sei mit dir und Segen sei mit dir.
+Ich habe die Summe von 27,5 Millionen USD f=C3=BCr Investitionen, ich
+interessiere mich f=C3=BCr Sie f=C3=BCr die Unterst=C3=BCtzung von
+Investitionsprojekten in Ihrem Land. Mein Name ist Aisha Gaddafi und
+lebe derzeit im Oman, ich bin eine Witwe und alleinerziehende Mutter
+mit drei Kindern, die einzige leibliche Tochter des verstorbenen
+libyschen Pr=C3=A4sidenten (dem verstorbenen Oberst Muammar Gaddafi) und
+stehe derzeit unter politischem Asylschutz der omanischen Regierung.
 
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
-index 5596bee70509..81a54a4e8e3e 100644
---- a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
-+++ b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
-@@ -29,6 +29,7 @@ properties:
-           - enum:
-               - rockchip,px30-pwm
-               - rockchip,rk3308-pwm
-+              - rockchip,rk3568-pwm
-           - const: rockchip,rk3328-pwm
- 
-   reg:
--- 
-2.17.1
+Bitte antworten Sie dringend f=C3=BCr weitere Details.
 
-
-
+Vielen Dank
+Mit freundlichen Gr=C3=BC=C3=9Fen Aisha
