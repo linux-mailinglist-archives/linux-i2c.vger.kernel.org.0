@@ -2,123 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 433793B1E9F
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 18:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA803B2205
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 22:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbhFWQ25 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Jun 2021 12:28:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229918AbhFWQ25 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 23 Jun 2021 12:28:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E0456101D;
-        Wed, 23 Jun 2021 16:26:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624465599;
-        bh=x9Y32u8xKnq9y9RUCEeFlJlF/lSKVUF+efxe6yJZN4A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fz4b58xSieSWwb4sHRoe4Lj2rrT7gQSIUzklMVC3obvRrjUTvDFLU4hCRQNC1cdJl
-         FCRfpjjpGoomjQOmxBZGWbhJwhe0Lz35zllUWnm0z7787yx3Z09UX3GTt9zW2VZgkO
-         zhwfEuYACVH6v/dBQI9T/hgXO06ZvTGs9OPOm9Q9AMD1bNqZ6Q9GnQ7eJCHzjpj+0b
-         2hRndsgIxBEP3PiYNSJYhIGHF43COPjFViTmsde0QQA3aLXycwdukKQRKK5K7W3TdU
-         NWhHAOkZNmaOwcygMLAsQMnK1JHOcc8GP5b6cvB176RsbB4lX3N53yKMTJh9CPVDN/
-         DblZ3aUNa4vBA==
-Date:   Wed, 23 Jun 2021 18:26:36 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Michal Simek <michal.simek@xilinx.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 2/9] i2c: xiic: Simplify with dev_err_probe()
-Message-ID: <YNNgvMKtG6Fg0Jee@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Michal Simek <michal.simek@xilinx.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20200902150643.14839-1-krzk@kernel.org>
- <20200902150643.14839-2-krzk@kernel.org>
+        id S229755AbhFWUv2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Jun 2021 16:51:28 -0400
+Received: from mxout03.lancloud.ru ([45.84.86.113]:37152 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229660AbhFWUv1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Jun 2021 16:51:27 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru D8F4820A8BE4
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+To:     <linux-i2c@vger.kernel.org>
+CC:     Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH 0/5] Correctly handle plaform_get_irq()'s result in the i2C
+ drivers
+Organization: Open Mobile Platform
+Message-ID: <e51f8c48-a63e-57e4-ffc7-157c2534611b@omp.ru>
+Date:   Wed, 23 Jun 2021 23:48:57 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RyrFzM+QFbnSHop+"
-Content-Disposition: inline
-In-Reply-To: <20200902150643.14839-2-krzk@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Here are 5 patches against the 'i2c/for-current' branch of the Jens Axboe's 'linux-block.git' repo.
+The affected drivers call platform_get_irq() but mis-interprete its result -- they consider
+IRQ0 as error and (sometimes) the real error codes as valid IRQs... :-/
 
---RyrFzM+QFbnSHop+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Sep 02, 2020 at 05:06:36PM +0200, Krzysztof Kozlowski wrote:
-> Common pattern of handling deferred probe can be simplified with
-> dev_err_probe().  Less code and the error value gets printed.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-
-Applied to for-next, thanks!
-
-
---RyrFzM+QFbnSHop+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDTYLwACgkQFA3kzBSg
-KbaeVw//XoYX3KOAm8qeZlZZ1yMVkrOM8FdXdIkWJXp/6GWZ2CZw1O2bmnTmWLtu
-oTpTQUJeibcURR6v0MX7SUFJHRRUMa0iN56HulVX2ficfGOhKBG2bh/YPbnOPKOc
-kyc0oe4L9AXqWIs+XtNQHyCpV8rJoP73vIXSlYZVF6UbwNzDQl8c8Br6ryP1kY4I
-Dd9XNXM6PnLYsmTJtnYZ4ZcGhn7YSYTaSUsoo8Ec+N51f9Aavi9dDDyqLl62kbZS
-SQBlBigpHUw3XC7NNtKL8D5zyMfrvfIdbHyMGbIJ1lDUZ7oeXj55Gvk7qrI6eg4Y
-d3SEELrApAwxisaWfKP/2BiECz5WL+eH4ak59S1Gs/s6M8x0/BncbRFmWRSyy+It
-WSGxJhX0R2WU54ECN/JAjrVP75GPlIEc1gNpwkdCF1djAg9banpxKOe7dWNvFmrW
-ezzm2no8S8BeoKxGnR1XBQhAd9Dqwor4V3qKWtSPYyS9uegAhllnXHIXp0nJxJNz
-xk4XjBZaL9+0QCe6TfSdKO2skHGejTHnrCSpNKedXCd5ax1la/HHT7qhNu3fXPhC
-2tS7osemPAXLJ/+5yBlFTD+SEMvAJTL/4PjUZmLlvOk0tn4lOTc38pk8bqzgUoZI
-HW7ehBttpBwKxRgE42hdeJIj/MAAVxTzEyoYTO9qWEN1hJHH++E=
-=ofX/
------END PGP SIGNATURE-----
-
---RyrFzM+QFbnSHop+--
+[1/5] i2c: hix5hd2: fix IRQ check
+[2/5] i2c: mt65xx: fix IRQ check
+[3/5] i2c: pmcmsp: fix-IRQ-check
+[4/5] i2c: s3c2410: fix IRQ check
+[5/5] i2c: xlp9xx: fix main IRQ check
