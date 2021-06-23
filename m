@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D14C33B1E98
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 18:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1703B1E9D
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 18:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhFWQ2g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Jun 2021 12:28:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58580 "EHLO mail.kernel.org"
+        id S229523AbhFWQ2r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Jun 2021 12:28:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58742 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229523AbhFWQ2f (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 23 Jun 2021 12:28:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F1D760FEE;
-        Wed, 23 Jun 2021 16:26:17 +0000 (UTC)
+        id S229881AbhFWQ2p (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 23 Jun 2021 12:28:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BC5716100B;
+        Wed, 23 Jun 2021 16:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624465577;
-        bh=vvKsxcawOIU7zaJ1jBb+8b/U8+WkJThvm04wURj4SMw=;
+        s=k20201202; t=1624465587;
+        bh=f8jfUGDIsGoDUvStlPo2ihoRuJM8S3wV5YVSk/OHcCU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cbTH33dUHXrd0FmIlJ6uBzJbjsqN3uycHS90voxRndM3GrMvgq1s+0PolD82WF2Tz
-         Q1ZRHadFyslVuVGXVqLoW3oFaIPIGHPoYyY6IKJNOH4ISGNLF0ONjJLRsiaAGz8lIn
-         kb1e/PeNd872slHmurnOoGlnPTz1fulOs23ZcPwQ8mQtrCDnn62rZBk1qFMAwDVQwV
-         8GIzIhYeh02GSL41FcXv9zibzRQbiPpE/XeXMNxGh6fjUdYzsNT0HeaYH3qgHRCq9F
-         0cjDu6GeOh80+KhGcQPZ4+FIS9F21D6f7fzIJGEX0jISpMLZalpwORbP0knzbP8tbx
-         yhmpEe6r/IPpQ==
-Date:   Wed, 23 Jun 2021 18:26:15 +0200
+        b=eqfj4zZDu0ioOWCBrvww4ZxvMGJhE9nMGHlhWzLes0djdv7HTnTjLDCTl0g8tcCgs
+         iQkgvvIy0fgXnmbV+ODTej+fVL9zGrLO12ayD8unJwXKDd3SD36h6pYvzu+VekLUeP
+         mSUyg5XWmFNYCBPJoa4ZBUuUWK24KANZx10nmNlgt4M7pVnB7/19dUt7rGlEdw5Pa9
+         V8QH719yXK0XKiT0YbrmSXi5IeBvWI6tas9CLq0URN7FnzKksddIhLUcoR/nkuCuZr
+         mY1zJy/vbtjoOSUlVXJ7sIASv+oG6EGFFx0ci3N1RSjzvBMZdBNBsdie+wN9Gj+cer
+         VtstjKh4MXOjw==
+Date:   Wed, 23 Jun 2021 18:26:24 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
@@ -49,8 +49,8 @@ Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 4/9] i2c: cadence: Simplify with dev_err_probe()
-Message-ID: <YNNgpx8eMUuRH1y7@kunai>
+Subject: Re: [PATCH 5/9] i2c: davinci: Simplify with dev_err_probe()
+Message-ID: <YNNgsLS1KtfNjBkc@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
@@ -76,23 +76,23 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         linux-rockchip@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com
 References: <20200902150643.14839-1-krzk@kernel.org>
- <20200902150643.14839-4-krzk@kernel.org>
+ <20200902150643.14839-5-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yQCihXPE0Rw77HZd"
+        protocol="application/pgp-signature"; boundary="McslsymjVjCUswlO"
 Content-Disposition: inline
-In-Reply-To: <20200902150643.14839-4-krzk@kernel.org>
+In-Reply-To: <20200902150643.14839-5-krzk@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---yQCihXPE0Rw77HZd
+--McslsymjVjCUswlO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 02, 2020 at 05:06:38PM +0200, Krzysztof Kozlowski wrote:
+On Wed, Sep 02, 2020 at 05:06:39PM +0200, Krzysztof Kozlowski wrote:
 > Common pattern of handling deferred probe can be simplified with
 > dev_err_probe().  Less code and the error value gets printed.
 >=20
@@ -101,24 +101,24 @@ On Wed, Sep 02, 2020 at 05:06:38PM +0200, Krzysztof Kozlowski wrote:
 Applied to for-next, thanks!
 
 
---yQCihXPE0Rw77HZd
+--McslsymjVjCUswlO
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDTYKcACgkQFA3kzBSg
-KbY0zw/+KHiicY05BPDAkNLs7LvofrF8GF9g4q4kNTv+0zHqKwrdbTJFdBOXoQDL
-9L1VLCkQgAGYrDEFDyr5QTS7merRNCmWLg2NHVd57L15Gk0XqApSyo2ecEG1it4f
-5HH9mrgym+WGmgcqVOw4c8DxZjywEFo8ls+y8VugOQyYzSdRgOAigzm8ywA/tLYo
-YorHpmN4IVqbrhkXrsDTUZ9McG/n7XtJDZo9kBhKX279kQQIRfLkJ09mBTQm0zgw
-FVaSgkqs9wbo3nfupnpUf8rc1nos0iIKz+W0/P1JWPESV7Krqiv1zUk27lY5ptHy
-FWDvCK+/kBaJSjbYdEGixKXv2DsFQdbrzE9xi+19n1xzF7DtYmkOnk5lNKpxlB3z
-cx5Laus/NvZtK6U36lK5HULjZ4DCIJEbTrjMsR9FRJNowPeKPnSLnfm6TIYiq8EJ
-zDgsWhuZ3c7MZ/VS1WCZpxpNTjsEbm+bNmcO9RfyBVJif3To71mDsJjUcS2PdXIO
-HuAurETnq5MRepPzAzOy3LPs/xoD0dEx/0oFx3UVJHLHL/URRH364keM5YS6vMMo
-iJ+fYMPQ2zMLfBbGQA3/WFCjEDarJZPc0hqJTPyZLbZvAsjWFuMDVSR2oysB7zEy
-JiQdi8m3PVKkShrA7dCkC/wCManU+MZ/HOeaitjlY80AQ0WfF70=
-=kMfn
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDTYLAACgkQFA3kzBSg
+KbYqLw//dsYnYLS1NUVJkuErYmMje539th7kKWQS4WdI9gO/feZZv2DPwLXkj3e7
+g1+xg2fngE9iEP/phJ4r26wYV1Lo2JJChg+xfUxdpI0ZDJWYdoHLnsTPw3mhim5J
++6sNaGcq/JcN46iW8J5sM+Q0ZHWOpjO5b7rZSMyBNh4brDm8uKKo5r1de1ZEoCrl
+UOPDtX1I4wgUJ7kma1CE7qsp7moZAptyaPNLcLEFjgzIzAVPQFC6lRPGhzeQqKTa
+i0foiKovC3gOX15EcaMGXUzxJnPw85tVHWuTLL52uCNpNaHLAIsN3Jo1G+JyypSs
+4TgTEGPGDCwE50tBn3dugKEr6yxp01YcLJMTis1mIoiDxAM1MzHYIlkgQu4oZ9pV
+hAzPdEIqY6dkItB51HKO6K067v0B6jEQgyX2huAL+71VTZ5yr5EVb1YcVcH4VSJL
+91osHWWFSVvzjXAks3rYKd2E92jVwxfidX0usCy/2hyGdTNUYknUZDe3meytFkMK
+I7p6iIBzEgCMt9ZXtH91BbmuvFYmNzFdFSNQ6/gqryHV07rsTqImxgtVTzzs1N3M
+SDJOAG8lWb+LqIf6sjM2MBIJ0FQcSkiaXyA7JBt4VndRg4+AHyJCUsqkavL9Twa3
+3tTsk+zvhYgCWAkALzhR1xiVrQkruqEF+CYWHz0BwwOXzzVe3PE=
+=2cJu
 -----END PGP SIGNATURE-----
 
---yQCihXPE0Rw77HZd--
+--McslsymjVjCUswlO--
