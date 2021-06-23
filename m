@@ -2,92 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A46393B1BF4
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 16:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFA53B1C0F
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 16:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbhFWOGX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Jun 2021 10:06:23 -0400
-Received: from www.zeus03.de ([194.117.254.33]:50954 "EHLO mail.zeus03.de"
+        id S231215AbhFWOKf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Jun 2021 10:10:35 -0400
+Received: from www.zeus03.de ([194.117.254.33]:51866 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230306AbhFWOGX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 23 Jun 2021 10:06:23 -0400
+        id S231269AbhFWOK1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 23 Jun 2021 10:10:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=5Hz0NBW+dm9DpC3tg2xUSrZvo02x
-        pLXSDQ9mKWvGrZo=; b=a6nXb2FF57WWdN3KkRmaItssShKrVhGSiOUgJWDdzz6Z
-        8SHdsvJ6rzucr3NnxXaon6EMCxloUccpk3EPZ8FZM223BlageQ/l3j22cMtfDGfl
-        LDuDMfsfFiR9Bol7p1MaFvD+apa+YzC4dKwVEPvlnPlYTuwfGM3u3TydGRjmRhY=
-Received: (qmail 2628777 invoked from network); 23 Jun 2021 16:04:03 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Jun 2021 16:04:03 +0200
-X-UD-Smtp-Session: l3s3148p1@0guzYG/FUsUgAwDPXwWqAK4jk/jYs7Oa
-Date:   Wed, 23 Jun 2021 16:03:57 +0200
+        :content-type:in-reply-to; s=k1; bh=Mj7EQ7nV6Jff7yb7wTLlSMV9KN4G
+        GlxCKUMrrU/WKG0=; b=ocAEe0L4rkKg1d6QWI1gro1X1R2AKa+p4y272Tb1UVP9
+        rGpOJ3/nYsIJC1LFxXspuOzc0HRIGeLp90Lm3EI/F/p+vjrIP/foSuV0KTZ09fH0
+        qNaDAIJz29s7VrZEBTTXzPkFC7L+nNqkryZIc1FvayFL7Hnu7rT62YeZ38mZDT4=
+Received: (qmail 2630227 invoked from network); 23 Jun 2021 16:08:08 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Jun 2021 16:08:08 +0200
+X-UD-Smtp-Session: l3s3148p1@Xfieb2/FVMUgAwDPXwWqAK4jk/jYs7Oa
+Date:   Wed, 23 Jun 2021 16:08:08 +0200
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-mmc@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] i2c: stm32f7: : use proper DMAENGINE API for
- termination
-Message-ID: <YNM/TZMWwCLGSEJO@ninjato>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/7] i2c: rcar: : use proper DMAENGINE API for termination
+Message-ID: <YNNASBSYBu5lisae@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 References: <20210623095942.3325-1-wsa+renesas@sang-engineering.com>
- <20210623095942.3325-8-wsa+renesas@sang-engineering.com>
+ <20210623095942.3325-6-wsa+renesas@sang-engineering.com>
+ <CAMuHMdVQ-XFy6fP_g70N8ukNPFj20ds-iEDF58Ocnpg7e5wLsQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1fTcwnSHuuE3QDd/"
+        protocol="application/pgp-signature"; boundary="Z0m2yZezuwqrXzq0"
 Content-Disposition: inline
-In-Reply-To: <20210623095942.3325-8-wsa+renesas@sang-engineering.com>
+In-Reply-To: <CAMuHMdVQ-XFy6fP_g70N8ukNPFj20ds-iEDF58Ocnpg7e5wLsQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---1fTcwnSHuuE3QDd/
+--Z0m2yZezuwqrXzq0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 23, 2021 at 11:59:41AM +0200, Wolfram Sang wrote:
-> dmaengine_terminate_all() is deprecated in favor of explicitly saying if
-> it should be sync or async. Here, we want dmaengine_terminate_sync()
-> because there is no other synchronization code in the driver to handle
-> an async case.
->=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Eeks, this is called from irq context as well. Broken patch :(
 
 
---1fTcwnSHuuE3QDd/
+> Is this safe? The driver is not using a threaded irq, and DMA termination
+> may be called from the interrupt handler.
+
+You are right, this will not work. Not my best day today, I overlooked
+it for i2c-rcar and lost the note pointing out the same issue for
+stm32f7 :(
+
+> Have you tried triggering DMA termination, with lockdep enabled?
+
+Nope. As the code didn't show signs of async nature, I assumed sync was
+desired anyhow.
+
+
+--Z0m2yZezuwqrXzq0
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDTP0oACgkQFA3kzBSg
-KbYBHQ/+IJf8b0KVc9LD1AjbSx3G6RbvdgxCXWltzxHXyso9+q5IVQ4IT+JLUNQj
-RZWpX8WMrnxCyAG6soDPaScazxJz0WowMManZgOUTjhj59pRl8dnBGy/n/Diws2N
-FajIRvjSf0pBF9SlSvGYzrbX1+rd+lUi73JKzH3f5gJKu7Pl3kkXILijIPDUp2zI
-64zXApYYlJsJgGJmNEOq4YYoqYPVvQZ8PayjSgEoQXX77ebW45hqc+o3RHUeTu0P
-dx5irTMfEw6Brk35lPfkmsTxDf6/mHvzU0B4PAxl5FGWsKdj/9dRGtfqEpN6WJyp
-zpzelpZZr9o0l4kieCCgAxeea2qYqcX0OvRn3q51DjL5FTBy8u3p/siL1wVLluKT
-Tf5RjgIKR02Hg8+noq1AKConkhynExZLjBCyS99Ct3F0bQqagI6HvxKl2azkWlcC
-ETwznqWrENqwvkh4Mwmt5tu5ifRtw6D5iWJSYZbNgSls/0eiww04cuH+5yQf9zUF
-++Pp2ltIuoYN+yxWKcSi34pFMeDpFoZAACJ17cKWz3TNM9aufhhgh9zsOKWwM9Bd
-cMT854BLnaXbc6jSZfuAh/b6ol2oWsF4O50EsJKVbZuGmD2YZ6HqWZBMEOb8vuVO
-xyRAfKXxXDVjqNAdKv5uHSHwE2GGCOxPN05gyQVn2MSUYesejDg=
-=FXBJ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDTQEgACgkQFA3kzBSg
+Kba2eQ/+PTvyfQg4n/PazU8mc7PeuEydjDsjlvyoZeRijo5PCY1/JU5x2WnfDA/K
+PRIUd/IqAmJuvB+38UY9TgqWmRheri6XfyYhqbLE9Yt6MjMjFYhKKce/9PAr04nS
+5j2/CqpCoU0aWC1CNBdJNXDFGV3vFReq+ej9zexu01LRyR5oWu5etce2iux2U/pn
+FJ7FB2tABa80dRUxETG7vSCAxJla0L8efirY1dlFbFH0mZeN/tiG1apEXYjJhD5A
+ds9M4DkKcYhc2JIK2MCEgb0RDYdxcv1x7ff+Eud9cAfL28SnQUUFmGTvUXQBRCQr
+OyRBctpCvDRDu3jKKcW/J0wK3sn9FJKyws0HoH2/L1k7KjK66PF34Upqd/VCmt0r
+fMSbT9XwZCbQorwkolfW60JmfaIIaNEnwcYLjJd99ElpgYnqahmYlPUgVCC+ByzH
+oSXLiSO2purA2ZerMj7wNyMpkf99U3pERaJvs5imoGgWepicyKrY/OIJ4kFDKZVK
+XICVU4I4xXevkcQyaS90kgCyiM7k31K3FORtCoMnoRqRUlaltdNu+46tLwTrZRte
+eHRNya3znaxWNIYy15v5ddatwcQnyRImJZzhI7BMhQr3A5JaCMcv8FEH86M3CZZg
+FxKuKiqwejA9Vj+EvWp34mTnqify/ZZQ0/Z3NZXnj0FeX57Ek6o=
+=lvkI
 -----END PGP SIGNATURE-----
 
---1fTcwnSHuuE3QDd/--
+--Z0m2yZezuwqrXzq0--
