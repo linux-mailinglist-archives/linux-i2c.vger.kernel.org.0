@@ -2,93 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B452A3B163A
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 10:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E863B1655
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 10:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbhFWIyX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Jun 2021 04:54:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229833AbhFWIyW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 23 Jun 2021 04:54:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A8822611AD;
-        Wed, 23 Jun 2021 08:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624438325;
-        bh=q1/pZ+8XNyXmDYADtZuYnclhptwzKj9U01waM05X9kM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G3Q2NGpduDsEzBbm+JtSbBOWO8IxUb5//355wIoeaDmbU6jQ2dj1m7J336hvTIpZ7
-         xWomRwFI2rkCcJvbpp3DG4ewNXRHSBaoI0YdSXwgb0jcYY25U4WeeCxYreT1C4047X
-         ivvm/aFuHyTN8aazHHb76orlBvrUt0REJTBl1jNU/gF4ggfxNaHwffhfaJ31qnj8PZ
-         TdD+ujwj5I6itPUFrN5dnMzrxlPF9ErQ+DQH9An5dRAxxnD21s/qRq6XXZLC+8thta
-         dJzgCzejV/VGrHIzAAZX17La7HiBni1JWoibGmgqESqAsfdt+BXOP3+j6r12kcWfkC
-         orP1bJ3ou1Scg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lvyc8-0001tR-79; Wed, 23 Jun 2021 10:52:04 +0200
-Date:   Wed, 23 Jun 2021 10:52:04 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com,
-        stable@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH] i2c: robotfuzz-osif: fix control-request directions
-Message-ID: <YNL2NLSpBQqnc2bH@hovoldconsulting.com>
-References: <20210524090912.3989-1-johan@kernel.org>
+        id S229881AbhFWJAG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Jun 2021 05:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230151AbhFWJAF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Jun 2021 05:00:05 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD48C061760
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Jun 2021 01:57:48 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id hq39so2828406ejc.5
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Jun 2021 01:57:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Z6Z3rnoFwy3s+OnHi/sH1rvXTGduUYkOOkAbeaIPw4Q=;
+        b=tdK9uAJWdmT+cTqTX4ozHwlgRi7wW7OUcIGpx+5Br2fodFNa+MnfUQZVAzgz1DMfXp
+         n/6yy9sAzllko9mIwsv87gD1kCOH5+UvzuTO8Ov4YmQvbrKg9vhNxEnX9Bb3xpiNP2fH
+         k9Oyze3A8ShMVN/bVHL82sBkwKgirt++Dw9dhx7H9AShjZynKsDqAx3QjkNyy+S3seYa
+         O7aOzg7Mj0Cm2KxHYiHvi5dJSHR99JkBwPvAeetXr4PIjVliCzIaKYRVlGsyYaoAOytV
+         AXOwIKzGUy2+Qw0GsQqKp2vE+Hbxv9yib/h1U+C6vqKY5DAWNhTnHvHGn5ed0S9mxQ6J
+         iM2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Z6Z3rnoFwy3s+OnHi/sH1rvXTGduUYkOOkAbeaIPw4Q=;
+        b=fSQBfT1Nr1m1IGtRM68ODFKvQ8xP3+c8eDUI0EdKFZRie7u6vSN2ev6OpsiVnUWVfI
+         umeOvtajEFItj3oEHLBppgsgXyJp9uhNpvE343Wq3wMyPgBAPPZm+jUK6HpW5a9KvSrY
+         AK6C1vzcm8NwkzdIdmONplMJtXwgAfk/LcBfHgpgXItciHVXHVP+NGBBxi+immReB5K2
+         Bsc+Vva68BwKf61dc3Ewy2ekitD742UF5zgu/F0JUx2/wxl/Iv4Y1vxO2HC1PhqVWQbN
+         Qc0FG3Zadggtxhikq2dlwk/tllCtDVsO8ATlmr+s4Du6sPGoEew6/le/vt3RekIe7c8T
+         2kKg==
+X-Gm-Message-State: AOAM530FO7biV2UrDDHRiNJmpMmAdwLdAHjRQx+0XCBtf4tCAcZ7ccw0
+        SnKEKIS6ff0Vq/YDETHQjAR8LBtxmmP6+za5zIJuWA==
+X-Google-Smtp-Source: ABdhPJwy+pM9oZ1iyRoxUOJy65b7IRacVpAEIpAEHz2ud7J2MhpMBy54g7b0sAw4obchFDygfdWC6jUFii9npycxr4w=
+X-Received: by 2002:a17:906:ca4a:: with SMTP id jx10mr8892678ejb.200.1624438666647;
+ Wed, 23 Jun 2021 01:57:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210524090912.3989-1-johan@kernel.org>
+References: <20200902150643.14839-1-krzk@kernel.org> <20200902150643.14839-2-krzk@kernel.org>
+In-Reply-To: <20200902150643.14839-2-krzk@kernel.org>
+From:   Michal Simek <monstr@monstr.eu>
+Date:   Wed, 23 Jun 2021 10:57:35 +0200
+Message-ID: <CAHTX3dK+M9eg+Xod9tYHiEXY_igjO6iocaO=e1Frqd1kzPKTrw@mail.gmail.com>
+Subject: Re: [PATCH 2/9] i2c: xiic: Simplify with dev_err_probe()
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 24, 2021 at 11:09:12AM +0200, Johan Hovold wrote:
-> The direction of the pipe argument must match the request-type direction
-> bit or control requests may fail depending on the host-controller-driver
-> implementation.
-> 
-> Control transfers without a data stage are treated as OUT requests by
-> the USB stack and should be using usb_sndctrlpipe(). Failing to do so
-> will now trigger a warning.
-> 
-> Fix the OSIFI2C_SET_BIT_RATE and OSIFI2C_STOP requests which erroneously
-> used the osif_usb_read() helper and set the IN direction bit.
-> 
-> Reported-by: syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com
-> Fixes: 83e53a8f120f ("i2c: Add bus driver for for OSIF USB i2c device.")
-> Cc: stable@vger.kernel.org      # 3.14
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+st 2. 9. 2020 v 17:10 odes=C3=ADlatel Krzysztof Kozlowski <krzk@kernel.org>=
+ napsal:
+>
+> Common pattern of handling deferred probe can be simplified with
+> dev_err_probe().  Less code and the error value gets printed.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
+>  drivers/i2c/busses/i2c-xiic.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.=
+c
+> index 90c1c362394d..a97438f35c5d 100644
+> --- a/drivers/i2c/busses/i2c-xiic.c
+> +++ b/drivers/i2c/busses/i2c-xiic.c
+> @@ -787,11 +787,10 @@ static int xiic_i2c_probe(struct platform_device *p=
+dev)
+>         init_waitqueue_head(&i2c->wait);
+>
+>         i2c->clk =3D devm_clk_get(&pdev->dev, NULL);
+> -       if (IS_ERR(i2c->clk)) {
+> -               if (PTR_ERR(i2c->clk) !=3D -EPROBE_DEFER)
+> -                       dev_err(&pdev->dev, "input clock not found.\n");
+> -               return PTR_ERR(i2c->clk);
+> -       }
+> +       if (IS_ERR(i2c->clk))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(i2c->clk),
+> +                                    "input clock not found.\n");
+> +
+>         ret =3D clk_prepare_enable(i2c->clk);
+>         if (ret) {
+>                 dev_err(&pdev->dev, "Unable to enable clock.\n");
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
-Wolfram, can you pick this one up for 5.14?
+I see that this didn't go through.
+Acked-by: Michal Simek <michal.simek@xilinx.com>
 
-Johan
+Wolfram: Can you please apply?
 
->  drivers/i2c/busses/i2c-robotfuzz-osif.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-robotfuzz-osif.c b/drivers/i2c/busses/i2c-robotfuzz-osif.c
-> index a39f7d092797..66dfa211e736 100644
-> --- a/drivers/i2c/busses/i2c-robotfuzz-osif.c
-> +++ b/drivers/i2c/busses/i2c-robotfuzz-osif.c
-> @@ -83,7 +83,7 @@ static int osif_xfer(struct i2c_adapter *adapter, struct i2c_msg *msgs,
->  			}
->  		}
->  
-> -		ret = osif_usb_read(adapter, OSIFI2C_STOP, 0, 0, NULL, 0);
-> +		ret = osif_usb_write(adapter, OSIFI2C_STOP, 0, 0, NULL, 0);
->  		if (ret) {
->  			dev_err(&adapter->dev, "failure sending STOP\n");
->  			return -EREMOTEIO;
-> @@ -153,7 +153,7 @@ static int osif_probe(struct usb_interface *interface,
->  	 * Set bus frequency. The frequency is:
->  	 * 120,000,000 / ( 16 + 2 * div * 4^prescale).
->  	 * Using dev = 52, prescale = 0 give 100KHz */
-> -	ret = osif_usb_read(&priv->adapter, OSIFI2C_SET_BIT_RATE, 52, 0,
-> +	ret = osif_usb_write(&priv->adapter, OSIFI2C_SET_BIT_RATE, 52, 0,
->  			    NULL, 0);
->  	if (ret) {
->  		dev_err(&interface->dev, "failure sending bit rate");
+Thanks,
+Michal
+
+
+--=20
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
