@@ -2,98 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B353B179A
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 12:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED973B19C5
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 14:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbhFWKCT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Jun 2021 06:02:19 -0400
-Received: from www.zeus03.de ([194.117.254.33]:51026 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231186AbhFWKCM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 23 Jun 2021 06:02:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=I33H4EByZc0csK
-        pE0fENe7nleEwl4e+vhGhP/UxIkFY=; b=gx/YfhBRyET/K1MN1Fh7AYxfBYv76Z
-        qayK8Mo+Uppd4RT2VwUXDvg11Z422h25sCsEqvqubc/IW8CYlrlybm6XOzALgfjq
-        WP8TMKw4yMOmVVxn08y4MxAUgvuEZ8YC71FyRXQLc1QTq+rbLQLTOZM15cQ1C/ta
-        t1mfISKUzig9o=
-Received: (qmail 2552157 invoked from network); 23 Jun 2021 11:59:47 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Jun 2021 11:59:47 +0200
-X-UD-Smtp-Session: l3s3148p1@HQRw92vFHqogARa4RfhaAavnjlTTqzSz
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-mmc@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] i2c: stm32f7: : use proper DMAENGINE API for termination
-Date:   Wed, 23 Jun 2021 11:59:41 +0200
-Message-Id: <20210623095942.3325-8-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210623095942.3325-1-wsa+renesas@sang-engineering.com>
-References: <20210623095942.3325-1-wsa+renesas@sang-engineering.com>
+        id S230274AbhFWMWK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Jun 2021 08:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230061AbhFWMWK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Jun 2021 08:22:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348F4C061756
+        for <linux-i2c@vger.kernel.org>; Wed, 23 Jun 2021 05:19:53 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lw1r9-0005px-3E; Wed, 23 Jun 2021 14:19:47 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lw1r4-0008Rw-Dr; Wed, 23 Jun 2021 14:19:42 +0200
+Date:   Wed, 23 Jun 2021 14:19:42 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Kwon Tae-young <tykwon@m2i.co.kr>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] i2c/imx: Fix some checkpatch warnings
+Message-ID: <20210623121942.n5vzur5rfazgjtd2@pengutronix.de>
+References: <20210623083643.395-1-tykwon@m2i.co.kr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6t4gwuuw3c4iudk7"
+Content-Disposition: inline
+In-Reply-To: <20210623083643.395-1-tykwon@m2i.co.kr>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-dmaengine_terminate_all() is deprecated in favor of explicitly saying if
-it should be sync or async. Here, we want dmaengine_terminate_sync()
-because there is no other synchronization code in the driver to handle
-an async case.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/i2c/busses/i2c-stm32f7.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+--6t4gwuuw3c4iudk7
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 0138317ea600..9ea074a7ced6 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1567,7 +1567,7 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
- 	if (!ret) {
- 		dev_dbg(i2c_dev->dev, "<%s>: Timed out\n", __func__);
- 		stm32f7_i2c_disable_dma_req(i2c_dev);
--		dmaengine_terminate_all(dma->chan_using);
-+		dmaengine_terminate_sync(dma->chan_using);
- 		f7_msg->result = -ETIMEDOUT;
- 	}
- 
-@@ -1637,7 +1637,7 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
- 	/* Disable dma */
- 	if (i2c_dev->use_dma) {
- 		stm32f7_i2c_disable_dma_req(i2c_dev);
--		dmaengine_terminate_all(dma->chan_using);
-+		dmaengine_terminate_sync(dma->chan_using);
- 	}
- 
- 	i2c_dev->master_mode = false;
-@@ -1678,7 +1678,7 @@ static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
- 		dev_dbg(i2c_dev->dev, "Access to slave 0x%x timed out\n",
- 			i2c_dev->msg->addr);
- 		if (i2c_dev->use_dma)
--			dmaengine_terminate_all(dma->chan_using);
-+			dmaengine_terminate_sync(dma->chan_using);
- 		ret = -ETIMEDOUT;
- 	}
- 
-@@ -1727,7 +1727,7 @@ static int stm32f7_i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- 	if (!timeout) {
- 		dev_dbg(dev, "Access to slave 0x%x timed out\n", f7_msg->addr);
- 		if (i2c_dev->use_dma)
--			dmaengine_terminate_all(dma->chan_using);
-+			dmaengine_terminate_sync(dma->chan_using);
- 		ret = -ETIMEDOUT;
- 		goto pm_free;
- 	}
--- 
-2.30.2
+Hello,
 
+On Wed, Jun 23, 2021 at 05:36:43PM +0900, Kwon Tae-young wrote:
+> @@ -1395,7 +1386,7 @@ static int i2c_imx_probe(struct platform_device *pd=
+ev)
+>  				platform_get_device_id(pdev)->driver_data;
+> =20
+>  	/* Setup i2c_imx driver structure */
+> -	strlcpy(i2c_imx->adapter.name, pdev->name, sizeof(i2c_imx->adapter.name=
+));
+> +	strscpy(i2c_imx->adapter.name, pdev->name, sizeof(i2c_imx->adapter.name=
+));
+
+TIL about strscpy. I'm not yet sure if I like it better than strlcpy in
+this case, but the usage is correct for sure.
+
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+>  	i2c_imx->adapter.owner		=3D THIS_MODULE;
+>  	i2c_imx->adapter.algo		=3D &i2c_imx_algo;
+>  	i2c_imx->adapter.dev.parent	=3D &pdev->dev;
+> --=20
+> 2.17.1
+>=20
+>=20
+>=20
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--6t4gwuuw3c4iudk7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDTJtsACgkQwfwUeK3K
+7AkcKAf+JNnmzhVNCCViCtR6HE2gW9q9uFgU0NcJUPhf33AZ34LmL2MqFEApXR5f
+iWxOkJd2zBV3VKevtDIYK7E8JhrvDNokENlXdL00DBx4GYgAOGCKecTzp7WzQkaG
+mqBk078/wklfKIjbSI/X8xxeuW8liulhQhVzVkgJpRUmWIACuWkyiV6bkAY9V0RY
+Q8dgt8KwmE2pqUOOK4m8RARKxRB1upqfZwOvBQi2zcMc7vRTXgIW/jOpmK6fO4PT
+C6Rfw53qzoO84rhhVwM1iYfE6JUOlemltFJKUW38HzK/NfDHglQptOBw21Fe9ENb
+1DtxU4f00YwR95l+HVOdC8d8rw8KNw==
+=+yxd
+-----END PGP SIGNATURE-----
+
+--6t4gwuuw3c4iudk7--
