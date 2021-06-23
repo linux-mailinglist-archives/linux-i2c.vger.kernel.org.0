@@ -2,77 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AB83B142C
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 08:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D7E3B1618
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 10:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbhFWGtp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Jun 2021 02:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbhFWGtp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Jun 2021 02:49:45 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258DFC06175F
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Jun 2021 23:47:27 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id a11so2212208lfg.11
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Jun 2021 23:47:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=L0V3tEWU6RXdv4sHk2WURUiKYv8hNk/3Vb4RrbCcOlY=;
-        b=NNIzqOYwBynenFN8vdGe7ySNHqpxvPYp40UtycV+u8T0/DzkDVfGebaNJZTiaaxs+m
-         JU6BZtFEM+HuMoMcE39KG4wkvyg47pX2Ig/bJUMkQJysrHm190UO9m0ELxSjtzgBoDFH
-         LllrbCzSCCPP5t7i9+O3zUpTdOkbvrEVjh7cFRiAL7/gcTbCRRnHL6xVysl7hiJc6uI7
-         9KerAOtBaoDnpJ58zK82F2gZpU5aph+Gqik30tAJYLZO7bfKAVPjV67u2Os3OFylcSWY
-         0pugdGNSNUzyJ+g6yGZSYsGJWIlHafV+8X7hs5Iuoly01+Awvd11KQ8phRHUdf9fzjD3
-         FGPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=L0V3tEWU6RXdv4sHk2WURUiKYv8hNk/3Vb4RrbCcOlY=;
-        b=ENhutBsgUdT6ouqZNHADwBMFeXaaHxU797dOiOUSE7LOf5p+cde4AxZORaf/qEKOgt
-         8uQd1z0D8Y5GVLn75nb9VeJeUfgFJc8735D7VUng7LzdTiAPhlfYKFTExFYZjdB3d/XX
-         6bhNWAxvODzoa8J3pjiJruiwyCPX0j2OKq3WTS1oO1Q4I+F2vPJ/C3XXtnhYN9Uv34f6
-         7hhFwSKLXKsdMJYBVan05yQZjJ2NXh7KqOx3M7vG28pfyOA93Klvvfg11zfqeNUUxOdB
-         DyqNtso6yRQTosZHXw2o//sG/EuTk6MD13y69mfIepkWUhtqr0W45FiGjGAAdSq2RjE7
-         u4KA==
-X-Gm-Message-State: AOAM531OyybepFz986pVkOQsehB7mdCiG4a7NYlxnW7dNhq57oytUohR
-        yuspHUY8aGhCMsRmdaySqj8zg3CYptYdol6EKOs=
-X-Google-Smtp-Source: ABdhPJy9apBlfTn2BeeCKJqE69QfF6t+fc5zVTWNpl9YEMabMnNCtaqklFziqU3NEPkK+ry8npgV2bfHEOdbzSAis7g=
-X-Received: by 2002:a19:e301:: with SMTP id a1mr1615623lfh.468.1624430845089;
- Tue, 22 Jun 2021 23:47:25 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6512:31c2:0:0:0:0 with HTTP; Tue, 22 Jun 2021 23:47:24
- -0700 (PDT)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <mrmusakabore17@gmail.com>
-Date:   Tue, 22 Jun 2021 23:47:24 -0700
-Message-ID: <CA+jaZSAZ8KSVCZxAk9eGzynYbqM6ncQympNZqAH61KLkAEX+4w@mail.gmail.com>
-Subject: Liebster Freund,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S229999AbhFWIqP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Jun 2021 04:46:15 -0400
+Received: from smtp3.hiworks.co.kr ([121.254.168.205]:34613 "EHLO
+        smtp3.hiworks.co.kr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229918AbhFWIqO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Jun 2021 04:46:14 -0400
+Received: (qmail 155734 invoked from network); 23 Jun 2021 17:37:15 +0900
+Received: from unknown (HELO hiworks.co.kr) (192.168.10.101)
+        by 0 (qmail 1.03 + ejcp v14) with SMTP;
+        23 Jun 2021 17:37:15 +0900
+Received: (qmail 109303 invoked from network); 23 Jun 2021 17:37:15 +0900
+Received: from unknown (HELO localhost.localdomain) (tykwon@m2i.co.kr@58.75.176.98)
+        by 0 (qmail 1.03 + ejcp v14) with SMTP;
+        23 Jun 2021 17:37:15 +0900
+X-Authinfo: HIWORKS SMTP authenticated <tykwon@m2i.co.kr|58.75.176.98|tykwon@m2i.co.kr|210623173715_6023108200>
+From:   Kwon Tae-young <tykwon@m2i.co.kr>
+To:     Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     Kwon Tae-young <tykwon@m2i.co.kr>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c/imx: Fix some checkpatch warnings
+Date:   Wed, 23 Jun 2021 17:36:43 +0900
+Message-Id: <20210623083643.395-1-tykwon@m2i.co.kr>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---=20
-Liebster Freund,
+Fix the following warnings reported by checkpatch::
+drivers/i2c/busses/i2c-imx.c:173: WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
+drivers/i2c/busses/i2c-imx.c:175: WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
+drivers/i2c/busses/i2c-imx.c:176: WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
+drivers/i2c/busses/i2c-imx.c:177: WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
+drivers/i2c/busses/i2c-imx.c:455: WARNING: Unnecessary ftrace-like logging - prefer using ftrace
+drivers/i2c/busses/i2c-imx.c:602: WARNING: Unnecessary ftrace-like logging - prefer using ftrace
+drivers/i2c/busses/i2c-imx.c:638: WARNING: Unnecessary ftrace-like logging - prefer using ftrace
+drivers/i2c/busses/i2c-imx.c:1170: WARNING: Unnecessary ftrace-like logging - prefer using ftrace
+drivers/i2c/busses/i2c-imx.c:1374: WARNING: Unnecessary ftrace-like logging - prefer using ftrace
+drivers/i2c/busses/i2c-imx.c:1398: WARNING: Prefer strscpy over strlcpy - see: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
 
-Im Namen Gottes, des gn=C3=A4digsten, barmherzigsten.
+Signed-off-by: Kwon Tae-young <tykwon@m2i.co.kr>
+---
+ drivers/i2c/busses/i2c-imx.c | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
 
-Friede sei mit dir und Barmherzigkeit sei mit dir und Segen sei mit dir.
-Ich habe die Summe von 27,5 Millionen USD f=C3=BCr Investitionen, ich
-interessiere mich f=C3=BCr Sie f=C3=BCr die Unterst=C3=BCtzung von
-Investitionsprojekten in Ihrem Land. Mein Name ist Aisha Gaddafi und
-lebe derzeit im Oman, ich bin eine Witwe und alleinerziehende Mutter
-mit drei Kindern, die einzige leibliche Tochter des verstorbenen
-libyschen Pr=C3=A4sidenten (dem verstorbenen Oberst Muammar Gaddafi) und
-stehe derzeit unter politischem Asylschutz der omanischen Regierung.
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index dc5ca71906db..d5b5f084a27d 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -170,11 +170,11 @@ enum imx_i2c_type {
+ 
+ struct imx_i2c_hwdata {
+ 	enum imx_i2c_type	devtype;
+-	unsigned		regshift;
++	unsigned int		regshift;
+ 	struct imx_i2c_clk_pair	*clk_div;
+-	unsigned		ndivs;
+-	unsigned		i2sr_clr_opcode;
+-	unsigned		i2cr_ien_opcode;
++	unsigned int		ndivs;
++	unsigned int		i2sr_clr_opcode;
++	unsigned int		i2cr_ien_opcode;
+ };
+ 
+ struct imx_i2c_dma {
+@@ -452,8 +452,6 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool a
+ 	unsigned long orig_jiffies = jiffies;
+ 	unsigned int temp;
+ 
+-	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
+-
+ 	while (1) {
+ 		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+ 
+@@ -599,8 +597,6 @@ static int i2c_imx_start(struct imx_i2c_struct *i2c_imx, bool atomic)
+ 	unsigned int temp = 0;
+ 	int result;
+ 
+-	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
+-
+ 	imx_i2c_write_reg(i2c_imx->ifdr, i2c_imx, IMX_I2C_IFDR);
+ 	/* Enable I2C controller */
+ 	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx, IMX_I2C_I2SR);
+@@ -635,7 +631,6 @@ static void i2c_imx_stop(struct imx_i2c_struct *i2c_imx, bool atomic)
+ 
+ 	if (!i2c_imx->stopped) {
+ 		/* Stop I2C transaction */
+-		dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
+ 		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+ 		if (!(temp & I2CR_MSTA))
+ 			i2c_imx->stopped = 1;
+@@ -1167,8 +1162,6 @@ static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
+ 	bool is_lastmsg = false;
+ 	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(adapter);
+ 
+-	dev_dbg(&i2c_imx->adapter.dev, "<%s>\n", __func__);
+-
+ 	/* Start I2C transfer */
+ 	result = i2c_imx_start(i2c_imx, atomic);
+ 	if (result) {
+@@ -1371,8 +1364,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	dma_addr_t phy_addr;
+ 	const struct imx_i2c_hwdata *match;
+ 
+-	dev_dbg(&pdev->dev, "<%s>\n", __func__);
+-
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
+ 		return irq;
+@@ -1395,7 +1386,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 				platform_get_device_id(pdev)->driver_data;
+ 
+ 	/* Setup i2c_imx driver structure */
+-	strlcpy(i2c_imx->adapter.name, pdev->name, sizeof(i2c_imx->adapter.name));
++	strscpy(i2c_imx->adapter.name, pdev->name, sizeof(i2c_imx->adapter.name));
+ 	i2c_imx->adapter.owner		= THIS_MODULE;
+ 	i2c_imx->adapter.algo		= &i2c_imx_algo;
+ 	i2c_imx->adapter.dev.parent	= &pdev->dev;
+-- 
+2.17.1
 
-Bitte antworten Sie dringend f=C3=BCr weitere Details.
-
-Vielen Dank
-Mit freundlichen Gr=C3=BC=C3=9Fen Aisha
