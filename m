@@ -2,103 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED973B19C5
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 14:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1E63B1BE9
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Jun 2021 16:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbhFWMWK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Jun 2021 08:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbhFWMWK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Jun 2021 08:22:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348F4C061756
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Jun 2021 05:19:53 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lw1r9-0005px-3E; Wed, 23 Jun 2021 14:19:47 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lw1r4-0008Rw-Dr; Wed, 23 Jun 2021 14:19:42 +0200
-Date:   Wed, 23 Jun 2021 14:19:42 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Kwon Tae-young <tykwon@m2i.co.kr>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] i2c/imx: Fix some checkpatch warnings
-Message-ID: <20210623121942.n5vzur5rfazgjtd2@pengutronix.de>
-References: <20210623083643.395-1-tykwon@m2i.co.kr>
+        id S230411AbhFWOEy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Jun 2021 10:04:54 -0400
+Received: from mail-ua1-f51.google.com ([209.85.222.51]:34560 "EHLO
+        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230430AbhFWOEt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Jun 2021 10:04:49 -0400
+Received: by mail-ua1-f51.google.com with SMTP id c47so192936uad.1;
+        Wed, 23 Jun 2021 07:02:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4kB7+8R1X1Mp14SEda7xSh4fu9NS5YjQHGge6J0bi9w=;
+        b=oo+BEZqR6dKsQ/GOoqsG47gtlUvQx2aTOcd4cJc2XK/qb6LMG5LtZ6Jv7E3VVfYagN
+         Mo5oV+1SqL0MiMBpZxqDoDCTsV7BvA2V9uzwiH0xj5oKlmP2/v0X5a0rN5UiPsPLraKo
+         KXrcIbKhPz8BMiMhXgOvID9XHc3n75kwozhvYID774bqwJsXUw3ID8H7c4hWSPcbqfpX
+         cB7CVu7U6Xd6MrSwoTkzMBLSEjS6V4QbGtDqLGG7UkF+CQKarfS3vL3mQLXuhqAvg5LP
+         uRPtuhrGLj5pAtJ867gcy0zSVAvVuFAPnRe6u9WjCk8917oZThUWwfQ9PMEC77TnNAgk
+         aHJg==
+X-Gm-Message-State: AOAM530pTGyZVJVnxazUbZEw/0ZvVU38LGvEW/t8JA64i0rvjpGRVDB+
+        2PRy6IXMWtSHEdAO/Bez3q3aTBsA6D/jiC7ZYzk33n9D6C1uDg==
+X-Google-Smtp-Source: ABdhPJy31i5AAunYMREiF+cdMgFimvVF04l3hoci7n34ee1J2y5AMmyPDDJo06xDEY8hquOoSeWkvrZOFG8J6pkbDPk=
+X-Received: by 2002:ab0:1e4c:: with SMTP id n12mr4804036uak.58.1624456951381;
+ Wed, 23 Jun 2021 07:02:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6t4gwuuw3c4iudk7"
-Content-Disposition: inline
-In-Reply-To: <20210623083643.395-1-tykwon@m2i.co.kr>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+References: <20210623095942.3325-1-wsa+renesas@sang-engineering.com> <20210623095942.3325-6-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20210623095942.3325-6-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 23 Jun 2021 16:02:19 +0200
+Message-ID: <CAMuHMdVQ-XFy6fP_g70N8ukNPFj20ds-iEDF58Ocnpg7e5wLsQ@mail.gmail.com>
+Subject: Re: [PATCH 5/7] i2c: rcar: : use proper DMAENGINE API for termination
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
---6t4gwuuw3c4iudk7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jun 23, 2021 at 12:01 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> dmaengine_terminate_all() is deprecated in favor of explicitly saying if
+> it should be sync or async. Here, we want dmaengine_terminate_sync()
+> because there is no other synchronization code in the driver to handle
+> an async case.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Hello,
+Thanks for your patch!
 
-On Wed, Jun 23, 2021 at 05:36:43PM +0900, Kwon Tae-young wrote:
-> @@ -1395,7 +1386,7 @@ static int i2c_imx_probe(struct platform_device *pd=
-ev)
->  				platform_get_device_id(pdev)->driver_data;
-> =20
->  	/* Setup i2c_imx driver structure */
-> -	strlcpy(i2c_imx->adapter.name, pdev->name, sizeof(i2c_imx->adapter.name=
-));
-> +	strscpy(i2c_imx->adapter.name, pdev->name, sizeof(i2c_imx->adapter.name=
-));
+Is this safe? The driver is not using a threaded irq, and DMA termination
+may be called from the interrupt handler.
 
-TIL about strscpy. I'm not yet sure if I like it better than strlcpy in
-this case, but the usage is correct for sure.
+Have you tried triggering DMA termination, with lockdep enabled?
 
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Gr{oetje,eeting}s,
 
->  	i2c_imx->adapter.owner		=3D THIS_MODULE;
->  	i2c_imx->adapter.algo		=3D &i2c_imx_algo;
->  	i2c_imx->adapter.dev.parent	=3D &pdev->dev;
-> --=20
-> 2.17.1
->=20
->=20
->=20
+                        Geert
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---6t4gwuuw3c4iudk7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDTJtsACgkQwfwUeK3K
-7AkcKAf+JNnmzhVNCCViCtR6HE2gW9q9uFgU0NcJUPhf33AZ34LmL2MqFEApXR5f
-iWxOkJd2zBV3VKevtDIYK7E8JhrvDNokENlXdL00DBx4GYgAOGCKecTzp7WzQkaG
-mqBk078/wklfKIjbSI/X8xxeuW8liulhQhVzVkgJpRUmWIACuWkyiV6bkAY9V0RY
-Q8dgt8KwmE2pqUOOK4m8RARKxRB1upqfZwOvBQi2zcMc7vRTXgIW/jOpmK6fO4PT
-C6Rfw53qzoO84rhhVwM1iYfE6JUOlemltFJKUW38HzK/NfDHglQptOBw21Fe9ENb
-1DtxU4f00YwR95l+HVOdC8d8rw8KNw==
-=+yxd
------END PGP SIGNATURE-----
-
---6t4gwuuw3c4iudk7--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
