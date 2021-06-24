@@ -2,63 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 891913B37C3
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Jun 2021 22:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51DC3B37DF
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Jun 2021 22:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbhFXU2o (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Jun 2021 16:28:44 -0400
-Received: from mxout01.lancloud.ru ([45.84.86.81]:35574 "EHLO
-        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbhFXU2o (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Jun 2021 16:28:44 -0400
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru DA5C520E0D5B
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: [PATCH v2 3/3] i2c: synquacer: fix deferred probing
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     <linux-i2c@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>
-References: <f50837d5-9eb0-61c1-6d3a-5f7d1e17b9ae@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <66454f16-fd9b-1f02-4f88-283d3c41d109@omp.ru>
-Date:   Thu, 24 Jun 2021 23:26:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S232515AbhFXUe1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Jun 2021 16:34:27 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:54532 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232163AbhFXUe0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 24 Jun 2021 16:34:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:To:From:Date:From:Sender:Reply-To:Subject:Date:
+        Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=DQaVe3svyqtnMuTAQBTKyVNiLfF5PLoMKvvy1C7mW1A=; b=ijwSo6GU38nyg5zIJU9iXy83Vs
+        CZilmBC5pEFAycYay1pNJsMetUPMd+sr+MSak1aPo0Tu8CQ6c1BWPbLdkHwsIrlOC2VFw0tSlY56g
+        4fUwWHWH3j/HlY8APC+9zSBFkHQcvJIaeQP47LulKI9y6+PyAHv6jzi7mdPC/DJ4cVKk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1lwW17-00B1gI-7R; Thu, 24 Jun 2021 22:32:05 +0200
+Date:   Thu, 24 Jun 2021 22:32:05 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] i2c: robotfuzz-osif: fix control-request directions
+Message-ID: <YNTrxT9gRrfMlN+2@lunn.ch>
+References: <20210524090912.3989-1-johan@kernel.org>
+ <YNL2NLSpBQqnc2bH@hovoldconsulting.com>
+ <YNTmqcrYb9KzW8Zh@kunai>
 MIME-Version: 1.0
-In-Reply-To: <f50837d5-9eb0-61c1-6d3a-5f7d1e17b9ae@omp.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YNTmqcrYb9KzW8Zh@kunai>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The driver overrides the error codes returned by platform_get_irq() to
--ENODEV, so if it returns -EPROBE_DEFER, the driver will fail the probe
-permanently instead of the deferred probing. Switch to propagating the
-error codes upstream...
+On Thu, Jun 24, 2021 at 10:10:17PM +0200, Wolfram Sang wrote:
+> On Wed, Jun 23, 2021 at 10:52:04AM +0200, Johan Hovold wrote:
+> > On Mon, May 24, 2021 at 11:09:12AM +0200, Johan Hovold wrote:
+> > > The direction of the pipe argument must match the request-type direction
+> > > bit or control requests may fail depending on the host-controller-driver
+> > > implementation.
+> > > 
+> > > Control transfers without a data stage are treated as OUT requests by
+> > > the USB stack and should be using usb_sndctrlpipe(). Failing to do so
+> > > will now trigger a warning.
+> > > 
+> > > Fix the OSIFI2C_SET_BIT_RATE and OSIFI2C_STOP requests which erroneously
+> > > used the osif_usb_read() helper and set the IN direction bit.
+> > > 
+> > > Reported-by: syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com
+> > > Fixes: 83e53a8f120f ("i2c: Add bus driver for for OSIF USB i2c device.")
+> > > Cc: stable@vger.kernel.org      # 3.14
+> > > Cc: Andrew Lunn <andrew@lunn.ch>
+> > > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > > ---
+> > 
+> > Wolfram, can you pick this one up for 5.14?
+> 
+> Sorry, I thought Andrew was the maintainer of this driver and was
+> waiting for his ack.
 
-Fixes: 0d676a6c4390 ("i2c: add support for Socionext SynQuacer I2C controller")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omprussia.ru>
+Ah, sorry. I did take a quick look at the change, it seemed
+sensible. But i've not used this hardware in years, i have no way to
+test it, etc.
 
----
- drivers/i2c/busses/i2c-synquacer.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: linux/drivers/i2c/busses/i2c-synquacer.c
-===================================================================
---- linux.orig/drivers/i2c/busses/i2c-synquacer.c
-+++ linux/drivers/i2c/busses/i2c-synquacer.c
-@@ -578,7 +578,7 @@ static int synquacer_i2c_probe(struct pl
- 
- 	i2c->irq = platform_get_irq(pdev, 0);
- 	if (i2c->irq < 0)
--		return -ENODEV;
-+		return i2c->irq;
- 
- 	ret = devm_request_irq(&pdev->dev, i2c->irq, synquacer_i2c_isr,
- 			       0, dev_name(&pdev->dev), i2c);
+     Andrew
