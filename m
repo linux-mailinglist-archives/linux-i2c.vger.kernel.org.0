@@ -2,110 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2FF3B34AC
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Jun 2021 19:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39123B3740
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Jun 2021 21:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbhFXRYb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Jun 2021 13:24:31 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:35932 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbhFXRYb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Jun 2021 13:24:31 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 442D41FDA9;
-        Thu, 24 Jun 2021 17:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1624555330; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GZewz+dJ4nSNLfOaC9fHbVY+mBlxFQ3Psk7Ka1K8wG4=;
-        b=2MEKv7SLvynfnEaykHKfV4hVixl0g/k2OugV3VlbM+VXVcLs6ssRox5skP4DchWiKuX3Tg
-        nzJ+Cjj4o4zEvzexLMdOvbi0Q7xUzyVEYTDmpD984BxBYSmG12NxvvsNqvSxSlalNQJ1lb
-        uU2NIZV0v+2/+mSUN0bfnwsn2ANCzGM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1624555330;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GZewz+dJ4nSNLfOaC9fHbVY+mBlxFQ3Psk7Ka1K8wG4=;
-        b=OnzFmu2CaRVPgMxeGpg/rveDZTAOwgTHouOLnr47F9+HGJ28SDts6ENDAIbgSJSWVyZa23
-        UkfHp5BfRFfR1qBg==
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id 0244511A97;
-        Thu, 24 Jun 2021 17:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1624555330; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GZewz+dJ4nSNLfOaC9fHbVY+mBlxFQ3Psk7Ka1K8wG4=;
-        b=2MEKv7SLvynfnEaykHKfV4hVixl0g/k2OugV3VlbM+VXVcLs6ssRox5skP4DchWiKuX3Tg
-        nzJ+Cjj4o4zEvzexLMdOvbi0Q7xUzyVEYTDmpD984BxBYSmG12NxvvsNqvSxSlalNQJ1lb
-        uU2NIZV0v+2/+mSUN0bfnwsn2ANCzGM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1624555330;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GZewz+dJ4nSNLfOaC9fHbVY+mBlxFQ3Psk7Ka1K8wG4=;
-        b=OnzFmu2CaRVPgMxeGpg/rveDZTAOwgTHouOLnr47F9+HGJ28SDts6ENDAIbgSJSWVyZa23
-        UkfHp5BfRFfR1qBg==
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id bazEOUG/1GC5WwAALh3uQQ
-        (envelope-from <jdelvare@suse.de>); Thu, 24 Jun 2021 17:22:09 +0000
-Date:   Thu, 24 Jun 2021 19:22:09 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S232709AbhFXTuz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 24 Jun 2021 15:50:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37534 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232684AbhFXTuz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 24 Jun 2021 15:50:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0F857613EE;
+        Thu, 24 Jun 2021 19:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624564115;
+        bh=OQezVEYhjFzcaI+rY4Y9xK11XSOl6xBaI9YhRYP+A/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PPzTml/HBEqAdBJS1HbmPktPntsFfj6Ia/h0qQwELXQTaAh3LPlpbcnGE89MUGeB+
+         eo1j4ygYLZG2xSfA5YRw/O6wziArR3yR4QI1B6C1iJY3/qxVO9Itt+1hNmhdVN/aon
+         ln1KIuiwp9NeA4BHgunUmHF4xkqClZ2Rtjgc41/FEmHBvA6/ioVLOhppU+vfEwlOJf
+         QR887xJeVVyzrPjw/Ny+hPsccAcxkrnOS99qN2umfv26L0HZ8peeJbmt0133HljLiF
+         C+bt75yN/UDabUty+g7zNxOjKbLv4Y35hStDld0WC8HxTXDXTW1/fQFcDiX8eXpZyx
+         OocOL6QCfH0uw==
+Date:   Thu, 24 Jun 2021 21:48:31 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andreas Hecht <andreas.e.hecht@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] i2c: parport: Switch to use
- module_parport_driver()
-Message-ID: <20210624192209.648eebe0@endymion>
-In-Reply-To: <20210616140441.39479-1-andriy.shevchenko@linux.intel.com>
-References: <20210616140441.39479-1-andriy.shevchenko@linux.intel.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+Subject: Re: [PATCH] i2c: i2c-dev: Add __user annotation
+Message-ID: <YNThj3wA0P7/twn3@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andreas Hecht <andreas.e.hecht@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210624152535.4949-1-andreas.e.hecht@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9fA+NkiHXMciafc6"
+Content-Disposition: inline
+In-Reply-To: <20210624152535.4949-1-andreas.e.hecht@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy,
 
-On Wed, 16 Jun 2021 17:04:41 +0300, Andy Shevchenko wrote:
-> Switch to use module_parport_driver() to reduce boilerplate code.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/i2c/busses/i2c-parport.c | 36 ++++++++++----------------------
->  1 file changed, 11 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-parport.c b/drivers/i2c/busses/i2c-parport.c
-> index a535889acca6..ccbbc9306e88 100644
-> --- a/drivers/i2c/busses/i2c-parport.c
-> +++ b/drivers/i2c/busses/i2c-parport.c
-> @@ -267,6 +267,16 @@ static void i2c_parport_attach(struct parport *port)
-                              ^^^^
+--9fA+NkiHXMciafc6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  	int i;
->  	struct pardev_cb i2c_parport_cb;
->  
-> +	if (type < 0) {
-> +		pr_warn("adapter type unspecified\n");
-> +		return -ENODEV;
-                       ^^^^^^^
+On Thu, Jun 24, 2021 at 05:25:35PM +0200, Andreas Hecht wrote:
+> Fix Sparse warnings:
+> drivers/i2c/i2c-dev.c:546:19: warning: incorrect type in assignment (diff=
+erent address spaces)
+> drivers/i2c/i2c-dev.c:549:53: warning: incorrect type in argument 2 (diff=
+erent address spaces)
+>=20
+> compat_ptr() returns a pointer tagged __user which gets assigned to a
+> pointer missing the __user annotation. The same pointer is passed to
+> copy_from_user() as an argument where it is expected to have the __user
+> annotation. Fix both by adding the __user annotation to the pointer.
+>=20
+> Signed-off-by: Andreas Hecht <andreas.e.hecht@gmail.com>
 
-> +	}
+Nice catch. Applied to for-current, thanks!
 
-Does not build.
 
--- 
-Jean Delvare
-SUSE L3 Support
+--9fA+NkiHXMciafc6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDU4YsACgkQFA3kzBSg
+KbZ1ug/+IrIJz/aSwJSEQI+BMw0FLJYPznzSZzTlMQq4rmUaUGSj2/kZ137bZht9
+yIOrK6wa2PTjpyt6M/f4ixv7GAWM6e8peAITZllHbvur+Qx6v6BsxCytSJDcvdtW
+IQtppQWVHaqBU+U97XIh9FzK6uOHcnr3nUB4FlkE4G85EnfImU/fDMfbdDg2fPsk
+1D+hIZo9qfun+BB+AhRUvMhaFoLCIUNPHbZVYN/P0rOup8/pAylVj/reHmYIm3qy
+lYP0+wA5ZuQR78zIj/OUdE2JHs3cfISmLf1223gFUSvHAWdTkS9D8obn0HEWRmsf
+DQSFE1xaSWIIQ/wCI1Igjyg/zsQMWZTrTQhrqKBNEfoeASntGUlHwsbEMhxEwuQT
+xBLtkiSQo4hHmYkSmcf5ZNfWIgU+L7A1NFUqytBMMtzAnh1H5XDN5hKw2LhbZIZp
+nWwd6Q1wIUKZ4RRKy2TVqZ/tN6CCob8Zh92TsTf1/KAntPH/nTSKYj20cJfvPNXx
+ICI1SZ8qstp50Qgb8EVZzW4AWDomgZNXxHBhUM/+cYIU9j/cijqOxUEUHbjYaG2J
+ZuEnUvwIzyrP9zmy5Av/BP0WDMzxdWNztFSVioM6IUELifi83Z2fcKku7hqopzt7
+rtSdhntowts/yCTAyMDGUm4ZFEesGnRxCCKXcp5ryh8hvhIrurQ=
+=Ah+d
+-----END PGP SIGNATURE-----
+
+--9fA+NkiHXMciafc6--
