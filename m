@@ -2,78 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9C33B4391
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jun 2021 14:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 522FF3B445F
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jun 2021 15:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbhFYMte (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Jun 2021 08:49:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57872 "EHLO mail.kernel.org"
+        id S231684AbhFYN1n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Jun 2021 09:27:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229470AbhFYMte (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 25 Jun 2021 08:49:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5FB9F6193A;
-        Fri, 25 Jun 2021 12:47:13 +0000 (UTC)
+        id S229934AbhFYN1m (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 25 Jun 2021 09:27:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 81FD66197B;
+        Fri, 25 Jun 2021 13:25:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624625233;
-        bh=FZXUHyZcqitdVOml9HZSNoGP/q8GXo+kGnotZDKbLXk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oSsGIO04ccCFmvGOAgXV0swJgneYwHG/RhrQqKhlfZUv1sU4MK4wFTnrNds65puCG
-         jzNRVnuuxUOJB1xmyUjF/25/mcW0Mvoo1IgbJkzqQs+x7UEPxdlM1HdOXw0bQ3i8I5
-         zgb7L0ANXIlgfGoTbc6eiBr8rMBc0sqG5nV+KHcecYLDY7cCQzgmtkRXVaKJhtirOg
-         2wxY2rXNBJMQLhEtZ8R8djrZpmPt0vzoVOom3vLsI30tnqDhyRMAu2IFY9EzKlBNCF
-         VYQQ+rI8+tv/onquAV/D3zGRc9VSCoaKe2PkD3JUeuKqgBsQmyM35GDX/qf6q3cBgs
-         hWfanb8Kj/SWg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lwlEo-0000Ec-CS; Fri, 25 Jun 2021 14:47:14 +0200
-Date:   Fri, 25 Jun 2021 14:47:14 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com,
-        stable@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH] i2c: robotfuzz-osif: fix control-request directions
-Message-ID: <YNXQUkaGOyg4AN2G@hovoldconsulting.com>
-References: <20210524090912.3989-1-johan@kernel.org>
- <YNL2NLSpBQqnc2bH@hovoldconsulting.com>
- <YNTmqcrYb9KzW8Zh@kunai>
+        s=k20201202; t=1624627522;
+        bh=2jRgXYYh1suuTSb/ARhd+TKxo/8YGzp2hFUNykuCvxI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XyQD4b6VgjtIRSy8BYEXVl3AatJZYBtublHC/DMNIEuu1jDlBuMjRd+JfxD7TEif/
+         qC4C7vNKSKFhbZzNqg4x5XaR2d+/CyRa47SbRI8BRcJUTL8hyqqKCBSj+x3vYY1tpX
+         mr69oSFD1LhJIvvn1FOlYqTlPFbfjD0unS75dqeZQcIPv/0XkRJH5TWhdXOka+8FZH
+         uIvaqHWaglDI2bj8+YHKi6Nn/qJWqsdWkjCuRHazLVuHlHEPnKrbBvGy8HTnDegskX
+         dsB97Sm/204SFNoARe79rEQvQ3SOYKsIAoqeTJKHQSbXSgyQx8XG8y4gkHSgGJTm/y
+         RAh6W+7sAJPzw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-spi@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 0/5] Add and enable GPI DMA users
+Date:   Fri, 25 Jun 2021 14:24:54 +0100
+Message-Id: <162462715508.45765.4709893375922153018.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210625052213.32260-1-vkoul@kernel.org>
+References: <20210625052213.32260-1-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wLtWFzcEsnVb05WS"
-Content-Disposition: inline
-In-Reply-To: <YNTmqcrYb9KzW8Zh@kunai>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, 25 Jun 2021 10:52:08 +0530, Vinod Koul wrote:
+> This series adds the GPI DMA in qcom geni spi and i2c drivers.
+> 
+> For this we first need to move GENI_IF_DISABLE_RO to common
+> headers and then add support for gpi dma in geni drivers.
+> 
+> Also, to reuse the dma-mapping in spi, we add a new field dma_map_dev to
+> allow controllers to pass a specific device for dma-mapping
+> 
+> [...]
 
---wLtWFzcEsnVb05WS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Thu, Jun 24, 2021 at 10:10:17PM +0200, Wolfram Sang wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> Sorry, I thought Andrew was the maintainer of this driver and was
-> waiting for his ack. But he is not, this driver is unmaintained. So, I
-> trust you and picked it up now.
->=20
-> Applied to for-current, thanks!
+Thanks!
 
-Perfect, thanks!
+[3/5] spi: core: add dma_map_dev for dma device
+      commit: b470e10eb43f19e08245cd87dd3192a8141cfbb5
 
-Johan
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---wLtWFzcEsnVb05WS
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCYNXQTQAKCRALxc3C7H1l
-CKGVAQCPI0qfCKxYhHx64ZOYAW3DDrzFhJIMXSUY0zzG0wjp3gEAu/5kmoaimUsX
-7DUTKIKtgcwrDMJ2P4ugizbEzPWCuAE=
-=x5Za
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---wLtWFzcEsnVb05WS--
+Thanks,
+Mark
