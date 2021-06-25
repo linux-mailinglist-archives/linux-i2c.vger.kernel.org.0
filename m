@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8123B3C1C
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jun 2021 07:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350E83B3C1E
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Jun 2021 07:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbhFYFYr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Jun 2021 01:24:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46076 "EHLO mail.kernel.org"
+        id S230359AbhFYFYw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Jun 2021 01:24:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46174 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230097AbhFYFYr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 25 Jun 2021 01:24:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 738BA6140B;
-        Fri, 25 Jun 2021 05:22:23 +0000 (UTC)
+        id S233129AbhFYFYv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 25 Jun 2021 01:24:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E269161423;
+        Fri, 25 Jun 2021 05:22:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624598547;
-        bh=NA/PKUB9sUEfGTtChxFr08NQkrRdfdT5k6WfEW3Pdjo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bdLdzKfVYFs0zfV/gIIrjH4LZvgya9n1yUGJaXJzynTfse/2SqmIDSyCbsVIPoVZE
-         KdjQb4aNgO3wHN9C8qnp9K2thYqIpIEFCTE5jpcRDY0cOxLRB8/WVBgzhZ8D/IyvmP
-         hBuRFk1klXFadPlb3LLUvaKMnPNXhOro1Wqc8D4BtsUGT2A4z06KN0Txtvs1IodRZi
-         HSxHq9KQGxQnRzor1/v8i9SLpO/TMSfNeAKICNiRpv6lGamQbhZgsdqLzG0iEPJ0SW
-         RSqFKUVe893fKv5lNRUFjFgCsWLHswrAB8GIxtocIAtIroW7R47qemlPtv17KtBFEy
-         05qvKkXbYuU7A==
+        s=k20201202; t=1624598551;
+        bh=9CpDYd6V2+ZRataORv0JLj011dFvZe8nxIM9fHBFhSA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KcXhZM/MpToxLGfI//7R+vEgoTnrXwjgeQAdZfu0TQ40FoIiEJyUzv4zb7me9cw0a
+         28kBq8fLaAWtKLIUn5vH6yOgJlWuBMtybVTVvcv2eRJSzc4boQOZRBXtUZryzm3tP4
+         ATjLmyBJ/vznuwchZXvHxqhWmHoi/B5UAD19q51HKgKaW2i9hsfbnvkaXZVUPOMHuQ
+         udTWSfFluKQVqYZv8Q6DMl1hL/bSOKanpmp2tCLlG5BAkx3FZ8SQiCzBnT7TL09OAK
+         q3G4LcERwvNPTBl0dx6kEcuExJmZMwLQBolibw44UskILSyRqL3/96fN8CIw2YfxAP
+         wnd41dDJw7+eA==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
@@ -32,57 +32,62 @@ Cc:     Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
         Matthias Kaehlcke <mka@chromium.org>,
         linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/5] Add and enable GPI DMA users
-Date:   Fri, 25 Jun 2021 10:52:08 +0530
-Message-Id: <20210625052213.32260-1-vkoul@kernel.org>
+Subject: [PATCH v3 1/5] soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
+Date:   Fri, 25 Jun 2021 10:52:09 +0530
+Message-Id: <20210625052213.32260-2-vkoul@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210625052213.32260-1-vkoul@kernel.org>
+References: <20210625052213.32260-1-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello,
+GENI_IF_DISABLE_RO is used by geni spi driver as well to check the
+status if GENI, so move this to common header qcom-geni-se.h
 
-This series adds the GPI DMA in qcom geni spi and i2c drivers.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ drivers/soc/qcom/qcom-geni-se.c | 1 -
+ include/linux/qcom-geni-se.h    | 4 ++++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-For this we first need to move GENI_IF_DISABLE_RO to common
-headers and then add support for gpi dma in geni drivers.
-
-Also, to reuse the dma-mapping in spi, we add a new field dma_map_dev to
-allow controllers to pass a specific device for dma-mapping
-
-Then, we add spi and i2c geni driver changes to support this DMA.
-
-Changes since v2:
-- Add core spi patch for dma_map_dev addition
-- rework the logic for getting and releasing channels in both driver, also
-  ensure proper cleanup
-- Fix the comments recieved from Doug and Bjorn
-- Add kernel-doc changes for enum geni_se_xfer_mode
-
-Changes since v1:
- - add r-b from Bjorn on patch 1
- - add more details in log for patch 2
- - Fix the comments from Doug and Bjorn for patch3, notable use read, modify
-   update for irq registers, use geni_se_irq_clear() for irq, dont update
-   single bit registers, add a bit more description for gpi dma etc
-
-Vinod Koul (5):
-  soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
-  soc: qcom: geni: Add support for gpi dma
-  spi: core: add dma_map_dev for dma device
-  spi: spi-geni-qcom: Add support for GPI dma
-  i2c: qcom-geni: Add support for GPI DMA
-
- drivers/i2c/busses/i2c-qcom-geni.c | 309 ++++++++++++++++++++++++++-
- drivers/soc/qcom/qcom-geni-se.c    |  30 ++-
- drivers/spi/spi-geni-qcom.c        | 329 +++++++++++++++++++++++++++--
- drivers/spi/spi.c                  |   4 +
- include/linux/qcom-geni-se.h       |  19 +-
- include/linux/spi/spi.h            |   1 +
- 6 files changed, 667 insertions(+), 25 deletions(-)
-
+diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+index 5bdfb1565c14..fe666ea0c487 100644
+--- a/drivers/soc/qcom/qcom-geni-se.c
++++ b/drivers/soc/qcom/qcom-geni-se.c
+@@ -104,7 +104,6 @@ static const char * const icc_path_names[] = {"qup-core", "qup-config",
+ #define GENI_OUTPUT_CTRL		0x24
+ #define GENI_CGC_CTRL			0x28
+ #define GENI_CLK_CTRL_RO		0x60
+-#define GENI_IF_DISABLE_RO		0x64
+ #define GENI_FW_S_REVISION_RO		0x6c
+ #define SE_GENI_BYTE_GRAN		0x254
+ #define SE_GENI_TX_PACKING_CFG0		0x260
+diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
+index 7c811eebcaab..5114e2144b17 100644
+--- a/include/linux/qcom-geni-se.h
++++ b/include/linux/qcom-geni-se.h
+@@ -63,6 +63,7 @@ struct geni_se {
+ #define SE_GENI_STATUS			0x40
+ #define GENI_SER_M_CLK_CFG		0x48
+ #define GENI_SER_S_CLK_CFG		0x4c
++#define GENI_IF_DISABLE_RO		0x64
+ #define GENI_FW_REVISION_RO		0x68
+ #define SE_GENI_CLK_SEL			0x7c
+ #define SE_GENI_DMA_MODE_EN		0x258
+@@ -105,6 +106,9 @@ struct geni_se {
+ #define CLK_DIV_MSK			GENMASK(15, 4)
+ #define CLK_DIV_SHFT			4
+ 
++/* GENI_IF_DISABLE_RO fields */
++#define FIFO_IF_DISABLE			(BIT(0))
++
+ /* GENI_FW_REVISION_RO fields */
+ #define FW_REV_PROTOCOL_MSK		GENMASK(15, 8)
+ #define FW_REV_PROTOCOL_SHFT		8
 -- 
 2.31.1
 
