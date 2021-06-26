@@ -2,23 +2,23 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E466A3B4DFF
-	for <lists+linux-i2c@lfdr.de>; Sat, 26 Jun 2021 12:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F57E3B4E01
+	for <lists+linux-i2c@lfdr.de>; Sat, 26 Jun 2021 12:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbhFZKbD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 26 Jun 2021 06:31:03 -0400
-Received: from mail-co1nam11on2073.outbound.protection.outlook.com ([40.107.220.73]:53647
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        id S229975AbhFZKbG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 26 Jun 2021 06:31:06 -0400
+Received: from mail-dm6nam08on2043.outbound.protection.outlook.com ([40.107.102.43]:27552
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229987AbhFZKbB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 26 Jun 2021 06:31:01 -0400
+        id S229999AbhFZKbE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 26 Jun 2021 06:31:04 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nFFrY6RmdgdJ4iW7BWPvA7YopUgKOuJvgercwXUWjMKbzqYcX0mp0gDvkJQpX6RJT6OYEnjVJoUny8qZWY88jhKuGOkZkMarw6iJfWx80EsnBj0NPgDYUxALvHPKPHR7QXJtbptqbaToRa9Pn37Y8h43VDcveOFfW3OVmF3pNAwam7NPeKT7yaYPrWYI9tmhhkLnQF+2PdIrs6C4/iyXu3UjDJlZtZKBt74381/Qyvjqw8n0mrCpv2U6+Gsvwf3KGnIE92qE5AozYcgY5FK/NXqC5oa7T3L+/D+GzZbbFxItnBefvadYKML3gzIHzfgiDdeQNPUhQaFzSyvGahTCjA==
+ b=PxsMmjOm7TkpApjJYDicRTYwJoXFP6IieoYdJ2L0p1WhhNE5erDGFvYyirqaKjKQWJV53qufe1tLqauPuCbnq5Mgu+YXdVgeZH5Sb9S+xGkWL2HTvpqBfVnLpcfWkiDoRAmM7E899qw+BOwJ17duFvlD4PZ6tjfd0pSCSjHoLxi4Nvq0giDlgk5+3VeicAsuL1NuYFX55zldGEXzpgMNUpdqxtGU3b6MAWivSumMfAVIRqPQoBMbW/EEqz31I5ufuMTS6Kc7Sl/TyOw8nI1fHMz+418LFXcNrS29FDvZELU8LdkHp0B8OihLY9/suj9E3hDwtQ8V7/EEcOr/mEni8g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b8YWvGcRhX1Wp0SGqnRKhxCjN2UKT+g0wXrkPJChmMM=;
- b=IPdM/RsjWzgP70uYdZWsJCnw/5OD3PUK4T6fMSjNSqNHCZdlTUxERye29oWW3cp/zl0PEolYfXIlT/0XA8x4BGHqUEVlpLvgHdbZLXIose3HiP5HPCdMUrxapcyoo4tACav2V0ifope6oqelymYeEYzrXXAh5esm8ShjGTu/mo8LGsvnRytiGwQE0S8ejXMDXtx08uMY1msfDAIL7HvfbLUb8qkcd0Fc53fAg1M79BQIlNRGKcBQ+KJagCnDNjoo6UBA70uOBx3eCnWxBLHEwQ/SHsjht+rJB/OztEK1+rsXfuxvTpcmNCiTFGcJEQCj/K6RVzfrLzGTQ82sTovy5g==
+ bh=hXKCqVaK3KBPFimqqPK6oUy9SddBtUFw0eGUpOZA+WQ=;
+ b=al8/SQmWhUXo+9xlj+oy6x6ZJH47LRmgaApNXhH5BP3BAh0OjMuj+4sYJW0sawdgNM4mPBWKpHNyYP6WX/BnvzO8U0aD0s1bCjUPlHveXpQLKGVPzwDImccl3PNdDEgUQcBhRYa92ukwYb/7bFStCQ4Oe7zAQbG2WUREmLHOlfH6hbsT09RrouXkQ7GHHRXum4Ffpe6pvruHlwPFfrZ+90Hxbd8QrFMYwR7lzbTGJM5jQOSEljAcwxDMeUvK2xrpSpThPqrWXqgdYgepSsiSZCBGlKAZGSL5bqvz4frUH7wtWkwG4vI2Jawabnanfks1rH0rh6ryaHBaoN/EXPQnMA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b8YWvGcRhX1Wp0SGqnRKhxCjN2UKT+g0wXrkPJChmMM=;
- b=BwHZaJJ2pKd8I+nc4sL4fxbr6JnmZvWtKfP4IxoNzY8tvGJzSSUNfPKC0hqSL7MoqeMxg47v81tTq/OtS/TV/vP5k+XqEHbnLNnV3oob01CUeR+E5E7EmEN3DP4YgVTZyY6hZRBqbh3am+5KItOG+aqVHK/9n5PF8eQHphYZD4I=
-Received: from SA0PR11CA0177.namprd11.prod.outlook.com (2603:10b6:806:1bb::32)
- by DM5PR02MB3765.namprd02.prod.outlook.com (2603:10b6:4:b2::33) with
+ bh=hXKCqVaK3KBPFimqqPK6oUy9SddBtUFw0eGUpOZA+WQ=;
+ b=n3k0M/MdS/zedNjLYU1Wb2Tsj6Px4kGTpt8TqxsswGK4cGT5X3UJBzJKICQnc7CiaGTh2cG9fwAwsDTvNU35cEm0FjoU3raztIMwMXQrbG1YP+rGGOj6SxYtLfJWwoHYPyoBZX73bUDfQgoQ6HKL7kEbJgMot1LRyvdz8im6DFQ=
+Received: from SA0PR11CA0163.namprd11.prod.outlook.com (2603:10b6:806:1bb::18)
+ by CO6PR02MB7745.namprd02.prod.outlook.com (2603:10b6:303:a3::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.24; Sat, 26 Jun
- 2021 10:28:37 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18; Sat, 26 Jun
+ 2021 10:28:41 +0000
 Received: from SN1NAM02FT0061.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:1bb:cafe::79) by SA0PR11CA0177.outlook.office365.com
- (2603:10b6:806:1bb::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18 via Frontend
- Transport; Sat, 26 Jun 2021 10:28:36 +0000
+ (2603:10b6:806:1bb:cafe::40) by SA0PR11CA0163.outlook.office365.com
+ (2603:10b6:806:1bb::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.19 via Frontend
+ Transport; Sat, 26 Jun 2021 10:28:41 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=pass action=none header.from=xilinx.com;
@@ -47,14 +47,14 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
 Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
  SN1NAM02FT0061.mail.protection.outlook.com (10.97.4.250) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4264.18 via Frontend Transport; Sat, 26 Jun 2021 10:28:36 +0000
+ 15.20.4264.18 via Frontend Transport; Sat, 26 Jun 2021 10:28:40 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 26 Jun 2021 03:28:20 -0700
+ 15.1.2176.2; Sat, 26 Jun 2021 03:28:24 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Sat, 26 Jun 2021 03:28:20 -0700
+ 15.1.2176.2 via Frontend Transport; Sat, 26 Jun 2021 03:28:24 -0700
 Envelope-to: git@xilinx.com,
  linux-i2c@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org,
@@ -64,16 +64,16 @@ Envelope-to: git@xilinx.com,
 Received: from [10.140.6.6] (port=55646 helo=xhdappanad40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <raviteja.narayanam@xilinx.com>)
-        id 1lx5Xv-000AWJ-Aw; Sat, 26 Jun 2021 03:28:19 -0700
+        id 1lx5Xz-000AWJ-4c; Sat, 26 Jun 2021 03:28:23 -0700
 From:   Raviteja Narayanam <raviteja.narayanam@xilinx.com>
 To:     <linux-i2c@vger.kernel.org>, <michal.simek@xilinx.com>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <git@xilinx.com>, <marex@denx.de>,
         <joe@perches.com>,
         Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-Subject: [PATCH v2 02/10] i2c: xiic: Add standard mode support for > 255 byte read transfers
-Date:   Sat, 26 Jun 2021 15:57:58 +0530
-Message-ID: <20210626102806.15402-3-raviteja.narayanam@xilinx.com>
+Subject: [PATCH v2 03/10] i2c: xiic: Switch to Xiic standard mode for i2c-read
+Date:   Sat, 26 Jun 2021 15:57:59 +0530
+Message-ID: <20210626102806.15402-4-raviteja.narayanam@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
 References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
@@ -81,548 +81,178 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 18a6c846-7710-47cc-d375-08d9388d2824
-X-MS-TrafficTypeDiagnostic: DM5PR02MB3765:
-X-Microsoft-Antispam-PRVS: <DM5PR02MB3765661639535D651A975A09CA059@DM5PR02MB3765.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: e1586486-46d5-4f96-519c-08d9388d2adc
+X-MS-TrafficTypeDiagnostic: CO6PR02MB7745:
+X-Microsoft-Antispam-PRVS: <CO6PR02MB77456FA87DA2D504AA5D3046CA059@CO6PR02MB7745.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:232;
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XIS0Nf0EBIVqrw4ANGSzyVYUcC91yDHs2zd4HprUgtu4lvhJkqYLLlFDABUijo2msSbDerOYHZ2cx5cBR8JYE62Rk9zMo9GZ2wIxR3UY2hXMcYPWJGD7GCSdc+wM0CIR7eAH2lMe7ApnNe8YDOq9B06nT49TNmsSZwX++eo6ObxD6n1WuCe7xOFCP4ltO7TiVF+3WyRsfNdkRI3Om9HJh1AHWTUOVJBkJA9wJZf/iS2ovhnw+MeCQmgFarTqeK4VniZmS9yQMQVbI8aD2XCReacZ53+O8Qrr3cPArnsSuZDFMxajSJCEWtTLE+4EXhB4ywWnx02kBCqxFSp2mmfOMbklppL9Nd7mkC08X4Ut2vY1ykX2SytE29xtq7uyyEPzQRtVcQxqTfRbr2EIzTHvEB2NGgRAKtpUBe3rpkJ4Lp5smFJotNNL7bk73cAJV8xm5BKOIUhT3QouGNnN+aoNx5TPB8mGrkg+O+43h/cGaVsLZT1xUH74euugwUK7vFv8/bVEvnBKfrHfRjFb5ovwSsJVff8H6I6FwK1bJDESMoeRt3xfAixXLycMRhwoI5Y/NMJkpHPcv7tfFE1KFO2+u/bZVZeOjXHPwXiqZKh+pIr6DZdnEr/V0txaQN3zyRhuLzz6tZAqkLeyVmtvX9HaxQqSa24tRpFH3VthqNg+cIRC3S+tQeIP5lB+u52wwjf5dlzxBf+hamxLb9JN+YO6QNAJFcTqYNJarERPNkdQhi8=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(39860400002)(136003)(396003)(346002)(46966006)(36840700001)(336012)(70206006)(36860700001)(6636002)(36906005)(8936002)(54906003)(82740400003)(316002)(356005)(5660300002)(82310400003)(30864003)(8676002)(83380400001)(2906002)(7636003)(44832011)(1076003)(9786002)(186003)(7696005)(26005)(110136005)(70586007)(2616005)(107886003)(4326008)(6666004)(36756003)(426003)(478600001)(47076005)(102446001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: H96C24umzG5x57pIUHrbQ34YYTVHZGbK+uagK4F7qa0ZOV7igbJIkiAzbFvJ3lV2oSWIIRj0GKnrC6qqVkhKqQ5cXkm0T+wBWGDjumns8V0Sg/wUASWLAqiZimt1Z4i9DcZ2Utkqz8xO0nzN6jgysagB2OSQifRlRuxNMR7sigjZ+KeeXE1gWZ6V8LHC1sVu2hHgst89e0W6IHhAIJjW6n/+OqBky6c3IUht5izQ7XeIcQlJVHgB63/uhV3uI6HWZi2DLY9sTzRjRjBN6hJuAnLEdvHsMWqo/nt3IwRp7aBxxg1xS9UX7NVoJb4uGcOhUMLHIMxTuwqQThBFmqSxoQhvI7Bvb/QhATRwCxmP9ocDS046oy5nikpSj07qHAeKWuac/1Lsw2MPTWr3CumUaoWdBCW+d4RaBkUE+crY1DjtfCd3zdhIvN+1Ug+kuYbVn1ax6IpbE4S+J5S9i9HkWEZXNkQTz/8sQ2xmJi5wQ4TNCqQnCUPowUIx+tQwZEeVyvDh98DVIOaGBnHCxRicDwN3rT++sr44L6lw90HXDugL4Vz1TRZBxPDm0rq3uIysYCDS4FB/c8TW67BHzBHFP6WJK7W+zxR+zSBSqbOgeqza4WcekziWMIm8+Dn4KmHYJVYnBU06eGIPnTvnY4CB/SM/ymoAjMRR5FYj0Zw/9yipSHcO0aas0oEBXdkEWPHAYQboRSt2AJsvr3N1LJlULQXxdw5WyE3/oSAxzurGS18=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(39860400002)(136003)(376002)(346002)(36840700001)(46966006)(8936002)(4326008)(1076003)(6666004)(36756003)(44832011)(2616005)(356005)(426003)(316002)(36906005)(47076005)(82310400003)(9786002)(83380400001)(8676002)(82740400003)(5660300002)(107886003)(7696005)(6636002)(336012)(36860700001)(478600001)(2906002)(26005)(186003)(70206006)(70586007)(7636003)(110136005)(54906003)(102446001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2021 10:28:36.3882
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2021 10:28:40.9462
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18a6c846-7710-47cc-d375-08d9388d2824
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1586486-46d5-4f96-519c-08d9388d2adc
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
 X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0061.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB3765
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR02MB7745
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In the current driver implementation, there is a limit of read
-transfer size to 255 bytes as it is using AXI I2C dynamic mode.
-But the IP supports this transfer through standard mode.
+Xilinx I2C IP has two modes of operation, both of which implement
+I2C transactions. The only difference from sw perspective is the
+programming sequence for these modes.
+Dynamic mode  -> Simple to program, less number of steps in sequence.
+Standard mode -> Gives flexibility, more number of steps in sequence.
 
-So added AXI I2C standard mode support to enable read transfers
-of size more than 255 bytes. The driver scans through the message
-request from user space and selects AXI I2C standard mode if there
-is a read request of more than 255 bytes. Then the whole message goes
-through standard mode Tx and Rx paths.
+In dynamic mode, during the i2c-read transactions, if there is a
+delay(> 200us) between the register writes (address & byte count),
+read transaction fails. On a system with load, this scenario is
+occurring frequently.
+To avoid this, switch to standard mode if there is a read request.
+
+Added a quirk to identify the IP version effected by this and follow
+the standard mode.
 
 Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
 ---
- drivers/i2c/busses/i2c-xiic.c | 367 +++++++++++++++++++++++++++++-----
- 1 file changed, 319 insertions(+), 48 deletions(-)
+ drivers/i2c/busses/i2c-xiic.c | 54 ++++++++++++++++++++++++++++-------
+ 1 file changed, 43 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index b0cfd9d15467..004103267e9c 100644
+index 004103267e9c..c31d0d0a8384 100644
 --- a/drivers/i2c/busses/i2c-xiic.c
 +++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -60,6 +60,8 @@ enum xiic_endian {
-  * @clk: Pointer to AXI4-lite input clock
-  * @state: See STATE_
+@@ -33,6 +33,8 @@
+ 
+ #define DRIVER_NAME "xiic-i2c"
+ 
++#define DYNAMIC_MODE_READ_BROKEN_BIT	BIT(0)
++
+ enum xilinx_i2c_state {
+ 	STATE_DONE,
+ 	STATE_ERROR,
+@@ -62,6 +64,7 @@ enum xiic_endian {
   * @singlemaster: Indicates bus is single master
-+ * @dynamic: Mode of controller
-+ * @prev_msg_tx: Previous message is Tx
+  * @dynamic: Mode of controller
+  * @prev_msg_tx: Previous message is Tx
++ * @quirks: To hold platform specific bug info
   */
  struct xiic_i2c {
  	struct device *dev;
-@@ -76,6 +78,8 @@ struct xiic_i2c {
- 	struct clk *clk;
- 	enum xilinx_i2c_state state;
+@@ -80,8 +83,12 @@ struct xiic_i2c {
  	bool singlemaster;
-+	bool dynamic;
-+	bool prev_msg_tx;
+ 	bool dynamic;
+ 	bool prev_msg_tx;
++	u32 quirks;
  };
  
++struct xiic_version_data {
++	u32 quirks;
++};
  
-@@ -144,6 +148,9 @@ struct xiic_i2c {
- #define XIIC_TX_DYN_START_MASK            0x0100 /* 1 = Set dynamic start */
- #define XIIC_TX_DYN_STOP_MASK             0x0200 /* 1 = Set dynamic stop */
+ #define XIIC_MSB_OFFSET 0
+ #define XIIC_REG_OFFSET (0x100+XIIC_MSB_OFFSET)
+@@ -963,6 +970,7 @@ static int xiic_start_xfer(struct xiic_i2c *i2c)
  
-+/* Dynamic mode constants */
-+#define MAX_READ_LENGTH_DYNAMIC		255 /* Max length for dynamic read */
+ static int xiic_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+ {
++	bool broken_read, max_read_len;
+ 	struct xiic_i2c *i2c = i2c_get_adapdata(adap);
+ 	int err, count;
+ 
+@@ -986,10 +994,21 @@ static int xiic_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+ 	/* Initialize prev message type */
+ 	i2c->prev_msg_tx = false;
+ 
+-	/* Enter standard mode only when read length is > 255 bytes */
++	/*
++	 * Scan through nmsgs, use dynamic mode when none of the below two
++	 * conditions occur. We need standard mode even if one condition holds
++	 * true in the entire array of messages in a single transfer.
++	 * If read transaction as dynamic mode is broken for delayed reads
++	 * in xlnx,axi-iic-2.0 / xlnx,xps-iic-2.00.a IP versions.
++	 * If read length is > 255 bytes.
++	 */
+ 	for (count = 0; count < i2c->nmsgs; count++) {
+-		if ((i2c->tx_msg[count].flags & I2C_M_RD) &&
+-		    i2c->tx_msg[count].len > MAX_READ_LENGTH_DYNAMIC) {
++		broken_read = (i2c->quirks & DYNAMIC_MODE_READ_BROKEN_BIT) &&
++			       (i2c->tx_msg[count].flags & I2C_M_RD);
++		max_read_len = (i2c->tx_msg[count].flags & I2C_M_RD) &&
++				(i2c->tx_msg[count].len > MAX_READ_LENGTH_DYNAMIC);
 +
- /*
-  * The following constants define the register offsets for the Interrupt
-  * registers. There are some holes in the memory map for reserved addresses
-@@ -270,6 +277,24 @@ static int xiic_clear_rx_fifo(struct xiic_i2c *i2c)
++		if (broken_read || max_read_len) {
+ 			i2c->dynamic = false;
+ 			break;
+ 		}
+@@ -1035,11 +1054,23 @@ static const struct i2c_adapter xiic_adapter = {
+ 	.algo = &xiic_algorithm,
+ };
+ 
++static const struct xiic_version_data xiic_2_00 = {
++	.quirks = DYNAMIC_MODE_READ_BROKEN_BIT,
++};
++
++#if defined(CONFIG_OF)
++static const struct of_device_id xiic_of_match[] = {
++	{ .compatible = "xlnx,xps-iic-2.00.a", .data = &xiic_2_00 },
++	{},
++};
++MODULE_DEVICE_TABLE(of, xiic_of_match);
++#endif
+ 
+ static int xiic_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct xiic_i2c *i2c;
+ 	struct xiic_i2c_platform_data *pdata;
++	const struct of_device_id *match;
+ 	struct resource *res;
+ 	int ret, irq;
+ 	u8 i;
+@@ -1049,6 +1080,13 @@ static int xiic_i2c_probe(struct platform_device *pdev)
+ 	if (!i2c)
+ 		return -ENOMEM;
+ 
++	match = of_match_node(xiic_of_match, pdev->dev.of_node);
++	if (match && match->data) {
++		const struct xiic_version_data *data = match->data;
++
++		i2c->quirks = data->quirks;
++	}
++
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	i2c->base = devm_ioremap_resource(&pdev->dev, res);
+ 	if (IS_ERR(i2c->base))
+@@ -1129,6 +1167,8 @@ static int xiic_i2c_probe(struct platform_device *pdev)
+ 			i2c_new_client_device(&i2c->adap, pdata->devices + i);
+ 	}
+ 
++	dev_info(&pdev->dev, "mmio %08lx irq %d\n", (unsigned long)res->start, irq);
++
+ 	return 0;
+ 
+ err_clk_dis:
+@@ -1160,14 +1200,6 @@ static int xiic_i2c_remove(struct platform_device *pdev)
  	return 0;
  }
  
-+static int xiic_wait_tx_empty(struct xiic_i2c *i2c)
-+{
-+	u8 isr;
-+	unsigned long timeout;
-+
-+	timeout = jiffies + XIIC_I2C_TIMEOUT;
-+	for (isr = xiic_getreg32(i2c, XIIC_IISR_OFFSET);
-+			!(isr & XIIC_INTR_TX_EMPTY_MASK);
-+			isr = xiic_getreg32(i2c, XIIC_IISR_OFFSET)) {
-+		if (time_after(jiffies, timeout)) {
-+			dev_err(i2c->dev, "Timeout waiting at Tx empty\n");
-+			return -ETIMEDOUT;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int xiic_reinit(struct xiic_i2c *i2c)
- {
- 	int ret;
-@@ -311,13 +336,14 @@ static void xiic_deinit(struct xiic_i2c *i2c)
- 
- static void xiic_read_rx(struct xiic_i2c *i2c)
- {
--	u8 bytes_in_fifo;
-+	u8 bytes_in_fifo, cr = 0, bytes_to_read = 0;
-+	u32 bytes_rem = 0;
- 	int i;
- 
- 	bytes_in_fifo = xiic_getreg8(i2c, XIIC_RFO_REG_OFFSET) + 1;
- 
- 	dev_dbg(i2c->adap.dev.parent,
--		"%s entry, bytes in fifo: %d, msg: %d, SR: 0x%x, CR: 0x%x\n",
-+		"%s entry, bytes in fifo: %d, rem: %d, SR: 0x%x, CR: 0x%x\n",
- 		__func__, bytes_in_fifo, xiic_rx_space(i2c),
- 		xiic_getreg8(i2c, XIIC_SR_REG_OFFSET),
- 		xiic_getreg8(i2c, XIIC_CR_REG_OFFSET));
-@@ -325,13 +351,53 @@ static void xiic_read_rx(struct xiic_i2c *i2c)
- 	if (bytes_in_fifo > xiic_rx_space(i2c))
- 		bytes_in_fifo = xiic_rx_space(i2c);
- 
--	for (i = 0; i < bytes_in_fifo; i++)
-+	bytes_to_read = bytes_in_fifo;
-+
-+	if (!i2c->dynamic) {
-+		bytes_rem = xiic_rx_space(i2c) - bytes_in_fifo;
-+
-+		if (bytes_rem > IIC_RX_FIFO_DEPTH) {
-+			bytes_to_read = bytes_in_fifo;
-+		} else if (bytes_rem > 1) {
-+			bytes_to_read = bytes_rem - 1;
-+		} else if (bytes_rem == 1) {
-+			bytes_to_read = 1;
-+			/* Set NACK in CR to indicate slave transmitter */
-+			cr = xiic_getreg8(i2c, XIIC_CR_REG_OFFSET);
-+			xiic_setreg8(i2c, XIIC_CR_REG_OFFSET, cr |
-+				     XIIC_CR_NO_ACK_MASK);
-+		} else if (bytes_rem == 0) {
-+			bytes_to_read = bytes_in_fifo;
-+
-+			/* Generate stop on the bus if it is last message */
-+			if (i2c->nmsgs == 1) {
-+				cr = xiic_getreg8(i2c, XIIC_CR_REG_OFFSET);
-+				xiic_setreg8(i2c, XIIC_CR_REG_OFFSET, cr &
-+					     ~XIIC_CR_MSMS_MASK);
-+			}
-+
-+			/* Make TXACK=0, clean up for next transaction */
-+			cr = xiic_getreg8(i2c, XIIC_CR_REG_OFFSET);
-+			xiic_setreg8(i2c, XIIC_CR_REG_OFFSET, cr &
-+				     ~XIIC_CR_NO_ACK_MASK);
-+		}
-+	}
-+
-+	/* Read the fifo */
-+	for (i = 0; i < bytes_to_read; i++) {
- 		i2c->rx_msg->buf[i2c->rx_pos++] =
- 			xiic_getreg8(i2c, XIIC_DRR_REG_OFFSET);
-+	}
- 
--	xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET,
--		(xiic_rx_space(i2c) > IIC_RX_FIFO_DEPTH) ?
--		IIC_RX_FIFO_DEPTH - 1 :  xiic_rx_space(i2c) - 1);
-+	if (i2c->dynamic) {
-+		u8 bytes;
-+
-+		/* Receive remaining bytes if less than fifo depth */
-+		bytes = min_t(u8, xiic_rx_space(i2c), IIC_RX_FIFO_DEPTH);
-+		bytes--;
-+
-+		xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET, bytes);
-+	}
- }
- 
- static int xiic_tx_fifo_space(struct xiic_i2c *i2c)
-@@ -361,6 +427,62 @@ static void xiic_fill_tx_fifo(struct xiic_i2c *i2c)
- 	}
- }
- 
-+static void xiic_std_fill_tx_fifo(struct xiic_i2c *i2c)
-+{
-+	u8 fifo_space = xiic_tx_fifo_space(i2c);
-+	u16 data = 0;
-+	int len = xiic_tx_space(i2c);
-+
-+	dev_dbg(i2c->adap.dev.parent, "%s entry, len: %d, fifo space: %d\n",
-+		__func__, len, fifo_space);
-+
-+	if (len > fifo_space)
-+		len = fifo_space;
-+	else if (len && !(i2c->nmsgs > 1))
-+		len--;
-+
-+	while (len--) {
-+		data = i2c->tx_msg->buf[i2c->tx_pos++];
-+		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, data);
-+	}
-+}
-+
-+static void xiic_send_tx(struct xiic_i2c *i2c)
-+{
-+	dev_dbg(i2c->adap.dev.parent,
-+		"%s entry, rem: %d, SR: 0x%x, CR: 0x%x\n",
-+		__func__, xiic_tx_space(i2c),
-+		xiic_getreg8(i2c, XIIC_SR_REG_OFFSET),
-+		xiic_getreg8(i2c, XIIC_CR_REG_OFFSET));
-+
-+	if (xiic_tx_space(i2c) > 1) {
-+		xiic_std_fill_tx_fifo(i2c);
-+		return;
-+	}
-+
-+	if ((xiic_tx_space(i2c) == 1)) {
-+		u16 data;
-+
-+		if (i2c->nmsgs == 1) {
-+			u8 cr;
-+			int status;
-+
-+			/* Wait till FIFO is empty so STOP is sent last */
-+			status = xiic_wait_tx_empty(i2c);
-+			if (status)
-+				return;
-+
-+			/* Write to CR to stop */
-+			cr = xiic_getreg8(i2c, XIIC_CR_REG_OFFSET);
-+			xiic_setreg8(i2c, XIIC_CR_REG_OFFSET, cr &
-+				     ~XIIC_CR_MSMS_MASK);
-+		}
-+		/* Send last byte */
-+		data = i2c->tx_msg->buf[i2c->tx_pos++];
-+		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, data);
-+	}
-+}
-+
- static void xiic_wakeup(struct xiic_i2c *i2c, int code)
- {
- 	i2c->tx_msg = NULL;
-@@ -391,7 +513,9 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
- 	dev_dbg(i2c->adap.dev.parent, "%s: SR: 0x%x, msg: %p, nmsgs: %d\n",
- 		__func__, xiic_getreg8(i2c, XIIC_SR_REG_OFFSET),
- 		i2c->tx_msg, i2c->nmsgs);
--
-+	dev_dbg(i2c->adap.dev.parent, "%s, ISR: 0x%x, CR: 0x%x\n",
-+		__func__, xiic_getreg32(i2c, XIIC_IISR_OFFSET),
-+		xiic_getreg8(i2c, XIIC_CR_REG_OFFSET));
- 
- 	/* Service requesting interrupt */
- 	if ((pend & XIIC_INTR_ARB_LOST_MASK) ||
-@@ -465,7 +589,10 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
- 			goto out;
- 		}
- 
--		xiic_fill_tx_fifo(i2c);
-+		if (i2c->dynamic)
-+			xiic_fill_tx_fifo(i2c);
-+		else
-+			xiic_send_tx(i2c);
- 
- 		/* current message sent and there is space in the fifo */
- 		if (!xiic_tx_space(i2c) && xiic_tx_fifo_space(i2c) >= 2) {
-@@ -554,35 +681,113 @@ static int xiic_busy(struct xiic_i2c *i2c)
- 
- static void xiic_start_recv(struct xiic_i2c *i2c)
- {
--	u8 rx_watermark;
-+	u16 rx_watermark;
-+	u8 cr = 0, rfd_set = 0;
- 	struct i2c_msg *msg = i2c->rx_msg = i2c->tx_msg;
- 	unsigned long flags;
- 
--	/* Clear and enable Rx full interrupt. */
--	xiic_irq_clr_en(i2c, XIIC_INTR_RX_FULL_MASK | XIIC_INTR_TX_ERROR_MASK);
-+	dev_dbg(i2c->adap.dev.parent, "%s entry, ISR: 0x%x, CR: 0x%x\n",
-+		__func__, xiic_getreg32(i2c, XIIC_IISR_OFFSET),
-+		xiic_getreg8(i2c, XIIC_CR_REG_OFFSET));
-+
-+	/* Disable Tx interrupts */
-+	xiic_irq_dis(i2c, XIIC_INTR_TX_HALF_MASK | XIIC_INTR_TX_EMPTY_MASK);
- 
--	/* we want to get all but last byte, because the TX_ERROR IRQ is used
--	 * to inidicate error ACK on the address, and negative ack on the last
--	 * received byte, so to not mix them receive all but last.
--	 * In the case where there is only one byte to receive
--	 * we can check if ERROR and RX full is set at the same time
--	 */
--	rx_watermark = msg->len;
--	if (rx_watermark > IIC_RX_FIFO_DEPTH)
--		rx_watermark = IIC_RX_FIFO_DEPTH;
--	xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET, rx_watermark - 1);
--
--	local_irq_save(flags);
--	if (!(msg->flags & I2C_M_NOSTART))
--		/* write the address */
-+	if (i2c->dynamic) {
-+		u8 bytes;
-+		u16 val;
-+
-+		/* Clear and enable Rx full interrupt. */
-+		xiic_irq_clr_en(i2c, XIIC_INTR_RX_FULL_MASK |
-+				XIIC_INTR_TX_ERROR_MASK);
-+
-+		/*
-+		 * We want to get all but last byte, because the TX_ERROR IRQ
-+		 * is used to indicate error ACK on the address, and
-+		 * negative ack on the last received byte, so to not mix
-+		 * them receive all but last.
-+		 * In the case where there is only one byte to receive
-+		 * we can check if ERROR and RX full is set at the same time
-+		 */
-+		rx_watermark = msg->len;
-+		bytes = min_t(u8, rx_watermark, IIC_RX_FIFO_DEPTH);
-+		bytes--;
-+
-+		xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET, bytes);
-+
-+		local_irq_save(flags);
-+		if (!(msg->flags & I2C_M_NOSTART))
-+			/* write the address */
-+			xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET,
-+				      i2c_8bit_addr_from_msg(msg) |
-+				      XIIC_TX_DYN_START_MASK);
-+
-+		xiic_irq_clr_en(i2c, XIIC_INTR_BNB_MASK);
-+
-+		/* If last message, include dynamic stop bit with length */
-+		val = (i2c->nmsgs == 1) ? XIIC_TX_DYN_STOP_MASK : 0;
-+		val |= msg->len;
-+
-+		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, val);
-+		local_irq_restore(flags);
-+	} else {
-+		/*
-+		 * If previous message is Tx, make sure that Tx FIFO is empty
-+		 * before starting a new transfer as the repeated start in
-+		 * standard mode can corrupt the transaction if there are
-+		 * still bytes to be transmitted in FIFO
-+		 */
-+		if (i2c->prev_msg_tx) {
-+			int status;
-+
-+			status = xiic_wait_tx_empty(i2c);
-+			if (status)
-+				return;
-+		}
-+
-+		cr = xiic_getreg8(i2c, XIIC_CR_REG_OFFSET);
-+
-+		/* Set Receive fifo depth */
-+		rx_watermark = msg->len;
-+		if (rx_watermark > IIC_RX_FIFO_DEPTH) {
-+			rfd_set = IIC_RX_FIFO_DEPTH - 1;
-+		} else if ((rx_watermark == 1) || (rx_watermark == 0)) {
-+			rfd_set = rx_watermark - 1;
-+			/* Handle single byte transfer separately */
-+			cr |= XIIC_CR_NO_ACK_MASK;
-+		} else {
-+			rfd_set = rx_watermark - 2;
-+		}
-+
-+		/* Check if RSTA should be set */
-+		if (cr & XIIC_CR_MSMS_MASK) {
-+			/* Already a master, RSTA should be set */
-+			xiic_setreg8(i2c, XIIC_CR_REG_OFFSET, (cr |
-+				     XIIC_CR_REPEATED_START_MASK) &
-+				     ~(XIIC_CR_DIR_IS_TX_MASK));
-+		}
-+
-+		xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET, rfd_set);
-+
-+		/* Clear and enable Rx full and transmit complete interrupts */
-+		xiic_irq_clr_en(i2c, XIIC_INTR_RX_FULL_MASK |
-+				XIIC_INTR_TX_ERROR_MASK);
-+
-+		/* Write the address */
- 		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET,
--			i2c_8bit_addr_from_msg(msg) | XIIC_TX_DYN_START_MASK);
-+			      i2c_8bit_addr_from_msg(msg));
- 
--	xiic_irq_clr_en(i2c, XIIC_INTR_BNB_MASK);
-+		/* Write to Control Register,to start transaction in Rx mode */
-+		if ((cr & XIIC_CR_MSMS_MASK) == 0) {
-+			xiic_setreg8(i2c, XIIC_CR_REG_OFFSET, (cr |
-+				     XIIC_CR_MSMS_MASK)
-+				     & ~(XIIC_CR_DIR_IS_TX_MASK));
-+		}
- 
--	xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET,
--		msg->len | ((i2c->nmsgs == 1) ? XIIC_TX_DYN_STOP_MASK : 0));
--	local_irq_restore(flags);
-+		dev_dbg(i2c->adap.dev.parent, "%s end, ISR: 0x%x, CR: 0x%x\n",
-+			__func__, xiic_getreg32(i2c, XIIC_IISR_OFFSET),
-+			xiic_getreg8(i2c, XIIC_CR_REG_OFFSET));
-+	}
- 
- 	if (i2c->nmsgs == 1)
- 		/* very last, enable bus not busy as well */
-@@ -590,10 +795,17 @@ static void xiic_start_recv(struct xiic_i2c *i2c)
- 
- 	/* the message is tx:ed */
- 	i2c->tx_pos = msg->len;
-+
-+	/* Enable interrupts */
-+	xiic_setreg32(i2c, XIIC_DGIER_OFFSET, XIIC_GINTR_ENABLE_MASK);
-+
-+	i2c->prev_msg_tx = false;
- }
- 
- static void xiic_start_send(struct xiic_i2c *i2c)
- {
-+	u8 cr = 0;
-+	u16 data;
- 	struct i2c_msg *msg = i2c->tx_msg;
- 
- 	xiic_irq_clr(i2c, XIIC_INTR_TX_ERROR_MASK);
-@@ -604,22 +816,71 @@ static void xiic_start_send(struct xiic_i2c *i2c)
- 		__func__, xiic_getreg32(i2c, XIIC_IISR_OFFSET),
- 		xiic_getreg8(i2c, XIIC_CR_REG_OFFSET));
- 
--	if (!(msg->flags & I2C_M_NOSTART)) {
--		/* write the address */
--		u16 data = i2c_8bit_addr_from_msg(msg) |
--			XIIC_TX_DYN_START_MASK;
--		if ((i2c->nmsgs == 1) && msg->len == 0)
--			/* no data and last message -> add STOP */
--			data |= XIIC_TX_DYN_STOP_MASK;
-+	if (i2c->dynamic) {
-+		if (!(msg->flags & I2C_M_NOSTART)) {
-+			/* write the address */
-+			data = i2c_8bit_addr_from_msg(msg) |
-+				XIIC_TX_DYN_START_MASK;
-+
-+			if (i2c->nmsgs == 1 && msg->len == 0)
-+				/* no data and last message -> add STOP */
-+				data |= XIIC_TX_DYN_STOP_MASK;
-+
-+			xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, data);
-+		}
-+
-+		xiic_fill_tx_fifo(i2c);
-+
-+		/* Clear any pending Tx empty, Tx Error and then enable them */
-+		xiic_irq_clr_en(i2c, (XIIC_INTR_TX_EMPTY_MASK |
-+				      XIIC_INTR_TX_ERROR_MASK |
-+				      XIIC_INTR_BNB_MASK));
-+	} else {
-+		/*
-+		 * If previous message is Tx, make sure that Tx FIFO is empty
-+		 * before starting a new transfer as the repeated start in
-+		 * standard mode can corrupt the transaction if there are
-+		 * still bytes to be transmitted in FIFO
-+		 */
-+		if (i2c->prev_msg_tx) {
-+			int status;
-+
-+			status = xiic_wait_tx_empty(i2c);
-+			if (status)
-+				return;
-+		}
- 
-+		/* Check if RSTA should be set */
-+		cr = xiic_getreg8(i2c, XIIC_CR_REG_OFFSET);
-+		if (cr & XIIC_CR_MSMS_MASK) {
-+			/* Already a master, RSTA should be set */
-+			xiic_setreg8(i2c, XIIC_CR_REG_OFFSET, (cr |
-+				     XIIC_CR_REPEATED_START_MASK |
-+				     XIIC_CR_DIR_IS_TX_MASK) &
-+				     ~(XIIC_CR_NO_ACK_MASK));
-+		}
-+
-+		/* Write address to FIFO */
-+		data = i2c_8bit_addr_from_msg(msg);
- 		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, data);
--	}
-+		/* Fill fifo */
-+		xiic_std_fill_tx_fifo(i2c);
- 
--	xiic_fill_tx_fifo(i2c);
-+		if ((cr & XIIC_CR_MSMS_MASK) == 0) {
- 
--	/* Clear any pending Tx empty, Tx Error and then enable them. */
--	xiic_irq_clr_en(i2c, XIIC_INTR_TX_EMPTY_MASK | XIIC_INTR_TX_ERROR_MASK |
--		XIIC_INTR_BNB_MASK);
-+			/* Start Tx by writing to CR */
-+			cr = xiic_getreg8(i2c, XIIC_CR_REG_OFFSET);
-+			xiic_setreg8(i2c, XIIC_CR_REG_OFFSET, cr |
-+				     XIIC_CR_MSMS_MASK |
-+				     XIIC_CR_DIR_IS_TX_MASK);
-+		}
-+
-+		/* Clear any pending Tx empty, Tx Error and then enable them */
-+		xiic_irq_clr_en(i2c, XIIC_INTR_TX_EMPTY_MASK |
-+				XIIC_INTR_TX_ERROR_MASK |
-+				XIIC_INTR_BNB_MASK);
-+	}
-+	i2c->prev_msg_tx = true;
- }
- 
- static irqreturn_t xiic_isr(int irq, void *dev_id)
-@@ -703,7 +964,7 @@ static int xiic_start_xfer(struct xiic_i2c *i2c)
- static int xiic_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
- {
- 	struct xiic_i2c *i2c = i2c_get_adapdata(adap);
--	int err;
-+	int err, count;
- 
- 	dev_dbg(adap->dev.parent, "%s entry SR: 0x%x\n", __func__,
- 		xiic_getreg8(i2c, XIIC_SR_REG_OFFSET));
-@@ -719,6 +980,21 @@ static int xiic_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
- 	i2c->tx_msg = msgs;
- 	i2c->nmsgs = num;
- 
-+	/* Decide standard mode or Dynamic mode */
-+	i2c->dynamic = true;
-+
-+	/* Initialize prev message type */
-+	i2c->prev_msg_tx = false;
-+
-+	/* Enter standard mode only when read length is > 255 bytes */
-+	for (count = 0; count < i2c->nmsgs; count++) {
-+		if ((i2c->tx_msg[count].flags & I2C_M_RD) &&
-+		    i2c->tx_msg[count].len > MAX_READ_LENGTH_DYNAMIC) {
-+			i2c->dynamic = false;
-+			break;
-+		}
-+	}
-+
- 	err = xiic_start_xfer(i2c);
- 	if (err < 0) {
- 		dev_err(adap->dev.parent, "Error xiic_start_xfer\n");
-@@ -752,16 +1028,11 @@ static const struct i2c_algorithm xiic_algorithm = {
- 	.functionality = xiic_func,
- };
- 
--static const struct i2c_adapter_quirks xiic_quirks = {
--	.max_read_len = 255,
+-#if defined(CONFIG_OF)
+-static const struct of_device_id xiic_of_match[] = {
+-	{ .compatible = "xlnx,xps-iic-2.00.a", },
+-	{},
 -};
+-MODULE_DEVICE_TABLE(of, xiic_of_match);
+-#endif
 -
- static const struct i2c_adapter xiic_adapter = {
- 	.owner = THIS_MODULE,
- 	.name = DRIVER_NAME,
- 	.class = I2C_CLASS_DEPRECATED,
- 	.algo = &xiic_algorithm,
--	.quirks = &xiic_quirks,
- };
- 
- 
+ static int __maybe_unused xiic_i2c_runtime_suspend(struct device *dev)
+ {
+ 	struct xiic_i2c *i2c = dev_get_drvdata(dev);
 -- 
 2.25.1
 
