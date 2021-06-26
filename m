@@ -2,82 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B5C3B4E13
-	for <lists+linux-i2c@lfdr.de>; Sat, 26 Jun 2021 12:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEA23B4F37
+	for <lists+linux-i2c@lfdr.de>; Sat, 26 Jun 2021 17:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbhFZKeT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 26 Jun 2021 06:34:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50824 "EHLO mail.kernel.org"
+        id S229916AbhFZPcv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 26 Jun 2021 11:32:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50374 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229556AbhFZKeS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 26 Jun 2021 06:34:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AC0961931;
-        Sat, 26 Jun 2021 10:31:55 +0000 (UTC)
+        id S229890AbhFZPcv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 26 Jun 2021 11:32:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 12A0C61627;
+        Sat, 26 Jun 2021 15:30:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624703516;
-        bh=oidf+dnO3JeOCkZEe7ykQGbmQd+Jhf4t3Yufa3Pl3jc=;
+        s=k20201202; t=1624721428;
+        bh=2UxB53HP75l/vNHDJAp80mRZXu0ELhhNcYaBvs1m6ws=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j5+CyxbhquJd+IUyEY2XKYSugk72oljAuu1KtREMhm1vBwr5VPGqqbiqXAf815aCJ
-         2WJbXHSp5WQWuRYaXJNMv1WdvL1mn6Mj75zv39syRXOcITzplkGRcTkpRxaOHzppmf
-         okfpQdMFSykZ6UoI+Ws9HyZOpSZqt+1hgcsK83vxc0etxNvOxbcUW2n1/eIwPrAMel
-         pGLlrALJqs2FSkja5I8RxwNLIQabxWIFevLKee5oi90of1CY911gHkpmncCLE6AucF
-         6Utb9pqJKRykc6Zl648+9akMItzVavFdCXQjZNlid2+igcnOVpmHDolKCu3CSNXhfz
-         bKKZKHk95x6HQ==
-Date:   Sat, 26 Jun 2021 12:31:51 +0200
+        b=CRtrx/dinH0isTGYQJxRHI2a+qjA8V1bLxqqDA4OGwEj6ucTzCDDDMkHOHrCq+kHi
+         MxFzgYEyOiFJvu0lBRU5pgV9q+bLcQjiDrA+HjluEOyCnKT4HaiqrVju6KEKor8+qX
+         0DGEnVRinQc9J6juGuSp9qwnqQQC2Eqfx3w0hgDwZHHEeCYdCHz1Ir4hn98rum8acX
+         1aFPMBgjvWSYIjDw+nFp/XvGNeFe6bnMKx0iSOk0FregRshnbZDmMkq4P9I226HVvn
+         bisPSe0lUgNNTTPeDr0vt6T1fcbSOqwoM6pA5g4sM8sAOKsNA2ACxsgDNUTj7mh2J7
+         bJ6Dx/ljyyJLg==
+Date:   Sat, 26 Jun 2021 17:30:25 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjorn.ardo@axis.com>
-Cc:     linux-i2c@vger.kernel.org, kernel@axis.com
-Subject: Re: [PATCH] i2c: slave-eeprom: add an of_match_table
-Message-ID: <YNcCFxzGVkTQMs/x@kunai>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Crestez Dan Leonard <leonard.crestez@intel.com>
+Subject: Re: [PATCH 0/7] Rework block read support among i2cget and i2cdump
+Message-ID: <YNdIEUpBoToGN7JY@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        =?utf-8?B?QmrDtnJuIEFyZMO2?= <bjorn.ardo@axis.com>,
-        linux-i2c@vger.kernel.org, kernel@axis.com
-References: <20210504135209.4757-1-bjorn.ardo@axis.com>
+        Jean Delvare <jdelvare@suse.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Crestez Dan Leonard <leonard.crestez@intel.com>
+References: <20210608172338.0cf520a1@endymion>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H/x6YAY0Ao66a1BU"
+        protocol="application/pgp-signature"; boundary="BsviPprBJodQtJHb"
 Content-Disposition: inline
-In-Reply-To: <20210504135209.4757-1-bjorn.ardo@axis.com>
+In-Reply-To: <20210608172338.0cf520a1@endymion>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---H/x6YAY0Ao66a1BU
-Content-Type: text/plain; charset=utf-8
+--BsviPprBJodQtJHb
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 04, 2021 at 03:52:09PM +0200, Bj=C3=B6rn Ard=C3=B6 wrote:
-> This is needed since commit af503716ac14 ("i2c: core: report OF style
-> module alias for devices registered via OF").
->=20
-> Signed-off-by: Bj=C3=B6rn Ard=C3=B6 <bjorn.ardo@axis.com>
+Hi Jean,
 
-I'm afraid we need a YAML file, too. checkpatch says:
+> The idea would be to get the first 6 patches in the upcoming i2c-tools
+> v4.3, and apply the 7th patch "later" (either immediately after that
+> release, or some time later, I'm not sure).
 
-WARNING: DT compatible string "linux,slave-24c02" appears un-documented -- =
-check ./Documentation/devicetree/bindings/
+I agree with this approach.
+
+I had a glimpse at the patches and think they look good so far. I would
+have squashed patches 1+2, but this minor, of course. I'll try to test
+them this weekend, too. Let's see...
 
 
---H/x6YAY0Ao66a1BU
+--BsviPprBJodQtJHb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDXAhcACgkQFA3kzBSg
-KbYkHw/+MKIWhsn5CuAlK5E7l0WXnmxRB6GvJZLTija7xCE4EWTBeemKlr3yqeCL
-2h9Z+GSH5H5mikzzQ7bhNSsJbXC1+b3SlVn4qD8bQX0JPYMXvymh/YTK5KmjOzPw
-n8rjEn6dRdyFC0CQV5XGwJp5qfMwe3Mp8EcnfnHK3PxQBFGJct2evzowmkFTBBu0
-eBqttDtPxXk0yJSqMB/2+61WKhJqu6eULuwwbcN2XEi27N6ru7CtjiuuKBr+FH9B
-Nc7jhmR59meG+FbydNWyXe+W2zpfh2C+pZdEgm5OWzJgd1LoTxwsXpLeXwUxsk1I
-EdzS6/DzqaHE6CgOsdh1Mub+YMLdO7OWxpTZ7p5Jp9tr6DjCzoZgZH1d55T4O8GH
-E/e7ckOg/H7rjWufko7ZO6uqEQCB3vOsPJ8ZBWIuBHG/RCe+AttGG5z163Cg0x3Z
-sEwtetDqblC2ph6t7V01l9l0oGKAB121mo+IBb54yYS88DgdwhEvbT5Bxw8Fdlkg
-/tFtEA9SNSpGh+57NiFdx1hsbLgydN3ZWGtlat6s8/YzC5xrke3EfMVSbOtw8J5R
-qSBzT+AE5DJ+miMrs6Mr4YcPFHFpANxjVmgAjgvu3IHLu5ZCbQ9gYrFBgddj9kfG
-xXHV9ySrT7QbZEC+6cw1hf/PvQYDmcb/wVA2wfhCEqCqje8BVgA=
-=vqym
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDXSA0ACgkQFA3kzBSg
+Kbaw2A//V5Iv5+6frfm2Cvbr6e0PgX1A/FlIZxfEwxBYe9Iagnhv77vMNjuSulb+
+ATlO6cndbt79B9etJ2PLAhA+AvwvaeqZe+XrKZ1NLf0gKurLZ8WDrnhsvplIFRRE
+yW1tWE754tZqNaw8k3NuH0fnOyg9eqlactTq+qwXy6CkPco1JzUakN502s1dGLRZ
+ecWAU1sJRLxVONS5peU3vRlZjz+SgozVhkm3koo93WQjUPwLZikatDf0tQDeUMHH
+cvp7G35tVgG5Viz5FvnzJU6MxTCvMLiHI/BJF+X+IvRqSS4/+53NySzJ/OXxYIvh
+PaBLFqVLWOCfcpp49H4EIolHauEn2fd9MP80Gb54a2ltmGm78ZOmrM+4cRYp7LpO
+7ZyfW/GGDFAGmXewSDniE4DT6Q2WtIgYnFrib/yXQHb6u6+lADPcg8NYh5UY8Pz6
+oVnpJwhbPD++IocaeE/hefPhy2WLtPI2jdUVJVol6no3pMjPjqSme/xtSaakN9dx
+oRFU/mYs+ePA4ZifEFMBaYr6AC6kU7WmH+8BIc7oyxLwsOX7IAnHH+UPPoNcoTsp
+PDivEgZJi+paSbh9Rqgs7m1otaJd5YolVSsYCQbJKNyNCYDygZjk04yePQCEW+9Q
+zjlQQjKCRPwYqm/Yt3ueYUu7A9T+H7COWW+AeqanAlR0oBZ/Xl4=
+=rjDs
 -----END PGP SIGNATURE-----
 
---H/x6YAY0Ao66a1BU--
+--BsviPprBJodQtJHb--
