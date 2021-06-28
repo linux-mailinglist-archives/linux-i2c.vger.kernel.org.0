@@ -2,134 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFC03B6491
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jun 2021 17:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943CF3B6611
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jun 2021 17:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235665AbhF1PKh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Jun 2021 11:10:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39702 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236104AbhF1PHk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 28 Jun 2021 11:07:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F3ED613FD;
-        Mon, 28 Jun 2021 14:58:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624892301;
-        bh=HsQz+eG06TzAb3HbY3JdUc6LQkxeCoRIcHF3y10TQ+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZVOvoruMYHVhjj1s9pjQE/Aw1s+xTb2/9/1JCF6tZd4BsiX9Bs6Mp9zskJOHy7VF6
-         0mLmmtpq7YBd/uzGdrLBiHS0f6dWAhtedwzFyed+Zzcw/+t7lmYxPUbsArRJFoz64D
-         G77Oxmqf0KbyrItRSd9lKiAwxLg+RSZRSZsRJW13BpwMOPMsdekuet042fL5vYi1rM
-         fKgiWJSku7nULuw544GP81w+ZRqhlKfUqoFbAi1ujEDDkog/GgWbanclu+JPLy/mm3
-         K34g7zrN5YdeJYYjf3PTy/vWpNAfuSBjm9H3Yb/BeFGOnYDsw7lZYCy4lW3wWv4rtQ
-         2UFPIbWnIlwFw==
-Date:   Mon, 28 Jun 2021 16:58:15 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jie Deng <jie.deng@intel.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        conghui.chen@intel.com, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com,
-        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
-        Tali Perry <tali.perry1@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        yu1.wang@intel.com, shuo.a.liu@intel.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <YNnjh3xxyaZZSo9N@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jie Deng <jie.deng@intel.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        conghui.chen@intel.com, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com,
-        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
-        Tali Perry <tali.perry1@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>, yu1.wang@intel.com,
-        shuo.a.liu@intel.com, Viresh Kumar <viresh.kumar@linaro.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
- <YNmK0MP5ffQpiipt@ninjato>
- <CAK8P3a2qrfhyfZA-8qPVQ252tZXSBKVT==GigJMVvX5_XLPrCQ@mail.gmail.com>
- <YNmVg3ZhshshlbSx@ninjato>
- <CAK8P3a3Z-9MbsH6ZkXENZ-vt8+W5aP3t+EBcEGRmh2Cgr89R8Q@mail.gmail.com>
- <YNmg2IEpUlArZXPK@ninjato>
- <CAK8P3a3vD0CpuJW=3w3nq0h9HECCiOigNWK-SvXq=m1zZpqvjA@mail.gmail.com>
+        id S237176AbhF1PwX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Jun 2021 11:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235821AbhF1PwT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Jun 2021 11:52:19 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363A0C0611F9
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Jun 2021 08:29:46 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E6F47B8A;
+        Mon, 28 Jun 2021 17:29:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1624894184;
+        bh=LsaKUfL5dgfHxwHkCU1lj7kPoPO/yuuNuLGKgREO1vc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BwpvQ66NufswOwSCbrVq4L6uu1PgRbwM5QnBn9xGcNmveYLDzgYrLOVSGaaQCINMZ
+         6UGvawCe3SJgTdZPQAKZKi08+7hp89pdjPyzqzvULHiotZxrq5+GAhZH7WtwTlVr9n
+         0IXaxlnJHa187Jvq9BKGLPBsFdibTHJJdVKVwaXY=
+Date:   Mon, 28 Jun 2021 18:29:42 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Jose Cazarin <joseespiriki@gmail.com>
+Subject: Device match data and DT compatible string fallback
+Message-ID: <YNnq5ljCeSbBU7cQ@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="x7HUe2JbQ8ROazkf"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a3vD0CpuJW=3w3nq0h9HECCiOigNWK-SvXq=m1zZpqvjA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hello,
 
---x7HUe2JbQ8ROazkf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I recently ran into an issue in a driver (drivers/iio/dac/ti-dac5571.c
+to be precise, but the problem is more generic) that led to a crash at
+probe time. The driver supports matching to both OF devices and platform
+devices by specifying of_device_id and i2c_device_id tables. It supports
+multiple devices, and stores device-specific data in the i2c_device_id
+table that it retrieves at probe time through the i2c_device_id pointer
+passed to the probe function.
 
+The device I'm working with is an DAC081C081, which is compatible with
+the DAC5571. It's an OF device that has the compatible property set to
 
-> You can fine Viresh's vhost-user implementation at
-> https://lore.kernel.org/qemu-devel/cover.1617278395.git.viresh.kumar@linaro.org/t/#m3b5044bad9769b170f505e63bd081eb27cef8db2
+	compatible = "ti,dac081c081", "ti,dac5571";
 
-It looks OK so far; yet, it is not complete. But it might be bearable
-in the end.
+The driver doesn't support the ti,dac081c081 compatible string, so the
+device is matched to the driver using the compatible fallback
+"ti,dac5571". This leads to the i2c_device_id passed to the proble
+function being NULL, as the i2c_device_if table doesn't contain a
+"dac5571" entry, and this results in a crash.
 
-> As you say, it does get a bit clumsy, but I think there is also a good argument
-> to be made that the clumsiness is based on the host Linux user interface
-> more than the on the requirements of the physical interface,
-> and that should not have to be reflected in the virtio specification.
+I could fix this in the driver by calling of_device_get_match_data() in
+the probe function with dev->of_node is not NULL, but I feel this is
+really an issue that should be handled by the framework. Has anyone ever
+given it a thought ?
 
-Makes sense to me.
+-- 
+Regards,
 
-> Right, this one has come up before as well: the preliminary result
-> was to assume that this probably won't be needed, but would be easy
-> enough to add later if necessary.
-
-If adding support incrementally works for such an interface, this makes
-sense as well.
-
-So, where are we? As I understand, this v10 does not support I2C
-transactions (or I2C_RDWR as you said). But you want to support all
-clients. So, this doesn't match, or?
-
-
---x7HUe2JbQ8ROazkf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDZ44MACgkQFA3kzBSg
-KbZiNRAAg3+smsUmLAlo8w15thKTdKhG6yNDBD+TxkLusukTvHLa5j7KBjzDW+8L
-TgeVVbK6h4x9T21E0ofnkT8wUFquxCDC+h80FYIS/wMcISrLFDZAjW6M9Gjftzho
-pMW6jKibH9oKHZdvfnE3S5wCHGveCcBtztoTxUVELJop2HXj3OXhyCgtlo52PR2u
-rNIEjRsp+gSunOpu3c6U+70Hh+gmvTuFBWinAuelHCVqjoC9WbHbP3l0khP72y6A
-bDWWZk5e0Z3AHEoPlOXEWScNB0b/ScL6ZAkj19Q/JOrYFeDAAc4FdkE33HfX4J8h
-TbbwDRLxejCFyIfKfoIXGYxjihWwjdfZDkRspPy9i5gLCK6tfEcFCw/g+vSmisBh
-Xp6eQMqgFKiiFsBljSGRN8rEHrJKcysQXrL34QAPb5/ZK7PlRNtdBJBG6kWNkKLJ
-YjuLf2zkB0dD4fOwhHEYs7jbA2WDSNy3vJHVkqxyVOLClX67KTZMO8ShhHSFnSsA
-YZRJhbWAYvpZTrVRr54uvaWkv8VYL/BSx4N9DJE6ZbtHcVH2ixNBduqgY5SudnOt
-nQGq9SZHYY3VCZyO4d1U3rhPP1LFyHTkDA06AwDMV9I2jImA/I2Vofqy3ORWjBUZ
-ZF7xGiZ3jWuEOGhtyESTDYkfRIxir1zQKywb/1p+21f2lVFx+wc=
-=QsUe
------END PGP SIGNATURE-----
-
---x7HUe2JbQ8ROazkf--
+Laurent Pinchart
