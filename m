@@ -2,148 +2,153 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B333B59AF
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jun 2021 09:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF8A3B5A8F
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jun 2021 10:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbhF1HZy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Jun 2021 03:25:54 -0400
-Received: from mail-dm3nam07on2042.outbound.protection.outlook.com ([40.107.95.42]:18845
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229998AbhF1HZx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 28 Jun 2021 03:25:53 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g3LcSsUMKSmo7ZQADa25Rrico4v6PukvCga5OQZQkGc3oam7RFMEzYDAp4QcSqxSQbCGBPYX9xY2rO/gcBF93+d03I+mIdmNP8WPlYHPCNt610Y7thoih19wZ7A7/YT8QoVB/de21FvLW5wLGuMDod4U+W6QGYmwKFHlDzKSz0DD1ewNHSgTIn05BN9rrI6KMLtkJ/5yeRBKb9HKHt7GBfPtiH0Ld9GnjzzOVNBU86IloAolKFbW0r/79jmlK5gtWMqfRe9Je3c/6+ihy2rf3KPfAsI9oktEXZtZXGv0FElL2yVMVMmjMXLc/J3DHTOeMgTvB+JwFeh40jkZEOMY+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8NG1ngXoteQChZnh9UuPqM1VnIf+BeV+zOk+X08wNyE=;
- b=QizCpaW+W9MHtAq9jTYRm/qaniWD/vaCzb/uMf2qaMw6w1Z96TrOMorxdHsjpH0s2aakbnapn34MtGZE6fNDuyOLAxeHtFfVq60r+RAhRmnrwfmugIEg6kKtFvYl6sZGUXWpO5NoZbvKsweyGKYKyUJ2xdz8DgPuiLhqqEAmKT4VNxPU2mYepWYND2qIrfkwpbkHYLPmXR8gUl+CCmbTxRsDee0scYJaa++nAKXtIw3eA+q1WETkGqShww9X039UIP0O3DTQCyjeOCUX5Bm2BuJSpcYVpSlRdVaSBkx1LHoLNgHI0Hj6C/rkPluPnCkypIxOp7RBlUPYjvH2pRU5EQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=perches.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8NG1ngXoteQChZnh9UuPqM1VnIf+BeV+zOk+X08wNyE=;
- b=i2NMoezpo8qnP3vKWCI5gENJPS9e6v2MycoyWycY5mbCjHYfB0g8md1pLACKyoPkqaecdta28q3+q2QCzv4zbT/bN7KLvpHvB6jNByj52I5nxtY/SvbaY7s/FWWNYqo5f/8jbFl273A4Y1aCv1OEHy3JMJi36ZAKaNEIsrOJlMs=
-Received: from BN0PR04CA0159.namprd04.prod.outlook.com (2603:10b6:408:eb::14)
- by CH0PR02MB8119.namprd02.prod.outlook.com (2603:10b6:610:10c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18; Mon, 28 Jun
- 2021 07:23:27 +0000
-Received: from BN1NAM02FT053.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:eb:cafe::ab) by BN0PR04CA0159.outlook.office365.com
- (2603:10b6:408:eb::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.19 via Frontend
- Transport; Mon, 28 Jun 2021 07:23:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; perches.com; dkim=none (message not signed)
- header.d=none;perches.com; dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT053.mail.protection.outlook.com (10.13.2.161) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4264.18 via Frontend Transport; Mon, 28 Jun 2021 07:23:27 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 28 Jun 2021 00:23:18 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Mon, 28 Jun 2021 00:23:18 -0700
-Envelope-to: git@xilinx.com,
- joe@perches.com,
- marex@denx.de,
- linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org
-Received: from [172.30.17.109] (port=50048)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1lxlbx-000312-NE; Mon, 28 Jun 2021 00:23:17 -0700
-Subject: Re: [PATCH v2 00/10] i2c: xiic: Add features, bug fixes.
-To:     Raviteja Narayanam <raviteja.narayanam@xilinx.com>,
-        <linux-i2c@vger.kernel.org>, <michal.simek@xilinx.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>, <marex@denx.de>,
-        <joe@perches.com>
-References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-Message-ID: <95162fd0-10e6-2bc6-4079-899ac26f66ce@xilinx.com>
-Date:   Mon, 28 Jun 2021 09:23:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230294AbhF1ImQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Jun 2021 04:42:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55046 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232427AbhF1ImP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 28 Jun 2021 04:42:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A64F46144B;
+        Mon, 28 Jun 2021 08:39:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624869590;
+        bh=THO6tfXSTEF7UsaWjKejI9nBZFIYuak1uBvRa1XTghU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PPYWRZLYttYNfF7bxfK4EL/+55kI/OLHwreamOdv8sW9luRUGmK/ymzM60YzWW1wB
+         1vPQWBWppnEJUIIYV1VHrLLSg6PLQTqFpNI6u6cjXeVSc4pmQ0PMEiGplaFMNhUVxz
+         jK865aNaKuCJdK/QxN815wYPtlSAGvQE7ie0efpu5q4AaWt1Esm11Sx7AzEl1Sd5Li
+         t2cKH/Vb8pmjjMp2PsOMku49MhRFZUGg/LDVZvs12hEigzH1nR6hKm8eR+RSyX7UcM
+         FtxZwizmkaQ/P2CjA60qPYxMQqbYVKuB/rS91UfksnsB1e9L4d6Bmy4Prz1khhlvJY
+         eueVO9LuaD+8Q==
+Date:   Mon, 28 Jun 2021 10:39:44 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jie Deng <jie.deng@intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
+        arnd@arndb.de, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
+        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
+        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
+        yu1.wang@intel.com, shuo.a.liu@intel.com, viresh.kumar@linaro.org,
+        stefanha@redhat.com, pbonzini@redhat.com
+Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <YNmK0MP5ffQpiipt@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
+        arnd@arndb.de, kblaiech@mellanox.com, jarkko.nikula@linux.intel.com,
+        Sergey.Semin@baikalelectronics.ru, rppt@kernel.org,
+        loic.poulain@linaro.org, tali.perry1@gmail.com,
+        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
+        yu1.wang@intel.com, shuo.a.liu@intel.com, viresh.kumar@linaro.org,
+        stefanha@redhat.com, pbonzini@redhat.com
+References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6f9d466d-0a01-4379-b2b0-08d93a059f6b
-X-MS-TrafficTypeDiagnostic: CH0PR02MB8119:
-X-Microsoft-Antispam-PRVS: <CH0PR02MB811947A3E1BE93E7416C32E8C6039@CH0PR02MB8119.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BwFM263Ptm0M1pZT8IiJmgvffW1rUM5k2m8yjDtH94Lb7IOA9A8hwpJFfdnqRQAr4Ixfysv36/bVlFeisYp1LpdJVw/N33W0lJbs+Gjin0G7HFKSln0/nLDrmywsGhrbAmRaKwMmPBNoqnM0pTGMszifzMuTeTN+4qv3id4OLjBE6k+JszeRI+CPFh5i3LGCG1MDr6EgfmnNjUbo43YTqwX8rb0FWivr0ohLZk9hcYysI9j32U8RMtjRbEylc9N0DTPUf/BIUW7mh8geC82zmHVJ0Jm6j9CAO4tRRH4gYR0Y9vf2X1N0Q/f/bihbtw+Ycr5l0Zn5sLyNGb2G/ioaO6XZ8FFAqE8IhOY/0JGOafMobZhgYaBCSbGF28PR32S2hOQkYpJvZNyXMgwxjlu9u7+KwePzroYc420d2Az9MdelW1+kisYrj2UYxjGyciiqwEqnOgrvq7mvfCYTdlKzx18rx5QAxd1VOsaepbaUtM63A308vHF62o+1z4OScJfQQLpCiB7FZ+yfS1y95g910rZWLbP6YiwsHUsK1lKiezdgSQhCjhBnVl7Oj/Wzvr0YVqCR0Tdj7cZci7bAvv+SDEWTHijBwY9MWFUOkfeiflbwOIB9Qw3FLwalno+jMPgmCd/+Wopc+za6rMuiISc2Vr7m0zYBGe/9rSXDOGERqUoZI1Kx++71tUZhHXyZhkV52r3LARfUxmwqHuYMw8O/P/Qo53G8oXJAus7WzeYf3jd4M8QQRC75tHuE1DzkhIV7E4l4PLNJPtN6onS9hcuIYErJtIIe57mUmAypiNIz6NMIsUYC+ysl5VXmM0rJjR/2vVDvGa4jslLJBqvqJdOZgw==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(39850400004)(376002)(346002)(396003)(46966006)(36840700001)(966005)(54906003)(31696002)(2906002)(110136005)(316002)(7636003)(356005)(5660300002)(31686004)(336012)(426003)(82740400003)(70206006)(478600001)(70586007)(53546011)(4326008)(8936002)(47076005)(186003)(8676002)(44832011)(36860700001)(83380400001)(82310400003)(9786002)(2616005)(26005)(36756003)(36906005)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2021 07:23:27.2109
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f9d466d-0a01-4379-b2b0-08d93a059f6b
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT053.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR02MB8119
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qSoO7NsOskj/CTgw"
+Content-Disposition: inline
+In-Reply-To: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
+--qSoO7NsOskj/CTgw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 6/26/21 12:27 PM, Raviteja Narayanam wrote:
-> -Add 'standard mode' feature for reads > 255 bytes.
-> -Add 'smbus block read' functionality.
-> -Add 'xlnx,axi-iic-2.1' new IP version support.
-> -Switch to 'AXI I2C standard mode' for i2c reads in affected IP versions.
-> -Remove 'local_irq_save/restore' calls as discussed here: https://www.spinics.net/lists/linux-i2c/msg46483.html.
-> -Some trivial fixes.
-> 
-> Changes in v2:
-> -Grouped the commits as fixes first and then features. 
-> -The first 4 commits fix the dynamic mode broken feature.
-> -Corrected the indentation in coding style issues.
-> 
-> Michal Simek (1):
->   i2c: xiic: Fix coding style issues
-> 
-> Raviteja Narayanam (7):
->   i2c: xiic: Fix Tx Interrupt path for grouped messages
->   i2c: xiic: Add standard mode support for > 255 byte read transfers
->   i2c: xiic: Switch to Xiic standard mode for i2c-read
->   i2c: xiic: Remove interrupt enable/disable in Rx path
->   dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to compatible
->   i2c: xiic: Update compatible with new IP version
->   i2c: xiic: Add smbus_block_read functionality
-> 
-> Shubhrajyoti Datta (2):
->   i2c: xiic: Return value of xiic_reinit
->   i2c: xiic: Fix the type check for xiic_wakeup
-> 
->  .../bindings/i2c/xlnx,xps-iic-2.00.a.yaml     |   4 +-
->  drivers/i2c/busses/i2c-xiic.c                 | 593 ++++++++++++++----
->  2 files changed, 487 insertions(+), 110 deletions(-)
-> 
+Hi,
 
-Acked-by: Michal Simek <michal.simek@xilinx.com>
+sorry for the long delay. I am not familiar with VFIO, so I had to dive
+into the topic a little first. I am still not seeing through it
+completely, so I have very high-level questions first.
 
-Thanks,
-Michal
+> The device specification can be found on
+> https://lists.oasis-open.org/archives/virtio-comment/202101/msg00008.html.
+
+I think we need to start here:
+
+===
+
+If ``length of \field{read_buf}''=0 and ``length of \field{write_buf}''>0,
+the request is called write request.
+
+If ``length of \field{read_buf}''>0 and ``length of \field{write_buf}''=0,
+the request is called read request.
+
+If ``length of \field{read_buf}''>0 and ``length of \field{write_buf}''>0,
+the request is called write-read request. It means an I2C write segment followed
+by a read segment. Usually, the write segment provides the number of an I2C
+controlled device register to be read.
+
+===
+
+I2C transactions can have an arbitrary number of messages which can
+arbitrarily be read or write. As I understand the above, only one read,
+write or read-write transaction is supported. If that is the case, it
+would be not very much I2C but more SMBus. If my assumptions are true,
+we first need to decide if you want to go the I2C way or SMBus subset.
+
+But maybe I need to undestand the following paragraph first:
+
+===
+
+A driver may send one request or multiple requests to the device at a time.
+The requests in the virtqueue are both queued and processed in order.
+
+===
+
+What happens if those multiple requests are sent out to the I2C bus
+master driver on the host? Is there one transaction with N messages or
+are there N transfers with 1 message each. This is a difference in I2C
+world (REP_START vs. STOP/START) and some devices really need this
+properly handled or they won't work.
+
+===
+
+The case when ``length of \field{write_buf}''=0, and at the same time,
+``length of \field{read_buf}''=0 doesn't make any sense.
+
+===
+
+Oh, it does. That's a legal transfer, both in SMBus and I2C. It is used
+to e.g. discover devices. I think it should be supported, even though
+not all bus master drivers on the host can support it. Is it possible?
+
+Also, as I read it, a whole bus is para-virtualized to the guest, or?
+Wouldn't it be better to allow just specific devices on a bus? Again, I
+am kinda new to this, so I may have overlooked things.
+
+Thanks and happy hacking,
+
+   Wolfram
+
+
+--qSoO7NsOskj/CTgw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDZiswACgkQFA3kzBSg
+KbYbXA/+KSKzXE7s7bq3L7tzpkMR2Dsra4ZFO9RRcu1nHxKOxA6sTNHfC08aPyk7
+8wn8SbkDjo5V+MPCr20aILLiAiW2AaUbtTy7vC/WUcmMgml/aDhwP/bYczzcpHgd
+9OW5Gd9otvxovWd3/1MK+IvDjdfI54ip5ItUX0KbW7/wmpJf1VlaMEYkZlY2G2o/
+MulO2lklg1uiiV55jW72INVWJchSTxNlh9ZRJVzM5uESm7C58GIG5okNjxshVgup
+1aKFXPlr+zrgHGh4HCZItSAN3m2Bxoss4Mz+fBbL1RAZUt/KvlmMyl5B+GSwQXrB
+vBTfsjWukF+YpQk1s9WqouKlkIPgkKWJnBRq12U4BhUcXJzlt/u1TilJ5XxWSAu6
+pZ4GMNZpmOaHx1fZf9M33eRtALZm4K5j0g5yhX+KahS3TuX0IssqVICkldrXUuFm
+K7ZX/gTGMMgFj4lB7k8oUHbphjl1FAyMbHAlRbvyI+JRtoyIHegck8A5HnWS4urI
+93oRlWiLMdns18mfCnwOd7AfKB8RphAjDGXReGbamNi7RnnnCsEEAqRAl2eb0F5c
+EFNNVcWfH7UFfDhPJUFN95OTo49JdfhfhXG5K8yZ+NMVrF1HkGRJQ7TXbfU/C2WE
+QNn4ZWlQ/d8VtQE6bUehICy7VLW9bO88lkUf49zZnp5HnXuiyTg=
+=T+Ay
+-----END PGP SIGNATURE-----
+
+--qSoO7NsOskj/CTgw--
