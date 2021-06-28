@@ -2,81 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D06E3B6640
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jun 2021 17:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180B23B669F
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Jun 2021 18:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbhF1P5z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Jun 2021 11:57:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33784 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235132AbhF1P5a (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 28 Jun 2021 11:57:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D4CE0619F1;
-        Mon, 28 Jun 2021 15:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624895704;
-        bh=BZuJnGMzXGdi218jt3UPqq3NZRayiGsbTHOZS5cZ8/U=;
+        id S233219AbhF1QY0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Jun 2021 12:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233330AbhF1QYZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Jun 2021 12:24:25 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5696FC061574
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Jun 2021 09:21:59 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B283CB8A;
+        Mon, 28 Jun 2021 18:21:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1624897317;
+        bh=qdjuMUOAL7WHUgpeT1RCMYx80BkQLlh8S+/GyyD9LSk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WaukQ9q03KqTB8hunoOr+0ZwhRJsJlBZBS6yWjzUxH28lCvRHfTEEflq7qXa7d2ER
-         CCPT7QRzbyi5zP/4tZPEDr4ACIeFW0hKPXbugvaPgaXQ5UKi0784LG6V4KKkfSbiyY
-         5pM2OZzgGafYokY2Lvb5htCqpRph8lRnqnYdDVz0x9yNngbGdXBHeAJFRnSq/ctE1Q
-         qjusZWrFfVQzOm/coyXLkNxvGn4ou4qVF94wZB411O+MnFaErMI2Iag97agrhGTcrS
-         +fyjg9sLN7Qatd3ld6E4pdsKFKQQQwi0CZfhePRRgCZ+pwo+j+vHCIoeXOYEvxKqBv
-         jgLdc6Lkt3QzQ==
-Date:   Mon, 28 Jun 2021 17:55:01 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        b=Bw0W1RbLUPWnwXC7lxkjkLGG74r3N3pahDo2PuGDMn1MJqOrhM8HjN1MKjUY54JzQ
+         XxHRPAt9XvzKE3oo5t/x7pLtuAuPrRpRUVU3nLHKmcqp2bpfzihHDLIRCWLEytDmtY
+         6JeLS6BcsD0FOEau50sgDo0PJBklid9zLIpEp6Pc=
+Date:   Mon, 28 Jun 2021 19:21:56 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, Jose Cazarin <joseespiriki@gmail.com>
 Subject: Re: Device match data and DT compatible string fallback
-Message-ID: <YNnw1aqUk/zVkz4j@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-i2c@vger.kernel.org, Jose Cazarin <joseespiriki@gmail.com>
+Message-ID: <YNn3JPC9Fx5xRMN7@pendragon.ideasonboard.com>
 References: <YNnq5ljCeSbBU7cQ@pendragon.ideasonboard.com>
+ <YNnw1aqUk/zVkz4j@ninjato>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PUUCDsFdCVjDdx06"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YNnq5ljCeSbBU7cQ@pendragon.ideasonboard.com>
+In-Reply-To: <YNnw1aqUk/zVkz4j@ninjato>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
---PUUCDsFdCVjDdx06
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, Jun 28, 2021 at 05:55:01PM +0200, Wolfram Sang wrote:
+> 
+> > I could fix this in the driver by calling of_device_get_match_data() in
+> > the probe function with dev->of_node is not NULL, but I feel this is
+> > really an issue that should be handled by the framework. Has anyone ever
+> > given it a thought ?
+> 
+> The of entries should also have .data entries and use that.
 
+That doesn't help unfortunately, as the i2c_device_id passed to probe()
+comes from the i2c_device_id table, the of_device_id table isn't
+involved.
 
-> I could fix this in the driver by calling of_device_get_match_data() in
-> the probe function with dev->of_node is not NULL, but I feel this is
-> really an issue that should be handled by the framework. Has anyone ever
-> given it a thought ?
+> The driver could also be converted to probe_new to become independent of
+> the i2c_device_id.
 
-The of entries should also have .data entries and use that.
+Sure, but that doesn't solve the problem, it only forces the driver to
+basically implement
 
-The driver could also be converted to probe_new to become independent of
-the i2c_device_id.
+	if (dev->of_node)
+		get data using of_device_get_match_data();
+	else
+		get data using i2c_match_id();
 
+Shouldn't the I2C subsystem provide a single function to let the driver
+retrieve the match data, regardless of where it comes from ?
 
---PUUCDsFdCVjDdx06
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Regards,
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDZ8NEACgkQFA3kzBSg
-Kba7TA//YslQeXDaO0OQNiSK2BETtLtePajcne6CHHG+h0WjMhIncG8yZ26gPBT7
-Sb9e1NV4IpjBRIz+/F/YuVlB5/UI+SQ+31X50PqvyGpcy1NJL9u1nhEUQTfKSNea
-CuG5020X/9TdH0Y1H+PIctspKbA8cW3qWOkuZkRunNsROxi3yCYzYp5Sy4DQAJ1C
-Z6GgiE78jYHeqjiJjk96wBTLulhg0q2W/Ec0h61PB56Lu4gWi7QZh/cI1rnawrQJ
-fRZkQJFCU4noRklEbOamRMkWt/nLQtFkxqBKJgwXBuRnMUZxieyGmlB9zapzXkRb
-PN0IP4AR870lDf7A1WoAZfWGoRNo9vqgr86hVWxMLPBJ3MwuHQKWB6pM3Eu8gLZv
-+Qc7P3Zqf9qH35is/HJSJAV/P6pzVHtGwmW+JgigG0lDL4IykBF4VFTH+ihQgr9O
-sZduiA1V3DxWxdwMr7LdkKUQg1kC9wU4b41a7J6go+zsIJKHXs0ooclBb6mPyoGN
-pooD0DfoOLWxa8bslijhjb+V4U3xaXoC0+Xg+SzbKhmgjaT+sPyxJkGl7Ng44MHO
-tlLcpD9iCWsih/vqhPvl1xgZRONk8QO3wqbgdNnzivXqUT5iYBpJ/FDTe7ih+4xD
-3MAUZJgMUtpUoR3aQ3IIKNXTiY40CRPiZwuJVpbC0v4e30cGpTs=
-=GcTV
------END PGP SIGNATURE-----
-
---PUUCDsFdCVjDdx06--
+Laurent Pinchart
