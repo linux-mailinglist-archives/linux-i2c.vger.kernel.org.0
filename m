@@ -2,55 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D17B3B710B
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 12:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E013B7125
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 13:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbhF2K7V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Jun 2021 06:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbhF2K7U (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Jun 2021 06:59:20 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABB2C061574
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Jun 2021 03:56:52 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id j24so2841142pfi.12
-        for <linux-i2c@vger.kernel.org>; Tue, 29 Jun 2021 03:56:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Jc3NxCk+KDZnIQDnHNRavHi5mkTsU8gdZSOVUuYmb/Q=;
-        b=QS9szzKZkwbuUl6cKd5ztj/xB9uMz9A1jTb+bhp/iKdt6UXXCDtfbkgpYSl9Ld+viw
-         6wm5vnieXa0uuthxGAsd2dKH5l1eiA5nEb/Q01RIm+4sRZOun/GGl0IoKejxx6PU/Cxi
-         KwW+NE7q5y9MFmWzZwJ/lOLR6FezFPiwFKp36Ggo57oNbkpfTdkz/yl0ZVaty0BvAd0Q
-         tkint4nL99vAdnuiwBtQONS1EyfJelM8ZYkTwrROgl/HDIykl+FUEmL3aXcw5DRa/mvE
-         VkMMefHA41nC0ZWHpWASXk0mnM1R+U1S1zX3LjB0QOklwhgqe/MbW7AabHCf9G6KZz9/
-         kW2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Jc3NxCk+KDZnIQDnHNRavHi5mkTsU8gdZSOVUuYmb/Q=;
-        b=kZeu+VESdLOuRXuIJbkiuXNjDPUSXOEOOw0iZz2Qn6J82sRLgbyw87zcNxBgnzRvS7
-         Ci7IaRZq9V4idUVjjkKOiiEmH0oS5H4pLMd4qs6nRAWpDDMZ/ZmBDVtFCg1RAbfy6SIG
-         X6ILmzLic/5JjmW9mG6dOcatsX1vdwzX1FEbFxZ69wgWl5fEP0whiR2A+7JgupeyOOGq
-         G3DH/3qgk9vahxwoMYHPD88cAT6zuxux2i24yYMz4hkkZrP+vBNeuIMXpyvHA4AjP8yY
-         PCdVG/RECjB7ZkD0p1Z3Gs1rtvqDb+rwMgesmggtGahB2CnX3krNLpSCofW9PtQg1RMG
-         WOlQ==
-X-Gm-Message-State: AOAM530/dUv4KcBiVMBRSj6EImWkC9auxHTFrpQoPUeY5eZ03mrzpE9g
-        7f/gfITriIBWze4CEpOzbZIpHg==
-X-Google-Smtp-Source: ABdhPJztQOYmtid8VFswfwsuX0Ti0CJClj3s+tJOjyJNAmsG+72+n65kqxZFjJN+ujUm53A0wuaxzw==
-X-Received: by 2002:a63:5616:: with SMTP id k22mr27766655pgb.41.1624964212463;
-        Tue, 29 Jun 2021 03:56:52 -0700 (PDT)
-Received: from localhost ([136.185.134.182])
-        by smtp.gmail.com with ESMTPSA id w123sm17955912pff.186.2021.06.29.03.56.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 03:56:51 -0700 (PDT)
-Date:   Tue, 29 Jun 2021 16:26:49 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Wolfram Sang <wsa@kernel.org>, Jie Deng <jie.deng@intel.com>,
-        linux-i2c@vger.kernel.org,
+        id S233337AbhF2LNv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Jun 2021 07:13:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56010 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233329AbhF2LNu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 29 Jun 2021 07:13:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DBE9261DC7;
+        Tue, 29 Jun 2021 11:11:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624965083;
+        bh=qR7dpwEkDa37N8fq1JF+niB5xx9wYkD8oDf8aWqJvS8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gsv0XlgkoGrCqUJuMrRL6ilJXwxyc5UDgKzptH+i1jtOVWAzGXi5L3+KFbOJGNENQ
+         qX0bQ8ZFEkb3ecE6dT1/EIsDi4WRRLRoUxRRKJiqlLw+U7tCjDtroMdIJFrM3N21lm
+         ZBcC12OTfBFFPZNNrz9eqk6NGZD4jJ8GtEGnV/vJgGDPRn8AJrBbv9N3vb3h0Pm/3A
+         2HOfIoQkUzwW2IAIe3MSSDAVs754SRfQUjgws1BHg1kYkmSqe3sAL+T1uFFRYyAdNV
+         EQC6bhJsu67vkUA4vCn5iIZB/+Kuzh3CK+J2qKooOeWSZhUPJhbGLgSaN2MSPEs1Pj
+         6TYUx3ManeaoA==
+Date:   Tue, 29 Jun 2021 13:11:20 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
         andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
@@ -61,7 +37,19 @@ To:     Wolfram Sang <wsa@kernel.org>, Jie Deng <jie.deng@intel.com>,
         yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
         pbonzini@redhat.com
 Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210629105649.nt63mxtiy6u7de3g@vireshk-i7>
+Message-ID: <YNr/2E/T4FRjLOgy@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
+        arnd@arndb.de, kblaiech@mellanox.com, jarkko.nikula@linux.intel.com,
+        Sergey.Semin@baikalelectronics.ru, rppt@kernel.org,
+        loic.poulain@linaro.org, tali.perry1@gmail.com,
+        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
+        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
+        pbonzini@redhat.com
 References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
  <YNrw4rxihFLuqLtY@ninjato>
  <20210629101627.kwc2rszborc3kvjs@vireshk-i7>
@@ -69,44 +57,52 @@ References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@in
  <20210629103014.nlk3mpetydc4mi6l@vireshk-i7>
  <YNr5Jf3WDTH7U5b7@ninjato>
  <YNr5ZRhT3qn+e9/m@ninjato>
+ <20210629105649.nt63mxtiy6u7de3g@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sAaNsJX8TpQmVU+g"
 Content-Disposition: inline
-In-Reply-To: <YNr5ZRhT3qn+e9/m@ninjato>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20210629105649.nt63mxtiy6u7de3g@vireshk-i7>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 29-06-21, 12:43, Wolfram Sang wrote:
-> 
-> > From the spec:
-> > 
-> > The case when ``length of \field{write_buf}''=0, and at the same time,
-> > ``length of \field{read_buf}''=0 doesn't make any sense.
-> > 
-> > I mentioned this in my first reply and to my understanding I did not get
-> > a reply that this has changed meanwhile.
-> > 
-> 
-> Also, this code as mentioned before:
-> 
-> > +             if (!msgs[i].len)
-> > +                     break;
-> 
-> I hope this can extended in the future to allow zero-length messages. If
-> this is impossible we need to set an adapter quirk instead.
 
-Ahh, yeah I saw these messages but I wasn't able to relate them to the
-I2C_FUNC_SMBUS_QUICK thing. My bad.
+--sAaNsJX8TpQmVU+g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Looked at Spec, Linux driver and my backends, I don't there is
-anything that breaks if we allow this. So the best thing (looking
-ahead) is if Jie sends a patch for spec to be modified like this.
 
-The case when ``length of \field{write_buf}''=0, and at the same time,
-``length of \field{read_buf}''=0 is called not-a-read-write request
-and result for such a request is I2C device specific.
+> The case when ``length of \field{write_buf}''=3D0, and at the same time,
+> ``length of \field{read_buf}''=3D0 is called not-a-read-write request
+> and result for such a request is I2C device specific.
 
--- 
-viresh
+Obviously, I don't know much about the specs and their wording. Still I
+wonder if we can't call it a zero length transfer? This is allowed by
+the I2C standard and SMBus has even a proper name for it (SMBUS_QUICK).
+=46rom my point of view, I would not say it is device specific because
+devices are expected to ACK such a message.
+
+
+--sAaNsJX8TpQmVU+g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDa/9gACgkQFA3kzBSg
+Kba1Jw//QCapndYVkCEmAxCDb4OuBgOzHn/nM06PE9m2MBtPSuR+dRU98n47Bmay
+3VQASHJA+ZydINhHEbMhgClGxDs/jnLV1vx20XraVPzwKLrHG9UDv5dVJCmY6YZq
+3F7GV7bIrbPtFVxDt0d0OjEmDcmSHxG/HQeiVwWKDC+RB/5Ono2oemIN/mrmafqZ
+vP2Pf46cbQNMHbcgOPG8GxFI6jUtVvPB/xXHAf0TA2U/DzuxIbNH69ymhE57VMV2
+ZEQFy+/am9LnhNWbcoaaJCSjVps2e7JqS4en7LOIAexdZGJkNQmog/qZNPmZZkVu
+XY0eLGKS2erq94vh6Wp76VKwRLhG/T2rwkFQxFdzHK89otRcfhHRBr9bMtKdkxkw
+bihc4FqiM4NiejvF0b+wDDGXSLXnT1UNUuyQ8MYHHxl+2bjTEKBajqBL2bzlege4
+upHspbvf/8L3HRlF0UVG01exPBpeUAeiFDM7imoQL6g7Q2itMcYnB0zhxABXZKYm
+xNGbmdd8mftRCnxlYV1qyCYFxACYnrIQAY70d9IaLHjaKEpG2XeHEpMWEopG52Fk
+M4K/JXnhae3vwVCl1ya5aRpMbIZK6wNzyPewXe0FqdZ8NnlITgxyJImPJI2WBy5p
+OBV3Bghg0b/L8vlgFPJP5QLcOY4KjF2VmKBy7Tw/4nB3oxVDihU=
+=hGo0
+-----END PGP SIGNATURE-----
+
+--sAaNsJX8TpQmVU+g--
