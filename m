@@ -2,121 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7F73B718A
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 13:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4232E3B71E5
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 14:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbhF2LvN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Jun 2021 07:51:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34830 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232724AbhF2LvN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 29 Jun 2021 07:51:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 26DCC61D23;
-        Tue, 29 Jun 2021 11:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624967325;
-        bh=F6+8DEUDRgQ8px260MOF5Gzv5rBY1SIRaS88R6jEyCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LCXjf4H4yOk3q0HSRv8xYxAJ8h+XsBRnVpk02td2SDmGlWumHfSKgIlEMJJEesszS
-         6TXXXLCg3JC4JqDWuGU7wJowpo7SRhsti+9hPg7m7wTe7Vn/UXCYqBuuPorZZ6hbAr
-         uf7iIXxygV+yutRXUK6lhfLYE+slbPT4lUUID9Au1SjhMzGr4sH//CqFvZIL6+48TZ
-         FuFdaMtJj+isc72q2cRazFvgdAqYvVZAkGKnr4cEGWlBTngWlOgvYCuKq8MJFtOzKY
-         kxFCjkkGEgqM2rt6dgd9tt+De/0G/GWIubkm9FqoDx1KJim1ZX5pxdLZ8ZL8wgTRXD
-         6ZfmqEztXtgUQ==
-Date:   Tue, 29 Jun 2021 13:48:42 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
-        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
-        arnd@arndb.de, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
-        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
-        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
-        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
-        pbonzini@redhat.com
-Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <YNsImlDN19zXRDO1@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
-        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
-        arnd@arndb.de, kblaiech@mellanox.com, jarkko.nikula@linux.intel.com,
-        Sergey.Semin@baikalelectronics.ru, rppt@kernel.org,
-        loic.poulain@linaro.org, tali.perry1@gmail.com,
-        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
-        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
-        pbonzini@redhat.com
-References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
- <YNrw4rxihFLuqLtY@ninjato>
- <20210629101627.kwc2rszborc3kvjs@vireshk-i7>
- <YNr0uDx1fv+Gjd7m@ninjato>
- <20210629103014.nlk3mpetydc4mi6l@vireshk-i7>
- <YNr5Jf3WDTH7U5b7@ninjato>
- <YNr5ZRhT3qn+e9/m@ninjato>
- <20210629105649.nt63mxtiy6u7de3g@vireshk-i7>
- <YNr/2E/T4FRjLOgy@ninjato>
- <20210629111630.badum3mtumcujbyk@vireshk-i7>
+        id S233400AbhF2MPa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Jun 2021 08:15:30 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:49507 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233384AbhF2MP3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Jun 2021 08:15:29 -0400
+X-UUID: 1808bfb60d774362bc069ba1ed953987-20210629
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=4SbG1vndPjwBWteOUa61pelj+E3Mh/QyjRjIiC1LL3s=;
+        b=kt4DZhFF3c3qEU+rHgUIkRCJ65aiuh9VZPAoBNm0UUHyEc+i9i4qh8107WVX5qavw/gN1w3KZ4XG/XKmEEyr+s5FaRuJiZX8yfeLuny12Bf61yqxQjpk8sJ+pFDV2Mem95Lfi/jUiN5WXQm/YUlI8nEUSOeEq1u8ls5smIZxl4o=;
+X-UUID: 1808bfb60d774362bc069ba1ed953987-20210629
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <kewei.xu@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1263429074; Tue, 29 Jun 2021 20:12:57 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 29 Jun
+ 2021 20:12:48 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 29 Jun 2021 20:12:47 +0800
+Message-ID: <1624968767.5647.2.camel@mhfsdcap03>
+Subject: Re: [PATCH 2/3] i2c: mediatek: Dump i2c/dma register when a timeout
+ occurs
+From:   Kewei Xu <kewei.xu@mediatek.com>
+To:     Tzung-Bi Shih <tzungbi@google.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>, <wsa@the-dreams.de>,
+        <robh+dt@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>, <qiangming.xia@mediatek.com>,
+        <liguo.zhang@mediatek.com>
+Date:   Tue, 29 Jun 2021 20:12:47 +0800
+In-Reply-To: <CA+Px+wU8qqEDU+bV0QpoJssNOxebutzRGgHo6WpC9VFJwckKKQ@mail.gmail.com>
+References: <1623122200-1896-1-git-send-email-kewei.xu@mediatek.com>
+         <1623122200-1896-3-git-send-email-kewei.xu@mediatek.com>
+         <54301510-e0d5-0762-1979-b194b8fd5eb8@gmail.com>
+         <1623206624.14050.10.camel@mhfsdcap03>
+         <CA+Px+wU8qqEDU+bV0QpoJssNOxebutzRGgHo6WpC9VFJwckKKQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2NUNxijQCUO6OTHP"
-Content-Disposition: inline
-In-Reply-To: <20210629111630.badum3mtumcujbyk@vireshk-i7>
+X-TM-SNTS-SMTP: 99D115C5B010B0D7F3D44B52D5ED0835CC3A0712A95D069472FE4D2D1B8632C52000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+T24gVHVlLCAyMDIxLTA2LTI5IGF0IDEyOjE5ICswODAwLCBUenVuZy1CaSBTaGloIHdyb3RlOg0K
+PiBPbiBXZWQsIEp1biA5LCAyMDIxIGF0IDEwOjQ0IEFNIEtld2VpIFh1IDxrZXdlaS54dUBtZWRp
+YXRlay5jb20+IHdyb3RlOg0KPiA+DQo+ID4gT24gVHVlLCAyMDIxLTA2LTA4IGF0IDE2OjAxICsw
+MjAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3RlOg0KPiA+ID4gSXMgdGhpcyBvZmZzZXQgb25seSBm
+b3IgbXQ4MTkyIG9yIGFsc28gZm9yIG10ODE4Mz8NCj4gPiA+IEluIGFueSBjYXNlIHRoYXQgc2hv
+dWxkIGdvIGluIGFzIGFub3RoZXIgcGF0Y2guIEVpdGhlciBhIGZpeCBvciBhIG5ldw0KPiA+ID4g
+bXRfaTJjX3JlZ3NfdjNbXQ0KPiA+DQo+ID4gVGhpcyBvZmZzZXQgdmFsdWUgaXMgc3VpdGFibGUg
+Zm9yIHRoZSBJQyBvZiBtdF9pMmNfcmVnc192MiBoYXJkd2FyZQ0KPiA+IGRlc2lnbiBzaW1pbGFy
+IHRvIG10ODE5Mi84MTk1LCBub3QgZm9yIDgxODMuDQo+ID4NCj4gPiBUaGUgcmVhc29uIGZvciB0
+aGUgbW9kaWZpY2F0aW9uIGhlcmUgaXMgdGhhdCB0aGUgcHJldmlvdXMNCj4gPiBvZmZzZXQgaW5m
+b3JtYXRpb24gaXMgaW5jb3JyZWN0LCBPRkZTRVRfREVCVUdTVEFUID0gMFhFNCBpcw0KPiA+IHRo
+ZSBjb3JyZWN0IHZhbHVlLg0KPiANCj4gUGxlYXNlIHN1Ym1pdCBhbm90aGVyIHBhdGNoIGZvciBm
+aXhpbmcgdGhlIGluY29ycmVjdCB2YWx1ZS4NCg0KT2theSwgSSB3aWxsIHJlc3VibWl0IGEgcGF0
+Y2ggdG8gZml4aW5nIHRoZSBpbmNvcnJlY3QgdmFsdWUsVGhhbmtzLg0KDQo=
 
---2NUNxijQCUO6OTHP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-
-> > Obviously, I don't know much about the specs and their wording. Still I
-> > wonder if we can't call it a zero length transfer?
->=20
-> Maybe that.
-
-I'd prefer it.
-
-> > This is allowed by
-> > the I2C standard and SMBus has even a proper name for it (SMBUS_QUICK).
-> > From my point of view, I would not say it is device specific because
-> > devices are expected to ACK such a message.
->=20
-> Actually we should skip the last line from my diff, i.e. completely
-> drop "and result for such a request is I2C device specific".
-
-Sounds good.
-
-> The device (host in virtio spec terminology) still needs to return
-> success/failure as it does for other requests. Nothing special here.
-
-Ack.
-
-
---2NUNxijQCUO6OTHP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDbCJYACgkQFA3kzBSg
-KbbW8BAAsq+m8PYVjLol2Bl88/uwq+wQriAFwSj35UISp/uiVClJAokC9pPHqdwB
-JFehttLuSQk7F7znOXvNMauGFiCqbNO2fwfEhqHSBPCcm6kouj0LscE9GxvYYCf4
-7LC9WmA2DWJlkTcutZqdhWnUSekihMCpoPBVMG4VoQmKuFaucbRBWA/hlGSYEn/j
-LXwJkNSvoTDScYUtHiX5CzQCq4m7ejCJ9ytsxvfu6gFpCO7UYwpvAqXr9RaulJns
-7dg6JkNQX0Mpzwnn0uRcHW08KP7c//LDJH0V4kwZMZI8KSpgiRIfqlZJdSHDInRt
-CTZLMu0Lk/q/Nr49SteaXy40KH/emyqkSQVt36xPcXeyTZcKLuuMX02hl+aviwuG
-jBn1xIFaQuxBfGkFqfeZ3l/F91xzc902YyeXYVFZi98znVKttMZMY2z2lKMrwSQf
-YfAPWfLVtYv/FHYoMwOiOq7CIlzVknk2Tu5a1WtUcjbEXHED/OrU7wN8tr1ymTXz
-OxKFd1DjwX+iPVmBULxaU//JkkN0loKc2bE8pRWR59TpT84vkg0DvdHr2D4wAVLM
-jr5qZ1J1sknWq22ILbrcLw80LOizpOFoFE5+Pelz9DDyKG7p/qJ7geXJxWPXaExR
-osMWrF9lQ3EcUZ7Y58fLjViMxrdOemVzaxCnzgy6Wj4zfjqjIlI=
-=tZM2
------END PGP SIGNATURE-----
-
---2NUNxijQCUO6OTHP--
