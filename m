@@ -2,28 +2,28 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B46F3B70E3
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 12:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8363B70E6
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 12:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbhF2KpR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Jun 2021 06:45:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53016 "EHLO mail.kernel.org"
+        id S233251AbhF2KqV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Jun 2021 06:46:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53170 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232410AbhF2KpQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 29 Jun 2021 06:45:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B2DB461DA7;
-        Tue, 29 Jun 2021 10:42:48 +0000 (UTC)
+        id S233221AbhF2KqU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 29 Jun 2021 06:46:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 363C061DB3;
+        Tue, 29 Jun 2021 10:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624963369;
-        bh=EQm+Q52P0Wib5HyIx8dMio6/6MEpfVira6/FYxYQ8XI=;
+        s=k20201202; t=1624963433;
+        bh=4VOTqddS7uKW2eQmZeku4kQPJMjXgCF9ls0JJnqoJK8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WtNns79ChU4Da7j/PvkcL7etBt3neAE+XqChZbgOURuRqaodlCXENtzQKSFwpUSjW
-         aqR7/qVcZMRY0KXMT4V/ST54fVfSRcCPvLh81RebDZ8TEeuLSQkgOXcYZp8N5G6hWK
-         FFSf+hUzoZsk8Am4Zl9FL5hjIpEFqfzqVF+OFABjjtCQYJq1wQcnQFtuSl75ff/Q64
-         yQ56lJHb+uyrAfh1YchKYFGdnhsMhUPY3zV/hK3MzVryK/rPbLRcthwabtdw+Xdpv5
-         jSHRdd+huW/IUXKl87iSKsfwHaILZSdZT9kVHgYF9ETKnouPhFWzu8lyrgR2qBge8t
-         /TrPsQw8Ughuw==
-Date:   Tue, 29 Jun 2021 12:42:45 +0200
+        b=IdVCPNNZF3MuV/j83PGyjf0tWuRa28Z+NHRlmxLgL7m4Y3QysD/5MIzuK7rWavh/K
+         TvRSfo0dg66KsP6zYY74YFtkJ6F/XhdhQCVEEJvgOX6t5fE1wa+JXREmeqFf/LNkVP
+         s5NdZTOpxJBylZw28mXfU9GxOEvJ4Y+W8ZPrDF06BafltDBTGIGVgCwQPhx0sVVRZ0
+         SrZjfx1Hn46l0UVi3SecMWh84Uu4uZMaVn8Qw6D39VKJg8jr0w26v7o8pxMTzRaIJG
+         5g7+jHrYvtuTXLVvW0/UNMdioTkAgEspXF52pPuCkT2FpTfPKcRJ4wwpvhlzwD4KOP
+         43XGUOPz9FW+g==
+Date:   Tue, 29 Jun 2021 12:43:49 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
@@ -37,7 +37,7 @@ Cc:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
         yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
         pbonzini@redhat.com
 Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <YNr5Jf3WDTH7U5b7@ninjato>
+Message-ID: <YNr5ZRhT3qn+e9/m@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
@@ -55,52 +55,59 @@ References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@in
  <20210629101627.kwc2rszborc3kvjs@vireshk-i7>
  <YNr0uDx1fv+Gjd7m@ninjato>
  <20210629103014.nlk3mpetydc4mi6l@vireshk-i7>
+ <YNr5Jf3WDTH7U5b7@ninjato>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DWc7wYBxX5qn7vxi"
+        protocol="application/pgp-signature"; boundary="IPUolotEl89k8M55"
 Content-Disposition: inline
-In-Reply-To: <20210629103014.nlk3mpetydc4mi6l@vireshk-i7>
+In-Reply-To: <YNr5Jf3WDTH7U5b7@ninjato>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---DWc7wYBxX5qn7vxi
+--IPUolotEl89k8M55
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 
-> Okay. But what is missing in the driver because of which it should
-> mask out I2C_FUNC_SMBUS_QUICK.
+> From the spec:
+>=20
+> The case when ``length of \field{write_buf}''=3D0, and at the same time,
+> ``length of \field{read_buf}''=3D0 doesn't make any sense.
+>=20
+> I mentioned this in my first reply and to my understanding I did not get
+> a reply that this has changed meanwhile.
+>=20
 
-=46rom the spec:
+Also, this code as mentioned before:
 
-The case when ``length of \field{write_buf}''=3D0, and at the same time,
-``length of \field{read_buf}''=3D0 doesn't make any sense.
+> +             if (!msgs[i].len)
+> +                     break;
 
-I mentioned this in my first reply and to my understanding I did not get
-a reply that this has changed meanwhile.
+I hope this can extended in the future to allow zero-length messages. If
+this is impossible we need to set an adapter quirk instead.
 
 
---DWc7wYBxX5qn7vxi
+--IPUolotEl89k8M55
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDa+SEACgkQFA3kzBSg
-Kbbh+xAAjjok+PzUt6yYXID3QRxMwhD2lcKTY+vJms8hdTwxH5FHfhwWGvvZNJ8E
-hnxH9VWGlxbg4HMbfsSP968+MJ4xq+6nOWsXy/5zcbM95g7Mo4TDGNWyo31y9Gk6
-Hlyfz+EKHh5sRi57jjKFXJMDCGmFGapXm1qWFo6NHwpuDFfwtMf94XhxpsnYCnlM
-8NzORMTW5G/P8K7h3UE/vrN+w7BYXWYHBlkS5cIy/B5S3dLEvb2CqIMzYKxnQ3TP
-IgHJa8xmvfTN9EmB5THNMzsXt28gnL3pL2jdTL3ZglSNZvljFUfVcK8EApGqGY+3
-tlMqRtSbiqEaQNHJg/2kzlrrgK+0DPSe/4ojmxBWN8icepf6dOwW8/4LZMygyPX/
-V0SxX00bG1N5WcFhSxy20vfXXBSOK9FHmH12Gn6wWc4F5t64Co5/pYUMGD73GfpN
-9rMpALB2zIc7RGnJeca0+iJZpm0lIvVyyR6qAegCgYY0HCYchW46pPS1QQh8wZy8
-EK7ffqg3md0N7StDTNILJvojv01RHVq6F2vfbZXo8JWqhiodvPTAfxxW4GFXRCvD
-/1l4sPKq6b9k4uY3Sy7JY0+vdPANItUaNlJjj8QZZwTsU3XCna+SRLCYsUiGrSQ/
-1FKSgpB3I3p4usxwC3Dy7RjvoUAss4niXG5UCwp2SKKP4EJXigg=
-=IwgD
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDa+WUACgkQFA3kzBSg
+Kba8Mw/7B3ItYaYag3BSGk0Ue14V20I3OtVtN/HquuwX0LpjERuvFFbdkYtQ2iFY
+h8zebNkl/9Hw4F6EvDP9xIakjTGO9l56jqTJGvs3zDGPJyo8bZPX0zlmGl/bqfzD
+AF+EOS27097fMakwkwNI2Cb8HuEtBWYHNMGcCVhA9WJeF5Vpdq4BQZSGMWx8NfpZ
+u3LxstwaXZFVGS87pUiRhmWWBIRKKjPLgduQYo4jNcVUZobVSD/6gY0IjNKRS7l8
+vAn/IGrqWb7eHDR+ywcOJEm9XTzCqtMrxFS8wEMfdKzNqhDlc9o71F5+C9A0JSq7
+4T4V3SDuMYgnSaT7PMKAUpepAM4zglVASbw8IHgAQ6Lj0ZgWQHS3TqYs/NfDtT1D
+qOBKAIYETHS7RU7QfjNZtg0MOCeRco80yh/DHPVx+xgaNkLLCTTEcuy2REbD/e4z
+mjsKoSx4xp2eaF98xvrykoN6yIBRLgcfKEu9K1Vk+2I4bJ1rWgaIi2gdyRJ2TODZ
+MhMYPYv3Yd2pZK+LlTHX5eYh6v0UKHMtIIwD9CO3ja/fK9DNRV+weA8QvmXrGxU4
+vLld7rvHF2QC1SXGkhxlGopHNDBLBjIRdmRrZlQ47Sj5W9fuVkiTuvml9Jk+ihDu
+JDVAEsaDInmiYu45lX9HUwrCUeMNROmwOfvKwk7wQ7uDN6FbpMU=
+=4zKv
 -----END PGP SIGNATURE-----
 
---DWc7wYBxX5qn7vxi--
+--IPUolotEl89k8M55--
