@@ -2,31 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C04F3B6FE6
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 11:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AEC3B6FF1
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 11:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbhF2JJt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 29 Jun 2021 05:09:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36182 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232671AbhF2JJs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 29 Jun 2021 05:09:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D49C761DD6;
-        Tue, 29 Jun 2021 09:07:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624957641;
-        bh=v+XYSmN0yCDjibhehaFRbA46fo8oLE3YUszwBIdDUbA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MBfu8+ezTNoltkY+dhiqlUYf/3U9VlbCciSKbIVSchMh567SdiNqT9USI/0AFPsOf
-         nin6zAb5qFbwJr9yFTlpeLKs0bghu4LAIbKBpuEfXJuTMmhlA6O3nEZWLEGmPeIwX0
-         JjKO4Jx1qXkGewzmE+ZCZFUb0wFTQ/dwGRCB6tw3fcNlrfxnthR3XITpeYQishkE65
-         lv+z3aPR9aSVorviAGyWLYEwxzGQjhvn8t5mMhV7hHIaeGcEdkzwTSXgP9Nnqy/qQb
-         dV5qgksTlorqBawJDI1vWbaW7dZXWf7ec3fjdxOd3C9oGceNw44A4NMXql/H23KQiu
-         1QJntUy7k/+aw==
-Date:   Tue, 29 Jun 2021 11:07:15 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jie Deng <jie.deng@intel.com>,
+        id S232518AbhF2JQI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 29 Jun 2021 05:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232680AbhF2JQI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 29 Jun 2021 05:16:08 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28849C061760
+        for <linux-i2c@vger.kernel.org>; Tue, 29 Jun 2021 02:13:40 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id c15so10529942pls.13
+        for <linux-i2c@vger.kernel.org>; Tue, 29 Jun 2021 02:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=/mbR5W4jZNhMRD0mHPnAUx4Qn6VhbPpqpMkPdEN+qCw=;
+        b=h3kBBqZh8DPMfpKRMWrkgKG29VmYBFChBsDU6VX3DQIGT21s30+n7loOWNEwLULJYI
+         Jt8PlO/AdtorV+BXuwyRi5kVsr/8ziGzZMkIs3sJlT5fkFZCzN4jQe6G5vENi2ghiEy8
+         iSNsGWR26aZam456igvzC+A99sXH2vJu5VKvcUa2iqjv8WhojD8w1sNmx2vVtIh6nG9f
+         kGvt0hXL+39Ps8C7+wFO1T4JDY4eqpFtYTpVjsIOpfDJ/37P8Mv1qQdYb+kdtERLN5x3
+         feYqRfWr4ac7x/b6I81iyeAC/Ivqgui8c/Oha+9yYCJN4UyNY+e21Tm5FyYlLQlnrI+2
+         s81g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=/mbR5W4jZNhMRD0mHPnAUx4Qn6VhbPpqpMkPdEN+qCw=;
+        b=P1RZK4I2f8nTWxLr4PSzZ5LiDHQiJeV1Dbu9lffBLTSUqkVaVFZwIstz0iehU84vgN
+         uXGHUWdUorXIKQ2mIwifQ35kZQzUrBeNGgiTZyQVIQPRP34j9GPI3sL9s6iFrEzhRVWt
+         GVl0olVfRB0eMk9sI2ercSo08uL6JcZRwQjNAxtTvHBUcV6v1Fib4F3jxQ7T5j3YmAIr
+         EetD68cb6+a/JAa33/IuUpAfLKt7XACV+aW2AJwY8hGY69otgWCS76UiNatuynh1itBf
+         AzPrXAcMrmvt8F33sIklzt2DTH+lrnR59URzKK8+FG+UBG6SY33TUxKYJ2PsPoDt5uaT
+         QAOA==
+X-Gm-Message-State: AOAM530YibBV11Zjm91tm0zZM3lu7UAovPgrCfVu9JyZvScVNcIijFoO
+        5plcIaB3wzzFdB/xq3rpWX+Ucg==
+X-Google-Smtp-Source: ABdhPJwX62WyP4ZnIeHKOlZFjp5zh7GhKe84JXR5nkRF7xvHcouHhy1+axXBjzQ/kCNnfCWFOYX/iQ==
+X-Received: by 2002:a17:90a:4dc5:: with SMTP id r5mr42292126pjl.203.1624958019649;
+        Tue, 29 Jun 2021 02:13:39 -0700 (PDT)
+Received: from localhost ([136.185.134.182])
+        by smtp.gmail.com with ESMTPSA id y4sm17167803pfc.15.2021.06.29.02.13.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Jun 2021 02:13:38 -0700 (PDT)
+Date:   Tue, 29 Jun 2021 14:43:37 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Wolfram Sang <wsa@kernel.org>, Jie Deng <jie.deng@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         virtualization@lists.linux-foundation.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -45,83 +71,40 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Jie Deng <jie.deng@intel.com>,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>
 Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <YNriw0teFmOVnU8T@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jie Deng <jie.deng@intel.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        conghui.chen@intel.com, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com,
-        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
-        Tali Perry <tali.perry1@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>, yu1.wang@intel.com,
-        shuo.a.liu@intel.com, Stefan Hajnoczi <stefanha@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <YNmK0MP5ffQpiipt@ninjato>
+Message-ID: <20210629091337.bcerprdyupvgr6gf@vireshk-i7>
+References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
+ <YNmK0MP5ffQpiipt@ninjato>
  <CAK8P3a2qrfhyfZA-8qPVQ252tZXSBKVT==GigJMVvX5_XLPrCQ@mail.gmail.com>
  <YNmVg3ZhshshlbSx@ninjato>
  <CAK8P3a3Z-9MbsH6ZkXENZ-vt8+W5aP3t+EBcEGRmh2Cgr89R8Q@mail.gmail.com>
  <YNmg2IEpUlArZXPK@ninjato>
  <CAK8P3a3vD0CpuJW=3w3nq0h9HECCiOigNWK-SvXq=m1zZpqvjA@mail.gmail.com>
  <YNnjh3xxyaZZSo9N@ninjato>
- <20210629041017.dsvzldikvsaade37@vireshk-i7>
- <YNrZVho/98qgJS9N@kunai>
- <20210629085213.7a7eqcgkmtk5y7nh@vireshk-i7>
+ <4c7f0989-305b-fe4c-63d1-966043c5d2f2@intel.com>
+ <YNraQMl3yJyZ6d5+@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Xlew4Opvjp4WjDav"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210629085213.7a7eqcgkmtk5y7nh@vireshk-i7>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YNraQMl3yJyZ6d5+@kunai>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 29-06-21, 10:30, Wolfram Sang wrote:
+> 
+> >     3. It seems the I2C core takes care of locking already, so is it safy to
+> > remove "struct mutex lock in struct virtio_i2c"?
+> 
+> Looks to me like the mutex is only to serialize calls to
+> virtio_i2c_xfer(). Then, it can go. The core does locking. See, we have
+> i2c_transfer and __i2c_transfer, the unlocked version.
 
---Xlew4Opvjp4WjDav
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Right, this is what I have been suggesting as well.
 
+So do you want Jie to send V11 now after fixing these three issues, or
+you have more concerns ?
 
->     struct i2c_rdwr_ioctl_data data;
->     data.nmsgs =3D count;
->     data.msgs =3D msgs;
->=20
->     return ioctl(adapter->fd, I2C_RDWR, &data);
->=20
-> So we will end up recreating the exact situation as when
-> virtio_i2c_xfer() is called.
-
-Perfect! I was hoping exactly for this. But with my limited experience
-of all the blocks involved, I decided to ask for this instead of digging
-into various sources. Looks good.
-
-
---Xlew4Opvjp4WjDav
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDa4r8ACgkQFA3kzBSg
-KbZc2g/9EicqwrDKiZCv3MQ/VV7liEhzflZ8+f8S9rVtA/qxqLHRA4pRxqC6AyQn
-tlj/8jomNuGdFYrqJ9sW/Wbt/5YAj1FrX5xCK5umNPfRvNvDsLz4lwSSKur/KCm7
-Fp0S+aebL877JsQZ+5W/6hOm3Jk/+gksSCY1PPPrH9eKHsyPws9BVTfyPVogzhLY
-PsjENDnXCftjGLTKptAkegD07L/1b5Ep4PYjJ4ms1ISgXyH8RWrwzP+4t1gQ6i9S
-PONYs0XE/i/kJK811PM90WAlG0Jj1YeTMxMcTTBy1TWAr6t3dUGKEvNOu+/VlTZs
-f8uqa8VuQ8U4tm7AGLxk2OOuNBk+DeMggBobw0ZBp16VyGf4qqM5pOQO+XFOGjeG
-dboqhBGcxGaatkxMtqYBfwt9bH6SP4jqE/tFW2x2fLjFWE5SyAZj1iawRchSDPXi
-2NMJaMgtzWS9u5iQYd1iVTtQ165M7lEKTD5iT/Z3ubXh2Rk3kCJl4ByynZnlOZrA
-NSLHz4Eqqbi9cWzDh34t/3dwjHbKVHmTqizgY2BGtaPoIlJsLY+qmZnLaFA97xDx
-t/KILTSFILbsKICINw2Yq9xhZd1Pm5ZTOiPQU/zkbWF6VO5wKKaF3jgCm1pO9Q5U
-l1XnENZg1CWslfJIHJySMS6u+C5xSL9QbsQJ+O7JsFXI1v6/q8Q=
-=Pe63
------END PGP SIGNATURE-----
-
---Xlew4Opvjp4WjDav--
+-- 
+viresh
