@@ -2,91 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6583B6CBF
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 05:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68DE3B6D0A
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Jun 2021 05:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbhF2DGp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Jun 2021 23:06:45 -0400
-Received: from mga03.intel.com ([134.134.136.65]:14776 "EHLO mga03.intel.com"
+        id S231805AbhF2DkH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Jun 2021 23:40:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42698 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231219AbhF2DGo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 28 Jun 2021 23:06:44 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10029"; a="208112885"
-X-IronPort-AV: E=Sophos;i="5.83,307,1616482800"; 
-   d="scan'208";a="208112885"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2021 20:04:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,307,1616482800"; 
-   d="scan'208";a="456601201"
-Received: from dengjie-mobl1.ccr.corp.intel.com (HELO [10.239.154.58]) ([10.239.154.58])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2021 20:04:11 -0700
-Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-To:     Wolfram Sang <wsa@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        conghui.chen@intel.com, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com,
-        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
-        Tali Perry <tali.perry1@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        yu1.wang@intel.com, shuo.a.liu@intel.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
- <YNmK0MP5ffQpiipt@ninjato>
- <CAK8P3a2qrfhyfZA-8qPVQ252tZXSBKVT==GigJMVvX5_XLPrCQ@mail.gmail.com>
- <YNmVg3ZhshshlbSx@ninjato>
- <CAK8P3a3Z-9MbsH6ZkXENZ-vt8+W5aP3t+EBcEGRmh2Cgr89R8Q@mail.gmail.com>
- <YNmg2IEpUlArZXPK@ninjato>
- <CAK8P3a3vD0CpuJW=3w3nq0h9HECCiOigNWK-SvXq=m1zZpqvjA@mail.gmail.com>
- <YNnjh3xxyaZZSo9N@ninjato>
-From:   Jie Deng <jie.deng@intel.com>
-Message-ID: <4c7f0989-305b-fe4c-63d1-966043c5d2f2@intel.com>
-Date:   Tue, 29 Jun 2021 11:04:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.10.0
+        id S231741AbhF2DkG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 28 Jun 2021 23:40:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6442561D38;
+        Tue, 29 Jun 2021 03:37:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624937859;
+        bh=wvinFt0qcp97HAcqwxqlfrjB2zJAOfcgDtrhX0/nJus=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jhGlkF14cvJcmHhIFuloHFwYL4Wx1SyKAMrqA1zLfRSl3/5l12d5nvvZiRn2TKdcW
+         eoePSsj9I6PM4ugrq+mvkwHfz9BBxtR/zxkrlyJItvRlF6rrxY2ybi4ivcXXVdjF0m
+         xDJxv5g21kdxmwrDhifiRMLsAPQ55KJaFZPVBr/WWKwG2u9lwgwLePwLaT76/6p80X
+         1ny7s0KtI8cIbiQnmkSoEoLJ7+v8NXdDZLkekkkjvzTsyJXhQjmaPO8i0P/sA/sVZa
+         bmcC5DGIHYBQpU6LvOffiM8qA8Tewt0mws+MZIj00AplWkAQ/Qc+hieiJLnsj/N9xF
+         wRtvsb5G//inQ==
+Date:   Tue, 29 Jun 2021 09:07:36 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/5] soc: qcom: geni: Add support for gpi dma
+Message-ID: <YNqVgESqehz27knL@matsya>
+References: <20210625052213.32260-1-vkoul@kernel.org>
+ <20210625052213.32260-3-vkoul@kernel.org>
+ <CAD=FV=ULVo=vz2Vww6_bcfrhosy0GRC2oVEcXt6zw8n4C2MiuQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <YNnjh3xxyaZZSo9N@ninjato>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=ULVo=vz2Vww6_bcfrhosy0GRC2oVEcXt6zw8n4C2MiuQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 2021/6/28 22:58, Wolfram Sang wrote:
-> If adding support incrementally works for such an interface, this makes
-> sense as well.
->
-> So, where are we? As I understand, this v10 does not support I2C
-> transactions (or I2C_RDWR as you said). But you want to support all
-> clients. So, this doesn't match, or?
+Hi Doug,
 
-I hope we can have a minimum working driver get merged first so that we 
-can have a base.
+On 28-06-21, 16:38, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Jun 24, 2021 at 10:22 PM Vinod Koul <vkoul@kernel.org> wrote:
+> >
+> > +static void geni_se_select_gpi_mode(struct geni_se *se)
+> > +{
+> > +       u32 val;
+> > +
+> > +       geni_se_irq_clear(se);
+> > +
+> > +       writel(0, se->base + SE_IRQ_EN);
+> > +
+> > +       val = readl(se->base + SE_GENI_S_IRQ_EN);
+> > +       val &= ~S_CMD_DONE_EN;
+> > +       writel(val, se->base + SE_GENI_S_IRQ_EN);
+> > +
+> > +       val = readl(se->base + SE_GENI_M_IRQ_EN);
+> > +       val &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN |
+> > +                M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
+> > +       writel(val, se->base + SE_GENI_M_IRQ_EN);
+> > +
+> > +       writel(GENI_DMA_MODE_EN, se->base + SE_GENI_DMA_MODE_EN);
+> > +
+> > +       val = readl(se->base + SE_GSI_EVENT_EN);
+> > +       val |= (DMA_RX_EVENT_EN | DMA_TX_EVENT_EN | GENI_M_EVENT_EN | GENI_S_EVENT_EN);
+> 
+> nit: the above has some extra parenthesis that aren't needed.
+> 
+> I will continue to assert that all of the "set mode" stuff doesn't
+> really belong here and should be managed by individual drivers [1].
+> I'll accept that it doesn't have to block forward progress, though I'm
+> at least a bit disappointed that we asked Qualcomm to do this over 8
+> months ago and no action was taken. :(
+> 
+> In any case, this looks OK to me:
+> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-The v10 has three remaining problems:
+Thanks for the review.
 
-     1. To remove vi->adap.class = I2C_CLASS_DEPRECATED; (already 
-confirmed by Wolfram)
+> 
+> [1] https://lore.kernel.org/r/CAD=FV=VWPqswOXJejyXjYT_Yspdu75ELq42cffN87FrpTwPUQg@mail.gmail.com/
 
-     2. Use #ifdef CONFIG_PM_SLEEP to replace the "__maybe_unused" 
-(already confirmed by Arnd)
+I agree we should do something, will discuss with Bjorn and try to help
+here.
 
-     3. It seems the I2C core takes care of locking already, so is it 
-safy to remove "struct mutex lock in struct virtio_i2c"?
-
-         (Raised by Viresh, still need Wolfram's confirmation)
-
-Regards,
-
-Jie
-
+Regards
+-- 
+~Vinod
