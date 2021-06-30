@@ -2,37 +2,31 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 383783B7E6C
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jun 2021 09:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A5C3B7EA6
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jun 2021 10:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbhF3IAy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Jun 2021 04:00:54 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:51355 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232788AbhF3IAx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Jun 2021 04:00:53 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MWixU-1ljA7M0oNU-00X3Kn; Wed, 30 Jun 2021 09:58:24 +0200
-Received: by mail-wr1-f48.google.com with SMTP id v5so2440312wrt.3;
-        Wed, 30 Jun 2021 00:58:24 -0700 (PDT)
-X-Gm-Message-State: AOAM532CmRsIWO/Mc7g2Y1m6ZYKpznUsa5IAkkeZKGsVSIj/6pNkp+zc
-        ooC+Gkxcd1IfSyhZ4/PBJjysiQDVqpVgOCCbOHQ=
-X-Google-Smtp-Source: ABdhPJw/54Ymafy8iJydjgPOOW+N/LuLT/C7tu8FRFKuPYFqT73YoCsIrQFVMpqbzhM8lXHUuzTJSikU14gArx6gH0Q=
-X-Received: by 2002:adf:e107:: with SMTP id t7mr37559025wrz.165.1625039903884;
- Wed, 30 Jun 2021 00:58:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
- <YNrw4rxihFLuqLtY@ninjato> <05cc9484-f97b-0533-64fe-ff917c6b87ee@intel.com>
- <YNwd/t3DMKSOrTAT@ninjato> <3016ab8b-cbff-1309-6a1f-080703a4130f@intel.com>
-In-Reply-To: <3016ab8b-cbff-1309-6a1f-080703a4130f@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 30 Jun 2021 09:55:49 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0Ew+RS_1buR+1OneH8XEqVjPOr0FGCF5d6CvFQuJqg6g@mail.gmail.com>
-Message-ID: <CAK8P3a0Ew+RS_1buR+1OneH8XEqVjPOr0FGCF5d6CvFQuJqg6g@mail.gmail.com>
-Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
+        id S233084AbhF3IHC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Jun 2021 04:07:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37048 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233035AbhF3IHC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 30 Jun 2021 04:07:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1042F61A2B;
+        Wed, 30 Jun 2021 08:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625040273;
+        bh=7tnwHLbYqbXhx2qSLXJfed/m+hgZ3KoXLS9UtXG+kys=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FGrO7tGW9nBPQrO+mjGUXH6tT7IuaO9G8j/D88IjDx4ETayniDQ5UQeg7AnQSn4jz
+         dNNFsMkbXjFDU5/7sQASRfXVhyMccUQnrUc28sBtS1Z/PZS/aSQJuQrTo/DszMzxBC
+         x+pxRaWWh5DmB8x1YkiXF43ANSdteJPtKiaxbpH7j43St8wQbVepKiBmDjdoQHdD1u
+         ObSB/CFJ0xbMBjvp0X+0LA58PiNiy5qpPrifzTcj480fT8iNIR2n/UQZwVA2ts9EXp
+         vX6qvMQRK3UIjcVXDzIpWjNGUQfy8/j5fuwcOOorjQhR/TrIBniv6bb5DvLxcUhHpL
+         /rdvPJXfFrIoA==
+Date:   Wed, 30 Jun 2021 10:04:30 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Jie Deng <jie.deng@intel.com>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         virtualization@lists.linux-foundation.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -44,74 +38,84 @@ Cc:     Wolfram Sang <wsa@kernel.org>,
         Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
         Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
         Tali Perry <tali.perry1@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         yu1.wang@intel.com, shuo.a.liu@intel.com,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:6egYPYexTmL/MQIuD73eM2fYrrSLN1LLs/3bxSH3ZOnZ17tD4Ke
- bMlNqaOgRZmh7TPit/Ztgkj/QRdXk3dpnIEfG9jaWr+jEmh/2MToYlsBU8WvlWJgiPLPC6M
- cX5ZoWFjM58WD9JjmzvpXD+dAnsdVAumXV2uXhPwIrGUnjlcItCcoKcupIPmzPd90L8/viS
- nyzZTS43zCMS5DXEuj0hw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Bd/ORH/iKMw=:vazu2uKZHxqr6kCR3d/1GJ
- ky5yHRxj2jlpE+HloqKXSpD0NdsFitDEgYk9F2suYwYDwHJkHPqpBY6As+DvY4UvYEahkkuYV
- YgpqPqvFxzGf0eatwaZ5pt4NIzvLERh/ImqfVCku6DePl7qhCGWBxKc7sORi78Oac48/moDhw
- mMCKHgsLYerA8vMRI15b0dS4zTaRP1/WQrCif2vgdVvJ0jcIJIi2vrOSxq2JRW/CIaH65r1AB
- UnH+IRTzGh5zYzS7XC3+BGbcp8jo87XFGUndyCRS+jxnDmYIFzu43kNbGcJdeEuBvsxX3vXzD
- wYykQO4Bt3Zsh3nybhAeyDtMqDwHfvwqRvp7Hskj/jPxlGhWU1AcfUWllCQHO1dwJPGMfCTW4
- z2M3J/gjjrDsn0zBvUcf8ZE1yMyv8rULHM/2nXp4a2VirbY9ZB8naj4J7+LwyKyRFVjUQ6S3f
- +207c+kgp5EL68hEpOyHHrP1a3eDX55R5Q/RKY+7HGTSkGNLjklJETfoz77rTVfb2Py1OLr0I
- Fro9ZlVHQGcgXE6TZ98K0NfLq+UhKtW/ahbo36L3+CkxJSpkPlnpNBbqnBE2MS4DMHD6t/j6/
- P4SaBrmMhuLE+VZ2fAYCmdgDmndY8AIPar2MQnTGiw/pZMJmEqQfWOCQXhuHJ9C+PDydAGZgw
- 4GAg=
+Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <YNwljrHzOmD1V5be@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jie Deng <jie.deng@intel.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        conghui.chen@intel.com, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com,
+        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
+        Tali Perry <tali.perry1@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>, yu1.wang@intel.com,
+        shuo.a.liu@intel.com, Viresh Kumar <viresh.kumar@linaro.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
+ <YNrw4rxihFLuqLtY@ninjato>
+ <05cc9484-f97b-0533-64fe-ff917c6b87ee@intel.com>
+ <YNwd/t3DMKSOrTAT@ninjato>
+ <3016ab8b-cbff-1309-6a1f-080703a4130f@intel.com>
+ <CAK8P3a0Ew+RS_1buR+1OneH8XEqVjPOr0FGCF5d6CvFQuJqg6g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kdQpy3ObinWCWOTi"
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0Ew+RS_1buR+1OneH8XEqVjPOr0FGCF5d6CvFQuJqg6g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 9:51 AM Jie Deng <jie.deng@intel.com> wrote:
-> On 2021/6/30 15:32, Wolfram Sang wrote:
-> >>>> +  snprintf(vi->adap.name, sizeof(vi->adap.name), "Virtio I2C Adapter");
-> >>> Is there something to add so you can distinguish multiple instances?
-> >>> Most people want that.
-> >>
-> >> I find the I2C core will set a device name "i2c-%d" for this purpose, right?
-> >>
-> >> I think this name can be used to distinguish the adapter types while
-> >> "i2c-%d" can be used to
-> >>
-> >> distinguish instances. Does it make sense ?
-> > That alone does not help. See the 'i2cdetect -l' output of my Renesas
-> > board here:
-> >
-> > i2c-4 i2c             e66d8000.i2c                            I2C adapter
-> > i2c-2 i2c             e6510000.i2c                            I2C adapter
-> > i2c-7 i2c             e60b0000.i2c                            I2C adapter
-> >
-> > Notice that the third column carries the base address, so you know which
-> > i2c-%d is which physical bus. I don't know if it makes sense in your
-> > "virtual" case, but so far it would always print "Virtio I2C Adapter".
-> > Maybe it makes sense to add some parent device name, too?
-> >
-> > And if this is not reasonable, just skip it. As I said, it can be
-> > helpful at times, but it is definately not a show stopper.
->
->
-> OK. I will add the virtio_device index for this purpose.
-> which indicates the unique position on the virtio bus.
 
-Is that position stable across kernel versions? We do have stable naming
-for PCI devices and for platform devices that are the parent of a virtio
-device, but I would expect the virtio device to be numbered in probe
-order instead.
+--kdQpy3ObinWCWOTi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On a related note, we are apparently still missing the bit in the virtio bus
-layer that fills in the dev->of_node pointer of the virtio device. Without
-this, it is not actually possible to automatically probe i2c devices connected
-to a virtio-i2c bus. The same problem came up again with the virtio-gpio
-driver that suffers from the same issue.
 
-       Arnd
+> Is that position stable across kernel versions? We do have stable naming
+> for PCI devices and for platform devices that are the parent of a virtio
+> device, but I would expect the virtio device to be numbered in probe
+> order instead.
+
+For me, it would be good enough to know who (= which device) created
+this adapter when I look at the name at runtime. I wouldn't require this
+to be stable across kernel versions. In general, this is just an info
+string with no guarantees. But maybe you have reasons to insist on it
+being stable nonetheless.
+
+
+--kdQpy3ObinWCWOTi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDcJYoACgkQFA3kzBSg
+KbYsbxAAmlealqAbiVXEdd9mmVIZA//KjCbOIxz9zGg6QyZhThboDHDVm6Kaf3D9
+wMAZR/u8sWqAJXUAN2jfAndOwggGD+JWJNRfl6eggWz8kV1LztEzJuvEiftRPkUh
+XHXCGIoZAGjeooDE3QMsvejrerWlNqjAB8u+Grf1mfEC4u5cU+5AFX51xGvpdWh/
+MMhyNw65LOK1mQdbh7Zc16bzxPpQAOP4k6YNGGlt+IYto9gpIonqADoX7aILjZL+
++j+L4UWfvTCEY/+5TzhVKtJ/lVPMdmVgAgDWMOflQO8cpGyMzlrLUemmin7fYaeG
+2V/FZp0GKMhxCMA7g8ySG7SljbHUj+jBH7X+5Kh4ngJRdLpLpY66+6v8Jg9rIleM
+GRbA8Qi4SYyFRQ1Z+lME65rt+7WnBv/uWr+zbhisDT04GBWFeofIfFHFvWH5DKaf
+l+8iXOOrstJ7RIHK9d446jqV7lsO1u0P1YSxFgZJQPpYDbfXNFD3QOwvcb/9JK3l
+2d6x7LrvjZrupQQUCjb7P/MAo7kZ5cxRbe1D9kjyicEAMgr9xiHek0BJIqd+js1Z
+IrASEC82er/YLwBdAg1gudSBoUl3MZTIiMH22XLiglixKfatZPMEZSVA1i+f5sff
+qJE1EpqDY4LOr5teWHiyJwpahcIKJkf3uMS4OZEkXAPV5Vhftao=
+=DQ2b
+-----END PGP SIGNATURE-----
+
+--kdQpy3ObinWCWOTi--
