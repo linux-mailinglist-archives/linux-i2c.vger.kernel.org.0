@@ -2,104 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AD03B84D1
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jun 2021 16:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321AC3B8527
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Jun 2021 16:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235271AbhF3OPt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Jun 2021 10:15:49 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:49320 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235088AbhF3OPl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Jun 2021 10:15:41 -0400
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15UEAY0h002860;
-        Wed, 30 Jun 2021 16:12:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=2vk0SM1w1rYwBoKsGyRqoKEvl040SvG0KTlIbUrKgsc=;
- b=Z1d9v2V2HDrqhk0MZUnAz3mbRajKOrOhUStToRb4SFG4plLLFkABzrzbvm3vF6p2ZJkQ
- 8mAL1QZXGXVJerZ4E94/hRGdgTANjyqGNo1RgAfvE+24aa92S3mMwmuTizzuiIcXAttR
- Q2zBtFHhBxr1OliAftxJELttwA7le6qd6X/vNKKoww+qhcHkChQXm8FX2ldCrORgh8l1
- nJiW3SRWXnHeZThK3CD184V/9oQNUwSnCeeFpye+x+HmhpoPJ951VWP+fQ/RPFmcSFHu
- cngiVrGseXFTM0rryX7Y7yi2sHLNmdoPama/w4SJaeuSZve1zKvxtJtVhB3AVMMIgU5l Ow== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 39g4kpy7f2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Jun 2021 16:12:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EF43810003A;
-        Wed, 30 Jun 2021 16:12:57 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E465F23151D;
-        Wed, 30 Jun 2021 16:12:57 +0200 (CEST)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 30 Jun 2021 16:12:57
- +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <wsa@kernel.org>, <pierre-yves.mordret@foss.st.com>
-CC:     <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <amelie.delaunay@foss.st.com>, <alain.volmat@foss.st.com>
-Subject: [PATCH 3/3] i2c: stm32f7: prevent calling slave handling if no slave running
-Date:   Wed, 30 Jun 2021 16:11:43 +0200
-Message-ID: <1625062303-15327-4-git-send-email-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1625062303-15327-1-git-send-email-alain.volmat@foss.st.com>
-References: <1625062303-15327-1-git-send-email-alain.volmat@foss.st.com>
+        id S235051AbhF3Ole (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Jun 2021 10:41:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48470 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234882AbhF3Old (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 30 Jun 2021 10:41:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DCDD61476;
+        Wed, 30 Jun 2021 14:39:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625063944;
+        bh=L8V2JdvEBC3OUGI9cx9YLOGRxBzDEGMRE1EedaGTRrA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F8wudrmJ7+4o2TNN7S2nlbf/SewXYxiYxBUPEKuPxY0FycN7ZJLRb9ybxw/Y4L7nR
+         pS+SiRbWJ0udH596uiN+HTl1KVB4K/uoVKABgifye1I8hGBESqr36w9kZGd55ft/T9
+         CCqKi1mptAishN67SPLy4fB0ZPzlgQyDWOAeRBjv56DDifMpr5ObLZvROuTyA9SXMF
+         2J1IzjXQ4T3CqP+ZV0xUbnM46Qrhvo+Q7wclOqQMflZNAjtHieQTLzqvg30ZvR5rPZ
+         N5e7tzefgPIFVVEaH5XrafDNM3Zl3hQMjNgq5qqj1sxJCMEQTTtJz/tvrbJL1X2jzp
+         /QwT45zg3G7gA==
+Date:   Wed, 30 Jun 2021 16:38:55 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jie Deng <jie.deng@intel.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        conghui.chen@intel.com, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com,
+        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
+        Tali Perry <tali.perry1@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        yu1.wang@intel.com, shuo.a.liu@intel.com,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <YNyB/+fNK0u2bI6j@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jie Deng <jie.deng@intel.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        conghui.chen@intel.com, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com,
+        Sergey Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mike Rapoport <rppt@kernel.org>, loic.poulain@linaro.org,
+        Tali Perry <tali.perry1@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>, yu1.wang@intel.com,
+        shuo.a.liu@intel.com, Stefan Hajnoczi <stefanha@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
+ <YNmK0MP5ffQpiipt@ninjato>
+ <CAK8P3a2qrfhyfZA-8qPVQ252tZXSBKVT==GigJMVvX5_XLPrCQ@mail.gmail.com>
+ <YNmVg3ZhshshlbSx@ninjato>
+ <CAK8P3a3Z-9MbsH6ZkXENZ-vt8+W5aP3t+EBcEGRmh2Cgr89R8Q@mail.gmail.com>
+ <YNmg2IEpUlArZXPK@ninjato>
+ <CAK8P3a3vD0CpuJW=3w3nq0h9HECCiOigNWK-SvXq=m1zZpqvjA@mail.gmail.com>
+ <YNnjh3xxyaZZSo9N@ninjato>
+ <20210629041017.dsvzldikvsaade37@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-30_06:2021-06-29,2021-06-30 signatures=0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cnJsFUAyBPHKEwpS"
+Content-Disposition: inline
+In-Reply-To: <20210629041017.dsvzldikvsaade37@vireshk-i7>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Slave interrupt handler should only be called if there is actually
-a slave registered and running to avoid accessing an invalid pointer.
 
-Without this commit, an OOPS can be generated due to a NULL ptr dereference
-while receiving an IT when there is no master transfer and no slave
-running:
-  - stm32f7_i2c_isr_event
-  - no master_mode hence calling stm32f7_i2c_slave_isr_event
-  - access to i2c_dev->slave_running leading to oops due to
-slave_running being NULL.
+--cnJsFUAyBPHKEwpS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 60d609f30de2 ("i2c: i2c-stm32f7: Add slave support")
+Hi Viresh,
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- drivers/i2c/busses/i2c-stm32f7.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+> While we are at it, this has been replaced by a Rust counterpart [1]
+> (as that makes it hypervisor agnostic, which is the goal of my work
+> here) and I need someone with I2C knowledge to help review it. It
+> should be okay even if you don't understand Rust a lot, just review
+> this file[2] which is where most of i2c specific stuff lies.
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 0d99c075deb2..2cc9bb0f6d7f 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1497,10 +1497,14 @@ static irqreturn_t stm32f7_i2c_isr_event(int irq, void *data)
- 	u32 status, mask;
- 	int ret = IRQ_HANDLED;
- 
--	/* Check if the interrupt if for a slave device */
-+	/* Check if the interrupt is for a slave device */
- 	if (!i2c_dev->master_mode) {
--		ret = stm32f7_i2c_slave_isr_event(i2c_dev);
--		return ret;
-+		if (i2c_dev->slave_running)
-+			return stm32f7_i2c_slave_isr_event(i2c_dev);
-+
-+		dev_warn_ratelimited(i2c_dev->dev,
-+				"Unexpected IT received: ISR:0x%x\n",
-+				readl_relaxed(i2c_dev->base + STM32F7_I2C_ISR));
- 	}
- 
- 	status = readl_relaxed(i2c_dev->base + STM32F7_I2C_ISR);
--- 
-2.25.1
+=46rom the high level review I can provide, it looks good to me. Block
+transfers are missing, but I think you said that already. Mising Rust
+experience, I might miss details, of course. But the general approach
+seems fine to me. smbus_prepare() will get a bit more messy when you add
+block transfers, but it still looks bearable, I think.
 
+Happy hacking!
+
+   Wolfram
+
+
+--cnJsFUAyBPHKEwpS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDcgfoACgkQFA3kzBSg
+KbYF7BAAq1r7cuYTp6YJrMb46z5zZ5GxUA2lqtoo6e5LbokrlsQc7NGhGmIkHOJc
+bsoVy3HfJPTDqhVrQrOMuUSsvID8IRtV4jOlENBGjvC7OULYSSZEqIGJBiKv0TM3
+jbQstaKjpumImL+1SzvGmfTX4KhN6WXnxkWo1SHeeNP7/ykIh1au0abmk+LcTcX6
++pQJ2SzM+P2MMQiAqPq8FOrndPK8VSMyV6Mg+ZJ72jqnIW9IJVsFQv8vwHG2iH/2
+zFC/eLOAD0JoOuA48xM9a3TSPMYaL0FjBNNcTeLULCV3TVlv4C82cOVSCIfZ59fO
+K/94pJ3gLGuDmeimN7IiD5U3JbTmzwLH06Oitl88noLW7OwxQX3F1fMzu9p5jFjg
+wIDPPjSkAOvu6ExHo/TLc7IaaRkZjBNp+SGbVuzRksh7hMkZB5PB2wtVpbwXG7uW
+Mi97r7sEQQ0lX6+wl9ohIOOaE8Na2CYV1oBifTYpAtUxCFkuGuTo2iXAjjs0N5Yv
+Mf5xUZJv9HjJfTHMbHoogJmdatLCluWGW+q7XzVI+l7YfauG7j4WZZ7dCqz1bLhY
+Uz+Zrr4eZ0AwWUmd8QFpjwCqC8awkMDbh8SUPKE7rvNe7RqFC2XiuoRM3Oc1O/hx
+XWvqF/0Z+ChHTb1cEdDb3v25ausl11SsQJt/j9kAkxboV9XNwEE=
+=7H7Z
+-----END PGP SIGNATURE-----
+
+--cnJsFUAyBPHKEwpS--
