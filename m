@@ -2,111 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7580A3B9184
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jul 2021 14:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90753B93ED
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jul 2021 17:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236328AbhGAMQv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Jul 2021 08:16:51 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:45456 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236192AbhGAMQv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jul 2021 08:16:51 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        id S233064AbhGAPbL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Jul 2021 11:31:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31322 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232969AbhGAPbL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jul 2021 11:31:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625153319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DmXj8caY15pwsQgjtiEZnmZUg1bkwyeXw/rOXNl13yM=;
+        b=Z8AELCkClhgSNY4shKNxMn1Ei1ZCYFo2QRQ0AbJHS/InYhK1OhGAKHNOFMUjqAFO2biCGP
+        VLhVrOcSakDeyiqtDAVrSQKx9ofKKQ36wLKjpYIYB9cDqKUwzVP6PP/7EvED3YVfqxVR/n
+        Kr36mpW3/ADZf1+zXVLpXpkrmrpgA9Y=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-31-2j6XOe-zPpK98edlVNmnrw-1; Thu, 01 Jul 2021 11:28:38 -0400
+X-MC-Unique: 2j6XOe-zPpK98edlVNmnrw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2E848228B7;
-        Thu,  1 Jul 2021 12:14:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1625141660; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E+tIfXy1UmBt8fIIfmz11YsGUbPEBLU0kzYNxmJPsB4=;
-        b=f6UwE7/RD6Pi5rZnVt0Pjw5k6MH9MsvQnFNQ8RnrSxvRlDiAy4mwrv2FXmmUkuW8OumJnZ
-        AVW1GW+JLce5E/RQM9bqdWH8sM35CPZVcEnL5zJPVw3OrCC7/8idkDUjiPlJz3iCg2TlQ0
-        6JmFAJtS2uxjJcvWtT+n5dYIVdsawiM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1625141660;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E+tIfXy1UmBt8fIIfmz11YsGUbPEBLU0kzYNxmJPsB4=;
-        b=SqxFyzxxJwaayYexi2jgcsN7Kl9hkw6DBKxFg2AEuE23HZOWlCJxuFcIPU6ILzsf32Z3uJ
-        +ALDEX3jsJd9BBBQ==
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id E952811CC0;
-        Thu,  1 Jul 2021 12:14:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1625141660; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E+tIfXy1UmBt8fIIfmz11YsGUbPEBLU0kzYNxmJPsB4=;
-        b=f6UwE7/RD6Pi5rZnVt0Pjw5k6MH9MsvQnFNQ8RnrSxvRlDiAy4mwrv2FXmmUkuW8OumJnZ
-        AVW1GW+JLce5E/RQM9bqdWH8sM35CPZVcEnL5zJPVw3OrCC7/8idkDUjiPlJz3iCg2TlQ0
-        6JmFAJtS2uxjJcvWtT+n5dYIVdsawiM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1625141660;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E+tIfXy1UmBt8fIIfmz11YsGUbPEBLU0kzYNxmJPsB4=;
-        b=SqxFyzxxJwaayYexi2jgcsN7Kl9hkw6DBKxFg2AEuE23HZOWlCJxuFcIPU6ILzsf32Z3uJ
-        +ALDEX3jsJd9BBBQ==
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id eoL1NZux3WCdGgAALh3uQQ
-        (envelope-from <jdelvare@suse.de>); Thu, 01 Jul 2021 12:14:19 +0000
-Date:   Thu, 1 Jul 2021 14:14:18 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: ali1535: mention that the device should not be
- disabled
-Message-ID: <20210701141418.0b51d668@endymion>
-In-Reply-To: <20210625151758.12180-1-wsa@kernel.org>
-References: <20210625151758.12180-1-wsa@kernel.org>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7C42B19611AE;
+        Thu,  1 Jul 2021 15:28:36 +0000 (UTC)
+Received: from fedora.hsd1.ca.comcast.net (ovpn-116-250.rdu2.redhat.com [10.10.116.250])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 233C85C22B;
+        Thu,  1 Jul 2021 15:28:31 +0000 (UTC)
+From:   jglisse@redhat.com
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Diego Santa Cruz <Diego.SantaCruz@spinetix.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jon Hunter <jonathanh@nvidia.com>, stable@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH] misc: eeprom: at24: Always append device id even if label property is set.
+Date:   Thu,  1 Jul 2021 08:28:25 -0700
+Message-Id: <20210701152825.265729-1-jglisse@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 25 Jun 2021 17:17:58 +0200, Wolfram Sang wrote:
-> The comment from the i801 driver is valid here, too, so copy it.
-> 
-> Reported-by: Jean Delvare <jdelvare@suse.de>
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
-> ---
->  drivers/i2c/busses/i2c-ali1535.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-ali1535.c b/drivers/i2c/busses/i2c-ali1535.c
-> index fb93152845f4..ee83c4581bce 100644
-> --- a/drivers/i2c/busses/i2c-ali1535.c
-> +++ b/drivers/i2c/busses/i2c-ali1535.c
-> @@ -508,6 +508,11 @@ static void ali1535_remove(struct pci_dev *dev)
->  {
->  	i2c_del_adapter(&ali1535_adapter);
->  	release_region(ali1535_smba, ALI1535_SMB_IOSIZE);
-> +
-> +	/*
-> +	 * do not call pci_disable_device(dev) since it can cause hard hangs on
-> +	 * some systems during power-off
-> +	 */
->  }
->  
->  static struct pci_driver ali1535_driver = {
+From: Jérôme Glisse <jglisse@redhat.com>
 
-Can't hurt.
+We need to append device id even if eeprom have a label property set as some
+platform can have multiple eeproms with same label and we can not register
+each of those with same label. Failing to register those eeproms trigger
+cascade failures on such platform (system is no longer working).
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+This fix regression on such platform introduced with 4e302c3b568e
 
+Signed-off-by: Jérôme Glisse <jglisse@redhat.com>
+Cc: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
+Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc: Jon Hunter <jonathanh@nvidia.com>
+Cc: stable@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+---
+ drivers/misc/eeprom/at24.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index 7a6f01ace78a..305ffad131a2 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -714,23 +714,20 @@ static int at24_probe(struct i2c_client *client)
+ 	}
+ 
+ 	/*
+-	 * If the 'label' property is not present for the AT24 EEPROM,
+-	 * then nvmem_config.id is initialised to NVMEM_DEVID_AUTO,
+-	 * and this will append the 'devid' to the name of the NVMEM
+-	 * device. This is purely legacy and the AT24 driver has always
+-	 * defaulted to this. However, if the 'label' property is
+-	 * present then this means that the name is specified by the
+-	 * firmware and this name should be used verbatim and so it is
+-	 * not necessary to append the 'devid'.
++	 * We initialize nvmem_config.id to NVMEM_DEVID_AUTO even if the
++	 * label property is set as some platform can have multiple eeproms
++	 * with same label and we can not register each of those with same
++	 * label. Failing to register those eeproms trigger cascade failure
++	 * on such platform.
+ 	 */
++	nvmem_config.id = NVMEM_DEVID_AUTO;
++
+ 	if (device_property_present(dev, "label")) {
+-		nvmem_config.id = NVMEM_DEVID_NONE;
+ 		err = device_property_read_string(dev, "label",
+ 						  &nvmem_config.name);
+ 		if (err)
+ 			return err;
+ 	} else {
+-		nvmem_config.id = NVMEM_DEVID_AUTO;
+ 		nvmem_config.name = dev_name(dev);
+ 	}
+ 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.31.1
+
