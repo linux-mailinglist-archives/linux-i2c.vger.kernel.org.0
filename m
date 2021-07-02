@@ -2,142 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4913B9E98
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Jul 2021 11:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD573BA62C
+	for <lists+linux-i2c@lfdr.de>; Sat,  3 Jul 2021 01:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbhGBKA7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 2 Jul 2021 06:00:59 -0400
-Received: from mga06.intel.com ([134.134.136.31]:44767 "EHLO mga06.intel.com"
+        id S229847AbhGBXEJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 2 Jul 2021 19:04:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41716 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230363AbhGBKA6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 2 Jul 2021 06:00:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10032"; a="269835890"
-X-IronPort-AV: E=Sophos;i="5.83,316,1616482800"; 
-   d="scan'208";a="269835890"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2021 02:58:26 -0700
-X-IronPort-AV: E=Sophos;i="5.83,316,1616482800"; 
-   d="scan'208";a="558990539"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2021 02:58:23 -0700
-Received: from andy by smile with local (Exim 4.94.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lzFwA-007eal-2Q; Fri, 02 Jul 2021 12:58:18 +0300
-Date:   Fri, 2 Jul 2021 12:58:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     linux-i2c@vger.kernel.org,
+        id S229648AbhGBXEJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 2 Jul 2021 19:04:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6060F6140E;
+        Fri,  2 Jul 2021 23:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625266897;
+        bh=bM3A5UidT8fI6f1r1MObCSjrzfca4+FhgMz0lIMssuo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SwAZBx3pnTXfMJvjSDD1MamyR9X/kTrvJrydc80c5GGiIYE2oOqN2U0XDUD7zg/Ij
+         C3n556WogQvNi+5r8zClpQ37GbfaMeJziANpnrSqaY/rIp6yaylWJ2+cXGF2fje43I
+         bF5AzESLroFh2WBZoQbd0xM33r3tj7sW0XN8Vwyz+2uU5udB96ThjoohzsYePVeP5s
+         opHy1zcI3gtZNxTEQ8YyRTVvipNEL1gU0/7+FAAnjWp1pfvA57kcnxt3EHjCAHpd8X
+         K3KCI9MX6l0pPbO41zLD3/oTvFMnnLcHCLkTjEMK10ptcgnoU4l+GcrgTmY3GPsViT
+         FWD8tZWXs2k/Q==
+Date:   Sat, 3 Jul 2021 01:01:34 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, wsa@kernel.org,
-        wsa+renesas@sang-engineering.com, mst@redhat.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, mst@redhat.com, arnd@arndb.de,
         jasowang@redhat.com, yu1.wang@intel.com, shuo.a.liu@intel.com,
         conghui.chen@intel.com, viresh.kumar@linaro.org,
         stefanha@redhat.com
 Subject: Re: [PATCH v12] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <YN7jOm68fUL4UA2Q@smile.fi.intel.com>
+Message-ID: <YN+azpQsgAK9MbYd@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, arnd@arndb.de,
+        jasowang@redhat.com, yu1.wang@intel.com, shuo.a.liu@intel.com,
+        conghui.chen@intel.com, viresh.kumar@linaro.org,
+        stefanha@redhat.com
 References: <f229cd761048bc143f88f33a3437bdbf891c39fd.1625214435.git.jie.deng@intel.com>
+ <YN7jOm68fUL4UA2Q@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IxARlzPRJnfyHLX0"
 Content-Disposition: inline
-In-Reply-To: <f229cd761048bc143f88f33a3437bdbf891c39fd.1625214435.git.jie.deng@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <YN7jOm68fUL4UA2Q@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jul 02, 2021 at 04:46:47PM +0800, Jie Deng wrote:
-> Add an I2C bus driver for virtio para-virtualization.
-> 
-> The controller can be emulated by the backend driver in
-> any device model software by following the virtio protocol.
-> 
-> The device specification can be found on
-> https://lists.oasis-open.org/archives/virtio-comment/202101/msg00008.html.
-> 
-> By following the specification, people may implement different
-> backend drivers to emulate different controllers according to
-> their needs.
 
-...
-
-> +static int virtio_i2c_complete_reqs(struct virtqueue *vq,
-> +				    struct virtio_i2c_req *reqs,
-> +				    struct i2c_msg *msgs, int nr,
-> +				    bool fail)
-> +{
-> +	struct virtio_i2c_req *req;
-> +	bool failed = fail;
-> +	unsigned int len;
-> +	int i, j = 0;
-> +
-> +	for (i = 0; i < nr; i++) {
-> +		/* Detach the ith request from the vq */
-> +		req = virtqueue_get_buf(vq, &len);
-> +
-> +		/*
-> +		 * Condition (req && req == &reqs[i]) should always meet since
-> +		 * we have total nr requests in the vq.
-> +		 */
-> +		if (!failed && (WARN_ON(!(req && req == &reqs[i])) ||
-> +		    (req->in_hdr.status != VIRTIO_I2C_MSG_OK)))
-> +			failed = true;
-
-...and after failed is true, we are continuing the loop, why?
-
-> +		i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], !failed);
-> +		if (!failed)
-
-> +			++j;
-
-Besides better to read j++ the j itself can be renamed to something more
-verbose.
-
-> +	}
-
-> +	return (fail ? -ETIMEDOUT : j);
-
-Redundant parentheses.
-
-> +}
-
-...
-
-> +	ret = virtio_i2c_send_reqs(vq, reqs, msgs, num);
-> +	if (ret != num) {
-> +		virtio_i2c_complete_reqs(vq, reqs, msgs, ret, true);
-
-Below you check the returned code, here is not.
-
-> +		ret = 0;
-> +		goto err_free;
-> +	}
-> +
-> +	reinit_completion(&vi->completion);
-> +	virtqueue_kick(vq);
-> +
-> +	time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
-> +	if (!time_left)
-> +		dev_err(&adap->dev, "virtio i2c backend timeout.\n");
-> +
-> +	ret = virtio_i2c_complete_reqs(vq, reqs, msgs, num, !time_left);
-> +
-> +err_free:
-> +	kfree(reqs);
-> +	return ret;
-
-> +++ b/include/uapi/linux/virtio_i2c.h
-
-> +#include <linux/types.h>
-> +
-> +/* The bit 0 of the @virtio_i2c_out_hdr.@flags, used to group the requests */
-> +#define VIRTIO_I2C_FLAGS_FAIL_NEXT	BIT(0)
-
-It's _BITUL() or so from linux/const.h.
-https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/const.h#L28
-You may not use internal definitions in UAPI headers.
-
--- 
-With Best Regards,
-Andy Shevchenko
+--IxARlzPRJnfyHLX0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
+> It's _BITUL() or so from linux/const.h.
+> https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/const.h#L28
+> You may not use internal definitions in UAPI headers.
+
+Sorry, I missed it was an uapi header and gave the authors bad advice
+with BIT.
+
+If I get another fixed version by Saturday evening (CEST), I can still
+squeeze it into my pull request for 5.14. Minor details can be fixed
+incrementally, but we definatel need to get the uapi header correct.
+
+
+--IxARlzPRJnfyHLX0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDfmskACgkQFA3kzBSg
+KbZLBg/5AeU6TjKkwB4I79xJ8UhpHUBAJ0CQWQgCo/7pcojSqebMzQNv0Y9052rJ
+oXT8uYDUEbGUayMp8Vd/MKLXjvJnPdHMtzyICtj5w83/9pZyhgd9ObbNfXJcdM5d
+ViSEIzWo+9JaeN7eNHk1iFmgqgKw6OIZtdfnsJXD/DrkSrULFdUWKGZAii9mgS0S
+XMeq+Wbt6xb+bhmIfi/Pn5O79CcPRkMRZZ1ClGlm+KciLaMKl09YJyua69oWlXrh
+0/vOmRMwyI9j9gWunrzgBZGq6k7it/7Y3xewkak1o2La7snoN3TMu+FFQ0pftbPD
+A5xvI9Ffi4s/suFYTAcdLjHfTZ97qDkxNHBnzlbPy7nVPWN61XRoxj2RXmqdLg0h
+aoW+8dTLDT8qTV5zlqm+KnJpe6YHrzPnvr9rfpPZrWV2vMVfEyhoHCiWS+sDZoFH
+VB8jWe6SiUQD46pW8NZzySO5rYIIVPFrz8ZuZUY64RxUGXBUU/S9SD59itVJwfk+
+BMVB2xespgxuJ+V6bpECUZW41S7hXyDgVPaFKIfT5KC6wVeiOlwfYAEvUEtRHs7d
+cRUC67Pieypuuc5stD0HuG8e93BJZDdYXXO/q7Iz7/PHR/hxm26ou13o3YTDQzJb
+xlhSTHGAAjbICjwaaY5W09lxYoB+1TTtKVIrHmMP8TzvHIOSkXA=
+=uVsf
+-----END PGP SIGNATURE-----
+
+--IxARlzPRJnfyHLX0--
