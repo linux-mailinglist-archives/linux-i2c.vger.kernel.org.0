@@ -2,154 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3CB3BBCC7
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jul 2021 14:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33CE3BC1C8
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jul 2021 18:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbhGEMVM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Jul 2021 08:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        id S229714AbhGEQxk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Jul 2021 12:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbhGEMVM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jul 2021 08:21:12 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D8FC06175F
-        for <linux-i2c@vger.kernel.org>; Mon,  5 Jul 2021 05:18:35 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id f20so8637354pfa.1
-        for <linux-i2c@vger.kernel.org>; Mon, 05 Jul 2021 05:18:35 -0700 (PDT)
+        with ESMTP id S229686AbhGEQxk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jul 2021 12:53:40 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09570C061574;
+        Mon,  5 Jul 2021 09:51:02 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id v20so29776663eji.10;
+        Mon, 05 Jul 2021 09:51:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=u4GEMXqrVqxTiuERmBBzhK0c9EgdVjMcqN5EyjmdR60=;
-        b=IxrUn1LmGvOtzScwNxvADvtlbcqMdlIb2lKdy744YfPAlPzhXlfo2xb9uEYNhFUHc6
-         oWOSJUTSoMDUttRI0b9TaZts+dkOP1PuGqJdxM5Bo3BC/5IeLW8QaAG32wLD9HFPIHl5
-         i1Rqz/8RbeQom8kwEmlCNkGMTIGSvV1IeYDAnrPMm0AZkWUQGrQF/oovTz+1ltVCAl6q
-         Vtn0ta5A0zGr+Tag2SAH33SNdXKRGaTYASlihNvMApKV0tQAtkDTCS3uD47TBj+AFW4d
-         S7IF0YH9w+6iSkvaAFUBSmx+W1s/0Vtbk9y2qF/s2AxjZBgy50hKCBsKS3h3tYas+WO2
-         bzBQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9sktkUxG3S8lSrJsfOUzMs562zEuFhtkrmIQvaJAQbs=;
+        b=PAN65IgOQWPTgYS4XZLZHRGGdkvq294r9wfNQDwpVZ5Sg2GIOhRwo0g8fFyw59GtNt
+         SnYVF8kTK7mUso6qcQ4inDbuWQA9sJtODauZhajT7M9iNRIItAybnue76L5pzqlcqWu+
+         /Da6qHd+hfWNEHFZsZT8xV7zJDyP61GHAb8jOqO/w5MFYv+6UarVIrblGHT1mO/bEncI
+         YNRON9A+EdESr5l4e7CzqQHLe1XO+M5pJc4dEq2VeYCWQh9NmukwWEwqMetAWkleHTWL
+         fqfSIibxL1vDYy6Y5rg2HNVQDftnM9q2IrJjkM6DwgaDah8dwFKAMHVneMNBZ4ZpEwMY
+         q53A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=u4GEMXqrVqxTiuERmBBzhK0c9EgdVjMcqN5EyjmdR60=;
-        b=rpJGnO9dM93hY1hI1vZrPKcFu1OS0/y0m6QSIPmva9Gagmbw+FxhJs35VWO/1NNKlf
-         BjxmzpL0XIkGKzTLNR0HOTQSk/jz8NqdecHdCpXpV0ETtF/76XK7Dr6banIAVqIA623F
-         cnGyWTIsxH05M/mkwBIuVWbOdGgfyhc/qiO9P90iP6LvjRyTgcsaL3hwp1CEb2taWJ2g
-         7R0Nes03L+9ulejX87qQQDgPfLuEZ1XzUmvG2K80RttLkrikUAyEOkhWA7+5Re8emZAe
-         kMyrzxgoF854GwQZgOf1/3qOJ0WJDWjxB3Wseqzsi6+dqg5SD2dOofyurozELI6+nLZr
-         58tA==
-X-Gm-Message-State: AOAM530m2398I8jRLYx6Hlsu03G7VXcXKkU8HCL9zqOcR2tkvQaUvdL9
-        wFHNZt1MWf5zRzwigCcO9IgkFA==
-X-Google-Smtp-Source: ABdhPJyTYM9QsZt+DYXU859OWip3irzytNPEbNakK54hTszjXI/wJpcc+0dtyXT55ww9/BS+VBzBVA==
-X-Received: by 2002:a63:f556:: with SMTP id e22mr15436308pgk.189.1625487514767;
-        Mon, 05 Jul 2021 05:18:34 -0700 (PDT)
-Received: from localhost ([106.201.108.2])
-        by smtp.gmail.com with ESMTPSA id f17sm21157918pjj.21.2021.07.05.05.18.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jul 2021 05:18:34 -0700 (PDT)
-Date:   Mon, 5 Jul 2021 17:48:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Wolfram Sang <wsa@kernel.org>, Jie Deng <jie.deng@intel.com>,
-        linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
-        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
-        arnd@arndb.de, kblaiech@mellanox.com,
-        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
-        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
-        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
-        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
-        pbonzini@redhat.com
-Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210705121832.fmye5xnlbydoc5ir@vireshk-i7>
-References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
- <YNrw4rxihFLuqLtY@ninjato>
- <20210629101627.kwc2rszborc3kvjs@vireshk-i7>
- <YNr0uDx1fv+Gjd7m@ninjato>
- <20210629103014.nlk3mpetydc4mi6l@vireshk-i7>
- <YNr5Jf3WDTH7U5b7@ninjato>
- <YNr5ZRhT3qn+e9/m@ninjato>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9sktkUxG3S8lSrJsfOUzMs562zEuFhtkrmIQvaJAQbs=;
+        b=nYIF5Hjmj6gg2UFifxtXJKqgYeSjnXrXhIGDZxk1s0pCunf+iKzWlqOXSjUtlSJF+m
+         4WaG1SGrbBdddCaMkZlyVP1R595O/p4osTjHuuWZXvi6OlgUG+HNKQdu76f1xIX3UP8M
+         Rzrb4BVIeQRlOC+SoJsYYqGji0xRnwAb/7Ln0FJUeeo6WvKSE0iIUq2/bjI+Tt5cuQnX
+         BX0oKl30vsuYa8fKvy0jDCcbsryGilWQOy1W9jsbpkO23iG5ejc/Oeq6ldOJxV1jjFS/
+         3wepAlIQiWUAMJ12jhekx0VjGre5k+vnTI6WvExbZXqfbsTPeOHRmBcuIIsMI0Q0kZIY
+         AWWA==
+X-Gm-Message-State: AOAM530bbmq5pyg/htdMnMzEOp6kgtY+qJPAst2byiRQmxqDu4CTC/RM
+        p/vKKUxqwuitmN3bmTNiz7SFNukiw7l7gEkMpPw=
+X-Google-Smtp-Source: ABdhPJwEAdn1FYjN8xdmsvWsg+tPzoarkVZyD0e+MOk2C3iQV+A/xDvg/0hrjyhcaiYaUoORdbcjJW/FLbSvA7yUiMc=
+X-Received: by 2002:a17:906:24c3:: with SMTP id f3mr1922119ejb.145.1625503860490;
+ Mon, 05 Jul 2021 09:51:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YNr5ZRhT3qn+e9/m@ninjato>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20210701152825.265729-1-jglisse@redhat.com> <CAMpxmJX_3eu+8Oxg2UgiifwD=qwJYM3-qCqwxseM1mnLbn5fJA@mail.gmail.com>
+In-Reply-To: <CAMpxmJX_3eu+8Oxg2UgiifwD=qwJYM3-qCqwxseM1mnLbn5fJA@mail.gmail.com>
+From:   Alexander Fomichev <fomichev.ru@gmail.com>
+Date:   Mon, 5 Jul 2021 19:50:49 +0300
+Message-ID: <CAEKnZG5TmoR44dOmK9KmHnWogHvd7MGVXjdXWgew+9smuGEOCg@mail.gmail.com>
+Subject: Re: [PATCH] misc: eeprom: at24: Always append device id even if label
+ property is set.
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Diego Santa Cruz <Diego.SantaCruz@spinetix.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        "Stable # 4 . 20+" <stable@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>, linux@yadro.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 29-06-21, 12:43, Wolfram Sang wrote:
-> 
-> > From the spec:
-> > 
-> > The case when ``length of \field{write_buf}''=0, and at the same time,
-> > ``length of \field{read_buf}''=0 doesn't make any sense.
-> > 
-> > I mentioned this in my first reply and to my understanding I did not get
-> > a reply that this has changed meanwhile.
-> > 
-> 
-> Also, this code as mentioned before:
-> 
-> > +             if (!msgs[i].len)
-> > +                     break;
-> 
-> I hope this can extended in the future to allow zero-length messages. If
-> this is impossible we need to set an adapter quirk instead.
-
-Wolfram,
-
-I stumbled again upon this while working at the backend implementation.
-
-If you look at i2c_smbus_xfer_emulated(), the command is always sent via
-msgbuf0[0]. Even in the case of I2C_SMBUS_QUICK, where we set msg[0].len = 0, we
-still send the buf. This is really confusing :(
-
-Do I understand correctly that we always need to send msg[0].buf even when
-msg[0].len is 0 ?
-
-If so, it would be difficult to implement this with the current i2c virtio
-specification, as the msg.len isn't really passed from guest to host, rather it
-is inferred using the length of the buffer itself. And so we can't really pass a
-buffer if length is 0.
-
-Moreover, the driver uses i2c_get_dma_safe_msg_buf(), which also depends on the
-length parameter here to allocate the buffer and copy data to it.
-
-All in all, the latest version of the driver doesn't work with "i2cdetect -q <bus>".
-
-To make it work, I had to add this:
-
-diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
-index 731267d42292..5b8bd98ae38e 100644
---- a/drivers/i2c/busses/i2c-virtio.c
-+++ b/drivers/i2c/busses/i2c-virtio.c
-@@ -73,6 +73,9 @@ static int virtio_i2c_prepare_reqs(struct virtqueue *vq,
-                sg_init_one(&out_hdr, &reqs[i].out_hdr, sizeof(reqs[i].out_hdr));
-                sgs[outcnt++] = &out_hdr;
-
-+               if (!msgs[i].len)
-+                       msgs[i].len = 1;
-+
-                if (msgs[i].len) {
-                        reqs[i].buf = i2c_get_dma_safe_msg_buf(&msgs[i], 1);
-                        if (!reqs[i].buf)
-
-which made it I2C_SMBUS_BYTE instead of I2C_SMBUS_QUICK.
-
-What should we do here Wolfram?
-
-
-Jie, while wolfram comes back and replies to this, I think you need to switch
-back to NOT supporting zero length transfer and set update virtio_i2c_func() to
-return:
-
-        I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-
-Support for zero-length transfers and I2C_FUNC_SMBUS_QUICK can be added
-separately.
-
+The proposed patch has been tested and it solves the problem.
 Thanks.
 
--- 
-viresh
+Tested-by: Alexander Fomichev <fomichev.ru@gmail.com>
+
+=D1=87=D1=82, 1 =D0=B8=D1=8E=D0=BB. 2021 =D0=B3. =D0=B2 19:47, Bartosz Gola=
+szewski <bgolaszewski@baylibre.com>:
+>
+> On Thu, Jul 1, 2021 at 5:28 PM <jglisse@redhat.com> wrote:
+> >
+> > From: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+> >
+> > We need to append device id even if eeprom have a label property set as=
+ some
+> > platform can have multiple eeproms with same label and we can not regis=
+ter
+> > each of those with same label. Failing to register those eeproms trigge=
+r
+> > cascade failures on such platform (system is no longer working).
+> >
+> > This fix regression on such platform introduced with 4e302c3b568e
+> >
+> > Signed-off-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+> > Cc: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
+> > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > Cc: Jon Hunter <jonathanh@nvidia.com>
+> > Cc: stable@vger.kernel.org
+> > Cc: linux-i2c@vger.kernel.org
+> > ---
+> >  drivers/misc/eeprom/at24.c | 17 +++++++----------
+> >  1 file changed, 7 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> > index 7a6f01ace78a..305ffad131a2 100644
+> > --- a/drivers/misc/eeprom/at24.c
+> > +++ b/drivers/misc/eeprom/at24.c
+> > @@ -714,23 +714,20 @@ static int at24_probe(struct i2c_client *client)
+> >         }
+> >
+> >         /*
+> > -        * If the 'label' property is not present for the AT24 EEPROM,
+> > -        * then nvmem_config.id is initialised to NVMEM_DEVID_AUTO,
+> > -        * and this will append the 'devid' to the name of the NVMEM
+> > -        * device. This is purely legacy and the AT24 driver has always
+> > -        * defaulted to this. However, if the 'label' property is
+> > -        * present then this means that the name is specified by the
+> > -        * firmware and this name should be used verbatim and so it is
+> > -        * not necessary to append the 'devid'.
+> > +        * We initialize nvmem_config.id to NVMEM_DEVID_AUTO even if th=
+e
+> > +        * label property is set as some platform can have multiple eep=
+roms
+> > +        * with same label and we can not register each of those with s=
+ame
+> > +        * label. Failing to register those eeproms trigger cascade fai=
+lure
+> > +        * on such platform.
+> >          */
+> > +       nvmem_config.id =3D NVMEM_DEVID_AUTO;
+> > +
+> >         if (device_property_present(dev, "label")) {
+> > -               nvmem_config.id =3D NVMEM_DEVID_NONE;
+> >                 err =3D device_property_read_string(dev, "label",
+> >                                                   &nvmem_config.name);
+> >                 if (err)
+> >                         return err;
+> >         } else {
+> > -               nvmem_config.id =3D NVMEM_DEVID_AUTO;
+> >                 nvmem_config.name =3D dev_name(dev);
+> >         }
+> >
+> > --
+> > 2.31.1
+> >
+>
+> Cc'ing Alexander Fomichev who reported this issue first.
+>
+> This is the second time someone raises this problem so it seems that
+> this change really broke many existing systems. I will apply this
+> patch and send it for stable.
+>
+> Bart
+
+
+
+--=20
+=D0=A1 =D1=83=D0=B2=D0=B0=D0=B6=D0=B5=D0=BD=D0=B8=D0=B5=D0=BC,
+=D0=90=D0=BB=D0=B5=D0=BA=D1=81=D0=B0=D0=BD=D0=B4=D1=80 =D0=A4=D0=BE=D0=BC=
+=D0=B8=D1=87=D1=91=D0=B2.
