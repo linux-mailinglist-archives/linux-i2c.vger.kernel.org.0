@@ -2,133 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FAA3BBCC4
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jul 2021 14:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3CB3BBCC7
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jul 2021 14:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbhGEMUE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Jul 2021 08:20:04 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:63284 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbhGEMUE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jul 2021 08:20:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1625487447; x=1657023447;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=U8MCjRpKfvJOwyIa9fp84LUcaitYhKvbsbAJj9S0FwA=;
-  b=PCQ+FwHTEC1ZIqQ6lfktQxflB+d7rVFOi8/js1OmgUieLn0orcEiiMUK
-   afYt6Gmx+EXpSEOreHf9F2GlwjapiQR1QIo8z4cMJI8LCMmoohf2b5FNj
-   60E+vZWpwCydGel1sQaZrk1mh7ePjUJYEQkvSZhK6tIAxA1aLq3mGBbSl
-   DxiSGih6fnrgAqmyl+hyD6kILLCSy57ZOlNFJBHErw96lear+KexPORQw
-   vePwIZbJsb5HIgYWk/X6gLqWTIFFQbbqkm3PpqQF+vS2jNNrPq+Zpbr8P
-   fcXzP6WeH8Z8ogNhDYydYYlX3nMZx2LifZkfNOGJOSDBfWpRkuaD0Qbb6
-   w==;
-IronPort-SDR: DQh6J9QGBj0u31aLTJdOi2Ps3k1RkuZXEyicFQ3DhX0aCoT3TXdN3YiMNXSjZLpO9HC3MerfYq
- Xqh3GeI+MfSWkjZIO0mIR5zvvoxwa6jA3f8m+FKykLWZHo402DRYmxDgu+Cgwa1BFFvkgLxhsq
- NV0PLKp6g9x+222jdh3MZnP6K8oFJxM8knuIJRXDXxzEAK/uHqADf0HNncGJsoTW+LOdOouHfv
- FpY0PzpKKBzN568u/n/vxX1c1Ds+Fhamqebho4O460A/1NE6HldZi1sVjdTIvrAIYezZJXLnGg
- 7QY=
-X-IronPort-AV: E=Sophos;i="5.83,325,1616482800"; 
-   d="scan'208";a="120996567"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jul 2021 05:17:26 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 5 Jul 2021 05:17:26 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Mon, 5 Jul 2021 05:17:24 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <codrin.ciubotariu@microchip.com>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>
-CC:     <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH] i2c: at91: remove #define CONFIG_PM
-Date:   Mon, 5 Jul 2021 15:15:16 +0300
-Message-ID: <20210705121516.622326-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        id S231243AbhGEMVM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Jul 2021 08:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231186AbhGEMVM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jul 2021 08:21:12 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D8FC06175F
+        for <linux-i2c@vger.kernel.org>; Mon,  5 Jul 2021 05:18:35 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id f20so8637354pfa.1
+        for <linux-i2c@vger.kernel.org>; Mon, 05 Jul 2021 05:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=u4GEMXqrVqxTiuERmBBzhK0c9EgdVjMcqN5EyjmdR60=;
+        b=IxrUn1LmGvOtzScwNxvADvtlbcqMdlIb2lKdy744YfPAlPzhXlfo2xb9uEYNhFUHc6
+         oWOSJUTSoMDUttRI0b9TaZts+dkOP1PuGqJdxM5Bo3BC/5IeLW8QaAG32wLD9HFPIHl5
+         i1Rqz/8RbeQom8kwEmlCNkGMTIGSvV1IeYDAnrPMm0AZkWUQGrQF/oovTz+1ltVCAl6q
+         Vtn0ta5A0zGr+Tag2SAH33SNdXKRGaTYASlihNvMApKV0tQAtkDTCS3uD47TBj+AFW4d
+         S7IF0YH9w+6iSkvaAFUBSmx+W1s/0Vtbk9y2qF/s2AxjZBgy50hKCBsKS3h3tYas+WO2
+         bzBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=u4GEMXqrVqxTiuERmBBzhK0c9EgdVjMcqN5EyjmdR60=;
+        b=rpJGnO9dM93hY1hI1vZrPKcFu1OS0/y0m6QSIPmva9Gagmbw+FxhJs35VWO/1NNKlf
+         BjxmzpL0XIkGKzTLNR0HOTQSk/jz8NqdecHdCpXpV0ETtF/76XK7Dr6banIAVqIA623F
+         cnGyWTIsxH05M/mkwBIuVWbOdGgfyhc/qiO9P90iP6LvjRyTgcsaL3hwp1CEb2taWJ2g
+         7R0Nes03L+9ulejX87qQQDgPfLuEZ1XzUmvG2K80RttLkrikUAyEOkhWA7+5Re8emZAe
+         kMyrzxgoF854GwQZgOf1/3qOJ0WJDWjxB3Wseqzsi6+dqg5SD2dOofyurozELI6+nLZr
+         58tA==
+X-Gm-Message-State: AOAM530m2398I8jRLYx6Hlsu03G7VXcXKkU8HCL9zqOcR2tkvQaUvdL9
+        wFHNZt1MWf5zRzwigCcO9IgkFA==
+X-Google-Smtp-Source: ABdhPJyTYM9QsZt+DYXU859OWip3irzytNPEbNakK54hTszjXI/wJpcc+0dtyXT55ww9/BS+VBzBVA==
+X-Received: by 2002:a63:f556:: with SMTP id e22mr15436308pgk.189.1625487514767;
+        Mon, 05 Jul 2021 05:18:34 -0700 (PDT)
+Received: from localhost ([106.201.108.2])
+        by smtp.gmail.com with ESMTPSA id f17sm21157918pjj.21.2021.07.05.05.18.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jul 2021 05:18:34 -0700 (PDT)
+Date:   Mon, 5 Jul 2021 17:48:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Wolfram Sang <wsa@kernel.org>, Jie Deng <jie.deng@intel.com>,
+        linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        andriy.shevchenko@linux.intel.com, conghui.chen@intel.com,
+        arnd@arndb.de, kblaiech@mellanox.com,
+        jarkko.nikula@linux.intel.com, Sergey.Semin@baikalelectronics.ru,
+        rppt@kernel.org, loic.poulain@linaro.org, tali.perry1@gmail.com,
+        u.kleine-koenig@pengutronix.de, bjorn.andersson@linaro.org,
+        yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
+        pbonzini@redhat.com
+Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <20210705121832.fmye5xnlbydoc5ir@vireshk-i7>
+References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
+ <YNrw4rxihFLuqLtY@ninjato>
+ <20210629101627.kwc2rszborc3kvjs@vireshk-i7>
+ <YNr0uDx1fv+Gjd7m@ninjato>
+ <20210629103014.nlk3mpetydc4mi6l@vireshk-i7>
+ <YNr5Jf3WDTH7U5b7@ninjato>
+ <YNr5ZRhT3qn+e9/m@ninjato>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YNr5ZRhT3qn+e9/m@ninjato>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Remove #define CONFIG_PM and use __maybe_unused for PM functions and
-pm_ptr() for PM ops.
+On 29-06-21, 12:43, Wolfram Sang wrote:
+> 
+> > From the spec:
+> > 
+> > The case when ``length of \field{write_buf}''=0, and at the same time,
+> > ``length of \field{read_buf}''=0 doesn't make any sense.
+> > 
+> > I mentioned this in my first reply and to my understanding I did not get
+> > a reply that this has changed meanwhile.
+> > 
+> 
+> Also, this code as mentioned before:
+> 
+> > +             if (!msgs[i].len)
+> > +                     break;
+> 
+> I hope this can extended in the future to allow zero-length messages. If
+> this is impossible we need to set an adapter quirk instead.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/i2c/busses/i2c-at91-core.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
+Wolfram,
 
-diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at91-core.c
-index e14edd236108..9f3c3e8e8011 100644
---- a/drivers/i2c/busses/i2c-at91-core.c
-+++ b/drivers/i2c/busses/i2c-at91-core.c
-@@ -286,9 +286,7 @@ static int at91_twi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM
--
--static int at91_twi_runtime_suspend(struct device *dev)
-+static int __maybe_unused at91_twi_runtime_suspend(struct device *dev)
- {
- 	struct at91_twi_dev *twi_dev = dev_get_drvdata(dev);
- 
-@@ -299,7 +297,7 @@ static int at91_twi_runtime_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int at91_twi_runtime_resume(struct device *dev)
-+static int __maybe_unused at91_twi_runtime_resume(struct device *dev)
- {
- 	struct at91_twi_dev *twi_dev = dev_get_drvdata(dev);
- 
-@@ -308,7 +306,7 @@ static int at91_twi_runtime_resume(struct device *dev)
- 	return clk_prepare_enable(twi_dev->clk);
- }
- 
--static int at91_twi_suspend_noirq(struct device *dev)
-+static int __maybe_unused at91_twi_suspend_noirq(struct device *dev)
- {
- 	if (!pm_runtime_status_suspended(dev))
- 		at91_twi_runtime_suspend(dev);
-@@ -316,7 +314,7 @@ static int at91_twi_suspend_noirq(struct device *dev)
- 	return 0;
- }
- 
--static int at91_twi_resume_noirq(struct device *dev)
-+static int __maybe_unused at91_twi_resume_noirq(struct device *dev)
- {
- 	struct at91_twi_dev *twi_dev = dev_get_drvdata(dev);
- 	int ret;
-@@ -342,11 +340,6 @@ static const struct dev_pm_ops at91_twi_pm = {
- 	.runtime_resume		= at91_twi_runtime_resume,
- };
- 
--#define at91_twi_pm_ops (&at91_twi_pm)
--#else
--#define at91_twi_pm_ops NULL
--#endif
--
- static struct platform_driver at91_twi_driver = {
- 	.probe		= at91_twi_probe,
- 	.remove		= at91_twi_remove,
-@@ -354,7 +347,7 @@ static struct platform_driver at91_twi_driver = {
- 	.driver		= {
- 		.name	= "at91_i2c",
- 		.of_match_table = of_match_ptr(atmel_twi_dt_ids),
--		.pm	= at91_twi_pm_ops,
-+		.pm	= pm_ptr(&at91_twi_pm),
- 	},
- };
- 
+I stumbled again upon this while working at the backend implementation.
+
+If you look at i2c_smbus_xfer_emulated(), the command is always sent via
+msgbuf0[0]. Even in the case of I2C_SMBUS_QUICK, where we set msg[0].len = 0, we
+still send the buf. This is really confusing :(
+
+Do I understand correctly that we always need to send msg[0].buf even when
+msg[0].len is 0 ?
+
+If so, it would be difficult to implement this with the current i2c virtio
+specification, as the msg.len isn't really passed from guest to host, rather it
+is inferred using the length of the buffer itself. And so we can't really pass a
+buffer if length is 0.
+
+Moreover, the driver uses i2c_get_dma_safe_msg_buf(), which also depends on the
+length parameter here to allocate the buffer and copy data to it.
+
+All in all, the latest version of the driver doesn't work with "i2cdetect -q <bus>".
+
+To make it work, I had to add this:
+
+diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
+index 731267d42292..5b8bd98ae38e 100644
+--- a/drivers/i2c/busses/i2c-virtio.c
++++ b/drivers/i2c/busses/i2c-virtio.c
+@@ -73,6 +73,9 @@ static int virtio_i2c_prepare_reqs(struct virtqueue *vq,
+                sg_init_one(&out_hdr, &reqs[i].out_hdr, sizeof(reqs[i].out_hdr));
+                sgs[outcnt++] = &out_hdr;
+
++               if (!msgs[i].len)
++                       msgs[i].len = 1;
++
+                if (msgs[i].len) {
+                        reqs[i].buf = i2c_get_dma_safe_msg_buf(&msgs[i], 1);
+                        if (!reqs[i].buf)
+
+which made it I2C_SMBUS_BYTE instead of I2C_SMBUS_QUICK.
+
+What should we do here Wolfram?
+
+
+Jie, while wolfram comes back and replies to this, I think you need to switch
+back to NOT supporting zero length transfer and set update virtio_i2c_func() to
+return:
+
+        I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
+
+Support for zero-length transfers and I2C_FUNC_SMBUS_QUICK can be added
+separately.
+
+Thanks.
+
 -- 
-2.25.1
-
+viresh
