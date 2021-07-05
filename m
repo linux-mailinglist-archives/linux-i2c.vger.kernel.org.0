@@ -2,82 +2,185 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF353BB821
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jul 2021 09:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0A63BB88A
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jul 2021 10:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbhGEHtO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Jul 2021 03:49:14 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:47331 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbhGEHtN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jul 2021 03:49:13 -0400
-Received: from mail-ed1-f70.google.com ([209.85.208.70])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1m0JJL-000219-PW
-        for linux-i2c@vger.kernel.org; Mon, 05 Jul 2021 07:46:35 +0000
-Received: by mail-ed1-f70.google.com with SMTP id d17-20020a05640208d1b0290399de3a0eecso523930edz.0
-        for <linux-i2c@vger.kernel.org>; Mon, 05 Jul 2021 00:46:35 -0700 (PDT)
+        id S230049AbhGEIFZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Jul 2021 04:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229984AbhGEIFZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jul 2021 04:05:25 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA2FC061574
+        for <linux-i2c@vger.kernel.org>; Mon,  5 Jul 2021 01:02:47 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id x3so1335630pll.5
+        for <linux-i2c@vger.kernel.org>; Mon, 05 Jul 2021 01:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7HFtrvl8Hp3RAM/FFfn+6kiIZNa9TUM0Rjxm9S07BYU=;
+        b=wT20aR19P0l8+aXdUbQcBT2ncbwV7FLfcH5+V03YDNNqKv6/W87Yd4qmTk6DrcK30g
+         DvdQhRcrJe9G3BFaoFV5p4WrmgUYKk3+u3X4UvHFL0rNEX3TkXe2iLY38CprPo955Xzk
+         jXw1t1JN2FhA8XTxNXav8VU91f4SYPjClLB2etFbnaARMLCB1puhJz8RBotc77tIGNYG
+         YqVZkWZTcmUltC94eZPNzm9ddh9ayqP2+UMdqYc/uXD+lDCeqntSEOoRDnRI80vOfihc
+         4Rwft7IiiyvdBJHDpT7OmrenOGha/+t3Zh7rTwhzsLC3HMMBQmC6moV+GZbSHYxhWGsY
+         5KAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OUlQvFhnqw4yNB5g21FpiNDLoa74ksIlL0BX+hEIYks=;
-        b=FPw3S1UU5F76Wxrmi3AH4KcMIYCMeX1TI78cedk2044D9ziYGC2bTJT9EJ0LGWIUb6
-         +E1T5dVJ2gd8ZWZ/ykHgFAKxbgEazPcyq6hT52ZfoPKyrD3/pt9uN+RInBwFQirFEhXM
-         udaV9R9fg8jOq7nPDRHicjTPaeKrYOoMp43xaCRRyMKw1rclSLNhTNun6icP8+5AH7Yc
-         9mNZ2wJhoI7WlYqWCNw0Oa9RdM0u9YerJxs3DhKQGgYACOnDnF8p40p6+M04edu2GDv/
-         /k/FlCYYqzZmj3XPsQLKMUDs9NDdUHQmbpZ0UaGhYfW7xm60nXWnWktIfV7vpDpbtykQ
-         15TA==
-X-Gm-Message-State: AOAM531ariA51+MNfH3jaNHfBKAwI1Ide4/eAR0GxOhW2FV9Gd/X1GMz
-        Z8ZoT4b8rmug921C0GYJg9QP3M7pjZMepxjbRLeLjRv31T0Z9BW1fCuhLB1mmA1aRdBEjUE6mL5
-        CC/6TX7dn7PSs1RxSzfkTDcDbLQx37eQKQjuH5g==
-X-Received: by 2002:a50:fe08:: with SMTP id f8mr14916117edt.186.1625471195550;
-        Mon, 05 Jul 2021 00:46:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzW6PoBTiPiuHziQf0PYt2MvNb01/YBP8mxrJfN2emEpQSWFsLcmPfpPNgmeKiK8cDlYK2oLQ==
-X-Received: by 2002:a50:fe08:: with SMTP id f8mr14916107edt.186.1625471195398;
-        Mon, 05 Jul 2021 00:46:35 -0700 (PDT)
-Received: from [192.168.3.211] (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
-        by smtp.gmail.com with ESMTPSA id k25sm3450686eds.77.2021.07.05.00.46.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jul 2021 00:46:35 -0700 (PDT)
-Subject: Re: [PATCH v2 4/5] i2c: s3c2410: fix IRQ check
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>, linux-i2c@vger.kernel.org
-Cc:     linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <3712e871-bf2f-32c5-f9c2-2968c42087f8@omp.ru>
- <771d94cf-5e82-0cb7-fb1f-5af2f0b10dd4@omp.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <2a76179d-b901-b971-ea99-b68833dc56cf@canonical.com>
-Date:   Mon, 5 Jul 2021 09:46:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7HFtrvl8Hp3RAM/FFfn+6kiIZNa9TUM0Rjxm9S07BYU=;
+        b=sazuHYqIYTJQ8Yr3f7Lfvmv8N8pfbcKEN/Y8EFkG0B1VIBr2NwGB02gRai+nPfe0y8
+         zeSJyQJwtjDJTouq1o2Z4Lj9gdbQ0jJQ+ODGJr1CHveArha50Esx+Xd5wMltRKzwisWN
+         zCc19LNN6ZojA3f/iUca+pMxxZeU/HatrZzcJu+G5+GHR7up6QOZtumSd36d2bnue5xz
+         DSX++esy2rDJf3KRu2blFp6CH8iIYKMoKxPjDPUzITvSyizY1jEDid2caeotEz3vcTD7
+         vtEve2mWGxdQHIRzg4M8DlEFE1qdeTLXoUsjqg/lFHEL7xeAB0ZU+KNapZ5SJUjtu8JO
+         cYVw==
+X-Gm-Message-State: AOAM531eja4pp7LhNGTUyJB/HyhkOogUpvf0XTRyvnSjRTKHUSiXMZPf
+        keS8SF3NxIhrOS8YfJhoOzKeZQ==
+X-Google-Smtp-Source: ABdhPJzpiH5Tj6rIdJ6BpWrt9yRBYxI8qI2sTP9njbWlR/EiBwQY+vKPW1G7o0sV6W/XsAOUrtBk/A==
+X-Received: by 2002:a17:902:e848:b029:129:2e87:9944 with SMTP id t8-20020a170902e848b02901292e879944mr11397658plg.27.1625472167343;
+        Mon, 05 Jul 2021 01:02:47 -0700 (PDT)
+Received: from localhost ([106.201.108.2])
+        by smtp.gmail.com with ESMTPSA id v14sm13323329pgo.89.2021.07.05.01.02.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jul 2021 01:02:46 -0700 (PDT)
+Date:   Mon, 5 Jul 2021 13:32:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jie Deng <jie.deng@intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, wsa@kernel.org,
+        wsa+renesas@sang-engineering.com, mst@redhat.com, arnd@arndb.de,
+        jasowang@redhat.com, andriy.shevchenko@linux.intel.com,
+        yu1.wang@intel.com, shuo.a.liu@intel.com, conghui.chen@intel.com,
+        stefanha@redhat.com, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v13] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <20210705080245.yabjlrgje5l7vndt@vireshk-i7>
+References: <8908f35a741e25a630d521e1012494e67d31ea64.1625466616.git.jie.deng@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <771d94cf-5e82-0cb7-fb1f-5af2f0b10dd4@omp.ru>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8908f35a741e25a630d521e1012494e67d31ea64.1625466616.git.jie.deng@intel.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 04/07/2021 16:45, Sergey Shtylyov wrote:
-> Iff platform_get_irq() returns 0, the driver's probe() method will return 0
-> early (as if the method's call was successful).  Let's consider IRQ0 valid
-> for simplicity -- devm_request_irq() can always override that decision...
-> 
-> Fixes: 2bbd681ba2b ("i2c-s3c2410: Change IRQ to be plain integer.")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> 
-> ---
->  drivers/i2c/busses/i2c-s3c2410.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Jie.
 
+On 05-07-21, 14:53, Jie Deng wrote:
+> diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
+> +static int virtio_i2c_complete_reqs(struct virtqueue *vq,
+> +				    struct virtio_i2c_req *reqs,
+> +				    struct i2c_msg *msgs, int nr,
+> +				    bool fail)
+> +{
+> +	struct virtio_i2c_req *req;
+> +	bool failed = fail;
+> +	unsigned int len;
+> +	int i, j = 0;
+> +
+> +	for (i = 0; i < nr; i++) {
+> +		/* Detach the ith request from the vq */
+> +		req = virtqueue_get_buf(vq, &len);
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Calling this for cases where virtio_i2c_prepare_reqs() itself has failed will
+always return NULL, should we even try to call this then ?
 
+virtqueue_get_buf() returns the next used buffer only, i.e. returned by the host
+?
 
-Best regards,
-Krzysztof
+> +
+> +		/*
+> +		 * Condition (req && req == &reqs[i]) should always meet since
+> +		 * we have total nr requests in the vq.
+> +		 */
+> +		if (!failed && (WARN_ON(!(req && req == &reqs[i])) ||
+
+Mentioning again for completeness of the review, reqs[i] can never be NULL here
+though req can be. And even in that case you never need to check req here.
+
+Feel free to ignore it if you want, we can always send a fixup patch later and
+discuss it further :)
+
+> +		    (req->in_hdr.status != VIRTIO_I2C_MSG_OK)))
+> +			failed = true;
+> +
+> +		i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], !failed);
+> +		if (!failed)
+> +			j++;
+> +	}
+> +
+> +	return fail ? 0 : j;
+
+Since you don't return ETIMEDOUT anymore, you can simply return j now. And so we
+can work with a single failed argument and don't need both fail and failed.
+
+> +}
+> +
+> +static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+> +{
+> +	struct virtio_i2c *vi = i2c_get_adapdata(adap);
+> +	struct virtqueue *vq = vi->vq;
+> +	struct virtio_i2c_req *reqs;
+> +	unsigned long time_left;
+> +	int ret;
+> +
+> +	reqs = kcalloc(num, sizeof(*reqs), GFP_KERNEL);
+> +	if (!reqs)
+> +		return -ENOMEM;
+> +
+> +	ret = virtio_i2c_prepare_reqs(vq, reqs, msgs, num);
+> +	if (ret != num) {
+> +		ret = virtio_i2c_complete_reqs(vq, reqs, msgs, ret, true);
+> +		goto err_free;
+> +	}
+> +
+> +	reinit_completion(&vi->completion);
+> +	virtqueue_kick(vq);
+> +	time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
+> +	ret = virtio_i2c_complete_reqs(vq, reqs, msgs, num, !time_left);
+> +
+> +	if (!time_left) {
+> +		ret = -ETIMEDOUT;
+> +		dev_err(&adap->dev, "virtio i2c backend timeout.\n");
+> +	}
+> +
+> +err_free:
+> +	kfree(reqs);
+> +	return ret;
+> +}
+
+> diff --git a/include/uapi/linux/virtio_i2c.h b/include/uapi/linux/virtio_i2c.h
+> new file mode 100644
+> index 0000000..df936a2
+> --- /dev/null
+> +++ b/include/uapi/linux/virtio_i2c.h
+> @@ -0,0 +1,41 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
+> +/*
+> + * Definitions for virtio I2C Adpter
+> + *
+> + * Copyright (c) 2021 Intel Corporation. All rights reserved.
+> + */
+> +
+> +#ifndef _UAPI_LINUX_VIRTIO_I2C_H
+> +#define _UAPI_LINUX_VIRTIO_I2C_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/const.h>
+
+Both of these need to be the uapi headers as Andy said earlier and they better
+be in alphabetical order.
+
+#include <uapi/linux/const.h>
+#include <uapi/linux/types.h>
+
+Though in your support, I do see a lot of files in uapi/linux using the standard
+types.h, which looks wrong as that types.h is not a userspace ABI.
+
+-- 
+viresh
