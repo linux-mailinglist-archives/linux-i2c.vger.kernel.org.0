@@ -2,39 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E49C83BD900
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Jul 2021 16:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E26E53BD96C
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Jul 2021 17:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbhGFOzK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Jul 2021 10:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S232215AbhGFPJr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Jul 2021 11:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbhGFOzH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Jul 2021 10:55:07 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDE3C0617AB;
-        Tue,  6 Jul 2021 07:52:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=1ayrkKf5NvJjQdfUl2A/VO9K+bU0q5/9ZgivWetFS3o=; b=JbK3meFocLJ6fB6QYONBPtOQk9
-        DJh8XYIRvVsq19DtaRbOde3Pqt+U3mVhAJRiVq9/pLYYfHRPetQ2VwkvtOK63TFIov9LQtN9N9PJt
-        W7/r5BUcb6i86u+BjFat8OYQU9y2P1DA/EDcTwU14mU2aPtj4aDiy4zBQ/DSm0rkTEqy36baSOqyA
-        V4yYgj7JmTV6DLtcs5VRxDGb3q6cP0CLL/po4JfkE8jt0lxs+Hs+g3d6AcmGzyEozq//QEL4RnMt8
-        byUYd3U5VUmkthiwr4pU7QnYiaWZQxohw6U15DrlSostKCZf7pcDzFMvg9GIfhVhYyVE4cG/tyrih
-        3mmB/xNA==;
-Received: from [2602:306:c5a2:a380:b447:81b0:ffaa:defc]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m0mQg-00F4IY-8x; Tue, 06 Jul 2021 14:52:06 +0000
+        with ESMTP id S231582AbhGFPJq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Jul 2021 11:09:46 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46497C061788;
+        Tue,  6 Jul 2021 08:07:06 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id o5so34696731ejy.7;
+        Tue, 06 Jul 2021 08:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+9dsgPbS//aUCZUFixPgGcG7qxsG2EJ3dbyOzFDh8TA=;
+        b=SBHfWn821HxdveyktStHQrYDe4MbFpbgRsAdNfnT39UeMrTpAkqi5Mw9J7eZv7cX8o
+         4IiMGVVUkNi11aAd4XiuIPLnSf4etnUsfgOrP0HPkyuBpadE2fbx2e+Mv3rlJzIHAso+
+         o7XaFo1UlSb/NBSAjQV11bNqf2gionJphJcRl4YCGJk45hXp5V+Gpo6AbrJv2xqP31dM
+         +oUmVZwHbjtRk+sinfDNsF+kPOGLbKlYnyzpn0vB+NsB4Whl5CCwUy8NwaOykBdFTFHG
+         XhUidv7/qS7jG1fnPfvqgohVjfRj0vLF0MFd7Vbksyj/BKvpyZ1bN9xNMq5MG35cMCap
+         n6sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+9dsgPbS//aUCZUFixPgGcG7qxsG2EJ3dbyOzFDh8TA=;
+        b=GDK7yvJvkcDOuPd0uIRrklR1fc6X7B2sU57pxliIxWldT6etwwBX8TwCLvuj14fz21
+         10+FnocJ1Nf1KgZIxlUyZNiijcTcPmKM/MNhL1nyxZjiY2f51zQfp03R3wJqgcGTcXQq
+         FKh/ZTlL06yn2nS/kniWLxoLMPN1rmwgtdWw4LZDaPBpoivi9qW7/Zg8Z4y3aSuUyddY
+         gBOkyw9VSs6XhOURFFHiCROfItMIp++tDvYqPO6aBUcopht1b6yI3wQPcfxIt3sl+UC1
+         sY6VtjB9akJYDB9UPWQDVJXJxVLvec0DQ5kivlLhf1cftFzDspxiVWEHcEu+GQ4181uC
+         FeIw==
+X-Gm-Message-State: AOAM530hgMwsR1/NSD6un3semUevKXDa5CS4HQujFsMrYlnoeCr4Qb8B
+        Pek3sZhMqm+xuQqOdNKHcxmYK5qRmH9F1IDrQ6w=
+X-Google-Smtp-Source: ABdhPJyx2s89fjP7kWr4sVrlETefy/K9QI98mSZLW/XMLqqA4vHIWAGZQnqqZ+CiP6xjmA9K+asUF6gnTpo1w9tsizc=
+X-Received: by 2002:a17:907:6289:: with SMTP id nd9mr19151547ejc.384.1625584024338;
+ Tue, 06 Jul 2021 08:07:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
+From:   Yehezkel Bernat <yehezkelshb@gmail.com>
+Date:   Tue, 6 Jul 2021 18:06:47 +0300
+Message-ID: <CA+CmpXu5-NCvfuOc8fso2a9bmi0Dacmd=+u=XB-Wd7X=WgOTBA@mail.gmail.com>
 Subject: Re: [PATCH] bus: Make remove callback return void
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@pengutronix.de, LKML <linux-kernel@vger.kernel.org>,
         Russell King <linux@armlinux.org.uk>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
         Helge Deller <deller@gmx.de>,
+        Geoff Levand <geoff@infradead.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
@@ -83,7 +107,7 @@ Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
         Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Maximilian Luz <luzmaximilian@gmail.com>,
@@ -105,7 +129,6 @@ Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
         Andreas Noever <andreas.noever@gmail.com>,
         Michael Jamet <michael.jamet@intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
         Rob Herring <robh@kernel.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -129,7 +152,7 @@ Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
         Alexey Kardashevskiy <aik@ozlabs.ru>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joey Pabalan <jpabalanb@gmail.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Frank Li <lznuaa@gmail.com>,
         Mike Christie <michael.christie@oracle.com>,
@@ -149,7 +172,8 @@ Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
         industrypack-devel@lists.sourceforge.net,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         netdev@vger.kernel.org, linux-ntb@googlegroups.com,
-        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
         linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
@@ -157,41 +181,34 @@ Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
         virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
         xen-devel@lists.xenproject.org
-References: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
-From:   Geoff Levand <geoff@infradead.org>
-Message-ID: <7a68b536-302c-0374-848f-4b9535ff1306@infradead.org>
-Date:   Tue, 6 Jul 2021 07:51:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 7/6/21 2:50 AM, Uwe Kleine-König wrote:
+On Tue, Jul 6, 2021 at 12:50 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> The driver core ignores the return value of this callback because there
+> is only little it can do when a device disappears.
+>
+> This is the final bit of a long lasting cleanup quest where several
+> buses were converted to also return void from their remove callback.
+> Additionally some resource leaks were fixed that were caused by drivers
+> returning an error code in the expectation that the driver won't go
+> away.
+>
+> With struct bus_type::remove returning void it's prevented that newly
+> implemented buses return an ignored error code and so don't anticipate
+> wrong expectations for driver authors.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
 
-> --- a/arch/powerpc/platforms/ps3/system-bus.c
-> +++ b/arch/powerpc/platforms/ps3/system-bus.c
-> @@ -381,7 +381,7 @@ static int ps3_system_bus_probe(struct device *_dev)
->  	return result;
->  }
->  
-> -static int ps3_system_bus_remove(struct device *_dev)
-> +static void ps3_system_bus_remove(struct device *_dev)
->  {
->  	struct ps3_system_bus_device *dev = ps3_dev_to_system_bus_dev(_dev);
->  	struct ps3_system_bus_driver *drv;
-> @@ -399,7 +399,6 @@ static int ps3_system_bus_remove(struct device *_dev)
->  			__func__, __LINE__, drv->core.name);
->  
->  	pr_debug(" <- %s:%d: %s\n", __func__, __LINE__, dev_name(&dev->core));
-> -	return 0;
->  }
+>
+>  drivers/thunderbolt/domain.c              | 4 +---
 
-PS3 part looks fine.
+For Thunderbolt:
 
-Acked-by: Geoff Levand <geoff@infradead.org>
+Acked-by: Yehezkel Bernat <YehezkelShB@gmail.com>
