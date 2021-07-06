@@ -2,190 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C758E3BDE81
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Jul 2021 22:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49873BDF00
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Jul 2021 23:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbhGFUqF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Jul 2021 16:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59328 "EHLO
+        id S230052AbhGFVkb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Jul 2021 17:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbhGFUqE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Jul 2021 16:46:04 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE7AC061765
-        for <linux-i2c@vger.kernel.org>; Tue,  6 Jul 2021 13:43:25 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id e85-20020a4a55580000b02902579a1a1393so1780565oob.6
-        for <linux-i2c@vger.kernel.org>; Tue, 06 Jul 2021 13:43:25 -0700 (PDT)
+        with ESMTP id S229894AbhGFVka (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Jul 2021 17:40:30 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE21C061574;
+        Tue,  6 Jul 2021 14:37:51 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id h1-20020a17090a3d01b0290172d33bb8bcso2390238pjc.0;
+        Tue, 06 Jul 2021 14:37:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=pxMY07o9eA6SvMdwqfO/Cy/RP18zRy8WHvKUzTEaaNE=;
-        b=cMEULcwqLZ1Wut54PhoGe8eWn9DWOkTBGefRRfl5OdVDl+rs626G5wMaH28cgDjzcy
-         C3SrxS4IBWN9GT87WmK8g47N1LXQplCWDOfx8int0/GS3k/x/nkilLmTHNlFEJRG7MNd
-         XBIkEEXZ1pU0eRvjS1TRSvA1B76ydqAA34SpYmKB2ihzHjiFB86o3rkOkpvBUwbSv3hH
-         SAJ7sWW3535WnApBT/aqgm8mqOlZd3rAIlZ18pf5XSKHOT2S+byWJIp1xZIbcvBH0etl
-         zsjB18jSpkL6JUn2+voD9bKAbUaWuj/V1AbjBFUkZHMHiCqgtvfqmj4sQqDjclnu51kM
-         rRng==
+        bh=Ocbz7plpl2GsaeWZtT2xSwu/ECmgcGgX+U0mFWoVx8o=;
+        b=fjV4+ka8h0vH05QQfb5mosysrP9nHimBGyZMIaa5AG6oYKlZIJ9fBu1u8zdUGxqK0V
+         Um+d4Woup62vh1nDeTEMfYQu/z07c7tU/WMAtzd8zyjZ+D++/9qAcGD3Qi5HWfAEidnP
+         LVIhoqq3BcdDCaWawKEqjjS8yu6I4JR+nAEzkK0jeMXN28vBiyhs3oL9vVM3I/zG4bRq
+         0ch+fVpWTwIZJdpOA5MGN4Hsas/DzY0s55S8/73rafQT0BQHzaPtbSSjdX9FgBPH3Kng
+         zdOUu0zymj0lCUC9mcaI5h90C5jAW9R9slEqBMssceloFyAtObCoJPafpr9GaUMLPWWg
+         1jSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=pxMY07o9eA6SvMdwqfO/Cy/RP18zRy8WHvKUzTEaaNE=;
-        b=DM5V+qsM8GfGEcRe2XUOcEke7q3cjsi6VIZ+R3US8h0+ELwHJsc27mwSF8BFesCA28
-         Eyf/4D3360Dsp7XDQCbEZXbZy8T05YUlQleW5jprR9cxyMdOkpLcoGCRzmBIQCGWKdkT
-         trqBSp+Egooneu3+cmuyM0z5/eF7E8TvnFVTBxcA3iHK0CLBMUnpJuUrdlEMijJQHCSZ
-         s7Vud52yYRh3IggF9Yj9cGf+oQ9QxJu0Ekgcj0kVqYpPyr1bZr4n2nSaGYxf6+BrLkn7
-         ErHkNzWEjhV2vutBjOckaU+f5C0GUYNyCKDLrfxPMixH4ijZsJJX/DBVrbCJa2EXHDD0
-         pRxA==
-X-Gm-Message-State: AOAM532BXg/rY383jAls97FFiKJnp/wrUJkKdVniIvOb95T9YNO9LlZj
-        KuRsxmCQ1NNx42v55+fXiWkiDA==
-X-Google-Smtp-Source: ABdhPJxDvDPv3ADYsyyhWPVlnzb7CaqMGlOMdSkFiej4dUoXbTCedb2luVlDDH/zGyqw6KpVymfMhg==
-X-Received: by 2002:a4a:d6cc:: with SMTP id j12mr2894172oot.0.1625604204373;
-        Tue, 06 Jul 2021 13:43:24 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id x130sm1332892oix.22.2021.07.06.13.43.22
+        bh=Ocbz7plpl2GsaeWZtT2xSwu/ECmgcGgX+U0mFWoVx8o=;
+        b=WK3yTWnvM5htSk/VSimnCQqje/FGFNelVEcwioYL2R7o83YW8eHgkZ6evNB3mBqPc0
+         b3GB1gLkWojJs9XG4BTClxxWXSVq9Gv09epEhdKJWYrb06H3nFuUuHgoZMgPD+WJybRF
+         3gZPab5P9vzwNlIIVEEo5Jl90VKSVHHxvBhjU3Pay3BEhOy6ShtVlTPAKjzUw+5LPvM3
+         g6Hpy3G6QibGd3AnFNfSCRKBRvetF31DDjQDeo8pnbGgCNJEzMmdhIwT1ify8AXwqciQ
+         XYOzvzRvY9jKXvHDc86y1R7eC14/aeggf/uWlHU2/VXBeEU0HO0uKcxPPx3BI1CBvsUI
+         0OtQ==
+X-Gm-Message-State: AOAM531T2RTDL3ySJyrUH9BdixZdoksL8kUK7Ivl7hx7XCT9buaF/thj
+        cTEAlptetL3RDzHa5EJYnN0=
+X-Google-Smtp-Source: ABdhPJyn2Hi8kaCYu+WokB25snaMIG+9Q6KwjeQoMDQJIrAIZd3JeXm641055Ca25Y6q1bD80UK2hA==
+X-Received: by 2002:a17:90a:3009:: with SMTP id g9mr2332932pjb.82.1625607470831;
+        Tue, 06 Jul 2021 14:37:50 -0700 (PDT)
+Received: from shinobu ([156.146.35.76])
+        by smtp.gmail.com with ESMTPSA id h14sm14343197pgv.47.2021.07.06.14.37.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jul 2021 13:43:23 -0700 (PDT)
-Date:   Tue, 6 Jul 2021 15:43:21 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>
-Cc:     nvdimm@lists.linux.dev, linux-hyperv@vger.kernel.org,
-        kvm@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-pci@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-cxl@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, target-devel@vger.kernel.org,
+        Tue, 06 Jul 2021 14:37:49 -0700 (PDT)
+Date:   Wed, 7 Jul 2021 06:37:39 +0900
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net, linux-scsi@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-acpi@vger.kernel.org,
         industrypack-devel@lists.sourceforge.net,
-        linux-input@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, greybus-dev@lists.linaro.org,
-        virtualization@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        dmaengine@vger.kernel.org, linux-ntb@googlegroups.com,
-        linuxppc-dev@lists.ozlabs.org
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org
 Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
-Message-ID: <YOTAaQ7AnkCvRQaS@yoga>
+Message-ID: <YOTMp88HfFiy6+RM@shinobu>
 References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de>
  <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
- <YOSb1+yeVeLxiSRc@yoga>
- <20210706184323.fudcbsiu4i34dojs@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VOubNWsj2sFIOkFX"
 Content-Disposition: inline
-In-Reply-To: <20210706184323.fudcbsiu4i34dojs@pengutronix.de>
+In-Reply-To: <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue 06 Jul 13:43 CDT 2021, Uwe Kleine-K?nig wrote:
 
-> Hello Bjorn,
-> 
-> On Tue, Jul 06, 2021 at 01:08:18PM -0500, Bjorn Andersson wrote:
-> > On Tue 06 Jul 10:48 CDT 2021, Uwe Kleine-K?nig wrote:
-> > > diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> > > index c1404d3dae2c..7f6fac618ab2 100644
-> > > --- a/drivers/rpmsg/rpmsg_core.c
-> > > +++ b/drivers/rpmsg/rpmsg_core.c
-> > > @@ -530,7 +530,7 @@ static int rpmsg_dev_probe(struct device *dev)
-> > >  	return err;
-> > >  }
-> > >  
-> > > -static int rpmsg_dev_remove(struct device *dev)
-> > > +static void rpmsg_dev_remove(struct device *dev)
-> > >  {
-> > >  	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
-> > >  	struct rpmsg_driver *rpdrv = to_rpmsg_driver(rpdev->dev.driver);
-> > > @@ -546,8 +546,6 @@ static int rpmsg_dev_remove(struct device *dev)
-> > >  
-> > >  	if (rpdev->ept)
-> > >  		rpmsg_destroy_ept(rpdev->ept);
-> > > -
-> > > -	return err;
-> > 
-> > This leaves err assigned but never used, but I don't mind following up
-> > with a patch cleaning that up after this has landed.
-> 
-> Ah, good catch. If I send out a v3 I will fold the following into this
-> patch:
-> 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index 7f6fac618ab2..9151836190ce 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -534,10 +534,9 @@ static void rpmsg_dev_remove(struct device *dev)
->  {
->  	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
->  	struct rpmsg_driver *rpdrv = to_rpmsg_driver(rpdev->dev.driver);
-> -	int err = 0;
->  
->  	if (rpdev->ops->announce_destroy)
-> -		err = rpdev->ops->announce_destroy(rpdev);
-> +		rpdev->ops->announce_destroy(rpdev);
->  
->  	if (rpdrv->remove)
->  		rpdrv->remove(rpdev);
-> 
+--VOubNWsj2sFIOkFX
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sounds good, feel free to keep my ack on this.
+On Tue, Jul 06, 2021 at 05:48:03PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> The driver core ignores the return value of this callback because there
+> is only little it can do when a device disappears.
+>=20
+> This is the final bit of a long lasting cleanup quest where several
+> buses were converted to also return void from their remove callback.
+> Additionally some resource leaks were fixed that were caused by drivers
+> returning an error code in the expectation that the driver won't go
+> away.
+>=20
+> With struct bus_type::remove returning void it's prevented that newly
+> implemented buses return an ignored error code and so don't anticipate
+> wrong expectations for driver authors.
+>=20
+> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk> (For ARM, Am=
+ba and related parts)
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Chen-Yu Tsai <wens@csie.org> (for drivers/bus/sunxi-rsb.c)
+> Acked-by: Pali Roh=C3=A1r <pali@kernel.org>
+> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org> (for drivers/media)
+> Acked-by: Hans de Goede <hdegoede@redhat.com> (For drivers/platform)
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-By: Vinod Koul <vkoul@kernel.org>
+> Acked-by: Juergen Gross <jgross@suse.com> (For Xen)
+> Acked-by: Lee Jones <lee.jones@linaro.org> (For drivers/mfd)
+> Acked-by: Johannes Thumshirn <jth@kernel.org> (For drivers/mcb)
+> Acked-by: Johan Hovold <johan@kernel.org>
+> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org> (For drive=
+rs/slimbus)
+> Acked-by: Kirti Wankhede <kwankhede@nvidia.com> (For drivers/vfio)
+> Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com> (For ulpi and=
+ typec)
+> Acked-by: Samuel Iglesias Gons=C3=A1lvez <siglesias@igalia.com> (For ipac=
+k)
+> Reviewed-by: Tom Rix <trix@redhat.com> (For fpga)
+> Acked-by: Geoff Levand <geoff@infradead.org> (For ps3)
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
 
-> Maybe .announce_destroy() should then be changed to return void, too?
-> Something like:
-> 
+>  drivers/base/isa.c                        | 4 +---
 
-Yes, I saw this opportunity as well. But that will fan out further, so
-let's postpone that until your series has landed and we can follow up
-with such changes through the remoteproc tree.
+Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index a76c344253bf..d5204756714c 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -40,7 +40,7 @@ struct rpmsg_device_ops {
->  					    struct rpmsg_channel_info chinfo);
->  
->  	int (*announce_create)(struct rpmsg_device *ept);
-> -	int (*announce_destroy)(struct rpmsg_device *ept);
-> +	void (*announce_destroy)(struct rpmsg_device *ept);
->  };
->  
->  /**
-> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> index 8e49a3bacfc7..4e05994634f8 100644
-> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> @@ -340,7 +340,7 @@ static int virtio_rpmsg_announce_create(struct rpmsg_device *rpdev)
->  	return err;
->  }
->  
-> -static int virtio_rpmsg_announce_destroy(struct rpmsg_device *rpdev)
-> +static void virtio_rpmsg_announce_destroy(struct rpmsg_device *rpdev)
->  {
->  	struct virtio_rpmsg_channel *vch = to_virtio_rpmsg_channel(rpdev);
->  	struct virtproc_info *vrp = vch->vrp;
-> @@ -360,8 +360,6 @@ static int virtio_rpmsg_announce_destroy(struct rpmsg_device *rpdev)
->  		if (err)
->  			dev_err(dev, "failed to announce service %d\n", err);
->  	}
-> -
-> -	return err;
->  }
->  
->  static const struct rpmsg_device_ops virtio_rpmsg_ops = {
-> 
-> though it's not obvious for me that the last hunk is sensible. (OTOH the
-> return code is ignored anyhow as rpmsg_dev_remove() is the only caller.
-> 
+--VOubNWsj2sFIOkFX
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I need to backtrack a little bit more to figure out why we ended up with
-this...
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Bjorn
+iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmDkzSMACgkQhvpINdm7
+VJLVFhAAyxEk2xOSRC1xhJSnjLQvNeb+KeTAJr+uaSAwwExERXcbGlIryhqCZSij
+fZRzkvgPIscNAegWidvmuhZlhkFJPwvPArfhB/pFIDvQ1xX0kCPH3T51Lncu35Tf
+vgluc4JhAW9+1UzoKZsv8RK4uY2ETRMBBeYs7epjqK2RhCvzG8rDMD+Dy49nxrYX
+eNdmcR+7EcK8RjLmb/YEfNXxcXdDW0KlU5ATAh+PKuAPKbOKpoKfKuYsOYS7VrGJ
+MAk5lC5J/bqbBWM4eqm+g5NbskWMr1N5WC60R7K3isMCoaEpnKNhSD3kvYIFe2Tf
+mWyIE2c7D+UWhzbp+Kq4+DHzBN4ajLBy0oMd28HrGOQmD+/chjjc1zTOK9uNBvKz
+xBRbxQl7OrAnKhUqcrgVpVL30EvTNajZIOZdwtGXhQCWW+MX747JE+H291VLg3gz
+a0p6IJ8TS+gOgGGvmNjVg6yHYuKv6XDbDfI7tc0dRJUOoVqfbkIHSvAQQzn0LIFn
+k/Ln4D8LDFj8X3fHbfz200+nzo9gwA5ZXhWXzvTKXhSEyBoc3+i+Ihn3bgYf6rI8
+j8LozqWaWpNxaLMBrLuy06ldAuzhnQ7wPw1JuGXDAY1vdMYVVRp1XcbjBSqybXMA
+weoaxx4Lwh05XikzxZpXDQBx5N+5V3sYRuqGrYs7H1ZUm0rT0I0=
+=yTaM
+-----END PGP SIGNATURE-----
+
+--VOubNWsj2sFIOkFX--
