@@ -2,59 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EEB3BCD29
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Jul 2021 13:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF0A3BCD7C
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Jul 2021 13:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbhGFLUp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 6 Jul 2021 07:20:45 -0400
-Received: from mail-bn7nam10on2089.outbound.protection.outlook.com ([40.107.92.89]:36192
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232547AbhGFLTw (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:19:52 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OB3jt3SlsdowvqILnghDEybT9vYvyo2iso3STBIJcnupZGT9eEg2Qnje2DqSc1C4mFk2QBNm4Rucxdtyl+OsHUQ/EmMhpY6Ao22yIbNMM+gvlQ8sod5DJX/bxsjpKS6eO4jX3PQu/YQHrM1O+BbrVNmmvyE+/SEjOD6yYppVXkhGxNBjW6Ktv0JvCMebYgktbnIi00Q7kZfMtMhgzlS+RanZh8R3z7epBj+pipCPB70e3UOOw6Nwz1UsTwZdygf++CmCNg4iCcEFQob/F8pbAQCy3wJJMjqKQPM3zCAKa0XQ42hESmNJRNH+Vc9ZPSJZpZVoJ4lnNlD0tHOjILD6vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gzQgfqIi8OFdMGOA+iDXYHDenSaYbIa98IiQWdAlr00=;
- b=PbcXlkdCv25iKncBNhz1SQ8QsirUn58/y6c0ZmgRVus/xxMLbQ+eR9VSZ8eS506GpA2/FBfVsZ02guxjIB/XH7j/2OgjjGvg8CvTq+vELmw+UEsn8eda5C/LlejJ5Rvnhlxv9Vq4u8iw3YorMf/V1Kt7r5YEs+kp9iV5eUT8qYCAru8m/eCf7MY/zpu4IWRaIZ7LQCj+ntML2yOrXDI3yBcUIZAzvmFL4gVKSV5hmxR2vbloCwGfZAqDrgsHFQlNeRuHorr7BxChRkbtg6OF6BJIuRJ0pDWVaA3/LNo3ycmIeKRljLZTyAL1xlaE4oBbreAYAPZoCo0uQol2wsMRJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.34) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gzQgfqIi8OFdMGOA+iDXYHDenSaYbIa98IiQWdAlr00=;
- b=Z3JYE8fELRazWIk7bK0Fe6hW3oRwz+8ZoNiqvKNqxw0TiUmV9YgYLWmTeemU+crJ9s959ogLVawNp5FFh0NFupAUqImkuyesyKZ6krt8RQp0pafIPYfEJeBi5PwNZQrwSQE71j7XpY509fW5feJm0I2vmey6PepXF7LKHb7bngzqpGZpC25OkJUH8rsxYnfFV8xQl6Ghb/lArYh0mue5Gb2zdWLqHmfACmiYCdH55M/xrPhSzGYYSQub0JCzJ4tAjheZiYHDU1XpdLgbA7RN6HKQa8wuYTSuNMp4mWqxRaRuihUr41br7D9e6ccszMTT/m1yoBBLIYggYufBgORFww==
-Received: from BN6PR14CA0005.namprd14.prod.outlook.com (2603:10b6:404:79::15)
- by DM5PR1201MB0059.namprd12.prod.outlook.com (2603:10b6:4:54::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22; Tue, 6 Jul
- 2021 11:17:08 +0000
-Received: from BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:79:cafe::5) by BN6PR14CA0005.outlook.office365.com
- (2603:10b6:404:79::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22 via Frontend
- Transport; Tue, 6 Jul 2021 11:17:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
- smtp.mailfrom=nvidia.com; linaro.org; dkim=none (message not signed)
- header.d=none;linaro.org; dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.34; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.34) by
- BN8NAM11FT013.mail.protection.outlook.com (10.13.176.182) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4287.22 via Frontend Transport; Tue, 6 Jul 2021 11:17:06 +0000
-Received: from [10.40.102.252] (172.20.187.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 6 Jul
- 2021 11:16:25 +0000
-Subject: Re: [PATCH] bus: Make remove callback return void
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        id S233678AbhGFLWF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 6 Jul 2021 07:22:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34956 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233286AbhGFLUf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 6 Jul 2021 07:20:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625570276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GjbCzRDVGxTPwLr0ZAizMTX8crBOOlyEFb2n3sNXFts=;
+        b=Mg8Za+5cuo7gsg5xUintaXZdpb7JPWlWjhMbKDaaHFvrPHG9u162FVMM44sUxPDjAvo+CV
+        pehcatdBLRDxpOtKwAlUwSeT/UdfkEq7ov4HyGbqnWJ39ysdx3Q570HQ3uaTdAONxNF4RD
+        v9/Jy/0cEAYWX/g3ITkFEiDgBiJQeqs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-66-0awj3QsmOBmPU2KgCkEgvQ-1; Tue, 06 Jul 2021 07:17:54 -0400
+X-MC-Unique: 0awj3QsmOBmPU2KgCkEgvQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 95A44800D62;
+        Tue,  6 Jul 2021 11:17:49 +0000 (UTC)
+Received: from localhost (ovpn-113-13.ams2.redhat.com [10.36.113.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2FC1919C79;
+        Tue,  6 Jul 2021 11:17:39 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
         Russell King <linux@armlinux.org.uk>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
@@ -66,8 +49,8 @@ CC:     <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Len Brown <lenb@kernel.org>,
         William Breathitt Gray <vilhelm.gray@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
+        =?utf-8?Q?Rafa=C5=82_Mi=C5=82eck?= =?utf-8?Q?i?= 
+        <zajec5@gmail.com>, Maxime Ripard <mripard@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Alison Schofield <alison.schofield@intel.com>,
@@ -108,8 +91,8 @@ CC:     <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
         Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84sk?= =?utf-8?Q?i?= 
+        <kw@linux.com>, Bjorn Helgaas <bhelgaas@google.com>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Maximilian Luz <luzmaximilian@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -136,8 +119,8 @@ CC:     <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Jason Wang <jasowang@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
         Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
         Martyn Welch <martyn@welchs.me.uk>,
         Manohar Vanga <manohar.vanga@gmail.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
@@ -153,7 +136,7 @@ CC:     <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
         Alexey Kardashevskiy <aik@ozlabs.ru>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joey Pabalan <jpabalanb@gmail.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Frank Li <lznuaa@gmail.com>,
         Mike Christie <michael.christie@oracle.com>,
@@ -162,87 +145,192 @@ CC:     <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
         David Woodhouse <dwmw@amazon.co.uk>,
         SeongJae Park <sjpark@amazon.de>,
         Julien Grall <jgrall@amazon.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-acpi@vger.kernel.org>,
-        <linux-wireless@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
-        <linux-cxl@vger.kernel.org>, <nvdimm@lists.linux.dev>,
-        <dmaengine@vger.kernel.org>,
-        <linux1394-devel@lists.sourceforge.net>,
-        <linux-fpga@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-hyperv@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-i3c@lists.infradead.org>,
-        <industrypack-devel@lists.sourceforge.net>,
-        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-ntb@googlegroups.com>,
-        <linux-pci@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-staging@lists.linux.dev>,
-        <greybus-dev@lists.linaro.org>, <target-devel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>,
-        <xen-devel@lists.xenproject.org>
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH] bus: Make remove callback return void
+In-Reply-To: <87pmvvhfqq.fsf@redhat.com>
+Organization: Red Hat GmbH
 References: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
-X-Nvconfidentiality: public
-From:   Kirti Wankhede <kwankhede@nvidia.com>
-Message-ID: <f4c5e4c9-95a1-e801-6d2d-6bb18a924b01@nvidia.com>
-Date:   Tue, 6 Jul 2021 16:46:21 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ <87pmvvhfqq.fsf@redhat.com>
+User-Agent: Notmuch/0.32.1 (https://notmuchmail.org)
+Date:   Tue, 06 Jul 2021 13:17:37 +0200
+Message-ID: <87mtqzhesu.fsf@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20210706095037.1425211-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.20.187.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d660212b-af0f-4381-7aa8-08d9406f9722
-X-MS-TrafficTypeDiagnostic: DM5PR1201MB0059:
-X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM5PR1201MB0059F2FD2EA1FF32196093E3DC1B9@DM5PR1201MB0059.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yp+xo1ChYomO5saPmEiiXoTZrpARTWeS+6+ILqneuCodLa6j14xykFNBVNaB4aiSH2d+5MPlJMacyo/bFt8aKcan7CtgrqMd0lAsvFIkZgwuCeKYMsT2Xfmw5J/km/XgptN82DkQln6ltmUSP5rY8bY8C1/13//X6pHRKC7TQ718mAEqrAKf+wNbig3UHNNLoOR6w975lGU5jVv1u1lHKveYETvI1HxLK9EAigj1IS8jiHQwoEUbAJtPyk/0Iyw/umAFVeL1/yiulcjReFcWfGKm4HxeXYHJeqjsbDQ8z58nwPulNCDyrEyI2OAIPYW2DXMjhWpIeFrDWB7LG2y1+dMgZOC5Awev6CyctuFAr8/1dfXCAF/zLNAw+WZe/OqYx/LBwE+uUIq9DNbzkqraj1p2iLhQk6oPB9wR09pr9cHnLBbuxX8n2WvREZhzVDRzS67ljrMLBTDu1SLxxnozXOoYny7NjUfvBOJMFdRHn4z7ivj1lLMqYCjxkQoKa3xuvEsNCSVAsoGhuEc6Dy9sdlluue/2i6NiQirxyNP97b16LmlwAsDu2J1GknqHaGuMnaNt2+f0/PQaAiKJ8Fl+NVNqnUw2Xp0PRXBcfi55eDn1g28TuiXzOCgRh/zVdhr+4Tywc040jRYHJj6OaSzsDUlECeNnvEToseYb+sDgQ1R2LGrW5aEEyqm9q5ftmFVUz7yPSsE172P7P4oFhOBR2K9NffS/ZbkUK/PIiZkGZ+vRBrWH52nHpdCxqybxQFxD
-X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(376002)(396003)(39860400002)(136003)(346002)(36840700001)(46966006)(53546011)(7366002)(7406005)(336012)(7336002)(2906002)(316002)(31686004)(82310400003)(82740400003)(66574015)(4326008)(47076005)(7276002)(86362001)(6666004)(7416002)(7636003)(36756003)(16576012)(8676002)(36860700001)(70586007)(31696002)(356005)(16526019)(186003)(5660300002)(8936002)(70206006)(26005)(2616005)(110136005)(54906003)(426003)(36906005)(478600001)(4744005)(557034005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2021 11:17:06.9013
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d660212b-af0f-4381-7aa8-08d9406f9722
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0059
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Jul 06 2021, Cornelia Huck <cohuck@redhat.com> wrote:
 
+> On Tue, Jul 06 2021, Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.d=
+e> wrote:
+>
+>> The driver core ignores the return value of this callback because there
+>> is only little it can do when a device disappears.
+>>
+>> This is the final bit of a long lasting cleanup quest where several
+>> buses were converted to also return void from their remove callback.
+>> Additionally some resource leaks were fixed that were caused by drivers
+>> returning an error code in the expectation that the driver won't go
+>> away.
+>>
+>> With struct bus_type::remove returning void it's prevented that newly
+>> implemented buses return an ignored error code and so don't anticipate
+>> wrong expectations for driver authors.
+>
+> Yay!
+>
+>>
+>> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>> ---
+>> Hello,
+>>
+>> this patch depends on "PCI: endpoint: Make struct pci_epf_driver::remove
+>> return void" that is not yet applied, see
+>> https://lore.kernel.org/r/20210223090757.57604-1-u.kleine-koenig@pengutr=
+onix.de.
+>>
+>> I tested it using allmodconfig on amd64 and arm, but I wouldn't be
+>> surprised if I still missed to convert a driver. So it would be great to
+>> get this into next early after the merge window closes.
+>
+> I'm afraid you missed the s390-specific busses in drivers/s390/cio/
+> (css/ccw/ccwgroup).
 
-On 7/6/2021 3:20 PM, Uwe Kleine-König wrote:
-> The driver core ignores the return value of this callback because there
-> is only little it can do when a device disappears.
-> 
-> This is the final bit of a long lasting cleanup quest where several
-> buses were converted to also return void from their remove callback.
-> Additionally some resource leaks were fixed that were caused by drivers
-> returning an error code in the expectation that the driver won't go
-> away.
-> 
-> With struct bus_type::remove returning void it's prevented that newly
-> implemented buses return an ignored error code and so don't anticipate
-> wrong expectations for driver authors.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+The change for vfio/mdev looks good.
 
+The following should do the trick for s390; not sure if other
+architectures have easy-to-miss busses as well.
 
->   drivers/vfio/mdev/mdev_driver.c           | 4 +---
-
-Acked-by: Kirti Wankhede <kwankhede@nvidia.com>
+diff --git a/drivers/s390/cio/ccwgroup.c b/drivers/s390/cio/ccwgroup.c
+index 9748165e08e9..a66f416138ab 100644
+--- a/drivers/s390/cio/ccwgroup.c
++++ b/drivers/s390/cio/ccwgroup.c
+@@ -439,17 +439,15 @@ module_exit(cleanup_ccwgroup);
+=20
+ /************************** driver stuff ******************************/
+=20
+-static int ccwgroup_remove(struct device *dev)
++static void ccwgroup_remove(struct device *dev)
+ {
+ 	struct ccwgroup_device *gdev =3D to_ccwgroupdev(dev);
+ 	struct ccwgroup_driver *gdrv =3D to_ccwgroupdrv(dev->driver);
+=20
+ 	if (!dev->driver)
+-		return 0;
++		return;
+ 	if (gdrv->remove)
+ 		gdrv->remove(gdev);
+-
+-	return 0;
+ }
+=20
+ static void ccwgroup_shutdown(struct device *dev)
+diff --git a/drivers/s390/cio/css.c b/drivers/s390/cio/css.c
+index a974943c27da..ebc321edba51 100644
+--- a/drivers/s390/cio/css.c
++++ b/drivers/s390/cio/css.c
+@@ -1371,15 +1371,14 @@ static int css_probe(struct device *dev)
+ 	return ret;
+ }
+=20
+-static int css_remove(struct device *dev)
++static void css_remove(struct device *dev)
+ {
+ 	struct subchannel *sch;
+-	int ret;
+=20
+ 	sch =3D to_subchannel(dev);
+-	ret =3D sch->driver->remove ? sch->driver->remove(sch) : 0;
++	if (sch->driver->remove)
++		sch->driver->remove(sch);
+ 	sch->driver =3D NULL;
+-	return ret;
+ }
+=20
+ static void css_shutdown(struct device *dev)
+diff --git a/drivers/s390/cio/device.c b/drivers/s390/cio/device.c
+index 84f659cafe76..61d5d55bd9c8 100644
+--- a/drivers/s390/cio/device.c
++++ b/drivers/s390/cio/device.c
+@@ -1742,7 +1742,7 @@ ccw_device_probe (struct device *dev)
+ 	return 0;
+ }
+=20
+-static int ccw_device_remove(struct device *dev)
++static void ccw_device_remove(struct device *dev)
+ {
+ 	struct ccw_device *cdev =3D to_ccwdev(dev);
+ 	struct ccw_driver *cdrv =3D cdev->drv;
+@@ -1776,8 +1776,6 @@ static int ccw_device_remove(struct device *dev)
+ 	spin_unlock_irq(cdev->ccwlock);
+ 	io_subchannel_quiesce(sch);
+ 	__disable_cmf(cdev);
+-
+-	return 0;
+ }
+=20
+ static void ccw_device_shutdown(struct device *dev)
+diff --git a/drivers/s390/cio/scm.c b/drivers/s390/cio/scm.c
+index 9f26d4310bb3..b6b4589c70bd 100644
+--- a/drivers/s390/cio/scm.c
++++ b/drivers/s390/cio/scm.c
+@@ -28,12 +28,13 @@ static int scmdev_probe(struct device *dev)
+ 	return scmdrv->probe ? scmdrv->probe(scmdev) : -ENODEV;
+ }
+=20
+-static int scmdev_remove(struct device *dev)
++static void scmdev_remove(struct device *dev)
+ {
+ 	struct scm_device *scmdev =3D to_scm_dev(dev);
+ 	struct scm_driver *scmdrv =3D to_scm_drv(dev->driver);
+=20
+-	return scmdrv->remove ? scmdrv->remove(scmdev) : -ENODEV;
++	if (scmdrv->remove)
++		scmdrv->remove(scmdev);
+ }
+=20
+ static int scmdev_uevent(struct device *dev, struct kobj_uevent_env *env)
+diff --git a/drivers/s390/crypto/ap_bus.c b/drivers/s390/crypto/ap_bus.c
+index d2560186d771..8a0d37c0e2a5 100644
+--- a/drivers/s390/crypto/ap_bus.c
++++ b/drivers/s390/crypto/ap_bus.c
+@@ -884,7 +884,7 @@ static int ap_device_probe(struct device *dev)
+ 	return rc;
+ }
+=20
+-static int ap_device_remove(struct device *dev)
++static void ap_device_remove(struct device *dev)
+ {
+ 	struct ap_device *ap_dev =3D to_ap_dev(dev);
+ 	struct ap_driver *ap_drv =3D ap_dev->drv;
+@@ -909,8 +909,6 @@ static int ap_device_remove(struct device *dev)
+ 	ap_dev->drv =3D NULL;
+=20
+ 	put_device(dev);
+-
+-	return 0;
+ }
+=20
+ struct ap_queue *ap_get_qdev(ap_qid_t qid)
 
