@@ -2,41 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEDA3BE99E
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jul 2021 16:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B0A3BF1AA
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jul 2021 23:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbhGGO2K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Jul 2021 10:28:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28171 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231866AbhGGO2J (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Jul 2021 10:28:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625667928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R1b1MmqRg+JjTb9SqE3N1oUES1jMyS6VpEEII2IWGuk=;
-        b=Iwo14BH06W//MgUJ/Dx5+0ggoObpPt3GMxyyQBWF8d1IHUVhouEMvKgsOvmGIh2+GywzJi
-        +s4nM2c/4yUcqqIk/5/D8RDL/iiZIxBG4fJxpGSUR0LCGQna8mc/ItGR3dWtwxL87y5tK5
-        gUfjwMS7Yp9iKOYkVjxwYcPjJSPj38k=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-248-3QQwLlOoP9Ouo1dOX0QIzg-1; Wed, 07 Jul 2021 10:25:27 -0400
-X-MC-Unique: 3QQwLlOoP9Ouo1dOX0QIzg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E5AAE9F93C;
-        Wed,  7 Jul 2021 14:25:20 +0000 (UTC)
-Received: from [10.36.112.61] (ovpn-112-61.ams2.redhat.com [10.36.112.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E4E3919C66;
-        Wed,  7 Jul 2021 14:24:39 +0000 (UTC)
-Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
+        id S232359AbhGGVyq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Jul 2021 17:54:46 -0400
+Received: from mail-am6eur05on2087.outbound.protection.outlook.com ([40.107.22.87]:46273
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230002AbhGGVyn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 7 Jul 2021 17:54:43 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QGlI00tOYmH5JlziKq/YJEi2G81qTDnMLXD0g38ik6DfnM0fAeopR4eLT1hdnPRnDZ8i7uO633WimO/ulohWRnVDoKLAj4ILVrE4zuY9aQ6LEKOQmLg5l8BRTZXvolUV76N/CHs2wIIPjO50NILCtNWIwpD6kbr3U2UpK06tAsjz9TMSIk9eZ5yVZ46e+0twVfz/6v+r9lC8p/2r0BXU11Hyu7ysatrFHXI026sSArYV19vJcH/xiqTRCvRpqFWea/lksv3CuKfidvMK+fsJNku2nB1PNOaXbiqtp+HcVtui12vXXAr69WiFh7Rd0y5kvtAS5fPPGYTSiAGbgLI9jQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WOlcEdl7QPNc6aw+1dLvTyRyvVtdMsDxOzlMGNdOHQA=;
+ b=AiHB8XcWUzftmRQ8B4O/zoeQlhLDIu4bcW+pvwfO5IsHVyUGscy/I9slvdI4WgQVktekfnhryaEwdFwTFR9imSMoCc7ARUnSrm1lo0QSMZZylMpO9wmjhJstddGpfrjQzsjZ6jsxhAkML4Y7hsoIfHC6tg++Wry/XcWXGJSlXi8DgBGUqDzUjEat06vi2vUN3x6vP4m+8BkhOlq3PsVo58xAjDuzfXE5VEmUY9jJo9CFe09LXvRtMvEygejTKmsr77qKSu+EoDaglo0q6aconvgiVlPLTKovwKAKscuSXmhWqg5tGP1bUJuT5wpB6DoQThzZyVtb5TI5bWVDfJIrWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=eckelmann.de; dmarc=pass action=none header.from=eckelmann.de;
+ dkim=pass header.d=eckelmann.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=eckelmannde.onmicrosoft.com; s=selector1-eckelmannde-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WOlcEdl7QPNc6aw+1dLvTyRyvVtdMsDxOzlMGNdOHQA=;
+ b=nyoOMG2EmWX7k1wjdqkZw23W20Vbar7Ie7yaBQcRChgP48y90jPdfJOftoeeMoO4Jvuck46m4ECg7nBFX2PDldDe9whxUm102xMg+bGkcq6MSVWb/aizip8qyVPN1ROdiJG6B3GhSHSNuHYFfZgsJa7BNBB0tyB8MvXV6LjD+K4=
+Authentication-Results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none
+ header.from=eckelmann.de;
+Received: from AM9P189MB1700.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:2fc::15)
+ by AM8P189MB1411.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:242::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.21; Wed, 7 Jul
+ 2021 21:51:56 +0000
+Received: from AM9P189MB1700.EURP189.PROD.OUTLOOK.COM
+ ([fe80::cc15:eec3:792a:3310]) by AM9P189MB1700.EURP189.PROD.OUTLOOK.COM
+ ([fe80::cc15:eec3:792a:3310%7]) with mapi id 15.20.4308.022; Wed, 7 Jul 2021
+ 21:51:56 +0000
+Date:   Wed, 7 Jul 2021 23:51:54 +0200
+From:   Thorsten Scherer <t.scherer@eckelmann.de>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
         linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
@@ -48,7 +55,7 @@ Cc:     kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Len Brown <lenb@kernel.org>,
         William Breathitt Gray <vilhelm.gray@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
         Maxime Ripard <mripard@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -65,6 +72,7 @@ Cc:     kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
         Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
         Moritz Fischer <mdf@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
@@ -89,7 +97,7 @@ Cc:     kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
         Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Maximilian Luz <luzmaximilian@gmail.com>,
@@ -101,7 +109,6 @@ Cc:     kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Thorsten Scherer <t.scherer@eckelmann.de>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Mark Brown <broonie@kernel.org>,
@@ -134,7 +141,7 @@ Cc:     kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
         Alexey Kardashevskiy <aik@ozlabs.ru>,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Joey Pabalan <jpabalanb@gmail.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Frank Li <lznuaa@gmail.com>,
         Mike Christie <michael.christie@oracle.com>,
@@ -164,24 +171,72 @@ Cc:     kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
         xen-devel@lists.xenproject.org,
         Russell King <rmk+kernel@armlinux.org.uk>,
         Johannes Thumshirn <jth@kernel.org>
+Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
+Message-ID: <20210707215108.ervxrkmbitp3l2ej@ws067.eckelmann.group>
 References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de>
  <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Message-ID: <5d3bf56e-285f-ecc1-ec64-384409645353@redhat.com>
-Date:   Wed, 7 Jul 2021 16:24:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+In-Reply-To: <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+X-ClientProxiedBy: PR3P251CA0003.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:102:b5::6) To AM9P189MB1700.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:2fc::15)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost (2a00:1f08:400:4::2) by PR3P251CA0003.EURP251.PROD.OUTLOOK.COM (2603:10a6:102:b5::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.20 via Frontend Transport; Wed, 7 Jul 2021 21:51:55 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8987669f-0789-4189-d163-08d94191700f
+X-MS-TrafficTypeDiagnostic: AM8P189MB1411:
+X-Microsoft-Antispam-PRVS: <AM8P189MB14112A254C08C477E55D0F8F9F1A9@AM8P189MB1411.EURP189.PROD.OUTLOOK.COM>
+X-MS-Exchange-Transport-Forked: True
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Lb/VPh7eDx+8uAXqVeH7DJbNAOhaPuWa3f5CT3h/INJORJ7mDCVWkm0CgKnudmpM9LI5W5r92BSyz0MjERB/4Gl2oyYOs5kUzr701FfZiZY78zjaiiCvN937bnDKnFeBpH+5Eg0XX7n3GmrgtwbkOF74I2eM77+1VB/tY4YSiuWcARdLL6shSP45qF4FNj14/fNhVk0AUdcYfeOIsUk5I+bI5xtVyT9lRX30HosaKOFmZ7WZfL8Pedh+pb+FJSZr0vQK0xnGVagwa0sx0K5bG8EuKmDPkT/kHKOPCLtGkAy9cHH/TjUWbnenC+qYCABLS+BPXtsyhf09uojC24nCdD6qpui9tRfVEwLNN8soTS1mPqkyUjZbH2duVE8voOYUrFxoT5VB1WCHtBxJ5pf1YHLlwyNdvfjWduXRSI/1dx+pMFumUZbz4qaAIhbKhp3k0T8lKtEnVUz1tojhWXN5dkSDoOv2v09TWzbH8JNtjcm1shSJu2Ue06Lwl4vcFB4WVvzTisBKRlH4667qd3Fi6Wv0p3pLcBqXqFfUQmYbwjEjD/nEc8Xh72CCIvB6O9DMV7wGTsqVy1qgEVLiQb7fmJ1dUl9klnw57ekGd3WclklG+03/CyMV17aN8kRx6CvN4qltad8RnDU9uLm1fTUAh5SoGDVUWTVbMn1GXRNjoedSG7LnFrqmeG64bEyhrVjZW5I/ar6wxxFNkjqLmm8bNT+cimHXdWK0dPvh0tD8gYmiOnkVIw4J0AkuOz9DJBQNbLVcUoE/FBD9hslaMn1fvQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P189MB1700.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(396003)(346002)(39830400003)(366004)(376002)(136003)(4326008)(6916009)(4744005)(2906002)(6486002)(7406005)(7416002)(15974865002)(8936002)(8676002)(66946007)(478600001)(86362001)(5660300002)(316002)(52116002)(6496006)(1076003)(54906003)(38100700002)(66574015)(66556008)(66476007)(9686003)(186003)(557034005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?eDZZLUdi0LX9JYklNk1x7DqZXpMygmSWtSlaRlIBVNvRThOPePohfCLPA5?=
+ =?iso-8859-1?Q?vqTMntKBtCEzz1xuRmWc4X3UdMrUl1+m/hUKXWwf8ByXww3o0gauh+nl2C?=
+ =?iso-8859-1?Q?69oPdOhoDszfyN+oGyL8lKfkoIoELQDUp0Ha/E97SArD/mEBG3+8tGTpoH?=
+ =?iso-8859-1?Q?R+/Dsd7ze7SAecXrgTcbqeE58MZtNUpv6qc3jyupRynVRxr2WwsDmPuw4e?=
+ =?iso-8859-1?Q?VI6CvmvETAdFJ7Ich0AROZZHaaUyJXsw/T2LNLCk+NStIuzMFGKY/Tu6Vv?=
+ =?iso-8859-1?Q?O9IX5YhN0GV5QDX4Gsp/qDQURyrnlnkOC6lE8kQoPlhRq7jFr1VnQWEVGh?=
+ =?iso-8859-1?Q?4LphKn/5DEwUQSIv8a7ViE8raLMb4ZH86eg3sfpHrl8s4+QoxOdloluOpj?=
+ =?iso-8859-1?Q?C9Wn34IqqcUow6TqqcoR4ZBmSIL9f4N5vo+8qJiIgtqJFtTzxqKOkWerSD?=
+ =?iso-8859-1?Q?BWaD4YYbjzfF2ilwbrH+rqO8VnQXI5ld4/X1jcyMYvHLz6bg568C7V1KxD?=
+ =?iso-8859-1?Q?Y7zEert5KiX/SyywI0tPlAyuqfgQ+6UQlk+fc/BPS+uz6jMsoaLINQxYVi?=
+ =?iso-8859-1?Q?P9LpStzEEQAWUszpav4E4QzsZArxc2DTNOGkorJY8NnkthOeL7CBmQ8uSw?=
+ =?iso-8859-1?Q?4URnC8tb0wov6bGORczmFXo4v5xsDTy+Y56CvMO7rKQ+mgK3EK3ynmizZ6?=
+ =?iso-8859-1?Q?N7XObtVUWYuaOWevEeC5xqeZAblK7p/xBUrOZS/l61QdC4RpPv9x9LvOAn?=
+ =?iso-8859-1?Q?rj5gjedsRyLrfjqZmVJD83C87tjMqZcwwWTTJXAZOK2BL6xcf9DCZeazaK?=
+ =?iso-8859-1?Q?a6QmImE/vabFEUTlnw9THp+zXcbVPVJwCtXiHoFGQXYyMCIt6eXWo8O0vC?=
+ =?iso-8859-1?Q?XslR0dVr6kKfKIJQ6pn0IKWgBw90OARdiPlJO/xswtkxlwACx9NcI/a1gf?=
+ =?iso-8859-1?Q?Bxw4s+R9Tq/3wzGyGeszWMKLIr9cxaPrn5ywIu/smDokwdrndWaH8PiJlY?=
+ =?iso-8859-1?Q?PeZQQzAB0LsN9sLV0OTfnoaUFyOd/NO7G91skbNKrwTr67CSMLZpO0Efix?=
+ =?iso-8859-1?Q?ePmY/61Phqj1rTLGOc5UUnvgvLdUKPalem/6yK0T7emq+mTJ6f2adICuEA?=
+ =?iso-8859-1?Q?fIeXJzzGT9XkhMHRlK4s9uNkklGZHW8ChgBnc/l37rX3dBSq6YR1xbogeC?=
+ =?iso-8859-1?Q?vIIUdfOkiaNs6trXwq5V4kjGCaGafYjiQV1vzfd2NygYMLcH0Gy1Qm5ULX?=
+ =?iso-8859-1?Q?/TafMLXdYbz3Nc2PBViPY72+XuZIeTPAyFAtWijazfS7dod5Zu9NFXXH3V?=
+ =?iso-8859-1?Q?J7zFPCNC7zR7ej2QYOwXouGEQM83Ck5nULNdh8XhUk5cmio9IZQll40jUK?=
+ =?iso-8859-1?Q?QIQevgKi3tv9aWyxzUZyC4tJ5cZcdoug=3D=3D?=
+X-OriginatorOrg: eckelmann.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8987669f-0789-4189-d163-08d94191700f
+X-MS-Exchange-CrossTenant-AuthSource: AM9P189MB1700.EURP189.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2021 21:51:56.1698
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 62e24f58-823c-4d73-8ff2-db0a5f20156c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ur8XMZiF6bwEyBALI0qg2jMFHKKsDYaGvYi6ddYfgV7bn1VoiuIVhLN4LTrTEmRStKglRvEnKtWfYKCJBBKoYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8P189MB1411
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 7/6/21 5:48 PM, Uwe Kleine-König wrote:
+
+On Tue, Jul 06, 2021 at 05:48:03PM +0200, Uwe Kleine-K�nig wrote:
 > The driver core ignores the return value of this callback because there
 > is only little it can do when a device disappears.
 > 
@@ -194,86 +249,17 @@ On 7/6/21 5:48 PM, Uwe Kleine-König wrote:
 > With struct bus_type::remove returning void it's prevented that newly
 > implemented buses return an ignored error code and so don't anticipate
 > wrong expectations for driver authors.
-> 
-> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk> (For ARM, Amba and related parts)
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Acked-by: Chen-Yu Tsai <wens@csie.org> (for drivers/bus/sunxi-rsb.c)
-> Acked-by: Pali Rohár <pali@kernel.org>
-> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org> (for drivers/media)
-> Acked-by: Hans de Goede <hdegoede@redhat.com> (For drivers/platform)
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Acked-By: Vinod Koul <vkoul@kernel.org>
-> Acked-by: Juergen Gross <jgross@suse.com> (For Xen)
-> Acked-by: Lee Jones <lee.jones@linaro.org> (For drivers/mfd)
-> Acked-by: Johannes Thumshirn <jth@kernel.org> (For drivers/mcb)
-> Acked-by: Johan Hovold <johan@kernel.org>
-> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org> (For drivers/slimbus)
-> Acked-by: Kirti Wankhede <kwankhede@nvidia.com> (For drivers/vfio)
-> Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com> (For ulpi and typec)
-> Acked-by: Samuel Iglesias Gonsálvez <siglesias@igalia.com> (For ipack)
-> Reviewed-by: Tom Rix <trix@redhat.com> (For fpga)
-> Acked-by: Geoff Levand <geoff@infradead.org> (For ps3)
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
-> 
 
 [...]
 
->   drivers/hid/hid-core.c                    | 4 +---
->   drivers/hid/intel-ish-hid/ishtp/bus.c     | 4 +---
+>  drivers/siox/siox-core.c                  | 4 +---
 
-[...]
+(For drivers/siox)
 
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index 7db332139f7d..dbed2524fd47 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-> @@ -2302,7 +2302,7 @@ static int hid_device_probe(struct device *dev)
->   	return ret;
->   }
->   
-> -static int hid_device_remove(struct device *dev)
-> +static void hid_device_remove(struct device *dev)
->   {
->   	struct hid_device *hdev = to_hid_device(dev);
->   	struct hid_driver *hdrv;
-> @@ -2322,8 +2322,6 @@ static int hid_device_remove(struct device *dev)
->   
->   	if (!hdev->io_started)
->   		up(&hdev->driver_input_lock);
-> -
-> -	return 0;
->   }
->   
->   static ssize_t modalias_show(struct device *dev, struct device_attribute *a,
-> diff --git a/drivers/hid/intel-ish-hid/ishtp/bus.c b/drivers/hid/intel-ish-hid/ishtp/bus.c
-> index f0802b047ed8..8a51bd9cd093 100644
-> --- a/drivers/hid/intel-ish-hid/ishtp/bus.c
-> +++ b/drivers/hid/intel-ish-hid/ishtp/bus.c
-> @@ -255,7 +255,7 @@ static int ishtp_cl_bus_match(struct device *dev, struct device_driver *drv)
->    *
->    * Return: Return value from driver remove() call.
->    */
-> -static int ishtp_cl_device_remove(struct device *dev)
-> +static void ishtp_cl_device_remove(struct device *dev)
->   {
->   	struct ishtp_cl_device *device = to_ishtp_cl_device(dev);
->   	struct ishtp_cl_driver *driver = to_ishtp_cl_driver(dev->driver);
-> @@ -267,8 +267,6 @@ static int ishtp_cl_device_remove(struct device *dev)
->   
->   	if (driver->remove)
->   		driver->remove(device);
-> -
-> -	return 0;
->   }
->   
->   /**
+Acked-by: Thorsten Scherer <t.scherer@eckelmann.de>
 
-For the HID part:
+Best regards
+Thorsten
 
-Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-
-Cheers,
-Benjamin
-
+--
+Thorsten Scherer | Eckelmann AG | www.eckelmann.de |
