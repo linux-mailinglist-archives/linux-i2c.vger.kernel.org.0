@@ -2,495 +2,479 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB003C18F4
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jul 2021 20:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8333C1D7A
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Jul 2021 04:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbhGHSLv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Jul 2021 14:11:51 -0400
-Received: from foss.arm.com ([217.140.110.172]:36016 "EHLO foss.arm.com"
+        id S230313AbhGIC3Q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Jul 2021 22:29:16 -0400
+Received: from mga09.intel.com ([134.134.136.24]:45884 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230248AbhGHSLt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 8 Jul 2021 14:11:49 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34EBE1063;
-        Thu,  8 Jul 2021 11:09:07 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A1C643F66F;
-        Thu,  8 Jul 2021 11:09:05 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wolfram Sang <wsa@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH 07/13] mailbox: pcc: Use PCC mailbox channel pointer instead of standard
-Date:   Thu,  8 Jul 2021 19:08:45 +0100
-Message-Id: <20210708180851.2311192-8-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210708180851.2311192-1-sudeep.holla@arm.com>
-References: <20210708180851.2311192-1-sudeep.holla@arm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S230262AbhGIC3Q (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 8 Jul 2021 22:29:16 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10039"; a="209596032"
+X-IronPort-AV: E=Sophos;i="5.84,225,1620716400"; 
+   d="scan'208";a="209596032"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2021 19:26:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,225,1620716400"; 
+   d="scan'208";a="560817999"
+Received: from jiedeng-optiplex-7050.sh.intel.com ([10.239.154.104])
+  by orsmga004.jf.intel.com with ESMTP; 08 Jul 2021 19:26:28 -0700
+From:   Jie Deng <jie.deng@intel.com>
+To:     linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     wsa@kernel.org, wsa+renesas@sang-engineering.com,
+        jie.deng@intel.com, mst@redhat.com, arnd@arndb.de,
+        jasowang@redhat.com, andriy.shevchenko@linux.intel.com,
+        yu1.wang@intel.com, shuo.a.liu@intel.com, conghui.chen@intel.com,
+        viresh.kumar@linaro.org, stefanha@redhat.com,
+        gregkh@linuxfoundation.org
+Subject: [PATCH v14] i2c: virtio: add a virtio i2c frontend driver
+Date:   Fri,  9 Jul 2021 10:25:30 +0800
+Message-Id: <984ebecaf697058eb73389ed14ead9dd6d38fb53.1625796246.git.jie.deng@intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Now that we have all the shared memory region information populated in
-the pcc_mbox_chan, let us propagate the pointer to the same as the
-return value to pcc_mbox_request channel.
+Add an I2C bus driver for virtio para-virtualization.
 
-This eliminates the need for the individual users of PCC mailbox to
-parse the PCCT subspace entries and fetch the shmem information. This
-also eliminates the need for PCC mailbox controller to set con_priv to
-PCCT subspace entries. This is required as con_priv is private to the
-controller driver to attach private data associated with the channel and
-not meant to be used by the mailbox client/users.
+The controller can be emulated by the backend driver in
+any device model software by following the virtio protocol.
 
-Let us convert all the users of pcc_mbox_{request,free}_channel to use
-new interface.
+The device specification can be found on
+https://lists.oasis-open.org/archives/virtio-comment/202101/msg00008.html.
 
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Wolfram Sang <wsa@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+By following the specification, people may implement different
+backend drivers to emulate different controllers according to
+their needs.
+
+Co-developed-by: Conghui Chen <conghui.chen@intel.com>
+Signed-off-by: Conghui Chen <conghui.chen@intel.com>
+Signed-off-by: Jie Deng <jie.deng@intel.com>
 ---
- drivers/acpi/cppc_acpi.c               | 43 +++++++-----------
- drivers/hwmon/xgene-hwmon.c            | 35 ++++++---------
- drivers/i2c/busses/i2c-xgene-slimpro.c | 33 +++++---------
- drivers/mailbox/pcc.c                  | 61 +++++++-------------------
- include/acpi/pcc.h                     | 12 ++---
- 5 files changed, 61 insertions(+), 123 deletions(-)
+Changes v13 -> v14
+	- Put the headers in virtio_i2c.h in alphabetical order.
+	- Dropped I2C_FUNC_SMBUS_QUICK support.
+	- Dropped few unnecessary variables and checks.
+	- Use "num" everywhere instead of num or nr, to be consistent.
+	- Added few comments which make the design more clear. 
+ 
+Changes v12 -> v13
+	- Use _BITUL() instead of BIT().
+	- Rename "virtio_i2c_send_reqs" to "virtio_i2c_prepare_reqs".
+	- Optimize the return value of "virtio_i2c_complete_reqs".
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index eb5685167d19..dad6c0c1dd3d 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -43,7 +43,7 @@
- #include <acpi/cppc_acpi.h>
+Changes v11 -> v12
+	- Do not sent msg_buf for zero-length request.
+	- Send requests to host only if all the number of transfers requested prepared successfully.
+	- Remove the line #include <linux/bits.h> in virtio_i2c.h.
+
+Changes v10 -> v11
+	- Remove vi->adap.class = I2C_CLASS_DEPRECATED.
+	- Use #ifdef CONFIG_PM_SLEEP to replace the "__maybe_unused".
+	- Remove "struct mutex lock" in "struct virtio_i2c".
+	- Support zero-length request.
+	- Remove unnecessary logs.
+	- Remove vi->adap.timeout = HZ / 10, just use the default value.
+	- Use BIT(0) to define VIRTIO_I2C_FLAGS_FAIL_NEXT.
+	- Add the virtio_device index to adapter's naming mechanism.
+
+ drivers/i2c/busses/Kconfig      |  11 ++
+ drivers/i2c/busses/Makefile     |   3 +
+ drivers/i2c/busses/i2c-virtio.c | 285 ++++++++++++++++++++++++++++++++++++++++
+ include/uapi/linux/virtio_i2c.h |  41 ++++++
+ include/uapi/linux/virtio_ids.h |   1 +
+ 5 files changed, 341 insertions(+)
+ create mode 100644 drivers/i2c/busses/i2c-virtio.c
+ create mode 100644 include/uapi/linux/virtio_i2c.h
+
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 10acece..e47616a 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -21,6 +21,17 @@ config I2C_ALI1535
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called i2c-ali1535.
  
- struct cppc_pcc_data {
--	struct mbox_chan *pcc_channel;
-+	struct pcc_mbox_chan *pcc_channel;
- 	void __iomem *pcc_comm_addr;
- 	bool pcc_channel_acquired;
- 	unsigned int deadline_us;
-@@ -295,7 +295,7 @@ static int send_pcc_cmd(int pcc_ss_id, u16 cmd)
- 	pcc_ss_data->platform_owns_pcc = true;
++config I2C_VIRTIO
++	tristate "Virtio I2C Adapter"
++	select VIRTIO
++	help
++	  If you say yes to this option, support will be included for the virtio
++	  I2C adapter driver. The hardware can be emulated by any device model
++	  software according to the virtio protocol.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called i2c-virtio.
++
+ config I2C_ALI1563
+ 	tristate "ALI 1563"
+ 	depends on PCI
+diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+index 69e9963..9843756 100644
+--- a/drivers/i2c/busses/Makefile
++++ b/drivers/i2c/busses/Makefile
+@@ -147,4 +147,7 @@ obj-$(CONFIG_I2C_XGENE_SLIMPRO) += i2c-xgene-slimpro.o
+ obj-$(CONFIG_SCx200_ACB)	+= scx200_acb.o
+ obj-$(CONFIG_I2C_FSI)		+= i2c-fsi.o
  
- 	/* Ring doorbell */
--	ret = mbox_send_message(pcc_ss_data->pcc_channel, &cmd);
-+	ret = mbox_send_message(pcc_ss_data->pcc_channel->mchan, &cmd);
- 	if (ret < 0) {
- 		pr_err("Err sending PCC mbox message. ss: %d cmd:%d, ret:%d\n",
- 		       pcc_ss_id, cmd, ret);
-@@ -308,10 +308,10 @@ static int send_pcc_cmd(int pcc_ss_id, u16 cmd)
- 	if (pcc_ss_data->pcc_mrtt)
- 		pcc_ss_data->last_cmd_cmpl_time = ktime_get();
++# VIRTIO I2C host controller driver
++obj-$(CONFIG_I2C_VIRTIO)	+= i2c-virtio.o
++
+ ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
+diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
+new file mode 100644
+index 0000000..0139cdc
+--- /dev/null
++++ b/drivers/i2c/busses/i2c-virtio.c
+@@ -0,0 +1,285 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Virtio I2C Bus Driver
++ *
++ * The Virtio I2C Specification:
++ * https://raw.githubusercontent.com/oasis-tcs/virtio-spec/master/virtio-i2c.tex
++ *
++ * Copyright (c) 2021 Intel Corporation. All rights reserved.
++ */
++
++#include <linux/acpi.h>
++#include <linux/completion.h>
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/virtio.h>
++#include <linux/virtio_ids.h>
++#include <linux/virtio_config.h>
++#include <linux/virtio_i2c.h>
++
++/**
++ * struct virtio_i2c - virtio I2C data
++ * @vdev: virtio device for this controller
++ * @completion: completion of virtio I2C message
++ * @adap: I2C adapter for this controller
++ * @vq: the virtio virtqueue for communication
++ */
++struct virtio_i2c {
++	struct virtio_device *vdev;
++	struct completion completion;
++	struct i2c_adapter adap;
++	struct virtqueue *vq;
++};
++
++/**
++ * struct virtio_i2c_req - the virtio I2C request structure
++ * @out_hdr: the OUT header of the virtio I2C message
++ * @buf: the buffer into which data is read, or from which it's written
++ * @in_hdr: the IN header of the virtio I2C message
++ */
++struct virtio_i2c_req {
++	struct virtio_i2c_out_hdr out_hdr	____cacheline_aligned;
++	uint8_t *buf				____cacheline_aligned;
++	struct virtio_i2c_in_hdr in_hdr		____cacheline_aligned;
++};
++
++static void virtio_i2c_msg_done(struct virtqueue *vq)
++{
++	struct virtio_i2c *vi = vq->vdev->priv;
++
++	complete(&vi->completion);
++}
++
++static int virtio_i2c_prepare_reqs(struct virtqueue *vq,
++				   struct virtio_i2c_req *reqs,
++				   struct i2c_msg *msgs, int num)
++{
++	struct scatterlist *sgs[3], out_hdr, msg_buf, in_hdr;
++	int i;
++
++	for (i = 0; i < num; i++) {
++		int outcnt = 0, incnt = 0;
++
++		/*
++		 * We don't support 0 length messages and so masked out
++		 * I2C_FUNC_SMBUS_QUICK in virtio_i2c_func().
++		 */
++		if (!msgs[i].len)
++			break;
++
++		/*
++		 * Only 7-bit mode supported for this moment. For the address
++		 * format, Please check the Virtio I2C Specification.
++		 */
++		reqs[i].out_hdr.addr = cpu_to_le16(msgs[i].addr << 1);
++
++		if (i != num - 1)
++			reqs[i].out_hdr.flags = cpu_to_le32(VIRTIO_I2C_FLAGS_FAIL_NEXT);
++
++		sg_init_one(&out_hdr, &reqs[i].out_hdr, sizeof(reqs[i].out_hdr));
++		sgs[outcnt++] = &out_hdr;
++
++		reqs[i].buf = i2c_get_dma_safe_msg_buf(&msgs[i], 1);
++		if (!reqs[i].buf)
++			break;
++
++		sg_init_one(&msg_buf, reqs[i].buf, msgs[i].len);
++
++		if (msgs[i].flags & I2C_M_RD)
++			sgs[outcnt + incnt++] = &msg_buf;
++		else
++			sgs[outcnt++] = &msg_buf;
++
++		sg_init_one(&in_hdr, &reqs[i].in_hdr, sizeof(reqs[i].in_hdr));
++		sgs[outcnt + incnt++] = &in_hdr;
++
++		if (virtqueue_add_sgs(vq, sgs, outcnt, incnt, &reqs[i], GFP_KERNEL)) {
++			i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], false);
++			break;
++		}
++	}
++
++	return i;
++}
++
++static int virtio_i2c_complete_reqs(struct virtqueue *vq,
++				    struct virtio_i2c_req *reqs,
++				    struct i2c_msg *msgs, int num,
++				    bool timedout)
++{
++	struct virtio_i2c_req *req;
++	bool failed = timedout;
++	unsigned int len;
++	int i, j = 0;
++
++	for (i = 0; i < num; i++) {
++		/* Detach the ith request from the vq */
++		req = virtqueue_get_buf(vq, &len);
++
++		/*
++		 * Condition req == &reqs[i] should always meet since we have
++		 * total num requests in the vq. reqs[i] can never be NULL here.
++		 */
++		if (!failed && (WARN_ON(req != &reqs[i]) ||
++				req->in_hdr.status != VIRTIO_I2C_MSG_OK))
++			failed = true;
++
++		i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], !failed);
++
++		if (!failed)
++			j++;
++	}
++
++	return timedout ? -ETIMEDOUT : j;
++}
++
++static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
++			   int num)
++{
++	struct virtio_i2c *vi = i2c_get_adapdata(adap);
++	struct virtqueue *vq = vi->vq;
++	struct virtio_i2c_req *reqs;
++	unsigned long time_left;
++	int count;
++
++	reqs = kcalloc(num, sizeof(*reqs), GFP_KERNEL);
++	if (!reqs)
++		return -ENOMEM;
++
++	count = virtio_i2c_prepare_reqs(vq, reqs, msgs, num);
++	if (!count)
++		goto err_free;
++
++	/*
++	 * For the case where count < num, i.e. we weren't able to queue all the
++	 * msgs, ideally we should abort right away and return early, but some
++	 * of the messages are already sent to the remote I2C controller and the
++	 * virtqueue will be left in undefined state in that case. We kick the
++	 * remote here to clear the virtqueue, so we can try another set of
++	 * messages later on.
++	 */
++
++	reinit_completion(&vi->completion);
++	virtqueue_kick(vq);
++
++	time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
++	if (!time_left)
++		dev_err(&adap->dev, "virtio i2c backend timeout.\n");
++
++	count = virtio_i2c_complete_reqs(vq, reqs, msgs, count, !time_left);
++
++err_free:
++	kfree(reqs);
++	return count;
++}
++
++static void virtio_i2c_del_vqs(struct virtio_device *vdev)
++{
++	vdev->config->reset(vdev);
++	vdev->config->del_vqs(vdev);
++}
++
++static int virtio_i2c_setup_vqs(struct virtio_i2c *vi)
++{
++	struct virtio_device *vdev = vi->vdev;
++
++	vi->vq = virtio_find_single_vq(vdev, virtio_i2c_msg_done, "msg");
++	return PTR_ERR_OR_ZERO(vi->vq);
++}
++
++static u32 virtio_i2c_func(struct i2c_adapter *adap)
++{
++	return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
++}
++
++static struct i2c_algorithm virtio_algorithm = {
++	.master_xfer = virtio_i2c_xfer,
++	.functionality = virtio_i2c_func,
++};
++
++static int virtio_i2c_probe(struct virtio_device *vdev)
++{
++	struct device *pdev = vdev->dev.parent;
++	struct virtio_i2c *vi;
++	int ret;
++
++	vi = devm_kzalloc(&vdev->dev, sizeof(*vi), GFP_KERNEL);
++	if (!vi)
++		return -ENOMEM;
++
++	vdev->priv = vi;
++	vi->vdev = vdev;
++
++	init_completion(&vi->completion);
++
++	ret = virtio_i2c_setup_vqs(vi);
++	if (ret)
++		return ret;
++
++	vi->adap.owner = THIS_MODULE;
++	snprintf(vi->adap.name, sizeof(vi->adap.name),
++		 "i2c_virtio at virtio bus %d", vdev->index);
++	vi->adap.algo = &virtio_algorithm;
++	vi->adap.dev.parent = &vdev->dev;
++	i2c_set_adapdata(&vi->adap, vi);
++
++	/*
++	 * Setup ACPI node for controlled devices which will be probed through
++	 * ACPI.
++	 */
++	ACPI_COMPANION_SET(&vi->adap.dev, ACPI_COMPANION(pdev));
++
++	ret = i2c_add_adapter(&vi->adap);
++	if (ret)
++		virtio_i2c_del_vqs(vdev);
++
++	return ret;
++}
++
++static void virtio_i2c_remove(struct virtio_device *vdev)
++{
++	struct virtio_i2c *vi = vdev->priv;
++
++	i2c_del_adapter(&vi->adap);
++	virtio_i2c_del_vqs(vdev);
++}
++
++static struct virtio_device_id id_table[] = {
++	{ VIRTIO_ID_I2C_ADAPTER, VIRTIO_DEV_ANY_ID },
++	{}
++};
++MODULE_DEVICE_TABLE(virtio, id_table);
++
++#ifdef CONFIG_PM_SLEEP
++static int virtio_i2c_freeze(struct virtio_device *vdev)
++{
++	virtio_i2c_del_vqs(vdev);
++	return 0;
++}
++
++static int virtio_i2c_restore(struct virtio_device *vdev)
++{
++	return virtio_i2c_setup_vqs(vdev->priv);
++}
++#endif
++
++static struct virtio_driver virtio_i2c_driver = {
++	.id_table	= id_table,
++	.probe		= virtio_i2c_probe,
++	.remove		= virtio_i2c_remove,
++	.driver	= {
++		.name	= "i2c_virtio",
++	},
++#ifdef CONFIG_PM_SLEEP
++	.freeze = virtio_i2c_freeze,
++	.restore = virtio_i2c_restore,
++#endif
++};
++module_virtio_driver(virtio_i2c_driver);
++
++MODULE_AUTHOR("Jie Deng <jie.deng@intel.com>");
++MODULE_AUTHOR("Conghui Chen <conghui.chen@intel.com>");
++MODULE_DESCRIPTION("Virtio i2c bus driver");
++MODULE_LICENSE("GPL");
+diff --git a/include/uapi/linux/virtio_i2c.h b/include/uapi/linux/virtio_i2c.h
+new file mode 100644
+index 0000000..7c6a6fc
+--- /dev/null
++++ b/include/uapi/linux/virtio_i2c.h
+@@ -0,0 +1,41 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
++/*
++ * Definitions for virtio I2C Adpter
++ *
++ * Copyright (c) 2021 Intel Corporation. All rights reserved.
++ */
++
++#ifndef _UAPI_LINUX_VIRTIO_I2C_H
++#define _UAPI_LINUX_VIRTIO_I2C_H
++
++#include <linux/const.h>
++#include <linux/types.h>
++
++/* The bit 0 of the @virtio_i2c_out_hdr.@flags, used to group the requests */
++#define VIRTIO_I2C_FLAGS_FAIL_NEXT	_BITUL(0)
++
++/**
++ * struct virtio_i2c_out_hdr - the virtio I2C message OUT header
++ * @addr: the controlled device address
++ * @padding: used to pad to full dword
++ * @flags: used for feature extensibility
++ */
++struct virtio_i2c_out_hdr {
++	__le16 addr;
++	__le16 padding;
++	__le32 flags;
++};
++
++/**
++ * struct virtio_i2c_in_hdr - the virtio I2C message IN header
++ * @status: the processing result from the backend
++ */
++struct virtio_i2c_in_hdr {
++	__u8 status;
++};
++
++/* The final status written by the device */
++#define VIRTIO_I2C_MSG_OK	0
++#define VIRTIO_I2C_MSG_ERR	1
++
++#endif /* _UAPI_LINUX_VIRTIO_I2C_H */
+diff --git a/include/uapi/linux/virtio_ids.h b/include/uapi/linux/virtio_ids.h
+index 4fe842c..3b5f05a 100644
+--- a/include/uapi/linux/virtio_ids.h
++++ b/include/uapi/linux/virtio_ids.h
+@@ -55,6 +55,7 @@
+ #define VIRTIO_ID_FS			26 /* virtio filesystem */
+ #define VIRTIO_ID_PMEM			27 /* virtio pmem */
+ #define VIRTIO_ID_MAC80211_HWSIM	29 /* virtio mac80211-hwsim */
++#define VIRTIO_ID_I2C_ADAPTER		34 /* virtio i2c adapter */
+ #define VIRTIO_ID_BT			40 /* virtio bluetooth */
  
--	if (pcc_ss_data->pcc_channel->mbox->txdone_irq)
--		mbox_chan_txdone(pcc_ss_data->pcc_channel, ret);
-+	if (pcc_ss_data->pcc_channel->mchan->mbox->txdone_irq)
-+		mbox_chan_txdone(pcc_ss_data->pcc_channel->mchan, ret);
- 	else
--		mbox_client_txdone(pcc_ss_data->pcc_channel, ret);
-+		mbox_client_txdone(pcc_ss_data->pcc_channel->mchan, ret);
- 
- end:
- 	if (cmd == CMD_WRITE) {
-@@ -493,46 +493,33 @@ EXPORT_SYMBOL_GPL(acpi_get_psd_map);
- 
- static int register_pcc_channel(int pcc_ss_idx)
- {
--	struct acpi_pcct_hw_reduced *cppc_ss;
-+	struct pcc_mbox_chan *pcc_chan;
- 	u64 usecs_lat;
- 
- 	if (pcc_ss_idx >= 0) {
--		pcc_data[pcc_ss_idx]->pcc_channel =
--			pcc_mbox_request_channel(&cppc_mbox_cl,	pcc_ss_idx);
-+		pcc_chan = pcc_mbox_request_channel(&cppc_mbox_cl, pcc_ss_idx);
- 
--		if (IS_ERR(pcc_data[pcc_ss_idx]->pcc_channel)) {
-+		if (IS_ERR(pcc_chan)) {
- 			pr_err("Failed to find PCC channel for subspace %d\n",
- 			       pcc_ss_idx);
- 			return -ENODEV;
- 		}
- 
--		/*
--		 * The PCC mailbox controller driver should
--		 * have parsed the PCCT (global table of all
--		 * PCC channels) and stored pointers to the
--		 * subspace communication region in con_priv.
--		 */
--		cppc_ss = (pcc_data[pcc_ss_idx]->pcc_channel)->con_priv;
--
--		if (!cppc_ss) {
--			pr_err("No PCC subspace found for %d CPPC\n",
--			       pcc_ss_idx);
--			return -ENODEV;
--		}
--
-+		pcc_data[pcc_ss_idx]->pcc_channel = pcc_chan;
- 		/*
- 		 * cppc_ss->latency is just a Nominal value. In reality
- 		 * the remote processor could be much slower to reply.
- 		 * So add an arbitrary amount of wait on top of Nominal.
- 		 */
--		usecs_lat = NUM_RETRIES * cppc_ss->latency;
-+		usecs_lat = NUM_RETRIES * pcc_chan->latency;
- 		pcc_data[pcc_ss_idx]->deadline_us = usecs_lat;
--		pcc_data[pcc_ss_idx]->pcc_mrtt = cppc_ss->min_turnaround_time;
--		pcc_data[pcc_ss_idx]->pcc_mpar = cppc_ss->max_access_rate;
--		pcc_data[pcc_ss_idx]->pcc_nominal = cppc_ss->latency;
-+		pcc_data[pcc_ss_idx]->pcc_mrtt = pcc_chan->min_turnaround_time;
-+		pcc_data[pcc_ss_idx]->pcc_mpar = pcc_chan->max_access_rate;
-+		pcc_data[pcc_ss_idx]->pcc_nominal = pcc_chan->latency;
- 
- 		pcc_data[pcc_ss_idx]->pcc_comm_addr =
--			acpi_os_ioremap(cppc_ss->base_address, cppc_ss->length);
-+			acpi_os_ioremap(pcc_chan->shmem_base_addr,
-+					pcc_chan->shmem_size);
- 		if (!pcc_data[pcc_ss_idx]->pcc_comm_addr) {
- 			pr_err("Failed to ioremap PCC comm region mem for %d\n",
- 			       pcc_ss_idx);
-diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-index 382ef0395d8e..30aae8642069 100644
---- a/drivers/hwmon/xgene-hwmon.c
-+++ b/drivers/hwmon/xgene-hwmon.c
-@@ -93,6 +93,7 @@ struct slimpro_resp_msg {
- struct xgene_hwmon_dev {
- 	struct device		*dev;
- 	struct mbox_chan	*mbox_chan;
-+	struct pcc_mbox_chan	*pcc_chan;
- 	struct mbox_client	mbox_client;
- 	int			mbox_idx;
- 
-@@ -652,7 +653,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 			goto out_mbox_free;
- 		}
- 	} else {
--		struct acpi_pcct_hw_reduced *cppc_ss;
-+		struct pcc_mbox_chan *pcc_chan;
- 		const struct acpi_device_id *acpi_id;
- 		int version;
- 
-@@ -671,26 +672,16 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		}
- 
- 		cl->rx_callback = xgene_hwmon_pcc_rx_cb;
--		ctx->mbox_chan = pcc_mbox_request_channel(cl, ctx->mbox_idx);
--		if (IS_ERR(ctx->mbox_chan)) {
-+		pcc_chan = pcc_mbox_request_channel(cl, ctx->mbox_idx);
-+		if (IS_ERR(pcc_chan)) {
- 			dev_err(&pdev->dev,
- 				"PPC channel request failed\n");
- 			rc = -ENODEV;
- 			goto out_mbox_free;
- 		}
- 
--		/*
--		 * The PCC mailbox controller driver should
--		 * have parsed the PCCT (global table of all
--		 * PCC channels) and stored pointers to the
--		 * subspace communication region in con_priv.
--		 */
--		cppc_ss = ctx->mbox_chan->con_priv;
--		if (!cppc_ss) {
--			dev_err(&pdev->dev, "PPC subspace not found\n");
--			rc = -ENODEV;
--			goto out;
--		}
-+		ctx->pcc_chan = pcc_chan;
-+		ctx->mbox_chan = pcc_chan->mchan;
- 
- 		if (!ctx->mbox_chan->mbox->txdone_irq) {
- 			dev_err(&pdev->dev, "PCC IRQ not supported\n");
-@@ -702,16 +693,16 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		 * This is the shared communication region
- 		 * for the OS and Platform to communicate over.
- 		 */
--		ctx->comm_base_addr = cppc_ss->base_address;
-+		ctx->comm_base_addr = pcc_chan->shmem_base_addr;
- 		if (ctx->comm_base_addr) {
- 			if (version == XGENE_HWMON_V2)
- 				ctx->pcc_comm_addr = (void __force *)ioremap(
- 							ctx->comm_base_addr,
--							cppc_ss->length);
-+							pcc_chan->shmem_size);
- 			else
- 				ctx->pcc_comm_addr = memremap(
- 							ctx->comm_base_addr,
--							cppc_ss->length,
-+							pcc_chan->shmem_size,
- 							MEMREMAP_WB);
- 		} else {
- 			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
-@@ -727,11 +718,11 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 		}
- 
- 		/*
--		 * cppc_ss->latency is just a Nominal value. In reality
-+		 * pcc_chan->latency is just a Nominal value. In reality
- 		 * the remote processor could be much slower to reply.
- 		 * So add an arbitrary amount of wait on top of Nominal.
- 		 */
--		ctx->usecs_lat = PCC_NUM_RETRIES * cppc_ss->latency;
-+		ctx->usecs_lat = PCC_NUM_RETRIES * pcc_chan->latency;
- 	}
- 
- 	ctx->hwmon_dev = hwmon_device_register_with_groups(ctx->dev,
-@@ -757,7 +748,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
- 	else
--		pcc_mbox_free_channel(ctx->mbox_chan);
-+		pcc_mbox_free_channel(ctx->pcc_chan);
- out_mbox_free:
- 	kfifo_free(&ctx->async_msg_fifo);
- 
-@@ -773,7 +764,7 @@ static int xgene_hwmon_remove(struct platform_device *pdev)
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
- 	else
--		pcc_mbox_free_channel(ctx->mbox_chan);
-+		pcc_mbox_free_channel(ctx->pcc_chan);
- 
- 	return 0;
- }
-diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c b/drivers/i2c/busses/i2c-xgene-slimpro.c
-index bba08cbce6e1..1a19ebad60ad 100644
---- a/drivers/i2c/busses/i2c-xgene-slimpro.c
-+++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
-@@ -103,6 +103,7 @@ struct slimpro_i2c_dev {
- 	struct i2c_adapter adapter;
- 	struct device *dev;
- 	struct mbox_chan *mbox_chan;
-+	struct pcc_mbox_chan *pcc_chan;
- 	struct mbox_client mbox_client;
- 	int mbox_idx;
- 	struct completion rd_complete;
-@@ -466,7 +467,7 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
- 			return PTR_ERR(ctx->mbox_chan);
- 		}
- 	} else {
--		struct acpi_pcct_hw_reduced *cppc_ss;
-+		struct pcc_mbox_chan *pcc_chan;
- 		const struct acpi_device_id *acpi_id;
- 		int version = XGENE_SLIMPRO_I2C_V1;
- 
-@@ -483,24 +484,14 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
- 
- 		cl->tx_block = false;
- 		cl->rx_callback = slimpro_i2c_pcc_rx_cb;
--		ctx->mbox_chan = pcc_mbox_request_channel(cl, ctx->mbox_idx);
--		if (IS_ERR(ctx->mbox_chan)) {
-+		pcc_chan = pcc_mbox_request_channel(cl, ctx->mbox_idx);
-+		if (IS_ERR(pcc_chan)) {
- 			dev_err(&pdev->dev, "PCC mailbox channel request failed\n");
--			return PTR_ERR(ctx->mbox_chan);
-+			return PTR_ERR(ctx->pcc_chan);
- 		}
- 
--		/*
--		 * The PCC mailbox controller driver should
--		 * have parsed the PCCT (global table of all
--		 * PCC channels) and stored pointers to the
--		 * subspace communication region in con_priv.
--		 */
--		cppc_ss = ctx->mbox_chan->con_priv;
--		if (!cppc_ss) {
--			dev_err(&pdev->dev, "PPC subspace not found\n");
--			rc = -ENOENT;
--			goto mbox_err;
--		}
-+		ctx->pcc_chan = pcc_chan;
-+		ctx->mbox_chan = pcc_chan->mchan;
- 
- 		if (!ctx->mbox_chan->mbox->txdone_irq) {
- 			dev_err(&pdev->dev, "PCC IRQ not supported\n");
-@@ -512,17 +503,17 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
- 		 * This is the shared communication region
- 		 * for the OS and Platform to communicate over.
- 		 */
--		ctx->comm_base_addr = cppc_ss->base_address;
-+		ctx->comm_base_addr = pcc_chan->shmem_base_addr;
- 		if (ctx->comm_base_addr) {
- 			if (version == XGENE_SLIMPRO_I2C_V2)
- 				ctx->pcc_comm_addr = memremap(
- 							ctx->comm_base_addr,
--							cppc_ss->length,
-+							pcc_chan->shmem_size,
- 							MEMREMAP_WT);
- 			else
- 				ctx->pcc_comm_addr = memremap(
- 							ctx->comm_base_addr,
--							cppc_ss->length,
-+							pcc_chan->shmem_size,
- 							MEMREMAP_WB);
- 		} else {
- 			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
-@@ -561,7 +552,7 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
- 	else
--		pcc_mbox_free_channel(ctx->mbox_chan);
-+		pcc_mbox_free_channel(ctx->pcc_chan);
- 
- 	return rc;
- }
-@@ -575,7 +566,7 @@ static int xgene_slimpro_i2c_remove(struct platform_device *pdev)
- 	if (acpi_disabled)
- 		mbox_free_channel(ctx->mbox_chan);
- 	else
--		pcc_mbox_free_channel(ctx->mbox_chan);
-+		pcc_mbox_free_channel(ctx->pcc_chan);
- 
- 	return 0;
- }
-diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-index affde0995d52..49971e007e40 100644
---- a/drivers/mailbox/pcc.c
-+++ b/drivers/mailbox/pcc.c
-@@ -79,24 +79,9 @@ struct pcc_chan_info {
- 	int db_irq;
- };
- 
-+#define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
- static struct pcc_chan_info *chan_info;
--
- static struct mbox_controller pcc_mbox_ctrl = {};
--/**
-- * get_pcc_channel - Given a PCC subspace idx, get
-- *	the respective mbox_channel.
-- * @id: PCC subspace index.
-- *
-- * Return: ERR_PTR(errno) if error, else pointer
-- *	to mbox channel.
-- */
--static struct mbox_chan *get_pcc_channel(int id)
--{
--	if (id < 0 || id >= pcc_mbox_ctrl.num_chans)
--		return ERR_PTR(-ENOENT);
--
--	return &pcc_mbox_channels[id];
--}
- 
- /*
-  * PCC can be used with perf critical drivers such as CPPC
-@@ -239,26 +224,16 @@ static irqreturn_t pcc_mbox_irq(int irq, void *p)
-  *		ACPI package. This is used to lookup the array of PCC
-  *		subspaces as parsed by the PCC Mailbox controller.
-  *
-- * Return: Pointer to the Mailbox Channel if successful or
-- *		ERR_PTR.
-+ * Return: Pointer to the PCC Mailbox Channel if successful or ERR_PTR.
-  */
--struct mbox_chan *pcc_mbox_request_channel(struct mbox_client *cl,
--					   int subspace_id)
-+struct pcc_mbox_chan *
-+pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
- {
- 	struct pcc_chan_info *pchan = chan_info + subspace_id;
- 	struct device *dev = pcc_mbox_ctrl.dev;
--	struct mbox_chan *chan;
-+	struct mbox_chan *chan = pchan->chan.mchan;
- 	unsigned long flags;
- 
--	/*
--	 * Each PCC Subspace is a Mailbox Channel.
--	 * The PCC Clients get their PCC Subspace ID
--	 * from their own tables and pass it here.
--	 * This returns a pointer to the PCC subspace
--	 * for the Client to operate on.
--	 */
--	chan = get_pcc_channel(subspace_id);
--
- 	if (IS_ERR(chan) || chan->cl) {
- 		dev_err(dev, "Channel not found for idx: %d\n", subspace_id);
- 		return ERR_PTR(-EBUSY);
-@@ -284,38 +259,32 @@ struct mbox_chan *pcc_mbox_request_channel(struct mbox_client *cl,
- 		if (unlikely(rc)) {
- 			dev_err(dev, "failed to register PCC interrupt %d\n",
- 				pchan->db_irq);
--			pcc_mbox_free_channel(chan);
--			chan = ERR_PTR(rc);
-+			pcc_mbox_free_channel(&pchan->chan);
-+			return ERR_PTR(rc);
- 		}
- 	}
- 
--	return chan;
-+	return &pchan->chan;
- }
- EXPORT_SYMBOL_GPL(pcc_mbox_request_channel);
- 
- /**
-  * pcc_mbox_free_channel - Clients call this to free their Channel.
-  *
-- * @chan: Pointer to the mailbox channel as returned by
-- *		pcc_mbox_request_channel()
-+ * @pchan: Pointer to the PCC mailbox channel as returned by
-+ *	   pcc_mbox_request_channel()
-  */
--void pcc_mbox_free_channel(struct mbox_chan *chan)
-+void pcc_mbox_free_channel(struct pcc_mbox_chan *pchan)
- {
--	u32 id = chan - pcc_mbox_channels;
--	struct pcc_chan_info *pchan;
-+	struct pcc_chan_info *pchan_info = to_pcc_chan_info(pchan);
-+	struct mbox_chan *chan = pchan->mchan;
- 	unsigned long flags;
- 
- 	if (!chan || !chan->cl)
- 		return;
- 
--	if (id >= pcc_mbox_ctrl.num_chans) {
--		pr_debug("pcc_mbox_free_channel: Invalid mbox_chan passed\n");
--		return;
--	}
--
--	pchan = chan_info + id;
--	if (pchan->db_irq > 0)
--		devm_free_irq(chan->mbox->dev, pchan->db_irq, chan);
-+	if (pchan_info->db_irq > 0)
-+		devm_free_irq(chan->mbox->dev, pchan_info->db_irq, chan);
- 
- 	spin_lock_irqsave(&chan->lock, flags);
- 	chan->cl = NULL;
-diff --git a/include/acpi/pcc.h b/include/acpi/pcc.h
-index 5e510a6b8052..73e806fe7ce7 100644
---- a/include/acpi/pcc.h
-+++ b/include/acpi/pcc.h
-@@ -20,16 +20,16 @@ struct pcc_mbox_chan {
- 
- #define MAX_PCC_SUBSPACES	256
- #ifdef CONFIG_PCC
--extern struct mbox_chan *pcc_mbox_request_channel(struct mbox_client *cl,
--						  int subspace_id);
--extern void pcc_mbox_free_channel(struct mbox_chan *chan);
-+extern struct pcc_mbox_chan *
-+pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id);
-+extern void pcc_mbox_free_channel(struct pcc_mbox_chan *chan);
- #else
--static inline struct mbox_chan *pcc_mbox_request_channel(struct mbox_client *cl,
--							 int subspace_id)
-+static inline struct pcc_mbox_chan *
-+pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
- {
- 	return ERR_PTR(-ENODEV);
- }
--static inline void pcc_mbox_free_channel(struct mbox_chan *chan) { }
-+static inline void pcc_mbox_free_channel(struct pcc_mbox_chan *chan) { }
- #endif
- 
- #endif /* _PCC_H */
+ #endif /* _LINUX_VIRTIO_IDS_H */
 -- 
-2.25.1
+2.7.4
 
