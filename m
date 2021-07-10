@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD203C3147
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Jul 2021 04:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDB63C31AB
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Jul 2021 04:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbhGJClH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Jul 2021 22:41:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58442 "EHLO mail.kernel.org"
+        id S235312AbhGJCnq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Jul 2021 22:43:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235803AbhGJCjr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:39:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B411961435;
-        Sat, 10 Jul 2021 02:36:00 +0000 (UTC)
+        id S235400AbhGJCmz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:42:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A637D613CA;
+        Sat, 10 Jul 2021 02:39:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625884561;
-        bh=gX80I4HjBwctd2RK6SB6nTUgM99aqqGzzWuj3XnhyDo=;
+        s=k20201202; t=1625884749;
+        bh=BC0d3JEZTjVg/cD/fz//KnLazwuydKt7zuKa+28OpfY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fp/YLjqb2PoCot5lhJp/UJkw6o3FECuc4AyYzPNEaayDWpaIvPx/mfSPoGcbmcyLY
-         3K/OjG9Usw92H/zB+/Ec806o+eggzTpAwyomI7ow+rJKUQHGogxN+eWBHCcMjpqiy3
-         qLKuq1xUVdPLOmoP9zfftwSg2ju3DNJfh3EZkyVxKMY1+OT0HiDXlKAPLSRbrV/vqA
-         KVfiFxH1pJNzOVbHwTFznMT9fHxBW4dw0xUDNm4sTALidf6qiwRhZxLuRsAbTstOvB
-         lbVsFVlzRpGiSw+jIPyReDMu3SRUao8ID0Sku3NHwcNTzOlWqGLXzmrf6lr1W6rmTD
-         7prLsArZRyBxQ==
+        b=goEL54qN3dhGWn78R3dvm4wGh5y/4Ret/qnW5mOWzXpfHnMd7CpvaqyvuMWINIWdZ
+         aSh1arC91LPNDtOPYcS6EmyrPnCa6GzlpZy1AcwSfKdQxO6Nt6f0eJGgBK3Rf/bykh
+         bNdNb3ZQtop3HZ2jirDNuIXKODmFVbdZQTSTOQVaaaC2R6FcVU15dgzNzZsPsj06fh
+         FYk4GIxRPZBwFHXcGP8cVijFSookoCVtLiHLF7ERrbnFjmeO4tIxxj55kEjV+QEkOs
+         hfH0Q+4S+nif4pGa1Vbcg/Q/UpGj5YI9Qdisl9llQhRihCnB+uXesVgMG71hmQsMbb
+         vqBvje/1DTgEg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -30,12 +30,12 @@ Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Stephen Boyd <swboyd@chromium.org>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 32/33] i2c: core: Disable client irq on reboot/shutdown
-Date:   Fri,  9 Jul 2021 22:35:14 -0400
-Message-Id: <20210710023516.3172075-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 25/26] i2c: core: Disable client irq on reboot/shutdown
+Date:   Fri,  9 Jul 2021 22:36:03 -0400
+Message-Id: <20210710023604.3172486-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710023516.3172075-1-sashal@kernel.org>
-References: <20210710023516.3172075-1-sashal@kernel.org>
+In-Reply-To: <20210710023604.3172486-1-sashal@kernel.org>
+References: <20210710023604.3172486-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -71,14 +71,14 @@ Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/i2c-core-base.c | 3 +++
+ drivers/i2c/i2c-core.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 39065a5d50fc..b7fe8075f2b8 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -31,6 +31,7 @@
+diff --git a/drivers/i2c/i2c-core.c b/drivers/i2c/i2c-core.c
+index 4fd7bfda2f9d..67e44e990777 100644
+--- a/drivers/i2c/i2c-core.c
++++ b/drivers/i2c/i2c-core.c
+@@ -42,6 +42,7 @@
  #include <linux/i2c.h>
  #include <linux/idr.h>
  #include <linux/init.h>
@@ -86,7 +86,7 @@ index 39065a5d50fc..b7fe8075f2b8 100644
  #include <linux/irqflags.h>
  #include <linux/jump_label.h>
  #include <linux/kernel.h>
-@@ -452,6 +453,8 @@ static void i2c_device_shutdown(struct device *dev)
+@@ -1003,6 +1004,8 @@ static void i2c_device_shutdown(struct device *dev)
  	driver = to_i2c_driver(dev->driver);
  	if (driver->shutdown)
  		driver->shutdown(client);
