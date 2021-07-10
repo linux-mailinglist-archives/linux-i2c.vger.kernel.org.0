@@ -2,27 +2,27 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DE83C3082
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Jul 2021 04:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8B33C3145
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Jul 2021 04:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbhGJCfo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Jul 2021 22:35:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53520 "EHLO mail.kernel.org"
+        id S232866AbhGJClG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Jul 2021 22:41:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58380 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235640AbhGJCe5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:34:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 60520613CC;
-        Sat, 10 Jul 2021 02:32:00 +0000 (UTC)
+        id S234927AbhGJCjS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:39:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 466E9613F2;
+        Sat, 10 Jul 2021 02:35:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625884321;
-        bh=L7B8jWpA0eVGQdZRPFLwWbDUxnKVm/LaZBmlk4YsjAw=;
+        s=k20201202; t=1625884513;
+        bh=5vvKhpf1wnKOQ7hM+FGiCC3Nq6hpYTSywIeiLaqR0SQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fdel0uMAXurKDW704DIT7lMbC9K4pXDBpgOJsXSzrYw6T/zjCsxxfYELEtEXK0pF2
-         lbah/ITHLNOcOwAdK36+CytdNNX1/pCBEr/NjeYLJcuV3+rXvbjdfpwYgSCwQseagA
-         c7WCcqJUEP+3p9U/oCApQhSQj6olxGfdT7+lKx7NdLzNKXF+PMXkX8A6n1IVYj/tcQ
-         P4VRrexn+ugKeeGdj7hggwiWSViehFfvISGaZ2Mp7G7sjfK4xHSvLpIKGpSwxtkjjF
-         gCvewTg1RM2htukzQb2B8jKtSC0ItJiB08rUTO8bHhQuKNajADF8cpjL/MFI/vxVw2
-         v+JDhS3+6xOwA==
+        b=AZ2S0ggBHIV925UhyK+nBBQzXY1jCDiUDUlg+rdYtyqsCY7bpLV3MkCxhGc2C5gLR
+         GfTBiOxggVC8bCyFOZGCEPXHUWN/SSjgMH/zE0ZeheOuWuAGa8eH0zJFdrYBUwS46U
+         CQ25LsgxGPcr6ZabgY9wFummRVee+L5mbCRvhra8LLgUODB7mvMBK09miS4+zkUuPQ
+         8whYRwtIr3BfGamQ/YYsUP/Ahiq22ilGIDOraUYkN9Gc97I08Bh16IfMDXzYHtdueO
+         uigRLJzl7CmPtBZ0eHKULVzek0XNt2t5d9V5fHBeY7/nWi+yugiAwSFalpv3GDOrL2
+         D65icWKFSYGLA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -30,12 +30,12 @@ Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Stephen Boyd <swboyd@chromium.org>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 62/63] i2c: core: Disable client irq on reboot/shutdown
-Date:   Fri,  9 Jul 2021 22:27:08 -0400
-Message-Id: <20210710022709.3170675-62-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 38/39] i2c: core: Disable client irq on reboot/shutdown
+Date:   Fri,  9 Jul 2021 22:32:03 -0400
+Message-Id: <20210710023204.3171428-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710022709.3170675-1-sashal@kernel.org>
-References: <20210710022709.3170675-1-sashal@kernel.org>
+In-Reply-To: <20210710023204.3171428-1-sashal@kernel.org>
+References: <20210710023204.3171428-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -75,10 +75,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 840f59650c7c..1b93fae58ec7 100644
+index 39be53b6f983..2a43f4e46af0 100644
 --- a/drivers/i2c/i2c-core-base.c
 +++ b/drivers/i2c/i2c-core-base.c
-@@ -24,6 +24,7 @@
+@@ -32,6 +32,7 @@
  #include <linux/i2c-smbus.h>
  #include <linux/idr.h>
  #include <linux/init.h>
@@ -86,7 +86,7 @@ index 840f59650c7c..1b93fae58ec7 100644
  #include <linux/irqflags.h>
  #include <linux/jump_label.h>
  #include <linux/kernel.h>
-@@ -459,6 +460,8 @@ static void i2c_device_shutdown(struct device *dev)
+@@ -457,6 +458,8 @@ static void i2c_device_shutdown(struct device *dev)
  	driver = to_i2c_driver(dev->driver);
  	if (driver->shutdown)
  		driver->shutdown(client);
