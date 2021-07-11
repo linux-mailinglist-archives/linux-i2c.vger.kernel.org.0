@@ -2,99 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDB63C31AB
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Jul 2021 04:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5383C3CAD
+	for <lists+linux-i2c@lfdr.de>; Sun, 11 Jul 2021 14:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbhGJCnq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Jul 2021 22:43:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33772 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235400AbhGJCmz (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:42:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A637D613CA;
-        Sat, 10 Jul 2021 02:39:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625884749;
-        bh=BC0d3JEZTjVg/cD/fz//KnLazwuydKt7zuKa+28OpfY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=goEL54qN3dhGWn78R3dvm4wGh5y/4Ret/qnW5mOWzXpfHnMd7CpvaqyvuMWINIWdZ
-         aSh1arC91LPNDtOPYcS6EmyrPnCa6GzlpZy1AcwSfKdQxO6Nt6f0eJGgBK3Rf/bykh
-         bNdNb3ZQtop3HZ2jirDNuIXKODmFVbdZQTSTOQVaaaC2R6FcVU15dgzNzZsPsj06fh
-         FYk4GIxRPZBwFHXcGP8cVijFSookoCVtLiHLF7ERrbnFjmeO4tIxxj55kEjV+QEkOs
-         hfH0Q+4S+nif4pGa1Vbcg/Q/UpGj5YI9Qdisl9llQhRihCnB+uXesVgMG71hmQsMbb
-         vqBvje/1DTgEg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 25/26] i2c: core: Disable client irq on reboot/shutdown
-Date:   Fri,  9 Jul 2021 22:36:03 -0400
-Message-Id: <20210710023604.3172486-25-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710023604.3172486-1-sashal@kernel.org>
-References: <20210710023604.3172486-1-sashal@kernel.org>
+        id S232840AbhGKNCD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Sun, 11 Jul 2021 09:02:03 -0400
+Received: from mail.07d05.mspz7.gob.ec ([186.46.59.139]:46960 "EHLO
+        mail.07d05.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232789AbhGKNCD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 11 Jul 2021 09:02:03 -0400
+X-Greylist: delayed 1399 seconds by postgrey-1.27 at vger.kernel.org; Sun, 11 Jul 2021 09:02:02 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id 8EB061844822;
+        Sun, 11 Jul 2021 07:28:56 -0500 (-05)
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id nZZYFCKN_3Tt; Sun, 11 Jul 2021 07:28:56 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id 52592184481E;
+        Sun, 11 Jul 2021 07:26:56 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 07d05.mspz7.gob.ec
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id h2Uo1X_Oa9wS; Sun, 11 Jul 2021 07:26:56 -0500 (-05)
+Received: from cris-PC.wifi (unknown [105.9.79.139])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTPSA id 49A461844826;
+        Sun, 11 Jul 2021 07:21:56 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <maria.coronel@07d05.mspz7.gob.ec>
+From:   ''Tayeb souami'' <maria.coronel@07d05.mspz7.gob.ec>
+Date:   Sun, 11 Jul 2021 14:21:47 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210711122157.49A461844826@mail.07d05.mspz7.gob.ec>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Hallo mein lieber Freund
+Mein Name ist Tayeb Souami aus New Jersey in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an fünf glückliche Personen zu spenden, und Sie wurden als einer der Begünstigten ausgewählt. Bitte klicken Sie auf diesen Link, um mehr über meinen Gewinn zu erfahren.
 
-[ Upstream commit b64210f2f7c11c757432ba3701d88241b2b98fb1 ]
 
-If an i2c client receives an interrupt during reboot or shutdown it may
-be too late to service it by making an i2c transaction on the bus
-because the i2c controller has already been shutdown. This can lead to
-system hangs if the i2c controller tries to make a transfer that is
-doomed to fail because the access to the i2c pins is already shut down,
-or an iommu translation has been torn down so i2c controller register
-access doesn't work.
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
-Let's simply disable the irq if there isn't a shutdown callback for an
-i2c client when there is an irq associated with the device. This will
-make sure that irqs don't come in later than the time that we can handle
-it. We don't do this if the i2c client device already has a shutdown
-callback because presumably they're doing the right thing and quieting
-the device so irqs don't come in after the shutdown callback returns.
+Bitte kontaktieren Sie mich über diese E-Mail:Tayebsouam.spende@gmail.com
 
-Reported-by: kernel test robot <lkp@intel.com>
-[swboyd@chromium.org: Dropped newline, added commit text, added
-interrupt.h for robot build error]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/i2c-core.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/i2c/i2c-core.c b/drivers/i2c/i2c-core.c
-index 4fd7bfda2f9d..67e44e990777 100644
---- a/drivers/i2c/i2c-core.c
-+++ b/drivers/i2c/i2c-core.c
-@@ -42,6 +42,7 @@
- #include <linux/i2c.h>
- #include <linux/idr.h>
- #include <linux/init.h>
-+#include <linux/interrupt.h>
- #include <linux/irqflags.h>
- #include <linux/jump_label.h>
- #include <linux/kernel.h>
-@@ -1003,6 +1004,8 @@ static void i2c_device_shutdown(struct device *dev)
- 	driver = to_i2c_driver(dev->driver);
- 	if (driver->shutdown)
- 		driver->shutdown(client);
-+	else if (client->irq > 0)
-+		disable_irq(client->irq);
- }
- 
- static void i2c_client_dev_release(struct device *dev)
--- 
-2.30.2
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
 
+Grüße
+Herr Tayeb Souami
