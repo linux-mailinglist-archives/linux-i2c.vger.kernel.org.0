@@ -2,103 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E071A3C6EFA
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 12:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDC53C71C7
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 16:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235572AbhGMKxx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Jul 2021 06:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235820AbhGMKxu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jul 2021 06:53:50 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFBDC061786
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Jul 2021 03:50:58 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id me13-20020a17090b17cdb0290173bac8b9c9so1162422pjb.3
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Jul 2021 03:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jpLLVifshAbN8p9woBgv2ZTKXWPkKhiksBb+TTgeAU0=;
-        b=xPiyCCSNVpUMFrtC2LlEfZacKYLM5pphD5lCNG/nuXs3LaUM5dOdfAlFOW8nZwkqhu
-         KkEF7hs6FWetfVpeyk/kj3vIOQp4c6kMkbj6KB3alHAs2XmY8I3JJLGZsAfy8sG9X+dY
-         MlDtHTK4uyqX6888rCNx/o5Z7cT6DVqqrP4t3QalqFpSyc4jzUya9kWF44FBWSom0UvP
-         k2s8/NkxjOW2mRNP0ZkIt0ONSWCgLwQWrPScrazAgHeRnZd+2gznoA9yhDKk8YDfK2w+
-         yGYMNjQG8zE+vM4M3R7yjJNtvjpVzhwmWwlT3+wIeF14JFd7vkYNAXazbJKODKH7zP7X
-         H+dQ==
+        id S236710AbhGMOGO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Jul 2021 10:06:14 -0400
+Received: from mail-il1-f178.google.com ([209.85.166.178]:37420 "EHLO
+        mail-il1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236755AbhGMOGO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jul 2021 10:06:14 -0400
+Received: by mail-il1-f178.google.com with SMTP id o8so12465073ilf.4;
+        Tue, 13 Jul 2021 07:03:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jpLLVifshAbN8p9woBgv2ZTKXWPkKhiksBb+TTgeAU0=;
-        b=ipGpOMO1u7VBIj0ORA9uqecQTxboGKDay8yHciniAVCorWtkCsnOJHvp/7MztitdHk
-         E17Fs5UbAWQdthz5SHNx6vgTG85Fee6VSqmrpQtbFntSfzCO1dO3bLIziRS6+ZxMRjpM
-         BrWI1nBqBWNoqQ2uHHApfh8cT2qBaEYePIpEeTxcF25MkqqajlMIKs8STDcrEV83HaHh
-         fg6dqjljiGASmStM72Jo8jLNm9rR14+KUzIdZSDG7yuYcIjLqcywsaNAI2n2hHgJu3+w
-         1wYyDZ+jhwXnvIYD60dryPpKrl+6X6UDk1/iLobOOX7grr9GWmb1H+lNmzh7DR7K0Swo
-         qkuA==
-X-Gm-Message-State: AOAM533PgdrauBkRz5apS98lR5k0kJLq2oVBYPC2U0X3OBzbT7GIEa2S
-        EEYHPwriS86Y+HJuQkU33aXtCw==
-X-Google-Smtp-Source: ABdhPJyA0h7pGPn9Q2oO94AvZyMMvb0OAUTS7pkEtEgXnaYJk7eDeP5GAW7/sEilxZeKxmzO7loJrw==
-X-Received: by 2002:a17:902:9b87:b029:11e:7c15:a597 with SMTP id y7-20020a1709029b87b029011e7c15a597mr3091660plp.6.1626173458228;
-        Tue, 13 Jul 2021 03:50:58 -0700 (PDT)
-Received: from localhost ([106.201.108.2])
-        by smtp.gmail.com with ESMTPSA id m13sm18415675pfc.119.2021.07.13.03.50.57
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=rrdiKpMGTcNX/oecvUxIZ+HcSY5J/MLTnT7FsikOG0g=;
+        b=Vqzk6pEkNrOEkU2H23Dv6pc9gNWqZNjXAporyytCOv5MABIYkqP7gKCl/h6Reehvdn
+         ir5JjbOKgeNLg6V2fKwCB1W1hg4hxsksWD1vmnfyvBWNQPVzr8VQNSlMb7v46NRN/n10
+         wbagJJHPjiijkjjeLMwSIGG+Fe7f7cVfrXml2pjJOnGkg+BTxSf2Y4zcMWJfqgo89XQ8
+         /7r0PCeSiKsBwYm0HxxplbOSpyyDUHWGyP2qYPYttUtt1xCOGLww2KrcUI9Tzcij3VOF
+         ROOp/3Mv5MM3RxRw3yjSvOIkUVGqnmRPx2JodmdFNc4ixOeU+aUSjKJqoFxSwtenRvN5
+         5Nbw==
+X-Gm-Message-State: AOAM533gBhEVoo7kYUdAkNYQtnBDah97GqDzQniKcdyQ5aDcy7sVM103
+        uI1pmdypDmARxQLBDWg6PA==
+X-Google-Smtp-Source: ABdhPJzonXO+4ZfWz8P78P+ikyRaaY9YHUrrlWmavAu+ibX9HKMQRFdOhnXkLxc2XaT8jK4JxU+Blw==
+X-Received: by 2002:a92:a30d:: with SMTP id a13mr3116852ili.236.1626185003183;
+        Tue, 13 Jul 2021 07:03:23 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id r16sm4229865iln.30.2021.07.13.07.03.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jul 2021 03:50:57 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+        Tue, 13 Jul 2021 07:03:22 -0700 (PDT)
+Received: (nullmailer pid 129713 invoked by uid 1000);
+        Tue, 13 Jul 2021 14:03:13 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Jie Deng <jie.deng@intel.com>,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Bill Mills <bill.mills@linaro.org>,
-        =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Jie Deng <jie.deng@intel.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH 4/5] i2c: virtio: Update i2c-adapter's of_node
-Date:   Tue, 13 Jul 2021 16:20:33 +0530
-Message-Id: <5465df68b2e18d510fa47e691907287fe655fe8b.1626173013.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1626173013.git.viresh.kumar@linaro.org>
-References: <cover.1626173013.git.viresh.kumar@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        =?utf-8?q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <e650cecb3bc6a0ed16eb37460ac57cb191ba92e4.1626173013.git.viresh.kumar@linaro.org>
+References: <cover.1626173013.git.viresh.kumar@linaro.org> <e650cecb3bc6a0ed16eb37460ac57cb191ba92e4.1626173013.git.viresh.kumar@linaro.org>
+Subject: Re: [PATCH 3/5] dt-bindings: i2c: Add bindings for i2c-virtio
+Date:   Tue, 13 Jul 2021 08:03:13 -0600
+Message-Id: <1626184993.664261.129712.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Set of_node of the adapter from the virtio device to enable automatic
-parsing the of the I2C devices present in DT.
+On Tue, 13 Jul 2021 16:20:32 +0530, Viresh Kumar wrote:
+> i2c-virtio represents a virtio I2C device and this patch adds binding
+> for the same. The i2c-virtio subnode can be part of a virtio,mmio node
+> and is based on its binding.
+> 
+> Cc: Wolfram Sang <wsa@kernel.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  .../devicetree/bindings/i2c/i2c-virtio.yaml   | 59 +++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
+> 
 
-Cc: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-Depends on:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-https://lore.kernel.org/linux-i2c/984ebecaf697058eb73389ed14ead9dd6d38fb53.1625796246.git.jie.deng@intel.com/
----
- drivers/i2c/busses/i2c-virtio.c | 1 +
- 1 file changed, 1 insertion(+)
+yamllint warnings/errors:
 
-diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
-index 0139cdc33cae..cb8cfae2748f 100644
---- a/drivers/i2c/busses/i2c-virtio.c
-+++ b/drivers/i2c/busses/i2c-virtio.c
-@@ -223,6 +223,7 @@ static int virtio_i2c_probe(struct virtio_device *vdev)
- 		 "i2c_virtio at virtio bus %d", vdev->index);
- 	vi->adap.algo = &virtio_algorithm;
- 	vi->adap.dev.parent = &vdev->dev;
-+	vi->adap.dev.of_node = vdev->dev.of_node;
- 	i2c_set_adapdata(&vi->adap, vi);
- 
- 	/*
--- 
-2.31.1.272.g89b43f80a514
+dtschema/dtc warnings/errors:
+Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/virtio/mmio.yaml'
+xargs: dt-doc-validate: exited with status 255; aborting
+Documentation/devicetree/bindings/i2c/i2c-virtio.example.dts:19:18: fatal error: dt-bindings/virtio/virtio_ids.h: No such file or directory
+   19 |         #include <dt-bindings/virtio/virtio_ids.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:380: Documentation/devicetree/bindings/i2c/i2c-virtio.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1416: dt_binding_check] Error 2
+\ndoc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1504542
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
