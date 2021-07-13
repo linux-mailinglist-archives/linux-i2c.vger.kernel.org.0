@@ -2,23 +2,23 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC1C3C69FF
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 07:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 191EF3C6A02
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 07:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbhGMF5p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Jul 2021 01:57:45 -0400
-Received: from mail-dm6nam10on2091.outbound.protection.outlook.com ([40.107.93.91]:23617
+        id S233638AbhGMF5r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Jul 2021 01:57:47 -0400
+Received: from mail-dm6nam10on2118.outbound.protection.outlook.com ([40.107.93.118]:45121
         "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233638AbhGMF5o (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Jul 2021 01:57:44 -0400
+        id S233713AbhGMF5q (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Jul 2021 01:57:46 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MARE1zCIyQWqzhu7gcmSK5lDqXlz193eHG4/tmUS07bZOQQHwMhKG/fj6Zs1HyZf8r0iVOTW0PZkGRh51d6myNQZ3rHGtA65TUmZavb7YtHrh4JcP/MX9L/yPG0tidVRhJL4FBx4pn3Ew0EmymScArz4awaVXT92oA669H13Q7zt4+lxsuI2ajp2ESvOI3EMpcRGb//46V/kN2SJ+ovASQ2hdnimWv09y1wGQ3MBJ6nLUIiKiqHySrl4dbSo0N2y26UQRjIL3UBFfDWJzcW/uzlDL4IX1O0R6v7EeiQooik4cTM8RSFp1sT64QE0nieMqornkW2Cqzcduu6QZvwzOg==
+ b=dKokhhxeZ7t3TqK8YDA7mTD3FXagu3MVIOORZKFurupPJx6R5FNerABAN7saTOySDy/qiIMiziwaQuelMmzrQznmKHgYRGn2GdMYgTmhK9nQB2aAL0DVLdInmEBcBr7HD3bg9gAcnn0r2Nz5vBht289agdEO8TxFoFtvvY1UNUNRt7I4ItLukb5pidSSRfxnxXXSBUByFt1dV2qviEXQ1ZS4/uAGAHlQKjXZVpUz9K03uE6yWt1k2YWHa22N7tJkHBqM9mtveqFx0DvdRi1C1UfC+sfoqHoF09e7Gs05oFVBBObQyHmVoDYtgbxBAFtQSs8aZcLZFaGHVrkbXQpPjg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4o2Kr0pgqInta8YQxFYmgBw5n6bKfLUYUZm5RnyyUko=;
- b=UJlgh3txXh/fkPuG2bhxBN4SeflsvWYLh3+xHhCi+Ul3E1m74OObD/dcdJKR9f7LJZQUX9wD6TQFkuUJ77Trw/8tMCUlULSqhoOq2uiXyx/hrbWxGlKk8u+NQrTzVAjRV1rQa+0cEFDPujZF8WBVCv9f0hHTeZY9b4eKxlOwE2rGoU5qP70hGzAaNmV2JWawvG6ZoPYiXuqOeA6EtcjvttIrM0Hz4imuhoBih6aLjc3F0sCWleV5fGpk4nSra2svY1vJ1LN1ttFbmNlRNuEqCyT1EnrakuZya/1dCsyNRjby1dbrFwKgNmADCX7QY4vHm8MwFh/0t53S9lH+AnQCOg==
+ bh=ZiCqv816ye69wa5yoL7KXA6UEBvLis8Z1T3oFCWysr4=;
+ b=SUXxGSmXWUg0cdij2b4YLY1Tr8+pjJQA2bCKNCzejnYyu7gv4CHCu1gt5kRUw2Meqt84/l7mmS5A93gpj54k5FUjATYGL520N0VpYXdmsNniyea7nzbAvjb2QmnjhlADpwzSExneDZVTcADEYJNQtmQ+mN3NYc3Q55bUSCAAhJPBLLHgaQLPEud6m2yct/0OBi4dTqSvvdltwC8HYBIewfi5QIjgVL/HqVuMrmdqkodOx/Kb2pi0RuKhxkoR/CLlY6Q9jSpzrgIpnGn4qgtOS65AL9nckohGzT3yjsYJjcML2sdu6/v4GHwnZLJO2oV1IzsYZCA4r2bABKcL+x/Tiw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -26,19 +26,19 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4o2Kr0pgqInta8YQxFYmgBw5n6bKfLUYUZm5RnyyUko=;
- b=aQGhYYpP6xQGT15vgaqf71cfK1QXP/3jeAk5toGeR6Egtg3M5uA+Lp3qk/0vRHWu8eokRuAloykQVj1iJ+EjNcYAIr8POLpDzdYopFy+dBVw9tx7DpXOFQbEUb2zSF/7S5x3HtfjbLIjAS4VCvvwZ1PE+dmONECYjrxWRD6bB0E=
+ bh=ZiCqv816ye69wa5yoL7KXA6UEBvLis8Z1T3oFCWysr4=;
+ b=e/6I05MqowrpfcYlE51HbKaK2HQ22S8P9oV/OtmW9Xgl9SAP+1N4Gtx1DtHrRYMJz4uoOBRghp2baDLrGFcrAt3n49FSLLbc3QdqKoyp/rlb+VkwJwNBOqlA1qlSKA8LMjOjLo4pC9h38j/7th/UQfk1D4dOjfgZuvw2gTWIujo=
 Authentication-Results: acm.org; dkim=none (message not signed)
  header.d=none;acm.org; dmarc=none action=none
  header.from=os.amperecomputing.com;
 Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
  CO1PR01MB6535.prod.exchangelabs.com (2603:10b6:303:d9::17) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4308.19; Tue, 13 Jul 2021 05:54:51 +0000
+ 15.20.4308.19; Tue, 13 Jul 2021 05:54:55 +0000
 Received: from MW2PR0102MB3482.prod.exchangelabs.com
  ([fe80::452a:24fb:12cb:9d7e]) by MW2PR0102MB3482.prod.exchangelabs.com
  ([fe80::452a:24fb:12cb:9d7e%5]) with mapi id 15.20.4308.027; Tue, 13 Jul 2021
- 05:54:51 +0000
+ 05:54:55 +0000
 From:   Quan Nguyen <quan@os.amperecomputing.com>
 To:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
         Joel Stanley <joel@jms.id.au>,
@@ -53,9 +53,9 @@ To:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
 Cc:     Open Source Submission <patches@amperecomputing.com>,
         Phong Vo <phong@os.amperecomputing.com>,
         "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: [PATCH v4 2/3] bindings: ipmi: Add binding for SSIF BMC driver
-Date:   Tue, 13 Jul 2021 12:54:24 +0700
-Message-Id: <20210713055425.30636-3-quan@os.amperecomputing.com>
+Subject: [PATCH v4 3/3] i2c: aspeed: Add slave_enable() to toggle slave mode
+Date:   Tue, 13 Jul 2021 12:54:25 +0700
+Message-Id: <20210713055425.30636-4-quan@os.amperecomputing.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210713055425.30636-1-quan@os.amperecomputing.com>
 References: <20210713055425.30636-1-quan@os.amperecomputing.com>
@@ -66,117 +66,134 @@ X-ClientProxiedBy: HKAPR03CA0027.apcprd03.prod.outlook.com
  (2603:10b6:302:c::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from hcm-sw-17.amperecomputing.com (118.69.219.201) by HKAPR03CA0027.apcprd03.prod.outlook.com (2603:1096:203:c9::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.10 via Frontend Transport; Tue, 13 Jul 2021 05:54:47 +0000
+Received: from hcm-sw-17.amperecomputing.com (118.69.219.201) by HKAPR03CA0027.apcprd03.prod.outlook.com (2603:1096:203:c9::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.10 via Frontend Transport; Tue, 13 Jul 2021 05:54:51 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 78dabedf-cb52-4072-da51-08d945c2bafb
+X-MS-Office365-Filtering-Correlation-Id: 59cf5a78-500a-4faa-344d-08d945c2bd61
 X-MS-TrafficTypeDiagnostic: CO1PR01MB6535:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CO1PR01MB6535ECA682061D48F6849CE6F2149@CO1PR01MB6535.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-Microsoft-Antispam-PRVS: <CO1PR01MB6535F84453339498B404861DF2149@CO1PR01MB6535.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:820;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xShwvRtrctBmkNyIYLIYez49N1y+FHBJQVTtF/U91iIuGSiFDgyOaXElOLmne8EmALpQzctFwCLerZv9Vg2j4no58ginadPATPK0TQ0vF4SRcTUkmgO7hY2vZMPfPRJMm69uGa+v0ki+jl6dZR/Wed/z6ktgsaqnveU44uWR/ErDNwU/uf0mYZKqPfsP/OzrULRIFlDt6z0CXDJ7g1aqPpcoJJDxorwAs2TnBq6QGYaur5SWmVarWdczovTaZyKqU34EHscTttHB82i1xLxU8uU2NuoJ8q7Q5X5xM5+ntFe80/A+B0uNonbXO1NfUosSLw6xdtGwgBWYMVmHbtpCWP79I2y1B548PelSY+MqErxSMqgFmItf8nhq28zztL8uCQ8JSBMrH4Aj8w0eG9mz/uK17GpbWmdZpAeWmD9+90y67JtTc9PDpKgJfg7bbnSjuqgeUzRr4ZT/KqEAM1Qs7kDDCGiO3CBa9IFjdWxWE36C8AQU+rBBwMXUop2NEYEz81gSbdkL9jvi0WSlF/0FwFc64T95RahV91v9RJEEbgzH8Vx8qcU9B7b7FZTXH8BOfJe+HFIws9fJNbnv6HoyyPEyhlbng3fXtTYQkzAi7NGAcbKrn1SfjxRl5BHJmiz8HY8DNHUdZXfFEqedus7UhDOQA+UFctKd+a6osGiHpQea/SduxqQy6K5o2DDwJyVZ9mHwfvG7buEvIMHdBbzM/CxWSk6PjtZkf9z7z8ZQet6/q1+wghuuSQYOoo9NL2YsI2nedJE3pPSxCNhorbuUUxmQ8HMFZeKehICvJZTtUgVQvaebpF0Yjrbvw6YRf2Hk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(366004)(396003)(39850400004)(346002)(956004)(8676002)(54906003)(86362001)(5660300002)(2616005)(2906002)(1076003)(7416002)(52116002)(66946007)(107886003)(478600001)(66556008)(6666004)(66476007)(6506007)(921005)(110136005)(26005)(186003)(38100700002)(316002)(4326008)(966005)(38350700002)(83380400001)(6512007)(8936002)(6486002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: tJl95ke1G4O9CylA6LvRbk5zv0oaj/iqUEo5usfurJetFn7+t+MyXKb/wzA4z7Uf3WGhh57uotD036aj2+K9lrQYhe1kgMsnIg8ccBnuizRDOFEnUieXYyYNYMR1rLGkM8B0o1gqqEKpXS/lx1pF0L/x3cBsgBenWlme2n9E2Yl9wlmxgLctniDEEROxFwXP56YBWGHmiH2czo4Wh4UtIvhm1l2tBTCrblWxCcAUfTbwoIgff+VhFcCxAbehrelD4ufTQ3btS5Sjo/MUEJiwAeDMHhwoRHSKBd1XNPyt1AaTOcSKjJi3KM3HV0MDdIKGzSHNXCHyjn0RT4y9rxg9I8YPkxbs2w8E4q9k01Bn158K16CrC1Z9SPsmEysSJO0Ob74Rk0/ADFLEU4EDZnm+v2zc8MUgeXbwpJfYkVhmlooTWYzjlQjxPoZRyJ+aCLaFZGNPCP1mJNT+ObcM03lwfToeoPnyEvd0s578oglxHZddtPEZq2nE11KhvIuGVgPfMqvBys4rBawWf6/u4V1TxZ9AP2vIIOK0FMzAXofvRUSrI2Bk8kPEP69Eutw2q6PAMWg+PcKIywNjWESQRnE6ex5VmLZsHhRng0Z491fZ/eHgonxvp8RVdNWcdIUzV0aNMwHcvV0sBh62Q/ZGsBW/odrFs5td8tZe56UJ5knKTnViaVtNetocYQCOwt2mPPHK6z+1H+8nJ8TBAxx0yYN1xFCITZbq6hI8bAMkKHeNia8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(366004)(396003)(39850400004)(346002)(956004)(8676002)(54906003)(86362001)(5660300002)(2616005)(2906002)(1076003)(7416002)(52116002)(66946007)(107886003)(478600001)(66556008)(6666004)(66476007)(6506007)(921005)(110136005)(26005)(186003)(38100700002)(316002)(4326008)(38350700002)(83380400001)(6512007)(8936002)(6486002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oov2FvzF6UFc/DUDT92tFhAwkjrBGbB78jS6DNORr8wq6pBeDfvmsbi56wxq?=
- =?us-ascii?Q?1tgpMSjqVKIaWuTjoZ+MwCdozP9KMIMOWfdcFnpMz6IuTPp0aNOgftxhpdlY?=
- =?us-ascii?Q?swBcHmY6pjA3kT/unOqYgWEQnUryeQC0tKNzwRjXko0bYYUtQgHInP/qWAHZ?=
- =?us-ascii?Q?egCHIyImSTaCSmuZNMqYChzrZvNotN/nEV3w91Mo1WEfPsSs9Z8npG21V9vm?=
- =?us-ascii?Q?BaR5Q0MmrjS3bLDl4V1lmARZTjs1uqK9a1MgeKBZR5tBy1DoFXM5gxfRgsUu?=
- =?us-ascii?Q?qUlKEJxO3gNn1tqyE6EvJPCp66j4bp42cdCx40CzmaLvY2GdzMcG2RgyePr7?=
- =?us-ascii?Q?ZZhb8BePel63EJMUOUgS3IOKvHgyPICaofbteanWgdkAI8EnvBbYRFs8eaUB?=
- =?us-ascii?Q?kk8TDjbsqWh0+5gCyBYX6N9uvNPEbgO13KKtk7eKrV54QtrKysoxHjozXifO?=
- =?us-ascii?Q?h0E95p6lYi+iNwVFaQfI8m1Pb+Xhtvw5nVstaWpAf4Vu6ty+L4vQjbCWFbMl?=
- =?us-ascii?Q?XN9tAx7mV9K2m4+9GJzUXIvbvprow7ocmVmzGLv2YU/8FXLlnWQHG7sBYvVz?=
- =?us-ascii?Q?KMtYP8+E1iGAoObXRcN8W9pbrmXGV8GfQ7s2SSuZxdY2aazu9WU7A0ngeJjx?=
- =?us-ascii?Q?NDQpPIQ4m6Djzi6H9kiMvHEMtzeyQaAoA5duArGrzzm1fkxhtJpAALBnmJBE?=
- =?us-ascii?Q?cJ1kC48lZxoCLa1mrVpOSKrjrZkrktC88QynrBHDsQ73lcXDb1RmYq/AyeQy?=
- =?us-ascii?Q?PbckP5v3Diq82z05FYAFVMitzXtzWHG6JMfcVTco2FOLz/EC8NYuvy3X9+uc?=
- =?us-ascii?Q?XdAvyoJG1yaRD8xv77p4L1UxYcOCnpmwp2XaPxBXqi7DNb2fvE7DI7ZfI9NK?=
- =?us-ascii?Q?I3iDblc8QCZnJSqvsYJbjNmLa4OnLGA0fJ9ivk3EOYnH3AegN4PQmU4EHg66?=
- =?us-ascii?Q?IaMKWHLBcso1AzizJ886d93uQM9Xgh5A6FcbwvSUxmkkf9a0y/kIj0JEkrCq?=
- =?us-ascii?Q?mL5EV0q8k6woJ52T2pPPu+D5smkGqpbBe2MBoODS1F2fgX9txIbfgrJ7rVnJ?=
- =?us-ascii?Q?Elzc1/7UM6W/GocTUA1mv05c5wMN+kxSUZ3Xjb2dPVtR+CsiOiSxG5buwRRv?=
- =?us-ascii?Q?J7DfxT5SQmkybD1bRG3Jy6lc1UkD1e7845FGewEX6yKFuDSnKr4yyVEodyar?=
- =?us-ascii?Q?uKUKTkTTekHvx89rJFvXnU/T30SViYXFiCwWH3tGoFw14hv75po+bKDH6qgy?=
- =?us-ascii?Q?EGR3SLjsBW1P+ThpriYt7QrtysPhTFz8jkZGngqKrqs70vRiokw03EZY/puj?=
- =?us-ascii?Q?vpd9Wd0TqCbM4gkNhozF3Agy?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XwsMqXkOtNZR82eUcGE/g2I+G4px+EdhThx1Yk8YbvS2xR9128AQ+iTGUzWr?=
+ =?us-ascii?Q?PQJtSme+63+0n3eoE5R9fDQGPGgfi65dF2EFT0VNRhfGF19zzxdSM6KP6+6n?=
+ =?us-ascii?Q?BIL1JmshII8ob9iJgikEhCFiusHW7NGGla+17/+OhWgV+KFFr/atmJlJvFgP?=
+ =?us-ascii?Q?FXETNtjCrQcmulFotqPVdksklm6MqXqz7l78plpVj76It9W05C5Pz2qzLtMo?=
+ =?us-ascii?Q?G7jTI35Z6/MuuQR7XxbC7k3XWbCAY/tVG3zdfDl6bqyM35h4EJg5BJ3RXiMo?=
+ =?us-ascii?Q?8AuQTwYTB0+4a98oc/V34efhwJKtR2OvzdQuR0y+hCzZN+Nt2c8kyRplhJMW?=
+ =?us-ascii?Q?iUIQS09w6b0YnYggTvHEpPqnN9Cglma1Dp8k2N1XdVcXLB9kJ8d4lj+4+X/B?=
+ =?us-ascii?Q?h8FoFYeCcCKoismfkrpbJYVKaigENTZIpJ2DeTDfpicVNvCqvlVeuasi+ypP?=
+ =?us-ascii?Q?d5kq/1y9OZ1hJbiX0UFEMmSgKpuBDzRM1TRRhtzqHMTALZumf9q3nlp/hTCv?=
+ =?us-ascii?Q?DkJ1NnxgHRgKvMElUH6hws+5EvNbygIkWvog7CEwD8Q6SuBOhZhDjBEBNIcM?=
+ =?us-ascii?Q?dRo4Lj7IDXraunZV+xC+vO3ary0wjdxABKkjr8MwDPv10Oc7VNOzJnNM/2hE?=
+ =?us-ascii?Q?oxEXaPa1e4OH2f/3IESYKnFvAuadzhIdgFkDLChQF0tD1e5ldEZ68Pz353yh?=
+ =?us-ascii?Q?Qrcj2qrZoXMTzeafW0/QUg8DmXCS1ieHnYMIj/SbqUhP7TE7T4ETWzhzdtxp?=
+ =?us-ascii?Q?Ny6XhMw5yxMMQaJLF1+Pa+HhPS1Fj/F3YlzfxYAaugdTUapkUm3AewpfaSqB?=
+ =?us-ascii?Q?oGz+SRH5/Ya519uJ+uYDy1159RXLV0bHMxZPeMm00ZJFkDkyKz0KEnTqrX+N?=
+ =?us-ascii?Q?BriyLObvdd2cbF+FjgQVNCfDT2HkbsrKJ+7sz45lOC8TfmUKmezEyeMl1edO?=
+ =?us-ascii?Q?HeFeKtd+Y8IKJcZsd765ihI/fl1nGbWRwysIlGkeMtaSeyWb75e8cc3kC3T3?=
+ =?us-ascii?Q?3XmO7+nNK5m7i+86DgzLkqoryBZzqgM/D8Rk99WRSe8IFTIV1ZNhEiQgADc6?=
+ =?us-ascii?Q?wLxmyGiMsA1gNdlVifZF+fxhUjshUCYLDXuq0GdvlZinFFed9lk4hLREaALQ?=
+ =?us-ascii?Q?C9dEM5dvE0n8lDIXvvyhLAgHF/x2BJqH8aSbVfW8BQyLh7d5sB1SGKIFYAZA?=
+ =?us-ascii?Q?3s0S+2suTlwq4+cLUeeM8UAA+P2PaqRi5/ta3JWdAUbtYIXE4a5gpNG4ead7?=
+ =?us-ascii?Q?exjavlU6E9GTQjLDLnIyF1Zlso0ExrzCoyiccfLeSk69uIc7l7ly5Zq8j6+y?=
+ =?us-ascii?Q?+7KapkYS7ddlTzg/+Y5Euo+T?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78dabedf-cb52-4072-da51-08d945c2bafb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59cf5a78-500a-4faa-344d-08d945c2bd61
 X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2021 05:54:51.6333
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2021 05:54:55.7109
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W3kDD0v527jUcipDU+vsh9LZ6t6TnOlfcp+iQmUAoEWIIaYgFpxzS8N7ET8DMZ9A7H41/QIlLuzBwj3ovr7kgDHjQpePFPedSCYxMzMgaSY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: smBguKr95Q4IqhWCuS0nn3Yx/24pHkzjMfF7Bix6ruQvgsPNCVkpWaV7t8+LkDZenah2nnOyvsBJ9naZOOn7/rnKix0iquldowea9GLCz0U=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB6535
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add device tree binding document for the SSIF BMC driver.
+Slave needs time to prepare the response data before Master could
+enquiry via read transaction. However, there is no mechanism for
+i2c-aspeed Slave to notify Master that it needs more time to process
+and this make Master side to time out when trying to get the response.
+
+This commit introduces the slave_enable() callback in struct
+i2c_algorithm for Slave to temporary stop the Slave mode while working
+on the response and re-enable the Slave when response data ready.
 
 Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
 ---
 v4:
-  + Fix warning with dt_binding_check [Rob]
-  + Change aspeed-ssif-bmc.yaml to ssif-bmc.yaml [Quan]
+  + First introduced follow Ryan's suggestion               [Ryan]
+  + Fix recursive spinlock issue in v3 (aspeed_set_slave_busy())
+  and apply in this patch                                 [Graeme]
 
-v3:
-  + Switched to use DT schema format [Rob]
+ drivers/i2c/busses/i2c-aspeed.c | 20 ++++++++++++++++++++
+ include/linux/i2c.h             |  2 ++
+ 2 files changed, 22 insertions(+)
 
-v2:
-  + None
- .../devicetree/bindings/ipmi/ssif-bmc.yaml    | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
-
-diff --git a/Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml b/Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
-new file mode 100644
-index 000000000000..917a577c2f29
---- /dev/null
-+++ b/Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/ipmi/ssif-bmc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index 67e8b97c0c95..a6a19dc8a501 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -785,6 +785,25 @@ static int aspeed_i2c_unreg_slave(struct i2c_client *client)
+ 
+ 	return 0;
+ }
 +
-+title: SSIF IPMI BMC interface
++static int aspeed_i2c_slave_enable(struct i2c_client *client, bool enable)
++{
++	struct aspeed_i2c_bus *bus = i2c_get_adapdata(client->adapter);
++	u32 func_ctrl_reg_val;
 +
-+description: SSIF IPMI BMC device bindings
++	if (!bus->slave)
++		return -EINVAL;
 +
-+maintainers:
-+  - Quan Nguyen <quan@os.amperecomputing.com>
++	/* Toggle slave mode. */
++	func_ctrl_reg_val = readl(bus->base + ASPEED_I2C_FUN_CTRL_REG);
++	if (enable)
++		func_ctrl_reg_val |= ASPEED_I2CD_SLAVE_EN;
++	else
++		func_ctrl_reg_val &= ~ASPEED_I2CD_SLAVE_EN;
++	writel(func_ctrl_reg_val, bus->base + ASPEED_I2C_FUN_CTRL_REG);
 +
-+properties:
-+  compatible:
-+    enum:
-+      - ampere,ssif-bmc
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ssif-bmc@10 {
-+            compatible = "ampere,ssif-bmc";
-+            reg = <0x10>;
-+        };
-+    };
++	return 0;
++}
+ #endif /* CONFIG_I2C_SLAVE */
+ 
+ static const struct i2c_algorithm aspeed_i2c_algo = {
+@@ -793,6 +812,7 @@ static const struct i2c_algorithm aspeed_i2c_algo = {
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 	.reg_slave	= aspeed_i2c_reg_slave,
+ 	.unreg_slave	= aspeed_i2c_unreg_slave,
++	.slave_enable	= aspeed_i2c_slave_enable,
+ #endif /* CONFIG_I2C_SLAVE */
+ };
+ 
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 3eb60a2e9e61..8c1765aa7e3f 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -520,6 +520,7 @@ i2c_register_board_info(int busnum, struct i2c_board_info const *info,
+  *   from the ``I2C_FUNC_*`` flags.
+  * @reg_slave: Register given client to I2C slave mode of this adapter
+  * @unreg_slave: Unregister given client from I2C slave mode of this adapter
++ * @slave_enable: Toggle enable slave mode for given client of this adapter
+  *
+  * The following structs are for those who like to implement new bus drivers:
+  * i2c_algorithm is the interface to a class of hardware solutions which can
+@@ -557,6 +558,7 @@ struct i2c_algorithm {
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 	int (*reg_slave)(struct i2c_client *client);
+ 	int (*unreg_slave)(struct i2c_client *client);
++	int (*slave_enable)(struct i2c_client *client, bool enable);
+ #endif
+ };
+ 
 -- 
 2.28.0
 
