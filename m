@@ -2,217 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9623C6D86
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 11:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1393C6EE8
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 12:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235304AbhGMJfP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Jul 2021 05:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S235552AbhGMKxi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Jul 2021 06:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235306AbhGMJfO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jul 2021 05:35:14 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD28C0613DD;
-        Tue, 13 Jul 2021 02:32:23 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id i5so19324868lfe.2;
-        Tue, 13 Jul 2021 02:32:23 -0700 (PDT)
+        with ESMTP id S235484AbhGMKxh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jul 2021 06:53:37 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CED4C0613E9
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Jul 2021 03:50:47 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id a14so10898684pls.4
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Jul 2021 03:50:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=exzPflTZlKhHjc2qVoBz3QeibvHsyKH/UM3yc324PFI=;
-        b=I3DPC0ko6enWQCZH3V51nlAj7hlee+aOTUb7lwEw2pj6/hnDGTdtLXFCPT4IETzAjJ
-         TpIk94eXwDg82LnUqCBdaylUVoBk//FCu8u7Lf4mlacZVW4ySCuqvMvbN6vSW0LF2Iab
-         QGWE1e4jblZsJaQiRfNqMkdk/i6a5LkCBKhfXeuZtEidpL05NSGCUiohMOB/Abq9MyN/
-         36ti+zhrJdsC2VbeUjlYKyHnTMcsoCuBRavlc8EjajOZECCY/xUrzQcjpVXgkeSbniQb
-         Te05Dop0phv6MDI7VQil87/ZXyafA+pGY6VdbGTHaoz4DfH/0eG/QEYcL7JgmMAbcJ5+
-         jZ+g==
+        bh=4xLUJ1dW1Qt0KgF3pEuea/62PVc6DCT7EsaU/Szp0Bg=;
+        b=E2vCdTP4Dqtla5LUcohrAy+3w9yg8TqQrenrE5K9FTm+s6OAAqAP4MkvIUanmoewVh
+         p9Xoha8+yUnUYTMCuoC0YpI5U+SKq2/0jW9vqhW6ACR2JbmbQlA9mE3k0V9hJ0hd8oan
+         tTlxN5pFfvjiYWIdZqviVCBXIrYVnUuADNxLHBtHQAw7pqzSDE/xUbphfgNvfjOHqS5u
+         JeJ0nuh0WIXCgIrUZzo3opYAS5jkLPFYAnwd+nwZ+eSIYIbqkkdOPQeqgg2Mc7wm6yd8
+         LE1lVaUisP/flFiy87qUDrIeegoszDgg1BVBZsTYuXAIoMCvvY120W27WX3hWkBNqpEq
+         uoJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=exzPflTZlKhHjc2qVoBz3QeibvHsyKH/UM3yc324PFI=;
-        b=N7AR251peHyUxIqB5xI5H7k1dGGCnwbJQtHup5eKsJCCmDvbwh0ZEjgWikbJN4FAhu
-         QGaWPXAJnTTKtl7XQ4id1WJyr0hxJaknn88uu2s5kfcmXwwotCmZmtnGs1VSy79oSvWd
-         npxFUvsTMI5RwS4ijgVS9iB5XJci/mUAI0GostPmCxLgGT7UtSDa/tBuNv+KlAm9fQgz
-         lUrLklmGNgJlFcQodp4tV96AIJn6gsi3L1yaIRMQCGwtW2NHTB/YDJeF2l74Phypyz73
-         tmPkE4MwMZVPTtamfm3ngUzBsqaHYs2kxaNc4FolYYY6b8dXLy1hSksS3hq0sI7a34UK
-         s6nw==
-X-Gm-Message-State: AOAM53384iW9CnY/2sZxMgr7hXR6+kGKa9BtU+sJQxGg6DDnleKLe7qG
-        4UXf5JMM2FLPAZEXJ219G/b74mbaqjY=
-X-Google-Smtp-Source: ABdhPJzkQPo5kXaoKhwLVrai9wHVz767uqIgF78auMZWDINaJpdQzR4uiYsVxMobeSP25YQmW25XOg==
-X-Received: by 2002:ac2:4356:: with SMTP id o22mr2896126lfl.309.1626168742108;
-        Tue, 13 Jul 2021 02:32:22 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id h14sm673934lfv.249.2021.07.13.02.32.20
+        bh=4xLUJ1dW1Qt0KgF3pEuea/62PVc6DCT7EsaU/Szp0Bg=;
+        b=r3593Gx8I6HTJVi3GhGESoMXCkt5FHva8V8lvtX4YOT5HaPd1jwzrjWinuKHlsGx4A
+         SepQyBQ41BSJ1ioFp9O3YfHJ/Ico0mO7tEWN/TXO1ejRrs/dq1hAthbMlSAjdxxFzn02
+         aisNPs/nwJYyo60yWVlSZLqTfSpU3wUPN9YRQoK3Ct0oLAGQfKs6dUynUNMGmt/j2BLT
+         Z2h1LSPK2LZlYJt4Ea4aMrZ/mma7dwK/lKIY1IMIPbafGBo0Bi43YbzAT1K4zsZyGlcB
+         pILUs5Uo4sKX52JTCzt0gx97tSIQRshXS/Ot1p01r5jvnDaWxKHGQLhTqoVBePBzotj0
+         qSEQ==
+X-Gm-Message-State: AOAM533X1X8B1W8k/mhKRBLgywI/kDO9OeOYbn96L/AkmdzRXJzcLIjE
+        e3Yihwa+PjfpuZZ9YFmqFd9eeA==
+X-Google-Smtp-Source: ABdhPJxwSt+fW6q6oLmsbQWUpPWMZxVQMEC0vEz1IMyhrgYVT2WsxbkoAvR6ROOjdRLOSHodWNX0Yg==
+X-Received: by 2002:a17:90b:957:: with SMTP id dw23mr12591539pjb.123.1626173446842;
+        Tue, 13 Jul 2021 03:50:46 -0700 (PDT)
+Received: from localhost ([106.201.108.2])
+        by smtp.gmail.com with ESMTPSA id lj13sm15276916pjb.53.2021.07.13.03.50.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jul 2021 02:32:21 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH RESEND] dt-bindings: i2c: brcm,iproc-i2c: convert to the json-schema
-Date:   Tue, 13 Jul 2021 11:31:55 +0200
-Message-Id: <20210713093155.1752-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        Tue, 13 Jul 2021 03:50:46 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Bill Mills <bill.mills@linaro.org>,
+        =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Jie Deng <jie.deng@intel.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 0/5] virtio: Parse virtio-device nodes from DT
+Date:   Tue, 13 Jul 2021 16:20:29 +0530
+Message-Id: <cover.1626173013.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+Hi,
 
-This helps validating DTS files.
+Currently the DT only provides support for following node types for virtio-mmio
+nodes:
 
-Introduced changes:
-1. Added arm-gic.h include
+	virtio_mmio@a000000 {
+		dma-coherent;
+		interrupts = <0x00 0x10 0x01>;
+		reg = <0x00 0xa000000 0x00 0x200>;
+		compatible = "virtio,mmio";
+	};
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-RESEND: commit 11480dbfe1d5 ("ASoC: wm8750: convert to the json-schema")
-is part of the 5.14-rc1 so Rob's bot should be happy this time.
----
- .../bindings/i2c/brcm,iproc-i2c.txt           | 46 ------------
- .../bindings/i2c/brcm,iproc-i2c.yaml          | 71 +++++++++++++++++++
- 2 files changed, 71 insertions(+), 46 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/brcm,iproc-i2c.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/brcm,iproc-i2c.yaml
+And each virtio-mmio corresponds to a virtio-device. But there is no way for
+other users in the DT to show their dependency on virtio devices.
 
-diff --git a/Documentation/devicetree/bindings/i2c/brcm,iproc-i2c.txt b/Documentation/devicetree/bindings/i2c/brcm,iproc-i2c.txt
-deleted file mode 100644
-index d12cc33cca6c..000000000000
---- a/Documentation/devicetree/bindings/i2c/brcm,iproc-i2c.txt
-+++ /dev/null
-@@ -1,46 +0,0 @@
--Broadcom iProc I2C controller
--
--Required properties:
--
--- compatible:
--    Must be "brcm,iproc-i2c" or "brcm,iproc-nic-i2c"
--
--- reg:
--    Define the base and range of the I/O address space that contain the iProc
--    I2C controller registers
--
--- clock-frequency:
--    This is the I2C bus clock. Need to be either 100000 or 400000
--
--- #address-cells:
--    Always 1 (for I2C addresses)
--
--- #size-cells:
--    Always 0
--
--Optional properties:
--
--- interrupts:
--    Should contain the I2C interrupt. For certain revisions of the I2C
--    controller, I2C interrupt is unwired to the interrupt controller. In such
--    case, this property should be left unspecified, and driver will fall back
--    to polling mode
--
--- brcm,ape-hsls-addr-mask:
--    Required for "brcm,iproc-nic-i2c". Host view of address mask into the
--    'APE' co-processor. Value must be unsigned, 32-bit
--
--Example:
--	i2c0: i2c@18008000 {
--		compatible = "brcm,iproc-i2c";
--		reg = <0x18008000 0x100>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--		interrupts = <GIC_SPI 85 IRQ_TYPE_NONE>;
--		clock-frequency = <100000>;
--
--		codec: wm8750@1a {
--			compatible = "wlf,wm8750";
--			reg = <0x1a>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/i2c/brcm,iproc-i2c.yaml b/Documentation/devicetree/bindings/i2c/brcm,iproc-i2c.yaml
-new file mode 100644
-index 000000000000..2aa75b7add7b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/brcm,iproc-i2c.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/brcm,iproc-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom iProc I2C controller
-+
-+maintainers:
-+  - Rafał Miłecki <rafal@milecki.pl>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - brcm,iproc-i2c
-+      - brcm,iproc-nic-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  clock-frequency:
-+    enum: [ 100000, 400000 ]
-+
-+  interrupts:
-+    description: |
-+      Should contain the I2C interrupt. For certain revisions of the I2C
-+      controller, I2C interrupt is unwired to the interrupt controller. In such
-+      case, this property should be left unspecified, and driver will fall back
-+      to polling mode
-+    maxItems: 1
-+
-+  brcm,ape-hsls-addr-mask:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Host view of address mask into the 'APE' co-processor
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: brcm,iproc-nic-i2c
-+    then:
-+      required:
-+        - brcm,ape-hsls-addr-mask
-+
-+unevaluatedProperties: false
-+
-+required:
-+  - reg
-+  - clock-frequency
-+  - '#address-cells'
-+  - '#size-cells'
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    i2c@18008000 {
-+        compatible = "brcm,iproc-i2c";
-+        reg = <0x18008000 0x100>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        interrupts = <GIC_SPI 85 IRQ_TYPE_NONE>;
-+        clock-frequency = <100000>;
-+
-+        wm8750@1a {
-+            compatible = "wlf,wm8750";
-+            reg = <0x1a>;
-+        };
-+    };
+This patchset provides that support.
+
+The first patch update virtio,mmio bindings to allow for device subnodes to be
+present and the second patch updates the virtio-mmio driver to update the
+of_node.
+
+Other patches add bindings for i2c and gpio virtio devices (they have some
+dependencies, mentioned in the patches).
+
+Tested on x86 with qemu for arm64.
+
+--
+Viresh
+
+Viresh Kumar (5):
+  dt-bindings: virtio: mmio: Add support for device subnode
+  virtio_mmio: Bind virtio device to device-tree node
+  dt-bindings: i2c: Add bindings for i2c-virtio
+  i2c: virtio: Update i2c-adapter's of_node
+  dt-bindings: gpio: Add bindings for gpio-virtio
+
+ .../devicetree/bindings/gpio/gpio-virtio.yaml | 67 +++++++++++++++++++
+ .../devicetree/bindings/i2c/i2c-virtio.yaml   | 59 ++++++++++++++++
+ .../devicetree/bindings/virtio/mmio.yaml      | 41 ++++++++++++
+ drivers/i2c/busses/i2c-virtio.c               |  1 +
+ drivers/virtio/virtio_mmio.c                  | 44 ++++++++++++
+ include/dt-bindings/virtio/virtio_ids.h       |  1 +
+ 6 files changed, 213 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/gpio/gpio-virtio.yaml
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
+ create mode 120000 include/dt-bindings/virtio/virtio_ids.h
+
 -- 
-2.26.2
+2.31.1.272.g89b43f80a514
 
