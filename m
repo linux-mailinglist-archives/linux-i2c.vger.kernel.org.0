@@ -2,198 +2,207 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 191EF3C6A02
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 07:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A853C6AE5
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 09:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbhGMF5r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Jul 2021 01:57:47 -0400
-Received: from mail-dm6nam10on2118.outbound.protection.outlook.com ([40.107.93.118]:45121
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        id S232908AbhGMHDb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Jul 2021 03:03:31 -0400
+Received: from mail-co1nam11on2064.outbound.protection.outlook.com ([40.107.220.64]:36992
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233713AbhGMF5q (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 13 Jul 2021 01:57:46 -0400
+        id S233762AbhGMHDa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 13 Jul 2021 03:03:30 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dKokhhxeZ7t3TqK8YDA7mTD3FXagu3MVIOORZKFurupPJx6R5FNerABAN7saTOySDy/qiIMiziwaQuelMmzrQznmKHgYRGn2GdMYgTmhK9nQB2aAL0DVLdInmEBcBr7HD3bg9gAcnn0r2Nz5vBht289agdEO8TxFoFtvvY1UNUNRt7I4ItLukb5pidSSRfxnxXXSBUByFt1dV2qviEXQ1ZS4/uAGAHlQKjXZVpUz9K03uE6yWt1k2YWHa22N7tJkHBqM9mtveqFx0DvdRi1C1UfC+sfoqHoF09e7Gs05oFVBBObQyHmVoDYtgbxBAFtQSs8aZcLZFaGHVrkbXQpPjg==
+ b=FYABvKkgxVKoLI0g/8RKI7FUbjlJ1PEhjYt2nrwRzjGo9/NJCWw5gfm+Y0TBMpFu4GihbVEtNRVwE3M9hW/M2D5TVLSqi6rfAwyPQhO1s2DDd94/fxph5BNH5kLaQY8B+QZMQfV2ULdqyuZwcJQCkcNhVk9socxwro+yQZcisHzMqF50B4G9CPRefOew3m4XhvcA7l/uKY0NUo2mQayVk/ChqD6jeiRYAwVFhMe71PXt0IFQOsqg1d/a9GXhJIFz9T2riL1pmfLw2FQ6abV/ZWNltGVX3y/QkXSZLVvBNwNkyhjR56UmsiM3cwCPrdKXwGwy0H6H/B9pLoOUnwJp0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZiCqv816ye69wa5yoL7KXA6UEBvLis8Z1T3oFCWysr4=;
- b=SUXxGSmXWUg0cdij2b4YLY1Tr8+pjJQA2bCKNCzejnYyu7gv4CHCu1gt5kRUw2Meqt84/l7mmS5A93gpj54k5FUjATYGL520N0VpYXdmsNniyea7nzbAvjb2QmnjhlADpwzSExneDZVTcADEYJNQtmQ+mN3NYc3Q55bUSCAAhJPBLLHgaQLPEud6m2yct/0OBi4dTqSvvdltwC8HYBIewfi5QIjgVL/HqVuMrmdqkodOx/Kb2pi0RuKhxkoR/CLlY6Q9jSpzrgIpnGn4qgtOS65AL9nckohGzT3yjsYJjcML2sdu6/v4GHwnZLJO2oV1IzsYZCA4r2bABKcL+x/Tiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+ bh=agmzg8GdXRN3eXOZ+QuQxjmFtE4nuxjT8oL0MaRDhPw=;
+ b=cVBCEz+//u8vX0tv5WX+1mtQuAYGCyI+BQvK4EHj8ja4b8yvchUaYT+k8H2ASeApHrv5UrnQit5KqNyKSVVT4yohjiDQXvbdvWhl1nHDOBqU4h9EsFl6QU6LjqPJK/oQmRcV4sUciONyvM6/G8cRwUbohDwRlZR5fze5eS9cCLkCdnvQNYRTbQKlv8gsNxR860LxE3lyrk9qBgUsGuoVBEI/rbTBqOYoD26VZqMNNsUtpEVBg8NzFrUxAAt0vhskG1L6FcPDGHQiNHaWXbIgAP8uBgpshz+Wf0y+bMENe0J7U4ALxE1WmhCNiF4J7r1fH1lFU4hKg4LVm6vDS50/hA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZiCqv816ye69wa5yoL7KXA6UEBvLis8Z1T3oFCWysr4=;
- b=e/6I05MqowrpfcYlE51HbKaK2HQ22S8P9oV/OtmW9Xgl9SAP+1N4Gtx1DtHrRYMJz4uoOBRghp2baDLrGFcrAt3n49FSLLbc3QdqKoyp/rlb+VkwJwNBOqlA1qlSKA8LMjOjLo4pC9h38j/7th/UQfk1D4dOjfgZuvw2gTWIujo=
-Authentication-Results: acm.org; dkim=none (message not signed)
- header.d=none;acm.org; dmarc=none action=none
- header.from=os.amperecomputing.com;
-Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- CO1PR01MB6535.prod.exchangelabs.com (2603:10b6:303:d9::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4308.19; Tue, 13 Jul 2021 05:54:55 +0000
-Received: from MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::452a:24fb:12cb:9d7e]) by MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::452a:24fb:12cb:9d7e%5]) with mapi id 15.20.4308.027; Tue, 13 Jul 2021
- 05:54:55 +0000
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-To:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Cc:     Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: [PATCH v4 3/3] i2c: aspeed: Add slave_enable() to toggle slave mode
-Date:   Tue, 13 Jul 2021 12:54:25 +0700
-Message-Id: <20210713055425.30636-4-quan@os.amperecomputing.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210713055425.30636-1-quan@os.amperecomputing.com>
-References: <20210713055425.30636-1-quan@os.amperecomputing.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HKAPR03CA0027.apcprd03.prod.outlook.com
- (2603:1096:203:c9::14) To MW2PR0102MB3482.prod.exchangelabs.com
- (2603:10b6:302:c::32)
+ bh=agmzg8GdXRN3eXOZ+QuQxjmFtE4nuxjT8oL0MaRDhPw=;
+ b=E1h9bU6buRfecXRBDJYwWSQNZA/w07jOujmgUPJoBUx6SgAFdhUme8vQe/my9btWJsXkd4kazTdcOp4Bth1K2bFH9BQq6LnfJt3BLGXQK16colZuPD+hr1xVaFHHYd3/XaBXD8kBIxlbNu0chM6QOngP+fRR0+k6PvIijF9VaYw=
+Received: from DM5PR12CA0064.namprd12.prod.outlook.com (2603:10b6:3:103::26)
+ by BYAPR02MB4181.namprd02.prod.outlook.com (2603:10b6:a02:f1::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.22; Tue, 13 Jul
+ 2021 07:00:38 +0000
+Received: from DM3NAM02FT036.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:3:103:cafe::3b) by DM5PR12CA0064.outlook.office365.com
+ (2603:10b6:3:103::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.20 via Frontend
+ Transport; Tue, 13 Jul 2021 07:00:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT036.mail.protection.outlook.com (10.13.5.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4308.20 via Frontend Transport; Tue, 13 Jul 2021 07:00:36 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 13 Jul 2021 00:00:19 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Tue, 13 Jul 2021 00:00:19 -0700
+Envelope-to: git@xilinx.com,
+ linux-i2c@vger.kernel.org,
+ shubhrajyoti.datta@gmail.com
+Received: from [10.140.6.59] (port=58718 helo=xhdshubhraj40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1m3COu-0001Lw-Uh; Tue, 13 Jul 2021 00:00:17 -0700
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <git@xilinx.com>, <linux-i2c@vger.kernel.org>
+CC:     <michal.simek@xilinx.com>, <shubhrajyoti.datta@gmail.com>,
+        "Shubhrajyoti Datta" <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH] i2c: cadence: Implement save restore
+Date:   Tue, 13 Jul 2021 12:30:11 +0530
+Message-ID: <20210713070011.28254-1-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from hcm-sw-17.amperecomputing.com (118.69.219.201) by HKAPR03CA0027.apcprd03.prod.outlook.com (2603:1096:203:c9::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.10 via Frontend Transport; Tue, 13 Jul 2021 05:54:51 +0000
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 59cf5a78-500a-4faa-344d-08d945c2bd61
-X-MS-TrafficTypeDiagnostic: CO1PR01MB6535:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CO1PR01MB6535F84453339498B404861DF2149@CO1PR01MB6535.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:820;
+X-MS-Office365-Filtering-Correlation-Id: 62e82e3e-1c56-449b-1b80-08d945cbeac8
+X-MS-TrafficTypeDiagnostic: BYAPR02MB4181:
+X-Microsoft-Antispam-PRVS: <BYAPR02MB4181340DE73B489C10E9C0BEAA149@BYAPR02MB4181.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tJl95ke1G4O9CylA6LvRbk5zv0oaj/iqUEo5usfurJetFn7+t+MyXKb/wzA4z7Uf3WGhh57uotD036aj2+K9lrQYhe1kgMsnIg8ccBnuizRDOFEnUieXYyYNYMR1rLGkM8B0o1gqqEKpXS/lx1pF0L/x3cBsgBenWlme2n9E2Yl9wlmxgLctniDEEROxFwXP56YBWGHmiH2czo4Wh4UtIvhm1l2tBTCrblWxCcAUfTbwoIgff+VhFcCxAbehrelD4ufTQ3btS5Sjo/MUEJiwAeDMHhwoRHSKBd1XNPyt1AaTOcSKjJi3KM3HV0MDdIKGzSHNXCHyjn0RT4y9rxg9I8YPkxbs2w8E4q9k01Bn158K16CrC1Z9SPsmEysSJO0Ob74Rk0/ADFLEU4EDZnm+v2zc8MUgeXbwpJfYkVhmlooTWYzjlQjxPoZRyJ+aCLaFZGNPCP1mJNT+ObcM03lwfToeoPnyEvd0s578oglxHZddtPEZq2nE11KhvIuGVgPfMqvBys4rBawWf6/u4V1TxZ9AP2vIIOK0FMzAXofvRUSrI2Bk8kPEP69Eutw2q6PAMWg+PcKIywNjWESQRnE6ex5VmLZsHhRng0Z491fZ/eHgonxvp8RVdNWcdIUzV0aNMwHcvV0sBh62Q/ZGsBW/odrFs5td8tZe56UJ5knKTnViaVtNetocYQCOwt2mPPHK6z+1H+8nJ8TBAxx0yYN1xFCITZbq6hI8bAMkKHeNia8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(366004)(396003)(39850400004)(346002)(956004)(8676002)(54906003)(86362001)(5660300002)(2616005)(2906002)(1076003)(7416002)(52116002)(66946007)(107886003)(478600001)(66556008)(6666004)(66476007)(6506007)(921005)(110136005)(26005)(186003)(38100700002)(316002)(4326008)(38350700002)(83380400001)(6512007)(8936002)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XwsMqXkOtNZR82eUcGE/g2I+G4px+EdhThx1Yk8YbvS2xR9128AQ+iTGUzWr?=
- =?us-ascii?Q?PQJtSme+63+0n3eoE5R9fDQGPGgfi65dF2EFT0VNRhfGF19zzxdSM6KP6+6n?=
- =?us-ascii?Q?BIL1JmshII8ob9iJgikEhCFiusHW7NGGla+17/+OhWgV+KFFr/atmJlJvFgP?=
- =?us-ascii?Q?FXETNtjCrQcmulFotqPVdksklm6MqXqz7l78plpVj76It9W05C5Pz2qzLtMo?=
- =?us-ascii?Q?G7jTI35Z6/MuuQR7XxbC7k3XWbCAY/tVG3zdfDl6bqyM35h4EJg5BJ3RXiMo?=
- =?us-ascii?Q?8AuQTwYTB0+4a98oc/V34efhwJKtR2OvzdQuR0y+hCzZN+Nt2c8kyRplhJMW?=
- =?us-ascii?Q?iUIQS09w6b0YnYggTvHEpPqnN9Cglma1Dp8k2N1XdVcXLB9kJ8d4lj+4+X/B?=
- =?us-ascii?Q?h8FoFYeCcCKoismfkrpbJYVKaigENTZIpJ2DeTDfpicVNvCqvlVeuasi+ypP?=
- =?us-ascii?Q?d5kq/1y9OZ1hJbiX0UFEMmSgKpuBDzRM1TRRhtzqHMTALZumf9q3nlp/hTCv?=
- =?us-ascii?Q?DkJ1NnxgHRgKvMElUH6hws+5EvNbygIkWvog7CEwD8Q6SuBOhZhDjBEBNIcM?=
- =?us-ascii?Q?dRo4Lj7IDXraunZV+xC+vO3ary0wjdxABKkjr8MwDPv10Oc7VNOzJnNM/2hE?=
- =?us-ascii?Q?oxEXaPa1e4OH2f/3IESYKnFvAuadzhIdgFkDLChQF0tD1e5ldEZ68Pz353yh?=
- =?us-ascii?Q?Qrcj2qrZoXMTzeafW0/QUg8DmXCS1ieHnYMIj/SbqUhP7TE7T4ETWzhzdtxp?=
- =?us-ascii?Q?Ny6XhMw5yxMMQaJLF1+Pa+HhPS1Fj/F3YlzfxYAaugdTUapkUm3AewpfaSqB?=
- =?us-ascii?Q?oGz+SRH5/Ya519uJ+uYDy1159RXLV0bHMxZPeMm00ZJFkDkyKz0KEnTqrX+N?=
- =?us-ascii?Q?BriyLObvdd2cbF+FjgQVNCfDT2HkbsrKJ+7sz45lOC8TfmUKmezEyeMl1edO?=
- =?us-ascii?Q?HeFeKtd+Y8IKJcZsd765ihI/fl1nGbWRwysIlGkeMtaSeyWb75e8cc3kC3T3?=
- =?us-ascii?Q?3XmO7+nNK5m7i+86DgzLkqoryBZzqgM/D8Rk99WRSe8IFTIV1ZNhEiQgADc6?=
- =?us-ascii?Q?wLxmyGiMsA1gNdlVifZF+fxhUjshUCYLDXuq0GdvlZinFFed9lk4hLREaALQ?=
- =?us-ascii?Q?C9dEM5dvE0n8lDIXvvyhLAgHF/x2BJqH8aSbVfW8BQyLh7d5sB1SGKIFYAZA?=
- =?us-ascii?Q?3s0S+2suTlwq4+cLUeeM8UAA+P2PaqRi5/ta3JWdAUbtYIXE4a5gpNG4ead7?=
- =?us-ascii?Q?exjavlU6E9GTQjLDLnIyF1Zlso0ExrzCoyiccfLeSk69uIc7l7ly5Zq8j6+y?=
- =?us-ascii?Q?+7KapkYS7ddlTzg/+Y5Euo+T?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59cf5a78-500a-4faa-344d-08d945c2bd61
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2021 05:54:55.7109
+X-Microsoft-Antispam-Message-Info: zBEm6FAofM41RZPJCoaq/kzV3T3B1LksbWKJQgelfIlmyzAPzRSNmSS4kqxIHBX/Gbd2q2j131oHxmzw8SRfCcgGpTqXPrJFwiNaXYfDFEYuKkk/DQCRdJ9a88uAvIlboRleRcLBtM46WlM+VwJGX4vyVvUwXh3x5BxPFbNscVUR/cNhdFqYverccluyWdeYWlsXNfX/Qqhqmjv5BVtc8vhxduhC37Rmy8Zd7xZJAtRVaQfgGVpeQT412/egG7YzWgdPrOjukkHz+YJ+Y4OU+VK4y8vYxnMV+7YGLAsCu7GuWq/uH1F9619HZggy+t7MeV4+GcRyFAQ92vAFx/0y9ldRt8UhUuw/he9p9TJWui7dG4oSiMoF/86wo/ugIYQUheWL/PFAUQ70ye7Br96qGr0K101AGBa53LOGnIWyn01+v+m7yXu61War/8h4/Sce51KcEwKSFsb4ML727tr3T8yaYUXA4EuHuuB/wQ1NuXQvJMtu5uQDveZDl9re+pZMUDucccEbcKtTSzUzqGhwrFxoX+NSyumOALZDlcqEBbGF6oiYlt1IENDR1I2fnEDSG/rmKN1AFBT3xvobIECsm/GrnosOgLLnPbwpxuyyu9vxpKH/PobH9U/ZUB//PENmeOx/zFWxHT4PE+D4cPf6vWq47j0lNse5T7QyOvH/S97ghPRJ0YM4KYd7ss/4k5nQl/+pZzxJp93/a9NuvlNRsX5wJWgrcKdMHJCyBSkOPlg=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(136003)(376002)(39840400004)(346002)(36840700001)(46966006)(8676002)(36906005)(8936002)(4326008)(426003)(336012)(9786002)(36860700001)(316002)(82310400003)(47076005)(44832011)(7636003)(478600001)(110136005)(54906003)(107886003)(36756003)(2616005)(1076003)(2906002)(6666004)(356005)(186003)(5660300002)(70206006)(70586007)(83380400001)(26005)(7696005)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2021 07:00:36.6587
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: smBguKr95Q4IqhWCuS0nn3Yx/24pHkzjMfF7Bix6ruQvgsPNCVkpWaV7t8+LkDZenah2nnOyvsBJ9naZOOn7/rnKix0iquldowea9GLCz0U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB6535
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62e82e3e-1c56-449b-1b80-08d945cbeac8
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT036.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4181
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Slave needs time to prepare the response data before Master could
-enquiry via read transaction. However, there is no mechanism for
-i2c-aspeed Slave to notify Master that it needs more time to process
-and this make Master side to time out when trying to get the response.
+The zynqmp platform now supports chip-off so the registers can
+lose context.
+Implement save restore for i2c module.
+Since we have only a couple of registers
+an unconditional restore is done.
 
-This commit introduces the slave_enable() callback in struct
-i2c_algorithm for Slave to temporary stop the Slave mode while working
-on the response and re-enable the Slave when response data ready.
-
-Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 ---
-v4:
-  + First introduced follow Ryan's suggestion               [Ryan]
-  + Fix recursive spinlock issue in v3 (aspeed_set_slave_busy())
-  and apply in this patch                                 [Graeme]
+ drivers/i2c/busses/i2c-cadence.c | 38 +++++++++++++++++++++++---------
+ 1 file changed, 27 insertions(+), 11 deletions(-)
 
- drivers/i2c/busses/i2c-aspeed.c | 20 ++++++++++++++++++++
- include/linux/i2c.h             |  2 ++
- 2 files changed, 22 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 67e8b97c0c95..a6a19dc8a501 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -785,6 +785,25 @@ static int aspeed_i2c_unreg_slave(struct i2c_client *client)
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 66aafa7d1123..25a0447e9fbf 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -178,6 +178,7 @@ enum cdns_i2c_slave_state {
+  * @clk:		Pointer to struct clk
+  * @clk_rate_change_nb:	Notifier block for clock rate changes
+  * @quirks:		flag for broken hold bit usage in r1p10
++ * @ctrl_reg:		Cached value of the control register.
+  * @ctrl_reg_diva_divb: value of fields DIV_A and DIV_B from CR register
+  * @slave:		Registered slave instance.
+  * @dev_mode:		I2C operating role(master/slave).
+@@ -202,6 +203,7 @@ struct cdns_i2c {
+ 	struct clk *clk;
+ 	struct notifier_block clk_rate_change_nb;
+ 	u32 quirks;
++	u32 ctrl_reg;
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 	u16 ctrl_reg_diva_divb;
+ 	struct i2c_client *slave;
+@@ -1037,10 +1039,11 @@ static int cdns_i2c_setclk(unsigned long clk_in, struct cdns_i2c *id)
+ 	if (ret)
+ 		return ret;
+ 
+-	ctrl_reg = cdns_i2c_readreg(CDNS_I2C_CR_OFFSET);
++	ctrl_reg = id->ctrl_reg;
+ 	ctrl_reg &= ~(CDNS_I2C_CR_DIVA_MASK | CDNS_I2C_CR_DIVB_MASK);
+ 	ctrl_reg |= ((div_a << CDNS_I2C_CR_DIVA_SHIFT) |
+ 			(div_b << CDNS_I2C_CR_DIVB_SHIFT));
++	id->ctrl_reg = ctrl_reg;
+ 	cdns_i2c_writereg(ctrl_reg, CDNS_I2C_CR_OFFSET);
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 	id->ctrl_reg_diva_divb = ctrl_reg & (CDNS_I2C_CR_DIVA_MASK |
+@@ -1128,6 +1131,26 @@ static int __maybe_unused cdns_i2c_runtime_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
++/**
++ * cdns_i2c_init -  Controller initialisation
++ * @id:		Device private data structure
++ *
++ * Initialise the i2c controller.
++ *
++ */
++static void cdns_i2c_init(struct cdns_i2c *id)
++{
++	cdns_i2c_writereg(id->ctrl_reg, CDNS_I2C_CR_OFFSET);
++	/*
++	 * Cadence I2C controller has a bug wherein it generates
++	 * invalid read transaction after HW timeout in master receiver mode.
++	 * HW timeout is not used by this driver and the interrupt is disabled.
++	 * But the feature itself cannot be disabled. Hence maximum value
++	 * is written to this register to reduce the chances of error.
++	 */
++	cdns_i2c_writereg(CDNS_I2C_TIMEOUT_MAX, CDNS_I2C_TIME_OUT_OFFSET);
++}
++
+ /**
+  * cdns_i2c_runtime_resume - Runtime resume
+  * @dev:	Address of the platform_device structure
+@@ -1146,6 +1169,7 @@ static int __maybe_unused cdns_i2c_runtime_resume(struct device *dev)
+ 		dev_err(dev, "Cannot enable clock.\n");
+ 		return ret;
+ 	}
++	cdns_i2c_init(xi2c);
  
  	return 0;
  }
-+
-+static int aspeed_i2c_slave_enable(struct i2c_client *client, bool enable)
-+{
-+	struct aspeed_i2c_bus *bus = i2c_get_adapdata(client->adapter);
-+	u32 func_ctrl_reg_val;
-+
-+	if (!bus->slave)
-+		return -EINVAL;
-+
-+	/* Toggle slave mode. */
-+	func_ctrl_reg_val = readl(bus->base + ASPEED_I2C_FUN_CTRL_REG);
-+	if (enable)
-+		func_ctrl_reg_val |= ASPEED_I2CD_SLAVE_EN;
-+	else
-+		func_ctrl_reg_val &= ~ASPEED_I2CD_SLAVE_EN;
-+	writel(func_ctrl_reg_val, bus->base + ASPEED_I2C_FUN_CTRL_REG);
-+
-+	return 0;
-+}
- #endif /* CONFIG_I2C_SLAVE */
- 
- static const struct i2c_algorithm aspeed_i2c_algo = {
-@@ -793,6 +812,7 @@ static const struct i2c_algorithm aspeed_i2c_algo = {
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 	.reg_slave	= aspeed_i2c_reg_slave,
- 	.unreg_slave	= aspeed_i2c_unreg_slave,
-+	.slave_enable	= aspeed_i2c_slave_enable,
- #endif /* CONFIG_I2C_SLAVE */
- };
- 
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 3eb60a2e9e61..8c1765aa7e3f 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -520,6 +520,7 @@ i2c_register_board_info(int busnum, struct i2c_board_info const *info,
-  *   from the ``I2C_FUNC_*`` flags.
-  * @reg_slave: Register given client to I2C slave mode of this adapter
-  * @unreg_slave: Unregister given client from I2C slave mode of this adapter
-+ * @slave_enable: Toggle enable slave mode for given client of this adapter
-  *
-  * The following structs are for those who like to implement new bus drivers:
-  * i2c_algorithm is the interface to a class of hardware solutions which can
-@@ -557,6 +558,7 @@ struct i2c_algorithm {
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 	int (*reg_slave)(struct i2c_client *client);
- 	int (*unreg_slave)(struct i2c_client *client);
-+	int (*slave_enable)(struct i2c_client *client, bool enable);
+@@ -1246,7 +1270,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 	id->dev_mode = CDNS_I2C_MODE_MASTER;
+ 	id->slave_state = CDNS_I2C_SLAVE_STATE_IDLE;
  #endif
- };
+-	cdns_i2c_writereg(CDNS_I2C_CR_MASTER_EN_MASK, CDNS_I2C_CR_OFFSET);
++	id->ctrl_reg = CDNS_I2C_CR_ACK_EN | CDNS_I2C_CR_NEA | CDNS_I2C_CR_MS;
  
+ 	ret = cdns_i2c_setclk(id->input_clk, id);
+ 	if (ret) {
+@@ -1261,15 +1285,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "cannot get irq %d\n", id->irq);
+ 		goto err_clk_dis;
+ 	}
+-
+-	/*
+-	 * Cadence I2C controller has a bug wherein it generates
+-	 * invalid read transaction after HW timeout in master receiver mode.
+-	 * HW timeout is not used by this driver and the interrupt is disabled.
+-	 * But the feature itself cannot be disabled. Hence maximum value
+-	 * is written to this register to reduce the chances of error.
+-	 */
+-	cdns_i2c_writereg(CDNS_I2C_TIMEOUT_MAX, CDNS_I2C_TIME_OUT_OFFSET);
++	cdns_i2c_init(id);
+ 
+ 	ret = i2c_add_adapter(&id->adap);
+ 	if (ret < 0)
 -- 
-2.28.0
+2.17.1
 
