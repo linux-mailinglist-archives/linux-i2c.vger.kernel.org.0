@@ -2,102 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6116E3C79DC
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jul 2021 00:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A338E3C79E6
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jul 2021 00:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235536AbhGMXAI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Jul 2021 19:00:08 -0400
-Received: from mail-il1-f179.google.com ([209.85.166.179]:39510 "EHLO
-        mail-il1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235417AbhGMXAH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jul 2021 19:00:07 -0400
-Received: by mail-il1-f179.google.com with SMTP id a7so5582218iln.6;
-        Tue, 13 Jul 2021 15:57:16 -0700 (PDT)
+        id S236733AbhGMXBv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Jul 2021 19:01:51 -0400
+Received: from mail-io1-f43.google.com ([209.85.166.43]:45981 "EHLO
+        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235417AbhGMXBu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jul 2021 19:01:50 -0400
+Received: by mail-io1-f43.google.com with SMTP id y16so6223805iol.12;
+        Tue, 13 Jul 2021 15:59:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=pLqgmA3zxhNncLZSYPNiduirqdJowC5CS/FxB37q7a0=;
-        b=QY3IRJHoflPIMpkwq+MCpIENT0F9/vIJtKJ9H7d6dzpvruOVRBOUxyKV9ZWm+WYhBr
-         5VNHo10Qmcm/xnL7q6UQM5H5vwP2b7J651QxOJaWvJRRo7/svdSdqcvcQPCrL2/WeBiV
-         Poj5QQDcffHCD4FZEbHubdmvypHvD/yty+0H6lqeOvRh/qCbz9Cx4oz07GQyYhyixSwl
-         3yhYIGZXM/BICIbi2EbbsG/aWkk2Fyu7tdBeCeMGuAiH3tvuXwjnj/r/c6Bo4YRRK49U
-         NSrID3KHVc2zWX0WVFnw9SuAoxV8BYKO5rtnMj9iaSAprOuma6zXdggnZ6rs3BefAgV1
-         MTqQ==
-X-Gm-Message-State: AOAM531coC40WCS6CzpUck0Vre4QL9gZvQhIMknvWMskQcqQ/aJ/2ZUt
-        6Wa8+nMZ39R6dpgWlHJC5w==
-X-Google-Smtp-Source: ABdhPJxDX1fh/0j6B2cCSd4v8x4aGdA/5rqK4c3fCxO5I50gLSJPtAzdjVMjSMFPK1gExOJTLlDC3g==
-X-Received: by 2002:a05:6e02:218c:: with SMTP id j12mr4598261ila.32.1626217035898;
-        Tue, 13 Jul 2021 15:57:15 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to;
+        bh=JTI1ZBR9D1Ugup4282dbl5tw68/bdXRLNL3cR2M36lk=;
+        b=AqXB8tdCYM+JQVy+8YYIEFzjHv1mck4krMtxLlypCIMHXlHptHapmdZ04Nv+/2G1R+
+         ABDe9RnxG2B2gBul2xAUSeYr2LD/c1fU+68YLq61aTqioe24SzjGio3orVW0VUb27ist
+         FOXsrUERQ2JF8iKQvTcAeHnb/YZZhLmnGYlocvRYXT4DHt4jdm5ATQuLzsRZAmHfBzqM
+         25ukl0fg8Bv9DhBtqmJLfP41WVQohFPKZ03uHEZ1N+POWm0u/YQdxHvNDrui0uLq8XTP
+         pz6hmHSIpOeLPurwuWwA56JlUqrkHKlTpfoP7OZ6MILlKmdebXOH2jf8/7v9KHWPtiwN
+         WfaQ==
+X-Gm-Message-State: AOAM533iZbDjaqz8+WfbsgWHElz6mqMlkWAfSPKBUWs89VegWpr3UJ5U
+        4pnZOiPY54cNNiCFnIzX+Q==
+X-Google-Smtp-Source: ABdhPJwqQj4i60dPLCZFJEHdYwTRX+Yhru1/A8V14H871+oGYZI2ex/1qE4HdMBMRRnO95P5eEF3/Q==
+X-Received: by 2002:a02:cace:: with SMTP id f14mr6161797jap.5.1626217139833;
+        Tue, 13 Jul 2021 15:58:59 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id t16sm209462ilp.15.2021.07.13.15.57.10
+        by smtp.gmail.com with ESMTPSA id b2sm224559iln.5.2021.07.13.15.58.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jul 2021 15:57:15 -0700 (PDT)
-Received: (nullmailer pid 1007696 invoked by uid 1000);
-        Tue, 13 Jul 2021 22:57:09 -0000
-Date:   Tue, 13 Jul 2021 16:57:09 -0600
+        Tue, 13 Jul 2021 15:58:59 -0700 (PDT)
+Received: (nullmailer pid 1010485 invoked by uid 1000);
+        Tue, 13 Jul 2021 22:58:53 -0000
+Date:   Tue, 13 Jul 2021 16:58:53 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, cl@rock-chips.com,
-        thierry.reding@gmail.com, heiko@sntech.de,
-        jagan@amarulasolutions.com, wens@csie.org, uwe@kleine-koenig.org,
-        mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
-        linux-watchdog@vger.kernel.org, maz@kernel.org,
-        linux-pwm@vger.kernel.org
+To:     cl@rock-chips.com
+Cc:     linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, cnsztl@gmail.com,
+        linux-watchdog@vger.kernel.org, lee.jones@linaro.org,
+        shawn.lin@rock-chips.com, linux-kernel@vger.kernel.org,
+        heiko@sntech.de, huangtao@rock-chips.com, wim@linux-watchdog.org,
+        jensenhuang@friendlyarm.com, linux-serial@vger.kernel.org,
+        maz@kernel.org, zhangqing@rock-chips.com, thierry.reding@gmail.com,
+        jamie@jamieiles.com, ulf.hansson@linaro.org, mail@david-bauer.net,
+        jbx6244@gmail.com, david.wu@rock-chips.com,
+        linux-pwm@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+        linux-mmc@vger.kernel.org, jay.xu@rock-chips.com,
+        uwe@kleine-koenig.org, michael@amarulasolutions.com,
+        linux@roeck-us.net, jagan@amarulasolutions.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org, wens@csie.org,
+        devicetree@vger.kernel.org
 Subject: Re: [RESEND PATCH v5 1/4] dt-bindings: pwm: rockchip: add
  description for rk3568
-Message-ID: <20210713225709.GA987961@robh.at.kernel.org>
+Message-ID: <20210713225853.GA1010426@robh.at.kernel.org>
 References: <20210622020517.13100-1-cl@rock-chips.com>
  <20210623021303.28015-1-cl@rock-chips.com>
- <20210705064914.o2neaiwqndjfdyqd@pengutronix.de>
- <YOK1+pMy+N64eR75@dell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YOK1+pMy+N64eR75@dell>
+In-Reply-To: <20210623021303.28015-1-cl@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 05, 2021 at 08:34:18AM +0100, Lee Jones wrote:
-> On Mon, 05 Jul 2021, Uwe Kleine-König wrote:
+On Wed, 23 Jun 2021 10:13:03 +0800, cl@rock-chips.com wrote:
+> From: Liang Chen <cl@rock-chips.com>
 > 
-> > On Wed, Jun 23, 2021 at 10:13:03AM +0800, cl@rock-chips.com wrote:
-> > > From: Liang Chen <cl@rock-chips.com>
-> > > 
-> > > add "rockchip,rk3568-pwm", "rockchip,rk3328-pwm" for pwm nodes on
-> > > a rk3568 platform to pwm-rockchip.yaml.
-> > 
-> > Looks good to me
-> > 
-> > Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > 
-> > Who is supposed to apply this patch? Does this need blessing by Rob?
+> add "rockchip,rk3568-pwm", "rockchip,rk3328-pwm" for pwm nodes on
+> a rk3568 platform to pwm-rockchip.yaml.
 > 
-> There is no standard.  Rob will usually have some kind of arrangement
-> with the associated maintainer(s).  If this is a big functional
-> change, I would suggest letting Rob and his army of bots give it the
-> once over before it is applied in any case.
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> ---
+>  Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-The documented standard[1] is subsystem maintainers take bindings. Are 
-there exceptions? Yes. Usually that's standalone patches (which netdev 
-maintainers just ignore for example).
-
-One line compatible string changes don't need to wait for me.
-
-Rob
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/tree/Documentation/devicetree/bindings/submitting-patches.rst#n67
+Acked-by: Rob Herring <robh@kernel.org>
