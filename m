@@ -2,522 +2,166 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A93C93C735E
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 17:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D17B3C737B
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jul 2021 17:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237020AbhGMPlD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Jul 2021 11:41:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45051 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236992AbhGMPlD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jul 2021 11:41:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626190693;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PkpGjk3IAqUo4g2B+8cvDFjwsKJtxW8AwUw5KJ9QtHg=;
-        b=eULWG48aeonhA9zmOaAyt1YaDOVA4c1Q5UTXRM/cdvrs+ip1aux5f442RgERISgF177kT8
-        aHi6psaSLSDSff7IIS/FJxIgvWzGficjXNrJvxGTs7VrJILbMZSB2xVmSTT7xODuSLjXGS
-        Kfxj64EST4KvYUFYq7TpKvx+lbFZ8+c=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-497-x0ZT5TQvPJO-k5bVVwcTeQ-1; Tue, 13 Jul 2021 11:38:12 -0400
-X-MC-Unique: x0ZT5TQvPJO-k5bVVwcTeQ-1
-Received: by mail-wm1-f69.google.com with SMTP id m6-20020a05600c4f46b0290205f5e73b37so1626252wmq.3
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Jul 2021 08:38:11 -0700 (PDT)
+        id S237131AbhGMPrB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Jul 2021 11:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236932AbhGMPrB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jul 2021 11:47:01 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F54DC0613DD;
+        Tue, 13 Jul 2021 08:44:11 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id e1-20020a9d63c10000b02904b8b87ecc43so8991307otl.4;
+        Tue, 13 Jul 2021 08:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=retq6liOP8LyC4cjQJYBW1Hq0tEy4WkIXq1yMZpGIss=;
+        b=l5diPwu63ZdwRDfFsRfLQy6ioKCxMcgkhHwIYlXxCmK8cfEIsueg3SB3anKBpHRUFL
+         /ygVShxWcr+HN/+V5ri/oymhukuLDAjGZ7wzhGv9J3LNpQZRxmJ4uVnL8MX8CaGKXiem
+         6863xjwYlv9r55SU7cPAxwSnubqtyzFaIL7/WWAWmncdYPMNYhLBxdOOPsLH5ogoja8I
+         4MB/Ghh455+ouxNT3gtRiQFhNsx7hN+MGYLiMkhrFWeN+levLLFjQOL8rEXE6EecfxQt
+         DptmuInoEjccYpab6fsGBKqa3jVdcmuD1AfGNLxNIa7ixzEEcMcRjx4mnTi0yXi6aeBz
+         nXbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PkpGjk3IAqUo4g2B+8cvDFjwsKJtxW8AwUw5KJ9QtHg=;
-        b=SNDPbMYFSSRkdv8bmZ7qC+K1r59/RudLk2kzuBpC/4VyCkz3dyuOhaqe6Mopiqw+YU
-         k9rPoDG2I//Awtejqvh+QMFdJiY+Ug8gyHqDOdNtO7zRWWfgOWKmPhgCPotqCn1HcN1c
-         7m3V1wCMzrMoSVBw65sCsXhrtzSZblUR5BI8rWH9Q+GimDyE6v2wyqdNd6aSOVwoWLZJ
-         bK3tK0BYqvXFdQrSxqa3WQHROh01VoeJFD86xWr3GHXqg9vPzaWw36+Yta4kr2abDD50
-         DzJa+Q8CxOST/++awVkTsOrJB8mBdcjQtuCoTo59lCIBp78DdjqcbDcyPNkVxDJuzAQ+
-         k+dw==
-X-Gm-Message-State: AOAM533Krn3goHVHyBzAMD5meMvnQyV1JOv7peryWavLKCpsVhMLTyy3
-        DBRIcQS5uarjck769K6flIteVCfOLS47C1/zEgmO55zYSq73UOhtPl32fr8fQ8dUON7R0r1D5QN
-        gV0isQaD0swVW3bRBtYmy
-X-Received: by 2002:adf:e0c8:: with SMTP id m8mr6543708wri.261.1626190690801;
-        Tue, 13 Jul 2021 08:38:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx5gRYN/5Fm8EE9B9Q//aKvJjbg4Hmw8ae63wQji1dUg1u2RqchL2CD/ZfgcYIuPvVrzJ4zXg==
-X-Received: by 2002:adf:e0c8:: with SMTP id m8mr6543680wri.261.1626190690558;
-        Tue, 13 Jul 2021 08:38:10 -0700 (PDT)
-Received: from redhat.com ([2.55.15.23])
-        by smtp.gmail.com with ESMTPSA id y197sm1893726wmc.7.2021.07.13.08.38.07
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to;
+        bh=retq6liOP8LyC4cjQJYBW1Hq0tEy4WkIXq1yMZpGIss=;
+        b=EXkrF/I3qDFEL1C2XM+ORqoPl+NAqYLpMNrQu+mJ0sW3faaWzVCnkn1/9oc7YIbu+F
+         pA0f13hPwVfVdZ4+mTPkIHSq88DYBHEWicMWWwbFiOLIQGRPeDIMIC2b09wK1dvPzKZG
+         H9w6Bh3L6YXokJpF3O+o4z/a2sIYZIzPJ8WyOtyXSKqLziQUT0fgQ9b6EakcdugliwoF
+         /JvV4daHp65WRa1R77rI3TvdAhVf82VCNotQKDFsES+f5ktuF3YxkKVOX36AVGuDx2pk
+         mYK/Pkqm51ID/nRlYt++ZDwdzzKWxpawfs7BY2N/Qs8QpRE4BllKmFi1mkUbDhcC4wVH
+         1B5g==
+X-Gm-Message-State: AOAM5305NXibudOGp2J8lYlOWvPDKr5gSzViJmflQvAzTP7V9L8yA46G
+        gNdplv7dvl+lW6DGks3xRg==
+X-Google-Smtp-Source: ABdhPJyx0htP9DIoOaWYr204hm25coZiD0nA2Sxr0KKjHdzpEOchF2qpDQHfdQWgEM0KXzdIvynVzw==
+X-Received: by 2002:a05:6830:3108:: with SMTP id b8mr4034650ots.182.1626191050482;
+        Tue, 13 Jul 2021 08:44:10 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id v26sm336142oof.30.2021.07.13.08.44.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jul 2021 08:38:09 -0700 (PDT)
-Date:   Tue, 13 Jul 2021 11:38:05 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, wsa@kernel.org,
-        wsa+renesas@sang-engineering.com, arnd@arndb.de,
-        jasowang@redhat.com, andriy.shevchenko@linux.intel.com,
-        yu1.wang@intel.com, shuo.a.liu@intel.com, conghui.chen@intel.com,
-        viresh.kumar@linaro.org, stefanha@redhat.com,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v14] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210713113607-mutt-send-email-mst@kernel.org>
-References: <984ebecaf697058eb73389ed14ead9dd6d38fb53.1625796246.git.jie.deng@intel.com>
+        Tue, 13 Jul 2021 08:44:08 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:2514:a9eb:8442:8902])
+        by serve.minyard.net (Postfix) with ESMTPSA id 08A4D1800E8;
+        Tue, 13 Jul 2021 15:44:07 +0000 (UTC)
+Date:   Tue, 13 Jul 2021 10:44:05 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v4 0/3] Add SSIF BMC driver
+Message-ID: <20210713154405.GB3406@minyard.net>
+Reply-To: minyard@acm.org
+References: <20210713055425.30636-1-quan@os.amperecomputing.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <984ebecaf697058eb73389ed14ead9dd6d38fb53.1625796246.git.jie.deng@intel.com>
+In-Reply-To: <20210713055425.30636-1-quan@os.amperecomputing.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jul 09, 2021 at 10:25:30AM +0800, Jie Deng wrote:
-> Add an I2C bus driver for virtio para-virtualization.
-> 
-> The controller can be emulated by the backend driver in
-> any device model software by following the virtio protocol.
-> 
-> The device specification can be found on
-> https://lists.oasis-open.org/archives/virtio-comment/202101/msg00008.html.
-> 
-> By following the specification, people may implement different
-> backend drivers to emulate different controllers according to
-> their needs.
-> 
-> Co-developed-by: Conghui Chen <conghui.chen@intel.com>
-> Signed-off-by: Conghui Chen <conghui.chen@intel.com>
-> Signed-off-by: Jie Deng <jie.deng@intel.com>
-> ---
-> Changes v13 -> v14
-> 	- Put the headers in virtio_i2c.h in alphabetical order.
-> 	- Dropped I2C_FUNC_SMBUS_QUICK support.
-> 	- Dropped few unnecessary variables and checks.
-> 	- Use "num" everywhere instead of num or nr, to be consistent.
-> 	- Added few comments which make the design more clear. 
->  
-> Changes v12 -> v13
-> 	- Use _BITUL() instead of BIT().
-> 	- Rename "virtio_i2c_send_reqs" to "virtio_i2c_prepare_reqs".
-> 	- Optimize the return value of "virtio_i2c_complete_reqs".
-> 
-> Changes v11 -> v12
-> 	- Do not sent msg_buf for zero-length request.
-> 	- Send requests to host only if all the number of transfers requested prepared successfully.
-> 	- Remove the line #include <linux/bits.h> in virtio_i2c.h.
-> 
-> Changes v10 -> v11
-> 	- Remove vi->adap.class = I2C_CLASS_DEPRECATED.
-> 	- Use #ifdef CONFIG_PM_SLEEP to replace the "__maybe_unused".
-> 	- Remove "struct mutex lock" in "struct virtio_i2c".
-> 	- Support zero-length request.
-> 	- Remove unnecessary logs.
-> 	- Remove vi->adap.timeout = HZ / 10, just use the default value.
-> 	- Use BIT(0) to define VIRTIO_I2C_FLAGS_FAIL_NEXT.
-> 	- Add the virtio_device index to adapter's naming mechanism.
-> 
->  drivers/i2c/busses/Kconfig      |  11 ++
->  drivers/i2c/busses/Makefile     |   3 +
->  drivers/i2c/busses/i2c-virtio.c | 285 ++++++++++++++++++++++++++++++++++++++++
->  include/uapi/linux/virtio_i2c.h |  41 ++++++
->  include/uapi/linux/virtio_ids.h |   1 +
->  5 files changed, 341 insertions(+)
->  create mode 100644 drivers/i2c/busses/i2c-virtio.c
->  create mode 100644 include/uapi/linux/virtio_i2c.h
-> 
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index 10acece..e47616a 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -21,6 +21,17 @@ config I2C_ALI1535
->  	  This driver can also be built as a module.  If so, the module
->  	  will be called i2c-ali1535.
->  
-> +config I2C_VIRTIO
-> +	tristate "Virtio I2C Adapter"
-> +	select VIRTIO
-> +	help
-> +	  If you say yes to this option, support will be included for the virtio
-> +	  I2C adapter driver. The hardware can be emulated by any device model
-> +	  software according to the virtio protocol.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called i2c-virtio.
-> +
->  config I2C_ALI1563
->  	tristate "ALI 1563"
->  	depends on PCI
-> diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-> index 69e9963..9843756 100644
-> --- a/drivers/i2c/busses/Makefile
-> +++ b/drivers/i2c/busses/Makefile
-> @@ -147,4 +147,7 @@ obj-$(CONFIG_I2C_XGENE_SLIMPRO) += i2c-xgene-slimpro.o
->  obj-$(CONFIG_SCx200_ACB)	+= scx200_acb.o
->  obj-$(CONFIG_I2C_FSI)		+= i2c-fsi.o
->  
-> +# VIRTIO I2C host controller driver
-> +obj-$(CONFIG_I2C_VIRTIO)	+= i2c-virtio.o
-> +
->  ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
-> diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
-> new file mode 100644
-> index 0000000..0139cdc
-> --- /dev/null
-> +++ b/drivers/i2c/busses/i2c-virtio.c
-> @@ -0,0 +1,285 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Virtio I2C Bus Driver
-> + *
-> + * The Virtio I2C Specification:
-> + * https://raw.githubusercontent.com/oasis-tcs/virtio-spec/master/virtio-i2c.tex
-> + *
-> + * Copyright (c) 2021 Intel Corporation. All rights reserved.
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/completion.h>
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/virtio.h>
-> +#include <linux/virtio_ids.h>
-> +#include <linux/virtio_config.h>
-> +#include <linux/virtio_i2c.h>
-> +
-> +/**
-> + * struct virtio_i2c - virtio I2C data
-> + * @vdev: virtio device for this controller
-> + * @completion: completion of virtio I2C message
-> + * @adap: I2C adapter for this controller
-> + * @vq: the virtio virtqueue for communication
-> + */
-> +struct virtio_i2c {
-> +	struct virtio_device *vdev;
-> +	struct completion completion;
-> +	struct i2c_adapter adap;
-> +	struct virtqueue *vq;
-> +};
-> +
-> +/**
-> + * struct virtio_i2c_req - the virtio I2C request structure
-> + * @out_hdr: the OUT header of the virtio I2C message
-> + * @buf: the buffer into which data is read, or from which it's written
-> + * @in_hdr: the IN header of the virtio I2C message
-> + */
-> +struct virtio_i2c_req {
-> +	struct virtio_i2c_out_hdr out_hdr	____cacheline_aligned;
-> +	uint8_t *buf				____cacheline_aligned;
-> +	struct virtio_i2c_in_hdr in_hdr		____cacheline_aligned;
-> +};
-> +
-> +static void virtio_i2c_msg_done(struct virtqueue *vq)
-> +{
-> +	struct virtio_i2c *vi = vq->vdev->priv;
-> +
-> +	complete(&vi->completion);
-> +}
-> +
-> +static int virtio_i2c_prepare_reqs(struct virtqueue *vq,
-> +				   struct virtio_i2c_req *reqs,
-> +				   struct i2c_msg *msgs, int num)
-> +{
-> +	struct scatterlist *sgs[3], out_hdr, msg_buf, in_hdr;
-> +	int i;
-> +
-> +	for (i = 0; i < num; i++) {
-> +		int outcnt = 0, incnt = 0;
-> +
-> +		/*
-> +		 * We don't support 0 length messages and so masked out
-> +		 * I2C_FUNC_SMBUS_QUICK in virtio_i2c_func().
-> +		 */
-> +		if (!msgs[i].len)
-> +			break;
-> +
-> +		/*
-> +		 * Only 7-bit mode supported for this moment. For the address
-> +		 * format, Please check the Virtio I2C Specification.
-> +		 */
-> +		reqs[i].out_hdr.addr = cpu_to_le16(msgs[i].addr << 1);
-> +
-> +		if (i != num - 1)
-> +			reqs[i].out_hdr.flags = cpu_to_le32(VIRTIO_I2C_FLAGS_FAIL_NEXT);
-> +
-> +		sg_init_one(&out_hdr, &reqs[i].out_hdr, sizeof(reqs[i].out_hdr));
-> +		sgs[outcnt++] = &out_hdr;
-> +
-> +		reqs[i].buf = i2c_get_dma_safe_msg_buf(&msgs[i], 1);
-> +		if (!reqs[i].buf)
-> +			break;
-> +
-> +		sg_init_one(&msg_buf, reqs[i].buf, msgs[i].len);
-> +
-> +		if (msgs[i].flags & I2C_M_RD)
-> +			sgs[outcnt + incnt++] = &msg_buf;
-> +		else
-> +			sgs[outcnt++] = &msg_buf;
-> +
-> +		sg_init_one(&in_hdr, &reqs[i].in_hdr, sizeof(reqs[i].in_hdr));
-> +		sgs[outcnt + incnt++] = &in_hdr;
-> +
-> +		if (virtqueue_add_sgs(vq, sgs, outcnt, incnt, &reqs[i], GFP_KERNEL)) {
-> +			i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], false);
-> +			break;
-> +		}
+On Tue, Jul 13, 2021 at 12:54:22PM +0700, Quan Nguyen wrote:
+> This series add support the SSIF BMC driver which is to perform in-band
+> IPMI communication with their host in management (BMC) side.
 
+Per the kernel build robot, looks like patch 3 introduces slave_enable()
+but patch 1 uses it.
 
-I think we should tweak this such that we add multiple buffers but
-only make them visible to host after all add commands were successful.
-With split this is possible by deffering avail idx update,
-with packed by deferring update of the avail bit in the descriptor.
-I'll write a patch to add an API like that to virtio, then we
-can switch to that.
+-corey
 
-
-> +	}
-> +
-> +	return i;
-> +}
-> +
-> +static int virtio_i2c_complete_reqs(struct virtqueue *vq,
-> +				    struct virtio_i2c_req *reqs,
-> +				    struct i2c_msg *msgs, int num,
-> +				    bool timedout)
-> +{
-> +	struct virtio_i2c_req *req;
-> +	bool failed = timedout;
-> +	unsigned int len;
-> +	int i, j = 0;
-> +
-> +	for (i = 0; i < num; i++) {
-> +		/* Detach the ith request from the vq */
-> +		req = virtqueue_get_buf(vq, &len);
-> +
-> +		/*
-> +		 * Condition req == &reqs[i] should always meet since we have
-> +		 * total num requests in the vq. reqs[i] can never be NULL here.
-> +		 */
-> +		if (!failed && (WARN_ON(req != &reqs[i]) ||
-> +				req->in_hdr.status != VIRTIO_I2C_MSG_OK))
-> +			failed = true;
-> +
-> +		i2c_put_dma_safe_msg_buf(reqs[i].buf, &msgs[i], !failed);
-> +
-> +		if (!failed)
-> +			j++;
-> +	}
-> +
-> +	return timedout ? -ETIMEDOUT : j;
-> +}
-> +
-> +static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
-> +			   int num)
-> +{
-> +	struct virtio_i2c *vi = i2c_get_adapdata(adap);
-> +	struct virtqueue *vq = vi->vq;
-> +	struct virtio_i2c_req *reqs;
-> +	unsigned long time_left;
-> +	int count;
-> +
-> +	reqs = kcalloc(num, sizeof(*reqs), GFP_KERNEL);
-> +	if (!reqs)
-> +		return -ENOMEM;
-> +
-> +	count = virtio_i2c_prepare_reqs(vq, reqs, msgs, num);
-> +	if (!count)
-> +		goto err_free;
-> +
-> +	/*
-> +	 * For the case where count < num, i.e. we weren't able to queue all the
-> +	 * msgs, ideally we should abort right away and return early, but some
-> +	 * of the messages are already sent to the remote I2C controller and the
-> +	 * virtqueue will be left in undefined state in that case. We kick the
-> +	 * remote here to clear the virtqueue, so we can try another set of
-> +	 * messages later on.
-> +	 */
-> +
-> +	reinit_completion(&vi->completion);
-> +	virtqueue_kick(vq);
-> +
-> +	time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
-> +	if (!time_left)
-> +		dev_err(&adap->dev, "virtio i2c backend timeout.\n");
-> +
-> +	count = virtio_i2c_complete_reqs(vq, reqs, msgs, count, !time_left);
-> +
-> +err_free:
-> +	kfree(reqs);
-> +	return count;
-> +}
-> +
-> +static void virtio_i2c_del_vqs(struct virtio_device *vdev)
-> +{
-> +	vdev->config->reset(vdev);
-> +	vdev->config->del_vqs(vdev);
-> +}
-> +
-> +static int virtio_i2c_setup_vqs(struct virtio_i2c *vi)
-> +{
-> +	struct virtio_device *vdev = vi->vdev;
-> +
-> +	vi->vq = virtio_find_single_vq(vdev, virtio_i2c_msg_done, "msg");
-> +	return PTR_ERR_OR_ZERO(vi->vq);
-> +}
-> +
-> +static u32 virtio_i2c_func(struct i2c_adapter *adap)
-> +{
-> +	return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-> +}
-> +
-> +static struct i2c_algorithm virtio_algorithm = {
-> +	.master_xfer = virtio_i2c_xfer,
-> +	.functionality = virtio_i2c_func,
-> +};
-> +
-> +static int virtio_i2c_probe(struct virtio_device *vdev)
-> +{
-> +	struct device *pdev = vdev->dev.parent;
-> +	struct virtio_i2c *vi;
-> +	int ret;
-> +
-> +	vi = devm_kzalloc(&vdev->dev, sizeof(*vi), GFP_KERNEL);
-> +	if (!vi)
-> +		return -ENOMEM;
-> +
-> +	vdev->priv = vi;
-> +	vi->vdev = vdev;
-> +
-> +	init_completion(&vi->completion);
-> +
-> +	ret = virtio_i2c_setup_vqs(vi);
-> +	if (ret)
-> +		return ret;
-> +
-> +	vi->adap.owner = THIS_MODULE;
-> +	snprintf(vi->adap.name, sizeof(vi->adap.name),
-> +		 "i2c_virtio at virtio bus %d", vdev->index);
-> +	vi->adap.algo = &virtio_algorithm;
-> +	vi->adap.dev.parent = &vdev->dev;
-> +	i2c_set_adapdata(&vi->adap, vi);
-> +
-> +	/*
-> +	 * Setup ACPI node for controlled devices which will be probed through
-> +	 * ACPI.
-> +	 */
-> +	ACPI_COMPANION_SET(&vi->adap.dev, ACPI_COMPANION(pdev));
-> +
-> +	ret = i2c_add_adapter(&vi->adap);
-> +	if (ret)
-> +		virtio_i2c_del_vqs(vdev);
-> +
-> +	return ret;
-> +}
-> +
-> +static void virtio_i2c_remove(struct virtio_device *vdev)
-> +{
-> +	struct virtio_i2c *vi = vdev->priv;
-> +
-> +	i2c_del_adapter(&vi->adap);
-> +	virtio_i2c_del_vqs(vdev);
-> +}
-> +
-> +static struct virtio_device_id id_table[] = {
-> +	{ VIRTIO_ID_I2C_ADAPTER, VIRTIO_DEV_ANY_ID },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(virtio, id_table);
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int virtio_i2c_freeze(struct virtio_device *vdev)
-> +{
-> +	virtio_i2c_del_vqs(vdev);
-> +	return 0;
-> +}
-> +
-> +static int virtio_i2c_restore(struct virtio_device *vdev)
-> +{
-> +	return virtio_i2c_setup_vqs(vdev->priv);
-> +}
-> +#endif
-> +
-> +static struct virtio_driver virtio_i2c_driver = {
-> +	.id_table	= id_table,
-> +	.probe		= virtio_i2c_probe,
-> +	.remove		= virtio_i2c_remove,
-> +	.driver	= {
-> +		.name	= "i2c_virtio",
-> +	},
-> +#ifdef CONFIG_PM_SLEEP
-> +	.freeze = virtio_i2c_freeze,
-> +	.restore = virtio_i2c_restore,
-> +#endif
-> +};
-> +module_virtio_driver(virtio_i2c_driver);
-> +
-> +MODULE_AUTHOR("Jie Deng <jie.deng@intel.com>");
-> +MODULE_AUTHOR("Conghui Chen <conghui.chen@intel.com>");
-> +MODULE_DESCRIPTION("Virtio i2c bus driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/uapi/linux/virtio_i2c.h b/include/uapi/linux/virtio_i2c.h
-> new file mode 100644
-> index 0000000..7c6a6fc
-> --- /dev/null
-> +++ b/include/uapi/linux/virtio_i2c.h
-> @@ -0,0 +1,41 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
-> +/*
-> + * Definitions for virtio I2C Adpter
-> + *
-> + * Copyright (c) 2021 Intel Corporation. All rights reserved.
-> + */
-> +
-> +#ifndef _UAPI_LINUX_VIRTIO_I2C_H
-> +#define _UAPI_LINUX_VIRTIO_I2C_H
-> +
-> +#include <linux/const.h>
-> +#include <linux/types.h>
-> +
-> +/* The bit 0 of the @virtio_i2c_out_hdr.@flags, used to group the requests */
-> +#define VIRTIO_I2C_FLAGS_FAIL_NEXT	_BITUL(0)
-> +
-> +/**
-> + * struct virtio_i2c_out_hdr - the virtio I2C message OUT header
-> + * @addr: the controlled device address
-> + * @padding: used to pad to full dword
-> + * @flags: used for feature extensibility
-> + */
-> +struct virtio_i2c_out_hdr {
-> +	__le16 addr;
-> +	__le16 padding;
-> +	__le32 flags;
-> +};
-> +
-> +/**
-> + * struct virtio_i2c_in_hdr - the virtio I2C message IN header
-> + * @status: the processing result from the backend
-> + */
-> +struct virtio_i2c_in_hdr {
-> +	__u8 status;
-> +};
-> +
-> +/* The final status written by the device */
-> +#define VIRTIO_I2C_MSG_OK	0
-> +#define VIRTIO_I2C_MSG_ERR	1
-> +
-> +#endif /* _UAPI_LINUX_VIRTIO_I2C_H */
-> diff --git a/include/uapi/linux/virtio_ids.h b/include/uapi/linux/virtio_ids.h
-> index 4fe842c..3b5f05a 100644
-> --- a/include/uapi/linux/virtio_ids.h
-> +++ b/include/uapi/linux/virtio_ids.h
-> @@ -55,6 +55,7 @@
->  #define VIRTIO_ID_FS			26 /* virtio filesystem */
->  #define VIRTIO_ID_PMEM			27 /* virtio pmem */
->  #define VIRTIO_ID_MAC80211_HWSIM	29 /* virtio mac80211-hwsim */
-> +#define VIRTIO_ID_I2C_ADAPTER		34 /* virtio i2c adapter */
->  #define VIRTIO_ID_BT			40 /* virtio bluetooth */
->  
->  #endif /* _LINUX_VIRTIO_IDS_H */
+> 
+> SSIF BMC driver in this series is tested with Aspeed AST2500.
+> 
+> v4:
+>   + Fix recursive spinlock                                      [Graeme]
+>   + Send response with Completion code 0xFF when aborting         [Quan]
+>   + Fix warning with dt_binding_check                              [Rob]
+>   + Change aspeed-ssif-bmc.yaml to ssif-bmc.yaml                  [Quan]
+>   + Added bounding check on SMBus writes and the whole request     [Dan]
+>   + Moved buffer to end of struct ssif_bmc_ctx to avoid context
+>     corruption if somehow buffer is written past the end           [Dan]
+>   + Return -EINVAL if userspace buffer too small, dont
+>     silence truncate                                       [Corey, Joel]
+>   + Not necessary to check NONBLOCK in lock                      [Corey]
+>   + Enforce one user at a time                                    [Joel]
+>   + Reject write with invalid response length from userspace     [Corey]
+>   + Add state machines for better ssif bmc state handling         [Quan]
+>   + Drop ssif_bmc_aspeed.c and make ssif_bmc.c is generic
+>     SSIF BMC driver                                               [Quan]
+>   + Change compatible string "aspeed,ast2500-ssif-bmc" to
+>     "ampere,ssif-bmc"                                             [Quan]
+>   + Toggle Slave enable in i2c-aspeed to turn on/off slave mode   [Ryan]
+>   + Added slave_enable() to struct i2c_algorithm to control
+>     slave mode and to address the recursive spinlock      [Graeme, Ryan]
+>   + Abort current request with invalid SMBus write or
+>     invalid command                                               [Quan]
+>   + Abort all request if there is pending response                [Quan]
+>   + Changed validate_pec() to validate_request()                  [Quan]
+>   + Add unsupported_smbus_cmd() to handle unknown SMBus command   [Quan]
+>   + Print internal state string for ease investigating issue      [Quan]
+>   + Move to READY state on SLAVE_STOP event                       [Quan]
+>   + Change initilize_transfer() to process_smbus_cmd()            [Quan]
+>   + Introduce functions for each slave event                      [Quan]
+> 
+> v3:
+>   + Switched binding doc to use DT schema format [Rob]
+>   + Splited into generic ssif_bmc and aspeed-specific [Corey, Joel]
+>   + Removed redundant license info [Joel]
+>   + Switched to use traditional if-else [Joel]
+>   + Removed unused ssif_bmc_ioctl() [Joel]
+>   + Made handle_request()/complete_response() to return void [Joel]
+>   + Refactored send_ssif_bmc_response()/receive_ssif_bmc_request()
+>   [Corey]
+>   + Remove mutex [Corey]
+>   + Use spin_lock/unlock_irqsave/restore in callback [Corey]
+>   + Removed the unnecessary memset [Corey]
+>   + Switch to use dev_err() [Corey]
+>   + Combine mask/unmask two interrupts together [Corey]
+>   + Fixed unhandled Tx done with NAK [Quan]
+>   + Late ack'ed Tx done w/wo Ack irq [Quan]
+>   + Use aspeed-specific exported aspeed_set_slave_busy() when slave busy
+>   to fix the deadlock [Graeme, Philipp, Quan]
+>   + Clean buffer for last multipart read [Quan]
+>   + Handle unknown incoming command [Quan]
+> 
+> v2:
+>   + Fixed compiling error with COMPILE_TEST for arc
+> 
+> Quan Nguyen (3):
+>   ipmi: ssif_bmc: Add SSIF BMC driver
+>   bindings: ipmi: Add binding for SSIF BMC driver
+>   i2c: aspeed: Add slave_enable() to toggle slave mode
+> 
+>  .../devicetree/bindings/ipmi/ssif-bmc.yaml    |  38 +
+>  drivers/char/ipmi/Kconfig                     |  11 +
+>  drivers/char/ipmi/Makefile                    |   1 +
+>  drivers/char/ipmi/ssif_bmc.c                  | 781 ++++++++++++++++++
+>  drivers/char/ipmi/ssif_bmc.h                  | 106 +++
+>  drivers/i2c/busses/i2c-aspeed.c               |  20 +
+>  include/linux/i2c.h                           |   2 +
+>  7 files changed, 959 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
+>  create mode 100644 drivers/char/ipmi/ssif_bmc.c
+>  create mode 100644 drivers/char/ipmi/ssif_bmc.h
+> 
 > -- 
-> 2.7.4
-
+> 2.28.0
+> 
