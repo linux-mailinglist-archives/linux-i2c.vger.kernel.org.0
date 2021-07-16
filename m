@@ -2,77 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5C53CB57E
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jul 2021 11:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69103CBA39
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jul 2021 18:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbhGPJ5A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Jul 2021 05:57:00 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:12000 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230360AbhGPJ5A (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Jul 2021 05:57:00 -0400
-X-UUID: 55162037efd240dcbc606e145f7512df-20210716
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=phqCD4LJR0pNpBe3FK03xbs4bsxYpn9hSfS9hoyXs+k=;
-        b=YTvmwYpHJUgH8Gjq3kCIA2uZD3b3ML+6Wwyu2kyXUAXulPxEZWEMPOXTKN2XIMBgFfQxMGfwgiLdE3Lu1hWEB7T5fxkZHjOIgBIi7Is4eVPMA1Y/6kgNr/zWftzXvfUqV4aNhPgV7AAjf4H+qLDRHhCjPj8K13mIfBFKpYLkxYk=;
-X-UUID: 55162037efd240dcbc606e145f7512df-20210716
-Received: from mtkmrs31.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1896142837; Fri, 16 Jul 2021 17:54:00 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
- (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 16 Jul
- 2021 17:53:57 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 16 Jul 2021 17:53:57 +0800
-Message-ID: <1626429237.29703.16.camel@mhfsdcap03>
-Subject: Re: [PATCH 8/8] i2c: mediatek: modify bus speed calculation formula
-From:   Kewei Xu <kewei.xu@mediatek.com>
-To:     Tzung-Bi Shih <tzungbi@google.com>
-CC:     <wsa@the-dreams.de>, <matthias.bgg@gmail.com>,
-        <robh+dt@kernel.org>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, <qiangming.xia@mediatek.com>,
-        <ot_daolong.zhu@mediatek.com>
-Date:   Fri, 16 Jul 2021 17:53:57 +0800
-In-Reply-To: <CA+Px+wWNcSkxvsEoUrgBN73+jhq8qjFJodYjQnY1zW2d0a5yRA@mail.gmail.com>
-References: <1626316157-24935-1-git-send-email-kewei.xu@mediatek.com>
-         <1626316157-24935-9-git-send-email-kewei.xu@mediatek.com>
-         <CA+Px+wWNcSkxvsEoUrgBN73+jhq8qjFJodYjQnY1zW2d0a5yRA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S235486AbhGPQEW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Jul 2021 12:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235138AbhGPQEW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Jul 2021 12:04:22 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2886C06175F;
+        Fri, 16 Jul 2021 09:01:26 -0700 (PDT)
+Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id BD14C805DF;
+        Fri, 16 Jul 2021 18:01:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1626451283;
+        bh=6i5JGXlL1V3GzRerBd5Yb5nT3I1ajEBH7myeU25jc8E=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=NGQromh6ScHrW/4NMwJm/TNJla7SDk/N6ofjCi6q4i2x2Yj0OWt3YHxBunD6Trfua
+         8gdS4Kbq+IPjxT4i6oSdMn4b1LuVIhR1Kzumef9H8RGCLF/bHtkGAs+gEtbWPXf4OK
+         edeacIDNq4cgFJlAsU5nG/gAWwqfocQDNUXPIR9XJcuLMifDFQcqhTiqQQmvhx8LJV
+         vTN64zlJIw8HtQp5Mvdhhm25nVr+LIR7yK0Lk/ZkO80bZ5cRGFZK/lo/hcIzWLyOew
+         47sI4mnql4dalYah60E0c531rS4IMDvfq6LlkVfKShX/CtTxwZ9/InuossyPVoEm2p
+         5DgvZBZlvgmQw==
+Subject: Re: [PATCH v2 00/10] i2c: xiic: Add features, bug fixes.
+To:     Michal Simek <michal.simek@xilinx.com>,
+        Raviteja Narayanam <raviteja.narayanam@xilinx.com>,
+        linux-i2c@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@xilinx.com, joe@perches.com
+References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
+ <95162fd0-10e6-2bc6-4079-899ac26f66ce@xilinx.com>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <0c51785f-9763-aebc-a9ea-04337ad1accc@denx.de>
+Date:   Fri, 16 Jul 2021 18:01:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 6F46C422B3AC89BA8EF99B33069B7310E2E578E2D00ADFD2BE96F0D5623221F82000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <95162fd0-10e6-2bc6-4079-899ac26f66ce@xilinx.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gVGh1LCAyMDIxLTA3LTE1IGF0IDE1OjA5ICswODAwLCBUenVuZy1CaSBTaGloIHdyb3RlOg0K
-PiBPbiBUaHUsIEp1bCAxNSwgMjAyMSBhdCAxMDozMiBBTSBLZXdlaSBYdSA8a2V3ZWkueHVAbWVk
-aWF0ZWsuY29tPiB3cm90ZToNCj4gPiBXaGVuIGNsb2NrLWRpdiBpcyAwIG9yIGdyZWF0ZXIgdGhh
-biAxLCB0aGUgYnVzIHNwZWVkDQo+ID4gY2FsY3VsYXRlZCBieSB0aGUgb2xkIHNwZWVkIGNhbGN1
-bGF0aW9uIGZvcm11bGEgd2lsbCBiZQ0KPiA+IGxhcmdlciB0aGFuIHRoZSB0YXJnZXQgc3BlZWQu
-IFNvIHdlIHVwZGF0ZSB0aGUgZm9ybXVsYS4NCj4gVGhlIHBhdGNoIHNvdW5kcyBsaWtlIGEgZml4
-IHVwLiAgTmVlZCBhICJGaXhlcyIgdGFnLg0KPiANCj4gPiAgICAgICAgIGZvciAoY2xrX2RpdiA9
-IDE7IGNsa19kaXYgPD0gbWF4X2Nsa19kaXY7IGNsa19kaXYrKykgew0KPiA+ICAgICAgICAgICAg
-ICAgICBjbGtfc3JjID0gcGFyZW50X2NsayAvIGNsa19kaXY7DQo+ID4gKyAgICAgICAgICAgICAg
-IGkyYy0+YWNfdGltaW5nLmludGVyX2Nsa19kaXYgPSBjbGtfZGl2IC0gMTsNCj4gVXNpbmcgdGhl
-IHdheSB0byBwYXNzIHRoZSBwYXJhbWV0ZXIgImludGVyX2Nsa19kaXYiIHRvDQo+IG10a19pMmNf
-Y2FsY3VsYXRlX3NwZWVkKCkgbG9va3MgbGlrZSBhIGhhY2suICBpbnRlcl9jbGtfZGl2IGlzIHNl
-dA0KPiBhZ2FpblsxXSBuZXh0IHRvIHRoZSBmb3IgbG9vcC4NCj4gDQo+IFsxXTogaHR0cHM6Ly9l
-bGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTQtcmMxL3NvdXJjZS9kcml2ZXJzL2kyYy9idXNz
-ZXMvaTJjLW10NjV4eC5jI0w4MzENCj4gDQo+IA0KPiANCj4gSSBoYXZlIG5vIGRvbWFpbiBrbm93
-bGVkZ2Ugb2Ygd2hhdC9ob3cgdGhlIHBhdGNoIGZpeGVzLiAgQnV0IGlmIHRoaXMNCj4gaXMgYSBz
-dGFuZGFsb25lIGZpeHVwIHBhdGNoLCBzdWdnZXN0IHNlcGFyYXRpbmcgdG8gYW4gaW5kZXBlbmRl
-bnQNCj4gcGF0Y2guDQoNCkhpIFR6dW5nLUJpLA0KDQoxLiBUaGlzIFBhdGNoIGlzIG5vdCBmb3Ig
-Zml4aW5nIHByZXZpb3VzIGNvbW1pdCxpdCBpcyBqdXN0IGZvciB0aGUgYmFkDQpzcGVlZCBmb3Jt
-dWxhLg0KDQoyLiBJIHdpbGwgZml4IHRoaXMgcHJvYmxlbSBhY2NvcmRpbmcgdG8geW91ciBzdWdn
-ZXN0aW9uIGluIHRoZSBuZXh0DQpwYXRjaC4NCg0KVGhhbmtzDQpLZXdlaQ0K
+On 6/28/21 9:23 AM, Michal Simek wrote:
+> 
+> 
+> On 6/26/21 12:27 PM, Raviteja Narayanam wrote:
+>> -Add 'standard mode' feature for reads > 255 bytes.
+>> -Add 'smbus block read' functionality.
+>> -Add 'xlnx,axi-iic-2.1' new IP version support.
+>> -Switch to 'AXI I2C standard mode' for i2c reads in affected IP versions.
+>> -Remove 'local_irq_save/restore' calls as discussed here: https://www.spinics.net/lists/linux-i2c/msg46483.html.
+>> -Some trivial fixes.
+>>
+>> Changes in v2:
+>> -Grouped the commits as fixes first and then features.
+>> -The first 4 commits fix the dynamic mode broken feature.
+>> -Corrected the indentation in coding style issues.
+>>
+>> Michal Simek (1):
+>>    i2c: xiic: Fix coding style issues
+>>
+>> Raviteja Narayanam (7):
+>>    i2c: xiic: Fix Tx Interrupt path for grouped messages
+>>    i2c: xiic: Add standard mode support for > 255 byte read transfers
+>>    i2c: xiic: Switch to Xiic standard mode for i2c-read
+>>    i2c: xiic: Remove interrupt enable/disable in Rx path
+>>    dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to compatible
+>>    i2c: xiic: Update compatible with new IP version
+>>    i2c: xiic: Add smbus_block_read functionality
+>>
+>> Shubhrajyoti Datta (2):
+>>    i2c: xiic: Return value of xiic_reinit
+>>    i2c: xiic: Fix the type check for xiic_wakeup
+>>
+>>   .../bindings/i2c/xlnx,xps-iic-2.00.a.yaml     |   4 +-
+>>   drivers/i2c/busses/i2c-xiic.c                 | 593 ++++++++++++++----
+>>   2 files changed, 487 insertions(+), 110 deletions(-)
+>>
+> 
+> Acked-by: Michal Simek <michal.simek@xilinx.com>
 
+I just tested this patchset on next-20210716 and the XIIC failures are 
+still present, see:
+
+xiic-i2c a0010000.i2c: mmio a0010000 irq 36
+xiic-i2c a0120000.i2c: mmio a0120000 irq 38
+atmel_mxt_ts 3-004a: supply vdda not found, using dummy regulator
+atmel_mxt_ts 3-004a: supply vdd not found, using dummy regulator
+
+xiic-i2c a0120000.i2c: Timeout waiting at Tx empty
+
+atmel_mxt_ts 3-004a: __mxt_read_reg: i2c transfer failed (-5)
+atmel_mxt_ts 3-004a: mxt_bootloader_read: i2c recv failed (-5)
+atmel_mxt_ts 3-004a: Trying alternate bootloader address
+atmel_mxt_ts 3-004a: mxt_bootloader_read: i2c recv failed (-5)
+atmel_mxt_ts: probe of 3-004a failed with error -5
