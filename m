@@ -2,147 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2439B3CC28D
-	for <lists+linux-i2c@lfdr.de>; Sat, 17 Jul 2021 12:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D037F3CC92B
+	for <lists+linux-i2c@lfdr.de>; Sun, 18 Jul 2021 14:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233740AbhGQKVV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 17 Jul 2021 06:21:21 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:50678 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233398AbhGQKVM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 17 Jul 2021 06:21:12 -0400
-X-UUID: 82f131d2cffa4d79873e75fd5610d4a9-20210717
-X-UUID: 82f131d2cffa4d79873e75fd5610d4a9-20210717
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1275498462; Sat, 17 Jul 2021 18:18:12 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 17 Jul 2021 18:18:10 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 17 Jul 2021 18:18:09 +0800
-From:   Kewei Xu <kewei.xu@mediatek.com>
-To:     <wsa@the-dreams.de>
-CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, <yuhan.wei@mediatek.com>,
-        <kewei.xu@mediatek.com>, <ot_daolong.zhu@mediatek.com>,
-        <liguo.zhang@mediatek.com>
-Subject: [PATCH v4 8/8] i2c: mediatek: modify bus speed calculation formula
-Date:   Sat, 17 Jul 2021 18:17:59 +0800
-Message-ID: <1626517079-9057-9-git-send-email-kewei.xu@mediatek.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1626517079-9057-1-git-send-email-kewei.xu@mediatek.com>
-References: <1626517079-9057-1-git-send-email-kewei.xu@mediatek.com>
+        id S233552AbhGRMyP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 18 Jul 2021 08:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232859AbhGRMyP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 18 Jul 2021 08:54:15 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D15C061762
+        for <linux-i2c@vger.kernel.org>; Sun, 18 Jul 2021 05:51:16 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id hr1so23381764ejc.1
+        for <linux-i2c@vger.kernel.org>; Sun, 18 Jul 2021 05:51:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GgDX/gDdFzff38eVLEbKWZCi0IIuTpi3FYNjXmZlnds=;
+        b=ganJDQm8LclKiMhkWYCbqQ/6kZxjOkkzyMGSSg5hBJUp2zS9joBQxeR1CtgcYujpoQ
+         ytQxOXpJ6OIEv+d6bvK2eZCpODlSc28s7JPJTi+BwGErICvuf9AjZJWD9xa/jnYuPETu
+         WZyjlGuMkkjdQFBRbyo/sC3ZUgW0WrH6EWGotnLwhHUu4Uufj8R3Mpa4OE6kLzGfFK5A
+         prMVDQN0R6QpwyPaNx5f4fi1JovpHF2Vhc6VdziVdcOhIk87jhA60xXS0HNQ3uqOGIQe
+         nsPT/Qt4E21SvbxAkSNpr1eUAmpFW2j9/uwhxkGlyWJc8avcj1m4EQl35oD1Gz1IEqne
+         3uyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GgDX/gDdFzff38eVLEbKWZCi0IIuTpi3FYNjXmZlnds=;
+        b=PkwA5XUANv5ObEbJYhguaEtefoQRWiuuCL//5P8n6GUJhZgR2BYW4mJBiVBdTb+VUe
+         3ZiJSIRfi+MsnMkDp1lNRyXfHhvfw9FLV3YJV57qH271kEHP83fXrCpsgsiRO+6nAw9F
+         ng3kBRoo0IqscxAZBDhLGjQLTFTnU+s0tWpi11fkAEz9xx1grUk+Uqmsc+6vyqrrDd24
+         /RIJ5ED9yDb4+ZabnJcHc7lKqZKRMj7GEJFRmpqjQaB7lLnkwJPu1JHFyeMqmkUO6+CP
+         HH720EK/3CXj3JbdY9cdQNqJyaiRkVQ/ZhZ3U6jPl0U0TZG6pdBsCcfVANEN7WKbFZtn
+         8hMw==
+X-Gm-Message-State: AOAM532YaCccsCQuI7mV7cgEtXS9xSAmxPfCsBk0TdOe4ZdJdpc9jGrh
+        qwAzidTDf43I6e5G+TNAqsb2JyGTb8tZ5jL8seEcz8/eRhc=
+X-Google-Smtp-Source: ABdhPJw8p0uxj5aSXFZ2tueSYRJGIdL7kxHds9KD25zbKp+CCBxcoJnvnuIOARIicLuWItUBQsIMR4xfiQkYb7qsFp4=
+X-Received: by 2002:a17:906:384c:: with SMTP id w12mr22545936ejc.445.1626612674863;
+ Sun, 18 Jul 2021 05:51:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <20210705093314.20322-1-brgl@bgdev.pl>
+In-Reply-To: <20210705093314.20322-1-brgl@bgdev.pl>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Sun, 18 Jul 2021 14:51:04 +0200
+Message-ID: <CAMRc=MciijLbimum3Bs+9DJLQm72voBZCc0D8h97ZRtEioN5MA@mail.gmail.com>
+Subject: Re: [GIT PULL] at24: fixes for v5.14
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When clock-div is 0 or greater than 1, the bus speed
-calculated by the old speed calculation formula will be
-larger than the target speed. So we update the formula.
+On Mon, Jul 5, 2021 at 11:33 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> Wolfram,
+>
+> Please pull the following fix for an issue that was raised recently on the
+> list. If multiple eeproms would have the same labels in the system, the driver
+> would refuse to bind any other than the first one.
+>
+> Best Regards,
+> Bartosz Golaszewski
+>
 
-Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
----
- drivers/i2c/busses/i2c-mt65xx.c | 35 +++++++++++++++++++++++----------
- 1 file changed, 25 insertions(+), 10 deletions(-)
+Hi Wolfram,
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 061775489380..45939f919085 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -68,11 +68,12 @@
- #define I2C_DEFAULT_CLK_DIV		5
- #define MAX_SAMPLE_CNT_DIV		8
- #define MAX_STEP_CNT_DIV		64
--#define MAX_CLOCK_DIV			256
-+#define MAX_CLOCK_DIV_8BITS		256
-+#define MAX_CLOCK_DIV_5BITS		32
- #define MAX_HS_STEP_CNT_DIV		8
--#define I2C_STANDARD_MODE_BUFFER	(1000 / 2)
--#define I2C_FAST_MODE_BUFFER		(300 / 2)
--#define I2C_FAST_MODE_PLUS_BUFFER	(20 / 2)
-+#define I2C_STANDARD_MODE_BUFFER	(1000 / 3)
-+#define I2C_FAST_MODE_BUFFER		(300 / 3)
-+#define I2C_FAST_MODE_PLUS_BUFFER	(20 / 3)
- 
- #define I2C_CONTROL_RS                  (0x1 << 1)
- #define I2C_CONTROL_DMA_EN              (0x1 << 2)
-@@ -719,14 +720,26 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	unsigned int best_mul;
- 	unsigned int cnt_mul;
- 	int ret = -EINVAL;
-+	int clock_div_constraint = 0;
- 
- 	if (target_speed > I2C_MAX_HIGH_SPEED_MODE_FREQ)
- 		target_speed = I2C_MAX_HIGH_SPEED_MODE_FREQ;
- 
-+	if (i2c->default_timing_adjust) {
-+		clock_div_constraint = 0;
-+	} else if (i2c->dev_comp->ltiming_adjust &&
-+		   i2c->ac_timing.inter_clk_div > 1) {
-+		clock_div_constraint = 1;
-+	} else if (i2c->dev_comp->ltiming_adjust &&
-+		   i2c->ac_timing.inter_clk_div == 0) {
-+		clock_div_constraint = -1;
-+	}
-+
- 	max_step_cnt = mtk_i2c_max_step_cnt(target_speed);
- 	base_step_cnt = max_step_cnt;
- 	/* Find the best combination */
--	opt_div = DIV_ROUND_UP(clk_src >> 1, target_speed);
-+	opt_div = DIV_ROUND_UP(clk_src >> 1, target_speed) +
-+		  clock_div_constraint;
- 	best_mul = MAX_SAMPLE_CNT_DIV * max_step_cnt;
- 
- 	/* Search for the best pair (sample_cnt, step_cnt) with
-@@ -761,7 +774,8 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	sample_cnt = base_sample_cnt;
- 	step_cnt = base_step_cnt;
- 
--	if ((clk_src / (2 * sample_cnt * step_cnt)) > target_speed) {
-+	if ((clk_src / (2 * (sample_cnt * step_cnt - clock_div_constraint))) >
-+		 target_speed) {
- 		/* In this case, hardware can't support such
- 		 * low i2c_bus_freq
- 		 */
-@@ -848,13 +862,16 @@ static int mtk_i2c_set_speed_adjust_timing(struct mtk_i2c *i2c,
- 	target_speed = i2c->speed_hz;
- 	parent_clk /= i2c->clk_src_div;
- 
--	if (i2c->dev_comp->timing_adjust)
--		max_clk_div = MAX_CLOCK_DIV;
-+	if (i2c->dev_comp->timing_adjust && i2c->dev_comp->ltiming_adjust)
-+		max_clk_div = MAX_CLOCK_DIV_5BITS;
-+	else if (i2c->dev_comp->timing_adjust)
-+		max_clk_div = MAX_CLOCK_DIV_8BITS;
- 	else
- 		max_clk_div = 1;
- 
- 	for (clk_div = 1; clk_div <= max_clk_div; clk_div++) {
- 		clk_src = parent_clk / clk_div;
-+		i2c->ac_timing.inter_clk_div = clk_div - 1;
- 
- 		if (target_speed > I2C_MAX_FAST_MODE_PLUS_FREQ) {
- 			/* Set master code speed register */
-@@ -901,8 +918,6 @@ static int mtk_i2c_set_speed_adjust_timing(struct mtk_i2c *i2c,
- 		break;
- 	}
- 
--	i2c->ac_timing.inter_clk_div = clk_div - 1;
--
- 	return 0;
- }
- 
--- 
-2.18.0
+Gentle ping for the PR.
 
+Bart
