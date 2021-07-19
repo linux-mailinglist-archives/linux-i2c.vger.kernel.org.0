@@ -2,79 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9773CDB02
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jul 2021 17:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBAB3CEBAC
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jul 2021 22:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244397AbhGSOkk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Jul 2021 10:40:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54384 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343926AbhGSOju (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 19 Jul 2021 10:39:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D8B561222;
-        Mon, 19 Jul 2021 15:19:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626707994;
-        bh=q8ExU2Wod/ytjh9i+TFwSDbPuXu8hNumWu0xiHeJNG8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ghyW3LrAVCjn4w7SiRrjQKkFfoQXva+1WRFG2YQPWtHgXOTPl7O9Ps8D5i1fmmNJo
-         O45xAeitzWjwUlfdnp1D5odIE6r4RPk5RwYlufh+OpiH5GHXatcqwouBMJ9G5GfPXu
-         03gEhOpknUbDbEdXmmt/ZXBcqnQrwwdVlIgCbMPkanE6gwtUzNtUBtD6ArkkR5naCT
-         gwwQl6VLogQO3PNbV4pUxtaIQ50xV8AL0V5phDxyeDjyRH4aCXUNn//MmAUC/xlcOX
-         qjHFJOICZL+oiJUnfgenfMVnLI39QxZhtIKFZTh9QHXbo+noTFysiJFZ0uHexm5tAo
-         4UDD3qwpNe9lg==
-Date:   Mon, 19 Jul 2021 17:19:47 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 0/7] Rework block read support among i2cget and i2cdump
-Message-ID: <YPWYEx7QJBNzQ6dZ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-References: <20210608172338.0cf520a1@endymion>
- <YNdIEUpBoToGN7JY@kunai>
- <20210712115823.74149795@endymion>
+        id S1352687AbhGSRXM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Jul 2021 13:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236213AbhGSRV7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Jul 2021 13:21:59 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E29CC0613B7;
+        Mon, 19 Jul 2021 10:44:21 -0700 (PDT)
+Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 02023829E7;
+        Mon, 19 Jul 2021 20:00:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1626717620;
+        bh=HEXZweqgYJVklWr9hryJRs34EHGLfve8XO83yKZu7B8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=J+ywi6bQWKnsHS3gBtT5PAfJuzpX5IN4LBOfCQHf/gB1A3uRouP+KjX3FJ5C/1TQr
+         1+D+F8vIDSO32O6E2Z5+M3XkV0m1MZfejm+UdchLH/ET6AOIJAt3MxWYT4/4cnO3/J
+         XVMdPsaEe3jfFjv7E4VKzP2R4UMXJ1Zc24EJ+yfdv6MCf+2o2NHMoaTxuWW1hAmuHt
+         HjW2nuPFQzTKm4/YyKRzAj2oOsxgGNlGhGwuvz8cJuU1tumkSZTbsWeEWqpsF1MMUN
+         um1GChfcTcVfcTCcy5CdrhzNAiTXXrUq2OAKzSWbQTmGca2e/4RmMepl32SpelDCGW
+         +KRDWIW0ArSRQ==
+Subject: Re: [PATCH v2 00/10] i2c: xiic: Add features, bug fixes.
+To:     Raviteja Narayanam <rna@xilinx.com>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>, "joe@perches.com" <joe@perches.com>
+References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
+ <95162fd0-10e6-2bc6-4079-899ac26f66ce@xilinx.com>
+ <0c51785f-9763-aebc-a9ea-04337ad1accc@denx.de>
+ <SN6PR02MB40933E99A241952502B69F41CAE19@SN6PR02MB4093.namprd02.prod.outlook.com>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <45aa8d2b-a077-32a2-0608-8f20a5b807a8@denx.de>
+Date:   Mon, 19 Jul 2021 20:00:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vidu4n66ZDKw+gh4"
-Content-Disposition: inline
-In-Reply-To: <20210712115823.74149795@endymion>
+In-Reply-To: <SN6PR02MB40933E99A241952502B69F41CAE19@SN6PR02MB4093.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 7/19/21 12:09 PM, Raviteja Narayanam wrote:
 
---vidu4n66ZDKw+gh4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi,
 
+[...]
 
-> I would have too but patch 1 was submitted by somebody else. I didn't
-> want to put more changes in it than was required for committing
-> acceptance, so as to respect the original submission.
+>>>> -Add 'standard mode' feature for reads > 255 bytes.
+>>>> -Add 'smbus block read' functionality.
+>>>> -Add 'xlnx,axi-iic-2.1' new IP version support.
+>>>> -Switch to 'AXI I2C standard mode' for i2c reads in affected IP versions.
+>>>> -Remove 'local_irq_save/restore' calls as discussed here:
+>> https://www.spinics.net/lists/linux-i2c/msg46483.html.
+>>>> -Some trivial fixes.
+>>>>
+>>>> Changes in v2:
+>>>> -Grouped the commits as fixes first and then features.
+>>>> -The first 4 commits fix the dynamic mode broken feature.
+>>>> -Corrected the indentation in coding style issues.
+>>>>
+>>>> Michal Simek (1):
+>>>>     i2c: xiic: Fix coding style issues
+>>>>
+>>>> Raviteja Narayanam (7):
+>>>>     i2c: xiic: Fix Tx Interrupt path for grouped messages
+>>>>     i2c: xiic: Add standard mode support for > 255 byte read transfers
+>>>>     i2c: xiic: Switch to Xiic standard mode for i2c-read
+>>>>     i2c: xiic: Remove interrupt enable/disable in Rx path
+>>>>     dt-bindings: i2c: xiic: Add 'xlnx,axi-iic-2.1' to compatible
+>>>>     i2c: xiic: Update compatible with new IP version
+>>>>     i2c: xiic: Add smbus_block_read functionality
+>>>>
+>>>> Shubhrajyoti Datta (2):
+>>>>     i2c: xiic: Return value of xiic_reinit
+>>>>     i2c: xiic: Fix the type check for xiic_wakeup
+>>>>
+>>>>    .../bindings/i2c/xlnx,xps-iic-2.00.a.yaml     |   4 +-
+>>>>    drivers/i2c/busses/i2c-xiic.c                 | 593 ++++++++++++++----
+>>>>    2 files changed, 487 insertions(+), 110 deletions(-)
+>>>>
+>>>
+>>> Acked-by: Michal Simek <michal.simek@xilinx.com>
+>>
+>> I just tested this patchset on next-20210716 and the XIIC failures are still
+>> present, see:
+> 
+> The probe of ' atmel_mxt_ts' failed as per the error. May I know the details of
+> your test case if you tweaked any i2ctransfers/added delays.
 
-I see. This is fine, of course. Glad to see the patches upstream!
+It is still the same test case from a year ago -- Atmel MXT touchscreen 
+controller connected to XIIC I2C IP in ZynqMP FPGA, both drivers are 
+compiled into the kernel. Also, it is not the "new" XIIC IP revision, 
+but older one from Vivado 2019 or so.
 
+> If it failed without adding anything, then please check whether the vivado design constraints
+> are correctly applied or not.
 
---vidu4n66ZDKw+gh4
-Content-Type: application/pgp-signature; name="signature.asc"
+They are, we already checked multiple times and the FPGA part is OK.
 
------BEGIN PGP SIGNATURE-----
+> Also check if the other devices on the bus are detected and i2ctransfer command is successful on them.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmD1mA8ACgkQFA3kzBSg
-KbZSxw//XsaFWCV6D8ZiJBhBYdCTq/6ivy3ik6r2Ah3+UwqahB7e1t9Re11QB8LD
-u7jljlb+gfM77oafUqHx8G6fSZ/DEZF6jJct/xAlCJv3eD0mYFvlVdu/jrHVce73
-K9uOPvbTQOx9eK91qT2eFY3b+XR/kldOZXAMJv0CMX3uUz7p5t/nb4Owussr/uPg
-qImEEzET3TCq5b68JksKmtrz/AQ7ybraxWB4R3HWneZHxt1BSMg+MtDU/xhccxny
-k3jvtjmcv/pBg3h1kNank1S1Rqhx4uvFsG4OJW1jTMAU+7ya7mWsHw1lTygTclQT
-m1Y8m367utreuTWozHbJUz94Uk+bdfZQve68PuDaxHVdxm/lDxMBETk0vJziKmcT
-WIPeGPbX6c/btEsbeL0OrdOHTGJ8pUOwWIeTkb2N2F1ohZzamFB9GLqy5Sjy12aQ
-9yc+X4b06zneLwETJ6yV1B0gsjNtbJs6WyU/B5F/sEyTVTIgCMJ9WPXlJ+kEVcWW
-WFVs8AlENdrvweMnkPai+XmJ0tueGvpQY3P042uWKeje3AO1pYM/rxNxcsnL5NH5
-wrUayn04WbnULbWm4TXil5pE6tV0/d1ljRx6qCDaEmarnbVgx78zBsSg+L+6KwGJ
-Mzl9GllrJ8ik0gIhn1LgWnBLn6Ga9iU7gSoVxsHmgPVZVjM/xyw=
-=4cLW
------END PGP SIGNATURE-----
+Note that this problem is very likely a race condition in the XIIC 
+driver, so a trivial test like i2ctransfer on idle system from userspace 
+is unlikely to trigger it. When the system is under heavy load e.g. 
+during the kernel boot, that is when these corner cases start showing up.
 
---vidu4n66ZDKw+gh4--
+> It would be helpful to know if the device ' atmel_mxt_ts' is successfully probed with next-20210716
+> without applying this patchset.
+
+Sometimes, the XIIC driver in current mainline Linux suffers from race 
+conditions on SMP, so it depends.
+
+The MXT driver also has to be patched to avoid longer than 255 byte 
+transfers, because that is currently broken with XIIC.
+
+> I have tested this again on our boards with eeprom and other sensors, this is working fine for us.
+
+Can you share details of how those tests were performed ?
