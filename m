@@ -2,86 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C593D1E04
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Jul 2021 08:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E60E3D1FE1
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Jul 2021 10:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbhGVFbA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Jul 2021 01:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbhGVFbA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Jul 2021 01:31:00 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB01FC061757
-        for <linux-i2c@vger.kernel.org>; Wed, 21 Jul 2021 23:11:35 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id i16-20020a17090acf90b02901736d9d2218so4053435pju.1
-        for <linux-i2c@vger.kernel.org>; Wed, 21 Jul 2021 23:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5cK/GjjXslo6GmhOaYGYgEeJORqH/6loH5RcftK4HU0=;
-        b=sNFeP8gsrg5VCxm8rqifewFeatxucPeFT8QEFd5cHlvPnxDGYlqnnKYLg+/mZOBh3V
-         CekjXrhczXfkr2iNaSB6W8rWUmHAet4VscoEFL0AxiE9nbEs9oJIBany+LvtbYG7FrUc
-         Jw565w2BlZDy5hT+ZL/hzLtLDs7UhDamlxcQbn9ItGvEKbqihRsPUMqc5D4lK31eE//F
-         lS0ODkg7FIALkXk18t7MF1EHSOEK3hYf68fnBKu1wVHjDBdpcWUyZkgHgaDfg2A3IbOM
-         v9sUmK94nsKDYack8MCse8YMfsQ0WP92vv5RlI9kGXshr0CnNHD8SOp8MmT9xvmbYGp5
-         RAOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5cK/GjjXslo6GmhOaYGYgEeJORqH/6loH5RcftK4HU0=;
-        b=W40qWFKkMCAkiBt4PWpmpMjNDx4fLRmYbi8Y8jhPMphxvmT09vHXz/AnKTLaEcezb+
-         BkUSovGNMTeIWPg6csEUwY49iCV3CdIrp7MW6XfA75YRDIsJvlKhDhaf2hy38hJOWQqE
-         iI52n9EU7EHGXHtGl88cpPXZlXUOKm0viLdOQ1NdlPb0Daf52oUJFJx05LtcyRzkzrZ5
-         HThX4qhIBbY4GmDNAN6KCWPAof57Fjys49Cdy0zEA8+V6J+5dhZJkK930pEVTAQ7D8EX
-         2lMCFutCEY6SlyhGhu+vapgG8yulmwdxaV3iJ3K7hAU9s5ImgY3GmGMyARmRetHXuFDG
-         JyJA==
-X-Gm-Message-State: AOAM530OCH16Rvk4hCAN+E4pGBvoaWwAwLrHqatyA6U2i654yvUFbLG4
-        5pDVqP7NARIlGcOsiYpICXhwUw==
-X-Google-Smtp-Source: ABdhPJzsWABQoKOw3MzOV+BFwPL/nvqeS+gihVIl55DIiQN+F2diI2HTBaXl4hz/H55Mrjp2n4llLA==
-X-Received: by 2002:a05:6a00:1895:b029:32c:b091:ebc with SMTP id x21-20020a056a001895b029032cb0910ebcmr41234478pfh.4.1626934295257;
-        Wed, 21 Jul 2021 23:11:35 -0700 (PDT)
-Received: from localhost ([106.201.108.2])
-        by smtp.gmail.com with ESMTPSA id 202sm29390372pfx.75.2021.07.21.23.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jul 2021 23:11:32 -0700 (PDT)
-Date:   Thu, 22 Jul 2021 11:41:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jie Deng <jie.deng@intel.com>, wsa@kernel.org,
-        linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, wsa+renesas@sang-engineering.com,
-        mst@redhat.com, arnd@arndb.de, jasowang@redhat.com,
-        andriy.shevchenko@linux.intel.com, yu1.wang@intel.com,
-        shuo.a.liu@intel.com, conghui.chen@intel.com, stefanha@redhat.com
-Subject: Re: [PATCH v14] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210722061130.yb7z7povshgtbi7z@vireshk-i7>
-References: <984ebecaf697058eb73389ed14ead9dd6d38fb53.1625796246.git.jie.deng@intel.com>
- <20210722051433.3f2ix75wbi5pphp2@vireshk-i7>
- <YPkK7RlufYj1b+2f@kroah.com>
+        id S231154AbhGVHyA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 22 Jul 2021 03:54:00 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:54708 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230499AbhGVHyA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Jul 2021 03:54:00 -0400
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 28BD8225FB;
+        Thu, 22 Jul 2021 08:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1626942875; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=//Hmw5L09xmoaS2sd4Elsv1sht+jyYYB7SNpQJ0xx/U=;
+        b=nuLoY7e+3t3+d8WA8leNWhZQ7xBrIoSwu6aQ/cKAFixLypAY9mMb1bOsjPX9m2bntDYkZU
+        4kyAhkSfC+4tnfov7S3PDVyVcMiqP9WQ769Nng5E8GGz0jCDysnWBwgpuu32R7o2ngfaFq
+        mRSbI5Z2276svoitJ9O19pugy8HS7Uk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1626942875;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=//Hmw5L09xmoaS2sd4Elsv1sht+jyYYB7SNpQJ0xx/U=;
+        b=xBcHQUPrVNvwSrH1lIsLtpIvFxv7C4cn0PHaNgBTKsk6efZ/UdR9MSsvyxG78kFZb29YKZ
+        KmrU9nY749gCC3AA==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id E928513889;
+        Thu, 22 Jul 2021 08:34:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id clLjNZot+WDYGQAAGKfGzw
+        (envelope-from <jdelvare@suse.de>); Thu, 22 Jul 2021 08:34:34 +0000
+Date:   Thu, 22 Jul 2021 10:34:33 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: Fix handling SMBHSTCNT_PEC_EN
+Message-ID: <20210722103433.6c81c6b2@endymion>
+In-Reply-To: <20210721144620.00671c3d@endymion>
+References: <15db81d0-ddbd-b590-3996-51e588c5b10a@gmail.com>
+        <20210721144620.00671c3d@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YPkK7RlufYj1b+2f@kroah.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 22-07-21, 08:06, Greg KH wrote:
-> No new features are allowed for 5.14, you know this.  It's but fixes
-> only now.
+On Wed, 21 Jul 2021 14:46:20 +0200, Jean Delvare wrote:
+> As for testing, I also don't have a PEC-cable device at hand. However,
+> we may still be able to test this change:
+> * If you have a device at 0x69 on the i801 SMBus of any of your system,
+>   that would be a clock device, which almost always support PEC.
+> * If you have EEPROMs on your i801 SMBus, you may be lucky and find a
+>   sequence of bytes where the PEC computation leads to exactly the
+>   value of the following byte. I remember doing that years ago, sadly I
+>   can no longer find the script I wrote at that time. Be careful when
+>   accessing SPD EEPROMs, you want to read from them, not write to them
+>   ;-) Incidentally i2c-tools was just improved to allow arbitrary SMBus
+>   block read commands so i2cget can be used for easy testing from
+>   user-space.
 
-I was trying to be (overly) optimistic here since this was a fairly
-independent driver which won't break anything else, and had been
-pending on the list since many months now.
+Well, what I wrote above wasn't accurate (bad memory I suppose). While
+SMBus Block Read commands are OK to test the clock devices at 0x69,
+they are not the best choice to poke a read-only EEPROM, as the first
+byte will be interpreted as the block length, and if it is not between
+1 and 32, it is invalid and the transaction will fail, regardless of
+PEC. Which in turn dramatically decreases the chances that at least one
+offset in your EEPROM will work and be usable for testing purposes.
 
-But yeah, I know the rule and understand its purpose :)
+Furthermore, i2cget has a safety to prevent you from messing up with
+your SPD EEPROMs, that will deny using PEC at all in the I2C address
+range 0x50-0x57. Which is exactly what I was suggesting to do. So I had
+to recompile i2cget without the safety in order to preform my tests. To
+be honest I think the safety is overkill (as far as I can see PEC would
+only trash data in "c" mode so we could limit the safety to that mode)
+but my testing being clearly a protocol abuse, I'm fine with having to
+modify the source code to do it.
 
-5.15 it is then.
+Anyway, for the record, my hackish testing protocol is as follows:
+
+# rmmod at24
+# modprobe i2c-dev
+# for i in `seq 0 254` ; do echo $i ; ./tools/i2cget -y 4 0x50 $i bp ; sleep 1 ; done
+
+Then I basically look at commands failing (on PEC error), until I am
+lucky enough that the next byte in the EEPROM matches the expected PEC
+value. I had 2 such offsets on my first SPD EEPROM (82 and 163).
+Meaning that I was able to test your patch and I can confirm that it
+works OK (testing limited to the 8 Series/C220 Series [8086:8c22]
+device and SMBus Read Byte transactions, but I have no reason to
+believe other devices or other transaction types would behave
+differently).
+
+Tested-by: Jean Delvare <jdelvare@suse.de>
 
 -- 
-viresh
+Jean Delvare
+SUSE L3 Support
