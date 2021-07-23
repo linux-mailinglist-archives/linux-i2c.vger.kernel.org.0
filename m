@@ -2,110 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D08D3D3755
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jul 2021 11:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441023D404A
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jul 2021 20:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234147AbhGWIXW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Jul 2021 04:23:22 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:35605 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbhGWIXV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jul 2021 04:23:21 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MLQl3-1lp3EH0EfT-00IRVL; Fri, 23 Jul 2021 11:03:54 +0200
-Received: by mail-wr1-f48.google.com with SMTP id z7so1492059wrn.11;
-        Fri, 23 Jul 2021 02:03:53 -0700 (PDT)
-X-Gm-Message-State: AOAM532H1ppmufJs80cq9R517KKVB6crrQl8TBH4DDUvnZkBbVbdee8p
-        sPJGyWG9nPzJ57ZLVkhBMY870k3NFUa97Sln96I=
-X-Google-Smtp-Source: ABdhPJy3ItUq0sRuqlziECSTpnqgqAEwiUMYe9CtHrcLjroCnJUUgu4nyS6Li21tNISMIRuRGBH3im1Ow2SeuHqPtvs=
-X-Received: by 2002:adf:e107:: with SMTP id t7mr4168842wrz.165.1627031033699;
- Fri, 23 Jul 2021 02:03:53 -0700 (PDT)
+        id S229662AbhGWRuu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Jul 2021 13:50:50 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:50942 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229455AbhGWRuu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jul 2021 13:50:50 -0400
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 834BD3F2;
+        Fri, 23 Jul 2021 20:31:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1627065082;
+        bh=9cOAh/2P+qeSwfNSWVrGse7yKV2nCRJMElqi0UIGA/A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sugqkOMQjVZPhKULQ9VO8eabhHrFIbiv5lJwEP23uECSW32pYMjtol1ZoPGtkLQwE
+         +RPf4IG1QYo+vAku4MjYo7139c6byIOm1eTLK0wWhOnKQudBbj/X+6yhi4DWKMb84m
+         fuJkPQJnSyEE5OVk5iWL0urI02A2nKqD0gJZjkHo=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-iio@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Nyekjaer <sean@geanix.com>, devicetree@vger.kernel.org,
+        Jose Cazarin <joseespiriki@gmail.com>,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 0/2] iio: ti-dac5571: Add TI DAC081C081 support
+Date:   Fri, 23 Jul 2021 21:31:12 +0300
+Message-Id: <20210723183114.26017-1-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <bcf2fb9bbe965862213f27e05f87ffc91283c0c5.1627018061.git.jie.deng@intel.com>
-In-Reply-To: <bcf2fb9bbe965862213f27e05f87ffc91283c0c5.1627018061.git.jie.deng@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 23 Jul 2021 11:03:37 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1=TpKLGMzvoLafjxtmoBbDL+sBMb8ZiEmTjW91Yr-cYw@mail.gmail.com>
-Message-ID: <CAK8P3a1=TpKLGMzvoLafjxtmoBbDL+sBMb8ZiEmTjW91Yr-cYw@mail.gmail.com>
-Subject: Re: [PATCH v15] i2c: virtio: add a virtio i2c frontend driver
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jason Wang <jasowang@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        yu1.wang@intel.com, conghui.chen@intel.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        jiedeng@alumni.sjtu.edu.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:kEplOMaUqVzJBv/AHt0lDnTUCf+kykaXARzxFMZ6hdYx/uda5gQ
- 8XQudr/poHSIOdicNbn/kjPV3f13Sr920VbWraVIl2I0UbwQMvBZtmddYpjWDYKSG/IBVbi
- IjsuuKE79yjcNswucQoyXjrPxxG3/t9WcCL9L/bNfDJoLNtBtxukFSAjqGzViJc1s4rB3NO
- ICWrdPaYdzXmdqj0a5a2w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:54dWuqyBZ3A=:lQ9lVQz1vrrr4ZCkg5Qzb0
- YS3BYopTtGGCW1xAKHITf5XcPXj80Hi8UdvQyNa+n2jTC8DNCj5MTyQDcUsbFLF0PA49tKgK8
- xNHkOH1nI+0ZneTTzUjVBgLRy81zg77VKFKEmWWW4a3tccIEGyl8N8eqoMlIfC6jCGfNGHLLm
- vdTbeyApVrivwWvjFuRZrNmppFbpKXYibpZYaHuJ3MaDcJ5UOrykURITtK/t203JDKHlO90x7
- 7Z8apU8IN+Xl/6gjymz0LXViYWXPbN5i6eAr1tJ3R4kGbhK3ckL5e3+h2EwTpBhncq5IKAA6+
- MbTr0xQK5R4lyvVYtYRYj+SRDPatiUDTFfPyrUZIvgJG6/FxE5n03OYNOT0sJR+CD8pHOBvxf
- OB21f2TxvS21PkU37F/yHZ1egcbFaGKOYLPSwKL2cQ/fVFF1jswNT40FZB49QqPtGeJoGXC3O
- CBga5qJk+C0qnD+xUTuvJUWqgGqKN0hlrPdusXv8ClnCPsUpkBGdAB7ypauZ95Wjn5D279LkS
- 97Gq/Waa+qCCPhtBqbg/EZ1StCBrNGLTaQhMUMf3EQu3iR06MLDFCAXcypzW7TnLx6lXoUbkL
- UTeydh3Sc5XUZKCQKQpzR4dIG4puD+/sB6Sdcc1+J/LjfR8zZxv3xH+jUgcZD4z64i+S/zFZ9
- xGrBU9xPACpRufNyf/MomhIC4zq/9lz8qhGbFfzDJ4bWbw7rMM6XLRQHfmq4sprKT4nx0IOpJ
- zboggphIyeMkG+XJE42dOJWqA907EV7UCHtCbCuFZHkes36Kr+e3164pIShV7mYw57kFVdRIE
- oyY8CGb+Un2nLSqs2ZOqqjCkqogS1ywqVPm3wN1+Xm2V4JdZi4K7YwBpi72KzNO51q3ccsP
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jul 23, 2021 at 7:44 AM Jie Deng <jie.deng@intel.com> wrote:
+Hello,
 
-> +
-> +       ret = virtio_i2c_setup_vqs(vi);
-> +       if (ret)
-> +               return ret;
-> +
-> +       vi->adap.owner = THIS_MODULE;
-> +       snprintf(vi->adap.name, sizeof(vi->adap.name),
-> +                "i2c_virtio at virtio bus %d", vdev->index);
-> +       vi->adap.algo = &virtio_algorithm;
-> +       vi->adap.quirks = &virtio_i2c_quirks;
-> +       vi->adap.dev.parent = &vdev->dev;
-> +       i2c_set_adapdata(&vi->adap, vi);
-> +
-> +       /*
-> +        * Setup ACPI node for controlled devices which will be probed through
-> +        * ACPI.
-> +        */
-> +       ACPI_COMPANION_SET(&vi->adap.dev, ACPI_COMPANION(pdev));
+This small patch series adds support for the TI DAC081C081 in the
+ti-dac5571 IIO driver. Patch 1/2 addresses the DT bindings, and patch
+2/2 the driver.
 
-Since there is now a generic way for virtio drivers to link up with OF
-device nodes, maybe this should be handled the same way in the
-virtio core rather than the driver?
+I've expanded the CC list to the I2C mailing list and Wolfram because I
+think the second patch may not be the best option. Instead of addressing
+this issue in all drivers, it wonder if it wouldn't be better for the
+I2C subsystem to handle this internally. One option would be to extend
+i2c_match_id to walk through the compatible values in case of an
+OF-based match, but I'm worried this could introduce regressions.
+Feedback would be welcome.
 
-> index 70a8057a..99aa27b 100644
-> --- a/include/uapi/linux/virtio_ids.h
-> +++ b/include/uapi/linux/virtio_ids.h
-> @@ -55,6 +55,7 @@
->  #define VIRTIO_ID_FS                   26 /* virtio filesystem */
->  #define VIRTIO_ID_PMEM                 27 /* virtio pmem */
->  #define VIRTIO_ID_MAC80211_HWSIM       29 /* virtio mac80211-hwsim */
-> +#define VIRTIO_ID_I2C_ADAPTER          34 /* virtio i2c adapter */
->  #define VIRTIO_ID_BT                   40 /* virtio bluetooth */
+The series could still be merged as-is in the meantime if desired.
 
-This will now conflict with Viresh's patch that adds all the other IDs.
-Not sure if there is anything to be done about that.
+Jose Cazarin (1):
+  iio: dac: dac5571: Fix chip id detection for OF devices
 
-       Arnd
+Laurent Pinchart (1):
+  dt-bindings: iio: dac: ti,dac5571: Add TI DAC081C081 support
+
+ .../bindings/iio/dac/ti,dac5571.yaml          | 24 ++++++++++-------
+ drivers/iio/dac/ti-dac5571.c                  | 27 ++++++++++++-------
+ 2 files changed, 31 insertions(+), 20 deletions(-)
+
+-- 
+Regards,
+
+Laurent Pinchart
+
