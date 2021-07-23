@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBBE3D31CE
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jul 2021 04:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 310E53D3415
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jul 2021 07:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbhGWBsE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 22 Jul 2021 21:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        id S233793AbhGWEsC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Jul 2021 00:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbhGWBsE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 22 Jul 2021 21:48:04 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8FDC061757
-        for <linux-i2c@vger.kernel.org>; Thu, 22 Jul 2021 19:28:38 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id j8-20020a17090aeb08b0290173bac8b9c9so6955296pjz.3
-        for <linux-i2c@vger.kernel.org>; Thu, 22 Jul 2021 19:28:38 -0700 (PDT)
+        with ESMTP id S233771AbhGWEsB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jul 2021 00:48:01 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31283C061757
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Jul 2021 22:28:35 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id f1so2011639plg.3
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Jul 2021 22:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=tAw85E8NXV/d5HgkTo259jtbI4ouhmcg6pjHUDSWPjc=;
-        b=Q7CIwrCSaunZRhC18Xlo4DvY8+aN4ehQ8+o9kvikwLv3PHHcQ4BFGQhX9vu8e28p3/
-         vuFeJmrPpxB4Ach1ym4qW9yJPyYnTIdLn4z3y/8Ihhe+s61EFqv8PjfvgMRR3rOXoUP6
-         nLDsUlogdx/HTaxNHdkBk0SzAQKwDkCxTN4Oqz8nvr2FEtbdXnFJt5R4W4Zyb2+qRanh
-         SiXn7ka7sLQPZSEj2AlCDkJF+v6Bf0C9cTO4QlY6svJJUVm5F07h6D/Zu4FYwIDkTdlN
-         vRLbZA4Lxz5Wp3xNxNCxmu8OO3+cRKITygD40IWp+Q7X5t0CFpEdR9FGfbmsJD6CmHgQ
-         g0dg==
+        bh=J87f8T10lgtVuzcfK6rQXH+rwvV/4HwvhXrz0f4FLD0=;
+        b=JWPEJ8wVPzIVjSi6bXQsG2CTcz6zWW9SQbNjgvUnbVzcB05X8Ar0CMyPUPh/oIS0XL
+         UO0Y3LRoOmlpfGLQQP6oRTVzyGWhcrZqZNWFOPJiElfej2LRbRH71xEr46axPvjfwuab
+         eIQPLafyxTXrQmXOft4lzdMAbg2cMdi+BncNS4HukrXy/df8nXM0k6IjwLxJAWS47fj3
+         7svNWv28SdZBoM+MuW6ZjxBSEP0zZWt7rKizRWqjdWZkrBdVsYCJ6G5D9eLUpsiV8OpW
+         Wt4s7Fsb9SE88DmXMHWcEYHqU4Euj/xsKus6niUK336f4oRWDodSrcChvD7UxJaTAG3u
+         POGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tAw85E8NXV/d5HgkTo259jtbI4ouhmcg6pjHUDSWPjc=;
-        b=VpIIXHgFMpuHl6bSfF5gpFL6N2qFD1j/ArFD7jQ09UYEnPIbM+qeDoflIy+XRqnM4E
-         TpgEdOxiR8jYrIF/0taJnKFlPN5F16BWLHIpaCUpqsRoIKM7xHyN4n/ajGgO01icl9TB
-         gf+rdzUTgSVSyKWmAd/PeyH17WfNdOlH53XNT6KeB9+mwuLtm3NT64kLQMPVVXbxHiQZ
-         Nm18BYq5i8c33zj/dg2ySbOjmfu5EeckgXz5toSpIpGmEjzbNNgzczmR+hM/vVqGPLaR
-         rwhZqop6skSfuExzcSAvzZsxbaDUIw32Vo6rUJq6d/VbBmFY7AnH61Kc78/NZQgwdyEC
-         +Z1A==
-X-Gm-Message-State: AOAM530IKDkrdPzNw5QvMZ7DDABvwSQYWSvQu10oK60jVEoglv67Fw53
-        D6X6LfIzle7LIhn1xTbJiM/WPeUNwPl2HA==
-X-Google-Smtp-Source: ABdhPJxSWSpC//R2a9331w7aLWF4tUcZt/V6puU33PGp87Oq9CNUj0lUb/eotMn0lPyFT2oVs4VjiQ==
-X-Received: by 2002:aa7:93ac:0:b029:32e:4fce:bde1 with SMTP id x12-20020aa793ac0000b029032e4fcebde1mr2586387pff.54.1627007318309;
-        Thu, 22 Jul 2021 19:28:38 -0700 (PDT)
+        bh=J87f8T10lgtVuzcfK6rQXH+rwvV/4HwvhXrz0f4FLD0=;
+        b=nCmNPAF1dIyqD9ciHCxZf/NqeGUTvC6ll9pRDzU0PaFRt6ciDDbDNOVe66Bj6XEvhs
+         0XPOr420WPHZrHpZZFkR4b38kKrr9hnajaH/gOl1CV9kb59Z8D+eqhEwT1+8RRyjLhJ2
+         0Xr46Ajm5LId8wenwO5ILc4JiOfNuZLeauS/FKsMHcxHG6m8KDQy1jBLObFXhcRrA3z9
+         wymQRm3sKqHpIIfTSHnc01I157uq7jpLeU3POPgkoYjyHUvG45zwtjYJSsJGv2gygPof
+         fv/PYohJOghOhfICMHwFT7c6DP8sF6OoptROueVsb1QRHBfsiAHJacoHRjUKGMiSsZBb
+         J55A==
+X-Gm-Message-State: AOAM5304Gs3omRoIx6dG3KYUo+9egzWsribFyD9vST0a6pEzz2OZ2Ca4
+        Bzu8XBonxTfxCRbuqlgQCZp/Lw==
+X-Google-Smtp-Source: ABdhPJwrlLG2ErWx84N6cAS6kFP1mW+MQT2AXD6jNUD9UMF3uahmb2g3KxWWnPrca6tjN2zQvYsJMA==
+X-Received: by 2002:a65:434c:: with SMTP id k12mr3332536pgq.17.1627018114572;
+        Thu, 22 Jul 2021 22:28:34 -0700 (PDT)
 Received: from localhost ([106.201.108.2])
-        by smtp.gmail.com with ESMTPSA id y15sm32865753pfn.63.2021.07.22.19.28.37
+        by smtp.gmail.com with ESMTPSA id b7sm31767619pfl.195.2021.07.22.22.28.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jul 2021 19:28:37 -0700 (PDT)
-Date:   Fri, 23 Jul 2021 07:58:36 +0530
+        Thu, 22 Jul 2021 22:28:33 -0700 (PDT)
+Date:   Fri, 23 Jul 2021 10:58:32 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Wolfram Sang <wsa@kernel.org>, Jie Deng <jie.deng@intel.com>,
         linux-i2c@vger.kernel.org,
@@ -61,7 +61,7 @@ To:     Wolfram Sang <wsa@kernel.org>, Jie Deng <jie.deng@intel.com>,
         yu1.wang@intel.com, shuo.a.liu@intel.com, stefanha@redhat.com,
         pbonzini@redhat.com
 Subject: Re: [PATCH v10] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210723022836.ews7bshlwcsaktud@vireshk-i7>
+Message-ID: <20210723052832.kmi2654q2bufu45w@vireshk-i7>
 References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@intel.com>
  <YNrw4rxihFLuqLtY@ninjato>
  <20210629101627.kwc2rszborc3kvjs@vireshk-i7>
@@ -71,44 +71,30 @@ References: <226a8d5663b7bb6f5d06ede7701eedb18d1bafa1.1616493817.git.jie.deng@in
  <YNr5ZRhT3qn+e9/m@ninjato>
  <20210705121832.fmye5xnlbydoc5ir@vireshk-i7>
  <YPmLoeLSPS1tfYUK@ninjato>
+ <20210723022836.ews7bshlwcsaktud@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YPmLoeLSPS1tfYUK@ninjato>
+In-Reply-To: <20210723022836.ews7bshlwcsaktud@vireshk-i7>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
-
-On 22-07-21, 17:15, Wolfram Sang wrote:
-> Nope, I think you misinterpreted that. SMBUS_QUICK will not send any
-> byte. After the address phase (with the RW bit as data), a STOP will
-> immediately follow. len = 0 will ensure that.
+On 23-07-21, 07:58, Viresh Kumar wrote:
+> Would need a spec update, which I am going to send.
 > 
-> msgbuf0[0] is set to 'command' because every mode except SMBUS_QUICK
-> will need that. So, it is convenient to always do it. For SMBUS_QUICK
-> it is superfluous but does not hurt.
-
-Yeah, I think I was confused by this stuff.
-
-> > If so, it would be difficult to implement this with the current i2c virtio
-> > specification, as the msg.len isn't really passed from guest to host, rather it
-> > is inferred using the length of the buffer itself. And so we can't really pass a
-> > buffer if length is 0.
+> We would also need another update to spec to make the Quick thing
+> working. Lemme do it separately and we merge the latest version of the
+> driver for linux-next until then.
 > 
-> And you can't leave out the buffer and assume len = 0 then?
+> I checked the code with i2cdetect -q and it worked fine, I was
+> required to do some changes to the backend (and spec) to make it work.
+> I will propose the changes to the spec first for the same.
 
-Would need a spec update, which I am going to send.
+I have sent all the necessary changes for the spec here:
 
-We would also need another update to spec to make the Quick thing
-working. Lemme do it separately and we merge the latest version of the
-driver for linux-next until then.
-
-I checked the code with i2cdetect -q and it worked fine, I was
-required to do some changes to the backend (and spec) to make it work.
-I will propose the changes to the spec first for the same.
+https://lists.oasis-open.org/archives/virtio-dev/202107/msg00167.html
 
 -- 
 viresh
