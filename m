@@ -2,143 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 853563D4390
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Jul 2021 02:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8975D3D4730
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Jul 2021 12:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbhGWX0c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Jul 2021 19:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbhGWX0c (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jul 2021 19:26:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E9CC061575;
-        Fri, 23 Jul 2021 17:07:04 -0700 (PDT)
-Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 56BAB255;
-        Sat, 24 Jul 2021 02:07:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1627085220;
-        bh=xEo/CQNYqj63iAN2RCqLB7wwRY0GHrHZrfs6dVn81xY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JVkPaIT4nnD5aQLoEAsPbRiXFDC4KuQJcqJIC0cb9Rx/2FI6pY/yd705G0kkS7eev
-         ewFZXhCzU5Yha/JJYXef9QPS6t9NJoX8f3A8J2sYV4J5ZTr2cq2Xlb3s6PvEhV3KX8
-         DMeY1UW4UUSc4ECLHQ9V5A15hj923TQ2GPbAbgks=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-iio@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Nyekjaer <sean@geanix.com>, devicetree@vger.kernel.org,
-        Jose Cazarin <joseespiriki@gmail.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH v1.1 2/2] iio: dac: dac5571: Fix chip id detection for OF devices
-Date:   Sat, 24 Jul 2021 03:06:54 +0300
-Message-Id: <20210724000654.23168-1-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210723183114.26017-3-laurent.pinchart@ideasonboard.com>
-References: <20210723183114.26017-3-laurent.pinchart@ideasonboard.com>
+        id S235038AbhGXJ6f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 24 Jul 2021 05:58:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51764 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234219AbhGXJ6e (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 24 Jul 2021 05:58:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 309E560E9C;
+        Sat, 24 Jul 2021 10:39:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627123146;
+        bh=rd3agneBNGlYwrmFkKik3XEga91vS8fwDX0YJVTXZLQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YHFF97OVw+Gsv6GlRKwBN2/c9Hm20zz1EjhbrHnJd/dEGiINf9tUAJJnKwQQ+UJcu
+         3EE4DbOm4UUcOZa3+DdDmO8CKxUAgc0gMycf1CJfEzk8e8MufRlFyRid3l+lTSOza/
+         fkcQgHMZVJRy8ibgton6IzU8xbYxnBfM+wQZDlTaquQWPckrEtOLl1D6pn9dsiH865
+         qFRsRUonOtMCqbvXNgY4U8uW/KAFtA3iJ+jO2OtANrT0NG2jsO4maiPdnCHsxqk+WK
+         SaEFYilH3Sbcyjfe5pdrZVvjUt7OI8ekQ8IEKXLkAhqHfpr+RudqPA01AGGv3vlaFa
+         94fCyW+j9zlfA==
+Date:   Sat, 24 Jul 2021 12:38:58 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.14
+Message-ID: <YPvtwtk3wPtFnB8L@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bZPzLBFILEwfatwp"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Jose Cazarin <joseespiriki@gmail.com>
 
-When matching an OF device, the match mechanism tries all components of
-the compatible property. This can result with a device matched with a
-compatible string that isn't the first in the compatible list. For
-instance, with a compatible property set to
+--bZPzLBFILEwfatwp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    compatible = "ti,dac081c081", "ti,dac5571";
+Linus,
 
-the driver will match the second compatible string, as the first one
-isn't listed in the of_device_id table. The device will however be named
-"dac081c081" by the I2C core.
+here are two bugfixes for the I2C subsystem.
 
-This causes an issue when identifying the chip. The probe function
-receives a i2c_device_id that comes from the module's I2C device ID
-table. There is no entry in that table for "dac081c081", which results
-in a NULL pointer passed to the probe function.
+Please pull.
 
-To fix this, add chip_id information in the data field of the OF device
-ID table, and retrieve it with of_device_get_match_data() for OF
-devices.
+Thanks,
 
-Signed-off-by: Jose Cazarin <joseespiriki@gmail.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
-Changes since v1:
+   Wolfram
 
-- Include linux/of_device.h
----
- drivers/iio/dac/ti-dac5571.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/iio/dac/ti-dac5571.c b/drivers/iio/dac/ti-dac5571.c
-index 2a5ba1b08a1d..8ceb1b42b14e 100644
---- a/drivers/iio/dac/ti-dac5571.c
-+++ b/drivers/iio/dac/ti-dac5571.c
-@@ -19,6 +19,7 @@
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
-+#include <linux/of_device.h>
- #include <linux/regulator/consumer.h>
- 
- enum chip_id {
-@@ -311,6 +312,7 @@ static int dac5571_probe(struct i2c_client *client,
- 	const struct dac5571_spec *spec;
- 	struct dac5571_data *data;
- 	struct iio_dev *indio_dev;
-+	enum chip_id chip_id;
- 	int ret, i;
- 
- 	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
-@@ -326,7 +328,13 @@ static int dac5571_probe(struct i2c_client *client,
- 	indio_dev->modes = INDIO_DIRECT_MODE;
- 	indio_dev->channels = dac5571_channels;
- 
--	spec = &dac5571_spec[id->driver_data];
-+	if (dev->of_node)
-+		chip_id = (uintptr_t)of_device_get_match_data(dev);
-+	else
-+		chip_id = id->driver_data;
-+
-+	spec = &dac5571_spec[chip_id];
-+
- 	indio_dev->num_channels = spec->num_channels;
- 	data->spec = spec;
- 
-@@ -384,15 +392,15 @@ static int dac5571_remove(struct i2c_client *i2c)
- }
- 
- static const struct of_device_id dac5571_of_id[] = {
--	{.compatible = "ti,dac5571"},
--	{.compatible = "ti,dac6571"},
--	{.compatible = "ti,dac7571"},
--	{.compatible = "ti,dac5574"},
--	{.compatible = "ti,dac6574"},
--	{.compatible = "ti,dac7574"},
--	{.compatible = "ti,dac5573"},
--	{.compatible = "ti,dac6573"},
--	{.compatible = "ti,dac7573"},
-+	{.compatible = "ti,dac5571", .data = (void *)single_8bit},
-+	{.compatible = "ti,dac6571", .data = (void *)single_10bit},
-+	{.compatible = "ti,dac7571", .data = (void *)single_12bit},
-+	{.compatible = "ti,dac5574", .data = (void *)quad_8bit},
-+	{.compatible = "ti,dac6574", .data = (void *)quad_10bit},
-+	{.compatible = "ti,dac7574", .data = (void *)quad_12bit},
-+	{.compatible = "ti,dac5573", .data = (void *)quad_8bit},
-+	{.compatible = "ti,dac6573", .data = (void *)quad_10bit},
-+	{.compatible = "ti,dac7573", .data = (void *)quad_12bit},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, dac5571_of_id);
--- 
-Regards,
+The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
 
-Laurent Pinchart
+  Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-curre=
+nt
+
+for you to fetch changes up to 4a8ac5e45cdaa88884b4ce05303e304cbabeb367:
+
+  i2c: mpc: Poll for MCF (2021-07-20 22:32:01 +0200)
+
+----------------------------------------------------------------
+Chris Packham (1):
+      i2c: mpc: Poll for MCF
+
+J=C3=A9r=C3=B4me Glisse (1):
+      misc: eeprom: at24: Always append device id even if label property is=
+ set.
+
+Wolfram Sang (1):
+      Merge tag 'at24-fixes-for-v5.14' of git://git.kernel.org/pub/scm/linu=
+x/kernel/git/brgl/linux into i2c/for-current
+
+ drivers/i2c/busses/i2c-mpc.c |  4 ++--
+ drivers/misc/eeprom/at24.c   | 17 +++++++----------
+ 2 files changed, 9 insertions(+), 12 deletions(-)
+
+--bZPzLBFILEwfatwp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmD77b0ACgkQFA3kzBSg
+KbZq5Q/7BJNq+cSooAV8zeZqPBqYf0LpwF4+7cMs6f6bTvxUJBIrVKxZh7M8lpTC
+i8VSq+NWUWz/x5iuJtXlPFKdv5Bk7i2ozsfpkt86v/hmKgF0Uqf+RAIErYPrZTiy
+Ks6qrq6h5WDguPUd+wigmml2fcLA7MoIwNCACYs9XW54rdMg5PaxMwDTz0vUYEWe
+NKCXS+VPpqxM2M30/3HZkudRwE0jkR/QOtEVgEh2STCuh6FV0/foEC/dW7BiTtXK
+b4PcvluF4L4j+AhA8FuDYy9OJk6y2chwiB3Fg/UNryVpX8f+H20ClzWFp8mkwxlp
+xGDfGKnDkoK/pfih1i7dhZmYloQ2DKsUkovk6M0r06WIbHWy1Lci/IRA2fyXinPX
+kErAj2m7c8BXQUm3KRUB0PIJe6E68r56I0ndyH7WOPyB7amucaXL/Ph0L7nwrs0a
+IKMGHVzG3/2AVMVJ8dVvlnEau9ElBCIVoGJsoXobL5WerLh/OoDfmb38TU2DYwxV
+KOLUuAuC4d9k2FoO2PGYlCc2xQdepFTNXbj123trNocomky9PbigqmqMniP8luEy
+FMSkZxfPAouUCwfCEMMA4C/K2CYF10lbT865GwzACukpxVbNUoi7oNGVpz2jho0q
+Y2mmPMYCtUJuzzb6nnPdETpfcFD1X7bcaMGlIkq/VY4cXN8lQB4=
+=x9Bi
+-----END PGP SIGNATURE-----
+
+--bZPzLBFILEwfatwp--
