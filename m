@@ -2,128 +2,136 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D61EA3D5A18
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Jul 2021 15:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670F83D5CA3
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Jul 2021 17:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbhGZMcS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Jul 2021 08:32:18 -0400
-Received: from phobos.denx.de ([85.214.62.61]:49434 "EHLO phobos.denx.de"
+        id S234909AbhGZO1y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Jul 2021 10:27:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59570 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231874AbhGZMcR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 26 Jul 2021 08:32:17 -0400
-Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 9CCA48322E;
-        Mon, 26 Jul 2021 15:12:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1627305165;
-        bh=p3NJwtM/VyiPbTe+g0orgn6yYw1Z65KQJG09p5d9osY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=EyoxrILbR9PbAZcq2HMn6GOro0q/C1VNmRqIKfeNw9+LWjlAyybGmROET692BLD3x
-         Ida4B2Y90maJrkeik6BD1OzCazzPrndaQ5ruVF9IWqPygMNDLDGe6fLkLRkP98USH6
-         vbtW5HPIqj8+5cP5w6QQaUpgRuGVLpLikrAzBnnNcEF86sCbbWpSeLqijI89R9VqRC
-         W3/Q8vI06btYBnHC85lLyQsismf+LbnCnJsj2x3DpPCQ08W6vSegbo2X1Hkh6ssePD
-         7XmrEmj0A3Br7U5omFYfR12/FdtwryA8yQaSeLTJ4aTx8jI0KfwaiwAMLCufEWqleh
-         BeqOkvCaHwi6Q==
-Subject: Re: [PATCH v2 00/10] i2c: xiic: Add features, bug fixes.
-To:     Raviteja Narayanam <rna@xilinx.com>,
-        Michal Simek <michals@xilinx.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>, "joe@perches.com" <joe@perches.com>
-References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
- <95162fd0-10e6-2bc6-4079-899ac26f66ce@xilinx.com>
- <0c51785f-9763-aebc-a9ea-04337ad1accc@denx.de>
- <SN6PR02MB40933E99A241952502B69F41CAE19@SN6PR02MB4093.namprd02.prod.outlook.com>
- <45aa8d2b-a077-32a2-0608-8f20a5b807a8@denx.de>
- <SN6PR02MB4093C7F2EB59D854D8753A01CAE29@SN6PR02MB4093.namprd02.prod.outlook.com>
- <328f6c4e-ff0b-c88f-d246-75b493b67a9a@denx.de>
- <SN6PR02MB4093E219E0BCE2C3CBCE472CCAE89@SN6PR02MB4093.namprd02.prod.outlook.com>
-From:   Marek Vasut <marex@denx.de>
-Message-ID: <5d49b316-6fcd-e677-578e-64b0ab5520ab@denx.de>
-Date:   Mon, 26 Jul 2021 15:12:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S234925AbhGZOZu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 26 Jul 2021 10:25:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D8C7160F5A;
+        Mon, 26 Jul 2021 15:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627311977;
+        bh=R7MPYQnCJsG4fwhF0u+zeh0a/cBUeZfS0iP3V5ZDZHs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=b1Vix8NWuhvx4Q3pmG2tfftmmJzpSqffx+Ena5rVF6w+9YlJ2LHqt3MI4fprMvysm
+         Hw//UXufJgfEuEQRisRQeWNM4WwAf3YrdYsh7W16QoRLV/GOWwswTvrY0KSHFGeb3x
+         X2/wmeBcfc5nWsbKaBSxEf4ZMFe90GwdUNjdPcXcoewd3pxp998jQ1cnwnOm/Vw30q
+         Yw5g09PZb3chZKrDWBaIHTdnaFtFc4eYsO5D82gh6wapPk5OB0jzWwYCmjt2d97rnj
+         4Au90QFhzTJlWYf1DDSLED8mhW4trOCaw3Xk9ZQnAgjAulv5ELq/+/TcwzotC5o07l
+         6BICNVOv+eACA==
+Received: by mail-ej1-f48.google.com with SMTP id nb11so16957976ejc.4;
+        Mon, 26 Jul 2021 08:06:17 -0700 (PDT)
+X-Gm-Message-State: AOAM533wxIfwkyR4EoZUhwnL7Z/cW6P3PlgZae2J6W3ASF9nDMM02UoC
+        4j7q0JCmJwE03feERLSCubbygi4/Jwl0YNeNEw==
+X-Google-Smtp-Source: ABdhPJwwWICG++z75Hxvtq0N/g+sjBEODxNxt0nefCKbjiFba0jZlqxerC/yhL1o1fRHzDPTuM0kWe53k7yKt0DMP1A=
+X-Received: by 2002:a17:906:b750:: with SMTP id fx16mr10994131ejb.108.1627311976354;
+ Mon, 26 Jul 2021 08:06:16 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <SN6PR02MB4093E219E0BCE2C3CBCE472CCAE89@SN6PR02MB4093.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
-X-Virus-Status: Clean
+References: <cover.1627273794.git.viresh.kumar@linaro.org> <4182aff2d1437b30025f3d17d11e5fdc21845239.1627273794.git.viresh.kumar@linaro.org>
+In-Reply-To: <4182aff2d1437b30025f3d17d11e5fdc21845239.1627273794.git.viresh.kumar@linaro.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 26 Jul 2021 09:06:04 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKz6fNCrKium0EMW0Y8_1_fymr6BMnuBS1NnV_7PO236A@mail.gmail.com>
+Message-ID: <CAL_JsqKz6fNCrKium0EMW0Y8_1_fymr6BMnuBS1NnV_7PO236A@mail.gmail.com>
+Subject: Re: [PATCH V3 2/5] dt-bindings: i2c: Add bindings for i2c-virtio
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Bill Mills <bill.mills@linaro.org>,
+        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Jie Deng <jie.deng@intel.com>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
+        <virtualization@lists.linux-foundation.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 7/26/21 7:26 AM, Raviteja Narayanam wrote:
+On Sun, Jul 25, 2021 at 10:52 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> This patch adds binding for virtio I2C device, it is based on
+> virtio-device bindings.
+>
+> Acked-by: Wolfram Sang <wsa@kernel.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  .../devicetree/bindings/i2c/i2c-virtio.yaml   | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml b/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
+> new file mode 100644
+> index 000000000000..0381d9065287
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/i2c-virtio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Virtio I2C Adapter
+> +
+> +maintainers:
+> +  - Viresh Kumar <viresh.kumar@linaro.org>
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +  - $ref: /schemas/virtio/virtio-device.yaml#
+> +
+> +description:
+> +  Virtio I2C device, see /schemas/virtio/virtio-device.yaml for more details.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: '^i2c-virtio(-[a-z0-9]+)?$'
 
-Hi,
+i2c-controller.yaml already defines the node name. In this case
+though, it can be restricted a bit more to be just 'i2c' as there's
+only a single instance.
 
-[...]
-
->>>>> I have tested this again on our boards with eeprom and other
->>>>> sensors, this
->>>> is working fine for us.
->>>>
->>>> Can you share details of how those tests were performed ?
->>>
->>> Stress test - 1:
->>> Heavy ethernet traffic running in the background.
->>> I2c commands script (like below) running. We can see visible stutter in the
->> output as expected, but nothing failed.
->>>
->>> i=0
->>> while [ 1 ]
->>> do
->>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r31@0X54
->>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r32@0X54
->>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r255@0X54
->>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r273@0X54
->>>                                i2ctransfer -y -f 2 w1@0X54 0X00 r1@0X54
->>
->> Could it be that you never see the problem because you always talk to one
->> single device ?
-> 
-> There are transfers to other devices as well.
-
-The above test only accesses device at address 0x54, right ?
-
-> Our board has multiple power monitors, eeprom and other misc devices that
-> are accessed through the same driver and are working fine.
-
-That does not seem to be what the test above does .
-
->> Do you also test writes which are not 1 byte long ?
->>
-> 
-> Yes, like for eeprom 1 page (16 bytes)  is written.
-
-I suspect the atmel mxt does much longer writes, try 255 bytes or so.
-
->>>           i=$(expr $i + 1)
->>>           echo "$i"
->>> done
->>>
->>> Stress test - 2:
->>> Two i2c scripts running in parallel with commands as shown above with
->> different bus numbers (as a result of mux), but going into same XIIC adapter.
->>> This is also working fine.
->>
->> Could it be the i2c-dev serializes each of those transfers , so no race can be
->> triggered ?
->>
-> 
-> Yes, that is true because all our tests are going through the i2c-core only
-> and there is a lock at adapter level in the core.
-> It has to be reproducible through the i2c standard interface, which is not
-> happening at our setup.
-> 
-> I can take your patches that are targeted for this issue, rebase, test
-> and send them.
-
-I think you and Michal talked about getting the atmel mxt touchscreen, 
-so you can test that yourself as well.
+> +
+> +  compatible:
+> +    const: virtio,22
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    virtio@3000 {
+> +        compatible = "virtio,mmio";
+> +        reg = <0x3000 0x100>;
+> +        interrupts = <41>;
+> +
+> +        i2c-virtio {
+> +            compatible = "virtio,22";
+> +
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            light-sensor@1c {
+> +                compatible = "dynaimage,al3320a";
+> +                reg = <0x20>;
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> --
+> 2.31.1.272.g89b43f80a514
+>
