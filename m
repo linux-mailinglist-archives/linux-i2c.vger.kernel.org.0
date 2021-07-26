@@ -2,109 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F354E3D5662
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Jul 2021 11:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61EA3D5A18
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Jul 2021 15:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbhGZIkf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Jul 2021 04:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbhGZIke (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Jul 2021 04:40:34 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C42BC061760
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Jul 2021 02:21:04 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id a20so11049851plm.0
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Jul 2021 02:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Q2bTbIzuNR8Z17qVedSx5UTI8m+JO41tvc9PLnzRbyY=;
-        b=tWadrVNRyXQFNGcdGTy5ELi21BrWtCSXF2pYOfvz+nc3S8H4LMjdd+tv3d9Iys2qJK
-         SYG89iS7msEv/oK+ffbBpjZEHWbSeeY4HvxrGgxVSTOUK169+A80wnQpUgxCljEy3Ayi
-         f9n2Va62XCW/Pa67igB8NGzQMZlwvacjQYsMoP48fBsyZTsBfOCqOAj0wRsSyXLsp42D
-         UyJU0z+F8truVI1Z8B912kOWtfKVLodOQhu8TYxU54UqXaU+UPfwcpWHoEy+wE3z/LgZ
-         zTdqlJc0ZXc7wnAcNK4B7l2I+MpZTAwE3ji0W1lO9yRGvNaCjeH1Jt34qVToIz4XAX9X
-         00lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Q2bTbIzuNR8Z17qVedSx5UTI8m+JO41tvc9PLnzRbyY=;
-        b=O4S+v4++tZjoWrYzSbNRJXQ9JTv9Yb8vX/3ywrjLd7tWJ2HqXLU0+ZD4uEupANi6qq
-         q0iWYgwCBO/wy1Vt0tb2IFDORjVveqVTpcxpWPuPnx+HBKCCZdLbzR7Ph1saoDWL+jSK
-         opB6gUDeip02jRh1yhVcCyUPo12Lhw/l2UKPmQx7cpns/Mmdtmlcb2VnCKLQhWphHDC0
-         aYdLgwnks5wAQRlxRk+Nj1wYceyjUkUcStaBTpLORR7p8a0K7zE1jXF1fehBUsZfEtVn
-         4yETsPI8MVmjTMpwpJrZ8pZ2ee9dAg650t9L6tbajcNE+DbxyFzAcP9A7vSJw9EqRkR2
-         LoKg==
-X-Gm-Message-State: AOAM53008IgiptWKxGxX3c6g35xAv5Ja6X3PCfXThSdF0Yv/FLh2ctKw
-        AaYE96pphwRUWyhOyXF1T870bw==
-X-Google-Smtp-Source: ABdhPJzmUDnTNUKbWGwqSdm7aMIzCwtdu9YyEc3FRNxnsh53o+Wpv+9lXdE9a+3TxmU5FRPAMdta1A==
-X-Received: by 2002:a17:90a:940e:: with SMTP id r14mr25446503pjo.41.1627291263269;
-        Mon, 26 Jul 2021 02:21:03 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id t9sm49619360pgc.81.2021.07.26.02.21.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 02:21:02 -0700 (PDT)
-Date:   Mon, 26 Jul 2021 14:51:00 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bill Mills <bill.mills@linaro.org>,
-        Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Jie Deng <jie.deng@intel.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH V3 2/5] dt-bindings: i2c: Add bindings for i2c-virtio
-Message-ID: <20210726092100.y4kuwzgzb2dhcwpf@vireshk-i7>
-References: <cover.1627273794.git.viresh.kumar@linaro.org>
- <4182aff2d1437b30025f3d17d11e5fdc21845239.1627273794.git.viresh.kumar@linaro.org>
- <CAK8P3a3FniCgQJ0UCvrwZ8F=f11mLAwe7XH5CcrqxL8TTMUvVg@mail.gmail.com>
- <CAK8P3a2m3BB2=4gkHXZD+=y1C47Og0QvfTWuA7e28oAonMyvzw@mail.gmail.com>
+        id S232955AbhGZMcS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Jul 2021 08:32:18 -0400
+Received: from phobos.denx.de ([85.214.62.61]:49434 "EHLO phobos.denx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231874AbhGZMcR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 26 Jul 2021 08:32:17 -0400
+Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 9CCA48322E;
+        Mon, 26 Jul 2021 15:12:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1627305165;
+        bh=p3NJwtM/VyiPbTe+g0orgn6yYw1Z65KQJG09p5d9osY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=EyoxrILbR9PbAZcq2HMn6GOro0q/C1VNmRqIKfeNw9+LWjlAyybGmROET692BLD3x
+         Ida4B2Y90maJrkeik6BD1OzCazzPrndaQ5ruVF9IWqPygMNDLDGe6fLkLRkP98USH6
+         vbtW5HPIqj8+5cP5w6QQaUpgRuGVLpLikrAzBnnNcEF86sCbbWpSeLqijI89R9VqRC
+         W3/Q8vI06btYBnHC85lLyQsismf+LbnCnJsj2x3DpPCQ08W6vSegbo2X1Hkh6ssePD
+         7XmrEmj0A3Br7U5omFYfR12/FdtwryA8yQaSeLTJ4aTx8jI0KfwaiwAMLCufEWqleh
+         BeqOkvCaHwi6Q==
+Subject: Re: [PATCH v2 00/10] i2c: xiic: Add features, bug fixes.
+To:     Raviteja Narayanam <rna@xilinx.com>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>, "joe@perches.com" <joe@perches.com>
+References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
+ <95162fd0-10e6-2bc6-4079-899ac26f66ce@xilinx.com>
+ <0c51785f-9763-aebc-a9ea-04337ad1accc@denx.de>
+ <SN6PR02MB40933E99A241952502B69F41CAE19@SN6PR02MB4093.namprd02.prod.outlook.com>
+ <45aa8d2b-a077-32a2-0608-8f20a5b807a8@denx.de>
+ <SN6PR02MB4093C7F2EB59D854D8753A01CAE29@SN6PR02MB4093.namprd02.prod.outlook.com>
+ <328f6c4e-ff0b-c88f-d246-75b493b67a9a@denx.de>
+ <SN6PR02MB4093E219E0BCE2C3CBCE472CCAE89@SN6PR02MB4093.namprd02.prod.outlook.com>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <5d49b316-6fcd-e677-578e-64b0ab5520ab@denx.de>
+Date:   Mon, 26 Jul 2021 15:12:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2m3BB2=4gkHXZD+=y1C47Og0QvfTWuA7e28oAonMyvzw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <SN6PR02MB4093E219E0BCE2C3CBCE472CCAE89@SN6PR02MB4093.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 26-07-21, 10:11, Arnd Bergmann wrote:
-> On Mon, Jul 26, 2021 at 10:06 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > On Mon, Jul 26, 2021 at 6:52 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > This patch adds binding for virtio I2C device, it is based on
-> > > virtio-device bindings.
-> > >
-> > > Acked-by: Wolfram Sang <wsa@kernel.org>
-> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> >
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> Too quick, after seeing the same issue in the gpio binding I saw it here too:
-> 
-> > +        i2c-virtio {
-> > +            compatible = "virtio,22";
-> 
-> The node name "i2c-virtio" looks wrong. According to
-> https://github.com/devicetree-org/dt-schema/blob/master/schemas/i2c/i2c-controller.yaml,
-> this needs to be plain "i2c".
+On 7/26/21 7:26 AM, Raviteja Narayanam wrote:
 
-Okay, I will move back to simple node names then.
+Hi,
 
-Thanks.
+[...]
 
--- 
-viresh
+>>>>> I have tested this again on our boards with eeprom and other
+>>>>> sensors, this
+>>>> is working fine for us.
+>>>>
+>>>> Can you share details of how those tests were performed ?
+>>>
+>>> Stress test - 1:
+>>> Heavy ethernet traffic running in the background.
+>>> I2c commands script (like below) running. We can see visible stutter in the
+>> output as expected, but nothing failed.
+>>>
+>>> i=0
+>>> while [ 1 ]
+>>> do
+>>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r31@0X54
+>>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r32@0X54
+>>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r255@0X54
+>>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r273@0X54
+>>>                                i2ctransfer -y -f 2 w1@0X54 0X00 r1@0X54
+>>
+>> Could it be that you never see the problem because you always talk to one
+>> single device ?
+> 
+> There are transfers to other devices as well.
+
+The above test only accesses device at address 0x54, right ?
+
+> Our board has multiple power monitors, eeprom and other misc devices that
+> are accessed through the same driver and are working fine.
+
+That does not seem to be what the test above does .
+
+>> Do you also test writes which are not 1 byte long ?
+>>
+> 
+> Yes, like for eeprom 1 page (16 bytes)  is written.
+
+I suspect the atmel mxt does much longer writes, try 255 bytes or so.
+
+>>>           i=$(expr $i + 1)
+>>>           echo "$i"
+>>> done
+>>>
+>>> Stress test - 2:
+>>> Two i2c scripts running in parallel with commands as shown above with
+>> different bus numbers (as a result of mux), but going into same XIIC adapter.
+>>> This is also working fine.
+>>
+>> Could it be the i2c-dev serializes each of those transfers , so no race can be
+>> triggered ?
+>>
+> 
+> Yes, that is true because all our tests are going through the i2c-core only
+> and there is a lock at adapter level in the core.
+> It has to be reproducible through the i2c standard interface, which is not
+> happening at our setup.
+> 
+> I can take your patches that are targeted for this issue, rebase, test
+> and send them.
+
+I think you and Michal talked about getting the atmel mxt touchscreen, 
+so you can test that yourself as well.
