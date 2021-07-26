@@ -2,136 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 670F83D5CA3
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Jul 2021 17:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1863D698F
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Jul 2021 00:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234909AbhGZO1y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Jul 2021 10:27:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59570 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234925AbhGZOZu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 26 Jul 2021 10:25:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D8C7160F5A;
-        Mon, 26 Jul 2021 15:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627311977;
-        bh=R7MPYQnCJsG4fwhF0u+zeh0a/cBUeZfS0iP3V5ZDZHs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b1Vix8NWuhvx4Q3pmG2tfftmmJzpSqffx+Ena5rVF6w+9YlJ2LHqt3MI4fprMvysm
-         Hw//UXufJgfEuEQRisRQeWNM4WwAf3YrdYsh7W16QoRLV/GOWwswTvrY0KSHFGeb3x
-         X2/wmeBcfc5nWsbKaBSxEf4ZMFe90GwdUNjdPcXcoewd3pxp998jQ1cnwnOm/Vw30q
-         Yw5g09PZb3chZKrDWBaIHTdnaFtFc4eYsO5D82gh6wapPk5OB0jzWwYCmjt2d97rnj
-         4Au90QFhzTJlWYf1DDSLED8mhW4trOCaw3Xk9ZQnAgjAulv5ELq/+/TcwzotC5o07l
-         6BICNVOv+eACA==
-Received: by mail-ej1-f48.google.com with SMTP id nb11so16957976ejc.4;
-        Mon, 26 Jul 2021 08:06:17 -0700 (PDT)
-X-Gm-Message-State: AOAM533wxIfwkyR4EoZUhwnL7Z/cW6P3PlgZae2J6W3ASF9nDMM02UoC
-        4j7q0JCmJwE03feERLSCubbygi4/Jwl0YNeNEw==
-X-Google-Smtp-Source: ABdhPJwwWICG++z75Hxvtq0N/g+sjBEODxNxt0nefCKbjiFba0jZlqxerC/yhL1o1fRHzDPTuM0kWe53k7yKt0DMP1A=
-X-Received: by 2002:a17:906:b750:: with SMTP id fx16mr10994131ejb.108.1627311976354;
- Mon, 26 Jul 2021 08:06:16 -0700 (PDT)
+        id S233704AbhGZVuW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Jul 2021 17:50:22 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:60467 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233348AbhGZVuW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Jul 2021 17:50:22 -0400
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CC8F4806B6
+        for <linux-i2c@vger.kernel.org>; Tue, 27 Jul 2021 10:30:46 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1627338646;
+        bh=jXascuXxOUXACq1t5wxrUs2OZR1jDAigJ4zQmpvAaxs=;
+        h=From:To:Subject:Date:References:In-Reply-To;
+        b=FyWxQn4sO/7lF7e/bELPLDo6zD7C82XjB1V3SHS76/KKc8ooYQ+A3znTleNBwnpbj
+         KeNEnb2zv49SQlq5Y7sDo1gfaV56JRWQR7+Rz4JcxBchzbbxoon1IUzWEqPPZ6W6vr
+         QEBn/a5B48630b1NR5nESPzWJELhuzzswum1xyBfq/+wkEgxMhLzlfmWYHoFPgHPNo
+         xmERyQ7AD3UMOD3RZAkMoJgP8xhNwCdqQBZh7V4/pQagpkPcJ8bjnGHuYIsag9knkr
+         ryg4wdtGOay5+XCBfAaJI2H6XH0zfz/gDLHMjHoJKFKZiWAuH1DMmaqdYtkrInp+d0
+         qBhzlhauNEcaA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60ff37960001>; Tue, 27 Jul 2021 10:30:46 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.23; Tue, 27 Jul 2021 10:30:46 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.023; Tue, 27 Jul 2021 10:30:46 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Chris Clayton <chris2553@googlemail.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: i2c-tools-4.3 - tarballs from kernel.org
+Thread-Topic: i2c-tools-4.3 - tarballs from kernel.org
+Thread-Index: AQHXgm3g6lCmotRLhUOh2ouPcWVXEg==
+Date:   Mon, 26 Jul 2021 22:30:45 +0000
+Message-ID: <1eac6bbb-b7f7-5665-b091-73d3f66adb25@alliedtelesis.co.nz>
+References: <c6403e32-2e48-c556-d08e-2c4441e34565@googlemail.com>
+In-Reply-To: <c6403e32-2e48-c556-d08e-2c4441e34565@googlemail.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CEAC8DB44415164591C540D7E830B400@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <cover.1627273794.git.viresh.kumar@linaro.org> <4182aff2d1437b30025f3d17d11e5fdc21845239.1627273794.git.viresh.kumar@linaro.org>
-In-Reply-To: <4182aff2d1437b30025f3d17d11e5fdc21845239.1627273794.git.viresh.kumar@linaro.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 26 Jul 2021 09:06:04 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKz6fNCrKium0EMW0Y8_1_fymr6BMnuBS1NnV_7PO236A@mail.gmail.com>
-Message-ID: <CAL_JsqKz6fNCrKium0EMW0Y8_1_fymr6BMnuBS1NnV_7PO236A@mail.gmail.com>
-Subject: Re: [PATCH V3 2/5] dt-bindings: i2c: Add bindings for i2c-virtio
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bill Mills <bill.mills@linaro.org>,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Jie Deng <jie.deng@intel.com>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=dvql9Go4 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=VwQbUJbxAAAA:8 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=e_q4qTt1xDgA:10 a=a28CaqLzsHWDZ6HAidcA:9 a=QEXdDO2ut3YA:10 a=pRQRx_yQ9a0A:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Jul 25, 2021 at 10:52 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> This patch adds binding for virtio I2C device, it is based on
-> virtio-device bindings.
->
-> Acked-by: Wolfram Sang <wsa@kernel.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  .../devicetree/bindings/i2c/i2c-virtio.yaml   | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
->
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml b/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
-> new file mode 100644
-> index 000000000000..0381d9065287
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/i2c-virtio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Virtio I2C Adapter
-> +
-> +maintainers:
-> +  - Viresh Kumar <viresh.kumar@linaro.org>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +  - $ref: /schemas/virtio/virtio-device.yaml#
-> +
-> +description:
-> +  Virtio I2C device, see /schemas/virtio/virtio-device.yaml for more details.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: '^i2c-virtio(-[a-z0-9]+)?$'
-
-i2c-controller.yaml already defines the node name. In this case
-though, it can be restricted a bit more to be just 'i2c' as there's
-only a single instance.
-
-> +
-> +  compatible:
-> +    const: virtio,22
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    virtio@3000 {
-> +        compatible = "virtio,mmio";
-> +        reg = <0x3000 0x100>;
-> +        interrupts = <41>;
-> +
-> +        i2c-virtio {
-> +            compatible = "virtio,22";
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            light-sensor@1c {
-> +                compatible = "dynaimage,al3320a";
-> +                reg = <0x20>;
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> --
-> 2.31.1.272.g89b43f80a514
->
+DQpPbiAyMy8wNy8yMSA4OjI0IHBtLCBDaHJpcyBDbGF5dG9uIHdyb3RlOg0KPiBIaQ0KPg0KPiBU
+aGUgdGFyYmFsbHMgYXQgaHR0cHM6Ly93d3cua2VybmVsLm9yZy9wdWIvc29mdHdhcmUvdXRpbHMv
+aTJjLXRvb2xzLyBzZWVtIHRvIGNvbnRhaW4gc291cmNlIGZvciB2NC4wLg0KPiBUaGUgZmlsZSB2
+ZXJzaW9uLmggY29udGFpbnMgIiNkZWZpbmUgVkVSU0lPTiAiNC4wIg0KPg0KPiBDaHJpcw0KPg0K
+QW5kIGludGVybmFsbHkgdGhlIHBhdGggc2F5cyBpMmMtdG9vbHMtNC4wLiBMb29raW5nIGF0IHRo
+ZSBDSEFOR0VTIGZpbGUgDQppdCBhbHNvIGFwcGVhcnMgdG8gbGluZSB1cCB3aXRoIHRoZSA0LjAg
+dGFnLg0K
