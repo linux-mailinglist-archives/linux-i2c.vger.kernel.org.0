@@ -2,83 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CF73D5511
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Jul 2021 10:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAEA3D561F
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Jul 2021 11:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbhGZHbW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Jul 2021 03:31:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41124 "EHLO mail.kernel.org"
+        id S232568AbhGZIZY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Jul 2021 04:25:24 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:33190 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232346AbhGZHbV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 26 Jul 2021 03:31:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5EEF160F4A;
-        Mon, 26 Jul 2021 08:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627287110;
-        bh=x9BfLt21eI+bS8doUSvOI3N0Cb/8WZxlnko7Fk5mChY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Mmwv1I9HuLDrkWE1iwdzYaxKnNykSm6bPuX1vgCqsY6tQOYrVjLG20i2W5jEBxrdd
-         egZ6Uh68mDM58KhM5sgD+h13jcsJvwdJKZGkC4iJ4WR6L26Bi8QANFAGH4rBqPHoxS
-         Hk5udWcuIfvJDvtxIe537hr1IMasPms5s/l27DGX7fPj66roOzYs2Asx5ueGtPmKQq
-         Ip3RX63svpfmm4OrSOdWXkS/7IlREwACWuvwSA5zGlGTC2gPLhQKVP36oLNqjZ9l5n
-         Yy+Cs27DRckXLgJIpLKBWUjouZrLNCqmxl3J7mG1Y4+r4b08VyCItlwhZh4QMoh/rk
-         jla3snJ8Pm3+A==
-Received: by mail-wr1-f42.google.com with SMTP id n12so6422186wrr.2;
-        Mon, 26 Jul 2021 01:11:50 -0700 (PDT)
-X-Gm-Message-State: AOAM533ZCVQfgBTRJ2ge682HyjzJldgN5n3VHBO0uFe3fVMzr2AtJl2L
-        3EjiWhpp+aEMDkVu78od/q8Bgi3O151rA2YdUd0=
-X-Google-Smtp-Source: ABdhPJxG7BvoCYsqUtkwdHizGdjcpK4OiCLglI/wh62vI4zXHtiEnOj0MvxoAE1MXYgl87VRCwNn5nPTCFq2f6cG5bo=
-X-Received: by 2002:adf:e107:: with SMTP id t7mr17820045wrz.165.1627287108986;
- Mon, 26 Jul 2021 01:11:48 -0700 (PDT)
+        id S232041AbhGZIZY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 26 Jul 2021 04:25:24 -0400
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1m7wYL-0001MM-Tu; Mon, 26 Jul 2021 11:05:37 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     cl@rock-chips.com
+Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
+        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
+        jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
+Subject: Re: [PATCH v5 1/4] dt-bindings: pwm: rockchip: add description for rk3568
+Date:   Mon, 26 Jul 2021 11:05:36 +0200
+Message-ID: <6196734.7s5MMGUR32@diego>
+In-Reply-To: <20210622020517.13100-2-cl@rock-chips.com>
+References: <20210622020517.13100-1-cl@rock-chips.com> <20210622020517.13100-2-cl@rock-chips.com>
 MIME-Version: 1.0
-References: <cover.1627273794.git.viresh.kumar@linaro.org> <4182aff2d1437b30025f3d17d11e5fdc21845239.1627273794.git.viresh.kumar@linaro.org>
- <CAK8P3a3FniCgQJ0UCvrwZ8F=f11mLAwe7XH5CcrqxL8TTMUvVg@mail.gmail.com>
-In-Reply-To: <CAK8P3a3FniCgQJ0UCvrwZ8F=f11mLAwe7XH5CcrqxL8TTMUvVg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 26 Jul 2021 10:11:32 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2m3BB2=4gkHXZD+=y1C47Og0QvfTWuA7e28oAonMyvzw@mail.gmail.com>
-Message-ID: <CAK8P3a2m3BB2=4gkHXZD+=y1C47Og0QvfTWuA7e28oAonMyvzw@mail.gmail.com>
-Subject: Re: [PATCH V3 2/5] dt-bindings: i2c: Add bindings for i2c-virtio
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bill Mills <bill.mills@linaro.org>,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Jie Deng <jie.deng@intel.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 26, 2021 at 10:06 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Mon, Jul 26, 2021 at 6:52 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > This patch adds binding for virtio I2C device, it is based on
-> > virtio-device bindings.
-> >
-> > Acked-by: Wolfram Sang <wsa@kernel.org>
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
->
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Am Dienstag, 22. Juni 2021, 04:05:14 CEST schrieb cl@rock-chips.com:
+> From: Liang Chen <cl@rock-chips.com>
+> 
+> add "rockchip,rk3568-pwm", "rockchip,rk3328-pwm" for pwm nodes on
+> a rk3568 platform to pwm-rockchip.yaml.
+> 
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
 
-Too quick, after seeing the same issue in the gpio binding I saw it here too:
+I've picked this for a new separate patch submission to finalize adding pwm
+for rk3568 in
+https://lore.kernel.org/r/20210726090355.1548483-1-heiko@sntech.de
 
-> +        i2c-virtio {
-> +            compatible = "virtio,22";
 
-The node name "i2c-virtio" looks wrong. According to
-https://github.com/devicetree-org/dt-schema/blob/master/schemas/i2c/i2c-controller.yaml,
-this needs to be plain "i2c".
+> ---
+>  Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+> index 5596bee70509..81a54a4e8e3e 100644
+> --- a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+> @@ -29,6 +29,7 @@ properties:
+>            - enum:
+>                - rockchip,px30-pwm
+>                - rockchip,rk3308-pwm
+> +              - rockchip,rk3568-pwm
+>            - const: rockchip,rk3328-pwm
+>  
+>    reg:
+> 
 
-       Arnd
+
+
+
