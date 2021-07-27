@@ -2,96 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1103D6BD7
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Jul 2021 04:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFFE3D6CB3
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Jul 2021 05:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234271AbhG0Bey (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Jul 2021 21:34:54 -0400
-Received: from mga17.intel.com ([192.55.52.151]:48089 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233727AbhG0Bey (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 26 Jul 2021 21:34:54 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10057"; a="192629016"
-X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
-   d="scan'208";a="192629016"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2021 19:15:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
-   d="scan'208";a="505286256"
-Received: from dengjie-mobl1.ccr.corp.intel.com (HELO [10.239.154.58]) ([10.239.154.58])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Jul 2021 19:15:17 -0700
-Subject: Re: [PATCH v15] i2c: virtio: add a virtio i2c frontend driver
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        yu1.wang@intel.com, conghui.chen@intel.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        =?UTF-8?Q?Alex_Benn=c3=a9e?= <alex.bennee@linaro.org>,
-        jiedeng@alumni.sjtu.edu.cn
-References: <bcf2fb9bbe965862213f27e05f87ffc91283c0c5.1627018061.git.jie.deng@intel.com>
- <CAK8P3a1=TpKLGMzvoLafjxtmoBbDL+sBMb8ZiEmTjW91Yr-cYw@mail.gmail.com>
-From:   Jie Deng <jie.deng@intel.com>
-Message-ID: <a65f32f6-6068-951c-c080-9ae27915b288@intel.com>
-Date:   Tue, 27 Jul 2021 10:15:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S234797AbhG0Cs2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Jul 2021 22:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234731AbhG0Cs2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Jul 2021 22:48:28 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E32C061757
+        for <linux-i2c@vger.kernel.org>; Mon, 26 Jul 2021 20:28:55 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id p5so8317972wro.7
+        for <linux-i2c@vger.kernel.org>; Mon, 26 Jul 2021 20:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=2bNmzYQg8QnqRRqZW4R559oGTAVK4bu+4v+fMAugFco=;
+        b=EOPirYMe6Q6w4pNO3IzXVTcjIxkQZ/GXWnYDx/P7keaNztEUFsZVTyZOrI+jgLKO+E
+         zAQIRM7OkQ4hGVGb19i0YCJp9mREv7eVaF+OLuDlh/NMJqdYJoyXq5byJRpzwexmVBm2
+         U/WDaAhq8suUgHMun/TBUfMqzgKfW728Vf/71xP+WwygGjtHlkTfrZqVCFVomYZnWtGu
+         jyDSQ7a1xQE+TX0YpUmVJh13t8kR87lvI+sis8h7I5UykYbZsoo7S5ifcq0SRpAA9LDj
+         HH85nL6qEN80LpYYPPKYKg3z8C8ZNebuQ8Axk+jw+fwWdJvJuGaLxQ/7dDBDeR8rn7Ic
+         esiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=2bNmzYQg8QnqRRqZW4R559oGTAVK4bu+4v+fMAugFco=;
+        b=NXwgkxdKQ+9ynG4lFCZNBrI+MHAVup2925B+uOL7GphecSY+2Y2RJSiZHCusfgq9mt
+         C8NYf+Z2v0MgbT4oGZ62Z6NScBymJ2Oj6HUZlSjYknrZWb2F/QmxZ8C1FqF7EfCWkoPc
+         08zLBqwGH6WAqGUjdpi0kyU8NyAVqAG3EI7Y7v2W4VKtfLiCUy28Ycj9aJkG9BCM5tp4
+         dx92t/NM3DwLT8zQbUha5huuFYKH0w3ui7daTo+62NS+0jWsYZYgME5zxbKint0dRui0
+         huBQw1ma+TPVyTfUNYi+nkqNcx8neez1wbBDCu+FMUrCX4x50cO3d14Tr1hF5JiDygfK
+         FQbQ==
+X-Gm-Message-State: AOAM5313S4oY9am84aJyuh/zYJw1+NphnwviR1JXXs4RgGTg5wQw+oxf
+        zIsuMB+w8A8eCg112gsk/n7C33AY67REgOFeVXlT7mmtPvZ+IUKR
+X-Google-Smtp-Source: ABdhPJxCPsUyhPwhdn3LHbIVfOibe4dC0vCoaojfUYNnhyGpSUwun7rywv8Tal7ycPW0WU6s1i0TYVIP0yhd771wiXo=
+X-Received: by 2002:a5d:5642:: with SMTP id j2mr22160478wrw.65.1627356534054;
+ Mon, 26 Jul 2021 20:28:54 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a1=TpKLGMzvoLafjxtmoBbDL+sBMb8ZiEmTjW91Yr-cYw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+From:   Chris Murphy <lists@colorremedies.com>
+Date:   Mon, 26 Jul 2021 21:28:38 -0600
+Message-ID: <CAJCQCtTB+KW596A1Q+Ds6u9uvUrqeOSmer6qKv7g+xRYijGS3A@mail.gmail.com>
+Subject: kernel 5.14, i801_smbus errors during early boot
+To:     linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Lenovo Thinkpad X1 Carbon 7th gen
+kernel 5.14.0-0.rc3.29.fc35.x86_64+debug
 
-On 2021/7/23 17:03, Arnd Bergmann wrote:
-> On Fri, Jul 23, 2021 at 7:44 AM Jie Deng <jie.deng@intel.com> wrote:
->
->> +
->> +       ret = virtio_i2c_setup_vqs(vi);
->> +       if (ret)
->> +               return ret;
->> +
->> +       vi->adap.owner = THIS_MODULE;
->> +       snprintf(vi->adap.name, sizeof(vi->adap.name),
->> +                "i2c_virtio at virtio bus %d", vdev->index);
->> +       vi->adap.algo = &virtio_algorithm;
->> +       vi->adap.quirks = &virtio_i2c_quirks;
->> +       vi->adap.dev.parent = &vdev->dev;
->> +       i2c_set_adapdata(&vi->adap, vi);
->> +
->> +       /*
->> +        * Setup ACPI node for controlled devices which will be probed through
->> +        * ACPI.
->> +        */
->> +       ACPI_COMPANION_SET(&vi->adap.dev, ACPI_COMPANION(pdev));
-> Since there is now a generic way for virtio drivers to link up with OF
-> device nodes, maybe this should be handled the same way in the
-> virtio core rather than the driver?
+These errors happen with kernels 5.11+ through 5.14-rc3. I haven't
+tested older kernels.
 
+[    4.138577] i801_smbus 0000:00:1f.4: enabling device (0000 -> 0003)
+[    4.141533] i801_smbus 0000:00:1f.4: SPD Write Disable is set
+[    4.141600] i801_smbus 0000:00:1f.4: SMBus using PCI interrupt
+*[    4.349174] i801_smbus 0000:00:1f.4: Timeout waiting for interrupt!
+[    4.349178] i801_smbus 0000:00:1f.4: Transaction timeout
+*[    4.352052] i801_smbus 0000:00:1f.4: Failed terminating the transaction
+*[    4.352133] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
 
-I'm currently based on the I2C tree. Has that patch been already merged ？
+* = dmesg paints these messages in red text
 
-Anyway, I think we can send an additional patch to remove this line once 
-that
+Should I file a bug somewhere? Where and what information to include?
 
-"generic way" patch is merged.
+Thanks,
 
-Regards,
-
-Jie
-
-
-
+-- 
+Chris Murphy
