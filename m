@@ -2,146 +2,175 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7503D7A8F
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Jul 2021 18:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCDE3D7F35
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Jul 2021 22:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbhG0QJp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 27 Jul 2021 12:09:45 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27279 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229658AbhG0QJo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Jul 2021 12:09:44 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16RG4ctn129513;
-        Tue, 27 Jul 2021 12:09:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=tHitE0CZyHx+5CmS/wzGU1uVXS4acUw969HBGjcmvCs=;
- b=DCqrVLjmDC/bxHUGYEcT4lVFX33tr5A93B8BMBC+WzdKixo0Rqy82C6eJFdz8XAdYy8q
- xuQHycIVtJi+QowzXry25yyBETSivZDSZeMIXLlyvvPof9nsf3b0tAmTbqv224J2GmGK
- tB5IwfSDtzHheo9TPMp00se0TOAo/FdPvXIYburSE/mnXwsWJ/ZC3WR3xrLYTE8aCPf9
- cQZO/mqlJRYodTEg5bzR0JT+IUJK7ha3NW2s6ydMeDc8GFUn4rxEJdOd2RLlm76H/Vnw
- Ik2YMq5Jw/wf0JScX8PyGQqdJGGtuAvtKzob70YXV9mUn4e8RWXh0OagoXPyjsWTpK1B SA== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3a2kbd5qe7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 12:09:39 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16RG49tq019697;
-        Tue, 27 Jul 2021 16:04:38 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02dal.us.ibm.com with ESMTP id 3a2362j0qt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 16:04:38 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16RG3M1o46924260
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jul 2021 16:03:22 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3B597BE063;
-        Tue, 27 Jul 2021 16:03:22 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E23DBBE04F;
-        Tue, 27 Jul 2021 16:03:21 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.139.59])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Jul 2021 16:03:21 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peda@axentia.se, robh+dt@kernel.org,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH v2 2/2] i2c: mux: pca954x: Support multiple devices on a single reset line
-Date:   Tue, 27 Jul 2021 11:03:15 -0500
-Message-Id: <20210727160315.15575-3-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210727160315.15575-1-eajames@linux.ibm.com>
-References: <20210727160315.15575-1-eajames@linux.ibm.com>
+        id S232214AbhG0UZj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 27 Jul 2021 16:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232140AbhG0UZj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 27 Jul 2021 16:25:39 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DDFC061757
+        for <linux-i2c@vger.kernel.org>; Tue, 27 Jul 2021 13:25:37 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id l18so8952128wrv.5
+        for <linux-i2c@vger.kernel.org>; Tue, 27 Jul 2021 13:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=KQS+VnQfQzWTe5bY3UWveGWqlkNr7L0IiwQziY4iu2k=;
+        b=YHO8ZfT2wyMmhD6kihoBdcwXhpsX1NjRGpWIZuZVqMBYhGMUroLotdBTqBXdru+Bvv
+         PYB86BisV1gwY6ueC6hQQn/9aAe+FQRLBhNLM04SHQASjGilIInyl0MtmTIobpyKJOG5
+         9sNo3oszCkGHtm5Ykw5S00ZqqNX5aIL4xQ07/d29TSdUzK8W5CXWBY0mTadHAoon02bK
+         Yzgzld0s1dgWaamX6e+3mpkjy5nvmYGr6wRyymZXA5gmvmsULhCHEhFPoNKIW2y42XRm
+         uRuwK3YcU/nPUm1vKO0ifEo5DiNNIDsopOW99cMoaJT2lTtufg2ZhqlAiKy3FHwi5o9c
+         60Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=KQS+VnQfQzWTe5bY3UWveGWqlkNr7L0IiwQziY4iu2k=;
+        b=rEUnp5/6SzMsya5/czke+/9/We0OTbxxedOVQULYPCycluDYmA8J9sHnV2szYi9Npr
+         TDrW/3cgVjZ8pV/2F4ALvgIhy45v7F+nBUd7dIS3+QpPh6iwwErvQI23MjpTB0IIPa/3
+         Xbf/Tx0t56LPR/2RzZzBjAFqaY53tP/iN0s/WbFOlCiBTtmtbAFoPc1u85NJiWwbGtkY
+         6OT4+CW3iYg3LOI/xJtVMB8fKICrAEJ5e7fItIHqk2jKOTywjWphuahSGvfRmlKH3LxW
+         bSFFtG+RP+cOpwiIJm87Sapa5r4E7ut/SWbU7mpylDy40pAp+Z58xpMNN+eojxGygl1t
+         aOfw==
+X-Gm-Message-State: AOAM530EVXmyI4wVYsp7CuBjdOCPuA6gg76DifcL4q8U3U9MEiU1Qyl7
+        FXFatUJ0lPRAN/tgSZEL6bXyXbO7ep8=
+X-Google-Smtp-Source: ABdhPJwbfuS1+lKgbBW6DuE0eAyxRn2EtV3mIdye4it814XVHPFYOQKK6ikhY3AqNWIm1fF+Uz/P3Q==
+X-Received: by 2002:adf:fb05:: with SMTP id c5mr26132079wrr.55.1627417536307;
+        Tue, 27 Jul 2021 13:25:36 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8f3a:f500:1581:5149:b8dd:692f? (p200300ea8f3af50015815149b8dd692f.dip0.t-ipconnect.de. [2003:ea:8f3a:f500:1581:5149:b8dd:692f])
+        by smtp.googlemail.com with ESMTPSA id d8sm4779422wrv.20.2021.07.27.13.25.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jul 2021 13:25:35 -0700 (PDT)
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v2] i2c: i801: Fix handling SMBHSTCNT_PEC_EN
+To:     Jean Delvare <jdelvare@suse.com>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Message-ID: <c738b504-d545-8f7d-ab86-06dba876ddeb@gmail.com>
+Date:   Tue, 27 Jul 2021 22:25:25 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: y39omJr1lIcXvIhVYrA1oL_7PyHTQ8jo
-X-Proofpoint-GUID: y39omJr1lIcXvIhVYrA1oL_7PyHTQ8jo
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-27_10:2021-07-27,2021-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- suspectscore=0 malwarescore=0 impostorscore=0 adultscore=0
- lowpriorityscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2107270097
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Some systems connect several PCA954x devices to a single reset GPIO. For
-these devices to get out of reset and probe successfully, each device must
-defer the probe until the GPIO has been hogged. Accomplish this by
-attempting to grab a new "reset-shared-hogged" devicetree property, but
-expect it to fail with EPROBE_DEFER or EBUSY.
+Bit SMBHSTCNT_PEC_EN is used only if software calculates the CRC and
+uses register SMBPEC. This is not supported by the driver, it supports
+hw-calculation of CRC only (using bit SMBAUXSTS_CRCE). The chip spec
+states the following, therefore never set bit SMBHSTCNT_PEC_EN.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Chapter SMBus CRC Generation and Checking
+If the AAC bit is set in the Auxiliary Control register, the PCH
+automatically calculates and drives CRC at the end of the transmitted
+packet for write cycles, and will check the CRC for read cycles. It will
+not transmit the contents of the PEC register for CRC. The PEC bit must
+not be set in the Host Control register. If this bit is set, unspecified
+behavior will result.
+
+This patch is based solely on the specification and compile-tested only,
+because I have no PEC-capable devices.
+
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Tested-by: Jean Delvare <jdelvare@suse.de>
 ---
- drivers/i2c/muxes/i2c-mux-pca954x.c | 46 +++++++++++++++++++++++------
- 1 file changed, 37 insertions(+), 9 deletions(-)
+v2:
+- further simplified the change in i801_block_transaction_by_block
+- added comment to the change in i801_setup_hstcfg
+---
+ drivers/i2c/busses/i2c-i801.c | 27 +++++++++++----------------
+ 1 file changed, 11 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 4ad665757dd8..376b54ffb590 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -434,15 +434,43 @@ static int pca954x_probe(struct i2c_client *client,
- 	i2c_set_clientdata(client, muxc);
- 	data->client = client;
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index aa3f60e69..92ec291c0 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -503,19 +503,16 @@ static int i801_transaction(struct i801_priv *priv, int xact)
  
--	/* Reset the mux if a reset GPIO is specified. */
--	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio))
--		return PTR_ERR(gpio);
--	if (gpio) {
--		udelay(1);
--		gpiod_set_value_cansleep(gpio, 0);
--		/* Give the chip some time to recover. */
--		udelay(1);
-+	/*
-+	 * Grab the shared, hogged gpio that controls the mux reset. We expect
-+	 * this to fail with either EPROBE_DEFER or EBUSY. The only purpose of
-+	 * trying to get it is to make sure the gpio controller has probed up
-+	 * and hogged the line to take the mux out of reset, meaning that the
-+	 * mux is ready to be probed up. Don't try and set the line any way; in
-+	 * the event we actually successfully get the line (if it wasn't
-+	 * hogged) then we immediately release it, since there is no way to
-+	 * sync up the line between muxes.
-+	 */
-+	gpio = gpiod_get_optional(dev, "reset-shared-hogged", 0);
-+	if (IS_ERR(gpio)) {
-+		ret = PTR_ERR(gpio);
-+		if (ret != -EBUSY)
-+			return ret;
-+	} else {
-+		if (gpio) {
-+			/* This is really a problem since now we don't know the
-+			 * state of the gpio. Log a warning and keep trying to
-+			 * probe the mux just in case it works.
-+			 */
-+			dev_warn(dev, "got hogged reset line, expect error\n");
-+			gpiod_put(gpio);
-+		} else {
-+			/* Reset the mux if a reset GPIO is specified. */
-+			gpio = devm_gpiod_get_optional(dev, "reset",
-+						       GPIOD_OUT_HIGH);
-+			if (IS_ERR(gpio))
-+				return PTR_ERR(gpio);
-+
-+			if (gpio) {
-+				udelay(1);
-+				gpiod_set_value_cansleep(gpio, 0);
-+				/* Give the chip some time to recover. */
-+				udelay(1);
-+			}
-+		}
- 	}
+ static int i801_block_transaction_by_block(struct i801_priv *priv,
+ 					   union i2c_smbus_data *data,
+-					   char read_write, int command,
+-					   int hwpec)
++					   char read_write, int command)
+ {
+-	int i, len;
+-	int status;
+-	int xact = hwpec ? SMBHSTCNT_PEC_EN : 0;
++	int i, len, status, xact;
  
- 	data->chip = device_get_match_data(dev);
+ 	switch (command) {
+ 	case I2C_SMBUS_BLOCK_PROC_CALL:
+-		xact |= I801_BLOCK_PROC_CALL;
++		xact = I801_BLOCK_PROC_CALL;
+ 		break;
+ 	case I2C_SMBUS_BLOCK_DATA:
+-		xact |= I801_BLOCK_DATA;
++		xact = I801_BLOCK_DATA;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
+@@ -665,8 +662,7 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
+  */
+ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 					       union i2c_smbus_data *data,
+-					       char read_write, int command,
+-					       int hwpec)
++					       char read_write, int command)
+ {
+ 	int i, len;
+ 	int smbcmd;
+@@ -764,9 +760,8 @@ static int i801_set_block_buffer_mode(struct i801_priv *priv)
+ }
+ 
+ /* Block transaction function */
+-static int i801_block_transaction(struct i801_priv *priv,
+-				  union i2c_smbus_data *data, char read_write,
+-				  int command, int hwpec)
++static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
++				  char read_write, int command)
+ {
+ 	int result = 0;
+ 	unsigned char hostc;
+@@ -802,11 +797,11 @@ static int i801_block_transaction(struct i801_priv *priv,
+ 	 && i801_set_block_buffer_mode(priv) == 0)
+ 		result = i801_block_transaction_by_block(priv, data,
+ 							 read_write,
+-							 command, hwpec);
++							 command);
+ 	else
+ 		result = i801_block_transaction_byte_by_byte(priv, data,
+ 							     read_write,
+-							     command, hwpec);
++							     command);
+ 
+ 	if (command == I2C_SMBUS_I2C_BLOCK_DATA
+ 	 && read_write == I2C_SMBUS_WRITE) {
+@@ -917,8 +912,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+ 		       SMBAUXCTL(priv));
+ 
+ 	if (block)
+-		ret = i801_block_transaction(priv, data, read_write, size,
+-					     hwpec);
++		ret = i801_block_transaction(priv, data, read_write, size);
+ 	else
+ 		ret = i801_transaction(priv, xact);
+ 
+@@ -1690,6 +1684,7 @@ static void i801_setup_hstcfg(struct i801_priv *priv)
+ 	unsigned char hstcfg = priv->original_hstcfg;
+ 
+ 	hstcfg &= ~SMBHSTCFG_I2C_EN;	/* SMBus timing */
++	hstcfg &= ~SMBHSTCNT_PEC_EN;	/* Disable software PEC */
+ 	hstcfg |= SMBHSTCFG_HST_EN;
+ 	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hstcfg);
+ }
 -- 
-2.27.0
+2.32.0
 
