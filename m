@@ -2,69 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1863D698F
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Jul 2021 00:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1103D6BD7
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Jul 2021 04:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233704AbhGZVuW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 26 Jul 2021 17:50:22 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:60467 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233348AbhGZVuW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 26 Jul 2021 17:50:22 -0400
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CC8F4806B6
-        for <linux-i2c@vger.kernel.org>; Tue, 27 Jul 2021 10:30:46 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1627338646;
-        bh=jXascuXxOUXACq1t5wxrUs2OZR1jDAigJ4zQmpvAaxs=;
-        h=From:To:Subject:Date:References:In-Reply-To;
-        b=FyWxQn4sO/7lF7e/bELPLDo6zD7C82XjB1V3SHS76/KKc8ooYQ+A3znTleNBwnpbj
-         KeNEnb2zv49SQlq5Y7sDo1gfaV56JRWQR7+Rz4JcxBchzbbxoon1IUzWEqPPZ6W6vr
-         QEBn/a5B48630b1NR5nESPzWJELhuzzswum1xyBfq/+wkEgxMhLzlfmWYHoFPgHPNo
-         xmERyQ7AD3UMOD3RZAkMoJgP8xhNwCdqQBZh7V4/pQagpkPcJ8bjnGHuYIsag9knkr
-         ryg4wdtGOay5+XCBfAaJI2H6XH0zfz/gDLHMjHoJKFKZiWAuH1DMmaqdYtkrInp+d0
-         qBhzlhauNEcaA==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B60ff37960001>; Tue, 27 Jul 2021 10:30:46 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.23; Tue, 27 Jul 2021 10:30:46 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.023; Tue, 27 Jul 2021 10:30:46 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Chris Clayton <chris2553@googlemail.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: i2c-tools-4.3 - tarballs from kernel.org
-Thread-Topic: i2c-tools-4.3 - tarballs from kernel.org
-Thread-Index: AQHXgm3g6lCmotRLhUOh2ouPcWVXEg==
-Date:   Mon, 26 Jul 2021 22:30:45 +0000
-Message-ID: <1eac6bbb-b7f7-5665-b091-73d3f66adb25@alliedtelesis.co.nz>
-References: <c6403e32-2e48-c556-d08e-2c4441e34565@googlemail.com>
-In-Reply-To: <c6403e32-2e48-c556-d08e-2c4441e34565@googlemail.com>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CEAC8DB44415164591C540D7E830B400@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S234271AbhG0Bey (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 26 Jul 2021 21:34:54 -0400
+Received: from mga17.intel.com ([192.55.52.151]:48089 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233727AbhG0Bey (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 26 Jul 2021 21:34:54 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10057"; a="192629016"
+X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
+   d="scan'208";a="192629016"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2021 19:15:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,272,1620716400"; 
+   d="scan'208";a="505286256"
+Received: from dengjie-mobl1.ccr.corp.intel.com (HELO [10.239.154.58]) ([10.239.154.58])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Jul 2021 19:15:17 -0700
+Subject: Re: [PATCH v15] i2c: virtio: add a virtio i2c frontend driver
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
+        <virtualization@lists.linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        yu1.wang@intel.com, conghui.chen@intel.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        =?UTF-8?Q?Alex_Benn=c3=a9e?= <alex.bennee@linaro.org>,
+        jiedeng@alumni.sjtu.edu.cn
+References: <bcf2fb9bbe965862213f27e05f87ffc91283c0c5.1627018061.git.jie.deng@intel.com>
+ <CAK8P3a1=TpKLGMzvoLafjxtmoBbDL+sBMb8ZiEmTjW91Yr-cYw@mail.gmail.com>
+From:   Jie Deng <jie.deng@intel.com>
+Message-ID: <a65f32f6-6068-951c-c080-9ae27915b288@intel.com>
+Date:   Tue, 27 Jul 2021 10:15:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=dvql9Go4 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=VwQbUJbxAAAA:8 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=e_q4qTt1xDgA:10 a=a28CaqLzsHWDZ6HAidcA:9 a=QEXdDO2ut3YA:10 a=pRQRx_yQ9a0A:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
+In-Reply-To: <CAK8P3a1=TpKLGMzvoLafjxtmoBbDL+sBMb8ZiEmTjW91Yr-cYw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiAyMy8wNy8yMSA4OjI0IHBtLCBDaHJpcyBDbGF5dG9uIHdyb3RlOg0KPiBIaQ0KPg0KPiBU
-aGUgdGFyYmFsbHMgYXQgaHR0cHM6Ly93d3cua2VybmVsLm9yZy9wdWIvc29mdHdhcmUvdXRpbHMv
-aTJjLXRvb2xzLyBzZWVtIHRvIGNvbnRhaW4gc291cmNlIGZvciB2NC4wLg0KPiBUaGUgZmlsZSB2
-ZXJzaW9uLmggY29udGFpbnMgIiNkZWZpbmUgVkVSU0lPTiAiNC4wIg0KPg0KPiBDaHJpcw0KPg0K
-QW5kIGludGVybmFsbHkgdGhlIHBhdGggc2F5cyBpMmMtdG9vbHMtNC4wLiBMb29raW5nIGF0IHRo
-ZSBDSEFOR0VTIGZpbGUgDQppdCBhbHNvIGFwcGVhcnMgdG8gbGluZSB1cCB3aXRoIHRoZSA0LjAg
-dGFnLg0K
+
+On 2021/7/23 17:03, Arnd Bergmann wrote:
+> On Fri, Jul 23, 2021 at 7:44 AM Jie Deng <jie.deng@intel.com> wrote:
+>
+>> +
+>> +       ret = virtio_i2c_setup_vqs(vi);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       vi->adap.owner = THIS_MODULE;
+>> +       snprintf(vi->adap.name, sizeof(vi->adap.name),
+>> +                "i2c_virtio at virtio bus %d", vdev->index);
+>> +       vi->adap.algo = &virtio_algorithm;
+>> +       vi->adap.quirks = &virtio_i2c_quirks;
+>> +       vi->adap.dev.parent = &vdev->dev;
+>> +       i2c_set_adapdata(&vi->adap, vi);
+>> +
+>> +       /*
+>> +        * Setup ACPI node for controlled devices which will be probed through
+>> +        * ACPI.
+>> +        */
+>> +       ACPI_COMPANION_SET(&vi->adap.dev, ACPI_COMPANION(pdev));
+> Since there is now a generic way for virtio drivers to link up with OF
+> device nodes, maybe this should be handled the same way in the
+> virtio core rather than the driver?
+
+
+I'm currently based on the I2C tree. Has that patch been already merged ？
+
+Anyway, I think we can send an additional patch to remove this line once 
+that
+
+"generic way" patch is merged.
+
+Regards,
+
+Jie
+
+
+
