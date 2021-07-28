@@ -2,73 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 220C93D92AB
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Jul 2021 18:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB2C3D957F
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Jul 2021 20:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237366AbhG1QAp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 28 Jul 2021 12:00:45 -0400
-Received: from m34-101.88.com ([104.250.34.101]:37865 "HELO 88.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with SMTP
-        id S237241AbhG1QAp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 28 Jul 2021 12:00:45 -0400
-X-Greylist: delayed 355 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Jul 2021 12:00:44 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cn;
-        s=dkim; h=From:To:Date; bh=Gv7KUucopsmsqIQxT+x1MtsOiHITozTqojHrK
-        PHgZ7c=; b=FYRYN70tEgYKctiU8TZiGJjBqyx1V9Z+jdT2CI5bjVlpYZzY0wRyS
-        pLyAUj7E86QqZh495ODeiqZYEFhFG701bM0JyGQf9hYTwhU7emzJG/PVMyLwdnHh
-        sJ7rR3XXEG7QpuE8gk+R4S8ffzD3WKFkl13gd3AOkPpwwqZTAju5QU=
-Received: from localhost.localdomain (unknown [113.251.14.68])
-        by v_coremail2-frontend-2 (Coremail) with SMTP id GiKnCgCnJqeLfQFhVvsMAA--.44841S2;
-        Wed, 28 Jul 2021 23:53:48 +0800 (CST)
-From:   Hu Haowen <src.res@email.cn>
-To:     wsa@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: i2c: add i2c-sysfs into index
-Date:   Wed, 28 Jul 2021 23:53:46 +0800
-Message-Id: <20210728155346.8941-1-src.res@email.cn>
-X-Mailer: git-send-email 2.25.1
+        id S229761AbhG1Sre (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 28 Jul 2021 14:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229542AbhG1Sre (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 28 Jul 2021 14:47:34 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E1CC061757;
+        Wed, 28 Jul 2021 11:47:31 -0700 (PDT)
+Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id DD0AD82AE5;
+        Wed, 28 Jul 2021 20:47:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1627498047;
+        bh=zIdPGhc6P9y10bJIyxKHkuhJwK0+TrueUOdXoKwFtoU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=r7jgyxys7q9VpG9O1NdIIO0QwjqKzQJV+BB3gg8qKXsDLzVxmsKMvWb4S1Q63dt3V
+         2OnHwL07cAkHeMkeerIsICOU5x2YKMbfCb+3SSaRkKoOtiFTfULGs20NiiCbE76V4y
+         FgdDTAA/8WZLN+dk4OwDTti9mRrwdO/1cX+bcTUrC2KybxM+cpJNV16WJxRDsvjGIF
+         +b+85cTNKzg5BWsZgAdGT1UX4v1a+MVdRsY8FAnHddLIExSWSN3FfZ744UlCe6YBDl
+         WmZPq34hR62de1MQxyE3aPgxBqRa88cf3KcyEUppUf98NO4DDHK11pTchR2L2nXoMN
+         7DX/xqnl8CvDw==
+Subject: Re: [PATCH v2 00/10] i2c: xiic: Add features, bug fixes.
+To:     Raviteja Narayanam <rna@xilinx.com>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>, "joe@perches.com" <joe@perches.com>
+References: <20210626102806.15402-1-raviteja.narayanam@xilinx.com>
+ <95162fd0-10e6-2bc6-4079-899ac26f66ce@xilinx.com>
+ <0c51785f-9763-aebc-a9ea-04337ad1accc@denx.de>
+ <SN6PR02MB40933E99A241952502B69F41CAE19@SN6PR02MB4093.namprd02.prod.outlook.com>
+ <45aa8d2b-a077-32a2-0608-8f20a5b807a8@denx.de>
+ <SN6PR02MB4093C7F2EB59D854D8753A01CAE29@SN6PR02MB4093.namprd02.prod.outlook.com>
+ <328f6c4e-ff0b-c88f-d246-75b493b67a9a@denx.de>
+ <SN6PR02MB4093E219E0BCE2C3CBCE472CCAE89@SN6PR02MB4093.namprd02.prod.outlook.com>
+ <5d49b316-6fcd-e677-578e-64b0ab5520ab@denx.de>
+ <SN6PR02MB4093ACD6E6A349BA9740ABB9CAEA9@SN6PR02MB4093.namprd02.prod.outlook.com>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <d70b569d-a0e3-81b0-a553-ed88423924f7@denx.de>
+Date:   Wed, 28 Jul 2021 20:47:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GiKnCgCnJqeLfQFhVvsMAA--.44841S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5-7k0a2IF6w4kM7kC6x804xWl1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
-        x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWU
-        JVW8JwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        74AGY7Cv6cx26F4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04
-        k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26F4UJr1UMxC20s026xCaFVCjc4AY6r1j
-        6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-        AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
-        2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
-        C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
-        nUUI43ZEXa7IUnLSdPUUUUU==
-X-Originating-IP: [113.251.14.68]
-X-CM-SenderInfo: hvufh21hv6vzxdlohubq/
+In-Reply-To: <SN6PR02MB4093ACD6E6A349BA9740ABB9CAEA9@SN6PR02MB4093.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Append i2c-sysfs to toctree in order to get rid of building warnings.
+On 7/28/21 12:11 PM, Raviteja Narayanam wrote:
+[...]
 
-Signed-off-by: Hu Haowen <src.res@email.cn>
----
- Documentation/i2c/index.rst | 1 +
- 1 file changed, 1 insertion(+)
+>>>>>>> I have tested this again on our boards with eeprom and other
+>>>>>>> sensors, this
+>>>>>> is working fine for us.
+>>>>>>
+>>>>>> Can you share details of how those tests were performed ?
+>>>>>
+>>>>> Stress test - 1:
+>>>>> Heavy ethernet traffic running in the background.
+>>>>> I2c commands script (like below) running. We can see visible stutter
+>>>>> in the
+>>>> output as expected, but nothing failed.
+>>>>>
+>>>>> i=0
+>>>>> while [ 1 ]
+>>>>> do
+>>>>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r31@0X54
+>>>>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r32@0X54
+>>>>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r255@0X54
+>>>>> 		i2ctransfer -y -f 2 w1@0X54 0X00 r273@0X54
+>>>>>                                 i2ctransfer -y -f 2 w1@0X54 0X00
+>>>>> r1@0X54
+>>>>
+>>>> Could it be that you never see the problem because you always talk to
+>>>> one single device ?
+>>>
+>>> There are transfers to other devices as well.
+>>
+>> The above test only accesses device at address 0x54, right ?
+> 
+> Above code is just one part.
+> We are doing read/writes to all devices present on this board https://www.xilinx.com/support/documentation/boards_and_kits/zcu102/ug1182-zcu102-eval-bd.pdf
 
-diff --git a/Documentation/i2c/index.rst b/Documentation/i2c/index.rst
-index 8b76217e370a..6270f1fd7d4e 100644
---- a/Documentation/i2c/index.rst
-+++ b/Documentation/i2c/index.rst
-@@ -17,6 +17,7 @@ Introduction
-    busses/index
-    i2c-topology
-    muxes/i2c-mux-gpio
-+   i2c-sysfs
- 
- Writing device drivers
- ======================
--- 
-2.25.1
+Can you share details of how those tests were performed ?
 
+>>> Our board has multiple power monitors, eeprom and other misc devices
+>>> that are accessed through the same driver and are working fine.
+>>
+>> That does not seem to be what the test above does .
+>>
+>>>> Do you also test writes which are not 1 byte long ?
+>>>>
+>>>
+>>> Yes, like for eeprom 1 page (16 bytes)  is written.
+>>
+>> I suspect the atmel mxt does much longer writes, try 255 bytes or so.
+> 
+> Ok, I will do longer writes (in the range of 255) on supported slave devices.
+
+Thank you
