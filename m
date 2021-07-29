@@ -2,96 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BEA3DA12E
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Jul 2021 12:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415A33DA68B
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Jul 2021 16:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235887AbhG2KjR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 29 Jul 2021 06:39:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39880 "EHLO mail.kernel.org"
+        id S236736AbhG2Ofl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 29 Jul 2021 10:35:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42744 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233273AbhG2KjJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 29 Jul 2021 06:39:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8DF6660720;
-        Thu, 29 Jul 2021 10:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627555146;
-        bh=bZVuBVFUJ64Ac6eCV4x63SJzQtCFqISOkoxt63NBgKo=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=N7IpwIzfkkF0iQc9UkJCL5tLuVVCB5WR7b5mL6IWaIG6dKEU1Buc9yyOzINPjHwRQ
-         +SYE+pL0ipcSM94O1tJhkcwmWt3k0iIIjHq6/b04azL7JboN9c/pzhmup8RBMydw3h
-         lG3EjuNAospKhmwRX9qMVmLrvc5diygcaetoWwk7fm1nG52DGvtS50c5zxVdpT9dOy
-         a70o868DguxQZglQdg7N2IlhtiU2g5AjCSgnQNlhGhJqB99cWSuzsqUgbNy3uhRxOE
-         rpXTZEiw6YS4+TeOUB+MzQGgSO4z9pySlu8BKvFgi5avR1XEXrOjBu35+GCAh2V3Qx
-         Flle/Ziw/fWwQ==
-Date:   Thu, 29 Jul 2021 12:39:03 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Michael Zaidman <michael.zaidman@gmail.com>
-cc:     benjamin.tissoires@redhat.com, aaron.jones@ftdichip.com,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2] HID: ft260: fix device removal due to USB
- disconnect
-In-Reply-To: <20210729102603.3844-1-michael.zaidman@gmail.com>
-Message-ID: <nycvar.YFH.7.76.2107291238490.8253@cbobk.fhfr.pm>
-References: <nycvar.YFH.7.76.2107281147160.8253@cbobk.fhfr.pm> <20210729102603.3844-1-michael.zaidman@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S235324AbhG2Ofk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 29 Jul 2021 10:35:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EE8AF60F4B;
+        Thu, 29 Jul 2021 14:35:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627569336;
+        bh=EVWeCG+dHdsvppMXTRfNm1+MmGhkBNdB/EmdeGAb1ww=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dr7b5FHafIThX9AnJVXR9Yu/gH6w5QYu+6Ly7I1VT730LnEwy5qzSQ12Vrxl92Cp+
+         Hai3iIyFg2Mh3O9zVlotMLD0eCHQ9r+lvEfWkTq6z73G0E4n+F+4e9axqBC1PpuwQe
+         y2rNc5074qNqQ9C6ndpNliCi9NlOQMmJdEGycr5c=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH v2] i2c: dev: zero out array used for i2c reads from userspace
+Date:   Thu, 29 Jul 2021 16:35:32 +0200
+Message-Id: <20210729143532.47240-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1545; h=from:subject; bh=EVWeCG+dHdsvppMXTRfNm1+MmGhkBNdB/EmdeGAb1ww=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlMezat6YzTL77zI3G5qf03Nd7wrTLVaw6kmIt/cWi3n2bC XPW7I5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACZSHsowv+r/u8kv4mtnndD/1sC37u 2eE7PO/2WYp1Yw4+TdTPdAV1mWa/2nIoVfZ/m5AAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 29 Jul 2021, Michael Zaidman wrote:
+If an i2c driver happens to not provide the full amount of data that a
+user asks for, it is possible that some uninitialized data could be sent
+to userspace.  While all in-kernel drivers look to be safe, just be sure
+by initializing the buffer to zero before it is passed to the i2c driver
+so that any future drivers will not have this issue.
 
-> This commit fixes a functional regression introduced by the commit 82f09a637dd3
-> ("HID: ft260: improve error handling of ft260_hid_feature_report_get()")
-> when upon USB disconnect, the FTDI FT260 i2c device is still available within
-> the /dev folder.
-> 
-> In my company's product, where the host USB to FT260 USB connection is
-> hard-wired in the PCB, the issue is not reproducible. To reproduce it, I used
-> the VirtualBox Ubuntu 20.04 VM and the UMFT260EV1A development module for the
-> FTDI FT260 chip:
-> 
-> Plug the UMFT260EV1A module into a USB port and attach it to VM.
-> 
-> The VM shows 2 i2c devices under the /dev:
->     michael@michael-VirtualBox:~$ ls /dev/i2c-*
->     /dev/i2c-0  /dev/i2c-1
-> 
-> The i2c-0 is not related to the FTDI FT260:
->     michael@michael-VirtualBox:~$ cat /sys/bus/i2c/devices/i2c-0/name
->     SMBus PIIX4 adapter at 4100
-> 
-> The i2c-1 is created by hid-ft260.ko:
->     michael@michael-VirtualBox:~$ cat /sys/bus/i2c/devices/i2c-1/name
->     FT260 usb-i2c bridge on hidraw1
-> 
-> Now, detach the FTDI FT260 USB device from VM. We expect the /dev/i2c-1
-> to disappear, but it's still here:
->     michael@michael-VirtualBox:~$ ls /dev/i2c-*
->     /dev/i2c-0  /dev/i2c-1
-> 
-> And the kernel log shows:
->     [  +0.001202] usb 2-2: USB disconnect, device number 3
->     [  +0.000109] ft260 0003:0403:6030.0002: failed to retrieve system status
->     [  +0.000316] ft260 0003:0403:6030.0003: failed to retrieve system status
-> 
-> It happens because the commit 82f09a637dd3 changed the ft260_get_system_config()
-> return logic. This caused the ft260_is_interface_enabled() to exit with error
-> upon the FT260 device USB disconnect, which in turn, aborted the ft260_remove()
-> before deleting the FT260 i2c device and cleaning its sysfs stuff.
-> 
-> This commit restores the FT260 USB removal functionality and improves the
-> ft260_is_interface_enabled() code to handle correctly all chip modes defined
-> by the device interface configuration pins DCNF0 and DCNF1.
-> 
-> Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
-> Acked-by: Aaron Jones (FTDI-UK) <aaron.jones@ftdichip.com>
+Also properly copy the amount of data recvieved to the userspace buffer,
+as pointed out by Dan Carpenter.
 
-Thanks for the respin. Queued in for-5.14/upstream-fixes.
+Reported-by: Eric Dumazet <edumazet@google.com>
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+v2: Add copy_to_user() change as pointed out by Dan
 
+ drivers/i2c/i2c-dev.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index cb64fe649390..77f576e51652 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -141,7 +141,7 @@ static ssize_t i2cdev_read(struct file *file, char __user *buf, size_t count,
+ 	if (count > 8192)
+ 		count = 8192;
+ 
+-	tmp = kmalloc(count, GFP_KERNEL);
++	tmp = kzalloc(count, GFP_KERNEL);
+ 	if (tmp == NULL)
+ 		return -ENOMEM;
+ 
+@@ -150,7 +150,8 @@ static ssize_t i2cdev_read(struct file *file, char __user *buf, size_t count,
+ 
+ 	ret = i2c_master_recv(client, tmp, count);
+ 	if (ret >= 0)
+-		ret = copy_to_user(buf, tmp, count) ? -EFAULT : ret;
++		if (copy_to_user(buf, tmp, ret))
++			ret = -EFAULT;
+ 	kfree(tmp);
+ 	return ret;
+ }
 -- 
-Jiri Kosina
-SUSE Labs
+2.32.0
 
