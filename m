@@ -2,60 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CE53DCBF0
-	for <lists+linux-i2c@lfdr.de>; Sun,  1 Aug 2021 16:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA443DCBF7
+	for <lists+linux-i2c@lfdr.de>; Sun,  1 Aug 2021 16:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbhHAOQA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 1 Aug 2021 10:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
+        id S231945AbhHAOY4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 1 Aug 2021 10:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbhHAOP7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 1 Aug 2021 10:15:59 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB2BC061796
-        for <linux-i2c@vger.kernel.org>; Sun,  1 Aug 2021 07:15:42 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id o7-20020a05600c5107b0290257f956e02dso5731626wms.1
-        for <linux-i2c@vger.kernel.org>; Sun, 01 Aug 2021 07:15:42 -0700 (PDT)
+        with ESMTP id S231577AbhHAOY4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 1 Aug 2021 10:24:56 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D263C06175F
+        for <linux-i2c@vger.kernel.org>; Sun,  1 Aug 2021 07:24:48 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h14so18190712wrx.10
+        for <linux-i2c@vger.kernel.org>; Sun, 01 Aug 2021 07:24:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=DSSOSeXpAOh/bvGQvnSv18BC/U4Hf/zHTlZqJxuOuJs=;
-        b=rVMTXEty6i7bpu9EvtKWM1DN9OjBgUsTdiaevwdrYlm+duam74sNlWCA8J5Zp7bN3y
-         uqYs3XpZr8oDm15EaicJR4EAAK5rHpWwAAa9HcEOELWSvhsGmbIH85vzKB/hnA6Xbyr6
-         OO8DS1H1sUF023+bjAlOGYIQdBPw1KJXq2FJ4x3bq+XgO0tl9bToRMgTOGMF+OdwIkWd
-         sE/nIe+czEt/lxNPJHsfYSq8jibmku8755VAUItR3QebML1to9yW/fHvZtibe1dSWWQY
-         b2YOC2qMooXXXTsw92iQOyIeReMu0OZVL8TEyfCkC5C9ODDPmNPnd+hjyZ5nNUHzbiyb
-         ICRw==
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=M8jq2GSwxUyQHPbFcbHhL19hRaynArgfI2wbsJp+rRM=;
+        b=ms8DDCHxgHTgTL4xhcrbDL9/wkqiNPnyc+i/yVe+U68xwTH1JkzUh2cE1m8RSlRcA8
+         X2LPnsfye4ennPOFOhFo8AISry+ViECtmZ/ibn1yWBmFi8W270asj++gL/okck8Id0pM
+         92BJbnS9aQftFAvcU/65icFXBbZbJkMSJeN4okllPSF+uBu2al9ZiB0KLJNplbq1IkIT
+         7Nc6ptQCgRIi/ylSaSrNqS6CfvOT8UkYh2xqj1R0pEwAFQmABD42vx/tlmsFoHXhS6+a
+         MGiUUu3esuCshGNJLqzGH+Fbwu7m+6BpxzCmkJgwL6Q9ZwCAkHKrXASFoaJgUADhF1ds
+         SPKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=DSSOSeXpAOh/bvGQvnSv18BC/U4Hf/zHTlZqJxuOuJs=;
-        b=iOLJV/AFiGmgiqbeucEgCraWrHefLPTv+nF2N05qVhvZr034YQq1x+gq5dzL9AtAkw
-         fL+3XmTC2aMxPlj8A+JVHYcuj4We9ijEz3h3qMP/mAAvzkHRzhCm/0m18SdjUj65flvz
-         iF8o9hpMDpG6890g1kndD0zjxZEx/I0k5PIst5IH06EuKObT6na8iuLlZW8LW12HcmGQ
-         g/daX8bKjbge0cYTz+Vi86qjsvirIY5CgS+YjkP3JwrO9YXP/4sQUF5kgTdOfhBlJgOA
-         p46I9OU2kvKW0d78jmo/RdLN7CEpvLLQ66UM9f9j+HMo/kLoTn9Af6pRyH1juJJrw3Kn
-         ZH4g==
-X-Gm-Message-State: AOAM5325f7mn76M4VdWZUwUAW1dUPPPoXqABIudNx8eSMctngkmA+SM0
-        RSIqPB+PsrhIXWK08B8ir84ZjmGaxXQu1w==
-X-Google-Smtp-Source: ABdhPJxP/8sTyeLAxSn2x+ySMSQKB6YhTavFxVLkAPMZ2JafcIQbT9PJW1+mhywXiPkdnILZXLbGaQ==
-X-Received: by 2002:a1c:ed0a:: with SMTP id l10mr12344649wmh.151.1627827341121;
-        Sun, 01 Aug 2021 07:15:41 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=M8jq2GSwxUyQHPbFcbHhL19hRaynArgfI2wbsJp+rRM=;
+        b=kg9YaGn8DNJjaDTFXRvghd70Xvy22gJxlvym4s8jUpTm4B2ggYA9K+YsTbs5boc6iA
+         ih9jQjSS823ryrjdUR1BTh+9hN42yuokXGZHg0hrt97ITQ2xJs53L6HVn6Xb3GcqhdDc
+         vrkweUKMTYjXAjngwKy+QrXaH7d9IDhwoK9XrQKwG0bW+8JuFaVHODc7m7KZ2kkRMlYn
+         apr8D5MBbL7PKjH/iMX2mVPLgASTBMYRWSIGoSk9e8ILS/TLjyOl7pHeYoY97nLgUm42
+         pRExj+pf6Bn62L4+nlTSnTO0P4WRxeOR1WooW1V2j6bItKJklMHqlKf4HXo7mHLojWr2
+         lzTg==
+X-Gm-Message-State: AOAM532t9WQpRe8/lDh93BEctjSjzpD3wYSQL7REaevr+JvHYwF0M/GZ
+        1kWZAsu+AKvjU7yp0C4qPuWEtwirtaB5AQ==
+X-Google-Smtp-Source: ABdhPJzn4ztkBn4/Sa2p6xm1+MFmTPki0WPuWQm7U4YhTIpRcLdDzFU1sZhGrJSR9H641xr0Cnt3hg==
+X-Received: by 2002:adf:e5cf:: with SMTP id a15mr12934920wrn.362.1627827885879;
+        Sun, 01 Aug 2021 07:24:45 -0700 (PDT)
 Received: from ?IPv6:2003:ea:8f10:c200:9d9e:757:f317:c524? (p200300ea8f10c2009d9e0757f317c524.dip0.t-ipconnect.de. [2003:ea:8f10:c200:9d9e:757:f317:c524])
-        by smtp.googlemail.com with ESMTPSA id j14sm8049644wrr.16.2021.08.01.07.15.40
+        by smtp.googlemail.com with ESMTPSA id i7sm8509841wre.64.2021.08.01.07.24.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Aug 2021 07:15:40 -0700 (PDT)
+        Sun, 01 Aug 2021 07:24:45 -0700 (PDT)
+Subject: [PATCH 01/10] i2c: i801: Don't call pm_runtime_allow
+From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>
 Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH 00/10] i2c: i801: Series with improvements
-Message-ID: <7a1581de-7566-15da-d1af-08cbf8c5e46f@gmail.com>
-Date:   Sun, 1 Aug 2021 16:15:34 +0200
+References: <7a1581de-7566-15da-d1af-08cbf8c5e46f@gmail.com>
+Message-ID: <c0eeddf6-f630-d18b-cdae-0d74ed095f9c@gmail.com>
+Date:   Sun, 1 Aug 2021 16:16:56 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <7a1581de-7566-15da-d1af-08cbf8c5e46f@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -63,23 +66,36 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This series includes a number of improvements to the i801 driver.
+Drivers should not call pm_runtime_allow(), see
+Documentation/power/pci.rst. Therefore remove the call and leave this
+to user space. Also remove the not needed call to pm_runtime_forbid().
 
-Heiner Kallweit (10):
-  i2c: i801: Don't call pm_runtime_allow
-  i2c: i801: Improve disabling runtime pm
-  i2c: i801: Make p2sb_spinlock a mutex
-  i2c: i801: Remove not needed debug message
-  i2c: i801: Improve is_dell_system_with_lis3lv02d
-  i2c: i801: Remove not needed check for PCI_COMMAND_INTX_DISABLE
-  i2c: i801: Improve i801_acpi_probe/remove functions
-  i2c: i801: Improve i801_add_mux
-  i2c: i801: Improve register_dell_lis3lv02d_i2c_device
-  i2c: i801: Improve handling platform data for tco device
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 2 --
+ 1 file changed, 2 deletions(-)
 
- drivers/i2c/busses/i2c-i801.c | 138 +++++++++++-----------------------
- 1 file changed, 44 insertions(+), 94 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 92ec291c0..362e74761 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1891,7 +1891,6 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	pm_runtime_set_autosuspend_delay(&dev->dev, 1000);
+ 	pm_runtime_use_autosuspend(&dev->dev);
+ 	pm_runtime_put_autosuspend(&dev->dev);
+-	pm_runtime_allow(&dev->dev);
+ 
+ 	return 0;
+ }
+@@ -1900,7 +1899,6 @@ static void i801_remove(struct pci_dev *dev)
+ {
+ 	struct i801_priv *priv = pci_get_drvdata(dev);
+ 
+-	pm_runtime_forbid(&dev->dev);
+ 	pm_runtime_get_noresume(&dev->dev);
+ 
+ 	i801_disable_host_notify(priv);
 -- 
 2.32.0
+
 
