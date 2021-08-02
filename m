@@ -2,74 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB893DCF5F
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Aug 2021 06:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03363DD60C
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Aug 2021 14:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbhHBEY0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Aug 2021 00:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbhHBEYV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Aug 2021 00:24:21 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AFBC0617B0
-        for <linux-i2c@vger.kernel.org>; Sun,  1 Aug 2021 21:24:10 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id b7so22691904edu.3
-        for <linux-i2c@vger.kernel.org>; Sun, 01 Aug 2021 21:24:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=FtyL1jenxhHoD0FEqr0JzEzar9WxjQ0aFEwPIjOui/KxHqjdRIaWw+qc9fVrqT7/Dn
-         Pnh35Va41LybAL6U8YkeIBgROe6j/64zDWESXr3a3yRfbQQPGRB9fNiPFd+zLtRJzUIN
-         QuzzTY5SkBKHMhw3aNm828s4szNx+qezVfjbXBb1AnLosRqM3hZLsmXFs11UFe9XwQd0
-         8wSmR+hXWoecdn7C1dRJ3raMOO2OzRp8To/v4OIIenhLUR2Xi2bEwQKHQsPiMZ9RJ/f/
-         /P5G34L+RYG0gvY4mQKUVcv9jgYngramQoP+XViWVUuAojxufRmPTkFAnPt7xVda61k1
-         G8fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=CNPa9xahLYKPIy8C4OeIZDbLSVyNOk1V7wMl/5c3YWDxubd6n67l5DaAhikOxZ2cIE
-         Zw4pKL4hyxjZ2MhxuXi3frSVX7IuT7zjneW51AhGunhANBjoAly7HroiRcmnwlSd6ez6
-         9m2qaa0setBxexrzAY6PYhOFIexpPem766uxrTtptBp/E99MeKhhAqnwFsMTrlNvRHSd
-         QreTIaEpSlbG9vvXInH89Z6mda9ljn7FiJe7Ngkb0MnY4j40AvBBvkWtTNABckRFdeI1
-         bIOPdPdjWSI1Mc1TdbNLUNuYd9HJF2DI6seoxZg8KKOlZLxNTtzSBRHMzuen64s8eycV
-         BVnQ==
-X-Gm-Message-State: AOAM532DOKFE7L6y+t35KRr+3wxYsm++Tp1XvJNCgTiQjwtnsrqAAQlX
-        nVVXfjGhlo7macB+7zgN445+uhmNfmg31b/SFw8=
-X-Google-Smtp-Source: ABdhPJzys5yCwXnLOHH4NsCIcKA9f726GMnAOsN9NLlhSmyZNb7UhzU0IEwJ6FYKksyg3UeOKVwrbLA6pAJm2hMlOV0=
-X-Received: by 2002:aa7:c0d1:: with SMTP id j17mr16890014edp.217.1627878249276;
- Sun, 01 Aug 2021 21:24:09 -0700 (PDT)
+        id S233730AbhHBMyB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 Aug 2021 08:54:01 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:53702 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233688AbhHBMyA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Aug 2021 08:54:00 -0400
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C109521FDC;
+        Mon,  2 Aug 2021 12:53:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1627908830; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VdFhtn57yPP2EIBIBkmFa7iqmG16GZMqN7QHTwaZQA8=;
+        b=gq7IyBQ+SFEtioP87J/oAmy+7WA1ZiUBVj6WKYwCtF7Rx1REGhu1ugqo8sMm7G8TEEffEb
+        1Tm2qmTST7V4VpFtGe4OBptQOFhlsmEiuaHSyTshaAzp7rf42lGFUWr07wKXla+sToqzAf
+        0C437JzPmql+8eoS5CaKXqDf9h4KwbU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1627908830;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VdFhtn57yPP2EIBIBkmFa7iqmG16GZMqN7QHTwaZQA8=;
+        b=NhU65Tg01hJOp/OWhYW5H5A0F3YfIx473GEoYr72JW7Q2QS3DR2njV6oTOmFySdr0+X1zZ
+        c7o43MjpP9iYmaCQ==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 8E87D13983;
+        Mon,  2 Aug 2021 12:53:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id RfFbIN7qB2GdWwAAGKfGzw
+        (envelope-from <jdelvare@suse.de>); Mon, 02 Aug 2021 12:53:50 +0000
+Date:   Mon, 2 Aug 2021 14:53:47 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 01/10] i2c: i801: Don't call pm_runtime_allow
+Message-ID: <20210802145347.605ce8d5@endymion>
+In-Reply-To: <c0eeddf6-f630-d18b-cdae-0d74ed095f9c@gmail.com>
+References: <7a1581de-7566-15da-d1af-08cbf8c5e46f@gmail.com>
+        <c0eeddf6-f630-d18b-cdae-0d74ed095f9c@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:24:08
- -0700 (PDT)
-Reply-To: ablahikazabl67@gmail.com
-From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
-Date:   Mon, 2 Aug 2021 05:24:08 +0100
-Message-ID: <CAKwBCXuzDf40zPCct3xg8L9LubxzXWgC230fQ80GXrmg_Yuttw@mail.gmail.com>
-Subject: More Authentic Information
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Heiner,
+
+On Sun, 01 Aug 2021 16:16:56 +0200, Heiner Kallweit wrote:
+> Drivers should not call pm_runtime_allow(), see
+> Documentation/power/pci.rst. Therefore remove the call and leave this
+> to user space. Also remove the not needed call to pm_runtime_forbid().
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 92ec291c0..362e74761 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -1891,7 +1891,6 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  	pm_runtime_set_autosuspend_delay(&dev->dev, 1000);
+>  	pm_runtime_use_autosuspend(&dev->dev);
+>  	pm_runtime_put_autosuspend(&dev->dev);
+> -	pm_runtime_allow(&dev->dev);
+>  
+>  	return 0;
+>  }
+> @@ -1900,7 +1899,6 @@ static void i801_remove(struct pci_dev *dev)
+>  {
+>  	struct i801_priv *priv = pci_get_drvdata(dev);
+>  
+> -	pm_runtime_forbid(&dev->dev);
+>  	pm_runtime_get_noresume(&dev->dev);
+>  
+>  	i801_disable_host_notify(priv);
+
+These calls were added by Jarkko (Cc'd) and I'm not familiar with power
+management so I'll need an explicit ack from him before I can accept
+this patch.
+
 -- 
-Dear Partner,
-
-I am soliciting your partnership to relocate $12.5 Million to your
-country for investment on my behalf and you will be entitled to 30% of
-the sum once the transaction is successful made.
-
-Please indicate your genuine interest if you are capable so that i
-will send you the authentic details and documents of the transaction
-in awareness with some of my fellow Directors in the bank.
-
-If you are interested, here is my private Email address:
-(ablahikazabl67@gmail.com)
-For more authentic and legit information.
-
-
-Regards :  Abdoulahi Kazim
+Jean Delvare
+SUSE L3 Support
