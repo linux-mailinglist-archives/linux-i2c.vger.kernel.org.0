@@ -2,157 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1623DECC9
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Aug 2021 13:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC3C3DF203
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Aug 2021 18:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236334AbhHCLoz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Aug 2021 07:44:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35108 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236027AbhHCLoS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 3 Aug 2021 07:44:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C0D9E60F56;
-        Tue,  3 Aug 2021 11:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627991047;
-        bh=6QtEQO6FOU2PYeSDEe9WRguwYtnQCN8FsNPIhfcXRRE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h+UQZisi92uG3KAd+Rlx9yizAIFnNVqD7mAZKgaflVzybpoaoCYJH32RkwlxA/ALO
-         ofRaNX3PskcUJup7hjQ1Le6+74JJ+BY8kK5ViLQooesdKX82lqc8Tn8F9DjycoxLJ/
-         Jc+JDzoYQ9MMFTQLPgVeuZuCSnZbAk9eFFH105FVHB1lzZB9mTlik8SrCEJufKzHul
-         geLLQrBXL3D28zuEuJTeCpW+P+ldW5bNwhKjLZaxA26ahBN1WHhgQJ81utHqJ5fu/9
-         uqIFevPU6mmVJZTEKBqfzEi6XXcnjgraxltuKRzOfU5goUtWKgk8ZF0nJ9D8YXNjTm
-         +4ubMIqIhOrpw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Zaidman <michael.zaidman@gmail.com>,
-        Aaron Jones <aaron.jones@ftdichip.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 11/11] HID: ft260: fix device removal due to USB disconnect
-Date:   Tue,  3 Aug 2021 07:43:52 -0400
-Message-Id: <20210803114352.2252544-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210803114352.2252544-1-sashal@kernel.org>
-References: <20210803114352.2252544-1-sashal@kernel.org>
+        id S229762AbhHCQBM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Aug 2021 12:01:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31497 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230362AbhHCQBL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 Aug 2021 12:01:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1628006460;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q9zI909jUmBKlCDhY1zjUy3yeKmNmxzBA19zg0e+vEg=;
+        b=KnDKZfBQ8rs9XquH/LtjMOU9fi0ap8Di0PorB4NOozF7hX/pL/k2AFhRu8ITObo9Z55d2W
+        sLzwugv251xaN35//T1XdQKdksueADpBvdcnRV7phu2DcGB26g5QbIzPsYpYMFKSCJ1r/p
+        IvbxkftKH+F5CPvkCaWfgJQcomjIZ1M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-500-ifHoCoGiPO6cHAfR4C6mvQ-1; Tue, 03 Aug 2021 12:00:49 -0400
+X-MC-Unique: ifHoCoGiPO6cHAfR4C6mvQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 865FE1009600;
+        Tue,  3 Aug 2021 16:00:47 +0000 (UTC)
+Received: from x1.localdomain (unknown [10.39.193.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AB53A60C05;
+        Tue,  3 Aug 2021 16:00:45 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mark Gross <mgross@linux.intel.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH 0/4] i2c/pdx86: Add an i2c_acpi_client_count() helper function
+Date:   Tue,  3 Aug 2021 18:00:40 +0200
+Message-Id: <20210803160044.158802-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Michael Zaidman <michael.zaidman@gmail.com>
+Hi All,
 
-[ Upstream commit db8d3a21275c807a4047a21bde3b57d49ca55d82 ]
+This patch-set adds a new i2c_acpi_client_count() helper function
+to remove a bunch of code-duplication.
 
-This commit fixes a functional regression introduced by the commit 82f09a637dd3
-("HID: ft260: improve error handling of ft260_hid_feature_report_get()")
-when upon USB disconnect, the FTDI FT260 i2c device is still available within
-the /dev folder.
+Since 3 of the 4 patches touch files under drivers/platform/x86 and
+also since the drivers/platform/x86/dual_accel_detect.h file is new
+in pdx86/for-next I believe that it would be best to just merge the
+entire series through my pdx86 tree.
 
-In my company's product, where the host USB to FT260 USB connection is
-hard-wired in the PCB, the issue is not reproducible. To reproduce it, I used
-the VirtualBox Ubuntu 20.04 VM and the UMFT260EV1A development module for the
-FTDI FT260 chip:
+Mika + WSA, may I have your ack for merging the entire series through
+the pdx86 tree (or please let me know if you want to proceed in a
+different way) ?
 
-Plug the UMFT260EV1A module into a USB port and attach it to VM.
+Regards,
 
-The VM shows 2 i2c devices under the /dev:
-    michael@michael-VirtualBox:~$ ls /dev/i2c-*
-    /dev/i2c-0  /dev/i2c-1
+Hans
 
-The i2c-0 is not related to the FTDI FT260:
-    michael@michael-VirtualBox:~$ cat /sys/bus/i2c/devices/i2c-0/name
-    SMBus PIIX4 adapter at 4100
 
-The i2c-1 is created by hid-ft260.ko:
-    michael@michael-VirtualBox:~$ cat /sys/bus/i2c/devices/i2c-1/name
-    FT260 usb-i2c bridge on hidraw1
+Hans de Goede (4):
+  i2c: acpi: Add an i2c_acpi_client_count() helper function
+  platform/x86: dual_accel_detect: Use the new i2c_acpi_client_count()
+    helper
+  platform/x86: i2c-multi-instantiate: Use the new
+    i2c_acpi_client_count() helper
+  platform/x86: intel_cht_int33fe: Use the new i2c_acpi_client_count()
+    helper
 
-Now, detach the FTDI FT260 USB device from VM. We expect the /dev/i2c-1
-to disappear, but it's still here:
-    michael@michael-VirtualBox:~$ ls /dev/i2c-*
-    /dev/i2c-0  /dev/i2c-1
+ drivers/i2c/i2c-core-acpi.c                   | 32 +++++++++++++++++++
+ drivers/platform/x86/dual_accel_detect.h      | 26 +--------------
+ drivers/platform/x86/i2c-multi-instantiate.c  | 27 +---------------
+ .../intel/int33fe/intel_cht_int33fe_common.c  | 29 +----------------
+ include/linux/i2c.h                           |  5 +++
+ 5 files changed, 40 insertions(+), 79 deletions(-)
 
-And the kernel log shows:
-    [  +0.001202] usb 2-2: USB disconnect, device number 3
-    [  +0.000109] ft260 0003:0403:6030.0002: failed to retrieve system status
-    [  +0.000316] ft260 0003:0403:6030.0003: failed to retrieve system status
-
-It happens because the commit 82f09a637dd3 changed the ft260_get_system_config()
-return logic. This caused the ft260_is_interface_enabled() to exit with error
-upon the FT260 device USB disconnect, which in turn, aborted the ft260_remove()
-before deleting the FT260 i2c device and cleaning its sysfs stuff.
-
-This commit restores the FT260 USB removal functionality and improves the
-ft260_is_interface_enabled() code to handle correctly all chip modes defined
-by the device interface configuration pins DCNF0 and DCNF1.
-
-Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
-Acked-by: Aaron Jones (FTDI-UK) <aaron.jones@ftdichip.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hid/hid-ft260.c | 23 +++++++----------------
- 1 file changed, 7 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
-index f43a8406cb9a..e73776ae6976 100644
---- a/drivers/hid/hid-ft260.c
-+++ b/drivers/hid/hid-ft260.c
-@@ -742,7 +742,7 @@ static int ft260_is_interface_enabled(struct hid_device *hdev)
- 	int ret;
- 
- 	ret = ft260_get_system_config(hdev, &cfg);
--	if (ret)
-+	if (ret < 0)
- 		return ret;
- 
- 	ft260_dbg("interface:  0x%02x\n", interface);
-@@ -754,23 +754,16 @@ static int ft260_is_interface_enabled(struct hid_device *hdev)
- 	switch (cfg.chip_mode) {
- 	case FT260_MODE_ALL:
- 	case FT260_MODE_BOTH:
--		if (interface == 1) {
-+		if (interface == 1)
- 			hid_info(hdev, "uart interface is not supported\n");
--			return 0;
--		}
--		ret = 1;
-+		else
-+			ret = 1;
- 		break;
- 	case FT260_MODE_UART:
--		if (interface == 0) {
--			hid_info(hdev, "uart is unsupported on interface 0\n");
--			ret = 0;
--		}
-+		hid_info(hdev, "uart interface is not supported\n");
- 		break;
- 	case FT260_MODE_I2C:
--		if (interface == 1) {
--			hid_info(hdev, "i2c is unsupported on interface 1\n");
--			ret = 0;
--		}
-+		ret = 1;
- 		break;
- 	}
- 	return ret;
-@@ -1004,11 +997,9 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 
- static void ft260_remove(struct hid_device *hdev)
- {
--	int ret;
- 	struct ft260_device *dev = hid_get_drvdata(hdev);
- 
--	ret = ft260_is_interface_enabled(hdev);
--	if (ret <= 0)
-+	if (!dev)
- 		return;
- 
- 	sysfs_remove_group(&hdev->dev.kobj, &ft260_attr_group);
 -- 
-2.30.2
+2.31.1
 
