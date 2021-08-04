@@ -2,196 +2,176 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AD23E0603
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Aug 2021 18:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36113E0876
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Aug 2021 21:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbhHDQfm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 4 Aug 2021 12:35:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54516 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229912AbhHDQfl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 4 Aug 2021 12:35:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EE35C60FC4;
-        Wed,  4 Aug 2021 16:35:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628094929;
-        bh=ZiiDEhR2LOIcPd/6Phi/U+sJK+O+1mkNZ8aCcbOJpT4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hl519HE5lVVI3Wla/X7yRIbgWlUc5zA4sXTYFcALz+uJCqLilPHkN8ti+Y88gDdTP
-         62lU0FOV4pCoVBtqi+NQh4re09ohqqsBhmNTTOKwZZ+ChC1gRQk/ddz8+/wpx9RhPU
-         HouPxjV0s69Fx8yiakwjzFR6dNaC0ZL8vYapnax8xbM5L05lx8jg8DlI0pf2t50P2s
-         sbk+HeQQYF+msf+0gaH0vvhE1rw8FRFmsVI8JgTNlgysTh9rbsShlMovUubCjW0sO8
-         UkDPbYxa3nVNi9YW3thntAr++SsGGbKg9E1JwndNY9PDQvskv5RCJIiCOoGGunptNd
-         S97U2y4Y/9jfg==
-Received: by mail-ed1-f45.google.com with SMTP id y12so4333266edo.6;
-        Wed, 04 Aug 2021 09:35:28 -0700 (PDT)
-X-Gm-Message-State: AOAM530yfQUkPmKnlsLgHINJRSs1hUdjVsgnaCOvnKjbjORXKUcAqdIC
-        bGiJP9ZRPBvoZ76y/ShvOmghfyCXkmjP/mzrHA==
-X-Google-Smtp-Source: ABdhPJyLltRHiJUHDShCQfQpCNb3aMYPOGVtFSrX1w/GZ2S95G11LI5x9+Qyip9GIogZrHXjJXyVl+09iOfK8fUZOiI=
-X-Received: by 2002:a05:6402:291d:: with SMTP id ee29mr712131edb.289.1628094927462;
- Wed, 04 Aug 2021 09:35:27 -0700 (PDT)
+        id S237429AbhHDTDE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 4 Aug 2021 15:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230063AbhHDTDE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 4 Aug 2021 15:03:04 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70F9C0613D5
+        for <linux-i2c@vger.kernel.org>; Wed,  4 Aug 2021 12:02:50 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id b11so3374330wrx.6
+        for <linux-i2c@vger.kernel.org>; Wed, 04 Aug 2021 12:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Klx1ZFMODRxUANh91mIqCOT+FEGuSaGimuCwXElm9mc=;
+        b=DRTO5tOhszARV3nieByrccQqYDdRtoVJgA8FoRIg+JlLqdPOfNk/BmgKP2AnQqqbW4
+         Fdz7VREU7I+mTlYQQuQFZbLy++M2dcO5I21purie2rcljDHIpHmdPFhS/2FFAy6g0VG2
+         fVxi6+DY6IsxcK/CMRZVkoDrPZYpKXCjBgY/VxT9ypHS/s4Xn6m23Q8030boDwv+IkJI
+         XRXoyyoPRxLBsuhKxfkRiSXhhzY7M6wCUvHWcR4KY1bOnZ2BgovA2PJhPVD421zXCak2
+         sbsKVY5QU3fM4mKg/HZzuVxwoigAeHq1IAzZXDVOIQXZhTmsz7iWKYlA5HLOgMaeCXW0
+         GXMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Klx1ZFMODRxUANh91mIqCOT+FEGuSaGimuCwXElm9mc=;
+        b=AtA3EHHUES8xXReDASnaMvPtzMKXgWhiZv6LXKBWnPHa15PKTUhkO8OoGMjI7mAhZc
+         y/wfzQeqwsSE3K9j9nu5XEFYV5YQbOWr7xCe14XFsLRx4woyGH5I5QME2+RHUlKi1hPH
+         8JIcQd4YjhF0Gl8hVbul+nNtkfgAUn5292wXNIwwTDTXx/dWlSILSVMkKo/CJ6r4HFKP
+         HcH5n4YvW3R6rrLOrBFrXWjM1DVDMqjCtirg3fmkLwted65wOUlvmou6dzqGOWar8JTN
+         Dk2PGvB5PHZOnxMUTsoZgSD/OBEbHVbTiz7+8WcQ8Kpa6yznRAKb/qnKSLefW3Vyuiax
+         Onig==
+X-Gm-Message-State: AOAM532A9sCtiH5nDf8m9Emtw2iXGQWi+BcUlJsF6y9AqCLUhXY9Ns8B
+        qBKkTn5Y538PX5zttCuNN3zWfXvOi9mxqA==
+X-Google-Smtp-Source: ABdhPJyttZ4CYoSzt06aqwMp7RqP3bp5gmQLy6LVwZ7au9vgqzSMYb5LoJpneF4avg4TJz4qnzCdMQ==
+X-Received: by 2002:a5d:4cc6:: with SMTP id c6mr787108wrt.383.1628103769300;
+        Wed, 04 Aug 2021 12:02:49 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8f10:c200:1c9b:2aa1:8778:a6c? (p200300ea8f10c2001c9b2aa187780a6c.dip0.t-ipconnect.de. [2003:ea:8f10:c200:1c9b:2aa1:8778:a6c])
+        by smtp.googlemail.com with ESMTPSA id x12sm3608393wrt.35.2021.08.04.12.02.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Aug 2021 12:02:48 -0700 (PDT)
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Jean Delvare <jdelvare@suse.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+References: <7a1581de-7566-15da-d1af-08cbf8c5e46f@gmail.com>
+ <c0eeddf6-f630-d18b-cdae-0d74ed095f9c@gmail.com>
+ <20210802145347.605ce8d5@endymion>
+ <b0bca52e-2bbc-18ef-5134-d5b6fe9df2bf@gmail.com>
+ <68929f0f-a44e-6617-3e4e-dcdb9933d856@linux.intel.com>
+ <CAJZ5v0jdNFDJr8ZrbU-jp53RWsZxY7+KRLF0kqmU+pxzXu6RmA@mail.gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH 01/10] i2c: i801: Don't call pm_runtime_allow
+Message-ID: <139a63dd-e14e-56d1-9fd1-408047831aea@gmail.com>
+Date:   Wed, 4 Aug 2021 21:02:39 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20210727160315.15575-1-eajames@linux.ibm.com> <20210727160315.15575-3-eajames@linux.ibm.com>
- <YQhZimPDbNJk5nbR@robh.at.kernel.org> <29d72be98ebe3e5761f4c3da7b4daf2f05fbbf3b.camel@linux.ibm.com>
- <209d9f68-e6c4-68c9-d495-d7e3f5050440@axentia.se> <CAL_JsqLFC7vjMvZ3o6ey=thf=ZHsqApdT69e6akLvs0ceb8m1w@mail.gmail.com>
- <8b4fc37178449e99c2f7a9d23429b7fb4bc13de4.camel@linux.ibm.com>
-In-Reply-To: <8b4fc37178449e99c2f7a9d23429b7fb4bc13de4.camel@linux.ibm.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 4 Aug 2021 10:35:14 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJf_9QJf=tvb6r5xWTe+idAEB+sMyUa-f4Ts-De90FyCQ@mail.gmail.com>
-Message-ID: <CAL_JsqJf_9QJf=tvb6r5xWTe+idAEB+sMyUa-f4Ts-De90FyCQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] i2c: mux: pca954x: Support multiple devices on a
- single reset line
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJZ5v0jdNFDJr8ZrbU-jp53RWsZxY7+KRLF0kqmU+pxzXu6RmA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Aug 4, 2021 at 9:12 AM Eddie James <eajames@linux.ibm.com> wrote:
->
-> On Wed, 2021-08-04 at 07:28 -0600, Rob Herring wrote:
-> > On Wed, Aug 4, 2021 at 1:50 AM Peter Rosin <peda@axentia.se> wrote:
-> > > On 2021-08-02 23:51, Eddie James wrote:
-> > > > On Mon, 2021-08-02 at 14:46 -0600, Rob Herring wrote:
-> > > > > On Tue, Jul 27, 2021 at 11:03:15AM -0500, Eddie James wrote:
-> > > > > > Some systems connect several PCA954x devices to a single
-> > > > > > reset
-> > > > > > GPIO. For
-> > > > > > these devices to get out of reset and probe successfully,
-> > > > > > each
-> > > > > > device must
-> > > > > > defer the probe until the GPIO has been hogged. Accomplish
-> > > > > > this by
-> > > > > > attempting to grab a new "reset-shared-hogged" devicetree
-> > > > > > property,
-> > > > > > but
-> > > > > > expect it to fail with EPROBE_DEFER or EBUSY.
-> > > > > >
-> > > > > > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> > > > > > ---
-> > > > > >  drivers/i2c/muxes/i2c-mux-pca954x.c | 46
-> > > > > > +++++++++++++++++++++++
-> > > > > > ------
-> > > > > >  1 file changed, 37 insertions(+), 9 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c
-> > > > > > b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> > > > > > index 4ad665757dd8..376b54ffb590 100644
-> > > > > > --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-> > > > > > +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> > > > > > @@ -434,15 +434,43 @@ static int pca954x_probe(struct
-> > > > > > i2c_client
-> > > > > > *client,
-> > > > > >     i2c_set_clientdata(client, muxc);
-> > > > > >     data->client = client;
-> > > > > >
-> > > > > > -   /* Reset the mux if a reset GPIO is specified. */
-> > > > > > -   gpio = devm_gpiod_get_optional(dev, "reset",
-> > > > > > GPIOD_OUT_HIGH);
-> > > > > > -   if (IS_ERR(gpio))
-> > > > > > -           return PTR_ERR(gpio);
-> > > > > > -   if (gpio) {
-> > > > > > -           udelay(1);
-> > > > > > -           gpiod_set_value_cansleep(gpio, 0);
-> > > > > > -           /* Give the chip some time to recover. */
-> > > > > > -           udelay(1);
-> > > > > > +   /*
-> > > > > > +    * Grab the shared, hogged gpio that controls the mux
-> > > > > > reset. We
-> > > > > > expect
-> > > > > > +    * this to fail with either EPROBE_DEFER or EBUSY. The
-> > > > > > only
-> > > > > > purpose of
-> > > > > > +    * trying to get it is to make sure the gpio controller
-> > > > > > has
-> > > > > > probed up
-> > > > > > +    * and hogged the line to take the mux out of reset,
-> > > > > > meaning
-> > > > > > that the
-> > > > > > +    * mux is ready to be probed up. Don't try and set the
-> > > > > > line any
-> > > > > > way; in
-> > > > > > +    * the event we actually successfully get the line (if it
-> > > > > > wasn't
-> > > > > > +    * hogged) then we immediately release it, since there is
-> > > > > > no
-> > > > > > way to
-> > > > > > +    * sync up the line between muxes.
-> > > > > > +    */
-> > > > > > +   gpio = gpiod_get_optional(dev, "reset-shared-hogged", 0);
-> > > > > > +   if (IS_ERR(gpio)) {
-> > > > > > +           ret = PTR_ERR(gpio);
-> > > > > > +           if (ret != -EBUSY)
-> > > > > > +                   return ret;
-> > > > >
-> > > > > Why can't you just do this with the existing 'reset-gpios'
-> > > > > property?
-> > > > > What's the usecase where you'd want to fail probe because EBUSY
-> > > > > other
-> > > > > than an error in your DT.
-> > > >
-> > > > Hi, thanks for the reply.
-> > > >
-> > > > Are you suggesting I use "reset-gpios" and change the driver to
-> > > > ignore
-> > > > EBUSY? I don't know any other usecase, I just didn't think it
-> > > > would be
-> > > > acceptable to ignore EBUSY on that, but perhaps it is a better
-> > > > solution.
-> > >
-> > > Hi!
-> > >
-> > > From a device-tree point of view that might seem simple. But it
-> > > becomes
-> > > a mess when several driver instances need to coordinate. If one
-> > > instance
-> > > is grabbing the reset line but is then stalled while other
-> > > instances
-> > > race ahead, they might be clobbered by a late reset from the
-> > > stalled
-> > > first instance.
->
-> Hi,
->
-> Well this isn't a concern if the line is hogged - once it's hogged it
-> shouldn't change, and all driver instances should get the same thing -
-> EBUSY. Before it's hogged all driver instances should get EPROBE_DEFER.
->
-> > >
-> > > And while it might be possible to arrange the code such that those
-> > > dragons
-> > > are dodged and that the reset is properly coordinated, what if the
-> > > gpio is
-> > > supposed to be shared with some other totally unrelated driver? It
-> > > might
-> > > seem to work when everything is normal, but as soon as anything out
-> > > of the
-> > > ordinary happens, all bets are off. I expect subtle problems in the
-> > > furture.
->
-> Unless another driver uses the non-exclusive flag (which can cause many
-> subtle problems in all sorts of areas anyway), the GPIO shouldn't
-> change. Now, the driver that does the GPIO hogging might go away, which
-> definitely would be a problem. I suppose I feel it's an error path
-> anyway, so all bets are off for dependent devices.
->
-> >
-> > All of this is true, but a different reset GPIO property name does
-> > nothing to solve it.
->
-> This is part of why I chose a new property that specifically indicates
-> that it's hogged.
+On 04.08.2021 16:06, Rafael J. Wysocki wrote:
+> On Wed, Aug 4, 2021 at 3:36 PM Jarkko Nikula
+> <jarkko.nikula@linux.intel.com> wrote:
+>>
+>> Hi
+>>
+>> On 8/2/21 7:31 PM, Heiner Kallweit wrote:
+>>> On 02.08.2021 14:53, Jean Delvare wrote:
+>>>> Hi Heiner,
+>>>>
+>>>> On Sun, 01 Aug 2021 16:16:56 +0200, Heiner Kallweit wrote:
+>>>>> Drivers should not call pm_runtime_allow(), see
+>>>>> Documentation/power/pci.rst. Therefore remove the call and leave this
+>>>>> to user space. Also remove the not needed call to pm_runtime_forbid().
+>>>>>
+>>>>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>>>>> ---
+>>>>>   drivers/i2c/busses/i2c-i801.c | 2 --
+>>>>>   1 file changed, 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+>>>>> index 92ec291c0..362e74761 100644
+>>>>> --- a/drivers/i2c/busses/i2c-i801.c
+>>>>> +++ b/drivers/i2c/busses/i2c-i801.c
+>>>>> @@ -1891,7 +1891,6 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>>>>>     pm_runtime_set_autosuspend_delay(&dev->dev, 1000);
+>>>>>     pm_runtime_use_autosuspend(&dev->dev);
+>>>>>     pm_runtime_put_autosuspend(&dev->dev);
+>>>>> -   pm_runtime_allow(&dev->dev);
+>>>>>
+>>>>>     return 0;
+>>>>>   }
+>>>>> @@ -1900,7 +1899,6 @@ static void i801_remove(struct pci_dev *dev)
+>>>>>   {
+>>>>>     struct i801_priv *priv = pci_get_drvdata(dev);
+>>>>>
+>>>>> -   pm_runtime_forbid(&dev->dev);
+>>>>>     pm_runtime_get_noresume(&dev->dev);
+>>>>>
+>>>>>     i801_disable_host_notify(priv);
+>>>>
+>>>> These calls were added by Jarkko (Cc'd) and I'm not familiar with power
+>>>> management so I'll need an explicit ack from him before I can accept
+>>>> this patch.
+>>>>
+>>> The calls were part of the initial submission for rpm support and supposedly
+>>> just copied from another driver. But fine with me to wait for his feedback.
+>>>
+>> Yes, I'm quite sure I've copied it from another driver :-)
+>>
+>> This patch will cause the device here won't go automatically to D3
+>> before some user space script allows it. E.g
+>>
+>> echo auto > /sys/bus/pci/devices/0000\:00\:1f.3/power/control
+>>
+>> I think this is kind of PM regression with this patch. It's not clear to
+>> me from the Documentation/power/pci.rst why driver should not call the
+>> pm_runtime_allow() and what would be allowed kernel alternative for it.
+> 
+> Please see the comment in local_pci_probe().
+> 
+> Because the PCI bus type is involved in power management, the driver
+> needs to cooperate.
+> 
+>> Rafael: what would be the correct way here to allow runtime PM from the
+>> driver or does it really require some user space script for it?
+> 
+> No, it doesn't.
+> 
 
-I'm not really a fan of GPIO hog stuff and using it here definitely
-seems like a hack. I thought the purpose was for GPIOs not controlled
-elsewhere... Regardless, you still have all the information you need
-in DT already. We don't need to duplicate it. You know it is a hog and
-can also tell it is shared. Information doesn't have to be in the node
-associated with a driver.
+PCI core code includes the following because of historic issues
+with broken ACPI support on some platforms:
 
-Rob
+void pci_pm_init(struct pci_dev *dev)
+{
+	int pm;
+	u16 status;
+	u16 pmc;
+
+	pm_runtime_forbid(&dev->dev);
+	pm_runtime_set_active(&dev->dev);
+	pm_runtime_enable(&dev->dev);
+
+That's why RPM has to be enabled by userspace for PCI devices:
+echo auto > /sys/bus/pci/devices/0000\:00\:1f.3/power/control
+
+Or drivers (that know that they can't be used on one of the broken
+platforms) call pm_runtime_allow(), what however is explicitly
+discouraged.
+
+Not sure whether any of the old broken platforms is still relevant,
+therefore I started a discussion about it, which however ended
+w/o tangible result. See here:
+https://www.spinics.net/lists/linux-pci/msg103281.html
+
+I work around this restriction with the following in an init script,
+not sure how common distro's deal with this.
+
+# enable Runtime PM for all PCI devices
+for i in /sys/bus/pci/devices/*/power/control; do
+        echo auto > $i
+done
