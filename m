@@ -2,83 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A394B3DF69B
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Aug 2021 22:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D85A43DFA24
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Aug 2021 05:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbhHCUtZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Aug 2021 16:49:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33770 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231519AbhHCUtW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 3 Aug 2021 16:49:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 86EFD60EE7;
-        Tue,  3 Aug 2021 20:49:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628023751;
-        bh=KLGGzLOD3Np9VfR+5Y8F+AzhsIE4DQ6jDoU+vHFfdp0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=db1fNMDeV8zb07KGh7nKlFdW5oe0Bv5vJSlHIhqzbpVAa9iaU9dIR59GdySTngk5J
-         85Ns1xkIuFG//n12vekPJreXvM57gRlAxlVykSu+onWHGQlm80DDs688+mb0Xye2Wk
-         mdnuiwg6jz6IO/c62dKRO7cjLC6+rqydd183vMpBqLRqdQ1Cr4cGMHcAUcPtf7UYkx
-         UHX2h/B6l/ZSTXeUKq4a9WyFj3z2wltHccfJQxyHDPc3vlnivlCZrXGlv/j0ulrIzz
-         jlVX1EhQS3/Eauk9uftIZIbpaUVZdY03K7oqdhKqXFrrkxJH00WlM2DGka+Oah0XMt
-         0njvm7IgaDGaw==
-Date:   Tue, 3 Aug 2021 22:49:03 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: highlander: add IRQ check
-Message-ID: <YQmrv+0K3vqFuVG8@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-i2c@vger.kernel.org
-References: <4be958f5-3e6c-e536-9d51-1de8664ccaaa@omp.ru>
+        id S234972AbhHDD4i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 3 Aug 2021 23:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234192AbhHDD4h (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 Aug 2021 23:56:37 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD5FC061798
+        for <linux-i2c@vger.kernel.org>; Tue,  3 Aug 2021 20:56:26 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id j1so1121399pjv.3
+        for <linux-i2c@vger.kernel.org>; Tue, 03 Aug 2021 20:56:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=0ZHYwmuwBB2HtOoKEULFjho6JxP6yZHRiPr37fJbra4=;
+        b=hl3XdlB4jYy+wT1mdMb8yurr9oZXxti9oqh96q80dPuJJF/Yq+NLcAsFU04oNDtSkD
+         /YyxOcvDDixL+wIRumzrx/wtV7hbWudOPV0de0xzY7Ci3OgQYTmX3aby0hACRe7JMytr
+         MAIx2lvf/rhNZ4/sGTlxWkPnjhkDmnPgnprTf/1AQRV12jGmQ0GGTq8zhewY4fGlrpu0
+         s92TpMZXI3V9KbWV1SFxIvMvXpIKcNRfD1EZ133zkkhq7K9S39ejxti1vTlneWC5H4uG
+         dro0H3VInrzzA+lFf4NAm7rJrV9K4PM7/doxeiBvy4E+IE145vm3So/6OVwP7mtlzDY1
+         3Wow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0ZHYwmuwBB2HtOoKEULFjho6JxP6yZHRiPr37fJbra4=;
+        b=L+pBhbQGBUlGZbCIEOUe04jiQKudXAzy58ATwcebHFWQCLC8BhbJ761A/14BWliCRV
+         xS7bc/Ud2RDRtJZUXhjUUej4qdI45/Djj2VITsg6du1LG2MnaQ8c4YNvjA/VrsqXa+Tx
+         2zvwJmaDgsA3xBdviI1P6YW1a05CWvvyOpjv+oqkV+Vs3Mr944U1k8NnQh6CDXXo/atQ
+         V/idezwohGHqqH9IE+tbSBI90V6h8nqRz8HwtoELoIOxdOUm+qCEMHEu3Dwye0oCbqIa
+         95MrwUIqwuTtreEHoNjRCqHjiPa2DpoA89W8sjtbRaWi+WdnFZoCCElypKXtrmdzopLx
+         rYJw==
+X-Gm-Message-State: AOAM533lXEwCKCL6V2495Ai8G5lzbepPG+INYXbeXwNTA6tK70cPJsuM
+        JStdEbqEddd3mV13C4UR12XBEw==
+X-Google-Smtp-Source: ABdhPJyWbX7rhBTYZkB+2/CNdO7HVuodEfPZIWRtTfENeVnwx7K5DDQjjk4B2l/Qr4+ABKbp6VpteQ==
+X-Received: by 2002:a17:902:6a82:b029:12c:58c0:1af3 with SMTP id n2-20020a1709026a82b029012c58c01af3mr39186plk.50.1628049385534;
+        Tue, 03 Aug 2021 20:56:25 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id j15sm736558pfu.171.2021.08.03.20.56.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Aug 2021 20:56:25 -0700 (PDT)
+Date:   Wed, 4 Aug 2021 09:26:23 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Bill Mills <bill.mills@linaro.org>,
+        Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Jie Deng <jie.deng@intel.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH V4 0/5] virtio: Add virtio-device bindings
+Message-ID: <20210804035623.flacrogemvjina3o@vireshk-i7>
+References: <cover.1627362340.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/3MMq3k5gRV9mM1G"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4be958f5-3e6c-e536-9d51-1de8664ccaaa@omp.ru>
+In-Reply-To: <cover.1627362340.git.viresh.kumar@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 27-07-21, 10:53, Viresh Kumar wrote:
+> Hi,
+> 
+> Currently the DT only provides support for following node types for virtio-mmio
+> nodes:
+> 
+>         virtio_mmio@a000000 {
+>                 dma-coherent;
+>                 interrupts = <0x00 0x10 0x01>;
+>                 reg = <0x00 0xa000000 0x00 0x200>;
+>                 compatible = "virtio,mmio";
+>         };
+> 
+> Here, each virtio-mmio corresponds to a virtio-device. But there is no way for
+> other users in the DT to show their dependency on virtio devices.
+> 
+> This patchset provides that support.
+> 
+> The first patch adds virtio-device bindings to allow for device sub-nodes to be
+> present and the second patch updates the virtio core to update the of_node.
+> 
+> Other patches add bindings for i2c and gpio devices.
+> 
+> Tested on x86 with qemu for arm64.
 
---/3MMq3k5gRV9mM1G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Michael,
 
-On Sun, May 30, 2021 at 10:13:45PM +0300, Sergey Shtylyov wrote:
-> The driver is written as if platform_get_irq() returns 0 on errors (while
-> actually it returns a negative error code), blithely passing these error
-> codes to request_irq() (which takes *unsigned* IRQ #) -- which fails with
-> -EINVAL. Add the necessary error check to the pre-existing *if* statement
-> forcing the driver into the polling mode...
->=20
-> Fixes: 4ad48e6ab18c ("i2c: Renesas Highlander FPGA SMBus support")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->=20
+I hope you will be picking this series (Now that it is reviewed by
+others) ? Just so you know, Wolfram needs the 4th patch, 4/5, to base
+the virtio-i2c driver over it and has requested an immutable branch
+for the same.
 
-Applied to for-next, thanks!
+Thanks.
 
-
---/3MMq3k5gRV9mM1G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEJq7oACgkQFA3kzBSg
-KbYMKw//WEkAHET2ZRtZvS5bktZkYNWmc1dZs/kCMw0U+uUj3vSiQtjN57EUvDTs
-i7aAQpH2GlJJgkPQrzHdU979T6C4xm8/h048WE/jO5ziAPcEYpcEzQhwY4E81KWF
-ECeqIgI4jtnlFWVnwRAD30saso0qpc6TRnP4cLdk36O5l/DwUOoG9R94a9NoTdey
-yGSJ5jioJGI+JfvzsxJRpzQi7tumaeMyfJIy/+fFxPE3uQEw9VkfEpExHI8W0XsN
-OukOsPqefmuIf9tSrP3XXOS0UB9J+RDoNjglwPsNGqgcIAostTtuio4nG+urR4EQ
-R4x8MGLqT9Z1PndVHhgQNzMMo3dzuaFookoda5OcY6hi0LwB14fkqxLJaoB2wX+P
-mI3RWEeV7CEFpwbjVqwQgByr/9gt4TfdoaVMcJhtD7E9sC2bVNGu+bCzYPi96GSm
-7/TJ9AS0xTFuL9FeaGXXByJUcBzmvGVTKKSWs54CEplAgf4jIQy+bHmXPhVIZi4V
-/rmMFLiK2xc3Cjg6kkMci7uoMSJydTHRqWSoBuk+s7sSbGKS9GMJriEmofoG9FmQ
-SV/I1DmDZMkKvhuXpVmHEh0A53CU6kusSNbPfxu4p2/jyuaC/+rWfXxhGjxP62nP
-vUHUdyHMT5OlozLchF+e0YxaJaIkBPnP7Iihh7ZZtuGvZp3WY84=
-=vzh3
------END PGP SIGNATURE-----
-
---/3MMq3k5gRV9mM1G--
+-- 
+viresh
