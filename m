@@ -2,97 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F0A3E1C2B
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Aug 2021 21:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD3A3E1C32
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Aug 2021 21:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242295AbhHETJ1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Aug 2021 15:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242452AbhHETJU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Aug 2021 15:09:20 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C329C0613D5
-        for <linux-i2c@vger.kernel.org>; Thu,  5 Aug 2021 12:09:04 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id z5so9006614ybj.2
-        for <linux-i2c@vger.kernel.org>; Thu, 05 Aug 2021 12:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=66klr3RRk6o66gBKNdZEM7W2NMGH3F3MK/aEyxf87PI=;
-        b=n/RdEz7x4Hdz972oDHKkOLKisyM+jGDoux+WTvW8scFrttaTpF7jvhZvrEe7sA0E/9
-         AA5A5hzv/R7EUmAyoHMqBw1MeqDbJFfK1idnqIjR26dLjaJiwb6qdHMck+n2WqUqZZw/
-         TB1Hab00zIU6gIG8ODCyQIV5VKvKstBT8cqdWR/3VMIqObWAAdCkWmp7YDPM381priUE
-         IYlETrBGENW2IEIL5h6+nEJvgZHohoYMLp275zXc7+u8ZoFtBYPbzbOIFPxhKdj4kYl4
-         CApL86Zh+6UveyxJtjeM6FqW6Hh97L8R+Jcpq7ZpWm7ZrKkAYhIAFArfgyssbthugUDm
-         6UVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=66klr3RRk6o66gBKNdZEM7W2NMGH3F3MK/aEyxf87PI=;
-        b=pSOfQd1+iExLPAH3eiuD5D93M7zU5nTL3YDv0GlaKtyz2tnVoQ7w1TUPhhWMkFoUzX
-         N9WA/SXZ/GL6pmJWVb/ey3gRcM5cvz3oKFr2mU7/F8tckyoRwHAkL/41xp9Jz8rSj4uX
-         +5sFvTxVqVSIPhty42yoRB/vfWH3AOT30Eh2TJdnI46KKNMw0TQeF3l3Mu4tyo0/0qru
-         lKO18wiRlfIF04/yNCJHGA+EDvW/eHLY3n4ZP+RuRU5ypHGwa8QfjcOEa9dgg7/BKpZd
-         ZLwWpAgVCKoYnaA5vs9jClxUm4skG9nyB6FjYQS2tT8zIa0KYKdNeXUAGANcx0nuiY1E
-         SQTQ==
-X-Gm-Message-State: AOAM530DSIMAsHZSenz5xbimzayrlCTA/R2B0/Cg2v8z2L7ppwK3gJTG
-        +syLR1Nv2mHixm/mBodomQgsWVW794pvLykb1kvMZg==
-X-Google-Smtp-Source: ABdhPJzW09jDFnZCROZvMGrpzmvOaLe++zLkGJEfyvO5tZXGesyIoWyTosfywba8jYtMHoOawEh2J1DGnf1TAwFpxf4=
-X-Received: by 2002:a25:db89:: with SMTP id g131mr7906029ybf.302.1628190543546;
- Thu, 05 Aug 2021 12:09:03 -0700 (PDT)
+        id S242268AbhHETMB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Aug 2021 15:12:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50868 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242056AbhHETMB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 5 Aug 2021 15:12:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9EE85610FF;
+        Thu,  5 Aug 2021 19:11:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628190706;
+        bh=MAIZmfCBJpWdBGUfQQv8rUI4fZ0Lv77KXSxJRDYR4Ig=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OKP8FkMfD+rJs1TDLly8ABicRrQPa4NRrs9Z4VRe70/nWIUMY51LlE7J96Hs/tcna
+         K7al4SBcy7EYLv/wt55XnWpMnxY0YUWYrNGajWxc4v/W4yt/1oAi/Z1/jiA3ZEb9Rp
+         sYOeJPc3XCsRt6E6gTxwYRKWN7LU7B7Nl0Bssl1jteFWlAv9sUXPRSj/FO0jOEow2M
+         /rLN//FiOAExo8pj9HgZJ/9hcREROg4FqTyYC+motWDW3fKjuVAX8t5Axzl3Ohk0k7
+         rS2mOm+64n5rq3ommnV2WWLEo2G0ZaNcyvzPUQrUBpTUo+KPm6G1LJ7VDm3Y/yDIIL
+         FdIGItrpYW5/g==
+Received: by pali.im (Postfix)
+        id 32A93817; Thu,  5 Aug 2021 21:11:44 +0200 (CEST)
+Date:   Thu, 5 Aug 2021 21:11:44 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 05/10] i2c: i801: Improve is_dell_system_with_lis3lv02d
+Message-ID: <20210805191144.qq37e73p5zqomkem@pali>
+References: <7a1581de-7566-15da-d1af-08cbf8c5e46f@gmail.com>
+ <f2477399-62df-0036-7d35-4e8634afad9c@gmail.com>
+ <20210805115156.70e364be@endymion>
 MIME-Version: 1.0
-References: <1628105086-8172-1-git-send-email-raagjadav@gmail.com> <1628105086-8172-3-git-send-email-raagjadav@gmail.com>
-In-Reply-To: <1628105086-8172-3-git-send-email-raagjadav@gmail.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Thu, 5 Aug 2021 21:08:52 +0200
-Message-ID: <CAMpxmJXsOHR0xTsMNqdqydboRiaj7iRnCSQT98uGX2woUUPVEA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: at24: add ON Semi CAT24C04 and CAT24C05
-To:     Raag Jadav <raagjadav@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210805115156.70e364be@endymion>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Aug 4, 2021 at 9:25 PM Raag Jadav <raagjadav@gmail.com> wrote:
->
-> Add bindings for ON Semi CAT24C04 and CAT24C05 eeproms,
-> which are compatible with Atmel AT24C04.
->
-> Signed-off-by: Raag Jadav <raagjadav@gmail.com>
-> ---
->  Documentation/devicetree/bindings/eeprom/at24.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> index 914a423..4c5396a 100644
-> --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> @@ -98,6 +98,12 @@ properties:
->            - const: nxp,se97b
->            - const: atmel,24c02
->        - items:
-> +          - const: onnn,cat24c04
-> +          - const: atmel,24c04
-> +      - items:
-> +          - const: onnn,cat24c05
-> +          - const: atmel,24c04
-> +      - items:
->            - const: renesas,r1ex24002
->            - const: atmel,24c02
->        - items:
-> --
-> 2.7.4
->
+Hello!
 
-Applied, thanks!
+On Thursday 05 August 2021 11:51:56 Jean Delvare wrote:
+> Hi Heiner,
+> 
+> On Sun, 01 Aug 2021 16:20:19 +0200, Heiner Kallweit wrote:
+> > Replace the ugly cast of the return_value pointer with proper usage.
+> > In addition use dmi_match() instead of open-coding it.
+> 
+> Pali, would you be able to test this patch?
 
-Bartosz
+Tested now on Latitude E6440 and patch is working fine (no difference).
+
+> > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> > ---
+> >  drivers/i2c/busses/i2c-i801.c | 13 ++++---------
+> >  1 file changed, 4 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> > index d971ee20c..a6287c520 100644
+> > --- a/drivers/i2c/busses/i2c-i801.c
+> > +++ b/drivers/i2c/busses/i2c-i801.c
+> > @@ -1191,7 +1191,7 @@ static acpi_status check_acpi_smo88xx_device(acpi_handle obj_handle,
+> >  
+> >  	kfree(info);
+> >  
+> > -	*((bool *)return_value) = true;
+> > +	*return_value = obj_handle;
+
+You are missing a cast here. "obj_handle" is of unknown typedef type
+acpi_handle and *return_value is of type void*. So this can generate a
+compile warning (either now or in future).
+
+So you need to write it something like this:
+
+  *((acpi_handle *)return_value) = obj_handle;
+
+But what is benefit of this change? Is not usage of explicit true and
+false values better than some acpi_handle type of undefined value stored
+in obj_handle?
+
+> >  	return AE_CTRL_TERMINATE;
+> >  
+> >  smo88xx_not_found:
+> > @@ -1201,13 +1201,10 @@ static acpi_status check_acpi_smo88xx_device(acpi_handle obj_handle,
+> >  
+> >  static bool is_dell_system_with_lis3lv02d(void)
+> >  {
+> > -	bool found;
+> > -	const char *vendor;
+> > +	acpi_handle found = NULL;
+
+Anyway, it looks strange to use name "found" for object handle
+variable. I would expect that something named "found" is storing
+something which refers to 2-state logic and not some handle value.
+
+> >  
+> > -	vendor = dmi_get_system_info(DMI_SYS_VENDOR);
+> > -	if (!vendor || strcmp(vendor, "Dell Inc."))
+> > +	if (!dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
+> >  		return false;
+> 
+> Looks good to me.
+> 
+> > -
+> 
+> I see no reason to remove that blank line.
+> 
+> >  	/*
+> >  	 * Check that ACPI device SMO88xx is present and is functioning.
+> >  	 * Function acpi_get_devices() already filters all ACPI devices
+> > @@ -1216,9 +1213,7 @@ static bool is_dell_system_with_lis3lv02d(void)
+> >  	 * accelerometer but unfortunately ACPI does not provide any other
+> >  	 * information (like I2C address).
+> >  	 */
+> > -	found = false;
+> > -	acpi_get_devices(NULL, check_acpi_smo88xx_device, NULL,
+> > -			 (void **)&found);
+
+Just to explain my motivation: I originally assigned found to false
+value immediately before acpi_get_devices() function call to show that
+this is the place where variable is used due to to API of that function.
+
+> > +	acpi_get_devices(NULL, check_acpi_smo88xx_device, NULL, &found);
+> 
+> The choice of return value by the acpi_get_devices() designer is very
+> unfortunate. It would have been much more convenient if the return
+> value was different whether a match has been found or not. Oh well.
+
+I agree, it is very _original_ way...
+
+> I agree that the proposed change is a nicer way to work around this
+> limitation. Unfortunately I can't test this as I do not own a Dell
+> laptop. Were you able to test it? If not, I hope Pali will.
+> 
+> >  
+> >  	return found;
+> >  }
+> 
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> 
+> -- 
+> Jean Delvare
+> SUSE L3 Support
