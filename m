@@ -2,145 +2,228 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 841283E1E1F
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Aug 2021 23:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8D03E1F2D
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Aug 2021 01:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234312AbhHEVt6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Aug 2021 17:49:58 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:49542 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233838AbhHEVt6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Aug 2021 17:49:58 -0400
-Received: by linux.microsoft.com (Postfix, from userid 1046)
-        id 7B5A020B36E8; Thu,  5 Aug 2021 14:49:43 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7B5A020B36E8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1628200183;
-        bh=SsBMOCXcw1KTxHPV+Kx5Z5bw2rNQDy5iy70OREmZWIc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oXkOZHyKUuC3XHtMyeHfLTBX18n/T/JnQV2JiH0J18vsgBq0pdKd0cTYb8co0WT/h
-         Cy1jGM5FdJummXe47j0UdWO/DJJcl/GWapTNCsabAkulcmaso/bEdKMqLn6WVG5Mo/
-         TX0MX+BToTMZex0J54PhVWkLmmR/rYD7p44aRlpY=
-From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>
-Subject: [PATCH] i2c: iproc: fix race between client unreg and tasklet
-Date:   Thu,  5 Aug 2021 14:49:05 -0700
-Message-Id: <1628200145-4962-1-git-send-email-dphadke@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S232728AbhHEXIf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Aug 2021 19:08:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60108 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229697AbhHEXIf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 5 Aug 2021 19:08:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A2A336103B;
+        Thu,  5 Aug 2021 23:08:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628204900;
+        bh=E3Ox1MZITA9f5KC4G5WdWoqc7M48/wZuaVVGznI7CIU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FcKQA/Tu6J2zNlan449pjx0o897JuvivbsfBtcdo7amc0f6KJQBEltygIP8/uNztK
+         VP/qn9Gq6Sp/hWx1Mr3bSZpwSu4XKbvbZ0XztYpQyjdymbGy+woPs9RdHn+5CKK98h
+         NLrJYP84xHYXf7ClU/Y8t8SSX3W+KrX08BXeHDVtXQ6moJca1Exjg47HT4khb4M8CQ
+         qzwMH5O4yo6E3SOxTbne8aKZVzPBJ62prFw+sfOFiT5FXN/PVy5ZA2DC4VTZxaKg6X
+         o+9gBtgKJ80Z1R0F6w5o3Ss1tzZH5lDPatZylNNXlAypIdmGASftQczMLkuaNCxlVV
+         wRqLHUkJQRtZQ==
+Received: by pali.im (Postfix)
+        id 49400817; Fri,  6 Aug 2021 01:08:18 +0200 (CEST)
+Date:   Fri, 6 Aug 2021 01:08:18 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 05/10] i2c: i801: Improve is_dell_system_with_lis3lv02d
+Message-ID: <20210805230818.mmgybd4ybr2savyk@pali>
+References: <7a1581de-7566-15da-d1af-08cbf8c5e46f@gmail.com>
+ <f2477399-62df-0036-7d35-4e8634afad9c@gmail.com>
+ <20210805115156.70e364be@endymion>
+ <20210805191144.qq37e73p5zqomkem@pali>
+ <14a49ba2-f6a6-3ccc-6a65-70a72bb3fe51@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <14a49ba2-f6a6-3ccc-6a65-70a72bb3fe51@gmail.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Similar NULL deref was originally fixed by graceful teardown sequence -
+On Thursday 05 August 2021 21:42:23 Heiner Kallweit wrote:
+> On 05.08.2021 21:11, Pali Rohár wrote:
+> > Hello!
+> > 
+> > On Thursday 05 August 2021 11:51:56 Jean Delvare wrote:
+> >> Hi Heiner,
+> >>
+> >> On Sun, 01 Aug 2021 16:20:19 +0200, Heiner Kallweit wrote:
+> >>> Replace the ugly cast of the return_value pointer with proper usage.
+> >>> In addition use dmi_match() instead of open-coding it.
+> >>
+> >> Pali, would you be able to test this patch?
+> > 
+> > Tested now on Latitude E6440 and patch is working fine (no difference).
+> > 
+> >>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> >>> ---
+> >>>  drivers/i2c/busses/i2c-i801.c | 13 ++++---------
+> >>>  1 file changed, 4 insertions(+), 9 deletions(-)
+> >>>
+> >>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> >>> index d971ee20c..a6287c520 100644
+> >>> --- a/drivers/i2c/busses/i2c-i801.c
+> >>> +++ b/drivers/i2c/busses/i2c-i801.c
+> >>> @@ -1191,7 +1191,7 @@ static acpi_status check_acpi_smo88xx_device(acpi_handle obj_handle,
+> >>>  
+> >>>  	kfree(info);
+> >>>  
+> >>> -	*((bool *)return_value) = true;
+> >>> +	*return_value = obj_handle;
+> > 
+> > You are missing a cast here. "obj_handle" is of unknown typedef type
+> > acpi_handle and *return_value is of type void*. So this can generate a
+> > compile warning (either now or in future).
+> > 
+> 
+> acpi_handle is defined as:  typedef void *acpi_handle;
+> Therefore compiler is happy (as long as acpi_handle is any pointer type).
 
-https://lore.kernel.org/linux-i2c/1597106560-79693-1-git-send-email-dphadke@linux.microsoft.com
+But point of this typedefing is to hide real type and let user to use
+this "unknown" type without excepting any specific type.
 
-After this, a tasklet was added to take care of FIFO full condition for large i2c
-transaction.
+"Therefore compiler is happy" here is there just a "hack" which
+currently mute casting warning. But I think it is not something which
+should be used as it is against how API / code of specific function was
+designed.
 
-https://lore.kernel.org/linux-arm-kernel/20201102035433.6774-1-rayagonda.kokatanur@broadcom.com/
+For me this situation looks like: Somebody created API and specified how
+to use it. It was realized that specified usage is not ideal for some
+operations. And then people started "hacking" this API to look better
+in these special cases.
 
-This introduced regression, a new race condition between tasklet enabling
-interrupts and client unreg teardown sequence.
+But solution for this issue is to fix API (or create a new API which
+better for this purpose), not hacking or workarounding it to looks
+better by hiding / workarounding other important details.
 
-Kill tasklet before unreg_slave() masks bits in IE_OFFSET.
-Updated teardown sequence -
-(1) disable_irq()
-(2) Kill tasklet
-(3) Mask event enable bits in control reg
-(4) Erase slave address (avoid further writes to rx fifo)
-(5) Flush tx and rx FIFOs
-(6) Clear pending event (interrupt) bits in status reg
-(7) Set client pointer to NULL
-(8) enable_irq()
+> > So you need to write it something like this:
+> > 
+> >   *((acpi_handle *)return_value) = obj_handle;
+> > 
+> > But what is benefit of this change? Is not usage of explicit true and
+> > false values better than some acpi_handle type of undefined value stored
+> > in obj_handle?
+> > 
+> From a logical perspective I agree. My motivation is that I see explicit
+> casts as a last resort and try to avoid them as far as possible.
 
- --
+But in this case you really should not avoid casting. It is different
+pointer type of unknown (or rather hidden) type. Currently it does not
+throw warning (maybe because compiler is not smart enough). But it does
+not mean that code is really semantically correct or that in future
+compiler (or its new version) does not throw warning.
 
- Unable to handle kernel read from unreadable memory at virtual address 0000000000000320
- Mem abort info:
-   ESR = 0x96000004
-   EC = 0x25: DABT (current EL), IL = 32 bits
-   SET = 0, FnV = 0
-   EA = 0, S1PTW = 0
- Data abort info:
-   ISV = 0, ISS = 0x00000004
-   CM = 0, WnR = 0
- user pgtable: 4k pages, 48-bit VAs, pgdp=000000009212a000
- [0000000000000320] pgd=0000000000000000, p4d=0000000000000000
- Internal error: Oops: 96000004 [#1] SMP
- CPU: 0 PID: 0 Comm: swapper/0 Tainted: G           O
- Hardware name: Overlake (DT)
- pstate: 40400085 (nZcv daIf +PAN -UAO -TCO BTYPE=--)
- pc : bcm_iproc_i2c_slave_isr+0x2b8/0x8e4
- lr : bcm_iproc_i2c_slave_isr+0x1c8/0x8e4
- sp : ffff800010003e70
- x29: ffff800010003e80 x28: ffffda017acdc000
- x27: ffffda017b0ae000 x26: ffff800010004000
- x25: ffff800010000000 x24: ffffda017af4a168
- x23: 0000000000000073 x22: 0000000000000000
- x21: 0000000001400000 x20: 0000000001000000
- x19: ffff06f09583f880 x18: 00000000fa83b2da
- x17: 000000000000b67e x16: 0000000002edb2f3
- x15: 00000000000002c7 x14: 00000000000002c7
- x13: 0000000000000006 x12: 0000000000000033
- x11: 0000000000000000 x10: 0000000001000000
- x9 : 0000000003289312 x8 : 0000000003289311
- x7 : 02d0cd03a303adbc x6 : 02d18e7f0a4dfc6c
- x5 : 02edb2f33f76ea68 x4 : 00000000fa83b2da
- x3 : ffffda017af43cd0 x2 : ffff800010003e74
- x1 : 0000000001400000 x0 : 0000000000000000
- Call trace:
-  bcm_iproc_i2c_slave_isr+0x2b8/0x8e4
-  bcm_iproc_i2c_isr+0x178/0x290
-  __handle_irq_event_percpu+0xd0/0x200
-  handle_irq_event+0x60/0x1a0
-  handle_fasteoi_irq+0x130/0x220
-  __handle_domain_irq+0x8c/0xcc
-  gic_handle_irq+0xc0/0x120
-  el1_irq+0xcc/0x180
-  finish_task_switch+0x100/0x1d8
-  __schedule+0x61c/0x7a0
-  schedule_idle+0x28/0x44
-  do_idle+0x254/0x28c
-  cpu_startup_entry+0x28/0x2c
-  rest_init+0xc4/0xd0
-  arch_call_rest_init+0x14/0x1c
-  start_kernel+0x33c/0x3b8
- Code: f9423260 910013e2 11000509 b9047a69 (f9419009)
- ---[ end trace 4781455b2a7bec15 ]---
+Syntactically code looks better, but only until reader start studding
+what code is really doing.
 
-Fixes: 4d658451c9d6 ("i2c: iproc: handle rx fifo full interrupt")
+> The current code abuses a void* variable to store a bool. This makes the
+> implicit assumption that a pointer variable is always big enough to
+> store a bool.
 
-Signed-off-by: Dhananjay Phadke <dphadke@linux.microsoft.com>
----
- drivers/i2c/busses/i2c-bcm-iproc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I understand your concerns and also your motivation. API is not ideal
+for usage. But both current and your proposed solution is just a hack to
+workaround this API usage.
 
-diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-index cceaf69279a9..6304d1dd2dd6 100644
---- a/drivers/i2c/busses/i2c-bcm-iproc.c
-+++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-@@ -1224,14 +1224,14 @@ static int bcm_iproc_i2c_unreg_slave(struct i2c_client *slave)
- 
- 	disable_irq(iproc_i2c->irq);
- 
-+	tasklet_kill(&iproc_i2c->slave_rx_tasklet);
-+
- 	/* disable all slave interrupts */
- 	tmp = iproc_i2c_rd_reg(iproc_i2c, IE_OFFSET);
- 	tmp &= ~(IE_S_ALL_INTERRUPT_MASK <<
- 			IE_S_ALL_INTERRUPT_SHIFT);
- 	iproc_i2c_wr_reg(iproc_i2c, IE_OFFSET, tmp);
- 
--	tasklet_kill(&iproc_i2c->slave_rx_tasklet);
--
- 	/* Erase the slave address programmed */
- 	tmp = iproc_i2c_rd_reg(iproc_i2c, S_CFG_SMBUS_ADDR_OFFSET);
- 	tmp &= ~BIT(S_CFG_EN_NIC_SMB_ADDR3_SHIFT);
--- 
-2.17.1
+I think that according to C standard it is possible to cast between
+pointer and non-pointer (integer-like) types only via uintptr_t (or
+intptr_t) type...
 
+So compliant C code could look like this?
+
+    void func(void **ret) {
+        *ret = (void *)(uintptr_t)1;
+    }
+
+    bool test(void) {
+        void *found = (uintptr_t)0;
+        func(&found);
+        return (uintptr_t)found;
+    }
+
+or test() function may be simplified:
+
+    bool test(void) {
+        void *found = NULL;
+        func(&found);
+        return found;
+    }
+
+(but for me it looks strange if I'm reading _word_ NULL when used as a
+false value in 2-state logic variable)
+
+> With regard to "acpi_handle of undefined value": I'm just interested
+> in the information whether handle is NULL or not. That's the normal
+> implicit cast to bool like in every if(pointer) clause. 
+
+Yes, of course, this is fully valid.
+
+> >>>  	return AE_CTRL_TERMINATE;
+> >>>  
+> >>>  smo88xx_not_found:
+> >>> @@ -1201,13 +1201,10 @@ static acpi_status check_acpi_smo88xx_device(acpi_handle obj_handle,
+> >>>  
+> >>>  static bool is_dell_system_with_lis3lv02d(void)
+> >>>  {
+> >>> -	bool found;
+> >>> -	const char *vendor;
+> >>> +	acpi_handle found = NULL;
+> > 
+> > Anyway, it looks strange to use name "found" for object handle
+> > variable. I would expect that something named "found" is storing
+> > something which refers to 2-state logic and not some handle value.
+> > 
+> >>>  
+> >>> -	vendor = dmi_get_system_info(DMI_SYS_VENDOR);
+> >>> -	if (!vendor || strcmp(vendor, "Dell Inc."))
+> >>> +	if (!dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
+> >>>  		return false;
+> >>
+> >> Looks good to me.
+> >>
+> >>> -
+> >>
+> >> I see no reason to remove that blank line.
+> >>
+> >>>  	/*
+> >>>  	 * Check that ACPI device SMO88xx is present and is functioning.
+> >>>  	 * Function acpi_get_devices() already filters all ACPI devices
+> >>> @@ -1216,9 +1213,7 @@ static bool is_dell_system_with_lis3lv02d(void)
+> >>>  	 * accelerometer but unfortunately ACPI does not provide any other
+> >>>  	 * information (like I2C address).
+> >>>  	 */
+> >>> -	found = false;
+> >>> -	acpi_get_devices(NULL, check_acpi_smo88xx_device, NULL,
+> >>> -			 (void **)&found);
+> > 
+> > Just to explain my motivation: I originally assigned found to false
+> > value immediately before acpi_get_devices() function call to show that
+> > this is the place where variable is used due to to API of that function.
+> > 
+> >>> +	acpi_get_devices(NULL, check_acpi_smo88xx_device, NULL, &found);
+> >>
+> >> The choice of return value by the acpi_get_devices() designer is very
+> >> unfortunate. It would have been much more convenient if the return
+> >> value was different whether a match has been found or not. Oh well.
+> > 
+> > I agree, it is very _original_ way...
+> > 
+> >> I agree that the proposed change is a nicer way to work around this
+> >> limitation. Unfortunately I can't test this as I do not own a Dell
+> >> laptop. Were you able to test it? If not, I hope Pali will.
+> >>
+> >>>  
+> >>>  	return found;
+> >>>  }
+> >>
+> >> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> >>
+> >> -- 
+> >> Jean Delvare
+> >> SUSE L3 Support
+> 
