@@ -2,138 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F493E16D5
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Aug 2021 16:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AD43E16DE
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Aug 2021 16:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240556AbhHEOX0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Aug 2021 10:23:26 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:49890 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233428AbhHEOXZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Aug 2021 10:23:25 -0400
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0E1F51FD3A;
-        Thu,  5 Aug 2021 14:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1628173391; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SPrLQmDrYvFZ5eeY3ciw6mMJMqppjs8uy28f0mWTPKs=;
-        b=Y50xx53silHXZIpzXnMFQLtUL0dTTNO0wk76GNEoKa8DEFydBVX1F/ZTGhj4W/EGXPWsM6
-        g5VsB85iyOosiuUXciHKi2yL3SVi0H/c3fMe3/zj7VCj9zdcsgcH6JSjWoaKnjDfn//I9b
-        ImQxlPUrZzqm3KuIdnGZpTanycaqYgg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1628173391;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SPrLQmDrYvFZ5eeY3ciw6mMJMqppjs8uy28f0mWTPKs=;
-        b=TaZK3LOqaezXffDwJ+hnPSxixJlU0+XYJtoZkxxrCw77gKiYZbeQIW9HLI/8+uBf+FOa88
-        oa5w3QWAr/RLsfBA==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id D713413A4D;
-        Thu,  5 Aug 2021 14:23:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id n/tzMU70C2HAQQAAGKfGzw
-        (envelope-from <jdelvare@suse.de>); Thu, 05 Aug 2021 14:23:10 +0000
-Date:   Thu, 5 Aug 2021 16:23:09 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 09/10] i2c: i801: Improve
- register_dell_lis3lv02d_i2c_device
-Message-ID: <20210805162309.14dbaf63@endymion>
-In-Reply-To: <5d8e72e2-085b-32ea-0a86-eeecfe1e94f3@gmail.com>
+        id S237913AbhHEOYt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Aug 2021 10:24:49 -0400
+Received: from mga01.intel.com ([192.55.52.88]:43414 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233040AbhHEOYs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 5 Aug 2021 10:24:48 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10067"; a="236130824"
+X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
+   d="scan'208";a="236130824"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 07:24:34 -0700
+X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
+   d="scan'208";a="437808153"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 07:24:32 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 05 Aug 2021 17:24:29 +0300
+Date:   Thu, 5 Aug 2021 17:24:29 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 07/10] i2c: i801: Improve i801_acpi_probe/remove functions
+Message-ID: <YQv0nXYD/FZn/BU8@lahna>
 References: <7a1581de-7566-15da-d1af-08cbf8c5e46f@gmail.com>
-        <5d8e72e2-085b-32ea-0a86-eeecfe1e94f3@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+ <064c1f0b-9f79-3fb2-cac1-35ef26c33296@gmail.com>
+ <20210805153857.442ca8e7@endymion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210805153857.442ca8e7@endymion>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 01 Aug 2021 16:23:34 +0200, Heiner Kallweit wrote:
-> - Use an initializer for struct i2c_board_info info
-> - Use dmi_match()
-> - Simplify loop logic
+On Thu, Aug 05, 2021 at 03:38:57PM +0200, Jean Delvare wrote:
+> On Sun, 01 Aug 2021 16:21:54 +0200, Heiner Kallweit wrote:
+> > By using ACPI_HANDLE() the handler argument can be retrieved directly.
+> > Both address space handler functions check the handler argument and
+> > return an error if it's NULL. This allows to further simplify the code.
+> > 
+> > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> > ---
+> >  drivers/i2c/busses/i2c-i801.c | 23 +++++++----------------
+> >  1 file changed, 7 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> > index 5b9eebc1c..5fa8dc1cb 100644
+> > --- a/drivers/i2c/busses/i2c-i801.c
+> > +++ b/drivers/i2c/busses/i2c-i801.c
+> > @@ -1633,31 +1633,22 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
+> >  
+> >  static int i801_acpi_probe(struct i801_priv *priv)
+> >  {
+> > -	struct acpi_device *adev;
+> > +	acpi_handle ah = ACPI_HANDLE(&priv->pci_dev->dev);
+> >  	acpi_status status;
+> >  
+> > -	adev = ACPI_COMPANION(&priv->pci_dev->dev);
+> > -	if (adev) {
+> > -		status = acpi_install_address_space_handler(adev->handle,
+> > -				ACPI_ADR_SPACE_SYSTEM_IO, i801_acpi_io_handler,
+> > -				NULL, priv);
+> > -		if (ACPI_SUCCESS(status))
+> > -			return 0;
+> > -	}
+> > +	status = acpi_install_address_space_handler(ah, ACPI_ADR_SPACE_SYSTEM_IO,
+> > +						    i801_acpi_io_handler, NULL, priv);
+> > +	if (ACPI_SUCCESS(status))
+> > +		return 0;
+> >  
+> >  	return acpi_check_resource_conflict(&priv->pci_dev->resource[SMBBAR]);
+> >  }
+> >  
+> >  static void i801_acpi_remove(struct i801_priv *priv)
+> >  {
+> > -	struct acpi_device *adev;
+> > -
+> > -	adev = ACPI_COMPANION(&priv->pci_dev->dev);
+> > -	if (!adev)
+> > -		return;
+> > +	acpi_handle ah = ACPI_HANDLE(&priv->pci_dev->dev);
+> >  
+> > -	acpi_remove_address_space_handler(adev->handle,
+> > -		ACPI_ADR_SPACE_SYSTEM_IO, i801_acpi_io_handler);
+> > +	acpi_remove_address_space_handler(ah, ACPI_ADR_SPACE_SYSTEM_IO, i801_acpi_io_handler);
+> >  }
+> >  #else
+> >  static inline int i801_acpi_probe(struct i801_priv *priv) { return 0; }
 > 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-i801.c | 28 +++++++++-------------------
->  1 file changed, 9 insertions(+), 19 deletions(-)
+> Looks completely reasonable.
 > 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index 958b2e14b..1ca92a1e0 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1245,28 +1245,18 @@ static const struct {
->  
->  static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
->  {
-> -	struct i2c_board_info info;
-> -	const char *dmi_product_name;
-> +	struct i2c_board_info info = { .type = "lis3lv02d" };
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> Tested-by: Jean Delvare <jdelvare@suse.de>
+> 
+> Mika, no objection?
 
-Can it be moved to the inner loop where it is used, so that
-initialization only takes place when needed? I don't know how the
-compiler handles that, to be honest.
+No.
 
->  	int i;
->  
-> -	dmi_product_name = dmi_get_system_info(DMI_PRODUCT_NAME);
-> -	for (i = 0; i < ARRAY_SIZE(dell_lis3lv02d_devices); ++i) {
-> -		if (strcmp(dmi_product_name,
-> -			   dell_lis3lv02d_devices[i].dmi_product_name) == 0)
-> -			break;
-> -	}
-> -
-> -	if (i == ARRAY_SIZE(dell_lis3lv02d_devices)) {
-> -		dev_warn(&priv->pci_dev->dev,
-> -			 "Accelerometer lis3lv02d is present on SMBus but its"
-> -			 " address is unknown, skipping registration\n");
-> -		return;
-> -	}
-> +	for (i = 0; i < ARRAY_SIZE(dell_lis3lv02d_devices); ++i)
-
-Outer block without curly braces is discouraged for readability and
-maintenance reasons (see Documentation/process/coding-style.rst section
-3).
-
-> +		if (dmi_match(DMI_PRODUCT_NAME, dell_lis3lv02d_devices[i].dmi_product_name)) {
-
-This causes dmi_get_system_info(DMI_PRODUCT_NAME) to be called for
-every iteration of the loop, slowing down the lookup. It's an exported
-function so it can't be inlined by the compiler. I know this happens
-only once, but we try to keep boot times as short as possible.
-
-> +			info.addr = dell_lis3lv02d_devices[i].i2c_addr;
-> +			i2c_new_client_device(&priv->adapter, &info);
-> +			return;
-> +		}
->  
-> -	memset(&info, 0, sizeof(struct i2c_board_info));
-> -	info.addr = dell_lis3lv02d_devices[i].i2c_addr;
-> -	strlcpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
-> -	i2c_new_client_device(&priv->adapter, &info);
-> +	pci_warn(priv->pci_dev,
-> +		 "Accelerometer lis3lv02d is present on SMBus but its address is unknown, skipping registration\n");
->  }
->  
->  /* Register optional slaves */
-
-
--- 
-Jean Delvare
-SUSE L3 Support
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
