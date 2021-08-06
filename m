@@ -2,59 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C96953E30E2
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Aug 2021 23:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D083E30E3
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Aug 2021 23:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238155AbhHFVTo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Aug 2021 17:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S238898AbhHFVTu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Aug 2021 17:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238016AbhHFVTn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Aug 2021 17:19:43 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D914C0613CF
-        for <linux-i2c@vger.kernel.org>; Fri,  6 Aug 2021 14:19:26 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id n12so2616028wrr.2
-        for <linux-i2c@vger.kernel.org>; Fri, 06 Aug 2021 14:19:26 -0700 (PDT)
+        with ESMTP id S238016AbhHFVTs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Aug 2021 17:19:48 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABC2C0613CF
+        for <linux-i2c@vger.kernel.org>; Fri,  6 Aug 2021 14:19:29 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id c16so12652112wrp.13
+        for <linux-i2c@vger.kernel.org>; Fri, 06 Aug 2021 14:19:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=k+H9Qy6AVSQfmzCVSq6PZRXdQZcZaCG04yQUbjpoH7w=;
-        b=mB5209/k84mATchksY3tGTM+p+bS08KRMFOqWTH45WT0pZ5xjZs+1xZukxmJmVgkrT
-         SX2Wmnmk9jvR+eZhwrIVOwheugbG2uiibbasekQqFk9YSPh63JIEFYUxTYIJZ9wfoXlC
-         Hwz2RHbstCDZdcp7TALwolHceKprMkB/51J88ob1R651fVKXfUia0YZvtZ3/TAbR6yQA
-         QoOc6y+7zoTkugrBXu0pst/92bjOEvhsKuteiUkr36O4ku1J2WY40WTq0dGr7DsK5qCZ
-         L7cRFsTiT6u3pHGJMHnSCcZr0C8xSYC+7AbNjzREhVmelrC9qA5SvVNn4On+H6WefphV
-         Zxdg==
+        bh=g0E1z9oUpcFeUAqMFDOHHwdKa9avIPsEMBJBlOA+9Zo=;
+        b=Qm3EwNnrUODIIggKuMYjeNQz0g7OHOPwir6+ZYhih3itVo4HF6d7LSoGBR2THid5AM
+         2lBiJMOaFRWGMbafr+3f4l5WA3zRWfhNOXuUteTUmAz5WeePXmMOQB5ID5sK9un59bN+
+         cgwzZOhA5NzMnOCd4ngCAQtZbXYFtZgKSUuj3IpWBaCm8urCxAdDyu7IrM81Va4N3lIE
+         K8rfQ2mKX2xgMafPO6CbTe/webzxL0zLaYF5qHC+NTEyV8XzPQlDYhNk7YZ4UcgaF+pm
+         wHMCk5vnzrBKSHylisLeY4pG2n5t8MqWnNfSDiUi/VfZMx3+z4EJ15bb1qpHH16OocCL
+         ueEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=k+H9Qy6AVSQfmzCVSq6PZRXdQZcZaCG04yQUbjpoH7w=;
-        b=PxVLqv22XJjRMcrVyFp0VaMGvYLyNuWvfB3L8YwP09PsjoxOCDofa3xaQJmxB5o2T7
-         Mmdun5ur0G/8OcGwibdUSFmWx8DBynovlC4ieug2WTY6gApMwVAsE4sa3m44XzL8OBKF
-         PkNw0LJhNkNmDSyGHbuARH7HqZujq20Hhkq8kO6T2l8LccOg/OhzfV+owNuZuK8e97ja
-         VfyieAYBfMa7cGIUlgvzC9fb12ae3U3G6K3tF1bNecFci8A2n4sIpIyWWgIJEFcaTvC9
-         Mq7e2dzmGblhloz4mHjYImkqNT9sjtEZbeE2dHQIF+Owqlkl5C7qw8wj6siSVqcLy9rJ
-         aBDg==
-X-Gm-Message-State: AOAM530Fdn/r/B8OCTQ2bJJ4tG5OmAQwOGuluCQD4/hH8otwqZ979AGP
-        FPSUWHT2layNLOoXYmwb6aua3YIuMiAT5g==
-X-Google-Smtp-Source: ABdhPJxdr7JtohA893+zdSrUeFlWuloq0gfLYjHScddaeZrLY7USZE94LYQG53vHH816hYVU1oBlQQ==
-X-Received: by 2002:adf:d087:: with SMTP id y7mr12535051wrh.323.1628284765118;
-        Fri, 06 Aug 2021 14:19:25 -0700 (PDT)
+        bh=g0E1z9oUpcFeUAqMFDOHHwdKa9avIPsEMBJBlOA+9Zo=;
+        b=OfwJcYlt53s9jiDWrHoTSWOqcuHrqoMi8EGs3EHcpaxk9uJa+z9dpLFME7m5WemYFp
+         JFfvgHYVm2uCZRCSnkEFWBSz9Jew7uFKRszWeaBH+jVYXmW0RYcLJfSMyHA2J0Z7TlGF
+         yQgwGi2E7O+0ufdL+hzCo0lF5/7XoRay2xt9bmq/gGsuM5Wo0xALtXE2QJSWrFP2S0w3
+         urnLM01DqJbyBfnvwvz3+3BbLqZKKrnxx1KOpTgb/ffquZVUXGJxAlpucM7TXNH6ZrPL
+         WBRrlLe1+kKuBD6fnhux9YEsCDRVo+WAE6BhnhR7NPYzCPKMB6vEuu+j6Ajxawc5In7E
+         qILg==
+X-Gm-Message-State: AOAM531z3mrfJQk99oEemmKtWU15E2oEqNPM1MWziBOZNBFYr8asWJcq
+        QxE1KbcUmu+iz0lak8V33C0lxkei+aMQmQ==
+X-Google-Smtp-Source: ABdhPJxjc6r9yxeeKbo2scigAhao3/xobnQW/jxtDJbnK52SMIPAlxts9bAAiHBrLxGZ+RPhc2qAMQ==
+X-Received: by 2002:adf:eccc:: with SMTP id s12mr12569902wro.331.1628284768266;
+        Fri, 06 Aug 2021 14:19:28 -0700 (PDT)
 Received: from ?IPv6:2003:ea:8f10:c200:cc6d:4891:c067:bf7b? (p200300ea8f10c200cc6d4891c067bf7b.dip0.t-ipconnect.de. [2003:ea:8f10:c200:cc6d:4891:c067:bf7b])
-        by smtp.googlemail.com with ESMTPSA id q5sm10997601wrx.33.2021.08.06.14.19.22
+        by smtp.googlemail.com with ESMTPSA id j14sm10700743wrr.16.2021.08.06.14.19.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Aug 2021 14:19:24 -0700 (PDT)
-Subject: [PATCH v2 8/9] i2c: i801: Improve register_dell_lis3lv02d_i2c_device
+        Fri, 06 Aug 2021 14:19:27 -0700 (PDT)
+Subject: [PATCH v2 9/9] i2c: i801: Improve handling platform data for tco
+ device
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>
 Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
-Message-ID: <3ce2ea87-809e-5999-e920-07ddd5fcc035@gmail.com>
-Date:   Fri, 6 Aug 2021 23:18:05 +0200
+Message-ID: <0e8188d1-e35c-162b-6657-b22e8034483c@gmail.com>
+Date:   Fri, 6 Aug 2021 23:18:40 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
@@ -66,63 +67,71 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-- Use an initializer for struct i2c_board_info info
-- Use dmi_match()
-- Simplify loop logic
+The platform data structures are used in the respective i801_add_tco
+functions only. Therefore we can make the definitions local to these
+functions.
 
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
-v2:
-  - move definition of struct i2c_board_info info to inner loop
-  - add missing curly braces to outer for loop
----
- drivers/i2c/busses/i2c-i801.c | 28 +++++++++++-----------------
- 1 file changed, 11 insertions(+), 17 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 6e9aca81b..88745e3bc 100644
+index 88745e3bc..242bdd2ae 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1247,28 +1247,22 @@ static const struct {
+@@ -1470,15 +1470,14 @@ static inline unsigned int i801_get_adapter_class(struct i801_priv *priv)
+ }
+ #endif
  
- static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
- {
--	struct i2c_board_info info;
--	const char *dmi_product_name;
- 	int i;
- 
--	dmi_product_name = dmi_get_system_info(DMI_PRODUCT_NAME);
- 	for (i = 0; i < ARRAY_SIZE(dell_lis3lv02d_devices); ++i) {
--		if (strcmp(dmi_product_name,
--			   dell_lis3lv02d_devices[i].dmi_product_name) == 0)
--			break;
--	}
+-static const struct itco_wdt_platform_data spt_tco_platform_data = {
+-	.name = "Intel PCH",
+-	.version = 4,
+-};
 -
--	if (i == ARRAY_SIZE(dell_lis3lv02d_devices)) {
--		dev_warn(&priv->pci_dev->dev,
--			 "Accelerometer lis3lv02d is present on SMBus but its"
--			 " address is unknown, skipping registration\n");
--		return;
-+		if (dmi_match(DMI_PRODUCT_NAME, dell_lis3lv02d_devices[i].dmi_product_name)) {
-+			struct i2c_board_info info = {
-+				.type = "lis3lv02d",
-+				.addr = dell_lis3lv02d_devices[i].i2c_addr,
-+			};
-+
-+			i2c_new_client_device(&priv->adapter, &info);
-+			return;
-+		}
- 	}
+ static struct platform_device *
+ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 		 struct resource *tco_res)
+ {
++	static const struct itco_wdt_platform_data pldata = {
++		.name = "Intel PCH",
++		.version = 4,
++	};
+ 	static DEFINE_MUTEX(p2sb_mutex);
+ 	struct resource *res;
+ 	unsigned int devfn;
+@@ -1522,22 +1521,20 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 	res->flags = IORESOURCE_MEM;
  
--	memset(&info, 0, sizeof(struct i2c_board_info));
--	info.addr = dell_lis3lv02d_devices[i].i2c_addr;
--	strlcpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
--	i2c_new_client_device(&priv->adapter, &info);
-+	pci_warn(priv->pci_dev,
-+		 "Accelerometer lis3lv02d is present on SMBus but its address is unknown, skipping registration\n");
+ 	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
+-					tco_res, 2, &spt_tco_platform_data,
+-					sizeof(spt_tco_platform_data));
++					tco_res, 2, &pldata, sizeof(pldata));
  }
  
- /* Register optional slaves */
+-static const struct itco_wdt_platform_data cnl_tco_platform_data = {
+-	.name = "Intel PCH",
+-	.version = 6,
+-};
+-
+ static struct platform_device *
+ i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 		 struct resource *tco_res)
+ {
+-	return platform_device_register_resndata(&pci_dev->dev,
+-			"iTCO_wdt", -1, tco_res, 1, &cnl_tco_platform_data,
+-			sizeof(cnl_tco_platform_data));
++	static const struct itco_wdt_platform_data pldata = {
++		.name = "Intel PCH",
++		.version = 6,
++	};
++
++	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
++						 tco_res, 1, &pldata, sizeof(pldata));
+ }
+ 
+ static void i801_add_tco(struct i801_priv *priv)
 -- 
 2.32.0
 
