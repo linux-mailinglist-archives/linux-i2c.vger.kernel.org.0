@@ -2,59 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BCC3E30DE
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Aug 2021 23:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F233E30DF
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Aug 2021 23:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237662AbhHFVTb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Aug 2021 17:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S238108AbhHFVTe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Aug 2021 17:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237975AbhHFVTb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Aug 2021 17:19:31 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E118BC0613CF
-        for <linux-i2c@vger.kernel.org>; Fri,  6 Aug 2021 14:19:13 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id f9-20020a05600c1549b029025b0f5d8c6cso9847659wmg.4
-        for <linux-i2c@vger.kernel.org>; Fri, 06 Aug 2021 14:19:13 -0700 (PDT)
+        with ESMTP id S238016AbhHFVTe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Aug 2021 17:19:34 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D70C0613CF
+        for <linux-i2c@vger.kernel.org>; Fri,  6 Aug 2021 14:19:17 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id i10-20020a05600c354ab029025a0f317abfso9854893wmq.3
+        for <linux-i2c@vger.kernel.org>; Fri, 06 Aug 2021 14:19:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HvM3lPG2xI8313rRdu83d9EPpxbMXrPiuZRB9e1Nt8U=;
-        b=UDWCLeuIOjALS6BJG9A3LVfVYE2SA2T7aBTFbT52QEUp2F2CEKKkkOUAAjOem5B2OM
-         0qP3rrVqJqGAvaEOs20Af+pq040+YMRva7w0yDMN/TZhjwAj50rvPwWd6/LjvV0WFW+D
-         Xn/JhZWEh0zuzZ7ygraVeOM8DVjLJGwbGjJyA4aqtNeFUmeHr5AgRWlpU/VrsvEoe4B4
-         9gTMU8uw4qV2KQUNgJiahhMO4zSejdRq9BAH3SYSQwj1I/KZKl+lhf2f9RpzdAV+4DYv
-         PjxaLvVnkIY4D2Lfq8L1eY/0G0aSjU2wH33GXH3MWAaCXsYm/Dvbq9yeNX5EQj+WigD7
-         1WLA==
+        bh=As+NizC8ogF5PNDbWVSg8efY2szqjKrHpPIO1Ppqotk=;
+        b=AkElhC9XLwQaciNvd30dIlE8pHDIRZ06Hsz9pbdSrT0KZGLMS6bAW23CKrCwWEEn2Z
+         /IOV/GQDBsLmZGPPl7KGV671A8eOiYQtx6Vx23yBq/ivxmDPRSukDzkLNKIB50PBJsMy
+         l58bUGi16xFMUsbrLyo3CNehsPCEPpE064B9TeXX2+F556avYqliIpRd3REswFBnUPG8
+         oXLcuxq1cCbAywzhUdq3fhCsj+Vs8aGl4u/hHjB/m5GRMjuDhYbdDE/OVzTFnaUHGHQ2
+         C2LjvBi+pjnKfhQCcbjmqFtqQSZO94ypo/X1N3Ac6H15d6WcMxPrXtuPjAYKXhjbjvQS
+         YyJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=HvM3lPG2xI8313rRdu83d9EPpxbMXrPiuZRB9e1Nt8U=;
-        b=f+/Im6E3CKbq7OuxasPd8nVzaHwo1ALtKvZy7c0iz2+I/oYwDpJG8+WTq1WArETptM
-         lwk1YtnUk17ENt+yIQcDXyaEXQSzCvTftVTiEoin4xYEQcXEmrOjQdFQuLi1RCZ9NX/j
-         qFuWcqNg/TEtS+kCb5J4HD+e1TGY+415UPMqX/79ZXtd3rAyM6vRknFyEiwItqOh4qak
-         BdkEU0DhSSQGPV/RI1CYBReX40wquiWOrZDLUWlG7gJq/hx15CieyCB8G6gZXiFUJrFU
-         BGr7m3u+w6wKTRO2N8pnP0ZHf/ihzkhjl2AvX2hCcsAx34t1ibDFHX8C0pvSFiZHvTbW
-         YRfA==
-X-Gm-Message-State: AOAM530fsYwFnvYjBydRji9XfYzLLtuS9yG9BKr7oA6ENNt0LQfmTAmU
-        3P2GC2QuvZBjCBpNto1OuXhswWYrUk97aQ==
-X-Google-Smtp-Source: ABdhPJyEYAXD/uxVOZH8GTXl4cTDLw2y+HmfA7wI/RKkHndsNN82KI49o3f/gDS9m5BIwSvD19MUZQ==
-X-Received: by 2002:a7b:c254:: with SMTP id b20mr22462388wmj.189.1628284752370;
-        Fri, 06 Aug 2021 14:19:12 -0700 (PDT)
+        bh=As+NizC8ogF5PNDbWVSg8efY2szqjKrHpPIO1Ppqotk=;
+        b=YfhTOM6N5rpE56EgnlSn7TRQRbbabSxLTxIGUjJgoq6TGdVxJD/7Ki+ws3Fiz4AVvO
+         Hvdhf7wLfr0KIDXsWWD2DrZ5jPAsAxkdJ8TNHFSEQ0hgQHkQahybmiegiESaBj8pgs/X
+         CZG/bRExsaiadKk6rrFyXcKbXjtfaui4QIK0iYGFuFirIA+w190JxShsfR+ovfKXjJXz
+         X+KzaonuSpsilAY/vczZmvV6npPbhR2MKbtM8iAFQ57tUZ8tBv7ZxxRKKc4E2IRjOXyC
+         JSaYcSg7bwPyh3JI5U6AahJR7AF7Vw1zgK8gRsGYnOsFhaGOwh7L6zjZSvLj2LvCAh7r
+         WY9w==
+X-Gm-Message-State: AOAM531JtRU2uVhPgpKOVdKa0Eli69Xa7jueA6Qk/QNwKqCEwKN9oh05
+        jeB7hwZ6zEKF/BWemVtM5U1zB4XEezug+A==
+X-Google-Smtp-Source: ABdhPJx9erCZ6Z7xUUdCMrPfggFCC0XBwJdfW+TmnizHCVYMmXB0G/Oe1hCKA4+LsR7dSp2zPs8vlA==
+X-Received: by 2002:a05:600c:41d3:: with SMTP id t19mr22108491wmh.157.1628284755630;
+        Fri, 06 Aug 2021 14:19:15 -0700 (PDT)
 Received: from ?IPv6:2003:ea:8f10:c200:cc6d:4891:c067:bf7b? (p200300ea8f10c200cc6d4891c067bf7b.dip0.t-ipconnect.de. [2003:ea:8f10:c200:cc6d:4891:c067:bf7b])
-        by smtp.googlemail.com with ESMTPSA id b20sm10609529wmj.48.2021.08.06.14.19.09
+        by smtp.googlemail.com with ESMTPSA id k17sm10801005wrw.53.2021.08.06.14.19.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Aug 2021 14:19:12 -0700 (PDT)
-Subject: [PATCH v2 4/9] i2c: i801: Improve is_dell_system_with_lis3lv02d
+        Fri, 06 Aug 2021 14:19:15 -0700 (PDT)
+Subject: [PATCH v2 5/9] i2c: i801: Remove not needed check for
+ PCI_COMMAND_INTX_DISABLE
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>
 Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
-Message-ID: <effeb0c0-36cb-afc4-4d9a-7ef348c928ae@gmail.com>
-Date:   Fri, 6 Aug 2021 23:15:15 +0200
+Message-ID: <9ac8ff4b-3e2a-278d-f7f6-65534b43eec7@gmail.com>
+Date:   Fri, 6 Aug 2021 23:15:51 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
@@ -66,58 +67,39 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Replace the ugly cast of the return_value pointer with proper usage.
-In addition use dmi_match() instead of open-coding it.
+do_pci_enable_device() takes care that PCI_COMMAND_INTX_DISABLE
+is cleared if a legacy interrupt is used.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
-v2:
-  - avoid assigning potentially dangling pointer to *return_value
----
- drivers/i2c/busses/i2c-i801.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 89ae78ef1..f56060fcf 100644
+index f56060fcf..7fa06b85f 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1192,7 +1192,7 @@ static acpi_status check_acpi_smo88xx_device(acpi_handle obj_handle,
+@@ -1827,19 +1827,12 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 		priv->features &= ~FEATURE_IRQ;
  
- 	kfree(info);
+ 	if (priv->features & FEATURE_IRQ) {
+-		u16 pcictl, pcists;
++		u16 pcists;
  
--	*((bool *)return_value) = true;
-+	*return_value = NULL;
- 	return AE_CTRL_TERMINATE;
+ 		/* Complain if an interrupt is already pending */
+ 		pci_read_config_word(priv->pci_dev, PCI_STATUS, &pcists);
+ 		if (pcists & PCI_STATUS_INTERRUPT)
+ 			dev_warn(&dev->dev, "An interrupt is pending!\n");
+-
+-		/* Check if interrupts have been disabled */
+-		pci_read_config_word(priv->pci_dev, PCI_COMMAND, &pcictl);
+-		if (pcictl & PCI_COMMAND_INTX_DISABLE) {
+-			dev_info(&dev->dev, "Interrupts are disabled\n");
+-			priv->features &= ~FEATURE_IRQ;
+-		}
+ 	}
  
- smo88xx_not_found:
-@@ -1202,11 +1202,9 @@ static acpi_status check_acpi_smo88xx_device(acpi_handle obj_handle,
- 
- static bool is_dell_system_with_lis3lv02d(void)
- {
--	bool found;
--	const char *vendor;
-+	void *err = ERR_PTR(-ENOENT);
- 
--	vendor = dmi_get_system_info(DMI_SYS_VENDOR);
--	if (!vendor || strcmp(vendor, "Dell Inc."))
-+	if (!dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
- 		return false;
- 
- 	/*
-@@ -1217,11 +1215,9 @@ static bool is_dell_system_with_lis3lv02d(void)
- 	 * accelerometer but unfortunately ACPI does not provide any other
- 	 * information (like I2C address).
- 	 */
--	found = false;
--	acpi_get_devices(NULL, check_acpi_smo88xx_device, NULL,
--			 (void **)&found);
-+	acpi_get_devices(NULL, check_acpi_smo88xx_device, NULL, &err);
- 
--	return found;
-+	return !IS_ERR(err);
- }
- 
- /*
+ 	if (priv->features & FEATURE_IRQ) {
 -- 
 2.32.0
 
