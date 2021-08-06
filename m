@@ -2,60 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F233E30DF
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Aug 2021 23:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0563E30E0
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Aug 2021 23:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbhHFVTe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 6 Aug 2021 17:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        id S237975AbhHFVTh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 6 Aug 2021 17:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238016AbhHFVTe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Aug 2021 17:19:34 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D70C0613CF
-        for <linux-i2c@vger.kernel.org>; Fri,  6 Aug 2021 14:19:17 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id i10-20020a05600c354ab029025a0f317abfso9854893wmq.3
-        for <linux-i2c@vger.kernel.org>; Fri, 06 Aug 2021 14:19:17 -0700 (PDT)
+        with ESMTP id S238155AbhHFVTg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 6 Aug 2021 17:19:36 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8B7C0613CF
+        for <linux-i2c@vger.kernel.org>; Fri,  6 Aug 2021 14:19:20 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id b11so12695676wrx.6
+        for <linux-i2c@vger.kernel.org>; Fri, 06 Aug 2021 14:19:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=As+NizC8ogF5PNDbWVSg8efY2szqjKrHpPIO1Ppqotk=;
-        b=AkElhC9XLwQaciNvd30dIlE8pHDIRZ06Hsz9pbdSrT0KZGLMS6bAW23CKrCwWEEn2Z
-         /IOV/GQDBsLmZGPPl7KGV671A8eOiYQtx6Vx23yBq/ivxmDPRSukDzkLNKIB50PBJsMy
-         l58bUGi16xFMUsbrLyo3CNehsPCEPpE064B9TeXX2+F556avYqliIpRd3REswFBnUPG8
-         oXLcuxq1cCbAywzhUdq3fhCsj+Vs8aGl4u/hHjB/m5GRMjuDhYbdDE/OVzTFnaUHGHQ2
-         C2LjvBi+pjnKfhQCcbjmqFtqQSZO94ypo/X1N3Ac6H15d6WcMxPrXtuPjAYKXhjbjvQS
-         YyJQ==
+        bh=AQvMtFq8Po6vh52QjvN0sEfHzpusUaBiZ8gx3Z9m+QI=;
+        b=uBy6XGm0S3KgJpQ0tv+Po7W0GcBYp59FysOH/a/2RciBK4HObvq25KHUrWZYe3t7Ci
+         OF7KISbzxmXU3yxtxh2SUe/b8OGdfSDKraxQi+H61/uQouaPJjY0JpNRx/LUJjyKRUC1
+         +zC+5rtVkjye43nA7dr2ZyKBs6jrX87DUSMppNYKx+5V4FOult2aWx3i1qcfEqhTOx3F
+         Clc2tzhrOjYung8SEVCVt0s6At5CaQuE65JSXFO69qIgYIhRyYQcIYfHxJ0/Xs44n8X0
+         USEtIIh29mmXKCkci/s9G1YchXD/nEv2AGEPkORFx53roRKFOdNldk1kxvUEpaJyjcaw
+         igZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=As+NizC8ogF5PNDbWVSg8efY2szqjKrHpPIO1Ppqotk=;
-        b=YfhTOM6N5rpE56EgnlSn7TRQRbbabSxLTxIGUjJgoq6TGdVxJD/7Ki+ws3Fiz4AVvO
-         Hvdhf7wLfr0KIDXsWWD2DrZ5jPAsAxkdJ8TNHFSEQ0hgQHkQahybmiegiESaBj8pgs/X
-         CZG/bRExsaiadKk6rrFyXcKbXjtfaui4QIK0iYGFuFirIA+w190JxShsfR+ovfKXjJXz
-         X+KzaonuSpsilAY/vczZmvV6npPbhR2MKbtM8iAFQ57tUZ8tBv7ZxxRKKc4E2IRjOXyC
-         JSaYcSg7bwPyh3JI5U6AahJR7AF7Vw1zgK8gRsGYnOsFhaGOwh7L6zjZSvLj2LvCAh7r
-         WY9w==
-X-Gm-Message-State: AOAM531JtRU2uVhPgpKOVdKa0Eli69Xa7jueA6Qk/QNwKqCEwKN9oh05
-        jeB7hwZ6zEKF/BWemVtM5U1zB4XEezug+A==
-X-Google-Smtp-Source: ABdhPJx9erCZ6Z7xUUdCMrPfggFCC0XBwJdfW+TmnizHCVYMmXB0G/Oe1hCKA4+LsR7dSp2zPs8vlA==
-X-Received: by 2002:a05:600c:41d3:: with SMTP id t19mr22108491wmh.157.1628284755630;
-        Fri, 06 Aug 2021 14:19:15 -0700 (PDT)
+        bh=AQvMtFq8Po6vh52QjvN0sEfHzpusUaBiZ8gx3Z9m+QI=;
+        b=Pkc+mEJWTcy/kvMZyV/6hVTTYSauxMdWawJf3nCS4Hh6fTVoK0i4Tcwam9+knCrJ9H
+         xfbgV2xrtTbJb5Jkwugjf8+VvSLcCZobKNblINpjrliTekQNZSsRkXCckiPqg0eYYI9n
+         oPopmEpihSto4hQxue702yBJ4QKg913dwM+TL+9w1QdUxrUJGl62A7F3IoZnyt+PvpU2
+         tLT3hKjNZtdGropwuxxZkuL4YpwZQ8jURAM+t38tx3i0PvHJ47ISaGsTJT5cfdaj21VU
+         HQlDWRC88DsRccKu7IS7zHiYxd5smg9qds1LnDZzqFaYCNYhumK4NrGpmgDseRvo0d/s
+         O8nw==
+X-Gm-Message-State: AOAM5338ej6aqRYtUsVFWuMlrwozUEb9++33nIOeH1vJHraw8vMZvaE3
+        EvNhfgEZ0hQF1qWnVzMsArj4aqdj0MYSmg==
+X-Google-Smtp-Source: ABdhPJx6WnhNaBO2R8vBPw2+3XprPd963gT4IFrNbj23PruGwhdPwzupToOA2zsF2B22m0FChodTQA==
+X-Received: by 2002:adf:e0c4:: with SMTP id m4mr12719217wri.312.1628284758834;
+        Fri, 06 Aug 2021 14:19:18 -0700 (PDT)
 Received: from ?IPv6:2003:ea:8f10:c200:cc6d:4891:c067:bf7b? (p200300ea8f10c200cc6d4891c067bf7b.dip0.t-ipconnect.de. [2003:ea:8f10:c200:cc6d:4891:c067:bf7b])
-        by smtp.googlemail.com with ESMTPSA id k17sm10801005wrw.53.2021.08.06.14.19.12
+        by smtp.googlemail.com with ESMTPSA id m9sm10462487wrz.75.2021.08.06.14.19.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Aug 2021 14:19:15 -0700 (PDT)
-Subject: [PATCH v2 5/9] i2c: i801: Remove not needed check for
- PCI_COMMAND_INTX_DISABLE
+        Fri, 06 Aug 2021 14:19:18 -0700 (PDT)
+Subject: [PATCH v2 6/9] i2c: i801: Improve i801_acpi_probe/remove functions
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>
 Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
-Message-ID: <9ac8ff4b-3e2a-278d-f7f6-65534b43eec7@gmail.com>
-Date:   Fri, 6 Aug 2021 23:15:51 +0200
+Message-ID: <a9a630af-e979-72df-d254-568878dc7ee6@gmail.com>
+Date:   Fri, 6 Aug 2021 23:16:33 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
@@ -67,39 +66,61 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-do_pci_enable_device() takes care that PCI_COMMAND_INTX_DISABLE
-is cleared if a legacy interrupt is used.
+By using ACPI_HANDLE() the handler argument can be retrieved directly.
+Both address space handler functions check the handler argument and
+return an error if it's NULL. This allows to further simplify the code.
 
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Tested-by: Jean Delvare <jdelvare@suse.de>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 23 +++++++----------------
+ 1 file changed, 7 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index f56060fcf..7fa06b85f 100644
+index 7fa06b85f..bd1db0f0a 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1827,19 +1827,12 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		priv->features &= ~FEATURE_IRQ;
+@@ -1635,31 +1635,22 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
  
- 	if (priv->features & FEATURE_IRQ) {
--		u16 pcictl, pcists;
-+		u16 pcists;
+ static int i801_acpi_probe(struct i801_priv *priv)
+ {
+-	struct acpi_device *adev;
++	acpi_handle ah = ACPI_HANDLE(&priv->pci_dev->dev);
+ 	acpi_status status;
  
- 		/* Complain if an interrupt is already pending */
- 		pci_read_config_word(priv->pci_dev, PCI_STATUS, &pcists);
- 		if (pcists & PCI_STATUS_INTERRUPT)
- 			dev_warn(&dev->dev, "An interrupt is pending!\n");
+-	adev = ACPI_COMPANION(&priv->pci_dev->dev);
+-	if (adev) {
+-		status = acpi_install_address_space_handler(adev->handle,
+-				ACPI_ADR_SPACE_SYSTEM_IO, i801_acpi_io_handler,
+-				NULL, priv);
+-		if (ACPI_SUCCESS(status))
+-			return 0;
+-	}
++	status = acpi_install_address_space_handler(ah, ACPI_ADR_SPACE_SYSTEM_IO,
++						    i801_acpi_io_handler, NULL, priv);
++	if (ACPI_SUCCESS(status))
++		return 0;
+ 
+ 	return acpi_check_resource_conflict(&priv->pci_dev->resource[SMBBAR]);
+ }
+ 
+ static void i801_acpi_remove(struct i801_priv *priv)
+ {
+-	struct acpi_device *adev;
 -
--		/* Check if interrupts have been disabled */
--		pci_read_config_word(priv->pci_dev, PCI_COMMAND, &pcictl);
--		if (pcictl & PCI_COMMAND_INTX_DISABLE) {
--			dev_info(&dev->dev, "Interrupts are disabled\n");
--			priv->features &= ~FEATURE_IRQ;
--		}
- 	}
+-	adev = ACPI_COMPANION(&priv->pci_dev->dev);
+-	if (!adev)
+-		return;
++	acpi_handle ah = ACPI_HANDLE(&priv->pci_dev->dev);
  
- 	if (priv->features & FEATURE_IRQ) {
+-	acpi_remove_address_space_handler(adev->handle,
+-		ACPI_ADR_SPACE_SYSTEM_IO, i801_acpi_io_handler);
++	acpi_remove_address_space_handler(ah, ACPI_ADR_SPACE_SYSTEM_IO, i801_acpi_io_handler);
+ }
+ #else
+ static inline int i801_acpi_probe(struct i801_priv *priv) { return 0; }
 -- 
 2.32.0
 
