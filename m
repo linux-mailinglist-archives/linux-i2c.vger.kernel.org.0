@@ -2,97 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E913E84D7
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Aug 2021 22:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28383E84E2
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Aug 2021 23:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbhHJUzv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Aug 2021 16:55:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48188 "EHLO mail.kernel.org"
+        id S232739AbhHJVBK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Aug 2021 17:01:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50540 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234556AbhHJUzh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 10 Aug 2021 16:55:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 42FE561100;
-        Tue, 10 Aug 2021 20:55:14 +0000 (UTC)
+        id S231894AbhHJVBK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 10 Aug 2021 17:01:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 302BF60724;
+        Tue, 10 Aug 2021 21:00:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628628914;
-        bh=lXVCb81Ds/VdhoshPZIHAlr3P7ZKsCBLDSx3SIJXrYw=;
+        s=k20201202; t=1628629247;
+        bh=FdKF9smxg3E0EXaS1euGXqveQmfFkFj6bAwW41jyB7Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BdC54j871H68/YQ2QalAxXiBsMwC6eUDQufRWlDZava2qtmjEG5DsLAyHE6lJK0vE
-         gvQfwIrqjeIcp6/mxTlmi4vemk6rtmohIEmjZsSzX4ju+0SOjd1DwCi+Qh/S3g5jKP
-         K8YicFnZaXBTmrgA0TQv8pEjH2ozaN8+aAVLrrSpqoDqTeod0NaatkdrLViIepGUc6
-         Q5r1JLOV+5c0/6a/uxV0yXtd16BFDoOYVQ1ySiZrowCq1nzFlrBf5JZgI9dsBbcK16
-         u70Z/s1QFUq1DOe6h5TqGn+9RlzzfgpWjqok17FXe38EEUTEIeRa1uaqVCacAZsM0R
-         wp8Y7pjs2mbVw==
-Date:   Tue, 10 Aug 2021 22:55:11 +0200
+        b=fn7i0KGIVCB3YraPlcYneUkXwWqtprEvKtloDXVOcsbGA3gNGWvP/EZ3uRwvFHeH0
+         6Eew/a7jiA+nY6XDazIRXFC9TaCmFoNrbO0Q+0hetU3vM9ceIFZWNw1/wxkV6eEE+S
+         GDNUWY8EvALgnPt4vgWvWs2ynrVFBHBPq25XRHiSpP5LNA4uQJwvSho1enV0Vih+7V
+         HVb76wIOKHCJbkJpR8az7lV/F85yhBB9KQcZs9+DgyvMWk7dEa3n6hKy/L+PLMC3At
+         w1zAfd9BRpbtB3EY52oYwPHIjIS2UgMmTBa53yXPU65kn/hrcUTp0l/sCDRNNAEffd
+         hC/gKaDJ/1CDg==
+Date:   Tue, 10 Aug 2021 23:00:44 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: dev: zero out array used for i2c reads from
- userspace
-Message-ID: <YRLnr24IBwe5HS+j@kunai>
+To:     Hu Haowen <src.res@email.cn>
+Cc:     linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation: i2c: add i2c-sysfs into index
+Message-ID: <YRLo/PlLmFgW+Doh@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        stable <stable@vger.kernel.org>
-References: <20210729143532.47240-1-gregkh@linuxfoundation.org>
+        Hu Haowen <src.res@email.cn>, linux-i2c@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210728155346.8941-1-src.res@email.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9Swibbr0MaEeP+pe"
+        protocol="application/pgp-signature"; boundary="4VIhR7DobTcl6BkU"
 Content-Disposition: inline
-In-Reply-To: <20210729143532.47240-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20210728155346.8941-1-src.res@email.cn>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---9Swibbr0MaEeP+pe
+--4VIhR7DobTcl6BkU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 29, 2021 at 04:35:32PM +0200, Greg Kroah-Hartman wrote:
-> If an i2c driver happens to not provide the full amount of data that a
-> user asks for, it is possible that some uninitialized data could be sent
-> to userspace.  While all in-kernel drivers look to be safe, just be sure
-> by initializing the buffer to zero before it is passed to the i2c driver
-> so that any future drivers will not have this issue.
+On Wed, Jul 28, 2021 at 11:53:46PM +0800, Hu Haowen wrote:
+> Append i2c-sysfs to toctree in order to get rid of building warnings.
 >=20
-> Also properly copy the amount of data recvieved to the userspace buffer,
-> as pointed out by Dan Carpenter.
->=20
-> Reported-by: Eric Dumazet <edumazet@google.com>
-> Cc: Dan Carpenter <dan.carpenter@oracle.com>
-> Cc: stable <stable@vger.kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Hu Haowen <src.res@email.cn>
 
-Fixed checkpatch warning "WARNING: Invalid email format for stable:
-'stable <stable@vger.kernel.org>', prefer 'stable@vger.kernel.org' " and
-applied to for-current, thanks!
+Added Fixes-tag (please provide one next time) and applied to
+for-current, thanks!
 
 
---9Swibbr0MaEeP+pe
+--4VIhR7DobTcl6BkU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmES568ACgkQFA3kzBSg
-KbYTXhAAlT/K3AtvhsnMS3vwbfA+wSr0BYsT6io4lLdFK7t1KZbtTiH08jhSWe0Z
-nZrWxmgCGmQ0zHTDJslFzZz2LtuLE/rhSDqz/pW5l1rKfkOSdeATwmvoU/COZ30i
-O0Gx9DYR/BFANzOEJa8OGApuGeloah6X/5JDRDCZbqU2ZoLPFzJumkQxk4TesLBq
-QwrMXWhl5hsuccfEeEVOuyqpXqkNDCnVgqK1MFqAGawQvMlbiYa5wbn5PR0VKAO0
-IVzz9YLIP+fxyssk0IA1NxiJn5aIqVjlW2wfX5Tu3yT8lJAH/11i3MNfwzMO/XvS
-7IMr00AafqQkAi6ZRvRpn9G0wWL5twuv+weOuJsDgYqyGGX0KWAugEV9PibSV5n3
-4+b8Yb70kwQvAFOz19nBUlIDchVh1Wm8svMJSZO78CGeXmQZLbDfomB0Gvfpjhb8
-hsMzl4SNBqvywRVFqtbj9mVDCjtyMyKNZfY9OOo67mT7PcNPhXUJS/xRmP697oom
-2/l/Iq07xP54i1gEMLhZcNAChJFOXeKbCzL3z/qduvhgbLyXHzwK8wa9jDizk8Ez
-cJ8/nFqa3c9KPrbzst8ql7RNNNHu3DfPslw7rvI52/s8Uqk3Y3DRh5/x9qC6V0j6
-N3Awz9C1CFixVkwGbtzcwd3WKOzglqf9X2nd93yQrX2S9Ldry7s=
-=8fOf
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmES6PwACgkQFA3kzBSg
+KbaO2xAAgFMpO9qWG4VvRHOpeBMwJ1r+lhgJhE3TBneQzbC4y8gYBaqBh/FGtK8r
+VD0/PBdwm7BpXpx6zzm0HJIDwNHvB74rh9LV9lbqbzm+7fXYrxa9hB69Yex6kt7p
+xGkZ4yw/j3KRkU0ThEXa6KS818Z5nXa9i6jrBKTZvy/MCqRylY2VEx4MBKgSJ0y3
+R3cKNTMzI71lD+bWBQqO0pf1uurf426AXE+ARqpmbMdDoRYQDlLZD+ApFDHSmy4M
+IEiCSuRC5vxvWzeJngMv658LhCQRQprbjzZFM2Oj+xcZfFTOb0tTfgEkr3GX5KCU
+r3hSTfHTVDGaub6WE7JdlUQy6dViBkB3/1sMB3azUIKgEgSuO194Asg3SqmCZRs8
+aCqys5MbxnfJ2BfeQRJKbN3W1q/wDFpO7UR/KYpugLnEW8Fe4lfM9OIf6uyEfmN1
+yr6Ofq/XBepmF+f1Idb5mxvmegs2GTcYmCpnHBJ8DtALFQIKtk8JzBSSnr8GUVLV
+opQ6aI39scoN5VBmHAwWXP5yjE+PB+136kacbGrA0g4pnqc+W2cWCGOjYJ+MDyb5
+hpRhO4nPXtS0tNYuos6gqo/Af2KKnd8RyuYR0S+bAoZVY+C0pVwSn8SG9WlJ8bmC
+qunAMm26LdtGqFhPLue7FMSeaWQxu7M6cY0VIEvbLhkOKW7I/Ec=
+=ZhaI
 -----END PGP SIGNATURE-----
 
---9Swibbr0MaEeP+pe--
+--4VIhR7DobTcl6BkU--
