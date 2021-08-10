@@ -2,80 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C28383E84E2
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Aug 2021 23:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11233E84F4
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Aug 2021 23:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbhHJVBK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Aug 2021 17:01:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50540 "EHLO mail.kernel.org"
+        id S233254AbhHJVIf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Aug 2021 17:08:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35322 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231894AbhHJVBK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 10 Aug 2021 17:01:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 302BF60724;
-        Tue, 10 Aug 2021 21:00:46 +0000 (UTC)
+        id S233153AbhHJVIf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 10 Aug 2021 17:08:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F3AF60E09;
+        Tue, 10 Aug 2021 21:08:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628629247;
-        bh=FdKF9smxg3E0EXaS1euGXqveQmfFkFj6bAwW41jyB7Q=;
+        s=k20201202; t=1628629693;
+        bh=VCknxQ8XebAwOlomRtsChDvFl0zg3vZtQqtg0m+qLGs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fn7i0KGIVCB3YraPlcYneUkXwWqtprEvKtloDXVOcsbGA3gNGWvP/EZ3uRwvFHeH0
-         6Eew/a7jiA+nY6XDazIRXFC9TaCmFoNrbO0Q+0hetU3vM9ceIFZWNw1/wxkV6eEE+S
-         GDNUWY8EvALgnPt4vgWvWs2ynrVFBHBPq25XRHiSpP5LNA4uQJwvSho1enV0Vih+7V
-         HVb76wIOKHCJbkJpR8az7lV/F85yhBB9KQcZs9+DgyvMWk7dEa3n6hKy/L+PLMC3At
-         w1zAfd9BRpbtB3EY52oYwPHIjIS2UgMmTBa53yXPU65kn/hrcUTp0l/sCDRNNAEffd
-         hC/gKaDJ/1CDg==
-Date:   Tue, 10 Aug 2021 23:00:44 +0200
+        b=Z4A6MQyg4QgCF6Oc6CCs78DVz5bktB0WM2rDYHI+tNoS0t7uxU6ELuCBPQnVjYejS
+         WVdJSqiqA+vnkMqn0+3DFIGgya8G+rXztysjN72df43DJTaKvraQF7pouFMtWxw/Ug
+         AJc4TIkTt38NAypGk99r9VRBl8tG92+ssBQMSKIVxk+ojV3OyGX/ImYAMqX7+HICD2
+         WBdW/Hk5toA2Z90xDMwhWAD3j2UDKTkccXmW9t/n+HCAhld11ExOa3MWs1m0kIlGw0
+         6P87xj+hdNfVjSSnvJbNqBxTReJ0ggT4hi32cUdwxq0ZONJaLcN+GCHZg4QJi+udD4
+         pIAK+qgHpJf/w==
+Date:   Tue, 10 Aug 2021 23:08:09 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Hu Haowen <src.res@email.cn>
-Cc:     linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: i2c: add i2c-sysfs into index
-Message-ID: <YRLo/PlLmFgW+Doh@kunai>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v2 1/1] i2c: parport: Switch to use
+ module_parport_driver()
+Message-ID: <YRLquRXkQvGKjQ3K@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hu Haowen <src.res@email.cn>, linux-i2c@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210728155346.8941-1-src.res@email.cn>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>
+References: <20210712141119.22426-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4VIhR7DobTcl6BkU"
+        protocol="application/pgp-signature"; boundary="1Fp8NoEhRuznlFAk"
 Content-Disposition: inline
-In-Reply-To: <20210728155346.8941-1-src.res@email.cn>
+In-Reply-To: <20210712141119.22426-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---4VIhR7DobTcl6BkU
+--1Fp8NoEhRuznlFAk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 28, 2021 at 11:53:46PM +0800, Hu Haowen wrote:
-> Append i2c-sysfs to toctree in order to get rid of building warnings.
+On Mon, Jul 12, 2021 at 05:11:19PM +0300, Andy Shevchenko wrote:
+> Switch to use module_parport_driver() to reduce boilerplate code.
 >=20
-> Signed-off-by: Hu Haowen <src.res@email.cn>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Added Fixes-tag (please provide one next time) and applied to
-for-current, thanks!
+Applied to for-next, thanks!
 
 
---4VIhR7DobTcl6BkU
+--1Fp8NoEhRuznlFAk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmES6PwACgkQFA3kzBSg
-KbaO2xAAgFMpO9qWG4VvRHOpeBMwJ1r+lhgJhE3TBneQzbC4y8gYBaqBh/FGtK8r
-VD0/PBdwm7BpXpx6zzm0HJIDwNHvB74rh9LV9lbqbzm+7fXYrxa9hB69Yex6kt7p
-xGkZ4yw/j3KRkU0ThEXa6KS818Z5nXa9i6jrBKTZvy/MCqRylY2VEx4MBKgSJ0y3
-R3cKNTMzI71lD+bWBQqO0pf1uurf426AXE+ARqpmbMdDoRYQDlLZD+ApFDHSmy4M
-IEiCSuRC5vxvWzeJngMv658LhCQRQprbjzZFM2Oj+xcZfFTOb0tTfgEkr3GX5KCU
-r3hSTfHTVDGaub6WE7JdlUQy6dViBkB3/1sMB3azUIKgEgSuO194Asg3SqmCZRs8
-aCqys5MbxnfJ2BfeQRJKbN3W1q/wDFpO7UR/KYpugLnEW8Fe4lfM9OIf6uyEfmN1
-yr6Ofq/XBepmF+f1Idb5mxvmegs2GTcYmCpnHBJ8DtALFQIKtk8JzBSSnr8GUVLV
-opQ6aI39scoN5VBmHAwWXP5yjE+PB+136kacbGrA0g4pnqc+W2cWCGOjYJ+MDyb5
-hpRhO4nPXtS0tNYuos6gqo/Af2KKnd8RyuYR0S+bAoZVY+C0pVwSn8SG9WlJ8bmC
-qunAMm26LdtGqFhPLue7FMSeaWQxu7M6cY0VIEvbLhkOKW7I/Ec=
-=ZhaI
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmES6rUACgkQFA3kzBSg
+KbZufA/9GdOq8rDzqAi0jSwSSLHATht3jW8/BigF+ydPbwnUoxYoNdyvuv9Tu8M6
+ku5A0z1dhUKtma40Fv4By/Hi/JTvDzsvrsLijY4swvVM68VzKLcMjb3aF+/6tRQR
+cqjplsrZy+IDBoL/nMEPAq3kmw3s1mfA+qy09rl3HluSrtttQpgc+4P9nive91ya
+3AtaV4ZXUcLO9Vl56N8FJMTNukwvAap/7Esmz4HkE/krFrZQgw9gQ9eabyGYXrp8
+c1yazMgTKz2wIXNqHiSVzQPmtkgXANKYgfVJYkuUIAka/f2IUg6bQi6A6k2dYCnU
+eYOO9HzecZXFjLn2X1CUfpF2eWztROk7be5G9tF81FZ8Z+Xchy/5dAj3NbG5C8Av
+zZOS9yTFPCsTV0V7VW2s7WYIZ2VThodPcry/wOQnm9mRgURtaeUQMc7/r1y6lk4b
+2hihrdFS7CbGEvCy+d0QzDOwLReCAWHo62ADEgQDwPABC6d5lCrW2lfQtNPZWDxR
+GajxV56Mx4oqdrD4gcIZqvL7LZWpGWIKar8BGj8ns48FAwhPNJUyaLyt8DFTYqD2
+O3E99gDRzQpOHmKmAbOUTkGTtJuNwAJHcBMemAqZ80HFsivHe/wAKt4GVwuZDh5a
+tibvO98UfyqlbJ8mEBnYcRykOrCQl7ZIrwakQyuEkhKfYwl5Tcc=
+=7ZCw
 -----END PGP SIGNATURE-----
 
---4VIhR7DobTcl6BkU--
+--1Fp8NoEhRuznlFAk--
