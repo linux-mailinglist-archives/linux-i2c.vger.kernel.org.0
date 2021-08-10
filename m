@@ -2,69 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A203E7ECE
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Aug 2021 19:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282053E846F
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Aug 2021 22:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbhHJRfV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Aug 2021 13:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbhHJRe2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Aug 2021 13:34:28 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EA1C061254
-        for <linux-i2c@vger.kernel.org>; Tue, 10 Aug 2021 10:33:14 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id n6so17044409ljp.9
-        for <linux-i2c@vger.kernel.org>; Tue, 10 Aug 2021 10:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=RsiBBdA9QKOcTCF5lGXKVsjmClQ3sMV8nYRHi5UzQ6RFRdaZ6t981j56diJ7q3WLiT
-         dSrogDmRt6kwHS+J+pcIdphvlu5Vk62bOJudqb0dzEOf5Tr6sAVMWTY2NbEn++ZnSdaf
-         F4yj6h4F7VBk6uVCXN4p2StSiBpSckLhr0NJoCtUTvVh+gCrpSdvA2dss+nT8Q4XWg+b
-         4x9fMuBGMminOSzPCK8njOsWexpWsfb2omBFXa3GLhHqzUauC1r8oyB3fDvFuiS7qNjT
-         fDqijYMWxjmP3EeBvtWaIUY7Z5YEma/9OhqmI5Ya7ZKqW/5hzlkm8xAdNsqyzESz/5Xj
-         5sZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=Q9pBJAwnLm8Xd/Mg4aI2p8huUIkktuzX50TO8qtAbhmd1mnkbklqEIz3Q/d6TkGjrK
-         ys6xfmlIr1C8fMhTHAt7r2WhXNuxGgqqJizNVpnpgKDrBEXV5eU2bT+2xdZ7TSu8R9qT
-         q7MPHvLqzWtJ+GH0VHsV/1IEvp3dN/TUt4o5EC3bwKVyCjAka5a4lkdYQnWq8ItwQ+Dm
-         6c+MgOWENeq5paONNTIVPgGkEecVfx8dROq75uBGRk8A/6kY0owL23RgCA7rHfbq4g62
-         VNCe8/PLr8gjfVE5g7vZXVQNqb29yEdbwosS6FO0z7qHctr/cFLU86pQqJtt8M7pGcZ6
-         rdew==
-X-Gm-Message-State: AOAM532UFFVjhBmTgEQYF+RSbjXJpHOHsF6LJfXKCCeW6g8zIsVKbrI/
-        KWhUNmNqqHoiOz2ImxEAu1atdFW1TBvVlcllxmU=
-X-Google-Smtp-Source: ABdhPJw+sC+pBQw0G+0ULVvin/r/jCVVb1V7XUqN67UCoWrnBzyIXnaSzK5br1SZrCupI/L0LIZWgMfi7vhpZK+Wcm0=
-X-Received: by 2002:a05:651c:32c:: with SMTP id b12mr1745558ljp.198.1628616792032;
- Tue, 10 Aug 2021 10:33:12 -0700 (PDT)
+        id S229822AbhHJUhh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Aug 2021 16:37:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41772 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229649AbhHJUhh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 10 Aug 2021 16:37:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8DDF9606A5;
+        Tue, 10 Aug 2021 20:37:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628627835;
+        bh=40lR3UuYfxWIcHzzWgzYtKeON+Jm7vbiPKrgNQKw8ww=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fqUwUYKZxrT/OS5VaRMYrX0DSGSuXg2FDa5vo9D+elt8/8ppgpxHB+Ev3NcopmqNH
+         Dz0lP6cNF+TnN46WDJvHwz8+Kv5o3NOHNJ8Ts6pvhIh+wpQAELDJM1Y4nqQ3jU3P26
+         Qbx/jz6JQDcDRe/62pIJPUNbCzJS1X68XfAO9y6uDZmMf+MUMgccpXbRQwbee31A8c
+         m2N4QoT1JdOlWn9VgHt1pdLxFsSwG/RH4VRo88G9FEcinWjyg923j6rEVnyO7rgm1+
+         xI+uHKLxl4IC3dpi4Mkxuok3Q0RcgYVpRaUGvfQpjrQfEhx/aQtF86+WhOpVPV/EXQ
+         HV9OrN/msoKIw==
+Date:   Tue, 10 Aug 2021 22:37:07 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH v2 1/9] i2c: i801: Improve disabling runtime pm
+Message-ID: <YRLjc0ZWuys/d92/@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
+ <10690555-2317-4916-70b8-870708858f9b@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ac2:5d2e:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 10:33:10
- -0700 (PDT)
-Reply-To: majidmuzaffar8@gmail.com
-From:   Majid Muzaffar <ing.abdullabin.rishid.me@gmail.com>
-Date:   Tue, 10 Aug 2021 20:33:10 +0300
-Message-ID: <CAFsu49XXzY7ugKhGzJm5OPKe2LG1R35c-Dkp83VgS3+u27y=sQ@mail.gmail.com>
-Subject: Proposal
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3fMrbBWYeBJOnknj"
+Content-Disposition: inline
+In-Reply-To: <10690555-2317-4916-70b8-870708858f9b@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Salam alaikum,
 
-I am the investment officer of UAE based investment company who are
-ready to fund projects outside UAE, in the form of debt finance. We
-grant loan to both Corporate and private entities at a low interest
-rate of 3% ROI per annum. The terms are very flexible and interesting.
-Kindly revert back if you have projects that needs funding for further
-discussion and negotiation.
+--3fMrbBWYeBJOnknj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks
+On Fri, Aug 06, 2021 at 11:12:18PM +0200, Heiner Kallweit wrote:
+> Setting the autosuspend delay to a negative value disables runtime pm in
+> a little bit smarter way, because we need no cleanup when removing the
+> driver. Note that this is safe when reloading the driver, because the
+> call to pm_runtime_set_autosuspend_delay() in probe() will reverse the
+> effect. See update_autosuspend() for details.
+>=20
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-investment officer
+Applied to for-next, thanks!
+
+
+--3fMrbBWYeBJOnknj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmES428ACgkQFA3kzBSg
+KbblHg/+Mgr2Y3/rdH5IHoxgevqj6nMJyUcMxZgTQq4Zb7aJ8yC1luJjveM0hQaX
+xXUkwJkaEQB2ZlKOCi4VN09x0iI5RJKpvd4XPTScsC6ZPi6HmDxhR1QC134YaCEa
+tlBgJAGTR0rOhUW18ihu9EclWZtgfPSVYUGKD2Sp2+4sl8qAEPYP9MvWXAXLrDgc
+bkZc26c6tux6z1jINlV0VFrfrX2f8T4Z3sO4UCJs6crcdH0UDdF4c8iTwCmOo33E
+MPqTiN6CsM3/VBfE7WcHrscAuRD+lM13Se9tCCDMXU7LwooT2eQCg+gpj9gu5NjK
+B+2mp4K8f6GjlGqS687nJoNM1eES/uOWUX0qduh0gOIDvOfSXJuGKxoWhHkCTKeC
+M+yuUtoGILpDzJoO+jN7salsDnB2LXG7rZcxPJJzLI0IXYkxC7U2VKgK+yElUvXV
+bde2hnM/ADJ1N7tsDuw8U87OlA9uE16N94smtkU1iUQaNJKQ9bYGrAX4TAL3uZhJ
+JP+hkWSVCCYSgj9vSXfKd3Vw3aNHUaHyghP57IA3BO+Xx8GXZBESQBayapiCab2V
+FXM2MXMfbXqkFWZczqC/Epf0EXloO4cgtHvooRopy2e/c4djR/iR3AjMVNFPyg/+
+BGegNxCI128xq0fVMVfqRHnC4gPDco6y9YkCV2jVZpQ7CICEz3w=
+=03V+
+-----END PGP SIGNATURE-----
+
+--3fMrbBWYeBJOnknj--
