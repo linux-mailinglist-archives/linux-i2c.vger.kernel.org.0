@@ -2,92 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E125F3E8485
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Aug 2021 22:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E913E84D7
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Aug 2021 22:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbhHJUpD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Aug 2021 16:45:03 -0400
-Received: from sauhun.de ([88.99.104.3]:48968 "EHLO pokefinder.org"
+        id S233743AbhHJUzv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Aug 2021 16:55:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230181AbhHJUpD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 10 Aug 2021 16:45:03 -0400
-Received: from localhost (p5486ce3a.dip0.t-ipconnect.de [84.134.206.58])
-        by pokefinder.org (Postfix) with ESMTPSA id 725B22C00D7;
-        Tue, 10 Aug 2021 22:44:38 +0200 (CEST)
-Date:   Tue, 10 Aug 2021 22:44:38 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 1/4] i2c: acpi: Add an i2c_acpi_client_count() helper
- function
-Message-ID: <YRLlNh4MrHyVobvR@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-References: <20210803160044.158802-1-hdegoede@redhat.com>
- <20210803160044.158802-2-hdegoede@redhat.com>
- <YQlzzy933V9XMHqt@lahna>
- <9fbf0d6a-2df3-4765-ccf5-788b86994d71@redhat.com>
+        id S234556AbhHJUzh (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 10 Aug 2021 16:55:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 42FE561100;
+        Tue, 10 Aug 2021 20:55:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628628914;
+        bh=lXVCb81Ds/VdhoshPZIHAlr3P7ZKsCBLDSx3SIJXrYw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BdC54j871H68/YQ2QalAxXiBsMwC6eUDQufRWlDZava2qtmjEG5DsLAyHE6lJK0vE
+         gvQfwIrqjeIcp6/mxTlmi4vemk6rtmohIEmjZsSzX4ju+0SOjd1DwCi+Qh/S3g5jKP
+         K8YicFnZaXBTmrgA0TQv8pEjH2ozaN8+aAVLrrSpqoDqTeod0NaatkdrLViIepGUc6
+         Q5r1JLOV+5c0/6a/uxV0yXtd16BFDoOYVQ1ySiZrowCq1nzFlrBf5JZgI9dsBbcK16
+         u70Z/s1QFUq1DOe6h5TqGn+9RlzzfgpWjqok17FXe38EEUTEIeRa1uaqVCacAZsM0R
+         wp8Y7pjs2mbVw==
+Date:   Tue, 10 Aug 2021 22:55:11 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2] i2c: dev: zero out array used for i2c reads from
+ userspace
+Message-ID: <YRLnr24IBwe5HS+j@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable <stable@vger.kernel.org>
+References: <20210729143532.47240-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XUVmFIGdhrbGtadj"
+        protocol="application/pgp-signature"; boundary="9Swibbr0MaEeP+pe"
 Content-Disposition: inline
-In-Reply-To: <9fbf0d6a-2df3-4765-ccf5-788b86994d71@redhat.com>
+In-Reply-To: <20210729143532.47240-1-gregkh@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---XUVmFIGdhrbGtadj
+--9Swibbr0MaEeP+pe
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> >> We have 3 files now which have the need to count the number of
-> >> I2cSerialBus resources in an ACPI-device's resource-list.
-> >>
-> >> Currently all implement their own helper function for this,
-> >> add a generic helper function to replace the 3 implementations.
-> >>
-> >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> >=20
-> > Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Thu, Jul 29, 2021 at 04:35:32PM +0200, Greg Kroah-Hartman wrote:
+> If an i2c driver happens to not provide the full amount of data that a
+> user asks for, it is possible that some uninitialized data could be sent
+> to userspace.  While all in-kernel drivers look to be safe, just be sure
+> by initializing the buffer to zero before it is passed to the i2c driver
+> so that any future drivers will not have this issue.
 >=20
-> Thank you, Wolfram are you also ok with me merging this
-> patch through the pdx86 tree?
+> Also properly copy the amount of data recvieved to the userspace buffer,
+> as pointed out by Dan Carpenter.
+>=20
+> Reported-by: Eric Dumazet <edumazet@google.com>
+> Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> Cc: stable <stable@vger.kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Sure!
+Fixed checkpatch warning "WARNING: Invalid email format for stable:
+'stable <stable@vger.kernel.org>', prefer 'stable@vger.kernel.org' " and
+applied to for-current, thanks!
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
 
-
---XUVmFIGdhrbGtadj
+--9Swibbr0MaEeP+pe
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmES5TUACgkQFA3kzBSg
-KbaqcA/+PD08vkVwJP3H6+FYae3PadhO8O+PXXrjdZ4o4HT0gsn/SrSxO1Vcqntt
-H1s6IfOlwKtfxwb7vH7SM/0XFpBISC0xnc2HKssRg2E0qV2A5M58QYOgGuiv+1y6
-ozSOyA1T8AWRwIkujdYoGamTnDiyGMZdR59lm8TWFTgYfAebJWh5TTdiPOaMwv2N
-1/yqbRSiCe9+6E0J2TAzHf24dPPj1uhLYBLkjluimoKZvHKt1UCet6hdQyVAhyL+
-MPDKkmFZBY0PJNK3TV+bXihTpJg3Xc6ECkDTrUOYe4SX4aOWprB9cXgVdgxd0Kjy
-AovrnIbUT5hgv5mpZbu4b5wwzv5cVyqC9rmp8KVTkVit2lGbw0iWbk1mU+Fl2HTU
-asZ/zKHnDhYnw91fCiJY2OwrQhug3NmYY1Ax4b+70ZD9VUvXbERTV7mp75twjjMZ
-z+4EQJKp5WtiHAzF7eBwf/8/W5ms0tLPwFjU/AVBN7XpibdLIODXfROyn8xKdUKh
-BoIzcPwNqRa0XAL7L0rU4K89bv2S/HNd9nssqnH3kZIWuZ+prkFrsYry/u+O/swN
-RcJbJ5l76ZrJe4gmM7jiQaJzkpEzpsWIgCc3dT0JwmAhoBq8grFNqc/wFAz5twBB
-axB+fsVAStwSkgEoDntD9xWtgIw8xWf9WdQuyFylrTwzQsHVpXg=
-=WnY9
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmES568ACgkQFA3kzBSg
+KbYTXhAAlT/K3AtvhsnMS3vwbfA+wSr0BYsT6io4lLdFK7t1KZbtTiH08jhSWe0Z
+nZrWxmgCGmQ0zHTDJslFzZz2LtuLE/rhSDqz/pW5l1rKfkOSdeATwmvoU/COZ30i
+O0Gx9DYR/BFANzOEJa8OGApuGeloah6X/5JDRDCZbqU2ZoLPFzJumkQxk4TesLBq
+QwrMXWhl5hsuccfEeEVOuyqpXqkNDCnVgqK1MFqAGawQvMlbiYa5wbn5PR0VKAO0
+IVzz9YLIP+fxyssk0IA1NxiJn5aIqVjlW2wfX5Tu3yT8lJAH/11i3MNfwzMO/XvS
+7IMr00AafqQkAi6ZRvRpn9G0wWL5twuv+weOuJsDgYqyGGX0KWAugEV9PibSV5n3
+4+b8Yb70kwQvAFOz19nBUlIDchVh1Wm8svMJSZO78CGeXmQZLbDfomB0Gvfpjhb8
+hsMzl4SNBqvywRVFqtbj9mVDCjtyMyKNZfY9OOo67mT7PcNPhXUJS/xRmP697oom
+2/l/Iq07xP54i1gEMLhZcNAChJFOXeKbCzL3z/qduvhgbLyXHzwK8wa9jDizk8Ez
+cJ8/nFqa3c9KPrbzst8ql7RNNNHu3DfPslw7rvI52/s8Uqk3Y3DRh5/x9qC6V0j6
+N3Awz9C1CFixVkwGbtzcwd3WKOzglqf9X2nd93yQrX2S9Ldry7s=
+=8fOf
 -----END PGP SIGNATURE-----
 
---XUVmFIGdhrbGtadj--
+--9Swibbr0MaEeP+pe--
