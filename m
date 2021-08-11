@@ -2,56 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5D33E9526
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 17:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50413E9630
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 18:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbhHKPy4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Aug 2021 11:54:56 -0400
-Received: from mga07.intel.com ([134.134.136.100]:2131 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233639AbhHKPyc (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 11 Aug 2021 11:54:32 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10073"; a="278894565"
-X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
-   d="scan'208";a="278894565"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 08:53:49 -0700
-X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
-   d="scan'208";a="526982377"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 08:53:48 -0700
-Received: from andy by smile with local (Exim 4.94.2)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mDqY2-008C5g-Aq; Wed, 11 Aug 2021 18:53:42 +0300
-Date:   Wed, 11 Aug 2021 18:53:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2 9/9] i2c: i801: Improve handling platform data for tco
- device
-Message-ID: <YRPyhtiEfNHzPb2J@smile.fi.intel.com>
-References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
- <0e8188d1-e35c-162b-6657-b22e8034483c@gmail.com>
+        id S229905AbhHKQkS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Aug 2021 12:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229819AbhHKQkS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Aug 2021 12:40:18 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90340C061765
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Aug 2021 09:39:54 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id o7-20020a05600c5107b0290257f956e02dso4894300wms.1
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Aug 2021 09:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=Hrdg9pk9YUSSKTXmw0dOJ3gsthIl6w7YahTc2Ikiw3ws0xRvt/rKtMX/z0LeV/7zXu
+         0ssgndyaLtj0pbH38qQWBaDymPHv57GlFKRiuWBYQvpZt4np0ZXt3E2o5CyWNwQn1K/5
+         BradTii3wPOkLPJwAWN2ubnssdxEKDqBr0CMCLF9amzOZURGY4QYSLDg7aCk9T6JCO01
+         +PnAGR4FjkoxmpPISPxN+ZAXCDoWY1rfWbT6danJY9bKf70nyCuF+swneNV82oI2cPf2
+         UxjoK9c7mEbLc2p+4aX0D2gYUjuyRrl3mAEJnkuBYaMKH02N/+jIqpyHnLDpj0TvkBFj
+         XeVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=Au1mCVLfpFLqmRVri7R9bfU/WvfFDJfHtgXi04dgCtjFVkmr+i4rBH9kkfj1N0Un3h
+         k4I2TgeeiyAbm+Va4orwYbisoJE4P3YVsZVo+VPlEEJ4C9m1GEOBbjUkyZfo7rjYlT91
+         n69F1COjsv3JdTXCxpCax5JfBxkkUdfKuzTRsWoeemnA36K3mllXjauK50notOzIh0yi
+         4/5kJkXg1/cIcr6CjY9p+Y0i5TKBJKj2qZuaQv7o4B2klS5vibNKaOsl0cRx2hNX/rYa
+         GLTr9jpsr+XxLgcPBcom+9xtzaUG5uGr4Xg/ZMrpTmipf2/e8/dtlh4IRSApjzj5oCjr
+         cpbA==
+X-Gm-Message-State: AOAM533fKLUCXXYCNT1VZXblI9O9yQE7Du0m7JX2k0ZnM8i/xM3YX71V
+        /T0ndOVgg6q40YN/EIMT+ew=
+X-Google-Smtp-Source: ABdhPJx3Sjnpd2vlZ9d8g+fLpCmyPXXJq41BNrOjJE/s4ruaLz4+ywuxMDhqtNicdyBPpEPAdPpTZQ==
+X-Received: by 2002:a1c:4d01:: with SMTP id o1mr19685428wmh.91.1628699993244;
+        Wed, 11 Aug 2021 09:39:53 -0700 (PDT)
+Received: from [192.168.1.70] ([102.64.209.185])
+        by smtp.gmail.com with ESMTPSA id s1sm2699637wmh.46.2021.08.11.09.39.46
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Wed, 11 Aug 2021 09:39:52 -0700 (PDT)
+Message-ID: <6113fd58.1c69fb81.ff4c7.b751@mx.google.com>
+From:   Vanina curth <curtisvani0040@gmail.com>
+X-Google-Original-From: Vanina  curth
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0e8188d1-e35c-162b-6657-b22e8034483c@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Dear
+To:     Recipients <Vanina@vger.kernel.org>
+Date:   Wed, 11 Aug 2021 16:39:38 +0000
+Reply-To: curtisvani9008@gmail.com
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Aug 06, 2021 at 11:18:40PM +0200, Heiner Kallweit wrote:
-> The platform data structures are used in the respective i801_add_tco
-> functions only. Therefore we can make the definitions local to these
-> functions.
-
-Side note: usually we refer to the functions like "i801_add_tco()" (w/o
-quotes).
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+How are you? I'm Vanina. I'm interested to know you and I would like to kno=
+w more about you and establish relationship with you. i will wait for your =
+response. thank you.
