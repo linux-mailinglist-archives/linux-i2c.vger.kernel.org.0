@@ -2,85 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9414C3E93D7
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 16:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353E83E93D9
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 16:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbhHKOoa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Aug 2021 10:44:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35116 "EHLO mail.kernel.org"
+        id S232698AbhHKOoj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Aug 2021 10:44:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35244 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232565AbhHKOo3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 11 Aug 2021 10:44:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 73D3D60E93;
-        Wed, 11 Aug 2021 14:44:05 +0000 (UTC)
+        id S232680AbhHKOoi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 11 Aug 2021 10:44:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 43E8A60E93;
+        Wed, 11 Aug 2021 14:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628693046;
-        bh=dGOt1cYomh8yokgWuxB0xfISG6IQh8JAyOZf3l6hW/A=;
+        s=k20201202; t=1628693054;
+        bh=nxgp5H+RnhOR05fAcA31g/2Yye5vSP9ihBsQgfVFZIE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cZbCNhWZGEeHVpWwjmuyYQBmC0OE/saECY4IcbvRbTO+sN10qEWJM7P1CV6geyatt
-         POMp/QoksyoLQfYd27wKLJ3ObX2LZ2qU8G2YZPJbk0/J6Ve5Ugpig5NmrIhIQ6ttfm
-         mCWclo1Bys4PdC7eO07QTrMntsR70rwxYJUnZgzZ/7j6KwtfNm3G07cZt3lT/Lfdt7
-         WLk+A6D88P2lw2qOXCikpR7yD7PvOx2Qvv9vxs2lJbm7i0tAKr42rxHJnukHOywp7w
-         0Y0ZaChMIdPcO3z5TkV4TWnIrn34KvZ2qukZsB4y5bHIJNwEI5NIDVwFBOgtXw70pw
-         uwFr5VtAcPZ0g==
-Date:   Wed, 11 Aug 2021 16:44:03 +0200
+        b=I5q3z7SRKfxnCVMLbAc+5DmqdY6C2iImSq0PtS46lg1/0MNxcAeuSweVRkrT1QYli
+         bztoD5Ed6rUvSUIQAnDlGpxJXBRH7em3ets8PHFgC8mv6dICgKsrDC033tdQuVeDyd
+         TNRkfvd/FAuTWvU0i6PRzgws07yC8929GWXT/rU7mCh+jRwdomfN9PCd/KY7vV2r7o
+         LaGE0c6ZFqwId5hva0TReT1iUDnQaPLGLE8CUQQuiQRnW6EU8wgGIudURWybrfakYR
+         WqLcBuDeUHcQKBIBhyqWrKrkKZFDRDqzCJ5P1as97iXLO8WriUaPwuglsVrLLODdnG
+         T3ZozQztexLcQ==
+Date:   Wed, 11 Aug 2021 16:44:12 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v3 1/3] units: Add SI metric prefix definitions
-Message-ID: <YRPiM4y/eSB0F7jy@shikoro>
+Subject: Re: [PATCH v3 2/3] i2c: designware: Use DIV_ROUND_CLOSEST() macro
+Message-ID: <YRPiPHEOEP/bzYZZ@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
 References: <20210712142027.22900-1-andriy.shevchenko@linux.intel.com>
+ <20210712142027.22900-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lFgNly8v2zNB5wC0"
+        protocol="application/pgp-signature"; boundary="Lf3+gByS4rT9GnRY"
 Content-Disposition: inline
-In-Reply-To: <20210712142027.22900-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210712142027.22900-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---lFgNly8v2zNB5wC0
+--Lf3+gByS4rT9GnRY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 12, 2021 at 05:20:25PM +0300, Andy Shevchenko wrote:
-> Sometimes it's useful to have well-defined SI metric prefix to be used
-> to self-describe the formulas or equations.
+On Mon, Jul 12, 2021 at 05:20:26PM +0300, Andy Shevchenko wrote:
+> Instead of open-coding DIV_ROUND_CLOSEST() and similar use the macros dir=
+ectly.
+> While at it, replace numbers with predefined SI metric prefixes.
 >=20
-> List most popular ones in the units.h.
+> No functional change intended.
 >=20
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 Applied to for-next, thanks!
 
 
---lFgNly8v2zNB5wC0
+--Lf3+gByS4rT9GnRY
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmET4jIACgkQFA3kzBSg
-KbZufxAAksUlFAiJDB9zxnMbqyPTFFKJpy5c/wVFRR3iQBLxymOXR9QJLh27MhNx
-Vp+mAv9LzDe7aQQYFTWzDBPXIsZLeq62wIyGHyJGP6YpQAdL15yEOzhHU9fqjB2E
-lrKhjyx97hfXGghtUCPtYO2//ucqHvydMgnMBjHCkPo1lw+jry0C5J+l+Mz2FqSB
-e2N20KnmyKJwiQtlvH4PYrNM/M2Syz3HK1ObZwvxeH1BxuyTRsG1qBVUax/LYHAl
-eghtFD2q7fTMIYAHcokO7EV6srsCb3sJXB2MsdYKY+2rIKgL3qtJjPBABeL9FR7n
-HGW6+j9E+87bqjZxshXL+w08N8avSqwp/whasv5ExVScBdJ68Mz2melm3EKa+EVE
-lfGaAb+vTrGL/D5Q4O8g/KX+bLyfODHo3I1x4O7ZSRK5Z0SkmcpyFPBY+axekEfz
-q8C9UnTon6lDW5Lhmjuihpuo5GtcbiJEs9J6FZqpRzDyWM0/1c2mdwLt4V2YduRD
-2FKQHUgw7jDYdsIQJOC2DHy5c3/0A/QrG7H6flBF5DR7en0Mb7CGcamL6UutYLKG
-OynYB2HTaF3t07a/r78lsN3m53wv63tPWeAOLiX56FcIrYyD+SJkcdWm/pLR7Goi
-1LaBEN4SIZwAAzKoIOqXyzMIclzUuNyjwJC9OmLIn4s4V1kTv6E=
-=FcKA
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmET4jwACgkQFA3kzBSg
+KbZ0JQ/+MvfTlmeZcX56Ts3K/l5avztZbyKtKA73/D7wm4vgkEeClhFEzThyQAh9
+4fFvbZq3Cu2gW0tMSSyKuVxq83KGxTq2uPNFXW7C9t4qU2QCuU5dnefsDaocNw/M
+vLMLLLWH3B4HjLBZijLAM9wXZcgoeP83SNSSyMbxnlK+R7DezFdWcBUF4/hKm+pZ
+UPTU1HAhhmusg8ABdWjBp9qrbRG4Ob6rF333Fqhs9vOsCuT+l7+naddVCc8eFN7Y
+i20BQZVudph+Vr8MPmgm2IlMpRE+qMosgdh0pUHgRnkzCwpOuHRslYoGhwoyBa5/
+VvpRDKTOWe5tvzlbcuSrHVjArQUvHQN7+1LpvDXaPt8FAJtjmIN0Ue170nfJmPxA
+ZBR49FK3CuPYY7kzv+iHcPD6ug1JMDpCFLImOpHml2CgiSzwFqIJ9oJi4HlIxu4z
+TRD5FZBVf7Rxfmd8/Oq7Zsg9Yc0tWYIoHnsprTQybFD0ogss8BrXBEnWyrS2KNiJ
+W4w3hazabdrs4erQiYrY7fVTni+xY47y5Gydf+P73635baV4joLwibS8UjSgOfUm
+RYXr4AiRxChsmT/9oqz6o15lLdnw6zwAeikYbWY5Oi5r8qghh60RGT+1OFfcoBDI
+2YmnefxdHR+tmZcgDeSIGX95BwOuwGBY51WcPRJ4ul5zpzKIGuI=
+=Fwwd
 -----END PGP SIGNATURE-----
 
---lFgNly8v2zNB5wC0--
+--Lf3+gByS4rT9GnRY--
