@@ -2,58 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 361643E90A3
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 14:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0093E913A
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 14:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237780AbhHKMXq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Aug 2021 08:23:46 -0400
-Received: from mga18.intel.com ([134.134.136.126]:35393 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237913AbhHKMXO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 11 Aug 2021 08:23:14 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10072"; a="202281062"
-X-IronPort-AV: E=Sophos;i="5.84,311,1620716400"; 
-   d="scan'208";a="202281062"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 05:22:47 -0700
-X-IronPort-AV: E=Sophos;i="5.84,311,1620716400"; 
-   d="scan'208";a="445911372"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 05:22:45 -0700
-Received: from andy by smile with local (Exim 4.94.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mDnFo-007ord-28; Wed, 11 Aug 2021 15:22:40 +0300
-Date:   Wed, 11 Aug 2021 15:22:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        wsa@kernel.org
-Subject: Re: [PATCH v3 1/3] units: Add SI metric prefix definitions
-Message-ID: <YRPBEMVzQK7AbrSL@smile.fi.intel.com>
-References: <20210712142027.22900-1-andriy.shevchenko@linux.intel.com>
+        id S229793AbhHKMcR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Aug 2021 08:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229693AbhHKMcM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Aug 2021 08:32:12 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACA3C061A01
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id o20so4235933oiw.12
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=l4gMJVQR0kiw5jB7QjBwuNpfM6KgRmAnZ+U3/uWnaDOrOmeNXH1cBsuQp1/yvU/vbe
+         h7truI0tSaL01ahWzSqREXmT86UPLmMGQ2+FLEgN9spMzc4cuAIBO//Q+H5br/KBc0TV
+         kFrfyS3HAXSTLm9xum/FyUF/jALDjxDHHjAbGHdZk+wTj7O/Gvjxi495MUWK0LMLb61t
+         xWjyjzLQh6acP97vVSQvECAoNev4PY9q3zMqG/1nqsutkiyZpW2+ssMsVdYVIVzVs9ax
+         stDtdqMeOw7/9vXNfePZRksemawFwQjcQ1gGbjzrFwOEwtevs3PZsUTk25T8b2r2n2+I
+         0gBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=Vt4B8bLVn9cZ+GBWIF6DVxS9OWLwo+L45sMf3AM57I3Bz6GJ7fDRhZQuEXIb3G2TEt
+         60hEjgVAcG3MofTVSpd8mQxDxDN1WNuNupjZ4wRVb7MZc+ovufSeNiNwBfyIg2O+fvtx
+         apALl0aHqq+vOAVZpCHKjiM5G+87XyqDfz4sQA4WbfNxWy0NuSOacd/pebzP6ZO6TvpZ
+         HC/PyDsuNTb3Rv2yXpp55Cq9G4F/oX2/da2/3JT1IQnLVJwRRj3yPBeuuutnozK2wmhw
+         izEIDq7T4AlWXhz6xh1bK+nKSQYcuIAL+5aaHOh+QRGpzWLcpznVBM5c6YL/OgNG7TP+
+         9O1g==
+X-Gm-Message-State: AOAM532mf6QuVyDyrB1ROANwnWJERlb+xBiPA0UfhGO/I95KXPnrIlHD
+        vGJesE59wBnBHJmlmcl5BNFFvqD+GC3IlXkzbHQ=
+X-Google-Smtp-Source: ABdhPJwW80yC3Jv4N7Ygd/oz/W2w0OMWMVUNvF3laMRZsfuxi/a2uJ5LPRrNJQDqCRwhEl9YwYATyhizs0DKY0HnRMk=
+X-Received: by 2002:a05:6808:1924:: with SMTP id bf36mr24189327oib.106.1628685002002;
+ Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210712142027.22900-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:30:01
+ -0700 (PDT)
+Reply-To: rihabmanyang07@yahoo.com
+From:   Rihab Manyang <ndourandiogou1@gmail.com>
+Date:   Wed, 11 Aug 2021 13:30:01 +0100
+Message-ID: <CAP5_mB76a-FSZzks8OG9YWvLEFv62qfHQ6sTAFQrmH0xjgR9bw@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 12, 2021 at 05:20:25PM +0300, Andy Shevchenko wrote:
-> Sometimes it's useful to have well-defined SI metric prefix to be used
-> to self-describe the formulas or equations.
-> 
-> List most popular ones in the units.h.
-
-Wolfram, can we have this applied or commented? It seems we are going to have
-more users of these definitions (I have recently reviewed one of IIO driver
-where two of them are in use).
-
-
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+How are you?I am miss.Rihab Manyang i will like to be your friend
+please write me back on my email for more details, Thanks.
