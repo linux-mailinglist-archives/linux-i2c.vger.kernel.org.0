@@ -2,85 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7D93E84F7
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Aug 2021 23:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E033E89CD
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 07:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233887AbhHJVJe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Aug 2021 17:09:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36864 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229582AbhHJVJd (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 10 Aug 2021 17:09:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A55C160F55;
-        Tue, 10 Aug 2021 21:09:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628629751;
-        bh=N+y0Ib3nB0HIOVlUv1cNjmOALpuYktMVSuK4FCr+TFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SdPv7xnpU/amHpU4nx0K1W+22Jh042xkVEUQtzCNvvizK/Zcsb2Xox3jl7tLDGfDa
-         2WqBv5i8wqHqv1azoWhd6YhkUGCUj6cN288/8dSRiUvGvSw3iB+dAnxbNzZ+9VEbkB
-         As8ekGisX+jBnKehC2N67u1a2Q11iGx8TTBdKoiuNpyMP6gQzdKzNwFZfscybVLBQQ
-         WpMKsxYkPt2cYYr+bt2Mf/ykFNFhbvEZLh2Z7/TQfd60+WMYcFlmLsdtzN4dCULcGi
-         96IMn9NeD9HsGVQUtNyRHNP5/O1VtO4cvWil3LA5NtyF42bSemA3OC3sfW0q9kRX5t
-         RT1/UgUAZoF/A==
-Date:   Tue, 10 Aug 2021 23:09:08 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     codrin.ciubotariu@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: at91: remove #define CONFIG_PM
-Message-ID: <YRLq9ClCMZlApNqr@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        codrin.ciubotariu@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20210705121516.622326-1-claudiu.beznea@microchip.com>
+        id S234155AbhHKFjV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Aug 2021 01:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233942AbhHKFjU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Aug 2021 01:39:20 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7780CC061765
+        for <linux-i2c@vger.kernel.org>; Tue, 10 Aug 2021 22:38:57 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id q2so1189901plr.11
+        for <linux-i2c@vger.kernel.org>; Tue, 10 Aug 2021 22:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9C16aGrQd4DbmatTkdrN+5r9o60LDqyKnHni66oi5yA=;
+        b=ay0Z1NCDG8WPAn0RRxsixr6dpvr8p3y035Y6DM7CKPLF66XtxVf/sGr/q2+7hVyGVL
+         xcflIio6ixnfRRGtcl/5KkgLtZOB7FIEkp1fyih99x8YgYKnxcwd4L96wIA66wTHDsS6
+         De+km3kdPeHefFd9x6AgF1K79DBr4IUgdVRzH6rJTP0gfnRgWkwSaUCSdvIsdz0pE29k
+         Or/CuxzYPn3vrRDz3/rr4lIpxBYsK1B96T2ed09VcExRXsLwDGAfGQu9RLou53lMuYy+
+         mDzGmi1oL4rp6XLd3heku9vLzLtzx9jnhtzCLTovxxPd6wZpbQxYW6reVTjUdWqNGGVL
+         6/Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9C16aGrQd4DbmatTkdrN+5r9o60LDqyKnHni66oi5yA=;
+        b=LOYUmGmb7kMvsys+uZ4AnaCXMeYo+zvR5rBmQ1f4e8MnDAyQ59WxhBbiC436e+jVd0
+         +RMHxUWv8zC2REPD5cQYT55qr0bip2kdfYwqFAQJIeRTyk5EJ9kNP5Ft3io+d9mJFvc9
+         ayZrs8Y/cXAklIC3q/4Dh76e6JBdgQEbG8YMKXzZdM1q3XOr187amMborc1yRemGTpvQ
+         mz657/UK1OKXA8tZpPa5drxRP0UHpKDm+EAcHo5LIJSPKVSgjbs8m3hPTru0GoDGdbOx
+         LpW1N8OCAW/yE3CV1oTpTHwx4IljmzU47vToq88jJtJrH7uhW39fNFwQtaZjIso/CcRq
+         uiaw==
+X-Gm-Message-State: AOAM530l+Opdj+xX8IUFYIwce+2Cp0nJ7EbY3DyYw1UTofesFHOtdwsF
+        ops/vCBMS48ohN44kii1GXzHUw==
+X-Google-Smtp-Source: ABdhPJz670d+mhV5NHPn4IBMMT7nwf5ci7sI0cLkCTuYIabeyKuBFTWpGjH65c1d6erAUk37z2/Zog==
+X-Received: by 2002:a17:902:9897:b029:12d:17ac:3d40 with SMTP id s23-20020a1709029897b029012d17ac3d40mr14926473plp.67.1628660336982;
+        Tue, 10 Aug 2021 22:38:56 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id o9sm27927871pfh.217.2021.08.10.22.38.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 22:38:56 -0700 (PDT)
+Date:   Wed, 11 Aug 2021 11:08:54 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Bill Mills <bill.mills@linaro.org>,
+        Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Jie Deng <jie.deng@intel.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH V4 0/5] virtio: Add virtio-device bindings
+Message-ID: <20210811053854.37uf55p62r525ees@vireshk-i7>
+References: <cover.1627362340.git.viresh.kumar@linaro.org>
+ <20210804035623.flacrogemvjina3o@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yMdhhDsa+5QlKnsv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210705121516.622326-1-claudiu.beznea@microchip.com>
+In-Reply-To: <20210804035623.flacrogemvjina3o@vireshk-i7>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 04-08-21, 09:26, Viresh Kumar wrote:
+> Michael,
+> 
+> I hope you will be picking this series (Now that it is reviewed by
+> others) ? Just so you know, Wolfram needs the 4th patch, 4/5, to base
+> the virtio-i2c driver over it and has requested an immutable branch
+> for the same.
 
---yMdhhDsa+5QlKnsv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Michael, we need an immutable branch with the following patch:
 
-On Mon, Jul 05, 2021 at 03:15:16PM +0300, Claudiu Beznea wrote:
-> Remove #define CONFIG_PM and use __maybe_unused for PM functions and
-> pm_ptr() for PM ops.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+  uapi: virtio_ids: Sync ids with specification
 
-Applied to for-next, thanks!
+This will enable Wolfram to apply the I2C driver for 5.15-rc1 and
+maybe Linus as well for the GPIO driver.
 
-
---yMdhhDsa+5QlKnsv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmES6vQACgkQFA3kzBSg
-KbaUCg//a2wHKLl0xDRcJB2lIIRRoz9h9yZymQd0SRR/KnPfV4c7NyC6u1q8PYCu
-26ZueLJNrkZScENDmxH3NWDDE7zin24FTBRn63GbxwI5w6eHjHhsezJiMEVULqL1
-bZSfB4oUuiJqd/32AuKJJ2e2ug1X8qSaZA0QPu/AWyLb7v/cq27cOrOI2zj89cNm
-PsAijmiCrl6hfg03suCAZA+dqLHd+TMwDWKRHitDYbYeUwp4h44OAd1gYjAaC6R6
-LtaFN1S8y8kp1CYkbB7k+O4K1I40rZKoWqOL+o5A8s71vV5RTpwIU2H+yhWT2N8E
-SQwutt4Buyj6hMdKhcpIgHTbnluGNlJ9mmYdG8MAg6PGoyrL9xaZe/Rw0t+J6bSG
-59/fK2B+CwZSA8UpeAN9MiDDG4ZhXgaNtMc83sRMWdR71Ns1K+WXxlLMPLi5bXYQ
-ucxNuGkjKJocRRTz3WQUDwQSROKm1QmILOFhzsDZP1y5gfRie++yPUr0/pqL1YPR
-zBVz420zDxNkpJrkOusknGdd0zEN8r94I8Iyph9ixRgPyqD57YOwh6aD/fWIpksM
-Rzi5E7ZJLmulvcn+bEFvJi7vYcT6udmziUueklc8lMdfeoKA3zZ5c45Sj5VYXd4B
-UUNusyAawGPdBkdBecCJm/EtmV2W2eJK8zTOGcrsvhKO/EtcrjU=
-=YqL6
------END PGP SIGNATURE-----
-
---yMdhhDsa+5QlKnsv--
+-- 
+viresh
