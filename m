@@ -2,91 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B143E9492
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 17:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28F83E94C0
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 17:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233278AbhHKPaf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Aug 2021 11:30:35 -0400
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:41773 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbhHKPae (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Aug 2021 11:30:34 -0400
-Received: by mail-ua1-f48.google.com with SMTP id 75so1353135uav.8;
-        Wed, 11 Aug 2021 08:30:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=L469o3K3DZxiKH2GQhMbCcpe1P8gTUJkOxsV39vwt1s=;
-        b=Nxgt8b2O8SVInZtsTNS0ELxaPzoB9jim/zhwojqahKoRHR9AtNKNyfypNpXJtLbh1b
-         1lb6ZlmW48Jgvz+BDKuvudhG8pT2C9/y670BLsautcA+MOufU9m3zqGt17CdS2M2Tnt1
-         /IqUpjRfZ4XHs74v4FR4biOxfP02pMEG8Bbj3Ild5RTsLJa5DjCHf9WsQJacVquWIi+0
-         z+EUI2cnbAuCCQD76nJJmKt7PU20DA5HVyvIf256F8BceBD5HZt/rfD3PzW2D+Tbp3dj
-         Wj/3R8PBETHK1oyfU5lDdbajsxuZQHptidMGXiBxz8/CJA9DzLssKM8usYljSMdZ6btV
-         OXSw==
-X-Gm-Message-State: AOAM532CXCJ93HYXn8RT3Sz32j0TyvKkt0mpCycNaTDn7yfBBLUd2liO
-        fEbDs/pvBvbLxrXyXOdUs7O7xtppr2s7fI/5w28az/ZXBiM=
-X-Google-Smtp-Source: ABdhPJwjG0GpaCmPASRUhombd34bXg9609A6y1rSKXNr8AiJKDrHVCLQlbeqxDVu07BIbmzTvhLuPmR1yt6JaNDERDo=
-X-Received: by 2002:ab0:208c:: with SMTP id r12mr2571587uak.106.1628695810459;
- Wed, 11 Aug 2021 08:30:10 -0700 (PDT)
+        id S232832AbhHKPmM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Aug 2021 11:42:12 -0400
+Received: from mga05.intel.com ([192.55.52.43]:55249 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232120AbhHKPmL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 11 Aug 2021 11:42:11 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10073"; a="300734377"
+X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
+   d="scan'208";a="300734377"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 08:41:48 -0700
+X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
+   d="scan'208";a="484953160"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 08:41:46 -0700
+Received: from andy by smile with local (Exim 4.94.2)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1mDqMO-008BtO-NY; Wed, 11 Aug 2021 18:41:40 +0300
+Date:   Wed, 11 Aug 2021 18:41:40 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH v2 1/9] i2c: i801: Improve disabling runtime pm
+Message-ID: <YRPvtPid3EeMylSr@smile.fi.intel.com>
+References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
+ <10690555-2317-4916-70b8-870708858f9b@gmail.com>
 MIME-Version: 1.0
-References: <cover.1626267422.git.geert+renesas@glider.be> <YRPdTiAakb6OBd2k@shikoro>
-In-Reply-To: <YRPdTiAakb6OBd2k@shikoro>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 11 Aug 2021 17:29:59 +0200
-Message-ID: <CAMuHMdVmKuYo7XhrQsLhXCOyRa=-aKwbtub=yi5nuSvJ22An2Q@mail.gmail.com>
-Subject: Re: [PATCH/RFC 0/4] dt-bindings: i2c: renesas,riic: Add interrupt-names
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <10690555-2317-4916-70b8-870708858f9b@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+On Fri, Aug 06, 2021 at 11:12:18PM +0200, Heiner Kallweit wrote:
+> Setting the autosuspend delay to a negative value disables runtime pm in
+> a little bit smarter way, because we need no cleanup when removing the
+> driver. Note that this is safe when reloading the driver, because the
+> call to pm_runtime_set_autosuspend_delay() in probe() will reverse the
+> effect. See update_autosuspend() for details.
 
-On Wed, Aug 11, 2021 at 4:23 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > The Renesas RZ/A and RZ/G2L I2C Bus Interface has no less than 8
-> > interrupts.  So I think it makes sense to use "interrupt-names"
-> > property, to make it easier to review the interrupt mappings in DTS
-> > files.
-> >
-> > Hence this series documents the "interrupt-names" property in the DT
-> > bindings, adds the property to the DTS files, and marks it required in
-> > the DT bindings. Obviously the last step cannot be applied until all
-> > earlier patches are upstream.
-> >
-> > What do you think?
->
-> I like it and I'd think it is good to go. It is probably easiest if you
-> take the series via your tree to avoid merge conflicts and/or subsystem
-> dependencies. It's unlikely the YAML file will see further updates. So,
-> for the series:
+...
 
-Probably it is not worth doing this in lockstep (1/4 in v5.15 through
-i2c, 2/4 and 3/4 in v5.16 through renesas-devel, and 4/4 in v5.17
-through i2c).
-I have different branches for DT binding and DTS, but I guess it
-doesn't hurt to deviate and apply both to renesas-arm-dt-for-v5.15...
+>  		 * BIOS is accessing the host controller so prevent it from
+>  		 * suspending automatically from now on.
+>  		 */
+> -		pm_runtime_get_sync(&pdev->dev);
+> +		pm_runtime_set_autosuspend_delay(&pdev->dev, -1);
 
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
+I dunno if it's being discussed, but with this you effectively allow user to
+override the setting. It may screw things up AFAIU the comment above.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+With Best Regards,
+Andy Shevchenko
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
