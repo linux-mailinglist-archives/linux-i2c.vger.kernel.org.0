@@ -2,67 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E50413E9630
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 18:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C213E9841
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 21:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbhHKQkS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Aug 2021 12:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbhHKQkS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Aug 2021 12:40:18 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90340C061765
-        for <linux-i2c@vger.kernel.org>; Wed, 11 Aug 2021 09:39:54 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id o7-20020a05600c5107b0290257f956e02dso4894300wms.1
-        for <linux-i2c@vger.kernel.org>; Wed, 11 Aug 2021 09:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=Hrdg9pk9YUSSKTXmw0dOJ3gsthIl6w7YahTc2Ikiw3ws0xRvt/rKtMX/z0LeV/7zXu
-         0ssgndyaLtj0pbH38qQWBaDymPHv57GlFKRiuWBYQvpZt4np0ZXt3E2o5CyWNwQn1K/5
-         BradTii3wPOkLPJwAWN2ubnssdxEKDqBr0CMCLF9amzOZURGY4QYSLDg7aCk9T6JCO01
-         +PnAGR4FjkoxmpPISPxN+ZAXCDoWY1rfWbT6danJY9bKf70nyCuF+swneNV82oI2cPf2
-         UxjoK9c7mEbLc2p+4aX0D2gYUjuyRrl3mAEJnkuBYaMKH02N/+jIqpyHnLDpj0TvkBFj
-         XeVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=Au1mCVLfpFLqmRVri7R9bfU/WvfFDJfHtgXi04dgCtjFVkmr+i4rBH9kkfj1N0Un3h
-         k4I2TgeeiyAbm+Va4orwYbisoJE4P3YVsZVo+VPlEEJ4C9m1GEOBbjUkyZfo7rjYlT91
-         n69F1COjsv3JdTXCxpCax5JfBxkkUdfKuzTRsWoeemnA36K3mllXjauK50notOzIh0yi
-         4/5kJkXg1/cIcr6CjY9p+Y0i5TKBJKj2qZuaQv7o4B2klS5vibNKaOsl0cRx2hNX/rYa
-         GLTr9jpsr+XxLgcPBcom+9xtzaUG5uGr4Xg/ZMrpTmipf2/e8/dtlh4IRSApjzj5oCjr
-         cpbA==
-X-Gm-Message-State: AOAM533fKLUCXXYCNT1VZXblI9O9yQE7Du0m7JX2k0ZnM8i/xM3YX71V
-        /T0ndOVgg6q40YN/EIMT+ew=
-X-Google-Smtp-Source: ABdhPJx3Sjnpd2vlZ9d8g+fLpCmyPXXJq41BNrOjJE/s4ruaLz4+ywuxMDhqtNicdyBPpEPAdPpTZQ==
-X-Received: by 2002:a1c:4d01:: with SMTP id o1mr19685428wmh.91.1628699993244;
-        Wed, 11 Aug 2021 09:39:53 -0700 (PDT)
-Received: from [192.168.1.70] ([102.64.209.185])
-        by smtp.gmail.com with ESMTPSA id s1sm2699637wmh.46.2021.08.11.09.39.46
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Wed, 11 Aug 2021 09:39:52 -0700 (PDT)
-Message-ID: <6113fd58.1c69fb81.ff4c7.b751@mx.google.com>
-From:   Vanina curth <curtisvani0040@gmail.com>
-X-Google-Original-From: Vanina  curth
-Content-Type: text/plain; charset="iso-8859-1"
+        id S230270AbhHKTEl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Aug 2021 15:04:41 -0400
+Received: from www.zeus03.de ([194.117.254.33]:42170 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229802AbhHKTEk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 11 Aug 2021 15:04:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=yotAXwGxPU3du2t0851ttQ/XEv4u
+        xc75haydCGhcwDk=; b=uhRV3nizCjjBdQUbDSIINuQ40KhPgDduxHvZ7loqVD4E
+        J5TZYUfonKw/uoS7XbNuyCR6VO79Br63PP+58KBbgbc4aFWHYpFrobsZpXCAB/YH
+        fsFHVaXHKtntIDaby9s4/LSP/qeB1kx99cKx1blQeryPrz1UgkkegpucWYY/G3s=
+Received: (qmail 2749631 invoked from network); 11 Aug 2021 21:04:14 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Aug 2021 21:04:14 +0200
+X-UD-Smtp-Session: l3s3148p1@8oDASE3JxOIgAwDPXwY8AGSWydYZifHX
+Date:   Wed, 11 Aug 2021 21:04:12 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH/RFC 0/4] dt-bindings: i2c: renesas,riic: Add
+ interrupt-names
+Message-ID: <YRQfLN3r0gFiQMG1@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
+References: <cover.1626267422.git.geert+renesas@glider.be>
+ <YRPdTiAakb6OBd2k@shikoro>
+ <CAMuHMdVmKuYo7XhrQsLhXCOyRa=-aKwbtub=yi5nuSvJ22An2Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Dear
-To:     Recipients <Vanina@vger.kernel.org>
-Date:   Wed, 11 Aug 2021 16:39:38 +0000
-Reply-To: curtisvani9008@gmail.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VhfuD+Qk+C9o4mf/"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVmKuYo7XhrQsLhXCOyRa=-aKwbtub=yi5nuSvJ22An2Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-How are you? I'm Vanina. I'm interested to know you and I would like to kno=
-w more about you and establish relationship with you. i will wait for your =
-response. thank you.
+
+--VhfuD+Qk+C9o4mf/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Geert,
+
+> Probably it is not worth doing this in lockstep (1/4 in v5.15 through
+> i2c, 2/4 and 3/4 in v5.16 through renesas-devel, and 4/4 in v5.17
+> through i2c).
+
+I agree!
+
+> I have different branches for DT binding and DTS, but I guess it
+> doesn't hurt to deviate and apply both to renesas-arm-dt-for-v5.15...
+
+Sounds good, thanks!
+
+All the best,
+
+   Wolfram
+
+--VhfuD+Qk+C9o4mf/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEUHygACgkQFA3kzBSg
+KbZXaBAAim/mI+VPfpgtyAN2RE3C4n/H5lYiDnzByB2Rqq4t1ammd2RoLwDibtxp
+5wE1CelXSD64Q3tRvRCyQBImxrhI76BlD8UjtXaQ2Y3PRVdRHgR1DueVXa24q/6N
+ofkxPM4LAWU4kF2I7RfMyFau5Dtf/oJlCKncF/TK5+/SGO/eBqxgZVY1o0+9r7ix
+C1yHFEEI3KVnvbRygGk1aUT+kQm5KZAPD9/SnPnyu9Fq81I0r0oJi8jWNm8hT3i3
+JxjCR0y+OrhUP2jrknkTTZfghYiR17GVcAPqVIog+dbZ8Eq5l8v2u0Qea7OWLtDV
+hzZ3l9owIhjXk0uXDX7VYhwRTq1WreY0fqm9686mQOTNBcf/1BuY6gr0fp1Woqhf
+PNsgEkBm/TgTIA08gLkB1E1HHDSErBYwAnXy2zRW/BTTA/MdrM9GFkMZ1EuzVLwv
+9/jiDGuD/kYJwxH+TzzkW2IwK05UEg9j+kY4iMbHeOntM0LNTAj5n7jYH4TXdm9v
+z9NnEGOXxHgJoVeK98yFxUQk5GOjXzg59Jsp00qtVFGf1Y6f+4RaXw/zP1NODoru
+37UnxfH9XoRB2qZo6Rf0w7r+L2zDe3r8IFg03lDt6B5jeK1R+icVZ2SUWmT2t0Ob
+2b/JHxlxqf54JVcj7kwifucu1oO0ScCLV2Q0mOsGgIdU2Jg/V40=
+=bJpJ
+-----END PGP SIGNATURE-----
+
+--VhfuD+Qk+C9o4mf/--
