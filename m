@@ -2,104 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C473E9398
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 16:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4D13E93CC
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Aug 2021 16:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbhHKOXi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Aug 2021 10:23:38 -0400
-Received: from www.zeus03.de ([194.117.254.33]:33486 "EHLO mail.zeus03.de"
+        id S232438AbhHKOnT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Aug 2021 10:43:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34204 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232276AbhHKOXg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 11 Aug 2021 10:23:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=bA+SpoCd9Zrin70ep2OKmQSSiYzO
-        VLF5suFO9tR8vJU=; b=sNdIRyoQrtF9c/RK047CRz32yayHGtxMCPHLvHJKEovc
-        ciZpqZcEK4MAz205TALD1DNDpGQ067qZryQVPfVIIT4aUAkwZdAzSZFbU1sigKxq
-        4dBNdMkkCNbVcGHhArZyH5QvJ0JBAU5GnoLh/3yzb1GhVq5xnDMo6Xzn2TA6UcA=
-Received: (qmail 2682161 invoked from network); 11 Aug 2021 16:23:11 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Aug 2021 16:23:11 +0200
-X-UD-Smtp-Session: l3s3148p1@QzenW0nJDJ8gARa4RTP4AfHKOCm/nqrR
-Date:   Wed, 11 Aug 2021 16:23:10 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH/RFC 0/4] dt-bindings: i2c: renesas,riic: Add
- interrupt-names
-Message-ID: <YRPdTiAakb6OBd2k@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <cover.1626267422.git.geert+renesas@glider.be>
+        id S232364AbhHKOnS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 11 Aug 2021 10:43:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 63B9B60C40;
+        Wed, 11 Aug 2021 14:42:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628692975;
+        bh=f/AVoeAgOQsi7jtVb4jpRLKXKdBrhsXQTZF78EVwSzA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QT3owfR5lYN7ObwCiAL5hulFbFrgoLqq8Fc/CSyuTqFyd3pQkTcmN+XHT8KJt7e44
+         TRVYYIkscctTo4rf7kut3qwA5XWe+HeMWTK5b+xV1hjwReMvlSQ89tnTjaG0Z/cfAs
+         YF3aWs0dZnh7erOx98JkjfM+nkFC3jgRzX4bdrhgaD8y7DMnot4KdqNZVj6qu/D8hP
+         WufXqtxAZlSEG0a6XPwvDWNnPn72aG9x3fS5Br9FNzjdMLnzcGWdlrUUD6ipR0xSM1
+         ozWoWFalq6JLKdoPYnEf4U4uK+tqZt+s+SerG2V/HedVIQOWWgWP9HVZBwA7JVBWtm
+         KIPmDdK5gAp0g==
+Date:   Wed, 11 Aug 2021 16:42:51 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v3 1/3] units: Add SI metric prefix definitions
+Message-ID: <YRPh60yHab3q0mVo@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20210712142027.22900-1-andriy.shevchenko@linux.intel.com>
+ <YRPBEMVzQK7AbrSL@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0/yWTP9/4TtsiMqK"
+        protocol="application/pgp-signature"; boundary="DURPq4zVU7c15iyL"
 Content-Disposition: inline
-In-Reply-To: <cover.1626267422.git.geert+renesas@glider.be>
+In-Reply-To: <YRPBEMVzQK7AbrSL@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---0/yWTP9/4TtsiMqK
+--DURPq4zVU7c15iyL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Geert,
-
-> The Renesas RZ/A and RZ/G2L I2C Bus Interface has no less than 8
-> interrupts.  So I think it makes sense to use "interrupt-names"
-> property, to make it easier to review the interrupt mappings in DTS
-> files.
+On Wed, Aug 11, 2021 at 03:22:40PM +0300, Andy Shevchenko wrote:
+> On Mon, Jul 12, 2021 at 05:20:25PM +0300, Andy Shevchenko wrote:
+> > Sometimes it's useful to have well-defined SI metric prefix to be used
+> > to self-describe the formulas or equations.
+> >=20
+> > List most popular ones in the units.h.
 >=20
-> Hence this series documents the "interrupt-names" property in the DT
-> bindings, adds the property to the DTS files, and marks it required in
-> the DT bindings. Obviously the last step cannot be applied until all
-> earlier patches are upstream.
->=20
-> What do you think?
+> Wolfram, can we have this applied or commented? It seems we are going to =
+have
+> more users of these definitions (I have recently reviewed one of IIO driv=
+er
+> where two of them are in use).
 
-I like it and I'd think it is good to go. It is probably easiest if you
-take the series via your tree to avoid merge conflicts and/or subsystem
-dependencies. It's unlikely the YAML file will see further updates. So,
-for the series:
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Let me know if you think another way is better.
-
-Happy hacking,
-
-   Wolfram
+Okay, seems there won't be one to ack the units.h changes. Doesn't
+really matter, I think. Will apply now.
 
 
---0/yWTP9/4TtsiMqK
+--DURPq4zVU7c15iyL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmET3U4ACgkQFA3kzBSg
-KbYwWg/+MAKeYtltD8jFf1qc2Dpw7KM5aIJ+xh8k3TP69KhqUT0VrTRm9Arv0iyh
-m8xarEu7CQJOksSxLuUScEHMmEsEyjJQ2YT1oWbqzvRJcm7jVUQJ9muAeaKbVDRH
-ZM9Vj0GohckcVXrN98Ob+dHa5TIv7lzrcSr71DRLJJx6MT55lPezfARxSYQqnYFN
-iaeyZ6rRLANzZ3DUvwM6LK5fWy460UB3Wr1SBLj9XxLEvMm8MZElVfyXZI+uwAIa
-/MSKufEe2b0E0ACzoyQAYXeDDSF73LNV6+nTjScU9jw0fgTs6OlK5HtRzpYNfck6
-8CyGacSHn0Fl9WY33/kZtUySbGzB6gsNqCnJe6pQOrMvUtC3APP8tXIRFq8gcIm/
-hBjAv1yKCMFIdZMVnsK1TMf3MUCEZ79nIbJA0JUp0ytSEe65uHnPvoOZmCvHlTE3
-rrfRmVi8T0ABBO+OayyeA4klswajvNMSjCei/XqbBh4XCi/ko2oq5pZcr1utTuxv
-e2jaa2ts9Zpfc1NaQOUtKRw64X+53D07AU1GDjf1IGOkbvA1aBQWwYUbuNijda/X
-F/FhCr7UP96RU7KZktYxHswwl6NSBEO0LJmQCxDPxUTTDZ68hDVgckKmL//Hseyt
-2TK6AKLMX5f9YBtY1ufpvpHVsMpp62k+NlrIb0Ge/jbUp0lqa+0=
-=DrMT
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmET4ecACgkQFA3kzBSg
+KbbyRQ/+PaWjrR6kRg46GHm7g8EgLe/ezpT6FelhOt9WMTC9HJL1q+0U7TYETX7L
+wPHX960YAFL3pjLZjPA5FojE4PlFhKOaAuOqYznRQCjVR1zjoGjXlnUxY/aBYjsW
+2v5z5Rmp3I5bvS1m33x7V5qZlS7AyqqlQEeN+A4U/+Fy/U48Qjl+rb2tBJmcqgz6
+m/6+XcWYFKRzrJCeSN8MW+wbzh59lf47lMuhmmSs2kGGhjbVxs9ms3e81e8lCi9N
+RrWbWc25J3mmT0hoCB55M7FzHEE88xYcBuFNO9uTRTwPkhaIAU+DKjnDMUgOsGAJ
+z5mk9iICyNwBu+GfuobyYpv6PVtQEERhL8crf++9y8XHoN7GUpUAIidW4r80AIhU
+wR9MjCdhbBxn1gP/M1/sp4nXhKhM8GohYkeksf4r15vjz/BUIXrLM3W6fg3QW5eQ
+K0ThYH2/HdBs6BMbEAIvTNPbgR4jVxrBQ5Qzq7bxzr3f//RwqotlnbPQYwTnpyuI
+4WomPesFUKr6PAMA0Flmdee/tw7au6C0Tsf92oNibK7wKSYYTrT615O5nOX6C7Xv
+tKdx7vmOo2WzvRJt+da4eZ/TdrlRde4mNe4IClGckvwHLkxNJ0XlteVKbZpb0UK4
+4k5lC1YoaqL+f5s/Nn8MxX2Ug4XAQOgy+Fdf+PukCRmkdWERDsQ=
+=NxIx
 -----END PGP SIGNATURE-----
 
---0/yWTP9/4TtsiMqK--
+--DURPq4zVU7c15iyL--
