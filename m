@@ -2,128 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B553E9F84
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Aug 2021 09:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE233EA26A
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Aug 2021 11:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234199AbhHLHkU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Aug 2021 03:40:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43590 "EHLO mail.kernel.org"
+        id S235508AbhHLJtC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Aug 2021 05:49:02 -0400
+Received: from mga14.intel.com ([192.55.52.115]:1482 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231496AbhHLHkT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 12 Aug 2021 03:40:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6E56360E78;
-        Thu, 12 Aug 2021 07:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628753995;
-        bh=irX84ooBnsiAdoz0s5VmTLIdLA7xUv8R2abt2xDslt4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cfS0KONckKE6S/yS1AUqL5MrF3jPpcJBiUIqHzeR7N07C2hRV9SfUfhixPcUuOKJf
-         uL2V21XEwzGBvqfvdUMWTvXter/LPnHaUSv9PTPX4uabffL595ltUTRZ9JtP7gIOtj
-         lEXzV5M9kwQzAzeTdpCEoQtsxCzBqKy6cEt8DPNZNqIFOgaC1US/vbWSvYDXy/vFk/
-         O33qc4pB7hwzS3+U+dC7dPPuipH4fLongGgfpq1pnzCixNcwn8oub/4LRRBbs+4SQf
-         Y8zAR2lxYZ8bwIcrszU9diSsnPH3ShW8nj7K3uleAqbPyJZzlQcdpa1T113/iVtotz
-         R2EsLaCodzjIQ==
-Date:   Thu, 12 Aug 2021 09:39:43 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v5 1/3] i2c: aspeed: Add slave_enable() to toggle slave
- mode
-Message-ID: <YRTQP9sX0hkTJMTx@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20210714033833.11640-1-quan@os.amperecomputing.com>
- <20210714033833.11640-2-quan@os.amperecomputing.com>
+        id S235145AbhHLJtC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 12 Aug 2021 05:49:02 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10073"; a="215048389"
+X-IronPort-AV: E=Sophos;i="5.84,315,1620716400"; 
+   d="scan'208";a="215048389"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2021 02:48:37 -0700
+X-IronPort-AV: E=Sophos;i="5.84,315,1620716400"; 
+   d="scan'208";a="527700435"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2021 02:48:36 -0700
+Received: from andy by smile with local (Exim 4.94.2)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1mE7KA-008Xdh-BL; Thu, 12 Aug 2021 12:48:30 +0300
+Date:   Thu, 12 Aug 2021 12:48:30 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH v2 1/9] i2c: i801: Improve disabling runtime pm
+Message-ID: <YRTubuupevq0JMbW@smile.fi.intel.com>
+References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
+ <10690555-2317-4916-70b8-870708858f9b@gmail.com>
+ <YRPvtPid3EeMylSr@smile.fi.intel.com>
+ <3f225422-b343-eaef-0a95-9d15a5a378f2@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GwGWc7OEMm4Wptga"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210714033833.11640-2-quan@os.amperecomputing.com>
+In-Reply-To: <3f225422-b343-eaef-0a95-9d15a5a378f2@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Aug 11, 2021 at 10:03:12PM +0200, Heiner Kallweit wrote:
+> On 11.08.2021 17:41, Andy Shevchenko wrote:
+> > On Fri, Aug 06, 2021 at 11:12:18PM +0200, Heiner Kallweit wrote:
+> >> Setting the autosuspend delay to a negative value disables runtime pm in
+> >> a little bit smarter way, because we need no cleanup when removing the
+> >> driver. Note that this is safe when reloading the driver, because the
+> >> call to pm_runtime_set_autosuspend_delay() in probe() will reverse the
+> >> effect. See update_autosuspend() for details.
+> > 
+> > ...
+> > 
+> >>  		 * BIOS is accessing the host controller so prevent it from
+> >>  		 * suspending automatically from now on.
+> >>  		 */
+> >> -		pm_runtime_get_sync(&pdev->dev);
+> >> +		pm_runtime_set_autosuspend_delay(&pdev->dev, -1);
+> > 
+> > I dunno if it's being discussed, but with this you effectively allow user to
+> > override the setting. It may screw things up AFAIU the comment above.
+> > 
+> No, this hasn't been discussed. At least not now. Thanks for the hint.
+> This attribute is writable for the root user, so we could argue that
+> the root user has several options to break the system anyway.
 
---GwGWc7OEMm4Wptga
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+But it will mean the side effect on this driver and typical (root-run) system
+application (systemd like?) should care now the knowledge about this
+side-effect. I do not think it is desired behaviour. But I'm not a maintainer
+and I commented here just to make everybody understand the consequences of the
+change.
 
-Hi all,
-
-On Wed, Jul 14, 2021 at 10:38:31AM +0700, Quan Nguyen wrote:
-> Slave needs time to prepare the response data before Master could
-> enquiry via read transaction. However, there is no mechanism for
-> i2c-aspeed Slave to notify Master that it needs more time to process
-> and this make Master side to time out when trying to get the response.
->=20
-> This commit introduces the slave_enable() callback in struct
-> i2c_algorithm for Slave to temporary stop the Slave mode while working
-> on the response and re-enable the Slave when response data ready.
-
-Sorry that I couldn't chime in earlier, but NAK!
-
->  include/linux/i2c.h             |  2 ++
-
-@Corey: Please do not change this file without my ACK. It is not a
-trivial change but an API extenstion and that should really be acked by
-the subsystem maintainer, in this case me. I was really surprised to see
-this in linux-next already.
-
-@all: Plus, I neither like the API (because it doesn't look generic to
-me but mostly handling one issue needed here) nor do I fully understand
-the use case. Normally, when a read is requested and the backend needs
-time to deliver the data, the hardware should stretch the SCL clock
-until some data register is finally written to. If it doesn't do it for
-whatever reason, this is a quirky hardware in my book and needs handling
-in the driver only. So, what is special with this HW? Can't we solve it
-differently?
-
-All the best,
-
-   Wolfram
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---GwGWc7OEMm4Wptga
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEU0DsACgkQFA3kzBSg
-KbY9lg//WuQBcK9qC8p75mupHENCaWqvbTpqZARXpEbhlHtaxT2SqoADaOlbbFX8
-A2hu9n0efOSGZs1mEfLKL/y9BSBy0XLMLikoQgZw76ole8RWFjYJjJT1Oqqlk4p2
-LpVhrGj+g54IuMLo+vD0R5V9GeK6iXfFMwCJP5pi/AZ5p71DmyHDq/O7yDHvR5Cq
-m0e7SFKxyYt8oEUYFzqdi/EEx5ndMeIycipVFdNPRhAARJHixYprG4wmyqRBUhDM
-Mm43mGSsalicQggJ6vhVBj1JloOAN7Of7p4TsElFEX7uRig8Pgv35ODmMxNGfv81
-QCu1gV7gggqyt+V6dRl8TQoXb0bWcCZ3f7fodcRDdOWIHZhqq7IBURRoiVSGKZ7X
-UVVwNTt1X55FBxKAkj1Coxu1JZnp5LPa6bIpA4o2NSd4hj/smutrDVGVsQRnNLEK
-+sQ4ovJGK2YPjuOKxHyN+gZ4fO9Tj2nHlzm3AVWpalkd89qcclqDMRIaFdR9Wi3c
-t1mtXjMjqKOj99+yYacMMSnI4EfqsuTD2NxEMEQCGjlU27rcfXagxeif7RJZeSWq
-3tuvG7lGRNMKk59dC7/Rn9yl9vUUx5n1fiK4sNEaVvAK1lbXng8G4bxMgUW/EFN3
-0kln133baUn8BIfoaHBRjGSQ+npxyGS84OsJfjg1bzxZViBDA74=
-=05a4
------END PGP SIGNATURE-----
-
---GwGWc7OEMm4Wptga--
