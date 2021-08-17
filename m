@@ -2,110 +2,122 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E973EF3EE
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Aug 2021 22:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0D33EF43B
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Aug 2021 22:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234706AbhHQUXL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Aug 2021 16:23:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58678 "EHLO mail.kernel.org"
+        id S234641AbhHQUo6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Aug 2021 16:44:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48672 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235959AbhHQUXC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 17 Aug 2021 16:23:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 163E0600AA;
-        Tue, 17 Aug 2021 20:22:27 +0000 (UTC)
+        id S234827AbhHQUo5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 17 Aug 2021 16:44:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 974DD6023E;
+        Tue, 17 Aug 2021 20:44:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629231748;
-        bh=xM8Fq7ZMWQEXCu1xpmZ+0XG+A2I9ImRmgv7hwNwGuQI=;
+        s=k20201202; t=1629233063;
+        bh=jenxdlwuv8KbA36CMOiq/pND/A9001wiHZjzZzHp/hg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hP5RveA2cBN/vePeFX/3i5KSAEeAFUEIjbdXFfpFKhN7lMOPyeqWal/bZ5Ua+arp6
-         yCJtZ+ktYJlvF6o1pbjd8kRs4hp/g3CoeCjeA8RDkR2DJJrhI+pxDrvbl1gjIZi+d2
-         s7LxQuMW+C/Zz1ve8NQfjPos8mBzxvhMT+bTMtuKgKAp2W6rI/9yDm1h1cweO0OJEQ
-         KIwzfNQ7DP7y0BAf53xn9ceze18Kn5P66emhK5eH9iUn57S3pCfYnj4CGcpQsbujlD
-         TKHYq31Lr9SIL+sQ+Bgw/GCtiZac0kGWlzly93YLr2avhtBRPwMA5cTY/mA/dKCdlI
-         JhyziatJezU4Q==
-Date:   Tue, 17 Aug 2021 22:22:25 +0200
+        b=NYdDSPH+gVMmcxOQ4wmF37Mv7S75mRIVyHQmostdPYhw037RtFvUPDkUwBhD9GpbZ
+         NbKvoqziNO/eiZIPED/Mu9nXWr2ENJubPFuzgtraw/hIErooayo3DumdrsnlJDYdHY
+         2iANWmhBQqWgsg/zOPRjN9lPyfv6E4v7XJuwA1a0i2eyFPq8n7i7uXSUJTi2K1GpGR
+         OW3faYxdnZ3n3cukLA41Us0cO1396UC+ioTwXoAMIEI98sf2CpONDZCRHcEtiZdoes
+         HLcZp9rWpwE/k53r2kNfEinQyt30zTq16H1Rhysw/wWsK/5aT06eKl9Mm7JNqjAKVm
+         Kysgs/+WBnlxw==
+Date:   Tue, 17 Aug 2021 22:44:20 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, arnd@arndb.de,
-        jasowang@redhat.com, andriy.shevchenko@linux.intel.com,
-        yu1.wang@intel.com, conghui.chen@intel.com,
-        viresh.kumar@linaro.org, stefanha@redhat.com,
-        gregkh@linuxfoundation.org, vincent.guittot@linaro.org,
-        alex.bennee@linaro.org, jiedeng@alumni.sjtu.edu.cn
-Subject: Re: [PATCH v15] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <YRwagcZ8SUCsncEA@kunai>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Nyekjaer <sean@geanix.com>, devicetree@vger.kernel.org,
+        Jose Cazarin <joseespiriki@gmail.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v1.1 2/2] iio: dac: dac5571: Fix chip id detection for OF
+ devices
+Message-ID: <YRwfpOuyVEstwsza@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, arnd@arndb.de,
-        jasowang@redhat.com, andriy.shevchenko@linux.intel.com,
-        yu1.wang@intel.com, conghui.chen@intel.com, viresh.kumar@linaro.org,
-        stefanha@redhat.com, gregkh@linuxfoundation.org,
-        vincent.guittot@linaro.org, alex.bennee@linaro.org,
-        jiedeng@alumni.sjtu.edu.cn
-References: <bcf2fb9bbe965862213f27e05f87ffc91283c0c5.1627018061.git.jie.deng@intel.com>
+        Jonathan Cameron <jic23@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, Sean Nyekjaer <sean@geanix.com>,
+        devicetree@vger.kernel.org, Jose Cazarin <joseespiriki@gmail.com>,
+        linux-i2c@vger.kernel.org
+References: <20210723183114.26017-3-laurent.pinchart@ideasonboard.com>
+ <20210724000654.23168-1-laurent.pinchart@ideasonboard.com>
+ <20210724154308.55afb03c@jic23-huawei>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wqGf7iqXPvdRtbI6"
+        protocol="application/pgp-signature"; boundary="bSLA9Xlk/h7hJBea"
 Content-Disposition: inline
-In-Reply-To: <bcf2fb9bbe965862213f27e05f87ffc91283c0c5.1627018061.git.jie.deng@intel.com>
+In-Reply-To: <20210724154308.55afb03c@jic23-huawei>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---wqGf7iqXPvdRtbI6
+--bSLA9Xlk/h7hJBea
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 23, 2021 at 01:44:35PM +0800, Jie Deng wrote:
-> Add an I2C bus driver for virtio para-virtualization.
->=20
-> The controller can be emulated by the backend driver in
-> any device model software by following the virtio protocol.
->=20
-> The device specification can be found on
-> https://lists.oasis-open.org/archives/virtio-comment/202101/msg00008.html.
->=20
-> By following the specification, people may implement different
-> backend drivers to emulate different controllers according to
-> their needs.
->=20
-> Co-developed-by: Conghui Chen <conghui.chen@intel.com>
-> Signed-off-by: Conghui Chen <conghui.chen@intel.com>
-> Signed-off-by: Jie Deng <jie.deng@intel.com>
-> Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Tested-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-Okay, with rc6 being released, I won't wait for an immutable branch
-anymore. I applied this now and we will see if there will be a merge
-conflict. If so, it will be trivial to handle, I'd think. So:
+> > When matching an OF device, the match mechanism tries all components of
+> > the compatible property. This can result with a device matched with a
+> > compatible string that isn't the first in the compatible list. For
+> > instance, with a compatible property set to
+> >=20
+> >     compatible =3D "ti,dac081c081", "ti,dac5571";
+> >=20
+> > the driver will match the second compatible string, as the first one
+> > isn't listed in the of_device_id table. The device will however be named
+> > "dac081c081" by the I2C core.
+> >=20
+> > This causes an issue when identifying the chip. The probe function
+> > receives a i2c_device_id that comes from the module's I2C device ID
+> > table. There is no entry in that table for "dac081c081", which results
+> > in a NULL pointer passed to the probe function.
+> >=20
+> > To fix this, add chip_id information in the data field of the OF device
+> > ID table, and retrieve it with of_device_get_match_data() for OF
+> > devices.
+> >=20
+> > Signed-off-by: Jose Cazarin <joseespiriki@gmail.com>
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>=20
+> Interesting problem that I hadn't previously realised could happen.
+>=20
+> One request though, can we use device_get_match_data() here rather than
+> the of specific version?  Include property.h as well for that.
+>=20
+> That should allow the same issue with compatible to work correctly when
+> using PRP0001 based ACPI methods.=20
+> https://elixir.bootlin.com/linux/v5.14-rc1/source/drivers/acpi/bus.c#L891
+> Will result in acpi_of_device_get_match_data() being called which will
+> match to the of_device_id table.
 
-Applied to for-next, thanks!
+Couldn't you use the "new" probe_new() callback instead which will drop
+the i2c_device_id? Kieran was interested in such conversions IIRC.
 
 
---wqGf7iqXPvdRtbI6
+--bSLA9Xlk/h7hJBea
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEcGoEACgkQFA3kzBSg
-Kbab5BAAj+hmjTG/rpYyTFk9GZoqqGBBlIr/k97mBENtBe9nrA3TK3zkdoZRZAur
-F02VXTvcq2l/oXu5Od4wQVqMF67NRkOYKldOdN+84BQ0/9P2i7PrBhX0UrMyLk1v
-tIMGdi2ObAUwL+7/9VGCx1hleQyjp2RmDOMqIwSZr5j4cGH6lMTRR1qnwS5J8Xxe
-QRWLN7Qk+G/5k8ODa5aFMhbWQxijvtMx0eqna8Dn6AkMoXaU8F/hFxLMWDwpjxci
-FMuhQ4qSae5F89HbHmG0CZzF8ae8clExpm9pB4lVlFCU5pVirR5mYBBeWkiqQ1ZS
-JmllebetdqqUzYZVQn3bAVepxSefet9MJqGxSelFnfASJrGCqKpIOX0SXzZ1bH/h
-qm4jLsqkhCsqA2XfRWA9wINpX/S+oyJ4sds3HfzaQ/daA8C683jWPYnyCWksdOWD
-LlbqEm06v7MTsjGsQFQSP9tfTag0L3IHHxK9wneUfUF60CTvOlXkRscINyrVUUse
-epeOFzeheiuEGCMpaTkbMcKDI+gIeeBoDSFXeo1oOXyOE1WtCZewz73H+a8X+a3+
-j9SQFoq0u3WqjSiZLSMZFzrsR1hBYW2V6aSaCE4qxx7nOFRGkwazkOTNJsW76ZO0
-iptjFEPzgvHUOXMQLGGSh3aoqSfo3H90AZCqkGZFYD4mYPz5w6s=
-=c2a7
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEcH6AACgkQFA3kzBSg
+Kbah8w/+NkTSt52U4e5c47zS8FCRLjUAvqttde7RahDWQf2aLgXeeN8u4EYLKXrU
+9hW5saYFQYH1jvpqTnJbDXDqqf2+LDbUGIauJo3K2WYKXRQdzK0yPoJRErSnB3jl
+K9jexLleJmloXSO2lz5u+Cgfbu2aiZ1b9+09JOcXBi4nchIGdMynBoC5ZoTNDjPw
+5/e7T8o7tcdRpIkbgcOZB5a20+HeH3f7TnGnKslTiXj0PylrmRUgloYAJWbi9mFI
+A1QIN+jMaIEN373015vx/CfUrgB1EMgSX5Xo8VPb6GBXOf3KNGRSk4Lxr4ib2i+U
+uZdfEGVFt4g2eheSyRIT4B0OkDcye3xVjTu4imX7q6nnP+IUymWONFi9vLWtl8O/
+eE4+ubpSct5d37jR9v6/LzpH9i8v3HE1UcnQmXpaft++i6caeoMZiDWiebviKdsT
+8O+c+GuOk8oDxu79KOtuDaBc68aPKMkJFeQMMPKGKQ91pgE6I9aZsShXIbl2X8tU
+j5ONhZ+nGxvWUhNsdj8QtskpAb3bE+2SkEa7JCBg/pKF6v+6aqleCv/jxOJuWChW
+OekZKDAzZMQvv4pOJTuASeLAu8+0Z7I1ZXAVKwx/b3+Q4KXezdXjQBvc3O+ppC+b
+rpOdjkJB9X4KbnnRDVC9PJKfJNhEPeVVngunzZw4a/MHkQsMIiY=
+=vjMH
 -----END PGP SIGNATURE-----
 
---wqGf7iqXPvdRtbI6--
+--bSLA9Xlk/h7hJBea--
