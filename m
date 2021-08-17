@@ -2,92 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 259813EF2B2
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Aug 2021 21:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1123EF2BE
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Aug 2021 21:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbhHQThG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Aug 2021 15:37:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45432 "EHLO mail.kernel.org"
+        id S231281AbhHQTmy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Aug 2021 15:42:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46128 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229640AbhHQThF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 17 Aug 2021 15:37:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 459506023F;
-        Tue, 17 Aug 2021 19:36:31 +0000 (UTC)
+        id S229466AbhHQTmx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 17 Aug 2021 15:42:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E3F761008;
+        Tue, 17 Aug 2021 19:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629228991;
-        bh=lVa/cd8lqAuqi9Xb46n1dPF4Die4VhK2NzXYomfF1F8=;
+        s=k20201202; t=1629229340;
+        bh=8vwSU/yZzOg0ZOh2nWEiUk4FqXkEglZANChwOG/xNEM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MpJqbMTJoY9HiVSZCsZrCWmeFiwYxVmy4mvIkY/TJff233HbXI+HI8emvSQdhDnJm
-         cldRNM3O2aVw8yw8aqyKfCfpGEkKLJfWa0n1ky2BpCQvl1h4jRXohis0wYuD75rLGe
-         3fFg/KGIBqfqYC2g3Wtr+cv06xJFYMt5tkSsofOZap6dXiPj+KYJjn8xMBuUWr90xO
-         y007nNsP0lBUpseo1WG1MmFBr1gMygd03q+3kwknYO/3PNTOFzt6CjYnhWl2hT99v0
-         +jm3vyqtQmwLjH0Rg08PmYb4Kpd7SftftL4pCMPmyUGrpz80BgkA8xzCjEcD2XlFRj
-         XXwP/Yym/QKdA==
-Date:   Tue, 17 Aug 2021 21:36:28 +0200
+        b=d8i+dlZpUH+QP8mXCecrPC0ne8OSvTyVA1QI1IRmwK8DORWVBvvG4mLJoRRQQ0tmr
+         WoD9JPUJAvsQjvDAUUURQXMuhxEFBzvSEuU+dvUHXKNnvIC2g0CnsrTyLmywbVQech
+         8KkJQ1XgPgynPb4k8Qvhx9OOabSsRQlgO+gyfWvZlVPgHJUhQLzu1gQr+luXh7MwpW
+         230eh2teCXY0Iv1KVohwRPLZtl1P3ckAQLArO7T55+in4yHcf/XQ3VzomWCxjS9K+U
+         mI3sCdLqm4uXt2q3jag71oaxopkeDxeJb9fOpYCODztAK3GDannGkXkXzXrDEozKbu
+         SR/x2Kyu+7qCg==
+Date:   Tue, 17 Aug 2021 21:42:17 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Len Baker <len.baker@gmx.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: sun6i-pw2i: Prefer strscpy over strlcpy
-Message-ID: <YRwPvKZm8i47xFXP@kunai>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-i2c@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v2 2/2] i2c: synquacer: fix deferred probing
+Message-ID: <YRwRGRNFIRlrFgLp@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Len Baker <len.baker@gmx.com>, Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20210817165859.5429-1-len.baker@gmx.com>
+        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-i2c@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>
+References: <07588701-4f82-2390-8781-5e6965e87eb4@omp.ru>
+ <1ab424b2-95b8-76ab-9d18-9362d1595887@omp.ru>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zfDDtb3v1My09Y6o"
+        protocol="application/pgp-signature"; boundary="ExzbcEZ1O/YpuoZK"
 Content-Disposition: inline
-In-Reply-To: <20210817165859.5429-1-len.baker@gmx.com>
+In-Reply-To: <1ab424b2-95b8-76ab-9d18-9362d1595887@omp.ru>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---zfDDtb3v1My09Y6o
+--ExzbcEZ1O/YpuoZK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 17, 2021 at 06:58:59PM +0200, Len Baker wrote:
-> strlcpy() reads the entire source buffer first. This read may exceed the
-> destination size limit. This is both inefficient and can lead to linear
-> read overflows if a source string is not NUL-terminated. The safe
-> replacement is strscpy().
+On Thu, Aug 12, 2021 at 11:39:11PM +0300, Sergey Shtylyov wrote:
+> The driver overrides the error codes returned by platform_get_irq() to
+> -ENODEV, so if it returns -EPROBE_DEFER, the driver will fail the probe
+> permanently instead of the deferred probing. Switch to propagating the
+> error codes upstream...
 >=20
-> This is a previous step in the path to remove the strlcpy() function
-> entirely from the kernel [1].
+> Fixes: 0d676a6c4390 ("i2c: add support for Socionext SynQuacer I2C contro=
+ller")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omprussia.ru>
 >=20
-> [1] https://github.com/KSPP/linux/issues/89
->=20
-> Signed-off-by: Len Baker <len.baker@gmx.com>
 
 Applied to for-next, thanks!
 
 
---zfDDtb3v1My09Y6o
+--ExzbcEZ1O/YpuoZK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEcD7wACgkQFA3kzBSg
-KbbAshAAqzwcYf+sCrGC16fOCkh5J4iMfSbWmFFrJB1GzLD+Prabz99WbMT9wTR1
-s4E8qEP8AH2l88yhtKcgoT4apvfeZxJi6AWJ52pD3n+noQ3xAZie3ss6dVSI1Bib
-6VI/+GeEGLZQZkM5rUXWWkYeugOJClYyj2g1aulpW4vLDa9G7rd3/FjEsMk/cMH8
-a3yyTm8tRhMGJOIiMTIhxZybdvEzQuyHMNWkhDHrjt+H+KnkQmhqBImmfijEM+HM
-uS639QWzCTw1d5mwK9VFcM0Kd4f6rrZUFLq2qw8sMB2jVgN7ZchOLnw7JhXM73ok
-SEETZe5RsaUupDkvhm9+hygBH+1klK+ZDz/G081yyPqJYXtHkYcArDPO1ZnjGNr2
-RirCAQokAa/Nly4vJWiRMGNyckLWcx2teYK9t2RTUqwtXC9ivK9b7DtmyGkLX8d1
-maIlre3Cy1DeQRuqKGBFC4/xZ9RSP+B8fsrcjnKjur3gUJaNWSCZb+Ub7F2fhiNL
-QGmzyxqUU7oGNruxICTiNniJ2qm5yNgXQwwWwCRzKt/psap1Kh1jbjgWAQ6uBAgu
-NRRrVtkw5G1s8UMtThS8Hi4BdTMwTy1klt7R+qeuqE3f/87hBHfOUCQM8mJHp12F
-RzlRw/o2bBGOlb6OMV5nDH1o/ME8c6rwmGieMXDaN4kfoJWGIn0=
-=/o4W
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEcERkACgkQFA3kzBSg
+KbYmuxAAkgvQDcMqp4VeYFK1CIqnRYKjtXsy/R5ndzrBfm46bWXGQZQOMQyis3XC
+45r3gCO/GqFITAXrieYtCOPj2Wo1It4I8kJ5MG40cnjK50EOTe0YO72cklnnxneU
+EsH6kkjepd0FP9t2TnYuBhmoyvhPE4I8oiMsVqaaUpXe1VBk6II2Xr8K2s37hoHy
+FzR1WJPM93DlJ5F+YI/06PAdI2xk8tuENruIbsrz2qREJobmhkUJq3dtlnTdhA21
+c2paDoN/AD78bIPC7UcbqnodkVrgLl6sGrH3v4xhCeZiBkEyib+NKaSnN6Nxr+Hd
+bh6PZdpwezEqGYAUxtDtXhFfZv4gR0d9HvfdCvI1nUFK4+rbwHqi5+Cidyt9GrrZ
+rGvdZDeihoz53i7j3KMlhhXJrCqaiN72Lphpn4bWHmTXX+xJToadt1pABdsgVz6o
+BVhO7TFhNUbdWlHgRN1nQw4Vr7Hnr7p3NKRTwbrj8Q0jrCqyczf8ckuaVooUBkPJ
+TH7pMoChHtiLsAhRr6+VWU2s+Jzt2sgsFvRsbh2lM4jN2tAUW5+CmMMkGi7BDcBy
+5FklHkCIhS4KuGsgqG2VU4Nr/iW/zBcDZlO7QOnRh5ClELnKr+xw2EupHGoybpWg
+pPST1LhTvSWsQe1+bqODueZPHxbZmz4dDyLjhROthq1d7y+EKyQ=
+=te/n
 -----END PGP SIGNATURE-----
 
---zfDDtb3v1My09Y6o--
+--ExzbcEZ1O/YpuoZK--
