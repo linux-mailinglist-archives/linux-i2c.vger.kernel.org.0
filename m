@@ -2,88 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3413F1EFE
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Aug 2021 19:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757D93F1F00
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Aug 2021 19:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbhHSRYq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 19 Aug 2021 13:24:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44182 "EHLO mail.kernel.org"
+        id S232117AbhHSRZH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 19 Aug 2021 13:25:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44310 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232827AbhHSRYp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 19 Aug 2021 13:24:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D32061075;
-        Thu, 19 Aug 2021 17:24:08 +0000 (UTC)
+        id S232969AbhHSRZF (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 19 Aug 2021 13:25:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AB38261075;
+        Thu, 19 Aug 2021 17:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629393849;
-        bh=V2+TYaiXErkcPbcE9j+Rpr8nZGtBRaPkrXZzAokpHrQ=;
+        s=k20201202; t=1629393869;
+        bh=KbzYgF4Sy53ZuirB0lvneIh/3iisHVfmHDhYsyK4XIU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pIk4Tjnsxw+12XU9KYIV2pE9/z4eN0pabGIW9KbEWyakDpbZ4EV7Wpxc0uHKK8Goi
-         MH2aCeSTarfY0vJvmTpvimin25qj3VwWmwQDkK6+uwrwiSlCA9YEmrco7jbX2B56Y4
-         mZ6zxfDVzWJZpkvQGcWm3IBx2so5jKiJOR1TXR+PPG9pXnMh8cJKpJAkywhukrgiq5
-         i90YACHaBcrOTS39LP47t9IuBN+61SfmEzlIHtRGySPpFjnUwt4zj06gzviHO63X0G
-         4jBGUEKFvoTDlPvjjt3Y44BSMpfWO9D2BlsTuBQBbsvnLABTc8Vfok2Hu4s4ZGmPSD
-         lKsAtUxaeEDdg==
-Date:   Thu, 19 Aug 2021 19:24:06 +0200
+        b=oyiyF6X3LCqd5jewhmU+5HfJ9QivtiexrD6RIeRsIvfvPR0Xz4ZBSjSuAuDv5PRau
+         jCPFlgMHda3n9k580KXa8o8Mi2y7by8OLvmgdUtbQv6H9HsSrF75kAdU1vM5wu+ZVL
+         u/EevEv7StSaB3MED4smjVUBDCmhhdRIrDQzy5v2ai6K0mc0fjPVOD8gNVxANfI2O1
+         5fcoUHyZbJfgLHPOtLu0zliS01rcoCy8ensuJ6VTND9+By/HopqC0/EVhAgIkGlFrV
+         kYA/SvVBfHq7o4nAMRAg66+8TUlyUJtkAbFghdCWXFmOdjXIkJJedJScVwMMDij9bU
+         MFyD6s8K8FMFw==
+Date:   Thu, 19 Aug 2021 19:24:26 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jie Deng <jie.deng@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>, arnd@kernel.org,
-        linux-i2c@vger.kernel.org,
+To:     Jie Deng <jie.deng@intel.com>
+Cc:     linux-i2c@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: virtio: Update i2c-adapter's of_node
-Message-ID: <YR6TtolgrEG9ij7q@kunai>
+        linux-kernel@vger.kernel.org, viresh.kumar@linaro.org,
+        sfr@canb.auug.org.au, conghui.chen@intel.com
+Subject: Re: [PATCH] i2c: virtio: Fix the compiler warning when CONFIG_ACPI
+ is not set
+Message-ID: <YR6Tysn548x+2Szz@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jie Deng <jie.deng@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>, arnd@kernel.org,
-        linux-i2c@vger.kernel.org,
+        Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <376bd0a3a34e8f0de297103dd2f711bb236a8615.1629257677.git.viresh.kumar@linaro.org>
+        linux-kernel@vger.kernel.org, viresh.kumar@linaro.org,
+        sfr@canb.auug.org.au, conghui.chen@intel.com
+References: <4309f869890e70810f2c40a8d60495240e318303.1629333590.git.jie.deng@intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eTY6BXmAvITqGGqC"
+        protocol="application/pgp-signature"; boundary="flWGK3gheJDnxcoG"
 Content-Disposition: inline
-In-Reply-To: <376bd0a3a34e8f0de297103dd2f711bb236a8615.1629257677.git.viresh.kumar@linaro.org>
+In-Reply-To: <4309f869890e70810f2c40a8d60495240e318303.1629333590.git.jie.deng@intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---eTY6BXmAvITqGGqC
+--flWGK3gheJDnxcoG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 18, 2021 at 09:05:50AM +0530, Viresh Kumar wrote:
-> Set of-node of the adapter to the virtio device's of-node to enable
-> automatic parsing the of the I2C devices, if present in the DT.
+On Thu, Aug 19, 2021 at 08:48:41AM +0800, Jie Deng wrote:
+> Fix the compiler warning "drivers/i2c/busses/i2c-virtio.c:208:17:
+> warning: unused variable 'pdev' [-Wunused-variable]" when CONFIG_ACPI
+> is not set.
 >=20
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Fixes: 8fb12751ac78 ("i2c: virtio: add a virtio i2c frontend driver")
+> Signed-off-by: Jie Deng <jie.deng@intel.com>
 
 Applied to for-next, thanks! Since I need to rebase for-mergewindow
 anyhow, I might just squash it into the main patch.
 
-
---eTY6BXmAvITqGGqC
+--flWGK3gheJDnxcoG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEek7YACgkQFA3kzBSg
-KbYykg/+LIGydh+fo8PIycG0wor+wgSsJHk+zjHeFpEqHj3H/6ql8qlmiy0Jv/gd
-nEFldUOPneGlUrAP/D45MLgP1p26KL9r9/cV4xJU4TeRtm5qXdYBdt+nCxfY/ogs
-u/wdq3pMGVTjck7e+nzbM756P4jEAnqEwf/gkTXtJq57Vv03FVMGuiwNOoL+oTNr
-OKmJMS0eOy6Hm3bs5V6Ck9S3A9SYIbcYjCDSBDn09PtrINKij04aiEABQtbhp5DR
-SWsb2+K3/Jc/wIbIXxJk23gnPCJWZPz0WpplyGJvpEB777/MX/NXMqUZiYRSLMf2
-n4fZu1V6dxHxk8QP00F5GSkeKSDfgR/7/IugsW1igQDHtw2zxi8QDO+IVbu7NmAt
-8Ks+L/JITtPq7c8RIULcEFfkzHhR8/f1YbOyj5BYUHLnqdBV4Q7+CFnYDKfWFagA
-W8BLd6SvGlJQnhUF6Dgh8FIiM5YR4Aq3GQMnocdh6vT1hS5trru23al5MycnLGTy
-KO4oKnMZeZ3GP8xxVTqO/bQVK2fP5xhIthAWEo/i3YyavJLEXR0aheZo5XXKy+q0
-MlfgUqj0GO2lqDFsipgeFTeZBfL55M0rHccrKzUvenWd91auZDd7biggRr8sHHDU
-OgFNna0hXCYGpnM9l2QM1GOamrMK1Hk04gu6NYLhe1AtVoOJ5nE=
-=zWte
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEek8oACgkQFA3kzBSg
+KbY07hAAgITMkKNwCFQbuyyywSxWgjPihrseu1b5U5SxyHR071H3L0Ec0qwz3YpW
+inPAANbk0RtPEQaDfY2euP42A1HPA8BA2P2QG1wrG7j+mkE+e5E/pPJ6Fm5Gvmrw
+WXPtVuGv3FePr4Adc3PTGeE3R3/t9Xdm/Lsgl3Gm80FsEYolQWpinpiiyu6/r6Lr
+ZLtR/yi8h+diXx/qB59k8nKNP3S1g/ywF4TTwKkncitahj6N0/Ii1AzI7qme3rbX
+0arhenE8vqq23rpcYIZoCXT9nYMa1q36oS1peO4U789gTH4EsjyTykUhk/ZmgLxo
+t7Y7od8C18NWv7iqsMmxiKOmPIXxH+I3cQYrC/BcsU6C4OVk6dAeHnO34ZY1gccC
+Dt6CEKp9S690RWR7J+sYEg/F6eXUOnZhX5LGCR7jQpf+9vctmKaeIUH3FHSmz/VF
+LyxbrC4Sg0STRfXu7gYv6R+DFRJXYbas90ylvJn+zc+FLE6lPDxS5DWK3mXbxger
+/Rl33o0NHKJlP3nWNuB/Wb8DcQBeoKXQi/QzkceTFSDdG00MYhsmxtcmO5kpVGZm
+wzw7hGGpbPOjKIDsjEfoZdNfobtCYCBoNSwjndfFhaalkLz5jFX3iGE+vyVKyrNh
+Eqc40XmBlY5SbG/sXrfEd5duskq+moJyBKCaywzKPE/alTjmmt0=
+=WFAy
 -----END PGP SIGNATURE-----
 
---eTY6BXmAvITqGGqC--
+--flWGK3gheJDnxcoG--
