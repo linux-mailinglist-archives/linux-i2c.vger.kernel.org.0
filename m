@@ -2,147 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4FC3F4B62
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Aug 2021 15:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66723F4C97
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Aug 2021 16:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237321AbhHWNGi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 Aug 2021 09:06:38 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:47934 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237333AbhHWNGg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Aug 2021 09:06:36 -0400
-X-UUID: 48ef46ac57a24f93a249b1e5f371a3b7-20210823
-X-UUID: 48ef46ac57a24f93a249b1e5f371a3b7-20210823
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 713664978; Mon, 23 Aug 2021 21:05:49 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 23 Aug 2021 21:05:47 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 23 Aug 2021 21:05:46 +0800
-From:   Kewei Xu <kewei.xu@mediatek.com>
-To:     <wsa@the-dreams.de>
-CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
-        <caiyu.chen@mediatek.com>, <ot_daolong.zhu@mediatek.com>,
-        <yuhan.wei@mediatek.com>, <kewei.xu@mediatek.com>
-Subject: [PATCH 7/7] i2c: mediatek: modify bus speed calculation formula
-Date:   Mon, 23 Aug 2021 21:05:37 +0800
-Message-ID: <1629723937-10839-8-git-send-email-kewei.xu@mediatek.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1629723937-10839-1-git-send-email-kewei.xu@mediatek.com>
-References: <1629723937-10839-1-git-send-email-kewei.xu@mediatek.com>
+        id S230354AbhHWOq2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 Aug 2021 10:46:28 -0400
+Received: from relay.uni-heidelberg.de ([129.206.100.212]:57139 "EHLO
+        relay.uni-heidelberg.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230290AbhHWOq1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Aug 2021 10:46:27 -0400
+X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Aug 2021 10:46:27 EDT
+X-IPAS-Result: =?us-ascii?q?A2CDAABesiNh/1BqzoFaHQEBAQEJARIBBQUBQIFHBgELA?=
+ =?us-ascii?q?YMhVoUzkQubbYIHAQEBAQEBAQEBCTcHAQIEAQGEaoI7AiU2Bw4BAgQBAQEBA?=
+ =?us-ascii?q?wIDAQEBAQEBAwEBBgEBAQEBBgSBJIVoDYZCAQEEASMPAUYQCxgCAiYCAhQoI?=
+ =?us-ascii?q?S6CV4JmIQ+oZ3qBMYEBg00BhFuBKh0GgRAqAYVwU4UJgk+CKYQKMD6CS4IWg?=
+ =?us-ascii?q?nqCZASFMgiBOVREvxkHjWyTfQQWLJVYkSCQXpF3k1mFMIFoBIIJMz6DOU8ZD?=
+ =?us-ascii?q?5cmhUxCZwIGAQoBAQMJhT0BAYkrAQE?=
+IronPort-HdrOrdr: A9a23:z62F1anQsZK+CoY9KY3YfzVlSl/pDfIb3DAbv31ZSRFFG/Fwz/
+ re+MjzpiWE7wr5OUtQ4uxoV5PhfZqxz/NICMwqTNKftWrdyRGVxeNZnOjfKlTbckWUnNK1l5
+ 0QEZSWY+eeMbEOt6fHCX6DferIruPqzEniv5a5854kd3ASV0hP1XYANjqm
+X-IronPort-Anti-Spam-Filtered: true
+Received: from lemon.iwr.uni-heidelberg.de ([129.206.106.80])
+  by relay.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Aug 2021 16:38:35 +0200
+Received: from hlauer by lemon.iwr.uni-heidelberg.de with local (Exim 4.92)
+        (envelope-from <hlauer@lemon.iwr.uni-heidelberg.de>)
+        id 1mIB5u-000112-Ey; Mon, 23 Aug 2021 16:38:34 +0200
+Date:   Mon, 23 Aug 2021 16:38:34 +0200
+From:   Hermann.Lauer@uni-heidelberg.de
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: Re: I2C MV64XXX: Showing Allwinner debug LCR register in bus
+ lock case
+Message-ID: <20210823143834.GP8757@lemon.iwr.uni-heidelberg.de>
+References: <20210729073100.GA8757@lemon.iwr.uni-heidelberg.de>
+ <87mtq3zxhx.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87mtq3zxhx.fsf@BL-laptop>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When clock-div is 0 or greater than 1, the bus speed
-calculated by the old speed calculation formula will be
-larger than the target speed. So we update the formula.
+Hello Grégory,
 
-Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
----
- drivers/i2c/busses/i2c-mt65xx.c | 35 +++++++++++++++++++++++++----------
- 1 file changed, 25 insertions(+), 10 deletions(-)
+On Fri, Jul 30, 2021 at 04:28:58PM +0200, Gregory CLEMENT wrote:
+> > if Allwinner i2c locks, the is a LCR register (reg_base + 0x20),
+> > which shows directly the state of the SCL and SDA lines. So you can
+> > see which line (if any) is pulled externally low.
+> >
+> > Is there a similar usefull register in the original MV64XXX MARVELL
+> > chip?
+> 
+> I've check on the Armada 38x datasheet and at least on this one there is
+> no such register or register with similar information. That's mean you
+> won't be able to use it for any device only the Allwinner ones.
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 18b5659..0b42acd8 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -69,11 +69,12 @@
- #define I2C_DEFAULT_CLK_DIV		5
- #define MAX_SAMPLE_CNT_DIV		8
- #define MAX_STEP_CNT_DIV		64
--#define MAX_CLOCK_DIV			256
-+#define MAX_CLOCK_DIV_8BITS		256
-+#define MAX_CLOCK_DIV_5BITS		32
- #define MAX_HS_STEP_CNT_DIV		8
--#define I2C_STANDARD_MODE_BUFFER	(1000 / 2)
--#define I2C_FAST_MODE_BUFFER		(300 / 2)
--#define I2C_FAST_MODE_PLUS_BUFFER	(20 / 2)
-+#define I2C_STANDARD_MODE_BUFFER	(1000 / 3)
-+#define I2C_FAST_MODE_BUFFER		(300 / 3)
-+#define I2C_FAST_MODE_PLUS_BUFFER	(20 / 3)
- 
- #define I2C_CONTROL_RS                  (0x1 << 1)
- #define I2C_CONTROL_DMA_EN              (0x1 << 2)
-@@ -725,14 +726,26 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	unsigned int best_mul;
- 	unsigned int cnt_mul;
- 	int ret = -EINVAL;
-+	int clock_div_constraint = 0;
- 
- 	if (target_speed > I2C_MAX_HIGH_SPEED_MODE_FREQ)
- 		target_speed = I2C_MAX_HIGH_SPEED_MODE_FREQ;
- 
-+	if (i2c->use_default_timing) {
-+		clock_div_constraint = 0;
-+	} else if (i2c->dev_comp->ltiming_adjust &&
-+		   i2c->ac_timing.inter_clk_div > 1) {
-+		clock_div_constraint = 1;
-+	} else if (i2c->dev_comp->ltiming_adjust &&
-+		   i2c->ac_timing.inter_clk_div == 0) {
-+		clock_div_constraint = -1;
-+	}
-+
- 	max_step_cnt = mtk_i2c_max_step_cnt(target_speed);
- 	base_step_cnt = max_step_cnt;
- 	/* Find the best combination */
--	opt_div = DIV_ROUND_UP(clk_src >> 1, target_speed);
-+	opt_div = DIV_ROUND_UP(clk_src >> 1, target_speed) +
-+		  clock_div_constraint;
- 	best_mul = MAX_SAMPLE_CNT_DIV * max_step_cnt;
- 
- 	/* Search for the best pair (sample_cnt, step_cnt) with
-@@ -767,7 +780,8 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	sample_cnt = base_sample_cnt;
- 	step_cnt = base_step_cnt;
- 
--	if ((clk_src / (2 * sample_cnt * step_cnt)) > target_speed) {
-+	if ((clk_src / (2 * (sample_cnt * step_cnt - clock_div_constraint))) >
-+		 target_speed) {
- 		/* In this case, hardware can't support such
- 		 * low i2c_bus_freq
- 		 */
-@@ -854,13 +868,16 @@ static int mtk_i2c_set_speed_adjust_timing(struct mtk_i2c *i2c,
- 	target_speed = i2c->speed_hz;
- 	parent_clk /= i2c->clk_src_div;
- 
--	if (i2c->dev_comp->timing_adjust)
--		max_clk_div = MAX_CLOCK_DIV;
-+	if (i2c->dev_comp->timing_adjust && i2c->dev_comp->ltiming_adjust)
-+		max_clk_div = MAX_CLOCK_DIV_5BITS;
-+	else if (i2c->dev_comp->timing_adjust)
-+		max_clk_div = MAX_CLOCK_DIV_8BITS;
- 	else
- 		max_clk_div = 1;
- 
- 	for (clk_div = 1; clk_div <= max_clk_div; clk_div++) {
- 		clk_src = parent_clk / clk_div;
-+		i2c->ac_timing.inter_clk_div = clk_div - 1;
- 
- 		if (target_speed > I2C_MAX_FAST_MODE_PLUS_FREQ) {
- 			/* Set master code speed register */
-@@ -907,8 +924,6 @@ static int mtk_i2c_set_speed_adjust_timing(struct mtk_i2c *i2c,
- 		break;
- 	}
- 
--	i2c->ac_timing.inter_clk_div = clk_div - 1;
--
- 	return 0;
- }
- 
--- 
-1.9.1
+Thanks for looking! So, is ifdefing in the driver then the best solution to
+display that valueable information?
 
+Thanks for any idea,
+ greetings
+  Hermann
+
+> > I'd like to make the patch https://bitbucket.org/hlauer/kernel/src/master/patches/i2c-buslock.patchl working for that chip, too.
