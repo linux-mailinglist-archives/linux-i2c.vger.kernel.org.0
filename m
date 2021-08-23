@@ -2,47 +2,45 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBAF3F52F3
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Aug 2021 23:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852C03F52F2
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Aug 2021 23:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232979AbhHWVnC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 Aug 2021 17:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbhHWVnB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Aug 2021 17:43:01 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62905C061575
-        for <linux-i2c@vger.kernel.org>; Mon, 23 Aug 2021 14:42:18 -0700 (PDT)
+        id S232503AbhHWVnB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 Aug 2021 17:43:01 -0400
+Received: from phobos.denx.de ([85.214.62.61]:40802 "EHLO phobos.denx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232954AbhHWVnB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 23 Aug 2021 17:43:01 -0400
 Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 4F84682BE5;
+        by phobos.denx.de (Postfix) with ESMTPSA id B32D782C03;
         Mon, 23 Aug 2021 23:42:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1629754936;
-        bh=/9BAaomeDN8lddP6hBwwmqMpX5vLm6a310aOxL9ME8A=;
+        s=phobos-20191101; t=1629754937;
+        bh=ZO5w9EtJMDEcvyoxYdU6wFXZXO3f81gZfTDmo5R07ow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lfSXSufV0g7UBGIEnC5cNzi1CkPyaPquHO76B1sDrDxaE5VNvRXL2Hs+YKXUbmbbK
-         RmiEGEHFVB/ocG4nMSkU4ZJ1ksIMchPcPYmUa9+JBy2dPxREyyK0Aorp0IKqSSbfUB
-         cqZlv/+F7nJ/97cPMvDvxon/GcM1SDyBMpK36eeS9qpHX9JhffwG8/uH4ZHOwB6SHc
-         rdRQu3sl2tnj4FHouzP4XvB8EzrqYujy3qVWVO0JbDwoikzZJP6Vs2Jcdf3KhWLrOB
-         byMv2i/SmJUR0n+8H13XumywRnU2UwXx9rVbgVWag033ZMKPN41jj9xE1lA0w3YQGy
-         bCIeAY36a8sAA==
+        b=BkFLXgl+G336rznJObNOrhYsema2mWSuZUWJFihAuf97iiBH0JoE0Qsg6Wu9qfoj7
+         zCFaj04KNrvveL9FYsu4vl/ybKRAb2d1oDG22iiC5tdnsZhizeXRngrmJAue9sknLU
+         pPlom0uI+uDomGZIU7xNAwRnj4MvvihasCOYlpK+LVprLRElyVh5/WzdgvB9jFQwIU
+         1ChJUv9fZlPUrATnJiWrzOmGcMHn+IFuacN2hIaiXztr42L7Cm9BvMqmUGnoGq3OOF
+         e+5j/qKebnu6S4a66icWUdWiJC86zNSYqlH+yEObPDwFSj8C9bDawGierxO1oDn4PL
+         H1UfxeT/NVUfg==
 From:   Marek Vasut <marex@denx.de>
 To:     linux-i2c@vger.kernel.org
 Cc:     Marek Vasut <marex@denx.de>,
         Michal Simek <michal.simek@xilinx.com>,
         Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
         Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH v2 2/6] i2c: xiic: Drop broken interrupt handler
-Date:   Mon, 23 Aug 2021 23:41:41 +0200
-Message-Id: <20210823214145.295104-3-marex@denx.de>
+Subject: [PATCH v2 3/6] i2c: xiic: Defer xiic_wakeup() and __xiic_start_xfer() in xiic_process()
+Date:   Mon, 23 Aug 2021 23:41:42 +0200
+Message-Id: <20210823214145.295104-4-marex@denx.de>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210823214145.295104-1-marex@denx.de>
 References: <20210823214145.295104-1-marex@denx.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
 X-Virus-Status: Clean
@@ -50,11 +48,11 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The interrupt handler is missing locking when reading out registers
-and is racing with other threads which might access the driver. Drop
-it altogether, so that the threaded interrupt is always executed, as
-that one is already serialized by the driver mutex. This also allows
-dropping local_irq_save()/local_irq_restore() in xiic_start_recv().
+The __xiic_start_xfer() manipulates the interrupt flags, xiic_wakeup()
+may result in return from xiic_xfer() early. Defer both to the end of
+the xiic_process() interrupt thread, so that they are executed after
+all the other interrupt bits handling completed and once it completely
+safe to perform changes to the interrupt bits in the hardware.
 
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Michal Simek <michal.simek@xilinx.com>
@@ -63,73 +61,93 @@ Cc: Wolfram Sang <wsa@kernel.org>
 ---
 V2: No change
 ---
- drivers/i2c/busses/i2c-xiic.c | 25 +------------------------
- 1 file changed, 1 insertion(+), 24 deletions(-)
+ drivers/i2c/busses/i2c-xiic.c | 37 ++++++++++++++++++++++++-----------
+ 1 file changed, 26 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index 50320dd32eea9..b13166e94d894 100644
+index b13166e94d894..aecdeec579977 100644
 --- a/drivers/i2c/busses/i2c-xiic.c
 +++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -554,7 +554,6 @@ static void xiic_start_recv(struct xiic_i2c *i2c)
- {
- 	u8 rx_watermark;
- 	struct i2c_msg *msg = i2c->rx_msg = i2c->tx_msg;
--	unsigned long flags;
+@@ -375,6 +375,9 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
+ 	struct xiic_i2c *i2c = dev_id;
+ 	u32 pend, isr, ier;
+ 	u32 clr = 0;
++	int xfer_more = 0;
++	int wakeup_req = 0;
++	int wakeup_code = 0;
  
- 	/* Clear and enable Rx full interrupt. */
- 	xiic_irq_clr_en(i2c, XIIC_INTR_RX_FULL_MASK | XIIC_INTR_TX_ERROR_MASK);
-@@ -570,7 +569,6 @@ static void xiic_start_recv(struct xiic_i2c *i2c)
- 		rx_watermark = IIC_RX_FIFO_DEPTH;
- 	xiic_setreg8(i2c, XIIC_RFD_REG_OFFSET, rx_watermark - 1);
+ 	/* Get the interrupt Status from the IPIF. There is no clearing of
+ 	 * interrupts in the IPIF. Interrupts must be cleared at the source.
+@@ -411,10 +414,14 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
+ 		 */
+ 		xiic_reinit(i2c);
  
--	local_irq_save(flags);
- 	if (!(msg->flags & I2C_M_NOSTART))
- 		/* write the address */
- 		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET,
-@@ -580,7 +578,6 @@ static void xiic_start_recv(struct xiic_i2c *i2c)
+-		if (i2c->rx_msg)
+-			xiic_wakeup(i2c, STATE_ERROR);
+-		if (i2c->tx_msg)
+-			xiic_wakeup(i2c, STATE_ERROR);
++		if (i2c->rx_msg) {
++			wakeup_req = 1;
++			wakeup_code = STATE_ERROR;
++		}
++		if (i2c->tx_msg) {
++			wakeup_req = 1;
++			wakeup_code = STATE_ERROR;
++		}
+ 	}
+ 	if (pend & XIIC_INTR_RX_FULL_MASK) {
+ 		/* Receive register/FIFO is full */
+@@ -448,8 +455,7 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
+ 				i2c->tx_msg++;
+ 				dev_dbg(i2c->adap.dev.parent,
+ 					"%s will start next...\n", __func__);
+-
+-				__xiic_start_xfer(i2c);
++				xfer_more = 1;
+ 			}
+ 		}
+ 	}
+@@ -463,11 +469,13 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
+ 		if (!i2c->tx_msg)
+ 			goto out;
  
- 	xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET,
- 		msg->len | ((i2c->nmsgs == 1) ? XIIC_TX_DYN_STOP_MASK : 0));
--	local_irq_restore(flags);
+-		if ((i2c->nmsgs == 1) && !i2c->rx_msg &&
+-			xiic_tx_space(i2c) == 0)
+-			xiic_wakeup(i2c, STATE_DONE);
++		wakeup_req = 1;
++
++		if (i2c->nmsgs == 1 && !i2c->rx_msg &&
++		    xiic_tx_space(i2c) == 0)
++			wakeup_code = STATE_DONE;
+ 		else
+-			xiic_wakeup(i2c, STATE_ERROR);
++			wakeup_code = STATE_ERROR;
+ 	}
+ 	if (pend & (XIIC_INTR_TX_EMPTY_MASK | XIIC_INTR_TX_HALF_MASK)) {
+ 		/* Transmit register/FIFO is empty or ½ empty */
+@@ -491,7 +499,7 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
+ 			if (i2c->nmsgs > 1) {
+ 				i2c->nmsgs--;
+ 				i2c->tx_msg++;
+-				__xiic_start_xfer(i2c);
++				xfer_more = 1;
+ 			} else {
+ 				xiic_irq_dis(i2c, XIIC_INTR_TX_HALF_MASK);
  
- 	if (i2c->nmsgs == 1)
- 		/* very last, enable bus not busy as well */
-@@ -620,26 +617,6 @@ static void xiic_start_send(struct xiic_i2c *i2c)
- 		XIIC_INTR_BNB_MASK);
+@@ -509,6 +517,13 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
+ 	dev_dbg(i2c->adap.dev.parent, "%s clr: 0x%x\n", __func__, clr);
+ 
+ 	xiic_setreg32(i2c, XIIC_IISR_OFFSET, clr);
++	if (xfer_more)
++		__xiic_start_xfer(i2c);
++	if (wakeup_req)
++		xiic_wakeup(i2c, wakeup_code);
++
++	WARN_ON(xfer_more && wakeup_req);
++
+ 	mutex_unlock(&i2c->lock);
+ 	return IRQ_HANDLED;
  }
- 
--static irqreturn_t xiic_isr(int irq, void *dev_id)
--{
--	struct xiic_i2c *i2c = dev_id;
--	u32 pend, isr, ier;
--	irqreturn_t ret = IRQ_NONE;
--	/* Do not processes a devices interrupts if the device has no
--	 * interrupts pending
--	 */
--
--	dev_dbg(i2c->adap.dev.parent, "%s entry\n", __func__);
--
--	isr = xiic_getreg32(i2c, XIIC_IISR_OFFSET);
--	ier = xiic_getreg32(i2c, XIIC_IIER_OFFSET);
--	pend = isr & ier;
--	if (pend)
--		ret = IRQ_WAKE_THREAD;
--
--	return ret;
--}
--
- static void __xiic_start_xfer(struct xiic_i2c *i2c)
- {
- 	int first = 1;
-@@ -818,7 +795,7 @@ static int xiic_i2c_probe(struct platform_device *pdev)
- 	pm_runtime_use_autosuspend(i2c->dev);
- 	pm_runtime_set_active(i2c->dev);
- 	pm_runtime_enable(i2c->dev);
--	ret = devm_request_threaded_irq(&pdev->dev, irq, xiic_isr,
-+	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
- 					xiic_process, IRQF_ONESHOT,
- 					pdev->name, i2c);
- 
 -- 
 2.32.0
 
