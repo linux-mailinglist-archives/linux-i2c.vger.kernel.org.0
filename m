@@ -2,140 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4D43F7D60
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Aug 2021 22:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00AA3F7D6F
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Aug 2021 23:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbhHYU4N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Aug 2021 16:56:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57070 "EHLO mail.kernel.org"
+        id S231448AbhHYVBu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Aug 2021 17:01:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57946 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230025AbhHYU4N (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 25 Aug 2021 16:56:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 221C76108E;
-        Wed, 25 Aug 2021 20:55:26 +0000 (UTC)
+        id S230455AbhHYVBt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 25 Aug 2021 17:01:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 50DD760FD9;
+        Wed, 25 Aug 2021 21:01:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629924926;
-        bh=gjZeZMGJIoheKp31xKi7pLwU9TfiEyPpquQWCgvZtE4=;
+        s=k20201202; t=1629925263;
+        bh=O491Wjstd55ptiItcBQmMStGcPeTVu8i5bDRYlMHCUk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y9boM9pg89jRKmwouT/QTKTfP6cnbbCCCS7xmR/j11WJTKQOoI8xp/F9tCG875w14
-         t6ZHgrFxWueYM1Y92Rl7sM+t1APG8oB3pawMogJMmlk55scB1wpiiS9VEVKHn2TSfQ
-         v6b9DHSD8GG1ExHf6HWDK/0ILsqf5kdC4LZvW8txDVi7va9/vzSeyJvT19soF4LTaO
-         UhE+SSACe6K2tgwjuD324QiY1xyoXVmyl0z/7jdZ80aCjvvWDXLZHJ4EY3w0hYaMuh
-         LCtCQKRsN60dvSDuUXJopL0P8Y23dbW9YmOT36artHj8pWjc7htojIylo/VltN2sRE
-         hShhViV80NumQ==
-Date:   Wed, 25 Aug 2021 22:55:21 +0200
+        b=XE/g1Hy5xcXRzDs1m6ymA8x4Jz79ug6PGGR86pE3O0aQDbWVNi7Enm7XU0h97k7NX
+         c90XDOAsgfhQOY3kjPX0rfyM4lcXBSGDwcLhY6sWh+aQoR44dhhOTMzQPNbjOAd9VF
+         G/AumvbPhqT/O12DKigfbH+jL87G2KQgNn0ECkrGPKBScaYSkHGcUmq/Jq1vWHPYaF
+         EitDyPaUIt3bDzSb8lfNW2Z9aTFNBsjaBOMc6H2tx44axBmchrgf9FNkgYre6pOEG1
+         XRzJSoO0w1co6cu4s16KdItfkg16mfzPhQZhd5cqGba3Uy2FISUT1rNssH294whOGn
+         UHuCh6e3GMKXQ==
+Date:   Wed, 25 Aug 2021 23:00:59 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
- entries
-Message-ID: <YSauOeE4lBfeDiGw@kunai>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-i2c@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 2/5] i2c: mt65xx: fix IRQ check
+Message-ID: <YSavi8ZKhi/a0TR9@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>, Vignesh R <vigneshr@ti.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org
-References: <20210824202014.978922-1-robh@kernel.org>
+        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-i2c@vger.kernel.org,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <3712e871-bf2f-32c5-f9c2-2968c42087f8@omp.ru>
+ <bab29007-8d74-0a68-2378-9db6ba0bc576@omp.ru>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l25l+0aqVZr4EHUF"
+        protocol="application/pgp-signature"; boundary="kwNgeN+Mlw5HimRj"
 Content-Disposition: inline
-In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
+In-Reply-To: <bab29007-8d74-0a68-2378-9db6ba0bc576@omp.ru>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---l25l+0aqVZr4EHUF
+--kwNgeN+Mlw5HimRj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 24, 2021 at 03:20:14PM -0500, Rob Herring wrote:
-> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
-> is more concise and yields better error messages.
+On Sun, Jul 04, 2021 at 05:38:45PM +0300, Sergey Shtylyov wrote:
+> Iff platform_get_irq() returns 0, the driver's probe() method will return=
+ 0
+> early (as if the method's call was successful).  Let's consider IRQ0 valid
+> for simplicity -- devm_request_irq() can always override that decision...
 >=20
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Vignesh R <vigneshr@ti.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Fixes: ce38815d39ea ("I2C: mediatek: Add driver for MediaTek I2C controll=
+er")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omprussia.ru>
+>=20
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
-
-Thanks!
+Applied to for-next, thanks!
 
 
---l25l+0aqVZr4EHUF
+--kwNgeN+Mlw5HimRj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEmrjQACgkQFA3kzBSg
-KbZM6Q//Y9REdiq/zJ83ZpDra3byCGjog62qLvRAGT4bIWJksXDHZQIAI+VT4f6T
-bcW/EdAoYI1thOwyeO0PFXFAocKX3YZqx8y3bUw/vQXhQmDi3lhbeA3nmGlGl5zF
-DJoaMXH/hK7uuwmdyeoHFpedIP5M+gHnvDyC4ZarCzeWuZBWMf4fwFyOgVS4PtHw
-nRqm4E9bfQNCveZ/YxIQdbJFg8x419pJ49q3xqnLPweEAPs0h27mIG45IrPwHw8A
-aVOGhHDvGqA3HduEiFmcLZWL7Ud3ariS19SSiHwdcdTPXtYBI+JPJh+arDDaJ2JF
-8sgn/OSkymL9JZa0mg5Y3O9+FczVUlHALdrC+eSxkOlfXNR3xOJzetBC12vBlH44
-6gBxucO3QoyujUTd7gsfaVIn5XqssAsWn2BYD9iM5j0D74Quyb2t1m10e6wMRWVv
-/wSiWLnsC6dSO2jpulphC/G/Fyw+YcPfmvm402PlgOY5tzsY6sVS6eqyegvMReUP
-oc26QyGtdxBy9Ksr54/s3N8WV14vcJm/mjCLH3ejKPrtBvOyu9sXEFmyV6lhB9r2
-pEr0igI5TSC1J9EHQyvT10B56KbKlz4ZLB44daIOAYCvAIrlVRd+Yn/Nnmvk0mbs
-7bnP+mB18KKgKC6GdNtfMyyZFCetGmhPLp1n1JUeoTlACwJF++Q=
-=9C1H
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEmr4sACgkQFA3kzBSg
+KbYYnhAAtfxroMXkfK8KgUfArohFxjwTVzFF+hA8xULBOhOTDQ2QfO6JESKDMV9S
+VLU008TXfBzwTlM7Q5QIQqbQ4GmfOiyIJXWHOt2pMQ5njdPp/hnFOTxvVMWKZTJH
+6vTrUiQ7wZCPl9OmzLngDNBwEjNr0/wUhMHXtJAkvLUF4ZKJFsD+BOucmQtb1xjA
+XCmvmm4ewPNXyRlfTEXIv8zuIL/szUns2zjr3vO6f/l1imG1Ow0PRd5VsE3mnvKt
+Jd8hRcZnNLu3NJ+q5CEUk6mOzPOJkC7rsute+YuNGpAqZuqdzPCEoVDb+dlLb1tg
+HSDq1rQJ4D/a30/axFNdEv0CHzmDYd/cF2rv1L6MCpaTB7RyAaaU+muMH/7qU8Dz
+BapEIMuYZztIaS11OJJ/+JmfwPkyeSclbXtOYd+JwBCYIQXGaK4+DrwxkGs2c5iG
+4IfbY+vmaRdufyF3ia9G/4RyyCaT9/U8DxVY+BofwyuZHqT0KsP3Q/MfUS79zD3d
+EGZWEse0kQfbkMRNrYLcU+W/4yz4aGZT4Del3NcUtb7u5Rj9uf/g9lNwyTARiYHr
+jY8wXfGZFwcPBYCAEFruDtR8Jio1lI+sZVLg3hN4eMfxaN/FO0500W2YjLsqtfpE
+UoBvMDvvGq0MEEgMXmnxx3c6YLISzV3KAxsEHB670YkRfSCC6Ro=
+=drRF
 -----END PGP SIGNATURE-----
 
---l25l+0aqVZr4EHUF--
+--kwNgeN+Mlw5HimRj--
