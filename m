@@ -2,85 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C1B3F7D77
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Aug 2021 23:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1113F7D83
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Aug 2021 23:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbhHYVGV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Aug 2021 17:06:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58520 "EHLO mail.kernel.org"
+        id S233845AbhHYVK6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Aug 2021 17:10:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58946 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230477AbhHYVGV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 25 Aug 2021 17:06:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 30E406108E;
-        Wed, 25 Aug 2021 21:05:33 +0000 (UTC)
+        id S233928AbhHYVK5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 25 Aug 2021 17:10:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F1BDC610D1;
+        Wed, 25 Aug 2021 21:10:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629925534;
-        bh=/XXR8btWeA5gaHUZTg+ZhLMEz63HwBH4QWrWOtn7jxc=;
+        s=k20201202; t=1629925811;
+        bh=3fxQsM8jTDoVZY+kIl31I1WMOgxI+nNNgoj5Dkcoy8c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RzRbYiur3kvNTZjI9kKBSWThtlvbMKKOMDQXx1bHt6zoEGyRhmWQ46+xnRtm0aEgr
-         UiWnhSoRU8jxmYCh1pJpLyii2TiMtbK/jqXB31aXpCGpTsgN+uzniVdKeUIakT7E+n
-         VEeWHRMCaE/Tn74Ax+lkXbYRQJtTGFKvVNB3ZKpd40Rgjzj3FwNgcLEl73jHJAhKL4
-         TjPr/lWe0JjLDckB/ZRI144DZZymfqC7rUkbSy5UHM4VQqmZzAvIa9DaQZn3evO0td
-         DFv9Z/QHLQ9qXqOWZGcSRhwMMBQc+O2UmJhRWoGzAWE7XKanow57NF8QigGyeu79z1
-         OnIRte9HaJ+rA==
-Date:   Wed, 25 Aug 2021 23:05:31 +0200
+        b=AqCiZagHkRFH+e6bcQThjUjsmkSe30NDH23HQQjgNnScSytTUNavQmxg66zGAjPqm
+         AEmc8OHTtm65XMj7R9m7vNHVsSlY/V9SBF/7PEJOVa0A/dJ+qmfW+CjXlPOBER6dQA
+         udono6MlOanX3xDFMj/OlxGTGignvWMFjyI1Nsi5GWtXpgV/8BwU8JdzZRSZfrnbb2
+         tZd/lwFqaanxWXfqRKBlFU0qGGXg1Du4ycrZzQcsbRxMlNJLamcdrv6iNCE4ql8Q8N
+         zNYqgY3a4Gm9cQitZKH3k4cC4Xhkpz5crz4/cw3q+LHz/jAJT7XuVtt3l/aIAftdbd
+         IzQEPSJ6bo+qg==
+Date:   Wed, 25 Aug 2021 23:10:07 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-i2c@vger.kernel.org, George Cherian <gcherian@marvell.com>
-Subject: Re: [PATCH v2 5/5] i2c: xlp9xx: fix main IRQ check
-Message-ID: <YSawm4O5cMffck3M@kunai>
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Cc:     git@xilinx.com, linux-i2c@vger.kernel.org, michal.simek@xilinx.com,
+        shubhrajyoti.datta@gmail.com
+Subject: Re: [PATCH] i2c: cadence: Implement save restore
+Message-ID: <YSaxr5SNwELgXe6V@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-i2c@vger.kernel.org,
-        George Cherian <gcherian@marvell.com>
-References: <3712e871-bf2f-32c5-f9c2-2968c42087f8@omp.ru>
- <88b0915b-de45-1ef3-0b03-ec9c2ff3ce88@omp.ru>
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>, git@xilinx.com,
+        linux-i2c@vger.kernel.org, michal.simek@xilinx.com,
+        shubhrajyoti.datta@gmail.com
+References: <20210713070011.28254-1-shubhrajyoti.datta@xilinx.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="F1bk0huWrYGccCxy"
+        protocol="application/pgp-signature"; boundary="TaT9jZDY9HVPVPQU"
 Content-Disposition: inline
-In-Reply-To: <88b0915b-de45-1ef3-0b03-ec9c2ff3ce88@omp.ru>
+In-Reply-To: <20210713070011.28254-1-shubhrajyoti.datta@xilinx.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---F1bk0huWrYGccCxy
+--TaT9jZDY9HVPVPQU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jul 04, 2021 at 05:47:54PM +0300, Sergey Shtylyov wrote:
-> Iff platform_get_irq() returns 0 for the main IRQ, the driver's probe()
-> method will return 0 early (as if the method's call was successful).
-> Let's consider IRQ0 valid for simplicity -- devm_request_irq() can always
-> override that decision...
+On Tue, Jul 13, 2021 at 12:30:11PM +0530, Shubhrajyoti Datta wrote:
+> The zynqmp platform now supports chip-off so the registers can
+> lose context.
+> Implement save restore for i2c module.
+> Since we have only a couple of registers
+> an unconditional restore is done.
 >=20
-> Fixes: 2bbd681ba2b ("i2c: xlp9xx: Driver for Netlogic XLP9XX/5XX I2C cont=
-roller")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->=20
+> Acked-by: Michal Simek <michal.simek@xilinx.com>
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 
 Applied to for-next, thanks!
 
 
---F1bk0huWrYGccCxy
+--TaT9jZDY9HVPVPQU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEmsJsACgkQFA3kzBSg
-KbZIWg//U344yuA65iXqInupqZaTaFk2u43E+2M6oNWKs0bkAwbmJzSaDOrIVITX
-V5N+4NwGnrg6X9gzv4aSlsMxpTEesOOqafCbQ2LX8C1np110+XBTzvYmKKFgmCI+
-YgHlO7NvUs72Y69xFLeqY0+hX6lxVsOXDJPVtS4irJIcuaKZnrO16SLy65sjgi+D
-lkHiesDoat0L+ocwuLo0R0ltK//b3K32/of2m/mHwDNDAQwLvj5QcnYBnqYA/emE
-8dRndZyc59PxFEXiY03nhaLX/OWIYoXury82nX9/Dra1wQFV3osZG0JAUpLe1GHK
-QDJ1/V4mc3DPyayYiLU9a4qEUzP3YIV7LWyM1Tu69m/1kMyUdzXh+D7pkpK6SBCr
-sS6VbQn0cwtzUYL33vUN6+ZnUtrNNFQ65nxkPq2SkDUGzFyEdUUDoqVNQuwzQDoY
-SXazEqX94Z50Qj1GZ6Li9p2mucnW2MawUgKi/Z0fwmbuoKG9KZXk1AEoXJc6GYX/
-o/xV8fiNxnDd18w4OoBGEPePdpgm6G73ErNWMlgTLbN8cuYUJs/11FaAcwzz0f+K
-gE7JnqeUYQhyFXYogEu2LqOQaJ589NBQpTsXMe9o8G8rfGlUgqKomYXHe6uMIGmX
-u5dSiKR0TKE9L9CDOodAeBF1o4UY1OZUNLHXqXgEAaDU+n8qC40=
-=jg0q
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEmsa8ACgkQFA3kzBSg
+KbYECBAAiCnXYkELkXs6w/0pwehQfZrXjnJlsNY+Cgvy1jmzFWqq4sGReHTxfKZR
+DdZaE3Fawd6QmUybtt9o7MKrZV4s3RD/kP1jKfMdU0LHUfOwxjWP17ipH3DdUGN/
+JjqAI7cvNkouOx0y22ff0LS0UxxLtfv/gVXORcokCRjdQTer1v+5a3wX6ttP0ZEj
+YrH5reMcTIvfwoAwLi7k4SYfVPTcke5f6iEymW4KkotLZ/CdpzT2qC9IBnMEEQqC
+EDwnI5KcKpoEgx0qoBVF3Y8wM2x6NXpHaY9LMOWvui93gf8z3sMY+uO+mki3+t78
+I5EpRfE5hYlfKqwqjwtU7EZ8eGRYaGMpr8VMlm7QqbrN9xEVBnI66TcOS36oDaeV
+uUCA8ML4WvP2T/eEscKEyjt7io0l9ZYVfsfk0KZy46e7mE8FiP4mE/SBZ1cJnAvn
+6heLA8uWdDfRY38olfCNPAEDhlqIEsywMHuuRwMenI0plcOtjNQWTF1GNhYCuc6M
+WCRAEwDsMs731MShgbW4pViwiX/8b/1utiPx29mYp2Ch2JTXokHZerrQAGmVfrnI
+o3AwW7hHBE8gUeItdwa6t/qKuHd3yXGE0WGGd7Ujy6UHvYlr+qEdc8aHT7wlGT53
+NCRwmIhELPLgc7AY3B7/slu/4lq6OAIixqmocRTpFvUMNEF8HxI=
+=UUog
 -----END PGP SIGNATURE-----
 
---F1bk0huWrYGccCxy--
+--TaT9jZDY9HVPVPQU--
