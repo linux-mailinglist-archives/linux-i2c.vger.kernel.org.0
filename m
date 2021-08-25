@@ -2,91 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B00AA3F7D6F
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Aug 2021 23:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C1B3F7D77
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Aug 2021 23:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbhHYVBu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Aug 2021 17:01:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57946 "EHLO mail.kernel.org"
+        id S232768AbhHYVGV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Aug 2021 17:06:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58520 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230455AbhHYVBt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 25 Aug 2021 17:01:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 50DD760FD9;
-        Wed, 25 Aug 2021 21:01:02 +0000 (UTC)
+        id S230477AbhHYVGV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 25 Aug 2021 17:06:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 30E406108E;
+        Wed, 25 Aug 2021 21:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629925263;
-        bh=O491Wjstd55ptiItcBQmMStGcPeTVu8i5bDRYlMHCUk=;
+        s=k20201202; t=1629925534;
+        bh=/XXR8btWeA5gaHUZTg+ZhLMEz63HwBH4QWrWOtn7jxc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XE/g1Hy5xcXRzDs1m6ymA8x4Jz79ug6PGGR86pE3O0aQDbWVNi7Enm7XU0h97k7NX
-         c90XDOAsgfhQOY3kjPX0rfyM4lcXBSGDwcLhY6sWh+aQoR44dhhOTMzQPNbjOAd9VF
-         G/AumvbPhqT/O12DKigfbH+jL87G2KQgNn0ECkrGPKBScaYSkHGcUmq/Jq1vWHPYaF
-         EitDyPaUIt3bDzSb8lfNW2Z9aTFNBsjaBOMc6H2tx44axBmchrgf9FNkgYre6pOEG1
-         XRzJSoO0w1co6cu4s16KdItfkg16mfzPhQZhd5cqGba3Uy2FISUT1rNssH294whOGn
-         UHuCh6e3GMKXQ==
-Date:   Wed, 25 Aug 2021 23:00:59 +0200
+        b=RzRbYiur3kvNTZjI9kKBSWThtlvbMKKOMDQXx1bHt6zoEGyRhmWQ46+xnRtm0aEgr
+         UiWnhSoRU8jxmYCh1pJpLyii2TiMtbK/jqXB31aXpCGpTsgN+uzniVdKeUIakT7E+n
+         VEeWHRMCaE/Tn74Ax+lkXbYRQJtTGFKvVNB3ZKpd40Rgjzj3FwNgcLEl73jHJAhKL4
+         TjPr/lWe0JjLDckB/ZRI144DZZymfqC7rUkbSy5UHM4VQqmZzAvIa9DaQZn3evO0td
+         DFv9Z/QHLQ9qXqOWZGcSRhwMMBQc+O2UmJhRWoGzAWE7XKanow57NF8QigGyeu79z1
+         OnIRte9HaJ+rA==
+Date:   Wed, 25 Aug 2021 23:05:31 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     linux-i2c@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 2/5] i2c: mt65xx: fix IRQ check
-Message-ID: <YSavi8ZKhi/a0TR9@kunai>
+Cc:     linux-i2c@vger.kernel.org, George Cherian <gcherian@marvell.com>
+Subject: Re: [PATCH v2 5/5] i2c: xlp9xx: fix main IRQ check
+Message-ID: <YSawm4O5cMffck3M@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Sergey Shtylyov <s.shtylyov@omp.ru>, linux-i2c@vger.kernel.org,
-        Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+        George Cherian <gcherian@marvell.com>
 References: <3712e871-bf2f-32c5-f9c2-2968c42087f8@omp.ru>
- <bab29007-8d74-0a68-2378-9db6ba0bc576@omp.ru>
+ <88b0915b-de45-1ef3-0b03-ec9c2ff3ce88@omp.ru>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kwNgeN+Mlw5HimRj"
+        protocol="application/pgp-signature"; boundary="F1bk0huWrYGccCxy"
 Content-Disposition: inline
-In-Reply-To: <bab29007-8d74-0a68-2378-9db6ba0bc576@omp.ru>
+In-Reply-To: <88b0915b-de45-1ef3-0b03-ec9c2ff3ce88@omp.ru>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---kwNgeN+Mlw5HimRj
+--F1bk0huWrYGccCxy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jul 04, 2021 at 05:38:45PM +0300, Sergey Shtylyov wrote:
-> Iff platform_get_irq() returns 0, the driver's probe() method will return=
- 0
-> early (as if the method's call was successful).  Let's consider IRQ0 valid
-> for simplicity -- devm_request_irq() can always override that decision...
+On Sun, Jul 04, 2021 at 05:47:54PM +0300, Sergey Shtylyov wrote:
+> Iff platform_get_irq() returns 0 for the main IRQ, the driver's probe()
+> method will return 0 early (as if the method's call was successful).
+> Let's consider IRQ0 valid for simplicity -- devm_request_irq() can always
+> override that decision...
 >=20
-> Fixes: ce38815d39ea ("I2C: mediatek: Add driver for MediaTek I2C controll=
-er")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omprussia.ru>
+> Fixes: 2bbd681ba2b ("i2c: xlp9xx: Driver for Netlogic XLP9XX/5XX I2C cont=
+roller")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 >=20
 
 Applied to for-next, thanks!
 
 
---kwNgeN+Mlw5HimRj
+--F1bk0huWrYGccCxy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEmr4sACgkQFA3kzBSg
-KbYYnhAAtfxroMXkfK8KgUfArohFxjwTVzFF+hA8xULBOhOTDQ2QfO6JESKDMV9S
-VLU008TXfBzwTlM7Q5QIQqbQ4GmfOiyIJXWHOt2pMQ5njdPp/hnFOTxvVMWKZTJH
-6vTrUiQ7wZCPl9OmzLngDNBwEjNr0/wUhMHXtJAkvLUF4ZKJFsD+BOucmQtb1xjA
-XCmvmm4ewPNXyRlfTEXIv8zuIL/szUns2zjr3vO6f/l1imG1Ow0PRd5VsE3mnvKt
-Jd8hRcZnNLu3NJ+q5CEUk6mOzPOJkC7rsute+YuNGpAqZuqdzPCEoVDb+dlLb1tg
-HSDq1rQJ4D/a30/axFNdEv0CHzmDYd/cF2rv1L6MCpaTB7RyAaaU+muMH/7qU8Dz
-BapEIMuYZztIaS11OJJ/+JmfwPkyeSclbXtOYd+JwBCYIQXGaK4+DrwxkGs2c5iG
-4IfbY+vmaRdufyF3ia9G/4RyyCaT9/U8DxVY+BofwyuZHqT0KsP3Q/MfUS79zD3d
-EGZWEse0kQfbkMRNrYLcU+W/4yz4aGZT4Del3NcUtb7u5Rj9uf/g9lNwyTARiYHr
-jY8wXfGZFwcPBYCAEFruDtR8Jio1lI+sZVLg3hN4eMfxaN/FO0500W2YjLsqtfpE
-UoBvMDvvGq0MEEgMXmnxx3c6YLISzV3KAxsEHB670YkRfSCC6Ro=
-=drRF
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEmsJsACgkQFA3kzBSg
+KbZIWg//U344yuA65iXqInupqZaTaFk2u43E+2M6oNWKs0bkAwbmJzSaDOrIVITX
+V5N+4NwGnrg6X9gzv4aSlsMxpTEesOOqafCbQ2LX8C1np110+XBTzvYmKKFgmCI+
+YgHlO7NvUs72Y69xFLeqY0+hX6lxVsOXDJPVtS4irJIcuaKZnrO16SLy65sjgi+D
+lkHiesDoat0L+ocwuLo0R0ltK//b3K32/of2m/mHwDNDAQwLvj5QcnYBnqYA/emE
+8dRndZyc59PxFEXiY03nhaLX/OWIYoXury82nX9/Dra1wQFV3osZG0JAUpLe1GHK
+QDJ1/V4mc3DPyayYiLU9a4qEUzP3YIV7LWyM1Tu69m/1kMyUdzXh+D7pkpK6SBCr
+sS6VbQn0cwtzUYL33vUN6+ZnUtrNNFQ65nxkPq2SkDUGzFyEdUUDoqVNQuwzQDoY
+SXazEqX94Z50Qj1GZ6Li9p2mucnW2MawUgKi/Z0fwmbuoKG9KZXk1AEoXJc6GYX/
+o/xV8fiNxnDd18w4OoBGEPePdpgm6G73ErNWMlgTLbN8cuYUJs/11FaAcwzz0f+K
+gE7JnqeUYQhyFXYogEu2LqOQaJ589NBQpTsXMe9o8G8rfGlUgqKomYXHe6uMIGmX
+u5dSiKR0TKE9L9CDOodAeBF1o4UY1OZUNLHXqXgEAaDU+n8qC40=
+=jg0q
 -----END PGP SIGNATURE-----
 
---kwNgeN+Mlw5HimRj--
+--F1bk0huWrYGccCxy--
