@@ -2,34 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9513C3F70F9
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Aug 2021 10:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BD63F7337
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Aug 2021 12:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239256AbhHYISs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Aug 2021 04:18:48 -0400
-Received: from mga07.intel.com ([134.134.136.100]:11522 "EHLO mga07.intel.com"
+        id S240369AbhHYK23 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Aug 2021 06:28:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39992 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238764AbhHYISr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 25 Aug 2021 04:18:47 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="281193905"
-X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
-   d="scan'208";a="281193905"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 01:17:56 -0700
-X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
-   d="scan'208";a="597975808"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 01:17:50 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 08532201ED;
-        Wed, 25 Aug 2021 11:17:48 +0300 (EEST)
-Date:   Wed, 25 Aug 2021 11:17:47 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+        id S240167AbhHYK2P (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 25 Aug 2021 06:28:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 14E3161212;
+        Wed, 25 Aug 2021 10:27:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629887249;
+        bh=/dGcdnDJQSuikSxYpLybghGo6DeDQ9TcuR3g7ByXcx8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YzQfIITYt+EvmJkw15OcJ5ISgWzmfAAa9l1OY26UMXJYFyuibz1c+h+8Mk1FZCuHQ
+         kAJTQSl0ONbTNT/9lrv6hzN6QhLVWUwE815h7VOrCdY8YvCWgS3u1bctTLujiM8iyu
+         M2sRBLq78Vru85NB9m3LEF3gSubrENg5UHN8Qhq244f/WJpBeL5APGDRjTizsqga+P
+         R+am+zkLRFhNBWRZjsjF1VkOahqzMZZHXYrgTUgbynHQ0MUTdn3jtNfP6dJ5fNKPOR
+         2OS8+sxjO8jOeELe4bpM0maGGU4KaC22/bulQY5Ka345TX0/+psJIL/4XIVTsRsbp1
+         lpZrdGca7ZZAQ==
+Date:   Wed, 25 Aug 2021 11:27:01 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Rob Herring <robh@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Vinod Koul <vkoul@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
         Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -37,7 +38,6 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bjorn Helgaas <bhelgaas@google.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-media@vger.kernel.org, netdev@vger.kernel.org,
@@ -46,51 +46,44 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
  entries
-Message-ID: <20210825081747.GO3@paasikivi.fi.intel.com>
+Message-ID: <20210825102701.GB5186@sirena.org.uk>
 References: <20210824202014.978922-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7ZAtKRhVyVSsbBD2"
 Content-Disposition: inline
 In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
+X-Cookie: MY income is ALL disposable!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rob,
 
-Thanks for the patch.
+--7ZAtKRhVyVSsbBD2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 On Tue, Aug 24, 2021 at 03:20:14PM -0500, Rob Herring wrote:
+
 > 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
 > is more concise and yields better error messages.
-> 
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Vignesh R <vigneshr@ti.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com> (mipi-ccs)
+Acked-by: Mark Brown <broonie@kernel.org>
 
--- 
-Sakari Ailus
+--7ZAtKRhVyVSsbBD2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEmGvUACgkQJNaLcl1U
+h9AfCwf/TPAwmd3i8vLyV5kU4MWAOn8zovhbZ+gXG2hJek5nLRjdW7eTl2yXz1gx
+xdOp2MMA5ldnXUjncRKHMJYykdL7ZtEsOUWT44WgHT0h1WEQzTHSnoVgkt/DDbsP
+tuovH5NV986VPCJXIC+mBkt5a4MPzdD1nYVmPss+8R+HXfTRZauTlZefXvwCzNDT
+Md/IxPvIbcqw5Ks12P4kdojbEGB92MONTO3vRYkzCeY1toRL9fOY3DJE30Kd6o3+
+hzCYzeRkTgoibpK8oG+ZqMOJ38/shj8Wiyfovdhd7LOj9orgkbGdGRi10R1997IR
+tDWFSsOVWZ8p+r2ZuI06T7GlVjygag==
+=GpUP
+-----END PGP SIGNATURE-----
+
+--7ZAtKRhVyVSsbBD2--
