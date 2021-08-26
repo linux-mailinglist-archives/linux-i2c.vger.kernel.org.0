@@ -2,71 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 210193F7F79
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Aug 2021 02:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A363F86D2
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Aug 2021 13:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbhHZAtK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Aug 2021 20:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbhHZAtK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Aug 2021 20:49:10 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4B0C061757
-        for <linux-i2c@vger.kernel.org>; Wed, 25 Aug 2021 17:48:23 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id w19-20020a17090aaf9300b00191e6d10a19so1074619pjq.1
-        for <linux-i2c@vger.kernel.org>; Wed, 25 Aug 2021 17:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PsHyntCvEtGn+duo8htPYwuNmPT7oJkqg7DGWFaMSVk=;
-        b=Zt5bD2S32NDCDn6NL/wNdpWzpJO1e6yEBi4TeQJiusfYMfb3BdaU83ZxDqREwsF1Ig
-         9htYoJzI9+UFMoOqlyisyl8wvyV3CxvKHAvFsqyQAHbdLF5Vf2043zvDqcm0N8wGEwwI
-         TtDWWwQWekVbr/FQTzZESjJmB4nOBOSud2wyclyAnxNyXS/gpdypzJ6/Nno7wWinUuwy
-         54f4TRA+yf4i9w04zYD+a869z5ogFGGDUGeHE/V00WGjphNAcuLSN8f9sJo/yuShIvCE
-         2R3z1cFxSobnr5bp0Y+j15l0UrvrFh49d1ylrbWXJN5ZmtMv/9kUMxfjmY2fvclOZiax
-         VIAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PsHyntCvEtGn+duo8htPYwuNmPT7oJkqg7DGWFaMSVk=;
-        b=WZ30+5s1Uultsuax5RqFJVo3lr/dXPKb9mlGkwdgS5azh9tFmyizeXbr/1vZQQKdxg
-         +IbmEhAQ7qEv1VLcztm6sDsa6BzDBrjsoyjK0QRPgjSAu4TbQk7QdlD9r6JbeowIP4tp
-         sgfeYSTWqQkFzQDBOiLVdSqmjaCR4vgM2BHqogUmFvocctXJ9E82IzyT65cJgITxeHTX
-         DdDuiIrx9NmXfnnh95KziXwsSpZ8TeRB7rrif2MgLRP/Fm1qVNkQMs7sQEXZ6tBYBZ+j
-         Rydqaesb7Go7mtPTy6MiEDHHEMgSDCef0e2R+P0stLR+zkfQKHmNwhnvTr8FKFNwkIaC
-         iO5w==
-X-Gm-Message-State: AOAM533r9VArOjVONvYIInGtvqRxqq6vcfx9lksjRay5KID1qVC/A06R
-        MUDT09OwuNZTdME78Ijm3IItpDNc1yECP3A0cdI=
-X-Google-Smtp-Source: ABdhPJyLcpK2ClKtj9NB/icGungfOFq6B3vND3LA8drAwFAP+RBUFed66xPlFFTb3TOjz5psrufh/ZUToxmqrWs0BwU=
-X-Received: by 2002:a17:90a:7d11:: with SMTP id g17mr1109090pjl.150.1629938903363;
- Wed, 25 Aug 2021 17:48:23 -0700 (PDT)
+        id S242372AbhHZL6i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Aug 2021 07:58:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242307AbhHZL6f (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 26 Aug 2021 07:58:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B82B6102A;
+        Thu, 26 Aug 2021 11:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1629979068;
+        bh=VqrmZfvdySGGpRkZfJ9sTmMn3wWb3fwMDv/A6XRJ5g0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lzvupKGm6DHeJEI0TqRmS03OkixQqyNvn5fHICulBulOAdMBqEccYq8nc5D2E6XhM
+         gWy/yQjptw7v0BYdQVMP3sXyUlMzJb2TDV9Ccg4Kg4G1aHaVRKNtLVfFwr83vd5wme
+         FgPiaOq7JB0o7euja3GB3WosZG/JyuK67iUcwAk8=
+Date:   Thu, 26 Aug 2021 13:57:44 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
+ entries
+Message-ID: <YSeBuMtUa77AR7Tn@kroah.com>
+References: <20210824202014.978922-1-robh@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7300:238e:b029:2a:3f90:ff96 with HTTP; Wed, 25 Aug 2021
- 17:48:22 -0700 (PDT)
-Reply-To: drtracywilliams877@gmail.com
-From:   "Dr. Tracy Williams" <misswrightanderson2@gmail.com>
-Date:   Wed, 25 Aug 2021 17:48:23 -0700
-Message-ID: <CAPUTNTvoAfVUW4uoYVxC2NJyNrDam8ZwZEdOMT7vG30maR5a4g@mail.gmail.com>
-Subject: Please send your reply to my PRIVATE mail box. drtracywilliams877@gmail.com
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Dear,
+On Tue, Aug 24, 2021 at 03:20:14PM -0500, Rob Herring wrote:
+> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
+> is more concise and yields better error messages.
+> 
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Vignesh R <vigneshr@ti.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: dmaengine@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-pci@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-How are you today,I hope you are doing great. It is my great pleasure
-to contact you,I want to make a new and special friend,I hope you
-don't mind. My name is Tracy Williams
-
-from the United States, Am a french and English nationality. I will
-give you pictures and more details about my self as soon as i hear
-from you in my email account bellow, Here is my email
-address;drtracywilliams877@gmail.com
-
-
-Thanks,
-Dr. Tracy Williams
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
