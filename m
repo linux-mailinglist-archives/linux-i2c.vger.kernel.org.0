@@ -2,85 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1113F7D83
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Aug 2021 23:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210193F7F79
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Aug 2021 02:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233845AbhHYVK6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 25 Aug 2021 17:10:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58946 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233928AbhHYVK5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 25 Aug 2021 17:10:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F1BDC610D1;
-        Wed, 25 Aug 2021 21:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629925811;
-        bh=3fxQsM8jTDoVZY+kIl31I1WMOgxI+nNNgoj5Dkcoy8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AqCiZagHkRFH+e6bcQThjUjsmkSe30NDH23HQQjgNnScSytTUNavQmxg66zGAjPqm
-         AEmc8OHTtm65XMj7R9m7vNHVsSlY/V9SBF/7PEJOVa0A/dJ+qmfW+CjXlPOBER6dQA
-         udono6MlOanX3xDFMj/OlxGTGignvWMFjyI1Nsi5GWtXpgV/8BwU8JdzZRSZfrnbb2
-         tZd/lwFqaanxWXfqRKBlFU0qGGXg1Du4ycrZzQcsbRxMlNJLamcdrv6iNCE4ql8Q8N
-         zNYqgY3a4Gm9cQitZKH3k4cC4Xhkpz5crz4/cw3q+LHz/jAJT7XuVtt3l/aIAftdbd
-         IzQEPSJ6bo+qg==
-Date:   Wed, 25 Aug 2021 23:10:07 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc:     git@xilinx.com, linux-i2c@vger.kernel.org, michal.simek@xilinx.com,
-        shubhrajyoti.datta@gmail.com
-Subject: Re: [PATCH] i2c: cadence: Implement save restore
-Message-ID: <YSaxr5SNwELgXe6V@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>, git@xilinx.com,
-        linux-i2c@vger.kernel.org, michal.simek@xilinx.com,
-        shubhrajyoti.datta@gmail.com
-References: <20210713070011.28254-1-shubhrajyoti.datta@xilinx.com>
+        id S234655AbhHZAtK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Aug 2021 20:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232139AbhHZAtK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Aug 2021 20:49:10 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4B0C061757
+        for <linux-i2c@vger.kernel.org>; Wed, 25 Aug 2021 17:48:23 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id w19-20020a17090aaf9300b00191e6d10a19so1074619pjq.1
+        for <linux-i2c@vger.kernel.org>; Wed, 25 Aug 2021 17:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=PsHyntCvEtGn+duo8htPYwuNmPT7oJkqg7DGWFaMSVk=;
+        b=Zt5bD2S32NDCDn6NL/wNdpWzpJO1e6yEBi4TeQJiusfYMfb3BdaU83ZxDqREwsF1Ig
+         9htYoJzI9+UFMoOqlyisyl8wvyV3CxvKHAvFsqyQAHbdLF5Vf2043zvDqcm0N8wGEwwI
+         TtDWWwQWekVbr/FQTzZESjJmB4nOBOSud2wyclyAnxNyXS/gpdypzJ6/Nno7wWinUuwy
+         54f4TRA+yf4i9w04zYD+a869z5ogFGGDUGeHE/V00WGjphNAcuLSN8f9sJo/yuShIvCE
+         2R3z1cFxSobnr5bp0Y+j15l0UrvrFh49d1ylrbWXJN5ZmtMv/9kUMxfjmY2fvclOZiax
+         VIAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=PsHyntCvEtGn+duo8htPYwuNmPT7oJkqg7DGWFaMSVk=;
+        b=WZ30+5s1Uultsuax5RqFJVo3lr/dXPKb9mlGkwdgS5azh9tFmyizeXbr/1vZQQKdxg
+         +IbmEhAQ7qEv1VLcztm6sDsa6BzDBrjsoyjK0QRPgjSAu4TbQk7QdlD9r6JbeowIP4tp
+         sgfeYSTWqQkFzQDBOiLVdSqmjaCR4vgM2BHqogUmFvocctXJ9E82IzyT65cJgITxeHTX
+         DdDuiIrx9NmXfnnh95KziXwsSpZ8TeRB7rrif2MgLRP/Fm1qVNkQMs7sQEXZ6tBYBZ+j
+         Rydqaesb7Go7mtPTy6MiEDHHEMgSDCef0e2R+P0stLR+zkfQKHmNwhnvTr8FKFNwkIaC
+         iO5w==
+X-Gm-Message-State: AOAM533r9VArOjVONvYIInGtvqRxqq6vcfx9lksjRay5KID1qVC/A06R
+        MUDT09OwuNZTdME78Ijm3IItpDNc1yECP3A0cdI=
+X-Google-Smtp-Source: ABdhPJyLcpK2ClKtj9NB/icGungfOFq6B3vND3LA8drAwFAP+RBUFed66xPlFFTb3TOjz5psrufh/ZUToxmqrWs0BwU=
+X-Received: by 2002:a17:90a:7d11:: with SMTP id g17mr1109090pjl.150.1629938903363;
+ Wed, 25 Aug 2021 17:48:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TaT9jZDY9HVPVPQU"
-Content-Disposition: inline
-In-Reply-To: <20210713070011.28254-1-shubhrajyoti.datta@xilinx.com>
+Received: by 2002:a05:7300:238e:b029:2a:3f90:ff96 with HTTP; Wed, 25 Aug 2021
+ 17:48:22 -0700 (PDT)
+Reply-To: drtracywilliams877@gmail.com
+From:   "Dr. Tracy Williams" <misswrightanderson2@gmail.com>
+Date:   Wed, 25 Aug 2021 17:48:23 -0700
+Message-ID: <CAPUTNTvoAfVUW4uoYVxC2NJyNrDam8ZwZEdOMT7vG30maR5a4g@mail.gmail.com>
+Subject: Please send your reply to my PRIVATE mail box. drtracywilliams877@gmail.com
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hello Dear,
 
---TaT9jZDY9HVPVPQU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+How are you today,I hope you are doing great. It is my great pleasure
+to contact you,I want to make a new and special friend,I hope you
+don't mind. My name is Tracy Williams
 
-On Tue, Jul 13, 2021 at 12:30:11PM +0530, Shubhrajyoti Datta wrote:
-> The zynqmp platform now supports chip-off so the registers can
-> lose context.
-> Implement save restore for i2c module.
-> Since we have only a couple of registers
-> an unconditional restore is done.
->=20
-> Acked-by: Michal Simek <michal.simek@xilinx.com>
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-
-Applied to for-next, thanks!
+from the United States, Am a french and English nationality. I will
+give you pictures and more details about my self as soon as i hear
+from you in my email account bellow, Here is my email
+address;drtracywilliams877@gmail.com
 
 
---TaT9jZDY9HVPVPQU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmEmsa8ACgkQFA3kzBSg
-KbYECBAAiCnXYkELkXs6w/0pwehQfZrXjnJlsNY+Cgvy1jmzFWqq4sGReHTxfKZR
-DdZaE3Fawd6QmUybtt9o7MKrZV4s3RD/kP1jKfMdU0LHUfOwxjWP17ipH3DdUGN/
-JjqAI7cvNkouOx0y22ff0LS0UxxLtfv/gVXORcokCRjdQTer1v+5a3wX6ttP0ZEj
-YrH5reMcTIvfwoAwLi7k4SYfVPTcke5f6iEymW4KkotLZ/CdpzT2qC9IBnMEEQqC
-EDwnI5KcKpoEgx0qoBVF3Y8wM2x6NXpHaY9LMOWvui93gf8z3sMY+uO+mki3+t78
-I5EpRfE5hYlfKqwqjwtU7EZ8eGRYaGMpr8VMlm7QqbrN9xEVBnI66TcOS36oDaeV
-uUCA8ML4WvP2T/eEscKEyjt7io0l9ZYVfsfk0KZy46e7mE8FiP4mE/SBZ1cJnAvn
-6heLA8uWdDfRY38olfCNPAEDhlqIEsywMHuuRwMenI0plcOtjNQWTF1GNhYCuc6M
-WCRAEwDsMs731MShgbW4pViwiX/8b/1utiPx29mYp2Ch2JTXokHZerrQAGmVfrnI
-o3AwW7hHBE8gUeItdwa6t/qKuHd3yXGE0WGGd7Ujy6UHvYlr+qEdc8aHT7wlGT53
-NCRwmIhELPLgc7AY3B7/slu/4lq6OAIixqmocRTpFvUMNEF8HxI=
-=UUog
------END PGP SIGNATURE-----
-
---TaT9jZDY9HVPVPQU--
+Thanks,
+Dr. Tracy Williams
