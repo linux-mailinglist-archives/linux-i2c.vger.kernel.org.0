@@ -2,84 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A363F86D2
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Aug 2021 13:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A8D3F88AC
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Aug 2021 15:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242372AbhHZL6i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Aug 2021 07:58:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44448 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242307AbhHZL6f (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 26 Aug 2021 07:58:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B82B6102A;
-        Thu, 26 Aug 2021 11:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629979068;
-        bh=VqrmZfvdySGGpRkZfJ9sTmMn3wWb3fwMDv/A6XRJ5g0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lzvupKGm6DHeJEI0TqRmS03OkixQqyNvn5fHICulBulOAdMBqEccYq8nc5D2E6XhM
-         gWy/yQjptw7v0BYdQVMP3sXyUlMzJb2TDV9Ccg4Kg4G1aHaVRKNtLVfFwr83vd5wme
-         FgPiaOq7JB0o7euja3GB3WosZG/JyuK67iUcwAk8=
-Date:   Thu, 26 Aug 2021 13:57:44 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
- entries
-Message-ID: <YSeBuMtUa77AR7Tn@kroah.com>
-References: <20210824202014.978922-1-robh@kernel.org>
+        id S235852AbhHZNWH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Aug 2021 09:22:07 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:35610 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229844AbhHZNWG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Aug 2021 09:22:06 -0400
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D773422262;
+        Thu, 26 Aug 2021 13:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1629984078; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Wb4jFCKsDy8o5ctzGFs+L82lSshGzatP4+kHNonr+c=;
+        b=jdMTgra2YdHsGGxbPK13MPwPvBuZ0HvT4AwhYMGON4oIC5lvv8Gu2FiqUWzaM2uFhuU89n
+        xKMlXvDftQVSjqhHA7gZmKXcDgAcYk5HRBqIraLl3wKmDZ+9MBGQV00x1T4xuas6Gs+xm/
+        sYY29o1nIX2plIvLU8I96CS8lnJd2S0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1629984078;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Wb4jFCKsDy8o5ctzGFs+L82lSshGzatP4+kHNonr+c=;
+        b=0mmOjnCX/iar3Ik/WvXaPqDLw6nYkTIL2p5ZYuG1d8r+M85TVY2RAMHRmS7rdiFbk5Ao1q
+        /Fem5Ti8ilMP0hBw==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id A7ACE132FD;
+        Thu, 26 Aug 2021 13:21:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id eOllJk6VJ2GWUQAAGKfGzw
+        (envelope-from <jdelvare@suse.de>); Thu, 26 Aug 2021 13:21:18 +0000
+Date:   Thu, 26 Aug 2021 15:21:17 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] i2c: i801: Improve is_dell_system_with_lis3lv02d
+Message-ID: <20210826152117.1cfc7e99@endymion>
+In-Reply-To: <effeb0c0-36cb-afc4-4d9a-7ef348c928ae@gmail.com>
+References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
+        <effeb0c0-36cb-afc4-4d9a-7ef348c928ae@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Aug 24, 2021 at 03:20:14PM -0500, Rob Herring wrote:
-> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
-> is more concise and yields better error messages.
-> 
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Vignesh R <vigneshr@ti.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hi Heiner,
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Fri, 06 Aug 2021 23:15:15 +0200, Heiner Kallweit wrote:
+> Replace the ugly cast of the return_value pointer with proper usage.
+> In addition use dmi_match() instead of open-coding it.
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+> v2:
+>   - avoid assigning potentially dangling pointer to *return_value
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 89ae78ef1..f56060fcf 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -1192,7 +1192,7 @@ static acpi_status check_acpi_smo88xx_device(acpi_handle obj_handle,
+>  
+>  	kfree(info);
+>  
+> -	*((bool *)return_value) = true;
+> +	*return_value = NULL;
+>  	return AE_CTRL_TERMINATE;
+>  
+>  smo88xx_not_found:
+> @@ -1202,11 +1202,9 @@ static acpi_status check_acpi_smo88xx_device(acpi_handle obj_handle,
+>  
+>  static bool is_dell_system_with_lis3lv02d(void)
+>  {
+> -	bool found;
+> -	const char *vendor;
+> +	void *err = ERR_PTR(-ENOENT);
+>  
+> -	vendor = dmi_get_system_info(DMI_SYS_VENDOR);
+> -	if (!vendor || strcmp(vendor, "Dell Inc."))
+> +	if (!dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
+>  		return false;
+>  
+>  	/*
+> @@ -1217,11 +1215,9 @@ static bool is_dell_system_with_lis3lv02d(void)
+>  	 * accelerometer but unfortunately ACPI does not provide any other
+>  	 * information (like I2C address).
+>  	 */
+> -	found = false;
+> -	acpi_get_devices(NULL, check_acpi_smo88xx_device, NULL,
+> -			 (void **)&found);
+> +	acpi_get_devices(NULL, check_acpi_smo88xx_device, NULL, &err);
+>  
+> -	return found;
+> +	return !IS_ERR(err);
+>  }
+>  
+>  /*
+
+OK, it's a bit different from what I proposed but it still addresses the
+concerns that had been raised. So fine with me.
+
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+
+-- 
+Jean Delvare
+SUSE L3 Support
