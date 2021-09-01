@@ -2,32 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1953FD6D2
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Sep 2021 11:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02223FD6DA
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Sep 2021 11:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243623AbhIAJe1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Sep 2021 05:34:27 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:34560 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S243514AbhIAJe1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Sep 2021 05:34:27 -0400
-X-UUID: f315a76fc05f4a91bf1f5641544d5f84-20210901
+        id S243576AbhIAJfw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Sep 2021 05:35:52 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:56946 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S243492AbhIAJfv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Sep 2021 05:35:51 -0400
+X-UUID: 9b064c854c5f4758bfc1e27bf25c25bb-20210901
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=qAFr462PAO/0XoeV1XxQaBZ1QKjkdT0RHzO2jPPAGlk=;
-        b=PGQ6b3RaYPZy9CNt7cY9TspreIWRjwuwSdTqmPAcYsix6zhxVhjctjH8BG3tTVtbIeBjjROYyR8cjkejlL+JcA1Crrr+jn6Wb0Bfg7o1h4kcJkNgcXd7rw/1vEkDDXKAAbTNva+6+KbdBlndVU9EHc3DV34EgE3VvCTQ9tS4Eng=;
-X-UUID: f315a76fc05f4a91bf1f5641544d5f84-20210901
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=dfh2IRW0A/mFGk8MNdDMTFcvdeRY8+5m/pyHarFWllU=;
+        b=UTfSc3w/oO3DgWqnZ8wJ0ZRPL7qMx3ebVOfw2gGUT5LAJHS/s6YipgNClu1/vhHF/xcGeqOqEBK6Wt5lwvCKafH/MOLXMUvxKLfaB+jvZIyyAR56yNM0M8VQO7yBid2gOyn2Rc3m9I28p6bjxPe2NCHhhD5P8XlZ4bWLuIIML3Q=;
+X-UUID: 9b064c854c5f4758bfc1e27bf25c25bb-20210901
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
         (envelope-from <qii.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1821073945; Wed, 01 Sep 2021 17:33:27 +0800
+        with ESMTP id 733951886; Wed, 01 Sep 2021 17:34:50 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 1 Sep 2021 17:33:26 +0800
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 1 Sep 2021 17:34:49 +0800
 Received: from [10.17.3.153] (10.17.3.153) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 1 Sep 2021 17:33:25 +0800
-Message-ID: <1630488805.11251.6.camel@mhfsdcap03>
-Subject: Re: [PATCH v6 5/7] i2c: mediatek: Add OFFSET_EXT_CONF setting back
+ Transport; Wed, 1 Sep 2021 17:34:48 +0800
+Message-ID: <1630488888.11251.7.camel@mhfsdcap03>
+Subject: Re: [PATCH v6 6/7] i2c: mediatek: Isolate speed setting via dts for
+ special devices
 From:   Qii Wang <qii.wang@mediatek.com>
 To:     Kewei Xu <kewei.xu@mediatek.com>
 CC:     <wsa@the-dreams.de>, <matthias.bgg@gmail.com>,
@@ -39,10 +40,10 @@ CC:     <wsa@the-dreams.de>, <matthias.bgg@gmail.com>,
         <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
         <liguo.zhang@mediatek.com>, <caiyu.chen@mediatek.com>,
         <ot_daolong.zhu@mediatek.com>, <yuhan.wei@mediatek.com>
-Date:   Wed, 1 Sep 2021 17:33:25 +0800
-In-Reply-To: <1630147859-17031-6-git-send-email-kewei.xu@mediatek.com>
+Date:   Wed, 1 Sep 2021 17:34:48 +0800
+In-Reply-To: <1630147859-17031-7-git-send-email-kewei.xu@mediatek.com>
 References: <1630147859-17031-1-git-send-email-kewei.xu@mediatek.com>
-         <1630147859-17031-6-git-send-email-kewei.xu@mediatek.com>
+         <1630147859-17031-7-git-send-email-kewei.xu@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
@@ -54,12 +55,16 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 T24gU2F0LCAyMDIxLTA4LTI4IGF0IDE4OjUwICswODAwLCBLZXdlaSBYdSB3cm90ZToNCj4gSW4g
 dGhlIGNvbW1pdCBiZTVjZTBlOTdjYzcgKCJpMmM6IG1lZGlhdGVrOiBBZGQgaTJjIGFjLXRpbWlu
-ZyBhZGp1c3QNCj4gc3VwcG9ydCIpLCB3ZSBtaXNzIHNldHRpbmcgT0ZGU0VUX0VYVF9DT05GIHJl
-Z2lzdGVyIGlmDQo+IGkyYy0+ZGV2X2NvbXAtPnRpbWluZ19hZGp1c3QgaXMgZmFsc2UsIG5vdyBh
-ZGQgaXQgYmFjay4NCj4gDQo+IEZpeGVzOiBiZTVjZTBlOTdjYzcgKCJpMmM6IG1lZGlhdGVrOiBB
-ZGQgaTJjIGFjLXRpbWluZyBhZGp1c3Qgc3VwcG9ydCIpDQo+IFNpZ25lZC1vZmYtYnk6IEtld2Vp
-IFh1IDxrZXdlaS54dUBtZWRpYXRlay5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy9pMmMvYnVzc2Vz
-L2kyYy1tdDY1eHguYyB8IDExICsrKysrKysrKystDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTAgaW5z
-ZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCg0KUmV2aWV3ZWQtYnk6IFFpaSBXYW5nIDxx
-aWkud2FuZ0BtZWRpYXRlay5jb20+DQo=
+ZyBhZGp1c3QNCj4gc3VwcG9ydCIpLCB0aGUgSTJDIHRpbWluZyBjYWxjdWxhdGlvbiBoYXMgYmVl
+biByZXZpc2VkIHRvIHN1cHBvcnQNCj4gYWMtdGltaW5nIGFkanVzdG1lbnQsIGhvd2V2ZXIgdGhh
+dCB3aWxsIGJyZWFrIG9uIHNvbWUgSTJDIGNvbXBvbmVudHMuDQo+IEFzIGEgcmVzdWx0IHdlIHdh
+bnQgdG8gaW50cm9kdWNlIGEgbmV3IHNldHRpbmcgImRlZmF1bHQtYWRqdXN0LXRpbWluZyINCj4g
+c28gdGhvc2UgY29tcG9uZW50cyBjYW4gY2hvb3NlIHRvIHVzZSB0aGUgb2xkIChkZWZhdWx0KSB0
+aW1pbmcgYWxnb3JpdGhtLg0KPiANCj4gRml4ZXM6IGJlNWNlMGU5N2NjNyAoImkyYzogbWVkaWF0
+ZWs6IEFkZCBpMmMgYWMtdGltaW5nIGFkanVzdCBzdXBwb3J0IikNCj4gU2lnbmVkLW9mZi1ieTog
+S2V3ZWkgWHUgPGtld2VpLnh1QG1lZGlhdGVrLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL2kyYy9i
+dXNzZXMvaTJjLW10NjV4eC5jIHwgNzcgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKystLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCA3MyBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9u
+cygtKQ0KPiANCg0KUmV2aWV3ZWQtYnk6IFFpaSBXYW5nIDxxaWkud2FuZ0BtZWRpYXRlay5jb20+
+DQoNCg==
 
