@@ -2,73 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 934E13FF9AC
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Sep 2021 06:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934A7400011
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Sep 2021 14:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbhICEpy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Sep 2021 00:45:54 -0400
-Received: from mail.repatriados.gov.py ([168.90.176.63]:9908 "EHLO
-        mail.repatriados.gov.py" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbhICEpy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Sep 2021 00:45:54 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.repatriados.gov.py (Postfix) with ESMTP id 658D76EE2A;
-        Wed,  1 Sep 2021 00:57:14 -0400 (-04)
-Received: from mail.repatriados.gov.py ([127.0.0.1])
-        by localhost (mail.repatriados.gov.py [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id v7v9V0DYCyxD; Wed,  1 Sep 2021 00:57:13 -0400 (-04)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.repatriados.gov.py (Postfix) with ESMTP id 64CA967BDF;
-        Tue, 31 Aug 2021 23:49:16 -0400 (-04)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.repatriados.gov.py 64CA967BDF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=repatriados.gov.py;
-        s=66AB3A4C-4957-11E8-AF15-073A956E488A; t=1630468156;
-        bh=re+Bi7IjhFEavKutGVOnSLzHkgr9hnVuewhYSbG4AUw=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=qroDRnpFzExkLNcLO2+0TcYj19RmycUz5pPBMvvSEPGaPFl/0ug7hCmo89uOv6iX1
-         BKMf6v9pGMdZ9lC2VBNx6Kk3L2qIeetMVoPhhVV4AAYKHJxwjGO9/MwP8iNkZf7BXc
-         6VEhMynuM+2Ler6x2ReRfzzz1op4BTRCQBfIzGE48MRk5CXkE3mO9SyKyXhovgmpAj
-         l91FxTX42wqNcNh1L5tn4+6xC78HJiBzZLfgwBmm6+CA7V4Oe1yaYAtCMfjInXNWbx
-         +1uxrBv3dN5KP8erFfHnDtVeUYu5f4KSzinP/YkG8Me3PkNQG7+73bPmKDUjNtCGfR
-         i7vMWl8ialokA==
-X-Virus-Scanned: amavisd-new at repatriados.gov.py
-Received: from mail.repatriados.gov.py ([127.0.0.1])
-        by localhost (mail.repatriados.gov.py [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id EN4iRacEzUea; Tue, 31 Aug 2021 23:49:15 -0400 (-04)
-Received: from cris-PC.www.huaweimobilewifi.com (unknown [105.4.4.195])
-        by mail.repatriados.gov.py (Postfix) with ESMTPSA id BA27B64E95;
-        Tue, 31 Aug 2021 21:52:24 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S234740AbhICM7Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Sep 2021 08:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231639AbhICM7Y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Sep 2021 08:59:24 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6215C061575
+        for <linux-i2c@vger.kernel.org>; Fri,  3 Sep 2021 05:58:24 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id h9so11934914ejs.4
+        for <linux-i2c@vger.kernel.org>; Fri, 03 Sep 2021 05:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=WYzSrI9zSNaecML1pdaUth8apEamlGgUMFyc+HnKzhk=;
+        b=Ilh7t4xEjHhQwo3noMQhLBg1vnGYtEwj4m7f6VGmLmkhpWv5CU+bT/5TNX6cMJRzxx
+         gMPZBMQJGH6iXldeDHlimJGOKdJSvJM8Tz4RtPHlQRM/BSPxzQmOQJ7CZ4XVwqo1XX39
+         quszCRN7onkDvFUDbROzm82P0y9KSrSGIhCtiS6cukE8D+gMonDFlRdd2fvKFVx1KXmt
+         5pf+JHoZJqjcZpwJ+jhkhd+wqDXgGp1205GQ6OV1li7tH8zh5Di80D/+Bbb1w9p07Md0
+         TmbIxsC5Xhd/qBMawmvZS9fCBpB6lyF0OQozemhlGN6NZQUJbHJlOHKIXF7zd3kcRpW/
+         y6eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=WYzSrI9zSNaecML1pdaUth8apEamlGgUMFyc+HnKzhk=;
+        b=ZoiR6GOJVmr9WA/CxrHAmPqcxAbVN94/udBzQ7uT3AjL9dxwKRtxXthM2R0/whwxjF
+         pKhLmozVXTeEvtdTXpZJw29QImtQ31Z5IYT7c5ScwgrHh9zLkvMXQQIrmThBVLogGZ4v
+         1lo4CKY/NNNYX6xG3h+oUWVgWL0C9yEgj+Ezg8byEbIxolAZYj1OkQCbOK18VszcsDf+
+         bOaPuAAGY9oWE9/COA9VhQTWtrw7qhACgUTs/LLHmsYqd/l2MNyDioZenDM4SYjm7w1a
+         EeYV+xt22PkafDlbhXuOCyVG5nk6hLLbUkERjeyi3St7/NM+Bb+2VqJ70deROaM58N97
+         H5KQ==
+X-Gm-Message-State: AOAM530SCzpMrH/wD0IdwmWhkB7vWLaxy7CM0PqcHpnFG3rXiQv/1HVY
+        nHQI1nesfhSXLjaSRFH18ie9I0YU6gdzJdcGGX4=
+X-Google-Smtp-Source: ABdhPJzyNiTR58o+MSntwQms5f7ZaOQz+XUNzy4+aUr7N6LLaAMyYLX2YqZdmiMbx+rlsCWvbTanwRnfVeT4UpFPQMY=
+X-Received: by 2002:a17:906:184e:: with SMTP id w14mr4012833eje.526.1630673903161;
+ Fri, 03 Sep 2021 05:58:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Euro?=
-To:     Recipients <mdominguez@repatriados.gov.py>
-From:   ''Charles jackon'' <mdominguez@repatriados.gov.py>
-Date:   Wed, 01 Sep 2021 03:52:57 +0200
-Reply-To: charlesjacksonjr001@gmail.com
-Message-Id: <20210901015225.BA27B64E95@mail.repatriados.gov.py>
+Received: by 2002:a17:906:c288:0:0:0:0 with HTTP; Fri, 3 Sep 2021 05:58:22
+ -0700 (PDT)
+Reply-To: michaelrachid7@gmail.com
+From:   Michael Rachid <sammyhamidou93@gmail.com>
+Date:   Fri, 3 Sep 2021 13:58:22 +0100
+Message-ID: <CAOO_Zf98hzdT+hyqg6T-jm=K5WvTdDbswq_apMThEde2QeyEww@mail.gmail.com>
+Subject: =?UTF-8?B?UHJvcG9zYWwv4Kaq4KeN4Kaw4Ka44KeN4Kak4Ka+4KasIFByYXN0xIFiYQ==?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hallo
-
-Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Ameri=
-ka, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen =
-US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der H=
-ilfsgelder f=FCr das Corona-Virus.
-
-Dies ist Ihr Spendencode: [CJ530342019]
-
-www.youtube.com/watch?v=3DBSr8myiLPMQ
-
-
-Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
-
-charlesjacksonjr001@gmail.com
-
-Ich hoffe, dass Sie und Ihre Familie dies durchkommen
-
-
-Herr Charles Jackson
+4Kaq4KeN4Kaw4Ka/4Kav4Ka8IOCmrOCmqOCnjeCmp+CngSwNCg0K4KaG4Kau4Ka/IOCmj+CmleCm
+n+CmvyDgpqzgp43gpq/gpqzgprjgpr7gpq/gprzgpr/gppUg4Kaq4KeN4Kaw4Ka44KeN4Kak4Ka+
+4KasIOCmuOCmruCnjeCmquCmsOCnjeCmleCnhyDgpobgpqrgpqjgpr7gppXgp4cg4KaF4Kas4Ka5
+4Ka/4KakIOCmleCmsOCmvuCmsCDgppzgpqjgp43gpq8g4Kay4Ka/4KaW4Kab4Ka/IOCmr+Cmvg0K
+4KaG4Kau4Ka/IOCmhuCmquCmqOCmvuCmsCDgprjgpr7gpqXgp4cg4Kaq4Kaw4Ka/4Kaa4Ka+4Kay
+4Kao4Ka+IOCmleCmsOCmpOCnhyDgpprgpr7gpofgpaQNCuCmquCmnuCnjeCmmuCmvuCmtiDgpq7g
+pr/gprLgpr/gpq/gprzgpqgg4Kah4Kay4Ka+4KawIOCmnOCmoeCmvOCmv+CmpOClpCDgpqjgpr/g
+prbgp43gpprgpr/gpqjgp43gpqQg4Kal4Ka+4KaV4KeB4KaoIOCmr+CnhyDgprjgpqzgppXgpr/g
+ppvgp4Eg4KaG4KaH4Kao4Ka/IOCmj+CmrOCmgiDgpp3gp4HgpoHgppXgpr/gpq7gp4HgppXgp43g
+pqTgpaQNCuCmpuCmr+CmvOCmviDgppXgprDgp4cg4KaG4Kaq4Kao4Ka+4KawIOCmhuCml+CnjeCm
+sOCmuSDgpqjgpr/gprDgp43gpqbgp4fgprYg4KaV4Kaw4KeB4Kao4KWkDQoNCuCmruCmvuCmh+Cm
+leCnh+CmsiDgprDgpr7gpprgpr/gpqHgpaQNClByaeG6j2EgYmFuZGh1LA0KDQrEgW1pIMSTa2Hh
+ua1pIGJ5YWJhc8SB4bqPaWthIHByYXN0xIFiYSBzYW1wYXJrxJMgxIFwYW7EgWvEkyBhYmFoaXRh
+IGthcsSBcmEgamFuJ3lhDQpsaWtoYWNoaSB5xIEgxIFtaSDEgXBhbsSBcmEgc8SBdGjEkyBwYXJp
+Y8SBbGFuxIEga2FyYXTEkyBjxIEnaS4NClBhw7FjxIHFm2EgbWlsaeG6j2FuYSDhuI1hbMSBcmEg
+amHhuZtpdGEuIE5pxZtjaW50YSB0aMSBa3VuYSB5xJMgc2FiYWtpY2h1IMSBJ2luaQ0KxJNiYeG5
+gSBqaHVtzJBraW11a3RhLg0KRGHhuo/EgSBrYXLEkyDEgXBhbsSBcmEgxIFncmFoYSBuaXJkxJPF
+m2Ega2FydW5hLg0KDQpNxIEnaWvEk2xhIHLEgWNp4biNYS4NCg0KDQpEZWFyIGZyaWVuZCwNCg0K
+SSB3cml0ZSB0byBpbmZvcm0geW91IGFib3V0IGEgYnVzaW5lc3MgcHJvcG9zYWwgSSBoYXZlIHdo
+aWNoIEkgd291bGQNCmxpa2UgdG8gaGFuZGxlIHdpdGggeW91Lg0KRmlmdHkgbWlsbGlvbiBkb2xs
+YXJzIGlzIGludm9sdmVkLiBCZSByZXN0IGFzc3VyZWQgdGhhdCBldmVyeXRoaW5nIGlzDQpsZWdh
+bCBhbmQgcmlzayBmcmVlLg0KS2luZGx5IGluZGljYXRlIHlvdXIgaW50ZXJlc3QuDQoNCk1pY2hh
+ZWwgUmFjaGlkLg0K
