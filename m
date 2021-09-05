@@ -2,164 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A888B400EEE
-	for <lists+linux-i2c@lfdr.de>; Sun,  5 Sep 2021 12:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C654010B7
+	for <lists+linux-i2c@lfdr.de>; Sun,  5 Sep 2021 17:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236579AbhIEKCN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 5 Sep 2021 06:02:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46248 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233169AbhIEKCN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 5 Sep 2021 06:02:13 -0400
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C860601FA;
-        Sun,  5 Sep 2021 10:01:07 +0000 (UTC)
-Date:   Sun, 5 Sep 2021 11:04:29 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-iio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v3.1 2/3] iio: chemical: Add Senseair Sunrise 006-0-007
- driver
-Message-ID: <20210905110429.34763e30@jic23-huawei>
-In-Reply-To: <20210831074011.d6f5rsix2mgxqba5@uno.localdomain>
-References: <20210822184927.94673-3-jacopo@jmondi.org>
-        <20210823073639.13688-1-jacopo@jmondi.org>
-        <20210829175413.7ce30bfa@jic23-huawei>
-        <20210830162051.rjqlhwvtguaivt3p@uno.localdomain>
-        <20210830181117.6808f085@jic23-huawei>
-        <20210831074011.d6f5rsix2mgxqba5@uno.localdomain>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        id S230387AbhIEQA5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 5 Sep 2021 12:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229566AbhIEQA5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 5 Sep 2021 12:00:57 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1F1C061575
+        for <linux-i2c@vger.kernel.org>; Sun,  5 Sep 2021 08:59:54 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id d6so5372732wrc.11
+        for <linux-i2c@vger.kernel.org>; Sun, 05 Sep 2021 08:59:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=xtRBab/7flUtpwg9SnKebIAgaeMeQq9M8lEXcw2HHoU=;
+        b=cwn9Ys1WVRRS20uldGNozlJrkcYDqIyFJUBiWr0CIYB8HyDdgH+uDorf4gMXH0Iz/T
+         BZyvny+UjiU7c6i4C7IujcNCpJyJ/O9ig0BH/xDJIUrgmzGIZr68M6euXrfeHo8FUaNT
+         7V3yHLvM7w7IGKyiyY70B05b4Lu5Hx9AxH200wyTw2ms00+1RHT7FgkqNuznciFp9ooZ
+         DE3VzOwFc7DWukGhGHG5LidzfboabDC9Sj6wzxaWMZcy33RmqDTxciy7Keto2QQTbyYw
+         jHQ6AD9yYu2lUzRVnWHtw3EihQnS09LHH7KJ8n8MzatnerCftupbQdKeuP+ZdUIBNqjz
+         99oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=xtRBab/7flUtpwg9SnKebIAgaeMeQq9M8lEXcw2HHoU=;
+        b=He7F6prDsVzTxutlrtXFpsm/tlXecYzktnxbpdDF3v0hAthdOFWrMUjAyWGIGkjccS
+         8yw5m5Ph6AcqWTwdt/MOcj5+xq0mgCzvs2OQyFjqTUpfjxBDizFgA89ZsFMcRV25cZ52
+         Uqhuc4u9BtpD0oIaceYHnThpXohljPYXiKWxOmYnoJ45xsnT10lORPe1Tsavpv92tJH7
+         Kh08t/LKmitv9nIAKW6B9NuCJ95mWJ3GyiCdy7cjA21Xrz0je+bqx9N/d5jU/15T8+7o
+         Zvc3xYZATKQD4AghL6SoRR9sR+nBp2jCtOC385RREnSGnApI6wgDTSygigH1b5qK17wy
+         DqHQ==
+X-Gm-Message-State: AOAM5332q1R2CUsm689Yb7zXqy8uIv9MJHnnd9QQOBliiCK4CK5V7jYq
+        TlF7m42r9098nR8Y25GhrV0BubdtAMQ=
+X-Google-Smtp-Source: ABdhPJyscVa/ckBSTekjarN9KsULNjqgWIIvY16JWQTpWumwUy/ywXa8BaOfrPKi2eA7TnjJ6p/7+w==
+X-Received: by 2002:adf:e74a:: with SMTP id c10mr8958704wrn.350.1630857592768;
+        Sun, 05 Sep 2021 08:59:52 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8f08:4500:38d8:6e4e:65cf:5ed0? (p200300ea8f08450038d86e4e65cf5ed0.dip0.t-ipconnect.de. [2003:ea:8f08:4500:38d8:6e4e:65cf:5ed0])
+        by smtp.googlemail.com with ESMTPSA id q13sm4851065wmj.46.2021.09.05.08.59.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Sep 2021 08:59:52 -0700 (PDT)
+To:     Jean Delvare <jdelvare@suse.com>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH] i2c: i801: Use PCI bus rescan mutex to protect P2SB access
+Message-ID: <7521c130-d777-6a26-bd14-1ed784f828cc@gmail.com>
+Date:   Sun, 5 Sep 2021 17:59:42 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 31 Aug 2021 09:40:11 +0200
-Jacopo Mondi <jacopo@jmondi.org> wrote:
+As pointed out by Andy in [0] using a local mutex here isn't strictly
+wrong but not sufficient. We should hold the PCI rescan lock for P2SB
+operations.
 
-> Hi Jonathan,
->    two more clarification requests, sorry to bother :)
-No problem.  First one: No idea +CC wolfram and i2c list.
-> 
-> On Mon, Aug 30, 2021 at 06:11:17PM +0100, Jonathan Cameron wrote:
-> > On Mon, 30 Aug 2021 18:20:51 +0200  
-> > > > > +static int sunrise_write_word(struct sunrise_dev *sunrise, u8 reg, u16 data)
-> > > > > +{
-> > > > > +	__be16 be_data = cpu_to_be16(data);
-> > > > > +	int ret;
-> > > > > +
-> > > > > +	sunrise_wakeup(sunrise);  
-> > > >
-> > > > Hmm. Technically there isn't anything stopping another user of the i2c bus sneaking in
-> > > > between the wakeup and the following command.  That would make the device going back
-> > > > to sleep a lot more likely.  I can't off the top of my head remember if regmap lets
-> > > > you lock the bus.  If not, you'll have to use the underlying i2c bus locking functions.
-> > > > https://elixir.bootlin.com/linux/latest/source/drivers/iio/temperature/mlx90614.c#L432
-> > > > gives an example.  
-> > >
-> > > Right, there might be another call stealing the wakeup session!
-> > >
-> > > I should lock the underlying i2c bus, probably not root adapter like
-> > > mlx90614 does but only the segment.  
-> >
-> > Ideally only segment as you say as could be some muxes involved.  
-> 
-> If not that i2c_smbus_xfer() which is called by my wakeup and by the
-> regmap_smbus_* calls tries to lock the segment as well, so we deadlock :)
-> 
-> And actually, locking the underlying i2c segment seems even too
-> strict, what we have to guarantee is that no other read/write function
-> call from this driver interrupts a [wakeup-trasactions] sequence.
-> 
-> Wouldn't it be better if I handle that with a dedicated mutex ?
+[0] https://www.spinics.net/lists/linux-i2c/msg52717.html
 
-I'm not sure what best route is. +CC Wolfram, Peter and linux-i2c.
+Fixes: 1a987c69ce2c ("i2c: i801: make p2sb_spinlock a mutex")
+Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Short story here is we have a device which autonomously goes to sleep.
-Datasheet suggests waking it up with a failed xfer followed by what we
-actually want to do (sufficiently quickly).
-
-Obviously we can't actually guarantee that will ever happen but it's a lot
-more likely to succeed if we briefly stop anything else using he i2c bus.
-
-How should we handle this?
-
-
-
-
-> 
-> >  
-> > >  
-> > > >
-> > > > Perhaps worth a look is the regmap-sccb implementation which has a dance that looks
-> > > > a tiny bit like what you have to do here (be it for a different reason).
-> > > > It might be nice to do something similar here and have a custom regmap bus which
-> > > > has the necessary wakeups in the relevant places.
-> > > >
-> > > > Note I haven't thought it through in depth, so it might not work!  
-> > >
-> > > the dance is similar if not regmap-sccb tranfers a byte instead of
-> > > sending only the R/W bit (notice the usage of I2C_SMBUS_QUICK here and
-> > > I2C_SMBUS_BYTE in regmap-sccb). Practically speaking it makes no
-> > > difference as the sensor nacks the first message, so the underlying
-> > > bus implementation bails out, but that's a bit of work-by-accident
-> > > thing, isn't it ?
-> > >
-> > > If fine with you, I would stick to this implementation and hold the
-> > > segment locked between the wakup and the actual messages.  
-> >
-> > That's fine.  I was just thinking you could hid the magic in a custom regmap then
-> > the rest of the driver would not have to be aware of it.  Slightly neater than
-> > wrapping regmap functions with this extra call in the wrapper.
-> >  
-> 
-> [snip]
-> 
-> > > > > +		}
-> > > > > +
-> > > > > +	case IIO_CHAN_INFO_SCALE:
-> > > > > +		/* Chip temperature scale = 1/100 */  
-> > > >
-> > > > IIO temperatures are measured in milli degrees.  1lsb = 1/100*1000 degrees centigrade seems very accurate
-> > > > for a device like this!  I'm guessing this should be 10.  
-> > >
-> > > Ah yes, I thought it had to be given in the chip's native format,
-> > > which is 1/100 degree.
-> > >
-> > > I guess I should then multiply by 10 the temperature raw read and
-> > > return IIO_VAL_INT here.  
-> >
-> > You could do that, but can cause a mess if buffered support comes along later as
-> > it is then not a whole number of bits for putting in the buffer.
-> >  
-> 
-> Care to clarify ? What shouldn't I do here ? Multiply by 10 the raw
-> value (which I think is wrong as pointed out in a later reply) or
-> return IIO_VAL_INT ? Sorry I didn't get the connection with the number
-> of bits to put in the buffer :)
-
-So.  If you stick to output of _raw and _scale in the buffer the data
-would be whatever you read from the register.  That is typically a whole number of bits.
-If you were to multiply by 10 you end up something that may be say 12 or 13 bits depending
-on the value.  That's a bit ugly. We can handle it of course, but I'd rather not if it's
-as simple as not doing the *10 in kernel for the sysfs path.
-
-So not critical but things end up more elegant / standard if we don't do the *10 and
-instead make that a problem for userspace.
-
-Jonathan
-
-
-> 
-> Thanks
->    j
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 89ae78ef1..1f929e6c3 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1493,7 +1493,6 @@ static struct platform_device *
+ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 		 struct resource *tco_res)
+ {
+-	static DEFINE_MUTEX(p2sb_mutex);
+ 	struct resource *res;
+ 	unsigned int devfn;
+ 	u64 base64_addr;
+@@ -1506,7 +1505,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 	 * enumerated by the PCI subsystem, so we need to unhide/hide it
+ 	 * to lookup the P2SB BAR.
+ 	 */
+-	mutex_lock(&p2sb_mutex);
++	pci_lock_rescan_remove();
+ 
+ 	devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 1);
+ 
+@@ -1524,7 +1523,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 	/* Hide the P2SB device, if it was hidden before */
+ 	if (hidden)
+ 		pci_bus_write_config_byte(pci_dev->bus, devfn, 0xe1, hidden);
+-	mutex_unlock(&p2sb_mutex);
++	pci_unlock_rescan_remove();
+ 
+ 	res = &tco_res[1];
+ 	if (pci_dev->device == PCI_DEVICE_ID_INTEL_DNV_SMBUS)
+-- 
+2.33.0
 
