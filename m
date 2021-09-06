@@ -2,54 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7113B401808
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Sep 2021 10:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC654018BF
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Sep 2021 11:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240682AbhIFIbP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Sep 2021 04:31:15 -0400
-Received: from mga17.intel.com ([192.55.52.151]:16828 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240675AbhIFIbN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 6 Sep 2021 04:31:13 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10098"; a="200127585"
-X-IronPort-AV: E=Sophos;i="5.85,271,1624345200"; 
-   d="scan'208";a="200127585"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2021 01:30:07 -0700
-X-IronPort-AV: E=Sophos;i="5.85,271,1624345200"; 
-   d="scan'208";a="546120504"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2021 01:30:06 -0700
-Received: from andy by smile with local (Exim 4.95-RC2)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mNA0y-000Ros-2H;
-        Mon, 06 Sep 2021 11:30:04 +0300
-Date:   Mon, 6 Sep 2021 11:30:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+        id S237787AbhIFJWU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Sep 2021 05:22:20 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:44554 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240303AbhIFJWR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Sep 2021 05:22:17 -0400
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6AAE122096;
+        Mon,  6 Sep 2021 09:21:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1630920066; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4fLJaJVJnqou70CYeKITkgRVzHAVxWxzUSJuPLYjfCQ=;
+        b=vS8Bn4t0k0py8Ixhyf5R5bWxVIDSnFc8bqA7CO/lEzDCxGFcpCSW2YlD+vodYsHTh29V+3
+        ao79QKLIuAXLxX7/apQ/z/Cb8kLAa3wjbD1uWVL2bPTM21ayRGzEuF4aMxqvXtJ9sXoyB1
+        XbL+8HM9BJq5a64Ky1oL0t/sHxO5DNE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1630920066;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4fLJaJVJnqou70CYeKITkgRVzHAVxWxzUSJuPLYjfCQ=;
+        b=8p7PVWQJ/rw3jap3zBevQRT72UtjBHXX4//VQYT8C3sKsBA/PyeIiI5WHfit/ibQ5feOnp
+        lB8AMxQWsDlTOOBg==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 3796B13942;
+        Mon,  6 Sep 2021 09:21:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id YtsyC4LdNWGEewAAGKfGzw
+        (envelope-from <jdelvare@suse.de>); Mon, 06 Sep 2021 09:21:06 +0000
+Date:   Mon, 6 Sep 2021 11:21:04 +0200
+From:   Jean Delvare <jdelvare@suse.de>
 To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     linux-i2c@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
 Subject: Re: [PATCH] i2c: i801: Use PCI bus rescan mutex to protect P2SB
  access
-Message-ID: <YTXRjMABZhHocFUA@smile.fi.intel.com>
-References: <7521c130-d777-6a26-bd14-1ed784f828cc@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <20210906112104.5cda3131@endymion>
 In-Reply-To: <7521c130-d777-6a26-bd14-1ed784f828cc@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <7521c130-d777-6a26-bd14-1ed784f828cc@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Sep 05, 2021 at 05:59:42PM +0200, Heiner Kallweit wrote:
+Hi Heiner,
+
+On Sun, 05 Sep 2021 17:59:42 +0200, Heiner Kallweit wrote:
 > As pointed out by Andy in [0] using a local mutex here isn't strictly
 > wrong but not sufficient. We should hold the PCI rescan lock for P2SB
 > operations.
-
-Thanks!
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-
+> 
 > [0] https://www.spinics.net/lists/linux-i2c/msg52717.html
 > 
 > Fixes: 1a987c69ce2c ("i2c: i801: make p2sb_spinlock a mutex")
@@ -89,12 +110,11 @@ Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 >  
 >  	res = &tco_res[1];
 >  	if (pci_dev->device == PCI_DEVICE_ID_INTEL_DNV_SMBUS)
-> -- 
-> 2.33.0
-> 
+
+Looks good to me.
+
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jean Delvare
+SUSE L3 Support
