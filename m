@@ -2,54 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D5E401E6A
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Sep 2021 18:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1753401EF2
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Sep 2021 19:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244290AbhIFQd4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Sep 2021 12:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S243799AbhIFRLc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Sep 2021 13:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244220AbhIFQds (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Sep 2021 12:33:48 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9D6C0613A4
-        for <linux-i2c@vger.kernel.org>; Mon,  6 Sep 2021 09:32:43 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id a1so7343657ilj.6
-        for <linux-i2c@vger.kernel.org>; Mon, 06 Sep 2021 09:32:43 -0700 (PDT)
+        with ESMTP id S243136AbhIFRLc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Sep 2021 13:11:32 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62422C061575
+        for <linux-i2c@vger.kernel.org>; Mon,  6 Sep 2021 10:10:26 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id a21so6084863vsp.12
+        for <linux-i2c@vger.kernel.org>; Mon, 06 Sep 2021 10:10:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Hi0ERA05Hh6q+34+Ou3AtyiRWoG/jVLdZcB+Ekv+M3g=;
-        b=AQXQzDCQYveoXX8TzTwuiAk/FEyR3wCuvC9VFUOgylxIOdg1EFZyjuPsYQnAcX6J45
-         hGQ/TLw/xoIRE4dR4duos/11L9nUC9pcUBl/RXv6WkJZOj9GF3K+dFgRBHNvOmD3hg/2
-         8aWexR+OCBkLd9FzUsmw6Mf2hXMKPJJYu5JOjAjvp1WIk7xCdh9mnYnLj+26R+tY7rgo
-         HJPLbs6wPd+nl87UvFskxFfDoXbe22pxgW1zf9L/3TdM0lyau7vB+LmM0EAyEmYoeoMO
-         ZhwZDLJwTAD2meT4nF7FnViJ3hJIW4496YAschcWJBrRRFI5yQJjoNMRwEQgQiqRwsUz
-         E0sQ==
+        bh=gPWXiaNTPVTv8v8NJ16SYW6dYjSrDpzV61pQz3V3yPU=;
+        b=E3Vj8tFM3oaNkSxAciwWF7bviT0F6jf5FgCaeSSSEFUulwczVgWSChEiBzxUXWRkLz
+         DOJT2xrMKHse+pHjrAC1N+EhDprz2mU5Wiw6FgvBv3Jzyh+GDZY6kcSVoKm5qoxsf1oE
+         cHmAKkSITVkS1h+63G86K0bztxNW6BIvxE/n8YNaR9g+GpPqeod+YXE6Rs4n5e83s4Ke
+         4/kHz1kT6y2SlkidSPfwj5KyAiT15o9nwGInEmmj6n/y90zwfI4UlxZfKGjJjo4zmYRs
+         +SzQH+Y5kOKcchRHvyrJHQYIPiHbBS8uEg2OSXkYZ8j8pAANxnZIjQwY2at4acXOmcVr
+         FpMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=Hi0ERA05Hh6q+34+Ou3AtyiRWoG/jVLdZcB+Ekv+M3g=;
-        b=sRaLvku5GL4QjIfm1txeorYKKCsaddyELLlzJBTRpv9YhD83gJiZdOy/2NqAcskCY9
-         PEDcBTCPzWLJOMuFlE7n/pEwN44M+xhgru1Z6pt88oI4WCgS8JyDfuUbJmQh2ENDJ0lz
-         G1SYTURwjLgwaGRjGf66rhWt5ac5fnW0iw6QihqGEhLNCUwLoyRtBvrY2MCIJ5WH1HR8
-         4kuknkYBFcHzDmEhxz3ia2jITj2QmEwq7dfx0qIGofqg9STOQeOMDOS8rT9zLN+gpYyV
-         2WyToseCLvuxn5STpS9CxDD1aFkKfYanBbBCX17i8jgg/3Kou7VVhG7h8dfIZZ06S5xe
-         qeVQ==
-X-Gm-Message-State: AOAM533hKMEmEu+tvjuwHXtLeBz4UQShmWQr/7UGCB7fuzXHEmyVJ4sR
-        F1gu9IymnawRFXy/3W0UXgaIrKNsaGtthwz1qY4=
-X-Google-Smtp-Source: ABdhPJyNYLbPp58BcQ7mI7j8eL1xi4DRM/CVSKmP+XLlKZnpaM0c4B2zxnkjBdrMYYyKOgNolLHbsclwr0lft4or1UU=
-X-Received: by 2002:a05:6e02:1ca6:: with SMTP id x6mr8854675ill.86.1630945961991;
- Mon, 06 Sep 2021 09:32:41 -0700 (PDT)
+        bh=gPWXiaNTPVTv8v8NJ16SYW6dYjSrDpzV61pQz3V3yPU=;
+        b=OJQa5hnktBZ6GWdAcz63vbzdcQLuK/5R4+vJ377c8wrha/dD857h2BjH3NXsFg90SL
+         JVKaDU7M7QtVY+8EApJOqS5n4Rl8KwpDjtIREL7vVP5oc2uTRNJMw8KqudOD+xJarX7V
+         kAupOzs5mQFc4Ct5Rzczx3Rig0dMhDfSiPGklpN217Ok9r/o2nR4gEJ1MayhM1p/XbBy
+         JrDVQkQbCS/I+3pCqtQmU2DLQ6q3asUBhnlanPynfKdvaZ5/mtIiAktaL3KweFkAFiYd
+         CTHbeb9IbjT2wGR1nf0snB0RzLP6hfEj3VEKFr5OhOVcYjmedATbjkEnatjrNLQRAWF3
+         f+sA==
+X-Gm-Message-State: AOAM5301s+6TTZDgpTMeU5F10lgEOQpPaeFgovYpgU05ggC7/Z9ouhrB
+        k4VuQmGRmCIznSRNYOLW7O1SYxGRVjJ7+MqtmY8=
+X-Google-Smtp-Source: ABdhPJyzHhwvF+isdxxoB8YzVq5YmZwkDWqUtavxucpZ2oHig2dHn4DOkhIve7MzsYDs7iuwcJVgXpY4aEgq/k3Ct5E=
+X-Received: by 2002:a05:6102:7a4:: with SMTP id x4mr6600372vsg.10.1630948225484;
+ Mon, 06 Sep 2021 10:10:25 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1d86:0:0:0:0 with HTTP; Mon, 6 Sep 2021 09:32:41
- -0700 (PDT)
-Reply-To: suzara.wans2021@gmail.com
-From:   Mrs Suzara Maling Wan <mr.brueshands4world@gmail.com>
-Date:   Mon, 6 Sep 2021 09:32:41 -0700
-Message-ID: <CABvx5tpkSnzTGw2hd3awtMaYZ6SrrR=GwA3X22LN=2t5+bDtOw@mail.gmail.com>
-Subject: Hello
+Received: by 2002:ab0:2a08:0:0:0:0:0 with HTTP; Mon, 6 Sep 2021 10:10:24 -0700 (PDT)
+Reply-To: geomic123@yahoo.com
+From:   George <georgefox277@gmail.com>
+Date:   Mon, 6 Sep 2021 18:10:24 +0100
+Message-ID: <CADSebuQ_1CVEomO636rbdzt99xuHSAD9XpM2Gu9UBNRxVy2OCQ@mail.gmail.com>
+Subject: Read My Mail
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
@@ -57,21 +56,14 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 -- 
-My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
-of the Philippine presently base in West Africa B/F, dealing with
-exportation of Gold, I was diagnose of blood Causal decease, and my
-doctor have announce to me that I have few days to leave due to the
-condition of my sickness.
+Dear Sir/Madam
 
-I have a desire to build an orphanage home in your country of which i
-cannot execute the project myself due to my present health condition,
-I am willing to hand over the project under your care for you to help
-me fulfill my dreams and desire of building an orphanage home in your
-country.
+My name is Mr George Michael,i am the Personal Aid to former
+President Baba Yahya Abdul-Aziz Jemus Jammeh the Republic of Gambia in
+west Africa, who is currently in exile with his farmily. I have been
+trying on how to get in touch with you over an important issue
+concerning a project that will be profitable . I anticipate hearing
+from you for more details.
 
-Reply in you are will to help so that I can direct you to my bank for
-the urgent transfer of the fund/money require for the project to your
-account as I have already made the fund/money available.
-
-With kind regards
-Mrs Suzara Maling Wan
+Yours faithfully
+Mr George Michael
