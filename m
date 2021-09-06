@@ -2,91 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 406D34015BF
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Sep 2021 06:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BBB4015E6
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Sep 2021 07:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238371AbhIFEoU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Sep 2021 00:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
+        id S238908AbhIFF2n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Sep 2021 01:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbhIFEoO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Sep 2021 00:44:14 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890DEC061575
-        for <linux-i2c@vger.kernel.org>; Sun,  5 Sep 2021 21:43:10 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id z24-20020a17090acb1800b0018e87a24300so3725254pjt.0
-        for <linux-i2c@vger.kernel.org>; Sun, 05 Sep 2021 21:43:10 -0700 (PDT)
+        with ESMTP id S238881AbhIFF2n (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Sep 2021 01:28:43 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0092AC061757;
+        Sun,  5 Sep 2021 22:27:38 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id pi15-20020a17090b1e4f00b00197449fc059so985672pjb.0;
+        Sun, 05 Sep 2021 22:27:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3zWdOueDKtAVWRvfy9UP9yg3qL1geWqf5YsZ2lnxtUo=;
-        b=pHag5NqN7NmLLdCbx6/9eOnpQtF7ZlLiKc0HpXCLEHtYhFph+QMys170qxyVKIziAJ
-         enhc3w7ko88B/HrujeSJFW01Tsp70YxHU5h7+qcxRx/yPlTwmNSRAygOJ/VqxGqskb78
-         n8uNACU1NwyC3ZYEZa3Zvk2c+yxY/GkY692LDiF6q15ZWgGC74nDpAXLre+X+TESFFnL
-         DMkSwFFLmbQlek3KbcJp8a/1dp0UEvsdaG1SQv9RSw0l9n26nA05ViLHUoE2ydq/s842
-         jpLOLaILRNKQHmHgsHh1CiqQpd1G8rrWRD6m0F8jrPKzpRL3gtF128GTM3KoKaW4P0yj
-         Cslg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O8EgemLUAyhEE0xDtSpxWPGSz/8UwJOOmPy6hkxB9ZY=;
+        b=LFFBtt8QCnNg/4EX9uSSFk/oNMDV509nCQa+LBnV/KoqvnFDl9iuOGgYiWBbyVl9C0
+         kDlLIph19uG2HdPFMvQLonf6Cm3GTNAPN9gfpzS0sYLuRDaCGlhOWGPclbZgrY04A87C
+         ILBNzd07Ga15AsXAprrvloSS+Muari2Qxe8gMAMQAM0lEXtgWtiA9R3+K7CHgLA6wfMX
+         xLKsJI5m5hOpk23JLVbOvrIvvj0CyKis/W0XaOvqYoBgWRhdg5qFGuMEZ3b+REd3TMQX
+         V0H2n1IjZnGk8QqKkwy6X++myicn+XOC9jjDgfGAyO9Ihw9/+pf3eepdmh6VnP5ZBJhZ
+         5m5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3zWdOueDKtAVWRvfy9UP9yg3qL1geWqf5YsZ2lnxtUo=;
-        b=cIT95qzt8GrxpaknyRoFNw6CXNDeVCrEiyk0avsOMyTaZtP91OxpGABt3fw0ChDJFA
-         dLc89W/T1b00wD9KV7xmNRes8H0Ik3e3640fNtmVFTSKVRoCnOgSSaKc+ECeHnfZjj0P
-         iKAhzteUSfAIPpIrJdxbCZikFZA4B4e5B1c7/Ks0tofVpyKCKN2IvoYHyW/q1W/1qDHm
-         oaEQqkWUslCs4y0UCHJpqGyIW8KM5XIoycPG1uMKqr7Remhs8fxQrQ24oPNRiaWWpweC
-         2Kb+a85JVjQ7H7U7Dlutl7qfSJsDPjsHTiDQoTchBgtXNBwonqckQsxq20YW1kNujZzN
-         bcWA==
-X-Gm-Message-State: AOAM5319hKpXZuoZhBsMVsI9eYPTtscfLlthRijGKcDzr0SUPcUKOG/B
-        5sdT4G06xQH8c1Gi/Cwxj5SBbTO96HBu5A==
-X-Google-Smtp-Source: ABdhPJwe0pj97liB4LbsuYiSoF/Xal92iCreh5AfSiBr0sUl9OcHufz0zEsxfvXQheepjecetEIs7w==
-X-Received: by 2002:a17:90b:4b4f:: with SMTP id mi15mr11975932pjb.120.1630903390124;
-        Sun, 05 Sep 2021 21:43:10 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id m28sm7594271pgl.9.2021.09.05.21.43.09
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O8EgemLUAyhEE0xDtSpxWPGSz/8UwJOOmPy6hkxB9ZY=;
+        b=tUTCvgbBiAk64UGc5g8vv9QbHcBM1BIMYzWc0Be9T2wWmj/Q/B4aOzTpkTaHQCZMzQ
+         y5BDuTc/hi8QGTf4MbY7pTWlPHWlBM5wDOBnEX/X11F3aisNMMR++caH1es8xTS4nmvb
+         76JVLCYObbzHAn1fqYX+ZRlPiUglrEg9uwgPZE+XftQpJUeZGS0COWdicNTT/hhv9DHY
+         XdlDOI1Pgz4aoqNEkfRJoDrPzdE3lvpVw9F2i+zMzkZvBkb3u0VGRk6sSj9BDtS1thte
+         tXQFSjgOa1UF25CUf5RuoABVjS87LNoh69v4QS5XEnpJOqLYfO0UNIfsqsBWzjgLTjuJ
+         15BA==
+X-Gm-Message-State: AOAM530yTjn5WXgcf3MLVdeRM5O8ltyU6Ry7xcpUZH7nxpJn7N4CnfR3
+        uTLaiYg+S1lHLVx3jrvOOqcCiGJ2T7UYzw==
+X-Google-Smtp-Source: ABdhPJw3BzChu7rKDhHBe52O5LwZGgcvCBHhm0t8hApbFNm8WE3azi/K3p2FtykUH3BA1049T4veDw==
+X-Received: by 2002:a17:90a:3ec4:: with SMTP id k62mr12355034pjc.32.1630906057664;
+        Sun, 05 Sep 2021 22:27:37 -0700 (PDT)
+Received: from localhost.localdomain ([124.126.19.250])
+        by smtp.gmail.com with ESMTPSA id y23sm6039222pfe.129.2021.09.05.22.27.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Sep 2021 21:43:09 -0700 (PDT)
-Date:   Mon, 6 Sep 2021 10:13:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, wsa@kernel.org,
-        wsa+renesas@sang-engineering.com, arnd@arndb.de,
-        jasowang@redhat.com, andriy.shevchenko@linux.intel.com,
-        yu1.wang@intel.com, shuo.a.liu@intel.com, conghui.chen@intel.com,
-        stefanha@redhat.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v14] i2c: virtio: add a virtio i2c frontend driver
-Message-ID: <20210906044307.se4dcld2wlblieyv@vireshk-i7>
-References: <984ebecaf697058eb73389ed14ead9dd6d38fb53.1625796246.git.jie.deng@intel.com>
- <20210904160059-mutt-send-email-mst@kernel.org>
+        Sun, 05 Sep 2021 22:27:37 -0700 (PDT)
+From:   zhaoxiao <long870912@gmail.com>
+To:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhaoxiao <long870912@gmail.com>
+Subject: [PATCH] i2c: Fix return value of bcm_kona_i2c_probe()
+Date:   Mon,  6 Sep 2021 13:27:30 +0800
+Message-Id: <20210906052730.19644-1-long870912@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210904160059-mutt-send-email-mst@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 04-09-21, 16:01, Michael S. Tsirkin wrote:
-> Same as with qemu bits, I am confused as to what is the status
-> of proposed spec changes and whether the driver will work
-> with them.
+When call function devm_platform_ioremap_resource(), we should use IS_ERR()
+to check the return value and return PTR_ERR() if failed.
 
-This is already merged as well.
+Signed-off-by: zhaoxiao <long870912@gmail.com>
+---
+ drivers/i2c/busses/i2c-bcm-kona.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The current version simply fails to transmit the messages in case the
-length of a buffer is 0. I have patch ready to make it work with the
-proposed spec changes, just waiting for them to be accepted.
-
-> Let's let the dust settle on them then, then
-> resubmit?
-
-It doesn't break anything for now since we don't have much users and
-we know zero length transfers don't work. I will submit the necessary
-changes once spec is finalized.
-
+diff --git a/drivers/i2c/busses/i2c-bcm-kona.c b/drivers/i2c/busses/i2c-bcm-kona.c
+index ed5e1275ae46..8e350f20cde0 100644
+--- a/drivers/i2c/busses/i2c-bcm-kona.c
++++ b/drivers/i2c/busses/i2c-bcm-kona.c
+@@ -763,7 +763,7 @@ static int bcm_kona_i2c_probe(struct platform_device *pdev)
+ 	/* Map hardware registers */
+ 	dev->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(dev->base))
+-		return -ENOMEM;
++		return PTR_ERR(dev->base);
+ 
+ 	/* Get and enable external clock */
+ 	dev->external_clk = devm_clk_get(dev->device, NULL);
 -- 
-viresh
+2.20.1
+
