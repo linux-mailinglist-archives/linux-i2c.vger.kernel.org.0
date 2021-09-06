@@ -2,87 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BBB4015E6
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Sep 2021 07:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB99401682
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Sep 2021 08:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238908AbhIFF2n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Sep 2021 01:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238881AbhIFF2n (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Sep 2021 01:28:43 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0092AC061757;
-        Sun,  5 Sep 2021 22:27:38 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id pi15-20020a17090b1e4f00b00197449fc059so985672pjb.0;
-        Sun, 05 Sep 2021 22:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O8EgemLUAyhEE0xDtSpxWPGSz/8UwJOOmPy6hkxB9ZY=;
-        b=LFFBtt8QCnNg/4EX9uSSFk/oNMDV509nCQa+LBnV/KoqvnFDl9iuOGgYiWBbyVl9C0
-         kDlLIph19uG2HdPFMvQLonf6Cm3GTNAPN9gfpzS0sYLuRDaCGlhOWGPclbZgrY04A87C
-         ILBNzd07Ga15AsXAprrvloSS+Muari2Qxe8gMAMQAM0lEXtgWtiA9R3+K7CHgLA6wfMX
-         xLKsJI5m5hOpk23JLVbOvrIvvj0CyKis/W0XaOvqYoBgWRhdg5qFGuMEZ3b+REd3TMQX
-         V0H2n1IjZnGk8QqKkwy6X++myicn+XOC9jjDgfGAyO9Ihw9/+pf3eepdmh6VnP5ZBJhZ
-         5m5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O8EgemLUAyhEE0xDtSpxWPGSz/8UwJOOmPy6hkxB9ZY=;
-        b=tUTCvgbBiAk64UGc5g8vv9QbHcBM1BIMYzWc0Be9T2wWmj/Q/B4aOzTpkTaHQCZMzQ
-         y5BDuTc/hi8QGTf4MbY7pTWlPHWlBM5wDOBnEX/X11F3aisNMMR++caH1es8xTS4nmvb
-         76JVLCYObbzHAn1fqYX+ZRlPiUglrEg9uwgPZE+XftQpJUeZGS0COWdicNTT/hhv9DHY
-         XdlDOI1Pgz4aoqNEkfRJoDrPzdE3lvpVw9F2i+zMzkZvBkb3u0VGRk6sSj9BDtS1thte
-         tXQFSjgOa1UF25CUf5RuoABVjS87LNoh69v4QS5XEnpJOqLYfO0UNIfsqsBWzjgLTjuJ
-         15BA==
-X-Gm-Message-State: AOAM530yTjn5WXgcf3MLVdeRM5O8ltyU6Ry7xcpUZH7nxpJn7N4CnfR3
-        uTLaiYg+S1lHLVx3jrvOOqcCiGJ2T7UYzw==
-X-Google-Smtp-Source: ABdhPJw3BzChu7rKDhHBe52O5LwZGgcvCBHhm0t8hApbFNm8WE3azi/K3p2FtykUH3BA1049T4veDw==
-X-Received: by 2002:a17:90a:3ec4:: with SMTP id k62mr12355034pjc.32.1630906057664;
-        Sun, 05 Sep 2021 22:27:37 -0700 (PDT)
-Received: from localhost.localdomain ([124.126.19.250])
-        by smtp.gmail.com with ESMTPSA id y23sm6039222pfe.129.2021.09.05.22.27.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Sep 2021 22:27:37 -0700 (PDT)
-From:   zhaoxiao <long870912@gmail.com>
-To:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhaoxiao <long870912@gmail.com>
-Subject: [PATCH] i2c: Fix return value of bcm_kona_i2c_probe()
-Date:   Mon,  6 Sep 2021 13:27:30 +0800
-Message-Id: <20210906052730.19644-1-long870912@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        id S239422AbhIFGlm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Sep 2021 02:41:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58118 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239244AbhIFGll (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 6 Sep 2021 02:41:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0858460F45;
+        Mon,  6 Sep 2021 06:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630910437;
+        bh=/k4XCGEwuUQdAuLEeJ+zbInWBfr68zIyh+zZnBxjAn0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=llguqzU/IeTGVGoMMMluXHkFcYIOHa8zHUgyTabLYT+23QzJY2fm7ulmxvKFmuNI/
+         cPMncjoNLcrTmlhsmGD+oEcN2XewNsTUWetqcy50NDd2R1e3jUkHV0mpEG7aqLIdMW
+         j2OeBlvcPARRjIm/u/Hy1EjFOH8nYtA/g3tdM4+koR9r7vDDVkj/RzPXyGQQwANk/9
+         Ye5YkJIywq18BdEHglqrnwXw5xz7gG5vwcShGe4IJHaPpu4VrwbCx2E13km5QcQbJv
+         +ZhNxqEKlKuljHWNphT2mpdY/97Ca3sFu5fBEiuN5zVvIlrCtntvgO65oBJ6N3iwPX
+         3Lkjj23gp18JA==
+Date:   Mon, 6 Sep 2021 08:40:31 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de, jasowang@redhat.com,
+        andriy.shevchenko@linux.intel.com, yu1.wang@intel.com,
+        shuo.a.liu@intel.com, conghui.chen@intel.com, stefanha@redhat.com,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH v14] i2c: virtio: add a virtio i2c frontend driver
+Message-ID: <YTW33xK8QkYcOoFw@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jie Deng <jie.deng@intel.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de, jasowang@redhat.com,
+        andriy.shevchenko@linux.intel.com, yu1.wang@intel.com,
+        shuo.a.liu@intel.com, conghui.chen@intel.com, stefanha@redhat.com,
+        gregkh@linuxfoundation.org
+References: <984ebecaf697058eb73389ed14ead9dd6d38fb53.1625796246.git.jie.deng@intel.com>
+ <20210904160059-mutt-send-email-mst@kernel.org>
+ <20210906044307.se4dcld2wlblieyv@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5CQvKhLjITxIbgje"
+Content-Disposition: inline
+In-Reply-To: <20210906044307.se4dcld2wlblieyv@vireshk-i7>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When call function devm_platform_ioremap_resource(), we should use IS_ERR()
-to check the return value and return PTR_ERR() if failed.
 
-Signed-off-by: zhaoxiao <long870912@gmail.com>
----
- drivers/i2c/busses/i2c-bcm-kona.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--5CQvKhLjITxIbgje
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/i2c/busses/i2c-bcm-kona.c b/drivers/i2c/busses/i2c-bcm-kona.c
-index ed5e1275ae46..8e350f20cde0 100644
---- a/drivers/i2c/busses/i2c-bcm-kona.c
-+++ b/drivers/i2c/busses/i2c-bcm-kona.c
-@@ -763,7 +763,7 @@ static int bcm_kona_i2c_probe(struct platform_device *pdev)
- 	/* Map hardware registers */
- 	dev->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(dev->base))
--		return -ENOMEM;
-+		return PTR_ERR(dev->base);
- 
- 	/* Get and enable external clock */
- 	dev->external_clk = devm_clk_get(dev->device, NULL);
--- 
-2.20.1
 
+> The current version simply fails to transmit the messages in case the
+> length of a buffer is 0. I have patch ready to make it work with the
+> proposed spec changes, just waiting for them to be accepted.
+
+For the record, it fails gracefully. The driver has the proper quirk
+flag set, so the I2C core knows it doesn't zupport 0 length messages.
+
+
+--5CQvKhLjITxIbgje
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmE1t9sACgkQFA3kzBSg
+KbbKNw/6Ay5LQIFbUaWW8YkfD4w53f3QnjeVB+Jc3RTX314r/S3byFcjDdV4kv7t
+Cd+V+IphWMGjWQ+Nfe/CSc43/7XH7CV9EpEN4PH+Dk3UBlbxs2ZM/609nzSry18O
+O1g+qkE/R+lJcbviChyJgYx8hCevq5UeMY2HaP46qYsar/EWhACuojBgbb40EPFp
+yiIpgU1SKE9YqExcfWKvB5O87iIvp9nD4Qt6sAeQL8Ba6OCjWOR6D9gRqYsH5Gn2
+apHuXxeIw5Z7u299RM/SlxCAY3vQOKh74KnusD8PMHl8AZTDVB6ZjvTHDEys5SYT
+R8ZaM2hkX4I60O3aBbQERDjPg1P3v1w85fjiXAgXnIi9YXM2UJrF393E3VIOYUkL
+Uf6pqoVIR1aIPVhCFYYh2KsG0RoQmSmT7iV9qQg0nDEWzTZwEhYBEW6ayaMIV2/Z
+m+/zExeuPT/8t/2SLHN6tGPrYmuCDb4tRZtxQB+O9r8boFkDa1iyHHaGebHZh4ON
+pB2xuuC9s4sdkZ+DNW5h8DtTWCCogjYaayRMGmz+YysGB1vk6+Let+ajuBszfIyU
+wTYlS6XmI+VDnEJnuuMhFFIWrYq9CIHZ4EyVMnJVUxeGW4mJTypz3Mi6ePqqlaXj
+68KOV/C458iaOSPEk4gamkcV42gMjyS8O645JAEV+xmvY+/yi60=
+=bFFy
+-----END PGP SIGNATURE-----
+
+--5CQvKhLjITxIbgje--
