@@ -2,456 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61543402CEA
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Sep 2021 18:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE724402D89
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Sep 2021 19:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343591AbhIGQic (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Sep 2021 12:38:32 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:43958 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbhIGQib (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Sep 2021 12:38:31 -0400
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8449B1FFC9;
-        Tue,  7 Sep 2021 16:37:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1631032643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p9rdqH1pcw3ehI7M4Fzbi1mIjTKdQJHDxtva/qKp4Mo=;
-        b=pOCpFDt1aUnYY6ChY5JxRTJM1VmaMeRFM8PZ2asL4LXWblcEtLDVTbnjyi9homFX1kabcW
-        IA91CI8+1KpVqa6XAKwdy6xZYY1DmXKi1bAoscvvU2CqIVhoUc2VWXqGEYp8fNGjnwNGcT
-        XhULm1eerFqNCplL1UyzQy2uqfZXbRs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1631032643;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p9rdqH1pcw3ehI7M4Fzbi1mIjTKdQJHDxtva/qKp4Mo=;
-        b=91JVTp2L1mzzuMmo00uZJ0HGcpMG2fsrU8fGZJLvhF7V3AhJhRiquEATYyTfvi0A/nBgox
-        XCiSTZMnkPGb8jCQ==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 34F2713A51;
-        Tue,  7 Sep 2021 16:37:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id 9uQnCkOVN2EZLAAAGKfGzw
-        (envelope-from <jdelvare@suse.de>); Tue, 07 Sep 2021 16:37:23 +0000
-Date:   Tue, 7 Sep 2021 18:37:20 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     linux-kernel@vger.kernel.org, thomas.lendacky@amd.com,
-        linux-i2c@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
- io accesses with mmio accesses
-Message-ID: <20210907183720.6e0be6b6@endymion>
-In-Reply-To: <20210715221828.244536-1-Terry.Bowman@amd.com>
-References: <20210715221828.244536-1-Terry.Bowman@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1345581AbhIGRQE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Sep 2021 13:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345391AbhIGRQE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Sep 2021 13:16:04 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF123C061575
+        for <linux-i2c@vger.kernel.org>; Tue,  7 Sep 2021 10:14:57 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id u21so8544993qtw.8
+        for <linux-i2c@vger.kernel.org>; Tue, 07 Sep 2021 10:14:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=AQSygVQR7X2p3idaY2kblM6hHvDCfsOME2h6aqCtJ1E=;
+        b=Hf9D3nxbx5/Dcygi4zUjN1xcTblRqZCuWua1oQ4uZ6mtLtN3dDshWdrbgjHqITQo1W
+         KREzRRq2gHxd1bx1BeqCwnRjLSZCgoFZXjr3Zf2OLrk6okZXnta32dFWsYjYpJuLwqif
+         PI5x/+agw2rLC4kzaKCFOElc6N8C4NdscoJyJ08uAm7/XA0meNzMF1n0HCJphCfjjTgj
+         EQUFw5beZaIAtg/Kbmxw0wGWCq6gwoX8pHCeIPp647o4xHfbV4wbCnCmU6eGzT7iKe8v
+         NNw3cVKnaeeSgzx4M5XtdxSE9bVNtzx9cNX+0jXd1USldWZ30xXAjaeyLKuMcvTrp1vt
+         kOCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=AQSygVQR7X2p3idaY2kblM6hHvDCfsOME2h6aqCtJ1E=;
+        b=I2N3sDHHg45FuRoeKGwJpHs6CBYsk5IPjSf0xF2hmoHLFesVUHP6ahU8iFt8aJIU4E
+         QC+n7KlexNw4SKsulWxzLCdqgg4ioC3Dbkg7grKTUqUz94OkF8u8lVMykb6wcV2T0NSA
+         +qnXCedSf2jJrsNKJcyE6G2DYmlpTBe4nP0RECu71R9GGCKgzimeHopUvRKEFLfVzih2
+         9yKI5ffwn0xO/N1UhHlkDohlvduHflozbaPlS3y/QUdnewmOTVKbPvnyG1Sg6QHTcr/Q
+         q08JcTHjKNfeKyLMnQLHJxk5ZIBTLo97QmwlVZXk5XEYFwLHntXs4YTkzo7CzZonXs3Q
+         vz2A==
+X-Gm-Message-State: AOAM533n9opxofZa8v65k+LIS/AFQSX7WYTPFGPK269Y64clLzpTjleo
+        F3h5BWcnVWAow1EjegxqIPKidSxdf530uJAbD7Y=
+X-Google-Smtp-Source: ABdhPJx8zmeye3ogb1O3nRv+jpow2LCV56fTwCJtkWkI2xCJVicCWFvLUFWQq4iursPzLHhFeMOIFyvXlMxzUXvG10g=
+X-Received: by 2002:ac8:7491:: with SMTP id v17mr16641408qtq.291.1631034896813;
+ Tue, 07 Sep 2021 10:14:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6214:ca8:0:0:0:0 with HTTP; Tue, 7 Sep 2021 10:14:56
+ -0700 (PDT)
+Reply-To: shawnhayden424@gmail.com
+From:   Shawn Hayden <justinseydou@gmail.com>
+Date:   Tue, 7 Sep 2021 18:14:56 +0100
+Message-ID: <CADqCKbp+=Vaf6+XVMHA4otNmJ-y9TyrskaBybJ3-Tt3ssRhaeA@mail.gmail.com>
+Subject: =?UTF-8?B?Q2hhcml0eS/UstWh1oDVpdWj1bjWgNWu1bjWgtWp1bXVuNaC1bYgQmFyZWdvcnRzdXQ=?=
+        =?UTF-8?B?4oCZeXVu?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Terry,
-
-Sorry for the late review.
-
-On Thu, 15 Jul 2021 17:18:28 -0500, Terry Bowman wrote:
-> cd6h/cd7h port io can be disabled on recent AMD hardware. Read accesses to
-> disabled cd6h/cd7h will return F's and written data is dropped. The
-> recommended workaround to handle disabled cd6h/cd7h port io is replacing
-> with MMIO accesses. Support for MMIO has been available as an alternative
-> cd6h/cd7h access method since at least smbus controller with PCI revision
-> 0x59. The piix4_smbus driver uses cd6h/cd7h port io in the following 2
-> cases and requires updating to use MMIO:
-> 
-> 1. The FCH::PM::DECODEEN[smbusasfiobase] and FCH::PM::DECODEEN[0..7]
->    register fields are used to discover the smbus port io address.
-> 2. During access requests the piix4_smbus driver enables the requested port
->    if it is not already enabled. The downstream port is enabled through the
->    FCH::PM::DECODEEN[smbus0sel] register.
-> 
-> Signed-off-by: Terry Bowman <Terry.Bowman@amd.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
-> Cc: linux-i2c@vger.kernel.org
-> ---
-> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-> index 8c1b31ed0c42..2d2105793944 100644
-> --- a/drivers/i2c/busses/i2c-piix4.c
-> +++ b/drivers/i2c/busses/i2c-piix4.c
-> @@ -77,6 +77,7 @@
->  
->  /* SB800 constants */
->  #define SB800_PIIX4_SMB_IDX		0xcd6
-> +#define SB800_PIIX4_SMB_MAP_SIZE	2
-
-Now that this is defined, it should be used consistently in the whole
-driver.
-
-As a general rule, do not hesitate to split your changes into smaller
-steps whenever possible. Small changes are easier to review. The
-introduction of SB800_PIIX4_SMB_MAP_SIZE is independent from the rest
-of your changes, so it could go into a separate patch.
-
->  
->  #define KERNCZ_IMC_IDX			0x3e
->  #define KERNCZ_IMC_DATA			0x3f
-> @@ -97,6 +98,12 @@
->  #define SB800_PIIX4_PORT_IDX_MASK_KERNCZ	0x18
->  #define SB800_PIIX4_PORT_IDX_SHIFT_KERNCZ	3
->  
-> +#define SB800_PIIX4_FCH_PM_DECODEEN_MMIO_EN     BIT(1)
-
-That's many "EN", seems redundant, can it be simplified?
-
-> +#define SB800_PIIX4_FCH_PM_ADDR                 0xFED80300
-
-Isn't this address supposed to be changeable? As I read the datasheet,
-you should get the value from PM register 24h?
-
-> +#define SB800_PIIX4_FCH_PM_SIZE                 8
-> +
-> +#define AMD_PCI_SMBUS_REVISION_MMIO             0x59
-> +
->  /* insmod parameters */
->  
->  /* If force is set to anything different from 0, we forcibly enable the
-> @@ -155,6 +162,12 @@ static const char *piix4_main_port_names_sb800[PIIX4_MAX_ADAPTERS] = {
->  };
->  static const char *piix4_aux_port_name_sb800 = " port 1";
->  
-> +struct sb800_mmio_cfg {
-> +	void __iomem *addr;
-> +	struct resource *res;
-> +	bool use_mmio;
-> +};
-> +
->  struct i2c_piix4_adapdata {
->  	unsigned short smba;
->  
-> @@ -162,8 +175,72 @@ struct i2c_piix4_adapdata {
->  	bool sb800_main;
->  	bool notify_imc;
->  	u8 port;		/* Port number, shifted */
-> +	struct sb800_mmio_cfg mmio_cfg;
->  };
->  
-> +static int piix4_sb800_region_setup(struct device *dev,
-> +				    struct sb800_mmio_cfg *mmio_cfg)
-
-For symmetry, this function should be named piix4_sb800_region_request.
-
-> +{
-> +	if (mmio_cfg->use_mmio) {
-> +		struct resource *res;
-> +		void __iomem *addr;
-> +
-> +		res = request_mem_region(SB800_PIIX4_FCH_PM_ADDR,
-> +					 SB800_PIIX4_FCH_PM_SIZE,
-> +					 "sb800_piix4_smb");
-
-Is there any other driver which will be accessing this memory area? The
-old code path is using request_muxed_region(), so there must be.
-
-The git history shows that things were done that way by Guenter (Cc'd)
-in commit 04b6fcaba346e1ce76321ba9b0fd549da4c37ac2, to avoid a conflict
-with the sp5100_tco driver. So I suspect that this driver will need the
-same changes you are submitting to the i2c-piix4 driver now.
-
-Then the question is, what happens if both drivers request the mem
-region at the same time? Will the second be happy or will it fail with
--EBUSY? Honestly I'm not sure. More on this at the end.
-
-> +		if (!res) {
-> +			dev_err(dev,
-> +				"SMB base address memory region 0x%x already in use.\n",
-> +				SB800_PIIX4_FCH_PM_ADDR);
-
-It is a good opportunity to use "SMBus" instead of "SMB" in these
-messages, as "SMB" is ambiguous.
-
-> +			return -EBUSY;
-> +		}
-> +
-> +		addr = ioremap(SB800_PIIX4_FCH_PM_ADDR,
-> +			       SB800_PIIX4_FCH_PM_SIZE);
-> +		if (!addr) {
-> +			release_resource(res);
-> +			dev_err(dev, "SMB base address mapping failed.\n");
-> +			return -ENOMEM;
-> +		}
-> +
-> +		mmio_cfg->res = res;
-> +		mmio_cfg->addr = addr;
-> +	} else {
-> +		if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
-> +					  SB800_PIIX4_SMB_MAP_SIZE,
-> +					  "sb800_piix4_smb")) {
-> +			dev_err(dev,
-> +				"SMB base address index region 0x%x already in use.\n",
-> +				SB800_PIIX4_SMB_IDX);
-> +			return -EBUSY;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void piix4_sb800_region_release(struct device *dev,
-> +				       struct sb800_mmio_cfg *mmio_cfg)
-> +{
-> +	if (mmio_cfg->use_mmio) {
-> +		iounmap(mmio_cfg->addr);
-> +		mmio_cfg->addr = NULL;
-
-I see no need to set it to NULL, as the code is never going to check it.
-
-> +
-> +		release_resource(mmio_cfg->res);
-> +		mmio_cfg->res = NULL;
-
-Ditto.
-
-> +	} else {
-> +		release_region(SB800_PIIX4_SMB_IDX,
-> +			       SB800_PIIX4_SMB_MAP_SIZE);
-> +	}
-> +}
-> +
-> +static bool piix4_sb800_use_mmio(struct pci_dev *PIIX4_dev)
-> +{
-> +	return (PIIX4_dev->vendor == PCI_VENDOR_ID_AMD &&
-> +		PIIX4_dev->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS &&
-> +		PIIX4_dev->revision >= AMD_PCI_SMBUS_REVISION_MMIO);
-> +}
-> +
->  static int piix4_setup(struct pci_dev *PIIX4_dev,
->  		       const struct pci_device_id *id)
->  {
-> @@ -263,12 +340,58 @@ static int piix4_setup(struct pci_dev *PIIX4_dev,
->  	return piix4_smba;
->  }
->  
-> +static int piix4_setup_sb800_smba(struct pci_dev *PIIX4_dev,
-> +				  u8 smb_en,
-> +				  u8 aux,
-> +				  u8 *smb_en_status,
-> +				  unsigned short *piix4_smba)
-> +{
-> +	struct sb800_mmio_cfg mmio_cfg;
-> +	u8 smba_en_lo;
-> +	u8 smba_en_hi;
-
-Could be declared on the same line.
-
-> +	int retval;
-> +
-> +	mmio_cfg.use_mmio = piix4_sb800_use_mmio(PIIX4_dev);
-> +
-> +	retval = piix4_sb800_region_setup(&PIIX4_dev->dev, &mmio_cfg);
-> +	if (retval)
-> +		return retval;
-> +
-> +	if (mmio_cfg.use_mmio) {
-> +		iowrite32(ioread32(mmio_cfg.addr + 4) | SB800_PIIX4_FCH_PM_DECODEEN_MMIO_EN,
-> +			  mmio_cfg.addr + 4);
-> +
-> +		smba_en_lo = ioread8(mmio_cfg.addr);
-> +		smba_en_hi = ioread8(mmio_cfg.addr + 1);
-> +	} else {
-> +		outb_p(smb_en, SB800_PIIX4_SMB_IDX);
-> +		smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
-> +		outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
-> +		smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
-> +	}
-> +
-> +	piix4_sb800_region_release(&PIIX4_dev->dev, &mmio_cfg);
-> +
-> +	if (!smb_en) {
-> +		*smb_en_status = smba_en_lo & 0x10;
-> +		*piix4_smba = smba_en_hi << 8;
-> +		if (aux)
-> +			*piix4_smba |= 0x20;
-> +	} else {
-> +		*smb_en_status = smba_en_lo & 0x01;
-> +		*piix4_smba = ((smba_en_hi << 8) | smba_en_lo) & 0xffe0;
-> +	}
-> +
-> +	return retval;
-
-Value of retval is always 0 here, so you should hard-code it for
-clarity.
-
-> +}
-> +
->  static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  			     const struct pci_device_id *id, u8 aux)
->  {
->  	unsigned short piix4_smba;
-> -	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
-> +	u8 smb_en, smb_en_status, port_sel;
->  	u8 i2ccfg, i2ccfg_offset = 0x10;
-> +	int retval;
->  
->  	/* SB800 and later SMBus does not support forcing address */
->  	if (force || force_addr) {
-> @@ -290,29 +413,10 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  	else
->  		smb_en = (aux) ? 0x28 : 0x2c;
->  
-> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, 2, "sb800_piix4_smb")) {
-> -		dev_err(&PIIX4_dev->dev,
-> -			"SMB base address index region 0x%x already in use.\n",
-> -			SB800_PIIX4_SMB_IDX);
-> -		return -EBUSY;
-> -	}
-> -
-> -	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
-> -	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
-> -	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
-> -	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
-> -
-> -	release_region(SB800_PIIX4_SMB_IDX, 2);
-> -
-> -	if (!smb_en) {
-> -		smb_en_status = smba_en_lo & 0x10;
-> -		piix4_smba = smba_en_hi << 8;
-> -		if (aux)
-> -			piix4_smba |= 0x20;
-> -	} else {
-> -		smb_en_status = smba_en_lo & 0x01;
-> -		piix4_smba = ((smba_en_hi << 8) | smba_en_lo) & 0xffe0;
-> -	}
-> +	retval = piix4_setup_sb800_smba(PIIX4_dev, smb_en,
-> +					aux, &smb_en_status, &piix4_smba);
-> +	if (retval)
-> +		return retval;
->  
->  	if (!smb_en_status) {
->  		dev_err(&PIIX4_dev->dev,
-> @@ -662,6 +766,28 @@ static void piix4_imc_wakeup(void)
->  	release_region(KERNCZ_IMC_IDX, 2);
->  }
->  
-> +static int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg)
-> +{
-> +	u8 smba_en_lo;
-> +
-> +	if (mmio_cfg->use_mmio) {
-> +		smba_en_lo = ioread8(mmio_cfg->addr + piix4_port_sel_sb800);
-> +
-> +		if ((smba_en_lo & piix4_port_mask_sb800) != port)
-> +			iowrite8((smba_en_lo & ~piix4_port_mask_sb800) | port,
-> +				 mmio_cfg->addr + piix4_port_sel_sb800);
-> +	} else {
-> +		outb_p(piix4_port_sel_sb800, SB800_PIIX4_SMB_IDX);
-> +		smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
-> +
-> +		if ((smba_en_lo & piix4_port_mask_sb800) != port)
-> +			outb_p((smba_en_lo & ~piix4_port_mask_sb800) | port,
-> +			       SB800_PIIX4_SMB_IDX + 1);
-> +	}
-> +
-> +	return (smba_en_lo & piix4_port_mask_sb800);
-> +}
-> +
->  /*
->   * Handles access to multiple SMBus ports on the SB800.
->   * The port is selected by bits 2:1 of the smb_en register (0x2c).
-> @@ -678,12 +804,12 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  	unsigned short piix4_smba = adapdata->smba;
->  	int retries = MAX_TIMEOUT;
->  	int smbslvcnt;
-> -	u8 smba_en_lo;
-> -	u8 port;
-> +	u8 prev_port;
->  	int retval;
->  
-> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, 2, "sb800_piix4_smb"))
-> -		return -EBUSY;
-> +	retval = piix4_sb800_region_setup(&adap->dev, &adapdata->mmio_cfg);
-> +	if (retval)
-> +		return retval;
->  
->  	/* Request the SMBUS semaphore, avoid conflicts with the IMC */
->  	smbslvcnt  = inb_p(SMBSLVCNT);
-> @@ -738,18 +864,12 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  		}
->  	}
->  
-> -	outb_p(piix4_port_sel_sb800, SB800_PIIX4_SMB_IDX);
-> -	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
-> -
-> -	port = adapdata->port;
-> -	if ((smba_en_lo & piix4_port_mask_sb800) != port)
-> -		outb_p((smba_en_lo & ~piix4_port_mask_sb800) | port,
-> -		       SB800_PIIX4_SMB_IDX + 1);
-> +	prev_port = piix4_sb800_port_sel(adapdata->port, &adapdata->mmio_cfg);
->  
->  	retval = piix4_access(adap, addr, flags, read_write,
->  			      command, size, data);
->  
-> -	outb_p(smba_en_lo, SB800_PIIX4_SMB_IDX + 1);
-> +	piix4_sb800_port_sel(prev_port, &adapdata->mmio_cfg);
-
-While functionally correct, this change has a pretty high cost, as you
-turn a single I/O operation into a function call + 2 tests + 2 or 3 I/O
-operations.
-
-I'm not even sure why we restore the original port at this point. Other
-drivers (e.g. i2c-i801) only restore the original settings on suspend
-and shutdown. If something else (ACPI code, BIOS through SMI code) was
-to access the SMBus device at runtime, we would be in trouble anyway,
-as there is no synchronization in place.
-
->  
->  	/* Release the semaphore */
->  	outb_p(smbslvcnt | 0x20, SMBSLVCNT);
-> @@ -758,7 +878,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  		piix4_imc_wakeup();
->  
->  release:
-> -	release_region(SB800_PIIX4_SMB_IDX, 2);
-> +	piix4_sb800_region_release(&adap->dev, &adapdata->mmio_cfg);
->  	return retval;
->  }
->  
-> @@ -840,6 +960,7 @@ static int piix4_add_adapter(struct pci_dev *dev, unsigned short smba,
->  	adapdata->sb800_main = sb800_main;
->  	adapdata->port = port << piix4_port_shift_sb800;
->  	adapdata->notify_imc = notify_imc;
-> +	adapdata->mmio_cfg.use_mmio = piix4_sb800_use_mmio(dev);
->  
->  	/* set up the sysfs linkage to our parent device */
->  	adap->dev.parent = &dev->dev;
-
-More generally, I am worried about the overall design. The driver
-originally used per-access I/O port requesting because keeping the I/O
-ports busy all the time would prevent other drivers from working. Do we
-still need to do the same with the new code? If it is possible and safe
-to have a permanent mapping to the memory ports, that would be a lot
-faster.
-
-On the other hand, the read-modify-write cycle in
-piix4_setup_sb800_smba() is unsafe if 2 drivers can actually call
-request_mem_region() on the same memory area successfully.
-
-I'm not opposed to taking your patch with minimal changes (as long as
-the code is safe) and working on performance improvements later.
-
--- 
-Jean Delvare
-SUSE L3 Support
+1Y3Vq9aA1aXVrNWrINWo1bbVr9Wl1oAsDQoNCtS11b0g1LHVvtW91b/WgNWh1azVq9Wh1bXVqyDW
+hNWh1bLVodaE1aHWgdWrINWl1bQsINWh1brWgNW41oLVtCDVpdW0INSx1YTVhiAt1bjWgtW0INaH
+INW81avVpdWs1anVuNaAINWl1bQgMzUg1b/VodaA1b7VoQ0K1aHVt9Wt1aHVv9Wh1bbWhNWh1bXV
+q9W2INaD1bjWgNWx1bjVvg0K1oPVuNaA1bHVodW81bjWgtWp1bXVuNaC1bY6INWO1aXWgNW71aXW
+gNW9INW+1aHWgNWh1a/VvtWl1oHVqyBDb3ZpZC0xOSDVvtWr1oDVuNaC1b3VuNW+INaHINWk1oDV
+oSDVutWh1b/Vs9Wh1bzVuNW+DQrVq9W0INW/1aHWgNWr1oTVqywg1aXVvSDVudWl1bQg1a/VodaA
+1a7VuNaC1bQsINW41oAg1a/VodaA1bjVsiDVpdW0INWj1bjVtdWh1b/Wh9Wl1awg1b3VoTog1LXV
+vSDVqdWp1b7VodWu1bbVqyDVv9Wh1a8g1aXVtCDVpdWy1aXVrCDVoQ0K1bTVqyDWhNWh1bbVqyDW
+hdaALCDWhyDVpdW9INW51aXVtCDVr9Wh1oDVuNWyINWv1bXVodW21oTVvSDVo9W21aXVrCDWg9W4
+1bLVuNW+OiDUtdW9INWv1aHWgNW41bIg1aXVtCA1NSDVtNWr1azVq9W41bYNCtSx1YTVhiDVpNW4
+1azVodaAINW21b7Vq9aA1aHVotWl1oDVpdWsINWi1aHWgNWl1aPVuNaA1a7VuNaC1anVtdWh1bbV
+qCwNCtWw1aHVv9Wv1aHVutWl1b0g1aHVstaE1aHVv9W21aXWgNWr1bYg1oXVo9W21aXVrNW41oIg
+1bDVodW01aHWgDog1LHVttaB1bXVodWsINW/1aHWgNWrINWl1b0g1a/VuNaA1oHWgNWl1oHVqyDV
+r9W21bjVu9W9DQrWhNWh1bLWgdWv1aXVstWr1oEsINaHINWr1bQg1bTVq9Wh1a8g1bjWgNWk1avV
+tiDWhNaA1bjVttWr1a8g1bDVq9W+1aHVttWkINWnDQrVrdWh1bLVodW01bjVrCwg1bjVviDVtNW9
+1a3VpdaBINWr1bQg1b/WgNWh1bTVodWk1oDVodWuINWi1bjVrNW41oAg1bTVq9W71bjWgdW21aXW
+gNWoOg0K1YDVq9W+1aHVttWkINWw1avVvtWh1bbVpCDVodW21a/VuNWy1bbVuNaC1bQg1brVodW8
+1a/VodWuINWdINWh1bzVodW21oEg1aPVuNW11aHVv9aH1bTVodW2INWw1bjWgtW11b0g1bjWgtW2
+1aXVttWh1azVuNaCLCDVtNWh1bLVqdW41oLVtCDVpdW0DQrVpNW41oIg1avVttWxINaF1aPVttWl
+1oHVq9aAINWv1aHVv9Wh1oDVpdWsINWr1bQg1b7VpdaA1bvVq9W2INaB1aHVttWv1bjWgtWp1bXV
+uNaC1bbVqDog1Y3VoSDWgdWh1bbVr9W41oLVqdW11bjWgtW2INWnLCDVuNaA1agNCtWv1a7VodW8
+1aHVtdWrINWr1bbVsQ0K1bjWgNW61aXVvSDVodWy1aHVudWh1bbWhCDUsdW91b/VrtW41oLVtiDV
+q9W0INWw1bjVo9W41oIg1ocg1avVtCDVtNWl1bLWhNWl1oDVqyDVqdW41bLVuNaC1anVtdWh1bYg
+1bDVodW01aHWgDog1LXVqdWlIOKAi+KAi9W61aHVv9aA1aHVvdW/INWl1oQNCtaHINW61aHVv9aA
+1aHVvdW/INWnINaF1aPVttWl1awsINWt1bbVpNaA1bjWgtW0INWl1bQg1brVodW/1aHVvdWt1aHV
+ttWl1oQg1avVttWxLCDWhyDVpdW9INWx1aXVpiDVtNWh1bbWgNWh1bTVodW91bbVpdaADQrVr9W/
+1aHVtDog1LXVvSDVo9Wr1b/VpdW0LCDVuNaAINWl1b0NCtWv1aHWgNW41bIg1acg1b7VvdW/1aHV
+sNWl1awg1oTVpdWmOiDVldWj1bbVpdaB1aXWhCwg1a3VttWk1oDVuNaC1bQg1aXVtC4NCg0K1YDV
+odaA1aPVodW21oTVttWl1oDVuNW+Lg0KDQrVh9W41bYg1YDVpdW11aTVpdW2Lg0KDQpTaXJlbGkg
+eW5rZXIsDQoNClllcyBBdnN0cmFsaWF5aSBr4oCZYWdoYWvigJlhdHPigJlpIHllbSwgYXBydW0g
+eWVtIEFNTiAtdW0geWV2IHJyaXllbHTigJl2b3INCnllbSAzNSB0YXJ2YSBhc2hraGF0YW5r4oCZ
+YXlpbiBw4oCZdm9yZHpvdg0KcOKAmXZvcmR6YXJydXTigJl5dW46IFZlcmplcnMgdmFyYWt2ZXRz
+4oCZaSBDb3ZpZC0xOSB2aXJ1c292IHlldiBkcmEgcGF0Y2hhcnJvdg0KaW0gdGFyaWvigJlpLCB5
+ZXMgY2jigJllbSBrYXJ0c3VtLCB2b3Iga2Fyb2doIHllbSBnb3lhdGV2ZWwgc2E6IFllcw0KdOKA
+mXTigJl2YXRzbmkgdGFrIHllbSB5ZWdoZWwgYQ0KbWkga+KAmWFuaSBvciwgeWV2IHllcyBjaOKA
+mWVtIGthcm9naCBreWFua+KAmXMgZ25lbCBw4oCZdm9naG92OiBZZXMga2Fyb2doDQp5ZW0gNTUg
+bWlsaW9uIEFNTiBkb2xhciBudmlyYWJlcmVsIGJhcmVnb3J0c3V04oCZeWFueSwNCmhhdGthcGVz
+IGFnaGvigJlhdG5lcmluIG9nbmVsdSBoYW1hcjogQW50c+KAmXlhbCB0YXJpIHllcyBrb3J0c+KA
+mXJldHPigJlpDQprbm9qcyBr4oCZYWdodHPigJlrZWdoaXRz4oCZLCB5ZXYgaW0gbWlhayB2b3Jk
+aW4ga+KAmXJvbmlrIGhpdmFuZCBlDQpraGFnaGFtb2wsIG92IG1za2hldHPigJkgaW0gdHJhbWFk
+cmF0cyBib2xvciBtaWpvdHPigJluZXJ5Og0KSGl2YW5kIGhpdmFuZCBhbmtvZ2hudW0gcGFycmth
+dHMg1Z0gYXJyYW50c+KAmSBnb3lhdGV2bWFuIGh1eXMgdW5lbmFsdSwNCm1hZ2h04oCZdW0geWVt
+DQpkdSBpbmR6IG9nbmV0c+KAmWlyIGthdGFyZWwgaW0gdmVyamluIHRz4oCZYW5rdXTigJl5dW55
+OiBTYSB0c+KAmWFua3V04oCZeXVuIGUsDQp2b3J5IGt0c2FycmF5aSBpbmR6DQp2b3JwZXMgYWdo
+YWNo4oCZYW5r4oCZIEFzdHRzdW4gaW0gaG9ndSB5ZXYgaW0gbWVnaGvigJllcmkgdOKAmXZvZ2h1
+dOKAmXlhbg0KaGFtYXI6IFlldOKAmWUg4oCL4oCLcGF0cmFzdCB5ZWvigJkNCnlldiBwYXRyYXN0
+IGUgb2duZWwsIGtobmRydW0geWVtIHBhdGFza2hhbmVr4oCZIGluZHosIHlldiB5ZXMgZHpleg0K
+bWFucmFtYXNuZXIga3RhbTogWWVzIGdpdGVtLCB2b3IgeWVzDQprYXJvZ2ggZSB2c3RhaGVsIGvi
+gJllejogT2duZXRz4oCZZWvigJksIGtobmRydW0geWVtLg0KDQpIYXJnYW5r4oCZbmVyb3YuDQoN
+ClNob24gSGV5ZGVuLg0KDQoNCg0KRGVhciBmcmllbmQsDQoNCkkgYW0gYW4gQXVzdHJhbGlhbiBj
+aXRpemVuIGxpdmluZyBpbiB0aGUgVVNBIGFuZCBhIHJlYWx0b3Igd2l0aCAzNSB5ZWFycyBvZg0K
+ZXhwZXJpZW5jZS4gSSByZWNlbnRseSBiZWNhbWUgaW5mZWN0ZWQgd2l0aCB0aGUgQ292aWQtMTkg
+dmlydXMgYW5kIGR1ZSB0bw0KbXkgYWdlLCBJIGRvbid0IHRoaW5rIEkgY2FuIHN1cnZpdmUgdGhp
+cy4gSSBoYXZlIGJlZW4gdW5kZXIgb3h5Z2VuIGZvciBhDQpmZXcgZGF5cyBhbmQgSSBjYW4ndCBi
+dXkgbXkgbGlmZSB3aXRoIG1vbmV5LiBJIGNvdWxkIGRvbmF0ZSA1NW1pbGxpb24NClVTRCB0byBj
+aGFyaXR5LA0KZXNwZWNpYWxseSB0byBoZWxwIHRoZSBwb29yLiBMYXN0IHllYXIgSSBsb3N0IG15
+IHdpZmUgdG8gY2FuY2VyIGFuZCBteQ0Kb25seSBzb24gaXMgYSBjaHJvbmljDQpnYW1ibGVyIHdo
+byBzcXVhbmRlcmVkIGFsbCB0aGUgZnVuZHMgSSBnYXZlIHRvIGhpbS4NCkx5aW5nIGluIG15IHNp
+Y2sgYmVkLCB3aXRoIG5vIGhvcGUgb2Ygc3Vydml2YWwsIEkgd2lzaA0KeW91IGhlbHBlZCBtZSBm
+dWxmaWxsIG15IGxhc3Qgd2lzaC4gVGhpcyBpcyBhIHdpc2ggdGhhdCB3aWxsIHNlcnZlIG1lDQph
+cyBhIHBsZWEgdG8gR29kIGZvciBteSBzb3VsIGFuZCBteSBmb3JnaXZlbmVzcyBvZiBzaW5zLiBJ
+ZiB5b3UgYXJlIHdpbGxpbmcNCmFuZCByZWFkeSB0byBoZWxwLCBwbGVhc2UgYW5zd2VyIG1lIGFu
+ZCBJIHdpbGwgZ2l2ZSB5b3UgZGV0YWlscy4gSSBrbm93IEkNCmNhbiB0cnVzdCB5b3UuIEhlbHAg
+bWUgcGxlYXNlLg0KDQpLaW5kIHJlZ2FyZHMsDQoNClNoYXduIEhheWRlbi4NCg==
