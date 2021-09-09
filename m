@@ -2,38 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCB7404B1F
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Sep 2021 13:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2813404F27
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Sep 2021 14:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241273AbhIILuo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Sep 2021 07:50:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46060 "EHLO mail.kernel.org"
+        id S1348741AbhIIMRZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Sep 2021 08:17:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47406 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240939AbhIILqa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 Sep 2021 07:46:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EB52A61215;
-        Thu,  9 Sep 2021 11:42:57 +0000 (UTC)
+        id S1351213AbhIIMJn (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:09:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3BD45619F6;
+        Thu,  9 Sep 2021 11:48:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631187778;
-        bh=axmn8dH+PKOLbiom6RifHrPlM1s1t5joj3jEIbTgiWA=;
+        s=k20201202; t=1631188092;
+        bh=2aOYZBwGulLAxu4C5TU1qGMWvZtIhLPtvSeTuXUZAGg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YAVkVS/f7DiH4GD+3pfZZCnd0LiiGngQJf0tuX8U7+60STWh54iHxhrS1e086rd3Y
-         W4s1Zc5iwKQL45vh62Y8+VGJgkgit+xz03wwi+HP7MHBXLquA9DhhLkxTAjKL369mX
-         SPCFlV7fIkpE8WrtQCc5IHHB1K8jZq0XBGKFtKiWDo3WZV98ElyeV8MyjYhbKez9RI
-         glu7KH3ICMpQ9gszL6B4wAtcyCYWV/Ss0HPs5/AhJX1fm5hFJ5mzozOt0tuwH4ELqL
-         HDs41K6C1L1S4boXmtlTTsfkdOY2fXOit1zbu2pYLuquD9bx9JQ1vWFk0wL1i0om8g
-         d9NC0DaHYE58Q==
+        b=Aaf0JlOACdkL3BAgK469dnLZ8ZVrB2b402bLdtflTHtN1ZPym5/8fLdPQ1XtRoUEi
+         4FKl1eHW8HsresmHqxh3o3tDXOPaL85PmK0DSXzAH7pdL3EA5Fcptw/xJAKJadX5yF
+         KLcaEdSYG1kNsgeWr3j/IblQ/ENOEa1+LY2pJI8cNBG5Fkair5XYJv6kGLUizvVHN7
+         ODWcd5k27MD1sTCcWZw/odW+38BbQxatWcEIKlkrMHSFxwEG2+kQ09mP6sdqEIKSn2
+         B5rU5Id7RfXmMPRzM/CrAXIGLLlNTZ42OxFaw2Sb1hU5mfuaskc+meUG9WY11Iqoql
+         /TzfPBx35QS8A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
         Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 088/252] i2c: i801: Fix handling SMBHSTCNT_PEC_EN
-Date:   Thu,  9 Sep 2021 07:38:22 -0400
-Message-Id: <20210909114106.141462-88-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 075/219] i2c: i801: Fix handling SMBHSTCNT_PEC_EN
+Date:   Thu,  9 Sep 2021 07:44:11 -0400
+Message-Id: <20210909114635.143983-75-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
-References: <20210909114106.141462-1-sashal@kernel.org>
+In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
+References: <20210909114635.143983-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 11 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index aa3f60e69230..92ec291c0648 100644
+index 04a1e38f2a6f..3619805447ce 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -503,19 +503,16 @@ static int i801_transaction(struct i801_priv *priv, int xact)
+@@ -526,19 +526,16 @@ static int i801_transaction(struct i801_priv *priv, int xact)
  
  static int i801_block_transaction_by_block(struct i801_priv *priv,
  					   union i2c_smbus_data *data,
@@ -98,7 +98,7 @@ index aa3f60e69230..92ec291c0648 100644
  		break;
  	default:
  		return -EOPNOTSUPP;
-@@ -665,8 +662,7 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
+@@ -688,8 +685,7 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
   */
  static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
  					       union i2c_smbus_data *data,
@@ -108,7 +108,7 @@ index aa3f60e69230..92ec291c0648 100644
  {
  	int i, len;
  	int smbcmd;
-@@ -764,9 +760,8 @@ static int i801_set_block_buffer_mode(struct i801_priv *priv)
+@@ -794,9 +790,8 @@ static int i801_set_block_buffer_mode(struct i801_priv *priv)
  }
  
  /* Block transaction function */
@@ -120,7 +120,7 @@ index aa3f60e69230..92ec291c0648 100644
  {
  	int result = 0;
  	unsigned char hostc;
-@@ -802,11 +797,11 @@ static int i801_block_transaction(struct i801_priv *priv,
+@@ -832,11 +827,11 @@ static int i801_block_transaction(struct i801_priv *priv,
  	 && i801_set_block_buffer_mode(priv) == 0)
  		result = i801_block_transaction_by_block(priv, data,
  							 read_write,
@@ -134,7 +134,7 @@ index aa3f60e69230..92ec291c0648 100644
  
  	if (command == I2C_SMBUS_I2C_BLOCK_DATA
  	 && read_write == I2C_SMBUS_WRITE) {
-@@ -917,8 +912,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+@@ -947,8 +942,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
  		       SMBAUXCTL(priv));
  
  	if (block)
@@ -144,14 +144,14 @@ index aa3f60e69230..92ec291c0648 100644
  	else
  		ret = i801_transaction(priv, xact);
  
-@@ -1690,6 +1684,7 @@ static void i801_setup_hstcfg(struct i801_priv *priv)
+@@ -1720,6 +1714,7 @@ static unsigned char i801_setup_hstcfg(struct i801_priv *priv)
  	unsigned char hstcfg = priv->original_hstcfg;
  
  	hstcfg &= ~SMBHSTCFG_I2C_EN;	/* SMBus timing */
 +	hstcfg &= ~SMBHSTCNT_PEC_EN;	/* Disable software PEC */
  	hstcfg |= SMBHSTCFG_HST_EN;
  	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hstcfg);
- }
+ 	return hstcfg;
 -- 
 2.30.2
 
