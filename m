@@ -2,192 +2,204 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7FE404395
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Sep 2021 04:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5F44045D1
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Sep 2021 08:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbhIICdp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Sep 2021 22:33:45 -0400
-Received: from pi.codeconstruct.com.au ([203.29.241.158]:55484 "EHLO
-        codeconstruct.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbhIICdl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Sep 2021 22:33:41 -0400
-Received: by codeconstruct.com.au (Postfix, from userid 10001)
-        id 9F43020165; Thu,  9 Sep 2021 10:32:31 +0800 (AWST)
-From:   Matt Johnston <matt@codeconstruct.com.au>
-To:     devicetree@vger.kernel.org
-Cc:     linux-i2c@vger.kernel.org, Jeremy Kerr <jk@codeconstruct.com.au>,
-        Matt Johnston <matt@codeconstruct.com.au>
-Subject: [RFC PATCH v3] dt-bindings: net: New binding mctp-i2c-controller
-Date:   Thu,  9 Sep 2021 10:32:15 +0800
-Message-Id: <20210909023215.136490-1-matt@codeconstruct.com.au>
-X-Mailer: git-send-email 2.30.2
+        id S1350147AbhIIGyM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Sep 2021 02:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231176AbhIIGyK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Sep 2021 02:54:10 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A13C061575
+        for <linux-i2c@vger.kernel.org>; Wed,  8 Sep 2021 23:53:00 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id e23so1679621lfj.9
+        for <linux-i2c@vger.kernel.org>; Wed, 08 Sep 2021 23:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=CNttxbycZp2qdJTiRuD+5YVpMKZE8J8giQVoKawopOg=;
+        b=EUiGyaUBdWz4gq+0GkuGHEnr7HC1/hAJoHitMEgwNMqzql27kfrjFPvkiE+ey3gUkA
+         +FIt7BMQmQzU2/UFczhlf+yvWcScGdltcclsQMSicVQy/R2aOYV2JVnQijWlCRN20ljZ
+         TXdfTK4hTBgF/sWw00/FbtGt8byPrmMRpqYkptWKrLZRtnRhASazs5y4nnUrxDWZoctO
+         FpHZKYcD5RxWuR+3P5R0ICE7l/p0+CwIrx8HiHAhs0pHLqsjrUM+KsAK19qAVSynljNf
+         aIcAXH4Iu5GcLKMuLGKhjC4GvX0nDPqc+6CGSQ+VSY1Qb5+BUO9QuCQqvbsd63yPgEY6
+         QcQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=CNttxbycZp2qdJTiRuD+5YVpMKZE8J8giQVoKawopOg=;
+        b=oifUsouZsFVS3rGJ0au+tpElOUMmuYxXKXrho3tSdvFvUxs4JO8YEqYG33RVGxiwLL
+         S0f/K5nAMmOnxcjG1naSq4vicnpFNwHmsPZeZ/KBhX130UYXOReIv4X82jJFqNZ5yUr6
+         rCCpQsYRGjvuEA5TFhvBiqdocwfaLlGr7JMukA+kHnBIetENZvd7ap3fPGemL2fxRbWe
+         EaD4pqxZWig5IujTKE9zhbTSCZYnRIFQ47dT6GsKYjW9TNFDHME4UUKBpXRpE9emafP0
+         ML0hGWmKLLp9DC2DVew+eQzSSMGfgklpf87XAjrBu66wJ3VfNvKQWEdk6CZ33Ke3Qe9P
+         TnWw==
+X-Gm-Message-State: AOAM530cd9oYb1/mnRWwW/a2B2gk7WCuPDe9c/qZh5zlto4v5GB9ozpf
+        /aYWk28vg1QwqjZ/ijQjUUjFaDt5dc8Sudk3v2g=
+X-Google-Smtp-Source: ABdhPJwnH6BBQO+FyGMuGcp8IkcIoLajRBYJzcGeXZTB9LU/QtRcw8HWfZ6nUkbl4pZLNkkHvBvxaPOoCBdGH56J8Ho=
+X-Received: by 2002:a19:ca13:: with SMTP id a19mr1177271lfg.338.1631170379035;
+ Wed, 08 Sep 2021 23:52:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6520:182:b0:139:a426:5bf2 with HTTP; Wed, 8 Sep 2021
+ 23:52:58 -0700 (PDT)
+Reply-To: ahmadmustafa.7800@gmail.com
+From:   Ahmad Mustafa <rubenherbert503@gmail.com>
+Date:   Thu, 9 Sep 2021 07:52:58 +0100
+Message-ID: <CAD5WzfFEQA=nAXvZeRF7BpV6J3oyPWF6YX8h1WpUwaDzwn_s6Q@mail.gmail.com>
+Subject: =?UTF-8?B?TG9hbiBhbmQgSW52ZXN0bWVudC9Mb+CmoyDgpo/gpqzgpoIg4Kas4Ka/4Kao4Ka/4Kav?=
+        =?UTF-8?B?4Ka84KeL4KaXIExv4bmHYSDEk2Jh4bmBIGJpbmnhuo/FjWdh?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Used to define a local endpoint to communicate with MCTP peripherals
-attached to an I2C bus. This I2C endpoint can communicate with remote
-MCTP devices on the I2C bus.
-
-In the example I2C topology below (matching the second yaml example) we
-have MCTP devices on busses i2c1 and i2c6. MCTP-supporting busses are
-indicated by the 'mctp-controller' DT property on an I2C bus node.
-
-A mctp-i2c-controller I2C client DT node is placed at the top of the
-mux topology, since only the root I2C adapter will support I2C slave
-functionality.
-                                               .-------.
-                                               |eeprom |
-    .------------.     .------.               /'-------'
-    | adapter    |     | mux  --@0,i2c5------'
-    | i2c1       ----.*|      --@1,i2c6--.--.
-    |............|    \'------'           \  \  .........
-    | mctp-i2c-  |     \                   \  \ .mctpB  .
-    | controller |      \                   \  '.0x30   .
-    |            |       \  .........        \  '.......'
-    | 0x50       |        \ .mctpA  .         \ .........
-    '------------'         '.0x1d   .          '.mctpC  .
-                            '.......'          '.0x31   .
-                                                '.......'
-(mctpX boxes above are remote MCTP devices not included in the DT at
-present, they can be hotplugged/probed at runtime. A DT binding for
-specific fixed MCTP devices could be added later if required)
-
-Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
-
----
-
-Compared to v2 this patch changes the MCTP indicator to being a property
-on the I2C bus node.
-(Previous patches went only to DT list, I've now CCed linux-i2c)
-
-Wolfram does this look OK to you?
-
-Thanks,
-Matt
----
- Documentation/devicetree/bindings/i2c/i2c.txt |  4 +
- .../devicetree/bindings/net/mctp-i2c.yaml     | 94 +++++++++++++++++++
- 2 files changed, 98 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/mctp-i2c.yaml
-
-diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-index b864916e087f..fc3dd7ec0445 100644
---- a/Documentation/devicetree/bindings/i2c/i2c.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-@@ -95,6 +95,10 @@ wants to support one of the below features, it should adapt these bindings.
- - smbus-alert
- 	states that the optional SMBus-Alert feature apply to this bus.
- 
-+- mctp-controller
-+	indicates that the system is accessible via this bus as an endpoint for
-+	MCTP over I2C transport.
-+
- Required properties (per child device)
- --------------------------------------
- 
-diff --git a/Documentation/devicetree/bindings/net/mctp-i2c.yaml b/Documentation/devicetree/bindings/net/mctp-i2c.yaml
-new file mode 100644
-index 000000000000..d0ff7fa9e114
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/mctp-i2c.yaml
-@@ -0,0 +1,94 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/mctp-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MCTP I2C transport binding
-+
-+maintainers:
-+  - Matt Johnston <matt@codeconstruct.com.au>
-+
-+description:
-+  An mctp-i2c-controller defines a local MCTP endpoint on an I2C
-+  controller. MCTP I2C is specified by DMTF DSP0237.
-+
-+  An mctp-i2c-controller must be attached to an I2C adapter
-+  which supports slave functionality. I2C busses (either directly or as
-+  subordinate mux busses) are attached to the mctp-i2c-controller with
-+  a 'mctp-controller' property on each used bus. Each mctp-controller I2C bus
-+  will be presented to the host system as a separate MCTP I2C instance.
-+
-+properties:
-+  compatible:
-+    const: mctp-i2c-controller
-+
-+  reg:
-+    # 1<<30
-+    minimum: 1073741824
-+    # 1<<30 | 0x7f
-+    maximum: 1073741951
-+    description:
-+      7 bit I2C address of the local endpoint.
-+      I2C_OWN_SLAVE_ADDRESS (1<<30) flag must be set.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+examples:
-+  - |
-+    // Basic case of a single I2C bus
-+    #include <dt-bindings/i2c/i2c.h>
-+
-+    i2c0: i2cbus0 {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      mctp-controller;
-+
-+      mctp@30 {
-+        compatible = "mctp-i2c-controller";
-+        reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
-+      };
-+    };
-+
-+  - |
-+    // Mux topology with multiple MCTP-handling busses under
-+    // a single mctp-i2c-controller.
-+    // i2c1 and i2c6 can have MCTP devices, i2c5 does not.
-+    #include <dt-bindings/i2c/i2c.h>
-+
-+    i2c1: i2cbus1 {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      mctp-controller;
-+
-+      mctp@50 {
-+        compatible = "mctp-i2c-controller";
-+        reg = <(0x50 | I2C_OWN_SLAVE_ADDRESS)>;
-+      };
-+    };
-+
-+    i2cmux0 {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      i2c-parent = <&i2c1>;
-+
-+      i2c5: i2c@0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        reg = <0>;
-+        eeprom@33 {
-+          reg = <0x33>;
-+        };
-+      };
-+
-+      i2c6: i2c@1 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        reg = <1>;
-+        mctp-controller;
-+      };
-+    };
--- 
-2.30.2
-
+4Kac4Kao4Ka+4KasLA0KDQrgpoXgprjgpr/gprIg4KaH4Ka44Kay4Ka+4Kau4Ka/4KaVIOCmq+Cm
+vuCmh+CmqOCnjeCmr+CmvuCmqOCnjeCmuCDgpqrgpr/gppzgp4fgpo/gprjgprjgpr8g4Ka54Kay
+IOCmquCnjeCmsOCmvuCmh+CmreCnh+CmnyDgppzgpq/gprzgp4fgpqjgp43gpp8g4Ka44KeN4Kaf
+4KaVIOCmleCni+CmruCnjeCmquCmvuCmqOCmvyDgpq/gpr4NCuCnqOCnpuCnpiAyMDA2IOCmuOCm
+vuCmsuCnhyDgpqrgp43gprDgpqTgpr/gprfgp43gpqDgpr/gpqQg4Ka54Kav4Ka84KeH4Kab4Ka/
+4KayIOCmj+CmrOCmgiDgprjgpoLgpq/gp4HgppXgp43gpqQg4KaG4Kaw4KasIOCmhuCmruCmv+Cm
+sOCmvuCmpOCnh+CmsCDgpofgprjgprLgpr7gpq7gp4ANCuCmq+CmvuCmh+CmqOCnjeCmr+CmvuCm
+qOCnjeCmuCDgpq7gpr7gprDgp43gppXgp4fgpp/gp4cg4Kao4Ka/4Kac4KeH4KawIOCmnOCmqOCn
+jeCmryDgpo/gppXgpp/gpr8g4Kao4KeH4Kak4KeD4Ka44KeN4Kal4Ka+4Kao4KeA4Kav4Ka8IOCm
+rOCmvuCmnOCmvuCmsCDgpoXgpqzgprjgp43gpqXgpr7gpqgg4KaX4Kah4Ka84KeHDQrgpqTgp4Hg
+prLgp4fgppvgp4cg4Kav4Ka+IOCmsOCmv+Cmr+CmvOCnh+CmsiDgpo/gprjgp43gpp/gp4fgpp8s
+IOCmhuCmpOCmv+CmpeCnh+Cmr+CmvOCmpOCmviwg4Ka24Ka/4Kay4KeN4KaqIOCmkyDgpp/gp4fg
+ppXgprjgpocg4Kaq4KeN4Kaw4Kav4KeB4KaV4KeN4Kak4Ka/LCDgppXgp4zgprbgprLgppfgpqQN
+CuCmhuCmsOCnjeCmpeCmv+CmlSDgppXgp43gprfgp4fgpqTgp43gprDgp4cgbG9hbuCmoyDgpoXg
+prDgp43gpqXgpr7gpq/gprzgpqgg4KaP4Kas4KaCIOCmrOCmv+CmqOCmv+Cmr+CmvOCni+CmlyDg
+ppXgpr7gprDgp43gpq/gppXgp43gprDgpq7gppfgp4HgprLgpr/gpqTgp4cg4Kas4Ka/4Ka24KeH
+4Ka34Kac4KeN4Kae4KWkDQrgpqzgpr/gpqjgpr/gpq/gprzgp4vgppcsIOCmrOCmv+CmtuCnh+Cm
+t+CmvuCmr+CmvOCmv+CmpCDgprbgpr/gppXgp43gprfgpr4sIOCmuOCnjeCmrOCmvuCmuOCnjeCm
+peCnjeCmr+CmuOCnh+CmrOCmviDgprjgp4fgpqzgpr4sIOCmleCng+Cmt+Cmvywg4KaJ4KeO4Kaq
+4Ka+4Kam4KaoLCDgppbgpqjgpqgsDQrgprbgppXgp43gpqTgpr8g4KaP4Kas4KaCIOCmheCmpOCm
+v+CmsOCmv+CmleCnjeCmpCDgpqrgprDgpr/gpqzgp4fgprbgppfgpqTgpq3gpr7gpqzgp4cg4Kaf
+4KeH4KaV4Ka44KaHIOCmquCnjeCmsOCmleCmsuCnjeCmquClpA0KDQrgpobgpq7gpr7gprAg4Kao
+4Ka+4KauIOCmnOCmqOCmvuCmrCDgpofgpqzgpqjgp4cg4KaG4Ka54Kau4KamIOCmruCngeCmuOCn
+jeCmpOCmq+CmvuClpCDgpobgpqrgpqjgpr7gprAg4KaV4Ka/IOCmj+CmruCmqCDgpqrgp43gprDg
+ppXgprLgp43gpqog4KaG4Kab4KeHIOCmr+CmvuCmsCDgppzgpqjgp43gpq8NCuCmheCmsOCnjeCm
+peCnh+CmsCDgpqrgp43gprDgpq/gprzgp4vgppzgpqg/IDIg4Kaf4KeN4Kaw4Ka/4Kay4Ka/4Kav
+4Ka84Kao4KeH4Kaw4KaTIOCmrOCnh+CmtuCmvyDgpqzgp43gpq/gppXgp43gpqTgpr/gppfgpqQg
+4KaP4Kas4KaCIOCmleCmsOCnjeCmquCni+CmsOCnh+Cmnw0K4KaH4Kao4Kat4KeH4Ka44KeN4Kaf
+4Kau4KeH4Kao4KeN4KafIOCmquCni+CmsOCnjeCmn+Cmq+Cni+CmsuCmv+CmkyDgprjgprkg4KaG
+4Kaq4Kao4Ka+4KawIOCmquCnjeCmsOCmleCmsuCnjeCmquCnh+CmsCDgppzgpqjgp43gpq8g4KaG
+4Kau4Ka+4Kam4KeH4KawIOCmleCmvuCmm+CnhyDgpobgprDgp43gpqXgpr/gppUNCuCmuOCngeCm
+rOCmv+Cmp+CmviDgprDgpq/gprzgp4fgppvgp4fgpaQg4KaF4Ka44Ka/4KayIOCmh+CmuOCmsuCm
+vuCmruCmv+CmlSDgpqvgpr7gpofgpqjgp43gpq/gpr7gpqjgp43gprgg4Kaq4Ka/4Kac4KeH4KaP
+4Ka44Ka44Ka/IOCmh+CmleCngeCmh+Cmn+CmvyDgpqrgpr7gprDgp43gpp/gpqjgpr7gprAsDQrg
+pongpqbgp43gpq/gp4vgppXgp43gpqTgpr4sIOCmq+CmvuCmqOCnjeCmoSDgprDgpr7gpofgppzg
+pr7gprAg4KaP4Kas4KaCIOCmquCni+CmsOCnjeCmn+Cmq+Cni+CmsuCmv+CmkyDgpq7gp43gpq/g
+pr7gpqjgp4fgppzgpr7gprAg4KaW4KeB4KaB4Kac4Kab4KeHIOCmr+CmvuCmsOCmviA1IOCmpeCn
+h+CmleCnhyAxMA0K4Kas4Kab4Kaw4KeH4KawIOCmueCni+CmsuCnjeCmoSDgprjgprkgNC41JSDg
+pqrgprDgp43gpq/gpqjgp43gpqQg4Ka44KeB4KamIOCmj+CmrOCmgi/gpoXgpqXgpqzgpr4g4Kaq
+4Ka+4Kaw4KeN4KafIOCmh+CmleCnjeCmr+CngeCmh+Cmn+CmvyDgpqrgppzgpr/gprbgpqgg4Kam
+4KeH4Kas4KeH4KWkDQoyMDMwIOCmuOCmvuCmsuCnhywg4KaG4Kau4Kaw4Ka+IOCmrOCmsOCnjeCm
+pOCmruCmvuCmqCDgpqzgpr7gppzgpr7gprAg4Kaa4KaV4KeN4Kaw4KaV4KeHIOCmquCngeCmgeCm
+nOCmvyDgppXgprDgp4cg4KaJ4Kaa4KeN4Kaa4Kau4Ka+4Kao4KeH4KawLCDgppXgpq4NCuCmneCn
+geCmgeCmleCmv+CmquCnguCmsOCnjeCmoyDgprjgpq7gp43gpqrgpqYg4KaP4Kas4KaCIOCmrOCm
+v+CmqOCmv+Cmr+CmvOCni+Cml+CnhyAyIOCmn+CnjeCmsOCmv+CmsuCmv+Cmr+CmvOCmqCDgpqrg
+prDgp43gpq/gpqjgp43gpqQg4KaF4Kaw4KeN4Kac4KaoIOCmleCmsOCmvuCmsA0K4Kaq4Kaw4Ka/
+4KaV4Kay4KeN4Kaq4Kao4Ka+IOCmleCmsOCmm+Cmv+ClpA0KDQrgpoXgprjgpr/gprIg4KaH4Ka4
+4Kay4Ka+4Kau4Ka/4KaVIOCmq+CmvuCmh+CmqOCnjeCmr+CmvuCmqOCnjeCmuCDgpqrgpr/gppzg
+p4fgpo/gprjgprjgpr8g4KaP4KaV4Kaf4Ka/IG5kZXLgpqPgpqbgpr7gpqTgpr4g4Ka54Ka/4Ka4
+4Ka+4Kas4KeHIOCmleCmvuCmnCDgppXgprDgppvgp4cg4KaP4Kas4KaCDQrgpqTgprngpqzgpr/g
+prIg4KaH4KaV4KeN4Kav4KeB4KaH4Kaf4Ka/IOCmheCmguCmtuCngOCmpuCmvuCmsCDgpo/gpqzg
+poIg4KaJ4Kam4KeN4Kav4KeL4KaV4KeN4Kak4Ka+4Kam4KeH4KawIOCmpOCmvuCmpuCnh+CmsCDg
+pqzgpr/gpqjgpr/gpq/gprzgp4vgppcg4Kaq4KeN4Kaw4KaV4Kay4KeN4Kaq4KeH4KawIOCmnOCm
+qOCnjeCmrw0K4Kas4Ka+4Kaw4KeN4Ka34Ka/4KaVIDMuNSUg4Ka44KeB4Kam4KeH4KawIOCmueCm
+vuCmsOCnhyDgpqzgpr/gpqTgprDgpqMg4KaV4Kaw4Ka+IOCmueCmrOCnh+ClpCDgpobgpq7gprDg
+pr4g4Kam4Ka+4Kay4Ka+4Kay4Kam4KeH4KawIDIlIOCmleCmruCmv+CmtuCmqOCmkyDgpqbgpr/g
+pocsDQrgpq/gpr7gprDgpr4g4Kaq4KeN4Kaw4KaV4Kay4KeN4KaqIOCmruCmvuCmsuCmv+CmleCm
+puCnh+CmsCDgpoXgprDgp43gpqUg4Kas4Ka+IOCmheCmqOCnjeCmr+CmvuCmqOCnjeCmryDgprjg
+p4Hgpq/gp4vgppfgp4fgprAg4Kac4Kao4KeN4KavIOCmqOCmv+Cmr+CmvOCnhyDgpobgprjgp4fg
+paQNCg0K4KaG4Kaw4KaTIOCmrOCmv+CmuOCnjeCmpOCmvuCmsOCmv+CmpCDgppzgpr7gpqjgpr7g
+prAg4Kac4Kao4KeN4KavLCDgpqbgpq/gprzgpr4g4KaV4Kaw4KeHIOCmhuCmruCmvuCmpuCnh+Cm
+sCDgpobgpqrgpqjgpr7gprAg4Kas4KeN4Kav4Kas4Ka44Ka+4Kav4Ka84Ka/4KaVIOCmquCmsOCm
+v+CmleCmsuCnjeCmquCmqOCmvg0K4Kas4Ka+IOCmquCnjeCmsOCmleCmsuCnjeCmquCnh+CmsCDg
+prjgpr7gprDgpr7gpoLgprYg4Kaq4Ka+4Kag4Ka+4Kao4KWkDQoNCuCmtuCngeCmreCnh+CmmuCn
+jeCmm+CmviwNCg0KDQrgppzgpqjgpr7gpqwg4KaH4Kas4Kao4KeHIOCmhuCmueCmruCmpiDgpq7g
+p4Hgprjgp43gpqTgpqvgpr4NCuCmhuCmqOCnjeCmpOCmsOCnjeCmnOCmvuCmpOCmv+CmlSDgpqzg
+p43gpq/gpqzgprjgpr4g4Ka44Kau4Kao4KeN4Kas4Kav4Ka84KaV4Ka+4Kaw4KeADQrgpoXgprjg
+pr/gprIg4KaH4Ka44Kay4Ka+4Kau4Ka/4KaVIOCmq+CmvuCmh+CmqOCnjeCmr+CmvuCmqOCnjeCm
+uCDgpqrgpr/gppzgp4fgpo/gprjgprjgpr8NCuCmhuCmsiDgpq7gpr7gpqjgppbgp4HgprIsIOCm
+puCngeCmrOCmvuCmhyDgprjgpr8gMiDgpp/gpr7gppPgpq/gprzgpr7gprAsDQrgpqjgpr/gpprg
+pqTgprLgpr4sIFAuTyA5NDY2OSDgpqbgp4Hgpqzgpr7gpocsIOCmuOCmguCmr+CngeCmleCnjeCm
+pCDgpobgprDgpqwg4KaG4Kau4Ka/4Kaw4Ka+4KakDQrgpobgpqzgp4Eg4Kan4Ka+4Kas4Ka/LCDg
+prjgpoLgpq/gp4HgppXgp43gpqQg4KaG4Kaw4KasIOCmhuCmruCmv+CmsOCmvuCmpA0K4KaH4Kau
+4KeH4KaH4KayOiBhaG1hZG11c3RhZmEuNzgwMEBnbWFpbC5jb20NCg0KSmFuxIFiYSwNCg0KYXNp
+bGEgaXNhbMSBbWlrYSBwaMSBJ2luJ3nEgW5zYSBwaWrEkyfEk3Nhc2kgaGFsYSBwcsSBJ2liaMST
+4bmtYSBqYeG6j8STbuG5rWEgc+G5rWFrYQ0Ka8WNbXDEgW5pIHnEgSAyMDAgMjAwNiBzxIFsxJMg
+cHJhdGnhuaPhua1oaXRhIGhh4bqPxJNjaGlsYSDEk2Jh4bmBIHNhbnl1a3RhIMSBcmFiYQ0KxIFt
+aXLEgXTEk3JhIGlzYWzEgW3EqyBwaMSBJ2luJ3nEgW5zYSBtxIFya8ST4bmtxJMgbmlqxJNyYSBq
+YW4neWEgxJNrYeG5rWkNCm7Ek3RyzKVzdGjEgW7Eq+G6j2EgYsSBasSBcmEgYWJhc3RoxIFuYSBn
+YeG5m8STIHR1bMSTY2jEkyB5xIEgcmnhuo/Ek2xhIMSTc+G5rcST4bmtYSwNCsSBdGl0aMST4bqP
+YXTEgSwgxZtpbHBhIMWNIOG5rcSTa2FzYSdpIHByYXl1a3RpLCBrYXXFm2FsYWdhdGEgxIFydGhp
+a2Ega+G5o8STdHLEkw0KbG9hbuG5h2EgYXJ0aMSB4bqPYW5hIMSTYmHhuYEgYmluaeG6j8WNZ2Eg
+a8SBcnlha3JhbWFndWxpdMSTIGJpxZvEk+G5o2Fqw7FhLiBCaW5p4bqPxY1nYSwNCmJpxZvEk+G5
+o8SB4bqPaXRhIMWbaWvhuaPEgSwgc2LEgXN0aHlhc8STYsSBIHPEk2LEgSwga3LMpeG5o2ksIHXh
+ua9wxIFkYW5hLCBraGFuYW5hLCDFm2FrdGkNCsSTYmHhuYEgYXRpcmlrdGEgcGFyaWLEk8WbYWdh
+dGFiaMSBYsSTIOG5rcSTa2FzYSdpIHByYWthbHBhLg0KDQrEgG3EgXJhIG7EgW1hIGphbsSBYmEg
+aWJhbsSTIMSBaGFtYWRhIG11c3RhcGjEgS4gxIBwYW7EgXJhIGtpIMSTbWFuYSBwcmFrYWxwYQ0K
+xIFjaMSTIHnEgXJhIGphbid5YSBhcnRoxJNyYSBwcmHhuo/FjWphbmE/IDIg4bmscmlsaeG6j2Fu
+xJNyYSfFjSBixJPFm2kgYnlha3RpZ2F0YQ0KxJNiYeG5gSBrYXJwxY1yxJPhua1hIGluYWJoxJNz
+4bmtYW3Ek27hua1hIHDFjXLhua1hcGjFjWxpJ8WNIHNhaGEgxIFwYW7EgXJhIHByYWthbHDEk3Jh
+DQpqYW4neWEgxIFtxIFkxJNyYSBrxIFjaMSTIMSBcnRoaWthIHN1YmlkaMSBIHJh4bqPxJNjaMST
+LiBBc2lsYSBpc2FsxIFtaWthDQpwaMSBJ2luJ3nEgW5zYSBwaWrEkyfEk3Nhc2kgaWt1J2nhua1p
+IHDEgXLhua1hbsSBcmEsIHVkecWNa3TEgSwgcGjEgW7huI1hIHLEgSdpasSBcmENCsSTYmHhuYEg
+cMWNcuG5rWFwaMWNbGknxY0gbXnEgW7Ek2rEgXJhIGtodW3MkGphY2jEkyB5xIFyxIEgNSB0aMST
+a8STIDEwIGJhY2hhcsSTcmEgaMWNbOG4jWENCnNhaGEgNC41JSBQYXJ5YW50YSBzdWRhIMSTYmHh
+uYEvYXRoYWLEgSBwxIFy4bmtYSBpa3l1J2nhua1pIHBhamnFm2FuYSBkxJNixJMuIDIwMzANClPE
+gWzEkywgxIFtYXLEgSBiYXJ0YW3EgW5hIGLEgWrEgXJhIGNha3Jha8STIHB1bcyQamkga2FyxJMg
+dWNjYW3EgW7Ek3JhLCBrYW1hDQpqaHVtzJBraXDFq3LhuYdhIHNhbXBhZGEgxJNiYeG5gSBiaW5p
+4bqPxY1nxJMgMiDhua1yaWxp4bqPYW5hIHBhcnlhbnRhIGFyamFuYSBrYXLEgXJhDQpwYXJpa2Fs
+cGFuxIEga2FyYWNoaS4NCg0KQXNpbGEgaXNhbMSBbWlrYSBwaMSBJ2luJ3nEgW5zYSBwaWrEkyfE
+k3Nhc2kgxJNrYeG5rWkgbmRlcuG5h2FkxIF0xIEgaGlzxIFixJMga8SBamENCmthcmFjaMSTIMST
+YmHhuYEgdGFoYWJpbGEgaWt5dSdp4bmtaSBhbsWbxKtkxIFyYSDEk2Jh4bmBIHVkecWNa3TEgWTE
+k3JhIHTEgWTEk3JhDQpiaW5p4bqPxY1nYSBwcmFrYWxwxJNyYSBqYW4neWEgYsSBcuG5o2lrYSAz
+LjUlIFN1ZMSTcmEgaMSBcsSTIGJpdGFyYeG5h2Ega2FyxIENCmhhYsSTLiDEgG1hcsSBIGTEgWzE
+gWxhZMSTcmEgMiUga2FtacWbYW5hJ8WNIGRpJ2ksIHnEgXLEgSBwcmFrYWxwYSBtxIFsaWthZMST
+cmENCmFydGhhIGLEgSBhbid5xIFuJ3lhIHN1ecWNZ8STcmEgamFuJ3lhIG5p4bqPxJMgxIFzxJMu
+DQoNCsSAcmEnxY0gYmlzdMSBcml0YSBqxIFuxIFyYSBqYW4neWEsIGRh4bqPxIEga2FyxJMgxIFt
+xIFkxJNyYSDEgXBhbsSBcmEgYnlhYmFzxIHhuo9pa2ENCnBhcmlrYWxwYW7EgSBixIEgcHJha2Fs
+cMSTcmEgc8SBcsSBbsWbYSBwxIHhua1oxIFuYS4NCg0KxZp1YmjEk2NjaMSBLA0KDQoNCmphbsSB
+YmEgaWJhbsSTIMSBaGFtYWRhIG11c3RhcGjEgQ0KxIFudGFyasSBdGlrYSBieWFiYXPEgSBzYW1h
+bmJh4bqPYWvEgXLEqw0KYXNpbGEgaXNhbMSBbWlrYSBwaMSBJ2luJ3nEgW5zYSBwaWrEkyfEk3Nh
+c2kNCsSBbGEgbcSBbmFraHVsYSwgZHVixIEnaSBzaSAyIOG5rcSBJ8WN4bqPxIFyYSwNCm5pY2F0
+YWzEgSwgUC5PIDk0NjY5IGR1YsSBJ2ksIHNhbnl1a3RhIMSBcmFiYSDEgW1pcsSBdGENCsSBYnUg
+ZGjEgWJpLCBzYW55dWt0YSDEgXJhYmEgxIFtaXLEgXRhDQppbcSTJ2lsYTogQWhtYWRtdXN0YWZh
+Ljc4MDBAZ21haWwuY29tDQoNCkRlYXIgU2lyLA0KDQpBc2VlbCBJc2xhbWljIGZpbmFuY2UgUEpT
+QyBpcyBwcml2YXRlIGpvaW50IHN0b2NrIGNvbXBhbnkgdGhhdCB3YXMNCmVzdGFibGlzaGVkIGlu
+IDIwMDYgYW5kIGhhcyBidWlsdCBhIGxlYWRpbmcgbWFya2V0IHBvc2l0aW9uIGZvciBpdHNlbGYN
+CmluIHRoZSBVQUUncyBJc2xhbWljIGZpbmFuY2UgbWFya2V0IHdoaWNoIHNwZWNpYWxpemVzIGlu
+IGxvYW4gZmluYW5jZQ0KYW5kIGludmVzdG1lbnQgYWN0aXZpdGllcyBpbiByZWFsIGVzdGF0ZSwg
+aG9zcGl0YWxpdHksIGluZHVzdHJpYWwgJg0Kc3VzdGFpbmFibGUgdGVjaG5vbG9naWVzLCBzdHJh
+dGVnaWMgZmluYW5jaWFsIGludmVzdG1lbnRzLCBzcGVjaWFsaXplZA0KZWR1Y2F0aW9uLCBoZWFs
+dGhjYXJlIHNlcnZpY2VzLCBhZ3JpY3VsdHVyZSwgbWFudWZhY3R1cmluZywNCm1pbmluZyxlbmVy
+Z3kgYW5kIGFkZGl0aW9uYWwgZW52aXJvbm1lbnRhbGx5IHN1c3RhaW5hYmxlIHByb2plY3RzLg0K
+DQpNeSBuYW1lIGlzIE1yLiBJYm4gQWhtYWQgTXVzdGFmYSAuIERvIHlvdSBoYXZlIHByb2plY3Rz
+IHRoYXQgcmVxdWlyZQ0KZnVuZGluZz8gV2UgaGF2ZSBmaW5hbmNlIGF2YWlsYWJsZSBmb3IgeW91
+ciBwcm9qZWN0cyB3aXRoIG92ZXIgMg0KdHJpbGxpb24gcHJpdmF0ZSBhbmQgY29ycG9yYXRlIGlu
+dmVzdG1lbnQgcG9ydGZvbGlvcy4gIEFzZWVsIElzbGFtaWMNCmZpbmFuY2UgUEpTQyBpcyBsb29r
+aW5nIGZvciBlcXVpdHkgcGFydG5lcnMsIGVudHJlcHJlbmV1ciwgZnVuZA0KcmFpc2VycyBhbmQg
+cG9ydGZvbGlvIG1hbmFnZXJzIHdobyB3aWxsIHBheSB1cCB0byA0LjUlIGludGVyZXN0IGFuZC9v
+cg0KcGFydCBlcXVpdHkgcG9zaXRpb24gd2l0aCBhIDUgdG8gMTAgeWVhciBob2xkLiBJbiAyMDMw
+LCB3ZSBwbGFuIG9uDQphY3F1aXJpbmcgdXAgdG8gMiB0cmlsbGlvbiBpbiBoaWdoLXF1YWxpdHks
+IGxvdyByaXNrIGFzc2V0cyBhbmQNCmludmVzdG1lbnRzIHRvIGNhcGl0YWxpemUgb24gdGhlIGN1
+cnJlbnQgbWFya2V0IGN5Y2xlLg0KDQpBc2VlbCBJc2xhbWljIGZpbmFuY2UgUEpTQyBpcyBhY3Rp
+bmcgYXMgYSBsZW5kZXIgYW5kIHRoZSBmdW5kIHdpbGwgYmUNCmRpc2J1cnNlZCBvbiBhIGNsZWFy
+IGludGVyZXN0IHJhdGUgb2YgMy41JSBhbm51YWxseSB0byB0aGUgZXF1aXR5DQpwYXJ0bmVycyBh
+bmQgZW50cmVwcmVuZXVycyBmb3IgdGhlaXIgaW52ZXN0bWVudCBwcm9qZWN0cy4gV2UgYWxzbyBn
+aXZlDQphIDIlIGNvbW1pc3Npb24gdG8gYnJva2Vycywgd2hvIGJyaW5nIHByb2plY3Qgb3duZXJz
+IGZvciBmaW5hbmNlIG9yDQpvdGhlciBvcHBvcnR1bml0aWVzLg0KDQpGb3IgZnVydGhlciBkZXRh
+aWxzLCBraW5kbHkgc2VuZCB1cyB5b3VyIGJ1c2luZXNzIHBsYW5zIG9yIHByb2plY3Qgc3VtbWFy
+eS4NCg0KUmVnYXJkcywNCg0KDQpNci4gSWJuIEFobWFkIE11c3RhZmENCkludGVybmF0aW9uYWwg
+QnVzaW5lc3MgQ29vcmRpbmF0b3INCkFzZWVsIElzbGFtaWMgRmluYW5jZSBQSlNDDQpBbCBNYW5r
+aG9vbCwgRHViYWkgQzIgVG93ZXIsDQpHcm91bmQgZmxvb3IsUC5PIDk0NjY5IER1YmFpLCBVQUUN
+CkFidSBEaGFiaSAtIFVuaXRlZCBBcmFiIEVtaXJhdGVzDQpFbWFpbCA6IGFobWFkbXVzdGFmYS43
+ODAwQGdtYWlsLmNvbQ0K
