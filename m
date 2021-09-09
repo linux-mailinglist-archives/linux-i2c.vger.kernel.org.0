@@ -2,204 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5F44045D1
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Sep 2021 08:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCB7404B1F
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Sep 2021 13:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350147AbhIIGyM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Sep 2021 02:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbhIIGyK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Sep 2021 02:54:10 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A13C061575
-        for <linux-i2c@vger.kernel.org>; Wed,  8 Sep 2021 23:53:00 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id e23so1679621lfj.9
-        for <linux-i2c@vger.kernel.org>; Wed, 08 Sep 2021 23:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CNttxbycZp2qdJTiRuD+5YVpMKZE8J8giQVoKawopOg=;
-        b=EUiGyaUBdWz4gq+0GkuGHEnr7HC1/hAJoHitMEgwNMqzql27kfrjFPvkiE+ey3gUkA
-         +FIt7BMQmQzU2/UFczhlf+yvWcScGdltcclsQMSicVQy/R2aOYV2JVnQijWlCRN20ljZ
-         TXdfTK4hTBgF/sWw00/FbtGt8byPrmMRpqYkptWKrLZRtnRhASazs5y4nnUrxDWZoctO
-         FpHZKYcD5RxWuR+3P5R0ICE7l/p0+CwIrx8HiHAhs0pHLqsjrUM+KsAK19qAVSynljNf
-         aIcAXH4Iu5GcLKMuLGKhjC4GvX0nDPqc+6CGSQ+VSY1Qb5+BUO9QuCQqvbsd63yPgEY6
-         QcQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=CNttxbycZp2qdJTiRuD+5YVpMKZE8J8giQVoKawopOg=;
-        b=oifUsouZsFVS3rGJ0au+tpElOUMmuYxXKXrho3tSdvFvUxs4JO8YEqYG33RVGxiwLL
-         S0f/K5nAMmOnxcjG1naSq4vicnpFNwHmsPZeZ/KBhX130UYXOReIv4X82jJFqNZ5yUr6
-         rCCpQsYRGjvuEA5TFhvBiqdocwfaLlGr7JMukA+kHnBIetENZvd7ap3fPGemL2fxRbWe
-         EaD4pqxZWig5IujTKE9zhbTSCZYnRIFQ47dT6GsKYjW9TNFDHME4UUKBpXRpE9emafP0
-         ML0hGWmKLLp9DC2DVew+eQzSSMGfgklpf87XAjrBu66wJ3VfNvKQWEdk6CZ33Ke3Qe9P
-         TnWw==
-X-Gm-Message-State: AOAM530cd9oYb1/mnRWwW/a2B2gk7WCuPDe9c/qZh5zlto4v5GB9ozpf
-        /aYWk28vg1QwqjZ/ijQjUUjFaDt5dc8Sudk3v2g=
-X-Google-Smtp-Source: ABdhPJwnH6BBQO+FyGMuGcp8IkcIoLajRBYJzcGeXZTB9LU/QtRcw8HWfZ6nUkbl4pZLNkkHvBvxaPOoCBdGH56J8Ho=
-X-Received: by 2002:a19:ca13:: with SMTP id a19mr1177271lfg.338.1631170379035;
- Wed, 08 Sep 2021 23:52:59 -0700 (PDT)
+        id S241273AbhIILuo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Sep 2021 07:50:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46060 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240939AbhIILqa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:46:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EB52A61215;
+        Thu,  9 Sep 2021 11:42:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631187778;
+        bh=axmn8dH+PKOLbiom6RifHrPlM1s1t5joj3jEIbTgiWA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YAVkVS/f7DiH4GD+3pfZZCnd0LiiGngQJf0tuX8U7+60STWh54iHxhrS1e086rd3Y
+         W4s1Zc5iwKQL45vh62Y8+VGJgkgit+xz03wwi+HP7MHBXLquA9DhhLkxTAjKL369mX
+         SPCFlV7fIkpE8WrtQCc5IHHB1K8jZq0XBGKFtKiWDo3WZV98ElyeV8MyjYhbKez9RI
+         glu7KH3ICMpQ9gszL6B4wAtcyCYWV/Ss0HPs5/AhJX1fm5hFJ5mzozOt0tuwH4ELqL
+         HDs41K6C1L1S4boXmtlTTsfkdOY2fXOit1zbu2pYLuquD9bx9JQ1vWFk0wL1i0om8g
+         d9NC0DaHYE58Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 088/252] i2c: i801: Fix handling SMBHSTCNT_PEC_EN
+Date:   Thu,  9 Sep 2021 07:38:22 -0400
+Message-Id: <20210909114106.141462-88-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
+References: <20210909114106.141462-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:182:b0:139:a426:5bf2 with HTTP; Wed, 8 Sep 2021
- 23:52:58 -0700 (PDT)
-Reply-To: ahmadmustafa.7800@gmail.com
-From:   Ahmad Mustafa <rubenherbert503@gmail.com>
-Date:   Thu, 9 Sep 2021 07:52:58 +0100
-Message-ID: <CAD5WzfFEQA=nAXvZeRF7BpV6J3oyPWF6YX8h1WpUwaDzwn_s6Q@mail.gmail.com>
-Subject: =?UTF-8?B?TG9hbiBhbmQgSW52ZXN0bWVudC9Mb+CmoyDgpo/gpqzgpoIg4Kas4Ka/4Kao4Ka/4Kav?=
-        =?UTF-8?B?4Ka84KeL4KaXIExv4bmHYSDEk2Jh4bmBIGJpbmnhuo/FjWdh?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-4Kac4Kao4Ka+4KasLA0KDQrgpoXgprjgpr/gprIg4KaH4Ka44Kay4Ka+4Kau4Ka/4KaVIOCmq+Cm
-vuCmh+CmqOCnjeCmr+CmvuCmqOCnjeCmuCDgpqrgpr/gppzgp4fgpo/gprjgprjgpr8g4Ka54Kay
-IOCmquCnjeCmsOCmvuCmh+CmreCnh+CmnyDgppzgpq/gprzgp4fgpqjgp43gpp8g4Ka44KeN4Kaf
-4KaVIOCmleCni+CmruCnjeCmquCmvuCmqOCmvyDgpq/gpr4NCuCnqOCnpuCnpiAyMDA2IOCmuOCm
-vuCmsuCnhyDgpqrgp43gprDgpqTgpr/gprfgp43gpqDgpr/gpqQg4Ka54Kav4Ka84KeH4Kab4Ka/
-4KayIOCmj+CmrOCmgiDgprjgpoLgpq/gp4HgppXgp43gpqQg4KaG4Kaw4KasIOCmhuCmruCmv+Cm
-sOCmvuCmpOCnh+CmsCDgpofgprjgprLgpr7gpq7gp4ANCuCmq+CmvuCmh+CmqOCnjeCmr+CmvuCm
-qOCnjeCmuCDgpq7gpr7gprDgp43gppXgp4fgpp/gp4cg4Kao4Ka/4Kac4KeH4KawIOCmnOCmqOCn
-jeCmryDgpo/gppXgpp/gpr8g4Kao4KeH4Kak4KeD4Ka44KeN4Kal4Ka+4Kao4KeA4Kav4Ka8IOCm
-rOCmvuCmnOCmvuCmsCDgpoXgpqzgprjgp43gpqXgpr7gpqgg4KaX4Kah4Ka84KeHDQrgpqTgp4Hg
-prLgp4fgppvgp4cg4Kav4Ka+IOCmsOCmv+Cmr+CmvOCnh+CmsiDgpo/gprjgp43gpp/gp4fgpp8s
-IOCmhuCmpOCmv+CmpeCnh+Cmr+CmvOCmpOCmviwg4Ka24Ka/4Kay4KeN4KaqIOCmkyDgpp/gp4fg
-ppXgprjgpocg4Kaq4KeN4Kaw4Kav4KeB4KaV4KeN4Kak4Ka/LCDgppXgp4zgprbgprLgppfgpqQN
-CuCmhuCmsOCnjeCmpeCmv+CmlSDgppXgp43gprfgp4fgpqTgp43gprDgp4cgbG9hbuCmoyDgpoXg
-prDgp43gpqXgpr7gpq/gprzgpqgg4KaP4Kas4KaCIOCmrOCmv+CmqOCmv+Cmr+CmvOCni+CmlyDg
-ppXgpr7gprDgp43gpq/gppXgp43gprDgpq7gppfgp4HgprLgpr/gpqTgp4cg4Kas4Ka/4Ka24KeH
-4Ka34Kac4KeN4Kae4KWkDQrgpqzgpr/gpqjgpr/gpq/gprzgp4vgppcsIOCmrOCmv+CmtuCnh+Cm
-t+CmvuCmr+CmvOCmv+CmpCDgprbgpr/gppXgp43gprfgpr4sIOCmuOCnjeCmrOCmvuCmuOCnjeCm
-peCnjeCmr+CmuOCnh+CmrOCmviDgprjgp4fgpqzgpr4sIOCmleCng+Cmt+Cmvywg4KaJ4KeO4Kaq
-4Ka+4Kam4KaoLCDgppbgpqjgpqgsDQrgprbgppXgp43gpqTgpr8g4KaP4Kas4KaCIOCmheCmpOCm
-v+CmsOCmv+CmleCnjeCmpCDgpqrgprDgpr/gpqzgp4fgprbgppfgpqTgpq3gpr7gpqzgp4cg4Kaf
-4KeH4KaV4Ka44KaHIOCmquCnjeCmsOCmleCmsuCnjeCmquClpA0KDQrgpobgpq7gpr7gprAg4Kao
-4Ka+4KauIOCmnOCmqOCmvuCmrCDgpofgpqzgpqjgp4cg4KaG4Ka54Kau4KamIOCmruCngeCmuOCn
-jeCmpOCmq+CmvuClpCDgpobgpqrgpqjgpr7gprAg4KaV4Ka/IOCmj+CmruCmqCDgpqrgp43gprDg
-ppXgprLgp43gpqog4KaG4Kab4KeHIOCmr+CmvuCmsCDgppzgpqjgp43gpq8NCuCmheCmsOCnjeCm
-peCnh+CmsCDgpqrgp43gprDgpq/gprzgp4vgppzgpqg/IDIg4Kaf4KeN4Kaw4Ka/4Kay4Ka/4Kav
-4Ka84Kao4KeH4Kaw4KaTIOCmrOCnh+CmtuCmvyDgpqzgp43gpq/gppXgp43gpqTgpr/gppfgpqQg
-4KaP4Kas4KaCIOCmleCmsOCnjeCmquCni+CmsOCnh+Cmnw0K4KaH4Kao4Kat4KeH4Ka44KeN4Kaf
-4Kau4KeH4Kao4KeN4KafIOCmquCni+CmsOCnjeCmn+Cmq+Cni+CmsuCmv+CmkyDgprjgprkg4KaG
-4Kaq4Kao4Ka+4KawIOCmquCnjeCmsOCmleCmsuCnjeCmquCnh+CmsCDgppzgpqjgp43gpq8g4KaG
-4Kau4Ka+4Kam4KeH4KawIOCmleCmvuCmm+CnhyDgpobgprDgp43gpqXgpr/gppUNCuCmuOCngeCm
-rOCmv+Cmp+CmviDgprDgpq/gprzgp4fgppvgp4fgpaQg4KaF4Ka44Ka/4KayIOCmh+CmuOCmsuCm
-vuCmruCmv+CmlSDgpqvgpr7gpofgpqjgp43gpq/gpr7gpqjgp43gprgg4Kaq4Ka/4Kac4KeH4KaP
-4Ka44Ka44Ka/IOCmh+CmleCngeCmh+Cmn+CmvyDgpqrgpr7gprDgp43gpp/gpqjgpr7gprAsDQrg
-pongpqbgp43gpq/gp4vgppXgp43gpqTgpr4sIOCmq+CmvuCmqOCnjeCmoSDgprDgpr7gpofgppzg
-pr7gprAg4KaP4Kas4KaCIOCmquCni+CmsOCnjeCmn+Cmq+Cni+CmsuCmv+CmkyDgpq7gp43gpq/g
-pr7gpqjgp4fgppzgpr7gprAg4KaW4KeB4KaB4Kac4Kab4KeHIOCmr+CmvuCmsOCmviA1IOCmpeCn
-h+CmleCnhyAxMA0K4Kas4Kab4Kaw4KeH4KawIOCmueCni+CmsuCnjeCmoSDgprjgprkgNC41JSDg
-pqrgprDgp43gpq/gpqjgp43gpqQg4Ka44KeB4KamIOCmj+CmrOCmgi/gpoXgpqXgpqzgpr4g4Kaq
-4Ka+4Kaw4KeN4KafIOCmh+CmleCnjeCmr+CngeCmh+Cmn+CmvyDgpqrgppzgpr/gprbgpqgg4Kam
-4KeH4Kas4KeH4KWkDQoyMDMwIOCmuOCmvuCmsuCnhywg4KaG4Kau4Kaw4Ka+IOCmrOCmsOCnjeCm
-pOCmruCmvuCmqCDgpqzgpr7gppzgpr7gprAg4Kaa4KaV4KeN4Kaw4KaV4KeHIOCmquCngeCmgeCm
-nOCmvyDgppXgprDgp4cg4KaJ4Kaa4KeN4Kaa4Kau4Ka+4Kao4KeH4KawLCDgppXgpq4NCuCmneCn
-geCmgeCmleCmv+CmquCnguCmsOCnjeCmoyDgprjgpq7gp43gpqrgpqYg4KaP4Kas4KaCIOCmrOCm
-v+CmqOCmv+Cmr+CmvOCni+Cml+CnhyAyIOCmn+CnjeCmsOCmv+CmsuCmv+Cmr+CmvOCmqCDgpqrg
-prDgp43gpq/gpqjgp43gpqQg4KaF4Kaw4KeN4Kac4KaoIOCmleCmsOCmvuCmsA0K4Kaq4Kaw4Ka/
-4KaV4Kay4KeN4Kaq4Kao4Ka+IOCmleCmsOCmm+Cmv+ClpA0KDQrgpoXgprjgpr/gprIg4KaH4Ka4
-4Kay4Ka+4Kau4Ka/4KaVIOCmq+CmvuCmh+CmqOCnjeCmr+CmvuCmqOCnjeCmuCDgpqrgpr/gppzg
-p4fgpo/gprjgprjgpr8g4KaP4KaV4Kaf4Ka/IG5kZXLgpqPgpqbgpr7gpqTgpr4g4Ka54Ka/4Ka4
-4Ka+4Kas4KeHIOCmleCmvuCmnCDgppXgprDgppvgp4cg4KaP4Kas4KaCDQrgpqTgprngpqzgpr/g
-prIg4KaH4KaV4KeN4Kav4KeB4KaH4Kaf4Ka/IOCmheCmguCmtuCngOCmpuCmvuCmsCDgpo/gpqzg
-poIg4KaJ4Kam4KeN4Kav4KeL4KaV4KeN4Kak4Ka+4Kam4KeH4KawIOCmpOCmvuCmpuCnh+CmsCDg
-pqzgpr/gpqjgpr/gpq/gprzgp4vgppcg4Kaq4KeN4Kaw4KaV4Kay4KeN4Kaq4KeH4KawIOCmnOCm
-qOCnjeCmrw0K4Kas4Ka+4Kaw4KeN4Ka34Ka/4KaVIDMuNSUg4Ka44KeB4Kam4KeH4KawIOCmueCm
-vuCmsOCnhyDgpqzgpr/gpqTgprDgpqMg4KaV4Kaw4Ka+IOCmueCmrOCnh+ClpCDgpobgpq7gprDg
-pr4g4Kam4Ka+4Kay4Ka+4Kay4Kam4KeH4KawIDIlIOCmleCmruCmv+CmtuCmqOCmkyDgpqbgpr/g
-pocsDQrgpq/gpr7gprDgpr4g4Kaq4KeN4Kaw4KaV4Kay4KeN4KaqIOCmruCmvuCmsuCmv+CmleCm
-puCnh+CmsCDgpoXgprDgp43gpqUg4Kas4Ka+IOCmheCmqOCnjeCmr+CmvuCmqOCnjeCmryDgprjg
-p4Hgpq/gp4vgppfgp4fgprAg4Kac4Kao4KeN4KavIOCmqOCmv+Cmr+CmvOCnhyDgpobgprjgp4fg
-paQNCg0K4KaG4Kaw4KaTIOCmrOCmv+CmuOCnjeCmpOCmvuCmsOCmv+CmpCDgppzgpr7gpqjgpr7g
-prAg4Kac4Kao4KeN4KavLCDgpqbgpq/gprzgpr4g4KaV4Kaw4KeHIOCmhuCmruCmvuCmpuCnh+Cm
-sCDgpobgpqrgpqjgpr7gprAg4Kas4KeN4Kav4Kas4Ka44Ka+4Kav4Ka84Ka/4KaVIOCmquCmsOCm
-v+CmleCmsuCnjeCmquCmqOCmvg0K4Kas4Ka+IOCmquCnjeCmsOCmleCmsuCnjeCmquCnh+CmsCDg
-prjgpr7gprDgpr7gpoLgprYg4Kaq4Ka+4Kag4Ka+4Kao4KWkDQoNCuCmtuCngeCmreCnh+CmmuCn
-jeCmm+CmviwNCg0KDQrgppzgpqjgpr7gpqwg4KaH4Kas4Kao4KeHIOCmhuCmueCmruCmpiDgpq7g
-p4Hgprjgp43gpqTgpqvgpr4NCuCmhuCmqOCnjeCmpOCmsOCnjeCmnOCmvuCmpOCmv+CmlSDgpqzg
-p43gpq/gpqzgprjgpr4g4Ka44Kau4Kao4KeN4Kas4Kav4Ka84KaV4Ka+4Kaw4KeADQrgpoXgprjg
-pr/gprIg4KaH4Ka44Kay4Ka+4Kau4Ka/4KaVIOCmq+CmvuCmh+CmqOCnjeCmr+CmvuCmqOCnjeCm
-uCDgpqrgpr/gppzgp4fgpo/gprjgprjgpr8NCuCmhuCmsiDgpq7gpr7gpqjgppbgp4HgprIsIOCm
-puCngeCmrOCmvuCmhyDgprjgpr8gMiDgpp/gpr7gppPgpq/gprzgpr7gprAsDQrgpqjgpr/gpprg
-pqTgprLgpr4sIFAuTyA5NDY2OSDgpqbgp4Hgpqzgpr7gpocsIOCmuOCmguCmr+CngeCmleCnjeCm
-pCDgpobgprDgpqwg4KaG4Kau4Ka/4Kaw4Ka+4KakDQrgpobgpqzgp4Eg4Kan4Ka+4Kas4Ka/LCDg
-prjgpoLgpq/gp4HgppXgp43gpqQg4KaG4Kaw4KasIOCmhuCmruCmv+CmsOCmvuCmpA0K4KaH4Kau
-4KeH4KaH4KayOiBhaG1hZG11c3RhZmEuNzgwMEBnbWFpbC5jb20NCg0KSmFuxIFiYSwNCg0KYXNp
-bGEgaXNhbMSBbWlrYSBwaMSBJ2luJ3nEgW5zYSBwaWrEkyfEk3Nhc2kgaGFsYSBwcsSBJ2liaMST
-4bmtYSBqYeG6j8STbuG5rWEgc+G5rWFrYQ0Ka8WNbXDEgW5pIHnEgSAyMDAgMjAwNiBzxIFsxJMg
-cHJhdGnhuaPhua1oaXRhIGhh4bqPxJNjaGlsYSDEk2Jh4bmBIHNhbnl1a3RhIMSBcmFiYQ0KxIFt
-aXLEgXTEk3JhIGlzYWzEgW3EqyBwaMSBJ2luJ3nEgW5zYSBtxIFya8ST4bmtxJMgbmlqxJNyYSBq
-YW4neWEgxJNrYeG5rWkNCm7Ek3RyzKVzdGjEgW7Eq+G6j2EgYsSBasSBcmEgYWJhc3RoxIFuYSBn
-YeG5m8STIHR1bMSTY2jEkyB5xIEgcmnhuo/Ek2xhIMSTc+G5rcST4bmtYSwNCsSBdGl0aMST4bqP
-YXTEgSwgxZtpbHBhIMWNIOG5rcSTa2FzYSdpIHByYXl1a3RpLCBrYXXFm2FsYWdhdGEgxIFydGhp
-a2Ega+G5o8STdHLEkw0KbG9hbuG5h2EgYXJ0aMSB4bqPYW5hIMSTYmHhuYEgYmluaeG6j8WNZ2Eg
-a8SBcnlha3JhbWFndWxpdMSTIGJpxZvEk+G5o2Fqw7FhLiBCaW5p4bqPxY1nYSwNCmJpxZvEk+G5
-o8SB4bqPaXRhIMWbaWvhuaPEgSwgc2LEgXN0aHlhc8STYsSBIHPEk2LEgSwga3LMpeG5o2ksIHXh
-ua9wxIFkYW5hLCBraGFuYW5hLCDFm2FrdGkNCsSTYmHhuYEgYXRpcmlrdGEgcGFyaWLEk8WbYWdh
-dGFiaMSBYsSTIOG5rcSTa2FzYSdpIHByYWthbHBhLg0KDQrEgG3EgXJhIG7EgW1hIGphbsSBYmEg
-aWJhbsSTIMSBaGFtYWRhIG11c3RhcGjEgS4gxIBwYW7EgXJhIGtpIMSTbWFuYSBwcmFrYWxwYQ0K
-xIFjaMSTIHnEgXJhIGphbid5YSBhcnRoxJNyYSBwcmHhuo/FjWphbmE/IDIg4bmscmlsaeG6j2Fu
-xJNyYSfFjSBixJPFm2kgYnlha3RpZ2F0YQ0KxJNiYeG5gSBrYXJwxY1yxJPhua1hIGluYWJoxJNz
-4bmtYW3Ek27hua1hIHDFjXLhua1hcGjFjWxpJ8WNIHNhaGEgxIFwYW7EgXJhIHByYWthbHDEk3Jh
-DQpqYW4neWEgxIFtxIFkxJNyYSBrxIFjaMSTIMSBcnRoaWthIHN1YmlkaMSBIHJh4bqPxJNjaMST
-LiBBc2lsYSBpc2FsxIFtaWthDQpwaMSBJ2luJ3nEgW5zYSBwaWrEkyfEk3Nhc2kgaWt1J2nhua1p
-IHDEgXLhua1hbsSBcmEsIHVkecWNa3TEgSwgcGjEgW7huI1hIHLEgSdpasSBcmENCsSTYmHhuYEg
-cMWNcuG5rWFwaMWNbGknxY0gbXnEgW7Ek2rEgXJhIGtodW3MkGphY2jEkyB5xIFyxIEgNSB0aMST
-a8STIDEwIGJhY2hhcsSTcmEgaMWNbOG4jWENCnNhaGEgNC41JSBQYXJ5YW50YSBzdWRhIMSTYmHh
-uYEvYXRoYWLEgSBwxIFy4bmtYSBpa3l1J2nhua1pIHBhamnFm2FuYSBkxJNixJMuIDIwMzANClPE
-gWzEkywgxIFtYXLEgSBiYXJ0YW3EgW5hIGLEgWrEgXJhIGNha3Jha8STIHB1bcyQamkga2FyxJMg
-dWNjYW3EgW7Ek3JhLCBrYW1hDQpqaHVtzJBraXDFq3LhuYdhIHNhbXBhZGEgxJNiYeG5gSBiaW5p
-4bqPxY1nxJMgMiDhua1yaWxp4bqPYW5hIHBhcnlhbnRhIGFyamFuYSBrYXLEgXJhDQpwYXJpa2Fs
-cGFuxIEga2FyYWNoaS4NCg0KQXNpbGEgaXNhbMSBbWlrYSBwaMSBJ2luJ3nEgW5zYSBwaWrEkyfE
-k3Nhc2kgxJNrYeG5rWkgbmRlcuG5h2FkxIF0xIEgaGlzxIFixJMga8SBamENCmthcmFjaMSTIMST
-YmHhuYEgdGFoYWJpbGEgaWt5dSdp4bmtaSBhbsWbxKtkxIFyYSDEk2Jh4bmBIHVkecWNa3TEgWTE
-k3JhIHTEgWTEk3JhDQpiaW5p4bqPxY1nYSBwcmFrYWxwxJNyYSBqYW4neWEgYsSBcuG5o2lrYSAz
-LjUlIFN1ZMSTcmEgaMSBcsSTIGJpdGFyYeG5h2Ega2FyxIENCmhhYsSTLiDEgG1hcsSBIGTEgWzE
-gWxhZMSTcmEgMiUga2FtacWbYW5hJ8WNIGRpJ2ksIHnEgXLEgSBwcmFrYWxwYSBtxIFsaWthZMST
-cmENCmFydGhhIGLEgSBhbid5xIFuJ3lhIHN1ecWNZ8STcmEgamFuJ3lhIG5p4bqPxJMgxIFzxJMu
-DQoNCsSAcmEnxY0gYmlzdMSBcml0YSBqxIFuxIFyYSBqYW4neWEsIGRh4bqPxIEga2FyxJMgxIFt
-xIFkxJNyYSDEgXBhbsSBcmEgYnlhYmFzxIHhuo9pa2ENCnBhcmlrYWxwYW7EgSBixIEgcHJha2Fs
-cMSTcmEgc8SBcsSBbsWbYSBwxIHhua1oxIFuYS4NCg0KxZp1YmjEk2NjaMSBLA0KDQoNCmphbsSB
-YmEgaWJhbsSTIMSBaGFtYWRhIG11c3RhcGjEgQ0KxIFudGFyasSBdGlrYSBieWFiYXPEgSBzYW1h
-bmJh4bqPYWvEgXLEqw0KYXNpbGEgaXNhbMSBbWlrYSBwaMSBJ2luJ3nEgW5zYSBwaWrEkyfEk3Nh
-c2kNCsSBbGEgbcSBbmFraHVsYSwgZHVixIEnaSBzaSAyIOG5rcSBJ8WN4bqPxIFyYSwNCm5pY2F0
-YWzEgSwgUC5PIDk0NjY5IGR1YsSBJ2ksIHNhbnl1a3RhIMSBcmFiYSDEgW1pcsSBdGENCsSBYnUg
-ZGjEgWJpLCBzYW55dWt0YSDEgXJhYmEgxIFtaXLEgXRhDQppbcSTJ2lsYTogQWhtYWRtdXN0YWZh
-Ljc4MDBAZ21haWwuY29tDQoNCkRlYXIgU2lyLA0KDQpBc2VlbCBJc2xhbWljIGZpbmFuY2UgUEpT
-QyBpcyBwcml2YXRlIGpvaW50IHN0b2NrIGNvbXBhbnkgdGhhdCB3YXMNCmVzdGFibGlzaGVkIGlu
-IDIwMDYgYW5kIGhhcyBidWlsdCBhIGxlYWRpbmcgbWFya2V0IHBvc2l0aW9uIGZvciBpdHNlbGYN
-CmluIHRoZSBVQUUncyBJc2xhbWljIGZpbmFuY2UgbWFya2V0IHdoaWNoIHNwZWNpYWxpemVzIGlu
-IGxvYW4gZmluYW5jZQ0KYW5kIGludmVzdG1lbnQgYWN0aXZpdGllcyBpbiByZWFsIGVzdGF0ZSwg
-aG9zcGl0YWxpdHksIGluZHVzdHJpYWwgJg0Kc3VzdGFpbmFibGUgdGVjaG5vbG9naWVzLCBzdHJh
-dGVnaWMgZmluYW5jaWFsIGludmVzdG1lbnRzLCBzcGVjaWFsaXplZA0KZWR1Y2F0aW9uLCBoZWFs
-dGhjYXJlIHNlcnZpY2VzLCBhZ3JpY3VsdHVyZSwgbWFudWZhY3R1cmluZywNCm1pbmluZyxlbmVy
-Z3kgYW5kIGFkZGl0aW9uYWwgZW52aXJvbm1lbnRhbGx5IHN1c3RhaW5hYmxlIHByb2plY3RzLg0K
-DQpNeSBuYW1lIGlzIE1yLiBJYm4gQWhtYWQgTXVzdGFmYSAuIERvIHlvdSBoYXZlIHByb2plY3Rz
-IHRoYXQgcmVxdWlyZQ0KZnVuZGluZz8gV2UgaGF2ZSBmaW5hbmNlIGF2YWlsYWJsZSBmb3IgeW91
-ciBwcm9qZWN0cyB3aXRoIG92ZXIgMg0KdHJpbGxpb24gcHJpdmF0ZSBhbmQgY29ycG9yYXRlIGlu
-dmVzdG1lbnQgcG9ydGZvbGlvcy4gIEFzZWVsIElzbGFtaWMNCmZpbmFuY2UgUEpTQyBpcyBsb29r
-aW5nIGZvciBlcXVpdHkgcGFydG5lcnMsIGVudHJlcHJlbmV1ciwgZnVuZA0KcmFpc2VycyBhbmQg
-cG9ydGZvbGlvIG1hbmFnZXJzIHdobyB3aWxsIHBheSB1cCB0byA0LjUlIGludGVyZXN0IGFuZC9v
-cg0KcGFydCBlcXVpdHkgcG9zaXRpb24gd2l0aCBhIDUgdG8gMTAgeWVhciBob2xkLiBJbiAyMDMw
-LCB3ZSBwbGFuIG9uDQphY3F1aXJpbmcgdXAgdG8gMiB0cmlsbGlvbiBpbiBoaWdoLXF1YWxpdHks
-IGxvdyByaXNrIGFzc2V0cyBhbmQNCmludmVzdG1lbnRzIHRvIGNhcGl0YWxpemUgb24gdGhlIGN1
-cnJlbnQgbWFya2V0IGN5Y2xlLg0KDQpBc2VlbCBJc2xhbWljIGZpbmFuY2UgUEpTQyBpcyBhY3Rp
-bmcgYXMgYSBsZW5kZXIgYW5kIHRoZSBmdW5kIHdpbGwgYmUNCmRpc2J1cnNlZCBvbiBhIGNsZWFy
-IGludGVyZXN0IHJhdGUgb2YgMy41JSBhbm51YWxseSB0byB0aGUgZXF1aXR5DQpwYXJ0bmVycyBh
-bmQgZW50cmVwcmVuZXVycyBmb3IgdGhlaXIgaW52ZXN0bWVudCBwcm9qZWN0cy4gV2UgYWxzbyBn
-aXZlDQphIDIlIGNvbW1pc3Npb24gdG8gYnJva2Vycywgd2hvIGJyaW5nIHByb2plY3Qgb3duZXJz
-IGZvciBmaW5hbmNlIG9yDQpvdGhlciBvcHBvcnR1bml0aWVzLg0KDQpGb3IgZnVydGhlciBkZXRh
-aWxzLCBraW5kbHkgc2VuZCB1cyB5b3VyIGJ1c2luZXNzIHBsYW5zIG9yIHByb2plY3Qgc3VtbWFy
-eS4NCg0KUmVnYXJkcywNCg0KDQpNci4gSWJuIEFobWFkIE11c3RhZmENCkludGVybmF0aW9uYWwg
-QnVzaW5lc3MgQ29vcmRpbmF0b3INCkFzZWVsIElzbGFtaWMgRmluYW5jZSBQSlNDDQpBbCBNYW5r
-aG9vbCwgRHViYWkgQzIgVG93ZXIsDQpHcm91bmQgZmxvb3IsUC5PIDk0NjY5IER1YmFpLCBVQUUN
-CkFidSBEaGFiaSAtIFVuaXRlZCBBcmFiIEVtaXJhdGVzDQpFbWFpbCA6IGFobWFkbXVzdGFmYS43
-ODAwQGdtYWlsLmNvbQ0K
+From: Heiner Kallweit <hkallweit1@gmail.com>
+
+[ Upstream commit a6b8bb6a813a6621c75ceacd1fa604c0229e9624 ]
+
+Bit SMBHSTCNT_PEC_EN is used only if software calculates the CRC and
+uses register SMBPEC. This is not supported by the driver, it supports
+hw-calculation of CRC only (using bit SMBAUXSTS_CRCE). The chip spec
+states the following, therefore never set bit SMBHSTCNT_PEC_EN.
+
+Chapter SMBus CRC Generation and Checking
+If the AAC bit is set in the Auxiliary Control register, the PCH
+automatically calculates and drives CRC at the end of the transmitted
+packet for write cycles, and will check the CRC for read cycles. It will
+not transmit the contents of the PEC register for CRC. The PEC bit must
+not be set in the Host Control register. If this bit is set, unspecified
+behavior will result.
+
+This patch is based solely on the specification and compile-tested only,
+because I have no PEC-capable devices.
+
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Tested-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/busses/i2c-i801.c | 27 +++++++++++----------------
+ 1 file changed, 11 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index aa3f60e69230..92ec291c0648 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -503,19 +503,16 @@ static int i801_transaction(struct i801_priv *priv, int xact)
+ 
+ static int i801_block_transaction_by_block(struct i801_priv *priv,
+ 					   union i2c_smbus_data *data,
+-					   char read_write, int command,
+-					   int hwpec)
++					   char read_write, int command)
+ {
+-	int i, len;
+-	int status;
+-	int xact = hwpec ? SMBHSTCNT_PEC_EN : 0;
++	int i, len, status, xact;
+ 
+ 	switch (command) {
+ 	case I2C_SMBUS_BLOCK_PROC_CALL:
+-		xact |= I801_BLOCK_PROC_CALL;
++		xact = I801_BLOCK_PROC_CALL;
+ 		break;
+ 	case I2C_SMBUS_BLOCK_DATA:
+-		xact |= I801_BLOCK_DATA;
++		xact = I801_BLOCK_DATA;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
+@@ -665,8 +662,7 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
+  */
+ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 					       union i2c_smbus_data *data,
+-					       char read_write, int command,
+-					       int hwpec)
++					       char read_write, int command)
+ {
+ 	int i, len;
+ 	int smbcmd;
+@@ -764,9 +760,8 @@ static int i801_set_block_buffer_mode(struct i801_priv *priv)
+ }
+ 
+ /* Block transaction function */
+-static int i801_block_transaction(struct i801_priv *priv,
+-				  union i2c_smbus_data *data, char read_write,
+-				  int command, int hwpec)
++static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
++				  char read_write, int command)
+ {
+ 	int result = 0;
+ 	unsigned char hostc;
+@@ -802,11 +797,11 @@ static int i801_block_transaction(struct i801_priv *priv,
+ 	 && i801_set_block_buffer_mode(priv) == 0)
+ 		result = i801_block_transaction_by_block(priv, data,
+ 							 read_write,
+-							 command, hwpec);
++							 command);
+ 	else
+ 		result = i801_block_transaction_byte_by_byte(priv, data,
+ 							     read_write,
+-							     command, hwpec);
++							     command);
+ 
+ 	if (command == I2C_SMBUS_I2C_BLOCK_DATA
+ 	 && read_write == I2C_SMBUS_WRITE) {
+@@ -917,8 +912,7 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+ 		       SMBAUXCTL(priv));
+ 
+ 	if (block)
+-		ret = i801_block_transaction(priv, data, read_write, size,
+-					     hwpec);
++		ret = i801_block_transaction(priv, data, read_write, size);
+ 	else
+ 		ret = i801_transaction(priv, xact);
+ 
+@@ -1690,6 +1684,7 @@ static void i801_setup_hstcfg(struct i801_priv *priv)
+ 	unsigned char hstcfg = priv->original_hstcfg;
+ 
+ 	hstcfg &= ~SMBHSTCFG_I2C_EN;	/* SMBus timing */
++	hstcfg &= ~SMBHSTCNT_PEC_EN;	/* Disable software PEC */
+ 	hstcfg |= SMBHSTCFG_HST_EN;
+ 	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hstcfg);
+ }
+-- 
+2.30.2
+
