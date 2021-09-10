@@ -2,105 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBDE4056C6
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Sep 2021 15:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57994066A6
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Sep 2021 07:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353612AbhIINXN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Sep 2021 09:23:13 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:54084 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356944AbhIINPA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Sep 2021 09:15:00 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 938501FDEE;
-        Thu,  9 Sep 2021 13:13:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1631193227; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pFMRfoyR43hfi0VWujmUi6zgOxK+wVXStaOWAPl9ihk=;
-        b=jwKuuIPjmKLoBl9qRZBKB49VW4UfAudv/rGnMyjKgBqPkpmrFqAOXvMM1+HsncTPIFyjLG
-        UiDZJT/R9vrZyXHupExniDumvyGKGJvCfCBpsa80aGmMpDEj3K4weQaS47ndkZeu/EiaZN
-        TRUZCzHzOZZcl2h+4MwOhVbdwy0qYR8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1631193227;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pFMRfoyR43hfi0VWujmUi6zgOxK+wVXStaOWAPl9ihk=;
-        b=baFrK6w72S8VISeLlLZ1TZebCQin7lJIg4i8J+4B6Hlg2+qdOH9YOKCCx4rUfiZHL1MTLm
-        pR13G4mWYUcgyqCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3A5B513B36;
-        Thu,  9 Sep 2021 13:13:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KFuqC4sIOmFKDwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 09 Sep 2021 13:13:47 +0000
-Date:   Thu, 9 Sep 2021 15:13:20 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.14 088/252] i2c: i801: Fix handling
- SMBHSTCNT_PEC_EN
-Message-ID: <20210909151320.7bddd134@endymion>
-In-Reply-To: <20210909114106.141462-88-sashal@kernel.org>
-References: <20210909114106.141462-1-sashal@kernel.org>
-        <20210909114106.141462-88-sashal@kernel.org>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S230259AbhIJFPk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Sep 2021 01:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230190AbhIJFPk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Sep 2021 01:15:40 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFD0C061575
+        for <linux-i2c@vger.kernel.org>; Thu,  9 Sep 2021 22:14:29 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id v20-20020a1cf714000000b002e71f4d2026so339952wmh.1
+        for <linux-i2c@vger.kernel.org>; Thu, 09 Sep 2021 22:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=Ze6s6wpN9KzSNecgrpczzQzoITVtf1Ztfs5jirK1uUk=;
+        b=cQSJAESg4dmWb4d4ICyt1NWM2thsfbW6vSYv7CcRTbat/7gqpr2/U2+W63DdUG/R7J
+         xq6zUSHQ/867i8GMsQT7WT+lDp2Qe6WiYOsuKqHBGiBDIhjI7WTOO4wNjlx0kC1x8dYa
+         ygo++2fSBsjPN8D+GCe2Kw1vnlqzvt+x77sLUcNG6OELPyUa8NxpivuVl94Hp+OKMfts
+         aUoRN40rzbUVE64qCeG7/6DL8DrusjJzUcSr14TZ6EK6QTZlHK7JXciVmFfeo4IEbNTL
+         G/pzhZ/vlVP98i9ENc8PCxpEbYcyGcDV7PKxeNQ06CbgvMRSZw3euZMtbNxiWd4UXuY3
+         yAjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=Ze6s6wpN9KzSNecgrpczzQzoITVtf1Ztfs5jirK1uUk=;
+        b=OGioP/LeIyXzEI8ol3Nens+OqG8j8HfDXj6RGMLi4jbTI2MLnfzV3wnrWD7OSxwOdZ
+         YTngK7uEmvIByYu2Zx1jlo5kVg/dYc06HqFlUecI5F9yuDvru8XktzfwbDOJTaYieBvU
+         AaSW5qRON5bysS9cdZ+SoB/PvnZr14dsdQlThBskUvI9ADBm09xx7CvGcHS1OLL3Rzq2
+         oWF+eQWdp245XJxEjt76i8kOfTVlxwvLQDbNfMMzsJUuGVMpuNhtSQ7sh4XaCaxD1YUx
+         5hW+StldbRnzpcQ4KyFLKHeB6t6Skt9K2dYgtbWaSl5zpVzMC3KaGUZtOot8opYU2fsY
+         3vsg==
+X-Gm-Message-State: AOAM5302USITE2oipF/Mq7xGtuH+SmwJQ49bvZl7r6m+vU+eKqo86O+y
+        aLBEa40GQDuMVLJy1H4p4bdBPHhVBIG8IN/rSqM=
+X-Google-Smtp-Source: ABdhPJwQzvDzNx0WFozDu7KdnOsj+HDmrOnw+NOYKipYN/e411rnJgnhHYvXiAxzO3vIllEZ2Z6SzyhvWfda/u+t+vY=
+X-Received: by 2002:a05:600c:4c17:: with SMTP id d23mr6310889wmp.92.1631250867967;
+ Thu, 09 Sep 2021 22:14:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Reply-To: sanamohamad906@gmail.com
+Sender: christbebe7@gmail.com
+Received: by 2002:a1c:f216:0:0:0:0:0 with HTTP; Thu, 9 Sep 2021 22:14:27 -0700 (PDT)
+From:   Sana Mohamad <msana6897@gmail.com>
+Date:   Fri, 10 Sep 2021 06:14:27 +0100
+X-Google-Sender-Auth: vwYDsUpz7MuLfzE5EaUppIcqQ10
+Message-ID: <CAMOqPknJR1s1y1H13H8YHwaymw22UTL_GYui4m85fH=tyjq_zw@mail.gmail.com>
+Subject: Dear intended recipient
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Sascha,
+Greetings,
 
-On Thu,  9 Sep 2021 07:38:22 -0400, Sasha Levin wrote:
-> From: Heiner Kallweit <hkallweit1@gmail.com>
-> 
-> [ Upstream commit a6b8bb6a813a6621c75ceacd1fa604c0229e9624 ]
-> 
-> Bit SMBHSTCNT_PEC_EN is used only if software calculates the CRC and
-> uses register SMBPEC. This is not supported by the driver, it supports
-> hw-calculation of CRC only (using bit SMBAUXSTS_CRCE). The chip spec
-> states the following, therefore never set bit SMBHSTCNT_PEC_EN.
-> 
-> Chapter SMBus CRC Generation and Checking
-> If the AAC bit is set in the Auxiliary Control register, the PCH
-> automatically calculates and drives CRC at the end of the transmitted
-> packet for write cycles, and will check the CRC for read cycles. It will
-> not transmit the contents of the PEC register for CRC. The PEC bit must
-> not be set in the Host Control register. If this bit is set, unspecified
-> behavior will result.
-> 
-> This patch is based solely on the specification and compile-tested only,
-> because I have no PEC-capable devices.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> Tested-by: Jean Delvare <jdelvare@suse.de>
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/i2c/busses/i2c-i801.c | 27 +++++++++++----------------
->  1 file changed, 11 insertions(+), 16 deletions(-)
+I know that this mail will come to you as a surprise as we have never
+met before, but need not to worry as I am contacting you independently
+of my investigation and no one is informed of this communication.
+I need your urgent assistance in transferring the sum of
+$12,300,000.00 USD immediately to your private account.The money has
+been here in our Bank lying dormant for years now without anybody
+coming for the claim of it.I want to release the money to you as a
+relative to our deceased customer (the account owner) who died along
+with his supposed NEXT OF KIN on 16th October 2005.
 
-This patch fixes a theoretical problem nobody has ever complained
-about. I don't think it makes sense to backport it to stable kernel
-branches.
+The Banking laws here do not allow such money to stay more than 15
+years, because the money will be recalled to the Bank treasury account
+as an unclaimed fund.By indicating your interest I will send you the
+full details on how the business will be executed.
 
--- 
-Jean Delvare
-SUSE L3 Support
+Please respond urgently and delete if you are not interested.
+
+Best Regards,
+Mr. Sana Mohamad
