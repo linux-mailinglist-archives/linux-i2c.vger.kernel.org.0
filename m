@@ -2,79 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A57994066A6
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Sep 2021 07:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7F5408757
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Sep 2021 10:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbhIJFPk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Sep 2021 01:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhIJFPk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Sep 2021 01:15:40 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFD0C061575
-        for <linux-i2c@vger.kernel.org>; Thu,  9 Sep 2021 22:14:29 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id v20-20020a1cf714000000b002e71f4d2026so339952wmh.1
-        for <linux-i2c@vger.kernel.org>; Thu, 09 Sep 2021 22:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=Ze6s6wpN9KzSNecgrpczzQzoITVtf1Ztfs5jirK1uUk=;
-        b=cQSJAESg4dmWb4d4ICyt1NWM2thsfbW6vSYv7CcRTbat/7gqpr2/U2+W63DdUG/R7J
-         xq6zUSHQ/867i8GMsQT7WT+lDp2Qe6WiYOsuKqHBGiBDIhjI7WTOO4wNjlx0kC1x8dYa
-         ygo++2fSBsjPN8D+GCe2Kw1vnlqzvt+x77sLUcNG6OELPyUa8NxpivuVl94Hp+OKMfts
-         aUoRN40rzbUVE64qCeG7/6DL8DrusjJzUcSr14TZ6EK6QTZlHK7JXciVmFfeo4IEbNTL
-         G/pzhZ/vlVP98i9ENc8PCxpEbYcyGcDV7PKxeNQ06CbgvMRSZw3euZMtbNxiWd4UXuY3
-         yAjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=Ze6s6wpN9KzSNecgrpczzQzoITVtf1Ztfs5jirK1uUk=;
-        b=OGioP/LeIyXzEI8ol3Nens+OqG8j8HfDXj6RGMLi4jbTI2MLnfzV3wnrWD7OSxwOdZ
-         YTngK7uEmvIByYu2Zx1jlo5kVg/dYc06HqFlUecI5F9yuDvru8XktzfwbDOJTaYieBvU
-         AaSW5qRON5bysS9cdZ+SoB/PvnZr14dsdQlThBskUvI9ADBm09xx7CvGcHS1OLL3Rzq2
-         oWF+eQWdp245XJxEjt76i8kOfTVlxwvLQDbNfMMzsJUuGVMpuNhtSQ7sh4XaCaxD1YUx
-         5hW+StldbRnzpcQ4KyFLKHeB6t6Skt9K2dYgtbWaSl5zpVzMC3KaGUZtOot8opYU2fsY
-         3vsg==
-X-Gm-Message-State: AOAM5302USITE2oipF/Mq7xGtuH+SmwJQ49bvZl7r6m+vU+eKqo86O+y
-        aLBEa40GQDuMVLJy1H4p4bdBPHhVBIG8IN/rSqM=
-X-Google-Smtp-Source: ABdhPJwQzvDzNx0WFozDu7KdnOsj+HDmrOnw+NOYKipYN/e411rnJgnhHYvXiAxzO3vIllEZ2Z6SzyhvWfda/u+t+vY=
-X-Received: by 2002:a05:600c:4c17:: with SMTP id d23mr6310889wmp.92.1631250867967;
- Thu, 09 Sep 2021 22:14:27 -0700 (PDT)
-MIME-Version: 1.0
-Reply-To: sanamohamad906@gmail.com
-Sender: christbebe7@gmail.com
-Received: by 2002:a1c:f216:0:0:0:0:0 with HTTP; Thu, 9 Sep 2021 22:14:27 -0700 (PDT)
-From:   Sana Mohamad <msana6897@gmail.com>
-Date:   Fri, 10 Sep 2021 06:14:27 +0100
-X-Google-Sender-Auth: vwYDsUpz7MuLfzE5EaUppIcqQ10
-Message-ID: <CAMOqPknJR1s1y1H13H8YHwaymw22UTL_GYui4m85fH=tyjq_zw@mail.gmail.com>
-Subject: Dear intended recipient
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S236022AbhIMItY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 13 Sep 2021 04:49:24 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:35022 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237849AbhIMItY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 13 Sep 2021 04:49:24 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id CBA4A202A17;
+        Mon, 13 Sep 2021 10:48:07 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id BE8D0202A2E;
+        Mon, 13 Sep 2021 10:48:07 +0200 (CEST)
+Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 434B6202EC;
+        Mon, 13 Sep 2021 10:48:07 +0200 (CEST)
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
+Subject: [PATCH 00/10] arm64: dts: Add i.MX8DXL initial support
+Date:   Mon, 13 Sep 2021 11:47:44 +0300
+Message-Id: <1631522874-19862-1-git-send-email-abel.vesa@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Greetings,
+This allows i.MX8DXL EVK board to boot to prompt.
 
-I know that this mail will come to you as a surprise as we have never
-met before, but need not to worry as I am contacting you independently
-of my investigation and no one is informed of this communication.
-I need your urgent assistance in transferring the sum of
-$12,300,000.00 USD immediately to your private account.The money has
-been here in our Bank lying dormant for years now without anybody
-coming for the claim of it.I want to release the money to you as a
-relative to our deceased customer (the account owner) who died along
-with his supposed NEXT OF KIN on 16th October 2005.
+Abel Vesa (5):
+  arm64: dts: imx8-ss-lsio: Add mu5a mailbox
+  arm64: dts: freescale: Add adma subsystem dtsi for imx8dxl
+  dt-bindings: fsl: scu: add i.MX8DXL ocotp binding
+  dt-bindings: i2c: imx-lpi2c: Add i.MX8DXL compatible match
+  dt-bindings: serial: fsl-lpuart: Add i.MX8DXL compatible
 
-The Banking laws here do not allow such money to stay more than 15
-years, because the money will be recalled to the Bank treasury account
-as an unclaimed fund.By indicating your interest I will send you the
-full details on how the business will be executed.
+Jacky Bai (5):
+  arm64: dts: freescale: Add the top level dtsi support for imx8dxl
+  arm64: dts: freescale: Add the imx8dxl connectivity subsys dtsi
+  arm64: dts: freescale: Add ddr subsys dtsi for imx8dxl
+  arm64: dts: freescale: Add lsio subsys dtsi for imx8dxl
+  arm64: dts: imx8dxl: Add i.MX8DXL evk board support
 
-Please respond urgently and delete if you are not interested.
+ .../bindings/arm/freescale/fsl,scu.txt        |   3 +-
+ .../bindings/i2c/i2c-imx-lpi2c.yaml           |   2 +
+ .../bindings/serial/fsl-lpuart.yaml           |   1 +
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
+ .../boot/dts/freescale/imx8-ss-lsio.dtsi      |   7 +
+ arch/arm64/boot/dts/freescale/imx8dxl-evk.dts | 266 ++++++++++++++++++
+ .../boot/dts/freescale/imx8dxl-ss-adma.dtsi   |  53 ++++
+ .../boot/dts/freescale/imx8dxl-ss-conn.dtsi   | 137 +++++++++
+ .../boot/dts/freescale/imx8dxl-ss-ddr.dtsi    |  36 +++
+ .../boot/dts/freescale/imx8dxl-ss-lsio.dtsi   |  78 +++++
+ arch/arm64/boot/dts/freescale/imx8dxl.dtsi    | 245 ++++++++++++++++
+ 11 files changed, 828 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-lsio.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl.dtsi
 
-Best Regards,
-Mr. Sana Mohamad
+-- 
+2.31.1
+
