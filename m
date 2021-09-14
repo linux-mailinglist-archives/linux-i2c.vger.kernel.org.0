@@ -2,85 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A0B409A1F
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Sep 2021 18:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3830940A8CA
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Sep 2021 10:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240380AbhIMQ5A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 13 Sep 2021 12:57:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46538 "EHLO mail.kernel.org"
+        id S229846AbhINIHd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Sep 2021 04:07:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60972 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239888AbhIMQ47 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 13 Sep 2021 12:56:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A1CC60FE6;
-        Mon, 13 Sep 2021 16:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631552143;
-        bh=uUD9BeW8jFyLzVb0L7I3RCTD4qAQLcOLZZFlOvJ6GrQ=;
+        id S230260AbhINIGO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 14 Sep 2021 04:06:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 18E6460E90;
+        Tue, 14 Sep 2021 08:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1631606648;
+        bh=is6/OZHofB1mIm80FRHvelB2x0GoF/xOkKeCXSlJcEU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OQ2w0/Elkm+1G3wLjr17l9B2+/QcO0UwFVduMARk/dIt2bTmoS2TlWAgP9Qxzhs/H
-         J+HSjxT9vUVf8XG/e7ZSCTEmCXWQoPnwVdeAh1iAEWfp8EfomkJJy+4Usub5jDVxqt
-         Z+8ktArEH3LiFcHHe9sNaMWlhtfg+cR9P4Xqv2TFxIjmrfBy8hWCPkQIOMJs+GutK0
-         IAkvz5z2Xn5xMOXmAhYKL5bn4N1fxu9fZB/UU7atC+NguZpIUdcSloYYkqDQybANSk
-         +GethoLYKDThi70fW1qF2HrLi6pMB64PlYmRj5mcJIVrwnF6G8p3bK9JU0voZ/Ofhe
-         xSEeZ2Sl0mYnw==
-Date:   Mon, 13 Sep 2021 12:55:42 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.14 088/252] i2c: i801: Fix handling
- SMBHSTCNT_PEC_EN
-Message-ID: <YT+CjnAnkfL3Nh0D@sashalap>
-References: <20210909114106.141462-1-sashal@kernel.org>
- <20210909114106.141462-88-sashal@kernel.org>
- <20210909151320.7bddd134@endymion>
+        b=OgduPq+mQO6Li4zxje1QEqgUsLiFfiTISDlsd21qYh3nCYdaEHwS2mrlOL+GjSswE
+         RQxKZC6MUU746bw9w6/IYRb5d6L7drbdOAf4oeoIAhMD+SbmDLujR8Ytf7wFAJuTXK
+         LoCJQiOI2zDbmLLsOElFVRGOKreTXimr82hh4TC4=
+Date:   Tue, 14 Sep 2021 10:04:05 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 10/10] dt-bindings: serial: fsl-lpuart: Add i.MX8DXL
+ compatible
+Message-ID: <YUBXdR1RRWnItcAv@kroah.com>
+References: <1631522874-19862-1-git-send-email-abel.vesa@nxp.com>
+ <1631522874-19862-11-git-send-email-abel.vesa@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210909151320.7bddd134@endymion>
+In-Reply-To: <1631522874-19862-11-git-send-email-abel.vesa@nxp.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 09, 2021 at 03:13:20PM +0200, Jean Delvare wrote:
->Hi Sascha,
->
->On Thu,  9 Sep 2021 07:38:22 -0400, Sasha Levin wrote:
->> From: Heiner Kallweit <hkallweit1@gmail.com>
->>
->> [ Upstream commit a6b8bb6a813a6621c75ceacd1fa604c0229e9624 ]
->>
->> Bit SMBHSTCNT_PEC_EN is used only if software calculates the CRC and
->> uses register SMBPEC. This is not supported by the driver, it supports
->> hw-calculation of CRC only (using bit SMBAUXSTS_CRCE). The chip spec
->> states the following, therefore never set bit SMBHSTCNT_PEC_EN.
->>
->> Chapter SMBus CRC Generation and Checking
->> If the AAC bit is set in the Auxiliary Control register, the PCH
->> automatically calculates and drives CRC at the end of the transmitted
->> packet for write cycles, and will check the CRC for read cycles. It will
->> not transmit the contents of the PEC register for CRC. The PEC bit must
->> not be set in the Host Control register. If this bit is set, unspecified
->> behavior will result.
->>
->> This patch is based solely on the specification and compile-tested only,
->> because I have no PEC-capable devices.
->>
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->> Tested-by: Jean Delvare <jdelvare@suse.de>
->> Signed-off-by: Wolfram Sang <wsa@kernel.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  drivers/i2c/busses/i2c-i801.c | 27 +++++++++++----------------
->>  1 file changed, 11 insertions(+), 16 deletions(-)
->
->This patch fixes a theoretical problem nobody has ever complained
->about. I don't think it makes sense to backport it to stable kernel
->branches.
+On Mon, Sep 13, 2021 at 11:47:54AM +0300, Abel Vesa wrote:
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 
-Sure, I'll drop it. Thanks.
+I can not take patches without any changelog text at all, sorry.
 
--- 
-Thanks,
-Sasha
+greg k-h
