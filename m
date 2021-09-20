@@ -2,136 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 271ED4113AC
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Sep 2021 13:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CD3411817
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Sep 2021 17:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237041AbhITLnD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Sep 2021 07:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237018AbhITLnD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Sep 2021 07:43:03 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89934C061574
-        for <linux-i2c@vger.kernel.org>; Mon, 20 Sep 2021 04:41:36 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id dj4so4022521edb.5
-        for <linux-i2c@vger.kernel.org>; Mon, 20 Sep 2021 04:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oznmaGRVrHtxLdz21rhT8rtGnk/pKW1IuycVU1NNZQI=;
-        b=nu64i44cca1TGhdrBZc2AvH4MW0LRu5At3GAsQIrPlXRtMVZfMWIXmSBkLptlRvJRH
-         AV2QCk702OsMKqbMV4KMwGoX/I8mGIZOfP6jE8Jj+GP9ZiIBh85A5ADj4+jeg6A2HwmM
-         b0v1iNGEoqYQS26gLB7YsXH00izdvInsUgmoNEl2jIONbtRmU9UrkR6Gqb9Vq7ajfUgh
-         anQV5ToXNwrn/ibNU2ME96S/tyu8kRLA5dWmipfvE9Phnb3ZeqkfyGFSqRP/CYPji5Ce
-         uhWtziQQx58aWa30lWN8GrOSKzIDILLiHFwaSUbcI4kPGxDW+V+KJUsay1nqHVix0fGE
-         ruBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oznmaGRVrHtxLdz21rhT8rtGnk/pKW1IuycVU1NNZQI=;
-        b=yZxWUwr70IwzNl9L9MwgDgKyZweMq3ntAJ2BcVosVAPydpJ+VH4v9OMhPcZyFtqiYt
-         QAYfkweI10AmGKy+kDNI9us8F/fVG5UjSDdqvUkUJzfR0KJFDMG9YdIGNyNcp6cIs/BE
-         0TjgI6N7e5Aodp0rrpTHO2YmVjE0I+ExbsQmQTa0lMEAdAkYvzCEMvMB1oW3WuwqB09v
-         b5YYBHpVAG2nrc5GFctkl3wiVKthpyqJj1FgKPijbkjHUrrQM0oN2laTNOzr7Y8XzypF
-         DMUHOkQzTcDoT0wbvPlSnmcjrxCM7fpAi2ZvWEqKCwIDgpLNOcfEsafRzrKbD+pV/26d
-         MYtg==
-X-Gm-Message-State: AOAM533CpDXdm9vlTViZAhzjGGKYLkGIEqZDsKs4l/nxOfp+mGV2JzRm
-        vpBW3dCvZ55VCleJhS9h2/yTQY0A0U6Edi/7vqKeGA==
-X-Google-Smtp-Source: ABdhPJzidiKuODsDvZlYYgCkPEtfjXh1pYOz7UvhV5Ir0F2MUFALenmhBFjaWEn7IE11o62BoFhcsUsnFvA0tdGtAPw=
-X-Received: by 2002:a50:e0c3:: with SMTP id j3mr3071349edl.60.1632138095096;
- Mon, 20 Sep 2021 04:41:35 -0700 (PDT)
+        id S241350AbhITPX3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Sep 2021 11:23:29 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:56166 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235268AbhITPX1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Sep 2021 11:23:27 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18KE21hV025229;
+        Mon, 20 Sep 2021 17:21:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=selector1;
+ bh=11mbfnVg9/gdbNXUsMJb7eKBhQNTVHlQkqg8fvwjfGU=;
+ b=WJ6oDJofyU26m/VP/7VK39oole1/vl5zzLvZM/wizVK31tVqajFFYRA0EdAnBNACRVmM
+ IBU5bGEgskY8R6L4Gc0q0dQ6tsB4dEd0dzUuojIa/8/Qbpw5TEEAaaj2WqXV/l65N3ei
+ TQ5Hvo/qlAT0wS0Wq0ntoBghhxhUHucS4wsobYdZQg6DmGc3OnSoTGbuqGl1DnI6UA9q
+ lWHaz081LgxJdzZB4yYT2sQFnrQ1rxbkBhf6PDQ8L+iqFzGQhJEuGBAGn3DAWJS+4O2J
+ MDQHdPUvJdDlf/FSES0GU+TJxChlbt3ZldhJEJs3PKU/99FbMTotJ2S72mJnZ+Dt06w5 DQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3b6uq3rbag-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Sep 2021 17:21:46 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A896F10002A;
+        Mon, 20 Sep 2021 17:21:45 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9AF4722F7B7;
+        Mon, 20 Sep 2021 17:21:45 +0200 (CEST)
+Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 20 Sep 2021 17:21:45
+ +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <wsa@kernel.org>, <pierre-yves.mordret@foss.st.com>
+CC:     <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <amelie.delaunay@foss.st.com>, <alain.volmat@foss.st.com>
+Subject: [PATCH 0/4] i2c: stm32: various fixes & dmaengine updates
+Date:   Mon, 20 Sep 2021 17:21:28 +0200
+Message-ID: <1632151292-18503-1-git-send-email-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20210920072842.30889-1-brgl@bgdev.pl> <CAHp75Vc0ytt4gWqaEWVOLSwu8J15t92JXg790jvjtGJqMo5_6A@mail.gmail.com>
-In-Reply-To: <CAHp75Vc0ytt4gWqaEWVOLSwu8J15t92JXg790jvjtGJqMo5_6A@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 20 Sep 2021 13:41:24 +0200
-Message-ID: <CAMRc=MeLMngUi3oZAWuM6sBazvm6iXOYiVYbHOjbCdm7Z9r3bQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: update my email address
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@the-dreams.de>, Sekhar Nori <nsekhar@ti.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-20_07,2021-09-20_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 11:42 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Sep 20, 2021 at 12:31 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> >
-> > My professional situation changes soon. Update my email address.
->
-> I'm wondering if @kernel.org address would be a better choice. In such
-> a case you don't need to send a patch whenever your situation changes.
->
+This serie contains 3 fixes for I²C error handling cases.
+It also includes a patch to get rid of the deprecated
+dmaengine_terminate_all calls.
 
-This is my "private professional" address that I had used even before
-doing kernel work on BayLibre payroll - I intend to keep it from now
-on.
+Alain Volmat (4):
+  i2c: stm32f7: flush TX FIFO upon transfer errors
+  i2c: stm32f7: recover the bus on access timeout
+  i2c: stm32f7: stop dma transfer in case of NACK
+  i2c: stm32f7: use proper DMAENGINE API for termination
 
-> Either way, with hope that you will be still active here,
-> Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+ drivers/i2c/busses/i2c-stm32f7.c | 45 +++++++++++++++++++++++++++-----
+ 1 file changed, 38 insertions(+), 7 deletions(-)
 
-I will! :)
+-- 
+2.25.1
 
-Bart
-
->
-> > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> > ---
-> >  MAINTAINERS | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index eeb4c70b3d5b..6bebe6168922 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -2962,7 +2962,7 @@ F:        crypto/async_tx/
-> >  F:     include/linux/async_tx.h
-> >
-> >  AT24 EEPROM DRIVER
-> > -M:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > +M:     Bartosz Golaszewski <brgl@bgdev.pl>
-> >  L:     linux-i2c@vger.kernel.org
-> >  S:     Maintained
-> >  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
-> > @@ -7986,7 +7986,7 @@ F:        include/linux/gpio/regmap.h
-> >
-> >  GPIO SUBSYSTEM
-> >  M:     Linus Walleij <linus.walleij@linaro.org>
-> > -M:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > +M:     Bartosz Golaszewski <brgl@bgdev.pl>
-> >  L:     linux-gpio@vger.kernel.org
-> >  S:     Maintained
-> >  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
-> > @@ -11367,7 +11367,7 @@ F:      Documentation/devicetree/bindings/iio/proximity/maxbotix,mb1232.yaml
-> >  F:     drivers/iio/proximity/mb1232.c
-> >
-> >  MAXIM MAX77650 PMIC MFD DRIVER
-> > -M:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > +M:     Bartosz Golaszewski <brgl@bgdev.pl>
-> >  L:     linux-kernel@vger.kernel.org
-> >  S:     Maintained
-> >  F:     Documentation/devicetree/bindings/*/*max77650.yaml
-> > @@ -18689,7 +18689,7 @@ F:      include/linux/clk/ti.h
-> >
-> >  TI DAVINCI MACHINE SUPPORT
-> >  M:     Sekhar Nori <nsekhar@ti.com>
-> > -R:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > +R:     Bartosz Golaszewski <brgl@bgdev.pl>
-> >  L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> >  S:     Supported
-> >  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/nsekhar/linux-davinci.git
-> > --
-> > 2.30.1
-> >
