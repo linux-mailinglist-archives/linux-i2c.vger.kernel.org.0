@@ -2,147 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0C1411816
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Sep 2021 17:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC9041285E
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Sep 2021 23:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241386AbhITPX3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Sep 2021 11:23:29 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:34314 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235365AbhITPX2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Sep 2021 11:23:28 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18KAV2Bx031532;
-        Mon, 20 Sep 2021 17:21:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=59qcHB1kF9PMeMXhh/v3Yee2c2CN5Mky8y5HqhJtLso=;
- b=PPt0E2vuS+kU4Akd0kjN8nIC+/drHoClbzPszutOtLDBgwOe32SoxF70puZ8M6oEjUy9
- R4fHvCnd/1XLywkXrDer+egW08LXIkf3wc27iGkZlaLyI47SQuu9AbcdXht/yaNMlNba
- lJz2/eSvgqNu1OXgF4DmP7K0MTbpNE0vIXNbXLuoceSows4pLjy+OibJroqOqHi+UJ/u
- 3U01jdPlbWMaYgOIAxx6i/qMlpq/FCgVlXQkqAGugHv4xzJkF1hUMGlgvdTrqH/fHSF3
- XO5N7JV67EZVdHJ1yzizk/qvdO7X5uEbGq8XFqTGOXqsh1FNqMtpVigYsi1FapBVLo/K HA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3b6h723ajh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Sep 2021 17:21:47 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4BABC10002A;
-        Mon, 20 Sep 2021 17:21:47 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4383922F7B7;
-        Mon, 20 Sep 2021 17:21:47 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 20 Sep 2021 17:21:47
- +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <wsa@kernel.org>, <pierre-yves.mordret@foss.st.com>
-CC:     <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <amelie.delaunay@foss.st.com>, <alain.volmat@foss.st.com>
-Subject: [PATCH 4/4] i2c: stm32f7: use proper DMAENGINE API for termination
-Date:   Mon, 20 Sep 2021 17:21:32 +0200
-Message-ID: <1632151292-18503-5-git-send-email-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1632151292-18503-1-git-send-email-alain.volmat@foss.st.com>
-References: <1632151292-18503-1-git-send-email-alain.volmat@foss.st.com>
+        id S233205AbhITVqN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Sep 2021 17:46:13 -0400
+Received: from mail-eopbgr150080.outbound.protection.outlook.com ([40.107.15.80]:61831
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240143AbhITVoM (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 20 Sep 2021 17:44:12 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C8VDwP4lal5bN9vvOR92cqgqW91d5MNrl1QietVQ0mt8WdZIX7Y7mFvVu0d2jwVYq0iyPsIq/aTlKaMdyB2N0r3cCALVkeEcHioNiMLsTlT8CaWNLDXXPSDU8PeD4ew6dqrRqLhNMR99fpnxkUISVo2bybgncxweePi8CtP6al0FlfYdOccCJZalcQVAXFc4m12sWnVMS6YOuqChfkcxYFqBxikD0zMGSlf2jGDa629e3i9zvRp5qUjCWpmT7VWdYkxRASOdqg4/CKgmrNHyARHj+3mmM831koQ67MUa+FqD6wKIlDIV6QdDAvNav7YnD4uuPf12ELDWkZ6CV+8+gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=5rgNvva/MKeQs/T5q40/IqFG/xnDq4OuF/YrJDoWqhs=;
+ b=cAnzZb2FQ/pUAms4Wwuc7VnE62TiRciRbEBdNc5mixkL1INL4ndA2EiIuXB7B3mqUY7WKm2+H95RqNouhAHt699OtRmNSTNHqoA+43NCrSskMRQiDzlbgeInpYaU1GSYx93DFYnM0uyM2Tn/SO0tNel+nCu5BEdBTukWx6gJKsChDwR5efGPOtrDW3IHL33RDMgEV9eeXLtnuN6kLkKG9vPpbKmoQWVII0N99/wvNuWHJYBG4RakUmAkSvki8PzQEpdifcOGmixHDapJn/k1wS2rxCuC39r/Vko26TVqKcFloqdv3M2+DPg3oN+CVLsxyEOCsTWjrVLca0R4GYBOcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5rgNvva/MKeQs/T5q40/IqFG/xnDq4OuF/YrJDoWqhs=;
+ b=WFX79GwxlHVlDHZivE22QUWNGyJM355i01ZoEqr9i6I599Tg/zqhs4d6mfql4Io1LMvg1ILc7uJ2rzR2XkpDwXpYagVHNjNgPN6mY6iwgTjzvvx4Vq9vNVtyXu/4xqpleOKjshzqTvJEDY04AErWw9vDDrv4kCWUsdcyNhWOucg=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by VI1PR04MB3198.eurprd04.prod.outlook.com (2603:10a6:802:9::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14; Mon, 20 Sep
+ 2021 21:42:39 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::e157:3280:7bc3:18c4]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::e157:3280:7bc3:18c4%5]) with mapi id 15.20.4523.018; Mon, 20 Sep 2021
+ 21:42:39 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Subject: [PATCH net 0/2] Fix mdiobus users with devres
+Date:   Tue, 21 Sep 2021 00:42:07 +0300
+Message-Id: <20210920214209.1733768-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR04CA0092.eurprd04.prod.outlook.com
+ (2603:10a6:208:be::33) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-20_07,2021-09-20_01,2020-04-07_01
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (82.78.148.104) by AM0PR04CA0092.eurprd04.prod.outlook.com (2603:10a6:208:be::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.16 via Frontend Transport; Mon, 20 Sep 2021 21:42:38 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2a6495ca-6f64-4246-acd4-08d97c7f9186
+X-MS-TrafficTypeDiagnostic: VI1PR04MB3198:
+X-Microsoft-Antispam-PRVS: <VI1PR04MB3198B437DC37D502F68BB904E0A09@VI1PR04MB3198.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1227;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yaN5KlOrrTfB/2ARcudtkk+CdWm1u2kmyYfemccVYyt4IkYjHWZRBs7MAu/6+xjDph0p9VFEZOkMjhGvYB5SSfKPje0hXJcnfNCoqEUK66P1rtv/5cf5xF64hr4BCb4zCmfSmf3SPyPpsaPhAQEd19ZcMjqTT5YL9u7eIGyCwoBuHSe3OkL5Kx8QF5x9tntvYr6kESr49dAsNKMTBUbAP2CEnNZHrp+vhJ8qNF32Ore6Oitmq4lmPgPq16HJTiG2go2PN8KyiGYwABAhwiqNi/72uMMVGn7op6UdoTwzH2EiPM9XLzKthP0MhNEvpIOqltsoKkn9GvLWNAAsW052t5FE2M1WakSASzZl6kr4DzuUSlzwmgvIHylk4v0yxXyybPjCnvM5e603ByhlB6OvMBAAQ9E/TkloyMiSuJMH4IlTaZrIHjjCCDRbM8vkCW8eiZON3zT+cUc97HWccdPw3MWDwBR/dd/7h9UUSCxQj+DrHjxxyasxSJOXc/1VK/Ki1E07GN7DAAKupxfzoGwWVkHEYN8D61E0BCvu8do4Y3LorbDnUKtbSHg9pUwbEp+I8xxPg2qyunbTRmz3Fn7uOKjrxyS1NDpDGV0MuTLMh5f/J6bs7+wO4DDZ0ruugJSX+28j6iROZxXGPfbAzf9o7LoPNIUXt/f27/ndK64wL8Jwkv5wzqbZncqZxhuOjoxmlZVTR0GGeyD6WlfsDqo//g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(396003)(376002)(39860400002)(136003)(52116002)(38100700002)(38350700002)(4326008)(1076003)(44832011)(7416002)(83380400001)(66946007)(26005)(6486002)(8936002)(2616005)(8676002)(6512007)(6916009)(956004)(2906002)(478600001)(66476007)(66556008)(316002)(54906003)(36756003)(186003)(86362001)(6506007)(5660300002)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djVHRUI0YmdnSmJ6U1lsMW91NlptTThyZ3FSUTVGY2dMa0FqQVF0WS8xVW1p?=
+ =?utf-8?B?TWdKajhWZ0JkbTdtYkcwZmhoSWZETVVPMFNRZXQ2VERxd0dqdVN4dEpDQ0hx?=
+ =?utf-8?B?ZlBQbHlUT3VMU0VGTG9ZUUdWT0wxNDlnaUVEMExjeXdWSmxuZDlwTDdrSHlw?=
+ =?utf-8?B?TUx1UnBjdEEwaThuU1ZkeUlYWnpqRktoQm5OQmV6azRzNnVaNGY3NHZqak5D?=
+ =?utf-8?B?UFJHM01nSnhORlgwWlNDSEFWOHIrT0hDU1FGRDF3NHlnRG0xK2N5elJnREx6?=
+ =?utf-8?B?Mmw0ZDl1cG93VXZvUXRJbHVxajd5ZDZVdnI0WHFMcWJEQUpGVnI3S25WOGw4?=
+ =?utf-8?B?M3FrNWt5TUFBeEhYbVFsWXF4OGNvV1ZjcnlEdlR6UFFlK296UXpMZkRpclFl?=
+ =?utf-8?B?bW9TUUJGNk4vZ242K2ZpbEpyTUNBNHZvZ0xoRXJJNEE0Y1FkVHQyQU9tRGdz?=
+ =?utf-8?B?UDV0UmFuZUdDWG55K0lPM0dJNVI2NG10ZkZHazJvNjVlZS85RDlXZXJHYUR6?=
+ =?utf-8?B?WEdmUURoalR5elh6R0V6c0dQZTFSek9MZnVRQWhIZmJEYlhhOW9kS3UvQkpE?=
+ =?utf-8?B?UnRTUnZkWEpPT1UzdVVVRUFkN2xJeVkxSGc2U1hsS2l3emZVOVhFSXZXcXBE?=
+ =?utf-8?B?aWorWU4zaE01MjErMGxPZWM1TGFGd3YybDlYZWtRQmhHT29tOFBoVzZaYXNu?=
+ =?utf-8?B?dFpOalVjeDdmeVB6UjZDYWtJMTd5OVZDMWlRNFRKaVNKYitkUUpzRzArVkEx?=
+ =?utf-8?B?QmVOdHNXY0M0RytCSHorc0NnY1VRc3R1blNmd0l4eUROb0tKMnpOQlNpL1do?=
+ =?utf-8?B?THpZWS9aekRlOEhsTWIwVFJrYlBPUDlNYS9VcTVOQlpTRlFuUW01VlZvWVJx?=
+ =?utf-8?B?VWV6L3kydXdoMmYzTGl1eiszVU9oZDlZa0dFdEk5SWNhakFxdHZ6bmtSQVAw?=
+ =?utf-8?B?cWxVMTcyVnIrVlpsajFsS2RmckpocUpRNTZOdUM2SE9aOHJDRUFvMnYvdCtJ?=
+ =?utf-8?B?RGZIcEdTTWx5U2ZTemdVSis4b1lIaXN4ZEorWmFTRTVkRXVNbWorbjduTERW?=
+ =?utf-8?B?bXVUZEpMcHRrZG83YWdtRlF5N2F4WWpvYlBMN0RVdkR0QVVOd3Q4QzFGakhl?=
+ =?utf-8?B?UXQvQ1ZaV1VlWWM5ZzNjWnlpZm40MEwrbGYreU1kaVJkQk0vTFhsUjlybFlj?=
+ =?utf-8?B?bUJZOG1vb1N3OXRlWVJ0c0Z3ZVRHbHh6WFIvRVBOUkdGZDZtazZ6WFVLbnFZ?=
+ =?utf-8?B?WlpDaE1XT3FnZkF5Y3VRNkxLb25DQXpuUzdyOFJTV2pPcW5EeHN1cDIzMSt0?=
+ =?utf-8?B?QWdiOVNPQzlUYk9DbXU1TURaT2I3aWJ5b2xLck9UNjVzV0ZEbmI3ZFNrQ3Fz?=
+ =?utf-8?B?TFZnYnQvUFhudHhGcVBkaWoxaEN1RnNMZlkvWHo5SGJNM0RKVkR5UmtyakJE?=
+ =?utf-8?B?UlF0Q05wZ0RUOS9LYkZrRGRhZ3NBTW5zelJ4L0M3eVhUZG9xWWVMdHpDTUND?=
+ =?utf-8?B?b2FYNWdLcEhTbi9QOGNFM2dJbVlBRmFtc2s0NXd2cFdXUXhTRUxiRUVDdEll?=
+ =?utf-8?B?bEY5aGpNMTk2SUNtR1FKMnl1QnRyc1lzd1h5V3JtV1hMdkJBMTdqZjJneGRr?=
+ =?utf-8?B?U3dLc2kraVV1RmFpbjVSTUZnT3BsRGQyU0xmR1hvRjZoRXdlc0VuZmFaNVZU?=
+ =?utf-8?B?N1NEZldjb1RyTnN0S3Z4a1FmRElSRUVFMis4WFM5MnN5UERxSEFlR2VIMWg5?=
+ =?utf-8?Q?E10FHiN9nPRpjvL5Gz6x64UPrU4ngP4cNivhER1?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a6495ca-6f64-4246-acd4-08d97c7f9186
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2021 21:42:39.5707
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q2ISgDibuRUFWa08UjJiu1lGjFgGnIeK0SlwpcAY2HfF/xe4qOZ7cPbsGduML7nTAXCyARO49aozlA92rgQzpg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3198
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-dmaengine_terminate_all() is deprecated in favor of explicitly saying if
-it should be sync or async.  Here, we use dmaengine_terminate_sync in
-i2c_xfer and i2c_smbus_xfer handlers and rely on
-dmaengine_terminate_async within interrupt handlers
-(transmission error cases).
-dmaengine_synchronize is added within i2c_xfer and i2c_smbus_xfer handler
-to finalize terminate started in interrupt handlers.
+Commit ac3a68d56651 ("net: phy: don't abuse devres in
+devm_mdiobus_register()") by Bartosz Golaszewski has introduced two
+classes of potential bugs by making the devres callback of
+devm_mdiobus_alloc stop calling mdiobus_unregister.
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- drivers/i2c/busses/i2c-stm32f7.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+The exact buggy circumstances are presented in the individual commit
+messages. I have searched the tree for other occurrences, but at the
+moment:
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 50d5ae81d227..66145d2b9b55 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1521,7 +1521,7 @@ static irqreturn_t stm32f7_i2c_isr_event(int irq, void *data)
- 		writel_relaxed(STM32F7_I2C_ICR_NACKCF, base + STM32F7_I2C_ICR);
- 		if (i2c_dev->use_dma) {
- 			stm32f7_i2c_disable_dma_req(i2c_dev);
--			dmaengine_terminate_all(dma->chan_using);
-+			dmaengine_terminate_async(dma->chan_using);
- 		}
- 		f7_msg->result = -ENXIO;
- 	}
-@@ -1588,7 +1588,7 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
- 	if (!ret) {
- 		dev_dbg(i2c_dev->dev, "<%s>: Timed out\n", __func__);
- 		stm32f7_i2c_disable_dma_req(i2c_dev);
--		dmaengine_terminate_all(dma->chan_using);
-+		dmaengine_terminate_async(dma->chan_using);
- 		f7_msg->result = -ETIMEDOUT;
- 	}
- 
-@@ -1665,7 +1665,7 @@ static irqreturn_t stm32f7_i2c_isr_error(int irq, void *data)
- 	/* Disable dma */
- 	if (i2c_dev->use_dma) {
- 		stm32f7_i2c_disable_dma_req(i2c_dev);
--		dmaengine_terminate_all(dma->chan_using);
-+		dmaengine_terminate_async(dma->chan_using);
- 	}
- 
- 	i2c_dev->master_mode = false;
-@@ -1702,6 +1702,9 @@ static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
- 						i2c_dev->adap.timeout);
- 	ret = f7_msg->result;
- 	if (ret) {
-+		if (i2c_dev->use_dma)
-+			dmaengine_synchronize(dma->chan_using);
-+
- 		/*
- 		 * It is possible that some unsent data have already been
- 		 * written into TXDR. To avoid sending old data in a
-@@ -1716,7 +1719,7 @@ static int stm32f7_i2c_xfer(struct i2c_adapter *i2c_adap,
- 		dev_dbg(i2c_dev->dev, "Access to slave 0x%x timed out\n",
- 			i2c_dev->msg->addr);
- 		if (i2c_dev->use_dma)
--			dmaengine_terminate_all(dma->chan_using);
-+			dmaengine_terminate_sync(dma->chan_using);
- 		stm32f7_i2c_wait_free_bus(i2c_dev);
- 		ret = -ETIMEDOUT;
- 	}
-@@ -1761,6 +1764,9 @@ static int stm32f7_i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- 					      i2c_dev->adap.timeout);
- 	ret = f7_msg->result;
- 	if (ret) {
-+		if (i2c_dev->use_dma)
-+			dmaengine_synchronize(dma->chan_using);
-+
- 		/*
- 		 * It is possible that some unsent data have already been
- 		 * written into TXDR. To avoid sending old data in a
-@@ -1774,7 +1780,7 @@ static int stm32f7_i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- 	if (!timeout) {
- 		dev_dbg(dev, "Access to slave 0x%x timed out\n", f7_msg->addr);
- 		if (i2c_dev->use_dma)
--			dmaengine_terminate_all(dma->chan_using);
-+			dmaengine_terminate_sync(dma->chan_using);
- 		stm32f7_i2c_wait_free_bus(i2c_dev);
- 		ret = -ETIMEDOUT;
- 		goto pm_free;
+- for issue (a) I have no concrete proof that other buses except SPI and
+  I2C suffer from it, and the only SPI or I2C device drivers that call
+  of_mdiobus_alloc are the DSA drivers that leave a NULL
+  ds->slave_mii_bus and a non-NULL ds->ops->phy_read, aka ksz9477,
+  ksz8795, lan9303_i2c, vsc73xx-spi.
+
+- for issue (b), all drivers which call of_mdiobus_alloc either use
+  of_mdiobus_register too, or call mdiobus_unregister sometime within
+  the ->remove path.
+
+Although at this point I've seen enough strangeness caused by this
+"device_del during ->shutdown" that I'm just going to copy the SPI and
+I2C subsystem maintainers to this patch series, to get their feedback
+whether they've had reports about things like this before. I don't think
+other buses behave in this way, it forces SPI and I2C devices to have to
+protect themselves from a really strange set of issues.
+
+Vladimir Oltean (2):
+  net: dsa: don't allocate the slave_mii_bus using devres
+  net: dsa: realtek: register the MDIO bus under devres
+
+ drivers/net/dsa/realtek-smi-core.c |  2 +-
+ net/dsa/dsa2.c                     | 12 +++++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
 -- 
 2.25.1
 
