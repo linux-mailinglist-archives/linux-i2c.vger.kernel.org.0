@@ -2,250 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E780E413140
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Sep 2021 12:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC064131F1
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Sep 2021 12:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbhIUKJ3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Sep 2021 06:09:29 -0400
-Received: from mout.gmx.net ([212.227.17.21]:56905 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229833AbhIUKJ1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 21 Sep 2021 06:09:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1632218864;
-        bh=QZxXmLWDDXyrpBcPm6Htc27LFauCgm5JyGZwbhwuKDY=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=FCD9yQ4BTL6mepYHdacT2VlA/5kBUUKLyuVturdfmPvNT3nXLEdEsse4d75oMyZOI
-         dehNl25vd25vDV5beifzSb9U4f/dSDYtSFFGL6pgiNmyIuoDH7oXZTcooS1yOX8Zm2
-         W1E7JCS6HQjb2+3OjbuNjC/E1qT7r5t1MhieIRwM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.51] ([46.223.119.124]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M59C8-1mTicO0244-001BKO; Tue, 21
- Sep 2021 12:07:44 +0200
-Subject: Re: [PATCH net 1/2] net: dsa: don't allocate the slave_mii_bus using
- devres
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>
-References: <20210920214209.1733768-1-vladimir.oltean@nxp.com>
- <20210920214209.1733768-2-vladimir.oltean@nxp.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <95836a0f-a2fd-f557-d8e6-aea044552be4@gmx.de>
-Date:   Tue, 21 Sep 2021 12:07:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231823AbhIUKvd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Sep 2021 06:51:33 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:31784 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231189AbhIUKvb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Sep 2021 06:51:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632221216;
+    s=strato-dkim-0002; d=fpond.eu;
+    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Sx06uvrl+e0LyA/YFWFUPKtUiEYmws41XgsZoMZbkc8=;
+    b=NFpzdTEh6U6tDWgj+/r+AcrE0mTMQCxfJwGEuv/NSk51r/Px02YwooSpud4Lxa3d41
+    pf78fNDqe+rsSsq8nqOK6Elzju77PS2DH5oo1QVjQw4hb0pnib6D/Om+BgwKtM7mRubV
+    Lua6T6iKpL/bAMYErdNn3xjTcKw9X/KyMU5Jxl3ux/sUMBf7HXsLzVE2DgwDL0vONTGd
+    QPf1QS+Smz4IMtWD0EhcZxo42WatIDMSYjrmLXdKEV/TnoR8QXUJAoWB65PpTuqGDTcU
+    y1pcy1TF10WETNPtstiq23XxBLlzT7Tj+4d3lPzkrmJbGZvdoWZPN/hb9VbMueJTdNbN
+    I/9g==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fGl/w2B+Io="
+X-RZG-CLASS-ID: mo00
+Received: from oxapp02-03.back.ox.d0m.de
+    by smtp-ox.front (RZmta 47.33.8 AUTH)
+    with ESMTPSA id c00f85x8LAku4Et
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 21 Sep 2021 12:46:56 +0200 (CEST)
+Date:   Tue, 21 Sep 2021 12:46:56 +0200 (CEST)
+From:   Ulrich Hecht <uli@fpond.eu>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Ryo Kataoka <ryo.kataoka.wt@renesas.com>
+Message-ID: <936300701.1399345.1632221216524@webmail.strato.com>
+In-Reply-To: <20210915134827.13043-1-wsa+renesas@sang-engineering.com>
+References: <20210915134827.13043-1-wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH] i2c: rcar: enable interrupts before starting transfer
 MIME-Version: 1.0
-In-Reply-To: <20210920214209.1733768-2-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:NkAVTnEyhm2vdK9QUdzen/J3N5gtCaSWa0P6AkNwoCQ0amYDijW
- 2C1tZ+WS+V+PC7elFG6xVPcQn4/VOVUQxxIoECBqIj/dKmXuSMT2u6X2vMqdyIMOwyGfsfh
- Ck/NQshr7dgzFY2L8PYZjc9rQiWyvJMUF2P9r1gwY/ssmcNrGSGjIg3XEg+EYDPkv9DZYjY
- iFuvlYBrNmjOEk8VSEOPw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wtBxQQDx5hM=:z9y8MdAg8U14iyTYDVsdSn
- 7Y1aSWwowYcW3BPzr0PRkRJH8zfeETUccrA9VisCuOcmTau1S3W73G7lhWdu3lbNDQwv8gX7P
- chBFy4F4u9vCtaizSfEE4Cjk0s88xqyj1ObLfh7NtNqvLXu+/x3W7WlxUbgveJGME+ibp+P6O
- rXxNZBY31znaqvW8+VGKDRGy/22HvzbXpojHbKSy5z5+mQBHUBaS1lpEHSvdnEOus0OswNeNm
- 5JIvT2H1+tYHl0qUjlotuovfWiAqGrdkKjWK7yCf1+fIoS2cDUaLL4V9X59/NIiQCJwyxUpH+
- 6xUI/aCRliQjfRPpdxCtKa30J9c6fsYjGion43e36AU0kdq1nDqkyDdlaAIJl+tGK7jDXzgo1
- 5H+OFTFGhdh8T/UEAyRfi+aHsYc8B4S+EkE3p/LpGbVFc2BQCJEjFPkPLyyHrwzDV8ESe12KX
- yC/Z+ptwwf3l9EhpJ+VQeE/zQoL+IHJH+2hOpoJoGFjbFgzf3GaO0skz8L8VWqrnWD/ozDW/k
- Krtvr4oLuKGn/YV5N7esNyR847uMob7hZX2x+na2+tgJvjWwyUFUL70lnswiqghfvfXN+VfSs
- 69PDfqHIEyLobBaRNK2UHEclVMa/sSH8xp/iGGzPwSdtuMSU5pPiP1JHmSs5GtrmW7e/ZX8zT
- AXt1cuNy6YRiw3SDPltsVlBsKNvn7u1Aw2gSQLwr9XShlzD0Bv4Q2TrV9MUgt3zbNq1at94gi
- 88UVJXSKb32yYn8mtGmZND5CV1tbnY25QNfAi/bXlrRgKfEA4l5Hvf3SgAJQw7USYSYSXI3rK
- NI+UTPjScU6q3OmPcnRynr6n0qnqa6CHc02pIbBHu37PPFQyb0HqErs6joCNOJXwRr0PS5qwl
- Nw8lk/FxF3R8OG7msImlKMt/rV07S4lXo3LZi2tO6MJFWFp5C+ORdof6qJ/+zo/VFtKhiZhVP
- AwnwDYku2HASuQNyyG2+FX/g5Q96qP/UhJZ+eQRjUUYnI0sbucMNAEnH7Zvr4KAHvXIxly8V5
- /johf6CeL1h6H3HsTmiXUWycQcT5EMpHqycsfqH8wxq9nAZQWR9bxJPp/tkHbu5z0HAz2H9ac
- tWp6fMfIaIJkf0=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.5-Rev23
+X-Originating-Client: open-xchange-appsuite
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
-Hi Vladimir,
-
-On 20.09.21 at 23:42, Vladimir Oltean wrote:
-> The Linux device model permits both the ->shutdown and ->remove driver
-> methods to get called during a shutdown procedure. Example: a DSA switch
-> which sits on an SPI bus, and the SPI bus driver calls this on its
-> ->shutdown method:
->
-> spi_unregister_controller
-> -> device_for_each_child(&ctlr->dev, NULL, __unregister);
->    -> spi_unregister_device(to_spi_device(dev));
->       -> device_del(&spi->dev);
->
-> So this is a simple pattern which can theoretically appear on any bus,
-> although the only other buses on which I've been able to find it are
-> I2C:
->
-> i2c_del_adapter
-> -> device_for_each_child(&adap->dev, NULL, __unregister_client);
->    -> i2c_unregister_device(client);
->       -> device_unregister(&client->dev);
->
-> The implication of this pattern is that devices on these buses can be
-> unregistered after having been shut down. The drivers for these devices
-> might choose to return early either from ->remove or ->shutdown if the
-> other callback has already run once, and they might choose that the
-> ->shutdown method should only perform a subset of the teardown done by
-> ->remove (to avoid unnecessary delays when rebooting).
->
-> So in other words, the device driver may choose on ->remove to not
-> do anything (therefore to not unregister an MDIO bus it has registered
-> on ->probe), because this ->remove is actually triggered by the
-> device_shutdown path, and its ->shutdown method has already run and done
-> the minimally required cleanup.
->
-> This used to be fine until the blamed commit, but now, the following
-> BUG_ON triggers:
->
-> void mdiobus_free(struct mii_bus *bus)
-> {
-> 	/* For compatibility with error handling in drivers. */
-> 	if (bus->state =3D=3D MDIOBUS_ALLOCATED) {
-> 		kfree(bus);
-> 		return;
-> 	}
->
-> 	BUG_ON(bus->state !=3D MDIOBUS_UNREGISTERED);
-> 	bus->state =3D MDIOBUS_RELEASED;
->
-> 	put_device(&bus->dev);
-> }
->
-> In other words, there is an attempt to free an MDIO bus which was not
-> unregistered. The attempt to free it comes from the devres release
-> callbacks of the SPI device, which are executed after the device is
-> unregistered.
->
-> I'm not saying that the fact that MDIO buses allocated using devres
-> would automatically get unregistered wasn't strange. I'm just saying
-> that the commit didn't care about auditing existing call paths in the
-> kernel, and now, the following code sequences are potentially buggy:
->
-> (a) devm_mdiobus_alloc followed by plain mdiobus_register, for a device
->     located on a bus that unregisters its children on shutdown. After
->     the blamed patch, either both the alloc and the register should use
->     devres, or none should.
->
-> (b) devm_mdiobus_alloc followed by plain mdiobus_register, and then no
->     mdiobus_unregister at all in the remove path. After the blamed
->     patch, nobody unregisters the MDIO bus anymore, so this is even more
->     buggy than the previous case which needs a specific bus
->     configuration to be seen, this one is an unconditional bug.
->
-> In this case, DSA falls into category (a), it tries to be helpful and
-> registers an MDIO bus on behalf of the switch, which might be on such a
-> bus. I've no idea why it does it under devres.
->
-> It does this on probe:
->
-> 	if (!ds->slave_mii_bus && ds->ops->phy_read)
-> 		alloc and register mdio bus
->
-> and this on remove:
->
-> 	if (ds->slave_mii_bus && ds->ops->phy_read)
-> 		unregister mdio bus
->
-> I _could_ imagine using devres because the condition used on remove is
-> different than the condition used on probe. So strictly speaking, DSA
-> cannot determine whether the ds->slave_mii_bus it sees on remove is the
-> ds->slave_mii_bus that _it_ has allocated on probe. Using devres would
-> have solved that problem. But nonetheless, the existing code already
-> proceeds to unregister the MDIO bus, even though it might be
-> unregistering an MDIO bus it has never registered. So I can only guess
-> that no driver that implements ds->ops->phy_read also allocates and
-> registers ds->slave_mii_bus itself.
->
-> So in that case, if unregistering is fine, freeing must be fine too.
->
-> Stop using devres and free the MDIO bus manually. This will make devres
-> stop attempting to free a still registered MDIO bus on ->shutdown.
->
-> Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_regis=
-ter()")
-> Reported-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> On 09/15/2021 3:48 PM Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
+> 
+>  
+> We want to enable the interrupts _before_ starting the transfer because
+> it is good programming style and also the proposed order in the R-Car
+> manual. There is no difference in practice because it doesn't matter in
+> which order both conditions appear if we wait for both to happen.
+> 
+> Signed-off-by: Ryo Kataoka <ryo.kataoka.wt@renesas.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
->  net/dsa/dsa2.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
-> index f14897d9b31d..274018e9171c 100644
-> --- a/net/dsa/dsa2.c
-> +++ b/net/dsa/dsa2.c
-> @@ -880,7 +880,7 @@ static int dsa_switch_setup(struct dsa_switch *ds)
->  	devlink_params_publish(ds->devlink);
->
->  	if (!ds->slave_mii_bus && ds->ops->phy_read) {
-> -		ds->slave_mii_bus =3D devm_mdiobus_alloc(ds->dev);
-> +		ds->slave_mii_bus =3D mdiobus_alloc();
->  		if (!ds->slave_mii_bus) {
->  			err =3D -ENOMEM;
->  			goto teardown;
-> @@ -890,13 +890,16 @@ static int dsa_switch_setup(struct dsa_switch *ds)
->
->  		err =3D mdiobus_register(ds->slave_mii_bus);
->  		if (err < 0)
-> -			goto teardown;
-> +			goto free_slave_mii_bus;
+>  drivers/i2c/busses/i2c-rcar.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+> index bff9913c37b8..fc13511f4562 100644
+> --- a/drivers/i2c/busses/i2c-rcar.c
+> +++ b/drivers/i2c/busses/i2c-rcar.c
+> @@ -339,6 +339,9 @@ static void rcar_i2c_prepare_msg(struct rcar_i2c_priv *priv)
+>  		priv->flags |= ID_LAST_MSG;
+>  
+>  	rcar_i2c_write(priv, ICMAR, i2c_8bit_addr_from_msg(priv->msg));
+> +	if (!priv->atomic_xfer)
+> +		rcar_i2c_write(priv, ICMIER, read ? RCAR_IRQ_RECV : RCAR_IRQ_SEND);
+> +
+>  	/*
+>  	 * We don't have a test case but the HW engineers say that the write order
+>  	 * of ICMSR and ICMCR depends on whether we issue START or REP_START. Since
+> @@ -354,9 +357,6 @@ static void rcar_i2c_prepare_msg(struct rcar_i2c_priv *priv)
+>  			rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_START);
+>  		rcar_i2c_write(priv, ICMSR, 0);
 >  	}
->
->  	ds->setup =3D true;
->
->  	return 0;
->
-> +free_slave_mii_bus:
-> +	if (ds->slave_mii_bus && ds->ops->phy_read)
-> +		mdiobus_free(ds->slave_mii_bus);
->  teardown:
->  	if (ds->ops->teardown)
->  		ds->ops->teardown(ds);
-> @@ -921,8 +924,11 @@ static void dsa_switch_teardown(struct dsa_switch *=
-ds)
->  	if (!ds->setup)
->  		return;
->
-> -	if (ds->slave_mii_bus && ds->ops->phy_read)
-> +	if (ds->slave_mii_bus && ds->ops->phy_read) {
->  		mdiobus_unregister(ds->slave_mii_bus);
-> +		mdiobus_free(ds->slave_mii_bus);
-> +		ds->slave_mii_bus =3D NULL;
-> +	}
->
->  	dsa_switch_unregister_notifier(ds);
->
->
+> -
+> -	if (!priv->atomic_xfer)
+> -		rcar_i2c_write(priv, ICMIER, read ? RCAR_IRQ_RECV : RCAR_IRQ_SEND);
+>  }
+>  
+>  static void rcar_i2c_next_msg(struct rcar_i2c_priv *priv)
+> -- 
+> 2.30.2
 
-I applied this patch on top of your series "Make DSA switch drivers compat=
-ible with
-masters which unregister on shutdown" and now the shutdown works as expect=
-ed (i.e.
-no hang as without your patches and no kernel BUG as with only the above m=
-entioned
-series applied).
+Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
 
-Great job, thanks a lot!
-
-FWIW:
-Tested-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-
-Best Regards,
-Lino
-
-
+CU
+Uli
