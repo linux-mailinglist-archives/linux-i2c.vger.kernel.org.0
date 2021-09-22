@@ -2,81 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A359F414E6E
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Sep 2021 18:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C874151EC
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Sep 2021 22:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236638AbhIVQ6x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Sep 2021 12:58:53 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:36549 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236537AbhIVQ6x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Sep 2021 12:58:53 -0400
+        id S237881AbhIVU4q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Sep 2021 16:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237882AbhIVU4l (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Sep 2021 16:56:41 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA33C0613E4
+        for <linux-i2c@vger.kernel.org>; Wed, 22 Sep 2021 13:55:07 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id e15so17114345lfr.10
+        for <linux-i2c@vger.kernel.org>; Wed, 22 Sep 2021 13:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1632329843; x=1663865843;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AkgT5JiHWx2mZGF7DusjmOiIvbj1ToNLNU0qRyMkF2w=;
-  b=DaoOUbg3Ocznz1rtezTfs2fTjXp3HocgQRMq5zlu9g5IFwPDJtOj8smj
-   m6/ite9EbNlYOYQhzlEn68aBNsTX/RmyIEaC+CT+F38TXljRLwGgpwSaB
-   2x/wgSQnCOAOfXvdSUHpGkv4/+BTYN6+yyjWxhqM+jrRUauLc3/H3LiS8
-   4=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 22 Sep 2021 09:57:23 -0700
-X-QCInternal: smtphost
-Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2021 09:57:22 -0700
-Received: from localhost (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7; Wed, 22 Sep 2021
- 09:57:21 -0700
-From:   Jamie Iles <quic_jiles@quicinc.com>
-To:     <linux-i2c@vger.kernel.org>
-CC:     Jamie Iles <quic_jiles@quicinc.com>,
-        Octavian Purdila <octavian.purdila@intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] i2c / ACPI: fix resource leak in reconfiguration device addition
-Date:   Wed, 22 Sep 2021 17:57:18 +0100
-Message-ID: <20210922165718.179585-1-quic_jiles@quicinc.com>
-X-Mailer: git-send-email 2.30.2
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
+        b=fr8lNb1tzuroNDnbJJtYWeXOCGZbssrkZvaRy8HVdYCeSSxS96vSwd3R2+r1vg3M6/
+         ex66FoD7Oi9BZ+eroN2ctcLno3UxJhL89X1t6yEsFayGc2q4Pz0zZQBaUGqcHr3s/S1+
+         lgIwwHuJ4O8SDnA5oR3zC/CFwa9fWO84703n6I2aQyNKP1VzeqgyNRTdZaVTG81gy6Vx
+         t6u58+esbUQxWBZY5IFD1w784RDrV2U7d72/V+RQAoF8LyHU+KHsqwJTuZK+RI9xoYHQ
+         hU/k+XKo5P60J+yjbN5r0LQMnBzU5qvJitpMdoh7dt6f9DChJ/lZbweVN/xESakomSrI
+         Tc/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
+        b=Ltn9W17z7tqkLWrdPnjb1a7OFYI1+JNZF0Jb1iQNbudlRTRLNBpsBHMb0PcY/SEVsO
+         BWuJZ8IUUd3B8VS9jE70Qh4trM0aQznAq/W53iQOsxEHf2YexhXAvRpAJrZC4YfXzlXK
+         WYCF9zYX6pxy/TqCy+Otj2SeqDttGLZjjDyrPccp9flZtCWJrw4dEEAy8G2nJB2kSzkb
+         YZomMqxE2UCZJBS59LBeSZPCaEjZdjGTMLFWrgoJVbZSMjP9zDk9oedB375L5ib9mtut
+         4ntBxGLb6M0DsXLVfFs9fK6xefhsU3pKwYWUUrMQVAtEwSx6kmjzHjfgyDuZ1tMvcJjW
+         2yFA==
+X-Gm-Message-State: AOAM531hPjrwN/aCMyde1KZesRA7lImwPLn5yAcYCtIeY85Mp9gnHsC2
+        eYDjZdWxCpT7AnnTZ79QrDh2TSz86JirlZJTkhDulqNJOl0=
+X-Google-Smtp-Source: ABdhPJwYYn7ZwazUxB30/XTxKCOf4dlZaC6TfP1ljKsU4ZNb40cpLRsdAvw7sAb51nYQkeG7S6W5vU7Cgq+lC3FYxgE=
+X-Received: by 2002:a05:651c:1546:: with SMTP id y6mr1383813ljp.53.1632344095088;
+ Wed, 22 Sep 2021 13:54:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Sender: ratcliffijames58@gmail.com
+Received: by 2002:a05:6504:5067:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:54:54
+ -0700 (PDT)
+From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
+Date:   Wed, 22 Sep 2021 21:54:54 +0100
+X-Google-Sender-Auth: B3PIuwFz7UcaHNCffYC8akvbLEk
+Message-ID: <CAKVTYWSPSMf085dB7FkhkLr9XtoZHkjbvunoMard5qsSPn4ZOg@mail.gmail.com>
+Subject: My Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-acpi_i2c_find_adapter_by_handle() calls bus_find_device() which takes a
-reference on the adapter which is never released which will result in a
-reference count leak and render the adapter unremovable.  Make sure to
-put the adapter after creating the client in the same manner that we do
-for OF.
-
-Fixes: 525e6fabeae2 ("i2c / ACPI: add support for ACPI reconfigure notifications")
-Cc: Octavian Purdila <octavian.purdila@intel.com>
-Cc: Wolfram Sang <wsa@kernel.org>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Jamie Iles <quic_jiles@quicinc.com>
----
- drivers/i2c/i2c-core-acpi.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 6f0aa0ed3241..74925621f239 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -422,6 +422,7 @@ static int i2c_acpi_notify(struct notifier_block *nb, unsigned long value,
- 			break;
- 
- 		i2c_acpi_register_device(adapter, adev, &info);
-+		put_device(&adapter->dev);
- 		break;
- 	case ACPI_RECONFIG_DEVICE_REMOVE:
- 		if (!acpi_device_enumerated(adev))
--- 
-2.30.2
-
+Assalamu alaikum,
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological,
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children. I have investment funds
+worth Twenty Seven Million Five Hundred Thousand United State Dollar
+($27.500.000.00 ) and i need a trusted  investment Manager/Partner
+because of my current refugee status, however, I am interested in you
+for investment project assistance in your country. If you are willing
+to handle this project on my behalf kindly reply urgently to enable me
+to provide you more information about the investment
+funds.
+Best Regards
