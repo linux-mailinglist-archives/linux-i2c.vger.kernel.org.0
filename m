@@ -2,181 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9497E414DDF
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Sep 2021 18:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A359F414E6E
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Sep 2021 18:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236523AbhIVQQC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Sep 2021 12:16:02 -0400
-Received: from esa2.mentor.iphmx.com ([68.232.141.98]:58872 "EHLO
-        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236590AbhIVQQB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Sep 2021 12:16:01 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Sep 2021 12:15:58 EDT
-IronPort-SDR: 8UbnJGYKp9g00cfXnidR4XekML9AcaN1ikXoDPxI2aQNPOoTV25+1C1mpXUp410raLMJXgsIt8
- w8a/HmajNMuBBDJuYoG0ril5cWCdnSJ+Jlku2Eb8Qmcr9OUTFV5xaiE/3Fb/GGFRanKSsA1k3h
- nLUv51cpctMCSfQGfmJwvMakTCcHm8JGROPCi8HaD5FHVGqQiwNy8xakz6kkgbXfYw38kSMUMB
- FvedneDgXWpSHS8k3DqS8bAAfQZIAfDDehfqeX9H8B9QCw4FYZJock2nD6UJ9RFker5pCYg8e2
- 9HYEIwFf5lqfyr7uKO003n3F
-X-IronPort-AV: E=Sophos;i="5.85,314,1624348800"; 
-   d="scan'208";a="66169774"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa2.mentor.iphmx.com with ESMTP; 22 Sep 2021 08:07:17 -0800
-IronPort-SDR: TwrNP43X+qzAXREQFCLy/SGbiiUY1GzxlrBsCdu12I4vPOafw+HdxOo6U9v3SJrpthiMSoAY6i
- hJzGfLJNIlteK0lrzkaprszqmfSRArd2V7YcqrwpPx57nJ0fwNp1nB9ObXPTQQNXKBUFoHRYqI
- ZMbsvqtAiVAGVuyEUsyqoUsX95td5nNFjhAvo1ZwP7X4kOitS9c3sQex7bQ+HkF323QMlGB7bD
- dlhHSPEusa3Bfa8g+I1LOQvwNMI/+8RnxbcxonUhzGzvQ0a7HcFQcsiFoGI0wPtq7J9g8EzSt6
- WLA=
-From:   Andrew Gabbasov <andrew_gabbasov@mentor.com>
-To:     <linux-renesas-soc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
-Subject: [PATCH] i2c: rcar: add SMBus block read support
-Date:   Wed, 22 Sep 2021 11:06:49 -0500
-Message-ID: <20210922160649.28449-1-andrew_gabbasov@mentor.com>
-X-Mailer: git-send-email 2.21.0
+        id S236638AbhIVQ6x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Sep 2021 12:58:53 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:36549 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236537AbhIVQ6x (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Sep 2021 12:58:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1632329843; x=1663865843;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AkgT5JiHWx2mZGF7DusjmOiIvbj1ToNLNU0qRyMkF2w=;
+  b=DaoOUbg3Ocznz1rtezTfs2fTjXp3HocgQRMq5zlu9g5IFwPDJtOj8smj
+   m6/ite9EbNlYOYQhzlEn68aBNsTX/RmyIEaC+CT+F38TXljRLwGgpwSaB
+   2x/wgSQnCOAOfXvdSUHpGkv4/+BTYN6+yyjWxhqM+jrRUauLc3/H3LiS8
+   4=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 22 Sep 2021 09:57:23 -0700
+X-QCInternal: smtphost
+Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2021 09:57:22 -0700
+Received: from localhost (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7; Wed, 22 Sep 2021
+ 09:57:21 -0700
+From:   Jamie Iles <quic_jiles@quicinc.com>
+To:     <linux-i2c@vger.kernel.org>
+CC:     Jamie Iles <quic_jiles@quicinc.com>,
+        Octavian Purdila <octavian.purdila@intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH] i2c / ACPI: fix resource leak in reconfiguration device addition
+Date:   Wed, 22 Sep 2021 17:57:18 +0100
+Message-ID: <20210922165718.179585-1-quic_jiles@quicinc.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [137.202.0.90]
-X-ClientProxiedBy: svr-ies-mbx-06.mgc.mentorg.com (139.181.222.6) To
- svr-ies-mbx-02.mgc.mentorg.com (139.181.222.2)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The smbus block read is not currently supported for rcar i2c devices.
-This patchset adds the support to rcar i2c bus so that blocks of data
-can be read using SMbus block reads.(using i2c_smbus_read_block_data()
-function from the i2c-core-smbus.c).
+acpi_i2c_find_adapter_by_handle() calls bus_find_device() which takes a
+reference on the adapter which is never released which will result in a
+reference count leak and render the adapter unremovable.  Make sure to
+put the adapter after creating the client in the same manner that we do
+for OF.
 
-Inspired by commit 8e8782c71595 ("i2c: imx: add SMBus block read support")
-
-This patch (adapted) was tested with v4.14, but due to lack of real
-hardware with SMBus block read operations support, using "simulation",
-that is manual analysis of data, read from plain I2C devices with
-SMBus block read request.
-
-Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
-Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+Fixes: 525e6fabeae2 ("i2c / ACPI: add support for ACPI reconfigure notifications")
+Cc: Octavian Purdila <octavian.purdila@intel.com>
+Cc: Wolfram Sang <wsa@kernel.org>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Jamie Iles <quic_jiles@quicinc.com>
 ---
- drivers/i2c/busses/i2c-rcar.c | 45 +++++++++++++++++++++++++++++++----
- 1 file changed, 41 insertions(+), 4 deletions(-)
+ drivers/i2c/i2c-core-acpi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index bff9913c37b8..a9fc2b3b6392 100644
---- a/drivers/i2c/busses/i2c-rcar.c
-+++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -105,6 +105,7 @@
- #define ID_DONE		(1 << 2)
- #define ID_ARBLOST	(1 << 3)
- #define ID_NACK		(1 << 4)
-+#define ID_EPROTO	(1 << 5)
- /* persistent flags */
- #define ID_P_HOST_NOTIFY	BIT(28)
- #define ID_P_REP_AFTER_RD	BIT(29)
-@@ -412,6 +413,7 @@ static bool rcar_i2c_dma(struct rcar_i2c_priv *priv)
- 	struct device *dev = rcar_i2c_priv_to_dev(priv);
- 	struct i2c_msg *msg = priv->msg;
- 	bool read = msg->flags & I2C_M_RD;
-+	bool block_data = msg->flags & I2C_M_RECV_LEN;
- 	enum dma_data_direction dir = read ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
- 	struct dma_chan *chan = read ? priv->dma_rx : priv->dma_tx;
- 	struct dma_async_tx_descriptor *txdesc;
-@@ -429,9 +431,16 @@ static bool rcar_i2c_dma(struct rcar_i2c_priv *priv)
- 		/*
- 		 * The last two bytes needs to be fetched using PIO in
- 		 * order for the STOP phase to work.
-+		 *
-+		 * For SMBus block read the first byte was received using PIO.
- 		 */
--		buf = priv->msg->buf;
--		len = priv->msg->len - 2;
-+		if (block_data) {
-+			buf = priv->msg->buf + 1;
-+			len = priv->msg->len - 3;
-+		} else {
-+			buf = priv->msg->buf;
-+			len = priv->msg->len - 2;
-+		}
- 	} else {
- 		/*
- 		 * First byte in message was sent using PIO.
-@@ -530,6 +539,7 @@ static void rcar_i2c_irq_send(struct rcar_i2c_priv *priv, u32 msr)
- static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
- {
- 	struct i2c_msg *msg = priv->msg;
-+	bool block_data = msg->flags & I2C_M_RECV_LEN;
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index 6f0aa0ed3241..74925621f239 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -422,6 +422,7 @@ static int i2c_acpi_notify(struct notifier_block *nb, unsigned long value,
+ 			break;
  
- 	/* FIXME: sometimes, unknown interrupt happened. Do nothing */
- 	if (!(msr & MDR))
-@@ -538,8 +548,29 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
- 	if (msr & MAT) {
- 		/*
- 		 * Address transfer phase finished, but no data at this point.
--		 * Try to use DMA to receive data.
-+		 * Try to use DMA to receive data if it is not SMBus block
-+		 * data read.
- 		 */
-+		if (block_data)
-+			goto next_txn;
-+
-+		rcar_i2c_dma(priv);
-+	} else if (priv->pos == 0 && block_data) {
-+		/*
-+		 * First byte is the length of remaining packet
-+		 * in the SMBus block data read. Add it to
-+		 * msg->len.
-+		 */
-+		u8 data = rcar_i2c_read(priv, ICRXTX);
-+
-+		if (data == 0 || data > I2C_SMBUS_BLOCK_MAX) {
-+			priv->flags |= ID_DONE | ID_EPROTO;
-+			return;
-+		}
-+		msg->len += data;
-+		msg->buf[priv->pos] = data;
-+		priv->pos++;
-+		/* Still try to use DMA to receive the rest of data */
- 		rcar_i2c_dma(priv);
- 	} else if (priv->pos < msg->len) {
- 		/* get received data */
-@@ -557,6 +588,7 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
- 		}
- 	}
- 
-+next_txn:
- 	if (priv->pos == msg->len && !(priv->flags & ID_LAST_MSG))
- 		rcar_i2c_next_msg(priv);
- 	else
-@@ -855,6 +887,8 @@ static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
- 		ret = -ENXIO;
- 	} else if (priv->flags & ID_ARBLOST) {
- 		ret = -EAGAIN;
-+	} else if (priv->flags & ID_EPROTO) {
-+		ret = -EPROTO;
- 	} else {
- 		ret = num - priv->msgs_left; /* The number of transfer */
- 	}
-@@ -917,6 +951,8 @@ static int rcar_i2c_master_xfer_atomic(struct i2c_adapter *adap,
- 		ret = -ENXIO;
- 	} else if (priv->flags & ID_ARBLOST) {
- 		ret = -EAGAIN;
-+	} else if (priv->flags & ID_EPROTO) {
-+		ret = -EPROTO;
- 	} else {
- 		ret = num - priv->msgs_left; /* The number of transfer */
- 	}
-@@ -983,7 +1019,8 @@ static u32 rcar_i2c_func(struct i2c_adapter *adap)
- 	 * I2C_M_IGNORE_NAK (automatically sends STOP after NAK)
- 	 */
- 	u32 func = I2C_FUNC_I2C | I2C_FUNC_SLAVE |
--		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-+		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK) |
-+		   I2C_FUNC_SMBUS_READ_BLOCK_DATA;
- 
- 	if (priv->flags & ID_P_HOST_NOTIFY)
- 		func |= I2C_FUNC_SMBUS_HOST_NOTIFY;
+ 		i2c_acpi_register_device(adapter, adev, &info);
++		put_device(&adapter->dev);
+ 		break;
+ 	case ACPI_RECONFIG_DEVICE_REMOVE:
+ 		if (!acpi_device_enumerated(adev))
 -- 
-2.21.0
+2.30.2
 
