@@ -2,85 +2,181 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB86B414476
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Sep 2021 11:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9497E414DDF
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Sep 2021 18:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbhIVJFo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Sep 2021 05:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234176AbhIVJFl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Sep 2021 05:05:41 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9817C061766
-        for <linux-i2c@vger.kernel.org>; Wed, 22 Sep 2021 02:04:11 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id g14so2192867pfm.1
-        for <linux-i2c@vger.kernel.org>; Wed, 22 Sep 2021 02:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=iTGoqFM8qijEpuvk9WwIalanNU02ORS6d7bs4+cIQLs=;
-        b=TJnA2xZSNDmQVyDaUM5cetFg6piHlBIrzLYbLVA/L+yuikwexToDQQOXDpUqjS5BJS
-         ev7wC9FyVgBp+VojUE2hwZt6QDK94hIW9AkUhEfQrr2hUB2TZJd9m7WYBEDERBU0xf7V
-         HLEZKQ8imbD00ECabdcntHNdsmrEVi+ksDWbU5dQUHdjsrnCC5QGeTJtvQW8Dcb6/Gig
-         QJRmam67JS2cURfi0OZZ7UCHS5xrofx7U94cae+w1tvDEISkHYK4ePwn8jA8i6+Hn04x
-         V91ffa8741JrEfnPeR8hzfEW9746pm38IxXqRqxyeSUIbPBHKepHNewauGgvtvdlq0bs
-         n2Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=iTGoqFM8qijEpuvk9WwIalanNU02ORS6d7bs4+cIQLs=;
-        b=h6AiPUntRYpFBim2VKFJVirRTlODWgU4AJqBtRvxn9unhFN0NHbuvRke0vNkIm4fV7
-         GMRuQz0tzvvDHrDtlgyd6iueCPZQqzKgpXDR30SnOcNi/OL35lDIeYj+djav3CGI/7p8
-         +Ph3NTEwxy7+1SCc6NddQCsgheJ72KBBiKRUY7G2nVEhdIAyYhSMTp5CFLQ7YHb4d650
-         3zjyv77EWyNe1jnwAya+zrOZn81Yx3HFQBXjnfTSQOuXwm5q9Nxuuc+p1kH8n6aJQUSa
-         3w9XoYE9q4VOxZfeom5DS1ECQ0H+7LQOG8yMN6tASs84PPfC6Br3MKY740a5d+mPTJz7
-         owTg==
-X-Gm-Message-State: AOAM5301aUbiP50D1Odt86CTexm8NZ+JATnfYhQ2aXS/Rhlzdd6CWNmV
-        hG8+q7UBjANykno+A8ksf+AXGcja1prYwOt5J/c=
-X-Google-Smtp-Source: ABdhPJzSBG9U99LUNHcK5yvniZ2TvGsF3RlQLQvBorUg0W0/5QJ3J1WzEmA6R19USIFGxQwjeUn1wqeOl+7hIVPqJUM=
-X-Received: by 2002:a05:6a00:234f:b0:3eb:3ffd:6da2 with SMTP id
- j15-20020a056a00234f00b003eb3ffd6da2mr34198606pfj.15.1632301451198; Wed, 22
- Sep 2021 02:04:11 -0700 (PDT)
+        id S236523AbhIVQQC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Sep 2021 12:16:02 -0400
+Received: from esa2.mentor.iphmx.com ([68.232.141.98]:58872 "EHLO
+        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236590AbhIVQQB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Sep 2021 12:16:01 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Sep 2021 12:15:58 EDT
+IronPort-SDR: 8UbnJGYKp9g00cfXnidR4XekML9AcaN1ikXoDPxI2aQNPOoTV25+1C1mpXUp410raLMJXgsIt8
+ w8a/HmajNMuBBDJuYoG0ril5cWCdnSJ+Jlku2Eb8Qmcr9OUTFV5xaiE/3Fb/GGFRanKSsA1k3h
+ nLUv51cpctMCSfQGfmJwvMakTCcHm8JGROPCi8HaD5FHVGqQiwNy8xakz6kkgbXfYw38kSMUMB
+ FvedneDgXWpSHS8k3DqS8bAAfQZIAfDDehfqeX9H8B9QCw4FYZJock2nD6UJ9RFker5pCYg8e2
+ 9HYEIwFf5lqfyr7uKO003n3F
+X-IronPort-AV: E=Sophos;i="5.85,314,1624348800"; 
+   d="scan'208";a="66169774"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa2.mentor.iphmx.com with ESMTP; 22 Sep 2021 08:07:17 -0800
+IronPort-SDR: TwrNP43X+qzAXREQFCLy/SGbiiUY1GzxlrBsCdu12I4vPOafw+HdxOo6U9v3SJrpthiMSoAY6i
+ hJzGfLJNIlteK0lrzkaprszqmfSRArd2V7YcqrwpPx57nJ0fwNp1nB9ObXPTQQNXKBUFoHRYqI
+ ZMbsvqtAiVAGVuyEUsyqoUsX95td5nNFjhAvo1ZwP7X4kOitS9c3sQex7bQ+HkF323QMlGB7bD
+ dlhHSPEusa3Bfa8g+I1LOQvwNMI/+8RnxbcxonUhzGzvQ0a7HcFQcsiFoGI0wPtq7J9g8EzSt6
+ WLA=
+From:   Andrew Gabbasov <andrew_gabbasov@mentor.com>
+To:     <linux-renesas-soc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+Subject: [PATCH] i2c: rcar: add SMBus block read support
+Date:   Wed, 22 Sep 2021 11:06:49 -0500
+Message-ID: <20210922160649.28449-1-andrew_gabbasov@mentor.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:f393:0:0:0:0 with HTTP; Wed, 22 Sep 2021 02:04:10
- -0700 (PDT)
-From:   susan wong <susanwong096@gmail.com>
-Date:   Wed, 22 Sep 2021 02:04:10 -0700
-Message-ID: <CAB_2jog_+wbY0uTEKJXzerAEjzsC2-Y6bHmQ=DR2HGCmzwQDOQ@mail.gmail.com>
-Subject: Dear Beloved,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: svr-ies-mbx-06.mgc.mentorg.com (139.181.222.6) To
+ svr-ies-mbx-02.mgc.mentorg.com (139.181.222.2)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear Beloved,
+The smbus block read is not currently supported for rcar i2c devices.
+This patchset adds the support to rcar i2c bus so that blocks of data
+can be read using SMbus block reads.(using i2c_smbus_read_block_data()
+function from the i2c-core-smbus.c).
 
-I am writing this mail to you with heavy tears in my eyes and great
-sorrow in my heart. I am Mrs. Susan Wong. A widow to late Mr. Hamson
-Wong; I am 63 years old, suffering from long time Cancer of the
-breast.
+Inspired by commit 8e8782c71595 ("i2c: imx: add SMBus block read support")
 
-From all indications my condition is really deteriorating and it's
-quite obvious that I won't live more than 2 months according to my
-doctors. I have some funds I inherited from my late loving husband Mr.
-Hamson, the sum of (4,500,000.00 Million Dollars) which he deposited
-in a bank here and I need honest, truthful and God fearing person that
-can use these funds for Charity work, helping the less privileges, and
-30% of this money will be for your time and effort, while 70% goes to
-charities.
+This patch (adapted) was tested with v4.14, but due to lack of real
+hardware with SMBus block read operations support, using "simulation",
+that is manual analysis of data, read from plain I2C devices with
+SMBus block read request.
 
-1) For the sick, less-privileged
-2) For the Widows and the motherless babies
-3) Orphanages or Charity Home.
+Signed-off-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+---
+ drivers/i2c/busses/i2c-rcar.c | 45 +++++++++++++++++++++++++++++++----
+ 1 file changed, 41 insertions(+), 4 deletions(-)
 
-I look forward to your prompt reply from you for more details.
+diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+index bff9913c37b8..a9fc2b3b6392 100644
+--- a/drivers/i2c/busses/i2c-rcar.c
++++ b/drivers/i2c/busses/i2c-rcar.c
+@@ -105,6 +105,7 @@
+ #define ID_DONE		(1 << 2)
+ #define ID_ARBLOST	(1 << 3)
+ #define ID_NACK		(1 << 4)
++#define ID_EPROTO	(1 << 5)
+ /* persistent flags */
+ #define ID_P_HOST_NOTIFY	BIT(28)
+ #define ID_P_REP_AFTER_RD	BIT(29)
+@@ -412,6 +413,7 @@ static bool rcar_i2c_dma(struct rcar_i2c_priv *priv)
+ 	struct device *dev = rcar_i2c_priv_to_dev(priv);
+ 	struct i2c_msg *msg = priv->msg;
+ 	bool read = msg->flags & I2C_M_RD;
++	bool block_data = msg->flags & I2C_M_RECV_LEN;
+ 	enum dma_data_direction dir = read ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+ 	struct dma_chan *chan = read ? priv->dma_rx : priv->dma_tx;
+ 	struct dma_async_tx_descriptor *txdesc;
+@@ -429,9 +431,16 @@ static bool rcar_i2c_dma(struct rcar_i2c_priv *priv)
+ 		/*
+ 		 * The last two bytes needs to be fetched using PIO in
+ 		 * order for the STOP phase to work.
++		 *
++		 * For SMBus block read the first byte was received using PIO.
+ 		 */
+-		buf = priv->msg->buf;
+-		len = priv->msg->len - 2;
++		if (block_data) {
++			buf = priv->msg->buf + 1;
++			len = priv->msg->len - 3;
++		} else {
++			buf = priv->msg->buf;
++			len = priv->msg->len - 2;
++		}
+ 	} else {
+ 		/*
+ 		 * First byte in message was sent using PIO.
+@@ -530,6 +539,7 @@ static void rcar_i2c_irq_send(struct rcar_i2c_priv *priv, u32 msr)
+ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
+ {
+ 	struct i2c_msg *msg = priv->msg;
++	bool block_data = msg->flags & I2C_M_RECV_LEN;
+ 
+ 	/* FIXME: sometimes, unknown interrupt happened. Do nothing */
+ 	if (!(msr & MDR))
+@@ -538,8 +548,29 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
+ 	if (msr & MAT) {
+ 		/*
+ 		 * Address transfer phase finished, but no data at this point.
+-		 * Try to use DMA to receive data.
++		 * Try to use DMA to receive data if it is not SMBus block
++		 * data read.
+ 		 */
++		if (block_data)
++			goto next_txn;
++
++		rcar_i2c_dma(priv);
++	} else if (priv->pos == 0 && block_data) {
++		/*
++		 * First byte is the length of remaining packet
++		 * in the SMBus block data read. Add it to
++		 * msg->len.
++		 */
++		u8 data = rcar_i2c_read(priv, ICRXTX);
++
++		if (data == 0 || data > I2C_SMBUS_BLOCK_MAX) {
++			priv->flags |= ID_DONE | ID_EPROTO;
++			return;
++		}
++		msg->len += data;
++		msg->buf[priv->pos] = data;
++		priv->pos++;
++		/* Still try to use DMA to receive the rest of data */
+ 		rcar_i2c_dma(priv);
+ 	} else if (priv->pos < msg->len) {
+ 		/* get received data */
+@@ -557,6 +588,7 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
+ 		}
+ 	}
+ 
++next_txn:
+ 	if (priv->pos == msg->len && !(priv->flags & ID_LAST_MSG))
+ 		rcar_i2c_next_msg(priv);
+ 	else
+@@ -855,6 +887,8 @@ static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
+ 		ret = -ENXIO;
+ 	} else if (priv->flags & ID_ARBLOST) {
+ 		ret = -EAGAIN;
++	} else if (priv->flags & ID_EPROTO) {
++		ret = -EPROTO;
+ 	} else {
+ 		ret = num - priv->msgs_left; /* The number of transfer */
+ 	}
+@@ -917,6 +951,8 @@ static int rcar_i2c_master_xfer_atomic(struct i2c_adapter *adap,
+ 		ret = -ENXIO;
+ 	} else if (priv->flags & ID_ARBLOST) {
+ 		ret = -EAGAIN;
++	} else if (priv->flags & ID_EPROTO) {
++		ret = -EPROTO;
+ 	} else {
+ 		ret = num - priv->msgs_left; /* The number of transfer */
+ 	}
+@@ -983,7 +1019,8 @@ static u32 rcar_i2c_func(struct i2c_adapter *adap)
+ 	 * I2C_M_IGNORE_NAK (automatically sends STOP after NAK)
+ 	 */
+ 	u32 func = I2C_FUNC_I2C | I2C_FUNC_SLAVE |
+-		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
++		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK) |
++		   I2C_FUNC_SMBUS_READ_BLOCK_DATA;
+ 
+ 	if (priv->flags & ID_P_HOST_NOTIFY)
+ 		func |= I2C_FUNC_SMBUS_HOST_NOTIFY;
+-- 
+2.21.0
 
-I will like you to write me on my Email address;
-sosanwong123@gmail.com , to enable us discuss in details. I hope
-hearing from you soonest. Thanks for your understanding.
-
-Yours sincerely
-
-Mrs. Susan Wong
