@@ -2,71 +2,190 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C874151EC
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Sep 2021 22:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606E6415620
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Sep 2021 05:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237881AbhIVU4q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Sep 2021 16:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237882AbhIVU4l (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Sep 2021 16:56:41 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA33C0613E4
-        for <linux-i2c@vger.kernel.org>; Wed, 22 Sep 2021 13:55:07 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id e15so17114345lfr.10
-        for <linux-i2c@vger.kernel.org>; Wed, 22 Sep 2021 13:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=fr8lNb1tzuroNDnbJJtYWeXOCGZbssrkZvaRy8HVdYCeSSxS96vSwd3R2+r1vg3M6/
-         ex66FoD7Oi9BZ+eroN2ctcLno3UxJhL89X1t6yEsFayGc2q4Pz0zZQBaUGqcHr3s/S1+
-         lgIwwHuJ4O8SDnA5oR3zC/CFwa9fWO84703n6I2aQyNKP1VzeqgyNRTdZaVTG81gy6Vx
-         t6u58+esbUQxWBZY5IFD1w784RDrV2U7d72/V+RQAoF8LyHU+KHsqwJTuZK+RI9xoYHQ
-         hU/k+XKo5P60J+yjbN5r0LQMnBzU5qvJitpMdoh7dt6f9DChJ/lZbweVN/xESakomSrI
-         Tc/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=Ltn9W17z7tqkLWrdPnjb1a7OFYI1+JNZF0Jb1iQNbudlRTRLNBpsBHMb0PcY/SEVsO
-         BWuJZ8IUUd3B8VS9jE70Qh4trM0aQznAq/W53iQOsxEHf2YexhXAvRpAJrZC4YfXzlXK
-         WYCF9zYX6pxy/TqCy+Otj2SeqDttGLZjjDyrPccp9flZtCWJrw4dEEAy8G2nJB2kSzkb
-         YZomMqxE2UCZJBS59LBeSZPCaEjZdjGTMLFWrgoJVbZSMjP9zDk9oedB375L5ib9mtut
-         4ntBxGLb6M0DsXLVfFs9fK6xefhsU3pKwYWUUrMQVAtEwSx6kmjzHjfgyDuZ1tMvcJjW
-         2yFA==
-X-Gm-Message-State: AOAM531hPjrwN/aCMyde1KZesRA7lImwPLn5yAcYCtIeY85Mp9gnHsC2
-        eYDjZdWxCpT7AnnTZ79QrDh2TSz86JirlZJTkhDulqNJOl0=
-X-Google-Smtp-Source: ABdhPJwYYn7ZwazUxB30/XTxKCOf4dlZaC6TfP1ljKsU4ZNb40cpLRsdAvw7sAb51nYQkeG7S6W5vU7Cgq+lC3FYxgE=
-X-Received: by 2002:a05:651c:1546:: with SMTP id y6mr1383813ljp.53.1632344095088;
- Wed, 22 Sep 2021 13:54:55 -0700 (PDT)
+        id S239053AbhIWDfx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Sep 2021 23:35:53 -0400
+Received: from pi.codeconstruct.com.au ([203.29.241.158]:59534 "EHLO
+        codeconstruct.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235623AbhIWDfx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Sep 2021 23:35:53 -0400
+Received: by codeconstruct.com.au (Postfix, from userid 10001)
+        id 2D7F120165; Thu, 23 Sep 2021 11:34:16 +0800 (AWST)
+From:   Matt Johnston <matt@codeconstruct.com.au>
+To:     devicetree@vger.kernel.org
+Cc:     linux-i2c@vger.kernel.org, Jeremy Kerr <jk@codeconstruct.com.au>
+Subject: [PATCH v4] dt-bindings: net: New binding mctp-i2c-controller
+Date:   Thu, 23 Sep 2021 11:34:06 +0800
+Message-Id: <20210923033406.3166902-1-matt@codeconstruct.com.au>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Sender: ratcliffijames58@gmail.com
-Received: by 2002:a05:6504:5067:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:54:54
- -0700 (PDT)
-From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
-Date:   Wed, 22 Sep 2021 21:54:54 +0100
-X-Google-Sender-Auth: B3PIuwFz7UcaHNCffYC8akvbLEk
-Message-ID: <CAKVTYWSPSMf085dB7FkhkLr9XtoZHkjbvunoMard5qsSPn4ZOg@mail.gmail.com>
-Subject: My Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Assalamu alaikum,
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological,
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children. I have investment funds
-worth Twenty Seven Million Five Hundred Thousand United State Dollar
-($27.500.000.00 ) and i need a trusted  investment Manager/Partner
-because of my current refugee status, however, I am interested in you
-for investment project assistance in your country. If you are willing
-to handle this project on my behalf kindly reply urgently to enable me
-to provide you more information about the investment
-funds.
-Best Regards
+Used to define a local endpoint to communicate with MCTP peripherals
+attached to an I2C bus. This I2C endpoint can communicate with remote
+MCTP devices on the I2C bus.
+
+In the example I2C topology below (matching the second yaml example) we
+have MCTP devices on busses i2c1 and i2c6. MCTP-supporting busses are
+indicated by the 'mctp-controller' DT property on an I2C bus node.
+
+A mctp-i2c-controller I2C client DT node is placed at the top of the
+mux topology, since only the root I2C adapter will support I2C slave
+functionality.
+                                               .-------.
+                                               |eeprom |
+    .------------.     .------.               /'-------'
+    | adapter    |     | mux  --@0,i2c5------'
+    | i2c1       ----.*|      --@1,i2c6--.--.
+    |............|    \'------'           \  \  .........
+    | mctp-i2c-  |     \                   \  \ .mctpB  .
+    | controller |      \                   \  '.0x30   .
+    |            |       \  .........        \  '.......'
+    | 0x50       |        \ .mctpA  .         \ .........
+    '------------'         '.0x1d   .          '.mctpC  .
+                            '.......'          '.0x31   .
+                                                '.......'
+(mctpX boxes above are remote MCTP devices not included in the DT at
+present, they can be hotplugged/probed at runtime. A DT binding for
+specific fixed MCTP devices could be added later if required)
+
+Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
+---
+
+Changes:
+
+v3->v4:
+Formatting and YAML syntax fixes, rename .yaml file to match
+
+v2->v3:
+Change the MCTP indicator to being a property on the I2C bus node.
+
+Thanks,
+Matt
+
+ Documentation/devicetree/bindings/i2c/i2c.txt |  4 +
+ .../bindings/net/mctp-i2c-controller.yaml     | 92 +++++++++++++++++++
+ 2 files changed, 96 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml
+
+diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+index b864916e087f..fc3dd7ec0445 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c.txt
++++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+@@ -95,6 +95,10 @@ wants to support one of the below features, it should adapt these bindings.
+ - smbus-alert
+ 	states that the optional SMBus-Alert feature apply to this bus.
+ 
++- mctp-controller
++	indicates that the system is accessible via this bus as an endpoint for
++	MCTP over I2C transport.
++
+ Required properties (per child device)
+ --------------------------------------
+ 
+diff --git a/Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml b/Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml
+new file mode 100644
+index 000000000000..afd11c9422fa
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml
+@@ -0,0 +1,92 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/mctp-i2c-controller.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MCTP I2C transport binding
++
++maintainers:
++  - Matt Johnston <matt@codeconstruct.com.au>
++
++description: |
++  An mctp-i2c-controller defines a local MCTP endpoint on an I2C controller.
++  MCTP I2C is specified by DMTF DSP0237.
++
++  An mctp-i2c-controller must be attached to an I2C adapter which supports
++  slave functionality. I2C busses (either directly or as subordinate mux
++  busses) are attached to the mctp-i2c-controller with a 'mctp-controller'
++  property on each used bus. Each mctp-controller I2C bus will be presented
++  to the host system as a separate MCTP I2C instance.
++
++properties:
++  compatible:
++    const: mctp-i2c-controller
++
++  reg:
++    minimum: 0x40000000
++    maximum: 0x4000007f
++    description: |
++      7 bit I2C address of the local endpoint.
++      I2C_OWN_SLAVE_ADDRESS (1<<30) flag must be set.
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++
++examples:
++  - |
++    // Basic case of a single I2C bus
++    #include <dt-bindings/i2c/i2c.h>
++
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      mctp-controller;
++
++      mctp@30 {
++        compatible = "mctp-i2c-controller";
++        reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
++      };
++    };
++
++  - |
++    // Mux topology with multiple MCTP-handling busses under
++    // a single mctp-i2c-controller.
++    // i2c1 and i2c6 can have MCTP devices, i2c5 does not.
++    #include <dt-bindings/i2c/i2c.h>
++
++    i2c1: i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      mctp-controller;
++
++      mctp@50 {
++        compatible = "mctp-i2c-controller";
++        reg = <(0x50 | I2C_OWN_SLAVE_ADDRESS)>;
++      };
++    };
++
++    i2c-mux {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      i2c-parent = <&i2c1>;
++
++      i2c5: i2c@0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        reg = <0>;
++        eeprom@33 {
++          reg = <0x33>;
++        };
++      };
++
++      i2c6: i2c@1 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        reg = <1>;
++        mctp-controller;
++      };
++    };
+-- 
+2.30.2
+
