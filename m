@@ -2,179 +2,196 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 239E0415A90
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Sep 2021 11:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36904160F9
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Sep 2021 16:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240029AbhIWJIP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Sep 2021 05:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240019AbhIWJIO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Sep 2021 05:08:14 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE6BC061756;
-        Thu, 23 Sep 2021 02:06:43 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id i23so15195518wrb.2;
-        Thu, 23 Sep 2021 02:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W7zJC5aAqnyO98X4K6bFPJj+u1b4jQVw+cClFYWpioo=;
-        b=a9ZHfDLE1htrbTBFgFlzlURyjWeEzYOimdnm96oO8kOOASLQMgVEH+PbCXkqRa1QKa
-         Xo/mhNjZmJCv6//Yr2udOy4RrQmjbr0q5kcBySyqhwmHCWonJlcwwCqZKCCK+CFSp29v
-         ov3qEYsSyjLYIfHE0nIh1soE1ayctAmh2Z0tHgRqzd5fxf0vpFtOJCe5uRJ4S8ZRlmLm
-         9QbevfW59NDuCI6XfgPIVS/INi9r/M8UFKHlmojz0vYMwRbxZSJh273lYgBTHKizbJeR
-         GE12Hlf0gNNtYLVcD1oFQILaXal7Fz8C9G40Mw0uZ+4A53tnYmRo7jEJdFsIVIoDVL6m
-         Gz7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W7zJC5aAqnyO98X4K6bFPJj+u1b4jQVw+cClFYWpioo=;
-        b=pZMaBQAOt0HaU1m7Z32byYeOwEYOLxwbvsHC8tefWntwMNXj7bZlt7OSS7jsZflV+V
-         ry9nmDfpXROnk2txte+rqEgxFloQhiBqCqr560NgA4tZg6ll0sw/sm4jk6/N9xq2KZrf
-         oLr11DG2GzW4rc3P5pvvj9bJ5PYZ72zgLFUMJLoSgL6nbNr+ntrG5scbnW9WDD4y/MML
-         dEpSJkbnVmPPwGRgtG0dyFEYf0IVky0mHk0uCRO2QLgOIo5SLP91DB2HgjIEllGpczxx
-         xD6pAg6pB4tY0PuMF/F80OXQwuVFfCzdQgXdwCxPUm3N012qw/cIJeseTOMI3pMYQtWQ
-         eF9A==
-X-Gm-Message-State: AOAM531+CVlVlJtCTfQdbM4rQVGX0E4NsM9nTVL5/k2XvJ21Rv+eHyRC
-        NkOzZwcCOgwaH5wrrh+nO9f+ClBhkP3e55FHX9I=
-X-Google-Smtp-Source: ABdhPJwmaE0WOKFEdoPl71aerkf8BW4hR1ah2KQpCRQqOoPXwAejh3hHj5VunpFrv94eYrn+kbYy/RR8fKnhNZPGDTc=
-X-Received: by 2002:a5d:58ec:: with SMTP id f12mr3760465wrd.24.1632388001736;
- Thu, 23 Sep 2021 02:06:41 -0700 (PDT)
+        id S241480AbhIWO0u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Sep 2021 10:26:50 -0400
+Received: from mxout70.expurgate.net ([194.37.255.70]:41681 "EHLO
+        mxout70.expurgate.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241308AbhIWO0u (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Sep 2021 10:26:50 -0400
+X-Greylist: delayed 473 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Sep 2021 10:26:49 EDT
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1mTPXM-0004Hd-1D; Thu, 23 Sep 2021 16:17:20 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1mTPXL-000465-13; Thu, 23 Sep 2021 16:17:19 +0200
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 44992240041;
+        Thu, 23 Sep 2021 16:17:18 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id A9CD2240040;
+        Thu, 23 Sep 2021 16:17:17 +0200 (CEST)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+        by mail.dev.tdt.de (Postfix) with ESMTP id 6971620110;
+        Thu, 23 Sep 2021 16:17:13 +0200 (CEST)
 MIME-Version: 1.0
-References: <CAGhUXvBw4rzCQrqttyyS=Psxmhppk79c6fDoxPbV91jE7fO_9A@mail.gmail.com>
- <CAGhUXvDNj2v3O==+wWWKPYVzej8Vq+WNiBtPwmYxSQ2dTuLb9Q@mail.gmail.com>
- <CAGhUXvC8eHfxEKzkGN06VvRU6Z0ko7MJ9hF6uXNq+PxRZSbEmQ@mail.gmail.com> <70cbe360-6385-2536-32bd-ae803517d2b2@redhat.com>
-In-Reply-To: <70cbe360-6385-2536-32bd-ae803517d2b2@redhat.com>
-From:   Andrea Ippolito <andrea.ippo@gmail.com>
-Date:   Thu, 23 Sep 2021 11:06:05 +0200
-Message-ID: <CAGhUXvDWgsZ4+e-PL7EYkf48urJxfCS+eUKfgnqJOSBHM_oqCA@mail.gmail.com>
-Subject: Re: Touchpad stickiness on Dell Inspiron/XPS
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     dmitry.torokhov@gmail.com, Alex Hung <alex.hung@canonical.com>,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 23 Sep 2021 16:17:13 +0200
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Enrico Weigelt <info@metux.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.com>, Florian.Eckert@googlemail.com
+Cc:     linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Add a SSDT ACPI description to recognize my I2C device connected via
+ SMBus
+In-Reply-To: <YUrg6TfVhk+TIxDz@smile.fi.intel.com>
+References: <20200407173849.43628-1-andriy.shevchenko@linux.intel.com>
+ <290741faab199d3e43b6255bf2282075@dev.tdt.de>
+ <YUrO5ajlS9wS6xYU@smile.fi.intel.com> <YUrg6TfVhk+TIxDz@smile.fi.intel.com>
+Message-ID: <d84fb798722762862a7fb08f1e343b6a@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.16
+X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED,
+        T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dev.tdt.de
+X-purgate: clean
+X-purgate-ID: 151534::1632406639-000081E6-9F458C7C/0/0
+X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thanks a lot Hans for your quick reply :)
+I am working wit OpenWrt which has recently switched the kernel version
+from 5.4 to 5.10 on x86 Target [1] in its master branch.
 
-I will indeed proceed to filing a bug as you suggested and hope for the best.
+I am using a APU3 board from PC-Engine [2].
 
-Have a nice day!
+The APU3 board has an SMBus [3] device (Intel PIIX4 and compatible
+(ATI/AMD/Serverworks/Broadcom/SMSC) to communicate with additional 
+connected I2C devices.
 
-Andrea IPPOLITO
+On This SMBus there is a IO expander from microchip connect [4] via the 
+SMBus (i2c).
+I used this microchip IO expander to control additional LEDs, as the 
+APU3 only has 3.
 
-Il giorno gio 23 set 2021 alle ore 11:00 Hans de Goede
-<hdegoede@redhat.com> ha scritto:
->
-> Hi Andrea,
->
-> On 9/23/21 10:47 AM, Andrea Ippolito wrote:
-> > Hello,
-> >
-> > has anyone had a chance to have a look at this report, and can help
-> > making some progress on the investigation?
-> >
-> > Please let me know if there are more suitable channels for this, since
-> > most of the things I see in these mailing lists are patches and code
-> > reviews, not really reports and discussions around ongoing issues.
->
-> Right, bugs are usually discussed in bugzila, you could consider
-> filing a bug here:
->
-> https://bugzilla.kernel.org/enter_bug.cgi?product=Drivers
->
-> But I must be honest here, I don't see much progress being made
-> on this until someone with a significant amount of kernel / hw-enablement
-> experience gets it hands on one of these models. Either because some
-> company wants to run Linux on an affected model and ends up paying
-> someone to look at this, or because someone with the necessary
-> skills happens to buy one and then gets annoyed enough by this to sink
-> enough time into the issue to figure things out.
->
-> This hw is still relatively new, so with some luck someone accidentally
-> fixes this while fixing another issue, which happens to have the
-> same root cause.
->
-> Short of one of these 2 happening I don't see this getting resolved
-> anytime soon. By all means, do file a bug for this, I just want to
-> set expectations about the (un)likelyness of this getting fixed
-> (or the bug getting much attention in general) beforehand.
->
-> Regards,
->
-> Hans
->
->
->
-> >
-> > Thanks a lot in advance.
-> >
-> > Regards,
-> > Andrea IPPOLITO
-> >
-> > Il giorno ven 27 ago 2021 alle ore 08:57 Andrea Ippolito
-> > <andrea.ippo@gmail.com> ha scritto:
-> >>
-> >> (resending as plain text)
-> >>
-> >> Hello everyone,
-> >>
-> >> I hope I find you well.
-> >>
-> >> I am writing this to report a touchpad issue faced by me and several
-> >> other DELL users across several different distros (HW defect has been
-> >> ruled out by people unable to reproduce on Windows).
-> >>
-> >> First thing that came to mind was to report this to the libinput
-> >> project, which I did here:
-> >>
-> >> https://gitlab.freedesktop.org/libinput/libinput/-/issues/618
-> >>
-> >> A similar report by another user followed shortly after:
-> >>
-> >> https://gitlab.freedesktop.org/libinput/libinput/-/issues/636 (will be
-> >> closed as dupe eventually, so please keep #618 as reference)
-> >>
-> >> Issue has been also reported by yet another user on reddit:
-> >>
-> >> https://www.reddit.com/r/linuxhardware/comments/ofbzg3/dell_xps_15_9510_experience/h5ddy07/
-> >> and https://www.reddit.com/r/linuxhardware/comments/ofbzg3/dell_xps_15_9510_experience/h5zjwc8/?utm_source=reddit&utm_medium=web2x&context=3
-> >>
-> >> And finally, I have reported it on the DELL user forums (no help
-> >> whatsoever from DELL):
-> >>
-> >> https://www.dell.com/community/Inspiron/Tiger-Lake-DELL-Inspiron-Touchpad-Cursor-temporarily-drops/m-p/8021753#M126292
-> >>
-> >> The investigation on the libinput side appears to be complete, as
-> >> maintainers didn't spot anything weird there (also, the issue is also
-> >> reproducible with the synaptics lib, suggesting that this might be
-> >> lower level).
-> >>
-> >> Robert Martin suggested to raise this to you now, as per comment:
-> >>
-> >> https://gitlab.freedesktop.org/libinput/libinput/-/issues/618#note_1042277
-> >>
-> >> I'm kind of new to Linux mailing lists and bug reporting, so please
-> >> forgive me if I'm violating some rules or etiquette, I'd be glad to
-> >> rectify if that's the case.
-> >>
-> >> I also don't know what is the best way to keep the conversation going,
-> >> e.g. if there's an issue tracker or instead mailing lists are the
-> >> preferred choice.
-> >>
-> >> You should find some interesting data in the above mentioned reports
-> >> already, if not, please don't hesitate to let me know or chime in on
-> >> libinput issue #618 directly.
-> >>
-> >> Thanks a lot in advance.
-> >>
-> >> Kind regards,
-> >> Andrea IPPOLITO
-> >
->
+So far, everything has worked fine, because I had wirten a platform 
+device for this.
+Everything was recognized and compiled cleanly and I could control the 
+LEDs from the user-land.
+
+Due to the following change [5] between 5.4 and 5.10 by removing the 
+platform data support in
+the IO expander mcp23s08, my plaform device does not compile anymore,
+I can no longer use the platform device pattern for this kind of device.
+
+The only possibility I can think of now is to make this device known
+to the kernel via a dynamic ACPI SSDT table. I have already tried 
+various
+things but I can't get the driver [4] to feel responsible for this 
+device.
+
+I have used the following links that were provided by "Andy Shevchenko" 
+to me
+to understand the concept begind ACPI SSDT handling. Thanks for that.
+
+https://connect.linaro.org/resources/lvc21f/lvc21f-304/
+https://www.youtube.com/watch?v=nlKjUAv3RL0&ab_channel=OSDNConf
+https://stackoverflow.com/questions/65727454/
+https://stackoverflow.com/questions/60105101/
+https://stackoverflow.com/questions/54768841/
+https://stackoverflow.com/questions/46095840/
+https://github.com/westeri/meta-acpi/tree/master/recipes-bsp/acpi-tables/samples/
+
+This is my aml file that I tried with. It loads but nothing happens.
+
+DefinitionBlock ("mcp23s08.aml", "SSDT", 5, "", "IO", 2)
+{
+     External (\_SB.PCI0.SBUS, DeviceObj)
+
+     Device (\_SB.PCI0.SBUS.BUS0)
+     {
+         Name (_CID, "smbus")
+         NAME (_ADR, Zero)
+         Device (PIN)
+         {
+             Name (_HID, "PRP0001")
+             Name (_DDN, "io expander")
+             Name (_CRS, ResourceTemplate () {
+                 I2cSerialBus (
+                     0x24,                   // Bus address
+                     ControllerInitiated,    // Don't care
+                     400000,                 // Fast mode (400 kHz)
+                     AddressingMode7Bit,     // 7-bit addressing
+                     "\\_SB.PCI0.SBUS.BUS0", // I2C host controller
+                     0                       // Must be 0
+                 )
+             })
+
+             Name (_DSD, Package () {
+                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                 Package () {
+                     Package () { "compatible", Package () { 
+"microchip,mcp23017" } },
+                 }
+             })
+         }
+     }
+}
+
+In Coreboot the SMBus named SBUS and is on address 0x0014000 [7].
+
+But I'm not sure if that's right at all.
+Somehow I don't understand how the io expander is connected to SMBus.
+According to my research, however, it should fit.
+
+The SMBus device driver i2c-piix4 creates 3 I2C devices:
+ls -la /sys/bus/i2c/devices/
+../../../devices/pci0000:00/0000:00:14.0/i2c-0 (SMBus PIIX4 adapter port 
+0 at 0b00)
+../../../devices/pci0000:00/0000:00:14.0/i2c-1 (SMBus PIIX4 adapter port 
+2 at 0b00)
+../../../devices/pci0000:00/0000:00:14.0/i2c-2 (SMBus PIIX4 adapter port 
+1 at 0b20)
+
+
+The mcp23s08 is connected to the i2c-0 with address 0x24
+
+Therefore I believe the following applies
+
++------+    +------+
+| PCI0 |--->| SMB0 |--> i2c client A (0x24)
+|      |    |      |
++------+    +------+
+
+
+I have enabled the following kernel config parameters for ACPI SSDT:
+CONFIG_ACPI_CUSTOM_METHOD
+CONFIG_CONFIGFS_FS
+CONFIG_ACPI_CONFIGFS
+CONFIG_ACPI_DEBUG
+
+The goal would be that the ACPI mapping for the i2c-pii4 and the 
+connected pinctrl-mcp23s08 exactly works as
+show in the video [5] from Andy Shevchenko.
+
+I think others will have the same problem in the future when they update 
+the kernel on an X86 embedded device
+which does not support device trees and also now no platform data 
+handling.
+
+
+- Florian
+
+[1] 
+https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=64be0eadc17988f29d0a4b89569840d917746498
+[2] https://pcengines.ch/apu.htm
+[3] 
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/i2c/busses/i2c-piix4.c?h=v5.10.68
+[4] 
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/pinctrl/pinctrl-max77620.c?h=v5.10.68
+[5] 
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/drivers/pinctrl/pinctrl-mcp23s08.c?h=v5.10.68&id=6aba6ed879b3471903c8ada28ba968a268df6143
+[6] https://www.youtube.com/watch?v=nlKjUAv3RL0&ab_channel=OSDNConf
+[7] 
+https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/master/src/southbridge/amd/pi/hudson/acpi/fch.asl#29
