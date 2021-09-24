@@ -2,93 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED2F4170B6
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Sep 2021 13:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BA4417601
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Sep 2021 15:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245119AbhIXLRc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Sep 2021 07:17:32 -0400
-Received: from vps.xff.cz ([195.181.215.36]:34182 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245092AbhIXLRb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 24 Sep 2021 07:17:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1632482157; bh=34Gdmo0642tbeuZPW9xMHWN5BVp3DeIPofJxo02CEC4=;
-        h=From:To:Subject:Date:From;
-        b=jQokJeTan2xkic0EAF1IeKF14DZmV7zjr4hNZFk1T6rBw8XSKtUGEPAlS79EUSQrc
-         OZ9A4xtrYQpuiReKJp2o2NoBOMJIxlTWuZ1DwiCOi4JTQvmdc33rImPQqXDIoasBGf
-         d5R698DmaF140KY0y+FGkxOZTnFZ1ukzvhBJtaKc=
-From:   Ondrej Jirman <megous@megous.com>
-To:     Heiko Stuebner <heiko@sntech.de>, Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ondrej Jirman <megous@megous.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
-        support),
-        linux-rockchip@lists.infradead.org (open list:ARM/Rockchip SoC support),
-        linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RESEND PATCH] i2c: rk3x: Handle a spurious start completion interrupt flag
-Date:   Fri, 24 Sep 2021 13:15:27 +0200
-Message-Id: <20210924111528.2924251-1-megous@megous.com>
+        id S245027AbhIXNiV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 24 Sep 2021 09:38:21 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:38018
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346702AbhIXNh7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Sep 2021 09:37:59 -0400
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4B1E94027C
+        for <linux-i2c@vger.kernel.org>; Fri, 24 Sep 2021 13:36:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1632490585;
+        bh=S6Kt/t1TSGyeiJtJgoFpkmvIPh9xU6Dr0xsilHYx1x4=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=YVu1wkd3juuiuIsSYlHezkrgIfTumH6d03suWRQzi/Ldjf8fNK6Ys9pQO8QW8cmMi
+         P8tI4YKBIP6m9zZ3UaCg1OFzzV0vJqzN5v7LTIeVs6j6HpwcF5ZRKLs3DlnhrBuvUy
+         BRm0z3vjHV3mS/8lIdklSgzfArHwSri1eYW5z2nr2kFkRQ+cDFOZtYhS3oS7A7GR9L
+         kPJjk60gP1P7cp+wr44lwhqxW2PUUQwq21M4if6Pt4UlfifuW9GpbluP1o9TzEqjMT
+         0kxM/ehz4TYcC7p08L2pJqJnpjoFArPC11DZuvcpOBtspd1f1JVjVAZcuKJyzZ6PzX
+         lFNZB/D2bCeTA==
+Received: by mail-wr1-f69.google.com with SMTP id r9-20020a5d4989000000b0015d0fbb8823so8064219wrq.18
+        for <linux-i2c@vger.kernel.org>; Fri, 24 Sep 2021 06:36:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S6Kt/t1TSGyeiJtJgoFpkmvIPh9xU6Dr0xsilHYx1x4=;
+        b=HA4CsBeE6HVc8hlWzmbJ5u5/lDqgmWfTDDKqev6wqiuBWkxCTYs67V0PSoiFmUj97R
+         eH73CH+sSWRcHaQ4en+z0uk1J1nXJlhx8hYH2wrv9dJHswCv7bKLEoU6lzpIKyZFugZS
+         AhG4XmsnU5Js3sz8nSwJz8ZO3esX4Ga4dSRVFIVmh6LPzjxsaPsjB3qfWJL+ZrxRr4AC
+         UKxJ1zBzgrtoaQxdNOSocf6g3UexIPhAODiy4LT+MPCnpldjJgRVo6yrlwW0ByfEJt78
+         o9gJ50N81BYIePiQWykcyFAnav9E2Zald7ObRqVrPr9pyqWq2r2BEu9WXNI+aVEtE7+h
+         qHzw==
+X-Gm-Message-State: AOAM532yFVfIy48F1F6Cj+xtfVyK3/xY+x1O2c6RfcQUNhgdWt4NUd8/
+        uxukSSDaVrtG9F4UvUaVodL0NDHtYHo2th0nYzUt4rZAHytt0OBFM8SGWYrKSLQAVK3C0Cp0xA0
+        3vOPa+QybVIw9jbJyaYxpXwB6+bgttK9KItvsYg==
+X-Received: by 2002:a05:600c:214a:: with SMTP id v10mr2117097wml.167.1632490584120;
+        Fri, 24 Sep 2021 06:36:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwI1yh/i/veV4CX3x/B+5KadPo5GhYE/87Z36LyePhdH5qhrHtk2EOcRVEL6+fCnuWBNcRmpA==
+X-Received: by 2002:a05:600c:214a:: with SMTP id v10mr2117071wml.167.1632490583780;
+        Fri, 24 Sep 2021 06:36:23 -0700 (PDT)
+Received: from localhost.localdomain (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
+        by smtp.gmail.com with ESMTPSA id d70sm8377400wmd.3.2021.09.24.06.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Sep 2021 06:36:23 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH] i2c: exynos: describe drivers in KConfig
+Date:   Fri, 24 Sep 2021 15:35:49 +0200
+Message-Id: <20210924133550.112488-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In a typical read transfer, start completion flag is being set after
-read finishes (notice ipd bit 4 being set):
+Describe better which driver applies to which SoC, to make configuring
+kernel for Samsung SoC easier.
 
-trasnfer poll=0
-i2c start
-rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
-i2c read
-rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
-i2c stop
-rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 33
-
-This causes I2C transfer being aborted in polled mode from a stop completion
-handler:
-
-trasnfer poll=1
-i2c start
-rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
-i2c read
-rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 0
-rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
-i2c stop
-rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 13
-i2c stop
-rk3x-i2c fdd40000.i2c: unexpected irq in STOP: 0x10
-
-Clearing the START flag after read fixes the issue without any obvious
-side effects.
-
-This issue was dicovered on RK3566 when adding support for powering
-off the RK817 PMIC.
-
-Signed-off-by: Ondrej Jirman <megous@megous.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
-Re-sending, because originally, maintainers script did not pick up rockchip
-mailing list, to send this patch to.
+ drivers/i2c/busses/Kconfig | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- drivers/i2c/busses/i2c-rk3x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-index 819ab4ee517e..02ddb237f69a 100644
---- a/drivers/i2c/busses/i2c-rk3x.c
-+++ b/drivers/i2c/busses/i2c-rk3x.c
-@@ -423,8 +423,8 @@ static void rk3x_i2c_handle_read(struct rk3x_i2c *i2c, unsigned int ipd)
- 	if (!(ipd & REG_INT_MBRF))
- 		return;
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index e17790fe35a7..1df19ccc310b 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -615,7 +615,10 @@ config I2C_EXYNOS5
+ 	depends on ARCH_EXYNOS || COMPILE_TEST
+ 	default y if ARCH_EXYNOS
+ 	help
+-	  High-speed I2C controller on Exynos5 and newer Samsung SoCs.
++	  High-speed I2C controller on Samsung Exynos5 and newer Samsung SoCs:
++	  Exynos5250, Exynos5260, Exynos5410, Exynos542x, Exynos5800,
++	  Exynos5433 and Exynos7.
++	  Choose Y here only if you build for such Samsung SoC.
  
--	/* ack interrupt */
--	i2c_writel(i2c, REG_INT_MBRF, REG_IPD);
-+	/* ack interrupt (read also produces a spurious START flag, clear it too) */
-+	i2c_writel(i2c, REG_INT_MBRF | REG_INT_START, REG_IPD);
- 
- 	/* Can only handle a maximum of 32 bytes at a time */
- 	if (len > 32)
+ config I2C_GPIO
+ 	tristate "GPIO-based bitbanging I2C"
 -- 
-2.33.0
+2.30.2
 
