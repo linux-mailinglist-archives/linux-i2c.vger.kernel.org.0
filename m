@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E92BE4187FE
-	for <lists+linux-i2c@lfdr.de>; Sun, 26 Sep 2021 11:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C701C418800
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Sep 2021 12:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbhIZKBc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 26 Sep 2021 06:01:32 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:58061 "EHLO
+        id S230471AbhIZKBe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 26 Sep 2021 06:01:34 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:42217 "EHLO
         new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230085AbhIZKB2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 26 Sep 2021 06:01:28 -0400
+        by vger.kernel.org with ESMTP id S230250AbhIZKBb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 26 Sep 2021 06:01:31 -0400
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 962BB580FCE;
-        Sun, 26 Sep 2021 05:59:52 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id C4B8A580FD1;
+        Sun, 26 Sep 2021 05:59:54 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sun, 26 Sep 2021 05:59:52 -0400
+  by compute1.internal (MEProxy); Sun, 26 Sep 2021 05:59:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=eD+NxnkyU+/hP
-        i/UKgsnf10rLOiXfMOCvTD3jf1t0H0=; b=BbJWmL9rIELiwqAwkx6ZdyYYfQ/yc
-        gbZPgM6U8kt3QtDCO9OTwmAUoIwiPAk96YQ8fQ+ZIOi8uVmFs3W/D71ZZriQNx1r
-        cXocC+U5BX4YoQUTLL/ctglzTQQmr5hQgKqPVdjq6lxYMBDhULMZ3x5hyCzZxJFm
-        FGlE5Jovf2dqAaFpm+y6PwN7vcxIZ0MtVTVWrT3vmngvY2aYXafr7vmhD75iQ2uQ
-        dg0CEpX5XWwneyPMralb7AhVnwERjkLW3JNhCfeU1WM4PFPTynYE6xdldhvp8Kuv
-        CRnCNuL78vrbvUi+ESBD+FFUmjccbdF0ToCUcPiVh9pxvz9wFJ4PDa7fQ==
+        :mime-version:content-transfer-encoding; s=fm2; bh=KbpD7QDsVxr0s
+        hguUMq4LBuqqbF0i6Fnb7YHPNOz3ek=; b=qUZpi53zHUD80M8nqu661ADs8im9g
+        H6m6Mzdi6cRJ8NlT1f0sYVYv/7lnNa2vam1C9M7qUXc8Ze1S2wScKJYYiXIBtbM+
+        QX9LBZ0yXEU0nvI+Q7rC5udRfhf3J5gP1P/0lPDZ7xxosHFLeMy/EWkdXxIVqBsk
+        ngsa4Mn/NZxRACP15t3rrjxZAA0GEAWqa/EYorxkfXUAtrcf1tNumgUwDbOOFlvm
+        0WEHWpi0Fi4WZSJGz4PVhkxdG415DFVMyqjNM9RFzHQgqtAU9+hl7QI+aamn2gJY
+        BSr2rOUriYt/cj+aYQC/EfTuDwOSyeWmuyx7kmk+StJQCFDEI5jXbJHRQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=eD+NxnkyU+/hPi/UKgsnf10rLOiXfMOCvTD3jf1t0H0=; b=tlJ4Jm/6
-        XztkdtKC5bTdpdVe+6urPNE09FbmC+da3/py9U7aW7aYIT5v+zwc8izm6wYIk2aJ
-        YuX78NBhoTc3cKCFU6s1D13/y5O+ssgUO+fLz6UAbQDMOfXvNwULRbhTSJHME4lE
-        aXzmWfsqXFJVi9721iWz2a35yQZZap53anvFUhfuA+5o2p0vEvkZMtBZ2Ge7yqu3
-        OgHLjldgUiyL6qFLeAdpkTIeRD7zZEp5N5B+WQ0MJFCyzAIddf9rpqPERHQ/iIXv
-        Bu7tb5Ecf3+blBfhoYy8y6cDJRq33Xk9SofZbOlSo4FyNI7CeB8lmOxRU3NhFOnQ
-        QMQkCiMKIY1Tog==
-X-ME-Sender: <xms:mERQYRwWrwEJGOkbaWyT7cEV1oQlGD97QfB1M0U2E6HVJVm4KuoIxA>
-    <xme:mERQYRSuL_c5Po3r29uAnBZO8vndx2go1PvNv2sAjX58GBUjPbAXPrhEEs-pYCggg
-    Z614hqGSmlOuAcMoOM>
-X-ME-Received: <xmr:mERQYbVug99n-5x8w10C55Lu0t0XSGv4CIoM2zd4XtvuamXhH7mmjNMqF7PYnXE9R_km3WUIe5POQPpnyVE5OsoZssjJeblJ-vbcSe4QSLiDGnlaypx-d_Q>
+        fm3; bh=KbpD7QDsVxr0shguUMq4LBuqqbF0i6Fnb7YHPNOz3ek=; b=nyyiw9q+
+        Cp+FfyGYWwkGuV6q61ImTxR7ybE9CossQWXltL7CYV5fGrBJ8NFESWwQFhv0sQKn
+        yuHHHMX6NBQ7sk6gG+nw6ASpr7tp0GbvsaWoWgUaesN2hQB38Yo1TRS+T9H6bGbo
+        Y4MKz8rpd065L+5YcYsOxm1LsUQ5WOkEEcsa22z23nzGPH40fZZu7/ltJ8c6/BC2
+        BG7akP526ty4d6wHShl2bFyQBxMLUr7JXIen9yhOW/w1vP/RM3YHLcycZ5XpRLsn
+        JLDV+Pqc0/C2pe/RHrNueacCEoMgbfy+HfJLDFBRaa/Ngbz7bW7XmW1tz266n168
+        y5bbkaYgxCtr8Q==
+X-ME-Sender: <xms:mkRQYcGXwuhaRUvEmZRtsxt-DcPkwKCJGjM2FuazJDANj49lWSG7pw>
+    <xme:mkRQYVUfFHvMx_oqde4HWaPwaYLSnnDq6Mh2dIuHGC_1kQvvEjrHWj6-5V5Az43yT
+    wvbbpsStkQIUKRuhuA>
+X-ME-Received: <xmr:mkRQYWINdAsd491lSj1sxKX1kcuLygitrE7qn3lcqdMLxImm3h-HheOj1vpASPybPoL_lFUfJqT-qNfpelU8CbgBAhXzhp_8MP8ff2no-GE9H5a3a5OAGgU>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudejiedgvddvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -48,12 +48,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudejiedgvddvucetufdoteggod
     hrnheptedvkeetleeuffffhfekteetffeggffgveehieelueefvddtueffveevlefhfeej
     necuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepshhvvg
     hnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:mERQYTgtLIrWcCNTABwrKXXbmTDP46CpPRoartB8DARknw9HnEmJXA>
-    <xmx:mERQYTBVUwHn54k2KUZYMpRITvZQgUIIejQb2ZaLcVoh1vzrplVWgA>
-    <xmx:mERQYcIBKxhh-tExdra-RkjP-lQX_IhpclYB0QkF_X3K5z7dhKWjnw>
-    <xmx:mERQYTym48A0z-_1z7XG8weB9IhjOmjdVZqQZk21rtgfjTxIKmfOiA>
+X-ME-Proxy: <xmx:mkRQYeEqq7vPywGJxFw1B_Dmfp-rcN8_A29LRsWdzn6eFD9a8xOOcw>
+    <xmx:mkRQYSUsF5JptwPyJPt0aKdDykdMPYcL0E-KX655jVMCQippbcjLsA>
+    <xmx:mkRQYROmiU6Yd7WtM_I22qP789qdsRA9xyjFbjMVsv7jqcLkITpoNg>
+    <xmx:mkRQYbV1lji43E9w4x5B4fwEhxE6pjyKlgLPyjtLdrfxi-uHGnTsmQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 26 Sep 2021 05:59:50 -0400 (EDT)
+ 26 Sep 2021 05:59:52 -0400 (EDT)
 From:   Sven Peter <sven@svenpeter.dev>
 To:     Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -68,9 +68,9 @@ Cc:     Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
         linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 06/10] i2c: pasemi: Move common reset code to own function
-Date:   Sun, 26 Sep 2021 11:58:43 +0200
-Message-Id: <20210926095847.38261-7-sven@svenpeter.dev>
+Subject: [PATCH 07/10] i2c: pasemi: Allow to configure bus frequency
+Date:   Sun, 26 Sep 2021 11:58:44 +0200
+Message-Id: <20210926095847.38261-8-sven@svenpeter.dev>
 X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 In-Reply-To: <20210926095847.38261-1-sven@svenpeter.dev>
 References: <20210926095847.38261-1-sven@svenpeter.dev>
@@ -80,62 +80,78 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Split out common reset call to its own function so that we
-can later add support for selecting the clock frequency
-and an additional enable bit found in newer revisions.
+Right now the bus frequency has always been hardcoded as
+100 KHz with the specific reference clock used in the PASemi
+PCI controllers. Make this configurable to prepare for the
+platform driver.
 
 Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- drivers/i2c/busses/i2c-pasemi-core.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-pasemi-core.c | 8 +++-----
+ drivers/i2c/busses/i2c-pasemi-core.h | 1 +
+ drivers/i2c/busses/i2c-pasemi-pci.c  | 4 ++++
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-pasemi-core.c b/drivers/i2c/busses/i2c-pasemi-core.c
-index 3eda5e375fa2..7c6715f5dbb8 100644
+index 7c6715f5dbb8..a39e3258b162 100644
 --- a/drivers/i2c/busses/i2c-pasemi-core.c
 +++ b/drivers/i2c/busses/i2c-pasemi-core.c
-@@ -61,6 +61,12 @@ static inline int reg_read(struct pasemi_smbus *smbus, int reg)
- #define TXFIFO_WR(smbus, reg)	reg_write((smbus), REG_MTXFIFO, (reg))
- #define RXFIFO_RD(smbus)	reg_read((smbus), REG_MRXFIFO)
+@@ -39,9 +39,6 @@
+ #define CTL_MTR		0x00000200
+ #define CTL_CLK_M	0x000000ff
  
-+static void pasemi_reset(struct pasemi_smbus *smbus)
-+{
-+	reg_write(smbus, REG_CTL, (CTL_MTR | CTL_MRR |
-+		  (CLK_100K_DIV & CTL_CLK_M)));
-+}
-+
- static void pasemi_smb_clear(struct pasemi_smbus *smbus)
+-#define CLK_100K_DIV	84
+-#define CLK_400K_DIV	21
+-
+ static inline void reg_write(struct pasemi_smbus *smbus, int reg, int val)
  {
- 	unsigned int status;
-@@ -135,8 +141,7 @@ static int pasemi_i2c_xfer_msg(struct i2c_adapter *adapter,
- 	return 0;
+ 	dev_dbg(smbus->dev, "smbus write reg %lx val %08x\n",
+@@ -63,8 +60,9 @@ static inline int reg_read(struct pasemi_smbus *smbus, int reg)
  
-  reset_out:
+ static void pasemi_reset(struct pasemi_smbus *smbus)
+ {
 -	reg_write(smbus, REG_CTL, (CTL_MTR | CTL_MRR |
 -		  (CLK_100K_DIV & CTL_CLK_M)));
-+	pasemi_reset(smbus);
- 	return err;
++	u32 val = (CTL_MTR | CTL_MRR | (smbus->clk_div & CTL_CLK_M));
++
++	reg_write(smbus, REG_CTL, val);
  }
  
-@@ -302,8 +307,7 @@ static int pasemi_smb_xfer(struct i2c_adapter *adapter,
- 	return 0;
+ static void pasemi_smb_clear(struct pasemi_smbus *smbus)
+diff --git a/drivers/i2c/busses/i2c-pasemi-core.h b/drivers/i2c/busses/i2c-pasemi-core.h
+index 7acc33de6ce1..30a7990825ef 100644
+--- a/drivers/i2c/busses/i2c-pasemi-core.h
++++ b/drivers/i2c/busses/i2c-pasemi-core.h
+@@ -14,6 +14,7 @@ struct pasemi_smbus {
+ 	void __iomem		*ioaddr;
+ 	unsigned long		 base;
+ 	int			 size;
++	unsigned int		 clk_div;
+ };
  
-  reset_out:
--	reg_write(smbus, REG_CTL, (CTL_MTR | CTL_MRR |
--		  (CLK_100K_DIV & CTL_CLK_M)));
-+	pasemi_reset(smbus);
- 	return err;
- }
+ int pasemi_i2c_common_probe(struct pasemi_smbus *smbus);
+diff --git a/drivers/i2c/busses/i2c-pasemi-pci.c b/drivers/i2c/busses/i2c-pasemi-pci.c
+index 9a19df31866b..7405e0b48514 100644
+--- a/drivers/i2c/busses/i2c-pasemi-pci.c
++++ b/drivers/i2c/busses/i2c-pasemi-pci.c
+@@ -17,6 +17,9 @@
  
-@@ -335,8 +339,7 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smbus)
- 	/* set up the sysfs linkage to our parent device */
- 	smbus->adapter.dev.parent = smbus->dev;
+ #include "i2c-pasemi-core.h"
  
--	reg_write(smbus, REG_CTL, (CTL_MTR | CTL_MRR |
--		  (CLK_100K_DIV & CTL_CLK_M)));
-+	pasemi_reset(smbus);
++#define CLK_100K_DIV	84
++#define CLK_400K_DIV	21
++
+ static struct pci_driver pasemi_smb_pci_driver;
  
- 	error = i2c_add_adapter(&smbus->adapter);
- 	if (error)
+ static int pasemi_smb_pci_probe(struct pci_dev *dev,
+@@ -35,6 +38,7 @@ static int pasemi_smb_pci_probe(struct pci_dev *dev,
+ 	smbus->dev = &dev->dev;
+ 	smbus->base = pci_resource_start(dev, 0);
+ 	smbus->size = pci_resource_len(dev, 0);
++	smbus->clk_div = CLK_100K_DIV;
+ 
+ 	if (!request_region(smbus->base, smbus->size,
+ 			    pasemi_smb_pci_driver.name)) {
 -- 
 2.25.1
 
