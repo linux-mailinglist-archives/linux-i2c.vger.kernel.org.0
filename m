@@ -2,108 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6518418FB1
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Sep 2021 09:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CA8419019
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Sep 2021 09:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbhI0HJP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Sep 2021 03:09:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57136 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233140AbhI0HJP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 27 Sep 2021 03:09:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D47760F94;
-        Mon, 27 Sep 2021 07:07:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632726457;
-        bh=eMQ6pJlXVCcD9g2RORTHEO4UfDrkbLRI1N5jWkz02pk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dM0aiacINeizZ/6nAaB75Y4hAq+u2IvBjiW0d5J2/eoqd+undvXHbOZWTKuBv0Rvl
-         wpAsdPnQz4ltiF9RFHkApMFWBAbIl/YTlCXa5lCLoOoZoa8RcpRusmUNyyGvCUDk+O
-         B0KlHcQ0OcBgbDCzd2z72uSf++2vFJsl1Ulit2Tc7mgFmz3M4VYv9KO2AjvvdqAa5D
-         e+jGqSC/6IF7/inwhuRmkfuJcB1qXNtUVjLtybC/yzLdY4mclsBQGA8e1Hvx99fSzh
-         JqzVMaJQpVaqnd1xSXaz333Y+fxr+BsuKoLLMmSBR6s9pF9HefFyymsGryxLbkisG+
-         GfH1GfAfaCQ/A==
-Date:   Mon, 27 Sep 2021 09:07:26 +0200
-From:   Wolfram Sang <wsa@kernel.org>
+        id S233221AbhI0Hl1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Sep 2021 03:41:27 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:59063 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233166AbhI0Hl0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Sep 2021 03:41:26 -0400
+Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M2fHt-1mYLD237XD-004G11; Mon, 27 Sep 2021 09:39:47 +0200
+Received: by mail-wr1-f41.google.com with SMTP id x20so4935312wrg.10;
+        Mon, 27 Sep 2021 00:39:47 -0700 (PDT)
+X-Gm-Message-State: AOAM530ZPw2Gm3uTeKMOr6lYU4sUvf/qK641Wgntlgw2jd4iumBuqL2v
+        axFgJFhlPRK8b25DJslT5/w1RaP5oKLUaL1/y+g=
+X-Google-Smtp-Source: ABdhPJytwg2Jscle8D6U7FjXeASR49u7ckmZRsHWvpWZ7dVMwzcRYybH1hTRxtWvWXS2xPhWFtHNHK/cOuV06y8U5RI=
+X-Received: by 2002:adf:f481:: with SMTP id l1mr26255175wro.411.1632728387404;
+ Mon, 27 Sep 2021 00:39:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210926095847.38261-1-sven@svenpeter.dev> <20210926095847.38261-3-sven@svenpeter.dev>
+In-Reply-To: <20210926095847.38261-3-sven@svenpeter.dev>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 27 Sep 2021 09:39:31 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2_6rcQa8TCgw=6uH26UfjShrVVu-zfLf2=pi6Z8cGOPg@mail.gmail.com>
+Message-ID: <CAK8P3a2_6rcQa8TCgw=6uH26UfjShrVVu-zfLf2=pi6Z8cGOPg@mail.gmail.com>
+Subject: Re: [PATCH 02/10] i2c: pasemi: Use io{read,write}32
 To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Christian Zigotzky <chzigotzky@xenosoft.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
         Hector Martin <marcan@marcan.st>,
-        mohamed.mediouni@caramail.com, Stan Skowronek <stan@corellium.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
         Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-arm-kernel@lists.infradead.org,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "R.T.Dickinson" <rtd2@xtra.co.nz>,
-        Darren Stevens <darren@stevens-zone.net>,
-        Matthew Leaman <matthew@a-eon.biz>,
-        "R.T.Dickinson" <rtd@a-eon.com>
-Subject: Re: Add Apple M1 support to PASemi i2c driver
-Message-ID: <YVFtrpxfUbzv4XxT@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Christian Zigotzky <chzigotzky@xenosoft.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
-        mohamed.mediouni@caramail.com, Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-arm-kernel@lists.infradead.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "R.T.Dickinson" <rtd2@xtra.co.nz>,
-        Darren Stevens <darren@stevens-zone.net>,
-        Matthew Leaman <matthew@a-eon.biz>, "R.T.Dickinson" <rtd@a-eon.com>
-References: <6487d099-e0d6-4ea3-d312-6adbd94589f4@xenosoft.de>
- <3dcc6c36-a0dd-0cad-428d-a6ed0f73e687@xenosoft.de>
- <d0a646c7-426b-4b40-b3fc-9776c6a1025d@www.fastmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gTShxT62TmlXACri"
-Content-Disposition: inline
-In-Reply-To: <d0a646c7-426b-4b40-b3fc-9776c6a1025d@www.fastmail.com>
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:T7p1J/1gB9Ic7E3sfD9ruZZkCnSPI8KkU/E35WvgjvauMw5SpLu
+ 2IdmKc4b860GWnsILXMwg0WFK4Q1lAPsz11y8StDLKe0yh7rJvEgzgVnJV3G37Zpjmam9Xf
+ Jn7B71Sww5mFMaT9dxwQQvaiRipK56FNDqZ8n5StSZo7oWTJVd8upIRRmVn/93C5rCsoYVI
+ 3IkmNmGyChs2jZHT9sbrQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Pjdh4uzTX5g=:bevCXAHoUI70a0BpBWqf5/
+ MUEqJ1Cmg43/F5977LofeJffSnkOBpTgFwP14pgfzEV+JObgpBf4Zksu7Nz4vE2jUSMArfRqT
+ WocMtLH8Dy5A3gMnZ1O+6KWK9q9CASajHitjmCEqzBobWBlpRtUb3WGSYnQXdAWgU2ZhEamWv
+ KwBctQd4KZ7IjSCCN6mr3lnboPwUyOfa12lnPmiGqHOt5M/FyLfY0QQF7ObnMV6qpKexZIio8
+ rwiGKFFoMBYeAMWUNCM2zd6gYIvb7KYNstDGE56wpx6Bxy0CIwzR+I9vfUtFtNll8D210Gyf3
+ u+4mvuzo+f9GhTptAljR4SG6GcGEgsS6WrU5EPdSp6Q4bjPhVpQyvDsyxfDAwdWCi7iYnt/9f
+ MPyZ8u4csslxQhqwQdF/QLW7l6hVHID+66OkVx+90wmLVJE2zZkP391mcC9ZISHIdEQqnjwVO
+ J3EK3EhrbHqX8X8eVyTiyyn+ozQ7JnvBswg/6127Jv9JJAJjchGq16BFZkMZg2U1HzP+5JL8k
+ f7aWOax8jN8LaHxOcypIihHpwPJYobam50XnHEwACMiKd+JX9w4Eu2SaxUxWI9tZly9JdNfYA
+ xvjIhrxve0dpMtnaTzyPENL7Sxdhpix4f2mYRknWas2A+w87HevxeJrEsWaw6CJDU/dKnINvk
+ pOqc+5ue2BThRIcY5zrUTBupKeBPJ45ay7HQqZUkVOKcNFAd1UAwqxpyulM73Dwfu1uFGyFUq
+ xys8THosaHvFYlUSVd6j9c/nkKlJVwecWY9aC/wI6V94P2nifp3swq83/pca3q3TtVpWg3kXr
+ /lpbONZAhWBZBzzR5Uiqj/5DxYePYYNAfzsj8qxCxeRR0LV9z+rxx/3lml8Q9+yy42yoQmYx0
+ ZVoV1E3igiknSkq9XhDw==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sun, Sep 26, 2021 at 12:00 PM Sven Peter <sven@svenpeter.dev> wrote:
+>
+> In preparation for splitting this driver up into a platform_driver
+> and a pci_driver, replace outl/inl usage with ioport_map and
+> ioread32/iowrite32.
+>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>
+> +       smbus->ioaddr = ioport_map(smbus->base, smbus->size);
+> +       if (!smbus->ioaddr) {
+> +               error = -EBUSY;
+> +               goto out_release_region;
+> +       }
 
---gTShxT62TmlXACri
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+While this works, I would suggest using the more regular pci_iomap()
+or pcim_iomap() helper to turn the port number into an __iomem token.
 
-
-> Sure, will do that later as well!
-
-But please do it privately. For upstreaming, the patch series you sent
-is way better than a single patch.
-
-
---gTShxT62TmlXACri
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFRbaoACgkQFA3kzBSg
-KbbrrQ/9HIs6yV6l8QWQ+P4IlPfU2kXwk3/9VhzWJrZ3nsok/WzVbDWJmgPo7lJH
-XR6Nm4tcJI+N3zqD4K2yIjmjhOaZPS9FqWwU52+46C3N9KtefLm5nk2BKPcWQeSv
-/ezPuxpFX73wh+sLjHrlGJm02QBycsWU0UWXPeDCjzMHvgLKMK+TBOMkMkDiaR7N
-zHlVEyraezoqXsW+YIe766GewkmOnBp9r97NXrn1nLjWmVV81wXt0jTg7v/mVcCO
-8HAle3UUvQc+njozZZrYwwDPyS5Qr1sfRWaVVOROD3ljqaDEC7kJtYJ+AyOVdmvU
-vOrcmXKSvsluIZb7qfk6OuLL2H3Vg47TvaYjZ7jdqoHeAKiEOP/IOB8InYMiu49A
-ne28Gw7Rrv4qxao4JIFnL0/3teaDMnlGXLe5unP0lQ0QDno9Q2PeiLfWkFPzvMeU
-7XhioE+m3UFSFBG5MhjpDuVm0LeQXw+F2kOK2bSWEKbtRW0qfYgOhJVzBIrqYgn+
-mdAiLA9CecBnAQDr8eS8nqg16MUpdCnm7AXr0WgFv43UN4kkeme3gTww1N3GAzSh
-TkmF/Ii0C+Tl7DEUQP2YsRwS8b1axQ6BD80FjvYdVVur8Arb+KcnSgjdca7jYyfw
-64CBmjl455K9IQv0wYY7r695zhQch3OkKa91VsmwGXMvzlw+tMo=
-=Kgu0
------END PGP SIGNATURE-----
-
---gTShxT62TmlXACri--
+        Arnd
