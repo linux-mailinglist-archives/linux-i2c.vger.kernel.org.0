@@ -2,92 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 139E94196A6
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Sep 2021 16:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC42419ED6
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Sep 2021 21:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234799AbhI0OtY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Sep 2021 10:49:24 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:20881 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234782AbhI0OtY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Sep 2021 10:49:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632754010;
-    s=strato-dkim-0002; d=xenosoft.de;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=G44RgpYWm1lf5aJbtqvM3dEwZV68hpUjNCbqcFai2VI=;
-    b=lo2YMw8aaukGvNonTLkxYqC8YyZ9zP/V7FOgY7vzij69NlHvMd1lma39cgaAftn45E
-    vpQAI2pt26HCzo9wF+VIvqsq+G+RoaE7QGmWmIpVoStaNyQO0A7L6eUAvvw0M4Umhkki
-    jbFqvb+y0Wa872yzsWHFeWaUzbjnQGaeEuwtMyaI7fWXowDHXlnrU64OZ5ldXHsxvFMd
-    buaVRTRjVM6Vn15/UVky/jNELgDyswPJ15Ba4ed0ALb8xBevCwlSr0i9R5V3lGXOrQGr
-    PL/0OV+sY3JS4oPzVJwSy4spBAMURkePSy8IDPG8IY2yq0/wqkAjgpPh7Lw8WGzP+BCu
-    0SgQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHvJzedV4hp0mZXC9uZstB89hq66pCQ/IzAuyWHINmLRkeRKr"
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2a01:598:b172:60ba:4101:c483:8872:ffac]
-    by smtp.strato.de (RZmta 47.33.8 AUTH)
-    with ESMTPSA id I00cdex8REklONq
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 27 Sep 2021 16:46:47 +0200 (CEST)
-Subject: Re: Add Apple M1 support to PASemi i2c driver
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Wolfram Sang <wsa@kernel.org>, Sven Peter <sven@svenpeter.dev>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        Hector Martin <marcan@marcan.st>,
-        mohamed.mediouni@caramail.com, Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-arm-kernel@lists.infradead.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "R.T.Dickinson" <rtd2@xtra.co.nz>,
-        Darren Stevens <darren@stevens-zone.net>,
-        Matthew Leaman <matthew@a-eon.biz>,
-        "R.T.Dickinson" <rtd@a-eon.com>
-References: <6487d099-e0d6-4ea3-d312-6adbd94589f4@xenosoft.de>
- <3dcc6c36-a0dd-0cad-428d-a6ed0f73e687@xenosoft.de>
- <d0a646c7-426b-4b40-b3fc-9776c6a1025d@www.fastmail.com>
- <YVFtrpxfUbzv4XxT@shikoro> <87mtnylaam.fsf@mpe.ellerman.id.au>
-From:   Christian Zigotzky <chzigotzky@xenosoft.de>
-Message-ID: <75053ff2-7adc-178c-81cd-e80a2732c5fc@xenosoft.de>
-Date:   Mon, 27 Sep 2021 16:46:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S236180AbhI0TE2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Sep 2021 15:04:28 -0400
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:34693 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236225AbhI0TE0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Sep 2021 15:04:26 -0400
+Received: by mail-ot1-f46.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so20072362otb.1;
+        Mon, 27 Sep 2021 12:02:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ecI1ixxbKoKDjkuufNK1un3yapogUK+2LTUIo0suHRo=;
+        b=uy6AnneKjSvgKW/6uydQk0vRfbpWSR9lR3VoxD0et1B1JaOg+fpziWpPi7bdtBkNgx
+         2JERm312576fRPjgCmRNEX6nmXjnPX5QrhsLCVaSZHCKqwb4qv8za5tVnuaqkNfpjXo6
+         yjzb4ZV2f3uFOFPXhjbreiwPbA8BylanCRJXdNCTNZ8vjylY60ck1+LDuGCCuKdL7tja
+         8qSvFvNMgX4/tJmnou32n+h4/QILgClynEWTzkWBaGN5p4KCXtt1Rtby2+e795JqJijB
+         o529BZJ7qyu3B3Zh1Te02MDB9HconW1a4I9r3j6V4SZK9ls4Dbwp1K+par34r5CW4s7i
+         QhIw==
+X-Gm-Message-State: AOAM533ErCcXhG3GCj8FHSdiTtQPnoQZ6lCo/xXmsl2yJ7muAMATAZFO
+        wvT7c3GcBzz0AhyoYoqiRI25C/LZdw==
+X-Google-Smtp-Source: ABdhPJzWI4YFPrUorXsb67HfNc56meek1ROVVXpyhfeQT8tGHPkCoXTpWYrYRcBY1lsmuVqMUoutVw==
+X-Received: by 2002:a05:6830:11c7:: with SMTP id v7mr1359183otq.355.1632769368132;
+        Mon, 27 Sep 2021 12:02:48 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id w1sm4181986ote.41.2021.09.27.12.02.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Sep 2021 12:02:47 -0700 (PDT)
+Received: (nullmailer pid 3672458 invoked by uid 1000);
+        Mon, 27 Sep 2021 19:02:46 -0000
+Date:   Mon, 27 Sep 2021 14:02:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Matt Johnston <matt@codeconstruct.com.au>
+Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jeremy Kerr <jk@codeconstruct.com.au>
+Subject: Re: [PATCH v4] dt-bindings: net: New binding mctp-i2c-controller
+Message-ID: <YVIVVkgGtlXBVizP@robh.at.kernel.org>
+References: <20210923033406.3166902-1-matt@codeconstruct.com.au>
 MIME-Version: 1.0
-In-Reply-To: <87mtnylaam.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: de-DE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210923033406.3166902-1-matt@codeconstruct.com.au>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 27 September 2021 at 09:58 am, Michael Ellerman wrote:
-> Wolfram Sang <wsa@kernel.org> writes:
->>> Sure, will do that later as well!
->> But please do it privately. For upstreaming, the patch series you sent
->> is way better than a single patch.
-> Christian, the whole series is downloadable as a single mbox here:
->
-> https://patchwork.ozlabs.org/series/264134/mbox/
->
-> Save that to a file and apply with `git am`.
->
-> eg:
->
->   $ wget -O mbox https://patchwork.ozlabs.org/series/264134/mbox/
->   $ git am mbox
->
-> It applies cleanly on v5.15-rc3.
->
-> cheers
-I was able to patch it with the instructions above. Thanks! I will 
-compile and test the RC3 as soon as possible.
+On Thu, 23 Sep 2021 11:34:06 +0800, Matt Johnston wrote:
+> Used to define a local endpoint to communicate with MCTP peripherals
+> attached to an I2C bus. This I2C endpoint can communicate with remote
+> MCTP devices on the I2C bus.
+> 
+> In the example I2C topology below (matching the second yaml example) we
+> have MCTP devices on busses i2c1 and i2c6. MCTP-supporting busses are
+> indicated by the 'mctp-controller' DT property on an I2C bus node.
+> 
+> A mctp-i2c-controller I2C client DT node is placed at the top of the
+> mux topology, since only the root I2C adapter will support I2C slave
+> functionality.
+>                                                .-------.
+>                                                |eeprom |
+>     .------------.     .------.               /'-------'
+>     | adapter    |     | mux  --@0,i2c5------'
+>     | i2c1       ----.*|      --@1,i2c6--.--.
+>     |............|    \'------'           \  \  .........
+>     | mctp-i2c-  |     \                   \  \ .mctpB  .
+>     | controller |      \                   \  '.0x30   .
+>     |            |       \  .........        \  '.......'
+>     | 0x50       |        \ .mctpA  .         \ .........
+>     '------------'         '.0x1d   .          '.mctpC  .
+>                             '.......'          '.0x31   .
+>                                                 '.......'
+> (mctpX boxes above are remote MCTP devices not included in the DT at
+> present, they can be hotplugged/probed at runtime. A DT binding for
+> specific fixed MCTP devices could be added later if required)
+> 
+> Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
+> ---
+> 
+> Changes:
+> 
+> v3->v4:
+> Formatting and YAML syntax fixes, rename .yaml file to match
+> 
+> v2->v3:
+> Change the MCTP indicator to being a property on the I2C bus node.
+> 
+> Thanks,
+> Matt
+> 
+>  Documentation/devicetree/bindings/i2c/i2c.txt |  4 +
+>  .../bindings/net/mctp-i2c-controller.yaml     | 92 +++++++++++++++++++
+>  2 files changed, 96 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml
+> 
 
--- Christian
+Reviewed-by: Rob Herring <robh@kernel.org>
