@@ -2,33 +2,33 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CA8419019
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Sep 2021 09:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617EB41901F
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Sep 2021 09:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbhI0Hl1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 27 Sep 2021 03:41:27 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:59063 "EHLO
+        id S233226AbhI0HoN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 27 Sep 2021 03:44:13 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:56307 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbhI0Hl0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Sep 2021 03:41:26 -0400
-Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M2fHt-1mYLD237XD-004G11; Mon, 27 Sep 2021 09:39:47 +0200
-Received: by mail-wr1-f41.google.com with SMTP id x20so4935312wrg.10;
-        Mon, 27 Sep 2021 00:39:47 -0700 (PDT)
-X-Gm-Message-State: AOAM530ZPw2Gm3uTeKMOr6lYU4sUvf/qK641Wgntlgw2jd4iumBuqL2v
-        axFgJFhlPRK8b25DJslT5/w1RaP5oKLUaL1/y+g=
-X-Google-Smtp-Source: ABdhPJytwg2Jscle8D6U7FjXeASR49u7ckmZRsHWvpWZ7dVMwzcRYybH1hTRxtWvWXS2xPhWFtHNHK/cOuV06y8U5RI=
-X-Received: by 2002:adf:f481:: with SMTP id l1mr26255175wro.411.1632728387404;
- Mon, 27 Sep 2021 00:39:47 -0700 (PDT)
+        with ESMTP id S233223AbhI0HoN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 27 Sep 2021 03:44:13 -0400
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MavF5-1n6a4P17hD-00cS5e; Mon, 27 Sep 2021 09:42:34 +0200
+Received: by mail-wr1-f42.google.com with SMTP id d6so49487611wrc.11;
+        Mon, 27 Sep 2021 00:42:34 -0700 (PDT)
+X-Gm-Message-State: AOAM533ZicwIhU5WtzgjhPHcHOI1TFX71SC+iCyAddaN+N0uoMrWeNCG
+        20rKS8Y0t7Kbw//f0TGHiPzzuYaqOvmo4rCqZys=
+X-Google-Smtp-Source: ABdhPJyAwJs1fMl5WROWadibQbf9i4s452vEEuGBlKBwwPRVMz4Z4aFhReOWFzEvxiKPsQdFWNyIVMvgFQmk0bW7ncQ=
+X-Received: by 2002:a5d:6a08:: with SMTP id m8mr25501837wru.336.1632728553884;
+ Mon, 27 Sep 2021 00:42:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210926095847.38261-1-sven@svenpeter.dev> <20210926095847.38261-3-sven@svenpeter.dev>
-In-Reply-To: <20210926095847.38261-3-sven@svenpeter.dev>
+References: <20210926095847.38261-1-sven@svenpeter.dev>
+In-Reply-To: <20210926095847.38261-1-sven@svenpeter.dev>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 27 Sep 2021 09:39:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2_6rcQa8TCgw=6uH26UfjShrVVu-zfLf2=pi6Z8cGOPg@mail.gmail.com>
-Message-ID: <CAK8P3a2_6rcQa8TCgw=6uH26UfjShrVVu-zfLf2=pi6Z8cGOPg@mail.gmail.com>
-Subject: Re: [PATCH 02/10] i2c: pasemi: Use io{read,write}32
+Date:   Mon, 27 Sep 2021 09:42:18 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3Lt2QXk+aWLtXUXjjNhKJwNns6d9r=Yh5_aWETuvZTpQ@mail.gmail.com>
+Message-ID: <CAK8P3a3Lt2QXk+aWLtXUXjjNhKJwNns6d9r=Yh5_aWETuvZTpQ@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Add Apple M1 support to PASemi i2c driver
 To:     Sven Peter <sven@svenpeter.dev>
 Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -44,44 +44,58 @@ Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:T7p1J/1gB9Ic7E3sfD9ruZZkCnSPI8KkU/E35WvgjvauMw5SpLu
- 2IdmKc4b860GWnsILXMwg0WFK4Q1lAPsz11y8StDLKe0yh7rJvEgzgVnJV3G37Zpjmam9Xf
- Jn7B71Sww5mFMaT9dxwQQvaiRipK56FNDqZ8n5StSZo7oWTJVd8upIRRmVn/93C5rCsoYVI
- 3IkmNmGyChs2jZHT9sbrQ==
+X-Provags-ID: V03:K1:bbDys2bnyLP0F2yE86hVNqxzMvK0gatX+jp0BgTXILxAYhz5rOr
+ CBSuFDkMYHP5zmvO+Mmk+tVOLt8baO97TGHu36gRnhgAtSaza4o381uGqyPz3yEaRaglA7q
+ FvdBIUiYdns4DgZli94UeqnfShGdB213+Aah/RqPktAyeGumw3lktgn/pUxr+trB/T2+HYx
+ hIrbSii+w0Sy567w8Atyg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Pjdh4uzTX5g=:bevCXAHoUI70a0BpBWqf5/
- MUEqJ1Cmg43/F5977LofeJffSnkOBpTgFwP14pgfzEV+JObgpBf4Zksu7Nz4vE2jUSMArfRqT
- WocMtLH8Dy5A3gMnZ1O+6KWK9q9CASajHitjmCEqzBobWBlpRtUb3WGSYnQXdAWgU2ZhEamWv
- KwBctQd4KZ7IjSCCN6mr3lnboPwUyOfa12lnPmiGqHOt5M/FyLfY0QQF7ObnMV6qpKexZIio8
- rwiGKFFoMBYeAMWUNCM2zd6gYIvb7KYNstDGE56wpx6Bxy0CIwzR+I9vfUtFtNll8D210Gyf3
- u+4mvuzo+f9GhTptAljR4SG6GcGEgsS6WrU5EPdSp6Q4bjPhVpQyvDsyxfDAwdWCi7iYnt/9f
- MPyZ8u4csslxQhqwQdF/QLW7l6hVHID+66OkVx+90wmLVJE2zZkP391mcC9ZISHIdEQqnjwVO
- J3EK3EhrbHqX8X8eVyTiyyn+ozQ7JnvBswg/6127Jv9JJAJjchGq16BFZkMZg2U1HzP+5JL8k
- f7aWOax8jN8LaHxOcypIihHpwPJYobam50XnHEwACMiKd+JX9w4Eu2SaxUxWI9tZly9JdNfYA
- xvjIhrxve0dpMtnaTzyPENL7Sxdhpix4f2mYRknWas2A+w87HevxeJrEsWaw6CJDU/dKnINvk
- pOqc+5ue2BThRIcY5zrUTBupKeBPJ45ay7HQqZUkVOKcNFAd1UAwqxpyulM73Dwfu1uFGyFUq
- xys8THosaHvFYlUSVd6j9c/nkKlJVwecWY9aC/wI6V94P2nifp3swq83/pca3q3TtVpWg3kXr
- /lpbONZAhWBZBzzR5Uiqj/5DxYePYYNAfzsj8qxCxeRR0LV9z+rxx/3lml8Q9+yy42yoQmYx0
- ZVoV1E3igiknSkq9XhDw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fEqGRCn6Tbo=:npIMg/pMRKx1NlmYEa9meK
+ +CTezP6u9ecmtFvdKIs1ekrIvfXj+RvEO+u7P+93bpNLb2Ns0GKT7k+C+KlhQGvCWcHSs73/z
+ LjB4QeHXLHlIx0HkvJObz356W5q8Nc5j88QePDxozkPEyfGDhWm/3AG5UnI8V3rJFHTzpXmDw
+ xMTQuI/QvLlVLX2ZjwTc4nxoSYDvFLKTnNynm95gld2ejHOSrKEtES9eXxjiMjUV0DO+RX4pK
+ A2xhEfIZDzTrdRrbNL6wZkLf1xu24uxFSohF6apLVYWRgD6pKZNQfB2Nhol1mloI5SHbyh5Q8
+ m5Pv8X4Klbmuy5CgmKBaOq+IMrlErL1yWDk7P4edronfMQoX92jSKwt49aFxzejcJE7RRGe3j
+ XZ7B8b73NtEyE7SmmrTJsZ10QSoEuC5l+fog9lq65Mf1FHwtWcywGxH7aa41Fat9o4mvAWXT3
+ EIsWsAUPMrrYpqXW3pCX70d6ZCUH1kXmu0vXhsUN0+UQBmtPlHm+kgZU4DlpBtuexARxiUTPo
+ lu/mHh0lwRitCQ0r8NftOt7IekFlJgtsY5fg37yorZrlE/6GmHaNUv/iPYYOJpkhPex3Gq9pe
+ cSxa35uBZAoTux4padWOrOl5QVsGdRPd2rriIFdkAQaXvyMvDtahLX/VLxd73s5lh3Tw8kuF/
+ WxYKlwGpQEpBwFl7oD8z1Tt7HYNlVV379ZYjlAuQE8jU5u2dz8GCbwFFQBhG3pcL0iDK5qY8b
+ owjbHoRFb8Qsk0fJbXdl/As3X+KpRqNHfmKnqTve3U5hDkWj37Gk3H3FDrCRzJe90fQvFURD3
+ i5u7U7NulNymeR3JQ9nCo+gHuczPoibLV/qCcm/VTXMM7I4QqcKATxqPSJSSIigsg+LjsNffL
+ CvYXxzPmkVyDU/pEgS6Q==
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Sun, Sep 26, 2021 at 12:00 PM Sven Peter <sven@svenpeter.dev> wrote:
 >
-> In preparation for splitting this driver up into a platform_driver
-> and a pci_driver, replace outl/inl usage with ioport_map and
-> ioread32/iowrite32.
+> This series adds support for the I2C controller found on Apple Silicon Macs
+> which has quite a bit of history:
 >
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> Apple bought P.A. Semi in 2008 and it looks like a part of its legacy continues
+> to live on in the M1. This controller has actually been used since at least the
+> iPhone 4S and hasn't changed much since then.
+> Essentially, there are only a few differences that matter:
 >
-> +       smbus->ioaddr = ioport_map(smbus->base, smbus->size);
-> +       if (!smbus->ioaddr) {
-> +               error = -EBUSY;
-> +               goto out_release_region;
-> +       }
+>         - The controller no longer is a PCI device
+>         - Starting at some iPhone an additional bit in one register
+>           must be set in order to start transmissions.
+>         - The reference clock and hence the clock dividers are different
+>
+> In order to add support for a platform device I first replaced PCI-specific
+> bits and split out the PCI driver to its own file. Then I added support
+> to make the clock divider configurable and converted the driver to use
+> managed device resources to make it a bit simpler.
+>
+> The Apple and PASemi driver will never be compiled in the same kernel
+> since the Apple one will run on arm64 while the original PASemi driver
+> will only be useful on powerpc.
+> I've thus followed the octeon (mips)/thunderx(arm64) approach to do the
+> split: I created a -core.c file which contains the shared logic and just
+> compile that one for both the PASemi and the new Apple driver.
 
-While this works, I would suggest using the more regular pci_iomap()
-or pcim_iomap() helper to turn the port number into an __iomem token.
+This looks all very good to me, I had one very minor comment.
 
-        Arnd
+Whole series
+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
