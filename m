@@ -2,24 +2,24 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1C641AEAC
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Sep 2021 14:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15BB41AEB5
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Sep 2021 14:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240630AbhI1MTT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Sep 2021 08:19:19 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:60364 "EHLO inva020.nxp.com"
+        id S240647AbhI1MTX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Sep 2021 08:19:23 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:60400 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240588AbhI1MTR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 28 Sep 2021 08:19:17 -0400
+        id S240599AbhI1MTS (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 28 Sep 2021 08:19:18 -0400
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5C0F21A2841;
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id F3BF61A2846;
         Tue, 28 Sep 2021 14:17:37 +0200 (CEST)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4E7FC1A0153;
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E585C1A0153;
         Tue, 28 Sep 2021 14:17:37 +0200 (CEST)
 Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id BD5532030E;
-        Tue, 28 Sep 2021 14:17:36 +0200 (CEST)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 5E5402030E;
+        Tue, 28 Sep 2021 14:17:37 +0200 (CEST)
 From:   Abel Vesa <abel.vesa@nxp.com>
 To:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -32,9 +32,9 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>
-Subject: [PATCH v2 05/10] arm64: dts: freescale: Add ddr subsys dtsi for imx8dxl
-Date:   Tue, 28 Sep 2021 15:17:15 +0300
-Message-Id: <1632831440-5880-6-git-send-email-abel.vesa@nxp.com>
+Subject: [PATCH v2 06/10] arm64: dts: freescale: Add lsio subsys dtsi for imx8dxl
+Date:   Tue, 28 Sep 2021 15:17:16 +0300
+Message-Id: <1632831440-5880-7-git-send-email-abel.vesa@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1632831440-5880-1-git-send-email-abel.vesa@nxp.com>
 References: <1632831440-5880-1-git-send-email-abel.vesa@nxp.com>
@@ -45,57 +45,109 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Jacky Bai <ping.bai@nxp.com>
 
-Add the ddr subsys dtsi for i.MX8DXL. Additional db pmu is added
-compared to i.MX8QXP.
+On i.MX8DXL, the LSIO subsystem includes below devices:
+
+1x Inline Encryption Engine (IEE)
+1x FlexSPI
+4x Pulse Width Modulator (PWM)
+5x General Purpose Timer (GPT)
+8x GPIO
+14x Message Unit (MU)
+256KB On-Chip Memory (OCRAM)
+
+compared to the common imx8-ss-lsio dtsi, some nodes' interrupt
+property need to be updated.
 
 Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 ---
- .../boot/dts/freescale/imx8dxl-ss-ddr.dtsi    | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi
+ .../boot/dts/freescale/imx8dxl-ss-lsio.dtsi   | 78 +++++++++++++++++++
+ 1 file changed, 78 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-lsio.dtsi
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi
+diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-lsio.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-lsio.dtsi
 new file mode 100644
-index 000000000000..75b482966d94
+index 000000000000..d90602bab384
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-ddr.dtsi
-@@ -0,0 +1,36 @@
++++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-lsio.dtsi
+@@ -0,0 +1,78 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * Copyright 2021 NXP
++ * Copyright 2019-2021 NXP
 + */
++&lsio_gpio0 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
++};
 +
-+&ddr_subsys {
-+	db_ipg_clk: clock-db-ipg {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <456000000>;
-+		clock-output-names = "db_ipg_clk";
-+	};
++&lsio_gpio1 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
++};
 +
-+	db_pmu0: db-pmu@5ca40000 {
-+		compatible = "fsl,imx8dxl-db-pmu";
-+		reg = <0x5ca40000 0x10000>;
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&db_pmu0_lpcg IMX_LPCG_CLK_0>,
-+			 <&db_pmu0_lpcg IMX_LPCG_CLK_1>;
-+		clock-names = "ipg", "cnt";
-+		power-domains = <&pd IMX_SC_R_PERF>;
-+	};
++&lsio_gpio2 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
++};
 +
-+	db_pmu0_lpcg: clock-controller@5cae0000 {
-+		compatible = "fsl,imx8qxp-lpcg";
-+		reg = <0x5cae0000 0x10000>;
-+		#clock-cells = <1>;
-+		clocks = <&db_ipg_clk>, <&db_ipg_clk>;
-+		clock-indices = <IMX_LPCG_CLK_0>,
-+				<IMX_LPCG_CLK_1>;
-+		clock-output-names = "perf_lpcg_cnt_clk",
-+				     "perf_lpcg_ipg_clk";
-+		power-domains = <&pd IMX_SC_R_PERF>;
-+	};
++&lsio_gpio3 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio4 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio5 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio6 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_gpio7 {
++	compatible = "fsl,imx8dxl-gpio", "fsl,imx35-gpio";
++	interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu0 {
++	compatible = "fsl,imx8dxl-mu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu1 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu2 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu3 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu4 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu5 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lsio_mu13 {
++	compatible = "fsl,imx8-mu-scu", "fsl,imx8qxp-mu", "fsl,imx6sx-mu";
++	interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
 +};
 -- 
 2.31.1
