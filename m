@@ -2,107 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5657E41CD73
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Sep 2021 22:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3195A41CDA2
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Sep 2021 22:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346748AbhI2UhK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Sep 2021 16:37:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60430 "EHLO mail.kernel.org"
+        id S1346791AbhI2Uza (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Sep 2021 16:55:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39078 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345611AbhI2UhJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 29 Sep 2021 16:37:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 80722611C0;
-        Wed, 29 Sep 2021 20:35:27 +0000 (UTC)
+        id S1346776AbhI2Uza (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 29 Sep 2021 16:55:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DFF1F613D1;
+        Wed, 29 Sep 2021 20:53:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632947728;
-        bh=IH2/mcLbbTba4ogzth+XbUzMVfz5COKAcB5rIikRw94=;
+        s=k20201202; t=1632948828;
+        bh=sXPiZJApgWTPby5kfu7tesuhTT5pOFH3fPxxvZTww+k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dx5126F50lyQID/bfEVzqPq/BLzY11owVpezNFcSvXROFliqNeV2mje/rCsxyQ/+v
-         AJxnLUXx+kBHT2w9hX7qqk/Vc2eFOCMeTH5n7B6TUjBVtVpzLaLL8rOFNAFu9KaIOi
-         3aYKm9R4Qr6kufne7uDFsHywV/Eho/GekRU5f6fbPYRi8qhR9QRwTIHIV9ctR1MRbp
-         h9PjSjjLYz3I+WkGLYV4/JPbyyuG2f5Dw0GuEXaWRZDliAuwjLb9p9x7n3DcIOwuCZ
-         QFRtcpkBcHfYbGSrPEygmw2XH/Fc2Vq7RQHARnQ3+rdprkqinQOw8pTXlu/Gu/t0l6
-         Hu5eJ2jp4tm5g==
-Date:   Wed, 29 Sep 2021 22:35:25 +0200
+        b=cYU/3ZTSOWhZSMKhKtxd6WJij/X5VHWHGkANadNDZRdTuR4iOt1CJo1dE4jpPAqV2
+         RhsDe8mT9GrG1tCEL1XPy7cbdnmTQtvE4H2R4C+owWf7vN6w0ApeabXDEQmJDLZs2j
+         4IlC74l/VJ8mW6k5wC6NYzRLxOTSBvFr9Pb1oj9mCvOkcxNVOhiZv/wa/IzEto3ebg
+         C5oh+PILfr/ZIa8HhdG/N1gaCzUqWj2j+lqActjp9Z5+pc0Y42iXb7FK8nIfPYB/+t
+         NRlUCe1J6WFmxMCIxZRabDRM+hCZ6Q2CQyZjSt3kWAKIufM1wpcMcYwxpm3lu6tgbl
+         PnY+U0MQ9eBRw==
+Date:   Wed, 29 Sep 2021 22:53:45 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Olof Johansson <olof@lixom.net>,
-        Hector Martin <marcan@marcan.st>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/10] Add Apple M1 support to PASemi i2c driver
-Message-ID: <YVTODUqwQM0Ciqi1@kunai>
+To:     Matt Johnston <matt@codeconstruct.com.au>
+Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jeremy Kerr <jk@codeconstruct.com.au>
+Subject: Re: [PATCH v4] dt-bindings: net: New binding mctp-i2c-controller
+Message-ID: <YVTSWa3Nw3XF5o48@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Sven Peter <sven@svenpeter.dev>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, Olof Johansson <olof@lixom.net>,
-        Hector Martin <marcan@marcan.st>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20210926095847.38261-1-sven@svenpeter.dev>
- <CAK8P3a3Lt2QXk+aWLtXUXjjNhKJwNns6d9r=Yh5_aWETuvZTpQ@mail.gmail.com>
+        Matt Johnston <matt@codeconstruct.com.au>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Jeremy Kerr <jk@codeconstruct.com.au>
+References: <20210923033406.3166902-1-matt@codeconstruct.com.au>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CeaervSQYJjiQNT9"
+        protocol="application/pgp-signature"; boundary="WiWswZ2GucEUIAmB"
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a3Lt2QXk+aWLtXUXjjNhKJwNns6d9r=Yh5_aWETuvZTpQ@mail.gmail.com>
+In-Reply-To: <20210923033406.3166902-1-matt@codeconstruct.com.au>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---CeaervSQYJjiQNT9
+--WiWswZ2GucEUIAmB
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> This looks all very good to me, I had one very minor comment.
+On Thu, Sep 23, 2021 at 11:34:06AM +0800, Matt Johnston wrote:
+> Used to define a local endpoint to communicate with MCTP peripherals
+> attached to an I2C bus. This I2C endpoint can communicate with remote
+> MCTP devices on the I2C bus.
 >=20
-> Whole series
+> In the example I2C topology below (matching the second yaml example) we
+> have MCTP devices on busses i2c1 and i2c6. MCTP-supporting busses are
+> indicated by the 'mctp-controller' DT property on an I2C bus node.
 >=20
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> A mctp-i2c-controller I2C client DT node is placed at the top of the
+> mux topology, since only the root I2C adapter will support I2C slave
+> functionality.
+>                                                .-------.
+>                                                |eeprom |
+>     .------------.     .------.               /'-------'
+>     | adapter    |     | mux  --@0,i2c5------'
+>     | i2c1       ----.*|      --@1,i2c6--.--.
+>     |............|    \'------'           \  \  .........
+>     | mctp-i2c-  |     \                   \  \ .mctpB  .
+>     | controller |      \                   \  '.0x30   .
+>     |            |       \  .........        \  '.......'
+>     | 0x50       |        \ .mctpA  .         \ .........
+>     '------------'         '.0x1d   .          '.mctpC  .
+>                             '.......'          '.0x31   .
+>                                                 '.......'
+> (mctpX boxes above are remote MCTP devices not included in the DT at
+> present, they can be hotplugged/probed at runtime. A DT binding for
+> specific fixed MCTP devices could be added later if required)
+>=20
+> Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
 
-Thanks for the series and the review!
-
-Same here, looks good to me and I only had one minor comment.
+Acked-by: Wolfram Sang <wsa@kernel.org> # for the I2C part
 
 
---CeaervSQYJjiQNT9
+--WiWswZ2GucEUIAmB
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFUzgwACgkQFA3kzBSg
-Kbbn5A//f+gdLy9AwaxACKw3vT7xnW7HMQLauduB3y1RJmPHcvIkbtxlg6IPP9nV
-Qbd1Tl7PuTtKHxadWeiIcgAh0UjJUAPPv2W4CResqMgRSHTC1Nk44zng53zmv97O
-v+p0hpOTzzb77rN2RFBZ6sfYP+aXJ0M8SLLzmjt57pxck+kV0dRdHKjPOa4ayi0U
-A2dQclLfceyEMU3Yi/DJpBZz6+wRbMqYQwsncS4exsTk7YAIubAL7w2NFq0lUKpD
-P7ghHyD5/9fXgG3MuKV6EKuUN7N4Uq7tk2P/wn+wGTCVoBcgqyIod+4uS6B/iTcG
-QPn5YPhe4N2Q9C3ODaffVvv95EY8+4Rt4uDylxGSGxuXndyIpi+rV8RdPxAUKpOd
-uKuGbdFn7bQ9tKktQp0SJhfSv1eO40G4opaWxgYp8X05OzXDScCocF4pEnLYJLNR
-JW1ZbZe+T47nTcjtougmxLHXfp2+tnERJALkZlfFHP22+RJdUx3296Mh4GUVzZ6g
-8Vbuo4kf1q8YuASb375/3YBxp2lnD409kk46iWhJ2ZTWjUquLNUYz+Owtg0JIMW0
-Nz9upxOiMhIR14ZFn8TVmXxnNUpIfEJugkjNmVoeJ9nDcyoL9KHtXvAZTSZHo/XU
-PwHOVJ5HbZ7vIkXcrxSweCTP2f9RXS9rxME6kzLrPx0o1AgFp3k=
-=AdDI
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFU0lUACgkQFA3kzBSg
+KbbYoRAApea6QKmxC55pBcMds2GA4s+x1kNnL+6mkIl5O73Y/E42ywh7TnE5TFjN
+yiPRakjTP82dPi+jSHNaPrQlCpkyFtsJiOc5iuniCXTWQN9OzQCSuvhBzwUarwqu
+ZkfPha2eRxzaOniuNooLLcDB6uq2ueLlVThtt8kSpNRsPuyMvIrUpg+W3gD5Ai+Y
+x0oD0zJh6EvVnNzNDc4NdEkddOtdLjrXDgmNW4BJ49iRHZTfzJRbLM+AmnvkIiNa
+4oY6OcJjdLUriNHWFww7oJIbVtnt9DkRFi8nAGIOxFc99gnuGTnUAEfk9DJ2Er7d
+f7oBzmOqKpVjaRraHq4qQzci2rWGE1n29gfcuJapQDh982jjFZK6R67vbjlNsxM5
+ITSw6t/WmDqGMBHGvK0KOx+rdANgiHrlUQ4dGv6YWTezcEavLt4gRGoe2mU93Ddu
+jj/2Y5wCTausF3/4RKdDuMsJWLYxsfIIk+lpCxpbS17vayMPMR301TXdmhOT1/rb
+abJqvscrUCWvDGQ1zYCMRyk1vfXMvbI/5CiN7H9QVMIiUhpU+bhux/t0tcWfGFyN
+JX358+G1N2RDuSUtUvyDPn1IOuCZUMvktv9LCSiKogqM3FKrx3R0pqZcblzT1jRz
+PnArkjzNjuyDoU5nEv3pOFC7urrWa6K/qPqj5JGW3UiaXbWQyCM=
+=030o
 -----END PGP SIGNATURE-----
 
---CeaervSQYJjiQNT9--
+--WiWswZ2GucEUIAmB--
