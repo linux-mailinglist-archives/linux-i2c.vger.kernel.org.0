@@ -2,81 +2,80 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A54841CDD4
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Sep 2021 23:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133D841CDB9
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Sep 2021 23:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235757AbhI2VNL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Sep 2021 17:13:11 -0400
-Received: from sauhun.de ([88.99.104.3]:55134 "EHLO pokefinder.org"
+        id S1343814AbhI2VF0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Sep 2021 17:05:26 -0400
+Received: from www.zeus03.de ([194.117.254.33]:47436 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346355AbhI2VNL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 29 Sep 2021 17:13:11 -0400
-X-Greylist: delayed 595 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Sep 2021 17:13:10 EDT
-Received: from localhost (p5486ce57.dip0.t-ipconnect.de [84.134.206.87])
-        by pokefinder.org (Postfix) with ESMTPSA id E78CD2C015D;
-        Wed, 29 Sep 2021 23:01:30 +0200 (CEST)
-Date:   Wed, 29 Sep 2021 23:01:30 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: update my email address
-Message-ID: <YVTUKgXTUVIFPDFw@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sekhar Nori <nsekhar@ti.com>, Kevin Hilman <khilman@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <20210920072842.30889-1-brgl@bgdev.pl>
+        id S237372AbhI2VFX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 29 Sep 2021 17:05:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=qNDVgogKsAve+SdXmpiix6RvGn37
+        Dw9NRQ0dUuB7eWE=; b=dNvgP7Je9RQy3oxx7cnQv/6lS320feKNgKt9duZCJpLE
+        6XVWvS5vzj1QrsHB8AfK46BhyozM+cDbMHknt79SUks1HJ5ZXojqBKhv+jl+UVnE
+        k+Z4b00YgM1oNJ9fZ32CLr69olZYEwCBVBxraIdGA/4KMkXR+peiWbBGa0jsZR4=
+Received: (qmail 1802299 invoked from network); 29 Sep 2021 23:03:39 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Sep 2021 23:03:39 +0200
+X-UD-Smtp-Session: l3s3148p1@A+0RqijNEuEgAwDPXwj5ACKF5hhAYpZw
+Date:   Wed, 29 Sep 2021 23:03:37 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Ryo Kataoka <ryo.kataoka.wt@renesas.com>
+Subject: Re: [PATCH] i2c: rcar: enable interrupts before starting transfer
+Message-ID: <YVTUqQVlmB2Pe8B+@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Ryo Kataoka <ryo.kataoka.wt@renesas.com>
+References: <20210915134827.13043-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H23KkeOpPGGMhDW8"
+        protocol="application/pgp-signature"; boundary="0WE1ricZrn/U+nmo"
 Content-Disposition: inline
-In-Reply-To: <20210920072842.30889-1-brgl@bgdev.pl>
+In-Reply-To: <20210915134827.13043-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---H23KkeOpPGGMhDW8
+--0WE1ricZrn/U+nmo
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 20, 2021 at 09:28:42AM +0200, Bartosz Golaszewski wrote:
-> My professional situation changes soon. Update my email address.
+On Wed, Sep 15, 2021 at 03:48:27PM +0200, Wolfram Sang wrote:
+> We want to enable the interrupts _before_ starting the transfer because
+> it is good programming style and also the proposed order in the R-Car
+> manual. There is no difference in practice because it doesn't matter in
+> which order both conditions appear if we wait for both to happen.
 >=20
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> Signed-off-by: Ryo Kataoka <ryo.kataoka.wt@renesas.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Shall I take this via I2C?
+Applied to for-next, thanks!
 
 
---H23KkeOpPGGMhDW8
+--0WE1ricZrn/U+nmo
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFU1CoACgkQFA3kzBSg
-KbbuVw/+NrrHxvP3FzFvYN0B88/7Fd/YOG4nWPi1XfvXj7qNMfc8xSXHbwp3FOqE
-dYyOhWpC6iQ7kSd/SJQ2nH1fc+UtA6OGZbsO4jrhQwKHthGwomEZR+0RPs1ASrcr
-KbI4h+NfsVQrTX5IlKn/L0vJ7/B7qXkUyfA+ddmOuKf6bHcpCH03L5XduDQc/kjM
-883Bylfnp9pdjchU57JfgJ+x9UduirEQ3h8zPnpIVYXB+I1KTzAfCSCEuNqH4WuY
-E6cb2OR6z4ZSavIJYpRGfzevpIOr1Bof5OJjCVS158ttdHj0hUE5/6xxQv2SiqfE
-cV8zmySnIDkO+g8rLZ2gIQJV+XbYBrtAEaqy5bRA32ZyPxNAJt6OE0Hb2e2SbdYX
-EurpnR1IkzDh0kn7VDZIZ3Rx69jOdKtSI/bzSrCPaAvh+lczjIgXGYflV5urcCyK
-BQT3NFVJKBTWBIhMb9xqfUCqoOxOC1peafVDEfdYjATohxviY3PT0QPLI8dNd4JS
-8ujJ/563hiwXP3nE0eR9aaerL+LvQcH5p/VPrDrs23qT1lOhF7+yBzgoy3ouy5T9
-kq1EKsi2f63GzInbIVlztsQ+nbmXITLkKUXrqZ0nqfTCjtrcUkfAbKBNK0AixcMK
-z8KLRzehne0CbNVEMaQ5Q0EHX8+0cyAQsFfgr27oKnfTSc9mZeA=
-=mnA6
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFU1KkACgkQFA3kzBSg
+KbYXkw/9GOcYNtCYE3I3BnCh8AFRhxa//HW7r4lcxvEpua9ezEcR1oq7YRpURsEh
+Lu/XpgmxjiaenK0l3UuES8loeXpfBssiOHJ3DCtM1k7FJV2m5O8n10JoVJa7Br0k
+mO+MN35zSqN3rlTU00ZO1Yv49OgVId1bBitJ4iD2r4Zg+vSA8OPZFB+05+WGNatX
+gc9lvFROMyPaTD8GorH730tE2eaxBoz1El/LPvVbKSHSBb+catKSxQeVN6K570Jt
+gXlwqsyLzbANpqRy48izY5csoDJaS0Pg9471Z+o3jdRx3Y73W9j8vlaQU0qa1NLN
+fuTf7Wf+7MKQLLBfpYThFXhOtgNRZEU3kMrTzqDCwbiIgjYAd9ZXHDg2AeE42gYW
+gS76os/eawyMOoTAMXVGYh8r5iffQAc0BmyMLml7WFJkjB11K+BwrNhe/LBWF20K
+uHkEKdDLoQEqMlD77C35fh2JAD82EUReGxyFJ4gpRiNEQIwZ3a038jPrNF0Gj3Xi
+Qyor61cauh3O6K1Pp+LQ0QYJVelraFN5KalfUqBpXhHo/kAxqC2bVcFhpPNKoPTl
+sTExNpMbqih9CcGFSS+2hhkIO/1MAoo49495mffNYWIOgs9qO4Al8L0XSd3aXb1l
+FERCjiEw1bhpxH5gEwWXNfSibjSaLU6CMIJX+EOwdpxOMRkI2ZA=
+=oH9w
 -----END PGP SIGNATURE-----
 
---H23KkeOpPGGMhDW8--
+--0WE1ricZrn/U+nmo--
