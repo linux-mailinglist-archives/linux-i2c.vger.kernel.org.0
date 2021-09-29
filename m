@@ -2,97 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B92B41CD6D
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Sep 2021 22:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5657E41CD73
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Sep 2021 22:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346323AbhI2Uf1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Sep 2021 16:35:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59722 "EHLO mail.kernel.org"
+        id S1346748AbhI2UhK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Sep 2021 16:37:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60430 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345611AbhI2Uf0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 29 Sep 2021 16:35:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE5B261214;
-        Wed, 29 Sep 2021 20:33:44 +0000 (UTC)
+        id S1345611AbhI2UhJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 29 Sep 2021 16:37:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 80722611C0;
+        Wed, 29 Sep 2021 20:35:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632947625;
-        bh=WhIOdO1kGw77Ewr1D3r2Fuf1SftvNF+jqwjULDSyJRw=;
+        s=k20201202; t=1632947728;
+        bh=IH2/mcLbbTba4ogzth+XbUzMVfz5COKAcB5rIikRw94=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NwaW0+YxmxXBlG5e0Wg083UOBAXIHEOfj8bi8S7bxFd5JrNukFQZuW2lhhdbWtZL7
-         ROy2pBQAnQwPT2NHAAS0mu4DYWCIPVgaRlKGngnrSfkM/nfnmdC5J9xjQPSZ+jknVr
-         XjEBcMXNh9WERP4XlVdDWt+ml+JMFvYLENA9wXqwovAuJ+nVwddSJ8ZeKK5T9hAZlM
-         VGeU9wxupu7XPwGGtck81CEzOsG29eY37sav+eXwkXcR6yAhTrOt/gY2o+O/77YggX
-         HwTvZPo/glGuuDy19nzkPlggdSGJOtY2Naiz8ThCA4HeI553u1Atf8S2l2g5aAC9Pr
-         IElxuYt/1AFKg==
-Date:   Wed, 29 Sep 2021 22:33:42 +0200
+        b=dx5126F50lyQID/bfEVzqPq/BLzY11owVpezNFcSvXROFliqNeV2mje/rCsxyQ/+v
+         AJxnLUXx+kBHT2w9hX7qqk/Vc2eFOCMeTH5n7B6TUjBVtVpzLaLL8rOFNAFu9KaIOi
+         3aYKm9R4Qr6kufne7uDFsHywV/Eho/GekRU5f6fbPYRi8qhR9QRwTIHIV9ctR1MRbp
+         h9PjSjjLYz3I+WkGLYV4/JPbyyuG2f5Dw0GuEXaWRZDliAuwjLb9p9x7n3DcIOwuCZ
+         QFRtcpkBcHfYbGSrPEygmw2XH/Fc2Vq7RQHARnQ3+rdprkqinQOw8pTXlu/Gu/t0l6
+         Hu5eJ2jp4tm5g==
+Date:   Wed, 29 Sep 2021 22:35:25 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
         Hector Martin <marcan@marcan.st>,
         Mohamed Mediouni <mohamed.mediouni@caramail.com>,
         Stan Skowronek <stan@corellium.com>,
         Mark Kettenis <mark.kettenis@xs4all.nl>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/10] i2c: pasemi: Add Apple platform driver
-Message-ID: <YVTNpt/vOeZI5P+L@kunai>
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/10] Add Apple M1 support to PASemi i2c driver
+Message-ID: <YVTODUqwQM0Ciqi1@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>,
+        Arnd Bergmann <arnd@arndb.de>, Sven Peter <sven@svenpeter.dev>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
+        Hector Martin <marcan@marcan.st>,
         Mohamed Mediouni <mohamed.mediouni@caramail.com>,
         Stan Skowronek <stan@corellium.com>,
         Mark Kettenis <mark.kettenis@xs4all.nl>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 References: <20210926095847.38261-1-sven@svenpeter.dev>
- <20210926095847.38261-10-sven@svenpeter.dev>
+ <CAK8P3a3Lt2QXk+aWLtXUXjjNhKJwNns6d9r=Yh5_aWETuvZTpQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Abt4sC3J3qWpCcYx"
+        protocol="application/pgp-signature"; boundary="CeaervSQYJjiQNT9"
 Content-Disposition: inline
-In-Reply-To: <20210926095847.38261-10-sven@svenpeter.dev>
+In-Reply-To: <CAK8P3a3Lt2QXk+aWLtXUXjjNhKJwNns6d9r=Yh5_aWETuvZTpQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Abt4sC3J3qWpCcYx
+--CeaervSQYJjiQNT9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
->  drivers/i2c/busses/i2c-pasemi-apple.c | 122 ++++++++++++++++++++++++++
+> This looks all very good to me, I had one very minor comment.
+>=20
+> Whole series
+>=20
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-Can't we name it 'i2c-pasemi-platform.c' instead? Makes more sense to me
-because the other instance is named -pci.
+Thanks for the series and the review!
+
+Same here, looks good to me and I only had one minor comment.
 
 
---Abt4sC3J3qWpCcYx
+--CeaervSQYJjiQNT9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFUzaYACgkQFA3kzBSg
-KbbIGxAAh1Nhm33vkf+55YJVzuykGVhjXJqAR9GAq2GGbu78lsZehwAAPp0SUGvO
-aLPxI1nxlgvoMggZARhM4uMzQjF92GGsQyv0HR8vZRrPS2qWwVoN76RI8Qq3n3oh
-FheNQhW/lWImFFd1WQ7HyKEK7KKJJwyOBcSKqUtGy/B+Z/4NmSpFgM3vMKoszBoR
-sff9SQ8ebdLnI5IdAyGunxc7qmF5Wvg+2Njapv36GcX9lDid4eRsoH4MUk+Kr9rV
-kdaa6rs+RHvfAHV5r09k+aWeZorR69k5iqynoEiFQpXGXyNwKjlAAdXNyBSAATe0
-KzYVcKQkmsS+um1Cw9TXRUdKgO4TRG7rBcsgwhvY560Q96gCsPh7yxnHFXPNnyNK
-v68guAIQTPeo6azA8JO2UrIs14JgJGiTD0Yi0lylTueBO8z3dEooT7dzHJl9qnsC
-HTl8DwSFjYVsACpMKNAQI4AnQ8vy2mXY6kfvTOGGancUPF4CEA95lvHlBV0AWWhS
-YGa9IALzCdeklLkpN1TYHtXatD8kqij940UL+hJH4O9SjCfMXUukoT6z2+ZIJfME
-WvqUG2NMMazDNb/Idx4aHAEPVIe6j+iU/SOgdmYpuFTnNOUMyQnHjsMFmo5t77Vd
-Hj9BWpHL3eyDQj6Y71Apps/jRZoU5kXXinuFBVkHtZojBpFd5rE=
-=l4Nn
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFUzgwACgkQFA3kzBSg
+Kbbn5A//f+gdLy9AwaxACKw3vT7xnW7HMQLauduB3y1RJmPHcvIkbtxlg6IPP9nV
+Qbd1Tl7PuTtKHxadWeiIcgAh0UjJUAPPv2W4CResqMgRSHTC1Nk44zng53zmv97O
+v+p0hpOTzzb77rN2RFBZ6sfYP+aXJ0M8SLLzmjt57pxck+kV0dRdHKjPOa4ayi0U
+A2dQclLfceyEMU3Yi/DJpBZz6+wRbMqYQwsncS4exsTk7YAIubAL7w2NFq0lUKpD
+P7ghHyD5/9fXgG3MuKV6EKuUN7N4Uq7tk2P/wn+wGTCVoBcgqyIod+4uS6B/iTcG
+QPn5YPhe4N2Q9C3ODaffVvv95EY8+4Rt4uDylxGSGxuXndyIpi+rV8RdPxAUKpOd
+uKuGbdFn7bQ9tKktQp0SJhfSv1eO40G4opaWxgYp8X05OzXDScCocF4pEnLYJLNR
+JW1ZbZe+T47nTcjtougmxLHXfp2+tnERJALkZlfFHP22+RJdUx3296Mh4GUVzZ6g
+8Vbuo4kf1q8YuASb375/3YBxp2lnD409kk46iWhJ2ZTWjUquLNUYz+Owtg0JIMW0
+Nz9upxOiMhIR14ZFn8TVmXxnNUpIfEJugkjNmVoeJ9nDcyoL9KHtXvAZTSZHo/XU
+PwHOVJ5HbZ7vIkXcrxSweCTP2f9RXS9rxME6kzLrPx0o1AgFp3k=
+=AdDI
 -----END PGP SIGNATURE-----
 
---Abt4sC3J3qWpCcYx--
+--CeaervSQYJjiQNT9--
