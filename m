@@ -2,80 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 133D841CDB9
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Sep 2021 23:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF8641CDC3
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Sep 2021 23:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343814AbhI2VF0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 29 Sep 2021 17:05:26 -0400
-Received: from www.zeus03.de ([194.117.254.33]:47436 "EHLO mail.zeus03.de"
+        id S1345693AbhI2VHa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 29 Sep 2021 17:07:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237372AbhI2VFX (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 29 Sep 2021 17:05:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=qNDVgogKsAve+SdXmpiix6RvGn37
-        Dw9NRQ0dUuB7eWE=; b=dNvgP7Je9RQy3oxx7cnQv/6lS320feKNgKt9duZCJpLE
-        6XVWvS5vzj1QrsHB8AfK46BhyozM+cDbMHknt79SUks1HJ5ZXojqBKhv+jl+UVnE
-        k+Z4b00YgM1oNJ9fZ32CLr69olZYEwCBVBxraIdGA/4KMkXR+peiWbBGa0jsZR4=
-Received: (qmail 1802299 invoked from network); 29 Sep 2021 23:03:39 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Sep 2021 23:03:39 +0200
-X-UD-Smtp-Session: l3s3148p1@A+0RqijNEuEgAwDPXwj5ACKF5hhAYpZw
-Date:   Wed, 29 Sep 2021 23:03:37 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Ryo Kataoka <ryo.kataoka.wt@renesas.com>
-Subject: Re: [PATCH] i2c: rcar: enable interrupts before starting transfer
-Message-ID: <YVTUqQVlmB2Pe8B+@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Ryo Kataoka <ryo.kataoka.wt@renesas.com>
-References: <20210915134827.13043-1-wsa+renesas@sang-engineering.com>
+        id S1345622AbhI2VHa (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 29 Sep 2021 17:07:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 10E4E613A9;
+        Wed, 29 Sep 2021 21:05:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632949548;
+        bh=8sCsi7TyoxymnGSEmmhFlF0PCXT1AYj6AJXXSW0oxKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nyBK/CYfnjKioP3uhpui9gx1fvyTFkpC1vdmr43hE7LADGm1/MCesl24upmF45H4n
+         Vhc0YSSCzJBFsDtOHt8KTj36BU2k1npeQMPs2+bzqThgBJusiESgIF4MqehDEoXXxI
+         01x0NlC0vgyXRaObh+GUtwcLf0T2xrkXWEpxfceirnUZHmSrVoNyK50qWa8ONcXM0I
+         mnl1qBHoKRl4OgKB4Np49sYsTjc6aY13d/cjWAuVDa3CoSe1Pok4LX6k11zaEJgLGf
+         WHEAGNHW9g4KE1w2JdAMaD41miIg/iFFJ8ITaE2knOc8Mg58TOMcdFcoyxVGovzz6K
+         aUwPV43Unh7QQ==
+Date:   Wed, 29 Sep 2021 23:05:45 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     zhaoxiao <long870912@gmail.com>
+Cc:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: Fix return value of bcm_kona_i2c_probe()
+Message-ID: <YVTVKYPXqXlbqcQa@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        zhaoxiao <long870912@gmail.com>, f.fainelli@gmail.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210906052730.19644-1-long870912@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0WE1ricZrn/U+nmo"
+        protocol="application/pgp-signature"; boundary="WlqaMbHcI9I8LDgG"
 Content-Disposition: inline
-In-Reply-To: <20210915134827.13043-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20210906052730.19644-1-long870912@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---0WE1ricZrn/U+nmo
+--WlqaMbHcI9I8LDgG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 15, 2021 at 03:48:27PM +0200, Wolfram Sang wrote:
-> We want to enable the interrupts _before_ starting the transfer because
-> it is good programming style and also the proposed order in the R-Car
-> manual. There is no difference in practice because it doesn't matter in
-> which order both conditions appear if we wait for both to happen.
+On Mon, Sep 06, 2021 at 01:27:30PM +0800, zhaoxiao wrote:
+> When call function devm_platform_ioremap_resource(), we should use IS_ERR=
+()
+> to check the return value and return PTR_ERR() if failed.
 >=20
-> Signed-off-by: Ryo Kataoka <ryo.kataoka.wt@renesas.com>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: zhaoxiao <long870912@gmail.com>
 
 Applied to for-next, thanks!
 
 
---0WE1ricZrn/U+nmo
+--WlqaMbHcI9I8LDgG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFU1KkACgkQFA3kzBSg
-KbYXkw/9GOcYNtCYE3I3BnCh8AFRhxa//HW7r4lcxvEpua9ezEcR1oq7YRpURsEh
-Lu/XpgmxjiaenK0l3UuES8loeXpfBssiOHJ3DCtM1k7FJV2m5O8n10JoVJa7Br0k
-mO+MN35zSqN3rlTU00ZO1Yv49OgVId1bBitJ4iD2r4Zg+vSA8OPZFB+05+WGNatX
-gc9lvFROMyPaTD8GorH730tE2eaxBoz1El/LPvVbKSHSBb+catKSxQeVN6K570Jt
-gXlwqsyLzbANpqRy48izY5csoDJaS0Pg9471Z+o3jdRx3Y73W9j8vlaQU0qa1NLN
-fuTf7Wf+7MKQLLBfpYThFXhOtgNRZEU3kMrTzqDCwbiIgjYAd9ZXHDg2AeE42gYW
-gS76os/eawyMOoTAMXVGYh8r5iffQAc0BmyMLml7WFJkjB11K+BwrNhe/LBWF20K
-uHkEKdDLoQEqMlD77C35fh2JAD82EUReGxyFJ4gpRiNEQIwZ3a038jPrNF0Gj3Xi
-Qyor61cauh3O6K1Pp+LQ0QYJVelraFN5KalfUqBpXhHo/kAxqC2bVcFhpPNKoPTl
-sTExNpMbqih9CcGFSS+2hhkIO/1MAoo49495mffNYWIOgs9qO4Al8L0XSd3aXb1l
-FERCjiEw1bhpxH5gEwWXNfSibjSaLU6CMIJX+EOwdpxOMRkI2ZA=
-=oH9w
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFU1SkACgkQFA3kzBSg
+KbZmOhAAqVR8fjEWZ9lqsq8bARILHauv+gqBakob4IjaoJck7Q5lr1h4z7kKfMMa
+98x+xvmHxMuz7GwImXokFIYteVb4NoTGgFJvAyhkuzCYFEaieWGqf02kFSjPXb4D
+r1naEvGjqShMityL/wemiFPcAvjnZ7vcUW0UJr8p03WzfosEwRshj3M5PPBHUx+q
+RMqpomnt/UrP8ShBKxl/JfdoY6uz4EWSfPkehz0m3q+P4mcEL2Rd5F/4PwXvBTBD
+zCQevE7nb2MqIUZMveu9jVlFYBqV/BoE2oJVjGHJIYq6sVkJZCsPvdNkkdSLQBa4
+DC8bQz+SuRBPfz59Li1KLoYTiJ74NGGeWZMA/WnUQikMzT+79rFg9BycQdhUOff8
+YmWiFkf2a3RNX+633Uz6WGg5xFvBhEk5K9aTTm4ZQ2RXAE3CZ7yzM81XUsIENctQ
+1sfHzkK5sREsPN1hXoiIEqwzarY62LM2d/6iiXP3YO7ijyIl9+pN8+tCR8Zb7V9/
+OcDnegH6WvPSPqNH6BQCzBzGyx95nhuDyWNphkHX1ZkbfKufuErhmVYDtcgpomJL
+LgEHvlPIFKmCKh1/UjwbgyYx1+LVX4kuEJCACDfiNhxrYJJyqzM9d1F8DzB/N2zt
+dlPEMeC2edlnunmEIiGmDZYEDkv+BuS3kc1m5tr/dd30G49+0/I=
+=I7eT
 -----END PGP SIGNATURE-----
 
---0WE1ricZrn/U+nmo--
+--WlqaMbHcI9I8LDgG--
