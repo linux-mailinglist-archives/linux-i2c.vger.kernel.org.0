@@ -2,60 +2,177 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 525C541FA57
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Oct 2021 09:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D5E41FA5A
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Oct 2021 09:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbhJBHww (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 2 Oct 2021 03:52:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44240 "EHLO mail.kernel.org"
+        id S232603AbhJBHxG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 2 Oct 2021 03:53:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44392 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232457AbhJBHww (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 2 Oct 2021 03:52:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0E44761AAC;
-        Sat,  2 Oct 2021 07:51:05 +0000 (UTC)
+        id S232457AbhJBHxG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 2 Oct 2021 03:53:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7538361AEB;
+        Sat,  2 Oct 2021 07:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633161066;
-        bh=MwPjezR9kh3YnUIid+XJgsrLavX6tfp1IzsXZHdX+Ew=;
+        s=k20201202; t=1633161081;
+        bh=sIvSK2EP7/bNxMt0lT3kxzdAfTGoeSBeihandePxDMQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KrQKXzespV6f7WFqwny87FNmRIEmLTa+HWnY6ZRTbxUuDhQ/DtnYF4c8SyRotRxlQ
-         vc9MNC6PNhY/R4GUNPkRj2+7OM1buLIda89oEU2e9FVq9lQjgT8eFLcth6IS/ZQeUf
-         UjeBFZ1IWP6C9CWhwg7tAmLaGty5XrEvs3TDnz1AYhg/ifIIyIXVsDBwipmakEdsJJ
-         YswPoWgbX0pUO1KGM5PgF4q4bA+sad+sy7Hhq/ZJy+DBxpHURIk96S47jvuc9Om4lR
-         PYzMp8QF7deg9/qR09TjKLeuCxlIhNtyHF5YNS+JZNrprD/qH23s8ghe03mFsIHcuM
-         hBa5UXlveHoqA==
-Date:   Sat, 2 Oct 2021 09:51:03 +0200
+        b=cuYHoEfgKt/8PymKwrVtdRwsJzfOuwM0HUbS/NXUtK45abnWgrIGV+rH1kTw5ZQkO
+         TN69OYHpL3GxUgtS/ZqQdB1F/Z0kewWzCu/yD6jRL+92l843L6ykBSCjlOgGhNpkFl
+         p/4UDVxFuu53Kb5uOzDLcul7K5Ir0MjKWAbXPWO5boIzlHHS+pARssk7oZaT0Tn0Fu
+         cSw/7QGrWl5lAvUcl3G0yrqhS5oVRAsMJmxS7zsf1l5xPihpvFnKN0JONiuHguQ+b1
+         c7lVL2ILIYyomYp9fo30vcr5x1os6FN5OmES6HJRvS2z9NUt0kn0yZs8/XF6dP2nCM
+         jgvgN1Bsl7qzg==
+Date:   Sat, 2 Oct 2021 09:51:18 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Seth Heasley <seth.heasley@intel.com>,
-        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] i2c: busses: switch from 'pci_' to 'dma_' API
-Message-ID: <YVgPZxNZm3fPqxbb@kunai>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     syniurge@gmail.com, nehal-bakulchandra.shah@amd.com,
+        shyam-sundar.s-k@amd.com, seth.heasley@intel.com,
+        nhorman@tuxdriver.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] i2c: switch from 'pci_' to 'dma_' API
+Message-ID: <YVgPdvwOGJrEqghZ@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Qing Wang <wangqing@vivo.com>,
-        Seth Heasley <seth.heasley@intel.com>,
-        Neil Horman <nhorman@tuxdriver.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1632800519-108430-1-git-send-email-wangqing@vivo.com>
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        syniurge@gmail.com, nehal-bakulchandra.shah@amd.com,
+        shyam-sundar.s-k@amd.com, seth.heasley@intel.com,
+        nhorman@tuxdriver.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <fad542b558afc45496f7a7ba581593cd46e68f7c.1629660967.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="F3o/S5cEAXbTt/uY"
+        protocol="application/pgp-signature"; boundary="uXHfLlTznz6LvNSF"
 Content-Disposition: inline
-In-Reply-To: <1632800519-108430-1-git-send-email-wangqing@vivo.com>
+In-Reply-To: <fad542b558afc45496f7a7ba581593cd46e68f7c.1629660967.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---F3o/S5cEAXbTt/uY
+--uXHfLlTznz6LvNSF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 27, 2021 at 08:41:56PM -0700, Qing Wang wrote:
+On Sun, Aug 22, 2021 at 09:38:12PM +0200, Christophe JAILLET wrote:
 > The wrappers in include/linux/pci-dma-compat.h should go away.
 >=20
 > The patch has been generated with the coccinelle script below.
+>=20
+> It has been hand modified to use 'dma_set_mask_and_coherent()' instead of
+> 'pci_set_dma_mask()/pci_set_consistent_dma_mask()' when applicable.
+> This is less verbose.
+>=20
+> While at it a 'dev_err()' message has been slightly simplified.
+>=20
+> It has been compile tested.
+>=20
+>=20
+> @@
+> @@
+> -    PCI_DMA_BIDIRECTIONAL
+> +    DMA_BIDIRECTIONAL
+>=20
+> @@
+> @@
+> -    PCI_DMA_TODEVICE
+> +    DMA_TO_DEVICE
+>=20
+> @@
+> @@
+> -    PCI_DMA_FROMDEVICE
+> +    DMA_FROM_DEVICE
+>=20
+> @@
+> @@
+> -    PCI_DMA_NONE
+> +    DMA_NONE
+>=20
+> @@
+> expression e1, e2, e3;
+> @@
+> -    pci_alloc_consistent(e1, e2, e3)
+> +    dma_alloc_coherent(&e1->dev, e2, e3, GFP_)
+>=20
+> @@
+> expression e1, e2, e3;
+> @@
+> -    pci_zalloc_consistent(e1, e2, e3)
+> +    dma_alloc_coherent(&e1->dev, e2, e3, GFP_)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_free_consistent(e1, e2, e3, e4)
+> +    dma_free_coherent(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_map_single(e1, e2, e3, e4)
+> +    dma_map_single(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_unmap_single(e1, e2, e3, e4)
+> +    dma_unmap_single(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2, e3, e4, e5;
+> @@
+> -    pci_map_page(e1, e2, e3, e4, e5)
+> +    dma_map_page(&e1->dev, e2, e3, e4, e5)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_unmap_page(e1, e2, e3, e4)
+> +    dma_unmap_page(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_map_sg(e1, e2, e3, e4)
+> +    dma_map_sg(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_unmap_sg(e1, e2, e3, e4)
+> +    dma_unmap_sg(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_dma_sync_single_for_cpu(e1, e2, e3, e4)
+> +    dma_sync_single_for_cpu(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_dma_sync_single_for_device(e1, e2, e3, e4)
+> +    dma_sync_single_for_device(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_dma_sync_sg_for_cpu(e1, e2, e3, e4)
+> +    dma_sync_sg_for_cpu(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2, e3, e4;
+> @@
+> -    pci_dma_sync_sg_for_device(e1, e2, e3, e4)
+> +    dma_sync_sg_for_device(&e1->dev, e2, e3, e4)
+>=20
+> @@
+> expression e1, e2;
+> @@
+> -    pci_dma_mapping_error(e1, e2)
+> +    dma_mapping_error(&e1->dev, e2)
+>=20
+> @@
 > expression e1, e2;
 > @@
 > -    pci_set_dma_mask(e1, e2)
@@ -67,38 +184,29 @@ On Mon, Sep 27, 2021 at 08:41:56PM -0700, Qing Wang wrote:
 > -    pci_set_consistent_dma_mask(e1, e2)
 > +    dma_set_coherent_mask(&e1->dev, e2)
 >=20
-> While at it, some 'dma_set_mask()/dma_set_coherent_mask()' have been
-> updated to a much less verbose 'dma_set_mask_and_coherent()'.
->=20
-> Signed-off-by: Qing Wang <wangqing@vivo.com>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-I applied this one instead
-
-http://patchwork.ozlabs.org/project/linux-i2c/patch/fad542b558afc45496f7a7b=
-a581593cd46e68f7c.1629660967.git.christophe.jaillet@wanadoo.fr/
-
-because it was earlier and more complete. Still, thank you for the
-effort!
+Applied to for-next, thanks!
 
 
---F3o/S5cEAXbTt/uY
+--uXHfLlTznz6LvNSF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFYD2cACgkQFA3kzBSg
-KbZRJA/+Odw8AiMc3m3eoihOoBRJkU4Z9PQdPDqG6pmsBz0b7aqsxIknW7Hl7ul/
-MFpvZR3vuWjZyuGBqXLSJU2Yz00ykNeNVQl/K6zYuCEE6YsvwxUjwgpkgcZB8J0I
-qW+TMoq6ZNbRNQ+ZNELP7NveT0wiq6RLIA7K6GoUGloBSBJFxgje8m6pUxU/2gbE
-Xi6hsh6gu8mlAx/OpfpvQvIMoQ2cK4eaAu9x6U8zzCXAZ4tyJSxLL2f/LSsWRJyx
-j9IK0VSwPOKxFDX1P+SiagjFjIl4e1dfsiN7A72iAfgdgVMI4OgsrVjyaOGOFeaU
-0LNaUf7X6zML+7vE1pL0zjWIpiZySqZiLT8jlq734smWsOk9sAN3Qqf23B57W66f
-394lFMw5Hq4HjaW3w7re7x0PPOMsIQjc0xwFhCg8y0Qq55Hv6qB9t6dGQyOuFCiR
-eAAtZTs1zGRlfVTyZ2eGNDBWHcUKQ/tPoGjlpH4OtQ+ptJyKvLA9pGt2ackh9nwa
-3ykLH+0gblXAm5/XRlIT/79aJ/Xm+SDPpE86RSj8Kutz3pDmsimnlCht6Af/YFtV
-d20tbboDhRThXQxIWNP86anyyfQTl4GzSL3F4o1MfOoe+lEW1WerDhzYY5JtYlRT
-fXzoAAiN6xKwoZtW5QrlfpHq+3sr7qhbVuMgWQGGQmOc7yj8gTo=
-=WX1j
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFYD3YACgkQFA3kzBSg
+KbYu0Q/+PtIEYynAEiJoePONop4qyjpKf7cFhQ+JIZRHdWoOo4WMNQTMPHAtWEGB
+6GZHNfDB+v/P/LHGEbnDAzD0pfDwMTi8A9ad4MNGILUPeCGxvc6RQwz8OZOW/SuS
+8Tics4yhwDAmqlzLpo7i0xc8jPbaqkvGl+fOK++dTykPtXvRqZq+DbEteo6YAQtP
+v2KpTTEZ+cuQa0tJ/gx3HwbnlgiMHst9N8ttsbsvtP3+Bm1Q8BtpXwkDqGdfqS/b
+t0cj8P5qTYhIX0XR7+sepBpmAfO5YiO5kthv90SOrJKfUPWlsZxYzTsWg2TEUTKN
+2pG7G4KZH7Qmp1tuBTnd2I0S/aDDklzca5Mx1c4WQkTcoXtF8fP+bWVshAEgaZEh
+rUsSPkesnrxEDUS7bKvJtBZ1+zGr5pL9MPvVDvJ/aI5xcpVLFaojI2qHoSpi/nkc
+gkxMJvqXtbMyFlDPh3215Hthuhl14LwdfXQEV6PKbPhO4Mu8jOEA/z3FkQKwIlut
+Kw9OjDt1oX1Kbeq1m6T8VBoYscB+CLuZ3zd4YzDAd2v4IZeAPYLQdd9Ug0hN+xEA
+kHq9MFoHCS/3qNELjCVsHlQ+GwK/Mdjwe8RoG428iwmjFGe17eioWVgm3BXMGPD0
+etFhicXjZ8F2pwvWpIxNZmfy/dfBoVB1vZUSPQYhnIJxXaL4A/8=
+=PHaG
 -----END PGP SIGNATURE-----
 
---F3o/S5cEAXbTt/uY--
+--uXHfLlTznz6LvNSF--
