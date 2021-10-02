@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 066A341FA1D
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Oct 2021 08:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0045241FA20
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Oct 2021 08:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbhJBGjQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 2 Oct 2021 02:39:16 -0400
-Received: from sauhun.de ([88.99.104.3]:35022 "EHLO pokefinder.org"
+        id S232420AbhJBGlw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 2 Oct 2021 02:41:52 -0400
+Received: from sauhun.de ([88.99.104.3]:35054 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231941AbhJBGjP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 2 Oct 2021 02:39:15 -0400
+        id S232400AbhJBGlv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 2 Oct 2021 02:41:51 -0400
 Received: from localhost (p5486c558.dip0.t-ipconnect.de [84.134.197.88])
-        by pokefinder.org (Postfix) with ESMTPSA id 0370B2C01D8;
-        Sat,  2 Oct 2021 08:37:28 +0200 (CEST)
-Date:   Sat, 2 Oct 2021 08:37:28 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 25C7A2C01D8;
+        Sat,  2 Oct 2021 08:40:05 +0200 (CEST)
+Date:   Sat, 2 Oct 2021 08:40:04 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Kewei Xu <kewei.xu@mediatek.com>
 Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
@@ -24,9 +24,8 @@ Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
         leilk.liu@mediatek.com, qii.wang@mediatek.com,
         liguo.zhang@mediatek.com, caiyu.chen@mediatek.com,
         ot_daolong.zhu@mediatek.com, yuhan.wei@mediatek.com
-Subject: Re: [PATCH v7 3/7] i2c: mediatek: Dump i2c/dma register when a
- timeout occurs
-Message-ID: <YVf+KCztQI9XrdEq@kunai>
+Subject: Re: [PATCH v7 5/7] i2c: mediatek: Add OFFSET_EXT_CONF setting back
+Message-ID: <YVf+xNG8yXRJNmA0@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
         Kewei Xu <kewei.xu@mediatek.com>, matthias.bgg@gmail.com,
         robh+dt@kernel.org, linux-i2c@vger.kernel.org,
@@ -37,65 +36,52 @@ Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
         caiyu.chen@mediatek.com, ot_daolong.zhu@mediatek.com,
         yuhan.wei@mediatek.com
 References: <20210917101416.20760-1-kewei.xu@mediatek.com>
- <20210917101416.20760-4-kewei.xu@mediatek.com>
+ <20210917101416.20760-6-kewei.xu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WnN6qXzV7lU+Tq+i"
+        protocol="application/pgp-signature"; boundary="bdPPXQ8lIS5bCvDz"
 Content-Disposition: inline
-In-Reply-To: <20210917101416.20760-4-kewei.xu@mediatek.com>
+In-Reply-To: <20210917101416.20760-6-kewei.xu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---WnN6qXzV7lU+Tq+i
+--bdPPXQ8lIS5bCvDz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Sep 17, 2021 at 06:14:14PM +0800, Kewei Xu wrote:
+> In the commit be5ce0e97cc7 ("i2c: mediatek: Add i2c ac-timing adjust
+> support"), we miss setting OFFSET_EXT_CONF register if
+> i2c->dev_comp->timing_adjust is false, now add it back.
+>=20
+> Fixes: be5ce0e97cc7 ("i2c: mediatek: Add i2c ac-timing adjust support")
+> Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
+> Reviewed-by: Qii Wang <qii.wang@mediatek.com>
+
+Applied to for-current, thanks!
 
 
-> @@ -837,6 +839,57 @@ static int mtk_i2c_set_speed(struct mtk_i2c *i2c, unsigned int parent_clk)
->  	return 0;
->  }
-
-> +static void i2c_dump_register(struct mtk_i2c *i2c)
-> +{
-> +	dev_err(i2c->dev, "SLAVE_ADDR: 0x%x, INTR_MASK: 0x%x\n",
-> +		mtk_i2c_readw(i2c, OFFSET_SLAVE_ADDR),
-> +		mtk_i2c_readw(i2c, OFFSET_INTR_MASK));
-
-I think this is too verbose and should be a debugging only patch not
-really suited for upstream. But if you like it this way, then keep
-the verbosity. However, dev_err is too strong, this really needs to be
-dev_dbg. Timeouts can happen on an I2C bus, think about an EEPROM in a
-long erase cycle while you want to read it. Perfectly normal.
-
-
->  	if (ret == 0) {
-> -		dev_dbg(i2c->dev, "addr: %x, transfer timeout\n", msgs->addr);
-> +		dev_err(i2c->dev, "addr: %x, transfer timeout\n", msgs->addr);
-> +		i2c_dump_register(i2c);
-
-Needs to stay dev_dbg as well.
-
-
---WnN6qXzV7lU+Tq+i
+--bdPPXQ8lIS5bCvDz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFX/igACgkQFA3kzBSg
-Kbbp2hAAglx55ZKyMUuZ9OqPQ9uAScg0Tf3qeup5IFLV3AR2uLSpW3ONvZT7aCZv
-E2rZ4gZl/mLdRmeMBRsWIOSbanA1bjG0ddCTOMnuPhYrGo9Rv5qVW7CUfBRp3cMj
-rt590cr0/Jqbn3TyrM9N7/baathuJDpoTS1RlOC3t0BtivDWmaPghBR3MKUryNmp
-lqCbNEpOwG3Xrd69O4oNFCo/Pox862cyaAdMEBJfoJvk8O31fHkVbtGuhnN4Vh1N
-Z3NXYvISdxon71h0XvwTkzs5oX2PpV3oR1oBXUdAv+mWsk9ti9uxQorOcmyL1x7B
-HWQaBYyl+gpyHFElcYlM4h3TTUw3I/WzWBHwba5mjKl5fRD4EPBKhwoBdWYccQn9
-3nbmlOkEdhylMQBjI8pd0kpoAvegpHbtHfeGSo1/hyOi66UdX1kIA65emq+kaHjJ
-cCsjzGQE6QCm3GJ607qA1IIJaoCkqUvwrFTMy6VW0i/A9dMPtHiaN1spbFo8JyG1
-wDiWziHNaiqage6Xo2jgevrqmfp+wV7JwcxR+JJHs6nTApYCzsfB3iaqupL9adBu
-7fcNnGENR6oTSiaP8P55IaC/wHhqfZHcKDky02SqnOXQVfZvf4A7U5rQgTV7dL9y
-XbS16Zxl+/jIZyQi9Ys9cuj3HzoZnzVzkDwGT5M2rk45kvhUljI=
-=PiQy
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFX/sQACgkQFA3kzBSg
+KbbapRAAlO5F/fxxo9sQZIVaAXMTDPcHsKC2xquAN7db153EjC/0gPCSu0ZHIRr0
+wPZ3vEYifZ5ZM3rvDpqTlkCMKFJ1EAsF9Iz4V26teKhROMTLHMBXIExKsn77uK91
+gRGudtWd3K6fZsXCQRmTRUWcW1L6eIgcVoKsi4XqAp7iuwoOa8RhQWo5Q1hR5fds
+6rAyHQmE3i4v3Cv21ObmeZMhjaRIsSt6IfhrmCQijUcIGQXwdsTA37CcIAX/eldf
+lM9w0tUFxhXrGZLefbGXTX6QHA1bCpVZpwBWTx76as2A81inuyq68JG64URpNEIj
+U2klXv1DWa/KMOwbR4URVK+pEpLpGCrHgR2JjX1SQDeqHck5SkHbQCUl64ZKPoVT
+06Q2DT9wohf9sdqV8lhtG0w9qjGOm0+BLptE4O7MMxxi8GGWrl67SReALY9IHwX5
+1fjRTJqKWP+XiYtvPIWDElMLrhatcgTnRliKCIQLwqQrQaW+J92v9GCRe1kGa2Zc
+vECvAtf3HGsmOiH7ioX2gdTfKybpl0FqBjJ3wut0PPaZFcefn/3hf4BPGLX7s7op
+PeajqF9UVcJZWRsyMyuqKNLC5KbbgIoUzq3QBOZ0B5X8RMlKHJiX8O/B13Dy9JsI
+1FQPCX11MVtxL3YG1npu+jklofnJ9QJ4GkwCgRTSqr2FVVfunfw=
+=/rCL
 -----END PGP SIGNATURE-----
 
---WnN6qXzV7lU+Tq+i--
+--bdPPXQ8lIS5bCvDz--
