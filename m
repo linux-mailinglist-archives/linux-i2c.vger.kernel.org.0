@@ -2,58 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B83D7421600
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Oct 2021 20:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DD74216C8
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Oct 2021 20:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236921AbhJDSFC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 4 Oct 2021 14:05:02 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:54102 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236395AbhJDSFB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Oct 2021 14:05:01 -0400
+        id S235454AbhJDSrc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 4 Oct 2021 14:47:32 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:45298 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235035AbhJDSrc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Oct 2021 14:47:32 -0400
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E01A822318;
-        Mon,  4 Oct 2021 18:03:11 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EB9BE1FE0B;
+        Mon,  4 Oct 2021 18:45:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1633370591; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1633373141; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2j7p+nak7ES4/8hhXsilNsVPQWKlc06pxPGYYoaSqCY=;
-        b=bvuUtLM9xcFtSEMGaoG7+OL4jAp47eNI9eCKs0EF044uGU4U91JvK7+0vNx6hKwUkZbFwz
-        uf24E1rN8XyxMdH7TyYLVkXfcely+us3FFN23s94IuUbhzXe1zia79vSU5SSzAtaOvznri
-        IWZxW43QHuAEvyydV5UxzrWQkJNE+YM=
+        bh=ZelblX7GmtHbSC4tLkBBlO+yQNr/d2a85RwaVvx8vsA=;
+        b=OSENQW5/r6hMXBlCDW6n000NTnmsfA4lcRAy4osobeRtrC0e3HGYlvGDqIcM5Gkyq7Rlh2
+        b5PdWiB8qDA/Gljy7BtMvVhf39hvYujtOmOo6dgSff4YZdcz05AXFYUinPDuULIbI49Pck
+        ITpQu+DXq4LeVddx6hlLbsGmAL+BH2Q=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1633370591;
+        s=susede2_ed25519; t=1633373141;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2j7p+nak7ES4/8hhXsilNsVPQWKlc06pxPGYYoaSqCY=;
-        b=k8uPbQIdU92FvAV++sGL48cDZmKrBPSJuZN5nxmyQmcMESUuZJPo1shr1nOUSEl8Bunh8S
-        Y/QumP2/r8i1U8DA==
+        bh=ZelblX7GmtHbSC4tLkBBlO+yQNr/d2a85RwaVvx8vsA=;
+        b=v1yj2lFwDiJLzhFArdYKjCk2XWwFyvi2qVFSmI2AUoh9h6jhleKcHZK6rDoPZZKJ3Plb4p
+        mvg7+I58ukuO+2BA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B0C8613B42;
-        Mon,  4 Oct 2021 18:03:11 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B13DA13B11;
+        Mon,  4 Oct 2021 18:45:41 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id xwB5KN9BW2G6XgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 04 Oct 2021 18:03:11 +0000
-Date:   Mon, 4 Oct 2021 20:02:45 +0200
+        id BKZdKNVLW2GjbwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 04 Oct 2021 18:45:41 +0000
+Date:   Mon, 4 Oct 2021 20:45:14 +0200
 From:   Jean Delvare <jdelvare@suse.de>
-To:     Morten Linderud <morten@linderud.pw>
+To:     J88 <jakob.mailto@googlemail.com>
 Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH i2c-tools] py-smbus/Module.mk: Install with PREFIX
- defined
-Message-ID: <20211004200245.04d12431@endymion>
-In-Reply-To: <20210919100851.2890107-1-morten@linderud.pw>
-References: <20210919100851.2890107-1-morten@linderud.pw>
+Subject: Re: [decode-dimms] fails to read SPD
+Message-ID: <20211004204514.12bfc9c6@endymion>
+In-Reply-To: <CAG4msd=qMuJt72qjouRKMM85=zDpLunyaRRRYAAzkiuxEw=t2g@mail.gmail.com>
+References: <CAG4msd=qMuJt72qjouRKMM85=zDpLunyaRRRYAAzkiuxEw=t2g@mail.gmail.com>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
@@ -63,33 +62,58 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Morten,
+Hi Jakob,
 
-On Sun, 19 Sep 2021 12:08:51 +0200, Morten Linderud wrote:
-> If we are building to a defined destdir py-smbus is going to ignore this
-> and try install to the actual root. This breaks packaging setups as the
-> install section would fail.
+On Sun, 3 Oct 2021 09:47:18 +0200, J88 wrote:
+> i am trying to read out the DDR4 Specs on
 > 
-> Signed-off-by: Morten Linderud <morten@linderud.pw>
-> ---
->  py-smbus/Module.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> SETUP
 > 
-> diff --git a/py-smbus/Module.mk b/py-smbus/Module.mk
-> index 04ceb64..1e2ded1 100644
-> --- a/py-smbus/Module.mk
-> +++ b/py-smbus/Module.mk
-> @@ -22,7 +22,7 @@ clean-python:
->  	rm -rf py-smbus/build
->  
->  install-python:
-> -	$(DISTUTILS) install
-> +	$(DISTUTILS) install --prefix="$(PREFIX)"
->  
->  all: all-python
->  
+> [Mainboard] Supermicro X10DRH-CT (
+> https://www.supermicro.com/en/products/motherboard/X10DRH-CT)
+> 
+> [Memory]
+> 2x 16GB DDR4Super Talent F24R16G4S1
+> 
+> [OS]
+> Ubuntu Server 21.04 / Kernel 5.11.0-37-generic
+> 
+> --------------------------------
+> 
+> root@ramtest1:/home/rt1# modprobe -r eeprom
+> root@ramtest1:/home/rt1# modprobe ee1004
+> root@ramtest1:/home/rt1# i2cdetect -y 1
+> 
+>      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+> 00:                         -- -- -- -- -- -- -- --
+> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 30: -- -- -- -- -- -- -- 37 -- -- -- -- -- -- -- --
+> 40: -- -- -- -- -- -- -- -- -- 49 -- -- -- -- -- --
+> 50: 50 -- -- -- -- -- -- -- -- 59 -- -- -- -- -- --
+> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 70: -- -- -- -- -- -- -- --
+> 
+> root@ramtest1:/home/rt1# echo ee1004 0x50 >
+> /sys/bus/i2c/devices/i2c-1/new_device
+> root@ramtest1:/home/rt1# echo ee1004 0x59 >
+> /sys/bus/i2c/devices/i2c-1/new_device
+> root@ramtest1:/home/rt1# decode-dimms
+> Cannot read /sys/bus/i2c/drivers/ee1004/1-0050/eeprom at
+> /usr/bin/decode-dimms line 2459.
 
-Thanks for catching and fixing this. Applied.
+This is a server board with 16 memory slots, well above the 4 supported
+by the automatic SPD detection currently implemented in the i2c-i801
+driver. These server boards have their SMBus multiplexed, so automatic
+DPS detection is not possible. You need to get information from the
+vendor, how the multiplexing is implemented. Some boards are using
+GPIO-controlled mux chips, and you need to know which pins to toggle.
+Other boards use I2C-controlled mux chips, and you need to know which
+model and at which address it lives.
+
+This work was already done for Asus Z8 board series 10 years ago. You
+will need similar work for your board in order to be able to access SPD
+EEPROMs (and possibly some thermal sensors) on your system.
 
 -- 
 Jean Delvare
