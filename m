@@ -2,114 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2768B420270
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 Oct 2021 17:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942504205C2
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Oct 2021 08:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbhJCPxC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 3 Oct 2021 11:53:02 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:29519 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbhJCPxC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 3 Oct 2021 11:53:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1633275917;
-    s=strato-dkim-0002; d=xenosoft.de;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=n2U0PeCsRntS+jp/SpPVszJZtYbXqemerUZ0qpTMk3Y=;
-    b=jHCVuR3xGifKlofLLmuBTrzVjBk/X/XTWXVFrjZJBVrGpJDUzUodQFRCUY63HjTqOm
-    MCDgwgKMqJsUmlw/ZBESOwt54n9riq0Kp/02jNPE/l50GRe3TxIh4FJ5ThroT0e+JkGS
-    QZZnKrVyQX6Ns1gWtfwmfnK0bAgJxk3FQb5PZ+vTF5b+cTu3Clo2K/D2fWLCyGp6Ij08
-    +B089K9+ZpQz6FUtqhpaz+h5yJRFdeDXN217EbLZbQ98c3zJI5ycsvLrUCIL9cZ4u767
-    cSweAdnV2Loq9VtqUlwxf7kn/GWKi7LPdoGUHAwWgPi7lgMHOfTOfbAyid2dSgP2zSKL
-    UdDg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHvJzedV4hp0mZXDvscF/B540qv0BQZVZQLfrrxE4ejuGDN89"
-X-RZG-CLASS-ID: mo00
-Received: from cc-build-machine.a-eon.tld
-    by smtp.strato.de (RZmta 47.33.8 AUTH)
-    with ESMTPSA id I00cdex93FjDhap
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 3 Oct 2021 17:45:13 +0200 (CEST)
-Subject: Re: Add Apple M1 support to PASemi i2c driver
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        Hector Martin <marcan@marcan.st>,
-        mohamed.mediouni@caramail.com, Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-arm-kernel@lists.infradead.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "R.T.Dickinson" <rtd2@xtra.co.nz>,
-        Darren Stevens <darren@stevens-zone.net>,
-        Matthew Leaman <matthew@a-eon.biz>,
-        "R.T.Dickinson" <rtd@a-eon.com>
-References: <6487d099-e0d6-4ea3-d312-6adbd94589f4@xenosoft.de>
- <3dcc6c36-a0dd-0cad-428d-a6ed0f73e687@xenosoft.de>
- <d0a646c7-426b-4b40-b3fc-9776c6a1025d@www.fastmail.com>
- <9c1f5c48-bf1a-0ecc-e769-773d2935c66c@xenosoft.de>
- <49890226-cf04-46ff-bc37-33d1643faea2@www.fastmail.com>
-From:   Christian Zigotzky <chzigotzky@xenosoft.de>
-Message-ID: <d4aa72da-cb0b-45b9-1a20-08f183cde421@xenosoft.de>
-Date:   Sun, 3 Oct 2021 17:45:12 +0200
+        id S232579AbhJDGUO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 4 Oct 2021 02:20:14 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:52466
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232496AbhJDGUO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Oct 2021 02:20:14 -0400
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id F15D840314
+        for <linux-i2c@vger.kernel.org>; Mon,  4 Oct 2021 06:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1633328299;
+        bh=6rhTGdQXINmijpkcPrHK0rvBN904JsfzhP/R1ITG3yQ=;
+        h=Subject:To:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=tSiAxL/trZSnqDnQI98Bf/95bYqCMn+OAvwTf0d64/r94qjxGWvF1oS1pJFak5SEk
+         6kj+jh6U2G94zig7kDQs2UmhOwz/WjHnW6M3YS5pfVaW27zle8pegCuavUQd3UBXuA
+         OM/fFpPTJX6+o6AgS+IsMTk6u7ktoCS7lhjXvx0U8iKZj621+4H+eS3UC3ECgd3+Tr
+         k3UbqMVFW8PKPiNnQy502WWTMzHtNopyNi3M/7KNJ085rkoenhoWK2geZO6fBq7pqP
+         1oQ3KmHn6tJ6q+21JanGhhwCy4WhkTZw4IewH3tBAcj2vB5SqDw+XvMBo3G2OMWMD6
+         vdsjjb+s3f5cw==
+Received: by mail-lf1-f69.google.com with SMTP id d16-20020a056512369000b003fca9e038ddso13297209lfs.3
+        for <linux-i2c@vger.kernel.org>; Sun, 03 Oct 2021 23:18:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6rhTGdQXINmijpkcPrHK0rvBN904JsfzhP/R1ITG3yQ=;
+        b=jyiFUzw3wxheknmFgqlPVV9OxCeJyeMC9vR78v6qPQNKcPpJiFwC/GpsHJEpSUBQAw
+         pa8Xa0p6rUjyzylHy9GKxwUwmMcMmw0inKcmZ33seWAV4Gq2LfHwqkeSWG2yN2J+Ewgy
+         ixoDlGg3dWL84gl4g5Xr/uWTrumBv6bl0iNTFMe/tHwNaW6ZkUU9KGLSeFPYvuzevssh
+         NFzn/n4gyJQPlVG2ObDH5fccp+G/xaMjfyIQZKgTrqoQBchkQ3PL2WDWNfkX0godaZ6u
+         2f6N2NKqMyeIGuyBkPddISYDY1JWNPWHIpQWGEMunxVoOOcPMy0ED9dpdAuD0joVzAi3
+         BE3A==
+X-Gm-Message-State: AOAM532h1hBJ5LbOEAHzo2l6uEOV4FC76Ym7R40OO8GXjk+WcdrneK/K
+        8vDfkGfdRdEDVU2ARnCeps/BhxhL1HJmgWkNnlwJPIDKw7zqqpU3hChkduCM/HuDuNPAdyIFTDO
+        dCA+W3sBQPT1APzNXclArRqgTKwontieGrRyG8A==
+X-Received: by 2002:a05:6512:3341:: with SMTP id y1mr13304237lfd.496.1633328299224;
+        Sun, 03 Oct 2021 23:18:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwtlfzjHtJZ1tlXP9FwF40sLemJaJymCby0Kw0vhaAlQc4a2km708y5CoSpfeHPWMuPuKw0Lg==
+X-Received: by 2002:a05:6512:3341:: with SMTP id y1mr13304224lfd.496.1633328299032;
+        Sun, 03 Oct 2021 23:18:19 -0700 (PDT)
+Received: from [192.168.0.197] ([193.178.187.25])
+        by smtp.gmail.com with ESMTPSA id j18sm1518879lfu.84.2021.10.03.23.18.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Oct 2021 23:18:18 -0700 (PDT)
+Subject: Re: [PATCH] i2c: pxa: drop unneeded MODULE_ALIAS
+To:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <20210916170517.138035-1-krzysztof.kozlowski@canonical.com>
+ <YVgKu5IEr3kvdM1n@kunai>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <b94447ca-aa7f-661c-a0dc-8e7b244df5e3@canonical.com>
+Date:   Mon, 4 Oct 2021 08:18:17 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <49890226-cf04-46ff-bc37-33d1643faea2@www.fastmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: de-DE
+In-Reply-To: <YVgKu5IEr3kvdM1n@kunai>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 03 October 2021 at 04:36 pm, Sven Peter wrote:
- > Hi,
- >
- >
- > On Fri, Oct 1, 2021, at 06:47, Christian Zigotzky wrote:
- >> On 27 September 2021 at 07:39 am, Sven Peter wrote:
- >>  > Hi Christian,
- >>  >
- >>  > Thanks already for volunteering to test this!
- >>  >
- >> Hello Sven,
- >>
- >> Damian (Hypex) has successfully tested the RC3 of kernel 5.15 with your
- >> modified i2c driver on his Nemo board yesterday. [1]
- >
- > Thanks a lot, that's great to hear!
- > If he wants to I can credit him with a Tested-by tag in the commit 
-message,
- > see e.g. 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes.
- >
- >
- > Best,
- >
- >
- > Sven
+On 02/10/2021 09:31, Wolfram Sang wrote:
+> On Thu, Sep 16, 2021 at 07:05:17PM +0200, Krzysztof Kozlowski wrote:
+>> The MODULE_DEVICE_TABLE already creates proper alias for platform
+>> driver.  Having another MODULE_ALIAS causes the alias to be duplicated.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
+> Applied to for-next, thanks!
+> 
+> Good catch. Do you want to fix all of these duplicates in the tree? I
+> found two handful of the same pattern and could assist you in removing
+> themt. But I also don't want to steal your credits. Let me know if I can
+> help.
+> 
 
-Hello Sven,
+I think I fixed all of platform aliases. I also removed duplicates for
+few USB and ACPI (some others seems to be not an actual duplicate or
+intentional).
 
-We are still testing your i2c modifications. [1]
-Please wait a litte bit till we finished our tests.
+All patches:
+https://lore.kernel.org/lkml/?q=f%3Akozlowski+MODULE_ALIAS
 
-@Darren
-Could you also please check Sven's i2c modifications? He has also 
-modified your source code a little bit. [2]
+If you see something not fixed, go ahead.
 
-@Olof
-Are these i2c modifications OK? Do these work on your P.A. Semi board?
-
-Thanks,
-Christian
-
-[1] https://forum.hyperion-entertainment.com/viewtopic.php?p=54138#p54138
-[2] https://lists.ozlabs.org/pipermail/linuxppc-dev/2017-January/153195.html
+Best regards,
+Krzysztof
