@@ -2,93 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E964209F8
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Oct 2021 13:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCCD4209FD
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Oct 2021 13:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbhJDLWa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 4 Oct 2021 07:22:30 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:56497 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbhJDLWa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Oct 2021 07:22:30 -0400
-Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M9FX5-1mTnWZ1N39-006OM4; Mon, 04 Oct 2021 13:20:40 +0200
-Received: by mail-wr1-f41.google.com with SMTP id o20so12139824wro.3;
-        Mon, 04 Oct 2021 04:20:40 -0700 (PDT)
-X-Gm-Message-State: AOAM532Jd4Po+Bvnbqm4GkigEP2bVjOHyYxoCozDi8gcdjWRMXNBSZ7q
-        ewRxpQw07K7OwvM/eoxjkeDpHp+bo43WhY5CnAk=
-X-Google-Smtp-Source: ABdhPJwhFhZN1/rLzElq8LxHI+vYWGkiTfpWXOOqhx7kKzXCSyCUhYRu/5RoeP1GLfBuA250yguyI6fH/b4xP7cPZqg=
-X-Received: by 2002:adf:f481:: with SMTP id l1mr13368134wro.411.1633346439970;
- Mon, 04 Oct 2021 04:20:39 -0700 (PDT)
-MIME-Version: 1.0
+        id S232426AbhJDLYa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 4 Oct 2021 07:24:30 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:42817 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232278AbhJDLY3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 4 Oct 2021 07:24:29 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 26DFD580865;
+        Mon,  4 Oct 2021 07:22:40 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute1.internal (MEProxy); Mon, 04 Oct 2021 07:22:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :subject:content-type; s=fm2; bh=k4eiDbO0S0GhIIy1Ulz4BubSgS8pg11
+        RI+l3/cVsvRw=; b=FVMajL3lBrk3yevNtB/+RlBjXU38ww0iW9Aut7eCmNXwzk/
+        3CCMgVJkarHg9wrCUY9FNeAQhA2Gr4yEiGk5aV9aQp2bZ6iUOPKmcinG8i48xwxx
+        a0+WpS7yLnZQSS5Qu7hxXQ5QSXe7ts4lKpeCVaLDD5Vj0VAtH/qlaX4eTGRNTeI1
+        gpOPKw6LOO9YOb4Y3kttlqmBf7WpggzozTFl6DGkHwDwXx9/pDPfRmnslJPd/zhH
+        doBnV+b6G6rXyxLlRIphsqG6bl4KsXKObtv+qLcojY8NH57QJvmlVUV9E0UJ3RL5
+        ZE6pate8E4spyEfqfY2aknqaCRmWbUSzH3vkeMQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=k4eiDb
+        O0S0GhIIy1Ulz4BubSgS8pg11RI+l3/cVsvRw=; b=k2cptf8TqB4+1ARafPyM/x
+        AobSopKb+S3F2nYZ3rA2Vj1HiLSnQ82uU+Ilcnl3s4+l6KipS3raruEKTTcX3+IX
+        si4phykkN40eZe8zM5inMzJkz7Xi1bv40z13Oe0fCHawoIQNs3nzm9jcgmypGJWr
+        SHT+/CKJzsv1bGyFBZ69aoNpX31PL+pvvXcUgGX27eQB47nzJnRghhUU8L/RBScx
+        z2Td0KAIPo0h+0j2jXnouRXRYw9MHL2U2MNmUAtcABTxolR95H3qPK0EHrgcSA+r
+        mGPYNgjqMhsg5YFFEwkXLdRBu6r89jYQvr/jqaOlBQso6XhfvVIBv4a3R7G3LEIA
+        ==
+X-ME-Sender: <xms:_uNaYeeIloEZiV5tPLSJcj-1PrtmfPA6geWWDB531Z0sfw4_cZTj1Q>
+    <xme:_uNaYYPwATvFmpOj4JtGacmNJj5A4J-4TIW-FxHPIeoQGakvIfz5Bo9_1qFGmyY8Y
+    JDUe-DoP8ucGBh91Dk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudelvddgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
+    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:_uNaYfhxDSjkyTqgJBKRZDmhso2zVEqE0GneAQfVlieAnXlZy2kxmg>
+    <xmx:_uNaYb_CoYdj4ozDQa58TAmJDFwZTT3-gRkzsIFPhQN2PUHpJHTgZQ>
+    <xmx:_uNaYatJL3tEG5Y8EaYI-xCZU5YTUJaHd0L6yXbuopD87WR1hJHupQ>
+    <xmx:AORaYSSTr6C6ox_bOktGQhj7oubkMBu4s087EhGDZGGlSvsom_g94Q>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 84C0C2740061; Mon,  4 Oct 2021 07:22:38 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1322-g921842b88a-fm-20210929.001-g921842b8
+Mime-Version: 1.0
+Message-Id: <afd4c1a8-4230-4757-a373-027812ec0ca6@www.fastmail.com>
+In-Reply-To: <CAK8P3a2760x4OYbNBuFCv32Tgt7K3MdJna4qXvPchdKhV8-8vQ@mail.gmail.com>
 References: <49890226-cf04-46ff-bc37-33d1643faea2@www.fastmail.com>
  <1B71F6A3-6467-46EF-858F-82E93D54365D@xenosoft.de> <YVrPf4yVFm184LEG@shikoro>
-In-Reply-To: <YVrPf4yVFm184LEG@shikoro>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 4 Oct 2021 13:20:23 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2760x4OYbNBuFCv32Tgt7K3MdJna4qXvPchdKhV8-8vQ@mail.gmail.com>
-Message-ID: <CAK8P3a2760x4OYbNBuFCv32Tgt7K3MdJna4qXvPchdKhV8-8vQ@mail.gmail.com>
-Subject: Re: Add Apple M1 support to PASemi i2c driver
-To:     Wolfram Sang <wsa@kernel.org>,
-        Christian Zigotzky <chzigotzky@xenosoft.de>,
-        Sven Peter <sven@svenpeter.dev>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        Hector Martin <marcan@marcan.st>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ <CAK8P3a2760x4OYbNBuFCv32Tgt7K3MdJna4qXvPchdKhV8-8vQ@mail.gmail.com>
+Date:   Mon, 04 Oct 2021 13:22:18 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Arnd Bergmann" <arnd@arndb.de>, "Wolfram Sang" <wsa@kernel.org>,
+        "Christian Zigotzky" <chzigotzky@xenosoft.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        "Paul Mackerras" <paulus@samba.org>,
+        "Olof Johansson" <olof@lixom.net>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Mohamed Mediouni" <mohamed.mediouni@caramail.com>,
+        "Stan Skowronek" <stan@corellium.com>,
+        "Mark Kettenis" <mark.kettenis@xs4all.nl>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux I2C" <linux-i2c@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
         "R.T.Dickinson" <rtd2@xtra.co.nz>,
-        Darren Stevens <darren@stevens-zone.net>,
-        Matthew Leaman <matthew@a-eon.biz>,
+        "Darren Stevens" <darren@stevens-zone.net>,
+        "Matthew Leaman" <matthew@a-eon.biz>,
         "R.T.Dickinson" <rtd@a-eon.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:yEGDJdAsg9cAEfqhEAR9pAQVPWRaBH/v0c5qXjHJCtGYJfPwKj1
- Q0FuzH2gcjxVhrSESt8aZyVZZSC8BkDZzWcdFduEBEnM7D1CfKwIabP1DoJ2CDc0XYHDBiS
- dw0vQRAiqxWKEeREgTZMB5K8uke7sce23zpI7vcC2mkuybtwhln5g3mAjzTsdigz5nJ8Kx3
- HYCeQAJCdh2AOPBAap4Bg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DBVNx+O0+SE=:J2teYZ1JJoZ/JJiKj8TtBm
- wO+XbNXpmoXA2sAYAeQD3mFkS20jgeOIEGSKAAFxvDcOizs4t2YQEnOMGIKvn9923cBWcaGul
- TMXJyfAHSN4IywcZ1sn8gd+qgWwoEiFKG1eCBabnNWuqRT/ULak2Lus43aeeEWns352C/f5TH
- YWOEh6hP5dmsEGOH4f4ylgEBY9tfjv5f5PMRbduI5Y7DMvbwgPBOq2jyEa9o2fgKdgEDyXe0G
- qCO2kS0VgIqyzuYrCwAbC+vLrec4fvGHKlewZLvcaANPWhqDN3RrmTdaBQMReHmAPY/HbBupy
- pLRP4AXXE8m+wYWtG03sC9lTFUgEKH0LWxeX02xxRXKkjpwsdU9jDYgN1xtNksdCq5w54TMHU
- h2DIWILMKwMRbFsu4moy8xjgqs6uRpB4IYPuDdGtcFR2963GnUagQ/sTtVdMw8ofhLM1S2OUG
- OYkWzGIzXIHxTR7UBf/2I+2CB2QRk21DQXA0RdMM7HkU8o8RV9SIfet7E94CthVE28D7vpSol
- Unb1dPJTY22hXbMAtWzAtIKAZdfWAL8fFPZcIOu2+7XEczWAdJ8EFEhbYguKzkYho+ayifJPn
- cD8Ni5gN3fnrWCWpplALQe0+ukwwTaCj98+IZfMJ4qwn6zl/RQsSKqskZHJ6CoIAXlpJDBTUm
- Z4YXdqIUgbreafEJXBc47TWud7O+S382sKNA73HZVhNHARHMuMaf3BcTbZgp/+3sCP+WoVacf
- QVA3nSTP8x17ZF4Zr42yuZ+WSUA6fdTLSKfQmw3yGrWrHVqBTWRVOzUv1gUCTYe4Z40WZxOiS
- lD1sJxuX3ai/OrnZJNweZD2oedcioekysWxxZbjBATX/9+LazQgZroRi5DLRevNGycSUEWt1s
- c8taZp2rOcT+BB72758A==
+Subject: Re: Add Apple M1 support to PASemi i2c driver
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Oct 4, 2021 at 11:55 AM Wolfram Sang <wsa@kernel.org> wrote:
->
->
-> > i2c-8 i2c             PA Semi SMBus adapter at 0x(____ptrval____)     I2C adapter
-> > i2c-9 i2c             PA Semi SMBus adapter at 0x(____ptrval____)     I2C adapter
-> > i2c-10        i2c             PA Semi SMBus adapter at 0x(____ptrval____)     I2C adapter
->
-> As Sven correctly switched from %lx to %p, this is intended behaviour.
-> Run 'i2cdetect' as root to see the values again.
 
-I think the address could just get removed here, as this is clearly not helpful.
-port number, which is somewhat useful for identifying the device, now
-it's either the pointless string, or the virtual address that the
-device is mapped
-to, which is not helpful either and potentially leaks information about kernel
-internal structures.
 
-       Arnd
+On Mon, Oct 4, 2021, at 13:20, Arnd Bergmann wrote:
+> On Mon, Oct 4, 2021 at 11:55 AM Wolfram Sang <wsa@kernel.org> wrote:
+>>
+>>
+>> > i2c-8 i2c             PA Semi SMBus adapter at 0x(____ptrval____)     I2C adapter
+>> > i2c-9 i2c             PA Semi SMBus adapter at 0x(____ptrval____)     I2C adapter
+>> > i2c-10        i2c             PA Semi SMBus adapter at 0x(____ptrval____)     I2C adapter
+>>
+>> As Sven correctly switched from %lx to %p, this is intended behaviour.
+>> Run 'i2cdetect' as root to see the values again.
+>
+> I think the address could just get removed here, as this is clearly not helpful.
+> port number, which is somewhat useful for identifying the device, now
+> it's either the pointless string, or the virtual address that the
+> device is mapped
+> to, which is not helpful either and potentially leaks information about kernel
+> internal structures.
+
+Yeah, now that I'm looking at it again it doesn't make much sense to
+include it there. Maybe just dev_name(smbus->dev) instead of the address?
+
+
+Sven
