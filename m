@@ -2,59 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CE7422121
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Oct 2021 10:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1095742212F
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Oct 2021 10:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbhJEIvT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Oct 2021 04:51:19 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:43061 "EHLO
+        id S233208AbhJEIvr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Oct 2021 04:51:47 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:43097 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbhJEIvT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Oct 2021 04:51:19 -0400
+        with ESMTP id S233441AbhJEIvo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Oct 2021 04:51:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1633423769; x=1664959769;
+  t=1633423794; x=1664959794;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WNVpdwYZisfJCIhpCVBvPn0kt5a/f2Y6zS5O5OknR7E=;
-  b=yT/CgEn6g2zDnW0Bpuu80X52E4K2VT0+vqSXeGyK+qEmhbtjr57xq5Ah
-   Y9mNpUDAl+eh1ZKMe/VpOrUEKjrjOXCdoen3WDaQQoWIvjWQ13Ka48Vkj
-   Ler/A7Z8viItsTxgUXKWftIbEo7i/b0szanYBDpEPMfTK7pKpzMa1rd4E
-   3xnvmjYjtFzQba/lbcFcXz6UTvOSPk/LMaOiBdspK875mZ2mWaiue6ie6
-   9IacnTYxz3EeDZd0P6Q6a93v2xJLgbgxLJXpzs0sZtns8mgD0llebiiME
-   xXdbx1kxxKIFG6J/m3B74q9dYSTu3kZUtgDwIw2DWXVivxc9+mx92AN9R
+  bh=wnI/BmLBk+uOxjkUxMpKCkqwdoB2WNVKJRNNMMMgnr0=;
+  b=KRfw5A5HkD342ki+AfJrkaqnmIacsekpMnE4xsnTwjUG4ZNU+Z6Dm4Gl
+   5kSW+uC7R6fnvTQPMOddoLAJ1ZWW2otd2uquWZeVjlHSozaZMcEfJqZvm
+   U0R8PINHFdpHkbMbtAu+ctOdfprMvWh06K76NrVY47a9hFT+7oNs9DnTT
+   uBzUj0J4TEW+A75B/3CcIJ3SJLD58HPJzqGlpbsyvZG+i8woXf8j2ATFG
+   /6eEexPbZ9t1y4k5ItSyV9DhF5oNLl5gfGWQ5dTY5lVv3gqW6ORR5hP5t
+   KoifrA18WyevOdr9iZ35ON6uROXCojylRNiMWJeDXFu5kRUPblF+d4z2s
    w==;
-IronPort-SDR: g3A9k2qWzuWTJ+/dzll6kZoYZgYsCOukPWtJlY7D/ZOVLC8qmrOxHd0RZLFRVLvkdZ63tkcN2h
- J9vk6J7ZTpmbw0g3uW/dhKOqo/U/el7SUsxVO6zm8V2IHo5MncIogIF/IjsNBPEgEs4DovLEp+
- HTCmbL6fgS7+mnDaZnFoRcMun01tCum6Co19BVfdgipSx9GpO7L5PahinAJqUePXxwTtWOTG/t
- J4nMcH42WXvMiPBAYsrbmcZH5g4FFqbQeQ5g4QeW5A3mr6U/Cy7IaDMM9rH9mB5JBLPe9HOMgS
- hsMf/T4h8TEj9w/015iDWEfi
+IronPort-SDR: MX5/27B/oPDhrwDxRXUCvaz9nDY40iv2zpFqfKJr2C5V8bvz54LAoZAytyHonTIHKWHs6LAAyQ
+ v4H+dUJfbox8vnTQ7wOtydsZLsK3bmYANGlnZ2V8w1o3FGyuF2szeA1NBHbuS3sFGunk444t0m
+ lp+kR0jq3/ruyjFo1Xk3QUHqK7u3ZPlKPxPOx7KGs15uonLDTXbLw+oUG77ynqMr7eiewsWX8G
+ u3GeIGLQS93YhRLvhmtNCbOGbPzfIm0KVukEdreTMkdpw4bG9Srm/oCf1ey8dq7sZ8+9Ih9XPb
+ sOMgJZtXXqvidCGaIr0xdX6t
 X-IronPort-AV: E=Sophos;i="5.85,348,1624345200"; 
-   d="scan'208";a="138489542"
+   d="scan'208";a="138489588"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Oct 2021 01:49:28 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Oct 2021 01:49:54 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 5 Oct 2021 01:49:28 -0700
+ 15.1.2176.14; Tue, 5 Oct 2021 01:49:53 -0700
 Received: from CHE-LT-I41642.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 5 Oct 2021 01:49:24 -0700
-Message-ID: <c49d3e03075b136b8d5717be8291bccb35564b62.camel@microchip.com>
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 5 Oct 2021 01:49:50 -0700
+Message-ID: <fec61302f82d5030976ae9026619198580b8d53a.camel@microchip.com>
 Subject: Re: [PATCH v1 1/2] i2c:busses:Register PCI1XXXX adapter to I2C
  subsystem
 From:   LakshmiPraveen Kopparthi <LakshmiPraveen.Kopparthi@microchip.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-CC:     <wsa@kernel.org>, <treding@nvidia.com>, <mirq-linux@rere.qmqm.pl>,
-        <s.shtylyov@omp.ru>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>
-Date:   Tue, 5 Oct 2021 14:19:23 +0530
-In-Reply-To: <YVSX9ZE5hJpYNgN5@smile.fi.intel.com>
+To:     Dmitry Osipenko <digetx@gmail.com>, <wsa@kernel.org>,
+        <andriy.shevchenko@linux.intel.com>, <treding@nvidia.com>,
+        <mirq-linux@rere.qmqm.pl>, <s.shtylyov@omp.ru>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>
+Date:   Tue, 5 Oct 2021 14:19:48 +0530
+In-Reply-To: <775e00e3-e204-7138-9648-7551098968b8@gmail.com>
 References: <20210929062215.23905-1-LakshmiPraveen.Kopparthi@microchip.com>
          <20210929062215.23905-2-LakshmiPraveen.Kopparthi@microchip.com>
          <d39e99ff-6498-e532-e833-1c65861d566f@gmail.com>
-         <YVSX9ZE5hJpYNgN5@smile.fi.intel.com>
+         <775e00e3-e204-7138-9648-7551098968b8@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
@@ -63,65 +63,27 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 2021-09-29 at 19:44 +0300, Andy Shevchenko wrote:
+On Wed, 2021-09-29 at 17:35 +0300, Dmitry Osipenko wrote:
 > [Some people who received this message don't often get email from
-> andriy.shevchenko@linux.intel.com. Learn why this is important at 
+> digetx@gmail.com. Learn why this is important at 
 > http://aka.ms/LearnAboutSenderIdentification.]
 > 
 > EXTERNAL EMAIL: Do not click links or open attachments unless you
 > know the content is safe
 > 
-> On Wed, Sep 29, 2021 at 10:18:46AM +0300, Dmitry Osipenko wrote:
-> > 29.09.2021 09:22, LakshmiPraveen Kopparthi пишет:
+> 29.09.2021 10:18, Dmitry Osipenko пишет:
+> > +static void pci1xxxx_i2c_remove_pci(struct pci_dev *pdev)
+> > +{
+> > +     struct pci1xxxx_i2c *i2c = pci_get_drvdata(pdev);
+> > +
+> > +     pci1xxxx_i2c_shutdown(i2c);
+> > +     i2c_del_adapter(&i2c->adap);
 > 
-> ...
-> 
-> > return intr_handled ? IRQ_HANDLED : IRQ_NONE;
-> > Or turn intr_handled into "irqreturn_t ret" and return it directly.
-> 
-> Or
->         return IRQ_RETVAL(...);
+> The order is wrong. Adapter must be removed first, then hardware can
+> be
+> disabled.
 
-Ok. I will change it.
-
+ok. Got it. Will change it.
 > 
-> ...
-> 
-> > > +static const struct pci_device_id pci1xxxx_i2c_pci_id_table[] =
-> > > {
-> > > +   { PCI_DEVICE(PCI_VENDOR_ID_MICROCHIP, PCI12000_I2C_PID) },
-> > > +   { PCI_DEVICE(PCI_VENDOR_ID_MICROCHIP, PCI11010_I2C_PID) },
-> > > +   { PCI_DEVICE(PCI_VENDOR_ID_MICROCHIP, PCI11101_I2C_PID) },
-> > > +   { PCI_DEVICE(PCI_VENDOR_ID_MICROCHIP, PCI11400_I2C_PID) },
-> > > +   { PCI_DEVICE(PCI_VENDOR_ID_MICROCHIP, PCI11414_I2C_PID) },
-> 
-> If you switch to PCI_VDEVIDE, you will see how you may improve the
-> device ID
-> definitions.
-
-ok.Got it.Will change it.
-
-> 
-> > > +   {0, }
-> 
-> Redundant content inside curly braces.
-
-ok. I will remove the contents inside curly braces.
-
-> 
-> > > +};
-> > > +
-> 
-> Redundant blank line.
-
-ok. I will remove it.
-
-> 
-> > > +MODULE_DEVICE_TABLE(pci, pci1xxxx_i2c_pci_id_table);
-> 
-> --
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+> > +}
 
