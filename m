@@ -2,66 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31335423F1C
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Oct 2021 15:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003D24243CB
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Oct 2021 19:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238706AbhJFN26 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Oct 2021 09:28:58 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:40876 "EHLO inva021.nxp.com"
+        id S239219AbhJFRRW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Oct 2021 13:17:22 -0400
+Received: from mga17.intel.com ([192.55.52.151]:32507 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238839AbhJFN20 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 6 Oct 2021 09:28:26 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E856F201A4D;
-        Wed,  6 Oct 2021 15:26:32 +0200 (CEST)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id DB10D200E2B;
-        Wed,  6 Oct 2021 15:26:32 +0200 (CEST)
-Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 487D52029F;
-        Wed,  6 Oct 2021 15:26:32 +0200 (CEST)
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Abel Vesa <abel.vesa@nxp.com>
-Subject: [PATCH v3 11/11] dt-bindings: serial: fsl-lpuart: Add i.MX8DXL compatible
-Date:   Wed,  6 Oct 2021 16:26:04 +0300
-Message-Id: <1633526764-30151-12-git-send-email-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1633526764-30151-1-git-send-email-abel.vesa@nxp.com>
-References: <1633526764-30151-1-git-send-email-abel.vesa@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S239104AbhJFRRT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 6 Oct 2021 13:17:19 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="206863380"
+X-IronPort-AV: E=Sophos;i="5.85,352,1624345200"; 
+   d="scan'208";a="206863380"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2021 10:15:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,352,1624345200"; 
+   d="scan'208";a="568249292"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Oct 2021 10:15:19 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D4D06159; Wed,  6 Oct 2021 20:15:25 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH v1 1/3] driver core: Provide device_match_acpi_handle() helper
+Date:   Wed,  6 Oct 2021 20:15:15 +0300
+Message-Id: <20211006171517.47393-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add i.MX8DXL lpuart compatible to the bindings documentation.
+We have couple of users of this helper, make it available for them.
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/base/core.c        | 6 ++++++
+ include/linux/device/bus.h | 1 +
+ 2 files changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-index a90c971b4f1f..d84bb33f3b4c 100644
---- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-+++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-@@ -22,6 +22,7 @@ properties:
-           - fsl,imx7ulp-lpuart
-           - fsl,imx8qm-lpuart
-       - items:
-+          - const: fsl,imx8dxl-lpuart
-           - const: fsl,imx8qxp-lpuart
-           - const: fsl,imx7ulp-lpuart
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index c4a2c97a21a2..18f1f6499246 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -4840,6 +4840,12 @@ int device_match_acpi_dev(struct device *dev, const void *adev)
+ }
+ EXPORT_SYMBOL(device_match_acpi_dev);
  
++int device_match_acpi_handle(struct device *dev, const void *handle)
++{
++	return ACPI_HANDLE(dev) == handle;
++}
++EXPORT_SYMBOL(device_match_acpi_dev);
++
+ int device_match_any(struct device *dev, const void *unused)
+ {
+ 	return 1;
+diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+index 062777a45a74..a039ab809753 100644
+--- a/include/linux/device/bus.h
++++ b/include/linux/device/bus.h
+@@ -143,6 +143,7 @@ int device_match_of_node(struct device *dev, const void *np);
+ int device_match_fwnode(struct device *dev, const void *fwnode);
+ int device_match_devt(struct device *dev, const void *pdevt);
+ int device_match_acpi_dev(struct device *dev, const void *adev);
++int device_match_acpi_handle(struct device *dev, const void *handle);
+ int device_match_any(struct device *dev, const void *unused);
+ 
+ /* iterator helpers for buses */
 -- 
-2.31.1
+2.33.0
 
