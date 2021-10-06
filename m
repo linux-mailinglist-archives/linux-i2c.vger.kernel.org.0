@@ -2,24 +2,24 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E429423F12
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Oct 2021 15:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31335423F1C
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Oct 2021 15:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239088AbhJFN2f (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Oct 2021 09:28:35 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:40836 "EHLO inva021.nxp.com"
+        id S238706AbhJFN26 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Oct 2021 09:28:58 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:40876 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238815AbhJFN2Z (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 6 Oct 2021 09:28:25 -0400
+        id S238839AbhJFN20 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 6 Oct 2021 09:28:26 -0400
 Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 44C13201A4C;
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E856F201A4D;
         Wed,  6 Oct 2021 15:26:32 +0200 (CEST)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 37323201A46;
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id DB10D200E2B;
         Wed,  6 Oct 2021 15:26:32 +0200 (CEST)
 Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 98A7D2029F;
-        Wed,  6 Oct 2021 15:26:31 +0200 (CEST)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 487D52029F;
+        Wed,  6 Oct 2021 15:26:32 +0200 (CEST)
 From:   Abel Vesa <abel.vesa@nxp.com>
 To:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -32,9 +32,9 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         Abel Vesa <abel.vesa@nxp.com>
-Subject: [PATCH v3 10/11] dt-bindings: i2c: imx-lpi2c: Add i.MX8DXL compatible match
-Date:   Wed,  6 Oct 2021 16:26:03 +0300
-Message-Id: <1633526764-30151-11-git-send-email-abel.vesa@nxp.com>
+Subject: [PATCH v3 11/11] dt-bindings: serial: fsl-lpuart: Add i.MX8DXL compatible
+Date:   Wed,  6 Oct 2021 16:26:04 +0300
+Message-Id: <1633526764-30151-12-git-send-email-abel.vesa@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1633526764-30151-1-git-send-email-abel.vesa@nxp.com>
 References: <1633526764-30151-1-git-send-email-abel.vesa@nxp.com>
@@ -43,30 +43,25 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add i.MX8DXL lpi2c compatible to the bindings documentation.
+Add i.MX8DXL lpuart compatible to the bindings documentation.
 
 Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 ---
- Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-index acf2d5f45f4e..f277b4de5344 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-@@ -17,10 +17,12 @@ properties:
-     oneOf:
-       - enum:
-           - fsl,imx7ulp-lpi2c
-+          - fsl,imx8dxl-lpi2c
-           - fsl,imx8qm-lpi2c
-           - fsl,imx8qxp-lpi2c
+diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+index a90c971b4f1f..d84bb33f3b4c 100644
+--- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
++++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+@@ -22,6 +22,7 @@ properties:
+           - fsl,imx7ulp-lpuart
+           - fsl,imx8qm-lpuart
        - items:
-           - enum:
-+              - fsl,imx8dxl-lpi2c
-               - fsl,imx8qm-lpi2c
-               - fsl,imx8qxp-lpi2c
-           - const: fsl,imx7ulp-lpi2c
++          - const: fsl,imx8dxl-lpuart
+           - const: fsl,imx8qxp-lpuart
+           - const: fsl,imx7ulp-lpuart
+ 
 -- 
 2.31.1
 
