@@ -2,86 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1D64257FC
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Oct 2021 18:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60112425804
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Oct 2021 18:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbhJGQcx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 7 Oct 2021 12:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
+        id S241523AbhJGQf5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 Oct 2021 12:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242081AbhJGQcw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Oct 2021 12:32:52 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C220C061755;
-        Thu,  7 Oct 2021 09:30:58 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id y26so27619102lfa.11;
-        Thu, 07 Oct 2021 09:30:58 -0700 (PDT)
+        with ESMTP id S233594AbhJGQf4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Oct 2021 12:35:56 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54D6C061570;
+        Thu,  7 Oct 2021 09:34:02 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id g10so24625450edj.1;
+        Thu, 07 Oct 2021 09:34:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PntghZ8n41IEBKZwu1ubyDn5UXAobTnUN27Au7WdLGE=;
-        b=iZ+kc59FBshBteoGO/qrCtxFvr02X7u3GnjTikCt1QT6Ywc6If91lrNioPaLW6723I
-         ljnXmKxN9sDoAEhk4e5ZO7o7Tl4MnCtAK+sqXDqP+DjEI9wqVFsGmZy4G8bulUdi6Fky
-         MHU8MHOVCufnD1Jux3naP2qgurHfgSkD8736QxP8eIty/Z7hVC5ULrAyO5/9TEx4FSeB
-         IAg/thaQ1vZDzXHFEReZLOLZPcOvtUTAraSGbSUCOo/b23xdmb3h5nJu0Z1qpwXjzS2C
-         vZCJhiX8Rbf1/bO8g5a0jtc1Rg8w0wSqzOL7fk3IszH1GBmt7lVk8LyINHrdhEfEo5Vp
-         kmLQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1JFfk6QlY62fswdZpgxJiSavTDroR4RC0QS2ZH6Jyew=;
+        b=CtPXImfI3RvlZMJEHX+2WnTPErgzjVt6NOMRegDqOYhmsCnbyPlwAH99ElasNaq8Vu
+         0pdIH0tIcX9oXusIngx2wNLk9WJV8Go2PP/DIx8W9QyyNlRRRww4GrgZtfowZIJbhfs3
+         GN62Zb6wZ8Nlx8CUsS0KTBXUGGk4NCYp+tsyZUbm7eubsNQ/syrRQukdbTiTr/pfFYzU
+         n5p5eRZQ7H+iUMtiNN1UD5xOI65oW4VyxUS9Y3iQM6APoo7XhXzeEaaJGT3wfjkJyHt2
+         pqH16E9dmpIrfUKGwZlI6G3nlOfbuoxoB74Z1AAjNz5CCrpnrWkkt3rAULpDVaYneK8Q
+         zxOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PntghZ8n41IEBKZwu1ubyDn5UXAobTnUN27Au7WdLGE=;
-        b=hE3MTp6FHU/eCLz0O21BN9GEt5l55jjz1XoEI8+pjq95eb11Y1P0qMGCfcbKT1e67S
-         obdGvAuzo9sJ54Y35dwnLhdUPIaY6J+GsLNVJcO/61O2QJDWeoERoWHJysGmg9AeZU36
-         NTLFXknLo0ziMX+G2RofU4W9q1jUikhW9xC0+TpjVoCz6zgOixoWF8wOCfWqi4TvkBcF
-         H1MZtZEKfXuUiCKwe2im4C/DXC0mcqAbexzN3sezZa447S/QoRDp+fVK3bwLu+3dDbyj
-         ayB2E/WjtqXU/0w/gWDrIgwkE5BgB0wO5cnoBtDEC4h87iJXa1eXn8a8AfcEPK+Rp2g0
-         IMiw==
-X-Gm-Message-State: AOAM530gB8yLveOq2WncvUbIlbt7u+M7/BXwr5OcbzQmOexcuokN6PDn
-        8ScQL5zWjgBKQk8qjIuFjCS0cbODfNA=
-X-Google-Smtp-Source: ABdhPJyNTd/LgrUJmY/linh8EkDp7cyeKNQdpUD82bNJH8koRz+dauHIvwkynGR5wf567QSorCtDyA==
-X-Received: by 2002:ac2:46c1:: with SMTP id p1mr5412113lfo.7.1633624256700;
-        Thu, 07 Oct 2021 09:30:56 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id s13sm3485lfp.70.2021.10.07.09.30.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Oct 2021 09:30:56 -0700 (PDT)
-Subject: Re: [PATCH v1 1/2] i2c:busses:Register PCI1XXXX adapter to I2C
- subsystem
-To:     LakshmiPraveen Kopparthi <LakshmiPraveen.Kopparthi@microchip.com>
-Cc:     UNGLinuxDriver@microchip.com, wsa@kernel.org,
-        andriy.shevchenko@linux.intel.com, treding@nvidia.com,
-        mirq-linux@rere.qmqm.pl, s.shtylyov@omp.ru,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1JFfk6QlY62fswdZpgxJiSavTDroR4RC0QS2ZH6Jyew=;
+        b=zV0j+JGyGZFGOi/a+dQ6NB7FQNRCYFHk2Ivy1YNtXU2ryUHrRVW2B5One36sVvmXQB
+         mjq4dRoM7/Wnhyn3cnxp0KMye0uyUYEPiae/drTSC/hGgBFHld954vYUo4WRSkpjY0MF
+         USxBVs4L26x4ZvgjLP/zParRSpi2OUoba+torOLVf3BNh5FPGTCLvxgrRWhzBEEvocZQ
+         xJ+f46T9DwjFZCc6rDuywX8EY8KuHs9RFjgWyR+WCSSg32+Pt0d139UXkxkuPw4dgqPx
+         kUC5cYj7YK+XWHDvorhNOGFjlNHFZZe/hM6qsDCvwVUUWy7lOWTo2f4QsE7QbaIJNYVr
+         bg1g==
+X-Gm-Message-State: AOAM531GNy9Ex1ZFQ/8qne3LCDoZLJAm+RBn7flY/4bPRCnidQ4FgpAz
+        AcFJ1XBTISPooktCQADAfOC/W2xsHVMokkSWYCI=
+X-Google-Smtp-Source: ABdhPJy3Xghtyx+iq8ggKN0cubKDnXgy8Kliqsk+OMmA1iB2u7o9Gr480rzgG0Wjq2GIEYueSgSjkbBLkXD/RkYnxXU=
+X-Received: by 2002:a17:906:1707:: with SMTP id c7mr6472177eje.377.1633624434693;
+ Thu, 07 Oct 2021 09:33:54 -0700 (PDT)
+MIME-Version: 1.0
 References: <20210929062215.23905-1-LakshmiPraveen.Kopparthi@microchip.com>
  <20210929062215.23905-2-LakshmiPraveen.Kopparthi@microchip.com>
- <d39e99ff-6498-e532-e833-1c65861d566f@gmail.com>
- <683a7136ec818d01420a5c2cbf43e13498d82740.camel@microchip.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <5493f2ea-4e5a-3917-4fee-08d8ef0511b5@gmail.com>
-Date:   Thu, 7 Oct 2021 19:30:55 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <683a7136ec818d01420a5c2cbf43e13498d82740.camel@microchip.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+ <d39e99ff-6498-e532-e833-1c65861d566f@gmail.com> <683a7136ec818d01420a5c2cbf43e13498d82740.camel@microchip.com>
+ <55bf986d-ea29-f067-ea39-14eaab0d519a@gmail.com>
+In-Reply-To: <55bf986d-ea29-f067-ea39-14eaab0d519a@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 7 Oct 2021 19:33:18 +0300
+Message-ID: <CAHp75Vffte=NckQZ2e2fXsF33QOaKkksB2OxjWRi6gnngujtcg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] i2c:busses:Register PCI1XXXX adapter to I2C subsystem
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     LakshmiPraveen Kopparthi <LakshmiPraveen.Kopparthi@microchip.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        s.shtylyov@omp.ru, linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-05.10.2021 11:50, LakshmiPraveen Kopparthi пишет:
->> Interrupt is disabled in ISR, this lock does nothing.
-> 
-> Ok. But there are some registers that are read and updated in the ISR
-> and in the foreground.
-> I will add the lock for these register access.
+On Thu, Oct 7, 2021 at 7:25 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+> 05.10.2021 11:50, LakshmiPraveen Kopparthi =D0=BF=D0=B8=D1=88=D0=B5=D1=82=
+:
+> >> Why i2c->freq is fixed to I2C_MAX_FAST_MODE_FREQ in
+> >> pci1xxxx_i2c_init()?
+> > This is the default frequency at which the adapter shall operate. This
+> > driver is targeted for x86,X64 platforms. Could you please suggest a
+> > way to configure the freqeuncy?
+>
+> For x86 it should come somewhere from ACPI info presumably, but I'm not
+> ACPI expert. Andy may have more insight.
+>
+> At least you could add a clarifying comment to the code, telling why
+> freq is fixed to the standard speed.
 
-Please either add everything into a single patch or remove the unused code.
+Since it's a host controller adapter driver we have to choose
+something it will operate by default. In ACPI the peripheral may ask
+for higher or lower speed and in i2c_acpi_find_bus_speed() [1] we
+decide at which speed it should be.
 
-If you will need to add a lock, then like Michał Mirosław suggested in
-the other reply, you won't need to store/restore IRQ flags in the
-interrupt context.
+[1]: https://elixir.bootlin.com/linux/latest/source/drivers/i2c/i2c-core-ac=
+pi.c#L331
+
+--=20
+With Best Regards,
+Andy Shevchenko
