@@ -2,116 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B12425822
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Oct 2021 18:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF07042586E
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Oct 2021 18:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242660AbhJGQmB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 7 Oct 2021 12:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242297AbhJGQmB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Oct 2021 12:42:01 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A673C061570;
-        Thu,  7 Oct 2021 09:40:07 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id x27so27252969lfa.9;
-        Thu, 07 Oct 2021 09:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IkiYESUwPuOAhc/9Tu+J/TkjYtnEJg1nTu4gW+TNm28=;
-        b=S0Wej+NiSR7tu3xAmGqeGsTwG2U0U8SPQm0Z1R3fQVUn/2Vy7jIId541l1EbkuIgnv
-         +3LKLSh7iQtNtFKTXmsQteXU1olfcagzamtFxFf4bBSJWdDUYdU30xxNG3vzoU+xFnty
-         yZBZFZS9qWZm9XXl53ZL9Z3XCIKB/GV39LvUvRGsGvlMhCoLWJ65cFj4pasH+z6oQAyO
-         LjMeEB139hQ9uI63xhQ3WeEVSSjzL/ePvb8eTG5uKUK5qyd6jNQgYE+BfL/ju6mk2TYz
-         Dn8gNHgyA+0A+YuInKoNrqH32fgdONht86QNRKDcza1EnNgwZY4sPPU1XVGv3DOgidNI
-         g64Q==
+        id S235396AbhJGQww (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 Oct 2021 12:52:52 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:45584 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229810AbhJGQwv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Oct 2021 12:52:51 -0400
+Received: by mail-ot1-f43.google.com with SMTP id g15-20020a9d128f000000b0054e3d55dd81so3118775otg.12;
+        Thu, 07 Oct 2021 09:50:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IkiYESUwPuOAhc/9Tu+J/TkjYtnEJg1nTu4gW+TNm28=;
-        b=i+pT9Wr0unj4a2Sp74zoipzVZi1+A3YDKFOoTjEKXshHDJ5PG2UvmbgRCgunV1HfMA
-         Ja8e1qxFCzGS530grNrijYVYSKmncqxVKmsQcs9qthcJaKjaNgdCRyWTGu7C9V+GHhda
-         3R/Jw5VgysAGBlY8VhRpA40GfvNEhAe+JGOZHv/3wYJgG132l8HPil2Ai/oe9i+PvtQS
-         8EJo1Vdovz/ARoTk5HXL8UPLphzW/3Yjw6CajWU0U76ZQ/IH8xuEEA/bmHy7gARrKmSn
-         ahe3GyUqR3m/ocSNiVojbVNzptIf3t+u7MdUNO/VdZl/NnxFDauu2D8tPxeqU2LmaadU
-         7H3g==
-X-Gm-Message-State: AOAM530CcSXybmRTSpSHdqJMjCaL6Ds4Eztr3IdaDPOdDGlDa1g/+48v
-        PXgRbkeOh10qYJuwaxari4hjWvMHRqg=
-X-Google-Smtp-Source: ABdhPJx9C6dMgdo8FF7weruHR8bHFZH5KVNJJyGprjjGHakjPpRF/TfFZ+9CKEhsNcmHpq5YT9Znqg==
-X-Received: by 2002:a19:f805:: with SMTP id a5mr4995816lff.483.1633624805753;
-        Thu, 07 Oct 2021 09:40:05 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id e25sm5594lfn.82.2021.10.07.09.40.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Oct 2021 09:40:05 -0700 (PDT)
-Subject: Re: [PATCH v1 1/2] i2c:busses:Register PCI1XXXX adapter to I2C
- subsystem
-To:     LakshmiPraveen Kopparthi <LakshmiPraveen.Kopparthi@microchip.com>,
-        wsa@kernel.org, andriy.shevchenko@linux.intel.com,
-        treding@nvidia.com, mirq-linux@rere.qmqm.pl, s.shtylyov@omp.ru,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     UNGLinuxDriver@microchip.com
-References: <20210929062215.23905-1-LakshmiPraveen.Kopparthi@microchip.com>
- <20210929062215.23905-2-LakshmiPraveen.Kopparthi@microchip.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a63bbad2-b7b4-47da-93bd-4152a2c8b93f@gmail.com>
-Date:   Thu, 7 Oct 2021 19:40:04 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aQITjc9EkelfmrMblmNfFJUe60PWwUG8kF/gKJHNbBc=;
+        b=Bt/vlGbBj6PsGhgxH84G7Cx1PPHFg/FL0IjwoYSmOoJtjj/YbjisB2UmFXDvakIwa1
+         /+kd/Kyo214vY0mJnbMAOL+Jmb/BB/bi43lKfqLP9V+cBTHINpFuJO330wlJiy5IaaZC
+         UbDDvDyDCIEmoDy2+d8Sv5cdKPNb/gvq2UUP2rGQt2IholhX8fcyh0D2Izo92Vr5zjig
+         5PanzghM+4P8NAre2Uy2IXjsIN+In8Br/P2NFE9AvNXGuQpgzDexZCNOA7WmapANiuHO
+         Jxlf9bfmvWNqZvQi/CXnRL3FgY6Eov+qjJMPmHMpJtUWDWs2uEB0LnxQrggsEMdf+WZo
+         1LAg==
+X-Gm-Message-State: AOAM530KmRQWdS8dp2VkRm/ppGYZ2/nTvLBEEGrWHVXcM6xrxeg59qf0
+        ufICzw/g1/M3M0mWyHKsdFPBMRxBGWlunlIsTLc=
+X-Google-Smtp-Source: ABdhPJxkjmzjRmeA6qfA9L5v1U4is/YhJfMjAJ5Dp0rAk60j7IrwbvPf+wzuD0LRsGALgVrNNm8Wh2hn7IhCG/VmVtk=
+X-Received: by 2002:a9d:2f24:: with SMTP id h33mr4678062otb.254.1633625457450;
+ Thu, 07 Oct 2021 09:50:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210929062215.23905-2-LakshmiPraveen.Kopparthi@microchip.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211006173125.84423-1-andriy.shevchenko@linux.intel.com> <20211006173125.84423-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211006173125.84423-3-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 7 Oct 2021 18:50:46 +0200
+Message-ID: <CAJZ5v0iN+28gccy00_Ces9bYsLCNJaHaTZGMUwRrPA6TpY3H8A@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] gpiolib: acpi: Replace custom code with device_match_acpi_handle()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Wolfram Sang <wsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-29.09.2021 09:22, LakshmiPraveen Kopparthi пишет:
-> +static int pci1xxxx_i2c_suspend(struct device *dev)
-> +{
-> +	struct pci1xxxx_i2c *i2c = dev_get_drvdata(dev);
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	u32 regval;
-> +
-> +	i2c_mark_adapter_suspended(&i2c->adap);
-> +
-> +	pci1xxxx_ack_high_level_intr(i2c, ALL_HIGH_LAYER_INTR);
-> +	pci1xxxx_i2c_config_high_level_intr(i2c, ALL_HIGH_LAYER_INTR, false);
-> +
-> +	/*
-> +	 * Enable the PERST_DIS bit to mask the PERST from
-> +	 * resetting the core regs
-> +	 */
-> +	regval = readl(i2c->i2c_base + SMBUS_RESET_REG);
-> +	regval |= PERI_SMBUS_D3_RESET_DIS;
-> +	writel(regval, i2c->i2c_base + SMBUS_RESET_REG);
-> +
-> +	return 0;
-> +}
-> +
-> +static int pci1xxxx_i2c_resume(struct device *dev)
-> +{
-> +	struct pci1xxxx_i2c *i2c = dev_get_drvdata(dev);
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	u32 regval;
-> +
-> +	i2c_mark_adapter_resumed(&i2c->adap);
-> +
-> +	regval = readl(i2c->i2c_base + SMBUS_RESET_REG);
-> +	regval &= ~PERI_SMBUS_D3_RESET_DIS;
-> +	writel(regval, i2c->i2c_base + SMBUS_RESET_REG);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(pci1xxxx_i2c_pm_ops, pci1xxxx_i2c_suspend,
-> +			 pci1xxxx_i2c_resume);
+On Wed, Oct 6, 2021 at 7:31 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Since driver core provides a generic device_match_acpi_handle()
+> we may replace the custom code with it.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: no changes
+>  drivers/gpio/gpiolib-acpi.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> index 47712b6903b5..32f1f720b94b 100644
+> --- a/drivers/gpio/gpiolib-acpi.c
+> +++ b/drivers/gpio/gpiolib-acpi.c
+> @@ -95,10 +95,7 @@ static bool acpi_gpio_deferred_req_irqs_done;
+>
+>  static int acpi_gpiochip_find(struct gpio_chip *gc, void *data)
+>  {
+> -       if (!gc->parent)
+> -               return false;
+> -
+> -       return ACPI_HANDLE(gc->parent) == data;
+> +       return gc->parent ? device_match_acpi_handle(gc->parent, data) : false;
 
-Can you move suspend/resume to NOIRQ level? Device drivers may require
-to access I2C early on resume (or late on suspend), it's a common
-trouble for bus drivers.
+return gc->parent && device_match_acpi_handle(gc->parent, data);
+
+would work too if I'm not mistaken.
+
+>  }
+>
+>  /**
+> --
