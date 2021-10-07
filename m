@@ -2,79 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0674258E8
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Oct 2021 19:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1B0425928
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Oct 2021 19:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243041AbhJGRJZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 7 Oct 2021 13:09:25 -0400
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:35441 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242368AbhJGRJY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Oct 2021 13:09:24 -0400
-Received: by mail-ot1-f54.google.com with SMTP id 77-20020a9d0ed3000000b00546e10e6699so8372352otj.2;
-        Thu, 07 Oct 2021 10:07:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IefJA9LBUD7adbLBoj6lhBu/BQqC/aTFaIOQ0tDZ+DQ=;
-        b=5VMHO66+Ciwq244nC8uszX8d4UYVKucH5RRnVQNiAfFQW28/z10912Zr0kWyoAwh6U
-         3H7MqcK5KCYeUJCMVYtPH1+wV7j7y0b4pZjM4csUW03tyi7+s1Nrh/zewvK5Zi6B+Eys
-         JRtsGyoZgD5HFhbx9xentsSmuopJNul4p5tEiiANdx1gxHOFk92YXYEc62HDEU9/9Dle
-         xfy6MIZUtuLoRzuMOzf1wph3l27u/2/mWul4XoGX+mLlS1icrL7I7hAMzQZSArIqPegw
-         VG9QPZXLxYNonWy0c9zFX+0gAD6sDw0PFKr36hOdVBdwbSpXzXRtuLkinBqtwnaDTMy8
-         mx6w==
-X-Gm-Message-State: AOAM531fLD+hi7pYWWy64U8L4pEYHDCMeA63Jvclx7BIavaAmVG7lnPX
-        No2PzqCAq4oBANc5sY9e0BjNjwKPdiOF0ZoJNDE=
-X-Google-Smtp-Source: ABdhPJzrrsgi8uz8zu+MUoSiFl5pa9fUsEyroZv6f/hs128KFBk/gp7uP9JpenjMSxRdtp+uu9Z2//YAVV7FkeHQ274=
-X-Received: by 2002:a9d:2f24:: with SMTP id h33mr4756669otb.254.1633626449857;
- Thu, 07 Oct 2021 10:07:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211006173125.84423-1-andriy.shevchenko@linux.intel.com>
- <20211006173125.84423-3-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0iN+28gccy00_Ces9bYsLCNJaHaTZGMUwRrPA6TpY3H8A@mail.gmail.com> <YV8oAThCe2dR6K1n@smile.fi.intel.com>
-In-Reply-To: <YV8oAThCe2dR6K1n@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 7 Oct 2021 19:07:19 +0200
-Message-ID: <CAJZ5v0hTqUnvvhEN4O-Boi-_RBFvT5mNKBn+fVdo4XWz0-XJ_Q@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] gpiolib: acpi: Replace custom code with device_match_acpi_handle()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S243031AbhJGRUO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 Oct 2021 13:20:14 -0400
+Received: from mga05.intel.com ([192.55.52.43]:2893 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242959AbhJGRUO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 7 Oct 2021 13:20:14 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="312508078"
+X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
+   d="scan'208";a="312508078"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 10:18:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
+   d="scan'208";a="478648609"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 07 Oct 2021 10:18:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C9191159; Thu,  7 Oct 2021 20:18:19 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Saravana Kannan <saravanak@google.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v3 1/3] driver core: Provide device_match_acpi_handle() helper
+Date:   Thu,  7 Oct 2021 20:18:13 +0300
+Message-Id: <20211007171815.28336-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Oct 7, 2021 at 7:02 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Oct 07, 2021 at 06:50:46PM +0200, Rafael J. Wysocki wrote:
-> > On Wed, Oct 6, 2021 at 7:31 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
->
-> ...
->
-> > > +       return gc->parent ? device_match_acpi_handle(gc->parent, data) : false;
-> >
-> > return gc->parent && device_match_acpi_handle(gc->parent, data);
-> >
-> > would work too if I'm not mistaken.
->
-> Seems so.
->
-> Thanks for review, I will update for v3.
-> Any other comments to the series?
+We have couple of users of this helper, make it available for them.
 
-Not really.  Patch [2/3] is correct AFAICS.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v3: no changes
+ drivers/base/core.c        | 6 ++++++
+ include/linux/device/bus.h | 1 +
+ 2 files changed, 7 insertions(+)
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index b67ebe6a323c..fd034d742447 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -4838,6 +4838,12 @@ int device_match_acpi_dev(struct device *dev, const void *adev)
+ }
+ EXPORT_SYMBOL(device_match_acpi_dev);
+ 
++int device_match_acpi_handle(struct device *dev, const void *handle)
++{
++	return ACPI_HANDLE(dev) == handle;
++}
++EXPORT_SYMBOL(device_match_acpi_handle);
++
+ int device_match_any(struct device *dev, const void *unused)
+ {
+ 	return 1;
+diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+index 062777a45a74..a039ab809753 100644
+--- a/include/linux/device/bus.h
++++ b/include/linux/device/bus.h
+@@ -143,6 +143,7 @@ int device_match_of_node(struct device *dev, const void *np);
+ int device_match_fwnode(struct device *dev, const void *fwnode);
+ int device_match_devt(struct device *dev, const void *pdevt);
+ int device_match_acpi_dev(struct device *dev, const void *adev);
++int device_match_acpi_handle(struct device *dev, const void *handle);
+ int device_match_any(struct device *dev, const void *unused);
+ 
+ /* iterator helpers for buses */
+-- 
+2.33.0
+
