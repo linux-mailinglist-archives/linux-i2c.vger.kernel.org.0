@@ -2,64 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FDB426F13
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Oct 2021 18:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3F9426F14
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Oct 2021 18:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbhJHQiU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S232049AbhJHQiU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Fri, 8 Oct 2021 12:38:20 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:38295 "EHLO
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:40857 "EHLO
         new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229673AbhJHQiK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Oct 2021 12:38:10 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id AB54B580FD5;
-        Fri,  8 Oct 2021 12:36:13 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S231237AbhJHQiN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Oct 2021 12:38:13 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 6A26A580FF2;
+        Fri,  8 Oct 2021 12:36:17 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 08 Oct 2021 12:36:13 -0400
+  by compute1.internal (MEProxy); Fri, 08 Oct 2021 12:36:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm2; bh=cHX2rY9rskeE1+fRnngpouQp+f
-        owWM3d9LCqW9L1Z+0=; b=TqkAafPNpdb94tkYSGI5CqyYCj7IfvR/jOKRt7WVvv
-        1YidtBYXtoK9qwTjJfxhR1tIS2LS/UkEQvs0D/+Im47XmW4ojwJOPQLp2UYmEn9O
-        HjeVfl0lsa/kznsJKi/uTZGZh+97pwXZVEoIIeiGZyMFzEMuEQKkPVXhl0U96GQD
-        B0wcKHB4kbCYitFbQO4dwYSZEi2dMPTIZz4ZQpY2aZhlZJjWxoVxOibZ/gMPHg29
-        AxrWvbvVsCh90YlY3U07DiE0D91Ql1174hgFU2VbJYuoQjjlrUBrV+iF8XvTJdas
-        h43MIAP7NOHmQyn74UUPAnc+2VkJRfwVOAYbaUa+QZ0w==
+         h=from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm2; bh=gDYXv/fFdnWqv
+        tr1uvd+CSFoRdT7CSrilcDcl3UTHuQ=; b=cBcp12SubnOlXqasSnxaobasEiOwF
+        mSjVU2l40AdmXOu5HTu8mHWmb3xY01sIBp5W94Mr/JZB7w4lhmOGNFaRUCVlJdU4
+        sfkt/cpJ/q20log4d5lZLjh0hstQ8Ern5hI69vC34HLY1u5cuwmXhDyoihp8rd8i
+        3XxM/jW/ESQonp3j6JyPyQZPJHdODON3lp0KaP3ohc3ME5uIz+AvwLvNInq1Tssd
+        29YOuzAd2xwKBj0eRrWz1cCqJ/s9szeYytGIdGlhpVdP72+cHfroBz8muZtKURl2
+        29Ib2VVw+ezOTtfdc2V1zxlpTPWdUGL3W0TguUQA66zd19RgMqfcy4jrg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=cHX2rY9rskeE1+fRn
-        ngpouQp+fowWM3d9LCqW9L1Z+0=; b=Vu6xa+sbSYGmBVWHV6njmWP5ItJrJuLsa
-        lkZCT6DVC/STDr/vRMwYcl/uVkoREkZAWt2bJ6E98drt/GHnJDLdeRhWS6N7W1zR
-        n2pu6hBl5J3P0DQxLBVA6S2DWGCqva0vKa1kqp0fWIRZGa5922O0aYdE+6WVRUt1
-        a2eP5dvma2I6mnlxKmbhZPkhIoyawxCG3bM6lzBbZYBYcMSX0W1Ld4dgPp71INJt
-        I0NH3xQytIf+jFpxnTVjxpXUkI9vp+tnJadw8jZn/w1KT1PmQlyXUHYnGLSSqAXH
-        oFUxypulkbpx6V2Jvrns9K6GPIF0OAuWnx9C1IJzzzmarMtn/2gzA==
-X-ME-Sender: <xms:fHNgYRGhSbb2_A03eRnhnmJ4hYC3aqcXn4fDPCYJ49XNYEdrGyweJg>
-    <xme:fHNgYWX2sEUGK8ofeM9D9quwu8eZxOYZh5VasJpShBwI7WRbzBCJvQSNG0tmBxmKb
-    tVIUYw648rhAnjBjiA>
-X-ME-Received: <xmr:fHNgYTL_M1zCLtPdkjqVs1l5M5bpiy7sOyb5legnwXp5I4_nwWFoPfkp2v0UqVTy7P5Im-SBgRBH824Au12DG3avEv6aAwkw9BdL1_ZsDZuXYUqvxzbGaQs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddttddgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
-    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
-    epfeehudeftddvhfehvdduhedtjeejheeuudfftdfgvdekvdelleeuveelgfeflefgnecu
-    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:fHNgYXEAZtwSPee01aEdBUgDIppK-UvoTXCATjnTVw_GDfpBsg2aPg>
-    <xmx:fHNgYXV6Qx6reGY3CCQohojgUPf-Y-f0Nohe20_WS7Zg9heHVm3ZCA>
-    <xmx:fHNgYSPegl3F_vB5tfZBjtGzueleqniMgprxVCIsRtcXvBWRuC1mAg>
-    <xmx:fXNgYQUrEUkBPZ4ZgygCfMavyjnSHXh3Pwdjenz_Vn-YHf6kDKd8ZQ>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=gDYXv/fFdnWqvtr1uvd+CSFoRdT7CSrilcDcl3UTHuQ=; b=oLcZbuWl
+        WKf8fLTS1YJZhD52MysFL91NDHh7lH5QSE+c9ZPqiVE2168GQnWLKSXgh7AW4hpj
+        FX1swTpZaPO+i9eZqaPNE6pTfNnFlVMiDUCaDygJ+xZsAjC3WP4Cn+A4F4V/jx5S
+        PJakhLLB+4+jiv2jOeAHSltcZ6hh0Gx7GpyRnCHKQ+rSxLuk3o62kfraZWlTqNtp
+        EH6frBbgN7NYr4HqywY6YOuPAEYygrdVKfw9cD2Ffcmu8FEM4HszJ6A2Gfh+AXEO
+        uJ5aZx2Q1WWjbPqXdF3mhnkOupQCaFKuvtlXHbL7bXWGHWzzUCC1skS/mJioytxq
+        WiKZvIcsFieJNg==
+X-ME-Sender: <xms:gXNgYRUXQOwxOUsVuhVr14_bsZlhUAlfwqLARr5z_WUj1_K0uFLlag>
+    <xme:gXNgYRnOWPFgi4CRvh4ZP_lwi5Yij6G82f3Ap_QsUO1SPxZxgBOJ2RfufIfHTGm0M
+    7uOGvYOmLmLrTmEyUI>
+X-ME-Received: <xmr:gXNgYdaOZjDfcTNJ1b6SN8mdXwkvxACl7BTpGvZt-Z4_dYD9MPAVA-Mh0lDhPNNde9OxnHZX3Al8UD2NIxCYIQZ3wLg2tT29oXnX1w2UY84q7F8dqnN_aCw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddttddguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhvvghn
+    ucfrvghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtth
+    gvrhhnpeeivdduffetvdeiveeiffdvjeevieevudfhieefgeehheehtdfgheffueehfefh
+    leenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgpdhgihhthhhusgdrtghomh
+    dpohhfthgtrdhnvghtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
+    lhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:gXNgYUWBKkbDaAYDulQQp0Q0u5OvCEoAFfWw6oiMn3OkR1G2milGVA>
+    <xmx:gXNgYbnMHE52Gt8f9r_7OA7dy78R9RtlA6QymOiggdZkR8z4f5ZXqA>
+    <xmx:gXNgYRf9o8vcMfqoPQpCcvLiR7ehh5Ml6OAsjg63R9wwrOIZbW97Ag>
+    <xmx:gXNgYafyOOLqJhTkg6uqg2IE-PsSNGWnwycOAqJADbojS6GS7Y1q3Q>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 8 Oct 2021 12:36:09 -0400 (EDT)
+ 8 Oct 2021 12:36:13 -0400 (EDT)
 From:   Sven Peter <sven@svenpeter.dev>
 To:     Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Olof Johansson <olof@lixom.net>,
         Christian Zigotzky <chzigotzky@xenosoft.de>,
-        Wolfram Sang <wsa@kernel.org>
+        Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>
 Cc:     Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
         Hector Martin <marcan@marcan.st>,
         Mohamed Mediouni <mohamed.mediouni@caramail.com>,
@@ -68,94 +70,113 @@ Cc:     Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 00/11] Add Apple M1 support to PASemi i2c driver
-Date:   Fri,  8 Oct 2021 18:35:21 +0200
-Message-Id: <20211008163532.75569-1-sven@svenpeter.dev>
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 01/11] dt-bindings: i2c: Add Apple I2C controller bindings
+Date:   Fri,  8 Oct 2021 18:35:22 +0200
+Message-Id: <20211008163532.75569-2-sven@svenpeter.dev>
 X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <20211008163532.75569-1-sven@svenpeter.dev>
+References: <20211008163532.75569-1-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+The Apple I2C controller is based on the PASemi I2C controller.
+It is present on Apple SoCs such as the M1.
 
-v1: https://lore.kernel.org/linux-i2c/20210926095847.38261-1-sven@svenpeter.dev/
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+v1 -> v2: no changes
 
-Changes for v2:
- - Added reviewed-by/acks
- - Switched from ioport_map to pci_iomap as suggested by Arnd Bergmann
- - Renamed i2c-pasemi-apple.c to i2c-pasemi-platform.c as suggested by
-   Wolfram Sang
- - Replaced the ioport number in the adapter name with dev_name to be
-   able to identify separate busses in e.g. i2cdetect.
-
-I still don't have access to any old PASemi hardware but the changes from
-v1 are pretty small and I expect them to still work. Would still be nice
-if someone with access to such hardware could give this a quick test.
-
-
-And for those who didn't see v1 the (almost) unchanged original cover letter:
-
-This series adds support for the I2C controller found on Apple Silicon Macs
-which has quite a bit of history:
-
-Apple bought P.A. Semi in 2008 and it looks like a part of its legacy continues
-to live on in the M1. This controller has actually been used since at least the
-iPhone 4S and hasn't changed much since then.
-Essentially, there are only a few differences that matter:
-
-	- The controller no longer is a PCI device
-	- Starting at some iPhone an additional bit in one register
-          must be set in order to start transmissions.
-	- The reference clock and hence the clock dividers are different
-
-In order to add support for a platform device I first replaced PCI-specific
-bits and split out the PCI driver to its own file. Then I added support
-to make the clock divider configurable and converted the driver to use
-managed device resources to make it a bit simpler.
-
-The Apple and PASemi driver will never be compiled in the same kernel
-since the Apple one will run on arm64 while the original PASemi driver
-will only be useful on powerpc.
-I've thus followed the octeon (mips)/thunderx(arm64) approach to do the
-split: I created a -core.c file which contains the shared logic and just
-compile that one for both the PASemi and the new Apple driver.
-
-
-Best,
-
-Sven
-
-Sven Peter (11):
-  dt-bindings: i2c: Add Apple I2C controller bindings
-  i2c: pasemi: Use io{read,write}32
-  i2c: pasemi: Use dev_name instead of port number
-  i2c: pasemi: Remove usage of pci_dev
-  i2c: pasemi: Split off common probing code
-  i2c: pasemi: Split pci driver to its own file
-  i2c: pasemi: Move common reset code to own function
-  i2c: pasemi: Allow to configure bus frequency
-  i2c: pasemi: Refactor _probe to use devm_*
-  i2c: pasemi: Add Apple platform driver
-  i2c: pasemi: Set enable bit for Apple variant
-
- .../devicetree/bindings/i2c/apple,i2c.yaml    |  61 +++++++++
- MAINTAINERS                                   |   2 +
- drivers/i2c/busses/Kconfig                    |  11 ++
- drivers/i2c/busses/Makefile                   |   3 +
- .../{i2c-pasemi.c => i2c-pasemi-core.c}       | 114 +++++-----------
- drivers/i2c/busses/i2c-pasemi-core.h          |  21 +++
- drivers/i2c/busses/i2c-pasemi-pci.c           |  85 ++++++++++++
- drivers/i2c/busses/i2c-pasemi-platform.c      | 122 ++++++++++++++++++
- 8 files changed, 334 insertions(+), 85 deletions(-)
+ .../devicetree/bindings/i2c/apple,i2c.yaml    | 61 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 2 files changed, 62 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/i2c/apple,i2c.yaml
- rename drivers/i2c/busses/{i2c-pasemi.c => i2c-pasemi-core.c} (77%)
- create mode 100644 drivers/i2c/busses/i2c-pasemi-core.h
- create mode 100644 drivers/i2c/busses/i2c-pasemi-pci.c
- create mode 100644 drivers/i2c/busses/i2c-pasemi-platform.c
 
+diff --git a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+new file mode 100644
+index 000000000000..22fc8483256f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+@@ -0,0 +1,61 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/i2c/apple,i2c.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Apple/PASemi I2C controller
++
++maintainers:
++  - Sven Peter <sven@svenpeter.dev>
++
++description: |
++  Apple SoCs such as the M1 come with a I2C controller based on the one found
++  in machines with P. A. Semi's PWRficient processors.
++  The bus is used to communicate with e.g. USB PD chips or the speaker
++  amp.
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - apple,t8103-i2c
++      - apple,i2c
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: I2C bus reference clock
++
++  interrupts:
++    maxItems: 1
++
++  clock-frequency:
++    description: |
++      Desired I2C bus clock frequency in Hz. If not specified, 100 kHz will be
++      used. This frequency is generated by dividing the reference clock.
++      Allowed values are between ref_clk/(16*4) and ref_clk/(16*255).
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c@35010000 {
++      compatible = "apple,t8103-i2c";
++      reg = <0x35010000 0x4000>;
++      interrupt-parent = <&aic>;
++      interrupts = <0 627 4>;
++      clocks = <&ref_clk>;
++      #address-cells = <1>;
++      #size-cells = <0>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7cfd63ce7122..74aa85967ca3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1735,6 +1735,7 @@ B:	https://github.com/AsahiLinux/linux/issues
+ C:	irc://irc.oftc.net/asahi-dev
+ T:	git https://github.com/AsahiLinux/linux.git
+ F:	Documentation/devicetree/bindings/arm/apple.yaml
++F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
 -- 
 2.25.1
 
