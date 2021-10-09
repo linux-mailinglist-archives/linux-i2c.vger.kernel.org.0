@@ -2,65 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 181EB42796C
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Oct 2021 13:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA2B42796E
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Oct 2021 13:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbhJILcJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 9 Oct 2021 07:32:09 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:40321 "EHLO
+        id S232779AbhJILc0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 9 Oct 2021 07:32:26 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:56277 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231526AbhJILcI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 9 Oct 2021 07:32:08 -0400
+        by vger.kernel.org with ESMTP id S231526AbhJILc0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 9 Oct 2021 07:32:26 -0400
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 6FDF5580977;
-        Sat,  9 Oct 2021 07:30:10 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 5E8EA580958;
+        Sat,  9 Oct 2021 07:30:29 -0400 (EDT)
 Received: from imap47 ([10.202.2.97])
-  by compute1.internal (MEProxy); Sat, 09 Oct 2021 07:30:10 -0400
+  by compute1.internal (MEProxy); Sat, 09 Oct 2021 07:30:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm2; bh=uTxGnyhkHJhSQNzCzJ23BnB9E0YY
-        OsJqvk8zIcUsFNE=; b=HWKeMA2zk/SmswwAuUwtSfayXtT2QRaC6A/bksgBpP4R
-        AQIDzJBMbI8H40kxQoH9FMxddeq5/aVWu6X16xkUYSuL75Ag2xiyo3XZCIL8HfCw
-        KR6RfOmj+bDvSJTAsdQ9JitmydeTLAvEPgHmX2QeJDz3xEpgOTh0QgpDBKACzKj/
-        Z7PxTL8UpTLz/ExT1IkSa3g68GxkjunLLNKK5W7iCRE4CRbaPJI21+Axpdq7KWcO
-        4cvA43vN17PfqSYJS5XlKNSMqGooKCpuZw6ahTr1PmmHpdAcHs6Jh6fod6Efxnxl
-        UBo7eJwEvuEuMWm/Qrjz+K9q/b4is/0HXH1eHHa3MA==
+        :cc:subject:content-type; s=fm2; bh=yjaV+Aq620PMH7q1EGIlum03SV/o
+        UJx+i3qPZXiQFDo=; b=TtbRWbUcBV+Pt/wwY/RcU/PWNZf/aE5l2kf3EqdnxHyI
+        s/yjd8KH80LtAUZw+tZqwEIE4Zpnz4v3nwG35xb2ggpdkYpzfQBFvQQfO4aPh1lr
+        sFbmnXX5WxwoSvpY0X59wJggzlhXTgS9vlHm5QADlFABxj1ayBvSJxKBIXH6sg7E
+        gLndLhRj6vPqQfZA1lDNnEEGWiD6ljmj2wjbglk4hT8niJ57x0Sjtyi1vELsXF5u
+        yKPsqXK2Xp5YB3bKdaAbkD+sn9lOmyOSzmiOF/kp64QyZMJpY3lmlQHsWwE5qqaE
+        E0g8V4wTs3iYwzsSfQjlRtnWziDpFN1a2p/jznFptA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=uTxGny
-        hkHJhSQNzCzJ23BnB9E0YYOsJqvk8zIcUsFNE=; b=AtsLYlu3D5YC01UzMJvxjY
-        X7/h7ztco+uS7Hi+74AFtUw309ecoVdJCplIaMCeJIR2FgW1RxBgSW+lcLUO0jUU
-        X6Fvvxc5YBtvvL1720jwh13Nb5eNm+TXsbrBSiJq7WWJ3N67J9IqapGoMCDf5h7r
-        FsH4RxQkILz5gsWd37LwO0CBOmxCvqJlp6QIq7f1Z4UUhdR0INVSBpE1Hzywir3T
-        08RqhwgjkGbFOCOe/B/+Lxs4UNTmEKIp3eSGRa97Oddm9Cj1Noc0qdyt9RKKWLjp
-        C2nxqNFtPrzpeTtMO8LW8rU/JbO3eDfU54Kct72WuxrE8zNQf8a6h824kcf/Z/lg
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=yjaV+A
+        q620PMH7q1EGIlum03SV/oUJx+i3qPZXiQFDo=; b=UXA09pFYq8poDEewrBZO/U
+        fECE+f2C6Yr12nJ2G/gFdQCCUQ4KMqaXRO+qm9jFR2IfTinRAcfUjm07sovsQGNy
+        CWP74ZGzFogkt2FtxneokoR/u6NEeD6LaSg0b6sLirYQaOhGWzgpRyepJVu/GBHL
+        SAjP8dhjoMqBPXgm6PVcU2vzuGReKr/PXEBtVrVN4ne4eaLYeZ5oiLVOQGR9NGux
+        +zjSmlDpr87cAj9Ad4ZVrCrQGzbyY4nyQ9pLvVCJh+4h3q+lUBMvtXV/JjN1lUhD
+        m/SOwHsRjBtQEV4ep/hEn62GLicp6xSgGRyEc8xRizkzXDSKz2bGbid6pORLf4+Q
         ==
-X-ME-Sender: <xms:QX1hYa7lqWLI1vXjwr6C3e9afYZY0cc3wLdMoG97PxqEbDD75_rv5Q>
-    <xme:QX1hYT47D4-oQPjPpRaj09h-7lJYrhmkQO9dWxBpedMw8bBUmLzn7GmFqz1hkUSef
-    tOJI5hySZsEPrdFJbU>
+X-ME-Sender: <xms:VX1hYSHM9wpcHz3dl4pvcwuQ4d0QTZggyf4_5yEDj1DuLTlCXEGFQg>
+    <xme:VX1hYTWsSWEri_U3HMEpXyRQN-syL6FGCKjR9PSwnmHGNtW1gIvHKDVhksKWyqeTP
+    zYR9w8DLPXVgka6A2s>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtvddgfeelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
     nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
     htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
-    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    feekffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:QX1hYZdFPvGujphPZs4XiP3CvjfPRcpaIUCBlOFFEmhf1QJ5qe2BIg>
-    <xmx:QX1hYXK3IAjGfM5iWV0OpMIUl6wrOtD--dv_2DALBvW6sWkCah3hAg>
-    <xmx:QX1hYeJLGhCe6V-0kFUSxPAWblhISXHUGh82rDm2t9NHLXE41rwUwg>
-    <xmx:Qn1hYZYEwfWBy6tacnWQ_8Z2EqoKxT3-97Eym_zIOwO1cY778nhwrg>
+X-ME-Proxy: <xmx:VX1hYcJIUkumBhOboIGcPzOSd3Q68zSU0NnI6cQS0J1SKKV1VH7bGQ>
+    <xmx:VX1hYcGyIpP_rA6g78dAqg2XrjxW6uAFwXBUixeruzkYGyKV9_88iQ>
+    <xmx:VX1hYYVGjzYwDIq2aDY5MHYgHst_-h-0jaa1kWLSBq62ec5ch2kw5A>
+    <xmx:VX1hYZXTR3ZuA4FZ68Uk-RiVbnnvBJslbxivCXImn4Waiv7c4wHgVw>
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 11C5A2740061; Sat,  9 Oct 2021 07:30:08 -0400 (EDT)
+        id 3FA6D2740061; Sat,  9 Oct 2021 07:30:29 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.5.0-alpha0-1331-g5ae342296a-fm-20211005.001-g5ae34229
 Mime-Version: 1.0
-Message-Id: <7b8290ce-7ca0-4c91-a0a0-3421fc8b4983@www.fastmail.com>
-In-Reply-To: <YWFqUuc7I5Dh8+w6@ninjato>
+Message-Id: <2f0c7001-475e-4790-b90d-a6d9e1341563@www.fastmail.com>
+In-Reply-To: <YWFqr4uQGlNgnT1z@ninjato>
 References: <20211008163532.75569-1-sven@svenpeter.dev>
- <20211008163532.75569-11-sven@svenpeter.dev> <YWFqUuc7I5Dh8+w6@ninjato>
-Date:   Sat, 09 Oct 2021 13:29:48 +0200
+ <YWFqr4uQGlNgnT1z@ninjato>
+Date:   Sat, 09 Oct 2021 13:30:09 +0200
 From:   "Sven Peter" <sven@svenpeter.dev>
 To:     "Wolfram Sang" <wsa@kernel.org>
 Cc:     "Michael Ellerman" <mpe@ellerman.id.au>,
@@ -77,28 +77,21 @@ Cc:     "Michael Ellerman" <mpe@ellerman.id.au>,
         linux-arm-kernel@lists.infradead.org,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 10/11] i2c: pasemi: Add Apple platform driver
+Subject: Re: [PATCH v2 00/11] Add Apple M1 support to PASemi i2c driver
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-
-On Sat, Oct 9, 2021, at 12:09, Wolfram Sang wrote:
->>  F:	arch/arm64/boot/dts/apple/
->> +F:	drivers/i2c/busses/i2c-pasemi-platform.c
+On Sat, Oct 9, 2021, at 12:10, Wolfram Sang wrote:
+>> I still don't have access to any old PASemi hardware but the changes from
+>> v1 are pretty small and I expect them to still work. Would still be nice
+>> if someone with access to such hardware could give this a quick test.
 >
-> We have no dedicated maintainer for PASEMI. Are maybe you or your
-> project interested in maintaining the pasemi-core, too? I guess not many
-> patches will show up and they will likely be for M1 anyhow.
->
-> If so, then no need to resend, I could add the extra line while
-> applying.
+> Looks good to me. I will wait a few more days so that people can report
+> their tests. But it will be in the next merge window.
 
-Sure, feel free to add the core to the entry as well.
+Sounds great, thanks!
 
-
-Best,
 
 Sven
