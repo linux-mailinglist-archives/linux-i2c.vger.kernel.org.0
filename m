@@ -2,61 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8404F427DCC
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Oct 2021 00:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41196427F84
+	for <lists+linux-i2c@lfdr.de>; Sun, 10 Oct 2021 09:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbhJIWHV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 9 Oct 2021 18:07:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43672 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230296AbhJIWHV (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sat, 9 Oct 2021 18:07:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id A584360E95;
-        Sat,  9 Oct 2021 22:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633817123;
-        bh=bDNo0VJlQS0GDlS71ips1AwowPiEwimL2iIUSjm7O+s=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=R14N+SMTjchD7h/fE/EP0T9zgDXi5wqZ3mbVTVtYQTNvqMm2zKNgbQrlDSRUCXjnI
-         vN/NrLKYJobut5jQ0Rk6K5umtn2DeDPvbqwvNMQi55whqsjGVLAs6dB6l/CTIg44un
-         l/5f8hozYWBYsQcHCg4NLckQX6ey7W/F+Ku1ecIuTXTzUO6D07IhH6q6BVbhfIpKQ1
-         s+C1w9gpQpvzeFnprKS554ODEyxpurFWEx/+ZOdhCDaWTKzJJsSXl0QMB7aEKZ2RFw
-         SPFhZEHtoT8O4LneJZTEO9JLn0npPKYDSwiQyln5j4eZTG3ms0QX5qRqd08wyRQDE1
-         cDhqatM8wJ6xA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 914C760A38;
-        Sat,  9 Oct 2021 22:05:23 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c for v5.15
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YWHyUMqxa5giAJTJ@kunai>
-References: <YWHyUMqxa5giAJTJ@kunai>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YWHyUMqxa5giAJTJ@kunai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current-fixed
-X-PR-Tracked-Commit-Id: fa1049135c15b4930ce7ea757a81b1b78908f304
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7fd2bf83d59a2d32e0d596c5d3e623b9a0e7e2d5
-Message-Id: <163381712353.3348.9315706150947568165.pr-tracker-bot@kernel.org>
-Date:   Sat, 09 Oct 2021 22:05:23 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        id S230465AbhJJHHV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 10 Oct 2021 03:07:21 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55514 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230366AbhJJHHS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 10 Oct 2021 03:07:18 -0400
+X-UUID: 2fd26136496b4228af05345114233bf5-20211010
+X-UUID: 2fd26136496b4228af05345114233bf5-20211010
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <kewei.xu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 696301497; Sun, 10 Oct 2021 15:05:17 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Sun, 10 Oct 2021 15:05:15 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 10 Oct 2021 15:05:14 +0800
+From:   Kewei Xu <kewei.xu@mediatek.com>
+To:     <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
+        <caiyu.chen@mediatek.com>, <ot_daolong.zhu@mediatek.com>,
+        <yuhan.wei@mediatek.com>, <kewei.xu@mediatek.com>
+Subject: [PATCH v8 0/5] Introducing an attribute to select the time setting
+Date:   Sun, 10 Oct 2021 15:05:11 +0800
+Message-ID: <20211010070516.26763-1-kewei.xu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sat, 9 Oct 2021 21:49:36 +0200:
+v7:
+Resubmit the patch based on version 5.15-rc1
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current-fixed
+v6:
+1. Add the judgment condition, clear the handshake signal between dma and
+i2c when multiple msgs are transmitted.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7fd2bf83d59a2d32e0d596c5d3e623b9a0e7e2d5
+v5:
+1. Replace the previous variable name "default_timing_adjust" with "use-default-timing"
+2. Added waiting for dma reset mechanism
+3. Remove received patch(dt-bindings: i2c: update bindings for MT8195 SOC)
 
-Thank you!
+v4:
+1. Remove the repeated assignment of the inter_clk_div parameter
+2. Modify the wrong assignment of OFFSET_MULTI_DMA
+3. Unify the log print format of the i2c_dump_register() and drop the extra outer parentheses
+4. Place the fixes at the very least
+5. Add fixed tags 25708278f810 ("i2c: mediatek: Add i2c support for MediaTek MT8183")
+6. Add "i2c: mediatek: modify bus speed calculation formula"
+7. Fix single line characters exceeding 80 characters
+8. Combine two different series of patches.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+v3:
+1. Fix code errors caused by v2 modification
+
+v2:
+1. Add "dt-bindings: i2c: add attribute default-timing-adjust"
+2. Split the fix into sepatate patch.
+
+Kewei Xu (5):
+  i2c: mediatek: Reset the handshake signal between i2c and dma
+  i2c: mediatek: Dump i2c/dma register when a timeout occurs
+  dt-bindings: i2c: add attribute use-default-timing
+  i2c: mediatek: Isolate speed setting via dts for special devices
+  i2c: mediatek: modify bus speed calculation formula
+
+ .../devicetree/bindings/i2c/i2c-mt65xx.txt    |   2 +
+ drivers/i2c/busses/i2c-mt65xx.c               | 192 ++++++++++++++++--
+ 2 files changed, 180 insertions(+), 14 deletions(-)
+
+--
+2.18.0
+
