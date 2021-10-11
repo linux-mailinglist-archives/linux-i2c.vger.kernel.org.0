@@ -2,19 +2,19 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F21428AE6
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 12:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D96E428AE9
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 12:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbhJKKm5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Oct 2021 06:42:57 -0400
-Received: from sauhun.de ([88.99.104.3]:53402 "EHLO pokefinder.org"
+        id S235956AbhJKKnG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Oct 2021 06:43:06 -0400
+Received: from sauhun.de ([88.99.104.3]:53416 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235868AbhJKKm4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 Oct 2021 06:42:56 -0400
+        id S235868AbhJKKnE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Oct 2021 06:43:04 -0400
 Received: from localhost (p54b3315a.dip0.t-ipconnect.de [84.179.49.90])
-        by pokefinder.org (Postfix) with ESMTPSA id A69DB2C00A6;
-        Mon, 11 Oct 2021 12:40:53 +0200 (CEST)
-Date:   Mon, 11 Oct 2021 12:40:53 +0200
+        by pokefinder.org (Postfix) with ESMTPSA id 47DA82C00A6;
+        Mon, 11 Oct 2021 12:41:01 +0200 (CEST)
+Date:   Mon, 11 Oct 2021 12:41:01 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     Kewei Xu <kewei.xu@mediatek.com>
 Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
@@ -24,9 +24,9 @@ Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
         leilk.liu@mediatek.com, qii.wang@mediatek.com,
         liguo.zhang@mediatek.com, caiyu.chen@mediatek.com,
         ot_daolong.zhu@mediatek.com, yuhan.wei@mediatek.com
-Subject: Re: [PATCH v8 1/5] i2c: mediatek: Reset the handshake signal between
- i2c and dma
-Message-ID: <YWQUtUALm+p32bui@kunai>
+Subject: Re: [PATCH v8 2/5] i2c: mediatek: Dump i2c/dma register when a
+ timeout occurs
+Message-ID: <YWQUvV2papMMoMlM@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
         Kewei Xu <kewei.xu@mediatek.com>, matthias.bgg@gmail.com,
         robh+dt@kernel.org, linux-i2c@vger.kernel.org,
@@ -37,27 +37,27 @@ Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
         caiyu.chen@mediatek.com, ot_daolong.zhu@mediatek.com,
         yuhan.wei@mediatek.com
 References: <20211010070516.26763-1-kewei.xu@mediatek.com>
- <20211010070516.26763-2-kewei.xu@mediatek.com>
+ <20211010070516.26763-3-kewei.xu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6TggNdb/jhd7lklB"
+        protocol="application/pgp-signature"; boundary="JtSQ7rtXR1c2yVew"
 Content-Disposition: inline
-In-Reply-To: <20211010070516.26763-2-kewei.xu@mediatek.com>
+In-Reply-To: <20211010070516.26763-3-kewei.xu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---6TggNdb/jhd7lklB
+--JtSQ7rtXR1c2yVew
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 10, 2021 at 03:05:12PM +0800, Kewei Xu wrote:
-> Due to changes in the hardware design of the handshaking signal
-> between i2c and dma, it is necessary to reset the handshaking
-> signal before each transfer to ensure that the multi-msgs can
-> be transferred correctly.
+On Sun, Oct 10, 2021 at 03:05:13PM +0800, Kewei Xu wrote:
+> When a timeout error occurs in i2c transter, it is usually related
+> to the i2c/dma IP hardware configuration. Therefore, the purpose of
+> this patch is to dump the key register values of i2c/dma when a
+> timeout occurs in i2c for debugging.
 >=20
 > Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
 > Reviewed-by: Qii Wang <qii.wang@mediatek.com>
@@ -65,24 +65,24 @@ On Sun, Oct 10, 2021 at 03:05:12PM +0800, Kewei Xu wrote:
 Applied to for-next, thanks!
 
 
---6TggNdb/jhd7lklB
+--JtSQ7rtXR1c2yVew
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFkFLUACgkQFA3kzBSg
-KbZ0nQ//fejqkK4MR8ztJDpUH+a24oeWRNYjKA1JUibK8o7Vc6HBcI9j2Jxpsnoc
-k+YN4CvmIqcONm/SXoTBrNCcXoHN0Tj+uPrh2ATTSltyghL4qn/eAkaU4imbBTxA
-NdG5GsCJS8aTpE2iPls8VQd6AY5Bk4DJFXax/XqIY3GcBWz4Bv6FEt0AZnj6h4DL
-m1eF+T+YI1Hme2dWljv1hMRR+AIC7OUp3CZFkBDjrZD2Xqp3akDv05LkSONlbSrt
-FqXW8UoudEZ67ERKwHKyfngARylCTTiJkpJiDxQw1EiKFQ2yzGPiJ8rhMgHa3fKy
-D5YSBcotOroR31RcFAzVG6icOECh8D834YA4sms0hE3ew5p/akMAdBI3nCM6Oq34
-F0/NU+MDliYoGJM1noSyfVM3ppIzO6CFyAW7xtVMvANruqIkBgeNMDzmALf1y+pq
-s8T/f7mr/Hth6PEDEosPV74+CDVm4X0Sh+5DZ6W1fNDHMhVIWYmBArflGp9s27gX
-4WTsyCW0YPmdzCvYIrhYEk3hkGCjfrJiayy+2ukbRm07r88J6+hO0lA/mGs+GQLo
-Y4lpxLr66NgnVg7n4r0r6sYz7azDU43k8Du/eWeZeS7rtNpTAv79yqe73dkkRT2l
-2qvr7xq5QbT6PiM9mneMbQ9zShkzC3MBP8cUEZmKsgI0D6gm3Rs=
-=VPLH
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFkFLwACgkQFA3kzBSg
+KbaUeQ//VSuKXbSjtpnmqhB/rNYBemDzI/uIR1UVNHnMegYbHmnxIsjnYKTDcJpA
+xYsVjufqGagxzSPSED6xQ6tcIVl/I6NJ/D5XOZyVSYHOaXF6Y0OgfxlFXcrokLL+
+UWblDSIAcoxOqnIcKv5CFUvpfocIO8pQeHNFD+v+bn1is/dNxzCmuKOF70tsT0Qu
+hMNRUV1C/sVULBd9Kl5JBdBQxRSeTEnhYpx3X1WBOe6xlptSh26j2VlaUEl0E2C2
+L6erBq6K9MQoYDX7Zolyt0759HxNJjRH4bJxZQ2xMTDO29u3c6/a2DjPGKQ/p31c
+P+viAE53Csz6ooV6krMfR+hYSa6uEvG1SZ4l+6buUHTJ8tSSPpU7srNISofHgSzO
+a+VPrnNOI8RuxP/XKWNO13pPsc9+pULXXUOOi4Ozt+0y0Swql+Cdkvx+HNZ8TXIF
+eIaYJLMTuebxNjWMcJuX6wvT8L2UwLhpAo3XY93a+FJgUCdfPzCFd9uxHfWYX1Ad
+B8oLzJQw/XsVHOF/97fm64ODVBy8ndQyIy6yPSBBdsZ1a9Sn5SgDjehHunJP5b4B
+jDCdB0EBeA7R0bp58UCROkxcE17JMTfe+kVM6KPMw/RD2Sv/VG6wTawUl8+cax44
+LlUQssHqGedkJsg4DHMFpF7L/U+knIq6iqtmzd9/fscD50y5zEY=
+=pHeR
 -----END PGP SIGNATURE-----
 
---6TggNdb/jhd7lklB--
+--JtSQ7rtXR1c2yVew--
