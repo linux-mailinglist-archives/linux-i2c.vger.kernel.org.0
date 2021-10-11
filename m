@@ -2,74 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D3D4289A7
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 11:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5A54289AA
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 11:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235503AbhJKJbl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Oct 2021 05:31:41 -0400
-Received: from marcansoft.com ([212.63.210.85]:33082 "EHLO mail.marcansoft.com"
+        id S235476AbhJKJdI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Oct 2021 05:33:08 -0400
+Received: from mga01.intel.com ([192.55.52.88]:48063 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235461AbhJKJbg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 Oct 2021 05:31:36 -0400
-X-Greylist: delayed 335 seconds by postgrey-1.27 at vger.kernel.org; Mon, 11 Oct 2021 05:31:36 EDT
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 162E03FA5E;
-        Mon, 11 Oct 2021 09:23:54 +0000 (UTC)
-Subject: Re: [PATCH v2 00/11] Add Apple M1 support to PASemi i2c driver
-To:     Wolfram Sang <wsa@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        Christian Zigotzky <chzigotzky@xenosoft.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "R.T.Dickinson" <rtd@a-eon.com>,
-        Matthew Leaman <matthew@a-eon.biz>,
-        Darren Stevens <darren@stevens-zone.net>
-References: <20211008163532.75569-1-sven@svenpeter.dev>
- <YWFqr4uQGlNgnT1z@ninjato> <8a8afc73-3756-a305-ce5f-70b4bce6999f@xenosoft.de>
- <11d8f784-c90a-4e6c-9abd-564cb5241cb7@www.fastmail.com>
- <YWP71c8cXlE3PcIo@kunai>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <5ae30425-d6d4-5688-36e3-58cc6c6ff264@marcan.st>
-Date:   Mon, 11 Oct 2021 18:23:52 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S235452AbhJKJdI (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Oct 2021 05:33:08 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10133"; a="250221457"
+X-IronPort-AV: E=Sophos;i="5.85,364,1624345200"; 
+   d="scan'208";a="250221457"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 02:30:50 -0700
+X-IronPort-AV: E=Sophos;i="5.85,364,1624345200"; 
+   d="scan'208";a="479785314"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2021 02:30:44 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 11 Oct 2021 12:30:41 +0300
+Date:   Mon, 11 Oct 2021 12:30:41 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v3 01/11] ACPI: delay enumeration of devices with a _DEP
+ pointing to an INT3472 device
+Message-ID: <YWQEQVzF2nMjE10y@lahna>
+References: <20211010185707.195883-1-hdegoede@redhat.com>
+ <20211010185707.195883-2-hdegoede@redhat.com>
+ <YWPXixp/J6KIzWp6@lahna>
+ <0c08069e-7758-fc09-c200-d867d097b499@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YWP71c8cXlE3PcIo@kunai>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0c08069e-7758-fc09-c200-d867d097b499@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 11/10/2021 17.54, Wolfram Sang wrote:
->> MAINTAINERS. It'll probably apply cleanly to 5.15-rc5 but if that happens again
+On Mon, Oct 11, 2021 at 09:11:05AM +0200, Hans de Goede wrote:
+> Hi,
 > 
-> It doesn't because Linus' git doesn't have:
+> On 10/11/21 8:19 AM, Mika Westerberg wrote:
+> > Hi,
+> > 
+> > On Sun, Oct 10, 2021 at 08:56:57PM +0200, Hans de Goede wrote:
+> >> +/* List of HIDs for which we honor deps of matching ACPI devs, when checking _DEP lists. */
+> >> +static const char * const acpi_honor_dep_ids[] = {
+> >> +	"INT3472", /* Camera sensor PMIC / clk and regulator info */
+> > 
+> > Is there some reason why we can't do this for all devices with _DEP?
+> > That way we don't need to maintain lists like this.
 > 
-> Documentation/devicetree/bindings/pci/apple,pcie.yaml
+> Up until now the ACPI core deliberate mostly ignores _DEP-s because the
+> _DEP method may point to pretty much any random ACPI object and Linux does
+> not necessarily have a driver for all ACPI objects the driver points too,
+> which would lead to the devices never getting instantiated.
 > 
-> Because MAINTAINER dependencies can be a bit nasty, I suggest I drop the
-> MAINTAINER additions for now and we add them later. Then, you can add
-> the pasemi-core as well. D'accord?
+> In hindsight this might not have been the best solution (1), but if we
+> now start honoring _DEP-s for all devices all of a sudden then this
+> will almost certainly lead to a whole bunch of regressions.
 > 
+> Note that in this case the HID which triggers this is for the device
+> being depended upon and for all camera sensors used with the IPU3 and
+> IPU4 Intel camera blocks this is the INT3472 device. By triggering on
+> this HID (rather then on the sensor HIDs) I expect that we will not
+> need to update this list all that often.
 
-We can just split the MAINTAINERS changes into a separate patch and I 
-can push that one through the SoC tree, along with other MAINTAINERS 
-updates. Does that work for everyone?
+I see and agree. Thanks for the explanation!
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+No objections from my side then :)
