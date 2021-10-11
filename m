@@ -2,85 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B39EF4293BA
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 17:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB615429841
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 22:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239236AbhJKPsj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Oct 2021 11:48:39 -0400
-Received: from eu-shark2.inbox.eu ([195.216.236.82]:48664 "EHLO
-        eu-shark2.inbox.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238923AbhJKPsi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Oct 2021 11:48:38 -0400
-X-Greylist: delayed 495 seconds by postgrey-1.27 at vger.kernel.org; Mon, 11 Oct 2021 11:48:38 EDT
-Received: from eu-shark2.inbox.eu (localhost [127.0.0.1])
-        by eu-shark2-out.inbox.eu (Postfix) with ESMTP id 4C0E71E00603;
-        Mon, 11 Oct 2021 18:38:21 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.ee; s=20150108;
-        t=1633966701; bh=o7R0Au5IFBkQndLoGctiAVfvFZ84avgC7Sm8RCkpCHk=;
-        h=Date:From:To:Cc:Subject;
-        b=B0UNSCIfEAkXeD0imeYbLIZ2o3/77naYp9Rc0OxB3p4mxIm2950NAJVsrNwIV9XE/
-         b9GNaZZXYIJloxpOmW0BMZnB51D1cc23+41PeYTumkxHoL2Xv9kyovx7F/OoPR7EAv
-         B8MGHnN3GjDQrYHf+MFT1rscvze3AersbfroEQeI=
-Received: from localhost (localhost [127.0.0.1])
-        by eu-shark2-in.inbox.eu (Postfix) with ESMTP id 42B7B1E00602;
-        Mon, 11 Oct 2021 18:38:21 +0300 (EEST)
-Received: from eu-shark2.inbox.eu ([127.0.0.1])
-        by localhost (eu-shark2.inbox.eu [127.0.0.1]) (spamfilter, port 35)
-        with ESMTP id qsX0R9Y6rPyC; Mon, 11 Oct 2021 18:38:20 +0300 (EEST)
-Received: from mail.inbox.eu (eu-pop1 [127.0.0.1])
-        by eu-shark2-in.inbox.eu (Postfix) with ESMTP id 9B5021E00600;
-        Mon, 11 Oct 2021 18:38:20 +0300 (EEST)
-Received: from pc (unknown [2.58.44.26])
-        (Authenticated sender: arzamas-16@mail.ee)
-        by mail.inbox.eu (Postfix) with ESMTPA id E6C001BE01A9;
-        Mon, 11 Oct 2021 18:38:19 +0300 (EEST)
-Date:   Mon, 11 Oct 2021 18:38:14 +0300
-From:   Boris Lysov <arzamas-16@mail.ee>
-To:     Kewei Xu <kewei.xu@mediatek.com>
-Cc:     <linux-mediatek@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <matthias.bgg@gmail.com>, <qii.wang@mediatek.com>
-Subject: Re: [PATCH v8 2/5] i2c: mediatek: Dump i2c/dma register when a
- timeout occurs
-Message-ID: <20211011183814.488ed866@pc>
+        id S229627AbhJKUot (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Oct 2021 16:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235002AbhJKUos (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Oct 2021 16:44:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FDCC06161C
+        for <linux-i2c@vger.kernel.org>; Mon, 11 Oct 2021 13:42:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ma27j-0006Dn-4t; Mon, 11 Oct 2021 22:42:15 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ma27c-0003x4-Pt; Mon, 11 Oct 2021 22:42:08 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ma27c-0001bN-Nd; Mon, 11 Oct 2021 22:42:08 +0200
+Date:   Mon, 11 Oct 2021 22:42:07 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-serial@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>,
+        "Jason Gunthorpe linux-integrity @ vger . kernel . org" 
+        <jgg@ziepe.ca>, Mark Brown <broonie@kernel.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        linux-input@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 00/13] Make some spi device drivers return zero in
+ .remove()
+Message-ID: <20211011204207.zfmofwf4d6ga45ao@pengutronix.de>
+References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: OK
-X-ESPOL: +dBm1NUOBlzQh1+kSn3cDQIzqylVPp7o/vvJoxAn4GeDUSOGYE0FThSzg25wUQ==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4crg6rmgkslx3kie"
+Content-Disposition: inline
+In-Reply-To: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 10 Oct 2021 15:05:13 +0800
-Kewei Xu <kewei.xu@mediatek.com> wrote:
 
-> When a timeout error occurs in i2c transter, it is usually related
-> to the i2c/dma IP hardware configuration. Therefore, the purpose of
-> this patch is to dump the key register values of i2c/dma when a
-> timeout occurs in i2c for debugging.
-> 
-> Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
-> Reviewed-by: Qii Wang <qii.wang@mediatek.com>
+--4crg6rmgkslx3kie
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I would like to test this patchset on one of supported platforms, an
-mt6577-powered device. This driver requires a DMA base...
-> 	i2c->pdmabase = devm_ioremap_resource(&pdev->dev, res);
->	if (IS_ERR(i2c->pdmabase))
->		return PTR_ERR(i2c->pdmabase);
-... however I am not sure what address should I specify in the .dts file. While
-other i2c busses supported by this driver such as mt6589 [1][2] and mt6797 [3]
-have designated DMA for I2C, mt6577 seems to lack dedicated DMA engine for I2C
-[4][5].
+Hello,
 
-Do I need to specify the Generic DMA base address [4] instead?
+On Mon, Oct 11, 2021 at 03:27:41PM +0200, Uwe Kleine-K=F6nig wrote:
+> this series is part of my new quest to make spi remove callbacks return
+> void. Today they return an int, but the only result of returning a
+> non-zero value is a warning message. So it's a bad idea to return an
+> error code in the expectation that not freeing some resources is ok
+> then. The same holds true for i2c and platform devices which benefit en
+> passant for a few drivers.
+>=20
+> The patches in this series address some of the spi drivers that might
+> return non-zero and adapt them accordingly to return zero instead. For
+> most drivers it's just about not hiding the fact that they already
+> return zero.
+>=20
+> Given that there are quite some more patches of this type to create
+> before I can change the spi remove callback, I suggest the respecive
+> subsystem maintainers pick up these patches. There are no
+> interdependencies in this series.
+>=20
+> Uwe Kleine-K=F6nig (13):
+>   drm/panel: s6e63m0: Make s6e63m0_remove() return void
+>   hwmon: adt7x10: Make adt7x10_remove() return void
+>   hwmon: max31722: Warn about failure to put device in stand-by in
+>     .remove()
+>   input: adxl34xx: Make adxl34x_remove() return void
+>   input: touchscreen: tsc200x: Make tsc200x_remove() return void
+>   media: cxd2880: Eliminate dead code
+>   mfd: mc13xxx: Make mc13xxx_common_exit() return void
+>   mfd: stmpe: Make stmpe_remove() return void
+>   mfd: tps65912: Make tps65912_device_exit() return void
+>   serial: max310x: Make max310x_remove() return void
+>   serial: sc16is7xx: Make sc16is7xx_remove() return void
+>   staging: fbtft: Make fbtft_remove_common() return void
+>   tpm: st33zp24: Make st33zp24_remove() return void
 
-Worth mentioning I brought up this issue in the past [5][6].
+I thought I would be a good enough programmer to not need build tests.
+Obviously I was wrong and introduced build problems with the following
+patches:
 
-[1] ALPS.KK1.MP5.V1.3_EASTAEON89_WET_KK source code (downstream)
-[2] MT6589 HSPA+ Smartphone Application Processor Datasheet v1.0, page 869
-[3] MT6797 LTE-A Smartphone Application Processor Register Table (Part 1) v1.1,
-page 1796
-[4] MT6577 HSPA Smartphone Application Processor Datasheet v0.94, page 547
-[5] ALPS.JB.MP.V1.19_MBK77_TB_JB source code (downstream)
-[6] https://marc.info/?l=devicetree&m=159949247901831&w=2
-[7] https://marc.info/?l=linux-i2c&m=159939730714187&w=2
+	input: touchscreen: tsc200x: Make tsc200x_remove() return void
+	mfd: mc13xxx: Make mc13xxx_common_exit() return void
+	serial: max310x: Make max310x_remove() return void
+	serial: sc16is7xx: Make sc16is7xx_remove() return void
+
+Please don't apply these (unless you also fix the trivial problems in
+them). I will prepare a v2 soon.
+
+Best regards and sorry for the inconvenience,
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--4crg6rmgkslx3kie
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkoZsACgkQwfwUeK3K
+7AkTugf9FW8u+Q+uOdqyv/dig5mZMoKZ01YqhMcNB1hLm+NpjtUVPs0yR3CgUTq2
+lhQH+cy+0zeuFQEuyDRBXSLYHuSJJKVES8CBrpN960wFh6WaLLKLet8ri0sBJRe3
+gakaZ/TcwPP4RwY/f1V4w/APWuU3or8dviF7hasfFR+D8tIMK+Wgi0LbdWMQIRHf
+P9T60rK5sOnHH33Kksf5stqLxdk06MBHzwJV15PhzWc0TUQAmO+oG0FDfxq+C8tQ
+8lXq6dtxtEMlzLhtLsBBHoUegGR/XbnKUmxT6kC0nO+G88xCYTO+BBjIGacAxhmQ
+2mK/fRgMytsTSX41qXejUgp6TuoW+Q==
+=mP11
+-----END PGP SIGNATURE-----
+
+--4crg6rmgkslx3kie--
