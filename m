@@ -2,116 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DEC4289C1
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 11:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B427428A2E
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 11:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235476AbhJKJjl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Oct 2021 05:39:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39652 "EHLO mail.kernel.org"
+        id S235580AbhJKJvU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Oct 2021 05:51:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44394 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230475AbhJKJjk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 Oct 2021 05:39:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D06360EDF;
-        Mon, 11 Oct 2021 09:37:40 +0000 (UTC)
+        id S235559AbhJKJvT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Oct 2021 05:51:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3FC8360D07;
+        Mon, 11 Oct 2021 09:49:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633945061;
-        bh=YyuuSg4+Xw1WBeodqUV8qTEhir5tsvWm6bEneSlHOmM=;
+        s=k20201202; t=1633945759;
+        bh=2S2M+vWOVlpt6SDouVxbnwzuqIHxp67kF+TZGn3HQzk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i59HQEsRw6XeL+wWM/VpKT61n1VUj0RezFOCjc+1AthZno/w4EKiQ4PAZfRzpXHbs
-         rRtiFU/s5A2ARGgjZqjyUtCPpPmvI7itUB8+OIkU69WuIAbfy6uYeC/NzCvk0WRrQN
-         Z3xsGY1KDeSChYzBHmLDiFnJG6I14FlxtXTV57f3XxFvj5mqCevNecNIqdbBq2LdJo
-         5REpks8Dc6RbBI0lCZE9EGHhPL4YGrBAGb+qCtVqFszz0ycd76ybGzMPwrfwDLCaZy
-         eIWNHd2cCloOSxOhnhPsp2XpAniAjsWuvMcU/feK35TSsS070j7U2Vuoy6LwcEl8hf
-         WFrunQPR7oIWQ==
-Date:   Mon, 11 Oct 2021 11:37:36 +0200
+        b=qgboGxStzK89PPnYnYrazfeTg8br2hqCfCP9Cd6VYQBoH4VzUR4VQaxsvuSp0XV0S
+         5BnNz207Mic0sXCLXCQnGxM9/ptzYTAtG4lKjzS4qt4YOP5RF/vcHMTpdCEgMW087y
+         Foix2CtTPslsLBcwYswqQi87GEcHHYTwql8f+NOKmIEq2NV2bePnIdUdFf59P0f9nN
+         RsKNhTXGni4Jt9ZaHuMIBOTFOuXM/X35TJea/R4UWkLeU8Q3A4keP62qJPan42iBzB
+         AF1ityGZ2W8rkJS68xPHNZqvHokH4PYY/3KDB91l9M6rPq8K9txX4rFgWfKZy+UOr6
+         Lo6D6bBoZ8P1A==
+Date:   Mon, 11 Oct 2021 11:49:15 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Christian Zigotzky <chzigotzky@xenosoft.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "R.T.Dickinson" <rtd@a-eon.com>,
-        Matthew Leaman <matthew@a-eon.biz>,
-        Darren Stevens <darren@stevens-zone.net>
-Subject: Re: [PATCH v2 00/11] Add Apple M1 support to PASemi i2c driver
-Message-ID: <YWQF4D40a/qpfM3/@kunai>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v3 2/3] i2c: acpi: Replace custom function with
+ device_match_acpi_handle()
+Message-ID: <YWQImyIlsWdam7T/@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Christian Zigotzky <chzigotzky@xenosoft.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "R.T.Dickinson" <rtd@a-eon.com>, Matthew Leaman <matthew@a-eon.biz>,
-        Darren Stevens <darren@stevens-zone.net>
-References: <20211008163532.75569-1-sven@svenpeter.dev>
- <YWFqr4uQGlNgnT1z@ninjato>
- <8a8afc73-3756-a305-ce5f-70b4bce6999f@xenosoft.de>
- <11d8f784-c90a-4e6c-9abd-564cb5241cb7@www.fastmail.com>
- <YWP71c8cXlE3PcIo@kunai>
- <5ae30425-d6d4-5688-36e3-58cc6c6ff264@marcan.st>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+References: <20211007171815.28336-1-andriy.shevchenko@linux.intel.com>
+ <20211007171815.28336-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5TP+rHLVHtolMC1P"
+        protocol="application/pgp-signature"; boundary="UJCRYauk+dyrduoc"
 Content-Disposition: inline
-In-Reply-To: <5ae30425-d6d4-5688-36e3-58cc6c6ff264@marcan.st>
+In-Reply-To: <20211007171815.28336-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---5TP+rHLVHtolMC1P
+--UJCRYauk+dyrduoc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > Because MAINTAINER dependencies can be a bit nasty, I suggest I drop the
-> > MAINTAINER additions for now and we add them later. Then, you can add
-> > the pasemi-core as well. D'accord?
-> >=20
+On Thu, Oct 07, 2021 at 08:18:14PM +0300, Andy Shevchenko wrote:
+> Since driver core provides a generic device_match_acpi_handle()
+> we may replace the custom one with it. This unifies code to find
+> an adapter with the similar one which finds a client.
 >=20
-> We can just split the MAINTAINERS changes into a separate patch and I can
-> push that one through the SoC tree, along with other MAINTAINERS updates.
-> Does that work for everyone?
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-That would also work for me. Thank you!
+Fine with me:
+
+Acked-by: Wolfram Sang <wsa@kernel.org>
 
 
---5TP+rHLVHtolMC1P
+--UJCRYauk+dyrduoc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFkBdwACgkQFA3kzBSg
-KbYFeRAAn3V00WXZcUzFlKUIvdYT0C7Yni7P6e8BRdY0CYPcLdAQdT588ZDnztXb
-F1+gVrKcGjcSW0PH9Poor5cE1bH3BtCWl3bM0lVC3QXPSLEA23ZjO/WA+mWDLnNM
-y08LX6qn0jNDSf7MEgWCkKA7gpYTmxwZr4+hanflNHp2V+imR1vp803p59rSpX4+
-ZO+bm4HBy3A0VvTU26uzIbOJgpn5cO9vdZ6bLdw4Q6CdYmr1rq3p0mytsPEnnIOz
-gDuacJ9HwN3xmRa1cdMhXOKTgdryn6ZAEqyfaW5rgiM2dL9ZTumEUkJyHXcc1sMS
-QQqvQnY3zzhyLyEJsLPLMJnQQHGwUyMFX4D5R54tO1s0ne6iNIcOdWMsfAcrOb8b
-YWaikNAw3oQ392V6g/iXPUfMppY9O1f47gZkLMHuHZV5XusPm84qyYIlysgyyf3d
-Qwg5nFywlOFxYtySkxfje/OLREkzZoVOQXaxi/kC3IQiWDtoxU9NYMu7blXrJa71
-/kEe4lftTRBKib/iRahLb0ZOOiBI2Zpd0IiY3z5/Edhp9TY4akDHFOBOGZ66p8Af
-P/3TDcr7XZ/10fBZA/2biB4a5/hVKbnUTMBkXjqhNYN4lQA4VbuFB4+KvXJXrf4y
-Lsy0yB+hE2CIa7sRFrjGBPjPZTjvuYg1VONj3P/VUS4KDw02Uss=
-=z66C
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFkCJsACgkQFA3kzBSg
+KbbBrQ//e4S6A/kk7s4p9GPeIz2YzaWXID6jC1bNc5ax9g6YuwgvkuSYDOyXQHl9
+5U0mYLxdkOxq+9vG++t8lwh0vjJLN9dB7uDmMExtkzWejreqS9IDPc6/qSZIB8An
+kLU1o6jVFTM/SSSMn86pe7aUhMha3i/akqBTdpFwth8ph47yX3AIQ/l8eLvWlHBs
+w6EcyyNgfNLRj4i18bNvfTlqANUtt3R/Is4D73BWOpgCYFbZ6Mm2RuS+ukuyiYTx
+5ZYh6il1Cn6PAEU4vLkA0uA5VGw0U9IxGHwRheIdW1iq5q7rlHFzw//eUVjuD+56
+Uab0gi5gC/O67BFW90FKfH67LGjLl5KfZBKhE28cAlJ21XWYYqoXN8J8jg5wUxvN
+9uK10H7kDQboFz4AvMH49VFvic1FXwzA7Xkw9p07lVpwRBJoyOoqbilTwt/5RDdH
+9bTMJ2qp/hzMhabc3gaNh4gbq7Qe67KdY4RPvpoCvmOf7Zqkk6UaFsXUzjaDJBfA
+qwMdujGL5xUqZtCMtG8ooW6X9rKIo+c2aeShlzRpDBHhMM5doOSObUOAlGECX1we
+l8tS7K6Esoibq85b1y0eXX3iU3zgnapX4QJ8ZJhplkSRwr53NSlW7GCnTJWeColM
+4+TrfXavalv1Pp5lgrM9GjnSH5/7R4D65ioLs75v23/u5JWpzQI=
+=51+n
 -----END PGP SIGNATURE-----
 
---5TP+rHLVHtolMC1P--
+--UJCRYauk+dyrduoc--
