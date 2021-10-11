@@ -2,67 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E76428A89
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 12:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E36428ACA
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Oct 2021 12:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235712AbhJKKKD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Oct 2021 06:10:03 -0400
-Received: from foss.arm.com ([217.140.110.172]:42322 "EHLO foss.arm.com"
+        id S235859AbhJKKei (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Oct 2021 06:34:38 -0400
+Received: from sauhun.de ([88.99.104.3]:53292 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235695AbhJKKKD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 11 Oct 2021 06:10:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 750541FB;
-        Mon, 11 Oct 2021 03:08:03 -0700 (PDT)
-Received: from bogus (unknown [10.57.21.181])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 195683F66F;
-        Mon, 11 Oct 2021 03:08:00 -0700 (PDT)
-Date:   Mon, 11 Oct 2021 11:07:15 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wolfram Sang <wsa@kernel.org>, linux-hwmon@vger.kernel.org,
+        id S235858AbhJKKei (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 11 Oct 2021 06:34:38 -0400
+Received: from localhost (p54b3315a.dip0.t-ipconnect.de [84.179.49.90])
+        by pokefinder.org (Postfix) with ESMTPSA id 70FA92C00A6;
+        Mon, 11 Oct 2021 12:32:37 +0200 (CEST)
+Date:   Mon, 11 Oct 2021 12:32:37 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Vadim Pasternak <vadimp@nvidia.com>
+Cc:     peda@axentia.se, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH i2c-next 4/4] i2c: mlxcpld: Allow flexible polling time
+ setting for I2C transactions
+Message-ID: <YWQSxYt5iw/6szUG@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Vadim Pasternak <vadimp@nvidia.com>, peda@axentia.se,
         linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 07/14] mailbox: pcc: Use PCC mailbox channel pointer
- instead of standard
-Message-ID: <20211011100715.yhi4pmre6h2nglfc@bogus>
-References: <20210917133357.1911092-1-sudeep.holla@arm.com>
- <20210917133357.1911092-8-sudeep.holla@arm.com>
+References: <20210823144504.1249203-1-vadimp@nvidia.com>
+ <20210823144504.1249203-5-vadimp@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FkGUNGELixLodsfl"
 Content-Disposition: inline
-In-Reply-To: <20210917133357.1911092-8-sudeep.holla@arm.com>
+In-Reply-To: <20210823144504.1249203-5-vadimp@nvidia.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Guenter,
 
-On Fri, Sep 17, 2021 at 02:33:50PM +0100, Sudeep Holla wrote:
-> Now that we have all the shared memory region information populated in
-> the pcc_mbox_chan, let us propagate the pointer to the same as the
-> return value to pcc_mbox_request channel.
-> 
-> This eliminates the need for the individual users of PCC mailbox to
-> parse the PCCT subspace entries and fetch the shmem information. This
-> also eliminates the need for PCC mailbox controller to set con_priv to
-> PCCT subspace entries. This is required as con_priv is private to the
-> controller driver to attach private data associated with the channel and
-> not meant to be used by the mailbox client/users.
-> 
-> Let us convert all the users of pcc_mbox_{request,free}_channel to use
-> new interface.
-> 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
+--FkGUNGELixLodsfl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Any objections ? If you are OK, can I have your ack so that the series
-can go in one go.
+On Mon, Aug 23, 2021 at 05:45:04PM +0300, Vadim Pasternak wrote:
+> Allow polling time setting according to I2C frequency supported across
+> the system. For base frequency 400 KHz and 1 MHz set polling time is set
+> four times less than for system with base frequency 100KHz.
+>=20
+> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 
--- 
-Regards,
-Sudeep
+Applied to for-next, thanks!
+
+
+--FkGUNGELixLodsfl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFkEsAACgkQFA3kzBSg
+KbYfrQ//QYSzxsezgMLxp8kLlm6zls4wiFz4RgWl6zDIbWJcWlBoCNxOaFzjIyXs
+cntybAdGGWQ3T0Cp8omONVkEwT8hgNHSTB8PT5UGxNR/86s7wScggAkWXSIeD4RB
+sG7Ll8KINVt2klXGelloIWr0Ci8kse5L5k6CIJrL8WvI0Ka5lpBsalvMxGArPlkM
+BqyKbUOtBvEsTWRaA9001p0T2v+SPJRZSiJQ0GytDewSxxV9eSCTOk3k7zwUMP3n
+33fljvQtvQgf+4UOGJE0TAtFqdIiM/CnWhN0g+upnYHqcD6ehiNfaol+Vgkuoy1r
+2oA0MRv0y7BmuEvlC97SPooKka04Dx4AJHlXA/NDH5gy9Rp8PWVIiG6zEFLo82eR
+a+rt3OHeNxvuUqnKfu/sHQM2GF+sofuEpTjpOUobo2Q2gE+3qUq2EqemwnMWVjw+
+fXQSKxyOHyWDM860kSx5amaSXrkt355bgKRrnw/+BtCpICIKnLvvkcJy7ynjfFY/
+zF7nDuRu/ZOg2d+H7MKhJRkBYOcErk1xzzDrZqNALc8taWAPjRO4oYAVPOC6brQI
+DWXS3NXIgSC+EJY7KleLLxXIL5h9PFOn7I3rrSrbSXOX8ZcXF5Mqc7OTcYHy/Kfb
+jrAzf8kVFt2cL/Kg5j44A0lBnfE4fxL1JID4vPol/V2+Lo2nX2g=
+=VLAv
+-----END PGP SIGNATURE-----
+
+--FkGUNGELixLodsfl--
