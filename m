@@ -2,110 +2,190 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 055F342BF0F
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Oct 2021 13:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C92942BFC0
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Oct 2021 14:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbhJMLmQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Oct 2021 07:42:16 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:16011 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbhJMLmP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Oct 2021 07:42:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1634125214; x=1665661214;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gIJaKWc3mhoqjpjyoYXjqJKzdlBFVRY8Zq/+CGn0tEE=;
-  b=FH2gvz90ipxzgRfDOV+nL3mOF8tLi+sDJ4Ly+SflMznzYaeTepONRY1X
-   rEKNlYh8HheutvTIMS+V4ia0v+BNlsICVvko2ZV1bYctrGe9OYt5FHQmk
-   LKgVvXUATMR1SpWPpaGd/GUjdzevOh3whIS1D63gOxR/oO7Sg1Ywmen7M
-   PT2SLkd3mLazxvHnWt8tey1/3iskVwZY4cFUHUk3etPCI1529U56RM2fJ
-   G8apla4e64DgQq2m5u5aPusjsr3kN7TOxvIdtm9JwHDsqECwvNFcAk0an
-   z6YEO+6o1QzDxqEpUOLVAUw+dOBsc9DcoXijM9AoZGubEudDT8ZDm5LMk
-   g==;
-IronPort-SDR: gVgmCvWJ9ecNKu3wuehcCZQzhMW/7yJY52kQ+bFrZme95ab1USK5qJuZn7/b65LJ6L0Fzhc0Vq
- 1d6yQc9q6JSUYGa006jwIKW1GmUHauZMppditai1biTGLHXexH4SgrIlT7mEPqawnwtDlUHYj4
- rEawZM7bZXO2Jv4wa+ysS6Bg4M5aAUumwptP30+8Ihp+V4M52mXZmE9em70hS8jGUfpP4oxRMo
- 9qGNRfyy2Q2zNRjm1oElLR7KNUynY+jhJHYndB9orr7yfCsveZ42trXMmVfZZc59yOJ8dkphQV
- //LQIUhwz8GplLmfQJ9zfq5M
-X-IronPort-AV: E=Sophos;i="5.85,370,1624345200"; 
-   d="scan'208";a="139556124"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Oct 2021 04:40:13 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 13 Oct 2021 04:40:11 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Wed, 13 Oct 2021 04:40:11 -0700
-Date:   Wed, 13 Oct 2021 13:41:44 +0200
-From:   Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
-To:     Codrin Ciubotariu - M19940 <Codrin.Ciubotariu@microchip.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches - M43218 <Ludovic.Desroches@microchip.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] i2c: at91: Add support for programmable clock source
-Message-ID: <20211013114144.7j4scdaq2rjfmiwn@soft-dev3-1.localhost>
-References: <20211012140718.2138278-1-horatiu.vultur@microchip.com>
- <8a775c67-00a3-1dbe-daa3-09a537f482d8@microchip.com>
+        id S229715AbhJMMVQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Oct 2021 08:21:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57924 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229535AbhJMMVQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Oct 2021 08:21:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634127553;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8uA+gFhUzMMrb5D5fxARTwQwcT+AEfWKWkQ0ooGMKj8=;
+        b=eUbZ5ZZFQBAsmlzgYiHwvp/8L0ny7JameiAEQxDqfkdcZc/+Sf6A8z2p9Svsup2UWMY+cu
+        8t+/XHzb+q4ZP5mivCruSaNlj+/IbqASPrm9FsFzI7ddra8N6mXNp6dmFPNHuYHIGtf5kI
+        lDbZ/nOCsM2/n73gDrQJRA2QuN3H4sg=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-517-RvyoIL8RN5uiFwatF8iM3A-1; Wed, 13 Oct 2021 08:18:02 -0400
+X-MC-Unique: RvyoIL8RN5uiFwatF8iM3A-1
+Received: by mail-wr1-f71.google.com with SMTP id 10-20020a5d47aa000000b001610cbda93dso1781376wrb.23
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Oct 2021 05:18:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8uA+gFhUzMMrb5D5fxARTwQwcT+AEfWKWkQ0ooGMKj8=;
+        b=FS53MLYttfqE6IcR7AIN9LduljrH5bWWYSTwSBmteIwTHwTUAOPc0xKawspPkvXivH
+         crfgpCSYZZm2xX5fklGinYe0NYekuQyA3IVs7Z6iyOmmbyJN0QXPqm63pEeHJjdv8uIX
+         SY9metCs7Rccxdi2XoAXH18rO1alf7yeforG+tpSAzNwYyRKsdvHgjTvQjpIur6LHBf4
+         C2szn4tXhRP5JA5sK5aomupEHcMBMzPdSFicLCOdZv4vLupVwEKP7uXkvkXw6YxxSo9E
+         rUaSH+4p/KuKF1nkU6VNehLipz37r9fNxfpiBugU6pJKuTadDLygjpFsM/RE9AI3/R4U
+         wMKA==
+X-Gm-Message-State: AOAM531k21EncLoXIqpJgy/JadgQ1Wy9Dt3PkWNdyaSR7lhTeu6QkN4s
+        S7bvQJYDIB2znCRArRGMLgYnwpids7oPwCncuJ4kmhFeT4GvWdb5Kj8dchpPWnA/YNA8paXA75n
+        kPF3a4pcrz+OyF9OXamnr
+X-Received: by 2002:a7b:c30c:: with SMTP id k12mr12535213wmj.38.1634127481373;
+        Wed, 13 Oct 2021 05:18:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwFEzPqFQ+1qHznC4euH1QtbfXrvr/+t46tCqHwjpC6aqk2B2gJ30j5Cm2I+Hz0oA4zGN44UQ==
+X-Received: by 2002:a7b:c30c:: with SMTP id k12mr12535146wmj.38.1634127481076;
+        Wed, 13 Oct 2021 05:18:01 -0700 (PDT)
+Received: from redhat.com ([2.55.30.112])
+        by smtp.gmail.com with ESMTPSA id z1sm4104369wrt.94.2021.10.13.05.17.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Oct 2021 05:18:00 -0700 (PDT)
+Date:   Wed, 13 Oct 2021 08:17:49 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gonglei <arei.gonglei@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jie Deng <jie.deng@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Anton Yakovlev <anton.yakovlev@opensynergy.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-um@lists.infradead.org,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-remoteproc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, kvm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH RFC] virtio: wrap config->reset calls
+Message-ID: <20211013081632-mutt-send-email-mst@kernel.org>
+References: <20211013105226.20225-1-mst@redhat.com>
+ <2060bd96-5884-a1b5-9f29-7fe670dc088d@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8a775c67-00a3-1dbe-daa3-09a537f482d8@microchip.com>
+In-Reply-To: <2060bd96-5884-a1b5-9f29-7fe670dc088d@redhat.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The 10/13/2021 08:49, Codrin Ciubotariu - M19940 wrote:
-> On 12.10.2021 17:07, Horatiu Vultur wrote:
-> > Add support to be able to set BRSRCCLK. This feature is support on lan966x
+On Wed, Oct 13, 2021 at 01:03:46PM +0200, David Hildenbrand wrote:
+> On 13.10.21 12:55, Michael S. Tsirkin wrote:
+> > This will enable cleanups down the road.
+> > The idea is to disable cbs, then add "flush_queued_cbs" callback
+> > as a parameter, this way drivers can flush any work
+> > queued after callbacks have been disabled.
 > > 
-> > Horatiu Vultur (2):
-> >    dt-bindings: i2c: at91: Extend compatible list for lan966x
-> >    i2c: at91: add support for brsrcclk
+> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > ---
+> >   arch/um/drivers/virt-pci.c                 | 2 +-
+> >   drivers/block/virtio_blk.c                 | 4 ++--
+> >   drivers/bluetooth/virtio_bt.c              | 2 +-
+> >   drivers/char/hw_random/virtio-rng.c        | 2 +-
+> >   drivers/char/virtio_console.c              | 4 ++--
+> >   drivers/crypto/virtio/virtio_crypto_core.c | 8 ++++----
+> >   drivers/firmware/arm_scmi/virtio.c         | 2 +-
+> >   drivers/gpio/gpio-virtio.c                 | 2 +-
+> >   drivers/gpu/drm/virtio/virtgpu_kms.c       | 2 +-
+> >   drivers/i2c/busses/i2c-virtio.c            | 2 +-
+> >   drivers/iommu/virtio-iommu.c               | 2 +-
+> >   drivers/net/caif/caif_virtio.c             | 2 +-
+> >   drivers/net/virtio_net.c                   | 4 ++--
+> >   drivers/net/wireless/mac80211_hwsim.c      | 2 +-
+> >   drivers/nvdimm/virtio_pmem.c               | 2 +-
+> >   drivers/rpmsg/virtio_rpmsg_bus.c           | 2 +-
+> >   drivers/scsi/virtio_scsi.c                 | 2 +-
+> >   drivers/virtio/virtio.c                    | 5 +++++
+> >   drivers/virtio/virtio_balloon.c            | 2 +-
+> >   drivers/virtio/virtio_input.c              | 2 +-
+> >   drivers/virtio/virtio_mem.c                | 2 +-
+> >   fs/fuse/virtio_fs.c                        | 4 ++--
+> >   include/linux/virtio.h                     | 1 +
+> >   net/9p/trans_virtio.c                      | 2 +-
+> >   net/vmw_vsock/virtio_transport.c           | 4 ++--
+> >   sound/virtio/virtio_card.c                 | 4 ++--
+> >   26 files changed, 39 insertions(+), 33 deletions(-)
 > > 
-> >   .../devicetree/bindings/i2c/i2c-at91.txt      |  6 +++--
-> >   drivers/i2c/busses/i2c-at91-core.c            | 16 +++++++++++++
-> >   drivers/i2c/busses/i2c-at91-master.c          | 23 +++++++++++++++++--
-> >   drivers/i2c/busses/i2c-at91.h                 |  1 +
-> >   4 files changed, 42 insertions(+), 4 deletions(-)
-> > 
+> > diff --git a/arch/um/drivers/virt-pci.c b/arch/um/drivers/virt-pci.c
+> > index c08066633023..22c4d87c9c15 100644
+> > --- a/arch/um/drivers/virt-pci.c
+> > +++ b/arch/um/drivers/virt-pci.c
+> > @@ -616,7 +616,7 @@ static void um_pci_virtio_remove(struct virtio_device *vdev)
+> >   	int i;
+> >           /* Stop all virtqueues */
+> > -        vdev->config->reset(vdev);
+> > +        virtio_reset_device(vdev);
+> >           vdev->config->del_vqs(vdev);
 > 
-> Hi Horatiu,
-
-Hi Codrin,
-
+> Nit: virtio_device_reset()?
 > 
->  From what I understand, on your DTS, you replaced the peripheral clock 
-> with the GCLK in the I2C node. This means that you are forcing all the 
-> variants that support clk_brsrcclk to treat the current clock as GCLK. 
-> This is not necessarily correct, since this newer variants can also work 
-> fine with only the peripheral clock and we should keep these option 
-> available.
+> Because I see:
 > 
-> I would add an optional GCLK clock binding in the I2C node. This way 
-> GCLK will be used only if it is present in DT and clk_brsrcclk set.
-
-Thanks for the explanation.
-
-I think actually I will drop this patch series because apparently
-lan966x works fine also with the peripheral clock. So then no changes
-are required.
-
-If you think is worth it, I can do another version with the proposed
-changes.
-
+> int virtio_device_freeze(struct virtio_device *dev);
+> int virtio_device_restore(struct virtio_device *dev);
+> void virtio_device_ready(struct virtio_device *dev)
 > 
-> Best regards,
-> Codrin
+> But well, there is:
+> void virtio_break_device(struct virtio_device *dev);
 
--- 
-/Horatiu
+Exactly. I don't know what's best, so I opted for plain english :)
+
+
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+
