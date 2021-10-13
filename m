@@ -2,112 +2,173 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA0242C281
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Oct 2021 16:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7D342C519
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Oct 2021 17:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbhJMOPN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Oct 2021 10:15:13 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:5438 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbhJMOPN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Oct 2021 10:15:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1634134390; x=1665670390;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XwFxZzbdV+FjwFqNLqNmM3P65mE3OIvnLElxkhz2zRE=;
-  b=hXRKc7FDBxxIkPHroZEibE6KS1YXnZybQxL7BhQx5fxPW5Ad5Rq7HTnz
-   g27xd5/rMR/FCi4ZJZBaBQBG6HghovDeMCdmn+857jvl263Yog5X34Kcq
-   GSEEsbiypNa6kh2zlJR3FsJWLWWTnyiUs1XeKRg/SF4dZQtnPJEsul0O3
-   kpueo9pYE3OVZ/+1Y7MKPkIPGKGB90NeKM6SXzmo/17oUA/ocX4mfbjpo
-   IeJfesOO68gVPOU6golghAHu5T/FVudOeyX6VMDjgmR6pURodbZUTsmGs
-   zixG4EbNTRjj4vfe9wOdD0ibR6OAFLm1zY33JRIKMpHwTbWeR6SztgJkv
-   Q==;
-IronPort-SDR: uutPBZhzUAMA/q7T3VprZA70/jge25CgEEz8VinJFExlOzb7MSRSHwzN9NIix7IUhOincCcFW6
- N3RUmreMhE+mJzEL/1EFblto+EBTOybImZDUvAQQ3sN7N1lSnuY0eoVxaL9PZE8Q5HqA8BMJTW
- KIezk2m0DJSiPMZ5NrNKDNacqCNCFVevxdE5oNdmRLwbcgCj7wpfRKqU2Ai2iSXF0ZK6YUq4Kv
- rlI4DoA7ctSctEnrmhrSOnYgstgPJIx9GxszyItnWkMJSLoQ/Vpd+9Du5RdrFLe+nY98zb6SXH
- 2/6gj7rproxGmcvHK7ZGqSTg
-X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
-   d="scan'208";a="72800409"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Oct 2021 07:09:51 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 13 Oct 2021 07:09:51 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 13 Oct 2021 07:09:50 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <peda@axentia.se>, <robh+dt@kernel.org>,
-        <peter.korsgaard@barco.com>, <lars.povlsen@microchip.com>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH 2/2] i2c: i2c-mux-gpio: Add support 'select-delay' property
-Date:   Wed, 13 Oct 2021 16:10:03 +0200
-Message-ID: <20211013141003.2388495-3-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211013141003.2388495-1-horatiu.vultur@microchip.com>
-References: <20211013141003.2388495-1-horatiu.vultur@microchip.com>
+        id S231938AbhJMPsU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Oct 2021 11:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234305AbhJMPsO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Oct 2021 11:48:14 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04F0C061760
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Oct 2021 08:46:10 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id e65so316878pgc.5
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Oct 2021 08:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5P0ocxXM0vPODGkh8na4Mfy39/EYyFv4GMRrvhNNOUo=;
+        b=gfAizaxTiwRe31oPHuSEfCuoU3UyNzjvSGFjRtR0+20ybGnOJHR2SNvIUYXuMY2xpD
+         gjbOwicFvptk+HxbA9gztDS/NFb/B9PCmms4ywTb+W6ZfybGlSGnqIF9BrEyW3lnzugF
+         1xOsRizGgXSxqW3rE2o7H3pOyE6LnVUrXJS6JM8CS2LKu70yomZ+jIXvV9GC/9hEoAdh
+         pZgLdZj46NdkkNldf1y6Zal4VF0OHZO5HByoWBC8S5+MsG5/UJx0h6V+EfRdjNyAV2md
+         QHEhpyLmWUQN/xdLKYedMbdiT11toyum2MbaAnr8R6GfEwVc/Pi4akUF4ElQql0esd+K
+         tzhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5P0ocxXM0vPODGkh8na4Mfy39/EYyFv4GMRrvhNNOUo=;
+        b=iCLjixWgmBhWCUKxv/O3mBv7SQT1TqaA1IM7je50cpvC2v2E0qIKcGfWOTzpinoJQM
+         PuUO1qDLq7UCIJQLx7BFLyOtMdGQHkHxUc6m9EW5z7iecyuZ3j85fUlbrbNRVLeuYorc
+         WO/1lXvzs4/GatEL6iQUPjC2JScqdCQmpAyyHhqS7hkbBHoAAuvJ2v19JtNwMPGgAye7
+         BNZtg7aacLjJqEJGYZL7weoD+HYca6zvPZToHNwyqJfnyByacawxqKjpJTVHdI1C5Szi
+         B7u10blZWzMf90REA5Say1MaFLQWJgFx3QhCBgH4/4Uc33/pK6TiekevQj9v7EQd9JEt
+         0Dmg==
+X-Gm-Message-State: AOAM530eLqoB0JgvKhVj8Ra6tTTHFSxhBCZ6Hd2nU6p8cRePsB87S8B6
+        jkLRE7c00/r2FUP+gP0FeUDDpg==
+X-Google-Smtp-Source: ABdhPJxOS97EPwZsGm56NgXmycC48sC/ZWo8Q8DTT9IZBXIVEcdfskLSNijWrQkjT1bVWFJiZLyKew==
+X-Received: by 2002:aa7:949c:0:b0:44c:a0df:2c7f with SMTP id z28-20020aa7949c000000b0044ca0df2c7fmr128668pfk.34.1634139970091;
+        Wed, 13 Oct 2021 08:46:10 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id x27sm2452841pfo.90.2021.10.13.08.46.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Oct 2021 08:46:09 -0700 (PDT)
+Date:   Wed, 13 Oct 2021 09:46:04 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gonglei <arei.gonglei@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jie Deng <jie.deng@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Anton Yakovlev <anton.yakovlev@opensynergy.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-um@lists.infradead.org,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-remoteproc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, kvm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH RFC] virtio: wrap config->reset calls
+Message-ID: <20211013154604.GB4135908@p14s>
+References: <20211013105226.20225-1-mst@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211013105226.20225-1-mst@redhat.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Use select-delay property to add a delay once the mux state is changed.
-This is required on some platforms to allow the GPIO signals to get
-stabilized.
+On Wed, Oct 13, 2021 at 06:55:31AM -0400, Michael S. Tsirkin wrote:
+> This will enable cleanups down the road.
+> The idea is to disable cbs, then add "flush_queued_cbs" callback
+> as a parameter, this way drivers can flush any work
+> queued after callbacks have been disabled.
+> 
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> ---
+>  arch/um/drivers/virt-pci.c                 | 2 +-
+>  drivers/block/virtio_blk.c                 | 4 ++--
+>  drivers/bluetooth/virtio_bt.c              | 2 +-
+>  drivers/char/hw_random/virtio-rng.c        | 2 +-
+>  drivers/char/virtio_console.c              | 4 ++--
+>  drivers/crypto/virtio/virtio_crypto_core.c | 8 ++++----
+>  drivers/firmware/arm_scmi/virtio.c         | 2 +-
+>  drivers/gpio/gpio-virtio.c                 | 2 +-
+>  drivers/gpu/drm/virtio/virtgpu_kms.c       | 2 +-
+>  drivers/i2c/busses/i2c-virtio.c            | 2 +-
+>  drivers/iommu/virtio-iommu.c               | 2 +-
+>  drivers/net/caif/caif_virtio.c             | 2 +-
+>  drivers/net/virtio_net.c                   | 4 ++--
+>  drivers/net/wireless/mac80211_hwsim.c      | 2 +-
+>  drivers/nvdimm/virtio_pmem.c               | 2 +-
+>  drivers/rpmsg/virtio_rpmsg_bus.c           | 2 +-
+>  drivers/scsi/virtio_scsi.c                 | 2 +-
+>  drivers/virtio/virtio.c                    | 5 +++++
+>  drivers/virtio/virtio_balloon.c            | 2 +-
+>  drivers/virtio/virtio_input.c              | 2 +-
+>  drivers/virtio/virtio_mem.c                | 2 +-
+>  fs/fuse/virtio_fs.c                        | 4 ++--
+>  include/linux/virtio.h                     | 1 +
+>  net/9p/trans_virtio.c                      | 2 +-
+>  net/vmw_vsock/virtio_transport.c           | 4 ++--
+>  sound/virtio/virtio_card.c                 | 4 ++--
+>  26 files changed, 39 insertions(+), 33 deletions(-)
+> 
+>  static struct virtio_driver virtio_pmem_driver = {
+> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> index 8e49a3bacfc7..6a11952822df 100644
+> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> @@ -1015,7 +1015,7 @@ static void rpmsg_remove(struct virtio_device *vdev)
+>  	size_t total_buf_space = vrp->num_bufs * vrp->buf_size;
+>  	int ret;
+>  
+> -	vdev->config->reset(vdev);
+> +	virtio_reset_device(vdev);
+> 
 
-Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/i2c/muxes/i2c-mux-gpio.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-diff --git a/drivers/i2c/muxes/i2c-mux-gpio.c b/drivers/i2c/muxes/i2c-mux-gpio.c
-index bac415a52b78..1cc69eb67221 100644
---- a/drivers/i2c/muxes/i2c-mux-gpio.c
-+++ b/drivers/i2c/muxes/i2c-mux-gpio.c
-@@ -13,6 +13,8 @@
- #include <linux/slab.h>
- #include <linux/bits.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/delay.h>
-+
- /* FIXME: stop poking around inside gpiolib */
- #include "../../gpio/gpiolib.h"
- 
-@@ -20,6 +22,7 @@ struct gpiomux {
- 	struct i2c_mux_gpio_platform_data data;
- 	int ngpios;
- 	struct gpio_desc **gpios;
-+	int select_delay;
- };
- 
- static void i2c_mux_gpio_set(const struct gpiomux *mux, unsigned val)
-@@ -29,6 +32,8 @@ static void i2c_mux_gpio_set(const struct gpiomux *mux, unsigned val)
- 	values[0] = val;
- 
- 	gpiod_set_array_value_cansleep(mux->ngpios, mux->gpios, NULL, values);
-+	if (mux->select_delay)
-+		udelay(mux->select_delay);
- }
- 
- static int i2c_mux_gpio_select(struct i2c_mux_core *muxc, u32 chan)
-@@ -153,6 +158,8 @@ static int i2c_mux_gpio_probe_fw(struct gpiomux *mux,
- 	if (fwnode_property_read_u32(dev->fwnode, "idle-state", &mux->data.idle))
- 		mux->data.idle = I2C_MUX_GPIO_NO_IDLE;
- 
-+	fwnode_property_read_u32(dev->fwnode, "select-delay", &mux->select_delay);
-+
- 	return 0;
- }
- 
--- 
-2.33.0
-
+>  	ret = device_for_each_child(&vdev->dev, NULL, rpmsg_remove_device);
+>  	if (ret)
