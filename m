@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1584142C264
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Oct 2021 16:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA0242C281
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Oct 2021 16:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbhJMOL5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Oct 2021 10:11:57 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:42906 "EHLO
+        id S235662AbhJMOPN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Oct 2021 10:15:13 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:5438 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbhJMOL5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Oct 2021 10:11:57 -0400
+        with ESMTP id S230347AbhJMOPN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Oct 2021 10:15:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1634134194; x=1665670194;
+  t=1634134390; x=1665670390;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=S1R0ueUW/ZMahy3QrgzBWmGL8fqwA2pjk1VqK8I02+k=;
-  b=eGMGCKZNrm8CSCEl0KPTz1JxDPaDGvsisx1T7TgW5Jpd9SK25rru3Dn4
-   4lrMS8ISp8/FFlEOBzNHSlHbJldHk79j9cgNWA+Xvt27hXiWJzGo+cju7
-   U730SnDBBOf4rDr6aIde2+Sa98numC5qUe/bUthJz4wtYKT+kTIraAIVF
-   TOnKgKp/FMwarh/9jgXJrqdaXjvdlGwHqMVj6YPQX1taJVOZTK7maO2D8
-   cUbs95CvSSAJs7Z7qIoVrOQsAoe6Yt5j0Skkx9hkv18kV9rvewvDdMavD
-   MgFpAXIbGDkQkrMKLe2okT8Cz+r/69ahgtt9HQl67xRAZn5jZdF7JW6+x
-   A==;
-IronPort-SDR: KxJ6ZQcWrcirUhJ0QepG88B8+yY706LRXVmGS8XZHMhNY8QiYahL9ugeeEaoy4OPZKFLLbQnsv
- LWiOMa8jOB2xNrQYwlRydDVB/45jBt6fCyP7OXgWKKJ8rW7hQ6sWbzGIn3fqW1Vu1WmOT/4M45
- V/mJJDh/oU+2Sb6blgqyJrmZE/OS3R3oeZyr0p+y4e2NBMlGsRWLEcVLoDBMyCrd+vBUgpoA8R
- rZfOVO7g6tKc9OqMj8GrEGsolLMy+6EzEpphAUAerq2ZTRStmrDbPekVv3dkSxhgEBT8zSvHqI
- Zctae4Sjq/Bu8QbJFW9UCxF6
+  bh=XwFxZzbdV+FjwFqNLqNmM3P65mE3OIvnLElxkhz2zRE=;
+  b=hXRKc7FDBxxIkPHroZEibE6KS1YXnZybQxL7BhQx5fxPW5Ad5Rq7HTnz
+   g27xd5/rMR/FCi4ZJZBaBQBG6HghovDeMCdmn+857jvl263Yog5X34Kcq
+   GSEEsbiypNa6kh2zlJR3FsJWLWWTnyiUs1XeKRg/SF4dZQtnPJEsul0O3
+   kpueo9pYE3OVZ/+1Y7MKPkIPGKGB90NeKM6SXzmo/17oUA/ocX4mfbjpo
+   IeJfesOO68gVPOU6golghAHu5T/FVudOeyX6VMDjgmR6pURodbZUTsmGs
+   zixG4EbNTRjj4vfe9wOdD0ibR6OAFLm1zY33JRIKMpHwTbWeR6SztgJkv
+   Q==;
+IronPort-SDR: uutPBZhzUAMA/q7T3VprZA70/jge25CgEEz8VinJFExlOzb7MSRSHwzN9NIix7IUhOincCcFW6
+ N3RUmreMhE+mJzEL/1EFblto+EBTOybImZDUvAQQ3sN7N1lSnuY0eoVxaL9PZE8Q5HqA8BMJTW
+ KIezk2m0DJSiPMZ5NrNKDNacqCNCFVevxdE5oNdmRLwbcgCj7wpfRKqU2Ai2iSXF0ZK6YUq4Kv
+ rlI4DoA7ctSctEnrmhrSOnYgstgPJIx9GxszyItnWkMJSLoQ/Vpd+9Du5RdrFLe+nY98zb6SXH
+ 2/6gj7rproxGmcvHK7ZGqSTg
 X-IronPort-AV: E=Sophos;i="5.85,371,1624345200"; 
-   d="scan'208";a="140154216"
+   d="scan'208";a="72800409"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Oct 2021 07:09:50 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Oct 2021 07:09:51 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 13 Oct 2021 07:09:49 -0700
+ 15.1.2176.14; Wed, 13 Oct 2021 07:09:51 -0700
 Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 13 Oct 2021 07:09:48 -0700
+ 15.1.2176.14 via Frontend Transport; Wed, 13 Oct 2021 07:09:50 -0700
 From:   Horatiu Vultur <horatiu.vultur@microchip.com>
 To:     <peda@axentia.se>, <robh+dt@kernel.org>,
         <peter.korsgaard@barco.com>, <lars.povlsen@microchip.com>,
         <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH 1/2] dt-bindings: i2c-mux-gpio: Add optional DT property
-Date:   Wed, 13 Oct 2021 16:10:02 +0200
-Message-ID: <20211013141003.2388495-2-horatiu.vultur@microchip.com>
+Subject: [PATCH 2/2] i2c: i2c-mux-gpio: Add support 'select-delay' property
+Date:   Wed, 13 Oct 2021 16:10:03 +0200
+Message-ID: <20211013141003.2388495-3-horatiu.vultur@microchip.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211013141003.2388495-1-horatiu.vultur@microchip.com>
 References: <20211013141003.2388495-1-horatiu.vultur@microchip.com>
@@ -59,27 +59,55 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add optional property 'select-delay' DT property. In case this is set
-then a delay is added when changing mux state. The value is specified in
-usec.
+Use select-delay property to add a delay once the mux state is changed.
+This is required on some platforms to allow the GPIO signals to get
+stabilized.
 
+Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
 Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/i2c/muxes/i2c-mux-gpio.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
-index d4cf10582a26..d0dacbad491a 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.txt
-@@ -28,6 +28,7 @@ Required properties:
- Optional properties:
- - idle-state: value to set the muxer to when idle. When no value is
-   given, it defaults to the last value used.
-+- select-delay: GPIO settle delay when changing mux state. In usec.
+diff --git a/drivers/i2c/muxes/i2c-mux-gpio.c b/drivers/i2c/muxes/i2c-mux-gpio.c
+index bac415a52b78..1cc69eb67221 100644
+--- a/drivers/i2c/muxes/i2c-mux-gpio.c
++++ b/drivers/i2c/muxes/i2c-mux-gpio.c
+@@ -13,6 +13,8 @@
+ #include <linux/slab.h>
+ #include <linux/bits.h>
+ #include <linux/gpio/consumer.h>
++#include <linux/delay.h>
++
+ /* FIXME: stop poking around inside gpiolib */
+ #include "../../gpio/gpiolib.h"
  
- For each i2c child node, an I2C child bus will be created. They will
- be numbered based on their order in the device tree.
+@@ -20,6 +22,7 @@ struct gpiomux {
+ 	struct i2c_mux_gpio_platform_data data;
+ 	int ngpios;
+ 	struct gpio_desc **gpios;
++	int select_delay;
+ };
+ 
+ static void i2c_mux_gpio_set(const struct gpiomux *mux, unsigned val)
+@@ -29,6 +32,8 @@ static void i2c_mux_gpio_set(const struct gpiomux *mux, unsigned val)
+ 	values[0] = val;
+ 
+ 	gpiod_set_array_value_cansleep(mux->ngpios, mux->gpios, NULL, values);
++	if (mux->select_delay)
++		udelay(mux->select_delay);
+ }
+ 
+ static int i2c_mux_gpio_select(struct i2c_mux_core *muxc, u32 chan)
+@@ -153,6 +158,8 @@ static int i2c_mux_gpio_probe_fw(struct gpiomux *mux,
+ 	if (fwnode_property_read_u32(dev->fwnode, "idle-state", &mux->data.idle))
+ 		mux->data.idle = I2C_MUX_GPIO_NO_IDLE;
+ 
++	fwnode_property_read_u32(dev->fwnode, "select-delay", &mux->select_delay);
++
+ 	return 0;
+ }
+ 
 -- 
 2.33.0
 
