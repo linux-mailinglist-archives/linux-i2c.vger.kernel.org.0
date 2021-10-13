@@ -2,94 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E6F42B8D9
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Oct 2021 09:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E630542B9E6
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Oct 2021 10:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238347AbhJMHUP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Oct 2021 03:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238441AbhJMHTw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Oct 2021 03:19:52 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEF0C061749
-        for <linux-i2c@vger.kernel.org>; Wed, 13 Oct 2021 00:17:47 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id w11so1609310ilv.6
-        for <linux-i2c@vger.kernel.org>; Wed, 13 Oct 2021 00:17:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=k3+PIl84BDEKsR+afDftURi+daSqqQKQrezVjb4o2gs=;
-        b=f4RBirOndInCmcQbNAjfPzyUcIC13CLkwZylEPPw7xMyjSkPTbhczBJxIpnSuxIf48
-         d5j/fHCkkVwufd/IT6g1VEu+h6aYkjmkNR1xdxGNF3mhIVifC8wSRAzenj7UVrNLuMRT
-         nfMTLwWjEwnE0QZpjOIRrCq5ySg1AK+lxFFCucLoXQ+uGXxvee7mV/2yhYdQ32BgYWjb
-         Ee2jry6S1/f8hWr+HvmcOEiqNJOxzZ6bjVn/nUW7BONq2dxJcq26WAtCWZBLPnr0UOaL
-         m6d1iXzr/OwTZwKEFEjbRepy9IhVHBml/GH10TyuECgX3nvhYaYujuKq0S0S1lRiA9qb
-         1Ing==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=k3+PIl84BDEKsR+afDftURi+daSqqQKQrezVjb4o2gs=;
-        b=jBgM804EfKGdRTA+s7ICu+4EdmwD5K2ezc0TknhfZPpao893RSdc+R0utWpb7LbIC6
-         6py34NpyJ/ufiXp2VUIRC8qJfCNoKMyBqoMicODGyy6AZqBO3GdzDZAnjSigWvabpkkg
-         cW20gJuMn+l/rv90uNyniSKVxEj7tZ0BoTvmiAEQhocfmoWodHaTvHFpt5kU6AKWTb/M
-         jUd61m3l4XcvUItY8iYpnh4tQdSUyudr0/sdDYoXGMj+zUYWs93d1eVKMX0+lUO85cqm
-         gOEmomIRqtvoir4aQGCb4K+2UU6IZtO3RzyGWy6p/lJ95oOVLguH9gkSavvst4e6JlUZ
-         ankA==
-X-Gm-Message-State: AOAM531u2cPrDIjUMmycsxHELzaihwNHLtuDq8VTRzjo5XwdF4px0Foh
-        898Xloj5mHlLo/74yGAqKLykkEoueg6PaZibvQ0=
-X-Google-Smtp-Source: ABdhPJy91eDMkEUcISQxTLyJIy+gQpufSvewlT8EZcQSQcbhOQkYzCtQcZfuROMhFnLFUNkk2I36booSBgPc+/fqGpU=
-X-Received: by 2002:a05:6e02:1b0d:: with SMTP id i13mr27299824ilv.6.1634109466602;
- Wed, 13 Oct 2021 00:17:46 -0700 (PDT)
+        id S238861AbhJMIKF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Oct 2021 04:10:05 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:31491 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238839AbhJMIJ6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Oct 2021 04:09:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1634112408;
+    s=strato-dkim-0002; d=xenosoft.de;
+    h=In-Reply-To:Date:Message-ID:References:To:From:Subject:Cc:Date:From:
+    Subject:Sender;
+    bh=SIdqttAv8VY7+GPnyA9vyn4IVdFg1Dkp5cQAN7dWsbA=;
+    b=TZU2b0lOnmLfKHi2inaQ528J4Rm8TEj1TfhwkuQBKmTf1uB7NhnT8yTKEsZA2ErZvB
+    yPCprch6lE9F1gB27JLaStHAbV340zYe/MRN9wYqvCGgZw+W3qy2R6axfc51pp35dUh1
+    WM5njfwXe8B8LKfgXSfWJHEPNAsFtJ4YCoz3+mqe3tdbqPJkcgQpu7urHH3kyjJtSuWL
+    J2RjhXdaP9hCqx58oZOyvVERKr3AMANNAqmg0k0B9rJZC6Y45Ot7koo6oFgyrF3obhUk
+    +WbO6sr7BoHUznPxjUYK1Nd7yQG554TzF0YWA4PIL9L0/igCESNAbZcZb08pPsx/Pcvy
+    akFQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":L2QefEenb+UdBJSdRCXu93KJ1bmSGnhMdmOod1DhGM4l4Hio94KKxRySfLxnHfJ+Dkjp5DdBJSrwuuqxvPgFJ9KSk6V3+Pov4y9Nnu4lP5KR8g=="
+X-RZG-CLASS-ID: mo00
+Received: from Christians-iMac.fritz.box
+    by smtp.strato.de (RZmta 47.34.1 AUTH)
+    with ESMTPSA id z02498x9D86kgmG
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 13 Oct 2021 10:06:46 +0200 (CEST)
+Subject: Re: [PATCH v2 00/11] Add Apple M1 support to PASemi i2c driver
+From:   Christian Zigotzky <chzigotzky@xenosoft.de>
+To:     Wolfram Sang <wsa@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "R.T.Dickinson" <rtd@a-eon.com>,
+        Matthew Leaman <matthew@a-eon.biz>,
+        Darren Stevens <darren@stevens-zone.net>
+References: <20211008163532.75569-1-sven@svenpeter.dev>
+ <YWFqr4uQGlNgnT1z@ninjato> <8a8afc73-3756-a305-ce5f-70b4bce6999f@xenosoft.de>
+Message-ID: <df424385-92af-3fad-f50b-c64897e991e8@xenosoft.de>
+Date:   Wed, 13 Oct 2021 10:06:45 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-Sender: mrselisabeth73peter@gmail.com
-Received: by 2002:a05:6638:338c:0:0:0:0 with HTTP; Wed, 13 Oct 2021 00:17:46
- -0700 (PDT)
-From:   Mrs Lila Haber <mrslilahabe2016@gmail.com>
-Date:   Wed, 13 Oct 2021 07:17:46 +0000
-X-Google-Sender-Auth: 2kkJJ1K1IdQgy4g8ElzVkLdQG60
-Message-ID: <CAHZyUcj=opOwDuhmMJ65XpHhvBo9U=az=3WLt6=CyrahzesZJg@mail.gmail.com>
-Subject: Dear Child of God
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <8a8afc73-3756-a305-ce5f-70b4bce6999f@xenosoft.de>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: de-DE
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear Child of God,
+On 09 October 2021 at 03:57 pm, Christian Zigotzky wrote:
+ > On 09 October 2021 at 12:10 pm, Wolfram Sang wrote:
+ >>> I still don't have access to any old PASemi hardware but the 
+changes from
+ >>> v1 are pretty small and I expect them to still work. Would still be 
+nice
+ >>> if someone with access to such hardware could give this a quick test.
+ >> Looks good to me. I will wait a few more days so that people can report
+ >> their tests. But it will be in the next merge window.
+ >>
+ > Series v2:
+ >
+ > Tested-by: Christian Zigotzky <chzigotzky@xenosoft.de> [1]
+ >
+ > - Christian
+ >
+ > [1] 
+https://forum.hyperion-entertainment.com/viewtopic.php?p=54213#p54213
 
-Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
-CHRIST the giver of every good thing. Good day and compliments of the
-seasons, i know this letter will definitely come to you as a huge
-surprise, but I implore you to take the time to go through it
-carefully as the decision you make will go off a long way to determine
-my future and continued existence. I am Mrs Lila Haber aging widow of
-57 years old suffering from long time illness.I have some funds I
-inherited from my late husband, the sum of (19.1Million Dollars) and I
-needed a very honest and God fearing who can withdraw this money then
-use the funds for Charity works. I WISH TO GIVE THIS FUNDS TO YOU FOR
-CHARITY WORKS. I found your email address from the internet after
-honest prayers to the LORD to bring me a helper and i decided to
-contact you if you may be willing and interested to handle these trust
-funds in good faith before anything happens to me.
+Series v2:
 
-I accept this decision because I do not have any child who will
-inherit this money after I die. I want your urgent reply to me so that
-I will give you the deposit receipt which the SECURITY COMPANY issued
-to me as next of kin for immediate transfer of the money to your
-account in your country, to start the good work of God, I want you to
-use the 25/percent of the total amount to help yourself in doing the
-project. I am desperately in keen need of assistance and I have
-summoned up courage to contact you for this task, you must not fail me
-and the millions of the poor people in our todays WORLD. This is no
-stolen money and there are no dangers involved,100% RISK FREE with
-full legal proof. Please if you would be able to use the funds for the
-Charity works kindly let me know immediately.I will appreciate your
-utmost confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
-Please
-kindly respond quickly for further details.
+Tested-by: Damien Stewart (Hypex) [1]
 
-Warmest Regards,
-Mrs Lila Haber
+- Christian
+
+[1] https://forum.hyperion-entertainment.com/viewtopic.php?p=54217#p54217
+
