@@ -2,319 +2,663 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B206E42DEBE
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Oct 2021 17:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983CB42DED6
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Oct 2021 18:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbhJNP5l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 14 Oct 2021 11:57:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46119 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231764AbhJNP5k (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Oct 2021 11:57:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634226934;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JWnmViuZzS5vCJpHwulEVTRMqyjB1ka4+dw1VkAiD4g=;
-        b=ba42NLyfzebB0jQTUcd1Sdh3WTOfH5tu03hTK4jz/PovJC5oMvDdT0YAmw0lfQJTBFLNse
-        RzJMIS4Pp/pb4CVWFYd1q1/aYj3EleaJt1M0t8yiHEix5F3Z5+vXrIEBSMTo9kEA7TVmhJ
-        ouA7o4XXeiyhVkB3DugFx2eSxOHh20A=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-252-_2l-s_SANs22dLXFU5i4pw-1; Thu, 14 Oct 2021 11:55:33 -0400
-X-MC-Unique: _2l-s_SANs22dLXFU5i4pw-1
-Received: by mail-ed1-f72.google.com with SMTP id l22-20020aa7c316000000b003dbbced0731so5590963edq.6
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Oct 2021 08:55:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JWnmViuZzS5vCJpHwulEVTRMqyjB1ka4+dw1VkAiD4g=;
-        b=gV9+7akbDh2bVI/sBsaetdiebg4iEmIGbkRv4vBR+E1OuHp9zo+ioiHMcyqy6r591V
-         IHUqneQfUTW+V1FCcYm5pjLXtLSe/lsCzBRMhmCC33uknhbzp1zog99lEeXMpRCtwTES
-         zAvc9mPILs7JQdtdhIpIiUWK65COA/gee8wsWHAO3h7DE2Uk+2zPTwRbcRmbDHbJGuna
-         8LlBFwXC9zAoiEpY51c8FKsLGQDRRIyeqSx0lEXSOFzOSxznAUpghrhh3w0RjGqjf34a
-         NvioZXXNMTkt7I9axlY5sMF7zzzYHsj6ouAlbb/DTx5LdjsJBrMk6hkZX0PxZLqKK4gy
-         gF2w==
-X-Gm-Message-State: AOAM530ZHZzSP1GmaXwkgMdH/b+GCiPtu1kTRkrFfd8aP2lVIdiypaSN
-        WXw/eAnh/NzTeE1JHCGX1+aDFzIb3BuhvqsI3tTdev3+SdcP0U8pGSeluhBPUCbQhk7AYxzDBVT
-        SFXLkWx0PIbkynEmrDxSF
-X-Received: by 2002:a50:ccc4:: with SMTP id b4mr9996615edj.83.1634226931933;
-        Thu, 14 Oct 2021 08:55:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw7Wah1Y7cQHvDtlggE1t5rDd38gt88Yx5v6/TAUaNgjI2VtkWMOwkydRXvi/iQjcjEunuzVg==
-X-Received: by 2002:a50:ccc4:: with SMTP id b4mr9996587edj.83.1634226931676;
-        Thu, 14 Oct 2021 08:55:31 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id b2sm2587687edv.73.2021.10.14.08.55.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Oct 2021 08:55:31 -0700 (PDT)
-Subject: Re: [PATCH v3 01/11] ACPI: delay enumeration of devices with a _DEP
- pointing to an INT3472 device
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S232066AbhJNQHA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 14 Oct 2021 12:07:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49220 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232019AbhJNQHA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 14 Oct 2021 12:07:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 43BBB61056;
+        Thu, 14 Oct 2021 16:04:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634227495;
+        bh=+HHIE5iosemfxEXrA7tbEZzNxDboh33t4zlXIqvJhhk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fxeJSrV1PoV5uxBtUjNdpnldEREhlQRCRDJ201jFi5VaDC0wtdyPDNrz+ypQTFKWx
+         ay5y5tsbn2rjMAt53BQrm3PZEne8X/rA2CwISE8Qrw5BBjPQh2lRneZ721L2SHjHux
+         zQycoq9/cUAW1m0okV7m6L5QeTeR99UqcxGhm8bAAN56ZudbrsBEZr+4ikkT/wn6aj
+         b0BUeoelR0xWToWG3yIjmLXhImh2+dZQS2E5rVATQivDsR0+iBfTda+IB8+NUKO7Q1
+         +btcPbemgbkcEnYCE+f+IKR6drkx6XYujlOBSy6ZF93L8RZDgxmMfbZL5zgYrsmCbZ
+         VGY74bNR3bJWA==
+Date:   Thu, 14 Oct 2021 21:34:50 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
         linux-i2c <linux-i2c@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-References: <20211010185707.195883-1-hdegoede@redhat.com>
- <20211010185707.195883-2-hdegoede@redhat.com>
- <CAJZ5v0i0NR8faABuZVe7V6sKgM4+1kOh-S56usj2WyeiDnfy9g@mail.gmail.com>
- <0c90d1dd-8e03-714a-1dbf-51b09241a23c@redhat.com>
- <CAJZ5v0gN-o6O8daABdtD7ShnUkEgvknAa-VyzS7DG6jX2h8=uA@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <24f113e8-3af1-7c85-b8b8-584f5663a909@redhat.com>
-Date:   Thu, 14 Oct 2021 17:55:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 4/5] spi: spi-geni-qcom: Add support for GPI dma
+Message-ID: <YWhVIm+rqRMmkMMn@matsya>
+References: <20210625052213.32260-1-vkoul@kernel.org>
+ <20210625052213.32260-5-vkoul@kernel.org>
+ <CAD=FV=UfZxKyUZMK9c74KmMBBqgYROn1zp+vLfHaj_ghUK1t+g@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0gN-o6O8daABdtD7ShnUkEgvknAa-VyzS7DG6jX2h8=uA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=UfZxKyUZMK9c74KmMBBqgYROn1zp+vLfHaj_ghUK1t+g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Hi Doug,
 
-On 10/13/21 8:48 PM, Rafael J. Wysocki wrote:
-> On Wed, Oct 13, 2021 at 8:23 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi,
->>
->> On 10/13/21 7:29 PM, Rafael J. Wysocki wrote:
->>> On Sun, Oct 10, 2021 at 8:57 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>>>
->>>> The clk and regulator frameworks expect clk/regulator consumer-devices
->>>> to have info about the consumed clks/regulators described in the device's
->>>> fw_node.
->>>>
->>>> To work around cases where this info is not present in the firmware tables,
->>>> which is often the case on x86/ACPI devices, both frameworks allow the
->>>> provider-driver to attach info about consumers to the clks/regulators
->>>> when registering these.
->>>>
->>>> This causes problems with the probe ordering wrt drivers for consumers
->>>> of these clks/regulators. Since the lookups are only registered when the
->>>> provider-driver binds, trying to get these clks/regulators before then
->>>> results in a -ENOENT error for clks and a dummy regulator for regulators.
->>>>
->>>> One case where we hit this issue is camera sensors such as e.g. the OV8865
->>>> sensor found on the Microsoft Surface Go. The sensor uses clks, regulators
->>>> and GPIOs provided by a TPS68470 PMIC which is described in an INT3472
->>>> ACPI device. There is special platform code handling this and setting
->>>> platform_data with the necessary consumer info on the MFD cells
->>>> instantiated for the PMIC under: drivers/platform/x86/intel/int3472.
->>>>
->>>> For this to work properly the ov8865 driver must not bind to the I2C-client
->>>> for the OV8865 sensor until after the TPS68470 PMIC gpio, regulator and
->>>> clk MFD cells have all been fully setup.
->>>>
->>>> The OV8865 on the Microsoft Surface Go is just one example, all X86
->>>> devices using the Intel IPU3 camera block found on recent Intel SoCs
->>>> have similar issues where there is an INT3472 HID ACPI-device, which
->>>> describes the clks and regulators, and the driver for this INT3472 device
->>>> must be fully initialized before the sensor driver (any sensor driver)
->>>> binds for things to work properly.
->>>>
->>>> On these devices the ACPI nodes describing the sensors all have a _DEP
->>>> dependency on the matching INT3472 ACPI device (there is one per sensor).
->>>>
->>>> This allows solving the probe-ordering problem by delaying the enumeration
->>>> (instantiation of the I2C-client in the ov8865 example) of ACPI-devices
->>>> which have a _DEP dependency on an INT3472 device.
->>>>
->>>> The new acpi_dev_ready_for_enumeration() helper used for this is also
->>>> exported because for devices, which have the enumeration_by_parent flag
->>>> set, the parent-driver will do its own scan of child ACPI devices and
->>>> it will try to enumerate those during its probe(). Code doing this such
->>>> as e.g. the i2c-core-acpi.c code must call this new helper to ensure
->>>> that it too delays the enumeration until all the _DEP dependencies are
->>>> met on devices which have the new honor_deps flag set.
->>>>
->>>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->>>> ---
->>>>  drivers/acpi/scan.c     | 36 ++++++++++++++++++++++++++++++++++--
->>>>  include/acpi/acpi_bus.h |  5 ++++-
->>>>  2 files changed, 38 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
->>>> index 5b54c80b9d32..efee6ee91c8f 100644
->>>> --- a/drivers/acpi/scan.c
->>>> +++ b/drivers/acpi/scan.c
->>>> @@ -796,6 +796,12 @@ static const char * const acpi_ignore_dep_ids[] = {
->>>>         NULL
->>>>  };
->>>>
->>>> +/* List of HIDs for which we honor deps of matching ACPI devs, when checking _DEP lists. */
->>>> +static const char * const acpi_honor_dep_ids[] = {
->>>> +       "INT3472", /* Camera sensor PMIC / clk and regulator info */
->>>> +       NULL
->>>> +};
->>>> +
->>>>  static struct acpi_device *acpi_bus_get_parent(acpi_handle handle)
->>>>  {
->>>>         struct acpi_device *device = NULL;
->>>> @@ -1757,8 +1763,12 @@ static void acpi_scan_dep_init(struct acpi_device *adev)
->>>>         struct acpi_dep_data *dep;
->>>>
->>>>         list_for_each_entry(dep, &acpi_dep_list, node) {
->>>> -               if (dep->consumer == adev->handle)
->>>> +               if (dep->consumer == adev->handle) {
->>>> +                       if (dep->honor_dep)
->>>> +                               adev->flags.honor_deps = 1;
->>>
->>> Any concerns about doing
->>>
->>> adev->flags.honor_deps = dep->honor_dep;
->>>
->>> here?
->>
->> The idea is to set adev->flags.honor_deps even if the device has
->> multiple deps and only one of them has the honor_dep flag set.
->>
->> If we just do:
->>
->>         adev->flags.honor_deps = dep->honor_dep;
->>
->> Then adev->flags.honor_deps ends up having the honor_dep
->> flag of the last dependency checked.
+On 28-06-21, 16:37, Doug Anderson wrote:
+> Hi,
 > 
-> OK, but in that case dep_unmet may be blocking the enumeration of the
-> device even if the one in the acpi_honor_dep_ids[] list has probed
-> successfully.
+> On Thu, Jun 24, 2021 at 10:22 PM Vinod Koul <vkoul@kernel.org> wrote:
+> >
+> > We can use GPI DMA for devices where it is enabled by firmware. Add
+> > support for this mode
+> >
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> >  drivers/spi/spi-geni-qcom.c | 329 ++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 315 insertions(+), 14 deletions(-)
 > 
-> Isn't that a concern?
-
-For the devices where we set the dep->honor_dep flag this is
-not a concern (based on the DSDTs which I've seen).
-
-I also don't expect it to be a concern for other cases where we may
-set that flag in the future either. This is an opt-in thing, so
-I expect that in cases where we opt in to this, we also ensure that
-any other _DEPs are also met (by having a Linux driver which calls
-acpi_dev_clear_dependencies() for them).
-
-And now a days we also have the acpi_ignore_dep_ids[] list so if
-in the future there are some _DEP-s which never get fulfilled/met
-on a device where we set the adev->flags.honor_deps flag, then we
-can always add the ACPI HIDs for those devices to that list.
-
->>>> +
->>>>                         adev->dep_unmet++;
->>>> +               }
->>>>         }
->>>>  }
->>>>
->>>> @@ -1962,7 +1972,7 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
->>>>         for (count = 0, i = 0; i < dep_devices.count; i++) {
->>>>                 struct acpi_device_info *info;
->>>>                 struct acpi_dep_data *dep;
->>>> -               bool skip;
->>>> +               bool skip, honor_dep;
->>>>
->>>>                 status = acpi_get_object_info(dep_devices.handles[i], &info);
->>>>                 if (ACPI_FAILURE(status)) {
->>>> @@ -1971,6 +1981,7 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
->>>>                 }
->>>>
->>>>                 skip = acpi_info_matches_ids(info, acpi_ignore_dep_ids);
->>>> +              honor_dep = acpi_info_matches_ids(info, acpi_honor_dep_ids);
->>>>                 kfree(info);
->>>>
->>>>                 if (skip)
->>>> @@ -1984,6 +1995,7 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
->>>>
->>>>                 dep->supplier = dep_devices.handles[i];
->>>>                 dep->consumer = handle;
->>>> +               dep->honor_dep = honor_dep;
->>>>
->>>>                 mutex_lock(&acpi_dep_list_lock);
->>>>                 list_add_tail(&dep->node , &acpi_dep_list);
->>>> @@ -2071,6 +2083,9 @@ static acpi_status acpi_bus_check_add_2(acpi_handle handle, u32 lvl_not_used,
->>>>
->>>>  static void acpi_default_enumeration(struct acpi_device *device)
->>>>  {
->>>> +       if (!acpi_dev_ready_for_enumeration(device))
->>>> +               return;
->>>
->>> I'm not sure about this.
->>>
->>> First of all, this adds an acpi_device_is_present() check here which
->>> potentially is a change in behavior and I'm not sure how it is related
->>> to the other changes in this patch (it is not mentioned in the
->>> changelog AFAICS).
->>>
->>> I'm saying "potentially", because if we get here at all,
->>> acpi_device_is_present() has been evaluated already by
->>> acpi_bus_attach().
->>
->> Right the idea was that for this code-path the extra
->> acpi_device_is_present() check is a no-op since the only
->> caller of acpi_default_enumeration() has already done
->> that check before calling acpi_default_enumeration(),
->> where as the is_present check is useful for users outside
->> of the ACPI core code, like e.g. the i2c ACPI enumeration
->> code.
->>
->> Although I see this is also called from
->> acpi_generic_device_attach which comes into play when there
->> is devicetree info embedded inside the ACPI tables.
+> Not a truly full review since I haven't looked into the whole GSI DMA
+> driver, but I tried to go over most of your changes.
 > 
-> That too, but generally speaking this change should at least be
-> mentioned in the changelog.
 > 
->>> Now, IIUC, the new acpi_dev_ready_for_enumeration() is kind of an
->>> extension of acpi_device_is_present(), so shouldn't it be called by
->>> acpi_bus_attach() instead of the latter rather than from here?
->>
->> That is an interesting proposal. I assume you want this to replace
->> the current acpi_device_is_present() call in acpi_bus_attach()
->> then ?
+> > +#define GSI_LOOPBACK_EN                (BIT(0))
+> > +#define GSI_CS_TOGGLE          (BIT(3))
+> > +#define GSI_CPHA               (BIT(4))
+> > +#define GSI_CPOL               (BIT(5))
+> > +
+> > +#define MAX_TX_SG              (3)
+> > +#define NUM_SPI_XFER           (8)
+> > +#define SPI_XFER_TIMEOUT_MS    (250)
 > 
-> That seems consistent to me.
+> nit: don't need the extra parenthesis around everything above and it
+> doesn't match the existing definitions too.
+
+yes, fixed it
+
+> > +struct gsi_desc_cb {
+> > +       struct spi_geni_master *mas;
+> > +       struct spi_transfer *xfer;
+> > +};
+> > +
+> > +struct spi_geni_gsi {
+> > +       dma_cookie_t tx_cookie;
+> > +       dma_cookie_t rx_cookie;
+> > +       struct dma_async_tx_descriptor *tx_desc;
+> > +       struct dma_async_tx_descriptor *rx_desc;
+> > +       struct gsi_desc_cb tx_cb;
+> > +       struct gsi_desc_cb rx_cb;
+> > +};
 > 
->> For the use-case at hand here that should work fine and it would also
->> make the honor_deps flag work for devices which bind to the actual
->> acpi_device (because we delay the device_attach()) or
->> use an acpi_scan_handler.
->>
->> This would mean though that we can now have acpi_device-s where
->> acpi_device_is_present() returns true, but which are not
->> initialized (do not have device->flags.initialized set)
->> that would be a new acpi_device state which we have not had
->> before. I do not immediately forsee this causing issues,
->> but still...
->>
->> If you want me to replace the current acpi_device_is_present() call
->> in acpi_bus_attach() with the new acpi_dev_ready_for_enumeration()
->> helper, let me know and I'll prepare a new version with this change
->> (and run some tests with that new version).
+> I'd be curious if others feel the same way, but to me it kinda feels
+> like this should be:
 > 
-> I would prefer doing that to making acpi_default_enumeration() special
-> with respect to the handling of dependencies.
+> struct spi_geni_gsi_pipe {
+>   dma_cookie_t cookie;
+>   struct dma_async_tx_descriptor *desc;
+>   struct gsi_desc_cb cb;
+> };
+> 
+> struct spi_geni_gsi {
+>   spi_geni_gsi_pipe tx;
+>   spi_geni_gsi_pipe rx;
+> };
+> 
+> That would actually make spi_gsi_callback_result() more elegant
+> because you could pass in the correct structure and then a string "RX"
+> or "TX" and get rid of the bool.
 
-Ok I will make this change in the next version (ETA sometime next week).
+So this and the below comment about using spi fwk to do that wait, made
+me ponder upon this bit. So I went ahead with scissors and managed to
+chop this off as well as the waiting routines below. This makes code
+simpler to read as well.
 
-Regards,
+So we dont need these structs here and wait code anymore.
 
-Hans
+> > @@ -84,6 +110,13 @@ struct spi_geni_master {
+> >         int irq;
+> >         bool cs_flag;
+> >         bool abort_failed;
+> > +       struct spi_geni_gsi *gsi;
+> 
+> Maybe do something to make it obvious that this points to an array of
+> NUM_SPI_XFER transfers.
 
+> If my math is right then "gsi" is expected to be about 256 bytes big.
+> I guess you made this a pointer and only allocated it in GSI mode to
+> save those 256 bytes in non-GSI mode?
+> > +static void
+> > +spi_gsi_callback_result(void *cb, const struct dmaengine_result *result, bool tx)
+> > +{
+> > +       struct gsi_desc_cb *gsi = cb;
+> > +
+> > +       if (result->result != DMA_TRANS_NOERROR) {id'd do
+> > +               dev_err(gsi->mas->dev, "%s DMA txn failed\n", tx ? "TX" : "RX");
+> > +               return;
+> > +       }
+> > +
+> > +       if (!result->residue) {
+> > +               if (tx)
+> > +                       complete(&gsi->mas->tx_cb);
+> > +               else
+> > +                       complete(&gsi->mas->rx_cb);
+> > +       } else {
+> > +               dev_err(gsi->mas->dev, "%s DMA txn has pending %d data\n",
+> > +                       tx ? "TX" : "RX", result->residue);
+> 
+> I guess you just wait for the timeout in this case since you don't complete?
+
+> > +static int setup_gsi_xfer(struct spi_transfer *xfer, struct spi_geni_master *mas,
+> > +                         struct spi_device *spi_slv, struct spi_master *spi)
+> > +{
+> > +       unsigned long flags = DMA_PREP_INTERRUPT | DMA_CTRL_ACK;
+> > +       struct spi_geni_gsi *gsi;
+> > +       struct dma_slave_config config = {};
+> > +       struct gpi_spi_config peripheral = {};
+> > +       unsigned long timeout, jiffies;
+> 
+> Is it really a good idea to have a local variable called "jiffies"?
+> Isn't the global called "jiffies"?
+
+removed now
+
+> > +       int ret, i;
+> > +
+> > +       config.peripheral_config = &peripheral;
+> > +       config.peripheral_size = sizeof(peripheral);
+> > +       peripheral.set_config = true;
+> > +
+> > +       if (xfer->bits_per_word != mas->cur_bits_per_word ||
+> > +           xfer->speed_hz != mas->cur_speed_hz) {
+> > +               mas->cur_bits_per_word = xfer->bits_per_word;
+> > +               mas->cur_speed_hz = xfer->speed_hz;
+> > +       }
+> 
+> It seems a bit pointless to copy these things into "mas" for GSI mode
+> and even more pointless to have the "if" test first.
+> 
+> In FIFO mode I believe we stored them in "mas" because we needed them
+> from the interrupt handler. It also lets us optimize and avoid calls
+> if the config didn't change. You don't need them for either of these
+> reasons, do you?
+
+agreed, cleaned that up
+
+> Actually, you might possibly want to keep "cur_speed_hz" and use it to
+> avoid a call to get_spi_clk_cfg() which, at least at one point in
+> time, was a bit slow.
+
+Okay, thanks for suggestion, I can do that.
+
+> > +       if (!(mas->cur_bits_per_word % MIN_WORD_LEN)) {
+> > +               peripheral.rx_len = ((xfer->len << 3) / mas->cur_bits_per_word);
+> > +       } else {
+> > +               int bytes_per_word = (mas->cur_bits_per_word / BITS_PER_BYTE) + 1;
+> > +
+> > +               peripheral.rx_len = (xfer->len / bytes_per_word);
+> > +       }
+> 
+> I guess you could only do the above if "rx_buf" and then you don't
+> have to zero it back out below.
+
+yes updated
+
+> > +       if (xfer->tx_buf && xfer->rx_buf) {
+> > +               peripheral.cmd = SPI_DUPLEX;
+> > +       } else if (xfer->tx_buf) {
+> > +               peripheral.cmd = SPI_TX;
+> > +               peripheral.rx_len = 0;
+> > +       } else if (xfer->rx_buf) {
+> > +               peripheral.cmd = SPI_RX;
+> > +       }
+> > +
+> > +       if (spi_slv->mode & SPI_LOOP)
+> > +               peripheral.loopback_en = true;
+> > +       if (spi_slv->mode & SPI_CPOL)
+> > +               peripheral.clock_pol_high = true;
+> > +       if (spi_slv->mode & SPI_CPHA)
+> > +               peripheral.data_pol_high = true;
+> 
+> nit: I'd do it without the "if"s.
+> 
+> peripheral.loopback_en = spi_slv->mode & SPI_LOOP;
+
+Good suggestion, updated now.
+
+> In theory much of this could also be done at function init time but I
+> dunno if it makes a huge difference, like:
+> 
+> struct gpi_spi_config peripheral = {
+>   .loopback_en = spi_slv->mode & SPI_LOOP,
+>   .clock_pol_high = spi_slv->mode & SPI_CPOL,
+>   ...
+> };
+
+Still kept it runtime, lets me know in next rev if we can do better :)
+
+> > +       peripheral.cs = spi_slv->chip_select;
+> > +       peripheral.pack_en = true;
+> > +       peripheral.word_len = xfer->bits_per_word - MIN_WORD_LEN;
+> > +       peripheral.fragmentation = FRAGMENTATION;
+> > +
+> > +       ret = get_spi_clk_cfg(mas->cur_speed_hz, mas,
+> > +                             &peripheral.clk_src, &peripheral.clk_div);
+> > +       if (ret) {
+> > +               dev_err(mas->dev, "Err in get_spi_clk_cfg() :%d\n", ret);
+> > +               return ret;
+> > +       }
+> > +
+> > +       gsi = &mas->gsi[mas->num_xfers];
+> 
+> It sure feels like you should error-check this against NUM_SPI_XFER.
+> Otherwise if someone does a transfer with more than 8 parts you're
+> totally hosed, right?
+> 
+> Actually, why do you even need an array here? It seems like by the
+> time this function exits the transfer will be all done, right? So you
+> can just keep using the same structure over and over again? It can
+> even be on the stack?
+
+This was the trigger so things are on stack now and cleaned, pls see
+next rev, should be out in next few days
+
+> > +       gsi->rx_cb.mas = mas;
+> > +       gsi->rx_cb.xfer = xfer;
+> > +
+> > +       if (peripheral.cmd & SPI_RX) {
+> > +               dmaengine_slave_config(mas->rx, &config);
+> > +               gsi->rx_desc = dmaengine_prep_slave_sg(mas->rx, xfer->rx_sg.sgl, xfer->rx_sg.nents,
+> > +                                                      DMA_DEV_TO_MEM, flags);
+> > +               if (!gsi->rx_desc) {
+> > +                       dev_err(mas->dev, "Err setting up rx desc\n");
+> > +                       return -EIO;
+> > +               }
+> > +               gsi->rx_desc->callback_result = spi_gsi_rx_callback_result;
+> > +               gsi->rx_desc->callback_param = &gsi->rx_cb;
+> > +       }
+> > +
+> > +       dmaengine_slave_config(mas->tx, &config);
+> > +       gsi->tx_desc = dmaengine_prep_slave_sg(mas->tx, xfer->tx_sg.sgl, xfer->tx_sg.nents,
+> > +                                              DMA_MEM_TO_DEV, flags);
+> > +       if (!gsi->tx_desc) {
+> > +               dev_err(mas->dev, "Err setting up tx desc\n");
+> > +               return -EIO;
+> > +       }
+> 
+> I haven't dug deeply, but it surprises me that we do all the TX config
+> even if "xfer->tx_buf" is NULL.
+
+GPI DMA :) We _always_ need TX even for RX. I am adding a note here for
+that
+
+> > +       gsi->tx_cb.mas = mas;
+> > +       gsi->tx_cb.xfer = xfer;
+> > +       gsi->tx_desc->callback_result = spi_gsi_tx_callback_result;
+> > +       gsi->tx_desc->callback_param = &gsi->tx_cb;
+> > +
+> > +       if (peripheral.cmd & SPI_RX)
+> > +               gsi->rx_cookie = dmaengine_submit(gsi->rx_desc);
+> > +       gsi->tx_cookie = dmaengine_submit(gsi->tx_desc);
+> > +
+> > +       if (peripheral.cmd & SPI_RX)
+> > +               dma_async_issue_pending(mas->rx);
+> > +       dma_async_issue_pending(mas->tx);
+> > +       mas->num_xfers++;
+> > +
+> > +       jiffies = msecs_to_jiffies(SPI_XFER_TIMEOUT_MS);
+> > +       timeout = wait_for_completion_timeout(&mas->tx_cb, jiffies);
+> 
+> You're waiting a hardcoded 250 ms for every transfer. That could be
+> too short for a long transfer. Can you use some logic like the SPI
+> framework?
+> 
+> It's probably also worth adding a comment about why you can't just
+> return "1" from transfer_one() for GSI mode and let the SPI framework
+> handle the timeout calculations. My guess is that you might need extra
+> time because another processor might hold the SPI bus and keep you
+> from starting your transfer right away and thus your timeout needs to
+> be somehow longer than the normal SPI framework. Is that true?
+> 
+> Actually, it looks like spi_transfer_wait() already has 200 ms of
+> slop. Is that enough for you? Can you just let the SPI framework
+> handle the timeout?
+
+I have removed the code and returned 1 :)
+
+> 
+> > +       if (timeout <= 0) {
+> 
+> Just "== 0". "timeout" is unsigned, right?
+> 
+> 
+> > +               dev_err(mas->dev, "Tx[%d] timeout%lu\n", i, timeout);
+> 
+> timeout is always 0 in this printout.
+> > +               ret = -ETIMEDOUT;
+> > +               goto err_gsi_geni_transfer_one;
+> > +       }
+> > +
+> > +       if (peripheral.cmd & SPI_RX) {
+> > +               jiffies = msecs_to_jiffies(SPI_XFER_TIMEOUT_MS);
+> > +               timeout = wait_for_completion_timeout(&mas->rx_cb, jiffies);
+> 
+> Why do you need to re-init the timeout? You should just wait for
+> however much is left from the previous wait? The TX and RX should be
+> happening in parallel, right? So you don't want to wait for a full
+> second transfer.
+> 
+> > +               if (timeout <= 0) {
+> > +                       dev_err(mas->dev, "Rx[%d] timeout%lu\n", i, timeout);
+> > +                       ret = -ETIMEDOUT;
+> > +                       goto err_gsi_geni_transfer_one;
+> > +               }
+> > +       }
+> > +
+> > +       spi_finalize_current_transfer(spi);
+> > +       return 0;
+> > +
+> > +err_gsi_geni_transfer_one:
+> > +       dmaengine_terminate_all(mas->tx);
+> 
+> I know not what I'm talking about, but the description of
+> dmaengine_terminate_all says "This function is DEPRECATED". It also
+> seems like the old "terminate_all" is async? That's bad because you
+> gave it stack pointers...
+> 
+> You almost certainly want a WARN_ON or something like that if you fail
+> to terminate the transfer because, presumably, the DMA engine will
+> keep looking at your config that's stored on the stack (that you're
+> freeing by ending the function). That's super bad and I'd want a
+> pretty serious warning in my logs if it might be happening.
+
+Oops, somehow this got missed, we are supposed to use
+dmaengine_terminate_sync() here... I think I have updated i2c one but
+missed here
+
+> > +static bool geni_can_dma(struct spi_controller *ctlr,
+> > +                        struct spi_device *slv, struct spi_transfer *xfer)
+> > +{
+> > +       struct spi_geni_master *mas = spi_master_get_devdata(slv->master);
+> > +
+> > +       /* check if dma is supported */
+> > +       if (mas->cur_xfer_mode == GENI_GPI_DMA)
+> > +               return true;
+> > +
+> > +       return false;
+> > +}
+> 
+> nit: might as well handle GENI_SE_DMA as well since it's just as easy
+> to test against GENI_SE_FIFO?
+
+I think I will leave that for the person adding GENI_SE_DMA support :)
+
+> nit: no need for an if.
+> 
+> So just: return mas->cur_xfer_mode != GENI_SE_FIFO;
+
+Done
+
+> >  static int spi_geni_prepare_message(struct spi_master *spi,
+> >                                         struct spi_message *spi_msg)
+> >  {
+> > -       int ret;
+> >         struct spi_geni_master *mas = spi_master_get_devdata(spi);
+> > +       int ret;
+> >
+> > -       if (spi_geni_is_abort_still_pending(mas))
+> > -               return -EBUSY;
+> > +       switch (mas->cur_xfer_mode) {
+> > +       case GENI_SE_FIFO:
+> > +               if (spi_geni_is_abort_still_pending(mas))
+> > +                       return -EBUSY;
+> > +               ret = setup_fifo_params(spi_msg->spi, spi);
+> > +               if (ret)
+> > +                       dev_err(mas->dev, "Couldn't select mode %d\n", ret);
+> > +               return ret;
+> >
+> > -       ret = setup_fifo_params(spi_msg->spi, spi);
+> > -       if (ret)
+> > -               dev_err(mas->dev, "Couldn't select mode %d\n", ret);
+> > +       case GENI_GPI_DMA:
+> > +               mas->num_xfers = 0;
+> > +               reinit_completion(&mas->tx_cb);
+> > +               reinit_completion(&mas->rx_cb);
+> > +               memset(mas->gsi, 0, (sizeof(struct spi_geni_gsi) * NUM_SPI_XFER));
+> 
+> nit: make a #define for the size and use it here and in allocation?
+
+Removed the struct so no longer needed
+
+> > +static int spi_geni_grab_gpi_chan(struct spi_geni_master *mas)
+> > +{
+> > +       size_t gsi_sz;
+> > +       int ret;
+> > +
+> > +       mas->tx = dma_request_chan(mas->dev, "tx");
+> > +       if (IS_ERR_OR_NULL(mas->tx)) {
+> 
+> I don't think dma_request_chan() can return NULL.
+
+No it cant, updated now!
+
+> 
+> 
+> > +               dev_err(mas->dev, "Failed to get tx DMA ch %ld", PTR_ERR(mas->tx));
+> > +               ret = PTR_ERR(mas->tx);
+> 
+> niftier: ret = dev_err_probe(mas->dev, PTR_ERR(mas->tx), "Failed to
+> get tx DMA ch\n");
+> 
+> If you don't think that's nifty, at least you should add a "\n" to
+> your error message.
+
+I like dev_err_probe(), updated along with missing "\n"
+> 
+> 
+> > +               goto err_tx;
+> > +       }
+> 
+> Personally I'm a fan of devm_add_action_or_reset() to simplify error
+> handling like this. Everything becomes easier to handle then.
+> 
+> ret = devm_add_action_or_reset(mas->dev, spi_geni_dma_release_chan, mas->tx);
+> if (ret)
+>   return ret;
+> 
+> You've got to make a tiny spi_geni_dma_release_chan() function that
+> just wraps dma_release_chan() (or cast and violate the C standard) but
+> then you get rid of all error handling in this function, get rid of
+> the code you had to add to remove and the code you forgot to add the
+> the probe() function (see below). :-)
+
+So after reworking code, there is little error handling, so I am
+skipping it for next rev
+
+> > +       mas->rx = dma_request_chan(mas->dev, "rx");
+> > +       if (IS_ERR_OR_NULL(mas->rx)) {
+> > +               dev_err(mas->dev, "Failed to get rx DMA ch %ld", PTR_ERR(mas->rx));
+> > +               ret = PTR_ERR(mas->rx);
+> > +               goto err_rx;
+> > +       }
+> > +
+> > +       gsi_sz = sizeof(struct spi_geni_gsi) * NUM_SPI_XFER;
+> > +       mas->gsi = devm_kzalloc(mas->dev, gsi_sz, GFP_KERNEL);
+> > +       if (IS_ERR_OR_NULL(mas->gsi))
+> > +               goto err_mem;
+> 
+> This is not correct. kzalloc() never returns errors, just NULL. ...and
+> you don't set "ret".
+> 
+> Also: since you re-use this over and over and zero it before each
+> transfer, you could probably avoid the zero-allocation.
+> 
+> 
+> > @@ -349,15 +594,15 @@ static int spi_geni_init(struct spi_geni_master *mas)
+> >  {
+> >         struct geni_se *se = &mas->se;
+> >         unsigned int proto, major, minor, ver;
+> > -       u32 spi_tx_cfg;
+> > +       u32 spi_tx_cfg, fifo_disable;
+> > +       int ret = -ENXIO;
+> >
+> >         pm_runtime_get_sync(mas->dev);
+> >
+> >         proto = geni_se_read_proto(se);
+> >         if (proto != GENI_SE_SPI) {
+> >                 dev_err(mas->dev, "Invalid proto %d\n", proto);
+> > -               pm_runtime_put(mas->dev);
+> > -               return -ENXIO;
+> > +               goto out_pm;
+> 
+> nit: In theory this change could be relegated to a tiny cleanup patch
+> just to make your GPI change smaller to review, but I won't insist.
+
+This is looking better in next rev :)
+
+> > @@ -380,15 +625,38 @@ static int spi_geni_init(struct spi_geni_master *mas)
+> >         else
+> >                 mas->oversampling = 1;
+> >
+> > -       geni_se_select_mode(se, GENI_SE_FIFO);
+> > +       fifo_disable = readl(se->base + GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
+> > +       switch (fifo_disable) {
+> > +       case 1:
+> > +               ret = spi_geni_grab_gpi_chan(mas);
+> > +               if (!ret) { /* success case */
+> > +                       mas->cur_xfer_mode = GENI_GPI_DMA;
+> > +                       geni_se_select_mode(se, GENI_GPI_DMA);
+> > +                       dev_dbg(mas->dev, "Using GPI DMA mode for SPI\n");
+> > +                       break;
+> > +               }
+> > +               /*
+> > +                * in case of failure to get dma channel, we can till do the
+> > +                * FIFO mode, so fallthrough
+> 
+> s/till/still/
+
+ack
+
+> 
+> > +                */
+> > +               dev_warn(mas->dev, "FIFO mode disabled, but couldn't get DMA, fall back to FIFO mode\n");
+> > +               fallthrough;
+> 
+> I was under the impression that if `FIFO_IF_DISABLE` was set that the
+> FIFO was, how shall we say it, "disabled". ;-) If you can in fact fall
+> back to FIFO mode then that bit seems pretty poorly named.
+
+So on few places I have seen fall back work and some it doesn't so name
+seems correct. Now the question is should we _try_ to fallback on
+disabled fifo or not.. :)
+
+> >  static irqreturn_t geni_spi_isr(int irq, void *data)
+> > @@ -671,6 +942,15 @@ static int spi_geni_probe(struct platform_device *pdev)
+> >         if (irq < 0)
+> >                 return irq;
+> >
+> > +       ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+> 
+> nit: this function already has the line:
+> 
+> struct device *dev = &pdev->dev;
+> 
+> ...so you can use "dev". :-)
+
+updated here and few more places
+
+
+> 
+> 
+> > +       if (ret) {
+> > +               ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+> > +               if (ret) {
+> > +                       dev_err(&pdev->dev, "could not set DMA mask\n");
+> > +                       return ret;
+> 
+> niftier: return dev_err_probe(dev, ret, "could not set DMA mask\n");
+> 
+> 
+> > @@ -710,14 +990,17 @@ static int spi_geni_probe(struct platform_device *pdev)
+> >         spi->max_speed_hz = 50000000;
+> >         spi->prepare_message = spi_geni_prepare_message;
+> >         spi->transfer_one = spi_geni_transfer_one;
+> > +       spi->can_dma = geni_can_dma;
+> > +       spi->dma_map_dev = mas->dev->parent;
+> 
+> mas->dev->parent == dev->parent ?
+> 
+> 
+> > @@ -738,6 +1021,14 @@ static int spi_geni_probe(struct platform_device *pdev)
+> >         if (ret)
+> >                 goto spi_geni_probe_runtime_disable;
+> >
+> > +       /*
+> > +        * check the mode supported and set_cs for fifo mode only
+> > +        * for dma (gsi) mode, the gsi will set cs based on params passed in
+> > +        * TRE
+> > +        */
+> > +       if (mas->cur_xfer_mode == GENI_SE_FIFO)
+> > +               spi->set_cs = spi_geni_set_cs;
+> 
+> I'm curious: is there no way to get set_cs() working in GPI mode? In
+> an off-thread conversation Qualcomm seemed to indicate that it was
+> possible, but maybe they didn't quite understand what I was asking.
+> 
+> Without an implementation of set_cs() there will be drivers in Linux
+> that simply aren't compatible because they make the assumption that
+> they can lock the bus, set the CS, and do several transfers that are
+> part of some logical "transaction". I believe that both of the SPI
+> peripherals on boards that I work on, cros-ec and the SPI TPM make
+> this assumption. I don't even believe that the drivers can be "fixed"
+> because the requirement is more at the protocol level. The protocol
+> requires you to do things like:
+> 
+> 0. Lock the bus.
+> 1. Set the CS.
+> 2. Transfer a few bytes, reading the response as you go.
+> 3. Once you see the other side respond that it's ready, transfer some
+> more bytes.
+> 4. Release the CS.
+> 5. Unlock the bus.
+> 
+> You can't do this without a set_cs() implementation because of the
+> requirement to read the responses of the other side before moving on
+> to the next phase of the transfer.
+> 
+> As I understand it this is roughly the equivalent of i2c clock
+> stretching but much more ad-hoc and defined peripherals-by-peripheral.
+> 
+> In any case, I guess you must have examples of peripherals that need
+> GPI mode and don't need set_cs() so we shouldn't block your way
+> forward, but I'm just curious if you had more info on this.
+
+So I have asked some qcom folks, they tell me it is _possible_ to use
+the cs bit in the TRE and it can work. But TBH I am not yet convinced it
+would work as advertised. So do you enable the GPI mode for chrome books
+or it is SE DMA mode (i think SE DMA mode might be simpler to use for
+your case)
+
+> 
+> 
+> >  static int spi_geni_remove(struct platform_device *pdev)
+> >  {
+> >         struct spi_master *spi = platform_get_drvdata(pdev);
+> > @@ -762,6 +1061,8 @@ static int spi_geni_remove(struct platform_device *pdev)
+> >         /* Unregister _before_ disabling pm_runtime() so we stop transfers */
+> >         spi_unregister_master(spi);
+> >
+> > +       spi_geni_release_dma_chan(mas);
+> > +
+> 
+> Why isn't there a call to spi_geni_release_dma_chan() in the error
+> paths for probe?
+
+Fixed
+
+-- 
+~Vinod
