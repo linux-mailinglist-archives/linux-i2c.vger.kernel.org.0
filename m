@@ -2,91 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EEE042D563
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Oct 2021 10:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B50D42D7B8
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Oct 2021 13:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbhJNIuV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 14 Oct 2021 04:50:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44954 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229551AbhJNIuU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 14 Oct 2021 04:50:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F12636101E;
-        Thu, 14 Oct 2021 08:48:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634201296;
-        bh=GqPIsa1r+FpZHXvu2y7bSJcct4I9M3uZm3XKR3JDIAw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WAF7eTmHH4gCeJg5DvJpyP0F2QjL/MDwjnMDRGxLE92+Rn6cBeZe10dBMKVB0xmn1
-         nUDOCpjAuNyJzEtAPOc8FERqaNQ+vbrCHkCOOg92iuwbHTk7F5X+P0gw5AkcdI6nRp
-         57+QDe23QoN+DXz2YdBW4ErHlhVUVN3TcpVM89F4=
-Date:   Thu, 14 Oct 2021 10:48:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v3 1/3] driver core: Provide device_match_acpi_handle()
- helper
-Message-ID: <YWfuzq0aVAI9r9hW@kroah.com>
-References: <20211007171815.28336-1-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0h2=LZ8YX9MP6_dcyyybRQC6rii-r1Lc_Ss1XFFBUiSGQ@mail.gmail.com>
- <YWdOilxGqREXPBAm@smile.fi.intel.com>
- <CAJZ5v0gcmsMwB45k-+ca1G14zhtpChcdtB=dWMC1Wyj8j3WfFg@mail.gmail.com>
+        id S230282AbhJNLHZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 14 Oct 2021 07:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230080AbhJNLHZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Oct 2021 07:07:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B597C061570;
+        Thu, 14 Oct 2021 04:05:20 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2401:4900:1c20:48dc:2024:938f:96e4:4a08])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 4EF181F44A4A;
+        Thu, 14 Oct 2021 12:05:18 +0100 (BST)
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com, wsa@kernel.org
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
+Date:   Thu, 14 Oct 2021 16:34:37 +0530
+Message-Id: <20211014110437.64764-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gcmsMwB45k-+ca1G14zhtpChcdtB=dWMC1Wyj8j3WfFg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 08:33:14PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Oct 13, 2021 at 8:24 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Wed, Oct 13, 2021 at 07:47:37PM +0200, Rafael J. Wysocki wrote:
-> > > On Thu, Oct 7, 2021 at 7:18 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > We have couple of users of this helper, make it available for them.
-> > >
-> > > "a couple"?
-> >
-> > Yep.
-> >
-> > > >  EXPORT_SYMBOL(device_match_acpi_dev);
-> > > >
-> > > > +int device_match_acpi_handle(struct device *dev, const void *handle)
-> > >
-> > > Hmmm.  Should the second arg be of type acpi_handle?
-> >
-> > acpi_handle is not defined as struct and it means the header, where the
-> > prototype is declared, will require acpi.h to be included. Besides that the
-> > whole set of device_match_*() is done by the same prototype, so it can be used
-> > in bus_find_device() calls.
-> 
-> Ah, OK, it's for bus_find_device().
-> 
-> > > And doesn't this function belong to the ACPI core?  It is related to
-> > > acpi_bus_get_device() and such which are located there.
-> >
-> > Same as above. I don't think so.
-> 
-> I see, but any chance to improve the changelog?
+We are racing the registering of .to_irq when probing the
+i2c driver. This results in random failure of touchscreen
+devices.
 
-I will drop this from my testing tree and wait for a new version with a
-better changelog.
+Following errors could be seen in dmesg logs when gc->to_irq is NULL
 
-thanks,
+[2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
+[2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
 
-greg k-h
+To avoid this situation, defer probing until to_irq is registered.
+
+This issue has been reported many times in past and people have been
+using workarounds like changing the pinctrl_amd to built-in instead
+of loading it as a module or by adding a softdep for pinctrl_amd into
+the config file.
+
+References :-
+https://bugzilla.kernel.org/show_bug.cgi?id=209413
+https://github.com/Syniurge/i2c-amd-mp2/issues/3
+
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+---
+ drivers/gpio/gpiolib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 27c07108496d..fc0ba85f4c45 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -3084,7 +3084,7 @@ int gpiod_to_irq(const struct gpio_desc *desc)
+ 
+ 		return retirq;
+ 	}
+-	return -ENXIO;
++	return -EPROBE_DEFER;
+ }
+ EXPORT_SYMBOL_GPL(gpiod_to_irq);
+ 
+-- 
+2.30.2
+
