@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4885042E25C
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Oct 2021 22:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808B742E261
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Oct 2021 22:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbhJNUFS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 14 Oct 2021 16:05:18 -0400
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:36651 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbhJNUFR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Oct 2021 16:05:17 -0400
-Received: by mail-oo1-f54.google.com with SMTP id r1-20020a4a9641000000b002b6b55007bfso2273719ooi.3;
-        Thu, 14 Oct 2021 13:03:12 -0700 (PDT)
+        id S233742AbhJNUGn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 14 Oct 2021 16:06:43 -0400
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:45867 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229932AbhJNUGn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Oct 2021 16:06:43 -0400
+Received: by mail-ot1-f42.google.com with SMTP id l16-20020a9d6a90000000b0054e7ab56f27so9740157otq.12;
+        Thu, 14 Oct 2021 13:04:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=b35/8Ly81aRobPFM7Pcaw78v/nOqpcRxlYIlEx7HFJo=;
-        b=MSQYITueUrPQBRu+DL0FtdeRNhCJz2BpTVpH3JVO+3f1o5NBRuMImx17UYIBAQxvPc
-         vQoPCMDgIlm5ut9/3J6kef900ySGzQCrjR7mWfhDWgJijIyg6KlWnFASyPBHCADwi6Oq
-         H8ZYfK5shQNb+po8Tl2BOgjNZT8e4Kv8EPwO8AoJbF1efoCI9VPFTES+vicVZ34bB35/
-         4WambRASH+C1pG6Sjd0vA0RWirVNTdzPfr81z9jRaHW4mP9VINDC2mHVVG5I4LIQf7lI
-         f3mynPBfluHSuEFKY/emRU0PrE9rqA2xQBC1P2rwPjjpnTFw1tpCfNflBr9tZlGpTxo9
-         47eA==
-X-Gm-Message-State: AOAM530PlxE/tv3ZgytBl561qdIzmBOnYVmQEIo4MSEi8I6OEL/HOyqZ
-        N3ebJWz0JeZwmP1QK89YWQ==
-X-Google-Smtp-Source: ABdhPJwQ1D56h0+99QK5rctU0LO6xxcARbxttiJxE/IIR2/MraNZS+xeHh6+CZPuANHxJWNLrdle/A==
-X-Received: by 2002:a4a:a3c8:: with SMTP id t8mr5752668ool.2.1634241791805;
-        Thu, 14 Oct 2021 13:03:11 -0700 (PDT)
+        bh=gbYub33Z91e1QS79cd7omO33DSQ85uKXQk88sxDuHRo=;
+        b=1nbehc6lsQTFSMgzJhqHH1xBSMS+TY2DFJU2svaV7b8z0pg+ErK47ExJ0THzYmOCjv
+         CNAyocc0EAhi6F+LSqGvI/Kzo0ywiu1j5esMM94S82tLAylhRDqYiNhHrjTDenDEIJrh
+         dt1g74HN7JWjQbTZu+x/h7+b2u20LziMDbK1hvndGhxdIIbWikezc+/u0rcsVxDsLXbU
+         5ob91O44zz6Q7f4cVuFq8DSKWoKy5mU061/tv+u1f8Z4BJ72cdfiKxeDzGOArne0NaYQ
+         2YWtFL5fPXcSwfvekkWLCXhKS4jZW6jzCOXBCjQNAdiabu6rhaux57y7TxhsWoWhnUc5
+         /JBA==
+X-Gm-Message-State: AOAM532MTePYL610ZvXphya4p84ClR4XOQZc9K+oXkgUt+Hx77qEudNh
+        rzYi31hM0TlQkF4zS8tJNw==
+X-Google-Smtp-Source: ABdhPJyEZuDhUeC1wXYtsFMhBNQ+e7kVyhZEdS6H6Gd1iP1+azFmVrVZKD3F43EjhI4/xoqt25auqw==
+X-Received: by 2002:a9d:8e1:: with SMTP id 88mr4367769otf.339.1634241877348;
+        Thu, 14 Oct 2021 13:04:37 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 103sm758936otj.44.2021.10.14.13.03.10
+        by smtp.gmail.com with ESMTPSA id g29sm763533oic.27.2021.10.14.13.04.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Oct 2021 13:03:11 -0700 (PDT)
-Received: (nullmailer pid 3828063 invoked by uid 1000);
-        Thu, 14 Oct 2021 20:03:10 -0000
-Date:   Thu, 14 Oct 2021 15:03:10 -0500
+        Thu, 14 Oct 2021 13:04:36 -0700 (PDT)
+Received: (nullmailer pid 3830439 invoked by uid 1000);
+        Thu, 14 Oct 2021 20:04:35 -0000
+Date:   Thu, 14 Oct 2021 15:04:35 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Abel Vesa <abel.vesa@nxp.com>
 Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
@@ -48,48 +48,43 @@ Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 10/11] dt-bindings: i2c: imx-lpi2c: Add i.MX8DXL
- compatible match
-Message-ID: <YWiM/vn8RPR1J9+r@robh.at.kernel.org>
+Subject: Re: [PATCH v3 11/11] dt-bindings: serial: fsl-lpuart: Add i.MX8DXL
+ compatible
+Message-ID: <YWiNUxP2rLat5T4p@robh.at.kernel.org>
 References: <1633526764-30151-1-git-send-email-abel.vesa@nxp.com>
- <1633526764-30151-11-git-send-email-abel.vesa@nxp.com>
+ <1633526764-30151-12-git-send-email-abel.vesa@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1633526764-30151-11-git-send-email-abel.vesa@nxp.com>
+In-Reply-To: <1633526764-30151-12-git-send-email-abel.vesa@nxp.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Oct 06, 2021 at 04:26:03PM +0300, Abel Vesa wrote:
-> Add i.MX8DXL lpi2c compatible to the bindings documentation.
+On Wed, Oct 06, 2021 at 04:26:04PM +0300, Abel Vesa wrote:
+> Add i.MX8DXL lpuart compatible to the bindings documentation.
 > 
 > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 > ---
->  Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-> index acf2d5f45f4e..f277b4de5344 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-> @@ -17,10 +17,12 @@ properties:
->      oneOf:
->        - enum:
->            - fsl,imx7ulp-lpi2c
-> +          - fsl,imx8dxl-lpi2c
->            - fsl,imx8qm-lpi2c
->            - fsl,imx8qxp-lpi2c
+> diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> index a90c971b4f1f..d84bb33f3b4c 100644
+> --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> @@ -22,6 +22,7 @@ properties:
+>            - fsl,imx7ulp-lpuart
+>            - fsl,imx8qm-lpuart
 >        - items:
->            - enum:
-> +              - fsl,imx8dxl-lpi2c
+> +          - const: fsl,imx8dxl-lpuart
+>            - const: fsl,imx8qxp-lpuart
+>            - const: fsl,imx7ulp-lpuart
 
-Nope. Adding in both spots is wrong.
+If you needed to support:
 
->                - fsl,imx8qm-lpi2c
->                - fsl,imx8qxp-lpi2c
->            - const: fsl,imx7ulp-lpi2c
-> -- 
-> 2.31.1
-> 
-> 
+compatible = "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
+
+You just broke it.
+
+Rob
