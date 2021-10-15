@@ -2,131 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0997442E9BA
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Oct 2021 09:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B19142EE1D
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Oct 2021 11:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235893AbhJOHNj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 15 Oct 2021 03:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbhJOHNj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Oct 2021 03:13:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38471C061570
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Oct 2021 00:11:33 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mbHNA-0006an-26; Fri, 15 Oct 2021 09:11:20 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mbHN7-0000Fg-Uy; Fri, 15 Oct 2021 09:11:17 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mbHN7-0006wZ-Tp; Fri, 15 Oct 2021 09:11:17 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH] sound: soc: tlv320aic32x4: Make aic32x4_remove() return void
-Date:   Fri, 15 Oct 2021 09:11:13 +0200
-Message-Id: <20211015071113.2795767-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        id S231962AbhJOJuI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 15 Oct 2021 05:50:08 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:14357 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231254AbhJOJuH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Oct 2021 05:50:07 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HW1Xr1rFMz909T;
+        Fri, 15 Oct 2021 17:43:08 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Fri, 15 Oct 2021 17:48:00 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Fri, 15 Oct
+ 2021 17:47:59 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+CC:     <wsa@kernel.org>
+Subject: [PATCH] i2c: core: Fix possible memleak in i2c_new_client_device()
+Date:   Fri, 15 Oct 2021 17:55:41 +0800
+Message-ID: <20211015095541.3611223-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=nRNU/h5dN0hs6QQdYrn9XplF1ZR0nboidS4cpkp3qDI=; m=2e5HCshqMt6dybePlB07FsppmCU/zxeR26wervi3tws=; p=ET5WVtEOuO659Yg8+YuLjG7ttyClm3n+0otQ9SrIUgA=; g=9c9909311a8b559b124f8407491711be13fdf2b5
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFpKYgACgkQwfwUeK3K7AlALAf/RUg 6zfanHCHtHIXVMCCP0xByiI/Q2w5shLXJXILQQTO6MjzI1K9ILBJjpvMP0NB7sMmrjVNE7L/SoAq3 xHHgPA2lNbxmyuJ6RgD5WY0oxXOjRXnNpYZPiRb2SiNVd2aroa4shXCm9bGnhvXXNiqUHCwcThOJ/ XJpBGRwYkQvKo7VJT7iV9VuYNcaAoorEjIQDnnG4toBcW+CyN3j+MGHzsWQcZEPd2oKMwhZgeKAts iQ9itaLhW0jZQ2tCwufeoZuo12k/L3CXMQpPZrGT5U/JlwzXCgWHi1USqZlBXwX0erIZ2kesGY3Ta W2BdNlZkb2QDSWBiv/O2CJsHaxtKcIA==
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Up to now aic32x4_remove() returns zero unconditionally. Make it return
-void instead which makes it easier to see in the callers that there is
-no error to handle.
+I got memory leak as follows when doing fault injection test:
 
-Also the return value of i2c and spi remove callbacks is ignored anyway.
+unreferenced object 0xffff888014aec078 (size 8):
+  comm "xrun", pid 356, jiffies 4294910619 (age 16.332s)
+  hex dump (first 8 bytes):
+    31 2d 30 30 31 63 00 00                          1-001c..
+  backtrace:
+    [<00000000eb56c0a9>] __kmalloc_track_caller+0x1a6/0x300
+    [<000000000b220ea3>] kvasprintf+0xad/0x140
+    [<00000000b83203e5>] kvasprintf_const+0x62/0x190
+    [<000000002a5eab37>] kobject_set_name_vargs+0x56/0x140
+    [<00000000300ac279>] dev_set_name+0xb0/0xe0
+    [<00000000b66ebd6f>] i2c_new_client_device+0x7e4/0x9a0
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+In error path after calling i2c_dev_set_name(), the put_device()
+should be used to give up the device reference, then the name
+allocated in dev_set_name() will be freed in kobject_cleanup().
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- sound/soc/codecs/tlv320aic32x4-i2c.c | 4 +++-
- sound/soc/codecs/tlv320aic32x4-spi.c | 4 +++-
- sound/soc/codecs/tlv320aic32x4.c     | 4 +---
- sound/soc/codecs/tlv320aic32x4.h     | 2 +-
- 4 files changed, 8 insertions(+), 6 deletions(-)
+ drivers/i2c/i2c-core-base.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/codecs/tlv320aic32x4-i2c.c b/sound/soc/codecs/tlv320aic32x4-i2c.c
-index 04ad38311360..ed70e3d9baf2 100644
---- a/sound/soc/codecs/tlv320aic32x4-i2c.c
-+++ b/sound/soc/codecs/tlv320aic32x4-i2c.c
-@@ -44,7 +44,9 @@ static int aic32x4_i2c_probe(struct i2c_client *i2c,
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 54964fbe3f03..190d4fd5e594 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1047,8 +1047,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 	client->dev.of_node = of_node_get(info->of_node);
+ 	client->dev.fwnode = info->fwnode;
  
- static int aic32x4_i2c_remove(struct i2c_client *i2c)
- {
--	return aic32x4_remove(&i2c->dev);
-+	aic32x4_remove(&i2c->dev);
-+
-+	return 0;
- }
- 
- static const struct i2c_device_id aic32x4_i2c_id[] = {
-diff --git a/sound/soc/codecs/tlv320aic32x4-spi.c b/sound/soc/codecs/tlv320aic32x4-spi.c
-index e81c72958a82..a8958cd1c692 100644
---- a/sound/soc/codecs/tlv320aic32x4-spi.c
-+++ b/sound/soc/codecs/tlv320aic32x4-spi.c
-@@ -48,7 +48,9 @@ static int aic32x4_spi_probe(struct spi_device *spi)
- 
- static int aic32x4_spi_remove(struct spi_device *spi)
- {
--	return aic32x4_remove(&spi->dev);
-+	aic32x4_remove(&spi->dev);
-+
-+	return 0;
- }
- 
- static const struct spi_device_id aic32x4_spi_id[] = {
-diff --git a/sound/soc/codecs/tlv320aic32x4.c b/sound/soc/codecs/tlv320aic32x4.c
-index d39c7d52ecfd..8f42fd7bc053 100644
---- a/sound/soc/codecs/tlv320aic32x4.c
-+++ b/sound/soc/codecs/tlv320aic32x4.c
-@@ -1418,13 +1418,11 @@ int aic32x4_probe(struct device *dev, struct regmap *regmap)
- }
- EXPORT_SYMBOL(aic32x4_probe);
- 
--int aic32x4_remove(struct device *dev)
-+void aic32x4_remove(struct device *dev)
- {
- 	struct aic32x4_priv *aic32x4 = dev_get_drvdata(dev);
- 
- 	aic32x4_disable_regulators(aic32x4);
+-	i2c_dev_set_name(adap, client, info);
 -
--	return 0;
- }
- EXPORT_SYMBOL(aic32x4_remove);
+ 	if (info->swnode) {
+ 		status = device_add_software_node(&client->dev, info->swnode);
+ 		if (status) {
+@@ -1059,17 +1057,20 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+ 		}
+ 	}
  
-diff --git a/sound/soc/codecs/tlv320aic32x4.h b/sound/soc/codecs/tlv320aic32x4.h
-index e9fd2e55d6c3..4de5bd9e8cc5 100644
---- a/sound/soc/codecs/tlv320aic32x4.h
-+++ b/sound/soc/codecs/tlv320aic32x4.h
-@@ -18,7 +18,7 @@ enum aic32x4_type {
++	i2c_dev_set_name(adap, client, info);
+ 	status = device_register(&client->dev);
+-	if (status)
+-		goto out_remove_swnode;
++	if (status) {
++		device_remove_software_node(&client->dev);
++		of_node_put(info->of_node);
++		put_device(&client->dev);
++		return ERR_PTR(status);
++	}
  
- extern const struct regmap_config aic32x4_regmap_config;
- int aic32x4_probe(struct device *dev, struct regmap *regmap);
--int aic32x4_remove(struct device *dev);
-+void aic32x4_remove(struct device *dev);
- int aic32x4_register_clocks(struct device *dev, const char *mclk_name);
+ 	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
+ 		client->name, dev_name(&client->dev));
  
- /* tlv320aic32x4 register space (in decimal to match datasheet) */
+ 	return client;
+ 
+-out_remove_swnode:
+-	device_remove_software_node(&client->dev);
+ out_err_put_of_node:
+ 	of_node_put(info->of_node);
+ out_err:
 -- 
-2.30.2
+2.25.1
 
