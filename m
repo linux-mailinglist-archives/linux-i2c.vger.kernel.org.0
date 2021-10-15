@@ -2,89 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 808B742E261
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Oct 2021 22:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0997442E9BA
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Oct 2021 09:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233742AbhJNUGn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 14 Oct 2021 16:06:43 -0400
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:45867 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbhJNUGn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Oct 2021 16:06:43 -0400
-Received: by mail-ot1-f42.google.com with SMTP id l16-20020a9d6a90000000b0054e7ab56f27so9740157otq.12;
-        Thu, 14 Oct 2021 13:04:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gbYub33Z91e1QS79cd7omO33DSQ85uKXQk88sxDuHRo=;
-        b=1nbehc6lsQTFSMgzJhqHH1xBSMS+TY2DFJU2svaV7b8z0pg+ErK47ExJ0THzYmOCjv
-         CNAyocc0EAhi6F+LSqGvI/Kzo0ywiu1j5esMM94S82tLAylhRDqYiNhHrjTDenDEIJrh
-         dt1g74HN7JWjQbTZu+x/h7+b2u20LziMDbK1hvndGhxdIIbWikezc+/u0rcsVxDsLXbU
-         5ob91O44zz6Q7f4cVuFq8DSKWoKy5mU061/tv+u1f8Z4BJ72cdfiKxeDzGOArne0NaYQ
-         2YWtFL5fPXcSwfvekkWLCXhKS4jZW6jzCOXBCjQNAdiabu6rhaux57y7TxhsWoWhnUc5
-         /JBA==
-X-Gm-Message-State: AOAM532MTePYL610ZvXphya4p84ClR4XOQZc9K+oXkgUt+Hx77qEudNh
-        rzYi31hM0TlQkF4zS8tJNw==
-X-Google-Smtp-Source: ABdhPJyEZuDhUeC1wXYtsFMhBNQ+e7kVyhZEdS6H6Gd1iP1+azFmVrVZKD3F43EjhI4/xoqt25auqw==
-X-Received: by 2002:a9d:8e1:: with SMTP id 88mr4367769otf.339.1634241877348;
-        Thu, 14 Oct 2021 13:04:37 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g29sm763533oic.27.2021.10.14.13.04.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Oct 2021 13:04:36 -0700 (PDT)
-Received: (nullmailer pid 3830439 invoked by uid 1000);
-        Thu, 14 Oct 2021 20:04:35 -0000
-Date:   Thu, 14 Oct 2021 15:04:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 11/11] dt-bindings: serial: fsl-lpuart: Add i.MX8DXL
- compatible
-Message-ID: <YWiNUxP2rLat5T4p@robh.at.kernel.org>
-References: <1633526764-30151-1-git-send-email-abel.vesa@nxp.com>
- <1633526764-30151-12-git-send-email-abel.vesa@nxp.com>
+        id S235893AbhJOHNj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 15 Oct 2021 03:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234497AbhJOHNj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 15 Oct 2021 03:13:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38471C061570
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Oct 2021 00:11:33 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mbHNA-0006an-26; Fri, 15 Oct 2021 09:11:20 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mbHN7-0000Fg-Uy; Fri, 15 Oct 2021 09:11:17 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mbHN7-0006wZ-Tp; Fri, 15 Oct 2021 09:11:17 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, kernel@pengutronix.de,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH] sound: soc: tlv320aic32x4: Make aic32x4_remove() return void
+Date:   Fri, 15 Oct 2021 09:11:13 +0200
+Message-Id: <20211015071113.2795767-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1633526764-30151-12-git-send-email-abel.vesa@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+X-Patch-Hashes: v=1; h=sha256; i=nRNU/h5dN0hs6QQdYrn9XplF1ZR0nboidS4cpkp3qDI=; m=2e5HCshqMt6dybePlB07FsppmCU/zxeR26wervi3tws=; p=ET5WVtEOuO659Yg8+YuLjG7ttyClm3n+0otQ9SrIUgA=; g=9c9909311a8b559b124f8407491711be13fdf2b5
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFpKYgACgkQwfwUeK3K7AlALAf/RUg 6zfanHCHtHIXVMCCP0xByiI/Q2w5shLXJXILQQTO6MjzI1K9ILBJjpvMP0NB7sMmrjVNE7L/SoAq3 xHHgPA2lNbxmyuJ6RgD5WY0oxXOjRXnNpYZPiRb2SiNVd2aroa4shXCm9bGnhvXXNiqUHCwcThOJ/ XJpBGRwYkQvKo7VJT7iV9VuYNcaAoorEjIQDnnG4toBcW+CyN3j+MGHzsWQcZEPd2oKMwhZgeKAts iQ9itaLhW0jZQ2tCwufeoZuo12k/L3CXMQpPZrGT5U/JlwzXCgWHi1USqZlBXwX0erIZ2kesGY3Ta W2BdNlZkb2QDSWBiv/O2CJsHaxtKcIA==
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Oct 06, 2021 at 04:26:04PM +0300, Abel Vesa wrote:
-> Add i.MX8DXL lpuart compatible to the bindings documentation.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> ---
->  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> index a90c971b4f1f..d84bb33f3b4c 100644
-> --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> @@ -22,6 +22,7 @@ properties:
->            - fsl,imx7ulp-lpuart
->            - fsl,imx8qm-lpuart
->        - items:
-> +          - const: fsl,imx8dxl-lpuart
->            - const: fsl,imx8qxp-lpuart
->            - const: fsl,imx7ulp-lpuart
+Up to now aic32x4_remove() returns zero unconditionally. Make it return
+void instead which makes it easier to see in the callers that there is
+no error to handle.
 
-If you needed to support:
+Also the return value of i2c and spi remove callbacks is ignored anyway.
 
-compatible = "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ sound/soc/codecs/tlv320aic32x4-i2c.c | 4 +++-
+ sound/soc/codecs/tlv320aic32x4-spi.c | 4 +++-
+ sound/soc/codecs/tlv320aic32x4.c     | 4 +---
+ sound/soc/codecs/tlv320aic32x4.h     | 2 +-
+ 4 files changed, 8 insertions(+), 6 deletions(-)
 
-You just broke it.
+diff --git a/sound/soc/codecs/tlv320aic32x4-i2c.c b/sound/soc/codecs/tlv320aic32x4-i2c.c
+index 04ad38311360..ed70e3d9baf2 100644
+--- a/sound/soc/codecs/tlv320aic32x4-i2c.c
++++ b/sound/soc/codecs/tlv320aic32x4-i2c.c
+@@ -44,7 +44,9 @@ static int aic32x4_i2c_probe(struct i2c_client *i2c,
+ 
+ static int aic32x4_i2c_remove(struct i2c_client *i2c)
+ {
+-	return aic32x4_remove(&i2c->dev);
++	aic32x4_remove(&i2c->dev);
++
++	return 0;
+ }
+ 
+ static const struct i2c_device_id aic32x4_i2c_id[] = {
+diff --git a/sound/soc/codecs/tlv320aic32x4-spi.c b/sound/soc/codecs/tlv320aic32x4-spi.c
+index e81c72958a82..a8958cd1c692 100644
+--- a/sound/soc/codecs/tlv320aic32x4-spi.c
++++ b/sound/soc/codecs/tlv320aic32x4-spi.c
+@@ -48,7 +48,9 @@ static int aic32x4_spi_probe(struct spi_device *spi)
+ 
+ static int aic32x4_spi_remove(struct spi_device *spi)
+ {
+-	return aic32x4_remove(&spi->dev);
++	aic32x4_remove(&spi->dev);
++
++	return 0;
+ }
+ 
+ static const struct spi_device_id aic32x4_spi_id[] = {
+diff --git a/sound/soc/codecs/tlv320aic32x4.c b/sound/soc/codecs/tlv320aic32x4.c
+index d39c7d52ecfd..8f42fd7bc053 100644
+--- a/sound/soc/codecs/tlv320aic32x4.c
++++ b/sound/soc/codecs/tlv320aic32x4.c
+@@ -1418,13 +1418,11 @@ int aic32x4_probe(struct device *dev, struct regmap *regmap)
+ }
+ EXPORT_SYMBOL(aic32x4_probe);
+ 
+-int aic32x4_remove(struct device *dev)
++void aic32x4_remove(struct device *dev)
+ {
+ 	struct aic32x4_priv *aic32x4 = dev_get_drvdata(dev);
+ 
+ 	aic32x4_disable_regulators(aic32x4);
+-
+-	return 0;
+ }
+ EXPORT_SYMBOL(aic32x4_remove);
+ 
+diff --git a/sound/soc/codecs/tlv320aic32x4.h b/sound/soc/codecs/tlv320aic32x4.h
+index e9fd2e55d6c3..4de5bd9e8cc5 100644
+--- a/sound/soc/codecs/tlv320aic32x4.h
++++ b/sound/soc/codecs/tlv320aic32x4.h
+@@ -18,7 +18,7 @@ enum aic32x4_type {
+ 
+ extern const struct regmap_config aic32x4_regmap_config;
+ int aic32x4_probe(struct device *dev, struct regmap *regmap);
+-int aic32x4_remove(struct device *dev);
++void aic32x4_remove(struct device *dev);
+ int aic32x4_register_clocks(struct device *dev, const char *mclk_name);
+ 
+ /* tlv320aic32x4 register space (in decimal to match datasheet) */
+-- 
+2.30.2
 
-Rob
