@@ -2,80 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9AF430137
-	for <lists+linux-i2c@lfdr.de>; Sat, 16 Oct 2021 10:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B7A43024B
+	for <lists+linux-i2c@lfdr.de>; Sat, 16 Oct 2021 13:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243841AbhJPIug (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 16 Oct 2021 04:50:36 -0400
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:51379 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240127AbhJPIug (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Oct 2021 04:50:36 -0400
-Received: from pop-os.home ([92.140.161.106])
-        by smtp.orange.fr with ESMTPA
-        id bfMhmb2HZqYovbfMhmCLAi; Sat, 16 Oct 2021 10:48:28 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 16 Oct 2021 10:48:28 +0200
-X-ME-IP: 92.140.161.106
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     rric@kernel.org, jan.glauber@gmail.com, wsa@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] i2c: thunderx: Fix some resource leak
-Date:   Sat, 16 Oct 2021 10:48:26 +0200
-Message-Id: <6657505309174d3ea6df14169d42b6df91298470.1634374036.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.30.2
+        id S236005AbhJPLGa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 16 Oct 2021 07:06:30 -0400
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:34907 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244205AbhJPLGa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Oct 2021 07:06:30 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailout.west.internal (Postfix) with ESMTP id 0686E32009DF;
+        Sat, 16 Oct 2021 07:04:21 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sat, 16 Oct 2021 07:04:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm2; bh=2Qy5WepVKDYgDPKSs+FFAQm9TP
+        1zfOYWpZSciejJiJg=; b=jlpFw8/W8iLLJygFqsu3WovRnG47CqYRUThE0qCQGY
+        cgCfKN1bmgBWnf1HgSqdsyqRgVw1dlPOlq26ibBFj+cKtCnaKaj/gaA/XoJ2ek+c
+        U1nCslOSqNUNZ03NICYzvOLa78zDYI5QBj6Rn0Zy1BCz+1HzXVswO0XMG+jIte/2
+        JMtvy8cAukwL4dwDkVmCr/IOR2W8wyNRaTRuIyLG7S0CInL1ozAVmqyPE43P/eTl
+        Z0fPzBcziP42OMAdyT0+wIX9dAT8qgEn74JQK4FanwFxVvCXPIrr8366kO0QTy0K
+        xFlrMr4GmoyiNwQRb6Hq+rHdnX9SJNJ5uck7103vuYOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=2Qy5WepVKDYgDPKSs
+        +FFAQm9TP1zfOYWpZSciejJiJg=; b=j3zAA3dZ0wp6lipEDpNTDsBSOWUlboHFV
+        xrmFZI+lJUaDtsXkt5C+IsI4W+aNeOlCT0VStumONAPlTEDd2fmgzRXU4nBUOY8c
+        +HbuLyUiLK1nQyiSGjRAiNmayJYKXUQprEpC7sqJuJ2yi8zX8s0Cr/uBNQxCkYZk
+        bdBCzIzdNciGbzLpVgSybskh90Ng8XoP1Pwj8VoCLWZ6AgJYm8XlSVMsExHu/2uO
+        2Boal0qDzHyvYJ6YIR7IPiu9md3PRlBqElPoZTgdQJbnxfjhUwgCYbSnUA/84TRD
+        kF75CY7jyLU91pMLRyv9ZvG5vMdYwdiyJqSnNrcatr0b//7QjQ//Q==
+X-ME-Sender: <xms:tbFqYQHhRFOZZKNK2R5TefLOq-Q55-pvmwvLr8uZPdgUvhpJXZpm2g>
+    <xme:tbFqYZXPXOkNuVYINXrPkgNxdkVqznLoG220PwevkS8tEi_O4fDm5-UsjoFeGoON2
+    VrDFzDxxKFeJAWwEuc>
+X-ME-Received: <xmr:tbFqYaKYwElJRxDveENDD05LQ0Nh44hTY6FvakoLSc8oClTESpe2PVqNi0UHGVZi1LJye47rdQpt6ThqKrZEoYJnThyaBsBdW7bapC7MoktTdO2f4cW4ZvZXRiOD0w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdduiedgfeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epgeevffdthfdutdekhefhteeuueefgeeuffffkeeijeeikeduhfejgeekueevtdeunecu
+    ffhomhgrihhnpehgihhthhhusgdrtghomhdpohhfthgtrdhnvghtnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvght
+    vghrrdguvghv
+X-ME-Proxy: <xmx:tbFqYSH1XeY2p0ISpzxIfiekz3nxLFjFasRqr0asky8T8Zt2T1NAPQ>
+    <xmx:tbFqYWXJ7FTeLKotFO9d8kgFK27hUpdQrZQ_7tWnX22u3BIJttMvhw>
+    <xmx:tbFqYVMaxaWNcd1kBXrITqFrOFCON0b7kqgO5KWLGevcPFYoSVf-xw>
+    <xmx:tbFqYYcs9j8scEyegW0KRHeDu5X-WYUH13oRcZkpK2Fd-75rbUohKg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 16 Oct 2021 07:04:20 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Wolfram Sang <wsa@kernel.org>, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Add pasemi i2c to ARM/APPLE MACHINE
+Date:   Sat, 16 Oct 2021 13:03:44 +0200
+Message-Id: <20211016110344.53509-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-We need to undo a 'pci_request_regions()' call in the error handling path
-of the probe function and in the remove function.
+Add the pasemi i2c platform and core files to the ARM/APPLE MACHINE
+entry in MAINTAINERS.
 
-Fixes: 22d40209de3b ("i2c: thunderx: Add i2c driver for ThunderX SOC")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- drivers/i2c/busses/i2c-thunderx-pcidrv.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+As discussed in the i2c series, here are the MAINTAINER changes.
+Hector will take this commit through his tree.
 
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index 12c90aa0900e..2d37096a6968 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -177,8 +177,10 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 		return ret;
- 
- 	i2c->twsi_base = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
--	if (!i2c->twsi_base)
--		return -EINVAL;
-+	if (!i2c->twsi_base) {
-+		ret = -EINVAL;
-+		goto err_release_regions;
-+	}
- 
- 	thunder_i2c_clock_enable(dev, i2c);
- 	ret = device_property_read_u32(dev, "clock-frequency", &i2c->twsi_freq);
-@@ -231,6 +233,8 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 
- error:
- 	thunder_i2c_clock_disable(dev, i2c->clk);
-+err_release_regions:
-+	pci_release_regions(pdev);
- 	return ret;
- }
- 
-@@ -241,6 +245,7 @@ static void thunder_i2c_remove_pci(struct pci_dev *pdev)
- 	thunder_i2c_smbus_remove(i2c);
- 	thunder_i2c_clock_disable(&pdev->dev, i2c->clk);
- 	i2c_del_adapter(&i2c->adap);
-+	pci_release_regions(pdev);
- }
- 
- static const struct pci_device_id thunder_i2c_pci_id_table[] = {
+ MAINTAINERS | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ad62687a0b3c..ecf239ac427e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1729,10 +1729,13 @@ B:	https://github.com/AsahiLinux/linux/issues
+ C:	irc://irc.oftc.net/asahi-dev
+ T:	git https://github.com/AsahiLinux/linux.git
+ F:	Documentation/devicetree/bindings/arm/apple.yaml
++F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+ F:	arch/arm64/boot/dts/apple/
++F:	drivers/i2c/busses/i2c-pasemi-core.c
++F:	drivers/i2c/busses/i2c-pasemi-platform.c
+ F:	drivers/irqchip/irq-apple-aic.c
+ F:	include/dt-bindings/interrupt-controller/apple-aic.h
+ F:	include/dt-bindings/pinctrl/apple.h
 -- 
-2.30.2
+2.25.1
 
