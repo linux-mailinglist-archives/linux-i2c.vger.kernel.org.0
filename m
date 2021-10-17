@@ -2,84 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2244309B8
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Oct 2021 16:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE3A430A03
+	for <lists+linux-i2c@lfdr.de>; Sun, 17 Oct 2021 17:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343821AbhJQOZq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Oct 2021 10:25:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49062 "EHLO mail.kernel.org"
+        id S242096AbhJQP3c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Oct 2021 11:29:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52218 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231156AbhJQOZp (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Sun, 17 Oct 2021 10:25:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B89B60F25;
-        Sun, 17 Oct 2021 14:23:35 +0000 (UTC)
+        id S237062AbhJQP3b (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sun, 17 Oct 2021 11:29:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 46A4260FE3;
+        Sun, 17 Oct 2021 15:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634480616;
-        bh=u/RJgwBpG/Tu9YYkznyutqBM6vIUEdyN5FTOH2rAcp8=;
+        s=k20201202; t=1634484442;
+        bh=1IZIYpWcRRGo1hMpX747PkvJcepTsaddkzuhvsbA1ak=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=erect+gwOpQHpeQmQ+mvrlDf97mqesEDIPrBVBCLXUKv5x+ESvJaDqdKolzrc2XyX
-         LzGI7aVgCh70/ps3CCeVDoaEr/mpwcqZM5CJ3S+B3anvpMq047Ut+xmomuGw3dNVgh
-         y8LlZbKBInRDa8i+GSLz0q9VFF6lKSejG+MN7KhtMtkTgzbLsXAOzaI3aRHTxeebtj
-         AAbTgfBVmZyoEKWARXGMRRT4a1k+8HbftbSjddqjFkmnrw0fvUBIyxmnhKDKREWKNE
-         zHvNXIgdikpcPJmmBE3xezhtx88LlbkuBUdlGDIpAuIQXyfMV9oqhL98NXFdvIu2DP
-         c0EdXalMDI7+Q==
-Date:   Sun, 17 Oct 2021 16:23:32 +0200
+        b=WDCTv9T2R6sikzDWkmR7Lvja37jP0rWvAfH25HQkG1c0oowVGnnz8HX7A0BCGH7Z8
+         KcVtNB37xrIEKOumA4JrQ6DT0IJ4kSf/DC1VcL46GMc+cvkFrNUmNjhfDyalOMBma/
+         CPSCZgrC5xUbqB/5Wt9pY9tgGd1LXvbR05Bcu8FAdptdXfELoBlYlmfIM53ZwPrQEG
+         cibsORm1qGHsWjoagJZ9iLvPQkIXFmNuMBxV8A1pDSDsqdrVdePEui0S6DmhQvnWM2
+         bOLk2mUycicG8Sr5GJu6vyBpOe5TVSqwojLqldKtKx2ca0er6bFtYNDzL+x/V0M4qQ
+         hQd4bqSaqV5rQ==
+Date:   Sun, 17 Oct 2021 17:27:18 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v1 1/1] i2c: i801: Add support for Intel Ice Lake PCH-N
-Message-ID: <YWwx5NJTFmR6Yqkb@ninjato>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: Fix possible memleak in
+ i2c_new_client_device()
+Message-ID: <YWxA1nyTdFbwFD4N@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-References: <20211001172154.15660-1-andriy.shevchenko@linux.intel.com>
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20211015095541.3611223-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6JV+cPk/3aMxWDAh"
+        protocol="application/pgp-signature"; boundary="QU/iwWlS8CwwXil6"
 Content-Disposition: inline
-In-Reply-To: <20211001172154.15660-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211015095541.3611223-1-yangyingliang@huawei.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---6JV+cPk/3aMxWDAh
+--QU/iwWlS8CwwXil6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 01, 2021 at 08:21:54PM +0300, Andy Shevchenko wrote:
-> Add PCI ID of SMBus controller on Intel Ice Lake PCH-N.
->=20
-> The device can be found on MacBookPro16,2 [1].
->=20
-> [1]: https://linux-hardware.org/?probe=3Df1c5cf0c43
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied to for-next, thanks!
+> In error path after calling i2c_dev_set_name(), the put_device()
+> should be used to give up the device reference, then the name
+> allocated in dev_set_name() will be freed in kobject_cleanup().
 
+I don't see it. dev_set_name does not call device_get, so why should we
+call device_put on failure? No other user of dev_set_name seems to do
+this. So, if this is an imbalance, where does the unmatched get_device
+really come from?
 
---6JV+cPk/3aMxWDAh
+>=20
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/i2c/i2c-core-base.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 54964fbe3f03..190d4fd5e594 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -1047,8 +1047,6 @@ i2c_new_client_device(struct i2c_adapter *adap, str=
+uct i2c_board_info const *inf
+>  	client->dev.of_node =3D of_node_get(info->of_node);
+>  	client->dev.fwnode =3D info->fwnode;
+> =20
+> -	i2c_dev_set_name(adap, client, info);
+> -
+>  	if (info->swnode) {
+>  		status =3D device_add_software_node(&client->dev, info->swnode);
+>  		if (status) {
+> @@ -1059,17 +1057,20 @@ i2c_new_client_device(struct i2c_adapter *adap, s=
+truct i2c_board_info const *inf
+>  		}
+>  	}
+> =20
+> +	i2c_dev_set_name(adap, client, info);
+>  	status =3D device_register(&client->dev);
+> -	if (status)
+> -		goto out_remove_swnode;
+> +	if (status) {
+> +		device_remove_software_node(&client->dev);
+> +		of_node_put(info->of_node);
+> +		put_device(&client->dev);
+> +		return ERR_PTR(status);
+> +	}
+> =20
+>  	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
+>  		client->name, dev_name(&client->dev));
+> =20
+>  	return client;
+> =20
+> -out_remove_swnode:
+> -	device_remove_software_node(&client->dev);
+>  out_err_put_of_node:
+>  	of_node_put(info->of_node);
+>  out_err:
+> --=20
+> 2.25.1
+>=20
+
+--QU/iwWlS8CwwXil6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFsMeQACgkQFA3kzBSg
-KbY6oRAAg6wFty7kiqnkhMb4/uam1Tg++wcohXBBHfxSGMglrGaDxGQt7q6KFdc0
-4TLKYQez42dwCS8hSxdybT//95ndAKZYIlVQh5YrJtaRZrv7/ALFwEz/W+Waoyhl
-pioG/sWH9q6DQuYeLaAu7n7JzSL6sQjRTXH5xqMMnm0V5i9n4GZ3et51i8H4kWZi
-nwCUnenPV2SWZm40yYku8vf07KBNjlX1wUGEFfnSiZLqIILRN9VaBuYn7u2XO8bp
-XkkxaB6EVHVhW/TuRf7tdj93ABV7hA2uNHvVyjSHr+XvAokkyS8j+LHocn62gSRS
-eHEBdCQKxhDvK1aDoySEGGORqikr2O8B1ZLhiTrwmuyPfZahYY0trxSB6eS7fc3D
-t1XRsJ7RqCtiwMsV8hxt8N+wSH6kNlDRiXzi3f4EUYdzsF5Ty7rzk9SAcDNmkH7e
-6jkpqAz5ZYFXsk1gUwi5/cCkG4U6F/lTgowCJhLAF3KSKnHmDvSPCRd+c+PVaP9V
-xD6ef65WbN9abMAxhJ4WJepcim0jwJ2YHkEAmhEF71VZnYcr0nlQUYsanQAbHQld
-rvGmIsy1vq1k/JbgrRJ4TDc1dW9KlAt0PMdzW93I3UpqUnZKqb/P+F1H0a0YpkHc
-KlvLAXTgsNXj0L1hc+xOidwF+OCZllq9kkyTb4g+I3hVxQz1Vns=
-=J5KV
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFsQNIACgkQFA3kzBSg
+Kbbd4w//Qs1pHbM/qY2Ll7hRxFMvEbAN3H5n/7HjEKk0mp+M03ZRfN/FwjaZrQex
+FlsqfhGgJi4MA+ba4uV8mazCb5h7j6aXAT/BdEhaotjmNGoU3lmB5GGHNwyDO6Qv
+CgCY/jLUUItiS+oa8rA20Wsyw4ayspuV1PjvirRsnWXptkaCRs/2OqfvVR9sO6k1
+lVDRoLlDoojyg1xUCpgnh58BuX5FK9p85QhIPKXfvy4MrJZsLMqEVJuVICkLDx8p
+2QCO5qRez1FMSCZ7mtYmQJKrLWAecIXixaglW3YUyt8SQyOnLYGyjc7ihstHErQz
+fr5h6/tW2ll22ePe6C8Wge7vOHag48HFgKWXS61aEdoCyFXHBveExm5yOtY2po5p
+3iSXqbBjHsnT3RpQBOFf8n52zvBDnPhpenPLF/e6vCSELh/6K4Z+v4QLeSRn4DYE
+myb+QmyxRJAyINGAVEGP6f1gX+10imIyoQUqLNfwghsEyy3RAaWAzfxmc6dhHyE7
+Z5U2ryEcQkjUHJNQ2SQ7jM/6HCZkkWyIwfOFBYJtI+u++dQfB+We6TXhlnpALVVK
+QmG+x+W6qPB92imD6Ni2HFKFWyhiZzwhFmkL4hv5AHCxX3cBADeDfvd6aV3vQfmG
+He/IMWOo1lDs4JD0TQOsyhm+6OwiusSFn54nUI6ncRPki/rIklg=
+=Vos8
 -----END PGP SIGNATURE-----
 
---6JV+cPk/3aMxWDAh--
+--QU/iwWlS8CwwXil6--
