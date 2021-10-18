@@ -2,67 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C8E430C0C
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Oct 2021 22:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FE5430E01
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Oct 2021 05:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242664AbhJQUoQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 17 Oct 2021 16:44:16 -0400
-Received: from mx.xn--bimann-cta.de ([185.207.104.210]:37307 "EHLO
-        mx.xn--bimann-cta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242454AbhJQUoQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Oct 2021 16:44:16 -0400
-X-Greylist: delayed 452 seconds by postgrey-1.27 at vger.kernel.org; Sun, 17 Oct 2021 16:44:15 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=dkim; bh=RD8Cpi7fgivdyLu
-        s6Xf7V4g1wooyGS/VEAcS32QW6AE=; h=in-reply-to:references:subject:cc:to:
-        from:date; d=xn--bimann-cta.de; b=IYTzUGHCQOP0rHdxzdamPOiiK9NXRSUSYm+f
-        PVm3rwCr0WQzgxMUTUp6Z0RaFB/ud5YegLTafHpnGCGS9fHdkpGeXv5EcXAjPY4+oiSErd
-        Vq1vhvZFu8iylD4JBE2ON5Rb3JfseC5BjE/3/VfOxETehfEZTLdrXv2ACcUvBb7jQ=
-Received: from kallisto.localdomain (p5084cf21.dip0.t-ipconnect.de [80.132.207.33])
-        by mx.xn--bimann-cta.de (OpenSMTPD) with ESMTPSA id 1a0932bc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 17 Oct 2021 22:34:32 +0200 (CEST)
-Date:   Sun, 17 Oct 2021 22:34:29 +0200
-From:   naib@xn--bimann-cta.de
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: I2C MSFT0001 (04F3:3072) touchpad is not recognized / registered
-Message-ID: <20211017203429.2lgipbvr5oxm42nx@kallisto.localdomain>
-References: <20211015144714.lvp7vz7lmeku2jpj@kallisto.localdomain>
- <YWnzXWAhqYuJCE2Z@google.com>
+        id S229707AbhJRDFi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 17 Oct 2021 23:05:38 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:25161 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229526AbhJRDFh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 17 Oct 2021 23:05:37 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4HXhVG25CFz1DHhB;
+        Mon, 18 Oct 2021 11:01:42 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Mon, 18 Oct 2021 11:03:25 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpeml500017.china.huawei.com (7.185.36.243) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Mon, 18 Oct 2021 11:03:25 +0800
+Subject: Re: [PATCH] i2c: core: Fix possible memleak in
+ i2c_new_client_device()
+To:     Wolfram Sang <wsa@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+References: <20211015095541.3611223-1-yangyingliang@huawei.com>
+ <YWxA1nyTdFbwFD4N@ninjato>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <f2ae728a-d816-02d3-cefd-500a74f08003@huawei.com>
+Date:   Mon, 18 Oct 2021 11:03:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YWnzXWAhqYuJCE2Z@google.com>
+In-Reply-To: <YWxA1nyTdFbwFD4N@ninjato>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thanks for helping me.
+Hi,
 
-On Fri, Oct 15, 2021 at 02:32:13PM -0700, Dmitry Torokhov wrote:
-> > # The touchscreen (ok):
-> > i2c_designware AMDI0010:00: using lookup tables for GPIO lookup
-> > i2c_designware AMDI0010:00: No GPIO consumer scl found
-> > i2c i2c-0: adapter [Synopsys DesignWare I2C adapter] registered
-> > i2c i2c-0: client [ELAN238E:00] registered with bus id i2c-ELAN238E:00
-> > # The touchpad (not ok):
-> > i2c_designware AMDI0010:01: using lookup tables for GPIO lookup
-> > i2c_designware AMDI0010:01: No GPIO consumer scl found
-> > i2c i2c-1: adapter [Synopsys DesignWare I2C adapter] registered
-> 
-> Since we do not see I2C client being registered in the case of touchpad
-> I'd start tracing drivers/i2c/i2c-core-acpi.c, functions
-> i2c_acpi_add_device() and i2c_acpi_get_info() to see where the failure
-> is. I guess the changes made ACPI descriptions not match with what Linux
-> expects.
+On 2021/10/17 23:27, Wolfram Sang wrote:
+>> In error path after calling i2c_dev_set_name(), the put_device()
+>> should be used to give up the device reference, then the name
+>> allocated in dev_set_name() will be freed in kobject_cleanup().
+> I don't see it. dev_set_name does not call device_get, so why should we
+> call device_put on failure? No other user of dev_set_name seems to do
+> this. So, if this is an imbalance, where does the unmatched get_device
+> really come from?
+The reference is initialized in device_initialize() called in 
+device_register(), if device_register()
+fails, the 'kobj->name' is leaked.
 
-I have enabled tracing via kernel parameters. Solely enabling i2c_acpi_add_device and i2c_acpi_get_info generates no output. Output for "ftrace=function ftrace_filter=i2c_acpi_*" is at [1]. I have also generated a version with the option func_stack_trace enabled, but I don't think that it worked, since the output has'nt changed that much: "ftrace=function ftrace_filter=i2c_acpi_* trace_options=print-parent,trace_printk,annotate,context-info,record-cmd,overwrite,irq-info,markers,function-trace,func_stack_trace" [2]. To correlate entries I'll also supply a dmesg buffer output [3] from the same boot.
-
-While testing with different ftrace setups I've noticed that sometimes the touchscreen is not working. Looking at dmesg output [4] there seems to be an error while probing for it. As of [5]: "The duplicate WMI GUIDs are used for the binary MOF file of a _WDG entry in the ASL". To concentrate on the trackpad and not mix things up, I'd ignore these errors for the moment.
-
-I'll continue reading through different docs of ftrace, to generate more usable output.
-
-[1] https://op.xn--bimann-cta.de/bug/2021-10-16_trace.txt
-[2] https://op.xn--bimann-cta.de/bug/2021-10-17_trace.txt
-[3] https://op.xn--bimann-cta.de/bug/2021-10-17_dmesg.txt
-[4] https://op.xn--bimann-cta.de/bug/touchscreen_errors.txt
-[5] https://lkml.org/lkml/2017/12/8/914
+Thanks,
+Yang
+>
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+>>   drivers/i2c/i2c-core-base.c | 13 +++++++------
+>>   1 file changed, 7 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+>> index 54964fbe3f03..190d4fd5e594 100644
+>> --- a/drivers/i2c/i2c-core-base.c
+>> +++ b/drivers/i2c/i2c-core-base.c
+>> @@ -1047,8 +1047,6 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+>>   	client->dev.of_node = of_node_get(info->of_node);
+>>   	client->dev.fwnode = info->fwnode;
+>>   
+>> -	i2c_dev_set_name(adap, client, info);
+>> -
+>>   	if (info->swnode) {
+>>   		status = device_add_software_node(&client->dev, info->swnode);
+>>   		if (status) {
+>> @@ -1059,17 +1057,20 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+>>   		}
+>>   	}
+>>   
+>> +	i2c_dev_set_name(adap, client, info);
+>>   	status = device_register(&client->dev);
+>> -	if (status)
+>> -		goto out_remove_swnode;
+>> +	if (status) {
+>> +		device_remove_software_node(&client->dev);
+>> +		of_node_put(info->of_node);
+>> +		put_device(&client->dev);
+>> +		return ERR_PTR(status);
+>> +	}
+>>   
+>>   	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
+>>   		client->name, dev_name(&client->dev));
+>>   
+>>   	return client;
+>>   
+>> -out_remove_swnode:
+>> -	device_remove_software_node(&client->dev);
+>>   out_err_put_of_node:
+>>   	of_node_put(info->of_node);
+>>   out_err:
+>> -- 
+>> 2.25.1
+>>
