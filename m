@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C1243228E
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Oct 2021 17:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC61143226A
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Oct 2021 17:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233112AbhJRPUB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Oct 2021 11:20:01 -0400
-Received: from mga12.intel.com ([192.55.52.136]:57505 "EHLO mga12.intel.com"
+        id S231718AbhJRPSs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Oct 2021 11:18:48 -0400
+Received: from mga11.intel.com ([192.55.52.93]:18279 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232846AbhJRPT7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 18 Oct 2021 11:19:59 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="208372722"
+        id S229696AbhJRPSs (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 18 Oct 2021 11:18:48 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="225730658"
 X-IronPort-AV: E=Sophos;i="5.85,382,1624345200"; 
-   d="scan'208";a="208372722"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:15:01 -0700
+   d="scan'208";a="225730658"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:14:56 -0700
 X-IronPort-AV: E=Sophos;i="5.85,382,1624345200"; 
-   d="scan'208";a="462358708"
+   d="scan'208";a="573107469"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:14:58 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:14:53 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id A117820769;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id B3B7D20830;
         Mon, 18 Oct 2021 15:17:33 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1mcRa5-0001fb-LB; Mon, 18 Oct 2021 15:17:29 +0300
+        id 1mcRa5-0001fe-Mz; Mon, 18 Oct 2021 15:17:29 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
@@ -38,9 +38,9 @@ Cc:     Wolfram Sang <wsa@the-dreams.de>,
         Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
         Hyungwoo Yang <hyungwoo.yang@intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH 4/6] ACPI: Add a convenience function to tell a device is in D0 state
-Date:   Mon, 18 Oct 2021 15:17:27 +0300
-Message-Id: <20211018121729.6357-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH 5/6] media: i2c: imx319: Support device probe in non-zero ACPI D state
+Date:   Mon, 18 Oct 2021 15:17:28 +0300
+Message-Id: <20211018121729.6357-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211018121729.6357-1-sakari.ailus@linux.intel.com>
 References: <20211018121729.6357-1-sakari.ailus@linux.intel.com>
@@ -50,79 +50,153 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a convenience function to tell whether a device is in D0 state,
-primarily for use in drivers' probe or remove functions on busses where
-the custom is to power on the device for the duration of both.
+From: Rajmohan Mani <rajmohan.mani@intel.com>
 
-Returns false on non-ACPI systems.
+Tell ACPI device PM code that the driver supports the device being in
+non-zero ACPI D state when the driver's probe function is entered.
 
-Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
 ---
- drivers/acpi/device_pm.c | 26 ++++++++++++++++++++++++++
- include/linux/acpi.h     |  5 +++++
- 2 files changed, 31 insertions(+)
+ drivers/media/i2c/imx319.c | 74 ++++++++++++++++++++++----------------
+ 1 file changed, 44 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
-index 0028b6b51c877..19b33c028f356 100644
---- a/drivers/acpi/device_pm.c
-+++ b/drivers/acpi/device_pm.c
-@@ -1400,4 +1400,30 @@ bool acpi_storage_d3(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(acpi_storage_d3);
+diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
+index dba0854ab5aad..daa976858e296 100644
+--- a/drivers/media/i2c/imx319.c
++++ b/drivers/media/i2c/imx319.c
+@@ -140,6 +140,8 @@ struct imx319 {
  
-+/**
-+ * acpi_dev_state_d0 - Tell if the device is in D0 power state
-+ * @dev: Physical device the ACPI power state of which to check
-+ *
-+ * On a system without ACPI, return true. On a system with ACPI, return true if
-+ * the current ACPI power state of the device is D0, or false otherwise.
-+ *
-+ * Note that the power state of a device is not well-defined after it has been
-+ * passed to acpi_device_set_power() and before that function returns, so it is
-+ * not valid to ask for the ACPI power state of the device in that time frame.
-+ *
-+ * This function is intended to be used in a driver's probe or remove
-+ * function. See Documentation/firmware-guide/acpi/low-power-probe.rst for
-+ * more information.
-+ */
-+bool acpi_dev_state_d0(struct device *dev)
+ 	/* Streaming on/off */
+ 	bool streaming;
++	/* True if the device has been identified */
++	bool identified;
+ };
+ 
+ static const struct imx319_reg imx319_global_regs[] = {
+@@ -2084,6 +2086,31 @@ imx319_set_pad_format(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
++/* Verify chip ID */
++static int imx319_identify_module(struct imx319 *imx319)
 +{
-+	struct acpi_device *adev = ACPI_COMPANION(dev);
++	struct i2c_client *client = v4l2_get_subdevdata(&imx319->sd);
++	int ret;
++	u32 val;
 +
-+	if (!adev)
-+		return true;
++	if (imx319->identified)
++		return 0;
 +
-+	return adev->power.state == ACPI_STATE_D0;
++	ret = imx319_read_reg(imx319, IMX319_REG_CHIP_ID, 2, &val);
++	if (ret)
++		return ret;
++
++	if (val != IMX319_CHIP_ID) {
++		dev_err(&client->dev, "chip id mismatch: %x!=%x",
++			IMX319_CHIP_ID, val);
++		return -EIO;
++	}
++
++	imx319->identified = true;
++
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(acpi_dev_state_d0);
 +
- #endif /* CONFIG_PM */
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 375715b0535fb..143ce7e0bee13 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -1014,6 +1014,7 @@ int acpi_subsys_runtime_suspend(struct device *dev);
- int acpi_subsys_runtime_resume(struct device *dev);
- int acpi_dev_pm_attach(struct device *dev, bool power_on);
- bool acpi_storage_d3(struct device *dev);
-+bool acpi_dev_state_d0(struct device *dev);
- #else
- static inline int acpi_subsys_runtime_suspend(struct device *dev) { return 0; }
- static inline int acpi_subsys_runtime_resume(struct device *dev) { return 0; }
-@@ -1025,6 +1026,10 @@ static inline bool acpi_storage_d3(struct device *dev)
+ /* Start streaming */
+ static int imx319_start_streaming(struct imx319 *imx319)
  {
- 	return false;
- }
-+static inline bool acpi_dev_state_d0(struct device *dev)
-+{
-+	return true;
-+}
- #endif
+@@ -2091,6 +2118,10 @@ static int imx319_start_streaming(struct imx319 *imx319)
+ 	const struct imx319_reg_list *reg_list;
+ 	int ret;
  
- #if defined(CONFIG_ACPI) && defined(CONFIG_PM_SLEEP)
++	ret = imx319_identify_module(imx319);
++	if (ret)
++		return ret;
++
+ 	/* Global Setting */
+ 	reg_list = &imx319_global_setting;
+ 	ret = imx319_write_regs(imx319, reg_list->regs, reg_list->num_of_regs);
+@@ -2206,26 +2237,6 @@ static int __maybe_unused imx319_resume(struct device *dev)
+ 	return ret;
+ }
+ 
+-/* Verify chip ID */
+-static int imx319_identify_module(struct imx319 *imx319)
+-{
+-	struct i2c_client *client = v4l2_get_subdevdata(&imx319->sd);
+-	int ret;
+-	u32 val;
+-
+-	ret = imx319_read_reg(imx319, IMX319_REG_CHIP_ID, 2, &val);
+-	if (ret)
+-		return ret;
+-
+-	if (val != IMX319_CHIP_ID) {
+-		dev_err(&client->dev, "chip id mismatch: %x!=%x",
+-			IMX319_CHIP_ID, val);
+-		return -EIO;
+-	}
+-
+-	return 0;
+-}
+-
+ static const struct v4l2_subdev_core_ops imx319_subdev_core_ops = {
+ 	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
+ 	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
+@@ -2420,6 +2431,7 @@ static struct imx319_hwcfg *imx319_get_hwcfg(struct device *dev)
+ static int imx319_probe(struct i2c_client *client)
+ {
+ 	struct imx319 *imx319;
++	bool full_power;
+ 	int ret;
+ 	u32 i;
+ 
+@@ -2432,11 +2444,14 @@ static int imx319_probe(struct i2c_client *client)
+ 	/* Initialize subdev */
+ 	v4l2_i2c_subdev_init(&imx319->sd, client, &imx319_subdev_ops);
+ 
+-	/* Check module identity */
+-	ret = imx319_identify_module(imx319);
+-	if (ret) {
+-		dev_err(&client->dev, "failed to find sensor: %d", ret);
+-		goto error_probe;
++	full_power = acpi_dev_state_d0(&client->dev);
++	if (full_power) {
++		/* Check module identity */
++		ret = imx319_identify_module(imx319);
++		if (ret) {
++			dev_err(&client->dev, "failed to find sensor: %d", ret);
++			goto error_probe;
++		}
+ 	}
+ 
+ 	imx319->hwcfg = imx319_get_hwcfg(&client->dev);
+@@ -2488,11 +2503,9 @@ static int imx319_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		goto error_media_entity;
+ 
+-	/*
+-	 * Device is already turned on by i2c-core with ACPI domain PM.
+-	 * Enable runtime PM and turn off the device.
+-	 */
+-	pm_runtime_set_active(&client->dev);
++	/* Set the device's state to active if it's in D0 state. */
++	if (full_power)
++		pm_runtime_set_active(&client->dev);
+ 	pm_runtime_enable(&client->dev);
+ 	pm_runtime_idle(&client->dev);
+ 
+@@ -2545,6 +2558,7 @@ static struct i2c_driver imx319_i2c_driver = {
+ 	},
+ 	.probe_new = imx319_probe,
+ 	.remove = imx319_remove,
++	.flags = I2C_DRV_ACPI_WAIVE_D0_PROBE,
+ };
+ module_i2c_driver(imx319_i2c_driver);
+ 
 -- 
 2.30.2
 
