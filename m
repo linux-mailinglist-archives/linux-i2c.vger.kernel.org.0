@@ -2,96 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 912D24328EF
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Oct 2021 23:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A236E432990
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 00:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbhJRVR3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Oct 2021 17:17:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34884 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232045AbhJRVR3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 18 Oct 2021 17:17:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 84994610A2;
-        Mon, 18 Oct 2021 21:15:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634591717;
-        bh=B2VOWNbfr2Ec8nOMEj4yZrlFiebEDRloREOoCsz+MBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P/SOS8oNbx190hgij7zPHhywjewzuVnQFrXbI3+r7Ut7K828momsf9S2lDeSAW8NU
-         vY+ATUzYSI9QuPWbH5ZGoTt4q4KpYiAXKmCcZLrzjobVtK27X6rcCv1ZpnFlC1bPW/
-         ghthD98JMYwCLufVkxDqwszPyRoBpviVFZypln3kc8wYo6xy4/WMyXizvQD+HY6CTG
-         tBfSolrrepu9+dtzuLWxTC2jgWeWaQldXNcPaINq7KEwAFpzEVnriPozAKHq6vjOjg
-         r+eS96Lvza/UDUTbTl1oNzEVhaNbhLd9Z9Q+b2Ha60fiLVBcDaZ/U+Dzs2wp6U+KfS
-         b7revybRkVRXw==
-Date:   Mon, 18 Oct 2021 23:15:12 +0200
-From:   Robert Richter <rric@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     jan.glauber@gmail.com, wsa@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] i2c: thunderx: Fix some resource leak
-Message-ID: <YW3j4MF/y4T6Rtzp@rric.localdomain>
-References: <6657505309174d3ea6df14169d42b6df91298470.1634374036.git.christophe.jaillet@wanadoo.fr>
+        id S229555AbhJRWIB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Oct 2021 18:08:01 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39594 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232139AbhJRWIB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Oct 2021 18:08:01 -0400
+Received: from localhost.localdomain (unknown [IPv6:2401:4900:1c20:2044:d49c:4fd9:7471:bb74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id EB76F1F432B7;
+        Mon, 18 Oct 2021 23:05:45 +0100 (BST)
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        wsa@kernel.org, krisman@collabora.com,
+        sebastian.reichel@collabora.com
+Cc:     kernel@collabora.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH v2] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
+Date:   Tue, 19 Oct 2021 03:35:04 +0530
+Message-Id: <20211018220504.8301-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6657505309174d3ea6df14169d42b6df91298470.1634374036.git.christophe.jaillet@wanadoo.fr>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 16.10.21 10:48:26, Christophe JAILLET wrote:
-> We need to undo a 'pci_request_regions()' call in the error handling path
-> of the probe function and in the remove function.
+We are racing the registering of .to_irq when probing the
+i2c driver. This results in random failure of touchscreen
+devices.
 
-Isn't that devm and thus not needed?
+Following errors could be seen in dmesg logs when gc->to_irq is NULL
 
-> 
-> Fixes: 22d40209de3b ("i2c: thunderx: Add i2c driver for ThunderX SOC")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/i2c/busses/i2c-thunderx-pcidrv.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-> index 12c90aa0900e..2d37096a6968 100644
-> --- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-> +++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-> @@ -177,8 +177,10 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
->  		return ret;
->  
+[2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
+[2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
 
-There is a pcim_enable_device() call before all that, so the regions
-should be removed on device release, see pcim_release().
+To avoid this situation, defer probing until to_irq is registered.
 
--Robert
+This issue has been reported many times in past and people have been
+using workarounds like changing the pinctrl_amd to built-in instead
+of loading it as a module or by adding a softdep for pinctrl_amd into
+the config file.
 
->  	i2c->twsi_base = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
-> -	if (!i2c->twsi_base)
-> -		return -EINVAL;
-> +	if (!i2c->twsi_base) {
-> +		ret = -EINVAL;
-> +		goto err_release_regions;
-> +	}
->  
->  	thunder_i2c_clock_enable(dev, i2c);
->  	ret = device_property_read_u32(dev, "clock-frequency", &i2c->twsi_freq);
-> @@ -231,6 +233,8 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
->  
->  error:
->  	thunder_i2c_clock_disable(dev, i2c->clk);
-> +err_release_regions:
-> +	pci_release_regions(pdev);
->  	return ret;
->  }
->  
-> @@ -241,6 +245,7 @@ static void thunder_i2c_remove_pci(struct pci_dev *pdev)
->  	thunder_i2c_smbus_remove(i2c);
->  	thunder_i2c_clock_disable(&pdev->dev, i2c->clk);
->  	i2c_del_adapter(&i2c->adap);
-> +	pci_release_regions(pdev);
->  }
->  
->  static const struct pci_device_id thunder_i2c_pci_id_table[] = {
-> -- 
-> 2.30.2
-> 
+References :-
+https://bugzilla.kernel.org/show_bug.cgi?id=209413
+https://github.com/Syniurge/i2c-amd-mp2/issues/3
+
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+
+---
+Changes in v2
+  - Add a condition to check for irq chip to avoid bogus error.
+
+---
+ drivers/gpio/gpiolib.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 27c07108496d..12c088706167 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -3084,6 +3084,14 @@ int gpiod_to_irq(const struct gpio_desc *desc)
+ 
+ 		return retirq;
+ 	}
++	if (gc->irq.chip) {
++		/* avoid race condition with other code, which tries to lookup
++		 * an IRQ before the irqchip has been properly registered
++		 * (i.e. while gpiochip is still being brought up).
++		 */
++		return -EPROBE_DEFER;
++	}
++
+ 	return -ENXIO;
+ }
+ EXPORT_SYMBOL_GPL(gpiod_to_irq);
+-- 
+2.30.2
+
