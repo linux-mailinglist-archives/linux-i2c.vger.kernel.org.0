@@ -2,30 +2,30 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB1A43227E
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Oct 2021 17:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3568943226F
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Oct 2021 17:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbhJRPTs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Oct 2021 11:19:48 -0400
-Received: from mga14.intel.com ([192.55.52.115]:57163 "EHLO mga14.intel.com"
+        id S232349AbhJRPTH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Oct 2021 11:19:07 -0400
+Received: from mga07.intel.com ([134.134.136.100]:47428 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232105AbhJRPTk (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 18 Oct 2021 11:19:40 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="228542462"
+        id S232018AbhJRPTG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 18 Oct 2021 11:19:06 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="291739204"
 X-IronPort-AV: E=Sophos;i="5.85,382,1624345200"; 
-   d="scan'208";a="228542462"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:14:57 -0700
+   d="scan'208";a="291739204"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:15:03 -0700
 X-IronPort-AV: E=Sophos;i="5.85,382,1624345200"; 
-   d="scan'208";a="661403205"
+   d="scan'208";a="530403178"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:14:53 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:14:58 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 88AEB204C0;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 957552066A;
         Mon, 18 Oct 2021 15:17:33 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1mcRa5-0001fV-Hi; Mon, 18 Oct 2021 15:17:29 +0300
+        id 1mcRa5-0001fY-Jg; Mon, 18 Oct 2021 15:17:29 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
@@ -38,153 +38,125 @@ Cc:     Wolfram Sang <wsa@the-dreams.de>,
         Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
         Hyungwoo Yang <hyungwoo.yang@intel.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH 2/6] i2c: Allow an ACPI driver to manage the device's power state during probe
-Date:   Mon, 18 Oct 2021 15:17:25 +0300
-Message-Id: <20211018121729.6357-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH 3/6] Documentation: ACPI: Document _DSC object usage for enum power state
+Date:   Mon, 18 Oct 2021 15:17:26 +0300
+Message-Id: <20211018121729.6357-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211018121729.6357-1-sakari.ailus@linux.intel.com>
 References: <20211018121729.6357-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Enable drivers to tell ACPI that there's no need to power on a device for
-probe. Drivers should still perform this by themselves if there's a need
-to. In some cases powering on the device during probe is undesirable, and
-this change enables a driver to choose what fits best for it.
-
-Add a field called "flags" into struct i2c_driver for driver flags, and a
-flag I2C_DRV_ACPI_WAIVE_D0_PROBE to tell a driver supports probe in ACPI D
-states other than 0.
+Document the use of the _DSC object for setting desirable power state
+during probe.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-Acked-by: Wolfram Sang <wsa@kernel.org>
 ---
- drivers/i2c/i2c-core-acpi.c | 10 ++++++++++
- drivers/i2c/i2c-core-base.c |  7 ++++---
- include/linux/i2c.h         | 18 ++++++++++++++++++
- 3 files changed, 32 insertions(+), 3 deletions(-)
+ Documentation/firmware-guide/acpi/index.rst   |  1 +
+ .../firmware-guide/acpi/non-d0-probe.rst      | 78 +++++++++++++++++++
+ 2 files changed, 79 insertions(+)
+ create mode 100644 Documentation/firmware-guide/acpi/non-d0-probe.rst
 
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 546cc935e035a..c025919cdaaee 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -526,6 +526,16 @@ struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
- }
- EXPORT_SYMBOL_GPL(i2c_acpi_new_device);
- 
-+bool i2c_acpi_waive_d0_probe(struct device *dev)
-+{
-+	struct i2c_driver *driver = to_i2c_driver(dev->driver);
-+	struct acpi_device *adev = ACPI_COMPANION(dev);
+diff --git a/Documentation/firmware-guide/acpi/index.rst b/Documentation/firmware-guide/acpi/index.rst
+index a99ee402b212b..b053b0c3d6969 100644
+--- a/Documentation/firmware-guide/acpi/index.rst
++++ b/Documentation/firmware-guide/acpi/index.rst
+@@ -26,5 +26,6 @@ ACPI Support
+    acpi-lid
+    lpit
+    video_extension
++   non-d0-probe
+    extcon-intel-int3496
+    intel-pmc-mux
+diff --git a/Documentation/firmware-guide/acpi/non-d0-probe.rst b/Documentation/firmware-guide/acpi/non-d0-probe.rst
+new file mode 100644
+index 0000000000000..78781e1ab6a3d
+--- /dev/null
++++ b/Documentation/firmware-guide/acpi/non-d0-probe.rst
+@@ -0,0 +1,78 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+	return driver->flags & I2C_DRV_ACPI_WAIVE_D0_PROBE &&
-+		adev && adev->power.state_for_enumeration >= adev->power.state;
-+}
-+EXPORT_SYMBOL_GPL(i2c_acpi_waive_d0_probe);
++========================================
++Probing devices in other D states than 0
++========================================
 +
- #ifdef CONFIG_ACPI_I2C_OPREGION
- static int acpi_gsb_i2c_read_bytes(struct i2c_client *client,
- 		u8 cmd, u8 *data, u8 data_len)
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 54964fbe3f033..f193f90585841 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -551,7 +551,8 @@ static int i2c_device_probe(struct device *dev)
- 	if (status < 0)
- 		goto err_clear_wakeup_irq;
- 
--	status = dev_pm_domain_attach(&client->dev, true);
-+	status = dev_pm_domain_attach(&client->dev,
-+				      !i2c_acpi_waive_d0_probe(dev));
- 	if (status)
- 		goto err_clear_wakeup_irq;
- 
-@@ -590,7 +591,7 @@ static int i2c_device_probe(struct device *dev)
- err_release_driver_resources:
- 	devres_release_group(&client->dev, client->devres_group_id);
- err_detach_pm_domain:
--	dev_pm_domain_detach(&client->dev, true);
-+	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
- err_clear_wakeup_irq:
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-@@ -621,7 +622,7 @@ static void i2c_device_remove(struct device *dev)
- 
- 	devres_release_group(&client->dev, client->devres_group_id);
- 
--	dev_pm_domain_detach(&client->dev, true);
-+	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
- 	if (!pm_runtime_status_suspended(&client->dev) && adap->bus_regulator)
- 		regulator_disable(adap->bus_regulator);
- 
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 2ce3efbe9198a..16119ac1aa97e 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -11,6 +11,7 @@
- #define _LINUX_I2C_H
- 
- #include <linux/acpi.h>		/* for acpi_handle */
-+#include <linux/bits.h>
- #include <linux/mod_devicetable.h>
- #include <linux/device.h>	/* for struct device */
- #include <linux/sched.h>	/* for completion */
-@@ -222,6 +223,15 @@ enum i2c_alert_protocol {
- 	I2C_PROTOCOL_SMBUS_HOST_NOTIFY,
- };
- 
-+/**
-+ * enum i2c_driver_flags - Flags for an I2C device driver
-+ *
-+ * @I2C_DRV_ACPI_WAIVE_D0_PROBE: Don't put the device in D0 state for probe
-+ */
-+enum i2c_driver_flags {
-+	I2C_DRV_ACPI_WAIVE_D0_PROBE = BIT(0),
-+};
++Introduction
++============
 +
- /**
-  * struct i2c_driver - represent an I2C device driver
-  * @class: What kind of i2c device we instantiate (for detect)
-@@ -236,6 +246,7 @@ enum i2c_alert_protocol {
-  * @detect: Callback for device detection
-  * @address_list: The I2C addresses to probe (for detect)
-  * @clients: List of detected clients we created (for i2c-core use only)
-+ * @flags: A bitmask of flags defined in &enum i2c_driver_flags
-  *
-  * The driver.owner field should be set to the module owner of this driver.
-  * The driver.name field should be set to the name of this driver.
-@@ -294,6 +305,8 @@ struct i2c_driver {
- 	int (*detect)(struct i2c_client *client, struct i2c_board_info *info);
- 	const unsigned short *address_list;
- 	struct list_head clients;
++In some cases it may be preferred to leave certain devices powered off for the
++entire system bootup if powering on these devices has adverse side effects,
++beyond just powering on the said device.
 +
-+	u32 flags;
- };
- #define to_i2c_driver(d) container_of(d, struct i2c_driver, driver)
- 
-@@ -1015,6 +1028,7 @@ u32 i2c_acpi_find_bus_speed(struct device *dev);
- struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
- 				       struct i2c_board_info *info);
- struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle);
-+bool i2c_acpi_waive_d0_probe(struct device *dev);
- #else
- static inline bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
- 					     struct acpi_resource_i2c_serialbus **i2c)
-@@ -1038,6 +1052,10 @@ static inline struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle ha
- {
- 	return NULL;
- }
-+static inline bool i2c_acpi_waive_d0_probe(struct device *dev)
-+{
-+	return false;
-+}
- #endif /* CONFIG_ACPI */
- 
- #endif /* _LINUX_I2C_H */
++How it works
++============
++
++The _DSC (Device State for Configuration) object that evaluates to an integer
++may be used to tell Linux the highest allowed D state for a device during
++probe. The support for _DSC requires support from the kernel bus type if the
++bus driver normally sets the device in D0 state for probe.
++
++The downside of using _DSC is that as the device is not powered on, even if
++there's a problem with the device, the driver likely probes just fine but the
++first user will find out the device doesn't work, instead of a failure at probe
++time. This feature should thus be used sparingly.
++
++I²C
++---
++
++If an I²C driver indicates its support for this by setting the
++I2C_DRV_ACPI_WAIVE_D0_PROBE flag in struct i2c_driver.flags field and the
++_DSC object evaluates to integer higher than the D state of the device,
++the device will not be powered on (put in D0 state) for probe.
++
++D states
++--------
++
++The D states and thus also the allowed values for _DSC are listed below. Refer
++to [1] for more information on device power states.
++
++.. code-block:: text
++
++	Number	State	Description
++	0	D0	Device fully powered on
++	1	D1
++	2	D2
++	3	D3hot
++	4	D3cold	Off
++
++References
++==========
++
++[1] https://uefi.org/specifications/ACPI/6.4/02_Definition_of_Terms/Definition_of_Terms.html#device-power-state-definitions
++
++Example
++=======
++
++An ASL example describing an ACPI device using _DSC object to tell Operating
++System the device should remain powered off during probe looks like this. Some
++objects not relevant from the example point of view have been omitted.
++
++.. code-block:: text
++
++	Device (CAM0)
++        {
++		Name (_HID, "SONY319A")
++		Name (_UID, Zero)
++		Name (_CRS, ResourceTemplate ()
++		{
++			I2cSerialBus(0x0020, ControllerInitiated, 0x00061A80,
++				     AddressingMode7Bit, "\\_SB.PCI0.I2C0",
++				     0x00, ResourceConsumer)
++		})
++		Name (_DSC, 0, NotSerialized)
++		{
++			Return (0x4)
++                }
++	}
 -- 
 2.30.2
 
