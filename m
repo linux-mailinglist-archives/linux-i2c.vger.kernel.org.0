@@ -2,81 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE94E43354B
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 14:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0C94336E8
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 15:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbhJSMDv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Oct 2021 08:03:51 -0400
-Received: from mga12.intel.com ([192.55.52.136]:13690 "EHLO mga12.intel.com"
+        id S235795AbhJSNYC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Oct 2021 09:24:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33514 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230337AbhJSMDu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 19 Oct 2021 08:03:50 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="208590522"
-X-IronPort-AV: E=Sophos;i="5.85,384,1624345200"; 
-   d="scan'208";a="208590522"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2021 05:01:36 -0700
-X-IronPort-AV: E=Sophos;i="5.85,384,1624345200"; 
-   d="scan'208";a="594210343"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.159])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2021 05:01:33 -0700
-Received: from andy by smile with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mcnnu-000THp-DU;
-        Tue, 19 Oct 2021 15:01:14 +0300
-Date:   Tue, 19 Oct 2021 15:01:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v4 1/3] driver core: Provide device_match_acpi_handle()
- helper
-Message-ID: <YW6ziqiIgioxDjq3@smile.fi.intel.com>
-References: <20211014134756.39092-1-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0jqXqhV1FSyuoVwbgwhte7Q4KUQMozggcxCHGPf+Mfw=A@mail.gmail.com>
+        id S235622AbhJSNX6 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 19 Oct 2021 09:23:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 513046137C;
+        Tue, 19 Oct 2021 13:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634649705;
+        bh=7fsumYHDliZuLC11v2hwsWrg44f5IwD62fDRzCRuku8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VAUKxfVAvg8SUdJNNnAGoYRxfRZEkx6scwtL8yAlrxqUpn/mvZ6PHOrXhckH8HQxs
+         7eMkzyT134ChPKz/BS4WuR60eZ2avvsmMFY75RtD2H/AJjnnWp8IpJoSaXxp/M2DXo
+         37oUJT26/muOZrs1pEAD2O5hC8CtsKklU6IeuQ4u71IvJiIY6I8fbV623PV1ReUs3Q
+         GjZ3RyBSP0aRe4EyFL4IQR79+KZo8YowWuTn6BMaPwtX4HkG6QKTrwB/blMKq8SHa/
+         OPPZAW389PgkDNlgpKIfGwGV7kDhaUVUTOHZCZbr18KXPNVjV+fkb0pUghOZEOrCTZ
+         dB7psHbrBgOkA==
+Date:   Tue, 19 Oct 2021 14:21:43 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, alsa-devel@alsa-project.org,
+        kernel@pengutronix.de, Wolfram Sang <wsa@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] sound: soc: tlv320aic3x: Make aic3x_remove() return void
+Message-ID: <YW7GZ5E8a6oFJk88@sirena.org.uk>
+References: <20211019074125.3812513-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jQNrwv3AgDa8+rvQ"
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jqXqhV1FSyuoVwbgwhte7Q4KUQMozggcxCHGPf+Mfw=A@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211019074125.3812513-1-u.kleine-koenig@pengutronix.de>
+X-Cookie: I program, therefore I am.
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 01:42:37PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Oct 14, 2021 at 3:48 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > We have a couple of users of this helper, make it available for them.
-> >
-> > The prototype for the helper is specifically crafted in order to be
-> > easily used with bus_find_device() call. That's why its location is
-> > in the driver core rather than ACPI.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> OK, please feel free to add
-> 
-> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> to all of the patches in this series.
 
-Thank you, Rafael!
+--jQNrwv3AgDa8+rvQ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Greg, can it be applied now?
+On Tue, Oct 19, 2021 at 09:41:25AM +0200, Uwe Kleine-K=F6nig wrote:
+> Up to now aic3x_remove() returns zero unconditionally. Make it return
+> void instead which makes it easier to see in the callers that there is
+> no error to handle.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
 
+--jQNrwv3AgDa8+rvQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFuxmYACgkQJNaLcl1U
+h9AW9Af/TLSSokNc/j9/BxgIdhzcA6Z0KbE4eWBEhdjkYWFmV2B/CgKTAMKsTB1B
+eKe2MifxoCMwDu+mjABczEn85v1h6cUvAe67e1RaY06rmYeSUj0/1ms9lr1MwJS1
+M8klfCbsQGyKgMpzGzpSOWT4H7/5c5/rwpSfzmyQylecKPBlZhLHGYYY2u5Gacdi
+wqQWxbP5cs1F8KsTSoBdKF8nnIyUFPXgOk3SRcecpMhBJMxKDfBt5etVLdJgR3Z0
+Pvm7sgnFgG/vKL7asEWYRbIrw+PDtPN6WUskXoMvS3UmXaX8/ValQXqzAw4VHTAj
+M3fOCjKA2OzciX3JscFxwKulDlZo4A==
+=hEUK
+-----END PGP SIGNATURE-----
+
+--jQNrwv3AgDa8+rvQ--
