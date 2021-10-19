@@ -2,107 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B459433D7E
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 19:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5913F433E3A
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 20:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234630AbhJSRbu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Oct 2021 13:31:50 -0400
-Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:61782 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbhJSRbs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Oct 2021 13:31:48 -0400
-Received: from [192.168.1.18] ([92.140.161.106])
-        by smtp.orange.fr with ESMTPA
-        id csvdmJ16MPNphcsvem4kWR; Tue, 19 Oct 2021 19:29:34 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 19 Oct 2021 19:29:34 +0200
-X-ME-IP: 92.140.161.106
-Subject: Re: [PATCH] i2c: thunderx: Fix some resource leak
-To:     Robert Richter <rric@kernel.org>
-Cc:     jan.glauber@gmail.com, wsa@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <6657505309174d3ea6df14169d42b6df91298470.1634374036.git.christophe.jaillet@wanadoo.fr>
- <YW3j4MF/y4T6Rtzp@rric.localdomain>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Message-ID: <5a3eccff-f39d-29dc-976c-1de7b32e36c5@wanadoo.fr>
-Date:   Tue, 19 Oct 2021 19:29:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S232170AbhJSSRC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Oct 2021 14:17:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44752 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231586AbhJSSRB (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 19 Oct 2021 14:17:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E76C60FC1;
+        Tue, 19 Oct 2021 18:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634667288;
+        bh=+SM1BWHbH2LUlxh8AtYn+MneiN1TVdwLnuJB4dZdQUs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=byfnkPVjenYe/JfxSbZWIYWne0Kj1sE8gy5KJkEspDbt86gRE/5YRaI4IFqG7XT39
+         H+U6ywiTHOo3cmggSafvQ1R864AVq4QhVzKjzdU3eAaXAMaiGWi8jn/wr/4GE0AbuO
+         eD3bj++jBVmIpgjjQV33Uc4G+yy9BI95RCAVCu0wwSgo8lSpWy8UyuJIQWGwxf1yDL
+         9/qX2ll/3HCus5l9gzPpzBuVKZnTfSCjcSK+E9lGChMa1NIxIseia47gLJ8okGcjb/
+         1RubxDJF+CpD27pzeQuVQqwBma+u4+ENVaQopx1C8Rno9+/qtS7iexES+DNFugwF7G
+         l+6gUtZOFcmkA==
+Date:   Tue, 19 Oct 2021 20:14:45 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        jie.deng@intel.com, virtualization@lists.linux-foundation.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
+Subject: Re: [PATCH 1/2] i2c: virtio: disable timeout handling
+Message-ID: <YW8LFTcBuN1bB3PD@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        jie.deng@intel.com, virtualization@lists.linux-foundation.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
+References: <20211019074647.19061-1-vincent.whitchurch@axis.com>
+ <20211019074647.19061-2-vincent.whitchurch@axis.com>
+ <20211019080913.oajrvr2msz5enzvz@vireshk-i7>
+ <YW6Rj/T6dWfMf7lU@kroah.com>
+ <20211019094203.3kjzch7ipbdv7peg@vireshk-i7>
+ <YW6pHkXOPvtidtwS@kroah.com>
+ <20211019143748.wrpqopj2hmpvblh4@vireshk-i7>
 MIME-Version: 1.0
-In-Reply-To: <YW3j4MF/y4T6Rtzp@rric.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Z4xbno6aVwUYspRx"
+Content-Disposition: inline
+In-Reply-To: <20211019143748.wrpqopj2hmpvblh4@vireshk-i7>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Le 18/10/2021 à 23:15, Robert Richter a écrit :
-> On 16.10.21 10:48:26, Christophe JAILLET wrote:
->> We need to undo a 'pci_request_regions()' call in the error handling path
->> of the probe function and in the remove function.
-> 
-> Isn't that devm and thus not needed?
 
-My bad, you are obviously right, sorry for the noise.
+--Z4xbno6aVwUYspRx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I was aware that 'pcim_enable_device()' was turning automagically 
-'pci_alloc_irq_vectors()' into a managed function. But I wasn't for 
-'pci_request_regions()'. Now I'm :)
 
-CJ
+> I think it is set to HZ currently, though I haven't tried big
+> transfers but I still get into some issues with Qemu based stuff.
+> Maybe we can bump it up to few seconds :)
 
-> 
->>
->> Fixes: 22d40209de3b ("i2c: thunderx: Add i2c driver for ThunderX SOC")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->>   drivers/i2c/busses/i2c-thunderx-pcidrv.c | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
->> index 12c90aa0900e..2d37096a6968 100644
->> --- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
->> +++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
->> @@ -177,8 +177,10 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
->>   		return ret;
->>   
-> 
-> There is a pcim_enable_device() call before all that, so the regions
-> should be removed on device release, see pcim_release().
-> 
-> -Robert
-> 
->>   	i2c->twsi_base = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
->> -	if (!i2c->twsi_base)
->> -		return -EINVAL;
->> +	if (!i2c->twsi_base) {
->> +		ret = -EINVAL;
->> +		goto err_release_regions;
->> +	}
->>   
->>   	thunder_i2c_clock_enable(dev, i2c);
->>   	ret = device_property_read_u32(dev, "clock-frequency", &i2c->twsi_freq);
->> @@ -231,6 +233,8 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
->>   
->>   error:
->>   	thunder_i2c_clock_disable(dev, i2c->clk);
->> +err_release_regions:
->> +	pci_release_regions(pdev);
->>   	return ret;
->>   }
->>   
->> @@ -241,6 +245,7 @@ static void thunder_i2c_remove_pci(struct pci_dev *pdev)
->>   	thunder_i2c_smbus_remove(i2c);
->>   	thunder_i2c_clock_disable(&pdev->dev, i2c->clk);
->>   	i2c_del_adapter(&i2c->adap);
->> +	pci_release_regions(pdev);
->>   }
->>   
->>   static const struct pci_device_id thunder_i2c_pci_id_table[] = {
->> -- 
->> 2.30.2
->>
-> 
+If you use adapter->timeout, this can even be set at runtime using a
+ioctl. So, it can adapt to use cases. Of course, the driver should
+initialize it to a sane default if the automatic default (HZ) is not
+suitable.
 
+
+--Z4xbno6aVwUYspRx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFvCxEACgkQFA3kzBSg
+Kbb+yxAAoCt/AZ5kNarMw5Lh1QJZ/R1PY2mAkx/6X6xJdMtT2677sD7PqCNNnoaP
+JoPHTZzPkX6UFFw15vgH8VNnTnMj1zAxmVQNJb2fCdYCYL1En/hoRLVkggrpQ66a
+wOGtjwulBZmp1hHuaaPQT/92bRvG4RuMaBxU34wNq7qXC4PRQlQcxHn35+lHNpRW
+vbxwpUOpgVvcWOYo4aIMZhanDLXQHJwuy0ZZlr5HLvNAvuPLLcf/dd5l0kWOO8Fh
+Y2DmFeBMiduevRcd/dn3+dKts4ORn1mIqLPYaQaYgx8q9Mfy5HSYWgAPWYsW4bnT
+8QAzud6HJuG+LJKiD+oqWgLA/HTjOq26plxGnsSGYB2q5iKaqL/qhyAymepAN7jF
+m1dLSWSdj9++SeAAIOXCU+ux2corGHBcqs/JExwBgRYsh1am/sswZ+XA2/OknIpV
+rXmlLdg1fjqud1EOXpLi70gp/Sxzp4TfknL7PXIwEOlOXcZ2+BV2600DyMQNf0Vc
+5wsjESlpKcaiUxhyTPuYG0jUoqd2rWNtw4p8VUV4BPdDd7dAkrpeZe/Q+1IzjeCr
+t/JUBeAJZr7g7fWIjos5ZiHDiWDvl1aOeFKAl+KpooasFQOUPI4I9w6ivGeqcVNC
+ilP9Avt+vQFlbD7KpY8FQcOt8nLoayjh7cXJQTrlqAO7f7gl2Wo=
+=Ji5I
+-----END PGP SIGNATURE-----
+
+--Z4xbno6aVwUYspRx--
