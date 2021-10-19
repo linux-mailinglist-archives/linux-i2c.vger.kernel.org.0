@@ -2,97 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA69743327E
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 11:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237B84332B6
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 11:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235120AbhJSJlG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Oct 2021 05:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
+        id S234914AbhJSJoV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Oct 2021 05:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235050AbhJSJlE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Oct 2021 05:41:04 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86468C061765
-        for <linux-i2c@vger.kernel.org>; Tue, 19 Oct 2021 02:38:51 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id m20so19514015iol.4
-        for <linux-i2c@vger.kernel.org>; Tue, 19 Oct 2021 02:38:51 -0700 (PDT)
+        with ESMTP id S234680AbhJSJoS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Oct 2021 05:44:18 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF2CC06161C
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Oct 2021 02:42:06 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id o133so17117575pfg.7
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Oct 2021 02:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
-        b=TOvN/3L74NxJ8jkZLAwc1HWcAigE5PqgL50bgmFqgfF5N3Ni/F/hFF6HKKLKTN31yN
-         HevaAXYbPfypt8hhKvSPyehT5ALdXqczNk+5xUwtC+i5sgHXh2uIQwAecZjfCaWU8ix6
-         IP3iNNDeKzM9Rarn67S7Y6Q5meavaw7Mpk+sez5Jm9gTXVkS2K7rH0HxN0wGBD1vTEZW
-         SlZ7Ohjm5TDffwxVe9psHKkZrw9F8ewS3UJdvRp48BugnVC9N6o6tGt7kOuD9dBL9WOI
-         l1dbXlU20FuuDCR1G9eGV6dpPzPq/obtSd+vSUmjw4dvgQ3M4KndmuUgzevCd5/KLP2j
-         AvJA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZObreM2oofTkM3qJIYvGBPc4dPhqrsVSh4sl9pXqX94=;
+        b=gvXmPjPnRSNvISobWg1zZ6bO0AluECpeMJn/Wtis+JgxiwNWlke4JGvx/mqVLqczl8
+         4jegSqD2RFGK0e+025gFJmGB8Qvce8i7b/zZvQ5P1o4tLw1CzTJCwwCocqUq7fuHZO+p
+         MysEs4HafXErdZiKjnpU0yu+cum9rB5wSlO9OOgu1EapetCEmzj0NnS7gBq21lAK4Hmb
+         us2FlYi0wzPlsPFN+EMKrExs6+LEEyUnmsxebLREjpYBNZbdZXV2nC9luLFkNAXb785e
+         VKs72+TSrOMuYyZ1MUsqyan//oK3gDLuHtSMWLNH5V4uXwMqvV5oIPkyMVN3VdplB57K
+         d2Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
-        b=Fg1vQLIeJNTacPNXx2fc9FC+IEDjljlaFblBitscyAw4eQtFeGXRufYCfJ3DuWNt2g
-         L7jgjR/dhRziUQWfM1CjnTa4dqSTmzBhJ3ZSJc/VuGpx24QTLGX/toUEqnflQSWIIrpL
-         rtj6I6PcH1Uecjcxa8lNJP/FFSKvTw4gRuLp9YCnccpoKrpeBpjLG28Aqk5jTHHg2kBj
-         NUo19H4Zk8tqA0z264Hvw+R8v+h4meT44fSqQO8s1lT+F5uzgOmZTKjD7CFOTy5TeEAM
-         8le4z/SEMGqzJeef2U9PuA8tGooz1DFyp6IMzx0QPqkwXs5bxrhVhkEHrxfS+Fj02JBT
-         /6mg==
-X-Gm-Message-State: AOAM530qEIz3EsXVYp1wpQveHqov3B9lalHD6BMfiJatacfKGW+YMuE9
-        cvLBPMn8iEXnd8PIX/p6HNXNjFNAaev1AGqOfZU=
-X-Google-Smtp-Source: ABdhPJzMH7/Viv+gmOFi/wRxRbcc549EbhNxq1WBmFuuCl5Y1sIaNw3hPc5P9A8SHm6QnP1HNGNAvecvirmJS/oiL6w=
-X-Received: by 2002:a02:6f5d:: with SMTP id b29mr3319085jae.113.1634636331013;
- Tue, 19 Oct 2021 02:38:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZObreM2oofTkM3qJIYvGBPc4dPhqrsVSh4sl9pXqX94=;
+        b=pYYezQz6dNW9G/ByT9B6jXaDAe1SMPYSNTSmlzW5bd34rd1KH/BeOoJPPsJocu+gMU
+         pcZavoaAfc9XiMDcBwY8tPGAN1tKZQ308KVhVqCqX30rq5s3wdQ0lvaf08H8vzz3IXbr
+         EjCcFiZfofVSbAoosf5hcvf8xEj21Kl1BgajZqo+ofY8NIIqgr+TBU+biW2anJMcbOQ3
+         otUTnVwL5Bf42X/iZIrDq5l4mLn4Du4v58g4GVROR1TJg6MextwX8gs5aEgnpZwyI3em
+         mb0ETJNroLA4EcEcJj+RdFXhcOtKt59LkN2MWhkeKrVCzKQ4J/ewJo99cTLOl54trXjP
+         9pkQ==
+X-Gm-Message-State: AOAM530LAFRgI7nct1GID/L+lCEVw6CuB0NP+kUVvr8HgjZ2ekySKuT5
+        I6XM06ltstzn7citkW/UPv/b2A==
+X-Google-Smtp-Source: ABdhPJxcbC3OBgUMO+Lzh3jDx/hudBuFmrzaHwnRyTDEgDNQv+z9BMlhRENFVRvc+ZiQhDZAdCws7A==
+X-Received: by 2002:a63:154:: with SMTP id 81mr27360406pgb.38.1634636525679;
+        Tue, 19 Oct 2021 02:42:05 -0700 (PDT)
+Received: from localhost ([106.201.113.61])
+        by smtp.gmail.com with ESMTPSA id u4sm2037379pjg.54.2021.10.19.02.42.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Oct 2021 02:42:05 -0700 (PDT)
+Date:   Tue, 19 Oct 2021 15:12:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>, wsa@kernel.org,
+        jie.deng@intel.com, virtualization@lists.linux-foundation.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
+Subject: Re: [PATCH 1/2] i2c: virtio: disable timeout handling
+Message-ID: <20211019094203.3kjzch7ipbdv7peg@vireshk-i7>
+References: <20211019074647.19061-1-vincent.whitchurch@axis.com>
+ <20211019074647.19061-2-vincent.whitchurch@axis.com>
+ <20211019080913.oajrvr2msz5enzvz@vireshk-i7>
+ <YW6Rj/T6dWfMf7lU@kroah.com>
 MIME-Version: 1.0
-Received: by 2002:a92:c7c6:0:0:0:0:0 with HTTP; Tue, 19 Oct 2021 02:38:50
- -0700 (PDT)
-Reply-To: megaritalouisdrayfu199@yahoo.com
-From:   "Mrs. Margarita Louis-Dreyfus." <anniewei112@gmail.com>
-Date:   Mon, 18 Oct 2021 21:38:50 -1200
-Message-ID: <CAGT4pMkzKn8mfeY05OAG04CCAxodKEVDUk46D=O7cfK8+n1=tA@mail.gmail.com>
-Subject: Charitable funds to help the less privilege!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YW6Rj/T6dWfMf7lU@kroah.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---=20
-Hello,
+On 19-10-21, 11:36, Greg KH wrote:
+> What is the "other side" here?  Is it something that you trust or not?
 
-I am sorry to encroach into your privacy in this manner, my name
-Margarita Louis-Dreyfus , I find it pleasurable to offer you my
-partnership in business, i only pray at this time that your email
-address is still valid. I want to solicit your attention to receive
-money on my behalf for humanitarian project to help the less
-priviledge.
+Other side can be a remote processor (for remoteproc over virtio or
+something similar), or traditionally it can be host OS or host
+firmware providing virtualisation to a Guest running Linux (this
+driver). Or something else..
 
-The purpose of my contacting you is because my status would not permit
-me to do this alone. Given my current state of health, I have decided
-to donate Ninety -Eight Million United State Dollars to establish a
-foundation with your help to reach out to the less privilege, orphans,
-sick and homeless people in your country who will receive their
-blessings as i promised my God before i leave this earth.
+I would incline towards "we trust the other side" here.
 
-I got your contact through my personal search, you were revealed as
-being quite astute in private entrepreneurship, and i have no doubt
-that you can handle this huge financial transaction. Please contact my
-executor for more information:
+> Usually we trust the hardware, but if you do not trust the hardware,
+> then yes, you need to have a timeout here.
 
-Mr. Ford Spencer(Attorney at Law).
-For: Mrs. Margarita Louis-Dreyfus
-LEGAL DEPARTMENT LAWSON & ASSOCIATES
-(JUSTICE, FAIRPLAY & EQUITY)
-Email: fordspencer828@yahoo.com, fordspencereqs828@gmail.com
-Office: +1-970-414-1400
-+1-702-714-3422
-Mobile: +1 916 269 2733
-Fax: +1-970-414-1433
-=C2=AE Property of Steven C Spence PA.
+The other side is the software that has access to the _Real_ hardware,
+and so we should trust it. So we can have a actually have a completion
+without timeout here, interesting.
 
-Your earliest response to this letter will be appreciated.
-
-Kind Regards,
-
-Mrs. Margarita Louis-Dreyfus.
+-- 
+viresh
