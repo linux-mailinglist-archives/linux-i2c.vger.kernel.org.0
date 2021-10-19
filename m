@@ -2,78 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 719E4433485
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 13:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE94E43354B
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 14:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235379AbhJSLTE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Oct 2021 07:19:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52770 "EHLO mail.kernel.org"
+        id S231250AbhJSMDv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Oct 2021 08:03:51 -0400
+Received: from mga12.intel.com ([192.55.52.136]:13690 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235370AbhJSLTD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 19 Oct 2021 07:19:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 790AF6128B;
-        Tue, 19 Oct 2021 11:16:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634642211;
-        bh=zowoZA2DNh4UwkN2v6Xd3q8lGJcDY+Iha2h2tBForeA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yj6I2acSnV7xWPZ/fC3LkxRxWyygbqXfz1qRVSydcPPlMI9fO/W8abjJAuGJIjBMz
-         wQNHWiV28UR+80KR3//XNGg5nj2AyR8gLF4xr69/BPb+e/JaGrQdtXSVZUFDAzzLbb
-         gzgAIWwBgxIPcuP/6xkA5EYLifKBaT/enpUvNGvI=
-Date:   Tue, 19 Oct 2021 13:16:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>, wsa@kernel.org,
-        jie.deng@intel.com, virtualization@lists.linux-foundation.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com
-Subject: Re: [PATCH 1/2] i2c: virtio: disable timeout handling
-Message-ID: <YW6pHkXOPvtidtwS@kroah.com>
-References: <20211019074647.19061-1-vincent.whitchurch@axis.com>
- <20211019074647.19061-2-vincent.whitchurch@axis.com>
- <20211019080913.oajrvr2msz5enzvz@vireshk-i7>
- <YW6Rj/T6dWfMf7lU@kroah.com>
- <20211019094203.3kjzch7ipbdv7peg@vireshk-i7>
+        id S230337AbhJSMDu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 19 Oct 2021 08:03:50 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="208590522"
+X-IronPort-AV: E=Sophos;i="5.85,384,1624345200"; 
+   d="scan'208";a="208590522"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2021 05:01:36 -0700
+X-IronPort-AV: E=Sophos;i="5.85,384,1624345200"; 
+   d="scan'208";a="594210343"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.72.159])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2021 05:01:33 -0700
+Received: from andy by smile with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mcnnu-000THp-DU;
+        Tue, 19 Oct 2021 15:01:14 +0300
+Date:   Tue, 19 Oct 2021 15:01:14 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH v4 1/3] driver core: Provide device_match_acpi_handle()
+ helper
+Message-ID: <YW6ziqiIgioxDjq3@smile.fi.intel.com>
+References: <20211014134756.39092-1-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0jqXqhV1FSyuoVwbgwhte7Q4KUQMozggcxCHGPf+Mfw=A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211019094203.3kjzch7ipbdv7peg@vireshk-i7>
+In-Reply-To: <CAJZ5v0jqXqhV1FSyuoVwbgwhte7Q4KUQMozggcxCHGPf+Mfw=A@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 03:12:03PM +0530, Viresh Kumar wrote:
-> On 19-10-21, 11:36, Greg KH wrote:
-> > What is the "other side" here?  Is it something that you trust or not?
+On Fri, Oct 15, 2021 at 01:42:37PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Oct 14, 2021 at 3:48 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > We have a couple of users of this helper, make it available for them.
+> >
+> > The prototype for the helper is specifically crafted in order to be
+> > easily used with bus_find_device() call. That's why its location is
+> > in the driver core rather than ACPI.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> Other side can be a remote processor (for remoteproc over virtio or
-> something similar), or traditionally it can be host OS or host
-> firmware providing virtualisation to a Guest running Linux (this
-> driver). Or something else..
+> OK, please feel free to add
 > 
-> I would incline towards "we trust the other side" here.
-
-That's in contradition with what other people seem to think the virtio
-drivers are for, see this crazy thread for details about that:
-	https://lore.kernel.org/all/20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com/
-
-You can "trust" the hardware, but also handle things when hardware is
-broken, which is most often the case in the real world.
-
-So why is having a timeout a problem here?  If you have an overloaded
-system, you want things to time out so that you can start to recover.
-
-> > Usually we trust the hardware, but if you do not trust the hardware,
-> > then yes, you need to have a timeout here.
+> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> The other side is the software that has access to the _Real_ hardware,
-> and so we should trust it. So we can have a actually have a completion
-> without timeout here, interesting.
+> to all of the patches in this series.
 
-And if that hardware stops working?  Timeouts are good to have, why not
-just bump it up a bit if you are running into it in a real-world
-situation?
+Thank you, Rafael!
 
-thanks,
+Greg, can it be applied now?
 
-greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
