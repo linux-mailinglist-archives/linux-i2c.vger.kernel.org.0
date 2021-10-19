@@ -2,431 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09492432D9F
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 08:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21403432FD8
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 09:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233874AbhJSGEW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Oct 2021 02:04:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44996 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229527AbhJSGEW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 19 Oct 2021 02:04:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B4E860EBB;
-        Tue, 19 Oct 2021 06:02:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634623329;
-        bh=s/JBgwE7ICAcIzIuVBf7nWx+Nokb08B4f6Yr/Z68D/4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=q1MvsQbdtSZudoOehmxVfSx6KJMkG6tE3iwWyCBWkBdr3IKgJbtyq+41KA1pDwse/
-         iQkJWfAUJU/WSxobrc9JpUMmHpBsQNWaJYIDjU6anhhhicEoVvBvwXnWmcy8fuukEt
-         SHaJ9huG6noD0QXfNHEjhqHnoeyYbQeiBJZXEh5IcYLyyjB3ECft+jgXh7euW6khWi
-         ELrkzyDsxwvpsqq8Hn+5QcbMqtIWFZ1epuE/iFWNQ8eouPyyHRrlsA08OsQpowjFFG
-         S2c+/Udi1PvO7H8C+f+3Q3fGvHBZ4OPD9s0SpAzE2DsKN7a+tMeIvWa2lFjEQAprvQ
-         SQkTzoe1XVsNg==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] i2c: qcom-geni: Add support for GPI DMA
-Date:   Tue, 19 Oct 2021 11:31:58 +0530
-Message-Id: <20211019060158.1482722-1-vkoul@kernel.org>
-X-Mailer: git-send-email 2.31.1
+        id S231701AbhJSHnv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Oct 2021 03:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230207AbhJSHnv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Oct 2021 03:43:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E904AC06161C
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Oct 2021 00:41:38 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mcjka-0000v2-6B; Tue, 19 Oct 2021 09:41:32 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mcjkY-0002Tz-Js; Tue, 19 Oct 2021 09:41:30 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mcjkY-0003bQ-It; Tue, 19 Oct 2021 09:41:30 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, kernel@pengutronix.de,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] sound: soc: tlv320aic3x: Make aic3x_remove() return void
+Date:   Tue, 19 Oct 2021 09:41:25 +0200
+Message-Id: <20211019074125.3812513-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Patch-Hashes: v=1; h=sha256; i=8w7HYJGqdbQ2kbG1aXspZbTyWRRLPAjmywmDfVm7IYA=; m=PnSaQHMz3IEmULDyb5K8OkLrNaSYGahxv3SwQ4WTGOI=; p=hotap3Y2LDS3qFowdf7lx0zLRrc6B5QEQak9kgN63sU=; g=1da81ec36054ff0ab34683732bddc543160beea0
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFudqEACgkQwfwUeK3K7AmTdgf8DQJ 0uk2BQZFdvyF2Xz5VfiursT8uoSv3l5N+trPg1OlUFH28NpX5TfbJbG9U1dTyYvfBuKLgP0kV1Ct/ lAHWqKMAW34TwuATbcN04cLKnfPUNfsaGftQzmEHEVMXLd6mNWj+HHDTsAcCbyJ09Ia5FQqB1f4Z2 7s/oeIKMYn9wrENnsaooqEbkDpIecefxNZAIa3VV80JtZ1QzI9vR7tVg8z5ledzm3Q1y133NJMsWS amKJvms6bIOTQEkAbdnvxxk8W/RLEQuCcE3VVwNm5l09CPGhgyjaj+7OfUzJCMnpuIPOfwPFhfRm1 paKrfz1WuPr60Q1jYF4Si+xYWfyQemA==
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This adds capability to use GSI DMA for I2C transfers
+Up to now aic3x_remove() returns zero unconditionally. Make it return
+void instead which makes it easier to see in the callers that there is
+no error to handle.
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Also the return value of i2c and spi remove callbacks is ignored anyway.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
-Changes since v3:
- - remove separate tx and rx function for gsi dma and make a common one
- - remove global structs and use local variables instead
+ sound/soc/codecs/tlv320aic3x-i2c.c | 4 +++-
+ sound/soc/codecs/tlv320aic3x-spi.c | 4 +++-
+ sound/soc/codecs/tlv320aic3x.c     | 3 +--
+ sound/soc/codecs/tlv320aic3x.h     | 2 +-
+ 4 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 6d635a7c104c..b783d85559f5 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -3,7 +3,9 @@
+diff --git a/sound/soc/codecs/tlv320aic3x-i2c.c b/sound/soc/codecs/tlv320aic3x-i2c.c
+index cd0558ed4dd4..2f272bc3f5da 100644
+--- a/sound/soc/codecs/tlv320aic3x-i2c.c
++++ b/sound/soc/codecs/tlv320aic3x-i2c.c
+@@ -32,7 +32,9 @@ static int aic3x_i2c_probe(struct i2c_client *i2c, const struct i2c_device_id *i
  
- #include <linux/acpi.h>
- #include <linux/clk.h>
-+#include <linux/dmaengine.h>
- #include <linux/dma-mapping.h>
-+#include <linux/dma/qcom-gpi-dma.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -48,6 +50,8 @@
- #define LOW_COUNTER_SHFT	10
- #define CYCLE_COUNTER_MSK	GENMASK(9, 0)
- 
-+#define I2C_PACK_EN		(BIT(0) | BIT(1))
+ static int aic3x_i2c_remove(struct i2c_client *i2c)
+ {
+-	return aic3x_remove(&i2c->dev);
++	aic3x_remove(&i2c->dev);
 +
- enum geni_i2c_err_code {
- 	GP_IRQ0,
- 	NACK,
-@@ -72,6 +76,11 @@ enum geni_i2c_err_code {
- #define XFER_TIMEOUT		HZ
- #define RST_TIMEOUT		HZ
- 
-+enum i2c_se_mode {
-+	I2C_FIFO_SE_DMA,
-+	I2C_GPI_DMA,
-+};
-+
- struct geni_i2c_dev {
- 	struct geni_se se;
- 	u32 tx_wm;
-@@ -89,6 +98,10 @@ struct geni_i2c_dev {
- 	void *dma_buf;
- 	size_t xfer_len;
- 	dma_addr_t dma_addr;
-+	struct dma_chan *tx_c;
-+	struct dma_chan *rx_c;
-+	bool cfg_sent;
-+	enum i2c_se_mode se_mode;
- };
- 
- struct geni_i2c_err_log {
-@@ -456,6 +469,171 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	return gi2c->err;
++	return 0;
  }
  
-+static void i2c_gsi_cb_result(void *cb, const struct dmaengine_result *result)
-+{
-+	struct geni_i2c_dev *gi2c = cb;
-+
-+	if (result->result != DMA_TRANS_NOERROR) {
-+		dev_err(gi2c->se.dev, "DMA txn failed:%d\n", result->result);
-+		return;
-+	}
-+
-+	if (result->residue)
-+		dev_dbg(gi2c->se.dev, "DMA xfer has pending: %d\n", result->residue);
-+
-+	complete(&gi2c->done);
-+}
-+
-+static void geni_i2c_gpi_unmap(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
-+			       void *tx_buf, dma_addr_t tx_addr,
-+			       void *rx_buf, dma_addr_t rx_addr)
-+{
-+	if (tx_buf) {
-+		dma_unmap_single(gi2c->se.dev->parent, tx_addr, msg->len, DMA_TO_DEVICE);
-+		i2c_put_dma_safe_msg_buf(tx_buf, msg, false);
-+	}
-+
-+	if (rx_buf) {
-+		dma_unmap_single(gi2c->se.dev->parent, rx_addr, msg->len, DMA_FROM_DEVICE);
-+		i2c_put_dma_safe_msg_buf(rx_buf, msg, false);
-+	}
-+}
-+
-+static int geni_i2c_gpi(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
-+			   struct dma_slave_config *config, dma_addr_t *dma_addr_p,
-+			   void **buf, unsigned int op, struct dma_chan *dma_chan)
-+{
-+	struct gpi_i2c_config *peripheral;
-+	unsigned int flags;
-+	void *dma_buf = &buf;
-+	dma_addr_t addr;
-+	enum dma_data_direction map_dirn;
-+	enum dma_transfer_direction dma_dirn;
-+	struct dma_async_tx_descriptor *desc;
-+	int ret;
-+
-+	peripheral = config->peripheral_config;
-+
-+	dma_buf = i2c_get_dma_safe_msg_buf(msg, 1);
-+	if (!dma_buf)
-+		return -ENOMEM;
-+
-+	if (op == I2C_WRITE)
-+		map_dirn = DMA_TO_DEVICE;
-+	else
-+		map_dirn = DMA_FROM_DEVICE;
-+
-+	addr = dma_map_single(gi2c->se.dev->parent, dma_buf, msg->len, map_dirn);
-+	if (dma_mapping_error(gi2c->se.dev->parent, addr)) {
-+		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
-+		return -ENOMEM;
-+	}
-+
-+	peripheral->rx_len = msg->len;
-+	peripheral->op = op;
-+
-+	ret = dmaengine_slave_config(dma_chan, config);
-+	if (ret) {
-+		dev_err(gi2c->se.dev, "dma config error: %d for op:%d\n", ret, op);
-+		goto err_config;
-+	}
-+
-+	peripheral->set_config =  false;
-+	peripheral->multi_msg = true;
-+	flags = DMA_PREP_INTERRUPT | DMA_CTRL_ACK;
-+
-+	if (op == I2C_WRITE)
-+		dma_dirn = DMA_MEM_TO_DEV;
-+	else
-+		dma_dirn = DMA_DEV_TO_MEM;
-+
-+	desc = dmaengine_prep_slave_single(dma_chan, addr, msg->len, dma_dirn, flags);
-+	if (!desc) {
-+		dev_err(gi2c->se.dev, "prep_slave_sg failed\n");
-+		ret = -EIO;
-+		goto err_config;
-+	}
-+
-+	desc->callback_result = i2c_gsi_cb_result;
-+	desc->callback_param = gi2c;
-+
-+	dmaengine_submit(desc);
-+	*dma_addr_p = addr;
-+
-+	return 0;
-+
-+err_config:
-+	dma_unmap_single(gi2c->se.dev->parent, addr, msg->len, map_dirn);
-+	i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
-+	return ret;
-+}
-+
-+static int geni_i2c_gsi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], int num)
-+{
-+	struct dma_slave_config config = {};
-+	struct gpi_i2c_config peripheral = {};
-+	int i, ret = 0, timeout, stretch;
-+	dma_addr_t tx_addr, rx_addr;
-+	void *tx_buf = NULL, *rx_buf = NULL;
-+
-+	config.peripheral_config = &peripheral;
-+	config.peripheral_size = sizeof(peripheral);
-+
-+	if (!gi2c->cfg_sent) {
-+		const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
-+
-+		gi2c->cfg_sent = true;
-+		peripheral.pack_enable = I2C_PACK_EN;
-+		peripheral.cycle_count = itr->t_cycle_cnt;
-+		peripheral.high_count = itr->t_high_cnt;
-+		peripheral.low_count = itr->t_low_cnt;
-+		peripheral.clk_div = itr->clk_div;
-+		peripheral.set_config =  true;
-+	}
-+	peripheral.multi_msg = false;
-+
-+	for (i = 0; i < num; i++) {
-+		gi2c->cur = &msgs[i];
-+		dev_dbg(gi2c->se.dev, "msg[%d].len:%d\n", i, gi2c->cur->len);
-+
-+		stretch = (i < (num - 1));
-+		peripheral.addr = msgs[i].addr;
-+		peripheral.stretch = stretch;
-+
-+		if (msgs[i].flags & I2C_M_RD) {
-+			ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &rx_addr, &rx_buf, I2C_READ, gi2c->rx_c);
-+			if (ret)
-+				goto err;
-+		}
-+
-+		ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
-+		if (ret)
-+			goto err;
-+
-+		if (msgs[i].flags & I2C_M_RD)
-+			dma_async_issue_pending(gi2c->rx_c);
-+		dma_async_issue_pending(gi2c->tx_c);
-+
-+		timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
-+		if (!timeout) {
-+			dev_err(gi2c->se.dev, "I2C timeout gsi flags:%d addr:0x%x\n",
-+				gi2c->cur->flags, gi2c->cur->addr);
-+			gi2c->err = -ETIMEDOUT;
-+			goto err;
-+		}
-+
-+		geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
-+	}
-+
-+	return 0;
-+
-+err:
-+	dmaengine_terminate_sync(gi2c->rx_c);
-+	dmaengine_terminate_sync(gi2c->tx_c);
-+	geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
-+	return ret;
-+}
-+
- static int geni_i2c_xfer(struct i2c_adapter *adap,
- 			 struct i2c_msg msgs[],
- 			 int num)
-@@ -475,6 +653,12 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 	}
+ static const struct i2c_device_id aic3x_i2c_id[] = {
+diff --git a/sound/soc/codecs/tlv320aic3x-spi.c b/sound/soc/codecs/tlv320aic3x-spi.c
+index 8c7b6bb9223f..494e84402232 100644
+--- a/sound/soc/codecs/tlv320aic3x-spi.c
++++ b/sound/soc/codecs/tlv320aic3x-spi.c
+@@ -37,7 +37,9 @@ static int aic3x_spi_probe(struct spi_device *spi)
  
- 	qcom_geni_i2c_conf(gi2c);
-+
-+	if (gi2c->se_mode == I2C_GPI_DMA) {
-+		ret = geni_i2c_gsi_xfer(gi2c, msgs, num);
-+		goto geni_i2c_txn_ret;
-+	}
-+
- 	for (i = 0; i < num; i++) {
- 		u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
- 
-@@ -489,6 +673,7 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 		if (ret)
- 			break;
- 	}
-+geni_i2c_txn_ret:
- 	if (ret == 0)
- 		ret = num;
- 
-@@ -517,11 +702,49 @@ static const struct acpi_device_id geni_i2c_acpi_match[] = {
- MODULE_DEVICE_TABLE(acpi, geni_i2c_acpi_match);
- #endif
- 
-+static void release_gpi_dma(struct geni_i2c_dev *gi2c)
-+{
-+	if (gi2c->rx_c) {
-+		dma_release_channel(gi2c->rx_c);
-+		gi2c->rx_c = NULL;
-+	}
-+	if (gi2c->tx_c) {
-+		dma_release_channel(gi2c->tx_c);
-+		gi2c->tx_c = NULL;
-+	}
-+}
-+
-+static int setup_gpi_dma(struct geni_i2c_dev *gi2c)
-+{
-+	int ret;
-+
-+	geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
-+	gi2c->tx_c = dma_request_chan(gi2c->se.dev, "tx");
-+	ret = dev_err_probe(gi2c->se.dev, IS_ERR(gi2c->tx_c), "Failed to get tx DMA ch\n");
-+	if (ret < 0)
-+		goto err_tx;
-+
-+	gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
-+	ret = dev_err_probe(gi2c->se.dev, IS_ERR(gi2c->rx_c), "Failed to get rx DMA ch\n");
-+	if (ret < 0)
-+		goto err_rx;
-+
-+	dev_dbg(gi2c->se.dev, "Grabbed GPI dma channels\n");
-+	return 0;
-+
-+err_rx:
-+	dma_release_channel(gi2c->tx_c);
-+	gi2c->tx_c = NULL;
-+err_tx:
-+	gi2c->rx_c = NULL;
-+	return ret;
-+}
-+
- static int geni_i2c_probe(struct platform_device *pdev)
+ static int aic3x_spi_remove(struct spi_device *spi)
  {
- 	struct geni_i2c_dev *gi2c;
- 	struct resource *res;
--	u32 proto, tx_depth;
-+	u32 proto, tx_depth, fifo_disable;
- 	int ret;
- 	struct device *dev = &pdev->dev;
- 
-@@ -601,27 +824,52 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 	proto = geni_se_read_proto(&gi2c->se);
--	tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
- 	if (proto != GENI_SE_I2C) {
- 		dev_err(dev, "Invalid proto %d\n", proto);
- 		geni_se_resources_off(&gi2c->se);
- 		return -ENXIO;
- 	}
--	gi2c->tx_wm = tx_depth - 1;
--	geni_se_init(&gi2c->se, gi2c->tx_wm, tx_depth);
--	geni_se_config_packing(&gi2c->se, BITS_PER_BYTE, PACKING_BYTES_PW,
--							true, true, true);
+-	return aic3x_remove(&spi->dev);
++	aic3x_remove(&spi->dev);
 +
-+	fifo_disable = readl_relaxed(gi2c->se.base + GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
-+
-+	switch (fifo_disable) {
-+	case 1:
-+		ret = setup_gpi_dma(gi2c);
-+		if (!ret) { /* success case */
-+			gi2c->se_mode = I2C_GPI_DMA;
-+			geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
-+			dev_dbg(dev, "Using GPI DMA mode for I2C\n");
-+			break;
-+		}
-+		/*
-+		 * in case of failure to get dma channel, we can till do the
-+		 * FIFO mode, so fallthrough
-+		 */
-+		dev_warn(dev, "FIFO mode disabled, but couldn't get DMA, fall back to FIFO mode\n");
-+		fallthrough;
-+
-+	case 0:
-+		gi2c->se_mode = I2C_FIFO_SE_DMA;
-+		tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
-+		gi2c->tx_wm = tx_depth - 1;
-+		geni_se_init(&gi2c->se, gi2c->tx_wm, tx_depth);
-+		geni_se_config_packing(&gi2c->se, BITS_PER_BYTE,
-+				       PACKING_BYTES_PW, true, true, true);
-+
-+		dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
-+
-+		break;
-+	}
-+
- 	ret = geni_se_resources_off(&gi2c->se);
- 	if (ret) {
- 		dev_err(dev, "Error turning off resources %d\n", ret);
--		return ret;
-+		goto err_dma;
- 	}
- 
- 	ret = geni_icc_disable(&gi2c->se);
- 	if (ret)
--		return ret;
--
--	dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
-+		goto err_dma;
- 
- 	gi2c->suspended = 1;
- 	pm_runtime_set_suspended(gi2c->se.dev);
-@@ -633,18 +881,23 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(dev, "Error adding i2c adapter %d\n", ret);
- 		pm_runtime_disable(gi2c->se.dev);
--		return ret;
-+		goto err_dma;
- 	}
- 
- 	dev_dbg(dev, "Geni-I2C adaptor successfully added\n");
- 
- 	return 0;
-+
-+err_dma:
-+	release_gpi_dma(gi2c);
-+	return ret;
++	return 0;
  }
  
- static int geni_i2c_remove(struct platform_device *pdev)
- {
- 	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
+ static const struct spi_device_id aic3x_spi_id[] = {
+diff --git a/sound/soc/codecs/tlv320aic3x.c b/sound/soc/codecs/tlv320aic3x.c
+index 7731593a5509..d53037b1509d 100644
+--- a/sound/soc/codecs/tlv320aic3x.c
++++ b/sound/soc/codecs/tlv320aic3x.c
+@@ -1870,7 +1870,7 @@ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver
+ }
+ EXPORT_SYMBOL(aic3x_probe);
  
-+	release_gpi_dma(gi2c);
- 	i2c_del_adapter(&gi2c->adap);
- 	pm_runtime_disable(gi2c->se.dev);
- 	return 0;
+-int aic3x_remove(struct device *dev)
++void aic3x_remove(struct device *dev)
+ {
+ 	struct aic3x_priv *aic3x = dev_get_drvdata(dev);
+ 
+@@ -1881,7 +1881,6 @@ int aic3x_remove(struct device *dev)
+ 		gpio_set_value(aic3x->gpio_reset, 0);
+ 		gpio_free(aic3x->gpio_reset);
+ 	}
+-	return 0;
+ }
+ EXPORT_SYMBOL(aic3x_remove);
+ 
+diff --git a/sound/soc/codecs/tlv320aic3x.h b/sound/soc/codecs/tlv320aic3x.h
+index 7e0063913017..14298f9e6d9b 100644
+--- a/sound/soc/codecs/tlv320aic3x.h
++++ b/sound/soc/codecs/tlv320aic3x.h
+@@ -14,7 +14,7 @@ struct regmap_config;
+ 
+ extern const struct regmap_config aic3x_regmap;
+ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver_data);
+-int aic3x_remove(struct device *dev);
++void aic3x_remove(struct device *dev);
+ 
+ #define AIC3X_MODEL_3X 0
+ #define AIC3X_MODEL_33 1
 -- 
-2.31.1
+2.30.2
 
