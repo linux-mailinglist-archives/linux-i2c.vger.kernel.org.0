@@ -2,112 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB22433886
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 16:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDED43387E
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Oct 2021 16:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbhJSOlf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Oct 2021 10:41:35 -0400
-Received: from mga01.intel.com ([192.55.52.88]:57346 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229641AbhJSOle (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 19 Oct 2021 10:41:34 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10142"; a="252001992"
-X-IronPort-AV: E=Sophos;i="5.87,164,1631602800"; 
-   d="scan'208";a="252001992"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2021 07:17:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,164,1631602800"; 
-   d="scan'208";a="661823740"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.56])
-  by orsmga005.jf.intel.com with ESMTP; 19 Oct 2021 07:17:04 -0700
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        ck+kernelbugzilla@bl4ckb0x.de, stephane.poignant@protonmail.com
-Subject: [PATCH] i2c: i801: Fix interrupt storm from SMB_ALERT signal
-Date:   Tue, 19 Oct 2021 17:17:00 +0300
-Message-Id: <20211019141700.764413-1-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
+        id S229641AbhJSOkG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Oct 2021 10:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbhJSOkE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Oct 2021 10:40:04 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E7BC061746
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Oct 2021 07:37:52 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id n11so13812848plf.4
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Oct 2021 07:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=CIecaATj4T4Z7qYQY+MZOASityIhhLivg5T3isTLezg=;
+        b=K+IX3Vwyw6PvNlEeKvoJECnjpAQ+tkGq8g2/R/3Z48+kM7c1VCYYreHnYbMVVFcOof
+         uXLGvd/NkaIadqfUYAMerkL7JOTWBdXxnwHN7h2Q5GQSyoNPRzoHwNqVWloSN3/255CH
+         SP+rJfm7Ec4Y32ZlfD/ieoW6c9JqcgMHE748Rudvu0cIPIwrwVPmY5kp6mDGOs7ZssjT
+         MHByEPF1i2tmet0mT3njVAbtQdJTuVPG0vVYKccX49R5xQcEDuUXQKy5OSyz3fMXSUfJ
+         iXsbXp/yXl77AovgvglF9qZ1jTiCaV71XNAaektdjAcWYR6d5TgCJbG8TnkAb7Onn7xJ
+         7JsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CIecaATj4T4Z7qYQY+MZOASityIhhLivg5T3isTLezg=;
+        b=PsdgmPRpBEqoaXgd+IudyLFbRVmEw3mmxLRjIUYDRnmQHd+VLWQc/Tx+wAS5OVsAlk
+         6wT0lnAMFUf7MbfNBLJ7nMTLgiN7QIe99cg89cKSM/d+El4RUH802TKQ4Or1x3ZtsCGK
+         RhoUVyRaMLOqbBrDRGwiWaVFN9BJe/jZXlo23kec62+UiHdCTlhSPxTuvhn6lBVkGVhQ
+         SO3ZACo6NhoeoqkEmBDe1CIhEyvPaLiz6/EX9WpziwbdOw4vi5PMjDGtAmS6qLbx97CD
+         XHXa4mRW74tqjgzulfIvz/Q8oE947187txL2HW7iaKDrLGeJlCoOuq4rgKSNw5AMegpS
+         H5uQ==
+X-Gm-Message-State: AOAM531k8+vdKfIWq4fJEonGUX8J951cwAgmITFLjY2pIp+AQk5YU4eE
+        DhYd6oUut+HP7pxWLPpvWLUAow==
+X-Google-Smtp-Source: ABdhPJwi1zRSay/RiMuygWybe3OJlMn3edmEEKlLPd7Fpn5/Gz2ZpgAXfHwv4popfZhhKukTBL9uFg==
+X-Received: by 2002:a17:90a:f292:: with SMTP id fs18mr128645pjb.229.1634654271626;
+        Tue, 19 Oct 2021 07:37:51 -0700 (PDT)
+Received: from localhost ([106.201.113.61])
+        by smtp.gmail.com with ESMTPSA id s20sm2167476pfk.131.2021.10.19.07.37.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Oct 2021 07:37:51 -0700 (PDT)
+Date:   Tue, 19 Oct 2021 20:07:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>, wsa@kernel.org,
+        jie.deng@intel.com, virtualization@lists.linux-foundation.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
+Subject: Re: [PATCH 1/2] i2c: virtio: disable timeout handling
+Message-ID: <20211019143748.wrpqopj2hmpvblh4@vireshk-i7>
+References: <20211019074647.19061-1-vincent.whitchurch@axis.com>
+ <20211019074647.19061-2-vincent.whitchurch@axis.com>
+ <20211019080913.oajrvr2msz5enzvz@vireshk-i7>
+ <YW6Rj/T6dWfMf7lU@kroah.com>
+ <20211019094203.3kjzch7ipbdv7peg@vireshk-i7>
+ <YW6pHkXOPvtidtwS@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YW6pHkXOPvtidtwS@kroah.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Currently interrupt storm will occur from i2-i801 after first transaction
-if SMB_ALERT signal is enabled and ever asserted, even before the driver
-is loaded and does not recover because that interrupt is not
-acknowledged.
+On 19-10-21, 13:16, Greg KH wrote:
+> On Tue, Oct 19, 2021 at 03:12:03PM +0530, Viresh Kumar wrote:
+> > On 19-10-21, 11:36, Greg KH wrote:
+> > > What is the "other side" here?  Is it something that you trust or not?
+> > 
+> > Other side can be a remote processor (for remoteproc over virtio or
+> > something similar), or traditionally it can be host OS or host
+> > firmware providing virtualisation to a Guest running Linux (this
+> > driver). Or something else..
+> > 
+> > I would incline towards "we trust the other side" here.
+> 
+> That's in contradition with what other people seem to think the virtio
+> drivers are for, see this crazy thread for details about that:
+> 	https://lore.kernel.org/all/20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+> 
+> You can "trust" the hardware, but also handle things when hardware is
+> broken, which is most often the case in the real world.
 
-This fix aims to fix it by two ways:
-- Add acknowledging for the SMB_ALERT interrupt status
-- Disable the SMB_ALERT interrupt on platforms where possible since the
-  driver currently does not make use for it
+That's what I was worried about when I got you in, broken or hacked :)
 
-Acknowledging resets the SMB_ALERT interrupt status on all platforms and
-also should help to avoid interrupt storm on older platforms where the
-SMB_ALERT interrupt disabling is not available.
+> So why is having a timeout a problem here?  If you have an overloaded
+> system, you want things to time out so that you can start to recover.
+> 
+> And if that hardware stops working?  Timeouts are good to have, why not
+> just bump it up a bit if you are running into it in a real-world
+> situation?
 
-For simplicity this fix reuses the host notify feature for disabling and
-restoring original register value.
+I think it is set to HZ currently, though I haven't tried big
+transfers but I still get into some issues with Qemu based stuff.
+Maybe we can bump it up to few seconds :)
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=177311
-Reported-by: ck+kernelbugzilla@bl4ckb0x.de
-Reported-by: stephane.poignant@protonmail.com
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
-Hi Conrad and Stephane. This patch is otherwise the same than the one I
-had in bugzilla but this adds also acknowledging for the SMB_ALERT
-interrupt. There is short time window during driver load and unload
-where interrupt storm will still occur if signal was asserted. Also
-interrupt disabling is possible only on ICH3 and later so interrupt
-acknowledging should also help those old platforms.
----
- drivers/i2c/busses/i2c-i801.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 115660dce722..e95de4ce6b64 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -190,6 +190,7 @@
- #define SMBSLVSTS_HST_NTFY_STS	BIT(0)
- 
- /* Host Notify Command register bits */
-+#define SMBSLVCMD_SMBALERT_DISABLE	BIT(2)
- #define SMBSLVCMD_HST_NTFY_INTREN	BIT(0)
- 
- #define STATUS_ERROR_FLAGS	(SMBHSTSTS_FAILED | SMBHSTSTS_BUS_ERR | \
-@@ -642,9 +643,11 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
- 	 * Clear irq sources and report transaction result.
- 	 * ->status must be cleared before the next transaction is started.
- 	 */
--	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS;
--	if (status) {
-+	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS | SMBHSTSTS_SMBALERT_STS;
-+	if (status)
- 		outb_p(status, SMBHSTSTS(priv));
-+	status &= ~SMBHSTSTS_SMBALERT_STS;
-+	if (status) {
- 		priv->status = status;
- 		complete(&priv->done);
- 	}
-@@ -972,9 +975,9 @@ static void i801_enable_host_notify(struct i2c_adapter *adapter)
- 	if (!(priv->features & FEATURE_HOST_NOTIFY))
- 		return;
- 
--	if (!(SMBSLVCMD_HST_NTFY_INTREN & priv->original_slvcmd))
--		outb_p(SMBSLVCMD_HST_NTFY_INTREN | priv->original_slvcmd,
--		       SMBSLVCMD(priv));
-+	/* Enable host notify interrupt and disable SMB_ALERT signal */
-+	outb_p(SMBSLVCMD_HST_NTFY_INTREN | SMBSLVCMD_SMBALERT_DISABLE |
-+	       priv->original_slvcmd, SMBSLVCMD(priv));
- 
- 	/* clear Host Notify bit to allow a new notification */
- 	outb_p(SMBSLVSTS_HST_NTFY_STS, SMBSLVSTS(priv));
 -- 
-2.33.0
-
+viresh
