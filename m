@@ -2,105 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D51434213
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Oct 2021 01:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5184343ED
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Oct 2021 05:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbhJSXcC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Oct 2021 19:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbhJSXbx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Oct 2021 19:31:53 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839DCC06161C;
-        Tue, 19 Oct 2021 16:29:39 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id b189-20020a1c1bc6000000b0030da052dd4fso6187525wmb.3;
-        Tue, 19 Oct 2021 16:29:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vBSiNPduoSl/3dS/PeDAYLiDuGpiUawD5d8DGFmi4A4=;
-        b=ofCgOOKjfcK0SwKfzc2jleNX62a8I7prLfQu89LB4zQXuKe3eKGwEbIkKO4OTmFPpa
-         JCpMSxvIFq/owtQHQ5pnbneV4+k2S3ckjWWhysfcu2gMO+YXPnnOqmpjgTEo1gRvzDcR
-         /E6cXjrvjad7eCvx98SEKaRPa0rIJuMp4WqJl64zLRuJCg2BIxKk3owEv6HdxDWCikBE
-         nXnIcgSH+lHYCuknL51qBwf5ADiwpHu3DvylJ00q2VorAiWh+l1l/dj3SjBC0PTDK6g/
-         9GnxvqNxRXuyOsj9Jyb1KqCjl6wUYvo7QHmozcHTqJW4Qv/337Xa1nmNcORVipKS+uuc
-         QE/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vBSiNPduoSl/3dS/PeDAYLiDuGpiUawD5d8DGFmi4A4=;
-        b=mnZMV40Xj8Mu2rN7oTVm5V3vgsc8dYmIUlwICctDMypEzCcBvDneGcTzSJSUblWDDv
-         NV74P+GWrdtW+/MmW+SkNiTDc7qwpPDAc6cDr5QfITv6x3CUWGvUGlNxNls32H9ZMRMO
-         ESbFTHYCtPjnQuwgJuB6vXO0qOUucO8DyHfEjkD0lMTvSDdwV0SjKoH7KbTNT+GaqVLd
-         FhGpNmGHou++PjZHshqVxfuVLLddokyQ40Vuu+exNScLHz6ndSZBCQeFEHF5tXu7baEn
-         Q5WYPmmfNuY7ZA4C3xKvQsk3NLGAVC67RVZkDTdEKlVfPANcqkwxsauAjrIkRMEc9nxU
-         I6Lw==
-X-Gm-Message-State: AOAM531z1IT5xPtdHXFLznrmvG2I20Q9Hx4iwtJy6Vxw5faf6KW3g1ui
-        zUxvb8LqI+D/3W4q60yBqvx+r1T6ThY=
-X-Google-Smtp-Source: ABdhPJwR9WqvRq7opWdel7UQ+UDnmPhEWhsJjDJT9iEURmi8tHAcu789lxv2IguriPSCljfVUdBXEw==
-X-Received: by 2002:a05:6000:1565:: with SMTP id 5mr47441418wrz.305.1634686177714;
-        Tue, 19 Oct 2021 16:29:37 -0700 (PDT)
-Received: from localhost.localdomain (94-29-39-10.dynamic.spd-mgts.ru. [94.29.39.10])
-        by smtp.gmail.com with ESMTPSA id r3sm324799wrw.55.2021.10.19.16.29.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Oct 2021 16:29:37 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] i2c: tegra: Ensure that device is suspended before driver is removed
-Date:   Wed, 20 Oct 2021 02:29:19 +0300
-Message-Id: <20211019232919.21916-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        id S229741AbhJTDkr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Oct 2021 23:40:47 -0400
+Received: from mga14.intel.com ([192.55.52.115]:46912 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229555AbhJTDkr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 19 Oct 2021 23:40:47 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10142"; a="228953344"
+X-IronPort-AV: E=Sophos;i="5.87,165,1631602800"; 
+   d="scan'208";a="228953344"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2021 20:36:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,165,1631602800"; 
+   d="scan'208";a="483547120"
+Received: from unknown (HELO [10.239.154.68]) ([10.239.154.68])
+  by orsmga007.jf.intel.com with ESMTP; 19 Oct 2021 20:36:31 -0700
+Subject: Re: [PATCH 1/2] i2c: virtio: disable timeout handling
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        gregkh@linuxfoundation.org
+Cc:     wsa@kernel.org, virtualization@lists.linux-foundation.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
+References: <20211019074647.19061-1-vincent.whitchurch@axis.com>
+ <20211019074647.19061-2-vincent.whitchurch@axis.com>
+ <20211019080913.oajrvr2msz5enzvz@vireshk-i7>
+From:   Jie Deng <jie.deng@intel.com>
+Message-ID: <d16fed64-6aa9-8c68-91e0-06fc84c3049c@intel.com>
+Date:   Wed, 20 Oct 2021 11:36:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211019080913.oajrvr2msz5enzvz@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Tegra I2C device isn't guaranteed to be suspended after removal of
-the driver since driver uses pm_runtime_put() that is asynchronous and
-pm_runtime_disable() cancels pending power-change requests. This means
-that potentially refcount of the clocks may become unbalanced after
-removal of the driver. This a very minor problem which unlikely to
-happen in practice and won't cause any visible problems, nevertheless
-let's replace pm_runtime_disable() with pm_runtime_force_suspend() and
-use pm_runtime_put_sync() which disables RPM of the device and puts it
-into suspend before driver is removed.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/i2c/busses/i2c-tegra.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 2021/10/19 16:09, Viresh Kumar wrote:
+> Doing this may not be a good thing based on the kernel rules I have
+> understood until now. Maybe Greg and Wolfram can clarify on this.
+>
+> We are waiting here for an external entity (Host kernel) or a firmware
+> that uses virtio for transport. If the other side is hacked, it can
+> make the kernel hang here for ever. I thought that is something that
+> the kernel should never do.
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index c883044715f3..b3184c422826 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1700,7 +1700,7 @@ static int tegra_i2c_init_hardware(struct tegra_i2c_dev *i2c_dev)
- 	else
- 		ret = tegra_i2c_init(i2c_dev);
- 
--	pm_runtime_put(i2c_dev->dev);
-+	pm_runtime_put_sync(i2c_dev->dev);
- 
- 	return ret;
- }
-@@ -1819,7 +1819,7 @@ static int tegra_i2c_remove(struct platform_device *pdev)
- 	struct tegra_i2c_dev *i2c_dev = platform_get_drvdata(pdev);
- 
- 	i2c_del_adapter(&i2c_dev->adapter);
--	pm_runtime_disable(i2c_dev->dev);
-+	pm_runtime_force_suspend(i2c_dev->dev);
- 
- 	tegra_i2c_release_dma(i2c_dev);
- 	tegra_i2c_release_clocks(i2c_dev);
--- 
-2.32.0
+
+I'm also worried about this. We may be able to solve it by setting a big
+
+timeout value in the driver.
 
