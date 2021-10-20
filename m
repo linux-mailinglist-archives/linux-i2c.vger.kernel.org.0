@@ -2,32 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99253434974
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Oct 2021 12:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF714349A2
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Oct 2021 13:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhJTK6K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 Oct 2021 06:58:10 -0400
-Received: from smtp2.axis.com ([195.60.68.18]:12944 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229864AbhJTK6K (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 20 Oct 2021 06:58:10 -0400
+        id S229921AbhJTLFe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 Oct 2021 07:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229900AbhJTLFd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 20 Oct 2021 07:05:33 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62CBC06161C
+        for <linux-i2c@vger.kernel.org>; Wed, 20 Oct 2021 04:03:19 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id v8so2614446pfu.11
+        for <linux-i2c@vger.kernel.org>; Wed, 20 Oct 2021 04:03:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1634727356;
-  x=1666263356;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nHNmZOTmEfWp7T9719d3q3afCE/4ZU54ct9XTonwH8g=;
-  b=Heqs72ulCUIHW8hM0VIW9sP5IXk88P7DSnKcWljdY99Ac9B268N/kpdy
-   kAVerwsh3VdnOLxohzpLZanZ1eSqdT6YiKDt65TZtnI42CKtuuIh3CwTv
-   fDTHbq2BpYAFFm+f3EJDdcYr9BNwSpf74yWRmLvcdG7gMkA5HKJLkNNsi
-   vB3So+yGq2qmCPBvdkD0n32D6bw9ZiUjKnLVPErx48RJ00ED07B3K9N1i
-   7lL7Jo2lVDfxM3z0SygfYrfhcrN028nLjjJRLAdMQha2VKOVpjt+3QTtQ
-   LQ1cFUwwsLKaVx/QYmDGIUThehudlpRf2UuY/to91t8t5O4mT1y4ciNvp
-   A==;
-Date:   Wed, 20 Oct 2021 12:55:54 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Jie Deng <jie.deng@intel.com>
-CC:     Viresh Kumar <viresh.kumar@linaro.org>,
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8A9C5E8tdK3Q1/o4m/27R2aNTTSBIWA+hDzCu4axFW0=;
+        b=XL2jKHlr/fyCAFaxWGlvHVmU8AtpFp0D/QTIzup/lf4toTqvizjmReZiGgUfASJQWz
+         qhRSldMBBAPK0WZr9mOTUoRTtp+gFoRbGHhjo24DFksiOmhma/THWyHmPIDYjci7mXV/
+         DGDi02PbSGfW4iux8MsflOkpO0GFekIfyoAMA4RJ2ESOJx+4zFjK+YU9XPxXUcrYJ1T2
+         iu+aFFLvfhgwoz3Bmp3qz+84Hzjf5H/QcPceMTHaaAlRUxG0WxaEjgG4W/i25u8mgNTn
+         IfIzOGQv0Ka4lvz4qFlc+1IrL+y2DsNn11SBk8YfQEKaxbSyNVuh0x948ZwqCCLTVt64
+         LSRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8A9C5E8tdK3Q1/o4m/27R2aNTTSBIWA+hDzCu4axFW0=;
+        b=gKjYNuMAqT02TUhRLNQtN7GAugoiITI/xLPygf21sKXlcsJsGwS2bonk7I609Ws1pE
+         LisnWsibtdMSN4lSZ0R/n7G/3jggxe5Hgua6kW4OrhbhG/Neb4O3Fz60J+QaYuM8p0zG
+         ZocCEjw+0hEgJi/Up2PMW1vFS7NOmS76Qll0d1RHL7Zu4aK3BPr6+UNQJ3OtJQGu5mxB
+         Sq0emWiChB8FI3cAMlub5fDri436lk4lijzfv4/66Yb8lTC7h5JTO3hqEChgicMdXkqC
+         YYAh3E5UNXbsbsMF/lbeNtHKURYmCXon0WGEMob60iHg0s9iVZhFW8d4FNC/XYiqYhKp
+         xodw==
+X-Gm-Message-State: AOAM531rcy936QvYmoSdOmsjFAec/jZ24osofWgi3wS7Pv3vz8OeTi9T
+        42NOkFgXIcyoKqBZOB/KYBzZDA==
+X-Google-Smtp-Source: ABdhPJyWkuXXFp3ZxNT7p7PUzM9PhzJYLXZlo4BivbFG7A9jO5Flh1SqidEe2k3WzY/nScRxzTDanw==
+X-Received: by 2002:a63:6b82:: with SMTP id g124mr732952pgc.20.1634727799170;
+        Wed, 20 Oct 2021 04:03:19 -0700 (PDT)
+Received: from localhost ([106.201.113.61])
+        by smtp.gmail.com with ESMTPSA id ob5sm6296790pjb.2.2021.10.20.04.03.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Oct 2021 04:03:18 -0700 (PDT)
+Date:   Wed, 20 Oct 2021 16:33:16 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Jie Deng <jie.deng@intel.com>,
         Greg KH <gregkh@linuxfoundation.org>,
         Wolfram Sang <wsa@kernel.org>,
         "virtualization@lists.linux-foundation.org" 
@@ -36,9 +59,8 @@ CC:     Viresh Kumar <viresh.kumar@linaro.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         kernel <kernel@axis.com>
 Subject: Re: [PATCH 1/2] i2c: virtio: disable timeout handling
-Message-ID: <20211020105554.GB9985@axis.com>
-References: <YW6Rj/T6dWfMf7lU@kroah.com>
- <20211019094203.3kjzch7ipbdv7peg@vireshk-i7>
+Message-ID: <20211020110316.4x7tnxonswjuuoiw@vireshk-i7>
+References: <20211019094203.3kjzch7ipbdv7peg@vireshk-i7>
  <YW6pHkXOPvtidtwS@kroah.com>
  <20211019143748.wrpqopj2hmpvblh4@vireshk-i7>
  <YW8LFTcBuN1bB3PD@ninjato>
@@ -47,52 +69,29 @@ References: <YW6Rj/T6dWfMf7lU@kroah.com>
  <8e182ea8-5016-fa78-3d77-eefba7d58612@intel.com>
  <20211020064128.y2bjsbdmpojn7pjo@vireshk-i7>
  <01d9c992-28cc-6644-1e82-929fc46f91b4@intel.com>
+ <20211020105554.GB9985@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <01d9c992-28cc-6644-1e82-929fc46f91b4@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211020105554.GB9985@axis.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 09:04:45AM +0200, Jie Deng wrote:
-> On 2021/10/20 14:41, Viresh Kumar wrote:
-> > On 20-10-21, 14:35, Jie Deng wrote:
-> >> Yes, but we need to know what's the best value to be configured for a
-> >> specific "other side".
-> >>
-> >> I think the "other side" should be more aware of what value is reasonable to
-> >> be used.
-> > If we _really_ need that, then it would require an update to the
-> > specification first.
-> >
-> > I am not sure if the other side is the only party in play here. It
-> > depends on the entire setup and not just the hardware device.
-> > Specially with virtualisation things become really slow because of
-> > context switches, etc. It may be better for the guest userspace to
-> > decide on the value.
-> >
-> > Since this is specially for virtualisation, the kernel may set the
-> > value to few HZ by default, lets say 10 (Yeah its really high) :).
-> 
-> I'm OK with this way for the simplicity.
+On 20-10-21, 12:55, Vincent Whitchurch wrote:
+> If the timeout cannot be disabled, then the driver should be fixed to
+> always copy buffers and hold on to them to avoid memory corruption in
+> the case of timeout, as I mentioned in my commit message.  That would be
+> quite a substantial change to the driver so it's not something I'm
+> personally comfortable with doing, especially not this late in the -rc
+> cycle, so I'd leave that to others.
 
-That would not be safe.  Userspace can change this timeout and the end
-result with the current implementation of the driver is potentially
-kernel memory corruption, which is something userspace of course never
-should be able to trigger.
+Or we can avoid clearing up and freeing the buffers here until the
+point where the buffers are returned by the host. Until that happens,
+we can avoid taking new requests but return to the earlier caller with
+timeout failure. That would avoid corruption, by freeing buffers
+sooner, and not hanging of the kernel.
 
-Even if the timeout were hardcoded in the driver and the driver made to
-ignore what userspace requests, it would need to be set to a
-ridiculously high value so that we can guarantee that the timeout never
-ever occurs (since the result is potentially random kernel memory
-corruption).  Which is basically equivalent to disabling the timeout
-entirely as my patch does.
-
-If the timeout cannot be disabled, then the driver should be fixed to
-always copy buffers and hold on to them to avoid memory corruption in
-the case of timeout, as I mentioned in my commit message.  That would be
-quite a substantial change to the driver so it's not something I'm
-personally comfortable with doing, especially not this late in the -rc
-cycle, so I'd leave that to others.
+-- 
+viresh
