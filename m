@@ -2,76 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38781435177
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Oct 2021 19:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7B34358F9
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Oct 2021 05:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbhJTRk3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 20 Oct 2021 13:40:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42242 "EHLO mail.kernel.org"
+        id S230286AbhJUDcr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 20 Oct 2021 23:32:47 -0400
+Received: from mga17.intel.com ([192.55.52.151]:65520 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230391AbhJTRk3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 20 Oct 2021 13:40:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DBE64611C7;
-        Wed, 20 Oct 2021 17:38:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634751494;
-        bh=dlqZhTZMgkAacw0yTZYPf/PbPQrZV7HqKQMSqGYnVSI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nM8XnvUBCqd6vi/qIshaunTN6gwJvcSzmA4m5WmzUAS+TyVArbJXk3YR6pG5ba6p8
-         ec+k3aedURjgoz9gEQooSdj2oOX09N7pxPJ69g2nUjrYgjFsL6wZtdgOgm+fBh+lSE
-         1XaVv53jsE4EDAJMsREZAklfTDlOAZHewmQ2wcj8=
-Date:   Wed, 20 Oct 2021 19:38:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v4 1/3] driver core: Provide device_match_acpi_handle()
- helper
-Message-ID: <YXBUBGcb+kLvj7mj@kroah.com>
-References: <20211014134756.39092-1-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0jqXqhV1FSyuoVwbgwhte7Q4KUQMozggcxCHGPf+Mfw=A@mail.gmail.com>
- <YW6ziqiIgioxDjq3@smile.fi.intel.com>
+        id S229842AbhJUDcr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 20 Oct 2021 23:32:47 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10143"; a="209727953"
+X-IronPort-AV: E=Sophos;i="5.87,168,1631602800"; 
+   d="scan'208";a="209727953"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 20:30:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,168,1631602800"; 
+   d="scan'208";a="444616242"
+Received: from unknown (HELO [10.239.154.68]) ([10.239.154.68])
+  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2021 20:30:29 -0700
+Subject: Re: [PATCH 1/2] i2c: virtio: disable timeout handling
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>
+References: <20211019094203.3kjzch7ipbdv7peg@vireshk-i7>
+ <YW6pHkXOPvtidtwS@kroah.com> <20211019143748.wrpqopj2hmpvblh4@vireshk-i7>
+ <YW8LFTcBuN1bB3PD@ninjato> <94aa39ab-4ed6-daee-0402-f58bfed0cadd@intel.com>
+ <YW+q1yQ8MuhHINAs@kroah.com> <8e182ea8-5016-fa78-3d77-eefba7d58612@intel.com>
+ <20211020064128.y2bjsbdmpojn7pjo@vireshk-i7>
+ <01d9c992-28cc-6644-1e82-929fc46f91b4@intel.com>
+ <20211020105554.GB9985@axis.com> <20211020110316.4x7tnxonswjuuoiw@vireshk-i7>
+From:   Jie Deng <jie.deng@intel.com>
+Message-ID: <df7e6127-05fb-6aad-3896-fc810f213a54@intel.com>
+Date:   Thu, 21 Oct 2021 11:30:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YW6ziqiIgioxDjq3@smile.fi.intel.com>
+In-Reply-To: <20211020110316.4x7tnxonswjuuoiw@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 03:01:14PM +0300, Andy Shevchenko wrote:
-> On Fri, Oct 15, 2021 at 01:42:37PM +0200, Rafael J. Wysocki wrote:
-> > On Thu, Oct 14, 2021 at 3:48 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > We have a couple of users of this helper, make it available for them.
-> > >
-> > > The prototype for the helper is specifically crafted in order to be
-> > > easily used with bus_find_device() call. That's why its location is
-> > > in the driver core rather than ACPI.
-> > >
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > OK, please feel free to add
-> > 
-> > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > 
-> > to all of the patches in this series.
-> 
-> Thank you, Rafael!
-> 
-> Greg, can it be applied now?
 
-Yes, will go do so now, thanks.
+On 2021/10/20 19:03, Viresh Kumar wrote:
+> On 20-10-21, 12:55, Vincent Whitchurch wrote:
+>> If the timeout cannot be disabled, then the driver should be fixed to
+>> always copy buffers and hold on to them to avoid memory corruption in
+>> the case of timeout, as I mentioned in my commit message.  That would be
+>> quite a substantial change to the driver so it's not something I'm
+>> personally comfortable with doing, especially not this late in the -rc
+>> cycle, so I'd leave that to others.
+> Or we can avoid clearing up and freeing the buffers here until the
+> point where the buffers are returned by the host. Until that happens,
+> we can avoid taking new requests but return to the earlier caller with
+> timeout failure. That would avoid corruption, by freeing buffers
+> sooner, and not hanging of the kernel.
 
-greg k-h
+
+It seems similar to use "wait_for_completion". If the other side is 
+hacked, the guest may never
+
+get the buffers returned by the host, right ?
+
+
+For this moment, we can solve the problem by using a hardcoded big value 
+or disabling the timeout.
+
+Over the long term, I think the backend should provide that timeout 
+value and guarantee that its processing
+
+time should not exceed that value.
+
+
