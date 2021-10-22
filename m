@@ -2,82 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D486437284
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Oct 2021 09:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89A9437375
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Oct 2021 10:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbhJVHL3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Oct 2021 03:11:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43082 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230332AbhJVHL3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 22 Oct 2021 03:11:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 33ABA610D2;
-        Fri, 22 Oct 2021 07:09:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634886552;
-        bh=aMe1vDCT3CDtWlXkvqsaubG8OPmwUEDHwrKNgQHwV/8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mT82WQfzmwdv2zluT4Magkikw+AEmy8rXLwRvFsMu+PQ8NRFZ/uyW1qADWaL9hW27
-         4MkIVtKGDaGFvESWRz04ZZ9+c/zLLKjrST+6Kynmf+EDGHRTxogEcbhAvTQ2PhQrZI
-         XVPMxRBOVZPHBKetH+yqMDUkJFwQVcd2gEbCIghcK0/h3wx5mHhM7Z0FqEPZnga6tx
-         L7THUm+ZWAeBYzHffEIClptzHe86EOc/Z5cZ0mJZhBpmO4Yv1GZnSKHjE8ftE16aAR
-         TbSwg9iWqoeNxJeXrYgkhtr5TGIoCYQXHul9DtAVjJleO7nRgCj5OZx3Pn3Eg28z7w
-         6ur0uS3PavC1g==
-Received: by mail-wr1-f49.google.com with SMTP id e12so2420213wra.4;
-        Fri, 22 Oct 2021 00:09:12 -0700 (PDT)
-X-Gm-Message-State: AOAM5315wvCMF1fHwnVvuK9UJZ44H5k+onWv3HkD77YKtAFPPX8wTPhq
-        54cyYDGLOd6MTRgnplaorXidom4FOyiTA/KVqrk=
-X-Google-Smtp-Source: ABdhPJxvADH+w34D6rnd8a3QkGypVDg/M1da7J3dzGFcxTFYqHN3pF/BO+EW9BJ6qYjfpdrLlhLMHdWzCFYGPa1YQOQ=
-X-Received: by 2002:adf:d0c6:: with SMTP id z6mr11834861wrh.336.1634886550652;
- Fri, 22 Oct 2021 00:09:10 -0700 (PDT)
+        id S232353AbhJVIIH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Oct 2021 04:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232021AbhJVIIG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Oct 2021 04:08:06 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575BCC061764
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Oct 2021 01:05:49 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id i12so939376wrb.7
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Oct 2021 01:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=LwLOjATYr16Reu88cmUIiFsuPl67ksCMcRHqfpd8xTg=;
+        b=byB4vm/duyudlBLRci0SgANJ0Wauf4h1mxCu9AeH943eO2VqyYEln2BOc8qI8NrEES
+         eXv2Fs8+MIZ41siPMuzbBtpWnKbFQGDSZfqgd5WK49TzTJiqeIq++RoGSBWyKeo374ac
+         t2xFjdSUvjpx97E5IxA/CjSjk+Q7f4SYZhSYYeZy5Jvtld6mHQsTliODHQE+y7ZiW9TX
+         wPcshckxpjxYl9cvaKGzMUrmUQPUWE/nDcKjvD6uSXKIXoyI/9bMxwwrr988txUvhXS3
+         GXA8O/RDETEG8HdL16v1hlsFTJ6xL5z/Kp9r9K/DFkJyUm6rAI9N6ZUs9bDijENN2vZA
+         7JQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=LwLOjATYr16Reu88cmUIiFsuPl67ksCMcRHqfpd8xTg=;
+        b=x8vx++108rhkmbbqzwliBI6A0pkT5dYSlG6Rufrqj8RaOR/4Km68eXUYC4n/qULE7m
+         bNncSyad2N8r6pptgnpf/fo1iOV+NzDQBZ7cnMKva90XzEKYuz6uYmVa9LoZLB1fuuCE
+         SAnj1wDzOwTnFFdD6PM3QWDeLIsxlF5EDPu8MlFN2rflXBQ8acC09Lt0wzrX/44F1Zce
+         Kay1xdBvUFnr7myxMGj7hqFSQOLWKR3OTyR021WeljHaQUfK8c3V0zFupmAw1+2ZteBv
+         pyo3I1N2TT6CPv8vuRZTmJj+94RKkgKk0GxZGPVItu6jUgushqTxb2r7nkam19IApOlr
+         mavw==
+X-Gm-Message-State: AOAM531eS1z5+ek3yEKxGarCbQwI+F5OrhH9JUY1TAvNRyNtNbVNAyDP
+        eRIiSMx8WGkL/P/WWeIvXZ14UA==
+X-Google-Smtp-Source: ABdhPJy1gKz+t3xHUGfmL2xIDoRAS+7r13b/9+FPupmzbGivyUoJ3E//1yaY1pzMin2NHQFEyLUtSQ==
+X-Received: by 2002:a05:6000:156e:: with SMTP id 14mr9707827wrz.358.1634889947953;
+        Fri, 22 Oct 2021 01:05:47 -0700 (PDT)
+Received: from google.com ([95.148.6.207])
+        by smtp.gmail.com with ESMTPSA id l6sm7283123wmg.10.2021.10.22.01.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Oct 2021 01:05:47 -0700 (PDT)
+Date:   Fri, 22 Oct 2021 09:05:45 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>, Wolfram Sang <wsa@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] mfd: tps80031: Remove driver
+Message-ID: <YXJw2fX42REHylOy@google.com>
+References: <20211021192258.21968-1-digetx@gmail.com>
+ <20211021192258.21968-4-digetx@gmail.com>
 MIME-Version: 1.0
-References: <7c58868cd26d2fc4bd82d0d8b0dfb55636380110.1634808714.git.viresh.kumar@linaro.org>
- <0adf1c36-a00b-f16f-e631-439148c4f956@intel.com> <20211022065808.2rvbr6nvollz5mz6@vireshk-i7>
-In-Reply-To: <20211022065808.2rvbr6nvollz5mz6@vireshk-i7>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 22 Oct 2021 09:08:54 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1Zt-4goCHWEWcEqwDVwHYp_T=w3rX5pf81Jz_818=Nkw@mail.gmail.com>
-Message-ID: <CAK8P3a1Zt-4goCHWEWcEqwDVwHYp_T=w3rX5pf81Jz_818=Nkw@mail.gmail.com>
-Subject: Re: [PATCH] i2c: virtio: Add support for zero-length requests
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jie Deng <jie.deng@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stratos Mailing List <stratos-dev@op-lists.linaro.org>,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        conghui.chen@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211021192258.21968-4-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 8:58 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> On 22-10-21, 14:51, Jie Deng wrote:
-> > > +   if (!virtio_has_feature(vdev, VIRTIO_I2C_F_ZERO_LENGTH_REQUEST)) {
-> > > +           dev_err(&vdev->dev, "Zero-length request feature is mandatory\n");
-> > > +           return -EINVAL;
-> >
-> >
-> > It might be better to return -EOPNOTSUPP ?
->
-> Maybe that or one of these:
->
-> #define EBADE           52      /* Invalid exchange */
-> #define EPROTO          71      /* Protocol error */
-> #define EPFNOSUPPORT    96      /* Protocol family not supported */
-> #define ECONNREFUSED    111     /* Connection refused */
->
-> Arnd, any suggestions ? This is about the mandatory feature not being offered by
-> the device.
+On Thu, 21 Oct 2021, Dmitry Osipenko wrote:
 
-These are mostly used for network operations, I'd stick with either EINVAL
-or ENXIO in this case.
+> Driver was upstreamed in 2013 and never got a user, remove it.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/mfd/Kconfig          |  14 -
+>  drivers/mfd/Makefile         |   1 -
+>  drivers/mfd/tps80031.c       | 526 -----------------------------
+>  include/linux/mfd/tps80031.h | 637 -----------------------------------
+>  4 files changed, 1178 deletions(-)
+>  delete mode 100644 drivers/mfd/tps80031.c
+>  delete mode 100644 include/linux/mfd/tps80031.h
 
-        Arnd
+> -static const struct i2c_device_id tps80031_id_table[] = {
+> -	{ "tps80031", TPS80031 },
+> -	{ "tps80032", TPS80032 },
+> -	{ }
+> -};
+
+This is an I2C driver, right?
+
+I was under the impression that Linux could do auto-probing on I2C
+devices?  Such that they do not require platform code or DT in order
+to bind?
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
