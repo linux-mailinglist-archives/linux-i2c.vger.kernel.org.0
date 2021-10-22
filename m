@@ -2,113 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0963E4373DB
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Oct 2021 10:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7A54373E2
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Oct 2021 10:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbhJVItL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Oct 2021 04:49:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44984 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232261AbhJVItK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 22 Oct 2021 04:49:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F177610A8;
-        Fri, 22 Oct 2021 08:46:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634892413;
-        bh=CEILUiLo3Ef5aUsDfS+97SOXG+XSykycfDZEsicSCbc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IPdZy73Zdj0qjeDuIbt5ig6hXmBFzbZloroiFVw16isUzfHgX6GQLrmx9gcorrwNE
-         NoSkQtN0ZCrbL8ku/fxnQSEyeBEL0FWA8UXdfQDFOuTfgomVvav729qU3dr124JsWP
-         yI47CJ9v+yrDRFcWAJe+ydel14ydLn886h6+6Z8R56dDayaCMDhI1Avnm0eHNLDPLm
-         JfzpxfOvgdlXdPC6Ggz/tbfS7gMwBRkdeg3rdJnq8qCnP+sUBRDPqT6R4nUJK+spY9
-         JskkAut0gtIv8ikGS2+4770ZAxl+RHB0p0HiO930Q9q5TnxUsVJ6y7X+lw5gNKvgeC
-         YmpE2ruBUlQNA==
-Date:   Fri, 22 Oct 2021 10:46:45 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] mfd: tps80031: Remove driver
-Message-ID: <YXJ6deXN7vWrSc++@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <20211021192258.21968-1-digetx@gmail.com>
- <20211021192258.21968-4-digetx@gmail.com>
- <YXJw2fX42REHylOy@google.com>
- <b8f6dffb-ec7b-c105-51f1-7b761e331a89@gmail.com>
+        id S232384AbhJVIuH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Oct 2021 04:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232382AbhJVIuG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Oct 2021 04:50:06 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9A9C061348;
+        Fri, 22 Oct 2021 01:47:49 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 5so1086232edw.7;
+        Fri, 22 Oct 2021 01:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mqw/x/vCZKbqjafLM39rvi0on+kDAQS0f57EQg/oMGM=;
+        b=SqMgUQ5JC2NqnLjncR7he30QQm6LqBBbJ6cIwA1IQqOw+af6qlYnX6Y5DdJWYKM3xX
+         5cFn4E+3J2Wi9yoLyjh1v4O5Kge16fTRATfNGHCaNcmA5ykHxz7XUe0POknDB5rLoiVL
+         q3ZHE0MS6MVkg6Hjkz2FlsFAWx7+PY1UQI5MkSGLqicVnnzD89p9n6iXh6XsoRBOifv5
+         ezX5/s7wp0lqFI0u7TGci7K8IyqMH8npNsJ/EbuMJnmLBXcwgwzeo1xp3uId+E9vSmI/
+         1P2+O6lRgKE+8Jvg18vtii+yNMuPUG+d9+rFrimNiqTMPZPQ45R5pOmRe3YLjSTvTJJM
+         yltw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mqw/x/vCZKbqjafLM39rvi0on+kDAQS0f57EQg/oMGM=;
+        b=2+qRgZKfmZONZcrWierQ8rG5myGa8Tag1kBpEP4ORc9J2vR4YpweDK+J/m2BNCXhra
+         2ERp1cwzrCu/KekIg0tE2mjKgf8d6g7E3Qq2dHXfUvIIkzNx5J0XcL2vwj/byBRMLa65
+         PPYTGqAnHMUDRZPHZHy2hmmtAtCz4vmE1h7r+CKfn1p9v76LapIkeap1lOxtOhIUMbbd
+         P2NVlcXZaYqH4IC2ma0g43JEkEwSFMuug/Jc04r2F3v0roofC+OJx0NjCmW3VqQp0TRT
+         Bwy7qJ/tMTg0Sy9zUSTeULnNIP3amgkTlCTzPUzF6rYq+baIFXByYrqLy6Nq1CB9hDqv
+         /+aQ==
+X-Gm-Message-State: AOAM531T/asMGcQR0RIWH9NIqs0brK8BYYgfE3nwg4F3pxWsUJF+m7Ml
+        YowkFP6IxNKkVaqWdPBCVPi0XQWzncpvBKMe1p4=
+X-Google-Smtp-Source: ABdhPJyGk3siQwyG3NqnEjN0QkNpukSjalEA+eN76UWN1FifKQqpLxgKBn6CkVIHGlTpv8P2bWenUiHQ4c67AdGnQtQ=
+X-Received: by 2002:a17:906:5a47:: with SMTP id my7mr13255982ejc.128.1634892467672;
+ Fri, 22 Oct 2021 01:47:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e7GVzSQ1DCf4k6lf"
-Content-Disposition: inline
-In-Reply-To: <b8f6dffb-ec7b-c105-51f1-7b761e331a89@gmail.com>
+References: <20211010185707.195883-1-hdegoede@redhat.com> <20211010185707.195883-6-hdegoede@redhat.com>
+ <163415237957.936110.1269283416777498553@swboyd.mtv.corp.google.com> <4e5884d5-bcde-dac9-34fb-e29ed32f73c9@redhat.com>
+In-Reply-To: <4e5884d5-bcde-dac9-34fb-e29ed32f73c9@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 22 Oct 2021 11:46:51 +0300
+Message-ID: <CAHp75Ve_xqgnaCqc3oyDMWDE9kVm8HNOEcdMuDkOD9epwgfWnA@mail.gmail.com>
+Subject: Re: [PATCH v3 05/11] clk: Introduce clk-tps68470 driver
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J.Wysocki" <rjw@rjwysocki.net>,
+        Wolfram Sang <wsa@the-dreams.de>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, Oct 21, 2021 at 8:31 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 10/13/21 21:12, Stephen Boyd wrote:
 
---e7GVzSQ1DCf4k6lf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
+> >> +       regmap_write(clkdata->regmap, TPS68470_REG_CLKCFG1,
 
-> It's I2C driver. I'm not sure about auto-probing because something
-> should provide information about device to Linux. It's possible to
-> detect/scan whether there is device sitting on I2C address, but there is
-> no auto-discovery mechanism, AFAIK.
+> >> +                          (TPS68470_PLL_OUTPUT_ENABLE <<
+> >> +                          TPS68470_OUTPUT_A_SHIFT) |
 
-Well, in general, it could be manually instantiated from userspace...
+One line, please?
 
->=20
-> TPS80031 device will fail to bind to this driver because it explicitly
-> requires platform data which should be NULL if device is probed solely
-> by I2C ID.
+> >> +                          (TPS68470_PLL_OUTPUT_ENABLE <<
+> >> +                          TPS68470_OUTPUT_B_SHIFT));
 
-=2E.but I agree in this case. The driver has this code:
+Ditto.
 
-        if (!pdata) {
-                dev_err(&client->dev, "tps80031 requires platform data\n");
-                return -EINVAL;
-        }
+...
 
-and git grep shows no user having platform data.
+> > Also, why isn't this function actually writing
+> > hardware?
+>
+> set_rate can only be called when the clock is disabled, all the
+> necessary values are programmed based on the clk_cfg_idx in
+> tps68470_clk_prepare().
+>
+> Note there is no enable() since enable() may not sleep and
+> this device is interfaced over I2C, so the clock is already
+> enabled from the prepare() op.
 
-Shouldn't 'drivers/regulator/tps80031-regulator.c' and
-'./rtc/rtc-tps80031.c' be removed as well?
+This reminds me other drivers that do commit the changes to the
+hardware on bus lock, but I'm not sure if anything like that is
+applicable here.
 
-
---e7GVzSQ1DCf4k6lf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFyenEACgkQFA3kzBSg
-Kba3fg//Wb58LU2rHxo161/nonnSA3fMC2oFlw2yXZiYciLEhsqe5B3fd+GXSn7B
-aD3TDYvtFIB9i6Ifs+OtEvaemQut8ea2/nVJqVAe9sEn4CnF7UJFefVSu/in6pA3
-yey4ZzqRBZqcyzN9EYjcheLvvGC1+NeSo2Y/Ft05vSxop28auMs4oNDJ+90B/CEH
-NhtQ5QZ51AxotkPDWP1i5iAyAVINhZPoXSQVTLFAdnTKe+1VE98SePISzVnrP4vt
-BqFqANZuMuYGI3/ziZUoSeMGJYxgvHVvBejom+x/cwCNvLAdpANOY3JG7MsSTDU+
-TMVQeld7cSZB0wzXWXeb0K7hGBnTJdkFK/3D+5g7DldZSCw4UxCA0673nTP7SPeK
-H8f8lTuYs4VjdMokVPuuhYa4WRWxbgteHJB3z/s6rwv/1p50VL/VU7WUnTzFbMc4
-LDAToft++xsYBz4z/oZd/zAKX6FBsuWfG19xvDLUBjxh1NgYUHo6NzF3K86VfImD
-vNBkbl08DuHdbi4kvgOE+XTbO2xSABrAmvpZX4j8f8GF9/4gBTUOah+Leo4HIhj6
-u6Ynd8famuDpSpU66/5AuWIFlcY/cqy1fCzc14fFt+wDV5J5Y/gl3Omba+1Hfun2
-iquq00hc5cwz1rqsEbqyZcgcI3SdD7vGOoxwwMs1wus/g3wb8vc=
-=6mGi
------END PGP SIGNATURE-----
-
---e7GVzSQ1DCf4k6lf--
+-- 
+With Best Regards,
+Andy Shevchenko
