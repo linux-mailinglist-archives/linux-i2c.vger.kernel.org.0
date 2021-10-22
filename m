@@ -2,122 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8638437446
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Oct 2021 11:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D479043744C
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Oct 2021 11:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbhJVJGD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Oct 2021 05:06:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38177 "EHLO
+        id S232403AbhJVJGz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Oct 2021 05:06:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51483 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232412AbhJVJGB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Oct 2021 05:06:01 -0400
+        by vger.kernel.org with ESMTP id S232345AbhJVJGy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Oct 2021 05:06:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634893424;
+        s=mimecast20190719; t=1634893477;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vlS6aml8LL1qZe5zkUk/1HXVoXarBD/8NvPesYzireA=;
-        b=JjSU7VqLTxHRMXz4jdOzd2RB0ohb8+PE0CfwEfsxwmuCRE+eQEVRcT8XGBTNdS/poZ83OL
-        u+/N9tV1vx4Vl2fGMyyqJgaXkdUzwjfcF+tA+KChHD7Tqxnb9C0Exze+KqKUExSj8+xeSi
-        lMkPmkU5ukt7VkJ6W66c91uGdgSsHto=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-602-jMiQBV7jO4Cz9Y6ob_P4AQ-1; Fri, 22 Oct 2021 05:03:42 -0400
-X-MC-Unique: jMiQBV7jO4Cz9Y6ob_P4AQ-1
-Received: by mail-wm1-f72.google.com with SMTP id c5-20020a05600c0ac500b0030dba7cafc9so739438wmr.5
-        for <linux-i2c@vger.kernel.org>; Fri, 22 Oct 2021 02:03:42 -0700 (PDT)
+        bh=NJGZhkxj38uYQtmuRmaa5a4QRl7cPEpIp72Xf6GYbis=;
+        b=P01r7vf+j+Shx4/WX9StNxXhU5Fklnw7hrahPr3r1HoBc7ONbEJtoPkBY6ekKOzXKilkEg
+        dUPC9vBhido5O6i0iYDC0C6kLyKxO5MWFvmSQ2J4kZcRIp4WBCTyv96+43BETGf6YANS/b
+        MCHkPabM0T9qRYG/tUyDgBXKIbyh1mk=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-156-qkNO34ZHN6mrUJY_XSfClQ-1; Fri, 22 Oct 2021 05:04:34 -0400
+X-MC-Unique: qkNO34ZHN6mrUJY_XSfClQ-1
+Received: by mail-ed1-f70.google.com with SMTP id m16-20020a056402431000b003dd2005af01so1424315edc.5
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Oct 2021 02:04:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vlS6aml8LL1qZe5zkUk/1HXVoXarBD/8NvPesYzireA=;
-        b=F/l3XEjGED1qL0sx/TUUI/76fr43PPYMqQ8mOa1nYrEbdM2BkBOgmMGUr7lXYroHP0
-         kAtNKu6hLRi7TEnR+YaP8uommBLjT57Jz6mxHIMOIs+2ILIGpAsL+InoOtL/5awy9ytv
-         G3aZYm2taQg3Xlh0d9onQ7CwIwvlvotyokv09nR7nekO7JC7FlnWCTjsedELwFA/aWe/
-         HviZi5/HMiIt0hqZptxqurJ0dFO/KPg7dHEeQT2pzNeWlF6IeK17atpwunwsiJDrufZB
-         1NJn21yHK3B98C9BjFLTQgPep7KkfX7+1oPMGxAZNWKDRc/QBTqJd09bDjGNgHWIMCj8
-         Qgug==
-X-Gm-Message-State: AOAM533i6vHteq2oUzL+3nl2hkP2VA6r3jCyNnSA/Ppd3iQljeqxrL9j
-        CIV7S8u/72MeJPMHfUZg20aInjXPx/Ybn7hEwzzlPZsA/bhEzgZgQ1vEGRoq7jAU/mci9OC0tDu
-        8+1xOzKiueUjQxvW5LS6+
-X-Received: by 2002:a1c:191:: with SMTP id 139mr12823375wmb.186.1634893421625;
-        Fri, 22 Oct 2021 02:03:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzgz69ZOr6NDfBcGs5kRzntTTBb/m5Ee6/7befhnYjWUjj9wGNPtMHwP34fX3HbNswLKjwtYg==
-X-Received: by 2002:a1c:191:: with SMTP id 139mr12823362wmb.186.1634893421493;
-        Fri, 22 Oct 2021 02:03:41 -0700 (PDT)
-Received: from redhat.com ([2.55.24.172])
-        by smtp.gmail.com with ESMTPSA id p188sm3376289wmp.30.2021.10.22.02.03.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Oct 2021 02:03:40 -0700 (PDT)
-Date:   Fri, 22 Oct 2021 05:03:36 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jie Deng <jie.deng@intel.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        stratos-dev@op-lists.linaro.org,
-        Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-        cohuck@redhat.com,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, conghui.chen@intel.com
-Subject: Re: [PATCH] i2c: virtio: Add support for zero-length requests
-Message-ID: <20211022050222-mutt-send-email-mst@kernel.org>
-References: <7c58868cd26d2fc4bd82d0d8b0dfb55636380110.1634808714.git.viresh.kumar@linaro.org>
- <0adf1c36-a00b-f16f-e631-439148c4f956@intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NJGZhkxj38uYQtmuRmaa5a4QRl7cPEpIp72Xf6GYbis=;
+        b=0qGWFOANQNaofzMt3gp2AM1fq4RJ6VNDAPbkjRaBw8qxqk9QAo3W7FallMj16FmIM8
+         XkveceDzcBDXInE4K0kAVrjUPJHgZYD+EipXRrwZ2J6Udo/8qY06VSsZ3+bho6oXb4qh
+         Oz2V/vRRQUNvJKHt6+taO3QNUxE9IYIVRWH8O7o47HYLczg+r5GBJ6MUOG5GsvaEKqZd
+         lt453MoVKTXzNsWeH9uozqxk38T+G5IFvyZLmDoUMIPUR0A7/bhnQCwxClGUErBD2VnV
+         iOpe+B01YgVcqzDXK2Fb/nT3DuhC2n+NELMuixiaGjhgJLJt7s3XK6ihuOAx3aU42YWb
+         2xUw==
+X-Gm-Message-State: AOAM530uon2G4Pw89EsrJqdhbWlNkiHvOAUE4m8LxrjksclDoPrrTqaW
+        49QBbDVoqOFu90QzUhH2jyrLMi6hqUwnkEfqAupAtPdUWuuoC1EgL5yFyubamtdboLgipQzNiYK
+        psfd9vUosplHCCFWQJfqG
+X-Received: by 2002:a17:907:6d9f:: with SMTP id sb31mr13655309ejc.109.1634893473605;
+        Fri, 22 Oct 2021 02:04:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxgaLxV/q19thSWzWkPVL40Td4avhVP3W53ZxVNiGvYCe3dCcT5gMVAl5iE2ggZ3DTJDYw6TQ==
+X-Received: by 2002:a17:907:6d9f:: with SMTP id sb31mr13655281ejc.109.1634893473415;
+        Fri, 22 Oct 2021 02:04:33 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id j1sm4078740edk.53.2021.10.22.02.04.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Oct 2021 02:04:32 -0700 (PDT)
+Message-ID: <fd11b3fb-1f14-cd9e-c6f7-cbea0aa6548b@redhat.com>
+Date:   Fri, 22 Oct 2021 11:04:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0adf1c36-a00b-f16f-e631-439148c4f956@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 05/11] clk: Introduce clk-tps68470 driver
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J.Wysocki" <rjw@rjwysocki.net>,
+        Wolfram Sang <wsa@the-dreams.de>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+References: <20211010185707.195883-1-hdegoede@redhat.com>
+ <20211010185707.195883-6-hdegoede@redhat.com>
+ <163415237957.936110.1269283416777498553@swboyd.mtv.corp.google.com>
+ <4e5884d5-bcde-dac9-34fb-e29ed32f73c9@redhat.com>
+ <CAHp75Ve_xqgnaCqc3oyDMWDE9kVm8HNOEcdMuDkOD9epwgfWnA@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75Ve_xqgnaCqc3oyDMWDE9kVm8HNOEcdMuDkOD9epwgfWnA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 02:51:10PM +0800, Jie Deng wrote:
-> 
-> On 2021/10/21 17:47, Viresh Kumar wrote:
-> > The virtio specification received a new mandatory feature
-> > (VIRTIO_I2C_F_ZERO_LENGTH_REQUEST) for zero length requests. Fail if the
-> > feature isn't offered by the device.
-> > 
-> > For each read-request, set the VIRTIO_I2C_FLAGS_M_RD flag, as required
-> > by the VIRTIO_I2C_F_ZERO_LENGTH_REQUEST feature.
-> > 
-> > This allows us to support zero length requests, like SMBUS Quick, where
-> > the buffer need not be sent anymore.
-> > 
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> > Hi Wolfram,
-> > 
-> > Please do not apply this until the spec changes [1] are merged, sending it early
-> > to get review done. I will ping you later once the spec is merged.
-> > 
-> > [1] https://lists.oasis-open.org/archives/virtio-dev/202110/msg00109.html
-> > 
-> >   drivers/i2c/busses/i2c-virtio.c | 56 ++++++++++++++++++---------------
-> >   include/uapi/linux/virtio_i2c.h |  6 ++++
-> >   2 files changed, 36 insertions(+), 26 deletions(-)
-> > 
-> 
-> Acked-by: Jie Deng<jie.deng@intel.com>  once the spec is merged.
+Hi,
 
+On 10/22/21 10:46, Andy Shevchenko wrote:
+> On Thu, Oct 21, 2021 at 8:31 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>> On 10/13/21 21:12, Stephen Boyd wrote:
+> 
+> ...
+> 
+>>>> +       regmap_write(clkdata->regmap, TPS68470_REG_CLKCFG1,
+> 
+>>>> +                          (TPS68470_PLL_OUTPUT_ENABLE <<
+>>>> +                          TPS68470_OUTPUT_A_SHIFT) |
+> 
+> One line, please?
+> 
+>>>> +                          (TPS68470_PLL_OUTPUT_ENABLE <<
+>>>> +                          TPS68470_OUTPUT_B_SHIFT));
+> 
+> Ditto.
 
-There's supposed to be space before < btw. and one puts # before any
-comments this way tools can process the ack automatically:
+Ack, both fixed for v4.
 
-Acked-by: Jie Deng<jie.deng@intel.com> # once the spec is merged.
+Regards,
 
-> 
-> 
-> > +	if (!virtio_has_feature(vdev, VIRTIO_I2C_F_ZERO_LENGTH_REQUEST)) {
-> > +		dev_err(&vdev->dev, "Zero-length request feature is mandatory\n");
-> > +		return -EINVAL;
-> 
-> 
-> It might be better to return -EOPNOTSUPP ?
-> 
+Hans
 
