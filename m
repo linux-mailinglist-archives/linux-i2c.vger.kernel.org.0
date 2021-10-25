@@ -2,83 +2,190 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0080F438F24
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 08:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA4D4392A0
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 11:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbhJYGLf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Oct 2021 02:11:35 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:56547 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229735AbhJYGLe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 02:11:34 -0400
-X-UUID: c63f6a25fe7b440c9e8149536b629197-20211025
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Wtn1HyN9ykMO2gL1yqE85JuEFWs87aBJ68lMUlhTtXA=;
-        b=rI88uzLfYZ+as6eVoCXQz5TkxXl3UzsJIDChAVKoqor2fktEOHlJhqCqNoGCmLE28Q6h+nYFONAe2FtwDSvBUbLkuQ1MNeALAlY5QaRDQ7I4zkUZJ44xsf+kDjFA89GhoZt9sZ6SsJBeuNmltOtQGljobCBAEpRk9GcVZ4YBML0=;
-X-UUID: c63f6a25fe7b440c9e8149536b629197-20211025
-Received: from mtkcas11.mediatek.inc [(172.27.5.253)] by mailgw02.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1313698761; Mon, 25 Oct 2021 14:09:04 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 25 Oct 2021 14:09:05 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 25 Oct 2021 14:09:05 +0800
-Message-ID: <2f5e3d3275dc1914cd789abfd2da68f92e0e4117.camel@mediatek.com>
-Subject: Re: [PATCH v8 2/5] i2c: mediatek: Dump i2c/dma register when a
- timeout occurs
-From:   Kewei Xu <kewei.xu@mediatek.com>
-To:     Boris Lysov <arzamas-16@mail.ee>
-CC:     <linux-mediatek@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <matthias.bgg@gmail.com>, <qii.wang@mediatek.com>
-Date:   Mon, 25 Oct 2021 14:09:05 +0800
-In-Reply-To: <20211011183814.488ed866@pc>
-References: <20211011183814.488ed866@pc>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S232696AbhJYJn6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Oct 2021 05:43:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35375 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232692AbhJYJn5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 05:43:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635154895;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AJjwA8KpQ+JtJtv1gkti7fBiNXqA/I5dkFBR+HHCYOg=;
+        b=BeTMTOycSLJylzRq9SgQfFG/G0ZaDfQi7EBGgTgKeRDyUGLClC7G9b7MyJtfBY1BhTWnUe
+        tuPWjb3usby6V0wnZTpNLV5I8j9bZDiY/HA6/q1O8xY4QCOm5wtWxqyuXRExqg/3ShQTp1
+        sWhZMYUetl7mhKqomdCqNOHfwlvghyM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-380-OW6uVO-qNgm_GI2K9g3plA-1; Mon, 25 Oct 2021 05:41:31 -0400
+X-MC-Unique: OW6uVO-qNgm_GI2K9g3plA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 688511006AA4;
+        Mon, 25 Oct 2021 09:41:28 +0000 (UTC)
+Received: from x1.localdomain (unknown [10.39.195.129])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5BC1F60BF4;
+        Mon, 25 Oct 2021 09:41:20 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v4 00/11] Add support for X86/ACPI camera sensor/PMIC setup with clk and regulator platform data
+Date:   Mon, 25 Oct 2021 11:41:08 +0200
+Message-Id: <20211025094119.82967-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-T24gTW9uLCAyMDIxLTEwLTExIGF0IDE4OjM4ICswMzAwLCBCb3JpcyBMeXNvdiB3cm90ZToNCj4g
-T24gU3VuLCAxMCBPY3QgMjAyMSAxNTowNToxMyArMDgwMA0KPiBLZXdlaSBYdSA8a2V3ZWkueHVA
-bWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gDQo+ID4gV2hlbiBhIHRpbWVvdXQgZXJyb3Igb2NjdXJz
-IGluIGkyYyB0cmFuc3RlciwgaXQgaXMgdXN1YWxseSByZWxhdGVkDQo+ID4gdG8gdGhlIGkyYy9k
-bWEgSVAgaGFyZHdhcmUgY29uZmlndXJhdGlvbi4gVGhlcmVmb3JlLCB0aGUgcHVycG9zZSBvZg0K
-PiA+IHRoaXMgcGF0Y2ggaXMgdG8gZHVtcCB0aGUga2V5IHJlZ2lzdGVyIHZhbHVlcyBvZiBpMmMv
-ZG1hIHdoZW4gYQ0KPiA+IHRpbWVvdXQgb2NjdXJzIGluIGkyYyBmb3IgZGVidWdnaW5nLg0KPiA+
-IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEtld2VpIFh1IDxrZXdlaS54dUBtZWRpYXRlay5jb20+DQo+
-ID4gUmV2aWV3ZWQtYnk6IFFpaSBXYW5nIDxxaWkud2FuZ0BtZWRpYXRlay5jb20+DQo+IA0KPiBJ
-IHdvdWxkIGxpa2UgdG8gdGVzdCB0aGlzIHBhdGNoc2V0IG9uIG9uZSBvZiBzdXBwb3J0ZWQgcGxh
-dGZvcm1zLCBhbg0KPiBtdDY1NzctcG93ZXJlZCBkZXZpY2UuIFRoaXMgZHJpdmVyIHJlcXVpcmVz
-IGEgRE1BIGJhc2UuLi4NCj4gPiAJaTJjLT5wZG1hYmFzZSA9IGRldm1faW9yZW1hcF9yZXNvdXJj
-ZSgmcGRldi0+ZGV2LCByZXMpOw0KPiA+IAlpZiAoSVNfRVJSKGkyYy0+cGRtYWJhc2UpKQ0KPiA+
-IAkJcmV0dXJuIFBUUl9FUlIoaTJjLT5wZG1hYmFzZSk7DQo+IA0KPiAuLi4gaG93ZXZlciBJIGFt
-IG5vdCBzdXJlIHdoYXQgYWRkcmVzcyBzaG91bGQgSSBzcGVjaWZ5IGluIHRoZSAuZHRzDQo+IGZp
-bGUuIFdoaWxlDQo+IG90aGVyIGkyYyBidXNzZXMgc3VwcG9ydGVkIGJ5IHRoaXMgZHJpdmVyIHN1
-Y2ggYXMgbXQ2NTg5IFsxXVsyXSBhbmQNCj4gbXQ2Nzk3IFszXQ0KPiBoYXZlIGRlc2lnbmF0ZWQg
-RE1BIGZvciBJMkMsIG10NjU3NyBzZWVtcyB0byBsYWNrIGRlZGljYXRlZCBETUENCj4gZW5naW5l
-IGZvciBJMkMNCj4gWzRdWzVdLg0KPiANCj4gRG8gSSBuZWVkIHRvIHNwZWNpZnkgdGhlIEdlbmVy
-aWMgRE1BIGJhc2UgYWRkcmVzcyBbNF0gaW5zdGVhZD8NCj4gDQo+IFdvcnRoIG1lbnRpb25pbmcg
-SSBicm91Z2h0IHVwIHRoaXMgaXNzdWUgaW4gdGhlIHBhc3QgWzVdWzZdLg0KPiANCj4gWzFdIEFM
-UFMuS0sxLk1QNS5WMS4zX0VBU1RBRU9OODlfV0VUX0tLIHNvdXJjZSBjb2RlIChkb3duc3RyZWFt
-KQ0KPiBbMl0gTVQ2NTg5IEhTUEErIFNtYXJ0cGhvbmUgQXBwbGljYXRpb24gUHJvY2Vzc29yIERh
-dGFzaGVldCB2MS4wLA0KPiBwYWdlIDg2OQ0KPiBbM10gTVQ2Nzk3IExURS1BIFNtYXJ0cGhvbmUg
-QXBwbGljYXRpb24gUHJvY2Vzc29yIFJlZ2lzdGVyIFRhYmxlDQo+IChQYXJ0IDEpIHYxLjEsDQo+
-IHBhZ2UgMTc5Ng0KPiBbNF0gTVQ2NTc3IEhTUEEgU21hcnRwaG9uZSBBcHBsaWNhdGlvbiBQcm9j
-ZXNzb3IgRGF0YXNoZWV0IHYwLjk0LA0KPiBwYWdlIDU0Nw0KPiBbNV0gQUxQUy5KQi5NUC5WMS4x
-OV9NQks3N19UQl9KQiBzb3VyY2UgY29kZSAoZG93bnN0cmVhbSkNCj4gWzZdIGh0dHBzOi8vbWFy
-Yy5pbmZvLz9sPWRldmljZXRyZWUmbT0xNTk5NDkyNDc5MDE4MzEmdz0yDQo+IFs3XSBodHRwczov
-L21hcmMuaW5mby8/bD1saW51eC1pMmMmbT0xNTk5Mzk3MzA3MTQxODcmdz0yDQpIaSwgVGhpcyBw
-YXRjaCBvbmx5IGFwcGxpZXMgdG8gQVBETUEoYXBwbGljYXRpb24gcHJvY2Vzc29yIERNQSkgYW5k
-DQpkb2VzIG5vdCB1c2UgR0RNQShHZW5lcmljIERNQSkuSW4gYWRkaXRpb24sIHRoZSBmaWxlIGky
-Yy1tdDY1eHguYyBvbmx5DQpzdXBwb3J0cyBBUERNQSBtb2RlIGJ5IGRlZmF1bHQuIElmIEFQRE1B
-IGFkZHJlc3MgaXMgbm90IGNvbmZpZ3VyZWQgaW4NCmR0cywgaTJjIHRyYW5zbWlzc2lvbiB3aWxs
-IGJlIGZhaWwudGh4fg0K
+Hi All,
+
+Here is v4 of my patch-set adding support for camera sensor connected to a
+TPS68470 PMIC on x86/ACPI devices.
+
+Changes in v4:
+[PATCH 01/11] ACPI: delay enumeration of devices with a _DEP
+              pointing to an INT3472 device:
+- Move the acpi_dev_ready_for_enumeration() check to acpi_bus_attach()
+  (replacing the acpi_device_is_present() check there)
+
+[PATCH 04/11] regulator: Introduce tps68470-regulator driver:
+- Make the top comment block use c++ style comments
+- Drop the bogus builtin regulator_init_data
+- Make the driver enable the PMIC clk when enabling the Core buck
+  regulator, this switching regulator needs the PLL to be on
+- Kconfig: add || COMPILE_TEST, fix help text
+
+[PATCH 05/11] clk: Introduce clk-tps68470 driver
+- Kconfig: select REGMAP_I2C, add || COMPILE_TEST, fix help text
+- tps68470_clk_prepare(): Wait for the PLL to lock before returning
+- tps68470_clk_unprepare(): Remove unnecesary clearing of divider regs
+- tps68470_clk_probe(): Use devm_clk_hw_register()
+- Misc. small cleanups
+
+I'm quite happy with how this works now, so from my pov this is the final
+version of the device-instantiation deferral code / approach.
+
+###
+
+The clk and regulator frameworks expect clk/regulator consumer-devices
+to have info about the consumed clks/regulators described in the device's
+fw_node, but on ACPI this info is missing.
+
+This series worksaround this by providing platform_data with the info to
+the TPS68470 clk/regulator MFD cells.
+
+Patches 1 - 2 deal with a probe-ordering problem this introduces,
+since the lookups are only registered when the provider-driver binds,
+trying to get these clks/regulators before then results in a -ENOENT
+error for clks and a dummy regulator for regulators. See the patches
+for more details.
+
+Patch 3 adds a header file which adds tps68470_clk_platform_data and
+tps68470_regulator_platform_data structs. The futher patches depend on
+this new header file.
+
+Patch 4 + 5 add the TPS68470 clk and regulator drivers
+
+Patches 6 - 11 Modify the INT3472 driver which instantiates the MFD cells to
+provide the necessary platform-data.
+
+Assuming this series is acceptable to everyone, we need to talk about how
+to merge this.
+
+Patch 2 has already been acked by Wolfram for merging by Rafael, so patch
+1 + 2 can be merged into linux-pm, independent of the rest of the series
+(there are some runtime deps on other changes for everything to work,
+but the camera-sensors impacted by this are not fully supported yet in
+the mainline kernel anyways).
+
+For "[PATCH 03/13] platform_data: Add linux/platform_data/tps68470.h file",
+which all further patches depend on I plan to provide an immutable branch
+myself (once it has been reviewed), which the clk / regulator maintainers
+can then merge before merging the clk / regulator driver which depends on
+this.
+
+And I will merge that IM-branch + patches 6-11 into the pdx86 tree myself.
+
+Regards,
+
+Hans
+
+
+Daniel Scally (1):
+  platform/x86: int3472: Enable I2c daisy chain
+
+Hans de Goede (10):
+  ACPI: delay enumeration of devices with a _DEP pointing to an INT3472
+    device
+  i2c: acpi: Use acpi_dev_ready_for_enumeration() helper
+  platform_data: Add linux/platform_data/tps68470.h file
+  regulator: Introduce tps68470-regulator driver
+  clk: Introduce clk-tps68470 driver
+  platform/x86: int3472: Split into 2 drivers
+  platform/x86: int3472: Add get_sensor_adev_and_name() helper
+  platform/x86: int3472: Pass tps68470_clk_platform_data to the
+    tps68470-regulator MFD-cell
+  platform/x86: int3472: Pass tps68470_regulator_platform_data to the
+    tps68470-regulator MFD-cell
+  platform/x86: int3472: Deal with probe ordering issues
+
+ drivers/acpi/scan.c                           |  37 ++-
+ drivers/clk/Kconfig                           |   8 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-tps68470.c                    | 253 ++++++++++++++++++
+ drivers/i2c/i2c-core-acpi.c                   |   5 +-
+ drivers/platform/x86/intel/int3472/Makefile   |   9 +-
+ ...lk_and_regulator.c => clk_and_regulator.c} |   2 +-
+ drivers/platform/x86/intel/int3472/common.c   |  82 ++++++
+ .../{intel_skl_int3472_common.h => common.h}  |   6 +-
+ ...ntel_skl_int3472_discrete.c => discrete.c} |  51 ++--
+ .../intel/int3472/intel_skl_int3472_common.c  | 106 --------
+ ...ntel_skl_int3472_tps68470.c => tps68470.c} |  98 ++++++-
+ drivers/platform/x86/intel/int3472/tps68470.h |  25 ++
+ .../x86/intel/int3472/tps68470_board_data.c   | 118 ++++++++
+ drivers/regulator/Kconfig                     |   9 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/tps68470-regulator.c        | 215 +++++++++++++++
+ include/acpi/acpi_bus.h                       |   5 +-
+ include/linux/mfd/tps68470.h                  |  11 +
+ include/linux/platform_data/tps68470.h        |  35 +++
+ 20 files changed, 925 insertions(+), 152 deletions(-)
+ create mode 100644 drivers/clk/clk-tps68470.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_clk_and_regulator.c => clk_and_regulator.c} (99%)
+ create mode 100644 drivers/platform/x86/intel/int3472/common.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_common.h => common.h} (94%)
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_discrete.c => discrete.c} (91%)
+ delete mode 100644 drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_tps68470.c => tps68470.c} (54%)
+ create mode 100644 drivers/platform/x86/intel/int3472/tps68470.h
+ create mode 100644 drivers/platform/x86/intel/int3472/tps68470_board_data.c
+ create mode 100644 drivers/regulator/tps68470-regulator.c
+ create mode 100644 include/linux/platform_data/tps68470.h
+
+-- 
+2.31.1
 
