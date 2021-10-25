@@ -2,169 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72BEB439472
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 13:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DF6439488
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 13:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbhJYLHy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Oct 2021 07:07:54 -0400
-Received: from mga02.intel.com ([134.134.136.20]:51333 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232525AbhJYLHy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 25 Oct 2021 07:07:54 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10147"; a="216793262"
-X-IronPort-AV: E=Sophos;i="5.87,180,1631602800"; 
-   d="scan'208";a="216793262"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 04:05:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,180,1631602800"; 
-   d="scan'208";a="664019365"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.232.188]) ([10.238.232.188])
-  by orsmga005.jf.intel.com with ESMTP; 25 Oct 2021 04:05:27 -0700
-Subject: Re: [PATCH 3/6] Documentation: ACPI: Document _DSC object usage for
- enum power state
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-References: <20211018121729.6357-1-sakari.ailus@linux.intel.com>
- <20211018121729.6357-4-sakari.ailus@linux.intel.com>
-From:   Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <4da84e63-0e3d-155f-f3db-5d3a9efe3aa7@linux.intel.com>
-Date:   Mon, 25 Oct 2021 19:01:41 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S232796AbhJYLOm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Oct 2021 07:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230232AbhJYLOm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 07:14:42 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CF4C061745;
+        Mon, 25 Oct 2021 04:12:20 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id l13so20991631edi.8;
+        Mon, 25 Oct 2021 04:12:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DE414Csss+ESJUsxIVSV3LbjKKBbROgWqQe4HOBfb1o=;
+        b=ZyabSViE6U7Oogdi/LL9eL0DoZU1mlE5KHkHL4kMn5iqw3evyYKxGSA/W6q38331bM
+         BwzH90IAxQMTWxLdXZBFrIRih2fY27usQYqwoOop1toa+3X5qgVXvc1SSSkIaifjMG/0
+         Nn8EUcL1MOUPCUYeDWwvaJGdDkKdIcBzOFHDrsGFP3UAEYKqqwC8UKGzt1d+d+AKgN9Z
+         wQdFk8V/VcpXrC3ZY98ZamMK/2y/sU589/tsO1FFMEwmDqZ4W+Mc5UKF79NVgKWRrklC
+         2W8tcKHBVZsh2pv3l2f4fM+1M5sUdZLbU57j6ep4wR4Azrw+8nf2Fz26huOrOA/Hpd9W
+         MrRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DE414Csss+ESJUsxIVSV3LbjKKBbROgWqQe4HOBfb1o=;
+        b=TNSjPm7ipHVX8sD52eHcIyniuUWiAO9y3LfdaFSHP5xDYXF0ES/68BjuMWaF0Jdj6u
+         e2aCkRdRFxqOogJ228nA/ELufSXSHnNJUPl42jUMZK7xiuC7GrjI817R548sAIaLpWi9
+         sEyvZrRSqtvNSi/52wntKyThAWLfbdxL3k6qzw7jVx9//YOli1PoTcczo0tF2KBFaZdi
+         RckDP5le2i9YIHoID4aR6aUl/zYxTNrRgwh8cqGst+gZ9HX4MQJH9A/xq0zxtEwQr73k
+         DTtTPAREiIwfHUhY5emszO+WknbhxtAnms4Eyy7OWP6qabbH/re+rZAcRCXD6hb6vn48
+         Rw5g==
+X-Gm-Message-State: AOAM531wyNtFJQoV3TuE2TKpxyeJeHA0b+2C5NJGLFvjzHzCp/WxmQJj
+        t7YFQe5MLydqwOzSd9O7p0D6uVn/4LtCI//rc6o=
+X-Google-Smtp-Source: ABdhPJxsHqCxc9rcuWSI/uo1379vMzZ34fwIDA/WvIMYTprTuHb5Azjp9WOPaOClk9+sjtE6UnOhGd4VS5+dBo7YQhQ=
+X-Received: by 2002:a17:906:d553:: with SMTP id cr19mr14174870ejc.128.1635160338586;
+ Mon, 25 Oct 2021 04:12:18 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211018121729.6357-4-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-5-hdegoede@redhat.com>
+In-Reply-To: <20211025094119.82967-5-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Oct 2021 14:11:24 +0300
+Message-ID: <CAHp75Ve4nu1WDURaSvUto6+aLoEDM2OfTCVi2Th6x-oagO6a-Q@mail.gmail.com>
+Subject: Re: [PATCH v4 04/11] regulator: Introduce tps68470-regulator driver
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Sakari,
+On Mon, Oct 25, 2021 at 12:41 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> The TPS68470 PMIC provides Clocks, GPIOs and Regulators. At present in
+> the kernel the Regulators and Clocks are controlled by an OpRegion
+> driver designed to work with power control methods defined in ACPI, but
+> some platforms lack those methods, meaning drivers need to be able to
+> consume the resources of these chips through the usual frameworks.
+>
+> This commit adds a driver for the regulators provided by the tps68470,
+> and is designed to bind to the platform_device registered by the
+> intel_skl_int3472 module.
+>
+> This is based on this out of tree driver written by Intel:
+> https://github.com/intel/linux-intel-lts/blob/4.14/base/drivers/regulator/tps68470-regulator.c
+> with various cleanups added.
 
-On 10/18/21 8:17 PM, Sakari Ailus wrote:
-> Document the use of the _DSC object for setting desirable power state
-> during probe.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-> ---
->  Documentation/firmware-guide/acpi/index.rst   |  1 +
->  .../firmware-guide/acpi/non-d0-probe.rst      | 78 +++++++++++++++++++
->  2 files changed, 79 insertions(+)
->  create mode 100644 Documentation/firmware-guide/acpi/non-d0-probe.rst
-> 
-> diff --git a/Documentation/firmware-guide/acpi/index.rst b/Documentation/firmware-guide/acpi/index.rst
-> index a99ee402b212b..b053b0c3d6969 100644
-> --- a/Documentation/firmware-guide/acpi/index.rst
-> +++ b/Documentation/firmware-guide/acpi/index.rst
-> @@ -26,5 +26,6 @@ ACPI Support
->     acpi-lid
->     lpit
->     video_extension
-> +   non-d0-probe
->     extcon-intel-int3496
->     intel-pmc-mux
-> diff --git a/Documentation/firmware-guide/acpi/non-d0-probe.rst b/Documentation/firmware-guide/acpi/non-d0-probe.rst
-> new file mode 100644
-> index 0000000000000..78781e1ab6a3d
-> --- /dev/null
-> +++ b/Documentation/firmware-guide/acpi/non-d0-probe.rst
-> @@ -0,0 +1,78 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +========================================
-> +Probing devices in other D states than 0
-> +========================================
-> +
-> +Introduction
-> +============
-> +
-> +In some cases it may be preferred to leave certain devices powered off for the
-> +entire system bootup if powering on these devices has adverse side effects,
-> +beyond just powering on the said device.
-> +
-> +How it works
-> +============
-> +
-> +The _DSC (Device State for Configuration) object that evaluates to an integer
-> +may be used to tell Linux the highest allowed D state for a device during
-> +probe. The support for _DSC requires support from the kernel bus type if the
-> +bus driver normally sets the device in D0 state for probe.
-> +
-> +The downside of using _DSC is that as the device is not powered on, even if
-> +there's a problem with the device, the driver likely probes just fine but the
-> +first user will find out the device doesn't work, instead of a failure at probe
-> +time. This feature should thus be used sparingly.
-> +
-> +I²C
-> +---
-> +
-> +If an I²C driver indicates its support for this by setting the
-> +I2C_DRV_ACPI_WAIVE_D0_PROBE flag in struct i2c_driver.flags field and the
-> +_DSC object evaluates to integer higher than the D state of the device,
-> +the device will not be powered on (put in D0 state) for probe.
-> +
-> +D states
-> +--------
-> +
-> +The D states and thus also the allowed values for _DSC are listed below. Refer
-> +to [1] for more information on device power states.
-> +
-> +.. code-block:: text
-> +
-> +	Number	State	Description
-> +	0	D0	Device fully powered on
-> +	1	D1
-> +	2	D2
-> +	3	D3hot
-> +	4	D3cold	Off
-> +
-> +References
-> +==========
-> +
-> +[1] https://uefi.org/specifications/ACPI/6.4/02_Definition_of_Terms/Definition_of_Terms.html#device-power-state-definitions
-> +
-> +Example
-> +=======
-> +
-> +An ASL example describing an ACPI device using _DSC object to tell Operating
-> +System the device should remain powered off during probe looks like this. Some
-> +objects not relevant from the example point of view have been omitted.
-> +
-> +.. code-block:: text
-> +
-> +	Device (CAM0)
-> +        {
-> +		Name (_HID, "SONY319A")
-> +		Name (_UID, Zero)
-> +		Name (_CRS, ResourceTemplate ()
-> +		{
-> +			I2cSerialBus(0x0020, ControllerInitiated, 0x00061A80,
-> +				     AddressingMode7Bit, "\\_SB.PCI0.I2C0",
-> +				     0x00, ResourceConsumer)
-> +		})
-> +		Name (_DSC, 0, NotSerialized)
-> +		{
-> +			Return (0x4)
-> +                }
-One question here:
-Is the value of _DSC object evaluated from 'Method' or 'Name' ?
+> +struct tps68470_regulator_data {
+> +       struct clk *clk;
+> +};
 
-> +	}
-> 
+...
+
+> +/*
+> + * (1) This register must have same setting as VIOVAL if S_IO LDO is used to
+> + *     power daisy chained IOs in the receive side.
+> + * (2) If there is no I2C daisy chain it can be set freely.
+
+> + *
+
+Redundant empty line.
+
+> + */
+
+...
+
+> +       struct tps68470_regulator_platform_data *pdata = pdev->dev.platform_data;
+
+dev_get_platdata() ?
+
+...
+
+> +       data->clk = devm_clk_get(&pdev->dev, "tps68470-clk");
+> +       if (IS_ERR(data->clk)) {
+> +               dev_err(&pdev->dev, "Error getting tps68470-clk\n");
+> +               return PTR_ERR(data->clk);
+> +       }
+
+return dev_err_probe(...);
+
+...
+
+> +               rdev = devm_regulator_register(&pdev->dev, &regulators[i], &config);
+> +               if (IS_ERR(rdev)) {
+> +                       dev_err(&pdev->dev, "failed to register %s regulator\n",
+> +                               regulators[i].name);
+> +                       return PTR_ERR(rdev);
+> +               }
+
+Ditto.
 
 -- 
-Best regards,
-Bingbu Cao
+With Best Regards,
+Andy Shevchenko
