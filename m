@@ -2,98 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98D0438C2E
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Oct 2021 23:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BC1438E95
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 07:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbhJXVwU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 24 Oct 2021 17:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S232206AbhJYFFh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Oct 2021 01:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbhJXVwT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 24 Oct 2021 17:52:19 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36A0C061767
-        for <linux-i2c@vger.kernel.org>; Sun, 24 Oct 2021 14:49:57 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bq11so5427651lfb.10
-        for <linux-i2c@vger.kernel.org>; Sun, 24 Oct 2021 14:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zqFQsFklz0z9fcfedYbprvhik13AFhIEkeGZ0J9HMVs=;
-        b=vtdzNJXe7QO5brg0f8xsAF2K449Mc5q9vcJq0Qcq8K5HWgXm4fq6s2MKROR+wgugHh
-         /7nPILVTts16rDHuo9n7Ix+IjkFiSOXKB1sHPByCN6zeoVpIAH8X8bakNSHYS8jS3DFJ
-         qFYsBbZgfQ4Hl2cgMyBdeTsfNXF+Lgemm1NCR0+oLdvmTrr1+Y0DW5+nxCQZNxcHBjKd
-         dNokp3lRaRxMNp0zsDdWXdyLEbdU6V82Sb2apqaRcu13h3cWCdlhEA0HjsU9/WSdGZ0p
-         TIQ+zHPhHbesIkOXlzu7OuydUKuJ+6PM5Xx/tWhULpvKDZCWGlWYSCwJDMdzBlwny86K
-         mMOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zqFQsFklz0z9fcfedYbprvhik13AFhIEkeGZ0J9HMVs=;
-        b=HEcV+yg0n/LUftHgho9rqyYQfHuGwmw6ITFLL+lzTY5kFt82KmGG/4WJjon4f0PCJt
-         iUC1+fUh/LaP/obpllNG3tjSlOTVHw2CqivsPGK4tZ9s2Wz32PDokAWYmOoecI9RPpnZ
-         rLNO3Tlp8GkPjrVWqzo9gqNsxcwY26WtwG0/7e7XmCXrinmauodCjFgybV+ubI5Ufm02
-         3H+hTyLyGZ36Am62WbAp/bwir+lQrWECY+dXJJylHum8PpVfcJUEuCsDpabFtemqTcOV
-         UYYlbgCC7IJDDbSo5gJgrTkBmrMa9DQ0x/a2ezaffh3E9acopbn1Qr7qcJWw9I+dW3Pd
-         M9sw==
-X-Gm-Message-State: AOAM533lnpe6VHM/qGaqCD9ZA+ESL6nGdpUDG7zA8YbE4SNHVuBXS97D
-        ggDnZtqLlA6lP3En06LVrq5PJmXKPnzQdZ/py0MFv39HI4Y=
-X-Google-Smtp-Source: ABdhPJygz737sWYq7dytPNvnnlwtCG1vOKQaYk14JY11BQkN5FIGmxvZXnjTvu/d8bwlzjISeavbtKh2rIcQEhfyUR0=
-X-Received: by 2002:ac2:5d4a:: with SMTP id w10mr13208074lfd.584.1635112195140;
- Sun, 24 Oct 2021 14:49:55 -0700 (PDT)
+        with ESMTP id S229489AbhJYFFh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 01:05:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BD5C061745;
+        Sun, 24 Oct 2021 22:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=1h0WaOdivaQpGou6EXOqToxlTtTFUc2nlylZntQctDc=; b=hJZpOBftPioI3dFTzAQ7dGaSbf
+        LHbKuw1LZuCsojNXhLsC2IjNg5KrT25HpyaOO9d6duevEOWd0fg3rS0r1H6LLiIiGQtc4Mb0AqDH9
+        xVvtOuy8XVLOnks0Hs2pcPS5ezaAt0vT9YJ6QILJtPDZnzlor0Rfwb6opTjKZYE3keltj3M7DDFWJ
+        7wv/PmSCVki4XXDxVUdWKFalTfszEOz9hEkSORczUDVC/u/8A6DkRXiSKQczlxOLDn65wyQxXYyDE
+        L+KZubKz/lIo9n6LKbU8BGGJ3TBTJkNJ8egQDjtG9rUaNtcTsy6wxfMxAqTl+4atcYKPXPUm4cPfe
+        JiGs0C3g==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mes8g-00FI3I-La; Mon, 25 Oct 2021 05:03:14 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-i2c@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Wolfram Sang <wsa@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] i2c: qup: fix a trivial typo
+Date:   Sun, 24 Oct 2021 22:03:13 -0700
+Message-Id: <20211025050313.32409-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20211018220504.8301-1-shreeya.patel@collabora.com>
-In-Reply-To: <20211018220504.8301-1-shreeya.patel@collabora.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 24 Oct 2021 23:49:44 +0200
-Message-ID: <CACRpkdZCMH5OBwfiPwMT1CifDV28H4aTxy_N_4dHs0Qg0ENOAw@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, krisman@collabora.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 12:05 AM Shreeya Patel
-<shreeya.patel@collabora.com> wrote:
+Correct the typo of "reamining" to "remaining".
 
-> We are racing the registering of .to_irq when probing the
-> i2c driver. This results in random failure of touchscreen
-> devices.
->
-> Following errors could be seen in dmesg logs when gc->to_irq is NULL
->
-> [2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
-> [2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
->
-> To avoid this situation, defer probing until to_irq is registered.
->
-> This issue has been reported many times in past and people have been
-> using workarounds like changing the pinctrl_amd to built-in instead
-> of loading it as a module or by adding a softdep for pinctrl_amd into
-> the config file.
->
-> References :-
-> https://bugzilla.kernel.org/show_bug.cgi?id=209413
-> https://github.com/Syniurge/i2c-amd-mp2/issues/3
->
-> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
->
-> ---
-> Changes in v2
->   - Add a condition to check for irq chip to avoid bogus error.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Suggested-by: Matthew Wilcox <willy@infradead.org>
+Cc: Wolfram Sang <wsa@kernel.org>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+---
+ drivers/i2c/busses/i2c-qup.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This v2 looks acceptable to me.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+--- linux-next-20211022.orig/drivers/i2c/busses/i2c-qup.c
++++ linux-next-20211022/drivers/i2c/busses/i2c-qup.c
+@@ -1290,7 +1290,7 @@ static void qup_i2c_write_rx_tags_v2(str
+  * 1. Check if tx_tags_sent is false i.e. the start of QUP block so write the
+  *    tags to TX FIFO and set tx_tags_sent to true.
+  * 2. Check if send_last_word is true. It will be set when last few data bytes
+- *    (less than 4 bytes) are reamining to be written in FIFO because of no FIFO
++ *    (less than 4 bytes) are remaining to be written in FIFO because of no FIFO
+  *    space. All this data bytes are available in tx_fifo_data so write this
+  *    in FIFO.
+  * 3. Write the data to TX FIFO and check for cur_blk_len. If it is non zero
