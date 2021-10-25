@@ -2,122 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C2C439500
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 13:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD795439B4A
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 18:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbhJYLoA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Oct 2021 07:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S233907AbhJYQRI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Oct 2021 12:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbhJYLn5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 07:43:57 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5DFC061745;
-        Mon, 25 Oct 2021 04:41:35 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id g8so10320150edb.2;
-        Mon, 25 Oct 2021 04:41:35 -0700 (PDT)
+        with ESMTP id S233910AbhJYQQ7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 12:16:59 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63141C061226
+        for <linux-i2c@vger.kernel.org>; Mon, 25 Oct 2021 09:14:36 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id h193so11420826pgc.1
+        for <linux-i2c@vger.kernel.org>; Mon, 25 Oct 2021 09:14:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Af+qmYvV3PY7oY9iMHf1WDLN+yTC/dfVl6LmNB2Ru+M=;
-        b=iLTzGHKq62wcRXJw/NQeb8QVl0SSGxd0VOXTRXyEMYtWDF16J/H4D9o1cX+9caqz8h
-         pXrPyzBaUiZ0wa/rRI5QqSYx28CxRd1p5Ys03yoYaNBgm3qYTV80XOmaEFCOc8WN3eI+
-         /Zwrh18K9RiH6f4EmIOxd9zjwFUeuIeq/GdpkLulr84hMeotFMMfUuWWmc1F0lnxsvey
-         1wozSc9mRa+aSgqBIsqi3KeUU16h2VN8zp5sptzJqmma4Ljkt5BOEK3yDYNWT89byf7X
-         cX9CfI4culRu/NEpETmT2OCUXcdXtWlLT82RGyimdnOIp4g0iEyt3U8uwefzVYNDGf9/
-         VyeQ==
+        h=mime-version:reply-to:from:date:message-id:subject:cc;
+        bh=24EFpZU5AMMCntdM+3YfQ+A/kKth8PZ34wiS7rq1lOE=;
+        b=GdHkH465Fp+M+nGApVuELjWYOA7S77XU+uwpMYEUpqgDrbxPxPsIn3Epzyvzch8o6e
+         nO6a3oRKntK9z01E+4QD2WEWKTj+WL9QNnjPYW7RZrHmLAvLoa08yTz21DyKaafMpo0F
+         dBpC/PSrD2g9OpGQ04Exja2xYHPaz950o+RW1k4d4wWn97wvEUUEfGteEO2a+kqBdSbS
+         lh1EIuUA98lzmQzARsRilRcTZSlMQWK+dldP2jfwJDtre2dVB8gecXxqYlEflWFaV/m9
+         KyUUBvYsawzU81pZPevKviYL2/GFk+XYZqNvEe4O1o9GJ9LWr55QgS9d6uY1Vqltapyc
+         qXlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Af+qmYvV3PY7oY9iMHf1WDLN+yTC/dfVl6LmNB2Ru+M=;
-        b=UUfPSHY/5GTlh7vNnngmfbwcsOt1bbIg3kAuA7pAdr+5yiWD+5apss0uaJI76lIM0B
-         PZNlk+dFc68optixYEHjIqKAyILm+RYyPEpMXWQ1Tb13icpyy9tzLG042Y/VZ/JtZLBj
-         AZzJhiDwiefr//OvgpmAuy96rWNR++eWXf6MBy2DbhgqhgN3M8z84jozTE3JHJwIKaXi
-         f6ONyxx/qZpx8+Uwm0kOIn9Go5HjvbCVJjFg0HJW93gFp6sWMbRjCW4fYssGvWltrRmy
-         8UdxH94gs4NyNN4pffRPyXicaJwVUI7+ocgYLLVt14J9AeCQKDVP+8RLV4bG+8DcQafQ
-         aadw==
-X-Gm-Message-State: AOAM532wd7W+KrnWTlLjEnCsLZLCJmsW7oqOtBK8pUNvMRulJG3xTnhE
-        yHSacVq8seR56o2Xe1L4jRZLNbzZQxllRv5/bb0=
-X-Google-Smtp-Source: ABdhPJzjBN4K07mgHexd4fWyTF3MfP5LCSNqxjtFEIj1rgPmmarKsiTdhxurgICUQfmRRjgJ3XTV28Ui7aDLiZxfOA8=
-X-Received: by 2002:a17:906:d553:: with SMTP id cr19mr14340955ejc.128.1635162093757;
- Mon, 25 Oct 2021 04:41:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:cc;
+        bh=24EFpZU5AMMCntdM+3YfQ+A/kKth8PZ34wiS7rq1lOE=;
+        b=e+V3NkBAzVOwWu3n/OqTn0Z/UViQxOeTPE1akSS26LbzZZSDAGVHfA3Pwrt6X/Nk9i
+         /KAPsLUlQHDLQx0UTTT5ONldAc+GbfB+PmH8HenYWxjyiy9nDzL7qMo7vxOUrdFy40vS
+         eiw8eRbBgnTk/c9LMWrpWPCPlnpBqRJ/hbelv5tlYKVS6D5kPKZkiG2Q2CHZWVM7Plf4
+         ofo9A+PhFTOOePuX7ZCTsu/eKuBPFXWsUZ0v39NwRF1ZLBLp8gAPyclWFYmsejuN0cYX
+         IDcSyYAXaWEK21RwCvEM/nIWPFQSkxWSG861dmcG5EdZsBzXFdEKCOx+X5W36x+z1Ngr
+         dCmg==
+X-Gm-Message-State: AOAM530KZl0XkBGRnDS1gLMT4qQ0Ln09W9MFSLQi3Y54fEWRfzLQ1J9y
+        J50eIsmZV45E5V16ZTPp/DBdDsZCeBwDPvLXNv0=
+X-Received: by 2002:a63:2aca:: with SMTP id q193mt1441481pgq.211.1635178475854;
+ Mon, 25 Oct 2021 09:14:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-12-hdegoede@redhat.com>
-In-Reply-To: <20211025094119.82967-12-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Oct 2021 14:40:39 +0300
-Message-ID: <CAHp75VdJav6L03oVNd0DNA8jUXHPaqNzHU+q=+2-eEbh087bOQ@mail.gmail.com>
-Subject: Re: [PATCH v4 11/11] platform/x86: int3472: Deal with probe ordering issues
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
+Received: by 2002:a05:6a10:4a05:0:0:0:0 with HTTP; Mon, 25 Oct 2021 09:14:34
+ -0700 (PDT)
+Reply-To: israelbarney287@gmail.com
+From:   "Mr. israel barney" <sylvabou2018@gmail.com>
+Date:   Mon, 25 Oct 2021 17:14:34 +0100
+Message-ID: <CAGMjROf2viXeRaskiPaVZ+L=4VXHYUvDW7sHuZEFh9h+wVNW9g@mail.gmail.com>
+Subject: Greetings
+Cc:     israelbarney287@gmail.com
 Content-Type: text/plain; charset="UTF-8"
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> The clk and regulator frameworks expect clk/regulator consumer-devices
-> to have info about the consumed clks/regulators described in the device's
-> fw_node.
->
-> To work around this info missing from the ACPI tables on devices where
-> the int3472 driver is used, the int3472 MFD-cell drivers attach info about
-> consumers to the clks/regulators when registering these.
->
-> This causes problems with the probe ordering wrt drivers for consumers
-> of these clks/regulators. Since the lookups are only registered when the
-> provider-driver binds, trying to get these clks/regulators before then
-> results in a -ENOENT error for clks and a dummy regulator for regulators.
->
-> All the sensor ACPI fw-nodes have a _DEP dependency on the INT3472 ACPI
-> fw-node, so to work around these probe ordering issues the ACPI core /
-> i2c-code does not instantiate the I2C-clients for any ACPI devices
-> which have a _DEP dependency on an INT3472 ACPI device until all
-> _DEP-s are met.
->
-> This relies on acpi_dev_clear_dependencies() getting called by the driver
-> for the _DEP-s when they are ready, add a acpi_dev_clear_dependencies()
-> call to the discrete.c probe code.
->
-> In the tps68470 case calling acpi_dev_clear_dependencies() is already done
-> by the acpi_gpiochip_add() call done by the driver for the GPIO MFD cell
-> (The GPIO cell is deliberately the last cell created to make sure the
-> clk + regulator cells are already instantiated when this happens).
->
-> However for proper probe ordering, the clk/regulator cells must not just
-> be instantiated the must be fully ready (the clks + regulators must be
-> registered with their subsystems).
->
-> Add MODULE_SOFTDEP dependencies for the clk and regulator drivers for
-> the instantiated MFD-cells so that these are loaded before us and so
-> that they bind immediately when the platform-devs are instantiated.
+Good Day My Good Friend.
 
-Just a side note: MODULE_SOFTDEP() won't work in some (special?) cases
-when module tools are limited in functionality (e.g. busybox
-implementation as of today).
+I am deeply sorry if I have in any manner disturbed your privacy.
+Please forgive this unusual manner of contacting you, there is
+absolutely going to be a great doubt and distrust in your heart in
+respect for this email. There is no way for me to know whether I will
+be properly understood, but it is my duty to write and reach out to
+you as a person of transparency, honesty and high caliber. I'll
+introduce myself once again, I am Mr. Israel Barney, from Togo Republic. I
+am also the Branch Bank Manager of Biatogo Bank, I was also the
+Account Manager of my late client Mrs. Anna Who might or might
+not be related to you.
 
--- 
-With Best Regards,
-Andy Shevchenko
+She traveled down to china on the 28th of December 2019 on a five
+weeks business trip and after the successful transaction in china, she
+flew back, not knowing she has been infected with the deadly
+Coronavirus (COVID-19). And she sadly passed away on March 20th 2020.
+She left the sum of $3.2 Million (Three Million, Two Hundred Thousand
+United States Dollars) in our financial institute (Bank), she
+specifically confided in me told me that "no one else knows about her
+funds in our bank" that the funds was for a project before she passed
+away while she was ill. And down here in our country at this present
+day, once anyone passes away, after 1 Year if no relatives of the late
+the customer doesn't come to claim the funds/assets, it'll be recycled, and
+reported to the Central Bank where the greedy government will then
+want to have their hands on the funds.
+
+That's where you come in, since you bear the same surnames with her, I
+want you to stand as her next of kin since no one else knows about
+this funds in our bank besides me, and i don't think anyone will be
+coming for it. I promise you that if you agree to assist in claiming
+this funds from my Bank, we'll not bridge the law in any way because
+I'll be your eyes and ears here in the Bank.
+
+After all is settled we'll share the fund $3.2 Million 50% equally or
+rather invest on whatever we choose. So I would really like to know
+what you have to say in regards to my proposal.
+
+Thanks
+Mr. Israel Barney.
