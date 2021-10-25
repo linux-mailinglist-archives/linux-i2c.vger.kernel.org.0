@@ -2,173 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F104394C0
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 13:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B96C4394C8
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 13:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbhJYL1X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Oct 2021 07:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbhJYL1X (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 07:27:23 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E93BC061745;
-        Mon, 25 Oct 2021 04:25:01 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r4so16765179edi.5;
-        Mon, 25 Oct 2021 04:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HMjzXf7F4jpbrQlFDm/ITcd5oZmF0Z2TEeku8oHs3kU=;
-        b=bsotcAEmprCE7ce2WplDUGURzqrGrekAxYm00UTRZNzXyKHE6B08b4aa4Bzcbcdw5M
-         l8QlCXUhQLF5UeYA56cWKwQf8BH2NKKVWHzsryq9TEpS5f3ozdFrUjInicNJFiO/VSqI
-         x0v/OiHFMmkFC93i4jvSpyuTSu0jI6REkoXUfGOF8S79MmVhCOlcTMP1vMX1yPag3MyI
-         ASFC2jJUJtdaHrpXDkY82IzzwcRavnKpqZ9XJZYPfxDcGLa4mLNv72lculoB0VNPdoh9
-         Re1fPrGVmvyj8ot/LtyjbCDmT36ty1nMg0hnbS2+6+LPfdtpVXoGbXNtI1oJnFeJex6T
-         0pEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HMjzXf7F4jpbrQlFDm/ITcd5oZmF0Z2TEeku8oHs3kU=;
-        b=GLXgtdcHIDHCKILppQPhwVStr3RyRu92yaQWdGiPFOE4A7r78u648qO82smBVHNUvW
-         HgztTIavWw/JBxEnpVsYKyNSiKPACG3kMYYyEJclyZ+mRhGu6dQoxDOAMwoh9xn91jCU
-         AHWB4YWU2Ii94k/RcNQo9glwcOaekUAze4Wc9XcDQFl5Ng4VRQWPHL9DBR/lwGSu7QbM
-         6Hg9fgawPdOxpOsTp/GB87m3PUVFhuUg+ei1AxZsX5FWCJ5f1CzBnQpzTgqguFXIPhyn
-         AQmqxBBTi69m9mn1kQCVErjhTSwN2vI54Tcj6nseheEkSN85sW3WIHrfLaNg2FS4DH17
-         rPLg==
-X-Gm-Message-State: AOAM533ResgDVu2ew2SYw3BPvM/E83YwerYqJ2wRlrwsgSFb4j2c6pUX
-        aYXAzePfa1qg8YKDksZ+hznxX2CxgOs3GL1vgXo=
-X-Google-Smtp-Source: ABdhPJxNro7nJb+4nNcU2bcNEILfMTDeLp7HJvi6zJ4Qvf79TF+E57V2hcT8u1m/awhFSY5Xohc1i+UovGXa4cjHoyk=
-X-Received: by 2002:a17:906:d553:: with SMTP id cr19mr14246616ejc.128.1635161099617;
- Mon, 25 Oct 2021 04:24:59 -0700 (PDT)
+        id S233099AbhJYL1j (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Oct 2021 07:27:39 -0400
+Received: from mga07.intel.com ([134.134.136.100]:41187 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233087AbhJYL1i (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 25 Oct 2021 07:27:38 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10147"; a="293090765"
+X-IronPort-AV: E=Sophos;i="5.87,180,1631602800"; 
+   d="scan'208";a="293090765"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 04:25:16 -0700
+X-IronPort-AV: E=Sophos;i="5.87,180,1631602800"; 
+   d="scan'208";a="634706222"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 04:25:12 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 98CB920150;
+        Mon, 25 Oct 2021 14:25:10 +0300 (EEST)
+Date:   Mon, 25 Oct 2021 14:25:10 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bingbu Cao <bingbu.cao@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 3/6] Documentation: ACPI: Document _DSC object usage for
+ enum power state
+Message-ID: <YXaUFk7bQVNhq1L7@paasikivi.fi.intel.com>
+References: <20211018121729.6357-1-sakari.ailus@linux.intel.com>
+ <20211018121729.6357-4-sakari.ailus@linux.intel.com>
+ <4da84e63-0e3d-155f-f3db-5d3a9efe3aa7@linux.intel.com>
 MIME-Version: 1.0
-References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-6-hdegoede@redhat.com>
-In-Reply-To: <20211025094119.82967-6-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Oct 2021 14:24:05 +0300
-Message-ID: <CAHp75VdfwA_3QK2Fo1S34rRZWHCMNzzHug4AKsRfOrKu4CU_YA@mail.gmail.com>
-Subject: Re: [PATCH v4 05/11] clk: Introduce clk-tps68470 driver
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4da84e63-0e3d-155f-f3db-5d3a9efe3aa7@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> The TPS68470 PMIC provides Clocks, GPIOs and Regulators. At present in
-> the kernel the Regulators and Clocks are controlled by an OpRegion
-> driver designed to work with power control methods defined in ACPI, but
-> some platforms lack those methods, meaning drivers need to be able to
-> consume the resources of these chips through the usual frameworks.
->
-> This commit adds a driver for the clocks provided by the tps68470,
-> and is designed to bind to the platform_device registered by the
-> intel_skl_int3472 module.
+Hi Bingbu,
 
-...
+On Mon, Oct 25, 2021 at 07:01:41PM +0800, Bingbu Cao wrote:
+> Sakari,
+> 
+> On 10/18/21 8:17 PM, Sakari Ailus wrote:
+> > Document the use of the _DSC object for setting desirable power state
+> > during probe.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+> > ---
+> >  Documentation/firmware-guide/acpi/index.rst   |  1 +
+> >  .../firmware-guide/acpi/non-d0-probe.rst      | 78 +++++++++++++++++++
+> >  2 files changed, 79 insertions(+)
+> >  create mode 100644 Documentation/firmware-guide/acpi/non-d0-probe.rst
+> > 
+> > diff --git a/Documentation/firmware-guide/acpi/index.rst b/Documentation/firmware-guide/acpi/index.rst
+> > index a99ee402b212b..b053b0c3d6969 100644
+> > --- a/Documentation/firmware-guide/acpi/index.rst
+> > +++ b/Documentation/firmware-guide/acpi/index.rst
+> > @@ -26,5 +26,6 @@ ACPI Support
+> >     acpi-lid
+> >     lpit
+> >     video_extension
+> > +   non-d0-probe
+> >     extcon-intel-int3496
+> >     intel-pmc-mux
+> > diff --git a/Documentation/firmware-guide/acpi/non-d0-probe.rst b/Documentation/firmware-guide/acpi/non-d0-probe.rst
+> > new file mode 100644
+> > index 0000000000000..78781e1ab6a3d
+> > --- /dev/null
+> > +++ b/Documentation/firmware-guide/acpi/non-d0-probe.rst
+> > @@ -0,0 +1,78 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +========================================
+> > +Probing devices in other D states than 0
+> > +========================================
+> > +
+> > +Introduction
+> > +============
+> > +
+> > +In some cases it may be preferred to leave certain devices powered off for the
+> > +entire system bootup if powering on these devices has adverse side effects,
+> > +beyond just powering on the said device.
+> > +
+> > +How it works
+> > +============
+> > +
+> > +The _DSC (Device State for Configuration) object that evaluates to an integer
+> > +may be used to tell Linux the highest allowed D state for a device during
+> > +probe. The support for _DSC requires support from the kernel bus type if the
+> > +bus driver normally sets the device in D0 state for probe.
+> > +
+> > +The downside of using _DSC is that as the device is not powered on, even if
+> > +there's a problem with the device, the driver likely probes just fine but the
+> > +first user will find out the device doesn't work, instead of a failure at probe
+> > +time. This feature should thus be used sparingly.
+> > +
+> > +I²C
+> > +---
+> > +
+> > +If an I²C driver indicates its support for this by setting the
+> > +I2C_DRV_ACPI_WAIVE_D0_PROBE flag in struct i2c_driver.flags field and the
+> > +_DSC object evaluates to integer higher than the D state of the device,
+> > +the device will not be powered on (put in D0 state) for probe.
+> > +
+> > +D states
+> > +--------
+> > +
+> > +The D states and thus also the allowed values for _DSC are listed below. Refer
+> > +to [1] for more information on device power states.
+> > +
+> > +.. code-block:: text
+> > +
+> > +	Number	State	Description
+> > +	0	D0	Device fully powered on
+> > +	1	D1
+> > +	2	D2
+> > +	3	D3hot
+> > +	4	D3cold	Off
+> > +
+> > +References
+> > +==========
+> > +
+> > +[1] https://uefi.org/specifications/ACPI/6.4/02_Definition_of_Terms/Definition_of_Terms.html#device-power-state-definitions
+> > +
+> > +Example
+> > +=======
+> > +
+> > +An ASL example describing an ACPI device using _DSC object to tell Operating
+> > +System the device should remain powered off during probe looks like this. Some
+> > +objects not relevant from the example point of view have been omitted.
+> > +
+> > +.. code-block:: text
+> > +
+> > +	Device (CAM0)
+> > +        {
+> > +		Name (_HID, "SONY319A")
+> > +		Name (_UID, Zero)
+> > +		Name (_CRS, ResourceTemplate ()
+> > +		{
+> > +			I2cSerialBus(0x0020, ControllerInitiated, 0x00061A80,
+> > +				     AddressingMode7Bit, "\\_SB.PCI0.I2C0",
+> > +				     0x00, ResourceConsumer)
+> > +		})
+> > +		Name (_DSC, 0, NotSerialized)
+> > +		{
+> > +			Return (0x4)
+> > +                }
+> One question here:
+> Is the value of _DSC object evaluated from 'Method' or 'Name' ?
 
-> +/*
-> + *  The PLL is used to multiply the crystal oscillator
-> + *  frequency range of 3 MHz to 27 MHz by a programmable
-> + *  factor of F = (M/N)*(1/P) such that the output
-> + *  available at the HCLK_A or HCLK_B pins are in the range
-> + *  of 4 MHz to 64 MHz in increments of 0.1 MHz
+"Method". This is a bug in the documentation. Thanks!
 
-Missed (grammatical) period.
+Rafael: could you fix this while applying?
 
-> + *
-> + * hclk_# = osc_in * (((plldiv*2)+320) / (xtaldiv+30)) * (1 / 2^postdiv)
-> + *
-> + * PLL_REF_CLK should be as close as possible to 100kHz
-> + * PLL_REF_CLK = input clk / XTALDIV[7:0] + 30)
-> + *
-> + * PLL_VCO_CLK = (PLL_REF_CLK * (plldiv*2 + 320))
-> + *
-> + * BOOST should be as close as possible to 2Mhz
-> + * BOOST = PLL_VCO_CLK / (BOOSTDIV[4:0] + 16) *
-> + *
-> + * BUCK should be as close as possible to 5.2Mhz
-> + * BUCK = PLL_VCO_CLK / (BUCKDIV[3:0] + 5)
-> + *
-> + * osc_in   xtaldiv  plldiv   postdiv   hclk_#
-> + * 20Mhz    170      32       1         19.2Mhz
-> + * 20Mhz    170      40       1         20Mhz
-> + * 20Mhz    170      80       1         24Mhz
-
-> + *
-
-Redundant empty line.
-
-> + */
-
-...
-
-> +       /* disable clock first */
-
-Disable
-first...
-
-> +       /* and then tri-state the clock outputs */
-
-...and
-
-...
-
-> +       for (i = 0; i < ARRAY_SIZE(clk_freqs); i++) {
-> +               diff = clk_freqs[i].freq - rate;
-> +               if (diff == 0)
-> +                       return i;
-
-> +               diff = abs(diff);
-
-This needs a comment why higher (lower) frequency is okay.
-
-> +               if (diff < best_diff) {
-> +                       best_diff = diff;
-> +                       best_idx = i;
-> +               }
-> +       }
-
-...
-
-> +       if (pdata) {
-> +               ret = devm_clk_hw_register_clkdev(&pdev->dev,
-> +                                                 &tps68470_clkdata->clkout_hw,
-> +                                                 pdata->consumer_con_id,
-> +                                                 pdata->consumer_dev_name);
-
-if (ret)
-  return ret;
-
-> +       }
-> +
-> +       return ret;
-
-return 0;
-
---
-With Best Regards,
-Andy Shevchenko
+-- 
+Sakari Ailus
