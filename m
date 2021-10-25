@@ -2,148 +2,169 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 466694392E7
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 11:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BEB439472
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 13:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbhJYJp3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Oct 2021 05:45:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29978 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232949AbhJYJo6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 05:44:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635154954;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SKwKQKkno83iWdPQp68+jL3tuL2dNVk2AHtccPfXn80=;
-        b=U7IvCLnR4Hlky8FSv3f08I9JrWdAYGaL6r1yirKKZA17K9oDjEnVXex0FnzyXl7PYx/6Iw
-        BCpk5VLw/C+ZRRa+s7gxHV1wgxNjWbzWe8pEG+VDTyPymXN6D+M9kfrHS2vYgsbZKvHGtf
-        TlSA/nO0q0UnO2AyPEPFkMzBWotJvn8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-27-mMaRfN7JOiOBDnDm30BBxg-1; Mon, 25 Oct 2021 05:42:31 -0400
-X-MC-Unique: mMaRfN7JOiOBDnDm30BBxg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9E3968066F5;
-        Mon, 25 Oct 2021 09:42:28 +0000 (UTC)
-Received: from x1.localdomain (unknown [10.39.195.129])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 91B5760BF4;
-        Mon, 25 Oct 2021 09:42:23 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH v4 11/11] platform/x86: int3472: Deal with probe ordering issues
-Date:   Mon, 25 Oct 2021 11:41:19 +0200
-Message-Id: <20211025094119.82967-12-hdegoede@redhat.com>
-In-Reply-To: <20211025094119.82967-1-hdegoede@redhat.com>
-References: <20211025094119.82967-1-hdegoede@redhat.com>
+        id S232723AbhJYLHy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Oct 2021 07:07:54 -0400
+Received: from mga02.intel.com ([134.134.136.20]:51333 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232525AbhJYLHy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 25 Oct 2021 07:07:54 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10147"; a="216793262"
+X-IronPort-AV: E=Sophos;i="5.87,180,1631602800"; 
+   d="scan'208";a="216793262"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 04:05:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,180,1631602800"; 
+   d="scan'208";a="664019365"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.188]) ([10.238.232.188])
+  by orsmga005.jf.intel.com with ESMTP; 25 Oct 2021 04:05:27 -0700
+Subject: Re: [PATCH 3/6] Documentation: ACPI: Document _DSC object usage for
+ enum power state
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        Hyungwoo Yang <hyungwoo.yang@intel.com>,
+        linux-media@vger.kernel.org
+References: <20211018121729.6357-1-sakari.ailus@linux.intel.com>
+ <20211018121729.6357-4-sakari.ailus@linux.intel.com>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <4da84e63-0e3d-155f-f3db-5d3a9efe3aa7@linux.intel.com>
+Date:   Mon, 25 Oct 2021 19:01:41 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20211018121729.6357-4-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The clk and regulator frameworks expect clk/regulator consumer-devices
-to have info about the consumed clks/regulators described in the device's
-fw_node.
+Sakari,
 
-To work around this info missing from the ACPI tables on devices where
-the int3472 driver is used, the int3472 MFD-cell drivers attach info about
-consumers to the clks/regulators when registering these.
+On 10/18/21 8:17 PM, Sakari Ailus wrote:
+> Document the use of the _DSC object for setting desirable power state
+> during probe.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+> ---
+>  Documentation/firmware-guide/acpi/index.rst   |  1 +
+>  .../firmware-guide/acpi/non-d0-probe.rst      | 78 +++++++++++++++++++
+>  2 files changed, 79 insertions(+)
+>  create mode 100644 Documentation/firmware-guide/acpi/non-d0-probe.rst
+> 
+> diff --git a/Documentation/firmware-guide/acpi/index.rst b/Documentation/firmware-guide/acpi/index.rst
+> index a99ee402b212b..b053b0c3d6969 100644
+> --- a/Documentation/firmware-guide/acpi/index.rst
+> +++ b/Documentation/firmware-guide/acpi/index.rst
+> @@ -26,5 +26,6 @@ ACPI Support
+>     acpi-lid
+>     lpit
+>     video_extension
+> +   non-d0-probe
+>     extcon-intel-int3496
+>     intel-pmc-mux
+> diff --git a/Documentation/firmware-guide/acpi/non-d0-probe.rst b/Documentation/firmware-guide/acpi/non-d0-probe.rst
+> new file mode 100644
+> index 0000000000000..78781e1ab6a3d
+> --- /dev/null
+> +++ b/Documentation/firmware-guide/acpi/non-d0-probe.rst
+> @@ -0,0 +1,78 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +========================================
+> +Probing devices in other D states than 0
+> +========================================
+> +
+> +Introduction
+> +============
+> +
+> +In some cases it may be preferred to leave certain devices powered off for the
+> +entire system bootup if powering on these devices has adverse side effects,
+> +beyond just powering on the said device.
+> +
+> +How it works
+> +============
+> +
+> +The _DSC (Device State for Configuration) object that evaluates to an integer
+> +may be used to tell Linux the highest allowed D state for a device during
+> +probe. The support for _DSC requires support from the kernel bus type if the
+> +bus driver normally sets the device in D0 state for probe.
+> +
+> +The downside of using _DSC is that as the device is not powered on, even if
+> +there's a problem with the device, the driver likely probes just fine but the
+> +first user will find out the device doesn't work, instead of a failure at probe
+> +time. This feature should thus be used sparingly.
+> +
+> +I²C
+> +---
+> +
+> +If an I²C driver indicates its support for this by setting the
+> +I2C_DRV_ACPI_WAIVE_D0_PROBE flag in struct i2c_driver.flags field and the
+> +_DSC object evaluates to integer higher than the D state of the device,
+> +the device will not be powered on (put in D0 state) for probe.
+> +
+> +D states
+> +--------
+> +
+> +The D states and thus also the allowed values for _DSC are listed below. Refer
+> +to [1] for more information on device power states.
+> +
+> +.. code-block:: text
+> +
+> +	Number	State	Description
+> +	0	D0	Device fully powered on
+> +	1	D1
+> +	2	D2
+> +	3	D3hot
+> +	4	D3cold	Off
+> +
+> +References
+> +==========
+> +
+> +[1] https://uefi.org/specifications/ACPI/6.4/02_Definition_of_Terms/Definition_of_Terms.html#device-power-state-definitions
+> +
+> +Example
+> +=======
+> +
+> +An ASL example describing an ACPI device using _DSC object to tell Operating
+> +System the device should remain powered off during probe looks like this. Some
+> +objects not relevant from the example point of view have been omitted.
+> +
+> +.. code-block:: text
+> +
+> +	Device (CAM0)
+> +        {
+> +		Name (_HID, "SONY319A")
+> +		Name (_UID, Zero)
+> +		Name (_CRS, ResourceTemplate ()
+> +		{
+> +			I2cSerialBus(0x0020, ControllerInitiated, 0x00061A80,
+> +				     AddressingMode7Bit, "\\_SB.PCI0.I2C0",
+> +				     0x00, ResourceConsumer)
+> +		})
+> +		Name (_DSC, 0, NotSerialized)
+> +		{
+> +			Return (0x4)
+> +                }
+One question here:
+Is the value of _DSC object evaluated from 'Method' or 'Name' ?
 
-This causes problems with the probe ordering wrt drivers for consumers
-of these clks/regulators. Since the lookups are only registered when the
-provider-driver binds, trying to get these clks/regulators before then
-results in a -ENOENT error for clks and a dummy regulator for regulators.
+> +	}
+> 
 
-All the sensor ACPI fw-nodes have a _DEP dependency on the INT3472 ACPI
-fw-node, so to work around these probe ordering issues the ACPI core /
-i2c-code does not instantiate the I2C-clients for any ACPI devices
-which have a _DEP dependency on an INT3472 ACPI device until all
-_DEP-s are met.
-
-This relies on acpi_dev_clear_dependencies() getting called by the driver
-for the _DEP-s when they are ready, add a acpi_dev_clear_dependencies()
-call to the discrete.c probe code.
-
-In the tps68470 case calling acpi_dev_clear_dependencies() is already done
-by the acpi_gpiochip_add() call done by the driver for the GPIO MFD cell
-(The GPIO cell is deliberately the last cell created to make sure the
-clk + regulator cells are already instantiated when this happens).
-
-However for proper probe ordering, the clk/regulator cells must not just
-be instantiated the must be fully ready (the clks + regulators must be
-registered with their subsystems).
-
-Add MODULE_SOFTDEP dependencies for the clk and regulator drivers for
-the instantiated MFD-cells so that these are loaded before us and so
-that they bind immediately when the platform-devs are instantiated.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in v2:
-- Only call acpi_dev_clear_dependencies() in the discrete.c case, for the
-  tps68470 case this is already done by the acpi_gpiochip_add() for the
-  GPIO MFD cell.
----
- drivers/platform/x86/intel/int3472/discrete.c | 1 +
- drivers/platform/x86/intel/int3472/tps68470.c | 6 ++++++
- 2 files changed, 7 insertions(+)
-
-diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
-index ff2bdbb8722c..5b514fa01a97 100644
---- a/drivers/platform/x86/intel/int3472/discrete.c
-+++ b/drivers/platform/x86/intel/int3472/discrete.c
-@@ -380,6 +380,7 @@ static int skl_int3472_discrete_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	acpi_dev_clear_dependencies(adev);
- 	return 0;
- }
- 
-diff --git a/drivers/platform/x86/intel/int3472/tps68470.c b/drivers/platform/x86/intel/int3472/tps68470.c
-index 5b881d6f5943..fcd872804101 100644
---- a/drivers/platform/x86/intel/int3472/tps68470.c
-+++ b/drivers/platform/x86/intel/int3472/tps68470.c
-@@ -174,6 +174,11 @@ static int skl_int3472_tps68470_probe(struct i2c_client *client)
- 		return device_type;
- 	}
- 
-+	/*
-+	 * No acpi_dev_clear_dependencies() here, since the acpi_gpiochip_add()
-+	 * for the GPIO cell already does this.
-+	 */
-+
- 	return ret;
- }
- 
-@@ -207,3 +212,4 @@ module_i2c_driver(int3472_tps68470);
- MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI TPS68470 Device Driver");
- MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
- MODULE_LICENSE("GPL v2");
-+MODULE_SOFTDEP("pre: clk-tps68470 tps68470-regulator");
 -- 
-2.31.1
-
+Best regards,
+Bingbu Cao
