@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6476D4394DC
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 13:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBBD4394E6
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 13:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbhJYLev (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Oct 2021 07:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
+        id S232672AbhJYLgb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Oct 2021 07:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbhJYLeu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 07:34:50 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371B4C061745;
-        Mon, 25 Oct 2021 04:32:28 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id a26so17307067edy.11;
-        Mon, 25 Oct 2021 04:32:28 -0700 (PDT)
+        with ESMTP id S229890AbhJYLg3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 07:36:29 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E13C061745;
+        Mon, 25 Oct 2021 04:34:06 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id u13so17885745edy.10;
+        Mon, 25 Oct 2021 04:34:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=G2NPmlcMPM8u/iY4todsLOCGGObz0mNOdwPosQ4z7jU=;
-        b=iBXBEyTvee6oM98JuqDH5T5z+TI3MTmuIHrsMr0w3ksV1pIAj6WbaHDx1T7wz+I4tw
-         2xCsxFxgxLaHVrTNOlV0YDkxwTXVzIZ+LP94Gxhfe9fOViwdJf2OJ3w+fJsjQkkar0Fa
-         g1FP3e/le9ZANjG6VbXkhB4wlk8vCZLrijf027ZnS+NAgUuZyG90RhWCSh490gSfULrg
-         KLCY95RmW4RyhJKQttgg0BhurANO7w5zRir1GlebR1YQ6FVdqkvFTjoxiQXYU6VwTTqA
-         87B85toll8bZQ6bp8E5lPoDLFgeWj8YEaMazpcVy/EKkkmtMs9+Adubh+9laD5ea1zaF
-         I6LA==
+        bh=kY7AJIUIoYcee8SKIHfJwvrAvOFYsxcqzYnektF/Cco=;
+        b=QhGcn6WISmFJFiD2wlx2MqBOoZCQZz+hWFA3r2TCK5CHWNXRuG/GmYRULPrnaeSgyS
+         zv07ylCbNl2PvKm/rc/y3T6+NQahaBjLMc0FTcC9ru9gGOrlh6nIimEOCv3MajlM2mxo
+         UsqTD5IuRNg4v7V4zstk4Ev7dlONuRgZQOoczQTfCfiT7lsjY5EAMDq1hPKCQwl7KgEQ
+         SeMV1tJjiMfwmI2+A2/uUNBqwusLa1zuJW+i1jW+3hzNgMlNLYG6q4FOPsihNE+fSx16
+         vp3dDVXR6NTg64q6E+CXqaVW/ygf2rGYCFzlzps1B4TFB72m2TLDEyceSQ/4kiprRFIs
+         J6AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=G2NPmlcMPM8u/iY4todsLOCGGObz0mNOdwPosQ4z7jU=;
-        b=OzSF6v41+wCM+FUCn0UWY65DPPE+GhxYN9ctxY0/mhsYCz+7IunC3HY7Hhk/gZ/JS0
-         1S4ZiaVjTaCLmMPmZY5f536F/8iUpOY46lUdBoUOWaFvEl6M1SDyGvOxpdbrLG6c3Dz1
-         faS0GaQUQQ0DeOiuC+GOJ66KK2qkTNLyYWu9M6nrGpH4BYNsZ4Rdo7VqT04z77vHfV89
-         pcHnoRInQKdQI8lKcn+WD66qoM2xAwGcVugGm2BNxSHj8bPeVqdVJwULxLXnv5ZJtPVc
-         GK+hsQ1PzGzaoosrO8fyL5RBRfph+3iGldhOnJ+LtEUgHr7mPhOsERWk2mjLKw3rZm2h
-         msKQ==
-X-Gm-Message-State: AOAM530h/cPKEudoOo+STcPTyAwjWctNIXcKzJiGTgiTeZvgWoo2X5iq
-        zJiJlHzv9SfeAdbn2+yTXkwjb2UOvn3Pb3Sp4Qg=
-X-Google-Smtp-Source: ABdhPJwRTtO/pCXD97oUX/9rG5nYJlwxtG0fIcAVwqui8j4uQB48QLOBmVa/Ihxvr6hmy0V6m6XOuSP7TWuXDVe2Gjs=
-X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr22028819ejc.69.1635161546705;
- Mon, 25 Oct 2021 04:32:26 -0700 (PDT)
+        bh=kY7AJIUIoYcee8SKIHfJwvrAvOFYsxcqzYnektF/Cco=;
+        b=OTU7f8amd2gg9n95/pLarOUpdk5S2Uc9yUjQEoZes7TxpTSzoBik10W0bnHxCL5lZl
+         cGg7bPTZksUIPI/URLe1s7O7uJtauEQh1C9EkII1nd1B2d9VlHXq3KnqhGi4BccrqtCI
+         gkpMfiDIJqGN5WPCbGEbPQB+XBAFIU8a+dzC2Keq2ifEAA+8BFqIMWbMPPHu129TRN1f
+         +mVvJcA4dkLiDr3GQeeokXXRNx4+VGDzvbgcl3t47BTi16hslji8C+Dt4RIlVj6dNsx7
+         ad+oB9M8USGQTviXmlt4oI5Tl3YZf0C4TLEuSmPPVGTsnMtd4xePqPWnLQstQoAPH0f9
+         TwYA==
+X-Gm-Message-State: AOAM531suIVTP0oSAvr6Ex+5MHEDuZETAlsl0/QgufpqXAcpo59yKkg1
+        vAeZ94YbZjnxT2PUa8+TZkGd/paRi38bncaZOqo=
+X-Google-Smtp-Source: ABdhPJxAAvMgFzd/ND100uA3KkZo10KPgb9tMWB0oCBNF80MtzYpU8G5/rs15bT7JqjR5a7fYvIQde4tQUT9Ec1rixg=
+X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr22038755ejc.69.1635161645522;
+ Mon, 25 Oct 2021 04:34:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-9-hdegoede@redhat.com>
-In-Reply-To: <20211025094119.82967-9-hdegoede@redhat.com>
+References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-10-hdegoede@redhat.com>
+In-Reply-To: <20211025094119.82967-10-hdegoede@redhat.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Oct 2021 14:31:32 +0300
-Message-ID: <CAHp75VeLAW6ZBQYidnD7PDYfAH3A2bq+oMJTru-9OW_t-XS26g@mail.gmail.com>
-Subject: Re: [PATCH v4 08/11] platform/x86: int3472: Add get_sensor_adev_and_name()
- helper
+Date:   Mon, 25 Oct 2021 14:33:11 +0300
+Message-ID: <CAHp75Vee7Np9mOUKMBtu1Ueb7WjcqdH1zLMr4+CdAn7iyTg6rw@mail.gmail.com>
+Subject: Re: [PATCH v4 09/11] platform/x86: int3472: Pass tps68470_clk_platform_data
+ to the tps68470-regulator MFD-cell
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
@@ -79,62 +79,27 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Mon, Oct 25, 2021 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> The discrete.c code is not the only code which needs to lookup the
-> acpi_device and device-name for the sensor for which the INT3472
-> ACPI-device is a GPIO/clk/regulator provider.
->
-> The tps68470.c code also needs this functionality, so factor this
-> out into a new get_sensor_adev_and_name() helper.
+> Pass tps68470_clk_platform_data to the tps68470-clk MFD-cell,
+> so that sensors which use the TPS68470 can find their clock.
 
 ...
 
-> +int skl_int3472_get_sensor_adev_and_name(struct device *dev,
-> +                                        struct acpi_device **sensor_adev_ret,
-> +                                        const char **name_ret)
-> +{
-> +       struct acpi_device *adev = ACPI_COMPANION(dev);
-> +       struct acpi_device *sensor;
-> +       int ret = 0;
-> +
-> +       sensor = acpi_dev_get_first_consumer_dev(adev);
-> +       if (!sensor) {
-> +               dev_err(dev, "INT3472 seems to have no dependents.\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       *name_ret = devm_kasprintf(dev, GFP_KERNEL, I2C_DEV_NAME_FORMAT,
-> +                                  acpi_dev_name(sensor));
-> +       if (!*name_ret)
-> +               ret = -ENOMEM;
-> +
-> +       if (ret == 0 && sensor_adev_ret)
-> +               *sensor_adev_ret = sensor;
-> +       else
-> +               acpi_dev_put(sensor);
-> +
-> +       return ret;
+> +               cells = kcalloc(3, sizeof(*cells), GFP_KERNEL);
 
-The error path is twisted a bit including far staying ret=0 assignment.
+(1)
 
-Can it be
+> +               if (!cells)
+> +                       return -ENOMEM;
 
-       int ret;
-       ...
-       *name_ret = devm_kasprintf(dev, GFP_KERNEL, I2C_DEV_NAME_FORMAT,
-                                  acpi_dev_name(sensor));
-       if (!*name_ret) {
-               acpi_dev_put(sensor);
-               return -ENOMEM;
-       }
+...
 
-       if (sensor_adev_ret)
-               *sensor_adev_ret = sensor;
+> +               ret = devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_NONE, cells, 3,
 
-       return 0;
+(2)
 
-?
+>                                            NULL, 0, NULL);
 
-> +}
+Can we provide a definition for magic in (1) and (2)?
 
 -- 
 With Best Regards,
