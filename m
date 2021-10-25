@@ -2,36 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA4D4392A0
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 11:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292204392A6
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Oct 2021 11:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbhJYJn6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Oct 2021 05:43:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35375 "EHLO
+        id S232736AbhJYJoF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Oct 2021 05:44:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56923 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232692AbhJYJn5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 05:43:57 -0400
+        by vger.kernel.org with ESMTP id S232721AbhJYJoD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Oct 2021 05:44:03 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635154895;
+        s=mimecast20190719; t=1635154901;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AJjwA8KpQ+JtJtv1gkti7fBiNXqA/I5dkFBR+HHCYOg=;
-        b=BeTMTOycSLJylzRq9SgQfFG/G0ZaDfQi7EBGgTgKeRDyUGLClC7G9b7MyJtfBY1BhTWnUe
-        tuPWjb3usby6V0wnZTpNLV5I8j9bZDiY/HA6/q1O8xY4QCOm5wtWxqyuXRExqg/3ShQTp1
-        sWhZMYUetl7mhKqomdCqNOHfwlvghyM=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kk8as1D2u5xM5GrcrKLhuiYBApuAEF8oYEallD7Nr6w=;
+        b=D8smc694DVMfV2ksP85AMkJHR0d0aUkZtQOrcZGG03K5GP29fcpXaibxOvitXxBSfsjxpO
+        YychF6+nSSsqIt52+5FC5unjD33ym+TmypcKnVJzDHXj6cJYd7R9lpD6KWK6hBgWzoxdPC
+        o8nv3Z1gRlYMpZZXH9vPjSVJVDuFVoA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-380-OW6uVO-qNgm_GI2K9g3plA-1; Mon, 25 Oct 2021 05:41:31 -0400
-X-MC-Unique: OW6uVO-qNgm_GI2K9g3plA-1
+ us-mta-578-RZhNIedXNnq320ZU_bx_0Q-1; Mon, 25 Oct 2021 05:41:37 -0400
+X-MC-Unique: RZhNIedXNnq320ZU_bx_0Q-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 688511006AA4;
-        Mon, 25 Oct 2021 09:41:28 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5EEC0657;
+        Mon, 25 Oct 2021 09:41:35 +0000 (UTC)
 Received: from x1.localdomain (unknown [10.39.195.129])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5BC1F60BF4;
-        Mon, 25 Oct 2021 09:41:20 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C593560CC9;
+        Mon, 25 Oct 2021 09:41:28 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
@@ -51,9 +52,11 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v4 00/11] Add support for X86/ACPI camera sensor/PMIC setup with clk and regulator platform data
-Date:   Mon, 25 Oct 2021 11:41:08 +0200
-Message-Id: <20211025094119.82967-1-hdegoede@redhat.com>
+Subject: [PATCH v4 01/11] ACPI: delay enumeration of devices with a _DEP pointing to an INT3472 device
+Date:   Mon, 25 Oct 2021 11:41:09 +0200
+Message-Id: <20211025094119.82967-2-hdegoede@redhat.com>
+In-Reply-To: <20211025094119.82967-1-hdegoede@redhat.com>
+References: <20211025094119.82967-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
@@ -61,131 +64,184 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi All,
-
-Here is v4 of my patch-set adding support for camera sensor connected to a
-TPS68470 PMIC on x86/ACPI devices.
-
-Changes in v4:
-[PATCH 01/11] ACPI: delay enumeration of devices with a _DEP
-              pointing to an INT3472 device:
-- Move the acpi_dev_ready_for_enumeration() check to acpi_bus_attach()
-  (replacing the acpi_device_is_present() check there)
-
-[PATCH 04/11] regulator: Introduce tps68470-regulator driver:
-- Make the top comment block use c++ style comments
-- Drop the bogus builtin regulator_init_data
-- Make the driver enable the PMIC clk when enabling the Core buck
-  regulator, this switching regulator needs the PLL to be on
-- Kconfig: add || COMPILE_TEST, fix help text
-
-[PATCH 05/11] clk: Introduce clk-tps68470 driver
-- Kconfig: select REGMAP_I2C, add || COMPILE_TEST, fix help text
-- tps68470_clk_prepare(): Wait for the PLL to lock before returning
-- tps68470_clk_unprepare(): Remove unnecesary clearing of divider regs
-- tps68470_clk_probe(): Use devm_clk_hw_register()
-- Misc. small cleanups
-
-I'm quite happy with how this works now, so from my pov this is the final
-version of the device-instantiation deferral code / approach.
-
-###
-
 The clk and regulator frameworks expect clk/regulator consumer-devices
 to have info about the consumed clks/regulators described in the device's
-fw_node, but on ACPI this info is missing.
+fw_node.
 
-This series worksaround this by providing platform_data with the info to
-the TPS68470 clk/regulator MFD cells.
+To work around cases where this info is not present in the firmware tables,
+which is often the case on x86/ACPI devices, both frameworks allow the
+provider-driver to attach info about consumers to the clks/regulators
+when registering these.
 
-Patches 1 - 2 deal with a probe-ordering problem this introduces,
-since the lookups are only registered when the provider-driver binds,
-trying to get these clks/regulators before then results in a -ENOENT
-error for clks and a dummy regulator for regulators. See the patches
-for more details.
+This causes problems with the probe ordering wrt drivers for consumers
+of these clks/regulators. Since the lookups are only registered when the
+provider-driver binds, trying to get these clks/regulators before then
+results in a -ENOENT error for clks and a dummy regulator for regulators.
 
-Patch 3 adds a header file which adds tps68470_clk_platform_data and
-tps68470_regulator_platform_data structs. The futher patches depend on
-this new header file.
+One case where we hit this issue is camera sensors such as e.g. the OV8865
+sensor found on the Microsoft Surface Go. The sensor uses clks, regulators
+and GPIOs provided by a TPS68470 PMIC which is described in an INT3472
+ACPI device. There is special platform code handling this and setting
+platform_data with the necessary consumer info on the MFD cells
+instantiated for the PMIC under: drivers/platform/x86/intel/int3472.
 
-Patch 4 + 5 add the TPS68470 clk and regulator drivers
+For this to work properly the ov8865 driver must not bind to the I2C-client
+for the OV8865 sensor until after the TPS68470 PMIC gpio, regulator and
+clk MFD cells have all been fully setup.
 
-Patches 6 - 11 Modify the INT3472 driver which instantiates the MFD cells to
-provide the necessary platform-data.
+The OV8865 on the Microsoft Surface Go is just one example, all X86
+devices using the Intel IPU3 camera block found on recent Intel SoCs
+have similar issues where there is an INT3472 HID ACPI-device, which
+describes the clks and regulators, and the driver for this INT3472 device
+must be fully initialized before the sensor driver (any sensor driver)
+binds for things to work properly.
 
-Assuming this series is acceptable to everyone, we need to talk about how
-to merge this.
+On these devices the ACPI nodes describing the sensors all have a _DEP
+dependency on the matching INT3472 ACPI device (there is one per sensor).
 
-Patch 2 has already been acked by Wolfram for merging by Rafael, so patch
-1 + 2 can be merged into linux-pm, independent of the rest of the series
-(there are some runtime deps on other changes for everything to work,
-but the camera-sensors impacted by this are not fully supported yet in
-the mainline kernel anyways).
+This allows solving the probe-ordering problem by delaying the enumeration
+(instantiation of the I2C-client in the ov8865 example) of ACPI-devices
+which have a _DEP dependency on an INT3472 device.
 
-For "[PATCH 03/13] platform_data: Add linux/platform_data/tps68470.h file",
-which all further patches depend on I plan to provide an immutable branch
-myself (once it has been reviewed), which the clk / regulator maintainers
-can then merge before merging the clk / regulator driver which depends on
-this.
+The new acpi_dev_ready_for_enumeration() helper used for this is also
+exported because for devices, which have the enumeration_by_parent flag
+set, the parent-driver will do its own scan of child ACPI devices and
+it will try to enumerate those during its probe(). Code doing this such
+as e.g. the i2c-core-acpi.c code must call this new helper to ensure
+that it too delays the enumeration until all the _DEP dependencies are
+met on devices which have the new honor_deps flag set.
 
-And I will merge that IM-branch + patches 6-11 into the pdx86 tree myself.
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+Changes in v4:
+- Move the acpi_dev_ready_for_enumeration() check to acpi_bus_attach()
+  (replacing the acpi_device_is_present() check there)
+---
+ drivers/acpi/scan.c     | 37 +++++++++++++++++++++++++++++++++----
+ include/acpi/acpi_bus.h |  5 ++++-
+ 2 files changed, 37 insertions(+), 5 deletions(-)
 
-Regards,
-
-Hans
-
-
-Daniel Scally (1):
-  platform/x86: int3472: Enable I2c daisy chain
-
-Hans de Goede (10):
-  ACPI: delay enumeration of devices with a _DEP pointing to an INT3472
-    device
-  i2c: acpi: Use acpi_dev_ready_for_enumeration() helper
-  platform_data: Add linux/platform_data/tps68470.h file
-  regulator: Introduce tps68470-regulator driver
-  clk: Introduce clk-tps68470 driver
-  platform/x86: int3472: Split into 2 drivers
-  platform/x86: int3472: Add get_sensor_adev_and_name() helper
-  platform/x86: int3472: Pass tps68470_clk_platform_data to the
-    tps68470-regulator MFD-cell
-  platform/x86: int3472: Pass tps68470_regulator_platform_data to the
-    tps68470-regulator MFD-cell
-  platform/x86: int3472: Deal with probe ordering issues
-
- drivers/acpi/scan.c                           |  37 ++-
- drivers/clk/Kconfig                           |   8 +
- drivers/clk/Makefile                          |   1 +
- drivers/clk/clk-tps68470.c                    | 253 ++++++++++++++++++
- drivers/i2c/i2c-core-acpi.c                   |   5 +-
- drivers/platform/x86/intel/int3472/Makefile   |   9 +-
- ...lk_and_regulator.c => clk_and_regulator.c} |   2 +-
- drivers/platform/x86/intel/int3472/common.c   |  82 ++++++
- .../{intel_skl_int3472_common.h => common.h}  |   6 +-
- ...ntel_skl_int3472_discrete.c => discrete.c} |  51 ++--
- .../intel/int3472/intel_skl_int3472_common.c  | 106 --------
- ...ntel_skl_int3472_tps68470.c => tps68470.c} |  98 ++++++-
- drivers/platform/x86/intel/int3472/tps68470.h |  25 ++
- .../x86/intel/int3472/tps68470_board_data.c   | 118 ++++++++
- drivers/regulator/Kconfig                     |   9 +
- drivers/regulator/Makefile                    |   1 +
- drivers/regulator/tps68470-regulator.c        | 215 +++++++++++++++
- include/acpi/acpi_bus.h                       |   5 +-
- include/linux/mfd/tps68470.h                  |  11 +
- include/linux/platform_data/tps68470.h        |  35 +++
- 20 files changed, 925 insertions(+), 152 deletions(-)
- create mode 100644 drivers/clk/clk-tps68470.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_clk_and_regulator.c => clk_and_regulator.c} (99%)
- create mode 100644 drivers/platform/x86/intel/int3472/common.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_common.h => common.h} (94%)
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_discrete.c => discrete.c} (91%)
- delete mode 100644 drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_tps68470.c => tps68470.c} (54%)
- create mode 100644 drivers/platform/x86/intel/int3472/tps68470.h
- create mode 100644 drivers/platform/x86/intel/int3472/tps68470_board_data.c
- create mode 100644 drivers/regulator/tps68470-regulator.c
- create mode 100644 include/linux/platform_data/tps68470.h
-
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index 5b54c80b9d32..8a4cf12f8453 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -796,6 +796,12 @@ static const char * const acpi_ignore_dep_ids[] = {
+ 	NULL
+ };
+ 
++/* List of HIDs for which we honor deps of matching ACPI devs, when checking _DEP lists. */
++static const char * const acpi_honor_dep_ids[] = {
++	"INT3472", /* Camera sensor PMIC / clk and regulator info */
++	NULL
++};
++
+ static struct acpi_device *acpi_bus_get_parent(acpi_handle handle)
+ {
+ 	struct acpi_device *device = NULL;
+@@ -1757,8 +1763,12 @@ static void acpi_scan_dep_init(struct acpi_device *adev)
+ 	struct acpi_dep_data *dep;
+ 
+ 	list_for_each_entry(dep, &acpi_dep_list, node) {
+-		if (dep->consumer == adev->handle)
++		if (dep->consumer == adev->handle) {
++			if (dep->honor_dep)
++				adev->flags.honor_deps = 1;
++
+ 			adev->dep_unmet++;
++		}
+ 	}
+ }
+ 
+@@ -1962,7 +1972,7 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
+ 	for (count = 0, i = 0; i < dep_devices.count; i++) {
+ 		struct acpi_device_info *info;
+ 		struct acpi_dep_data *dep;
+-		bool skip;
++		bool skip, honor_dep;
+ 
+ 		status = acpi_get_object_info(dep_devices.handles[i], &info);
+ 		if (ACPI_FAILURE(status)) {
+@@ -1971,6 +1981,7 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
+ 		}
+ 
+ 		skip = acpi_info_matches_ids(info, acpi_ignore_dep_ids);
++		honor_dep = acpi_info_matches_ids(info, acpi_honor_dep_ids);
+ 		kfree(info);
+ 
+ 		if (skip)
+@@ -1984,6 +1995,7 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
+ 
+ 		dep->supplier = dep_devices.handles[i];
+ 		dep->consumer = handle;
++		dep->honor_dep = honor_dep;
+ 
+ 		mutex_lock(&acpi_dep_list_lock);
+ 		list_add_tail(&dep->node , &acpi_dep_list);
+@@ -2150,8 +2162,8 @@ static void acpi_bus_attach(struct acpi_device *device, bool first_pass)
+ 		register_dock_dependent_device(device, ejd);
+ 
+ 	acpi_bus_get_status(device);
+-	/* Skip devices that are not present. */
+-	if (!acpi_device_is_present(device)) {
++	/* Skip devices that are not ready for enumeration (e.g. not present) */
++	if (!acpi_dev_ready_for_enumeration(device)) {
+ 		device->flags.initialized = false;
+ 		acpi_device_clear_enumerated(device);
+ 		device->flags.power_manageable = 0;
+@@ -2313,6 +2325,23 @@ void acpi_dev_clear_dependencies(struct acpi_device *supplier)
+ }
+ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
+ 
++/**
++ * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready for enumeration
++ * @device: Pointer to the &struct acpi_device to check
++ *
++ * Check if the device is present and has no unmet dependencies.
++ *
++ * Return true if the device is ready for enumeratino. Otherwise, return false.
++ */
++bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
++{
++	if (device->flags.honor_deps && device->dep_unmet)
++		return false;
++
++	return acpi_device_is_present(device);
++}
++EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
++
+ /**
+  * acpi_dev_get_first_consumer_dev - Return ACPI device dependent on @supplier
+  * @supplier: Pointer to the dependee device
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index 13d93371790e..2da53b7b4965 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -202,7 +202,8 @@ struct acpi_device_flags {
+ 	u32 coherent_dma:1;
+ 	u32 cca_seen:1;
+ 	u32 enumeration_by_parent:1;
+-	u32 reserved:19;
++	u32 honor_deps:1;
++	u32 reserved:18;
+ };
+ 
+ /* File System */
+@@ -284,6 +285,7 @@ struct acpi_dep_data {
+ 	struct list_head node;
+ 	acpi_handle supplier;
+ 	acpi_handle consumer;
++	bool honor_dep;
+ };
+ 
+ /* Performance Management */
+@@ -693,6 +695,7 @@ static inline bool acpi_device_can_poweroff(struct acpi_device *adev)
+ bool acpi_dev_hid_uid_match(struct acpi_device *adev, const char *hid2, const char *uid2);
+ 
+ void acpi_dev_clear_dependencies(struct acpi_device *supplier);
++bool acpi_dev_ready_for_enumeration(const struct acpi_device *device);
+ struct acpi_device *acpi_dev_get_first_consumer_dev(struct acpi_device *supplier);
+ struct acpi_device *
+ acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const char *uid, s64 hrv);
 -- 
 2.31.1
 
