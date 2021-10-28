@@ -2,158 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E515D43E0D9
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Oct 2021 14:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD66643E14B
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Oct 2021 14:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbhJ1M0W (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Oct 2021 08:26:22 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:3532 "EHLO
+        id S230177AbhJ1Mzb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Oct 2021 08:55:31 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:5763 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbhJ1M0V (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Oct 2021 08:26:21 -0400
+        with ESMTP id S230157AbhJ1Mza (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Oct 2021 08:55:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1635423834; x=1666959834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0Oq6s7AaG3bBjKwD3GLU5KykTSVALr5XWLndoODjwLU=;
-  b=Rue0PgcyZZgsrKknQdIrkBaZNzzj46k7JGO6pSQhVMuqPR24GtgSaY6w
-   D8B196oXaGEELWZ7iDgzJyuovmItZ+2kiw13s8B6JoestoMK1HZR0bmpw
-   S+Gq/iUsqAT3tqJZbIjY7AOxiZ6DV62vCBGfivua8RzhhccK05QTYe+k3
-   1aCHrnYL7i3rAaikCo3Brc7OUJplavf6DVF+fQ/Vd5irBzHKXcb421XAI
-   hJDtv2d9vrXNrpIBJI3n4A73R1AIh3WPOUXXSjvCC/iLn+PlmEDjGeDbx
-   xQQKhofBv2WIvL7MaE2Q0PWzrKj3+IGXndwlZ3v46USFzQnjE+zDoUX+J
-   A==;
-IronPort-SDR: Jvt9IWyJhVgbyC8C7YE7fAwf8FOQFwPQjJpYGNXGuvyTt+PIMFEcAa6JTDfEyUoGL2Hfvmaq2w
- zkokjxpdqcdZObeGyaYVsgJDNYsblmTlPAvakcUsV+KKlllU6BinRfLW99C4jvDTOLFiiJfRNd
- MuaTB72RiiUYZb1UKPwsYqdHulv250M1Fj7u7iXdc8JRinM0ukID43cpoTx4oBSVfpmEeqrKXk
- a3JA/6HV4WJHaB+8NhaQfxMC7DVbsb6Kjtf+DGbo02g+Sq2CK/YcuGIc3zi4lkIrTWnMTcUogx
- H2tJA3Ns9EAQWxB0z8je9So2
+  t=1635425583; x=1666961583;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V0H6agmGCtTkcfi0Y+EUenLb9dv3H+UJUFjQMGH5fPI=;
+  b=hMhRD80M5o7a2tKaUf4/7SCYqQiv4KECeITgmVGbmDUZMQmGcHvKwQGh
+   ESpNLASWWgcFcgw38fpckIWTs6q5V1z1DgqSzai0QGYXgKqcfnZrsql2E
+   mVwNsi56t03As5JHRYLM65S/oedEyogO3G9zdC/TOmNhZzw5KA1DTUmum
+   R2Ci3cLVQwLwNhTzZg82v69Zp/9cwDZc1nc06wFIRjWM+Lvt1h8rP2jLC
+   BgofzdUhR8n+gFlejsWWqVo+TPtdCVfySs9AlcbVO8wZSJyVH/jE8mMFC
+   90gpZ+35RWEMsuzM+avQygydwVqFLXlwccjhOYF7ui6ufpRXKgq9O3iD5
+   Q==;
+IronPort-SDR: vRfOACLuRmnHakmvdsclY2ZbLLdvVk9Xo+r8FPMCwkQyalSk7pPrHzJh8TJ7cK5Og4MqaHe8Wg
+ Abr3NaOmcPhEwswxYIyTnlInBk9VScH8xZfdOKlq5q+oooEe6BD4RB7zjaCMk+jl/EE5LPpYSs
+ ZFadxQnNL1RX+efCmMtKT6ceL8j8+RYTW2wM3OB2oyYw+jeW6GSjDbbpYM9SB3lCiNvthDAIP8
+ NY3h/9yBI5Tex8D3rfkiCsBPxDRDGNwVE8r9nmqn1Cr7A2i42Gnt0hmEqORDJp5Kk1/mHr4ond
+ HYoOfs99cL20ikL7GgGEgw11
 X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
-   d="scan'208";a="134648670"
+   d="scan'208";a="134652461"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Oct 2021 05:23:51 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Oct 2021 05:53:03 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 28 Oct 2021 05:23:51 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Thu, 28 Oct 2021 05:23:50 -0700
-Date:   Thu, 28 Oct 2021 14:25:33 +0200
+ 15.1.2176.14; Thu, 28 Oct 2021 05:53:03 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 28 Oct 2021 05:53:01 -0700
 From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Peter Rosin <peda@axentia.se>
-CC:     <robh+dt@kernel.org>, <peter.korsgaard@barco.com>,
-        <lars.povlsen@microchip.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] i2c: i2c-mux-gpio: Add support 'select-delay'
- property
-Message-ID: <20211028122533.4o63fuguyqfua5tm@soft-dev3-1.localhost>
-References: <20211013141003.2388495-1-horatiu.vultur@microchip.com>
- <20211013141003.2388495-3-horatiu.vultur@microchip.com>
- <9fe92c02-40af-a077-4189-6f0c0a934745@axentia.se>
+To:     <peda@axentia.se>, <robh+dt@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH v2 0/2] i2c-mux-gpmux: Support settle-time-us property
+Date:   Thu, 28 Oct 2021 14:53:39 +0200
+Message-ID: <20211028125341.2457171-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <9fe92c02-40af-a077-4189-6f0c0a934745@axentia.se>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The 10/27/2021 12:41, Peter Rosin wrote:
-> 
-> Hi!
+Add support for settle-time-us property. If this is defined in device
+tree then add this delay to mux APIs.
 
-Hi Peter,
+v1->v2:
+ - add the changes to i2c-mux-gpmux instead of i2c-mux-gpio to be able
+   to use mux_control_select_delay
 
-> 
-> I'm sorry for the slow response...
-> 
-> On 2021-10-13 16:10, Horatiu Vultur wrote:
-> > Use select-delay property to add a delay once the mux state is changed.
-> > This is required on some platforms to allow the GPIO signals to get
-> > stabilized.
-> >
-> > Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >  drivers/i2c/muxes/i2c-mux-gpio.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/drivers/i2c/muxes/i2c-mux-gpio.c b/drivers/i2c/muxes/i2c-mux-gpio.c
-> > index bac415a52b78..1cc69eb67221 100644
-> > --- a/drivers/i2c/muxes/i2c-mux-gpio.c
-> > +++ b/drivers/i2c/muxes/i2c-mux-gpio.c
-> > @@ -13,6 +13,8 @@
-> >  #include <linux/slab.h>
-> >  #include <linux/bits.h>
-> >  #include <linux/gpio/consumer.h>
-> > +#include <linux/delay.h>
-> > +
-> >  /* FIXME: stop poking around inside gpiolib */
-> >  #include "../../gpio/gpiolib.h"
-> >
-> > @@ -20,6 +22,7 @@ struct gpiomux {
-> >       struct i2c_mux_gpio_platform_data data;
-> >       int ngpios;
-> >       struct gpio_desc **gpios;
-> > +     int select_delay;
-> >  };
-> >
-> >  static void i2c_mux_gpio_set(const struct gpiomux *mux, unsigned val)
-> > @@ -29,6 +32,8 @@ static void i2c_mux_gpio_set(const struct gpiomux *mux, unsigned val)
-> >       values[0] = val;
-> >
-> >       gpiod_set_array_value_cansleep(mux->ngpios, mux->gpios, NULL, values);
-> > +     if (mux->select_delay)
-> > +             udelay(mux->select_delay);
-> 
-> Use fsleep(mux->select_delay) if you don't know how long the delay really
-> is.
-> 
-> However, you needlessly invoke the delay even if you do not actually change
-> the state of the mux. In order to fix that, you need to keep track of the
-> current state of the mux, but that's a chunk of boring code to write. If you
-> instead switch to using a mux-gpio from the mux subsystem and point an
-> i2c-mux-gpmux to that instance, you get that for free, and you can make simple
-> changes to the i2c-mux-gpmux driver to get this sorted properly, basically
-> exactly as this patch but with this
-> 
-> -       ret = mux_control_select(mux->control, chan->channel);
-> +       ret = mux_control_select_delay(mux->control, chan->channel,
-> +                                      mux->delay_us);
-> 
-> instead of the udelay/fsleep in this patch. That will invoke the requested
-> delay, but only if too little time has gone by since the latest state change.
+Horatiu Vultur (2):
+  dt-bindings: i2c-mux-gpmux: Add property for settle time
+  i2c-mux-gpmux: Support settle-time-us property
 
-Thanks for the advice! I will change to use i2c-mux-gpmux and make the
-changes there.
-
-> 
-> That interface (mux_control_select_delay) is brand new though, but available
-> in linux-next and scheduled for the next merge window. But, since I fumbled
-> this series it's a bit late for this merge window anyway (sorry again) so
-> that should not be an issue.
-
-No worries, I will try to send a new version.
-
-> 
-> Cheers,
-> Peter
-> 
-> >  }
-> >
-> >  static int i2c_mux_gpio_select(struct i2c_mux_core *muxc, u32 chan)
-> > @@ -153,6 +158,8 @@ static int i2c_mux_gpio_probe_fw(struct gpiomux *mux,
-> >       if (fwnode_property_read_u32(dev->fwnode, "idle-state", &mux->data.idle))
-> >               mux->data.idle = I2C_MUX_GPIO_NO_IDLE;
-> >
-> > +     fwnode_property_read_u32(dev->fwnode, "select-delay", &mux->select_delay);
-> > +
-> >       return 0;
-> >  }
-> >
-> >
+ Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.yaml | 5 +++++
+ drivers/i2c/muxes/i2c-mux-gpmux.c                        | 6 +++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
 -- 
-/Horatiu
+2.33.0
+
