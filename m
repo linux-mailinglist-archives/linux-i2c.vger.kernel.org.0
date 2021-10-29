@@ -2,85 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3591440397
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Oct 2021 21:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3634E4403A3
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Oct 2021 21:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbhJ2Tyk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 29 Oct 2021 15:54:40 -0400
-Received: from sauhun.de ([88.99.104.3]:37796 "EHLO pokefinder.org"
+        id S230196AbhJ2T64 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Oct 2021 15:58:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230467AbhJ2Tyj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 29 Oct 2021 15:54:39 -0400
-Received: from localhost (p5de04e1e.dip0.t-ipconnect.de [93.224.78.30])
-        by pokefinder.org (Postfix) with ESMTPSA id D7A252C00AC;
-        Fri, 29 Oct 2021 21:52:07 +0200 (CEST)
-Date:   Fri, 29 Oct 2021 21:52:07 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] i2c: tegra: Ensure that device is suspended before
- driver is removed
-Message-ID: <YXxQ57FgbQIx+fR7@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211019232919.21916-1-digetx@gmail.com>
+        id S229886AbhJ2T6z (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 29 Oct 2021 15:58:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 55149603E5;
+        Fri, 29 Oct 2021 19:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635537387;
+        bh=ODAX8+zlFOS3VzXE/cJ9CfQfhPd1058qUEM92Yfdeho=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q1HhJmzqETOHFeQgalcjCTa0xOTGQZ4pdfbf3RscXWNV6i04U1jIj8xgMXLucOwcF
+         i6bqcEt02FnUKjXZInf/lK6/qXxxBuUcLK061tL/aICoDBoOlXbnPSz6dMBV1QIvrV
+         gtTGVVnDSHWQ5rbLpvgIuR+IJtO9Kive7Tgjn33xVtXwueE3TJwss+rNBggtfWfQli
+         acCO8oJIE3IWZW1On2GtfM7D1YWYzw39jLDp1nBH+3r7iR0klw95cmpeAiexTvPNP2
+         Lck04pMYa5LMQx803O65gb51fIqfb9g7mNx3vUbCIjyy0GStB9K9uJYLBBNe7opHFA
+         iP+bsmvrNqmpQ==
+Date:   Fri, 29 Oct 2021 21:56:23 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-i2c@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] i2c: qup: fix a trivial typo
+Message-ID: <YXxR57IqlMfKFfYH@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>, linux-i2c@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+References: <20211025050313.32409-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nQtl7vGokyqWsQ1f"
+        protocol="application/pgp-signature"; boundary="BAizD7Sx6watkDbG"
 Content-Disposition: inline
-In-Reply-To: <20211019232919.21916-1-digetx@gmail.com>
+In-Reply-To: <20211025050313.32409-1-rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---nQtl7vGokyqWsQ1f
+--BAizD7Sx6watkDbG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 20, 2021 at 02:29:19AM +0300, Dmitry Osipenko wrote:
-> Tegra I2C device isn't guaranteed to be suspended after removal of
-> the driver since driver uses pm_runtime_put() that is asynchronous and
-> pm_runtime_disable() cancels pending power-change requests. This means
-> that potentially refcount of the clocks may become unbalanced after
-> removal of the driver. This a very minor problem which unlikely to
-> happen in practice and won't cause any visible problems, nevertheless
-> let's replace pm_runtime_disable() with pm_runtime_force_suspend() and
-> use pm_runtime_put_sync() which disables RPM of the device and puts it
-> into suspend before driver is removed.
+On Sun, Oct 24, 2021 at 10:03:13PM -0700, Randy Dunlap wrote:
+> Correct the typo of "reamining" to "remaining".
 >=20
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Cc: Wolfram Sang <wsa@kernel.org>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: linux-arm-msm@vger.kernel.org
 
 Applied to for-next, thanks!
 
 
---nQtl7vGokyqWsQ1f
+--BAizD7Sx6watkDbG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmF8UOcACgkQFA3kzBSg
-KbavlQ/+L5xrHBpyis/WSbwIgJKdE8IknJFBlnJ6lqXQcCINWezSQKRkJUzx5rt3
-HEA6VUXY4oSVYjfKhqZUGSqxWM2M3dTHl+uCgzR90jcLo1+MAdNwoweQlfv3aOxV
-kkrp6taeHXlj/b8ilX7QrvFWno9iXYnbFH3ZpBdr6JDfZvZw9aZ+nE+/obaubalk
-orwEBOTl053OkBNlAuMseMM+SzSJli5ZYSC5cnbH08/07N5OGtE6Yf3fi45jMicu
-oXN/lzX/2XOulACsdX/ooK+6FVstSSZ1ZISI9VbDB6jaYQlZ//nLk4TBXnmWwpq1
-z9+hBm6s1hKEltdSTcyUE4TOHYgSmFtbTq2Jl2oQEbc6aIwf+utBaXY4p+pISVUU
-60zbMYYS+hhE0zOI0DurrsH/iBuguSXm0wF/GRGGTTkZTMH5Q/F/hXdenRmqJ3h2
-qLgpFGXt9SOmdF9DI5397NLvq1eYl/qBHwZ2t1Vhtfse3VN/5f6ErAZCw/HbbaER
-GzznfQX+7Z/yCW98QtWUi662HisUtavcFLvLdkT/NwHMhF2QleE9Zb7gfayNET4S
-Zk4K34lV/4+rNgexU0gWWHAg2LWh5tTrS8UiTma6x40Xg9Jg8gu1QOZ6z8i03d/S
-cAQX6zqMrqlm3u05qt0SMq7g2EyNmZ+XZFp9j7F2g5h76qROvVQ=
-=782P
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmF8UecACgkQFA3kzBSg
+KbYjARAAr4Ju9N8h3XFjvLYCC9t6xTjQBw2y4SZkcKFvsS0e7prmwLO5Ol70LLma
+wU+uRpIZSOpuPbrtX4s+5FKO52IjhRkkWMNd+ARebOOrGZ9rPYZEHUQP/0H+mW7V
+Ydp9GcH07ubzsAI5vR1H8WtXLx0QSKpwR/Ch0EBhjH4VFmkF/Gy7wXiBQQC0zWeH
+v/rPqGan1rxH+lDQMEYo3K8id8L3e5vVcBlYWnwQDslBjXZEvPgB5JBYYYl7sBi3
+igcdYUPmn5rwYBD0zmfqLhE46l3a/uZtSbOVXO2hq6TsXhYkFaysgRD10vpEFMao
+MuiwnoWUcnBBqXUhZ5ZDvkJxucpVsVnSmBWIHthq9JttObrEmYHgQy+WcqHbBoh4
+EJjYGrAc/GnaTe/4XGoMrIni8gE82M2fzc2iN4KpyZlKFHjIfHOgpKqqX0lL+zoz
+mCmg6tagVkzLm9+cj8AnlQ/SRySBJIeI8MoSsN6D+szBybrkenv3vOpJDBn+5JCY
+PHgSqeE/XZfXKgQY87R/0UinzWiM/pvJHrIQg4PDTUgqtwLHXro8bBcTmT59JyLs
+YPtyZTBw2dGRXDOD2tgxJb9J3H1kACA5J7LB3jXtGRy2y1jftKs+KSrLoMf532ba
+6v4BUDXb+JnLlWI+Q1RrVd+jJbPgrq2/11bENS9I4oPAJKiuBpQ=
+=ETIs
 -----END PGP SIGNATURE-----
 
---nQtl7vGokyqWsQ1f--
+--BAizD7Sx6watkDbG--
