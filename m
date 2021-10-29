@@ -2,90 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 631424403CC
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Oct 2021 22:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 454454403D1
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Oct 2021 22:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbhJ2UI1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 29 Oct 2021 16:08:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39250 "EHLO mail.kernel.org"
+        id S230271AbhJ2UKZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Oct 2021 16:10:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39908 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229458AbhJ2UI1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 29 Oct 2021 16:08:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D224A6101E;
-        Fri, 29 Oct 2021 20:05:57 +0000 (UTC)
+        id S229458AbhJ2UKZ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 29 Oct 2021 16:10:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CA1DF603E5;
+        Fri, 29 Oct 2021 20:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635537958;
-        bh=s7w+tMlthGfQT7o+0MSkSXq2ov58k7Q9neTioNtBumU=;
+        s=k20201202; t=1635538076;
+        bh=JWNtTtZlxxStPFFK9YVHU96GPvygUXlX9vi+gf6rdT0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rnz4HHvuOiVVmeEfYk86APkPEjs653rmGz/ORALvhSNX8zUFq8KWJzrHOrYL/gQZm
-         xIEU6N2dWVYCtSXrOwQl9QoJlZ+RnrLl6xSmGj6inq0gAO+u0FvIL8p6soXNJwrOBy
-         NHSCfvE1NqMs3DY0KSEkIc6GZJ3ywDCnXk0S2Rrw+7odZKZgslgucqIM06VA3w75SR
-         2yJ1baazaPr/g0lPRKEwAU9QTzL/ykw+rgLkSz8oPfpshKLAgDz8ifxSOl3wP2koxr
-         /Esu2oyYghIgti3CHP5CKuOWzFmsSlrG6FB/oClBYo4jv4fx4yZdBSIWzG97D9Ld83
-         H8/EuNcK7rJVQ==
-Date:   Fri, 29 Oct 2021 22:05:55 +0200
+        b=fqhDha9Gy8xEL5TPhe5gn5OQSU07xsXUub+8fvEkKQQMHgnfou9nBUCfxq7luxlB4
+         Qi6hUHtyfemei9t8bVGFvRxiFek2KvDF+dF0wHJR8y9S/IdhyH7oKSATgYa9HYZqtK
+         A2cCCiWYlYktYN4yE7sAuJ+joFw4Jk/1P+Z46TeofuoXcEsu3vwIINoBEw6eoIE5Wq
+         u5VjiTF9lwpupE4rU9WXAxnIx8XfrtJwZEYc+7NCSjCRZ3FgRBDeqtqnBp4D8IQTmr
+         xT2d5WHGOnK+MwGbZAIFHovevQCJU5Y/3yVTbzFCqHYYn3NbAyBjtY/kSEzbJWHcAG
+         EbGeYE7g09Wyg==
+Date:   Fri, 29 Oct 2021 22:07:53 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     mans@mansr.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] i2c: xlr: Fix a resource leak in the error handling path
- of 'xlr_i2c_probe()'
-Message-ID: <YXxUIw02XJqVvus3@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>, mans@mansr.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        nsaenz@kernel.org, krzk@kernel.org, stefan.wahren@i2se.com,
+        nh6z@nh6z.net, eric@anholt.net, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org
-References: <e928fd285b37599e1f6648d0b963de8ed7773166.1629405992.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] i2c: bcm2835: Fix the error handling in
+ 'bcm2835_i2c_probe()'
+Message-ID: <YXxUmXtXBR3Oy0C3@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        nsaenz@kernel.org, krzk@kernel.org, stefan.wahren@i2se.com,
+        nh6z@nh6z.net, eric@anholt.net, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <338008c444af4785a07fb5a402b60225a4964ae9.1629484876.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Y1W4jpuRes0sIcvE"
+        protocol="application/pgp-signature"; boundary="vErO5tT5H1S1DPMw"
 Content-Disposition: inline
-In-Reply-To: <e928fd285b37599e1f6648d0b963de8ed7773166.1629405992.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <338008c444af4785a07fb5a402b60225a4964ae9.1629484876.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Y1W4jpuRes0sIcvE
+--vErO5tT5H1S1DPMw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 19, 2021 at 10:48:08PM +0200, Christophe JAILLET wrote:
-> A successful 'clk_prepare()' call should be balanced by a corresponding
-> 'clk_unprepare()' call in the error handling path of the probe, as already
-> done in the remove function.
+On Fri, Aug 20, 2021 at 08:43:33PM +0200, Christophe JAILLET wrote:
+> Some resource should be released if an error occurs in
+> 'bcm2835_i2c_probe()'.
+> Add an error handling path and the needed 'clk_disable_unprepare()' and
+> 'clk_rate_exclusive_put()' calls.
 >=20
-> More specifically, 'clk_prepare_enable()' is used, but 'clk_disable()' is
-> also already called. So just the unprepare step has still to be done.
+> While at it, rework the bottom of the function to use this newly added
+> error handling path and have an explicit and more standard "return 0;" at
+> the end of the normal path.
 >=20
-> Update the error handling path accordingly.
->=20
-> Fixes: 75d31c2372e4 ("i2c: xlr: add support for Sigma Designs controller =
-variant")
+> Fixes: bebff81fb8b9 ("i2c: bcm2835: Model Divider in CCF")
 > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Applied to for-next, thanks!
+Could someone from the BCM community kindly test/approve this change?
 
+> ---
+>  drivers/i2c/busses/i2c-bcm2835.c | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bc=
+m2835.c
+> index 37443edbf754..a2f19b4c2402 100644
+> --- a/drivers/i2c/busses/i2c-bcm2835.c
+> +++ b/drivers/i2c/busses/i2c-bcm2835.c
+> @@ -449,13 +449,14 @@ static int bcm2835_i2c_probe(struct platform_device=
+ *pdev)
+>  	ret =3D clk_prepare_enable(i2c_dev->bus_clk);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "Couldn't prepare clock");
+> -		return ret;
+> +		goto err_put_exclusive_rate;
+>  	}
+> =20
+>  	irq =3D platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+>  	if (!irq) {
+>  		dev_err(&pdev->dev, "No IRQ resource\n");
+> -		return -ENODEV;
+> +		ret =3D -ENODEV;
+> +		goto err_disable_unprepare_clk;
+>  	}
+>  	i2c_dev->irq =3D irq->start;
+> =20
+> @@ -463,7 +464,7 @@ static int bcm2835_i2c_probe(struct platform_device *=
+pdev)
+>  			  dev_name(&pdev->dev), i2c_dev);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "Could not request IRQ\n");
+> -		return -ENODEV;
+> +		goto err_disable_unprepare_clk;
+>  	}
+> =20
+>  	adap =3D &i2c_dev->adapter;
+> @@ -481,7 +482,16 @@ static int bcm2835_i2c_probe(struct platform_device =
+*pdev)
+> =20
+>  	ret =3D i2c_add_adapter(adap);
+>  	if (ret)
+> -		free_irq(i2c_dev->irq, i2c_dev);
+> +		goto err_free_irq;
+> +
+> +	return 0;
+> +
+> +err_free_irq:
+> +	free_irq(i2c_dev->irq, i2c_dev);
+> +err_disable_unprepare_clk:
+> +	clk_disable_unprepare(i2c_dev->bus_clk);
+> +err_put_exclusive_rate:
+> +	clk_rate_exclusive_put(i2c_dev->bus_clk);
+> =20
+>  	return ret;
+>  }
+> --=20
+> 2.30.2
+>=20
 
---Y1W4jpuRes0sIcvE
+--vErO5tT5H1S1DPMw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmF8VB8ACgkQFA3kzBSg
-KbZRUA//XzsKKdmLWxE49+livXOqAA2C/3fsrZGauf5siAjOyd90xO6EYz9OpOjL
-CLFgsDWGLizuQZ07lpUSShpYIR6cv5m8U5qXvfx6oGw1qgfNhjbNY+T7GR6K3XYD
-y5eFANkeFN5cb7j5bogMZ/INoU1dl5Bxqqwjzl9dtXy9dMa/fCtc1+nB6HEyrkyJ
-T1tCtcAjXhil9trbDcuZT5+iTxKl8eSEMmMFXOJaqrTqgaRPCfT6P2q+g+3ipqrW
-b19Av4MZm95RB4o+Es6Z+dmyMo/VNS0l7dg9xeiVIXIWgwlRSqbFWLINqRVgc0m/
-wEo0Vjjrr/Jhkm+/D1rBJplg8p0IjB4Bontl9218mSGK8MXZrdViBLqnSeGy9+g0
-OOFRGjy6n+bl8POD74fmODABAIYjlTnoJJ7mGcSs3l2Jg0aFV7fzl8gbhJMkwQBM
-iDyacaZ562WyOmygz4neGgBDx0v7om+Z75qLPAF1NRWiANXVci7UnT/II4rA5psT
-D6gZvA0x3OuiIn+wDZohde7meDKq/mLaM29PAj1gBeRI7i1eTNpvsntyR8XOIgu5
-C30hh7Z2KIle6fCcEKCI3G+Cc66prywcJxpTjLnf12TaucgS+zgJj9kqxy/wx6d/
-c/iZ7BCorUHwJVviRU72WF0YaSXNV5NVOpTuPEircopGY09fU/A=
-=xhNM
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmF8VJkACgkQFA3kzBSg
+KbaJ9Q//fa5saV/r7SzxO3K6INdB08qy4jv7WsqQcvKqjd+v6nkAkKVDFH8hxhPB
+prBzqeWlhaC1JrLZgptjkhFw6q2N1YFJ99OqGs0mJWi4PpNq9myxA7OjWKD64oPD
+sregXrpVzM5E79a9n7GbduJkt5PDHRmBqeZtXRrFyzbLYPVCh3leimqY5p20EMXI
+Z48PQvJgzbb5mlA3QCaL9pmZVjrnTk2WSAMCbTt80ufad72SNPvWFaqfWqdpANt6
+uYPSBkpGf1jqBo/XxS1GVhdRw2YAipvbOhgXYwjLECd+MAVttxYcOKwaowY766do
+Whe1JpunWvSbU4W4pH2hyiEElc2s5z8dttNGBbZwLJ9wqLnNSdTIGz9xLznjekoL
+afXl1kRQvPSkNOQqazn7rwIGpKwVwH64fPBbuaCQ5tnCXVU1THM/8U1yl+QQyJzG
+XlI/bP1CZbKkA4bd4BzGHCP3+RP2jrrpshyVjIV1uuu1stpNVdL/DV26reo3wgzf
+w2zs00f9WGlEj2iNBbYdqZN2cEh8KV/oWuwI52nmXgkAaLvsiRWaWKrfqikYaAZG
+SO3k06Xdg2Xf+wgHU1HBFHRhhIlCFBzr087FdR67aisx8xOrUP8iYs83VdETaJGe
+g28ReVnmVU1oafs5p5UMt0j09Wd+lA87k0RMQek/LuvYWS9t2pM=
+=fkVz
 -----END PGP SIGNATURE-----
 
---Y1W4jpuRes0sIcvE--
+--vErO5tT5H1S1DPMw--
