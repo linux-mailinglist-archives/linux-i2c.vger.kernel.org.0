@@ -2,67 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B97441BF1
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 14:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D11441C95
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 15:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbhKANvp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Nov 2021 09:51:45 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:26219 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbhKANvh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 09:51:37 -0400
-Received: from dggeml709-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4HjZ8x54YFz8v7T;
-        Mon,  1 Nov 2021 21:47:29 +0800 (CST)
-Received: from localhost.localdomain (10.175.102.38) by
- dggeml709-chm.china.huawei.com (10.3.17.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.15; Mon, 1 Nov 2021 21:48:56 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     <weiyongjun1@huawei.com>, Wolfram Sang <wsa@kernel.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Zhiqi Song <songzhiqi1@huawei.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-CC:     <linux-i2c@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] i2c: xgene-slimpro: Fix wrong pointer passed to PTR_ERR()
-Date:   Mon, 1 Nov 2021 14:02:35 +0000
-Message-ID: <20211101140235.777322-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S231493AbhKAO22 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Nov 2021 10:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229826AbhKAO21 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 10:28:27 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB3EC061714;
+        Mon,  1 Nov 2021 07:25:53 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id f4so6731768edx.12;
+        Mon, 01 Nov 2021 07:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U8dGpHr2LbqeeAeL0rdMryoAEIzzb9ek644l/wYoSc0=;
+        b=qfPfuUyKZZiLcmVeHl4aZMPpfyaRykfYCtocxIUEaKcP1sB2WeHuRpeSenxfRhzVaJ
+         1VToEAmhDVB5dUVFxg4K9ZVhi1cSVQbk/SummxncNmrLuKtvht+NCy73ZODXPf0WpRUC
+         OlsvB2pbLI0s5s2DL5dB9MUj3UxOO05PLIzMGuKr92Wtv+CDEKAvF+UdX2zJ9N+auyUx
+         cdTKbekFXwzb9hHd0RJpv2JbV+fMSvTLlYDQf658hcmLLUWifohDy7PLV1yu3nYzAwVi
+         jS7+wCXEVlP2VUrf350Mk2gwzhAZiT7P9w41C2y47tSEs/7Vbz1lSjdIV3eCwjr4RBQX
+         2APw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U8dGpHr2LbqeeAeL0rdMryoAEIzzb9ek644l/wYoSc0=;
+        b=yD4D/vX1Wlx/bwizGp1iTt7Tq74zg4QMBnlg90G+nxYIRiw7CbgWAfTq5FdylhpNoX
+         JHuKLUahKvKV5yERDLpcqYdqjQx6EXbqfv8ruQHsBkf9jI1Z9p0cDLHF+7fbSLeuNxD9
+         qMyvqRJxAOmWCzV7rWovsVkEQPb0Fiwe0EjhN4ZbX8u56ASSUGIjjCFcFIlFYxzH66d2
+         x9DED/LZb+N1zjEShIDu9BA6DE71zjjpl4H11b4xPrwhozaRLVhrA9pTgXnMWCpM8bja
+         +DmH8gtgcMmxgrSW6FyQ4zjVXTTo9seywwVIOFPFnb77e2Fs8meCdjUk2DOMCw+6VPFv
+         eRqw==
+X-Gm-Message-State: AOAM530tLeVXc0Cwp/DLy96fJ+dqAwzoKKMd8fVr+KzY5lPO5ciE+LfR
+        oTVMueDUwRJK4BWUPSJBxPlDcuxqEP2GXRWeOMIbtrfXLCk=
+X-Google-Smtp-Source: ABdhPJzWM6VCDa5ZmF2ZKjZ1DdhV+AAGA9EqR2F/VhuTDDoFuYjeq48tl6QyW1NBKDlXUB980wqbufQ1zQVeZg6M+74=
+X-Received: by 2002:aa7:c44b:: with SMTP id n11mr20384013edr.238.1635776752332;
+ Mon, 01 Nov 2021 07:25:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.102.38]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggeml709-chm.china.huawei.com (10.3.17.139)
-X-CFilter-Loop: Reflected
+References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-11-hdegoede@redhat.com>
+ <CAHp75VdC8i1YWZh_KXNqz_hHgHFoXQ57cce4-x3e6Ha0ZVPQag@mail.gmail.com> <08a94895-ad57-c8f2-fcb5-ff1c1637dc0d@redhat.com>
+In-Reply-To: <08a94895-ad57-c8f2-fcb5-ff1c1637dc0d@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 1 Nov 2021 16:25:02 +0200
+Message-ID: <CAHp75VfYMEZKtR5HZTazSSZ1qgz5iV7Nk9JFHgFmtUuWGqQabg@mail.gmail.com>
+Subject: Re: [PATCH v4 10/11] platform/x86: int3472: Pass tps68470_regulator_platform_data
+ to the tps68470-regulator MFD-cell
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PTR_ERR should access the value just tested by IS_ERR, otherwise
-the wrong error code will be returned.
+On Mon, Nov 1, 2021 at 1:32 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 10/25/21 13:38, Andy Shevchenko wrote:
+> > On Mon, Oct 25, 2021 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
 
-Fixes: 7b6da7fe7bba ("mailbox: pcc: Use PCC mailbox channel pointer instead of standard")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/i2c/busses/i2c-xgene-slimpro.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c b/drivers/i2c/busses/i2c-xgene-slimpro.c
-index 1a19ebad60ad..63259b3ea5ab 100644
---- a/drivers/i2c/busses/i2c-xgene-slimpro.c
-+++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
-@@ -487,7 +487,7 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
- 		pcc_chan = pcc_mbox_request_channel(cl, ctx->mbox_idx);
- 		if (IS_ERR(pcc_chan)) {
- 			dev_err(&pdev->dev, "PCC mailbox channel request failed\n");
--			return PTR_ERR(ctx->pcc_chan);
-+			return PTR_ERR(pcc_chan);
- 		}
- 
- 		ctx->pcc_chan = pcc_chan;
+> >> +       board_data = int3472_tps68470_get_board_data(dev_name(&client->dev));
+> >
+> >> +       if (board_data)
+> >
+> > IIRC it's a dup. Below already incorporates this.
+> >
+> >> +               gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_table);
+>
+> Not sure what you mean here? This line *dereferences* board_data, so even if
+> gpiod_remove_lookup_table() already contains a NULL check for the table pointer,
+> we still need the board_data check to avoid dereferencing it to get
+> the tps68470_gpio_lookup_table member.
 
+Oh, I see now. Nothing needs to be changed here.
+
+-- 
+With Best Regards,
+Andy Shevchenko
