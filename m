@@ -2,101 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4037441B24
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 13:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD123441BA8
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 14:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbhKAM2x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Nov 2021 08:28:53 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:51132 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbhKAM2w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 08:28:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1635769580; x=1667305580;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=iN/RibOja1wF59XrxjcY2hghoc0UxWtklGtFy7NCwA0=;
-  b=2WxNHVHUhQe2QI+Z8tP1hGhvvQFq3pGqa3K+nHl8UZFaxyTHyVKoRtZ2
-   aEJ3982Yl5owmW9P7YdkIJckWGL9K0CQOG18KnAMGfa329sInjEVJwYSg
-   2m4x4iZF1bNbpTsHOVbrHl3wUjo9UaVazcx654qeEZmJj0Dv1gOK/CzLJ
-   UDCnXG99YD9aK0b9d9vJksa1UBpqYgGyG79mJhsHdcu61dOdPW3oP75AM
-   6SADSJmu6gQ8L/cunlJZMw+jJSBFscFjAi4e3YdVmBPSZwV+aSR4CDZXX
-   8piuqh6TLCpPTv4ztDHC7T7aP8r+DcyRwaQoABpDIXmMTsHhtgTZ0HsgQ
-   w==;
-IronPort-SDR: hRnROIqmSKvUpr87OHdDMnyPQd7X0LeJYfV1OfVL32rOCHMJC2mYBNmNL/szXmm/H46INuHj/J
- zuYNLXX6nh7i311NjJcoyDyeSBTiUD+O2rcqkG0l/dguzLd+3Dw8vKGV0xH1i0UF9G7rTTlPQz
- i7arzfgDRYunGYP9blg96Dr1q7hIGsokFJnsI2YvJepuzu/bzPoL2tXFHJsdu/OAFWuQDKxdHR
- 7Pu47aiz2p2dL0su8pDwgJveM5a/KfsBbLFQeJp23Ld2/4b40HF9AyWjRSf49VjyEshK1AwWUC
- EQU1xV5aeCeZ/obM3+PGyts4
-X-IronPort-AV: E=Sophos;i="5.87,199,1631602800"; 
-   d="scan'208";a="137580111"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Nov 2021 05:26:09 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 1 Nov 2021 05:26:09 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 1 Nov 2021 05:26:07 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <peda@axentia.se>, <robh+dt@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Subject: [PATCH v3 2/2] i2c-mux-gpmux: Support settle-time-us property
-Date:   Mon, 1 Nov 2021 13:25:45 +0100
-Message-ID: <20211101122545.3417624-3-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211101122545.3417624-1-horatiu.vultur@microchip.com>
-References: <20211101122545.3417624-1-horatiu.vultur@microchip.com>
+        id S231284AbhKANZR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Nov 2021 09:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230417AbhKANZQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 09:25:16 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8798BC061714;
+        Mon,  1 Nov 2021 06:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=zk7FJWTzuL8NwWu8TJAjAhULBbphyLU1o/0Lk1PLGqM=; b=ju6iFhCitIaM+RnRDypd+1odK3
+        FBtNPS5DkmhVsiupsj1msYw5Wvwf2IMyCP4ph2iYR/t1VV8Kvmsrc+QqT3h8ONldfGt1BEUIoNLh9
+        8dyFpkEMPomSHpjxYww/c3iS56dfFbpCCpxZOrJ9iKIzMv1T0jQXTp1hA8AhbeWcBQBUvYuB1UdnJ
+        vWCSBM8C2pvALZTVMudRDdTos4ja0BhVmddFklmg1ambVAzGtPM7ZhAEVHDytuiYg2pfQkWPFbViD
+        XPf+gicRsXQlcMhbPUuCcgwgNJ1XSXDluK/eU7VuGelclDJoqsPLEURJPjhWlVezF/YKXSN5J85m7
+        8GwX/w+g==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mhXGr-00GSuj-6A; Mon, 01 Nov 2021 13:22:41 +0000
+Subject: Re: [PATCH net-next 6/6] mctp i2c: MCTP I2C binding driver
+To:     Matt Johnston <matt@codeconstruct.com.au>
+Cc:     Zev Weiss <zev@bewilderbeest.net>, Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+References: <20211101090405.1405987-1-matt@codeconstruct.com.au>
+ <20211101090405.1405987-7-matt@codeconstruct.com.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <5650511d-f6aa-97a4-ce82-060c2c51afb5@infradead.org>
+Date:   Mon, 1 Nov 2021 06:22:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+In-Reply-To: <20211101090405.1405987-7-matt@codeconstruct.com.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for settle-time-us property. If this is defined in device
-tree then add this delay to mux APIs.
+Hi--
 
-Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/i2c/muxes/i2c-mux-gpmux.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 11/1/21 2:04 AM, Matt Johnston wrote:
+> diff --git a/drivers/net/mctp/Kconfig b/drivers/net/mctp/Kconfig
+> index d8f966cedc89..a468ba7c2f0b 100644
+> --- a/drivers/net/mctp/Kconfig
+> +++ b/drivers/net/mctp/Kconfig
+> @@ -3,6 +3,18 @@ if MCTP
+>   
+>   menu "MCTP Device Drivers"
+>   
+> +config MCTP_TRANSPORT_I2C
+> +	tristate "MCTP SMBus/I2C transport"
+> +	# i2c-mux is optional, but we must build as a module if i2c-mux is a module
+> +	depends on !I2C_MUX || I2C_MUX=y || m
 
-diff --git a/drivers/i2c/muxes/i2c-mux-gpmux.c b/drivers/i2c/muxes/i2c-mux-gpmux.c
-index d3acd8d66c32..f64a4b6034df 100644
---- a/drivers/i2c/muxes/i2c-mux-gpmux.c
-+++ b/drivers/i2c/muxes/i2c-mux-gpmux.c
-@@ -16,6 +16,7 @@
- 
- struct mux {
- 	struct mux_control *control;
-+	u32 delay_us;
- 
- 	bool do_not_deselect;
- };
-@@ -25,7 +26,7 @@ static int i2c_mux_select(struct i2c_mux_core *muxc, u32 chan)
- 	struct mux *mux = i2c_mux_priv(muxc);
- 	int ret;
- 
--	ret = mux_control_select(mux->control, chan);
-+	ret = mux_control_select_delay(mux->control, chan, mux->delay_us);
- 	mux->do_not_deselect = ret < 0;
- 
- 	return ret;
-@@ -106,6 +107,7 @@ static int i2c_mux_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, muxc);
- 
-+	of_property_read_u32(np, "settle-time-us", &mux->delay_us);
- 	muxc->mux_locked = of_property_read_bool(np, "mux-locked");
- 
- 	for_each_child_of_node(np, child) {
+I'm fairly sure that the ending "m" there forces this to always be built
+as a loadable module.  Is that what you meant to do here?
+
+Maybe you want something like this?
+
+	depends on I2C_MUX || !I2C_MUX
+
+That should limit how this driver can be built if I2C_MUX is m.
+
+> +	depends on I2C
+> +	depends on I2C_SLAVE
+> +	select MCTP_FLOWS
+> +	help
+> +	  Provides a driver to access MCTP devices over SMBus/I2C transport,
+> +	  from DMTF specification DSP0237. A MCTP protocol network device is
+> +	  created for each I2C bus that has been assigned a mctp-i2c device.
+
+
 -- 
-2.33.0
-
+~Randy
