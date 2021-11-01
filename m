@@ -2,55 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE87441A17
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 11:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A96F441A1F
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 11:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbhKAKqC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Nov 2021 06:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
+        id S231673AbhKAKsO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Nov 2021 06:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbhKAKqB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 06:46:01 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8ACC061714;
-        Mon,  1 Nov 2021 03:43:28 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z20so63199100edc.13;
-        Mon, 01 Nov 2021 03:43:28 -0700 (PDT)
+        with ESMTP id S231485AbhKAKsO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 06:48:14 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEA0C061714;
+        Mon,  1 Nov 2021 03:45:41 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id m14so9928815edd.0;
+        Mon, 01 Nov 2021 03:45:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hkAfHmlmX9XWaQXSquKe/6RtfK/xB73zNGE3haQKgYE=;
-        b=pmmpF5wfmYLmqYTcxMJhjqntWGMjj77X7b/s1PkF8/xALJuU8zrr6MKC3v0s4PKZid
-         r6fhca2xFz6gZY8YuGfR1ocMFAIiQu0vVIBkd9kN/eH7aakvBE7Q8WZ12QQGEZUSqqfT
-         NRW/Asfixo/GWNq32s6XjwPVzm+xBv4FpylSMRpgxNtGIW2kB6gG/aKZ86rQ2FHGOO8X
-         EyQ8Z5eKWuNvrNH149SlRDtha7vCNQ8svs5Y8Mo4Mgqwpssp639EiqtFlBRth/lNPUvI
-         tB4QuReGjL7LWvyKRxD215jykgIHzDlffKrFPvjt7KFQmbsUYAF8MQpeLP2CpAanbUrE
-         wAjw==
+        bh=YrYn8HwkWu9IjsAY6uUUxMRIsoewZD3Zbqzhh/3VGa4=;
+        b=gcQ/W/pfScTsVlIdnaYRMAJfaCGT5vIoV/HBDj3pBRvGqLyB77tm9U6uQTjzvi5CDh
+         kDcbsYKeN1DOtJVn0yLMEEpD5t0Fn3Q+Vim709sGzTfh94eCQ9QI9D7G0A3J9wYXH2L4
+         ctKEc1sFdbJ+xK9jqFqyGFSRTd7ASax35cAhTEK0/xcY7v5TCenjNMz9dqfwpBuenqRM
+         viBH7V9FdsMuNcHYvnQw28DLA3n4f1wS0p07BvtfdNJHBFuBzOisXnQPIlXcEMLPTcCy
+         lTp4CcQ3U53ajAospJ3Q1pTt+jeK/y7DtOjf+2DRnx1srVnRFLzxle/PbKv0a2sjTs84
+         Kqew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hkAfHmlmX9XWaQXSquKe/6RtfK/xB73zNGE3haQKgYE=;
-        b=2ECDPryh50S3fgZuw1HFcnJJTBDShSN+kPL4QE+v+pD1C97LmKVanIKf2OgVhXyULf
-         J+8CqKg1m6ra/p9GDl+yX27px1laBQ7mXM+NwwTs9GJMWUpCVLinsUxwsdBnSZT73Ie9
-         GTThOT7axYB8zKUtpTCwslUMK8UiReJPpNGd4Rwy0nVoU06/1Wsnn93sEVy+gHGygAyq
-         QcuSq8usM4BP0cXhJPAQAXVYKflPd7JsamUai6yKWno05GOCtQLnpnDeyOFw5YyXHdLL
-         Q0FULcch/ptoAkulXRdVjxTiwSWG/YboDHytw96buIz/uiWMzQu7GNV7El7FXSKX55Mb
-         Ss5Q==
-X-Gm-Message-State: AOAM5319YS0OlFRn6Ob5DljAibSWsElb+L/TGcM7mfyuASoexHnVCapD
-        1ge76a+1BrPB7bH2iHDVFIq3CI9WdyHv3Ajf53o=
-X-Google-Smtp-Source: ABdhPJyXVNhlnl/0TfajrJTGbiXqFhdoeCCdMhQrbeibxaSPX2lFJNn3AJttuCqMvlSaoRJEwRY4HfJ0S+fEGopoa1Q=
-X-Received: by 2002:a05:6402:207c:: with SMTP id bd28mr29606819edb.240.1635763407145;
- Mon, 01 Nov 2021 03:43:27 -0700 (PDT)
+        bh=YrYn8HwkWu9IjsAY6uUUxMRIsoewZD3Zbqzhh/3VGa4=;
+        b=extyXQ4JMyfnIWj25l9gIBEc5F/W1UC8p2V/0SG0IUnybwwao+SYwz+uyk9xVGIelK
+         HV62KO939/RneV5oqDrvLGwhQSHLRsnmSO9fV5TnE/zSYN6COiRg0mRZ39iISh2Q4cWx
+         TXJE0Q4eyUkFOhbUcZOTdGPdkeXsTEjLlNyFGyERaZVe8G4LJofaNx0NbpDrf9I/c5Cm
+         rSfs8u3SVHAydrtksEJLFWMXvlb9jV0fHWUE2QhfmxeHPN92c8K/43ERWjhcm/KFUtfU
+         NKRUXD62fJcvCU7Po6VWsAE34eTXWyLUsDXd11u2BSAP1cbcQa2pLGjaH9uYOOcfrApR
+         dRSA==
+X-Gm-Message-State: AOAM533AlKrlUtYJ0/VsH0Q/1tLv/X4u+4JiScra+Nq5azoUK5pbIpvN
+        fDiKDkZ3BmsGT3n9zyu4+9n9Qpy10/yePEPru5U=
+X-Google-Smtp-Source: ABdhPJwlk7yj+LnqpGtUa24O/09WH38yisRxJGg+DakfxGjwjisBLvrxXASwHyz72wFB/a950EFjZKDxi1ATHq9GK8k=
+X-Received: by 2002:a17:906:2887:: with SMTP id o7mr34660453ejd.425.1635763539634;
+ Mon, 01 Nov 2021 03:45:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-6-hdegoede@redhat.com>
- <CAHp75VdfwA_3QK2Fo1S34rRZWHCMNzzHug4AKsRfOrKu4CU_YA@mail.gmail.com> <ff8c8418-8e73-f949-3734-c0e2e109f554@redhat.com>
-In-Reply-To: <ff8c8418-8e73-f949-3734-c0e2e109f554@redhat.com>
+References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-9-hdegoede@redhat.com>
+ <CAHp75VeLAW6ZBQYidnD7PDYfAH3A2bq+oMJTru-9OW_t-XS26g@mail.gmail.com> <8804fa29-d0d9-14a9-e48e-268113a79d07@redhat.com>
+In-Reply-To: <8804fa29-d0d9-14a9-e48e-268113a79d07@redhat.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 1 Nov 2021 12:42:37 +0200
-Message-ID: <CAHp75VfUq+DZk_u5Wsyr5nnibbe+WrYDyhvCU22=4Pog06DgHg@mail.gmail.com>
-Subject: Re: [PATCH v4 05/11] clk: Introduce clk-tps68470 driver
+Date:   Mon, 1 Nov 2021 12:44:49 +0200
+Message-ID: <CAHp75VcdZV7NLEgQnEbsG951Mo2s_eRwfijgjSConXGF2SaSGA@mail.gmail.com>
+Subject: Re: [PATCH v4 08/11] platform/x86: int3472: Add get_sensor_adev_and_name()
+ helper
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
@@ -77,47 +78,64 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Nov 1, 2021 at 12:27 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> On 10/25/21 13:24, Andy Shevchenko wrote:
+On Mon, Nov 1, 2021 at 12:31 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 10/25/21 13:31, Andy Shevchenko wrote:
 > > On Mon, Oct 25, 2021 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
 
 ...
 
-> >> +       for (i = 0; i < ARRAY_SIZE(clk_freqs); i++) {
-> >> +               diff = clk_freqs[i].freq - rate;
-> >> +               if (diff == 0)
-> >> +                       return i;
-> >
-> >> +               diff = abs(diff);
-> >
-> > This needs a comment why higher (lower) frequency is okay.
->
-> This function is called in 2 places:
->
-> 1. From tps68470_clk_round_rate(), where higher/lower clearly is ok,
-> (see the function name) so no comment needed.
->
-> 2. From tps68470_clk_set_rate() where it is NOT ok and this is
-> enforced in the caller:
->
->         unsigned int idx = tps68470_clk_cfg_lookup(rate);
->
->         if (rate != clk_freqs[idx].freq)
->                 return -EINVAL;
->
-> This is not easy to describe in a comment, while being obvious
-> if someone looking at this actually looks at the callers.
-
-Hmm... but try your best. :-)
-
-While at it, recently I have learned about util_macros.h. Any use of it here?
-Or amending it there and re-using it here?
-
-> >> +               if (diff < best_diff) {
-> >> +                       best_diff = diff;
-> >> +                       best_idx = i;
-> >> +               }
+> >> +int skl_int3472_get_sensor_adev_and_name(struct device *dev,
+> >> +                                        struct acpi_device **sensor_adev_ret,
+> >> +                                        const char **name_ret)
+> >> +{
+> >> +       struct acpi_device *adev = ACPI_COMPANION(dev);
+> >> +       struct acpi_device *sensor;
+> >> +       int ret = 0;
+> >> +
+> >> +       sensor = acpi_dev_get_first_consumer_dev(adev);
+> >> +       if (!sensor) {
+> >> +               dev_err(dev, "INT3472 seems to have no dependents.\n");
+> >> +               return -ENODEV;
 > >> +       }
+> >> +
+> >> +       *name_ret = devm_kasprintf(dev, GFP_KERNEL, I2C_DEV_NAME_FORMAT,
+> >> +                                  acpi_dev_name(sensor));
+> >> +       if (!*name_ret)
+> >> +               ret = -ENOMEM;
+> >> +
+> >> +       if (ret == 0 && sensor_adev_ret)
+> >> +               *sensor_adev_ret = sensor;
+> >> +       else
+> >> +               acpi_dev_put(sensor);
+> >> +
+> >> +       return ret;
+> >
+> > The error path is twisted a bit including far staying ret=0 assignment.
+> >
+> > Can it be
+> >
+> >        int ret;
+> >        ...
+> >        *name_ret = devm_kasprintf(dev, GFP_KERNEL, I2C_DEV_NAME_FORMAT,
+> >                                   acpi_dev_name(sensor));
+> >        if (!*name_ret) {
+> >                acpi_dev_put(sensor);
+> >                return -ENOMEM;
+> >        }
+> >
+> >        if (sensor_adev_ret)
+> >                *sensor_adev_ret = sensor;
+> >
+> >        return 0;
+> >
+> > ?
+>
+> That misses an acpi_dev_put(sensor) when sensor_adev_ret == NULL.
+
+else
+  acpi_dev_put(...);
+
+?
 
 -- 
 With Best Regards,
