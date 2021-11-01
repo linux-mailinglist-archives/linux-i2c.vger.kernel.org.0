@@ -2,122 +2,189 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3F74420A1
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 20:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851FE4422AC
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 22:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbhKATTP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Nov 2021 15:19:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31856 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232493AbhKATTO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 15:19:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635794200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vPxF4UHOaFrwq4ubL6S9n5LY4w6t78aRQ2QSJla2WzE=;
-        b=iHQc0ylCsYQHM/YZ7Inan+C4Pk4Fnbh5MG1f3xQEYDQvhBsF4lSefP5cyYx0KPI4IOyyR2
-        XK7eQXFkfEjjFgldYSav7JiocdeWItKBlookSjnmvotZENYOKIhpLZ8iaoTc59Er3ZQGoy
-        KGLL3G4i6nrTqS7GF2daqNeccs23gY4=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-420-I4o9CTjXPE-oVc6aF7fkaA-1; Mon, 01 Nov 2021 15:16:39 -0400
-X-MC-Unique: I4o9CTjXPE-oVc6aF7fkaA-1
-Received: by mail-ed1-f69.google.com with SMTP id x13-20020a05640226cd00b003dd4720703bso16505385edd.8
-        for <linux-i2c@vger.kernel.org>; Mon, 01 Nov 2021 12:16:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vPxF4UHOaFrwq4ubL6S9n5LY4w6t78aRQ2QSJla2WzE=;
-        b=1kKEVshnRbFQ0VKH0Y4ky3mpSQ7dRpgb9VWbFRWDTOfUr1R0RLYod3UcCte2pIEb4D
-         kLMCKL7HmaKMovKSnQ2SAn3sMg6DfJG4rekVb4KKnlTjdxSNYAtcC7rgb+kwB9aDKQ5O
-         YCf4tL5BmxqHOrdBCUgc75AJqxDl5epMw9FulmfHMdlMfqNXrb1oSDOj1IEVt4bxzR32
-         4a/HAHv0ZCmS4d69Zl2xPz0X/pa8/uA7RaMhziQRYsesWifpV9Z6aUszCQeUGitObV4R
-         /9g/cBLNiP7BOoDrBftPmilrA8db+FhUf8FhQjN27o/K2VDskIgvYcS5sf2Kmbs/V1HV
-         XSCA==
-X-Gm-Message-State: AOAM532HoeVGyaaZ43hFbizh3mz6tDx5D0+o0fxgq2nLwkzzPkA/r32Y
-        kWkvPBboaEccLh8syFyr3sOtcOz8RmSBthnHcQqkCjHByqJEv8M41XVw1V7JZboRxE/qUB/Os4w
-        66YCKd7RIJZ/FmbWHNnkg
-X-Received: by 2002:a17:906:9acb:: with SMTP id ah11mr31873288ejc.305.1635794198470;
-        Mon, 01 Nov 2021 12:16:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzqRGooy6XZA1Y8t1ql0dlnn+gjO+gI4KXUs5ozQ5VUAaxbAmo9oSU5aRgIi+dcO44lXRA7hQ==
-X-Received: by 2002:a17:906:9acb:: with SMTP id ah11mr31873261ejc.305.1635794198319;
-        Mon, 01 Nov 2021 12:16:38 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id h10sm9331056edf.85.2021.11.01.12.16.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Nov 2021 12:16:37 -0700 (PDT)
-Message-ID: <b3f0d3fe-8038-626e-a68c-b818e6de69da@redhat.com>
-Date:   Mon, 1 Nov 2021 20:16:37 +0100
+        id S230333AbhKAVcv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Nov 2021 17:32:51 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:56207 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229712AbhKAVcv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 17:32:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1635802217; x=1667338217;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5hozMIsxI0YgyDEuwq/Ed15D9k+1DGG1GFvVzOI6EyM=;
+  b=Kz5Zdq4VJ4XdhmH8vxMX+jFGPFuQ2VVcuuKiBj3KDXSnrB+I3DIEkkxG
+   T0coWdS/rCIJZBCiYnV6QPiIaTGjA4KekZCpap8WMH6y1awiBrffYeHgL
+   yvVVGZ9M/BYF50+kEs6rI3T/jE5UZ7EiFm2JJMwWIOVnNZsG1SBzdedJG
+   fwh3eBzAcHIAh9xT46FZmVp8RgiNyPaR0jNd/1yGrqvxP7KcuuT05WxpO
+   f84IxAWrSfxnrKHLBHLhFuA1sz0lkaFSCnA2UKNXfuprmsrrKdXcly8YG
+   nBIH7sk9noCJI9aaKYyNeRRqBnh0CR+hKiFRULQOZ+E/vsEoZGvMLIsY9
+   Q==;
+IronPort-SDR: aYbaYa9p8/atwnOQFIMlVGMtm35GpIOSsjzUWMSIlAWo6XVKDMmHhx3arw+e4Vv0ArTlO8qR31
+ etCGbENT/P1vydZyLRcLy3OcQN83U+/+Rz1Wruc3VJdWuIHVAgUGB23rtf0hezhQQ+8Rfdm9dk
+ sA3GuuyO4ddyUdcPPAjryHLXRHVuchNltxk6gZrCO9bbCqVXzut0roN76D+ZtWiUuCTmY3N6I8
+ 6g0p6OzLjfzlM85Q0BMS4du/A+SM5iGkGJd4GAOouuGrC6goO7bJutxlSXCvabFI1cFrYnxn2S
+ B0JS2MTVbIRgMgldrnss0JJz
+X-IronPort-AV: E=Sophos;i="5.87,200,1631602800"; 
+   d="scan'208";a="142437898"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Nov 2021 14:30:17 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 1 Nov 2021 14:30:16 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Mon, 1 Nov 2021 14:30:16 -0700
+Date:   Mon, 1 Nov 2021 22:32:01 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Peter Rosin <peda@axentia.se>
+CC:     <robh+dt@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: i2c-mux: Add property for settle time
+Message-ID: <20211101213201.wdjsuexuuinepu3m@soft-dev3-1.localhost>
+References: <20211101122545.3417624-1-horatiu.vultur@microchip.com>
+ <20211101122545.3417624-2-horatiu.vultur@microchip.com>
+ <fb0ca91d-f5fa-5977-7574-8926d8d0e3bb@axentia.se>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC 3/5] gpiolib: acpi: Add a new "ignore" module option
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-References: <20211031162428.22368-1-hdegoede@redhat.com>
- <20211031162428.22368-4-hdegoede@redhat.com>
- <CAHp75Vf-EOfF_XfqfWFQZNLp3B03o79xHf4bUrf9x9D9pTrvgw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75Vf-EOfF_XfqfWFQZNLp3B03o79xHf4bUrf9x9D9pTrvgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <fb0ca91d-f5fa-5977-7574-8926d8d0e3bb@axentia.se>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+The 11/01/2021 15:32, Peter Rosin wrote:
 
-On 10/31/21 20:59, Andy Shevchenko wrote:
-> On Sun, Oct 31, 2021 at 6:25 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Add a new "ignore" module option to completely ignore controller@pin combos
->> from _AEI lists.
->>
->> And add a DMI quirk to ignore the interrupt of the BQ27520 fuel-gauge IC
->> on the Xiaomi Mi Pad 2. On this device we use native charger + fuel-gauge
->> drivers because of issues with the ACPI battery implementation. The _AEI
->> listing of the fuel-gauge IRQ is intended for use with the unused ACPI
->> battery implementation and is blocking the bq27xxx fuel-gauge driver
->> from binding.
+Hi Peter,
+
 > 
-> I'm wondering if the idea behind this is something relative to
-> https://elixir.bootlin.com/linux/latest/source/drivers/acpi/sysfs.c
+> On 2021-11-01 13:25, Horatiu Vultur wrote:
+> > Some HW requires some time for the signals to settle after the muxing is
+> > changed. Allow this time to be specified in device tree.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  Documentation/devicetree/bindings/i2c/i2c-mux.yaml | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+> > index 24cac36037f5..4628ff6340c1 100644
+> > --- a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+> > +++ b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+> > @@ -29,6 +29,12 @@ properties:
+> >    '#size-cells':
+> >      const: 0
+> >
+> > +  settle-time-us:
+> > +    default: 0
+> > +    description:
+> > +      The time required for the signals to settle. Currently only the
+> > +      i2c-mux-gpmux driver supports this optional binding.
+> 
+> The information about how i2c-mux-gpmux is special is bound to go stale,
+> and I don't think we should mention such specific details in the binding.
+> What I meant was a generic warnings about optional bindings perhaps not
+> being supported by all drivers, along the lines of this from i2c.txt:
+> 
+> "These properties may not be supported by all drivers. However, if a driver
+>  wants to support one of the below features, it should adapt these bindings."
+> 
+> However, I now notice that this sentence makes no sense. It looks like it
+> should be s/adapt/adopt/.
+> 
+> And, in the i2c-mux.yaml case it can simply say "Optional properties"
+> instead of "These properites" (which refers to a subset of properties
+> immediately below the text) since with a yaml binding it is always
+> clear which properties are optional and which are required. Lastly, I
+> guess this warning belongs in the description.
+> 
+> > +
+> >  patternProperties:
+> >    '^i2c@[0-9a-f]+$':
+> >      $ref: /schemas/i2c/i2c-controller.yaml
+> >
+> 
+> Since this is the first optional property, you now need to specify what
+> properties are required, which is everything but settle-time-us. If you
+> don't, all properties are required. Which is not what we want...
+> 
+> Something like this should do it, I think:
+> 
+> required:
+>   - compatible
+>   - '#address-cells'
+>   - '#size-cells'
 
-The idea indeed is similar, but there is only one set of GPEs and
-the GPIO pin-namespace is per GPIO controller, hence the
-controller-name@pin format used, which is also used for the
-already existing ignore_wake gpiolib-acpi.c module option and
-the patches re-use the existing parsing code.
+Thanks for a detail explanation but I am still struggling with these
+bindings. Were you thinking to have something like this?
 
-But since there seems to be agreement that using a board-file to
-work around the DSDT deficiencies is the best option this patch
-will no longer be needed. It is probably still good to keep it
-archived somewhere in case the functionality turns out to be
-useful on some other device(s).
+---
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+index 24cac36037f5..c9fde1bb0fea 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+@@ -19,6 +19,9 @@ description: |+
+   populating the i2c child busses.  If an 'i2c-mux' subnode is present, only
+   subnodes of this will be considered as i2c child busses.
 
-Regards,
++  Optional properties may not be supported by all drivers. However, if a driver
++  wants to support one of the below features, it should adopt these bindings.
++
+ properties:
+   $nodename:
+     pattern: '^(i2c-?)?mux'
+@@ -29,6 +32,11 @@ properties:
+   '#size-cells':
+     const: 0
 
-Hans
++  settle-time-us:
++    default: 0
++    description:
++      The time required for the signals to settle.
++
+ patternProperties:
+   '^i2c@[0-9a-f]+$':
+     $ref: /schemas/i2c/i2c-controller.yaml
+@@ -41,6 +49,11 @@ patternProperties:
 
+ additionalProperties: true
+
++required:
++  - compatible
++  - '#address-cells'
++  - '#size-cells'
++
+ examples:
+   - |
+     /*
+---
+
+If I have this then my problem is with the required properties because then I
+start to get new warnings once I run:
+
+make ARCH=arm CROSS_COMPILE=arm-linux- dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+
+For example, one of new the warnings is this:
+
+/home/hvultur/linux/arch/arm/boot/dts/am335x-icev2.dt.yaml: mux-mii-hog: 'compatible' is a required property
+	From schema: /home/hvultur/linux/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+/home/hvultur/linux/arch/arm/boot/dts/am335x-icev2.dt.yaml: mux-mii-hog: '#address-cells' is a required property
+	From schema: /home/hvultur/linux/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+/home/hvultur/linux/arch/arm/boot/dts/am335x-icev2.dt.yaml: mux-mii-hog: '#size-cells' is a required property
+	From schema: /home/hvultur/linux/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+
+If I don't have the required properties then I don't see these new warnings.
+
+Does it mean that actually the properties are optional by default?
+
+> 
+> Cheers,
+> Peter
+
+-- 
+/Horatiu
