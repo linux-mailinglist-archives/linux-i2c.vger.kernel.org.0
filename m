@@ -2,107 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A01441416
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 08:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C00C4414EE
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 09:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbhKAHXW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Nov 2021 03:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
+        id S231613AbhKAIJC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Nov 2021 04:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbhKAHXV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 03:23:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73421C061714
-        for <linux-i2c@vger.kernel.org>; Mon,  1 Nov 2021 00:20:48 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mhRcT-0001Xl-0S; Mon, 01 Nov 2021 08:20:37 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mhRcP-00016X-2V; Mon, 01 Nov 2021 08:20:33 +0100
-Date:   Mon, 1 Nov 2021 08:20:33 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        ~okias/devicetree@lists.sr.ht, Rob Herring <robh@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: imx: hardware do not restrict
- clock-frequency to only 100 and 400 kHz
-Message-ID: <20211101072033.GG20681@pengutronix.de>
-References: <20211029141134.66170-1-david@ixit.cz>
+        with ESMTP id S231838AbhKAIIv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 04:08:51 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77D3C06122E
+        for <linux-i2c@vger.kernel.org>; Mon,  1 Nov 2021 01:06:12 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id x27so34790147lfu.5
+        for <linux-i2c@vger.kernel.org>; Mon, 01 Nov 2021 01:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=jTwGY7UqyQ8YIhJUDjrqZPtk3LzrWCAUOAMDPLz5M7CqLBHqNsFTo9C861qV1B25Xf
+         r5L553Wxmro5Ww3I0Kz3a52AwkmZqFToii6+0ZOhpUkOfcb53PnNGE9m6Sqik3zmhZwo
+         n/R9HTp53zn5NI3DbL08muEwIh9gH7g9lDe2tstM5tUGQD80ibC8oJ7RZsh0jabUj80l
+         TjW7jDszyj0LgBKofuNs3yAxUhi8ze1MSxaF3AEB8qSt1N3bygNegk5wBFiWacOIsTYm
+         giGQNkRW+M+En5ZqEkyuSVwtFALtbKc66CUkcVFPmwMgTZmFkWlfrtrQ91sQ12FB43ir
+         IgcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=kkBLB8K5SfyQTjttKkF2/UTYp4oBsQgP6LKl4Ldi+nJqC8XI/+0PQMl2xAPSurwbyC
+         1Sn1Vf6zW5QoZqqykJlt2qp/SxyUdaz+975sVOFOrScqW0kY2PmrJNpA6DThmhdCUoFh
+         BpO0tVHuaGUTtNMztePg3UsabzRtWbflXl4YXOXl/EqTrWB1SMRPj6oeYsoE0b3Xwrqs
+         sSqM22zP1G118d213LjrXj6gejXqKMtuuA9etyDfEVj283vcwnjlhSkTpL2uN17E2Emf
+         6fv8LwI77R7NkX3fvsIxvFpsKA11GQP8rN7btskdYWcTZi2rGnDex+6QSnBz0idMtaY+
+         WD0g==
+X-Gm-Message-State: AOAM533BcQ+yVhN9PmRHcG44gTAYmVAWNYhjJh6bNI9ANq9/vxie7OZ/
+        R++AWs/eN0Clfc0vSnhC2DaMRnjKXIPF8pgg1g+Mx00nDNA=
+X-Google-Smtp-Source: ABdhPJxmqEVdpxtX6Hrcfxe4l+hmj7ibNqiYjCRoHEGQmkHQsxyv4j0y0ocCVsmwYp4ABnpO0ho1EyHAGzTI8DbI2zw=
+X-Received: by 2002:a05:6512:3696:: with SMTP id d22mr7627111lfs.659.1635753959932;
+ Mon, 01 Nov 2021 01:05:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211029141134.66170-1-david@ixit.cz>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:19:52 up 256 days, 10:43, 105 users,  load average: 0.01, 0.10,
- 0.14
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:59
+ -0700 (PDT)
+Reply-To: aisha.7d@yahoo.com
+From:   Aisha AG <rbx17058@gmail.com>
+Date:   Mon, 1 Nov 2021 00:05:59 -0800
+Message-ID: <CA+KbyychNgycp0rGBpdptJEdAFJQQCku4iDOhYe4CxitYXaueA@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 04:11:33PM +0200, David Heidelberg wrote:
-> clock-frequency is only restricted by the upper limit of 400 kHz.
-> 
-> Found with:
-> $ DT_SCHEMA_FILES=Documentation/devicetree/bindings/i2c/i2c-imx.yaml make dtbs_check
-> ...
-> arch/arm64/boot/dts/freescale/imx8mq-librem5-r2.dt.yaml: i2c@30a20000: clock-frequency:0:0: 387000 is not one of [100000, 400000]
-> 	From schema: linux/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-> ...
-> 
-> Fixes: 4bdc44347299 ("dt-bindings: i2c: Convert imx i2c to json-schema")
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-
-Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
-
-Thank you!
-
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-imx.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-> index 3592d49235e0..c167958ae2a9 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-imx.yaml
-> @@ -57,7 +57,9 @@ properties:
->      const: ipg
->  
->    clock-frequency:
-> -    enum: [ 100000, 400000 ]
-> +    minimum: 1
-> +    default: 100000
-> +    maximum: 400000
->  
->    dmas:
->      items:
-> -- 
-> 2.33.0
-> 
-> 
-
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+Hello Dear,
+
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
+Am a Widow and a single Mother with three Children.
+
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar $27.500.000.00, and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country,may be from there,we can build business relationship
+in the nearest future.
+
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits.
+
+If you are willing to handle this project on my behalf kindly reply
+urgently to enable me to provide you more information about the
+investment funds.
+Best Regards
+Mrs Aisha Al-Qaddafi.
