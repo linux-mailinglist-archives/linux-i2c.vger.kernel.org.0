@@ -2,133 +2,350 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E6E441AB2
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 12:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF5E441AC6
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 12:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbhKALef (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Nov 2021 07:34:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50529 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231755AbhKALef (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 07:34:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635766321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RYc7kj3KhIC57+jtFXvlpfVC9ikhX2Z8kNJ8F2TK81c=;
-        b=Qvkxb+IV4hQN8vM+aq0+s9/M4oVUyZN5uujIcuhHwkPvKF0nTb+4bWMDAU1KqlwVi/OuB0
-        07/ROhPrflbwzJakM3CVTHRLvjkqcUF/igfN0SseFCog9ga50nwMc5N18L12cjU1tqNTLl
-        eZ6DIm31A8zH/pGihru0Beu/QSy1zDE=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-481-N7i1Q2l3O3-nUE6OTsAP5w-1; Mon, 01 Nov 2021 07:32:00 -0400
-X-MC-Unique: N7i1Q2l3O3-nUE6OTsAP5w-1
-Received: by mail-ed1-f70.google.com with SMTP id h16-20020a05640250d000b003dd8167857aso15311393edb.0
-        for <linux-i2c@vger.kernel.org>; Mon, 01 Nov 2021 04:32:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RYc7kj3KhIC57+jtFXvlpfVC9ikhX2Z8kNJ8F2TK81c=;
-        b=VXasterRto1q2ttUZGpEnP45VVlWel96tVAzRB/qgZVMJrYXUFimHVnte5PaGeWg+e
-         sIj3xYfUJ+OL4dI8tQpzEmlr4yJNPf32mTpfixv4zwA4nkih2UbutjF/pmiralYEvPj+
-         aPF+d0XRn4YbgD8NNpWSjAJP6p9NJgE0HVo4uWNTujgAUr4/1BGdhjW07sttvzZaoR02
-         RzbIq8qK+kVuv7JAhmC3AN6nA7vQXyQjAJowvGgujF8oNChbuz47QpJMTdpaJgpTlRLQ
-         +dw7wK3zUmzyJKA/3Li4dT3HpUCFRJ3doezVjomwiFjg+YgIXkEUjRBE7hdaBYVg4Lxp
-         Q7lA==
-X-Gm-Message-State: AOAM531hDoU6oYjGd4G0Mg5LrMDMN87rCq8jnZHxWfY06sIcVU7t284h
-        c6G5EI+hWkNd+wqy2veKB+3UKCCHT27fMX20NIlVrvElYsuV/6RuIOOclYf1bvFCfg0FRUBuhUB
-        IcF9LtaROpCulQGHqE4ai
-X-Received: by 2002:a05:6402:2743:: with SMTP id z3mr2848029edd.167.1635766319105;
-        Mon, 01 Nov 2021 04:31:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxdzg3VeYKOvszAqY+bqfDsMTo43Ia8gPNjqW9LqNEBZ2jGBaPHdiCf4pqPe8/QslsQIofAZg==
-X-Received: by 2002:a05:6402:2743:: with SMTP id z3mr2848008edd.167.1635766318947;
-        Mon, 01 Nov 2021 04:31:58 -0700 (PDT)
-Received: from [10.40.1.223] ([81.30.35.201])
-        by smtp.gmail.com with ESMTPSA id hb14sm2906657ejc.115.2021.11.01.04.31.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Nov 2021 04:31:58 -0700 (PDT)
-Message-ID: <08a94895-ad57-c8f2-fcb5-ff1c1637dc0d@redhat.com>
-Date:   Mon, 1 Nov 2021 12:31:57 +0100
+        id S232215AbhKALok (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Nov 2021 07:44:40 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:43588 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232031AbhKALok (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 07:44:40 -0400
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211101114205epoutp04ed04d4709352d57e46eaa1776461a180~zaVoMY05a1474814748epoutp04W
+        for <linux-i2c@vger.kernel.org>; Mon,  1 Nov 2021 11:42:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211101114205epoutp04ed04d4709352d57e46eaa1776461a180~zaVoMY05a1474814748epoutp04W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1635766925;
+        bh=QN+i4jk5sZNzsmQDPHkVcSROkjef5YbRggvFnVgoBn4=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=V8dJSfsuIaeHIAGoNe11KQCBADBaHY3CAVt4FYqBKI/rYg0Eqk06PgtmdiqQ9v3od
+         VNLi2LWYnZ5d90zLh8UAiRmtVXH11C/wHXt8/AcdYY46oQCSDU3zQLbe9zfcAQS6ME
+         Cn+ZrVl4mhk0c+W7SgVVKPZ5rjAQQfZTR3eTNhWM=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20211101114204epcas2p480621179bb911c6c56861afaa076ed0b~zaVn7oG-_2684026840epcas2p4F;
+        Mon,  1 Nov 2021 11:42:04 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.89]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4HjWN6624Cz4x9Q3; Mon,  1 Nov
+        2021 11:41:58 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0B.55.10014.682DF716; Mon,  1 Nov 2021 20:41:58 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20211101114158epcas2p1d0762d52029b1b09912fd99665dd66f5~zaVh34sFr2930929309epcas2p15;
+        Mon,  1 Nov 2021 11:41:58 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20211101114158epsmtrp1b6726529433fdd6c007b7b2eafd049e6~zaVh3MCSC1195811958epsmtrp1B;
+        Mon,  1 Nov 2021 11:41:58 +0000 (GMT)
+X-AuditID: b6c32a47-489ff7000000271e-db-617fd286b854
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C3.69.08738.682DF716; Mon,  1 Nov 2021 20:41:58 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.51]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20211101114158epsmtip21baa0edd755472331bc85ef878246980~zaVhsJ6Wb3135631356epsmtip28;
+        Mon,  1 Nov 2021 11:41:58 +0000 (GMT)
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Chanho Park <chanho61.park@samsung.com>, linux-i2c@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jaewon Kim <jaewon02.kim@samsung.com>
+Subject: [PATCH 1/2] i2c: exynos5: support USI(Universal Serial Interface)
+Date:   Mon,  1 Nov 2021 20:38:18 +0900
+Message-Id: <20211101113819.50651-1-jaewon02.kim@samsung.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v4 10/11] platform/x86: int3472: Pass
- tps68470_regulator_platform_data to the tps68470-regulator MFD-cell
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-References: <20211025094119.82967-1-hdegoede@redhat.com>
- <20211025094119.82967-11-hdegoede@redhat.com>
- <CAHp75VdC8i1YWZh_KXNqz_hHgHFoXQ57cce4-x3e6Ha0ZVPQag@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VdC8i1YWZh_KXNqz_hHgHFoXQ57cce4-x3e6Ha0ZVPQag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHKsWRmVeSWpSXmKPExsWy7bCmuW7bpfpEg1ULDC0u79e22NFwhNVi
+        49sfTBYdf78wWlzeNYfNYsb5fUwWrXuPsFvc3T+X0YHDY1ZDL5vHplWdbB59W1YxenzeJBfA
+        EpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0hZJC
+        WWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAh
+        O+Pc5+MsBfMsK17vesnSwPhWt4uRk0NCwETi3dUFbF2MXBxCAjsYJRY1P2eFcD4xSnRf/sEE
+        4XwGykzvY+xi5ABr+bHdCyK+i1Fi1bQ3UB0fGSXW/L/PBjKXTUBb4vv6xawgtohAnUTb0xks
+        IEXMApsYJR5MbmEGSQgLeEnMOX6LBcRmEVCVONx6GayZV8BW4m3XLmaIA+UlJk64xw4RF5Q4
+        OfMJWD0zULx562xmkKESAufYJbbs6WODaHCReHKjhxXCFpZ4dXwLO4QtJfGyv40d4oV6ia83
+        HCB6e4Cu7vrFBFFjL/Fr+hZWkBpmAU2J9bv0IcqVJY7cglrLJ9Fx+C/UFF6JjjYhiEY1iftT
+        z0EdICMx6chKqIEeEn+2/AI7QEggVuLM7d+sExjlZyF5ZhaSZ2Yh7F3AyLyKUSy1oDg3PbXY
+        qMAYHqnJ+bmbGMEJUct9B+OMtx/0DjEycTAeYpTgYFYS4Y24UJMoxJuSWFmVWpQfX1Sak1p8
+        iNEUGLwTmaVEk/OBKTmvJN7QxNLAxMzM0NzI1MBcSZzXUjQ7UUggPbEkNTs1tSC1CKaPiYNT
+        qoGp/32YwKy4XaGfLSOW3LywvmjLIk/THTd3TFm80ej4EneFCQmcqgVJmR6ff+W9/qx1Jiup
+        wahLufPUfe+ngY6L1FbU9F6WvnJ70gTX0+eW2B9btvd7HoPCboGH0jf2/mlQ1FgdH/lT5nnq
+        SzvHzE/8s72vdf/OF7bYneIgsvo8167JOp1nnm8PWttV2/b6M5ugC2/Y97SLZ8vbLxzh/a2+
+        YuEk8e08T/zaHrRHsTQI70hdzpRsq+rxy8q+4Vf3Bn/px7O1D1TVc8RFRr/3tM6Pyou1rZqS
+        trZIe7NQQqiu4+LuaiFN7t8uYXYb1mx99vR04I4Vupwb5yX7G/1L3DiVMWfz+Y1R+arBQjyv
+        tiopsRRnJBpqMRcVJwIAKNmBuBEEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHLMWRmVeSWpSXmKPExsWy7bCSvG7bpfpEgxc7RS0u79e22NFwhNVi
+        49sfTBYdf78wWlzeNYfNYsb5fUwWrXuPsFvc3T+X0YHDY1ZDL5vHplWdbB59W1YxenzeJBfA
+        EsVlk5Kak1mWWqRvl8CVce7zcZaCeZYVr3e9ZGlgfKvbxcjBISFgIvFju1cXIxeHkMAORokF
+        V3oYuxg5geIyEsuf9bFB2MIS91uOsEIUvWeUuDP/HhNIgk1AW+L7+sWsILaIQAOjxM4WW5Ai
+        ZoFtjBKHb59iAUkIC3hJzDl+C8xmEVCVONx6GWwqr4CtxNuuXcwQG+QlJk64xw4RF5Q4OfMJ
+        WD0zULx562zmCYx8s5CkZiFJLWBkWsUomVpQnJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERyk
+        Wlo7GPes+qB3iJGJg/EQowQHs5IIb8SFmkQh3pTEyqrUovz4otKc1OJDjNIcLErivBe6TsYL
+        CaQnlqRmp6YWpBbBZJk4OKUamJwkz3qZfnkiYZFueGLjbLvPm4oWBi4wzlc0n/HiU02P9y5L
+        E5eNNoHZJ3ov1LDyJ6+t+Okz8fzsn38vTg7jrf6dV7tqg4SYfGVIs+vLLVecrPbnnfu2YJPX
+        kjeVKtv4ljN9VG2Q/3DvqMhc26+a4mdD6lzmx1p8D/q5/pHEbD7dZ9ess0WsX/nZdBfnmT5n
+        /Ntg+ophj4+jwWrflSJ2101bF92wnfe6LtPxdHpBmVE4X1jvCZfO+YuUnebOTxQWWrVwWstk
+        DfELc9kWJJ9mTb3aud5ur1v/h5PfDx50tm+U3LlfqMByU6bEreRfFzZWHPt+/HC39dOyJK5v
+        e9avc7Z8pxA5xTL2p86PfXNDvZVYijMSDbWYi4oTAVZBjAbBAgAA
+X-CMS-MailID: 20211101114158epcas2p1d0762d52029b1b09912fd99665dd66f5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211101114158epcas2p1d0762d52029b1b09912fd99665dd66f5
+References: <CGME20211101114158epcas2p1d0762d52029b1b09912fd99665dd66f5@epcas2p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Serial IPs(UART, I2C, SPI) are integrated into New IP-Core
+called USI(Universal Serial Interface).
 
-On 10/25/21 13:38, Andy Shevchenko wrote:
-> On Mon, Oct 25, 2021 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Pass tps68470_regulator_platform_data to the tps68470-regulator
->> MFD-cell, specifying the voltages of the various regulators and
->> tying the regulators to the sensor supplies so that sensors which use
->> the TPS68470 can find their regulators.
->>
->> Since the voltages and supply connections are board-specific, this
->> introduces a DMI matches int3472_tps68470_board_data struct which
->> contains the necessary per-board info.
->>
->> This per-board info also includes GPIO lookup information for the
->> sensor GPIOs which may be connected to the tps68470 gpios.
-> 
-> gpios --> GPIO lines
+As it is integrated into USI, there are additinal HW changes.
+Registers to control USI and sysreg to set serial IPs have been added.
+Also, some timing registres have been changed.
 
-Fixed for v5.
+Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+---
+ drivers/i2c/busses/i2c-exynos5.c | 120 ++++++++++++++++++++++++++++---
+ 1 file changed, 110 insertions(+), 10 deletions(-)
 
-
-> ...
-> 
->> +       board_data = int3472_tps68470_get_board_data(dev_name(&client->dev));
-> 
->> +       if (board_data)
-> 
-> IIRC it's a dup. Below already incorporates this.
-> 
->> +               gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_table);
-
-Not sure what you mean here? This line *dereferences* board_data, so even if
-gpiod_remove_lookup_table() already contains a NULL check for the table pointer,
-we still need the board_data check to avoid dereferencing it to get
-the tps68470_gpio_lookup_table member.
-
-Regards,
-
-Hans
+diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
+index 97d4f3ac0abd..f2dc7848f840 100644
+--- a/drivers/i2c/busses/i2c-exynos5.c
++++ b/drivers/i2c/busses/i2c-exynos5.c
+@@ -22,6 +22,8 @@
+ #include <linux/of_device.h>
+ #include <linux/of_irq.h>
+ #include <linux/spinlock.h>
++#include <linux/mfd/syscon.h>
++#include <linux/regmap.h>
+ 
+ /*
+  * HSI2C controller from Samsung supports 2 modes of operation
+@@ -166,9 +168,21 @@
+ 
+ #define EXYNOS5_I2C_TIMEOUT (msecs_to_jiffies(100))
+ 
++/* USI(Universal Serial Interface) Register map */
++#define USI_CON					0xc4
++#define USI_OPTION				0xc8
++
++/* USI(Universal Serial Interface) Register bits */
++#define USI_CON_RESET				(1 << 0)
++
++/* SYSREG Register bit */
++#define SYSREG_USI_SW_CONF_MASK			(0x7 << 0)
++#define SYSREG_I2C_SW_CONF			(1u << 2)
++
+ enum i2c_type_exynos {
+ 	I2C_TYPE_EXYNOS5,
+ 	I2C_TYPE_EXYNOS7,
++	I2C_TYPE_USI,
+ };
+ 
+ struct exynos5_i2c {
+@@ -199,6 +213,10 @@ struct exynos5_i2c {
+ 
+ 	/* Version of HS-I2C Hardware */
+ 	const struct exynos_hsi2c_variant *variant;
++
++	/* USI sysreg info */
++	struct regmap		*usi_sysreg;
++	unsigned int		usi_offset;
+ };
+ 
+ /**
+@@ -230,6 +248,11 @@ static const struct exynos_hsi2c_variant exynos7_hsi2c_data = {
+ 	.hw		= I2C_TYPE_EXYNOS7,
+ };
+ 
++static const struct exynos_hsi2c_variant exynos_usi_hsi2c_data = {
++	.fifo_depth	= 64,
++	.hw		= I2C_TYPE_USI,
++};
++
+ static const struct of_device_id exynos5_i2c_match[] = {
+ 	{
+ 		.compatible = "samsung,exynos5-hsi2c",
+@@ -243,6 +266,9 @@ static const struct of_device_id exynos5_i2c_match[] = {
+ 	}, {
+ 		.compatible = "samsung,exynos7-hsi2c",
+ 		.data = &exynos7_hsi2c_data
++	}, {
++		.compatible = "samsung,exynos-usi-hsi2c",
++		.data = &exynos_usi_hsi2c_data
+ 	}, {},
+ };
+ MODULE_DEVICE_TABLE(of, exynos5_i2c_match);
+@@ -281,6 +307,31 @@ static int exynos5_i2c_set_timing(struct exynos5_i2c *i2c, bool hs_timings)
+ 		i2c->op_clock;
+ 	int div, clk_cycle, temp;
+ 
++	/* In case of HSI2C controllers in USI
++	 * timing control formula changed.
++	 *
++	 * FSCL = IPCLK / ((CLK_DIV + 1) * 16)
++	 * T_SCL_LOW = IPCLK * (CLK_DIV + 1) * (N + M)
++	 *  [N : number of 0's in the TSCL_H_HS]
++	 *  [M : number of 0's in the TSCL_L_HS]
++	 * T_SCL_HIGH = IPCLK * (CLK_DIV + 1) * (N + M)
++	 *  [N : number of 1's in the TSCL_H_HS]
++	 *  [M : number of 1's in the TSCL_L_HS]
++	 *
++	 *  result of (N + M) is always 8.
++	 *  In genaral case, we don`t need to control timing_s1, timing_s2.
++	 */
++	if (i2c->variant->hw == I2C_TYPE_USI) {
++		div = ((clkin / (16 * i2c->op_clock)) - 1);
++		i2c_timing_s3 = div << 16;
++		if (hs_timings)
++			writel(i2c_timing_s3, i2c->regs + HSI2C_TIMING_HS3);
++		else
++			writel(i2c_timing_s3, i2c->regs + HSI2C_TIMING_FS3);
++
++		return 0;
++	}
++
+ 	/*
+ 	 * In case of HSI2C controller in Exynos5 series
+ 	 * FPCLK / FI2C =
+@@ -355,6 +406,16 @@ static int exynos5_hsi2c_clock_setup(struct exynos5_i2c *i2c)
+ 	return exynos5_i2c_set_timing(i2c, true);
+ }
+ 
++static void exynos_usi_reset(struct exynos5_i2c *i2c)
++{
++	u32 val;
++
++	/* Clear the software reset of USI block (it's set at startup) */
++	val = readl(i2c->regs + USI_CON);
++	val &= ~USI_CON_RESET;
++	writel(val, i2c->regs + USI_CON);
++}
++
+ /*
+  * exynos5_i2c_init: configures the controller for I2C functionality
+  * Programs I2C controller for Master mode operation
+@@ -385,6 +446,9 @@ static void exynos5_i2c_reset(struct exynos5_i2c *i2c)
+ {
+ 	u32 i2c_ctl;
+ 
++	if (i2c->variant->hw == I2C_TYPE_USI)
++		exynos_usi_reset(i2c);
++
+ 	/* Set and clear the bit for reset */
+ 	i2c_ctl = readl(i2c->regs + HSI2C_CTL);
+ 	i2c_ctl |= HSI2C_SW_RST;
+@@ -422,7 +486,8 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
+ 	writel(int_status, i2c->regs + HSI2C_INT_STATUS);
+ 
+ 	/* handle interrupt related to the transfer status */
+-	if (i2c->variant->hw == I2C_TYPE_EXYNOS7) {
++	if (i2c->variant->hw == I2C_TYPE_EXYNOS7 ||
++			i2c->variant->hw == I2C_TYPE_USI) {
+ 		if (int_status & HSI2C_INT_TRANS_DONE) {
+ 			i2c->trans_done = 1;
+ 			i2c->state = 0;
+@@ -569,13 +634,13 @@ static void exynos5_i2c_bus_check(struct exynos5_i2c *i2c)
+ {
+ 	unsigned long timeout;
+ 
+-	if (i2c->variant->hw != I2C_TYPE_EXYNOS7)
++	if (i2c->variant->hw == I2C_TYPE_EXYNOS5)
+ 		return;
+ 
+ 	/*
+-	 * HSI2C_MASTER_ST_LOSE state in EXYNOS7 variant before transaction
+-	 * indicates that bus is stuck (SDA is low). In such case bus recovery
+-	 * can be performed.
++	 * HSI2C_MASTER_ST_LOSE state in EXYNOS7 or EXYNOS_USI variant before
++	 * transaction indicates that bus is stuck (SDA is low).
++	 * In such case bus recovery can be performed.
+ 	 */
+ 	timeout = jiffies + msecs_to_jiffies(100);
+ 	for (;;) {
+@@ -611,10 +676,10 @@ static void exynos5_i2c_message_start(struct exynos5_i2c *i2c, int stop)
+ 	unsigned long flags;
+ 	unsigned short trig_lvl;
+ 
+-	if (i2c->variant->hw == I2C_TYPE_EXYNOS7)
+-		int_en |= HSI2C_INT_I2C_TRANS;
+-	else
++	if (i2c->variant->hw == I2C_TYPE_EXYNOS5)
+ 		int_en |= HSI2C_INT_I2C;
++	else
++		int_en |= HSI2C_INT_I2C_TRANS;
+ 
+ 	i2c_ctl = readl(i2c->regs + HSI2C_CTL);
+ 	i2c_ctl &= ~(HSI2C_TXCHON | HSI2C_RXCHON);
+@@ -738,6 +803,37 @@ static const struct i2c_algorithm exynos5_i2c_algorithm = {
+ 	.functionality		= exynos5_i2c_func,
+ };
+ 
++static int exynos_usi_init(struct exynos5_i2c *i2c)
++{
++	struct device *dev = i2c->dev;
++	int ret;
++
++	if (i2c->variant->hw != I2C_TYPE_USI)
++		return 0;
++
++	/* USI regmap control */
++	i2c->usi_sysreg = syscon_regmap_lookup_by_phandle(
++			dev->of_node, "samsung,usi-sysreg");
++	if (IS_ERR(i2c->usi_sysreg)) {
++		dev_err(dev, "Cannot find usi-sysreg\n");
++		return PTR_ERR(i2c->usi_sysreg);
++	}
++
++	ret = of_property_read_u32_index(dev->of_node,
++				"samsung,usi-sysreg", 1, &i2c->usi_offset);
++	if (ret) {
++		dev_err(dev, "usi-sysreg offset is not specified\n");
++		return ret;
++	}
++
++	regmap_update_bits(i2c->usi_sysreg, i2c->usi_offset,
++			SYSREG_USI_SW_CONF_MASK, SYSREG_I2C_SW_CONF);
++
++	exynos_usi_reset(i2c);
++
++	return 0;
++}
++
+ static int exynos5_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+@@ -777,6 +873,12 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 	i2c->adap.algo_data = i2c;
+ 	i2c->adap.dev.parent = &pdev->dev;
+ 
++	i2c->variant = of_device_get_match_data(&pdev->dev);
++
++	ret = exynos_usi_init(i2c);
++	if (ret)
++		return ret;
++
+ 	/* Clear pending interrupts from u-boot or misc causes */
+ 	exynos5_i2c_clr_pend_irq(i2c);
+ 
+@@ -794,8 +896,6 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 		goto err_clk;
+ 	}
+ 
+-	i2c->variant = of_device_get_match_data(&pdev->dev);
+-
+ 	ret = exynos5_hsi2c_clock_setup(i2c);
+ 	if (ret)
+ 		goto err_clk;
+-- 
+2.33.1
 
