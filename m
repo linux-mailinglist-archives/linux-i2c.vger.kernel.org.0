@@ -2,63 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B52AE441A4E
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 12:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42FE441A7E
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 12:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbhKALD0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Nov 2021 07:03:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34216 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231485AbhKALD0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 07:03:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635764452;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=joHNzvFQfcbDTZ/dkFJGCsXdvXmYKWaiFrgOXjjG3U4=;
-        b=a+RIImCJhfrRU6s3u1RrgcLnsWVs+YoUve9q2xnn5mvwQxFBfb8t/Xxu4XecU/im9QkV8x
-        jS5CyaB+gS4oE2zBVbv/c78ZNzCuIWNFYdtBYhqqUWWDPNU7eVtU0ZyErybgbK/ts5ihhS
-        1V4iLQ9AAyAlpjosCKVcp4E7tD0ZSmk=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-433-LtUisWT0MgCLEvbnGMptjw-1; Mon, 01 Nov 2021 07:00:51 -0400
-X-MC-Unique: LtUisWT0MgCLEvbnGMptjw-1
-Received: by mail-ed1-f70.google.com with SMTP id w11-20020a05640234cb00b003e0cd525777so10500272edc.12
-        for <linux-i2c@vger.kernel.org>; Mon, 01 Nov 2021 04:00:51 -0700 (PDT)
+        id S231993AbhKALO7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Nov 2021 07:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231485AbhKALO6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 07:14:58 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BE2C061714;
+        Mon,  1 Nov 2021 04:12:25 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 5so62117178edw.7;
+        Mon, 01 Nov 2021 04:12:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e/ndeUdloTh5m16qLTmNIXQLVVP3NuiAY5SQEn45NJs=;
+        b=KoLYJwuSR+BEdOEmgwZcfQ3vtQmrATV3wWRolFR1NYwMo1ZDE/GKzeISLXxILeNqQG
+         V5+LmVHypX/XDxgOe0vOyUUUX/ZETvqwDIrzCc9p2rYWI21wfkk6Wq10z8gXJzFqCuhL
+         dimlOz6rgDDxQrPsNByXEytlJh8IRvdFKYKAtKefNkTR8w7Fst0uoZklwV76EgF8+Pfe
+         VEN4P+NK8kbnmZWN72RBlmAUoC2+1CFrviH+ia4kJYLqt3LoFrlcxEC8jmVykMGievye
+         VFTnodxSJs5r6iE3UibpfHleOWUJgNLmtXTsNlmiusfPgFCgjThjAj+0HpJoBJ8Ug2j/
+         mDSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=joHNzvFQfcbDTZ/dkFJGCsXdvXmYKWaiFrgOXjjG3U4=;
-        b=Z29MjYOxs1gY1uJKzVSDD/mBCrsCaViYMXjjOv91MoN5dcL5mEbN+5iHyG3IZuHL/I
-         iWqHtV8pt/V28nuTABCJy1WPz6BiyV1C5zQipkioa/n3PUaVdIWWj9m2oLcCDtiaGJWY
-         LqbdSy1YpsnyIws6MljMio0HQvcjddw52Cruzc+0UtuRlUzSAb/Qz6BAYLEHpngGjaVD
-         x4mOy8r/95XRIL43bz6IWRiJgwav9r/oLMG3pnSQwLyOxg7XNiAfEzs43xutz6r9qhQt
-         tpPaE8OECL1QKrxY0cxo0VEw+Cd+BytVBGlavUcO0DZieb7BPuacXKqT4LKIzWjRHLHr
-         p3mg==
-X-Gm-Message-State: AOAM533WB+I0KxvBN/YLzpa4qIgWtrvr4wzlbHspQw36vNJEcdItboT0
-        x/74EhaJCWXGTmbnzDg0u1k1BJ12uIynSYlFgdwtpHcIhDVP1hdWdzj5W2an8SyNWTaP3ofuBtZ
-        rTghAze32slMCIdHJV3t1
-X-Received: by 2002:a17:907:1c0a:: with SMTP id nc10mr22593199ejc.211.1635764450487;
-        Mon, 01 Nov 2021 04:00:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwsz/WHOhVGJrVLCTGkCypW0KYkc8EOI/EYIO1yZjx/IvEyS0VgbABqYAnWykZcfYTHcUOH7g==
-X-Received: by 2002:a17:907:1c0a:: with SMTP id nc10mr22593140ejc.211.1635764450202;
-        Mon, 01 Nov 2021 04:00:50 -0700 (PDT)
-Received: from [10.40.1.223] ([81.30.35.201])
-        by smtp.gmail.com with ESMTPSA id g12sm6748963ejs.39.2021.11.01.04.00.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Nov 2021 04:00:49 -0700 (PDT)
-Message-ID: <4aec04d1-0964-e4c3-2c92-f9cef395494a@redhat.com>
-Date:   Mon, 1 Nov 2021 12:00:49 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e/ndeUdloTh5m16qLTmNIXQLVVP3NuiAY5SQEn45NJs=;
+        b=zEBBY9kp5NZc6ihx0jirZKomm8Bt4gFIzerlZ9hRbWrcgf9H5z8MFA7GgPIb+mr48g
+         zxGq3435mQ5HpGueY6ATkz8a3ok+ht1WsibgkoBLpR2bzNOkhjkXYbqOLsleovaT8foZ
+         rbipZ2G2jPiWPEhU5RbLTyw6dPow210ZgkoMqmPrST2H4uOj8GhL4NirUQ82lqrddi1J
+         NBpa/CnoPoVKKSDXhpIlqExxjaSqmjFFEFLrizRC5okx0yhM9bbu9bUa9CXojfSmyzqA
+         8fcHXy16CHL23R0ZEkOlVNkIzoVdGDH3lsoD1ZXjHpJUM37c8MzrHTltjioeELP4/v4l
+         +jxA==
+X-Gm-Message-State: AOAM532y9skHjeR85J4f3AodGns0WtjpkHg4u5QjEeFzYDQK5E3x2wPW
+        3AhABYsPLmAeHvdZG9G3XbwFX9NaaAzTsri8aWpTgV28xd8=
+X-Google-Smtp-Source: ABdhPJyrc30AQqdRLKr/BXV3DijFsqtCdCNhx9Ovfyd7dJ2Yh9ZNzzWrH6eogusJKDwvCt0KPqPWkG4zkuPEvBLrZjM=
+X-Received: by 2002:a05:6402:1801:: with SMTP id g1mr13385760edy.107.1635765143813;
+ Mon, 01 Nov 2021 04:12:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
+References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-6-hdegoede@redhat.com>
+ <CAHp75VdfwA_3QK2Fo1S34rRZWHCMNzzHug4AKsRfOrKu4CU_YA@mail.gmail.com>
+ <ff8c8418-8e73-f949-3734-c0e2e109f554@redhat.com> <CAHp75VfUq+DZk_u5Wsyr5nnibbe+WrYDyhvCU22=4Pog06DgHg@mail.gmail.com>
+ <4aec04d1-0964-e4c3-2c92-f9cef395494a@redhat.com>
+In-Reply-To: <4aec04d1-0964-e4c3-2c92-f9cef395494a@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 1 Nov 2021 13:11:33 +0200
+Message-ID: <CAHp75Vf1oZN=HD6apAeJ15tZMuAqJ2y6nKzZdj+8Tz9DHyK09g@mail.gmail.com>
 Subject: Re: [PATCH v4 05/11] clk: Introduce clk-tps68470 driver
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@infradead.org>,
@@ -79,75 +74,27 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Kate Hsuan <hpa@redhat.com>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>
-References: <20211025094119.82967-1-hdegoede@redhat.com>
- <20211025094119.82967-6-hdegoede@redhat.com>
- <CAHp75VdfwA_3QK2Fo1S34rRZWHCMNzzHug4AKsRfOrKu4CU_YA@mail.gmail.com>
- <ff8c8418-8e73-f949-3734-c0e2e109f554@redhat.com>
- <CAHp75VfUq+DZk_u5Wsyr5nnibbe+WrYDyhvCU22=4Pog06DgHg@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VfUq+DZk_u5Wsyr5nnibbe+WrYDyhvCU22=4Pog06DgHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+On Mon, Nov 1, 2021 at 1:00 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 11/1/21 11:42, Andy Shevchenko wrote:
+> > On Mon, Nov 1, 2021 at 12:27 PM Hans de Goede <hdegoede@redhat.com> wrote:
 
-On 11/1/21 11:42, Andy Shevchenko wrote:
-> On Mon, Nov 1, 2021 at 12:27 PM Hans de Goede <hdegoede@redhat.com> wrote:
->> On 10/25/21 13:24, Andy Shevchenko wrote:
->>> On Mon, Oct 25, 2021 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> 
-> ...
-> 
->>>> +       for (i = 0; i < ARRAY_SIZE(clk_freqs); i++) {
->>>> +               diff = clk_freqs[i].freq - rate;
->>>> +               if (diff == 0)
->>>> +                       return i;
->>>
->>>> +               diff = abs(diff);
->>>
->>> This needs a comment why higher (lower) frequency is okay.
->>
->> This function is called in 2 places:
->>
->> 1. From tps68470_clk_round_rate(), where higher/lower clearly is ok,
->> (see the function name) so no comment needed.
->>
->> 2. From tps68470_clk_set_rate() where it is NOT ok and this is
->> enforced in the caller:
->>
->>         unsigned int idx = tps68470_clk_cfg_lookup(rate);
->>
->>         if (rate != clk_freqs[idx].freq)
->>                 return -EINVAL;
->>
->> This is not easy to describe in a comment, while being obvious
->> if someone looking at this actually looks at the callers.
-> 
-> Hmm... but try your best. :-)
+...
 
-Ok I will :)
+> > While at it, recently I have learned about util_macros.h. Any use of it here?
+> > Or amending it there and re-using it here?
+>
+> That only works on straight integer/long/float arrays, not
+> on arrays of structs where we are looking for a specific member of
+> the struct to be closest. And reworking that to also work on
+> structs is really (really really) out of scope for this patch-set.
 
-> While at it, recently I have learned about util_macros.h. Any use of it here?
-> Or amending it there and re-using it here?
+Consider above as just heads up: a new header (helpers) is in the town.
 
-That only works on straight integer/long/float arrays, not
-on arrays of structs where we are looking for a specific member of
-the struct to be closest. And reworking that to also work on
-structs is really (really really) out of scope for this patch-set.
-
-Regards,
-
-Hans
-
-
-> 
->>>> +               if (diff < best_diff) {
->>>> +                       best_diff = diff;
->>>> +                       best_idx = i;
->>>> +               }
->>>> +       }
-> 
-
+-- 
+With Best Regards,
+Andy Shevchenko
