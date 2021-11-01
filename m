@@ -2,61 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FECE4419BD
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 11:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE534419D4
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Nov 2021 11:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbhKAKXF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 1 Nov 2021 06:23:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54145 "EHLO
+        id S232071AbhKAKaG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 Nov 2021 06:30:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28000 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231841AbhKAKXE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 06:23:04 -0400
+        by vger.kernel.org with ESMTP id S232033AbhKAKaF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 Nov 2021 06:30:05 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635762031;
+        s=mimecast20190719; t=1635762451;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6GKVOIqK7nVWtbHe5Lw3RempWLyywE1J9gAebyUeQYo=;
-        b=ilntWRlgoN+VGgRqTA085elgZwMm+Wikrf6apC7rUTRmwA7NRflglD4EijkaljBwi8B2K/
-        QDqAkd8wnBbt8TxZEAgdLObNIxc5gFrkRAjnXvjOAoeiic7BoOhHLJyQi0Q8VefBXr766K
-        nc61mbHy3bQz+MRUrXP+8XdmPcR0XQo=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-245-8i1Qd4sBPcyLNGAtGOzqJg-1; Mon, 01 Nov 2021 06:20:30 -0400
-X-MC-Unique: 8i1Qd4sBPcyLNGAtGOzqJg-1
-Received: by mail-ed1-f72.google.com with SMTP id w7-20020a056402268700b003dd46823a18so15077864edd.18
-        for <linux-i2c@vger.kernel.org>; Mon, 01 Nov 2021 03:20:30 -0700 (PDT)
+        bh=sbRv0LbOwweVcKPem1CDYmre/eBu7RPmgKjL80bCTNo=;
+        b=L0vEIW8YoAmHcoztbqAS04R1wc0VrAoOZH7LBK+6Ps0HOvLcbrlKwBjUti4JsTGwzPAW1V
+        I2YuPt16xjO5OD5ufdRpKt7ECJCT4+6vnEXlWgRj12mqp6AOaJbBCYgKfD724kWT+UvFt1
+        wbEe/CPGO6sl7ZNk8ydah2Yn32zTAas=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-508-yhCZUZBSOHyW1L5w9-3f2Q-1; Mon, 01 Nov 2021 06:27:30 -0400
+X-MC-Unique: yhCZUZBSOHyW1L5w9-3f2Q-1
+Received: by mail-ed1-f71.google.com with SMTP id r25-20020a05640216d900b003dca3501ab4so15054221edx.15
+        for <linux-i2c@vger.kernel.org>; Mon, 01 Nov 2021 03:27:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=6GKVOIqK7nVWtbHe5Lw3RempWLyywE1J9gAebyUeQYo=;
-        b=4xHAPEThowZxOjYnZcJ9VrYx0pICA1O3Od6zsWlBwI2okcUDLpgmtvd+J37ptMz6VR
-         UcSgX4jAkJC5+O/Z4/PSZa+DFOmnGnDLZMna8axk8nfxQjJW1i/iPSx6h1G++fspCW4i
-         Y4hMANN6tU6Jo6JVLQM+Jseae2q8yNpCBaCvXrn4iyXzm31pfHfF1JUpDmGUYGipq2I9
-         xKuV4NGqVasvEj4NHHDdef4YpEe/yMg6oPbVj8yjIydJ33t8WKcKOwUtYM/tdMRgg7VP
-         8lxpT4IpwEc11Q4xL4+ClOFw0EvZZyUkhDEQ/E4FkUs3Z4o16jJlLvvt+toPgvK2NgF2
-         hwow==
-X-Gm-Message-State: AOAM5309ItkJ7QGfpH99Q6yhHZLOONWQcSRiLYWbSJQhBlAPjaG7ZR+2
-        aBQXnHHQiGn1HMJdNNzRDQ+16Wla+s9njN0K6/1iPvYATVlCf7OXJyo4I0jLvrV7XcCk7HwU6o5
-        VuPjHECfuDaKS3nuiiyEq
-X-Received: by 2002:a17:907:6da4:: with SMTP id sb36mr35639761ejc.490.1635762029181;
-        Mon, 01 Nov 2021 03:20:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxEHfQy0TcctxhEUS7W+qUxUEatSVkMN784xMt2dLb/n/0z432ckOav1RgTwKmh1k2nt3yoIA==
-X-Received: by 2002:a17:907:6da4:: with SMTP id sb36mr35639725ejc.490.1635762028980;
-        Mon, 01 Nov 2021 03:20:28 -0700 (PDT)
+        bh=sbRv0LbOwweVcKPem1CDYmre/eBu7RPmgKjL80bCTNo=;
+        b=n9ndNiIVulu3vOlj5HNqNBGcng66+q5q++FHKecH8kBMmzzfCbW/xNJoL0DAOTa4Tn
+         n1ymBr2zYj3AsalCwJZcX79v1sdLrNb+JKoAXlZGF58aXhTY4ihtnMmw8BKFJyywBsZ3
+         bpYL9mqICFKuKLkv4DiAzLcXOfdr8sIwz7OIPdi4yifvysxC0I7xHzgCNa5lYAc8j8rN
+         2JsBfX5KCu+kpsVnPJLE3HuMo3AwrzR12omdTxxK5KDXHyQKndwKhCHBU+GaEzRAKysD
+         gA1WNngrTj9HF7DuXsqJcKh2Qrlbjs5H/C29G6WgdZFxR+L3WjsYgn8AgDFUfNd5VIsc
+         Q/PQ==
+X-Gm-Message-State: AOAM532qnoXI+G0VZVZju/Gfme+ycPneQtaG4fqzRfWxXk6rNWHRyk/b
+        LqS5RxOSpMPhyYdXbdUvVMXaartVTGc10jQAwnY4S62FNGymhy5s/vLaR7xPijUjuzBhf3epGRE
+        izFmlYKXpYnkc58TrojU4
+X-Received: by 2002:a17:907:96a4:: with SMTP id hd36mr723474ejc.407.1635762449536;
+        Mon, 01 Nov 2021 03:27:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJze8NyVmpBw7YgYiWD+CZnyOJgLe1lkQHSyHpWXs1dtzDSwFrSGxpNbxzdwHMmlXFZDjJJAyA==
+X-Received: by 2002:a17:907:96a4:: with SMTP id hd36mr723456ejc.407.1635762449305;
+        Mon, 01 Nov 2021 03:27:29 -0700 (PDT)
 Received: from [10.40.1.223] ([81.30.35.201])
-        by smtp.gmail.com with ESMTPSA id h10sm8869323edk.41.2021.11.01.03.20.28
+        by smtp.gmail.com with ESMTPSA id d3sm6726825ejb.35.2021.11.01.03.27.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Nov 2021 03:20:28 -0700 (PDT)
-Message-ID: <2c4d2e45-798e-fdc1-82fb-8413d5a9e061@redhat.com>
-Date:   Mon, 1 Nov 2021 11:20:27 +0100
+        Mon, 01 Nov 2021 03:27:29 -0700 (PDT)
+Message-ID: <ff8c8418-8e73-f949-3734-c0e2e109f554@redhat.com>
+Date:   Mon, 1 Nov 2021 11:27:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH v4 04/11] regulator: Introduce tps68470-regulator driver
+Subject: Re: [PATCH v4 05/11] clk: Introduce clk-tps68470 driver
 Content-Language: en-US
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -80,10 +80,10 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>
 References: <20211025094119.82967-1-hdegoede@redhat.com>
- <20211025094119.82967-5-hdegoede@redhat.com>
- <CAHp75Ve4nu1WDURaSvUto6+aLoEDM2OfTCVi2Th6x-oagO6a-Q@mail.gmail.com>
+ <20211025094119.82967-6-hdegoede@redhat.com>
+ <CAHp75VdfwA_3QK2Fo1S34rRZWHCMNzzHug4AKsRfOrKu4CU_YA@mail.gmail.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75Ve4nu1WDURaSvUto6+aLoEDM2OfTCVi2Th6x-oagO6a-Q@mail.gmail.com>
+In-Reply-To: <CAHp75VdfwA_3QK2Fo1S34rRZWHCMNzzHug4AKsRfOrKu4CU_YA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -92,8 +92,8 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi,
 
-On 10/25/21 13:11, Andy Shevchenko wrote:
-> On Mon, Oct 25, 2021 at 12:41 PM Hans de Goede <hdegoede@redhat.com> wrote:
+On 10/25/21 13:24, Andy Shevchenko wrote:
+> On Mon, Oct 25, 2021 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
 >>
 >> The TPS68470 PMIC provides Clocks, GPIOs and Regulators. At present in
 >> the kernel the Regulators and Clocks are controlled by an OpRegion
@@ -101,61 +101,116 @@ On 10/25/21 13:11, Andy Shevchenko wrote:
 >> some platforms lack those methods, meaning drivers need to be able to
 >> consume the resources of these chips through the usual frameworks.
 >>
->> This commit adds a driver for the regulators provided by the tps68470,
+>> This commit adds a driver for the clocks provided by the tps68470,
 >> and is designed to bind to the platform_device registered by the
 >> intel_skl_int3472 module.
->>
->> This is based on this out of tree driver written by Intel:
->> https://github.com/intel/linux-intel-lts/blob/4.14/base/drivers/regulator/tps68470-regulator.c
->> with various cleanups added.
-> 
->> +struct tps68470_regulator_data {
->> +       struct clk *clk;
->> +};
 > 
 > ...
 > 
 >> +/*
->> + * (1) This register must have same setting as VIOVAL if S_IO LDO is used to
->> + *     power daisy chained IOs in the receive side.
->> + * (2) If there is no I2C daisy chain it can be set freely.
+>> + *  The PLL is used to multiply the crystal oscillator
+>> + *  frequency range of 3 MHz to 27 MHz by a programmable
+>> + *  factor of F = (M/N)*(1/P) such that the output
+>> + *  available at the HCLK_A or HCLK_B pins are in the range
+>> + *  of 4 MHz to 64 MHz in increments of 0.1 MHz
+> 
+> Missed (grammatical) period.
+
+Thx, fixed for v5.
+
+> 
+>> + *
+>> + * hclk_# = osc_in * (((plldiv*2)+320) / (xtaldiv+30)) * (1 / 2^postdiv)
+>> + *
+>> + * PLL_REF_CLK should be as close as possible to 100kHz
+>> + * PLL_REF_CLK = input clk / XTALDIV[7:0] + 30)
+>> + *
+>> + * PLL_VCO_CLK = (PLL_REF_CLK * (plldiv*2 + 320))
+>> + *
+>> + * BOOST should be as close as possible to 2Mhz
+>> + * BOOST = PLL_VCO_CLK / (BOOSTDIV[4:0] + 16) *
+>> + *
+>> + * BUCK should be as close as possible to 5.2Mhz
+>> + * BUCK = PLL_VCO_CLK / (BUCKDIV[3:0] + 5)
+>> + *
+>> + * osc_in   xtaldiv  plldiv   postdiv   hclk_#
+>> + * 20Mhz    170      32       1         19.2Mhz
+>> + * 20Mhz    170      40       1         20Mhz
+>> + * 20Mhz    170      80       1         24Mhz
 > 
 >> + *
 > 
 > Redundant empty line.
-> 
+
+Removed for v5.
+
 >> + */
 > 
 > ...
 > 
->> +       struct tps68470_regulator_platform_data *pdata = pdev->dev.platform_data;
+>> +       /* disable clock first */
 > 
-> dev_get_platdata() ?
+> Disable
+> first...
 > 
+>> +       /* and then tri-state the clock outputs */
+> 
+> ...and
+
+Fixed for v5.
 > ...
 > 
->> +       data->clk = devm_clk_get(&pdev->dev, "tps68470-clk");
->> +       if (IS_ERR(data->clk)) {
->> +               dev_err(&pdev->dev, "Error getting tps68470-clk\n");
->> +               return PTR_ERR(data->clk);
+>> +       for (i = 0; i < ARRAY_SIZE(clk_freqs); i++) {
+>> +               diff = clk_freqs[i].freq - rate;
+>> +               if (diff == 0)
+>> +                       return i;
+> 
+>> +               diff = abs(diff);
+> 
+> This needs a comment why higher (lower) frequency is okay.
+
+This function is called in 2 places:
+
+1. From tps68470_clk_round_rate(), where higher/lower clearly is ok,
+(see the function name) so no comment needed.
+
+2. From tps68470_clk_set_rate() where it is NOT ok and this is
+enforced in the caller:
+
+        unsigned int idx = tps68470_clk_cfg_lookup(rate);
+
+        if (rate != clk_freqs[idx].freq)
+                return -EINVAL;
+
+This is not easy to describe in a comment, while being obvious
+if someone looking at this actually looks at the callers.
+
+> 
+>> +               if (diff < best_diff) {
+>> +                       best_diff = diff;
+>> +                       best_idx = i;
+>> +               }
 >> +       }
 > 
-> return dev_err_probe(...);
-> 
 > ...
 > 
->> +               rdev = devm_regulator_register(&pdev->dev, &regulators[i], &config);
->> +               if (IS_ERR(rdev)) {
->> +                       dev_err(&pdev->dev, "failed to register %s regulator\n",
->> +                               regulators[i].name);
->> +                       return PTR_ERR(rdev);
->> +               }
+>> +       if (pdata) {
+>> +               ret = devm_clk_hw_register_clkdev(&pdev->dev,
+>> +                                                 &tps68470_clkdata->clkout_hw,
+>> +                                                 pdata->consumer_con_id,
+>> +                                                 pdata->consumer_dev_name);
 > 
-> Ditto.
+> if (ret)
+>   return ret;
+> 
+>> +       }
+>> +
+>> +       return ret;
+> 
+> return 0;
 
-Andy, thank you for all the reviews. I've addressed all your comments in the v5
-of this series which I'm preparing now. This also applies to your comments on
-other patches, except those which I will address in separate emails.
+That was the code in v2, but Stephen (the clk maintainer) asked to
+simplify it to its current form, so I'm not going to change this back.
 
 Regards,
 
