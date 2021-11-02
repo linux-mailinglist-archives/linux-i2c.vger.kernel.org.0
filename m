@@ -2,148 +2,175 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B65442B06
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 10:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4563F442D2E
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 12:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbhKBJxf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Nov 2021 05:53:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45937 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231928AbhKBJwj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 05:52:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635846604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GHf1L78zlZbVcgZS57yJJ9tbV6/S/WZ37eDXpQxC7vo=;
-        b=iHOG+lRxOsE+ouLi2P/Kgn6oJQaBX3uSPhBsWTgZJrO0J49qTr2SXcjRTEWQUz7JdWtN7k
-        +Ew/zu57fj54IYmHs/lLqTCUTkkcLQkUb+cwE/5kGBixJLyzQ8O8Qa1Qkq29YrdyZzTvmA
-        g8Og8iyeLx2UZkgA3XYmsBn9Apwq+Rw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-315-ZYvtjyyONiGASnkvrZ7oyw-1; Tue, 02 Nov 2021 05:50:01 -0400
-X-MC-Unique: ZYvtjyyONiGASnkvrZ7oyw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D42FD1927800;
-        Tue,  2 Nov 2021 09:49:58 +0000 (UTC)
-Received: from x1.localdomain (unknown [10.39.195.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0D2E65D9DC;
-        Tue,  2 Nov 2021 09:49:54 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        id S229778AbhKBLxf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Nov 2021 07:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229720AbhKBLxe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 07:53:34 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE54C061714;
+        Tue,  2 Nov 2021 04:51:00 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id bi29so19301202qkb.5;
+        Tue, 02 Nov 2021 04:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=LJIjYhfvWq/XmxkSPhVuNgnT9R48OynbL5aet6ipzhY=;
+        b=dfAB0y0GoTZd4vmgCa4lDJlj9Xy1PPZCyGEdK/aTMYNEkaHQo4KucqVGBLIuVG+PRs
+         JGEUBY/3CgEHvt0J/ky8T5591KmJL8oUwcKVKttLnn92GjzZMjFohVOxeVTW199Z/YD7
+         Mnd8So9zLY16X+TivrlW6J9HRAdeDgGOnYMeHrWLApOHH0rP/WASjQ9tV2Z7XhsIXMZa
+         K0M0Bvns2d9xdDUcyFtUmZOAfV01E8LzRphK72ahfxPHlwgngv/wnSJi5wuA4F1bbDGM
+         focD78n4Arr4N/winCvY1ri3EsDM9OG2WaHQ4N2pNhqoNP6Y/e/1p1nWzr+A9dsa85qT
+         E2Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=LJIjYhfvWq/XmxkSPhVuNgnT9R48OynbL5aet6ipzhY=;
+        b=xg/IXkJwu9mFio3vAsm8ztbU18xaVXiG4TeCVcJi8/FIvSRdicwSY+rAbK3yiioO04
+         mSLil3TYYUbwknlYTr8PuMh+iZdMr8wPAqznu+U6E4QzJKyHOWKgv2u1jvSAFYke3krK
+         R7vpSfscdBJn4zevDVmSEkOvI0YaAXftR5eRuQVcf6LgprGOGePsomvPyKiM0ZAuq+Mt
+         knwovQB6slkNfTcmklGLb5z+KbK34iU58BSmJ5RNEs2uwrRiIUM0az8R6xDTxtHPkp+x
+         Hw4yQoWmBB+yuLB6ZLvwUZfodmqc8a6A8cD8jR7yk1N6vGccGhOmcWuqB5ePIuiRaCpC
+         h7Fg==
+X-Gm-Message-State: AOAM530dOuufcoJKrmbWuWxAjXW8AeiW+GQ4NEgv5BpLEVZeN4NkUWpj
+        TZg5CIV+UgnRtcX58dhwjEJogjiFQQ==
+X-Google-Smtp-Source: ABdhPJyAbjE94dVa8us1n3QC2fX9EDhr0MBywxIYHXAfN5NxraycqSOnTKvOPdJqmVl+6BY8ybsyEw==
+X-Received: by 2002:a37:9e8d:: with SMTP id h135mr3424965qke.105.1635853859207;
+        Tue, 02 Nov 2021 04:50:59 -0700 (PDT)
+Received: from serve.minyard.net ([47.184.156.158])
+        by smtp.gmail.com with ESMTPSA id a3sm13558462qta.58.2021.11.02.04.50.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Nov 2021 04:50:58 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:b4e0:932d:f90c:fafb])
+        by serve.minyard.net (Postfix) with ESMTPSA id B41A71800BA;
+        Tue,  2 Nov 2021 11:50:57 +0000 (UTC)
+Date:   Tue, 2 Nov 2021 06:50:56 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Corey Minyard <cminyard@mvista.com>,
+        Andrew Manley <andrew.manley@sealingtech.com>,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH v5 11/11] platform/x86: int3472: Deal with probe ordering issues
-Date:   Tue,  2 Nov 2021 10:49:07 +0100
-Message-Id: <20211102094907.31271-12-hdegoede@redhat.com>
-In-Reply-To: <20211102094907.31271-1-hdegoede@redhat.com>
-References: <20211102094907.31271-1-hdegoede@redhat.com>
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH 3/3] i2c:imx: Use an hrtimer, not a timer, for checking
+ for bus idle
+Message-ID: <20211102115056.GI4667@minyard.net>
+Reply-To: minyard@acm.org
+References: <20211005003216.2670632-1-minyard@acm.org>
+ <20211005003216.2670632-4-minyard@acm.org>
+ <20211102085806.hefnttaxm5srxbov@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20211102085806.hefnttaxm5srxbov@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The clk and regulator frameworks expect clk/regulator consumer-devices
-to have info about the consumed clks/regulators described in the device's
-fw_node.
+On Tue, Nov 02, 2021 at 09:58:06AM +0100, Uwe Kleine-König wrote:
+> On Mon, Oct 04, 2021 at 07:32:16PM -0500, minyard@acm.org wrote:
+> > From: Corey Minyard <cminyard@mvista.com>
+> > 
+> > The timer is too slow and significantly reduces performance.  Use an
+> > hrtimer to get things working faster.
+> > 
+> > Signed-off-by: Corey Minyard <minyard@acm.org>
+> > Tested-by: Andrew Manley <andrew.manley@sealingtech.com>
+> > Reviewed-by: Andrew Manley <andrew.manley@sealingtech.com>
+> > ---
+> >  drivers/i2c/busses/i2c-imx.c | 23 +++++++++++++++--------
+> >  1 file changed, 15 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> > index 26a04dc0590b..4b0e9d1784dd 100644
+> > --- a/drivers/i2c/busses/i2c-imx.c
+> > +++ b/drivers/i2c/busses/i2c-imx.c
+> > @@ -38,7 +38,7 @@
+> >  #include <linux/iopoll.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/spinlock.h>
+> > -#include <linux/timer.h>
+> > +#include <linux/hrtimer.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_device.h>
+> > @@ -53,6 +53,8 @@
+> >  /* This will be the driver name the kernel reports */
+> >  #define DRIVER_NAME "imx-i2c"
+> >  
+> > +#define I2C_IMX_CHECK_DELAY 30000 /* Time to check for bus idle, in NS */
+> > +
+> >  /*
+> >   * Enable DMA if transfer byte size is bigger than this threshold.
+> >   * As the hardware request, it must bigger than 4 bytes.\
+> > @@ -214,8 +216,8 @@ struct imx_i2c_struct {
+> >  	enum i2c_slave_event last_slave_event;
+> >  
+> >  	/* For checking slave events. */
+> > -	spinlock_t	  slave_lock;
+> > -	struct timer_list slave_timer;
+> > +	spinlock_t     slave_lock;
+> > +	struct hrtimer slave_timer;
+> 
+> This is unrelated to this patch, moreover it was introduced only in
+> patch 1.
 
-To work around this info missing from the ACPI tables on devices where
-the int3472 driver is used, the int3472 MFD-cell drivers attach info about
-consumers to the clks/regulators when registering these.
+The second line is important for this patch, of course.  I assume you
+mean the indention of the first line, which is just keeping things lined
+up.
 
-This causes problems with the probe ordering wrt drivers for consumers
-of these clks/regulators. Since the lookups are only registered when the
-provider-driver binds, trying to get these clks/regulators before then
-results in a -ENOENT error for clks and a dummy regulator for regulators.
+> 
+> >  };
+> >  
+> >  static const struct imx_i2c_hwdata imx1_i2c_hwdata = {
+> > @@ -783,13 +785,16 @@ static irqreturn_t i2c_imx_slave_handle(struct imx_i2c_struct *i2c_imx,
+> >  	}
+> >  
+> >  out:
+> > -	mod_timer(&i2c_imx->slave_timer, jiffies + 1);
+> > +	hrtimer_try_to_cancel(&i2c_imx->slave_timer);
+> 
+> Don't you need to check the return value here?
 
-All the sensor ACPI fw-nodes have a _DEP dependency on the INT3472 ACPI
-fw-node, so to work around these probe ordering issues the ACPI core /
-i2c-code does not instantiate the I2C-clients for any ACPI devices
-which have a _DEP dependency on an INT3472 ACPI device until all
-_DEP-s are met.
+Not really.  The possible return values are:
 
-This relies on acpi_dev_clear_dependencies() getting called by the driver
-for the _DEP-s when they are ready, add a acpi_dev_clear_dependencies()
-call to the discrete.c probe code.
+ *  *  0 when the timer was not active
+ *  *  1 when the timer was active
+ *  * -1 when the timer is currently executing the callback function and
+ *    cannot be stopped
 
-In the tps68470 case calling acpi_dev_clear_dependencies() is already done
-by the acpi_gpiochip_add() call done by the driver for the GPIO MFD cell
-(The GPIO cell is deliberately the last cell created to make sure the
-clk + regulator cells are already instantiated when this happens).
+and if it returns 0 or 1, then everything is fine.  If it returns -1,
+then the code will still work, though it may be redone (or already have
+been done) by the timer function.  So it doesn't matter.
 
-However for proper probe ordering, the clk/regulator cells must not just
-be instantiated the must be fully ready (the clks + regulators must be
-registered with their subsystems).
+Maybe I should add a comment about this?
 
-Add MODULE_SOFTDEP dependencies for the clk and regulator drivers for
-the instantiated MFD-cells so that these are loaded before us and so
-that they bind immediately when the platform-devs are instantiated.
+Thanks for reviewing.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in v2:
-- Only call acpi_dev_clear_dependencies() in the discrete.c case, for the
-  tps68470 case this is already done by the acpi_gpiochip_add() for the
-  GPIO MFD cell.
----
- drivers/platform/x86/intel/int3472/discrete.c | 1 +
- drivers/platform/x86/intel/int3472/tps68470.c | 6 ++++++
- 2 files changed, 7 insertions(+)
+-corey
 
-diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
-index ff2bdbb8722c..5b514fa01a97 100644
---- a/drivers/platform/x86/intel/int3472/discrete.c
-+++ b/drivers/platform/x86/intel/int3472/discrete.c
-@@ -380,6 +380,7 @@ static int skl_int3472_discrete_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	acpi_dev_clear_dependencies(adev);
- 	return 0;
- }
- 
-diff --git a/drivers/platform/x86/intel/int3472/tps68470.c b/drivers/platform/x86/intel/int3472/tps68470.c
-index 49eea7bb98c1..5232dbcd8212 100644
---- a/drivers/platform/x86/intel/int3472/tps68470.c
-+++ b/drivers/platform/x86/intel/int3472/tps68470.c
-@@ -177,6 +177,11 @@ static int skl_int3472_tps68470_probe(struct i2c_client *client)
- 		return device_type;
- 	}
- 
-+	/*
-+	 * No acpi_dev_clear_dependencies() here, since the acpi_gpiochip_add()
-+	 * for the GPIO cell already does this.
-+	 */
-+
- 	return ret;
- }
- 
-@@ -210,3 +215,4 @@ module_i2c_driver(int3472_tps68470);
- MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI TPS68470 Device Driver");
- MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
- MODULE_LICENSE("GPL v2");
-+MODULE_SOFTDEP("pre: clk-tps68470 tps68470-regulator");
--- 
-2.31.1
+> 
+> > +	hrtimer_forward_now(&i2c_imx->slave_timer, I2C_IMX_CHECK_DELAY);
+> > +	hrtimer_restart(&i2c_imx->slave_timer);
+> >  	return IRQ_HANDLED;
+> >  }
+> >  
+> 
+> Best regards
+> Uwe
+> 
+> -- 
+> Pengutronix e.K.                           | Uwe Kleine-König            |
+> Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
 
