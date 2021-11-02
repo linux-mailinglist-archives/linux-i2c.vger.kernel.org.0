@@ -2,63 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBF2443051
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 15:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856D5443084
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 15:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbhKBO0r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Nov 2021 10:26:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49878 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231663AbhKBO0l (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 10:26:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635863046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1YjJj9IqpDhJ07HE33uojzp5DuJdOMzvHOGPrvOy2QU=;
-        b=b9AsSj6i1AcGLKQ2t8BdJ0vCpxnWC0HdlpYBh5pxxWKgBWDtFzzLMvO4Xxp3Dn5ZSfEEa0
-        NpSZPzESE3IJ+sQv6LxmfUj0jjFUyuBy8xnLGnXkX0Av9fDqW/FUQPJMp1pdBedcjTHJuU
-        3pxZ/bH7AS9W6DoBxOXHSbbsMeZtiQ0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-56-YV0DlBF1PHGpy9dWp47Nxg-1; Tue, 02 Nov 2021 10:24:05 -0400
-X-MC-Unique: YV0DlBF1PHGpy9dWp47Nxg-1
-Received: by mail-ed1-f69.google.com with SMTP id r25-20020a05640216d900b003dca3501ab4so18902642edx.15
-        for <linux-i2c@vger.kernel.org>; Tue, 02 Nov 2021 07:24:04 -0700 (PDT)
+        id S230419AbhKBOh5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Nov 2021 10:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229530AbhKBOhz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 10:37:55 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83560C0613F5;
+        Tue,  2 Nov 2021 07:35:20 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w15so76792713edc.9;
+        Tue, 02 Nov 2021 07:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=65sYvvqiPacKnyXGm00uOfZmsdN1H152QZb/K+6oTrA=;
+        b=JxLBTKIVNZHK0eYuQS+2xQbio8EFWVSsF86el4ZeRBHIxp4C+xMek7kd13w+RHprtp
+         BUr6gFI4Vd7RVLKLTkAdpctZSALuqID7yhubn31jBEo/wGXnTxwHFvGgb5i4tXyM44Ee
+         eMuMErWiXd+lLV4bh96VAYwFml+Qjt1p1vDuv5nvc4C96SKi161F3rM8FIZVUGE//s0i
+         BLwF+OO8ZOIzlyS7sPYrylrrQKNDcbv8boMgC6JrTdWxM8/0I6RP3FvRt/eSc2c6djHg
+         ZW1mqeU1TH+QAxauUw/3Jv37PxViBGQ8hzcIpuWT7DOpoVx8iwLliYA8im2G00scJf3i
+         dBKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1YjJj9IqpDhJ07HE33uojzp5DuJdOMzvHOGPrvOy2QU=;
-        b=06mvGP2F3xnS59dRKybODyCcMDGzKGiG4VVZAGWIfphLGs2vN/pHf1AHB4ssEqvWam
-         rsFm5u2rJvWYV7DpYVEtzeP1I2MSHRVedKkVipzFfjWmC3uS36eOiaxyLs3bMKNgFBE7
-         3go0APozNCVGJWPkxtS6eJESJP9jgwtERnBjDXIfh6FpPFHBSp4kzyZTUL0b+KYr6I7K
-         cYU7w65imKPIWJ6f9mHAyLQLv8eBf3YglYRHMoXNdApsUSxgfjQeF9ndmnJNyY80KwHk
-         cFtn3XDD31oTh9l+nHYuCcJvPUTM4HVaqGtJAU2A4C+X+HmXlJE+VbozsKEyQLhnYw2U
-         q6CQ==
-X-Gm-Message-State: AOAM533ECA6UUhqZx8rGJX72obJPDjoGL5S+9imj8RSfRqyhfj5tgKkq
-        BmBfNAZneRZ0XzHb1GWckjwXo7d8VIekhVqOWSVh/LdcvSpaQjpSCuMGHRnbZ7hVQSB6nm6QfSQ
-        z1oMGgI08+VM9JXHzqpxp
-X-Received: by 2002:a17:907:7f8b:: with SMTP id qk11mr46491574ejc.313.1635863043802;
-        Tue, 02 Nov 2021 07:24:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxkmvL1HIl9M3KIUQMmw+yeeX/QNnPDpALyKPCkIFoHEdHZkwzBVyQbxiHQ+ACffR2u+1RHkA==
-X-Received: by 2002:a17:907:7f8b:: with SMTP id qk11mr46491524ejc.313.1635863043578;
-        Tue, 02 Nov 2021 07:24:03 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id sg17sm3448785ejc.72.2021.11.02.07.24.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Nov 2021 07:24:02 -0700 (PDT)
-Message-ID: <8eaeca66-f719-6b5d-bd7c-ccbd15a0b91c@redhat.com>
-Date:   Tue, 2 Nov 2021 15:24:01 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=65sYvvqiPacKnyXGm00uOfZmsdN1H152QZb/K+6oTrA=;
+        b=w9WksMXQ69VBCIl/ePBEdHusuh0tpUoLSsMRPQVUZgzkThSOtvCIhdilpIPQKg+YZs
+         GuWeFZF3F012u0eAwer5ydliXuZ7UoRjQ5J3KCencmJvnk5zQ/3Vr0fRN2YxoFulg/WL
+         /MBFwkBWmjwy3OO/kGI2EqDDba3rUTHCjnZDxFwPb6etYilFOme0FFLquBch3DDjDUBS
+         YtYhkdJ2a3R0zppzu28NVAQz0sje5sjpW1/upl+lJqw9sTFk1D+SOB33A2RXBikoHyC3
+         C/roUKgdFEdvBpy2aE2N5QNUhmxDPPWCtMglaasXzTFF5RABOXq3Bwo5ieC85PvPPhQP
+         SHvg==
+X-Gm-Message-State: AOAM530mHExfyJrE6KZuf6NPWOGOTK7Jt7jPq+IWUR3Bh4xFal/6ceEo
+        nzunRVd6gIfc88uzY9DrzndOu6onUaLF4Gu3Kgk=
+X-Google-Smtp-Source: ABdhPJxbNeuBL+SSNH+3/S3iAwFmMxZhFeZFkV/g7SdZI4XCi+BAFf24eDiSTLXHPzQiLIjNziN/KABxFr0PzlrMtTE=
+X-Received: by 2002:a05:6402:207c:: with SMTP id bd28mr41368359edb.240.1635863711126;
+ Tue, 02 Nov 2021 07:35:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5 07/11] platform/x86: int3472: Split into 2 drivers
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20211102094907.31271-1-hdegoede@redhat.com> <20211102094907.31271-11-hdegoede@redhat.com>
+In-Reply-To: <20211102094907.31271-11-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 2 Nov 2021 16:34:21 +0200
+Message-ID: <CAHp75Vd-xY43H8jPOUqJp55Rq3Wuhsdzctfhqq300S0vAKTzpw@mail.gmail.com>
+Subject: Re: [PATCH v5 10/11] platform/x86: int3472: Pass tps68470_regulator_platform_data
+ to the tps68470-regulator MFD-cell
+To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@infradead.org>,
@@ -79,81 +72,52 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Kate Hsuan <hpa@redhat.com>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>
-References: <20211102094907.31271-1-hdegoede@redhat.com>
- <20211102094907.31271-8-hdegoede@redhat.com>
- <CAHp75VePSv8b=oTJXJCL_go9Lody+8JQJyMC6exO-Zw8cPk9og@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VePSv8b=oTJXJCL_go9Lody+8JQJyMC6exO-Zw8cPk9og@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+On Tue, Nov 2, 2021 at 11:50 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Pass tps68470_regulator_platform_data to the tps68470-regulator
+> MFD-cell, specifying the voltages of the various regulators and
+> tying the regulators to the sensor supplies so that sensors which use
+> the TPS68470 can find their regulators.
+>
+> Since the voltages and supply connections are board-specific, this
+> introduces a DMI matches int3472_tps68470_board_data struct which
+> contains the necessary per-board info.
+>
+> This per-board info also includes GPIO lookup information for the
+> sensor IO lines which may be connected to the tps68470 GPIOs.
 
-On 11/2/21 15:16, Andy Shevchenko wrote:
-> On Tue, Nov 2, 2021 at 11:49 AM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> The intel_skl_int3472.ko module contains 2 separate drivers,
->> the int3472_discrete platform driver and the int3472_tps68470
->> I2C-driver.
->>
->> These 2 drivers contain very little shared code, only
->> skl_int3472_get_acpi_buffer() and skl_int3472_fill_cldb() are
->> shared.
->>
->> Split the module into 2 drivers, linking the little shared code
->> directly into both.
->>
->> This will allow us to add soft-module dependencies for the
->> tps68470 clk, gpio and regulator drivers to the new
->> intel_skl_int3472_tps68470.ko to help with probe ordering issues
->> without causing these modules to get loaded on boards which only
->> use the int3472_discrete platform driver.
->>
->> While at it also rename the .c and .h files to remove the
->> cumbersome intel_skl_int3472_ prefix.
-> 
-> ...
-> 
->> +union acpi_object *skl_int3472_get_acpi_buffer(struct acpi_device *adev, char *id)
->> +{
->> +       struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
->> +       acpi_handle handle = adev->handle;
->> +       union acpi_object *obj;
->> +       acpi_status status;
->> +
->> +       status = acpi_evaluate_object(handle, id, NULL, &buffer);
->> +       if (ACPI_FAILURE(status))
->> +               return ERR_PTR(-ENODEV);
->> +
->> +       obj = buffer.pointer;
->> +       if (!obj)
->> +               return ERR_PTR(-ENODEV);
->> +
->> +       if (obj->type != ACPI_TYPE_BUFFER) {
->> +               acpi_handle_err(handle, "%s object is not an ACPI buffer\n", id);
-> 
->> +               kfree(obj);
-> 
-> I'm wondering if we should use more of the ACPI_FREE() calls as
-> opposed to ACPI_ALLOCATE_BUFFER. Ditto for all such cases.
+...
 
-Basically the situation surrounding this is a mess, most code seems to
-simply use plain kfree() which I find much more readable, but some
-code indeed is using ACPI_FREE(), which I believe is really mostly
-meant for internal use by the acpica code.
+> +               board_data = int3472_tps68470_get_board_data(dev_name(&client->dev));
+> +               if (!board_data) {
+> +                       dev_err(&client->dev, "No board-data found for this laptop/tablet model\n");
+> +                       return -ENODEV;
 
-Eitherway until one of the ACPI maintainers clearly states
-that we really should use ACPI_FREE() here I plan to stick with kfree()
-because:
+It's fine to use dev_err_probe() for known error codes.
 
-1. I find it much more readable.
-2. AFAICT ACPI_FREE() is meant for acpica internal use
-   (basically it is part of the OS abstraction bits of acpica)
+> +               }
 
-Regards,
+...
 
-Hans
+> +               cells[1].platform_data = (void *)board_data->tps68470_regulator_pdata;
 
+Do we need casting?
+
+...
+
+> +#include <linux/dmi.h>
+> +#include <linux/gpio/machine.h>
+> +#include <linux/platform_data/tps68470.h>
+> +#include <linux/regulator/machine.h>
+
+string.h  for strcmp() ?
+kernel.h for ARRAY_SIZE() ?
+
+-- 
+With Best Regards,
+Andy Shevchenko
