@@ -2,37 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB96442ACB
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 10:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F2F442ACE
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 10:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbhKBJwQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Nov 2021 05:52:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:30545 "EHLO
+        id S231708AbhKBJwU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Nov 2021 05:52:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44096 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229869AbhKBJwE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 05:52:04 -0400
+        by vger.kernel.org with ESMTP id S231366AbhKBJwF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 05:52:05 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635846569;
+        s=mimecast20190719; t=1635846571;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BiAz5oFwyCR7XrBisAZxbTYMTtjP430KLpnYBCFqBkQ=;
-        b=Ex7eKB2Z+sOr5HCWs2w+hMemgQ1+zZmgZ0Q1l1yMAfj/zWDki022SV36/KHT3gjk3vfeIX
-        MBrye/eWy/E+z0l2EcM217WCXq07TxKEwDVr0PVMB/Lz4pcfK14F26w5f0SBdZJ3UkiWOn
-        NhCx20J0nKuYvcNc5xJK0SsMmde7WCI=
+        bh=+/WfrjlVFI3UoM80QLcnkyIdhiDPP7lbAiyBSN78tQo=;
+        b=d4a4L7xaQaQEHNe8bACO2oSMpZJQDxmYDlqlUbSrwSW/q+1kFfXPmhleKtLg2gDRR+ASJS
+        y/2TgTl7Nexe2TT/pbgWqqRYMJHOIafD+H3y05pQyeZoTadKMMgyOl8CONVCk1Lr9Yhd9n
+        4seBQpWJVzHCY4gReDRpcmuhl5+a9DA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-257-gOxlTEkaOMyMwIFalJfYKg-1; Tue, 02 Nov 2021 05:49:24 -0400
-X-MC-Unique: gOxlTEkaOMyMwIFalJfYKg-1
+ us-mta-16-J_8xwcM6MJSkNcJZGJN0Og-1; Tue, 02 Nov 2021 05:49:27 -0400
+X-MC-Unique: J_8xwcM6MJSkNcJZGJN0Og-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 83BBD9F92B;
-        Tue,  2 Nov 2021 09:49:21 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 867D91927807;
+        Tue,  2 Nov 2021 09:49:25 +0000 (UTC)
 Received: from x1.localdomain (unknown [10.39.195.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 86F115D9DC;
-        Tue,  2 Nov 2021 09:49:17 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CC9385D9D5;
+        Tue,  2 Nov 2021 09:49:21 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
@@ -51,11 +51,10 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH v5 02/11] i2c: acpi: Use acpi_dev_ready_for_enumeration() helper
-Date:   Tue,  2 Nov 2021 10:48:58 +0100
-Message-Id: <20211102094907.31271-3-hdegoede@redhat.com>
+        linux-clk@vger.kernel.org
+Subject: [PATCH v5 03/11] platform_data: Add linux/platform_data/tps68470.h file
+Date:   Tue,  2 Nov 2021 10:48:59 +0100
+Message-Id: <20211102094907.31271-4-hdegoede@redhat.com>
 In-Reply-To: <20211102094907.31271-1-hdegoede@redhat.com>
 References: <20211102094907.31271-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -71,45 +70,64 @@ fw_node.
 
 To work around cases where this info is not present in the firmware tables,
 which is often the case on x86/ACPI devices, both frameworks allow the
-provider-driver to attach info about consumers to the clks/regulators
-when registering these.
+provider-driver to attach info about consumers to the provider-device
+during probe/registration of the provider device.
 
-This causes problems with the probe ordering wrt drivers for consumers
-of these clks/regulators. Since the lookups are only registered when the
-provider-driver binds, trying to get these clks/regulators before then
-results in a -ENOENT error for clks and a dummy regulator for regulators.
+The TI TPS68470 PMIC is used x86/ACPI devices with the consumer-info
+missing from the ACPI tables. Thus the tps68470-clk and tps68470-regulator
+drivers must provide the consumer-info at probe time.
 
-To ensure the correct probe-ordering the ACPI core has code to defer the
-enumeration of consumers affected by this until the providers are ready.
+Define tps68470_clk_platform_data and tps68470_regulator_platform_data
+structs to allow the x86 platform code to pass the necessary consumer info
+to these drivers.
 
-Call the new acpi_dev_ready_for_enumeration() helper to avoid
-enumerating / instantiating i2c-clients too early.
-
-Acked-by: Wolfram Sang <wsa@kernel.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/i2c/i2c-core-acpi.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ include/linux/platform_data/tps68470.h | 35 ++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 include/linux/platform_data/tps68470.h
 
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 546cc935e035..71eee5bc17ab 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -144,9 +144,12 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
- 	struct list_head resource_list;
- 	int ret;
- 
--	if (acpi_bus_get_status(adev) || !adev->status.present)
-+	if (acpi_bus_get_status(adev))
- 		return -EINVAL;
- 
-+	if (!acpi_dev_ready_for_enumeration(adev))
-+		return -ENODEV;
+diff --git a/include/linux/platform_data/tps68470.h b/include/linux/platform_data/tps68470.h
+new file mode 100644
+index 000000000000..126d082c3f2e
+--- /dev/null
++++ b/include/linux/platform_data/tps68470.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * TI TPS68470 PMIC platform data definition.
++ *
++ * Copyright (c) 2021 Red Hat Inc.
++ *
++ * Red Hat authors:
++ * Hans de Goede <hdegoede@redhat.com>
++ */
++#ifndef __PDATA_TPS68470_H
++#define __PDATA_TPS68470_H
 +
- 	if (acpi_match_device_ids(adev, i2c_acpi_ignored_device_ids) == 0)
- 		return -ENODEV;
- 
++enum tps68470_regulators {
++	TPS68470_CORE,
++	TPS68470_ANA,
++	TPS68470_VCM,
++	TPS68470_VIO,
++	TPS68470_VSIO,
++	TPS68470_AUX1,
++	TPS68470_AUX2,
++	TPS68470_NUM_REGULATORS
++};
++
++struct regulator_init_data;
++
++struct tps68470_regulator_platform_data {
++	const struct regulator_init_data *reg_init_data[TPS68470_NUM_REGULATORS];
++};
++
++struct tps68470_clk_platform_data {
++	const char *consumer_dev_name;
++	const char *consumer_con_id;
++};
++
++#endif
 -- 
 2.31.1
 
