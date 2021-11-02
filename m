@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0643442FFC
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 15:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFD8443021
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 15:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbhKBOQW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Nov 2021 10:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S229981AbhKBOUA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Nov 2021 10:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhKBOQW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 10:16:22 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D805C061714;
-        Tue,  2 Nov 2021 07:13:47 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id m14so23419557edd.0;
-        Tue, 02 Nov 2021 07:13:46 -0700 (PDT)
+        with ESMTP id S229712AbhKBOT7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 10:19:59 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DB4C061714;
+        Tue,  2 Nov 2021 07:17:23 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id g14so14362068edz.2;
+        Tue, 02 Nov 2021 07:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+j8hsXOY8XFBcUQY09d3Bm6u2Cd3NbaccVLoECv3HYE=;
-        b=Tdf1K3H+Lg7s+DMqBUPbp1Zj4RDwqdxJ5f9UrW88BlRUYlgBYic1r7/n7I13XZNDBU
-         oG5MV/LgkcrxjTcxXakGCMiekxd9Xs7A8uQyu6Zq5gkIAyFJyUVtqhjDvIBm0ML77BZx
-         SXq829uwldsaG4eMoTAK8Crrhzm2EkP6TsmBkUDwg2/pHv0aLXJXh9z3brShcJwYF/D5
-         DijQxGvU1JDSkzbIxedUwKVc+Qm/OQO2bLj74ptbpKXHkcTfPEFOdtliboFWtJCxPZkw
-         cH/KR6rcdAAbql0GwZz/RxdfBGSWaRjJ3bad2XkBiCIrZlVJ+2tukjBswD2rsr2IdD7i
-         roWg==
+        bh=T8+WyOM8FuIvYF68qhKwIM74Y8tYUe6j13mhT+Zvc5U=;
+        b=X4VEXPrppNXjUsTVE0BGKzoth4gTvq2SLUBZ4Xt8Fy97Hnb75KR/CVdyb+A0Z/mYXg
+         4WgF9NghBbT0EbKvgmlQspSFqUPZJu1Qy48nXhLfA6oR5zIFN3WWymGarNvVckUQ3g3t
+         jEyZxWqPYx1oOTXvWcdwjNbPCXMM3hv0ftk4NS7XacZ01rIEvPLnhcyE85kFSngPZz5A
+         QyaoWPiaRQ03zz8T36nMvcNGLSIhm0AYwM6Jz28rXmUkKBLXpxx7sJhgAq3j2MsbIJdn
+         FdiCO0U0SI139gRReiCHoglAyBcDtItj6Jf3xpElXcDr4+Fk+2od4ojhF1FUpAS1hNkw
+         K6CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+j8hsXOY8XFBcUQY09d3Bm6u2Cd3NbaccVLoECv3HYE=;
-        b=emZMSV1Iln4zjpD/elp9Ewo0lQHX0YUV0lkDofhK6DU9oAbgFf1vZZcVGloSIZggrg
-         SQu3v6Dm1QWYszhgIaX/cK/qSZo6fy+X8Mw5z26jLIl45l2XWIXSR87pK+XaizjekXDB
-         lFsBsqqFPklZ8yNLYPXtneR7Mree9u6lX9YoVLUc6OARoLjlWh67NAB6un/Dnqwj7uYp
-         ICDpVFIY+5UpBMoCKe2qHrzHeen2iLALPGmtRr7ZXkI39DH2obKIZOIS4RVCVMPN84NA
-         47zGhaSidqKeSPNqkP6RNAATjcluDDkqUKJBU4/caSoZW87XoHGrIt4uTZ7DN8efLoY/
-         l3/w==
-X-Gm-Message-State: AOAM531QnNbRIYOn2IE/+bolNcddt46rMvWTo4A1A8J1mRZISrJH3Vga
-        gwMO+b2XLme9q0EFgEPhbsxlQqoyIIwJwt76Q8w=
-X-Google-Smtp-Source: ABdhPJyKcI23macxqNFIt9wwe+SVKY0dzoujCECZBAvK1EiUAl8fA0zKRHCqPQRXJB+c9kWKLTkoHkxrArinkXDo700=
-X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr45648690ejc.69.1635862424213;
- Tue, 02 Nov 2021 07:13:44 -0700 (PDT)
+        bh=T8+WyOM8FuIvYF68qhKwIM74Y8tYUe6j13mhT+Zvc5U=;
+        b=i2sQ/C1Ff0uqgPIebg1c0KHMEuGczftg/9tilz18H6pMirvLfElGVFQDCSys8g0FHH
+         GvRVm91GNp2hQ2g5+Mk7Ix548JNGXHcSO746kjzBVTS/x1ngNUbHzMxAuErkVpZhXwH2
+         WOPNvR8OnFxseM4kRy+yBzQPqoa14rEIYc/mChjep1jxdE2pM6ZXhJU3Ag3b6qoTNUjg
+         9FCDWpZMrrUQvud440tZM5nkLT021+ey3gkw8IsQLqoijaO+oopJ2CJ7XirYiVB+b+vL
+         AznmAWs84I7yAwH6DWfFgbwl92svy5Jd6H24VGkbSIziS/aMpsPH5s7Ck0kGaSYfADzm
+         8eNg==
+X-Gm-Message-State: AOAM531mydLEa12dtFzkF7ejHry3WhjRW42pdFXV48gbQxx9PJv+Lyli
+        HdMqMG6GRW6cmxpO9ZMMkI3gHEMSvL3H2qAX2HSg8bJu17c=
+X-Google-Smtp-Source: ABdhPJw99guFYRrhnUbbHcV2PzcXvkxqZ16jyF+3YDoMLfXSZmSv4HOcjNXybfZBQ5mHxzv1r7y9Tj9EUGxC3ZxC3XQ=
+X-Received: by 2002:a50:9ee3:: with SMTP id a90mr45859284edf.224.1635862638354;
+ Tue, 02 Nov 2021 07:17:18 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211102094907.31271-1-hdegoede@redhat.com> <20211102094907.31271-8-hdegoede@redhat.com>
 In-Reply-To: <20211102094907.31271-8-hdegoede@redhat.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 2 Nov 2021 16:12:54 +0200
-Message-ID: <CAHp75VfUUfJPRkwgSFCddv-Dm5PRNQkpKvAaATAtkCUvConhGg@mail.gmail.com>
+Date:   Tue, 2 Nov 2021 16:16:28 +0200
+Message-ID: <CAHp75VePSv8b=oTJXJCL_go9Lody+8JQJyMC6exO-Zw8cPk9og@mail.gmail.com>
 Subject: Re: [PATCH v5 07/11] platform/x86: int3472: Split into 2 drivers
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -97,16 +97,37 @@ On Tue, Nov 2, 2021 at 11:49 AM Hans de Goede <hdegoede@redhat.com> wrote:
 >
 > While at it also rename the .c and .h files to remove the
 > cumbersome intel_skl_int3472_ prefix.
->
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> Note git rename detection is failing for the new common.c but this is
-> just the old intel_skl_int3472_common.c with the driver registering
-> bits removed.
 
--M accepts a parameter (in percents) to set the threshold. Default is
-something like ~70 (?). You may play with it and see when it starts
-detecting the rename.
+...
+
+> +union acpi_object *skl_int3472_get_acpi_buffer(struct acpi_device *adev, char *id)
+> +{
+> +       struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> +       acpi_handle handle = adev->handle;
+> +       union acpi_object *obj;
+> +       acpi_status status;
+> +
+> +       status = acpi_evaluate_object(handle, id, NULL, &buffer);
+> +       if (ACPI_FAILURE(status))
+> +               return ERR_PTR(-ENODEV);
+> +
+> +       obj = buffer.pointer;
+> +       if (!obj)
+> +               return ERR_PTR(-ENODEV);
+> +
+> +       if (obj->type != ACPI_TYPE_BUFFER) {
+> +               acpi_handle_err(handle, "%s object is not an ACPI buffer\n", id);
+
+> +               kfree(obj);
+
+I'm wondering if we should use more of the ACPI_FREE() calls as
+opposed to ACPI_ALLOCATE_BUFFER. Ditto for all such cases.
+
+> +               return ERR_PTR(-EINVAL);
+> +       }
+> +
+> +       return obj;
+> +}
 
 -- 
 With Best Regards,
