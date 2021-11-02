@@ -2,56 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE016443091
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 15:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAEB443108
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 15:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbhKBOkm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Nov 2021 10:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbhKBOkl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 10:40:41 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BB3C061714;
-        Tue,  2 Nov 2021 07:38:06 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id g10so76466997edj.1;
-        Tue, 02 Nov 2021 07:38:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0I7ubj1Ldo3Nk5KDl6c4JTG3GlivIn7ejVsprdJKiXY=;
-        b=JlJTn17qKYIhLmMbFUjqYTIi9H4FR8PTJE4FBsZLnl//slB0e20M00TFsPqunDzHxF
-         PbVznl4+bNrhhrtQwo3TbA+AFWCj8dxNsVeARjRpvwrlPO/qNVg9XntE2Tu72oEVqqlA
-         sI8ekdXZEX/jKSwoYaUCE52G+M8UskIwpShUEhDHge3BU1vfPfmEbTteuy2S9VGbAcz8
-         wNpgwpdWvlRmGYogKzxaHPHsNJsB0OKzJoCOClqei2uOF26HK0U4vETsulOx8uc+tbHn
-         /qgXz45mYp7zYmffuPj5cj5poU8tkZIB8CYsEsClP67R0h32k7QURMbdUHQ+C9YWiutM
-         pjbg==
+        id S233648AbhKBPCW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Nov 2021 11:02:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55908 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233652AbhKBPCU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 11:02:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635865185;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s2qlvsp2B/ajzGnaxNanhBYqk1Fo8lMuMvQWyew1YE4=;
+        b=R5MDtdtCnUXB4MhBXt08sdLBchpzq9Jqrl98/HHZ0PkgCpUWJ9HkK5q98I96+Z39SpzWER
+        VGlAETlFqnqWx2ao+NYjTQrVUXzlaVxXSscdMvDFhr+YMrlhvq9mLZ7wJFPTLgBPdUap/i
+        1ktqiv5Wmvbr6hgXrhuzeqeNskUDPK0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-543-jey1OdalNx6Df2cjmVJFGw-1; Tue, 02 Nov 2021 10:59:44 -0400
+X-MC-Unique: jey1OdalNx6Df2cjmVJFGw-1
+Received: by mail-ed1-f72.google.com with SMTP id i9-20020a508709000000b003dd4b55a3caso19141594edb.19
+        for <linux-i2c@vger.kernel.org>; Tue, 02 Nov 2021 07:59:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0I7ubj1Ldo3Nk5KDl6c4JTG3GlivIn7ejVsprdJKiXY=;
-        b=g6FUfqFS/A5kily7HeyTA/8QhqwxASxlWI8r1/3Q4f+LPOOXzif7wFVEeuJWKEroKC
-         wVFnByCBSOwaud1+c9eSTEUBMbTZbHWz7SiT1sAGZtwe5OVzgycic9ONfG10l/rCxbLc
-         uTyhTJpD+pd7j2ttBl3mOLU4Ba/gcjlTiDZbkKIaNO0/DoSIqUGxuUhYdmF4S7NS/LUW
-         6Z300phn0vr+ypmG+boon0noPJglX1Vq/JGKOPh5p3bwYdgeHJ2CwlnuZEQCixs7BgIo
-         ymb+qiegzLDmVEMMyiMiYWxzE6a3pGnLuH0P7QaMdvNlYkpiMiUDGqpVuWbRQJbHIt95
-         F35Q==
-X-Gm-Message-State: AOAM532QFuaQ3pXTtFQGdb0pxVzZOHFi6fwh/iMu+CLgvmbjnds+5R+0
-        vDEzto0HFY2Da/Vg6M5ObNs58O1ov3pKdrLKJwI=
-X-Google-Smtp-Source: ABdhPJz78G9S+IwBiHwzwtrFf9Ws1srJp3v1MBNrdOcNp2jvAQsLpSlPPk6MqY0r4sswsy4EnwvJEpp19zeqpea2M7Q=
-X-Received: by 2002:a17:906:6a0a:: with SMTP id qw10mr18550055ejc.141.1635863882143;
- Tue, 02 Nov 2021 07:38:02 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s2qlvsp2B/ajzGnaxNanhBYqk1Fo8lMuMvQWyew1YE4=;
+        b=vPVKOseAKI5P9t3XDzSB2mHPUsHcpY+7ZyFQxt1UyJVLatTlRvqSh77qJ8PeSn9yNL
+         N5r83gGsasKeMUJeeULSlZXz7iDQJCnWCuXiF//C8l3d0BqUvJc6Lt0/aLCcvbTWLhzS
+         QqO1vVAue4YrybCBsR4UurQuLj8+muXui9VfVfyvbOuLW8X9tZTiTzvMIqLV8KQhAMt2
+         /BrZyPa8aqBhUueOIoGgzwYUIi8ACzczgM/czrjJ/tqaj1K9VeWfNipA/q8uFJHelQYk
+         n5X2BpCks4DtMp0N705+RJwqYBdCTD+WGd9yeJ3oBk8rH3H+xBCPgEKErm/8MpDzbjYI
+         TZzg==
+X-Gm-Message-State: AOAM532LtFTLAaFUxk08pagcfDCNeW2tKt0KdD268qeBFRn03W7DtDkq
+        KpI8Z/uFeTbTOQorQqG4OMxjhX29g1AOk6c5zDuIUyl3k3d2vhLnw+KzskoYOYfVtGBdSwRNqk4
+        FrooEqzmEX80IA6a7gyQo
+X-Received: by 2002:a17:906:c283:: with SMTP id r3mr25294481ejz.138.1635865183270;
+        Tue, 02 Nov 2021 07:59:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxKFQbu2utF1Nmvh8J5nGyiXWxLqQwUpuqFEbRaoqq44byXxZI0wBMOszsSdo8mNls2SFQ1cw==
+X-Received: by 2002:a17:906:c283:: with SMTP id r3mr25294449ejz.138.1635865183026;
+        Tue, 02 Nov 2021 07:59:43 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id bm2sm9241694edb.39.2021.11.02.07.59.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Nov 2021 07:59:42 -0700 (PDT)
+Message-ID: <1f4377bb-2902-05e9-95c7-ad924477b543@redhat.com>
+Date:   Tue, 2 Nov 2021 15:59:41 +0100
 MIME-Version: 1.0
-References: <20211102094907.31271-1-hdegoede@redhat.com>
-In-Reply-To: <20211102094907.31271-1-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 2 Nov 2021 16:37:13 +0200
-Message-ID: <CAHp75VfHo1XRo8SPy2PtW8JyJ4K6AtZhwGotuCu3Fw5-FFpK0g@mail.gmail.com>
-Subject: Re: [PATCH v5 00/11] Add support for X86/ACPI camera sensor/PMIC
- setup with clk and regulator platform data
-To:     Hans de Goede <hdegoede@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v5 10/11] platform/x86: int3472: Pass
+ tps68470_regulator_platform_data to the tps68470-regulator MFD-cell
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@infradead.org>,
@@ -72,47 +80,78 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Kate Hsuan <hpa@redhat.com>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20211102094907.31271-1-hdegoede@redhat.com>
+ <20211102094907.31271-11-hdegoede@redhat.com>
+ <CAHp75Vd-xY43H8jPOUqJp55Rq3Wuhsdzctfhqq300S0vAKTzpw@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75Vd-xY43H8jPOUqJp55Rq3Wuhsdzctfhqq300S0vAKTzpw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 2, 2021 at 11:49 AM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Here is v5 of my patch-set adding support for camera sensor connected to a
-> TPS68470 PMIC on x86/ACPI devices.
+Hi,
 
-No showstoppers observed, FWIW,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+On 11/2/21 15:34, Andy Shevchenko wrote:
+> On Tue, Nov 2, 2021 at 11:50 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Pass tps68470_regulator_platform_data to the tps68470-regulator
+>> MFD-cell, specifying the voltages of the various regulators and
+>> tying the regulators to the sensor supplies so that sensors which use
+>> the TPS68470 can find their regulators.
+>>
+>> Since the voltages and supply connections are board-specific, this
+>> introduces a DMI matches int3472_tps68470_board_data struct which
+>> contains the necessary per-board info.
+>>
+>> This per-board info also includes GPIO lookup information for the
+>> sensor IO lines which may be connected to the tps68470 GPIOs.
+> 
+> ...
+> 
+>> +               board_data = int3472_tps68470_get_board_data(dev_name(&client->dev));
+>> +               if (!board_data) {
+>> +                       dev_err(&client->dev, "No board-data found for this laptop/tablet model\n");
+>> +                       return -ENODEV;
+> 
+> It's fine to use dev_err_probe() for known error codes.
+> 
+>> +               }
+> 
+> ...
+> 
+>> +               cells[1].platform_data = (void *)board_data->tps68470_regulator_pdata;
+> 
+> Do we need casting?
 
-> I'm quite happy with how this works now, so from my pov this is the final
-> version of the device-instantiation deferral code / approach.
->
-> ###
->
-> The clk and regulator frameworks expect clk/regulator consumer-devices
-> to have info about the consumed clks/regulators described in the device's
-> fw_node, but on ACPI this info is missing.
->
-> This series worksaround this by providing platform_data with the info to
-> the TPS68470 clk/regulator MFD cells.
->
-> Patches 1 - 2 deal with a probe-ordering problem this introduces,
-> since the lookups are only registered when the provider-driver binds,
-> trying to get these clks/regulators before then results in a -ENOENT
-> error for clks and a dummy regulator for regulators. See the patches
-> for more details.
->
-> Patch 3 adds a header file which adds tps68470_clk_platform_data and
-> tps68470_regulator_platform_data structs. The futher patches depend on
-> this new header file.
->
-> Patch 4 + 5 add the TPS68470 clk and regulator drivers
->
-> Patches 6 - 11 Modify the INT3472 driver which instantiates the MFD cells to
-> provide the necessary platform-data.
+Yes, the cast casts away a "const", the const is correct
+since the data only ever gets read by the regulator driver,
+but platform_data pointers are normally not const, so it
+is either the cast, or loose the const on the definition
+of the struct to which board_data->tps68470_regulator_pdata
+points...
+
+So not good choice here really, only chosing between bad
+options and I picked the lets do the cast "least worse"
+option (at least to me). I'm open to changing this.
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+
+> ...
+> 
+>> +#include <linux/dmi.h>
+>> +#include <linux/gpio/machine.h>
+>> +#include <linux/platform_data/tps68470.h>
+>> +#include <linux/regulator/machine.h>
+> 
+> string.h  for strcmp() ?
+> kernel.h for ARRAY_SIZE() ?
+
+Ack.
+
+Regards,
+
+Hans
+
+
