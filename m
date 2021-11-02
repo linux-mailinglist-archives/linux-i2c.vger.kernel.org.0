@@ -2,175 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4563F442D2E
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 12:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0643442FFC
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Nov 2021 15:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbhKBLxf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 Nov 2021 07:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S230321AbhKBOQW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 Nov 2021 10:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbhKBLxe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 07:53:34 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE54C061714;
-        Tue,  2 Nov 2021 04:51:00 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id bi29so19301202qkb.5;
-        Tue, 02 Nov 2021 04:51:00 -0700 (PDT)
+        with ESMTP id S229530AbhKBOQW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 Nov 2021 10:16:22 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D805C061714;
+        Tue,  2 Nov 2021 07:13:47 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id m14so23419557edd.0;
+        Tue, 02 Nov 2021 07:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LJIjYhfvWq/XmxkSPhVuNgnT9R48OynbL5aet6ipzhY=;
-        b=dfAB0y0GoTZd4vmgCa4lDJlj9Xy1PPZCyGEdK/aTMYNEkaHQo4KucqVGBLIuVG+PRs
-         JGEUBY/3CgEHvt0J/ky8T5591KmJL8oUwcKVKttLnn92GjzZMjFohVOxeVTW199Z/YD7
-         Mnd8So9zLY16X+TivrlW6J9HRAdeDgGOnYMeHrWLApOHH0rP/WASjQ9tV2Z7XhsIXMZa
-         K0M0Bvns2d9xdDUcyFtUmZOAfV01E8LzRphK72ahfxPHlwgngv/wnSJi5wuA4F1bbDGM
-         focD78n4Arr4N/winCvY1ri3EsDM9OG2WaHQ4N2pNhqoNP6Y/e/1p1nWzr+A9dsa85qT
-         E2Mw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+j8hsXOY8XFBcUQY09d3Bm6u2Cd3NbaccVLoECv3HYE=;
+        b=Tdf1K3H+Lg7s+DMqBUPbp1Zj4RDwqdxJ5f9UrW88BlRUYlgBYic1r7/n7I13XZNDBU
+         oG5MV/LgkcrxjTcxXakGCMiekxd9Xs7A8uQyu6Zq5gkIAyFJyUVtqhjDvIBm0ML77BZx
+         SXq829uwldsaG4eMoTAK8Crrhzm2EkP6TsmBkUDwg2/pHv0aLXJXh9z3brShcJwYF/D5
+         DijQxGvU1JDSkzbIxedUwKVc+Qm/OQO2bLj74ptbpKXHkcTfPEFOdtliboFWtJCxPZkw
+         cH/KR6rcdAAbql0GwZz/RxdfBGSWaRjJ3bad2XkBiCIrZlVJ+2tukjBswD2rsr2IdD7i
+         roWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=LJIjYhfvWq/XmxkSPhVuNgnT9R48OynbL5aet6ipzhY=;
-        b=xg/IXkJwu9mFio3vAsm8ztbU18xaVXiG4TeCVcJi8/FIvSRdicwSY+rAbK3yiioO04
-         mSLil3TYYUbwknlYTr8PuMh+iZdMr8wPAqznu+U6E4QzJKyHOWKgv2u1jvSAFYke3krK
-         R7vpSfscdBJn4zevDVmSEkOvI0YaAXftR5eRuQVcf6LgprGOGePsomvPyKiM0ZAuq+Mt
-         knwovQB6slkNfTcmklGLb5z+KbK34iU58BSmJ5RNEs2uwrRiIUM0az8R6xDTxtHPkp+x
-         Hw4yQoWmBB+yuLB6ZLvwUZfodmqc8a6A8cD8jR7yk1N6vGccGhOmcWuqB5ePIuiRaCpC
-         h7Fg==
-X-Gm-Message-State: AOAM530dOuufcoJKrmbWuWxAjXW8AeiW+GQ4NEgv5BpLEVZeN4NkUWpj
-        TZg5CIV+UgnRtcX58dhwjEJogjiFQQ==
-X-Google-Smtp-Source: ABdhPJyAbjE94dVa8us1n3QC2fX9EDhr0MBywxIYHXAfN5NxraycqSOnTKvOPdJqmVl+6BY8ybsyEw==
-X-Received: by 2002:a37:9e8d:: with SMTP id h135mr3424965qke.105.1635853859207;
-        Tue, 02 Nov 2021 04:50:59 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.156.158])
-        by smtp.gmail.com with ESMTPSA id a3sm13558462qta.58.2021.11.02.04.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Nov 2021 04:50:58 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:b4e0:932d:f90c:fafb])
-        by serve.minyard.net (Postfix) with ESMTPSA id B41A71800BA;
-        Tue,  2 Nov 2021 11:50:57 +0000 (UTC)
-Date:   Tue, 2 Nov 2021 06:50:56 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        Andrew Manley <andrew.manley@sealingtech.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH 3/3] i2c:imx: Use an hrtimer, not a timer, for checking
- for bus idle
-Message-ID: <20211102115056.GI4667@minyard.net>
-Reply-To: minyard@acm.org
-References: <20211005003216.2670632-1-minyard@acm.org>
- <20211005003216.2670632-4-minyard@acm.org>
- <20211102085806.hefnttaxm5srxbov@pengutronix.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+j8hsXOY8XFBcUQY09d3Bm6u2Cd3NbaccVLoECv3HYE=;
+        b=emZMSV1Iln4zjpD/elp9Ewo0lQHX0YUV0lkDofhK6DU9oAbgFf1vZZcVGloSIZggrg
+         SQu3v6Dm1QWYszhgIaX/cK/qSZo6fy+X8Mw5z26jLIl45l2XWIXSR87pK+XaizjekXDB
+         lFsBsqqFPklZ8yNLYPXtneR7Mree9u6lX9YoVLUc6OARoLjlWh67NAB6un/Dnqwj7uYp
+         ICDpVFIY+5UpBMoCKe2qHrzHeen2iLALPGmtRr7ZXkI39DH2obKIZOIS4RVCVMPN84NA
+         47zGhaSidqKeSPNqkP6RNAATjcluDDkqUKJBU4/caSoZW87XoHGrIt4uTZ7DN8efLoY/
+         l3/w==
+X-Gm-Message-State: AOAM531QnNbRIYOn2IE/+bolNcddt46rMvWTo4A1A8J1mRZISrJH3Vga
+        gwMO+b2XLme9q0EFgEPhbsxlQqoyIIwJwt76Q8w=
+X-Google-Smtp-Source: ABdhPJyKcI23macxqNFIt9wwe+SVKY0dzoujCECZBAvK1EiUAl8fA0zKRHCqPQRXJB+c9kWKLTkoHkxrArinkXDo700=
+X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr45648690ejc.69.1635862424213;
+ Tue, 02 Nov 2021 07:13:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211102085806.hefnttaxm5srxbov@pengutronix.de>
+References: <20211102094907.31271-1-hdegoede@redhat.com> <20211102094907.31271-8-hdegoede@redhat.com>
+In-Reply-To: <20211102094907.31271-8-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 2 Nov 2021 16:12:54 +0200
+Message-ID: <CAHp75VfUUfJPRkwgSFCddv-Dm5PRNQkpKvAaATAtkCUvConhGg@mail.gmail.com>
+Subject: Re: [PATCH v5 07/11] platform/x86: int3472: Split into 2 drivers
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 02, 2021 at 09:58:06AM +0100, Uwe Kleine-König wrote:
-> On Mon, Oct 04, 2021 at 07:32:16PM -0500, minyard@acm.org wrote:
-> > From: Corey Minyard <cminyard@mvista.com>
-> > 
-> > The timer is too slow and significantly reduces performance.  Use an
-> > hrtimer to get things working faster.
-> > 
-> > Signed-off-by: Corey Minyard <minyard@acm.org>
-> > Tested-by: Andrew Manley <andrew.manley@sealingtech.com>
-> > Reviewed-by: Andrew Manley <andrew.manley@sealingtech.com>
-> > ---
-> >  drivers/i2c/busses/i2c-imx.c | 23 +++++++++++++++--------
-> >  1 file changed, 15 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> > index 26a04dc0590b..4b0e9d1784dd 100644
-> > --- a/drivers/i2c/busses/i2c-imx.c
-> > +++ b/drivers/i2c/busses/i2c-imx.c
-> > @@ -38,7 +38,7 @@
-> >  #include <linux/iopoll.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/spinlock.h>
-> > -#include <linux/timer.h>
-> > +#include <linux/hrtimer.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_device.h>
-> > @@ -53,6 +53,8 @@
-> >  /* This will be the driver name the kernel reports */
-> >  #define DRIVER_NAME "imx-i2c"
-> >  
-> > +#define I2C_IMX_CHECK_DELAY 30000 /* Time to check for bus idle, in NS */
-> > +
-> >  /*
-> >   * Enable DMA if transfer byte size is bigger than this threshold.
-> >   * As the hardware request, it must bigger than 4 bytes.\
-> > @@ -214,8 +216,8 @@ struct imx_i2c_struct {
-> >  	enum i2c_slave_event last_slave_event;
-> >  
-> >  	/* For checking slave events. */
-> > -	spinlock_t	  slave_lock;
-> > -	struct timer_list slave_timer;
-> > +	spinlock_t     slave_lock;
-> > +	struct hrtimer slave_timer;
-> 
-> This is unrelated to this patch, moreover it was introduced only in
-> patch 1.
+On Tue, Nov 2, 2021 at 11:49 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> The intel_skl_int3472.ko module contains 2 separate drivers,
+> the int3472_discrete platform driver and the int3472_tps68470
+> I2C-driver.
+>
+> These 2 drivers contain very little shared code, only
+> skl_int3472_get_acpi_buffer() and skl_int3472_fill_cldb() are
+> shared.
+>
+> Split the module into 2 drivers, linking the little shared code
+> directly into both.
+>
+> This will allow us to add soft-module dependencies for the
+> tps68470 clk, gpio and regulator drivers to the new
+> intel_skl_int3472_tps68470.ko to help with probe ordering issues
+> without causing these modules to get loaded on boards which only
+> use the int3472_discrete platform driver.
+>
+> While at it also rename the .c and .h files to remove the
+> cumbersome intel_skl_int3472_ prefix.
+>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+> Note git rename detection is failing for the new common.c but this is
+> just the old intel_skl_int3472_common.c with the driver registering
+> bits removed.
 
-The second line is important for this patch, of course.  I assume you
-mean the indention of the first line, which is just keeping things lined
-up.
+-M accepts a parameter (in percents) to set the threshold. Default is
+something like ~70 (?). You may play with it and see when it starts
+detecting the rename.
 
-> 
-> >  };
-> >  
-> >  static const struct imx_i2c_hwdata imx1_i2c_hwdata = {
-> > @@ -783,13 +785,16 @@ static irqreturn_t i2c_imx_slave_handle(struct imx_i2c_struct *i2c_imx,
-> >  	}
-> >  
-> >  out:
-> > -	mod_timer(&i2c_imx->slave_timer, jiffies + 1);
-> > +	hrtimer_try_to_cancel(&i2c_imx->slave_timer);
-> 
-> Don't you need to check the return value here?
-
-Not really.  The possible return values are:
-
- *  *  0 when the timer was not active
- *  *  1 when the timer was active
- *  * -1 when the timer is currently executing the callback function and
- *    cannot be stopped
-
-and if it returns 0 or 1, then everything is fine.  If it returns -1,
-then the code will still work, though it may be redone (or already have
-been done) by the timer function.  So it doesn't matter.
-
-Maybe I should add a comment about this?
-
-Thanks for reviewing.
-
--corey
-
-> 
-> > +	hrtimer_forward_now(&i2c_imx->slave_timer, I2C_IMX_CHECK_DELAY);
-> > +	hrtimer_restart(&i2c_imx->slave_timer);
-> >  	return IRQ_HANDLED;
-> >  }
-> >  
-> 
-> Best regards
-> Uwe
-> 
-> -- 
-> Pengutronix e.K.                           | Uwe Kleine-König            |
-> Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
-
+-- 
+With Best Regards,
+Andy Shevchenko
