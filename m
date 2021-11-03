@@ -2,109 +2,142 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F02C443D52
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Nov 2021 07:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1AE443E84
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Nov 2021 09:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbhKCGkY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 3 Nov 2021 02:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbhKCGkY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Nov 2021 02:40:24 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCE7C061714
-        for <linux-i2c@vger.kernel.org>; Tue,  2 Nov 2021 23:37:48 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id t21so1813776plr.6
-        for <linux-i2c@vger.kernel.org>; Tue, 02 Nov 2021 23:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=KvV07TGoZaoGw8L0LWYKUbxKaPDqvzThxG6WFrFLoZE=;
-        b=qV6o2DHzNyXcnTFQQPyEAH5HGAgqErf+nLausmvme7o+/HaH5BSY6GgQgYvm3NkDV1
-         OR0M6iMn7ErGmFwBNJwqGcnzu3l2AYFln/0aOue4QU9nVvw9ay2ysnUE2cF7dZWoUOYH
-         zLARG2g2WK8ganoyxRfEwndQ4J/4Irml4yeScRNO3KiamTkfwqbjH+IAAIoL15ZP5V26
-         1v5s1K+xO1a1+PH3LDRkuvG2tCjW+/AJpoOYNzC9a4nhJRD9Sr7QgBzIa9O7SeyT2KwP
-         3Ddois9E1aWdVaOecGfUI/sREvr3AoThqfVKlOv1mH9c7izxYcqWyPDhvnLUSt8A5x8+
-         O9+g==
+        id S231278AbhKCIor (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 3 Nov 2021 04:44:47 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:58072
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230463AbhKCIoq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 Nov 2021 04:44:46 -0400
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EABC73F19B
+        for <linux-i2c@vger.kernel.org>; Wed,  3 Nov 2021 08:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1635928929;
+        bh=kKZRZEPwd3etVyB2WM4q5L1wpzbHA8gGvbGv8rJ6kec=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=KGRXzVpG/9G4c6e8UBMa/GtREoZDKDzjl2/tOqcb9P8Wck6fz/LqqPhwRxBjuZKZo
+         jJqY1IDtNPXnFH0vTZY3RgwI94b/6YToIHzOveVrqZsJhqSb4pktB4ulCH1Z7hVfIz
+         MYUGmfjDCeybvpQPfTOHHgzEkOyP78Kr/YVVAY/f4k/y1tTyev1XnzLbT5eOmDI82B
+         ZH3wJ+HZfrDcoY5qDaGBaahseRrkMkhDUTGNzgwcsmtmLlZQEuzXf51e4KJcKPpWk+
+         Eg6sXINnCmzGsqP42VXmE3GdOgfADZsnBLz3lGZutfVqwt2YOG5Sq+HPvHfJbaefas
+         w3VwVQ4AH5tyQ==
+Received: by mail-lf1-f70.google.com with SMTP id i1-20020a056512340100b003fdd5b951e0so346501lfr.22
+        for <linux-i2c@vger.kernel.org>; Wed, 03 Nov 2021 01:42:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=KvV07TGoZaoGw8L0LWYKUbxKaPDqvzThxG6WFrFLoZE=;
-        b=SixHAFjfi5OrC7huEpCLGQG9oAPx63kzIEuN2a5sSgT4VCWbpRhFijlkpmaXZRoA95
-         KiftHjQeRfs6bVJz46XGlyysaQT/UtRSl8Iyh0x0jbw0WZFDBqVfLUxpxPDawbokZBDM
-         3YezSmHGb1+9vVzO21wltxBC+oYLXk+61D0lMM9yoxpe8/UEvxDIBo0C/9y83Umjheed
-         L+B3IDoZp1zZsuiQ7nR8XMhAKJqjjU9AyHIH73TYeB37zkhtq6cax2XHmOUzanrw3m59
-         DEtAdkFC9DzwrNtj8aEqvLGvb5ruqi5MVPCX6bVNKm3Q7ghxYFoacTYzg081V6/MYe0k
-         D7YQ==
-X-Gm-Message-State: AOAM532wX/w9ShN34YZszis8e++ZY0tmOPNuYrDdtcFLYPjzjbc9bAON
-        HrVR0X05s4C/4Kz10Y2fMhc+vQ==
-X-Google-Smtp-Source: ABdhPJzCmOo15jlPdgZPi4SyQjZk/5+4lEfnC9j8LuN0Fw6C+DU4a7f23C24EyvWV1cMUmhMJaL6/A==
-X-Received: by 2002:a17:90a:928a:: with SMTP id n10mr12308079pjo.128.1635921467640;
-        Tue, 02 Nov 2021 23:37:47 -0700 (PDT)
-Received: from localhost ([106.201.113.61])
-        by smtp.gmail.com with ESMTPSA id oa4sm930068pjb.13.2021.11.02.23.37.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Nov 2021 23:37:47 -0700 (PDT)
-Date:   Wed, 3 Nov 2021 12:07:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Chen, Conghui" <conghui.chen@intel.com>
-Cc:     "Deng, Jie" <jie.deng@intel.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>
-Subject: Re: [PATCH 1/2] i2c: virtio: disable timeout handling
-Message-ID: <20211103063745.utpphthou4angs4s@vireshk-i7>
-References: <YW+q1yQ8MuhHINAs@kroah.com>
- <8e182ea8-5016-fa78-3d77-eefba7d58612@intel.com>
- <20211020064128.y2bjsbdmpojn7pjo@vireshk-i7>
- <01d9c992-28cc-6644-1e82-929fc46f91b4@intel.com>
- <20211020105554.GB9985@axis.com>
- <20211020110316.4x7tnxonswjuuoiw@vireshk-i7>
- <df7e6127-05fb-6aad-3896-fc810f213a54@intel.com>
- <20211029122450.GB24060@axis.com>
- <8592a48d-0131-86bf-586a-d33e7989e523@intel.com>
- <MWHPR11MB0030C3489F38FF2AAF7C3D0A908C9@MWHPR11MB0030.namprd11.prod.outlook.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kKZRZEPwd3etVyB2WM4q5L1wpzbHA8gGvbGv8rJ6kec=;
+        b=PHr1et7pi8T6Q3mKDCtaDLnYGfX9+Vh6yAEFTasJLfYVRzw26npe+nS9ufeb9Xq9lo
+         AF/7uFt2xNXtILbqtF7qV40G7YSlHWPwarcCZlBFC5Fvm7Sk0tzSvxoYsBgFKdCj3hs1
+         we7hLhTExRF/Mw2PP2u2p8PPv4JigbJ1zWK8/U7iV+YDzfCI/74XU1oZe5o5b2zXVoqc
+         5mLSIt+b2tLVew2EJjPXbmsugKYrN1Ae1o+61PSIP3ZjKPtWNI6SRjCNohJddVFamw9G
+         hFqBmyYVukvvJeYTfms1KHV96YBbiufi6rGw9OCyC9pCJErYib9WlsDjlv6KptEfIxfv
+         KD7Q==
+X-Gm-Message-State: AOAM531O1uemVEfHy/pgWz5MChOcJ1R81xpYo8iYkeq6aWrowafOUw98
+        Ed/UVQiHB/4NHlf1Pw/KxmSek3JJHuBt+H+mOrqmPZAmdDQmsHIX/IjC9AwR5e6N+rB1X3Dhtg5
+        5hzApXuORTdaKHAolZwWtr09+GbmpoujqVjtmfA==
+X-Received: by 2002:a05:6512:238b:: with SMTP id c11mr23340534lfv.55.1635928929417;
+        Wed, 03 Nov 2021 01:42:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxoLYZQxp82GIsICfzZKnVOQP/gVDZZ1JYoK6fKha/wI/ZKZJTg775ib/aBhiilx9HsGfUCJA==
+X-Received: by 2002:a05:6512:238b:: with SMTP id c11mr23340519lfv.55.1635928929251;
+        Wed, 03 Nov 2021 01:42:09 -0700 (PDT)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id k16sm120594lfm.168.2021.11.03.01.42.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Nov 2021 01:42:08 -0700 (PDT)
+Message-ID: <c626abd9-eebb-3111-123d-7b2bea95b310@canonical.com>
+Date:   Wed, 3 Nov 2021 09:42:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR11MB0030C3489F38FF2AAF7C3D0A908C9@MWHPR11MB0030.namprd11.prod.outlook.com>
-User-Agent: NeoMutt/20180716-391-311a52
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: [PATCH 2/2] dt-bindings: i2c: exynos5: add exynos-usi-hsi2c
+ compatible
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     Chanho Park <chanho61.park@samsung.com>, linux-i2c@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211101113819.50651-1-jaewon02.kim@samsung.com>
+ <CGME20211101114158epcas2p46b50f8d946d59ffaedd203370b81c6ed@epcas2p4.samsung.com>
+ <20211101113819.50651-2-jaewon02.kim@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211101113819.50651-2-jaewon02.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 03-11-21, 06:18, Chen, Conghui wrote:
-> >>> Over the long term, I think the backend should provide that timeout
-> >>> value and guarantee that its processing time should not exceed that
-> >>> value.
-> >> If you mean that the spec should be changed to allow the virtio driver
-> >> to be able to program a certain timeout for I2C transactions in the
-> >> virtio device, yes, that does sound reasonable.
-> >
-> >
-> >Due to changes in my work, I will pass my virtio-i2c maintenance to Conghui.
-> >
-> >She may work on this in the future.
-> >
+On 01/11/2021 12:38, Jaewon Kim wrote:
+> This patch adds new "samsung,exynos-usi-hsi2c" compatible.
+> It is for i2c compatible with HSI2C available on Exynos SoC with USI.
 > 
-> I'll try to update the spec first.
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-exynos5.txt | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-I don't think the spec should be changed for timeout. Timeout-interval
-here isn't the property of just the host firmware/kernel, but the
-entire setup plays a role here.
+The bindings go as first patch, please.
 
-Host have its own timeframe to take care of things (I think HZ should
-really be enough for that, since kernel can manage it for busses
-normally with just that). Then comes the virtualization, context
-switches, guest OS, backend, etc, which add to this delay. All this is
-not part of the virtio protocol and so shouldn't be made part of it.
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt b/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+> index 2dbc0b62daa6..ce2373c7a357 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+> @@ -14,6 +14,8 @@ Required properties:
+>  				on Exynos5260 SoCs.
+>  	-> "samsung,exynos7-hsi2c", for i2c compatible with HSI2C available
+>  				on Exynos7 SoCs.
+> +	-> "samsung,exynos-usi-hsi2c", for i2c compatible with HSI2C available
+> +				on Exynos SoCs with USI.
 
--- 
-viresh
+I would prefer to describe the Exynos model, not the feature. USI might
+change between different SoCs, so then it will be "usiv2"?
+
+>  
+>    - reg: physical base address of the controller and length of memory mapped
+>      region.
+> @@ -31,6 +33,8 @@ Optional properties:
+>         at 100khz.
+>      -> If specified, the bus operates in high-speed mode only if the
+>         clock-frequency is >= 1Mhz.
+> +  - samsung,usi-sysreg : sysreg handle to control USI type.
+> +    -> sysreg phandle for "samsung,exynos-usi-hsic" compatible.
+
+s/sysreg/system registers controller/
+s/handle/phandle/
+
+Please document to what is this phandle. To which block.
+
+Why it cannot be the existing generic samsung,sysreg?
+
+>  
+>  Example:
+>  
+> @@ -46,6 +50,8 @@ hsi2c@12ca0000 {
+>  	#address-cells = <1>;
+>  	#size-cells = <0>;
+>  
+> +	samsung,usi-sysreg = <&usi_sysreg 0x28>;
+
+This does not look correct for this compatible. We should really convert
+the bindings to YAML...
+
+> +
+>  	s2mps11_pmic@66 {
+>  		compatible = "samsung,s2mps11-pmic";
+>  		reg = <0x66>;
+> 
+
+
+Best regards,
+Krzysztof
