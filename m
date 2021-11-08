@@ -2,162 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB455447ECA
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 12:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07217447F77
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 13:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239204AbhKHLZO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Nov 2021 06:25:14 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:29518 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239200AbhKHLZN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 06:25:13 -0500
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20211108112228epoutp0222c4dfc24edf5e97b14dd2f653c8db67~1jlf731sy0982409824epoutp02K
-        for <linux-i2c@vger.kernel.org>; Mon,  8 Nov 2021 11:22:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20211108112228epoutp0222c4dfc24edf5e97b14dd2f653c8db67~1jlf731sy0982409824epoutp02K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1636370548;
-        bh=QvmD6Tmq+bJeo76I1IXC5kiKoG3gf1RUxDtEOlrq1nE=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=sEha9i6KURaOiSdljVhOOwh+4Gvak611b8A8YzJXQs+aolqT8EWlqO39CT/3rZdmA
-         3T60YupF8LPXHrh5e0ht6eAHGxDT+GAqyBMZ5lmZ363GC6iNWnBgLPxR5rkzA2yRnA
-         cgUt5z7QYYjsZp0Zto3rxtrreQPmpmAcXX9fTPxk=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20211108112227epcas2p380483e73cd6786665f9b466738270008~1jlfpRJV71337813378epcas2p3H;
-        Mon,  8 Nov 2021 11:22:27 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.89]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4Hnpc923XQz4x9Q2; Mon,  8 Nov
-        2021 11:22:17 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        65.74.10018.76809816; Mon,  8 Nov 2021 20:22:15 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20211108112214epcas2p2c58d675ceddb6e7cc5f478fd5c295bfc~1jlTFFmU90032300323epcas2p2B;
-        Mon,  8 Nov 2021 11:22:14 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211108112214epsmtrp220678073f441bcf57c2906d42530a366~1jlTBClof0548405484epsmtrp2d;
-        Mon,  8 Nov 2021 11:22:14 +0000 (GMT)
-X-AuditID: b6c32a46-a0fff70000002722-a3-6189086702b4
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A7.40.29871.66809816; Mon,  8 Nov 2021 20:22:14 +0900 (KST)
-Received: from KORCO006858 (unknown [10.229.8.71]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20211108112214epsmtip14e0ee3c318ecdbb6d831bae0b047c2c9~1jlS0RvFh0874508745epsmtip1H;
-        Mon,  8 Nov 2021 11:22:14 +0000 (GMT)
-From:   "Jaewon Kim" <jaewon02.kim@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        "'Wolfram Sang'" <wsa@kernel.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>
-Cc:     "'Chanho Park'" <chanho61.park@samsung.com>,
-        <linux-i2c@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-In-Reply-To: <5b05ff2e-953c-d1a3-8347-4d3f9911cc49@canonical.com>
-Subject: RE: [PATCH 1/2] i2c: exynos5: support USI(Universal Serial
- Interface)
-Date:   Mon, 8 Nov 2021 20:22:14 +0900
-Message-ID: <000401d7d492$e157a450$a406ecf0$@samsung.com>
+        id S238340AbhKHMaF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Nov 2021 07:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237550AbhKHMaF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 07:30:05 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0636DC061570
+        for <linux-i2c@vger.kernel.org>; Mon,  8 Nov 2021 04:27:20 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id j2so35802646lfg.3
+        for <linux-i2c@vger.kernel.org>; Mon, 08 Nov 2021 04:27:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=5C018N7jEuHaysmmpu+q/ttVR6O5QrPEoSv+O3PCz/s=;
+        b=kPeFN2oNxcInLxU1AOQuHjv1f/u8AvO+1lbeSbBuIqPm3O6nSCkBRiY9n34/dG+Ns6
+         BeJfM5W29VqMmVMboZ4IAG1LhixtvMVih9DfPrUWjfr/yUwSiHX2dbHar9pfykaoQJd7
+         gXYZhAbCadH3A45ewsm0AwMUrn9FpcC9tCQbjEkzEHQlQQyw03J0cofTq5pa13EI+ybL
+         pWg8I4nwJZjTlWZCwM8cvnujtW8DRwm+xOIg8xRaeQ1QQFR56DBVq/2E8yHnP/uBelR+
+         uF+BA0lcnbCHRynsdEU5joA8T52zi8OlUgEJsE3S0vVFG78VMjaSLoJ9a9X/1IzsX7ym
+         L2kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=5C018N7jEuHaysmmpu+q/ttVR6O5QrPEoSv+O3PCz/s=;
+        b=aL8zZqKcrFwAf0956T2mV9D5oWhsRJzJR48b1nK2THh8zes+ugkExqK8NOT1IGSTsB
+         gUisbq3g23zbS+Wk9qca5SdSNVTvJIC/CzWvB7zSJp+yot8pi5/tMr731wdx9E2rSLa6
+         SZlTlbFTS9u+6klmHgbbvSZmWwuLAD6x8+2WJmvSWx1l4kKWNsYlkte97cdwdVW7iz94
+         876j/cJnXQEyECggC7XoWakkJJXskcXfMJNv8oM2IIekgPcxhkbMbhsitpc0EdCG+tKq
+         uyydgAXHMlYTcLl/STT6l5BQVUCKKTS/DVMYC0uq9v87K4xzZj96ecJyYIQwDfXn2tSp
+         rR+g==
+X-Gm-Message-State: AOAM533p26cuimedrz8E2TJXX+kt/vu6MMWIaxwGtO5Uq943cSkJSEof
+        HV6HgCdr30I7K2gA6FUoEVLLJnzwxebtOO2PBFk=
+X-Google-Smtp-Source: ABdhPJwzqLJkb9h5GoP5sOqB4jeUtncqpfqLSa9rTPZKMhWkTdAZUVAy7Rclh+l+NBnAqkiuWvnSMyx7L+V+Qa0rFT0=
+X-Received: by 2002:a05:6512:e9a:: with SMTP id bi26mr12315025lfb.480.1636374439068;
+ Mon, 08 Nov 2021 04:27:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQH9TS3Ubwx9WhvNqO8Onnoqn/bWugGADPusApYBWVkB1joeOQEO3tdOq3aqCqA=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplk+LIzCtJLcpLzFFi42LZdljTXDedozPRYEk3q8Xl/doWG9/+YLLo
-        +PuF0eLyrjlsFjPO72OyaN17hN3i7v65jA7sHrMaetk8Nq3qZPPo27KK0ePzJrkAlqhsm4zU
-        xJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygA5QUyhJzSoFC
-        AYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWleel6eaklVoYGBkamQIUJ2RlTf/9g
-        KTjDVfFlygnWBsZVHF2MnBwSAiYS69beZu5i5OIQEtjBKLH5xld2COcTo8Tt/XNYQaqEBL4x
-        SvzYndrFyAHW0bhUC6JmL6PEm8XH2CCc54wSB7qWMIM0sAnoSuzc+ApskohAF6PEpS87wKqY
-        BaYySty40cUMMopTwFGi800IiCksECDxa4UHiMkioCLxs5EPZAyvgKXEtoNnGCFsQYmTM5+w
-        gNjMAvIS29/OYYb4QEHi59NlYHeKCPhJTDj+mhWiRkRidmcb2GcSAhM5JJZ0rGSDeMBF4vtb
-        RYheYYlXx7ewQ9hSEp/f7YUqqZf4esMBorWHUWJN1y8miBp7iV/Tt7CC1DALaEqs36UPUa4s
-        ceQW1GV8Eh2H/7JDhHklOtqEIBrVJO5PPccGYctITDqykmkCo9IsJH/NQvLXLCT3z0LYtYCR
-        ZRWjWGpBcW56arFRgRE8opPzczcxgtOlltsOxilvP+gdYmTiYDzEKMHBrCTCe+9oR6IQb0pi
-        ZVVqUX58UWlOavEhRlNgQE9klhJNzgcm7LySeEMTSwMTMzNDcyNTA3MlcV5L0exEIYH0xJLU
-        7NTUgtQimD4mDk6pBqYc+Z43KRJ8Mg/6X9879XHW1/mX5OIFJ/Yvb7a1uzlNYtuKni+W4p/E
-        0xRbZCvP6R/sE92zz+xAivvupOgzCSdPr27Zv9JE+fhkO8lV4i3vP7IZVcR8vnP2X+lm+bBz
-        ou/Cv7h+S1sTMS1wZ//mO7yCXAIVHqbmy68yivQ+ymKxOjCxjY0nVWmh3ZEDUz9u4FHSnXqq
-        f6rFt0Bd07z078U9KzbOnGH++Pu583p3TCV1k19/mCCouoUh9yqn0YUXGidVL6S7XNZJKmXl
-        7VV/0j6peXbikrM7jXId8v9b7HhwvqQ2vU11A3eFRLvA2eCHE+9ZHq2Z8/g438abmy/mT5bj
-        WfeRsX1e4NJZ37eZtrkqsRRnJBpqMRcVJwIACh4WXCAEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDLMWRmVeSWpSXmKPExsWy7bCSnG4aR2eiwYvVXBaX92tbbHz7g8mi
-        4+8XRovLu+awWcw4v4/JonXvEXaLu/vnMjqwe8xq6GXz2LSqk82jb8sqRo/Pm+QCWKK4bFJS
-        czLLUov07RK4Mqb+/sFScIar4suUE6wNjKs4uhg5OCQETCQal2p1MXJxCAnsZpT4sHUjUxcj
-        J1BcRmL5sz42CFtY4n7LEVaIoqeMEmdOTGYFSbAJ6Ers3PiKHcQWEehhlDjXIwRSxCwwnVFi
-        4epGFoiO5UwS/1b3sIKs4xRwlOh8EwLSICzgJ7FncQMbSJhFQEXiZyMfSJhXwFJi28EzjBC2
-        oMTJmU9YQGxmAW2J3oetjBC2vMT2t3OYIY5TkPj5dBkrxA1+EhOOv2aFqBGRmN3ZxjyBUXgW
-        klGzkIyahWTULCQtCxhZVjFKphYU56bnFhsWGOallusVJ+YWl+al6yXn525iBEeQluYOxu2r
-        PugdYmTiYDzEKMHBrCTCe+9oR6IQb0piZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1Kz
-        U1MLUotgskwcnFINTKdeHROMXtWhMuMD66RHFrH7jNv3FMQtWKnu7lORuNBJ70QDyyz3uos5
-        HlXW9pwLAi55LdIqvb6X+fenRd0fl/yIN6nTlGxM/dGwK/jgyvPmvg17LcO36ddOendYZ28d
-        g4wlk1x0u3RC2vpv/bZPH+heDAhYIF3v2iK4OHn7/dPiLw+LVGipxtU0X5LJPiQYVrZhQ9tP
-        S1vT0jkOs97az11k1LphWvOhImVhHyaFuvUC9/tO392xlPfCkVnHfsx+06BwbwLjFPmnjTcY
-        7Ju4wvpm9D05Kr5Qz4tTyyH82LvIXeW31EOzYsRvCejeeLpNUEZMZzmfls5WNxNOF55zi49u
-        XvjNJr/o3fOQ893FSizFGYmGWsxFxYkAYWUsOA8DAAA=
-X-CMS-MailID: 20211108112214epcas2p2c58d675ceddb6e7cc5f478fd5c295bfc
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211101114158epcas2p1d0762d52029b1b09912fd99665dd66f5
-References: <CGME20211101114158epcas2p1d0762d52029b1b09912fd99665dd66f5@epcas2p1.samsung.com>
-        <20211101113819.50651-1-jaewon02.kim@samsung.com>
-        <a571af00-8ac1-f1a5-3240-2c93f823c995@canonical.com>
-        <001001d7d153$5fb18840$1f1498c0$@samsung.com>
-        <5b05ff2e-953c-d1a3-8347-4d3f9911cc49@canonical.com>
+Received: by 2002:a05:6520:505:b0:14a:f3ba:cf5e with HTTP; Mon, 8 Nov 2021
+ 04:27:18 -0800 (PST)
+Reply-To: Evelynwilfred6@gmail.com
+From:   John Nathaniel <johnbrunoedu111@gmail.com>
+Date:   Mon, 8 Nov 2021 13:27:18 +0100
+Message-ID: <CAOZ8G8YVXCjWSER+wkQmTA-+pSzPfzEv2SD+sLVZyFWHKAz3AQ@mail.gmail.com>
+Subject: ATM CARD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Krzysztof
-
-> On 04/11/2021 09:10, Jaewon Kim wrote:
-> >
-> >>> +	if (ret) {
-> >>> +		dev_err(dev, "usi-sysreg offset is not specified\n");
-> >>> +		return ret;
-> >>> +	}
-> >>> +
-> >>> +	regmap_update_bits(i2c->usi_sysreg, i2c->usi_offset,
-> >>> +			SYSREG_USI_SW_CONF_MASK, SYSREG_I2C_SW_CONF);
-> >>> +
-> >>> +	exynos_usi_reset(i2c);
-> >>
-> >> You are clearing the reset flag, but not setting it back on probe
-> >> failure. What happens if the probe fails after this clear()? E.g.
-> >> because of deferred probe? The next probe try will start on a not-reset controller. Will it work?
-> >>
-> >
-> > The user manual guides USI_RESET to be done after changing the system register.
-> > For clarity, we will change not only to clear reset, but to clear after reset.
-> >
-> 
-> What I meant, is do you handle probe failure correctly (e.g. probe deferral)? It's fine to leave the
-> reset cleared after deferred probe?
-> 
-
-I understood.
-In my opinion, rather than resetting USI_CON_RESET in the probe fail case.
-It seems it is more clear to set the reset as shown below.
-
-val = readl(i2c->regs + USI_CON);
-val |= USI_CON_RESET;
-writel(val, i2c->regs + USI_CON);
-udelay(1);
-
-val = readl(i2c->regs + USI_CON);
-val &= ~USI_CON_RESET;
-writel(val, i2c->regs + USI_CON);
+--=20
 
 
-> Best regards,
-> Krzysztof
+,
 
-Thanks
-Jaewon Kim
 
+
+
+
+
+
+
+
+
+
+Drah=C3=BD p=C5=99=C3=ADteli,
+
+Dobr=C3=BD den, m=C5=AFj drah=C3=BD p=C5=99=C3=ADteli, jak se m=C3=A1=C5=A1=
+? Nejdel=C5=A1=C3=AD =C4=8Das. Jsem r=C3=A1d, =C5=BEe
+v=C3=A1s mohu informovat o m=C3=A9m =C3=BAsp=C4=9Bchu p=C5=99i z=C3=ADsk=C3=
+=A1n=C3=AD p=C5=99evodu d=C4=9Bdick=C3=BDch fond=C5=AF
+ve spolupr=C3=A1ci s nov=C3=BDm partnerem. V sou=C4=8Dasn=C3=A9 dob=C4=9B p=
+racuji na
+zahrani=C4=8Dn=C3=ADch investi=C4=8Dn=C3=ADch projektech INDIE s vlastn=C3=
+=ADm pod=C3=ADlem na
+celkov=C3=A9 sum=C4=9B. Mezit=C3=ADm jsem nezapomn=C4=9Bl na va=C5=A1e minu=
+l=C3=A9 snahy a pokusy
+pomoci mi s p=C5=99evodem t=C4=9Bch d=C4=9Bdick=C3=BDch fond=C5=AF, i kdy=
+=C5=BE n=C3=A1m to n=C4=9Bjak
+selhalo. Nyn=C3=AD kontaktujte mou sekret=C3=A1=C5=99ku v Lome Togo v z=C3=
+=A1padn=C3=AD Africe,
+jmenuje se Evelyn Wilfred na jej=C3=AD e-mailov=C3=A9 adrese
+(Evelynwilfred6@gmail.com) a po=C5=BE=C3=A1dejte ji, aby v=C3=A1m poslala c=
+elkovou
+=C4=8D=C3=A1stku (500 000,00 USD), p=C4=9Bt set tis=C3=ADc americk=C3=BDch =
+dolar=C5=AF, kterou jsem
+si nechal va=C5=A1i kompenzaci za ve=C5=A1ker=C3=A9 minul=C3=A9 =C3=BAsil=
+=C3=AD a pokusy pomoci mi
+p=C5=99i transakci. Velmi jsem si v t=C3=A9 dob=C4=9B v=C3=A1=C5=BEil va=C5=
+=A1eho =C3=BAsil=C3=AD. Tak=C5=BEe
+nev=C3=A1hejte a kontaktujte mou sekret=C3=A1=C5=99ku  Evelyn Wilfred a dej=
+te j=C3=AD
+pokyn, kam v=C3=A1m m=C3=A1 poslat ATM CARD v celkov=C3=A9 =C4=8D=C3=A1stce=
+ (500 000,00 $).
+Pros=C3=ADm, dejte mi okam=C5=BEit=C4=9B v=C4=9Bd=C4=9Bt, a=C5=BE to dostan=
+ete, abychom mohli sd=C3=ADlet
+radost po v=C5=A1em tehdej=C5=A1=C3=ADm utrpen=C3=AD. V tuto chv=C3=ADli js=
+em zde velmi
+zanepr=C3=A1zdn=C4=9Bn kv=C5=AFli investi=C4=8Dn=C3=ADm projekt=C5=AFm, kte=
+r=C3=A9 m=C3=A1m s m=C3=BDm nov=C3=BDm
+partnerem, kone=C4=8Dn=C4=9B si pamatujte, =C5=BEe jsem va=C5=A1=C3=ADm jm=
+=C3=A9nem p=C5=99edal pokyny
+sv=C3=A9 sekret=C3=A1=C5=99ce, abych obdr=C5=BEel ATM CARD, tak=C5=BEe nev=
+=C3=A1hejte a kontaktujte
+Evelyn Wilfrede, po=C5=A1le v=C3=A1m =C4=8D=C3=A1stku bez jak=C3=A9hokoli z=
+po=C5=BEd=C4=9Bn=C3=AD.
+
+S pozdravem,
+
+Pan John Nathaniel
