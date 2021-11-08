@@ -2,183 +2,289 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C082A449C53
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 20:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BE8449CE8
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 21:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237104AbhKHTZy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Nov 2021 14:25:54 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:33566 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236881AbhKHTZy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 14:25:54 -0500
-Received: by mail-ot1-f51.google.com with SMTP id h12-20020a056830034c00b0055c8458126fso8252565ote.0;
-        Mon, 08 Nov 2021 11:23:09 -0800 (PST)
+        id S238431AbhKHUNG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Nov 2021 15:13:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238408AbhKHUNF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 15:13:05 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A006C061570
+        for <linux-i2c@vger.kernel.org>; Mon,  8 Nov 2021 12:10:20 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id d24so29013542wra.0
+        for <linux-i2c@vger.kernel.org>; Mon, 08 Nov 2021 12:10:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
+         :subject:content-transfer-encoding;
+        bh=nniE67IjgmyHsejjYLxwM/6E8NsqqcxXBBNJ9PwF9GM=;
+        b=YfDzOul57jjkgsu84Qr55Bo2mRx3duKB/iAE1eVW2S9VQytYRRFr7bDvFaRFtAgva4
+         5Uu479RXbLJoc+hK5N6N8G12eYXrxgPpt3lOq/TN2TNNQZGEuOrH1st94koRRtjubgdm
+         3WErFGXEaWTnAMRyP12GFrNR0cV74s5yyxVgZNBmjZ18Drk6n6Srxw7eTbKOw4P+xHBZ
+         t8VeCy6LqZgiwMsmgnDd5Re4dD/sKE8rt6fdEQAmxYS9wOlYjIJUN9GVSS0BumLPGiM8
+         62t/7gJmvD0Xmf/JaxBbS7dqGrNtGu0dKiR+moFNr90YwXbTW0KKT/XMSGuCznHRF7BD
+         vpZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lKW7MiMs8UBNSc0+Id3Jzt86LaF6KHkklaDg7NR6Atc=;
-        b=e4IlxVji7H3yvEQp1fuXFl3BFGgpB5NINVxo+4c2MMdr5uh5uUVttC2n/dHg84Sgxr
-         gEXWD60bGYWoPV6/sSOlacCHBRly4RbN/h9nLPcEvREk0ya0z9ZJ0OdvEE8i3OSQ5t5W
-         9hoJqiOspHUBBrCEPtC0O2NDiZ/XWsjgrNxQBYe7Hkd29f7VQDgOM46nJFOt+IJ2IF/C
-         G+zsQV5wXIN72i65RVXsTs5e5jlWieLmb/DF7jefdpIzt3KxsvAojSs3mwSPMs4YTMtI
-         DbKvdX0qgxlpBgtilaMMS9Xvdz7RQCpA3dHEQfdircAdkwPmEt+Yi/F8BJ05K7EDVFrg
-         X6cg==
-X-Gm-Message-State: AOAM5305QVvQTAz41LrE5c/q11nvLmIzsEKKaYO5Ok8xb/ZcffD1KGOJ
-        Du0c6dOE+Iet4iseBq9okA==
-X-Google-Smtp-Source: ABdhPJy1eyr8WBBmXN911K1XxYXoMreyckMSEidOkO468v/qY5IWEe+ypOxAdR32K8rTOPN1pyapjw==
-X-Received: by 2002:a05:6830:1014:: with SMTP id a20mr1156520otp.63.1636399389311;
-        Mon, 08 Nov 2021 11:23:09 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id z7sm2170359oib.0.2021.11.08.11.23.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Nov 2021 11:23:08 -0800 (PST)
-Received: (nullmailer pid 4061582 invoked by uid 1000);
-        Mon, 08 Nov 2021 19:23:07 -0000
-Date:   Mon, 8 Nov 2021 13:23:07 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "LH.Kuo" <lhjeff911@gmail.com>
-Cc:     p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        dvorkin@tibbo.com, qinjian@cqplus1.com, wells.lu@sunplus.com,
-        "LH.Kuo" <lh.kuo@sunplus.com>
-Subject: Re: [PATCH 2/2] devicetree bindings I2C Add bindings doc for Sunplus
- SP7021
-Message-ID: <YYl5GwqE7aMvoXDo@robh.at.kernel.org>
-References: <1635496955-13985-1-git-send-email-lh.kuo@sunplus.com>
- <1635496955-13985-3-git-send-email-lh.kuo@sunplus.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:from:to:cc:subject:content-transfer-encoding;
+        bh=nniE67IjgmyHsejjYLxwM/6E8NsqqcxXBBNJ9PwF9GM=;
+        b=iVlub2CPEZqGdHGgAaU+gTpiz1X3gCmKnO7HBDp/+hV3QgASiCUsYex1H/qwqxcO2Q
+         rVYvU9CjiJQVDY5M9ZvhiuqmRFDDxek8uHWhU59UkMbNqdLfqVyMOUlWJHxVHq6ARtXb
+         1vDaMpLYfN4s8FpLd1QMWWYfnZyoY+AWZdkigLdE+OLXwqW9jEqSSih4/DM9txRjqpPF
+         xm8cUIwa5bO6hibNFKjW0lUo2atkzA7mA/dK1SyRTbuJkpTq0PZKVmPP0NnNyyYKPEbR
+         2yQXfnyJAOOawoEq8YmS7zZN1M8Bn3EqCAc4smA+74nSkZpGUlPX1eg8YmCTfdzOaAZ4
+         gbJA==
+X-Gm-Message-State: AOAM533vLJyrgole+aslbuBRdn8CAus2nbkU/s23rJMpi3ESJSVbkO/e
+        uaBqAyhKUy4d6ZUd/t2QCodTjYQSCr8=
+X-Google-Smtp-Source: ABdhPJxCo/ZYjsDO83ahTp+bCYTMvYtY5NA8gY7GGOTlX5J0qbPilHX+mTVj/2Jp1epG1m+VColWxQ==
+X-Received: by 2002:a5d:6043:: with SMTP id j3mr2117603wrt.375.1636402219128;
+        Mon, 08 Nov 2021 12:10:19 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f1a:f00:2d8a:e3d9:1c29:7a84? (p200300ea8f1a0f002d8ae3d91c297a84.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:2d8a:e3d9:1c29:7a84])
+        by smtp.googlemail.com with ESMTPSA id z14sm18265464wrp.70.2021.11.08.12.10.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Nov 2021 12:10:18 -0800 (PST)
+Message-ID: <89eb31f3-8544-35c6-7b15-920831746563@gmail.com>
+Date:   Mon, 8 Nov 2021 21:10:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1635496955-13985-3-git-send-email-lh.kuo@sunplus.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: [PATCH] 2c: i801: Improve handling of chip-specific feature
+ definitions
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 04:42:35PM +0800, LH.Kuo wrote:
-> Add devicetree bindings I2C Add bindings doc for Sunplus SP7021
+Reduce source code and code size by defining the chip features
+statically.
 
-Please follow the subject convention used by the subsystem. This will 
-be evident running 'git log --oneline'. For this one: 
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+checkpatch complains about the format of the table but I think
+better readability justifies the formatting.
+---
+ drivers/i2c/busses/i2c-i801.c | 191 ++++++++++++----------------------
+ 1 file changed, 66 insertions(+), 125 deletions(-)
 
-'dt-bindings: i2c: ...'
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index f078e75dd..4c96f1b47 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -990,66 +990,72 @@ static const struct i2c_algorithm smbus_algorithm = {
+ 	.functionality	= i801_func,
+ };
+ 
++#define DEF_FEATURES	(FEATURE_BLOCK_PROC | FEATURE_I2C_BLOCK_READ	| \
++			 FEATURE_IRQ | FEATURE_SMBUS_PEC		| \
++			 FEATURE_BLOCK_BUFFER | FEATURE_HOST_NOTIFY)
++#define FEATURES_82801DB	(FEATURE_SMBUS_PEC | FEATURE_BLOCK_BUFFER | \
++				 FEATURE_HOST_NOTIFY)
++
+ static const struct pci_device_id i801_ids[] = {
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801AA_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801AB_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801BA_2) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801CA_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801DB_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801EB_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ESB_4) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH6_16) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH7_17) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ESB2_17) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH8_5) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH9_6) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EP80579_1) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH10_4) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH10_5) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5_3400_SERIES_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COUGARPOINT_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF0) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF1) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF2) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_DH89XXCC_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PANTHERPOINT_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_AVOTON_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS0) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS1) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS2) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COLETOCREEK_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_GEMINILAKE_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WILDCATPOINT_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_BAYTRAIL_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_BRASWELL_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_SUNRISEPOINT_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_SUNRISEPOINT_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CDF_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_DNV_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EBG_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_BROXTON_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LEWISBURG_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LEWISBURG_SSKU_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_KABYLAKE_PCH_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CANNONLAKE_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CANNONLAKE_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICELAKE_N_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_V_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS) },
++	{ PCI_DEVICE_DATA(INTEL, 82801AA_3,		0				) },
++	{ PCI_DEVICE_DATA(INTEL, 82801AB_3,		0				) },
++	{ PCI_DEVICE_DATA(INTEL, 82801BA_2,		0				) },
++	{ PCI_DEVICE_DATA(INTEL, 82801CA_3,		FEATURE_HOST_NOTIFY		) },
++	{ PCI_DEVICE_DATA(INTEL, 82801DB_3,		FEATURES_82801DB		) },
++	{ PCI_DEVICE_DATA(INTEL, 82801EB_3,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, ESB_4,			DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, ICH6_16,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, ICH7_17,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, ESB2_17,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, ICH8_5,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, ICH9_6,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, EP80579_1,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, ICH10_4,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, ICH10_5,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, 5_3400_SERIES_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, COUGARPOINT_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF0,	DEF_FEATURES | FEATURE_IDF	) },
++	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF1,	DEF_FEATURES | FEATURE_IDF	) },
++	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF2,	DEF_FEATURES | FEATURE_IDF	) },
++	{ PCI_DEVICE_DATA(INTEL, DH89XXCC_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, PANTHERPOINT_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, LYNXPOINT_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, LYNXPOINT_LP_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, AVOTON_SMBUS,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS0,	DEF_FEATURES | FEATURE_IDF	) },
++	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS1,	DEF_FEATURES | FEATURE_IDF	) },
++	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS2,	DEF_FEATURES | FEATURE_IDF	) },
++	{ PCI_DEVICE_DATA(INTEL, COLETOCREEK_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, GEMINILAKE_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, WILDCATPOINT_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, WILDCATPOINT_LP_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, BAYTRAIL_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, BRASWELL_SMBUS,	DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, SUNRISEPOINT_H_SMBUS,	DEF_FEATURES | FEATURE_TCO_SPT	) },
++	{ PCI_DEVICE_DATA(INTEL, SUNRISEPOINT_LP_SMBUS,	DEF_FEATURES | FEATURE_TCO_SPT	) },
++	{ PCI_DEVICE_DATA(INTEL, CDF_SMBUS,		DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, DNV_SMBUS,		DEF_FEATURES | FEATURE_TCO_SPT	) },
++	{ PCI_DEVICE_DATA(INTEL, EBG_SMBUS,		DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, BROXTON_SMBUS,		DEF_FEATURES			) },
++	{ PCI_DEVICE_DATA(INTEL, LEWISBURG_SMBUS,	DEF_FEATURES | FEATURE_TCO_SPT	) },
++	{ PCI_DEVICE_DATA(INTEL, LEWISBURG_SSKU_SMBUS,	DEF_FEATURES | FEATURE_TCO_SPT	) },
++	{ PCI_DEVICE_DATA(INTEL, KABYLAKE_PCH_H_SMBUS,	DEF_FEATURES | FEATURE_TCO_SPT	) },
++	{ PCI_DEVICE_DATA(INTEL, CANNONLAKE_H_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, CANNONLAKE_LP_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, ICELAKE_LP_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, ICELAKE_N_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_H_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_V_SMBUS,	DEF_FEATURES | FEATURE_TCO_SPT	) },
++	{ PCI_DEVICE_DATA(INTEL, ELKHART_LAKE_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, TIGERLAKE_LP_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, TIGERLAKE_H_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, JASPER_LAKE_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_S_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_P_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
++	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_M_SMBUS,	DEF_FEATURES | FEATURE_TCO_CNL	) },
+ 	{ 0, }
+ };
+ 
+@@ -1678,72 +1684,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	mutex_init(&priv->acpi_lock);
+ 
+ 	priv->pci_dev = dev;
+-	switch (dev->device) {
+-	case PCI_DEVICE_ID_INTEL_SUNRISEPOINT_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_SUNRISEPOINT_LP_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_LEWISBURG_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_LEWISBURG_SSKU_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_DNV_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_KABYLAKE_PCH_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_COMETLAKE_V_SMBUS:
+-		priv->features |= FEATURE_BLOCK_PROC;
+-		priv->features |= FEATURE_I2C_BLOCK_READ;
+-		priv->features |= FEATURE_IRQ;
+-		priv->features |= FEATURE_SMBUS_PEC;
+-		priv->features |= FEATURE_BLOCK_BUFFER;
+-		priv->features |= FEATURE_TCO_SPT;
+-		priv->features |= FEATURE_HOST_NOTIFY;
+-		break;
+-
+-	case PCI_DEVICE_ID_INTEL_CANNONLAKE_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_CANNONLAKE_LP_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_CDF_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ICELAKE_N_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_EBG_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS:
+-		priv->features |= FEATURE_BLOCK_PROC;
+-		priv->features |= FEATURE_I2C_BLOCK_READ;
+-		priv->features |= FEATURE_IRQ;
+-		priv->features |= FEATURE_SMBUS_PEC;
+-		priv->features |= FEATURE_BLOCK_BUFFER;
+-		priv->features |= FEATURE_TCO_CNL;
+-		priv->features |= FEATURE_HOST_NOTIFY;
+-		break;
+-
+-	case PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF0:
+-	case PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF1:
+-	case PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF2:
+-	case PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS0:
+-	case PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS1:
+-	case PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS2:
+-		priv->features |= FEATURE_IDF;
+-		fallthrough;
+-	default:
+-		priv->features |= FEATURE_BLOCK_PROC;
+-		priv->features |= FEATURE_I2C_BLOCK_READ;
+-		priv->features |= FEATURE_IRQ;
+-		fallthrough;
+-	case PCI_DEVICE_ID_INTEL_82801DB_3:
+-		priv->features |= FEATURE_SMBUS_PEC;
+-		priv->features |= FEATURE_BLOCK_BUFFER;
+-		fallthrough;
+-	case PCI_DEVICE_ID_INTEL_82801CA_3:
+-		priv->features |= FEATURE_HOST_NOTIFY;
+-		fallthrough;
+-	case PCI_DEVICE_ID_INTEL_82801BA_2:
+-	case PCI_DEVICE_ID_INTEL_82801AB_3:
+-	case PCI_DEVICE_ID_INTEL_82801AA_3:
+-		break;
+-	}
++	priv->features = id->driver_data;
+ 
+ 	/* Disable features on user request */
+ 	for (i = 0; i < ARRAY_SIZE(i801_feature_names); i++) {
+-- 
+2.33.1
 
-> 
-> Signed-off-by: LH.Kuo <lh.kuo@sunplus.com>
-> ---
->  .../devicetree/bindings/i2c/i2c-sunplus.yaml       | 82 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
-> new file mode 100644
-> index 0000000..7e2f827
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/i2c-sunplus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus's I2C controller
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +maintainers:
-> +  - lh.kuo <lh.kuo@sunplus.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sunplus,sp7021-i2cm
-> +      - sunplus,q645-i2cm
-> +
-> +  reg:
-> +    items:
-> +      - description: Base address and length of the I2C registers
-> +      - description: Base address and length of the I2C DMA registers
-> +
-> +  reg-names:
-> +    items:
-> +      - const: i2cm
-> +      - const: i2cmdma
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    enum: [ 100000, 400000 ]
-> +
-> +  pinctrl-names:
-> +    description:
-> +      A pinctrl state named "default" must be defined.
-> +    const: default
-> +
-> +  pinctrl-0:
-> +    description:
-> +      A phandle to the default pinctrl state.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +  - clocks
-> +  - resets
-> +  - pinctrl-names
-> +  - pinctrl-0
-> +
-> +additionalProperties: false
-
-This means you can't have any child nodes which I'd assume you want. You 
-need 'unevaluatedProperties: false' instead.
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/sp-sp7021.h>
-> +    #include <dt-bindings/reset/sp-sp7021.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2cm0: i2c@9C004600 {
-
-Drop unused labels.
-
-> +        compatible = "sunplus,sp7021-i2cm";
-> +        reg = <0x9c004600 0x80>, <0x9c004680 0x80>;
-> +        reg-names = "i2cm", "i2cmdma";
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <174 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&clkc I2CM0>;
-> +        resets = <&rstc RST_I2CM0>;
-> +        clock-frequency = <100000>;
-> +        pinctrl-names = "default";
-> +        pinctrl-0 = <&i2cm0_pins>;
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c89a3b1..7dc9bea 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17951,6 +17951,7 @@ SUNPLUS I2C CONTROLLER INTERFACE DRIVER
->  M:	LH Kuo <lh.kuo@sunplus.com>
->  L:	linux-i2c@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
->  F:	drivers/i2c/busses/i2c-sunplus.c
->  
->  SUPERH
-> -- 
-> 2.7.4
-> 
-> 
