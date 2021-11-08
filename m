@@ -2,296 +2,151 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6476944988C
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 16:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3644498A8
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 16:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237458AbhKHPkC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Nov 2021 10:40:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236257AbhKHPkB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 10:40:01 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F2EC061570
-        for <linux-i2c@vger.kernel.org>; Mon,  8 Nov 2021 07:37:17 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id v40-20020a056830092800b0055591caa9c6so26125159ott.4
-        for <linux-i2c@vger.kernel.org>; Mon, 08 Nov 2021 07:37:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=swiecki.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=yP/6ndrGwyVgaEJj9Zn/kFXoAw7Ybcs7RvLkY0hCqt4=;
-        b=cj9VGwuf8yAiFz1w9TtDw3pNPKkcvmeZnNZ8nmsUMijw+swPBB1XbrTWNcuP80uWzn
-         yoe/OZ6quNN3yddQdffcTGW1Rey6qxGhrv1eBTt8Vp5P0PzxEvw2qFXcxA+DHBd1pebQ
-         ZFKlNHFmkGX9SsE5+kFLKzoV5RtQAUnx2bDK4=
+        id S241060AbhKHPq5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Nov 2021 10:46:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37585 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241045AbhKHPq5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 10:46:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636386252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2RyU8qhSeZit5hKsiu2hQbRUAvUK+e+McPaAjHTnw30=;
+        b=HS6x5FyGQQVlFuQGME6P34WvESt32V2oisiWSOpoMV/PAyCf+0SqzxF9nTz0hteXflCb1c
+        mGXG9s4JQcm/Lf9krUchKvOOswr41RRqe/Mf9oPHrvikOZUV7y/AqI8Wkmw8bS+arxBM4T
+        EmjPUDugHiNcrflsXVgZ+8/T1J4VXqM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-468-OtDyuH8nPcGTDdm2Eg5eMA-1; Mon, 08 Nov 2021 10:44:11 -0500
+X-MC-Unique: OtDyuH8nPcGTDdm2Eg5eMA-1
+Received: by mail-ed1-f70.google.com with SMTP id w26-20020a056402071a00b003e28a389d04so15201677edx.4
+        for <linux-i2c@vger.kernel.org>; Mon, 08 Nov 2021 07:44:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=yP/6ndrGwyVgaEJj9Zn/kFXoAw7Ybcs7RvLkY0hCqt4=;
-        b=aL26Ig7hQiCbrsW6lJb+rakG/rM8j31BQDVH/5H3V1WEdhBj2dlLvTfIpUlLBToSLg
-         zEgIH7RweMIcs13sFPqsDw8pG6CrSQ4YfZG4HyEq1Wu47ZD5ZPOcrAhme79kdur8hScn
-         d9GGcNdp0Sypee5JL+nrjR4yWZvT6vFkZpCy+iecfwGXCsG4G/1lMkQtQQf11fR2SCj4
-         wBrfOtOjNaryIm7ZMMtIEpqYloOYiNqEWyWpOjkd3M5qg92dms1i05hmtMnfrnFwnUJz
-         q+ChD/WPtyx1v03R0lMnwPZTDktu+rd+8ccwfnZPsFVLRxXlNxwtRWAVsZnL5y++vIo1
-         Ugkg==
-X-Gm-Message-State: AOAM531NvY5Tn5YxY9Wxpps+xxhiPK+kvloZbPD4WExvn7Pf4hr9W5+R
-        LFqzXLIsSZBs80IoDdh2tH2oDDrVNKX/grq0KvjF0xGv6O4=
-X-Google-Smtp-Source: ABdhPJxL/9o9CYSCBZkims9v0ZWPNi1oG+ClolwQO6POULbnidSnUTJT1VI1GL/AUbjK7Bu6Rpi3vIowuCkDK39KDQI=
-X-Received: by 2002:a05:6830:1690:: with SMTP id k16mr581222otr.148.1636385836337;
- Mon, 08 Nov 2021 07:37:16 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2RyU8qhSeZit5hKsiu2hQbRUAvUK+e+McPaAjHTnw30=;
+        b=itf4Uy0YFZZu5DsreVR5S+ErLNfYq3LbRoiKWNQkFAd3gex0mypKpsjKOfC2TeaAGI
+         wJ/ehyVLCUW1QpU1coMayHHG6iW3bDmuZsUFFIH+HSM1+wp0ybURRJi/iZ/+seesGHdx
+         7Wp5LMLkNBBJykpiFZnO7J0NVvJpqeXnlY5WVv45438Owq9l6vy7JyvkEzRzw3z3ypG4
+         uE10pG+TXXe/26+rbb2SWAy4OuW0cC5DIbdan8DWaTsVi7o6LqlkpsOOQI49eeFfUfXU
+         MC/GJStCVpaYFEmHi3Nr700swIvNxwcAUtNyFum18f8XKag8TY9EF7XmgjMEMTqsURZR
+         gXKw==
+X-Gm-Message-State: AOAM531kE+OsPMuj7DdjYUmaNmM50b3O8tmsxRxAxqCheEWFrPBq99O6
+        8/1ZXw9/UwiU9I+HwqGTL3Z24I9rmZkuEvHz0E12pesC9vgUjdPYojpjwWHb56mWNZ5Y/HDwDuB
+        PIGsy2JzfsP67JQdi3oNg
+X-Received: by 2002:a17:906:2c16:: with SMTP id e22mr215019ejh.501.1636386250057;
+        Mon, 08 Nov 2021 07:44:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzlq0HQMHgB4Zj6dSwUyUqA2pyHOS5wXAZQanD1ylnLhmhVrP+t0k2sXvtMwqypw3DeXs0uyg==
+X-Received: by 2002:a17:906:2c16:: with SMTP id e22mr214996ejh.501.1636386249907;
+        Mon, 08 Nov 2021 07:44:09 -0800 (PST)
+Received: from [10.40.1.223] ([81.30.35.201])
+        by smtp.gmail.com with ESMTPSA id sd28sm9076804ejc.37.2021.11.08.07.44.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Nov 2021 07:44:09 -0800 (PST)
+Message-ID: <0b27cd90-3174-01f5-359c-be0c2e094fc8@redhat.com>
+Date:   Mon, 8 Nov 2021 16:44:08 +0100
 MIME-Version: 1.0
-References: <CAP145pgwt7svtDwcD=AStKTt_GSN-ZqPL2u74Y63TAY5ghAagQ@mail.gmail.com>
- <CAP145pgrL-tOHrxsKwk_yzQihyk4TMFrgBb6zhNgC1i2wUTCeQ@mail.gmail.com>
-In-Reply-To: <CAP145pgrL-tOHrxsKwk_yzQihyk4TMFrgBb6zhNgC1i2wUTCeQ@mail.gmail.com>
-From:   =?UTF-8?B?Um9iZXJ0IMWad2nEmWNraQ==?= <robert@swiecki.net>
-Date:   Mon, 8 Nov 2021 16:37:05 +0100
-Message-ID: <CAP145pgdrdiMAT7=-iB1DMgA7t_bMqTcJL4N0=6u8kNY3EU0dw@mail.gmail.com>
-Subject: Fwd: Crashes in 5.15-git in i2c code
-To:     linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 13/13] extcon: intel-cht-wc: Add support for devices with
+ an USB-micro-B connector
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+References: <20211030182813.116672-1-hdegoede@redhat.com>
+ <20211030182813.116672-14-hdegoede@redhat.com>
+ <CAHp75VfRALjbGaY8rdt5HCte3_NPuwpdkr+GNZV7qMWBK1idWg@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75VfRALjbGaY8rdt5HCte3_NPuwpdkr+GNZV7qMWBK1idWg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi linux-i2c.
+Hi,
 
-I'm daily-driving the linux from Linus' git (recompiling every day or
-two), and yesterday it stopped booting. Below is the dmesg from
-pstore. I'm currently at
-https://github.com/torvalds/linux/commit/6b75d88fa81b122cce37ebf17428a849ccd3d0f1
+On 10/31/21 13:52, Andy Shevchenko wrote:
+> On Sat, Oct 30, 2021 at 9:29 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> So far the extcon-intel-cht-wc code has only been tested on devices with
+>> a Type-C connector with USB-PD, USB3 (superspeed) and DP-altmode support
+>> through a FUSB302 Type-C controller.
+>>
+>> Some devices with the intel-cht-wc PMIC however come with an USB-micro-B
+>> connector, or an USB-2 only Type-C connector without USB-PD.
+>>
+>> These device are identified by "intel,cht-wc-setup" = "bq25890,bq27520",
+>> since there is no Type-C controller on these devices the extcon code must
+>> control the Vbus 5V boost converter and the USB role switch depending on
+>> the detected cable-type.
+> 
+> ...
+> 
+>> +       if (ext->vbus_boost && ext->vbus_boost_enabled != enable) {
+>> +               if (enable)
+>> +                       ret = regulator_enable(ext->vbus_boost);
+>> +               else
+>> +                       ret = regulator_disable(ext->vbus_boost);
+> 
+>> +               if (ret == 0)
+>> +                       ext->vbus_boost_enabled = enable;
+>> +               else
+>> +                       dev_err(ext->dev, "Error updating Vbus boost regulator: %d\n", ret);
+> 
+> if (ret)
+>  dev_err()
+> else
+>  ...
+> 
+> ?
 
-My cmdline
-BOOT_IMAGE=/vmlinuz-5.15.0+
-root=UUID=8759fa14-93a4-4dc1-87e6-aa6f5cdbb2ff ro nosplash
-mitigations=off no_file_caps apparmor=0 selinux=0 audit=0
-amdgpu.ppfeaturemask=0xffffffff hugepagesz=1G default_hugepagesz=1G
-hugepages=8 amd_iommu=on iommu=pt
-vfio-pci.ids=10de:1f02,10de:10f9,10de:1ada,10de:1adb
-drm.edid_firmware=DP-1:edid/sam-g9.edid isolcpus=1,2,5,6,17,18,21,22
-tsc=unstable
+When doing if-else branches around an error code I always put the success
+handling in the if branch and have the else branch deal with the error
+to me that feels as the most natural way to do it the error is the exception
+and thus the "else"
 
-I can try bisecting if you think it might, but I haven't done it so
-far with the Linux kernel, so wondering if you can see anything from
-the dmesg. I can also test some patches.
+> 
+>> +       }
+> 
+> ...
+> 
+> 
+>> +               /*
+>> +                * Classic micro USB-B setup, this requires controling
+> 
+> controlling
 
-The controller is on the RTX6800RX.
+Fixed for the next version.
 
-But, when I compile out the designware driver, problems appear
-elsewhere in the i2c code, so it seems to be something more
-fundamental to the i2c subsystem.
+Thanks & Regards,
 
-0c:00.3 Serial bus controller [0c80]: Advanced Micro Devices, Inc.
-[AMD/ATI] Navi 21 USB
-        Subsystem: Advanced Micro Devices, Inc. [AMD/ATI] Device 0408
-        Flags: bus master, fast devsel, latency 0, IRQ 66, IOMMU group 30
-        Memory at fbb20000 (64-bit, non-prefetchable) [size=16K]
-        Capabilities: [48] Vendor Specific Information: Len=08 <?>
-        Capabilities: [50] Power Management version 3
-        Capabilities: [64] Express Endpoint, MSI 00
-        Capabilities: [a0] MSI: Enable+ Count=1/2 Maskable- 64bit+
-        Capabilities: [100] Vendor Specific Information: ID=0001 Rev=1
-Len=010 <?>
-        Capabilities: [150] Advanced Error Reporting
-        Capabilities: [2a0] Access Control Services
-        Kernel driver in use: i2c-designware-pci
-        Kernel modules: i2c_designware_pci
+Hans
 
-grep 447 dmesg.txt
-<1>[    1.431369][  T447] BUG: kernel NULL pointer dereference,
-address: 0000000000000540
-<1>[    1.431371][  T447] #PF: supervisor read access in kernel mode
-<1>[    1.431375][  T447] #PF: error_code(0x0000) - not-present page
-<6>[    1.431378][  T447] PGD 0 P4D 0
-<4>[    1.431384][  T447] Oops: 0000 [#1] PREEMPT SMP NOPTI
-<4>[    1.431388][  T447] CPU: 12 PID: 447 Comm: systemd-udevd
-Tainted: G            E     5.15.0+ #91
-<4>[    1.431391][  T447] Hardware name: ASUS System Product Name/ROG
-CROSSHAIR VIII FORMULA, BIOS 3801 07/30/2021
-<4>[    1.431392][  T447] RIP: 0010:i2c_dw_pci_resume+0x8/0x40
-[i2c_designware_pci]
-<4>[    1.431399][  T447] Code: 00 00 00 00 66 66 2e 0f 1f 84 00 00 00
-00 00 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 84 00 00 00 00 00 53 48
-8b 5f 78 48 89 df <ff> 93 40 05 00 00 c6 83 c0 05 00 00 00 5b c3 66 66
-2e 0f 1f 84 00
-<4>[    1.431401][  T447] RSP: 0018:ffffb3e740a13ba8 EFLAGS: 00010286
-<4>[    1.431403][  T447] RAX: 0000000000000000 RBX: 0000000000000000
-RCX: 0000000000000000
-<4>[    1.431404][  T447] RDX: ffffffffc07311c0 RSI: 0000000000000000
-RDI: 0000000000000000
-<4>[    1.431406][  T447] RBP: ffffa13f41ea3000 R08: 0000000000000002
-R09: 0000000000008008
-<4>[    1.431406][  T447] R10: 0000000000000000 R11: 000000000000000c
-R12: ffffffffc0732660
-<4>[    1.431407][  T447] R13: 0000000000000000 R14: 0000000000000001
-R15: 0000000000000000
-<4>[    1.431409][  T447] FS:  00007fb5a80228c0(0000)
-GS:ffffa1464ed00000(0000) knlGS:0000000000000000
-<4>[    1.431411][  T447] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[    1.431412][  T447] CR2: 0000000000000540 CR3: 000000010e630000
-CR4: 0000000000750ee0
-<4>[    1.431413][  T447] PKRU: 55555554
-<4>[    1.431416][  T447] Call Trace:
-<4>[    1.431421][  T447]  <TASK>
-<4>[    1.431422][  T447]  pci_pm_runtime_resume+0xaa/0x100
-<4>[    1.431433][  T447]  ? pci_pm_thaw+0xc0/0xc0
-<4>[    1.431434][  T447]  __rpm_callback+0x3c/0x100
-<4>[    1.431440][  T447]  ? pci_pm_thaw+0xc0/0xc0
-<4>[    1.431442][  T447]  rpm_callback+0x54/0x80
-<4>[    1.431443][  T447]  ? pci_pm_thaw+0xc0/0xc0
-<4>[    1.431445][  T447]  rpm_resume+0x410/0x700
-<4>[    1.431447][  T447]  ? kernfs_activate+0x11/0x100
-<4>[    1.431452][  T447]  ? kernfs_add_one+0xdd/0x140
-<4>[    1.431455][  T447]  __pm_runtime_resume+0x45/0x80
-<4>[    1.431457][  T447]  pci_device_probe+0xa2/0x140
-<4>[    1.431459][  T447]  really_probe+0x1e4/0x400
-<4>[    1.431464][  T447]  __driver_probe_device+0xf9/0x180
-<4>[    1.431466][  T447]  driver_probe_device+0x19/0xc0
-<4>[    1.431468][  T447]  __driver_attach+0xb8/0x1c0
-<4>[    1.431470][  T447]  ? __device_attach_driver+0x100/0x100
-<4>[    1.431472][  T447]  ? __device_attach_driver+0x100/0x100
-<4>[    1.431473][  T447]  bus_for_each_dev+0x6c/0xc0
-<4>[    1.431475][  T447]  bus_add_driver+0x13f/0x200
-<4>[    1.431478][  T447]  driver_register+0x8a/0x100
-<4>[    1.431481][  T447]  ? 0xffffffffc0736000
-<4>[    1.431482][  T447]  do_one_initcall+0x44/0x1c0
-<4>[    1.431487][  T447]  ? load_module+0x9f8/0xac0
-<4>[    1.431491][  T447]  ? kmem_cache_alloc+0x14e/0x340
-<4>[    1.431496][  T447]  do_init_module+0x51/0x240
-<4>[    1.431498][  T447]  __do_sys_finit_module+0xaf/0x140
-<4>[    1.431501][  T447]  do_syscall_64+0x35/0x80
-<4>[    1.431505][  T447]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-<4>[    1.431509][  T447] RIP: 0033:0x7fb5a84d97b9
-<4>[    1.431511][  T447] Code: 48 8d 3d 5a a0 0c 00 0f 05 eb a5 66 0f
-1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c
-8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 87 56 0c 00 f7
-d8 64 89 01 48
-<4>[    1.431512][  T447] RSP: 002b:00007ffcafbc6258 EFLAGS: 00000246
-ORIG_RAX: 0000000000000139
-<4>[    1.431513][  T447] RAX: ffffffffffffffda RBX: 0000563806da65d0
-RCX: 00007fb5a84d97b9
-<4>[    1.431514][  T447] RDX: 0000000000000000 RSI: 00007fb5a8679eed
-RDI: 000000000000000c
-<4>[    1.431515][  T447] RBP: 0000000000020000 R08: 0000000000000000
-R09: 0000563806daecc0
-<4>[    1.431516][  T447] R10: 000000000000000c R11: 0000000000000246
-R12: 00007fb5a8679eed
-<4>[    1.431518][  T447] R13: 0000000000000000 R14: 0000563806d9ca00
-R15: 0000563806da65d0
-<4>[    1.431520][  T447]  </TASK>
-<4>[    1.431520][  T447] Modules linked in: i2c_designware_pci(E+)
-aesni_intel(E+) i2c_piix4(E) i2c_designware_core(E) backlight(E)
-xhci_pci(E+) ice(E+) xhci_pci_renesas(E) nvme(E) wmi(E)
-<4>[    1.431525][  T447] CR2: 0000000000000540
-<4>[    1.431528][  T447] ---[ end trace d5eecb89365b3d11 ]---
-<4>[    1.580240][  T447] RIP: 0010:i2c_dw_pci_resume+0x8/0x40
-[i2c_designware_pci]
-<4>[    1.587403][  T447] Code: 00 00 00 00 66 66 2e 0f 1f 84 00 00 00
-00 00 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 84 00 00 00 00 00 53 48
-8b 5f 78 48 89 df <ff> 93 40 05 00 00 c6 83 c0 05 00 00 00 5b c3 66 66
-2e 0f 1f 84 00
-<4>[    1.588236][  T447] RSP: 0018:ffffb3e740a13ba8 EFLAGS: 00010286
-<4>[    1.589626][  T447]
-<4>[    1.589626][  T447] RAX: 0000000000000000 RBX: 0000000000000000
-RCX: 0000000000000000
-<4>[    1.590245][  T447] RDX: ffffffffc07311c0 RSI: 0000000000000000
-RDI: 0000000000000000
-<4>[    1.590245][  T447] RBP: ffffa13f41ea3000 R08: 0000000000000002
-R09: 0000000000008008
-<4>[    1.590245][  T447] R10: 0000000000000000 R11: 000000000000000c
-R12: ffffffffc0732660
-<4>[    1.590245][  T447] R13: 0000000000000000 R14: 0000000000000001
-R15: 0000000000000000
-<4>[    1.594239][  T447] FS:  00007fb5a80228c0(0000)
-GS:ffffa1464ed00000(0000) knlGS:0000000000000000
-<4>[    1.594239][  T447] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[    1.594239][  T447] CR2: 0000000000000540 CR3: 000000010e630000
-CR4: 0000000000750ee0
-<4>[    1.596236][  T447] PKRU: 55555554
-<1>[    1.431369][  T447] BUG: kernel NULL pointer dereference,
-address: 0000000000000540
-<1>[    1.431371][  T447] #PF: supervisor read access in kernel mode
-<1>[    1.431375][  T447] #PF: error_code(0x0000) - not-present page
-<6>[    1.431378][  T447] PGD 0 P4D 0
-<4>[    1.431384][  T447] Oops: 0000 [#1] PREEMPT SMP NOPTI
-<4>[    1.431388][  T447] CPU: 12 PID: 447 Comm: systemd-udevd
-Tainted: G            E     5.15.0+ #91
-<4>[    1.431391][  T447] Hardware name: ASUS System Product Name/ROG
-CROSSHAIR VIII FORMULA, BIOS 3801 07/30/2021
-<4>[    1.431392][  T447] RIP: 0010:i2c_dw_pci_resume+0x8/0x40
-[i2c_designware_pci]
-<4>[    1.431399][  T447] Code: 00 00 00 00 66 66 2e 0f 1f 84 00 00 00
-00 00 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 84 00 00 00 00 00 53 48
-8b 5f 78 48 89 df <ff> 93 40 05 00 00 c6 83 c0 05 00 00 00 5b c3 66 66
-2e 0f 1f 84 00
-<4>[    1.431401][  T447] RSP: 0018:ffffb3e740a13ba8 EFLAGS: 00010286
-<4>[    1.431403][  T447] RAX: 0000000000000000 RBX: 0000000000000000
-RCX: 0000000000000000
-<4>[    1.431404][  T447] RDX: ffffffffc07311c0 RSI: 0000000000000000
-RDI: 0000000000000000
-<4>[    1.431406][  T447] RBP: ffffa13f41ea3000 R08: 0000000000000002
-R09: 0000000000008008
-<4>[    1.431406][  T447] R10: 0000000000000000 R11: 000000000000000c
-R12: ffffffffc0732660
-<4>[    1.431407][  T447] R13: 0000000000000000 R14: 0000000000000001
-R15: 0000000000000000
-<4>[    1.431409][  T447] FS:  00007fb5a80228c0(0000)
-GS:ffffa1464ed00000(0000) knlGS:0000000000000000
-<4>[    1.431411][  T447] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[    1.431412][  T447] CR2: 0000000000000540 CR3: 000000010e630000
-CR4: 0000000000750ee0
-<4>[    1.431413][  T447] PKRU: 55555554
-<4>[    1.431416][  T447] Call Trace:
-<4>[    1.431421][  T447]  <TASK>
-<4>[    1.431422][  T447]  pci_pm_runtime_resume+0xaa/0x100
-<4>[    1.431433][  T447]  ? pci_pm_thaw+0xc0/0xc0
-<4>[    1.431434][  T447]  __rpm_callback+0x3c/0x100
-<4>[    1.431440][  T447]  ? pci_pm_thaw+0xc0/0xc0
-<4>[    1.431442][  T447]  rpm_callback+0x54/0x80
-<4>[    1.431443][  T447]  ? pci_pm_thaw+0xc0/0xc0
-<4>[    1.431445][  T447]  rpm_resume+0x410/0x700
-<4>[    1.431447][  T447]  ? kernfs_activate+0x11/0x100
-<4>[    1.431452][  T447]  ? kernfs_add_one+0xdd/0x140
-<4>[    1.431455][  T447]  __pm_runtime_resume+0x45/0x80
-<4>[    1.431457][  T447]  pci_device_probe+0xa2/0x140
-<4>[    1.431459][  T447]  really_probe+0x1e4/0x400
-<4>[    1.431464][  T447]  __driver_probe_device+0xf9/0x180
-<4>[    1.431466][  T447]  driver_probe_device+0x19/0xc0
-<4>[    1.431468][  T447]  __driver_attach+0xb8/0x1c0
-<4>[    1.431470][  T447]  ? __device_attach_driver+0x100/0x100
-<4>[    1.431472][  T447]  ? __device_attach_driver+0x100/0x100
-<4>[    1.431473][  T447]  bus_for_each_dev+0x6c/0xc0
-<4>[    1.431475][  T447]  bus_add_driver+0x13f/0x200
-<4>[    1.431478][  T447]  driver_register+0x8a/0x100
-<4>[    1.431481][  T447]  ? 0xffffffffc0736000
-<4>[    1.431482][  T447]  do_one_initcall+0x44/0x1c0
-<4>[    1.431487][  T447]  ? load_module+0x9f8/0xac0
-<4>[    1.431491][  T447]  ? kmem_cache_alloc+0x14e/0x340
-<4>[    1.431496][  T447]  do_init_module+0x51/0x240
-<4>[    1.431498][  T447]  __do_sys_finit_module+0xaf/0x140
-<4>[    1.431501][  T447]  do_syscall_64+0x35/0x80
-<4>[    1.431505][  T447]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-<4>[    1.431509][  T447] RIP: 0033:0x7fb5a84d97b9
-<4>[    1.431511][  T447] Code: 48 8d 3d 5a a0 0c 00 0f 05 eb a5 66 0f
-1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c
-8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 87 56 0c 00 f7
-d8 64 89 01 48
-<4>[    1.431512][  T447] RSP: 002b:00007ffcafbc6258 EFLAGS: 00000246
-ORIG_RAX: 0000000000000139
-<4>[    1.431513][  T447] RAX: ffffffffffffffda RBX: 0000563806da65d0
-RCX: 00007fb5a84d97b9
-<4>[    1.431514][  T447] RDX: 0000000000000000 RSI: 00007fb5a8679eed
-RDI: 000000000000000c
-<4>[    1.431515][  T447] RBP: 0000000000020000 R08: 0000000000000000
-R09: 0000563806daecc0
-<4>[    1.431516][  T447] R10: 000000000000000c R11: 0000000000000246
-R12: 00007fb5a8679eed
-<4>[    1.431518][  T447] R13: 0000000000000000 R14: 0000563806d9ca00
-R15: 0000563806da65d0
-<4>[    1.431520][  T447]  </TASK>
-<4>[    1.431520][  T447] Modules linked in: i2c_designware_pci(E+)
-aesni_intel(E+) i2c_piix4(E) i2c_designware_core(E) backlight(E)
-xhci_pci(E+) ice(E+) xhci_pci_renesas(E) nvme(E) wmi(E)
-<4>[    1.431525][  T447] CR2: 0000000000000540
-<4>[    1.431528][  T447] ---[ end trace d5eecb89365b3d11 ]---
 
-Hope this helps.
+> 
+>> +                * the role-sw and vbus based on the id-pin.
+>> +                */
+> 
+
