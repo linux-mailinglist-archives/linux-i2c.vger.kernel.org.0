@@ -2,98 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1B94497D4
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 16:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574314497ED
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 16:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240704AbhKHPLq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Nov 2021 10:11:46 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:23991 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240863AbhKHPKf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 10:10:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1636384072; x=1667920072;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zstF7h07gTp/nSKCbQQYFsltrxG1f82P+gEsZAQgpqk=;
-  b=02kxndMFCiYXF30RPQQL+JnxhzfbfJ3vsL3k/li9U0rExwve71qJ9+ys
-   hGdlgZl2yXj7ydkam6b6BVN+ouOnQm7UgMFQaqA2iadowR88L4knZu6Yi
-   OdKELw5x8Nbw0Dg3rZ9WwuMCO8ZZ4k2rl9fV+NL9FrKKL+bHT0iv2HJ0V
-   heUB7Qnvcy7qz/7L7CO6OLTlyO/+UA3FYQSg1niVfu2080xXqoigtW6Je
-   8KpF+lNMpWiUi2RQdwRDb2JkbmKfphzvJwcZYfFVpg5nRO1OiHpG5/BW4
-   9GwHFi2hGG23Ldx917Ldg/TjQQdkGbiLuF5a3ntKNRjcxORp3BYVNTCTC
-   A==;
-IronPort-SDR: Eogmog9AAXgm4HnCJJNC5JQfchpBBEOXSO9Szw9Yd6IV1QVflnJrLHXeS92sou3QG5r9z3DAb0
- u/vPYB9PXTmDijeXfeSAE9Hw4D4QxiXyUiKC9SwSKVmc1uAhYqH7vf8zdmGoYTggva0kJsP7WW
- xE6IUll8rSK8YEXhlMRqt23eNZIlsvjl8CCURx7fsPBrrnRdUJfG8wKqpwRsLOg34SZRx07PTB
- 7qRZ86+1cqR97sBJlnGgEoxG+SNGDATG2j6o5Iz8k1VKg4t6bzGcO1bfWINExTZ8NeOfVpmOcA
- yK/txlrGNY6Mc976wnSszjAU
-X-IronPort-AV: E=Sophos;i="5.87,218,1631602800"; 
-   d="scan'208";a="138382872"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Nov 2021 08:07:50 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 8 Nov 2021 08:07:49 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Mon, 8 Nov 2021 08:07:45 -0700
-From:   <conor.dooley@microchip.com>
-To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
-        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
-        <gregkh@linuxfoundation.org>, <lewis.hanly@microchip.com>,
-        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
-        <atish.patra@wdc.com>, <ivan.griffin@microchip.com>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-crypto@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
-        <bin.meng@windriver.com>
-Subject: [PATCH 13/13] MAINTAINERS: update riscv/microchip entry
-Date:   Mon, 8 Nov 2021 15:05:54 +0000
-Message-ID: <20211108150554.4457-14-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211108150554.4457-1-conor.dooley@microchip.com>
-References: <20211108150554.4457-1-conor.dooley@microchip.com>
+        id S238905AbhKHPQG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Nov 2021 10:16:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231127AbhKHPPv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 10:15:51 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80CDC061205
+        for <linux-i2c@vger.kernel.org>; Mon,  8 Nov 2021 07:12:57 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id b3so32174850uam.1
+        for <linux-i2c@vger.kernel.org>; Mon, 08 Nov 2021 07:12:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9UlUS6saUywHZK/umS0DUBOD5AkBYetajHFNSpyoE4w=;
+        b=DOcAXZ4Mw2ea+GyAjENB23bTtsIuOKuEdvjP+XRgtsReT5UUBjNtxggSSHvwj6MdR8
+         V1+45UigKcj1QpVD+lmvp+U5Ibx93g+Eg1cvWvUM+mbtLBoTKvCS/9CMdFiN0mXO0mlz
+         5FmGehJD++jz8ghPFbjeJp+omeR8ITegBIet9Hx6WXG9x3lox7s/1+Jn3C/FUm38gOrH
+         z8Aq/5yqJWPYvOtpapyknlpcmGVFkA+aQhwhcO3MP6FIbH0LWdNE14hlOJb6V7zlZjLE
+         4P0N1a5gsR40AhaMiXjGk9HkIfCkgYHI3HOh/ioR5P3Fj+Pt4D1+LQrlK92yfLcYdqLs
+         xLqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9UlUS6saUywHZK/umS0DUBOD5AkBYetajHFNSpyoE4w=;
+        b=w2nGZCbm9c+oKiD1TOOweJnLOpi9DkiU9CHjjLXvsAvpJgz9hEh1YD89hQqWSvbbAO
+         AXg6YzYphYRzQLGztSazvCOh6BEAoterR4VY/Z8Gp+fYsPRUF3O3M/Birr9Cpr6BGOjP
+         TPtLnZxreZiKeEiY2mRTfHcaY0rlUHG8kKm5iYT2DAu5wp/OVRXBc3cejh0veHi5sw9y
+         lhA/764SH9YlQ9YN0RSjzNt7UJ96Zl8i0cFwhbAf4rztC0p0dphstd2hKrw+JC17JEeY
+         Q/yilfcy4ipOuxUoGqjUEKduqMQrJVrAmEsd4E42v47I9sHnoiv6Yv7MVJbYfODngxWK
+         figQ==
+X-Gm-Message-State: AOAM5314KZ2p5i0Qo0CEVnSaOTm0vE/5EKOyprxQnaQQIUX0tieFhQYD
+        T4q1CWh+8Q21F6+KCAjx/ggtLmbMisvvmyQuzNy8YP8AR/33618C
+X-Google-Smtp-Source: ABdhPJxGuRiXWJL0tUJhvhSH15xu8O6PSly0XUSVcpnNraXIznd7K+XJ1EfcXrgS3fbjV/7ZTx1T0mHyGs+pQ/qL0zs=
+X-Received: by 2002:a05:6102:3ece:: with SMTP id n14mr108075vsv.55.1636384376768;
+ Mon, 08 Nov 2021 07:12:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20211108134901.20490-1-semen.protsenko@linaro.org>
+ <20211108134901.20490-2-semen.protsenko@linaro.org> <433f2d77-90d0-53d9-2e04-a8c5feb16349@canonical.com>
+In-Reply-To: <433f2d77-90d0-53d9-2e04-a8c5feb16349@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 8 Nov 2021 17:12:44 +0200
+Message-ID: <CAPLW+4=RMfTmLnOiC+=rAB1c0+rTqpqDpc-1UO+0BOmP3+0Z_Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: defconfig: Enable Samsung I2C driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Will McVicker <willmcvicker@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Mon, 8 Nov 2021 at 16:18, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 08/11/2021 14:49, Sam Protsenko wrote:
+> > i2c-s3c2410 driver is needed for some arm64 Exynos SoCs, e.g. Exynos850.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  arch/arm64/configs/defconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> Hm, that's a little bit unexpected. I thought you will be also using the
+> HSI2C driver (where Jaewon is adding USI support).
+>
 
-Update the riscv/microchip entry by adding the microchip dts
-directory and myself as maintainer
+Thought you'd ask :) Exynos850 has both I2C and HSI2C blocks:
+  - I2C is a regular I2C, and uses s3c2410-i2c driver
+  - whilst HSI2C is a high-speed I2C (used for example for cameras),
+and uses exynos5-hsi2c driver
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+I'll look into HSI2C enablement on Exynos850 soon as well, so Jaewon's
+patches might be helpful for my case too -- didn't check that yet.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ca6d6fde85cf..a0000ddd02fd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16077,8 +16077,10 @@ K:	riscv
- 
- RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
- M:	Lewis Hanly <lewis.hanly@microchip.com>
-+M:	Conor Dooley <conor.dooley@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
-+F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
--- 
-2.33.1
-
+> Best regards,
+> Krzysztof
