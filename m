@@ -2,115 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A91F447620
-	for <lists+linux-i2c@lfdr.de>; Sun,  7 Nov 2021 22:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D94447B15
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 08:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbhKGV7x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 7 Nov 2021 16:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
+        id S237915AbhKHHan (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Nov 2021 02:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235308AbhKGV7w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 7 Nov 2021 16:59:52 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72879C061570
-        for <linux-i2c@vger.kernel.org>; Sun,  7 Nov 2021 13:57:09 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id d24so23562701wra.0
-        for <linux-i2c@vger.kernel.org>; Sun, 07 Nov 2021 13:57:09 -0800 (PST)
+        with ESMTP id S237832AbhKHHaT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 02:30:19 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70083C06120C
+        for <linux-i2c@vger.kernel.org>; Sun,  7 Nov 2021 23:27:33 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id f3so33905391lfu.12
+        for <linux-i2c@vger.kernel.org>; Sun, 07 Nov 2021 23:27:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=xGXV2OPwarrgoBi6vJnz3pVKZ9rXX00jSZSrvocIyTQ=;
-        b=M1pyQsrAvOWdC7/5anmYbpAIGyUmbUCZoRXwKiG/+E0kA4d1AEV+FwrZ+2zneIya5c
-         sIUPMf4U2FZepRupR3JSblpjAv5+QoakaF09kJn9fw232ezCjecDXLVWznNqYt5N6T1A
-         Ng5MR3z5etRa8JXO+Ocgysyjfag85XzrcSChM7Ss4X3nC6poA0Osmk53a87VXTGi1PTg
-         lbZ/WRdeeXUny1PQJTEXqwCoUzi7WqOXQUptpCLmYPjMmer8NNpDPm3TY9exFhmbUSaJ
-         tyS7r3g0xz16K3PnjmIxlR+1bHx81Z5htqm4O+0LDxz7wgRO+YQaKzFjISG7bSwXCSRk
-         iIRw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=lohGAXI96njXpZ5r6vgYlUkp2V68iRMzDV25uaLpmT1WmpX2h0YNNnPekuKOrJR7Hh
+         rCcmOUgGjsAkeHEvvQCkM6ux+TyqL0CqGbf0IPfL8V+eIKLF7r3X9QWFup/xVl2xV9qZ
+         NGc0LQ7JpvXhk+YTEHFaFd2QnuENE8mCWi0drmIQkANv1zf9DM6Bfjx/yF/A/b9RtJFU
+         CT2DuJeqJ7evq+rJKQgmUSCIg2GjkqvLZlnb0ekZ1/3u7apFf2k73Uqo2u8YZ8hKmOIw
+         ZGA3M8LZJFGSmW3P+nQyYMCLCtL13s+WCsnPOmCuuFd5xieMsN0vbLhindKIE3OfrP6U
+         BcYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=xGXV2OPwarrgoBi6vJnz3pVKZ9rXX00jSZSrvocIyTQ=;
-        b=j8OaGecDWriWDowvpuwVWyp/FL36vgC+NWI1041PA1+GiwGMEZlluXEpzCyojSfpp1
-         Kho/HzCzU9cWQmEUafwqfbfop5iyZ6/j2ZitrwYiVx8Zn3m2EMfRu3Xqf/P55rdpQ56v
-         YfxZXrVd/n2bDi4qdJJ9Etc0ydf7mIMYnz+e0lkVn6cKw4JIxOIc9SKGvfAInMyrGvwb
-         tyUxhltwLoJRqAmDe5y83XOofW+Z9Bp+dsfe3OvWNGms9sdcVYQ/Bnxz31b4T+Gpaa7d
-         OIaoxgLq/aqW58VN+EjLYic/Xj+gze4A1zRwti047DGoip/GVF/VmTgjueBJfCYd6cvq
-         18nQ==
-X-Gm-Message-State: AOAM530nbSq1UrtQT6oUBAE7bDMlFqB4NLJ6almMj9gw1LaUqPxSWIwK
-        CjHRbdIjEBrNOBXRZisdtA6lw+awU/A=
-X-Google-Smtp-Source: ABdhPJzx58r7d5XJd+aLsHzxT2HQBIQAbzH3aY9kzAGY+ZNBcpXLvNrWrWC9kLyGolM1mSViG13INg==
-X-Received: by 2002:adf:d1e2:: with SMTP id g2mr8322109wrd.105.1636322228077;
-        Sun, 07 Nov 2021 13:57:08 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f1a:f00:3959:820:92f5:6d52? (p200300ea8f1a0f003959082092f56d52.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:3959:820:92f5:6d52])
-        by smtp.googlemail.com with ESMTPSA id w17sm14969616wrp.79.2021.11.07.13.57.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Nov 2021 13:57:07 -0800 (PST)
-Message-ID: <a5e9b8b5-82af-96a1-b983-d98c2fa140f9@gmail.com>
-Date:   Sun, 7 Nov 2021 22:57:00 +0100
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=4Rlcu19nMs7P0F/OxGacvclC6OleFe8VT+dtl9YxKCmFlPzbVG/njY7slmdQPdn5e7
+         ay4Y5kJGODp7Hw0IK4xbNMz2Wuz+lXPrl64A1H4ivKoCORy/zSiyvgn1IHhxHASRNiyt
+         CN3bF7KYrKM4LqtXuoogu/C8yaMIFKAJcJJEwEVJUtlbbpkJvy8Tv8yxYcFP/Cb+acok
+         5zKHedupc5Ide8Tx4+Sk7vA/S5PZn7Z8r5wkiHMDqHIsIUeVCnAt4UMcw+R7Zm7PtbrT
+         G9frTjrBzM9gUjvNiSAvmn1yF0NiEFNyQHoMyR8rR1OsyTgxIEDFNuLBi8BnolHdg0xe
+         1akg==
+X-Gm-Message-State: AOAM533ZuSvMngkfjqqyGI2934Wq6bBjRFSYfoLBIIanY3KgsBbGOcpN
+        mGkWi+avlSwOJ924puds5FzY3NQs9TOt1sROCDtPjM3SMSw=
+X-Google-Smtp-Source: ABdhPJwiROS9SRRNMvDLES4YHo6uT5d60ZUwIiFmBNAm9OxEfLgMU9cee9PqVQWim0XNVifN/Rk5vWcyMQ7rvBndYNE=
+X-Received: by 2002:a05:6402:557:: with SMTP id i23mr66769092edx.176.1636356441798;
+ Sun, 07 Nov 2021 23:27:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: i2c: i801: Don't silently correct invalid transfer size
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:27:21 -0800 (PST)
+Reply-To: mariaschaefler@gmx.com
+From:   Maria Schaefler <ziskoraa@gmail.com>
+Date:   Mon, 8 Nov 2021 07:27:21 +0000
+Message-ID: <CAJh0FjiFL7uihMBL6ckYO8FJ6tnzM+tBivU2c60yDbG14LZLeA@mail.gmail.com>
+Subject: MY HEART CHOOSE YOU.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If an invalid block size is provided, reject it instead of silently
-changing it to a supported value. Especially critical I see the case of
-a write transfer with block length 0. In this case we have no guarantee
-that the byte we would write is valid. When silently reducing a read to
-32 bytes then we don't return an error and the caller may falsely
-assume that we returned the full requested data.
-
-If this change should break any (broken) caller, then I think we should
-fix the caller.
-
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/i2c/busses/i2c-i801.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 2c48691d2..638198b4b 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -761,6 +761,11 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
- 	int result = 0;
- 	unsigned char hostc;
- 
-+	if (read_write == I2C_SMBUS_READ && command == I2C_SMBUS_BLOCK_DATA)
-+		data->block[0] = I2C_SMBUS_BLOCK_MAX;
-+	else if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
-+		return -EPROTO;
-+
- 	if (command == I2C_SMBUS_I2C_BLOCK_DATA) {
- 		if (read_write == I2C_SMBUS_WRITE) {
- 			/* set I2C_EN bit in configuration register */
-@@ -774,16 +779,6 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
- 		}
- 	}
- 
--	if (read_write == I2C_SMBUS_WRITE
--	 || command == I2C_SMBUS_I2C_BLOCK_DATA) {
--		if (data->block[0] < 1)
--			data->block[0] = 1;
--		if (data->block[0] > I2C_SMBUS_BLOCK_MAX)
--			data->block[0] = I2C_SMBUS_BLOCK_MAX;
--	} else {
--		data->block[0] = 32;	/* max for SMBus block reads */
--	}
--
- 	/* Experience has shown that the block buffer can only be used for
- 	   SMBus (not I2C) block transactions, even though the datasheet
- 	   doesn't mention this limitation. */
--- 
-2.32.0
-
+Given my current state of health, I have decided to donate what I
+inherited from my late husband to you to help the poor and needy. I am
+Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
+cancer about 2 years ago and I have few months to live according to
+medical experts. Email me for my directives
