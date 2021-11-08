@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C533E44979B
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 16:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156B244979E
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Nov 2021 16:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240831AbhKHPK2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Nov 2021 10:10:28 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:21335 "EHLO
+        id S240838AbhKHPK3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 Nov 2021 10:10:29 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:20358 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240769AbhKHPJt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 10:09:49 -0500
+        with ESMTP id S240779AbhKHPJy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 10:09:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1636384025; x=1667920025;
+  t=1636384030; x=1667920030;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=o+1oOULA+X1tBNq85nvLBj0dUKiDbIcrC8BGtfHpz8s=;
-  b=iWovsz2Wy914D3Lh9TAmMyj9WrNuqJpkaGAySaYJk424xLIUkhdTiRkl
-   sA85xDwMX2wIaH3AyEIwRGOSI8CAPEtZvkbQpRDBrwqGRiEQNLDK9iFyl
-   CxgleUugQQ5IPYB4YUpL7mdmaIUhy1ZJjb08iW0embDYCX3dC62NGBXkc
-   dPCLaOUu6LfOqfO8hEbhQADN5SZXj8fXyRuEs7831zwHAMv6UizIX+yhY
-   +isOwrrHDJEQck2f3jPHgK6gDvk1JwjlHYoVNoFlXbsAb7fefzDvP0EEV
-   Dn45JIeeA0B237TroRnUoh4TCR/KY2EL1GCzwsynZaKM3xgTOLJSqtVhg
+  bh=RnzRJe2j8YUJD/3ju4Zm4B76UxmFkkmN8AGI+FaOFNU=;
+  b=q0om1p1V3kq/jjkHmCrMXPBs9zm8L7an7vU2kPTfmWftyWwaqceqKiVd
+   v3olxGDNqs4hShKqhvOs0EtAp+EDBrxh1gVPKEBp/kItSSYLMW2xOLGT+
+   nqjQKcLbRIPBswaalhr+HsyfNZITHJHgwYCwBLKVHbr1+cuGntmC2OITT
+   StfdIBdR0DwXD0ZErB2+7rcx31vlcqQ7iHlYNVQ59fBfBLGWuv+ISR8L4
+   Hr4KX38ZwEAulGPHZzPKyQqEn5s4Ne0KjsUjSEA1cDUVGGJIi58YRTXfG
+   WdE0iCcxof+s6DN+9sO6MO38JSM7ELPNWsF4OjekS3J4WPqwIA4qTPqtn
    Q==;
-IronPort-SDR: FYAPzOnF3NwHb03IhyY9qlG6Hg3FjlKg1XstHYXF3//yvBDio1NwMMQOQJ64RI1AMmMinD1DRT
- LDT9fjLFRw/vol6AaQwr6bu9OTQdl9gv0JnAHfL6pknV+uGOJnwZlAP1sOgwYC8H7aMliZAS2Q
- y8P4G8Ufb9504wc9l2rZmvEDBIuYRAI2db4/7BRAJtpydfexRifC6m/Af3VwkTNnRsfa2UPwnq
- o0N42/tgwMO7mb+0DB56RQuRJQBn9PSSZwW3kuRKaMEdpDac+vIaSZ3Q+A8qcQPtbpvF9qkcpi
- CLsrYEpqcZQlPO7b0jnj70Lt
+IronPort-SDR: gRM9iGd4Z5kToPIKmNPXQJXDF74gHh3Qo/SQy68lOs7xfksj32OLdrRet39IwAnqbcxVpWSF1x
+ Om/cp2zzU/XZeZT32IWIF6eXbpTio0E2wGCnnNZiQD2j1RprcGHR6fQE3QnnYFNc/0+/7GgOIg
+ flFvtFBBEmrN2e22JogEyWkClpz//rA0ip/1RYhkteMHHOvSpAQflRaXk3QmZlH/6q4iwPTpHK
+ wraOZ/noYzF6L6qkLTvBJch64MSkn4v6UL61drg0xlUuSAkfGJWjOrq1LvuqRldaFOO4IiKETQ
+ PcIJ0sR1bKLCGofpRBaG7huf
 X-IronPort-AV: E=Sophos;i="5.87,218,1631602800"; 
-   d="scan'208";a="75727248"
+   d="scan'208";a="143179818"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Nov 2021 08:07:04 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Nov 2021 08:07:08 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 8 Nov 2021 08:07:03 -0700
+ 15.1.2176.14; Mon, 8 Nov 2021 08:07:08 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Mon, 8 Nov 2021 08:06:59 -0700
+ Transport; Mon, 8 Nov 2021 08:07:04 -0700
 From:   <conor.dooley@microchip.com>
 To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
         <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
@@ -56,9 +56,9 @@ To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
         <linux-usb@vger.kernel.org>
 CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
         <bin.meng@windriver.com>
-Subject: [PATCH 05/13] dt-bindings: i2c: add bindings for microchip mpfs i2c
-Date:   Mon, 8 Nov 2021 15:05:46 +0000
-Message-ID: <20211108150554.4457-6-conor.dooley@microchip.com>
+Subject: [PATCH 06/13] dt-bindings: rng: add bindings for microchip mpfs rng
+Date:   Mon, 8 Nov 2021 15:05:47 +0000
+Message-ID: <20211108150554.4457-7-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211108150554.4457-1-conor.dooley@microchip.com>
 References: <20211108150554.4457-1-conor.dooley@microchip.com>
@@ -71,96 +71,52 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Add device tree bindings for the i2c controller on
-the Microchip PolarFire SoC.
+Add device tree bindings for the hardware rng device accessed via
+the system services on the Microchip PolarFire SoC.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
 ---
- .../bindings/i2c/microchip,mpfs-i2c.yaml      | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+ .../bindings/rng/microchip,mpfs-rng.yaml      | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
 
-diff --git a/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+diff --git a/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
 new file mode 100644
-index 000000000000..bc4ea4498d35
+index 000000000000..e8ecb3538a86
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
-@@ -0,0 +1,74 @@
++++ b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+@@ -0,0 +1,31 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/i2c/microchip,mpfs-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++$id: "http://devicetree.org/schemas/rng/microchip,mpfs-rng.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+title: Microchip MPFS I2C Controller Device Tree Bindings
++title: Microchip MPFS random number generator
 +
 +maintainers:
-+  - Daire McNamara <daire.mcnamara@microchip.com>
-+
-+description: |
-+  This I2C controller is found on the Microchip PolarFire SoC.
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
++  - Conor Dooley <conor.dooley@microchip.com>
 +
 +properties:
 +  compatible:
-+    enum:
-+      - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
++    const: microchip,polarfire-soc-rng
 +
-+  reg:
++  syscontroller:
 +    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    description: Phandle of the clock feeding the I2C controller.
-+    minItems: 1
-+
-+  clock-frequency:
-+    description: |
-+      Desired I2C bus clock frequency in Hz. As only Standard and Fast
-+      modes are supported, possible values are 100000 and 400000.
-+    enum: [100000, 400000]
++    description: name of the system controller device node
 +
 +required:
 +  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
++  - "syscontroller"
 +
-+unevaluatedProperties: false
++additionalProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/microchip,mpfs-clock.h>
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        i2c@2010a000 {
-+            compatible = "microchip,mpfs-i2c";
-+            reg = <0 0x2010a000 0 0x1000>;
-+            interrupts = <58>;
-+            clock-frequency = <100000>;
-+            clocks = <&clkcfg CLK_I2C0>;
-+        };
++    hwrandom: hwrandom {
++        compatible = "microchip,polarfire-soc-rng";
++        syscontroller = <&syscontroller>;
 +    };
-+  - |
-+    #include <dt-bindings/clock/microchip,mpfs-clock.h>
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        i2c@2010b000 {
-+            compatible = "microchip,mpfs-i2c";
-+            reg = <0 0x2010b000 0 0x1000>;
-+            interrupts = <61>;
-+            clock-frequency = <100000>;
-+            clocks = <&clkcfg CLK_I2C1>;
-+        };
-+    };
-+...
 -- 
 2.33.1
 
