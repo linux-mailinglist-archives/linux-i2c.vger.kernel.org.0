@@ -2,49 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 103C444A92F
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 09:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFD444A94F
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 09:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239424AbhKIIh7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Nov 2021 03:37:59 -0500
-Received: from mail-ua1-f47.google.com ([209.85.222.47]:34468 "EHLO
-        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244280AbhKIIhg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 03:37:36 -0500
-Received: by mail-ua1-f47.google.com with SMTP id b3so37086347uam.1;
-        Tue, 09 Nov 2021 00:34:50 -0800 (PST)
+        id S244183AbhKIIkU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Nov 2021 03:40:20 -0500
+Received: from mail-vk1-f172.google.com ([209.85.221.172]:33535 "EHLO
+        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237880AbhKIIkT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 03:40:19 -0500
+Received: by mail-vk1-f172.google.com with SMTP id d130so9629460vke.0;
+        Tue, 09 Nov 2021 00:37:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AeQsRqY/GskMz/vOm4ldxuS7JHiWlKXTjA+Am1FlP0g=;
-        b=5r7uvOhw7ynCk9Af+p6Mek1PwSJ53TQ2RWapaDY4UfTPNdB/UuxNSVRvZ+QrLxnHzE
-         kArpQlzv1vM9eX3gFCT683DrheD2AU3GtdIy2f71BA59DA5FxaQu7VvVcPOmnD3ch4+d
-         dmrhIJDJwA1F0fi3dPULvCHo8HK7FHtUGxwbSmrQMwnWBtDs8NpkWBzWcmKwfTk2ocpX
-         Y8iFF5fWSFtJ8PF1K81VmxkP7IARFB9a7sf5ClUE4WpXgNNafowPbLTUphsjVpf2ALsG
-         pDpDC6OvhbLuoLz1VTSFu0jtNyXzFKfyQvSu/atdMFvLYdKvtREXTb417r8Bg2Po96Ur
-         lDDg==
-X-Gm-Message-State: AOAM533YHVNpX3xKC2R3FC38oYiEFNevOQvMRUpyvgETqWfjG7S3349n
-        FknGjDx7Ty2EqWjWv4jXZ9j9F6hm4PNNghw9
-X-Google-Smtp-Source: ABdhPJwa1j6nX5jloLYtG9RuU90/Sh9fPVM9brTspVa1+XS29skV/GXmtqcLaiUDjzoIxZ5qEBA8dQ==
-X-Received: by 2002:ab0:6942:: with SMTP id c2mr7733560uas.92.1636446889902;
-        Tue, 09 Nov 2021 00:34:49 -0800 (PST)
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
-        by smtp.gmail.com with ESMTPSA id f7sm2310878vkm.31.2021.11.09.00.34.49
+        bh=a20XwW+ywquM0TvSLc4Uu7eUmVwNDFrP9cILSrmfGU4=;
+        b=ZPXlAO4KvMB6hGXaYL5C/A3eafP22MA8lyU1gWi5L/KRoqr0J3niBVcAR8NQrSJJKl
+         siQIrqk0bVxCI2xvRmmTLl45HW/YsKyI3LnB9cG0MDKCrBrnemt/PIkOiBcpy7FhZcFw
+         CCwDidcd2ML7gLm5XGqH98ZdS9BhvqCd1L8jiYEPRWVufOD6wcPHpmvyZEZdm22EyX1h
+         eypqecDErl57KmXjv0nH/hxLiwt+JZGd5+99gFKGlqPswVWCqWL7/LE/3AO/AGFt6803
+         T5u6f+oSVyPdl78PYdJT8Io4UQ5N6sjQvGK8H3WCx2kVAsuxk3GIKID0oXCaMO2yoml+
+         PfnA==
+X-Gm-Message-State: AOAM531FoZRLDJXb2065hmnc41mIc+8QV71ip+AqS3gNHfW7X1eNg4kc
+        z3NSXOT9tpJQ9BW1+glCLCqMxVXOLm7f5w==
+X-Google-Smtp-Source: ABdhPJxSJJiIqvqWvbpTflwUf4QrflfXVMFmla87mAJ93jPLjO5aJs/kaHm9LcUKMl8TNu/VB7nRJw==
+X-Received: by 2002:a05:6122:2005:: with SMTP id l5mr36807793vkd.4.1636447052081;
+        Tue, 09 Nov 2021 00:37:32 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id x9sm1655185vkn.36.2021.11.09.00.37.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Nov 2021 00:34:49 -0800 (PST)
-Received: by mail-ua1-f51.google.com with SMTP id b17so37082452uas.0;
-        Tue, 09 Nov 2021 00:34:49 -0800 (PST)
-X-Received: by 2002:a9f:2584:: with SMTP id 4mr7741221uaf.114.1636446888895;
- Tue, 09 Nov 2021 00:34:48 -0800 (PST)
+        Tue, 09 Nov 2021 00:37:32 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id s13so21496268uaj.11;
+        Tue, 09 Nov 2021 00:37:31 -0800 (PST)
+X-Received: by 2002:a05:6102:2910:: with SMTP id cz16mr48697933vsb.9.1636447051587;
+ Tue, 09 Nov 2021 00:37:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-5-conor.dooley@microchip.com>
-In-Reply-To: <20211108150554.4457-5-conor.dooley@microchip.com>
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-7-conor.dooley@microchip.com>
+In-Reply-To: <20211108150554.4457-7-conor.dooley@microchip.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 9 Nov 2021 09:34:37 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX1Xm9CP2hSpkD4ApVJ8gC_ZAE1L5CT0zjF+b5An4kmqw@mail.gmail.com>
-Message-ID: <CAMuHMdX1Xm9CP2hSpkD4ApVJ8gC_ZAE1L5CT0zjF+b5An4kmqw@mail.gmail.com>
-Subject: Re: [PATCH 04/13] dt-bindings: riscv: update microchip polarfire binds
+Date:   Tue, 9 Nov 2021 09:37:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWWzQE7Pq8Qo=Vt3ey-ODhnP9B5+r==fsoK0miDv7-arA@mail.gmail.com>
+Message-ID: <CAMuHMdWWzQE7Pq8Qo=Vt3ey-ODhnP9B5+r==fsoK0miDv7-arA@mail.gmail.com>
+Subject: Re: [PATCH 06/13] dt-bindings: rng: add bindings for microchip mpfs rng
 To:     Conor Dooley <conor.dooley@microchip.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -78,27 +78,43 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Conor,
 
-On Mon, Nov 8, 2021 at 4:06 PM <conor.dooley@microchip.com> wrote:
+On Mon, Nov 8, 2021 at 4:07 PM <conor.dooley@microchip.com> wrote:
 > From: Conor Dooley <conor.dooley@microchip.com>
 >
-> Add mpfs-soc to clear undocumented binding warning
+> Add device tree bindings for the hardware rng device accessed via
+> the system services on the Microchip PolarFire SoC.
 >
 > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  Documentation/devicetree/bindings/riscv/microchip.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
-> index 3f981e897126..1ff7a5224bbc 100644
-> --- a/Documentation/devicetree/bindings/riscv/microchip.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
-> @@ -21,6 +21,7 @@ properties:
->        - enum:
->            - microchip,mpfs-icicle-kit
->        - const: microchip,mpfs
-> +      - const: microchip,mpfs-soc
 
-Doesn't the "s" in "mpfs" already stand for "soc"?
+Thanks for your patch!
+
+> ---
+>  .../bindings/rng/microchip,mpfs-rng.yaml      | 31 +++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+> new file mode 100644
+> index 000000000000..e8ecb3538a86
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+> @@ -0,0 +1,31 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/rng/microchip,mpfs-rng.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Microchip MPFS random number generator
+> +
+> +maintainers:
+> +  - Conor Dooley <conor.dooley@microchip.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: microchip,polarfire-soc-rng
+
+"microchip,mpfs-rng", for consistency with other bindings?
 
 Gr{oetje,eeting}s,
 
