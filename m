@@ -2,49 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BCF44A958
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 09:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFF144A98B
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 09:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244326AbhKIImd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Nov 2021 03:42:33 -0500
-Received: from mail-vk1-f179.google.com ([209.85.221.179]:36498 "EHLO
-        mail-vk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244324AbhKIImc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 03:42:32 -0500
-Received: by mail-vk1-f179.google.com with SMTP id b192so3968532vkf.3;
-        Tue, 09 Nov 2021 00:39:46 -0800 (PST)
+        id S244438AbhKIIqJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Nov 2021 03:46:09 -0500
+Received: from mail-ua1-f44.google.com ([209.85.222.44]:37621 "EHLO
+        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238085AbhKIIqH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 03:46:07 -0500
+Received: by mail-ua1-f44.google.com with SMTP id l43so37050316uad.4;
+        Tue, 09 Nov 2021 00:43:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RhEU7/cMn0jM+Rvv1TDlHzOAxsTE31x17vOVQ8kJt3g=;
-        b=VZ9g06ZAwQPDkNRttHsK/eL3Y1pHtCeO2Fi2EGhbG7SPzgK7FaVewRgeiu0tAAy215
-         WaCfwzsYUlvbw20LCLfs8fcXsBu77+qPWM2P2bHKELJBsZDdErCXP3wD6xdkMn5soI33
-         5z8ZlBj/h47FFbGuoy9Jc4TJnySsNGZcbiwjyN1l5+pWRAOnbmkuEoGi4xROhiREwWuj
-         gGwoxYlMi3YoKd0KKq7HUe/rk+cP0BdJHGjgS5J+N/NFtDTOcE0fzpULJYhgCabB+Sr3
-         nlv3RyYfI/fDguBE00hHKDeC8Socqcj0Y1HFXZ78vTLpvIXwsCIp654xvJNq85WtbTO0
-         /tZQ==
-X-Gm-Message-State: AOAM530gg5gyF1vWB+qCj2ulOR0jKjPqvXR3QJW7S3fujQpwOorFunAQ
-        k1z8X5qyOZKEYCqGkd5AUzgwhKpNbt3/O49A
-X-Google-Smtp-Source: ABdhPJx0i0radw7kJgP5pqxSrLSZGsN5Cel+MReidhcy9UCfp1QLl3Lbg8JubezsdAGemilOyJAXXA==
-X-Received: by 2002:a05:6122:2090:: with SMTP id i16mr8629246vkd.18.1636447185930;
-        Tue, 09 Nov 2021 00:39:45 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id k185sm3593725vsc.21.2021.11.09.00.39.45
+        bh=SKaAwaDUF8hgJ7xnatzckTO00J9HAeQbGqYqskKTjGY=;
+        b=FAY1Wpn0OyCTyGJ3tBzNZO/EoRytfhdPMAMJgBEC8u6z5Od3he1hZ1nytEyqctvK2w
+         sXasIkRqGQQ5PXHtRLzu7ud9dS+d1OJJpaDedgV1iPbUJdOJHK8pkcOBaaK+eRM9SmxS
+         uJHX6sMlrSncxPlrQu5f7482T2N5XAnKf1lBK6FAV0fZCijRjDuDz+wPfyifLU9IV9nu
+         vfTD+WLBnl5MXMQY0vGpXistxpEIxWE93Zpml9e8+vWM3wsNOwAR8MZJb476jRwXZMD9
+         QvZm5kcwKodSQprBNTjsTqZ07vdmjRPyGiUK3cKmxsJXwOimrSHG1iFw4e9/jhvjS01h
+         Lh1A==
+X-Gm-Message-State: AOAM531R7hiO8Jzg5nOc3YlqlGcBfpqd/jE+Z0h7njoCFkRsz5sGosUd
+        IJte5DOV4LMRrcnM0KW/YZnNB/cSsWPp8+uY
+X-Google-Smtp-Source: ABdhPJy0ZS3OG3q8mnvej06NQRd9imNTJ8MMZys+9P5Oz8GwyO7tmUaoPKrnG8ApUfvuo7d5GrLxwQ==
+X-Received: by 2002:a67:a60b:: with SMTP id p11mr115778874vse.34.1636447400247;
+        Tue, 09 Nov 2021 00:43:20 -0800 (PST)
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
+        by smtp.gmail.com with ESMTPSA id u11sm37284vkl.53.2021.11.09.00.43.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Nov 2021 00:39:45 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id p37so35895611uae.8;
-        Tue, 09 Nov 2021 00:39:45 -0800 (PST)
-X-Received: by 2002:a05:6102:1354:: with SMTP id j20mr38560622vsl.41.1636447185011;
- Tue, 09 Nov 2021 00:39:45 -0800 (PST)
+        Tue, 09 Nov 2021 00:43:19 -0800 (PST)
+Received: by mail-ua1-f51.google.com with SMTP id e2so37040010uax.7;
+        Tue, 09 Nov 2021 00:43:19 -0800 (PST)
+X-Received: by 2002:a05:6102:3a07:: with SMTP id b7mr84616404vsu.35.1636447398871;
+ Tue, 09 Nov 2021 00:43:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-8-conor.dooley@microchip.com>
-In-Reply-To: <20211108150554.4457-8-conor.dooley@microchip.com>
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-10-conor.dooley@microchip.com>
+In-Reply-To: <20211108150554.4457-10-conor.dooley@microchip.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 9 Nov 2021 09:39:33 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWd_mXWeaDR+1SG=yoD=x6GGZwqXSH9pismXV=v2DOLhg@mail.gmail.com>
-Message-ID: <CAMuHMdWd_mXWeaDR+1SG=yoD=x6GGZwqXSH9pismXV=v2DOLhg@mail.gmail.com>
-Subject: Re: [PATCH 07/13] dt-bindings: rtc: add bindings for microchip mpfs rtc
+Date:   Tue, 9 Nov 2021 09:43:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUpGjyN-+u+THiNJ-Ouzp8vRTeg6u23P1BoF8Gi4aSnWQ@mail.gmail.com>
+Message-ID: <CAMuHMdUpGjyN-+u+THiNJ-Ouzp8vRTeg6u23P1BoF8Gi4aSnWQ@mail.gmail.com>
+Subject: Re: [PATCH 09/13] dt-bindings: gpio: add bindings for microchip mpfs gpio
 To:     Conor Dooley <conor.dooley@microchip.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -81,38 +81,141 @@ Hi Conor,
 On Mon, Nov 8, 2021 at 4:07 PM <conor.dooley@microchip.com> wrote:
 > From: Conor Dooley <conor.dooley@microchip.com>
 >
-> Add device tree bindings for the real time clock on
+> Add device tree bindings for the gpio controller on
 > the Microchip PolarFire SoC.
 >
 > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
 
 Thanks for your patch!
 
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-> @@ -0,0 +1,61 @@
+> +++ b/Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+> @@ -0,0 +1,108 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/microchip,mpfs-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip MPFS GPIO Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - Conor Dooley <conor.dooley@microchip.com>
+> +
+> +description: |
+> +  This GPIO controller is found on the Microchip PolarFire SoC.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - microchip,mpfs-gpio
+> +          - microsemi,ms-pf-mss-gpio
 
+What's the difference between these two?
+If there is a difference, please add a comment "# <explanation>"
+to each entry.
+If there is no difference, please drop the second one.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description:
+> +      Interrupt mapping, one per GPIO. Maximum 32 GPIOs.
+> +    minItems: 1
+> +    maxItems: 32
+> +
+> +  interrupt-controller: true
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  ngpios:
+> +    description:
+> +      The number of GPIOs available.
+> +    minimum: 1
+> +    maximum: 32
+> +    default: 32
+> +
+> +  gpio-controller: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - "#interrupt-cells"
+> +  - "#gpio-cells"
+> +  - gpio-controller
+> +  - clocks
+
+Any specific reason interrupt-controller is not required?
+
+> +
+> +additionalProperties: false
+> +
 > +examples:
 > +  - |
-> +    #include <dt-bindings/clock/microchip,mpfs-clock.h>
+> +    #include "dt-bindings/clock/microchip,mpfs-clock.h"
+> +    #include "dt-bindings/interrupt-controller/microchip,mpfs-plic.h"
 > +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
 
-Examples are indeed built with #{address,size}-cells = <1>.
-However, there is no need to override this.  Just drop the zeros in
-the reg property below.
+Just drop these two...
 
-> +        rtc@20124000 {
-> +            compatible = "microchip,mpfs-rtc";
-> +            reg = <0 0x20124000 0 0x1000>;
-> +            clocks = <&clkcfg CLK_RTC>;
-> +            clock-names = "rtc";
-> +            interrupts = <80>;
-> +        };
+> +      gpio2: gpio@20122000 {
+> +        compatible = "microchip,mpfs-gpio";
+> +        reg = <0x0 0x20122000 0x0 0x1000>;
+
+... and the zeros here.
+
+> +        clocks = <&clkcfg CLK_GPIO2>;
+> +        interrupt-parent = <&plic>;
+> +        interrupts = <PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT
+> +          PLIC_INT_GPIO2_NON_DIRECT>;
+> +        gpio-controller;
+> +        #gpio-cells = <2>;
+> +        status = "disabled";
+
+Please drop this.
+
+> +      };
 > +    };
-> +...
 
 Gr{oetje,eeting}s,
 
