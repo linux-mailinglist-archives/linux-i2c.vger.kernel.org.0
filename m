@@ -2,92 +2,124 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE8744AD85
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 13:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 827B044AE12
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 13:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242439AbhKIMdY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Nov 2021 07:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbhKIMdX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 07:33:23 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0518C061764;
-        Tue,  9 Nov 2021 04:30:37 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id f8so76136636edy.4;
-        Tue, 09 Nov 2021 04:30:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Izwf0rNKbmjX//l6OqTNxretUo1ZACTCQZpG5D1V0qY=;
-        b=Z/PuwOPXJ3QyXPwgTI9wO+h6I0yH2IfB0vfbX7zfIkNnrTuYgjwNTg8gUcIk9r3Lsh
-         nq7PTATk9O6PgJ+Ps9johoCLk8wGfs7N7urFewvSeQoV3S6g6hoyGPSPFSlhGO8nswXp
-         Wopwg9j50Op5IceG+odtGlfYttvwgb1Sp+2Opeio08MxPEP3azmUObThzL2+t8tsavPL
-         CfuvmInv622AoGVMwFbIWEPuNLZ+PyHulPDOIBAA2n6T9PplQExr3+UgfsETC8q8QL0S
-         aShTqkuyTtNI9AikZdMlx2sZ93ysgYLssinbMA+BR8WiPO7Gjfofs/3ddjA5wtnWVCNt
-         RZ8w==
+        id S238369AbhKIM4Q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Nov 2021 07:56:16 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:40062
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242868AbhKIM4K (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 07:56:10 -0500
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 36CE33F1A7
+        for <linux-i2c@vger.kernel.org>; Tue,  9 Nov 2021 12:53:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1636462402;
+        bh=j5tko5riuXms3JFEWKNcXt/poyacQNf52vuml9R0vAg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=O6JRxo6dBfipYpSvNoaIBYoID05hGx/gA56XQjZu117joPlyBzp5Vu2sXlJ0cceEi
+         fktSajCu5Ww16aIOG+znuHeN+v0MUuPSTYCabBhGWkiUCioAbbSpX2vg8OW9rzlekg
+         xjwXavLG4UtOx6XWLWnraAwj380xpCtSMXztdseZeE9YIBODrAJunBtQmKX7RGk2O2
+         XloIMvpF7/RjXUHaXon0Ts66rGe5KJ4YNuqojoY72ihZSq+iLjIdt5Bf6t2B+Wu0pC
+         vVFNdk40XnbFWbEXJH+/O2M9JfSWfKxmf6i/0t9ELfTzv/a55XkKNHQX3yTvr1oKH4
+         qe2nXvYCGgY5A==
+Received: by mail-lj1-f198.google.com with SMTP id q64-20020a2e2a43000000b00218c94eab9bso1736435ljq.18
+        for <linux-i2c@vger.kernel.org>; Tue, 09 Nov 2021 04:53:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Izwf0rNKbmjX//l6OqTNxretUo1ZACTCQZpG5D1V0qY=;
-        b=yXZzWshZouakFaAt0ML41JbzHDadg5i1PJmJicuwvE6XRymDw7f/6UEpDzTUsFUuJV
-         Qa84WOKfY32yAAdxMsDHb7dbrG7hYVsMqgPHs09dvUfCPHlWJRg2kxTHqLWftqhXzX9I
-         231t6RHs3rdvb8OL1hLi/1utPxpGNB4NJE3gu/o6su75/mcoLzb0vko5k9p1+mjnogEv
-         Or8vCAbFpZKr/vd2RgYXsHxmUD6LgqYcbDhGEu/v4u4HO1euoZyGXjCjVEOaKvi6FYPr
-         VVEG0Uq9Phf41rmLjnIwakSJ2aeknfBRF/JhUYDpBMV1ktksNKsZpZ1iy1+8K/CPhqiJ
-         3xkA==
-X-Gm-Message-State: AOAM532bWQetsLIv+POWSkF9DnNbsK0pNbtyAAacJZyjNWRTGcAws2UF
-        BZYnSvDVqyNV9GYq2KBA4UNnRsGjo3+OWGgqaC8=
-X-Google-Smtp-Source: ABdhPJxDCOOSrJrsdArOYFSqCctbOnu9Joe6Dm69fx4ZRvWaZkOHluNqKBfMst7bcVTnfdqsUbuH2jYNQs+b4XxgduE=
-X-Received: by 2002:a17:906:489b:: with SMTP id v27mr8851114ejq.567.1636461036427;
- Tue, 09 Nov 2021 04:30:36 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j5tko5riuXms3JFEWKNcXt/poyacQNf52vuml9R0vAg=;
+        b=hyYgv/t330tEjXYB/wsqWsBbyVukiv7gsGSr+/3xEVmdZgsCtgkoTEZM47mtp7Y4sQ
+         B3YLGOCgtg+TKgpTBYy+r0dtDL2mHVSy3+HA39vnr1arjkdedpe3sBiAvoYTKlQ9iXl+
+         uql+lX9+bfBdmoNfaJosc6v83NydUVpQ5ivPcmpo3olw7JMG9g3Iw3cJTFitZ5TiI+fR
+         uakSmRBFPUOO4xTaX4zhuFfJV3D1TDYUGW+8itCVlHKi9vu8qxRB6lk2MQSNTA51YCPv
+         r7bUkw9vd+hBW8y9OH0G54Xt/D/i4gsz8Gkl8+Op9+be+GJJfuqNLm9iHue1Y1y3s4gM
+         0ZpA==
+X-Gm-Message-State: AOAM530wsa2xaGN9LyK+XKCBR6h3kyeWI+fzitGA/UpQZEDZnaw9tSpN
+        U2pmXy8mmF/9efCR98PoOWLw5A7vzxjfC7LCkAe7gs03esMV64UMkJMcJrWf2LbbiNkVTcVkyWv
+        lHqKFJ+ImS5wbfCZyxUn8VfsnLx74wpJWzmfv0A==
+X-Received: by 2002:a19:9148:: with SMTP id y8mr6510840lfj.512.1636462401696;
+        Tue, 09 Nov 2021 04:53:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxj8OuRHAShyPuiff/xoQ2+ShAhXkJXJ57MKAdkVyp0FJ2HQRhii/EaQs7fi9Q9gr6wclBnKQ==
+X-Received: by 2002:a19:9148:: with SMTP id y8mr6510816lfj.512.1636462401453;
+        Tue, 09 Nov 2021 04:53:21 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id i6sm2136859lfr.163.2021.11.09.04.53.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Nov 2021 04:53:20 -0800 (PST)
+Message-ID: <0d996393-20b9-4f16-cbd0-c9bff2b54112@canonical.com>
+Date:   Tue, 9 Nov 2021 13:53:18 +0100
 MIME-Version: 1.0
-References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-5-hdegoede@redhat.com>
- <YYpmMNefsGUhqJ9W@paasikivi.fi.intel.com>
-In-Reply-To: <YYpmMNefsGUhqJ9W@paasikivi.fi.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 9 Nov 2021 14:29:51 +0200
-Message-ID: <CAHp75VeGR8_53ZEXAtQ9oQXGfLoVfS6a+RNWWgA6Hi6oq7_02g@mail.gmail.com>
-Subject: Re: [PATCH v4 04/11] regulator: Introduce tps68470-regulator driver
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH 10/13] dt-bindings: spi: add bindings for microchip mpfs
+ spi
+Content-Language: en-US
+To:     Conor.Dooley@microchip.com, robh@kernel.org
+Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        linus.walleij@linaro.org, linux-riscv@lists.infradead.org,
+        aou@eecs.berkeley.edu, paul.walmsley@sifive.com,
+        linux-usb@vger.kernel.org, Daire.McNamara@microchip.com,
+        linux-spi@vger.kernel.org, geert@linux-m68k.org,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, broonie@kernel.org, palmer@dabbelt.com,
+        bgolaszewski@baylibre.com, jassisinghbrar@gmail.com,
+        linux-crypto@vger.kernel.org, Ivan.Griffin@microchip.com,
+        atish.patra@wdc.com, Lewis.Hanly@microchip.com,
+        bin.meng@windriver.com, alexandre.belloni@bootlin.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        a.zummo@towertech.it
+References: <20211108150554.4457-1-conor.dooley@microchip.com>
+ <20211108150554.4457-11-conor.dooley@microchip.com>
+ <1636430789.935637.743042.nullmailer@robh.at.kernel.org>
+ <96005893-8819-1d76-6dea-7d173655258f@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <96005893-8819-1d76-6dea-7d173655258f@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 9, 2021 at 2:14 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
-> On Mon, Oct 25, 2021 at 11:41:12AM +0200, Hans de Goede wrote:
+On 09/11/2021 13:16, Conor.Dooley@microchip.com wrote:
+> On 09/11/2021 04:06, Rob Herring wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> On Mon, 08 Nov 2021 15:05:51 +0000, conor.dooley@microchip.com wrote:
+>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>
+>>> Add device tree bindings for the {q,}spi controller on
+>>> the Microchip PolarFire SoC.
+>>>
+>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>> ---
+>>>   .../bindings/spi/microchip,mpfs-spi.yaml      | 72 +++++++++++++++++++
+>>>   1 file changed, 72 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+>>>
+>>
+>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>
+>> yamllint warnings/errors:
+>>
+>> dtschema/dtc warnings/errors:
+>> Documentation/devicetree/bindings/spi/microchip,mpfs-spi.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
+>>     19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
+> Rob,
+> Should I drop the header from the example or is there a way for me 
+> specify the dependent patch to pass this check?
 
-> > Changes in v4:
-> > - Make the top comment block use c++ style comments
->
-> Why?
+The error has to be fixed, although not necessarily by dropping the
+header, but by posting it. How this can pass on your system? There is no
+such file added in this patchset.
 
-Subsystem maintainer requirement.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Krzysztof
