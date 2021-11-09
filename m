@@ -2,111 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7CE44A5EA
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 05:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 332DB44A6FA
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 07:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242868AbhKIEzK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 Nov 2021 23:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbhKIEzJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 Nov 2021 23:55:09 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EECC061764
-        for <linux-i2c@vger.kernel.org>; Mon,  8 Nov 2021 20:52:24 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id g19so12293553pfb.8
-        for <linux-i2c@vger.kernel.org>; Mon, 08 Nov 2021 20:52:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JkapuSwOnwxCbVYO9bfegcqw8wgDzralipX1H1BuD5E=;
-        b=Oq8Hop7UfqF6odaW6RoWQK/Dre2F5iWQRWQwE0ryorhq4KCyAzFVrKhpsKLelcCOLT
-         eLaYcntMkP6D9l28kM3sfnjAoF0i4Dvr9OmjjZOTULC8HzEQysGVQnjrb3i+Q98U2OAk
-         l5M4aVtDq7IlqDrbuwHzqPEsEQwrt5EMFmspVurem58kicyZcN4ZnLTNTy7G1Hsil7FD
-         Zt60JANYdAcZ6/mS6y4fb+NsObX+3f0QIYGPkDzjNbPIOwh0TVqaIuEkaBIwYR6M5QpF
-         cdmJ0JaW8GIpsnOkUlIIm2RItYNV/lYlysK6ElrG0MLDNtWOU603v7S6lGADLyH/FYYR
-         kfgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JkapuSwOnwxCbVYO9bfegcqw8wgDzralipX1H1BuD5E=;
-        b=vWb2ecNXiAKJKc8bBt9K8a2sDl0f9QHpSnoE/h3yrYQRIGww4x1H/mM53bi72gdqbh
-         FhG9U4mcz1Vu8x6sNg798FUP8wo46umomjvk0e1ZG9wk59hTVw1pYf2JxK0kzhRCrq4O
-         Cvqj9iVguW18JPs6m0B5gyLUp6r4ZhaJiIkXp8bWhyjBydKyHbHyb0WcpyI3WuJ/HW9s
-         TrOx4DS0EGVo/jQAHEL8SaYXjVGJE9FdOrWWun9WxhgmNkSo3LJsvGxQ0/tqqsdFvJJ1
-         Zsm7I8gxI5amDlYcsRu6NzoPgT0QjFZAMSlrtzm+fj6MCmj0+L7hD4LZPfex0CmsjAgq
-         UbRQ==
-X-Gm-Message-State: AOAM531YKeUTbeE4FdY4oifqWvIFsMX/SR0jDJ2I3FoOj1cs385NVRIx
-        +f0zhT7eUgiaIULoWzF8kBGjfg==
-X-Google-Smtp-Source: ABdhPJzo3mMOKUdZsnUntoCNQmDl0+nv890fatGtqLtt0zBDXxYrbya9x8UXloTwjlz15zmjWW8Z9A==
-X-Received: by 2002:a05:6a00:230d:b0:49f:b8ad:ae23 with SMTP id h13-20020a056a00230d00b0049fb8adae23mr5043480pfh.80.1636433543998;
-        Mon, 08 Nov 2021 20:52:23 -0800 (PST)
-Received: from localhost ([223.226.77.81])
-        by smtp.gmail.com with ESMTPSA id na13sm976263pjb.11.2021.11.08.20.52.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Nov 2021 20:52:23 -0800 (PST)
-Date:   Tue, 9 Nov 2021 10:22:21 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     "Chen, Conghui" <conghui.chen@intel.com>,
-        "Deng, Jie" <jie.deng@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>
-Subject: Re: [PATCH 1/2] i2c: virtio: disable timeout handling
-Message-ID: <20211109045221.xd6apt473jannag2@vireshk-i7>
-References: <20211020064128.y2bjsbdmpojn7pjo@vireshk-i7>
- <01d9c992-28cc-6644-1e82-929fc46f91b4@intel.com>
- <20211020105554.GB9985@axis.com>
- <20211020110316.4x7tnxonswjuuoiw@vireshk-i7>
- <df7e6127-05fb-6aad-3896-fc810f213a54@intel.com>
- <20211029122450.GB24060@axis.com>
- <8592a48d-0131-86bf-586a-d33e7989e523@intel.com>
- <MWHPR11MB0030C3489F38FF2AAF7C3D0A908C9@MWHPR11MB0030.namprd11.prod.outlook.com>
- <20211103063745.utpphthou4angs4s@vireshk-i7>
- <20211103144241.GA27285@axis.com>
+        id S238378AbhKIGpF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Nov 2021 01:45:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32808 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229591AbhKIGpE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 9 Nov 2021 01:45:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E672660234;
+        Tue,  9 Nov 2021 06:42:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1636440139;
+        bh=B1IguEi2bwhHxjOBHleDUZl379REYQJYKiP/fzsjmag=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p5J9N3GqT9v/BHqm+jT0fWwRW4bhsapm+tDX5PeGixFPln6G6/dPAP2jgByTNU2N8
+         K3ebZ/mnEy0PE/Yd2DAlh5GZIKHGqjIY6fJ+oq+2RtsxVaalciqNiJXVlEtYLMkQzH
+         XXRbG/57WQZ3Hh/G1a3gZDhHPbpsMkYcrE14Bl58=
+Date:   Tue, 9 Nov 2021 07:42:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
+        linux-i2c@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
+Message-ID: <YYoYQbf6SVyNyW4r@kroah.com>
+References: <20211108212226.253mwl4wp7xjckqz@pengutronix.de>
+ <20211109025619.GA1131403@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20211103144241.GA27285@axis.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211109025619.GA1131403@bhelgaas>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 03-11-21, 15:42, Vincent Whitchurch wrote:
-> The suggested timeout is not meant to take into account the overhead of
-> virtualization, but to be used by the virtio device as a timeout for the
-> transaction on the I2C bus (presumably by programming this value to the
-> physical I2C controller, if one exists).
+On Mon, Nov 08, 2021 at 08:56:19PM -0600, Bjorn Helgaas wrote:
+> [+cc Greg: new device_is_bound() use]
 > 
-> Assume that userspace (or an I2C client driver) asks for a timeout of 20
-> ms for a particular transfer because it, say, knows that the particular
-> connected I2C peripheral either responds within 10 ms to a particular
-> register read or never responds, so it doesn't want to waste time
-> waiting unnecessarily long for the transfer to complete.
+> On Mon, Nov 08, 2021 at 10:22:26PM +0100, Uwe Kleine-König wrote:
+> > pci_pm_runtime_resume() exits early when the device to resume isn't
+> > bound yet:
+> > 
+> > 	if (!to_pci_driver(dev->driver))
+> > 		return 0;
+> > 
+> > This however isn't true when the device currently probes and
+> > local_pci_probe() calls pm_runtime_get_sync() because then the driver
+> > core already setup dev->driver. As a result the driver's resume callback
+> > is called before the driver's probe function is called and so more often
+> > than not required driver data isn't setup yet.
+> > 
+> > So replace the check for the device being unbound by a check that only
+> > becomes true after .probe() succeeded.
 > 
-> If the virtio device end does not have any information on what timeout
-> is required (as in the current spec), it must assume some high value
-> which will never cause I2C transactions to spuriously timeout, say 10
-> seconds.  
->
-> Even if the virtio driver is fixed to copy and hold all buffers to avoid
-> memory corruption and to time out and return to the caller after the
-> requested 20 ms, the next I2C transfer can not be issued until 10
-> seconds have passed, since the virtio device end will still be waiting
-> for the hardcoded 10 second timeout and may not respond to new requests
-> until that transfer has timed out.
+> I like the fact that this patch is short and simple.
+> 
+> But there are 30+ users of to_pci_driver().  This patch asserts that
+> *one* of them, pci_pm_runtime_resume(), is special and needs to test
+> device_is_bound() instead of using to_pci_driver().
+> 
+> It's special because the current PM implementation calls it via
+> pm_runtime_get_sync() before the driver's .probe() method.  That
+> connection is a little bit obscure and fragile.  What if the PM
+> implementation changes?
+> 
+> Maybe we just need a comment there about why it looks different than
+> the other PM interfaces?
+> 
+> I also notice that the only other uses of device_is_bound()
+> outside the driver core are in iommu_group_store_type() and
+> regulator_resolve_supply().  This patch seems like a reasonable use,
+> but I always look twice when we do something unique.
 
-Okay, so this is more about making sure the device times-out before
-the driver or lets say in an expected time-frame. That should be okay
-I guess.
+I agree that this looks really odd.  No one should care outside of the
+driver core to call device_is_bound(), as if a driver is being called,
+implicitly you know that the device is bound to that driver.
 
--- 
-viresh
+Why does the PCI core care if a device is bound to a pci driver at this
+point in time?
+
+But, this does feel like an odd use of to_pci_driver() here, what needs
+to be known here, if a pci driver is in control of a device here or not?
+
+thanks,
+
+greg k-h
