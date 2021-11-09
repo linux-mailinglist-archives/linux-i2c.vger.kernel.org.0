@@ -2,94 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 332DB44A6FA
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 07:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE62C44A71E
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 07:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238378AbhKIGpF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Nov 2021 01:45:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32808 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229591AbhKIGpE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 9 Nov 2021 01:45:04 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E672660234;
-        Tue,  9 Nov 2021 06:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1636440139;
-        bh=B1IguEi2bwhHxjOBHleDUZl379REYQJYKiP/fzsjmag=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p5J9N3GqT9v/BHqm+jT0fWwRW4bhsapm+tDX5PeGixFPln6G6/dPAP2jgByTNU2N8
-         K3ebZ/mnEy0PE/Yd2DAlh5GZIKHGqjIY6fJ+oq+2RtsxVaalciqNiJXVlEtYLMkQzH
-         XXRbG/57WQZ3Hh/G1a3gZDhHPbpsMkYcrE14Bl58=
-Date:   Tue, 9 Nov 2021 07:42:09 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        linux-i2c@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
-Message-ID: <YYoYQbf6SVyNyW4r@kroah.com>
-References: <20211108212226.253mwl4wp7xjckqz@pengutronix.de>
- <20211109025619.GA1131403@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211109025619.GA1131403@bhelgaas>
+        id S243329AbhKIHCP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Nov 2021 02:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243332AbhKIHCO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 02:02:14 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85D5C061766;
+        Mon,  8 Nov 2021 22:59:28 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id o14so19228871plg.5;
+        Mon, 08 Nov 2021 22:59:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=406K+ivMcMW+jETknQGB5NJu1cV6OpudZZ5rUg2MBsc=;
+        b=mctdieHtm0NCuyU9NmOPo8fRCtCESxeu+IwW9MG3dskhj4EzJKi4Je2UoGc8/PMKSZ
+         tZYSIDtdWAH5LIswVieIZdPO/TaSrb53egu+JAurDOFKIxzpSauYD0GKiJ5iXL5EFnIs
+         KwpUTwKjwhVHnPTazjlnCw2J3K85373i0eScAvbkehrHok7E7+FEtRCVjfeiFH+Mgx/t
+         2fhdHDWwOFBrw2v/n87kzyLfEKMWlNthdqWZpjFA+Uf5sNdz5uakjrl4WPJHBdUtREPA
+         XCbwSWKYUzjQqKYcvTA+1QZRMQULo41Y/sjS05I+QT39ouuVuduEOQyftqMwXpaEAzf5
+         yftg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=406K+ivMcMW+jETknQGB5NJu1cV6OpudZZ5rUg2MBsc=;
+        b=gTQxLgD6WVpwpr5eaxijm1+SsLbLQn7W73mAHwaO/tAV67+7/uTCG3QqsZjXNqydlo
+         QyRtOnp1i4QT5SGU067GPYJFLDLeTAELcR2hCU70OLb06l9iKc/Gp3Z/8yMCndQ59Ioh
+         dtnWe5Cqbe1D3zQXHYI0W1aYnfx4TVYGxcBl2e9slzleNDtcvhb4UQZH+YhWVEds3xyS
+         gonWKJs5QHSTN/Ws4oiZ7z93392lz8JZ37/x5LKIJgfZXxz260d4ejaKjPd5L3Z+Bxdq
+         +FzGKxYJ7Ijmmbl/T1nCN+yNIJ0+q62CyYpijVAkoFK17ZSamNKva51Hi10IimzqkMAp
+         golQ==
+X-Gm-Message-State: AOAM5333dVLdh6EeZFaBxiXXRh/hSqAefU7CGr5VOj4T+SVEduHsvInr
+        SsdXM8lq0umeLcvCO5yhxWc=
+X-Google-Smtp-Source: ABdhPJzRDAtEo5VtkM2rBjlDtzFON05YgRpGbAxzGww9a00TRcQvTjTQXmWHih7EQSeICiljrvofyQ==
+X-Received: by 2002:a17:902:d50e:b0:142:1b2a:144 with SMTP id b14-20020a170902d50e00b001421b2a0144mr5028622plg.51.1636441168248;
+        Mon, 08 Nov 2021 22:59:28 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id ep15sm1929586pjb.3.2021.11.08.22.59.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Nov 2021 22:59:27 -0800 (PST)
+From:   "LH.Kuo" <lhjeff911@gmail.com>
+X-Google-Original-From: "LH.Kuo" <lh.kuo@sunplus.com>
+To:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
+        lee.jones@linaro.org, u.kleine-koenig@pengutronix.de,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     qinjian@cqplus1.com, wells.lu@sunplus.com,
+        "LH.Kuo" <lh.kuo@sunplus.com>
+Subject: [PATCH v2 0/2] Add I2C control driver for Sunplus SP7021 SoC
+Date:   Tue,  9 Nov 2021 14:59:24 +0800
+Message-Id: <1636441166-8127-1-git-send-email-lh.kuo@sunplus.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1635496955-13985-1-git-send-email-lh.kuo@sunplus.com>
+References: <1635496955-13985-1-git-send-email-lh.kuo@sunplus.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 08:56:19PM -0600, Bjorn Helgaas wrote:
-> [+cc Greg: new device_is_bound() use]
-> 
-> On Mon, Nov 08, 2021 at 10:22:26PM +0100, Uwe Kleine-König wrote:
-> > pci_pm_runtime_resume() exits early when the device to resume isn't
-> > bound yet:
-> > 
-> > 	if (!to_pci_driver(dev->driver))
-> > 		return 0;
-> > 
-> > This however isn't true when the device currently probes and
-> > local_pci_probe() calls pm_runtime_get_sync() because then the driver
-> > core already setup dev->driver. As a result the driver's resume callback
-> > is called before the driver's probe function is called and so more often
-> > than not required driver data isn't setup yet.
-> > 
-> > So replace the check for the device being unbound by a check that only
-> > becomes true after .probe() succeeded.
-> 
-> I like the fact that this patch is short and simple.
-> 
-> But there are 30+ users of to_pci_driver().  This patch asserts that
-> *one* of them, pci_pm_runtime_resume(), is special and needs to test
-> device_is_bound() instead of using to_pci_driver().
-> 
-> It's special because the current PM implementation calls it via
-> pm_runtime_get_sync() before the driver's .probe() method.  That
-> connection is a little bit obscure and fragile.  What if the PM
-> implementation changes?
-> 
-> Maybe we just need a comment there about why it looks different than
-> the other PM interfaces?
-> 
-> I also notice that the only other uses of device_is_bound()
-> outside the driver core are in iommu_group_store_type() and
-> regulator_resolve_supply().  This patch seems like a reasonable use,
-> but I always look twice when we do something unique.
+This is a patch series for I2C driver for Sunplus SP7021 SoC.	
+	
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates	
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and	
+etc.) into a single chip. It is designed for industrial control.	
+	
+Refer to:	
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview	
+https://tibbo.com/store/plus1.html
 
-I agree that this looks really odd.  No one should care outside of the
-driver core to call device_is_bound(), as if a driver is being called,
-implicitly you know that the device is bound to that driver.
+LH.Kuo (2):
+  I2C: Add I2C driver for Sunplus SP7021
+  devicetree bindings I2C Add bindings doc for Sunplus SP7021
 
-Why does the PCI core care if a device is bound to a pci driver at this
-point in time?
+ .../devicetree/bindings/i2c/i2c-sunplus.yaml       |   82 +
+ MAINTAINERS                                        |    7 +
+ drivers/i2c/busses/Kconfig                         |   10 +
+ drivers/i2c/busses/Makefile                        |    1 +
+ drivers/i2c/busses/i2c-sunplus.c                   | 1700 ++++++++++++++++++++
+ 5 files changed, 1800 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+ create mode 100644 drivers/i2c/busses/i2c-sunplus.c
 
-But, this does feel like an odd use of to_pci_driver() here, what needs
-to be known here, if a pci driver is in control of a device here or not?
+-- 
+2.7.4
 
-thanks,
-
-greg k-h
