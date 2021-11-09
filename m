@@ -2,578 +2,208 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAC244B0F8
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 17:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A2344B0FD
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Nov 2021 17:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239531AbhKIQTK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Nov 2021 11:19:10 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:45854 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239499AbhKIQTJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 11:19:09 -0500
-Received: by mail-oi1-f178.google.com with SMTP id u2so34514541oiu.12;
-        Tue, 09 Nov 2021 08:16:23 -0800 (PST)
+        id S239582AbhKIQT5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 Nov 2021 11:19:57 -0500
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:38764 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239499AbhKIQT4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 11:19:56 -0500
+Received: by mail-oi1-f173.google.com with SMTP id r26so13295672oiw.5;
+        Tue, 09 Nov 2021 08:17:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LTgw7u3B1rnQ2mPJkbUOilZFND3zAdrIE5Vn3ipd39w=;
-        b=KFjAquTr8LP9VZsLBcIhKg3QJcD75HHcqzd/y049h1V+W8VUNifpy0TCB31d/R0nIP
-         30YRtwOaDYSfkzdRyIXEIoa44f7Rrw1NUU5uppeTcFMKyG/QJ8RHMm9Ete9PCKmMGPAl
-         vDrrgkq8mg5uuUou3A95iZHBf6ntuTDn9qGc0fxdFeQ8f7HCR3c5WOQve7Su10JjVyoR
-         K4xMu7kRiOkNMeYVbaht0As1DdQj0tqSKvLgqieH3cvjgfM1inSrnCUwqcNplxq0LKXL
-         Qg1832nRfdlO7wu1qTSGClfO2J7d1fhzdjnj8mnbfID45a85I2+ahvxbSSRKPZ14kNvD
-         T3TQ==
-X-Gm-Message-State: AOAM533i1ZRTXcl9d8Z9ft7wGnWTi8ercO+M/cf96skoshnwtgfGvOxu
-        wYvXL5Xg+onAvL9oPTXomw==
-X-Google-Smtp-Source: ABdhPJzDDFWYLwvKmNGx1BBsEOS/TKCOHJ8g1FCMoLafQBLduR4m5yoNQ+gozXggyMA/AHSAr4ffaQ==
-X-Received: by 2002:a54:4397:: with SMTP id u23mr6677303oiv.112.1636474582748;
-        Tue, 09 Nov 2021 08:16:22 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4hv3lNiKtCV9caPy7LZaczGaDSUcKdCzFY13hA0esuk=;
+        b=wonHPy4S3Vn+eMLGTE5F38W/7mZf6mD9zj+O/tN01pbM+z6XFH6CpuHewtFVWVEWRI
+         wHsXtyWsqdvlKu7f/Y7ufbzc+I9PzUoqk1lIz0+ECol44rWAc1kCRqacrPVXV3q2BOaX
+         Xmr/9RadaCow47YZhBhGt15jr54n22RgIRU8/arWosRsfLnXjPUVwej/HZxrUZuNg7rE
+         qZf3ve0Cv7YojuMHSimkGZXPbKK0IYBULm7n5XhciSUx8Ad9XCH3xMmYdnuH1VblS14W
+         iqEgEVEF5PvVUwBF55v8N1ApTyFUGxeQOCm2qwxeSlfrvjOkktUwvZd+1Pl5JmD0EcLV
+         oCbg==
+X-Gm-Message-State: AOAM532zi8tJkwu/BmIIFCydPX9JBEA1BjnoR14P8CEUDXWaZ0n90vuy
+        moPjnODnrl2OogU1Fs7FGkALUdbbmA==
+X-Google-Smtp-Source: ABdhPJxHZ4VI7DSvTKNUC5hrVKjdgRHeB9oCykyK0rT2lAjdeeJyho5biBnNUY8N6L/QrBqc2rDLfQ==
+X-Received: by 2002:aca:ad95:: with SMTP id w143mr5695268oie.47.1636474629421;
+        Tue, 09 Nov 2021 08:17:09 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id m12sm4146662ots.59.2021.11.09.08.16.21
+        by smtp.googlemail.com with ESMTPSA id g2sm1001861oic.35.2021.11.09.08.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Nov 2021 08:16:22 -0800 (PST)
+        Tue, 09 Nov 2021 08:17:08 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>
+To:     devicetree@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, George Cherian <gcherian@marvell.com>,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH 2/2] i2c: Remove unused Netlogic/Sigma Designs XLR driver
-Date:   Tue,  9 Nov 2021 10:16:19 -0600
-Message-Id: <20211109161619.2206494-2-robh@kernel.org>
+        linux-mips@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        George Cherian <gcherian@marvell.com>,
+        Mark Brown <broonie@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH] dt-bindings: Remove Netlogic bindings
+Date:   Tue,  9 Nov 2021 10:17:07 -0600
+Message-Id: <20211109161707.2209170-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211109161619.2206494-1-robh@kernel.org>
-References: <20211109161619.2206494-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Commits 95b8a5e0111a ("MIPS: Remove NETLOGIC support") and edd4488aea9c
-("ARM: remove tango platform") removed Netlogic XLR and Sigma Designs
-Tango platforms which means there are no platforms using the XLR I2C
-driver and it can be removed.
+Support for Netlogic was removed in commit 95b8a5e0111a ("MIPS: Remove
+NETLOGIC support"). Remove the now unused bindings.
 
+The GPIO binding also includes "brcm,vulcan-gpio", but it appears to be
+unused as well as Broadcom Vulkan became Cavium ThunderX2 which is ACPI
+based.
+
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: George Cherian <gcherian@marvell.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-gpio@vger.kernel.org
 Cc: linux-i2c@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/i2c/busses/Kconfig   |  10 -
- drivers/i2c/busses/Makefile  |   1 -
- drivers/i2c/busses/i2c-xlr.c | 470 -----------------------------------
- 3 files changed, 481 deletions(-)
- delete mode 100644 drivers/i2c/busses/i2c-xlr.c
+ .../devicetree/bindings/gpio/gpio-xlp.txt     | 49 -------------------
+ .../devicetree/bindings/i2c/i2c-xlp9xx.txt    | 22 ---------
+ .../devicetree/bindings/spi/spi-xlp.txt       | 38 --------------
+ 3 files changed, 109 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-xlp.txt
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-xlp9xx.txt
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-xlp.txt
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index e9dd1640ffde..2f0a440ec446 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1159,16 +1159,6 @@ config I2C_XILINX
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called xilinx_i2c.
- 
--config I2C_XLR
--	tristate "Netlogic XLR I2C support"
--	depends on CPU_XLR || COMPILE_TEST
--	help
--	  This driver enables support for the on-chip I2C interface of
--	  the Netlogic XLR/XLS MIPS processors and Sigma Designs SOCs.
--
--	  This driver can also be built as a module.  If so, the module
--	  will be called i2c-xlr.
--
- config I2C_XLP9XX
- 	tristate "Cavium ThunderX2 I2C support"
- 	depends on ARCH_THUNDER2 || COMPILE_TEST
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index d85899fef8c7..1d00dce77098 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -119,7 +119,6 @@ obj-$(CONFIG_I2C_OCTEON)	+= i2c-octeon.o
- i2c-thunderx-objs := i2c-octeon-core.o i2c-thunderx-pcidrv.o
- obj-$(CONFIG_I2C_THUNDERX)	+= i2c-thunderx.o
- obj-$(CONFIG_I2C_XILINX)	+= i2c-xiic.o
--obj-$(CONFIG_I2C_XLR)		+= i2c-xlr.o
- obj-$(CONFIG_I2C_XLP9XX)	+= i2c-xlp9xx.o
- obj-$(CONFIG_I2C_RCAR)		+= i2c-rcar.o
- 
-diff --git a/drivers/i2c/busses/i2c-xlr.c b/drivers/i2c/busses/i2c-xlr.c
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-xlp.txt b/Documentation/devicetree/bindings/gpio/gpio-xlp.txt
 deleted file mode 100644
-index 9ce20652d494..000000000000
---- a/drivers/i2c/busses/i2c-xlr.c
+index 47fc64922fe0..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-xlp.txt
 +++ /dev/null
-@@ -1,470 +0,0 @@
--/*
-- * Copyright 2011, Netlogic Microsystems Inc.
-- * Copyright 2004, Matt Porter <mporter@kernel.crashing.org>
-- *
-- * This file is licensed under the terms of the GNU General Public
-- * License version 2.  This program is licensed "as is" without any
-- * warranty of any kind, whether express or implied.
-- */
+@@ -1,49 +0,0 @@
+-Netlogic XLP Family GPIO
+-========================
 -
--#include <linux/err.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/slab.h>
--#include <linux/ioport.h>
--#include <linux/delay.h>
--#include <linux/errno.h>
--#include <linux/i2c.h>
--#include <linux/io.h>
--#include <linux/platform_device.h>
--#include <linux/of_device.h>
--#include <linux/clk.h>
--#include <linux/interrupt.h>
--#include <linux/wait.h>
+-This GPIO driver is used for following Netlogic XLP SoCs:
+-	XLP832, XLP316, XLP208, XLP980, XLP532
+-This GPIO driver is also compatible with GPIO controller found on
+-Broadcom Vulcan ARM64.
 -
--/* XLR I2C REGISTERS */
--#define XLR_I2C_CFG		0x00
--#define XLR_I2C_CLKDIV		0x01
--#define XLR_I2C_DEVADDR		0x02
--#define XLR_I2C_ADDR		0x03
--#define XLR_I2C_DATAOUT		0x04
--#define XLR_I2C_DATAIN		0x05
--#define XLR_I2C_STATUS		0x06
--#define XLR_I2C_STARTXFR	0x07
--#define XLR_I2C_BYTECNT		0x08
--#define XLR_I2C_HDSTATIM	0x09
+-Required properties:
+--------------------
 -
--/* Sigma Designs additional registers */
--#define XLR_I2C_INT_EN		0x09
--#define XLR_I2C_INT_STAT	0x0a
+-- compatible: Should be one of the following:
+-  - "netlogic,xlp832-gpio": For Netlogic XLP832
+-  - "netlogic,xlp316-gpio": For Netlogic XLP316
+-  - "netlogic,xlp208-gpio": For Netlogic XLP208
+-  - "netlogic,xlp980-gpio": For Netlogic XLP980
+-  - "netlogic,xlp532-gpio": For Netlogic XLP532
+-  - "brcm,vulcan-gpio": For Broadcom Vulcan ARM64
+-- reg: Physical base address and length of the controller's registers.
+-- #gpio-cells: Should be two. The first cell is the pin number and the second
+-  cell is used to specify optional parameters (currently unused).
+-- gpio-controller: Marks the device node as a GPIO controller.
+-- nr-gpios: Number of GPIO pins supported by the controller.
+-- interrupt-cells: Should be two. The first cell is the GPIO Number. The
+-  second cell is used to specify flags. The following subset of flags is
+-  supported:
+-  - trigger type:
+-	1 = low to high edge triggered.
+-	2 = high to low edge triggered.
+-	4 = active high level-sensitive.
+-	8 = active low level-sensitive.
+-- interrupts: Interrupt number for this device.
+-- interrupt-controller: Identifies the node as an interrupt controller.
 -
--/* XLR I2C REGISTERS FLAGS */
--#define XLR_I2C_BUS_BUSY	0x01
--#define XLR_I2C_SDOEMPTY	0x02
--#define XLR_I2C_RXRDY		0x04
--#define XLR_I2C_ACK_ERR		0x08
--#define XLR_I2C_ARB_STARTERR	0x30
+-Example:
 -
--/* Register Values */
--#define XLR_I2C_CFG_ADDR	0xF8
--#define XLR_I2C_CFG_NOADDR	0xFA
--#define XLR_I2C_STARTXFR_ND	0x02    /* No Data */
--#define XLR_I2C_STARTXFR_RD	0x01    /* Read */
--#define XLR_I2C_STARTXFR_WR	0x00    /* Write */
+-	gpio: xlp_gpio@34000 {
+-		compatible = "netlogic,xlp316-gpio";
+-		reg = <0 0x34100 0x1000
+-		       0 0x35100 0x1000>;
+-		#gpio-cells = <2>;
+-		gpio-controller;
+-		nr-gpios = <57>;
 -
--#define XLR_I2C_TIMEOUT		10	/* timeout per byte in msec */
+-		#interrupt-cells = <2>;
+-		interrupt-parent = <&pic>;
+-		interrupts = <39>;
+-		interrupt-controller;
+-	};
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-xlp9xx.txt b/Documentation/devicetree/bindings/i2c/i2c-xlp9xx.txt
+deleted file mode 100644
+index f818ef507ab7..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-xlp9xx.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Device tree configuration for the I2C controller on the XLP9xx/5xx SoC
 -
--/*
-- * On XLR/XLS, we need to use __raw_ IO to read the I2C registers
-- * because they are in the big-endian MMIO area on the SoC.
-- *
-- * The readl/writel implementation on XLR/XLS byteswaps, because
-- * those are for its little-endian PCI space (see arch/mips/Kconfig).
-- */
--static inline void xlr_i2c_wreg(u32 __iomem *base, unsigned int reg, u32 val)
--{
--	__raw_writel(val, base + reg);
--}
+-Required properties:
+-- compatible      : should be "netlogic,xlp980-i2c"
+-- reg             : bus address start and address range size of device
+-- interrupts      : interrupt number
 -
--static inline u32 xlr_i2c_rdreg(u32 __iomem *base, unsigned int reg)
--{
--	return __raw_readl(base + reg);
--}
+-Optional properties:
+-- clock-frequency : frequency of bus clock in Hz
+-                    Defaults to 100 KHz when the property is not specified
 -
--#define XLR_I2C_FLAG_IRQ	1
+-Example:
 -
--struct xlr_i2c_config {
--	u32 flags;		/* optional feature support */
--	u32 status_busy;	/* value of STATUS[0] when busy */
--	u32 cfg_extra;		/* extra CFG bits to set */
+-i2c0: i2c@113100 {
+-	compatible = "netlogic,xlp980-i2c";
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	reg = <0 0x113100 0x100>;
+-	clock-frequency = <400000>;
+-	interrupts = <30>;
+-	interrupt-parent = <&pic>;
 -};
+diff --git a/Documentation/devicetree/bindings/spi/spi-xlp.txt b/Documentation/devicetree/bindings/spi/spi-xlp.txt
+deleted file mode 100644
+index f4925ec0ed33..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-xlp.txt
++++ /dev/null
+@@ -1,38 +0,0 @@
+-SPI Master controller for Netlogic XLP MIPS64 SOCs
+-==================================================
 -
--struct xlr_i2c_private {
--	struct i2c_adapter adap;
--	u32 __iomem *iobase;
--	int irq;
--	int pos;
--	struct i2c_msg *msg;
--	const struct xlr_i2c_config *cfg;
--	wait_queue_head_t wait;
--	struct clk *clk;
+-Currently this SPI controller driver is supported for the following
+-Netlogic XLP SoCs:
+-	XLP832, XLP316, XLP208, XLP980, XLP532
+-
+-Required properties:
+-- compatible		: Should be "netlogic,xlp832-spi".
+-- #address-cells	: Number of cells required to define a chip select address
+-			  on the SPI bus.
+-- #size-cells		: Should be zero.
+-- reg			: Should contain register location and length.
+-- clocks		: Phandle of the spi clock
+-- interrupts		: Interrupt number used by this controller.
+-
+-SPI slave nodes must be children of the SPI master node and can contain
+-properties described in Documentation/devicetree/bindings/spi/spi-bus.txt.
+-
+-Example:
+-
+-	spi: xlp_spi@3a100 {
+-		compatible = "netlogic,xlp832-spi";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		reg = <0 0x3a100 0x100>;
+-		clocks = <&spi_clk>;
+-		interrupts = <34>;
+-		interrupt-parent = <&pic>;
+-
+-		spi_nor@1 {
+-			compatible = "spansion,s25sl12801";
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			reg = <1>;	/* Chip Select */
+-			spi-max-frequency = <40000000>;
+-		};
 -};
--
--static int xlr_i2c_busy(struct xlr_i2c_private *priv, u32 status)
--{
--	return (status & XLR_I2C_BUS_BUSY) == priv->cfg->status_busy;
--}
--
--static int xlr_i2c_idle(struct xlr_i2c_private *priv)
--{
--	return !xlr_i2c_busy(priv, xlr_i2c_rdreg(priv->iobase, XLR_I2C_STATUS));
--}
--
--static int xlr_i2c_wait(struct xlr_i2c_private *priv, unsigned long timeout)
--{
--	int status;
--	int t;
--
--	t = wait_event_timeout(priv->wait, xlr_i2c_idle(priv),
--				msecs_to_jiffies(timeout));
--	if (!t)
--		return -ETIMEDOUT;
--
--	status = xlr_i2c_rdreg(priv->iobase, XLR_I2C_STATUS);
--
--	return status & XLR_I2C_ACK_ERR ? -EIO : 0;
--}
--
--static void xlr_i2c_tx_irq(struct xlr_i2c_private *priv, u32 status)
--{
--	struct i2c_msg *msg = priv->msg;
--
--	if (status & XLR_I2C_SDOEMPTY)
--		xlr_i2c_wreg(priv->iobase, XLR_I2C_DATAOUT,
--				msg->buf[priv->pos++]);
--}
--
--static void xlr_i2c_rx_irq(struct xlr_i2c_private *priv, u32 status)
--{
--	struct i2c_msg *msg = priv->msg;
--
--	if (status & XLR_I2C_RXRDY)
--		msg->buf[priv->pos++] =
--			xlr_i2c_rdreg(priv->iobase, XLR_I2C_DATAIN);
--}
--
--static irqreturn_t xlr_i2c_irq(int irq, void *dev_id)
--{
--	struct xlr_i2c_private *priv = dev_id;
--	struct i2c_msg *msg = priv->msg;
--	u32 int_stat, status;
--
--	int_stat = xlr_i2c_rdreg(priv->iobase, XLR_I2C_INT_STAT);
--	if (!int_stat)
--		return IRQ_NONE;
--
--	xlr_i2c_wreg(priv->iobase, XLR_I2C_INT_STAT, int_stat);
--
--	if (!msg)
--		return IRQ_HANDLED;
--
--	status = xlr_i2c_rdreg(priv->iobase, XLR_I2C_STATUS);
--
--	if (priv->pos < msg->len) {
--		if (msg->flags & I2C_M_RD)
--			xlr_i2c_rx_irq(priv, status);
--		else
--			xlr_i2c_tx_irq(priv, status);
--	}
--
--	if (!xlr_i2c_busy(priv, status))
--		wake_up(&priv->wait);
--
--	return IRQ_HANDLED;
--}
--
--static int xlr_i2c_tx(struct xlr_i2c_private *priv,  u16 len,
--	u8 *buf, u16 addr)
--{
--	struct i2c_adapter *adap = &priv->adap;
--	unsigned long timeout, stoptime, checktime;
--	u32 i2c_status;
--	int pos, timedout;
--	u8 offset;
--	u32 xfer;
--
--	offset = buf[0];
--	xlr_i2c_wreg(priv->iobase, XLR_I2C_ADDR, offset);
--	xlr_i2c_wreg(priv->iobase, XLR_I2C_DEVADDR, addr);
--	xlr_i2c_wreg(priv->iobase, XLR_I2C_CFG,
--			XLR_I2C_CFG_ADDR | priv->cfg->cfg_extra);
--
--	timeout = msecs_to_jiffies(XLR_I2C_TIMEOUT);
--	stoptime = jiffies + timeout;
--	timedout = 0;
--
--	if (len == 1) {
--		xlr_i2c_wreg(priv->iobase, XLR_I2C_BYTECNT, len - 1);
--		xfer = XLR_I2C_STARTXFR_ND;
--		pos = 1;
--	} else {
--		xlr_i2c_wreg(priv->iobase, XLR_I2C_BYTECNT, len - 2);
--		xlr_i2c_wreg(priv->iobase, XLR_I2C_DATAOUT, buf[1]);
--		xfer = XLR_I2C_STARTXFR_WR;
--		pos = 2;
--	}
--
--	priv->pos = pos;
--
--retry:
--	/* retry can only happen on the first byte */
--	xlr_i2c_wreg(priv->iobase, XLR_I2C_STARTXFR, xfer);
--
--	if (priv->irq > 0)
--		return xlr_i2c_wait(priv, XLR_I2C_TIMEOUT * len);
--
--	while (!timedout) {
--		checktime = jiffies;
--		i2c_status = xlr_i2c_rdreg(priv->iobase, XLR_I2C_STATUS);
--
--		if ((i2c_status & XLR_I2C_SDOEMPTY) && pos < len) {
--			xlr_i2c_wreg(priv->iobase, XLR_I2C_DATAOUT, buf[pos++]);
--
--			/* reset timeout on successful xmit */
--			stoptime = jiffies + timeout;
--		}
--		timedout = time_after(checktime, stoptime);
--
--		if (i2c_status & XLR_I2C_ARB_STARTERR) {
--			if (timedout)
--				break;
--			goto retry;
--		}
--
--		if (i2c_status & XLR_I2C_ACK_ERR)
--			return -EIO;
--
--		if (!xlr_i2c_busy(priv, i2c_status) && pos >= len)
--			return 0;
--	}
--	dev_err(&adap->dev, "I2C transmit timeout\n");
--	return -ETIMEDOUT;
--}
--
--static int xlr_i2c_rx(struct xlr_i2c_private *priv, u16 len, u8 *buf, u16 addr)
--{
--	struct i2c_adapter *adap = &priv->adap;
--	u32 i2c_status;
--	unsigned long timeout, stoptime, checktime;
--	int nbytes, timedout;
--
--	xlr_i2c_wreg(priv->iobase, XLR_I2C_CFG,
--			XLR_I2C_CFG_NOADDR | priv->cfg->cfg_extra);
--	xlr_i2c_wreg(priv->iobase, XLR_I2C_BYTECNT, len - 1);
--	xlr_i2c_wreg(priv->iobase, XLR_I2C_DEVADDR, addr);
--
--	priv->pos = 0;
--
--	timeout = msecs_to_jiffies(XLR_I2C_TIMEOUT);
--	stoptime = jiffies + timeout;
--	timedout = 0;
--	nbytes = 0;
--retry:
--	xlr_i2c_wreg(priv->iobase, XLR_I2C_STARTXFR, XLR_I2C_STARTXFR_RD);
--
--	if (priv->irq > 0)
--		return xlr_i2c_wait(priv, XLR_I2C_TIMEOUT * len);
--
--	while (!timedout) {
--		checktime = jiffies;
--		i2c_status = xlr_i2c_rdreg(priv->iobase, XLR_I2C_STATUS);
--		if (i2c_status & XLR_I2C_RXRDY) {
--			if (nbytes >= len)
--				return -EIO;	/* should not happen */
--
--			buf[nbytes++] =
--				xlr_i2c_rdreg(priv->iobase, XLR_I2C_DATAIN);
--
--			/* reset timeout on successful read */
--			stoptime = jiffies + timeout;
--		}
--
--		timedout = time_after(checktime, stoptime);
--		if (i2c_status & XLR_I2C_ARB_STARTERR) {
--			if (timedout)
--				break;
--			goto retry;
--		}
--
--		if (i2c_status & XLR_I2C_ACK_ERR)
--			return -EIO;
--
--		if (!xlr_i2c_busy(priv, i2c_status))
--			return 0;
--	}
--
--	dev_err(&adap->dev, "I2C receive timeout\n");
--	return -ETIMEDOUT;
--}
--
--static int xlr_i2c_xfer(struct i2c_adapter *adap,
--	struct i2c_msg *msgs, int num)
--{
--	struct i2c_msg *msg;
--	int i;
--	int ret = 0;
--	struct xlr_i2c_private *priv = i2c_get_adapdata(adap);
--
--	ret = clk_enable(priv->clk);
--	if (ret)
--		return ret;
--
--	if (priv->irq)
--		xlr_i2c_wreg(priv->iobase, XLR_I2C_INT_EN, 0xf);
--
--
--	for (i = 0; ret == 0 && i < num; i++) {
--		msg = &msgs[i];
--		priv->msg = msg;
--		if (msg->flags & I2C_M_RD)
--			ret = xlr_i2c_rx(priv, msg->len, &msg->buf[0],
--					msg->addr);
--		else
--			ret = xlr_i2c_tx(priv, msg->len, &msg->buf[0],
--					msg->addr);
--	}
--
--	if (priv->irq)
--		xlr_i2c_wreg(priv->iobase, XLR_I2C_INT_EN, 0);
--
--	clk_disable(priv->clk);
--	priv->msg = NULL;
--
--	return (ret != 0) ? ret : num;
--}
--
--static u32 xlr_func(struct i2c_adapter *adap)
--{
--	/* Emulate SMBUS over I2C */
--	return (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK) | I2C_FUNC_I2C;
--}
--
--static const struct i2c_algorithm xlr_i2c_algo = {
--	.master_xfer	= xlr_i2c_xfer,
--	.functionality	= xlr_func,
--};
--
--static const struct i2c_adapter_quirks xlr_i2c_quirks = {
--	.flags = I2C_AQ_NO_ZERO_LEN,
--};
--
--static const struct xlr_i2c_config xlr_i2c_config_default = {
--	.status_busy	= XLR_I2C_BUS_BUSY,
--	.cfg_extra	= 0,
--};
--
--static const struct xlr_i2c_config xlr_i2c_config_tangox = {
--	.flags		= XLR_I2C_FLAG_IRQ,
--	.status_busy	= 0,
--	.cfg_extra	= 1 << 8,
--};
--
--static const struct of_device_id xlr_i2c_dt_ids[] = {
--	{
--		.compatible	= "sigma,smp8642-i2c",
--		.data		= &xlr_i2c_config_tangox,
--	},
--	{ }
--};
--MODULE_DEVICE_TABLE(of, xlr_i2c_dt_ids);
--
--static int xlr_i2c_probe(struct platform_device *pdev)
--{
--	const struct of_device_id *match;
--	struct xlr_i2c_private  *priv;
--	struct clk *clk;
--	unsigned long clk_rate;
--	unsigned long clk_div;
--	u32 busfreq;
--	int irq;
--	int ret;
--
--	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
--
--	match = of_match_device(xlr_i2c_dt_ids, &pdev->dev);
--	if (match)
--		priv->cfg = match->data;
--	else
--		priv->cfg = &xlr_i2c_config_default;
--
--	priv->iobase = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(priv->iobase))
--		return PTR_ERR(priv->iobase);
--
--	irq = platform_get_irq(pdev, 0);
--
--	if (irq > 0 && (priv->cfg->flags & XLR_I2C_FLAG_IRQ)) {
--		priv->irq = irq;
--
--		xlr_i2c_wreg(priv->iobase, XLR_I2C_INT_EN, 0);
--		xlr_i2c_wreg(priv->iobase, XLR_I2C_INT_STAT, 0xf);
--
--		ret = devm_request_irq(&pdev->dev, priv->irq, xlr_i2c_irq,
--					IRQF_SHARED, dev_name(&pdev->dev),
--					priv);
--		if (ret)
--			return ret;
--
--		init_waitqueue_head(&priv->wait);
--	}
--
--	if (of_property_read_u32(pdev->dev.of_node, "clock-frequency",
--				 &busfreq))
--		busfreq = I2C_MAX_STANDARD_MODE_FREQ;
--
--	clk = devm_clk_get(&pdev->dev, NULL);
--	if (!IS_ERR(clk)) {
--		ret = clk_prepare_enable(clk);
--		if (ret)
--			return ret;
--
--		clk_rate = clk_get_rate(clk);
--		clk_div = DIV_ROUND_UP(clk_rate, 2 * busfreq);
--		xlr_i2c_wreg(priv->iobase, XLR_I2C_CLKDIV, clk_div);
--
--		clk_disable(clk);
--		priv->clk = clk;
--	}
--
--	priv->adap.dev.parent = &pdev->dev;
--	priv->adap.dev.of_node	= pdev->dev.of_node;
--	priv->adap.owner	= THIS_MODULE;
--	priv->adap.algo_data	= priv;
--	priv->adap.algo		= &xlr_i2c_algo;
--	priv->adap.quirks	= &xlr_i2c_quirks;
--	priv->adap.nr		= pdev->id;
--	priv->adap.class	= I2C_CLASS_HWMON;
--	snprintf(priv->adap.name, sizeof(priv->adap.name), "xlr-i2c");
--
--	i2c_set_adapdata(&priv->adap, priv);
--	ret = i2c_add_numbered_adapter(&priv->adap);
--	if (ret < 0)
--		goto err_unprepare_clk;
--
--	platform_set_drvdata(pdev, priv);
--	dev_info(&priv->adap.dev, "Added I2C Bus.\n");
--	return 0;
--
--err_unprepare_clk:
--	clk_unprepare(clk);
--	return ret;
--}
--
--static int xlr_i2c_remove(struct platform_device *pdev)
--{
--	struct xlr_i2c_private *priv;
--
--	priv = platform_get_drvdata(pdev);
--	i2c_del_adapter(&priv->adap);
--	clk_unprepare(priv->clk);
--
--	return 0;
--}
--
--static struct platform_driver xlr_i2c_driver = {
--	.probe  = xlr_i2c_probe,
--	.remove = xlr_i2c_remove,
--	.driver = {
--		.name   = "xlr-i2cbus",
--		.of_match_table	= xlr_i2c_dt_ids,
--	},
--};
--
--module_platform_driver(xlr_i2c_driver);
--
--MODULE_AUTHOR("Ganesan Ramalingam <ganesanr@netlogicmicro.com>");
--MODULE_DESCRIPTION("XLR/XLS SoC I2C Controller driver");
--MODULE_LICENSE("GPL v2");
--MODULE_ALIAS("platform:xlr-i2cbus");
 -- 
 2.32.0
 
