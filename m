@@ -2,158 +2,259 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD0D44BC5A
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Nov 2021 08:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8C444BD79
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Nov 2021 09:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbhKJHsQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 10 Nov 2021 02:48:16 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44776
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230022AbhKJHsP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Nov 2021 02:48:15 -0500
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 73C2F3F1A7
-        for <linux-i2c@vger.kernel.org>; Wed, 10 Nov 2021 07:45:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1636530327;
-        bh=N83ESKUHB/kqrmHqZ+hpUE8Wq2iA/YnywAyf4v9xq00=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=DrjT1UGU6tGN12zPCrmSmBheEVMGEr0bAg14ms71wqc11rWWUeCRZHGB+NgDg8RWR
-         CZNunqRTDBgYWhoJ27OM1k/QUAtPFg8C+E5/bQeHk18IqhqKiGmHls1yNu5YIULHbh
-         AR3AKeoNeaDyDrr3Vx0sxw2dQDDsk0doT52nc9z+hc4JSZETbc2kYKcrKZBWnhYVlF
-         Pl14s/EXqMFzZJFYH0DDXkYlMP3ul+8VC2b1a6nPfwj62FnpiLmukFAHHc1dS7uha/
-         PDczwIkfFENeBlPrLYmm4qOAXun1BxGs9T+1xN7lhMwLmPbDOZzIjYpo24VIRn20Ii
-         LRoO4VZ5iqc0Q==
-Received: by mail-wm1-f71.google.com with SMTP id m14-20020a05600c3b0e00b0033308dcc933so839168wms.7
-        for <linux-i2c@vger.kernel.org>; Tue, 09 Nov 2021 23:45:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=N83ESKUHB/kqrmHqZ+hpUE8Wq2iA/YnywAyf4v9xq00=;
-        b=OUPaT09HHr86iP+IgUQT3WKBeFjmU6tUCH4pp1YnXyZIdJOXOBb2uPK1rH6pvC5qTG
-         W2VJLts1ZsVbGW2JO/WkwXS+2/gqYjBQlN1hYKG/Hh+qcVI6RaEtXX771Y71zpX0N0ZT
-         ru9CS2SFLG2bhk4VQkmFr5WJxgqSq45FR93Dz12LyDceEAjSUJnONCp7dAgZmqYaqbG5
-         RQxzcpTr0ARwfZ8XYfg4DILbklj0yME1W21jNjjEUFxWxa5qNMbEnz6mal45FgJWaasd
-         G2cwnnVbukU45qk367qZG0ZoElH67a2yvJVT/2fvmgLdCzqFEK+r8a2tm15Oqqrj6Zoa
-         e8ug==
-X-Gm-Message-State: AOAM53066sbIR52HNNHP144PEdOOA9PJ0b/tqNBgX1coNZo5rWctsYpI
-        K68GrUouphYZEbdJ+IOCvenxpJ5mbQfTnTR0j5GLINlUb5IELLx0rOCR/EnoT1ewUe3P8pS0erm
-        eYgh4zIfXZnhCDrkbm7XZOgAymDT7aBqtbfQPFw==
-X-Received: by 2002:a05:651c:11cf:: with SMTP id z15mr13724613ljo.30.1636530316474;
-        Tue, 09 Nov 2021 23:45:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxj/L+35JjL2smH5MiuFZkelZYQSjo3AZ/1hVDezSpzMKpDS3vieitpkj9D1r3Hbn/gkMU6Bw==
-X-Received: by 2002:a05:651c:11cf:: with SMTP id z15mr13724596ljo.30.1636530316282;
-        Tue, 09 Nov 2021 23:45:16 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id b22sm2384886lfi.67.2021.11.09.23.45.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Nov 2021 23:45:15 -0800 (PST)
-Message-ID: <978563c0-95fd-1c76-42a2-5e0ab9cbc61d@canonical.com>
-Date:   Wed, 10 Nov 2021 08:45:14 +0100
+        id S230404AbhKJJBJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Nov 2021 04:01:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230338AbhKJJBI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Nov 2021 04:01:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95065C061764
+        for <linux-i2c@vger.kernel.org>; Wed, 10 Nov 2021 00:58:21 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mkjQw-0001VB-80; Wed, 10 Nov 2021 09:58:18 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mkjQu-0000C3-RN; Wed, 10 Nov 2021 09:58:16 +0100
+Date:   Wed, 10 Nov 2021 09:58:16 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     minyard@acm.org
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org,
+        Andrew Manley <andrew.manley@sealingtech.com>,
+        linux-kernel@vger.kernel.org, Corey Minyard <cminyard@mvista.com>
+Subject: Re: [PATCH 1/3] i2c:imx: Add timer for handling the stop condition
+Message-ID: <20211110085816.GC12195@pengutronix.de>
+References: <20211005003216.2670632-1-minyard@acm.org>
+ <20211005003216.2670632-2-minyard@acm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH 10/13] dt-bindings: spi: add bindings for microchip mpfs
- spi
-Content-Language: en-US
-To:     Conor.Dooley@microchip.com, robh@kernel.org
-Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        linus.walleij@linaro.org, linux-riscv@lists.infradead.org,
-        aou@eecs.berkeley.edu, paul.walmsley@sifive.com,
-        linux-usb@vger.kernel.org, Daire.McNamara@microchip.com,
-        linux-spi@vger.kernel.org, geert@linux-m68k.org,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, broonie@kernel.org, palmer@dabbelt.com,
-        bgolaszewski@baylibre.com, jassisinghbrar@gmail.com,
-        linux-crypto@vger.kernel.org, Ivan.Griffin@microchip.com,
-        atish.patra@wdc.com, Lewis.Hanly@microchip.com,
-        bin.meng@windriver.com, alexandre.belloni@bootlin.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        a.zummo@towertech.it
-References: <20211108150554.4457-1-conor.dooley@microchip.com>
- <20211108150554.4457-11-conor.dooley@microchip.com>
- <1636430789.935637.743042.nullmailer@robh.at.kernel.org>
- <96005893-8819-1d76-6dea-7d173655258f@microchip.com>
- <0d996393-20b9-4f16-cbd0-c9bff2b54112@canonical.com>
- <bd26a633-7c71-b00b-00c3-54688ee42297@microchip.com>
- <cd789074-53a0-72c1-76f0-b2b86a434247@canonical.com>
- <a2ce221d-5ab7-52c5-176e-e64a081a6805@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <a2ce221d-5ab7-52c5-176e-e64a081a6805@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211005003216.2670632-2-minyard@acm.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 09:57:25 up 265 days, 12:21, 128 users,  load average: 0.17, 0.16,
+ 0.17
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 09/11/2021 14:20, Conor.Dooley@microchip.com wrote:
-> On 09/11/2021 13:04, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> On 09/11/2021 13:58, Conor.Dooley@microchip.com wrote:
->>> On 09/11/2021 12:53, Krzysztof Kozlowski wrote:
->>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>>
->>>> On 09/11/2021 13:16, Conor.Dooley@microchip.com wrote:
->>>>> On 09/11/2021 04:06, Rob Herring wrote:
->>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>>>>
->>>>>> On Mon, 08 Nov 2021 15:05:51 +0000, conor.dooley@microchip.com wrote:
->>>>>>> From: Conor Dooley <conor.dooley@microchip.com>
->>>>>>>
->>>>>>> Add device tree bindings for the {q,}spi controller on
->>>>>>> the Microchip PolarFire SoC.
->>>>>>>
->>>>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->>>>>>> ---
->>>>>>>     .../bindings/spi/microchip,mpfs-spi.yaml      | 72 +++++++++++++++++++
->>>>>>>     1 file changed, 72 insertions(+)
->>>>>>>     create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
->>>>>>>
->>>>>>
->>>>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->>>>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>>>>>
->>>>>> yamllint warnings/errors:
->>>>>>
->>>>>> dtschema/dtc warnings/errors:
->>>>>> Documentation/devicetree/bindings/spi/microchip,mpfs-spi.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
->>>>>>       19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
->>>>> Rob,
->>>>> Should I drop the header from the example or is there a way for me
->>>>> specify the dependent patch to pass this check?
->>>>
->>>> The error has to be fixed, although not necessarily by dropping the
->>>> header, but by posting it. How this can pass on your system? There is no
->>>> such file added in this patchset.
->>> I linked the patch adding the clock as a dependency in the cover letter
->>> [1], which is why I was wondering if there was a better way to do so
->>> that would get picked up by the checker bot.
->>
->> It's not only about the bot, but dependency when applied. If you did not
->> warn clk maintainer that clock bindings should go via Rob's tree or
->> should be provided as a tag, the patches here cannot be applied in this
->> cycle.
-> It was not my (our) intention to send the clock patches via rob's tree.
-> And since this is my first time trying to upstream wholescale changes to 
-> a device tree I honestly didn't expect this series to get accepted in 
-> this cycle anyway.
+On Mon, Oct 04, 2021 at 07:32:14PM -0500, minyard@acm.org wrote:
+> From: Corey Minyard <cminyard@mvista.com>
+> 
+> Most IMX I2C interfaces don't generate an interrupt on a stop condition,
+> so it won't generate a timely stop event on a slave mode transfer.
+> Some users, like IPMB, need a timely stop event to work properly.
+> 
+> So, add a timer and add the proper handling to generate a stop event in
+> slave mode if the interface goes idle.
+> 
+> Signed-off-by: Corey Minyard <minyard@acm.org>
+> Tested-by: Andrew Manley <andrew.manley@sealingtech.com>
+> Reviewed-by: Andrew Manley <andrew.manley@sealingtech.com>
 
-OK :)
+Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Assuming your new bindings pass db_binding_check with
-DT_CHECKER_FLAGS=-m (on top of clock patch), I propose to keep the
-header here.
+Thank you!
 
-Another idea would be to submit without the header and use raw IDs
-(numbers) and convert it later. I prefer the first- base on clock patches.
+> ---
+>  drivers/i2c/busses/i2c-imx.c | 78 +++++++++++++++++++++++++++---------
+>  1 file changed, 59 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 3576b63a6c03..97369fe48b30 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -37,6 +37,8 @@
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/timer.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> @@ -210,6 +212,10 @@ struct imx_i2c_struct {
+>  	struct imx_i2c_dma	*dma;
+>  	struct i2c_client	*slave;
+>  	enum i2c_slave_event last_slave_event;
+> +
+> +	/* For checking slave events. */
+> +	spinlock_t	  slave_lock;
+> +	struct timer_list slave_timer;
+>  };
+>  
+>  static const struct imx_i2c_hwdata imx1_i2c_hwdata = {
+> @@ -680,7 +686,7 @@ static void i2c_imx_slave_event(struct imx_i2c_struct *i2c_imx,
+>  
+>  static void i2c_imx_slave_finish_op(struct imx_i2c_struct *i2c_imx)
+>  {
+> -	u8 val;
+> +	u8 val = 0;
+>  
+>  	while (i2c_imx->last_slave_event != I2C_SLAVE_STOP) {
+>  		switch (i2c_imx->last_slave_event) {
+> @@ -701,10 +707,11 @@ static void i2c_imx_slave_finish_op(struct imx_i2c_struct *i2c_imx)
+>  	}
+>  }
+>  
+> -static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx,
+> -				     unsigned int status, unsigned int ctl)
+> +/* Returns true if the timer should be restarted, false if not. */
+> +static irqreturn_t i2c_imx_slave_handle(struct imx_i2c_struct *i2c_imx,
+> +					unsigned int status, unsigned int ctl)
+>  {
+> -	u8 value;
+> +	u8 value = 0;
+>  
+>  	if (status & I2SR_IAL) { /* Arbitration lost */
+>  		i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
+> @@ -712,6 +719,16 @@ static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx,
+>  			return IRQ_HANDLED;
+>  	}
+>  
+> +	if (!(status & I2SR_IBB)) {
+> +		/* No master on the bus, that could mean a stop condition. */
+> +		i2c_imx_slave_finish_op(i2c_imx);
+> +		return IRQ_HANDLED;
+> +	}
+> +
+> +	if (!(status & I2SR_ICF))
+> +		/* Data transfer still in progress, ignore this. */
+> +		goto out;
+> +
+>  	if (status & I2SR_IAAS) { /* Addressed as a slave */
+>  		i2c_imx_slave_finish_op(i2c_imx);
+>  		if (status & I2SR_SRW) { /* Master wants to read from us*/
+> @@ -737,16 +754,9 @@ static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx,
+>  			imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+>  		}
+>  	} else if (!(ctl & I2CR_MTX)) { /* Receive mode */
+> -		if (status & I2SR_IBB) { /* No STOP signal detected */
+> -			value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> -			i2c_imx_slave_event(i2c_imx,
+> -					    I2C_SLAVE_WRITE_RECEIVED, &value);
+> -		} else { /* STOP signal is detected */
+> -			dev_dbg(&i2c_imx->adapter.dev,
+> -				"STOP signal detected");
+> -			i2c_imx_slave_event(i2c_imx,
+> -					    I2C_SLAVE_STOP, &value);
+> -		}
+> +		value = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +		i2c_imx_slave_event(i2c_imx,
+> +				    I2C_SLAVE_WRITE_RECEIVED, &value);
+>  	} else if (!(status & I2SR_RXAK)) { /* Transmit mode received ACK */
+>  		ctl |= I2CR_MTX;
+>  		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+> @@ -755,15 +765,32 @@ static irqreturn_t i2c_imx_slave_isr(struct imx_i2c_struct *i2c_imx,
+>  				    I2C_SLAVE_READ_PROCESSED, &value);
+>  
+>  		imx_i2c_write_reg(value, i2c_imx, IMX_I2C_I2DR);
+> -	} else { /* Transmit mode received NAK */
+> +	} else { /* Transmit mode received NAK, operation is done */
+>  		ctl &= ~I2CR_MTX;
+>  		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+>  		imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
+> +		i2c_imx_slave_finish_op(i2c_imx);
+> +		return IRQ_HANDLED;
+>  	}
+>  
+> +out:
+> +	mod_timer(&i2c_imx->slave_timer, jiffies + 1);
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +static void i2c_imx_slave_timeout(struct timer_list *t)
+> +{
+> +	struct imx_i2c_struct *i2c_imx = from_timer(i2c_imx, t, slave_timer);
+> +	unsigned int ctl, status;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&i2c_imx->slave_lock, flags);
+> +	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+> +	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+> +	i2c_imx_slave_handle(i2c_imx, status, ctl);
+> +	spin_unlock_irqrestore(&i2c_imx->slave_lock, flags);
+> +}
+> +
+>  static void i2c_imx_slave_init(struct imx_i2c_struct *i2c_imx)
+>  {
+>  	int temp;
+> @@ -843,7 +870,9 @@ static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
+>  {
+>  	struct imx_i2c_struct *i2c_imx = dev_id;
+>  	unsigned int ctl, status;
+> +	unsigned long flags;
+>  
+> +	spin_lock_irqsave(&i2c_imx->slave_lock, flags);
+>  	status = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
+>  	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
+>  
+> @@ -851,14 +880,20 @@ static irqreturn_t i2c_imx_isr(int irq, void *dev_id)
+>  		i2c_imx_clear_irq(i2c_imx, I2SR_IIF);
+>  		if (i2c_imx->slave) {
+>  			if (!(ctl & I2CR_MSTA)) {
+> -				return i2c_imx_slave_isr(i2c_imx, status, ctl);
+> -			} else if (i2c_imx->last_slave_event !=
+> -				   I2C_SLAVE_STOP) {
+> -				i2c_imx_slave_finish_op(i2c_imx);
+> +				irqreturn_t ret;
+> +
+> +				ret = i2c_imx_slave_handle(i2c_imx,
+> +							   status, ctl);
+> +				spin_unlock_irqrestore(&i2c_imx->slave_lock,
+> +						       flags);
+> +				return ret;
+>  			}
+> +			i2c_imx_slave_finish_op(i2c_imx);
+>  		}
+> +		spin_unlock_irqrestore(&i2c_imx->slave_lock, flags);
+>  		return i2c_imx_master_isr(i2c_imx, status);
+>  	}
+> +	spin_unlock_irqrestore(&i2c_imx->slave_lock, flags);
+>  
+>  	return IRQ_NONE;
+>  }
+> @@ -1378,6 +1413,9 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>  	if (!i2c_imx)
+>  		return -ENOMEM;
+>  
+> +	spin_lock_init(&i2c_imx->slave_lock);
+> +	timer_setup(&i2c_imx->slave_timer, i2c_imx_slave_timeout, 0);
+> +
+>  	match = device_get_match_data(&pdev->dev);
+>  	if (match)
+>  		i2c_imx->hwdata = match;
+> @@ -1491,6 +1529,8 @@ static int i2c_imx_remove(struct platform_device *pdev)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	del_timer_sync(&i2c_imx->slave_timer);
+> +
+>  	/* remove adapter */
+>  	dev_dbg(&i2c_imx->adapter.dev, "adapter removed\n");
+>  	i2c_del_adapter(&i2c_imx->adapter);
+> -- 
+> 2.25.1
+> 
+> 
 
-
-Best regards,
-Krzysztof
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
