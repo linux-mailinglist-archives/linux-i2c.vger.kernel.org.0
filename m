@@ -2,189 +2,251 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1FD44C34A
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Nov 2021 15:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9848B44C382
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Nov 2021 15:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbhKJOsh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 10 Nov 2021 09:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbhKJOsg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Nov 2021 09:48:36 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4D5C061764;
-        Wed, 10 Nov 2021 06:45:49 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id de30so2726628qkb.0;
-        Wed, 10 Nov 2021 06:45:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+rwfv3ywZ/R+q/1fQCq123/75gGQWBrg5o7p31TVHe8=;
-        b=UExFksNK78Oo+QtJrsV2xeoaHmcKXnbzLZNMaXcdcHCBHelHt2RmGdmsUJI/qk3JLP
-         nQy7/ZzkVy85sKrXovPAroz7emnzJSp4y8/SLyJsOkysj+SU1aHX557AfO6xt0xaU3Yg
-         tiDimHhKA1sE87JhZifNPC9GCaR6JTnVnSIWRYa55M/PjV3C8wfkg0S76LSLZ2xJ9Kki
-         k2sPnlpuKz7uWeAMo0ZR3iXyV80LCOnKXsI6qHNLPXcZbSVkiIISkKWOtVizB/YR0Edj
-         FvQ6EJcDOTpv+MsFOxVPNBZuU7d/3cx3SLFRZYeHiFWugbLi6jM9YRnuo/2byftazIf+
-         jD0g==
+        id S232263AbhKJPBe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Nov 2021 10:01:34 -0500
+Received: from mail-ua1-f54.google.com ([209.85.222.54]:46665 "EHLO
+        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232361AbhKJPBd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Nov 2021 10:01:33 -0500
+Received: by mail-ua1-f54.google.com with SMTP id az37so5210787uab.13;
+        Wed, 10 Nov 2021 06:58:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition:in-reply-to;
-        bh=+rwfv3ywZ/R+q/1fQCq123/75gGQWBrg5o7p31TVHe8=;
-        b=lNymw55MOp3RLUtnUZjDMVzK5uQyMn11hhG1LGBHnnpkPnWZ6WCdQCLKYSdS/0G6n8
-         H+FoFs6TmPbJYXR9+Mpt7Q39b8prlJvT0oAOcx6qOPGSYOpF3BqBr+/2P0ahyyEt83Fq
-         zyXTPsNUgFHQef9yRoh6Fla24qhk0KeftFUyhjE+KdN7BFSNjMRIkx16iUvkAd6HXOqH
-         b6VRmve8FWWKohFwCloDC/Nat/AR5UKZocWOTzEEHpFhNXlA2Fh3mu33mpHYD51DA6xz
-         yFC8LaTidqm3dESpSz86NRKIo4BtjJm+rCGdofaz6V8OfmXePlqkh1wDvsjTwO2ZODdm
-         WB/g==
-X-Gm-Message-State: AOAM533r9FjjuQEOrx0RQ7QP6GMt4it35of992BlWoyRwc8dGxSrVPRy
-        PMOJAn77YtVrzTWxzSy50hGGQ4EZCg==
-X-Google-Smtp-Source: ABdhPJxO3vScwJZ6FmxtI4ia+zWaF+xCYNjLu2UbW5A0IlK8pIsLqf01uw3X3H7C37o2QIiljFzPow==
-X-Received: by 2002:a05:620a:2909:: with SMTP id m9mr218492qkp.496.1636555548217;
-        Wed, 10 Nov 2021 06:45:48 -0800 (PST)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id t9sm52210qtw.37.2021.11.10.06.45.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 06:45:47 -0800 (PST)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:9036:4935:b469:a78b])
-        by serve.minyard.net (Postfix) with ESMTPSA id 9F01818000C;
-        Wed, 10 Nov 2021 14:45:46 +0000 (UTC)
-Date:   Wed, 10 Nov 2021 08:45:45 -0600
-From:   Corey Minyard <minyard@acm.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org,
-        Andrew Manley <andrew.manley@sealingtech.com>,
-        linux-kernel@vger.kernel.org, Corey Minyard <cminyard@mvista.com>
-Subject: Re: [PATCH 3/3] i2c:imx: Use an hrtimer, not a timer, for checking
- for bus idle
-Message-ID: <20211110144545.GF4667@minyard.net>
-Reply-To: minyard@acm.org
-References: <20211005003216.2670632-1-minyard@acm.org>
- <20211005003216.2670632-4-minyard@acm.org>
- <20211110090338.GE12195@pengutronix.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KOCA3CMBp0qlOJqLClVIbzJyqhqqK17pYfXIsSt5kCw=;
+        b=s2ckD5yd0tCPf58F5N8ZxmLHqo8U4MPsopy8nMNC8lD7MWl4ff6tzU07fRkjknooa3
+         FuSSYzwB1/xECvZD5/3AbqhRVIxvzQg8nl0YuyCvJ4JFDAC1tmWExHDS02qaj1cPTRHB
+         N1+pV1GOSQTD5p8TS+2sQXe2Nv5Og5O956VYNQZCteTQz8rfEO3Dt46Cp9PQbYS8FZ1P
+         uo9r1OIYO1U+cJ3Hi3umnQKOXOwSoTkBBE3DUfUvYfViCgbV9fEFsTviiBokteBx9ciw
+         g7qxKhUuVa3VWjMXdtVJ8tW63HioVs8H33W7m2vlqFAf+9wFH+nfK46H3wLrke158GnM
+         fQDA==
+X-Gm-Message-State: AOAM532al23csFXq1CtZmxLDxtIVoZ1WpV2dA+9ZadUU4OlG2+R0yqv9
+        S2TlZKI9vR5SsreCdPPEapVtEN96l0vZig==
+X-Google-Smtp-Source: ABdhPJxRApcmLBzw23ARqFtDlaJ+Dtvn5FUjdW1ehMzWo7KhRfe5iH8X6Uo/W1HIa6gGQWi9G6cChA==
+X-Received: by 2002:ab0:25da:: with SMTP id y26mr627720uan.72.1636556325320;
+        Wed, 10 Nov 2021 06:58:45 -0800 (PST)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id c11sm64450vsh.22.2021.11.10.06.58.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Nov 2021 06:58:45 -0800 (PST)
+Received: by mail-ua1-f44.google.com with SMTP id e10so5322234uab.3;
+        Wed, 10 Nov 2021 06:58:44 -0800 (PST)
+X-Received: by 2002:ab0:3154:: with SMTP id e20mr683424uam.14.1636556324638;
+ Wed, 10 Nov 2021 06:58:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211110090338.GE12195@pengutronix.de>
+References: <20211108150554.4457-1-conor.dooley@microchip.com>
+ <20211108150554.4457-13-conor.dooley@microchip.com> <CAMuHMdWEhJj0Cqt3sgGvgZe7JSFqBmTgtZRkom30NKqEW27NvQ@mail.gmail.com>
+ <0e379411-2469-8c78-1a3f-0645579a967c@microchip.com>
+In-Reply-To: <0e379411-2469-8c78-1a3f-0645579a967c@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 10 Nov 2021 15:58:32 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdULO5gJcbnsDzZcVShmYkByyM30f9nYyDD8e4PJ6nrnCQ@mail.gmail.com>
+Message-ID: <CAMuHMdULO5gJcbnsDzZcVShmYkByyM30f9nYyDD8e4PJ6nrnCQ@mail.gmail.com>
+Subject: Re: [PATCH 12/13] riscv: icicle-kit: update microchip icicle kit
+ device tree
+To:     Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Lewis Hanly <Lewis.Hanly@microchip.com>,
+        Daire.McNamara@microchip.com, Atish Patra <atish.patra@wdc.com>,
+        Ivan.Griffin@microchip.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, bin.meng@windriver.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 10:03:38AM +0100, Oleksij Rempel wrote:
-> On Mon, Oct 04, 2021 at 07:32:16PM -0500, minyard@acm.org wrote:
-> > From: Corey Minyard <cminyard@mvista.com>
-> > 
-> > The timer is too slow and significantly reduces performance.  Use an
-> > hrtimer to get things working faster.
-> > 
-> > Signed-off-by: Corey Minyard <minyard@acm.org>
-> > Tested-by: Andrew Manley <andrew.manley@sealingtech.com>
-> > Reviewed-by: Andrew Manley <andrew.manley@sealingtech.com>
-> 
-> Do we need to keep this change history? If no, please merge it to the
-> first patch.
+Hi Conor,
 
-Yeah, I can do that.  It make sense.
+On Wed, Nov 10, 2021 at 3:20 PM <Conor.Dooley@microchip.com> wrote:
+> On 09/11/2021 09:04, Geert Uytterhoeven wrote:
+> > On Mon, Nov 8, 2021 at 4:07 PM <conor.dooley@microchip.com> wrote:
+> >> From: Conor Dooley <conor.dooley@microchip.com>
+> >>
+> >> Update the device tree for the icicle kit by splitting it into a third part,
+> >> which contains peripherals in the fpga fabric, add new peripherals
+> >> (spi, qspi, gpio, rtc, pcie, system services, i2c), update parts of the memory
+> >> map which have been changed.
+> >>
+> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thanks,
+> As I said in the replies to another patch this is my first time doing
+> any upstreaming of a device tree, i didnt realise that this would be a
+> problem.
 
--corey
+No problem, we're here to help you ;-)
 
-> 
-> > ---
-> >  drivers/i2c/busses/i2c-imx.c | 23 +++++++++++++++--------
-> >  1 file changed, 15 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> > index 26a04dc0590b..4b0e9d1784dd 100644
-> > --- a/drivers/i2c/busses/i2c-imx.c
-> > +++ b/drivers/i2c/busses/i2c-imx.c
-> > @@ -38,7 +38,7 @@
-> >  #include <linux/iopoll.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/spinlock.h>
-> > -#include <linux/timer.h>
-> > +#include <linux/hrtimer.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_device.h>
-> > @@ -53,6 +53,8 @@
-> >  /* This will be the driver name the kernel reports */
-> >  #define DRIVER_NAME "imx-i2c"
-> >  
-> > +#define I2C_IMX_CHECK_DELAY 30000 /* Time to check for bus idle, in NS */
-> > +
-> >  /*
-> >   * Enable DMA if transfer byte size is bigger than this threshold.
-> >   * As the hardware request, it must bigger than 4 bytes.\
-> > @@ -214,8 +216,8 @@ struct imx_i2c_struct {
-> >  	enum i2c_slave_event last_slave_event;
-> >  
-> >  	/* For checking slave events. */
-> > -	spinlock_t	  slave_lock;
-> > -	struct timer_list slave_timer;
-> > +	spinlock_t     slave_lock;
-> > +	struct hrtimer slave_timer;
-> >  };
-> >  
-> >  static const struct imx_i2c_hwdata imx1_i2c_hwdata = {
-> > @@ -783,13 +785,16 @@ static irqreturn_t i2c_imx_slave_handle(struct imx_i2c_struct *i2c_imx,
-> >  	}
-> >  
-> >  out:
-> > -	mod_timer(&i2c_imx->slave_timer, jiffies + 1);
-> > +	hrtimer_try_to_cancel(&i2c_imx->slave_timer);
-> > +	hrtimer_forward_now(&i2c_imx->slave_timer, I2C_IMX_CHECK_DELAY);
-> > +	hrtimer_restart(&i2c_imx->slave_timer);
-> >  	return IRQ_HANDLED;
-> >  }
-> >  
-> > -static void i2c_imx_slave_timeout(struct timer_list *t)
-> > +static enum hrtimer_restart i2c_imx_slave_timeout(struct hrtimer *t)
-> >  {
-> > -	struct imx_i2c_struct *i2c_imx = from_timer(i2c_imx, t, slave_timer);
-> > +	struct imx_i2c_struct *i2c_imx = container_of(t, struct imx_i2c_struct,
-> > +						      slave_timer);
-> >  	unsigned int ctl, status;
-> >  	unsigned long flags;
-> >  
-> > @@ -798,6 +803,7 @@ static void i2c_imx_slave_timeout(struct timer_list *t)
-> >  	ctl = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
-> >  	i2c_imx_slave_handle(i2c_imx, status, ctl);
-> >  	spin_unlock_irqrestore(&i2c_imx->slave_lock, flags);
-> > +	return HRTIMER_NORESTART;
-> >  }
-> >  
-> >  static void i2c_imx_slave_init(struct imx_i2c_struct *i2c_imx)
-> > @@ -1423,7 +1429,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
-> >  		return -ENOMEM;
-> >  
-> >  	spin_lock_init(&i2c_imx->slave_lock);
-> > -	timer_setup(&i2c_imx->slave_timer, i2c_imx_slave_timeout, 0);
-> > +	hrtimer_init(&i2c_imx->slave_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS);
-> > +	i2c_imx->slave_timer.function = i2c_imx_slave_timeout;
-> >  
-> >  	match = device_get_match_data(&pdev->dev);
-> >  	if (match)
-> > @@ -1538,7 +1545,7 @@ static int i2c_imx_remove(struct platform_device *pdev)
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > -	del_timer_sync(&i2c_imx->slave_timer);
-> > +	hrtimer_cancel(&i2c_imx->slave_timer);
-> >  
-> >  	/* remove adapter */
-> >  	dev_dbg(&i2c_imx->adapter.dev, "adapter removed\n");
-> > -- 
-> > 2.25.1
-> > 
-> > 
-> 
-> -- 
-> Pengutronix e.K.                           |                             |
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> >> --- a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
+> >> +++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
+> >> @@ -1,5 +1,5 @@
+> >>   // SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> >> -/* Copyright (c) 2020 Microchip Technology Inc */
+> >> +/* Copyright (c) 2020-2021 Microchip Technology Inc */
+> >>
+> >>   /dts-v1/;
+> >>
+> >> @@ -13,72 +13,187 @@ / {
+> >>          compatible = "microchip,mpfs-icicle-kit", "microchip,mpfs";
+> >>
+> >>          aliases {
+> >> -               ethernet0 = &emac1;
+> >> -               serial0 = &serial0;
+> >> -               serial1 = &serial1;
+> >> -               serial2 = &serial2;
+> >> -               serial3 = &serial3;
+> >> +               mmuart0 = &mmuart0;
+> >> +               mmuart1 = &mmuart1;
+> >> +               mmuart2 = &mmuart2;
+> >> +               mmuart3 = &mmuart3;
+> >> +               mmuart4 = &mmuart4;
+> >
+> > Why? SerialN is the standard alias name.
+> we changed the label to mmuart to match the microchip documentation.
+
+The serialN aliases are standardized, so you cannot change them.
+
+> would it make more sense to call mmuart but alias it to serial?
+> ie serial0 = &mmuart0;
+
+You can change the labels, so that's OK.
+
+> >> +&spi1 {
+> >> +       status = "okay";
+> >
+> > No slave devices specified?
+> no, but its exposed
+
+But without specifying slave devices first you cannot use the
+controller anyway? While I2C supports instantiating slaves from
+userspace by writing to the new_device file in sysfs, SPI doesn't
+have that feature.
+
+> >> +&gpio2 {
+> >> +       interrupts = <PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT
+> >> +               PLIC_INT_GPIO2_NON_DIRECT>;
+> >
+> > Why override interrupts in the board .dts file?
+> > Doesn't this belong in the SoC .dtsi file?
+> The interrupt setup for the gpio isnt fixed, there is an option to
+> either connect the individual gpio interrupts to the plic *or* they can
+> be connected to a per gpio controller common interrupt, and it is up to
+> the driver to read a register to determine which interrupt triggered the
+> common/NON_DIRECT interrupt. This decision is made by a write to a
+> system register in application code, which to us didn't seem like it
+> belonged in the soc .dtsi.
+
+So it is software policy? Then it doesn't belong in the board DTS either.
+
+> Using the common interrupt for GPIO2 is the default on the
+> polarfire-soc, there are only 38 per gpio line interrupts available of
+> which 14 are connected to gpio0 and 24 to gpio1.
+
+> >>                  plic: interrupt-controller@c000000 {
+> >> -                       #interrupt-cells = <1>;
+> >> -                       compatible = "sifive,fu540-c000-plic", "sifive,plic-1.0.0";
+> >> +                       compatible = "sifive,plic-1.0.0";
+> >
+> > Why drop the first one again?
+> we felt it didnt make sense to have something that specifically
+> references the fu540 in the device tree for this board.
+
+That would be a revert of commit 73d3c44115514616 ("riscv: dts:
+microchip: add missing compatibles for clint and plic"), which you
+supplied an R-b tag for?
+
+Is this the same plic as in the FU540 SoC? Or do we need a new
+microchip,mpfs-plic compatible value?
+
+> >> -               emac1: ethernet@20112000 {
+> >> +               mac0: ethernet@20110000 {
+> >>                          compatible = "cdns,macb";
+> >> -                       reg = <0x0 0x20112000 0x0 0x2000>;
+> >> +                       #address-cells = <1>;
+> >> +                       #size-cells = <0>;
+> >> +                       reg = <0x0 0x20110000 0x0 0x2000>;
+> >> +                       clocks = <&clkcfg CLK_MAC0>, <&clkcfg CLK_AHB>;
+> >> +                       clock-names = "pclk", "hclk";
+> >>                          interrupt-parent = <&plic>;
+> >> -                       interrupts = <70 71 72 73>;
+> >> -                       local-mac-address = [00 00 00 00 00 00];
+> >> -                       clocks = <&clkcfg 5>, <&clkcfg 2>;
+> >> +                       interrupts = <PLIC_INT_MAC0_INT
+> >> +                               PLIC_INT_MAC0_QUEUE1
+> >> +                               PLIC_INT_MAC0_QUEUE2
+> >> +                               PLIC_INT_MAC0_QUEUE3
+> >> +                               PLIC_INT_MAC0_EMAC
+> >> +                               PLIC_INT_MAC0_MMSL>;
+> >
+> > Please group using angular brackets.
+> >
+> >> +                       mac-address = [56 34 12 00 FC 01];
+> >
+> > Please drop this.
+> Is the problem here having mac-address instead of local-, having either
+> at all or that we have populated it rather than just filling with 0s?
+
+MAC addresses are supposed to be unique.
+
+> We set it in u-boot anyway, so I think dropping entirely is okay.
+
+Exactly.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
