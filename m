@@ -2,128 +2,164 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD6844BABE
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Nov 2021 04:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4F444BC46
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Nov 2021 08:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbhKJEC3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 Nov 2021 23:02:29 -0500
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:63988 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230172AbhKJEC3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 Nov 2021 23:02:29 -0500
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AA3XNe5019384;
-        Tue, 9 Nov 2021 19:59:39 -0800
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3c7xp41u1b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Nov 2021 19:59:39 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ABFzgNzo1Cl3Ipx2c/3mtUyBJZdT4JFPS1GEElmSpBWEq8jnQGEU7FFhA2U5dgG6ZXPNVLEthhaynS8NUn0BLF4EBOIrAZkUhHaTxWP9PxLo0KXAPoXeqmFJFYHsXD5to7O7WqQdpYtF3gwPfjuA8HfdzzVPkJOVXZTFs+JV0j5vINcS7HQLuhlYpbLb0fQNv3cMsrWchKhcKBl9+AIwjOiU8hcxsq9DuY4cFHe/xqtikYgYn+/kugtj+S6pmAA+XVyGrwJ+XtKQB1ceJAZ1wI+aC8vd9Ys6+4muU/XfQFfmSKXpN9ZoSfL8WrfeEZvBdjdF5xGXnd2NbVhPqeevQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sipHoMgnP/FIYVT/lxNx6WN7DYJjWahqYC8YXJGjqkc=;
- b=fWm1VPC9bFZiCwxN5uroiyV9P/81VzxAvApHkY+WonN1PNqUNoMZPjOfGe4KJt3PYgpQeG1kg5oh7Rhj46by86wIPdAx6vLQ7b8SBDZX804snmFDf1jUxHDfGijKd5xuqzGvPqkQwBUyIvFLOP9qfP7q8upTXenYm7tu3LL9wXFNT0ylLAFrItKvJuil10De4TIKbnHn1pLKPuwwUVOO0hKGcaa4N8wOSeNIBQuUS/hhR/8FON8kL483XrJoiLed4iFep3SRNu0Yfph9p/VwLaXDZEO2tcBwIGIBCXryMiLmCHD4pLIVIQQd2uMjl0WUPN/nLEBQYa+fJXTGsO0ywA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sipHoMgnP/FIYVT/lxNx6WN7DYJjWahqYC8YXJGjqkc=;
- b=mt5uDpVJJn7VaazoWeJQWXmz9sRJMKpiMDPZ7Oty2iM8foJFlkr2+sdu4tfLNs+85EBpUEuf6iLwLDd9ZetIbM3JZzGWQ8PtY8xKgJS2Q2OUKggkk4AiZZkMVLtuRBXTLuQqxjN0A5cI9ZbCBvtbC+yXmGWG28W6xKKaGnRdg6c=
-Received: from BYAPR18MB2679.namprd18.prod.outlook.com (2603:10b6:a03:13c::10)
- by BYAPR18MB2837.namprd18.prod.outlook.com (2603:10b6:a03:111::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.15; Wed, 10 Nov
- 2021 03:59:35 +0000
-Received: from BYAPR18MB2679.namprd18.prod.outlook.com
- ([fe80::41a1:a7d1:fb3e:2b65]) by BYAPR18MB2679.namprd18.prod.outlook.com
- ([fe80::41a1:a7d1:fb3e:2b65%6]) with mapi id 15.20.4669.016; Wed, 10 Nov 2021
- 03:59:35 +0000
-From:   George Cherian <gcherian@marvell.com>
-To:     Rob Herring <robh@kernel.org>, Wolfram Sang <wsa@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 1/2] i2c: Remove Netlogic XLP variant
-Thread-Topic: [PATCH 1/2] i2c: Remove Netlogic XLP variant
-Thread-Index: AdfV5yrz8Iaojv3wTwmvZywfZuf0jw==
-Date:   Wed, 10 Nov 2021 03:59:35 +0000
-Message-ID: <BYAPR18MB26790ADA1AB03F410EC056FAC5939@BYAPR18MB2679.namprd18.prod.outlook.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: db7f81b5-b3d2-4fe8-6116-08d9a3fe8255
-x-ms-traffictypediagnostic: BYAPR18MB2837:
-x-microsoft-antispam-prvs: <BYAPR18MB2837B911D1A1E03A5BB0CF32C5939@BYAPR18MB2837.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:352;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EnP+PiJ6aebGJqL9NjcVgKZuUOhoxBptLpaCl34dJKsLFcM8gZn0iiC1HIddN2+nm8de59l22O/Hwv408oMK5jdTTdX+0WoCB9VEGiDH0Tpb/ZvOHyrLG077gD88WD+JMYt8Ti21O80KYQf5RbsUKPUDxzqxKgD8I5UYJ1DImh8ojAWSv9+u9Umgr3ZgEdBSuIELB5n4pXu+Ri859iKBIkiqnepvKRmm3BXUq+IJGyJEsdYhEz16YDNL9QzMNzkQZpY3BmZkQHhW7DBUtGIWYpaXnzKbAiJjM0YaDhAEDMPpNu9DawkRVZ77hZkz86inKe1c96n/1cUYkZF0iOBe9gALrQG4WWCCmbUPj07WdiP1pu3Lti0h0KIqrWpQmav2GwpFrTC2Sry83RlrGgbDuSSk1+AxQEJV1Hkbbo2rIH3nw5WEL78elBJzyP9CqsfzF7/0t0AUIzWyr9rlGQcN3JfRu25aq898ctbq2KQWEhBDFRXBSwPIJdNA4pf3tcE6+MuyVGcO4MyG4uJ7stp3F2Atd4V3leAJksbve0Tj7LpUExv/Q5HYc64MaV7Fh+shHxpUcF+S5lG13KuTbABhYRR5xEDJ2bw+KTksS850op/QBkjbwr/kJ4SMLGADs5pIwq1Q9dxmqQkcOoL0jFwOq3NsId0NJ8/QZ68eCf35IJ1faSQ4Te8vWaphoox2WNAo9gIPZ5f6Ide4uqXZY2t8xA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR18MB2679.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38070700005)(71200400001)(9686003)(86362001)(186003)(52536014)(8936002)(4326008)(8676002)(66556008)(55016002)(6506007)(66476007)(5660300002)(2906002)(64756008)(66446008)(33656002)(66946007)(26005)(76116006)(55236004)(316002)(4744005)(508600001)(38100700002)(7696005)(110136005)(54906003)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kwDD4U9i04DE3VtVdTl7Tt+fJn9Hi8cfMObinzvD6y59XnUlintT7B4t45XB?=
- =?us-ascii?Q?4cw0pUO9n4j+KYqDQQUI+mnK8OoE2Br2+5+E6B3afmoOLgHJLArEeGQW0stf?=
- =?us-ascii?Q?uTaW+3jAb7A51CQGt4Df7O8nrU+W552E4a6OGF/w6SKyJefgXvLwgcxFKd0q?=
- =?us-ascii?Q?/oeKdKNSFw5vtroNkumRlPCllrxtzCDQV13xV10er4q/6th2nqRyQblfh/Kn?=
- =?us-ascii?Q?FcddCQf1ATyMGgf6CnqtZsM7hhXA7mZj2Ue6AjaTPRyw1q6jIJbZNxA+661P?=
- =?us-ascii?Q?q2cOl/CR6dwQ8R3iBOwRP5aGprrNDee4z9VN/HlaRjD9742SFDJ1Uk7r03uc?=
- =?us-ascii?Q?vrlWTh8ukcanT3SzSagvLJVaNbIFJ+3gfCI7/sGtCtL693jsFlAjEiZC7nel?=
- =?us-ascii?Q?+9dzuEQohm3rVct5ZIh6XpiJp/bsl2dJFF2Zne7ObLZYjzOwly7j8f1bPww2?=
- =?us-ascii?Q?p1ha02ARVUGWHoWSM81h7v5kd/+RBedoWUC0/a7F3yETi+UD59OPeyQGuvgZ?=
- =?us-ascii?Q?oNRPodqJXi4DFBiAKriL6uUP2aEX7qvK61zZk+FqoGmC1GCw7MB2IeEIbBd8?=
- =?us-ascii?Q?MNXOSRNo0f+MDMasVTrQJ+2wxHf07VUljyyPioiryWSgKEOzuq7dKkj8JrfR?=
- =?us-ascii?Q?Y8XMQYcGMeFuH02UqVrSsFNgO+ZEj0NdxzuQhF3T5B7xy5NCfvBnbSFEfU2f?=
- =?us-ascii?Q?73+rSG4qhH8vpUXN8NKI72eHJzupnt9PZuuoM25x0XX7ls44zNLX9LTcdY9c?=
- =?us-ascii?Q?nTU/h9V1BlBk2FLu9xbUnGwLTOFbE7a5/JwaaDGFimPryoFjhluyK30iawjG?=
- =?us-ascii?Q?yl5QBz0imVfwZsJzNhv5M+FciY+UCqv0dtPTHdjfBD7JplpLntrzCnoWBfnN?=
- =?us-ascii?Q?0XTIQLU58D3Tj9zTrCt1ouQf46nkkgKpCRfPsUHyEh4kunISfiiX11DqiO1u?=
- =?us-ascii?Q?3GBt8zqGxjIk2m9RHZ4aZ9RSH1KCAFxo+gqXopaQA5bOR8DfIhduozwxdk+l?=
- =?us-ascii?Q?qW0ggwLvuBSbcEUJJyZfgFKVd80HixpDJG69VcFT+BBQz4rdgHenmINeyYKV?=
- =?us-ascii?Q?OpKmu6A6j/y6VrGYBjY5EdSH2vSmZ88FoNqYfSSa1DWqWN4TxrrQ4EwPNpj2?=
- =?us-ascii?Q?4AtP+sEz8Xs1arF+sTcIpH91zOtMS/3Uyqsf/W+lR+OMkTOwRm745Zhrfdse?=
- =?us-ascii?Q?jtV57MYUMzDU0Syg9wNeaQlW6myeUEWFW7kwRe4AoiMWM5+bzzKN2W1bQG39?=
- =?us-ascii?Q?IPAdpBZCtcz+q3PUffTXB8S1yl/tvHOn+SeqD7zaupkJ161AvWIZEH8GMh9C?=
- =?us-ascii?Q?Qb6l/CP07ab7sUeKF6qBKMUwprih7WaSrX6Yi4MV2Beve+U4eQEvq0KoFkDD?=
- =?us-ascii?Q?LceC84lbhT+99LuFXRCWtO+OH7KjFJZwMzwuOyv9VNe3iQXvvSgDnbUnbY6x?=
- =?us-ascii?Q?Ptc9B7G5nGA4TdLzhyOEEWyDtECFU2NdHI8YzXDyauq2gVUgJS/iYSbS/efS?=
- =?us-ascii?Q?S9w7G7tb11/0SosPmg5yNaTS4AwmkyP2qMfKMu8N2/0T60eQOneV1vaAzWAr?=
- =?us-ascii?Q?m90o6xOhh120esPoqtyY7ilCWPVdsAuQi1JTFOb0KSemXjtkh8c6lAItJUDd?=
- =?us-ascii?Q?Z1i7VlWYhv81AvvkQCHJgHw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S229756AbhKJHqO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Nov 2021 02:46:14 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:58772
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229831AbhKJHqN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Nov 2021 02:46:13 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 187CE3F340
+        for <linux-i2c@vger.kernel.org>; Wed, 10 Nov 2021 07:43:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1636530204;
+        bh=kNwihk9+TZU7Lmf8DShsoXNExCm0rcNJhlWEmsYrxyI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=DO9043g8CykCyu65JaHpEUrJcNzhsVOyr9c9mlQqz66JKmi4RHnjG5jiEd/P6Kx14
+         IQ4haN0dDv6Rfpg2yQRE8L7iA79XVBpo8MOEY6Anx+t74IbtoUo4uB5vQXByw/Pz53
+         gZlspmAtkvYgQT4s9EsvzhgDMW3df/Fy2dMNEET4XR2HDxonEbNoWiqfC5oi7e1xT8
+         8M4WdaKhpk8VZnCMHvGWnjBSmTepeLXNno3BoBZ1fcHtkOm+UeO8AtY9kEynFjnTFy
+         zA0EYXLeZBSC7ma7VI/9AeDKnivBR+Mve/SqWfFoaP88fyyiQ5oMf0deP6f6/TfAx0
+         GneQLuSKnh2GA==
+Received: by mail-lf1-f72.google.com with SMTP id bq29-20020a056512151d00b003ffce2467adso919926lfb.3
+        for <linux-i2c@vger.kernel.org>; Tue, 09 Nov 2021 23:43:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kNwihk9+TZU7Lmf8DShsoXNExCm0rcNJhlWEmsYrxyI=;
+        b=T+P/+FkJHwAThSzBlZt4N2OldVm3efHYTE3MB3PclZW3VA9kbi/dfwUPVJFr1q+P/Y
+         gnuC7wecnZIKAFGsSaxJ4e7t1u1JFlsmbrGu/W31Mo/8HWTyT3MUCGrb3yq0Q7CnJ1xB
+         yiEsEk1uODxxJsf25JjTrdP6OIJyADY0FsAcYAKD0l26qLxiM18Tc9dWQFQiQCzhlT5+
+         dnK7j4dpwTZDL506TQkV36claME7HHnAEdUuNFS0ffff2rR/UFGjaOg5pvFdDJmaLK94
+         M2UfWit2J+qcIjFBHcPbOXfI0OCCk3jIF/R3p1QhvH6Xb7p4E3pRiHa4D/6ANL9VRr+W
+         oW3g==
+X-Gm-Message-State: AOAM533qCiCOTdKlAxNhhxg68TAJRc65Q4WfTqRQXEX5HJdYcpzmM8Zk
+        JI6uYnw0L9wkt6PZP4Vn+8d4wOgfDVbFy4sBHSjGKE/WWMefy/CMxBndT1xdSRWVzrz6zH9hN9R
+        KnNcA5i9x+xLKEqFN8Pn74mZng3CBVBEKOugNQw==
+X-Received: by 2002:a19:495c:: with SMTP id l28mr13327775lfj.484.1636530203161;
+        Tue, 09 Nov 2021 23:43:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzX+kjYjN8x46mRk3Aya4zrud8jozXCf15P8hF9wfWX3cQCPgmfP5uU1NUQOpol1NYR50a10A==
+X-Received: by 2002:a19:495c:: with SMTP id l28mr13327746lfj.484.1636530202958;
+        Tue, 09 Nov 2021 23:43:22 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id a12sm1669240ljb.19.2021.11.09.23.43.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Nov 2021 23:43:22 -0800 (PST)
+Message-ID: <a0713a10-3409-4401-e612-0a9c06f88ea1@canonical.com>
+Date:   Wed, 10 Nov 2021 08:43:20 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR18MB2679.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db7f81b5-b3d2-4fe8-6116-08d9a3fe8255
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2021 03:59:35.1750
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QaidUvECOmdb7ZFp/rJNBKnXh/4uJcXbMjlDXWCTA+nIDAXn+leV/SgrvkXMtfvK51HLvOulNcfBeHw/IccbFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2837
-X-Proofpoint-GUID: K_FeFRdY2vUSxCGfQ58ZqCS9J-A_Aso_
-X-Proofpoint-ORIG-GUID: K_FeFRdY2vUSxCGfQ58ZqCS9J-A_Aso_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-10_01,2021-11-08_02,2020-04-07_01
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH 06/13] dt-bindings: rng: add bindings for microchip mpfs
+ rng
+Content-Language: en-US
+To:     Conor.Dooley@microchip.com
+Cc:     broonie@kernel.org, aou@eecs.berkeley.edu, robh+dt@kernel.org,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        jassisinghbrar@gmail.com, atish.patra@wdc.com,
+        Daire.McNamara@microchip.com, Lewis.Hanly@microchip.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        geert@linux-m68k.org, linux-gpio@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-usb@vger.kernel.org, bin.meng@windriver.com,
+        linux-i2c@vger.kernel.org, alexandre.belloni@bootlin.com,
+        Ivan.Griffin@microchip.com, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, a.zummo@towertech.it,
+        gregkh@linuxfoundation.org
+References: <20211108150554.4457-1-conor.dooley@microchip.com>
+ <20211108150554.4457-7-conor.dooley@microchip.com>
+ <f60cf7e0-4f67-f4b3-2596-01114cff6623@canonical.com>
+ <71c6917e-1463-c708-550a-726e5fe1566d@microchip.com>
+ <ca17d6ac-ef8e-b01c-3278-7cbb0d5745e3@canonical.com>
+ <ea871add-bddc-c4ae-ac9d-e86b4fad5a02@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <ea871add-bddc-c4ae-ac9d-e86b4fad5a02@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 09, 2021 at 10:16:18AM -0600, Rob Herring wrote:
-> Netlogic XLP was removed in commit 95b8a5e0111a ("MIPS: Remove NETLOGIC
-> support"). With those gone, the single platform left to support is
-> Cavium ThunderX2. Remove the Netlogic variant and DT support.
->=20
-> For simplicity, the existing kconfig name is retained.
->
-Acked-by George Cherian <gcherian@marvell.com>
+On 09/11/2021 14:36, Conor.Dooley@microchip.com wrote:
+> On 09/11/2021 12:56, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> On 09/11/2021 13:54, Conor.Dooley@microchip.com wrote:
+>>> On 08/11/2021 21:16, Krzysztof Kozlowski wrote:
+>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>>
+>>>> On 08/11/2021 16:05, conor.dooley@microchip.com wrote:
+>>>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>>>
+>>>>> Add device tree bindings for the hardware rng device accessed via
+>>>>> the system services on the Microchip PolarFire SoC.
+>>>>>
+>>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>>>> ---
+>>>>>    .../bindings/rng/microchip,mpfs-rng.yaml      | 31 +++++++++++++++++++
+>>>>>    1 file changed, 31 insertions(+)
+>>>>>    create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..e8ecb3538a86
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>>>>> @@ -0,0 +1,31 @@
+>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: "http://devicetree.org/schemas/rng/microchip,mpfs-rng.yaml#"
+>>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>>>>> +
+>>>>> +title: Microchip MPFS random number generator
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Conor Dooley <conor.dooley@microchip.com>
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: microchip,polarfire-soc-rng
+>>>>> +
+>>>>> +  syscontroller:
+>>>>> +    maxItems: 1
+>>>>> +    description: name of the system controller device node
+>>>>
+>>>> There are several issues with this:
+>>>> 1. You need to describe the type.
+>>>> 2. Description is not helpful (just copying the name of property) and
+>>>> actually misleading because you do not put there the name of device node.
+>>>> 3. What is it? Looks like syscon (or sometimes called sysreg). If yes,
+>>>> please use existing syscon bindings.
+>>> 1 & 2 - Correct, it is bad & I'll write a better description for it.
+>>> 3 - Its a system controller implemented as a mailbox. The syscontroller
+>>> is the mailbox client, which the rng and generic drivers both use.
+>>
+>> I understood that pointed device node is a mailbox, not this node. But
+>> here, what is it here? How do you use it here?
+> The system controller is the means of access to the random number 
+> generator. The phandle to the sys controller is provided here so that 
+> the rng driver can locate the mailbox client through which it requests 
+> random numbers.
+
+I am asking this to understand whether there is a generic or existing
+property which should be used instead.
+
+If I understand correctly, the rng driver needs a mailbox client?  If it
+is mailbox client, then there is a property: "mboxes". Use this one
+(look for existing bindings, e.g.
+Documentation/devicetree/bindings/firmware/arm,scmi.yaml).
+
+
+Best regards,
+Krzysztof
