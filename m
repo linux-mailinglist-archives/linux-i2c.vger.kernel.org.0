@@ -2,88 +2,146 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E22E244C68E
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Nov 2021 18:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3163D44C96E
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Nov 2021 20:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbhKJSCU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 10 Nov 2021 13:02:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36822 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230311AbhKJSCT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 10 Nov 2021 13:02:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D7FAA61159;
-        Wed, 10 Nov 2021 17:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636567172;
-        bh=Ofe7eOWNhRiC50gEQfKlr9CMMuFmkI3ju3xfiZYyFrY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=rEP32YbBqIePn8GoT80SgIFr3elQJFDM3gSWJVE1+is3HvHlpnQUw41LBLfsI4h1w
-         YCNfyWeIQLvNjmHqJIpAAudhngNYYdxS+Ij2I39rOcjkUujSJtokc0krejrfk8vVTH
-         +7XYf0bCe76SRrSjh8BY9EkoZ3CReYy0FnrnidFD4uFpXUt3hD3UwLDNQh1h/92g6x
-         /cj84RDYWSoaOrUHhmVqyctQ1UkolBiSKrHfi3P49JFTkAxadb+ncQMeoNN1vrjuSl
-         /ei/em8Bm1b8hgAeqHKnn/z3ShASG2w0bIZi8uVQulI4LEPHI0Y9FV0XT36JA28W4K
-         G9iOBlWvuI4+Q==
-Date:   Wed, 10 Nov 2021 11:59:29 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
-Message-ID: <20211110175929.GA1245597@bhelgaas>
+        id S231396AbhKJTwi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 Nov 2021 14:52:38 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:39884 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbhKJTwh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 Nov 2021 14:52:37 -0500
+Received: by mail-ot1-f54.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso5545847ots.6;
+        Wed, 10 Nov 2021 11:49:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Jffv+4OBBpjkkC43YZCngYWCvEJMwZVhqAxEmFK8L/I=;
+        b=MQxfkCCi2v2hsTKxKKuRvH/yTYF6TvDBR2IkrVLa3FgtYNkKDKAvhOX7hlWsN/EjhA
+         6++46uomlk3KOlLKNE7k9u0dvTqAYLBDLBZHQ6HZ0YNytxlA4y10ptz371mCGPzRsGCh
+         h/a/SsGW1e01hZkI9vuDR0obEq//YfAcPrQcEkR3WlwdocoMFfFIa0rrHuQ05Dj1v7Bs
+         82C3y+q4e6XXDZhAOfJPbSFyCn79J9t2hGE0w/Ewrs5NUPg4+q8n4DYanW8Ynzb/VWIy
+         6f8vx0BJyPV++gOnPVlNcixBtHRHKxqWz9RYhzjUgosiC3OOv6ZFWvz8ZIdnRilx7ChI
+         4D/w==
+X-Gm-Message-State: AOAM531HkJ2fCFC3fCq5mihHJeLsLKt6n9DZ2HfLf+TVea7JNQpnA2PV
+        +2/L2NW0LazGv+oEF/CAnQ==
+X-Google-Smtp-Source: ABdhPJyfVpmfG+ubS7aEU1ww03RUaTffAeDZHobEFdd7aYoPfW2ZAH5HMpiQ+tL5kGtHFO9Urrh52g==
+X-Received: by 2002:a9d:67c1:: with SMTP id c1mr1412382otn.299.1636573788340;
+        Wed, 10 Nov 2021 11:49:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id p14sm130082oov.0.2021.11.10.11.49.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Nov 2021 11:49:47 -0800 (PST)
+Received: (nullmailer pid 1843729 invoked by uid 1000);
+        Wed, 10 Nov 2021 19:49:44 -0000
+Date:   Wed, 10 Nov 2021 13:49:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     patrice.chotard@foss.st.com
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        thierry reding <thierry.reding@gmail.com>,
+        linux-iio@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mtd@lists.infradead.org,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        "david s . miller" <davem@davemloft.net>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-clk@vger.kernel.org,
+        michael turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>, netdev@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>, dmaengine@vger.kernel.org,
+        linux-usb@vger.kernel.org, dillon min <dillon.minfei@gmail.com>,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        linux-watchdog@vger.kernel.org, ohad ben-cohen <ohad@wizery.com>,
+        Le Ray <erwan.leray@foss.st.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-spi@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-i2c@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        david airlie <airlied@linux.ie>, alsa-devel@alsa-project.org,
+        baolin wang <baolin.wang7@gmail.com>,
+        philippe cornu <philippe.cornu@foss.st.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        daniel vetter <daniel@ffwll.ch>, linux-media@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        linux-crypto@vger.kernel.org, Jose Abreu <joabreu@synopsys.com>,
+        linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Zhang Rui <rui.zhang@intel.com>,
+        jonathan cameron <jic23@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        sam ravnborg <sam@ravnborg.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marek Vasut <marex@denx.de>, linux-phy@lists.infradead.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Richard Weinberger <richard@nod.at>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        vinod koul <vkoul@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        lars-peter clausen <lars@metafoo.de>,
+        linux-serial@vger.kernel.org,
+        pascal Paillet <p.paillet@foss.st.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        stephen boyd <sboyd@kernel.org>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/5] dt-bindings: timer: Update maintainers for
+ st,stm32-timer
+Message-ID: <YYwiWGn0ehnD4nDZ@robh.at.kernel.org>
+References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
+ <20211110150144.18272-2-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gGZEpj7bJZx9teNJsDfuVA0YW8PGt+q_aEDdGJPDh=bg@mail.gmail.com>
+In-Reply-To: <20211110150144.18272-2-patrice.chotard@foss.st.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 05:48:52PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Nov 10, 2021 at 5:33 PM Robert Święcki <robert@swiecki.net> wrote:
-> > śr., 10 lis 2021 o 15:14 Bjorn Helgaas <helgaas@kernel.org> napisał(a):
-> > > On Tue, Nov 09, 2021 at 02:05:18PM -0600, Bjorn Helgaas wrote:
-> > > > On Tue, Nov 09, 2021 at 07:58:47PM +0100, Rafael J. Wysocki wrote:
-> > > > > On Tue, Nov 9, 2021 at 7:52 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > > ...
-> > >
-> > > > > > So instead, we can drop the pm_runtime_get_sync() and
-> > > > > > pm_runtime_put_sync() from local_pci_probe() and pci_device_remove(),
-> > > > > > respectively, and add pm_runtine_get_noresume() to pci_pm_init(),
-> > > > > > which will prevent PM-runtime from touching the device until it has a
-> > > > > > driver that supports PM-runtime.
-> > > > > >
-> > > > > > We'll lose the theoretical ability to put unbound devices into D3 this
-> > > > > > way, but we learned some time ago that this isn't safe in all cases
-> > > > > > anyway.
-> > > > >
-> > > > > IOW, something like this (untested and most likely white-space-damaged).
-> > > >
-> > > > Thanks!  I applied this manually to for-linus in hopes of making the
-> > > > the next linux-next build.
-> > > >
-> > > > Please send any testing reports and corrections to the patch and
-> > > > commit log!
-> > >
-> > > Robert, I hate to ask even more of you, but if you have a chance, it
-> > > would be very helpful if you could test the patch below.  I'm pretty
-> > > sure it should fix the problem you saw, and I hope to ask Linus to
-> > > merge it today.
-> >
-> > I think the most recent patch creates some timeouts and other problems
-> > in pci-related code? Things I haven't seen before.
+On Wed, 10 Nov 2021 16:01:40 +0100, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
 > 
-> So I honestly think that commit 2a4d9408c9e8 needs to be reverted,
-> because it clearly does more than it is supposed to and we need to go
-> back to the drawing board and do this again, but correctly.
+> Benjamin has left the company, add Fabrice and myself as maintainers.
+> 
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> ---
+>  Documentation/devicetree/bindings/timer/st,stm32-timer.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
 
-Yep, I agree, I'll work on that today.
-
-Bjorn
+Applied, thanks!
