@@ -2,59 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6892F44D131
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Nov 2021 06:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF6344D22B
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Nov 2021 07:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbhKKFJr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 11 Nov 2021 00:09:47 -0500
-Received: from host-200-90-157-143.netpc.ec ([200.90.157.143]:52882 "EHLO
-        mail.gruponetpc.com" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbhKKFJr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Nov 2021 00:09:47 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gruponetpc.com (Postfix) with ESMTP id BE166E100EB;
-        Wed, 10 Nov 2021 08:37:29 -0500 (-05)
-Received: from mail.gruponetpc.com ([127.0.0.1])
-        by localhost (mail.gruponetpc.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id xcCZSWzSrDGo; Wed, 10 Nov 2021 08:37:29 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gruponetpc.com (Postfix) with ESMTP id C17CD8A5617;
-        Tue,  9 Nov 2021 22:22:09 -0500 (-05)
-X-Virus-Scanned: amavisd-new at gruponetpc.com
-Received: from mail.gruponetpc.com ([127.0.0.1])
-        by localhost (mail.gruponetpc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id geWnWybBd3-H; Tue,  9 Nov 2021 22:22:08 -0500 (-05)
-Received: from [192.168.0.108] (unknown [93.182.105.113])
-        by mail.gruponetpc.com (Postfix) with ESMTPSA id 92D05842C56;
-        Tue,  9 Nov 2021 15:25:20 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
+        id S231612AbhKKHBO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 Nov 2021 02:01:14 -0500
+Received: from smtpbguseast3.qq.com ([54.243.244.52]:47465 "EHLO
+        smtpbguseast3.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231514AbhKKHBN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Nov 2021 02:01:13 -0500
+X-QQ-mid: bizesmtp31t1636613882truf2e02
+Received: from localhost.localdomain (unknown [113.57.152.160])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Thu, 11 Nov 2021 14:58:01 +0800 (CST)
+X-QQ-SSF: 01400000000000I0F000B00C0000000
+X-QQ-FEAT: AY4E1/TiQGEqooOLL+JwiziAqSqzJdg1D17e0luiDXA0GDGf7aPI255il749k
+        1ZimvTCKWXlMgYCS2U0VDWGD9aiH/b3sTU8UStJTjhM1yz04Sl3vAzHAtSI3Z07hfbaCYQa
+        jvd9IIuTNxztfjcGFgPWNhR5S3VMeXMIHWd+gvqmWj/vDejKfnHvERYoV1uG39Ry52mwT7m
+        V6VqKpRcTTQrOow/lARfIRyWyRpsXGdkrqlUNJG9ngKg5rzMC/zl1QKnxnXHxVCcrsUJIKV
+        nyDyMQL9jaMeEKTOWh+ZTegNiv+/O+a8zArZXKGGvLzWU8D+aEklwbdXeu3gSkfqo9qgTKS
+        Ivcn6O05Y2WgxxsmqSG8eAYwMNM9g==
+X-QQ-GoodBg: 2
+From:   huangbibo <huangbibo@uniontech.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        p.zabel@pengutronix.de, huangbibo <huangbibo@uniontech.com>
+Subject: [PATCH] i2c: designware: I2C unexpected interrupt handling will cause kernel panic
+Date:   Thu, 11 Nov 2021 14:57:59 +0800
+Message-Id: <20211111065759.7423-1-huangbibo@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: donation
-To:     Recipients <ecouso@mail.gruponetpc.com>
-From:   ecouso@mail.gruponetpc.com
-Date:   Tue, 09 Nov 2021 20:24:49 +0000
-Reply-To: stefanopessina35@gmail.com
-Message-Id: <20211109202520.92D05842C56@mail.gruponetpc.com>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+I2C interrupts may be triggered unexpectedly,
+such as programs that directly access I2C registers,
+bus conflicts caused by hardware design defects, etc.
+These can cause null pointer reference errors and kernel panic.
 
+kernel log:
+[   52.676442] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+...
+[   52.816536] Workqueue: efi_rts_wq efi_call_rts
+[   52.820968] pstate: 60000085 (nZCv daIf -PAN -UAO)
+[   52.825753] pc : i2c_dw_isr+0x36c/0x5e0 [i2c_designware_core]
+[   52.831487] lr : i2c_dw_isr+0x88/0x5e0 [i2c_designware_core]
+[   52.837134] sp : ffff8020fff17650
+[   52.924451] Call trace:
+[   52.926888]  i2c_dw_isr+0x36c/0x5e0 [i2c_designware_core]
+...
+[   52.957394]  gic_handle_irq+0x7c/0x178
+[   52.961130]  el1_irq+0xb0/0x140
+[   52.964259]  0x21291d30
+[   52.983729]  0x21160938
+[   52.986164]  __efi_rt_asm_wrapper+0x28/0x44
+[   52.990335]  efi_call_rts+0x78/0x448
+[   53.019021] Kernel panic - not syncing: Fatal exception in interrupt
 
-Hallo,
+Signed-off-by: huangbibo <huangbibo@uniontech.com>
+---
+ drivers/i2c/busses/i2c-designware-master.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Ich bin STEFANO PESSINA. Ich bin ein italienisch-monegassischer Milliardär und stellvertretender Vorsitzender, Chief Executive Officer (CEO) und größter Einzelaktionär der Walgreens Boots Alliance. Au   fgrund dieser aktuellen Situation (Corona-Virus), die sich auf der ganzen Welt ausbreitet, spenden ich selbst und andere 19 italienische Milliardäre mehr als 45 Millionen US-Dollar, um das Coronavirus in Italien zu bekämpfen. Ich habe auch zugesagt, 1.500.000,00 € an Einzelpersonen, Kirchen und Waisenhäuser usw. zu spenden. Ich habe mich entschieden, Ihnen 1.500.000,00 € zu spenden, da Ihre E-Mail-Adresse zu den glücklichen Gewinnern gehört. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen. Du kannst auch über den untenstehenden Link mehr über mich lesen
-
-https://en.wikipedia.org/wiki/Stefano_Pessina
-
-Herzlicher Gruss
-Stellvertretender Vorsitzender und Geschäftsführer,
-Walgreens Boots-Allianz.
-Stefano Pessina
-
-E-Mail: stefanopessina35@gmail.com
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index 2871cf2ee8b4..6af1ede38253 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -631,8 +631,14 @@ static int i2c_dw_irq_handler_master(struct dw_i2c_dev *dev)
+ 	if (stat & DW_IC_INTR_RX_FULL)
+ 		i2c_dw_read(dev);
+ 
+-	if (stat & DW_IC_INTR_TX_EMPTY)
+-		i2c_dw_xfer_msg(dev);
++	if (stat & DW_IC_INTR_TX_EMPTY) {
++		if (dev->msgs) {
++			i2c_dw_xfer_msg(dev);
++		} else { //null  pointer
++			i2c_dw_disable_int(dev);
++			return 0;
++		}
++	}
+ 
+ 	/*
+ 	 * No need to modify or disable the interrupt mask here.
+-- 
+2.20.1
 
 
 
