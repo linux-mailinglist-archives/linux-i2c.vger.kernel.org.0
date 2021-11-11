@@ -2,79 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4F844DC91
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Nov 2021 21:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B6244DCCF
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Nov 2021 21:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbhKKUna (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 Nov 2021 15:43:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
+        id S232666AbhKKVCY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 Nov 2021 16:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbhKKUn3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Nov 2021 15:43:29 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8C7C0613F5
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Nov 2021 12:40:39 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id b5-20020a9d60c5000000b0055c6349ff22so10609210otk.13
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Nov 2021 12:40:39 -0800 (PST)
+        with ESMTP id S229785AbhKKVCY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Nov 2021 16:02:24 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99165C061766;
+        Thu, 11 Nov 2021 12:59:34 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id m14so29428845edd.0;
+        Thu, 11 Nov 2021 12:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/q0Nd34GVOW6Vtxlxyie8tWymeB+50LKpXfiwevblXU=;
-        b=XZHTFAlBg00W3A2TcZsb7/yLfISiWxehJykSZWM4yzx/UI2VWUY6k0sBYaSx2Zdg1m
-         LtpJyG/iAG04oYD9l/YrHBSaq1sZt11hMnWgXYPVlqBAsW/AWYpD4ojphCVZUacyAxVU
-         2zcTrwTemXbvSwDga8q/o3xYzJAXiiaJQpmb5XMq0KiU3/xDwMnoB55ab27Iec9k0UAf
-         fYJ1y5Zy1wY5TI0ttf9RyILiu7XyD3GZOIqySy+OuxAXLped/3ENBcQcqouh9y0H1XhH
-         shJmLQSHbBPTt7KIZ0ZoC0s/KDdKwsty03sbid0k70qCYYDep8V61zmd78tw0NTVkMzL
-         3Kfw==
+        bh=l7xU4r16mNqYSwLiBhq59xwqrndd8tElpUs78xQoNfY=;
+        b=Y5Wh/quoDdSzXOp1QwKilOeNatuqhK2jVQzq+OHsdsrxKALvoJJenLe8+/1ZzufxvC
+         x1pVCYNfow/klqPf4v6OSTU63HGKAoCL3h+gpD/Eb1SlJ8eAGCzUG6M4jXAYzYQfir9M
+         jr7dwAaDzAJTeoCwg5qOE+lj9oRsfp05Up7XqCwIyG5sCOJdNFMu9grM+x0zdw1DadO7
+         SOFxedz2hBIXFibtVMDorooAPRDiLwEBnqXqBqzXU1kooTXx+5e7eq+fc4c+Uue/Xy9A
+         VaYKK7A64zhYQciUDaNsJQYn6M2qfmpJQLa/nZWYNFWMhAprua+WtMrhAX6QMZpqAFVt
+         bt4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/q0Nd34GVOW6Vtxlxyie8tWymeB+50LKpXfiwevblXU=;
-        b=l2eDuoCjRyi1mWxIR6GyQLore8kBSo3PWJJK4ehM9GwygA/uAKwdewmgJnAA7s9Elh
-         YJ/VFO7RekXU5fGgyTtnDOUu7ZnySDMxQekiLNv3Zvn4YXtSskWnDZ3WJ8u+fDxo8JMy
-         x72OrHNEWpaeHnPuYSvSk+LtD9AErTWR/rPpOcCTddo2TVDJe8moHCxg8By38b2As9g2
-         qZtJWD9VWtibQpV72REPEB/JnpJz5x3j/ewCBCV3FejH5nrX/9Y2XEMBxmkK54RvReMM
-         z4ns9ZeVABtkIu6wmxi7pXgL5OONE97veSbQdpMkkd90TuOEvNiOT12P4fycODSGwkKm
-         1qCw==
-X-Gm-Message-State: AOAM530stM9oh83F38ng0WMxPo7Uah0wTTTIMv/iRinvJiQLiRqjSKG2
-        WwN6x59p9YT3FkLewubKrbniiK8aHPv/vDntKV5J4g==
-X-Google-Smtp-Source: ABdhPJySsR95LrrExB2lAp4D7yILSqjeWebOdJCZOAFeTEf1VDzCywTgpKbXhktGmNdDUukENe/NseuXLB+TFyiClIY=
-X-Received: by 2002:a9d:6348:: with SMTP id y8mr8309151otk.179.1636663239280;
- Thu, 11 Nov 2021 12:40:39 -0800 (PST)
+        bh=l7xU4r16mNqYSwLiBhq59xwqrndd8tElpUs78xQoNfY=;
+        b=YuhuvhTD/PS2So3khrIXUnDMfHFstBCIPyZHq84p1z0EyWdIho84vhk8NHLq00GD6e
+         VPTiUUsbdAPYfgt2VUQbbhQTzk5j4YEj0dW5Dp/qIDOVvDFNKc+7Ahf/KPbS24fr8HcL
+         rvs7C2F9edks7qeuS5xOFsXhQgP24Hki55y5XVzxYUj3FvjuP9K10jVXNsfy+evzQ1qV
+         oGcRbC4fNRC6RhmwbDhra0MdoS39nnyhUCx8iA5YOyCd4OyI7yA07qvBBhi3KsRUCRZB
+         Hd++UXnYpKl77FG3pkfIlEa+jQgUMiKJnVup2X2glbgKYDuoS1QpGSNTNrOM1IOhcHOi
+         aHDA==
+X-Gm-Message-State: AOAM532t/geJP9APN/Hwoj+JN4DsJOogsHpCureMVUavw9SmUmcG/jbU
+        w9BB8g48f9762tbX/aRw2dWAk3jHNpnVF5SHQVY=
+X-Google-Smtp-Source: ABdhPJxfw04bxiB/Ltdsn2yLtxNU6DGsobO4UtbbnhfyGdmEiLv4iLfcDgZWsbENb4r8beRtf8IWwFUKnfV3Jpw+5v4=
+X-Received: by 2002:a17:906:bccc:: with SMTP id lw12mr12554296ejb.128.1636664372540;
+ Thu, 11 Nov 2021 12:59:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20211018220504.8301-1-shreeya.patel@collabora.com> <202111101719.VzKfSYAQ-lkp@intel.com>
-In-Reply-To: <202111101719.VzKfSYAQ-lkp@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 Nov 2021 21:40:27 +0100
-Message-ID: <CACRpkdZFX2xvFSjjg2Kwh4vn4zNoCfnp_xRmFmtVffADdokkoQ@mail.gmail.com>
+References: <20211018220504.8301-1-shreeya.patel@collabora.com>
+In-Reply-To: <20211018220504.8301-1-shreeya.patel@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 11 Nov 2021 22:58:48 +0200
+Message-ID: <CAHp75Ve9Dw=JDfUQrLuOwujLMMZ-eyxXUZP7ZGy4jb9D6drn1A@mail.gmail.com>
 Subject: Re: [PATCH v2] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
-To:     kernel test robot <lkp@intel.com>
-Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
-        bgolaszewski@baylibre.com, wsa@kernel.org, krisman@collabora.com,
-        sebastian.reichel@collabora.com, kbuild-all@lists.01.org,
-        kernel@collabora.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, krisman@collabora.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 10:16 AM kernel test robot <lkp@intel.com> wrote:
+On Tue, Oct 19, 2021 at 1:07 AM Shreeya Patel
+<shreeya.patel@collabora.com> wrote:
+>
+> We are racing the registering of .to_irq when probing the
+> i2c driver. This results in random failure of touchscreen
+> devices.
+>
+> Following errors could be seen in dmesg logs when gc->to_irq is NULL
+>
+> [2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
+> [2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
+>
+> To avoid this situation, defer probing until to_irq is registered.
+>
+> This issue has been reported many times in past and people have been
+> using workarounds like changing the pinctrl_amd to built-in instead
+> of loading it as a module or by adding a softdep for pinctrl_amd into
+> the config file.
 
->    drivers/gpio/gpiolib.c: In function 'gpiod_to_irq':
-> >> drivers/gpio/gpiolib.c:3068:15: error: 'struct gpio_chip' has no member named 'irq'
->     3068 |         if (gc->irq.chip) {
->          |               ^~
+> References :-
+> https://bugzilla.kernel.org/show_bug.cgi?id=209413
+> https://github.com/Syniurge/i2c-amd-mp2/issues/3
 
-Right you need an #ifdef CONFIG_GPIOLIB_IRQCHIP in this
-case I would try:
+Please, convert them to BugLink: tags.
 
-if (IS_ENABLED(CONFIG_GPIOLIB_IRQCHIP) && gc->irq.chip)
+> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
 
-hoping the compiler is smart enough to deal with that
-(but I'm not sure it is)
+...
 
-Yours,
-Linus Walleij
+> +       if (gc->irq.chip) {
+> +               /* avoid race condition with other code, which tries to lookup
+> +                * an IRQ before the irqchip has been properly registered
+> +                * (i.e. while gpiochip is still being brought up).
+> +                */
+
+/*
+ * The style of multi-line comments should be
+ * like this. Pay attention to the grammar.
+ * In your comment the parentheses can be replaced
+ * by a simple ',' (comma without quotes).
+ */
+
+> +               return -EPROBE_DEFER;
+> +       }
+
+
+With above (including kbuildbot thingy) addressed
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+-- 
+With Best Regards,
+Andy Shevchenko
