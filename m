@@ -2,80 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FE844EB8A
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Nov 2021 17:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215B844ED8C
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Nov 2021 20:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbhKLQqJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 Nov 2021 11:46:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbhKLQqI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Nov 2021 11:46:08 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FDCC061766;
-        Fri, 12 Nov 2021 08:43:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=ZJr7h+aiUJaGofCFppdFarePecaKlzFMCXf5qGKbWtM=; b=RU82OzPk/fSguZ+uwDMcWgvHPO
-        HgB2Q21AvTXvWu3+NgiwEQ5h7B+1m5tVmnzf1EipFpboQS8YWlRd0DO4IV1oQJog0uumD1t5diy8m
-        lGFcKat+W77CnSBp8fBq+sNBKZrXmJKsyc6Dls1K+VuvtrOq0/MokcTfUGcqcARX0hJ9XWnqUR+9A
-        fnX6co+GSbTTy0Q4g6fPE+izT9Wrx5G7JSpkCC0QU/FRK9gsg9NQlEtEIoZm38WtD7y/A4V02lK8R
-        xFqCNoxVnlVsI3FqQwUnPQi6m5qKORTQcD37L0YthwvWK+5NR+v28uPxzBaV5WXC6M32QjPFtNtwO
-        VSdPZ9Lg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mlZe0-00BFtt-Rk; Fri, 12 Nov 2021 16:43:16 +0000
-Subject: Re: [PATCH v1 1/1] i2c: designware: Fix the kernel doc description
- for struct dw_i2c_dev
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20211112123459.73538-1-andriy.shevchenko@linux.intel.com>
- <e62bf878-03df-1b93-2177-7b8a3be293c4@infradead.org>
- <CAHp75Vd71WPosA8Sy999Mb5ZiGEGg-y3vxYsYz3st5Ng2PJ98A@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <07932f56-ec2d-46a5-7c8e-3f4aab7afd35@infradead.org>
-Date:   Fri, 12 Nov 2021 08:43:16 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S232474AbhKLTyP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 Nov 2021 14:54:15 -0500
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:40593 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230101AbhKLTyO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Nov 2021 14:54:14 -0500
+Received: by mail-oi1-f173.google.com with SMTP id bk14so19855810oib.7;
+        Fri, 12 Nov 2021 11:51:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wnYxAuGAMyIVD/s8arSghnQlkopMtZnXmDifjgRoSDw=;
+        b=y3FPABCyA48Zy0Hz2aLfcJIXtFAGTqh+Ugc/wJnqhzwL3uP6qZuphiDndHxW8nDY8o
+         i1Ldompo1m8xCPO2E4uY5alB4uKLuuyRGW3l7prcC+u/OMpYYqm9ELpMMuUPa+venw+p
+         aBbklez6WYXnrCu1IOad/+UZkihm1NMFLSgXsJ7Wwh0oGRhy9BThiK0xjlScA4QGAkqq
+         vtiWDMk3MVA8fG1EYYLj3fgN2vEAA3UEhANccc8ucsGbDmAeGu3isqMY1VjEJ5Mdv9Ib
+         YDlHitNf5Ok9Okn4DurGSBPls/h6aP6/WxnJVSUJ/JuCvgkglqOW5/eIcz26lzHhozmP
+         0rsw==
+X-Gm-Message-State: AOAM532vpyzQt7lQnnrw85zewv9J5a9p91p8LwgZHz3u+c1QvDxhUxq1
+        RjdGzti35JAxj/O3Lb9FPzGibJ8hfg==
+X-Google-Smtp-Source: ABdhPJziN3WHLy8iLfxC+mSQM4EDSEx6IrWAnqNiTbvF8ew+XPeJLaXQ4OwMmHynX10XvHhFjErqLA==
+X-Received: by 2002:a05:6808:3097:: with SMTP id bl23mr15403219oib.0.1636746683394;
+        Fri, 12 Nov 2021 11:51:23 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bf17sm1812139oib.27.2021.11.12.11.51.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Nov 2021 11:51:22 -0800 (PST)
+Received: (nullmailer pid 3258902 invoked by uid 1000);
+        Fri, 12 Nov 2021 19:51:21 -0000
+Date:   Fri, 12 Nov 2021 13:51:21 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     peda@axentia.se, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: i2c-mux: Add property for settle time
+Message-ID: <YY7FuUKIyZn5892i@robh.at.kernel.org>
+References: <20211103091839.1665672-1-horatiu.vultur@microchip.com>
+ <20211103091839.1665672-2-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHp75Vd71WPosA8Sy999Mb5ZiGEGg-y3vxYsYz3st5Ng2PJ98A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211103091839.1665672-2-horatiu.vultur@microchip.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 11/12/21 8:26 AM, Andy Shevchenko wrote:
-> On Fri, Nov 12, 2021 at 6:01 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->> On 11/12/21 4:34 AM, Andy Shevchenko wrote:
+On Wed, Nov 03, 2021 at 10:18:38AM +0100, Horatiu Vultur wrote:
+> Some HW requires some time for the signals to settle after the muxing is
+> changed. Allow this time to be specified in device tree.
 > 
-> ...
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-mux.yaml | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
->>> + * @rinfo: I²C GPIO recovery information
->>
->> Preferably:   "I2C"
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+> index 24cac36037f5..4c81e56d02f7 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+> @@ -19,6 +19,11 @@ description: |+
+>    populating the i2c child busses.  If an 'i2c-mux' subnode is present, only
+>    subnodes of this will be considered as i2c child busses.
+>  
+> +  Optional properties may not be supported by all drivers. However, if a driver
+> +  wants to support one of the below features, it should adopt these bindings.
+
+What drivers? Bindings are independent. I don't think you need the 
+comment, but this should be a separate change with an explanation along 
+the lines of what we discussed.
+
+> +
+> +select: false
+> +
+>  properties:
+>    $nodename:
+>      pattern: '^(i2c-?)?mux'
+> @@ -29,6 +34,11 @@ properties:
+>    '#size-cells':
+>      const: 0
+>  
+> +  settle-time-us:
+> +    default: 0
+> +    description:
+> +      The time required for the signals to settle.
+> +
+>  patternProperties:
+>    '^i2c@[0-9a-f]+$':
+>      $ref: /schemas/i2c/i2c-controller.yaml
+> @@ -41,6 +51,10 @@ patternProperties:
+>  
+>  additionalProperties: true
+>  
+> +required:
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+
+This too is a separate change.
+
+>  examples:
+>    - |
+>      /*
+> -- 
+> 2.33.0
 > 
-> Why?
-
-See below vvvvvvvvvvvvvvvvv:
->> like it is in thousands of places in the kernel source tree.
-
-
-> UTF-8 has been established for more than a decade. I prefer to use the
-> proper form of the abbreviation (*).
 > 
-> *) Check UM10204.pdf.
-> 
-
-Yes, I am aware of what is in the spec.
-
-thanks.
--- 
-~Randy
