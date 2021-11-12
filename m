@@ -2,124 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2267944E48B
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Nov 2021 11:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA6344E66B
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Nov 2021 13:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbhKLK3S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 Nov 2021 05:29:18 -0500
-Received: from mga02.intel.com ([134.134.136.20]:35250 "EHLO mga02.intel.com"
+        id S234899AbhKLMhz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 Nov 2021 07:37:55 -0500
+Received: from mga18.intel.com ([134.134.136.126]:19873 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234675AbhKLK3R (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 12 Nov 2021 05:29:17 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10165"; a="220321710"
+        id S231147AbhKLMhx (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 12 Nov 2021 07:37:53 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10165"; a="220016356"
 X-IronPort-AV: E=Sophos;i="5.87,229,1631602800"; 
-   d="scan'208";a="220321710"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2021 02:26:26 -0800
+   d="scan'208";a="220016356"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2021 04:35:02 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,229,1631602800"; 
-   d="scan'208";a="453113481"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2021 02:26:25 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mlTl8-0063lg-Ow;
-        Fri, 12 Nov 2021 12:26:14 +0200
-Date:   Fri, 12 Nov 2021 12:26:14 +0200
-From:   "andriy.shevchenko" <andriy.shevchenko@linux.intel.com>
-To:     =?utf-8?B?6buE56Kn5rOi?= <huangbibo@uniontech.com>
+   d="scan'208";a="492985802"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 12 Nov 2021 04:35:01 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 56979C5; Fri, 12 Nov 2021 14:35:03 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "mika.westerberg" <mika.westerberg@linux.intel.com>,
-        "p.zabel" <p.zabel@pengutronix.de>
-Subject: Re: [PATCH] i2c: designware: I2C unexpected interrupt handling will
- cause kernel panic
-Message-ID: <YY5BRrE8bLyvd3PB@smile.fi.intel.com>
-References: <20211111065759.7423-1-huangbibo@uniontech.com>
- <0f203acf-7f63-e2d0-b590-120d3a7ba9c5@linux.intel.com>
- <tencent_48E4F3B231317FCA25752384@qq.com>
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v1 1/1] i2c: designware: Fix the kernel doc description for struct dw_i2c_dev
+Date:   Fri, 12 Nov 2021 14:34:59 +0200
+Message-Id: <20211112123459.73538-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <tencent_48E4F3B231317FCA25752384@qq.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 03:35:07AM +0000, 黄碧波 wrote:
-> Hi Andy,
+$ scripts/kernel-doc -none drivers/i2c/busses/i2c-designware-core.h
+warning: Function parameter or member 'rst' not described in 'dw_i2c_dev'
+warning: Function parameter or member 'get_clk_rate_khz' not described in 'dw_i2c_dev'
+warning: Function parameter or member 'flags' not described in 'dw_i2c_dev'
+warning: Function parameter or member 'functionality' not described in 'dw_i2c_dev'
+warning: Function parameter or member 'master_cfg' not described in 'dw_i2c_dev'
+warning: Function parameter or member 'set_sda_hold_time' not described in 'dw_i2c_dev'
+warning: Function parameter or member 'rinfo' not described in 'dw_i2c_dev'
 
-First of all, please fix your email client (it mangled the message
-in a bad way) and do not top post!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-designware-core.h | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-> This patch is to make the kernel more stable &amp; stronger,
-> Even if there is an unexpected I2C interrupt, kernel will not crash
-
-As far as I can see this is, as Jarkko said, the change to hide the real issue.
-
-> Let me elaborate on this issue:
-> The BIOS support EFI RTC feature and add the I2C bus descr in the ACPI table (RTC chip is connected to I2C bus), The OS matches and registers the I2C bus driver.
-> 
-> When OS get RTC time by BIOS interface (Runtime Server), crash occurs.
-> The&nbsp; BIOS interface direct acces registers to sends and receives data, which conflicts with the&nbsp; I2C driver
-> 
-> This is a BIOS error and the root cause of this issue. The final solution is to delete the I2C device node in the ACPI table
-
-Oh, yeah, yet another brain damaged design. If somebody wants to have driver of
-the I²C peripheral in the ASL, it's not gonna work in Linux (in 99.99% cases).
-
-What you should do is go and fix BIOS that it won't do two things together, i.e.
-ASL based driver and exposure of I²C host controller in ACPI.
-
-On the constructive way, you need to use DMI quirks and somehow make EFI and
-I²C code to be communicating nicely in the kernel.
-
-The patch makes no sense to me, the problem is obviously somewhere else.
-
-NAK.
-
-> &nbsp;
-> &nbsp;
-> ------------------&nbsp;Original&nbsp;------------------
-> From: &nbsp;"Jarkko Nikula"<jarkko.nikula@linux.intel.com&gt;;
-> Date: &nbsp;Thu, Nov 11, 2021 02:06 PM
-> To: &nbsp;"huangbibo"<huangbibo@uniontech.com&gt;; "linux-i2c"<linux-i2c@vger.kernel.org&gt;; 
-> Cc: &nbsp;"linux-kernel"<linux-kernel@vger.kernel.org&gt;; "mika.westerberg"<mika.westerberg@linux.intel.com&gt;; "andriy.shevchenko"<andriy.shevchenko@linux.intel.com&gt;; "p.zabel"<p.zabel@pengutronix.de&gt;; 
-> Subject: &nbsp;Re: [PATCH] i2c: designware: I2C unexpected interrupt handling will cause kernel panic
-> 
-> &nbsp;
-> 
-> Hi
-> 
-> On 11/11/21 8:57 AM, huangbibo wrote:
-> &gt; I2C interrupts may be triggered unexpectedly,
-> &gt; such as programs that directly access I2C registers,
-> &gt; bus conflicts caused by hardware design defects, etc.
-> &gt; These can cause null pointer reference errors and kernel panic.
-> &gt; 
-> &gt; kernel log:
-> &gt; [&nbsp;&nbsp; 52.676442] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> &gt; ...
-> &gt; [&nbsp;&nbsp; 52.816536] Workqueue: efi_rts_wq efi_call_rts
-> &gt; [&nbsp;&nbsp; 52.820968] pstate: 60000085 (nZCv daIf -PAN -UAO)
-> &gt; [&nbsp;&nbsp; 52.825753] pc : i2c_dw_isr+0x36c/0x5e0 [i2c_designware_core]
-> &gt; [&nbsp;&nbsp; 52.831487] lr : i2c_dw_isr+0x88/0x5e0 [i2c_designware_core]
-> &gt; [&nbsp;&nbsp; 52.837134] sp : ffff8020fff17650
-> &gt; [&nbsp;&nbsp; 52.924451] Call trace:
-> &gt; [&nbsp;&nbsp; 52.926888]&nbsp; i2c_dw_isr+0x36c/0x5e0 [i2c_designware_core]
-> &gt; ...
-> &gt; [&nbsp;&nbsp; 52.957394]&nbsp; gic_handle_irq+0x7c/0x178
-> &gt; [&nbsp;&nbsp; 52.961130]&nbsp; el1_irq+0xb0/0x140
-> &gt; [&nbsp;&nbsp; 52.964259]&nbsp; 0x21291d30
-> &gt; [&nbsp;&nbsp; 52.983729]&nbsp; 0x21160938
-> &gt; [&nbsp;&nbsp; 52.986164]&nbsp; __efi_rt_asm_wrapper+0x28/0x44
-> &gt; [&nbsp;&nbsp; 52.990335]&nbsp; efi_call_rts+0x78/0x448
-> &gt; [&nbsp;&nbsp; 53.019021] Kernel panic - not syncing: Fatal exception in interrupt
-
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 60a2e750cee9..4b26cba40139 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -191,23 +191,26 @@ struct reset_control;
+  * @cmd_complete: tx completion indicator
+  * @clk: input reference clock
+  * @pclk: clock required to access the registers
++ * @rst: optional reset for the controller
+  * @slave: represent an I2C slave device
++ * @get_clk_rate_khz: callback to retrieve IP specific bus speed
+  * @cmd_err: run time hadware error code
+  * @msgs: points to an array of messages currently being transferred
+  * @msgs_num: the number of elements in msgs
+- * @msg_write_idx: the element index of the current tx message in the msgs
+- *	array
++ * @msg_write_idx: the element index of the current tx message in the msgs array
+  * @tx_buf_len: the length of the current tx buffer
+  * @tx_buf: the current tx buffer
+- * @msg_read_idx: the element index of the current rx message in the msgs
+- *	array
++ * @msg_read_idx: the element index of the current rx message in the msgs array
+  * @rx_buf_len: the length of the current rx buffer
+  * @rx_buf: the current rx buffer
+  * @msg_err: error status of the current transfer
+  * @status: i2c master status, one of STATUS_*
+  * @abort_source: copy of the TX_ABRT_SOURCE register
+  * @irq: interrupt number for the i2c master
++ * @flags: platform specific flags like type of IO accessors or model
+  * @adapter: i2c subsystem adapter node
++ * @functionality: I2C_FUNC_* ORed bits to reflect what controller does support
++ * @master_cfg: configuration for the master device
+  * @slave_cfg: configuration for the slave device
+  * @tx_fifo_depth: depth of the hardware tx fifo
+  * @rx_fifo_depth: depth of the hardware rx fifo
+@@ -228,7 +231,9 @@ struct reset_control;
+  * @disable: function to disable the controller
+  * @disable_int: function to disable all interrupts
+  * @init: function to initialize the I2C hardware
++ * @set_sda_hold_time: callback to retrieve IP specific SDA hold timing
+  * @mode: operation mode - DW_IC_MASTER or DW_IC_SLAVE
++ * @rinfo: I²C GPIO recovery information
+  * @suspended: set to true if the controller is suspended
+  *
+  * HCNT and LCNT parameters can be used if the platform knows more accurate
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.33.0
 
