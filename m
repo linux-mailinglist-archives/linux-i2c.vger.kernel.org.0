@@ -2,157 +2,176 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE3B44E058
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Nov 2021 03:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612A244E27B
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Nov 2021 08:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbhKLCiY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 Nov 2021 21:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S233916AbhKLHpd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 Nov 2021 02:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234506AbhKLCiY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 Nov 2021 21:38:24 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0FEC061767
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Nov 2021 18:35:33 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id x64so7247487pfd.6
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Nov 2021 18:35:33 -0800 (PST)
+        with ESMTP id S232791AbhKLHpd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Nov 2021 02:45:33 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C147AC0613F5
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so6126645wme.4
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RNXnFaFa6OypiY8cUDEXU0f6wOrYgTchSCvRvlsTQj8=;
-        b=CnEygtn/QYnOuEWrZ0Wl5Dq0XzaDKRMuFrim3itrSjv7xN6Md8/Q8/GeNreaH2Ukx/
-         ur0hfbc3FsY/A8ZfQxcgY4WuJroVKRGVeIhKy+mXt5/Op4g1sOk2uhHrBQOROoMSL3B/
-         tTygpiM+ZPkd1EWmCL9GAkH5P/yIq8cRWQUEjh9AoMopyvZQqZv6bmacTPJqvRPgwFTl
-         ibh6AgT+dUIAhN2acEIbLXW9wvYQdkVoZ6c27bOcjA+ZiGl6fgvZ7szAzkjlgKV3f5rP
-         7P5VvViXMiQpnSfugdpuKo8RKeQLhodgOogeuPcDgcV2MORcYusqtKDGV5i7WCyAseCn
-         jgoQ==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
+        b=L0G7vqzIu4OmVtWPcfcfA5NzLtPk2i0H7s2BzObNlHQTFEkm03sqk/2QHQ4kjpk9BH
+         XMXouE5QpmwrxFfo6B5ZLvuccwWWhT/w9Ko9Yi7L+7BfDDnicqyRLnT+TM8ck5H5bQEY
+         cyD6P6qfh9iWldNqTQR7o5UJ+sXkSMXyDzLNU6kkBq7ka/+ZuUqEk/qcSbQ3GxXC7kiU
+         cm9dyledHK9n0gr3crraQGaAfhd3vfTQwfXVu/kwmwojjE1dRCSgNEVgeiJJB70r7ke9
+         OYePQHHEPa/usZJXytv516/nCeAGVXFsmZBOHnIcNaOTOhsULeXowN7ikvsxKqOo/gxw
+         3O2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RNXnFaFa6OypiY8cUDEXU0f6wOrYgTchSCvRvlsTQj8=;
-        b=5ltNhrhqUGv/FHAYQnaQ2T3rCNsEfkPEEz+VGdCd5dnNiuEn5DwPHQoHuXxKsDQZ25
-         /F65L6M0Tyyrsz1igwb0sQlock1Oq96PDZAWi7bNSgSAvZyPL+hd+/jgDWqqfKFqQfFU
-         qHKifFN5DpbooK4Ommyr5nROWkNvxaMRzlAckLM/5VX52fNTYWPAA5J0s19HLaYc4st8
-         AvNrfa4Jyg2iC0GW59GXrVq1+xI+DI9xLOFmWN6jASiDpLwMyiIgI/axemebU9k1SzC8
-         9Ld3BesdF6TYNS/V+c+5PTW/sagL/6HqTuPL/mR2XL1k/VpdOswbZTBLIyViYaCS8BxX
-         VuLg==
-X-Gm-Message-State: AOAM5317HsixQGNG+wPO6ABwm6n64hPMStlnn+kK+koKc0JsZb7fifgA
-        9CCFyNq++/kxGuIWcOwrAeDSuDQQRGyfSQ==
-X-Google-Smtp-Source: ABdhPJyRkgNSq1OMU0V6NixxdtfxUcHIEtVk0YRczILs2+A+RXr19abyAyxkFmUenAaIGjShRy9EAw==
-X-Received: by 2002:a63:8ac3:: with SMTP id y186mr7927614pgd.444.1636684532167;
-        Thu, 11 Nov 2021 18:35:32 -0800 (PST)
-Received: from localhost ([223.226.77.81])
-        by smtp.gmail.com with ESMTPSA id a8sm3347968pgh.84.2021.11.11.18.35.31
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
+        b=zR6DrystZus4vVGaQ5GseK7Oe/cqTF/shiGnZgbwMi6sC6cPZvpNdONJErT5ToqUor
+         9W9T8OjcHzSQWV/lcwP1T3rG/Wf/RkQ5PCJYS0SG4ex8yZsgotuXhtI9rR1RoTk3q2br
+         EXHXOlv1y06Q/cArMYsC4Q8SCWNHUC4S08vRo7XQoyx4Rvz0APM/nIEjJpcx9jLgl1MW
+         b7epPaLHer+8wDfmEk03LVmjoecrtCMgF8c8RNp6eHgrvy0W+KqKI8Duj0EM62wUW8Ps
+         uMrKS6rEMwKQ35iI5wvBtvnCp0gSj2W44K9a2L3qqxUjJU+Gu9Kss8fzrniNHaToZNX3
+         OUYg==
+X-Gm-Message-State: AOAM532BiVXvOJpn4gZtT84feCOvMTSlyduUoeR6jh2qDQCxiCpcAUw+
+        Gn06qUJc/NO0caSC8Zu8Zx2tzA==
+X-Google-Smtp-Source: ABdhPJyYtg+MHn61GMl0MRFqSO/sm1wnHgrm7yORmq7WT7ihtvN7d0mp317CBhRDaom5mAlXGDszmg==
+X-Received: by 2002:a05:600c:2107:: with SMTP id u7mr32377342wml.82.1636702961238;
+        Thu, 11 Nov 2021 23:42:41 -0800 (PST)
+Received: from google.com ([95.148.6.174])
+        by smtp.gmail.com with ESMTPSA id q8sm4978469wrx.71.2021.11.11.23.42.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Nov 2021 18:35:31 -0800 (PST)
-Date:   Fri, 12 Nov 2021 08:05:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     wsa@kernel.org, jie.deng@intel.com, conghui.chen@intel.com,
-        mst@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com
-Subject: Re: [PATCH v2 1/2] i2c: virtio: disable timeout handling
-Message-ID: <20211112023529.2nypmrnm6mufcpjt@vireshk-i7>
-References: <20211111160412.11980-1-vincent.whitchurch@axis.com>
- <20211111160412.11980-2-vincent.whitchurch@axis.com>
+        Thu, 11 Nov 2021 23:42:40 -0800 (PST)
+Date:   Fri, 12 Nov 2021 07:42:37 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     patrice.chotard@foss.st.com, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        jonathan cameron <jic23@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        linux-mtd@lists.infradead.org, linux-watchdog@vger.kernel.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        Matt Mackall <mpm@selenic.com>, vinod koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        baolin wang <baolin.wang7@gmail.com>,
+        linux-spi@vger.kernel.org, david airlie <airlied@linux.ie>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        netdev@vger.kernel.org,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        ohad ben-cohen <ohad@wizery.com>, linux-gpio@vger.kernel.org,
+        Jose Abreu <joabreu@synopsys.com>,
+        Le Ray <erwan.leray@foss.st.com>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        michael turquette <mturquette@baylibre.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        linux-serial@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        "david s . miller" <davem@davemloft.net>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        linux-i2c@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        thierry reding <thierry.reding@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        philippe cornu <philippe.cornu@foss.st.com>,
+        linux-rtc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        alsa-devel@alsa-project.org, Zhang Rui <rui.zhang@intel.com>,
+        linux-crypto@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-iio@vger.kernel.org, pascal Paillet <p.paillet@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        stephen boyd <sboyd@kernel.org>,
+        dillon min <dillon.minfei@gmail.com>,
+        devicetree@vger.kernel.org,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        linux-phy@lists.infradead.org,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        sam ravnborg <sam@ravnborg.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
+        daniel vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        lars-peter clausen <lars@metafoo.de>
+Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: timers: Update maintainers for
+ st,stm32-timers
+Message-ID: <YY4a7ZxzhNq6Or+t@google.com>
+References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
+ <20211110150144.18272-3-patrice.chotard@foss.st.com>
+ <YYwjPAoCtuM6iycz@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211111160412.11980-2-vincent.whitchurch@axis.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YYwjPAoCtuM6iycz@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 11-11-21, 17:04, Vincent Whitchurch wrote:
-> If a timeout is hit, it can result is incorrect data on the I2C bus
-> and/or memory corruptions in the guest since the device can still be
-> operating on the buffers it was given while the guest has freed them.
-> 
-> Here is, for example, the start of a slub_debug splat which was
-> triggered on the next transfer after one transfer was forced to timeout
-> by setting a breakpoint in the backend (rust-vmm/vhost-device):
-> 
->  BUG kmalloc-1k (Not tainted): Poison overwritten
->  First byte 0x1 instead of 0x6b
->  Allocated in virtio_i2c_xfer+0x65/0x35c age=350 cpu=0 pid=29
->  	__kmalloc+0xc2/0x1c9
->  	virtio_i2c_xfer+0x65/0x35c
->  	__i2c_transfer+0x429/0x57d
->  	i2c_transfer+0x115/0x134
->  	i2cdev_ioctl_rdwr+0x16a/0x1de
->  	i2cdev_ioctl+0x247/0x2ed
->  	vfs_ioctl+0x21/0x30
->  	sys_ioctl+0xb18/0xb41
->  Freed in virtio_i2c_xfer+0x32e/0x35c age=244 cpu=0 pid=29
->  	kfree+0x1bd/0x1cc
->  	virtio_i2c_xfer+0x32e/0x35c
->  	__i2c_transfer+0x429/0x57d
->  	i2c_transfer+0x115/0x134
->  	i2cdev_ioctl_rdwr+0x16a/0x1de
->  	i2cdev_ioctl+0x247/0x2ed
->  	vfs_ioctl+0x21/0x30
->  	sys_ioctl+0xb18/0xb41
-> 
-> There is no simple fix for this (the driver would have to always create
-> bounce buffers and hold on to them until the device eventually returns
-> the buffers), so just disable the timeout support for now.
-> 
-> Fixes: 3cfc88380413d20f ("i2c: virtio: add a virtio i2c frontend driver")
-> Acked-by: Jie Deng <jie.deng@intel.com>
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  drivers/i2c/busses/i2c-virtio.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
-> index f10a603b13fb..7b2474e6876f 100644
-> --- a/drivers/i2c/busses/i2c-virtio.c
-> +++ b/drivers/i2c/busses/i2c-virtio.c
-> @@ -106,11 +106,10 @@ static int virtio_i2c_prepare_reqs(struct virtqueue *vq,
->  
->  static int virtio_i2c_complete_reqs(struct virtqueue *vq,
->  				    struct virtio_i2c_req *reqs,
-> -				    struct i2c_msg *msgs, int num,
-> -				    bool timedout)
-> +				    struct i2c_msg *msgs, int num)
->  {
->  	struct virtio_i2c_req *req;
-> -	bool failed = timedout;
-> +	bool failed = false;
->  	unsigned int len;
->  	int i, j = 0;
->  
-> @@ -132,7 +131,7 @@ static int virtio_i2c_complete_reqs(struct virtqueue *vq,
->  			j++;
->  	}
->  
-> -	return timedout ? -ETIMEDOUT : j;
-> +	return j;
->  }
->  
->  static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
-> @@ -141,7 +140,6 @@ static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->  	struct virtio_i2c *vi = i2c_get_adapdata(adap);
->  	struct virtqueue *vq = vi->vq;
->  	struct virtio_i2c_req *reqs;
-> -	unsigned long time_left;
->  	int count;
->  
->  	reqs = kcalloc(num, sizeof(*reqs), GFP_KERNEL);
-> @@ -164,11 +162,9 @@ static int virtio_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->  	reinit_completion(&vi->completion);
->  	virtqueue_kick(vq);
->  
-> -	time_left = wait_for_completion_timeout(&vi->completion, adap->timeout);
-> -	if (!time_left)
-> -		dev_err(&adap->dev, "virtio i2c backend timeout.\n");
-> +	wait_for_completion(&vi->completion);
+On Wed, 10 Nov 2021, Rob Herring wrote:
 
-I thought we decided on making this in insanely high value instead ?
+> On Wed, 10 Nov 2021 16:01:41 +0100, patrice.chotard@foss.st.com wrote:
+> > From: Patrice Chotard <patrice.chotard@foss.st.com>
+> > 
+> > Benjamin has left the company, remove his name from maintainers.
+> > 
+> > Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> > ---
+> >  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> 
+> Lee indicated he was going to pick this one up, so:
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+
+Since you already merged the treewide patch, you may as well take
+this too.  We'll work through any conflicts that may occur as a
+result.
+
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
-viresh
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
