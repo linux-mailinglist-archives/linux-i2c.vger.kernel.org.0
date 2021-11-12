@@ -2,176 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 612A244E27B
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Nov 2021 08:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108FA44E2D1
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Nov 2021 09:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233916AbhKLHpd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 Nov 2021 02:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbhKLHpd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Nov 2021 02:45:33 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C147AC0613F5
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so6126645wme.4
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
-        b=L0G7vqzIu4OmVtWPcfcfA5NzLtPk2i0H7s2BzObNlHQTFEkm03sqk/2QHQ4kjpk9BH
-         XMXouE5QpmwrxFfo6B5ZLvuccwWWhT/w9Ko9Yi7L+7BfDDnicqyRLnT+TM8ck5H5bQEY
-         cyD6P6qfh9iWldNqTQR7o5UJ+sXkSMXyDzLNU6kkBq7ka/+ZuUqEk/qcSbQ3GxXC7kiU
-         cm9dyledHK9n0gr3crraQGaAfhd3vfTQwfXVu/kwmwojjE1dRCSgNEVgeiJJB70r7ke9
-         OYePQHHEPa/usZJXytv516/nCeAGVXFsmZBOHnIcNaOTOhsULeXowN7ikvsxKqOo/gxw
-         3O2A==
+        id S233476AbhKLIMp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 Nov 2021 03:12:45 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:41610
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233125AbhKLIMo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Nov 2021 03:12:44 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BC6883F1CD
+        for <linux-i2c@vger.kernel.org>; Fri, 12 Nov 2021 08:09:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1636704590;
+        bh=N0lgEvQGt1KLpLy11X2dOPKbOYo7U8IYp3IkLc+Sfe4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=fWurR8O3W7O/T0GhBRAV770vK4/uvOawof3vnCprxs6PpFpgra3dIBmjMneIAV/VR
+         ik/N5qGkWdF8wx/D/XIe51CkuW9bCQ7RHiTa3/Y0ndu+4CcUSE00DQWQR7+hXPbzyF
+         bjJw+mqjhNoqe0PCFgYyl4L1XEuMGT6OCqaEcbCOzVZIoj/Jv2jREZrTGlbIsfxw+e
+         xyvTibNgxpOukXe3BwbuEyQA43dwyvEECworVGjVEhRzclWjHXft445AwSFYhzlspr
+         I6YLYUMI28yWdWW3I5pEqcnsICkhChSROySS6F88SbnXtgC88LkwvzZaHHGDt+3box
+         zOfT6N/iXbjYw==
+Received: by mail-lj1-f199.google.com with SMTP id o15-20020a2e90cf000000b00218dfebebdeso2823485ljg.13
+        for <linux-i2c@vger.kernel.org>; Fri, 12 Nov 2021 00:09:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
-        b=zR6DrystZus4vVGaQ5GseK7Oe/cqTF/shiGnZgbwMi6sC6cPZvpNdONJErT5ToqUor
-         9W9T8OjcHzSQWV/lcwP1T3rG/Wf/RkQ5PCJYS0SG4ex8yZsgotuXhtI9rR1RoTk3q2br
-         EXHXOlv1y06Q/cArMYsC4Q8SCWNHUC4S08vRo7XQoyx4Rvz0APM/nIEjJpcx9jLgl1MW
-         b7epPaLHer+8wDfmEk03LVmjoecrtCMgF8c8RNp6eHgrvy0W+KqKI8Duj0EM62wUW8Ps
-         uMrKS6rEMwKQ35iI5wvBtvnCp0gSj2W44K9a2L3qqxUjJU+Gu9Kss8fzrniNHaToZNX3
-         OUYg==
-X-Gm-Message-State: AOAM532BiVXvOJpn4gZtT84feCOvMTSlyduUoeR6jh2qDQCxiCpcAUw+
-        Gn06qUJc/NO0caSC8Zu8Zx2tzA==
-X-Google-Smtp-Source: ABdhPJyYtg+MHn61GMl0MRFqSO/sm1wnHgrm7yORmq7WT7ihtvN7d0mp317CBhRDaom5mAlXGDszmg==
-X-Received: by 2002:a05:600c:2107:: with SMTP id u7mr32377342wml.82.1636702961238;
-        Thu, 11 Nov 2021 23:42:41 -0800 (PST)
-Received: from google.com ([95.148.6.174])
-        by smtp.gmail.com with ESMTPSA id q8sm4978469wrx.71.2021.11.11.23.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Nov 2021 23:42:40 -0800 (PST)
-Date:   Fri, 12 Nov 2021 07:42:37 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     patrice.chotard@foss.st.com, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alexandre torgue <alexandre.torgue@foss.st.com>,
-        jonathan cameron <jic23@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        olivier moysan <olivier.moysan@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        linux-mtd@lists.infradead.org, linux-watchdog@vger.kernel.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        maxime coquelin <mcoquelin.stm32@gmail.com>,
-        Matt Mackall <mpm@selenic.com>, vinod koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        baolin wang <baolin.wang7@gmail.com>,
-        linux-spi@vger.kernel.org, david airlie <airlied@linux.ie>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        netdev@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        ohad ben-cohen <ohad@wizery.com>, linux-gpio@vger.kernel.org,
-        Jose Abreu <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        herbert xu <herbert@gondor.apana.org.au>,
-        michael turquette <mturquette@baylibre.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        linux-serial@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        "david s . miller" <davem@davemloft.net>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        linux-i2c@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        thierry reding <thierry.reding@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        philippe cornu <philippe.cornu@foss.st.com>,
-        linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        alsa-devel@alsa-project.org, Zhang Rui <rui.zhang@intel.com>,
-        linux-crypto@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-iio@vger.kernel.org, pascal Paillet <p.paillet@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        stephen boyd <sboyd@kernel.org>,
-        dillon min <dillon.minfei@gmail.com>,
-        devicetree@vger.kernel.org,
-        yannick fertre <yannick.fertre@foss.st.com>,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        linux-phy@lists.infradead.org,
-        benjamin gaignard <benjamin.gaignard@linaro.org>,
-        sam ravnborg <sam@ravnborg.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
-        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-        daniel vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
-        bjorn andersson <bjorn.andersson@linaro.org>,
-        lars-peter clausen <lars@metafoo.de>
-Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: timers: Update maintainers for
- st,stm32-timers
-Message-ID: <YY4a7ZxzhNq6Or+t@google.com>
-References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
- <20211110150144.18272-3-patrice.chotard@foss.st.com>
- <YYwjPAoCtuM6iycz@robh.at.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=N0lgEvQGt1KLpLy11X2dOPKbOYo7U8IYp3IkLc+Sfe4=;
+        b=L9HgqwuPhmGbeBuAy/1LpV99fJb45l9QQtjfke3pweoB/Abasg+uX/R6c70E5Hs8lt
+         F+EU/NSkna8pqWNvKzsLzMJdwdBJVTgudW1C2d5EbhvRXjHRsVqRM8afUE19BO6ebdLx
+         0y0/yMkiVZ2qyWLao4XNuKQLuRqw4FSSVhNQa9q+E0g8T4uOX06g+IavOpIgvdm2igV0
+         hUKeU2JNzdcMSyCzd1tEG80A/UKfCHLTUiGinXW+mYS4VH3NbA5mLf80iaEEvnjjCW/E
+         kyLQHsaRi3U3FVcZuCAfWpNgMkIeRg4fIIlK0Aa9rCqrx7MXbcB42ZoXXUvvd2nXCEdf
+         BzpQ==
+X-Gm-Message-State: AOAM532bpBbGzHjc10v70HHM0olfgRSg7Mx0kZZg2Rdu2FsP684Fj4Sk
+        OIvDkXv3+40RCc/MZNcTSqdUBnRFWJXrMsaryRvjGCVi8jXLIsu0/eK/AL62CadtC60SWOfYB3s
+        S8e6VRza/jw7Gd0eW0G24nudSOFcLT+ZQ4aR3dw==
+X-Received: by 2002:a05:651c:1503:: with SMTP id e3mr13074836ljf.181.1636704590111;
+        Fri, 12 Nov 2021 00:09:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyrUNr1T5EkFtrQpcvNMsMHIHtqi+AWQMLU5dHvVzJ97JYsfxC9021l75RYC0KKSA8xJU/X3g==
+X-Received: by 2002:a05:651c:1503:: with SMTP id e3mr13074809ljf.181.1636704589817;
+        Fri, 12 Nov 2021 00:09:49 -0800 (PST)
+Received: from [192.168.0.27] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id a7sm346751lfk.233.2021.11.12.00.09.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Nov 2021 00:09:49 -0800 (PST)
+Message-ID: <5816a13b-0ad8-450c-ff8e-2d646c7117b0@canonical.com>
+Date:   Fri, 12 Nov 2021 09:09:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YYwjPAoCtuM6iycz@robh.at.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v3 2/2] i2c: exynos5: add support for ExynosAutov9 SoC
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chanho61.park@samsung.com, linux-arm-kernel@lists.infradead.org,
+        Sam Protsenko <semen.protsenko@linaro.org>
+References: <20211112010137.149174-1-jaewon02.kim@samsung.com>
+ <CGME20211112010603epcas2p339d1a6ef3df7cdbe61c87c8afa541fd0@epcas2p3.samsung.com>
+ <20211112010137.149174-3-jaewon02.kim@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211112010137.149174-3-jaewon02.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 10 Nov 2021, Rob Herring wrote:
-
-> On Wed, 10 Nov 2021 16:01:41 +0100, patrice.chotard@foss.st.com wrote:
-> > From: Patrice Chotard <patrice.chotard@foss.st.com>
-> > 
-> > Benjamin has left the company, remove his name from maintainers.
-> > 
-> > Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> > ---
-> >  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
+On 12/11/2021 02:01, Jaewon Kim wrote:
+> Serial IPs(UART, I2C, SPI) are integrated into New IP-Core
+> called USI(Universal Serial Interface).
 > 
-> Lee indicated he was going to pick this one up, so:
+> As it is integrated into USI, there are additinal HW changes.
+> Registers to control USI and sysreg to set serial IPs have been added.
+> Also, some timing registres have been changed.
 > 
-> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> ---
+>  drivers/i2c/busses/i2c-exynos5.c | 135 ++++++++++++++++++++++++++++---
+>  1 file changed, 125 insertions(+), 10 deletions(-)
+> 
 
-Since you already merged the treewide patch, you may as well take
-this too.  We'll work through any conflicts that may occur as a
-result.
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+
+Best regards,
+Krzysztof
