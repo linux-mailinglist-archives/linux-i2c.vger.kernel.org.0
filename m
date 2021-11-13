@@ -2,113 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 215B844ED8C
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Nov 2021 20:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C88A44F3CD
+	for <lists+linux-i2c@lfdr.de>; Sat, 13 Nov 2021 16:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbhKLTyP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 Nov 2021 14:54:15 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:40593 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbhKLTyO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 Nov 2021 14:54:14 -0500
-Received: by mail-oi1-f173.google.com with SMTP id bk14so19855810oib.7;
-        Fri, 12 Nov 2021 11:51:23 -0800 (PST)
+        id S233195AbhKMPFs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 13 Nov 2021 10:05:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233143AbhKMPFs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 13 Nov 2021 10:05:48 -0500
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3371C061767
+        for <linux-i2c@vger.kernel.org>; Sat, 13 Nov 2021 07:02:55 -0800 (PST)
+Received: by mail-il1-x141.google.com with SMTP id k1so11902344ilo.7
+        for <linux-i2c@vger.kernel.org>; Sat, 13 Nov 2021 07:02:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=AYck59OKJZl5BcylX0MJhTaAQIkCo5TFvs+U+o+CvCM=;
+        b=LNPWR+xZrrrBhVfmBf9NiwaCAtTLq/4UgfwdPqX80v1qvfoH8X0ayWJEpi2BcPnOAj
+         5OJG5dkhMZN3jZDIIB6eIWIrbXwjeEG2tQ62LcqMGPXSMAer+YSD5Dh2j6OXUNDcPmLn
+         AGNeYSNcMeWzZxtkxHRarsXQ9PPrNP3G5WQa4fcIX9agqeAUkyOV1LCFsOEmgJnLGSC2
+         f+Uo5jKrM8BxBopkD/soUQ6gn1b4JmVvCW13CkoLPdr1UkICZKtzUyUoPC3+XV0O+zTg
+         Xi7RV79K1BWASQR3n8mp7f0hyWZoQUeYzCLT9uqbzThxcLkhhacDFQhQx7PuxosUmVDA
+         3ZGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wnYxAuGAMyIVD/s8arSghnQlkopMtZnXmDifjgRoSDw=;
-        b=y3FPABCyA48Zy0Hz2aLfcJIXtFAGTqh+Ugc/wJnqhzwL3uP6qZuphiDndHxW8nDY8o
-         i1Ldompo1m8xCPO2E4uY5alB4uKLuuyRGW3l7prcC+u/OMpYYqm9ELpMMuUPa+venw+p
-         aBbklez6WYXnrCu1IOad/+UZkihm1NMFLSgXsJ7Wwh0oGRhy9BThiK0xjlScA4QGAkqq
-         vtiWDMk3MVA8fG1EYYLj3fgN2vEAA3UEhANccc8ucsGbDmAeGu3isqMY1VjEJ5Mdv9Ib
-         YDlHitNf5Ok9Okn4DurGSBPls/h6aP6/WxnJVSUJ/JuCvgkglqOW5/eIcz26lzHhozmP
-         0rsw==
-X-Gm-Message-State: AOAM532vpyzQt7lQnnrw85zewv9J5a9p91p8LwgZHz3u+c1QvDxhUxq1
-        RjdGzti35JAxj/O3Lb9FPzGibJ8hfg==
-X-Google-Smtp-Source: ABdhPJziN3WHLy8iLfxC+mSQM4EDSEx6IrWAnqNiTbvF8ew+XPeJLaXQ4OwMmHynX10XvHhFjErqLA==
-X-Received: by 2002:a05:6808:3097:: with SMTP id bl23mr15403219oib.0.1636746683394;
-        Fri, 12 Nov 2021 11:51:23 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bf17sm1812139oib.27.2021.11.12.11.51.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Nov 2021 11:51:22 -0800 (PST)
-Received: (nullmailer pid 3258902 invoked by uid 1000);
-        Fri, 12 Nov 2021 19:51:21 -0000
-Date:   Fri, 12 Nov 2021 13:51:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     peda@axentia.se, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: i2c-mux: Add property for settle time
-Message-ID: <YY7FuUKIyZn5892i@robh.at.kernel.org>
-References: <20211103091839.1665672-1-horatiu.vultur@microchip.com>
- <20211103091839.1665672-2-horatiu.vultur@microchip.com>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=AYck59OKJZl5BcylX0MJhTaAQIkCo5TFvs+U+o+CvCM=;
+        b=WoOof4nKVdZTKptKiOmh0Lnn5iCrFiYvEKPNf3uXc97H5NUNB/eGGRcifiXvu84ZVK
+         12MHq9tfENsDbga8vvJm1ZJtJNRvPArfUhdtQKB0h0SFvRnghd2k9llp1VGgoMb63Gsn
+         jhMNijRXOUrZHfKbF5QPfQMJWW5x+ThpgUzSUcYUCntaryr4l/QKglqyPX88Q97jrw4s
+         CiAo8PpUQ4KlmggTXDUm2DBNQnp4hbyl3yJhJQaXsjViI9wuTs26Odg1UJPtcUZr09oR
+         08x5aAlxugHMIBlsSNvr56PZCmdQO1yMHlM1/kCeU5oDX4x8KFut92ua3Ht7JJSBBWXV
+         jZvA==
+X-Gm-Message-State: AOAM533ZCjAXqrTklzeAvx4T/fBDV39AJdiQ3VatQsOCWxXwiN25/+Jg
+        sfDq9GUPYCq9otYXcruldEPSPeFHnTKbVY3PTYI=
+X-Google-Smtp-Source: ABdhPJy+jOxOuxb5/w39AEfG3R2ggPEHih24bL1VO3dZWfeoYzM9kS+2JfVCWRE4rhl//mORRX5OPAWyIzEqvBu5rE8=
+X-Received: by 2002:a92:d14d:: with SMTP id t13mr14492253ilg.194.1636815775308;
+ Sat, 13 Nov 2021 07:02:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211103091839.1665672-2-horatiu.vultur@microchip.com>
+Reply-To: mohammadouattara53@gmail.com
+Sender: mohammadouattara27@gmail.com
+Received: by 2002:a5e:a80c:0:0:0:0:0 with HTTP; Sat, 13 Nov 2021 07:02:55
+ -0800 (PST)
+From:   Mohammad Ouattara <mohammad.ouattara3238@gmail.com>
+Date:   Sat, 13 Nov 2021 07:02:55 -0800
+X-Google-Sender-Auth: 8gXw9k5Y_dvzYw3ak8f9nE7_mlU
+Message-ID: <CAJ4jTgpq1zUrr3dWT75k5ku6kce0kTHwW=GzbEsva4eTNpS6OA@mail.gmail.com>
+Subject: I am expecting your urgent respond.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 03, 2021 at 10:18:38AM +0100, Horatiu Vultur wrote:
-> Some HW requires some time for the signals to settle after the muxing is
-> changed. Allow this time to be specified in device tree.
-> 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-mux.yaml | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
-> index 24cac36037f5..4c81e56d02f7 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
-> @@ -19,6 +19,11 @@ description: |+
->    populating the i2c child busses.  If an 'i2c-mux' subnode is present, only
->    subnodes of this will be considered as i2c child busses.
->  
-> +  Optional properties may not be supported by all drivers. However, if a driver
-> +  wants to support one of the below features, it should adopt these bindings.
+Dear Friend,
 
-What drivers? Bindings are independent. I don't think you need the 
-comment, but this should be a separate change with an explanation along 
-the lines of what we discussed.
+I know that this message will come to you as a surprise. I am the
+Auditing and Accounting section manager in (BOA BANK) Ouagadougou
+Burkina Faso.
 
-> +
-> +select: false
-> +
->  properties:
->    $nodename:
->      pattern: '^(i2c-?)?mux'
-> @@ -29,6 +34,11 @@ properties:
->    '#size-cells':
->      const: 0
->  
-> +  settle-time-us:
-> +    default: 0
-> +    description:
-> +      The time required for the signals to settle.
-> +
->  patternProperties:
->    '^i2c@[0-9a-f]+$':
->      $ref: /schemas/i2c/i2c-controller.yaml
-> @@ -41,6 +51,10 @@ patternProperties:
->  
->  additionalProperties: true
->  
-> +required:
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +
+I Hope that you will not expose or betray this trust and confident
+that I am about to repose on you for the mutual benefit of our both
+families.
 
-This too is a separate change.
+I need your assistance in transferring the sum of ($12.5M) Twelve
+Million, Five Hundred Thousand United Dollars into your account within
+7 to 10 banking days,as one of my Bank foriegn clients who died few
+years ago without indicating his next of kin to the fund.
 
->  examples:
->    - |
->      /*
-> -- 
-> 2.33.0
-> 
-> 
+If you are really interested in my proposal further details of the
+Transfer will be forwarded unto you as soon as I receive your
+willingness mail for a successful transfer.
+
+I am expecting your urgent respond.
+
+Have a great day,
+Mr mohammad ouattara.
