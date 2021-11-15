@@ -2,63 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DADA44F9EE
-	for <lists+linux-i2c@lfdr.de>; Sun, 14 Nov 2021 19:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 315EF44FD36
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Nov 2021 03:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbhKNS3r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 14 Nov 2021 13:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbhKNS3r (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Nov 2021 13:29:47 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9B9C061746
-        for <linux-i2c@vger.kernel.org>; Sun, 14 Nov 2021 10:26:51 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id v138so40021227ybb.8
-        for <linux-i2c@vger.kernel.org>; Sun, 14 Nov 2021 10:26:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=04eP9NX11mGOjkHW341e1AFStNXY4/sPxk2GLOiPsRo=;
-        b=o9wSx1TnoVWkwRkANWvMjfNogE473xGyLACSv0SmTp4/d5cJIiKnla3bMxC83hLPHD
-         E33ViDMvSKhUdSY/fl/SN/IR9hjctKDP2okeEEW9b6NawTHYWinbkP6WT8flIHEe4mD7
-         3NXXuIkFArLl038bddLDxURUn5MqxTWnMIKVchLTg3MJwBSYi/Iz/A1IfQACPMmw/A8w
-         xTwQf6EsQZsdrmulMtsk+eZus9p02sow0VETRyr+zRd+G4K2+J5wwRHlsL2V6pRuBzOY
-         ts3iyAYJOo3Pa7WGdwpEiQu6b4fGEIbNQUQ5fsuabcIgWlpMeb9k+DTZktD8+b7P3FwH
-         E4NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=04eP9NX11mGOjkHW341e1AFStNXY4/sPxk2GLOiPsRo=;
-        b=w1YS9ojRg81G2doIDS1VelkmOv7ASn45HP49hvX86lTb3NLEe+yJ1M0/nDfxSNDRq9
-         QpzlGkO84aOPnxbaAzgql8igWFalYAvsCfOzAq4yvFBNGUOedIS6YdYRTWJZHh7tRxbx
-         ziZ/ROKtXxjmNBxr6NcSi/SepYSgO716G8FuEnUoGRKZ8mnmEUxAFAVacC0KNRuF/onf
-         jkLBP9HPxzs1kHVhQz68VUrVCi7+glyPEMfXTJ9dJMXSo4N1OtKeeJFzVam2NQ6wJxAE
-         YrKgBeu6s7IX/1/jJ+NqznfsUwRZcMfSUfZhVf2xZgBxb7pQXWnSVb2/EFrmOtnr9B17
-         uytQ==
-X-Gm-Message-State: AOAM532MGUxNoINv8NXKWrrIkimrFJjULoJI9qBMyjV0jpP7lAJDm2eK
-        Hq8QlBhaOsGRBcq9YSG0kJkYJ07j4i+trZB73Ms=
-X-Google-Smtp-Source: ABdhPJzPa1fVvKyuC6hemc/EMnGZ9JqUpVnzBE9bT1M9R/zCZv4B8q0UhGlr+b9zITJbOXRBkLc2PCiYPCWCBysWck8=
-X-Received: by 2002:a5b:a85:: with SMTP id h5mr33937353ybq.502.1636914410599;
- Sun, 14 Nov 2021 10:26:50 -0800 (PST)
+        id S229880AbhKOCwq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 14 Nov 2021 21:52:46 -0500
+Received: from pi.codeconstruct.com.au ([203.29.241.158]:51300 "EHLO
+        codeconstruct.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229686AbhKOCwj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 14 Nov 2021 21:52:39 -0500
+Received: by codeconstruct.com.au (Postfix, from userid 10001)
+        id 97B3C2022C; Mon, 15 Nov 2021 10:49:40 +0800 (AWST)
+From:   Matt Johnston <matt@codeconstruct.com.au>
+Cc:     Zev Weiss <zev@bewilderbeest.net>, Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v3 0/6] MCTP I2C driver
+Date:   Mon, 15 Nov 2021 10:49:20 +0800
+Message-Id: <20211115024926.205385-1-matt@codeconstruct.com.au>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Received: by 2002:a05:7000:334f:0:0:0:0 with HTTP; Sun, 14 Nov 2021 10:26:50
- -0800 (PST)
-Reply-To: drgerdger10@gmail.com
-From:   Dr Gerd <mrskimm2@gmail.com>
-Date:   Mon, 15 Nov 2021 05:26:50 +1100
-Message-ID: <CAAHSUKc_AWb+wRdbcUjrLeisLUa_eEQyyfWKkydDeTOoJXhogw@mail.gmail.com>
-Subject: Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear
+Hi,
 
-Nice to meet you,I would like have a personal discussion with you
+This patch series adds a netdev driver providing MCTP transport over
+I2C. 
 
-Thanks
-Dr Gred
+It applies against net-next using recent MCTP changes there, though also
+has I2C core changes for review. I'll leave it to maintainers where it
+should be applied - please let me know if it needs to be submitted
+differently.
+
+The I2C patches were previously sent as RFC though the only feedback
+there was an ack to 255 bytes for aspeed.
+
+The dt-bindings patch went through review on the list.
+
+Cheers,
+Matt
+
+--
+v3:
+ - Added Reviewed-bys for npcm7xx
+ - Resend with net-next open
+v2:
+ - Simpler Kconfig condition for i2c-mux dependency, from Randy Dunlap
+
+Matt Johnston (6):
+  i2c: core: Allow 255 byte transfers for SMBus 3.x
+  i2c: dev: Handle 255 byte blocks for i2c ioctl
+  i2c: aspeed: Allow 255 byte block transfers
+  i2c: npcm7xx: Allow 255 byte block SMBus transfers
+  dt-bindings: net: New binding mctp-i2c-controller
+  mctp i2c: MCTP I2C binding driver
+
+ Documentation/devicetree/bindings/i2c/i2c.txt |   4 +
+ .../bindings/net/mctp-i2c-controller.yaml     |  92 ++
+ drivers/i2c/busses/i2c-aspeed.c               |   5 +-
+ drivers/i2c/busses/i2c-npcm7xx.c              |   3 +-
+ drivers/i2c/i2c-core-smbus.c                  |  20 +-
+ drivers/i2c/i2c-dev.c                         |  93 +-
+ drivers/net/mctp/Kconfig                      |  12 +
+ drivers/net/mctp/Makefile                     |   1 +
+ drivers/net/mctp/mctp-i2c.c                   | 982 ++++++++++++++++++
+ include/linux/i2c.h                           |  13 +
+ include/uapi/linux/i2c-dev.h                  |   2 +
+ include/uapi/linux/i2c.h                      |   7 +-
+ 12 files changed, 1209 insertions(+), 25 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml
+ create mode 100644 drivers/net/mctp/mctp-i2c.c
+
+-- 
+2.32.0
+
