@@ -2,92 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F1645083C
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Nov 2021 16:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4138450868
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Nov 2021 16:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbhKOP3L (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Nov 2021 10:29:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51546 "EHLO mail.kernel.org"
+        id S236734AbhKOPeD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Nov 2021 10:34:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52992 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231819AbhKOP3L (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 15 Nov 2021 10:29:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A31D61B04;
-        Mon, 15 Nov 2021 15:26:15 +0000 (UTC)
+        id S236719AbhKOPdu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 15 Nov 2021 10:33:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4278563212;
+        Mon, 15 Nov 2021 15:30:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636989975;
-        bh=eUM8nh5M+J+Xyi+ghRfR7pLG+uMUG9uqMGGQaGZ7d4U=;
+        s=k20201202; t=1636990242;
+        bh=8XoL+Ikkp+UiQCwAF2fR0hsh2hPoC6nkuXKsFj8Ke6o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b3ALJC1+8a3W3KhaixGxLlLbW1hq7YTPfYnIwt9vAAc/DDJwwgKkxTy9mKKbHOdYc
-         bTVzSPSn++dIEOzTQxoSCiqr6njOi8AByZMpaaiErnxDe3U3V88S/nkMh6W6gs/xRX
-         2BVqD42QceFvynL+yCnJ1K8R8c0FriftY7Bxro9sJ/CHFghoM95Y8JFqbAMlARBZVn
-         S/TRnCTFPTUbuRRi3yagULXRL2d5BSQ85nFcYE3DVraYtTG8R/fuw7+bV7i1fHB/XF
-         6GC0ak9fE2MpQgeInTBdnJvIiZUNEoXw+c9mL1Ev1FY4X1ENP3gyyPQYZpTkd196RL
-         pDzpDY96MnE8g==
-Date:   Mon, 15 Nov 2021 16:26:12 +0100
+        b=c5IWYzAI9rmakPDUZ05vSErJ66cE+baCDmNjCJjdP3NNcWu2TuP1zZaGmckrFCtWp
+         O414uhjrfq5BCTBteQ+Umuvnmmgqghifjjuw38X5AkS3Q+DjgDTAuhkwEFgmqG5HyN
+         u8+rQsK4wvNU4o1iHmdhZJXQNpVtjRJT3SpjmKR3RlJ09ollWWuHqgpeOKILgyQ28o
+         Biran/J4NwCPRXFZrmRY4sJh/3IEC/1kwljSmbtXD6C6QI3BP+jA59Kfr2G/Cmncvy
+         zWT3/jfHK0NJJZ258EKDR3aOEMhuRrI7GLU7HTnyKeV64LV/0hsJmzKMoYHlrXjWqa
+         CY4gfJ+wN3j3Q==
+Date:   Mon, 15 Nov 2021 16:30:39 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] i2c: designware: Fix the kernel doc description
- for struct dw_i2c_dev
-Message-ID: <YZJ8FPDDQ4PqDtTF@shikoro>
+To:     patchwork-bot+netdevbpf@kernel.org
+Cc:     Matt Johnston <matt@codeconstruct.com.au>, zev@bewilderbeest.net,
+        robh+dt@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        brendanhiggins@google.com, benh@kernel.crashing.org,
+        joel@jms.id.au, andrew@aj.id.au, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, jk@codeconstruct.com.au,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v3 0/6] MCTP I2C driver
+Message-ID: <YZJ9H4eM/M7OXVN0@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20211112123459.73538-1-andriy.shevchenko@linux.intel.com>
- <e62bf878-03df-1b93-2177-7b8a3be293c4@infradead.org>
- <CAHp75Vd71WPosA8Sy999Mb5ZiGEGg-y3vxYsYz3st5Ng2PJ98A@mail.gmail.com>
- <07932f56-ec2d-46a5-7c8e-3f4aab7afd35@infradead.org>
- <YZJsUHVhGFsImNvt@smile.fi.intel.com>
+        patchwork-bot+netdevbpf@kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>, zev@bewilderbeest.net,
+        robh+dt@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        brendanhiggins@google.com, benh@kernel.crashing.org, joel@jms.id.au,
+        andrew@aj.id.au, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
+        benjaminfair@google.com, jk@codeconstruct.com.au,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+References: <20211115024926.205385-1-matt@codeconstruct.com.au>
+ <163698601142.19991.3686735228078461111.git-patchwork-notify@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BvXqiEanE7JDdHew"
+        protocol="application/pgp-signature"; boundary="eRxy3H0oCy728e+K"
 Content-Disposition: inline
-In-Reply-To: <YZJsUHVhGFsImNvt@smile.fi.intel.com>
+In-Reply-To: <163698601142.19991.3686735228078461111.git-patchwork-notify@kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---BvXqiEanE7JDdHew
-Content-Type: text/plain; charset=utf-8
+--eRxy3H0oCy728e+K
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
 
-> > Yes, I am aware of what is in the spec.
->=20
-> Wolfram, what do you prefer?
+> This series was applied to netdev/net-next.git (master)
+> by David S. Miller <davem@davemloft.net>:
 
-I prefer I2C. But it is more a reading habit. I would neither enforce
-I2C nor I=C2=B2C.
+NACK. Please revert. Besides the driver in net, it modifies the I2C core
+code. This has not been acked by the I2C maintainer (in this case me).
+So, please don't pull this in via the net tree. The question raised here
+(extending SMBus calls to 255 byte) is complicated because we need ABI
+backwards compatibility.
 
 
---BvXqiEanE7JDdHew
+--eRxy3H0oCy728e+K
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGSfBQACgkQFA3kzBSg
-KbYKfhAAlId9kFNfFr8y53JyPOsTxdJ6h521xQpki3cD89L/+f57D/saomjQUjp5
-TauAzptzTJSIlDMzvdrayyEASdr5Ca8KWTeiHZ///GvMJlaPzFVWt7KNk01BCCZk
-odYj63G68vU5i5+CDPAabHDOuqTk4Nqbw2tbBjoeyRPOuPQCRfspQZ6BbYvbuxuB
-57wGURpyjV57zb68EDsJCUV5sEWwq8sxZvU34i8eANaLTdJaosKTkcQraqwIQ4Pw
-WwsVw3vsNwIaWAZ6cuxJz9PybX9N46U7+Hv0L6+eUtE4530cNSe95QnWTZG0fvs1
-6v/IAvaqo6Tk3lALjj6aUx+ab8fkgENH8NNyx8JHTo3XhzTD0bkNTHB462skgr8U
-vS0VLCw5AjMZZdr8Av8u9hf9Go/rmYhKPxyF1ImTM+jxeIa91NKgbsShxD4KA1VA
-K2X0i3buJRUEFfIGEWSdx2HYNt6fifWCNYheXDTvmOibQ9EUCEEQVNr7tWJkXK/W
-YT4FdjLJRzsVZWyM3i7b/zG75cL6FueQH3YhfeqtS0u8kmEa7+u1UsP71U02k2cM
-5ERgoO1Fs6EyqETNcMhGVl//fpuDmbQ0Jaewvrj9KIbqEozkupDVXSN57WVkTuZh
-4W9PbirslmNqpbHlANUFkFxtR8akm1aEGWJA6hFBLpeZ4YMLn90=
-=/G3W
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGSfR8ACgkQFA3kzBSg
+KbacqBAAqZ84qtLwwyREg6zMlaeQlM8gdgS9bKi7XXf5hsQ8ATVnHVQ5dqNP6WyQ
+6NOw7zA22nsqzyKXHpm4WxewPz0E3QD4iNyrBaVKse3qIXJS16+ANcfmxOrm0GhL
+pEllnhDer81kJwXVBUrC3fzatGcM2thiWiIba3VSdP2O+cemdetu6seNFo4VTgXx
+lv1DDdgjqbhT+oHxntSvxkQt2cJeY4b+9CrRhV5o5N3MKnwOp8mZa4fzt5fZHn2k
+c47X3oB8QebWHj5xjQxnL0Ms+ytqX+8L5fmzDazX+N0dHgvPmIdRA1R3xxZ5SfAJ
+gIp5buJkirvRH+RWqLLN4I4aNlm2xlxU+kBcYT87/e553TWy/4tr7rdx/+SLYKpu
+SFG0+X/Z12xLFmSCD8SBvQWbLml08n2Lc6tJOqrrXpopHDwaRyzNh+jrhT6octKL
+HNhLTMtzPmjh8O70dWSLdQTGbXQcuT5qyPvuY0IwQ+tguZLVpM+t3lsBpt72RDrD
+7mm8wl9C0af7PetM4zWX8HIGSVuwKm8aEIAqhIQ0ONi/IEHxou6Psz2A3E061yo8
+xC3TUETj3WhWdBboByQ7q00NTWPEj5La6nSSb8Oi5Oc0PwpQfKFyfjrX8JrOgQVn
+nycG6assjzWRunTH3CWbBBGfcVxTj837DmArmn3R1h92VduzHJE=
+=SVLh
 -----END PGP SIGNATURE-----
 
---BvXqiEanE7JDdHew--
+--eRxy3H0oCy728e+K--
