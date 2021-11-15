@@ -2,81 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 734EA450687
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Nov 2021 15:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 063A345069D
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Nov 2021 15:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbhKOOWV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Nov 2021 09:22:21 -0500
-Received: from mga02.intel.com ([134.134.136.20]:36029 "EHLO mga02.intel.com"
+        id S232019AbhKOOYL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Nov 2021 09:24:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232130AbhKOOWE (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 15 Nov 2021 09:22:04 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="220657292"
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="220657292"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 06:19:07 -0800
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="494034756"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 06:19:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1mmcoy-00779T-QA;
-        Mon, 15 Nov 2021 16:18:56 +0200
-Date:   Mon, 15 Nov 2021 16:18:56 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] i2c: designware: Fix the kernel doc description
- for struct dw_i2c_dev
-Message-ID: <YZJsUHVhGFsImNvt@smile.fi.intel.com>
-References: <20211112123459.73538-1-andriy.shevchenko@linux.intel.com>
- <e62bf878-03df-1b93-2177-7b8a3be293c4@infradead.org>
- <CAHp75Vd71WPosA8Sy999Mb5ZiGEGg-y3vxYsYz3st5Ng2PJ98A@mail.gmail.com>
- <07932f56-ec2d-46a5-7c8e-3f4aab7afd35@infradead.org>
+        id S236400AbhKOOXG (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 15 Nov 2021 09:23:06 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 70E6861BE2;
+        Mon, 15 Nov 2021 14:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636986011;
+        bh=BfZL5q0sK440f18vgm4f08TDEGzd0llC2s0A/rJ9bOo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Epks0kEWaYmiq+B9Vm7t/qnf7YAhJEpp7bRE4U61Nf5Lz0LowoUUH9FC1lv9LuvCs
+         GvsYe74YFH4zYePE6PUkI/D2gMVsMSuP8ocPPSHfpXQaQUz5y2qjOry1wTwz2zeDis
+         MSq4SPYh4bm6xxSVmLYgstZEWDaow+t9Bk+GWef/Ek/m6bZtJC3WT24NXC9P6kmpw5
+         coYFUP5mbDu4Ntv4DjBShcOEHlaXlTCldh4UFsacV9RsKD21RmLjVpFFH89CgWWkMv
+         D32PBKDTI2FrsCTkYVUUFAa/x7bwPBq9rxehxzsMgEuzeve15vWipchDEGU2Oh8b9a
+         qEtwT/ZOqs/dg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6824560A49;
+        Mon, 15 Nov 2021 14:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <07932f56-ec2d-46a5-7c8e-3f4aab7afd35@infradead.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Subject: Re: [PATCH net-next v3 0/6] MCTP I2C driver
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163698601142.19991.3686735228078461111.git-patchwork-notify@kernel.org>
+Date:   Mon, 15 Nov 2021 14:20:11 +0000
+References: <20211115024926.205385-1-matt@codeconstruct.com.au>
+In-Reply-To: <20211115024926.205385-1-matt@codeconstruct.com.au>
+To:     Matt Johnston <matt@codeconstruct.com.au>
+Cc:     zev@bewilderbeest.net, wsa@kernel.org, robh+dt@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, brendanhiggins@google.com,
+        benh@kernel.crashing.org, joel@jms.id.au, andrew@aj.id.au,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        jk@codeconstruct.com.au, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 08:43:16AM -0800, Randy Dunlap wrote:
-> On 11/12/21 8:26 AM, Andy Shevchenko wrote:
-> > On Fri, Nov 12, 2021 at 6:01 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> > > On 11/12/21 4:34 AM, Andy Shevchenko wrote:
+Hello:
 
-...
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-> > > > + * @rinfo: I²C GPIO recovery information
-> > > 
-> > > Preferably:   "I2C"
-> > 
-> > Why?
+On Mon, 15 Nov 2021 10:49:20 +0800 you wrote:
+> Hi,
 > 
-> See below vvvvvvvvvvvvvvvvv:
-> > > like it is in thousands of places in the kernel source tree.
-
-When is it good point to start following the spec?
-
-> > UTF-8 has been established for more than a decade. I prefer to use the
-> > proper form of the abbreviation (*).
-> > 
-> > *) Check UM10204.pdf.
+> This patch series adds a netdev driver providing MCTP transport over
+> I2C.
 > 
-> Yes, I am aware of what is in the spec.
+> It applies against net-next using recent MCTP changes there, though also
+> has I2C core changes for review. I'll leave it to maintainers where it
+> should be applied - please let me know if it needs to be submitted
+> differently.
+> 
+> [...]
 
-Wolfram, what do you prefer?
+Here is the summary with links:
+  - [net-next,v3,1/6] i2c: core: Allow 255 byte transfers for SMBus 3.x
+    https://git.kernel.org/netdev/net-next/c/13cae4a104d2
+  - [net-next,v3,2/6] i2c: dev: Handle 255 byte blocks for i2c ioctl
+    https://git.kernel.org/netdev/net-next/c/84a107e68b34
+  - [net-next,v3,3/6] i2c: aspeed: Allow 255 byte block transfers
+    https://git.kernel.org/netdev/net-next/c/1b2ba1f591c9
+  - [net-next,v3,4/6] i2c: npcm7xx: Allow 255 byte block SMBus transfers
+    https://git.kernel.org/netdev/net-next/c/3ef2de27a05a
+  - [net-next,v3,5/6] dt-bindings: net: New binding mctp-i2c-controller
+    https://git.kernel.org/netdev/net-next/c/0b6141eb2b14
+  - [net-next,v3,6/6] mctp i2c: MCTP I2C binding driver
+    https://git.kernel.org/netdev/net-next/c/80be9b2c0d93
 
+You are awesome, thank you!
 -- 
-With Best Regards,
-Andy Shevchenko
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
