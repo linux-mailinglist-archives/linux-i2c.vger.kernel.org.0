@@ -2,77 +2,98 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81412450A6D
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Nov 2021 18:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A173450FD3
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Nov 2021 19:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbhKORFb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Nov 2021 12:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbhKORF2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Nov 2021 12:05:28 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB95AC061746
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Nov 2021 09:02:32 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id k21so22387277ioh.4
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Nov 2021 09:02:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nijsmPQc+akyPlfu7TNZEY9OJhbTBh6O7p9FQtmiIsM=;
-        b=PJKhHv4pOrxh6HCO/0IYzIl/6cVowP78JFfCGVk8hz+SQDYnRSi0cNyw2LGWj8QMiO
-         YqKZo6UDKpxGdnw13mPS6rN+v38ODpjK93ldosKXzJ3vMXYal1s2oXgQgOVstZklrxuF
-         aXFtsSosPGwAcyZXk+kqxzBwKnV8D70BmvINk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nijsmPQc+akyPlfu7TNZEY9OJhbTBh6O7p9FQtmiIsM=;
-        b=aNRU8SclgTVfncnc6bkJ76ygaMYoRMVgBIdL3xK2mgGtQV9EkzuUEmuuiTGKSH5sN2
-         H9NHM7q3T3eu5Nlo//TclpQJs4CsHtrMOTcKgT5UxYiVzeICc3tAa9/UXZlJBFH8fgg1
-         c5MTHX3U0Kz+N/YbC/iDguFWZxmLunihZPfmWd9z4CWMV43Oh21SG79DuYFRoFTER+4w
-         1l9A1Hao77W/GtI1Na4ZBnVmuYydbUvdPRX07A4sIb2e256QRFPdjGVDpoP+OUrgShYb
-         Pag3iublx3Po+Cz001wzU2lmPkiZKvraH2gtOESJYgvHPVbChKWdL7t4U7hoAtIGweXW
-         /Ehw==
-X-Gm-Message-State: AOAM533D+FonDXzyAB6Oda4Jka0YG1hrsVHobghIgEuBZzvG2wbESu4b
-        GKauoAiwIPF+Ai9ev9NJff0vdHD6rfvU3A==
-X-Google-Smtp-Source: ABdhPJygwZIV/Q/TbZFkJfZJOI7NaCWjYAje7YPkCR6pB62NGSQRLkAqHNB4uKpnHfMvDpIq+MrXhg==
-X-Received: by 2002:a6b:f212:: with SMTP id q18mr260267ioh.16.1636995752289;
-        Mon, 15 Nov 2021 09:02:32 -0800 (PST)
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com. [209.85.166.173])
-        by smtp.gmail.com with ESMTPSA id c7sm8342528iob.28.2021.11.15.09.02.31
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Nov 2021 09:02:31 -0800 (PST)
-Received: by mail-il1-f173.google.com with SMTP id l8so17448551ilv.3
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Nov 2021 09:02:31 -0800 (PST)
-X-Received: by 2002:a05:6e02:1c46:: with SMTP id d6mr224481ilg.79.1636995751375;
- Mon, 15 Nov 2021 09:02:31 -0800 (PST)
+        id S242436AbhKOSgv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Nov 2021 13:36:51 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:55570 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242158AbhKOSeu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Nov 2021 13:34:50 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: shreeya)
+        with ESMTPSA id B5E3A1F44F22
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1637001110; bh=U/odPWkiNZqaJgSMaK/WWQK5FMSfWCiioBpM4k781b8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FwbjEaP/e1wNeo94buJljl/fvd51gUI7iaNQIRzB0LOnu8jMazdH0ZlbD1ZpoeTeB
+         zSsuvvHM9c2Hq32n6uyEdysWb7OxPsGFv35srrfaVshs6KKJ6Hch+ZeceS5kPsspFG
+         z/7bj6UcSMvH5loo/QJ/7EbsHAH0PhWfKbmwJBuJDVnMn1MOgYxuUEjlE7ufFkL/0j
+         rLvgo3X/uctgUjkg2w1jIBX5uLm2Io2OMGVNqgcQkog2/8KDKgaEMgn97P8BpmZ6bR
+         7e3Dl3dgeDrLz7LR2ox8uQHqg9ZeL3OJjqtfALMN7nj7jkNznKJ+mUdpt1UGkr66rd
+         9puA1Ra4552pA==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        andy.shevchenko@gmail.com, wsa@kernel.org
+Cc:     kernel@collabora.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v3] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
+Date:   Tue, 16 Nov 2021 00:00:29 +0530
+Message-Id: <20211115183029.234898-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20211115154201.46579-1-andriy.shevchenko@linux.intel.com> <20211115154201.46579-3-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211115154201.46579-3-andriy.shevchenko@linux.intel.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 15 Nov 2021 09:01:55 -0800
-X-Gmail-Original-Message-ID: <CAE=gft7+a2hW-EZz33=ApFAGA4HSOfQS_LGH9YMvDtM0=F0uww@mail.gmail.com>
-Message-ID: <CAE=gft7+a2hW-EZz33=ApFAGA4HSOfQS_LGH9YMvDtM0=F0uww@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] i2c: mux: gpio: Use array_size() helper
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Peter Rosin <peda@axentia.se>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 7:42 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Use array_size() helper to aid in 2-factor allocation instances.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+We are racing the registering of .to_irq when probing the
+i2c driver. This results in random failure of touchscreen
+devices.
 
-Thanks for the cleanup series!
+Following errors could be seen in dmesg logs when gc->to_irq is NULL
 
-Reviewed-by: Evan Green <evgreen@chromium.org>
+[2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
+[2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
+
+To avoid this situation, defer probing until to_irq is registered.
+
+This issue has been reported many times in past and people have been
+using workarounds like changing the pinctrl_amd to built-in instead
+of loading it as a module or by adding a softdep for pinctrl_amd into
+the config file.
+
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=209413
+
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+
+---
+Changes in v3
+  - Fix the error reported by kernel test robot.
+
+Changes in v2
+  - Add a condition to check for irq chip to avoid bogus error.
+---
+ drivers/gpio/gpiolib.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index abfbf546d159..4d7fb349e837 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -3111,6 +3111,16 @@ int gpiod_to_irq(const struct gpio_desc *desc)
+ 
+ 		return retirq;
+ 	}
++#ifdef CONFIG_GPIOLIB_IRQCHIP
++	if (gc->irq.chip) {
++		/*
++		 * avoid race condition with other code, which tries to lookup
++		 * an IRQ before the irqchip has been properly registered,
++		 * i.e. while gpiochip is still being brought up.
++		 */
++		return -EPROBE_DEFER;
++	}
++#endif
+ 	return -ENXIO;
+ }
+ EXPORT_SYMBOL_GPL(gpiod_to_irq);
+-- 
+2.30.2
+
