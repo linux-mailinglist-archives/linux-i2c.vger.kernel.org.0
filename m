@@ -2,61 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C30F450A45
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Nov 2021 17:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DB2450A69
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Nov 2021 18:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbhKOQ6l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 Nov 2021 11:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S231374AbhKOREk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 Nov 2021 12:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbhKOQ6k (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Nov 2021 11:58:40 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FE9C061570
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Nov 2021 08:55:43 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id w15so17413214ill.2
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Nov 2021 08:55:43 -0800 (PST)
+        with ESMTP id S230385AbhKOREe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 Nov 2021 12:04:34 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32CDC061714
+        for <linux-i2c@vger.kernel.org>; Mon, 15 Nov 2021 09:01:37 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id l8so17444593ilv.3
+        for <linux-i2c@vger.kernel.org>; Mon, 15 Nov 2021 09:01:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EZ7NYt0W413AD7cV4RQDPmgYwsGcXKqpIAx5+YC6+Bo=;
-        b=XsnQEFUknE61g50ai18W9TgJ92Cg0GKsw7/0yRbT5zg9e0A0FIC9p0J7wEr6WsX57Z
-         veF10fQeNCSVRbgxVjX+tOdfVRGtvIhM4jgBRHh8cRd1dLfmVlCAIPEtoArcQoH5nn5L
-         NxQ51PkeKFKDH+37zbAWK8JAGzRZWib1RaFNY=
+        bh=mHYUc1wY+XMa4sqcWEtA/HMvxlAjaod7I7i3bx8oN/U=;
+        b=ME3F1CzdIJN0UcKqKbpvONGd5csvj2s7zS3j9uI2pJ8f38CiPlc8nGUTErUKNCyzDW
+         +jdwqK+nDQ4osS1zH1q2FzYO5iz+SCXbtmHzN6pwG1aBIgLHi5FnBqfY01Hdc7vIfvrf
+         gewh4aE6dk3mvwhfcW+gLqHtAiuDmruJCwHG0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EZ7NYt0W413AD7cV4RQDPmgYwsGcXKqpIAx5+YC6+Bo=;
-        b=JCvXtmZbVScvp22pAa6gzOwiJi/hjaS00TONOkxv0Qw7U6tMxYC+Yr31nbm3C60yHw
-         Ym5Y5yOPiUVXgAu6qsOT8HkS8KSb/MLSo5niAcQibYnTGJMtVf+9VQPlN1iw3M6EpXXS
-         1BVeDAfR7GJvI/H65Mox+bp7SAm8stCdYrkKJqv1E84evp1BQRzAe3HVbBM06xhj6SC8
-         BusYfZPv87rF+xwmo7iGvwVgvGXOod0sqTQ5BefXBRf6tl8k8198XY3FPHzm7g7A8LRN
-         Tw1DOPlI0S8f2ZRsvdu5zrF1AMPYi+NuTdYT5RZwKeWPlFqEd/Q/qDXxt88i85Ndl2c+
-         dV4A==
-X-Gm-Message-State: AOAM530vFdc2QirnN19Ypjo1x8B+N7FhKdeVqQmFXqb8KjNscGMi6m+c
-        zhePyQdior3eDYCP9am6I2q7GGH3hSgcIA==
-X-Google-Smtp-Source: ABdhPJyu321nM6eTxIETfygDt2QHIU3UHJXz2ZYLo5YicQ5VBXXRMOVbPM2tYqwYBN6bKE68Cye9Gw==
-X-Received: by 2002:a05:6e02:1a85:: with SMTP id k5mr204398ilv.27.1636995343039;
-        Mon, 15 Nov 2021 08:55:43 -0800 (PST)
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com. [209.85.166.182])
-        by smtp.gmail.com with ESMTPSA id r3sm9098287ila.42.2021.11.15.08.55.42
+        bh=mHYUc1wY+XMa4sqcWEtA/HMvxlAjaod7I7i3bx8oN/U=;
+        b=0mxuFBNXySlwrQmIvE20Edla/st8WeSiVbRQXKDdSz9CnYUOst8V6q/jnYRDDzPWML
+         0Vdg+9BnAZNQSxxeI1cbNZGMTepYwz24v/lr9OvbeSLpM+Rnaw8O78OcvNbXUJqB+tSl
+         GBWeVE0RSebBtjkkka03oMquRaHOH2Um1zLuziQ6U+txhB1+ecD20UH0ajblV+VTBStP
+         QsEOiAjtg/lB8IwyR2vNUGo0n0upvbLeM25eKjG/+mErqJmNd6Jj1wcnphyGjTAhVdSi
+         cwkpYkQ6xqKCVtcuF3ISIFFvOZWtCWwgs0RmCoTaj1dlcplhPnU89utof+3wH72OZ9GW
+         immg==
+X-Gm-Message-State: AOAM533yi5JxgQ2yAKXcS97ORkrFLkkD7xeicfPJnsf1NVvCU2IeswnI
+        vpP10HFuqBrVGBm+pwBIPyIEz4ECJKodQQ==
+X-Google-Smtp-Source: ABdhPJxjKyphlap1wqkw5et5y/0wk7Ry1m7HnLfQXWuMWunOeVSu1Nd0h+Yv/ccoPG2tvgRa9O+CyQ==
+X-Received: by 2002:a05:6e02:19cb:: with SMTP id r11mr211441ill.151.1636995696846;
+        Mon, 15 Nov 2021 09:01:36 -0800 (PST)
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com. [209.85.166.50])
+        by smtp.gmail.com with ESMTPSA id h15sm10490511ili.26.2021.11.15.09.01.36
         for <linux-i2c@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Nov 2021 08:55:42 -0800 (PST)
-Received: by mail-il1-f182.google.com with SMTP id m11so17440749ilh.5
-        for <linux-i2c@vger.kernel.org>; Mon, 15 Nov 2021 08:55:42 -0800 (PST)
-X-Received: by 2002:a05:6e02:1aa2:: with SMTP id l2mr227461ilv.114.1636995342360;
- Mon, 15 Nov 2021 08:55:42 -0800 (PST)
+        Mon, 15 Nov 2021 09:01:36 -0800 (PST)
+Received: by mail-io1-f50.google.com with SMTP id k22so22231439iol.13
+        for <linux-i2c@vger.kernel.org>; Mon, 15 Nov 2021 09:01:36 -0800 (PST)
+X-Received: by 2002:a6b:d904:: with SMTP id r4mr245251ioc.52.1636995695808;
+ Mon, 15 Nov 2021 09:01:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20211115154201.46579-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211115154201.46579-1-andriy.shevchenko@linux.intel.com>
+References: <20211115154201.46579-1-andriy.shevchenko@linux.intel.com> <20211115154201.46579-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211115154201.46579-2-andriy.shevchenko@linux.intel.com>
 From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 15 Nov 2021 08:55:06 -0800
-X-Gmail-Original-Message-ID: <CAE=gft5CXQaC3M-LoWtY_TEnBEdK-kR9uH_Zqp1y6EDWyXdaYg@mail.gmail.com>
-Message-ID: <CAE=gft5CXQaC3M-LoWtY_TEnBEdK-kR9uH_Zqp1y6EDWyXdaYg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] i2c: mux: gpio: Replace custom acpi_get_local_address()
+Date:   Mon, 15 Nov 2021 09:01:00 -0800
+X-Gmail-Original-Message-ID: <CAE=gft4uiP8fVyE-+KDM_LQBKTwPMOb51JWU7=Jt=ggJV9dSFA@mail.gmail.com>
+Message-ID: <CAE=gft4uiP8fVyE-+KDM_LQBKTwPMOb51JWU7=Jt=ggJV9dSFA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] i2c: mux: gpio: Don't dereference fwnode from
+ struct device
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Peter Korsgaard <peter.korsgaard@barco.com>,
@@ -69,8 +70,9 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 On Mon, Nov 15, 2021 at 7:42 AM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 >
-> Recently ACPI gained the acpi_get_local_address() API which may be used
-> instead of home grown i2c_mux_gpio_get_acpi_adr().
+> We have a special helper to get fwnode out of struct device.
+> Moreover, dereferencing it directly prevents the fwnode
+> modifications in the future.
 >
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
