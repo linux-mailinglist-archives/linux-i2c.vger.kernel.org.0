@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 073D445304D
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Nov 2021 12:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5004530B7
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Nov 2021 12:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234948AbhKPLYv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 Nov 2021 06:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
+        id S235326AbhKPLc4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Nov 2021 06:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234877AbhKPLYY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Nov 2021 06:24:24 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95943C061208;
-        Tue, 16 Nov 2021 03:21:13 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id x15so86215408edv.1;
-        Tue, 16 Nov 2021 03:21:13 -0800 (PST)
+        with ESMTP id S233065AbhKPLcb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Nov 2021 06:32:31 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2396C061570;
+        Tue, 16 Nov 2021 03:29:33 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id g14so22612013edb.8;
+        Tue, 16 Nov 2021 03:29:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KGUzW8oU278JfYrY7N9IF7tN1n/tXliVYmfQC61IxV8=;
-        b=JQVvA1qWRgODHDOSLlagiGOfAXEHF7KxMNWe7LPWtqGmLHJiWZqhx7wzACas6AONv+
-         CAkZ1x83Da19F69Y4szYWBOdQL+g/VUfY93OJyeul01/oezFSOQ6LE5gLKIoAmzWjqbQ
-         hVScUsbwSOsewMQo+Ag4kVJC8jfz6QxeZbLCzCSqcLtwPFrJf7bcJ3pZZKe4qA20MqHi
-         sRiCruhHwvVNi6VRP7p2jZuDMhj8I8FstuiDEoUUygeq5GN/qbWOoXGHoSCEEMM6U0bb
-         /ZL166tglWsxqa7Wt+md18G3lU0bd8L1nY6Qttagny+96fQKAONUvcRdlWPzyCXM2Xyr
-         NBzg==
+        bh=tmE5I+KwN9wX/3DI+6oAR1as1MTfdlvqvq7gy6oaBLw=;
+        b=SMlhMM1pNbxAB1nu2cCyGH/LuM8ogF4FG0KvbeYoYZtw9HP3tp4vTmdss7+cN3o8zf
+         WMHzFTd8k4E0aXJf6qaXoZa4qNQn2LCHzLkx2VkEyn5O6mGc8xwK9HNjvdcgGBZIkvIY
+         i9ll/nEFIKMzg/MZQWv/hs6d6zplgo6eAIpr1H/PhIUmmuSPYRslGW7GWVQu7y43H9UO
+         DhLuPQWIGgWLilpdysSUIQ9qu88mOdsU/qE+D935KScIy0yHJk5mGOnp0dj4s+D+Mgy7
+         Wxpx0y0zINoZ0Vhgl3Q/0U+fbzgs9lk7ilIucLXEJ9+EqVye+m6JWWuEjldIWXIWrYol
+         ElPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KGUzW8oU278JfYrY7N9IF7tN1n/tXliVYmfQC61IxV8=;
-        b=vqoPQ6a212+uBfrUqbXvhvSTWALBagVy4Q0UZJw0g6iyi/ozzsZYygG8uAL7q2dLLF
-         mONP0E0ftmieg0nfzaH29MtNGSUh3ENbHkGU3WdxYnt+FMLH5AjmwVms2bd5E8D74n8F
-         v2bnWJc3IwPNqwehRJ2wZiFYsUrm5ALowU2SvkhbHYfBY74n1P+m6XXHhLDQ6ZZs89xm
-         /LoWTHdCy0Zh9rzwn7/dkLmFboIo4rKx5Xo5RuOHKX4svq4uPh+62MV6+0IZNazXt8op
-         VzWlVoRR9Z1PtgrTF7Npu/XPp4fMp7euLhCPq/bW8Str+dExviB8K1zLTRjuSqah3xoA
-         o6QA==
-X-Gm-Message-State: AOAM530eb7KbT11M4s7n4xwnh37Ba+CZ3ox3uYnF0fo6rO/krRtqN7Uz
-        ny2hf3MufVsWBc92I9c7q+vXQc/oXYq4FGOHbI8=
-X-Google-Smtp-Source: ABdhPJyKSwdFtfR7TpsDewfi37mChVACwnf+QUTy7V6gWiRnFog2qqdct+xLdwNvdm+Gqux0Kkbtu642mJPn2EzrZQE=
-X-Received: by 2002:a17:906:ecac:: with SMTP id qh12mr8693082ejb.377.1637061672128;
- Tue, 16 Nov 2021 03:21:12 -0800 (PST)
+        bh=tmE5I+KwN9wX/3DI+6oAR1as1MTfdlvqvq7gy6oaBLw=;
+        b=NP+a1gAqn+DaxI1E+G5EyTL4g0gV6PKEFNFRed3b1T0C1psRFjXz2vBW8Hc5gySZpk
+         KbVoxVBqzLrM6kInH1tN/SYKqeQwURD7nCVknaCKAhWbGb0DLcEia8Jvsxo2MqSfxo0t
+         gq9iubKmVTpQwzAZ5VN0kdVqlqwU8/PGI+eilUjdpWGGarNEYu01pqOxPl4Ju1BXUFjB
+         ltqBSF0ZqZPLfW+tYR53A4R6y+fZl4r+TzywkgQv1aAiJLR1rrSGQFLvYAlhBhsuBocL
+         4eh3/3aza8Pt526HGkrzsCW0apfJB9ay9N5SgCegGXUZa20AvNfeGJV5qZ1AhbcJK/Cz
+         anLg==
+X-Gm-Message-State: AOAM531g5UDGOJztu2r3q30+9xmy0K81qxia5Sf1ltM1XFlmb5bjcWlz
+        AadADppbzD+gAY3gXlVi1gCT5DGk0YTR7xiT9/vWyyzE7IH6yA==
+X-Google-Smtp-Source: ABdhPJxAn5qrLYWqOD8UPTRedV2AQCbwEPm4K81wyq0r1N3LJLLy2Xx52b3zNNu3oO4Xmo0O2+MJa3+vAOZJ2uKpYZM=
+X-Received: by 2002:a50:fd16:: with SMTP id i22mr9250032eds.224.1637062172295;
+ Tue, 16 Nov 2021 03:29:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20211114170335.66994-1-hdegoede@redhat.com> <20211114170335.66994-16-hdegoede@redhat.com>
-In-Reply-To: <20211114170335.66994-16-hdegoede@redhat.com>
+References: <20211114170335.66994-1-hdegoede@redhat.com> <20211114170335.66994-18-hdegoede@redhat.com>
+In-Reply-To: <20211114170335.66994-18-hdegoede@redhat.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 16 Nov 2021 13:20:31 +0200
-Message-ID: <CAHp75VfYGmW6kO18BL39ippuzyzebNXuBn0PkEV8WScB2-bN6A@mail.gmail.com>
-Subject: Re: [PATCH v2 15/20] i2c: cht-wc: Make charger i2c-client
- instantiation board/device-model specific
+Date:   Tue, 16 Nov 2021 13:28:51 +0200
+Message-ID: <CAHp75VdXSdhNtPwNdpssnmt+sZb+ZoAUm-cKJu-PqymmHMOpRw@mail.gmail.com>
+Subject: Re: [PATCH v2 17/20] extcon: intel-cht-wc: Support devs with Micro-B
+ / USB-2 only Type-C connectors
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -76,67 +76,75 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Sun, Nov 14, 2021 at 7:04 PM Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> The i2c-controller on the Cherry Trail - Whiskey Cove PMIC is special
-> in that it is always connected to the I2C charger IC of the board on
-> which the PMIC is used; and the charger IC is not described in ACPI,
-> so the i2c-cht-wc code needs to instantiate an i2c-client for it itself.
+> So far the extcon-intel-cht-wc code has only been tested on devices with
+> a Type-C connector with USB-PD, USB3 (superspeed) and DP-altmode support
+> through a FUSB302 Type-C controller.
 >
-> So far this was hardcoded to instantiate an i2c-client for the
-> bq24292i, with all properties, etc. set to match how this charger
-> is used on the GPD win and GPD pcoket devices.
-
-"pocket" I believe?
-
-> There is a rudimentary check to make sure the ACPI tables are at least
-> somewhat as expected, but this is far from accurate, leading to
-> a wrong i2c-client being instantiated for the charger on some boards.
+> Some devices with the intel-cht-wc PMIC however come with an USB-micro-B
+> connector, or an USB-2 only Type-C connector without USB-PD.
 >
-> Switch to the new DMI based intel_cht_wc_get_model() helper which is
-> exported by the MFD driver for the CHT Whiskey Cove PMIC to help PMIC
-> cell drivers like the i2c-cht-wc code reliably detect which board
-> they are running on.
->
-> And add board_info for the charger ICs as found on the other 2 known
-> boards with a Whisky Cove PMIC.
->
-> This has been tested on all 3 known boards.
+> Which device-model we are running on can be identified with the new
+> intel_cht_wc_get_model() helper and on models without a Type-C controller
+> the extcon code must control the Vbus 5V boost converter and the USB role
+> switch depending on the detected cable-type.
 
 ...
 
-> +/********** Lenovo Yogabook YB1-X90F/-X91F/-X91L charger settings **********/
-> +static const char * const lenovo_yb1_bq25892_suppliers[] = {
-> +       "cht_wcove_pwrsrc" };
+>  config EXTCON_INTEL_CHT_WC
+>         tristate "Intel Cherrytrail Whiskey Cove PMIC extcon driver"
+> -       depends on INTEL_SOC_PMIC_CHTWC
 
-Something went wrong with indentation...
+> +       depends on INTEL_SOC_PMIC_CHTWC && USB_SUPPORT
 
-...
+Having these two in one expression sounds a bit alogical to me, can
+you just add a separate "depends on"?
 
-> +       /*
-> +        * The firmware sets everything to the defaults, which leads to a
-> +        * somewhat low charge-current of 2048mA and worse to a batter-voltage
-
-battery?
-
-> +        * of 4.2V instead of 4.35V (when booted without a charger connected).
-> +        * Use our own values instead of "linux,read-back-settings" to fix this.
-> +        */
+> +       select USB_ROLE_SWITCH
 
 ...
 
-> +       switch (intel_cht_wc_get_model()) {
-> +       case INTEL_CHT_WC_GPD_WIN_POCKET:
-> +               board_info = &gpd_win_board_info;
-> +               break;
-> +       case INTEL_CHT_WC_XIAOMI_MIPAD2:
-> +               board_info = &xiaomi_mipad2_board_info;
-> +               break;
-> +       case INTEL_CHT_WC_LENOVO_YOGABOOK1:
-> +               board_info = &lenovo_yogabook1_board_info;
-> +               break;
-> +       default:
-> +               dev_warn(&pdev->dev, "Unknown model, not instantiating charger device\n");
+> +       if (ext->vbus_boost && ext->vbus_boost_enabled != enable) {
+> +               if (enable)
+> +                       ret = regulator_enable(ext->vbus_boost);
+> +               else
+> +                       ret = regulator_disable(ext->vbus_boost);
 
-break;
+Redundant blank line here (but it's up to you)
+
+> +               if (ret == 0)
+> +                       ext->vbus_boost_enabled = enable;
+> +               else
+> +                       dev_err(ext->dev, "Error updating Vbus boost regulator: %d\n", ret);
+
+Why not a traditional pattern, i.e. error handling first?
+
+> +       }
+
+...
+
+> +/* Some boards require controlling the role-sw and vbus based on the id-pin */
+
+Vbus ? VBUS? Here and there the inconsistency of some terms...
+
+...
+
+> +       ext->vbus_boost = devm_regulator_get_optional(ext->dev, "vbus");
+> +       if (IS_ERR(ext->vbus_boost)) {
+> +               ret = PTR_ERR(ext->vbus_boost);
+> +               if (ret == -ENODEV)
+> +                       ret = -EPROBE_DEFER;
+> +
+> +               return dev_err_probe(ext->dev, ret, "getting vbus regulator");
+
+Can be also written as
+
+    if (PTR_ERR(ext->vbus_boost) == -ENODEV ||
+PTR_ERR(ext->vbus_boost) == -EPROBE_DEFER)
+        return dev_err_probe(ext->dev, -EPROBE_DEFER, "getting vbus regulator");
+
+    return PTR_ERR(ext->vbus_boost);
+
+but up to you.
 
 > +       }
 
