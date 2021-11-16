@@ -2,84 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC53452F67
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Nov 2021 11:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4D5452FA6
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Nov 2021 12:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234271AbhKPKrK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 Nov 2021 05:47:10 -0500
-Received: from mga07.intel.com ([134.134.136.100]:16335 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234289AbhKPKrJ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 16 Nov 2021 05:47:09 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="297091534"
-X-IronPort-AV: E=Sophos;i="5.87,239,1631602800"; 
-   d="scan'208";a="297091534"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 02:44:10 -0800
-X-IronPort-AV: E=Sophos;i="5.87,239,1631602800"; 
-   d="scan'208";a="604256443"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 02:44:08 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mmvwV-007ODJ-Uo;
-        Tue, 16 Nov 2021 12:43:59 +0200
-Date:   Tue, 16 Nov 2021 12:43:59 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        ck+kernelbugzilla@bl4ckb0x.de, stephane.poignant@protonmail.com
-Subject: Re: [PATCH v3] i2c: i801: Fix interrupt storm from SMB_ALERT signal
-Message-ID: <YZOLb2gb5LtwiiTR@smile.fi.intel.com>
-References: <20211110141032.2429745-1-jarkko.nikula@linux.intel.com>
- <YYv+YdRWzU9HzEY8@smile.fi.intel.com>
- <71a5c6d4-4ae8-2c54-78e7-94a37b43a986@linux.intel.com>
- <20211116111821.75ba4ea6@endymion>
- <YZOLFSpQqw1haCC2@smile.fi.intel.com>
+        id S234410AbhKPLDp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 Nov 2021 06:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230515AbhKPLDm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 Nov 2021 06:03:42 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD73EC061570;
+        Tue, 16 Nov 2021 03:00:45 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id y13so10986917edd.13;
+        Tue, 16 Nov 2021 03:00:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mZYsLA03c0ESxUBqInit0nIdPnOqA/BXoaX/WaT1Xo0=;
+        b=qsMKMXQ3gqvfq5vm5Xf6kKGtzHl2sjvIqH1Gona6Hfq+inlnsBjP6WvPIKKuFZvHd6
+         /rzUb9Cbew5anK1AQxoFWqLS99sguSvNzIoEOCUVYUSPgk6V4fYa9ccVLhg6tBtmiQAf
+         rV8aNSozQxrftK7Srj92YJIgXthyLHX3yGVo0NBYMGH7gjfD1qyL9dA9oS/kac8yJIwf
+         viSXfcoavOU5yTotlfb2h1C0IA897ylObp8c7KTdGXB78lSs7BHxt++3+daIIz2jAKOs
+         JRjCh6S3UMndPpG7HiS9/qA/IUIO/UN/UVB2T/gQt/OyVBAvYxzHjZIM9s2F1hbpSJdR
+         HvKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mZYsLA03c0ESxUBqInit0nIdPnOqA/BXoaX/WaT1Xo0=;
+        b=7+jxa2UdH3+ke0vTe8+S57RS919OnDiCec9uH+HDavIinHtgqbpIZa4fCiuemk6WKN
+         JWPr8cFbyHciNxvLtF6hfDG8HWhhQZQ4GB9jm3b8eZZzu0dYhNfi5vf4NQ8yyjMMrhGU
+         FQvFIo8Lg2MYBdK7bnQDYnfB04cGypXVHKvbU4yj0EAhWBsIljwPhXRYNN0qCldVEQFj
+         +UPz9Nyn0Z6LZVI1/hSy8HHJURGUgpNloZ0T8sY6qaQiaiJ/AK6uhI6Zaf71ph1NiSJy
+         IlDViUPc5glBugEzkRgrbzskdbC3GhYN9vodoO0SLLCmc69PnkCuVexS2LU+W2Mdh84t
+         4ggw==
+X-Gm-Message-State: AOAM531zRv8TyoUTfqieMtn7AoJsGc8N3452dmFXBaaofkuAUj33L3sH
+        ky2d0SGzoacp5/Gd8+jIsYGFIDRHHHPB0vIL3o9SJT6qc8M=
+X-Google-Smtp-Source: ABdhPJy10veqr4r8kc5EiKNBhkcv6gYr2Kc2qm+82DyZ67lYKpyQ540qJr8Bgm1flhfPv1liIBqriGFL/Tu2lCppA5I=
+X-Received: by 2002:a50:9ec9:: with SMTP id a67mr8829518edf.238.1637060444315;
+ Tue, 16 Nov 2021 03:00:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YZOLFSpQqw1haCC2@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211114170335.66994-1-hdegoede@redhat.com>
+In-Reply-To: <20211114170335.66994-1-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 16 Nov 2021 13:00:02 +0200
+Message-ID: <CAHp75Vf+0yw8Nb4Lxbf9ukYWw9xPnpy2C0OyaXJ+o5xsamP4qA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/20] power-suppy/i2c/extcon: Fix charger setup on
+ Xiaomi Mi Pad 2 and Lenovo Yogabook
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 16, 2021 at 12:42:30PM +0200, Andy Shevchenko wrote:
-> On Tue, Nov 16, 2021 at 11:18:21AM +0100, Jean Delvare wrote:
-> > On Thu, 11 Nov 2021 16:39:28 +0200, Jarkko Nikula wrote:
-> > > On 11/10/21 7:16 PM, Andy Shevchenko wrote:
-> > > > On Wed, Nov 10, 2021 at 04:10:32PM +0200, Jarkko Nikula wrote:  
+On Sun, Nov 14, 2021 at 7:03 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi All,
+>
+> This is version 2 of my series previously titled:
+> "[PATCH 00/13] power-suppy/i2c/extcon: Add support for cht-wc PMIC
+> without USB-PD support".
+>
+> So far almost all the kernel code surrounding the Cherry Trail Whiskey Cove
+> PMIC has been developed on the GPD win / pocket devices and it has various
+> assumption based on that. In the mean time I've learned (and gotten access
+> to) about 2 more designs and none of the 3 now known designs use a single
+> standard setup for the charger, fuel-gauge and other chips surrounding the
+> PMIC / charging+data USB port:
+>
+> 1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
+> but the Pocket re-uses the GPD Win's design in a different housing:
+>
+> The WC PMIC is connected to a TI BQ24292i charger, paired with
+> a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
+> a PI3USB30532 USB switch, for a fully functional Type-C port.
+>
+> 2. The Xiaomi Mi Pad 2:
+>
+> The WC PMIC is connected to a TI BQ25890 charger, paired with
+> a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
+> detection, for a USB-2 only Type-C port without PD.
+>
+> 3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
+>
+> The WC PMIC is connected to a TI BQ25892 charger, paired with
+> a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
+> detection and using the BQ25892's Mediatek Pump Express+ (1.0)
+>
+> ###
+>
+> Unlike what is normal on X86 this diversity in designs is not handled /
+> abstracted away by the ACPI tables.
 
-...
-
-> > > >> +	 * Clear remaining irq sources: Completion of last command, errors  
-> > > >> +	 * and the SMB_ALERT signal. SMB_ALERT status is set after signal
-> > > >> +	 * assertion independently is the interrupt generation blocked or not  
-> > > > 
-> > > > is --> if ?
-> > >
-> > > hmm, I don't know which one is correct or neither. Or should it be 
-> > > something like "independently of whether the interrupt generation is 
-> > > blocked or not"? Grammar polices, please help me :-)
-> > 
-> > ... independently of the interrupt generation being blocked or not.
-> > 
-> > Sounds better?
-> > 
-> > (I think your "of whether" variant is grammatically correct too, if you
-> > prefer that.)
-> 
-> For the sake of bikeshedding :-) I lean to "whether" variant, because I think
-
-s/"whether"/"of whether"/
-
-> the determiner usage is decreasing over time, while its presence makes language
-> richer.
+I will briefly look into it, right now two observations (or nit-picks):
+- you may utilize Co-developed-by tag when it makes sense
+- I would rather see "x86/ACPI" in all texts (note small "x")
 
 -- 
 With Best Regards,
 Andy Shevchenko
-
-
