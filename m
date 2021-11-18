@@ -2,77 +2,135 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B3B455D45
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Nov 2021 15:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248B1455DCA
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Nov 2021 15:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbhKROHU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Nov 2021 09:07:20 -0500
-Received: from mga14.intel.com ([192.55.52.115]:33525 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232210AbhKROHA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 18 Nov 2021 09:07:00 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10171"; a="234424415"
+        id S232915AbhKROUU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Nov 2021 09:20:20 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:17726 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232893AbhKROUT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Nov 2021 09:20:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1637245039; x=1668781039;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PzUjR8CBONAi/Gz8Mh2kN2+XWsTJFNdoE0c4hLDlRM0=;
+  b=yrRe01CoYiVNXyuC9qFCJMOtXuZ/C4fyFhkUhdsPhtELpSnyYEB49JAp
+   jou4Cx6V0nCbnuuvIZTmLZF1lcYNkHkY4CUtQQbjGwUbFPqIHiqVTMt/c
+   00Jr5ckxj7+MjCx6e9tFxa/Yweq6abUMrJ5BZ+SsrEy7TAGJKXig48dwh
+   ARGuQrAQFbK1MR28a3NimSPhNXuisHqrTsJz5ZtTA9MVbs15qvVvuKJSx
+   FwIM1NshpQVgMDOwsbnUuM6+fnFD/YWxTxpyChnWkA9SM+nocqjMz9Shv
+   rilp/gdDcEmWrzs/gWXb6AodUYUvwJNQYVuoA2qHTGMJeqxZuO6cVzJwR
+   Q==;
+IronPort-SDR: HcP97IVp1dIl8LZuIt6ojMl5MCSqQaLezYIFGTdtkHbbv/kzyCKfxZTP67PHBCaECpLUIpuetw
+ yCNmMbfhbnJga3nFpYzefASqwL+0isnxoqEi6F9fMEeIk16gKhqw50AEiEe2716aN9KbD2H2Q+
+ kyJZCanjOZbFDHspJZpukMqYMbTxWNU6S9i/WsGDvYd5v+IckiwZV47n0QlGANp5jqOZ8f98nA
+ WCkVFjE7oZdgV40LZP8y4ImVLvRt9EeimeijucVviEpNkWvNWvgiMs6sQdX3U0JSloSTaNN9aZ
+ FhIVlug6xJk3Ofh0k7T60hFG
 X-IronPort-AV: E=Sophos;i="5.87,245,1631602800"; 
-   d="scan'208";a="234424415"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2021 06:03:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,245,1631602800"; 
-   d="scan'208";a="455335610"
-Received: from mylly.fi.intel.com (HELO [10.237.72.56]) ([10.237.72.56])
-  by orsmga006.jf.intel.com with ESMTP; 18 Nov 2021 06:03:40 -0800
-Subject: Re: [PATCH] 2c: i801: Improve handling of chip-specific feature
- definitions
-To:     Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     linux-i2c@vger.kernel.org
-References: <89eb31f3-8544-35c6-7b15-920831746563@gmail.com>
- <20211118110912.76b74cd3@endymion>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <56d37e6a-a0c0-861b-dfd7-e50b95cd5377@linux.intel.com>
-Date:   Thu, 18 Nov 2021 16:03:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+   d="scan'208";a="139582573"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Nov 2021 07:17:18 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 18 Nov 2021 07:17:17 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Thu, 18 Nov 2021 07:17:17 -0700
+Date:   Thu, 18 Nov 2021 15:19:05 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <peda@axentia.se>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: i2c-mux: Add property for settle time
+Message-ID: <20211118141905.zntm4dwaqlaa5iig@soft-dev3-1.localhost>
+References: <20211103091839.1665672-1-horatiu.vultur@microchip.com>
+ <20211103091839.1665672-2-horatiu.vultur@microchip.com>
+ <YY7FuUKIyZn5892i@robh.at.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20211118110912.76b74cd3@endymion>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <YY7FuUKIyZn5892i@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 11/18/21 12:09 PM, Jean Delvare wrote:
-> Hi Heiner,
-> 
-> On Mon, 08 Nov 2021 21:10:12 +0100, Heiner Kallweit wrote:
->> Reduce source code and code size by defining the chip features
->> statically.
-> 
-> While I don't like the PCI_DEVICE_DATA macro implementation (for it
-> breaks grepping for PCI defines), I generally enjoy more data and less
-> code. So I am fine with this change.
-> 
-> Jarkko, you are typically the one adding support for new devices to
-> this driver so this change will affect you. Are you OK with that change?
-> 
-I think it makes code more readable and less error prone when adding 
-support for new devices and merging with other upstream changes. I 
-remember one such accident:
+The 11/12/2021 13:51, Rob Herring wrote:
 
-fd4b204a0971 ("i2c: i801: Bring back Block Process Call support for 
-certain platforms")
+Hi Rob,
 
->> +#define DEF_FEATURES	(FEATURE_BLOCK_PROC | FEATURE_I2C_BLOCK_READ	| \
-> 
-> Not a good name ("default" isn't descriptive) and not consistent
-> either. I suggest "FEATURES_82801EB" instead, as this is the first
-> chipset which supported all these features. And you can make the
-> definitions of FEATURES_82801DB and FEATURES_82801EB consistent
-> (spacing/alignment).
-> 
-How about calling default as FEATURES_ICH5 and 82801DB as FEATURES_ICH4? 
-That makes easier to follow comments like "/* ICH4 and later */" in the 
-code.
+Sorry for the late reply, I was caught with some other patches.
 
-Jarkko
+> 
+> On Wed, Nov 03, 2021 at 10:18:38AM +0100, Horatiu Vultur wrote:
+> > Some HW requires some time for the signals to settle after the muxing is
+> > changed. Allow this time to be specified in device tree.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  Documentation/devicetree/bindings/i2c/i2c-mux.yaml | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+> > index 24cac36037f5..4c81e56d02f7 100644
+> > --- a/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+> > +++ b/Documentation/devicetree/bindings/i2c/i2c-mux.yaml
+> > @@ -19,6 +19,11 @@ description: |+
+> >    populating the i2c child busses.  If an 'i2c-mux' subnode is present, only
+> >    subnodes of this will be considered as i2c child busses.
+> >
+> > +  Optional properties may not be supported by all drivers. However, if a driver
+> > +  wants to support one of the below features, it should adopt these bindings.
+> 
+> What drivers? Bindings are independent. I don't think you need the
+> comment, but this should be a separate change with an explanation along
+> the lines of what we discussed.
+> 
+> > +
+> > +select: false
+> > +
+> >  properties:
+> >    $nodename:
+> >      pattern: '^(i2c-?)?mux'
+> > @@ -29,6 +34,11 @@ properties:
+> >    '#size-cells':
+> >      const: 0
+> >
+> > +  settle-time-us:
+> > +    default: 0
+> > +    description:
+> > +      The time required for the signals to settle.
+> > +
+> >  patternProperties:
+> >    '^i2c@[0-9a-f]+$':
+> >      $ref: /schemas/i2c/i2c-controller.yaml
+> > @@ -41,6 +51,10 @@ patternProperties:
+> >
+> >  additionalProperties: true
+> >
+> > +required:
+> > +  - '#address-cells'
+> > +  - '#size-cells'
+> > +
+> 
+> This too is a separate change.
+
+So just to be sure that I follow up correctly, then there will be one
+patch with the 'select: false' explaining why is added and another one
+with the new property and the required properties.
+Or am I still off?
+
+> 
+> >  examples:
+> >    - |
+> >      /*
+> > --
+> > 2.33.0
+> >
+> >
+
+-- 
+/Horatiu
