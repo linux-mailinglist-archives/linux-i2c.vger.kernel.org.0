@@ -2,125 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B20634565F5
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Nov 2021 23:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8272B45670E
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 01:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbhKRXBe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Nov 2021 18:01:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbhKRXBd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Nov 2021 18:01:33 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2A5C061574
-        for <linux-i2c@vger.kernel.org>; Thu, 18 Nov 2021 14:58:32 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id o29so6785400wms.2
-        for <linux-i2c@vger.kernel.org>; Thu, 18 Nov 2021 14:58:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=CvLL+Luxnu94FRY+3K+LGF9yUGlhCxJzQNH+MZ/w5ks=;
-        b=iyuR//TtLFeVNIhjwKc0112XAsy/Tjtk6ovXkv2W9HUAk3W/LDBJKPXqfr1HV/zCpt
-         Zaar20HCyXBAoo0nRPoGyk6z+LP82+Gm6nL6uz39CWRRGX102yshSLBDwh8IGpYQDujn
-         ZaKkJtPOFFoJABfvgZiAhnbX2Brd7ezdBKL15Nx0l1sUYJRXzXmYmhycqOL8oPe6G9R4
-         BYlQxZvee7f+Uum+NaPg+C1NqG63Jqri/zRNVBWXVN3quS15Wh4V7eDtZYl/ybp9DR7e
-         2AVWAAzVgOr5pPrOOJJEOMCdkBn5a/0sQ+uhXARqIca//1rQqo0TAvLGd5edPoUwGXBf
-         xcCA==
+        id S231949AbhKSA5j (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 Nov 2021 19:57:39 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:43749 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229851AbhKSA5i (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Nov 2021 19:57:38 -0500
+Received: by mail-oi1-f169.google.com with SMTP id o4so18266035oia.10;
+        Thu, 18 Nov 2021 16:54:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=CvLL+Luxnu94FRY+3K+LGF9yUGlhCxJzQNH+MZ/w5ks=;
-        b=Pdy1MNXI9tiYR/8uG/ewacW6lrKz2bMqL11HwIf3bSX+lCJQ6fZDp2mUc746qEArlX
-         fNb/eT8gesI03eEb67nA6xb7N3mB4nOWNfGfbAVUcDyRqGUF0UaVtKppBqHRf8dK0xLN
-         F5MDS39E7MYVLBcbRT1G6O0DdUTAzwAL+nwr1ur/ifVOxawn6qlLm4riqU7oRub8HrMz
-         9D5YhC7YUH18noTrOwQYbd7UWK6RSu7Pc9QW68e5hEVX7a5fNzq8EWeZ9loHEGOvxDCB
-         sED4nCDWe9PtAa0NxD+cwUwkNX4fmrWsr9K8uncE1KahOf4xtL8KsTiDhuPsU29oiSEe
-         CGdA==
-X-Gm-Message-State: AOAM530wRwK7UFHpG+910YJ3NkEHecm5UD5uHvm62bCatLjG9LOpV+sq
-        rlfY0U1rUNcxgb+1Ks6E3nyG3GUX1v8=
-X-Google-Smtp-Source: ABdhPJwI4wAXa/FmEP9Traa3FFnaT3V1ZvCFzwFA8G6bAqgf4C/z1qp0hDP13mKCKdbpCcGRq9pwzg==
-X-Received: by 2002:a7b:c744:: with SMTP id w4mr986625wmk.50.1637276311110;
-        Thu, 18 Nov 2021 14:58:31 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f1a:f00:fc8d:4de8:c1d1:9213? (p200300ea8f1a0f00fc8d4de8c1d19213.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:fc8d:4de8:c1d1:9213])
-        by smtp.googlemail.com with ESMTPSA id l5sm1025175wml.20.2021.11.18.14.58.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Nov 2021 14:58:30 -0800 (PST)
-Message-ID: <f6e13674-7f86-529f-10e2-6b34bc5f8f6c@gmail.com>
-Date:   Thu, 18 Nov 2021 23:58:17 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NJ9HnG2UMCEE4biBm5ej/tJE9ReBS+RZcFUyPPeYoTY=;
+        b=eRGN8v9Q14nixr42468lPZ9n9Pdf2iWXsyWhoo1gmVFuSoMdED3Weu4fMLwTiR0R9t
+         zUk9aS/JN3Cb05bsjwjggeMY7pCBM8OVqH7bDoc8qApSk//I1a2Ss8k1+V8fK/xAyUUW
+         wQSFtr5fqnm0PKZLG9pblriVBR7KzEEmOr+Z0VfUTqhqN9PkqMKioFVXL2bjyRQyAZzp
+         8FPg+OEds/EhvE/mvEopEhC798aktxuhnY586oU+uxv7sLrFhzQcMMMWfgjK3UumCAga
+         IVYDDUY7ghoC1RJt4x3iXpUQiG4i29L7kR2wdN+cG362Snn1S8AhWG6yK5ayOGGP5Od0
+         GFCg==
+X-Gm-Message-State: AOAM531h8DE4EL8XIbVAc7JgFjfBwbl5utWlPIkA65SnJpLMGnHREf4M
+        1tAkD81xHYwtrJRvLDWeDA==
+X-Google-Smtp-Source: ABdhPJxY4T9LF2F11iACJ3TIzLy6vgQ/UROqzyeIhb7PVJmARYDeMS8HZCif76ujP4ztygxu18BiBw==
+X-Received: by 2002:a05:6808:11c8:: with SMTP id p8mr1273757oiv.72.1637283277541;
+        Thu, 18 Nov 2021 16:54:37 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id b26sm256384oti.56.2021.11.18.16.54.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Nov 2021 16:54:36 -0800 (PST)
+Received: (nullmailer pid 2126530 invoked by uid 1000);
+        Fri, 19 Nov 2021 00:54:35 -0000
+Date:   Thu, 18 Nov 2021 18:54:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     linux-i2c@vger.kernel.org, linux-imx@nxp.com,
+        linux-watchdog@vger.kernel.org, linux@rempel-privat.de,
+        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
+        linux-spi@vger.kernel.org, kernel@pengutronix.de,
+        linux-serial@vger.kernel.org, robh+dt@kernel.org,
+        linux-mmc@vger.kernel.org, festevam@gmail.com, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux@roeck-us.net, ulf.hansson@linaro.org,
+        daniel.lezcano@linaro.org, Peng Fan <peng.fan@nxp.com>,
+        wim@linux-watchdog.org, Jacky Bai <ping.bai@nxp.com>,
+        s.hauer@pengutronix.de, broonie@kernel.org
+Subject: Re: [PATCH V5 8/9] arm64: dts: imx8ulp: Add the basic dtsi file for
+ imx8ulp
+Message-ID: <YZb1y5GpI7XPb/Ji@robh.at.kernel.org>
+References: <20211112082930.3809351-1-peng.fan@oss.nxp.com>
+ <20211112082930.3809351-9-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH v2] i2c: i801: Remove i801_set_block_buffer_mode
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211112082930.3809351-9-peng.fan@oss.nxp.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-If FEATURE_BLOCK_BUFFER is set then bit SMBAUXCTL_E32B is supported
-and there's no benefit in reading it back. Origin of this check
-seems to be 14 yrs ago when people were not completely sure which
-chip versions support the block buffer mode.
+On Fri, 12 Nov 2021 16:29:29 +0800, Peng Fan (OSS) wrote:
+> From: Jacky Bai <ping.bai@nxp.com>
+> 
+> Add the basic dtsi support for i.MX8ULP.
+> 
+> i.MX 8ULP is part of the ULP family with emphasis on extreme
+> low-power techniques using the 28 nm fully depleted silicon on
+> insulator process. Like i.MX 7ULP, i.MX 8ULP continues to be
+> based on asymmetric architecture, however will add a third DSP
+> domain for advanced voice/audio capability and a Graphics domain
+> where it is possible to access graphics resources from the
+> application side or the realtime side.
+> 
+> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> 
+>   - v4
+>    Fix build error after rebase
+>    Drop usb nodes and alias, drop fec node
+> 
+>   - v3 changes:
+>     no
+> 
+>   - v2 changes:
+>     update the license
+>     update the compatible property for usb related node
+> 
+>  .../boot/dts/freescale/imx8ulp-pinfunc.h      | 978 ++++++++++++++++++
+>  arch/arm64/boot/dts/freescale/imx8ulp.dtsi    | 396 +++++++
+>  2 files changed, 1374 insertions(+)
+>  create mode 100755 arch/arm64/boot/dts/freescale/imx8ulp-pinfunc.h
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> 
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
-v2:
-- made commit message less offending ;)
-- re-added parentheses to a & b && c expression
----
- drivers/i2c/busses/i2c-i801.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 05187457f..f5c1589da 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -521,9 +521,11 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
- 		return -EOPNOTSUPP;
- 	}
- 
-+	/* Set block buffer mode */
-+	outb_p(inb_p(SMBAUXCTL(priv)) | SMBAUXCTL_E32B, SMBAUXCTL(priv));
-+
- 	inb_p(SMBHSTCNT(priv)); /* reset the data buffer index */
- 
--	/* Use 32-byte buffer to process this transaction */
- 	if (read_write == I2C_SMBUS_WRITE) {
- 		len = data->block[0];
- 		outb_p(len, SMBHSTDAT0(priv));
-@@ -750,14 +752,6 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
- 	return i801_check_post(priv, status);
- }
- 
--static int i801_set_block_buffer_mode(struct i801_priv *priv)
--{
--	outb_p(inb_p(SMBAUXCTL(priv)) | SMBAUXCTL_E32B, SMBAUXCTL(priv));
--	if ((inb_p(SMBAUXCTL(priv)) & SMBAUXCTL_E32B) == 0)
--		return -EIO;
--	return 0;
--}
--
- /* Block transaction function */
- static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
- 				  char read_write, int command)
-@@ -791,9 +785,8 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
- 	/* Experience has shown that the block buffer can only be used for
- 	   SMBus (not I2C) block transactions, even though the datasheet
- 	   doesn't mention this limitation. */
--	if ((priv->features & FEATURE_BLOCK_BUFFER)
--	 && command != I2C_SMBUS_I2C_BLOCK_DATA
--	 && i801_set_block_buffer_mode(priv) == 0)
-+	if ((priv->features & FEATURE_BLOCK_BUFFER) &&
-+	    command != I2C_SMBUS_I2C_BLOCK_DATA)
- 		result = i801_block_transaction_by_block(priv, data,
- 							 read_write,
- 							 command);
--- 
-2.34.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
