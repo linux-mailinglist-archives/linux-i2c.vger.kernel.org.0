@@ -2,79 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F15234597C7
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Nov 2021 23:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7885A4598A8
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Nov 2021 00:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbhKVWmV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Nov 2021 17:42:21 -0500
-Received: from sibelius.xs4all.nl ([83.163.83.176]:55974 "EHLO
-        sibelius.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbhKVWmV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Nov 2021 17:42:21 -0500
-Received: from localhost (bloch.sibelius.xs4all.nl [local])
-        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id cdd96034;
-        Mon, 22 Nov 2021 23:39:12 +0100 (CET)
-Date:   Mon, 22 Nov 2021 23:39:12 +0100 (CET)
-From:   Mark Kettenis <mark.kettenis@xs4all.nl>
-To:     Janne Grunau <j@jannau.net>
-Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        robh+dt@kernel.org, wsa@kernel.org, olof@lixom.net, arnd@arndb.de,
-        kettenis@openbsd.org, robh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211122222440.21177-3-j@jannau.net> (message from Janne Grunau
-        on Mon, 22 Nov 2021 23:24:39 +0100)
-Subject: Re: [PATCH v2 2/3] dt-bindings: i2c: apple,i2c: allow multiple compatibles
-References: <20211122222440.21177-1-j@jannau.net> <20211122222440.21177-3-j@jannau.net>
-Message-ID: <d3caf42a8fea181b@bloch.sibelius.xs4all.nl>
+        id S232318AbhKVXza (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Nov 2021 18:55:30 -0500
+Received: from mx08-00227901.pphosted.com ([91.207.212.184]:59606 "EHLO
+        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232101AbhKVXzX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Nov 2021 18:55:23 -0500
+Received: from pps.filterd (m0097674.ppops.net [127.0.0.1])
+        by mx08-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7wixe018132;
+        Fri, 19 Nov 2021 10:27:12 +0100
+Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
+        by mx08-.pphosted.com (PPS) with ESMTPS id 3cdmdm1455-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 19 Nov 2021 10:27:11 +0100
+Received: from ZBW2K16EX01.bardusch.net (172.25.1.1) by
+ ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
+ Fri, 19 Nov 2021 10:27:10 +0100
+Received: from User (172.25.1.131) by ZBW2K16EX01.bardusch.net (172.25.1.1)
+ with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
+ Nov 2021 10:26:59 +0100
+Reply-To: <josechoondak@gmail.com>
+From:   Joseph Choondak <info@ndd.co.mz>
+Subject: I hope this email finds you well.
+Date:   Fri, 19 Nov 2021 01:27:13 -0800
+MIME-Version: 1.0
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <e7a31752-8681-4042-9ad5-c01248965c5f@ZBW2K16EX01.bardusch.net>
+To:     Undisclosed recipients:;
+X-Proofpoint-GUID: CmkypoSbrhIOZjoh10HOlF5xTX1kBMKq
+X-Proofpoint-ORIG-GUID: CmkypoSbrhIOZjoh10HOlF5xTX1kBMKq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Reason: orgsafe
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> From: Janne Grunau <j@jannau.net>
-> Date: Mon, 22 Nov 2021 23:24:39 +0100
-> 
-> The intention was to have a SoC-specific and base compatible string
-> to allow forward compatibility and SoC specific quirks,
-> 
-> Fixes: df7c4a8c1b47 ("dt-bindings: i2c: Add Apple I2C controller bindings")
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> Cc: Mark Kettenis <kettenis@openbsd.org>
-> Reviewed-by: Sven Peter <sven@svenpeter.dev>
+May I please ask with considerable urgency for your kind assistance with the following matter.
+I'm a financial person, I think  I have something huge you might be interested in.
 
-Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
+Looking forward to hearing from you.
 
-> ---
->  Documentation/devicetree/bindings/i2c/apple,i2c.yaml | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> index 22fc8483256f..82b953181a52 100644
-> --- a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> @@ -20,9 +20,9 @@ allOf:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - apple,t8103-i2c
-> -      - apple,i2c
-> +    items:
-> +      - const: apple,t8103-i2c
-> +      - const: apple,i2c
->  
->    reg:
->      maxItems: 1
-> @@ -51,7 +51,7 @@ unevaluatedProperties: false
->  examples:
->    - |
->      i2c@35010000 {
-> -      compatible = "apple,t8103-i2c";
-> +      compatible = "apple,t8103-i2c", "apple,i2c";
->        reg = <0x35010000 0x4000>;
->        interrupt-parent = <&aic>;
->        interrupts = <0 627 4>;
-> -- 
-> 2.34.0
-> 
-> 
+
+Respectfully!!
+Joseph Choondak
+Account Executive.
