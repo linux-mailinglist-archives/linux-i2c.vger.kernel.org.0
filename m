@@ -2,129 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E370C4570E5
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 15:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880114570F5
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 15:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235180AbhKSOmX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Nov 2021 09:42:23 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:43280 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233963AbhKSOmX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Nov 2021 09:42:23 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D3185212CA;
-        Fri, 19 Nov 2021 14:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1637332760; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e4nzpNjJHHkOebYPOoWg+xqJ3i9tS/e3nzrCqD+YpT4=;
-        b=GJuCtR1+9J0kIuTscxQL32XeZ0IwN0ZR+qwRFn0ZQ6II70doZOyAvWxcJOmmtW+7Gm7LkI
-        bYQgVqnt188/tqlLyrui1M3F/0M5Fk5phyLnZIE5A2xoBHROl84LmgVNHd8Oj6A9HgljDK
-        Ns33nmkzful5RusqjMRnUPoNxIxd+wE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1637332760;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e4nzpNjJHHkOebYPOoWg+xqJ3i9tS/e3nzrCqD+YpT4=;
-        b=MmB0QjQYeabWkCevcerrWLwg2dWtMNRZwuBxGfcMxpNadPmZChjLV79HvvbDdV5El/XY+t
-        ldV5HDbInMv0hUBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B043713B32;
-        Fri, 19 Nov 2021 14:39:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FHVrKBi3l2HmBwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 19 Nov 2021 14:39:20 +0000
-Date:   Fri, 19 Nov 2021 15:39:18 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: i801: Remove i801_set_block_buffer_mode
-Message-ID: <20211119153918.492ea41d@endymion>
-In-Reply-To: <f6e13674-7f86-529f-10e2-6b34bc5f8f6c@gmail.com>
-References: <f6e13674-7f86-529f-10e2-6b34bc5f8f6c@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S235073AbhKSOtj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Nov 2021 09:49:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40380 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234402AbhKSOtj (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 19 Nov 2021 09:49:39 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 022A761546;
+        Fri, 19 Nov 2021 14:46:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637333197;
+        bh=zCcY+VFf57S76r68pFY7JNDJn5iVG1TUoLBjwC2jrB8=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=NaY+nuvS8ONJeAbhT5jC1TrqeOBSZc1Ss+MvcP6G2buRvoiXmZl7ogsQ/YWmy3VKW
+         PyBt/uhIcxt1bqubCXpQqI2llQwULERHG6pRhYhJQ/alFbzxTh9xi6LaaBPwsit/XG
+         WnHBc/Tg93vbr5VpeeSkkO2lMhL9vbVriXuPxZTtNUey0Yz7h51b7dbbpPaDAGK7zC
+         vfUYn6PhacuC2+Y31govhapKzCTzkIMFJc5VymLHOJhsfHrdr9biMqJ7HeSqHYGjBi
+         LAvyYq950zeeFoPuJ4++DDDmh9wvy47GhZbWJLMKzBd7MdjbGqmA7Sjop72hyfTKBh
+         YsxDWqaP9p9xg==
+Date:   Fri, 19 Nov 2021 15:46:20 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Michael Zaidman <michael.zaidman@gmail.com>
+cc:     benjamin.tissoires@redhat.com, aaron.jones@ftdichip.com,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Germain Hebert <germain.hebert@ca.abb.com>
+Subject: Re: [PATCH v1] HID: ft260: fix i2c probing for hwmon devices
+In-Reply-To: <20211023193957.5002-1-michael.zaidman@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2111191546070.16505@cbobk.fhfr.pm>
+References: <20211023193957.5002-1-michael.zaidman@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 18 Nov 2021 23:58:17 +0100, Heiner Kallweit wrote:
-> If FEATURE_BLOCK_BUFFER is set then bit SMBAUXCTL_E32B is supported
-> and there's no benefit in reading it back. Origin of this check
-> seems to be 14 yrs ago when people were not completely sure which
-> chip versions support the block buffer mode.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
-> v2:
-> - made commit message less offending ;)
-> - re-added parentheses to a & b && c expression
-> ---
->  drivers/i2c/busses/i2c-i801.c | 17 +++++------------
->  1 file changed, 5 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index 05187457f..f5c1589da 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -521,9 +521,11 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
->  		return -EOPNOTSUPP;
->  	}
->  
-> +	/* Set block buffer mode */
-> +	outb_p(inb_p(SMBAUXCTL(priv)) | SMBAUXCTL_E32B, SMBAUXCTL(priv));
-> +
->  	inb_p(SMBHSTCNT(priv)); /* reset the data buffer index */
->  
-> -	/* Use 32-byte buffer to process this transaction */
->  	if (read_write == I2C_SMBUS_WRITE) {
->  		len = data->block[0];
->  		outb_p(len, SMBHSTDAT0(priv));
-> @@ -750,14 +752,6 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
->  	return i801_check_post(priv, status);
->  }
->  
-> -static int i801_set_block_buffer_mode(struct i801_priv *priv)
-> -{
-> -	outb_p(inb_p(SMBAUXCTL(priv)) | SMBAUXCTL_E32B, SMBAUXCTL(priv));
-> -	if ((inb_p(SMBAUXCTL(priv)) & SMBAUXCTL_E32B) == 0)
-> -		return -EIO;
-> -	return 0;
-> -}
-> -
->  /* Block transaction function */
->  static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
->  				  char read_write, int command)
-> @@ -791,9 +785,8 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
->  	/* Experience has shown that the block buffer can only be used for
->  	   SMBus (not I2C) block transactions, even though the datasheet
->  	   doesn't mention this limitation. */
-> -	if ((priv->features & FEATURE_BLOCK_BUFFER)
-> -	 && command != I2C_SMBUS_I2C_BLOCK_DATA
-> -	 && i801_set_block_buffer_mode(priv) == 0)
-> +	if ((priv->features & FEATURE_BLOCK_BUFFER) &&
-> +	    command != I2C_SMBUS_I2C_BLOCK_DATA)
->  		result = i801_block_transaction_by_block(priv, data,
->  							 read_write,
->  							 command);
+On Sat, 23 Oct 2021, Michael Zaidman wrote:
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Tested-by: Jean Delvare <jdelvare@suse.de>
+> The below scenario causes the kernel NULL pointer dereference failure:
+> 1. sudo insmod hid-ft260.ko
+> 2. sudo modprobe lm75
+> 3. unplug USB hid-ft260
+> 4. plug USB hid-ft260
+> 
+> [  +0.000006] Call Trace:
+> [  +0.000004]  __i2c_smbus_xfer.part.0+0xd1/0x310
+> [  +0.000007]  ? ft260_smbus_write+0x140/0x140 [hid_ft260]
+> [  +0.000005]  __i2c_smbus_xfer+0x2b/0x80
+> [  +0.000004]  i2c_smbus_xfer+0x61/0xf0
+> [  +0.000005]  i2c_default_probe+0xf9/0x130
+> [  +0.000004]  i2c_detect_address+0x84/0x160
+> [  +0.000004]  ? kmem_cache_alloc_trace+0xf6/0x200
+> [  +0.000009]  ? i2c_detect.isra.0+0x69/0x130
+> [  +0.000005]  i2c_detect.isra.0+0xbf/0x130
+> [  +0.000004]  ? __process_new_driver+0x30/0x30
+> [  +0.000004]  __process_new_adapter+0x18/0x20
+> [  +0.000004]  bus_for_each_drv+0x84/0xd0
+> [  +0.000003]  i2c_register_adapter+0x1e4/0x400
+> [  +0.000005]  i2c_add_adapter+0x5c/0x80
+> [  +0.000004]  ft260_probe.cold+0x222/0x2e2 [hid_ft260]
+> [  +0.000006]  hid_device_probe+0x10e/0x170 [hid]
+> [  +0.000009]  really_probe+0xff/0x460
+> [  +0.000004]  driver_probe_device+0xe9/0x160
+> [  +0.000003]  __device_attach_driver+0x71/0xd0
+> [  +0.000004]  ? driver_allows_async_probing+0x50/0x50
+> [  +0.000004]  bus_for_each_drv+0x84/0xd0
+> [  +0.000002]  __device_attach+0xde/0x1e0
+> [  +0.000004]  device_initial_probe+0x13/0x20
+> [  +0.000004]  bus_probe_device+0x8f/0xa0
+> [  +0.000003]  device_add+0x333/0x5f0
+> 
+> It happened when i2c core probed for the devices associated with the lm75
+> driver by invoking 2c_detect()-->..-->ft260_smbus_write() from within the
+> ft260_probe before setting the adapter data with i2c_set_adapdata().
+> 
+> Moving the i2c_set_adapdata() before i2c_add_adapter() fixed the failure.
+> 
+> Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
+> Signed-off-by: Germain Hebert <germain.hebert@ca.abb.com>
+
+Applied, thanks.
 
 -- 
-Jean Delvare
-SUSE L3 Support
+Jiri Kosina
+SUSE Labs
+
