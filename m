@@ -2,132 +2,223 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC7B456BFB
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 09:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECCA456FC3
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 14:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234501AbhKSJA4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Nov 2021 04:00:56 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39248
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230519AbhKSJAz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Nov 2021 04:00:55 -0500
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 717EE3F31C
-        for <linux-i2c@vger.kernel.org>; Fri, 19 Nov 2021 08:57:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1637312273;
-        bh=Q2Xq+lz5R/zlPr5E9PhfPrpqfALjDZ550sxUN46fIkA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=ajczkAhxmtPh01kCJPAg7qWo/V+5zbsy0HXo0+lZmgSKJPrseWPkwPLft6cimDQwt
-         2EGFtKgBfQZ08IhH6eHcjsDZawbjNzM/l9O9Y1rWvlZLiCkbaxorvFDyQ+cD6ehf78
-         4QRi8S8ZcCv9WwVtqfXUo0ucF2MigUYroCI49/WENNXL+2TuSLOLfpV16deUOGJloE
-         iwBXclxVS71tib6sj/LNxoLEiPuhnYwWW7jFCufH3ZFS5M2nv0jKrwJ2maREwfgf9j
-         33LQEmE6SoQK3IccHb9tmPStRcGXE6q9IuDbcX7nO7YS+QFBEJVdcIqESYvsrIqUEj
-         MHsjpz5LgclnA==
-Received: by mail-lf1-f72.google.com with SMTP id z1-20020a056512308100b003ff78e6402bso6105920lfd.4
-        for <linux-i2c@vger.kernel.org>; Fri, 19 Nov 2021 00:57:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Q2Xq+lz5R/zlPr5E9PhfPrpqfALjDZ550sxUN46fIkA=;
-        b=dR/FvTIk0BldA0KuaSt6fjDwxl+vaPzTzpIEn98b6BieJHHfPxkFoX31BHgU3cxf68
-         lIEGfNFJn4KCYZSgTF1RNg5HsvS30AW+uwQ4nMK4vRT64XRBttkma2yPMVj9IMH0jhyU
-         j8ulIzA8773lEuU9mhtK4iUiOPhOH8H3GBiVFD2FeNztWXM0hiPU2WSxXexJzuAhBmnc
-         qtXsOJY0om6rMiUbuq6CPqj/HlpbR5F4bxg364Rah43x+uRCNp6ZqglIMUlphaIU41XZ
-         y8mTU+JP1VrqEojNMEOMboA51x+BDWeZxXrdpszV1/YJSMR/2sXuX6FD/tZ5dsm1auND
-         KmxQ==
-X-Gm-Message-State: AOAM5329B2+pA/Z202u0VcG//VSoWW6lcPHUmWCMcbkq6aJuaCPxNxJp
-        CSxnrsg0zYf7Rg5avhRjJdjoFDo6sGc0oGPLH9E1iT6SaaGqrsoxbuEfT/V0K7xtnETqojWeC6c
-        uA1GfP1B1UGc3w9PNKWblv2yQrDbaLB3jHX7zYA==
-X-Received: by 2002:a2e:9a09:: with SMTP id o9mr24529358lji.21.1637312272769;
-        Fri, 19 Nov 2021 00:57:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxlLab4GnUpev9rIdVitfS5kqSKRDOwtirMnZsL11xiqoH898mmLHs7m3hFj0tATN8s62/2+A==
-X-Received: by 2002:a2e:9a09:: with SMTP id o9mr24529318lji.21.1637312272447;
-        Fri, 19 Nov 2021 00:57:52 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id t7sm300122lfg.115.2021.11.19.00.57.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Nov 2021 00:57:51 -0800 (PST)
-Message-ID: <589dbb7f-4f7c-0ae0-e899-04107accf23c@canonical.com>
-Date:   Fri, 19 Nov 2021 09:57:50 +0100
+        id S235292AbhKSNkQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Nov 2021 08:40:16 -0500
+Received: from mail-bn1nam07on2089.outbound.protection.outlook.com ([40.107.212.89]:5767
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229457AbhKSNkQ (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 19 Nov 2021 08:40:16 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T4y9B6TOfB0qeBjG40n9xWV50s0la78aQFMpXjPKM38uBaAf9TFAbwJr9q360yaAMznt31A196puQR8F48XETatqhBEAjBrQcAj/RFVsIvzxGhcwnbYx/qLEgLXtnDynpe9Im94Y3rNcn1pGlhdOzVtVtzaipDryLkeHl4m7HSmGktpwOYDyEYZWcZ0fg+ghbdAbRyKiL6deItvZwqPi6J6felZnWUyZHO1QyDJYpoYwPSdad+qnwOwZwny+Tt7Mog3uS6eA2YkbInIDttHNpmHRAhdQTzy3VkPCx+A6lHEE4eQtEbNuvIzer5OxBowSzEYujz7LMGDCWYYykLlw0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7bTBbNSYXMXGjBeGzgrikYZ/KBT0nXEOl712hOEqqyE=;
+ b=fVEyfWNh5FyhO3BCd/tRYpY4F1TH1HO+cYV+BqTPEbwGgglHlW6IjvJItO3OXVV3Nm2GppAPKd9Di16TopjMUl9md1rdVSqJjs4YT7szxAFlv3K73THYo4OI6v5hWwDvuzT5cwbwtXHNP+tN8wPLArhA9EM8fZG9cJuSYQTn5IPWbM4FU/6IpUHKaiu7YXrEKk1z7+vxVItzcsZHTli2U3yS8wLRfSBsXyB37Uq6CYmuEC+zC9MGeXrcbIdy5ZNIeiE11OtojriOTqMrVaw26UGNcJ//O5QK/jTJSc+GFfaODjfxA831qudYI9SbFNnsdGY0+/w341Jg6LfHbdKPKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7bTBbNSYXMXGjBeGzgrikYZ/KBT0nXEOl712hOEqqyE=;
+ b=F9J11RIuqjdGeT0G0JV0rem/X1Y5JXVMDUnHtg8YawKn00e4V38eBnrS3HdR97F/Z/hkT00tjdw05My5Vcqf1DjYIndo9Mo6OWV0exdjIRSdF3QNG3RAwMUfSpwA4V4b+ZOyiJg8g8/kdJf3KimWK+RuBWgNAgaN6A7A81jSW6CpSMxyYRv4K3/BJcaPHbfoGR7o8AffSsuGASm+TEGqSOVHxGtF2/mh0nqzOF/a3UsZrBzLrygu8lfuIUSL8N4EI5DOQdSx9XgmPUnWYsuwIGIv1O6KMlkNn5ycDV2GiDMf9SGPjn/VmeEVvtYPQgKOIfZOf5c8rromqug4D5T0DQ==
+Received: from MWHPR18CA0030.namprd18.prod.outlook.com (2603:10b6:320:31::16)
+ by MWHPR12MB1662.namprd12.prod.outlook.com (2603:10b6:301:11::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.21; Fri, 19 Nov
+ 2021 13:37:11 +0000
+Received: from CO1NAM11FT047.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:320:31:cafe::5f) by MWHPR18CA0030.outlook.office365.com
+ (2603:10b6:320:31::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.21 via Frontend
+ Transport; Fri, 19 Nov 2021 13:37:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ CO1NAM11FT047.mail.protection.outlook.com (10.13.174.132) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4713.20 via Frontend Transport; Fri, 19 Nov 2021 13:37:10 +0000
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 19 Nov
+ 2021 13:37:10 +0000
+Received: from kyarlagadda-linux.nvidia.com (172.20.187.6) by mail.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Fri, 19 Nov 2021 05:37:05 -0800
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <ldewangan@nvidia.com>, <digetx@gmail.com>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <p.zabel@pengutronix.de>, <sumit.semwal@linaro.org>,
+        <christian.koenig@amd.com>, <linux-i2c@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <andy.shevchenko@gmail.com>
+CC:     Akhil R <akhilrajeev@nvidia.com>
+Subject: [PATCH] i2c: tegra: Add ACPI support
+Date:   Fri, 19 Nov 2021 19:02:14 +0530
+Message-ID: <1637328734-20576-1-git-send-email-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH v3 1/2] dt-bindings: i2c: exynos5: add exynosautov9-hsi2c
- compatible
-Content-Language: en-US
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chanho61.park@samsung.com, linux-arm-kernel@lists.infradead.org,
-        Sam Protsenko <semen.protsenko@linaro.org>
-References: <20211112010137.149174-1-jaewon02.kim@samsung.com>
- <CGME20211112010603epcas2p26c076e65e0cb286cb53f06053165ef60@epcas2p2.samsung.com>
- <20211112010137.149174-2-jaewon02.kim@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211112010137.149174-2-jaewon02.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a6de2455-54c5-4343-2dde-08d9ab61b088
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1662:
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1662E7CE3483996D2518E341C09C9@MWHPR12MB1662.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bMW3QPcECLxCsU0WN+fkb5+FUzOv+xaq1huQZnbl6b/TaLMZ3i7lcIt3K/24LkrjR4qu4zCxl9DpNNn+3wPI2pFRNCVq/QzMV8q/GLEAhfU8T+zFkADH7Dl4njSYeRJUr/7LYtXhFuCY9oe8UQgYdIfy4ppkCU7oPHVDYLj+yxYr59jKTZxMgUCjhY5EvtYjEiuhxnOMlfZQKdyo3b+3rNOP5WnJPCc/tSl4gsZsx2bbgl6rZ/pxOiHR0LaUrJgtoLL57GpCeUS6qGN3w17Y/CGCA/iIyfMz9DPVRlJFc0Pe+scn/FUxnFuFylfOUv850wzJbLjT8qs9wcqbZ47eXOKyq5WZYF+NRo8vZF3lo5BkV8v2h4JuV8X8KZU8MWIKNU/njFaH+v6okne3nZsT3zxHy2H73BAAFpe64J0VLLt+fReTDpLwtBi7QFV5RUmqQYf0dvGlbFUb0j4vX9BXI08kauv7DUrikAGIe2qQaN3tIt5sTHx11IRjYZ9IKMbKe/qFSYOubHdtnH2+F9yMwnCcp7ItIWcgRRbeA2/rbfR13DfK/zMzxn8jTS6tXVeW2ndB0Y9rSFDK8BxmkTxwBEAdkSIs+9GQ1HDBhDwXU4iZlBIfnVkmOG1nJC02mgj9uyO9hebpp39phxNyHu7v/INlfs7ysmQsRY2F7uDBOMkWXTEjcUQj1pt1qaqFamBR3SLT47LL3Uk/hyQ1EQSFGa03/lYXXjQhd/JkVItYkZU=
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(7636003)(7416002)(4326008)(2616005)(508600001)(70206006)(186003)(70586007)(47076005)(426003)(921005)(6666004)(107886003)(82310400003)(36756003)(26005)(316002)(5660300002)(83380400001)(8676002)(36860700001)(356005)(86362001)(336012)(2906002)(110136005)(8936002)(7696005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2021 13:37:10.9798
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6de2455-54c5-4343-2dde-08d9ab61b088
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT047.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1662
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 12/11/2021 02:01, Jaewon Kim wrote:
-> This patch adds new "samsung,exynosautov9-hsi2c" compatible.
-> It is for i2c compatible with HSI2C available on Exynos SoC with USI.
-> 
-> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Add support for ACPI based device registration so that the driver
+can be also enabled through ACPI table.
 
-Thanks Jaewon for your patch. After more discussions and remarks from
-David, I think we should go with dedicated USI driver instead of using
-sysreg/syscon in every I2C/UART/SPI.
+Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 52 +++++++++++++++++++++++++++++-------------
+ 1 file changed, 36 insertions(+), 16 deletions(-)
 
-Therefore I want to remove my reviewed-by and instead ask to work on
-dedicated USI driver (option 1 from Chanho's email).
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index c883044..781f747 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -6,6 +6,7 @@
+  * Author: Colin Cross <ccross@android.com>
+  */
+ 
++#include <linux/acpi.h>
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+@@ -618,8 +619,13 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+ 	 * emit a noisy warning on error, which won't stay unnoticed and
+ 	 * won't hose machine entirely.
+ 	 */
+-	err = reset_control_reset(i2c_dev->rst);
+-	WARN_ON_ONCE(err);
++	if (has_acpi_companion(i2c_dev->dev)) {
++		acpi_evaluate_object(ACPI_HANDLE(i2c_dev->dev), "_RST",
++				     NULL, NULL);
++	} else {
++		err = reset_control_reset(i2c_dev->rst);
++		WARN_ON_ONCE(err);
++	}
+ 
+ 	if (i2c_dev->is_dvc)
+ 		tegra_dvc_init(i2c_dev);
+@@ -1627,12 +1633,12 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
+ 	bool multi_mode;
+ 	int err;
+ 
+-	err = of_property_read_u32(np, "clock-frequency",
+-				   &i2c_dev->bus_clk_rate);
++	err = device_property_read_u32(i2c_dev->dev, "clock-frequency",
++				       &i2c_dev->bus_clk_rate);
+ 	if (err)
+ 		i2c_dev->bus_clk_rate = I2C_MAX_STANDARD_MODE_FREQ;
+ 
+-	multi_mode = of_property_read_bool(np, "multi-master");
++	multi_mode = device_property_read_bool(i2c_dev->dev, "multi-master");
+ 	i2c_dev->multimaster_mode = multi_mode;
+ 
+ 	if (of_device_is_compatible(np, "nvidia,tegra20-i2c-dvc"))
+@@ -1684,6 +1690,9 @@ static int tegra_i2c_init_clocks(struct tegra_i2c_dev *i2c_dev)
+ 
+ static void tegra_i2c_release_clocks(struct tegra_i2c_dev *i2c_dev)
+ {
++	if (i2c_dev->nclocks == 0)
++		return;
++
+ 	if (i2c_dev->multimaster_mode)
+ 		clk_disable(i2c_dev->div_clk);
+ 
+@@ -1720,7 +1729,7 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 	init_completion(&i2c_dev->msg_complete);
+ 	init_completion(&i2c_dev->dma_complete);
+ 
+-	i2c_dev->hw = of_device_get_match_data(&pdev->dev);
++	i2c_dev->hw = device_get_match_data(&pdev->dev);
+ 	i2c_dev->cont_id = pdev->id;
+ 	i2c_dev->dev = &pdev->dev;
+ 
+@@ -1746,18 +1755,20 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 	if (err)
+ 		return err;
+ 
+-	i2c_dev->rst = devm_reset_control_get_exclusive(i2c_dev->dev, "i2c");
+-	if (IS_ERR(i2c_dev->rst)) {
+-		dev_err_probe(i2c_dev->dev, PTR_ERR(i2c_dev->rst),
+-			      "failed to get reset control\n");
+-		return PTR_ERR(i2c_dev->rst);
+-	}
+-
+ 	tegra_i2c_parse_dt(i2c_dev);
+ 
+-	err = tegra_i2c_init_clocks(i2c_dev);
+-	if (err)
+-		return err;
++	if (!has_acpi_companion(&pdev->dev)) {
++		i2c_dev->rst = devm_reset_control_get_exclusive(i2c_dev->dev, "i2c");
++		if (IS_ERR(i2c_dev->rst)) {
++			dev_err_probe(i2c_dev->dev, PTR_ERR(i2c_dev->rst),
++				      "failed to get reset control\n");
++			return PTR_ERR(i2c_dev->rst);
++		}
++
++		err = tegra_i2c_init_clocks(i2c_dev);
++		if (err)
++			return err;
++	}
+ 
+ 	err = tegra_i2c_init_dma(i2c_dev);
+ 	if (err)
+@@ -1923,12 +1934,21 @@ static const struct dev_pm_ops tegra_i2c_pm = {
+ 			   NULL)
+ };
+ 
++static const struct acpi_device_id tegra_i2c_acpi_match[] = {
++	{.id = "NVDA0101", .driver_data = (kernel_ulong_t)&tegra210_i2c_hw},
++	{.id = "NVDA0201", .driver_data = (kernel_ulong_t)&tegra186_i2c_hw},
++	{.id = "NVDA0301", .driver_data = (kernel_ulong_t)&tegra194_i2c_hw},
++	{ },
++};
++MODULE_DEVICE_TABLE(acpi, tegra_i2c_acpi_match);
++
+ static struct platform_driver tegra_i2c_driver = {
+ 	.probe = tegra_i2c_probe,
+ 	.remove = tegra_i2c_remove,
+ 	.driver = {
+ 		.name = "tegra-i2c",
+ 		.of_match_table = tegra_i2c_of_match,
++		.acpi_match_table = tegra_i2c_acpi_match,
+ 		.pm = &tegra_i2c_pm,
+ 	},
+ };
+-- 
+2.7.4
 
-It's not that this solution is anything bad, just it won't be flexible
-to support USIv1. It will also lead to duplicated - and possibly
-conflicting - USI configuration in each of drivers (I2C/UART/SPI).
-
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-exynos5.txt | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt b/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
-> index 2dbc0b62daa6..39f4067d9d1f 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
-> @@ -14,6 +14,8 @@ Required properties:
->  				on Exynos5260 SoCs.
->  	-> "samsung,exynos7-hsi2c", for i2c compatible with HSI2C available
->  				on Exynos7 SoCs.
-> +	-> "samsung,exynosautov9-hsi2c", for i2c compatible with HSI2C available
-> +				on ExynosAutov9 SoCs.
->  
->    - reg: physical base address of the controller and length of memory mapped
->      region.
-> @@ -31,6 +33,11 @@ Optional properties:
->         at 100khz.
->      -> If specified, the bus operates in high-speed mode only if the
->         clock-frequency is >= 1Mhz.
-> +  - samsung,sysreg : system registers controller phandle to control USI.
-> +    -> If I2C integrated to USI(Universal Serial Interface), this property
-> +       is required. When using Exynos USI block, it needs to select which type
-> +       of Serial IPs(UART, SPI, I2C) to use with system register. So, it
-> +       requires samsung,sysreg phandle and offset value of system register.
->  
->  Example:
->  
-> 
-
-
-Best regards,
-Krzysztof
