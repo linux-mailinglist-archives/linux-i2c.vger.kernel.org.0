@@ -2,93 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D48A8456735
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 02:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF73A456A1A
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 07:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbhKSBHH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 Nov 2021 20:07:07 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:39888 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbhKSBHG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 Nov 2021 20:07:06 -0500
-Received: by mail-ot1-f41.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso14145343ots.6;
-        Thu, 18 Nov 2021 17:04:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v917wAgzhWr2HX1sCSNueTi9WROJRtpV947wxT/gCV4=;
-        b=7Q+fnu2f5svckYVosDafST+AL1l7FECkPVud/tA4zYB9bv3XztZUSRklWBbXRGqtgJ
-         hdCoudlv/mpLzDbI04D3mLTuCQhAc/LjqnWAZQfoAnXE8E61Q1fPaL5vk4LKuuZXMF1w
-         cxDEn1jkP4BrB5uyx166i8r+pImxDyFExPad+2w/t+F+5baVun/HwxuP4vhWlg1eELJL
-         xQRFlBRbCK5QafqSgC9eXaAMEGDbBzT0dXgyVQmkzUIQbOQeNv76nKcIRdl5rsC/W/2Z
-         GNL1wCgYZ2h3UjYAHCN/7vlv1YxAFDO1kAMwNVmrt0VuIzVQxD72cyR3JYoKZV9tU6s6
-         X9Xg==
-X-Gm-Message-State: AOAM530cF4wxPWGHd0zc1CK4q6vl+8dYP4FGEDiQVLo+dpZOba5O+MC3
-        QIgWQgNq+sbUFA5bwHlKHA==
-X-Google-Smtp-Source: ABdhPJzT4HF64KJ/W7x22WnoWZt3RmG6X26Hyge4RAK7kStsVzG/azanpwHaxBYlSirwF+K2Q92CKw==
-X-Received: by 2002:a9d:3cc:: with SMTP id f70mr1304438otf.253.1637283845501;
-        Thu, 18 Nov 2021 17:04:05 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j14sm392504oil.43.2021.11.18.17.04.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 17:04:04 -0800 (PST)
-Received: (nullmailer pid 2143262 invoked by uid 1000);
-        Fri, 19 Nov 2021 01:04:04 -0000
-Date:   Thu, 18 Nov 2021 19:04:04 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 12/12] dt-bindings: serial: fsl-lpuart: Add i.MX8DXL
- compatible
-Message-ID: <YZb4BClv4fXU65yz@robh.at.kernel.org>
-References: <1636566415-22750-1-git-send-email-abel.vesa@nxp.com>
- <1636566415-22750-13-git-send-email-abel.vesa@nxp.com>
+        id S229865AbhKSGRd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Nov 2021 01:17:33 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:47515 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229760AbhKSGRc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Nov 2021 01:17:32 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id DF1C658091A;
+        Fri, 19 Nov 2021 01:14:30 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 19 Nov 2021 01:14:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.in; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=bgWuFoLEb87DsIPJtjpr2qz3Xy
+        aQqedmbsGqM77Zh9M=; b=no1YhPc0az9k3uzn7dlt/fUx6yd8UbiF89VRaAsHtO
+        rCcgXQacUEQIkEWr/JsCl+9JHY2vGEm0Vduk3uJ7uliVdc8yTaAgto8Mf8iVSHD1
+        5vPYQ3BmwIJdMpJaeOzZdL+gS4OoX2v0/1BDqcCS8GIeyW9AXiBDrul4XA5DIcfc
+        LIh4Xu/UqYBbvvNpPwmiYbW+ahaOQB9a9ZKdYrNqy21ilzYnSnwx4BL7aKEIkfw4
+        8uWttpxQSG4GTELs3QoeezCd0Fd0ydggBxW97v/7BB8oduyH8m0V3rLWhyAluAzR
+        HeKxdBrwhHQo34ITze3Fo+kSsRI/dfBDw5eFjLHdc1Cw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=bgWuFoLEb87DsIPJt
+        jpr2qz3XyaQqedmbsGqM77Zh9M=; b=ApM3oOl0fiFY0rU74OxwqKqtJHjPHvRLI
+        rlhAxJisc40CmvDzlgB6SImhCTRenEQB+yMQOi8wqv8zSXOX82ahCB6xig0iH8uS
+        qiwZjxu31sihtRWbgZi+Jjac/W4/f7rbAR8Vp4ChWvHSf5IqXNFCSTQumAlaZ1+X
+        bVVT+9omON9/NjT+n+83WWUJGcsAOz0kkQR3Wtuwcyt7kLsbM5OIBdueS/3aILZ0
+        jWh9uwcqXrjXDS+ecwp/CdmWNWZyVuFov6x0Xb2lJVi6G9OZQ2ZOZlc+ppmTDYTM
+        2tJw9/RJZ2IvNlvkW4Iwi/T5lipokywliLW4p3a4zC89DlQ7izJMg==
+X-ME-Sender: <xms:xkCXYbHW0z4TPlN8cTm_EsJ5cjoHEcDreq2_Hjhh4z22jyTz4zc3Tg>
+    <xme:xkCXYYWLN8SxxKAvs0jaGPHX0xYIAUhwBAPOTKidOIlKfQe-zn4cH6ftbPZMtJW9i
+    C5kz8e9JSmtrIrlLGc>
+X-ME-Received: <xmr:xkCXYdI9_F49szZQ6gmZYcdFnhj_GbdC5kT5L6kktEFDaozIdx-JzJT0TQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrfeejgdelvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpeffvggvphcuofgrjhhumhguvghruceouggvvghpsehfrghsthhmrghi
+    lhdrihhnqeenucggtffrrghtthgvrhhnpedvvedtkefhteeggfehveehgeehgeeigfekke
+    fgteejleehffffffeggfdtheetleenucffohhmrghinhepnhigphdrtghomhdpphholhho
+    lhhurdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepuggvvghpsehfrghsthhmrghilhdrihhn
+X-ME-Proxy: <xmx:xkCXYZFqbG9LIoIBfiZ_9OIzdOhiz8RhxX9g2IC-LBKJXRFnt3BCzA>
+    <xmx:xkCXYRVq1xBwKFTEfj9vKxBqgEfJIZs-WLLKTP60qHAHZzbXEa0oYA>
+    <xmx:xkCXYUOlSTfz_ZEOZ4L3N0mWnEEa8wI3GnHK4-dIlKZZtCgv8XYTpQ>
+    <xmx:xkCXYURQekMirRyjs576zUr2gIMqwycOvrq1aGCoxq8ECNf6Nv-yrA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 Nov 2021 01:14:29 -0500 (EST)
+From:   Deep Majumder <deep@fastmail.in>
+To:     wsa@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Deep Majumder <deep@fastmail.in>
+Subject: [PATCH v2] Docs: Fixes link to I2C specification
+Date:   Fri, 19 Nov 2021 11:44:01 +0530
+Message-Id: <20211119061401.19852-1-deep@fastmail.in>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1636566415-22750-13-git-send-email-abel.vesa@nxp.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 07:46:55PM +0200, Abel Vesa wrote:
-> Add i.MX8DXL lpuart compatible to the bindings documentation.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> ---
->  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> index dc1f0e07cbd4..fa8a602ccb22 100644
-> --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> @@ -27,6 +27,10 @@ properties:
->        - items:
->            - const: fsl,imx8qm-lpuart
->            - const: fsl,imx8qxp-lpuart
-> +      - items:
-> +          - const: fsl,imx8dxl-lpuart
-> +          - const: fsl,imx8qxp-lpuart
-> +          - const: fsl,imx7ulp-lpuart
+The link to the I2C specification is broken and is replaced in this
+patch by one that points to Rev 6 (2014) of the specification.
+Although `https://www.nxp.com" hosts the Rev 7 (2021) of this
+specification, it is behind a login-wall and thus cannot be used.
+Thus, an additional link has been added (which doesn't require a login)
+and the NXP official docs link has been updated. The additional link is
+not the Wayback Machine link since it seems that the PDF has not been
+archived.
 
-I'm confused why 8dxl is compatible with 7ulp, but 8qm is not? From the 
-driver, it looks like the difference is clocks.
+Signed-off-by: Deep Majumder <deep@fastmail.in>
+---
+ Documentation/i2c/summary.rst | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
->  
->    reg:
->      maxItems: 1
-> -- 
-> 2.31.1
-> 
-> 
+diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
+index 136c4e333be7..3395e2e46d9c 100644
+--- a/Documentation/i2c/summary.rst
++++ b/Documentation/i2c/summary.rst
+@@ -11,9 +11,11 @@ systems.  Some systems use variants that don't meet branding requirements,
+ and so are not advertised as being I2C but come under different names,
+ e.g. TWI (Two Wire Interface), IIC.
+ 
+-The official I2C specification is the `"I2C-bus specification and user
+-manual" (UM10204) <https://www.nxp.com/docs/en/user-guide/UM10204.pdf>`_
+-published by NXP Semiconductors.
++The official I2C specification (revision 7) is the `"I2C-bus specification and user
++manual" (UM10204) <https://www.nxp.com/webapp/Download?colCode=UM10204&location=null>`_
++published by NXP Semiconductors. However, you need to log-in to the site to
++access the PDF. An older version of the specification (revision 6) is available
++`here <https://www.pololu.com/file/0J435/UM10204.pdf>`_.
+ 
+ SMBus (System Management Bus) is based on the I2C protocol, and is mostly
+ a subset of I2C protocols and signaling.  Many I2C devices will work on an
+-- 
+2.30.2
+
