@@ -2,163 +2,292 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B55A94571F7
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 16:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6760D4577EE
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 21:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235595AbhKSPsh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Nov 2021 10:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S231192AbhKSUtK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Nov 2021 15:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbhKSPsh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Nov 2021 10:48:37 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2FEC061574;
-        Fri, 19 Nov 2021 07:45:35 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id t26so45033463lfk.9;
-        Fri, 19 Nov 2021 07:45:35 -0800 (PST)
+        with ESMTP id S230474AbhKSUtJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Nov 2021 15:49:09 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09CEC061574
+        for <linux-i2c@vger.kernel.org>; Fri, 19 Nov 2021 12:46:06 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so8421698wme.4
+        for <linux-i2c@vger.kernel.org>; Fri, 19 Nov 2021 12:46:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=H5DNf1Om0RwN3xbCK02EXPW+4a49S0Mj+o5dz3hW1Ao=;
-        b=jgFeD6KHlr8fc/qBe69bLZyZid40UQIXlYu7QjNSAPKFWeThwOkK4rw8SW6nGU2HC7
-         h41Bl2nc6bcd8VFm2tQQcIKDiXWjJP1Fj6ulg9ECJUCjd36QqSTJHWZtRSsEypg0TYmo
-         9RqE2KiPJzlGYTLvOvFmX/TwtHR5kCbnpJf3pyZ415bwlWXWWWB4CAmQNEanSEdCtwnp
-         w1GaDfnicEFtO/Bo8PBdVm6rHJ33iuUweSY3h43xaQTM66GmoArVXJaK36ipyVX6sInZ
-         nyhls+omGqpGE2oID+XT1IPMzcG+nu8mBdqPCZ2FwgtJO/2Y20LuPZ20fEI10gWdpWai
-         ZYgQ==
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=ie4aIs2Yvo7BKcQPMRhTgIH0yj/zfGNWON4Jt8k5FkQ=;
+        b=Jjtz0lXs8d9jAdh3nV1QmAzkOAZo/APXB4464eCjIeLo2vkv9Et0swKAixbG/5kuE7
+         2koI4sv4j/tI8Y0I5zWN8/MLdZ7wic7kxr0wPedqSwBTq2+R2iWCXmWaIRAfXyEHEqJa
+         e0AGAACzN9QCRTX7VkLW+xIxTB21kjFlnQO/MmM3WJ1/rOws4t7t3iqm6mMd2qiM5bTR
+         cIN9RapFo2xJEShw2OO7RKe/+EL82vo0vAm/lFXUzNpbyhWwC/0c5/WlphUq8AJfbkFb
+         n2WDffdIoNBLzhicw2A5FJXNABLboWy6KMPHLl1vfFHINbW9h1T03GR3Xe02EPiJJYue
+         ft5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=H5DNf1Om0RwN3xbCK02EXPW+4a49S0Mj+o5dz3hW1Ao=;
-        b=RRP51P4pzkkCw2OAZPHDSZuqA59EUAhGMRg85AHaXRr6CtLTBwaDqPQQtAF80undp6
-         SnHZThlCZCLEVOoRAOyjc0pSyp+MYxu1vgRq92Pb6OXRdCqegwfqIM+igY1VxfWreDim
-         F6MiQa+eex08JpDrThIJ7UmJTFHuZYSMuEvEuYkPUet1NlHbGUWaX9wVz6Q5TsB9xmiS
-         c9wLG97yRCZm7FVX/4fhvn6n/6tbXJghWsXPHs4oqKfgBYBK4sO+W9U6LNz8Sg7uNcgb
-         asxzp15gjd9L4lg+/7XyqSnSwwK1Y0P6Pz6AOzgCVmwCeb3C2lSgRi6LBf7rP2ch7X4Y
-         gpEw==
-X-Gm-Message-State: AOAM5315cGPt8AjYiEhAWxUr5E6DpUl3hhF/0JdXFdJHNAafFezj3hHq
-        xQ9U2AbfwTcSW2IgmV642H6nq7ASsKlI5h2mkiI=
-X-Google-Smtp-Source: ABdhPJw3+LsGrV6BE/PJnSU0eWWwjMN//P6rVmixx+B5xJdk+hOh+foW7PN1rErwhpVqxuHtpaiySXy/VuoVMi3TPlc=
-X-Received: by 2002:a05:6512:114a:: with SMTP id m10mr34357387lfg.188.1637336733476;
- Fri, 19 Nov 2021 07:45:33 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=ie4aIs2Yvo7BKcQPMRhTgIH0yj/zfGNWON4Jt8k5FkQ=;
+        b=Q39VwxJ0Go0CMQ4IZQS9Iy8OEewby6vQRmmUluawVEiism1wPWs/0EuB1uU8gyeuxn
+         Dl1VJStJDPnptGp4t86NUOFZzZeelFS9DQZfTmWxztqidyjeW3ZZvlyy1snB3A4Oq0+k
+         oLqMKDDhWtekrUBzhn0BlCXXFVncrDhwhfLEGTmvvEjofXT+kWqw3dTMhnlVTeeN48Wo
+         FX0o44crm0Lu4kqM3Flf8ddCCWBCU9nAav5NdbHQ6bIVWNgTGyhD0YbXGIsIr6Bi6u5+
+         Vqjc5YiyAvX8NwN5qti8UwT0CvlSrqZwrpioLHqbpgMODyWnhgeiNOZ6eNkDUvCbR6Nr
+         HitQ==
+X-Gm-Message-State: AOAM532VS9/QTMJU0rQ6uhS1JN+S6oPZpV7uGGO30jQ+RAZmtE8+hZm+
+        m7MlbEO+FsU1Ya13NnGw5Xt7oarNdd8=
+X-Google-Smtp-Source: ABdhPJxa1F1pyoS09AyfBPds5iXM4OB4JqECelnDwLrDdiwMulIpWZhucCRmmk2OML9mgyAGAnVgbw==
+X-Received: by 2002:a7b:c38d:: with SMTP id s13mr3365228wmj.12.1637354765194;
+        Fri, 19 Nov 2021 12:46:05 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f1a:f00:e956:6e6f:f307:5861? (p200300ea8f1a0f00e9566e6ff3075861.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:e956:6e6f:f307:5861])
+        by smtp.googlemail.com with ESMTPSA id o12sm797245wmq.12.2021.11.19.12.46.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Nov 2021 12:46:04 -0800 (PST)
+Message-ID: <45c1aa85-bb20-ccb0-189e-b8353da3f403@gmail.com>
+Date:   Fri, 19 Nov 2021 21:45:54 +0100
 MIME-Version: 1.0
-References: <20211114170335.66994-1-hdegoede@redhat.com> <20211114170335.66994-19-hdegoede@redhat.com>
- <f84e2060-f6b7-64f9-78cd-e8ad8776ab2d@gmail.com> <662623cd-c70b-63e6-499e-7c24b5d3e342@redhat.com>
-In-Reply-To: <662623cd-c70b-63e6-499e-7c24b5d3e342@redhat.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Sat, 20 Nov 2021 00:44:56 +0900
-Message-ID: <CAGTfZH1ndMc902R+wJXM+q+4fSJQD+RZVxaWcMvut4+9oSzqnw@mail.gmail.com>
-Subject: Re: [PATCH v2 18/20] extcon: intel-cht-wc: Refactor cht_wc_extcon_get_charger()
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v2] i2c: i801: Improve handling of chip-specific feature
+ definitions
+To:     Jean Delvare <jdelvare@suse.com>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Reduce source code and code size by defining the chip features
+statically.
 
-On Thu, Nov 18, 2021 at 7:31 AM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 11/17/21 08:15, Chanwoo Choi wrote:
-> > Hello,
-> >
-> > I think that you need to squash it with patch21
-> > I'm not sure that this patch is either atomic or not because
-> > you remove the 'return EXTCON_CHG_USB_SDP/EXTCON_CHG_USB_SDP'
-> > without explaining why it is no problem. Just mention that
-> > pass the role to next 'switch' cases. But, before this change,
-> > there were any reason to return the type of charger cable
-> > before switch statement.
->
-> The setting of usbsrc to "CHT_WC_USBSRC_TYPE_SDP << CHT_WC_USBSRC_TYPE_SH=
-IFT"
-> will make the following switch-case return EXTCON_CHG_USB_SDP
-> just as before, so there is no functional change.
->
-> > According to your patch description, you don't need
-> > to make the separate patch of it. Please squash it with patch21.
->
-> Having this refactoring in a separate patch makes it easier
-> to see what is going on in patch 21. So I'm going to keep this
-> as a separate patch for v3 of this series.
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+v2:
+- make checkpatch happy
+- rename feature definitions to FEATURES_ICH4 and FEATURES_ICH5
+- fix patch title typo
+---
+ drivers/i2c/busses/i2c-i801.c | 191 ++++++++++++----------------------
+ 1 file changed, 66 insertions(+), 125 deletions(-)
 
-If you want to keep this  patch, please remove the following description.
-Instead, just mention to focus on refactor it without behavior changes.
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index f078e75dd..4c96f1b47 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -990,66 +990,72 @@ static const struct i2c_algorithm smbus_algorithm = {
+ 	.functionality	= i801_func,
+ };
+ 
++#define FEATURES_ICH5	(FEATURE_BLOCK_PROC | FEATURE_I2C_BLOCK_READ	| \
++			 FEATURE_IRQ | FEATURE_SMBUS_PEC		| \
++			 FEATURE_BLOCK_BUFFER | FEATURE_HOST_NOTIFY)
++#define FEATURES_ICH4	(FEATURE_SMBUS_PEC | FEATURE_BLOCK_BUFFER | \
++			 FEATURE_HOST_NOTIFY)
++
+ static const struct pci_device_id i801_ids[] = {
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801AA_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801AB_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801BA_2) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801CA_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801DB_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82801EB_3) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ESB_4) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH6_16) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH7_17) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ESB2_17) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH8_5) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH9_6) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EP80579_1) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH10_4) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICH10_5) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5_3400_SERIES_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COUGARPOINT_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF0) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF1) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF2) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_DH89XXCC_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_PANTHERPOINT_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_AVOTON_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS0) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS1) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS2) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COLETOCREEK_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_GEMINILAKE_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_WILDCATPOINT_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_BAYTRAIL_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_BRASWELL_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_SUNRISEPOINT_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_SUNRISEPOINT_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CDF_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_DNV_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_EBG_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_BROXTON_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LEWISBURG_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_LEWISBURG_SSKU_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_KABYLAKE_PCH_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CANNONLAKE_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_CANNONLAKE_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ICELAKE_N_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_COMETLAKE_V_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS) },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS) },
++	{ PCI_DEVICE_DATA(INTEL, 82801AA_3,		0)				 },
++	{ PCI_DEVICE_DATA(INTEL, 82801AB_3,		0)				 },
++	{ PCI_DEVICE_DATA(INTEL, 82801BA_2,		0)				 },
++	{ PCI_DEVICE_DATA(INTEL, 82801CA_3,		FEATURE_HOST_NOTIFY)		 },
++	{ PCI_DEVICE_DATA(INTEL, 82801DB_3,		FEATURES_ICH4)			 },
++	{ PCI_DEVICE_DATA(INTEL, 82801EB_3,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, ESB_4,			FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, ICH6_16,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, ICH7_17,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, ESB2_17,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, ICH8_5,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, ICH9_6,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, EP80579_1,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, ICH10_4,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, ICH10_5,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, 5_3400_SERIES_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, COUGARPOINT_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF0,	FEATURES_ICH5 | FEATURE_IDF)	 },
++	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF1,	FEATURES_ICH5 | FEATURE_IDF)	 },
++	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF2,	FEATURES_ICH5 | FEATURE_IDF)	 },
++	{ PCI_DEVICE_DATA(INTEL, DH89XXCC_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, PANTHERPOINT_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, LYNXPOINT_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, LYNXPOINT_LP_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, AVOTON_SMBUS,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS0,	FEATURES_ICH5 | FEATURE_IDF)	 },
++	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS1,	FEATURES_ICH5 | FEATURE_IDF)	 },
++	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS2,	FEATURES_ICH5 | FEATURE_IDF)	 },
++	{ PCI_DEVICE_DATA(INTEL, COLETOCREEK_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, GEMINILAKE_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, WILDCATPOINT_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, WILDCATPOINT_LP_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, BAYTRAIL_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, BRASWELL_SMBUS,	FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, SUNRISEPOINT_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
++	{ PCI_DEVICE_DATA(INTEL, SUNRISEPOINT_LP_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
++	{ PCI_DEVICE_DATA(INTEL, CDF_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, DNV_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_SPT) },
++	{ PCI_DEVICE_DATA(INTEL, EBG_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, BROXTON_SMBUS,		FEATURES_ICH5)			 },
++	{ PCI_DEVICE_DATA(INTEL, LEWISBURG_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
++	{ PCI_DEVICE_DATA(INTEL, LEWISBURG_SSKU_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
++	{ PCI_DEVICE_DATA(INTEL, KABYLAKE_PCH_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
++	{ PCI_DEVICE_DATA(INTEL, CANNONLAKE_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, CANNONLAKE_LP_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, ICELAKE_LP_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, ICELAKE_N_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_V_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
++	{ PCI_DEVICE_DATA(INTEL, ELKHART_LAKE_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, TIGERLAKE_LP_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, TIGERLAKE_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, JASPER_LAKE_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_P_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_M_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+ 	{ 0, }
+ };
+ 
+@@ -1678,72 +1684,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	mutex_init(&priv->acpi_lock);
+ 
+ 	priv->pci_dev = dev;
+-	switch (dev->device) {
+-	case PCI_DEVICE_ID_INTEL_SUNRISEPOINT_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_SUNRISEPOINT_LP_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_LEWISBURG_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_LEWISBURG_SSKU_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_DNV_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_KABYLAKE_PCH_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_COMETLAKE_V_SMBUS:
+-		priv->features |= FEATURE_BLOCK_PROC;
+-		priv->features |= FEATURE_I2C_BLOCK_READ;
+-		priv->features |= FEATURE_IRQ;
+-		priv->features |= FEATURE_SMBUS_PEC;
+-		priv->features |= FEATURE_BLOCK_BUFFER;
+-		priv->features |= FEATURE_TCO_SPT;
+-		priv->features |= FEATURE_HOST_NOTIFY;
+-		break;
+-
+-	case PCI_DEVICE_ID_INTEL_CANNONLAKE_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_CANNONLAKE_LP_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_CDF_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ICELAKE_N_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_TIGERLAKE_LP_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_TIGERLAKE_H_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_JASPER_LAKE_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_EBG_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_P_SMBUS:
+-	case PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS:
+-		priv->features |= FEATURE_BLOCK_PROC;
+-		priv->features |= FEATURE_I2C_BLOCK_READ;
+-		priv->features |= FEATURE_IRQ;
+-		priv->features |= FEATURE_SMBUS_PEC;
+-		priv->features |= FEATURE_BLOCK_BUFFER;
+-		priv->features |= FEATURE_TCO_CNL;
+-		priv->features |= FEATURE_HOST_NOTIFY;
+-		break;
+-
+-	case PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF0:
+-	case PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF1:
+-	case PCI_DEVICE_ID_INTEL_PATSBURG_SMBUS_IDF2:
+-	case PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS0:
+-	case PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS1:
+-	case PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS_MS2:
+-		priv->features |= FEATURE_IDF;
+-		fallthrough;
+-	default:
+-		priv->features |= FEATURE_BLOCK_PROC;
+-		priv->features |= FEATURE_I2C_BLOCK_READ;
+-		priv->features |= FEATURE_IRQ;
+-		fallthrough;
+-	case PCI_DEVICE_ID_INTEL_82801DB_3:
+-		priv->features |= FEATURE_SMBUS_PEC;
+-		priv->features |= FEATURE_BLOCK_BUFFER;
+-		fallthrough;
+-	case PCI_DEVICE_ID_INTEL_82801CA_3:
+-		priv->features |= FEATURE_HOST_NOTIFY;
+-		fallthrough;
+-	case PCI_DEVICE_ID_INTEL_82801BA_2:
+-	case PCI_DEVICE_ID_INTEL_82801AB_3:
+-	case PCI_DEVICE_ID_INTEL_82801AA_3:
+-		break;
+-	}
++	priv->features = id->driver_data;
+ 
+ 	/* Disable features on user request */
+ 	for (i = 0; i < ARRAY_SIZE(i801_feature_names); i++) {
+-- 
+2.33.1
 
-'This is a preparation patch for adding support for registering
-a power_supply class device.'
-
->
->
-> > On 21. 11. 15. =EC=98=A4=EC=A0=84 2:03, Hans de Goede wrote:
-> >> Refactor cht_wc_extcon_get_charger() to have all the returns are in
-> >> the "switch (usbsrc)" cases.
-> >>
-> >> This is a preparation patch for adding support for registering
-> >> a power_supply class device.
-> >>
-> >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> >> ---
-> >>   drivers/extcon/extcon-intel-cht-wc.c | 15 ++++++++-------
-> >>   1 file changed, 8 insertions(+), 7 deletions(-)
-> >>
-> >> diff --git a/drivers/extcon/extcon-intel-cht-wc.c b/drivers/extcon/ext=
-con-intel-cht-wc.c
-> >> index 119b83793123..f2b93a99a625 100644
-> >> --- a/drivers/extcon/extcon-intel-cht-wc.c
-> >> +++ b/drivers/extcon/extcon-intel-cht-wc.c
-> >> @@ -153,14 +153,15 @@ static int cht_wc_extcon_get_charger(struct cht_=
-wc_extcon_data *ext,
-> >>       } while (time_before(jiffies, timeout));
-> >>         if (status !=3D CHT_WC_USBSRC_STS_SUCCESS) {
-> >> -        if (ignore_errors)
-> >> -            return EXTCON_CHG_USB_SDP; /* Save fallback */
-> >> +        if (!ignore_errors) {
-> >> +            if (status =3D=3D CHT_WC_USBSRC_STS_FAIL)
-> >> +                dev_warn(ext->dev, "Could not detect charger type\n")=
-;
-> >> +            else
-> >> +                dev_warn(ext->dev, "Timeout detecting charger type\n"=
-);
-> >> +        }
-> >>   -        if (status =3D=3D CHT_WC_USBSRC_STS_FAIL)
-> >> -            dev_warn(ext->dev, "Could not detect charger type\n");
-> >> -        else
-> >> -            dev_warn(ext->dev, "Timeout detecting charger type\n");
-> >> -        return EXTCON_CHG_USB_SDP; /* Save fallback */
-> >> +        /* Save fallback */
-> >> +        usbsrc =3D CHT_WC_USBSRC_TYPE_SDP << CHT_WC_USBSRC_TYPE_SHIFT=
-;
-> >>       }
-> >>         usbsrc =3D (usbsrc & CHT_WC_USBSRC_TYPE_MASK) >> CHT_WC_USBSRC=
-_TYPE_SHIFT;
-> >>
-> >
-> >
->
-
-
---=20
-Best Regards,
-Chanwoo Choi
