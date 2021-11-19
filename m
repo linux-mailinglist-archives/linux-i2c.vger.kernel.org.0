@@ -2,155 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D72F457066
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 15:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E370C4570E5
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Nov 2021 15:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235748AbhKSOP3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 Nov 2021 09:15:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235733AbhKSOP3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Nov 2021 09:15:29 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E482DC061574
-        for <linux-i2c@vger.kernel.org>; Fri, 19 Nov 2021 06:12:27 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id g1so7170907qvd.2
-        for <linux-i2c@vger.kernel.org>; Fri, 19 Nov 2021 06:12:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UgAqbpopy6HklYietNPfXdJKLyBN7yZp/5A4MJwHDTY=;
-        b=CEnYbYaY8rBd1Cif8k8YZBWlBHeTr8pPZsol+HzbDQrXPK/E4j+NS/7uSTu9qqqItA
-         2On7bI0TRuDAVBAKwMmp/c0Ou3YdqgsmNbZs6zsK12njRtpkGd4b81MLNLzrCpItUurk
-         i6m5en2CybWucPpNjfnQ+XB3zctBJP4rISr0zsrxNjS45kjGEWbqjU0215wzs15PVyAL
-         6JFuv2WjRSbcTnHA7Id7/qaKlrraA97HiL0D6o/GrpQrtSbTq39o8Iy9G9HQmCDQJv6t
-         E4Gc7NitF2C75qKmYSt54NOfKCYsfgGU7wYML0cKsUTGgdErHh/GkapONPo2lVZCMQZp
-         5hvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UgAqbpopy6HklYietNPfXdJKLyBN7yZp/5A4MJwHDTY=;
-        b=oONrTcE71mYlBdVPWO60kVoHilUmXnHAaeqqnmM9ImZ/qoDgnRYvniTjG5mGuoyVmi
-         VM7xBg/R56HorSFsaoOcd7zNLsLbZgosLArNx2w95qoITTTdvWqNECsLtj2lcWXy6zkJ
-         6/gQiM3IrearFA5p7cGYwfzjXYOmQ4beFBzbhX37A7A7/Z3XBXSx7axkzOPELcm1q7ha
-         VOh//H0EHvQHXjmmBGg2Kt98vKXdLN7xJhVZjCu7glmEIrcpkcP9zC7AN8oKsPYy/NXp
-         yGlAJnNBCgrczr+vpQ07yj+7IzS2zOlNjCxwiVkW5obvKh83IszjwvwVTQZc96HGLqq0
-         OOFw==
-X-Gm-Message-State: AOAM5303P++AtNTR/U2HfcYbzYI6sdRNO5tv65matbo6bW/YYhuMk5nf
-        GfIVPc6w+zyo7nwHaN2EEK5jLoDEVbQ5gN3M1/N5o4EiSo0arg==
-X-Google-Smtp-Source: ABdhPJz1hwMPGGN4/nlVyGD+fO+dHHNAi/WPWrzoLWlJ/hnc5Yu87VoDBBCzIB/CWsfpcbrD9oqWIftLk7Q6tGO9mSs=
-X-Received: by 2002:a05:6122:1813:: with SMTP id ay19mr119204327vkb.24.1637331135963;
- Fri, 19 Nov 2021 06:12:15 -0800 (PST)
+        id S235180AbhKSOmX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 Nov 2021 09:42:23 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43280 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233963AbhKSOmX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 Nov 2021 09:42:23 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D3185212CA;
+        Fri, 19 Nov 2021 14:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1637332760; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e4nzpNjJHHkOebYPOoWg+xqJ3i9tS/e3nzrCqD+YpT4=;
+        b=GJuCtR1+9J0kIuTscxQL32XeZ0IwN0ZR+qwRFn0ZQ6II70doZOyAvWxcJOmmtW+7Gm7LkI
+        bYQgVqnt188/tqlLyrui1M3F/0M5Fk5phyLnZIE5A2xoBHROl84LmgVNHd8Oj6A9HgljDK
+        Ns33nmkzful5RusqjMRnUPoNxIxd+wE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1637332760;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e4nzpNjJHHkOebYPOoWg+xqJ3i9tS/e3nzrCqD+YpT4=;
+        b=MmB0QjQYeabWkCevcerrWLwg2dWtMNRZwuBxGfcMxpNadPmZChjLV79HvvbDdV5El/XY+t
+        ldV5HDbInMv0hUBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B043713B32;
+        Fri, 19 Nov 2021 14:39:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FHVrKBi3l2HmBwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 19 Nov 2021 14:39:20 +0000
+Date:   Fri, 19 Nov 2021 15:39:18 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: i801: Remove i801_set_block_buffer_mode
+Message-ID: <20211119153918.492ea41d@endymion>
+In-Reply-To: <f6e13674-7f86-529f-10e2-6b34bc5f8f6c@gmail.com>
+References: <f6e13674-7f86-529f-10e2-6b34bc5f8f6c@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <CGME20211112010603epcas2p339d1a6ef3df7cdbe61c87c8afa541fd0@epcas2p3.samsung.com>
- <20211112010137.149174-1-jaewon02.kim@samsung.com> <20211112010137.149174-3-jaewon02.kim@samsung.com>
- <CAPLW+4==X+irRBKHiDfgJeAb0oDKkzbcWERFs7Y3=PSOg0+qAw@mail.gmail.com>
- <001401d7da86$f7ebd660$e7c38320$@samsung.com> <da9bd8cc-9415-6db7-024e-8d50b5f666f7@canonical.com>
- <CAPLW+4kS-pzROC5oyAjW1aJp5cb1e3XK+40HsKwgPdCziSp1ZQ@mail.gmail.com> <773110c9-fc74-6cab-68c0-1c771a3be104@canonical.com>
-In-Reply-To: <773110c9-fc74-6cab-68c0-1c771a3be104@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 19 Nov 2021 16:12:04 +0200
-Message-ID: <CAPLW+4n+JKOQjbLriu6frB+c4nt6efTrURcbw9ZWZB-+a6Ruiw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] i2c: exynos5: add support for ExynosAutov9 SoC
-To:     Jaewon Kim <jaewon02.kim@samsung.com>
-Cc:     Chanho Park <chanho61.park@samsung.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 19 Nov 2021 at 10:54, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 18/11/2021 20:59, Sam Protsenko wrote:
-> > On Tue, 16 Nov 2021 at 11:32, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@canonical.com> wrote:
-> >>
-> >> On 16/11/2021 02:12, Chanho Park wrote:
-> >>>> With this patch the Exynos850 HSI2C becomes functional. The only nit-pick
-> >>>> from my side (just a food for thought): do we want to configure USI
-> >>>> related config inside of particular drivers (SPI, I2C, UART)? Or it would
-> >>>> be better design to implement some platform driver for that, so we can
-> >>>> choose USI configuration (SPI/I2C/UART) in device tree? I think this
-> >>>> series is good to be merged as is, but we should probably consider all
-> >>>> upsides and downsides of each option, for the future work.
-> >>>
-> >>> I'm also considering how to support this USI configuration gracefully.
-> >>> Current version of USI is v2 which means there is a v1 version as well. It might be a non-upstream SoC so we don't need to consider it so far.
-> >>> But, there is a possibility that the USI hw version can be bumped for future SoCs.
-> >>>
-> >>> As you probably know, earlier version of the product kernel has a USI SoC driver[1] and it was designed to be configured the USI settings by device tree.
-> >>>
-> >>> Option1) Make a USI driver under soc/samsung/ like [1].
-> >>> Option2) Use more generic driver such as "reset driver"? This might be required to extend the reset core driver.
-> >>> Option3) Each USI driver(uart/i2c/spi) has its own USI configurations respectively and expose some configurations which can be variable as device tree.
-> >>>
-> >>> [1]: https://github.com/ianmacd/d2s/blob/master/drivers/soc/samsung/usi_v2.c
-> >>
-> >> I don't have user manuals, so all my knowledge here is based on
-> >> Exynos9825 vendor source code, therefore it is quite limited. In
-> >> devicetree the USI devices have their own nodes - but does it mean it's
-> >> separate SFR range dedicated to USI? Looks like that, especially that
-> >> address space is just for one register (4 bytes).
-> >>
-> >> In such case having separate dedicated driver makes sense and you would
-> >> only have to care about driver ordering (e.g. via device links or phandles).
-> >>
-> >> Option 2 looks interesting - reusing reset framework to set proper USI
-> >> mode, however this looks more like a hack. As you said Chanho, if there
-> >> is a USI version 3, this reset framework might not be sufficient.
-> >>
-> >> In option 3 each driver (UART/I2C/SPI) would need to receive second IO
-> >> range and toggle some registers, which could be done via shared
-> >> function. If USI v3 is coming, all such drivers could get more complicated.
-> >>
-> >> I think option 1 is the cleanest and extendable in future. It's easy to
-> >> add usi-v3 or whatever without modifying the UART/I2C/SPI drivers. It
-> >> also nicely encapsulates USI-related stuff in separate driver. Probe
-> >> ordering should not be a problem now.
-> >>
-> >> But as I said, I don't have even the big picture here, so I rely on your
-> >> opinions more.
-> >>
-> >
-> > Hi Krzysztof,
-> >
-> > Can you please let me know if you're going to apply this series as is,
-> > or if you want me to submit USIv2 driver first, and then rework this
-> > patch on top of it? I'm working on some HSI2C related patches right
-> > now, and thus it'd nice to know about your decision on this series
-> > beforehand, as some of my patches (like bindings doc patches) might
-> > depend on it. Basically I'd like to base my patches on the proper
-> > baseline, so we don't have to rebase those later.
->
-> This set won't go via my tree anyway, but I am against it. David pointed
-> out that his USIv1 is a little bit different and embedding in each of
-> I2C/UART/SPI drivers the logic of controlling USIv1 and USIv2 looks too
-> big. The solution with a dedicated driver looks to me more flexible and
-> encapsulated/cleaner.
->
-> Therefore after the discussions I am against this solution, so a
-> soft-NAK from my side.
->
+On Thu, 18 Nov 2021 23:58:17 +0100, Heiner Kallweit wrote:
+> If FEATURE_BLOCK_BUFFER is set then bit SMBAUXCTL_E32B is supported
+> and there's no benefit in reading it back. Origin of this check
+> seems to be 14 yrs ago when people were not completely sure which
+> chip versions support the block buffer mode.
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+> v2:
+> - made commit message less offending ;)
+> - re-added parentheses to a & b && c expression
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 17 +++++------------
+>  1 file changed, 5 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 05187457f..f5c1589da 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -521,9 +521,11 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
+>  		return -EOPNOTSUPP;
+>  	}
+>  
+> +	/* Set block buffer mode */
+> +	outb_p(inb_p(SMBAUXCTL(priv)) | SMBAUXCTL_E32B, SMBAUXCTL(priv));
+> +
+>  	inb_p(SMBHSTCNT(priv)); /* reset the data buffer index */
+>  
+> -	/* Use 32-byte buffer to process this transaction */
+>  	if (read_write == I2C_SMBUS_WRITE) {
+>  		len = data->block[0];
+>  		outb_p(len, SMBHSTDAT0(priv));
+> @@ -750,14 +752,6 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+>  	return i801_check_post(priv, status);
+>  }
+>  
+> -static int i801_set_block_buffer_mode(struct i801_priv *priv)
+> -{
+> -	outb_p(inb_p(SMBAUXCTL(priv)) | SMBAUXCTL_E32B, SMBAUXCTL(priv));
+> -	if ((inb_p(SMBAUXCTL(priv)) & SMBAUXCTL_E32B) == 0)
+> -		return -EIO;
+> -	return 0;
+> -}
+> -
+>  /* Block transaction function */
+>  static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
+>  				  char read_write, int command)
+> @@ -791,9 +785,8 @@ static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *
+>  	/* Experience has shown that the block buffer can only be used for
+>  	   SMBus (not I2C) block transactions, even though the datasheet
+>  	   doesn't mention this limitation. */
+> -	if ((priv->features & FEATURE_BLOCK_BUFFER)
+> -	 && command != I2C_SMBUS_I2C_BLOCK_DATA
+> -	 && i801_set_block_buffer_mode(priv) == 0)
+> +	if ((priv->features & FEATURE_BLOCK_BUFFER) &&
+> +	    command != I2C_SMBUS_I2C_BLOCK_DATA)
+>  		result = i801_block_transaction_by_block(priv, data,
+>  							 read_write,
+>  							 command);
 
-Hi Jaewon,
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Tested-by: Jean Delvare <jdelvare@suse.de>
 
-I'm going to submit USI driver soon, and also some more HSI2C patches.
-Do you mind if I rework your patches to rely on USI drver (instead of
-modifying System Register in HSI2C driver), and include those in my
-patch series? Of course, I'll preserve your authorship. Just think
-that would be easier and faster this way.
-
-Thanks!
-
->
-> Best regards,
-> Krzysztof
+-- 
+Jean Delvare
+SUSE L3 Support
