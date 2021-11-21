@@ -2,58 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1BA45843F
-	for <lists+linux-i2c@lfdr.de>; Sun, 21 Nov 2021 16:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5381C458452
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 Nov 2021 16:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238340AbhKUPFh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 21 Nov 2021 10:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
+        id S238401AbhKUPJI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 21 Nov 2021 10:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238337AbhKUPFg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 Nov 2021 10:05:36 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E29C061714
-        for <linux-i2c@vger.kernel.org>; Sun, 21 Nov 2021 07:02:31 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id i6so31354908uae.6
-        for <linux-i2c@vger.kernel.org>; Sun, 21 Nov 2021 07:02:31 -0800 (PST)
+        with ESMTP id S238394AbhKUPJH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 Nov 2021 10:09:07 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A13C061714
+        for <linux-i2c@vger.kernel.org>; Sun, 21 Nov 2021 07:06:02 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id u3so68132275lfl.2
+        for <linux-i2c@vger.kernel.org>; Sun, 21 Nov 2021 07:06:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ewCR+zztptKsJ8KIVGfIJqeRh+t6Nh5hBzYWdIOddbI=;
-        b=DSjlOXuFLR7fltc2k0KwMobb2ttHVi01kU8LQbXxB4/ZoJNVGakI1uUnUpqRG+TQiC
-         ajP4SRxqDR5m3WtzrWAJ7s64fJnWhcJ6j1U3s28rYZI5v4VqQ87Q86V70FosO5DmcEAj
-         orxqnTbNjtQD41OMApZpL2I4T4qtNla09xA9fBYlOKehTJHENu9xdDRADhVYOq67FxT/
-         fkeLCT1rO5Locz14W5zmawwgXQ2UaUdYzXwFhf5VD6nGF75SRP+lHeAYL7y9SPlAOZUQ
-         iJofS02RBpZJEMbn5nWppRCw3gzbhuAsYv6QweIa2t30uunwUJCthDZ2HwkhfnzOFDhj
-         oHWw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k8vZd6v9v9+rdgKV/PqzJo8VveO9M9COmbjdbxILTmY=;
+        b=T2epvNnR/erfzq7gZjzmw5DBnXb43OC0XHNHflZQZwKGVhk6X6ovTmVXeJ1TsGMdSz
+         DQi0nRto2Wd1WHdiGwF++7+syR8m6i/ShNRApO17Z9Nx45f2wsIULpKiDDFOcbV/hhPt
+         LqDEfEF5Hc/d4C4CG78rP1Yg4H5hT+rsBYRzTgJtjgslK3z4pmSu3zPPvWUQUA7dtmbl
+         3oK7VhXehX+RN0I68oOgFkeqY6PqSyamTIuA+ltpooetsMxtzOEmJPRHvoy94RjlDr8T
+         fzQhe85iirJSN6f/7gpEG75jTSM/Wm/OKY8XlQrW+o7y4/r5R4D+NNgn4DMlVbHX0F+5
+         SXxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ewCR+zztptKsJ8KIVGfIJqeRh+t6Nh5hBzYWdIOddbI=;
-        b=PnMT3Yrh4e3K1KYd1JI3PbKnOthc1kVFn4an1Q+6rk5fQ/ZE8qxPqEtj7UOFJg76Z/
-         fxosRyKSBMpllZKNhxYGf4e2c+UFz6wNmfQ0WQKLDEj4E2sK21e4RdkcBKzC8hHAknHW
-         591X91ONfBod2LxuspAj657rkdPZV0j03DMEOHTAeKfJK4u2veU+jKBYJzVSwvb5UjYn
-         bvSEQdJB8MU1m0aFxhqunfs/nBhVgQ50eoNPEtLs0qJjEMHAGPNCx7uX1vPM6OSKWSX7
-         1i1a7CWGgFjsngZbb9Nbr3kKmpjNX1RDIKbaDfI6zaOo7vAtRKdphQDrugHPMnwM1lp3
-         m13Q==
-X-Gm-Message-State: AOAM533sIM9cYiO7ECn98+aeyg8+MU9E/4FW7qyVU7wZ0LkFxUjJwWSY
-        KFnYmzxEo4IxTDMi+KmMbXMbTv50db84mbT5hiKpeayhDyMKlg==
-X-Google-Smtp-Source: ABdhPJyGlYS/dAMmh8S6nbKcs5k5Z/LtQK+tCLwZxz2GaoFXq8JvxOqmAYnacyFaR7rjYK52hB72Yq3KW5hpk1W2hcw=
-X-Received: by 2002:a67:d893:: with SMTP id f19mr116652012vsj.39.1637506950538;
- Sun, 21 Nov 2021 07:02:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20211108134901.20490-1-semen.protsenko@linaro.org> <b374d1a6-6478-cf2f-924e-425825731ad5@canonical.com>
-In-Reply-To: <b374d1a6-6478-cf2f-924e-425825731ad5@canonical.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k8vZd6v9v9+rdgKV/PqzJo8VveO9M9COmbjdbxILTmY=;
+        b=MDZUH1KJxpKOaNlK+A6P2Lc5yqCPMNOftK4DwSdIGCu82xSdSf+kkvgPFtRMAB57KX
+         ylhQ5pZ9RIRDBJq6gHeeyzGtrm9Ugk3knhIJQ9WYyibe/aAQhjjwwtuXcSv9IP8rbrEf
+         Kxk4HH4W9kaRqMLt7HeNvs2/gH2qTEFCsDev23XrpMF6GowHRw6Ei8LBzMB0ZLENUSta
+         jJjyIGTRvdqZfUjckFqlg/cIBlvfBzWrLMdCPT0IhJJ49AFlBoDlSOGbl9xh28lJg+wm
+         CuWZBOCN6Gc3gQrkQvQyESn7eq2PPrcDyIO9lkj8eHd7lYbJjKmjM3U574pZpAE7loDG
+         YrLQ==
+X-Gm-Message-State: AOAM533+KI1+9TSbWooN7nPbq649KqtLCFPrUjXRet13sdQzyf4KZy6u
+        fPIGvfFWbsxdGwwi6G85O0dEeA==
+X-Google-Smtp-Source: ABdhPJxfPdCz9cplT/BecIooFLfm3HHfz5dDCAwheJVLk50og2S+UyVylGS1Lj8vXq4tE9zkADh3DQ==
+X-Received: by 2002:ac2:464f:: with SMTP id s15mr48950544lfo.590.1637507160860;
+        Sun, 21 Nov 2021 07:06:00 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id bj11sm578251ljb.62.2021.11.21.07.05.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Nov 2021 07:05:59 -0800 (PST)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Sun, 21 Nov 2021 17:02:19 +0200
-Message-ID: <CAPLW+4mq1H9N4BEAT2zoPxa85SXN2jPHqEJA7HCgavaDDpfEDQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm: samsung: Remove HAVE_S3C2410_I2C and use direct dependencies
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Will McVicker <willmcvicker@google.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Will McVicker <willmcvicker@google.com>,
         Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -61,44 +59,38 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v2 1/2] arm64: defconfig: Enable Samsung I2C driver
+Date:   Sun, 21 Nov 2021 17:05:57 +0200
+Message-Id: <20211121150558.21801-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 21 Nov 2021 at 14:39, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 08/11/2021 14:49, Sam Protsenko wrote:
-> > A separate Kconfig option HAVE_S3C2410_I2C for Samsung SoCs is not
-> > really needed and the i2c-s3c24xx driver can depend on Samsung ARM
-> > architectures instead. This also enables i2c-s3c2410 for arm64 Exynos
-> > SoCs, which is required for example by Exynos850.
-> >
-> > This is basically continuation of work made in following commits:
-> >   - commit d96890fca9fd ("rtc: s3c: remove HAVE_S3C_RTC in favor of
-> >     direct dependencies")
-> >   - commit 7dd3cae90d85 ("ARM: samsung: remove HAVE_S3C2410_WATCHDOG and
-> >     use direct dependencies")
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > ---
-> >  arch/arm/Kconfig                  |  1 -
-> >  arch/arm/mach-exynos/Kconfig      |  1 -
-> >  arch/arm/mach-s3c/Kconfig.s3c64xx |  1 -
-> >  arch/arm/mach-s5pv210/Kconfig     |  1 -
-> >  drivers/i2c/busses/Kconfig        | 10 ++--------
-> >  5 files changed, 2 insertions(+), 12 deletions(-)
-> >
->
-> This does not apply, which is weird because there were no changes here.
-> It seems you based your work on some older tree, so please rebase and
-> re-test on current tree (my for-next branch or linux-next).
->
+i2c-s3c2410 driver is needed for some arm64 Exynos SoCs, e.g. Exynos850.
 
-This is strange indeed, those two patches are rebased flawlessly on
-linux-next for me. Anyway, I'll send v2 today, thanks for letting me
-know.
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+---
+Changes in v2:
+  - Rebased on latest linux-next
 
-> Best regards,
-> Krzysztof
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index f2e2b9bdd702..0da6a944d5cd 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -461,6 +461,7 @@ CONFIG_I2C_QCOM_GENI=m
+ CONFIG_I2C_QUP=y
+ CONFIG_I2C_RIIC=y
+ CONFIG_I2C_RK3X=y
++CONFIG_I2C_S3C2410=y
+ CONFIG_I2C_SH_MOBILE=y
+ CONFIG_I2C_TEGRA=y
+ CONFIG_I2C_UNIPHIER_F=y
+-- 
+2.30.2
+
