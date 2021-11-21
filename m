@@ -2,131 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32228458649
-	for <lists+linux-i2c@lfdr.de>; Sun, 21 Nov 2021 21:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B747F4586B0
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 Nov 2021 22:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbhKUU0O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 21 Nov 2021 15:26:14 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:38419 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229441AbhKUU0N (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 Nov 2021 15:26:13 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 93C00580788;
-        Sun, 21 Nov 2021 15:23:07 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute3.internal (MEProxy); Sun, 21 Nov 2021 15:23:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm3; bh=Lwf/LrY/vE+XfQ2/Z92KIftl2TmX
-        RB7ZTlFzeqJGXNQ=; b=XOuHG3LQgih+VPL0zEycQIAQS4SH+cqYCG/qlQPF9YAS
-        burGyn8RjULH0IKt+evegCRWlwmUMP41QCoQ1z7yfEkA/qukZ4XE1MPGZsnjXUmi
-        FTrumL76+A4D6GbvzI5AnyU0CDB038GbhcjQY1FrOYVibBhmycoDJplGnROL4ouA
-        Er28FhLapOt2+qxs6ooo11ePEzzBWo0FlcgXqFFs8XYsfhSQWbrScqb8vmYQhruJ
-        UIw6gwCZFsLUxb57jjgUnmTB2QYGyl0pqTl+df1kiJ8jn4ytZ72nk0/uTfbCA+Jt
-        uSzY5amJ3U3vPl3C1FLY2VM4u8c/ullKw0DqMP2U9A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Lwf/Lr
-        Y/vE+XfQ2/Z92KIftl2TmXRB7ZTlFzeqJGXNQ=; b=UJ3HwRgtmw7K+DpeuWDEOx
-        rFazcoVi5aZu5uHJF5leS6+/BP4fK+ghav+SelaocCvlzN0cZJV/bDkY3rXrV4ZN
-        iRn7fLv9bhh8mRjdKnXDgKYnq1VFZnBu29v/ah8Z06hYWf8Hmv16LFWZIY7eiurm
-        SfBq2cry3mCyZi4RQGi4QphIn/wXQlq03LAO9zcTshrkLxyXhfG1cXiqvvL/5C+X
-        LzjP157yO7QDBfuFeAY6kZ2DKgSOy4AQVODq4Gal66fmuWbx+QCG7a6H9pICXJh2
-        yjA0X7N2Fl+9WbCLn5NdX4sclCpU4/8lN/6XiEXfvD5THcJqs6kz7Uah9nNmAcTg
-        ==
-X-ME-Sender: <xms:q6qaYUNcT_AofxWkRAiZBJVh5JWEF0j58dmKLGKM_G4XGuQQWHvPYA>
-    <xme:q6qaYa-WaA5J_sv4SRcLfhSB0LE_q2qYaKV1b37OKIeUOm0iLDzzEtnNS0i5iPmt4
-    dmS8hBFRX2AKoxYRPE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrgedvgddufeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
-    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:q6qaYbS6nbxT-X9KYwWt8IiskYv6fJPo7O6I5q3eyEzOEopUU1mWGg>
-    <xmx:q6qaYcuiuX_CAawIrVN_AzVO62BBB76-tQ9UByW3gfi5AFBj6LuQzA>
-    <xmx:q6qaYcd2tIN1PuwJ5QIW_ma6GBY_NPNC30Pkfyqrq-bOUYYF4Du11g>
-    <xmx:q6qaYdVIUtzooA9FK0zaQSKQE-j1rNWxz1SVz5EJLpa7Fu9SvLpz6w>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 54102274055F; Sun, 21 Nov 2021 15:23:07 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1371-g2296cc3491-fm-20211109.003-g2296cc34
-Mime-Version: 1.0
-Message-Id: <2baebbe6-0080-4cff-86de-a00f23aea95e@www.fastmail.com>
-In-Reply-To: <20211121171545.27402-3-j@jannau.net>
-References: <20211121171545.27402-1-j@jannau.net>
- <20211121171545.27402-3-j@jannau.net>
-Date:   Sun, 21 Nov 2021 21:22:47 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Janne Grunau" <j@jannau.net>, "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Wolfram Sang" <wsa@kernel.org>, "Olof Johansson" <olof@lixom.net>,
-        "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Mark Kettenis" <kettenis@openbsd.org>,
-        "Rob Herring" <robh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: i2c: apple,i2c: allow multiple compatibles
-Content-Type: text/plain
+        id S231887AbhKUWCE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 21 Nov 2021 17:02:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231770AbhKUWCE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 Nov 2021 17:02:04 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A42C061574;
+        Sun, 21 Nov 2021 13:58:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
+        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=Fwt37T4d7LTM0vzmiuMiu+xbLg++qPwMMPqVu0kGMTw=; b=EjeXs8orjn6YTp6k/sBm2gzwdW
+        IrVNECVdM6RHOKQnqPBDRLmdS1OHs9Uzl096vEJ0+VrxlOy7Jry4YAG/FJJ6MgoNCVaelVQBXvqVb
+        hKRviwE45byLf/FGTIPZXjqMOEQ8ObmMvmmkp/Z0XFiSs0UdjyvmG0KkzmA4LfryP8fN9FnuVzzXR
+        wojRLjQLzAIAP4JA7+w5vVhZD1Bo78mr6QSbPVzgKd4Xuh3eKupXuPtemFN2cU5n70X9ZXph5X4Sm
+        cqt3dimE3YwM/zGOgfmCl48mnY/xU1CP5oPZeJpM4JWMA9eh4ZBMcgK1qlNRZegcGXtnwfsTDlc5S
+        MtFUtdUw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mourS-00ENFE-Qi; Sun, 21 Nov 2021 21:58:58 +0000
+Subject: Re: [PATCH v2] Docs: Fixes link to I2C specification
+To:     wsa@kernel.org, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211119061401.19852-1-deep@fastmail.in>
+ <4c16a9f5-3728-5377-1286-001b1b362bb1@infradead.org>
+ <20211121174654.hu26uxcd3lsdpypq@CodeMachine>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <a8f107ff-cb5f-8bf8-6bcf-9ac8320be0e0@infradead.org>
+Date:   Sun, 21 Nov 2021 13:58:57 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211121174654.hu26uxcd3lsdpypq@CodeMachine>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
-
-On Sun, Nov 21, 2021, at 18:15, Janne Grunau wrote:
-> The intention was to have a SoC-specific and base compatible string
-> to allow forward compatibility and SoC specific quirks,
->
-> Fixes: df7c4a8c1b47 ("dt-bindings: i2c: Add Apple I2C controller bindings")
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> Cc: Mark Kettenis <kettenis@openbsd.org>
-> ---
-
-Yeah, this should've been "apple,t8103-i2c", "apple,i2c" all along :/
-Given that we have no i2c nodes in the dts yet and that this binding was
-only added for -rc1 I think it's fine to just drop "apple,t8103-i2c"
-here instead of marking it as deprecated and keeping it around forever
-if Mark Kettenis also agrees.
-
->  Documentation/devicetree/bindings/i2c/apple,i2c.yaml | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml 
-> b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> index 22fc8483256f..f1cb96c08212 100644
-> --- a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> @@ -20,9 +20,10 @@ allOf:
+On 11/21/21 9:46 AM, Deep Majumder wrote:
+> Randy Dunlap wrote:
+>> On 11/18/21 10:14 PM, Deep Majumder wrote:
+>>> The link to the I2C specification is broken and is replaced in this
+>>> patch by one that points to Rev 6 (2014) of the specification.
+>>> Although `https://www.nxp.com" hosts the Rev 7 (2021) of this
+>>> specification, it is behind a login-wall and thus cannot be used.
+>>
+>> I don't quite get the "cannot be used" part.
+>> I created a free login and downloaded this spec,
+>> so yes, it's a hassle, but why can it not be used?
 > 
->  properties:
->    compatible:
-> -    enum:
-> -      - apple,t8103-i2c
-> -      - apple,i2c
-> +    items:
-> +      - enum:
-> +        - apple,t8103-i2c
-> +      - const: apple,i2c
+> Perhaps a more appropriate wording would be "cannot be used as the only
+> source of the spec"? Because as I understand, many users may be
+> unwilling to sign up to a website just to download a spec sheet (if for
+> no other reason, for the fear of spam).
 
-Nit: the enum makes sense once we add t6000-i2c but right now
+To be clear, I think that what you have added in the summary.rst
+file is fine, but the commit message is too strong IMO.
 
-properties:
-  compatible:
-    items:
-      - const: apple,t8103-i2c
-      - const: apple,i2c
+I would  just say something like
+(or you could just add: cannot "easily" be used):
 
-also works and look a bit less weird.
+   Although `https://www.nxp.com" hosts the Rev 7 (2021) of this
+   specification, it is behind a login-wall and thus cannot easily be used,
+   while Rev 6 (2014) is readily available without requiring registration
+   and login.
 
-Either way,
+>>> Thus, an additional link has been added (which doesn't require a login)
+>>> and the NXP official docs link has been updated. The additional link is
+>>> not the Wayback Machine link since it seems that the PDF has not been
+>>> archived.
+>>>
+>>> Signed-off-by: Deep Majumder <deep@fastmail.in>
+>>> ---
+>>>    Documentation/i2c/summary.rst | 8 +++++---
+>>>    1 file changed, 5 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
+>>> index 136c4e333be7..3395e2e46d9c 100644
+>>> --- a/Documentation/i2c/summary.rst
+>>> +++ b/Documentation/i2c/summary.rst
+>>> @@ -11,9 +11,11 @@ systems.  Some systems use variants that don't meet branding requirements,
+>>>    and so are not advertised as being I2C but come under different names,
+>>>    e.g. TWI (Two Wire Interface), IIC.
+>>> -The official I2C specification is the `"I2C-bus specification and user
+>>> -manual" (UM10204) <https://www.nxp.com/docs/en/user-guide/UM10204.pdf>`_
+>>> -published by NXP Semiconductors.
+>>> +The official I2C specification (revision 7) is the `"I2C-bus specification and user
+>>> +manual" (UM10204) <https://www.nxp.com/webapp/Download?colCode=UM10204&location=null>`_
+>>> +published by NXP Semiconductors. However, you need to log-in to the site to
+>>> +access the PDF. An older version of the specification (revision 6) is available
+>>> +`here <https://www.pololu.com/file/0J435/UM10204.pdf>`_.
+>>>    SMBus (System Management Bus) is based on the I2C protocol, and is mostly
+>>>    a subset of I2C protocols and signaling.  Many I2C devices will work on an
 
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
-
-
-Sven
+thanks.
+-- 
+~Randy
