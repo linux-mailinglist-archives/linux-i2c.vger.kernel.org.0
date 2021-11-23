@@ -2,87 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DCE45A05D
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Nov 2021 11:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C41F45A0A8
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Nov 2021 11:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235519AbhKWKk5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Nov 2021 05:40:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48674 "EHLO mail.kernel.org"
+        id S235450AbhKWKzn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Nov 2021 05:55:43 -0500
+Received: from sauhun.de ([88.99.104.3]:48678 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235412AbhKWKk4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 23 Nov 2021 05:40:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4415460F41;
-        Tue, 23 Nov 2021 10:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637663869;
-        bh=QHPy8jN4E1B6G1qlFMQZYM3JfIS0NJHiirezl0NGSYM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qQkqrWq/91bwWfTJ+FncjNTp05bxlwjpsYHP5aGvyhnHvIH7NmNtG+Zj0r9lLJDSA
-         8rLuK2Q4htdkgoVFieW5deI9gpbedN46dWJGSxQNfv4qB0WG8KLiOMon8+jhCWp7xd
-         LFRJDrBdI6SLoaoA8R/wxWCHPQgD/r+kiRyFyoemyW/iDjRMLUqQMqlxbawmm27Pe2
-         XBVXHvBt7AG7mFu03C63x9BX/ej7KZjzepQKUHO3CVXJhZ/2F6spXnyDmKONlTZzxe
-         3vnHr6x/TUGugywrbf3y/8HG9yI3W2DAPXDOaZbS2/1zQCiDt2Fz4QthUexHkgzeua
-         MgCfqMhs332vA==
-Date:   Tue, 23 Nov 2021 11:37:45 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Deep Majumder <deep@fastmail.in>
-Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Docs: Fixes link to I2C specification
-Message-ID: <YZzEeeVuI/8hLxD0@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Deep Majumder <deep@fastmail.in>, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211119061401.19852-1-deep@fastmail.in>
+        id S234186AbhKWKzm (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Nov 2021 05:55:42 -0500
+Received: from localhost (p5486ca86.dip0.t-ipconnect.de [84.134.202.134])
+        by pokefinder.org (Postfix) with ESMTPSA id A128F2C009E;
+        Tue, 23 Nov 2021 11:52:33 +0100 (CET)
+Date:   Tue, 23 Nov 2021 11:52:33 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Evan Green <evgreen@chromium.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Korsgaard <peter.korsgaard@barco.com>
+Subject: Re: [PATCH v1 1/3] i2c: mux: gpio: Replace custom
+ acpi_get_local_address()
+Message-ID: <YZzH8fSk6B1n9WX9@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Peter Rosin <peda@axentia.se>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Evan Green <evgreen@chromium.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Korsgaard <peter.korsgaard@barco.com>
+References: <20211115154201.46579-1-andriy.shevchenko@linux.intel.com>
+ <304efdfe-db6e-051e-b61d-e73a8dfa1c53@axentia.se>
+ <CAHp75VcF1TZ5hH42-D+0sRkYkN-A1r797LdHGMT93UO4Sp3wLQ@mail.gmail.com>
+ <fecc80b0-e24b-409d-5f60-82b899f0bdba@axentia.se>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pRh1ykX5gp1PIsDE"
+        protocol="application/pgp-signature"; boundary="meIjsH7BA1Ore7SF"
 Content-Disposition: inline
-In-Reply-To: <20211119061401.19852-1-deep@fastmail.in>
+In-Reply-To: <fecc80b0-e24b-409d-5f60-82b899f0bdba@axentia.se>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---pRh1ykX5gp1PIsDE
+--meIjsH7BA1Ore7SF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+> @Wolfram: You're finding this series in patchwork and will be picking it
+> up as usual, right? Thanks!
 
-> The additional link is
-> not the Wayback Machine link since it seems that the PDF has not been
-> archived.
-
-Sure, wikipedia uses this link
-
-https://web.archive.org/web/20210813122132/https://www.nxp.com/docs/en/user-guide/UM10204.pdf
-
-on this page:
-
-https://en.wikipedia.org/wiki/I%C2%B2C
-
-And I agree with Randy about saying "cannot be easily used" in the
-commit message.
+Right, will do so now.
 
 
---pRh1ykX5gp1PIsDE
+--meIjsH7BA1Ore7SF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGcxHgACgkQFA3kzBSg
-KbanHw//eACvwAeblxDU4KVBDD9Qr8utMR7hjptP2NY0psSC7FkWGqdfnvbQ7oei
-iEl86HWQxaLGlRvEtqV9MkdLqAPeCjcWa8gdDRMEHr5QMQEpxtAmt4RqqzKsVyxG
-D3+arRkj3BjpGkWJfLclb1Y3jkdEz/hxVkTkRypDYwvCv02kco1yYP7nkMTXPXrG
-inwRRgVNTjkC9aPhKzZB8d3k59K6x+Y0aS85jcc52hIanzERU9u92iZsWKOc/PUX
-Pcc46R4Vooazyb3cd7TU3XuHoVbval1tV+p3HlfqTcUZhPUYJgE+QbEfztEXn2q6
-8ztqPvKwXzjbRimjmQmn8044edQ0YVApsYh2NhxY9Iq10lo1jAdSkHc6LvYdMJVf
-e7j78eXoRP3vA+2IiGWNzVaKxTrzQn5xfAeWvNal72AP+jVSqV1ULGk6JlADasFw
-6DIIUz3fbpT3rJMw1Qa6zYH0u9WxFmi6TKXD6z7v+F87947zI3Zd+Ez+Hy7oO039
-IHvIYYcFNgwQZ4pIHvLjiPKW8KvWzgDu+6wwK2GiBMg2CFXCVqCVYhjYbXbI1Fdu
-inr7fZDZHaoHukEDVV2QCV1noDsnFUoiH+wEZlnykXCxrH9QpCzdyDsncR7UErKL
-N8ukFeyi8JVc8sqWW2rWXR+zdA1WVzyP9WnsDCPYja6A3nrfjJg=
-=b1k5
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGcx/EACgkQFA3kzBSg
+KbaXAQ/+N13bGsQOkSjn4Phfs1jQzubQo8FR08/SzxDTuD5WJoKPI6EkqOLpUHzq
+ot44+RajN2QoAqYtFM7UNGOsz2D8A3wGnB7QjvTpJlnpX7bFMJ0j0wdzVy5Qq07x
+dU4RZRjJr1hNGQGTAuTTky2JLbQeOYgEyM7yiuzMnrOLWi9/2tRBedW7nMmZo5Fy
+aT58BjSvcC2YvitDqfs2XHHelYJZpRk1dPq+VKfsJiAP+gYOkH8TCwpcxGPFbnP8
+HlSqjsQNaWfIpMA5teavozeey0z+86W5QZk5p3L5432CkzpiZV2XZTL05cpl44Yp
+PWkRsfQXn+SZYmKzA2xzin9gUTmuBchTn4mSOIt+nvbs89T1JLpZRlrDCDzA5kfM
+fT2mhEFr96MUtIN5WCyPt1HX2JUo3mve+ZCnGLoRz5tv0Py1TrJIlByWQIJxaIBu
+ffHAQNSQQzIf97NV0AIQ5VPeF6XqBKP6xRXcOuOYRDecn5wdbf7i1nAW9ajt7Pqu
+NQMldlnZCxWFtis3lP5NzPDGZxMP0JyI0Hns8pf2Ls6nhRPm/NnsC0d5DJ2d9NsX
+7NXE5jrKYEiYy41ip0m+K86+sj3cy1l5AjMds7l/LK79dTYof2/db3Vv+/A6GfR1
+hdzy3L/CLyDC5k82TZw+Qn2e6MX6QlREkENIbb5VTiX1Zyqf+y8=
+=ARCc
 -----END PGP SIGNATURE-----
 
---pRh1ykX5gp1PIsDE--
+--meIjsH7BA1Ore7SF--
