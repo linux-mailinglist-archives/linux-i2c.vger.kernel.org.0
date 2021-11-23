@@ -2,148 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 672CC459CC3
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Nov 2021 08:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A8E459DE0
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Nov 2021 09:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233985AbhKWHd3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Nov 2021 02:33:29 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:5894 "EHLO mx1.tq-group.com"
+        id S230334AbhKWI1x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Nov 2021 03:27:53 -0500
+Received: from sauhun.de ([88.99.104.3]:47114 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233890AbhKWHd3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 23 Nov 2021 02:33:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1637652621; x=1669188621;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tFJXfZ52umANdWH1SSIASpr2VZIUDRLoZZDdNaHo0a0=;
-  b=RWTt+D78dEKyQnaC+NtuvCgAXS+7Qk5+uLqw88/i7IiQz0l+k4zZBFOd
-   9BiBLDDq+vbKoQGaJDt2VBWInnMRzDVCcFMtR1yEYBquZw5dbvdnxzVY0
-   +g+TuB0usZEiz0OYTVo6mxoNfrSdVybjfW6UDSFp2oxPYwAtChUCdhlyN
-   ArbIQeCW6w1OPT/31CG06+3iOQDEn7KgriHWWbeVHPxkQ+0knZgIglpSX
-   MO+4s3xLYfseGW+1XZrDhAISOiQIi0avE+WgosjcV54kVR22NJ+O/I10c
-   LrDcCgknaLWTL4PaiZ/ZMF9qXriYvojtxukJElRy1Ehq271Ge2WV/jAo9
-   g==;
-X-IronPort-AV: E=Sophos;i="5.87,257,1631570400"; 
-   d="scan'208";a="20611135"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 23 Nov 2021 08:30:20 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 23 Nov 2021 08:30:20 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 23 Nov 2021 08:30:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1637652620; x=1669188620;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tFJXfZ52umANdWH1SSIASpr2VZIUDRLoZZDdNaHo0a0=;
-  b=jRmoK7Ae3heTJf3H0pKuMoJRF35i2IdZUEgkd8X1AUVSxljDH+nrGjMI
-   f813cVujWThLMLGRNQzjJuLn96p2p7vtgrfrm8oLlX7RXggK3VpLnAe15
-   QvN06Pb1wxB5qqliw300BkVI81Wpvd2mM3+XE71JM1hZ8jQC6tQrCCSS5
-   mpqhSj1vm3DDvDQ9vOHY1YlTBAUg7UyDEOQibeIwupDWMd3APW1WkTPkq
-   13SVM8qreoHszTmfTEyXZrC/9lsgbEMs7UgQCqmA2fvvV7kHxJnLzPrlc
-   69aKBgfas/Bca+CyP2Ox6Tz5FAhU9biNBtBnCDTICE2/Clc2qqK5mG/i+
-   g==;
-X-IronPort-AV: E=Sophos;i="5.87,257,1631570400"; 
-   d="scan'208";a="20611134"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 23 Nov 2021 08:30:20 +0100
-Received: from steina-w (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id CCE71280065;
-        Tue, 23 Nov 2021 08:30:19 +0100 (CET)
-Message-ID: <c3fd087edb757a453bc2a2d745f813e834ccf08e.camel@ew.tq-group.com>
-Subject: Re: (EXT) Re: (EXT) Re: [PATCH v4 12/12] dt-bindings: serial:
- fsl-lpuart: Add i.MX8DXL compatible
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Date:   Tue, 23 Nov 2021 08:30:17 +0100
-In-Reply-To: <YZvJP2ISfc/zyK+4@ryzen>
-References: <1636566415-22750-1-git-send-email-abel.vesa@nxp.com>
-         <1636566415-22750-13-git-send-email-abel.vesa@nxp.com>
-         <YZb4BClv4fXU65yz@robh.at.kernel.org>
-         <000f8f724ef9a8c2652e9cab0a5bb1f7768869c3.camel@ew.tq-group.com>
-         <YZvJP2ISfc/zyK+4@ryzen>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S230306AbhKWI1x (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Nov 2021 03:27:53 -0500
+Received: from localhost (p5486ca86.dip0.t-ipconnect.de [84.134.202.134])
+        by pokefinder.org (Postfix) with ESMTPSA id 06C2B2C009E;
+        Tue, 23 Nov 2021 09:24:42 +0100 (CET)
+Date:   Tue, 23 Nov 2021 09:24:38 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Subject: Re: [PATCH v2 15/20] i2c: cht-wc: Make charger i2c-client
+ instantiation board/device-model specific
+Message-ID: <YZylRkOQsj9LpG5U@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+References: <20211114170335.66994-1-hdegoede@redhat.com>
+ <20211114170335.66994-16-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WTi5NgaCbc4tZLlR"
+Content-Disposition: inline
+In-Reply-To: <20211114170335.66994-16-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Am Montag, dem 22.11.2021 um 18:45 +0200 schrieb Abel Vesa:
-> On 21-11-19 08:17:11, Alexander Stein wrote:
-> > Am Donnerstag, dem 18.11.2021 um 19:04 -0600 schrieb Rob Herring:
-> > > On Wed, Nov 10, 2021 at 07:46:55PM +0200, Abel Vesa wrote:
-> > > > Add i.MX8DXL lpuart compatible to the bindings documentation.
-> > > > 
-> > > > Signed-off-by: Abel Vesa <
-> > > > abel.vesa@nxp.com
-> > > > 
-> > > > 
-> > > > ---
-> > > >  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 4
-> > > > ++++
-> > > >  1 file changed, 4 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/serial/fsl-
-> > > > lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-
-> > > > lpuart.yaml
-> > > > index dc1f0e07cbd4..fa8a602ccb22 100644
-> > > > --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> > > > +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> > > > @@ -27,6 +27,10 @@ properties:
-> > > >        - items:
-> > > >            - const: fsl,imx8qm-lpuart
-> > > >            - const: fsl,imx8qxp-lpuart
-> > > > +      - items:
-> > > > +          - const: fsl,imx8dxl-lpuart
-> > > > +          - const: fsl,imx8qxp-lpuart
-> > > > +          - const: fsl,imx7ulp-lpuart
-> > > 
-> > > I'm confused why 8dxl is compatible with 7ulp, but 8qm is not?
-> > > From
-> > > the 
-> > > driver, it looks like the difference is clocks.
-> > 
-> > There is a difference between 8qm and 7ulp regarding the clocks.
-> > Are
-> > they still considered compatible? Depending on the answer [1] might
-> > not
-> > be the correct solution for earlycon regression on 8qm.
-> > 
-> 
-> In NXP's tree, they are not compatible.
-> 
-> See here:
-> 
-> https://source.codeaurora.org/external/imx/linux-imx/tree/arch/arm64/boot/dts/freescale/imx8qm-ss-dma.dtsi?h=lf-5.10.y#n9
 
-Well, commit 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4b844930f27bf7019c0bbd8cc575dde32e00ecc
- says otherwise.
-This might be true for earlycon only, because clocks should be setup
-already.
+--WTi5NgaCbc4tZLlR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Together with your other mail regarding the imx7ulp fixup,
-commit b4b844930f27bf7019c0bbd8cc575dde32e00ecc should just be reverted
-in order to get earlycon running again on imx8qm and imx8qxp, IMHO.
+On Sun, Nov 14, 2021 at 06:03:30PM +0100, Hans de Goede wrote:
+> The i2c-controller on the Cherry Trail - Whiskey Cove PMIC is special
+> in that it is always connected to the I2C charger IC of the board on
+> which the PMIC is used; and the charger IC is not described in ACPI,
+> so the i2c-cht-wc code needs to instantiate an i2c-client for it itself.
+>=20
+> So far this was hardcoded to instantiate an i2c-client for the
+> bq24292i, with all properties, etc. set to match how this charger
+> is used on the GPD win and GPD pcoket devices.
+>=20
+> There is a rudimentary check to make sure the ACPI tables are at least
+> somewhat as expected, but this is far from accurate, leading to
+> a wrong i2c-client being instantiated for the charger on some boards.
+>=20
+> Switch to the new DMI based intel_cht_wc_get_model() helper which is
+> exported by the MFD driver for the CHT Whiskey Cove PMIC to help PMIC
+> cell drivers like the i2c-cht-wc code reliably detect which board
+> they are running on.
+>=20
+> And add board_info for the charger ICs as found on the other 2 known
+> boards with a Whisky Cove PMIC.
+>=20
+> This has been tested on all 3 known boards.
+>=20
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Best regards,
-Alexander
+Here is my Ack to take this via some other tree:
+
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+No need to send further versions of this series to the i2c-list, I'd
+think.
 
 
+--WTi5NgaCbc4tZLlR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGcpUEACgkQFA3kzBSg
+KbZSBA/9GZx4RHh20+JYopnxXgk1t0Q/HPhRtQbbQI3VO4mo4gy8ayNRmaDWhi2+
+SYeVFpAEaYJSlGATSM5JO6IaqcKM1TO1Jtuh0FH7vNPQMbqJmEA8nhKuM3Mf2pcP
+qt9PhNkeZdg2qsDUVyHFo6fKsXahznvsZXtj/U5TPfTKtnXxJMDQY7mI6i4YCDZT
+m4s8bjXxSaTd1uR/7URY+gtF9bKcyA9VZ6BKyV9sdutNSWkBkuP/RO0AEaPJMNzx
+fjtaP7mabpQIFKvqx2dPIagON+sy7zd/H2ImKCDQjs/DwVgro9PdQ+6II8ObL1gE
+74/dBRVIf0azQzYyxs1rtGftXf4vrsENGAKdzbOFzxwd4swg3BsLBrIcHZtc7bDb
+n9C//6dIcS28/SJRCyOVNRLg5U529XqCVJ6njL8j5QGmfiCUUcyO097JrZAUpyGI
+bsq01dw6I7ab9dgpLeLWVMKMRkrLgOeHgfzyONG17RKOofEC+8ZqNs8DW3WAwoad
+XUWVEYT666VcxO2kFK/wpuS35Oef44Jm7sXlhkP4vjFKAAkYe8bO86Jkz1s+oqwL
+h4g8dafZswiMZnrCq9wzc4lAVpgD3uRoKaFiTx9Qf2GNQ1mWWC9L1WnM90pODbWv
+7M+q3EuWlrR3qjqb0Zlbf6jyxOobdVhq6mzkWTl7TjE385NA1kI=
+=WAP4
+-----END PGP SIGNATURE-----
+
+--WTi5NgaCbc4tZLlR--
