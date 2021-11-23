@@ -2,85 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D778645A0B5
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Nov 2021 11:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CDF45A0EF
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Nov 2021 12:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234471AbhKWK6l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Nov 2021 05:58:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51442 "EHLO mail.kernel.org"
+        id S233241AbhKWLLU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 Nov 2021 06:11:20 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:51856 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235715AbhKWK6l (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 23 Nov 2021 05:58:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 951CC60C4A;
-        Tue, 23 Nov 2021 10:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637664933;
-        bh=epXNXCSHR16BQf4WBgeJBD8d2zKMDdY0hplRa0Rzgqw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IfWtv8dh/AxAXKTcffPx69DbYl9+zXLza17EE6Wchy8871C83Wy2d+wg0RHVTHoXk
-         FNuWX4G/1lNs3LfdCvlB/KVp0i9bp+Bm1kEtkwTHVHqo7vVD0Py/TuUc7GSQcworIL
-         5r7/YYYldPJJUbHKVNMWswlpJkTEuEF2CB/aEBcI3kCFa4EhbY0miU5zJHMmRloG8V
-         e5JAqZJRp12rPv1UZuFdfKwYh8/FzBYlzXlDOWHROhE07ZB56YxSXWLjBevO+tb9PQ
-         yjSwRIstnp/bi5x05rBDTulGi6r6iiE138Tp6spLGzIPB9Kdhbk6jXYje4bKeJjbj8
-         mEDEaq0mabIbg==
-Date:   Tue, 23 Nov 2021 11:55:30 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Evan Green <evgreen@chromium.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: [PATCH v1 3/3] i2c: mux: gpio: Use array_size() helper
-Message-ID: <YZzIoneNgoADf9Ok@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Evan Green <evgreen@chromium.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Peter Rosin <peda@axentia.se>
-References: <20211115154201.46579-1-andriy.shevchenko@linux.intel.com>
- <20211115154201.46579-3-andriy.shevchenko@linux.intel.com>
+        id S230471AbhKWLLU (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 23 Nov 2021 06:11:20 -0500
+Received: from ip5f5b2004.dynamic.kabel-deutschland.de ([95.91.32.4] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1mpTeV-00086y-0h; Tue, 23 Nov 2021 12:07:55 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        robh+dt@kernel.org, jassisinghbrar@gmail.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lewis.hanly@microchip.com,
+        conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        atish.patra@wdc.com, ivan.griffin@microchip.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, conor.dooley@microchip.com
+Subject: Re: [PATCH 01/13] dt-bindings: interrupt-controller: create a header for RISC-V interrupts
+Date:   Tue, 23 Nov 2021 12:07:52 +0100
+Message-ID: <272946671.hFph3VMliC@diego>
+In-Reply-To: <20211108150554.4457-2-conor.dooley@microchip.com>
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5BLKk/XWK7YWwAEr"
-Content-Disposition: inline
-In-Reply-To: <20211115154201.46579-3-andriy.shevchenko@linux.intel.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Am Montag, 8. November 2021, 16:05:42 CET schrieb conor.dooley@microchip.com:
+> From: Ivan Griffin <ivan.griffin@microchip.com>
+> 
+> Provide named identifiers for device tree for RISC-V interrupts.
+> 
+> Licensed under GPL and MIT, as this file may be useful to any OS that
+> uses device tree.
+> 
+> Signed-off-by: Ivan Griffin <ivan.griffin@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../interrupt-controller/riscv-hart.h         | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>  create mode 100644 include/dt-bindings/interrupt-controller/riscv-hart.h
+> 
+> diff --git a/include/dt-bindings/interrupt-controller/riscv-hart.h b/include/dt-bindings/interrupt-controller/riscv-hart.h
+> new file mode 100644
+> index 000000000000..e1c32f6090ac
+> --- /dev/null
+> +++ b/include/dt-bindings/interrupt-controller/riscv-hart.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/*
+> + * Copyright (C) 2021 Microchip Technology Inc.  All rights reserved.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H
+> +#define _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H
+> +
+> +#define HART_INT_U_SOFT   0
+> +#define HART_INT_S_SOFT   1
+> +#define HART_INT_M_SOFT   3
+> +#define HART_INT_U_TIMER  4
+> +#define HART_INT_S_TIMER  5
+> +#define HART_INT_M_TIMER  7
+> +#define HART_INT_U_EXT    8
+> +#define HART_INT_S_EXT    9
+> +#define HART_INT_M_EXT    11
 
---5BLKk/XWK7YWwAEr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+(1) From checking clic doc [0] I see an additional
+	12   CLIC software interrupt
+defined.
 
-On Mon, Nov 15, 2021 at 05:42:01PM +0200, Andy Shevchenko wrote:
-> Use array_size() helper to aid in 2-factor allocation instances.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+(2) The doc states that the ordering is a recommendation and
+	"not mandatory in all incarnations of the CLIC"
+Is that clarified somewhere else that this more than recommended?
 
-Applied to for-next, thanks!
+Thanks
+Heiko
 
 
---5BLKk/XWK7YWwAEr
-Content-Type: application/pgp-signature; name="signature.asc"
+[0] https://github.com/riscv/riscv-fast-interrupt/blob/master/clic.adoc
 
------BEGIN PGP SIGNATURE-----
+> +
+> +#endif /* _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H */
+> 
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGcyKIACgkQFA3kzBSg
-KbYhYQ//U84V4+ux4DePprp6CnbTIDFVeSTniYdRijWArK4O91uwE2BtZiC08aSN
-sburnTB7TyAzxuk8Be7yJRFcM9LNf+OHOaTD/p3RF1XkxDLZZxbVXS/D9hYXMgzp
-E6R7S2oUZsTbc8tz1PdRDTrFM+91N3MBw8QB1/wMvzrBpQHARq8iTGwHIy46O/X1
-GJ82CufA4F04ODDjgM/KXE8GoD8ffHMu43+i4g3Rm4XJzz1/kdT2g8ev+JXV3mpm
-eu8XeWvRn2INhQSV+jat2yLgCfCHozToSk8djfv3YUd136o6ViXXUJbWmIc+/ekW
-3VhNWds2QWtlihGA3y0lHpgoSrrmPP54L0Sycx4AbKLppsKNwUOoof3y4+Nc/rCo
-OKD+RqxQoBkny/ca5akdJB5vvcuYJiF4UiaqjlOnPJOplQXLinhfCWHI1NKshMT1
-5Zoq41AChNwPJXZi/XsSBvl5NT6RYldfyJYI9hj/dQbCbCNu4/6XkO5Oq+0xKOJR
-QFykjANIGxFteYCL7opTNZUs+JDVJl8wo9K5OHdP5+klOgQKeh1kyk4SqSB4nyU+
-JX/EDmpuOJxdIVS5eO4UVpQV2ss1GTYBxeDECOTL7OwASBr+2aIt5r4PzRFps2Ca
-wid3jEub/In3C1hWuNLOZKUsr/hbUlXk9vAUe8R7/d+EARn7HBs=
-=8dMr
------END PGP SIGNATURE-----
 
---5BLKk/XWK7YWwAEr--
+
+
