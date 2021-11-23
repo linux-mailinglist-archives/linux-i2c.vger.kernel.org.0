@@ -2,58 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7885A4598A8
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Nov 2021 00:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF5A4598D0
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Nov 2021 01:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbhKVXza (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 Nov 2021 18:55:30 -0500
-Received: from mx08-00227901.pphosted.com ([91.207.212.184]:59606 "EHLO
-        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232101AbhKVXzX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 Nov 2021 18:55:23 -0500
-Received: from pps.filterd (m0097674.ppops.net [127.0.0.1])
-        by mx08-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7wixe018132;
-        Fri, 19 Nov 2021 10:27:12 +0100
-Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
-        by mx08-.pphosted.com (PPS) with ESMTPS id 3cdmdm1455-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Fri, 19 Nov 2021 10:27:11 +0100
-Received: from ZBW2K16EX01.bardusch.net (172.25.1.1) by
- ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
- Fri, 19 Nov 2021 10:27:10 +0100
-Received: from User (172.25.1.131) by ZBW2K16EX01.bardusch.net (172.25.1.1)
- with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
- Nov 2021 10:26:59 +0100
-Reply-To: <josechoondak@gmail.com>
-From:   Joseph Choondak <info@ndd.co.mz>
-Subject: I hope this email finds you well.
-Date:   Fri, 19 Nov 2021 01:27:13 -0800
+        id S232769AbhKWADz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 Nov 2021 19:03:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44224 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232678AbhKWADo (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 22 Nov 2021 19:03:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CF3DB61027;
+        Tue, 23 Nov 2021 00:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637625635;
+        bh=01cYwVbEdh0X7Ig5gVg6S/mgZIzXX2UFJSaD0Nf/IgU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=U1nmBoWjhnKgcYW1P9S5O0K0Rs11K/69Wj8qIMIwjMYyqTSq9SSAFIvwKX46MCafv
+         bzKXJmvlxQfZ96AyBeB+jN1NZHMYBe1gJ7eNUTWvU7RFnJQFeQsHUNTWr2I2h6zLDs
+         gH6aaEAr75ufBXmH79TfSd8EAGD3NX716TmMcNtk8csTCVWeFZkWmIzJBBp9k7ASdG
+         K2PuMIsmI99E0MK1tlq8fKQ5hQrpmALZjV5BmVplWZXNKDZaIKvK4uNe8TxtotADZv
+         H2Sln2ND0ACs8GbYP6iiLLWccxe9xFzttrBoEXugXv3gYH6EuehNCPKvRhbOQeOHqf
+         Uta6pbTYeOIbA==
+From:   Mark Brown <broonie@kernel.org>
+To:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
+        wim@linux-watchdog.org, s.hauer@pengutronix.de,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, ulf.hansson@linaro.org,
+        linux@rempel-privat.de, linux@roeck-us.net
+Cc:     kernel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, daniel.lezcano@linaro.org,
+        linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        festevam@gmail.com, Peng Fan <peng.fan@nxp.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+References: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+Subject: Re: (subset) [PATCH V5 0/8] dt-bindinds/dts: support i.MX8ULP
+Message-Id: <163762563048.2472045.8052329194047350725.b4-ty@kernel.org>
+Date:   Tue, 23 Nov 2021 00:00:30 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <e7a31752-8681-4042-9ad5-c01248965c5f@ZBW2K16EX01.bardusch.net>
-To:     Undisclosed recipients:;
-X-Proofpoint-GUID: CmkypoSbrhIOZjoh10HOlF5xTX1kBMKq
-X-Proofpoint-ORIG-GUID: CmkypoSbrhIOZjoh10HOlF5xTX1kBMKq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Reason: orgsafe
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-May I please ask with considerable urgency for your kind assistance with the following matter.
-I'm a financial person, I think  I have something huge you might be interested in.
+On Sat, 20 Nov 2021 19:34:46 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> 
+> V5:
+>  only fix patch 8/8 "arm64: dts: imx8ulp: Add the basic dts for imx8ulp evk board"
+>   - Correct bus-width to 8 for eMMC
+>   - Drop pinctrl enet which no user
+>  Drop patch 1/9 in V4, since in merged in linux-next
+>  Add A-b/R-b tag
+> 
+> [...]
 
-Looking forward to hearing from you.
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Respectfully!!
-Joseph Choondak
-Account Executive.
+Thanks!
+
+[3/8] dt-bindings: spi: fsl-lpspi: Add imx8ulp compatible string
+      commit: 49cd1eb37b487036f51bd57b591f7b5760a10e02
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
