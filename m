@@ -2,489 +2,190 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D8345B280
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Nov 2021 04:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA6945B535
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Nov 2021 08:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234924AbhKXDSn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 Nov 2021 22:18:43 -0500
-Received: from pi.codeconstruct.com.au ([203.29.241.158]:56166 "EHLO
-        codeconstruct.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbhKXDSl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 Nov 2021 22:18:41 -0500
-Received: by codeconstruct.com.au (Postfix, from userid 10001)
-        id DE9D9202CF; Wed, 24 Nov 2021 11:15:22 +0800 (AWST)
-Date:   Wed, 24 Nov 2021 11:15:22 +0800
-From:   Matt Johnston <matt@codeconstruct.com.au>
-To:     Wolfram Sang <wsa@kernel.org>, zev@bewilderbeest.net,
-        robh+dt@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        brendanhiggins@google.com, benh@kernel.crashing.org,
-        joel@jms.id.au, andrew@aj.id.au, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, jk@codeconstruct.com.au,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v3 0/6] MCTP I2C driver
-Message-ID: <20211124031522.GB18900@codeconstruct.com.au>
-References: <20211115024926.205385-1-matt@codeconstruct.com.au>
- <163698601142.19991.3686735228078461111.git-patchwork-notify@kernel.org>
- <YZJ9H4eM/M7OXVN0@shikoro>
+        id S238275AbhKXHVz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 Nov 2021 02:21:55 -0500
+Received: from mail-dm6nam11on2075.outbound.protection.outlook.com ([40.107.223.75]:43745
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229633AbhKXHVy (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 24 Nov 2021 02:21:54 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AvQnuRI0SXAeGRx/7IT0QCz6YxTGIwq/Twh+keQfww3wx64pXvo9LI069kGMN+euRmOJcqqKRBlEByjUj08CYgQIBM9UBGrZC3yym2OeSTB6oI9y0feC4P6qy1zcbfSGpWIglsq2KxdS/lzSIw4i3k1kD9xbsRY395PCYBwi/X0E8zadeNXBQNlvWEsM+OaUZX/4ynWR0xyTPXjcHXcmWbIxNSoQF7J8wGOi5gzznNZR5U/EO4dXSXB7up6xxxO86rrdCkHM6/1DAR5Qc8wh4n+hKqq7dSu4+/q24/mvCe9GTxcV8H3879ff0K4epGxfd0kQLGJqscCNOHHFBk3o6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u7BV2XfA0dakYTzBXS3o8o4gVylEtKclYv05+5z+jnQ=;
+ b=MqhAoQTY8WdLqq7VAknWuhnxylOCYdMbJVl7QW6l1dBZGvo0mm2VPjb/hv2q9YKbT3yMNxEKpFajw4Y+OAMPQtmx+xaxLmOxuS10BhnOgI+Fns4hpr7+JeoJPORzCINpMADLdyreM7aI4F6XSJz/rrMZP/ZtPisG9OLn8N6oRtOiMYOSPl1LTyjNFI1mhxaZT4bM4iLoT+JFM+tMm/PiW1uoAbT7DBNMNZQ/hpAKcc+HgEwT5u/5nuNL+lCOoqskiJElbj2QLH0la/F8PZdNmqniPnCfGX1zcgh6kBDqzcF6vpn2ixSJnhU9VzySjtEujlzEmqNhzdenmwAze55Czw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u7BV2XfA0dakYTzBXS3o8o4gVylEtKclYv05+5z+jnQ=;
+ b=C3cDNrZ6spDR4M+xCaitMyLFYtnGKyZb7Skh70n8jhaZ5UscAR7LveLkLEx4Tv+oZmBmR34DYoyApOwVL+ct7FEJPLHt1m3EnT6uEVdTiPl9mNutQy7cSkC6+uPHGjsP6Q3SG9nwXgtwZUn7vOFlKOcmc2rOn7rg1Nb/O+KydcuUzG0hUh+DsdNFF2sjVU43Letw8Kz9I5sJoqdSBC/ffLoYfjSwT8YOcPGXfScfjuhGN43qQ6Wx5bQZmy5gn6LT9SAYgnxlnPNDNxVekzc1OJoFiBOfFFxSiCtKcvPKsXM9rNK2YVFucEDHfe2rjg4Wp82QYZTzaFDfCIPLQqvqFg==
+Received: from BN9PR12MB5273.namprd12.prod.outlook.com (2603:10b6:408:11e::22)
+ by BN9PR12MB5116.namprd12.prod.outlook.com (2603:10b6:408:119::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22; Wed, 24 Nov
+ 2021 07:18:43 +0000
+Received: from BN9PR12MB5273.namprd12.prod.outlook.com
+ ([fe80::d170:24c:2ca0:7e1e]) by BN9PR12MB5273.namprd12.prod.outlook.com
+ ([fe80::d170:24c:2ca0:7e1e%7]) with mapi id 15.20.4713.025; Wed, 24 Nov 2021
+ 07:18:43 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>
+CC:     Shardar Mohammed <smohammed@nvidia.com>
+Subject: RE: [PATCH v2] i2c: tegra: Add ACPI support
+Thread-Topic: [PATCH v2] i2c: tegra: Add ACPI support
+Thread-Index: AQHX4DoEbVec8BOkJU60fp9nQzQHYKwRKraAgADyRTA=
+Date:   Wed, 24 Nov 2021 07:18:43 +0000
+Message-ID: <BN9PR12MB5273A7628D80076F4EF2CC69C0619@BN9PR12MB5273.namprd12.prod.outlook.com>
+References: <1637328734-20576-1-git-send-email-akhilrajeev@nvidia.com>
+ <1637651753-5067-1-git-send-email-akhilrajeev@nvidia.com>
+ <eebf20ea-6a7f-1120-5ad8-b6dc1f9935e6@gmail.com>
+In-Reply-To: <eebf20ea-6a7f-1120-5ad8-b6dc1f9935e6@gmail.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4bbe0714-2e3e-49b8-8149-08d9af1aa5be
+x-ms-traffictypediagnostic: BN9PR12MB5116:
+x-microsoft-antispam-prvs: <BN9PR12MB51168FBEEC47BCA447FEE9C6C0619@BN9PR12MB5116.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9c31ZrI1gQsh+ohA2BuGudH5JAPR6WMQUQ8ZCSzDQKPUzaVDVbILkGq0qCNb4T1DoYrwK1GbHvLrneq3JifJ69/GI2kd/Tr32G93pydf1aNh1N+bLMzRX9o7WF/961dx0e5G6fDNJVg639mVl8U+PC5N9cYdJ6srMQDlh1VbV/r9JPys7frSERx4pGDZxx2uootuNZA1Cj7bo2hr6SrA9FNaVaNz4JvZEWAqnKowmXxjEa/j4ThOD4ZedjnHr/EzRblb9PErXfwf3+IAbQz6QfS2Or07O9wLE0Cee4LgYACDwpYDB+tAu0+NdV8G9xLJWS0myKDTTMnOEkj2rxhSmEHAIWKH8mESav6GWmyrk258DLYT7EbsEQqywxkUMdMc/4x4KmdrGuyWcnJrP1ep+4O2TogU1yyC3p+enpfZ1TBcArU9Ta7ruGx/mdaXHnxaph8vT9PiNqakBmxI/wJ6IXiGGkbbAdJeoIgSvN39txj9VaRo9hMMfU6MXnMdTUraj9eFivhB1QlyJsfxP84lkm+FlkfQpcbStBOH87zfZrOeBehZrJPJx7HkL9lunYvhj+dsruJf2qPZUotnQ8fwpPLdnxhWHnqE6Z8sIgZuLm4YS2vJFmZspbdEBMMPDcReo0h0UZoxD87OPPIoRC5UJ2UV2tfKKxyyDJzFgPN7O7ykx83oHJfGszpRP4xg9JMrKS35aQVIZEBe5Oud29QiDFp71HeK0GpYhKBmU4j4y0M=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5273.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(7696005)(26005)(107886003)(921005)(186003)(6506007)(8936002)(52536014)(55236004)(71200400001)(508600001)(4326008)(2906002)(38100700002)(55016003)(66446008)(64756008)(8676002)(86362001)(66946007)(316002)(7416002)(76116006)(110136005)(9686003)(83380400001)(66476007)(66556008)(122000001)(5660300002)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VmNkMXBjZjlGcU1ma1lKenMrT3ZUZENUTTBXeExoWitwTlI1RXVhcS9LekxS?=
+ =?utf-8?B?NTF1UWFNelE4eE1XVDNYN3lkRTBqekljRlh5S1FOVFlXTzJKSlBDeklvaDU4?=
+ =?utf-8?B?UkhUeXZlSWN6TUNXRGN3WTFrYVJ5U20rbzIxbXdKQ1pudWc5QTNGek93NXM2?=
+ =?utf-8?B?eEdNdkVWTTh5NEorM3prbGtHWXZvbHM4TG5yaXNtMzJRWWQweFJ2UmpXTEVG?=
+ =?utf-8?B?WW13amlTQnZva2xsTG11d2JMdVYyU0J4bXB6UWhuK1UwbzJRV0NteVhVZDg1?=
+ =?utf-8?B?dVRSRzh3bEprQkxSdWZ5V2pETnNybk41MTJ3UXFRMXFxMy9aWUJyMHVhZVdk?=
+ =?utf-8?B?ZXl5RDhZdC9NK3R1UXpyVGRveHNZcW1abXlSTE45YmhCVEE1cENUMDQzSFBE?=
+ =?utf-8?B?OUV5ODdQaTdSQ1VOaU05MkI1UVBvSzNXdVZYOVpxVnFJMmhFOVBGUUU1WHFT?=
+ =?utf-8?B?bGh3MlN4NytkaXJVVDI0Q29pNkNQVUZFMFZhYjFxcURKNnl3a3JWajFMVXUr?=
+ =?utf-8?B?eUxndmplTWlERTc4R2xnM2JFT1ZpZS9LTjNhd2xNdjBrTkRnYjRkVm9wNjlT?=
+ =?utf-8?B?Y0wwY1U0ZDBLdkRRSmVkUzhES0ZheWl1K2dUeDlVUDNDellwTGpPSTZFUTAx?=
+ =?utf-8?B?QXFBTTBXM3NzSlp0QzhuMGdXeldLSkdCYzhYSVZMYXhIemx6MDhGNzdDZ3dD?=
+ =?utf-8?B?U1V0K3BZVHRDaWtOMXc5Y2NLS3ZhUHdXMzl4SDU4MnRwRTFqRUVNcm5XcGR3?=
+ =?utf-8?B?ZzdNaUVBRFdEdEo2Q2djR3V2N1ZxUEJXc0hZTGhhSUw2ZjB0WWdySUU5cExj?=
+ =?utf-8?B?bmJMUHdENFNoa1MwbEZmNU95ckhYLzJwOGhHWWU3dnpkS0lNdS9WbkFLaU9F?=
+ =?utf-8?B?VWxFTTUyNjBLeDN5dlVmUWk2OVo0YlQyRk9xQVRLc3ZuYzR3MHRRUXF6YzI1?=
+ =?utf-8?B?amhTSEs4ZFVHUjh6c0dtNFpibTVsSlhtZ1Jib2RlckxMYldWTWV2RVQxbzZD?=
+ =?utf-8?B?bVZVTXZBVjZ2SnNPd2RiT3EzM2VzTzRzdnN5R1locUhjN2ZFL2R2d1laRHk3?=
+ =?utf-8?B?VllaM2RmR2VycFgzS3RXaEpSM0dkVDBoZldONW9LTmRQaDZvVGZjbllvUUN0?=
+ =?utf-8?B?bS90Z0dBNTloVjJDZUZwWWV3VWZLTUhyanluT2E2YmxIUkR0R0QxN0ZkbGNn?=
+ =?utf-8?B?ZEdCNHg4ak82NjQyWkptUXBtVm9ObndKdHd4QW0vY3BnRFFGaVI2QStMUnBt?=
+ =?utf-8?B?dy82V3g2TnZxNG9IdFRLZjd0Sy85dXJOOEkraUdoT3B3ZGFOTnpzNHFVVWd6?=
+ =?utf-8?B?QkE0YjhPWjYzN1VrVHFWVStPRGp0ZW4zN3lZUFVzU3ppTFVRSjZXWXl5V1M4?=
+ =?utf-8?B?ZW1ic2V6Ris4ZlRhV2dEbTZLUS85YlBNdVo3Q3FGWWxmMFBSRHA3Uk93T2dM?=
+ =?utf-8?B?cnJFNXlZUHlBanEvSjE2bHF2VkNyck95b2s3c2xyU29lYlhlZ0c2dHpoSGl0?=
+ =?utf-8?B?L24rY1hXaUl5dk1UaWFQZ1NvK1l1QzkrTktjME5GaWt5dkRvWjZUVlZzdGhl?=
+ =?utf-8?B?bTdGUTBENEZjM3F6a0hZakhLWkl1MGZnQWsrRHQwZ3RLMnpibDE4UFU2a0RH?=
+ =?utf-8?B?dlIwMkRIYzhRVXRuK0UyaW10bzBKYm1zZVhSdGE3NjMwaldqcFgyazNaS1Q1?=
+ =?utf-8?B?UUlUdzJoalBEKzVIaDdka2JkUTBKR1U4Q1JMRUo3QUNyaTR3UFMwbytoMWpY?=
+ =?utf-8?B?SXJQaUZrN0hsWGRyaCtxVVFKYnE0RzdCeEVZY2NiMm1xUDFHbzA2ZExkKzR1?=
+ =?utf-8?B?UTA4RHl3czR5YlhKcHJUUi9Yd3JXRWljKzEweGxTM3QwN3Y3WDdNc2hFUTJ3?=
+ =?utf-8?B?WnJuc3liZWdHZDBEZ1c1V0d6aHgwVVkwTjA2M0c4TDlmR2Q1V2ZSZzZKY0px?=
+ =?utf-8?B?UHpDeVc5L0oxcEtSMnRuZlhIZ2hvcUhPWDd4K1B2SEV1bFlzbFIyejcwN0h0?=
+ =?utf-8?B?aHJiSXVHRVJGQkdhOFM1UEI3WU4xc21kQjVtNkNpMUU5ajN3R0hYUU5VQzBR?=
+ =?utf-8?B?d012cENNNzZvMkQ5em02eWYrTkdxS1hyek9INXdvbWlKMWNsbGIvcFdKdUZL?=
+ =?utf-8?B?SnRuWnF1UEQ5U0hRdnQybzFMVXYrRUNKbVR0VFErdW1GRXd3ZjcxMkdPRVJY?=
+ =?utf-8?Q?XFZhc6koaGtS0Ux+soQOMSw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YZJ9H4eM/M7OXVN0@shikoro>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5273.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4bbe0714-2e3e-49b8-8149-08d9af1aa5be
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Nov 2021 07:18:43.3983
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Q9WqIApXYTdH8iI78ueSiJgiFEQVIaRGhIi/sdo7bbHD9T/+E/zx1SZ4Lk4nDI2cjkxft4uOPpUXgZt5kLcnKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5116
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
-
-> (extending SMBus calls to 255 byte) is complicated because we need ABI
-> backwards compatibility.
-
-Is it only the i2c-dev ABI that you are concerned about?
-
-I've tested various edge cases of the I2C dev interface, the only ABI
-change seen is that I2C_RDWR ioctl will now read larger messages with
-I2C_M_RECV_LEN if userspace provides a larger buffer. I think that is a
-reasonable change. The i2ctransfer tool provides a 256 byte buffer
-already.
-
-The attached driver patch creates an artifical I2C bus for testing, with
-fixed I2C endpoints 0x30 (for block reads) and 0x40 (for block writes).
-This was written just to test this case, though could be committed if
-you think it's more useful generally.
-
-The script below runs through the edge cases around 32 bytes, with
-either 32 or 255 blockmax on two separate i2c-testbus adapters. The
-patch applies on top of the 255 byte patch series. The script behaviour
-is the same applied on a clean tree (after fixing up 'V3' code), apart
-from the final test as expected.
-
-Cheers,
-Matt
-
-
-#!/bin/sh
-
-# Tests for edge cases around 32 byte block size handling in i2c dev
-# Matt Johnston <matt@codeconstruct.com.au> 2021
-
-# Two i2c-testbus adapter numbers.
-# Bus 15 has v2-only set on i2c-testbus devicetree node, 32 block max
-V2_BUS=15
-# Bus 14 accepts 255 block max
-V3_BUS=14
-
-EXPECT_FAIL="exit 3"
-FAIL="exit 2"
-
-# Behaviour of 32 byte (V2) and 255 byte (V3) busses is the same for most operations
-for b in $V2_BUS $V3_BUS; do
-
-echo "Testing bus $b"
-
-############
-
-echo "Testing 31 byte read"
-i2cget -y $b 0x30 31 s || $FAIL
-echo "Testing 32 byte read"
-i2cget -y $b 0x30 32 s || $FAIL
-
-echo "Testing 33 byte read, should fail"
-i2cget -y $b 0x30 33 s && $EXPECT_FAIL
-
-echo "Testing 35 byte i2c read, should succeed"
-i2cget -y $b 0x30 35 i || $FAIL
-
-echo "Testing 32 byte i2c set length"
-i2cset -y $b 0x30 32 || $FAIL
-echo "Testing 32 byte i2c read, should succeed"
-i2ctransfer -y $b 'r?@0x30' || $FAIL
-
-############
-
-echo "Testing 31 byte smbus write"
-i2cset -y $b 0x40 0x0f 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 s || $FAIL
-wl=$(i2cget -y $b 0x40)
-echo "check length ($wl) is 33==0x21"
-[ $wl = 0x21 ] || $FAIL
-
-echo "Testing 32 byte smbus write"
-i2cset -y $b 0x40 0x0f 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 s || $FAIL
-wl=$(i2cget -y $b 0x40)
-echo "Check length ($wl) is 34==0x22"
-[ $wl = 0x22 ] || $FAIL
-
-echo "Testing 33 byte smbus write (fails)"
-i2cset -y $b 0x40 0x0f 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 0x77 s && $EXPECT_FAIL
-
-echo "Testing 70 byte i2c write"
-i2ctransfer -y $b w70@0x40 123- || $FAIL
-wl=$(i2cget -y $b 0x40)
-echo "Check length ($wl) is 70==0x46"
-[ $wl = 0x46 ] || $FAIL
-
-echo "Done testing bus $b"
-
-done
-
-########## Behaviour V2 vs V3 differs with tests below
-
-echo "Testing difference of V2 bus $V2_BUS"
-b=$V2_BUS
-
-echo "Testing 44 byte read set-length (succeeds with a warning of further failure)"
-i2cset -y $b 0x30 44 || $FAIL
-# i2c-testbus checks size against I2C_SMBUS_BLOCK_MAX in the v2-only case.
-# This is similar to the I2C_SMBUS_BLOCK_MAX vs I2C_SMBUS_V3_BLOCK_MAX
-# checks changed in i2c-npcm7xx and i2c-aspeed
-echo "Testing 44 byte i2c read, fails"
-i2ctransfer -y $b 'r?@0x30' && $EXPECT_FAIL
-
-echo "Done with difference of V2 bus $V2_BUS"
-
-############
-
-echo "Testing difference of V3 bus $V3_BUS"
-b=$V3_BUS
-
-echo "Testing 44 byte read set-length"
-i2cset -y $b 0x30 44 || $FAIL
-echo "Testing 44 byte i2c read, succeeds. (failed prior to 255 byte patch)"
-i2ctransfer -y $b 'r?@0x30' || $FAIL
-
-echo "Done with difference of V3 bus $V3_BUS"
-
-############
-
-echo
-echo "All tests completed as expected"
-
---
-Subject: [PATCH] i2c testbus: Add an I2C bus for testing
-
-The bus provides fixed endpoints to be used for testing i2c-dev or
-drivers, without needing real hardware. In particular these can test
-block size limitations.
-
-Devicetree property "v2-only" will limit the bus to 32 byte
-SMBus messages, otherwise it supports 255 byte SMBus v3 message.
-
-Examples have i2c-testbus attached as bus number 14:
-
-Address 0x30 provides an endpoint to test block reads
-
-    i2cget -y 14 0x30 31 s
-
-will read 31 bytes as an smbus read. >32 bytes will fail.
-
-    i2cset -y 14 0x30 200
-    i2ctransfer -y 14 r?@0x30
-
-will read 200 bytes as an I2C read.
-
-Address 0x40 is an endpoint to test block writes. The number of bytes
-written can be read back from the endpoint.
-
-i2cset -y 14 0x40 0x32 0x12 0x13 s
-
-i2ctransfer -y 14 w30@0x40 0xff 0x19-
-
-Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
----
- drivers/i2c/busses/Kconfig       |   9 ++
- drivers/i2c/busses/Makefile      |   1 +
- drivers/i2c/busses/i2c-testbus.c | 252 +++++++++++++++++++++++++++++++
- 3 files changed, 262 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-testbus.c
-
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index dce392839017..238d48b42d93 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1418,4 +1418,13 @@ config I2C_VIRTIO
-           This driver can also be built as a module. If so, the module
-           will be called i2c-virtio.
- 
-+config I2C_TESTBUS
-+        tristate "Testing I2C Bus Adapter"
-+        help
-+          Build a driver for testing I2C functionality. The bus provides
-+          various clients at fixed addresses with different functionality.
-+
-+          This driver can also be built as a module. If so, the module
-+          will be called i2c-testbus.
-+
- endmenu
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index d85899fef8c7..e67773637f01 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -149,5 +149,6 @@ obj-$(CONFIG_I2C_XGENE_SLIMPRO) += i2c-xgene-slimpro.o
- obj-$(CONFIG_SCx200_ACB)	+= scx200_acb.o
- obj-$(CONFIG_I2C_FSI)		+= i2c-fsi.o
- obj-$(CONFIG_I2C_VIRTIO)	+= i2c-virtio.o
-+obj-$(CONFIG_I2C_TESTBUS)	+= i2c-testbus.o
- 
- ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
-diff --git a/drivers/i2c/busses/i2c-testbus.c b/drivers/i2c/busses/i2c-testbus.c
-new file mode 100644
-index 000000000000..e04c9e96c9bc
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-testbus.c
-@@ -0,0 +1,252 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Testing I2C adapter.
-+ * Copyright (c) 2021 Code Construct
-+ *
-+ * Presents artificial I2C client endpoints for testing I2C core/dev
-+ * functionality, in particular block transfer sizes.
-+ *
-+ *
-+ * Should be instantiated in devicetree, with an optional v2-only
-+ * property to limit to 32 byte block transfers.
-+
-+	testi2c1 {
-+		compatible = "testing-i2c-bus";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		// optional limit to 32 byte blocks
-+		v2-only;
-+	};
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/completion.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/irq.h>
-+#include <linux/irqchip/chained_irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_irq.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include <linux/slab.h>
-+
-+struct testing_i2c_bus {
-+	struct i2c_adapter		adap;
-+	struct device			*dev;
-+	spinlock_t			lock;
-+
-+	// Don't advertise I2C_FUNC_SMBUS_V3_BLOCK functionality
-+	bool v2_only;
-+
-+	int client_30_len;
-+	u8 client_30_val;
-+
-+	int client_40_len;
-+};
-+
-+static int bus_block_max(struct testing_i2c_bus *bus)
-+{
-+	return bus->v2_only ? I2C_SMBUS_BLOCK_MAX : I2C_SMBUS_V3_BLOCK_MAX;
-+}
-+
-+/*
-+ * 0x30 is a 'read block' i2c endpoint.
-+ * A single byte can be written to the "client", indicating the length
-+ * of subsequent block reads.
-+ */
-+int handle_xfer_30(struct testing_i2c_bus *bus, struct i2c_msg *msg)
-+{
-+	int len, index, i;
-+	int block_max = bus_block_max(bus);
-+
-+	if (msg->flags & I2C_M_RD) {
-+		// Read
-+		if (msg->flags & I2C_M_RECV_LEN) {
-+			// sanity check, should already be limited by Write path below
-+			if (bus->client_30_len > block_max) {
-+				dev_warn(bus->dev,
-+					"%s: addr 0x30 read length %d too large, -EPROTO",
-+					__func__, bus->client_30_len);
-+				return -EPROTO;
-+			}
-+			len = bus->client_30_len;
-+			msg->buf[0] = len;
-+			index = 1;
-+			msg->len = len+1;
-+		} else {
-+			len = msg->len;
-+			index = 0;
-+		}
-+		dev_dbg(bus->dev, "%s read len %d\n", __func__, len);
-+		// Fill the buffer with something arbitrary
-+		for (i = 0; i < len; i++) {
-+			msg->buf[index + i] = bus->client_30_val;
-+			(bus->client_30_val)++;
-+		}
-+	} else {
-+		// Write
-+		if (msg->len != 1) {
-+			dev_warn(bus->dev, "%s: Bad write length to 0x30, must be 1\n",
-+				__func__);
-+			return -EIO;
-+		}
-+		len = msg->buf[0];
-+		if (len > block_max) {
-+			dev_warn(bus->dev,
-+				"%s: addr 0x30 read length was set to %d which is > %d (BLOCK_MAX). smbus reads will fail.",
-+				__func__, len, block_max);
-+		}
-+		dev_dbg(bus->dev, "%s write set len %d\n", __func__, len);
-+		bus->client_30_len = len;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * 0x40 is a 'write block' i2c endpoint.
-+ * After a block write, the block length can be read back.
-+ */
-+int handle_xfer_40(struct testing_i2c_bus *bus, struct i2c_msg *msg)
-+{
-+	int index;
-+
-+	if (msg->flags & I2C_M_RD) {
-+		// Read
-+		index = 0;
-+		if (msg->flags & I2C_M_RECV_LEN) {
-+			// limit to valid API buffer lengths
-+			msg->buf[0] = 1;
-+			index = 1;
-+			msg->len = 2;
-+		} else if (msg->len != 1) {
-+			dev_warn(bus->dev, "%s bad read len to 0x40, must be 1\n",
-+				__func__);
-+			return -EIO;
-+		}
-+		// return the byte count previously written
-+		msg->buf[index] = bus->client_40_len;
-+	} else {
-+		// Write
-+		bus->client_40_len = msg->len;
-+		dev_dbg(bus->dev, "%s wrote %d bytes: %*ph\n",
-+			__func__, bus->client_40_len,
-+			msg->len, msg->buf);
-+	}
-+	return 0;
-+}
-+static int testing_i2c_master_xfer(struct i2c_adapter *adap,
-+				  struct i2c_msg *msgs, int num)
-+{
-+	struct testing_i2c_bus *bus = i2c_get_adapdata(adap);
-+	int i, rc = 0;
-+
-+	for (i = 0; i < num; i++) {
-+		struct i2c_msg *msg = &msgs[i];
-+
-+		switch (msg->addr) {
-+		case 0x30:
-+			rc = handle_xfer_30(bus, msg);
-+			break;
-+		case 0x40:
-+			rc = handle_xfer_40(bus, msg);
-+			break;
-+		default:
-+			// unused address
-+			rc = -ENXIO;
-+		}
-+
-+		if (rc) {
-+			dev_warn(bus->dev, "%s return err %d\n", __func__, rc);
-+			return rc;
-+		}
-+	}
-+
-+	return num;
-+}
-+
-+static u32 testing_i2c_functionality(struct i2c_adapter *adap)
-+{
-+	struct testing_i2c_bus *bus = i2c_get_adapdata(adap);
-+	int func = I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL |
-+		I2C_FUNC_SMBUS_BLOCK_DATA;
-+
-+	if (!bus->v2_only)
-+		func |= I2C_FUNC_SMBUS_V3_BLOCK;
-+	return func;
-+}
-+
-+static const struct i2c_algorithm testing_i2c_algo = {
-+	.master_xfer	= testing_i2c_master_xfer,
-+	.functionality	= testing_i2c_functionality,
-+};
-+
-+static const struct of_device_id testing_i2c_bus_of_table[] = {
-+	{
-+		.compatible = "testing-i2c-bus",
-+	},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, testing_i2c_bus_of_table);
-+
-+static int testing_i2c_probe_bus(struct platform_device *pdev)
-+{
-+	struct testing_i2c_bus *bus;
-+	int ret;
-+
-+	bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
-+	if (!bus)
-+		return -ENOMEM;
-+
-+	/* Initialize the I2C adapter */
-+	spin_lock_init(&bus->lock);
-+	bus->adap.owner = THIS_MODULE;
-+	bus->adap.retries = 0;
-+	bus->adap.algo = &testing_i2c_algo;
-+	bus->adap.dev.parent = &pdev->dev;
-+	bus->adap.dev.of_node = pdev->dev.of_node;
-+	strscpy(bus->adap.name, pdev->name, sizeof(bus->adap.name));
-+	i2c_set_adapdata(&bus->adap, bus);
-+	bus->dev = &pdev->dev;
-+	bus->v2_only = of_property_read_bool(pdev->dev.of_node, "v2-only");
-+
-+	ret = i2c_add_adapter(&bus->adap);
-+	if (ret < 0)
-+		return ret;
-+
-+	platform_set_drvdata(pdev, bus);
-+
-+	dev_info(bus->dev, "testing i2c bus %d registered. max block %d bytes.\n",
-+		 bus->adap.nr, bus_block_max(bus));
-+
-+	return 0;
-+}
-+
-+static int testing_i2c_remove_bus(struct platform_device *pdev)
-+{
-+	struct testing_i2c_bus *bus = platform_get_drvdata(pdev);
-+
-+	i2c_del_adapter(&bus->adap);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver testing_i2c_bus_driver = {
-+	.probe		= testing_i2c_probe_bus,
-+	.remove		= testing_i2c_remove_bus,
-+	.driver		= {
-+		.name		= "testing-i2c-bus",
-+		.of_match_table	= testing_i2c_bus_of_table,
-+	},
-+};
-+module_platform_driver(testing_i2c_bus_driver);
-+
--- 
-2.32.0
-
+PiAyMy4xMS4yMDIxIDEwOjE1LCBBa2hpbCBSINC/0LjRiNC10YI6DQo+ID4gQWRkIHN1cHBvcnQg
+Zm9yIEFDUEkgYmFzZWQgZGV2aWNlIHJlZ2lzdHJhdGlvbiBzbyB0aGF0IHRoZSBkcml2ZXIgY2Fu
+DQo+ID4gYmUgYWxzbyBlbmFibGVkIHRocm91Z2ggQUNQSSB0YWJsZS4NCj4gPg0KPiA+IFNpZ25l
+ZC1vZmYtYnk6IEFraGlsIFIgPGFraGlscmFqZWV2QG52aWRpYS5jb20+DQo+ID4gLS0tDQo+ID4g
+IGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtdGVncmEuYyB8IDUyDQo+ID4gKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKystLS0tLS0tLS0tDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA0MCBpbnNl
+cnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L2kyYy9idXNzZXMvaTJjLXRlZ3JhLmMNCj4gPiBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtdGVn
+cmEuYyBpbmRleCBjODgzMDQ0Li44ZTQ3ODg5IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvaTJj
+L2J1c3Nlcy9pMmMtdGVncmEuYw0KPiA+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtdGVn
+cmEuYw0KPiA+IEBAIC02LDYgKzYsNyBAQA0KPiA+ICAgKiBBdXRob3I6IENvbGluIENyb3NzIDxj
+Y3Jvc3NAYW5kcm9pZC5jb20+DQo+ID4gICAqLw0KPiA+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9h
+Y3BpLmg+DQo+ID4gICNpbmNsdWRlIDxsaW51eC9iaXRmaWVsZC5oPg0KPiA+ICAjaW5jbHVkZSA8
+bGludXgvY2xrLmg+DQo+ID4gICNpbmNsdWRlIDxsaW51eC9kZWxheS5oPg0KPiA+IEBAIC02MDgs
+NiArNjA5LDcgQEAgc3RhdGljIGludCB0ZWdyYV9pMmNfd2FpdF9mb3JfY29uZmlnX2xvYWQoc3Ry
+dWN0DQo+ID4gdGVncmFfaTJjX2RldiAqaTJjX2RldikgIHN0YXRpYyBpbnQgdGVncmFfaTJjX2lu
+aXQoc3RydWN0DQo+ID4gdGVncmFfaTJjX2RldiAqaTJjX2RldikgIHsNCj4gPiAgICAgICB1MzIg
+dmFsLCBjbGtfZGl2aXNvciwgY2xrX211bHRpcGxpZXIsIHRzdV90aGQsIHRsb3csIHRoaWdoLA0K
+PiA+IG5vbl9oc19tb2RlOw0KPiA+ICsgICAgIGFjcGlfaGFuZGxlIGhhbmRsZSA9IEFDUElfSEFO
+RExFKGkyY19kZXYtPmRldik7DQo+ID4gICAgICAgaW50IGVycjsNCj4gPg0KPiA+ICAgICAgIC8q
+DQo+ID4gQEAgLTYxOCw3ICs2MjAsMTEgQEAgc3RhdGljIGludCB0ZWdyYV9pMmNfaW5pdChzdHJ1
+Y3QgdGVncmFfaTJjX2Rldg0KPiAqaTJjX2RldikNCj4gPiAgICAgICAgKiBlbWl0IGEgbm9pc3kg
+d2FybmluZyBvbiBlcnJvciwgd2hpY2ggd29uJ3Qgc3RheSB1bm5vdGljZWQgYW5kDQo+ID4gICAg
+ICAgICogd29uJ3QgaG9zZSBtYWNoaW5lIGVudGlyZWx5Lg0KPiA+ICAgICAgICAqLw0KPiA+IC0g
+ICAgIGVyciA9IHJlc2V0X2NvbnRyb2xfcmVzZXQoaTJjX2Rldi0+cnN0KTsNCj4gPiArICAgICBp
+ZiAoaGFuZGxlICYmIGFjcGlfaGFzX21ldGhvZChoYW5kbGUsICJfUlNUIikpDQo+IA0KPiBXaGlj
+aCBTb0MgdmVyc2lvbiBkb2Vzbid0IGhhdmUgIl9SU1QiIG1ldGhvZD8gSWYgbmVpdGhlciwgdGhl
+biBwbGVhc2UgcmVtb3ZlDQo+IHRoaXMgY2hlY2suDQo+IA0KPiA+ICsgICAgICAgICAgICAgZXJy
+ID0gKGFjcGlfZXZhbHVhdGVfb2JqZWN0KGhhbmRsZSwgIl9SU1QiLCBOVUxMLA0KPiA+ICsgTlVM
+TCkpOw0KPiANCj4gUGxlYXNlIHJlbW92ZSBwYXJlbnMgYXJvdW5kIGFjcGlfZXZhbHVhdGVfb2Jq
+ZWN0KCkuIFdoeSB5b3UgYWRkZWQgdGhlbT8NCj4gDQo+ID4gKyAgICAgZWxzZQ0KPiA+ICsgICAg
+ICAgICAgICAgZXJyID0gcmVzZXRfY29udHJvbF9yZXNldChpMmNfZGV2LT5yc3QpOw0KPiA+ICsN
+Cj4gPiAgICAgICBXQVJOX09OX09OQ0UoZXJyKTsNCj4gPg0KPiA+ICAgICAgIGlmIChpMmNfZGV2
+LT5pc19kdmMpDQo+ID4gQEAgLTE2MjcsMTIgKzE2MzMsMTIgQEAgc3RhdGljIHZvaWQgdGVncmFf
+aTJjX3BhcnNlX2R0KHN0cnVjdA0KPiB0ZWdyYV9pMmNfZGV2ICppMmNfZGV2KQ0KPiA+ICAgICAg
+IGJvb2wgbXVsdGlfbW9kZTsNCj4gPiAgICAgICBpbnQgZXJyOw0KPiA+DQo+ID4gLSAgICAgZXJy
+ID0gb2ZfcHJvcGVydHlfcmVhZF91MzIobnAsICJjbG9jay1mcmVxdWVuY3kiLA0KPiA+IC0gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICZpMmNfZGV2LT5idXNfY2xrX3JhdGUpOw0KPiA+
+ICsgICAgIGVyciA9IGRldmljZV9wcm9wZXJ0eV9yZWFkX3UzMihpMmNfZGV2LT5kZXYsICJjbG9j
+ay1mcmVxdWVuY3kiLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAm
+aTJjX2Rldi0+YnVzX2Nsa19yYXRlKTsNCj4gPiAgICAgICBpZiAoZXJyKQ0KPiA+ICAgICAgICAg
+ICAgICAgaTJjX2Rldi0+YnVzX2Nsa19yYXRlID0gSTJDX01BWF9TVEFOREFSRF9NT0RFX0ZSRVE7
+DQo+ID4NCj4gPiAtICAgICBtdWx0aV9tb2RlID0gb2ZfcHJvcGVydHlfcmVhZF9ib29sKG5wLCAi
+bXVsdGktbWFzdGVyIik7DQo+ID4gKyAgICAgbXVsdGlfbW9kZSA9IGRldmljZV9wcm9wZXJ0eV9y
+ZWFkX2Jvb2woaTJjX2Rldi0+ZGV2LA0KPiA+ICsgIm11bHRpLW1hc3RlciIpOw0KPiA+ICAgICAg
+IGkyY19kZXYtPm11bHRpbWFzdGVyX21vZGUgPSBtdWx0aV9tb2RlOw0KPiA+DQo+ID4gICAgICAg
+aWYgKG9mX2RldmljZV9pc19jb21wYXRpYmxlKG5wLCAibnZpZGlhLHRlZ3JhMjAtaTJjLWR2YyIp
+KSBAQA0KPiA+IC0xNjQyLDEwICsxNjQ4LDI1IEBAIHN0YXRpYyB2b2lkIHRlZ3JhX2kyY19wYXJz
+ZV9kdChzdHJ1Y3QgdGVncmFfaTJjX2Rldg0KPiAqaTJjX2RldikNCj4gPiAgICAgICAgICAgICAg
+IGkyY19kZXYtPmlzX3ZpID0gdHJ1ZTsNCj4gPiAgfQ0KPiBIb3cgYXJlIHlvdSBnb2luZyB0byBk
+aWZmZXJlbnRpYXRlIHRoZSBWSSBJMkMgZnJvbSBhIG5vbi1WST8gVGhpcyBkb2Vzbid0IGxvb2sN
+Cj4gcmlnaHQuDQpUaGlzIHBhdGNoIGFkZHMgdGhlIEFDUEkgc3VwcG9ydCB0byBvbmx5IG5vbi1W
+SSBJMkMuIFRoZSBkZXZpY2VfaWRzIGluIG1hdGNoIHRhYmxlDQphcmUgYWRkZWQgYWNjb3JkaW5n
+bHkuIEkgc3VwcG9zZSwgb2ZfZGV2aWNlX2lzX2NvbXBhdGlibGUgYWx3YXlzIHJldHVybnMgZmFs
+c2UgYXMgDQp0aGVyZSBpcyBubyBkZXZpY2UgdHJlZS4gDQpBZ3JlZSB3aXRoIHRoZSBvdGhlciBj
+b21tZW50cy4NCg0K
