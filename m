@@ -2,38 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5891A45DEEA
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Nov 2021 17:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 506AB45DEF2
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Nov 2021 17:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242503AbhKYQ7q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Nov 2021 11:59:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41630 "EHLO
+        id S1356717AbhKYQ7w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Nov 2021 11:59:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38501 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344276AbhKYQ5p (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Nov 2021 11:57:45 -0500
+        by vger.kernel.org with ESMTP id S1344998AbhKYQ5v (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Nov 2021 11:57:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637859273;
+        s=mimecast20190719; t=1637859279;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=k9bEnJSLw0b1m9mNcKIvp37nfxiJYGtI8n2PBiX7Wj4=;
-        b=Tuok1w0cqQopoK7Bvs5yh4alxZRtGacp0YU6NxyGepDy8UfWX97F9nTxQJQcudUjkjzU7t
-        zNKGnXe1MZndw24GyZS3xkETQ3sgkmtJx/jxA1aBRlVg87VkI8l2b88PyrgZEHRQMrsCUe
-        2fsJlYaJ3VbNom0PUDcRS8DBA7APKMM=
+        bh=xJXHj7P3qkN59efmGkwSwb4GZHHfiOukib4ofzUjwpw=;
+        b=R6Nu1H/BnBrYmxJMquvRQ0vJ5C2cR+YG7WS96DwOrRi/iyFnpUpoA6qMDfK+zw+OGBc215
+        WVY/ZeATetRLQTtQ9dKSFWMWbhQhGGQGL64+SAC6Uavr+7haPNSIE1Vp952Z9D2oFCS2b2
+        Twc7q3ZclaIkoqxfUOuRicktBUAfb34=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-np-AMbiWMCmsN6HlSWpBmA-1; Thu, 25 Nov 2021 11:54:30 -0500
-X-MC-Unique: np-AMbiWMCmsN6HlSWpBmA-1
+ us-mta-485-yamrlpRAPJy6ts7aAIweNg-1; Thu, 25 Nov 2021 11:54:36 -0500
+X-MC-Unique: yamrlpRAPJy6ts7aAIweNg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4830083DD20;
-        Thu, 25 Nov 2021 16:54:27 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E1AE51006AA1;
+        Thu, 25 Nov 2021 16:54:33 +0000 (UTC)
 Received: from x1.localdomain (unknown [10.39.195.117])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2289560657;
-        Thu, 25 Nov 2021 16:54:22 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 91DE157CA5;
+        Thu, 25 Nov 2021 16:54:27 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
@@ -52,12 +52,11 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-clk@vger.kernel.org,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v6 02/15] i2c: acpi: Use acpi_dev_ready_for_enumeration() helper
-Date:   Thu, 25 Nov 2021 17:53:59 +0100
-Message-Id: <20211125165412.535063-3-hdegoede@redhat.com>
+Subject: [PATCH v6 03/15] i2c: acpi: Add i2c_acpi_new_device_by_fwnode() function
+Date:   Thu, 25 Nov 2021 17:54:00 +0100
+Message-Id: <20211125165412.535063-4-hdegoede@redhat.com>
 In-Reply-To: <20211125165412.535063-1-hdegoede@redhat.com>
 References: <20211125165412.535063-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -67,52 +66,113 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The clk and regulator frameworks expect clk/regulator consumer-devices
-to have info about the consumed clks/regulators described in the device's
-fw_node.
+Change i2c_acpi_new_device() into i2c_acpi_new_device_by_fwnode() and
+add a static inline wrapper providing the old i2c_acpi_new_device()
+behavior.
 
-To work around cases where this info is not present in the firmware tables,
-which is often the case on x86/ACPI devices, both frameworks allow the
-provider-driver to attach info about consumers to the clks/regulators
-when registering these.
+This is necessary because in some cases we may only have access
+to the fwnode / acpi_device and not to the matching physical-node
+struct device *.
 
-This causes problems with the probe ordering wrt drivers for consumers
-of these clks/regulators. Since the lookups are only registered when the
-provider-driver binds, trying to get these clks/regulators before then
-results in a -ENOENT error for clks and a dummy regulator for regulators.
-
-To ensure the correct probe-ordering the ACPI core has code to defer the
-enumeration of consumers affected by this until the providers are ready.
-
-Call the new acpi_dev_ready_for_enumeration() helper to avoid
-enumerating / instantiating i2c-clients too early.
-
-Acked-by: Wolfram Sang <wsa@kernel.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/i2c/i2c-core-acpi.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Changes in v6:
+- New patch in v6 of this patch series
+---
+ drivers/i2c/i2c-core-acpi.c | 18 ++++++++++++------
+ include/linux/i2c.h         | 17 +++++++++++++----
+ 2 files changed, 25 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 92c1cc07ed46..04338cbd08a9 100644
+index 04338cbd08a9..1db3cc5fc47f 100644
 --- a/drivers/i2c/i2c-core-acpi.c
 +++ b/drivers/i2c/i2c-core-acpi.c
-@@ -144,9 +144,12 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
- 	struct list_head resource_list;
+@@ -476,8 +476,9 @@ struct notifier_block i2c_acpi_notifier = {
+ };
+ 
+ /**
+- * i2c_acpi_new_device - Create i2c-client for the Nth I2cSerialBus resource
+- * @dev:     Device owning the ACPI resources to get the client from
++ * i2c_acpi_new_device_by_fwnode - Create i2c-client for the Nth I2cSerialBus
++ * resource
++ * @fwnode:  fwnode with the ACPI resources to get the client from
+  * @index:   Index of ACPI resource to get
+  * @info:    describes the I2C device; note this is modified (addr gets set)
+  * Context: can sleep
+@@ -493,15 +494,20 @@ struct notifier_block i2c_acpi_notifier = {
+  * Returns a pointer to the new i2c-client, or error pointer in case of failure.
+  * Specifically, -EPROBE_DEFER is returned if the adapter is not found.
+  */
+-struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
+-				       struct i2c_board_info *info)
++struct i2c_client *i2c_acpi_new_device_by_fwnode(struct fwnode_handle *fwnode,
++						 int index,
++						 struct i2c_board_info *info)
+ {
+-	struct acpi_device *adev = ACPI_COMPANION(dev);
+ 	struct i2c_acpi_lookup lookup;
+ 	struct i2c_adapter *adapter;
++	struct acpi_device *adev;
+ 	LIST_HEAD(resource_list);
  	int ret;
  
--	if (acpi_bus_get_status(adev) || !adev->status.present)
-+	if (acpi_bus_get_status(adev))
- 		return -EINVAL;
- 
-+	if (!acpi_dev_ready_for_enumeration(adev))
-+		return -ENODEV;
++	adev = to_acpi_device_node(fwnode);
++	if (!adev)
++		return ERR_PTR(-ENODEV);
 +
- 	if (acpi_match_device_ids(adev, i2c_acpi_ignored_device_ids) == 0)
- 		return -ENODEV;
+ 	memset(&lookup, 0, sizeof(lookup));
+ 	lookup.info = info;
+ 	lookup.device_handle = acpi_device_handle(adev);
+@@ -523,7 +529,7 @@ struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
  
+ 	return i2c_new_client_device(adapter, info);
+ }
+-EXPORT_SYMBOL_GPL(i2c_acpi_new_device);
++EXPORT_SYMBOL_GPL(i2c_acpi_new_device_by_fwnode);
+ 
+ bool i2c_acpi_waive_d0_probe(struct device *dev)
+ {
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 16119ac1aa97..7d4f52ceb7b5 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -1025,8 +1025,9 @@ bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
+ 			       struct acpi_resource_i2c_serialbus **i2c);
+ int i2c_acpi_client_count(struct acpi_device *adev);
+ u32 i2c_acpi_find_bus_speed(struct device *dev);
+-struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
+-				       struct i2c_board_info *info);
++struct i2c_client *i2c_acpi_new_device_by_fwnode(struct fwnode_handle *fwnode,
++						 int index,
++						 struct i2c_board_info *info);
+ struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle);
+ bool i2c_acpi_waive_d0_probe(struct device *dev);
+ #else
+@@ -1043,8 +1044,9 @@ static inline u32 i2c_acpi_find_bus_speed(struct device *dev)
+ {
+ 	return 0;
+ }
+-static inline struct i2c_client *i2c_acpi_new_device(struct device *dev,
+-					int index, struct i2c_board_info *info)
++static inline struct i2c_client *i2c_acpi_new_device_by_fwnode(
++					struct fwnode_handle *fwnode, int index,
++					struct i2c_board_info *info)
+ {
+ 	return ERR_PTR(-ENODEV);
+ }
+@@ -1058,4 +1060,11 @@ static inline bool i2c_acpi_waive_d0_probe(struct device *dev)
+ }
+ #endif /* CONFIG_ACPI */
+ 
++static inline struct i2c_client *i2c_acpi_new_device(struct device *dev,
++						     int index,
++						     struct i2c_board_info *info)
++{
++	return i2c_acpi_new_device_by_fwnode(dev_fwnode(dev), index, info);
++}
++
+ #endif /* _LINUX_I2C_H */
 -- 
 2.33.1
 
