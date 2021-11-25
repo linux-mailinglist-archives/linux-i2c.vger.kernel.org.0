@@ -2,89 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5853845D39D
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Nov 2021 04:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1257745D4C6
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Nov 2021 07:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236074AbhKYDbl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 Nov 2021 22:31:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238170AbhKYD3k (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 Nov 2021 22:29:40 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDE3C061395
-        for <linux-i2c@vger.kernel.org>; Wed, 24 Nov 2021 19:21:23 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id o6-20020a17090a0a0600b001a64b9a11aeso4511482pjo.3
-        for <linux-i2c@vger.kernel.org>; Wed, 24 Nov 2021 19:21:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kl9QFdxeQT+ZdNe5xXwILBYCvxJMvl+e0+hxIPhlJP4=;
-        b=pY9LGPHk4GsETow/BIfhAVy1fXTYs03/BfFNQaCwQ1SISuth9VjsALMfDtZq9D9j9S
-         57q+uDA5rg1jEJjrkHxKmjQNYOMln5BNr7w3l7J7ZALuGNHEOPgK2YpIFE2/DWh7ZS7I
-         RXy+NTExlJBl8cwxLmBLHwH422jONNq4CUGBQm/TaQbto5AIH8l0a6kOrB6oE4ldrFFB
-         c+UcJtGRmAhOmJJ+UYvchNkXNSgsazkwJFMZN9WTdQrJQSAlELG6x240gIc7Oz17nn6X
-         S4PjitXePvbskGDuaqeTzEtXK3djDgrM9IND2Rc+E5/kGEjuEK/4WRISisYpuOyAmBin
-         cEAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kl9QFdxeQT+ZdNe5xXwILBYCvxJMvl+e0+hxIPhlJP4=;
-        b=dHsP5l9hCjBkBK6PybP801TVwFFQfRuVdUAK0DUQ5gJCfYFpQVoxTQbkcX4TZ+Hfkn
-         6/5FKEtNGJEyKtDiFFl3Lgm8u7TsLEyOJB3IhUUMaiabICqCIA5Hj9NYRmuElJWTfnNo
-         1Yqiwsi5jPoa/ZZyD+1T239cZJILKyGqC32EQMrlsAjPySiHOC5FkigO2wl5LnH8HE8f
-         vOPsS2MqXUqgXl++6Ap/kRvnizHUegyuC5PUpbpjzeLCpc49UuS9W6Bvip5lWhek9ZD2
-         HUqOrITlAVycvHaKdkhcA9ztmSYiUx9kU+fiRh8yDStYW2tvO0RTMNfbqEZrXO9Qh3je
-         tOrQ==
-X-Gm-Message-State: AOAM5313GPuoyN9WTbQ/Ri7ocCI6Gwj2Y5rZxoNGrkMosecQonN1ETFx
-        EksC9aAM6LUyKRV+srXu0AvjGA==
-X-Google-Smtp-Source: ABdhPJxO6BHDZemocrThhO4FCIcZqEhKUZzepBue7p+e37VnZ16tNLPHS1GtahtspFNrmOnik+J2xA==
-X-Received: by 2002:a17:90a:df88:: with SMTP id p8mr3090793pjv.32.1637810482599;
-        Wed, 24 Nov 2021 19:21:22 -0800 (PST)
-Received: from localhost ([122.181.57.99])
-        by smtp.gmail.com with ESMTPSA id h13sm824811pgg.16.2021.11.24.19.21.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 19:21:21 -0800 (PST)
-Date:   Thu, 25 Nov 2021 08:51:19 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>, wsa@kernel.org,
+        id S1347237AbhKYG3g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 Nov 2021 01:29:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43402 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349176AbhKYG1g (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 25 Nov 2021 01:27:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9083A6101D;
+        Thu, 25 Nov 2021 06:24:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637821465;
+        bh=OUHkcVCFse0J7BEGfxwpXVHQjULRa183gmW3DhVOVzg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qn3yd5IQcUBLumra6MbcJFAIPOf8OqDjI7qIqwFxsid5jZBOcCxk5F+IQj3B6Ip7z
+         QqhFHXr9jWHgKknJEuwegAgx44CXOCnQNzFCSQTcPHE7SV2P86AfD8Uqq92MmrNLh9
+         jqDl+7itHkONUcDsPqxhfgiFA6muvz7Ll91LcWXrb7hDbaXgPPRLMxgKG10Hb9Gdt+
+         MxevFkBBZa5+AvMtp9SiwttBJdng7t+x+tokhxC7IZLhmuU6tJTF/v7T//VZRlViYM
+         ihLI372pzxcZh6asaA0aHE45mhBjBpdyktuCn3iAnmnvz6uZIlGkKVjjwVg7K7AmdK
+         MaqvU0RJQWgWw==
+Date:   Thu, 25 Nov 2021 07:24:18 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
         jie.deng@intel.com, conghui.chen@intel.com,
         virtualization@lists.linux-foundation.org,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel@axis.com
 Subject: Re: [PATCH v2 0/2] virtio-i2c: Fix buffer handling
-Message-ID: <20211125032119.vklsh4yymwnalh5b@vireshk-i7>
+Message-ID: <YZ8rxHDPo68AT4HN@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        jie.deng@intel.com, conghui.chen@intel.com,
+        virtualization@lists.linux-foundation.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
 References: <20211111160412.11980-1-vincent.whitchurch@axis.com>
  <20211124185546-mutt-send-email-mst@kernel.org>
+ <20211125032119.vklsh4yymwnalh5b@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="R0vFRG15XN++6TWT"
 Content-Disposition: inline
-In-Reply-To: <20211124185546-mutt-send-email-mst@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20211125032119.vklsh4yymwnalh5b@vireshk-i7>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 24-11-21, 18:55, Michael S. Tsirkin wrote:
-> On Thu, Nov 11, 2021 at 05:04:10PM +0100, Vincent Whitchurch wrote:
-> > This fixes a couple of bugs in the buffer handling in virtio-i2c which can
-> > result in incorrect data on the I2C bus or memory corruption in the guest.
-> > 
-> > I tested this on UML (virtio-uml needs a bug fix too, I will sent that out
-> > later) with the device implementation in rust-vmm/vhost-device.
-> > 
-> > Changes in v2:
-> > - Added Acked-by and Fixes tags
-> 
-> 
-> What are the plans for this patchset?
 
-Wolfram applied the first patch, but not the second.
+--R0vFRG15XN++6TWT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Wolfram, you can apply that one as well, it looks okay.
 
--- 
-viresh
+> Wolfram, you can apply that one as well, it looks okay.
+
+Is it? I read that the code only waits for the last request while
+Michael suggested to wait for all of them? And he did not ack patch 2
+while he acked patch 1. Did I misunderstand?
+
+
+--R0vFRG15XN++6TWT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGfLBIACgkQFA3kzBSg
+KbZ4PRAAg742+Rz0NTcNl5M51/MewIuKQoW0EhUsi6vJhGVULs2sAwCC8BrR19nn
+H13DA9pH3GYssOkLmb5XZqVQDwmi1znUniEnwfLnKapLXfy9hV+AW/lf4TemvHN3
+AVlzt/85QSxLsMHRCGin0tXw4v5+QOxSU0T6ZU2F78o79Ogh0PL0rGgevF+cGmRs
+BwIf4aNNUIDKtei8OIQKT6HQmBjWitdcWXEeRWZg6BdJCYlJsmxr9CfXHM1VMwm+
+hyGlHkngr60gtf9D5ZRaM6vSccSixzb66HdEqJP4GzCF9BykJMEXp6AXdN3xIVd9
+Zg7Y7X0EMvxVpc02185sfwlIAQew9hgNTsmMi3Lpj7rcIT3J2mkJ8rJG7zA9XUhy
+eeQJUUBd1PFRQhev8JbdB4xAAxWFiMJhrKGHXaJez8SX/BDRPcBC7Iu85sZSQfc9
+tyQtNW+gG7NxTScIYVU0JNDDCp/ehMZ6QxDnoewRwOrgPHWPZ5tBDBScXIueZcVj
+SFtBsJmgITMDbTjDBwM/IeI/TWhKlUv7x+plHw1+LblSiEvkHLjNiToSxBfyx7vD
+ZrWxEeZlA3VkDGe1IqmHsA6VUVSwY+d4lRF+wW8pIWfy0nmmTRA4h23LsvCXjQzT
+LNSqLdQhTv4Vgr1OYVpEMC13V88/LifcMth8ZLEHxt0FuoDNaVs=
+=2AXP
+-----END PGP SIGNATURE-----
+
+--R0vFRG15XN++6TWT--
