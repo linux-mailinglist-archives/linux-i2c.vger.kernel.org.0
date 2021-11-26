@@ -2,86 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD5645F10A
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Nov 2021 16:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A75945F51A
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Nov 2021 20:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378263AbhKZPvN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 Nov 2021 10:51:13 -0500
-Received: from mga07.intel.com ([134.134.136.100]:56837 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237966AbhKZPtN (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 26 Nov 2021 10:49:13 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="299083269"
-X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="299083269"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 07:43:32 -0800
-X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="458226709"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 07:43:29 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mqdNm-00ApEa-9w;
-        Fri, 26 Nov 2021 17:43:26 +0200
-Date:   Fri, 26 Nov 2021 17:43:26 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Peter Tyser <ptyser@xes-inc.com>,
-        hdegoede@redhat.com, henning.schild@siemens.com
-Subject: Re: [rfc, PATCH v1 0/7] PCI: introduce p2sb helper
-Message-ID: <YaEAnri0yM3CgnbQ@smile.fi.intel.com>
-References: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210308122020.57071-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S235425AbhKZTVz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 Nov 2021 14:21:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233255AbhKZTTz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 Nov 2021 14:19:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C318C061A24;
+        Fri, 26 Nov 2021 10:41:31 -0800 (PST)
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAB6C62338;
+        Fri, 26 Nov 2021 18:35:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 2423C6008E;
+        Fri, 26 Nov 2021 18:35:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637951715;
+        bh=90Pew1VjM3fxxyuTXSlJJwIU0g0YhylRQJIYJZBsgBs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=sjOz+8EG8jj4XHNSRpqCSf6BxwEQP+5Ubhhp/IPQ7pjSeJYAxprit1T68vltizQq3
+         GXg+bYrw2XL+D8X62jrlTNxcBjv971ReKYyEd6x5u9ZFDk5VpqM7M+xy800gCauJrm
+         MyVQR+IeLfNhsZIujWnhnCxNf4uXrOSHNQtugchy+VdqdBLZGj6r1rpppg8yWhgxe6
+         1+yaFld0SoB2NErobHVe2HBy0OY83KxSWle7YH4kb3DZ79sKEZuV7gNhV4wgJKk1nQ
+         Lo3VbC/c/WMA0PqVaZtr6NSBHpZ9yM1MhZe6xhhasxHxY++hADu8o6TM+LMil2IHRE
+         6i51xjDZ6HUsA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 1DB1D60A3E;
+        Fri, 26 Nov 2021 18:35:15 +0000 (UTC)
+Subject: Re: [PULL REQUEST] i2c for v5.16
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YaC5FYorV4yyQnaE@kunai>
+References: <YaC5FYorV4yyQnaE@kunai>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YaC5FYorV4yyQnaE@kunai>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+X-PR-Tracked-Commit-Id: bed68f4f4db429a0bf544887e64dc710e5a690ea
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 80d75202f033f51581020a5ac06699d4dff89e73
+Message-Id: <163795171511.22939.11310940243320684912.pr-tracker-bot@kernel.org>
+Date:   Fri, 26 Nov 2021 18:35:15 +0000
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Mar 08, 2021 at 02:20:13PM +0200, Andy Shevchenko wrote:
-> There are a few users and even at least one more is coming
-> that would like to utilize p2sb mechanisms like hide/unhide
-> a device from PCI configuration space.
-> 
-> Here is the series to deduplicate existing users and provide
-> a generic way for new comers.
-> 
-> It also includes a patch to enable GPIO controllers on Apollo Lake
-> when it's used with ABL bootloader w/o ACPI support.
-> 
-> Please, comment on the approach and individual patches.
-> 
-> (Since it's cross subsystem, the PCI seems like a main one and
->  I think it makes sense to route it thru it with immutable tag
->  or branch provided for the others).
+The pull request you sent on Fri, 26 Nov 2021 11:38:13 +0100:
 
-TWIMC, after refreshing (a bit) my memories on this thread, I think the roadmap
-may look like the following:
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
 
-1) exporting necessary APIs from PCI core to avoid code dup;
-2) moving pci-p2sb.c out from PCI to PDx86 where it seems naturally fit;
-3) addressing comments on patches that are not going to change their location /
-functionality;
-4) adding tags, etc.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/80d75202f033f51581020a5ac06699d4dff89e73
 
-Any objections?
-
-Meanwhile I will try to setup a machine with ACPI tables to test the code if
-they have not been provided.
+Thank you!
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
