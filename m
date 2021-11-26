@@ -2,100 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9745B45E3E0
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Nov 2021 02:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7CD45E873
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Nov 2021 08:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238359AbhKZBH5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 25 Nov 2021 20:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243282AbhKZBF4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 Nov 2021 20:05:56 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB676C061574;
-        Thu, 25 Nov 2021 17:02:43 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id p8so2039812ljo.5;
-        Thu, 25 Nov 2021 17:02:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=d5eybHUeaAVMy2um3rYiSgMu1qvMcc0ni9BDBOieeBo=;
-        b=L+idWAu/GRgivG969p6gm/LH2qCEWB+i5m44beTgr6Uwa6hzdF2k4qBXhNZeLU6USE
-         AChTYSdb57Vipf33dqjoqCKu1B+j/3EdyNxE5ANPzoyzy+oQH7DItcOOPiRN+nBk6eln
-         8vcYABfJvDkeBwWC3fOVs5RcaHdQB0We53YH82o2z1iLmpNx7s50b0+/P9aMv7k1uYBq
-         g+l7gx5pk1mJEwMf+kGfYz4+xFF4dHaybX0F6HJASGO3/nx4QKR0vbOkxR5UTV1Eq56L
-         5L+D/+ft8wytUEy1smK5cMwSCidZTxDJ0slNHrk6jafsCTGdF1tbyrPZeqewO9cssL2x
-         X6lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=d5eybHUeaAVMy2um3rYiSgMu1qvMcc0ni9BDBOieeBo=;
-        b=QG6HSVvds8BapiYBrlDwJ39sLlNRbxtKE6Pd9BOBBgCHv1ZfWZe9Si4ytL90ML5w6j
-         OKuPVM8gyN3luS9deN9rKZBraTUT93XlDy4EvnyFyQEk8fg5ER/I6ZT5oyMJq6MrDaEO
-         spgWsVcF+X4XLnYabzu+6XKlghuT8ncCcZVhTtikv7Mmynuj3B6mJcnTIqves9eIQ9Qc
-         uOmKcelQy49rKTwLhnJgeFmZ1s9m6Lf04eXCUX5a+V3PaRhYEoNWfDSLkXIG8nhTAem3
-         sxDJ7J9ceyXvCC+jMaFK/1OhLmuR19gRmO4kNZTbtsMUKq8MGhMAl6JMAM2KvqSaWKDf
-         14qA==
-X-Gm-Message-State: AOAM532NVR4IkeAkJM2aFyZ83VAvWWfwdYjLC2Zz4IknLoSqCbrWibne
-        K5pdJipheinrpj/WjI6UK98=
-X-Google-Smtp-Source: ABdhPJwDlHo4lbJIQNIvxCxi52QGGUiKS4o/tEWhT6OWWbm2bP2UQs/NTgNq7wKFmXqO8NiR+HnQ9Q==
-X-Received: by 2002:a05:651c:238:: with SMTP id z24mr30440552ljn.84.1637888562022;
-        Thu, 25 Nov 2021 17:02:42 -0800 (PST)
-Received: from [192.168.2.145] (94-29-48-99.dynamic.spd-mgts.ru. [94.29.48.99])
-        by smtp.googlemail.com with ESMTPSA id f6sm363021ljm.48.2021.11.25.17.02.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Nov 2021 17:02:41 -0800 (PST)
-Subject: Re: [PATCH v4] i2c: tegra: Add the ACPI support
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     andy.shevchenko@gmail.com, christian.koenig@amd.com,
-        dri-devel@lists.freedesktop.org, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linaro-mm-sig@lists.linaro.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, sumit.semwal@linaro.org,
-        thierry.reding@gmail.com
-References: <1637859224-5179-1-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <08781b22-2d96-6605-06ea-6911a4837474@gmail.com>
-Date:   Fri, 26 Nov 2021 04:02:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1359188AbhKZH1D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 Nov 2021 02:27:03 -0500
+Received: from mga05.intel.com ([192.55.52.43]:41337 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348129AbhKZHZD (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 26 Nov 2021 02:25:03 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="321855712"
+X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
+   d="scan'208";a="321855712"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 23:17:03 -0800
+X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
+   d="scan'208";a="458094770"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 23:16:56 -0800
+Received: by lahna (sSMTP sendmail emulation); Fri, 26 Nov 2021 09:16:53 +0200
+Date:   Fri, 26 Nov 2021 09:16:53 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
+        linux-clk@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v6 02/15] i2c: acpi: Use acpi_dev_ready_for_enumeration()
+ helper
+Message-ID: <YaCJ5UOHIwn5VD9B@lahna>
+References: <20211125165412.535063-1-hdegoede@redhat.com>
+ <20211125165412.535063-3-hdegoede@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <1637859224-5179-1-git-send-email-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211125165412.535063-3-hdegoede@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-25.11.2021 19:53, Akhil R пишет:
-> Add support for the ACPI based device registration so that the driver
-> can be also enabled through ACPI table.
+On Thu, Nov 25, 2021 at 05:53:59PM +0100, Hans de Goede wrote:
+> The clk and regulator frameworks expect clk/regulator consumer-devices
+> to have info about the consumed clks/regulators described in the device's
+> fw_node.
 > 
-> This does not include the ACPI support for Tegra VI and DVC I2C.
+> To work around cases where this info is not present in the firmware tables,
+> which is often the case on x86/ACPI devices, both frameworks allow the
+> provider-driver to attach info about consumers to the clks/regulators
+> when registering these.
 > 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 52 ++++++++++++++++++++++++++++++++----------
->  1 file changed, 40 insertions(+), 12 deletions(-)
+> This causes problems with the probe ordering wrt drivers for consumers
+> of these clks/regulators. Since the lookups are only registered when the
+> provider-driver binds, trying to get these clks/regulators before then
+> results in a -ENOENT error for clks and a dummy regulator for regulators.
 > 
-> v4 changes:
->   * changed has_acpi_companion to ACPI_HANDLE for consistency across 
->     all functions
-> v3 - https://lkml.org/lkml/2021/11/25/173
-> v2 - https://lkml.org/lkml/2021/11/23/82
-> v1 - https://lkml.org/lkml/2021/11/19/393
+> To ensure the correct probe-ordering the ACPI core has code to defer the
+> enumeration of consumers affected by this until the providers are ready.
+> 
+> Call the new acpi_dev_ready_for_enumeration() helper to avoid
+> enumerating / instantiating i2c-clients too early.
+> 
+> Acked-by: Wolfram Sang <wsa@kernel.org>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Andy suggested to make v5 with extra patch that will make use of the
-generic i2c_timings, but it should be a separate change.
-
-This patch is good to me. Please provide the full changelog for each
-version next time, instead of the links. Thanks!
-
-If you'll make v5, then feel free to add my r-b:
-
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
