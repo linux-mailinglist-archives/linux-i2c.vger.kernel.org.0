@@ -2,228 +2,405 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD99245EC6E
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Nov 2021 12:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EFA45EC91
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Nov 2021 12:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239241AbhKZLYT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 Nov 2021 06:24:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27987 "EHLO
+        id S234180AbhKZL1x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 Nov 2021 06:27:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23650 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239060AbhKZLWR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 Nov 2021 06:22:17 -0500
+        by vger.kernel.org with ESMTP id S238963AbhKZLZw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 Nov 2021 06:25:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637925544;
+        s=mimecast20190719; t=1637925759;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DEigbysMKZscWuG/nrx9AX2D3SqvZ+Fu4CJlrP/uHHg=;
-        b=UPGybewkWLMZzE0qa3LaZdn1H9l+Fh9gSkQRHPyjXvyNlz7tdiVR1WW1N0ztFHsXRocxmk
-        IJfWWuSbcyedhnwqwqz6uqrIpntWIgzSJ3wzLtx6uLFvTRhU8wIGtDyqao1jq19hmd/ABL
-        Mah7mSbpPKr8apERvgGVteYBc9kv+VY=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5wQ71Ekph3DRe2BFAcFX0uixh6OWYjGAxQ/auMSN/pI=;
+        b=cqT1eScQyodS7BZeO/YeyDL9OYCAZa3Zdu4c8KUsGdIpASCo5REpRYiCR26Ynj53B8wd/P
+        I34nqsF9zKJ1kt8vnOPIaASa9Ez7EsEw48ZxLb04zd7fLMx55ABPdpiRGG6dhlsSUBdLam
+        w0jiWjJv3ATxe47qN25D9onICOzziZc=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-232-gdg3R8YTM6qXQ5vYxPcJlw-1; Fri, 26 Nov 2021 06:19:03 -0500
-X-MC-Unique: gdg3R8YTM6qXQ5vYxPcJlw-1
-Received: by mail-ed1-f70.google.com with SMTP id v10-20020aa7d9ca000000b003e7bed57968so7727209eds.23
-        for <linux-i2c@vger.kernel.org>; Fri, 26 Nov 2021 03:19:03 -0800 (PST)
+ us-mta-304-Iqe-AzfvO3-j-XNcK8_aqw-1; Fri, 26 Nov 2021 06:22:38 -0500
+X-MC-Unique: Iqe-AzfvO3-j-XNcK8_aqw-1
+Received: by mail-ed1-f69.google.com with SMTP id y9-20020aa7c249000000b003e7bf7a1579so7774919edo.5
+        for <linux-i2c@vger.kernel.org>; Fri, 26 Nov 2021 03:22:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=DEigbysMKZscWuG/nrx9AX2D3SqvZ+Fu4CJlrP/uHHg=;
-        b=MAuMg0D2T1IUSSaGPv1KZhQU20elQDoYxtuclq5n51i3m+EeV+zwuM1lcRgtoYlODk
-         4gm2JO7y9Zf0tPYks4zXRsB9A7+7OKfF/7Ndo/7i58y64KOBHxdFVyv2stc2jIbiWL1D
-         kfkPULeF72/lNqAJ93CzvycFG6n2+DfRTwKiwjdiUr2C+NsNP2ybwXENOOL2Hdm184LR
-         0BUMMPUkzJLDJc8abMAytNDeesFIt9ckbHk4MOgDKzhi2LyoclalzedRkCNmOC3WA9vN
-         p5WkpOJwqt1rYVYz5aaeDo0/c+zWhG9/8r3A1klOgNIzxXpny20sQOdSYXHr90WOUW5X
-         RBig==
-X-Gm-Message-State: AOAM533GYkORQ6v8Zngha/rKQx7zr2FzTtSM0qI7e37GXLx9u/kzYFb4
-        7xNRk0AldRlFS6VxVOPt+HiNTdyq4fpKZC1ABI7obS1jVxD4ZMAXarDLLi2gZEYm61uoj1FcZur
-        g0kwgdW/Mtwj46a4HdioG
-X-Received: by 2002:a05:6402:185:: with SMTP id r5mr44737577edv.259.1637925542415;
-        Fri, 26 Nov 2021 03:19:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwahPgaHB3vNloRByTEj2b+ZXi68UUpneC/4sfhsoKP7oJ8BOIxq7zoR/6CW0ILA40KMefQgw==
-X-Received: by 2002:a05:6402:185:: with SMTP id r5mr44737558edv.259.1637925542223;
-        Fri, 26 Nov 2021 03:19:02 -0800 (PST)
+        bh=5wQ71Ekph3DRe2BFAcFX0uixh6OWYjGAxQ/auMSN/pI=;
+        b=q52aloHdJBFANlb/M4a2mnlInz8EyuoT3jJnwPZ1msvQb3VmZWlKKPTX32WG3QNXk0
+         cUCY78FDUuQ2D2iFlUWZW6DbeZkzqx39fJJ4F0ihE9+W/ib2ozcn3934D2gDluJv4k9e
+         eDF1ZGtNKFcSdnesIhwRXl604dliTBgxQH2WEMwNpuI8Jvq0jytJ30RLsskG4hW9USR9
+         zKnCZFX1Xwj279FpwygOhrf3zcZfEOHYlqHZp/zjDPo5rREX8S4KQY1yqQvA8GA9Qe6A
+         cstNCXK7ZCA9dqYO6lBz22ApG4J5V3I68dnoZBuIzyzuFeW0c1IewskEK98RalIYtfEk
+         azwQ==
+X-Gm-Message-State: AOAM5335xaBYYwAkMfeGey4eGX0odA3TmPKPI4FngWsPPx4HzIbH307g
+        pvZBQAw9Emop6YF9+a8jHC0Zx25ASPkDvUAwQbn80GkaB7w60RN4A00nljbOteyxymVr74zpE/s
+        zPJgPHkwSVZEjTsrn11oW
+X-Received: by 2002:a17:906:fcbb:: with SMTP id qw27mr37500930ejb.320.1637925756922;
+        Fri, 26 Nov 2021 03:22:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxPOFL2cQbmr2W2mt4cULzTQZVhO7d08bazuCPqd8d7L4mLsxhcBClNOG0Ss2AXat+dwi95iw==
+X-Received: by 2002:a17:906:fcbb:: with SMTP id qw27mr37500907ejb.320.1637925756666;
+        Fri, 26 Nov 2021 03:22:36 -0800 (PST)
 Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id sa3sm3072930ejc.113.2021.11.26.03.19.01
+        by smtp.gmail.com with ESMTPSA id y19sm642739edq.2.2021.11.26.03.22.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Nov 2021 03:19:01 -0800 (PST)
-Message-ID: <5c6511e1-1264-a2f8-377c-a9da34469468@redhat.com>
-Date:   Fri, 26 Nov 2021 12:19:00 +0100
+        Fri, 26 Nov 2021 03:22:36 -0800 (PST)
+Message-ID: <19aeff06-d397-5f88-6d07-f76a2073b682@redhat.com>
+Date:   Fri, 26 Nov 2021 12:22:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
-Subject: Re: [PATCH v6 03/15] i2c: acpi: Add i2c_acpi_new_device_by_fwnode()
- function
+Subject: Re: [PATCH v6 05/15] regulator: Introduce tps68470-regulator driver
 Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@infradead.org>,
         Wolfram Sang <wsa@the-dreams.de>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
 References: <20211125165412.535063-1-hdegoede@redhat.com>
- <20211125165412.535063-4-hdegoede@redhat.com>
- <CAHp75VdBf-xNfx5a70LWnP7-qJpjB9gWSVQExqCz3emrgrT7Zw@mail.gmail.com>
+ <20211125165412.535063-6-hdegoede@redhat.com>
+ <YaAdIG+2MZPsdI+F@pendragon.ideasonboard.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VdBf-xNfx5a70LWnP7-qJpjB9gWSVQExqCz3emrgrT7Zw@mail.gmail.com>
+In-Reply-To: <YaAdIG+2MZPsdI+F@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Hi Laurent,
 
-On 11/25/21 18:22, Andy Shevchenko wrote:
-> On Thu, Nov 25, 2021 at 6:54 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Change i2c_acpi_new_device() into i2c_acpi_new_device_by_fwnode() and
->> add a static inline wrapper providing the old i2c_acpi_new_device()
->> behavior.
->>
->> This is necessary because in some cases we may only have access
->> to the fwnode / acpi_device and not to the matching physical-node
->> struct device *.
+On 11/26/21 00:32, Laurent Pinchart wrote:
+> Hi Hans,
 > 
-> One nit-pick below.
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Thank you for the patch.
+> 
+> I've had a quick look and the driver seems fine. Just a few comments
+> below.
+> 
+> On Thu, Nov 25, 2021 at 05:54:02PM +0100, Hans de Goede wrote:
+>> The TPS68470 PMIC provides Clocks, GPIOs and Regulators. At present in
+>> the kernel the Regulators and Clocks are controlled by an OpRegion
+>> driver designed to work with power control methods defined in ACPI, but
+>> some platforms lack those methods, meaning drivers need to be able to
+>> consume the resources of these chips through the usual frameworks.
+>>
+>> This commit adds a driver for the regulators provided by the tps68470,
+>> and is designed to bind to the platform_device registered by the
+>> intel_skl_int3472 module.
+>>
+>> This is based on this out of tree driver written by Intel:
+>> https://github.com/intel/linux-intel-lts/blob/4.14/base/drivers/regulator/tps68470-regulator.c
+>> with various cleanups added.
+>>
+>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>> Changes in v6:
+>> - Drop the unused volt_table argument from the TPS68470_REGULATOR() macro
+>> - While working on VCM (voice coil motor) support for the camera-module behind
+>>   this PMIC I learned that the VIO voltage is always on. Instead of pointing its
+>>   enable_reg and enable_mask at the same register-bits as the VSIO regulator
+>>   (which is wrong), add a new tps68470_always_on_reg_ops struct without
+>>   is_enabled, enable and disable ops and use that for the VIO regulator.
+>>
+>> Changes in v5:
+>> - Small comment / code cleanups based on review from Andy
+>>
+>> Changes in v4:
+>> - Make the top comment block use c++ style comments
+>> - Drop the bogus builtin regulator_init_data
+>> - Add || COMPILE_TEST to Kconfig snippet
+>> - Make the driver enable the PMIC clk when enabling the Core buck
+>>   regulator, this switching regulator needs the PLL to be on
+>>
+>> Changes in v2:
+>> - Update the comment on why a subsys_initcall is used to register the drv
+>> - Make struct regulator_ops const
+>> ---
+>>  drivers/regulator/Kconfig              |   9 ++
+>>  drivers/regulator/Makefile             |   1 +
+>>  drivers/regulator/tps68470-regulator.c | 201 +++++++++++++++++++++++++
+>>  3 files changed, 211 insertions(+)
+>>  create mode 100644 drivers/regulator/tps68470-regulator.c
+>>
+>> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+>> index 6be9b1c8a615..ebe46e09510e 100644
+>> --- a/drivers/regulator/Kconfig
+>> +++ b/drivers/regulator/Kconfig
+>> @@ -1339,6 +1339,15 @@ config REGULATOR_TPS65912
+>>  	help
+>>  	    This driver supports TPS65912 voltage regulator chip.
+>>  
+>> +config REGULATOR_TPS68470
+>> +	tristate "TI TPS68470 PMIC Regulators Driver"
+>> +	depends on INTEL_SKL_INT3472 || COMPILE_TEST
+>> +	help
+>> +	  This driver adds support for the TPS68470 PMIC to register
+>> +	  regulators against the usual framework.
+>> +
+>> +	  The module will be called "tps68470-regulator".
+>> +
+>>  config REGULATOR_TWL4030
+>>  	tristate "TI TWL4030/TWL5030/TWL6030/TPS659x0 PMIC"
+>>  	depends on TWL4030_CORE
+>> diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+>> index b07d2a22df0b..257331d2caed 100644
+>> --- a/drivers/regulator/Makefile
+>> +++ b/drivers/regulator/Makefile
+>> @@ -159,6 +159,7 @@ obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
+>>  obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
+>>  obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
+>>  obj-$(CONFIG_REGULATOR_TPS65132) += tps65132-regulator.o
+>> +obj-$(CONFIG_REGULATOR_TPS68470) += tps68470-regulator.o
+>>  obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o twl6030-regulator.o
+>>  obj-$(CONFIG_REGULATOR_UNIPHIER) += uniphier-regulator.o
+>>  obj-$(CONFIG_REGULATOR_VCTRL) += vctrl-regulator.o
+>> diff --git a/drivers/regulator/tps68470-regulator.c b/drivers/regulator/tps68470-regulator.c
+>> new file mode 100644
+>> index 000000000000..9ad2d1eae8fe
+>> --- /dev/null
+>> +++ b/drivers/regulator/tps68470-regulator.c
+>> @@ -0,0 +1,201 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +//
+>> +// Regulator driver for TPS68470 PMIC
+>> +//
+>> +// Copyright (c) 2021 Red Hat Inc.
+>> +// Copyright (C) 2018 Intel Corporation
+>> +//
+>> +// Authors:
+>> +//	Hans de Goede <hdegoede@redhat.com>
+>> +//	Zaikuo Wang <zaikuo.wang@intel.com>
+>> +//	Tianshu Qiu <tian.shu.qiu@intel.com>
+>> +//	Jian Xu Zheng <jian.xu.zheng@intel.com>
+>> +//	Yuning Pu <yuning.pu@intel.com>
+>> +//	Rajmohan Mani <rajmohan.mani@intel.com>
+>> +
+>> +#include <linux/clk.h>
+>> +#include <linux/device.h>
+>> +#include <linux/err.h>
+>> +#include <linux/init.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/mfd/tps68470.h>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_data/tps68470.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regulator/driver.h>
+>> +#include <linux/regulator/machine.h>
+>> +
+>> +struct tps68470_regulator_data {
+>> +	struct clk *clk;
+>> +};
+>> +
+>> +#define TPS68470_REGULATOR(_name, _id, _ops, _n,			\
+>> +			   _vr, _vm, _er, _em, _lr, _nlr)		\
+>> +	[TPS68470_ ## _name] = {					\
+>> +		.name			= # _name,			\
+>> +		.id			= _id,				\
+>> +		.ops			= &_ops,			\
+>> +		.n_voltages		= _n,				\
+>> +		.type			= REGULATOR_VOLTAGE,		\
+>> +		.owner			= THIS_MODULE,			\
+>> +		.vsel_reg		= _vr,				\
+>> +		.vsel_mask		= _vm,				\
+>> +		.enable_reg		= _er,				\
+>> +		.enable_mask		= _em,				\
+>> +		.linear_ranges		= _lr,				\
+>> +		.n_linear_ranges	= _nlr,				\
+>> +	}
+>> +
+>> +static const struct linear_range tps68470_ldo_ranges[] = {
+>> +	REGULATOR_LINEAR_RANGE(875000, 0, 125, 17800),
+>> +};
+>> +
+>> +static const struct linear_range tps68470_core_ranges[] = {
+>> +	REGULATOR_LINEAR_RANGE(900000, 0, 42, 25000),
+>> +};
+>> +
+>> +static int tps68470_regulator_enable(struct regulator_dev *rdev)
+>> +{
+>> +	struct tps68470_regulator_data *data = rdev->reg_data;
+>> +	int ret;
+>> +
+>> +	/* The Core buck regulator needs the PMIC's PLL to be enabled */
+>> +	if (rdev->desc->id == TPS68470_CORE) {
+>> +		ret = clk_prepare_enable(data->clk);
+>> +		if (ret) {
+>> +			dev_err(&rdev->dev, "Error enabling TPS68470 clock\n");
+>> +			return ret;
+>> +		}
+>> +	}
+>> +
+>> +	return regulator_enable_regmap(rdev);
+>> +}
+>> +
+>> +static int tps68470_regulator_disable(struct regulator_dev *rdev)
+>> +{
+>> +	struct tps68470_regulator_data *data = rdev->reg_data;
+>> +
+>> +	if (rdev->desc->id == TPS68470_CORE)
+>> +		clk_disable_unprepare(data->clk);
+>> +
+>> +	return regulator_disable_regmap(rdev);
+>> +}
+>> +
+>> +/* Operations permitted on DCDCx, LDO2, LDO3 and LDO4 */
+>> +static const struct regulator_ops tps68470_regulator_ops = {
+>> +	.is_enabled		= regulator_is_enabled_regmap,
+>> +	.enable			= tps68470_regulator_enable,
+>> +	.disable		= tps68470_regulator_disable,
+>> +	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
+>> +	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
+>> +	.list_voltage		= regulator_list_voltage_linear_range,
+>> +	.map_voltage		= regulator_map_voltage_linear_range,
+>> +};
+>> +
+>> +static const struct regulator_ops tps68470_always_on_reg_ops = {
+>> +	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
+>> +	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
+>> +	.list_voltage		= regulator_list_voltage_linear_range,
+>> +	.map_voltage		= regulator_map_voltage_linear_range,
+>> +};
+>> +
+>> +static const struct regulator_desc regulators[] = {
+>> +	TPS68470_REGULATOR(CORE, TPS68470_CORE, tps68470_regulator_ops, 43,
+>> +			   TPS68470_REG_VDVAL, TPS68470_VDVAL_DVOLT_MASK,
+>> +			   TPS68470_REG_VDCTL, TPS68470_VDCTL_EN_MASK,
+>> +			   tps68470_core_ranges, ARRAY_SIZE(tps68470_core_ranges)),
+>> +	TPS68470_REGULATOR(ANA, TPS68470_ANA, tps68470_regulator_ops, 126,
+>> +			   TPS68470_REG_VAVAL, TPS68470_VAVAL_AVOLT_MASK,
+>> +			   TPS68470_REG_VACTL, TPS68470_VACTL_EN_MASK,
+>> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
+>> +	TPS68470_REGULATOR(VCM, TPS68470_VCM, tps68470_regulator_ops, 126,
+>> +			   TPS68470_REG_VCMVAL, TPS68470_VCMVAL_VCVOLT_MASK,
+>> +			   TPS68470_REG_VCMCTL, TPS68470_VCMCTL_EN_MASK,
+>> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
+>> +	TPS68470_REGULATOR(VIO, TPS68470_VIO, tps68470_always_on_reg_ops, 126,
+>> +			   TPS68470_REG_VIOVAL, TPS68470_VIOVAL_IOVOLT_MASK,
+>> +			   0, 0,
+>> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
+>> +/*
+>> + * (1) This regulator must have the same voltage as VIO if S_IO LDO is used to
+>> + *     power a sensor/VCM which I2C is daisy chained behind the PMIC.
+>> + * (2) If there is no I2C daisy chain it can be set freely.
+>> + */
+> 
+> Do we need safety checks for this ?
 
-Thank you, I've fixed the nit-pick in my local tree, either for v7 of
-the series, of for in the immutable branch which I plan to create for
-this.
+There really is no way to deal this condition needs to matches inside the driver,
+this should be enforced by setting proper constraints on the 2 regulators where
+the PMIC is used with a sensor I2C daisy chained behind it.
+
+> 
+>> +	TPS68470_REGULATOR(VSIO, TPS68470_VSIO, tps68470_regulator_ops, 126,
+>> +			   TPS68470_REG_VSIOVAL, TPS68470_VSIOVAL_IOVOLT_MASK,
+>> +			   TPS68470_REG_S_I2C_CTL, TPS68470_S_I2C_CTL_EN_MASK,
+>> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
+>> +	TPS68470_REGULATOR(AUX1, TPS68470_AUX1, tps68470_regulator_ops, 126,
+>> +			   TPS68470_REG_VAUX1VAL, TPS68470_VAUX1VAL_AUX1VOLT_MASK,
+>> +			   TPS68470_REG_VAUX1CTL, TPS68470_VAUX1CTL_EN_MASK,
+>> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
+>> +	TPS68470_REGULATOR(AUX2, TPS68470_AUX2, tps68470_regulator_ops, 126,
+>> +			   TPS68470_REG_VAUX2VAL, TPS68470_VAUX2VAL_AUX2VOLT_MASK,
+>> +			   TPS68470_REG_VAUX2CTL, TPS68470_VAUX2CTL_EN_MASK,
+>> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
+>> +};
+>> +
+>> +static int tps68470_regulator_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct tps68470_regulator_platform_data *pdata = dev_get_platdata(dev);
+>> +	struct tps68470_regulator_data *data;
+>> +	struct regulator_config config = { };
+>> +	struct regulator_dev *rdev;
+>> +	int i;
+>> +
+>> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>> +	if (!data)
+>> +		return -ENOMEM;
+>> +
+>> +	data->clk = devm_clk_get(dev, "tps68470-clk");
+>> +	if (IS_ERR(data->clk))
+>> +		return dev_err_probe(dev, PTR_ERR(data->clk), "getting tps68470-clk\n");
+>> +
+>> +	config.dev = dev->parent;
+>> +	config.regmap = dev_get_drvdata(dev->parent);
+>> +	config.driver_data = data;
+>> +
+>> +	for (i = 0; i < TPS68470_NUM_REGULATORS; i++) {
+>> +		if (pdata)
+>> +			config.init_data = pdata->reg_init_data[i];
+>> +		else
+>> +			config.init_data = NULL;
+>> +
+>> +		rdev = devm_regulator_register(dev, &regulators[i], &config);
+>> +		if (IS_ERR(rdev))
+>> +			return dev_err_probe(dev, PTR_ERR(data->clk),
+> 
+> This should be PTR_ERR(rdev).
+
+Good catch, thanks. Fixed for v7.
 
 Regards,
 
 Hans
 
 
-
->> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->> Changes in v6:
->> - New patch in v6 of this patch series
->> ---
->>  drivers/i2c/i2c-core-acpi.c | 18 ++++++++++++------
->>  include/linux/i2c.h         | 17 +++++++++++++----
->>  2 files changed, 25 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
->> index 04338cbd08a9..1db3cc5fc47f 100644
->> --- a/drivers/i2c/i2c-core-acpi.c
->> +++ b/drivers/i2c/i2c-core-acpi.c
->> @@ -476,8 +476,9 @@ struct notifier_block i2c_acpi_notifier = {
->>  };
->>
->>  /**
->> - * i2c_acpi_new_device - Create i2c-client for the Nth I2cSerialBus resource
->> - * @dev:     Device owning the ACPI resources to get the client from
 > 
->> + * i2c_acpi_new_device_by_fwnode - Create i2c-client for the Nth I2cSerialBus
->> + * resource
-> 
-> Can be on one line.
-> 
->> + * @fwnode:  fwnode with the ACPI resources to get the client from
->>   * @index:   Index of ACPI resource to get
->>   * @info:    describes the I2C device; note this is modified (addr gets set)
->>   * Context: can sleep
->> @@ -493,15 +494,20 @@ struct notifier_block i2c_acpi_notifier = {
->>   * Returns a pointer to the new i2c-client, or error pointer in case of failure.
->>   * Specifically, -EPROBE_DEFER is returned if the adapter is not found.
->>   */
->> -struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
->> -                                      struct i2c_board_info *info)
->> +struct i2c_client *i2c_acpi_new_device_by_fwnode(struct fwnode_handle *fwnode,
->> +                                                int index,
->> +                                                struct i2c_board_info *info)
->>  {
->> -       struct acpi_device *adev = ACPI_COMPANION(dev);
->>         struct i2c_acpi_lookup lookup;
->>         struct i2c_adapter *adapter;
->> +       struct acpi_device *adev;
->>         LIST_HEAD(resource_list);
->>         int ret;
->>
->> +       adev = to_acpi_device_node(fwnode);
->> +       if (!adev)
->> +               return ERR_PTR(-ENODEV);
+>> +					     "registering %s regulator\n",
+>> +					     regulators[i].name);
+>> +	}
 >> +
->>         memset(&lookup, 0, sizeof(lookup));
->>         lookup.info = info;
->>         lookup.device_handle = acpi_device_handle(adev);
->> @@ -523,7 +529,7 @@ struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
->>
->>         return i2c_new_client_device(adapter, info);
->>  }
->> -EXPORT_SYMBOL_GPL(i2c_acpi_new_device);
->> +EXPORT_SYMBOL_GPL(i2c_acpi_new_device_by_fwnode);
->>
->>  bool i2c_acpi_waive_d0_probe(struct device *dev)
->>  {
->> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
->> index 16119ac1aa97..7d4f52ceb7b5 100644
->> --- a/include/linux/i2c.h
->> +++ b/include/linux/i2c.h
->> @@ -1025,8 +1025,9 @@ bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
->>                                struct acpi_resource_i2c_serialbus **i2c);
->>  int i2c_acpi_client_count(struct acpi_device *adev);
->>  u32 i2c_acpi_find_bus_speed(struct device *dev);
->> -struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
->> -                                      struct i2c_board_info *info);
->> +struct i2c_client *i2c_acpi_new_device_by_fwnode(struct fwnode_handle *fwnode,
->> +                                                int index,
->> +                                                struct i2c_board_info *info);
->>  struct i2c_adapter *i2c_acpi_find_adapter_by_handle(acpi_handle handle);
->>  bool i2c_acpi_waive_d0_probe(struct device *dev);
->>  #else
->> @@ -1043,8 +1044,9 @@ static inline u32 i2c_acpi_find_bus_speed(struct device *dev)
->>  {
->>         return 0;
->>  }
->> -static inline struct i2c_client *i2c_acpi_new_device(struct device *dev,
->> -                                       int index, struct i2c_board_info *info)
->> +static inline struct i2c_client *i2c_acpi_new_device_by_fwnode(
->> +                                       struct fwnode_handle *fwnode, int index,
->> +                                       struct i2c_board_info *info)
->>  {
->>         return ERR_PTR(-ENODEV);
->>  }
->> @@ -1058,4 +1060,11 @@ static inline bool i2c_acpi_waive_d0_probe(struct device *dev)
->>  }
->>  #endif /* CONFIG_ACPI */
->>
->> +static inline struct i2c_client *i2c_acpi_new_device(struct device *dev,
->> +                                                    int index,
->> +                                                    struct i2c_board_info *info)
->> +{
->> +       return i2c_acpi_new_device_by_fwnode(dev_fwnode(dev), index, info);
+>> +	return 0;
 >> +}
 >> +
->>  #endif /* _LINUX_I2C_H */
->> --
->> 2.33.1
->>
-> 
+>> +static struct platform_driver tps68470_regulator_driver = {
+>> +	.driver = {
+>> +		.name = "tps68470-regulator",
+>> +	},
+>> +	.probe = tps68470_regulator_probe,
+>> +};
+>> +
+>> +/*
+>> + * The ACPI tps68470 probe-ordering depends on the clk/gpio/regulator drivers
+>> + * registering before the drivers for the camera-sensors which use them bind.
+>> + * subsys_initcall() ensures this when the drivers are builtin.
+>> + */
+>> +static int __init tps68470_regulator_init(void)
+>> +{
+>> +	return platform_driver_register(&tps68470_regulator_driver);
+>> +}
+>> +subsys_initcall(tps68470_regulator_init);
+>> +
+>> +static void __exit tps68470_regulator_exit(void)
+>> +{
+>> +	platform_driver_unregister(&tps68470_regulator_driver);
+>> +}
+>> +module_exit(tps68470_regulator_exit);
+>> +
+>> +MODULE_ALIAS("platform:tps68470-regulator");
+>> +MODULE_DESCRIPTION("TPS68470 voltage regulator driver");
+>> +MODULE_LICENSE("GPL v2");
 > 
 
