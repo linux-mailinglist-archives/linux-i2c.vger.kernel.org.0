@@ -2,191 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF1F45EDDD
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Nov 2021 13:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0396F45F06C
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Nov 2021 16:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237249AbhKZMb3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 Nov 2021 07:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbhKZM33 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 Nov 2021 07:29:29 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C220C08C5DA;
-        Fri, 26 Nov 2021 03:56:14 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id j3so18148910wrp.1;
-        Fri, 26 Nov 2021 03:56:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=FjiDebeN0lftz9SIBVsy6WJxvM/l3Hn6Nmxtkdqni4Q=;
-        b=qV59eAZvwVT28HDrcNzurtuW8qs60Idx7SSZRN9FdnyyNugUBTneHz/X8BbSom+Z1M
-         FFMacGSf/yxmIocne/ESqk797izSzsl0zwq2x5T1LtE4DJnz1Reh0lJKpbLTeXWO0rj5
-         9HBk0KmDA3+OnrTaG4/bfBNt/rfhnivxrjflJzSuvH/OKfqln4diqOEZl7uE1VcIhE+m
-         GWaKb+CQxgLCkHCCEQpQdNoIDijAt2a0E8uM+fhYQLDvRfNEoXUGjXZzkTgcIw7T2Tp0
-         FII8k3XvwMmffzfIZPlTJh4/eMfb+xXov9RUY7mNhj9BRbQjckh7AWLjwqPXf5M0w0I4
-         tGow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=FjiDebeN0lftz9SIBVsy6WJxvM/l3Hn6Nmxtkdqni4Q=;
-        b=lCByU3f0B5ufhtD32kXeMylQfmSZAQBw4xJa3fXvULVCnZ38S1NlihoSyBE4I9dwoN
-         T+vxvLAWuIWYa1P7EhcHgx1TNGVwNQWp7MKqhSeC7Y184OhfO63+QahBcdn2Y4BMMeI7
-         sKKpY/yWYFH8epG76qysRIQWkMz390pw3+Ymjj6n5rLsqxcNrlBqw2sIzAQ7tb8+147R
-         5dfMsRNHLmcLFQuCE6bDU5UxE3adBQ1y+f65GVcMp/4LP8Gcc0qPkx+lg8Hrwl8VRtBy
-         +9TmbQeYzQ161jKIvmYO8Rtn358NoMio8GzAJpe607jHGJGumJGUNjsPO5/hmRbYoPXh
-         ZsvQ==
-X-Gm-Message-State: AOAM533bS5l1zGecK2RUs4F08r0p9ozTotsuUbSEhwUVfO/EFtoMd7Eo
-        U2iXwGE9I86dMNg7tASp5qI=
-X-Google-Smtp-Source: ABdhPJzfUgA3+l4rR+XNu5HeQbUXPQ1u3phKl+rWgA+uxctzFaji7KrNTSrX0cUbU77wZeGV2rlWOA==
-X-Received: by 2002:adf:c10e:: with SMTP id r14mr13062187wre.558.1637927772579;
-        Fri, 26 Nov 2021 03:56:12 -0800 (PST)
-Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id p13sm10797690wmi.0.2021.11.26.03.56.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Nov 2021 03:56:12 -0800 (PST)
-Subject: Re: [PATCH v6 07/15] platform/x86: int3472: Enable I2c daisy chain
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        id S1354121AbhKZPP5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 Nov 2021 10:15:57 -0500
+Received: from mga18.intel.com ([134.134.136.126]:47878 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354128AbhKZPN4 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 26 Nov 2021 10:13:56 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="222548406"
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="222548406"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 07:10:43 -0800
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="457703842"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 07:10:40 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mqcs1-00Aogm-Ii;
+        Fri, 26 Nov 2021 17:10:37 +0200
+Date:   Fri, 26 Nov 2021 17:10:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Henning Schild <henning.schild@siemens.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20211125165412.535063-1-hdegoede@redhat.com>
- <20211125165412.535063-8-hdegoede@redhat.com>
- <YaAel9HuAvemRg2s@pendragon.ideasonboard.com>
- <03306e12-40ec-39ab-3b40-42b0395e1b65@redhat.com>
- <4ab5efa7-65b0-009c-293a-d7a49776e78d@gmail.com>
- <2fd5400e-e587-54d2-1071-ad8df49a8a68@redhat.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <ef123ea0-f51f-50e1-dbc2-c442a97722e4@gmail.com>
-Date:   Fri, 26 Nov 2021 11:56:11 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com
+Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
+ support library
+Message-ID: <YaD47Vk0pAufkhD8@smile.fi.intel.com>
+References: <YGYPiCekM3clFEsD@smile.fi.intel.com>
+ <20210401184446.GA1528755@bjorn-Precision-5520>
+ <YOwyVXz9QMyRqs4B@smile.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <2fd5400e-e587-54d2-1071-ad8df49a8a68@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YOwyVXz9QMyRqs4B@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, Jul 12, 2021 at 03:15:17PM +0300, Andy Shevchenko wrote:
+> On Thu, Apr 01, 2021 at 01:44:46PM -0500, Bjorn Helgaas wrote:
+> > On Thu, Apr 01, 2021 at 09:23:04PM +0300, Andy Shevchenko wrote:
+> > > On Thu, Apr 01, 2021 at 11:42:56AM -0500, Bjorn Helgaas wrote:
+> > > > On Thu, Apr 01, 2021 at 06:45:02PM +0300, Andy Shevchenko wrote:
+> > > > > On Tue, Mar 09, 2021 at 09:42:52AM +0100, Henning Schild wrote:
+> > > > > > Am Mon, 8 Mar 2021 19:42:21 -0600
+> > > > > > schrieb Bjorn Helgaas <helgaas@kernel.org>:
+> > > > > > > On Mon, Mar 08, 2021 at 09:16:50PM +0200, Andy Shevchenko wrote:
+> > > > > > > > On Mon, Mar 08, 2021 at 12:52:12PM -0600, Bjorn Helgaas wrote:  
+> > > > > > > > > On Mon, Mar 08, 2021 at 02:20:16PM +0200, Andy Shevchenko wrote:  
+> > > > > 
+> > > > > ...
+> > > > > 
+> > > > > > > > > > +	/* Read the first BAR of the device in question */
+> > > > > > > > > > +	__pci_bus_read_base(bus, devfn, pci_bar_unknown, mem,
+> > > > > > > > > > PCI_BASE_ADDRESS_0, true);  
+> > > > > > > > > 
+> > > > > > > > > I don't get this.  Apparently this normally hidden device is
+> > > > > > > > > consuming PCI address space.  The PCI core needs to know
+> > > > > > > > > about this.  If it doesn't, the PCI core may assign this
+> > > > > > > > > space to another device.  
+> > > > > > > > 
+> > > > > > > > Right, it returns all 1:s to any request so PCI core *thinks*
+> > > > > > > > it's plugged off (like D3cold or so).  
+> > > > > > > 
+> > > > > > > I'm asking about the MMIO address space.  The BAR is a register
+> > > > > > > in config space.  AFAICT, clearing P2SBC_HIDE_BYTE makes that
+> > > > > > > BAR visible.  The BAR describes a region of PCI address space.
+> > > > > > > It looks like setting P2SBC_HIDE_BIT makes the BAR disappear
+> > > > > > > from config space, but it sounds like the PCI address space
+> > > > > > > *described* by the BAR is still claimed by the device.  If the
+> > > > > > > device didn't respond to that MMIO space, you would have no
+> > > > > > > reason to read the BAR at all.
+> > > > > > > 
+> > > > > > > So what keeps the PCI core from assigning that MMIO space to
+> > > > > > > another device?
+> > > > > > 
+> > > > > > The device will respond to MMIO while being hidden. I am afraid
+> > > > > > nothing stops a collision, except for the assumption that the BIOS
+> > > > > > is always right and PCI devices never get remapped. But just
+> > > > > > guessing here.
+> > > > > > 
+> > > > > > I have seen devices with coreboot having the P2SB visible, and
+> > > > > > most likely relocatable. Making it visible in Linux and not hiding
+> > > > > > it again might work, but probably only as long as Linux will not
+> > > > > > relocate it.  Which i am afraid might seriously upset the BIOS,
+> > > > > > depending on what a device does with those GPIOs and which parts
+> > > > > > are implemented in the BIOS.
+> > > > > 
+> > > > > So the question is, do we have knobs in PCI core to mark device
+> > > > > fixes in terms of BARs, no relocation must be applied, no other
+> > > > > devices must have the region?
+> > > > 
+> > > > I think the closest thing is the IORESOURCE_PCI_FIXED bit that we use
+> > > > for things that must not be moved.  Generally PCI resources are
+> > > > associated with a pci_dev, and we set IORESOURCE_PCI_FIXED for BARs,
+> > > > e.g., dev->resource[n].  We do that for IDE legacy regions (see
+> > > > LEGACY_IO_RESOURCE), Langwell devices (pci_fixed_bar_fixup()),
+> > > > "enhanced allocation" (pci_ea_flags()), and some quirks (quirk_io()).
+> > > > 
+> > > > In your case, the device is hidden so it doesn't respond to config
+> > > > accesses, so there is no pci_dev for it.
+> > > 
+> > > Yes, and the idea is to unhide it on the early stage.
+> > > Would it be possible to quirk it to fix the IO resources?
+> > 
+> > If I read your current patch right, it unhides the device, reads the
+> > BAR, then hides the device again.  I didn't see that it would create a
+> > pci_dev for it.
+> > 
+> > If you unhide it and then enumerate it normally (and mark the BAR as
+> > IORESOURCE_PCI_FIXED to make sure we never move it), that might work.
+> > Then there should be a pci_dev for it, and it would then show up in
+> > sysfs, lspci, etc.  And we should insert the BAR in iomem_resource, so
+> > we should see it in /proc/iomem and we won't accidentally put
+> > something else on top of it.
+> 
+> If the PCI device is present and we have ACPI description for the one or more
+> devices (currently pin control), wouldn't be a conflicting resources issue?
+> 
+> When would be the suitable place to avoid that?
 
-On 26/11/2021 11:45, Hans de Goede wrote:
-> Hi,
->
-> On 11/26/21 12:39, Daniel Scally wrote:
->> Hello
->>
->> On 26/11/2021 11:30, Hans de Goede wrote:
->>> Hi,
->>>
->>> On 11/26/21 00:39, Laurent Pinchart wrote:
->>>> Hi Hans,
->>>>
->>>> Thank you for the patch.
->>>>
->>>> On Thu, Nov 25, 2021 at 05:54:04PM +0100, Hans de Goede wrote:
->>>>> From: Daniel Scally <djrscally@gmail.com>
->>>>>
->>>>> The TPS68470 PMIC has an I2C passthrough mode through which I2C traffic
->>>>> can be forwarded to a device connected to the PMIC as though it were
->>>>> connected directly to the system bus. Enable this mode when the chip
->>>>> is initialised.
->>>> Is there any drawback doing this unconditionally, if nothing is
->>>> connected to the bus on the other side (including no pull-ups) ?
->>> I actually never took a really close look at this patch, I just
->>> sorta inherited it from Daniel.
->>>
->>> Now that I have taken a close look, I see that it is setting the
->>> exact same bits as which get set when enabling the VSIO regulator.
->>>
->>> The idea here is that the I2C-passthrough only gets enabled when
->>> the VSIO regulator is turned on, because some sensors end up
->>> shorting the I2C pins to ground when the sensor is not powered.
->>>
->>> Since we set these bits when powering up the VSIO regulator
->>> and since we do that before trying to talk to the sensor
->>> I don't think that we need this (hack) anymore.
->>>
->>> I will give things a try without this change and if things
->>> still work I will drop this patch from the set.
->>>
->>> Daniel, what do you think?
->>
->> Humm, we're only using the VSIO regulator with the VCM though right?
-> Nope, there is a mapping from VSIO to dovdd for the ov8865 in the
-> board_data; and I'm pretty sure I copied that from your earlier
-> attempts at getting regulator lookups registered :)
+Given another thought on that and I think we can't unhide entire P2SB due to
+possible ACPI tables present which may or may not fully or partially describe
+devices behind that bridge, so, I would stick with current approach.
 
-Oh yeah derp; I was looking at the supply names rather than the
-regulator names, my bad!
-> And even if the VSIO regulator was only used by the VCM, then it would
-> get turned off after probing the VCM, clearing the 2 bits which this
-> commit sets. Which would break things if we did not re-enable it when
-> the ov8865 needs it.
->
->> Which might not be on when the ov8865 tries to probe. I haven't tried
->> without this patch to be honest; I set it because that was what Windows
->> does when powering on the PMIC.
-> See above, I'm pretty sure we can do without this patch which means
-> that the INT3472 code will no longer be poking at the PMIC directly
-> itself, which is good :)
+> > > > resource, fills it in, sets IORESOURCE_PCI_FIXED, and does something
+> > > > similar to pci_claim_resource()?
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Yeah, in that case I think you're right and this can be dropped.
-
-> Anyways I'll give this a try sometime next week and then drop the
-> patch.
-
-
-Sounds good
-
->
-> Regards,
->
-> Hans
->
->
->
->
->>>>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->>>>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
->>>>> ---
->>>>>  .../x86/intel/int3472/intel_skl_int3472_tps68470.c         | 7 +++++++
->>>>>  1 file changed, 7 insertions(+)
->>>>>
->>>>> diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
->>>>> index c05b4cf502fe..42e688f4cad4 100644
->>>>> --- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
->>>>> +++ b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
->>>>> @@ -45,6 +45,13 @@ static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
->>>>>  		return ret;
->>>>>  	}
->>>>>  
->>>>> +	/* Enable I2C daisy chain */
->>>>> +	ret = regmap_write(regmap, TPS68470_REG_S_I2C_CTL, 0x03);
->>>>> +	if (ret) {
->>>>> +		dev_err(dev, "Failed to enable i2c daisy chain\n");
->>>>> +		return ret;
->>>>> +	}
->>>>> +
->>>>>  	dev_info(dev, "TPS68470 REVID: 0x%02x\n", version);
->>>>>  
->>>>>  	return 0;
