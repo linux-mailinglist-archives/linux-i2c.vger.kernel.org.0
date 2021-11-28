@@ -2,266 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74219460987
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Nov 2021 20:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB8E460B4C
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 00:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbhK1Tva (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 28 Nov 2021 14:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S1359755AbhK1X7t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 28 Nov 2021 18:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240139AbhK1Tt0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Nov 2021 14:49:26 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EF5C061574;
-        Sun, 28 Nov 2021 11:46:10 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id bi37so38909436lfb.5;
-        Sun, 28 Nov 2021 11:46:09 -0800 (PST)
+        with ESMTP id S1359613AbhK1X5s (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Nov 2021 18:57:48 -0500
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD863C061756
+        for <linux-i2c@vger.kernel.org>; Sun, 28 Nov 2021 15:54:31 -0800 (PST)
+Received: by mail-vk1-xa29.google.com with SMTP id b192so9793021vkf.3
+        for <linux-i2c@vger.kernel.org>; Sun, 28 Nov 2021 15:54:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=5c2x7L/3GBh3yUpNOqfBo5XiVGRYdFLXSX4SbETDqQo=;
-        b=mKnm7iytAs3F5zG4gvNhQKUjuYRdZTaDXrdkogodsE0nfRRe6guLcGJgNkNw7/c652
-         J3cUmpVkMGnDHP42iDGhSp6ZXqH+1BxsXBGsmMRrMrSMK9JwQSkoRjWf8cd828bCl1KE
-         O6Ac0ldb+GAaxvOAiSzX3oxQGqcBylzD6TEBfYHl96VNBN8bsHGVl+qX3AWEGWukH5Ih
-         re/6cAOigJnVGjZmXWF6CGBKcB8WaVGnP4b5ox23lGs4Y5z7dj/8PcuN2VpaJq7wYucr
-         /4vokqY59uSpd/DIq8PMNS1odRBRH3xtWzI6uvh/Psfz3TsbuYBRaCAIeSde/OtuH/3G
-         nBsw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W6GUPGDBtJn+odYJ5HX9HLZbUxWJ488arHtw5A2QE5I=;
+        b=mAP+xUXoJdAGw+3jgnscKZG1chXc/PKkk929pxX1NBvMUcqxq416PnF1Q9LV+y3IAH
+         12zWR5H/rkQUsU4Ij9XRDMWaJAXtvb8ARK8LY9wX0jSohw630SZ1bmXfflhCNq8dzyXe
+         jHyXLwDdLEFdHXLFa/Zs8bysH52SDcnXQ62X3lUeIGMr3f4NR5dmQh59b79ucjYIrz+6
+         3DOZQwQRfdgU6lZU9gGDWNWh6ssUZAIL4/qevnIc0rZSZGCLS7ePw8Y4ozoKybFD2S2I
+         zx07pvwbYJJvK9oVwWtY6Yst+A2bwCJWTn+2z6N4tfCN6ZpFbmIXWUC6R+4GXH383tS8
+         wH6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=5c2x7L/3GBh3yUpNOqfBo5XiVGRYdFLXSX4SbETDqQo=;
-        b=0FA8W9kOqjHbzQ3XVZHzC+KaxFQnNm6CX8C7q0omC70XTRVJiK9kroOievbB0yfmF9
-         oYPctfe81LwewKEbJXPw21hfplHWtT2q4LBx1TIw4V8USYcqmo0tcHz7J6+s5qJ7lTcG
-         G/ZePJZC66R0dUe9dq34uJAQOs2IMUZtyL3mVgfzNvHwpuW983zMcnxgyfVx+lqsbzxA
-         YT4MDatWGZO03+ImXn3KP8zMuwSaSfUIGAu0+9jlkpdDNu7KKFzbZatLjcOD9uCxQITn
-         F+WPwoVz6oq+DLn0S3F9vYYuFetvijTC7/BuIW87/+yGWB6+EebEJya2bXQ0eYsYwtFW
-         4Jxg==
-X-Gm-Message-State: AOAM530kj8sxJWBzhPUWnkq4eC7yA8RMUdso+224X4i0lKmkLyyNxSLw
-        OYM7nw1pzNlDBUYAVJVgsqw=
-X-Google-Smtp-Source: ABdhPJx4QZQBawYmjCibcf6YH73t5aAjTPkIW4EGO0RP0T+O3QOZcTbk7xlMWehAp+wIYBz2ng4YEg==
-X-Received: by 2002:a19:6412:: with SMTP id y18mr43593647lfb.494.1638128768070;
-        Sun, 28 Nov 2021 11:46:08 -0800 (PST)
-Received: from localhost.localdomain ([37.45.176.136])
-        by smtp.gmail.com with ESMTPSA id z28sm1149185ljn.77.2021.11.28.11.46.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 11:46:07 -0800 (PST)
-Received: from jek by localhost.localdomain with local (Exim 4.95)
-        (envelope-from <jekhor@gmail.com>)
-        id 1mrQ7h-000qFw-SL;
-        Sun, 28 Nov 2021 22:46:05 +0300
-Date:   Sun, 28 Nov 2021 22:46:05 +0300
-From:   Yauhen Kharuzhy <jekhor@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi@vger.kernel.org
-Subject: Re: [PATCH v2 10/20] power: supply: bq25890: Add
- bq25890_set_otg_cfg() helper
-Message-ID: <YaPcfZQ8OsPNUjwK@jeknote.loshitsa1.net>
-References: <20211114170335.66994-1-hdegoede@redhat.com>
- <20211114170335.66994-11-hdegoede@redhat.com>
- <YZIyQ1BdJ0v8QTtj@jeknote.loshitsa1.net>
- <66fbed75-7b48-6d91-1ef5-5df1c075e91c@redhat.com>
- <CAKWEGV7WVsZK=890UG=t3dhqCuoD-6N44DPMzk-_8TSPBm4_Dg@mail.gmail.com>
- <fbc88a7a-317f-9b81-fc76-2ceefcf6c7f5@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W6GUPGDBtJn+odYJ5HX9HLZbUxWJ488arHtw5A2QE5I=;
+        b=g5apveNl8YQffUItNN899rEJCk2w89ygX1mQXVAmiFm5NY9ImTCbhGyaZW5sB7Mh1g
+         2waLLbtMuJXxCeT0PwG1WG6xDF3EeN4wAoGOSDaCWB3H2ZsWwKY3a5Yhyxd5owifEjrf
+         4jO5k5b7IRBrVta0ytgzcqcAdosK9yx5NJPO6xxxIjVAEoDVsECu7WMkme5xQ76dgwog
+         g0gHgCvPBEqrRKoajHLYtVhD3Re9SspLbHsqvpJHgEMtkQKax3FP7oXTB4wU8Jtj+gPf
+         5/Ic4lN8AiTJuiDuIX177EFSQJcqlCrQtXKBlGTESgOfPSrHyjwuqU1m6l+YQF/7azxU
+         wTZg==
+X-Gm-Message-State: AOAM532AwokvJhg5hk7Axd+a0391jjaCunP1Z4zk+C7Qm5eZ1FbUaKSC
+        GbETA6b/vyzaTYD9IucASKJj4WCMp99IkBqTNDYH8Q==
+X-Google-Smtp-Source: ABdhPJwpbsu1iP889kCFOoQxvKA0CIJwmiMq5+VFnpzr9X3v6KVdGvWK3BRzk6bWKvLGWCwFUfT3lgvPVfWQ4zhRTEY=
+X-Received: by 2002:a05:6122:2158:: with SMTP id m24mr33410783vkd.1.1638143670173;
+ Sun, 28 Nov 2021 15:54:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fbc88a7a-317f-9b81-fc76-2ceefcf6c7f5@redhat.com>
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+ <20211127223253.19098-7-semen.protsenko@linaro.org> <YaORtBO4b9AyFYyd@kroah.com>
+In-Reply-To: <YaORtBO4b9AyFYyd@kroah.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 29 Nov 2021 01:54:18 +0200
+Message-ID: <CAPLW+4=mL6ZV73zY+AoF6mo8Tka0cO8pst2mBYOoEHpX4nrRbA@mail.gmail.com>
+Subject: Re: [PATCH 6/8] tty: serial: Make SERIAL_SAMSUNG=y impossible when EXYNOS_USI_V2=m
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 04:02:06PM +0100, Hans de Goede wrote:
-> Hi,
-> 
-> On 11/16/21 12:07, Yauhen Kharuzhy wrote:
-> > 
-> > 
-> > аў, 16 ліс 2021, 12:33 карыстальнік Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com>> напісаў:
-> > 
-> >     Hi Yauhen,
-> > 
-> >     On 11/15/21 11:11, Yauhen Kharuzhy wrote:
-> >     > On Sun, Nov 14, 2021 at 06:03:25PM +0100, Hans de Goede wrote:
-> >     >> Add a bq25890_set_otg_cfg() helper function, this is a preparation
-> >     >> patch for adding regulator support.
-> >     >>
-> >     >> Signed-off-by: Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com>>
-> >     >> ---
-> >     >>  drivers/power/supply/bq25890_charger.c | 28 ++++++++++++++------------
-> >     >>  1 file changed, 15 insertions(+), 13 deletions(-)
-> >     >>
-> >     >> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-> >     >> index 2bdfb58cda75..3c41fe86b3d3 100644
-> >     >> --- a/drivers/power/supply/bq25890_charger.c
-> >     >> +++ b/drivers/power/supply/bq25890_charger.c
-> >     >> @@ -801,6 +801,17 @@ static int bq25890_power_supply_init(struct bq25890_device *bq)
-> >     >>      return PTR_ERR_OR_ZERO(bq->charger);
-> >     >>  }
-> >     >> 
-> >     >> +static int bq25890_set_otg_cfg(struct bq25890_device *bq, u8 val)
-> >     >> +{
-> >     >> +    int ret;
-> >     >> +
-> >     >> +    ret = bq25890_field_write(bq, F_OTG_CFG, val);
-> >     >> +    if (ret < 0)
-> >     >> +            dev_err(bq->dev, "Error switching to boost/charger mode: %d\n", ret);
-> >     >
-> >     > Just a note: if a connected USB device has relative big capacitor
-> >     > at power wires inside, then a starting current pulse may be enough to
-> >     > overload the boost reguator and VBUS will not be powered. I met this
-> >     > at Yoga Book: the firmware set boost current limit to 1.4 A (default
-> >     > value for bq25892) but when USB hub connected, the BOOST_FAULT event
-> >     > appeared.
-> >     >
-> >     > To avoid this, Lenovo uses following trick in its kernel: set a boost
-> >     > current limit to big value (2.1 A), wait some time (500 ms) and set
-> >     > the current limit to right value (1.4A). This provides enough current to
-> >     > charge capacitors in the connected device but saves desired long-time limit
-> >     > to prevent overloading if the device consumes too much power itself.
-> > 
-> >     Right I saw this in your git repo, but I cannot reproduce the issue (1)
-> >     I was hoping that since you can reproduce this, that you can rebase
-> >     your fix on top of my patch-set ?
-> > 
-> >     Also I'm wondering if this behavior should be the default, I believe
-> >     that the max. boost current may also be dependent on some external
-> >     factors, so maybe we should make this behavior conditional on a
-> >     new device-property ?
-> > 
-> > Yes, defining of max VBUS current may be a good idea. Another possible approach may be to use some empirical multiplier, like 150% of max 'long time' current limit setting. I almost sure that all hardware will work with short impulse of such current, its usual condition at device connection.
-> > 
-> > 
-> >     Regards,
-> > 
-> >     Hans
-> > 
-> > 
-> > 
-> >     1) I must admit I did not try really hard, I guess I could try an
-> >     USB powered hdd enclosure with a spinning disk
-> > 
-> >     What device are you seeing this with?
-> > 
-> > I cannot remember exactly device but this was a USB hub, possible with keyboard, mouse receiver and USB dongle inserted. I can recheck this issue but one week after, when will return home.
-> 
-> So as I mentioned before I've just tried to reproduce this problem, but
-> I cannot reproduce it with an 2.5" USB disk enclosure with a spinning
-> disk, which typically will cause a nice current-peak when spinning up.
-> 
-> I think this might also require an almost empty battery to reproduce ?
+On Sun, 28 Nov 2021 at 16:27, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Nov 28, 2021 at 12:32:51AM +0200, Sam Protsenko wrote:
+> > When UART is encapsulated in USIv2 block (e.g. in Exynos850), USIv2
+> > driver must be loaded first, as it's preparing USI hardware for
+> > particular protocol use. Make it impossible for Samsung serial driver to
+> > be built-in when USIv2 driver is built as a module, to prevent incorrect
+> > booting order for those drivers.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  drivers/tty/serial/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> > index 0e5ccb25bdb1..47bc24e74041 100644
+> > --- a/drivers/tty/serial/Kconfig
+> > +++ b/drivers/tty/serial/Kconfig
+> > @@ -237,6 +237,7 @@ config SERIAL_CLPS711X_CONSOLE
+> >  config SERIAL_SAMSUNG
+> >       tristate "Samsung SoC serial support"
+> >       depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || ARCH_APPLE || COMPILE_TEST
+> > +     depends on EXYNOS_USI_V2 || !EXYNOS_USI_V2
+>
+> That's odd, and is not going to help if everything is built as a module
+> and loaded that way.
+>
+> This needs to be done properly in code to handle the issues if the
+> "wrong" code is loaded first.  Please trigger off of the hardware type
+> correctly so you don't have to worry about this at all.
+>
 
-Hi.
+You are right. The only thing that should be done is "__init" should
+be removed from s3c24xx_serial_console_setup() and
+s3c24xx_serial_get_options() functions. Because in case when USIv2
+driver instantiates the serial driver via of_platform_populate(), when
+USI_V2=m and SERIAL_SAMSUNG=y, those symbols will be thrown away
+already. And of course "[PATCH 5/8] tty: serial: samsung: Enable
+console as module" is needed as well. Correct init order (USI vs
+serial) is already ensured by embedding serial node in USI node (as a
+child node).
 
-I tried to reproduce just now with success.
+We'll still have some weird init order in that case (USI_V2=m and
+SERIAL_SAMSUNG=y), like doing serial console init first (and
+earlycon), then registering USI driver as a module (reconfiguring USI
+IP-core), and then doing serial probe. But at least that doesn't crash
+and works fine (only causing some delay once, in the middle of dmesg
+output). But I guess that would be a problem of people who decided to
+go with such weird config.
 
-I have the UNITEK Y-2165B OTG USB hub with cardreader. It has three
-100 uF capacitors connected to the VBUS inside.
+Bottom line is, this patch is not needed. I'll re-send v2 soon,
+excluding it from there, and will also add that mentioned "__init"
+removal.
 
-If the boost current limit is set to 1.4A, boot failure condition is appeared
-when the hub connected, there is no USB device detected.
+Thanks for review!
 
-If the limit is set to 2.15A, the device detected and works, there is no
-fault condition appeared.
-
-So, I think that you may add 1-3 100uF capacitors to
-any USB device or cable and try to reproduce.
-
-Debug I2C dumps are below.
-
-Before connection of the hub:
-
-root@yogabook:/home/jek# i2cdump -f -y 7 0x6b
-No size specified (using byte-data access)
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 00 06 00 0a 42 13 80 cc 03 44 73 02 00 8d 58 57    .?.?B????Ds?.?XW
-10: 4e 00 00 00 05 ff ff ff ff ff ff ff ff ff ff ff    N...?...........
-20: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-30: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-90: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-
-Immediately after connection (look to 0x0c register):
-
-root@yogabook:/home/jek# i2cdump -f -y 7 0x6b
-No size specified (using byte-data access)
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 00 06 00 2a 42 13 82 cc 03 44 73 e2 40 8d 57 57    .?.*B????Ds?@?WW
-10: 4d 00 00 00 05 ff ff ff ff ff ff ff ff ff ff ff    M...?...........
-20: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-30: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-90: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-
-Increase current limit manually and restart the boost converter:
-
-root@yogabook:/home/jek# i2cset -f -y 7 0x6b 0x0a 0x76
-root@yogabook:/home/jek# i2cset -f -y 7 0x6b 0x03 0x0a
-root@yogabook:/home/jek# i2cset -f -y 7 0x6b 0x03 0x2a
-
-root@yogabook:/home/jek# i2cdump -f -y 7 0x6b
-No size specified (using byte-data access)
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 00 06 00 2a 42 13 82 cc 03 44 76 e2 00 8d 57 57    .?.*B????Dv?.?WW
-10: 4d 00 00 00 05 ff ff ff ff ff ff ff ff ff ff ff    M...?...........
-20: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-30: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-90: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-
-
-
-> 
-> Regards,
-> 
-> Hans
-> 
-
--- 
-Yauhen Kharuzhy
+> thanks,
+>
+> greg k-h
