@@ -2,172 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F13460706
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Nov 2021 16:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D3046077B
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Nov 2021 17:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244870AbhK1PH1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 28 Nov 2021 10:07:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37304 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352701AbhK1PF0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Nov 2021 10:05:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638111730;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iX13/SG9QVzjtgOCFE9A2Tjj7ExPs6uzaEpwB6t8MCU=;
-        b=QyPEDMbFDypau/Khl1OOWeShmfVITji/aFqFvmDZPyJVcwibm8Kzy9IIqi/jdRw8UPaKJ5
-        idAFApvmUQS7MxeqL7vt4gvjUdQy/YSZ12ZMFNCACEh5zLeW0JM3ZKE3QTjv0J905oaS5P
-        9P79ngwXRiS8u6JvhvNhCjLCtki+p5c=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-MmpsP1UDMr-7SaOVEnH6Nw-1; Sun, 28 Nov 2021 10:02:09 -0500
-X-MC-Unique: MmpsP1UDMr-7SaOVEnH6Nw-1
-Received: by mail-ed1-f71.google.com with SMTP id l15-20020a056402124f00b003e57269ab87so11541586edw.6
-        for <linux-i2c@vger.kernel.org>; Sun, 28 Nov 2021 07:02:08 -0800 (PST)
+        id S1352779AbhK1Qbx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 28 Nov 2021 11:31:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358264AbhK1Q3x (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 Nov 2021 11:29:53 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3C9C0613E1
+        for <linux-i2c@vger.kernel.org>; Sun, 28 Nov 2021 08:26:37 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id w23so28960420uao.5
+        for <linux-i2c@vger.kernel.org>; Sun, 28 Nov 2021 08:26:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/ccB47tdeti47CvDM6R5rYXfeqjwA3nH7VkbP1EBuzs=;
+        b=bb8iROMPL4xY9YKCKh0LcMj6ctNvNaAZS+EVGTP+2em16DnWvURJFBwKiZgQ14kpFx
+         Nk0yod58G1GSRAXhbEmJSlcSr5H+7E+VRw2oFQ49OQGFlI0NaPsYM76X/VH5tGjQ6CYh
+         WoFk8Gn8q0COPBUli/NDsEWR6bc+iXAJ019W+PmGTj4jAV8rJApYX0PUUsYpzjqrLwrj
+         Gu7/GiaJ0CKIqr+7VglKPoUwlrTg9rFOnRoOgI70LWhYsailfiQ4Cqkz2G0dLY83lvMz
+         8sS5BykmV2FyfWNqpRXjubhzLMPxPi1RfEDwJU0dc9fs5dv57ePDFc/y2awY/aQP9Fja
+         ZJmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iX13/SG9QVzjtgOCFE9A2Tjj7ExPs6uzaEpwB6t8MCU=;
-        b=3a9AeSpSxWHRbExBWALhjpQqUEIEYjwNtmRqEedfneGkrLRPFKNrw3TXaqgVzViPQg
-         V+XpEgY9YOZxCj66nlQYynQ7mNxjWtrHtcgrNr185mLAoq9UN1o99PalZYMuluT/6MlR
-         8OEdJRxxqnsgvHcLNeieKJ/SgNivd8tTUXO3yvcBeeb+TLclqihZpp2QO4NXovfu3SM5
-         ZzPCgkSPkOlp3RMlJq/+orrYzXkahePbsme4tbZI+e1N0XPo694IKI8lfu6zeJ0zYkLw
-         YXia54+7jgNB3K3kjxK4fTnt0rcLaHzxLFiv+zlsEayvb8O7iEpJ8pPseMJX9CuBtMou
-         DRtw==
-X-Gm-Message-State: AOAM532d/8UIVVD7erFOWAQd4t2j1fRf1TkxsQBVDXmk9m0lZfxIVpIN
-        oSkSLg91T8qUdaiNnTJSy6ju0JENLMXyzeOzc64WyeOo3mG7HDiz2L4rIZ/b0o1AeLjGVzV4UdF
-        /9jniHZhi5/6Tv1u3cB3r
-X-Received: by 2002:a17:906:cb82:: with SMTP id mf2mr53839643ejb.266.1638111727654;
-        Sun, 28 Nov 2021 07:02:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzEowT50fZ7ivaFDJ6V5lUqwpF6775Ln26cgBO1XkuRoo+Nxd33Br4pIX2oVkufpwJATaPlWA==
-X-Received: by 2002:a17:906:cb82:: with SMTP id mf2mr53839613ejb.266.1638111727453;
-        Sun, 28 Nov 2021 07:02:07 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id nb17sm6253338ejc.7.2021.11.28.07.02.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Nov 2021 07:02:07 -0800 (PST)
-Message-ID: <fbc88a7a-317f-9b81-fc76-2ceefcf6c7f5@redhat.com>
-Date:   Sun, 28 Nov 2021 16:02:06 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/ccB47tdeti47CvDM6R5rYXfeqjwA3nH7VkbP1EBuzs=;
+        b=YyFvyLhOUjv9br7al+iJjHsHzPqaBcx6SoJ8aNyWUsf5GyR7EZQhHAp9mWGVGnIrBj
+         HlFQJHQwJAXNtuSb0X8eTpBL9HiBbLDkW2EpKklVj/2adVJiaWOAo8aXvLAB+x4BDQIA
+         tQMDb/amkwRehX5EJ8oL+H5YmusaJtGup2BLEH0f1K+2cD2Kg77I+BddoNowxmEWkmqc
+         RJVLS5z0RYXdP9sXOxM4ncZEnJNiJ7vl4t+lPTuFdbbAtm6T3Cen4RyR2cXGcFjxyDsO
+         7wbayXN80yigqewxi7pC4UxQblYgZlyq6FY1FN2qCu9NSe1CTz00AsDkokmr6f9TzmtH
+         PNTw==
+X-Gm-Message-State: AOAM533/zSUeytlHymym0xChJ8rxvWhLhE/k//D+aaOD8hAqLRkQjfXL
+        u8Q8ghl57hmdfVGA5eiC0HsMqA24MlCrB+4wrZiGjQ==
+X-Google-Smtp-Source: ABdhPJzu4Sg8mGJhx58EsQjBE9m8h7oKRpTbBEmqiNm24rO+Vi7sjel3oyR2vWLi6046pK/x0t8RLwwXmEN3LNKN6pg=
+X-Received: by 2002:a9f:2431:: with SMTP id 46mr44679918uaq.114.1638116796127;
+ Sun, 28 Nov 2021 08:26:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 10/20] power: supply: bq25890: Add
- bq25890_set_otg_cfg() helper
-Content-Language: en-US
-To:     Yauhen Kharuzhy <jekhor@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi@vger.kernel.org
-References: <20211114170335.66994-1-hdegoede@redhat.com>
- <20211114170335.66994-11-hdegoede@redhat.com>
- <YZIyQ1BdJ0v8QTtj@jeknote.loshitsa1.net>
- <66fbed75-7b48-6d91-1ef5-5df1c075e91c@redhat.com>
- <CAKWEGV7WVsZK=890UG=t3dhqCuoD-6N44DPMzk-_8TSPBm4_Dg@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAKWEGV7WVsZK=890UG=t3dhqCuoD-6N44DPMzk-_8TSPBm4_Dg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+ <20211127223253.19098-5-semen.protsenko@linaro.org> <YaOR+TbcR1V4ovf/@kroah.com>
+In-Reply-To: <YaOR+TbcR1V4ovf/@kroah.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Sun, 28 Nov 2021 18:26:24 +0200
+Message-ID: <CAPLW+4mG8AMPCXGWYwURVJhCw0Cv=mYYzNAZf0i7akVcqc384w@mail.gmail.com>
+Subject: Re: [PATCH 4/8] tty: serial: samsung: Remove USI initialization
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+On Sun, 28 Nov 2021 at 16:28, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Nov 28, 2021 at 12:32:49AM +0200, Sam Protsenko wrote:
+> > USI control is now extracted to dedicated USIv2 driver. Remove USI
+> > related code from serial driver to avoid conflicts and code duplication.
+>
+> What conflicts?
+>
 
-On 11/16/21 12:07, Yauhen Kharuzhy wrote:
-> 
-> 
-> аў, 16 ліс 2021, 12:33 карыстальнік Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com>> напісаў:
-> 
->     Hi Yauhen,
-> 
->     On 11/15/21 11:11, Yauhen Kharuzhy wrote:
->     > On Sun, Nov 14, 2021 at 06:03:25PM +0100, Hans de Goede wrote:
->     >> Add a bq25890_set_otg_cfg() helper function, this is a preparation
->     >> patch for adding regulator support.
->     >>
->     >> Signed-off-by: Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com>>
->     >> ---
->     >>  drivers/power/supply/bq25890_charger.c | 28 ++++++++++++++------------
->     >>  1 file changed, 15 insertions(+), 13 deletions(-)
->     >>
->     >> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
->     >> index 2bdfb58cda75..3c41fe86b3d3 100644
->     >> --- a/drivers/power/supply/bq25890_charger.c
->     >> +++ b/drivers/power/supply/bq25890_charger.c
->     >> @@ -801,6 +801,17 @@ static int bq25890_power_supply_init(struct bq25890_device *bq)
->     >>      return PTR_ERR_OR_ZERO(bq->charger);
->     >>  }
->     >> 
->     >> +static int bq25890_set_otg_cfg(struct bq25890_device *bq, u8 val)
->     >> +{
->     >> +    int ret;
->     >> +
->     >> +    ret = bq25890_field_write(bq, F_OTG_CFG, val);
->     >> +    if (ret < 0)
->     >> +            dev_err(bq->dev, "Error switching to boost/charger mode: %d\n", ret);
->     >
->     > Just a note: if a connected USB device has relative big capacitor
->     > at power wires inside, then a starting current pulse may be enough to
->     > overload the boost reguator and VBUS will not be powered. I met this
->     > at Yoga Book: the firmware set boost current limit to 1.4 A (default
->     > value for bq25892) but when USB hub connected, the BOOST_FAULT event
->     > appeared.
->     >
->     > To avoid this, Lenovo uses following trick in its kernel: set a boost
->     > current limit to big value (2.1 A), wait some time (500 ms) and set
->     > the current limit to right value (1.4A). This provides enough current to
->     > charge capacitors in the connected device but saves desired long-time limit
->     > to prevent overloading if the device consumes too much power itself.
-> 
->     Right I saw this in your git repo, but I cannot reproduce the issue (1)
->     I was hoping that since you can reproduce this, that you can rebase
->     your fix on top of my patch-set ?
-> 
->     Also I'm wondering if this behavior should be the default, I believe
->     that the max. boost current may also be dependent on some external
->     factors, so maybe we should make this behavior conditional on a
->     new device-property ?
-> 
-> Yes, defining of max VBUS current may be a good idea. Another possible approach may be to use some empirical multiplier, like 150% of max 'long time' current limit setting. I almost sure that all hardware will work with short impulse of such current, its usual condition at device connection.
-> 
-> 
->     Regards,
-> 
->     Hans
-> 
-> 
-> 
->     1) I must admit I did not try really hard, I guess I could try an
->     USB powered hdd enclosure with a spinning disk
-> 
->     What device are you seeing this with?
-> 
-> I cannot remember exactly device but this was a USB hub, possible with keyboard, mouse receiver and USB dongle inserted. I can recheck this issue but one week after, when will return home.
+There might be possible conflicts when accessing the same USI register
+from both serial driver and USIv2 driver. Also there will be conflicts
+when trying to access the same I/O address space in those both
+drivers.
 
-So as I mentioned before I've just tried to reproduce this problem, but
-I cannot reproduce it with an 2.5" USB disk enclosure with a spinning
-disk, which typically will cause a nice current-peak when spinning up.
+> What duplication?  All you did here was delete code.
+>
 
-I think this might also require an almost empty battery to reproduce ?
+It's all explained in [PATCH 0/8], but long story short, I've added
+USIv2 driver (in this series) which handles the code that's removed
+from serial driver in this patch.
 
-Regards,
-
-Hans
-
+> confused,
+>
+> greg k-h
