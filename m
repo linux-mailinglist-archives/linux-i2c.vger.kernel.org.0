@@ -2,376 +2,135 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DDB460268
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Nov 2021 00:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5986646035A
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Nov 2021 04:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239116AbhK0XoQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 27 Nov 2021 18:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S232943AbhK1DYf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 27 Nov 2021 22:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356509AbhK0XmQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 27 Nov 2021 18:42:16 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEACEC061574;
-        Sat, 27 Nov 2021 15:39:00 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 42B2AF1;
-        Sun, 28 Nov 2021 00:38:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638056337;
-        bh=mBsDtjvPTvQpZlyscgULiqi5pGedaYlFNV5ijq40QnQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mi+n1qt1mVbd4+ssbCG7vUrK/taUwICnUczD4YCuatmBHVGLcq1dYssefT2MG6Cvh
-         Bci0lqCU6zWUV8U4HOp04zzqGcyg9w+3Z4mXh2JN/ogC4J2YWmeh16ZMB9nPoRbp2y
-         UgudxTaJH7mz2hAN05QJ2jyL51KReom2CBVbIzqU=
-Date:   Sun, 28 Nov 2021 01:38:34 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        with ESMTP id S239581AbhK1DWf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 27 Nov 2021 22:22:35 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA1EC061574;
+        Sat, 27 Nov 2021 19:15:39 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id d9so7352203wrw.4;
+        Sat, 27 Nov 2021 19:15:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=i8O7Dpns9fHSY/WW7qsVWPhyTZikkhDp94r/4zepqx8=;
+        b=DmECkuZUV5YSSj/DfOoH3n7JthwWmt4sMFUBjCiqYnGRG1bYb7E16TqCoiFaKTFUUS
+         mnqRcEoRp9PHq2T5bZEFn9TQGcZgg4Y2dza46zascx0UKHK9g9wxhARGCaMdzAZTPl9f
+         S2bx/g4gZV3UHdz9hOjmPbUdj8XRSt3BK5/rLDjtyDpgAR/GEloZzmdGnthEKLgr9hgA
+         PnQE5ALJtcLj8jXESdrTlROp5WWvw5ghr0uvSv7GR7dCxfbwnFG5Z95yJkZGuXKluAQx
+         8bthCoCDPamXJ6Tlo/hu7qBniJK0Xj3ubTQzZ/PWH2XEwFHKFdeTdnFalJlCTUPpS6Nk
+         mptA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=i8O7Dpns9fHSY/WW7qsVWPhyTZikkhDp94r/4zepqx8=;
+        b=agyk9ai+fQeYNuj9QuraY/GhJqCGTBkJ5Fo0KVxXc41/0gOZ7Umcp3d6CyE+RCgfON
+         ymolww+G1crrhK3gJdP6WrAB3pFHiUaTymQQoeINlHl9KEOcKC7U0sl4YNmFwH+sY2WX
+         wzguTOseWWgElTopvBKRYkfqjDNym53iMI9B4zI5tsjDYE2AxyIBs7NczDgkxa1ND5yl
+         rvSeD2uegyN2c9SHnk84rRqUcrPHLfrW8hrEAoJzZT3x2vhyvl5NJBsvaZSDKcxMW0Wr
+         LZQq9Xdz86fRqGeCh9MIhhtStqhdGUMAA9qteBRyl5JAxl8Z+LejtbEjkW+l6VpAD/B5
+         /McQ==
+X-Gm-Message-State: AOAM531RkYSj4KHR3AGWHQYvbKurmsAbFJ3w5OW/t+mujV0AnpVJu3L2
+        8JiYy5TNBkUVrSGh3XmZi8k=
+X-Google-Smtp-Source: ABdhPJy4vCRUS6Fqq39kobf0Cj0I1na6Rp6CeLZVHNUSf48vfxwQUASuvgNZ1YWJm4TWEyfch5U6bw==
+X-Received: by 2002:adf:d22a:: with SMTP id k10mr25078422wrh.80.1638069338221;
+        Sat, 27 Nov 2021 19:15:38 -0800 (PST)
+Received: from ?IPv6:2a02:ab88:368f:2080:eab:126a:947d:3008? ([2a02:ab88:368f:2080:eab:126a:947d:3008])
+        by smtp.gmail.com with ESMTPSA id b6sm16388764wmq.45.2021.11.27.19.15.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Nov 2021 19:15:37 -0800 (PST)
+Message-ID: <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
+Subject: Re: [PATCH 0/8] soc: samsung: Add USIv2 driver
+From:   David Virag <virag.david003@gmail.com>
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v6 05/15] regulator: Introduce tps68470-regulator driver
-Message-ID: <YaLBeq0+0A6R2FZG@pendragon.ideasonboard.com>
-References: <20211125165412.535063-1-hdegoede@redhat.com>
- <20211125165412.535063-6-hdegoede@redhat.com>
- <YaAdIG+2MZPsdI+F@pendragon.ideasonboard.com>
- <19aeff06-d397-5f88-6d07-f76a2073b682@redhat.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Date:   Sun, 28 Nov 2021 04:15:13 +0100
+In-Reply-To: <20211127223253.19098-1-semen.protsenko@linaro.org>
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <19aeff06-d397-5f88-6d07-f76a2073b682@redhat.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Hans,
-
-On Fri, Nov 26, 2021 at 12:22:35PM +0100, Hans de Goede wrote:
-> On 11/26/21 00:32, Laurent Pinchart wrote:
-> > On Thu, Nov 25, 2021 at 05:54:02PM +0100, Hans de Goede wrote:
-> >> The TPS68470 PMIC provides Clocks, GPIOs and Regulators. At present in
-> >> the kernel the Regulators and Clocks are controlled by an OpRegion
-> >> driver designed to work with power control methods defined in ACPI, but
-> >> some platforms lack those methods, meaning drivers need to be able to
-> >> consume the resources of these chips through the usual frameworks.
-> >>
-> >> This commit adds a driver for the regulators provided by the tps68470,
-> >> and is designed to bind to the platform_device registered by the
-> >> intel_skl_int3472 module.
-> >>
-> >> This is based on this out of tree driver written by Intel:
-> >> https://github.com/intel/linux-intel-lts/blob/4.14/base/drivers/regulator/tps68470-regulator.c
-> >> with various cleanups added.
-> >>
-> >> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> >> ---
-> >> Changes in v6:
-> >> - Drop the unused volt_table argument from the TPS68470_REGULATOR() macro
-> >> - While working on VCM (voice coil motor) support for the camera-module behind
-> >>   this PMIC I learned that the VIO voltage is always on. Instead of pointing its
-> >>   enable_reg and enable_mask at the same register-bits as the VSIO regulator
-> >>   (which is wrong), add a new tps68470_always_on_reg_ops struct without
-> >>   is_enabled, enable and disable ops and use that for the VIO regulator.
-> >>
-> >> Changes in v5:
-> >> - Small comment / code cleanups based on review from Andy
-> >>
-> >> Changes in v4:
-> >> - Make the top comment block use c++ style comments
-> >> - Drop the bogus builtin regulator_init_data
-> >> - Add || COMPILE_TEST to Kconfig snippet
-> >> - Make the driver enable the PMIC clk when enabling the Core buck
-> >>   regulator, this switching regulator needs the PLL to be on
-> >>
-> >> Changes in v2:
-> >> - Update the comment on why a subsys_initcall is used to register the drv
-> >> - Make struct regulator_ops const
-> >> ---
-> >>  drivers/regulator/Kconfig              |   9 ++
-> >>  drivers/regulator/Makefile             |   1 +
-> >>  drivers/regulator/tps68470-regulator.c | 201 +++++++++++++++++++++++++
-> >>  3 files changed, 211 insertions(+)
-> >>  create mode 100644 drivers/regulator/tps68470-regulator.c
-> >>
-> >> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-> >> index 6be9b1c8a615..ebe46e09510e 100644
-> >> --- a/drivers/regulator/Kconfig
-> >> +++ b/drivers/regulator/Kconfig
-> >> @@ -1339,6 +1339,15 @@ config REGULATOR_TPS65912
-> >>  	help
-> >>  	    This driver supports TPS65912 voltage regulator chip.
-> >>  
-> >> +config REGULATOR_TPS68470
-> >> +	tristate "TI TPS68470 PMIC Regulators Driver"
-> >> +	depends on INTEL_SKL_INT3472 || COMPILE_TEST
-> >> +	help
-> >> +	  This driver adds support for the TPS68470 PMIC to register
-> >> +	  regulators against the usual framework.
-> >> +
-> >> +	  The module will be called "tps68470-regulator".
-> >> +
-> >>  config REGULATOR_TWL4030
-> >>  	tristate "TI TWL4030/TWL5030/TWL6030/TPS659x0 PMIC"
-> >>  	depends on TWL4030_CORE
-> >> diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-> >> index b07d2a22df0b..257331d2caed 100644
-> >> --- a/drivers/regulator/Makefile
-> >> +++ b/drivers/regulator/Makefile
-> >> @@ -159,6 +159,7 @@ obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
-> >>  obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
-> >>  obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
-> >>  obj-$(CONFIG_REGULATOR_TPS65132) += tps65132-regulator.o
-> >> +obj-$(CONFIG_REGULATOR_TPS68470) += tps68470-regulator.o
-> >>  obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o twl6030-regulator.o
-> >>  obj-$(CONFIG_REGULATOR_UNIPHIER) += uniphier-regulator.o
-> >>  obj-$(CONFIG_REGULATOR_VCTRL) += vctrl-regulator.o
-> >> diff --git a/drivers/regulator/tps68470-regulator.c b/drivers/regulator/tps68470-regulator.c
-> >> new file mode 100644
-> >> index 000000000000..9ad2d1eae8fe
-> >> --- /dev/null
-> >> +++ b/drivers/regulator/tps68470-regulator.c
-> >> @@ -0,0 +1,201 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +//
-> >> +// Regulator driver for TPS68470 PMIC
-> >> +//
-> >> +// Copyright (c) 2021 Red Hat Inc.
-> >> +// Copyright (C) 2018 Intel Corporation
-> >> +//
-> >> +// Authors:
-> >> +//	Hans de Goede <hdegoede@redhat.com>
-> >> +//	Zaikuo Wang <zaikuo.wang@intel.com>
-> >> +//	Tianshu Qiu <tian.shu.qiu@intel.com>
-> >> +//	Jian Xu Zheng <jian.xu.zheng@intel.com>
-> >> +//	Yuning Pu <yuning.pu@intel.com>
-> >> +//	Rajmohan Mani <rajmohan.mani@intel.com>
-> >> +
-> >> +#include <linux/clk.h>
-> >> +#include <linux/device.h>
-> >> +#include <linux/err.h>
-> >> +#include <linux/init.h>
-> >> +#include <linux/kernel.h>
-> >> +#include <linux/mfd/tps68470.h>
-> >> +#include <linux/module.h>
-> >> +#include <linux/platform_data/tps68470.h>
-> >> +#include <linux/platform_device.h>
-> >> +#include <linux/regulator/driver.h>
-> >> +#include <linux/regulator/machine.h>
-> >> +
-> >> +struct tps68470_regulator_data {
-> >> +	struct clk *clk;
-> >> +};
-> >> +
-> >> +#define TPS68470_REGULATOR(_name, _id, _ops, _n,			\
-> >> +			   _vr, _vm, _er, _em, _lr, _nlr)		\
-> >> +	[TPS68470_ ## _name] = {					\
-> >> +		.name			= # _name,			\
-> >> +		.id			= _id,				\
-> >> +		.ops			= &_ops,			\
-> >> +		.n_voltages		= _n,				\
-> >> +		.type			= REGULATOR_VOLTAGE,		\
-> >> +		.owner			= THIS_MODULE,			\
-> >> +		.vsel_reg		= _vr,				\
-> >> +		.vsel_mask		= _vm,				\
-> >> +		.enable_reg		= _er,				\
-> >> +		.enable_mask		= _em,				\
-> >> +		.linear_ranges		= _lr,				\
-> >> +		.n_linear_ranges	= _nlr,				\
-> >> +	}
-> >> +
-> >> +static const struct linear_range tps68470_ldo_ranges[] = {
-> >> +	REGULATOR_LINEAR_RANGE(875000, 0, 125, 17800),
-> >> +};
-> >> +
-> >> +static const struct linear_range tps68470_core_ranges[] = {
-> >> +	REGULATOR_LINEAR_RANGE(900000, 0, 42, 25000),
-> >> +};
-> >> +
-> >> +static int tps68470_regulator_enable(struct regulator_dev *rdev)
-> >> +{
-> >> +	struct tps68470_regulator_data *data = rdev->reg_data;
-> >> +	int ret;
-> >> +
-> >> +	/* The Core buck regulator needs the PMIC's PLL to be enabled */
-> >> +	if (rdev->desc->id == TPS68470_CORE) {
-> >> +		ret = clk_prepare_enable(data->clk);
-> >> +		if (ret) {
-> >> +			dev_err(&rdev->dev, "Error enabling TPS68470 clock\n");
-> >> +			return ret;
-> >> +		}
-> >> +	}
-> >> +
-> >> +	return regulator_enable_regmap(rdev);
-> >> +}
-> >> +
-> >> +static int tps68470_regulator_disable(struct regulator_dev *rdev)
-> >> +{
-> >> +	struct tps68470_regulator_data *data = rdev->reg_data;
-> >> +
-> >> +	if (rdev->desc->id == TPS68470_CORE)
-> >> +		clk_disable_unprepare(data->clk);
-> >> +
-> >> +	return regulator_disable_regmap(rdev);
-> >> +}
-> >> +
-> >> +/* Operations permitted on DCDCx, LDO2, LDO3 and LDO4 */
-> >> +static const struct regulator_ops tps68470_regulator_ops = {
-> >> +	.is_enabled		= regulator_is_enabled_regmap,
-> >> +	.enable			= tps68470_regulator_enable,
-> >> +	.disable		= tps68470_regulator_disable,
-> >> +	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-> >> +	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-> >> +	.list_voltage		= regulator_list_voltage_linear_range,
-> >> +	.map_voltage		= regulator_map_voltage_linear_range,
-> >> +};
-> >> +
-> >> +static const struct regulator_ops tps68470_always_on_reg_ops = {
-> >> +	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-> >> +	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-> >> +	.list_voltage		= regulator_list_voltage_linear_range,
-> >> +	.map_voltage		= regulator_map_voltage_linear_range,
-> >> +};
-> >> +
-> >> +static const struct regulator_desc regulators[] = {
-> >> +	TPS68470_REGULATOR(CORE, TPS68470_CORE, tps68470_regulator_ops, 43,
-> >> +			   TPS68470_REG_VDVAL, TPS68470_VDVAL_DVOLT_MASK,
-> >> +			   TPS68470_REG_VDCTL, TPS68470_VDCTL_EN_MASK,
-> >> +			   tps68470_core_ranges, ARRAY_SIZE(tps68470_core_ranges)),
-> >> +	TPS68470_REGULATOR(ANA, TPS68470_ANA, tps68470_regulator_ops, 126,
-> >> +			   TPS68470_REG_VAVAL, TPS68470_VAVAL_AVOLT_MASK,
-> >> +			   TPS68470_REG_VACTL, TPS68470_VACTL_EN_MASK,
-> >> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
-> >> +	TPS68470_REGULATOR(VCM, TPS68470_VCM, tps68470_regulator_ops, 126,
-> >> +			   TPS68470_REG_VCMVAL, TPS68470_VCMVAL_VCVOLT_MASK,
-> >> +			   TPS68470_REG_VCMCTL, TPS68470_VCMCTL_EN_MASK,
-> >> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
-> >> +	TPS68470_REGULATOR(VIO, TPS68470_VIO, tps68470_always_on_reg_ops, 126,
-> >> +			   TPS68470_REG_VIOVAL, TPS68470_VIOVAL_IOVOLT_MASK,
-> >> +			   0, 0,
-> >> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
-> >> +/*
-> >> + * (1) This regulator must have the same voltage as VIO if S_IO LDO is used to
-> >> + *     power a sensor/VCM which I2C is daisy chained behind the PMIC.
-> >> + * (2) If there is no I2C daisy chain it can be set freely.
-> >> + */
-> > 
-> > Do we need safety checks for this ?
+On Sun, 2021-11-28 at 00:32 +0200, Sam Protsenko wrote:
+> USIv2 IP-core provides selectable serial protocol (UART, SPI or
+> High-Speed I2C); only one can be chosen at a time. This series
+> implements USIv2 driver, which allows one to select particular USI
+> function in device tree, and also performs USI block initialization.
 > 
-> There really is no way to deal this condition needs to matches inside the driver,
-> this should be enforced by setting proper constraints on the 2 regulators where
-> the PMIC is used with a sensor I2C daisy chained behind it.
-
-Right. I tend to be cautious here, as incorrect settings can destroy the
-hardware. We should err on the side of too many safety checks rather
-than too few. I was thinking that the cio2-bridge driver could set a
-daisy-chaining flag, which could trigger additional checks here, but it
-wouldn't protect against someone experimenting to support a new device
-and setting different voltages without the daisy-chaining flag.
-
-My biggest worry is that someone with an unsupported machine may start
-by copying and pasting an existing configuration to try it out, and fry
-their hardware.
-
-> >> +	TPS68470_REGULATOR(VSIO, TPS68470_VSIO, tps68470_regulator_ops, 126,
-> >> +			   TPS68470_REG_VSIOVAL, TPS68470_VSIOVAL_IOVOLT_MASK,
-> >> +			   TPS68470_REG_S_I2C_CTL, TPS68470_S_I2C_CTL_EN_MASK,
-> >> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
-> >> +	TPS68470_REGULATOR(AUX1, TPS68470_AUX1, tps68470_regulator_ops, 126,
-> >> +			   TPS68470_REG_VAUX1VAL, TPS68470_VAUX1VAL_AUX1VOLT_MASK,
-> >> +			   TPS68470_REG_VAUX1CTL, TPS68470_VAUX1CTL_EN_MASK,
-> >> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
-> >> +	TPS68470_REGULATOR(AUX2, TPS68470_AUX2, tps68470_regulator_ops, 126,
-> >> +			   TPS68470_REG_VAUX2VAL, TPS68470_VAUX2VAL_AUX2VOLT_MASK,
-> >> +			   TPS68470_REG_VAUX2CTL, TPS68470_VAUX2CTL_EN_MASK,
-> >> +			   tps68470_ldo_ranges, ARRAY_SIZE(tps68470_ldo_ranges)),
-> >> +};
-> >> +
-> >> +static int tps68470_regulator_probe(struct platform_device *pdev)
-> >> +{
-> >> +	struct device *dev = &pdev->dev;
-> >> +	struct tps68470_regulator_platform_data *pdata = dev_get_platdata(dev);
-> >> +	struct tps68470_regulator_data *data;
-> >> +	struct regulator_config config = { };
-> >> +	struct regulator_dev *rdev;
-> >> +	int i;
-> >> +
-> >> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> >> +	if (!data)
-> >> +		return -ENOMEM;
-> >> +
-> >> +	data->clk = devm_clk_get(dev, "tps68470-clk");
-> >> +	if (IS_ERR(data->clk))
-> >> +		return dev_err_probe(dev, PTR_ERR(data->clk), "getting tps68470-clk\n");
-> >> +
-> >> +	config.dev = dev->parent;
-> >> +	config.regmap = dev_get_drvdata(dev->parent);
-> >> +	config.driver_data = data;
-> >> +
-> >> +	for (i = 0; i < TPS68470_NUM_REGULATORS; i++) {
-> >> +		if (pdata)
-> >> +			config.init_data = pdata->reg_init_data[i];
-> >> +		else
-> >> +			config.init_data = NULL;
-> >> +
-> >> +		rdev = devm_regulator_register(dev, &regulators[i], &config);
-> >> +		if (IS_ERR(rdev))
-> >> +			return dev_err_probe(dev, PTR_ERR(data->clk),
-> > 
-> > This should be PTR_ERR(rdev).
+> With that driver implemented, it's not needed to do USI
+> initialization
+> in protocol drivers anymore, so that code is removed from the serial
+> driver.
 > 
-> Good catch, thanks. Fixed for v7.
-> 
-> >> +					     "registering %s regulator\n",
-> >> +					     regulators[i].name);
-> >> +	}
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static struct platform_driver tps68470_regulator_driver = {
-> >> +	.driver = {
-> >> +		.name = "tps68470-regulator",
-> >> +	},
-> >> +	.probe = tps68470_regulator_probe,
-> >> +};
-> >> +
-> >> +/*
-> >> + * The ACPI tps68470 probe-ordering depends on the clk/gpio/regulator drivers
-> >> + * registering before the drivers for the camera-sensors which use them bind.
-> >> + * subsys_initcall() ensures this when the drivers are builtin.
-> >> + */
-> >> +static int __init tps68470_regulator_init(void)
-> >> +{
-> >> +	return platform_driver_register(&tps68470_regulator_driver);
-> >> +}
-> >> +subsys_initcall(tps68470_regulator_init);
-> >> +
-> >> +static void __exit tps68470_regulator_exit(void)
-> >> +{
-> >> +	platform_driver_unregister(&tps68470_regulator_driver);
-> >> +}
-> >> +module_exit(tps68470_regulator_exit);
-> >> +
-> >> +MODULE_ALIAS("platform:tps68470-regulator");
-> >> +MODULE_DESCRIPTION("TPS68470 voltage regulator driver");
-> >> +MODULE_LICENSE("GPL v2");
 
--- 
-Regards,
+I think the downstream way of doing this (USI node reg being on the
+SW_CONF register itself rather than an offset from uart/i2c/spi, the
+USI driver only controlling the SW_CONF, and the uart/i2c/spi drivers
+controlling their USI_CON and USI_OPTION regs) is cleaner, better, and
+easier to adapt to USIv1 too.
 
-Laurent Pinchart
+For example: I'm sure this is the case on USIv2 devices too, but on
+Exynos7885, different devices have USI modes configured differently.
+For example a Samsung Galaxy A8 (2018) has all the USI blocks
+configured as SPI while a Samsung Galaxy M20 has the first USI
+configured as dual HSI2C, the second as HSI2C on the first 2 pins and
+the third as HSI2C on the last 2 pins. With this way of doing
+everything on USIv2 we'd need 3 disabled USIv2 nodes in the SoC DTSI
+for one USI block, each for every protocol the USI block can do, all
+having a single child for their protocol and each referencing the same
+sysreg (not even sure if that's even supported). Then the board DTS
+could enable the USI node it needs.
+
+With the downstream way we could have just one USI node and we could
+add the 3 protocols it can do disabled as seperate or child nodes. This
+way the board DTS only needs to set the appropriate mode setting and
+enable the protocol it needs. I'd say much better than having 3 USI
+nodes for the same USI block.
+
+Also this way is pretty USIv2 centric. Adding USIv1 support to this
+driver is difficult this way because of the the lack of USI_CON and
+USI_OPTION registers as a whole (so having nowhere to actually set the
+reg of the USI node to, as the only thing USIv1 has is the SW_CONF
+register). In my opinion being able to use the same driver and same
+device tree layout for USIv1 and USIv2 is a definite plus
+
+The only real drawback of that way is having to add code for USIv2
+inside the UART, HSI2C, and SPI drivers but in my opinion the benefits
+overweigh the drawbacks greatly. We could even make the uart/spi/hsi2c
+drivers call a helper function in the USI driver to set their USI_CON
+and USI_OPTION registers up so that code would be shared and not
+duplicated. Wether this patch gets applied like this is not my choice
+though, I'll let the people responsible decide
+:-)
+
+Anyways, soon enough I can write an USIv1 driver after I submit all the
+7885 stuff I'm working on currently. If you want to, you can add USIv2
+support to that driver, or if an USIv2 driver is already in upstream at
+that point, if it is written in the downstream way I can add v1 support
+to that, or if it's like this I'll have to make a whole seperate driver
+with a whole seperate DT structure.
+
+Best regards,
+David
