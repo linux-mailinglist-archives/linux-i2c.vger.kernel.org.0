@@ -2,116 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DD646201F
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 20:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C74D46220B
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 21:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352008AbhK2TTm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 14:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S231478AbhK2UVt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 15:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345426AbhK2TRk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 14:17:40 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5EBC0613E1;
-        Mon, 29 Nov 2021 07:35:46 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 553C92A5;
-        Mon, 29 Nov 2021 16:35:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638200144;
-        bh=vQkTcVeubQtyPEvZTfPpWgr0xCoUlM+OeJ2wAvY6uCE=;
+        with ESMTP id S234601AbhK2USW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 15:18:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEBEC06FD57;
+        Mon, 29 Nov 2021 08:51:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B39EEB8125D;
+        Mon, 29 Nov 2021 16:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5E6C53FC7;
+        Mon, 29 Nov 2021 16:51:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638204677;
+        bh=WmHg1SN+kwfATW5Mwywh1SO9/fEBScJyIJQzbuVqR+4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oe4PxyJ7rOJ6yNLwvZq0rwzDfKO/ZpsZplSPR/6rbcSz8KScSUcJ0sw74veOAAPjO
-         ch3/3pIXPkuEq9U2GunOyYN4O52w4iSSmKvnQ6vxxKxiKhhFYf8jYSYLTAcCEBLcjw
-         VUeAOCZFVl5N4nOZrvU3h5xf4e8THuPM1K5Y9mls=
-Date:   Mon, 29 Nov 2021 17:35:20 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
+        b=uYgJNUNQov3HFAQyHt+/z0KcufI0hJX/hyjohnlasyTmtOikWM8KR5bJam64Lh+/l
+         7/kZIHMlgdFHFtZ7pDng9V4gPa9BUQL5TYYlacuEZDDUQfk4bj8oTpPG5GT2auuQIR
+         LjaD+5lyJkQwW9kr4ovdGC4qzbW4nFYVHlEiWGSzNZ4B73iQK6SEjuYysBc6ci4Y+k
+         k+yAiXcwKqcMu0SaUH2xvGYIhO3rJJnA+fKpHzw2aRBcSZQ/9Um9Oxx4FTuB8ry9bD
+         /sdx4G3ILRpXnbdt+FAu/wPvy+/juPcLJaw99d53f5ic1Gi1D/mz30f8iyMjqQPa3v
+         9MyMZ28igEvaQ==
+Date:   Mon, 29 Nov 2021 17:51:14 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v6 05/15] regulator: Introduce tps68470-regulator driver
-Message-ID: <YaTzOA7uV5TzHDDR@pendragon.ideasonboard.com>
-References: <20211125165412.535063-1-hdegoede@redhat.com>
- <20211125165412.535063-6-hdegoede@redhat.com>
- <YaAdIG+2MZPsdI+F@pendragon.ideasonboard.com>
- <19aeff06-d397-5f88-6d07-f76a2073b682@redhat.com>
- <YaLBeq0+0A6R2FZG@pendragon.ideasonboard.com>
- <YaTCpgYaPDssQp+N@sirena.org.uk>
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dtor@google.com, rajatxjain@gmail.com,
+        dbasehore@chromium.org
+Subject: Re: [PATCH 2/3] i2c: enable async suspend/resume for i2c adapters
+Message-ID: <YaUFAgsH1fMRrswZ@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dtor@google.com, rajatxjain@gmail.com,
+        dbasehore@chromium.org
+References: <20211025213532.2349161-1-rajatja@google.com>
+ <20211025213532.2349161-3-rajatja@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WdV5dsrXV+/86Yeq"
 Content-Disposition: inline
-In-Reply-To: <YaTCpgYaPDssQp+N@sirena.org.uk>
+In-Reply-To: <20211025213532.2349161-3-rajatja@google.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Mark,
 
-On Mon, Nov 29, 2021 at 12:08:06PM +0000, Mark Brown wrote:
-> On Sun, Nov 28, 2021 at 01:38:34AM +0200, Laurent Pinchart wrote:
-> > On Fri, Nov 26, 2021 at 12:22:35PM +0100, Hans de Goede wrote:
-> > > On 11/26/21 00:32, Laurent Pinchart wrote:
-> > > > On Thu, Nov 25, 2021 at 05:54:02PM +0100, Hans de Goede wrote:
-> > > >> The TPS68470 PMIC provides Clocks, GPIOs and Regulators. At present in
-> > > >> the kernel the Regulators and Clocks are controlled by an OpRegion
-> > > >> driver designed to work with power control methods defined in ACPI, but
-> 
-> Please delete unneeded context from mails when replying.  Doing this
-> makes it much easier to find your reply in the message, helping ensure
-> it won't be missed by people scrolling through the irrelevant quoted
-> material.
+--WdV5dsrXV+/86Yeq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have mixed feelings about that, someones the context is indeed not
-needed, but I've found myself more often than not replying deep in a
-mail thread and wishing the context hadn't been deleted, because it
-ended up being relevant.
+On Mon, Oct 25, 2021 at 02:35:30PM -0700, Rajat Jain wrote:
+> Enable async suspend/resume of i2c adapters. It enormously helps with
+> reducing the resume time of systems (as much as 20%-40%) where I2C devices
+> can take significant time (100s of ms) to resume.
+>=20
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-> > > >> + * (1) This regulator must have the same voltage as VIO if S_IO LDO is used to
-> > > >> + *     power a sensor/VCM which I2C is daisy chained behind the PMIC.
-> > > >> + * (2) If there is no I2C daisy chain it can be set freely.
-> > > >> + */
-> 
-> > > > Do we need safety checks for this ?
-> 
-> > > There really is no way to deal this condition needs to matches inside the driver,
-> > > this should be enforced by setting proper constraints on the 2 regulators where
-> > > the PMIC is used with a sensor I2C daisy chained behind it.
-> 
-> > Right. I tend to be cautious here, as incorrect settings can destroy the
-> > hardware. We should err on the side of too many safety checks rather
-> > than too few. I was thinking that the cio2-bridge driver could set a
-> > daisy-chaining flag, which could trigger additional checks here, but it
-> > wouldn't protect against someone experimenting to support a new device
-> > and setting different voltages without the daisy-chaining flag.
-> 
-> > My biggest worry is that someone with an unsupported machine may start
-> > by copying and pasting an existing configuration to try it out, and fry
-> > their hardware.
-> 
-> There's really nothing you can do that prevents this, especially in the
-> cut'n'paste scenario.  Overrides tend to get copied along with the rest
-> of the configuration, or checks hacked out if people think they're
-> getting in the way without realising what they're there for.
+Applied to for-next, thanks!
 
-Maybe a big fat warning comment in the code ? Apart from that, I agree,
-I don't think we can do much.
 
--- 
-Regards,
+--WdV5dsrXV+/86Yeq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Laurent Pinchart
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlBQIACgkQFA3kzBSg
+KbbGeg//ekeTpryWxILYtJCrWop10hUVSX+ZYflgG3+ln1hQRvP7Zyj4OuoHnXXY
+I1+TjxEX7+WaIQ7EBg25b+iDGfYvJR2B66CA7M3dmpRg8ZW7LbDVEkG07hN+3QXt
+0zXY3MlnnvG61pRv7bopL0KstjUR7RbwX8bzrShuyBRdAYFkyeybtiGM4nv6E8a3
+WmuGXEqM7CdTZTDwv7/wNOrkGzPqwQo5HuwIFIWpBgKtxNFtuXb/J4UgGd52J2sL
+JMyLyVq69H/dUaAUPnC3cqQRWjBSjVUHo2nrJwL/3iOtV+zmaOSOgimGf9j2x2oU
+BdCDGQTfw9+xAsONjIa2dn7qNXT7w63ShsgazMU9iKuOO/cqpWpXQZAUPHRXRG7q
+ZyyXY7RM+Kq4ezfbAn51hGQ/hiseu+OX2UbdZBDUNtSPiZfLq0kxBAgVGRA4Z6Le
+DvhkhjaXSYxcSzyoLekEHvWzzVvDT7oih4I+LppNpx/yCrJjBgBc39ErUFYPFZ6s
+jTowGFiKOQR68qJoRLxJSmVjcKP9B61hdXG3SwV14HSRWd3SA/OuYyKCSIgQVVAh
+Xcr1GD0KQjB0zAm/xdfamhxYA5SKJWQ6GLG8R8/SgGbjxHh+JFI2Cs6xZHkBylkC
+Xy7QoRjM56v0324/OYKgxaLgbx1PIiri0+vtTlpSjXAXQ8c5vos=
+=Sh9N
+-----END PGP SIGNATURE-----
+
+--WdV5dsrXV+/86Yeq--
