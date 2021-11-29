@@ -2,117 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D60A64620A2
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 20:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5819B462131
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 20:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234229AbhK2TkI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 14:40:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53364 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234990AbhK2TiH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 14:38:07 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE402B815CE;
-        Mon, 29 Nov 2021 19:34:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B7EC53FC7;
-        Mon, 29 Nov 2021 19:34:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638214487;
-        bh=uePvt5gMX4TCL27r5CN6jhQcivmaVfv/7LWiS3z51Z4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MEE8n62NGTa/brNFFlvb9FgYyKurmn24pS/XrKGR42MPp1tduyLil2D7SAgiVPTb+
-         Zoy2CsrLD4FTlDlE+Q9xSXjuOxxv1LG8RZ9DDrCFCGzCBVWjJ82aAJc70B9OsAVhEG
-         LjlYy+7j5hxgxDfInoCEtj0pzGelawbuwJ1h9sYz/LgiMXQ9M2rkCHf7AuqJ2vZfi7
-         bXMwo7KmTo4TIpSryev2s5bxpe8FdQdkqaBnOy4Oe1gw70wivT0AGrWi4xeoW7Rzjf
-         j7Dq3+KI/WsW+1N91On/pJHrcllIxemTzTc4nsC01Xoe3RYNdNBgtfzfauU9eNal6H
-         MSqpTEVTeFhAA==
-Date:   Mon, 29 Nov 2021 20:34:44 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Matt Johnston <matt@codeconstruct.com.au>
-Cc:     zev@bewilderbeest.net, robh+dt@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, brendanhiggins@google.com,
-        benh@kernel.crashing.org, joel@jms.id.au, andrew@aj.id.au,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        jk@codeconstruct.com.au, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v3 0/6] MCTP I2C driver
-Message-ID: <YaUrVD0AMwCc7+Cf@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Matt Johnston <matt@codeconstruct.com.au>, zev@bewilderbeest.net,
-        robh+dt@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        brendanhiggins@google.com, benh@kernel.crashing.org, joel@jms.id.au,
-        andrew@aj.id.au, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
-        benjaminfair@google.com, jk@codeconstruct.com.au,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-References: <20211115024926.205385-1-matt@codeconstruct.com.au>
- <163698601142.19991.3686735228078461111.git-patchwork-notify@kernel.org>
- <YZJ9H4eM/M7OXVN0@shikoro>
- <20211124031522.GB18900@codeconstruct.com.au>
+        id S1348091AbhK2UBk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 15:01:40 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:45949 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235687AbhK2T7j (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 14:59:39 -0500
+Received: by mail-oi1-f170.google.com with SMTP id 7so36633289oip.12;
+        Mon, 29 Nov 2021 11:56:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2bv3MqtAYFd6aKtve0kHQtlsznvcV7uI6PKWd3pGaDM=;
+        b=X88vgMLAI3oyhQvhaT64JRUvMyHndg57SxwE5FMqckKihmubAmO5KwY/DZde6bTL63
+         Efy8dVhWzA4jJWnyuUuRvPuv3xLbBwznxbVUd5914elZiL8dTOfAj0YwVmuJQXDl8gVM
+         4swUONxD5xok4sGpf/ueZeFO2BxIU0PctTiMvRzbvkojvU1lxpjlAOWBMahJ3eJgOPQB
+         O1d75iwZ9G76c0bH0jnBlNSopX0UfxJ4P9/Fx8crtq3qHttKbQnyJVZCst6a5aC9jgbM
+         l78k1QMyj8w2kM7guR2FN1cWIpkyO55e8fRwuswfjE5S4gDB6au+zVT/hG8W1evSfrVi
+         H+Ag==
+X-Gm-Message-State: AOAM5332l3lfz2LIB6eyhzbp/IpUfgJ+4T2pVbpMWhOofXE/buJ6o/Tf
+        MrCwflx/iqMXowku97cYsgWr7SU28A==
+X-Google-Smtp-Source: ABdhPJzZTkmKa7Ovd7T72fND6EsSsej/FmXr489BG/R05JxgA09sAstD4jrlNB2n0QXW7mdfgksy5g==
+X-Received: by 2002:aca:4307:: with SMTP id q7mr156403oia.3.1638215780450;
+        Mon, 29 Nov 2021 11:56:20 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id w29sm2522578ooe.25.2021.11.29.11.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 11:56:19 -0800 (PST)
+Received: (nullmailer pid 502661 invoked by uid 1000);
+        Mon, 29 Nov 2021 19:56:18 -0000
+Date:   Mon, 29 Nov 2021 13:56:18 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, atish.patra@wdc.com,
+        ivan.griffin@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com
+Subject: Re: [PATCH 02/13] dt-bindings: interrupt-controller: add defines for
+ mpfs-plic
+Message-ID: <YaUwYkHHhTsPkAQh@robh.at.kernel.org>
+References: <20211108150554.4457-1-conor.dooley@microchip.com>
+ <20211108150554.4457-3-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gpsjBBqS4+607dEI"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211124031522.GB18900@codeconstruct.com.au>
+In-Reply-To: <20211108150554.4457-3-conor.dooley@microchip.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, Nov 08, 2021 at 03:05:43PM +0000, conor.dooley@microchip.com wrote:
+> From: Ivan Griffin <ivan.griffin@microchip.com>
+> 
+> Add device tree bindings for the Microchip Polarfire Soc interrupt
+> controller
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Ivan Griffin <ivan.griffin@microchip.com>
+> ---
+>  .../microchip,mpfs-plic.h                     | 199 ++++++++++++++++++
+>  1 file changed, 199 insertions(+)
+>  create mode 100644 include/dt-bindings/interrupt-controller/microchip,mpfs-plic.h
 
---gpsjBBqS4+607dEI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Notice how there are not SoC interrupt defines in this directory. That's 
+because we don't do defines for them. The 'rule' is only defines for 
+made up numbers which are not in a reference manual.
 
-Hi Matt,
-
-sorry for the long delay. This cycle, I am concentrating on overhauling the
-bus_recovery handling. I am rather unsure if I have the bandwidth for
-larger block reads this cycle. But it is planned for next cycle.
-
-> > (extending SMBus calls to 255 byte) is complicated because we need ABI
-> > backwards compatibility.
->=20
-> Is it only the i2c-dev ABI that you are concerned about?
-
-To at least give you a pointer what we discussed last time, have a look
-here:
-
-https://lore.kernel.org/r/20200728004708.4430-1-daniel.stodden@gmail.com
-
-I can't go into details now because they escaped my mind :/ But I'll
-work into it again when the bus_recovery thing is done and the recent
-driver patches are handled. But you probably will get the idea without
-me...
-
-Thanks for sharing your script and working on the issue.
-
-Happy hacking,
-
-   Wolfram
-
-
---gpsjBBqS4+607dEI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlK1AACgkQFA3kzBSg
-KbZQDBAAl9AQd3eSooJNmxHZhi63DLh9LFY+YPCISpqGsUYmntckM1+2LPF/hdv5
-fK+YDAnLGeLd/G9VgbQ+gzE9DdLQyv/rxpaNz/vgLkdWF4uz32n4qswYiZrpEFwP
-ByH4C3hcdwt7DErHNABidkzchbXW/3yZ9gQNX0fTbeTaNqvv+OrqrawGMHEKbFMZ
-09M98fQ+aTSztAmpgSKMvJEyy96+afkTAcFsIbGgGC17I8u0daOpuaFoiGakIsvv
-HviYzdpVDeovy20Y9kGAhvxp3IscRBAW9YX9IQpASv5c4OC1NY7Gtw8gkwFqsqHY
-QHXUMrgFqOaglaghfQyFyxcUIKxgq0elq1KFz3dZHOHkddd3xq1Ixkd1AG7wtL4f
-XoL/cTsE1N5YPn8LeVLRNfKvAxwc7uEwi7nC5LwXWHTiu3PRH6rP19PmzyGv/pNL
-Ge10kKSViKy04B4cnCAGMdbM17RZ0Py+nEJdOpKDU4YTGLOVU3c6ciulYjZ+L3uK
-8y7GGu2ilfdryCN0DrlwRslJjfX2SE5Pq7UKpmgxTXsQzuRinqodpzb7v8h2S6pL
-pGQRu1NypiuE9nyt67W5a6DcS474qFlbKYfZYGXpqt48tXQJX8sdnkRuHdYOqU1X
-GqXmNXtuDOmYe9vOlDKP+PQaTx2v3CQ129MtY2H1WIAo6+Zd444=
-=/GFC
------END PGP SIGNATURE-----
-
---gpsjBBqS4+607dEI--
+Rob
