@@ -2,97 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1364614D6
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 13:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B7446150B
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 13:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241998AbhK2MRx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 07:17:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57904 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236912AbhK2MPx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 07:15:53 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 655256131D;
-        Mon, 29 Nov 2021 12:12:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 289B2C53FCE;
-        Mon, 29 Nov 2021 12:12:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638187954;
-        bh=J6RU2160OUE42YClmwCyG+Es52HOmnCZuL2GlsaaDUA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YPRGsL++uiB3n5nNE5PzP2RGHUyBDokqG/NKvrtScM9Oh4RKIMg86l5nanCG7PrFx
-         iFMbwUcqhy8fRD/W++CIRzMnk0Ptf91HS6XtY7JReJiexj3VhWRdau+eg+Ij/GZU2F
-         2bOcooFnAgY59Yql6MD9P700Q+vT0NRVCUwlUwyRb5NAO+UY7RvmxyHtFQEFcd5uts
-         S8+zK4cvkKzcXZA1T141wTP7p2XzALwsLeEbN9ZWYIH04ccR125TZgrvTPiSqtKfil
-         V1uvWJj9SyRzRCjoD2qtCwvxRowyesZwEkIvV8gS4jJlxbWCiImkx31eBObYUovW64
-         xi4aJxt5yV8CA==
-Date:   Mon, 29 Nov 2021 13:12:31 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 1/4] i2c: stm32f7: flush TX FIFO upon transfer errors
-Message-ID: <YaTDr7tFo844UAIf@kunai>
+        id S239960AbhK2Mbu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 07:31:50 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:41596 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239808AbhK2M3u (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 07:29:50 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AT8UeAC024974;
+        Mon, 29 Nov 2021 13:26:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=selector1; bh=G6PSSYkYmZM0MaQPoLImSJDApg8FN1Eq02Ab0suxV6U=;
+ b=C+yRdUm4u05HRyZBVfUMGlaA8sdhNHX/m9bNNcKbUJWQRLMaY1xyV2Ne9x6y70g3ELhH
+ f6UJ8bvsOJRr3hjW4DL97EbL/4nfQOWE2mP+VVC7VeOEcrLo3JOkxMl3H4Xz8v2qbqn/
+ pkJpKnOAl0/mbDWQvO7tRV795uc32INN5GAsa4XdHULWIoJtEB1sRykajaCYgahQaMYE
+ oF0g2nhpqnYL/GgWLiPaxgRCxXOv34wQ6DmBdd5U3r3pLQjmoVQT8yWujEYyXMqEkRq9
+ BqP0SkUVbA5uhNDFsRpbgntc2zQNkkKjE0Oy6S3tLk2fJqZDF2EdnnjbGObQpk7LE3lL /A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cmudrsedc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 13:26:12 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1739810002A;
+        Mon, 29 Nov 2021 13:26:11 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7AF88214D22;
+        Mon, 29 Nov 2021 13:26:11 +0100 (CET)
+Received: from gnbcxd0016.gnb.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 29 Nov
+ 2021 13:26:11 +0100
+Date:   Mon, 29 Nov 2021 13:25:45 +0100
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     Wolfram Sang <wsa@kernel.org>, <pierre-yves.mordret@foss.st.com>,
+        <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <amelie.delaunay@foss.st.com>
+Subject: Re: [PATCH 3/3] i2c: stm32f7: prevent calling slave handling if no
+ slave running
+Message-ID: <20211129122545.GA486850@gnbcxd0016.gnb.st.com>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Alain Volmat <alain.volmat@foss.st.com>,
         pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
         linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-References: <1632151292-18503-1-git-send-email-alain.volmat@foss.st.com>
- <1632151292-18503-2-git-send-email-alain.volmat@foss.st.com>
+References: <1625062303-15327-1-git-send-email-alain.volmat@foss.st.com>
+ <1625062303-15327-4-git-send-email-alain.volmat@foss.st.com>
+ <YaTFsV0sIU6BA0ja@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1sYfu5XiG+wi/5C6"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1632151292-18503-2-git-send-email-alain.volmat@foss.st.com>
+In-Reply-To: <YaTFsV0sIU6BA0ja@kunai>
+X-Disclaimer: ce message est personnel / this message is private
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-29_07,2021-11-28_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
---1sYfu5XiG+wi/5C6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 29, 2021 at 01:21:05PM +0100, Wolfram Sang wrote:
+> On Wed, Jun 30, 2021 at 04:11:43PM +0200, Alain Volmat wrote:
+> > Slave interrupt handler should only be called if there is actually
+> > a slave registered and running to avoid accessing an invalid pointer.
+> > 
+> > Without this commit, an OOPS can be generated due to a NULL ptr dereference
+> > while receiving an IT when there is no master transfer and no slave
+> > running:
+> >   - stm32f7_i2c_isr_event
+> >   - no master_mode hence calling stm32f7_i2c_slave_isr_event
+> >   - access to i2c_dev->slave_running leading to oops due to
+> > slave_running being NULL.
+> > 
+> > Fixes: 60d609f30de2 ("i2c: i2c-stm32f7: Add slave support")
+> > 
+> > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> 
+> Is this one still of interest? You resent patches 1 and 2 but not this
+> one?
 
-On Mon, Sep 20, 2021 at 05:21:29PM +0200, Alain Volmat wrote:
-> While handling an error during transfer (ex: NACK), it could
-> happen that the driver has already written data into TXDR
-> before the transfer get stopped.
-> This commit add TXDR Flush after end of transfer in case of error to
-> avoid sending a wrong data on any other slave upon next transfer.
->=20
-> Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
->=20
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-
-Applied to for-current, thanks!
-
-
---1sYfu5XiG+wi/5C6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkw68ACgkQFA3kzBSg
-KbY0GQ/9FflxoUzCZMy+SZ4u/71HEEbXOxCS4MJG2HYHtPtgSgzzXqHEnPkkO7y1
-3w0wztsBDOVyam0ooiwOgYaP2sQmB3WPFnz3e3OcV2nXgr7Y9MravpnwKF9LO6Lq
-tywOzSI/MVbuRQeb2RlzGyIQ0l3Cbm/rzKoc1bPmhklD6j0qzHV4EH+HQpSHbSZy
-sehUSx3tA8KL8CtGr9Nr2mwj3d3rtjHXB5SLzR3tPH+0ScALH/E3B3OUK69xUaHz
-crKTFwdQL8Rx2XNsyRbGpO3LKanzcu36iTUZGGo5OI8JOh6eD4O8ft0HSId4wIr1
-56fiIUU84iVh6cTPWhSOsHFE46w+bxiTgtqR3x5KiWUSFTf1VljdVKW/e38d55M0
-CY69kMcYirqiOtrsdHpYGDjUZ/5QWI8zNxYTKVuln1JGIcv3sZF9U6yTEdbUzPbG
-GJ/vatVo7LJJlFoFrxZma40ozkUUp+Xb19yN6lxlk/w08N0lRyDyxu0gCHV7Ho8A
-A8gODXZDfw9POXXJPXSf2CZzoN9myMiEks1U33JmbLlNUZA012x9mU2V3Zk0Pbi7
-r0EEngpsrnXeH6laHBTHdjXTH2fSOLP6uxA0GDZwhz1+OuIrhDvHSmhROnjmtNWj
-gbt0uIPbT+BWcveNKvB7pBkJ0uAtsrP/PItvYm1k8aS9qQva99E=
-=tguV
------END PGP SIGNATURE-----
-
---1sYfu5XiG+wi/5C6--
+No you can ignore it. Thanks.
