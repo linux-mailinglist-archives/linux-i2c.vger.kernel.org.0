@@ -2,298 +2,160 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C674610E9
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 10:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 147974610C0
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 10:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243259AbhK2JSs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 04:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241100AbhK2JQs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 04:16:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EA1C0613B3;
-        Mon, 29 Nov 2021 01:01:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5105B80E2B;
-        Mon, 29 Nov 2021 09:00:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C76CEC004E1;
-        Mon, 29 Nov 2021 09:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638176458;
-        bh=Qlr43Soawr/WWYkdiJWsATYOLYnK2WCcrLgE7pjs6R4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qrf3MfG4KKoLsRGFnsNpE+7cijbqY3jNHzzeoHfnJUszA7IEN1w/Qae2paOBap1QS
-         A2dsMLWbexRe2WeJ6jF1sEML5GznFnB88dKsCz9EA5MyHNW5b+bBpJ1M90X8cNItZ3
-         MulgHzXA+rToegfrAAQo3PocTZdXlHsE6XXBrXLmzCE0gsfYh8C2BkFj9kvUl/IACr
-         zeLIYm/NLEYro0pxKWFVtcnT+eQ7gQXlSCubRABDFqOuc9zIVLAq6QahTAVXubyEe1
-         eYfYk8k4b+ZHRAHDBEHAdcF62a66Da/kyZ2C2uPWn8zkmpwcj/hsux+RYG4Rk6gGJM
-         idNDJ3XG5k+KA==
-Date:   Mon, 29 Nov 2021 10:00:55 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Hector Martin <marcan@marcan.st>, Jean Delvare <jdelvare@suse.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
-Message-ID: <YaSWx7ldFfbCmrK3@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hector Martin <marcan@marcan.st>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20210626054113.246309-1-marcan@marcan.st>
+        id S241113AbhK2JG6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 04:06:58 -0500
+Received: from mail-bn8nam11on2085.outbound.protection.outlook.com ([40.107.236.85]:26243
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242294AbhK2JE5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 29 Nov 2021 04:04:57 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VUCCMbqS3frYstM/rPoTEK4yghNVbCyoasNgJZ4H7rvMcb8oanBwn+FVQxPx00dFI8EgeCwf7Cc7DHxWVLEEuXQRbnOagh+1prXCGo2jkGzgwyRmN15bknPJARguS6mqqPmg/t4jOJa8cOhscAg8+l1v+L26TQBHviu/rPJH3YTBNCWNepQaX3SdxmTDP4BlEfzqaXeA7BACS3qkG8NniIaRpfRnVREZp/Dwh9lCEiQ7P20H5zoM4NGgX00xYFeMVRLCY3vJv0U3fUQMfwtXgvwmkvAelfENXO1kW0VKE7UlCDedLgRvPtHKfAkY7uJMU+Fyc5TSrpbOprH/aMphWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iTJE3P/NRTYo7GC5MAIqo99gfZt5hfTv1IMf8wUl+XI=;
+ b=EOOkxwcs1I6QtpxFCyLLiRa9agBJiyf4UNqhf4HVzlotinpRJ3Kwh/nzSEgk50dt6T2bPyIyoutXm71XaW/BrjBTQB82wm7kha50D+TdIXVbvM/EN4+CbsYH9XCun3UIuT9RcE9Mi8RrTtWLMDz/KyLrWSEtOnCkhQyt3oQdhnrrn0cpIKlL6H5UCjTYC8Q8oCzyMXRmQK5yspjpwry6oxQFTh/tVMYY/f03M5F3HJq2RnAuhg+ePGLlR6gqd7YJwJXn1Waj9uacXyvzbz48ZPUoC3UBcvNMB4VBN8Bfh4fUU+Rcs9phMtgtUZP7Pn1XDBtLHf9QftAYiBXO5y5NIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iTJE3P/NRTYo7GC5MAIqo99gfZt5hfTv1IMf8wUl+XI=;
+ b=ECAe6wMgx1D3owcBgv7OZjquS95s+EJlhUL3vw4f0LaxA1n3sQbmgzA3trSJ2QTSaDkvPC3g52MTGQ97pD+6yo/0wlAG79Ei5Sc5q1Gm7gT0RXW+7DYMKjv5t4gxBrGVhgnZsYXXA/DjHu4kSNo6vNId4bcnVMg2RJEQ40UZEL0=
+Received: from SN4PR0501CA0054.namprd05.prod.outlook.com
+ (2603:10b6:803:41::31) by BN0PR02MB7902.namprd02.prod.outlook.com
+ (2603:10b6:408:161::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
+ 2021 09:01:32 +0000
+Received: from SN1NAM02FT0045.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:803:41:cafe::66) by SN4PR0501CA0054.outlook.office365.com
+ (2603:10b6:803:41::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.9 via Frontend
+ Transport; Mon, 29 Nov 2021 09:01:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0045.mail.protection.outlook.com (10.97.5.234) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4734.20 via Frontend Transport; Mon, 29 Nov 2021 09:01:32 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 29 Nov 2021 01:01:28 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Mon, 29 Nov 2021 01:01:28 -0800
+Envelope-to: git@xilinx.com,
+ linux-i2c@vger.kernel.org,
+ robert.hancock@calian.com
+Received: from [10.140.6.59] (port=34642 helo=xhdshubhraj40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1mrcXP-0001hh-EG; Mon, 29 Nov 2021 01:01:27 -0800
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <linux-i2c@vger.kernel.org>
+CC:     <michal.simek@xilinx.com>, <git@xilinx.com>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Chirag Parekh <chiragp@xilinx.com>,
+        "Shubhrajyoti Datta" <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH v2] i2c: cadence: Add standard bus recovery support
+Date:   Mon, 29 Nov 2021 14:31:16 +0530
+Message-ID: <20211129090116.16628-1-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NJ64SnWzsGr4DzGg"
-Content-Disposition: inline
-In-Reply-To: <20210626054113.246309-1-marcan@marcan.st>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b999f265-ddca-4d18-c30d-08d9b316d701
+X-MS-TrafficTypeDiagnostic: BN0PR02MB7902:
+X-Microsoft-Antispam-PRVS: <BN0PR02MB79028C74B12486DDE02DA5DFAA669@BN0PR02MB7902.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j3Jvn8wzbq98YOborjgj4wbC1O2TtFW10XPIR1HA+tdZq5bazF7N3dhhlcP53ZA/0EjrvmBHvepncPLd+mxGrf8loZanw+W+FhHqUJOTOul8078MNZA3nmPrud9rPwFMcYRFr2D6CR7pIGVDgRgor6uQFIennKWHt8hU1EISAihIij91W7LGSukj2brocvBfeaO2yJrPsA6fBNmiUxuJ0FP7Hy1Twy37vvdmqOr6q7QN9W5v11UMRRWiOTWceooxPMYiyX1RBEGkJ+9mC/PYN6iJ+lg8wsuyRKorI9aU41mzsYRMTSfgWgn6ozvVoiL5eLKbmegFL7oNCxAwWWgmccOBT6VnNYMQaP62eK7jnkBBepa/G3XaM4Ug+VTdg43Hvz7BncSvFSIuExhTw1Sei4h3H00tLSQ6kdynJkFMhhBpiR4wMXgk+wf0utrVa7FVh/iaKqVbTsDuFjxParu4zuU40gz/Avsi9jGv4ZiR91tpWE3TrI3cYq1MiJFa0zMmA2l/mHa17foAf6HenM2sL4DDN/kXbhXinN+rBSxvw3fIn+JE6kKxu1FHIuzLP7n36Dk8CLWBN8ayifYPFpsSlK2yUOKtHZFVL5b9CoFCM9nZHal8dYcWRSMN7KMFjtSKrT6hFebViLZwNMHFjkBy/Xx45AUjExER9RHuS/ewWzZUluYJznn7KXkO/oKyDOT9i5tV2D8DmBWIAfcsBlFTMFcH5uvWACPio8frDsVLFG0=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(46966006)(36840700001)(44832011)(426003)(4326008)(8936002)(6666004)(508600001)(5660300002)(2616005)(70586007)(6916009)(54906003)(316002)(2906002)(70206006)(8676002)(107886003)(1076003)(336012)(9786002)(7636003)(356005)(83380400001)(26005)(186003)(82310400004)(47076005)(7696005)(36860700001)(36756003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 09:01:32.6695
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b999f265-ddca-4d18-c30d-08d9b316d701
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0045.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR02MB7902
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Robert Hancock <robert.hancock@calian.com>
 
---NJ64SnWzsGr4DzGg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hook up the standard GPIO/pinctrl-based recovery support for this
+driver.
 
-On Sat, Jun 26, 2021 at 02:41:13PM +0900, Hector Martin wrote:
-> The i801 controller provides a locking mechanism that the OS is supposed
-> to use to safely share the SMBus with ACPI AML or other firmware.
->=20
-> Previously, Linux attempted to get out of the way of ACPI AML entirely,
-> but left the bus locked if it used it before the first AML access. This
-> causes AML implementations that *do* attempt to safely share the bus
-> to time out if Linux uses it first; notably, this regressed ACPI video
-> backlight controls on 2015 iMacs after 01590f361e started instantiating
-> SPD EEPROMs on boot.
->=20
-> Commit 065b6211a8 fixed the immediate problem of leaving the bus locked,
-> but we can do better. The controller does have a proper locking mechanism,
-> so let's use it as intended. Since we can't rely on the BIOS doing this
-> properly, we implement the following logic:
->=20
-> - If ACPI AML uses the bus at all, we make a note and disable power
->   management. The latter matches already existing behavior.
-> - When we want to use the bus, we attempt to lock it first. If the
->   locking attempt times out, *and* ACPI hasn't tried to use the bus at
->   all yet, we cautiously go ahead and assume the BIOS forgot to unlock
->   the bus after boot. This preserves existing behavior.
-> - We always unlock the bus after a transfer.
-> - If ACPI AML tries to use the bus (except trying to lock it) while
->   we're in the middle of a transfer, or after we've determined
->   locking is broken, we know we cannot safely share the bus and give up.
->=20
-> Upon first usage of SMBus by ACPI AML, if nothing has gone horribly
-> wrong so far, users will see:
->=20
-> i801_smbus 0000:00:1f.4: SMBus controller is shared with ACPI AML. This s=
-eems safe so far.
->=20
-> If locking the SMBus times out, users will see:
->=20
-> i801_smbus 0000:00:1f.4: BIOS left SMBus locked
->=20
-> And if ACPI AML tries to use the bus concurrently with Linux, or it
-> previously used the bus and we failed to subsequently lock it as
-> above, the driver will give up and users will get:
->=20
-> i801_smbus 0000:00:1f.4: BIOS uses SMBus unsafely
-> i801_smbus 0000:00:1f.4: Driver SMBus register access inhibited
->=20
-> This fixes the regression introduced by 01590f361e, and further allows
-> safely sharing the SMBus on 2015 iMacs. Tested by running `i2cdump` in a
-> loop while changing backlight levels via the ACPI video device.
->=20
-> Fixes: 01590f361e ("i2c: i801: Instantiate SPD EEPROMs automatically")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+Based on a patch "i2c: cadence: Recover bus after controller reset" by
+Chirag Parekh in the Xilinx kernel Git tree, but simplified to make use
+of more common code.
 
-Jean, Heiner, what do we do with this topic?
+Cc: Chirag Parekh <chiragp@xilinx.com>
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+---
+v2:
+Rebased.
 
-> ---
->  drivers/i2c/busses/i2c-i801.c | 96 ++++++++++++++++++++++++++++-------
->  1 file changed, 79 insertions(+), 17 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index 04a1e38f2a6f..03be6310d6d7 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -287,11 +287,18 @@ struct i801_priv {
->  #endif
->  	struct platform_device *tco_pdev;
-> =20
-> +	/* BIOS left the controller marked busy. */
-> +	bool inuse_stuck;
->  	/*
-> -	 * If set to true the host controller registers are reserved for
-> -	 * ACPI AML use. Protected by acpi_lock.
-> +	 * If set to true, ACPI AML uses the host controller registers.
-> +	 * Protected by acpi_lock.
->  	 */
-> -	bool acpi_reserved;
-> +	bool acpi_usage;
-> +	/*
-> +	 * If set to true, ACPI AML uses the host controller registers in an
-> +	 * unsafe way. Protected by acpi_lock.
-> +	 */
-> +	bool acpi_unsafe;
->  	struct mutex acpi_lock;
->  };
-> =20
-> @@ -854,10 +861,37 @@ static s32 i801_access(struct i2c_adapter *adap, u1=
-6 addr,
->  	int hwpec;
->  	int block =3D 0;
->  	int ret =3D 0, xact =3D 0;
-> +	int timeout =3D 0;
->  	struct i801_priv *priv =3D i2c_get_adapdata(adap);
-> =20
-> +	/*
-> +	 * The controller provides a bit that implements a mutex mechanism
-> +	 * between users of the bus. First, try to lock the hardware mutex.
-> +	 * If this doesn't work, we give up trying to do this, but then
-> +	 * bail if ACPI uses SMBus at all.
-> +	 */
-> +	if (!priv->inuse_stuck) {
-> +		while (inb_p(SMBHSTSTS(priv)) & SMBHSTSTS_INUSE_STS) {
-> +			if (++timeout >=3D MAX_RETRIES) {
-> +				dev_warn(&priv->pci_dev->dev,
-> +					 "BIOS left SMBus locked\n");
-> +				priv->inuse_stuck =3D true;
-> +				break;
-> +			}
-> +			usleep_range(250, 500);
-> +		}
-> +	}
-> +
->  	mutex_lock(&priv->acpi_lock);
-> -	if (priv->acpi_reserved) {
-> +	if (priv->acpi_usage && priv->inuse_stuck && !priv->acpi_unsafe) {
-> +		priv->acpi_unsafe =3D true;
-> +
-> +		dev_warn(&priv->pci_dev->dev, "BIOS uses SMBus unsafely\n");
-> +		dev_warn(&priv->pci_dev->dev,
-> +			 "Driver SMBus register access inhibited\n");
-> +	}
-> +
-> +	if (priv->acpi_unsafe) {
->  		mutex_unlock(&priv->acpi_lock);
->  		return -EBUSY;
->  	}
-> @@ -1639,6 +1673,16 @@ static bool i801_acpi_is_smbus_ioport(const struct=
- i801_priv *priv,
->  	       address <=3D pci_resource_end(priv->pci_dev, SMBBAR);
->  }
-> =20
-> +static acpi_status
-> +i801_acpi_do_access(u32 function, acpi_physical_address address,
-> +				u32 bits, u64 *value)
-> +{
-> +	if ((function & ACPI_IO_MASK) =3D=3D ACPI_READ)
-> +		return acpi_os_read_port(address, (u32 *)value, bits);
-> +	else
-> +		return acpi_os_write_port(address, (u32)*value, bits);
-> +}
-> +
->  static acpi_status
->  i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bi=
-ts,
->  		     u64 *value, void *handler_context, void *region_context)
-> @@ -1648,17 +1692,38 @@ i801_acpi_io_handler(u32 function, acpi_physical_=
-address address, u32 bits,
->  	acpi_status status;
-> =20
->  	/*
-> -	 * Once BIOS AML code touches the OpRegion we warn and inhibit any
-> -	 * further access from the driver itself. This device is now owned
-> -	 * by the system firmware.
-> +	 * Non-i801 accesses pass through.
->  	 */
-> -	mutex_lock(&priv->acpi_lock);
-> +	if (!i801_acpi_is_smbus_ioport(priv, address))
-> +		return i801_acpi_do_access(function, address, bits, value);
-> =20
-> -	if (!priv->acpi_reserved && i801_acpi_is_smbus_ioport(priv, address)) {
-> -		priv->acpi_reserved =3D true;
-> +	if (!mutex_trylock(&priv->acpi_lock)) {
-> +		mutex_lock(&priv->acpi_lock);
-> +		/*
-> +		 * This better be a read of the status register to acquire
-> +		 * the lock...
-> +		 */
-> +		if (!priv->acpi_unsafe &&
-> +			!(address =3D=3D SMBHSTSTS(priv) &&
-> +			 (function & ACPI_IO_MASK) =3D=3D ACPI_READ)) {
-> +			/*
-> +			 * Uh-oh, ACPI AML is trying to do something with the
-> +			 * controller without locking it properly.
-> +			 */
-> +			priv->acpi_unsafe =3D true;
-> +
-> +			dev_warn(&pdev->dev, "BIOS uses SMBus unsafely\n");
-> +			dev_warn(&pdev->dev,
-> +				 "Driver SMBus register access inhibited\n");
-> +		}
-> +	}
-> =20
-> -		dev_warn(&pdev->dev, "BIOS is accessing SMBus registers\n");
-> -		dev_warn(&pdev->dev, "Driver SMBus register access inhibited\n");
-> +	if (!priv->acpi_usage) {
-> +		priv->acpi_usage =3D true;
-> +
-> +		if (!priv->acpi_unsafe)
-> +			dev_info(&pdev->dev,
-> +				 "SMBus controller is shared with ACPI AML. This seems safe so far.\=
-n");
-> =20
->  		/*
->  		 * BIOS is accessing the host controller so prevent it from
-> @@ -1667,10 +1732,7 @@ i801_acpi_io_handler(u32 function, acpi_physical_a=
-ddress address, u32 bits,
->  		pm_runtime_get_sync(&pdev->dev);
->  	}
-> =20
-> -	if ((function & ACPI_IO_MASK) =3D=3D ACPI_READ)
-> -		status =3D acpi_os_read_port(address, (u32 *)value, bits);
-> -	else
-> -		status =3D acpi_os_write_port(address, (u32)*value, bits);
-> +	status =3D i801_acpi_do_access(function, address, bits, value);
-> =20
->  	mutex_unlock(&priv->acpi_lock);
-> =20
-> @@ -1706,7 +1768,7 @@ static void i801_acpi_remove(struct i801_priv *priv)
->  		ACPI_ADR_SPACE_SYSTEM_IO, i801_acpi_io_handler);
-> =20
->  	mutex_lock(&priv->acpi_lock);
-> -	if (priv->acpi_reserved)
-> +	if (priv->acpi_usage)
->  		pm_runtime_put(&priv->pci_dev->dev);
->  	mutex_unlock(&priv->acpi_lock);
->  }
-> --=20
-> 2.32.0
->=20
+ drivers/i2c/busses/i2c-cadence.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---NJ64SnWzsGr4DzGg
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 805c77143a0f..22ca4ca2a1c1 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -179,6 +179,7 @@ enum cdns_i2c_slave_state {
+  * @clk_rate_change_nb:	Notifier block for clock rate changes
+  * @quirks:		flag for broken hold bit usage in r1p10
+  * @ctrl_reg:		Cached value of the control register.
++ * @rinfo:		Structure holding recovery information.
+  * @ctrl_reg_diva_divb: value of fields DIV_A and DIV_B from CR register
+  * @slave:		Registered slave instance.
+  * @dev_mode:		I2C operating role(master/slave).
+@@ -204,6 +205,7 @@ struct cdns_i2c {
+ 	struct notifier_block clk_rate_change_nb;
+ 	u32 quirks;
+ 	u32 ctrl_reg;
++	struct i2c_bus_recovery_info rinfo;
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ 	u16 ctrl_reg_diva_divb;
+ 	struct i2c_client *slave;
+@@ -788,6 +790,7 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 	/* Wait for the signal of completion */
+ 	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
+ 	if (time_left == 0) {
++		i2c_recover_bus(adap);
+ 		cdns_i2c_master_reset(adap);
+ 		dev_err(id->adap.dev.parent,
+ 				"timeout waiting on completion\n");
+@@ -1270,6 +1273,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
+ 	id->adap.retries = 3;		/* Default retry value. */
+ 	id->adap.algo_data = id;
+ 	id->adap.dev.parent = &pdev->dev;
++	id->adap.bus_recovery_info = &id->rinfo;
+ 	init_completion(&id->xfer_done);
+ 	snprintf(id->adap.name, sizeof(id->adap.name),
+ 		 "Cadence I2C at %08lx", (unsigned long)r_mem->start);
+-- 
+2.17.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGklsMACgkQFA3kzBSg
-Kbb19xAAp+/KuBaMeVdW591pCrHFWzeHtIY0DD8VW4txlCukb+DbpQhglCh55H+N
-o9b0kwVdZU4Fv/5SMVfeTlXb7kPilI+JnlMiY4uxgzkQADzYBnkES/PsjBxY1aRQ
-0evCirc8gDGrMllwe0p5YmYsir/4JvGowIMjpHA4LWm/Ul9wyoMbiEp0dtaecMQU
-mq9LJSX6+oL3dhueuwNSX6h72mI55KfMTuS/ay83Fqwqhr/Y8txYSky1y8q7ICyx
-jVLDUQFh/dcCqIPFKncVCLDFS/pcTpIDRvvvD7yDv5uC4SPKnq1xXHlkUm7iRP9+
-nRAv/eSuyj9tZ4955Za/TBsrzh+QPlgVFXTkTeEr6W7PBOIOs5ayQFPpTYni/S8p
-IQ5uDRVnEDMNiFPNf9O+Y9q0NeMiUiXl48aPRNWBjTbiCx4uLg98H89Pocb5Ji4L
-thbfEiPuf86YRErHaqKIQo7m77tQBwd0ySk4XC2r5SiwlUORJ+1wMmH9cbLuEkp1
-tfMMYzqpW7SQU8uxp3H/y0nZCnHFIWrPODtZZsTDv48ga5ODzQdqg/rt4MZG1cmy
-6/B/e5dvDVYxBlynTShQ3ch7MwlBTGJjLaqWzI+ie0GzzzcoSW9BAfx0W60aDzC2
-QiVnpPuiMBeTXY4yCSYl5qHBLog1L5BSRqiNuaekokZHBfjL6qA=
-=pW/q
------END PGP SIGNATURE-----
-
---NJ64SnWzsGr4DzGg--
