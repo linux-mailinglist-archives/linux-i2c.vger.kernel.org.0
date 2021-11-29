@@ -2,130 +2,138 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E651462588
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 23:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB2F462490
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 23:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbhK2Wkw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 17:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
+        id S232402AbhK2WVQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 17:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234053AbhK2WkW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 17:40:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCA1C061191;
-        Mon, 29 Nov 2021 11:20:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 65F50CE13D7;
-        Mon, 29 Nov 2021 19:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3847C53FC7;
-        Mon, 29 Nov 2021 19:20:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638213623;
-        bh=g/nsYskIq0J2gIpANu+wdPav06i49Mv0L127LqeWDic=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZZrHcQYuIz2+z6eGi7PKmEwwhGdcpFmkHNkAtnlOxfYSQqQIiZXQV3n/Zxexl1Sne
-         LGEaInfaa0NcDRMmyel5OApl5FeUuMg9RenyiQ515L9vJ4pat2aNNkBeZYmcQZJWH9
-         BjOzWz3sACWFtEqYz88K1XcKZ7nWgsn+P8gttjAylwKBkTPLbLuRTwtEIhZXsqAamJ
-         a23yF2v3+M+z8O4cz2fK0T+/Gpr2DUKiRtx+PGgh5LmqNYhfVKcmYHIDX4KnUw7zMn
-         rOUo06+MlC1ypTvTriX/NCB48pFT0uKtFFkOQ3RAWEMOKMOnvTN4YTafK5mDkONbeN
-         TEQ9TUa3ZJJ2w==
-Date:   Mon, 29 Nov 2021 20:20:20 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v2 0/2] i2c: aspeed: Late ack Tx done irqs and fix
- unhandled Tx done with NAK
-Message-ID: <YaUn9HO4STM+LmAD@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20210616031046.2317-1-quan@os.amperecomputing.com>
+        with ESMTP id S232086AbhK2WTy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 17:19:54 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85966C0423BD
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 11:53:25 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id d24so39375046wra.0
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 11:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:to:cc:references
+         :content-language:subject:in-reply-to:content-transfer-encoding;
+        bh=psZKX6rfnkaTjO+ZgWVRjGvuXVTl6p4350BG6K7/WK8=;
+        b=lENhKabPaeNYcqAtdJLeEgu7iDflQYQWxVqqi6n4Dt5sHQzl1FW16kHAG2mNPKIPV6
+         6pZGxqmD7YdA8bbIw0h9WtI4WuMhlm6Lr1yhvW7UywBnmrNmDsehtXN6PU2cddVGYTRG
+         d/SUxIBtUyE2o/ptOBi7Fkd+OzkcTP1qusrIICSNmeD2pmAPCEG5twSD7P7qIamRQ01K
+         +miAbOMAbEQoV9gAoSmx/fLwAzSXAkEswgZafyO517bdR11uXw+w56o2ulWTi/Jct4O1
+         P7I+eMf6Q49+b4Lca8PaWMfxCPgg4DMmxYiP70Ft1+woWU9mUAo6cqK/wSDn3UgxkCMK
+         vVFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from:to
+         :cc:references:content-language:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=psZKX6rfnkaTjO+ZgWVRjGvuXVTl6p4350BG6K7/WK8=;
+        b=Ctq4j8jilV9OYvg34JZlU7MxocuauSnKnQkl1hNHCxSjEEVZLCSC6SrP+1d60j47zR
+         idE20Naklkm+ihVD8dcUz32yg9kWrvVFAhsI4nsu/9kVvV3PWDq41dTC38tJ3C9J7Qjl
+         JeS5yswScpJLRsXHnJhCoFsBsWUuRnJ18u5R8EHjwI+sHFNKYvGbVWljQkl6iAYybv9/
+         IwW6OB2gMhyIycU8PsIFCMpoZWJzXOM43j1r87zp3/zOF+rUmgkh58GpxiZ8KluDYtXU
+         GDl4Wbj/nAvk6II7BBDAbAvqcoIasZAqjRwAAb/yLWX/1vzdRAGPrYmdpuUtn9cIiGWs
+         MueA==
+X-Gm-Message-State: AOAM533/egjz5LTrxAwlYLdp+lNQtLrrL18Z0VowfF1eM6w3SnOVLWPm
+        QTl95pDM/l77MJjrSNv9qjnWf1HaBAM=
+X-Google-Smtp-Source: ABdhPJzbaKSghDIR8d7GLOKFiKgLrz2NHxEfiuiRseWiAyqDafHqAmrm86gSKNTmodIklWfQXMmBhw==
+X-Received: by 2002:a5d:49c3:: with SMTP id t3mr36342516wrs.207.1638215604089;
+        Mon, 29 Nov 2021 11:53:24 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f1a:f00:8596:696b:f4cd:9c8e? (p200300ea8f1a0f008596696bf4cd9c8e.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:8596:696b:f4cd:9c8e])
+        by smtp.googlemail.com with ESMTPSA id x4sm240525wmi.3.2021.11.29.11.53.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 11:53:23 -0800 (PST)
+Message-ID: <85361e7d-f2fd-6199-71f3-3f7a749b1677@gmail.com>
+Date:   Mon, 29 Nov 2021 20:53:14 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hSONgx73KSpSsJcS"
-Content-Disposition: inline
-In-Reply-To: <20210616031046.2317-1-quan@os.amperecomputing.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@kernel.org>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
+Content-Language: en-US
+Subject: [PATCH v3] i2c: i801: Improve handling platform data for tco device
+In-Reply-To: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The platform data structures are used in the respective i801_add_tco
+functions only. Therefore we can make the definitions local to these
+functions.
 
---hSONgx73KSpSsJcS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+v3:
+- rebased
+---
+ drivers/i2c/busses/i2c-i801.c | 27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
-On Wed, Jun 16, 2021 at 10:10:44AM +0700, Quan Nguyen wrote:
-> This series consists of two patches to fix the below issues observed
-> when testing with slave mode:
->   + Unhandled Tx done with NAK
->   + Early ack'ed of Tx done (ACK and NAK) causing "Unexpected Ack on
->   read request".
->=20
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 8c0695956..cb6e55758 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1463,15 +1463,14 @@ static inline unsigned int i801_get_adapter_class(struct i801_priv *priv)
+ }
+ #endif
+ 
+-static const struct itco_wdt_platform_data spt_tco_platform_data = {
+-	.name = "Intel PCH",
+-	.version = 4,
+-};
+-
+ static struct platform_device *
+ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 		 struct resource *tco_res)
+ {
++	static const struct itco_wdt_platform_data pldata = {
++		.name = "Intel PCH",
++		.version = 4,
++	};
+ 	struct resource *res;
+ 	unsigned int devfn;
+ 	u64 base64_addr;
+@@ -1514,22 +1513,20 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 	res->flags = IORESOURCE_MEM;
+ 
+ 	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
+-					tco_res, 2, &spt_tco_platform_data,
+-					sizeof(spt_tco_platform_data));
++					tco_res, 2, &pldata, sizeof(pldata));
+ }
+ 
+-static const struct itco_wdt_platform_data cnl_tco_platform_data = {
+-	.name = "Intel PCH",
+-	.version = 6,
+-};
+-
+ static struct platform_device *
+ i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
+ 		 struct resource *tco_res)
+ {
+-	return platform_device_register_resndata(&pci_dev->dev,
+-			"iTCO_wdt", -1, tco_res, 1, &cnl_tco_platform_data,
+-			sizeof(cnl_tco_platform_data));
++	static const struct itco_wdt_platform_data pldata = {
++		.name = "Intel PCH",
++		.version = 6,
++	};
++
++	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
++						 tco_res, 1, &pldata, sizeof(pldata));
+ }
+ 
+ static void i801_add_tco(struct i801_priv *priv)
+-- 
+2.34.1
 
-aspeed maintainers, are you happy with this series now?
-
-> v2:
->   + Split these patches to separate series [Joel]
->   + Added the Fixes lines [Joel]
->   + Fixed multiline comment [Joel]
->   + Refactor irq clearing code [Joel, Guenter]
->   + Revised commit message [Joel, Quan]
->=20
-> v1:
->   + These patches are first introduced in
->   https://lkml.org/lkml/2021/5/19/205
->=20
-> Quan Nguyen (2):
->   i2c: aspeed: Fix unhandled Tx done with NAK
->   i2c: aspeed: Acknowledge Tx done with and without ACK irq late
->=20
->  drivers/i2c/busses/i2c-aspeed.c | 22 ++++++++++++++--------
->  1 file changed, 14 insertions(+), 8 deletions(-)
->=20
-> --=20
-> 2.28.0
->=20
-
---hSONgx73KSpSsJcS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlJ/QACgkQFA3kzBSg
-KbZoxg/+Me1R4XCxqO4t3nohVs8D4zoBBn+b2tQCtqhHNlmbD8hVLPiWu3vfwu3f
-xLDMgOHONd6/rxrw5N2bN8t1oX0AXz2yhxMeVYKgO3jm3AIFuf6bQiqNgBEw009r
-V0NgFmKmN7VkkA3AX5tZKb67P9MSMoVTmWPteZtSzvbphyZr74U8Gv4XpaX1X6ep
-QuQXO3LGvHEJ+WDF5T38eXR1lXZZFTraGqkPmmslFiNOX00XCw5w3zv0PKg8oO4a
-7HRqAxvFiWOw+MD29hkSop+Pjt8G8heq+ZUyIFuBJ6VKLWgCtuaBVnR9B4KlSo1U
-r96yEHx7zrGx8BMMjp/39Ds3oJzkjQR/LzVMy/DAwb8FO0YtELsMJkg1n18r/BFt
-a1ezWd28jFfuVJVTtE5CKZBgPT0wSq4738L236sENmfC0Lo5Zjd3p8miJCnZnlXz
-ePc0fL6PjdJCTNZIlM21mBNvNUWiSW+zsF2+ASJDIwFUVbEaBdvt0k4fSW5GoSX0
-ribRkt2str4gFtyg+s+19mnb8UHZlQnpQunHqpXiaO93iPGqATZFKpwhCG77qJO3
-ifsYMJ+Cui4uPv9xZcTqRJmeqP9ElqYzCz6YVq0EDcLaKaBYfESu0pu1NKTsohB6
-JNJlXes7kqTsu0l4dxspbwNwAGiUe8pk+Vfirn6kM41SUNxKaEE=
-=MdjE
------END PGP SIGNATURE-----
-
---hSONgx73KSpSsJcS--
