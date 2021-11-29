@@ -2,127 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D33994613E8
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 12:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D358A461443
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 12:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234883AbhK2LgJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 06:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242121AbhK2LeJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 06:34:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A20C0698C8;
-        Mon, 29 Nov 2021 02:44:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A4D1B80E58;
-        Mon, 29 Nov 2021 10:44:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB1CC004E1;
-        Mon, 29 Nov 2021 10:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638182691;
-        bh=xSycSCHun7nvgriSFuoyHqvSFKVs/MsbAmwoC5vWqnA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iOfzDwwzDcoYazx28YwA5+GZ9vv4ksBNwIVTY+wzyo6pTm/WgK68j9HWsGHhRwd72
-         NzlFNpTfwtWKOhAw3YHBlRUlchqUgCIIs+LyuzTzWDgK/PkgAdThDxenCSPRz3LBp2
-         JsRCxPi1onFM1GF7z5ffPXfgND+eQO7yd00KuCsVMFuMCK6fJEPmzZB/TJ7aVEf1mZ
-         iFw6VB1qQMhhCC1pEDkVdhfAB4zT8AOSBht0yaMtdAMZk/qe1rWmJLEg+FsC1f5qqs
-         e2X+OVWGsk/N73qa3cV44O3kRsxa060iAPsx4AHEcCVEWCEMBlGwTvRBlz669D2Vnz
-         1qDbRA0fQToGw==
-Date:   Mon, 29 Nov 2021 11:44:48 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tobias Schramm <t.schramm@manjaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH] i2c: rk3x: disable and reenable I2C after timeouts to
- fix stuck low SDA
-Message-ID: <YaSvIDfF5YVArOa+@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tobias Schramm <t.schramm@manjaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>
-References: <20210826174632.91887-1-t.schramm@manjaro.org>
+        id S229969AbhK2L4l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 06:56:41 -0500
+Received: from sauhun.de ([88.99.104.3]:41190 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232592AbhK2Lyl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Mon, 29 Nov 2021 06:54:41 -0500
+Received: from localhost (p54b33788.dip0.t-ipconnect.de [84.179.55.136])
+        by pokefinder.org (Postfix) with ESMTPSA id 3644C2C00AC;
+        Mon, 29 Nov 2021 12:51:22 +0100 (CET)
+Date:   Mon, 29 Nov 2021 12:51:21 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Joakim Tjernlund <joakim.tjernlund@infinera.com>
+Cc:     linux-i2c@vger.kernel.org, Scott Wood <oss@buserror.net>
+Subject: Re: [PATCHv2] i2c-mpc: Correct I2C reset procedure
+Message-ID: <YaS+ueLqCADpvBHP@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Joakim Tjernlund <joakim.tjernlund@infinera.com>,
+        linux-i2c@vger.kernel.org, Scott Wood <oss@buserror.net>
+References: <20170511122033.22471-1-joakim.tjernlund@infinera.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6Li5gp6QIDsdtTJv"
+        protocol="application/pgp-signature"; boundary="vCQhYB1eIMPvaQgH"
 Content-Disposition: inline
-In-Reply-To: <20210826174632.91887-1-t.schramm@manjaro.org>
+In-Reply-To: <20170511122033.22471-1-joakim.tjernlund@infinera.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---6Li5gp6QIDsdtTJv
+--vCQhYB1eIMPvaQgH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 26, 2021 at 07:46:32PM +0200, Tobias Schramm wrote:
-> Previously the SDA line sometimes remained stuck low after timeouts
-> rendering the I2C bus unusable. Testing has shown that disabling and
-> reenabling the I2C peripheral after sending the stop condition seems to
-> unstick SDA reliably.
-> Disable and reenable the I2C controller on timeout after sending stop
-> condition to unstick SDA.
-
-Does it also help to not send STOP? This looks a bit like a hack which
-went into the driver somehow. The proper solution might be to remove the
-STOP and add proper i2c_bus_recovery at the beginning of a transfer.
-
+On Thu, May 11, 2017 at 02:20:33PM +0200, Joakim Tjernlund wrote:
+> Current I2C reset procedure is broken in two ways:
+> 1) It only generate 1 START instead of 9 STARTs and STOP.
+> 2) It leaves the bus Busy so every I2C xfer after the first
+>    fixup calls the reset routine again, for every xfer there after.
 >=20
-> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
-> ---
->  drivers/i2c/busses/i2c-rk3x.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> This fixes both errors.
 >=20
-> diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-> index 819ab4ee517e..fc330cc3686a 100644
-> --- a/drivers/i2c/busses/i2c-rk3x.c
-> +++ b/drivers/i2c/busses/i2c-rk3x.c
-> @@ -1108,6 +1108,16 @@ static int rk3x_i2c_xfer_common(struct i2c_adapter=
- *adap,
->  			val |=3D REG_CON_EN | REG_CON_STOP;
->  			i2c_writel(i2c, val, REG_CON);
-> =20
-> +			/*
-> +			 * Sometimes SDA remains stuck low after timeouts.
-> +			 * Disable and reenable the I2C peripheral to unstick
-> +			 * SDA.
-> +			 */
-> +			val &=3D ~REG_CON_EN;
-> +			i2c_writel(i2c, val, REG_CON);
-> +			val |=3D REG_CON_EN;
-> +			i2c_writel(i2c, val, REG_CON);
-> +
->  			i2c->state =3D STATE_IDLE;
-> =20
->  			ret =3D -ETIMEDOUT;
-> --=20
-> 2.31.1
->=20
+> Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+> Acked-by: Scott Wood <oss@buserror.net>
 
---6Li5gp6QIDsdtTJv
+Okay, I admit it is strange to apply a patch after 4 years, but I am
+doing a bus_recovery overhaul right now and Joakim mentioned a few
+times, he is still using this patch.
+
+I still do wonder why the generic bus recovery algorithm can't be used.
+It has been updated quite a bit and at least sends STOPs after each
+pulse (as a result of an earlier discussion about this patch). But a
+conversion to generic bus recovery wasn't happening, so apply a) what
+users need and b) document what worked for them. Maybe the conversion
+will happen somewhen and/or the algorithm here might improve the generic
+one. We will see.
+
+That all being said:
+
+Applied to for-next, thanks!
+
+
+--vCQhYB1eIMPvaQgH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkryAACgkQFA3kzBSg
-KbbtDA//exD7rdAgLU3RKa0p5TYvpLXxYJpx9MKUCjJVtSTMYaam83u0Yl/LyaDk
-fAi3Il8MY/3muqVMp2iukHzqi+QLJftgC/bBR35xuCGXX3O13C3ER5Jcq51yV5YC
-4GIKIU4gHywMhT1E++OGbZMcurhlazpHTYkmAz7YjdFEf50ws3DajzotLJgbZ2Cy
-XhxTtWOTop4TpjEc59rRhpWZ6+sTITTwMzLng0hMBSYYQrgOohq8UzPy4xxBFUe/
-R+zsM8EtjiBkRLwZ+zjm3DzS6RlSsPKMKs5IszW2E/Q1/uDlHBwiPGUxC+W70wL9
-BVzR2p7hzSaUwwUNfKCruahJnXA370GFnnpPT9nzqBbKb3/uJZloD03q1k/1pN3V
-Fr6YEnomd4UGFehNYWKNy5vFzYQ0PGfxmH8J6qpFU1ud43WYFHXuMWZnzOKhnYyo
-aYZGWiMDC/pjTKEaUqq0LLObTLaHoMmXbFNdo6gfYR+pndqkrjxMq4FTz3mucHXk
-ikNuDt9zRQf49MlF4O61R3WBeE/SYsmS3pHOF/KlrcyOdBwaLUb7nMqquDmsMiK0
-nc06whPerE0fO06divCwcPz047FlAA0YGStkLwRsvCiqWSSa3awjZxCE68mDx6ai
-2OpA+1bPIIXxm7zYKE0Cny0IZXJPg2totOkEjozXcnSN4LY/UA8=
-=vtQV
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkvrYACgkQFA3kzBSg
+KbYb9xAAhTTbkQ2V0Rc9H8p5oNL+Tlpj4w3vTKUrGPddq1G15Qq2cVfqG3MoYEIE
+dofXoRkQ55ICtCfrozvYdzMnQeJ1M96zDHpBf4Rqgxr/zMIkOk2TiCu9pjFdYzcg
+EG3cSoOqwpkFGPnx+xHZxMM5LO+VrBqUzrWUcybmyY+Tq7ej0dR7eglDMrHj8UZD
+PMDudtQBMce1mnzYZjF1Map1BDpYKY0F91K+wTaDT71dd+7CW2p1U+1bAIs74VKV
+vmfGnapXa8hOFotbUSVsVpPtKlld06xY9Z7H8ounLvBTucAUTrLYyQwtP+CJ+hrM
+i7RHea6STuWsj6F5/+dTs2vzqiFnAh0+mRMlChNXQD0JZqHPncsf6sFi6YrdJyoE
+QO6V6LpmDvzPn7MvaqvGTUEURRjpw+Ril9AcYoOx0Vwi6c0nEO632TQUZlgc8SZz
+w5htYHJdlQRgEAfGJJysH8NfZm8uyXtFa7jGxTzuUQuUCI9BgaLfP5xoEn7FmQRn
+IqyGMzdUkE+mn2LOXVXI2U8/PokfawFi+3tAjLkdtm7Clwi2O8YS6pYOENIyftAA
+4Hc10AKni+Mcy0blGUjVmSBfZ6ed5LYm1CBXJIE01ior5JXWti47B9c7Ysx1GG2u
+5fcYgfAygvqlyfFYORLJteki88Dylh3d7FIuOD5gzloJl0Yxj6U=
+=QeKx
 -----END PGP SIGNATURE-----
 
---6Li5gp6QIDsdtTJv--
+--vCQhYB1eIMPvaQgH--
