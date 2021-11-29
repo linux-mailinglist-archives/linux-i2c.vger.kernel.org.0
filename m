@@ -2,87 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9C5462087
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 20:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D60A64620A2
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 20:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234663AbhK2Tdx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 14:33:53 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41614 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbhK2Tbw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 14:31:52 -0500
+        id S234229AbhK2TkI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 14:40:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53364 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234990AbhK2TiH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 14:38:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AB143CE139A;
-        Mon, 29 Nov 2021 19:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B93C53FC7;
-        Mon, 29 Nov 2021 19:28:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE402B815CE;
+        Mon, 29 Nov 2021 19:34:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B7EC53FC7;
+        Mon, 29 Nov 2021 19:34:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638214109;
-        bh=2bPVsYZGEvkL7ytZo1aPhJLz8c1dMzifaUDBAFLBItw=;
+        s=k20201202; t=1638214487;
+        bh=uePvt5gMX4TCL27r5CN6jhQcivmaVfv/7LWiS3z51Z4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RtS0hE/RdKbW2RIa+5sY4JhJGIASzeNdLiXgnE2CvByw5/D6yWy1yzpalKRn7eIMI
-         LBfNJFBa/8ahvFMiZSN0JY93AiP9IHv58oIPdGp3ATx0sxVXkZCsKmjuw6MVJcBVBl
-         igGqH+VxeubgN/PW78WX3y5fsc49drl9BCBY9Y2Ql0mctKfRBSjXAiqnQMHcQFPwHD
-         bbelxeaP7FWqlm4zt3oBJZfjWfZ38IHBATxez5NOyzZzWgpEpzDWfxiY8HGBr8UzVy
-         Q9izPxPeZqy8ONCM3oje/wWR3bXUKBvTgCkQeXKqXiOU82uvA+jSLslVMo/tfwNJYY
-         qxCTfJbPIhv7w==
-Date:   Mon, 29 Nov 2021 20:28:26 +0100
+        b=MEE8n62NGTa/brNFFlvb9FgYyKurmn24pS/XrKGR42MPp1tduyLil2D7SAgiVPTb+
+         Zoy2CsrLD4FTlDlE+Q9xSXjuOxxv1LG8RZ9DDrCFCGzCBVWjJ82aAJc70B9OsAVhEG
+         LjlYy+7j5hxgxDfInoCEtj0pzGelawbuwJ1h9sYz/LgiMXQ9M2rkCHf7AuqJ2vZfi7
+         bXMwo7KmTo4TIpSryev2s5bxpe8FdQdkqaBnOy4Oe1gw70wivT0AGrWi4xeoW7Rzjf
+         j7Dq3+KI/WsW+1N91On/pJHrcllIxemTzTc4nsC01Xoe3RYNdNBgtfzfauU9eNal6H
+         MSqpTEVTeFhAA==
+Date:   Mon, 29 Nov 2021 20:34:44 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     "Lawrence,Wang" <lawrence.wang@nokia-sbell.com>
-Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wang@wrlinb193.emea.nsn-net.net
-Subject: Re: [PATCH] i2c: designware: Get HCNT/LCNT values from dts
-Message-ID: <YaUp2pFmrDJhv4T+@kunai>
+To:     Matt Johnston <matt@codeconstruct.com.au>
+Cc:     zev@bewilderbeest.net, robh+dt@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, brendanhiggins@google.com,
+        benh@kernel.crashing.org, joel@jms.id.au, andrew@aj.id.au,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        jk@codeconstruct.com.au, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v3 0/6] MCTP I2C driver
+Message-ID: <YaUrVD0AMwCc7+Cf@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Lawrence,Wang" <lawrence.wang@nokia-sbell.com>,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wang@wrlinb193.emea.nsn-net.net
-References: <20211115093556.7154-1-lawrence.wang@nokia-sbell.com>
+        Matt Johnston <matt@codeconstruct.com.au>, zev@bewilderbeest.net,
+        robh+dt@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        brendanhiggins@google.com, benh@kernel.crashing.org, joel@jms.id.au,
+        andrew@aj.id.au, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
+        benjaminfair@google.com, jk@codeconstruct.com.au,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+References: <20211115024926.205385-1-matt@codeconstruct.com.au>
+ <163698601142.19991.3686735228078461111.git-patchwork-notify@kernel.org>
+ <YZJ9H4eM/M7OXVN0@shikoro>
+ <20211124031522.GB18900@codeconstruct.com.au>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rJlXTTk3u6DNV2nZ"
+        protocol="application/pgp-signature"; boundary="gpsjBBqS4+607dEI"
 Content-Disposition: inline
-In-Reply-To: <20211115093556.7154-1-lawrence.wang@nokia-sbell.com>
+In-Reply-To: <20211124031522.GB18900@codeconstruct.com.au>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---rJlXTTk3u6DNV2nZ
+--gpsjBBqS4+607dEI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Matt,
+
+sorry for the long delay. This cycle, I am concentrating on overhauling the
+bus_recovery handling. I am rather unsure if I have the bandwidth for
+larger block reads this cycle. But it is planned for next cycle.
+
+> > (extending SMBus calls to 255 byte) is complicated because we need ABI
+> > backwards compatibility.
+>=20
+> Is it only the i2c-dev ABI that you are concerned about?
+
+To at least give you a pointer what we discussed last time, have a look
+here:
+
+https://lore.kernel.org/r/20200728004708.4430-1-daniel.stodden@gmail.com
+
+I can't go into details now because they escaped my mind :/ But I'll
+work into it again when the bus_recovery thing is done and the recent
+driver patches are handled. But you probably will get the idea without
+me...
+
+Thanks for sharing your script and working on the issue.
+
+Happy hacking,
+
+   Wolfram
 
 
-> +	ret = device_property_read_u16_array(dev->dev, "dw-i2c-scl-timing",
-> +					(u16 *)&i2c_scl_timing, sizeof(i2c_scl_timing)/sizeof(u16));
-
-Putting hex values directly into DT is not a proper binding. They need
-to be more generic. Sadly, I don't know the DW hardware, so I can't be
-of much more help. But Andy already gave some pointers, as I saw.
-
-
---rJlXTTk3u6DNV2nZ
+--gpsjBBqS4+607dEI
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlKdoACgkQFA3kzBSg
-Kbba/w/8CVu53eC17FKot1rqbl6DF8+zh83feyfclXNWwPPu82Nr0jZBNDz+Mnbg
-enjpxSnqEFVInmwS+yQ2SNkgMtbovCMXuUigYbJrfZl310+ku2b/lcD+v14wmLJE
-DrrPoVDBa4UB4hq5zwvEbtXtd+XjGuQyABJUMo7iALfDjkgT/bkSBaGyPE4z3wNU
-0HI0U8fFkvX/dQ1nFlaehJoQEeZuhoy6gzKy+kIn1rTNUiBsQBAqV+IagDkGH5Uf
-PpjC0J7ZhbgZnjGwG7ISA0kJJnCWLfUpTOTCkKWB9xa4Dk4Hx4WBc1fAydjcwNrF
-LB8Nn62NovLSGoVENEBwnX5bNk+MbJUlX7karobnDcoc8XAzRVrGOvRy6BfNRAu+
-KowQEndq4FHmCH0CuzYxUF3y3AJmJxkCJx8LCStaIZ6lJd6+Ymt4jHWgo5cUDkyF
-t4XzV/pNJ51ONFBzzV+kxHXGFv0cvVqDm3OTgAA0OSta9wW66NvaDkLqQsVd9G4y
-c7TAcTYT/16n9dHyrvkDEZ373bhjF/JFW9Z4BOAzCYKWBlgV8fpi8KDUJT4nJoeX
-yIDuRmsDthDu7pH4p5aXf4IQyq33/edA3TI/MlV0dMV/YYT5gRTO6Blbs/q2lQt9
-ETbiAUpslY+nAU+cim4pbJgAwBejQA679D8QrhhhqM3Sg9Tyagg=
-=Np68
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlK1AACgkQFA3kzBSg
+KbZQDBAAl9AQd3eSooJNmxHZhi63DLh9LFY+YPCISpqGsUYmntckM1+2LPF/hdv5
+fK+YDAnLGeLd/G9VgbQ+gzE9DdLQyv/rxpaNz/vgLkdWF4uz32n4qswYiZrpEFwP
+ByH4C3hcdwt7DErHNABidkzchbXW/3yZ9gQNX0fTbeTaNqvv+OrqrawGMHEKbFMZ
+09M98fQ+aTSztAmpgSKMvJEyy96+afkTAcFsIbGgGC17I8u0daOpuaFoiGakIsvv
+HviYzdpVDeovy20Y9kGAhvxp3IscRBAW9YX9IQpASv5c4OC1NY7Gtw8gkwFqsqHY
+QHXUMrgFqOaglaghfQyFyxcUIKxgq0elq1KFz3dZHOHkddd3xq1Ixkd1AG7wtL4f
+XoL/cTsE1N5YPn8LeVLRNfKvAxwc7uEwi7nC5LwXWHTiu3PRH6rP19PmzyGv/pNL
+Ge10kKSViKy04B4cnCAGMdbM17RZ0Py+nEJdOpKDU4YTGLOVU3c6ciulYjZ+L3uK
+8y7GGu2ilfdryCN0DrlwRslJjfX2SE5Pq7UKpmgxTXsQzuRinqodpzb7v8h2S6pL
+pGQRu1NypiuE9nyt67W5a6DcS474qFlbKYfZYGXpqt48tXQJX8sdnkRuHdYOqU1X
+GqXmNXtuDOmYe9vOlDKP+PQaTx2v3CQ129MtY2H1WIAo6+Zd444=
+=/GFC
 -----END PGP SIGNATURE-----
 
---rJlXTTk3u6DNV2nZ--
+--gpsjBBqS4+607dEI--
