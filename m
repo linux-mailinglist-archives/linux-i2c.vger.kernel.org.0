@@ -2,194 +2,108 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92954462226
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 21:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C7446253B
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 23:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbhK2U3i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 15:29:38 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:38827 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbhK2U0e (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 15:26:34 -0500
-Received: by mail-oi1-f180.google.com with SMTP id r26so36809085oiw.5;
-        Mon, 29 Nov 2021 12:23:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lDk8BlneSuRVeKSf5grrrIRYXl1VbeT1udhOyG1OtVk=;
-        b=Dn0HbFSXMVpM8g6TPx9ce76jmgRiR5Pm8r3oRIbCj2W/MNB87naj3CYoT1KvRfBVHv
-         XU5N84CuUAnnWKU97nA3CaKQKkpvS4BZ0M5yF5qqaEoVEPMjrOK1KUUHAhoVlGYVBfbN
-         2YRcmRsH+VhP/FDmg2KTQfgsQ76AP7SZPElqJ76g6Nvkk5sxEKxKUz1N9AVaPyK/V5FH
-         nZqG74h97ILvQRViBCAvYlpf1EIgEVmZVoWDC3AyDyj/zsuBc2QxDSy0blG/kkjycM5W
-         lGKjhvzVWqyQPbSqnwOkLbI9NU8GWpF4i9lTyyA2MnoEHgbQgr1x5T9mUTKueU/FnZoF
-         jnIA==
-X-Gm-Message-State: AOAM532XcQyvSgRi2OFLuXmCX4UfMjqHIOJexDjs/cKCKt1C/yF6XBPd
-        SdIVDAM1s3M1QqnR96neSw==
-X-Google-Smtp-Source: ABdhPJwF7Y+9YhXyqxZGUYPifOjP+P5BOlnWsiZCV4rCVdjToGw+1EGueSoksyzSxVFXxzRBg793XQ==
-X-Received: by 2002:aca:ab86:: with SMTP id u128mr271578oie.41.1638217396125;
-        Mon, 29 Nov 2021 12:23:16 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x17sm2419929oot.30.2021.11.29.12.23.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 12:23:15 -0800 (PST)
-Received: (nullmailer pid 540951 invoked by uid 1000);
-        Mon, 29 Nov 2021 20:23:14 -0000
-Date:   Mon, 29 Nov 2021 14:23:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "LH.Kuo" <lhjeff911@gmail.com>
-Cc:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
-        lee.jones@linaro.org, u.kleine-koenig@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, qinjian@cqplus1.com,
-        wells.lu@sunplus.com, "LH.Kuo" <lh.kuo@sunplus.com>
-Subject: Re: [PATCH v2 2/2] devicetree bindings I2C Add bindings doc for
- Sunplus SP7021
-Message-ID: <YaU2snDw5KiGjgjJ@robh.at.kernel.org>
-References: <1635496955-13985-1-git-send-email-lh.kuo@sunplus.com>
- <1636441166-8127-1-git-send-email-lh.kuo@sunplus.com>
- <1636441166-8127-3-git-send-email-lh.kuo@sunplus.com>
+        id S233773AbhK2Wgd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 17:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231676AbhK2Wfp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 17:35:45 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAD5C201F9B;
+        Mon, 29 Nov 2021 11:15:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A8224CE167C;
+        Mon, 29 Nov 2021 19:15:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3473EC53FD4;
+        Mon, 29 Nov 2021 19:15:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638213351;
+        bh=As5tGxBWpsIBr6Ptb98MIpSwR+cID+ZtMAjxC8CabBc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AeNzBB06DPCfeHGq6k4OFx0j224B1i++bhjyaRLcobu0p9O1K7sTYCxY0x9YyQwyl
+         tJEkYMkGJng+5yPY9cIxMQl+zM8BayIAfOcRD/fOgJmW/NOwspug1j2qmw+yYpnUUZ
+         5gjmnYNTtYLEZLOHxGKCH2uiNSPzF8ZE0Q/eN/wHaMl+E+JwnIRhwMo/ux7lqJzvdo
+         OlB/gW8G/xXKyL+7c8Hoe2ImxoyPIl5uyq6O3vXkpxo6f2ASjnEqewPTkgQGW8dluo
+         Tmj7ohRjbFUzJBELi6QQxlG1inHVLqAOemgUiNp0vYcR9IhY2+CnJi5VYYW93ig9uv
+         PW8GahJaUb+kQ==
+Date:   Mon, 29 Nov 2021 20:15:48 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     helgaas@kernel.org, corbet@lwn.net, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, bhelgaas@google.com, Sanket.Goswami@amd.com,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 3/4] i2c: designware: Use pcim_alloc_irq_vectors() to
+ allocate IRQ vectors
+Message-ID: <YaUm5NBr/Pb/i0Vv@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Dejin Zheng <zhengdejin5@gmail.com>, helgaas@kernel.org,
+        corbet@lwn.net, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        rric@kernel.org, bhelgaas@google.com, Sanket.Goswami@amd.com,
+        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210607153916.1021016-1-zhengdejin5@gmail.com>
+ <20210607153916.1021016-4-zhengdejin5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Lgy2OFLg3jDVJdoD"
 Content-Disposition: inline
-In-Reply-To: <1636441166-8127-3-git-send-email-lh.kuo@sunplus.com>
+In-Reply-To: <20210607153916.1021016-4-zhengdejin5@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 09, 2021 at 02:59:26PM +0800, LH.Kuo wrote:
-> Add devicetree bindings I2C Add bindings doc for Sunplus SP7021
-> 
-> Signed-off-by: LH.Kuo <lh.kuo@sunplus.com>
 
-As with other SunPlus patches, author and S-o-b must match.
+--Lgy2OFLg3jDVJdoD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
-> Changes in v2:
->  - Addressed all comments from Mr. Rob Herring.
->  - Modified the structure and register access method.
->  - Modifiedthe path about MAINTAINERS. ( wrong messages PATH in v1).
->  - Modifiedthe the YAML file.
-> 
->  .../devicetree/bindings/i2c/i2c-sunplus.yaml       | 82 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
-> new file mode 100644
-> index 0000000..af860ee
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/i2c-sunplus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus's I2C controller
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +maintainers:
-> +  - lh.kuo <lh.kuo@sunplus.com>
+On Mon, Jun 07, 2021 at 11:39:15PM +0800, Dejin Zheng wrote:
+> The pcim_alloc_irq_vectors() function, an explicit device-managed version
+> of pci_alloc_irq_vectors(). If pcim_enable_device() has been called
+> before, then pci_alloc_irq_vectors() is actually a device-managed
+> function. It is used here as a device-managed function, So replace it
+> with pcim_alloc_irq_vectors(). At the same time, Remove the
+> pci_free_irq_vectors() function to simplify the error handling path.
+> the freeing resources will take automatically when device is gone.
+>=20
+> Reviewed-by: Robert Richter <rric@kernel.org>
+> Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 
-Full name here please.
+Dunno the status of this series, but if it ever goes upstream, I am fine
+with the I2C changes:
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sunplus,sp7021-i2cm
-> +      - sunplus,q645-i2cm
-> +
-> +  reg:
-> +    items:
-> +      - description: Base address and length of the I2C registers
-> +      - description: Base address and length of the I2C DMA registers
-
-Drop 'Base address and length of the '.
-
-> +
-> +  reg-names:
-> +    items:
-> +      - const: i2cm
-> +      - const: i2cmdma
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    enum: [ 100000, 400000 ]
-
-You can't support other frequencies?
-
-> +
-> +  pinctrl-names:
-> +    description:
-> +      A pinctrl state named "default" must be defined.
-> +    const: default
-> +
-> +  pinctrl-0:
-> +    description:
-> +      A phandle to the default pinctrl state.
-
-You don't have to define pinctrl properties when there's only 'default'.
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +  - clocks
-> +  - resets
-> +  - pinctrl-names
-> +  - pinctrl-0
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/sp-sp7021.h>
-> +    #include <dt-bindings/reset/sp-sp7021.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c@9C004600 {
-> +        compatible = "sunplus,sp7021-i2cm";
-> +        reg = <0x9c004600 0x80>, <0x9c004680 0x80>;
-> +        reg-names = "i2cm", "i2cmdma";
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <174 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&clkc I2CM0>;
-> +        resets = <&rstc RST_I2CM0>;
-> +        clock-frequency = <100000>;
-> +        pinctrl-names = "default";
-> +        pinctrl-0 = <&i2cm0_pins>;
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5b7a8a2..575a8e0 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18193,6 +18193,7 @@ SUNPLUS I2C CONTROLLER INTERFACE DRIVER
->  M:	LH Kuo <lh.kuo@sunplus.com>
->  L:	linux-i2c@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
->  F:	drivers/i2c/busses/i2c-sunplus.c
->  
->  SUPERH
-> -- 
-> 2.7.4
-> 
-> 
+--Lgy2OFLg3jDVJdoD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlJuQACgkQFA3kzBSg
+KbZ4Hw/+JuoqxZy2bbiNX8LiPt6gXGhQrly3nu+8bhOe5smWpEmFpLUdQHX/0CPk
+QJguw68urbcJH1tvCw2g5KM81McukpSavS9mi74JLSwJWblmWZFxXNBxirkDP9QP
+/2c6wBEal8h+0T0inKLYm+uUk3DXmVmVp5iv6ZA9kdlfjVvJEAifcgY6/Ie8mOwc
+gIuvTuNtRc6YbneDnLbFjII1sgLepkASr4paZ/KgUwVULdqjm8Q6CHzg9OmHWjwF
+2oEA7CtIO30pe6Ky6tbVOdcxjBhxYC4h66erAMnqO7Wk3QLS4obEowuX1/i5uAWT
+FOO7Az8tKuR+lMNNh3AfTJbkeNNs+wcAb3L2SvIy14braTddeNe5FyzSuC+9QM7X
+x5wIFkXz/SbB1eJt/X4KVCadgKZXxK6NMsSmPuktO5+EYxSySZMJQgtWHcC9aP7E
+4n4gt/sINW3XkKnNv19vHBuXpn7EPkM8h+t/tK/3SHWDYZzRCRLA55lebYvmcqHs
+2BlPZ2cu/WbOm34KeO5y9GFmpKo5pO2TlonWrSVE6T9WnJ01yXd1iPvj4pBnCg6E
+6ttwzMfrZkPn0piefq6nRnUutg2jHK/re6ylAMayBOfr9C0JlEfUELxgETyXmbn0
+ASU8ebTBdSUWSdi6dyEkCUn8XFEzuojFeUBEr9G4p3ycG07BF00=
+=rRir
+-----END PGP SIGNATURE-----
+
+--Lgy2OFLg3jDVJdoD--
