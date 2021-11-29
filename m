@@ -2,160 +2,177 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 147974610C0
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 10:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3794610C1
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 10:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241113AbhK2JG6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 04:06:58 -0500
-Received: from mail-bn8nam11on2085.outbound.protection.outlook.com ([40.107.236.85]:26243
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242294AbhK2JE5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 29 Nov 2021 04:04:57 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VUCCMbqS3frYstM/rPoTEK4yghNVbCyoasNgJZ4H7rvMcb8oanBwn+FVQxPx00dFI8EgeCwf7Cc7DHxWVLEEuXQRbnOagh+1prXCGo2jkGzgwyRmN15bknPJARguS6mqqPmg/t4jOJa8cOhscAg8+l1v+L26TQBHviu/rPJH3YTBNCWNepQaX3SdxmTDP4BlEfzqaXeA7BACS3qkG8NniIaRpfRnVREZp/Dwh9lCEiQ7P20H5zoM4NGgX00xYFeMVRLCY3vJv0U3fUQMfwtXgvwmkvAelfENXO1kW0VKE7UlCDedLgRvPtHKfAkY7uJMU+Fyc5TSrpbOprH/aMphWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iTJE3P/NRTYo7GC5MAIqo99gfZt5hfTv1IMf8wUl+XI=;
- b=EOOkxwcs1I6QtpxFCyLLiRa9agBJiyf4UNqhf4HVzlotinpRJ3Kwh/nzSEgk50dt6T2bPyIyoutXm71XaW/BrjBTQB82wm7kha50D+TdIXVbvM/EN4+CbsYH9XCun3UIuT9RcE9Mi8RrTtWLMDz/KyLrWSEtOnCkhQyt3oQdhnrrn0cpIKlL6H5UCjTYC8Q8oCzyMXRmQK5yspjpwry6oxQFTh/tVMYY/f03M5F3HJq2RnAuhg+ePGLlR6gqd7YJwJXn1Waj9uacXyvzbz48ZPUoC3UBcvNMB4VBN8Bfh4fUU+Rcs9phMtgtUZP7Pn1XDBtLHf9QftAYiBXO5y5NIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iTJE3P/NRTYo7GC5MAIqo99gfZt5hfTv1IMf8wUl+XI=;
- b=ECAe6wMgx1D3owcBgv7OZjquS95s+EJlhUL3vw4f0LaxA1n3sQbmgzA3trSJ2QTSaDkvPC3g52MTGQ97pD+6yo/0wlAG79Ei5Sc5q1Gm7gT0RXW+7DYMKjv5t4gxBrGVhgnZsYXXA/DjHu4kSNo6vNId4bcnVMg2RJEQ40UZEL0=
-Received: from SN4PR0501CA0054.namprd05.prod.outlook.com
- (2603:10b6:803:41::31) by BN0PR02MB7902.namprd02.prod.outlook.com
- (2603:10b6:408:161::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
- 2021 09:01:32 +0000
-Received: from SN1NAM02FT0045.eop-nam02.prod.protection.outlook.com
- (2603:10b6:803:41:cafe::66) by SN4PR0501CA0054.outlook.office365.com
- (2603:10b6:803:41::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.9 via Frontend
- Transport; Mon, 29 Nov 2021 09:01:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0045.mail.protection.outlook.com (10.97.5.234) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4734.20 via Frontend Transport; Mon, 29 Nov 2021 09:01:32 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 29 Nov 2021 01:01:28 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 29 Nov 2021 01:01:28 -0800
-Envelope-to: git@xilinx.com,
- linux-i2c@vger.kernel.org,
- robert.hancock@calian.com
-Received: from [10.140.6.59] (port=34642 helo=xhdshubhraj40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1mrcXP-0001hh-EG; Mon, 29 Nov 2021 01:01:27 -0800
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     <linux-i2c@vger.kernel.org>
-CC:     <michal.simek@xilinx.com>, <git@xilinx.com>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Chirag Parekh <chiragp@xilinx.com>,
-        "Shubhrajyoti Datta" <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH v2] i2c: cadence: Add standard bus recovery support
-Date:   Mon, 29 Nov 2021 14:31:16 +0530
-Message-ID: <20211129090116.16628-1-shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        id S237392AbhK2JHd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 04:07:33 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:59468
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239634AbhK2JFc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 04:05:32 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C713F3F1D6
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 09:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638176534;
+        bh=+klvKK+faRKLaDg9Hg7NVSa08prt4fM01iOQLi+L9zY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Fvs0Oylz5sN3CxTlVB19nDIygbjt1VhPj4sfK0ai86FDclSQT/nzTeV/CfgSy7XY8
+         HeAP+T3CXyor+jmTCaaU77cNp9VNd2+d7AZC5/D7et8DBqV2icb8niDKvscQokPg43
+         kXLZX1etipIkvhd4WKHwsRA44ev+vGWOnLtTvqpUdHcRWjfuLRlec+1pPasJ5OAtHK
+         BaSkK0rGzigQG6mmcx7Qc/ruKm7wJjpLITIVBn4+STzpci+1WXguJVMNpP8G3hZi5M
+         JPmohMEfRRqBV0WtptN6RD1TC+qlDdXbhG60oIwMr/8t8aC7nYsWtqHLyHtQ2x8z9V
+         k+vc5kET3/K6Q==
+Received: by mail-lj1-f199.google.com with SMTP id q64-20020a2e2a43000000b00218c94eab9bso6549703ljq.18
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 01:02:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+klvKK+faRKLaDg9Hg7NVSa08prt4fM01iOQLi+L9zY=;
+        b=7tR7Y2X3LlWlfVEyFqukcljOBQeWNlToUzi1FiYQ1qUYxdKy15t5A1Y5rdG/FChknw
+         /ryeLp+ZVLVVEiwVTCdIeQ6VOvqvFVaKY7F5U+wgNxu4Pe6a1Onqd414FqHVR5F0d70f
+         De0mbHIK2dHTSEGVhUCfKTD+c+BAtqfmezenyM9CkOtnM7GWKfkUF9nycmiPGIGcLR2T
+         GlBZTGrawN8kZr028uncvQa5dRMEonVYFIW69XEXvXCH5iEU/8xNV4NprBIoKoW6oiz0
+         Psf8spGqAVEGJni04Ckrw9XHqHhbHc20Xs9qA1YukINxc6b+YpkiGMI4LtP9mZ6AfoTl
+         j1bA==
+X-Gm-Message-State: AOAM531nwWQfcrd9SYNIE3gqjed4C/GBLiKQpzn1Z6geVIz727/q4pD1
+        nmgd0W3dcg56dGmvlDsiO8bn2H31hjCr6kmASuqzSloxZjb6m/EjvUH7IiNYdNAgZJArdebuQkf
+        /i+3a9S/SV2lQwAXZrDJPL2SHaR3AzZcJNOQcow==
+X-Received: by 2002:a2e:9c8:: with SMTP id 191mr51057827ljj.262.1638176534016;
+        Mon, 29 Nov 2021 01:02:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxfGeBl6B/J9dcWZ1YaA7JAygGQ1hd6YaFyoQjt6umkddkhFy1DycoprioX3nIn6ZG+Rj4h3Q==
+X-Received: by 2002:a2e:9c8:: with SMTP id 191mr51057790ljj.262.1638176533695;
+        Mon, 29 Nov 2021 01:02:13 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id f24sm1266012lfe.247.2021.11.29.01.02.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 01:02:13 -0800 (PST)
+Message-ID: <1b55a6fb-1a23-1f50-9025-1b901ede70a8@canonical.com>
+Date:   Mon, 29 Nov 2021 10:02:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b999f265-ddca-4d18-c30d-08d9b316d701
-X-MS-TrafficTypeDiagnostic: BN0PR02MB7902:
-X-Microsoft-Antispam-PRVS: <BN0PR02MB79028C74B12486DDE02DA5DFAA669@BN0PR02MB7902.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j3Jvn8wzbq98YOborjgj4wbC1O2TtFW10XPIR1HA+tdZq5bazF7N3dhhlcP53ZA/0EjrvmBHvepncPLd+mxGrf8loZanw+W+FhHqUJOTOul8078MNZA3nmPrud9rPwFMcYRFr2D6CR7pIGVDgRgor6uQFIennKWHt8hU1EISAihIij91W7LGSukj2brocvBfeaO2yJrPsA6fBNmiUxuJ0FP7Hy1Twy37vvdmqOr6q7QN9W5v11UMRRWiOTWceooxPMYiyX1RBEGkJ+9mC/PYN6iJ+lg8wsuyRKorI9aU41mzsYRMTSfgWgn6ozvVoiL5eLKbmegFL7oNCxAwWWgmccOBT6VnNYMQaP62eK7jnkBBepa/G3XaM4Ug+VTdg43Hvz7BncSvFSIuExhTw1Sei4h3H00tLSQ6kdynJkFMhhBpiR4wMXgk+wf0utrVa7FVh/iaKqVbTsDuFjxParu4zuU40gz/Avsi9jGv4ZiR91tpWE3TrI3cYq1MiJFa0zMmA2l/mHa17foAf6HenM2sL4DDN/kXbhXinN+rBSxvw3fIn+JE6kKxu1FHIuzLP7n36Dk8CLWBN8ayifYPFpsSlK2yUOKtHZFVL5b9CoFCM9nZHal8dYcWRSMN7KMFjtSKrT6hFebViLZwNMHFjkBy/Xx45AUjExER9RHuS/ewWzZUluYJznn7KXkO/oKyDOT9i5tV2D8DmBWIAfcsBlFTMFcH5uvWACPio8frDsVLFG0=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(46966006)(36840700001)(44832011)(426003)(4326008)(8936002)(6666004)(508600001)(5660300002)(2616005)(70586007)(6916009)(54906003)(316002)(2906002)(70206006)(8676002)(107886003)(1076003)(336012)(9786002)(7636003)(356005)(83380400001)(26005)(186003)(82310400004)(47076005)(7696005)(36860700001)(36756003)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 09:01:32.6695
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b999f265-ddca-4d18-c30d-08d9b316d701
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0045.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR02MB7902
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 0/8] soc: samsung: Add USIv2 driver
+Content-Language: en-US
+To:     David Virag <virag.david003@gmail.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+ <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+On 28/11/2021 04:15, David Virag wrote:
+> On Sun, 2021-11-28 at 00:32 +0200, Sam Protsenko wrote:
+>> USIv2 IP-core provides selectable serial protocol (UART, SPI or
+>> High-Speed I2C); only one can be chosen at a time. This series
+>> implements USIv2 driver, which allows one to select particular USI
+>> function in device tree, and also performs USI block initialization.
+>>
+>> With that driver implemented, it's not needed to do USI
+>> initialization
+>> in protocol drivers anymore, so that code is removed from the serial
+>> driver.
+>>
+> 
+> I think the downstream way of doing this (USI node reg being on the
+> SW_CONF register itself rather than an offset from uart/i2c/spi, the
+> USI driver only controlling the SW_CONF, and the uart/i2c/spi drivers
+> controlling their USI_CON and USI_OPTION regs) is cleaner, better, and
+> easier to adapt to USIv1 too.
+> 
+> For example: I'm sure this is the case on USIv2 devices too, but on
+> Exynos7885, different devices have USI modes configured differently.
+> For example a Samsung Galaxy A8 (2018) has all the USI blocks
+> configured as SPI while a Samsung Galaxy M20 has the first USI
+> configured as dual HSI2C, the second as HSI2C on the first 2 pins and
+> the third as HSI2C on the last 2 pins. With this way of doing
+> everything on USIv2 we'd need 3 disabled USIv2 nodes in the SoC DTSI
+> for one USI block, each for every protocol the USI block can do, all
+> having a single child for their protocol and each referencing the same
+> sysreg (not even sure if that's even supported). Then the board DTS
+> could enable the USI node it needs.
 
-Hook up the standard GPIO/pinctrl-based recovery support for this
-driver.
+It's not supported (one cannot have three same nodes with same unit
+addresses), so this would be solved by dropping out unused interfaces,
+commenting them out or storing everything under one USI:
 
-Based on a patch "i2c: cadence: Recover bus after controller reset" by
-Chirag Parekh in the Xilinx kernel Git tree, but simplified to make use
-of more common code.
+usi@0x1abcdef0 {
+  serial@.... {
+    status = "okay";
+  }
 
-Cc: Chirag Parekh <chiragp@xilinx.com>
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
-v2:
-Rebased.
+  i2c@.... {
+    status = "disabled";
+  }
 
- drivers/i2c/busses/i2c-cadence.c | 4 ++++
- 1 file changed, 4 insertions(+)
+  spi@.... {
+    status = "disabled";
+  }
+}
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 805c77143a0f..22ca4ca2a1c1 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -179,6 +179,7 @@ enum cdns_i2c_slave_state {
-  * @clk_rate_change_nb:	Notifier block for clock rate changes
-  * @quirks:		flag for broken hold bit usage in r1p10
-  * @ctrl_reg:		Cached value of the control register.
-+ * @rinfo:		Structure holding recovery information.
-  * @ctrl_reg_diva_divb: value of fields DIV_A and DIV_B from CR register
-  * @slave:		Registered slave instance.
-  * @dev_mode:		I2C operating role(master/slave).
-@@ -204,6 +205,7 @@ struct cdns_i2c {
- 	struct notifier_block clk_rate_change_nb;
- 	u32 quirks;
- 	u32 ctrl_reg;
-+	struct i2c_bus_recovery_info rinfo;
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 	u16 ctrl_reg_diva_divb;
- 	struct i2c_client *slave;
-@@ -788,6 +790,7 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 	/* Wait for the signal of completion */
- 	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
- 	if (time_left == 0) {
-+		i2c_recover_bus(adap);
- 		cdns_i2c_master_reset(adap);
- 		dev_err(id->adap.dev.parent,
- 				"timeout waiting on completion\n");
-@@ -1270,6 +1273,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
- 	id->adap.retries = 3;		/* Default retry value. */
- 	id->adap.algo_data = id;
- 	id->adap.dev.parent = &pdev->dev;
-+	id->adap.bus_recovery_info = &id->rinfo;
- 	init_completion(&id->xfer_done);
- 	snprintf(id->adap.name, sizeof(id->adap.name),
- 		 "Cadence I2C at %08lx", (unsigned long)r_mem->start);
--- 
-2.17.1
+> 
+> With the downstream way we could have just one USI node and we could
+> add the 3 protocols it can do disabled as seperate or child nodes. This
+> way the board DTS only needs to set the appropriate mode setting and
+> enable the protocol it needs. I'd say much better than having 3 USI
+> nodes for the same USI block.
 
+Then however you need to handle probe ordering and possible probe deferrals.
+
+> 
+> Also this way is pretty USIv2 centric. Adding USIv1 support to this
+> driver is difficult this way because of the the lack of USI_CON and
+> USI_OPTION registers as a whole (so having nowhere to actually set the
+> reg of the USI node to, as the only thing USIv1 has is the SW_CONF
+> register). 
+
+How is it difficult? Not having a register is easy - noop on given platform.
+
+> In my opinion being able to use the same driver and same
+> device tree layout for USIv1 and USIv2 is a definite plus
+> 
+> The only real drawback of that way is having to add code for USIv2
+> inside the UART, HSI2C, and SPI drivers but in my opinion the benefits
+> overweigh the drawbacks greatly. We could even make the uart/spi/hsi2c
+> drivers call a helper function in the USI driver to set their USI_CON
+> and USI_OPTION registers up so that code would be shared and not
+> duplicated. Wether this patch gets applied like this is not my choice
+> though, I'll let the people responsible decide
+> :-)
+> 
+> Anyways, soon enough I can write an USIv1 driver after I submit all the
+> 7885 stuff I'm working on currently. If you want to, you can add USIv2
+> support to that driver, or if an USIv2 driver is already in upstream at
+> that point, if it is written in the downstream way I can add v1 support
+> to that, or if it's like this I'll have to make a whole seperate driver
+> with a whole seperate DT structure.
+> 
+> Best regards,
+> David
+> 
+
+
+Best regards,
+Krzysztof
