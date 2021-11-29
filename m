@@ -2,83 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4813462140
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 20:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D3F462161
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 21:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351267AbhK2UDA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 15:03:00 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:39798 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379792AbhK2UBA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 15:01:00 -0500
-Received: by mail-oi1-f175.google.com with SMTP id bf8so36737668oib.6;
-        Mon, 29 Nov 2021 11:57:41 -0800 (PST)
+        id S1347495AbhK2UIr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 15:08:47 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:39519 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229452AbhK2UGq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 15:06:46 -0500
+Received: by mail-ot1-f50.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso27069920ots.6;
+        Mon, 29 Nov 2021 12:03:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=HfsUR5L7A7mtic8OAeLVF3BR2S9QhZbq2Zd9TYiAIUw=;
-        b=iyeslQhcxi/TgIusZcp8RzX0mv2uCvB1mPXqI7Mb2NOjvcOqOnHq2qhd2TA5U+cukK
-         uKqqj5ZIhX6ToRW8a/OvDc/ZQ5TTfX8QS4ysxnS0D2sEt/FlwbqffJkd+kQuvHF2ZHCn
-         M6jKSOdBItRv7vy/n1m7Gv96pMcOInPa/8aAGmWL2N2VjL/jvYhQcOnyACxzpwL9WZzK
-         TuPGwktfTzd3quYQgoI/wFmnTNulkhiceyBURukB+e1DDOvRtiMa2umRUYeciLOrrVGK
-         gxm0LALK0Na4NM4dskApisDYoTofW3ijOiu+HbZZSw/8iqfwi6MP2++0TLiKjCdTqcL5
-         sngw==
-X-Gm-Message-State: AOAM533cBofvcD8i12qTCaiPfXHgWe5Q6dV8taNYjHno3thUmr9oqBP8
-        X678ovh3LN1HWD9fWBQ8gw==
-X-Google-Smtp-Source: ABdhPJzP2oHSFJrUqX433xhlxSbtB1tFwj+rRhSRXyeRyaBNTiCllu+XkavzvOWSuvIiREO4uWcIhA==
-X-Received: by 2002:aca:1202:: with SMTP id 2mr153130ois.63.1638215861431;
-        Mon, 29 Nov 2021 11:57:41 -0800 (PST)
+        bh=kvDcsM3w4WQk4jXsDcnewbr4cFKFCF6p3RmEQ5PDnjA=;
+        b=S7JPj8OFP9W9H/iYZ3Dm9XvVqanpni9mXRwicwFiz5tsxzGU2fnAwhxX80oy9cri16
+         u4bD9fql8YOHxoLjejQAOnRjELE5gZzaCULoB4Sm25WMU5Snjj7KzIrwW9esE3Ex6oK3
+         yfb39gha2TB+dP6nUCmJchmaJMaIeVze4vgNF2owIUXqcrkxdwdlKhhuuqGfhdXzN5TT
+         bWNbo1b0GjcrDqh/hY7pG1U4SkqpX83Xtq/HAdbrbx+ofqGl2j0DUknxCXTchBlJ4H+f
+         7ks8Lq7uxEb2OfDqbL0HVhXbscsDcNmfkUqmfZPeAWb0ForYEcGzUq1o8a+CFBUhcEuI
+         RTBQ==
+X-Gm-Message-State: AOAM533SBv7/Vr7z0M+YIwcWLAgSBffmWUHO4aLmMsrHJp2xfXBcVuRK
+        r/2kDREUlOfep5p0cBBbuQ==
+X-Google-Smtp-Source: ABdhPJy/Ihp3jA541L/1BdmDyIG1+61H1YRDltOlKuS90bu2rf+mRdfltiPME33JnY7hnF3caTjYCA==
+X-Received: by 2002:a9d:1f4:: with SMTP id e107mr46658945ote.52.1638216207570;
+        Mon, 29 Nov 2021 12:03:27 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bb8sm3226530oib.9.2021.11.29.11.57.39
+        by smtp.gmail.com with ESMTPSA id e21sm2805635ote.72.2021.11.29.12.03.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 11:57:40 -0800 (PST)
-Received: (nullmailer pid 504791 invoked by uid 1000);
-        Mon, 29 Nov 2021 19:57:39 -0000
-Date:   Mon, 29 Nov 2021 13:57:39 -0600
+        Mon, 29 Nov 2021 12:03:27 -0800 (PST)
+Received: (nullmailer pid 512532 invoked by uid 1000);
+        Mon, 29 Nov 2021 20:03:25 -0000
+Date:   Mon, 29 Nov 2021 14:03:25 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     conor.dooley@microchip.com
-Cc:     paul.walmsley@sifive.com, alexandre.belloni@bootlin.com,
-        daire.mcnamara@microchip.com, bin.meng@windriver.com,
-        palmer@dabbelt.com, a.zummo@towertech.it,
-        linux-kernel@vger.kernel.org, jassisinghbrar@gmail.com,
-        atish.patra@wdc.com, lewis.hanly@microchip.com,
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, atish.patra@wdc.com,
+        ivan.griffin@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
         krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linus.walleij@linaro.org,
-        broonie@kernel.org, ivan.griffin@microchip.com,
-        linux-spi@vger.kernel.org, aou@eecs.berkeley.edu,
-        robh+dt@kernel.org, bgolaszewski@baylibre.com,
-        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 01/13] dt-bindings: interrupt-controller: create a header
- for RISC-V interrupts
-Message-ID: <YaUws4nu6iLvHLiF@robh.at.kernel.org>
+        bin.meng@windriver.com
+Subject: Re: [PATCH 03/13] dt-bindings: soc/microchip: update sys ctrlr
+ compat string
+Message-ID: <YaUyDUsyEoaA6nky@robh.at.kernel.org>
 References: <20211108150554.4457-1-conor.dooley@microchip.com>
- <20211108150554.4457-2-conor.dooley@microchip.com>
+ <20211108150554.4457-4-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211108150554.4457-2-conor.dooley@microchip.com>
+In-Reply-To: <20211108150554.4457-4-conor.dooley@microchip.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 08 Nov 2021 15:05:42 +0000, conor.dooley@microchip.com wrote:
-> From: Ivan Griffin <ivan.griffin@microchip.com>
+On Mon, Nov 08, 2021 at 03:05:44PM +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Provide named identifiers for device tree for RISC-V interrupts.
+> Update 'compatible' strings for system controller drivers to the
+> approved Microchip name.
+
+Why do I care what Microchip approved? You all picked identifiers 
+(that's all it is) and now get to live with them.
+
 > 
-> Licensed under GPL and MIT, as this file may be useful to any OS that
-> uses device tree.
-> 
-> Signed-off-by: Ivan Griffin <ivan.griffin@microchip.com>
 > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  .../interrupt-controller/riscv-hart.h         | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->  create mode 100644 include/dt-bindings/interrupt-controller/riscv-hart.h
+>  .../bindings/mailbox/microchip,polarfire-soc-mailbox.yaml     | 4 +++-
+>  .../soc/microchip/microchip,polarfire-soc-sys-controller.yaml | 4 +++-
+>  drivers/mailbox/mailbox-mpfs.c                                | 1 +
+>  3 files changed, 7 insertions(+), 2 deletions(-)
 > 
-
-Acked-by: Rob Herring <robh@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+> index bbb173ea483c..b08c8a158eea 100644
+> --- a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+> @@ -11,7 +11,9 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    const: microchip,polarfire-soc-mailbox
+> +    enum:
+> +      - microchip,polarfire-soc-mailbox
+> +      - microchip,mpfs-mailbox
+>  
+>    reg:
+>      items:
+> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+> index 2cd3bc6bd8d6..d6c953cd154b 100644
+> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+> @@ -19,7 +19,9 @@ properties:
+>      maxItems: 1
+>  
+>    compatible:
+> -    const: microchip,polarfire-soc-sys-controller
+> +    enum:
+> +      - microchip,polarfire-soc-sys-controller
+> +      - microchip,mpfs-sys-controller
+>  
+>  required:
+>    - compatible
+> diff --git a/drivers/mailbox/mailbox-mpfs.c b/drivers/mailbox/mailbox-mpfs.c
+> index 0d6e2231a2c7..9d5e558a6ee6 100644
+> --- a/drivers/mailbox/mailbox-mpfs.c
+> +++ b/drivers/mailbox/mailbox-mpfs.c
+> @@ -233,6 +233,7 @@ static int mpfs_mbox_probe(struct platform_device *pdev)
+>  
+>  static const struct of_device_id mpfs_mbox_of_match[] = {
+>  	{.compatible = "microchip,polarfire-soc-mailbox", },
+> +	{.compatible = "microchip,mpfs-mailbox", },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, mpfs_mbox_of_match);
+> -- 
+> 2.33.1
+> 
+> 
