@@ -2,120 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2471A462065
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 20:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9C5462087
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 20:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbhK2T14 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 14:27:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46308 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351964AbhK2TZ4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 14:25:56 -0500
+        id S234663AbhK2Tdx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 14:33:53 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:41614 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234229AbhK2Tbw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 14:31:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5DD5B815CF;
-        Mon, 29 Nov 2021 19:22:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F090EC53FC7;
-        Mon, 29 Nov 2021 19:22:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AB143CE139A;
+        Mon, 29 Nov 2021 19:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B93C53FC7;
+        Mon, 29 Nov 2021 19:28:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638213755;
-        bh=Y5NwSlQVKu/RjuujNCewGKGidAPlSFDXVTVyAhtaMd4=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=rP23YM30IC0YD3XcoytOUD3nAaBxVfg9sYjCOZfzb8zunQm8ShvGTG7V8Uvl21RZ2
-         Rtalf+oKhumJ6V0JtMg8w6h8MX4opoA/WJjDnBmKZnRrfEVqYufEewICYKJQKKXTEO
-         +DvO8fzn4CsyDezm+73FMLG6t+IIzG1H5mnXI091jdYsOBDks/YCOqWaHJpKbvAx40
-         kFBtHb48AAMNmcbHjj3Ho2cL4ObwUglELMdgRg/rVxCWIlgkcyN0a54CiicB46tpAW
-         4M9fxbNtupmVZRYkGTcyRZeZsUrMGe1hMmjVmsD/S6dHwNJEH25zKtBoh6FOJX259s
-         xRlhjNUjcuJJw==
-Date:   Mon, 29 Nov 2021 20:22:32 +0100
+        s=k20201202; t=1638214109;
+        bh=2bPVsYZGEvkL7ytZo1aPhJLz8c1dMzifaUDBAFLBItw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RtS0hE/RdKbW2RIa+5sY4JhJGIASzeNdLiXgnE2CvByw5/D6yWy1yzpalKRn7eIMI
+         LBfNJFBa/8ahvFMiZSN0JY93AiP9IHv58oIPdGp3ATx0sxVXkZCsKmjuw6MVJcBVBl
+         igGqH+VxeubgN/PW78WX3y5fsc49drl9BCBY9Y2Ql0mctKfRBSjXAiqnQMHcQFPwHD
+         bbelxeaP7FWqlm4zt3oBJZfjWfZ38IHBATxez5NOyzZzWgpEpzDWfxiY8HGBr8UzVy
+         Q9izPxPeZqy8ONCM3oje/wWR3bXUKBvTgCkQeXKqXiOU82uvA+jSLslVMo/tfwNJYY
+         qxCTfJbPIhv7w==
+Date:   Mon, 29 Nov 2021 20:28:26 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>,
-        Corey Minyard <minyard@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v5 1/3] i2c: aspeed: Add slave_enable() to toggle slave
- mode
-Message-ID: <YaUoeFZn6zLNoGed@kunai>
+To:     "Lawrence,Wang" <lawrence.wang@nokia-sbell.com>
+Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wang@wrlinb193.emea.nsn-net.net
+Subject: Re: [PATCH] i2c: designware: Get HCNT/LCNT values from dts
+Message-ID: <YaUp2pFmrDJhv4T+@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20210714033833.11640-1-quan@os.amperecomputing.com>
- <20210714033833.11640-2-quan@os.amperecomputing.com>
- <YRTQP9sX0hkTJMTx@shikoro>
+        "Lawrence,Wang" <lawrence.wang@nokia-sbell.com>,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wang@wrlinb193.emea.nsn-net.net
+References: <20211115093556.7154-1-lawrence.wang@nokia-sbell.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d1UpdctGHU2n/12Q"
+        protocol="application/pgp-signature"; boundary="rJlXTTk3u6DNV2nZ"
 Content-Disposition: inline
-In-Reply-To: <YRTQP9sX0hkTJMTx@shikoro>
+In-Reply-To: <20211115093556.7154-1-lawrence.wang@nokia-sbell.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---d1UpdctGHU2n/12Q
+--rJlXTTk3u6DNV2nZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi,
 
-I still wonder if we can't get the SSIF BMC driver upstream...
+> +	ret = device_property_read_u16_array(dev->dev, "dw-i2c-scl-timing",
+> +					(u16 *)&i2c_scl_timing, sizeof(i2c_scl_timing)/sizeof(u16));
 
-> @all: Plus, I neither like the API (because it doesn't look generic to
-> me but mostly handling one issue needed here) nor do I fully understand
-> the use case. Normally, when a read is requested and the backend needs
-> time to deliver the data, the hardware should stretch the SCL clock
-> until some data register is finally written to. If it doesn't do it for
-> whatever reason, this is a quirky hardware in my book and needs handling
-> in the driver only. So, what is special with this HW? Can't we solve it
-> differently?
-
-... for that, it would be great if somebody could answer my questions
-here :)
-
-Happy hacking,
-
-   Wolfram
+Putting hex values directly into DT is not a proper binding. They need
+to be more generic. Sadly, I don't know the DW hardware, so I can't be
+of much more help. But Andy already gave some pointers, as I saw.
 
 
---d1UpdctGHU2n/12Q
+--rJlXTTk3u6DNV2nZ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlKHgACgkQFA3kzBSg
-Kbaj7Q/+K++8yheJLiYAr0liA2UQdfCq+XezGICIbZAVxxsZK8n1//zZg7zn5/im
-iUQ/roCf08jiF7YOvNDErnCyJTNpVvm9JHvNlYf/TvB9zv7Lwxu3ysMUFaiV00dT
-c6MskoCbxYPdDEz3UtYJ6eJE4qaU0prhazQlYqJvJu1W/cN41e23eHWfiRvSPg65
-ui/7bC0mCLia8VUl2OUs6MGedop+JiqmvaKm5cmoZf7Idi5wxyOVbpQ3955ys1Y/
-4FWtD1YvJubfqZW0WBRDzFiesE5QY+ryqVcu4AdbwdT9jdik4t9vz0yJsgpPOQ/+
-2AAnfuvzWdSvQL5+2aGITnOrT2qJDDePA87OaE0egYKyyUfX533Y8Yit1Fc5OQeh
-hgTvVOzuBsaJVcJTEka49RpzuCha9SeOs8oOV1tOx7rO7tL7kLmKmUmWyj1cRm35
-C15QuoyRZ83+l2v+x27L+leKiWlTabVV1/D+gfVSmt1GD/qKoc/h0Lxss1x1VGcW
-YVopBoNqawQLVsX7EhordVwZNjBuU473rFfYxWPW+DDi34WaFIOlf2b0XN8gNymU
-F8tQo20t7Nd2KvwhmTDUT7j5nXbEJbS3/TqeSMpOQi3kjskHWr78o267qqe0kIzT
-xNkLGxWkdF71AbdjUMUJu+pxli9ABhL0OqxhZ4imhrRZBIKo0wQ=
-=qfX/
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlKdoACgkQFA3kzBSg
+Kbba/w/8CVu53eC17FKot1rqbl6DF8+zh83feyfclXNWwPPu82Nr0jZBNDz+Mnbg
+enjpxSnqEFVInmwS+yQ2SNkgMtbovCMXuUigYbJrfZl310+ku2b/lcD+v14wmLJE
+DrrPoVDBa4UB4hq5zwvEbtXtd+XjGuQyABJUMo7iALfDjkgT/bkSBaGyPE4z3wNU
+0HI0U8fFkvX/dQ1nFlaehJoQEeZuhoy6gzKy+kIn1rTNUiBsQBAqV+IagDkGH5Uf
+PpjC0J7ZhbgZnjGwG7ISA0kJJnCWLfUpTOTCkKWB9xa4Dk4Hx4WBc1fAydjcwNrF
+LB8Nn62NovLSGoVENEBwnX5bNk+MbJUlX7karobnDcoc8XAzRVrGOvRy6BfNRAu+
+KowQEndq4FHmCH0CuzYxUF3y3AJmJxkCJx8LCStaIZ6lJd6+Ymt4jHWgo5cUDkyF
+t4XzV/pNJ51ONFBzzV+kxHXGFv0cvVqDm3OTgAA0OSta9wW66NvaDkLqQsVd9G4y
+c7TAcTYT/16n9dHyrvkDEZ373bhjF/JFW9Z4BOAzCYKWBlgV8fpi8KDUJT4nJoeX
+yIDuRmsDthDu7pH4p5aXf4IQyq33/edA3TI/MlV0dMV/YYT5gRTO6Blbs/q2lQt9
+ETbiAUpslY+nAU+cim4pbJgAwBejQA679D8QrhhhqM3Sg9Tyagg=
+=Np68
 -----END PGP SIGNATURE-----
 
---d1UpdctGHU2n/12Q--
+--rJlXTTk3u6DNV2nZ--
