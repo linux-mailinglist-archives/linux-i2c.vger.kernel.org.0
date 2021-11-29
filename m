@@ -2,111 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 196934612B8
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 11:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26EC34612B2
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 11:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349924AbhK2Kp4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 05:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbhK2Knx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 05:43:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100BCC061396;
-        Mon, 29 Nov 2021 02:06:56 -0800 (PST)
+        id S1346013AbhK2KpT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 05:45:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60544 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348541AbhK2KnS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 05:43:18 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6748EB80E79;
-        Mon, 29 Nov 2021 10:06:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C17C004E1;
-        Mon, 29 Nov 2021 10:06:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 940E5B80E80;
+        Mon, 29 Nov 2021 10:40:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD8CC53FAD;
+        Mon, 29 Nov 2021 10:39:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638180413;
-        bh=uitWIyNTXwwm6OoKWtXuF9nygCgs3sTMxZAODgrYAfU=;
+        s=k20201202; t=1638182399;
+        bh=dEEOcQfEB95yM+DcjkZPRT2lrjVYea8Y1lBzvzrExkw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IKKoAc9a1ic9NcZI4k1mpaYfaDltZw2XNo2118zFf7SKo+s3k4/pm6ZfmFHeAoniU
-         SwSC3oPI+cy6wJh3uaBmWEP9ZB7MCPJE/B1CAgoD9o9HYWiw7qXMz/nYpHjUNhPu8Q
-         n8TCCf0/7olBiJZRnMv/rUppn9OV83rNePMCvDawKXYqdy/1AobP7hgqt6zAJoIwEN
-         ZIKpJBng0OpeKGlPDr7RkCCahxvtulOxV37bVVl1mVrRId9fTOmXhXFHjfNIAJalnX
-         KhjARqoo72iGt53sFrGLs05clJdxDPrdChpMlPj00Z55VBDQc2lnLX6kOfoh5yvAB5
-         Cz8i3RRdZTHLA==
-Date:   Mon, 29 Nov 2021 11:06:50 +0100
+        b=lqEICburaTXd7FBOJ8WP1mTsl3Lpk/QJjgwNPL6h4TTf/8aj3FQRIkWnzhSMwz99p
+         VQftEDF43EG7hots65fgIwZeVSe8Wk31sszc+P5Au/1VWro6T10ftJ4Ow8ucvKpTT7
+         nqOm8ubVUh5TsjYs9V78G+H0Fw/n1SocH27DNOguHiYLuRUAbWZ/44HfFO/yepNTP+
+         wyAGK6IDY2viPPbTjJTLFz4EHh4TKDAY9sUFrIgcY5blD9tKz4ZkS47lx9Qy6i7rBC
+         isYruR6GPBLAjxTfaBuPI1ImH38EIGALZ2jb1mR+gM4VfOrvVA2TOuJq44nmqAJrfO
+         hoSmK05UEGQ/w==
+Date:   Mon, 29 Nov 2021 11:39:56 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
-Cc:     Codrin Ciubotariu - M19940 <Codrin.Ciubotariu@microchip.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches - M43218 <Ludovic.Desroches@microchip.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] i2c: at91: Add support for programmable clock source
-Message-ID: <YaSmOgH9MP0Kag0s@kunai>
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
+        andrew@sanpeople.com, mhoffman@lightlink.com, khali@linux-fr.org
+Subject: Re: [PATCH 1/3] i2c: at91: move i2c_recover_bus() outside of
+ at91_do_twi_transfer()
+Message-ID: <YaSt/CXWmZGmt+te@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>,
-        Codrin Ciubotariu - M19940 <Codrin.Ciubotariu@microchip.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches - M43218 <Ludovic.Desroches@microchip.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211012140718.2138278-1-horatiu.vultur@microchip.com>
- <8a775c67-00a3-1dbe-daa3-09a537f482d8@microchip.com>
- <20211013114144.7j4scdaq2rjfmiwn@soft-dev3-1.localhost>
- <YYWmZMc8eVq5SZYj@kunai>
- <eb2120c3-540e-64db-8b70-c2b29f23e3cc@microchip.com>
- <20211108092942.uulvtqoi36wnbisg@soft-dev3-1.localhost>
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
+        andrew@sanpeople.com, mhoffman@lightlink.com, khali@linux-fr.org
+References: <20210727111554.1338832-1-codrin.ciubotariu@microchip.com>
+ <20210727111554.1338832-2-codrin.ciubotariu@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kYzvNRaC+UDmnAMR"
+        protocol="application/pgp-signature"; boundary="3OthpyYLRMGfk6Jx"
 Content-Disposition: inline
-In-Reply-To: <20211108092942.uulvtqoi36wnbisg@soft-dev3-1.localhost>
+In-Reply-To: <20210727111554.1338832-2-codrin.ciubotariu@microchip.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---kYzvNRaC+UDmnAMR
+--3OthpyYLRMGfk6Jx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+
+Hi Codrin,
+
+sorry for the super-long delay. There is an issue here with regard to
+bus recovery which affetcs more drivers and I can't make up my mind how
+to handle it...
+
+> Fixes: d3d3fdcc4c90 ("i2c: at91: implement i2c bus recovery")
+
+Sidenote: I don't think this is a fix.
+
+> +	if (ret < 0) {
+> +		/*
+> +		 * some faulty I2C slave devices might hold SDA down;
+> +		 * we can send a bus clear command, hoping that the pins will be
+> +		 * released
+> +		 */
+> +		i2c_recover_bus(&dev->adapter);
+> +	} else {
+> +		ret = num;
+> +	}
+
+So, one issue is more straightforward. Bus recovery is applied on all
+errors. It should only be called when SDA is stuck.
+
+The other issue is that bus recovery is applied after a transfer. The
+I2C specs mention bus recovery only at the beginning of a transfer when
+SDA is detected low. I think it also makes more sense because the bus
+may also be stuck because of a misbehaving bootloader etc. This will be
+caught when the check is done at the beginning.
+
+However, moving the detection to the beginning leaves room for a
+regression, because your driver already does it at the end of a
+transfer. However, I'd think all regressions coming up need seperate
+fixing anyhow. Unless I overlooked something, of course.
+
+So, I think it should be moved to the beginning of a transfer, but I am
+open for discussion, so we get the best possible bus recovery in Linux.
+
+Happy hacking,
+
+   Wolfram
 
 
-> > > Not even patch 1/2?
-> >=20
-> > we can keep the new compatible, but patch 2/2 needs to be split.
->=20
-> For me it is OK to use the compatible string 'microchip,sam9x60-i2c'
-
-I'll drop this patch for now. If anyone is still interested in it,
-please resend.
-
-
---kYzvNRaC+UDmnAMR
+--3OthpyYLRMGfk6Jx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkpjoACgkQFA3kzBSg
-KbYgag//bafEUOij4Wvxhxw39Z6jv2XeGguyQkh5gVuO3B54PNNqSSpOPjzHhWat
-Kiqt1hZSer7cQIaIM7WApLkMDjwNl70w2k0t+UsfnEwFp4WH67J6k+xOGs7VOanF
-c9ncopG6YzhlsEFegaYOyXKgHihGF7FYUxmZus8BMpWv4ihRCBotdnR5+nPP6emH
-8DeB6J6sLkW6Jw/c8wgARhGxAhA9UqJItIQNExOPh34QSY3fK86EnJIwyr6zLLQV
-aWT9Vv3ZIEnVc4QTa59O9MI0Miq7sN7mU3Q/GKGQhcP9BNXYheDIiIa8Ra8FXxwZ
-fibnPzQqHfhPbb0uIM77ygeWOFH8CpS+Sql5PotMmHs4/xK5l6o+HU5o7oLJko8M
-X0xWhWX1GRctascxVvIiXpdfZhVhv0kJUeYyTVcuiw+nJmt0IJAxzpxMFbWMiHVC
-hoFyOSRDNr/wy2DMSLo9hxAgdOXl2gkk2MDliDgm+PSO1lgXPrMLQZD5k9h2hc29
-8wE95a6ITv3mGzK2V+FclgAMjANqpORCe15WQcCd2fibWoWq8UyTEG43kV6MWIgn
-3Bc8Uo9hNwuC9xvlNLLUomL7oc+Vuv1bIG7WBOaU17oFFPDr4PPIzvD02cCW/B/r
-C1uPi5hZcN7e2ovsyOtev/QxEvt2lJie/8Lqw1PBLVsAdOH71+w=
-=Aykl
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkrfgACgkQFA3kzBSg
+KbY+Fw//XBnb5n5/XOjcc6s8oJlvjKElkgzd8bDBmXWnRC8XyQPjiWNO4+oXLhOu
+UkkIaGzL7RcQEc0Bc1JswFqCK8PKdQQDGCJ+BIpk0e9Yfz0Srwg066PJWBuXtNlw
+L+11VKeIPG/18dwrk9HFxP/rQV6mu7hjTAFDUNvUrc7WKR0V/O1ll6ci8RUJ72Vq
+y86v+YF3eTOaBhy61AvttrTitCGyVb0m0TWt3i5nYY+BMKVLns96COqw/UE5GA7c
+jkhRaScyYy+QWhj3o5myWB3K6ynika+5kh1OhHFYsV9xkrdngAR1bLgroeV9PJ91
+EcOZkFJ6fbbaDKBWNeGi4f3UDCpvSyQlPy8uAHXsmF2hGI5SUiW7mWXlezUbQzyk
+i3yFNtlsCQ6lY7qM+iA4JXtRSu1vB2wR69kK67RgpNl+K71mFYdutKVPZcDYHAza
+yOIB6Su6VYge1G2EaBAhdfopBUJyfDqMIBRgowQqd73urdHT4qcFLhRhnnhssvX6
+W2OW7kY3uQvN5Kx1zoxbZGprdMGw/tMIosCesVWWOn+iGNYXiUxpDOr3yyLMvhz2
+u1Rpq8Mn99tnA8TSwmuJnlvW7TTsKFY1y5kpbj3U6Uh49FAPyQMeS2jqT0L7fd58
+rrWJ3M8BUS05ISoyfWvrqaOmW6YjIMCqYGOgmxLdEkyd9uppPTM=
+=dQkj
 -----END PGP SIGNATURE-----
 
---kYzvNRaC+UDmnAMR--
+--3OthpyYLRMGfk6Jx--
