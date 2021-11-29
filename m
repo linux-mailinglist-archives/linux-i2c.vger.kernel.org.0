@@ -2,88 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9474610A9
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 09:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2981B4610B6
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 10:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241241AbhK2JAx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 04:00:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60052 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245262AbhK2I6w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 03:58:52 -0500
+        id S241369AbhK2JEI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 04:04:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37844 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236684AbhK2JCH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 04:02:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59787611F9
-        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 08:55:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0674EC004E1;
-        Mon, 29 Nov 2021 08:55:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 374FEB80E2B
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 08:58:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A094C004E1;
+        Mon, 29 Nov 2021 08:58:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638176134;
-        bh=Bgd9cb07mL4WJE5Nzqt4GNOAOJPRP83zleQ54J9jl5k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KNmxBWYLSjUIbHzMFHMP32xVrvHqxr5XRdarPiZEkazezm+GNiqR3hDhZs3Ndxoge
-         gjEWSVdUPIwk/cAbV4oTZN4Ejd2Mu6hY4LMghSW3KCmgb1CJnvlLnnQFm9Eam8rgCh
-         irwSjf3VwgpgXDia2BuR1PIPZvQkKl3ROSvIHGtmuu4iDJXW6iXs4bzU54QMNwb3BR
-         MoykZ0sP5eAGwUIVnNiPTCDtcF4Pk6n9ynZ7SEqPQkMlXp+cIS8NEB0sLs+KfSpss7
-         i0UwZcgbYTQyzYE5r8eK6ZMELCZUSRRO6Sj6Ve7td607phC+GV+hVL2TscqCGEbUJl
-         7NeYDVW/Ky2Vg==
-Date:   Mon, 29 Nov 2021 09:55:31 +0100
+        s=k20201202; t=1638176327;
+        bh=N0rnSHdOyXJ5PfxhII+ialZbd5Oawwi4oT0gQz8aLhA=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=n7d12LBVSFC75HcuWOVoOCkYg90PShCt6vtterRsdWVoUGcEU1H+ACjSo/OoDpuAc
+         5T/iDcU1HPYeXkoEV24gPdPqKEm/2QIiSQPLqN6632VZVYk3BY3SXP6p9NUcBHPscN
+         OdV4mrBgFp6nK4tG1TOAaLGKpOt5H9ylwZ0NP68Pc9bOEEg8b4GI7vZNqdJviFh6o1
+         Vr//7ILLWQi4aYEswFGC9kdyTEO/yeZgNewguKHI5689uaJvmn+pZZoxuQyj8CE6mH
+         KQeB/Momd9r3GjGo6hGrbzbEnJZik/rg8wS5Qfr5OMvqQkW29T4C4yvEPPxpQJPz6Q
+         7a3xV9UNC+Vdg==
+Date:   Mon, 29 Nov 2021 09:58:44 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: i801: Remove i801_set_block_buffer_mode
-Message-ID: <YaSVg37N+TY5Tccv@kunai>
+Subject: Re: [PATCH v2 9/9] i2c: i801: Improve handling platform data for tco
+ device
+Message-ID: <YaSWRBJEgq9ZGhjE@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <f6e13674-7f86-529f-10e2-6b34bc5f8f6c@gmail.com>
+References: <e46ac7c1-1bb0-2caf-58e6-2fcaa89d30ae@gmail.com>
+ <0e8188d1-e35c-162b-6657-b22e8034483c@gmail.com>
+ <YVgN9xLPSJAOqkz+@kunai>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d/tuIzvysDK/fZAb"
+        protocol="application/pgp-signature"; boundary="2qPTi0px14SV2SAd"
 Content-Disposition: inline
-In-Reply-To: <f6e13674-7f86-529f-10e2-6b34bc5f8f6c@gmail.com>
+In-Reply-To: <YVgN9xLPSJAOqkz+@kunai>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---d/tuIzvysDK/fZAb
+--2qPTi0px14SV2SAd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 18, 2021 at 11:58:17PM +0100, Heiner Kallweit wrote:
-> If FEATURE_BLOCK_BUFFER is set then bit SMBAUXCTL_E32B is supported
-> and there's no benefit in reading it back. Origin of this check
-> seems to be 14 yrs ago when people were not completely sure which
-> chip versions support the block buffer mode.
+On Sat, Oct 02, 2021 at 09:44:55AM +0200, Wolfram Sang wrote:
+> On Fri, Aug 06, 2021 at 11:18:40PM +0200, Heiner Kallweit wrote:
+> > The platform data structures are used in the respective i801_add_tco
+> > functions only. Therefore we can make the definitions local to these
+> > functions.
+> >=20
+> > Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 >=20
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Hmm, this doesn't apply on i2c/for-mergewindow. Did I miss a patch?
 
-Applied to for-next, thanks!
+Since a lot of other i801 patches have been merged meanwhile, I'd need
+this patch rebased if you still want it to be applied. Thanks for all
+your i801 work!
 
 
---d/tuIzvysDK/fZAb
+--2qPTi0px14SV2SAd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGklYMACgkQFA3kzBSg
-KbZR6xAAl+EoMDbpDOJhzImxJy6fKW2IIq6HnMC29+1D+0fOalD8RqsLt7XONCDn
-GXPn1gxM2vwUxyvqf0ANW2a74TaHH0jbOPFoNepI+rNRXFGAJimMgcwkdjgok8Qi
-haBE+exgPm+zKV7q3ACQYTLSih1VNoG17LUQFwkfa06v5WQHODJnm++Yq813tgLi
-wTQ9F6a6VyQy41c9cqaprQNopeBdlZBJorcnoC3yRY2FuHvG/S0dM4csXlO01lvq
-einPrk3IUTqnXAEDamIckCFoDs0rWVNYr7XEggcX7osp4d45RUknoE/NkpRcycYd
-QKd6KwU8ibcOL6+0/LEtm+DhvkCbPl/s87WxCugRnNc5EtIoYoakrzGPune+UGSd
-fuQEZWO8cDife7krQjCXx4ofyRGmcvGUrBwFoFc0ADfHlYQASSEX3Q+e5sJzI7B+
-/MCUBN+w/MPqnaRok06s2Gtr1FVIGclaX58mbz95vgenD0m1GtFQbvxT7+zx3YT9
-bcMqW/Tjg2RCyQ76qMfoFxXz2nYrenOqgrjmESVn0qcNWq1uiJGW6yq+03lyMLRw
-GNSONpMrjQepWXZ8wzFKScwCOztUDAZ3U1l8LnmxssN8OjEXX2CqOqdli3Jl6+Fm
-1KkMFg0kWuxiNT7Cdd78AOXn/2LuufEg64Sw8eZWBYKJ8Vz9R2k=
-=F0Ca
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGklkQACgkQFA3kzBSg
+KbbbTBAAlz++qSr1zHt2/CtTh26wrRIo53HwLG4A1ORSEHaNAg4lYt74wW50n1aU
+CAgCzc1UkPcoeFdPEISI3ynES5hAIKfXqXmz48ErGtWLKrW/Ji5tAyv+94KnOF6D
+rPPcTxQqSFeJuRlC2FBb3s4mVIvguMuCwe3o3y3EoeYcf1g1+I8SnXTizgRb0t/n
+qhbDAk0Nfm+9OiCKwcYfcTuJScFCHbXY9v3ZKpBO2oFumh6sjGxR/nYv7h1/MOg/
+EyV5BkCyDBI/SNac1R+y09YR7sXb87peCQ87FevjN7a2Q+7CcWITXNUgAdyKaQFt
+Jxs5l/GUTGRi7GkWypNvpbS7rUZnibX2nVbP6DbvvHSUOdKWLwxbd8InBx0ijGRl
+HLDEVhsCIwMg1EOLIM0HjMtZja+EvDrK0MYCI4a73gPZlx0dHHXKQL7Acj4+ufEw
+BPPGmvcZyeAqueGxi4B86uO4kTr4elCzwVtNKvhmPVPt0uKddr4q8pcRamDUBWLB
+cSNpMecIbFUVWA57iJlj05daw8a58WQNbHSL8i3Kdm3qSusYdZn/1iqY4rusPECR
+BUOcGk6EvjKXD+5wjyDxKIFW0QW3dg6/4lX5xGwggXvfGj/jK7vwWv4ojlPTr83Q
+kZXzFeFHE+JqXwHbL6F59WT5vY/jOQKb1ExHl52p/6juCR9xrEA=
+=jo3V
 -----END PGP SIGNATURE-----
 
---d/tuIzvysDK/fZAb--
+--2qPTi0px14SV2SAd--
