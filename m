@@ -2,59 +2,92 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F355461284
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 11:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9E14610DD
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 10:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344409AbhK2KiF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 05:38:05 -0500
-Received: from mail.vallenar.cl ([200.54.241.89]:35548 "EHLO mail.vallenar.cl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235743AbhK2KgC (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:36:02 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vallenar.cl (Postfix) with ESMTP id 70A371CEF776;
-        Sun, 28 Nov 2021 14:07:12 -0300 (-03)
-Received: from mail.vallenar.cl ([127.0.0.1])
-        by localhost (mail.vallenar.cl [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id BaEeZa31vyGI; Sun, 28 Nov 2021 14:07:12 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vallenar.cl (Postfix) with ESMTP id 4F34E1D0777A;
-        Sun, 28 Nov 2021 12:25:19 -0300 (-03)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.vallenar.cl 4F34E1D0777A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vallenar.cl;
-        s=EC098874-C7DE-11E7-B3B1-1A9A6030413E; t=1638113119;
-        bh=IQxUcKgLaEia+DMrVj9OEHbWOH8TffrzQMeZgAxYubI=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=jf1I9xxTxaZ6C1OPQA/zc1UFnqDmEwitooMxMRjabthONAuC6U3R0IP//IvSQA3V3
-         sfxJI4SikGFyh3v7uBTruIne42iLkWnWkZNU3zB0BjyXTvsF0LPExIxWa4y6YNo/bh
-         DtNsSa0kkZwc/WRDUBSg0kVbHW06Kzf4dZkjqoDKZ0pgz2jgI6qw6K207FW1a19leR
-         l4FjJvip+pfZsC3/06O14Txg0Kl/Y6GLesCDFtUzF9XRRP0Ncs/mJThhrkAY9YE6W4
-         XrL3QMNmR8R/nhSHbokwg8YetJ7RMD8qoG/i//791FMtFN6LcYW6TYf2PmEOL3H3NU
-         ubd9HD/OXMlGw==
-X-Virus-Scanned: amavisd-new at vallenar.cl
-Received: from mail.vallenar.cl ([127.0.0.1])
-        by localhost (mail.vallenar.cl [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id pryR-6tLuzzF; Sun, 28 Nov 2021 12:25:19 -0300 (-03)
-Received: from [192.168.8.101] (unknown [105.0.3.102])
-        by mail.vallenar.cl (Postfix) with ESMTPSA id 183F31D08C99;
-        Sun, 28 Nov 2021 11:21:38 -0300 (-03)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S229604AbhK2JOs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 04:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241123AbhK2JMs (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 04:12:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49799C0617A2
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 00:56:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D81D36120E
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 08:56:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E290C004E1;
+        Mon, 29 Nov 2021 08:56:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638176178;
+        bh=QXQTz222UGeJfJzjjGcHyVkAsZ9qtGOEX8nHOEQuu58=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l4I9GMjSouZElYYTD0NBc6j0tV3vm3XAWYKOclI85j4JPo5xuMYZ7SXaDCiD5jScz
+         l2eX3zBWgFX4Jd5i9f2ggKDcwqLwd/3/WvWhCIUvVZSdS8gJFHZcVBP8tzC7keSl1U
+         KCnxZhT0aRA7TuuYf7X+fMjdrrm/c7OjQgTG7GUslLsJ3C1pXuB+M6gfbJmIJPGZc6
+         cR2Ck//387l1U6WHozd2uOI770dbShw/Pw9hZn+dBFTo5ReN8njTRhpmXpwWLuU6+G
+         b3jNX7kkNRTwgOEB+id/Vw03LVfXDj9UpLq+7gPMNgoXi8n+lwrs4MwAagYwEHaYxY
+         6v6y6HoSTvwCA==
+Date:   Mon, 29 Nov 2021 09:56:15 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH v2] i2c: i801: Improve handling of chip-specific feature
+ definitions
+Message-ID: <YaSVr18exOfx+dm8@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+References: <45c1aa85-bb20-ccb0-189e-b8353da3f403@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: 2.000.000,00. Euro
-To:     Recipients <yperez@vallenar.cl>
-From:   "manuel franco" <yperez@vallenar.cl>
-Date:   Sun, 28 Nov 2021 16:29:08 +0200
-Reply-To: manuelfrancospende00@gmail.com
-Message-Id: <20211128142139.183F31D08C99@mail.vallenar.cl>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ph7m4JBj/hxIIUQW"
+Content-Disposition: inline
+In-Reply-To: <45c1aa85-bb20-ccb0-189e-b8353da3f403@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Sie haben eine Spende von 2.000.000,00. Euro
 
-Mein Name ist Manuel Franco aus den Vereinigten Staaten.
-Ich habe die Amerika-Lotterie im Wert von 768 Millionen US-Dollar gewonnen =
-und spende einen Teil davon an nur 5 gl=FCckliche Menschen und ein paar Wai=
-senh=E4user als Wohlwollen f=FCr die Menschheit.
+--Ph7m4JBj/hxIIUQW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Nov 19, 2021 at 09:45:54PM +0100, Heiner Kallweit wrote:
+> Reduce source code and code size by defining the chip features
+> statically.
+>=20
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+
+Applied to for-next, thanks!
+
+
+--Ph7m4JBj/hxIIUQW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkla8ACgkQFA3kzBSg
+KbZ5cw//XKmnvGzI046C1SNyby5L2ckBJEPlLciVtkVsESHzpVsK5bXLeYKhXVJl
+gN81T97KrSc/WEG7Sn91B4WwWYkvPty0L6+5+kL8vCY0xSCERJhUZW41RVAvA5CR
+6g7j/OT7HcolOZ4RVMKPOWXZENxF5Bv2BzEvV9Oli8cCpO8LMJgdh7sXJ2vDEskB
+IVKRAS4SOyicClHXhAt0TkRuI36lhHzm7UvEa3yWLVyAEDYVcWCaZKrApanA9tqk
+ejQTvsO1smOkptQBfWxcZQ2t/89uXfaFHyyf5cbKSgWyFcZW+A1gNlmMezTXlfGW
+uLM4sH9JSJFGv05q2EHH7GYVmhiD2S69ipyteeWrTVCtKo1tpIuG0XuS10Pxqapk
+JwyKWscmgKXQH0UcOrigce0BtCKGDeBQQuaL+lYumDWf/lENrm6ztfxaP5LIZw5G
+BeHAL80baoUk4J/Yw3GcFtl2Q+mgzOhKbbQCJZt/sZJFTPw4ZpzqAVEfmztiH1SY
+LOlzNcld6S0W2AFccouaO6cj4INsW4b0epXOoskaq+BYOHbgJVyLqUSaq9nDq+Le
+uhl2Q4i2HAxnw01fkMsFjPYibpZgCgs/0FAqEuDL+ZsIxFpoc+xyZSRIej5kZwYH
+gL3HkONc8gaSLVwMEJzjlhKuQvUNFpUAV/sax24YGbCZDT/+/n4=
+=Os5t
+-----END PGP SIGNATURE-----
+
+--Ph7m4JBj/hxIIUQW--
