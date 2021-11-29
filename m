@@ -2,102 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A762B46103E
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 09:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C967B46109E
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 09:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242764AbhK2Iic (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 03:38:32 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:40492
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243616AbhK2Igc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 03:36:32 -0500
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S244421AbhK2I6o (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 03:58:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241213AbhK2I4n (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 03:56:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02083C06179E;
+        Mon, 29 Nov 2021 00:41:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 160714074A
-        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 08:33:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638174790;
-        bh=aCARnuWDBDtCC7T3FRwThc50ZrhDk+owTuPeR9h19HA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=k+yWRq7z6N+utbgCZ7ulmbFvqsY8Y2hN7hLe+yv85KCQOcyDYnrSBblHYVoRIdWlX
-         SThoS/yQrgthsoHyCYrn+vRP5R0h0Nj4TWIc4k18XRwCWMqqW54Rb3OMn7dVF2dNaG
-         bRSfzf/30AkBpSeGk05dU49OvMV/IcGHqwjICpK1hBafP43YBu0b7vpMAK+9VaFxkA
-         6n4VjKVp7hESZScZHvc8IotV9cTAAUrPr+wHRGpMSk7r6TYzUNk0xpHiured/JmHH3
-         xXc/3EoACu11hIuVFYQFdG2SkMJRJ69XkZ2O7bbNh5L1+nNzjgLLsTes+f+c6O45AJ
-         yNQsRrzEjUw9w==
-Received: by mail-lf1-f71.google.com with SMTP id n18-20020a0565120ad200b004036c43a0ddso5478235lfu.2
-        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 00:33:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aCARnuWDBDtCC7T3FRwThc50ZrhDk+owTuPeR9h19HA=;
-        b=bCNuSERiuZCHKlYUuumulBMJEe4f+N8hzeyJPED4LzBhdco6XtV0qO7aNPUD2Xs8tQ
-         H1KXBmjl38C2YBHRNwcfeFYloCP+GGd9+7oEdB193WtAaesShghjJJFUTQ3dsLtKw1z0
-         hYh/0ORoZsaEujEqSs7jxK5PHol1vz92lhOWTxUDfLjsrh+Wk5FWqzlZC+OJBtz+wihe
-         NCRAj7k8Lj3Igy8NhQHyBAlMv8VzSfnsii7y9MctrwkjVKe9NCNFz9NmwrvybXMEMkE1
-         pyDOU1WthD3GCi2oDEcej2hsCkDVd4TCeZXMlBjuE2AV3oLXSmx2zN4rR3h83YOrCV5Q
-         f3fg==
-X-Gm-Message-State: AOAM530/B9sxdHoZG5L2NOGyWehhhSKww0odFLFYTGGx07zFXkiyfag/
-        EfH81p1CscHrmYFL946Pe6RJf0J9DbXrH9Xke4+3qZbANuANTI+ZmBLnmV8yFnQaWt/gDJPE9H2
-        Oc+ZcNn/W+S6DWDyc7S/DMHYvp0bFOr+qSCcrgA==
-X-Received: by 2002:a2e:b907:: with SMTP id b7mr47798053ljb.214.1638174789568;
-        Mon, 29 Nov 2021 00:33:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx+HqYaIWrUgOtsIwWv3NVax4MJeBvRWzGCQC326fhRonBcNHs6JMwj77zI5nkCDsHZVk4s+w==
-X-Received: by 2002:a2e:b907:: with SMTP id b7mr47798035ljb.214.1638174789408;
-        Mon, 29 Nov 2021 00:33:09 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id u2sm1268765lfi.108.2021.11.29.00.33.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 00:33:08 -0800 (PST)
-Message-ID: <b757dcc7-7262-1f17-1889-6159015f2dc6@canonical.com>
-Date:   Mon, 29 Nov 2021 09:33:07 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6F27B80933;
+        Mon, 29 Nov 2021 08:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88EFC004E1;
+        Mon, 29 Nov 2021 08:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638175315;
+        bh=Mj7X1l1gdYa1BrDv7xW5CTAYeo/8ZoHro5zWrCtQfS0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bWPFZ95lyp63A1gGOC+Esl2VtWEQ+pmcM1sHVtoMW7W9OEmKrRd2w1pmjXIW4woJw
+         gfVqQKgSIEFKBG+mNjX+pYdi2EtBXWwA3zSsu4PpZRdCA0451kDdslP+IwqpObKQ3z
+         PG9w8lhi71WWpP0X36nTMlqA0Czqq1orJXyPlHdRuIhbFC3eMIsC2LTFPa9Dqh5Hud
+         I6uez9ZrrUPRWYmaNWdQtUCR8FOVbk+mwlm4cJDzxHWbLE3/JKQ03XS9j0fE3/rYrx
+         LcurGcStuFLkw0rx2j36f4dodIhoBzK0gfkGt5AmV2nEJX+QjEpjv7xhB/5QC9mjDw
+         Zyy+4DI4HXqiw==
+Date:   Mon, 29 Nov 2021 09:41:52 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 11/12] dt-bindings: i2c: imx-lpi2c: Add i.MX8DXL
+ compatible match
+Message-ID: <YaSSUHH2e9mHxhtx@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Abel Vesa <abel.vesa@nxp.com>, Rob Herring <robh@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+References: <1636566415-22750-1-git-send-email-abel.vesa@nxp.com>
+ <1636566415-22750-12-git-send-email-abel.vesa@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 2/8] dt-bindings: soc: samsung: Add Exynos USIv2 bindings
- doc
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <20211127223253.19098-1-semen.protsenko@linaro.org>
- <20211127223253.19098-3-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211127223253.19098-3-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DOW3NFxjw4Y5rvlF"
+Content-Disposition: inline
+In-Reply-To: <1636566415-22750-12-git-send-email-abel.vesa@nxp.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 27/11/2021 23:32, Sam Protsenko wrote:
-> Document USIv2 IP-core bindings.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  .../bindings/soc/samsung/exynos-usi-v2.yaml   | 124 ++++++++++++++++++
->  1 file changed, 124 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi-v2.yaml
-> 
 
-I propose to squash it with patch #1.
+--DOW3NFxjw4Y5rvlF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rest looks good to me.
+On Wed, Nov 10, 2021 at 07:46:54PM +0200, Abel Vesa wrote:
+> Add i.MX8DXL lpi2c compatible to the bindings documentation.
+>=20
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+
+Applied to for-next, thanks!
 
 
-Best regards,
-Krzysztof
+--DOW3NFxjw4Y5rvlF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkklAACgkQFA3kzBSg
+KbafeA/8CuvjQGEPMI9aeqCJabLH5w3PdiM3Jxbt5FxwFcHpcPZEqbOPxQWWjCQ2
+gKwxwCmf0ZrZx3+AxMYkNx3B5iL4E0E3ArecwVJavz/SG+kq0NoIhX6YvVGYJV8r
+j8qKyP934FsPOsJlwuULcjmwT4eZQPTjc++oCslYvYMY6Z1DJEPL3BGILab38kQy
+S30YPaxpTsJEWfqGhUixUjCh5LhglzXoe4sHKKfhViPeeHzMFX78gZwwIwr7UyDc
+cvGHFsbF5f0kItFkcchyQRuSEkok5pXzzyzq8fYjAKTdaPMzhGVtsOLj6f3sUl7q
+KtZnUI3PvLryFP/IjuHhbs23dEjfU9EH8xuYVxfBYriBHQPct6GmogEaSkw0WqVs
+UqmR/olx/CPTYBhw+XkiDb+lgglb21yIHeaQ3LHO4+gBGTcWPY5ieiqt3xZXKKdl
+C5KoE3gB2NoaX1gYBObJb+txyXpMYJJynmzzruQKA7hwK3wwsEMaZqffBzfwwk8p
+7xUQ/qPoa+/+hB0xb1lvcv9W0lujSe+z5QbFMQ8rkvKZqtst0hQelmO1PCVbcfG+
+xFkAz6afeMaUAW8M28hBuFbQlAvHqNqT+tQn0BCEhgZBVe5L+YOxSJ7PuJMCLBPB
+eFolg3Anrbfp2UMonwjNlFKvxx/9XpkXy0I2HO7Swb2DZ7s6dt0=
+=tzkd
+-----END PGP SIGNATURE-----
+
+--DOW3NFxjw4Y5rvlF--
