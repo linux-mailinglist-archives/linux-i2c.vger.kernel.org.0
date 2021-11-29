@@ -2,97 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF706462225
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 21:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C88462246
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 21:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbhK2U31 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 15:29:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
+        id S233152AbhK2UiB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 15:38:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234540AbhK2UZq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 15:25:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F488C025542;
-        Mon, 29 Nov 2021 09:00:08 -0800 (PST)
+        with ESMTP id S232388AbhK2UgB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 15:36:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8E6C08EB52
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 09:10:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0B11615BF;
-        Mon, 29 Nov 2021 17:00:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 632D0C53FC7;
-        Mon, 29 Nov 2021 17:00:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F29FB81261
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 17:10:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1971C53FAD;
+        Mon, 29 Nov 2021 17:10:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638205207;
-        bh=zp3v0tEjkVXyMXsgHVlwxFZPWYI5F7lWo5ERzAP4pv0=;
+        s=k20201202; t=1638205801;
+        bh=4bS07e8gSW0fzxfov2nAwWrVbwc0hGwfKPrp9/F+D28=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M/rJdA5ldDAhTzPUsqVIJLJfyJxzsDObnp0IfBWxjotm4mcnu/EY3bvTLtUULKbA/
-         s7QTs6doatOqN9SZusgexDLtOckbIxW12aIm3g+yA5D0g5zOdM3YHrsgeuJak0S89U
-         9HVWzT/i6HxtxUSC/HZDHxCTFoEeg9ivBIBr4rlYoYBJdfbEh9Wugk+jq23FVwt+7v
-         IEDKhCQwdqWSonKvP1Qr3IK7oG0fl+Wa85ODDOBd+xBwlUeeFi30hanLdU9e3GtrFb
-         YGAdx8pf6RPsELcACt0qmWpXrmxdCR/s3a99d1vJR0o/+HEnXf91mMW2CWJmVkOYfd
-         Ga+PxzDc3iPRA==
-Date:   Mon, 29 Nov 2021 18:00:04 +0100
+        b=jUS5SUjIqcrZUwRDemw/GqNK/qzEd4ERyfN7aW0SqwOVXvOB/kckgxhnKI824y9Xz
+         MOdA0uTaRaMVo+hm+lG9rJJYvYh5z1+1itLGvfR2KefufEWneWK5HyB6rlR/Knxpih
+         VbsoQByoRksLE8Fs6JCYiZ4RCT18+ImbgxWB7XYnvUgxh5DMEcE+87KBLF5FMvXjho
+         gFGxknNYdVMosD+gNWrRxElXrtkEyb6UVc3zlp1Qs9IukKvgEzfa5QrrEWP385n9Tv
+         j0dCnVqM6rhW6LLVeXeWn2c9DLvhnM+vB2As9K57syelkDNSim/hQPI+rfj2mxk0xq
+         3wm5j+IbflFSg==
+Date:   Mon, 29 Nov 2021 18:09:58 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     lakshmi.sowjanya.d@intel.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bala.senthil@intel.com,
-        pandith.n@intel.com
-Subject: Re: [PATCH v1 2/2] i2c: designware-pci: Set ideal timing parameters
- for Elkhart Lake PSE
-Message-ID: <YaUHFM2xyLQiXFMt@kunai>
+To:     Sui Chen <suichen@google.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [RFC Patch 0/2] I2C statistics as sysfs attributes
+Message-ID: <YaUJZn0aLf7GknY9@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        lakshmi.sowjanya.d@intel.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bala.senthil@intel.com,
-        pandith.n@intel.com
-References: <20211109103552.18677-1-lakshmi.sowjanya.d@intel.com>
- <20211109103552.18677-2-lakshmi.sowjanya.d@intel.com>
- <44b0646b-165a-065e-1029-026ef1b6cc27@linux.intel.com>
+        Sui Chen <suichen@google.com>, linux-i2c@vger.kernel.org
+References: <CAJOps0s4qY3O36BGUpffzzA=gxw_crDzf_iif2fq0RdVhfCydg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/SwrNiUKbKjtHACx"
+        protocol="application/pgp-signature"; boundary="befE5sYyLMVpU4pD"
 Content-Disposition: inline
-In-Reply-To: <44b0646b-165a-065e-1029-026ef1b6cc27@linux.intel.com>
+In-Reply-To: <CAJOps0s4qY3O36BGUpffzzA=gxw_crDzf_iif2fq0RdVhfCydg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---/SwrNiUKbKjtHACx
+--befE5sYyLMVpU4pD
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Jarkko,
+Hi Sui Chen,
 
-> To both:
+> It appears bus errors and NACK counts are frequently found in many
+> I2C controllers; a few I2C bus drivers now export those counters to
+> debugfs. There is some effort in attempting to monitor a large
+> number of BMCs (board management controllers) and we are wondering if
+> it is possible to have a more stable and unified interface for those
+> counters to be exported to compared to the debugfs, so that a single
+> command can be used to obtain the counters from different types of I2C
+> controllers.
 
-If it is not causing too much trouble for you, I'd appreciate if you
-could ack patches separately. This gives me a better overview in
-patchwork which series are completely checked.
+There are at least two things to consider here:
+
+1) Why do you need this information? I don't think values like NACK
+count describe the health of a system. NACKs are perfectly OK in regular
+I2C communication. So, for now, I think debugfs is the better place.
+An exception might be the bus speed. Some people already had an interest
+in this.
+
+2) Even when this information is kept in debugfs, we can still add some
+core helper to have a standardized structure for the created files. This
+is independent from sysfs. I don't think I want this a standardized ABI,
+currently. Unless you explain good reasons to me :)
 
 Thanks and happy hacking,
 
    Wolfram
 
 
---/SwrNiUKbKjtHACx
+--befE5sYyLMVpU4pD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlBxMACgkQFA3kzBSg
-KbZluA/8CDJ73gKGvbrKGQwwnIZh21vnMhozZyRI4Bovh8aN95i0W3u9zZgc1K/e
-gMLqTH8498jZ4Wkw3nIks899PTLCUc1oEhnHMdtdqy4D5tGoJdIsZCwKVvefqfzR
-RBQka5QeilBVsers35VWHR49+l9Qh6bGdxYVy3LanhQ5e3zMDjYatwWX2OwcKqSb
-H5Eakq+Syuwbdo65ZrsnBQ5BDL7EO1+enrvbkwGy/sVxnc4e9GG36wACcNitC9r8
-I2D+BzlpxNlsqzIimY+ct+ZW1ahk6Nbi7cejrnMEwop/nlDBPGO7wCso6hXSqlWR
-UWbX4peA/INBeH6pFo6ZzYCc4mVVGGysJBPrezsGhBG/zSP2o2pIZ6doryx02vdi
-IY4Wk+0/ednZYvzrUvt2Nq0YHuadeR7weCG9zbN7/U8QgDxJV6DuU+GM/5ONRNMd
-jZCfsBNDI6UmXzAnpwsYzdij6q3BS+VTjnNAeR+Ylq84LdC0CjpFH5ZaYpG4F8dh
-awV6KtK4d4+Sr6SIaBWpjlf9arW4bEqm+0DQUtP+za3HDrA0ImFP6Rca7hZLHVkw
-vZUpRjXqF43ctsCHTNTFJGo+jgEPgEi8Z13UQYobz7tx/CX89w9JwKly7QtBjo76
-S5j05AFoEEK0TbolasVzkAq9Qa1t8et5/MVVWuIW/e4ceuQu5C4=
-=lDLI
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlCWIACgkQFA3kzBSg
+KbYh9A//fzE1WzmhwzTu6KhijDC8bErZxcMkQLw5Ygsdtx7LXH+2fhxkF403vCQu
+fqTYuYvJBQ0SevY66WCKay9F5aU6gh/1eBvsFUwD3kgMTtZCpXfucbs7Qxwxnm+N
+LtW8ex163qwrxOIuAaFSa5/Izpc6LgG4A/Dnsgj5ljCxTPFyZac0q/QaVkm3al5A
+J5SZGMT3Pi/FjnfoQap66di0RyqVSkig6TikY+H5Zb0wOQUDctXgWNDjqwJ4CMyL
+zuZr4u1bYmiLw2w7l+zSfXkHkXJUHJscUX0S7oxKjeLVw1uSfY18ipclaHIMkXgw
+ru7CoOPLBFmGoq4JBDHuK70yjrCnwq29LCN61coOAKWkjLF+b/D2+rDTc7U9/Ftm
+bI1pkSaWppC89CtzQtmm9vgWtVMuMttGrtFt8UCSXaoG+ao9ht0/tUobcuRqCxL5
+W9LdDRgeIi6gxPTv9ekTfUQp73k/eFQuaS6a8ZMix+hAxFmZipD4XblurauYyzA5
+j7E/4jLIXX2+6QlDF6s2+tBb3PEc250Sr2x8/FvR7qLPDnCmQgmC7xwdWGX+9Wd7
+LSUdZkoDslvRSernaesZY/mVaF8JoGhDWkYyIPuQZlJ1eRjAQlyFIfgj3Anyj1mq
+MNeIu44irPaNOzQPwrIP9GtiGxOsaCJzV/svSUJfwxN8Re3D+1o=
+=2E/k
 -----END PGP SIGNATURE-----
 
---/SwrNiUKbKjtHACx--
+--befE5sYyLMVpU4pD--
