@@ -2,89 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D358A461443
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 12:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3769461474
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 13:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbhK2L4l (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 06:56:41 -0500
-Received: from sauhun.de ([88.99.104.3]:41190 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232592AbhK2Lyl (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:54:41 -0500
-Received: from localhost (p54b33788.dip0.t-ipconnect.de [84.179.55.136])
-        by pokefinder.org (Postfix) with ESMTPSA id 3644C2C00AC;
-        Mon, 29 Nov 2021 12:51:22 +0100 (CET)
-Date:   Mon, 29 Nov 2021 12:51:21 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Joakim Tjernlund <joakim.tjernlund@infinera.com>
-Cc:     linux-i2c@vger.kernel.org, Scott Wood <oss@buserror.net>
-Subject: Re: [PATCHv2] i2c-mpc: Correct I2C reset procedure
-Message-ID: <YaS+ueLqCADpvBHP@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Joakim Tjernlund <joakim.tjernlund@infinera.com>,
-        linux-i2c@vger.kernel.org, Scott Wood <oss@buserror.net>
-References: <20170511122033.22471-1-joakim.tjernlund@infinera.com>
+        id S231664AbhK2MFo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 07:05:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52806 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231688AbhK2MDo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 07:03:44 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EB7961309
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 12:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474C6C004E1;
+        Mon, 29 Nov 2021 12:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638187226;
+        bh=t/eWkMM+vjJ/x1jz544HWgaK1u7elz2lMbEpUH/n1nI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G/bEJLBVZPzDlOHae9FqOae/IbnIuJgLI4Y/ddVPI3EE3JibX6A/6jw+WTxJSLO89
+         safuGc6btYRQGlI2CdwWV3+awruOH0ZvZYGp/FEQR002R7GYK9AVVwM5a1MzmEWPzK
+         KO7q9Mf8zItFOB5/ffusxl04GleszhVI78hMfwp2SvOAMmMNytwJKxBIApyLfOlPlJ
+         Nk05K9sJe2OIWDQnIB/aseD2K9ruJYaMOkVuSuo5fVlNDX5SzqsBtp0I42Dz4Vcz0R
+         hxIddxwuSG8JOlthoNVFLZ93XGPQ8L5chodPMlfxICA7qW7K31fTNxHjv+aKjV4rTv
+         SFWoNBer49c9A==
+Date:   Mon, 29 Nov 2021 13:00:22 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Cc:     linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com,
+        Robert Hancock <robert.hancock@calian.com>,
+        Chirag Parekh <chiragp@xilinx.com>
+Subject: Re: [PATCH v2] i2c: cadence: Add standard bus recovery support
+Message-ID: <YaTA1j/yrCe1gGOv@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        linux-i2c@vger.kernel.org, michal.simek@xilinx.com, git@xilinx.com,
+        Robert Hancock <robert.hancock@calian.com>,
+        Chirag Parekh <chiragp@xilinx.com>
+References: <20211129090116.16628-1-shubhrajyoti.datta@xilinx.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vCQhYB1eIMPvaQgH"
+        protocol="application/pgp-signature"; boundary="JdFguHgDrJYyfbfF"
 Content-Disposition: inline
-In-Reply-To: <20170511122033.22471-1-joakim.tjernlund@infinera.com>
+In-Reply-To: <20211129090116.16628-1-shubhrajyoti.datta@xilinx.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---vCQhYB1eIMPvaQgH
+--JdFguHgDrJYyfbfF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 11, 2017 at 02:20:33PM +0200, Joakim Tjernlund wrote:
-> Current I2C reset procedure is broken in two ways:
-> 1) It only generate 1 START instead of 9 STARTs and STOP.
-> 2) It leaves the bus Busy so every I2C xfer after the first
->    fixup calls the reset routine again, for every xfer there after.
+On Mon, Nov 29, 2021 at 02:31:16PM +0530, Shubhrajyoti Datta wrote:
+> From: Robert Hancock <robert.hancock@calian.com>
 >=20
-> This fixes both errors.
+> Hook up the standard GPIO/pinctrl-based recovery support for this
+> driver.
 >=20
-> Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
-> Acked-by: Scott Wood <oss@buserror.net>
+> Based on a patch "i2c: cadence: Recover bus after controller reset" by
+> Chirag Parekh in the Xilinx kernel Git tree, but simplified to make use
+> of more common code.
 
-Okay, I admit it is strange to apply a patch after 4 years, but I am
-doing a bus_recovery overhaul right now and Joakim mentioned a few
-times, he is still using this patch.
+Guys, sorry for the long delay.
 
-I still do wonder why the generic bus recovery algorithm can't be used.
-It has been updated quite a bit and at least sends STOPs after each
-pulse (as a result of an earlier discussion about this patch). But a
-conversion to generic bus recovery wasn't happening, so apply a) what
-users need and b) document what worked for them. Maybe the conversion
-will happen somewhen and/or the algorithm here might improve the generic
-one. We will see.
+>  	if (time_left =3D=3D 0) {
+> +		i2c_recover_bus(adap);
 
-That all being said:
-
-Applied to for-next, thanks!
+According to I2C specs, recovery should be done at the beginning of a
+transfer when SDA is detected low. I think this makes sense because
+other issues may have stalled the bus as well (e.g. broken bootloader).
+Makes sense?
 
 
---vCQhYB1eIMPvaQgH
+--JdFguHgDrJYyfbfF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkvrYACgkQFA3kzBSg
-KbYb9xAAhTTbkQ2V0Rc9H8p5oNL+Tlpj4w3vTKUrGPddq1G15Qq2cVfqG3MoYEIE
-dofXoRkQ55ICtCfrozvYdzMnQeJ1M96zDHpBf4Rqgxr/zMIkOk2TiCu9pjFdYzcg
-EG3cSoOqwpkFGPnx+xHZxMM5LO+VrBqUzrWUcybmyY+Tq7ej0dR7eglDMrHj8UZD
-PMDudtQBMce1mnzYZjF1Map1BDpYKY0F91K+wTaDT71dd+7CW2p1U+1bAIs74VKV
-vmfGnapXa8hOFotbUSVsVpPtKlld06xY9Z7H8ounLvBTucAUTrLYyQwtP+CJ+hrM
-i7RHea6STuWsj6F5/+dTs2vzqiFnAh0+mRMlChNXQD0JZqHPncsf6sFi6YrdJyoE
-QO6V6LpmDvzPn7MvaqvGTUEURRjpw+Ril9AcYoOx0Vwi6c0nEO632TQUZlgc8SZz
-w5htYHJdlQRgEAfGJJysH8NfZm8uyXtFa7jGxTzuUQuUCI9BgaLfP5xoEn7FmQRn
-IqyGMzdUkE+mn2LOXVXI2U8/PokfawFi+3tAjLkdtm7Clwi2O8YS6pYOENIyftAA
-4Hc10AKni+Mcy0blGUjVmSBfZ6ed5LYm1CBXJIE01ior5JXWti47B9c7Ysx1GG2u
-5fcYgfAygvqlyfFYORLJteki88Dylh3d7FIuOD5gzloJl0Yxj6U=
-=QeKx
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkwNYACgkQFA3kzBSg
+KbbJgw/9GTxkV3/DzaMGOzke3qZNjUpTfvd7gggz1RFDdflfjCF2BWTphtJNPYkp
+C0JWqrSCDViDPOkqfE7AR+SOhCIyAgHPQcqzoRgEBVkbv4ZPn06yZ/72brOPvzlS
+7rXJ6OhoOhfV7GqPxiOyL/cudCAWkPlNqOUyQCHzaSuC5ypppFCuPjnBLy0JDoXk
+hz+B7EHE2mH1qdDfbWU2e8c/3ssNsaC1A0La/efBLmJu3F/7Ce1sceFu0tGH1+i0
+5UdrXaWLcQOfCiaRHtCQn8gvEuqu289LflMc//jloqyj2H/1xnQ/1b0wrwbBWJRl
+xdZ6YqbFXLosDkWTdNTg0UkFiRFrywavMi6JeF0YMrI0o8cmYENTm87Du6+ApCLi
+apnsLOhHmd62Ea6TG18hXm97SDd1zALgX91TjJfEG0JHuEoQuyy92EAmdMGL2Ek5
+Mw60SYfWdahb4FGklKw9AQAgU4DAkdaKWwS2Ovh2lxl5GFiU4EwvCB0YERBiGFFX
+s4GLzxU7MU1NweAowXW6rKeeaF25NdqdNQlxSX4VwmzHOJzGishTKw67xYCZ1JLF
+U6MoDxFsjN18pcE/0cPU6KYo3NrLfQghkfjD/reBP/ECu3qrqx80BtZElCBY4W4a
+xkU9PnO7txMvT2cUCeOdbKJ+UWS93AaVNU3VbdAaCwwxDUiCa5c=
+=ub/j
 -----END PGP SIGNATURE-----
 
---vCQhYB1eIMPvaQgH--
+--JdFguHgDrJYyfbfF--
