@@ -2,93 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E42CF4610A2
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 09:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9474610A9
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Nov 2021 09:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbhK2I77 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 Nov 2021 03:59:59 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35644 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243474AbhK2I56 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 03:57:58 -0500
+        id S241241AbhK2JAx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 Nov 2021 04:00:53 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60052 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245262AbhK2I6w (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 Nov 2021 03:58:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EE62B80E2F
-        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 08:54:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35034C004E1;
-        Mon, 29 Nov 2021 08:54:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59787611F9
+        for <linux-i2c@vger.kernel.org>; Mon, 29 Nov 2021 08:55:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0674EC004E1;
+        Mon, 29 Nov 2021 08:55:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638176078;
-        bh=tG+g0qpUyzxrH0U8Y5MsCl8YqThQohi0vumLE6Ao278=;
+        s=k20201202; t=1638176134;
+        bh=Bgd9cb07mL4WJE5Nzqt4GNOAOJPRP83zleQ54J9jl5k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DpEAUaBz7FKUsVMTKfGTV0KK+wQjrc73bIizoac9GN/DRkMeK3InbCxK6hhfqq6/l
-         kvA8RE97zonZ0Xeylxe8YZPhtgC6LRBQUZkHladv2cqyxwpqTv87NilnQZQVIVdSHW
-         2BcH4czbsnnXyk+xJunA6Z0J9mp0EJNnGfyWwjahYEm5mxzUPzSqBFp5pGs9CzXQo3
-         qCLFf+j5si9oUT07q/HQT3hS9L1agoSV4+ed3TJZIWumZRv5zcuV/vyDvU0Vc68lPY
-         sx1WNUfVOrWTBZRmcyXaLUcv1yjMCXW9W15AroJgjJBneNtF3HE8hWmzlp01bAblnA
-         eFUlDKl15Dmpw==
-Date:   Mon, 29 Nov 2021 09:54:35 +0100
+        b=KNmxBWYLSjUIbHzMFHMP32xVrvHqxr5XRdarPiZEkazezm+GNiqR3hDhZs3Ndxoge
+         gjEWSVdUPIwk/cAbV4oTZN4Ejd2Mu6hY4LMghSW3KCmgb1CJnvlLnnQFm9Eam8rgCh
+         irwSjf3VwgpgXDia2BuR1PIPZvQkKl3ROSvIHGtmuu4iDJXW6iXs4bzU54QMNwb3BR
+         MoykZ0sP5eAGwUIVnNiPTCDtcF4Pk6n9ynZ7SEqPQkMlXp+cIS8NEB0sLs+KfSpss7
+         i0UwZcgbYTQyzYE5r8eK6ZMELCZUSRRO6Sj6Ve7td607phC+GV+hVL2TscqCGEbUJl
+         7NeYDVW/Ky2Vg==
+Date:   Mon, 29 Nov 2021 09:55:31 +0100
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Heiner Kallweit <hkallweit1@gmail.com>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: i2c: i801: Don't silently correct invalid transfer size
-Message-ID: <YaSVS2BLBZet4bj+@kunai>
+Subject: Re: [PATCH v2] i2c: i801: Remove i801_set_block_buffer_mode
+Message-ID: <YaSVg37N+TY5Tccv@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <a5e9b8b5-82af-96a1-b983-d98c2fa140f9@gmail.com>
+References: <f6e13674-7f86-529f-10e2-6b34bc5f8f6c@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jaFRAQe47WhOdGvK"
+        protocol="application/pgp-signature"; boundary="d/tuIzvysDK/fZAb"
 Content-Disposition: inline
-In-Reply-To: <a5e9b8b5-82af-96a1-b983-d98c2fa140f9@gmail.com>
+In-Reply-To: <f6e13674-7f86-529f-10e2-6b34bc5f8f6c@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---jaFRAQe47WhOdGvK
+--d/tuIzvysDK/fZAb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 07, 2021 at 10:57:00PM +0100, Heiner Kallweit wrote:
-> If an invalid block size is provided, reject it instead of silently
-> changing it to a supported value. Especially critical I see the case of
-> a write transfer with block length 0. In this case we have no guarantee
-> that the byte we would write is valid. When silently reducing a read to
-> 32 bytes then we don't return an error and the caller may falsely
-> assume that we returned the full requested data.
->=20
-> If this change should break any (broken) caller, then I think we should
-> fix the caller.
+On Thu, Nov 18, 2021 at 11:58:17PM +0100, Heiner Kallweit wrote:
+> If FEATURE_BLOCK_BUFFER is set then bit SMBAUXCTL_E32B is supported
+> and there's no benefit in reading it back. Origin of this check
+> seems to be 14 yrs ago when people were not completely sure which
+> chip versions support the block buffer mode.
 >=20
 > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 Applied to for-next, thanks!
 
 
---jaFRAQe47WhOdGvK
+--d/tuIzvysDK/fZAb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGklUsACgkQFA3kzBSg
-Kbbniw/9FV7u2qwSL90MptsJSSIt/oKJdiGx6JiPSD0/okIcNB5bTENrfUdbBRxQ
-5HyZnxsvldGrMfL7AdYSWa4t/UEo4OgoBPBNrktOQ+wo6ZhEWKeXPXc2c5tgCOPN
-xTBvXGHdm0wgyk1+VD4kjCISyjfAjTZZyRfHnh/vfGunS1c4w5cjxwqXK1+auP+5
-laDxBimVQ+DGNbNnXRX3b3cSFJ7ONcvAodDLtqjFmQFYK7YrIAr4onLRhCuuIVxR
-H1m6cgIBrEB/jQyMcqiQUVf5Fjo703Zpy5g/LPZxv9KaJqws2soHoi+NKhJqnxcF
-2bSiafWr2+WdIom58tdKYCkQVhnwcfcs6mwYn5y9fy0GXdnAJQxjvk/co1JNhiot
-lBOwchzuNv+vuC4Hggzk8vgO8LMEhNcnzWdJdw6zCOhG6aPLpxYQr+K17i+lRmFI
-q71ZaeeZyNN3TEx+f2tu+7vq2m4TaL9DV1rFTmAlDnjflumodg387xlU0pbhwEJz
-sVyz6uKQH1EFw5qUrkVkk9dpU4SLJm3gi6i6ziHcwIzEwdGttLSSfrYhcDOoGfzq
-uxhjogxut4Hb6jyCbFKxfG+fwn9v3zAaLwhZ/EMAzs7zN5lULzDY57D2Ns92WIxs
-1uo2YplEGJShpfYg7dNY8ixcEcK1oDiGgk9Ggn5tr6VE6rcifTk=
-=fWPd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGklYMACgkQFA3kzBSg
+KbZR6xAAl+EoMDbpDOJhzImxJy6fKW2IIq6HnMC29+1D+0fOalD8RqsLt7XONCDn
+GXPn1gxM2vwUxyvqf0ANW2a74TaHH0jbOPFoNepI+rNRXFGAJimMgcwkdjgok8Qi
+haBE+exgPm+zKV7q3ACQYTLSih1VNoG17LUQFwkfa06v5WQHODJnm++Yq813tgLi
+wTQ9F6a6VyQy41c9cqaprQNopeBdlZBJorcnoC3yRY2FuHvG/S0dM4csXlO01lvq
+einPrk3IUTqnXAEDamIckCFoDs0rWVNYr7XEggcX7osp4d45RUknoE/NkpRcycYd
+QKd6KwU8ibcOL6+0/LEtm+DhvkCbPl/s87WxCugRnNc5EtIoYoakrzGPune+UGSd
+fuQEZWO8cDife7krQjCXx4ofyRGmcvGUrBwFoFc0ADfHlYQASSEX3Q+e5sJzI7B+
+/MCUBN+w/MPqnaRok06s2Gtr1FVIGclaX58mbz95vgenD0m1GtFQbvxT7+zx3YT9
+bcMqW/Tjg2RCyQ76qMfoFxXz2nYrenOqgrjmESVn0qcNWq1uiJGW6yq+03lyMLRw
+GNSONpMrjQepWXZ8wzFKScwCOztUDAZ3U1l8LnmxssN8OjEXX2CqOqdli3Jl6+Fm
+1KkMFg0kWuxiNT7Cdd78AOXn/2LuufEg64Sw8eZWBYKJ8Vz9R2k=
+=F0Ca
 -----END PGP SIGNATURE-----
 
---jaFRAQe47WhOdGvK--
+--d/tuIzvysDK/fZAb--
