@@ -2,101 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D787462F99
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Nov 2021 10:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99BB462FD9
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Nov 2021 10:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234531AbhK3Jb3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Nov 2021 04:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
+        id S236255AbhK3Jlr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Nov 2021 04:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbhK3Jb2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Nov 2021 04:31:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFFBC061574;
-        Tue, 30 Nov 2021 01:28:09 -0800 (PST)
+        with ESMTP id S235639AbhK3Jlr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Nov 2021 04:41:47 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3661FC061574
+        for <linux-i2c@vger.kernel.org>; Tue, 30 Nov 2021 01:38:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7B09B817F2;
-        Tue, 30 Nov 2021 09:28:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D2BC53FC1;
-        Tue, 30 Nov 2021 09:28:06 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 327C7CE181D
+        for <linux-i2c@vger.kernel.org>; Tue, 30 Nov 2021 09:38:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 989DEC53FC7;
+        Tue, 30 Nov 2021 09:38:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638264487;
-        bh=TgTB+HvwgE1K6uTIqH5Mm8brLfCpRDbgZBQvLIL6PNs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MabxmVv7aCXsEKQFvEeVFu97DbMxV/cvLNON0JOyB10fQ2cSbY1H5b97NOouaVYrJ
-         5e7mDIWn/sh7BskppfifvCT0mM2B/hRW8cbCoyfM2dW0VyQQdO4ZfUsfAdxLRfkloQ
-         YMGnelqkifHMhiKAmDw807yLfEAy5lxOpEdyuUUmmy/YSEjI2NH7MQEZaGeDTE8Rvs
-         P7hjLSfnYdbz+Bhwr0OpsR1BzOu5QR1h8ogwlXzW7kVugNvFxwbvqwkAI6GlQsmXbw
-         87w+uQTOBEng266LTV5B+4et2tzlsN4w03iuGWe+pZVUgV/JLpzp24IhoMLoBfF2C9
-         V8BsBD+3Pf4xQ==
-Date:   Tue, 30 Nov 2021 10:28:04 +0100
+        s=k20201202; t=1638265104;
+        bh=r0cAyP2rsavYVcD1jWm5stdLNg5T4rJuUcSS69KJPfQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Xo10gcG0m4f0eUy7oYK1K4FuAOihAPTCSvOQzL2vICKP5WOZwwqauPghwDE5zMHfp
+         WdVOja671ngrq/sblbI8fcZykH+8pE+NTj/JJV2mvlS84k0vh827eKNXo87JeF7fsZ
+         8eQnhVSt0fjnKAlGvzU7EQRAFP0yjgGc58o6cChxaCErr4q3mhlpSavF/3gVPT5j7w
+         ioj63Apox+UqLp68THmwnDrzddukzpzloeBYjN4AVRekyOz1qaIpcMesYph+Yh6+/+
+         dU2yeY/9otNFJv44xUk3VJd/2tSsu4qAr+HAGMWIT+sGVw99Ue6F97oshSc0cHAksY
+         kgwq+uF53ahkA==
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org,
+To:     linux-i2c@vger.kernel.org
+Cc:     Alain Volmat <alain.volmat@foss.st.com>,
         linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 4/4] i2c: stm32f7: use proper DMAENGINE API for
- termination
-Message-ID: <YaXupH+h2PU+YUlA@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-References: <1632151292-18503-1-git-send-email-alain.volmat@foss.st.com>
- <1632151292-18503-5-git-send-email-alain.volmat@foss.st.com>
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH] i2c: stm32f7: remove noisy and imprecise log messages
+Date:   Tue, 30 Nov 2021 10:38:16 +0100
+Message-Id: <20211130093816.12789-1-wsa@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9BKR1twofcV34c05"
-Content-Disposition: inline
-In-Reply-To: <1632151292-18503-5-git-send-email-alain.volmat@foss.st.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The log messages talk about 'bus recovery' while it is not a bus
+recovery with 9 pulses but merely a controller reset. Controller resets
+are not worth log messages. The 'bus busy' message should be emitted by
+upper layers, a busy bus may be expectected in some cases.
 
---9BKR1twofcV34c05
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+---
 
-On Mon, Sep 20, 2021 at 05:21:32PM +0200, Alain Volmat wrote:
-> dmaengine_terminate_all() is deprecated in favor of explicitly saying if
-> it should be sync or async.  Here, we use dmaengine_terminate_sync in
-> i2c_xfer and i2c_smbus_xfer handlers and rely on
-> dmaengine_terminate_async within interrupt handlers
-> (transmission error cases).
-> dmaengine_synchronize is added within i2c_xfer and i2c_smbus_xfer handler
-> to finalize terminate started in interrupt handlers.
->=20
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Alain, do you agree? Only compile tested.
 
-Applied to for-current, thanks!
+ drivers/i2c/busses/i2c-stm32f7.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
+diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+index b9b19a2a2ffa..e0e7d0001cbc 100644
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -832,8 +832,6 @@ static int stm32f7_i2c_release_bus(struct i2c_adapter *i2c_adap)
+ {
+ 	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(i2c_adap);
+ 
+-	dev_info(i2c_dev->dev, "Trying to recover bus\n");
+-
+ 	stm32f7_i2c_clr_bits(i2c_dev->base + STM32F7_I2C_CR1,
+ 			     STM32F7_I2C_CR1_PE);
+ 
+@@ -854,13 +852,9 @@ static int stm32f7_i2c_wait_free_bus(struct stm32f7_i2c_dev *i2c_dev)
+ 	if (!ret)
+ 		return 0;
+ 
+-	dev_info(i2c_dev->dev, "bus busy\n");
+-
+ 	ret = stm32f7_i2c_release_bus(&i2c_dev->adap);
+-	if (ret) {
+-		dev_err(i2c_dev->dev, "Failed to recover the bus (%d)\n", ret);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	return -EBUSY;
+ }
+-- 
+2.30.2
 
---9BKR1twofcV34c05
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGl7qQACgkQFA3kzBSg
-Kba9bxAAnolHWrz96xTiK4AAyN69kypXX4qth+xsvFARDQpkOIv02CFxNE877QgF
-8RsfYdvGMPb7fvB5gBebN8o15gETECfW6YCNRI++V6GtO2XqbjcDFv5dfP/X7Gmf
-WTM2uh3efg2yMq9C6gVDPWStys1ZumDxZadMPSN1I78N0On3ySkLepBZWDHgi2jh
-LA5PnsyCCosTF9a7zWTet+sWzsxFxcnwb83QAnv8B27BXUeH+9Z0KWaS7HYV8kP/
-vyPZ5KhkqDwLn/xELfJEjvPcVnOX3BWUEo7QoI1RkrRFhjdf8cooRvgqKfnJ9de+
-+xwpNgeEW948YKQcapM4m6p+/CsUWwBW5eXmzh5rkSF5ZfFk/skj2DZR77Xo288w
-F0/Ar1BqbVDai6jSuKgigSoPhLajIY8W0tw2U6EzB3E/gINtUZ/GwMtI7S8Iucbc
-VE4Bmirx16B5cr9ki9lhFJa1Pg5qUYNBS/tIlqHcGiXFUf+iE/Qq0KfPjNQZ59xP
-nN1oTeWHGHdHq/Jx4vs9PA/opRKt1eSgvHs5vV/bYPcWxjb5WhibzDx96KPGCOwo
-dduUZxp5lcbBgTMPc8ihXV/YjVR2olHOIM5KwKa9EGE6aiNnyAdH7ZcQ6ZIhEFuu
-LVvmvvCjmSr3Xhz8zTRddi+Z6MtqiVnSSWUFEI4oBm/p1+mjMbQ=
-=ZOXV
------END PGP SIGNATURE-----
-
---9BKR1twofcV34c05--
