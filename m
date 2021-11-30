@@ -2,139 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB46046383A
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Nov 2021 15:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F92463A97
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Nov 2021 16:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243287AbhK3O6x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Nov 2021 09:58:53 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:60272 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbhK3O4v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Nov 2021 09:56:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C4817CE1A75;
-        Tue, 30 Nov 2021 14:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F11F2C53FC1;
-        Tue, 30 Nov 2021 14:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638284009;
-        bh=WHjCRXogm5Kl8KpuQkkByV+cS/mu/8FDifLQmqlyog4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rHlqBTCQcrU1eyTM9zNzCygDekPGIiLmdMZI7b58ajuQxu7LsKhpM8qpF9fHRSud9
-         Jo6xTduDqdyKGzFddEjSg7RPk77b03R+AAQ/CjxaD9ly+4oo5GTMyoxSp8Wms4YY4u
-         1LWoxPf/8OYbleHz+OxDdkxRorHLBKhdrFw2EZrG0E2mk2rYDCzbfIasGrSJiHhZEr
-         Z8ugCbDCkExRC0p06NmApxnDw3rLcpqLNCt1nPw6MJum3GTf6gyi0sile/dOMn6jjO
-         6wDTwMf6k3don8tBOG8IaepdLzjicxVUghiiu0XNcflXw5EFEq2Yy0MPCBpfbDt93K
-         DOvfGKkjoDwYA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        ck+kernelbugzilla@bl4ckb0x.de, stephane.poignant@protonmail.com,
-        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 07/14] i2c: i801: Fix interrupt storm from SMB_ALERT signal
-Date:   Tue, 30 Nov 2021 09:53:08 -0500
-Message-Id: <20211130145317.946676-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211130145317.946676-1-sashal@kernel.org>
-References: <20211130145317.946676-1-sashal@kernel.org>
+        id S239882AbhK3P4T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Nov 2021 10:56:19 -0500
+Received: from mga06.intel.com ([134.134.136.31]:2534 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242260AbhK3PyL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 30 Nov 2021 10:54:11 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="297045988"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="297045988"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 07:50:47 -0800
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="676879872"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 07:50:46 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1ms5O2-000bCI-9c;
+        Tue, 30 Nov 2021 17:49:42 +0200
+Date:   Tue, 30 Nov 2021 17:49:41 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, lakshmi.sowjanya.d@intel.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, bala.senthil@intel.com,
+        pandith.n@intel.com
+Subject: Re: [PATCH v1 2/2] i2c: designware-pci: Set ideal timing parameters
+ for Elkhart Lake PSE
+Message-ID: <YaZIFTHCGb5dLM2f@smile.fi.intel.com>
+References: <20211109103552.18677-1-lakshmi.sowjanya.d@intel.com>
+ <20211109103552.18677-2-lakshmi.sowjanya.d@intel.com>
+ <YaUGX27+jHwQxg48@kunai>
+ <YaXrkJbsktXFAgFJ@smile.fi.intel.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <YaXrkJbsktXFAgFJ@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+On Tue, Nov 30, 2021 at 11:14:57AM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 29, 2021 at 05:57:03PM +0100, Wolfram Sang wrote:
+> > On Tue, Nov 09, 2021 at 04:05:52PM +0530, lakshmi.sowjanya.d@intel.com wrote:
+> > > From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+> > > 
+> > > Set optimal HCNT, LCNT and hold time values for all the speeds supported
+> > > in Intel Programmable Service Engine I2C controller in Intel Elkhart
+> > > Lake.
+> > > 
+> > > Signed-off-by: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+> > 
+> > Applied to for-next, thanks!
+> 
+> Oh là là! Can we revert these, please?
+> 
+> After the commit 64d0a0755c7d ("i2c: designware: Read counters from ACPI for
+> PCI driver") the PCI driver should get this from ACPI tables, no hard coding
+> needed anymore. I did that series to address this very issue.
+> 
+> So, Lakshmi, please ask for BIOS fix as we discussed long time ago.
 
-[ Upstream commit 03a976c9afb5e3c4f8260c6c08a27d723b279c92 ]
+For the record, I have just checked the DSDT dump I have from
+Elkhart Lake machine and BIOS provides those counters for devices
+\_SB.PCI0.I2C0 .. \_SB.PCI0.I2C5 (6 devices altogether).
 
-Currently interrupt storm will occur from i2c-i801 after first
-transaction if SMB_ALERT signal is enabled and ever asserted. It is
-enough if the signal is asserted once even before the driver is loaded
-and does not recover because that interrupt is not acknowledged.
+So, BIOS is quite aware of the interface and patches are not needed.
+I rather add a comment there that these tables in the driver shouldn't
+be spread and expanded anymore (at least by Intel).
 
-This fix aims to fix it by two ways:
-- Add acknowledging for the SMB_ALERT interrupt status
-- Disable the SMB_ALERT interrupt on platforms where possible since the
-  driver currently does not make use for it
-
-Acknowledging resets the SMB_ALERT interrupt status on all platforms and
-also should help to avoid interrupt storm on older platforms where the
-SMB_ALERT interrupt disabling is not available.
-
-For simplicity this fix reuses the host notify feature for disabling and
-restoring original register value.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=177311
-Reported-by: ck+kernelbugzilla@bl4ckb0x.de
-Reported-by: stephane.poignant@protonmail.com
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Tested-by: Jean Delvare <jdelvare@suse.de>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-i801.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 7b1654b0fb6db..2964c3a3f89f2 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -196,6 +196,7 @@
- #define SMBSLVSTS_HST_NTFY_STS	BIT(0)
- 
- /* Host Notify Command register bits */
-+#define SMBSLVCMD_SMBALERT_DISABLE	BIT(2)
- #define SMBSLVCMD_HST_NTFY_INTREN	BIT(0)
- 
- #define STATUS_ERROR_FLAGS	(SMBHSTSTS_FAILED | SMBHSTSTS_BUS_ERR | \
-@@ -639,12 +640,20 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
- 		i801_isr_byte_done(priv);
- 
- 	/*
--	 * Clear irq sources and report transaction result.
-+	 * Clear remaining IRQ sources: Completion of last command, errors
-+	 * and the SMB_ALERT signal. SMB_ALERT status is set after signal
-+	 * assertion independently of the interrupt generation being blocked
-+	 * or not so clear it always when the status is set.
-+	 */
-+	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS | SMBHSTSTS_SMBALERT_STS;
-+	if (status)
-+		outb_p(status, SMBHSTSTS(priv));
-+	status &= ~SMBHSTSTS_SMBALERT_STS; /* SMB_ALERT not reported */
-+	/*
-+	 * Report transaction result.
- 	 * ->status must be cleared before the next transaction is started.
- 	 */
--	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS;
- 	if (status) {
--		outb_p(status, SMBHSTSTS(priv));
- 		priv->status = status;
- 		wake_up(&priv->waitq);
- 	}
-@@ -964,9 +973,13 @@ static void i801_enable_host_notify(struct i2c_adapter *adapter)
- 	if (!(priv->features & FEATURE_HOST_NOTIFY))
- 		return;
- 
--	if (!(SMBSLVCMD_HST_NTFY_INTREN & priv->original_slvcmd))
--		outb_p(SMBSLVCMD_HST_NTFY_INTREN | priv->original_slvcmd,
--		       SMBSLVCMD(priv));
-+	/*
-+	 * Enable host notify interrupt and block the generation of interrupt
-+	 * from the SMB_ALERT signal because the driver does not support
-+	 * SMBus Alert.
-+	 */
-+	outb_p(SMBSLVCMD_HST_NTFY_INTREN | SMBSLVCMD_SMBALERT_DISABLE |
-+	       priv->original_slvcmd, SMBSLVCMD(priv));
- 
- 	/* clear Host Notify bit to allow a new notification */
- 	outb_p(SMBSLVSTS_HST_NTFY_STS, SMBSLVSTS(priv));
 -- 
-2.33.0
+With Best Regards,
+Andy Shevchenko
+
 
