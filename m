@@ -2,45 +2,45 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8683E463762
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Nov 2021 15:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5107F4637CB
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Nov 2021 15:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242725AbhK3Ox1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Nov 2021 09:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S242950AbhK3O4F (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Nov 2021 09:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242727AbhK3Owf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Nov 2021 09:52:35 -0500
+        with ESMTP id S242515AbhK3Ox1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Nov 2021 09:53:27 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845DCC0613E0;
-        Tue, 30 Nov 2021 06:48:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1371EC0617A2;
+        Tue, 30 Nov 2021 06:48:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 13814CE1A4D;
-        Tue, 30 Nov 2021 14:48:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9E0C53FCF;
-        Tue, 30 Nov 2021 14:48:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 56EAACE1A53;
+        Tue, 30 Nov 2021 14:48:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E9FDC53FD0;
+        Tue, 30 Nov 2021 14:48:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283697;
-        bh=BhIew2AD86pu1If7zFqfREteOWJx4UUFBUVRbRKMWlc=;
+        s=k20201202; t=1638283725;
+        bh=wSy4ngHqonLlpwH4MCkuw7K7ZRA4PhoObos2hxXHl1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vg8CMKryZUFqwW9l5BY93MM4JG+I34CgMbkJKyXJ8ru8MTLNMyOBv5kcKhJ5TisXg
-         lH89wqCdB0y5gF9Qv9Z8FhsmqVw6gjP237wqQNkeNUSRSse7sCYaDNSvXg3MIiDyBd
-         eY2GOYnl6eS8NHsknvWdOOY6hY2URSGtGDGE2Jej3P7lIwwuKee6LwiuuLSN03qyLj
-         b5963fI6YtTQshs2XCC+N3OZE1ummSxcl0b0pfJqGvZEdWZB8dLW5vuHQEYHxGA4nn
-         s+9Kxf6tob6kyRQILB5QfYFkDdkUm9pB1wT+Z0aB2OOmo5ZneTRYhCfb5/9RLKA/gR
-         vFOCYtMWE4oCw==
+        b=fdgdhaawgE1EaawLep+Rlh9iTl1YiAIZdPNGXuoJXsuen1rkgVpXRZ5a9VP+UfhVD
+         GBz2vGFCr9cyVXz41W9SkL0VUbh+8l4SsGQizxE01z4RzG4KW9x/CAKj7aT/j25w20
+         EAK5UhO8Gs42HN0QlPL0b3FD5Y1RrlnkKx6t3EiwTGMxLsjEQvVR8xk5m/AA5VRfKN
+         JdPZR4KOkhgAwZaQAyZyBAaF4Zfty2Ss//r3aBwnEzcpOPKorfLUNfPWvxPh67wSwX
+         fVg2htfklucF7fJKfcpvbyqcp7wLDb79fMPFOWaZcQAATE/Wy1FgZVKZEMgeFCM3DO
+         5RBRZek9QWkxA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Zaidman <michael.zaidman@gmail.com>,
-        Germain Hebert <germain.hebert@ca.abb.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 23/68] HID: ft260: fix i2c probing for hwmon devices
-Date:   Tue, 30 Nov 2021 09:46:19 -0500
-Message-Id: <20211130144707.944580-23-sashal@kernel.org>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        ck+kernelbugzilla@bl4ckb0x.de, stephane.poignant@protonmail.com,
+        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 35/68] i2c: i801: Fix interrupt storm from SMB_ALERT signal
+Date:   Tue, 30 Nov 2021 09:46:31 -0500
+Message-Id: <20211130144707.944580-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130144707.944580-1-sashal@kernel.org>
 References: <20211130144707.944580-1-sashal@kernel.org>
@@ -52,91 +52,92 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Michael Zaidman <michael.zaidman@gmail.com>
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-[ Upstream commit a94f61e63f337d95001e1a976ab701100fa1d666 ]
+[ Upstream commit 03a976c9afb5e3c4f8260c6c08a27d723b279c92 ]
 
-The below scenario causes the kernel NULL pointer dereference failure:
-1. sudo insmod hid-ft260.ko
-2. sudo modprobe lm75
-3. unplug USB hid-ft260
-4. plug USB hid-ft260
+Currently interrupt storm will occur from i2c-i801 after first
+transaction if SMB_ALERT signal is enabled and ever asserted. It is
+enough if the signal is asserted once even before the driver is loaded
+and does not recover because that interrupt is not acknowledged.
 
-[  +0.000006] Call Trace:
-[  +0.000004]  __i2c_smbus_xfer.part.0+0xd1/0x310
-[  +0.000007]  ? ft260_smbus_write+0x140/0x140 [hid_ft260]
-[  +0.000005]  __i2c_smbus_xfer+0x2b/0x80
-[  +0.000004]  i2c_smbus_xfer+0x61/0xf0
-[  +0.000005]  i2c_default_probe+0xf9/0x130
-[  +0.000004]  i2c_detect_address+0x84/0x160
-[  +0.000004]  ? kmem_cache_alloc_trace+0xf6/0x200
-[  +0.000009]  ? i2c_detect.isra.0+0x69/0x130
-[  +0.000005]  i2c_detect.isra.0+0xbf/0x130
-[  +0.000004]  ? __process_new_driver+0x30/0x30
-[  +0.000004]  __process_new_adapter+0x18/0x20
-[  +0.000004]  bus_for_each_drv+0x84/0xd0
-[  +0.000003]  i2c_register_adapter+0x1e4/0x400
-[  +0.000005]  i2c_add_adapter+0x5c/0x80
-[  +0.000004]  ft260_probe.cold+0x222/0x2e2 [hid_ft260]
-[  +0.000006]  hid_device_probe+0x10e/0x170 [hid]
-[  +0.000009]  really_probe+0xff/0x460
-[  +0.000004]  driver_probe_device+0xe9/0x160
-[  +0.000003]  __device_attach_driver+0x71/0xd0
-[  +0.000004]  ? driver_allows_async_probing+0x50/0x50
-[  +0.000004]  bus_for_each_drv+0x84/0xd0
-[  +0.000002]  __device_attach+0xde/0x1e0
-[  +0.000004]  device_initial_probe+0x13/0x20
-[  +0.000004]  bus_probe_device+0x8f/0xa0
-[  +0.000003]  device_add+0x333/0x5f0
+This fix aims to fix it by two ways:
+- Add acknowledging for the SMB_ALERT interrupt status
+- Disable the SMB_ALERT interrupt on platforms where possible since the
+  driver currently does not make use for it
 
-It happened when i2c core probed for the devices associated with the lm75
-driver by invoking 2c_detect()-->..-->ft260_smbus_write() from within the
-ft260_probe before setting the adapter data with i2c_set_adapdata().
+Acknowledging resets the SMB_ALERT interrupt status on all platforms and
+also should help to avoid interrupt storm on older platforms where the
+SMB_ALERT interrupt disabling is not available.
 
-Moving the i2c_set_adapdata() before i2c_add_adapter() fixed the failure.
+For simplicity this fix reuses the host notify feature for disabling and
+restoring original register value.
 
-Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
-Signed-off-by: Germain Hebert <germain.hebert@ca.abb.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=177311
+Reported-by: ck+kernelbugzilla@bl4ckb0x.de
+Reported-by: stephane.poignant@protonmail.com
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Tested-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-ft260.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
-index 4ef1c3b8094ea..8ee77f4afe9ff 100644
---- a/drivers/hid/hid-ft260.c
-+++ b/drivers/hid/hid-ft260.c
-@@ -966,24 +966,23 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	mutex_init(&dev->lock);
- 	init_completion(&dev->wait);
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 1f929e6c30bea..9be0b8f3e4a54 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -190,6 +190,7 @@
+ #define SMBSLVSTS_HST_NTFY_STS	BIT(0)
  
-+	ret = ft260_xfer_status(dev);
-+	if (ret)
-+		ft260_i2c_reset(hdev);
-+
-+	i2c_set_adapdata(&dev->adap, dev);
- 	ret = i2c_add_adapter(&dev->adap);
- 	if (ret) {
- 		hid_err(hdev, "failed to add i2c adapter\n");
- 		goto err_hid_close;
+ /* Host Notify Command register bits */
++#define SMBSLVCMD_SMBALERT_DISABLE	BIT(2)
+ #define SMBSLVCMD_HST_NTFY_INTREN	BIT(0)
+ 
+ #define STATUS_ERROR_FLAGS	(SMBHSTSTS_FAILED | SMBHSTSTS_BUS_ERR | \
+@@ -639,12 +640,20 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
+ 		i801_isr_byte_done(priv);
+ 
+ 	/*
+-	 * Clear irq sources and report transaction result.
++	 * Clear remaining IRQ sources: Completion of last command, errors
++	 * and the SMB_ALERT signal. SMB_ALERT status is set after signal
++	 * assertion independently of the interrupt generation being blocked
++	 * or not so clear it always when the status is set.
++	 */
++	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS | SMBHSTSTS_SMBALERT_STS;
++	if (status)
++		outb_p(status, SMBHSTSTS(priv));
++	status &= ~SMBHSTSTS_SMBALERT_STS; /* SMB_ALERT not reported */
++	/*
++	 * Report transaction result.
+ 	 * ->status must be cleared before the next transaction is started.
+ 	 */
+-	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS;
+ 	if (status) {
+-		outb_p(status, SMBHSTSTS(priv));
+ 		priv->status = status;
+ 		complete(&priv->done);
  	}
+@@ -972,9 +981,13 @@ static void i801_enable_host_notify(struct i2c_adapter *adapter)
+ 	if (!(priv->features & FEATURE_HOST_NOTIFY))
+ 		return;
  
--	i2c_set_adapdata(&dev->adap, dev);
--
- 	ret = sysfs_create_group(&hdev->dev.kobj, &ft260_attr_group);
- 	if (ret < 0) {
- 		hid_err(hdev, "failed to create sysfs attrs\n");
- 		goto err_i2c_free;
- 	}
+-	if (!(SMBSLVCMD_HST_NTFY_INTREN & priv->original_slvcmd))
+-		outb_p(SMBSLVCMD_HST_NTFY_INTREN | priv->original_slvcmd,
+-		       SMBSLVCMD(priv));
++	/*
++	 * Enable host notify interrupt and block the generation of interrupt
++	 * from the SMB_ALERT signal because the driver does not support
++	 * SMBus Alert.
++	 */
++	outb_p(SMBSLVCMD_HST_NTFY_INTREN | SMBSLVCMD_SMBALERT_DISABLE |
++	       priv->original_slvcmd, SMBSLVCMD(priv));
  
--	ret = ft260_xfer_status(dev);
--	if (ret)
--		ft260_i2c_reset(hdev);
--
- 	return 0;
- 
- err_i2c_free:
+ 	/* clear Host Notify bit to allow a new notification */
+ 	outb_p(SMBSLVSTS_HST_NTFY_STS, SMBSLVSTS(priv));
 -- 
 2.33.0
 
