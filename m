@@ -2,32 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F6C463828
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Nov 2021 15:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB46046383A
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Nov 2021 15:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243045AbhK3O6Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 Nov 2021 09:58:25 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58744 "EHLO
+        id S243287AbhK3O6x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 Nov 2021 09:58:53 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:60272 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242888AbhK3O40 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Nov 2021 09:56:26 -0500
+        with ESMTP id S229810AbhK3O4v (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 Nov 2021 09:56:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9FC6FCE1A74;
-        Tue, 30 Nov 2021 14:53:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0372C53FC7;
-        Tue, 30 Nov 2021 14:53:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C4817CE1A75;
+        Tue, 30 Nov 2021 14:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F11F2C53FC1;
+        Tue, 30 Nov 2021 14:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283983;
-        bh=3S7YOgzGCmBTdU22hi4/KaF8ovSGbDGe7wXFSwKaTPg=;
+        s=k20201202; t=1638284009;
+        bh=WHjCRXogm5Kl8KpuQkkByV+cS/mu/8FDifLQmqlyog4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W0NTtfFjCS+9WAvbUjAl0mv34DeD8QIsqx+9DsLNiUs2s2LjoNFT+baBymK/8fGhJ
-         Rva+/7za04HTbjmShR8mCddIOR4mGIdAxVy/mPqHmvJeSKSoM++XLoKabDr4gXEemk
-         zMdu4wHfceptaVlG2R2EYXWTAg66aOGlRmoPnMO/6yzw77Mrh5XREbKoYa46j9snJV
-         lP3KZv4RhyILbQb3Gqi9WFiOvTRB/+/z7+Prsk1a7yLHdpqiVbSz+7T8s1f366QTX0
-         WhBSN5O3BAiXOj94PgdFF+7gU6uG2Lo/rKRsHjfCOsKEn8rsnz8NjFbeCpiqYaAmAe
-         x0iOswMLOHH/w==
+        b=rHlqBTCQcrU1eyTM9zNzCygDekPGIiLmdMZI7b58ajuQxu7LsKhpM8qpF9fHRSud9
+         Jo6xTduDqdyKGzFddEjSg7RPk77b03R+AAQ/CjxaD9ly+4oo5GTMyoxSp8Wms4YY4u
+         1LWoxPf/8OYbleHz+OxDdkxRorHLBKhdrFw2EZrG0E2mk2rYDCzbfIasGrSJiHhZEr
+         Z8ugCbDCkExRC0p06NmApxnDw3rLcpqLNCt1nPw6MJum3GTf6gyi0sile/dOMn6jjO
+         6wDTwMf6k3don8tBOG8IaepdLzjicxVUghiiu0XNcflXw5EFEq2Yy0MPCBpfbDt93K
+         DOvfGKkjoDwYA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
@@ -35,12 +35,12 @@ Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
         Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
         linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 10/17] i2c: i801: Fix interrupt storm from SMB_ALERT signal
-Date:   Tue, 30 Nov 2021 09:52:34 -0500
-Message-Id: <20211130145243.946407-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 07/14] i2c: i801: Fix interrupt storm from SMB_ALERT signal
+Date:   Tue, 30 Nov 2021 09:53:08 -0500
+Message-Id: <20211130145317.946676-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211130145243.946407-1-sashal@kernel.org>
-References: <20211130145243.946407-1-sashal@kernel.org>
+In-Reply-To: <20211130145317.946676-1-sashal@kernel.org>
+References: <20211130145317.946676-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -83,10 +83,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 19 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index efafd028c5d16..3606a1d6a0560 100644
+index 7b1654b0fb6db..2964c3a3f89f2 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -199,6 +199,7 @@
+@@ -196,6 +196,7 @@
  #define SMBSLVSTS_HST_NTFY_STS	BIT(0)
  
  /* Host Notify Command register bits */
@@ -94,7 +94,7 @@ index efafd028c5d16..3606a1d6a0560 100644
  #define SMBSLVCMD_HST_NTFY_INTREN	BIT(0)
  
  #define STATUS_ERROR_FLAGS	(SMBHSTSTS_FAILED | SMBHSTSTS_BUS_ERR | \
-@@ -644,12 +645,20 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
+@@ -639,12 +640,20 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
  		i801_isr_byte_done(priv);
  
  	/*
@@ -118,7 +118,7 @@ index efafd028c5d16..3606a1d6a0560 100644
  		priv->status = status;
  		wake_up(&priv->waitq);
  	}
-@@ -969,9 +978,13 @@ static void i801_enable_host_notify(struct i2c_adapter *adapter)
+@@ -964,9 +973,13 @@ static void i801_enable_host_notify(struct i2c_adapter *adapter)
  	if (!(priv->features & FEATURE_HOST_NOTIFY))
  		return;
  
