@@ -2,88 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A11BA464C4F
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Dec 2021 12:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B36464CFB
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Dec 2021 12:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbhLALHt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Dec 2021 06:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
+        id S1348930AbhLALhy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Dec 2021 06:37:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbhLALHt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Dec 2021 06:07:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6815C061574
-        for <linux-i2c@vger.kernel.org>; Wed,  1 Dec 2021 03:04:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67B1EB81E17
-        for <linux-i2c@vger.kernel.org>; Wed,  1 Dec 2021 11:04:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 796B3C53FCC;
-        Wed,  1 Dec 2021 11:04:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638356664;
-        bh=7pQ0uFUOVKeErMhY9dzJH14SYOZ5LKeB2g8dQfFONSY=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=ewIcKZnbCOe2YvYsNotfoJhLmZuLVD/iDH+zlwmFTbDxRcUzOfb4MgPz56fPQi3/m
-         vVAUze2gR897KUAJhHtA+f7YFxIZe64HwqtszzAS5GwwSYkhPvQZfFfpDlBZHFVbST
-         angezio7KkhQR0MAFSwAjfV5EmLznL3D41GFwDreb2TTCJj+QLQ6UuwT0Vpr8mXfoX
-         zI56kgoyk8IfQZfTIlEMScgnVuEjIGwURXb3fgOX5KsAFyYE82Zbgf7J/WotBIan0r
-         SPZ7jA8KGKV1zLYsZtf0+opfrG50cP2fY31VlCBFO/yNeuBnGVyyadIER8yuY8FUEA
-         DQgZEmwXJNt0Q==
-Date:   Wed, 1 Dec 2021 12:04:21 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        pierre-yves.mordret@foss.st.com
-Subject: Re: [PATCH] i2c: stm32f7: remove noisy and imprecise log messages
-Message-ID: <YadWtUWHhQgWbh4+@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        pierre-yves.mordret@foss.st.com
-References: <20211130093816.12789-1-wsa@kernel.org>
- <20211130162534.GA813993@gnbcxd0016.gnb.st.com>
- <YaaakSa16Dun6b+h@kunai>
- <20211201105953.GA825735@gnbcxd0016.gnb.st.com>
+        with ESMTP id S1349032AbhLALhl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Dec 2021 06:37:41 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D4FC0613B4
+        for <linux-i2c@vger.kernel.org>; Wed,  1 Dec 2021 03:34:11 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id o1so48185370uap.4
+        for <linux-i2c@vger.kernel.org>; Wed, 01 Dec 2021 03:34:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
+         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
+         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
+         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
+         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
+         Af5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=PwqmmEm+pXz7qoeTvJGZZawJ+/KPb9t2+3ectAfpcCfb+mndjHMKw8tCyL9s7M+aBZ
+         l3DYTVtvK+nPGPE1Az4Iv3cKEL6Y7wvjcxcEJsx7pPFZXpwAYoGXj/pTIoGwP6/tvbEY
+         H6dNyxevhZoTnx0jRqBxPM+t7K0QBx+GLd4194PnkO+FU8jqauU37eaHQVDqnonEwn+u
+         /kfxzrp7UOmavOq9KodJePe0YY/NuwQ8vQPWqAIJ4EW6UkpuFwPNZtzxhZqzR3m21eiA
+         YdtBy2A/OjzI/W5ei2V3Q9Mzu/ARgDIUIuSJKadJ1rF/IsSm6uaqkFBaKgeO+2GKKMPf
+         qtEw==
+X-Gm-Message-State: AOAM531H/yzFUrW8lczJIdC6USWIgOlxefTZVt7EPVU7lAFZRlqYZpDg
+        2i0ckaXafoKqT0xWumsbdIpOct0pDLUzRS4HWUJagsghHjg=
+X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
+X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
+ Wed, 01 Dec 2021 03:33:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NuMdnzB3da78tof9"
-Content-Disposition: inline
-In-Reply-To: <20211201105953.GA825735@gnbcxd0016.gnb.st.com>
+Sender: unitednationawardwinner@gmail.com
+Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
+From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
+Date:   Wed, 1 Dec 2021 03:33:58 -0800
+X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
+Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
+Subject: Your long awaited part payment of $2.5.000.00Usd
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Attention: Beneficiary, Your long awaited part payment of
+$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
+Dollars) is ready for immediate release to you, and it was
+electronically credited into an ATM Visa Card for easy delivery.
 
---NuMdnzB3da78tof9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Your new Payment Reference No.- 6363836,
+Pin Code No: 1787
+Your Certificate of Merit Payment No: 05872,
 
+Your Names: |
+Address: |
 
-> Ok, I thus send a 2 patches serie with mine and yours reworked on top of
-> mine together. Hope you don't mind.
+Person to Contact:MR KELLY HALL the Director of the International
+Audit unit ATM Payment Center,
 
-Please do.
+Email: uba-bf@e-ubabf.com
+TELEPHONE: +226 64865611 You can whatsApp the bank
 
-
---NuMdnzB3da78tof9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGnVrAACgkQFA3kzBSg
-KbZFqBAAqoRiBLM+wqt8C/bR/WA5jcs7cTFUiZuRBT1bmfGGDqlqoizsNhF39Ms4
-OLAsU/9u7K3btfWcopWLWlmnnvcGXb90cV2CY1AAJG0dQRhFMdW9a5+llW/wpYyM
-F0jtNoMa+5cd85pvEa9RVlOPK1QnwvLTd/IktdpaxqFSITVLrwc6RJ2fmUkqFSLH
-7p/PtEGGgOp1fVYmPvLW8FZ0UFE0EaVcaVcpcstyyKDz+F4tYD0YSqWuFS3b+9TF
-URPpQ9M1xVCu9Ygz9X9UPmVXxOlYILhrymSCOaUs2095ypKQUVI1+IuyJpRfPyp1
-T8TUWo4mMFVHglTYdrE1Ulz/dORTAqPF2ht6BKZQVfYsHSxU7+dFqSQ6k1NuEaat
-Yy5wGWNCJ/fH5BYKVxGgfWVjKL387HuRtF6vdbe6s8wMvkPFyIBc80l69INvFsup
-bGTpW6jTluoEdN8tChdHsySd/xWgMXh+8NJqIq+7ObKCcm4Sabl0zOMgJBycBsSQ
-xZhAJA0x5EvSmIVslwCpjFbnw5xrxMZCFjGGKX6DpDRAD5JDQyOT2fV5UjhcuM+g
-wzHvnCkoEUVIDm1xmz2xa4Up3qWw82i1GXin5z2XfdMcHNe2M4uN5b2ov5Njb57e
-NEDAWA+EqtuUaA7C8RNITHx/DLEBvYQsGNHwAiB3eyShSY70KJg=
-=J5Dz
------END PGP SIGNATURE-----
-
---NuMdnzB3da78tof9--
+Regards.
+Mrs ORGIL BAATAR
