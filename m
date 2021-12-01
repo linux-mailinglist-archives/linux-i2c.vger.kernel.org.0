@@ -2,77 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B36464CFB
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Dec 2021 12:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B9C464D16
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Dec 2021 12:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348930AbhLALhy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Dec 2021 06:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349032AbhLALhl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Dec 2021 06:37:41 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D4FC0613B4
-        for <linux-i2c@vger.kernel.org>; Wed,  1 Dec 2021 03:34:11 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id o1so48185370uap.4
-        for <linux-i2c@vger.kernel.org>; Wed, 01 Dec 2021 03:34:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
-         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
-         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
-         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
-         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
-         Af5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=PwqmmEm+pXz7qoeTvJGZZawJ+/KPb9t2+3ectAfpcCfb+mndjHMKw8tCyL9s7M+aBZ
-         l3DYTVtvK+nPGPE1Az4Iv3cKEL6Y7wvjcxcEJsx7pPFZXpwAYoGXj/pTIoGwP6/tvbEY
-         H6dNyxevhZoTnx0jRqBxPM+t7K0QBx+GLd4194PnkO+FU8jqauU37eaHQVDqnonEwn+u
-         /kfxzrp7UOmavOq9KodJePe0YY/NuwQ8vQPWqAIJ4EW6UkpuFwPNZtzxhZqzR3m21eiA
-         YdtBy2A/OjzI/W5ei2V3Q9Mzu/ARgDIUIuSJKadJ1rF/IsSm6uaqkFBaKgeO+2GKKMPf
-         qtEw==
-X-Gm-Message-State: AOAM531H/yzFUrW8lczJIdC6USWIgOlxefTZVt7EPVU7lAFZRlqYZpDg
-        2i0ckaXafoKqT0xWumsbdIpOct0pDLUzRS4HWUJagsghHjg=
-X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
-X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
- Wed, 01 Dec 2021 03:33:59 -0800 (PST)
+        id S243832AbhLALjA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Dec 2021 06:39:00 -0500
+Received: from mga11.intel.com ([192.55.52.93]:46333 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243700AbhLALi7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 1 Dec 2021 06:38:59 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="233942572"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="233942572"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 03:35:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="512667219"
+Received: from mylly.fi.intel.com (HELO [10.237.72.148]) ([10.237.72.148])
+  by orsmga008.jf.intel.com with ESMTP; 01 Dec 2021 03:35:35 -0800
+Subject: Re: [PATCH v1 1/2] i2c: designware-pci: Add support for Fast Mode
+ Plus and High Speed Mode
+To:     "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Senthil, Bala" <bala.senthil@intel.com>,
+        "N, Pandith" <pandith.n@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Saha, Tamal" <tamal.saha@intel.com>
+References: <20211109103552.18677-1-lakshmi.sowjanya.d@intel.com>
+ <YaUGV3lEmW9qtP+3@kunai>
+ <042d2c9f-4333-44b1-09c0-b0953a51c176@linux.intel.com>
+ <DM6PR11MB36609A77B3F5D7730FA16A52C4689@DM6PR11MB3660.namprd11.prod.outlook.com>
+ <4a420cc0-d18a-32db-ed58-f611336c99ec@linux.intel.com>
+ <Yac0JgqrEdUJcfsf@ninjato>
+ <DM6PR11MB366003BA82D2A65F60D3AF4BC4689@DM6PR11MB3660.namprd11.prod.outlook.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <691f1f59-5f6e-14b5-7607-38b91c23e149@linux.intel.com>
+Date:   Wed, 1 Dec 2021 13:35:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Sender: unitednationawardwinner@gmail.com
-Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
-From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
-Date:   Wed, 1 Dec 2021 03:33:58 -0800
-X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
-Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
-Subject: Your long awaited part payment of $2.5.000.00Usd
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <DM6PR11MB366003BA82D2A65F60D3AF4BC4689@DM6PR11MB3660.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Attention: Beneficiary, Your long awaited part payment of
-$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
-Dollars) is ready for immediate release to you, and it was
-electronically credited into an ATM Visa Card for easy delivery.
+On 12/1/21 11:39 AM, D, Lakshmi Sowjanya wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Wolfram Sang <wsa@kernel.org>
+>> Sent: Wednesday, December 1, 2021 2:07 PM
+>> To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+>> Cc: D, Lakshmi Sowjanya <lakshmi.sowjanya.d@intel.com>; linux-
+>> i2c@vger.kernel.org; linux-kernel@vger.kernel.org; Senthil, Bala
+>> <bala.senthil@intel.com>; N, Pandith <pandith.n@intel.com>; Andy
+>> Shevchenko <andriy.shevchenko@linux.intel.com>; Saha, Tamal
+>> <tamal.saha@intel.com>
+>> Subject: Re: [PATCH v1 1/2] i2c: designware-pci: Add support for Fast Mode
+>> Plus and High Speed Mode
+>>
+>>
+>>> See the comments from Andy. Recent enough Elkhart Lake BIOS and his
+>>> patches from last year already provide the timing parameters. Feeling
+>>> embarrassed I forgot them :-(
+>>
+>> But the u16 conversion of the existing parameters is still useful?
+> 
+> Jarkko: I've seen the changes by Andy. These patches are no more required as suggested. I'm following up on the same, regarding ACPI table entries.
+> 
+> I have the same query...is the u16 conversion of existing parameters still useful?
+> 
+Yes, that's useful.
 
-Your new Payment Reference No.- 6363836,
-Pin Code No: 1787
-Your Certificate of Merit Payment No: 05872,
-
-Your Names: |
-Address: |
-
-Person to Contact:MR KELLY HALL the Director of the International
-Audit unit ATM Payment Center,
-
-Email: uba-bf@e-ubabf.com
-TELEPHONE: +226 64865611 You can whatsApp the bank
-
-Regards.
-Mrs ORGIL BAATAR
+Jarkko
