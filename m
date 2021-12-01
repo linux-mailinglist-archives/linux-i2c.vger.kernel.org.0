@@ -2,79 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8FC464C3F
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Dec 2021 12:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A11BA464C4F
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Dec 2021 12:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243226AbhLALDb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Dec 2021 06:03:31 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:59582 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229696AbhLALDa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Dec 2021 06:03:30 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B18KtIV005616;
-        Wed, 1 Dec 2021 12:00:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=selector1; bh=3p8hf60x3MN36gSfgRlizyRmbFUL0MtXRK+OAqeqejE=;
- b=DCnp1tmRSfZ0IeJiok1WKICqN5ZzAiI2x3+BxIs9VKDvhfsRJCcn8SyJoPEnc2gPpmqn
- iDz66tvGJz3mX3mx5752PcXC0fQ9vjh75n3iv28sAqQT+O1d54gy4tBWMqPdc+zOKmN7
- Ads/qZDKHedB5GdoFyKe5iO6KTClJRU1+J/17IyzrFQzyD16Vz7yhZCEgyYglhLJrmep
- 61DeKlTChmk3oVWMLIzm2HJA/6fQD95R7ln4plfei0lgDBn0LSeag6d3zlp9p3+4dR5e
- TDhYgJi63yq08A8Zg9JlW1/5d4yFZV3cggalA+5y8dWrzUb9YogtbMyZWFAxOGb2Y6jF Ug== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cnx6ck24u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 12:00:00 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 29A8C10002A;
-        Wed,  1 Dec 2021 12:00:00 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1CE16215150;
-        Wed,  1 Dec 2021 12:00:00 +0100 (CET)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.46) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 1 Dec
- 2021 11:59:59 +0100
-Date:   Wed, 1 Dec 2021 11:59:53 +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     Wolfram Sang <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <pierre-yves.mordret@foss.st.com>
+        id S230450AbhLALHt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Dec 2021 06:07:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229696AbhLALHt (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Dec 2021 06:07:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6815C061574
+        for <linux-i2c@vger.kernel.org>; Wed,  1 Dec 2021 03:04:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67B1EB81E17
+        for <linux-i2c@vger.kernel.org>; Wed,  1 Dec 2021 11:04:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 796B3C53FCC;
+        Wed,  1 Dec 2021 11:04:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638356664;
+        bh=7pQ0uFUOVKeErMhY9dzJH14SYOZ5LKeB2g8dQfFONSY=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=ewIcKZnbCOe2YvYsNotfoJhLmZuLVD/iDH+zlwmFTbDxRcUzOfb4MgPz56fPQi3/m
+         vVAUze2gR897KUAJhHtA+f7YFxIZe64HwqtszzAS5GwwSYkhPvQZfFfpDlBZHFVbST
+         angezio7KkhQR0MAFSwAjfV5EmLznL3D41GFwDreb2TTCJj+QLQ6UuwT0Vpr8mXfoX
+         zI56kgoyk8IfQZfTIlEMScgnVuEjIGwURXb3fgOX5KsAFyYE82Zbgf7J/WotBIan0r
+         SPZ7jA8KGKV1zLYsZtf0+opfrG50cP2fY31VlCBFO/yNeuBnGVyyadIER8yuY8FUEA
+         DQgZEmwXJNt0Q==
+Date:   Wed, 1 Dec 2021 12:04:21 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        pierre-yves.mordret@foss.st.com
 Subject: Re: [PATCH] i2c: stm32f7: remove noisy and imprecise log messages
-Message-ID: <20211201105953.GA825735@gnbcxd0016.gnb.st.com>
+Message-ID: <YadWtUWHhQgWbh4+@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         pierre-yves.mordret@foss.st.com
 References: <20211130093816.12789-1-wsa@kernel.org>
  <20211130162534.GA813993@gnbcxd0016.gnb.st.com>
  <YaaakSa16Dun6b+h@kunai>
+ <20211201105953.GA825735@gnbcxd0016.gnb.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NuMdnzB3da78tof9"
 Content-Disposition: inline
-In-Reply-To: <YaaakSa16Dun6b+h@kunai>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
+In-Reply-To: <20211201105953.GA825735@gnbcxd0016.gnb.st.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:41:37PM +0100, Wolfram Sang wrote:
-> 
-> > - looking at this area of code again, it appears that the function stm32f7_i2c_release_bus
-> > is ALWAYS returning 0. So it should actually be a void function.  I thus
-> > propose, if you agree with that, that I propose, and apply a patch PRIOR to your/this patch
-> > to change that and remove the error checking of the stm32f7_i2c_release_bus function since it is useless.
-> > Is that fine for you ?
-> 
-> Well, I'd think we can also apply this patch first and then make the
-> function void, but I don't really care about the order. But we should do
-> both, I agree.
-> 
 
-Ok, I thus send a 2 patches serie with mine and yours reworked on top of
-mine together. Hope you don't mind.
+--NuMdnzB3da78tof9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
+> Ok, I thus send a 2 patches serie with mine and yours reworked on top of
+> mine together. Hope you don't mind.
+
+Please do.
+
+
+--NuMdnzB3da78tof9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGnVrAACgkQFA3kzBSg
+KbZFqBAAqoRiBLM+wqt8C/bR/WA5jcs7cTFUiZuRBT1bmfGGDqlqoizsNhF39Ms4
+OLAsU/9u7K3btfWcopWLWlmnnvcGXb90cV2CY1AAJG0dQRhFMdW9a5+llW/wpYyM
+F0jtNoMa+5cd85pvEa9RVlOPK1QnwvLTd/IktdpaxqFSITVLrwc6RJ2fmUkqFSLH
+7p/PtEGGgOp1fVYmPvLW8FZ0UFE0EaVcaVcpcstyyKDz+F4tYD0YSqWuFS3b+9TF
+URPpQ9M1xVCu9Ygz9X9UPmVXxOlYILhrymSCOaUs2095ypKQUVI1+IuyJpRfPyp1
+T8TUWo4mMFVHglTYdrE1Ulz/dORTAqPF2ht6BKZQVfYsHSxU7+dFqSQ6k1NuEaat
+Yy5wGWNCJ/fH5BYKVxGgfWVjKL387HuRtF6vdbe6s8wMvkPFyIBc80l69INvFsup
+bGTpW6jTluoEdN8tChdHsySd/xWgMXh+8NJqIq+7ObKCcm4Sabl0zOMgJBycBsSQ
+xZhAJA0x5EvSmIVslwCpjFbnw5xrxMZCFjGGKX6DpDRAD5JDQyOT2fV5UjhcuM+g
+wzHvnCkoEUVIDm1xmz2xa4Up3qWw82i1GXin5z2XfdMcHNe2M4uN5b2ov5Njb57e
+NEDAWA+EqtuUaA7C8RNITHx/DLEBvYQsGNHwAiB3eyShSY70KJg=
+=J5Dz
+-----END PGP SIGNATURE-----
+
+--NuMdnzB3da78tof9--
