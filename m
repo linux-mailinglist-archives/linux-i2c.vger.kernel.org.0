@@ -2,82 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B9C464D16
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Dec 2021 12:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BEA464D43
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Dec 2021 12:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243832AbhLALjA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Dec 2021 06:39:00 -0500
-Received: from mga11.intel.com ([192.55.52.93]:46333 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243700AbhLALi7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:38:59 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="233942572"
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="233942572"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 03:35:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="512667219"
-Received: from mylly.fi.intel.com (HELO [10.237.72.148]) ([10.237.72.148])
-  by orsmga008.jf.intel.com with ESMTP; 01 Dec 2021 03:35:35 -0800
-Subject: Re: [PATCH v1 1/2] i2c: designware-pci: Add support for Fast Mode
- Plus and High Speed Mode
-To:     "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Senthil, Bala" <bala.senthil@intel.com>,
-        "N, Pandith" <pandith.n@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Saha, Tamal" <tamal.saha@intel.com>
-References: <20211109103552.18677-1-lakshmi.sowjanya.d@intel.com>
- <YaUGV3lEmW9qtP+3@kunai>
- <042d2c9f-4333-44b1-09c0-b0953a51c176@linux.intel.com>
- <DM6PR11MB36609A77B3F5D7730FA16A52C4689@DM6PR11MB3660.namprd11.prod.outlook.com>
- <4a420cc0-d18a-32db-ed58-f611336c99ec@linux.intel.com>
- <Yac0JgqrEdUJcfsf@ninjato>
- <DM6PR11MB366003BA82D2A65F60D3AF4BC4689@DM6PR11MB3660.namprd11.prod.outlook.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <691f1f59-5f6e-14b5-7607-38b91c23e149@linux.intel.com>
-Date:   Wed, 1 Dec 2021 13:35:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S243209AbhLALv4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Dec 2021 06:51:56 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48614 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S242456AbhLALvw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Dec 2021 06:51:52 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B18KtWG005616;
+        Wed, 1 Dec 2021 12:48:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=d5m1UFk/3Up92017AsNcahPFJca6ECq5hi/I0JYLI3w=;
+ b=3f8MgReHd4PIBLiCc6spSiM6XZJ4VCyXrSGC9eK5QohG81Tc9iZH+FFUlk2ORG4aM7Ca
+ YszvrlF0BKW02tiQyNZu7/EBEZF+RpMnfD/3rk4m/Smxne52Ct4eciH6A+sgLhpM9h7a
+ ItJ/dRoSshYdUObhrYGRibVGffEBwpRuE6yLknAlFI6WRKvL4ExPJrB6etKHwdkiizVt
+ OBHLUDjqXz0gpktZ3fVSbWxb9LzLbHQFbK8/WymjtX6eXAxCn5sqVRvbqGgZLWd7pf9b
+ X8PuYfTwJ2F3s59AEEXo0OU7c8USp9eULkbUI0pk8iGoOvJzQhLH4LJj8eQgzGgRgs8g OA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cnx6ckdb3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 12:48:12 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DA14F100034;
+        Wed,  1 Dec 2021 12:48:10 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CDE742194D5;
+        Wed,  1 Dec 2021 12:48:10 +0100 (CET)
+Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 1 Dec 2021 12:48:10
+ +0100
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <wsa@kernel.org>, <pierre-yves.mordret@foss.st.com>
+CC:     <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <amelie.delaunay@foss.st.com>, <alain.volmat@foss.st.com>
+Subject: [PATCH 0/2] i2c: stm32: A few cleanups
+Date:   Wed, 1 Dec 2021 12:47:49 +0100
+Message-ID: <20211201114751.828474-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <DM6PR11MB366003BA82D2A65F60D3AF4BC4689@DM6PR11MB3660.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 12/1/21 11:39 AM, D, Lakshmi Sowjanya wrote:
-> 
-> 
->> -----Original Message-----
->> From: Wolfram Sang <wsa@kernel.org>
->> Sent: Wednesday, December 1, 2021 2:07 PM
->> To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
->> Cc: D, Lakshmi Sowjanya <lakshmi.sowjanya.d@intel.com>; linux-
->> i2c@vger.kernel.org; linux-kernel@vger.kernel.org; Senthil, Bala
->> <bala.senthil@intel.com>; N, Pandith <pandith.n@intel.com>; Andy
->> Shevchenko <andriy.shevchenko@linux.intel.com>; Saha, Tamal
->> <tamal.saha@intel.com>
->> Subject: Re: [PATCH v1 1/2] i2c: designware-pci: Add support for Fast Mode
->> Plus and High Speed Mode
->>
->>
->>> See the comments from Andy. Recent enough Elkhart Lake BIOS and his
->>> patches from last year already provide the timing parameters. Feeling
->>> embarrassed I forgot them :-(
->>
->> But the u16 conversion of the existing parameters is still useful?
-> 
-> Jarkko: I've seen the changes by Andy. These patches are no more required as suggested. I'm following up on the same, regarding ACPI table entries.
-> 
-> I have the same query...is the u16 conversion of existing parameters still useful?
-> 
-Yes, that's useful.
+A few cleanup, removal of unnecessary messages regarding bus busy
+and recovering bus.
+Make the function stm32f7_i2c_release_bus void since it is never
+returning any error message, allowing to get rid of the error handling
+within the calling function.
 
-Jarkko
+Alain Volmat (1):
+  i2c: stm32: get rid of stm32f7_i2c_release_bus return value
+
+Wolfram Sang (1):
+  i2c: stm32f7: remove noisy and imprecise log messages
+
+ drivers/i2c/busses/i2c-stm32f7.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+-- 
+2.25.1
+
