@@ -2,109 +2,138 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A11E466107
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Dec 2021 10:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A177A466171
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Dec 2021 11:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346206AbhLBKCQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Dec 2021 05:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357233AbhLBKBW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Dec 2021 05:01:22 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1806FC061756
-        for <linux-i2c@vger.kernel.org>; Thu,  2 Dec 2021 01:58:00 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id d9so37591305wrw.4
-        for <linux-i2c@vger.kernel.org>; Thu, 02 Dec 2021 01:58:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=IfHOpBw3s4FHttIvC2ZAubhl4BmM6ohfRL40cbIe+ps=;
-        b=Ly/+ypSYiH25g9tl8U30z5bSr7TQmWEj/tzTbrL2yW6mFpwp3tuN601I6IDrAiwa3p
-         +8Yql32d73rIL9s2S8ghd5RfwpAtgVCVXv91eGkV+FUiWysrAgoYEYB1X1UQcxAs66An
-         JDWMSVjxZCkSwV/DoU/DzRPG493ndSOivL32vh0huBCLblk1PASG5C1fXM6NeAz0bUIu
-         Z9oolBMtWnXmHUFYM4G07oHVKBcc8D67taOEFDXPQumHrVGatWagz1TmfmWRXmAXD2i7
-         MoVm5mFPcGdoHOFXzw91J06WTCDBHXgrR15Xu3YLFbPhfiGcE1P+i6EyEenjlnrEzAqg
-         AwHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=IfHOpBw3s4FHttIvC2ZAubhl4BmM6ohfRL40cbIe+ps=;
-        b=LvaWh+79fNFV9Gwl58DycjpFCdU9R3rSZqIckUs0O4SDeIEfH66huUIaVrr9rz5vwL
-         i0p9e7KMlHOAeL94ta3fivfqOlsR5zSfATL+5n7jaaQASUlWBKBIAoWlzbgDkUxbHQjv
-         rMSWO/KdpHj8G5XuUE7Lderma47imhdbVQBbZHin8ftQuGvEreeXoSCJfAN5CwAj+3rw
-         0JpqG5PqrBPvFY4rbZ/7FuA/a8gT3NCQrB0L/pArBmOn90kl85YxjJlngBOwPnkSb6G5
-         5zXd4GozWAdsU4AAZedZNcXVEAl129JPSmugQRcPT0uTY08G92WX8sHGgy/DxTtjiu1b
-         Zghg==
-X-Gm-Message-State: AOAM531Z+YdVaMcgcKfRtfR1YjNKkzNzVio9tF+20Rpxc0ELQunCRylj
-        oBR7eoouky6sJZ3B7UuxJ8V378CfjCQ=
-X-Google-Smtp-Source: ABdhPJycPm45toLpPEiSgs2RF+u/el6k5ieuHGk8gwz3YMdVt27FdTNn9TY8MkiChw0cNRv5RXUohg==
-X-Received: by 2002:adf:b18e:: with SMTP id q14mr14094609wra.477.1638439078645;
-        Thu, 02 Dec 2021 01:57:58 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f1a:f00:6195:7c7f:1f45:58f4? (p200300ea8f1a0f0061957c7f1f4558f4.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:6195:7c7f:1f45:58f4])
-        by smtp.googlemail.com with ESMTPSA id d188sm2107975wmd.3.2021.12.02.01.57.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 01:57:58 -0800 (PST)
-Message-ID: <8fba896a-81c4-dda7-6481-92ae8dccf41c@gmail.com>
-Date:   Thu, 2 Dec 2021 10:57:43 +0100
+        id S1356977AbhLBKdk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Dec 2021 05:33:40 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:27796 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356968AbhLBKdj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Dec 2021 05:33:39 -0500
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211202103015epoutp01f863a8f6134d83227be488148a741f37~86WxReFWy3266732667epoutp017
+        for <linux-i2c@vger.kernel.org>; Thu,  2 Dec 2021 10:30:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211202103015epoutp01f863a8f6134d83227be488148a741f37~86WxReFWy3266732667epoutp017
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1638441015;
+        bh=8eXxum7S0l0cge2okJ0tZV6fIkWy7PAqtaXy4/mv+yk=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=B8EO/PbFPU9UrgZNlAD71OqXftUHzpryyNpm6Ne105849mRqq1O1qyEg2XjVH/n4X
+         ULYyOzUrwY1quEEmtlYzVBMg4x6depnzY+3Z/pjN+WfNAEpVvi5CJqrWX+nIQTm+qg
+         UkgrUAfy9hKxOAJgWY33ViN5wD/6eObygch7szzY=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20211202103015epcas2p1fcaa00c2220f62ca37dc8abe129cb0a7~86Wwsj8uk0368403684epcas2p19;
+        Thu,  2 Dec 2021 10:30:15 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4J4XK16WFxz4x9Pq; Thu,  2 Dec
+        2021 10:30:13 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9E.E0.12141.530A8A16; Thu,  2 Dec 2021 19:30:13 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20211202103012epcas2p25c34dfb8cc9890403e8d131f40aee909~86WuchWFj2597025970epcas2p2w;
+        Thu,  2 Dec 2021 10:30:12 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20211202103012epsmtrp188b64721acdff3a180bba7eceadad119~86WuanaTF1095010950epsmtrp1f;
+        Thu,  2 Dec 2021 10:30:12 +0000 (GMT)
+X-AuditID: b6c32a48-d73ff70000002f6d-89-61a8a0351ed8
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        38.3D.29871.330A8A16; Thu,  2 Dec 2021 19:30:11 +0900 (KST)
+Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20211202103012epsmtip1968abd75f39b11d978c2dc2d0588f649~86WuLiK1S1878818788epsmtip1h;
+        Thu,  2 Dec 2021 10:30:12 +0000 (GMT)
+From:   "Chanho Park" <chanho61.park@samsung.com>
+To:     "'Sam Protsenko'" <semen.protsenko@linaro.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Rob Herring'" <robh+dt@kernel.org>
+Cc:     "'Jaewon Kim'" <jaewon02.kim@samsung.com>,
+        "'David Virag'" <virag.david003@gmail.com>,
+        "'Youngmin Nam'" <youngmin.nam@samsung.com>,
+        "'Wolfram Sang'" <wsa@kernel.org>,
+        "'Arnd Bergmann'" <arnd@arndb.de>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
+In-Reply-To: <20211201190455.31646-6-semen.protsenko@linaro.org>
+Subject: RE: [PATCH 5/6] i2c: exynos5: Add bus clock support
+Date:   Thu, 2 Dec 2021 19:30:11 +0900
+Message-ID: <002f01d7e767$96417940$c2c46bc0$@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] i2c: i801: Don't clear status flags twice in interrupt mode
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJ+Fna5aS4J9DFonoTtOdjbcAGMmgHjBJAzAvyntMCqq6ShkA==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKJsWRmVeSWpSXmKPExsWy7bCmqa7pghWJBu/Wslj8nXSM3WL+kXOs
+        FjsajrBabHz7g8li0+NrrBYdf78wWlzeNYfNYsb5fUwWrXuPsFs87wOyjr9/zGhxd/9cRovF
+        Bz6xO/B6/P41idFjVkMvm8fOWXfZPTat6mTzuHNtD5vH5iX1Hn1bVjF6fN4kF8ARlW2TkZqY
+        klqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SykkJZYk4pUCgg
+        sbhYSd/Opii/tCRVISO/uMRWKbUgJafAvECvODG3uDQvXS8vtcTK0MDAyBSoMCE748LmXWwF
+        +1grZiz/zdjAuJGli5GTQ0LAROLv2uVMXYxcHEICOxgllu26wQySEBL4xCixbUEoROIbo0Tb
+        xa3sMB1zDvewQiT2Mkq86HnPBuG8YJTY+WUPG0gVm4C+xMuObWBVIgLTGSWOd65jB3GYBf4x
+        SbQ2/gCbxSngILG+9yTYQmEBG4nu03MZQWwWARWJY+tWg13IK2Apcb7lFyOELShxcuYTsDiz
+        gLzE9rdzmCFuUpD4+XQZK4gtIuAksf3bc1aIGhGJ2Z1tzCCLJQRucEi8f3gT6m0XiY/LlrFB
+        2MISr45vgXpOSuJlfxs7REM3o0Tro/9QidWMEp2NPhC2vcSv6VuANnAAbdCUWL9LH8SUEFCW
+        OHIL6jY+iY7Df9khwrwSHW1CEI3qEge2T4e6QFaie85n1gmMSrOQfDYLyWezkHwwC2HXAkaW
+        VYxiqQXFuempxUYFJvDoTs7P3cQITs9aHjsYZ7/9oHeIkYmD8RCjBAezkgiv/MxliUK8KYmV
+        ValF+fFFpTmpxYcYTYFhPZFZSjQ5H5gh8kriDU0sDUzMzAzNjUwNzJXEeT/4T08UEkhPLEnN
+        Tk0tSC2C6WPi4JRqYJqyz27yrxPSHafypLTfGkw0/ugwO2Ztvmutd+DbO5rMn5e8nZ/19cSX
+        tcssv+WGzhDblBErdvyliuQ8mY6Pd/i/XCxe4Be+d2PwRGvHJ/d3HS8IYjOzlNlQvUkg7HSz
+        sa/0mfNdXGdFpnZUPrddHDtB5WVR2bMwqxs6q+/9npUcf0ywvaLU4rDF0iLryXK95xdv2OXk
+        k+V6Y+nv+9LHAtzaF2s3Sh+ymTkx+P+9AC/Onc3NUjdrbp3w//N7vpGD36+TPYsWNu5/OjHi
+        yiw9ll5V+RZhx8qdN6+95ZJ7ba2508ectX9Bn+s5nepPb3wCrqW0/9aJ5uzIOpyh6Phd8IWF
+        3seI4i0vSqPLHZeI2iuxFGckGmoxFxUnAgADhhjiWAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAIsWRmVeSWpSXmKPExsWy7bCSnK7xghWJBjceWlr8nXSM3WL+kXOs
+        FjsajrBabHz7g8li0+NrrBYdf78wWlzeNYfNYsb5fUwWrXuPsFs87wOyjr9/zGhxd/9cRovF
+        Bz6xO/B6/P41idFjVkMvm8fOWXfZPTat6mTzuHNtD5vH5iX1Hn1bVjF6fN4kF8ARxWWTkpqT
+        WZZapG+XwJVxYfMutoJ9rBUzlv9mbGDcyNLFyMkhIWAiMedwD2sXIxeHkMBuRolz23eyQyRk
+        JZ692wFlC0vcbzkCVfSMUaL5XTcjSIJNQF/iZcc2sISIwExGieNf57KBOMwCbcwS3199Zodo
+        Ocoo0bDpN9hCTgEHifW9J5lBbGEBG4nu03PBRrEIqEgcW7carIZXwFLifMsvRghbUOLkzCdA
+        cQ6gqXoSbRvBwswC8hLb385hhjhPQeLn02WsILaIgJPE9m/PWSFqRCRmd7YxT2AUnoVk0iyE
+        SbOQTJqFpGMBI8sqRsnUguLc9NxiwwLDvNRyveLE3OLSvHS95PzcTYzgSNXS3MG4fdUHvUOM
+        TByMhxglOJiVRHjlZy5LFOJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFq
+        EUyWiYNTqoHJMUhlvcGtBeGt0XM8TYxTMqYbVOQ7llyVcuiaoqHDtql5Q/Nv26vvgpzvuiUK
+        mv5V99ntuu6TcpOv+ZKUT9tntNxTeBKnJjD57ZaWAxMUwxIFWkWmZ73uK0h2nxbM8bW0M3LS
+        9AXzVrPrcr5YGLDYuO/xEr73yf3FZyeuFYyVZihwZayeqzp7y84sTfWHNhteK+ncKFBcFqcQ
+        /ZhtS1z+e9/gylbxVU+SKzdmK+x2mh917p+U8to3wiumPip4+j/k+hMezZCTvR48/29z/A5d
+        sJRlutqC561PNxsvc5z2MfNVwr2/udWud099tH6yIffJivvik2Iryp7cXhP2n0/290u1JULH
+        g/1tWmNLY14qsRRnJBpqMRcVJwIA5f39DkMDAAA=
+X-CMS-MailID: 20211202103012epcas2p25c34dfb8cc9890403e8d131f40aee909
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211201190525epcas2p3f2915664524b53bf72c69f46e1c13844
+References: <20211201190455.31646-1-semen.protsenko@linaro.org>
+        <CGME20211201190525epcas2p3f2915664524b53bf72c69f46e1c13844@epcas2p3.samsung.com>
+        <20211201190455.31646-6-semen.protsenko@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In interrupt mode we clear the status flags twice, in the interrupt
-handler and in i801_check_post(). Remove clearing the status flags
-from i801_check_post() and let i801_wait_intr() clear them in
-polling mode. Another benefit is that now only checks for error
-conditions are left in i801_check_post(), thus better matching the
-function name.
+> In new Exynos SoCs (like Exynos850) where HSI2C is implemented as a part
+> of USIv2 block, there are two clocks provided to HSI2C controller:
+>   - PCLK: bus clock (APB), provides access to register interface
+>   - IPCLK: operating IP-core clock; SCL is derived from this one
+> 
+> Both clocks have to be asserted for HSI2C to be functional in that case.
+> 
+> Add code to obtain and enable/disable PCLK in addition to already handled
+> operating clock. Make it optional though, as older Exynos SoC variants
+> only have one HSI2C clock.
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-Note: There's a comment in i801_check_post() that i801_wait_intr()
-clears the error status bits. Actually this hasn't been true until
-this change.
+Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/i2c/busses/i2c-i801.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Best Regards,
+Chanho Park
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 7446bed78..82553e0cb 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -438,9 +438,6 @@ static int i801_check_post(struct i801_priv *priv, int status)
- 		dev_dbg(&priv->pci_dev->dev, "Lost arbitration\n");
- 	}
- 
--	/* Clear status flags except BYTE_DONE, to be cleared by caller */
--	outb_p(status, SMBHSTSTS(priv));
--
- 	return result;
- }
- 
-@@ -455,8 +452,10 @@ static int i801_wait_intr(struct i801_priv *priv)
- 		status = inb_p(SMBHSTSTS(priv));
- 		busy = status & SMBHSTSTS_HOST_BUSY;
- 		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
--		if (!busy && status)
-+		if (!busy && status) {
-+			outb_p(status, SMBHSTSTS(priv));
- 			return status;
-+		}
- 	} while (time_is_after_eq_jiffies(timeout));
- 
- 	return -ETIMEDOUT;
--- 
-2.33.1
 
