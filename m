@@ -2,70 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E951C467C4F
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 18:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B862D467D8D
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 19:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352819AbhLCRQt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Dec 2021 12:16:49 -0500
-Received: from mga07.intel.com ([134.134.136.100]:4516 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235278AbhLCRQt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:16:49 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="300399758"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="300399758"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 09:13:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="577551858"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Dec 2021 09:13:16 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2EC8A178; Fri,  3 Dec 2021 19:13:21 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v1 1/1] i2c: designware: Add a note about struct dw_scl_sda_cfg usage
-Date:   Fri,  3 Dec 2021 19:13:18 +0200
-Message-Id: <20211203171318.62503-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S236257AbhLCS5Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Dec 2021 13:57:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234981AbhLCS5W (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Dec 2021 13:57:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D9FC061751;
+        Fri,  3 Dec 2021 10:53:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 252DC62CAA;
+        Fri,  3 Dec 2021 18:53:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 867FBC53FCD;
+        Fri,  3 Dec 2021 18:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638557637;
+        bh=Dj3UgovYtc08Lx5pulZb/nz0mOCPJHhKAEON54LkdiM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=dhROiAHs0bUgJiD4TkAlqBa4vUZLHv1p/0paEnXcDVuiZqdjY2JskpnSfcl9F3nBb
+         ENDV4YsYJV5CbjifUvwZ+C4H7UHTSLz1j7PawQFqPLPpN8npDa1eELOl6vtUFjOw7P
+         gdTckAzPY8HFMrQR4hiFgk6pWu3UgUt9Lmz1yk/kPGDKF8rYpMou+Lb3kx/rmPJ/Nt
+         p9ikZJ7s+ddzC9sm2v1cwsX6mYvwZErPtK1afmrvP0hm3GcVVG4aNQcXIRYc8LOceg
+         kH1Zf/hI+hQErjOwbXdiRzTiiaNrJNPmq6SSpA8wSgRWxsYmv7j7HNnGsqt+4UoLBX
+         7bEX8V4v5xGuA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 54E0960A50;
+        Fri,  3 Dec 2021 18:53:57 +0000 (UTC)
+Subject: Re: [PULL REQUEST] i2c for v5.16
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YapJpi/BNwQ3VOR/@kunai>
+References: <YapJpi/BNwQ3VOR/@kunai>
+X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YapJpi/BNwQ3VOR/@kunai>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+X-PR-Tracked-Commit-Id: 02fe0fbd8a21e183687925c3a266ae27dda9840f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f66062c7491b0f861ba1ee9c767c860fd615b2c3
+Message-Id: <163855763728.17226.4484747444946640069.pr-tracker-bot@kernel.org>
+Date:   Fri, 03 Dec 2021 18:53:57 +0000
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a note about struct dw_scl_sda_cfg usage to discourage people
-of using this structure on new platforms. Instead they should try
-hard to put the needed information into firmware descriptions.
+The pull request you sent on Fri, 3 Dec 2021 17:45:26 +0100:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/busses/i2c-designware-pcidrv.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
 
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 0f409a4c2da0..3ba506c3a9a9 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -38,6 +38,13 @@ enum dw_pci_ctl_id_t {
- 	navi_amd,
- };
- 
-+/*
-+ * This is a legacy structure to describe the hardware counters
-+ * to configure signal timings on the bus. For Device Tree platforms
-+ * one should use the respective properties and for ACPI there is
-+ * a set of ACPI methods that provide these counters. No new
-+ * platform should use this structure.
-+ */
- struct dw_scl_sda_cfg {
- 	u32 ss_hcnt;
- 	u32 fs_hcnt;
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f66062c7491b0f861ba1ee9c767c860fd615b2c3
+
+Thank you!
+
 -- 
-2.33.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
