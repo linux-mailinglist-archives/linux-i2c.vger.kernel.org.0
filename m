@@ -2,113 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74443467132
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 05:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 375134671AE
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 06:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235629AbhLCEmp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Dec 2021 23:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S1378493AbhLCFik (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Dec 2021 00:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234957AbhLCEmp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Dec 2021 23:42:45 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECB1C061757
-        for <linux-i2c@vger.kernel.org>; Thu,  2 Dec 2021 20:39:21 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id f125so1924312pgc.0
-        for <linux-i2c@vger.kernel.org>; Thu, 02 Dec 2021 20:39:21 -0800 (PST)
+        with ESMTP id S229931AbhLCFik (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Dec 2021 00:38:40 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF068C061757
+        for <linux-i2c@vger.kernel.org>; Thu,  2 Dec 2021 21:35:16 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id i12so1836869pfd.6
+        for <linux-i2c@vger.kernel.org>; Thu, 02 Dec 2021 21:35:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OcPdj+R92LM+0ZI0wmyCsSW46rzlUsrsE3LQQ/iEpLE=;
-        b=dBx99xt9ShaVFEHeymStBpp3iQP2Pd4gcfLkcVUqJ51OiRwy283uuc+wXxjnuh5TRT
-         XLuB2ZOWRzZJc1rFq/U1CatDfpn2yM5dM9335x3YCeZgZuRYxBwXnkOI7mdCi+j9iv3/
-         st8uatwl7bGGU6kchQ+vpyziRshakjMSllwWn2P8cEvHnB/aikDe6LFq0As/ZyclNFS+
-         DfUUTOvq0O9a6o4qxfONFuqK81srsX+D6BeQ8PvfxMdCGmd4+0HWDeC3c146CsUigE6G
-         S9aFXC7vr1ETdAAbooJxFIebB8dXtZo1z587/GVTcd0vOTeuZxtnNrMOSeO0gJ+HiBA/
-         RUJQ==
+        d=google.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1MNPz6WE52QSr+7j6Q9Dzeo7RAlFzOR7yieEdRW5DUg=;
+        b=LNr6GWB9XpqtlOa6lOOVUPMjte+sUfDC8tYwcxhqkLYMyOxDeLzJD2P9Lhdbx5JWaP
+         rsFRO/doQwQ+vWvx0kWBDSsOCRyKGYEvVZ3sinZ1z6T5tlD/VUc26AqnUiiJ4emN+Z6c
+         cUnHYqwrz5Hot0raOBt4mkQSF/uTCukbPoRf/l7ThAtkbmAuj4lfTHSV48cOyl4abcjM
+         sJ6Em0MQsfGI2HNrLbhWLJCQRBhVMnB3qBsGpgB8pMHMdxXazLq+5d2YOAzPz8HNsSHj
+         RlMRzCZ1uraWlXY9gIpwaPKmLIr75T4lsS8DdeNflnl8DaSyHEBJerCBqi5Lz+MtlQP5
+         k7tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OcPdj+R92LM+0ZI0wmyCsSW46rzlUsrsE3LQQ/iEpLE=;
-        b=rn4jDA44Px1BJb5Rc9jJ1OXqIF1La1eKzqTJVHMD9QcDpfSRcv3URGPyPaf4BRg2jw
-         C4x9fFbHE2hTfwNNf1BG83KDziatt+eehVfO1ywN5tsJQwGg9RpDRQSVudR4Z/UwmymP
-         u5iU8yK3oJMYUB9x+ptD5adKbN1WXHZzip8kkcvflnOPysrSFE+PWr6uPZr7PB6iI1Oe
-         97aEGAoFvggGOAyACu9mLy21F7K1EiIl4yRxxzku/eUAbdO0NiR/Huo0fghVX6TH4B4c
-         WNKGXk+C+5neZqo+nqKACfPsReMUs7uqH6MD/iMdkjobNFzwr3EY5ZID9ZflhwTz1GhC
-         HyuQ==
-X-Gm-Message-State: AOAM53138Ta6rdQQmaST1Md3DWRpn2+eRee8WCEeryXo16ZPp84TmQ4b
-        SLfMgucXJMT9xUwLRtAiQdJZrQ==
-X-Google-Smtp-Source: ABdhPJx3r5/a3LSEpyJfO3oVjqbl62c8FXOn/xd99G1hXtUmAXrpEYkc/n2bP7s/+FAWNOZxxXXI9A==
-X-Received: by 2002:aa7:9d81:0:b0:49f:e072:bfc7 with SMTP id f1-20020aa79d81000000b0049fe072bfc7mr16975671pfq.48.1638506360976;
-        Thu, 02 Dec 2021 20:39:20 -0800 (PST)
-Received: from localhost ([106.201.42.111])
-        by smtp.gmail.com with ESMTPSA id p2sm924575pja.55.2021.12.02.20.39.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 20:39:20 -0800 (PST)
-Date:   Fri, 3 Dec 2021 10:09:17 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     wsa@kernel.org, Conghui Chen <conghui.chen@intel.com>,
-        kernel@axis.com, Jie Deng <jie.deng@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: virtio: fix completion handling
-Message-ID: <20211203043917.z4njhql4y43tcbew@vireshk-i7>
-References: <20211202153215.31796-1-vincent.whitchurch@axis.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1MNPz6WE52QSr+7j6Q9Dzeo7RAlFzOR7yieEdRW5DUg=;
+        b=eN7WwOvq2bY9oueKm21uvSshjJ8F2DGpKDWe5HpiJPOsgGk5HwNahDF1whWoKicxhg
+         k7BQMdZ53JGdZL5KQwfn9i3zPMBbfaSDMaRHQJP4Tdv94dD0SWEoEStzcttAieEX/uAv
+         EQuAGcXyak0axLkCzZ6Dulfx78qWqqJt3fE9Txz+mIWO3xhNXVh1146Tcm0wjN/l+Xcy
+         YN0V1cRdckk/k0tgEHbwJaJ734TeAv/DP+lB/PTWEjaoHcNOgvpIFCGjvpoKKsq/p8C9
+         PS5MJ5PJojleh6A8C58GEYhZlUXasbF2WwYjvvl7u1wHT6lkAXumDieo8PIF8K6Ao1kq
+         CXAg==
+X-Gm-Message-State: AOAM531BzPira4oiMY+KS4Iberyi8Bo9fTK4z7h8BG4BmMoaJrQRhYy7
+        HISGjKsgn1VbWG1tJ8s+gQwnOQ==
+X-Google-Smtp-Source: ABdhPJwfEKBuVAwyPLEbgiyRgYzjB/g3+CZ7ZcN067XoXFLuPgfSdoSs/5GNP9AhFYeiYJMmFC8daw==
+X-Received: by 2002:a63:4d8:: with SMTP id 207mr2900748pge.549.1638509716161;
+        Thu, 02 Dec 2021 21:35:16 -0800 (PST)
+Received: from [100.115.92.196] (c-73-189-176-14.hsd1.ca.comcast.net. [73.189.176.14])
+        by smtp.gmail.com with ESMTPSA id t8sm1181698pgk.66.2021.12.02.21.35.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 21:35:15 -0800 (PST)
+Subject: Re: [RFC Patch v2 1/3] i2c debug counters as sysfs attributes
+To:     Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        joel@jms.id.au, andrew@aj.id.au, tali.perry1@gmail.com,
+        benjaminfair@google.com, krellan@google.com
+References: <20211203023728.3699610-1-suichen@google.com>
+ <20211203023728.3699610-2-suichen@google.com>
+ <10e59e850894524d34cc7d89c126ab9133e6a1a7.camel@perches.com>
+From:   Sui Chen <suichen@google.com>
+Message-ID: <c3e3d7fe-765e-defa-275b-0b5e731c77ce@google.com>
+Date:   Thu, 2 Dec 2021 21:35:13 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202153215.31796-1-vincent.whitchurch@axis.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <10e59e850894524d34cc7d89c126ab9133e6a1a7.camel@perches.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 02-12-21, 16:32, Vincent Whitchurch wrote:
-> The driver currently assumes that the notify callback is only received
-> when the device is done with all the queued buffers.
+On 12/2/21 6:50 PM, Joe Perches wrote:
+> On Thu, 2021-12-02 at 18:37 -0800, Sui Chen wrote:
+>> This change adds a few example I2C debug counters as sysfs attributes:
+>> - ber_cnt (bus error count)
+>> - nack_cnt (NACK count)
+>> - rec_fail_cnt, rec_succ_cnt (recovery failure/success count)
+>> - timeout_cnt (timeout count)
+>> - i2c_speed (bus frequency)
+>> - tx_complete_cnt (transaction completed, including both as an initiator
+>>    and as a target)
+>>
+>> The function i2c_adapter_create_stats_folder creates a stats directory
+>> in the device's sysfs directory to hold the debug counters. The platform
+>> drivers are responsible for instantiating the counters in the stats
+>> directory if applicable.
 > 
-> However, this is not true, since the notify callback could be called
-> without any of the queued buffers being completed (for example, with
-> virtio-pci and shared interrupts) or with only some of the buffers being
-> completed (since the driver makes them available to the device in
-> multiple separate virtqueue_add_sgs() calls).
+> Please try to use scripts/checkpatch.pl on your patches and see if
+> you should be more 'typical kernel style' compliant.
 > 
-> This can lead to incorrect data on the I2C bus or memory corruption in
-> the guest if the device operates on buffers which are have been freed by
-> the driver.  (The WARN_ON in the driver is also triggered.)
+> Ideally, use the --strict option too.
 > 
->  BUG kmalloc-128 (Tainted: G        W        ): Poison overwritten
->  First byte 0x0 instead of 0x6b
->  Allocated in i2cdev_ioctl_rdwr+0x9d/0x1de age=243 cpu=0 pid=28
->  	memdup_user+0x2e/0xbd
->  	i2cdev_ioctl_rdwr+0x9d/0x1de
->  	i2cdev_ioctl+0x247/0x2ed
->  	vfs_ioctl+0x21/0x30
->  	sys_ioctl+0xb18/0xb41
->  Freed in i2cdev_ioctl_rdwr+0x1bb/0x1de age=68 cpu=0 pid=28
->  	kfree+0x1bd/0x1cc
->  	i2cdev_ioctl_rdwr+0x1bb/0x1de
->  	i2cdev_ioctl+0x247/0x2ed
->  	vfs_ioctl+0x21/0x30
->  	sys_ioctl+0xb18/0xb41
-> 
-> Fix this by calling virtio_get_buf() from the notify handler like other
-> virtio drivers and by actually waiting for all the buffers to be
-> completed.
-> 
-> Fixes: 3cfc88380413d20f ("i2c: virtio: add a virtio i2c frontend driver")
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
-> 
-> Notes:
->     v3: Wait for all completions instead of only the last one.
 
-LGTM, thanks.
+Hello Joe,
 
--- 
-viresh
+I thank and really appreciate your spending time commenting on the 
+patch, and on its previous version too. I ran checkpatch.pl and found a 
+few code style fixes on patches 1 and 2.
+Sorry for not checking the format before sending the email, I will 
+definitely do the format check next time.
+
+Regarding the patch itself, code style aside, we're wondering if this 
+idea of exporting I2C statistics to sysfs looks reasonable? Do we need 
+to accompany this change with design documents too (similar to PCIe AER 
+reporting?)
+
+We have done some more I2C-related performance and reliability tests; 
+however it might take some more efforts to explore those ideas and 
+summarize them into patches/documents. For now we would like to know 
+about the comments on this sysfs attribute change first, since it is the 
+initial step to the larger effort. Any comments will be greatly appreciated.
+
+Thanks,
+Sui
