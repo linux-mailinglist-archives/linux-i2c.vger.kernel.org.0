@@ -2,69 +2,195 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B862D467D8D
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 19:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E7C467F94
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 22:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236257AbhLCS5Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Dec 2021 13:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
+        id S1353883AbhLCV5K (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Dec 2021 16:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234981AbhLCS5W (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Dec 2021 13:57:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D9FC061751;
-        Fri,  3 Dec 2021 10:53:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 252DC62CAA;
-        Fri,  3 Dec 2021 18:53:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 867FBC53FCD;
-        Fri,  3 Dec 2021 18:53:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638557637;
-        bh=Dj3UgovYtc08Lx5pulZb/nz0mOCPJHhKAEON54LkdiM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=dhROiAHs0bUgJiD4TkAlqBa4vUZLHv1p/0paEnXcDVuiZqdjY2JskpnSfcl9F3nBb
-         ENDV4YsYJV5CbjifUvwZ+C4H7UHTSLz1j7PawQFqPLPpN8npDa1eELOl6vtUFjOw7P
-         gdTckAzPY8HFMrQR4hiFgk6pWu3UgUt9Lmz1yk/kPGDKF8rYpMou+Lb3kx/rmPJ/Nt
-         p9ikZJ7s+ddzC9sm2v1cwsX6mYvwZErPtK1afmrvP0hm3GcVVG4aNQcXIRYc8LOceg
-         kH1Zf/hI+hQErjOwbXdiRzTiiaNrJNPmq6SSpA8wSgRWxsYmv7j7HNnGsqt+4UoLBX
-         7bEX8V4v5xGuA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 54E0960A50;
-        Fri,  3 Dec 2021 18:53:57 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c for v5.16
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YapJpi/BNwQ3VOR/@kunai>
-References: <YapJpi/BNwQ3VOR/@kunai>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YapJpi/BNwQ3VOR/@kunai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-X-PR-Tracked-Commit-Id: 02fe0fbd8a21e183687925c3a266ae27dda9840f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f66062c7491b0f861ba1ee9c767c860fd615b2c3
-Message-Id: <163855763728.17226.4484747444946640069.pr-tracker-bot@kernel.org>
-Date:   Fri, 03 Dec 2021 18:53:57 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        with ESMTP id S236017AbhLCV5K (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Dec 2021 16:57:10 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD4BC061751
+        for <linux-i2c@vger.kernel.org>; Fri,  3 Dec 2021 13:53:45 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id o29so3423484wms.2
+        for <linux-i2c@vger.kernel.org>; Fri, 03 Dec 2021 13:53:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=0RICwt6n+0p1DmKQHDse5Rg02J1b12Yn91yFN86jSr4=;
+        b=nUkJU2ifuKXmSUrw06ibLJaVrEtbVaIc4BNN6jTZ+BmhFGn+K7cEjow98rJSNk//z7
+         8p36ptUmTc2EPz5t5WeB7CAq35Duc/p3pGrymhV9ndWNenYxv9oyqclo77lK84pznZVM
+         gaU07O9HpZr8rvfDgsiLipme2kmnw51UPpKqf3uYjYJ72lD2fVFJijV3jZS1HMfb1hrU
+         aM2DZ79m1CVo17HVH0HsAfNNt1SdFSxuK/k6owiBDv7BlfcnI1vLeWbDeAuKffJDrqNt
+         3BXeLwRj63WPiUvWUEabYRFLNTRDgYIYODVt/u2v2Cj22vFd3LJ/R6cROw6b8HMpME+W
+         60Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=0RICwt6n+0p1DmKQHDse5Rg02J1b12Yn91yFN86jSr4=;
+        b=Pe+nVIFoTwxxMhNeRYKu+m8bVNKnv5PET06ee56a4sJnGhcUnM7xmrX9R6/YIlccl5
+         7vsB/ZYUiGlnZ5VIJrALWD+dSyDHIRZckmv+wvSPVUdEwlKpFnlbgetcrlM1zYkDHw6q
+         ycdkbyAtqz26A0DSOqA0VBBpdfZijyz+4/ju32IT3/N8T/iN6i3+Qaw5+vSGI3DAMhoB
+         Csr4StZIXla7IkOQpbDgkO3HpkF6+7ilB5dYl5mPB3eVwBFhvCJdKQ6SJquSjb4KKfdW
+         J+4qMKGIrGBl42grwlTSBSwq2prAZPoeSBCUCzscMkcF2zUHfYVAll6Jw6NqcAB6cdqU
+         0mdQ==
+X-Gm-Message-State: AOAM531ZDxJuYZ38ToPqop3JxUhArBudhLtT0L0oH+dH9qqiq6ZdV71h
+        7v5iSFVe6gB7hjLkCDplEEC6ea6SMDQ=
+X-Google-Smtp-Source: ABdhPJw0SatBHItRTvwzDDN59aafNjtJRfxbZ0PSECUzCHay2+etPN46n4tzRW56J+kUg0w3qM7ySQ==
+X-Received: by 2002:a05:600c:b43:: with SMTP id k3mr18130430wmr.159.1638568423990;
+        Fri, 03 Dec 2021 13:53:43 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f1a:f00:3570:727:6afe:902f? (p200300ea8f1a0f00357007276afe902f.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:3570:727:6afe:902f])
+        by smtp.googlemail.com with ESMTPSA id l2sm6551009wmq.42.2021.12.03.13.53.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 13:53:43 -0800 (PST)
+Message-ID: <d2185fd1-94a6-d1f2-1394-dba737ae416e@gmail.com>
+Date:   Fri, 3 Dec 2021 22:25:47 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] i2c: i801: Don't read back cleared status in
+ i801_check_pre()
+Content-Language: en-US
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-i2c@vger.kernel.org
+References: <f0d7dd91-5b35-d5bb-33b7-dacc632c542a@gmail.com>
+ <20211203105914.393ffd24@endymion>
+ <31f34ce9-bf1f-29fc-a2c1-6ad549b5dd16@gmail.com>
+In-Reply-To: <31f34ce9-bf1f-29fc-a2c1-6ad549b5dd16@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Fri, 3 Dec 2021 17:45:26 +0100:
+On 03.12.2021 13:55, Heiner Kallweit wrote:
+> On 03.12.2021 10:59, Jean Delvare wrote:
+>> Hi Heiner,
+>>
+>> On Thu, 02 Dec 2021 10:53:05 +0100, Heiner Kallweit wrote:
+>>> I see no need to read back the registers to verify that the bits
+>>> have actually been cleared. I can't imagine any scenario where
+>>> the bits would remain set after a write to them.
+>>
+>> This happened at least once in the past. See this archived message:
+>>
+>> https://www.spinics.net/lists/linux-i2c/msg02651.html
+>>
+> 
+> "My last attempt locked the SMBus, but I was able to
+> recover by repeatedly writing to the HST_STS register, as may times as
+> the block length."
+> 
+> OK, this was 11 yrs ago, so at least I wouldn't be able to recall in
+> detail what happened back then ..
+> 
+> Question is how you did this "repeatedly writing to the HST_STS
+> register". Something like the following?
+> 
+> while (status = in (STATUS))
+> 	out(STATUS, status);
+> 
+> Or maybe the driver started the loop to process the next byte?
+> I think it's not likely that when writing a status bit it
+> remained set. As we now know E32B is ignored in I2C mode, therefore
+> the chip can read/write only one byte in a row, and w/o setting
+> SMBHSTCNT_START in between it wouldn't touch the next byte.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+I mixed something up, START is needed only once.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f66062c7491b0f861ba1ee9c767c860fd615b2c3
+> Of course I may be wrong with my assumptions ..
+> 
+> 
+>> This was in i801_check_post(), not i801_check_pre(), but that was the
+>> same code. Which was removed in
+>> 6cad93c4bbd62ecfa2e1b3a95c1ac4f6f27764c7 because there was little point
+>> in checking the same condition twice.
+>>
+>> Unfortunately it seems that the error messages were copied manually so
+>> we lack the details of which status bit couldn't be cleared exactly.
+>>
+>> Granted, it was caused by a driver bug, which was fixed since (commit
+>> c074c39d62306efa5ba7c69c1a1531bc7333d252) but this shows that the
+>> condition can actually trigger.
+>>
+>>> Whilst at it, change involved syslog messages to use pci_dbg() et al.
+>>> to simplify them.
+>>
+>> Fine with me.
+>>
+>>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>>> ---
+>>>  drivers/i2c/busses/i2c-i801.c | 22 +++-------------------
+>>>  1 file changed, 3 insertions(+), 19 deletions(-)
+>>>
+>>> diff --git a/drivers/i2c/busses/i2c-i801.c
+>>> b/drivers/i2c/busses/i2c-i801.c index 720f7e9d0..a82aaef27 100644
+>>> --- a/drivers/i2c/busses/i2c-i801.c
+>>> +++ b/drivers/i2c/busses/i2c-i801.c
+>>> @@ -328,22 +328,14 @@ static int i801_check_pre(struct i801_priv
+>>> *priv) 
+>>>  	status = inb_p(SMBHSTSTS(priv));
+>>>  	if (status & SMBHSTSTS_HOST_BUSY) {
+>>> -		dev_err(&priv->pci_dev->dev, "SMBus is busy, can't use it!\n");
+>>> +		pci_err(priv->pci_dev, "SMBus is busy, can't use it!\n");
+>>>  		return -EBUSY;
+>>>  	}
+>>>  
+>>>  	status &= STATUS_FLAGS;
+>>>  	if (status) {
+>>> -		dev_dbg(&priv->pci_dev->dev, "Clearing status flags (%02x)\n",
+>>> -			status);
+>>> +		pci_dbg(priv->pci_dev, "Clearing status flags (%02x)\n", status);
+>>>  		outb_p(status, SMBHSTSTS(priv));
+>>> -		status = inb_p(SMBHSTSTS(priv)) & STATUS_FLAGS;
+>>> -		if (status) {
+>>> -			dev_err(&priv->pci_dev->dev,
+>>> -				"Failed clearing status flags (%02x)\n",
+>>> -				status);
+>>> -			return -EBUSY;
+>>> -		}
+>>>  	}
+>>>  
+>>>  	/*
+>>> @@ -356,16 +348,8 @@ static int i801_check_pre(struct i801_priv *priv)
+>>>  	if (priv->features & FEATURE_SMBUS_PEC) {
+>>>  		status = inb_p(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE;
+>>>  		if (status) {
+>>> -			dev_dbg(&priv->pci_dev->dev,
+>>> -				"Clearing aux status flags (%02x)\n", status);
+>>> +			pci_dbg(priv->pci_dev, "Clearing aux status flags (%02x)\n", status);
+>>>  			outb_p(status, SMBAUXSTS(priv));
+>>> -			status = inb_p(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE;
+>>> -			if (status) {
+>>> -				dev_err(&priv->pci_dev->dev,
+>>> -					"Failed clearing aux status flags (%02x)\n",
+>>> -					status);
+>>> -				return -EBUSY;
+>>> -			}
+>>>  		}
+>>>  	}
+>>>  
+>>
+>> So I'm not too sure what to do with this. On the one hand, the code you
+>> want to remove could be useful to catch and investigate future bugs.
+>> The rest of the code does assume that the status bits are properly
+>> cleared before starting a new transaction. On the other hand, it is
+>> slowing down the driver a bit when all is fine. Is that really worth
+>> optimizing?
+>>
+> 
+> In a follow-up mail in the thread you mentioned is the following.
+> I noticed the same (the 1ms delay is too short) and have related patches
+> in my tree. However I'd like to finalize the cleanups first.
+> 
+> "While working on this issue, I noticed that the piece of code which is
+> supposed to let the i2c-i801 driver recover in case of a transaction
+> timeout, did not always work."
+> 
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
