@@ -2,95 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAF046700E
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 03:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF65D467059
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 03:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378114AbhLCClO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 2 Dec 2021 21:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350554AbhLCClM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Dec 2021 21:41:12 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BA0C061759
-        for <linux-i2c@vger.kernel.org>; Thu,  2 Dec 2021 18:37:49 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id d27-20020a25addb000000b005c2355d9052so3769339ybe.3
-        for <linux-i2c@vger.kernel.org>; Thu, 02 Dec 2021 18:37:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=fSw1ht/VcZ3dSf5YuPKT0BcZLwiLH8OOB5DtUZgNMMw=;
-        b=Xnx6dEs6acvz81QlVuLmXZMWgzDXPNak7TnUiGkbMVubfP4OHilSQf/RxSCgL9k2uw
-         S4MeHA2mRv4qVUg/RuE56bCmds4fm/4WSajSpH+WnGGC96iFY/TOOazGhjlAfd1z2SE5
-         YqSe/e+hO9lnRg2//z0getll7GikcejkXDSP25pni+r08TnieVWRY/4ZF+qaIYyy2zGF
-         zIhHnlJTSZaONZ19tscSkuu6yi6U1SQ8YEok5g9ro2NL/fY36DfMgKf28vLgSVuGCsHy
-         //XXyrLNu4HakZ9ZMmAraZk84/T4sqOKk9LOkbX7mXP5086m+hWgI5Zrr422UwLZTf2B
-         HnGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=fSw1ht/VcZ3dSf5YuPKT0BcZLwiLH8OOB5DtUZgNMMw=;
-        b=IJeadfjJUqUzoWwKIkNez6zML/uZczF4ZsK6C793qPcBQdzqRBENLmM8yRPPz4nosL
-         c6RsMcxVoE3T0LAPhuQTKSN9Ze2w/tEho4lka/pXJBJU0g3r8WzGw1wjtrfsgiV0G9vH
-         U82MfdN+0DX0Kt7S3gkT0QqDyw6h2ecgAhjj+iqt5L1pm65l3sTT+QZiXaXet7y1pBpX
-         ErA4EuCQ6iVC+HAqKkRtoLT/eGrIjvq9PpvdjenzFKLcqkXNB6ZyMKsyKl1DYIJSNxAs
-         OkZ5MauRGtlx1WxhEcWlCgaxlVZ+3X1briEe85ltje3dwgcntwsaD1x0faZ0lbql4B3n
-         nXNQ==
-X-Gm-Message-State: AOAM533vHYyXcvbKGndv4p5Io23RMKYmwN4mE3rYknVjprZ4B3ROKF3u
-        LJ0sfPQJHXrKBTB+xqO6ZJoJ9h7qzHCF
-X-Google-Smtp-Source: ABdhPJwnEfF+Irtkf60aNMSjduABvwU4/QHaaj4fyZOSZiapm3CEKdh0zg13dyEc38z3JrO0bwhfaVrzC6Qa
-X-Received: from suichen.svl.corp.google.com ([2620:15c:2c5:13:bc47:f5e4:20fa:844b])
- (user=suichen job=sendgmr) by 2002:a25:abcb:: with SMTP id
- v69mr19365697ybi.628.1638499068416; Thu, 02 Dec 2021 18:37:48 -0800 (PST)
-Date:   Thu,  2 Dec 2021 18:37:28 -0800
-In-Reply-To: <20211203023728.3699610-1-suichen@google.com>
-Message-Id: <20211203023728.3699610-4-suichen@google.com>
-Mime-Version: 1.0
-References: <20211203023728.3699610-1-suichen@google.com>
-X-Mailer: git-send-email 2.34.0.384.gca35af8252-goog
-Subject: [RFC Patch v2 3/3] add npcm7xx debug counters as sysfs attributes
-From:   Sui Chen <suichen@google.com>
-To:     linux-kernel@vger.kernel.org
+        id S1347075AbhLCDBn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 2 Dec 2021 22:01:43 -0500
+Received: from smtprelay0224.hostedemail.com ([216.40.44.224]:41924 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S242005AbhLCDBn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 2 Dec 2021 22:01:43 -0500
+X-Greylist: delayed 470 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Dec 2021 22:01:43 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave01.hostedemail.com (Postfix) with ESMTP id 53BA418456678
+        for <linux-i2c@vger.kernel.org>; Fri,  3 Dec 2021 02:50:31 +0000 (UTC)
+Received: from omf08.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 45C6D1815C4CB;
+        Fri,  3 Dec 2021 02:50:30 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id A7C1C20038;
+        Fri,  3 Dec 2021 02:50:28 +0000 (UTC)
+Message-ID: <10e59e850894524d34cc7d89c126ab9133e6a1a7.camel@perches.com>
+Subject: Re: [RFC Patch v2 1/3] i2c debug counters as sysfs attributes
+From:   Joe Perches <joe@perches.com>
+To:     Sui Chen <suichen@google.com>, linux-kernel@vger.kernel.org
 Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         joel@jms.id.au, andrew@aj.id.au, tali.perry1@gmail.com,
-        benjaminfair@google.com, krellan@google.com, joe@perches.com,
-        Sui Chen <suichen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        benjaminfair@google.com, krellan@google.com
+Date:   Thu, 02 Dec 2021 18:50:27 -0800
+In-Reply-To: <20211203023728.3699610-2-suichen@google.com>
+References: <20211203023728.3699610-1-suichen@google.com>
+         <20211203023728.3699610-2-suichen@google.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: A7C1C20038
+X-Spam-Status: No, score=-3.21
+X-Stat-Signature: ywct6uirwhdagy39zibat4wycbdx5x6u
+X-Rspamd-Server: rspamout04
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19jdsD/Pinoi7TG5JJ2y9H0VAQekIuvdUA=
+X-HE-Tag: 1638499828-864565
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This change adds npcm7xx debug counters as sysfs attributes using the
-i2c_adapter_stats_register_counter function.
+On Thu, 2021-12-02 at 18:37 -0800, Sui Chen wrote:
+> This change adds a few example I2C debug counters as sysfs attributes:
+> - ber_cnt (bus error count)
+> - nack_cnt (NACK count)
+> - rec_fail_cnt, rec_succ_cnt (recovery failure/success count)
+> - timeout_cnt (timeout count)
+> - i2c_speed (bus frequency)
+> - tx_complete_cnt (transaction completed, including both as an initiator
+>   and as a target)
+> 
+> The function i2c_adapter_create_stats_folder creates a stats directory
+> in the device's sysfs directory to hold the debug counters. The platform
+> drivers are responsible for instantiating the counters in the stats
+> directory if applicable.
 
-Signed-off-by: Sui Chen <suichen@google.com>
-Reviewed-by: Tali Perry <tali.perry1@gmail.com>
----
- drivers/i2c/busses/i2c-npcm7xx.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Please try to use scripts/checkpatch.pl on your patches and see if
+you should be more 'typical kernel style' compliant.
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 0b87706de31d7..1268b2d71ca0a 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -2228,6 +2228,15 @@ static void npcm_i2c_init_debugfs(struct platform_device *pdev,
- 	debugfs_create_u64("timeout_cnt", 0444, d, &bus->timeout_cnt);
- 	debugfs_create_u64("tx_complete_cnt", 0444, d, &bus->tx_complete_cnt);
- 
-+	/* register debug counters in sysfs */
-+	i2c_adapter_stats_register_counter(&bus->adap, "ber_cnt", &bus->ber_cnt);
-+	i2c_adapter_stats_register_counter(&bus->adap, "nack_cnt", &bus->nack_cnt);
-+	i2c_adapter_stats_register_counter(&bus->adap, "rec_succ_cnt", &bus->rec_succ_cnt);
-+	i2c_adapter_stats_register_counter(&bus->adap, "rec_fail_cnt", &bus->rec_fail_cnt);
-+	i2c_adapter_stats_register_counter(&bus->adap, "timeout_cnt", &bus->timeout_cnt);
-+	i2c_adapter_stats_register_counter(&bus->adap, "i2c_speed", &bus->bus_freq);
-+	i2c_adapter_stats_register_counter(&bus->adap, "tx_complete_cnt", &bus->tx_complete_cnt);
-+
- 	bus->debugfs = d;
- }
- 
--- 
-2.34.0.384.gca35af8252-goog
+Ideally, use the --strict option too.
 
