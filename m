@@ -2,110 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0A74671BE
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 06:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45F3467344
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Dec 2021 09:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378514AbhLCF5x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Dec 2021 00:57:53 -0500
-Received: from smtprelay0250.hostedemail.com ([216.40.44.250]:55412 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231182AbhLCF5x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Dec 2021 00:57:53 -0500
-Received: from omf18.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay04.hostedemail.com (Postfix) with ESMTP id C73411812EF2A;
-        Fri,  3 Dec 2021 05:54:27 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 3C21F35;
-        Fri,  3 Dec 2021 05:54:26 +0000 (UTC)
-Message-ID: <a5d44f520d9b1e0e7b48860000a8e657ef8e5b39.camel@perches.com>
-Subject: Re: [RFC Patch v2 1/3] i2c debug counters as sysfs attributes
-From:   Joe Perches <joe@perches.com>
-To:     Sui Chen <suichen@google.com>, linux-kernel@vger.kernel.org
-Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        joel@jms.id.au, andrew@aj.id.au, tali.perry1@gmail.com,
-        benjaminfair@google.com, krellan@google.com
-Date:   Thu, 02 Dec 2021 21:54:25 -0800
-In-Reply-To: <20211203023728.3699610-2-suichen@google.com>
-References: <20211203023728.3699610-1-suichen@google.com>
-         <20211203023728.3699610-2-suichen@google.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        id S1379164AbhLCIdc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Dec 2021 03:33:32 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:43908 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244052AbhLCIdb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Dec 2021 03:33:31 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CF2341FD3C;
+        Fri,  3 Dec 2021 08:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638520206; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Paxz2PbJ3ABf+QoTLmxZAgh9n+0xzk9SrTohSl7pwkk=;
+        b=kSucru1oKEfVRiHRu1oP/o1hAlmjYzR6N1aqQkXeKPmOgQxONBO1VjrJZQAHUHF5fE52yK
+        MlZRkecJY7d5lWC5Pj5O8+F2xOTZMG+lFeiTFyBp7s+ZshnszmlL2we/O/jv8uGCjB1+HY
+        YbDQFyl2bgCxEWZ+bbn9RmPUJ+qxu2w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638520206;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Paxz2PbJ3ABf+QoTLmxZAgh9n+0xzk9SrTohSl7pwkk=;
+        b=DVfinWFywF5kZKWZWEwp8ExveJDu/qnzWEOkQDaS4mxPYupKcKpenuxvsa0c/qmmgyaU66
+        2teZ3yw2Pff/IBAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6883B13CF5;
+        Fri,  3 Dec 2021 08:30:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Di5XF47VqWGRWQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 03 Dec 2021 08:30:06 +0000
+Date:   Fri, 3 Dec 2021 09:30:05 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        ck+kernelbugzilla@bl4ckb0x.de, stephane.poignant@protonmail.com,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.15 35/68] i2c: i801: Fix interrupt storm from
+ SMB_ALERT signal
+Message-ID: <20211203093005.4337dfde@endymion>
+In-Reply-To: <20211130144707.944580-35-sashal@kernel.org>
+References: <20211130144707.944580-1-sashal@kernel.org>
+        <20211130144707.944580-35-sashal@kernel.org>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 3C21F35
-X-Spam-Status: No, score=-3.25
-X-Stat-Signature: rqema1cduzhupfdpnd4z7soeitwq9m7g
-X-Rspamd-Server: rspamout04
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18mAWqEgH6LGGdG9zFQcE5JiVDmWP40504=
-X-HE-Tag: 1638510866-239568
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 2021-12-02 at 18:37 -0800, Sui Chen wrote:
-> This change adds a few example I2C debug counters as sysfs attributes:
-> - ber_cnt (bus error count)
-> - nack_cnt (NACK count)
-> - rec_fail_cnt, rec_succ_cnt (recovery failure/success count)
-> - timeout_cnt (timeout count)
-> - i2c_speed (bus frequency)
-> - tx_complete_cnt (transaction completed, including both as an initiator
->   and as a target)
+Hi Sasha,
+
+On Tue, 30 Nov 2021 09:46:31 -0500, Sasha Levin wrote:
+> From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 > 
-> The function i2c_adapter_create_stats_folder creates a stats directory
-> in the device's sysfs directory to hold the debug counters. The platform
-> drivers are responsible for instantiating the counters in the stats
-> directory if applicable.
-[]
-> diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-[]
-> +void i2c_adapter_create_stats_folder(struct i2c_adapter* adapter) {
-> +	adapter->stats = kzalloc(sizeof(struct i2c_adapter_stats), GFP_KERNEL);
+> [ Upstream commit 03a976c9afb5e3c4f8260c6c08a27d723b279c92 ]
+> 
+> Currently interrupt storm will occur from i2c-i801 after first
+> transaction if SMB_ALERT signal is enabled and ever asserted. It is
+> enough if the signal is asserted once even before the driver is loaded
+> and does not recover because that interrupt is not acknowledged.
+> 
+> This fix aims to fix it by two ways:
+> - Add acknowledging for the SMB_ALERT interrupt status
+> - Disable the SMB_ALERT interrupt on platforms where possible since the
+>   driver currently does not make use for it
+> 
+> Acknowledging resets the SMB_ALERT interrupt status on all platforms and
+> also should help to avoid interrupt storm on older platforms where the
+> SMB_ALERT interrupt disabling is not available.
+> 
+> For simplicity this fix reuses the host notify feature for disabling and
+> restoring original register value.
+> (...)
 
-unchecked alloc, could fail.
+If you are backporting this, then I think you should also include:
 
-> +	adapter->stats->kobj = kobject_create_and_add("stats", &adapter->dev.kobj);;
-> +}
-> +
-> +void i2c_adapter_stats_register_counter(struct i2c_adapter* adapter,
-> +	const char* counter_name, void* data_source) {
-> +	int ret;
-> +	if (adapter->stats == NULL) {
-> +		i2c_adapter_create_stats_folder(adapter);
-> +	}
+commit 9b5bf5878138293fb5b14a48a7a17b6ede6bea25
+Author: Jean Delvare
+Date:   Tue Nov 9 16:02:57 2021 +0100
 
-So all of these adapter->stats dereferences could oops.
+    i2c: i801: Restore INTREN on unload
 
-> +	if (!strcmp(counter_name, "ber_cnt")) {
-> +		adapter->stats->ber_cnt = data_source;
-> +		ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_ber_cnt.attr);
-> +	} else if (!strcmp(counter_name, "nack_cnt")) {
-> +		adapter->stats->nack_cnt = data_source;
-> +		ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_nack_cnt.attr);
-> +	} else if (!strcmp(counter_name, "rec_succ_cnt")) {
-> +		adapter->stats->rec_succ_cnt = data_source;
-> +		ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_rec_succ_cnt.attr);
-> +	} else if (!strcmp(counter_name, "rec_fail_cnt")) {
-> +		adapter->stats->rec_fail_cnt = data_source;
-> +		ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_rec_fail_cnt.attr);
-> +	} else if (!strcmp(counter_name, "timeout_cnt")) {
-> +		adapter->stats->timeout_cnt = data_source;
-> +		ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_timeout_cnt.attr);
-> +	} else if (!strcmp(counter_name, "i2c_speed")) {
-> +		adapter->stats->i2c_speed = data_source;
-> +		ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_i2c_speed.attr);
-> +	} else if (!strcmp(counter_name, "tx_complete_cnt")) {
-> +		adapter->stats->tx_complete_cnt = data_source;
-> +		ret = sysfs_create_file(adapter->stats->kobj, &dev_attr_tx_complete_cnt.attr);
-> +	}
+which is the first half of the fix for the same bug. Jarkko's patch
+fixes the interrupt storm while the driver is loaded, mine fixes it
+after the driver is unloaded (or when the device is handed over to the
+BIOS, at suspend or reboot).
 
-and if none of the strcmp comparisons match, ret is uninitialized.
-
-> +
-> +	if (ret) {
-> +		printk("Failed to create sysfs file for %s", counter_name);
-
-pr_<level> and should have a terminating newline
-
-
-
+-- 
+Jean Delvare
+SUSE L3 Support
