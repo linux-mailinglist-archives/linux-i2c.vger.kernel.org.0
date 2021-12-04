@@ -2,135 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDBE468761
-	for <lists+linux-i2c@lfdr.de>; Sat,  4 Dec 2021 21:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DBF4687AE
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 Dec 2021 22:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234329AbhLDUIR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 4 Dec 2021 15:08:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        id S1359689AbhLDVyD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 4 Dec 2021 16:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbhLDUIQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 4 Dec 2021 15:08:16 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A10BC061751
-        for <linux-i2c@vger.kernel.org>; Sat,  4 Dec 2021 12:04:50 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id k37-20020a05600c1ca500b00330cb84834fso7468103wms.2
-        for <linux-i2c@vger.kernel.org>; Sat, 04 Dec 2021 12:04:50 -0800 (PST)
+        with ESMTP id S1357238AbhLDVyC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 4 Dec 2021 16:54:02 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758C0C061751
+        for <linux-i2c@vger.kernel.org>; Sat,  4 Dec 2021 13:50:36 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d24so13806239wra.0
+        for <linux-i2c@vger.kernel.org>; Sat, 04 Dec 2021 13:50:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:to:cc:content-language
-         :subject:content-transfer-encoding;
-        bh=QPRIoF4rlKOTwAz/z+/OLsqS2Fzjm2v40KS3kV0qtbY=;
-        b=m6jLo+KHq9B+ujFprALMccBTECn9lcHhnKxz/1yClLGiNCcxEMLlnpXsov6LQjnQ7T
-         UxgdFi5Kc90b2XvTvD+5RRTsg0rpHHbNp6ovwhHoQ3H85GOYTnaYQa5oTdx2f5VBo2iz
-         gZbwmEbmMH3/vVccuWf8BJirk5kI1+p+yyCzwmQgKIQxvLkRYp2eE3Q0zy9RUjqZ0Zkn
-         gmP7YZIALrB+LV3aQpWljMZV4S/g3G4VoglHVfVshlYgnwP8iyKWqjRcPZ9Cu2/lueXM
-         Lpu+yoz5ka6T/0Q7K2UcWL2irzA/vX9RBjzG8E4g5/wY1w0HwAlVKFYVq8ulVqogXDjx
-         yHjg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jHZ/NY52q+fJ8ZyowbxA7ltlvG1kl7aRGse+qxxLYbY=;
+        b=HWiGCfL53Wa7TGAKg5tgcgNN4csXPz7IboCQqiRoy+A6ZZrbHrnX4sxBbaOqjdmC7j
+         XGXNjYR1rqi4HGDjbNtsnyg7c0N8YfghXJ6/uGwv/xufzkhBChwYohLnVJGFW3LOlaZN
+         yesGoqbzzjIcUOXySXtROFeuY/1zEnNSNfbZgBsFWzJ1XUasrcvHIF6ox1xQ4f/pM5N5
+         xxxJlSF54r2U1CbE99za6RLpDwyqCPfGgXicMVRhyBlQU86R5Uj+wD/OsPF6pO11/D3e
+         exB2fQrVXOQX+U0h3aUTxYx2wcFMwcWuUaWk8AgGLiR6aYs0HiuEycv2LSZVzHFCGnq2
+         ge6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from:to
-         :cc:content-language:subject:content-transfer-encoding;
-        bh=QPRIoF4rlKOTwAz/z+/OLsqS2Fzjm2v40KS3kV0qtbY=;
-        b=rO9xFbkjbxyM8r17KmSvm6Rxhcs5XgMxz2duby9cT3M99ln8Fq9d6VGco0EA4I/41j
-         gOPAmoco5OXQCHMCcsP+34Tn2OLfa1l3vX76J1DvVAhvmktD4tRang5qZr5MV4s2iu8U
-         3kXbxyUN2UxcTL/W6zUZFzwhrCm2+9Q8tfgsKCicGD+F10WxWaTvi8NgKe5SCDYqfa2t
-         eHLEDA4uFVVpZqq26Bdi4+haMP3H8X2wMPft93YNV/kWNbtVO9ePq5x81JxZpbD3vhyN
-         lSZUPRT3SlZrjKgqsrJIJwf38p/tv2piF3wDisbIkR0lHrijqGVo1vD5QNfQREac9rGW
-         MjGg==
-X-Gm-Message-State: AOAM53209V6Alkh4gCXryfR6Dtwv7oNm5SzzMkayj2xiVj0/Z9Cmji7J
-        CpXE8my06HL/GO8SVd7Do0LdbnnwQvE=
-X-Google-Smtp-Source: ABdhPJxqnGeKnlM+4jczuvObkY2C+DY/AXKJr6o8c+L+9VhZJ7WVl9Pk/Dkgs9ri5svBX6X+WZIwdw==
-X-Received: by 2002:a05:600c:b46:: with SMTP id k6mr25860575wmr.45.1638648288407;
-        Sat, 04 Dec 2021 12:04:48 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f1a:f00:683c:6af8:489f:48c5? (p200300ea8f1a0f00683c6af8489f48c5.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:683c:6af8:489f:48c5])
-        by smtp.googlemail.com with ESMTPSA id f8sm8926344wmf.2.2021.12.04.12.04.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Dec 2021 12:04:47 -0800 (PST)
-Message-ID: <bd0def53-4e63-61eb-c0bb-9975a308cb1a@gmail.com>
-Date:   Sat, 4 Dec 2021 21:04:40 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jHZ/NY52q+fJ8ZyowbxA7ltlvG1kl7aRGse+qxxLYbY=;
+        b=xk3mI65LvGu4sESlW+Ae6Yu1PhGreTTpFTFMGNWvhZwAz/7i+oVPHNBkiGoMi+4vQy
+         l4RDUvLtAiXGaewAZGWoHK2z6BEMqSbHiQwroX7fUZ+yr1QDfM08RUjZ+5onoZNy90Zb
+         gfgYJRXPKUDG+8VgaIz1KvKoMOBghz29XrZ2AJUQxWKAur43Z3DaKDCoNiqdJrRH5KUV
+         8yYfkM6LslaKCentFfejGehUncT+jNVs6tU6lSXTuSG6SLFpsOV4clni8JUoG+lYs25j
+         4QQZouMsrsjgMOjS8oi9PC2vtMBIOTK3dWlHqqovMR+IUPSUMejeI/yb+DEYC4R2SrNe
+         2cag==
+X-Gm-Message-State: AOAM533xYjmInSlp3/aBgBl5c240sTBdG2RzLeJVXD+51j45FmnPaDE8
+        DB8972Uq2VZ4SDHyraCMQuUQKA==
+X-Google-Smtp-Source: ABdhPJxILtMVzSvS1Vrd7Lgmv2DVMqTdPl18sdA4LtSUsO6snCPl5qQQFsJ/cYVbFis/6/c3Drwj6w==
+X-Received: by 2002:a5d:59a2:: with SMTP id p2mr31486819wrr.252.1638654635019;
+        Sat, 04 Dec 2021 13:50:35 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id h2sm6328676wrz.23.2021.12.04.13.50.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 13:50:34 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Wolfram Sang <wsa@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject:        From a5f512cb01e48f5bfcdef800dd477c8b04a4cacf Mon Sep 17 00:00:00 2001
+Date:   Sat,  4 Dec 2021 23:50:25 +0200
+Message-Id: <20211204215033.5134-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Content-Language: en-US
-Subject: [PATCH v3] i2c: i801: Don't clear status flags twice in interrupt
- mode
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In interrupt mode we clear the status flags twice, in the interrupt
-handler and in i801_check_post(). Remove clearing the status flags
-from i801_check_post() and handle polling mode by using the
-SMBus unlocking write to also clear the status flags if still set.
-To be precise: One could still argue that the status flags are
-cleared twice in interrupt mode, but it comes for free.
+Modern ARM64 Samsung Exynos SoCs (like Exynos Auto V9 and Exynos850) use
+pretty much the same High-Speed I2C controller supported in i2c-exynos5
+driver ("samsung,exynos7-hsi2c" variant), but with some differences:
+- timings are now calculated and configured a bit differently
+- two clocks are now provided to HSI2C controller (and must be
+asserted during I2C operation and register access)
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
-v2:
-- clear status flags also in i801_wait_byte_done()
-- remove outdated comment at i801_check_post()
-v3:
-- merge unlocking SMBus and clearing status flags
-- avoid the complexity added with v2
----
- drivers/i2c/busses/i2c-i801.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+This patch series implements these changes, making it possible to use
+HSI2C driver on modern Exynos SoCs.
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 930c6edbe..128a25de7 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -372,11 +372,6 @@ static int i801_check_pre(struct i801_priv *priv)
- 	return 0;
- }
- 
--/*
-- * Convert the status register to an error code, and clear it.
-- * Note that status only contains the bits we want to clear, not the
-- * actual register value.
-- */
- static int i801_check_post(struct i801_priv *priv, int status)
- {
- 	int result = 0;
-@@ -401,7 +396,6 @@ static int i801_check_post(struct i801_priv *priv, int status)
- 		    !(status & SMBHSTSTS_FAILED))
- 			dev_err(&priv->pci_dev->dev,
- 				"Failed terminating the transaction\n");
--		outb_p(STATUS_FLAGS, SMBHSTSTS(priv));
- 		return -ETIMEDOUT;
- 	}
- 
-@@ -440,9 +434,6 @@ static int i801_check_post(struct i801_priv *priv, int status)
- 		dev_dbg(&priv->pci_dev->dev, "Lost arbitration\n");
- 	}
- 
--	/* Clear status flags except BYTE_DONE, to be cleared by caller */
--	outb_p(status, SMBHSTSTS(priv));
--
- 	return result;
- }
- 
-@@ -939,8 +930,11 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
- 	}
- 
- out:
--	/* Unlock the SMBus device for use by BIOS/ACPI */
--	outb_p(SMBHSTSTS_INUSE_STS, SMBHSTSTS(priv));
-+	/*
-+	 * Unlock the SMBus device for use by BIOS/ACPI,
-+	 * and clear status flags if not done already.
-+	 */
-+	outb_p(SMBHSTSTS_INUSE_STS | STATUS_FLAGS, SMBHSTSTS(priv));
- 
- 	pm_runtime_mark_last_busy(&priv->pci_dev->dev);
- 	pm_runtime_put_autosuspend(&priv->pci_dev->dev);
+Another change in mentioned SoCs is that HSI2C controller is now a part
+of USIv2 IP-core. But no USI modifications are needed in HSI2C driver,
+as all USI related configuration is done in USI driver independently.
+USI driver is added in [1] series (or its later revision, if available).
+To make HSI2C functional, both patch series (this one and [1]) have to
+be applied, but those can be applied independently.
+
+Changes in v2:
+- Added new patches renaming "hsi2c@*" nodes to "i2c@*" for Exynos
+dts's
+- Added R-b tags from v1 review
+- Fixed and improved i2c-exynos5 dt-bindings
+
+[1] https://patchwork.kernel.org/project/linux-samsung-soc/cover/20211204195757.8600-1-semen.protsenko@linaro.org/
+
+Jaewon Kim (2):
+  dt-bindings: i2c: exynos5: Add exynosautov9-hsi2c compatible
+  i2c: exynos5: Add support for ExynosAutoV9 SoC
+
+Sam Protsenko (6):
+  dt-bindings: i2c: exynos5: Convert to dtschema
+  dt-bindings: i2c: exynos5: Add bus clock
+  i2c: exynos5: Add bus clock support
+  i2c: exynos5: Mention Exynos850 and ExynosAutoV9 in Kconfig
+  arm: dts: exynos: Rename hsi2c nodes to i2c for Exynos5260
+  arm64: dts: exynos: Rename hsi2c nodes to i2c for Exynos5433 and
+    Exynos7
+
+ .../devicetree/bindings/i2c/i2c-exynos5.txt   |  53 -------
+ .../devicetree/bindings/i2c/i2c-exynos5.yaml  | 133 ++++++++++++++++++
+ arch/arm/boot/dts/exynos5260.dtsi             |   8 +-
+ arch/arm64/boot/dts/exynos/exynos5433.dtsi    |  24 ++--
+ arch/arm64/boot/dts/exynos/exynos7.dtsi       |  24 ++--
+ drivers/i2c/busses/Kconfig                    |   2 +-
+ drivers/i2c/busses/i2c-exynos5.c              | 108 +++++++++++---
+ 7 files changed, 253 insertions(+), 99 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+
 -- 
-2.34.1
+2.30.2
 
