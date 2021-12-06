@@ -2,35 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F9746AA52
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Dec 2021 22:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B94A46AA4C
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Dec 2021 22:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351619AbhLFVYl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Dec 2021 16:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351472AbhLFVYB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Dec 2021 16:24:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4779CC0613FE;
-        Mon,  6 Dec 2021 13:20:32 -0800 (PST)
+        id S1351351AbhLFVY3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Dec 2021 16:24:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59870 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351408AbhLFVYL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Dec 2021 16:24:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 92ED0CE1582;
-        Mon,  6 Dec 2021 21:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71740C341C6;
-        Mon,  6 Dec 2021 21:20:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81787B81084;
+        Mon,  6 Dec 2021 21:20:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C7FCC341C7;
+        Mon,  6 Dec 2021 21:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638825628;
-        bh=UqIoGty3x6i+tPouRMfzEwDwRqaI2XcL1JbTVVMihyY=;
+        s=k20201202; t=1638825640;
+        bh=5WHsyBQsEtEnZ86t/8WCO8RRM2Kyqh/DD9/FU0LArNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iii0E+JYjiH2xJJ246ZhfAFEjDSb9Htp0PTHZKyRC4fuMoMYgJWBMkEWysEoyeOW4
-         LhSH5qGEGXE9SqttEZ8k44uplhH8V0VdklVeCx3Krr0PxHg+QlwjjkqGA0iFRsVp4t
-         JnjGxaqFClF+haRQtiQlWo43eSiwVlflzX5bjNv4Rc4G9lUnmEq8jDbgUlrfAYaQQW
-         xhyKcbTVTRBfTICBSM3U3QyOM5Gpijhh5JIYFPY7jBRoD4jTEfzeMI+6xWVUyOtB//
-         EleAYX2xGImRzPCB1mwixqOOOCIwpIOzC2QASOMoTgCTw+c/2JJItM4tcnE8ak+uWX
-         LWAqKfryQgM8Q==
+        b=fyCfWbgoOG4l4xPX84xol8YNVMN73pqwVQ/GXJSfvFrRiVQOc4Uripm+hLEwfPnhB
+         UeULeF+cyMCc5k1OrZI6a+yOsoU5oPMTlcbU7fDYMk2/AUoZWsuy4hiTRN+6qIGEcJ
+         HtQFqaKSj0/Wb9DJmNQNDrthZU5VJkTpKWhVQqDqIEdMWjX6vloMHbZdX09fqR9msK
+         N0GTaO0quaJBaKrdrI7eJgOQN3PtKaf+5ndJ/fnoslogFzHw3yuya28fKgQpzV/BzA
+         AHfMUYel6m36fGMbHOIxm+voq03/GxTeCw8vEch9N5Fe3n7/GC5RWBXwDZC1tVTBsn
+         +OgGYNOZbwISg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ondrej Jirman <megous@megous.com>,
@@ -38,12 +35,12 @@ Cc:     Ondrej Jirman <megous@megous.com>,
         Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
         heiko@sntech.de, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 3/5] i2c: rk3x: Handle a spurious start completion interrupt flag
-Date:   Mon,  6 Dec 2021 16:20:19 -0500
-Message-Id: <20211206212021.1661517-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 2/3] i2c: rk3x: Handle a spurious start completion interrupt flag
+Date:   Mon,  6 Dec 2021 16:20:33 -0500
+Message-Id: <20211206212034.1661597-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211206212021.1661517-1-sashal@kernel.org>
-References: <20211206212021.1661517-1-sashal@kernel.org>
+In-Reply-To: <20211206212034.1661597-1-sashal@kernel.org>
+References: <20211206212034.1661597-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -96,10 +93,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-index df220666d6274..b4f8cd7dc8b74 100644
+index 9096d17beb5bb..587f1a5a10243 100644
 --- a/drivers/i2c/busses/i2c-rk3x.c
 +++ b/drivers/i2c/busses/i2c-rk3x.c
-@@ -424,8 +424,8 @@ static void rk3x_i2c_handle_read(struct rk3x_i2c *i2c, unsigned int ipd)
+@@ -325,8 +325,8 @@ static void rk3x_i2c_handle_read(struct rk3x_i2c *i2c, unsigned int ipd)
  	if (!(ipd & REG_INT_MBRF))
  		return;
  
