@@ -2,82 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C0C46A907
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Dec 2021 22:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091B546A97A
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Dec 2021 22:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242378AbhLFVHT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Dec 2021 16:07:19 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:33493 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbhLFVHT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Dec 2021 16:07:19 -0500
-Received: by mail-oi1-f176.google.com with SMTP id q25so23916507oiw.0;
-        Mon, 06 Dec 2021 13:03:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hR7bXgwLHYJkT93zfCU56hRcK8Far9k2bXy+0JZvYDA=;
-        b=4GpwwEZCb9r3Dm+K67J6PzhzaYaZSCpXSFesJQR/5jKMhwIMNWqmpjQZJSYD8xWNYV
-         0xx8Riei4ifpV9QcABYXIgFQIbnlrwH7xtWg5N8UUQST80nusySS1WbSyipCSMBvuaai
-         E9PgN/6UIkkhX4ifVKiLQcWae58SzdKFv1Uk0GoOaJtuh7UsN9ZC3bNuSDJZscjjwUw0
-         gwuY5hYbd4/u/iLJtOWOZM4mdqiQSNhhao22Na4E13p2rtYahUVIe74DqoeZ0XBFOVSk
-         /q1XNW4vJz3NPmuvZlsOFNB+2EmRGdm4qB2lNwqLjLMUN1b22PLPzV1lRbelHwdjuQ7V
-         +4jg==
-X-Gm-Message-State: AOAM533BupcjvmZ3GYvjAClwC617uo4ghyMjwGXljhk8hANGunH+2Wb5
-        L2ugrluer+7NX/AOCFH8Sg==
-X-Google-Smtp-Source: ABdhPJwEhRVefMyREWgslDkwbGbmgUCsTUUusAb3pxk6xbwt92Gj19SDHua+BYuS/j/FO/WGC47EFw==
-X-Received: by 2002:a05:6808:994:: with SMTP id a20mr1186870oic.18.1638824629694;
-        Mon, 06 Dec 2021 13:03:49 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g7sm2372135oon.27.2021.12.06.13.03.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 13:03:49 -0800 (PST)
-Received: (nullmailer pid 2580406 invoked by uid 1000);
-        Mon, 06 Dec 2021 21:03:48 -0000
-Date:   Mon, 6 Dec 2021 15:03:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     devicetree@vger.kernel.org, Jaewon Kim <jaewon02.kim@samsung.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-i2c@vger.kernel.org, Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Virag <virag.david003@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Chanho Park <chanho61.park@samsung.com>
-Subject: Re: [PATCH v2 RESEND 2/8] dt-bindings: i2c: exynos5: Add
- exynosautov9-hsi2c compatible
-Message-ID: <Ya56tLvLR/msqMZP@robh.at.kernel.org>
-References: <20211204215820.17378-1-semen.protsenko@linaro.org>
- <20211204215820.17378-3-semen.protsenko@linaro.org>
+        id S1350528AbhLFVRu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Dec 2021 16:17:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350631AbhLFVRo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Dec 2021 16:17:44 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078D6C061746;
+        Mon,  6 Dec 2021 13:14:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5409ECE1864;
+        Mon,  6 Dec 2021 21:14:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4B1C341C6;
+        Mon,  6 Dec 2021 21:14:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638825251;
+        bh=hPhWCMSayHBcfhH1bYNvUK2TzdlMPbkcPiari3gUW8c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HifX9u3b7ByiKL041rOqp4WLYpVinxYj+QzNtIHh3oobvMl8lQDwy4HjbWdaf6kdb
+         3Pv2se0ZZU+9nEUW8Xt8+T6YjFySKHNrQ6qfpF7h4rJ6jpHvBR5v+zgxYd7at8aVLH
+         pNGgpf/7eRSceGUaYnhOpy26z/F4HWuBbzG9CV4/qNGpDPToRP3nA0PEcPrBYyAG7t
+         geARE2AeNTk39DwORIAKQB12ExmmTixo+p2KT3oVY2NSRrKIBYfGwfo4D5HyDIyxAb
+         InFokQ2UhEv34+bHeMvTsnw8eJQF5prBIRf1RkkSExkg1V9NOe8B5m2QGi+8ftXRZr
+         Ao43p4apd24FQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Ondrej Jirman <megous@megous.com>,
+        John Keeping <john@metanate.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        heiko@sntech.de, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 15/24] i2c: rk3x: Handle a spurious start completion interrupt flag
+Date:   Mon,  6 Dec 2021 16:12:20 -0500
+Message-Id: <20211206211230.1660072-15-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211206211230.1660072-1-sashal@kernel.org>
+References: <20211206211230.1660072-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211204215820.17378-3-semen.protsenko@linaro.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, 04 Dec 2021 23:58:14 +0200, Sam Protsenko wrote:
-> From: Jaewon Kim <jaewon02.kim@samsung.com>
-> 
-> This patch adds new "samsung,exynosautov9-hsi2c" compatible.
-> It is for i2c compatible with HSI2C available on Exynos SoC with USI.
-> 
-> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
-> Changes in v2:
->   - Added R-b tag by Krzysztof Kozlowski
->   - Removed quotes around compatible strings
->   - Added Exynos850 to comment
-> 
->  Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+From: Ondrej Jirman <megous@megous.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+[ Upstream commit 02fe0fbd8a21e183687925c3a266ae27dda9840f ]
+
+In a typical read transfer, start completion flag is being set after
+read finishes (notice ipd bit 4 being set):
+
+trasnfer poll=0
+i2c start
+rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
+i2c read
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
+i2c stop
+rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 33
+
+This causes I2C transfer being aborted in polled mode from a stop completion
+handler:
+
+trasnfer poll=1
+i2c start
+rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
+i2c read
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 0
+rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
+i2c stop
+rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 13
+i2c stop
+rk3x-i2c fdd40000.i2c: unexpected irq in STOP: 0x10
+
+Clearing the START flag after read fixes the issue without any obvious
+side effects.
+
+This issue was dicovered on RK3566 when adding support for powering
+off the RK817 PMIC.
+
+Signed-off-by: Ondrej Jirman <megous@megous.com>
+Reviewed-by: John Keeping <john@metanate.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/busses/i2c-rk3x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
+index 819ab4ee517e1..02ddb237f69af 100644
+--- a/drivers/i2c/busses/i2c-rk3x.c
++++ b/drivers/i2c/busses/i2c-rk3x.c
+@@ -423,8 +423,8 @@ static void rk3x_i2c_handle_read(struct rk3x_i2c *i2c, unsigned int ipd)
+ 	if (!(ipd & REG_INT_MBRF))
+ 		return;
+ 
+-	/* ack interrupt */
+-	i2c_writel(i2c, REG_INT_MBRF, REG_IPD);
++	/* ack interrupt (read also produces a spurious START flag, clear it too) */
++	i2c_writel(i2c, REG_INT_MBRF | REG_INT_START, REG_IPD);
+ 
+ 	/* Can only handle a maximum of 32 bytes at a time */
+ 	if (len > 32)
+-- 
+2.33.0
+
