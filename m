@@ -2,135 +2,82 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3B846A892
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Dec 2021 21:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C0C46A907
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Dec 2021 22:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243449AbhLFUmV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Dec 2021 15:42:21 -0500
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:36681 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349735AbhLFUmT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Dec 2021 15:42:19 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 0F3953201591;
-        Mon,  6 Dec 2021 15:38:47 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute3.internal (MEProxy); Mon, 06 Dec 2021 15:38:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm3; bh=3TNr3PJ/3oYhzRdj6fOfCCqXaq6X
-        S1SzYqe8FZFLhCI=; b=Ef/McVGo8XcpFbF4OBT1d+iVk2aqJQc6D488HYEPU66r
-        EgTR/nCkqaRUb56SKQigc29jia4AI33+HGLczy3lvMRqvDdUg0JW/b2fv21OeGci
-        wS2uNnV7ghWsDhHzpD++Y/PDo0XffPW9eidRPsjmkpOj+JqF2poEwSxyR2291ezU
-        KmkKTMHiWiQ/ImkLNY0mIgEuyW3mSPoth9mSZ46xjpk4SenAoTgNEM/+aogWDosc
-        +/b6Z6kqElar1SmwnL9JM+SroLI8ZTqmz0n+4OnC6yaIyhPV8ZvgnnnZFOVhc+dQ
-        /IlBoYzkZFdREwvIWei5CkR7oavmSPuneYicuJX7/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=3TNr3P
-        J/3oYhzRdj6fOfCCqXaq6XS1SzYqe8FZFLhCI=; b=KvjWiQ/Ip6oeAbSFVYurm3
-        85fcx5gis5aFWfoipd1jGeCPYpMLQYkmBSLfyyC5tCtLdCGjQdRFyhjz/DXlyZEg
-        FaLzwfWr91TVKALzPZylBy7hfP6j2UBrotBet4sVveG314ecHgfjIu1s2jhEaf+m
-        D25hItKVr+AXQmpE7yorL0KD8MCDwMp8AjYG2hrw2VvJ8lyFHOMgGDGFUfiOuQ3H
-        ZgAalfZpEKu3iERPYORNxAmJ+P/bZZtU8DDFlEAOTe30U9Mhc39QOqqGopmcZK29
-        /2eLh41L4v+DZYqtiiBthSQm7KAT8dkVZ8bLyaQIkmoMZCDBuo+6vbFPSwWH43Dw
-        ==
-X-ME-Sender: <xms:1nSuYYn81-224JPAlNWWa8xGnFQyY2p82Ob0ymV-qlS1SlKH1A8bnA>
-    <xme:1nSuYX24GzacOulsy1W9uzT-SX_aN3vyR5PKGRelNIE3wr2PHlkA16vLXs25nH8p3
-    gxej3Wmddag8O7wtIw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeefgddugedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
-    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:1nSuYWozKmKkZVG4Zx0DUNfKLGzkUAOm5jRu_B7eCgRifemF-X640w>
-    <xmx:1nSuYUmMxEy6JSZSv89-SDcZ9CI3j3J4V8mBWu9khWnx0CzYybiM6w>
-    <xmx:1nSuYW0VSSMOWg3z8C3seEuZZStgNW1epuyJbo0We_43FiVO8dXMog>
-    <xmx:13SuYS-bKQVszMBBVIzDq8eCkQ0vXySecc-gI1RGuDxCKoGkzGSYvg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 97BD327406DA; Mon,  6 Dec 2021 15:38:46 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
-Mime-Version: 1.0
-Message-Id: <3538e879-8548-4727-b397-c385295316c4@www.fastmail.com>
-In-Reply-To: <CAK8P3a2Ag60Dw1mbTsj7XVanT6u8kQW5vqK3hAD-yon1G8qKXw@mail.gmail.com>
-References: <202112061809.XT99aPrf-lkp@intel.com>
- <32ba635c-4588-4ea3-bd95-c55a33804e99@www.fastmail.com>
- <CAK8P3a2Ag60Dw1mbTsj7XVanT6u8kQW5vqK3hAD-yon1G8qKXw@mail.gmail.com>
-Date:   Mon, 06 Dec 2021 21:38:25 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "kernel test robot" <lkp@intel.com>,
-        "Linux I2C" <linux-i2c@vger.kernel.org>, kbuild-all@lists.01.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Wolfram Sang" <wsa-dev@sang-engineering.com>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>
-Subject: Re: powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:undefined
- reference to `__this_module'
-Content-Type: text/plain
+        id S242378AbhLFVHT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Dec 2021 16:07:19 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:33493 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231419AbhLFVHT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Dec 2021 16:07:19 -0500
+Received: by mail-oi1-f176.google.com with SMTP id q25so23916507oiw.0;
+        Mon, 06 Dec 2021 13:03:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hR7bXgwLHYJkT93zfCU56hRcK8Far9k2bXy+0JZvYDA=;
+        b=4GpwwEZCb9r3Dm+K67J6PzhzaYaZSCpXSFesJQR/5jKMhwIMNWqmpjQZJSYD8xWNYV
+         0xx8Riei4ifpV9QcABYXIgFQIbnlrwH7xtWg5N8UUQST80nusySS1WbSyipCSMBvuaai
+         E9PgN/6UIkkhX4ifVKiLQcWae58SzdKFv1Uk0GoOaJtuh7UsN9ZC3bNuSDJZscjjwUw0
+         gwuY5hYbd4/u/iLJtOWOZM4mdqiQSNhhao22Na4E13p2rtYahUVIe74DqoeZ0XBFOVSk
+         /q1XNW4vJz3NPmuvZlsOFNB+2EmRGdm4qB2lNwqLjLMUN1b22PLPzV1lRbelHwdjuQ7V
+         +4jg==
+X-Gm-Message-State: AOAM533BupcjvmZ3GYvjAClwC617uo4ghyMjwGXljhk8hANGunH+2Wb5
+        L2ugrluer+7NX/AOCFH8Sg==
+X-Google-Smtp-Source: ABdhPJwEhRVefMyREWgslDkwbGbmgUCsTUUusAb3pxk6xbwt92Gj19SDHua+BYuS/j/FO/WGC47EFw==
+X-Received: by 2002:a05:6808:994:: with SMTP id a20mr1186870oic.18.1638824629694;
+        Mon, 06 Dec 2021 13:03:49 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id g7sm2372135oon.27.2021.12.06.13.03.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 13:03:49 -0800 (PST)
+Received: (nullmailer pid 2580406 invoked by uid 1000);
+        Mon, 06 Dec 2021 21:03:48 -0000
+Date:   Mon, 6 Dec 2021 15:03:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     devicetree@vger.kernel.org, Jaewon Kim <jaewon02.kim@samsung.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-i2c@vger.kernel.org, Youngmin Nam <youngmin.nam@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Virag <virag.david003@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: Re: [PATCH v2 RESEND 2/8] dt-bindings: i2c: exynos5: Add
+ exynosautov9-hsi2c compatible
+Message-ID: <Ya56tLvLR/msqMZP@robh.at.kernel.org>
+References: <20211204215820.17378-1-semen.protsenko@linaro.org>
+ <20211204215820.17378-3-semen.protsenko@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211204215820.17378-3-semen.protsenko@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Sat, 04 Dec 2021 23:58:14 +0200, Sam Protsenko wrote:
+> From: Jaewon Kim <jaewon02.kim@samsung.com>
+> 
+> This patch adds new "samsung,exynosautov9-hsi2c" compatible.
+> It is for i2c compatible with HSI2C available on Exynos SoC with USI.
+> 
+> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+> Changes in v2:
+>   - Added R-b tag by Krzysztof Kozlowski
+>   - Removed quotes around compatible strings
+>   - Added Exynos850 to comment
+> 
+>  Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-
-On Mon, Dec 6, 2021, at 20:47, Arnd Bergmann wrote:
-> On Mon, Dec 6, 2021 at 6:02 PM Sven Peter <sven@svenpeter.dev> wrote:
->> On Mon, Dec 6, 2021, at 11:10, kernel test robot wrote:
->
->> > If you fix the issue, kindly add following tag as appropriate
->> > Reported-by: kernel test robot <lkp@intel.com>
->> >
->> > All error/warnings (new ones prefixed by >>):
->> >
->> >>> powerpc64-linux-ld: warning: orphan section `.stubs' from `drivers/i2c/busses/i2c-pasemi-core.o' being placed in section `.stubs'
->> >>> powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:(.toc+0x0): undefined reference to `__this_module'
->>
->> This seems to be triggered by compiling one of {pci,platform} as a module and the
->> other one as built-in. That setup can only happen with COMPILE_TEST since -pci
->> is otherwise only compiled for powerpc and -platform for arm64.
->>
->> -core.c is only built once with THIS_MODULE expanding to __this_module. That will
->> fail when linking the built-in driver where THIS_MODULE should've been NULL instead.
->>
->> The most simple fix (that also has no chance of breaking anything) is probably to
->> just move
->>
->>   smbus->adapter.owner = THIS_MODULE;
->>
->> from core to both apple.c and pci.c. I'll prepare a patch later this week.
->
-> I'd prefer fixing this in a better way, linking an object file into
-> both vmlinux and a loadable
-> module is not supported at all. 
-
-Make sense, I didn't know that.
-
-> Other options are:
->
-> - #include the common .c file from the individual drivers (not great)
-> - use Kconfig logic to prevent the broken configuration
-> - use Makefile tricks to make both drivers built-in when this happens
-> - make the common part a separate loadable module, exporting all the
->   global symbols.
->
-> Out of these, I would prefer the last option.
-
-Sure, I'll see when I can spare some time to do that since testing that
-is going to be a bit more annoying with my current setup.
-
-Fwiw, I2C_OCTEON and I2C_THUNDERX might have the same issue as well
-with i2c-octeon-core.o. It just won't result in the same compile error
-because i2c-octeon-core.c doesn't use THIS_MODULE.
-It's also nothing that is likely to ever happen since those two drivers
-are also never used on the same arch and it should only be possible to
-create a broken configuration with COMPILE_TEST as well.
-
-
-
-Sven
+Acked-by: Rob Herring <robh@kernel.org>
