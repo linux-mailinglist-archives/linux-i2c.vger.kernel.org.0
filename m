@@ -2,125 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A155346C713
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Dec 2021 23:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7F546C763
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Dec 2021 23:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241959AbhLGWJy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Dec 2021 17:09:54 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:35559 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbhLGWJy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Dec 2021 17:09:54 -0500
-Received: by mail-il1-f198.google.com with SMTP id m9-20020a056e021c2900b002a1d679b412so686279ilh.2
-        for <linux-i2c@vger.kernel.org>; Tue, 07 Dec 2021 14:06:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=7JWGSwb1iM57j21qzHJU2caGTTpBsLkiIdv7qzfHAyw=;
-        b=nXLTdAySSedcLVbTZoYnvOBrq3T64kfTVfzUKrcBn//zKrhT5LZu6I7WH0UA2ntXOR
-         wK1J+3Pjf/cQ9YmrJvvAfGmrnD0YfRhW5qdFr1s5vz0TOas4vwS+Nb9AB67cqKrnQEdp
-         P/NQkVeNNiN4U1JZ8T2iRlZYoWpfdHQtL6VODxNIRwocCL5xBiOTEX+HY89G/lL48N8v
-         jVSjpfYfBdzKFDuc+y0mQg4u3UdG1KNdJDTAal8lMOxQvVPfedGCYuaWyo/TwuhwMTnN
-         nNGqWBxNTJHSU8ouKyDEckjthaMNys2cmh89UI0BPgoeI3mB3IpMuTOtcc+NCW4XJQcV
-         PmIw==
-X-Gm-Message-State: AOAM531ePFR8IDUNYqPz5Sb5nhskwbFLFI9i60fYm+8LQ2lctH67yCHB
-        Cos/Ub4O80jYRpRJ8o4JJ5lSSllYLTGJgJu0xvpaShOMttbM
-X-Google-Smtp-Source: ABdhPJw9UuoW7uqBPHnv9wpVREqaSs3faXSZRSQzBxuXHRkWpBd7WzD6FFYNQasDKi/Rzi1RaKFLbc9QB4rm7d3/e1142SzY/T1t
+        id S238002AbhLGW1t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Dec 2021 17:27:49 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:53520 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233310AbhLGW1t (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Dec 2021 17:27:49 -0500
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8709A891B1;
+        Wed,  8 Dec 2021 11:24:14 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1638915854;
+        bh=TslM5ADFz08Cx03cfM6HSh91l2WWO3ZEVszWzepwZis=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=A0eSiULNSCisQs3Etl+ZzID0Ppa4QIDC8okfLkRYCADdW903W4hwVO89oqwZO/pD8
+         pn+zXA8Dl/Enc4BU1H5YCsD6nswO32J3rIX9ykeRE1DNRME8vWwc+BdZlVjgtW9fcY
+         JW3tmis6kmY4PvrUfHGWE0gXfin7t/SSQL+7Jokgv+wBZThprswIYzzV9WAVxfnS2O
+         3xgj19PEkFpl/rCS9ykfusCiXUsrB3H/2ySpwn7EvUqmks/HMz85u7D3OglklpcEqN
+         ulOa+q6hzt0gYswnQynzVjENHxp+0YoeQy0Iu3OYwh5aefHbxO9LKHvDTQjq9scy8v
+         RfND77b74UApw==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B61afdf0e0002>; Wed, 08 Dec 2021 11:24:14 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 8 Dec 2021 11:24:14 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.026; Wed, 8 Dec 2021 11:24:14 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "mbizon@freebox.fr" <mbizon@freebox.fr>,
+        "wsa@kernel.org" <wsa@kernel.org>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: mpc: Use atomic read and fix break condition
+Thread-Topic: [PATCH] i2c: mpc: Use atomic read and fix break condition
+Thread-Index: AQHX6yH59UeBzAfeJEWOl6N8FMj7Fawl9dyAgADMRYA=
+Date:   Tue, 7 Dec 2021 22:24:13 +0000
+Message-ID: <bce48dba-c163-4fe7-50c4-984de41488c2@alliedtelesis.co.nz>
+References: <20211207042144.358867-1-chris.packham@alliedtelesis.co.nz>
+ <ea12555e66d4dc16c5b093ac528442ed6dddf644.camel@freebox.fr>
+In-Reply-To: <ea12555e66d4dc16c5b093ac528442ed6dddf644.camel@freebox.fr>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C3258A4E0741374CA3246F84712A9F44@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a4b:: with SMTP id u11mr2046198ilv.225.1638914783280;
- Tue, 07 Dec 2021 14:06:23 -0800 (PST)
-Date:   Tue, 07 Dec 2021 14:06:23 -0800
-In-Reply-To: <000000000000b5e7f105d0d2d165@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000079822e05d2959596@google.com>
-Subject: Re: [syzbot] WARNING in __i2c_transfer (2)
-From:   syzbot <syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com>
-To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, wsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=XOZOtjpE c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=IOMw9HtfNCkA:10 a=tNKga8fkx7gt9p2w3KsA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
-
-HEAD commit:    cd8c917a56f2 Makefile: Do not quote value for CONFIG_CC_IM..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=139ff2e5b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=221ffc09e39ebbd1
-dashboard link: https://syzkaller.appspot.com/bug?extid=e417648b303855b91d8a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a68531b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b91d89b00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 6516 at drivers/i2c/i2c-core-base.c:2178 __i2c_transfer+0xa14/0x17c0 drivers/i2c/i2c-core-base.c:2178
-Modules linked in:
-CPU: 1 PID: 6516 Comm: syz-executor214 Not tainted 5.16.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__i2c_transfer+0xa14/0x17c0 drivers/i2c/i2c-core-base.c:2178
-Code: 0f 94 c7 31 ff 44 89 fe e8 39 d9 9b fb 45 84 ff 0f 84 26 fd ff ff e8 4b d5 9b fb e8 95 6f 24 fb e9 17 fd ff ff e8 3c d5 9b fb <0f> 0b 41 bc ea ff ff ff e9 9e fd ff ff e8 2a d5 9b fb 44 89 ee bf
-RSP: 0018:ffffc900029dfce8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000010 RCX: 0000000000000000
-RDX: ffff88807929ba00 RSI: ffffffff85dbd5b4 RDI: 0000000000000003
-RBP: ffff888021b94b58 R08: 0000000000000000 R09: ffffffff8ff73acf
-R10: ffffffff85dbcbd8 R11: 0000000000000000 R12: 0000000000000010
-R13: 0000000000000000 R14: ffff888021b94b78 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0063) knlGS:00000000576f92c0
-CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
-CR2: 00007fa70f9116c0 CR3: 000000007f540000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- i2c_transfer+0x1e6/0x3e0 drivers/i2c/i2c-core-base.c:2269
- i2cdev_ioctl_rdwr+0x583/0x6a0 drivers/i2c/i2c-dev.c:297
- compat_i2cdev_ioctl+0x419/0x4f0 drivers/i2c/i2c-dev.c:561
- __do_compat_sys_ioctl+0x1c7/0x290 fs/ioctl.c:972
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-RIP: 0023:0xf7f41549
-Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
-RSP: 002b:00000000ffd6affc EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000000707
-RDX: 0000000020000700 RSI: 00000000ffd6b050 RDI: 00000000f7fe8000
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
-   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
-   a:	10 06                	adc    %al,(%rsi)
-   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
-  10:	10 07                	adc    %al,(%rdi)
-  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
-  16:	10 08                	adc    %cl,(%rax)
-  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
-  1c:	00 00                	add    %al,(%rax)
-  1e:	00 00                	add    %al,(%rax)
-  20:	00 51 52             	add    %dl,0x52(%rcx)
-  23:	55                   	push   %rbp
-  24:	89 e5                	mov    %esp,%ebp
-  26:	0f 34                	sysenter
-  28:	cd 80                	int    $0x80
-* 2a:	5d                   	pop    %rbp <-- trapping instruction
-  2b:	5a                   	pop    %rdx
-  2c:	59                   	pop    %rcx
-  2d:	c3                   	retq
-  2e:	90                   	nop
-  2f:	90                   	nop
-  30:	90                   	nop
-  31:	90                   	nop
-  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-
+DQpPbiA3LzEyLzIxIDExOjEzIHBtLCBNYXhpbWUgQml6b24gd3JvdGU6DQo+IE9uIFR1ZSwgMjAy
+MS0xMi0wNyBhdCAxNzoyMSArMTMwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4NCj4+IENhbiB5
+b3UgZ2l2ZSB0aGlzIGEgdGVzdCBvbiB5b3VyIHNldHVwLiBJJ3ZlIHRyaWVkIGl0IG9uIHRoZSBz
+ZXR1cA0KPj4gd2hlcmUgSSBoYWQgdGhlIG9yaWdpbmFsIHByb2JsZW0gdGhhdCBsZWQgdG8gNGE4
+YWM1ZTQ1Y2RhIGFuZCBpdA0KPj4gc2VlbXMgT0sgc28gZmFyIChJJ2xsIGxlYXZlIG15IHRlc3Qg
+cnVubmluZyBvdmVybmlnaHQpLg0KPiBUZXN0ZWQtYnk6IE1heGltZSBCaXpvbiA8bWJpem9uQGZy
+ZWVib3guZnI+DQpNeSB0ZXN0aW5nIG92ZXJuaWdodCBhbHNvIGxvb2tzIGdvb2QuDQo+IFNtYWxs
+IHJlc2VydmF0aW9uIHRob3VnaCwgaXQgZG9lcyBub3Qgc2VlbSB0byBiZSB1bmRlcnN0b29kIHdo
+eSB0aGlzDQo+IHBvbGxpbmcgaXMgbmVlZGVkLg0KPg0KPiBSZWFkaW5nIHRoZSBkcml2ZXIgaGlz
+dG9yeSwgdGhlIHRoZW9yeSBpcyB0aGF0IHRoZSBjb250cm9sbGVyIHdpbGwNCj4gdHJpZ2dlciBh
+biBpbnRlcnJ1cHQgYXQgdGhlIGVuZCBvZiB0cmFuc2ZlciBqdXN0IGFmdGVyIHRoZSBsYXN0IFND
+TA0KPiBjeWNsZSwgYnV0IGlycmVzcGVjdGl2ZSBvZiB3aGV0aGVyIFNDTCBnb2VzIGhpZ2gsIHdo
+aWNoIGhhcHBlbnMgaWYgYQ0KPiBzbGF2ZSAic3RyZXRjaCIgdGhlIGNsb2NrIHVudGlsIGl0J3Mg
+cmVhZHkgdG8gYW5zd2VyLg0KPg0KPiBTdXBwb3NlZGx5IHdoZW4gdGhhdCBoYXBwZW4sIENTUl9N
+Q0YgYml0IHdvdWxkIGJlIDAgYXQgaW50ZXJydXB0IHRpbWUsDQo+IG1lYW5pbmcgYnVzIGlzIGJ1
+c3ksIGFuZCB3ZSBoYXZlIHRvIHBvbGwgdW50aWwgaXQgZ29lcyB0byAxIG1lYW5pbmcgdGhlDQo+
+IHNsYXZlIGhhcyByZWxlYXNlZCBTQ0wuDQoNCkkgc2hhcmUgeW91ciByZXNlcnZhdGlvbi4gVGhl
+IG9yaWdpbmFsIHJlLXJlYWQgcHJlLWRhdGVzIGdpdCAoSSBkbyANCnJlY2FsbCBsb29raW5nIGlu
+IHRoZSBoaXN0b3JpY2FsIHJlcG8gYXMgd2VsbCBhbmQgZmluZGluZyBub3RoaW5nIA0KZW5saWdo
+dGVuaW5nKS4gQWxsIEkgY2FuIHNheSBpcyB0aGF0IHRoZSBvcmlnaW5hbCBjb2RlIHRob3VnaHQg
+STJDX1NSIA0KbmVlZGVkIHNvbWUgdGltZSB0byAic3RhYmlsaXplIi4NCg0KQm90aCBNSUYgYW5k
+IE1DRiBzaG91bGQgYmUgc2V0IGF0IHRoZSBmYWxsaW5nIGVkZ2Ugb2YgdGhlIG5pbnRoIGNsb2Nr
+LiANCkluIHRoZW9yeSB3ZSBjb3VsZCBlbmQgdXAgd2l0aCBNSUY9MSBNQ0Y9MCBpZiBNQUwgaXMg
+c2V0IChpbiB3aGljaCBjYXNlIA0Kd2UnZCBoaXQgdGhlIDEwMHVzIHRpbWVvdXQgaW4gdGhlIHBv
+bGwpLiBCdXQgSSBzZWUgbm8gZXZpZGVuY2Ugb2YgdGhhdCANCmFjdHVhbGx5IGhhcHBlbmluZyAo
+YW5kIG5vIGlkZWEgd2hhdCBhcmJpdHJhdGlvbiBsb3N0IG1lYW5zIHcuci50IGkyYykuDQoNClRo
+ZSByb290IGludGVycnVwdHMgZm9yIEkyQzEgYW5kIEkyQzIgYXJlIHNoYXJlZCBzbyBpdCBtYXkg
+YmUgcG9zc2libGUgDQpmb3IgTUlGIHRvIGJlIGluIHRoZSBwcm9jZXNzIG9mIGJlaW5nIHNldCBm
+b3IgSTJDMSBidXQgdGhlIGFjdHVhbCBtcGljIA0KaW50ZXJydXB0IGJlIHJhaXNlZCBmb3IgYSBk
+aWZmZXJlbnQgdHJhbnNmZXIgb24gSTJDMi4gVGhlIGlzciB3aWxsIGxvb2sgDQphdCBib3RoIEky
+QyBhZGFwdGVycyBhbmQgYXR0ZW1wdCB0byBoYW5kbGUgdGhlIGludGVycnVwdCBpZiBNSUYgaXMg
+c2V0LiANCkknZCBleHBlY3QgYSBzcHVyaW91cyBpbnRlcnJ1cHQgdG8gYmUgY291bnRlZCBpbiB0
+aGlzIGNhc2UgYXMgYnkgdGhlIA0KdGltZSBJMkMxIHJhaXNlcyB0aGUgaW50ZXJydXB0IHdpdGgg
+dGhlIG1waWMgd2UnZCBoYXZlIGFscmVhZHkgc2VydmljZWQgDQppdCAoYnV0IG1heWJlIHRoZSBm
+aWRkbGluZyB3aXRoIE1FSU4gcHJldmVudHMgdGhhdCkuDQoNCk15IGJlc3QgZ3Vlc3MgaXMgdGhh
+dCBldmVuIGlmIHRoZSBob3N0IGFkYXB0ZXIgaGFzIHNlbnQgdGhlIG5pbnRoIGNsb2NrIA0KaXQg
+ZG9lc24ndCBtZWFuIHRoYXQgdGhlIHJlbW90ZSBkZXZpY2Ugd2lsbCByZWxlYXNlIFNDTCAoZS5n
+LiBpbiB0aGUgDQpjYXNlIG9mIGNsb2NrIHN0cmV0Y2hpbmcgb3IgbXkgc2xpZ2h0bHkgZG9kZ3kg
+aGFyZHdhcmUpLiBTbyBJIHRoaW5rIHRoZSANCmFjdCBvZiBwb2xsaW5nIGZvciBNQ0YgKG9yIHBy
+aW9yIHRvIHRoaXMgd2hhdCB3YXMgZWZmZWN0aXZlbHkgYSANCnVkZWxheSgxMDApKSBhbGxvd3Mg
+dGhlIHJlbW90ZSBkZXZpY2UgYSBiaXQgb2YgdGltZSB0byByZWxlYXNlIFNDTC4NCg0KPiBJIGhh
+dmUgbm8gc2xhdmUgdGhhdCBkb2VzIGNsb2NrIHN0cmV0Y2hpbmcgb24gbXkgYm9hcmQgc28gSSBj
+YW5ub3QgdGVzdA0KPiB0aGUgdGhlb3J5LiBPbiBteSBtcGM4MzQ3IGRldmljZSwgaTJjIGNsb2Nr
+IHNwZWVkIHNldCB0byA5MGtIeiwgSSd2ZQ0KPiBuZXZlciBzZWVuIGEgY2FzZSB3aGVyZSBNQ1Ig
+d2FzIDAgYXQgaW50ZXJydXB0IHRpbWUuDQo+DQo+IEZvciBpMmMgZXhwZXJ0cyBoZXJlLCBpcyAx
+MDB1cyBlbm91Z2ggaW4gdGhhdCBjYXNlID8gSSBjb3VsZCBub3QgYW55DQo+IG1heGltdW0gc3Ry
+ZXRjaCB0aW1lIGluIGkyYyBzcGVjaWZpY2F0aW9uLg0KDQpJIGRvbid0IGtub3cgdGhhdCB0aGVy
+ZSBpcyBhIG1heGltdW0gY2xvY2sgc3RyZXRjaCB0aW1lICh3ZSBjZXJ0YWlubHkgDQprbm93IHRo
+ZXJlIGFyZSBtaXNiZWhhdmluZyBkZXZpY2VzIHRoYXQgaG9sZCBTQ0wgbG93IGZvcmV2ZXIpLiBU
+aGUgU01CVVMgDQpwcm90b2NvbCBhZGRzIHNvbWUgdGltZW91dHMgYnV0IGFzIGZhciBhcyBJIGtu
+b3cgaTJjIHNheXMgbm90aGluZyBhYm91dCANCmhvdyBsb25nIGEgcmVtb3RlIGRldmljZSBjYW4g
+aG9sZCBTQ0wuDQoNCj4gTXkgQ1BVIHVzZXIgbWFudWFsIGlzIElNTyB2YWd1ZSBvbiB0aGlzIHBy
+ZWNpc2UgdG9waWMsIGhvcGVmdWxseSBhbiBOWFANCj4ga25vd2xlZGdlYWJsZSBlbXBsb3llZSB3
+aWxsIHJlYWQgdGhpcyBhbmQgZW5saWdodGVuIHVzLg0KDQpUaGF0IHdvdWxkIGJlIG5pY2UgKGJ1
+dCB0aGVyZSBpcyBhIHJlYXNvbiBJJ3ZlIGVuZGVkIHVwIGJlaW5nIGxpc3RlZCBhcyANCnRoZSBt
+YWludGFpbmVyIGZvciB0aGlzIGRyaXZlcikuDQoNCj4NCj4gVGhhbmtzLA0KPg==
