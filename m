@@ -2,87 +2,95 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E58946ABA2
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Dec 2021 23:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E24046B1D2
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Dec 2021 05:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357561AbhLFWb1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 6 Dec 2021 17:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S235317AbhLGEZj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 6 Dec 2021 23:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357412AbhLFWbV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Dec 2021 17:31:21 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB38C061746;
-        Mon,  6 Dec 2021 14:27:52 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id g16so3407090pgi.1;
-        Mon, 06 Dec 2021 14:27:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZJ9W19F9BVtFlFnJBI6M88XF4BCu/CVE632l0mNkIIQ=;
-        b=Y3xPtXcFAlydwm4j3JE2Uyb0fc1dC6VOqUmI2NEQReFtcqSW7ySiMc5FhgoFJNTLHI
-         jyKDd/kyvGUneg62yT4DIquASKBOthjxnu2R5G/52wqIfwv/K1dFwkS4Jad+RhYAZba/
-         sPBTwZHz/yE0Dyr9D9tlB9qIXIYbWuuJLZY0hYihOtod9T1zptaCBw7nDDMK9kxRL9+C
-         D15x9hro9t3EPMZC7FbSPWA7MnISH/m80E/xTWgcYNU5RbwpTuxct8y7pk5bXVogAJeg
-         BsETK7ugE+iNwYnLxGKZGNIHDDX32m5tS4vZ08E0w3QJBpWHvxyrT2wxSurdjInGcsSH
-         wOBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZJ9W19F9BVtFlFnJBI6M88XF4BCu/CVE632l0mNkIIQ=;
-        b=G399SJbkYdAUjZL0Pi4L6xrldSk2TRzoKHibYrpTFsrPy+BUMHXzjM8l8exz07lKSN
-         5VVPLpGw6tW1JDLmLvY1KOQaWkZ//FhPKdnSavtlW8mXTDFnwDNJIGsMIMgHUTpAjVnx
-         /AYnKIt0XeHmkjDX9papimyDP5xM9/KURm4mFaQT9wFjDvdKiteE8ndU5RwZrg1Jnkpm
-         J8T0pQ71c+v6DzMdFBwcPXaket+QNGKj+fNKmUk9wBlQ4gI1C+9UO4j0yzGqDyFpWZRa
-         GhBySkwCg23UIm7qM3E62jgTxs3gJHg6rCZbG0KytLyVTkqQoMXd8he36IBu52t+x6+U
-         GaZw==
-X-Gm-Message-State: AOAM531la9r4Rj3F0dY2r5pLC+n8Oe3efJCw+I8S9ycVDeMXFpO6aOWl
-        BAlNt0Zps+rM1sSvvF4EW3vxcp7MTkY=
-X-Google-Smtp-Source: ABdhPJwtp2Spm/FITxeUSHHC6FaMEGtczgkWuSeK7WtAXvD4RyiWpvbxMlNKdUu0lggbf4qXzG/EyA==
-X-Received: by 2002:aa7:970e:0:b0:4a2:655f:7a12 with SMTP id a14-20020aa7970e000000b004a2655f7a12mr39360359pfg.65.1638829671878;
-        Mon, 06 Dec 2021 14:27:51 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id oj11sm337484pjb.46.2021.12.06.14.27.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 14:27:51 -0800 (PST)
-Subject: Re: [PATCH] dt-bindings: i2c: brcm,bcm2835-i2c: convert to YAML
- schema
-To:     David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stephen Warren <swarren@wwwdotorg.org>
-Cc:     ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211206184613.100809-1-david@ixit.cz>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <d337e0e9-7013-b10f-f696-5133da3490e5@gmail.com>
-Date:   Mon, 6 Dec 2021 14:27:49 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        with ESMTP id S235069AbhLGEZd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 6 Dec 2021 23:25:33 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A1FC061354
+        for <linux-i2c@vger.kernel.org>; Mon,  6 Dec 2021 20:22:03 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 4B14F8364E;
+        Tue,  7 Dec 2021 17:21:58 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1638850918;
+        bh=XNS7tMPMWsz0YQlXTN2pcDOyy/ddhlLbJmGey5fqZ3Q=;
+        h=From:To:Cc:Subject:Date;
+        b=Tzr45wDVXTgIXnVOTvLOSgsHgMrcbvWYlA6MT/CZHMqteKmjbAoq56JUWKgiKcS0d
+         GTuedigrpONq6LXK0RcRbZWeVpmiRS7Nx9/+lZlRJ5X5NmT3Ezom9e3PEm+C5sGBRS
+         6UCh60LGLJTXzXK/gjUMtPwPgimflyAWiuVV9SwLMeYnUtOopT79CnuPcfs/hrnkm3
+         jd7lkSPFToKtdk49yZjGPPvv02vgh6aag/TS/MmzTrz0RS0PYgftYd2UKO3idGN+hX
+         to6wT41Ty4Ja+eKyaVICDMIHFpb2neJ0CUWt9ipc5JDlpb+Olg9LP2QJdo5KSpEABD
+         xjIDdjDc9EkGw==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B61aee1660000>; Tue, 07 Dec 2021 17:21:58 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 208F913EC78;
+        Tue,  7 Dec 2021 17:21:58 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 1BD422A02A6; Tue,  7 Dec 2021 17:21:58 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     wsa@kernel.org, mbizon@freebox.fr
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] i2c: mpc: Use atomic read and fix break condition
+Date:   Tue,  7 Dec 2021 17:21:44 +1300
+Message-Id: <20211207042144.358867-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20211206184613.100809-1-david@ixit.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=XOZOtjpE c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IOMw9HtfNCkA:10 a=pVfueR0RV8q608vrjqwA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 12/6/21 10:46 AM, David Heidelberg wrote:
-> Switch the DT binding to a YAML schema to enable the DT validation.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+Maxime points out that the polling code in mpc_i2c_isr should use the
+_atomic API because it is called in an irq context and that the
+behaviour of the MCF bit is that it is 1 when the byte transfer is
+complete. All of this means the original code was effectively a
+udelay(100).
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Fix this by using readb_poll_timeout_atomic() and removing the negation
+of the break condition.
 
-Let me know if you are planning on converting more of the bcm2835
-binding so we don't overlap. Thanks!
--- 
-Florian
+Fixes: 4a8ac5e45cda ("i2c: mpc: Poll for MCF")
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+
+Maxime,
+
+Can you give this a test on your setup. I've tried it on the setup where
+I had the original problem that led to 4a8ac5e45cda and it seems OK so
+far (I'll leave my test running overnight).
+
+ drivers/i2c/busses/i2c-mpc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+index a6ea1eb1394e..53b8da6dbb23 100644
+--- a/drivers/i2c/busses/i2c-mpc.c
++++ b/drivers/i2c/busses/i2c-mpc.c
+@@ -636,7 +636,7 @@ static irqreturn_t mpc_i2c_isr(int irq, void *dev_id)
+ 	status =3D readb(i2c->base + MPC_I2C_SR);
+ 	if (status & CSR_MIF) {
+ 		/* Wait up to 100us for transfer to properly complete */
+-		readb_poll_timeout(i2c->base + MPC_I2C_SR, status, !(status & CSR_MCF)=
+, 0, 100);
++		readb_poll_timeout_atomic(i2c->base + MPC_I2C_SR, status, status & CSR=
+_MCF, 0, 100);
+ 		writeb(0, i2c->base + MPC_I2C_SR);
+ 		mpc_i2c_do_intr(i2c, status);
+ 		return IRQ_HANDLED;
+--=20
+2.34.1
+
