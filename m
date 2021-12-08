@@ -2,92 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C31C46CC38
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Dec 2021 05:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1C346CF55
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Dec 2021 09:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244214AbhLHERV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Dec 2021 23:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41608 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244203AbhLHERS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Dec 2021 23:17:18 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83677C061D5F
-        for <linux-i2c@vger.kernel.org>; Tue,  7 Dec 2021 20:13:47 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id x131so1308012pfc.12
-        for <linux-i2c@vger.kernel.org>; Tue, 07 Dec 2021 20:13:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=cGWxDwe8B66FlIrZtrergIqE5+JvdqJ48sEvPTrvhBJ9xEqZLGyWZmuSPdCEFce/7D
-         /sVR44uqtlb2dmBH+iwgt0kboAu4/HTy3OZt9J6nwOu1H5twbKwVBnMykOKrBLHcBBEb
-         cgMJ7/59oMUtMggaQ9x/N1xe+U0YzN1k+xfCXkO5L7YIW30RFDnvCB0PrD7sMExliX7S
-         joeNtgfdJmxv3l42BA4cQp1HveXj/LpauGoYMsZKrrlYurvW6FC9Nrn9v/z7yklCLUv+
-         2uZJGSHlx+O0Rg+LxyFVcXJ8erZC2O96QnEFLkA1QmSl94RBUxOevwSkF8rG8CDqN06m
-         KdcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=nGUCfp1gajXYF1Ub4yG7m6vrRKv8h5Rk061utjMZuaXeXu4cIciEuDKBC1GhkC+2Pq
-         VseEAULtzXrkeJCF/0fnYXRZS5nYcaQ+M2i8vEfDPfImDBMLkVQ+v/bMJTYO2uSEko3S
-         bB3jmbce2MGerR4K3Y8GyO4RV3k963TI91T7qVFYxS5hgzqlU47XbQOXPIaDhRRFcj0f
-         ONRneIYymlp05Hp+2xQgks72P/zIor+zw2U9tLb7g+hW/4eLPqJPuSMPxWaffDvst/u0
-         bwienp1u1qSeda3WXBsd07gKVjrZQlJixKpKw53s3tTAvZ5jotmC+iWcL9s49Hon5kU9
-         5RXQ==
-X-Gm-Message-State: AOAM533Touy40uyEnBspplgYbszz+4BI4tzx0DDzuzbYLhctPGxb0E6J
-        mAaQQ2SVAsHetcgZTowxL+pwl4HbwnUc2qYrq2EhJk16VvBaYA==
-X-Google-Smtp-Source: ABdhPJx498jQ3rDCAEAukf875uPMCUUvAAHHJyp/169nhahBv8dg1ZTt80/LmlBc7j967yPpWx87fZn4PQyrL4JX27A=
-X-Received: by 2002:a92:600f:: with SMTP id u15mr3954317ilb.292.1638936815828;
- Tue, 07 Dec 2021 20:13:35 -0800 (PST)
+        id S229543AbhLHIta (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Dec 2021 03:49:30 -0500
+Received: from www.zeus03.de ([194.117.254.33]:51506 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229534AbhLHIt3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 8 Dec 2021 03:49:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=hKlYOOujtt6xvfk3cIOEDYTH9sV
+        0I+ud6x4mCtg+Q+M=; b=Jk2Y5iuiYVAILM+HMKXij6N83j7g9dy/9TB+SmXjKIJ
+        esQJsJERrZXPlIXZGlQgYzSd38yIHj/ZYj/x4I/pkqul801S2p0qE0oeGhAaT+m8
+        I+ZqDOHovqZRk1ddPubPILBF+Fw3uLJ13t0vqur8wX9yKhtGdONgm+zCMhVkv8HQ
+        =
+Received: (qmail 562677 invoked from network); 8 Dec 2021 09:45:56 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Dec 2021 09:45:56 +0100
+X-UD-Smtp-Session: l3s3148p1@QeJ6hJ7SpLIgAwDPXwXFABlafC1M4YKF
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH 1/2] i2c: rcar: update to new DMAENGINE API when terminating
+Date:   Wed,  8 Dec 2021 09:45:42 +0100
+Message-Id: <20211208084543.20181-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:35
- -0800 (PST)
-Reply-To: dj0015639@gmail.com
-From:   David Jackson <enkenpaul@gmail.com>
-Date:   Wed, 8 Dec 2021 05:13:35 +0100
-Message-ID: <CAG7-cQ_JEx-8fDdxn0Ex314ViSE32kaUjoR=sUvV7wmCUiKRGw@mail.gmail.com>
-Subject: FEDERAL BUREAU OF INVESTIGATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Our Ref: RTB /SNT/STB
-To: Beneficiary
+dmaengine_terminate_all() is deprecated. When converting the existing
+calls, it turned out that the termination in the interrupt handlers was
+superfluous and only a side effect of simply calling
+rcar_i2c_cleanup_dma(). As either no DMA transfers have been submitted
+yet or the last one has successfully completed, there is nothing to
+terminate and we can leave it out. So, merge the DMA unmap and cleanup
+function to save some code. Then, add a flag if the new cleanup function
+needs to terminate DMA. This is only the case for the erorr handling in
+the main thread, so we can finally switch from dmaengine_terminate_all()
+to dmaengine_terminate_sync() here.
 
-This is FBI special agents, David Jackson. I was delegated along side
-others by the United Nations to investigate scammers who has been in
-the business of swindling foreigners especially those that has one
-form of transaction/contracts and another. Please be informed that in
-the course of our investigation, we detected that your name and
-details in our Scammed Monitoring Network. We also found out that you
-were scammed of a huge sum of money by scammers via Western union and
-MoneyGram. Be informed here that in a bid to alleviate the suffering
-of scammed victims, the United Nations initiated this compensation
-program and therefore, you are entitled to the sum of Five Million Two
-Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
-victim.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/i2c/busses/i2c-rcar.c | 26 +++++++++-----------------
+ 1 file changed, 9 insertions(+), 17 deletions(-)
 
-Note that the said fund will be transfer to you via the Citibank being
-the paying bank mandated by the United Nations officials.
+diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+index fc13511f4562..f71c730f9838 100644
+--- a/drivers/i2c/busses/i2c-rcar.c
++++ b/drivers/i2c/busses/i2c-rcar.c
+@@ -367,11 +367,15 @@ static void rcar_i2c_next_msg(struct rcar_i2c_priv *priv)
+ 	rcar_i2c_prepare_msg(priv);
+ }
+ 
+-static void rcar_i2c_dma_unmap(struct rcar_i2c_priv *priv)
++static void rcar_i2c_cleanup_dma(struct rcar_i2c_priv *priv, bool terminate)
+ {
+ 	struct dma_chan *chan = priv->dma_direction == DMA_FROM_DEVICE
+ 		? priv->dma_rx : priv->dma_tx;
+ 
++	/* only allowed from thread context! */
++	if (terminate)
++		dmaengine_terminate_sync(chan);
++
+ 	dma_unmap_single(chan->device->dev, sg_dma_address(&priv->sg),
+ 			 sg_dma_len(&priv->sg), priv->dma_direction);
+ 
+@@ -386,25 +390,13 @@ static void rcar_i2c_dma_unmap(struct rcar_i2c_priv *priv)
+ 	rcar_i2c_write(priv, ICDMAER, 0);
+ }
+ 
+-static void rcar_i2c_cleanup_dma(struct rcar_i2c_priv *priv)
+-{
+-	if (priv->dma_direction == DMA_NONE)
+-		return;
+-	else if (priv->dma_direction == DMA_FROM_DEVICE)
+-		dmaengine_terminate_all(priv->dma_rx);
+-	else if (priv->dma_direction == DMA_TO_DEVICE)
+-		dmaengine_terminate_all(priv->dma_tx);
+-
+-	rcar_i2c_dma_unmap(priv);
+-}
+-
+ static void rcar_i2c_dma_callback(void *data)
+ {
+ 	struct rcar_i2c_priv *priv = data;
+ 
+ 	priv->pos += sg_dma_len(&priv->sg);
+ 
+-	rcar_i2c_dma_unmap(priv);
++	rcar_i2c_cleanup_dma(priv, false);
+ }
+ 
+ static bool rcar_i2c_dma(struct rcar_i2c_priv *priv)
+@@ -456,7 +448,7 @@ static bool rcar_i2c_dma(struct rcar_i2c_priv *priv)
+ 					 DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+ 	if (!txdesc) {
+ 		dev_dbg(dev, "dma prep slave sg failed, using PIO\n");
+-		rcar_i2c_cleanup_dma(priv);
++		rcar_i2c_cleanup_dma(priv, false);
+ 		return false;
+ 	}
+ 
+@@ -466,7 +458,7 @@ static bool rcar_i2c_dma(struct rcar_i2c_priv *priv)
+ 	cookie = dmaengine_submit(txdesc);
+ 	if (dma_submit_error(cookie)) {
+ 		dev_dbg(dev, "submitting dma failed, using PIO\n");
+-		rcar_i2c_cleanup_dma(priv);
++		rcar_i2c_cleanup_dma(priv, false);
+ 		return false;
+ 	}
+ 
+@@ -846,7 +838,7 @@ static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
+ 
+ 	/* cleanup DMA if it couldn't complete properly due to an error */
+ 	if (priv->dma_direction != DMA_NONE)
+-		rcar_i2c_cleanup_dma(priv);
++		rcar_i2c_cleanup_dma(priv, true);
+ 
+ 	if (!time_left) {
+ 		rcar_i2c_init(priv);
+-- 
+2.30.2
 
-However, we have to inform you that we have been able to arrest some
-of the swindlers who has been in this illicit business and will all be
-prosecuted accordingly. Be informed as well that we have limited time
-to stay back here, so we will advice that you urgently respond to this
-message ASAP. And do not inform any of the people that collected money
-from you before now about this new development to avoid jeopardizing
-our investigation. All you need to do is to follow our instruction and
-receive your compensation accordingly as directed by the United
-Nations.
-
-We urgently wait to receive your response.
-
-Regards,
-DAVID JACKSON
-FEDERAL BUREAU OF INVESTIGATION
-INVESTIGATION ON ALL ONLINE WIRE TRANSFER
