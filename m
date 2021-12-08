@@ -2,101 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6A246D146
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Dec 2021 11:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C1C46D2F1
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Dec 2021 13:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbhLHKt3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Dec 2021 05:49:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S232941AbhLHMLF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Dec 2021 07:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbhLHKt3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Dec 2021 05:49:29 -0500
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDF4C061A32
-        for <linux-i2c@vger.kernel.org>; Wed,  8 Dec 2021 02:45:56 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:a0bd:6217:e9a0:bd39])
-        by andre.telenet-ops.be with bizsmtp
-        id Tmlt2600G2LoXaB01mltQB; Wed, 08 Dec 2021 11:45:53 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1muuSO-003dvS-SU; Wed, 08 Dec 2021 11:45:52 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1muuD7-00BVez-IR; Wed, 08 Dec 2021 11:30:05 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] dt-bindings: at24: Rework special case compatible handling
-Date:   Wed,  8 Dec 2021 11:30:03 +0100
-Message-Id: <9ca85ea0eda03d581ccb435052cf37ba19000c3b.1638959309.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232901AbhLHMLE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Dec 2021 07:11:04 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80409C061746
+        for <linux-i2c@vger.kernel.org>; Wed,  8 Dec 2021 04:07:32 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id s11so1970825ilv.3
+        for <linux-i2c@vger.kernel.org>; Wed, 08 Dec 2021 04:07:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=N9iOXIxnGllI9nJIotJm/mfLnkKWsCvBZ6XVxwblbkY=;
+        b=SfIJC+0+ob2zMtawNxsZ9KWgiN7E4Y3Il2SNC4dxiaPjNeRhv9UpiGJsRv/rmw/feL
+         PIwW/SKSSlBarUC3bfVqLdUUsqO8li+g1l3n9UwHBKaxEtlIi03bQFTS85ChkkwYjj3c
+         mnfuGnvtcszqbKzS+Zl02Kg3lAmv1P2/fKQZBK4Y9uQ+AFKpORDjn4wdTpp6deWDg6j5
+         bB1T1OIxKT62hjteq2VRKuNNx5SyaB6Z+j1sHJ5fbbzWEYXRXNVMoT66hAKqEZ9Ec/xz
+         NbNTvMDWhyTV233pYsGgxiRk+bedGB3QUAdXVhO58yxgsJ4KqG/hh6FTco2XMGbt+jyR
+         lIAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=N9iOXIxnGllI9nJIotJm/mfLnkKWsCvBZ6XVxwblbkY=;
+        b=bpLZLXdqD2TBTjTq4Qpvzmc+BZ3TLwSbh+XwaeWIEVSAsXvb39sv4VaZaD1Yh+HRKB
+         fbcYQ3Jt6IEn+rVY1G5Q/d5fhX65SgxDrnJ1u3GMrvoljtJ+yvRuey0kYbpZiHZxz2d/
+         ymbPnpMAchg7IKxICO35C8gW4J4JsLwn94p3hij+wzN1XQ29sJtB+uDysUULzK0x+5q+
+         i6S2hGvhXl90EW74mCnx2KsbePoz8A7tqHzrUtA9rOSKyiauYiy1MORltzhQq8BgIjO0
+         svGHRZLPz+CEh3oCybyAYmKH3/1ITHpe116i2PZg+mxZBAdazo9FKx4WaWvQvBDscn02
+         Tffg==
+X-Gm-Message-State: AOAM5332seBPmg70NNsrZTDNwCPIeJgjZcx3e6jBkmrAgcboeVf/u65g
+        6mEZpTVh0KzjW/+/sfD6NloPJFqFfFgqx82MT78=
+X-Google-Smtp-Source: ABdhPJwCLpUajKm1Ru3FgSl+R2KmBQLlQ3iZS4HV8Bk8XRXTzaFYvZdgWHLRbqJicaaKl1Qu8COzJ5UlmJciiF+Ut7g=
+X-Received: by 2002:a05:6e02:17c9:: with SMTP id z9mr6441037ilu.106.1638965251781;
+ Wed, 08 Dec 2021 04:07:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6e02:2167:0:0:0:0 with HTTP; Wed, 8 Dec 2021 04:07:31
+ -0800 (PST)
+From:   Vaqif outreach <vaqif.outreach2@gmail.com>
+Date:   Wed, 8 Dec 2021 15:07:31 +0300
+Message-ID: <CAJYkiUYqqRh_GP5QoYBEdEdwk+JT+3FhSs=zzj_18MgaZyzaDA@mail.gmail.com>
+Subject: =?UTF-8?Q?Hallo=21=21_Guten_Tag_Empf=C3=A4nger?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Sort the compatible values for the special cases by EEPROM size, like is
-done for the normal cases.
-Combine entries with a common fallback using enums, to compact the
-table.
+Hallo!! Guten Tag Empf=C3=A4nger
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- .../devicetree/bindings/eeprom/at24.yaml      | 25 ++++++++-----------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Ich bin Hamid Abass, ein Mitarbeiter der=
+ VakifBank, T=C3=BCrkei.
+Ich habe Sie wegen eines verstorbenen Kunden kontaktiert, der 2003 bei
+einem Autounfall auf der Istanbuler Autobahn ums Leben kam und Ihr
+Interesse w=C3=A4re dankbar. Er war mir ein vertrauter Kunde.
+Vor seinem Tod hatte mein Mandant 36 Millionen US-Dollar ($
+36.000.000,00) in der Obhut meines Finanzinstituts hier in der T=C3=BCrkei
+hinterlassen Mittel. Leider hatte er zum Zeitpunkt seines Todes kein
+Testament.
+=C2=A0 =C2=A0 =C2=A0 =C2=A0Alle unternommenen Bem=C3=BChungen lie=C3=9Fen k=
+eine Verbindung zu einem
+seiner Familienmitglieder erkennen. Das neue EU-Erbrecht / Gutschrift
+/ Fonds legt jedoch eine Frist fest, innerhalb derer solche
+Gutschriften angenommen werden k=C3=B6nnen. Das Finanzinstitut hat mich
+angewiesen, das n=C3=A4chste Familienmitglied bereitzustellen, das die
+Gelder anfordern wird, und wird dem Finanzinstitut durch die
+Weigerung, auf dieses Ultimatum zu reagieren, gesetzlich erlauben,
+diese Gelder an die EU-Zentralbank als unaufgeforderte Gelder zu
+melden.
+=C2=A0 =C2=A0 =C2=A0 Mein Kollege und ich haben alle notwendigen Voraussetz=
+ungen f=C3=BCr
+die Freigabe dieser Mittel geschaffen, und ich beabsichtige, Ihnen als
+Beg=C3=BCnstigten diese Gelegenheit zu pr=C3=A4sentieren. Bitte beachten Si=
+e,
+dass mir alle notwendigen Informationen/Dokumentationen zu diesem
+Fonds rechtlich zur Verf=C3=BCgung gestellt werden. Bitte senden Sie mir
+Ihre Kommentare, indem Sie eine Antwort an diese E-Mail-Adresse
+senden:=C2=A0mortgagealtegra@gmail.com
 
-diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-index 4c5396a9744f68f5..8b9f230e84156b5b 100644
---- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-+++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-@@ -95,17 +95,20 @@ properties:
-       # These are special cases that don't conform to the above pattern.
-       # Each requires a standard at24 model as fallback.
-       - items:
--          - const: nxp,se97b
--          - const: atmel,24c02
-+          - enum:
-+              - rohm,br24g01
-+              - rohm,br24t01
-+          - const: atmel,24c01
-       - items:
--          - const: onnn,cat24c04
--          - const: atmel,24c04
-+          - enum:
-+              - nxp,se97b
-+              - renesas,r1ex24002
-+          - const: atmel,24c02
-       - items:
--          - const: onnn,cat24c05
-+          - enum:
-+              - onnn,cat24c04
-+              - onnn,cat24c05
-           - const: atmel,24c04
--      - items:
--          - const: renesas,r1ex24002
--          - const: atmel,24c02
-       - items:
-           - const: renesas,r1ex24016
-           - const: atmel,24c16
-@@ -115,12 +118,6 @@ properties:
-       - items:
-           - const: renesas,r1ex24128
-           - const: atmel,24c128
--      - items:
--          - const: rohm,br24g01
--          - const: atmel,24c01
--      - items:
--          - const: rohm,br24t01
--          - const: atmel,24c01
- 
-   label:
-     description: Descriptive name of the EEPROM.
--- 
-2.25.1
-
+Gr=C3=BC=C3=9Fe
+Hamid Abas
