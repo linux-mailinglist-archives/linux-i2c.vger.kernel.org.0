@@ -2,129 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD32146CF57
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Dec 2021 09:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6A246D146
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Dec 2021 11:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbhLHIta (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Dec 2021 03:49:30 -0500
-Received: from www.zeus03.de ([194.117.254.33]:51526 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229540AbhLHIt3 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 8 Dec 2021 03:49:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=sde5C8iKX6z/QR
-        RzCq5HMFRRgs1YJgDByVp81kFPX/o=; b=lqQANUgQqqFcVMFzB2G79/Qbc2KxNm
-        5OSJIgXr8cvafh09wLQb5lpBkvH9ALdZfb5eSf+ALaaR2KG4aHu/NNN72OvpwIsC
-        MHYjaEUBJ1ONKDLmcH0JhMmp6ELi4Xj9XuA+hYOLeHZ/SyyiyWYyyqXpeKx/e9uY
-        Fv1FJOQG14NwY=
-Received: (qmail 562706 invoked from network); 8 Dec 2021 09:45:56 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Dec 2021 09:45:56 +0100
-X-UD-Smtp-Session: l3s3148p1@SFmxhJ7SprIgAwDPXwXFABlafC1M4YKF
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH 2/2] i2c: sh_mobile: update to new DMAENGINE API when terminating
-Date:   Wed,  8 Dec 2021 09:45:43 +0100
-Message-Id: <20211208084543.20181-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211208084543.20181-1-wsa+renesas@sang-engineering.com>
-References: <20211208084543.20181-1-wsa+renesas@sang-engineering.com>
+        id S231844AbhLHKt3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Dec 2021 05:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229528AbhLHKt3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Dec 2021 05:49:29 -0500
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDF4C061A32
+        for <linux-i2c@vger.kernel.org>; Wed,  8 Dec 2021 02:45:56 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:a0bd:6217:e9a0:bd39])
+        by andre.telenet-ops.be with bizsmtp
+        id Tmlt2600G2LoXaB01mltQB; Wed, 08 Dec 2021 11:45:53 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1muuSO-003dvS-SU; Wed, 08 Dec 2021 11:45:52 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1muuD7-00BVez-IR; Wed, 08 Dec 2021 11:30:05 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] dt-bindings: at24: Rework special case compatible handling
+Date:   Wed,  8 Dec 2021 11:30:03 +0100
+Message-Id: <9ca85ea0eda03d581ccb435052cf37ba19000c3b.1638959309.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-dmaengine_terminate_all() is deprecated. When converting the existing
-calls, it turned out that the termination in the DMA setup and callback
-were superfluous and only a side effect of simply calling
-rcar_i2c_cleanup_dma(). As either no DMA transfers have been submitted
-yet or the last one has successfully completed, there is nothing to
-terminate and we can leave it out. So, merge the DMA unmap and cleanup
-function to save some code. Then, add a flag if the new cleanup function
-needs to terminate DMA. This is only the case for the erorr handling in
-the main thread, so we can finally switch from dmaengine_terminate_all()
-to dmaengine_terminate_sync() here.
+Sort the compatible values for the special cases by EEPROM size, like is
+done for the normal cases.
+Combine entries with a common fallback using enums, to compact the
+table.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/i2c/busses/i2c-sh_mobile.c | 26 +++++++++-----------------
- 1 file changed, 9 insertions(+), 17 deletions(-)
+ .../devicetree/bindings/eeprom/at24.yaml      | 25 ++++++++-----------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-sh_mobile.c b/drivers/i2c/busses/i2c-sh_mobile.c
-index db8fa4186814..7b8caf172851 100644
---- a/drivers/i2c/busses/i2c-sh_mobile.c
-+++ b/drivers/i2c/busses/i2c-sh_mobile.c
-@@ -442,34 +442,26 @@ static irqreturn_t sh_mobile_i2c_isr(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
+diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+index 4c5396a9744f68f5..8b9f230e84156b5b 100644
+--- a/Documentation/devicetree/bindings/eeprom/at24.yaml
++++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+@@ -95,17 +95,20 @@ properties:
+       # These are special cases that don't conform to the above pattern.
+       # Each requires a standard at24 model as fallback.
+       - items:
+-          - const: nxp,se97b
+-          - const: atmel,24c02
++          - enum:
++              - rohm,br24g01
++              - rohm,br24t01
++          - const: atmel,24c01
+       - items:
+-          - const: onnn,cat24c04
+-          - const: atmel,24c04
++          - enum:
++              - nxp,se97b
++              - renesas,r1ex24002
++          - const: atmel,24c02
+       - items:
+-          - const: onnn,cat24c05
++          - enum:
++              - onnn,cat24c04
++              - onnn,cat24c05
+           - const: atmel,24c04
+-      - items:
+-          - const: renesas,r1ex24002
+-          - const: atmel,24c02
+       - items:
+           - const: renesas,r1ex24016
+           - const: atmel,24c16
+@@ -115,12 +118,6 @@ properties:
+       - items:
+           - const: renesas,r1ex24128
+           - const: atmel,24c128
+-      - items:
+-          - const: rohm,br24g01
+-          - const: atmel,24c01
+-      - items:
+-          - const: rohm,br24t01
+-          - const: atmel,24c01
  
--static void sh_mobile_i2c_dma_unmap(struct sh_mobile_i2c_data *pd)
-+static void sh_mobile_i2c_cleanup_dma(struct sh_mobile_i2c_data *pd, bool terminate)
- {
- 	struct dma_chan *chan = pd->dma_direction == DMA_FROM_DEVICE
- 				? pd->dma_rx : pd->dma_tx;
- 
-+	/* only allowed from thread context! */
-+	if (terminate)
-+		dmaengine_terminate_sync(chan);
-+
- 	dma_unmap_single(chan->device->dev, sg_dma_address(&pd->sg),
- 			 pd->msg->len, pd->dma_direction);
- 
- 	pd->dma_direction = DMA_NONE;
- }
- 
--static void sh_mobile_i2c_cleanup_dma(struct sh_mobile_i2c_data *pd)
--{
--	if (pd->dma_direction == DMA_NONE)
--		return;
--	else if (pd->dma_direction == DMA_FROM_DEVICE)
--		dmaengine_terminate_sync(pd->dma_rx);
--	else if (pd->dma_direction == DMA_TO_DEVICE)
--		dmaengine_terminate_sync(pd->dma_tx);
--
--	sh_mobile_i2c_dma_unmap(pd);
--}
--
- static void sh_mobile_i2c_dma_callback(void *data)
- {
- 	struct sh_mobile_i2c_data *pd = data;
- 
--	sh_mobile_i2c_dma_unmap(pd);
-+	sh_mobile_i2c_cleanup_dma(pd, false);
- 	pd->pos = pd->msg->len;
- 	pd->stop_after_dma = true;
- 
-@@ -549,7 +541,7 @@ static void sh_mobile_i2c_xfer_dma(struct sh_mobile_i2c_data *pd)
- 					 DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
- 	if (!txdesc) {
- 		dev_dbg(pd->dev, "dma prep slave sg failed, using PIO\n");
--		sh_mobile_i2c_cleanup_dma(pd);
-+		sh_mobile_i2c_cleanup_dma(pd, false);
- 		return;
- 	}
- 
-@@ -559,7 +551,7 @@ static void sh_mobile_i2c_xfer_dma(struct sh_mobile_i2c_data *pd)
- 	cookie = dmaengine_submit(txdesc);
- 	if (dma_submit_error(cookie)) {
- 		dev_dbg(pd->dev, "submitting dma failed, using PIO\n");
--		sh_mobile_i2c_cleanup_dma(pd);
-+		sh_mobile_i2c_cleanup_dma(pd, false);
- 		return;
- 	}
- 
-@@ -698,7 +690,7 @@ static int sh_mobile_xfer(struct sh_mobile_i2c_data *pd,
- 		if (!time_left) {
- 			dev_err(pd->dev, "Transfer request timed out\n");
- 			if (pd->dma_direction != DMA_NONE)
--				sh_mobile_i2c_cleanup_dma(pd);
-+				sh_mobile_i2c_cleanup_dma(pd, true);
- 
- 			err = -ETIMEDOUT;
- 			break;
+   label:
+     description: Descriptive name of the EEPROM.
 -- 
-2.30.2
+2.25.1
 
