@@ -2,107 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6950246E4B2
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 09:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8740646E53A
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 10:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233176AbhLIJAi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Dec 2021 04:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbhLIJAi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 04:00:38 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750A7C061746;
-        Thu,  9 Dec 2021 00:57:05 -0800 (PST)
+        id S231191AbhLIJOn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Dec 2021 04:14:43 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:45748 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229379AbhLIJOn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 04:14:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B42ECCE245E;
-        Thu,  9 Dec 2021 08:57:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE2DC004DD;
-        Thu,  9 Dec 2021 08:57:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6EE47CE24D8;
+        Thu,  9 Dec 2021 09:11:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0A1C004DD;
+        Thu,  9 Dec 2021 09:11:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639040221;
-        bh=HUS9Ptxfx1asXriXFVwCYuojXtKlYmv3/KEbAbzET0s=;
+        s=k20201202; t=1639041066;
+        bh=lIySVKXJuzGaf+4L/Kkc4vKVZBxYKOBXLWu6InjMYnc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LNK7id6T0M3fR3WbL33MKzfJGTaydjTX9Yii7StWqsEjMkHNxMddbLU3KCqdN330C
-         iqvqvaMFVKSga6+n9NB6IqtoiZR8EH/flgdu93L052OBfNyVNL4dUyPNiAB8dwbmWD
-         vboOOEco3u78aSMrvshsFXV2WjKJJ6hgvc6sBsU7rRxaaFpwkqWfCv8EHHzsWDrp2L
-         y1/qh64t1+HGvTs1hTipMNrOzlXQNVQt92j+hWy2TNafd5vRJrPB3Cq4/MtnlI+GL1
-         0fN4aiv61TlPYDDPlZK6I76FnsVgy9R6eGWy4JxrYRKB/BsOEHW7HxmkJ+NrrJPAVu
-         zREt2HRf22KUw==
-Date:   Thu, 9 Dec 2021 09:56:58 +0100
+        b=YzxCZutR528C/jiJpyR77xJewU1gXCej9Lap4rPnXSAUOGhHaG+rmcBEvUAdtG2Yz
+         u3wIxbpcURLID0ZFTGDnhfyv9VEw7YUuiPMsmsU6GRFIkF5OVXhlJCvAUBhxkILxm4
+         A8hll0Ih5VoFDRQbQpZbiQWDP3yZXqniavr2X4NoP0Lmf9lImGNuLXz6aNbLiqn8Pj
+         M3KAovvuu/fU67RlykNI9c0BrBN+smwoseHJvvdAMl2lzEAMRIJrUB1DsjOiY54Lli
+         u37m27sq/tar7nNCxdOj0zUrBgOlHbrk9T10AUIWlML+RhsGJZHvNrzuoUPJtZ89qh
+         5Bh1fq9rEyrxQ==
+Date:   Thu, 9 Dec 2021 10:11:03 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stephen Warren <swarren@wwwdotorg.org>,
-        ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: brcm,bcm2835-i2c: convert to YAML
- schema
-Message-ID: <YbHE2nR2T+o9o8ji@ninjato>
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND 1/8] dt-bindings: i2c: exynos5: Convert to
+ dtschema
+Message-ID: <YbHIJ7zFCHO6XkOO@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stephen Warren <swarren@wwwdotorg.org>,
-        ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211206184613.100809-1-david@ixit.cz>
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+References: <20211204215820.17378-1-semen.protsenko@linaro.org>
+ <20211204215820.17378-2-semen.protsenko@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xJzInEz65zJn2DKF"
+        protocol="application/pgp-signature"; boundary="giaOf9sbUdGXrwm3"
 Content-Disposition: inline
-In-Reply-To: <20211206184613.100809-1-david@ixit.cz>
+In-Reply-To: <20211204215820.17378-2-semen.protsenko@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---xJzInEz65zJn2DKF
+--giaOf9sbUdGXrwm3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 06, 2021 at 07:46:12PM +0100, David Heidelberg wrote:
-> Switch the DT binding to a YAML schema to enable the DT validation.
+On Sat, Dec 04, 2021 at 11:58:13PM +0200, Sam Protsenko wrote:
+> Convert Samsung Exynos High Speed I2C bindings doc to DT schema format.
 >=20
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+> Changes during bindings conversion:
+> 1. Added missing required clock properties (driver fails when it's
+>    unable to get the clock)
+> 2. Removed properties and descriptions that can be found in
+>    schemas/i2c/i2c-controller.yaml [1]
+> 3. Fixed the example so it can be validated by dtschema
+>=20
+> [1] https://github.com/robherring/dt-schema/blob/master/schemas/i2c/i2c-c=
+ontroller.yaml
+>=20
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 Applied to for-next, thanks!
 
-David: Please quote only relevant parts of the messages when replying.
-You quoted Florian's tags as well and so they ended up twice. Also, it
-is easier to read, then.
 
-
---xJzInEz65zJn2DKF
+--giaOf9sbUdGXrwm3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxxNoACgkQFA3kzBSg
-Kbanow//U0RpDjbOB8K6jH1RIrbx00AN3tnq7Cu0C0YP/0CSQ5si9aoNbirxI46o
-kjEV5NAgHxZKjo6wfz9ZMsenfqarDC40XRPs+JVsY2LaMWA6/i/8Lc2WPkpV8B4S
-ulkhIqW59iC9cMEGGgfNTU9euvRzqtfMQYYXVCwqXA8P4rw0F+7CrmyU/MtCec0H
-YxoHG/wiQyy4cMVN+NWYLA3pQVccb9QDO8DUBe4tKKhFUOYcchIZNA1u1MbYTA5X
-TKcSYj0RGWz8Ut5yxHji1nJf9g7G8ajEnV7m/kWmx30o1A2Q2yRmYah18j/6YEG9
-aQGVglG14ZcaE9vHxoQGMuy7KwTjX1ECyOg4EeQKMUQRi0tGM4MHd7Zy1+y5P5qG
-qZwgtx0P4uGIKGk6o9rhHDr7D/OeTxl0eW6CFJXylqR9giFrzPkRxgUJIo4+KA19
-eyZ4yGCPMIWC4HzCYPP3TfzYD6etk7d7b4i/1BYGS1AHqzXxVxiayO6wlSHAXdWz
-hNMP05D7kpWpADnSzrmLywvb3LVXKEg32H+hVobZ8SHUHvsGN76SXFU6m2WNHGAb
-rFPwYfiaa0WqGSx7ZmfmTGT2YoAoAk7NOz/F2/sfmaYIJbx+35BhV7TsOuxGVz/S
-lwGMfZ2greQ1GfJxINEZNaKKHr5nuZa5Q64oS28mIItYaROkykI=
-=oC/n
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxyCcACgkQFA3kzBSg
+Kbbgfg/+N6I9YiB/OeiO8TIJzRRs46AjSaMxoUTMGyNoeAdTKdGEge6M69k5vEhW
+GIYg//REisF8PaUa5Ip9AyJ+MzFb8wXxN9yP/MNRgLbwiJqcPbfkFyRroCSGzKnw
+B/VnjQoxfrtN2tZNKkww4WrFxszd6o6v/7HHjyacasSSQJuejq3eNdU37MeTKnN8
+J4G0fsNLg3TSdRMu2VA18smaapalnswO57tQ0PjN5Y5c2b4LYvA22xTo8muW+AON
+ywd0YD3M9FgBMUdU4udl3eNdZf6QklZAyCkdiascvvXJJpOLMCP7CKygG+wNMER8
+fcTnlRdG3DNLMedBSNTK92sl1whq9D2HL13A8QZpv7yTpqViZ9XveTsTPjbNe5pF
++UiHJ3WcuiKjq13j3dzeOqV0qc0Q6Fx5cyDzjUHbYYk9EEMKFN3YY+4PFFiGkr5Q
+sz3gxcU5QYfv3zQUTYEDi6F7RxxW41bL0vNsfGtmP6kdR+ap8RZQ247qtpM3xJ0b
+UUivFs3JrNU2Az8wy0HyWvNgOURnDPWSD2pijBGds653k3R9wrCxIZUvYVmQ2wbE
+E5Rvog3ONBZ7AX1GDIz0FCW2gw2BKdSoyh16GeVXPGMd6554Mm5l7RMNYX/PieiZ
+Yh4xXqE6BawZXGtSXtGLj7oBmVKaebGwVDBpU3OmOuRYYfuwkHU=
+=YpRu
 -----END PGP SIGNATURE-----
 
---xJzInEz65zJn2DKF--
+--giaOf9sbUdGXrwm3--
