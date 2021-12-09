@@ -2,191 +2,223 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B21D646E95F
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 14:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB6D46E993
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 15:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbhLINwZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Dec 2021 08:52:25 -0500
-Received: from mail-bn7nam10on2045.outbound.protection.outlook.com ([40.107.92.45]:21985
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230072AbhLINwY (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:52:24 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LCAIfRDvTY8+JNqIWBAI/gcvWMWtWxS3vH9QbCwFEtWoDL8+F5JtUUzIPkJm6CbpWdRDz4I2xnRxJdNNPuL74YiqClIlOzdqw55WgaLARZ+VoQptrYtFvUyUj78Ee6q+j6yEibN9zdcaouec6I8cG0yxBz8x7OLS6xX7V8F7Vh+Pxpc9Lm+x5wN5zuFw0wP1SVCEb1rN1as5gaQ4y4q60q6X/EFRo5p19E480J3vk0CxogG2KAb3EP36kKIOiWOn5Jdq7mRt5+SMDHcSOC6VUqynLsoFtYLiTaBx3ypJlCITP5oO/ho3SzV2t1/yEbtbrotkDQhygU7LtN4awy4cpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=agjWDN8w5YqKO0JMoBb37V5H5doveDmbepbbLdVRE7E=;
- b=TNGZubU1Qdd3iERZzmE/+ARZ1ToWMmfHR1wDYnMzlqJ+CI7wItJ/isDR3wb/5rjmK0w7SOlb8slMlDeA7jtfEVxADZ4SaEGbzm3nl2jCuxHixxenwE+/Rdu+K2pECvJ3Jb4SWZD5guH1HEHoOvaKyoemNdW3WzPASIau4xKIhmDSpMylFLgVWzqPjydlZBUAehUIY2LruaiRKk+rroAq2aOUxiXGtWVAGavFrawmXvjASRcfBN2pm6V5qbjHWHBZzNyLsh51fo3Gj1QE3Njv4sHvPM/J9IlLdKxuUySrzzRV/YDy+rpN9RWN2fz4cv2ghxWBdVyAVTh9mLf5RIdn8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 203.18.50.14) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=agjWDN8w5YqKO0JMoBb37V5H5doveDmbepbbLdVRE7E=;
- b=KIH6iGgVbFadIk8QY/cd7xhGBR0lxj0x3b6giMpW0JyUaE1ubiugPywM3qMNteO6gn9fE/44LaOGf+qJzagTawwJHkjbeteyTroe+3zJZXP1dwN9pZCIrNoLzAWKSDmiR8BcGmSBAWieiFAEptlCz8tNDe/Q1DZjp2+DkQRCNo/mrEyWiZcmZ5XgsoCXRJ3oP3OW00+OOhXZTpS8uiRYuju0s1/W8xcPQatPmUmn9F47PU0t0622j1eTKw2Uf41lo8IYaYas6VBGx6tiDv8OJmQptLEfNICsKCWllAjSIyaBUxI/Oh1ktllnHVYt2zr0uVeqire+F+Gbdtgd4zo3JQ==
-Received: from BN9PR03CA0362.namprd03.prod.outlook.com (2603:10b6:408:f7::7)
- by MN2PR12MB4584.namprd12.prod.outlook.com (2603:10b6:208:24e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.11; Thu, 9 Dec
- 2021 13:48:48 +0000
-Received: from BN8NAM11FT058.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f7:cafe::1) by BN9PR03CA0362.outlook.office365.com
- (2603:10b6:408:f7::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12 via Frontend
- Transport; Thu, 9 Dec 2021 13:48:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 203.18.50.14)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 203.18.50.14 as permitted sender) receiver=protection.outlook.com;
- client-ip=203.18.50.14; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (203.18.50.14) by
- BN8NAM11FT058.mail.protection.outlook.com (10.13.177.58) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4755.13 via Frontend Transport; Thu, 9 Dec 2021 13:48:48 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HKMAIL103.nvidia.com
- (10.18.16.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
- 2021 13:48:32 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 9 Dec
- 2021 05:48:29 -0800
-Received: from kyarlagadda-linux.nvidia.com (172.20.187.5) by mail.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 9 Dec 2021 05:48:23 -0800
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     <andy.shevchenko@gmail.com>, <christian.koenig@amd.com>,
-        <digetx@gmail.com>, <dri-devel@lists.freedesktop.org>,
-        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <p.zabel@pengutronix.de>,
-        <sumit.semwal@linaro.org>, <thierry.reding@gmail.com>
-CC:     <akhilrajeev@nvidia.com>
-Subject: [PATCH] i2c: tegra: use i2c_timings for bus clock freq
-Date:   Thu, 9 Dec 2021 19:17:48 +0530
-Message-ID: <1639057668-14377-1-git-send-email-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        id S238316AbhLIOGw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Dec 2021 09:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238285AbhLIOGw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 09:06:52 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8FEC0617A2
+        for <linux-i2c@vger.kernel.org>; Thu,  9 Dec 2021 06:03:18 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id d10so12180089lfg.6
+        for <linux-i2c@vger.kernel.org>; Thu, 09 Dec 2021 06:03:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=64krO+V+IZo2Ha5bj0DHTuWWmyjAZcg9ZgxN6UxHjhc=;
+        b=QmbBl0RK8fMZW7jCPF4AINoMtMTkYKsKIpCpz9ztgxx2eFxIBhi2zZO21ITS+68I8x
+         NkQO2MVnoUpAVlObcrPPgXEV4XxhXwLTKWsiY07WpZHhMXE+cpw+I2ExQrqjqFQXNdwm
+         BGBogUE7ifomLMjvlPrfOJ1ApN304tZZW3KajiL3xrPSr7PSDHt3j8glSHbah0n0JYt7
+         e1BIWu0/xbBlTLJdwIqQ2nt5rJ5bgZbQxLzVfaww2giBpyw3H8rGAH+a4bX3rL2LX0js
+         57ndvMgd/chpxAUWC0IPIcWL8QLUCDdrxxzPGq0ED/g2xvZz968FXSAXFbWntbIJALOJ
+         afVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=64krO+V+IZo2Ha5bj0DHTuWWmyjAZcg9ZgxN6UxHjhc=;
+        b=OiB40EZvj/uaAckNtZ89KwoJFDrUePyugJfepToI1L9CGdc3H+Rk2A1bR6gN87Wer3
+         k4ZbT9+sUer+wl9tHkzkA4g0ukhY9ZiHHE3491M7Gl3Nk9TRRLPRs27goZNWAF20+A9d
+         W5CVDCcOMeJ/TkmVHsDU+7+7+ih8jladC32xK2kCya5S9GHaAWDKuQfCouuoW672cfnF
+         Lw4QL6gM+r/waMNQTQJBwuFw/iwVK6R1xyIRN3+UJViUXWAs7W52NI9VNGHLceaV5CTW
+         4k5n9TWk0bsbrfZWEaEz6xyRWf2a9tLxdPbSecJAWLmNtt1VfD38eEzU/mr29kFa29Wt
+         Rzow==
+X-Gm-Message-State: AOAM531UUYHoXO2w8C61G25dd7Pwjq9JXgWtHYmVulnRJYZbzcMj5Snc
+        fdlwAx5kXKvV3d62zucFekuIQQ==
+X-Google-Smtp-Source: ABdhPJzH+2XDoYBLN0Ewa6UxTwrV8nLvPrwWp9MqA9YDScekvmu/bEAAVXbMSBGr+tOHebmPSFZdYA==
+X-Received: by 2002:ac2:5615:: with SMTP id v21mr6418380lfd.112.1639058595951;
+        Thu, 09 Dec 2021 06:03:15 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id bp41sm539482lfb.129.2021.12.09.06.03.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 06:03:15 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH v3] i2c: exynos5: Add bus clock support
+Date:   Thu,  9 Dec 2021 16:03:13 +0200
+Message-Id: <20211209140313.14926-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8cde6373-903f-402b-c6ee-08d9bb1aa077
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4584:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4584DBCED9BA721CCD9C6126C0709@MN2PR12MB4584.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:513;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LeagAhG65+sliZ2LEnvznZxN78F3X758ZFHqL/ovQCg28EysL/ZWA4jysYhTdl04rCyEeIevxWetQZIZ/g/VZdPDwSEVd/Jemb4lBolyq6rh32yjWR6Fdasrdnq2hXHlOVrXmOHLc8GzJ3gr8xk/qv/VzVdcdBze0HNofKcS6LgbFXkGSilkTYBwgCEeUh38thpQTJB4/ZwZ9ZE5Xj13SislUIpgI0Cfpae2fU5utuS1s8o9slaBh4wzwOg4lXS3OIEibWeE914sg03gxAobDIZyPrY25Ii4hxIEH2muBJ+IO8koav4fJ4JgSxISSm+LMo4hcejs90tQ4IocBTF4c43N8P6rWST+EWXBH/01H1VQUvDKHLMNQdacOGeF1XX+FXCY8dqWUVuhaAa4vRV3jCazXseM7jpSKnqPMRk97SoBSVrcyzXl83jIDYhjgbzwMfRHJ+J6iAH9JaWIBshaf8zJpS6Cjw2J8VkWX2GoleJusQ1cQmj9gQjpUoytd0/cE5XMFl/UJmxiUaAMqs74nAmE5nZw7simzJ+VvIjNF/hEC27tPXVFUPvyAq+foxhJVyzArnePjswvDj8VXq9QS69I710gM9JBga1JtOPE/UQa/rcaJEVP0UchJGierR45i0aXMt0XA8YCcJdXJe8IEk1W8rSYt1kEg8l0HpKSB/eKlWRsJ6kIqd7tjVwksavjM7eiBDznHX3UDc310ntbaIac5AXlcDIHU6wEHKO9vd6F+Eiohj83IzqNZhYvcq7Owouso78x93BOHRTeaPsfwVAcvEBQfSpAADvf9FL917knVEpd3Wx+DnWpnAqFNR8S88BinE417KmTLiskbKvW/prvMEKD+ng40SO6kM84BIylvUThXLD5+HoVrPbiRM6YCVO5MoBFkFaGDVVAtobMOkQd7P/SNfrMawKaQFrG8DAqsPG7i7DmCUdJRZ3P9WTB
-X-Forefront-Antispam-Report: CIP:203.18.50.14;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:hkhybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(316002)(186003)(426003)(508600001)(7696005)(921005)(47076005)(70206006)(36756003)(36860700001)(34020700004)(26005)(110136005)(356005)(8676002)(83380400001)(4326008)(70586007)(2906002)(40460700001)(2616005)(5660300002)(86362001)(82310400004)(6666004)(966005)(107886003)(8936002)(7416002)(7636003)(336012)(83996005)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2021 13:48:48.0540
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cde6373-903f-402b-c6ee-08d9bb1aa077
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[203.18.50.14];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT058.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4584
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Use i2c_timings struct and corresponding methods to get bus clock frequency
+In new Exynos SoCs (like Exynos850) where HSI2C is implemented as a
+part of USIv2 block, there are two clocks provided to HSI2C controller:
+  - PCLK: bus clock (APB), provides access to register interface
+  - IPCLK: operating IP-core clock; SCL is derived from this one
 
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+Both clocks have to be asserted for HSI2C to be functional in that case.
+
+Add code to obtain and enable/disable PCLK in addition to already
+handled operating clock. Make it optional though, as older Exynos SoC
+variants only have one HSI2C clock.
+
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+Changes in v3:
+  - Rebased correctly on top of linux-next
 
-The patch is in response to the discussion in a previous patch to use
-i2c_timings struct for bus freq.
-ref. https://lkml.org/lkml/2021/11/25/767
+Changes in v2:
+  - Added R-b tag by Krzysztof Kozlowski
+  - Added R-b tag by Chanho Park
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index a5be8f0..ffd2ad2 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -246,7 +246,7 @@ struct tegra_i2c_hw_feature {
-  * @msg_buf: pointer to current message data
-  * @msg_buf_remaining: size of unsent data in the message buffer
-  * @msg_read: indicates that the transfer is a read access
-- * @bus_clk_rate: current I2C bus clock rate
-+ * @timings: i2c timings information like bus frequency
-  * @multimaster_mode: indicates that I2C controller is in multi-master mode
-  * @tx_dma_chan: DMA transmit channel
-  * @rx_dma_chan: DMA receive channel
-@@ -273,7 +273,7 @@ struct tegra_i2c_dev {
- 	unsigned int nclocks;
+ drivers/i2c/busses/i2c-exynos5.c | 46 ++++++++++++++++++++++++++------
+ 1 file changed, 38 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
+index c7e3cae99d13..693903e80892 100644
+--- a/drivers/i2c/busses/i2c-exynos5.c
++++ b/drivers/i2c/busses/i2c-exynos5.c
+@@ -182,7 +182,8 @@ struct exynos5_i2c {
+ 	unsigned int		irq;
  
- 	struct clk *div_clk;
--	u32 bus_clk_rate;
-+	struct i2c_timings timings;
+ 	void __iomem		*regs;
+-	struct clk		*clk;
++	struct clk		*clk;		/* operating clock */
++	struct clk		*pclk;		/* bus clock */
+ 	struct device		*dev;
+ 	int			state;
  
- 	struct completion msg_complete;
- 	size_t msg_buf_remaining;
-@@ -642,14 +642,14 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
- 	if (i2c_dev->is_vi)
- 		tegra_i2c_vi_init(i2c_dev);
+@@ -757,10 +758,14 @@ static int exynos5_i2c_xfer(struct i2c_adapter *adap,
+ 	struct exynos5_i2c *i2c = adap->algo_data;
+ 	int i, ret;
  
--	switch (i2c_dev->bus_clk_rate) {
-+	switch (i2c_dev->timings.bus_freq_hz) {
- 	case I2C_MAX_STANDARD_MODE_FREQ + 1 ... I2C_MAX_FAST_MODE_PLUS_FREQ:
- 	default:
- 		tlow = i2c_dev->hw->tlow_fast_fastplus_mode;
- 		thigh = i2c_dev->hw->thigh_fast_fastplus_mode;
- 		tsu_thd = i2c_dev->hw->setup_hold_time_fast_fast_plus_mode;
+-	ret = clk_enable(i2c->clk);
++	ret = clk_enable(i2c->pclk);
+ 	if (ret)
+ 		return ret;
  
--		if (i2c_dev->bus_clk_rate > I2C_MAX_FAST_MODE_FREQ)
-+		if (i2c_dev->timings.bus_freq_hz > I2C_MAX_FAST_MODE_FREQ)
- 			non_hs_mode = i2c_dev->hw->clk_divisor_fast_plus_mode;
- 		else
- 			non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
-@@ -685,7 +685,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
- 	clk_multiplier = (tlow + thigh + 2) * (non_hs_mode + 1);
++	ret = clk_enable(i2c->clk);
++	if (ret)
++		goto err_pclk;
++
+ 	for (i = 0; i < num; ++i) {
+ 		ret = exynos5_i2c_xfer_msg(i2c, msgs + i, i + 1 == num);
+ 		if (ret)
+@@ -768,6 +773,8 @@ static int exynos5_i2c_xfer(struct i2c_adapter *adap,
+ 	}
  
- 	err = clk_set_rate(i2c_dev->div_clk,
--			   i2c_dev->bus_clk_rate * clk_multiplier);
-+			   i2c_dev->timings.bus_freq_hz * clk_multiplier);
- 	if (err) {
- 		dev_err(i2c_dev->dev, "failed to set div-clk rate: %d\n", err);
- 		return err;
-@@ -724,7 +724,7 @@ static int tegra_i2c_disable_packet_mode(struct tegra_i2c_dev *i2c_dev)
- 	 * before disabling the controller so that the STOP condition has
- 	 * been delivered properly.
- 	 */
--	udelay(DIV_ROUND_UP(2 * 1000000, i2c_dev->bus_clk_rate));
-+	udelay(DIV_ROUND_UP(2 * 1000000, i2c_dev->timings.bus_freq_hz));
+ 	clk_disable(i2c->clk);
++err_pclk:
++	clk_disable(i2c->pclk);
  
- 	cnfg = i2c_readl(i2c_dev, I2C_CNFG);
- 	if (cnfg & I2C_CNFG_PACKET_MODE_EN)
-@@ -1254,7 +1254,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 	 * Total bits = 9 bits per byte (including ACK bit) + Start & stop bits
- 	 */
- 	xfer_time += DIV_ROUND_CLOSEST(((xfer_size * 9) + 2) * MSEC_PER_SEC,
--				       i2c_dev->bus_clk_rate);
-+				       i2c_dev->timings.bus_freq_hz);
+ 	return ret ?: num;
+ }
+@@ -807,10 +814,18 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 	}
  
- 	int_mask = I2C_INT_NO_ACK | I2C_INT_ARBITRATION_LOST;
- 	tegra_i2c_unmask_irq(i2c_dev, int_mask);
-@@ -1633,10 +1633,7 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
- 	bool multi_mode;
- 	int err;
+-	ret = clk_prepare_enable(i2c->clk);
++	i2c->pclk = devm_clk_get(&pdev->dev, "hsi2c_pclk");
++	if (IS_ERR(i2c->pclk))
++		i2c->pclk = NULL; /* pclk is optional */
++
++	ret = clk_prepare_enable(i2c->pclk);
+ 	if (ret)
+ 		return ret;
  
--	err = device_property_read_u32(i2c_dev->dev, "clock-frequency",
--				       &i2c_dev->bus_clk_rate);
--	if (err)
--		i2c_dev->bus_clk_rate = I2C_MAX_STANDARD_MODE_FREQ;
-+	i2c_parse_fw_timings(i2c_dev->dev, &i2c_dev->timings, true);
++	ret = clk_prepare_enable(i2c->clk);
++	if (ret)
++		goto err_pclk;
++
+ 	i2c->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(i2c->regs)) {
+ 		ret = PTR_ERR(i2c->regs);
+@@ -853,11 +868,15 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, i2c);
  
- 	multi_mode = device_property_read_bool(i2c_dev->dev, "multi-master");
- 	i2c_dev->multimaster_mode = multi_mode;
+ 	clk_disable(i2c->clk);
++	clk_disable(i2c->pclk);
+ 
+ 	return 0;
+ 
+  err_clk:
+ 	clk_disable_unprepare(i2c->clk);
++
++ err_pclk:
++	clk_disable_unprepare(i2c->pclk);
+ 	return ret;
+ }
+ 
+@@ -868,6 +887,7 @@ static int exynos5_i2c_remove(struct platform_device *pdev)
+ 	i2c_del_adapter(&i2c->adap);
+ 
+ 	clk_unprepare(i2c->clk);
++	clk_unprepare(i2c->pclk);
+ 
+ 	return 0;
+ }
+@@ -879,6 +899,7 @@ static int exynos5_i2c_suspend_noirq(struct device *dev)
+ 
+ 	i2c_mark_adapter_suspended(&i2c->adap);
+ 	clk_unprepare(i2c->clk);
++	clk_unprepare(i2c->pclk);
+ 
+ 	return 0;
+ }
+@@ -888,21 +909,30 @@ static int exynos5_i2c_resume_noirq(struct device *dev)
+ 	struct exynos5_i2c *i2c = dev_get_drvdata(dev);
+ 	int ret = 0;
+ 
+-	ret = clk_prepare_enable(i2c->clk);
++	ret = clk_prepare_enable(i2c->pclk);
+ 	if (ret)
+ 		return ret;
+ 
++	ret = clk_prepare_enable(i2c->clk);
++	if (ret)
++		goto err_pclk;
++
+ 	ret = exynos5_hsi2c_clock_setup(i2c);
+-	if (ret) {
+-		clk_disable_unprepare(i2c->clk);
+-		return ret;
+-	}
++	if (ret)
++		goto err_clk;
+ 
+ 	exynos5_i2c_init(i2c);
+ 	clk_disable(i2c->clk);
++	clk_disable(i2c->pclk);
+ 	i2c_mark_adapter_resumed(&i2c->adap);
+ 
+ 	return 0;
++
++err_clk:
++	clk_disable_unprepare(i2c->clk);
++err_pclk:
++	clk_disable_unprepare(i2c->pclk);
++	return ret;
+ }
+ #endif
+ 
 -- 
-2.7.4
+2.30.2
 
