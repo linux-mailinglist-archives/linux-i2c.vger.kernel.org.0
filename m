@@ -2,128 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB87746E49D
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 09:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6950246E4B2
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 09:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbhLIIys (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Dec 2021 03:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        id S233176AbhLIJAi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Dec 2021 04:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbhLIIyr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 03:54:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36EBC061746;
-        Thu,  9 Dec 2021 00:51:13 -0800 (PST)
+        with ESMTP id S232038AbhLIJAi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 04:00:38 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750A7C061746;
+        Thu,  9 Dec 2021 00:57:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85C74B82361;
-        Thu,  9 Dec 2021 08:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8A3C004DD;
-        Thu,  9 Dec 2021 08:51:10 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B42ECCE245E;
+        Thu,  9 Dec 2021 08:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE2DC004DD;
+        Thu,  9 Dec 2021 08:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639039871;
-        bh=PFw5JNdpaWY2OuAZ+jMV5B80awe6cfgQIRBi4sl+9qA=;
+        s=k20201202; t=1639040221;
+        bh=HUS9Ptxfx1asXriXFVwCYuojXtKlYmv3/KEbAbzET0s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cvZfnHgDKCiu3OO4yMcS4Pkp8vqz+JkE8XRat3X7OQN6Ah+KWucrqhkRbqbBpYNCM
-         enrcJME30V+lnDoF7fTJVqfunoRhCavie2MKnnnoXEuieXqNcuTnJ338HN+Jz/f+0m
-         7hPC9nhx3r9XZAuxcGZ+bkMYi5A+oxtyORhpKWsNM07ObAtcMWwoUjnvsrXHc8NPtQ
-         8/BmYB3Z8BbR818mJhIER1m8c4cE+TvdpY+6qe1ZhcIF0jXdl3oZRo0Ba2ZPZiiz52
-         iScZFVXxQFC/4mN3FX8kmJ5rvXxuatvLeuQb0bz6731gYUBxb28ByhZvTAcMHx89Yz
-         LADhKNF/PPokw==
-Date:   Thu, 9 Dec 2021 09:51:07 +0100
+        b=LNK7id6T0M3fR3WbL33MKzfJGTaydjTX9Yii7StWqsEjMkHNxMddbLU3KCqdN330C
+         iqvqvaMFVKSga6+n9NB6IqtoiZR8EH/flgdu93L052OBfNyVNL4dUyPNiAB8dwbmWD
+         vboOOEco3u78aSMrvshsFXV2WjKJJ6hgvc6sBsU7rRxaaFpwkqWfCv8EHHzsWDrp2L
+         y1/qh64t1+HGvTs1hTipMNrOzlXQNVQt92j+hWy2TNafd5vRJrPB3Cq4/MtnlI+GL1
+         0fN4aiv61TlPYDDPlZK6I76FnsVgy9R6eGWy4JxrYRKB/BsOEHW7HxmkJ+NrrJPAVu
+         zREt2HRf22KUw==
+Date:   Thu, 9 Dec 2021 09:56:58 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Conghui Chen <conghui.chen@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>, kernel@axis.com,
-        Jie Deng <jie.deng@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: virtio: fix completion handling
-Message-ID: <YbHDe+YLH+NZkrC0@ninjato>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stephen Warren <swarren@wwwdotorg.org>,
+        ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: brcm,bcm2835-i2c: convert to YAML
+ schema
+Message-ID: <YbHE2nR2T+o9o8ji@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Conghui Chen <conghui.chen@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>, kernel@axis.com,
-        Jie Deng <jie.deng@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <20211202153215.31796-1-vincent.whitchurch@axis.com>
+        David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stephen Warren <swarren@wwwdotorg.org>,
+        ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211206184613.100809-1-david@ixit.cz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ge0jWUKZVg17/s2k"
+        protocol="application/pgp-signature"; boundary="xJzInEz65zJn2DKF"
 Content-Disposition: inline
-In-Reply-To: <20211202153215.31796-1-vincent.whitchurch@axis.com>
+In-Reply-To: <20211206184613.100809-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---ge0jWUKZVg17/s2k
+--xJzInEz65zJn2DKF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 02, 2021 at 04:32:14PM +0100, Vincent Whitchurch wrote:
-> The driver currently assumes that the notify callback is only received
-> when the device is done with all the queued buffers.
+On Mon, Dec 06, 2021 at 07:46:12PM +0100, David Heidelberg wrote:
+> Switch the DT binding to a YAML schema to enable the DT validation.
 >=20
-> However, this is not true, since the notify callback could be called
-> without any of the queued buffers being completed (for example, with
-> virtio-pci and shared interrupts) or with only some of the buffers being
-> completed (since the driver makes them available to the device in
-> multiple separate virtqueue_add_sgs() calls).
->=20
-> This can lead to incorrect data on the I2C bus or memory corruption in
-> the guest if the device operates on buffers which are have been freed by
-> the driver.  (The WARN_ON in the driver is also triggered.)
->=20
->  BUG kmalloc-128 (Tainted: G        W        ): Poison overwritten
->  First byte 0x0 instead of 0x6b
->  Allocated in i2cdev_ioctl_rdwr+0x9d/0x1de age=3D243 cpu=3D0 pid=3D28
->  	memdup_user+0x2e/0xbd
->  	i2cdev_ioctl_rdwr+0x9d/0x1de
->  	i2cdev_ioctl+0x247/0x2ed
->  	vfs_ioctl+0x21/0x30
->  	sys_ioctl+0xb18/0xb41
->  Freed in i2cdev_ioctl_rdwr+0x1bb/0x1de age=3D68 cpu=3D0 pid=3D28
->  	kfree+0x1bd/0x1cc
->  	i2cdev_ioctl_rdwr+0x1bb/0x1de
->  	i2cdev_ioctl+0x247/0x2ed
->  	vfs_ioctl+0x21/0x30
->  	sys_ioctl+0xb18/0xb41
->=20
-> Fix this by calling virtio_get_buf() from the notify handler like other
-> virtio drivers and by actually waiting for all the buffers to be
-> completed.
->=20
-> Fixes: 3cfc88380413d20f ("i2c: virtio: add a virtio i2c frontend driver")
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
+
+David: Please quote only relevant parts of the messages when replying.
+You quoted Florian's tags as well and so they ended up twice. Also, it
+is easier to read, then.
 
 
---ge0jWUKZVg17/s2k
+--xJzInEz65zJn2DKF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxw3sACgkQFA3kzBSg
-KbZ56Q//SQjmtTthjdX/3a2BmHjSwbNESk51bmpkZ9Hyfy+niTnbTYs8EK9ED0jq
-T4Z/al1dGBVnqnfs9m28ZNv6YuoxMqBlPfXWFQcpuCbVTMvcgYGW5MR1kYv0txbu
-GM/pTQYmdIS6sTawSfHwyHKl5oAKgFWaTL3j1soih6aeyZ4ha6cfoL8dlt62hwmR
-LzSsMzuocxUws0TBZpaGkzMFsd5eFC7+wgQBpn3/rUxCp3j2IqBc5IS/QF8A8Lft
-0VxOudfwAFdY/hplnYEV3pObTyyAl5Y/8zAGMUF3l19MhLPjT0g5S0yNJCq2o/m/
-yVUqmDg4Il1kjQolTANxLEnlDdbtePPKGwPbY1ldhj2Ry18QXFzmsfZqQB8xwG9I
-YrxMI9oh3chLtqfgyWofYOkHGFMmYvhSO8yFOHT02jsU47k4My0eoOS2i4KyIjfM
-L2Ifug4+x6DdgdAHd3ygdEWfEpi6/5ozGFn4WO6uQS7vnIMtDPjZDABUnwra1guF
-twolE4AADmKiDg+n5AKnY2lQ+Z1eJf46H4QzHK0bmhWJHoF7NiXRu65ynZug+m5x
-XpfBzx3hiuSB1ZdWEzeTgxdWnDgZ8fwsDfVlxWMmzpRVC6sdSDLtG841gWgPVlWS
-hP1cWvVUhsa9/sEmI/iZpUA+FntKNiSuJFR7Xlq/kG1/Jig68qA=
-=pFLx
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGxxNoACgkQFA3kzBSg
+Kbanow//U0RpDjbOB8K6jH1RIrbx00AN3tnq7Cu0C0YP/0CSQ5si9aoNbirxI46o
+kjEV5NAgHxZKjo6wfz9ZMsenfqarDC40XRPs+JVsY2LaMWA6/i/8Lc2WPkpV8B4S
+ulkhIqW59iC9cMEGGgfNTU9euvRzqtfMQYYXVCwqXA8P4rw0F+7CrmyU/MtCec0H
+YxoHG/wiQyy4cMVN+NWYLA3pQVccb9QDO8DUBe4tKKhFUOYcchIZNA1u1MbYTA5X
+TKcSYj0RGWz8Ut5yxHji1nJf9g7G8ajEnV7m/kWmx30o1A2Q2yRmYah18j/6YEG9
+aQGVglG14ZcaE9vHxoQGMuy7KwTjX1ECyOg4EeQKMUQRi0tGM4MHd7Zy1+y5P5qG
+qZwgtx0P4uGIKGk6o9rhHDr7D/OeTxl0eW6CFJXylqR9giFrzPkRxgUJIo4+KA19
+eyZ4yGCPMIWC4HzCYPP3TfzYD6etk7d7b4i/1BYGS1AHqzXxVxiayO6wlSHAXdWz
+hNMP05D7kpWpADnSzrmLywvb3LVXKEg32H+hVobZ8SHUHvsGN76SXFU6m2WNHGAb
+rFPwYfiaa0WqGSx7ZmfmTGT2YoAoAk7NOz/F2/sfmaYIJbx+35BhV7TsOuxGVz/S
+lwGMfZ2greQ1GfJxINEZNaKKHr5nuZa5Q64oS28mIItYaROkykI=
+=oC/n
 -----END PGP SIGNATURE-----
 
---ge0jWUKZVg17/s2k--
+--xJzInEz65zJn2DKF--
