@@ -2,39 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A44A646F367
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 19:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7652E46F36B
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 19:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbhLISzs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Dec 2021 13:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbhLISzr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 13:55:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719FCC061746;
-        Thu,  9 Dec 2021 10:52:13 -0800 (PST)
+        id S229844AbhLIS4O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Dec 2021 13:56:14 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:38624 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229838AbhLIS4N (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 13:56:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31799B8260F;
-        Thu,  9 Dec 2021 18:52:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FC1C004DD;
-        Thu,  9 Dec 2021 18:52:10 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4A232CE27D8;
+        Thu,  9 Dec 2021 18:52:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8A3CC004DD;
+        Thu,  9 Dec 2021 18:52:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639075930;
-        bh=H/Jr3TdLNxeHxHNtPWdT/VfKemaRYhozTkxTkPKDXVk=;
+        s=k20201202; t=1639075956;
+        bh=Vpvn9BpaztMxS3Coy+djzcUc9rDa62Nrs8W/yp3DK2Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KsOFnWAcwTajHGN5gDdcLtz3RuuPJMVTpdplVDT6SSf9rRFl51pio53CV9KfaDOYS
-         PNldMWBFkE14fmnXwjj3MA2V6NZ/pf5qFazMnzFnb7HW4cAzPuxIQUpahnWiDQyd4m
-         e69KVnecozzcN8TW7uAYDBAdF3clSb6sF3SCLOnULlmjwyhtExXJXz43DL/2b9zd91
-         4csLllfUTIu6KPkMMrs+rYs4zUWrviOZAHI9MV3DVX/FFPZ4RyDt5Fs129M3sfc+3r
-         ju+BQrmUqca1k5rAsLYf0mfnlpe568YiUsTzeZ0f7j0sYFGHo+bZz8HNslTwwYeUsu
-         5g+SUSDoWGBxg==
-Date:   Thu, 9 Dec 2021 19:52:07 +0100
+        b=BX0Z8sGJhkNL8PgGS9z4GLxEdUgIO/Qnk9ywa1iyyXnCr3Ri2vik6024sjwJXtAf3
+         41+3qRr1JA15DT8Zq5oYNc84qNrCI7wIf7xgq3XugUWct8y+HKH8lZdCN8yg27sZrB
+         hD504qSFshPSRQuYaf5+jC762t5NKPN2wTjW6CQDqnySdvS+yEMnIGwiCM8Wmf2ree
+         Zqmar/eL/LRdIRU1KABSunK7dbpVdxNysz/cSxPG4MsE7Fu+PJZaXG1P1Cg3TVjG0N
+         95OaNlAmMLWmOsc498P230h4ODRTeRQb+9uaObFbfbw0J3apktwaKGb5U21DATMJ+r
+         k6Ykm8ouIijGA==
+Date:   Thu, 9 Dec 2021 19:52:33 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
         Jaewon Kim <jaewon02.kim@samsung.com>,
         Chanho Park <chanho61.park@samsung.com>,
@@ -43,12 +40,12 @@ Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v2 RESEND 7/8] arm: dts: exynos: Rename hsi2c nodes to
- i2c for Exynos5260
-Message-ID: <YbJQV3kwFz7RR1FM@ninjato>
+Subject: Re: [PATCH v2 RESEND 6/8] i2c: exynos5: Mention Exynos850 and
+ ExynosAutoV9 in Kconfig
+Message-ID: <YbJQcZptx63GRV9s@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
         Jaewon Kim <jaewon02.kim@samsung.com>,
         Chanho Park <chanho61.park@samsung.com>,
@@ -58,52 +55,52 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
 References: <20211204215820.17378-1-semen.protsenko@linaro.org>
- <20211204215820.17378-8-semen.protsenko@linaro.org>
- <YbIXVw+as1Sj6yDW@ninjato>
- <f0e01fda-b153-9d74-ae7d-7ef0fc2112aa@canonical.com>
+ <20211204215820.17378-7-semen.protsenko@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YY765/7WdObujyJT"
+        protocol="application/pgp-signature"; boundary="onpvWf7vS8z3wf5+"
 Content-Disposition: inline
-In-Reply-To: <f0e01fda-b153-9d74-ae7d-7ef0fc2112aa@canonical.com>
+In-Reply-To: <20211204215820.17378-7-semen.protsenko@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---YY765/7WdObujyJT
+--onpvWf7vS8z3wf5+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > Applied to for-next, thanks!
+On Sat, Dec 04, 2021 at 11:58:18PM +0200, Sam Protsenko wrote:
+> I2C controller chosen by I2C_EXYNOS5 config option is also suitable for
+> Exynos850 and ExynosAutoV9 SoCs. State that specifically in I2C_EXYNOS5
+> symbol help section.
 >=20
-> I applied the DTS patches, because they should go via arm-soc tree.
-> Please drop them from I2C.
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 
-Sure thing! I replied to the wrong mail, I am sorry for the noise. I
-didn't apply patch 7 but 6.
+Applied to for-next (and not patch 7), thanks!
 
 
---YY765/7WdObujyJT
+--onpvWf7vS8z3wf5+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGyUFIACgkQFA3kzBSg
-KbblVRAAjO523dWeogRIyI5+aZNPhE3AjLGUDJlRGOwXoWynARkgq5ndtr3HThkn
-Hr2N7f3kg/KoEZ4XPu0lOmEz02eOW5tiPzOzvxX6CfNBo4nkhy4S4f0nz1Dt7hFr
-dYYPVevJawDzow2HQVliv36LqSIlPOj9v7ZBUHdc4ofyILwsGz32BgzvsdXXlDss
-69zR5VwnmNLAN58lDnsyOkcQQBdHnk8gijatTsiP+86/aNJZ7zF4AZWmHysefIJh
-AxIihpD1LysGMtT5/tWJCDHEfAR/KWBPpXo6rjTuwQQ4cs77xeaJtrcIC8OAu0WK
-edgUFJNPul+PIgzhYgSj0m2q4ZR12cidpzj0rFakqHWC24GIo6mW9r5NkiFkP8Cj
-WrAmb2afnqZfLvhbmoBx/OH6o4vHNJxGE4N2JvC6JRTV0uPM6MZ9wYp0ixts6L7f
-7rHctg6hR8yI5ivpn7m/yJU+y3bpHXQAV/GLw9UmaNJLAlY2s5OpvTzIpEKa6bAJ
-LPZXG3MM0TwyI1TTSIdsuiQR96kUsdYZNS8jI6wcztroNYhp4hqRZgWsbRV67rRl
-KcF/vt8SQEgLs5b8tygLrcqFx8hk2Nj/Nzca9DodGl+JXSXnfjf8Rc5CknmPWGVC
-BCl10MBgSn1JgGDGnpqvqALOiIf7AqAQmtKeZ9Pp4nOLmC3jDtU=
-=GKh2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGyUHAACgkQFA3kzBSg
+KbbvYQ//QamLSIQn+VKzJSqlbh64hvRzvxCtMpNIws3ZNpYnImwZotSkRuXzVGK8
+BCXuZcF+dbmA9O+CoeoNwpVIxh7iQAwH59j9VN8RxkuwUfCtkvBZa4nU5BC7Zwhc
+6O/WWDOw9s+usmyKkmwRVa9Of7I5sCGPmVsPacyZ0SJlR28b58z+CQR4MVsFuFnO
+piq1q8GxQln98LjHFgmHp+JLWMth59y4sTEB7ilgHc1XNv3+GFZBBVFnXyloLcOp
+a12y9TDhmIIoE7YUUYV8kUG3Y3/nso7QqZ5JsuDjRGGH4fKUkpqY4j1O/g/LSj2R
+vOj4xfYmIrNYHocj000CCI4wY7u4dUbcbnikPz1sBWAen1ATuN1ln8lPVtH/EKoJ
+vpW9cahXyXurnxQtqBbVz31VIOPE10Pn2BcxRQF+Yq6ofshvFvtbull52LFOVhP9
+ONVcuctXF8WYRJoV+pgkjsoSvllleoRvjWLRR+EzDTj7nR/bD1JsTXTJI3STrea1
+3rqF06EdzPpn9doOZPtVGWkUHf9vncQD1359hSmpfMI8yapC7aRKqqTkC8vHZOi9
+AqAjRS+r+s/XSChQANGDl66rQ4KzjLXWUzkU6nVPHV9/3LZbS5tqDn4F6us6LONe
+WOwNli6ZnPgmG1Q09yl+mc09QKF5uWirWUnHR+oR9qZtaXTPvgU=
+=YXRt
 -----END PGP SIGNATURE-----
 
---YY765/7WdObujyJT--
+--onpvWf7vS8z3wf5+--
