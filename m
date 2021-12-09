@@ -2,142 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6E346E8D4
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 14:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF01A46E937
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 14:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237605AbhLINNj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Dec 2021 08:13:39 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:35412 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbhLINNj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 08:13:39 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0F784210FE;
-        Thu,  9 Dec 2021 13:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639055405; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MIat0hguBMM5JaJfYwk4CWG78Dw2Mf1UxsEG6ZEyIOA=;
-        b=Rk8/GtHV5EMVlsRxXZB91+ctDJI7Dl0+SCu+n1zT4FojwG7HmMwWBgFyiFLNcLujkAnK83
-        kzY1JIKt25LK0WGXzO7lOXk3nRJAlPlGX5vKLzTQiKwGy+Vp1i1B86hgFY7fjhJvZphZKm
-        ncApSEl8lfoJTQ43FpttMq9URru7Gcw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639055405;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MIat0hguBMM5JaJfYwk4CWG78Dw2Mf1UxsEG6ZEyIOA=;
-        b=fA7Wi1c3JmBlHDNNwmlIdVpQf0mnmXbL02No4mTtDl1jxFopTa9lY8yFYsykUyhndVoYMe
-        UKqTaAiTaavcoXAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DB39B13343;
-        Thu,  9 Dec 2021 13:10:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zAwgMywAsmEHeQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 09 Dec 2021 13:10:04 +0000
-Date:   Thu, 9 Dec 2021 14:10:03 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v3] i2c: i801: Don't clear status flags twice in
- interrupt mode
-Message-ID: <20211209141003.7b406f2f@endymion>
-In-Reply-To: <bd0def53-4e63-61eb-c0bb-9975a308cb1a@gmail.com>
-References: <bd0def53-4e63-61eb-c0bb-9975a308cb1a@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S238043AbhLINif (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Dec 2021 08:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238029AbhLINie (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 08:38:34 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE383C0617A2
+        for <linux-i2c@vger.kernel.org>; Thu,  9 Dec 2021 05:35:00 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id w23so10765727uao.5
+        for <linux-i2c@vger.kernel.org>; Thu, 09 Dec 2021 05:35:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rVYnS72yP3Vfzg3mEeaHx/Hrk/5oTnnL8AOPR30dVy0=;
+        b=YNbIIe25vYO60B6ne+3R6oyfuOlsSlaiSJ0awd9eU4155uIpSononUMENtDdIgoDmf
+         BHGw6HYe99GQZYx9FfYPR8miMIoI0Dtz2f1PZPZFMkPAVp0S9+XG+uNykXR9qJNgSAuq
+         OwN1NDferXQYxSFnieDZV9txPPv08yqtPTq7nPWE9OWy9s96iwlSTw22Je/e+l3z/KKA
+         FktQa5MebX9P8KMB0z0adm2hvv4i9Ubi9l8auMtQ7Olh7f2Xyt4OOC5EzAVNu7Pc55oA
+         0yR9r2Tfui1h/D2pFxSsLygQdkVj0xZ+Kq+ruVSC1VN5L6FQRFTcsppM489BWXqikkhS
+         VM+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rVYnS72yP3Vfzg3mEeaHx/Hrk/5oTnnL8AOPR30dVy0=;
+        b=7DT1eDVwgHlM8urHRXAyndK5Bc+E6cDswBW+qmUcSOlXFRiUXd2seIc/RR9d7gdayd
+         +eNMt4IDBQh76OBq+CW3rVaFDnJ6OShn65MQvELsSAMwyk/dD8tI1QGhmQormQcWi4yY
+         /Peu7bogMjUEVp6KMK8ASSsYh2iXRl1K6snmXZxqR3EAO2fSbIPCnWq3DFo4RaojKrUK
+         zuP8maPfmuyU+d+jPF9BOzjJgetiVjOnpguL5gryqIpv1LL1BcA0J8j2bSGZmRV4BEvb
+         AQMYpWNgTXCu2NYPSd1rvYS59PTPa0KjHQUVQ3Yf1tmKUtpJSjAfyyQb2VuFpf0meY0I
+         XRTg==
+X-Gm-Message-State: AOAM530zwKDyHPFDNHtVXgW6/0+p4DIXIwbVfF8JNZXYmmSj9VWmGhk8
+        iSxtWJ80W55PsVfjEwo7P3UcKpDv7My4jkWvFnCeUg==
+X-Google-Smtp-Source: ABdhPJxt91N8G6WCwX4/8szQ/jRPc67Jnft4mCDcv3HJQElj92b5iS0Vgpy3Lmy7HyhnoVglAwtQnGhOm6TIe36Ga5s=
+X-Received: by 2002:a67:be0f:: with SMTP id x15mr7817987vsq.86.1639056899865;
+ Thu, 09 Dec 2021 05:34:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211204215820.17378-1-semen.protsenko@linaro.org> <20211204215820.17378-7-semen.protsenko@linaro.org>
+In-Reply-To: <20211204215820.17378-7-semen.protsenko@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Thu, 9 Dec 2021 15:34:47 +0200
+Message-ID: <CAPLW+4kCH7Z3ZJrYcHtjMeq1_mhPg1FusBQb5KyV2nvBc60n5Q@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND 6/8] i2c: exynos5: Mention Exynos850 and
+ ExynosAutoV9 in Kconfig
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, 04 Dec 2021 21:04:40 +0100, Heiner Kallweit wrote:
-> In interrupt mode we clear the status flags twice, in the interrupt
-> handler and in i801_check_post(). Remove clearing the status flags
-> from i801_check_post() and handle polling mode by using the
-> SMBus unlocking write to also clear the status flags if still set.
-> To be precise: One could still argue that the status flags are
-> cleared twice in interrupt mode, but it comes for free.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+On Sat, 4 Dec 2021 at 23:58, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+>
+> I2C controller chosen by I2C_EXYNOS5 config option is also suitable for
+> Exynos850 and ExynosAutoV9 SoCs. State that specifically in I2C_EXYNOS5
+> symbol help section.
+>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 > ---
-> v2:
-> - clear status flags also in i801_wait_byte_done()
-> - remove outdated comment at i801_check_post()
-> v3:
-> - merge unlocking SMBus and clearing status flags
-> - avoid the complexity added with v2
-> ---
->  drivers/i2c/busses/i2c-i801.c | 16 +++++-----------
->  1 file changed, 5 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index 930c6edbe..128a25de7 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -372,11 +372,6 @@ static int i801_check_pre(struct i801_priv *priv)
->  	return 0;
->  }
->  
-> -/*
-> - * Convert the status register to an error code, and clear it.
-> - * Note that status only contains the bits we want to clear, not the
-> - * actual register value.
-> - */
->  static int i801_check_post(struct i801_priv *priv, int status)
->  {
->  	int result = 0;
-> @@ -401,7 +396,6 @@ static int i801_check_post(struct i801_priv *priv, int status)
->  		    !(status & SMBHSTSTS_FAILED))
->  			dev_err(&priv->pci_dev->dev,
->  				"Failed terminating the transaction\n");
-> -		outb_p(STATUS_FLAGS, SMBHSTSTS(priv));
->  		return -ETIMEDOUT;
->  	}
->  
-> @@ -440,9 +434,6 @@ static int i801_check_post(struct i801_priv *priv, int status)
->  		dev_dbg(&priv->pci_dev->dev, "Lost arbitration\n");
->  	}
->  
-> -	/* Clear status flags except BYTE_DONE, to be cleared by caller */
-> -	outb_p(status, SMBHSTSTS(priv));
-> -
->  	return result;
->  }
->  
-> @@ -939,8 +930,11 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
->  	}
->  
->  out:
-> -	/* Unlock the SMBus device for use by BIOS/ACPI */
-> -	outb_p(SMBHSTSTS_INUSE_STS, SMBHSTSTS(priv));
-> +	/*
-> +	 * Unlock the SMBus device for use by BIOS/ACPI,
-> +	 * and clear status flags if not done already.
-> +	 */
-> +	outb_p(SMBHSTSTS_INUSE_STS | STATUS_FLAGS, SMBHSTSTS(priv));
->  
->  	pm_runtime_mark_last_busy(&priv->pci_dev->dev);
->  	pm_runtime_put_autosuspend(&priv->pci_dev->dev);
 
-Looks good to me.
+Wolfram, can you please also take this one in your tree?
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Tested-by: Jean Delvare <jdelvare@suse.de>
-
-
--- 
-Jean Delvare
-SUSE L3 Support
+> Changes in v2:
+>   - Added R-b tag by Krzysztof Kozlowski
+>   - Added R-b tag by Chanho Park
+>
+>  drivers/i2c/busses/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index df89cb809330..42da31c1ab70 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -617,7 +617,7 @@ config I2C_EXYNOS5
+>         help
+>           High-speed I2C controller on Samsung Exynos5 and newer Samsung SoCs:
+>           Exynos5250, Exynos5260, Exynos5410, Exynos542x, Exynos5800,
+> -         Exynos5433 and Exynos7.
+> +         Exynos5433, Exynos7, Exynos850 and ExynosAutoV9.
+>           Choose Y here only if you build for such Samsung SoC.
+>
+>  config I2C_GPIO
+> --
+> 2.30.2
+>
