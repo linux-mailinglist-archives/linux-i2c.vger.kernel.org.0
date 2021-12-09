@@ -2,105 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7652E46F36B
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 19:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E25146F43A
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 20:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbhLIS4O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Dec 2021 13:56:14 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:38624 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbhLIS4N (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 13:56:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S229940AbhLITvP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Dec 2021 14:51:15 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:55674 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229517AbhLITvP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 14:51:15 -0500
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4A232CE27D8;
-        Thu,  9 Dec 2021 18:52:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8A3CC004DD;
-        Thu,  9 Dec 2021 18:52:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639075956;
-        bh=Vpvn9BpaztMxS3Coy+djzcUc9rDa62Nrs8W/yp3DK2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BX0Z8sGJhkNL8PgGS9z4GLxEdUgIO/Qnk9ywa1iyyXnCr3Ri2vik6024sjwJXtAf3
-         41+3qRr1JA15DT8Zq5oYNc84qNrCI7wIf7xgq3XugUWct8y+HKH8lZdCN8yg27sZrB
-         hD504qSFshPSRQuYaf5+jC762t5NKPN2wTjW6CQDqnySdvS+yEMnIGwiCM8Wmf2ree
-         Zqmar/eL/LRdIRU1KABSunK7dbpVdxNysz/cSxPG4MsE7Fu+PJZaXG1P1Cg3TVjG0N
-         95OaNlAmMLWmOsc498P230h4ODRTeRQb+9uaObFbfbw0J3apktwaKGb5U21DATMJ+r
-         k6Ykm8ouIijGA==
-Date:   Thu, 9 Dec 2021 19:52:33 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v2 RESEND 6/8] i2c: exynos5: Mention Exynos850 and
- ExynosAutoV9 in Kconfig
-Message-ID: <YbJQcZptx63GRV9s@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20211204215820.17378-1-semen.protsenko@linaro.org>
- <20211204215820.17378-7-semen.protsenko@linaro.org>
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CEB71806B7;
+        Fri, 10 Dec 2021 08:47:37 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1639079257;
+        bh=ccdqNOj5J5nVKrh1rkY07iE6vW2enmlH7mBkut3FsvQ=;
+        h=From:To:Subject:Date:References:In-Reply-To;
+        b=BkuV9k1mFzROFHQbDeYCPRJVt8/AOFJlaM6kWHBtPubCHiuLIrCNnLFN39zu/OGH8
+         rCr6v0UlKSWFHJ/u0saPtGPaKsq6dc/0fDb5mx3V0mlGAm6yXkpCJYzDe3jhFys8SM
+         3p81WWaeT3l4oiyLr/MYlhfe7fz0a9OyCjgeB4J9VLmhZqW5eYnukEnceLZ6YtS5IH
+         /ypNxQLkNlwTDAto+SO6ydMis5flUOWiRW54RBAXlUkgztsTkzq6XQQ9CHhQtaiLOm
+         GNapsDgbTWZSQhB6KDMwQEMgfCpH5PaLw+uZkQo7gbQ447WSA1QvQslegBAWvdnZdf
+         V/RBm6EM8OljQ==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B61b25d590001>; Fri, 10 Dec 2021 08:47:37 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.26; Fri, 10 Dec 2021 08:47:37 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.026; Fri, 10 Dec 2021 08:47:37 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "wsa@kernel.org" <wsa@kernel.org>,
+        "mbizon@freebox.fr" <mbizon@freebox.fr>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: mpc: Use atomic read and fix break condition
+Thread-Topic: [PATCH] i2c: mpc: Use atomic read and fix break condition
+Thread-Index: AQHX6yH59UeBzAfeJEWOl6N8FMj7Fawl9dyAgADMRYCAAkoTAIAArtQA
+Date:   Thu, 9 Dec 2021 19:47:36 +0000
+Message-ID: <d9a9d4db-9e21-288d-40d5-0eef198146fb@alliedtelesis.co.nz>
+References: <20211207042144.358867-1-chris.packham@alliedtelesis.co.nz>
+ <ea12555e66d4dc16c5b093ac528442ed6dddf644.camel@freebox.fr>
+ <bce48dba-c163-4fe7-50c4-984de41488c2@alliedtelesis.co.nz>
+ <YbHKsI35uHz9PjwO@ninjato>
+In-Reply-To: <YbHKsI35uHz9PjwO@ninjato>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <6A3602B25FA9E74186D8FE423CA853C8@atlnz.lc>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="onpvWf7vS8z3wf5+"
-Content-Disposition: inline
-In-Reply-To: <20211204215820.17378-7-semen.protsenko@linaro.org>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=XOZOtjpE c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=N659UExz7-8A:10 a=IOMw9HtfNCkA:10 a=VwQbUJbxAAAA:8 a=Vzfgeu6Zy-1uzFYh-k4A:9 a=pILNOxqGKmIA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---onpvWf7vS8z3wf5+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, Dec 04, 2021 at 11:58:18PM +0200, Sam Protsenko wrote:
-> I2C controller chosen by I2C_EXYNOS5 config option is also suitable for
-> Exynos850 and ExynosAutoV9 SoCs. State that specifically in I2C_EXYNOS5
-> symbol help section.
->=20
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Chanho Park <chanho61.park@samsung.com>
-
-Applied to for-next (and not patch 7), thanks!
-
-
---onpvWf7vS8z3wf5+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGyUHAACgkQFA3kzBSg
-KbbvYQ//QamLSIQn+VKzJSqlbh64hvRzvxCtMpNIws3ZNpYnImwZotSkRuXzVGK8
-BCXuZcF+dbmA9O+CoeoNwpVIxh7iQAwH59j9VN8RxkuwUfCtkvBZa4nU5BC7Zwhc
-6O/WWDOw9s+usmyKkmwRVa9Of7I5sCGPmVsPacyZ0SJlR28b58z+CQR4MVsFuFnO
-piq1q8GxQln98LjHFgmHp+JLWMth59y4sTEB7ilgHc1XNv3+GFZBBVFnXyloLcOp
-a12y9TDhmIIoE7YUUYV8kUG3Y3/nso7QqZ5JsuDjRGGH4fKUkpqY4j1O/g/LSj2R
-vOj4xfYmIrNYHocj000CCI4wY7u4dUbcbnikPz1sBWAen1ATuN1ln8lPVtH/EKoJ
-vpW9cahXyXurnxQtqBbVz31VIOPE10Pn2BcxRQF+Yq6ofshvFvtbull52LFOVhP9
-ONVcuctXF8WYRJoV+pgkjsoSvllleoRvjWLRR+EzDTj7nR/bD1JsTXTJI3STrea1
-3rqF06EdzPpn9doOZPtVGWkUHf9vncQD1359hSmpfMI8yapC7aRKqqTkC8vHZOi9
-AqAjRS+r+s/XSChQANGDl66rQ4KzjLXWUzkU6nVPHV9/3LZbS5tqDn4F6us6LONe
-WOwNli6ZnPgmG1Q09yl+mc09QKF5uWirWUnHR+oR9qZtaXTPvgU=
-=YXRt
------END PGP SIGNATURE-----
-
---onpvWf7vS8z3wf5+--
+On 9/12/21 10:21 pm, wsa@kernel.org wrote:
+>> we'd hit the 100us timeout in the poll). But I see no evidence of that
+>> actually happening (and no idea what arbitration lost means w.r.t i2c).
+> On a bus with multiple masters, it means the other master has won the
+> arbitration because the address it wants to talk to contains more 0 bits.
+>
+>> I don't know that there is a maximum clock stretch time (we certainly
+>> know there are misbehaving devices that hold SCL low forever). The SMBUS
+>> protocol adds some timeouts but as far as I know i2c says nothing about
+>> how long a remote device can hold SCL.
+> The above is all correct.
+>
+> Even with the unclear situation about the 100us, I think this should go
+> to for-current soon, right?
+Please and thank you.=
