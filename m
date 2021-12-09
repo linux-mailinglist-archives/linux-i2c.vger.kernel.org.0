@@ -2,57 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E4C46EB5F
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 16:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD3546EBE8
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 16:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235984AbhLIPiJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Dec 2021 10:38:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
+        id S240391AbhLIPmg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Dec 2021 10:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbhLIPiI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 10:38:08 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3183C061746;
-        Thu,  9 Dec 2021 07:34:34 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id r25so20397693edq.7;
-        Thu, 09 Dec 2021 07:34:34 -0800 (PST)
+        with ESMTP id S241291AbhLIPmE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 10:42:04 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFE6C061353;
+        Thu,  9 Dec 2021 07:38:00 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id g14so20271032edb.8;
+        Thu, 09 Dec 2021 07:38:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v7q+b8ru+Ky6lO25qRsnx8MdjQIu6CL1OnWNn18j9rA=;
-        b=CKUdXy3kgh5kOICc3cQf8Jmegb7VQw0+KBnTRYoNebDTfC5UxxgRzbmDvpxAktKFeK
-         NKy7BcU1YI7AHWjgUVcT7siUYtEkr0oEbqiqTFTGVcu/WR7AcxGs2aYBHIpEKuPEp263
-         jXdWJEsFZbIwWrup+zP8mIHtn7swj3o2HjRdCfjAKXmZN25AnGcSn1PKyH5McF+m/C/l
-         nWy+KShSstXIV1bA3bikl/TB61SQdsvOrcgrikSkddBnDx0gMNK/7WYXcRNdQnV7nIQu
-         PnxvlErkDP2puHqlJ/d7cPeBhq5lcfcp+JK7IrDguPTNELhDqhCGKxqx7KDlfO0DSAH/
-         ydIg==
+         :cc:content-transfer-encoding;
+        bh=8lxkFDRMwg8pNfKVoAyUh19eKSO8wmq+MV5O7kUhYxI=;
+        b=esWLlSPHynxWr5honL+GAEx/gqvDANyWuVRIgrW1bOxZBXPPpdzkngm0lr3iTi31DN
+         taGQfbAYqHrKHjUhKXSMXiU9OZoBhG7h+0YIYUBmWV6MBnoEHyK72T0MJnQu93fGrQF/
+         A9bXGbUTXq5mENYIV3z2bA93OHTcySlsg3LWFqGQuLj16ZIMJ5FaUHlw4jYj5dxFmFwR
+         Ehh9Q9b3zbJlHwxaWmX9UNO7aREverDxv/1pcPAmXbdqyZDscw3Njt8a/fcAyp5Dm+WU
+         jqsoCBAo2UnZKc9hd8Qsu2Hv+tGSaHlD31TP/LCI7md1zpzZ1o/mKBQaimhi0G8/JLby
+         cEQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v7q+b8ru+Ky6lO25qRsnx8MdjQIu6CL1OnWNn18j9rA=;
-        b=DD9EonJKQ3RNXfZaeeZjUIv6ksHsiGo6IGGHD0psVs4drmGvn5Fs6tGIIRYYadBglV
-         K3vwYlbOR/Ia5mmSvVzuFELHNXJZeiF0G3nMhgMB/qYctr04YBUhJfsNlQ8QbTp+Wjqj
-         EfytYb9cWzTn1zWM6yhC6ywHmZNQU+b16GYrKe619WKcpf7IilRMqgOphamBnFWkRiSy
-         j4hxLMEyxdix8gMXcVfjY+88osDcFgbFMTWLd8wES+cOYIXiBKDpV9sHt6eI98c9FQyW
-         NiM5Mal8X7oIB3lxKo2gUm3vAqsd8g7RsZ5hEMcwqWyojujJbQTYeFclYCSnYzTH8j+v
-         iZjQ==
-X-Gm-Message-State: AOAM533RxExMq1VVYFxspxKwmO9e9eixVlntzVTxvcIqqQ0EM9gfYVr8
-        hBVX/3YwuW8S49Rcl1NSRUbNFNuRtAbHOYlL9Xd5pVoVC2Du3w==
-X-Google-Smtp-Source: ABdhPJyWpLtmhRm6GMN81/OCA7635jv2GlCrohxEtBVOLvosfETIwBbIKp5yfLk3RuimXXe/lW1fNxtfojs8t86sG3Q=
-X-Received: by 2002:a17:906:bccc:: with SMTP id lw12mr15968050ejb.128.1639063946054;
- Thu, 09 Dec 2021 07:32:26 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8lxkFDRMwg8pNfKVoAyUh19eKSO8wmq+MV5O7kUhYxI=;
+        b=KvKBITjj1VtMwW1hfhX9Uo+7FkLqOCSNuQ9vopldg8lS4AUR5mD/iSsbioCgUgEkwz
+         8a8AZv7jovk543LYdadAT4xuBzEqRxhD95pa+flbvtuEj8G6aPkxzJ7cbgrReOXa0USx
+         IMq7Ziyp7dZG9KefjVyD8n6hwIEEoG0jg4wKNqA8ZOgkHusGBr0wePoW2NC4Da/N2pFy
+         nILJ7MFIANhZatkEsmaXgmtRwrOSp3KHdboiZJF65KlgeDWAmcq53BG+lz7a6XT2UmT+
+         vMxowSvjGF1Pg/xOPO+LTEFwES8W+hp5NlklAX8lxdA5d0w2e8NbrW2SOARwZL2zwQk/
+         vS8w==
+X-Gm-Message-State: AOAM531pbnsiwve/lKhcX2onuirCuLXPvr8Iyj6dg12DEP7bl7o75OAN
+        mLvOxeulkWyWZRuU5rShUi9kQuTthTEH7Z9BzJo=
+X-Google-Smtp-Source: ABdhPJyMKzJQYJxTsKbBv+y62UDyk4QFBVKlhVjI7qC3dvWq418bPqN5fQgjAP7p0KHuljU4XKmV8Y+t89+fa5Sh8eA=
+X-Received: by 2002:aa7:d0d1:: with SMTP id u17mr29711824edo.135.1639064121144;
+ Thu, 09 Dec 2021 07:35:21 -0800 (PST)
 MIME-Version: 1.0
-References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com> <1639062321-18840-2-git-send-email-akhilrajeev@nvidia.com>
-In-Reply-To: <1639062321-18840-2-git-send-email-akhilrajeev@nvidia.com>
+References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
+ <1639062321-18840-3-git-send-email-akhilrajeev@nvidia.com> <976c8d73-d137-2050-ca82-18326456c9e8@gmail.com>
+In-Reply-To: <976c8d73-d137-2050-ca82-18326456c9e8@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 9 Dec 2021 17:30:53 +0200
-Message-ID: <CAHp75VeP_9P+GaD=vXZdQdOjZpdWxUWp+0=yPy0zJefi=qh=oA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: tegra: Add SMBus feature properties
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
+Date:   Thu, 9 Dec 2021 17:33:46 +0200
+Message-ID: <CAHp75VdzrT5z13qx-mMRdrS2=GrMOv87WaEPL5eoPO5cBiqjDg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] i2c: tegra: Add SMBus block read and SMBus alert functions
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Akhil R <akhilrajeev@nvidia.com>,
+        Christian Koenig <christian.koenig@amd.com>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         Jon Hunter <jonathanh@nvidia.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
@@ -67,27 +68,36 @@ Cc:     Christian Koenig <christian.koenig@amd.com>,
         Rob Herring <robh+dt@kernel.org>,
         devicetree <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 5:05 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+On Thu, Dec 9, 2021 at 5:30 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+> 09.12.2021 18:05, Akhil R =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > +static int tegra_i2c_setup_smbalert(struct tegra_i2c_dev *i2c_dev)
+> > +{
+> > +     struct tegra_i2c_smbalert *smbalert =3D &i2c_dev->smbalert;
+> > +     struct gpio_desc *alert_gpiod;
+> > +     struct i2c_client *ara;
+> > +
+> > +     alert_gpiod =3D devm_gpiod_get(i2c_dev->dev, "smbalert", GPIOD_IN=
+);
+> > +     if (IS_ERR(alert_gpiod))
+> > +             return PTR_ERR(alert_gpiod);
+> > +
+> > +     smbalert->alert_data.irq =3D gpiod_to_irq(alert_gpiod);
+> > +     if (smbalert->alert_data.irq <=3D 0)
+> > +             return smbalert->alert_data.irq;
 >
-> Tegra I2C can use a gpio as an smbus-alert. Document the usage of
-> the same.
+> 0 is the error condition.
 
-...
+I'm not sure what you implied here. gpiod_to_irq() returns 0 if and
+only if it goes to the architectures where it might be possible to
+have valid vIRQ 0, but this is not the case (at least I never heard of
+a such) for GPIO controllers on such platforms. So, looking at the
+above code I may tell that the '=3D' part is redundant.
 
-> +optional properties:
-
-Optional
-
-> +- smbalert-gpio: Must contain an entry for the gpio to be used as smbus alert.
-
--gpios (the suffix in plural form, the singular is a legacy one)
-
-> +  It will be used only if optional smbus-alert property is present.
-
--- 
+--=20
 With Best Regards,
 Andy Shevchenko
