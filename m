@@ -2,95 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A3546F4C3
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 21:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD4346F572
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 22:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbhLIUTX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Dec 2021 15:19:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52746 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbhLIUTW (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 15:19:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3272AB82655
-        for <linux-i2c@vger.kernel.org>; Thu,  9 Dec 2021 20:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19FD0C004DD;
-        Thu,  9 Dec 2021 20:15:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639080946;
-        bh=FuC5lY1Nxqn3L5R9SFrcU38uWB+fDJsElPPAuGlGw84=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OY8yntYWYVOiB5ZNTywfLEbloTX/kmcP8OMP0Lw5tThdOi20xCYPFQ2Y1VVkHyKxW
-         URiq3gM4MoVbd/MjEPeVlDIowKOc2/p+YsPwcAHQgra6eytvsdSenc878Af528w4YZ
-         2SfRjwONm9H7Qiuf5/t6WRFh9j/oGzYu2aRxhoq9pI8T9adRjJZLnVO1/K69KXB5Ok
-         veLZeTHoZzlWsvJHT/BWdgLqBT5SpwoFQLQ3Zh7g0zbPEM1nIo2irI5+Aj44asE4RJ
-         O0qWqq2fI6mvTY03W1i12DWAfaeO8GexcVFGa4HNOsPWzH/96pfA+Eyz1Q9j1/Xfon
-         Q43mHw1jYsYEQ==
-Date:   Thu, 9 Dec 2021 21:15:43 +0100
-From:   "wsa@kernel.org" <wsa@kernel.org>
-To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-Subject: Re: [bisected][regression] Applications that need amdgpu doesn't run
- after waking up from suspend
-Message-ID: <YbJj7xyiPs8HBxC8@kunai>
-Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
-        "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-References: <1295184560.182511.1639075777725.ref@mail.yahoo.com>
- <1295184560.182511.1639075777725@mail.yahoo.com>
+        id S232478AbhLIVDp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Dec 2021 16:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231553AbhLIVDo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 16:03:44 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40E4C061353
+        for <linux-i2c@vger.kernel.org>; Thu,  9 Dec 2021 13:00:10 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id x5so6614653pfr.0
+        for <linux-i2c@vger.kernel.org>; Thu, 09 Dec 2021 13:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=BJPWo58tKlQXm4vRD5vnXhZrKIbn/SXsA1N14vuJVFE=;
+        b=HDQaSwQak/N2he922zPWW8Kt6V0y0r/r/ddXnOE8ZVwjUOuGXpgvCGPpWbPgasJsad
+         MPdAnPSXNHDpBngIzfZSLvS/pSAWzKXZ7Vjvhw7xbMj4SM5q3CUcIf+mNsBXs5MDyYWA
+         OfjtHHyde7aXAJboFDFcGNbYI/gyyD98vnSZEuLHcvkKqabz+vDAJ5unUzRi7PscRn2O
+         QrelYzgAEtKPRzTB5LruOfzV20SIAmyJaDE+Wq8vfpbT5HZcYTImeebJLSfFYkmHgVbL
+         REUS2fCCmT9JlSATiuR03IW/4wMV6B0XSdU1hpY2/HCM/dEIi2J71CiSST2fOw32hORr
+         UrFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=BJPWo58tKlQXm4vRD5vnXhZrKIbn/SXsA1N14vuJVFE=;
+        b=fEjQb+N/uZgK8cWh/FFXZ0Uafj1hQXAAWyWuoeA5pezDjV7vqYGhH6ezb7hgY5UaMq
+         7KRIp3STW/pCupfptsDU5YJzejUQaH53hCBTt6mWaMZ3KOEtsmpbcLV2sojqZZzdCoq2
+         if7Uq1M1d0kGhcC2U8pYAfl1aPVVSwEWaX0KcFk+rVhrOAvvbpAE0+H4YN16xGDyoBk4
+         jasoks/TKa1a//VoEhs5SeKgZtsgc9HjFVqaPg5pzZYCvayneqm1nKJElFUzSc3vO4gL
+         dFCrqSCzlGMdefqTLiknLQI+1UelocGnCRuxZvYvo2oZHwGgDB3SbQulc1M3PeZ+RG/v
+         72Hw==
+X-Gm-Message-State: AOAM530HkZPcdi12Q/qj0sMyTrIcRNTQMHks2abv2muozvPRF9FRkmZs
+        pOc9UBxdScpOk25OzpRwIB0EjcuubBY8BOn/bx4=
+X-Google-Smtp-Source: ABdhPJx5f68YiYU2AwdcRxyp33aawqMiDcSXXGsErgxO0ZniginZy8l5PTlStnNdcjb+PHnlPE1dewX0IwOAdPab5eg=
+X-Received: by 2002:a63:4a5d:: with SMTP id j29mr34783247pgl.455.1639083610189;
+ Thu, 09 Dec 2021 13:00:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="S2gOC+f4gRLD7q+n"
-Content-Disposition: inline
-In-Reply-To: <1295184560.182511.1639075777725@mail.yahoo.com>
+Received: by 2002:a05:6a20:7d8b:b0:5d:5c22:870b with HTTP; Thu, 9 Dec 2021
+ 13:00:09 -0800 (PST)
+Reply-To: clmloans9@gmail.com
+From:   MR ANTHONY EDWARD <debraalessii@gmail.com>
+Date:   Thu, 9 Dec 2021 22:00:09 +0100
+Message-ID: <CAM30Livg1bgTR9ct7i5sZ9vpaSp0Rf1Wd64CyxsccyW8Vf1FvA@mail.gmail.com>
+Subject: DARLEHEN ZU 2% BEANTRAGEN
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+--=20
+Ben=C3=B6tigen Sie einen Gesch=C3=A4ftskredit oder einen Kredit jeglicher A=
+rt?
+Wenn ja, kontaktieren Sie uns
 
---S2gOC+f4gRLD7q+n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi,
-
-thank you for the report!
-
-> No issues in Kernel 5.13.13 and the issues exist in 5.14 to 5.15.7 .So
-> I bisected the bug with
-> git(https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux).first
-> bad commit: [5a7b95fb993ec399c8a685552aa6a8fc995c40bd] i2c: core:
-> support bus regulator controlling in adapter
-
-Have you tried reverting the commit and see if things work again?
-
-Kind regards,
-
-   Wolfram
-
-
---S2gOC+f4gRLD7q+n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGyY+sACgkQFA3kzBSg
-KbZTjA//fKRTKsg2MWfMp3vysUngWfcYn20L2fjatYCY4ki7tD4TAUQ43dE0vM1t
-BTOacDB/YkQbbX/SOHLFy+A/icNJv7rczvc+shAhzFw4691fshor6w6/yqwHsdro
-gwBLOBT33jx6NrIR3qfQqfCG+XqzICT2FR2Op6+1RhPOYsd9M5yEIKov57aVwHXh
-k0bLVd0sIrvcvRquqUx3Zs/lgiWZKxRZQQD1hZkdjS0Nbr+Qxn37SgdLX6crXmvY
-Ff8ULmYT5K/yTCmek7sGfidz4bA30J3Y0B4FMw9xenR8h+3ZyZpQ8sy0KZQ1TPuV
-MjoMjRxIEJdezMcG1uF1DTcOmfkX/Hvbt9SXV3f4fdOxSVSAjJn9nCHR3ZmZ8mke
-ADcU3tRQOxd8YrWLeABDEpXOXcgpKrhikdP9kdiY1aZN63wJLIFP8hd39wKaeQsY
-+L3zXlbmsCIJxTKfRJQrzOfjGA2yeM6jgGlNmfepRkxhejomF+MmrRIdhZNGL3t/
-/gi5SF7lj/7VvpbHHyMWnPQOMmlyq2CcG5OaQ4M6m7jLjMDZBcJ+RntUi/GRV8hy
-LwPJMpQcjw5NnfHrE630C7601m32qvvgWFAleNKHPX516n92DS4RkOKCuT6rp+rs
-uYp3QKuAdcFDArH7xx2z08m9E+Jt7jAwkHoFNkOCk46yeAYav1M=
-=x7eh
------END PGP SIGNATURE-----
-
---S2gOC+f4gRLD7q+n--
+*Vollst=C3=A4ndiger Name:
+*Ben=C3=B6tigte Menge:
+*Darlehensdauer:
+*Handy:
+*Land:
