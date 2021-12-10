@@ -2,83 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D681846F6D1
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Dec 2021 23:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A964C46F96A
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 03:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbhLIWbc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Dec 2021 17:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbhLIWbc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Dec 2021 17:31:32 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21521C061746;
-        Thu,  9 Dec 2021 14:27:58 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id z7so14713735lfi.11;
-        Thu, 09 Dec 2021 14:27:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=vB6UFMMKeMbML0pasfrlK2ON8jLTtffrDd18+0fvXTM=;
-        b=iddzqvFmZjbr0V4tMd5txSDNy7G2HAtwVp5YCUKPc9Li6DCaSw1Dl939MACHK+hypd
-         dUgBtSYybk5qW4WJpYOYiRhaLY0cMX7W309R/DHAihMWKLZC6l26Oj+s6L9LLUReNWr0
-         jUamKjDqSmseia/nXvbIs29In+ghj1NOlsW6tQAA8bKp02+OId7jO9dTdNKyI6qbnZSr
-         sjV7hqSqDOhL93lfp5thW2Bu+JR5fc3kRlu2xTw7E6gvYphreWnD61oFXgsJgjdE/S9U
-         wPVcajc5uLx685kx2V4dyVaEUwd7fLfg6qi7qMy4SojfN/cWKQHX/IUPBu62pepXEn08
-         u+7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vB6UFMMKeMbML0pasfrlK2ON8jLTtffrDd18+0fvXTM=;
-        b=XPfZuYZEMVdEDzJYCTcxa0Rp5UfbH+dBtg/3XA2Old65OTCv/ss37XfRI07Qtemq/a
-         VXnHih7cOlM+r3716yl0/VasGVxoUg4UIojyepPxlYOCcgpwX8IW3RkeDVe4l8sSgoMJ
-         l8x58H3Rx1DDj2p7AB9VSeRj3ezwzeUWJaR1sT+KySCouyj2DprzJzog+UBd+EjtxHDD
-         VMFDHo2bG4qfeU8PVXFbCX+cZTDQlP5vPcGyysg9M/Gbc9fWv1GpUFGH1EIDW4XsbgsE
-         m71rWsjrEUBVNAMJ8c28cXSIrtitmCv6+LEUApO/DJe+dLN0A2vdWzbLThjDFQSD4zMi
-         oC1A==
-X-Gm-Message-State: AOAM530qw+oqk5alzqsOxMi+WLI7PPT02+O+4EyBPZUjfuxbboeD0ODX
-        2HA7O9/UN1cnibVoreuiVbUsPKStiZs=
-X-Google-Smtp-Source: ABdhPJzFdHGaxPfjywJc1hIiA9ySfrY8guYDU1C2I16TpAhgmS6ic0/GqJw1gbuLNpG04WutziYJSg==
-X-Received: by 2002:a05:6512:31cf:: with SMTP id j15mr8629350lfe.229.1639088876408;
-        Thu, 09 Dec 2021 14:27:56 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id k6sm122488lfu.218.2021.12.09.14.27.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 14:27:56 -0800 (PST)
-Subject: Re: [PATCH v2] i2c: tegra: use i2c_timings for bus clock freq
-To:     Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
-        jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, thierry.reding@gmail.com
-References: <1639067318-29014-1-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c9eceaba-df4e-0e75-d6a7-87cfdf45fced@gmail.com>
-Date:   Fri, 10 Dec 2021 01:27:55 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S236200AbhLJDBv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Dec 2021 22:01:51 -0500
+Received: from m12-18.163.com ([220.181.12.18]:22780 "EHLO m12-18.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230255AbhLJDBv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 9 Dec 2021 22:01:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Ul1cZ
+        sDrGceF2boeMAzd+MEotAGR1y5T0vMOvr4Pzas=; b=h+l7rWgRCJkzpMD2c9pTD
+        nIxEClaO1waQc7ve0uNWoAySqy2Y3V6HJnI+Q3HM/lX/z0rHvtMsJ6+2ZswTkAuK
+        W57Z35gNv9dki3ijNqKsnOmuP0uJtBP0GKWkcoi+JiuE7jCRNWC2A2G50+wdKBHn
+        exQSpotFYrwqjKMlpqdYd8=
+Received: from localhost.localdomain (unknown [120.243.48.4])
+        by smtp14 (Coremail) with SMTP id EsCowADnTlf_wbJhOuGqAA--.18832S4;
+        Fri, 10 Dec 2021 10:57:38 +0800 (CST)
+From:   lizhe <sensor1010@163.com>
+To:     linux@rempel-privat.de, kernel@pengutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        sensor1010@163.com
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/i2c/busses/i2c-imx.c: Use with resource management to register interrupts
+Date:   Thu,  9 Dec 2021 18:57:01 -0800
+Message-Id: <20211210025701.7316-1-sensor1010@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1639067318-29014-1-git-send-email-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EsCowADnTlf_wbJhOuGqAA--.18832S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWruryrXrW8XFyfGFy3XrW8JFb_yoWktrcE9F
+        W8Cwn7WrsIvrnYgr1YvFW3Zr1vkF1q9F18X3W2qa4S934DKwsruFsrZ3s5Ar4DWr47KFnY
+        93s8GF4fArnrGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUjNzV5UUUUU==
+X-Originating-IP: [120.243.48.4]
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBlwZkq1SIlLJeLAABsX
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-09.12.2021 19:28, Akhil R пишет:
-> -	err = device_property_read_u32(i2c_dev->dev, "clock-frequency",
-> -				       &i2c_dev->bus_clk_rate);
-> -	if (err)
-> -		i2c_dev->bus_clk_rate = I2C_MAX_STANDARD_MODE_FREQ;
-> +	i2c_parse_fw_timings(i2c_dev->dev, &i2c_dev->timings, true);
+In the probe function, used devm_request_threaded_irq instead of
+request_threaded_irq, make full use of the resource management
+function provided by the kernel
 
-Was this patch tested at all? Apparently it wasn't compile-tested.
+Signed-off-by: lizhe <sensor1010@163.com>
+---
+ drivers/i2c/busses/i2c-imx.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-drivers/i2c/busses/i2c-tegra.c: In function ‘tegra_i2c_parse_dt’:
-drivers/i2c/busses/i2c-tegra.c:1635:13: warning: unused variable ‘err’ [-Wunused-variable]
- 1635 |         int err;
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index 3576b63a6c03..3e99827b2720 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1426,7 +1426,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 		goto rpm_disable;
+ 
+ 	/* Request IRQ */
+-	ret = request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
++	ret = devm_request_threaded_irq(irq, i2c_imx_isr, NULL, IRQF_SHARED,
+ 				   pdev->name, i2c_imx);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
+@@ -1472,7 +1472,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 
+ clk_notifier_unregister:
+ 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
+-	free_irq(irq, i2c_imx);
+ rpm_disable:
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+-- 
+2.25.1
 
-BTW, MM, DRI and media mailing lists have nothing to do with this patch
+
