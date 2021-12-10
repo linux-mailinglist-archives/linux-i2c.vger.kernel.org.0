@@ -2,82 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B09EB4708A6
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 19:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59979470B7E
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 21:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245319AbhLJSaB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Dec 2021 13:30:01 -0500
-Received: from fallback18.mail.ru ([185.5.136.250]:42304 "EHLO
-        fallback18.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235195AbhLJS37 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Dec 2021 13:29:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail3;
-        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=2TZZnhwlS7tgFmbbzJSs0twXAp/bB+HmkSUr2X7cEgc=;
-        t=1639160784;x=1639766184; 
-        b=djGGi1qRIt62SakUUz5nzZoGVQw8VRHvj75E+rua5MMqv/iIXX+CxiofoAIVAnYc9wsx5H/0aRvWvOcAPJWeDHp8SnWOG5TlThohkSDwbttYAl/hs+ZlrGD6o+bS3OlWSABAD2uaLXVywCN6MFBZJHTCUUJkzxkzPv92EzdkOYQ=;
-Received: from [10.161.55.49] (port=33182 helo=smtpng1.i.mail.ru)
-        by fallback18.m.smailru.net with esmtp (envelope-from <fido_max@inbox.ru>)
-        id 1mvkb8-0002iX-QC
-        for linux-i2c@vger.kernel.org; Fri, 10 Dec 2021 21:26:23 +0300
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
-        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=2TZZnhwlS7tgFmbbzJSs0twXAp/bB+HmkSUr2X7cEgc=;
-        t=1639160782;x=1639766182; 
-        b=iOfjaDpyZsI/+thhh43Fg6GLQ2NRhala7UuP6kp+kqAqKKLO9oIpDz25X0xON+QTUtcPZoz7hN5FbM5+p5WfEgEnpWPi9St4YXpY8di4e/25t4CnbbyIN8+V526mN9//CHOEXi1K0YG5MDcVdNraetdg068AJiW81i/ZZ8inUIS1LlZiahU7s1diPKVtgmvjFUYw6SkDtZHxDU+fJp9EtBuBupedskeCT78iJ0qjFUeznK+Q2m5ANFMJB64E5gvNpPqedtkevdeRE5Z/1OY01LzIKPNKU5odm4BURivsjk2UqnQT3NlL6Pvt80n+nNqAaw7yRlhSd8BJ22/3vnsMuA==;
-Received: by smtpng1.m.smailru.net with esmtpa (envelope-from <fido_max@inbox.ru>)
-        id 1mvkb7-0005jP-8C; Fri, 10 Dec 2021 21:26:21 +0300
-From:   Maxim Kochetkov <fido_max@inbox.ru>
-To:     linux-i2c@vger.kernel.org
-Cc:     bgolaszewski@baylibre.com, brgl@bgdev.pl, arnd@arndb.de,
-        gregkh@linuxfoundation.org, Maxim Kochetkov <fido_max@inbox.ru>
-Subject: [PATCH v3 2/2] dt-bindings: at24: add at24c1025
-Date:   Fri, 10 Dec 2021 21:26:04 +0300
-Message-Id: <20211210182604.14288-3-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211210182604.14288-1-fido_max@inbox.ru>
-References: <20211210182604.14288-1-fido_max@inbox.ru>
+        id S243176AbhLJUMY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Dec 2021 15:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242594AbhLJUMX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Dec 2021 15:12:23 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CACC061A32;
+        Fri, 10 Dec 2021 12:08:47 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id w1so33158985edc.6;
+        Fri, 10 Dec 2021 12:08:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zjHbozy8lTEw3S9Lfcr8vZlenDvjXEkS7qIHLdAcDg4=;
+        b=mTUaCWFS9m8JKY04hj2SpDF4uM+U+OZm1n77NagK7gdfu4PTiknx/Bncc5YVDHs0nG
+         sPMw/bXqKgHwCmoLQYwpDVSRMvGxUz/sweJD+sP2QbhWddbja4m2KOZ6j9aXcGdZpI74
+         bUkmOPTEBOQ67ni/GfBQBXpKTW9MGrSb3lkYgj0PyooQBd/j2m1YN7pGqk/sPxLMvXbs
+         O72UGGudJWkipw2xE8FC6luc7Kvscw9TwZh1YpWppvknx/ST4Vzj6dSlNYgdA6OJQLl9
+         Q3ypI4HbXOvYgY2zlCxEauBpc6TdJy7R68Veut2ywjn8IPOnqdFRn8SeOob16scbdeDl
+         tREg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zjHbozy8lTEw3S9Lfcr8vZlenDvjXEkS7qIHLdAcDg4=;
+        b=WPEvyK/5fEWH/u38E5ZfY7u5ii3tqUU9jd9lYciZCtprc88uqVgEKLHIu8N2IfhNHb
+         zj1DndybL3pISVDk5/VL3HzSPkRni1J3diyNN0TUXWCy4Wn4iNP1k2Xgqoxd2xbiYjXD
+         fDYiAZkX/RqxHcx7sIgBTyd2QnY4OHZ0KynOJ6+bi9pQ9QZiD636Bs+F0pQ520oP51D8
+         iwYl6SLto8e/47JolCka/9mYMX2x+hcOH0zkAPnOfFKvGF0qeUZxMsF6mQvsSFuQOmRB
+         eQ0BSMxQw54VQ9VdTpzfksk0/11sTGkV05b5M91AXVUbGF27mbKlMYqWnUqvWFFsin3f
+         lbDQ==
+X-Gm-Message-State: AOAM533FU0UFJoyTOgILEWm3eVcS9uOria6BwSAPVWrZZMPMpt/rt5gH
+        NKKK3A3/Tsm5+WyYSTfTxtgY9EWMerEqknNo8kE=
+X-Google-Smtp-Source: ABdhPJy6CvrLI2nJiPz+lJ9iWb5YgAsn9Qunps3UJrbeYJg8cz3p6VEAg92FM5GUe79+D/1/bXAgZOUVLBf/AGI693Y=
+X-Received: by 2002:a05:6402:291:: with SMTP id l17mr41658073edv.242.1639166926056;
+ Fri, 10 Dec 2021 12:08:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-7564579A: EEAE043A70213CC8
-X-77F55803: 4F1203BC0FB41BD947AAA3FEFDE5AEDD20C8A19806DF80E9487E9600A9FF4D76182A05F5380850404C228DA9ACA6FE275D9FD5C81C416D894889D4FF83D6EED050405D246718C6758F54CFC5DD61D080
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE742D9BD90C58D50E0EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006378556F4CD9D953FFE8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8D3A12118A9C42F86A028CC300BCA36BB6F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE70F3DDF2BBF19B93A9FA2833FD35BB23D9E625A9149C048EE26055571C92BF10FE5D25F19253116ADD2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8B1F8789D36234D406A471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7C289736CE4F78F08343847C11F186F3C59DAA53EE0834AAEE
-X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C644EC96CB38521146AE9D06D363FA23C15C99CA465037FB69C2B6934AE262D3EE7EAB7254005DCED7532B743992DF240BDC6A1CF3F042BAD6DF99611D93F60EFA50BD5087FBFCDAA699F904B3F4130E343918A1A30D5E7FCCB5012B2E24CD356
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D3472E5ECC12A9739C1112CC39C223DB9ABCFCAD0C7FF4DE954C3C1024D18873FFD3C2550323FCF822F1D7E09C32AA3244C9E04EA91D714E757A89F80907042BF6595A9E0DC41E9A4CF8D5DD81C2BAB7D1D
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojAtZOFKWMnjCT3UHS/d+U4g==
-X-Mailru-Sender: 689FA8AB762F7393C37E3C1AEC41BA5D90A9724417585EB190E418A09B11946D98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-7564579A: 646B95376F6C166E
-X-77F55803: 6242723A09DB00B4C456381A22064F8E4D2CF43611C06B13D5DA8B3B79AAEE56049FFFDB7839CE9E13D5095B00E522FD33ADE12670D6326F230EAEB31948DB195AD7736A32C9B3BD
-X-7FA49CB5: 0D63561A33F958A5BCFB5F7048D672DF664D188BA3883047E4234E66B3932FF3CACD7DF95DA8FC8BD5E8D9A59859A8B66EFF71F1B3C06F72CC7F00164DA146DAFE8445B8C89999728AA50765F79006378E5B25976F539216389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8C824672CB62AFFF2F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA775ECD9A6C639B01B78DA827A17800CE79E9721B410A3B6ED731C566533BA786AA5CC5B56E945C8DA
-X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C644EC96CB3852114E57AAA8DAA6A5AC5411096548B1E64979C2B6934AE262D3EE7EAB7254005DCED8DA55E71E02F9FC08E8E86DC7131B365E7726E8460B7C23C
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojAtZOFKWMnjAcpe/zsANphQ==
-X-Mailru-MI: 800
-X-Mras: Ok
+References: <1639138557-1709-1-git-send-email-akhilrajeev@nvidia.com> <1056abdf-684b-b808-3471-d4733fd5e449@gmail.com>
+In-Reply-To: <1056abdf-684b-b808-3471-d4733fd5e449@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 10 Dec 2021 22:07:14 +0200
+Message-ID: <CAHp75VfykSN6Jnoq6XsEL7W9+yCq-uwRdFRTSAJ6bBuYCuMa5Q@mail.gmail.com>
+Subject: Re: [PATCH v3] i2c: tegra: use i2c_timings for bus clock freq
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Akhil R <akhilrajeev@nvidia.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add bindings for Microchip EEPROM 24xx1025.
+On Fri, Dec 10, 2021 at 7:24 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+> 10.12.2021 15:15, Akhil R =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > Use i2c_timings struct and corresponding methods to get bus clock frequ=
+ency
+> >
+> > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> > Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>
+> Note that your s-b should be the last line of the commit message. No
+> need to resend for that.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- Documentation/devicetree/bindings/eeprom/at24.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+AFAICT there is no such requirement in the documentation. It says that
+SoB should be last among SoBs, which is not broken here.
 
-diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-index 4c5396a9744f..c16199997716 100644
---- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-+++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-@@ -86,6 +86,10 @@ properties:
-                   pattern: c1024$
-               - items:
-                   pattern: cs1024$
-+              - items:
-+                  pattern: c1025$
-+              - items:
-+                  pattern: cs1025$
-               - items:
-                   pattern: c2048$
-               - items:
--- 
-2.32.0
-
+--=20
+With Best Regards,
+Andy Shevchenko
