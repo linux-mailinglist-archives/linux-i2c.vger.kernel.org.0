@@ -2,91 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 856684706EB
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 18:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3084708A4
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 19:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243779AbhLJR1k (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Dec 2021 12:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbhLJR1j (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Dec 2021 12:27:39 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33923C061746;
-        Fri, 10 Dec 2021 09:24:04 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id k23so14800286lje.1;
-        Fri, 10 Dec 2021 09:24:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=2IHG+224jizpqOrnxgQSmdGEKmll0BWkyNyhmdaM0bE=;
-        b=L5qlDiCtGk1LiLizXL2C6SosffEX7C64GJhEQltHM2lxsdWBecylY8QgwtBctzYaa0
-         eRX94RDRAps8pDAdUWSZDSp4KDRKmrv+6NF7KI/MGHQ6MP0JlGfemBo2sTRDRHqQwiF6
-         /FQXqObm9BQVYaVmx2RauEGl8RgYmpDgHSlJNnVMDPRJc6yDsY87QE0tjQ94VB/y8etf
-         5gluf975JfpOIxvq1ML3eTnGcxuS8zkHVCJkKeijTbciMD9lSyI290Fz4BW6SGGF6Uhw
-         A6TmpOfh8AECTpbwBkzWLC+lbvHxHDZSHPIv2O8LmX/pje3wghTv1/68pqkKx/POekwg
-         MPqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2IHG+224jizpqOrnxgQSmdGEKmll0BWkyNyhmdaM0bE=;
-        b=0CmMpt4CqZXlvIAamvxbQa+nIUKrBD0iG5hPdSTuyCyLu12ojLX40SMF0AYBE2Mqrc
-         CDOaWr1shyMCFSBs68naz/RsWpiASuEzM+Yjs2uJUL7tX1e7cs4BN4+vQKsb3iA72Np3
-         Q6i/BKn2Ui6aiti9mWf2/+ItLq0eiBX8w7IU4PhGBj0sitFEjAMxX5xfen985bRLICCF
-         Ia7AlX9kKRwuzZvnytMwKQLqfZ58jlKBcJITjrNg+gt+rqdJH7cPxmKEYmSq3vnhwRve
-         GjpCeC93Oeobqj6Oxkt4J1Xrkf4wEkhcgcbCXx8vUAEAF2rQ59yo9zASVfaeL38NaX+3
-         Wq6g==
-X-Gm-Message-State: AOAM532vsEBhRLgCFSJdyHIW1zx7/SKKLfl/7BR9Gj0zjdsts9xntHCa
-        o8KoQI1dALNLS+zyN0C2+exGw+B1GD8=
-X-Google-Smtp-Source: ABdhPJwZkhCEsqEVnMoHnpOfPKK8tGBlJt+jCpYBEDSjDTIq0Rj+8s36PTIWmcqQKXwGFvvjVGV+kw==
-X-Received: by 2002:a2e:9b17:: with SMTP id u23mr14238757lji.258.1639157042322;
-        Fri, 10 Dec 2021 09:24:02 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id a1sm397489lfb.190.2021.12.10.09.24.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 09:24:01 -0800 (PST)
-Subject: Re: [PATCH v3] i2c: tegra: use i2c_timings for bus clock freq
-To:     Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
-        christian.koenig@amd.com, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, sumit.semwal@linaro.org,
-        thierry.reding@gmail.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org
-References: <1639138557-1709-1-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <1056abdf-684b-b808-3471-d4733fd5e449@gmail.com>
-Date:   Fri, 10 Dec 2021 20:24:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S245314AbhLJS35 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Dec 2021 13:29:57 -0500
+Received: from fallback12.mail.ru ([94.100.179.29]:40170 "EHLO
+        fallback12.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245313AbhLJS35 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Dec 2021 13:29:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail3;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=bjsNY9ebFBhZQPU1jsyZxR4MTdHXf/kXeXTngCjgn7Q=;
+        t=1639160782;x=1639766182; 
+        b=sz1QyvOiperf3X74htvovH8E/BePHxNCJNtbeks/wR+NpJwJBlT9cn5jogse6/mJOIGT/UZpCcbWu+XEo32sk2Nj7JxRC8sA8bUWD5fJapnl5dho6NeZ/MPxRkvMgkkvM8JuDZbUYdk5lLqI3gtQXHecc4oRNnPsJDESuSPfoYI=;
+Received: from [10.161.55.49] (port=44972 helo=smtpng1.i.mail.ru)
+        by fallback12.m.smailru.net with esmtp (envelope-from <fido_max@inbox.ru>)
+        id 1mvkb6-0003Ug-Ir
+        for linux-i2c@vger.kernel.org; Fri, 10 Dec 2021 21:26:20 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=bjsNY9ebFBhZQPU1jsyZxR4MTdHXf/kXeXTngCjgn7Q=;
+        t=1639160780;x=1639766180; 
+        b=hMLTKoypsW2eLvURXQm905jLUJ6zHrdgLN+N82gPICGBV2dmrgsEo8h6deJITSbl0kKwVeEMpzlXg0MVA2EICvSYCz2WZuR73rKtFcQgEuRei+f7ntqkXrOezgyfnVfKJggLdUYg/J6PzUFlfL4pLxXY/X/Se9i8snle+8pMRERIG/qBhWrOcdoDtm1RHKWqdwLrCi4djOV/GAucUWcobvHXw9jclA5c7nbOWe2F+ZIGFseE6wIXVIULoYU5XqIId9cbUis0kSTxVdKn1rKFfA05hpGOwFCuHDboQN9P5QPGkTeRrQCPnoV4SH7lZMeVOYjmFK6jZ2WOieZGlYi6sA==;
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from <fido_max@inbox.ru>)
+        id 1mvkb3-0005jP-FW; Fri, 10 Dec 2021 21:26:17 +0300
+From:   Maxim Kochetkov <fido_max@inbox.ru>
+To:     linux-i2c@vger.kernel.org
+Cc:     bgolaszewski@baylibre.com, brgl@bgdev.pl, arnd@arndb.de,
+        gregkh@linuxfoundation.org, Maxim Kochetkov <fido_max@inbox.ru>
+Subject: [PATCH v3 0/2] Add Microchip EEPROM 24xx1025 support.
+Date:   Fri, 10 Dec 2021 21:26:02 +0300
+Message-Id: <20211210182604.14288-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <1639138557-1709-1-git-send-email-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD9FFF274446F725B74506C72DDA7EBE5A636C5C70934101B1A182A05F53808504004ED1F87DA19DE76371A90EBB672DC005A9E68CE5B82827EC51E5FB7B5547CB8
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7876E9C5582D2D91DEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637782358EF9635990EEA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38BBCA57AF85F7723F27950018F11253DFAC3740693B34C01FA20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0A633E4711A430BBE8941B15DA834481FA18204E546F3947C7AE820D2C17D0E56F6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F790063773DCDF0198120BE8389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC72CEEB2601E22B093A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4930A3850AC1BE2E735E4A630A5B664A4FFC4224003CC83647689D4C264860C145E
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C644EC96CB3852114204C862BA1F0102778AD9850EE95A54C9C2B6934AE262D3EE7EAB7254005DCEDCF20510D834BC2AB1E0A4E2319210D9B64D260DF9561598F01A9E91200F654B011BCFBCC9B646C2D8E8E86DC7131B365E7726E8460B7C23C
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D345C064E16D8ABF33562FD38E9F719E90B9205DAE34D518E321E5483C9E18998A872D3379A5750BCEB1D7E09C32AA3244C36A6751616BF82319FAB58086B935295E646F07CC2D4F3D88D5DD81C2BAB7D1D
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojAtZOFKWMnjBHionySKigQw==
+X-Mailru-Sender: 689FA8AB762F7393C37E3C1AEC41BA5DBA72D3622C49BF44CB1D7AA2C2B2B23C98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-7564579A: B8F34718100C35BD
+X-77F55803: 6242723A09DB00B4C456381A22064F8E4D2CF43611C06B13088F8C84D6277010049FFFDB7839CE9E13D5095B00E522FD97421EF899568516613A7E8A475E36492D8D493F2113D152
+X-7FA49CB5: 0D63561A33F958A5649054A099D5B38F0741389335D5DAB06CDD7C0E1AB99611CACD7DF95DA8FC8BD5E8D9A59859A8B64071617579528AACCC7F00164DA146DAFE8445B8C89999728AA50765F7900637FC170453F675FFAC389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8809A55E64550A2B6F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA775ECD9A6C639B01B78DA827A17800CE79E9721B410A3B6ED731C566533BA786AA5CC5B56E945C8DA
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C644EC96CB38521141C629D4B940BB49D600880C85F15DED69C2B6934AE262D3EE7EAB7254005DCEDCF20510D834BC2AB699F904B3F4130E343918A1A30D5E7FCCB5012B2E24CD356
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojAtZOFKWMnjDNSLv5LF+T3Q==
+X-Mailru-MI: 800
+X-Mras: Ok
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-10.12.2021 15:15, Akhil R пишет:
-> Use i2c_timings struct and corresponding methods to get bus clock frequency
-> 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Add Microchip EEPROM 24xx1025 support.
 
-Note that your s-b should be the last line of the commit message. No
-need to resend for that.
+v3: add dt-bindings
+v2: rebased on git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git/at24/for-next
 
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 21 +++++++++------------
->  1 file changed, 9 insertions(+), 12 deletions(-)
-> 
-> v2->v3: Removed unused variable 'err'.
-> v1->v2: Added temp var for i2c_timings struct in function.
+Maxim Kochetkov (2):
+  eeprom: at24: Add support for 24c1025 EEPROM
+  dt-bindings: at24: add at24c1025
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-Tested-by: Dmitry Osipenko <digetx@gmail.com>
+ .../devicetree/bindings/eeprom/at24.yaml          |  4 ++++
+ drivers/misc/eeprom/at24.c                        | 15 ++++++++++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
+
+-- 
+2.32.0
+
