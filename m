@@ -2,88 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59979470B7E
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 21:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033F1470C76
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 22:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243176AbhLJUMY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Dec 2021 15:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242594AbhLJUMX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Dec 2021 15:12:23 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CACC061A32;
-        Fri, 10 Dec 2021 12:08:47 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id w1so33158985edc.6;
-        Fri, 10 Dec 2021 12:08:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zjHbozy8lTEw3S9Lfcr8vZlenDvjXEkS7qIHLdAcDg4=;
-        b=mTUaCWFS9m8JKY04hj2SpDF4uM+U+OZm1n77NagK7gdfu4PTiknx/Bncc5YVDHs0nG
-         sPMw/bXqKgHwCmoLQYwpDVSRMvGxUz/sweJD+sP2QbhWddbja4m2KOZ6j9aXcGdZpI74
-         bUkmOPTEBOQ67ni/GfBQBXpKTW9MGrSb3lkYgj0PyooQBd/j2m1YN7pGqk/sPxLMvXbs
-         O72UGGudJWkipw2xE8FC6luc7Kvscw9TwZh1YpWppvknx/ST4Vzj6dSlNYgdA6OJQLl9
-         Q3ypI4HbXOvYgY2zlCxEauBpc6TdJy7R68Veut2ywjn8IPOnqdFRn8SeOob16scbdeDl
-         tREg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zjHbozy8lTEw3S9Lfcr8vZlenDvjXEkS7qIHLdAcDg4=;
-        b=WPEvyK/5fEWH/u38E5ZfY7u5ii3tqUU9jd9lYciZCtprc88uqVgEKLHIu8N2IfhNHb
-         zj1DndybL3pISVDk5/VL3HzSPkRni1J3diyNN0TUXWCy4Wn4iNP1k2Xgqoxd2xbiYjXD
-         fDYiAZkX/RqxHcx7sIgBTyd2QnY4OHZ0KynOJ6+bi9pQ9QZiD636Bs+F0pQ520oP51D8
-         iwYl6SLto8e/47JolCka/9mYMX2x+hcOH0zkAPnOfFKvGF0qeUZxMsF6mQvsSFuQOmRB
-         eQ0BSMxQw54VQ9VdTpzfksk0/11sTGkV05b5M91AXVUbGF27mbKlMYqWnUqvWFFsin3f
-         lbDQ==
-X-Gm-Message-State: AOAM533FU0UFJoyTOgILEWm3eVcS9uOria6BwSAPVWrZZMPMpt/rt5gH
-        NKKK3A3/Tsm5+WyYSTfTxtgY9EWMerEqknNo8kE=
-X-Google-Smtp-Source: ABdhPJy6CvrLI2nJiPz+lJ9iWb5YgAsn9Qunps3UJrbeYJg8cz3p6VEAg92FM5GUe79+D/1/bXAgZOUVLBf/AGI693Y=
-X-Received: by 2002:a05:6402:291:: with SMTP id l17mr41658073edv.242.1639166926056;
- Fri, 10 Dec 2021 12:08:46 -0800 (PST)
-MIME-Version: 1.0
-References: <1639138557-1709-1-git-send-email-akhilrajeev@nvidia.com> <1056abdf-684b-b808-3471-d4733fd5e449@gmail.com>
-In-Reply-To: <1056abdf-684b-b808-3471-d4733fd5e449@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 10 Dec 2021 22:07:14 +0200
-Message-ID: <CAHp75VfykSN6Jnoq6XsEL7W9+yCq-uwRdFRTSAJ6bBuYCuMa5Q@mail.gmail.com>
+        id S240192AbhLJV1V (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Dec 2021 16:27:21 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:58864 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237368AbhLJV1U (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Dec 2021 16:27:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0FF3DCE2D41;
+        Fri, 10 Dec 2021 21:23:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAE7BC00446;
+        Fri, 10 Dec 2021 21:23:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639171421;
+        bh=WZhMzHgknQpWsqrRNERS1gjjZ0fPcQiMPzk5ltfw6kc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TlDxseGnBGuKdK+5tchCA7yu/kVuWetPW6/apm/qXwr6f9dbFpQq1jXk5ghwAa8qK
+         fx6ht9/XzG9kFq/R4quwslmi2c81DEDz48Sp3uTUBOHnQnVedV8xEgAu0G8eAz7Wzp
+         K+9iQEx9ZVdXxbMOU6aqxpBPBu7OBILsvwNP+lVNLDjRF8np4JX6eBHdh7d8jpzzax
+         /XOVCdgoasqYkNZvnhD9KJdMWnhkGSqHrJCaKIS7ST3tkqR8mvxH2xzYUGcIfORDiQ
+         L7FkGiL06ULu27og9Ai0zOAb8Z+N/+vuBUxQvIW4qudhlZ/NW0+lW+JUVv8FG4dYJi
+         OeB0ga/43vtAA==
+Date:   Fri, 10 Dec 2021 22:23:35 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     andy.shevchenko@gmail.com, christian.koenig@amd.com,
+        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org, thierry.reding@gmail.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH v3] i2c: tegra: use i2c_timings for bus clock freq
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Akhil R <akhilrajeev@nvidia.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <YbPFV39VU4YY9SOn@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
+        christian.koenig@amd.com, digetx@gmail.com, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        p.zabel@pengutronix.de, sumit.semwal@linaro.org,
+        thierry.reding@gmail.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+References: <1639138557-1709-1-git-send-email-akhilrajeev@nvidia.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="S5JuNTA1eC+dxV7V"
+Content-Disposition: inline
+In-Reply-To: <1639138557-1709-1-git-send-email-akhilrajeev@nvidia.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 7:24 PM Dmitry Osipenko <digetx@gmail.com> wrote:
-> 10.12.2021 15:15, Akhil R =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > Use i2c_timings struct and corresponding methods to get bus clock frequ=
-ency
-> >
-> > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> > Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->
-> Note that your s-b should be the last line of the commit message. No
-> need to resend for that.
 
-AFAICT there is no such requirement in the documentation. It says that
-SoB should be last among SoBs, which is not broken here.
+--S5JuNTA1eC+dxV7V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
---=20
-With Best Regards,
-Andy Shevchenko
+On Fri, Dec 10, 2021 at 05:45:57PM +0530, Akhil R wrote:
+> Use i2c_timings struct and corresponding methods to get bus clock frequen=
+cy
+>=20
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+Applied to for-next, thanks!
+
+
+--S5JuNTA1eC+dxV7V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGzxVMACgkQFA3kzBSg
+KbZebg//SU+X/Tm0ervkH0g5sxrsw9ac426lDyOrd0/0YbXjCiHaQZxi6HJMzRht
+h6nEUbpTDnX5qgNZ/zJ79AYReqm8huhZzb6I0a3neNTlMTrJoUg1iykXGAO9QHGo
+Hj9R7dwJpMJRHonGvOVqi9uPLpGxOMQyQuBS1kX4DxuEwRTjLiqhWKYzEn6nvVnY
+Y65hmkT0NjpzmvFVx9fT7PFudSp5+0jyFIkj3AOi+p/N5WGr7EI+wLE9CwrLuIAa
+vzEIlaPa6+43SDSGSrzjmACNFjodEgLNuhK8Aor4DUiMKRGC45Bj1qIN7fYRNPbU
+wT2QQ8vHO2ooPVZWFdGJ4G8jjxzF4Q0dqNNuTXD6m3pZAELN/5vmnxyPVG0Tk0Q3
+8hrfg+1uYXQuIdbfjduZNLSdXfHcT76NVrT+WftJMQmadt9AURZ9Olhjmx2uJHuW
+QruqXLmM9iku3QFO74puRcWDNEDuQn2fGWzhhR7/zyt6MMS7Agd69O+nFHofbeE1
+OMs9kigGD2fU8PlVQ+AzUJbiUvHCxdKd3zFbWpiHhDDTYooMlMCAv85RH44c7WBV
+P9PDA4ArgughAcFS/F6PhVpuUcsUec6RpuU8UsUdfqSWdkUmdym21/GglwaxUVMw
+eM8jTFJ6HSWeg3ePu/FEv/tFUsJiSpW1n8kgsR1lf3rhBWKg/pw=
+=2KoO
+-----END PGP SIGNATURE-----
+
+--S5JuNTA1eC+dxV7V--
