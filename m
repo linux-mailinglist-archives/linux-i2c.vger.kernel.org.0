@@ -2,104 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C286B46FD05
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 09:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973EB46FD15
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 09:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238747AbhLJIzO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Dec 2021 03:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S231728AbhLJJAL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Dec 2021 04:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbhLJIzO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Dec 2021 03:55:14 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C948DC061746;
-        Fri, 10 Dec 2021 00:51:39 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id w1so27471255edc.6;
-        Fri, 10 Dec 2021 00:51:39 -0800 (PST)
+        with ESMTP id S238778AbhLJJAJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 10 Dec 2021 04:00:09 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061E9C061746;
+        Fri, 10 Dec 2021 00:56:35 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id 137so6257016wma.1;
+        Fri, 10 Dec 2021 00:56:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qoy86E6xdZKO6S/hVw3NpThoOmfROdvRvdZsaI2avXI=;
-        b=Zu4UsWq5769nhyV6CnhQ2qvKw8Bu5hHU5DRymcELHiP/DE978ugrtzbx7ta8ylw4yL
-         oy+E6fnToerF3hKGE5eMAXtdwPVM1sH93UF5lkjshucBWNbTI+GCrwK19lAbUg+kdR12
-         ijRNYeLL1J58LQh2aG+ItlrKWN+u/6tuyxFzJNJVGGkSMHhrL6fPgr1vXYw288boqYQU
-         BP3fdHD9hIE5Bu2aqfMGFYzX36adVVIgF1twARfJJLbpu0TWgB+qyZ9QosCLUrDuRgEg
-         lv9II0DHGBJURGwXfQUwP2HJbgSMIz67klpAMbSqJkoCA65gyV/cE49Sa+st1ozg9QLK
-         vT8Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ugWZHzEIl/ed3UDm2nkNMQGNSpbu5KKxXnSYP4z8tmE=;
+        b=V1Hc554AnCsotFmE/SYmLUYY13GxEa0a/+6yg6iYQxXVQooWp4UIl1EXOR/ohWtaoh
+         SSDSNJHt4bNUl/dJwy0wej4Ep8UARUR21gHDlk+x663IHiyy4a/NgKCRovFDYw/X0GqK
+         B0GvmtraFjTWvvl8t8r0RLTXTsXkqXtW8LJlkQ+OKgUTPFT8X4K/hmLXYq6iNBIRHRDE
+         5fEAb3Dz3vp1/xo0UjoVyow4VJpvk8nnqABG1vfT3GWt/VPgf3y2fDFVg0N08aw/nD4M
+         9oCdjVfig+4ewNy8Vv94fP+lE9ZFAlF1cWVDMK/Bm2xCoBxzeXAVuJWqn4ALjpPKRpg0
+         0oAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qoy86E6xdZKO6S/hVw3NpThoOmfROdvRvdZsaI2avXI=;
-        b=ukdaiYg0rQibE7rCc+HYPiYtGncAFkP6DlF4hB5zc2gxtKPALY6H4cIGnI7jmYrAOl
-         y4RRDoH0GuDMpl2XsoqGvt6EUMwiw0Y+g45XJHdQYiLSB5/PZRKUh40UTOlPV/pmBj1u
-         qT6ak1F26J/eIQDhk4i50YDBioYvPxzk0g+0YMQWkMyNA0eCK5Qcnc6neg7ekvvCMPZs
-         oK90MHLQAFFNKXPFReTZffc0dIr/ejQthhyyHlLSNfrD0mxrkfdc2PUmRLzLCVcDdmHB
-         oO5PY5AmCiJ+BmyH21ctR6TNbMCsgto07mQFnacrOdiKU8WZova1RKxcMrwewzdAxWQt
-         O61A==
-X-Gm-Message-State: AOAM53266Om08XC7BqvT839ELFXZHyZiyeoF/KSmKjl7ebvsPDMJdbGU
-        9EIi41ObbCUYFP5DRpRWVeEN3x5xdjzBFeDU/oI=
-X-Google-Smtp-Source: ABdhPJxHNSUve/zOGwzcv3MOGMFIFLskV6+kpZsEcy6Ojesw+HwCpEVpm+8mALw689m6K2essJt/qel6eRAdZ92B/Is=
-X-Received: by 2002:a50:c35b:: with SMTP id q27mr36451152edb.154.1639126298341;
- Fri, 10 Dec 2021 00:51:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ugWZHzEIl/ed3UDm2nkNMQGNSpbu5KKxXnSYP4z8tmE=;
+        b=l6EXYA/wM2UiddIMUCSQmpRhx/f7KcHM6rtEFKRqioHPqC+HHcfikGa4rW5Jd+/AqX
+         MTpVjA3BqQDzqQKiC2keOu9FdyKS+mxuWXH5YQkPpXfWbYClnoSRBcEhPohDP0owmDws
+         VHtdmv3ALrqfbYV95Z6iqa36FeXgvXTMAcHxJv/HLurY+TUgwVwsbRjyZJztFdn1qKPy
+         fNQ97xkBAOL9RFD2L3qD7QKdT5TmvE4OxVJV4oRZut49hnzs56EvR/m3pfgXWi/f/rnd
+         eYKcrzKnFEyDoX+R5SWxxXojkYRF/CKhgTQyZGTrUn4yXrOJT4T98Ry1e4XoWtDD6Pkp
+         spcA==
+X-Gm-Message-State: AOAM532INNuYhk6r36cVY12fdNjhAU5cPiay8wpzAwGRwIOWu5oluY3l
+        fjJ5+2gOPLavV/ryLtfIz5U=
+X-Google-Smtp-Source: ABdhPJzpGB9V66upS/EkyZnBy/vCflZB/b4r7xftEE8qItQGNebjwjNFs3haPcemiq8JZjpXgnqFTw==
+X-Received: by 2002:a05:600c:3489:: with SMTP id a9mr14966701wmq.53.1639126593509;
+        Fri, 10 Dec 2021 00:56:33 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id w17sm2333809wmc.14.2021.12.10.00.56.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 00:56:32 -0800 (PST)
+Date:   Fri, 10 Dec 2021 09:56:28 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
+        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/2] Add SMBus features to Tegra I2C
+Message-ID: <YbMWPGMcHEQXGkHf@orome>
+References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
+ <e3deea6a-3854-e58c-0d27-602413f2a496@gmail.com>
 MIME-Version: 1.0
-References: <1639067318-29014-1-git-send-email-akhilrajeev@nvidia.com>
- <c9eceaba-df4e-0e75-d6a7-87cfdf45fced@gmail.com> <BN9PR12MB52739E656160D234F5694C54C0719@BN9PR12MB5273.namprd12.prod.outlook.com>
-In-Reply-To: <BN9PR12MB52739E656160D234F5694C54C0719@BN9PR12MB5273.namprd12.prod.outlook.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 10 Dec 2021 10:51:02 +0200
-Message-ID: <CAHp75VfWrwPmMzbX5uYPgiXo_h=wtG=qc-VMFujJ37hR1ntV1A@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: tegra: use i2c_timings for bus clock freq
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2IhQJxqBxhd1xrh2"
+Content-Disposition: inline
+In-Reply-To: <e3deea6a-3854-e58c-0d27-602413f2a496@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 8:43 AM Akhil R <akhilrajeev@nvidia.com> wrote:
->
-> > 09.12.2021 19:28, Akhil R =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > > -     err =3D device_property_read_u32(i2c_dev->dev, "clock-frequency=
-",
-> > > -                                    &i2c_dev->bus_clk_rate);
-> > > -     if (err)
-> > > -             i2c_dev->bus_clk_rate =3D I2C_MAX_STANDARD_MODE_FREQ;
-> > > +     i2c_parse_fw_timings(i2c_dev->dev, &i2c_dev->timings, true);
-> >
-> > Was this patch tested at all? Apparently, it wasn't compile-tested.
-> Sorry, it got somehow missed as the build did not fail when prepared
-> the image for testing. Thanks for pointing this out.
-> Would fix and update.
 
-It is because Dmitry runs `make W=3D1 ...`. Otherwise these types of
-warnings are hidden.
+--2IhQJxqBxhd1xrh2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > drivers/i2c/busses/i2c-tegra.c: In function =E2=80=98tegra_i2c_parse_dt=
-=E2=80=99:
-> > drivers/i2c/busses/i2c-tegra.c:1635:13: warning: unused variable =E2=80=
-=98err=E2=80=99 [-
-> > Wunused-variable]
-> >  1635 |         int err;
-> >
-> > BTW, MM, DRI and media mailing lists have nothing to do with this patch
-> Even I was wondering on this, but apparently those lists are shown if get=
-_maintainer.pl
-> is run. Would remove the mailing lists going further.
+On Thu, Dec 09, 2021 at 07:04:30PM +0300, Dmitry Osipenko wrote:
+> 09.12.2021 18:05, Akhil R =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > Add support for SMBus Alert and SMBus block read functions to
+> > i2c-tegra driver
+> >=20
+> > Akhil R (2):
+> >   dt-bindings: i2c: tegra: Add SMBus feature properties
+> >   i2c: tegra: Add SMBus block read and SMBus alert functions
+> >=20
+> >  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt |  4 ++
+> >  drivers/i2c/busses/i2c-tegra.c                     | 54 ++++++++++++++=
++++++++-
+> >  2 files changed, 57 insertions(+), 1 deletion(-)
+> >=20
+>=20
+> How this was tested? This series must include the DT patch. If there is
+> no real user in upstream for this feature, then I don't think that we
+> should bother at all about it.
 
-I would recommend using my script [1] which has good heuristics.
+This is primarily used by a device that uses ACPI and the driver uses
+the firmware-agnostic APIs to get at this. However, it also means that
+the driver effectively provides this same support for DT via those APIs
+and therefore it makes sense to document that part even if there are no
+current users of the DT bits.
 
-[1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.=
-sh
+One big advantage of this is that it helps keep the ACPI and DT bindings
+in sync, and document this on the DT side also allows us to document the
+ACPI side of things where no formal documentation exists, as far as I
+know.
 
---=20
-With Best Regards,
-Andy Shevchenko
+Thierry
+
+--2IhQJxqBxhd1xrh2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGzFjwACgkQ3SOs138+
+s6F8mQ/9Fc5fNDbeJjUOJvaNOnGBiFoOwLTvUU5rJe09sJUQNqqXte8PM4BhTxGm
+rnqsAjSmfY3Hgw9XbdIad4hEj3GAtKavsAdK5oyDcqmCyyIcP2k2DxcPSP+LsOCN
+MnH6Byzm6HeMPX+FunjtCXxuJT1Htsb+Uy5iUkGctqZeW13f60qMSfmyKlcX6uxJ
+b4///ebppLbU9u989KnLx6WDQX9tfppHzCqYR8K9yYH25nidvmr5uu8EHUBYq0s2
+t+CyKM+IXbpCsk6ZS1eIPuKIkKntvl8DHkIiEMUX3Vs45DGWc6oYYF/Wa9GSZn3q
+xBI1B2nUfQCvumi0cyTwjJBSpkSjnBFLon3KAoqs20LygKF6XLjcHJZDtltuLKXB
+XqXCOoR2qoH6JwxdpXgYAr+pXEz1XJeKfQCZ61RDWI34I/nt2SYUxmEJIzFUXhmJ
+VgrugrKVa3yeGz8H6oni8YvQLufMPn+MrInuvAy24ndt0ICnB9f970tZwEngFacp
+YlxjV63f+KvH78B2KWjxtTTzqExZi393GHoxLjahWWx+EYXrYIdh2F+7DDwHN+NI
+6Ac+uWK3ZJZuoLADboTmoc45ShoN0NTkFjIiIGzmzU2cgcxG0D8d33+kT6GBNNPi
+z2ZODA/uePOon1EdVR6lbdAFMTA/8RnKQbK5BtuNEZ+YcRnRFqY=
+=eLpi
+-----END PGP SIGNATURE-----
+
+--2IhQJxqBxhd1xrh2--
