@@ -2,251 +2,200 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5E646FE00
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 10:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A7247007F
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Dec 2021 13:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239480AbhLJJmS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 10 Dec 2021 04:42:18 -0500
-Received: from mail-bn7nam10on2052.outbound.protection.outlook.com ([40.107.92.52]:9600
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S230472AbhLJMTv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 10 Dec 2021 07:19:51 -0500
+Received: from mail-dm6nam10on2048.outbound.protection.outlook.com ([40.107.93.48]:46561
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239366AbhLJJmP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Fri, 10 Dec 2021 04:42:15 -0500
+        id S229483AbhLJMTu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 10 Dec 2021 07:19:50 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z4cAj42pIXiRUMxPybPy6bWDASs6zfD1GDv3vHC8aEQfk7rMLzPiREbOwQ8ZfvUmdgheFGduozK0Um+iP7hbd8Wyd/2s7q6ZrsmzK2bVHwkSzz0S8ESCOBsREAtH5IJ3ULHHJ7v+KfEmsbQgD6undabRPI7BvUZLikP4lR7M+DCtMuO7R700ihdss0REFFS3gpa/ndWxGES6BtfyRGEYJFoOvPAnZ0mFY6e3ggTD0p2nzqjdHSmfbKj0S+x7HtkY+u9vNjWt4pAtfEYis9I2P8sbxWzNph00rrpBTHacTuFfjVMZ6Ewm0yg9dUh9ybQapgcp7OqYUSXWsZPiAYOvoQ==
+ b=crY3l2QmIbG5UzpPapu/BVG8+AKuJP3XDqw7LDAz549bD8GuWRppkIjQGZqGDcaYoETxrpnrYWGrrwjG+kui1DER9j1cXu2vZwAXObslxHDiqv+Z2OL+EeazLMOk8WZnQEJESwVUp8UNKU074KleR/NYAWhLGAcB6zeRKO8e8dA+dfxTtOJpjfVeOcLmUnTDKUdEE80lj72t1auPazwtmsEQLiAcJuSOmsHLZGrso+x90vsjnWAHJJljwL32B3YxgTjrILxJB56gGhAPSIDf8FQZNJ/SlK2ypigHF0djRX7KJmSIo/EZRS3wlZWgBRLZ0TOlMJUQ4lhY2pAjZPcMpQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ina+kzk0Y1ePiERk5eZJAmMQLvjDuk6C4ze070WAnc0=;
- b=RNMngPRCrTPKNm4k2uUZUAixQ5fPCnueCu3Mm63/wCkSF1C4W23u+6kjhSNV/BDzXh+MYwvanNLqDGjietQsEAiksxY6DEwHE5Qfz9lXLMYTTnpoJarGNuEmhaK7d1Fdi3KJ+didMaBpHq+J9sKz43EdR23UkIhklkroUvZfGXF3Mndr6rtX/hLrPtwDIWZTI5UlmYWeFGv9lHKETGEnUcjv0Rc0BWkIHeNRaUMErLO2U8jzXltKT++BebeAT/wAbaPbPUbNnuXoSSrn5+IZ9xW9YRb2FSSAZz5lH1IT8levkgQnk7li0RRhYDk2OeHvxi6/Dgixm330L88+NQ1kmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
+ bh=Slt+9fP9OeSpqNTHPmvrHG1E0ydNuIK6LJsqnPx5bv0=;
+ b=WbmnUf6jS8kfs5VK7NWpnUIej34JaZTjU/jT7SE0qlnqb3A1EvgJf5oIUr3UVXT8W/5XvgK3bTiHBMw0QlI4JsLgJi6QenWQntmgpYw2u196OZ3X3w6U5LDVkhizwWTvtTCl0Roo7aZk0lnV4J5PAVnvGdUjkRkv1nZ2ieAxgsSTMXaYedYRBmUO1CMbHAp3dgAbNkye/a8/5wq+RvG4nBgwtjZmdi2WfqoDbZw18eDeZI+e+FL2dOK6gH5Xl2Tavj3vVl1fwRQr97dMKB6qEKk5HMakwKmKB0EX96Umfb6O6QyGEYDI8gmpcUdYIdwZ/Oe13f4FsAfHbJXT+2pELw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
+ is 203.18.50.13) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=temperror action=none header.from=nvidia.com; dkim=none (message not
+ signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ina+kzk0Y1ePiERk5eZJAmMQLvjDuk6C4ze070WAnc0=;
- b=KfQi73cJN8z5mon5XDiEL2EAvt+BdHxWBo5tCGYgsIPPMsMuhNhEsSCjpEA5ZmYeCq9JgHCeZ4lg0v/WAyzR6ti/vkpaHXT1peDLPC5paspp1WZGRPOw5TgGu3NVp819Oc+chHTIiDRCSE9zuKMrG8E9L0odfgKph3YtvYvsvazk1M/ExRSNcS2+bJw/xEpAukD36ww6iW1Ftaq0yfgovLNeZDDD4zdo4Fx24jkPAQ0VaQ6i/Sj1qt/Fp381QGTooDvm3272oLYFi/q+kqB6P+z9YfqaX54pfQjHH53YkcdTEWelk0u7raBD7lIOcqLTKPiHM/LyLJNlyqNSl/56pg==
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com (2603:10b6:408:11e::22)
- by BN9PR12MB5306.namprd12.prod.outlook.com (2603:10b6:408:103::12) with
+ bh=Slt+9fP9OeSpqNTHPmvrHG1E0ydNuIK6LJsqnPx5bv0=;
+ b=d1+ewM/qdKg444doSzK1fDWNDDsTNHVt2+4+PIL5YhBszYxRZdnBF2DrQ2yjADwmPwbquNS8I8VQbqCT2M+BPuqQsEDRxp3bWU9JKjkVg+oXNM77o/4u7IBQLsQBJWlaRGN70jE//b4RKZjDFo17UI2L+o9HWxeHn5OJPdvqCUJEHH7sUt8R+U1qHRXmyl0nB5gACN+f5ZcHXeGa61sv69xtD9SW3ZmQIwyGNmnjQ+rn6BuP30E4CzfsCDQUoHc3mLde/7bn3iIKHgZySoP/XV4/qlcTTT8ugcmYpjTPr9nqQqoAW10FqoNBU8+WkcRivP3us/sFFovcfExA9LFXuQ==
+Received: from BN6PR21CA0024.namprd21.prod.outlook.com (2603:10b6:404:8e::34)
+ by DM5PR12MB1148.namprd12.prod.outlook.com (2603:10b6:3:74::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Fri, 10 Dec
- 2021 09:38:39 +0000
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::18e7:e0b1:5caf:b4b5]) by BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::18e7:e0b1:5caf:b4b5%6]) with mapi id 15.20.4755.022; Fri, 10 Dec 2021
- 09:38:39 +0000
+ 2021 12:16:14 +0000
+Received: from BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:8e:cafe::70) by BN6PR21CA0024.outlook.office365.com
+ (2603:10b6:404:8e::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.7 via Frontend
+ Transport; Fri, 10 Dec 2021 12:16:14 +0000
+X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
+ 203.18.50.13) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=temperror action=none header.from=nvidia.com;
+Received-SPF: TempError (protection.outlook.com: error in processing during
+ lookup of nvidia.com: DNS Timeout)
+Received: from mail.nvidia.com (203.18.50.13) by
+ BN8NAM11FT034.mail.protection.outlook.com (10.13.176.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4778.13 via Frontend Transport; Fri, 10 Dec 2021 12:16:12 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HKMAIL102.nvidia.com
+ (10.18.16.11) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 10 Dec
+ 2021 12:16:10 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 10 Dec
+ 2021 12:16:08 +0000
+Received: from kyarlagadda-linux.nvidia.com (172.20.187.5) by mail.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Fri, 10 Dec 2021 12:16:05 +0000
 From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH 2/2] i2c: tegra: Add SMBus block read and SMBus alert
- functions
-Thread-Topic: [PATCH 2/2] i2c: tegra: Add SMBus block read and SMBus alert
- functions
-Thread-Index: AQHX7Q51DiMSOsap0UOB30Jpk4oaIKwqSIAAgAAIUtA=
-Date:   Fri, 10 Dec 2021 09:38:39 +0000
-Message-ID: <BN9PR12MB52733A443AA5D5A690CE7132C0719@BN9PR12MB5273.namprd12.prod.outlook.com>
-References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
- <1639062321-18840-3-git-send-email-akhilrajeev@nvidia.com>
- <72ea6030-5f2d-4f51-3a42-8386c3638c65@gmail.com>
-In-Reply-To: <72ea6030-5f2d-4f51-3a42-8386c3638c65@gmail.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 043c5037-b4ec-4da5-3e01-08d9bbc0d8be
-x-ms-traffictypediagnostic: BN9PR12MB5306:EE_
-x-microsoft-antispam-prvs: <BN9PR12MB5306020B9D68D4F433DA11BAC0719@BN9PR12MB5306.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lGWJHP9S7N9Butz7v+/nlLfJYm/jYCDao2pS02qXXYp96Ar7j4qnM5IbwFI4FsBL/0FUbgFmqACTF9ENKGy0Spxy2sHa6zs8Cdc6Ti6Brc3k4JNPQZQCshe/OsGV45ePO7j/ZPfZlA8U1QiO9a/hcZ2SxSgbz1jbcf0r2vMIyOAUgsp2vIdMJ8oKK00rMYCLz0uRXpEMtIzwMBCr7FynqdyrluNBVMQXP0AZEM0aRbTtYgwdkab+HtNsQ1EfKh6SI8Iedh6Y8CkAXzHFAXtYpUsbjBfH2QZulpXMlgtBRh+9NsW6Cf9ks//fgR/qCQ8aLhiCl8Ok8EXyYY3unVAkMgC2hajgAp5Lm/vBJiR9hQDwgeFr63P1qLfJDIm2sUkTwzhtUpVToqjpG9Vu7CQgOZgsBCWthHOZ53D+4q6RtRqI30EOI9BHhJ7/x8NUl6IKZq+3SCoBishfgXnkB6vY/b1nxW8QgN9ufLtPMWlk3hcG3nj4u0D9rHetTtANwKgENcGX5SEBgcz0Yp3e5zE7n4k2p8FrGvIQWc5LfMyg8Gnm19JLrqV/uARnEpnWHeP787W1uG3Qsk4xD8Ao83Wg0NORbNFd8Q643RYZYdqI46HQqkNGX294AcXiZkfDgHAyBtA5zOn2cBkc+EJpZ7S4T5kTvObOOJs4AaND5hbhg4o9kBEzbe9s8JH/bp2zSlVOUeG9hPv4j5aqNZPgdvbPYUlBqt3D7zKbTjIw4+PUcOI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5273.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(86362001)(64756008)(26005)(186003)(76116006)(66476007)(66946007)(55016003)(8936002)(15650500001)(316002)(66556008)(6506007)(71200400001)(122000001)(921005)(83380400001)(38100700002)(66446008)(5660300002)(9686003)(7696005)(7416002)(33656002)(110136005)(8676002)(508600001)(2906002)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dTlhclYyRzRjY08rTnZrbVBPZlc4U3VVTDZ4WWRobHlrdGthbWgrYzBZemtv?=
- =?utf-8?B?TXVqVXkrQVZMV0FydlhTbWNYeWJiTkh5MTRCbGRGVkxtcUZPdlhJQ0Z0Q3Ix?=
- =?utf-8?B?eDcxdE5oWGh0MU5PVXl3WnRXbFEwUXNadE5jd3R0aTdDNDkwWnIyc0kxdWRn?=
- =?utf-8?B?aWs4V3Y0M1JRdC9yc084TUM0L2IrUnNpYU8zUGtwOXV4ZmhHWVRWQStKUm12?=
- =?utf-8?B?NDF3dlNXemJ2S2NWNTJTS2xZaHpNTHV2VmQ2VzlxT3pEbTJBYTJJajR1bm1R?=
- =?utf-8?B?dUtKZDdaRDI4aUFFbThuUWwrWlo4Qzl0Kzd3MEU2Z1pIVlhSN2hsYXNWUzlO?=
- =?utf-8?B?bzFWZ01yb3BXUWRxOFZVbkczLzZkR044MnBiakppZkVhSkJMNnVzTnE3ZUFV?=
- =?utf-8?B?NTJJVnhnbVFiSEh5eVVpaDVCN0QyNVpEam5mN3cvYmQxV1V3K2lxdW11Qm5K?=
- =?utf-8?B?em9FSjdwOXJyQ1NUS3d1MFNxczBFS2hvNkV5QnJiaVdoUzlKdmo3eVQ4cU5v?=
- =?utf-8?B?c2dtNlhxL3hEdW1ML1d6MWgvYi9TVldrU3MwNjU5dXQvd3BpTTJhb1dIVFJC?=
- =?utf-8?B?bUJDNWV1cmFKQloyNUNkb05DdDlXeUtFb1p0TEZhMldYUzlCWmRnYjBHdFAy?=
- =?utf-8?B?bG5nTVZqZmxHR1YrQTNDd0YxZ3Uwa2hiM3RhaFZLdHl6TSt4ZnQvbk83eTBI?=
- =?utf-8?B?TzVwbTlrblFDdi9DQTFGeGN4L3AxZVVMdXpqQXJCNzZJQ1lRRFF5Yi9DRSts?=
- =?utf-8?B?VXpTRXYySW1tcFRLemljUUdQRjlRRXVVYkk5bGdUQ2thK1VhV2J3V3A1d05W?=
- =?utf-8?B?ak1qb0ZSTUxlTzNIc0FmbzJWdnNwYkc3SDlZdFROdWRHVG5HU1E3QTcrUEdo?=
- =?utf-8?B?RURwYWNsd1BQQXVsS3NKZHZlcFcyM0wxbnpvYmcwWTdaejVtRFZGelE5QUpU?=
- =?utf-8?B?RmtObHBha3dkZnovU2hvbEpqdm1URnJRaXZDa2dwYzFYd2dKNG1NRGk3c0tr?=
- =?utf-8?B?ZzNJTC9POWxhUVpGUlRhdHpUdVJ2bnpISnc2RmFYbnoxNFpCNkc2eWtKOEtJ?=
- =?utf-8?B?MHNnKzZpNkdyODVvQVR6dUtmUENiVkxUaFVqUnBDaXpIL2xWU1IxdWxJbGFQ?=
- =?utf-8?B?QlJjMVp5cHhDUGZUbHNRZy9TaUo5eGlDZE5aYXNBWEdjNXlsQ090TW5uTFNZ?=
- =?utf-8?B?aEoxa1RXZStUbUxqZHFBS0R5SGxpUUhQcGpYRGtsbHlYcWUwaExTUEpNZ1FG?=
- =?utf-8?B?MzNZVENQeGRRNDFnc2p0cHhOMCtqUDZ0WVJKMSszMWRhSHpyYlFrWHQreUdv?=
- =?utf-8?B?NzlTTkM2MlM5TE9Mc05RbkowNStIUFR0eGVCTkRhSy9pOStIK2pSWEZQWDE5?=
- =?utf-8?B?ZlZJUG1MRTJLZXU0ZU5YaGJNYnpMTG9TdnM1OUNpZzYrOEY4VTlWSFlwQlNr?=
- =?utf-8?B?WWdjbTE5alk5MzVqdE0vUWlRSVZRNC9Tcyt4K3JSUDAvQnExS01QNUNOMmdN?=
- =?utf-8?B?NWRnQVZOZEloM0xxK3Z0b2xKV2hyUm9va2xCT25FaHI2RUJnNUVTR1pteHVk?=
- =?utf-8?B?WHJIRXNvdjMxU1A5SU1FanJZVEUycmZvKzUwZG0zeGFsOWFLdDhqMG5NMGdE?=
- =?utf-8?B?VEw1Q29iOFhwSFB2U0krMFMrZWFMVmZ4eVR1OE56VktkUHVtL09tbnZDZXFT?=
- =?utf-8?B?VUE1eG9tRE1oUXFjRlcyRHRxTkNlNGlXSzBxVCtIWjBjK0xOaXNXdGgvZ2Fy?=
- =?utf-8?B?SFNlK1Yzbzl4WEFKQ2I0TDVDcHQrRTFVVXlINnVObWRtNVR2SU1DaHAxaVlv?=
- =?utf-8?B?alZuYjRKNkVJREZXam1nT2VlOEZiSmxyM3ZqYS9KK0tNRGs0eVRDK0JiUWJP?=
- =?utf-8?B?NDd3Kys0Q2RvNThUbFpvVGprZFR6YzhPRGZBM2cvZllzNmM4TVUyNlZVYlBo?=
- =?utf-8?B?WUNKekxLWFp1eVRpa0RBTUFNQnlGTDcwMjdHZFZ1cHNXNnkyQ1hWb21wODdx?=
- =?utf-8?B?Nk41a1ZhTWdHSjkyNE5uelpIbWJDeFZITUN0VUZZV2d6NXM2UHBsZENkaWIr?=
- =?utf-8?B?cDc3TVpPbEU5ZExVWlpKNEJJK1FPQnNLNVVRNXhyR3cydHBQQWJWbGpsSDlj?=
- =?utf-8?B?RlhKL2QxdDFhTGJMY1R4N1YwTVpFMFE4clpjdG1ucXBVTFR3Q2F4d3hJTEtx?=
- =?utf-8?B?N1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+To:     <andy.shevchenko@gmail.com>, <christian.koenig@amd.com>,
+        <digetx@gmail.com>, <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <p.zabel@pengutronix.de>,
+        <sumit.semwal@linaro.org>, <thierry.reding@gmail.com>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH v3] i2c: tegra: use i2c_timings for bus clock freq
+Date:   Fri, 10 Dec 2021 17:45:57 +0530
+Message-ID: <1639138557-1709-1-git-send-email-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a635cb6e-7b4a-4af8-e99d-08d9bbd6db91
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1148:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1148388F61484F277C4B8913C0719@DM5PR12MB1148.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:513;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iBhzIT/rx9RhDhdTBc32frW6bIga/9kHrlH1ztWplmWkvPPGI/OaMFob5EgyHj86d/5kQCqe9ZIeJ2ZHdDwJ6PutO5LMoctOHLyOtcnJf9dkBeAqHc5yVujx6H/fWENKkxU6gJA2BBfDSGi3z7Xq83bLfcoZrf2yxh2jxPRbTLxn3oW4my/0qE/iE9tP9aiNcPm5AUBUvVtiFHaEOi445BhsPc+N706NEqWpblbBHG32pgRfOVoNAAVE2FUL7H/e8t9Coph0pQk3bND2QeDlGBrPBeHW0FKdZ1A12hdJefMixc5D0n9h4JCsLSt/7KLqwQv9tG8byefoQjRbVS79xs23EtK8tYrwIEXCLDUxG3jtVKx7USAXS80ljO6ugFHHsDOxRGYvcaO3+R7HquAL6YPERtfmMcySQDDkbw1+YFeaeViqtFceddCoQY6yOVGZJ32qPqVFDmBWxicCw8n64Sp5X4WeoR5KPqHGhaaLAqAMnzX06MgBjOAlz8ruLEqYBmy/+wIRsbO703sF6ZNbY/+RFwaDlt4REmotls0z1rEPR2boc7auGSbiU7pH6KU2TFEtRmh3/odKvFFIo3cOXlPQL0dkZar0ThBItPV9PND1f/GK6j/hF2PAJlwuNnDqheV5ASJJ1glvMwsJIReC7p7rI0RC+QSt+zEDdySyYYzhcXhgc/VyWR3UEzSgvaCSX5S0hgmX5mBzKNwa+Rr7rj0HmrSIovKS7BFxaWB1McaXr3DeKYgKSXmPagoKHTbpvKNbi3FqQPSLLW1umd+FqDj8BRVAreqAra6KZksn8AtqT5k1lnJtzohPL1kXSnBvEO/Pd7H2pmCgSTZRHhUrGGJd8wwmE5vs4frgI/vohHc=
+X-Forefront-Antispam-Report: CIP:203.18.50.13;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:hkhybrid02.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(40460700001)(7416002)(356005)(6666004)(316002)(110136005)(34020700004)(63350400001)(7636003)(186003)(36756003)(2906002)(336012)(508600001)(70586007)(8936002)(86362001)(70206006)(7696005)(26005)(8676002)(82310400004)(83380400001)(921005)(5660300002)(2616005)(4326008)(47076005)(107886003)(426003)(36860700001)(63370400001)(83996005)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5273.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 043c5037-b4ec-4da5-3e01-08d9bbc0d8be
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2021 09:38:39.2892
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 12:16:12.5804
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZA4qsSekYx1llwW+VVRjxENWFjXCaMpf/tFEkc453Ej3FbUuMh9f5iNHLRhgpvEM3al2M6QH4MQK3D9Sajbobg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5306
+X-MS-Exchange-CrossTenant-Network-Message-Id: a635cb6e-7b4a-4af8-e99d-08d9bbd6db91
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[203.18.50.13];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1148
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PiAwOS4xMi4yMDIxIDE4OjA1LCBBa2hpbCBSINC/0LjRiNC10YI6DQo+ID4gRW11bGF0ZSB0aGUg
-U01CdXMgYmxvY2sgcmVhZCB1c2luZyBDb250aW51ZVhmZXIgYW5kIFNNQnVzIHVzaW5nIEdQSU8N
-Cj4gPiBpbnRlcnJ1cHQuDQo+ID4NCj4gPiBGb3IgU01CdXMgYmxvY2sgcmVhZCwgdGhlIGRyaXZl
-ciAgcmVhZHMgdGhlIGZpcnN0IGJ5dGUgd2l0aA0KPiA+IENvbnRpbnVlWGZlciBzZXQgd2hpY2gg
-d2lsbCBoZWxwIHRvIHBhcnNlIHRoZSBkYXRhIGNvdW50IGFuZCByZWFkIHRoZQ0KPiA+IHJlbWFp
-bmluZyBieXRlcyB3aXRob3V0IHN0b3AgY29uZGl0aW9uIGluIGJldHdlZW4uDQo+ID4gU01CdXMg
-YWxlcnQgaXMgaW1wbGVtZW50ZWQgdXNpbmcgZXh0ZXJuYWwgZ3BpbyBpbnRlcnJ1cHQuDQo+ID4N
-Cj4gPiBTaWduZWQtb2ZmLWJ5OiBBa2hpbCBSIDxha2hpbHJhamVldkBudmlkaWEuY29tPg0KPiA+
-IC0tLQ0KPiA+ICBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLXRlZ3JhLmMgfCA1NA0KPiA+ICsrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQ0KPiA+ICAxIGZpbGUgY2hhbmdl
-ZCwgNTMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtdGVncmEuYw0KPiA+IGIvZHJpdmVycy9pMmMvYnVzc2Vz
-L2kyYy10ZWdyYS5jIGluZGV4IGE1YmU4ZjAuLjNiNzAwMTMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJp
-dmVycy9pMmMvYnVzc2VzL2kyYy10ZWdyYS5jDQo+ID4gKysrIGIvZHJpdmVycy9pMmMvYnVzc2Vz
-L2kyYy10ZWdyYS5jDQo+ID4gQEAgLTE0LDYgKzE0LDcgQEANCj4gPiAgI2luY2x1ZGUgPGxpbnV4
-L2RtYS1tYXBwaW5nLmg+DQo+ID4gICNpbmNsdWRlIDxsaW51eC9lcnIuaD4NCj4gPiAgI2luY2x1
-ZGUgPGxpbnV4L2kyYy5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvaTJjLXNtYnVzLmg+DQo+ID4g
-ICNpbmNsdWRlIDxsaW51eC9pbml0Lmg+DQo+ID4gICNpbmNsdWRlIDxsaW51eC9pbnRlcnJ1cHQu
-aD4NCj4gPiAgI2luY2x1ZGUgPGxpbnV4L2lvLmg+DQo+ID4gQEAgLTIyNiw2ICsyMjcsMTEgQEAg
-c3RydWN0IHRlZ3JhX2kyY19od19mZWF0dXJlIHsNCj4gPiAgICAgICBib29sIGhhc19pbnRlcmZh
-Y2VfdGltaW5nX3JlZzsNCj4gPiAgfTsNCj4gPg0KPiA+ICtzdHJ1Y3QgdGVncmFfaTJjX3NtYmFs
-ZXJ0IHsNCj4gDQo+IHNtYmFsZXJ0IGlzbid0IGEgd29yZCwgc2hvdWxkIGJlIHNtYnVzX2FsZXJ0
-LiBTYW1lIGZvciB0aGUgR1BJTyBuYW1lIGFuZA0KPiBvdGhlciBwbGFjZXMuDQpUaGUgYWN0dWFs
-IG5vdGF0aW9uLCBJIHN1cHBvc2UsIGlzIFNNQkFMRVJUIy4gSWYgeW91IHNlZSBpdCBpcyBiZXR0
-ZXIgdG8gbWFrZSBpdCANCnNtYnVzX2FsZXJ0LCBJIGNhbiB1cGRhdGUgaXQuICdzbWJhbGVydCcg
-YWxzbyBsb29rcyBnb29kIHRvIG1lIHRob3VnaC4NCj4gDQo+ID4gKyAgICAgc3RydWN0IGkyY19z
-bWJ1c19hbGVydF9zZXR1cCBhbGVydF9kYXRhOw0KPiA+ICsgICAgIHN0cnVjdCBpMmNfY2xpZW50
-ICphcmE7DQo+IA0KPiBXaGF0ICJhcmEiIHN0YW5kcyBmb3I/IFBsZWFzZSB1c2UgbWVhbmluZ2Z1
-bCBuYW1lcywgbGlrZSBhbGVydF9kZXYgZm9yDQo+IGV4YW1wbGUuDQppMmMtc21idXMuYyB1c2Vz
-IHRoZSBzYW1lIG5hbWUgdG8gcmVmZXIgdG8gdGhlIHNtYnVzIGFsZXJ0IGkyY19jbGllbnQuDQpJ
-IHRob3VnaHQgdG8gdXNlIHRoZSBzYW1lIGZvciBjb25zaXN0ZW5jeSB3aXRoIHRoZSBjb3JlIGFu
-ZCBvdGhlciBkcml2ZXJzLg0KSXQgc3RhbmRzIGZvciAiQWxlcnQgcmVzcG9uc2UgYWRkcmVzcyIu
-DQo+IA0KPiBJIGRvbid0IHNlZSB3aGVyZSB0aGlzIG1lbWJlciBpcyB1c2VkIGF0IGFsbCwgcGxl
-YXNlIHJlbW92ZSBpdC4NCldvdWxkbid0IGl0IGJlIGdvb2QgdG8gaGF2ZSBpdCBzdG9yZWQgc28g
-dGhhdCBpdCBpcyBoYW5keSBpZiB1c2luZyBhbnkgb3RoZXIgDQpmdW5jdGlvbiBsYXRlciwgbGlr
-ZSBpMmNfaGFuZGxlX3NtYnVzX2FsZXJ0LiBNb3Jlb3ZlciwgSSB0aG91Z2h0IHRvIGtlZXANCnRo
-ZSB1c2FnZSBjb25zaXN0ZW50IHdpdGggb3RoZXIgZHJpdmVycyBoYXZpbmcgc2ltaWxhciBmdW5j
-dGlvbi4NCj4gDQo+ID4gK307DQo+ID4gKw0KPiA+ICAvKioNCj4gPiAgICogc3RydWN0IHRlZ3Jh
-X2kyY19kZXYgLSBwZXIgZGV2aWNlIEkyQyBjb250ZXh0DQo+ID4gICAqIEBkZXY6IGRldmljZSBy
-ZWZlcmVuY2UgZm9yIHBvd2VyIG1hbmFnZW1lbnQgQEAgLTI4MCw2ICsyODYsOCBAQA0KPiA+IHN0
-cnVjdCB0ZWdyYV9pMmNfZGV2IHsNCj4gPiAgICAgICBpbnQgbXNnX2VycjsNCj4gPiAgICAgICB1
-OCAqbXNnX2J1ZjsNCj4gPg0KPiA+ICsgICAgIHN0cnVjdCB0ZWdyYV9pMmNfc21iYWxlcnQgc21i
-YWxlcnQ7DQo+IA0KPiBBbGwgcHJvcGVydGllcyBtdXN0IGhhdmUgZG9jIGNvbW1lbnQuDQpBZ3Jl
-ZQ0KPiANCj4gPiAgICAgICBzdHJ1Y3QgY29tcGxldGlvbiBkbWFfY29tcGxldGU7DQo+ID4gICAg
-ICAgc3RydWN0IGRtYV9jaGFuICp0eF9kbWFfY2hhbjsNCj4gPiAgICAgICBzdHJ1Y3QgZG1hX2No
-YW4gKnJ4X2RtYV9jaGFuOw0KPiA+IEBAIC0xMjMyLDYgKzEyNDAsMTEgQEAgc3RhdGljIGludCB0
-ZWdyYV9pMmNfeGZlcl9tc2coc3RydWN0IHRlZ3JhX2kyY19kZXYNCj4gKmkyY19kZXYsDQo+ID4g
-ICAgICAgICAgICAgICByZXR1cm4gZXJyOw0KPiA+DQo+ID4gICAgICAgaTJjX2Rldi0+bXNnX2J1
-ZiA9IG1zZy0+YnVmOw0KPiA+ICsNCj4gPiArICAgICAvKiBUaGUgY29uZGl0aW9uIHRydWUgaW1w
-bGllcyBzbWJ1cyBibG9jayByZWFkIGFuZCBsZW4gaXMNCj4gPiArIGFscmVhZHkgcmVhZCovDQo+
-IA0KPiBQcm9wZXIgU01CdXMgY2FwaXRhbGl6YXRpb24gaW4gY29tbWVudHMuIE11c3Npbmcgd2hp
-dGVzcGFjZSBpbiB0aGUgZW5kIG9mIHRoZQ0KPiBjb21tZW50Lg0KQWdyZWUuDQo+IA0KPiA+ICsg
-ICAgIGlmIChtc2ctPmZsYWdzICYgSTJDX01fUkVDVl9MRU4gJiYgZW5kX3N0YXRlICE9DQo+IE1T
-R19FTkRfQ09OVElOVUUpDQo+ID4gKyAgICAgICAgICAgICBpMmNfZGV2LT5tc2dfYnVmID0gbXNn
-LT5idWYgKyAxOw0KPiA+ICsNCj4gPiAgICAgICBpMmNfZGV2LT5tc2dfYnVmX3JlbWFpbmluZyA9
-IG1zZy0+bGVuOw0KPiA+ICAgICAgIGkyY19kZXYtPm1zZ19lcnIgPSBJMkNfRVJSX05PTkU7DQo+
-ID4gICAgICAgaTJjX2Rldi0+bXNnX3JlYWQgPSAhIShtc2ctPmZsYWdzICYgSTJDX01fUkQpOyBA
-QCAtMTM4OCw2DQo+ID4gKzE0MDEsMTUgQEAgc3RhdGljIGludCB0ZWdyYV9pMmNfeGZlcihzdHJ1
-Y3QgaTJjX2FkYXB0ZXIgKmFkYXAsIHN0cnVjdA0KPiBpMmNfbXNnIG1zZ3NbXSwNCj4gPiAgICAg
-ICAgICAgICAgICAgICAgICAgZWxzZQ0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IGVuZF90eXBlID0gTVNHX0VORF9SRVBFQVRfU1RBUlQ7DQo+ID4gICAgICAgICAgICAgICB9DQo+
-ID4gKyAgICAgICAgICAgICAvKiBJZiBNX1JFQ1ZfTEVOIHVzZSBDb250aW51ZVhmZXIgdG8gcmVh
-ZCB0aGUgZmlyc3QgYnl0ZSAqLw0KPiA+ICsgICAgICAgICAgICAgaWYgKG1zZ3NbaV0uZmxhZ3Mg
-JiBJMkNfTV9SRUNWX0xFTikgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICByZXQgPSB0ZWdy
-YV9pMmNfeGZlcl9tc2coaTJjX2RldiwgJm1zZ3NbaV0sDQo+IE1TR19FTkRfQ09OVElOVUUpOw0K
-PiA+ICsgICAgICAgICAgICAgICAgICAgICBpZiAocmV0KQ0KPiA+ICsgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIGJyZWFrOw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAvKiBTZXQgdGhl
-IHJlYWQgYnl0ZSBhcyBtc2cgbGVuICovDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIG1zZ3Nb
-aV0ubGVuID0gbXNnc1tpXS5idWZbMF07DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIGRldl9k
-YmcoaTJjX2Rldi0+ZGV2LCAicmVhZGluZyAlZCBieXRlc1xuIiwgbXNnc1tpXS5sZW4pOw0KPiA+
-ICsgICAgICAgICAgICAgfQ0KPiA+ICAgICAgICAgICAgICAgcmV0ID0gdGVncmFfaTJjX3hmZXJf
-bXNnKGkyY19kZXYsICZtc2dzW2ldLCBlbmRfdHlwZSk7DQo+ID4gICAgICAgICAgICAgICBpZiAo
-cmV0KQ0KPiA+ICAgICAgICAgICAgICAgICAgICAgICBicmVhazsNCj4gPiBAQCAtMTQxNSw3ICsx
-NDM3LDggQEAgc3RhdGljIHUzMiB0ZWdyYV9pMmNfZnVuYyhzdHJ1Y3QgaTJjX2FkYXB0ZXINCj4g
-PiAqYWRhcCkgIHsNCj4gPiAgICAgICBzdHJ1Y3QgdGVncmFfaTJjX2RldiAqaTJjX2RldiA9IGky
-Y19nZXRfYWRhcGRhdGEoYWRhcCk7DQo+ID4gICAgICAgdTMyIHJldCA9IEkyQ19GVU5DX0kyQyB8
-IChJMkNfRlVOQ19TTUJVU19FTVVMICYNCj4gfkkyQ19GVU5DX1NNQlVTX1FVSUNLKSB8DQo+ID4g
-LSAgICAgICAgICAgICAgIEkyQ19GVU5DXzEwQklUX0FERFIgfCBJMkNfRlVOQ19QUk9UT0NPTF9N
-QU5HTElORzsNCj4gPiArICAgICAgICAgICAgICAgSTJDX0ZVTkNfU01CVVNfUkVBRF9CTE9DS19E
-QVRBIHwgSTJDX0ZVTkNfMTBCSVRfQUREUiB8DQo+ID4gKyAgICAgICAgICAgICAgIEkyQ19GVU5D
-X1BST1RPQ09MX01BTkdMSU5HOw0KPiA+DQo+ID4gICAgICAgaWYgKGkyY19kZXYtPmh3LT5oYXNf
-Y29udGludWVfeGZlcl9zdXBwb3J0KQ0KPiA+ICAgICAgICAgICAgICAgcmV0IHw9IEkyQ19GVU5D
-X05PU1RBUlQ7IEBAIC0xNzI3LDYgKzE3NTAsMjkgQEAgc3RhdGljDQo+ID4gaW50IHRlZ3JhX2ky
-Y19pbml0X2hhcmR3YXJlKHN0cnVjdCB0ZWdyYV9pMmNfZGV2ICppMmNfZGV2KQ0KPiA+ICAgICAg
-IHJldHVybiByZXQ7DQo+ID4gIH0NCj4gPg0KPiA+ICtzdGF0aWMgaW50IHRlZ3JhX2kyY19zZXR1
-cF9zbWJhbGVydChzdHJ1Y3QgdGVncmFfaTJjX2RldiAqaTJjX2Rldikgew0KPiA+ICsgICAgIHN0
-cnVjdCB0ZWdyYV9pMmNfc21iYWxlcnQgKnNtYmFsZXJ0ID0gJmkyY19kZXYtPnNtYmFsZXJ0Ow0K
-PiA+ICsgICAgIHN0cnVjdCBncGlvX2Rlc2MgKmFsZXJ0X2dwaW9kOw0KPiA+ICsgICAgIHN0cnVj
-dCBpMmNfY2xpZW50ICphcmE7DQo+ID4gKw0KPiA+ICsgICAgIGFsZXJ0X2dwaW9kID0gZGV2bV9n
-cGlvZF9nZXQoaTJjX2Rldi0+ZGV2LCAic21iYWxlcnQiLCBHUElPRF9JTik7DQo+ID4gKyAgICAg
-aWYgKElTX0VSUihhbGVydF9ncGlvZCkpDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gUFRSX0VS
-UihhbGVydF9ncGlvZCk7DQo+ID4gKw0KPiA+ICsgICAgIHNtYmFsZXJ0LT5hbGVydF9kYXRhLmly
-cSA9IGdwaW9kX3RvX2lycShhbGVydF9ncGlvZCk7DQo+ID4gKyAgICAgaWYgKHNtYmFsZXJ0LT5h
-bGVydF9kYXRhLmlycSA8PSAwKQ0KPiA+ICsgICAgICAgICAgICAgcmV0dXJuIHNtYmFsZXJ0LT5h
-bGVydF9kYXRhLmlycTsNCj4gPiArDQo+ID4gKyAgICAgYXJhID0gaTJjX25ld19zbWJ1c19hbGVy
-dF9kZXZpY2UoJmkyY19kZXYtPmFkYXB0ZXIsICZzbWJhbGVydC0NCj4gPmFsZXJ0X2RhdGEpOw0K
-PiA+ICsgICAgIGlmIChJU19FUlIoYXJhKSkNCj4gPiArICAgICAgICAgICAgIHJldHVybiBQVFJf
-RVJSKGFyYSk7DQo+ID4gKw0KPiA+ICsgICAgIHNtYmFsZXJ0LT5hcmEgPSBhcmE7DQo+ID4gKw0K
-PiA+ICsgICAgIHJldHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICBzdGF0aWMgaW50IHRlZ3Jh
-X2kyY19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KSAgew0KPiA+ICAgICAgIHN0
-cnVjdCB0ZWdyYV9pMmNfZGV2ICppMmNfZGV2Ow0KPiA+IEBAIC0xODIxLDYgKzE4NjcsMTIgQEAg
-c3RhdGljIGludCB0ZWdyYV9pMmNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZQ0KPiAqcGRl
-dikNCj4gPiAgICAgICBpZiAoZXJyKQ0KPiA+ICAgICAgICAgICAgICAgZ290byByZWxlYXNlX3Jw
-bTsNCj4gPg0KPiA+ICsgICAgIGlmIChkZXZpY2VfcHJvcGVydHlfcmVhZF9ib29sKGkyY19kZXYt
-PmRldiwgInNtYnVzLWFsZXJ0IikpIHsNCj4gDQo+IEknZCBtb3ZlIHRoaXMgZGV2aWNlX3Byb3Bl
-cnR5X3JlYWRfYm9vbCgpIGluc2lkZSBvZg0KPiB0ZWdyYV9pMmNfc2V0dXBfc21idXNfYWxlcnQo
-KSwgZm9yIGNvbnNpc3RlbmN5IHdpdGggdGhlIHJlc3Qgb2YgdGhlIGNvZGUgaW4gdGhpcw0KPiBk
-cml2ZXIuDQpBZ3JlZS4NCj4gDQo+IEFsdGhvdWdoLCB5b3Ugc2hvdWxkbid0IG5lZWQgaXQgYXQg
-YWxsLCB1c2UgZGV2bV9ncGlvZF9nZXRfb3B0aW9uYWwoKS4NCnNtYnVzLWFsZXJ0IGlzIHByb3Zp
-ZGVkIGluIHRoZSBpMmMgZHQgYmluZGluZ3MgYnkgZGVmYXVsdC4gSSBmZWx0IGl0IGlzIGdvb2QN
-CnRvIHB1dCBpdCBpbnRvIHVzZSBzaW5jZSB0aGUgdXNlIGNhc2UgaXMgc2FtZS4NCj4gDQo+ID4g
-KyAgICAgICAgICAgICBlcnIgPSB0ZWdyYV9pMmNfc2V0dXBfc21iYWxlcnQoaTJjX2Rldik7DQo+
-ID4gKyAgICAgICAgICAgICBpZiAoZXJyKQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICBkZXZf
-d2FybigmcGRldi0+ZGV2LCAic21idXMtYWxlcnQgc2V0dXAgZmFpbGVkOg0KPiA+ICsgJWRcbiIs
-IGVycik7DQo+IA0KPiBHUElPIG1heSBwcm9iZS1kZWZlciwgbXVzdCBiZSBkZXZfZXJyX3Byb2Jl
-KCkgaGVyZS4NCkFncmVlLiBBbHNvLCB3aWxsIGNoZWNrIG9uIHRoZSBvcHRpb24gdG8gdXNlIGlu
-dGVycnVwdCBkaXJlY3RseSBpbnN0ZWFkIG9mDQpHUElPLg0KDQpUaGFua3MsDQpBa2hpbA0K
+Use i2c_timings struct and corresponding methods to get bus clock frequency
+
+Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
+
+v2->v3: Removed unused variable 'err'.
+v1->v2: Added temp var for i2c_timings struct in function.
+
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index a5be8f0..93b61c4 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -246,7 +246,7 @@ struct tegra_i2c_hw_feature {
+  * @msg_buf: pointer to current message data
+  * @msg_buf_remaining: size of unsent data in the message buffer
+  * @msg_read: indicates that the transfer is a read access
+- * @bus_clk_rate: current I2C bus clock rate
++ * @timings: i2c timings information like bus frequency
+  * @multimaster_mode: indicates that I2C controller is in multi-master mode
+  * @tx_dma_chan: DMA transmit channel
+  * @rx_dma_chan: DMA receive channel
+@@ -273,7 +273,7 @@ struct tegra_i2c_dev {
+ 	unsigned int nclocks;
+ 
+ 	struct clk *div_clk;
+-	u32 bus_clk_rate;
++	struct i2c_timings timings;
+ 
+ 	struct completion msg_complete;
+ 	size_t msg_buf_remaining;
+@@ -610,6 +610,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+ {
+ 	u32 val, clk_divisor, clk_multiplier, tsu_thd, tlow, thigh, non_hs_mode;
+ 	acpi_handle handle = ACPI_HANDLE(i2c_dev->dev);
++	struct i2c_timings *t = &i2c_dev->timings;
+ 	int err;
+ 
+ 	/*
+@@ -642,14 +643,14 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+ 	if (i2c_dev->is_vi)
+ 		tegra_i2c_vi_init(i2c_dev);
+ 
+-	switch (i2c_dev->bus_clk_rate) {
++	switch (t->bus_freq_hz) {
+ 	case I2C_MAX_STANDARD_MODE_FREQ + 1 ... I2C_MAX_FAST_MODE_PLUS_FREQ:
+ 	default:
+ 		tlow = i2c_dev->hw->tlow_fast_fastplus_mode;
+ 		thigh = i2c_dev->hw->thigh_fast_fastplus_mode;
+ 		tsu_thd = i2c_dev->hw->setup_hold_time_fast_fast_plus_mode;
+ 
+-		if (i2c_dev->bus_clk_rate > I2C_MAX_FAST_MODE_FREQ)
++		if (t->bus_freq_hz > I2C_MAX_FAST_MODE_FREQ)
+ 			non_hs_mode = i2c_dev->hw->clk_divisor_fast_plus_mode;
+ 		else
+ 			non_hs_mode = i2c_dev->hw->clk_divisor_fast_mode;
+@@ -685,7 +686,7 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+ 	clk_multiplier = (tlow + thigh + 2) * (non_hs_mode + 1);
+ 
+ 	err = clk_set_rate(i2c_dev->div_clk,
+-			   i2c_dev->bus_clk_rate * clk_multiplier);
++			   t->bus_freq_hz * clk_multiplier);
+ 	if (err) {
+ 		dev_err(i2c_dev->dev, "failed to set div-clk rate: %d\n", err);
+ 		return err;
+@@ -724,7 +725,7 @@ static int tegra_i2c_disable_packet_mode(struct tegra_i2c_dev *i2c_dev)
+ 	 * before disabling the controller so that the STOP condition has
+ 	 * been delivered properly.
+ 	 */
+-	udelay(DIV_ROUND_UP(2 * 1000000, i2c_dev->bus_clk_rate));
++	udelay(DIV_ROUND_UP(2 * 1000000, i2c_dev->timings.bus_freq_hz));
+ 
+ 	cnfg = i2c_readl(i2c_dev, I2C_CNFG);
+ 	if (cnfg & I2C_CNFG_PACKET_MODE_EN)
+@@ -1254,7 +1255,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 	 * Total bits = 9 bits per byte (including ACK bit) + Start & stop bits
+ 	 */
+ 	xfer_time += DIV_ROUND_CLOSEST(((xfer_size * 9) + 2) * MSEC_PER_SEC,
+-				       i2c_dev->bus_clk_rate);
++				       i2c_dev->timings.bus_freq_hz);
+ 
+ 	int_mask = I2C_INT_NO_ACK | I2C_INT_ARBITRATION_LOST;
+ 	tegra_i2c_unmask_irq(i2c_dev, int_mask);
+@@ -1631,12 +1632,8 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
+ {
+ 	struct device_node *np = i2c_dev->dev->of_node;
+ 	bool multi_mode;
+-	int err;
+ 
+-	err = device_property_read_u32(i2c_dev->dev, "clock-frequency",
+-				       &i2c_dev->bus_clk_rate);
+-	if (err)
+-		i2c_dev->bus_clk_rate = I2C_MAX_STANDARD_MODE_FREQ;
++	i2c_parse_fw_timings(i2c_dev->dev, &i2c_dev->timings, true);
+ 
+ 	multi_mode = device_property_read_bool(i2c_dev->dev, "multi-master");
+ 	i2c_dev->multimaster_mode = multi_mode;
+-- 
+2.7.4
+
