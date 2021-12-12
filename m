@@ -2,133 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D80E647198B
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Dec 2021 10:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B456471C0D
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Dec 2021 19:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbhLLJ5Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 12 Dec 2021 04:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S230480AbhLLSLC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 12 Dec 2021 13:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbhLLJ5Y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Dec 2021 04:57:24 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D8CC061714
-        for <linux-i2c@vger.kernel.org>; Sun, 12 Dec 2021 01:57:24 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1mwLbe-0000Rx-Hk; Sun, 12 Dec 2021 10:57:22 +0100
-Message-ID: <3472bee7-9974-ed13-1d56-79a08d4073f7@leemhuis.info>
-Date:   Sun, 12 Dec 2021 10:57:21 +0100
+        with ESMTP id S229874AbhLLSLB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 12 Dec 2021 13:11:01 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46622C061714
+        for <linux-i2c@vger.kernel.org>; Sun, 12 Dec 2021 10:11:01 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id u3so27089754lfl.2
+        for <linux-i2c@vger.kernel.org>; Sun, 12 Dec 2021 10:11:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5EFH32R/A8nKeoiQKEQd1o39+iKWJFk8VbMvazM8aas=;
+        b=PwLLqn2jtPgs4ZWqSP2LYkAwhq3gUsDH6gd+Dgi2Pn9pNHSysoSQQurPYzyyIJhQ7A
+         7wF4a8tUFyFqT+LSHa3INHCpE/hgVLjg+axv0yAp0l/TLzZAK1QSwcdmkfkcwp7wBlwI
+         89Uxa8zDSvcN0+QO9HKHHDJKU6Nf4kb4vUjjMHUCqaKBMz1yy/taQCgJwBIED8/MFFLU
+         YRIuyHwA2ox8R2yH5VaYUAjI9waNtNTNkasB8DnUF8wi5HhMXVnkJMb2O5h0Jgadx187
+         lu3FK1b0ZxGhxJ8X6LACU82NnpXjZ+LSUTN12PNIAgBG3Fz0NRJAkBKydqCAk//wgFcr
+         +tGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5EFH32R/A8nKeoiQKEQd1o39+iKWJFk8VbMvazM8aas=;
+        b=wfr0k2HlZl0MjD+gFQEq3e8OuY/97N/L9/jBBcpmconV1jFaQdvMCEWa4x6G/S18sZ
+         8H0eDr5fVLI/86iG2XwocXrNAVB+BJro81LzyTmoN/XpSRO3c+rXdu8rZC1Jap9fMJtZ
+         fug5flY57ecZUhsapnIW37l2wfQfbgCG7S6Vj/SxewwgpBx+wiQXbLArAOgMxvwE/dmb
+         /oHtAmwpsf2WVn51JqidNC1nH7wTTtuBonpR0nu5EbtRZS3ggfo1r0Ou39ECkuzo0CzS
+         9eGW3ytI1WrhtSssqf/Juhe3+74xJT7ui6Lhb3ZwSFUvw5u7fm85vnUgWHg/xHHcyFqG
+         JzVw==
+X-Gm-Message-State: AOAM530+UaUZjwW+zJ42ySkozjt8NiSlnO2BOiLHiSxOgVmdLOOkK7en
+        +grJDIqzodOPVsd/moPbgy86GQnQz2tF5pH6
+X-Google-Smtp-Source: ABdhPJx2q3hRmHoqk/Aq5FNWiKiOKG/xa/RK/FiJVpoc4XG9at3CTlaVHM8/sXx2HKXarvzHSne2iw==
+X-Received: by 2002:a19:604b:: with SMTP id p11mr23368383lfk.392.1639332659381;
+        Sun, 12 Dec 2021 10:10:59 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id e11sm1109229lfq.65.2021.12.12.10.10.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 10:10:58 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Chanho Park <chanho61.park@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: exynos5: Fix getting the optional clock
+Date:   Sun, 12 Dec 2021 20:10:57 +0200
+Message-Id: <20211212181057.20210-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [bisected][regression] Applications that need amdgpu doesn't run
- after waking up from suspend
-Content-Language: en-BS
-To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <1295184560.182511.1639075777725.ref@mail.yahoo.com>
- <1295184560.182511.1639075777725@mail.yahoo.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <1295184560.182511.1639075777725@mail.yahoo.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1639303044;0de1c0b6;
-X-HE-SMSGID: 1mwLbe-0000Rx-Hk
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-[TLDR: adding this regression to regzbot; most of this mail is compiled
-from a few templates paragraphs some of you might have seen already.]
+"hsi2c_pclk" clock is optional and may not be present for some SoCs
+supported by this driver. Nevertheless, in case the clock is provided
+but some error happens during its getting, that error should be handled
+properly. Use devm_clk_get_optional() API for that. Also report possible
+errors using dev_err_probe() to handle properly -EPROBE_DEFER error (if
+clock provider is not ready by the time I2C probe function is executed).
 
-Hi, this is your Linux kernel regression tracker speaking.
+Fixes: c93ac09df2a8 ("i2c: exynos5: Add bus clock support")
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+---
+ drivers/i2c/busses/i2c-exynos5.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Thanks for the report.
-
-Adding the regression mailing list to the list of recipients, as it
-should be in the loop for all regressions, as explained here:
-https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
-
-To be sure this issue doesn't fall through the cracks unnoticed, I'm
-adding it to regzbot, my Linux kernel regression tracking bot:
-
-#regzbot ^introduced 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
-#regzbot title drm: amdgpu: apps that need amdgpu do not start after
-system is woken from suspend
-#regzbot ignore-activity
-
-Reminder: when fixing the issue, please add a 'Link:' tag with the URL
-to the report (the parent of this mail), then regzbot will automatically
-mark the regression as resolved once the fix lands in the appropriate
-tree. For more details about regzbot see footer.
-
-Sending this to everyone that got the initial report, to make all aware
-of the tracking. I also hope that messages like this motivate people to
-directly get at least the regression mailing list and ideally even
-regzbot involved when dealing with regressions, as messages like this
-wouldn't be needed then.
-
-Don't worry, I'll send further messages wrt to this regression just to
-the lists (with a tag in the subject so people can filter them away), as
-long as they are intended just for regzbot. With a bit of luck no such
-messages will be needed anyway.
-
-Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat).
-
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply. That's in everyone's interest, as
-what I wrote above might be misleading to everyone reading this; any
-suggestion I gave thus might sent someone reading this down the wrong
-rabbit hole, which none of us wants.
-
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
-
-On 09.12.21 19:49, Tareque Md.Hanif wrote:
-> Hi,
-> I am getting some issues listed below when waking up from suspend on my
-> laptop.
-> 
-> Issues:
-> 1. After waking up from suspend in my laptop, anytime I open a game, the
-> window is just blank. But it works after reboot or if I don't suspend
-> the system.
-> 2. The system takes almost 7-8 seconds to wake up in 5.14 or later but
-> it's almost instant in 5.13 .
-> 3. If the laptop is connected with AC and then suspended and woken up,
-> there are no issues. This issue occurs if laptop is running on battery.
-> 
-> No issues in Kernel 5.13.13 and the issues exist in 5.14 to 5.15.7 . So
-> I bisected the bug with
-> git(https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux).
-> first bad commit: [5a7b95fb993ec399c8a685552aa6a8fc995c40bd] i2c: core:
-> support bus regulator controlling in adapter
-> 
-> I have attached full journalctl output of starting the system, then
-> suspend, then wake up and then running `DRI_PRIME=1 glxgears` (which
-> make my monitor 1fps) and then shutdown. I have also attached lsmod and
-> lspci output.
-> 
-> Kernel version: Linux version 5.15.7-arch1-1 (linux@archlinux) (gcc
-> (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Wed, 08 Dec
-> 2021 14:33:16 +0000
-> 
-> Device Information:
-> Laptop model: Dell Inspiron 15 5567
-> GPU 0: Intel HD Graphics 620
-> GPU 1: AMD ATI Radeon R7 M445
-> 
-> Regards,
-> Tareque Md Hanif.
->  
+diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
+index 693903e80892..b812d1090c0f 100644
+--- a/drivers/i2c/busses/i2c-exynos5.c
++++ b/drivers/i2c/busses/i2c-exynos5.c
+@@ -814,9 +814,11 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 	}
+ 
+-	i2c->pclk = devm_clk_get(&pdev->dev, "hsi2c_pclk");
+-	if (IS_ERR(i2c->pclk))
+-		i2c->pclk = NULL; /* pclk is optional */
++	i2c->pclk = devm_clk_get_optional(&pdev->dev, "hsi2c_pclk");
++	if (IS_ERR(i2c->pclk)) {
++		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->pclk),
++				     "cannot get pclk");
++	}
+ 
+ 	ret = clk_prepare_enable(i2c->pclk);
+ 	if (ret)
+-- 
+2.30.2
 
