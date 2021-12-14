@@ -2,117 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 417764744D2
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Dec 2021 15:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 522FE474BC0
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Dec 2021 20:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232554AbhLNOZP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 14 Dec 2021 09:25:15 -0500
-Received: from mga06.intel.com ([134.134.136.31]:62980 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232427AbhLNOZP (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:25:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639491914; x=1671027914;
-  h=from:to:cc:subject:date:message-id;
-  bh=4aEF09A6v3rYd2GDsCyFmwJiPx8pK9gv/YEI8Dx0wog=;
-  b=iEgbhoUMYn74gEqo13K4vL93qRd28oaawY/8YnDvPbkRXxOnZ9xJfOjz
-   hCjRJxvugo2jFSNEWpb24FgVCEy0AOSLWydp6Edk0paZGl7ox0e56e8dh
-   owgNLvRQfQX3XarivpDgcC4ayh79k/SyHkxXsMvm2HDjT4kRefg8N2pwE
-   dEeczvI5IrBPGVeirSyvHzRuZAbPr+nRWhK4xP5ZPOvUGCRIeOhSdellb
-   mAMFOiLXQN6boehJA5748Qq4GYX9HVlX/t2xIverCuCLnP+s+Kvyj1SZy
-   lZ9ir19Q8zpuePFxEM7wxyDpVT9XhwhcL3YoeY97OHtv8wnjWJR/+eMDf
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299764943"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="299764943"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 06:24:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="465108549"
-Received: from coresw01.iind.intel.com ([10.106.46.194])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 06:24:52 -0800
-From:   tamal.saha@intel.com
-To:     wsa@kernel.org, andriy.shevchenko@linux.intel.com,
-        jarkko.nikula@linux.intel.com, linux-i2c@vger.kernel.org
-Cc:     tamal.saha@intel.com, bala.senthil@intel.com
-Subject: [PATCH v3] i2c: designware: Do not complete i2c read without RX_FULL interrupt
-Date:   Tue, 14 Dec 2021 19:54:51 +0530
-Message-Id: <20211214142451.3638-1-tamal.saha@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S229680AbhLNTTA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 14 Dec 2021 14:19:00 -0500
+Received: from fallback17.m.smailru.net ([94.100.176.130]:36594 "EHLO
+        fallback17.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229671AbhLNTS7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Dec 2021 14:18:59 -0500
+X-Greylist: delayed 989 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 Dec 2021 14:18:59 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail3;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=FTG10nFpuh46oFN3tDJmheiI0PCDQn2nxAjJTjT+neI=;
+        t=1639509539;x=1640114939; 
+        b=EGVaPgFb/72oPk66oDtU3G8Q45go8Nbjz6SgvkS/QB4XrTDP97vMLff3EOsvpyUf5T6T1Ga8UV+wLOSgFpYVLUYbmY1RB2TtSbhjQEeh2nGWMuVxL6aeEpohTWbD3TDBXVFVv7Gud+vB4Pdc1DLMr9qfK2aS81nnYOcpKSiVtPI=;
+Received: from [10.161.55.49] (port=48890 helo=smtpng1.i.mail.ru)
+        by fallback17.m.smailru.net with esmtp (envelope-from <fido_max@inbox.ru>)
+        id 1mxD4G-000311-RK
+        for linux-i2c@vger.kernel.org; Tue, 14 Dec 2021 22:02:29 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=FTG10nFpuh46oFN3tDJmheiI0PCDQn2nxAjJTjT+neI=;
+        t=1639508548;x=1640113948; 
+        b=VAwZ2xZlYO/uvcGoNhijvmZVorTm5G1C3CWok+MMp4SAof/1EMDHQmWM+4jYDOCew20vxjUnwoqg3eQfYA+LcNLvx6BmuRgzT4H79zPnceYJvNJs8zceyRhtqLNDNGO0554rLlC2AxmQEmy9KbIsbsiCkMKyAhWe8A4lhXPT39dXF28ZpRntzNRFLzWP5CXkhqGD5DFVU6rVemzJ2gdBeXBsH7oflTuo+nBklbYBcqV4EmHUH7peZu5fBw9Ihoihu1er4ovhCJzv+PIc7cJDjmIryOE8V/thoYV6UmhSGCFJQnZB6KXSMUHI8rFJcCP0DsLDDTl0oKB4bfnZWT3dDQ==;
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from <fido_max@inbox.ru>)
+        id 1mxD4D-0005Xv-IK; Tue, 14 Dec 2021 22:02:26 +0300
+Message-ID: <bdc66b6e-e7b6-26a3-3427-d2c13fe40e77@inbox.ru>
+Date:   Tue, 14 Dec 2021 22:02:24 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 0/2] Add Microchip EEPROM 24xx1025 support.
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20211210182604.14288-1-fido_max@inbox.ru>
+ <CAMRc=MdXmFxLKumVE632420O=TVwx9FyYqX1K-XK_r91jYzcpg@mail.gmail.com>
+From:   Maxim Kochetkov <fido_max@inbox.ru>
+In-Reply-To: <CAMRc=MdXmFxLKumVE632420O=TVwx9FyYqX1K-XK_r91jYzcpg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-4EC0790: 10
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9FFF274446F725B74F2BE858B52863E69B5EA3FEFA4FF93A2182A05F538085040FC55A8FF699977EDB0868B856CC993DF2F6B72600AE920D71524737528303E99
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7AED985C8E545F588EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006375AC38C7EC4509C8B8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8B09F1F99151D9328CD844D3B74AA98C26F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE746CC513BB44FBA1D9FA2833FD35BB23D9E625A9149C048EE33AC447995A7AD18F04B652EEC242312D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8BEC1C9C6CFAD2A0F5A471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7CFA80D66F452D417A43847C11F186F3C59DAA53EE0834AAEE
+X-C1DE0DAB: 0D63561A33F958A5274EEB22F5C6BFEB420CFBA70F93AC1739DDF65CE623504CD59269BC5F550898D99A6476B3ADF6B47008B74DF8BB9EF7333BD3B22AA88B938A852937E12ACA75F0DFBB38B116E9C7410CA545F18667F91A7EA1CDA0B5A7A0
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34AF12ADB97C97CD896B07285701A674B10D7C7BB32CF7077DD33154507DB07040A607BFCCFDCCDA211D7E09C32AA3244CFF26C8BF161E54A94370BC33E542A1C355E75C8D0ED9F6EE83B48618A63566E0
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojqIoINCajonD6F3MBAlr/zw==
+X-Mailru-Sender: 689FA8AB762F7393C37E3C1AEC41BA5D556D71E5F7CB2DDBD57AD070CFDE22CE98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-7564579A: 78E4E2B564C1792B
+X-77F55803: 6242723A09DB00B4C456381A22064F8E4D2CF43611C06B136AAF023CE55F9FB6049FFFDB7839CE9E6AE0A34E1E843E51D6706DDF13F3677EDD05BACAD6ABBAB8BF2F5A2C46A105E2
+X-7FA49CB5: 0D63561A33F958A5F8D332E61E978C9B07E367B96AD4953CE6369596922D47ABCACD7DF95DA8FC8BD5E8D9A59859A8B64071617579528AACCC7F00164DA146DAFE8445B8C89999728AA50765F79006376B023E84F73EF47C389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8093C2F12201C912AF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA775ECD9A6C639B01B78DA827A17800CE71D0063F52110EA4A731C566533BA786AA5CC5B56E945C8DA
+X-C1DE0DAB: 0D63561A33F958A5F8D332E61E978C9B07E367B96AD4953CF8DD3ECFEDB37B94D59269BC5F550898D99A6476B3ADF6B4886A5961035A09600383DAD389E261318FB05168BE4CE3AF
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojqIoINCajonAKhITXgVT2YQ==
+X-Mailru-MI: 800
+X-Mras: Ok
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Tamal Saha <tamal.saha@intel.com>
 
-Intel Keem Bay platform supports multi-master operations over same i2c
-bus using Synopsys i2c DesignWare IP. When multi-masters initiate i2c
-operation simultaneously in a loop, SCL line is stucked low forever
-after few i2c operations. Following interrupt sequences are observed
-in:
-  working case: TX_EMPTY, RX_FULL and STOP_DET
-  non working case: TX_EMPTY, STOP_DET, RX_FULL.
 
-DW_apb_i2c stretches the SCL line when the TX FIFO is empty or when
-RX FIFO is full. The DW_apb_i2c master will continue to hold the SCL
-line LOW until RX FIFO is read.
+On 13.12.2021 16:40, Bartosz Golaszewski wrote:
+> On Fri, Dec 10, 2021 at 7:26 PM Maxim Kochetkov <fido_max@inbox.ru> wrote:
+>>
+>> Add Microchip EEPROM 24xx1025 support.
+>>
+>> v3: add dt-bindings
+>> v2: rebased on git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git/at24/for-next
+>>
+>> Maxim Kochetkov (2):
+>>    eeprom: at24: Add support for 24c1025 EEPROM
+>>    dt-bindings: at24: add at24c1025
+>>
+>>   .../devicetree/bindings/eeprom/at24.yaml          |  4 ++++
+>>   drivers/misc/eeprom/at24.c                        | 15 ++++++++++++++-
+>>   2 files changed, 18 insertions(+), 1 deletion(-)
+>>
+>> --
+>> 2.32.0
+>>
+> 
+> Series queued for v5.17.
 
-Linux kernel i2c DesignWare driver does not handle above non working
-sequence. TX_EMPTY, RX_FULL and STOP_DET routine execution are required
-in sequence although RX_FULL interrupt is raised after STOP_DET by
-hardware. Clear STOP_DET for the following conditions:
-  (STOP_DET ,RX_FULL, rx_outstanding)
-    Write Operation: (1, 0, 0)
-    Read Operation:
-      RX_FULL followed by STOP_DET: (0, 1, 1) -> (1, 0, 0)
-      STOP_DET followed by RX_FULL: (1, 0, 1) -> (1, 1, 0)
-      RX_FULL and STOP_DET together: (1, 1, 1)
+Great!
+https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git/log/drivers/misc/eeprom?h=at24/for-next
 
-Signed-off-by: Tamal Saha <tamal.saha@intel.com>
----
-Changes in v3:
- - "multi-master" is used in commit message
-Changes in v2:
- - Commit message updated as suggested by Andy Shevchenko
-  - Replaced Synopsis by Synopsys, designware by DesignWare, software by driver
----
- drivers/i2c/busses/i2c-designware-master.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+was merged into next:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/misc/eeprom?id=eb67a13c80a75ebd73f70538fc2e7f6f09ef778a
 
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index 9b08bb5df38d..9177463c2cbb 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -701,7 +701,8 @@ static u32 i2c_dw_read_clear_intrbits(struct dw_i2c_dev *dev)
- 		regmap_read(dev->map, DW_IC_CLR_RX_DONE, &dummy);
- 	if (stat & DW_IC_INTR_ACTIVITY)
- 		regmap_read(dev->map, DW_IC_CLR_ACTIVITY, &dummy);
--	if (stat & DW_IC_INTR_STOP_DET)
-+	if ((stat & DW_IC_INTR_STOP_DET) &&
-+	    ((dev->rx_outstanding == 0) || (stat & DW_IC_INTR_RX_FULL)))
- 		regmap_read(dev->map, DW_IC_CLR_STOP_DET, &dummy);
- 	if (stat & DW_IC_INTR_START_DET)
- 		regmap_read(dev->map, DW_IC_CLR_START_DET, &dummy);
-@@ -723,6 +724,7 @@ static int i2c_dw_irq_handler_master(struct dw_i2c_dev *dev)
- 	if (stat & DW_IC_INTR_TX_ABRT) {
- 		dev->cmd_err |= DW_IC_ERR_TX_ABRT;
- 		dev->status = STATUS_IDLE;
-+		dev->rx_outstanding = 0;
- 
- 		/*
- 		 * Anytime TX_ABRT is set, the contents of the tx/rx
-@@ -745,7 +747,8 @@ static int i2c_dw_irq_handler_master(struct dw_i2c_dev *dev)
- 	 */
- 
- tx_aborted:
--	if ((stat & (DW_IC_INTR_TX_ABRT | DW_IC_INTR_STOP_DET)) || dev->msg_err)
-+	if (((stat & (DW_IC_INTR_TX_ABRT | DW_IC_INTR_STOP_DET)) || dev->msg_err) &&
-+	     (dev->rx_outstanding == 0))
- 		complete(&dev->cmd_complete);
- 	else if (unlikely(dev->flags & ACCESS_INTR_MASK)) {
- 		/* Workaround to trigger pending interrupt */
--- 
-2.17.1
+But without 24c1025 commits
 
+> 
+> Bart
