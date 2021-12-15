@@ -2,25 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 260794751A1
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Dec 2021 05:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A784A4751A0
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Dec 2021 05:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235530AbhLOEaV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S239725AbhLOEaV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Tue, 14 Dec 2021 23:30:21 -0500
-Received: from lit010.phy.lolipop.jp ([118.27.125.16]:55894 "EHLO
+Received: from lit010.phy.lolipop.jp ([118.27.125.16]:55892 "EHLO
         lit010.phy.lolipop.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235760AbhLOEaU (ORCPT
+        with ESMTP id S235530AbhLOEaU (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Tue, 14 Dec 2021 23:30:20 -0500
+X-Greylist: delayed 516 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 Dec 2021 23:30:19 EST
 Received: by lit010.phy.lolipop.jp (Postfix, from userid 995)
-        id 790BE3C0F5832; Wed, 15 Dec 2021 13:21:45 +0900 (JST)
+        id 1EA153C0F582E; Wed, 15 Dec 2021 13:21:41 +0900 (JST)
 To:     linux-i2c@vger.kernel.org
 Subject: =?ISO-2022-JP?B?GyRCJCpMZCQkOWckOyQiJGokLCRIJCYkNCQ2JCQkXiQ3JD8bKEI=?=
 X-PHP-Originating-Script: 92861:class-phpmailer.php
-Date:   Wed, 15 Dec 2021 04:21:35 +0000
+Date:   Wed, 15 Dec 2021 04:21:41 +0000
 From:   =?ISO-2022-JP?B?Q29Db1JvGyRCM1gxYBsoQjE1dGg=?= 
         <contact@cocorogakuen.com>
 Reply-To: contact@cocorogakuen.com
-Message-ID: <24dec20cb9002b2e35f447ac69c7108c@cocorogakuen.com>
+Message-ID: <d315612000128c995bdb2c5d4a4ed137@cocorogakuen.com>
 X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=ISO-2022-JP
