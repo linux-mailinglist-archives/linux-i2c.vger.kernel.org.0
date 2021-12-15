@@ -2,99 +2,155 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAEB4760F0
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Dec 2021 19:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 536EB47635D
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Dec 2021 21:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343904AbhLOSmf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Dec 2021 13:42:35 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:40904 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343895AbhLOSmf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Dec 2021 13:42:35 -0500
-Received: by mail-oi1-f173.google.com with SMTP id bk14so32927981oib.7;
-        Wed, 15 Dec 2021 10:42:34 -0800 (PST)
+        id S236105AbhLOUdk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Dec 2021 15:33:40 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:44793 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234794AbhLOUdk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Dec 2021 15:33:40 -0500
+Received: by mail-ot1-f43.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso26325446otj.11;
+        Wed, 15 Dec 2021 12:33:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3OtsKeW4PGTLYhUwIW/0xDZ0rCoZLq4u4StGZiPBa7E=;
-        b=M6Ha8N60acEWIsAcZ6nJuL/DjpFU5uGlrwah+EM1jCBKeX2WzurzMsGC1AmmBDCqmM
-         BASyKlwrR+xFBRWb+XOzfYhG3n2Yvbq0oTRT3xH3B1GYDCGV9dWoqudtE0yjf8Ajo8h7
-         HoSW0u4k9YAgvwb2ZI5Cmqwr/mgOdnCteISnDtZk9K/mnQlfyPgprXigPVmHZ9fvQNEv
-         XVejnTrEx7wnmb0URVk0bKMcxOmrdCPaIDbEl/yXJSap0KeeCNkz0fpG50QQG/gWMfF2
-         m30JBFjo3HlpJyFbr9yBhMr5tBVQern1OKnT5Ij7zMUkZj5utA6xgl02avDEqp15j0Az
-         SOTQ==
-X-Gm-Message-State: AOAM5313zR9Fs0TQg71ZhLII2vwnANG1FzYNpTrihE426nxtsJ225LIx
-        ARoHwZGgGclzJMR6+A7rRA==
-X-Google-Smtp-Source: ABdhPJx1sPX5taOobDhPw0965b4z+Q5nH2DK3vahPxmFwzz1WnIT0pXUH6ue1ficuD1LEggwFjRtjw==
-X-Received: by 2002:a05:6808:114f:: with SMTP id u15mr1117524oiu.74.1639593754429;
-        Wed, 15 Dec 2021 10:42:34 -0800 (PST)
+         :mime-version:content-disposition:in-reply-to;
+        bh=PNasZti3EJAcUjmghAAyjrnvtl+di8xU5grpOnCBmyg=;
+        b=r/Os1Kd4WaahbBlEUwTmFvMz0jGMaEf5GyRAEsQcwXDHvAEx8OY3O+2FmcKTk5s8F9
+         DUG/r3/ozWdtYWboXX0729eGeT5AbDBr/TzjUitOsNKZVfKT9RfzAef9v+p6zKCuMLR7
+         71uF2hb9HrY8tyaSurfycruRmbn22eWBzarDSG53P9CMaKOnAnApA0GX9NimBoHWfr0j
+         yLvQNpya2WGAe5epcHRkxpc/mqisF8rr8uOCSa3yZllujU6j9sehV7VLwvBOXveWgUMj
+         zJO74zz5ILlgCOzxXs+Kwl/70JpFWjFIeWoAZH2e5NOSLJxC5hnqyevRugxC9JgcbhRl
+         RyOg==
+X-Gm-Message-State: AOAM531a51wj4QoqprZHGHNfczzKVFqVZW6xuoWWrXwGZsf04NOznj9F
+        KvZSs08XXpx+hSkZqhZVeyQsfEm8dg==
+X-Google-Smtp-Source: ABdhPJzYfl8+giEp7MlljEoKVlDCMkHWhKVi6Os4fWSTlT/WQhPPg1r7k7uJ2jVEdD343rJGGqFJOw==
+X-Received: by 2002:a05:6830:3499:: with SMTP id c25mr10508450otu.206.1639600419551;
+        Wed, 15 Dec 2021 12:33:39 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v12sm571493ote.9.2021.12.15.10.42.33
+        by smtp.gmail.com with ESMTPSA id bh12sm534362oib.25.2021.12.15.12.33.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 10:42:33 -0800 (PST)
-Received: (nullmailer pid 1622209 invoked by uid 1000);
-        Wed, 15 Dec 2021 18:42:32 -0000
-Date:   Wed, 15 Dec 2021 12:42:32 -0600
+        Wed, 15 Dec 2021 12:33:39 -0800 (PST)
+Received: (nullmailer pid 1790368 invoked by uid 1000);
+        Wed, 15 Dec 2021 20:33:38 -0000
+Date:   Wed, 15 Dec 2021 14:33:38 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
-        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
-        sumit.semwal@linaro.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/2] Add SMBus features to Tegra I2C
-Message-ID: <Ybo3GNYSZ9HLIwqj@robh.at.kernel.org>
-References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
- <e3deea6a-3854-e58c-0d27-602413f2a496@gmail.com>
- <YbMWPGMcHEQXGkHf@orome>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: i2c Update PCA954x
+Message-ID: <YbpRIjHgfPvHq/zR@robh.at.kernel.org>
+References: <20211214095021.572799-1-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YbMWPGMcHEQXGkHf@orome>
+In-Reply-To: <20211214095021.572799-1-patrick.rudolph@9elements.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:56:28AM +0100, Thierry Reding wrote:
-> On Thu, Dec 09, 2021 at 07:04:30PM +0300, Dmitry Osipenko wrote:
-> > 09.12.2021 18:05, Akhil R пишет:
-> > > Add support for SMBus Alert and SMBus block read functions to
-> > > i2c-tegra driver
-> > > 
-> > > Akhil R (2):
-> > >   dt-bindings: i2c: tegra: Add SMBus feature properties
-> > >   i2c: tegra: Add SMBus block read and SMBus alert functions
-> > > 
-> > >  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.txt |  4 ++
-> > >  drivers/i2c/busses/i2c-tegra.c                     | 54 +++++++++++++++++++++-
-> > >  2 files changed, 57 insertions(+), 1 deletion(-)
-> > > 
-> > 
-> > How this was tested? This series must include the DT patch. If there is
-> > no real user in upstream for this feature, then I don't think that we
-> > should bother at all about it.
+On Tue, Dec 14, 2021 at 10:50:18AM +0100, Patrick Rudolph wrote:
+> Add the Maxim MAX735x as supported chip to PCA954x and add an
+> example how to use it.
+
+The subject needs some work. Every change is an 'update' and you should 
+say something about Maxim. 'Add Maxim MAX735x variants' or something.
+
 > 
-> This is primarily used by a device that uses ACPI and the driver uses
-> the firmware-agnostic APIs to get at this. However, it also means that
-> the driver effectively provides this same support for DT via those APIs
-> and therefore it makes sense to document that part even if there are no
-> current users of the DT bits.
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> ---
+>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> index 9f1726d0356b..bd794cb80c11 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> @@ -11,6 +11,7 @@ maintainers:
+>  
+>  description:
+>    The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
+> +  Compatible with Maxim MAX7356 - MAX7358 I2C mux/switch devices.
+>  
+>  allOf:
+>    - $ref: /schemas/i2c/i2c-mux.yaml#
+> @@ -19,6 +20,9 @@ properties:
+>    compatible:
+>      oneOf:
+>        - enum:
+> +          - maxim,max7356
+> +          - maxim,max7357
+> +          - maxim,max7358
+>            - nxp,pca9540
+>            - nxp,pca9542
+>            - nxp,pca9543
+> @@ -40,6 +44,7 @@ properties:
+>  
+>    interrupts:
+>      maxItems: 1
+> +    description: Only supported on NXP devices. Unsupported on Maxim MAX735x.
 
-Then definitely a NAK.
+You can express that as an if/then schema.
 
-> One big advantage of this is that it helps keep the ACPI and DT bindings
-> in sync, and document this on the DT side also allows us to document the
-> ACPI side of things where no formal documentation exists, as far as I
-> know.
+Just 'interrupts: false' for maxim compatibles. There's lots of 
+examples in the tree.
 
-I have no bandwidth to review ACPI bindings and don't think the whole 
-use DT bindings in ACPI is a good idea either. If someone wants this to 
-be a thing, then they need to step up and review bindings.
+>  
+>    "#interrupt-cells":
+>      const: 2
+> @@ -100,6 +105,41 @@ examples:
+>                  #size-cells = <0>;
+>                  reg = <4>;
+>  
+> +                rtc@51 {
+> +                    compatible = "nxp,pcf8563";
+> +                    reg = <0x51>;
+> +                };
 
-Rob
+Unrelated change.
+
+> +            };
+> +        };
+> +    };
+> +
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+
+Really need another example?
+
+> +
+> +        i2c-mux@74 {
+> +            compatible = "maxim,max7357";
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            reg = <0x74>;
+> +
+> +            i2c@1 {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                reg = <1>;
+> +
+> +                eeprom@54 {
+> +                    compatible = "atmel,24c08";
+> +                    reg = <0x54>;
+> +                };
+> +            };
+> +
+> +            i2c@7 {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                reg = <7>;
+> +
+>                  rtc@51 {
+>                      compatible = "nxp,pcf8563";
+>                      reg = <0x51>;
+> -- 
+> 2.33.1
+> 
+> 
