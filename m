@@ -2,103 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5DD475B8A
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Dec 2021 16:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8BE4760E0
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Dec 2021 19:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243804AbhLOPMU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 15 Dec 2021 10:12:20 -0500
-Received: from mga18.intel.com ([134.134.136.126]:62944 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243816AbhLOPMT (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:12:19 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="226104886"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="226104886"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:12:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="518801202"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.88])
-  by orsmga008.jf.intel.com with ESMTP; 15 Dec 2021 07:12:17 -0800
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH 6/6] i2c: designware-pci: Convert to use dev_err_probe()
-Date:   Wed, 15 Dec 2021 17:12:05 +0200
-Message-Id: <20211215151205.584264-6-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215151205.584264-1-jarkko.nikula@linux.intel.com>
-References: <20211215151205.584264-1-jarkko.nikula@linux.intel.com>
+        id S1343849AbhLOShd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 15 Dec 2021 13:37:33 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:40682 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234977AbhLOShc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 15 Dec 2021 13:37:32 -0500
+Received: by mail-ot1-f50.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so26004432otj.7;
+        Wed, 15 Dec 2021 10:37:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1SeB84S69bpsa1PObCsguFCuIUK1jo7w+NpM6xYNgYQ=;
+        b=Rnh2ScQCEF00qB4lnQkgT6Nun2wNiZfwDmLuy0wYrDYy+qOaCiqPB6tHmOABQl9oF4
+         p5K9YDLXEkUMwBybvJfcOoAyliXQYgt5T69oUtOJP0YUQHxMAQDwn29yaICiANKtspbL
+         PVUbhgB21M+ye3BM69lHum+ZWUSBaXyG3bT9LGZBNdKhDNA1yebRGHN2jlm6EuSeVsQA
+         H1bh//6AxYcgAwUZGrpFeCygDc/4RWvICkOV1JfHMGmKZLhaFR2hRV43F9kZTmeEIfLU
+         tJQr4O1CCFuy3q31qHOppyyi7EG4eYZQwsTGv7qX7Giio+MENpC3+9/82HG4IBR8vkLg
+         vjKQ==
+X-Gm-Message-State: AOAM532aknhuKlGSoEH2mzmpkDO2G1U8T4zU05auxUXuOZNJ6vvEAPwa
+        xqglP1yEN766dWiUpFjemA==
+X-Google-Smtp-Source: ABdhPJwjTsE+G4GlNjpU1uHHk79mPFLVzI/DID9ltvFzWeKtA+cshnlVlgrxc/OfhJkOkys0N0IFIw==
+X-Received: by 2002:a05:6830:1ddd:: with SMTP id a29mr9883407otj.311.1639593451526;
+        Wed, 15 Dec 2021 10:37:31 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id b22sm474096oib.41.2021.12.15.10.37.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 10:37:30 -0800 (PST)
+Received: (nullmailer pid 1614869 invoked by uid 1000);
+        Wed, 15 Dec 2021 18:37:29 -0000
+Date:   Wed, 15 Dec 2021 12:37:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     andy.shevchenko@gmail.com, christian.koenig@amd.com,
+        digetx@gmail.com, dri-devel@lists.freedesktop.org,
+        jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org, thierry.reding@gmail.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: i2c: tegra: Add SMBus feature properties
+Message-ID: <Ybo16aNZ5MBW6XY6@robh.at.kernel.org>
+References: <1639062321-18840-1-git-send-email-akhilrajeev@nvidia.com>
+ <1639062321-18840-2-git-send-email-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1639062321-18840-2-git-send-email-akhilrajeev@nvidia.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Thu, Dec 09, 2021 at 08:35:20PM +0530, Akhil R wrote:
+> Tegra I2C can use a gpio as an smbus-alert. Document the usage of
+> the same.
+> 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt
+> index 3f2f990..71ee79b 100644
+> --- a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt
+> +++ b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt
+> @@ -70,6 +70,10 @@ Required properties:
+>    - rx
+>    - tx
+>  
+> +optional properties:
+> +- smbalert-gpio: Must contain an entry for the gpio to be used as smbus alert.
+> +  It will be used only if optional smbus-alert property is present.
 
-It's fine to call dev_err_probe() in ->probe() when error code is known.
-Convert the driver to use dev_err_probe().
+There's already a standard way to do this with interrupts. And GPIOs can 
+be interrupts usually.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
-Jarkko: In my opinion this was worth to take before cleanups so hand
-edited to apply to current code. I split the dev_err_probe() lines
-to have device pointer and error code in the first line and printable
-string in the next for shorter lines.
-While at it, change "invalid" -> "Invalid" (was before Andy's change).
----
- drivers/i2c/busses/i2c-designware-pcidrv.c | 24 +++++++++-------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 855ea666029f..6fde58878aa6 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -246,28 +246,24 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	struct dw_pci_controller *controller;
- 	struct dw_scl_sda_cfg *cfg;
- 
--	if (id->driver_data >= ARRAY_SIZE(dw_pci_controllers)) {
--		dev_err(&pdev->dev, "%s: invalid driver data %ld\n", __func__,
--			id->driver_data);
--		return -EINVAL;
--	}
-+	if (id->driver_data >= ARRAY_SIZE(dw_pci_controllers))
-+		return dev_err_probe(&pdev->dev, -EINVAL,
-+				     "Invalid driver data %ld\n",
-+				     id->driver_data);
- 
- 	controller = &dw_pci_controllers[id->driver_data];
- 
- 	r = pcim_enable_device(pdev);
--	if (r) {
--		dev_err(&pdev->dev, "Failed to enable I2C PCI device (%d)\n",
--			r);
--		return r;
--	}
-+	if (r)
-+		return dev_err_probe(&pdev->dev, r,
-+				     "Failed to enable I2C PCI device\n");
- 
- 	pci_set_master(pdev);
- 
- 	r = pcim_iomap_regions(pdev, 1 << 0, pci_name(pdev));
--	if (r) {
--		dev_err(&pdev->dev, "I/O memory remapping failed\n");
--		return r;
--	}
-+	if (r)
-+		return dev_err_probe(&pdev->dev, r,
-+				     "I/O memory remapping failed\n");
- 
- 	dev = devm_kzalloc(&pdev->dev, sizeof(struct dw_i2c_dev), GFP_KERNEL);
- 	if (!dev)
--- 
-2.34.1
-
+> +
+>  Example:
+>  
+>  	i2c@7000c000 {
+> -- 
+> 2.7.4
+> 
+> 
