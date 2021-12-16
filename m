@@ -2,130 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F03E477D44
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Dec 2021 21:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B17477E92
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Dec 2021 22:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241219AbhLPUTe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Dec 2021 15:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241282AbhLPUTd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Dec 2021 15:19:33 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDAEC06173E;
-        Thu, 16 Dec 2021 12:19:33 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id e3so92239270edu.4;
-        Thu, 16 Dec 2021 12:19:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=72vtUg8lpD9RmmoMvh+ZH1I3XqbPfTU1qYPquUy7V7s=;
-        b=gUE44e4FrDWAyGq5iIqAX6DcfeBlUxL6cVhanO8XzP04xxyEYbZF4PPGzTeq9jktDD
-         2jb4gf3O1Lalx6Knx1ZVKQ7wbYHjJ49OtfTLmaieQIngKmtmAAC7srcaeaPHz8d2IxUS
-         QgVP8MwVwfQ5Xi8lz3cDbQp4CDFFAQ5bzwihbOkJICofkOAuoD3+5jzH6Ng37g4isotN
-         0fxSiyygj2dLsJZx8y238rNVVJz3wswQp5KMqt0MTQshXYPWBVw9e7rkVarCE8WNCpoG
-         z3BbW2BCWap6vmNI1VV64fdWytHivFOcW2JaSmV3vDM8ru9TjpPOUAPvxFP6/RRyOJFh
-         GzyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=72vtUg8lpD9RmmoMvh+ZH1I3XqbPfTU1qYPquUy7V7s=;
-        b=TmLVZloqtDPe5vaMP7fOQi4LgT5JUXhgLM60VRADFVDNC0JKDf6uPczYxUzl8jilZA
-         4D6+qcPQy+hmSMSZhYX/SeuYuDF5Fz6ko41J9oBrWVJtMzk9jMsxP035xTgGZdXnGRU6
-         orgb637FQkILRSnX04hcwCORlpLqXD7qrveY4LM/ze2hUW3J4QCxRLIkhPf7HhYZK7N7
-         GwrAaZfBvn93Px2p6QHxmjBIspZ768/Vo10F7rv0GzMcJlRBpfrdWlymsnNsYw63Wvv7
-         1vsc5ZCh4J8nKaK0ZrVchdMbmcilmlIhCbnjRy148xvBJ3O38zx310YKWbMLzqj2/Gcx
-         H4vA==
-X-Gm-Message-State: AOAM533aP6DyYZH0h1N7CIVx6+x3l9z1VGgYDRzmWWODvX76WsR/Y+4M
-        HLaojNPwKmbjbZKQnsI6aKNQR0L7ULTGP7Vn6TbfAiI6VaaTTzX98c4=
-X-Google-Smtp-Source: ABdhPJzle6kPZJq6DVHDycIk891CMZBBF39xWduDs+8JvG3epYSRRZ/PQ2+wkVGsp6ZOvLoElqu94t5I+gFeaZ9FmX4=
-X-Received: by 2002:a17:906:30da:: with SMTP id b26mr17533409ejb.497.1639685971950;
- Thu, 16 Dec 2021 12:19:31 -0800 (PST)
+        id S239122AbhLPVRO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Dec 2021 16:17:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58464 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241726AbhLPVRN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Dec 2021 16:17:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E699BB82322
+        for <linux-i2c@vger.kernel.org>; Thu, 16 Dec 2021 21:17:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2F8C36AE7;
+        Thu, 16 Dec 2021 21:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639689430;
+        bh=lckjC5/gLKaDkB+vV1MVpBntVVh9CREWWNCT8oEJg/o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=maqcY4Vkdtdo8RwAfV9bXpEGO53We8SRTLxlBggwcEdb66Qup1WMpAEY29N9Stk8F
+         gUD794K8Th4tmChEw78C68qLWCCdD2txbCFypMy/3leTtCQEmSv46wRPOmhP0FAU5h
+         fObgEP0W5OSfyfhre5w5eTgY1X9NC5hLve5XnV/qcr3dYdcjVCZ+XzkjDxZqjuIP1v
+         qV7f0jMWHW2ZmD35OG5T10sQXt4Zjxluj5GvCSqcD5P4AjLAykpVHzXwDQ2zy4Osv3
+         u6fZak2E0iJHRBMqbw5/xA4e4rIuAVWvG9FTj3tsUkM81/5ezqEtQObak2a62+/0Cd
+         Z0A4xwxpNjiyQ==
+Date:   Thu, 16 Dec 2021 22:17:04 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Tamal Saha <tamal.saha@intel.com>
+Subject: Re: [PATCH 1/6] i2c: designware: Do not complete i2c read without
+ RX_FULL interrupt
+Message-ID: <Ybus0MVyyNU+GyeC@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Tamal Saha <tamal.saha@intel.com>
+References: <20211215151205.584264-1-jarkko.nikula@linux.intel.com>
 MIME-Version: 1.0
-References: <1639660402-31207-1-git-send-email-akhilrajeev@nvidia.com>
- <1639660402-31207-3-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75VcvrM0qLQE-04UZEkxbAvkE-MNSN7RGC7mPxj+1hoUyTw@mail.gmail.com> <BN9PR12MB52732B801C0D15BBBA71B8DDC0779@BN9PR12MB5273.namprd12.prod.outlook.com>
-In-Reply-To: <BN9PR12MB52732B801C0D15BBBA71B8DDC0779@BN9PR12MB5273.namprd12.prod.outlook.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 16 Dec 2021 22:18:54 +0200
-Message-ID: <CAHp75VfQpgWhKXM=1oRg8d_ntZvxkSArQv=6eaq7tyU6-KvJjg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] i2c: smbus: Use device_ functions instead of of_
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Suresh Mangipudi <smangipudi@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FkWHUZwsDAJ3Z5bG"
+Content-Disposition: inline
+In-Reply-To: <20211215151205.584264-1-jarkko.nikula@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 6:08 PM Akhil R <akhilrajeev@nvidia.com> wrote:
-> > On Thu, Dec 16, 2021 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
 
-...
+--FkWHUZwsDAJ3Z5bG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > -       irq = of_property_match_string(adapter->dev.of_node, "interrupt-
-> > names",
-> > > -                                      "smbus_alert");
-> > > +       irq = device_property_match_string(adapter->dev.parent, "interrupt-
-> > names",
-> > > +                                          "smbus_alert");
-> >
-> > Hmm... Adapter device node is not the same as the node for its parent.
-> > Do you have some code that propagates of_node from parent to child?
-> Adapter device does not have an of_node unless the adapter driver
-> sets it, I guess. I see all the adapter drivers add the of_node and
-> parent for adapter. Also, there are many places in i2c-core-base and
-> i2c-core-acpi where adapter->dev.parent is referred to as the adapter
-> driver device.
->
-> Basically, adapter->dev.parent and adapter->dev.of_node would
-> ultimately refer to the same device (or the of_node of that device),
-> as far as I understand.
-> >
-> > I.o.w. I would expect to see
-> >
-> >        irq = device_property_match_string(&adapter->dev, "interrupt-names",
-> >
-> > here.
-> It would then require adding the fw_node as well from the adapter driver.
-> I felt it made more sense to refer adapter->dev.parent here as most of the
-> (or rather all of the) adapter drivers already sets it.
+On Wed, Dec 15, 2021 at 05:12:00PM +0200, Jarkko Nikula wrote:
+> From: Tamal Saha <tamal.saha@intel.com>
+>=20
+> Intel Keem Bay platform supports multi-master operations over same i2c
+> bus using Synopsys i2c DesignWare IP. When multi-masters initiate i2c
+> operation simultaneously in a loop, SCL line is stucked low forever
+> after few i2c operations. Following interrupt sequences are observed
+> in:
+>   working case: TX_EMPTY, RX_FULL and STOP_DET
+>   non working case: TX_EMPTY, STOP_DET, RX_FULL.
+>=20
+> DW_apb_i2c stretches the SCL line when the TX FIFO is empty or when
+> RX FIFO is full. The DW_apb_i2c master will continue to hold the SCL
+> line LOW until RX FIFO is read.
+>=20
+> Linux kernel i2c DesignWare driver does not handle above non working
+> sequence. TX_EMPTY, RX_FULL and STOP_DET routine execution are required
+> in sequence although RX_FULL interrupt is raised after STOP_DET by
+> hardware. Clear STOP_DET for the following conditions:
+>   (STOP_DET ,RX_FULL, rx_outstanding)
+>     Write Operation: (1, 0, 0)
+>     Read Operation:
+>       RX_FULL followed by STOP_DET: (0, 1, 1) -> (1, 0, 0)
+>       STOP_DET followed by RX_FULL: (1, 0, 1) -> (1, 1, 0)
+>       RX_FULL and STOP_DET together: (1, 1, 1)
+>=20
+> Signed-off-by: Tamal Saha <tamal.saha@intel.com>
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-Is this
-https://elixir.bootlin.com/linux/latest/source/drivers/i2c/i2c-core-base.c#L1047
-what you are looking for?
+Applied to for-next, thanks!
 
-...
 
-> > >         if (irq == -EINVAL || irq == -ENODATA)
-> > >                 return 0;
-> > >         else if (irq < 0)
-> >
-> > TBH the entire code smells. "Interesting" way of getting an optional named
-> > interrupt.
-> I felt it useful to have it this way as it would remain agnostic to device tree and
-> the ACPI. We would not have to add redundant codes in adapter drivers that
-> are using ACPI table.
->
-> Named interrupts for the ACPI as well, I feel would be a useful addition that can
-> prove to be of value more than this change; I believe.
+--FkWHUZwsDAJ3Z5bG
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Me too. My comment was about current state of affairs, and not to your change.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-With Best Regards,
-Andy Shevchenko
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmG7rMwACgkQFA3kzBSg
+Kbb4Mg/+Kw8JFvggkWezuthDLrJk4QYPDa3zoHOdHpmzZcco2klpahBsX9piILCH
+kKaq1aSHwzgqQJpv7J94vHzQlJd9v1T+YInZo6F0NdrcNbOlg4xSzl9i/OSegj00
+PZ2LjlQ3lNVK5UyjP6U88yq3rXd3qMmYijYqvtpYGWQNdsyl818iBgQPtPylYGQg
+jzw9Ih3nHQ6X72W2fN09oO92RHcfVvkl8BxaBZrxrKr+R6ajccJ4e2VIsPHNN5pZ
+O5BY6VAoSPBYkzTr/emsyHrgo+T6YByMamqxndfQKVX39k5obp6YinSyz75MqizV
+S80yUdF2g0+DLtR4UPowUnUl6rCbUigPLZB57Al+aE0Nf9OdENBIX3GKruNBGnN+
+5x6f+TL3K6MHYfZxHxLU5ZIPeK+JYIgGTwb/nYhLigNSAiwfnm1uqa77zpagfg1y
+7SEzBB09OAxI1Y/XUmfvD7fD9Vy4ZF+pwPR30fMj/YSYW9I+TCDxfBDzv6r4CfWT
+pwzz8vVbo/YSo7JKyNRcv3hTKoVFD6xKJFmInCGmsqRGe0VgS2ZO6LQjxNr+07u+
+CtMWseJAdZOYb/twos/OKHZBGcRXWT3JkWJcvHvZ+s8wqnBIbhFOPfX0YLGl0eTr
+B2M0RuiYUF0lqNgDz2E3/PIDNU5aIgU9I+86NrgRnLnIjYPnU98=
+=kOZ/
+-----END PGP SIGNATURE-----
+
+--FkWHUZwsDAJ3Z5bG--
