@@ -2,53 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23496477EB1
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Dec 2021 22:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1149477EB4
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Dec 2021 22:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbhLPVXr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Dec 2021 16:23:47 -0500
-Received: from www.zeus03.de ([194.117.254.33]:51290 "EHLO mail.zeus03.de"
+        id S236916AbhLPVXv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Dec 2021 16:23:51 -0500
+Received: from www.zeus03.de ([194.117.254.33]:51308 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235310AbhLPVXr (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:23:47 -0500
+        id S236243AbhLPVXv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 16 Dec 2021 16:23:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=xrmK5M69JIoWYuKK+6Rip2IpR+MK
-        b8W/aHjjpwFJ7RM=; b=b6EDIicK1ENH9RqwH7bd02dHtWQeEPoRkzjI/LrQ5N49
-        EDG7O2mblH7iZs2wtBsWlz3wX0phs7T1hHX0guifMQGnTdQyRJCJPwhm9drcDfqj
-        AcbkAp/DbH3+B3RLKSPtQHof5Rh/vmwCxpt+sBqqAsuEIR2iJi/b0yDsZw+stg4=
-Received: (qmail 3861039 invoked from network); 16 Dec 2021 22:23:45 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Dec 2021 22:23:45 +0100
-X-UD-Smtp-Session: l3s3148p1@BgCYCUrTLKAgAQnoAGshAMNCcCooTOTk
-Date:   Thu, 16 Dec 2021 22:23:45 +0100
+        :content-type:in-reply-to; s=k1; bh=i1BF9ZY4zSrk0Ybh6RllYNXuCels
+        VczKSY/PVjeYXD4=; b=10NwK+ww8/mhQaDEKvYHJdEOOuYDMLCretfIvfNlxOSW
+        kU2l/82DZq+Z6l22/EZGwUJVzFeFemXATFizwbJJOr7xONuWy824bhEENUU8Nd1n
+        Is/eCfKugArHuSw4Ne3+3kcBrYW6hXeuDOSTg6NBwV2iNpOzRliwAuAw7kW5kvo=
+Received: (qmail 3861112 invoked from network); 16 Dec 2021 22:23:50 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Dec 2021 22:23:50 +0100
+X-UD-Smtp-Session: l3s3148p1@G0bZCUrTLqAgAQnoAGshAMNCcCooTOTk
+Date:   Thu, 16 Dec 2021 22:23:49 +0100
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: rcar: update to new DMAENGINE API when
+Subject: Re: [PATCH 2/2] i2c: sh_mobile: update to new DMAENGINE API when
  terminating
-Message-ID: <YbuuYVgSRJs1Bt6G@kunai>
+Message-ID: <YbuuZTZwjCQ04rIw@kunai>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
 References: <20211208084543.20181-1-wsa+renesas@sang-engineering.com>
+ <20211208084543.20181-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WUSwl8BU44/M9nst"
+        protocol="application/pgp-signature"; boundary="bHQYOl6mU3wTxe89"
 Content-Disposition: inline
-In-Reply-To: <20211208084543.20181-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20211208084543.20181-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---WUSwl8BU44/M9nst
+--bHQYOl6mU3wTxe89
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 08, 2021 at 09:45:42AM +0100, Wolfram Sang wrote:
+On Wed, Dec 08, 2021 at 09:45:43AM +0100, Wolfram Sang wrote:
 > dmaengine_terminate_all() is deprecated. When converting the existing
-> calls, it turned out that the termination in the interrupt handlers was
-> superfluous and only a side effect of simply calling
+> calls, it turned out that the termination in the DMA setup and callback
+> were superfluous and only a side effect of simply calling
 > rcar_i2c_cleanup_dma(). As either no DMA transfers have been submitted
 > yet or the last one has successfully completed, there is nothing to
 > terminate and we can leave it out. So, merge the DMA unmap and cleanup
@@ -62,24 +63,24 @@ On Wed, Dec 08, 2021 at 09:45:42AM +0100, Wolfram Sang wrote:
 Applied to for-next, thanks!
 
 
---WUSwl8BU44/M9nst
+--bHQYOl6mU3wTxe89
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmG7rmEACgkQFA3kzBSg
-KbZcNg/+NA+qyQweIMfHDZYyyX5nhnNgjERC9IaT3bv9nyE+w2o6LHfBaZYpfeOi
-YBqLWC1fBQjwTwK0mKc9XF6uOFjf7IymL7hlJdItilAenl2q4JOYwwyTV5r0Hj9l
-j/piBP+RUaIPxP3YrPv4AfAfVeFf48kMIC7GnGjSHOLHduFEVAjRIjwroo9qPwia
-CHclPBrepuCI70CzFBMuqjAtu8IVJl9/ek0Jjl3SbpbkgJpz2QoEad3foctvwVr1
-tawcLQCxYFJlPtcUQgx0wG9w4HjDhutcE3KPGGHLWcI3gdr1kHc1kFNYVv4fjLNw
-ctPPy9MMFglxE5M2wz+f0KMrI8bXmvAA8AmnFE35R2HrW7acHVdwnfHg+qq3Plw9
-qZ6ySgsTBnMxmRgvcyZ2s13PZXd7cyPQCfnl2yGKhkUqP9oG7/C2/iL5OMcnr1RD
-d+y6uPMqe7E9LO4FmjLe8CLlDRDgV6zMdZZAeaDvyUPfxqW3GXj8FzvDXokpjnnI
-QkHB3vzDbSaLpaNCG/zQzOd6DVAbu7d7DzKnz+4OKXnj0FsOLidObi7QdvOvoXQK
-Yzsz00gcKl8kJIg/Lbx41iQ735xrRWEpWi6VLv5sh1PjsK2nBNb7vu+aVU7e1SvW
-0A7JEg64ZYGig7HuaF1PDtDXGniUX11JYGUf7EYk3muKeoAbzA4=
-=MIl2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmG7rmUACgkQFA3kzBSg
+KbZm/Q//RAXBuvrS9R5zUaHG397fX1gz7n6E6NdbQvbpcT4lf+s1lND+lxwvGD5G
+lNisSJZIkwqLm7ylqYtraih/5U7iDoL96OIH0AdgCyl3t87NjC78mjs5PSk43SKT
+XTtO0Ly7azdMneOhGezV7oC9nCyJmcawZq/1oVKvoeKD+JeJieSs3D1PR+H0U1y3
+f02qENU4cZCNNQifmEFTf66mxaKNlQaBSBkY8Xaem8Rmh8qUabMKyigpXLaHZ1J2
+Z1YfuhvpBvuM2lrDywRfn+BHF7ggqVc8TGPPkUl9iXDleHvdEoUSROejEncX1MFZ
+oB6jGpBEEAIFVUeQjO/AjnQYQ6bF0YYBA+/+VN3U7i6/anoVtG7N31JZJIjSt6sO
+RzBhm5VXeJ6nPttmwgJ0O9quZG6x6o9GPu9Qd65IWDyMwKt1JLpGspo3Zof2Rn7N
+RijDlgFT/y2ADZR0PI6B++7Gp/yxSZab2gJ2fnDeFZluvOGvbIGYs6GX8nWD0moF
+c1MWOilhtsDyhDZTixDaTMXW6QS9YMGyCuF2c8jAVs8RTOkgh4Nq9SCDSXvXrkK1
+dclGSQLDhOcm+VEN4YZwDN2wDLPvbLohPYgCYgjCzXelqTQuFc5mYF5vfnbNvTjG
+Q6qVCX5Jn1Csv1iGuioweN0GfRqeLEWBlR4tOiX820Lue24ZzXc=
+=92vO
 -----END PGP SIGNATURE-----
 
---WUSwl8BU44/M9nst--
+--bHQYOl6mU3wTxe89--
