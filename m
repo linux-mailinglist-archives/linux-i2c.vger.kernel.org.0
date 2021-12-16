@@ -2,24 +2,24 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D28477BC9
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Dec 2021 19:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F21477BCC
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Dec 2021 19:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237469AbhLPSt2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Dec 2021 13:49:28 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:53432 "EHLO inva021.nxp.com"
+        id S237720AbhLPSta (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Dec 2021 13:49:30 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:60392 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236124AbhLPSt0 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:49:26 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 68A7020130F;
-        Thu, 16 Dec 2021 19:49:25 +0100 (CET)
+        id S236224AbhLPSt1 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 16 Dec 2021 13:49:27 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 16FA11A3128;
+        Thu, 16 Dec 2021 19:49:26 +0100 (CET)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 5C12F20001A;
-        Thu, 16 Dec 2021 19:49:25 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 09CF81A3127;
+        Thu, 16 Dec 2021 19:49:26 +0100 (CET)
 Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id D6CAE202AD;
-        Thu, 16 Dec 2021 19:49:23 +0100 (CET)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 7ECD0202AD;
+        Thu, 16 Dec 2021 19:49:24 +0100 (CET)
 From:   Abel Vesa <abel.vesa@nxp.com>
 To:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -31,10 +31,12 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         NXP Linux Team <linux-imx@nxp.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Abel Vesa <abel.vesa@nxp.com>
-Subject: [RESEND v4 03/10] arm64: dts: imx8-ss-lsio: Add mu5a mailbox
-Date:   Thu, 16 Dec 2021 20:48:07 +0200
-Message-Id: <1639680494-23183-4-git-send-email-abel.vesa@nxp.com>
+        Abel Vesa <abel.vesa@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>
+Subject: [RESEND v4 04/10] arm64: dts: freescale: Add adma subsystem dtsi for imx8dxl
+Date:   Thu, 16 Dec 2021 20:48:08 +0200
+Message-Id: <1639680494-23183-5-git-send-email-abel.vesa@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1639680494-23183-1-git-send-email-abel.vesa@nxp.com>
 References: <1639680494-23183-1-git-send-email-abel.vesa@nxp.com>
@@ -43,32 +45,76 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The mailbox of the lsio mu5a is used by rpmsg on imx8qxp and
-imx8dxl platforms.
+Override the I2Cs, LPUARTs, audio_ipg_clk and dma_ipg_clk with
+the i.MX8DXL specific properties.
 
+Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 ---
- arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../boot/dts/freescale/imx8dxl-ss-adma.dtsi   | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi
-index ee4e585a9c39..76abdab40c75 100644
---- a/arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8-ss-lsio.dtsi
-@@ -141,6 +141,13 @@ lsio_mu4: mailbox@5d1f0000 {
- 		status = "disabled";
- 	};
- 
-+	lsio_mu5: mailbox@5d200000 {
-+		reg = <0x5d200000 0x10000>;
-+		interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+		#mbox-cells = <2>;
-+		power-domains = <&pd IMX_SC_R_MU_5A>;
-+	};
+diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
+new file mode 100644
+index 000000000000..eccc31ee8f1b
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2019-2021 NXP
++ */
 +
- 	lsio_mu13: mailbox@5d280000 {
- 		reg = <0x5d280000 0x10000>;
- 		interrupts = <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>;
++&audio_ipg_clk {
++	clock-frequency = <160000000>;
++};
++
++&dma_ipg_clk {
++	clock-frequency = <160000000>;
++};
++
++&i2c0 {
++	compatible = "fsl,imx8dxl-lpi2c", "fsl,imx7ulp-lpi2c";
++	interrupts = <GIC_SPI 222 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&i2c1 {
++	compatible = "fsl,imx8dxl-lpi2c", "fsl,imx7ulp-lpi2c";
++	interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&i2c2 {
++	compatible = "fsl,imx8dxl-lpi2c", "fsl,imx7ulp-lpi2c";
++	interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&i2c3 {
++	compatible = "fsl,imx8dxl-lpi2c", "fsl,imx7ulp-lpi2c";
++	interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lpuart0 {
++	compatible = "fsl,imx8dxl-lpuart", "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
++	interrupts = <GIC_SPI 228 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lpuart1 {
++	compatible = "fsl,imx8dxl-lpuart", "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
++	interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lpuart2 {
++	compatible = "fsl,imx8dxl-lpuart", "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
++	interrupts = <GIC_SPI 230 IRQ_TYPE_LEVEL_HIGH>;
++};
++
++&lpuart3 {
++	compatible = "fsl,imx8dxl-lpuart", "fsl,imx8qxp-lpuart", "fsl,imx7ulp-lpuart";
++	interrupts = <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>;
++};
++
 -- 
 2.31.1
 
