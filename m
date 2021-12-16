@@ -2,95 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AF6477EA2
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Dec 2021 22:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBC4477EAB
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 Dec 2021 22:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236595AbhLPVSw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Dec 2021 16:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
+        id S229738AbhLPVWh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 16 Dec 2021 16:22:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234877AbhLPVSv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Dec 2021 16:18:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75AAC061574
-        for <linux-i2c@vger.kernel.org>; Thu, 16 Dec 2021 13:18:51 -0800 (PST)
+        with ESMTP id S229459AbhLPVWh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 16 Dec 2021 16:22:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3322C061574;
+        Thu, 16 Dec 2021 13:22:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66FF261DF0
-        for <linux-i2c@vger.kernel.org>; Thu, 16 Dec 2021 21:18:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FA5C36AE2;
-        Thu, 16 Dec 2021 21:18:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 808D4B82322;
+        Thu, 16 Dec 2021 21:22:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CF66C36AE2;
+        Thu, 16 Dec 2021 21:22:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639689530;
-        bh=2SFX/G6TWgyqsrgY0j3YqyYksDjHm8cRU2esXd9WPvg=;
+        s=k20201202; t=1639689754;
+        bh=0kQfGM1RjxfYWvw20Tn73hc189zljonNHseVbqgTbXU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=su8FdqW+ydH2azhurvs9AnVuon7NjJWjciQSgaqwUpt/xXHwUse+g5i5DLc3fSnwE
-         10eEo9u6QmlKC5pHpOCzXJET2CH5Hx1a9fIDjlwhOWPu0GHFud3/klmmaRHEzPczsR
-         SSb0jtn5xA6HTsHAP8BkuxPasGpJaQ+RjVPArm3Ge3LlypndRzrIhKGs9YPdyddI5G
-         RL7UYpc6XuAoixTIr+k0Jn255RN8MiqXPDs72g3H6suAf94reuz/r+B6a6saHGDvzb
-         cYsL2RD429aWsTRd+lHg91HEw+qBBBYcQ2XG37R09F49WIJEPc1suFgmKcAnCkDF5L
-         BF4jigLvUkkcg==
-Date:   Thu, 16 Dec 2021 22:18:47 +0100
+        b=NawKA1i+IWMOt72tRl6CiCFVJ9g7ci2uwJmnnnhRwxp9oi1PWf3D+XOqSd5W2ju4s
+         lTVpnA+IrGBZtGDzns4vqH86j2VY+P6hzxDpDvSynkJw12plUoDVKk1mQKbqfBG/a7
+         Jj9KhpAr5SCjkdhYwO5nDaYdXZ9Y5iXAbTVfqlLQ0pYnmPpagXECe9jPWcZkDbx1b3
+         V4zFlp/3irinh9roalIKeKZd1dlViQBV+VPwjYrvminP1D15Qy9Bh7+3sVybC3FryZ
+         qvDRW3hOKeDhwSgEjmVtyzLviM2yDic+z2rTsZEWmMcW6UF0V1+guztEN9HAF2AMtQ
+         ctbx7QWfkWnFw==
+Date:   Thu, 16 Dec 2021 22:22:31 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH 6/6] i2c: designware-pci: Convert to use dev_err_probe()
-Message-ID: <YbutN5Opu8O4Z2Zl@kunai>
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: exynos5: Fix getting the optional clock
+Message-ID: <YbuuFztynhVUcyTM@kunai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20211215151205.584264-1-jarkko.nikula@linux.intel.com>
- <20211215151205.584264-6-jarkko.nikula@linux.intel.com>
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211212181057.20210-1-semen.protsenko@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="U71V0hXALByj5MDP"
+        protocol="application/pgp-signature"; boundary="LGkMuXw0gDA0VW0U"
 Content-Disposition: inline
-In-Reply-To: <20211215151205.584264-6-jarkko.nikula@linux.intel.com>
+In-Reply-To: <20211212181057.20210-1-semen.protsenko@linaro.org>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---U71V0hXALByj5MDP
+--LGkMuXw0gDA0VW0U
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 15, 2021 at 05:12:05PM +0200, Jarkko Nikula wrote:
-> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Sun, Dec 12, 2021 at 08:10:57PM +0200, Sam Protsenko wrote:
+> "hsi2c_pclk" clock is optional and may not be present for some SoCs
+> supported by this driver. Nevertheless, in case the clock is provided
+> but some error happens during its getting, that error should be handled
+> properly. Use devm_clk_get_optional() API for that. Also report possible
+> errors using dev_err_probe() to handle properly -EPROBE_DEFER error (if
+> clock provider is not ready by the time I2C probe function is executed).
 >=20
-> It's fine to call dev_err_probe() in ->probe() when error code is known.
-> Convert the driver to use dev_err_probe().
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Fixes: c93ac09df2a8 ("i2c: exynos5: Add bus clock support")
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-Applied to for-next, thanks!
+Applied to for-next, thanks! But I needed to fix the Fixes tag?
 
 
---U71V0hXALByj5MDP
+--LGkMuXw0gDA0VW0U
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmG7rTcACgkQFA3kzBSg
-KbY0ChAAsZWlhJbwKrof2pRdrRpdcTaBxoUB5esErewafICOMCdh8xgyOUR72QLe
-pLFPqZtXn40ca0ADPLBoE8f7a6Go0+W7kCzzzXdTEWZR4sdeS8yzaZutTH5WLXpn
-6pBAqiEmUdwLMgUDGaG95wJ8SdKE9lAp30oiyOOIf+KztnSHp8bQhP5QeqRT5efr
-cz4Kd3vjvBc5vuLfByghcAUsRmLa+bWZ1v+L7J8ShWZ62zJyBfX2vp8Zx0jsJ5wn
-6fFm14MR4k6Zpf1/APm46foHSQnj1GPF2lAHHBYLO3sU6WADfMBOJ+RTb4pJTXOx
-DApk2hrhVLzuDIRRx8cuBSNvqdv0iaNjLgge766AUkqsKNWklnNP+duOMHPiYgfL
-Icqs2ubCEdpMVt0D+88hrhZvMKdl6hRfHIuaX+LxOws8C+AGddHkudXoOS2uRKLb
-VyNhYpF962YVuFEOTv8JdcHNz0CPVQPCmiICWk4P9aj/IQ+r8t4X6g3lx042ZaiO
-sggwJfvOVMQ+amYqgLwljoLZP0lnf9VIVCW6YCz2oBM99EAantVzTwEFslPsb/QQ
-lQfQgfu6d4czd693xr2C3esMtQqHlOsXX/X2DCC30JhoR8zRoXclbKM0DIhJcrG/
-yGzIIr5+fJZ6evnN6sdpvPD+Rym4zrgK4CdQ+9lMnop7+QmHW1g=
-=qsNP
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmG7rhcACgkQFA3kzBSg
+KbYuLg//V9a0VnkNuZFXzKPpM+/5MOfxH5zynk2LD1STaEvo0YaCaTI1W6JJ0pEI
+uUikJ9YyxnXgz7KuOVEl0yWavW3xm9v25OAHOCzuK9v4iVTLJZkY0/Ya21Hik4x5
+twOe282/lGfIGsmmZ5X8a+3Ul/1ZiIDi7c96MEwOwQpTQWK2UgTcswmKKsmUG2ps
+KUAmqnUf75IkjKtu2wNBCDl6CSkRpudKSSNslKv5Berg4O7R/NWVQl8FlDdwR5qP
+2zX1NUvZF9IREz6mKclsrXFeyi/Jfp0F/AfI4+ArSSIGMF5uFaxQGpYEpyokGpDd
+OLwK4YJ7ughim9FjdcMAIllFAEFtgSIdW+5zkV1U5m/KnM8zYA43hXYHB7191ekI
+2m1fg9aTV+EITF9Y9ErezNjHyr5LKC3jC805/AnvyDF+38mhHSRIJlUIg26hQ2tq
+2vSotv3yh9tqfvgR8kd1RM2LpoPu354TYFjOXGMyI0BNQkNKKTkzWl/8MGhEiCFc
+QqlySBDQ1Y57xjdTmHM1Uw+BYmLS6/Pqzh7tOPX29ocE1BZmiuzkwwCGuwCefgv5
+mxyTyyH9iR25lWm6KzYIFgx/fbBjLyv9n3z/GUCVQtvGVNIz1piTy0n168T/r3qM
+Q+MCKF7E7oLy9L+o/GIij734gan/g1pBatK7x+hNh8XClF/V16Q=
+=5alG
 -----END PGP SIGNATURE-----
 
---U71V0hXALByj5MDP--
+--LGkMuXw0gDA0VW0U--
