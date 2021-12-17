@@ -2,49 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 817A3478C30
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 14:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E8F478C45
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 14:25:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236697AbhLQNYX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Dec 2021 08:24:23 -0500
-Received: from mail-ua1-f46.google.com ([209.85.222.46]:42996 "EHLO
-        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236677AbhLQNYU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 08:24:20 -0500
-Received: by mail-ua1-f46.google.com with SMTP id t13so4242479uad.9;
-        Fri, 17 Dec 2021 05:24:19 -0800 (PST)
+        id S234139AbhLQNZn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Dec 2021 08:25:43 -0500
+Received: from mail-vk1-f169.google.com ([209.85.221.169]:40911 "EHLO
+        mail-vk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230037AbhLQNZn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 08:25:43 -0500
+Received: by mail-vk1-f169.google.com with SMTP id 70so1507426vkx.7;
+        Fri, 17 Dec 2021 05:25:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=UfQoARdnbkZAiC3vtgUpOeQLmZLNRjjpwLc9s5ZyHps=;
-        b=xYfAY7J7J9QffAykFLTch2fOSSEGskXuntYtMKlCX8maAZfgRC7qaeYbEYXEhHxAm9
-         hCprSbG7+WrIa9+7lPKf2Gnwb9ioX+R+RgibIbKM6PTk7hk7TRdYnQxFfz3Uvh2fnE43
-         5ilri1hg6O+NGD3LZ8i57+iYD9+vuULAmaDkvG/pbtchDhnnqYk1RCbUErtJ4g02beJy
-         sp8C7y21ZrvyE8OZIEfB7so4is2cjz7xSFk+9nrrb4lz0DmcaKUxl2uHmi4PuAI7Pxr/
-         NBCURrxkQyH90X6VZOJjiVOG8PMzyIp3PlqIt1SOL30ZCNF2eS0j3xxbqki04ANOps2S
-         773Q==
-X-Gm-Message-State: AOAM53375W3GmNivNzBMFfaktc7PL/pTXxza/phvxW5ZI9KeTC9Zl384
-        tUf4+AIs3aie7begwtfvMGNlEkC2jYYyOg==
-X-Google-Smtp-Source: ABdhPJwf9tK4F5rXipclTN8u7WMGEQYWyCzr93mNHr/EESAQDeztbJetl2fXnXAfihpEYTm5+KvDBw==
-X-Received: by 2002:ab0:449:: with SMTP id 67mr998976uav.46.1639747459373;
-        Fri, 17 Dec 2021 05:24:19 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id q9sm1804818vkn.44.2021.12.17.05.24.18
+        b=EmRMto8SVr5DpuupuSJUDrn1NDFZk58/g4oIul9ouFDNiZgtfcIV18ekAfzZSzyy5n
+         TSZllkYXtloVgHHNmdWXamRqfyXLnM8fglBA9MoNqL6xpyRo62AmwjsFfYbbPcNCuKzw
+         i9U7BA/vlgq+KpNou+y6FnFV98+6+agK5vsQ1+oigzxJAoF8PT5xVB/pDRdp3C5jC2Xg
+         QVt8U/m9v8eb+Hw2Il01+THaUGUx4EhiclADHtYbnu7BNqFWwvlapZpW8TF2kuzdSP3C
+         I6lVBoA2kKNLGhvG1xK50VEjcv9kBSN3KzQiHcjZtIEW1JEfFx5JOXZdUWEZJJ6+nX/2
+         m0zA==
+X-Gm-Message-State: AOAM531p2WtAqiY92Y7yi+jms/1jdt1tB90wqntWetx9EL5uTXIgm05Y
+        +eJdSVAd2okPpWmqcM+8GHqwTyf3Qp/25w==
+X-Google-Smtp-Source: ABdhPJwwFqhL88L0pJNgdnmmP+9zKvva/LGGolZ0zb8n19xe9p5NGzvfo6NB/JnWAPqyJDlT41WEdA==
+X-Received: by 2002:a1f:9f04:: with SMTP id i4mr1089716vke.33.1639747541456;
+        Fri, 17 Dec 2021 05:25:41 -0800 (PST)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
+        by smtp.gmail.com with ESMTPSA id w17sm1784700uar.18.2021.12.17.05.25.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 05:24:19 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id p37so4282078uae.8;
-        Fri, 17 Dec 2021 05:24:18 -0800 (PST)
-X-Received: by 2002:a67:c106:: with SMTP id d6mr960485vsj.77.1639747458226;
- Fri, 17 Dec 2021 05:24:18 -0800 (PST)
+        Fri, 17 Dec 2021 05:25:40 -0800 (PST)
+Received: by mail-ua1-f47.google.com with SMTP id r15so4319331uao.3;
+        Fri, 17 Dec 2021 05:25:40 -0800 (PST)
+X-Received: by 2002:a05:6102:e10:: with SMTP id o16mr1015811vst.5.1639747540015;
+ Fri, 17 Dec 2021 05:25:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-3-conor.dooley@microchip.com>
-In-Reply-To: <20211217093325.30612-3-conor.dooley@microchip.com>
+References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-5-conor.dooley@microchip.com>
+In-Reply-To: <20211217093325.30612-5-conor.dooley@microchip.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 17 Dec 2021 14:24:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXBm6PMnBTQDZY=3XkGBXsr4wXy8m+WbgHjA8SpctbVCA@mail.gmail.com>
-Message-ID: <CAMuHMdXBm6PMnBTQDZY=3XkGBXsr4wXy8m+WbgHjA8SpctbVCA@mail.gmail.com>
-Subject: Re: [PATCH v2 02/17] dt-bindings: soc/microchip: update syscontroller compatibles
+Date:   Fri, 17 Dec 2021 14:25:29 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXf-nLGXbxwSZJQncdNXaD4_3bHwcb7WyxeYUw21eGX+g@mail.gmail.com>
+Message-ID: <CAMuHMdXf-nLGXbxwSZJQncdNXaD4_3bHwcb7WyxeYUw21eGX+g@mail.gmail.com>
+Subject: Re: [PATCH v2 04/17] mailbox: change mailbox-mpfs compatible string
 To:     Conor Dooley <conor.dooley@microchip.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
