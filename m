@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A90147873F
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 10:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71BA478752
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 10:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbhLQJc2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Dec 2021 04:32:28 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:9407 "EHLO
+        id S231375AbhLQJdB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Dec 2021 04:33:01 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:26483 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbhLQJc1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 04:32:27 -0500
+        with ESMTP id S232790AbhLQJdA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 04:33:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639733547; x=1671269547;
+  t=1639733580; x=1671269580;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+DGboTmD/BHBbd77YYjxDdqurN/h3bROxrQV18YmPqc=;
-  b=VPJz1QSEaxj3UU4ozLgSS0DJ9gu8E8S/OZyzA9+GEQPan5bfxma2kSAz
-   dGReRm/U59w7rdj5DorskrnjSOwJoKSHMS7Qf2iLQb7m9fqWTiO143dqh
-   cqHTKw87V6dqbvW/pglroCGZwY/U8145DLSz0bOFF74XcPwel4CXoY8UX
-   M9BMp+GjqWTarZcHWLcBoYHjBCwlCSnN5yjLIKILhFf4u0RMoHX7wS6RZ
-   zZyT8ibBgVRRXsZ0QcWQI5GyzyQCN9RJvd00nA+JTax3yymyQzcnnz55o
-   wkkamKmAq+nkP4+bt/uNpo3+2Ki8tl8DYa098fd+xgna7IDLlltwIuxd0
-   Q==;
-IronPort-SDR: qG6ew+CdqBkxok7fk/Kr//smGeP1WZUnP6rv9n4Y5jw42Y+F4pSHgscnGnnZ0hRqymcl2isCCB
- 3tV2Xk4MQcwJxUBV8LUrKlce05Un47t3riNzlMVOVTle8J1P4IAvkHyBT8xKpe6vgMwgAOyl7v
- UPXED8XNyNOPl7Jei7CeUcMMP2m2ELiAcDh40TowS8H3JkuMLdtD6tDctSHzMbgB5TCGtAKK+A
- LqzffjlfIfQ+37nm/O2WNmEpnLhacVXjM1fnPe8ikFwqjriQZJWbNrIx7dy9o5BRb9fDFLSA4J
- JyT0HevO0UE5snL6+wpL8ieJ
+  bh=3qRUHoobo/ppmfZjVVOkiLMq+8SBs80cxkclQbTplqc=;
+  b=cpGmqao+Vuezq2hnc1IKNGL5p5B+XpwP/dXS2bbrNlSE9hm+3Woieicx
+   i09mnjgDNETfw71/ik6605X9KWGNWzjlhuqdqbzqS7kDBpgXnT+g5UxWV
+   BdpvshJZ5bA7HHWNc+bECaHRT6AVMs1Irx1qfFX7GN8VQIPiUAS6Utojg
+   GBiQWaXjYlNQXWZPdIUBeGovZzKF2EVSqs5oabP58CZshRqkgOS7Vxz39
+   FMgdxakBdDwirHS18ocCkUrkAfW+WWjva47ZCAA5oSAX1hDohkCuTLbCu
+   UuG6q7agauZaC7GtHYTs2G9r/lejo9kFQPKsdUr88h22i7dLIgtG0W9Jn
+   A==;
+IronPort-SDR: 3ygXOh/lCCf1GWWoDG1pNOmSe9s+0/SonRioONOLWMlNd71V19TUnY9pWwjY06utrZEimrJtTX
+ KXYI86g9Mz8TPSblA705fF3WCqL+VKENe+k6kU9w5ibWzU9i+A9IMlh3sJraQhQJ+lxjtQ1Akb
+ OUttu+zT67bycGgXyDmiys9XFDUk9dYbnOF1XB61505C+iYmTtanlKifiyra0Zb/jFIV4Sbfo4
+ tIVokdiiQqmKPGjZS0kWQip37KAOTNFPnTQHZnH/sSZRMmMqsjQqVi+klazChN8c/ITWj135dA
+ aVvfiLmnjRQnc9uRtMSEMUd0
 X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
-   d="scan'208";a="142745568"
+   d="scan'208";a="147571014"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 02:32:25 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 02:32:58 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 17 Dec 2021 02:32:25 -0700
+ 15.1.2375.17; Fri, 17 Dec 2021 02:32:33 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 17 Dec 2021 02:32:19 -0700
+ Transport; Fri, 17 Dec 2021 02:32:28 -0700
 From:   <conor.dooley@microchip.com>
 To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
         <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
@@ -58,9 +58,9 @@ CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
         <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
         <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
         <atish.patra@wdc.com>
-Subject: [PATCH v2 04/17] mailbox: change mailbox-mpfs compatible string
-Date:   Fri, 17 Dec 2021 09:33:12 +0000
-Message-ID: <20211217093325.30612-5-conor.dooley@microchip.com>
+Subject: [PATCH v2 05/17] dt-bindings: i2c: add bindings for microchip mpfs i2c
+Date:   Fri, 17 Dec 2021 09:33:13 +0000
+Message-ID: <20211217093325.30612-6-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211217093325.30612-1-conor.dooley@microchip.com>
 References: <20211217093325.30612-1-conor.dooley@microchip.com>
@@ -73,29 +73,76 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-The Polarfire SoC is currently using two different compatible string
-prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
-its system controller in order to match the compatible string used in
-the soc binding and device tree.
+Add device tree bindings for the i2c controller on
+the Microchip PolarFire SoC.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
 ---
- drivers/mailbox/mailbox-mpfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../bindings/i2c/microchip,mpfs-i2c.yaml      | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
 
-diff --git a/drivers/mailbox/mailbox-mpfs.c b/drivers/mailbox/mailbox-mpfs.c
-index 0d6e2231a2c7..4e34854d1238 100644
---- a/drivers/mailbox/mailbox-mpfs.c
-+++ b/drivers/mailbox/mailbox-mpfs.c
-@@ -232,7 +232,7 @@ static int mpfs_mbox_probe(struct platform_device *pdev)
- }
- 
- static const struct of_device_id mpfs_mbox_of_match[] = {
--	{.compatible = "microchip,polarfire-soc-mailbox", },
-+	{.compatible = "microchip,mpfs-mailbox", },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mpfs_mbox_of_match);
+diff --git a/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+new file mode 100644
+index 000000000000..2acaf1a7e0de
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/microchip,mpfs-i2c.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip MPFS I2C Controller Device Tree Bindings
++
++maintainers:
++  - Daire McNamara <daire.mcnamara@microchip.com>
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-frequency:
++    description: |
++      Desired I2C bus clock frequency in Hz. As only Standard and Fast
++      modes are supported, possible values are 100000 and 400000.
++    enum: [100000, 400000]
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/microchip,mpfs-clock.h>
++    i2c0: i2c@2010a000 {
++      compatible = "microchip,mpfs-i2c";
++      reg = <0x2010a000 0x1000>;
++      clocks = <&clkcfg CLK_I2C0>;
++      interrupt-parent = <&plic>;
++      interrupts = <58>;
++      clock-frequency = <100000>;
++    };
++...
 -- 
 2.33.1
 
