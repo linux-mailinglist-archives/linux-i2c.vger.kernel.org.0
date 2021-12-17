@@ -2,80 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B501B479232
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 17:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CC7479726
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 23:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239548AbhLQQ7e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Dec 2021 11:59:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239499AbhLQQ7b (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 11:59:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4598CC061401;
-        Fri, 17 Dec 2021 08:59:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 100C0B828D4;
-        Fri, 17 Dec 2021 16:59:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5371CC36AE7;
-        Fri, 17 Dec 2021 16:59:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639760368;
-        bh=cePM4fZOqSweG5iqCi/Kt1W2jaOm1RFO9qvsPI2XcWA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VdZLuFsU9lyrlY2yPcKsrCzQOkO3cluzqCdatXRPcVQvtZGafITBtMUxliJiU8Gqo
-         Lf5VrpbIkhBHvetwzqccD+La9h6uoEj06/aYzXqUDTlcLCTxRMu/3Sg73FpaFikqFt
-         LRgdgZUIXp6faqaTVM67qeGT8+M2E9cjZZY8QG+E=
-Date:   Fri, 17 Dec 2021 17:59:26 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [RESEND v4 10/10] dt-bindings: serial: fsl-lpuart: Add i.MX8DXL
- compatible
-Message-ID: <YbzB7mspRBonT9jJ@kroah.com>
-References: <1639680494-23183-1-git-send-email-abel.vesa@nxp.com>
- <1639680494-23183-11-git-send-email-abel.vesa@nxp.com>
+        id S229870AbhLQW31 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Dec 2021 17:29:27 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:35564 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229521AbhLQW30 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 17:29:26 -0500
+Received: by mail-oi1-f177.google.com with SMTP id m6so5729923oim.2;
+        Fri, 17 Dec 2021 14:29:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ceA6uFPrxoxuPoqQlCvVhkmHGQ1jymNTT0ALfCVWMx0=;
+        b=kmvDxkFWyvd3fKMj1/SOgGFswQkmFl18O/E9PQrJEMcULJpYKy9fnmz7dS2obCu+Og
+         sLdIoxBtYMAcmAY1VDzPBJ0nQxEEq6sGIhpKL/iMdTIcl0icQdH1mthi4c02Lx3bc3kq
+         677Welo+SoCO23FePLdcsv6l9kfRtAluhgs+n60/u6kivFNtq4ixh8dDRrtzJJbgdPN+
+         bN5yIk2/HmyzDVEA9VENf/0t/689q5Wp12m1ybN2MXV16r/194H+5gWpabT9WhRYVhw4
+         BPJkTBE/zJqjSJqrMun5QwzBT4EvU2nwHb+dVUncpnUVRaZkQP5ehWyAP+VlFlBWuDa9
+         9xAA==
+X-Gm-Message-State: AOAM5334F1PjAU/mpahcVeYzjxNR2yji74tt5DcGYrve1RbLduz4mvYO
+        SgJNsbxDmab0YBqkUOQf6w==
+X-Google-Smtp-Source: ABdhPJyMY+V79ohByfMUfq1Nt1y6axnKEY0TTdPBUJ5AEZ3X2yrpLHCKyrBkQ9z2wmUCusqOeDwpog==
+X-Received: by 2002:a05:6808:1285:: with SMTP id a5mr3751571oiw.104.1639780166081;
+        Fri, 17 Dec 2021 14:29:26 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id h14sm1859512ots.22.2021.12.17.14.29.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 14:29:25 -0800 (PST)
+Received: (nullmailer pid 3695500 invoked by uid 1000);
+        Fri, 17 Dec 2021 22:29:24 -0000
+Date:   Fri, 17 Dec 2021 16:29:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Peter Rosin <peda@axentia.se>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
+        Wolfram Sang <wsa@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: tegra: Convert to json-schema
+Message-ID: <Yb0PRLJXM6tKTFMB@robh.at.kernel.org>
+References: <20211217165658.2650677-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1639680494-23183-11-git-send-email-abel.vesa@nxp.com>
+In-Reply-To: <20211217165658.2650677-1-thierry.reding@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 08:48:14PM +0200, Abel Vesa wrote:
-> Add i.MX8DXL lpuart compatible to the bindings documentation.
+On Fri, 17 Dec 2021 17:56:55 +0100, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Convert the Tegra I2C controller bindings from plain text to json-schema
+> format.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
->  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+> Changes in v2:
+> - include i2c-controller.yaml and use unevaluatedProperties: false
 > 
-> diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> index fa23c60a01d0..ee37aa125c86 100644
-> --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> @@ -29,6 +29,10 @@ properties:
->        - items:
->            - const: fsl,imx8qm-lpuart
->            - const: fsl,imx8qxp-lpuart
-> +      - items:
-> +          - const: fsl,imx8dxl-lpuart
-> +          - const: fsl,imx8qxp-lpuart
-> +          - const: fsl,imx7ulp-lpuart
+>  .../bindings/i2c/nvidia,tegra20-i2c.txt       |  87 --------
+>  .../bindings/i2c/nvidia,tegra20-i2c.yaml      | 192 ++++++++++++++++++
+>  2 files changed, 192 insertions(+), 87 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
+> 
 
-Why is "- items:" listed twice here?
-
-thanks,
-
-greg k-h
+Applied, thanks!
