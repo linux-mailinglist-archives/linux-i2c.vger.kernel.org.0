@@ -2,109 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B8F478813
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 10:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE60A4789A4
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 12:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbhLQJtC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Dec 2021 04:49:02 -0500
-Received: from mail-vk1-f177.google.com ([209.85.221.177]:42998 "EHLO
-        mail-vk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbhLQJtC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 04:49:02 -0500
-Received: by mail-vk1-f177.google.com with SMTP id s1so1136054vks.9;
-        Fri, 17 Dec 2021 01:49:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pV3wufp8Dvr2hDhjItQtnYu6eMKRgXVIFNhbTAtUVzU=;
-        b=yvw5bl0T3tZKXmmpbo/vH01xbr9fzBmv3P+W8H9MtsOKaHt097Nw+0XrQD2L+wMmvr
-         z42lzBUSdFLgxNCKEfMrizK1dIgAR36ZSS6XknytaEWq4mCVg6lsRzb+E1VV6U2BZWbA
-         0mDznrCCYwfZMU3VPpLgdJdCGP2DhqorfKRiuUYFpyabSrujE/j2ofb0DZqwuDOYv1ca
-         qVs97xUcVgHu8B4juOldyJ8X4eTq2aQszGvEcWRea/Ij2wDse4yb7HW/Qht5Sw9cP7oQ
-         2TIUtTHA8iiYmAVgma7H7PrU9qGz1cQb7gG0iGdvHUFWfm4kibiUQErz83Y7dsE5mH3g
-         7kWg==
-X-Gm-Message-State: AOAM531njpYNAKJMNAqxkfZBOusG9qAeRZ8tO0G/b+dUbhBV+QKsnRT/
-        gzDMo1flr+ij0c2Qpxc0ZdqgZ5Je5BWdSw==
-X-Google-Smtp-Source: ABdhPJzlqo2h8WQv5SAzvK4/3sicPepHkLvrIy/RzWGDskdL9bfhn0NyB/ZFWmKRXYRwhZRJgvObZA==
-X-Received: by 2002:a1f:a556:: with SMTP id o83mr811562vke.9.1639734540702;
-        Fri, 17 Dec 2021 01:49:00 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id v8sm1679419vkc.52.2021.12.17.01.48.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 01:48:59 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id u40so3318675uad.1;
-        Fri, 17 Dec 2021 01:48:59 -0800 (PST)
-X-Received: by 2002:a67:c106:: with SMTP id d6mr650580vsj.77.1639734538930;
- Fri, 17 Dec 2021 01:48:58 -0800 (PST)
-MIME-Version: 1.0
+        id S235191AbhLQLRN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Dec 2021 06:17:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34924 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235179AbhLQLRN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 06:17:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89AC862111;
+        Fri, 17 Dec 2021 11:17:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0D67C36AE1;
+        Fri, 17 Dec 2021 11:17:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639739832;
+        bh=ciizNTJo2wPqNMTxwzDgqHE9JK7q6BV7T+/75cIK56M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nH7GUf5F3DdbIGiqXCbnIQyD6+vj31l6eJTYTXkZyYdWZoHhsGxPu4tRNKxlWgZBX
+         1ze42PlgXL/aWXptLdbCn5f9HSAC53k+hN0RkIvTLbpvxCRnLwGFeM2vD0p1cIGNaB
+         gs8YL04qGH3GTJLvfI2ek+S7OQ8aC2dgfv/1hNnoQI4w6YhlSNBxU641nNJR6a98di
+         CwBjTaadjj4O44/xKIhVmPGlEk2w6umqHhZrb/PaswwDz57nXUIOga54rbiUgEgzX/
+         Zq18ObE/m/NYLmLyCNhTX38sTKP4+C/1QvnC9bbb3CDSATqbdJLmaw4qopPC8CPJn8
+         DxYqpFpEuWEmA==
+Date:   Fri, 17 Dec 2021 11:17:02 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        robh+dt@kernel.org, jassisinghbrar@gmail.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, krzysztof.kozlowski@canonical.com,
+        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
+        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
+        ivan.griffin@microchip.com, atish.patra@wdc.com
+Subject: Re: [PATCH v2 10/17] dt-bindings: spi: add bindings for microchip
+ mpfs spi
+Message-ID: <YbxxrlmYGC3Pg8+j@sirena.org.uk>
 References: <20211217093325.30612-1-conor.dooley@microchip.com>
-In-Reply-To: <20211217093325.30612-1-conor.dooley@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 17 Dec 2021 10:48:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWTjrAiHosU0cGyJYkK=9JzNgHb=tjHXPdYxTWmkVzeYQ@mail.gmail.com>
-Message-ID: <CAMuHMdWTjrAiHosU0cGyJYkK=9JzNgHb=tjHXPdYxTWmkVzeYQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] Update the Icicle Kit device tree
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        Atish Patra <atish.patra@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
+ <20211217093325.30612-11-conor.dooley@microchip.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Q8nNbUqDPNVQRYrB"
+Content-Disposition: inline
+In-Reply-To: <20211217093325.30612-11-conor.dooley@microchip.com>
+X-Cookie: Pause for storage relocation.
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Conor,
 
-On Fri, Dec 17, 2021 at 10:31 AM <conor.dooley@microchip.com> wrote:
-> Also depends on Geert's format changes to interrupt grouping etc [2].
->
-> Additionally, the interrupt-extended warnings on the plic/clint are
-> cleared by [3] & [4], which lore appears to have been very confused about.
+--Q8nNbUqDPNVQRYrB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Right, it ended up being even more messier than I thought, and confuses
-"b4 am" too.
-I will resend these 3 series later today.
+On Fri, Dec 17, 2021 at 09:33:18AM +0000, conor.dooley@microchip.com wrote:
 
-> [1] https://lore.kernel.org/linux-clk/20211216140022.16146-1-conor.dooley@microchip.com/T/
-> [2] https://lore.kernel.org/linux-riscv/cover.1639660956.git.geert@linux-m68k.org/T/
-> [3] https://patchwork.kernel.org/project/linux-riscv/cover/cover.1639662093.git.geert@linux-m68k.org/
-> [4] https://patchwork.kernel.org/project/linux-riscv/cover/cover.1639661878.git.geert@linux-m68k.org/
+> +  num-cs:
+> +    description: |
+> +      Number of chip selects used.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1
+> +    maximum: 8
+> +    default: 8
 
-Gr{oetje,eeting}s,
+Why do you need this property in the DT - isn't the number of chip
+selects in the IP a fixes property?
 
-                        Geert
+--Q8nNbUqDPNVQRYrB
+Content-Type: application/pgp-signature; name="signature.asc"
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG8ca4ACgkQJNaLcl1U
+h9CSxwf/ej8wQ0M9Gd+7rtUHtN3BktycYB5ZcTYF2vBKdmrv+nxD7gkrKJ55D3X5
+Cq+ccL5v/vEk+7sKFZDtqt1Ro8Nb9xlge9lerzzE9UpRB47Aem2ixXy9LVkDSvJ6
+3DEHtrwqqn5sAy0uBgRXNfc7FnGajIjLdBWKBER6cRrUIjaW8laQhkGE+cWq7xVl
+vyhFYVIE8g0ffymZ6wCt/sLil+KhtZ5D1po3U0Gkdqf7UGxGUA1a+3mJT+zcoTXy
+YDuBPq7dAbVXNu3HjAU2k127FTYkjzI/e7vvit4/0WKNqvUch0E8H0YoTki71DJe
+pLmu1B/yykOCwy/UuX1wQ1U17x2Big==
+=n9Eh
+-----END PGP SIGNATURE-----
+
+--Q8nNbUqDPNVQRYrB--
