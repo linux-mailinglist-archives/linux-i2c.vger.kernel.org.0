@@ -2,117 +2,210 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1580347814E
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 01:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D24DF478495
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 06:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbhLQAbP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 16 Dec 2021 19:31:15 -0500
-Received: from mail-dm6nam11on2071.outbound.protection.outlook.com ([40.107.223.71]:21184
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        id S232984AbhLQFbv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Dec 2021 00:31:51 -0500
+Received: from mail-bn8nam11on2061.outbound.protection.outlook.com ([40.107.236.61]:18080
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229563AbhLQAbO (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 16 Dec 2021 19:31:14 -0500
+        id S230106AbhLQFbu (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 17 Dec 2021 00:31:50 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fGeuALE5GWefOjCTn6GCdAasQgWrW7mNeVU9ZhKCBVpKOIOqbI763LM6HlBRSZE/DB9FK0JQIsIbJyTef4irZWWGD7QP7FFOZ8oT+AooQoGzytvoYZW2iOWWP9Qa/x4IaEXzLhjfsiVW0yk9XrJ9YroCIfQFywiSkx1/N7ugN9pryk9AAoigY1X6wcao33uj71cx39gnbFCerjPWIPcWSPZCmjaf+fxUhQlf4eQ6xkNZXfrFreaOq0KPFE9tqZHQcVE3fux26wHqDwEFD3vuybzM7Xlz87AO5ldnVoCNSo2BLuuqLAIvX+EOXk/+JfMt65mHvkjLfE3wplC8OnOJIg==
+ b=nVRcJI9stBJLuwzVyc9vVobMG1YpKpnTBWsEs71E5vLSXR5r24tzX/ACQYj+A1SJC93chyQ1cT+wfN6vfaYaHUnaTrIptuIJE6M3fDMAo+2YkDrF9fO6wbFFGuDpSbniRxX7Xpwxdoqy1BekBxqBfZyziyfhb+Y5FmVJ1ylMYbvTqxrjq9JF1rWWCyYFdTRL6P2H5/aCvYFkOgdopo0gv3NhCgk96tJ/iHQs+V+kBS1nsuWrpm4NnskS4pM0KhyKVy4D4PuQG+zPyOhsOuEH6sLHEjN2ZnIGyLzuAeiEwxdYciZjC2xDL+0QEHa/gRBuq082aYDPOhmXJ4lVsISpiA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z0zZ9EILlwXRRTMMoj1qshsOJ23uYkdy2Sdjob72elg=;
- b=XlsypshcToEXZHT8Fm7z3skCnwSBOctRY+2WLR2uvx9dYImqbi+l3GJlpcfyYgCWAomKiznQIjcSrHzXrlRewSXQRcjubDfeCWuAxnNFmfCKZ7TK1sXmmACJz0M7mrVhMno1UFyIbP9+ue/gNJIjRb2DjePe5/4tVovZUF+zvhfsatnNXXdQI5GPBH0VDF6L+wY8G5RfSFe0wWfJpQiUGln8IW1SH5N7bUVzYIXg5jKhZKsVxbUmSRYALxQ+ENouHnKD+aWOOl0b8LKCXi9uCoRBq6KOABmG/pUlmQaLx06zZuNLuuAzP5VSXMIvHWLzinyp9C+Zu9rwkXciyrZN2Q==
+ bh=ykuK1K43Yyf5KTVhpdyaXJvqKXKV5fTFIEpEKdeCR1Q=;
+ b=OC85wmNEAU1+GEUeMFj+KN4sdp0anWhI7nBKUhzs0PfMEh9aVQHFLd5Fq/EwCzBoObQ29Sklg/TxQAUVbzzAWF4G733f/LDxZO2BpwRzxjpeigKKT3SpyG34eKwlkkAunz0jHTRm8u8lLLT4LNuSd/1b6Q70J0/ZKnX2MRhrbO7uEzE6/Qcjh7wPvfefyKH57Io6iQikDDw5fWtL6/wG5QVUgEkIBwpXChDWmRooWS++zr6Q5wa9fJM6iz6/O3uM/6zffwYYT5wxb5IWPSTUtlUFrMXC6DrmyFDFpOQr42/6f8g3JqohKAMR43JTaHbFU7l3eAuGjMoKx92OVq422A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
- dkim=pass header.d=vpitech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z0zZ9EILlwXRRTMMoj1qshsOJ23uYkdy2Sdjob72elg=;
- b=nkKKOA5sYEXwdwZNSGtw8HyQI4v/nvhK/94TyaSe6U5FY0OWHbPowV0HPoAVaFfKngx6MFS9GHIFTlHD6EEOanclNpgKDxt+tOwtYfaIu411CshlZwkUetCgitlV+z5fDLLHy60j6r6h0EJF8KY5sv3XAdbJcZDVB2KQNGLj9oU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vpitech.com;
-Received: from MW2PR07MB3980.namprd07.prod.outlook.com (2603:10b6:907:a::32)
- by MWHPR07MB2768.namprd07.prod.outlook.com (2603:10b6:300:28::18) with
+ bh=ykuK1K43Yyf5KTVhpdyaXJvqKXKV5fTFIEpEKdeCR1Q=;
+ b=bW4qlGGhcSbfPm7DAgGvPCj2WMSm2hJZTq6rvk21eQjZaQR64tU+dQX/Q8QbbC2uCdZPGK7S+N5Ec1cwPzFWBpSq2aAJL9BdytRj4NZ84FDnkVUIN2JrfMNMy/AmWEDPuFanmcR7pNX0YiBcg4ggHVeNhUHDCNGT97PZq3NVy9XRJDIDYhHKiOhKZ9Z36BUMJK4ELeLxztvZGCVTcJrvuzBliUSxQAw8XPFW0ezYOk2PW6mZ+dXH4TmVhU+L3SiTJ95WDFgZXt3bVBwcb0+7E9qho5bizfU1YvYgAhmvl0hedXjfCAkT+es3MYxDeiNmfCqXkJ3+aqTGOdejMbfwVA==
+Received: from BN9PR12MB5273.namprd12.prod.outlook.com (2603:10b6:408:11e::22)
+ by BN9PR12MB5306.namprd12.prod.outlook.com (2603:10b6:408:103::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Fri, 17 Dec
- 2021 00:31:12 +0000
-Received: from MW2PR07MB3980.namprd07.prod.outlook.com
- ([fe80::b999:3294:6433:4b13]) by MW2PR07MB3980.namprd07.prod.outlook.com
- ([fe80::b999:3294:6433:4b13%4]) with mapi id 15.20.4778.018; Fri, 17 Dec 2021
- 00:31:12 +0000
-Date:   Thu, 16 Dec 2021 17:31:10 -0700
-From:   Alex Henrie <alexh@vpitech.com>
-To:     linux-i2c@vger.kernel.org, marcan@marcan.st, wsa@kernel.org,
-        jdelvare@suse.de
-Cc:     alexhenrie24@gmail.com
-Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
-Message-Id: <20211216173110.82ae177385322c0992d00126@vpitech.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MWHPR10CA0058.namprd10.prod.outlook.com
- (2603:10b6:300:2c::20) To MW2PR07MB3980.namprd07.prod.outlook.com
- (2603:10b6:907:a::32)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15; Fri, 17 Dec
+ 2021 05:31:48 +0000
+Received: from BN9PR12MB5273.namprd12.prod.outlook.com
+ ([fe80::6867:d54e:5040:2167]) by BN9PR12MB5273.namprd12.prod.outlook.com
+ ([fe80::6867:d54e:5040:2167%5]) with mapi id 15.20.4801.015; Fri, 17 Dec 2021
+ 05:31:48 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Wolfram Sang <wsa@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Suresh Mangipudi <smangipudi@nvidia.com>
+Subject: RE: [PATCH 2/2] i2c: smbus: Use device_ functions instead of of_
+Thread-Topic: [PATCH 2/2] i2c: smbus: Use device_ functions instead of of_
+Thread-Index: AQHX8n7my/abMo8OBEe71trFCBr2/aw1NiAAgAAG55CAAFJGAIAAhfUA
+Date:   Fri, 17 Dec 2021 05:31:48 +0000
+Message-ID: <BN9PR12MB52736B1658C0B13526728119C0789@BN9PR12MB5273.namprd12.prod.outlook.com>
+References: <1639660402-31207-1-git-send-email-akhilrajeev@nvidia.com>
+ <1639660402-31207-3-git-send-email-akhilrajeev@nvidia.com>
+ <CAHp75VcvrM0qLQE-04UZEkxbAvkE-MNSN7RGC7mPxj+1hoUyTw@mail.gmail.com>
+ <BN9PR12MB52732B801C0D15BBBA71B8DDC0779@BN9PR12MB5273.namprd12.prod.outlook.com>
+ <CAHp75VfQpgWhKXM=1oRg8d_ntZvxkSArQv=6eaq7tyU6-KvJjg@mail.gmail.com>
+In-Reply-To: <CAHp75VfQpgWhKXM=1oRg8d_ntZvxkSArQv=6eaq7tyU6-KvJjg@mail.gmail.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 557a686f-a881-479b-c0db-08d9c11e8584
+x-ms-traffictypediagnostic: BN9PR12MB5306:EE_
+x-microsoft-antispam-prvs: <BN9PR12MB530631550C637574B43CECC7C0789@BN9PR12MB5306.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4125;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ndbW7rKmRFSNpbsTRMmDyiGbEKX0hzOLyZ5+aH8KhpO8oZR0aNIYj+EjsgRyB1rLOyqJvsAIcr2FkF0zOeBsRvSMKRoE4KXxUn+D91LsMEXFR49HEiBuBJ1GFkbB33CdtQ5jpADzGLcZ1PqGd1ZchkzL1+Qy+8VDAddKLiq5R9qh07xmCpAp5eLSJnxlaV41pVMqY6dPT9s7WwP7JmnANObIeq2Zgbo0dB8G1K4GItA78S94vDnGHQzERNpXkcB10WaH9MPHJQD3nrptmLE515YcNWMR11GBk32RLDqw2jfUoNjfkpJVl7kCeVVHiCDQDtoItmVs52Ph/ONR9MMUhqx38utOiztNKXeMD8rVXgPI22DB+WOtySgReV2Jb2l8AvKalLjVsbqXP1Ymo+Yc1ggPYWxgtq7en/eui5hMeR2u6smr7jkN9AU5E6fWn+9RZD+u7JpzVN7Rs4/TA4AXL022TW3fAa/93tIz1cjRaQ+ksy3TAk56pC2Pecq2E+CCa0gLFIeUSHp7xv48dYfD/jvCW8YxpLhgkbwyoFU3XEGVr/wAU6Ti3qdzYOwKfnMqnjCWIPAlvHD/MPFHeOPuHLXOe3EulFZka+xctbt/TcnNUSLsX406oZ2ZrQEUefZfjJNYz8zXZPKMdC5QTuc5eQKibuRB0K3bfnup2empmfdGgk5/v+oWZbsT6aAePXxjUj6NXuvktvPYoKJmBe4MbRj7dbORgV7B68Oh0J2Ll8AJDCf3hb0GvbRvVJ021bC5Rd9GJEvEQ2Bxi6gKk4uU5dzCA7nmd+Jd7vbO0r7W7XV8ic+hgSqfOgDoJ57lCjESlwWkZFliStWfyH9WvbOv7A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5273.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38070700005)(5660300002)(76116006)(55016003)(7696005)(71200400001)(83380400001)(86362001)(4326008)(107886003)(52536014)(64756008)(66446008)(66946007)(9686003)(66556008)(316002)(2906002)(186003)(26005)(66476007)(8676002)(38100700002)(8936002)(6506007)(7416002)(53546011)(966005)(33656002)(54906003)(122000001)(6916009)(508600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1DmGqXO8mpdZtZy4wkkyC8HeHQSGrW9sIlSCoQOsF9nAtVuLYo0YmuP+bSvF?=
+ =?us-ascii?Q?Kj+qNigEoUQQI5MyObY90n9WrcbVr4swuoPsE3kqZh3w3Gn8sVt/O5aFHTEb?=
+ =?us-ascii?Q?40DDRmvdKHl4oBXpl/gud3aL5SGfNCKE9OFI26iI6IaORQNLDigxSgXykrBH?=
+ =?us-ascii?Q?Ku+5pejfNFI1jbxck+pVjEXnzR9SJTDMacMsmj3ha3ZV1s6fPk8q72zzxyt0?=
+ =?us-ascii?Q?eFSPe3F49Hb8gyN9T085Bu8NWXeZPAkIh66yD8cybA8jNhTuoqv+wDeBhJOu?=
+ =?us-ascii?Q?UGKCHWz+SSAfdkStwAumilNB2vxHuS8HBesO1dUtOkFAXEgAjmiOYSdKGmZM?=
+ =?us-ascii?Q?/8008CDakprgORzsB22s7uXnnvSkiB8f6JDYGKGoEcHA2xn9Jiu8vjC+XXnj?=
+ =?us-ascii?Q?W+sroATYPnDpzR0jRsX2SBMksQzf7ifXoWSLPse9YXc0n4MghPbLBOxQ2DHI?=
+ =?us-ascii?Q?Kfpj4sO9A/o4fbjZqdSf0IHKSS2rFW25mpbk/fwQRm6pBR86TYMxsCXWKFEH?=
+ =?us-ascii?Q?dsRQROxPXSWq0mtynlmMVANDHoyN+jX+MBNTujUmpkgnWUiMHb9lhCWH8zQ0?=
+ =?us-ascii?Q?fvbVipGmUueEAkoroRoiec9Nf+KpP7MDB30lP2UwTpm7EbC2t1NBvPLMiQQ8?=
+ =?us-ascii?Q?2T6DhkbcKI6mpJ3nR1nbkdSz/DSkSPLfm0zN1+8RsNX+8kSSrbUjKkGRlR52?=
+ =?us-ascii?Q?WglY6J1VY8byxf3Z6x9MPPMYXtZMYjS8VhsUBpzQbhtZC9Rp06Zv0E7r6ngr?=
+ =?us-ascii?Q?VIL52wDSATCebPXlJgJ6iPrCG37DfWFQqlOO/cvZTn9C1oU9NOzeRBfSYZzP?=
+ =?us-ascii?Q?dIi64G8BJm+t2L8RtfMa6CmjFMMcJqdcNnd/DZoTlBJOqNpOyUANvhsTYlOl?=
+ =?us-ascii?Q?0HLA1M9UreY0kNaksWG2WCxbgmRbv5LsdHXl8kJ85vxL7xdAm7c6395NRTIg?=
+ =?us-ascii?Q?8ZCzQ9LHDG9QceVfFhtEF60uJMvuy+zd85Vrwr8m6SZYV3/DnbpFqz5Of3/g?=
+ =?us-ascii?Q?V8lSmaMloxXHLHdPeyDQY1chS/kgagnJK+vyGzPV8UDNWSj170Ox7dJ9p+3F?=
+ =?us-ascii?Q?OABNQLXho+48s+dZMvWQ4foWMSa3CJwGt2FW4rQTVVWBJLuPaMIsX5pDDPI2?=
+ =?us-ascii?Q?Azq9jnRUt4b1xAoavDBOboFh06Q44xm1avWvAz6HnP4AAvrI064KhMqYCXPT?=
+ =?us-ascii?Q?fQ/OqH4Rtw2QsET0/clizgwgE2ePr2K8AL5FHlnDqVHlodXrwNTxLNe0uKUk?=
+ =?us-ascii?Q?hibZpaz3XPT1WmKBsdhD5Op8Frnf4e5/mKtsBKZVqrL1aDs2f321uCgO4nCq?=
+ =?us-ascii?Q?Ozivh7LxioeNfQd4E/dZdFl49MbdW0NdT6awNuf9vEwz0CbBDNapyrQd3bv0?=
+ =?us-ascii?Q?kLyUe7uj0ieeZLqyMVeOitJKnHGqCUXsptLgBzacYby+DOCmvFZRr3anfWKA?=
+ =?us-ascii?Q?HtlYYXIAFzdxJpDFVrkM3kdkuwELHWnQwrdbSBFj/LBKpQ2xj6B/wLvcat0h?=
+ =?us-ascii?Q?1hZqRJFVcBzvIqe7qx99Nb1CZ1tbOjZXTXebCeReJH10HcfdDtxKlgkUrnGG?=
+ =?us-ascii?Q?qMyyiJXnhihrHB3LfZ5QhZYoD8mU6HeY8cDcIlH98nZDxHL4kf3JUTM6LSGb?=
+ =?us-ascii?Q?sQ0aIRxAStNf5jQEsSpTEi0=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4192c76c-a1f1-4d1d-9e59-08d9c0f486fb
-X-MS-TrafficTypeDiagnostic: MWHPR07MB2768:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR07MB27680A859579A06CA7496B7FB8789@MWHPR07MB2768.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C0xryJmQ2hOKpu0NxlIplJmdVL8auThKppoj3l7h8/e7PPapZOswPt2sB6rryiE/Xyymtaav67SRpvYKgiCOn10j7aitlCLU0DwrW6sDCle5/eiTVPeS8KsoYjcE4iCZBdz9P2fm8X0HvTKRdWG92ho7PLMLO6x6KCql3En1zobMFVb2pYGSaiM6PVt3xJIqyvcq0b5/0H7tfnZhYnILK/fjoh1IRzva/gYt73FHypwXs7OFnFaAdZCEDX/DpO+6Y2m4LHQz2Uv9Znbf3IUdWZsKk3V5GhP+8Dlgqdi++pW8EzItJBy0W+xKhHewEP3mybld1JsnUbWkMJSddTtNE0BxkkUF06z5G2/Dff2wqIgo587VY6JG2tzITJvk3GwZG0x0+0AAWE2uk348bKPmFj0gjWNAwilXBa+ME7Ih1jh0Um4nBz0/QauBiFU6UQcEYyM9+94pirioIoJDqU1I1TBQlkZeMLsvrsU4cocZG1Mip1tPOEqJzHyix4JNXfvuYCFsdAy3jDzxgBa6kkDhOeXEztYEBmS+Dw558qy+TDO+z1rFwSr5YohRZ14Zr6zMVNsyeHBsV7BY+VwVaW9wQzzkj8QVE6rXbviYlFd73DnfJVz7Fx1CfBydFDXp5oaFCql1azVR7oo5H2T0QPY9Gal40m11yfTT/j8RS6ZAdhIjwppPHU6O/rq2WPy28f6B7ejX8F2HQ+um6GvoRzRhoA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR07MB3980.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(376002)(39840400004)(346002)(136003)(396003)(26005)(2906002)(316002)(83380400001)(6486002)(86362001)(8676002)(36756003)(6506007)(1076003)(66946007)(52116002)(66556008)(6512007)(66476007)(8936002)(38350700002)(4744005)(38100700002)(186003)(2616005)(508600001)(4326008)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NfSesjro5RwlfalzfUGi0jiqYPlmKYVRMZB1Shgh9O9B5UkDc9EWPB0loT/L?=
- =?us-ascii?Q?Jt8Ku7h6QNnRWHVu4Jzvc2R3UsO5MuGpiu3G/bbogGjG4VZsF9WSwGQv2HE3?=
- =?us-ascii?Q?TEsEE5mbKnA5Xntl5uRihJvnE/h2PQscnOL4CuYeCdoYRf5Jf6Q/iyWS7+tx?=
- =?us-ascii?Q?YhEKzhOGLFAAAioagSc8Dr6Ky1BIvVkpqnOHGJ00l/95wPSV8GjafefCdh00?=
- =?us-ascii?Q?Xdrfnh0pl/Inz0idpQJo9hPWokiwJxFq3ydzmj+J1D27M8bGkyg2q9y3N4Ng?=
- =?us-ascii?Q?xxLPZAtLGXslGsy4LL5A9Mmx2SmkIeA5i5dGDnwEBLwgJUCxRY1QjULZ39Lb?=
- =?us-ascii?Q?MDMarUS9jyOmihXKlkbODb91h8V0/Zhd5PMbtcMMB8zlVTKY8PGTBfJheRIz?=
- =?us-ascii?Q?U7g9naAny8tNUyeYRegmbUiL5SsxPe1+64Xy/2qTiGT29uQS3GZZ2PAOCW/8?=
- =?us-ascii?Q?2GeFIT24nMkTcQLuSzc4CF3vQ32OpXJrfu818uI2yKDvI/R8kkzZd2Z/gq++?=
- =?us-ascii?Q?FT2mlvmjV5OMfOpDS79mODAlKaay44SOQt0T3yOtFzKkSTkVpvYZuIOBywBe?=
- =?us-ascii?Q?BLqD0k2Um8PgdUiDbHJ1H2z1jLM1a2kefpXARFESN3xIYT7VUGJTxp4/BWQx?=
- =?us-ascii?Q?iiUVN4/qOsYHKx+FcTFFqLjwNhxziNSRiFpDxNMz4HB6jVk1MbmwwrAJmLep?=
- =?us-ascii?Q?lJEoklpO4d8a+Doj9rjUpackpJNlrtJjHvtRjEm/rWarPOBn7h6F5loLLtjD?=
- =?us-ascii?Q?WHCArQI66gZqzolNNb3n18ppxpWUw5EJnsVWnGpoo8EKcvLReyVOVTPdxM15?=
- =?us-ascii?Q?zNKhdIiX2+zKWsU/Lb8Zpo2aM6yUD5/woLAgvFc3NUmxyVAO5bmQpl+d3AUl?=
- =?us-ascii?Q?iuv/642LieEGIegWrpkJrg6fBzxrG4RuXW/HioX+QW5e8Gy7b129mZlO+wxs?=
- =?us-ascii?Q?tImbZZjK1ZVU0Dw0s6bimtGG3AUD17dFpSiA7ZaVoEweCWsnxP5XUJXe5jB0?=
- =?us-ascii?Q?eV4qQvtWg4wyaenOzPf2GX1DN9bgB5/kJm3nywOdS8ClLK+ySVbfPhyY99d2?=
- =?us-ascii?Q?rUgMa8+qZExNnHtKMbONSQExzGO0deyctj85/T1BOeMGrjsKyw3cdOna7+zg?=
- =?us-ascii?Q?EDj2lU4spUzygNAYmUBChXgcIsP08GqcOlL/g3xzL0L5l8aTLp+UR8mmyGpo?=
- =?us-ascii?Q?N1ydjyZmoqvwZFxrCnSdzu9ijQowKdbwO3Ohv9+3nAva1osk1WZXpEz6YyRS?=
- =?us-ascii?Q?sei8YlSbcpRhSP4VZaAXrBuKMhVVVFdZRv0Z44U5Gx180AEz591YzCxhtKk5?=
- =?us-ascii?Q?bqmMP/Tc/mvDCCg5EC9mafVW9VJKI50EueKpjvv5laAYdBGhqqQMx++vhs8L?=
- =?us-ascii?Q?fh62Ik1gZHxFjGeXs9j/teNya3naEH8o9sia8qSmoAQwzdxMhaXLkgEB9rvA?=
- =?us-ascii?Q?pZgdM0dLwR229kfIqh6p6pVYyNifX5wSYn+/Onr1LEMUImrju2/2ljdP7YxN?=
- =?us-ascii?Q?ySvxRZzT5POEz4xTE3E1Y2lofIVU4IKcDotLP4HiHqrT9tEdWENVfaqONj01?=
- =?us-ascii?Q?U5X/2L916wBl0U5hDlwOv/FMj/GBZDZ4qcsx5SGaH4qswRJhIDwwhO9ynkMN?=
- =?us-ascii?Q?e1oHshjciUNNFH8XUNs1TiU=3D?=
-X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4192c76c-a1f1-4d1d-9e59-08d9c0f486fb
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR07MB3980.namprd07.prod.outlook.com
+X-OriginatorOrg: Nvidia.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 00:31:12.1950
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5273.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 557a686f-a881-479b-c0db-08d9c11e8584
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2021 05:31:48.2260
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: miSnXTC4NY2zp3DAmJ3FCX21iYRDYqbyzXHe+AMWQzUt11NeJwMzCPTVzTTSF+6zZPW9NzP73fiMLAmyfxk64w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR07MB2768
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NhqRCd8880EUi55oLTcRkzXA8r+w6awRuYTU+f+KKG/3ZqNEFYWT+LG/a9ilBpFz/e3ifWbtuzme+NcesxYOpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5306
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear kernel developers,
+> On Thu, Dec 16, 2021 at 6:08 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+> > > On Thu, Dec 16, 2021 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrot=
+e:
+>=20
+> ...
+>=20
+> > > > -       irq =3D of_property_match_string(adapter->dev.of_node, "int=
+errupt-
+> > > names",
+> > > > -                                      "smbus_alert");
+> > > > +       irq =3D device_property_match_string(adapter->dev.parent,
+> > > > + "interrupt-
+> > > names",
+> > > > +                                          "smbus_alert");
+> > >
+> > > Hmm... Adapter device node is not the same as the node for its parent=
+.
+> > > Do you have some code that propagates of_node from parent to child?
+> > Adapter device does not have an of_node unless the adapter driver sets
+> > it, I guess. I see all the adapter drivers add the of_node and parent
+> > for adapter. Also, there are many places in i2c-core-base and
+> > i2c-core-acpi where adapter->dev.parent is referred to as the adapter
+> > driver device.
+> >
+> > Basically, adapter->dev.parent and adapter->dev.of_node would
+> > ultimately refer to the same device (or the of_node of that device),
+> > as far as I understand.
+> > >
+> > > I.o.w. I would expect to see
+> > >
+> > >        irq =3D device_property_match_string(&adapter->dev,
+> > > "interrupt-names",
+> > >
+> > > here.
+> > It would then require adding the fw_node as well from the adapter drive=
+r.
+> > I felt it made more sense to refer adapter->dev.parent here as most of
+> > the (or rather all of the) adapter drivers already sets it.
+>=20
+> Is this
+> https://elixir.bootlin.com/linux/latest/source/drivers/i2c/i2c-core-base.=
+c#L1047
+>
+> what you are looking for?
+This, I suppose, is for the i2c client driver.
+I meant the individual adapter drivers.
+https://elixir.bootlin.com/linux/latest/source/drivers/i2c/busses/i2c-tegra=
+.c#L1786
+similar is there in all drivers.
+If to use adapter->dev for interrupt-names, I assume, it would require to a=
+dd
 
-I am having a similar problem, but unfortunately this patch doesn't
-work for me (I get the error "BIOS uses SMBus unsafely"). Would it be
-acceptable to add a module parameter to allow access to the SMBus, even
-if the BIOS is using it? I realize that this is not a good idea in
-general, but I believe it is safe in my particular case, and I don't
-see any other way to solve my problem.
+	adapter->dev.fwnode =3D i2c_dev->dev->fwnode;
 
--Alex
+in all drivers (or at least in the drivers which does not use devicetree).
+I thought it would be decent to use adapter->dev.parent as all the drivers =
+already
+set it.
+
+>=20
+> ...
+>=20
+> > > >         if (irq =3D=3D -EINVAL || irq =3D=3D -ENODATA)
+> > > >                 return 0;
+> > > >         else if (irq < 0)
+> > >
+> > > TBH the entire code smells. "Interesting" way of getting an optional
+> > > named interrupt.
+> > I felt it useful to have it this way as it would remain agnostic to
+> > device tree and the ACPI. We would not have to add redundant codes in
+> > adapter drivers that are using ACPI table.
+> >
+> > Named interrupts for the ACPI as well, I feel would be a useful
+> > addition that can prove to be of value more than this change; I believe=
+.
+>=20
+> Me too. My comment was about current state of affairs, and not to your
+> change.
+Got it :)
+
+Thanks,
+Akhil
+
