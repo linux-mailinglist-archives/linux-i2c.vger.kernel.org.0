@@ -2,96 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE60A4789A4
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 12:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94ECE4789EA
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 12:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbhLQLRN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Dec 2021 06:17:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34924 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235179AbhLQLRN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 06:17:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89AC862111;
-        Fri, 17 Dec 2021 11:17:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0D67C36AE1;
-        Fri, 17 Dec 2021 11:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639739832;
-        bh=ciizNTJo2wPqNMTxwzDgqHE9JK7q6BV7T+/75cIK56M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nH7GUf5F3DdbIGiqXCbnIQyD6+vj31l6eJTYTXkZyYdWZoHhsGxPu4tRNKxlWgZBX
-         1ze42PlgXL/aWXptLdbCn5f9HSAC53k+hN0RkIvTLbpvxCRnLwGFeM2vD0p1cIGNaB
-         gs8YL04qGH3GTJLvfI2ek+S7OQ8aC2dgfv/1hNnoQI4w6YhlSNBxU641nNJR6a98di
-         CwBjTaadjj4O44/xKIhVmPGlEk2w6umqHhZrb/PaswwDz57nXUIOga54rbiUgEgzX/
-         Zq18ObE/m/NYLmLyCNhTX38sTKP4+C/1QvnC9bbb3CDSATqbdJLmaw4qopPC8CPJn8
-         DxYqpFpEuWEmA==
-Date:   Fri, 17 Dec 2021 11:17:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        robh+dt@kernel.org, jassisinghbrar@gmail.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, krzysztof.kozlowski@canonical.com,
-        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
-        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
-        ivan.griffin@microchip.com, atish.patra@wdc.com
-Subject: Re: [PATCH v2 10/17] dt-bindings: spi: add bindings for microchip
- mpfs spi
-Message-ID: <YbxxrlmYGC3Pg8+j@sirena.org.uk>
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-11-conor.dooley@microchip.com>
+        id S229576AbhLQLa5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Dec 2021 06:30:57 -0500
+Received: from mga05.intel.com ([192.55.52.43]:27145 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229771AbhLQLa5 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Fri, 17 Dec 2021 06:30:57 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="326024635"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="326024635"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 03:30:57 -0800
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="465095078"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 03:30:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1myBR2-007OJ1-KC;
+        Fri, 17 Dec 2021 13:30:00 +0200
+Date:   Fri, 17 Dec 2021 13:30:00 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH 4/6] i2c: designware-pci: Group MODULE_*() macros
+Message-ID: <Ybx0uPds3auwqO7a@smile.fi.intel.com>
+References: <20211215151205.584264-1-jarkko.nikula@linux.intel.com>
+ <20211215151205.584264-4-jarkko.nikula@linux.intel.com>
+ <YbutJCYnoMwjV6Zn@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Q8nNbUqDPNVQRYrB"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217093325.30612-11-conor.dooley@microchip.com>
-X-Cookie: Pause for storage relocation.
+In-Reply-To: <YbutJCYnoMwjV6Zn@kunai>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Thu, Dec 16, 2021 at 10:18:28PM +0100, Wolfram Sang wrote:
+> On Wed, Dec 15, 2021 at 05:12:03PM +0200, Jarkko Nikula wrote:
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > 
+> > For better maintenance group MODULE_*() macros together.
 
---Q8nNbUqDPNVQRYrB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Removed an empty line and applied to for-next, thanks!
 
-On Fri, Dec 17, 2021 at 09:33:18AM +0000, conor.dooley@microchip.com wrote:
+Agree on the change and thanks!
 
-> +  num-cs:
-> +    description: |
-> +      Number of chip selects used.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 8
-> +    default: 8
+> > +MODULE_ALIAS("i2c_designware-pci");
+> > +
+> 
+> This one.
+> 
+> >  MODULE_AUTHOR("Baruch Siach <baruch@tkos.co.il>");
 
-Why do you need this property in the DT - isn't the number of chip
-selects in the IP a fixes property?
+-- 
+With Best Regards,
+Andy Shevchenko
 
---Q8nNbUqDPNVQRYrB
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG8ca4ACgkQJNaLcl1U
-h9CSxwf/ej8wQ0M9Gd+7rtUHtN3BktycYB5ZcTYF2vBKdmrv+nxD7gkrKJ55D3X5
-Cq+ccL5v/vEk+7sKFZDtqt1Ro8Nb9xlge9lerzzE9UpRB47Aem2ixXy9LVkDSvJ6
-3DEHtrwqqn5sAy0uBgRXNfc7FnGajIjLdBWKBER6cRrUIjaW8laQhkGE+cWq7xVl
-vyhFYVIE8g0ffymZ6wCt/sLil+KhtZ5D1po3U0Gkdqf7UGxGUA1a+3mJT+zcoTXy
-YDuBPq7dAbVXNu3HjAU2k127FTYkjzI/e7vvit4/0WKNqvUch0E8H0YoTki71DJe
-pLmu1B/yykOCwy/UuX1wQ1U17x2Big==
-=n9Eh
------END PGP SIGNATURE-----
-
---Q8nNbUqDPNVQRYrB--
