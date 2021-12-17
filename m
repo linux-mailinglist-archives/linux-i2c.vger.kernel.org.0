@@ -2,50 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DEC478C81
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 14:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2F0478CC4
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 14:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236555AbhLQNkn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Dec 2021 08:40:43 -0500
-Received: from mail-vk1-f170.google.com ([209.85.221.170]:41531 "EHLO
-        mail-vk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234437AbhLQNkn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 08:40:43 -0500
-Received: by mail-vk1-f170.google.com with SMTP id s144so1538739vkb.8;
-        Fri, 17 Dec 2021 05:40:42 -0800 (PST)
+        id S236824AbhLQNvp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Dec 2021 08:51:45 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:43886 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233082AbhLQNvo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 08:51:44 -0500
+Received: by mail-ua1-f43.google.com with SMTP id 107so4400892uaj.10;
+        Fri, 17 Dec 2021 05:51:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rtHDFTmA9jAujdChviftcLGAoCqoDrj9rbkqjCaVfPY=;
-        b=evZRjLae1O9802bI064bPZMgL+WzkRwsIvqlQj0OefnDOASPGDK8Ydx+mMtQQt6ywq
-         PUjYmdfIZtLBlVUk+PSO7RYLOmwY5kgIBK30oWZTgLN9+0pGRYAADzYvvvSNEr5TnmXR
-         3kiv0YnICBFTwHKmI6TSJSkEQDdfEUMmcLkeT4Z4H8lG1DrPpkkKbhVzx2pGzSlNV7m0
-         lXo0PhCC3oQIKjNey/+IXedCp0Y+RFWBhxqu3fSR4cJghgGKQ/yE6QQIQ82Vf3Oe4hFs
-         1zGF/i2GvLYRhPPZ8n6NxlpYhso5iYJE78Vhpk3+qC1bGgkDllNWB2jkAfGrJJDxraSB
-         ECsg==
-X-Gm-Message-State: AOAM5339FGfOkVPhK0trER0JIVeRwHBh907nlZaYgiNoZGqv/2YciK20
-        ib4DaFhgDaSeaCZ+/MNhYumPcztUcw6Ozw==
-X-Google-Smtp-Source: ABdhPJzgC6NbrwspU5MLn/XIDxxFyJ8uu8MA8EAiYeoJliuNGon8pTS36lOZYP5xeeIJLZM9LA427g==
-X-Received: by 2002:a05:6122:8c6:: with SMTP id 6mr1074873vkg.5.1639748441578;
-        Fri, 17 Dec 2021 05:40:41 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id 204sm910916vkb.43.2021.12.17.05.40.40
+        bh=IzymPMQBtSGyl0KMkX7mRJW21YY8HhWUvGCPuNIAzLc=;
+        b=2kmyB2CVofVserc+bm2snp8gFJudz+9Hm0Ie9OK3Ob6ICL/0ZVvkFIF5D5LEna8bJE
+         qwxgbnh1ncfXnWocglQ75JtnRtLjp8vTCaoytyUTpUqANMK9P88DMsJ0S9imCGf3lFvv
+         pnI7AQYJONE9svhSkwvRLsf/94xuMPP0lMSdwNhz50oVqmpGaSom3lhqVB81QHAuaDTL
+         9XoScuDy43ZsH/uBadV6Y+jm46tv+GLJi8Vr65RfjWWqQNNasd/le0sHuW1XWFylM6dn
+         NYKu32pC+5Byz4HoZvcFw7MyBKnw/VEWn4kjMTappASDkLlNyg5fuY9jm63C3Ik2QP9N
+         Rr5A==
+X-Gm-Message-State: AOAM530VPHD6YiubK+QRkTlu98hCP8EE7I7BSCvKXLexqKXBQzKaVrCL
+        W2sHg63xPV430QP+yaLya12UhcizDFhlRA==
+X-Google-Smtp-Source: ABdhPJygqHbD/X/j8BRU0bhjpRRjRAWfUxD7m6R8LZ06FOC/Bi4xRjb7x1NpLLTc+CgbjrViTdloRw==
+X-Received: by 2002:ab0:6f49:: with SMTP id r9mr899509uat.111.1639749103352;
+        Fri, 17 Dec 2021 05:51:43 -0800 (PST)
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com. [209.85.221.174])
+        by smtp.gmail.com with ESMTPSA id c14sm1769301vkm.10.2021.12.17.05.51.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 05:40:40 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id y22so4425815uap.2;
-        Fri, 17 Dec 2021 05:40:40 -0800 (PST)
-X-Received: by 2002:a05:6102:21dc:: with SMTP id r28mr949708vsg.57.1639748440025;
- Fri, 17 Dec 2021 05:40:40 -0800 (PST)
+        Fri, 17 Dec 2021 05:51:43 -0800 (PST)
+Received: by mail-vk1-f174.google.com with SMTP id m200so1568227vka.6;
+        Fri, 17 Dec 2021 05:51:43 -0800 (PST)
+X-Received: by 2002:a1f:4641:: with SMTP id t62mr1041561vka.0.1639748601739;
+ Fri, 17 Dec 2021 05:43:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-14-conor.dooley@microchip.com>
-In-Reply-To: <20211217093325.30612-14-conor.dooley@microchip.com>
+References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-15-conor.dooley@microchip.com>
+In-Reply-To: <20211217093325.30612-15-conor.dooley@microchip.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 17 Dec 2021 14:40:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUYUEpU4bFobK=fpVDGzwAHQWJ=dvPVmp20DUTLSe+DRw@mail.gmail.com>
-Message-ID: <CAMuHMdUYUEpU4bFobK=fpVDGzwAHQWJ=dvPVmp20DUTLSe+DRw@mail.gmail.com>
-Subject: Re: [PATCH v2 13/17] riscv: dts: microchip: use hart and clk defines
- for icicle kit
+Date:   Fri, 17 Dec 2021 14:43:10 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV0N-15kNZ1fnzaj_psNVCRUQP506Noc-tHawmgxqCVeA@mail.gmail.com>
+Message-ID: <CAMuHMdV0N-15kNZ1fnzaj_psNVCRUQP506Noc-tHawmgxqCVeA@mail.gmail.com>
+Subject: Re: [PATCH v2 14/17] riscv: dts: microchip: add fpga fabric section
+ to icicle kit
 To:     Conor Dooley <conor.dooley@microchip.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -84,76 +84,38 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Conor,
 
-Thanks for your patch!
-
 On Fri, Dec 17, 2021 at 10:33 AM <conor.dooley@microchip.com> wrote:
 > From: Conor Dooley <conor.dooley@microchip.com>
 >
-> Update the Microchip Icicle kit device tree by replacing interrupt and
-> clock related magic numbers with their defined counterparts.
-
-Usually we make a distinction between (a) numbers that can be looked
-up easily in a datasheet, and (b) numbers that were made up because
-we needed some mapping. Of course both types of numbers are fixed,
-and cannot be changed.
-
-For (a), we tend to use the hardcoded numbers in the DTS files, to
-avoid reviewers having to go through another layer of indirection
-(i.e. does the number for the define match the number in the
-datasheet?).
-For (b), we use the defines, as there is no other official place to
-look up the numbers.
-
-> --- a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-> +++ b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-> @@ -2,6 +2,8 @@
->  /* Copyright (c) 2020 Microchip Technology Inc */
+> Split the device tree for the Microchip MPFS into two sections by adding
+> microchip-mpfs-fabric.dtsi, which contains peripherals contained in the
+> FPGA fabric.
 >
->  /dts-v1/;
-> +#include "dt-bindings/clock/microchip,mpfs-clock.h"
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-The clock numbers we're made-up, so they fall under (b).
+Thanks for your patch!
 
-> +#include "dt-bindings/interrupt-controller/riscv-hart.h"
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
+> @@ -0,0 +1,13 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/* Copyright (c) 2020-2021 Microchip Technology Inc */
+> +
+> +/ {
+> +       corePWM0: pwm@41000000 {
+> +               compatible = "microchip,corepwm";
+> +               reg = <0x0 0x41000000 0x0 0xF0>;
+> +               microchip,sync-update = /bits/ 8 <0>;
+> +               #pwm-cells = <2>;
+> +               clocks = <&clkcfg CLK_FIC3>;
+> +               status = "disabled";
+> +       };
 
-I believe these are just the official CLIC interrupt IDs, so they
-fall under (a)?
+I'm wondering if these should be grouped under a "fabric" subnode,
+like we have an "soc" subnode for on-SoC devices? Rob?
 
-> @@ -165,11 +167,16 @@ cache-controller@2010000 {
->                 clint@2000000 {
->                         compatible = "sifive,fu540-c000-clint", "sifive,clint0";
->                         reg = <0x0 0x2000000 0x0 0xC000>;
-> -                       interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
-> -                                             <&cpu1_intc 3>, <&cpu1_intc 7>,
-> -                                             <&cpu2_intc 3>, <&cpu2_intc 7>,
-> -                                             <&cpu3_intc 3>, <&cpu3_intc 7>,
-> -                                             <&cpu4_intc 3>, <&cpu4_intc 7>;
-> +                       interrupts-extended = <&cpu0_intc HART_INT_M_SOFT>,
-> +                                             <&cpu0_intc HART_INT_M_TIMER>,
-> +                                             <&cpu1_intc HART_INT_M_SOFT>,
-> +                                             <&cpu1_intc HART_INT_M_TIMER>,
-> +                                             <&cpu2_intc HART_INT_M_SOFT>,
-> +                                             <&cpu2_intc HART_INT_M_TIMER>,
-> +                                             <&cpu3_intc HART_INT_M_SOFT>,
-> +                                             <&cpu3_intc HART_INT_M_TIMER>,
-> +                                             <&cpu4_intc HART_INT_M_SOFT>,
-> +                                             <&cpu4_intc HART_INT_M_TIMER>;
-
-Hence I'm not sure we want changes like this?
-
->                 };
->
->                 plic: interrupt-controller@c000000 {
-         };
->
-> @@ -210,7 +221,7 @@ serial0: serial@20000000 {
->                         interrupt-parent = <&plic>;
->                         interrupts = <90>;
->                         current-speed = <115200>;
-> -                       clocks = <&clkcfg 8>;
-> +                       clocks = <&clkcfg CLK_MMUART0>;
-
-But this change is fine.
+BTW, do you already have a naming plan for different revisions of
+FPGA fabric cores?
 
 Gr{oetje,eeting}s,
 
