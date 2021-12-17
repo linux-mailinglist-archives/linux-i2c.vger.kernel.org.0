@@ -2,98 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53405478A46
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 12:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817A3478C30
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Dec 2021 14:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233484AbhLQLoI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 17 Dec 2021 06:44:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50220 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbhLQLoI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 06:44:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2676B82789;
-        Fri, 17 Dec 2021 11:44:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E106C36AE8;
-        Fri, 17 Dec 2021 11:43:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639741444;
-        bh=N4SLJbonmm8jBnFacqm9G6G41H3dlxGpaFVouOO8aLE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Aijgx0ZIQWQAeb7gNbL6SpclY57lW1QH0Tjj3lrF/XSwEDWHugwzvn5/s/1FKJOQZ
-         pMfarvCtO2n6TMepMbTJta2l2d2dBhZ30HsQGQnNMkZbX+M9wjvCIP45pe7ip0Jb6d
-         t1L4C3jdIyEZW4kIbK3N3eDfMSl9TMsVzWRs1icIJfjNRHDeum0xEfwgvz93MG4d6z
-         awp9XipBLcVyB2cWVHPejEh53NMcYLIPkxvC2cJ0CCKJZ+uBhrSnAe/auux+I3KTD5
-         xFRHR4vdmElgOxACGGACl9xld/yXnMVUL0Yvx2S8kxsPIfrWy8hEFEej6h92auURX4
-         Fm/jKx8mARyyg==
-Date:   Fri, 17 Dec 2021 11:43:55 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Conor.Dooley@microchip.com
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        robh+dt@kernel.org, jassisinghbrar@gmail.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, krzysztof.kozlowski@canonical.com,
-        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
-        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
-        Ivan.Griffin@microchip.com, atish.patra@wdc.com
-Subject: Re: [PATCH v2 10/17] dt-bindings: spi: add bindings for microchip
- mpfs spi
-Message-ID: <Ybx3+3QaVe2lCcQP@sirena.org.uk>
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-11-conor.dooley@microchip.com>
- <YbxxrlmYGC3Pg8+j@sirena.org.uk>
- <606633c8-6cd6-af3a-4d6a-bb3058a64026@microchip.com>
+        id S236697AbhLQNYX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 17 Dec 2021 08:24:23 -0500
+Received: from mail-ua1-f46.google.com ([209.85.222.46]:42996 "EHLO
+        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236677AbhLQNYU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 17 Dec 2021 08:24:20 -0500
+Received: by mail-ua1-f46.google.com with SMTP id t13so4242479uad.9;
+        Fri, 17 Dec 2021 05:24:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UfQoARdnbkZAiC3vtgUpOeQLmZLNRjjpwLc9s5ZyHps=;
+        b=xYfAY7J7J9QffAykFLTch2fOSSEGskXuntYtMKlCX8maAZfgRC7qaeYbEYXEhHxAm9
+         hCprSbG7+WrIa9+7lPKf2Gnwb9ioX+R+RgibIbKM6PTk7hk7TRdYnQxFfz3Uvh2fnE43
+         5ilri1hg6O+NGD3LZ8i57+iYD9+vuULAmaDkvG/pbtchDhnnqYk1RCbUErtJ4g02beJy
+         sp8C7y21ZrvyE8OZIEfB7so4is2cjz7xSFk+9nrrb4lz0DmcaKUxl2uHmi4PuAI7Pxr/
+         NBCURrxkQyH90X6VZOJjiVOG8PMzyIp3PlqIt1SOL30ZCNF2eS0j3xxbqki04ANOps2S
+         773Q==
+X-Gm-Message-State: AOAM53375W3GmNivNzBMFfaktc7PL/pTXxza/phvxW5ZI9KeTC9Zl384
+        tUf4+AIs3aie7begwtfvMGNlEkC2jYYyOg==
+X-Google-Smtp-Source: ABdhPJwf9tK4F5rXipclTN8u7WMGEQYWyCzr93mNHr/EESAQDeztbJetl2fXnXAfihpEYTm5+KvDBw==
+X-Received: by 2002:ab0:449:: with SMTP id 67mr998976uav.46.1639747459373;
+        Fri, 17 Dec 2021 05:24:19 -0800 (PST)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id q9sm1804818vkn.44.2021.12.17.05.24.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 05:24:19 -0800 (PST)
+Received: by mail-ua1-f53.google.com with SMTP id p37so4282078uae.8;
+        Fri, 17 Dec 2021 05:24:18 -0800 (PST)
+X-Received: by 2002:a67:c106:: with SMTP id d6mr960485vsj.77.1639747458226;
+ Fri, 17 Dec 2021 05:24:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AfGRrf1crhTWT0mA"
-Content-Disposition: inline
-In-Reply-To: <606633c8-6cd6-af3a-4d6a-bb3058a64026@microchip.com>
-X-Cookie: Pause for storage relocation.
+References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-3-conor.dooley@microchip.com>
+In-Reply-To: <20211217093325.30612-3-conor.dooley@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 17 Dec 2021 14:24:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXBm6PMnBTQDZY=3XkGBXsr4wXy8m+WbgHjA8SpctbVCA@mail.gmail.com>
+Message-ID: <CAMuHMdXBm6PMnBTQDZY=3XkGBXsr4wXy8m+WbgHjA8SpctbVCA@mail.gmail.com>
+Subject: Re: [PATCH v2 02/17] dt-bindings: soc/microchip: update syscontroller compatibles
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        Atish Patra <atish.patra@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Dec 17, 2021 at 10:32 AM <conor.dooley@microchip.com> wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> The Polarfire SoC is currently using two different compatible string
+> prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
+> its system controller in order to match the compatible string used in
+> the soc binding and device tree.
+>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
---AfGRrf1crhTWT0mA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-On Fri, Dec 17, 2021 at 11:40:29AM +0000, Conor.Dooley@microchip.com wrote:
-> On 17/12/2021 11:17, Mark Brown wrote:
+Gr{oetje,eeting}s,
 
->  > Why do you need this property in the DT - isn't the number of chip
->  > selects in the IP a fixes property?
+                        Geert
 
-> Nope! It's an IP that's intended for use in FPGAs so the number of=20
-> selects may (and does) vary based on implementation.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-That doesn't explain why the number is needed in the binding - why do
-you need this property in the DT?
-
---AfGRrf1crhTWT0mA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG8d/oACgkQJNaLcl1U
-h9BGLgf/SiqoIpPFvZymGI+lV8cyTUm+CuIWdAYRxHOotUpqpCdFDWSt6ungnucf
-L+CKgnigBiPYJ3jZs9yRuC1kaIDnha4hNFuGs8nlVgdVOd5k+PhGI3B6Vtz9sjv7
-UKnkHSHk7yEcMB1CKjrgWDs5d7dcaA9vwNNrQNLd0TaqtSPR8VPUuW4uM1/gPVbt
-g8MxN6GRUTiGKG8GIAVFXNQ1NFuGXti9FrbYZHelZQM811Gjua3bqRY6RfPGoaSu
-2AudboDMa+HNohXPvKaRolBubzwtXw2zX3GABTZSHaG9/X/3C9LeJFR53x1Avmib
-ak8CKqa7Sou8MLRP9OiktJGz1dPYTA==
-=9ef7
------END PGP SIGNATURE-----
-
---AfGRrf1crhTWT0mA--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
