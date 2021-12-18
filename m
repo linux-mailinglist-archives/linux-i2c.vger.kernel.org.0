@@ -2,82 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A754E479BD4
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Dec 2021 17:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB999479C38
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Dec 2021 19:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233658AbhLRQxQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 18 Dec 2021 11:53:16 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:49487 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233678AbhLRQxP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 18 Dec 2021 11:53:15 -0500
-X-IronPort-AV: E=Sophos;i="5.88,216,1635174000"; 
-   d="scan'208";a="104388682"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 19 Dec 2021 01:53:15 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 1D25F40A5168;
-        Sun, 19 Dec 2021 01:53:11 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 3/3] i2c: riic: Use platform_get_irq() to get the interrupt
-Date:   Sat, 18 Dec 2021 16:52:58 +0000
-Message-Id: <20211218165258.16716-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S232217AbhLRS5I (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 18 Dec 2021 13:57:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231234AbhLRS5H (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 18 Dec 2021 13:57:07 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B03C06173E
+        for <linux-i2c@vger.kernel.org>; Sat, 18 Dec 2021 10:57:07 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id y23so10422173uay.7
+        for <linux-i2c@vger.kernel.org>; Sat, 18 Dec 2021 10:57:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=vqRa1re3wtmOE21d8K7oOAGi5OVvzWXrArG0keEDjLo=;
+        b=ASQWZh9jJNhKb0r+nZkVHtqJDlCCAvsZ8zjddHkQDVMswhB5ZDAsx8fuDANlffe7YV
+         dA0yuRoFrz+FEDQk3RjhxHI3pLg+S1Bm56mPdmAeztHbtO0Btze+UzRw9imKYeshpya1
+         DZR837QFWubz1zfWwjoptHDkT6xCbXHcQtofppZS6OFXUvHmpvAI/Ktfqg+G3TRauwQj
+         lGt8AhtH8AxxFTAlwjGkT5Q0fCEWKxQmd6JydEXiuTfYOI0kC2GiPpgi+lItInfzcODl
+         dQxONauO2Ym4d1S0xiYZ/mPPNOgnFfT70nPtX7rzKkvEjqXCES63Tv0l+qSj2esoO/o5
+         rVMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=vqRa1re3wtmOE21d8K7oOAGi5OVvzWXrArG0keEDjLo=;
+        b=Wef0hPtB5J+Qr0IiewdVjSlMZS5IeHsu6uJcWsD3hG3gR0DzfNZ1tELkzoZxgyriBZ
+         TvRQ85os3H0XVY8Mje1TCJV6hlIwB9hoIwhdpzkX6n46xklOV3qVf+gJvaJgp9LjK6RV
+         9XZlfraLtC9v2JcZ+oascOeJ2lsBjj+Pl3JBBEjmo4/C1E9le20zRzDYZU/McMNVPeKG
+         e+yGk0l2vWrHCYU2EFp2OldxbHrzsi/rXGDIGIzaQFs6hohiW0UfmQqyV57joR9ZJcuO
+         wYt3Ncxn4Hk6VzS8YumLNdhnEK16bCWsA8amkV/+RbwJasL1gjT1gOu58OJaXyXFRTo/
+         vk9w==
+X-Gm-Message-State: AOAM533XFcQ9kIiXSqTyWuI/y/MuKiwnweQ2Q3zitwdYz2EkwGQIPDgH
+        ezQlhNp7Lglfpw9De+2gIK8A+VOoPZtm1l+N+pg=
+X-Google-Smtp-Source: ABdhPJxzKXqiYoJD5OXxSWaBwfqKBhBl9M9omqUMirTZNgfhavp/ahvgU8m7OZQE4B+wBN0FCT9jdg+xVcYG1Bsa+eg=
+X-Received: by 2002:a67:fa59:: with SMTP id j25mr3131018vsq.30.1639853826014;
+ Sat, 18 Dec 2021 10:57:06 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:ab0:77cc:0:0:0:0:0 with HTTP; Sat, 18 Dec 2021 10:57:05
+ -0800 (PST)
+Reply-To: godk52512t@gmail.com
+From:   Mr Seyba <paulmadi2009bf@gmail.com>
+Date:   Sat, 18 Dec 2021 18:57:05 +0000
+Message-ID: <CAF3LYjc16RRCigPsk5SbuJ+5rL9PHkGkf08LggWQVTM9EW4V_A@mail.gmail.com>
+Subject: Good day from Mr Seyba
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
-
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq().
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/i2c/busses/i2c-riic.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index 78b84445ee6a..f18b9fe86d4b 100644
---- a/drivers/i2c/busses/i2c-riic.c
-+++ b/drivers/i2c/busses/i2c-riic.c
-@@ -433,12 +433,12 @@ static int riic_i2c_probe(struct platform_device *pdev)
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(riic_irqs); i++) {
--		res = platform_get_resource(pdev, IORESOURCE_IRQ, riic_irqs[i].res_num);
--		if (!res)
--			return -ENODEV;
-+		ret = platform_get_irq(pdev, riic_irqs[i].res_num);
-+		if (ret <= 0)
-+			return ret ? ret : -ENXIO;
- 
--		ret = devm_request_irq(&pdev->dev, res->start, riic_irqs[i].isr,
--					0, riic_irqs[i].name, riic);
-+		ret = devm_request_irq(&pdev->dev, ret, riic_irqs[i].isr,
-+				       0, riic_irqs[i].name, riic);
- 		if (ret) {
- 			dev_err(&pdev->dev, "failed to request irq %s\n", riic_irqs[i].name);
- 			return ret;
 -- 
-2.17.1
-
+Dear Good Friend My Name Is Mr Seyba; I have a business proposal
+for you that involve $5.5 Million Dollars No risk involved. Please
+reply here for details: godk52512t@gmail.com
+Regards.
+Mr.Seyba Paul.
