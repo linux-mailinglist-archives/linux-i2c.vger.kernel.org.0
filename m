@@ -2,128 +2,152 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90911479CCF
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Dec 2021 22:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30595479DDE
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Dec 2021 22:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234270AbhLRVRR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 18 Dec 2021 16:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbhLRVRR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 18 Dec 2021 16:17:17 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F79DC061574;
-        Sat, 18 Dec 2021 13:17:17 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id u17so4872793plg.9;
-        Sat, 18 Dec 2021 13:17:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GTXZALPrULQFFohO+yn4hKDW5HSqM1ZL3ZeujC4578Q=;
-        b=claeeP6hpDrPXUF1P+DW1064XICLuC4tDMVCgrdkHAkWSRd2+zz+lqiVodfQYAAYxS
-         qEhhz2tEvSS0kDpNuPz/jGz6Sx+yl2FZfUuJJOWTNTEtKHmKswZq98ol/HFQBgWJgnFo
-         FItfyvk2yooWM5DvukP0a6c0TFqksVW/ryXcD3WibWQFIBkmN8Hcs54Svevzg//UZKmR
-         5ezGUKhufyVDXtTc0J8nB91Xutuol90iHN9zTrYTcVDIRt3U/XDR8+K9a4d4WBetgbtq
-         +vUFjFOVhGBMmnGtuEBH/useCRe3vB9hcVVCrIkgil+7FR8yp2Xqjrq/Frs9mQG5Tcx/
-         t2DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GTXZALPrULQFFohO+yn4hKDW5HSqM1ZL3ZeujC4578Q=;
-        b=h5PznRnmXFvQpYnWI2Zmc021QzXAN3v0RcxZzemH0gHckS2tSUM0BKQdkGjL2S/B6P
-         4chYxpuWoJzbVqsSMsiAurxzZg3BVejbDlZIKTq8m9I38Vg0y/8sQuVWv1vi8T0WaIct
-         OlVqe3VTsXdExFwAqBD0qR4qw9nvGsiZE+7CVjYYINnOgnFAed0ipHOv/+1pp0G0b661
-         vcF12Lyi5UMT2nkSepUHFOhJEcT0+mz3DzrnogKhR/A2LIqog8kcKxsVwU3pRb9dP+on
-         s3gDMsWi935+3twFGWrua1mdspi5yGkYCY1yL8kgcRzGK/TbBK2qz+Z8sT5tL8bEK4vd
-         OgMg==
-X-Gm-Message-State: AOAM533CcIed4GiqCwCjS22Ml94MzFdXLkTXphWnYP/bR58dM9jbKP+I
-        1Iqzq2eKlqDGTU9p75VqPls=
-X-Google-Smtp-Source: ABdhPJzyBK3WWbHHo+VX9p2yHZLVkeAfYE/tCUCIbpHeawtBk1NfNjDO6g1jSdvVyXSM2qb0j1I8Bw==
-X-Received: by 2002:a17:902:8b8a:b0:148:bd36:94ed with SMTP id ay10-20020a1709028b8a00b00148bd3694edmr9766601plb.44.1639862236626;
-        Sat, 18 Dec 2021 13:17:16 -0800 (PST)
-Received: from [10.1.10.177] (c-71-198-249-153.hsd1.ca.comcast.net. [71.198.249.153])
-        by smtp.gmail.com with ESMTPSA id oj9sm9458935pjb.0.2021.12.18.13.17.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 13:17:15 -0800 (PST)
-Message-ID: <a02d76dc-52cc-3ecc-5ef7-825c3167431a@gmail.com>
-Date:   Sat, 18 Dec 2021 13:17:13 -0800
+        id S232578AbhLRV6w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 18 Dec 2021 16:58:52 -0500
+Received: from mail-db8eur05on2077.outbound.protection.outlook.com ([40.107.20.77]:58913
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232339AbhLRV6w (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Sat, 18 Dec 2021 16:58:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mmec69ARiT0EtjDMSPrTF9/BSjy+cvNPqs9MCMDhR568Da1x4mIRatDj1jceL9cChguWux/l4I6nPgrKnSRfn6/czNig9D4VTyOFz6s2rVXIo1vjT/pI/okuSQ5bidJzY65xe8rTGsUyga1DGYY0Sh9uGY/vqf1fyJX/duyq3YYgteEvQP4fQQZtEU53QXSSpO1008U17HqiLNFhae1HTdQzdPl4pcNmxuWohyI4DtWoexeGPKOdNE2pQ9NbCyxq4SLJyb1Ypn9FAWmIWBYPYHxGsgANeQJk2+2SHrMO7KyJFe4ZZk9nC+mlIZeluPVLYWAGVeGNOxKEcnKDOy4ojQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VOm8pMpa5Bka66uDqL5sD0MCOA2EPyM+VaIroFW6VNc=;
+ b=HLpCrmnNMbuekr60/0/0mVd92r412/8pTmIoO9V1KlAmS4QDezftT9iLMwgqfsGsmggPzzxYHVwFl3CTfZ4yvA+y8jJRAtZWY9SYybcOfii8Bp1lhQl4p9yOvrFoCw0DdS6ttpmqq72aDYryjEsYWYdgwZ3L4YKrSQVk2a+IheRRoEZrDTpXdM3CHEGv2j9ryY39bOx+YYtu8vWQdRPrZH3qZcs0C9Gq4puwQSRFxQffL11ATg8ln2I8JMPzX1EVhR9es3C/ZVglVNu83rpTWR1zJGcxV0R2Ey9TtuyQSRyKFYcwsufdx8QsGzZCYn894RQmPMo26N9JTZ1Gb5Tg0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VOm8pMpa5Bka66uDqL5sD0MCOA2EPyM+VaIroFW6VNc=;
+ b=Gh+TI8JeJ0TF+Xq/IFr+6IUdsaNtCC1fNE6rDr9Rc3stkQ7/ag8B/cw+489RxWVpxmkEMLakHU0Qaf6+z0jIXwkDn4RqEqLreaB1GWVzwSNME0OXVgDe5lZOat0nomIe2uUtMgOa/XxzvzTtS4iLVw4IvnUkk+4tSW10a97YnX4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by VI1PR04MB3198.eurprd04.prod.outlook.com (2603:10a6:802:9::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Sat, 18 Dec
+ 2021 21:58:48 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::4c4c:f2b2:addb:841]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::4c4c:f2b2:addb:841%6]) with mapi id 15.20.4778.019; Sat, 18 Dec 2021
+ 21:58:48 +0000
+Date:   Sat, 18 Dec 2021 23:58:46 +0200
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [RESEND v4 10/10] dt-bindings: serial: fsl-lpuart: Add i.MX8DXL
+ compatible
+Message-ID: <Yb5ZlnEm3EYCD9h8@ryzen>
+References: <1639680494-23183-1-git-send-email-abel.vesa@nxp.com>
+ <1639680494-23183-11-git-send-email-abel.vesa@nxp.com>
+ <YbzB7mspRBonT9jJ@kroah.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbzB7mspRBonT9jJ@kroah.com>
+X-ClientProxiedBy: VI1PR08CA0176.eurprd08.prod.outlook.com
+ (2603:10a6:800:d1::30) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 1/3] i2c: bcm2835: Use platform_get_irq() to get the
- interrupt
-Content-Language: en-US
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211218165258.16716-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211218165258.16716-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f41ab1c2-e128-4fb4-7271-08d9c27191f3
+X-MS-TrafficTypeDiagnostic: VI1PR04MB3198:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR04MB31981D622FC57DB3483F7FE8F6799@VI1PR04MB3198.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: P3oG00hJU5FwDIg5oCQrfmf9rFvf0yipE1fxPQNxedmdZFFy1U/A+eG7t6RifGv/1mxluxZjY2ojKqVW+gTmEbcAa0Fa4XuYOmaaxop6vVcWAhw80UyhFk7gDM2b+Qmie/uK8IbEIkBKFi0mk/mAhx1kCbGREaTKpTeEllvme6iIU6u0ARReXEp5x4YE9hqMO+blGENZUpZoy7W2YKNBJKL3JadSMDdG7OzNjNjSoP57YGb46cuz/6Sv/KzReHW0QRBtsQBgD6u5rjtk6j7Sl7v2DZeNOWugPAFGFhcVfrtOIUKTrNcPK2XeBCjVNFQL9cEp+OR3HtvB87x2nSIjuHzZZimyl5r8ZcgI7QebKzahggH1e+QJheYlgK/dKcPQa/7nbh+cRQG5BEGKXEOHQVcDslbqbGzK/wRuo/kiDV6pw9vBuMUcF8o34u+xfzX6GuRMWNTRRoiUqXTbeQ4Gog64qf41Fq1M7TVQfYsdYvh8Sy3+5teEiyNTewVnWWDYO0OyyPVA3nlbBK2IMXzJNxO/otnlAC4H3Yn2NmtbHpi49YWmZM1hFIUtNNDwcqSGQshehXUAP9UPc953MOntJAwrvMYG1tdzDHta5KQEvknXYtw4IjiGZ9tz5bPUz5r9nCsUfO3212gp0qLEKQ+I+EDGx6OycN9BtKT3tKJMyna1wLxAHFPfW/9RcAiXaeytXH1pz66jwe0PLZhxjIefEg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(38100700002)(4326008)(38350700002)(8676002)(2906002)(5660300002)(186003)(7416002)(44832011)(8936002)(52116002)(316002)(53546011)(54906003)(6506007)(86362001)(9686003)(6512007)(6916009)(26005)(66476007)(33716001)(66556008)(508600001)(83380400001)(66946007)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s/HlxPNNLdkKvE5853DMGv/tlhDmv1iBHdl2ppI63CsfO5/UBrlThvGhlNBc?=
+ =?us-ascii?Q?ECnadbWkHo66Ip11pBualYzcEJwwnOKkUmwVWRnA9gq78wBGH/rPDqBaY6nn?=
+ =?us-ascii?Q?H7xS+P5f8eExtWznJfk0hIbf5waG+3rarDeyGJJGysqzIQe5G0A3fvTj0qwY?=
+ =?us-ascii?Q?MK4IREzVe45IHoKpyNrd/9QooP1uKUxNC75xEg7VGpTv3krBQBAH2MKrU6G7?=
+ =?us-ascii?Q?JinSp/1BjGcjBKutsQNCR5De5vewrcM5CEqQOMNzgWtqwekSDW088S3rb/uj?=
+ =?us-ascii?Q?3R3jYrVr0K7UmSKwM9MJW/XnM/NFe0vad19mpSW0vJ/QaF6SU7wZIliXBL5e?=
+ =?us-ascii?Q?8MeYb2syXPmOAalO6OJNbsPMDP4e/LDCHmV93WmggxuNrYkWdf0TO1moPRkM?=
+ =?us-ascii?Q?qyTE2VkFb4JUeBYK3DfoAAFq3bdPEEWR7+Ijy7LuwZ6qei6dSaKHZDQsD3mI?=
+ =?us-ascii?Q?9+oKSKKzVJxmilNUkY+2An3lecry+EC3YQWckbZrl4r8BjphZctGvcaqSttB?=
+ =?us-ascii?Q?u97fEpuzn2NnMQ98oRj7PuSldENAH5HyWGnMbOyTapX++MWvdkIjmFqhW6em?=
+ =?us-ascii?Q?QrsP3/i6dpwiOS/9jAo4EvKI883Bxf/Q6Z9DudCRZsT7FzmyDL1XFwRfTS03?=
+ =?us-ascii?Q?gjQdAL/S1LvyBPoZ2YfOx3GNF8FfB8Yyw1yLFFPVbWUdkSAzUEPK6EVewJuK?=
+ =?us-ascii?Q?r6r5EWmmcqD2c1fmIC/HlGSyzNDbmS5IsglkRNDLcvNpPhAKEspaBj3AlYKN?=
+ =?us-ascii?Q?X3lJEMWSpS1ZNhOzMnJr8WxIiFoEeioHVAbl4tFddnr0CsE6QkHZB30PhvZ2?=
+ =?us-ascii?Q?xEfuYqNv3nq/C3lVsvls1L54lg6zBekAP2IHKBXFStRq/VVXJauVPCdMwDDn?=
+ =?us-ascii?Q?UmghefkdTznDVVwqwQeVJWHZh/aTUYyTZxpR8ul3+ybTrfyvFruWxWNBAKFy?=
+ =?us-ascii?Q?Akdm7xKzh8gJzmX7PJVRtUDP16t+ACiRM9/APp1UOvBg1Kb4LnOve7YnpjJR?=
+ =?us-ascii?Q?bvP8L5zi2+A82pgmg0e7IUJUGOVBjwU3bHRk+G0s3fJwQufICgvt+3/doOXX?=
+ =?us-ascii?Q?2118NLlcVUtUgCs5kEzEPNOdbYu4tc7sG479t1m8Fz1qyfWQrrWCZ9qZ32kg?=
+ =?us-ascii?Q?0ZcAn8LTGqDNb6S69p9IrcL8OLWxy/3ICfNzVyXU5jySdtCRCcQ0kR/a3QAL?=
+ =?us-ascii?Q?yRpJfRnwbwub3/ps0dpMHbziC1rv3lEpMmUfdgpneRiKa5Fc1GZIr0yKs73j?=
+ =?us-ascii?Q?74IRNfMuGR7HC0iSekZHTjWwPv5uD5GqcaabQjMvouGnkgXvE/OS8KVqQczc?=
+ =?us-ascii?Q?wtUVx1xa7+iIKNtdVHfACYYaUb3WCjhhPgUnUuHJVRiNqT6J3o0UHGDIg0ZN?=
+ =?us-ascii?Q?+pU/8i/hWyim64LJEA9Mps1Hapk1jabaVp+0ORl/7RcKtXqoNa4vu5DxPh7e?=
+ =?us-ascii?Q?r8w5muHKAPFtpPe0HLMekfoUMxPe0PZBBwQdnuqYttANk8RpNV3ssiI0pwYp?=
+ =?us-ascii?Q?/c8qYXQ1ZvVbymsPkTJlfwiUU3kpsWFoVedcbJdyaeoEdz5swpCXnxLbkI4i?=
+ =?us-ascii?Q?0zApHL9TRt9v2qp3+EoEenRWauRLh/xaB/RMyUqHjeSK6ezgbce8AscGl09x?=
+ =?us-ascii?Q?PvZTJtyLb4xpdvhO+iJ7DWU=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f41ab1c2-e128-4fb4-7271-08d9c27191f3
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2021 21:58:48.6848
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +PvJ5K5euzLHiXNFhB1Ewq4cJ8FHyprbjfyIKbXToTh2x9NI7uqCKUMKSTH4MrKMUJG/z8fI0SyjhxNPaj7KTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3198
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-
-On 12/18/2021 8:52 AM, Lad Prabhakar wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
+On 21-12-17 17:59:26, Greg Kroah-Hartman wrote:
+> On Thu, Dec 16, 2021 at 08:48:14PM +0200, Abel Vesa wrote:
+> > Add i.MX8DXL lpuart compatible to the bindings documentation.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> > ---
+> >  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> > index fa23c60a01d0..ee37aa125c86 100644
+> > --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> > +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> > @@ -29,6 +29,10 @@ properties:
+> >        - items:
+> >            - const: fsl,imx8qm-lpuart
+> >            - const: fsl,imx8qxp-lpuart
+> > +      - items:
+> > +          - const: fsl,imx8dxl-lpuart
+> > +          - const: fsl,imx8qxp-lpuart
+> > +          - const: fsl,imx7ulp-lpuart
 > 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Why is "- items:" listed twice here?
 
-Just one nit below:
-> ---
->   drivers/i2c/busses/i2c-bcm2835.c | 11 ++++-------
->   1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-> index 37443edbf754..d63dec5f3cb1 100644
-> --- a/drivers/i2c/busses/i2c-bcm2835.c
-> +++ b/drivers/i2c/busses/i2c-bcm2835.c
-> @@ -402,7 +402,7 @@ static const struct i2c_adapter_quirks bcm2835_i2c_quirks = {
->   static int bcm2835_i2c_probe(struct platform_device *pdev)
->   {
->   	struct bcm2835_i2c_dev *i2c_dev;
-> -	struct resource *mem, *irq;
-> +	struct resource *mem;
->   	int ret;
->   	struct i2c_adapter *adap;
->   	struct clk *mclk;
-> @@ -452,12 +452,9 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> -	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> -	if (!irq) {
-> -		dev_err(&pdev->dev, "No IRQ resource\n");
-> -		return -ENODEV;
-> -	}
-> -	i2c_dev->irq = irq->start;
-> +	i2c_dev->irq = platform_get_irq(pdev, 0);
-> +	if (i2c_dev->irq <= 0)
-> +		return i2c_dev->irq ? i2c_dev->irq : -ENXIO;
+There are actually 3 "- items:" and there is a "oneOf:" 
+that encloses all of these.
 
-Why not just check for a negative return code and propagate it as is?
--- 
-Florian
+Unfortunately, there are special cases within the driver
+that forces the devicetree nodes to have a different list of
+compatibles for almost each SoC.
+
+> 
+> thanks,
+> 
+> greg k-h
