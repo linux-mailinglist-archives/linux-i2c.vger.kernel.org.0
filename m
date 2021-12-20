@@ -2,147 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8821247B243
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Dec 2021 18:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC0247B301
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Dec 2021 19:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbhLTRlO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 20 Dec 2021 12:41:14 -0500
-Received: from mail-mw2nam12on2062.outbound.protection.outlook.com ([40.107.244.62]:60192
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229633AbhLTRlK (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 20 Dec 2021 12:41:10 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K/f2kGQjY1wzg6fLxe3X9oOLlWXmbXD1qf8Vi9Gg0urwuxTcvOKHfhTtWZOjI27rAl+YXez8/AaLpdHShYO7sD35xnZslotECEBq0JyKb9YuRfp9s9ElnDLpuCZhTPDRctU3oFF1qIB10XLy1y/gWHjl8LVxGjxY9kI88RFrPG9OKGnarR4g51oJqvf2k/C3BpqOYFkQC+ZgFfqN3uM/3jhoz52fHB37dRs8zZUfVylgyrhamFoDqa4RyTNJrS6yW5EbSssapmJYDbCVT6dYKT37RFheOqQI/akwsWYySBwiuOCm1cjTEMlKY1eE1TXcI0TYxNvqShKI1j7S0S45Iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GNzyOS/VubMVp9gDQn5Hq11VBSPZhVFtS7L6OGzttyE=;
- b=Zb8tjCHV1sLBELpZkhck9ZsM9bB2uiYUVaJLZTFf/uShd8ZIIybgbPUAsgeWm9MCj0yOjpOk+Rkeo/RQ20LkYEd1dj1DfNhO0q/JYgy5gaGAoEkYSGPWVlH/7KUlXgyIogbRF34UuDTCUPeF2CKgSfThn0Cj20ZYgyqCPbLisj/23agFYEfpOI6mSnpgjc7c/EUvubxSGnIvUB5qNmuurfaBcVXSgE9+baDp9Wx1AV/22PKqOWCtXI1M1YVcZTFdlBCH8YQO3cpWG/Yr19RqChzw12P+XyO0nL+Z3F+DtkUt4ClKBUcXO/I/f5hDfJwn3V6b1b8VmwjlM9EQfn1g+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
- dkim=pass header.d=vpitech.com; arc=none
+        id S239980AbhLTSlL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 20 Dec 2021 13:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236275AbhLTSlK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 20 Dec 2021 13:41:10 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C5BC061574
+        for <linux-i2c@vger.kernel.org>; Mon, 20 Dec 2021 10:41:10 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id i63so17437217lji.3
+        for <linux-i2c@vger.kernel.org>; Mon, 20 Dec 2021 10:41:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GNzyOS/VubMVp9gDQn5Hq11VBSPZhVFtS7L6OGzttyE=;
- b=gf5QAUM4pQI4byse+hBR8ALcNeNG5TXBMO4aB01YGyO2lWnbqUh8azhwH4yOF/QeTcwNE2AT/+Z1fr9DspKeIONlMmCn9bKfHFncLxBBoO5ITdtAihcGYDYk/MdeaKAFxZsRRLy7qQMo7F5bviYttQ/7FxsaRN8VBtSz9PkX6rI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vpitech.com;
-Received: from MW2PR07MB3980.namprd07.prod.outlook.com (2603:10b6:907:a::32)
- by MW4PR07MB8668.namprd07.prod.outlook.com (2603:10b6:303:105::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.14; Mon, 20 Dec
- 2021 17:41:09 +0000
-Received: from MW2PR07MB3980.namprd07.prod.outlook.com
- ([fe80::b999:3294:6433:4b13]) by MW2PR07MB3980.namprd07.prod.outlook.com
- ([fe80::b999:3294:6433:4b13%5]) with mapi id 15.20.4801.020; Mon, 20 Dec 2021
- 17:41:09 +0000
-Date:   Mon, 20 Dec 2021 10:41:06 -0700
-From:   Alex Henrie <alexh@vpitech.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     linux-i2c@vger.kernel.org, wsa@kernel.org, jdelvare@suse.de,
-        alexhenrie24@gmail.com
-Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
-Message-Id: <20211220104106.e4c0e3d95145cc2f2a91c3d3@vpitech.com>
-In-Reply-To: <7fb63895-e8fb-c9c3-c5da-f922ae0c69fd@marcan.st>
-References: <20211216173110.82ae177385322c0992d00126@vpitech.com>
-        <a5da4d27-f2cc-9018-5266-9f40d74818ad@marcan.st>
-        <20211217195128.49285f55facfe061655a6279@vpitech.com>
-        <7fb63895-e8fb-c9c3-c5da-f922ae0c69fd@marcan.st>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR03CA0089.namprd03.prod.outlook.com
- (2603:10b6:303:b6::34) To MW2PR07MB3980.namprd07.prod.outlook.com
- (2603:10b6:907:a::32)
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=pLZggBUklJ+pgTfhLFwZMRngMrWq4IOaW/gfR4GGMZI=;
+        b=Xt/ddBgP3zAZ1DRJJTPLfPGw5jUnfwa6JYku8nliq77gYfBJ2t/OimnnnhVgLeKG3Z
+         qzu9+vsa5wmlcfLnsWGEwuuiGnbHtTiW/LELP0CipFDI9FIrA201c5kSEArx+EfN0G4D
+         HiCmPdb49/3CgLk3gRzi/dqGnSza57rvOQFl0NJpu4JUnoyKLxlhesn3o4Qoi+Q84Cbu
+         GWFe7pCxAsk2lk3it8mfQal9iGyUOMB4paWzw/jXzOSQnBMGaxVO+yz8Sq2wEPVRT+Yc
+         oFkBzLY8si3C+aYZQiy0W/jHZYALSnIcLqhh9BaWazhQO3NXVweGbzawCVVjqVxMj+Oq
+         vrZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=pLZggBUklJ+pgTfhLFwZMRngMrWq4IOaW/gfR4GGMZI=;
+        b=e0XqoWIOqHtzqq1Zex0P+S0mAVHrjgKX/N4g2Jx0Y2EJSjU/IR99CJkkotj4Soj/gq
+         B8Y839/ZLeKjvnOCe+LAKVlyk1I3OCm0UqQEO1fd4YEempeWJrXZ0psQEstjiNsj5eeS
+         e7XPYZ/nVWgAcjT4u4hHA2Fct8/msAmGyEXky8kl5NuYcjB/Z77jywreH+64zf9+6rfp
+         uyWL20XGcNFNjNmtCXv4yJAEi1SPReEQc3CYZH5P4ZTlRI4+qwKRoL9OpAGJmyxQojYf
+         N+LS0lqgnacdl5quEaHFRqbidBDORwOCe1U55tOpdTCKTKoGuAizycCWpITC9tLmk/ds
+         AaDg==
+X-Gm-Message-State: AOAM532SsOjBMlkHHIUffMaj9Wk988iIZL5lzSgvZb3VpOoG/1NK1y8/
+        fv4F+3hr0/UuUNW0/ffhfAsKeq8hbJuzMlsQfXE=
+X-Google-Smtp-Source: ABdhPJxytNhEK2iazDGfE5z18kOg0UjEZ002xJcF0+Cq3QTPMOY5vGbUKNGxpPF9N/TTNouBX+AiyFUmkXEMCeAITIw=
+X-Received: by 2002:a2e:a365:: with SMTP id i5mr15683532ljn.335.1640025668536;
+ Mon, 20 Dec 2021 10:41:08 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 29f2b6b1-d141-4a3a-6b65-08d9c3dfe800
-X-MS-TrafficTypeDiagnostic: MW4PR07MB8668:EE_
-X-Microsoft-Antispam-PRVS: <MW4PR07MB86684A19271DB63ADF39AF1EB87B9@MW4PR07MB8668.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EPPflOuFwWbn3oRzIqqlACC2Np0zuxHEY93LNibI0pFliLAAO4VxEptxbcvnle1aZ0X+6Cuaad0iX+Np6Z+wF4ZIQgg93iY3exEmIfdHgAa+jTK497Kbnu9/3cNF9mVNHmhSWuiz1VjpTYjBQjgmljlEs6qSzwy7w32DKyF7d7xdW2t7MZZsdZSKX0qiyiAmPM0WaMua24yFRy0mYe96Hc1FVlJTa03f1btqDMIaI0S5AqL+NGhTC/MQh8LnIf2+tCBsNIbRakEnF4yS7oi5rPWMC+qfSJhbUStlKjznu9esVHPH/5Q/HI1t/rBWQrYbsaXT2x39YQ5KQAx4awwGNwvdzVIEwuLL2O2kQ7Y7sXgm6eW5hOwYNrbhz6yd+Eci4BUCaNTUAYlfyJp1vrPxoqzYqZ97wMqZ0TGoQIZwanPLFy3rC2/1YpdUkj2F3VcQ49PSqtaEc2jsWbO0YJ1e0YWIJ21a8juLSEdwb5KFznRwYaF4pcM/b/JkaY5MlgE3tw3rJO+TDhLxsSJw+tWhPoFv09FuPgOAhC4AK0GE1qybQM+4ttbSSHWniROAkF/nP/30c3PNGLw5GsX5vrj4oR5lwKWCNj57s4cLeJs8NErnA7hIDGMS4RZ4rNGg4fCGSWNOo7mopA6VQaa/RETGM6ilEdJqaw6QAibTnhfCcUBz5qN1RhN4Y7BnvfAwSRAivcKvpPp+AOCvEOuCQzBKdg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR07MB3980.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(396003)(39830400003)(346002)(376002)(38350700002)(6666004)(6486002)(316002)(6512007)(83380400001)(38100700002)(2616005)(1076003)(8936002)(6506007)(6916009)(86362001)(36756003)(52116002)(8676002)(66556008)(66476007)(5660300002)(508600001)(4326008)(2906002)(26005)(186003)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DsiAhTHXLrS4gKAAw5OMGD9HqvVhqm9ylwZcb7sxpvWmWs594XdXQY7HEQuU?=
- =?us-ascii?Q?5xlE4EifjE1vELrEuoQAfJa2+qtvgvF4dZCQoCJsG14hJsCWd4H5b+37u99M?=
- =?us-ascii?Q?+T9MuXcp8ctVK2TXJIbKxoAVMOTLAyShOL4Od+V9VwBlGDj1FYhX3RKBlOva?=
- =?us-ascii?Q?8iMwBa/dBax8T9S01KEXXRLZeQAboFZ6zg6x3crVN+6U5yXd5lvBIEBBj1WH?=
- =?us-ascii?Q?pOZ0nbDcJzv3ShCsBYPB43DbsrUODLvwT5qZA8Gfd0PgUpnY7Acyn60oy/1C?=
- =?us-ascii?Q?jCpdoYRHZMY4Q0f29M/MHwNa5Zu9xXAhqePtA3xeJDDMZtH4xagjAA0gU8c+?=
- =?us-ascii?Q?AGzPtM+okpeqUyg7R5kXvfNVk0+zP56FPLpJiDjoY7IS6h0CqJ9V1M5OP/J1?=
- =?us-ascii?Q?bGmC6dQ7HoZBWZsHudtVuI4UJbJuKpBvEhKypIvVTVmDHTlkygVCaE8MTAlM?=
- =?us-ascii?Q?NXMm1IaRNWBaP8zknnRuhvnRu3GBWliexJFIUeveZZ+qsFOPMiK8f5Amhjs6?=
- =?us-ascii?Q?h3+C/Wpkpv44PraB1A3EjePSovyAuRPNDDq/wjRcoAfuV91+U893jDlmRM5Q?=
- =?us-ascii?Q?X73xEbOddCp1UZd/TOfhNJLRsYl7H3PJAllcc596ussGWPFg1ueeir4F7z8n?=
- =?us-ascii?Q?Dfu5S8sKQw8Qi/MWoGoo/Jy1yHUwH5I/Ij9Bg/VhxYePuOJdRnIPgJob39Kq?=
- =?us-ascii?Q?acbRugp9PpGed+HHS1KnGuGgO8q4wB2CYpeie3LZ1xEjA3fbhcuy/i6R3wEr?=
- =?us-ascii?Q?1h8gGNXes7QnWha/ekguk9I0adw592FuEm+O7nzgTwFyOviYHph/OuAdSrQQ?=
- =?us-ascii?Q?ge5JdLEQyozX3e+juCJR/ucH+qnGNi4UmFIu3lkiwHVOlZ9r8jyaXioKEgXW?=
- =?us-ascii?Q?R29LsuAa6a4qcL24TUnZHGTaXELkeZaRJ0h65hhrWmt+sZBiC2Z/5n5Yi/6i?=
- =?us-ascii?Q?XPuAj4iNH2W7zsBBO5ABvhvSn4IOSZ+/QIygMYVA8kNBHyYW3xm6dcqbMceX?=
- =?us-ascii?Q?748QiYg1V56NFVmgyAiu6fpXTlgZnQOoS6vMvCVhAFKKljd2iZTwlBKLBhLh?=
- =?us-ascii?Q?qvRCFTZbOizHyp4oLzJKPwmXjLj7FWVMPSSvVyGpxFOB/D7+brfPO2RjJ7p7?=
- =?us-ascii?Q?pTYg1Lv4lGyR84OPIkxi/7QHy/JqiNFB8kVd3Qg6V93aMcOg8rSiORCQQYvQ?=
- =?us-ascii?Q?gMB91cwWKvd/mx3ObZ9f5zJsKVYm8R6idiNoqMztDVWU5FwMIzN8UKsTkF74?=
- =?us-ascii?Q?cvAxOD/pfnkhix2Z2TL5xh1VDB9MJgZuP7cIqgx2qwmv48wN3oIIs2NpD2zr?=
- =?us-ascii?Q?4cVgpb4vIBPjye3JUgEXK7yp7E9neetUr7dBMO0DSAvEaI8GvytvQEM9E3tm?=
- =?us-ascii?Q?F99FsfpPfSYCm0XiyAnbc2+qwM/8EFEZoQWERroGo/jBCTTaO9sqiaQOumaA?=
- =?us-ascii?Q?a0emuIuFOT3zavW7XPNEIgww0cMxsoQbH5BIHDU9TiuLYSh7nsniFVvCQvV3?=
- =?us-ascii?Q?Jl7EhQG87bE3a/x7Jiaud1trU7KfHYxFzex+gBljUkYl3eah4FVYSLV6nvVp?=
- =?us-ascii?Q?lhXyRTPJbIqXW8mFgkwInnS+gXo5XHXmoUMB6WtCtwFq2hFM+et4kpZJkBco?=
- =?us-ascii?Q?bShDkXC6ANNUbQ4BElUvmK4=3D?=
-X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29f2b6b1-d141-4a3a-6b65-08d9c3dfe800
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR07MB3980.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 17:41:09.0538
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zx5kKAeeXdBLXZQ+l5Hpy06T/u/frdeWQ/CcoToRN4gO+hhJBdjewhk/e2pFddo9I9btSxawxoqdZsqfNdEaCQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR07MB8668
+Received: by 2002:a05:6520:4448:b0:150:9bb9:b9f6 with HTTP; Mon, 20 Dec 2021
+ 10:41:07 -0800 (PST)
+Reply-To: uchennailobitenone@gmail.com
+From:   uhenna <tochiuju010@gmail.com>
+Date:   Mon, 20 Dec 2021 10:41:07 -0800
+Message-ID: <CA+CavF+PPSd31bD6iz-Xvob=J4pYwWDLESe25sWW_bpt=MLO4g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, 18 Dec 2021 12:39:11 +0900
-Hector Martin <marcan@marcan.st> wrote:
+Nech je s vami V=C5=A1emoh=C3=BAci P=C3=A1n....
+Som VDOVA PO P=C3=81NOM Davidovi HOLLANDOVI, M=C3=81M 59 .ROKOV. Moje meno =
+je
+Jozef=C3=ADna HOLLANDOV=C3=81. Som vydat=C3=A1 za zosnul=C3=A9ho p=C3=A1na =
+Davida HOLLANDA,
+ktor=C3=BD pracoval
+dev=C3=A4=C5=A5 rokov na franc=C3=BAzskom ve=C4=BEvyslanectve a tu v Lome-T=
+ogo v z=C3=A1padnej Afrike
+predt=C3=BDm, ako zomrel v
+rok 2019.
 
-> On 18/12/2021 11.51, Alex Henrie wrote:
-> > On Fri, 17 Dec 2021 16:41:05 +0900
-> > Hector Martin <marcan@marcan.st> wrote:
-> > 
-> >> On 17/12/2021 09.31, Alex Henrie wrote:
-> >>> I am having a similar problem, but unfortunately this patch doesn't
-> >>> work for me (I get the error "BIOS uses SMBus unsafely"). Would it be
-> >>> acceptable to add a module parameter to allow access to the SMBus, even
-> >>> if the BIOS is using it? I realize that this is not a good idea in
-> >>> general, but I believe it is safe in my particular case, and I don't
-> >>> see any other way to solve my problem.
-> >>
-> >> How is this safe in your case? If the BIOS is using SMBus without
-> >> locking it, and may do so at any time, then there's no way to safely use
-> >> it from Linux.
-> > 
-> > The BIOS appears to access the SMBus during the first few minutes after
-> > boot, and then it stops using it. So "safe" may not be the right word,
-> > but in my case, it seems to work OK to use the SMBus as long as the
-> > uptime is greater than a few minutes.
-> 
-> Linux will probe the SMBus on startup, so that still seems like a rather
-> fragile situation. You'd have to blacklist the module and load it
-> separately a few minutes after boot, or something like that...
+Boli ste vybran=C3=AD, aby ste dostali finan=C4=8Dn=C3=BD dar m=C3=B4jho zo=
+snul=C3=A9ho man=C5=BEela
+ktor=C3=BD financuje 5,7 000 000,00 dol=C3=A1rov (p=C3=A4=C5=A5 mili=C3=B3n=
+ov sedemstotis=C3=ADc
+americk=C3=BDch dol=C3=A1rov) na pomoc chudobn=C3=BDm a sirotincom prostred=
+n=C3=ADctvom v=C3=A1=C5=A1ho
+=C3=BAprimn=C3=BA pomoc pred mojou smr=C5=A5ou. Dlhodobo trp=C3=ADm rakovin=
+ou
+Prsia, zo v=C5=A1etk=C3=BDch indik=C3=A1ci=C3=AD sa m=C3=B4j stav naozaj zh=
+or=C5=A1uje
+a je =C3=BAplne zrejm=C3=A9, =C5=BEe by som u=C5=BE =C4=8Falej ne=C5=BEil
+m=C3=B4jmu lek=C3=A1rovi, preto=C5=BEe rakovina sa dostala do ve=C4=BEmi zl=
+=C3=A9ho =C5=A1t=C3=A1dia, =C5=BEe nie
+d=C3=BAfam, =C5=BEe budem op=C3=A4=C5=A5 =C5=BEivou osobou. V=C5=A1etko, =
+=C4=8Do od teba potrebujem, je tvoje
+=C3=BAprimnos=C5=A5 pou=C5=BEi=C5=A5 tieto prostriedky na realiz=C3=A1ciu t=
+ohto projektu tak,
+ako chcem a potrebujem
+va=C5=A1e inform=C3=A1cie o tom, kam bude moja banka posiela=C5=A5 prostrie=
+dky,
 
-It's awful, I agree. I was just hoping to find a slightly less awful
-solution than patching the kernel to remove the BIOS access check,
-which is what I currently have to do. It seems to me that if multiple
-people are in this situation, it might make sense to add a module
-parameter to disable the check.
+ako napr=C3=ADklad:
+Meno pr=C3=ADjemcu: _ Adresa: _ Telef=C3=B3n
+=C4=8D=C3=ADslo: _ Krajina: _
 
--Alex
+Pros=C3=ADm, neur=C3=A1=C5=BEajte sa t=C3=BDm, ak=C3=BDm sp=C3=B4sobom som =
+k v=C3=A1m pri=C5=A1iel ako a
+cudzinec, aby som to urobil, je to jedin=C3=BD sp=C3=B4sob, ako sa k tebe p=
+otom dosta=C5=A5
+prejden=C3=ADm va=C5=A1ich kontaktov ID. D=C3=A1m v=C3=A1m kontakty na
+breh. Pre legitimitu s poveren=C3=ADm, ktor=C3=A9 zalo=C5=BE=C3=AD
+vy ako m=C3=B4j menovan=C3=BD pr=C3=ADjemca t=C3=BDchto pe=C5=88az=C3=AD.
+
+=C4=8Cak=C3=A1m na tvoju odpove=C4=8F.
+Od sestry Josephine HOLLAND.
+
+Mali by ste ma kontaktova=C5=A5 prostredn=C3=ADctvom mojej s=C3=BAkromnej e=
+-mailovej adresy:
+
+mrsjosephineoneholland@gmail.com
