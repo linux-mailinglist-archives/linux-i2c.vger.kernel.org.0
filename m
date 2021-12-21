@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDB047C5B5
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Dec 2021 19:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8E347C5C4
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Dec 2021 19:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240863AbhLUSH2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Dec 2021 13:07:28 -0500
-Received: from mga02.intel.com ([134.134.136.20]:28871 "EHLO mga02.intel.com"
+        id S236948AbhLUSHh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Dec 2021 13:07:37 -0500
+Received: from mga17.intel.com ([192.55.52.151]:27067 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236894AbhLUSH2 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:07:28 -0500
+        id S236894AbhLUSHf (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 21 Dec 2021 13:07:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640110048; x=1671646048;
+  t=1640110055; x=1671646055;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Nwz96mDAYB2gmKI8bVpsfwylETs2xaB50GhG3S0F5YA=;
-  b=TaHXYCwoyV9T7oVvznTMZJMN0s0cUTUv4393UyAxRV16ichWvO/QrNCW
-   Ub0LenJY06u+ld2oJAWRjyBY+BKjx5IYNo5uuhDu9AEZ8o7GzEF74m7N9
-   EqimZZ4qg5/rRlzbjWAqC/AdMgrQI4UIyuAm1Vlx73zDxnrXNDACkNKrc
-   DbldzHGo/ddL8U5tnzdUmRnVk8LO2/L8wmoVTS6zKceN82JvCbfffDoXP
-   IRUO1WqkBqGFKeUSg1wpNBa2xjredC+3d7JdH3yoP6Wll/Jd28KoPYtid
-   IGwvjMlxlyx2jbR20blELVYg/Gi4PjsqguU8KuxVRex+S0NJ0FWgtpbJp
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227751330"
+  bh=odfpjb40813bEsnO4F0m5yfmvDKHC6/Q8vBwdpPGyIo=;
+  b=kzFTjdSqBtg8sLNxp/IjrwmtHSXz4EiVI32lOgZed1UXKQOv/RTBB3dV
+   nCeENK2U7cYdYJEIdU05jEk+yyDfMvG5Uryjtw6ppfBqmXtA3ddjOvv+9
+   Wp3Jgf3djXoMtk0KKBNC+mrjmQQe7/doayhMwyIPdvP22w1wGUlZh2iih
+   gj/t5vpbUtEDAubOqSLwbP9TmSQy6gGlIBi9D/LG61FDAv4d6FkaVcgFG
+   vt1P9QsfIzqwOcaKOCEsFP9qhEm2iafBw46NQ7aMIQh/od4ElamnAMgA6
+   RZ3rk7ZxfWeaHADYyN5ak62ZstLzmWrJvgbNCpub8bwQ+BL2p1QcUXf3h
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="221132966"
 X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="227751330"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 09:41:06 -0800
+   d="scan'208";a="221132966"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 09:41:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="521805190"
+   d="scan'208";a="684739674"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Dec 2021 09:41:01 -0800
+  by orsmga005.jf.intel.com with ESMTP; 21 Dec 2021 09:41:01 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id B5A8F331; Tue, 21 Dec 2021 19:41:09 +0200 (EET)
+        id BF6E136F; Tue, 21 Dec 2021 19:41:09 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
         Heiner Kallweit <hkallweit1@gmail.com>,
@@ -53,11 +53,10 @@ To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
 Cc:     Jean Delvare <jdelvare@suse.com>, Peter Tyser <ptyser@xes-inc.com>,
         Andy Shevchenko <andy@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: [PATCH v2 4/8] pinctrl: intel: Check against matching data instead of ACPI companion
-Date:   Tue, 21 Dec 2021 19:39:41 +0200
-Message-Id: <20211221173945.53674-4-andriy.shevchenko@linux.intel.com>
+        Mark Gross <markgross@kernel.org>
+Subject: [PATCH v2 5/8] mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
+Date:   Tue, 21 Dec 2021 19:39:42 +0200
+Message-Id: <20211221173945.53674-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211221173945.53674-1-andriy.shevchenko@linux.intel.com>
 References: <20211221173945.53674-1-andriy.shevchenko@linux.intel.com>
@@ -67,55 +66,61 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In some cases we may get a platform device that has ACPI companion
-which is different to the pin control described in the ACPI tables.
-This is primarily happens when device is instantiated by board file.
+Factor out duplicate code to lpc_ich_enable_spi_write() helper function.
 
-In order to allow this device being enumerated, refactor
-intel_pinctrl_get_soc_data() to check the matching data instead of
-ACPI companion.
-
-Reported-by: Henning Schild <henning.schild@siemens.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/pinctrl/intel/pinctrl-intel.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/mfd/lpc_ich.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index 85750974d182..7d8a7e7b0aef 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -1598,16 +1598,14 @@ EXPORT_SYMBOL_GPL(intel_pinctrl_probe_by_uid);
+diff --git a/drivers/mfd/lpc_ich.c b/drivers/mfd/lpc_ich.c
+index f10e53187f67..13d8c64318e6 100644
+--- a/drivers/mfd/lpc_ich.c
++++ b/drivers/mfd/lpc_ich.c
+@@ -1084,12 +1084,21 @@ static int lpc_ich_init_wdt(struct pci_dev *dev)
+ 	return ret;
+ }
  
- const struct intel_pinctrl_soc_data *intel_pinctrl_get_soc_data(struct platform_device *pdev)
++static void lpc_ich_test_spi_write(struct pci_dev *dev, unsigned int devfn,
++				   struct intel_spi_boardinfo *info)
++{
++	u32 bcr;
++
++	pci_bus_read_config_dword(dev->bus, devfn, BCR, &bcr);
++	info->writeable = !!(bcr & BCR_WPD);
++}
++
+ static int lpc_ich_init_spi(struct pci_dev *dev)
  {
-+	const struct intel_pinctrl_soc_data * const *table;
- 	const struct intel_pinctrl_soc_data *data = NULL;
--	const struct intel_pinctrl_soc_data **table;
--	struct acpi_device *adev;
--	unsigned int i;
+ 	struct lpc_ich_priv *priv = pci_get_drvdata(dev);
+ 	struct resource *res = &intel_spi_res[0];
+ 	struct intel_spi_boardinfo *info;
+-	u32 spi_base, rcba, bcr;
++	u32 spi_base, rcba;
  
--	adev = ACPI_COMPANION(&pdev->dev);
--	if (adev) {
--		const void *match = device_get_match_data(&pdev->dev);
-+	table = device_get_match_data(&pdev->dev);
-+	if (table) {
-+		struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-+		unsigned int i;
+ 	info = devm_kzalloc(&dev->dev, sizeof(*info), GFP_KERNEL);
+ 	if (!info)
+@@ -1113,8 +1122,7 @@ static int lpc_ich_init_spi(struct pci_dev *dev)
+ 			res->start = spi_base + SPIBASE_LPT;
+ 			res->end = res->start + SPIBASE_LPT_SZ - 1;
  
--		table = (const struct intel_pinctrl_soc_data **)match;
- 		for (i = 0; table[i]; i++) {
- 			if (!strcmp(adev->pnp.unique_id, table[i]->uid)) {
- 				data = table[i];
-@@ -1621,7 +1619,7 @@ const struct intel_pinctrl_soc_data *intel_pinctrl_get_soc_data(struct platform_
- 		if (!id)
- 			return ERR_PTR(-ENODEV);
+-			pci_read_config_dword(dev, BCR, &bcr);
+-			info->writeable = !!(bcr & BCR_WPD);
++			lpc_ich_test_spi_write(dev, dev->devfn, info);
+ 		}
+ 		break;
  
--		table = (const struct intel_pinctrl_soc_data **)id->driver_data;
-+		table = (const struct intel_pinctrl_soc_data * const *)id->driver_data;
- 		data = table[pdev->id];
- 	}
+@@ -1135,8 +1143,7 @@ static int lpc_ich_init_spi(struct pci_dev *dev)
+ 			res->start = spi_base & 0xfffffff0;
+ 			res->end = res->start + SPIBASE_APL_SZ - 1;
  
+-			pci_bus_read_config_dword(bus, spi, BCR, &bcr);
+-			info->writeable = !!(bcr & BCR_WPD);
++			lpc_ich_test_spi_write(dev, spi, info);
+ 		}
+ 
+ 		pci_bus_write_config_byte(bus, p2sb, 0xe1, 0x1);
 -- 
 2.34.1
 
