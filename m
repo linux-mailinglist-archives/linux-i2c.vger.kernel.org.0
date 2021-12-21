@@ -2,126 +2,151 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FBA47C591
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Dec 2021 18:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A65AD47C675
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Dec 2021 19:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240761AbhLURzk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Dec 2021 12:55:40 -0500
-Received: from mail-qk1-f171.google.com ([209.85.222.171]:34778 "EHLO
-        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240752AbhLURzj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Dec 2021 12:55:39 -0500
-Received: by mail-qk1-f171.google.com with SMTP id t6so13346038qkg.1;
-        Tue, 21 Dec 2021 09:55:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4GSGA/qwtNXG0IPZ01RqeQiJyKL3VoAZk2c0sbKkobg=;
-        b=hlfjFvMtD79EiL/LGYq82Z1elOoAOubXKDaCJkEHPoftWwakQIsYns8HVhu/mnQPum
-         2k1ZiIHWFYJYRo1XuE7Ni9+1ToDmJbOMqtJ7gWazRPyS0o0OsE8mFT5ZBwB6WnAryTYt
-         0Aogzc2pbINGNJQavvaoc4eE1/WzLf4de6pG6YL8vIavMjiDgeRedqTlGlAu6zqlGrq0
-         SShn+4CUa0bAvoN/dCtNBwnxUdYSIqdBc1uEFiEuZISrUs/Py5e7HjRIDexdJxhEjwsm
-         cCDzeljhIj/Q8KnwpHOYIQeEhB1wFJx873LVBp1XCjR+mfph2ZMhX45IpiA4k23p3+Or
-         Q/Xg==
-X-Gm-Message-State: AOAM531pTbm2BROPCb0zP4FG6ljA96TPzvJtT390rerLdu1ti+w1gYAk
-        0xHaYFz1lF6FU/pEHWvjWQ==
-X-Google-Smtp-Source: ABdhPJz5vgBn1TjeZtoc2YYKvQ+HmcEPZTFsNL3qHHc8SbteC0W1UmfcNlqbGX3NnNYb5boB3sk4Pg==
-X-Received: by 2002:a05:620a:258e:: with SMTP id x14mr2824830qko.578.1640109338673;
-        Tue, 21 Dec 2021 09:55:38 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id bm35sm14659623qkb.86.2021.12.21.09.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 09:55:38 -0800 (PST)
-Received: (nullmailer pid 1495705 invoked by uid 1000);
-        Tue, 21 Dec 2021 17:55:33 -0000
-Date:   Tue, 21 Dec 2021 13:55:33 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        id S241275AbhLUSXc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 21 Dec 2021 13:23:32 -0500
+Received: from mga03.intel.com ([134.134.136.65]:44983 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241271AbhLUSXb (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 21 Dec 2021 13:23:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640111010; x=1671647010;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7+5zVsIZ/ITzZCzzI7K9rUDfhR9Qdw/EbbOne19K668=;
+  b=gVs8+190OiL8EQPn7U2X7kAYX2f7tb7ofUAqLUbl3h9SL7fE6vU/1Yv5
+   kGhegiWN8c4OWCZqAtbqQEdvxW3u/2/wFIoBtdWSCRKjlLv+j2PEqt7oc
+   eRq7z4S9hm3OySKM9JBdgG9RwN30Uy6VOywzrmw0qxU/IQLMmAD8Iyv85
+   fZGV2uhPtPeyRq4WfsSxZsnK8U7bpfxlsXuDc16NJ1OnWZtx/UiYvPydV
+   g7xNi1rC/0FPLFl0N3pwztd32X//F7o/gM0hu3XecDLAJIWPYS3nf7k3q
+   P6BdgAZhG/Kb25XdjQi3jWr4ivlX0ALzrr5fXpXNDFn0voAtkpAGmxAKa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240418045"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="240418045"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 10:15:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="548200384"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 21 Dec 2021 10:15:31 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D30F9190; Tue, 21 Dec 2021 20:15:39 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atish.patra@wdc.com
-Subject: Re: [PATCH v2 03/17] dt-bindings: soc/microchip: make
- systemcontroller a mfd
-Message-ID: <YcIVFZSqt/JSuk3J@robh.at.kernel.org>
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-4-conor.dooley@microchip.com>
+        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH v3 0/8] platform/x86: introduce p2sb_bar() helper
+Date:   Tue, 21 Dec 2021 20:15:18 +0200
+Message-Id: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217093325.30612-4-conor.dooley@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 09:33:11AM +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Make the system controller on the Polarfire SoC
-> a "simple,mfd" so that the services can be child
-> nodes of the system controller node.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../microchip,mpfs-sys-controller.yaml        | 33 +++++++++++++++++--
->  1 file changed, 30 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> index f699772fedf3..014cb44b8f31 100644
-> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> @@ -13,13 +13,34 @@ description: |
->    The PolarFire SoC system controller is communicated with via a mailbox.
->    This document describes the bindings for the client portion of that mailbox.
->  
-> -
->  properties:
->    mboxes:
->      maxItems: 1
->  
->    compatible:
-> -    const: microchip,mpfs-sys-controller
-> +    items:
-> +      - const: microchip,mpfs-sys-controller
-> +      - const: simple-mfd
+There are a few users and at least one more is coming that would
+like to utilize P2SB mechanism of hiding and unhiding a device from
+the PCI configuration space.
 
-'simple-mfd' means there is zero dependency on the parent for the child 
-nodes. Isn't 'mboxes' a dependency?
+Here is the series to deduplicate existing users and provide
+a generic way for new comers.
 
-> +
-> +  hwrandom:
-> +    type: object
-> +
-> +    properties:
-> +      compatible:
-> +        const: microchip,mpfs-rng
-> +
-> +    required:
-> +      - compatible
-> +
-> +  sysserv:
-> +    type: object
-> +
-> +    properties:
-> +      compatible:
-> +        const: microchip,mpfs-generic-service
-> +
-> +    required:
-> +      - compatible
+It also includes a patch to enable GPIO controllers on Apollo Lake
+when it's used with ABL bootloader w/o ACPI support.
 
-There's not really any need to have child nodes which have no resources. 
-The driver for microchip,mpfs-sys-controller can create child devices.
+The patch that bring the helper ("platform/x86/intel: Add Primary
+to Sideband (P2SB) bridge support") has a commit message that
+sheds a light on what the P2SB is and why this is needed.
 
-Rob
+Please, comment on the approach and individual patches.
+
+The changes made in v2 do not change the main idea and the functionality
+in a big scale. What we need is probably one more (RE-)test done by Henning.
+I hope to have it merged to v5.17-rc1 that Siemens can develop their changes
+based on this series.
+
+I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
+since we have an ACPI device for GPIO I do not see any attempts to recreate
+one).
+
+(Since it's cross subsystem, the PDx86 seems the main one and
+I think it makes sense to route it throught it with immutable
+tag or branch provided for the others).
+
+Bjorn, are you okay with this approach and the commit message in the main
+patch?
+
+Changes in v3:
+- resent with cover letter
+
+Changes in v2:
+- added parentheses around bus in macros (Joe)
+- added tag (Jean)
+- fixed indentation and wrapping in the header (Christoph)
+- moved out of PCI realm to PDx86 as the best common denominator (Bjorn)
+- added a verbose commit message to explain P2SB thingy (Bjorn)
+- converted first parameter from pci_dev to pci_bus
+- made first two parameters (bus and devfn) optional (Henning, Lee)
+- added Intel pin control patch to the series (Henning, Mika)
+- fixed English style in the commit message of one of MFD patch (Lee)
+- added tags to my MFD LPC ICH patches (Lee)
+- used consistently (c) (Lee)
+- made indexing for MFD cell and resource arrays (Lee)
+- fixed the resource size in i801 (Jean)
+
+Andy Shevchenko (6):
+  PCI: Introduce pci_bus_*() printing macros when device is not
+    available
+  PCI: Convert __pci_read_base() to __pci_bus_read_base()
+  pinctrl: intel: Check against matching data instead of ACPI companion
+  mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
+  mfd: lpc_ich: Switch to generic p2sb_bar()
+  i2c: i801: convert to use common P2SB accessor
+
+Jonathan Yong (1):
+  platform/x86/intel: Add Primary to Sideband (P2SB) bridge support
+
+Tan Jui Nee (1):
+  mfd: lpc_ich: Add support for pinctrl in non-ACPI system
+
+ drivers/i2c/busses/Kconfig             |   1 +
+ drivers/i2c/busses/i2c-i801.c          |  39 ++-----
+ drivers/mfd/Kconfig                    |   1 +
+ drivers/mfd/lpc_ich.c                  | 136 +++++++++++++++++++++----
+ drivers/pci/pci.h                      |  16 ++-
+ drivers/pci/probe.c                    |  81 +++++++--------
+ drivers/pinctrl/intel/pinctrl-intel.c  |  14 ++-
+ drivers/platform/x86/intel/Kconfig     |  12 +++
+ drivers/platform/x86/intel/Makefile    |   2 +
+ drivers/platform/x86/intel/p2sb.c      |  99 ++++++++++++++++++
+ include/linux/pci.h                    |   8 ++
+ include/linux/platform_data/x86/p2sb.h |  27 +++++
+ 12 files changed, 335 insertions(+), 101 deletions(-)
+ create mode 100644 drivers/platform/x86/intel/p2sb.c
+ create mode 100644 include/linux/platform_data/x86/p2sb.h
+
+-- 
+2.34.1
+
