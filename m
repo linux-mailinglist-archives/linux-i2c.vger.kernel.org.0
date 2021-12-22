@@ -2,85 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8EA47CB69
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Dec 2021 03:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFEB47CF15
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Dec 2021 10:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238989AbhLVCs3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 21 Dec 2021 21:48:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbhLVCs2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 21 Dec 2021 21:48:28 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79418C061574
-        for <linux-i2c@vger.kernel.org>; Tue, 21 Dec 2021 18:48:28 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id t23so1784203oiw.3
-        for <linux-i2c@vger.kernel.org>; Tue, 21 Dec 2021 18:48:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/FZUFL2wLkEGZGFTbPONkk6mLWd8J6cDzMFXomn323A=;
-        b=Niimf1jllbIyv3wnG8/DrqRRpShYICD8EWAfwYqJY8qcVGHPp/f2EqajPpp/OQ55iX
-         7avYtd0TmboDXiqV4tshfdp7cv/Y4/zbfmr6GhPhXYMEd3RJyNmCADsOeW/Vpwl+ZvIT
-         LCNinerXlMPpFLuJvTQh3YrZ3jK8M543vM7IfidOglerQpDjrYzdYHBP6gSN8eYW9nG8
-         ezvZHL4Eh4mkMiiOTgSwT3gL+IUApU4GILXtkZatXC0KV1jRk+jCLVJ86BMVK9p+m7zu
-         F5KqUESKLmMKEKql51KlJO9x+//yei5FefBnN6rCNbYCyK6dNQmRq+6xk8cp/8TH+Z84
-         sG1w==
+        id S243856AbhLVJUQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Dec 2021 04:20:16 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:40865 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239569AbhLVJUQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Dec 2021 04:20:16 -0500
+Received: by mail-ua1-f43.google.com with SMTP id y23so3019941uay.7;
+        Wed, 22 Dec 2021 01:20:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/FZUFL2wLkEGZGFTbPONkk6mLWd8J6cDzMFXomn323A=;
-        b=naATD+yKmo+BBzzHm5LtlnUo1Rw00Q99101zs5PeeRQueBTMKNQJGymxOQgX1fCEmF
-         MXtl7xttCrS6ChHSV2R/k0n97MW4HkNmMCbTELQqM8+xsePaXk5ETaTejaayw9mjnO3Q
-         pivz9+RRbGid0ZS53hAzAx2Fr3uNhocM2Vn8jy+2ArJ+AfkEo4Vr9t2x3M/62KFlAjY6
-         Ah+pSM4izG9woBRCv+Euv+uleWUyai+DqPldmgRfY2nhbfbcmd+HKVdxkYZwSGzrGcIt
-         V1Y9YFyduSPtsvCY6jj7nQlRpAtL2p6hOR1+1a17EP9o2p84Kad/tBS57GQqbfCi1fm4
-         czWQ==
-X-Gm-Message-State: AOAM533+FNZH8lQMhMqJWu53KCfInx4YJedJ2WMrNHK8emzTveFeSKyI
-        66B+uUY8v99ITlHYT1BWlHOcdW/pLmqPfHX846Vncg==
-X-Google-Smtp-Source: ABdhPJzgjgZvCZer+0qK1pclgej1TT1RDlfQKfCQvqjVS3qOHMzJGGAXe5nK0e/t6ph4iTgc1ECudtqKVJBwg9u1Q/o=
-X-Received: by 2002:aca:120f:: with SMTP id 15mr742282ois.132.1640141307641;
- Tue, 21 Dec 2021 18:48:27 -0800 (PST)
+        bh=a5KXFkJczT+loL4bmBd/xTV7aUTkBhT057Cylmeu8aM=;
+        b=B63M9lnNYHxhCs876fSKbCSpVLD3SfeHDCQ77UUuhAJIjPE0tI/K0QZ/ug73+1jqta
+         lz+bns5TmqLV1byR0NQHxegThxqZFm7zeOyw4s8f0D2I4OFLR067nmkfg8dL9+O8UIqb
+         9EUSrQtkweKOX/0xI25uRnG+RgQew75PkNL6Hd3hRVhp5bkJMySnkLOlCm1ikQjvmJvn
+         gYb1fqB3hss1eLowdUPZIAN+es6xsFyxHQoJPhwzBt63u4jQcdsWWOSVilR/RgXg+OWp
+         jA5ze6crTQxXH5UhafeaF7QpPch9aoiD83x5Mne4OpplJbpItpwm2+PwgAhrYfAjrPxB
+         dROA==
+X-Gm-Message-State: AOAM530RprnitFafJVAQX54NdesjpiBUpGz7g/OwzzjgRZh6wgycFlqz
+        Xx3YztjPSaxiX9b6FrH5RiBZxF8990/y3g==
+X-Google-Smtp-Source: ABdhPJwF9jaHNu77S8dTJ0lF2VMZJwYVQ2Lk62/GUHrzODlWm4y4qhZpM09z2gYL0qwrD/XRcwqQNA==
+X-Received: by 2002:a67:e109:: with SMTP id d9mr631850vsl.11.1640164815641;
+        Wed, 22 Dec 2021 01:20:15 -0800 (PST)
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
+        by smtp.gmail.com with ESMTPSA id i123sm281897vkb.20.2021.12.22.01.20.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 01:20:15 -0800 (PST)
+Received: by mail-vk1-f170.google.com with SMTP id m185so933582vkm.5;
+        Wed, 22 Dec 2021 01:20:15 -0800 (PST)
+X-Received: by 2002:a05:6122:21a6:: with SMTP id j38mr685592vkd.39.1640164815041;
+ Wed, 22 Dec 2021 01:20:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 22 Dec 2021 03:48:15 +0100
-Message-ID: <CACRpkdbLk1aHEaiumq3d4qmg007QtZcitmCwdyFyLxyY=H7MXQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/8] platform/x86: introduce p2sb_bar() helper
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
+References: <20211221175322.7096-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211221175322.7096-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211221175322.7096-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 22 Dec 2021 10:20:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXhenTpAqYkZhgnxOWZPgJah0_UeWC_sC9Me+AA1YDBMQ@mail.gmail.com>
+Message-ID: <CAMuHMdXhenTpAqYkZhgnxOWZPgJah0_UeWC_sC9Me+AA1YDBMQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakarprabhakar.csengg@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 7:21 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Tue, Dec 21, 2021 at 7:21 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional() for DT users only.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-> Please, comment on the approach and individual patches.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-This approach looks reasonable to me so FWIW:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-for the series.
+Gr{oetje,eeting}s,
 
-Yours,
-Linus Walleij
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
