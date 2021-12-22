@@ -2,137 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B2547D508
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Dec 2021 17:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED57D47D5F6
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Dec 2021 18:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241697AbhLVQUi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Dec 2021 11:20:38 -0500
-Received: from mga01.intel.com ([192.55.52.88]:40847 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241647AbhLVQUi (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:20:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640190038; x=1671726038;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MXvEvTDY3wXxjdpwc1zjX86H1PjRuybykzxgW93brTo=;
-  b=NMULG771sR7YFcw+FgIw5/s4CRNqtCiYBTTX8JeqloIvsK7KHkIeNPb4
-   XgluAU7BocsO+Nw1x81et5W7rTD4aa4QYWrGKC6hdL/vOnNORF7+4cGqP
-   86ZtJ7Ze9iIHY5qU/s5cEw02ATnSdNZ+EJyGUGVNcCEO9DiFoDpPVfweu
-   AOR3ZnPMMHhgdx/VEtoc31Vfuvw4HHJjsp/Rgcsy416hT0IuTB5/QrQ9p
-   iQUSR0boLNQkmZVpnYkHPoxCFpzIWy3jog8BpEhnv8+jNbQurPdpuEICO
-   E1qO8BFmvqxUUsIOg8UhLk03GFQ4/vJmhAQm4KG/YF68LIj/KO8nGwkTs
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="264852528"
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="264852528"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 08:20:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="607457623"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Dec 2021 08:20:35 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3A95137D; Wed, 22 Dec 2021 18:20:44 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Subject: [PATCH v2 5/5] i2c: designware-pci: Switch to use i2c_new_ccgx_ucsi()
-Date:   Wed, 22 Dec 2021 18:20:41 +0200
-Message-Id: <20211222162041.64625-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211222162041.64625-1-andriy.shevchenko@linux.intel.com>
-References: <20211222162041.64625-1-andriy.shevchenko@linux.intel.com>
+        id S234413AbhLVRpT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Dec 2021 12:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232852AbhLVRpR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Dec 2021 12:45:17 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2D5C061574
+        for <linux-i2c@vger.kernel.org>; Wed, 22 Dec 2021 09:45:16 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id by39so5020017ljb.2
+        for <linux-i2c@vger.kernel.org>; Wed, 22 Dec 2021 09:45:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=QF42aD0zscG+BtuAFRB/mrFD1dxXGx13co8vBNm/8Is=;
+        b=hw8gF8Y37JT0pLwaOZRCkYbE0i2cTBRXJBsUPO606G+Khzs+zS6jw7qW3wIDAVZ12N
+         t/QvTbJ9oR+HlA+/K3RLCdZ11fzZh9j27tVd9jyLZMjqPNQLS+wEACkGB8yAdd1fcrO0
+         VKHuNvNs7Sf+hyqoxSmw8rzmSERCRnZMtJJBd/HCzuGOKZbTA4AZ3rU4r33MTUzLxbk2
+         HjLXKuDbkJQhTm/H7SZYrN150qaU85/wFGtxYTSk2pjN+pu/SNNqvJzvPkYIGuvGmR3i
+         yazlwLaspfImM/bk2fVk+IZkR/CfzdvgRSTLvazEpWNHhkGChlcF0u8852T9VrcqGLPA
+         XaNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to:content-transfer-encoding;
+        bh=QF42aD0zscG+BtuAFRB/mrFD1dxXGx13co8vBNm/8Is=;
+        b=dwN2SGzNTJbX9KltUJQa8rYQq+U9UcHJCs51sLwfPKYqQGyZT7eZsodxmwjhmG906B
+         uCC1xOTbMH6tS9wduuLGe1DV83MK+K47rDi0zfzZWAuOXHNHwLuhASRLkq5xMMGeQvso
+         dICSvwi47yCDrpXuU8hjz7lSSbFVKiMsk2SPYsNrk49p/5hL+TcjTwoKRYIUpKZrH1Bx
+         v/nr1lO5+xqugDkXEuVPW24EThtYok1x3kk4MnqV5SNpziUXWAqfwqeeE5fkKxxsqUnE
+         Y7XSUSir8rwkFPuvpMdyEDgVIxPXXfyMdtK3L6cHALnu2Zff6r6JlykKcg2u7stXOQwr
+         DozA==
+X-Gm-Message-State: AOAM532GwXJ2NFEzXl0AZzFj0cFJ42TX5HaNcIyPb8gjPm6KzCIlYGW4
+        F87xTyTQSxDsO+D6yFJd10Hoz0TUllwv+N+BKic=
+X-Google-Smtp-Source: ABdhPJwLQ3PNJsZMJTvCg38igSUBPam5TXvv0vJXkTSmP0XgoWoMHiL6wwhgKE+9tv5JwdIriHmVChw9dYHfr15GQTY=
+X-Received: by 2002:a2e:96d0:: with SMTP id d16mr2013285ljj.330.1640195115046;
+ Wed, 22 Dec 2021 09:45:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a2e:88ca:0:0:0:0:0 with HTTP; Wed, 22 Dec 2021 09:45:13
+ -0800 (PST)
+Reply-To: camillejackson021@gmail.com
+In-Reply-To: <CA+gc9O5Z96TZcX+TSP0-WR_zsMKSjMuWigidv3Lrhs4qK5Wi1g@mail.gmail.com>
+References: <CA+gc9O5Z96TZcX+TSP0-WR_zsMKSjMuWigidv3Lrhs4qK5Wi1g@mail.gmail.com>
+From:   camille jackson <aminoutchanile@gmail.com>
+Date:   Wed, 22 Dec 2021 17:45:13 +0000
+Message-ID: <CA+gc9O4BnctTefa7BME0ra=-S41f5QjnjEDiLp8vK-4XFyiHMQ@mail.gmail.com>
+Subject: Pozdravy
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Instead of open coded variant switch to use i2c_new_ccgx_ucsi().
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: rebased on top of current i2c/for-next
-
- drivers/i2c/busses/Kconfig                 |  1 +
- drivers/i2c/busses/i2c-designware-pcidrv.c | 30 ++++------------------
- 2 files changed, 6 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 0c9b089d1456..e2e8ae7ed2a7 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -578,6 +578,7 @@ config I2C_DESIGNWARE_PCI
- 	tristate "Synopsys DesignWare PCI"
- 	depends on PCI
- 	select I2C_DESIGNWARE_CORE
-+	select I2C_CCGX_UCSI
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  Synopsys DesignWare I2C adapter. Only master mode is supported.
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index ef4250f8852b..2782dddfb087 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -24,6 +24,7 @@
- #include <linux/slab.h>
- 
- #include "i2c-designware-core.h"
-+#include "i2c-ccgx-ucsi.h"
- 
- #define DRIVER_NAME "i2c-designware-pci"
- #define AMD_CLK_RATE_HZ	100000
-@@ -125,26 +126,6 @@ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
- 	return -ENODEV;
- }
- 
-- /*
--  * TODO find a better way how to deduplicate instantiation
--  * of USB PD slave device from nVidia GPU driver.
--  */
--static int navi_amd_register_client(struct dw_i2c_dev *dev)
--{
--	struct i2c_board_info	info;
--
--	memset(&info, 0, sizeof(struct i2c_board_info));
--	strscpy(info.type, "ccgx-ucsi", I2C_NAME_SIZE);
--	info.addr = 0x08;
--	info.irq = dev->irq;
--
--	dev->slave = i2c_new_client_device(&dev->adapter, &info);
--	if (IS_ERR(dev->slave))
--		return PTR_ERR(dev->slave);
--
--	return 0;
--}
--
- static int navi_amd_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
- {
- 	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
-@@ -325,11 +306,10 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	}
- 
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
--		r = navi_amd_register_client(dev);
--		if (r) {
--			dev_err(dev->dev, "register client failed with %d\n", r);
--			return r;
--		}
-+		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, NULL);
-+		if (IS_ERR(dev->slave))
-+			return dev_err_probe(dev->dev, PTR_ERR(dev->slave),
-+					     "register UCSI failed\n");
- 	}
- 
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
--- 
-2.34.1
-
+SmFrIHNlIGRuZXMgbcOhxaEsIGRvdWbDoW0sIMW+ZSBzZSBtw6HFoSBkb2LFmWUsIHByb3PDrW0g
+b2Rwb3bEm3ogbWkgdGXEjywgZMOta3kNCg==
