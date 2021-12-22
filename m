@@ -2,96 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E06C47D143
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Dec 2021 12:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AC147D293
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Dec 2021 14:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235657AbhLVLrg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Dec 2021 06:47:36 -0500
-Received: from mga02.intel.com ([134.134.136.20]:37057 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233332AbhLVLrg (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 22 Dec 2021 06:47:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640173656; x=1671709656;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aoAbh32TYP3w4Jy1rx3e+sOGeADjU570Cm9ZONwMIVA=;
-  b=PA1a7sxHe81eWKAAI1whMqfvM33X8DRR5CmvW17Cg2lMNrD8dBxQFGZV
-   F9gvkI64Czxm8TaTdI4TpnElHJeLr1JGLTWSbSInuI6jxg+AccRrsTKY3
-   XIaM2ekc6TW6fsk9hqtNH3yfzghXANoDF6R2v8jjJfFpmr/epqauMuBAX
-   4H1sP+2He/MVDzn5y+tTQ+395m6wdysJhYZ8DjmUE/hHkAoSGc0pJGPDR
-   bl6pv6+auLjJEF+wgk1wwBsQzq9ifCjluzCUX0tLF4/muVX+VEtBvtmn0
-   5cH30cxxYNs+UP+nSiO1dLEuPT/LMooUZnyvAGdH0DwoovrPEuQp198qM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227898468"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="227898468"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 03:47:36 -0800
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="607382745"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 03:47:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n004O-000k9r-5h;
-        Wed, 22 Dec 2021 13:46:08 +0200
-Date:   Wed, 22 Dec 2021 13:46:07 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jan Dabros <jsd@semihalf.com>,
-        Serge Semin <fancer.lancer@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        wsa@kernel.org, rrangel@chromium.org, mw@semihalf.com,
-        jaz@semihalf.com, upstream@semihalf.com
-Subject: Re: [RFC 0/2] i2c-designware: Add support for AMD PSP semaphore
-Message-ID: <YcMP/9ATna3/yckC@smile.fi.intel.com>
-References: <20211222094558.2098791-1-jsd@semihalf.com>
+        id S245145AbhLVNBB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Dec 2021 08:01:01 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:33544 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245117AbhLVNBB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 22 Dec 2021 08:01:01 -0500
+Received: by mail-ua1-f43.google.com with SMTP id a14so4336572uak.0;
+        Wed, 22 Dec 2021 05:01:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yxte1rmkLG8Gm4NdhjyMtfcy7DGtqwrDwC8ez4uL4ug=;
+        b=7aexI+22OuVkLdZeWSxCPzvWM9o48o4yUTmU8QjcyHW5hICJSXWaqqIYXRXN0B33MT
+         c7mQIOLPQDLPzU5493ZJo7+/YkBoAEyjg8reCwcbxzjoQi62TASVIC+9OeTSQ1vaA2A1
+         Vk9AIb6kdCIoQ/6g1Wm9gaTfFwoCtkpVz6CZ12BE58jiLbQvIEhr3AqW3RnmaDJ4a8Jf
+         1m4iT3DXQETQfdqQXu6z4XMswdcvpGW46/BMqLM1XE803IqUdHKIs95M4CIT7DNKCjd5
+         7x1w6/0IhOMBGM1C6UubsmBK1dDOiZj9JkpsWpzBSGk4ZkYudLehfLG3o9mxVg25xNG2
+         TgiA==
+X-Gm-Message-State: AOAM531bXCST4l0bOV/x434y5txFEEfBKS+ZUHe0RXiJfNYcJBmYFbru
+        DfM+geAWbAKcRtt7gNxyEYYhA8juUlMy1Q==
+X-Google-Smtp-Source: ABdhPJxv37cvs2r4zsJg2ebG9OgCzjGonPx8m71eAcn0O3DfWWsNnb5//UdHj4scngwnsn13jQHMqA==
+X-Received: by 2002:ab0:70ce:: with SMTP id r14mr892472ual.76.1640178060090;
+        Wed, 22 Dec 2021 05:01:00 -0800 (PST)
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
+        by smtp.gmail.com with ESMTPSA id bc2sm369283vkb.53.2021.12.22.05.00.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 05:00:59 -0800 (PST)
+Received: by mail-vk1-f179.google.com with SMTP id m185so1263688vkm.5;
+        Wed, 22 Dec 2021 05:00:59 -0800 (PST)
+X-Received: by 2002:a1f:2196:: with SMTP id h144mr984968vkh.7.1640178059508;
+ Wed, 22 Dec 2021 05:00:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222094558.2098791-1-jsd@semihalf.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211221175322.7096-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211221175322.7096-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211221175322.7096-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 22 Dec 2021 14:00:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVc-t_7-HRiM=nubmBHGRUvC+ihRa1M287LMdD3RD2dnw@mail.gmail.com>
+Message-ID: <CAMuHMdVc-t_7-HRiM=nubmBHGRUvC+ihRa1M287LMdD3RD2dnw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] i2c: riic: Use platform_get_irq() to get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakarprabhakar.csengg@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-+Serge
+On Tue, Dec 21, 2021 at 7:25 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-On Wed, Dec 22, 2021 at 10:45:56AM +0100, Jan Dabros wrote:
-> This patchset comprises support for new i2c-designware controller setup on some
-> AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses the same
-> controller and acts as an i2c arbitrator there (x86 is leasing bus from it).
-> 
-> First commit aims to improve generic i2c-designware code by adding extra locking
-> on probe() and disable() paths. I would like to ask someone with access to
-> boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to verify
-> behavior of my changes on such setup.
-> 
-> Second commit adds support for new PSP semaphore arbitration mechanism.
-> Implementation is similar to the one from i2c-designware-baytrail.c however
-> there are two main differences:
-> 1) Add new ACPI ID in order to protect against silent binding of the old driver
-> to the setup with PSP semaphore. Extra flag ARBITRATION_SEMAPHORE added to this
-> new _HID allows to recognize setup with PSP.
-> 2) Beside acquire_lock() and release_lock() methods we are also applying quirks
-> to the lock_bus() and unlock_bus() global adapter methods. With this in place
-> all i2c clients drivers may lock i2c bus for a desired number of i2c
-> transactions (e.g. write-wait-read) without being aware of that such bus is
-> shared with another entity.
-> 
-> Mark this patchset as RFC, since waiting for new ACPI ID value. As a temporary
-> measure use "AMDI9999". Once proper one will be ready, will re-send this CL for
-> review & merge.
-> 
-> Looking forward to some feedback.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-If I am not mistaken something similar happened in Baikal T1.
-Perhaps Serge has something to share.
+Gr{oetje,eeting}s,
 
--- 
-With Best Regards,
-Andy Shevchenko
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
