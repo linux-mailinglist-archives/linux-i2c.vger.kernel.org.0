@@ -2,101 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F22B747CF92
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Dec 2021 10:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCDA47D0A1
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Dec 2021 12:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244039AbhLVJwv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 22 Dec 2021 04:52:51 -0500
-Received: from www.zeus03.de ([194.117.254.33]:36526 "EHLO mail.zeus03.de"
+        id S244489AbhLVLPP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 22 Dec 2021 06:15:15 -0500
+Received: from mga02.intel.com ([134.134.136.20]:35056 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244021AbhLVJwv (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 22 Dec 2021 04:52:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=AHNPN1hdXL7hd2i9ZuGladTAOJCQ
-        W3apvH9TdmfrnHI=; b=foYXSNO2+l+O3fOb+hseepoNn9kHj2VMWrrn5mXWy/Yu
-        u+MJaxaGqpJqLzksr8EBwd4rghzUFLAab8K8FigM1bzUdC+SNk+UYTMpOoetA0Yv
-        depZiKyY34fEHcn6zlDip6aocBTqsyf5SAkOOBuRWFbfZA9rdpcugrOehT4PfJ4=
-Received: (qmail 1701447 invoked from network); 22 Dec 2021 10:52:49 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Dec 2021 10:52:49 +0100
-X-UD-Smtp-Session: l3s3148p1@06GoFbnTxLUgAQnoAFCUAc+q0T6Ni/m/
-Date:   Wed, 22 Dec 2021 10:52:49 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakarprabhakar.csengg@gmail.com
-Subject: Re: [PATCH v2 3/3] i2c: riic: Use platform_get_irq() to get the
- interrupt
-Message-ID: <YcL1cR0RUUsSwn0u@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakarprabhakar.csengg@gmail.com
-References: <20211221175322.7096-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211221175322.7096-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S244469AbhLVLPL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 22 Dec 2021 06:15:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640171711; x=1671707711;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=db1sx17QDaZa2BUBsB+jMc5FrPgUGSuAsy9wXBqkqK8=;
+  b=TGYKejomT1PcEzrArn6tNvbwWhj86fZGq6jtbtfVgbsUi0oNiuRPfZx0
+   2RFpdCxhzVocOnZC7wZ+kvCfJ1dNmKIpnLNTx5wELJA4tP+BwLhaezxIp
+   iGpqQGkstwFAIaYR5dLYZZyw80bwMKB5xG5EhbFJ9326j76T7kGBU2eY+
+   mlYMw1xiW5Q9I3l9mAJ0oHoE2lY62OLnwFOF0NM3MjtnwuIHB4fJg+hly
+   THpVnXu6uibeC9QKnJPYszamPrssyOseBSH7audGJOTkQi1Iome94s4Yw
+   qDBHlrfX6Eq3613UFnABSb7Y/oSmrwqejaD/LB+7G7IMMfwFCnQxX2Q93
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="227894642"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="227894642"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 03:15:09 -0800
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="664243692"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 03:15:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mzzYw-000jjn-PK;
+        Wed, 22 Dec 2021 13:13:38 +0200
+Date:   Wed, 22 Dec 2021 13:13:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: Re: [PATCH v3 0/8] platform/x86: introduce p2sb_bar() helper
+Message-ID: <YcMIYn+jV7ConPPE@smile.fi.intel.com>
+References: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
+ <CACRpkdbLk1aHEaiumq3d4qmg007QtZcitmCwdyFyLxyY=H7MXQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AyxD8pR0xn0cOwpA"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211221175322.7096-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <CACRpkdbLk1aHEaiumq3d4qmg007QtZcitmCwdyFyLxyY=H7MXQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Wed, Dec 22, 2021 at 03:48:15AM +0100, Linus Walleij wrote:
+> On Tue, Dec 21, 2021 at 7:21 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> 
+> > Please, comment on the approach and individual patches.
+> 
+> This approach looks reasonable to me so FWIW:
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> for the series.
 
---AyxD8pR0xn0cOwpA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you!
 
-On Tue, Dec 21, 2021 at 05:53:22PM +0000, Lad Prabhakar wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->=20
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---AyxD8pR0xn0cOwpA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHC9XEACgkQFA3kzBSg
-Kbax8RAAhWBhzDGrT4VrmbsJidDPuoYUFK2RAb8dI6JMAL7Zk52s5CopunI4Z4xt
-eRGtd86E8YblKiNbWCD8+t9pukJ97Z51js2HcGB2no72vIbCNPcHf0+fNmDC9bI5
-aROl3QtLfgYky3sK1AVQSV4CEe2ZvwDny9p+yy5zyH1fLPKkbiB+OMtkUS5ktC0q
-/icnbEfVf/qXSbnYSIxw6jd66Xy8KMqzBCjx5vhIfJaB/IXWPwkNm4QA/AitgcSC
-F0T2WFtygXQxwlDKCw1fSmF0tb9In2gu9CHOimaxtjb2ysZ+ZqRhFkwDuSVInDXK
-myvhZvbeDLI5OSfVKNNBB1Bn9lvUGPZj036KoVdDliDcVr4pPYuAVbuEfY50A6wz
-kn6bTkOT4c3JZvzjNo41sTcL6nRJd6ynOZYizlzMA9qCfB2j2SDKdBnNItJXwlNs
-T84k0HmLR7oRrqTxYP/P9XGayZHUPkybkDqAqvP23rm6ka77re2Mg7/sC69ss/8l
-f8UJSCeq028oE4zF2zv49M8S4a9RJSW9LXVGLlVrt33jMyn0fBF0RpRWAkzSuPoL
-IGdClM3vCrdOoo50KxST/8su36U05kLeJE4lv609hJ+coAYtkWnLM6q8/Nd/gmPB
-MVrfmlpD5fNbZwGDQx67ZiizWfO3nCi79pATQFSX2LAgR5AImcY=
-=GJh1
------END PGP SIGNATURE-----
-
---AyxD8pR0xn0cOwpA--
