@@ -2,145 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 338EA47E69D
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Dec 2021 18:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8811A47E72B
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Dec 2021 18:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349353AbhLWRCd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Dec 2021 12:02:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40992 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233591AbhLWRCc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Dec 2021 12:02:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640278952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0L3hrfGHh2CA7aMbkoiYJDWgrUzDP7juBauygQys1NE=;
-        b=crVJQlN/JO2zqnvPxXEnCgKzsYPLHvinA3HORg+Ug2CoYnVjDDsPajUCq19cqGZ+DLEDSd
-        y4EGgu8AC0AhSLlWZWTmCFH9mIkBdUH+nB/0q8Gsy1Wodvg8YUi8FBHxpSylaMBge8bbzk
-        IxWJMJpm9sbHgcKp9qShuXHhTtf7Rxw=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-656-P_5AW6E6M6K2I9n4xqdAUA-1; Thu, 23 Dec 2021 12:02:31 -0500
-X-MC-Unique: P_5AW6E6M6K2I9n4xqdAUA-1
-Received: by mail-ed1-f70.google.com with SMTP id s12-20020a50ab0c000000b003efdf5a226fso4930124edc.10
-        for <linux-i2c@vger.kernel.org>; Thu, 23 Dec 2021 09:02:30 -0800 (PST)
+        id S238035AbhLWRgZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Dec 2021 12:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238045AbhLWRgY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 23 Dec 2021 12:36:24 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC90C06175E
+        for <linux-i2c@vger.kernel.org>; Thu, 23 Dec 2021 09:36:24 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id z9-20020a17090a7b8900b001b13558eadaso9358671pjc.4
+        for <linux-i2c@vger.kernel.org>; Thu, 23 Dec 2021 09:36:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dPYUZWC+77UBrBLBUUxU9fHb6AxVTt9UdaUWIxpei+o=;
+        b=L0sjRUzYInvoF3lTrWwfgbrnXNR7T+eXsaPmPTag7OLNZPysAOAy+7D/eWdc8Y8pWa
+         ZYd8pC2fEDwzZy3dX8MHG6cokMq+LvNvhyVHt7n4Ot4zwmRwldtutxXO3oyyhccGcTGj
+         6HqoZZOHqzyqhn2YiN2yvj0pdcsduMD2RNXRxGoK6VCf9RFwFffI4Bcz668E4CDGnHCe
+         W9InkcEY0CD9FxjiRL4s4xROMFQ19FlU2EzPctV1dHFiCYC2qFsXNDzh4+eMW8ZOMg0i
+         GvYkYHgDSayVhkayneoGjmk9tIMU7TKP2/FjiXoGEbnsbQKYI7gPlGu5VC6SGmmrwTQd
+         Q6mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=0L3hrfGHh2CA7aMbkoiYJDWgrUzDP7juBauygQys1NE=;
-        b=OuzHO3oRbh5i4XwHCMDGDdDf4744XXqAhNltDnfV9ZlXc7a/iobk5kaPJTM6ppCRD1
-         Wepq88MkXUxUM/0Co7IhOungoP/2wB16uyrLJtyLu7Bj3tba0+P9xTDhUCA4O1SoDWIl
-         LOxkVm+9iuwzrobVIX7dgxzHzq6zZGm0M+x6w1romqEnUPyo+BDmxNNfCIjRAa8xbtTy
-         gc2amPkA1ivwHTybwVNT31bcBdkey58NCIJjOlA8rx4Qm/Icd0wRTO1DSu171Q7susUu
-         er9DttW0lzo//1RxolP6wtZ8n53V7DJpqFs7CMEM3nn/WCen6ZGkK83mcHOxNv+gUgYH
-         1qSQ==
-X-Gm-Message-State: AOAM531AAhN3hwys67J66H1u0YE2GtPFubqOd2fgkZ1hn35l2L+SyvvP
-        09Gq7aAb/js+VohJCOpNYG6wT+hUUKiTLqoMimhqGJazHeu7wjq6qfQSNFxix0ZyQTUDRRPaWFz
-        iOBhWQagbr56D5C8PfSdZ
-X-Received: by 2002:a17:906:f890:: with SMTP id lg16mr2710053ejb.757.1640278949776;
-        Thu, 23 Dec 2021 09:02:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxd6UhL94vaLcT6InDaVEGyzk60r+sLqen2QhcGsQrIMo2bSgdjMPwZF4AcdCPefw/JLHpfew==
-X-Received: by 2002:a17:906:f890:: with SMTP id lg16mr2710037ejb.757.1640278949597;
-        Thu, 23 Dec 2021 09:02:29 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id nc14sm1937751ejc.44.2021.12.23.09.02.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Dec 2021 09:02:29 -0800 (PST)
-Message-ID: <4f3eca9f-1d55-35f5-585d-d121b1c83920@redhat.com>
-Date:   Thu, 23 Dec 2021 18:02:28 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v3 0/8] platform/x86: introduce p2sb_bar() helper
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=dPYUZWC+77UBrBLBUUxU9fHb6AxVTt9UdaUWIxpei+o=;
+        b=hgPbZ8LQh4yQnvGZn4PGPzuDxTQIQAsMhxZA7MIhPpSW57hDbMOoLJEjOhYV9h50aH
+         ch2t95DOYdB6vvsArqO0sR8eVsif0pste1KvaPCSKQqnM2mb8mahIGte2EFTrJpxuRMt
+         Xyfn5MAADMb39TAow8QV8PSJMczFjhieok/v+O/UGGgrQ4oUMVLo+DTrUtd7Pu3c3VxT
+         0exIIRONH5xsFtsnUROU5DAbBP6/hRXPV24b/N/1ov4KRpOH26yQc+fv/ZPsb0UbnC8p
+         XcVghpO5pD4yc0jhB66Rge5WlvS4889QPHvKe6pIew5ASzZtZBM/ze7sAwrdgbUpeHuk
+         A41g==
+X-Gm-Message-State: AOAM530S94qGmehrjYDCJvw4lDxeZDIOp2I95RAGFzJVckCmJvb6xPXE
+        4pVWVTIE8Z+gVB0lEUvuVi0QJw==
+X-Google-Smtp-Source: ABdhPJypoRaM/7mbkBhlfvlUN6kGHVEF9KQ22b8kXscmQCQL7JNkF0LVo3y3phgMBogpBLz4jmYGaw==
+X-Received: by 2002:a17:90b:4d07:: with SMTP id mw7mr3712671pjb.69.1640280983976;
+        Thu, 23 Dec 2021 09:36:23 -0800 (PST)
+Received: from localhost ([12.163.77.120])
+        by smtp.gmail.com with ESMTPSA id g6sm7407727pfj.156.2021.12.23.09.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 09:36:23 -0800 (PST)
+Date:   Thu, 23 Dec 2021 09:36:23 -0800 (PST)
+X-Google-Original-Date: Thu, 23 Dec 2021 09:36:07 PST (-0800)
+Subject:     Re: [PATCH v2 17/17] MAINTAINERS: update riscv/microchip entry
+In-Reply-To: <05d6a273-19f6-2147-75ba-1fff726a0f70@microchip.com>
+CC:     krzysztof.kozlowski@canonical.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Gross <markgross@kernel.org>,
-        Henning Schild <henning.schild@siemens.com>
-References: <20211221181526.53798-1-andriy.shevchenko@linux.intel.com>
- <08236e18-f1ae-303c-3d2e-96f795d96c1f@redhat.com>
-In-Reply-To: <08236e18-f1ae-303c-3d2e-96f795d96c1f@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
+        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
+        Ivan.Griffin@microchip.com, Atish Patra <atishp@rivosinc.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor.Dooley@microchip.com
+Message-ID: <mhng-0e4cde83-cfa1-4bf6-9f2c-611d9a4ddb5f@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+On Thu, 23 Dec 2021 06:56:45 PST (-0800), Conor.Dooley@microchip.com wrote:
+> On 17/12/2021 15:09, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>> 
+>> On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
+>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>
+>>> Update the RISC-V/Microchip entry by adding the microchip dts
+>>> directory and myself as maintainer
+>>>
+>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>> ---
+>>>   MAINTAINERS | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index 7a2345ce8521..3b1d6be7bd56 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -16348,8 +16348,10 @@ K:   riscv
+>>>
+>>>   RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
+>>>   M:   Lewis Hanly <lewis.hanly@microchip.com>
+>>> +M:   Conor Dooley <conor.dooley@microchip.com>
+>>>   L:   linux-riscv@lists.infradead.org
+>>>   S:   Supported
+>>> +F:   arch/riscv/boot/dts/microchip/
+>>>   F:   drivers/mailbox/mailbox-mpfs.c
+>>>   F:   drivers/soc/microchip/
+>>>   F:   include/soc/microchip/mpfs.h
+>>>
+>> 
+>> Good to have the DTS covered, so FWIW:
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> 
+>> You still should get Lewis' ack (unless he merges it)
+> Aye, it'll be an ack. We don't currently have a tree & would rather do 
+> this via risc-v than the at91/sam arm soc tree.
 
-On 12/23/21 18:00, Hans de Goede wrote:
-> Hi,
+WFM.  I'll be awaiting the ack.  I don't see any fundamental issues from 
+my end, as long is it's got all the acks/reviews then I'm generally fine 
+with this sort of stuff.  I'll take a look before merging it, I'm kind 
+of buried right now.  Sorry!
+
+>> 
+>> Best regards,
+>> Krzysztof
+>> 
 > 
-> On 12/21/21 19:15, Andy Shevchenko wrote:
->> There are a few users and at least one more is coming that would
->> like to utilize P2SB mechanism of hiding and unhiding a device from
->> the PCI configuration space.
->>
->> Here is the series to deduplicate existing users and provide
->> a generic way for new comers.
->>
->> It also includes a patch to enable GPIO controllers on Apollo Lake
->> when it's used with ABL bootloader w/o ACPI support.
->>
->> The patch that bring the helper ("platform/x86/intel: Add Primary
->> to Sideband (P2SB) bridge support") has a commit message that
->> sheds a light on what the P2SB is and why this is needed.
->>
->> Please, comment on the approach and individual patches.
->>
->> The changes made in v2 do not change the main idea and the functionality
->> in a big scale. What we need is probably one more (RE-)test done by Henning.
->> I hope to have it merged to v5.17-rc1 that Siemens can develop their changes
->> based on this series.
->>
->> I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
->> since we have an ACPI device for GPIO I do not see any attempts to recreate
->> one).
->>
->> (Since it's cross subsystem, the PDx86 seems the main one and
->> I think it makes sense to route it throught it with immutable
->> tag or branch provided for the others).
-> 
-> The series looks good to me:
-> 
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> For the series.
-> 
-> Not sure if this is really 5.17 material this late in the cycle though,
-> but lets wait and see what Bjorn and Lee have to say (patch 8/8 still
-> needs an ack from Lee).
-
-Correction I just realized that that would be 7/8 that needs an ack from
-Lee and that 8/8 needs an ack from Wolfram.
-
-> I'm fine with taking this upstream through the pdx86 tree, please
-> prepare a pull-req for everyone involved with an immutable branch
-> pushed to pdx86/platform-drivers-x86.git/
-> based on 5.16-rc1 (if everyone is happy with merging this for 5.17) or
-> based on 5.17-rc1 once that is out.
-
-Regards,
-
-Hans
-
