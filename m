@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6181347E487
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Dec 2021 15:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A45747E48E
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Dec 2021 15:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348823AbhLWOaA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 23 Dec 2021 09:30:00 -0500
-Received: from mga04.intel.com ([192.55.52.120]:8793 "EHLO mga04.intel.com"
+        id S232638AbhLWOhX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 23 Dec 2021 09:37:23 -0500
+Received: from mga06.intel.com ([134.134.136.31]:61399 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243798AbhLWOaA (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Thu, 23 Dec 2021 09:30:00 -0500
+        id S232888AbhLWOhW (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Thu, 23 Dec 2021 09:37:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640269800; x=1671805800;
+  t=1640270242; x=1671806242;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=QgiqzqoLdDwIHdsBcXClaRLXFp65YpRzRfnS77nX1/I=;
-  b=dH2hTHjrAxnRrCjrYouG531iE1xg4HRCGH7LIzScGmQ52n/hbIHIo6I5
-   JFDcnG7VpopVX7jaFA+HyHvIlYLCKPCoBHFAkmp/8gUM1j+HWbjsA/rp0
-   1qHAYab3AysI7w95d1ct434C3mzy01wdZDd+X4XB/dudc5NYKesufmG1M
-   X7wg2SQhaR0s7IQhDzeWuaDwQKhZD6dI3eOTHHKBX/1Pqwp7Zw0zO4P4/
-   PA/zkev3IWDG84MBnFQMwDGYeX+uLGAiQuX5bNJocgzvAendnwQdskx1l
-   i/zfHL6C0RTgjKeF3Ej6Ho6yEg+HCrLoVkNeh4LQnhEYtoMnJaRqPijKR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="239589060"
+  bh=vRP+R7DjpvAqxPqTnUXL6uwSG+wNEWbxuEFbD9QshhY=;
+  b=BJx88SR+a1P6ibTVdXgca7KJHgYdNVvH7pclekXTwDWzwuUd5J2B1zIJ
+   sM2uhK+yZULwqPr1qyzKlVxCM4WcstIFRkFTfk5N3Vx6cmBfN5FnYKEG8
+   I6bJz5tQh5rC2DD/xUGza++9lsTxKSJkqw92+6ilj/OIP9J6miWiOj/j2
+   A9qX6PEG/KE+HMcVq/5jT+BGrRA3exN8ATn09vIBj0mMLqI45QyZwvfhp
+   VIxL7xBepL76vVtLpF4Il4pFnohYPhIn03a9MY1vPNmViAqJzWevUSudp
+   3EAz+axlwfD5Tw4zyYRRjLd9LXzb0Dp9zvOJrp0J/SwUa1DoJuSnmCsGg
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="301596370"
 X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="239589060"
+   d="scan'208";a="301596370"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 06:29:59 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 06:37:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="617503584"
+   d="scan'208";a="617506401"
 Received: from mylly.fi.intel.com (HELO [10.237.72.50]) ([10.237.72.50])
-  by orsmga004.jf.intel.com with ESMTP; 23 Dec 2021 06:29:57 -0800
-Message-ID: <443785f5-323e-e36f-7a10-12d03140e6b0@linux.intel.com>
-Date:   Thu, 23 Dec 2021 16:29:56 +0200
+  by orsmga004.jf.intel.com with ESMTP; 23 Dec 2021 06:37:19 -0800
+Message-ID: <a1b47be4-f208-1a59-d704-99a463bb2fe0@linux.intel.com>
+Date:   Thu, 23 Dec 2021 16:37:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Firefox/91.0 Thunderbird/91.4.0
-Subject: Re: [RFC 1/2] i2c: designware: Add missing locks
+Subject: Re: [RFC 2/2] i2c: designware: Add AMD PSP I2C bus support
 Content-Language: en-US
 To:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
         linux-i2c@vger.kernel.org
@@ -47,9 +47,9 @@ Cc:     andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
         wsa@kernel.org, rrangel@chromium.org, mw@semihalf.com,
         jaz@semihalf.com, upstream@semihalf.com
 References: <20211222094558.2098791-1-jsd@semihalf.com>
- <20211222094558.2098791-2-jsd@semihalf.com>
+ <20211222094558.2098791-3-jsd@semihalf.com>
 From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20211222094558.2098791-2-jsd@semihalf.com>
+In-Reply-To: <20211222094558.2098791-3-jsd@semihalf.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -57,14 +57,12 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On 12/22/21 11:45, Jan Dabros wrote:
-> All accesses to controller's registers should be protected on
-> probe, disable and xfer paths. This is needed for i2c bus controllers
-> that are shared with but not controlled by kernel.
 > 
-> Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> ---
->   drivers/i2c/busses/i2c-designware-common.c | 12 ++++++++++++
->   drivers/i2c/busses/i2c-designware-master.c |  6 ++++++
->   2 files changed, 18 insertions(+)
+> Introduce new CONFIG and add new menuconfig selection list in order to
+> allow (optional) selection between baytrail and amdpsp semaphore.
 > 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+For the Linux distribution point of view selection must happen runtime. 
+Otherwise either AMD PSP or Baytrail semaphore support is missing from 
+the installation image.
+
+Jarkko
