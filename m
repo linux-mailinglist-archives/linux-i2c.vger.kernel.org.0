@@ -2,114 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCFD47EDEE
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Dec 2021 10:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C512D47F33E
+	for <lists+linux-i2c@lfdr.de>; Sat, 25 Dec 2021 13:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344052AbhLXJm1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 24 Dec 2021 04:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S229837AbhLYMjc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 25 Dec 2021 07:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241614AbhLXJm1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 24 Dec 2021 04:42:27 -0500
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B51C061401
-        for <linux-i2c@vger.kernel.org>; Fri, 24 Dec 2021 01:42:27 -0800 (PST)
-Received: by mail-qk1-x743.google.com with SMTP id w27so1793070qkj.7
-        for <linux-i2c@vger.kernel.org>; Fri, 24 Dec 2021 01:42:27 -0800 (PST)
+        with ESMTP id S229556AbhLYMjc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 25 Dec 2021 07:39:32 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF66AC061401;
+        Sat, 25 Dec 2021 04:39:31 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id h21so5794710ljh.3;
+        Sat, 25 Dec 2021 04:39:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
-        b=dyHvoMtjBFNWAAdvj+YIuUUNZScz1A0Wot5mxpv0TLLxTKXYbTLEerQQ9Ry9+91Z0D
-         pkF4KzUFIu04sIxHJTCQ4+9v3HN9xL5WvgqIeAS2aop6kQCdp0+2VysUMbHXqH17/Rtl
-         YES4mGDZWbgOpJ/D6hwulx0BhBeD8Oqy5IYvDRRJgwVR4Ol1X/Z4g/nC4+JKQ9f7RavR
-         24YQwamKY4SKWbBKe6yoJap5hvFxNXoWh9iFUxEJN7ykH6RC268Ka5crfFMP/8I1c+7f
-         ZzH/uLohI4uxp9ys5EYvwJi+65LjDgB08/t0e/7DkLYY7jxJIZTSpQ9283sh7tYHTvOJ
-         boNg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=Y0EGtTyg3mP/YEUrMu8z7SNmBjPe8bhxbkpOT3BOeas=;
+        b=FAw2w5mkf4GyZVPcTl/9WFDhDByOcf0b0ENsT4B7lq6vxaPGpg5OjXmXU8NYpaMwyG
+         ScV1XumFBQBpEq0EYyhBb9w+M/2GX99Ix76ZE7m8qxGt1PI+Bbx6+bweKT1V0xttAdyQ
+         hweIUQVYqOdumiyqGG3re1liPZHNvHv6KeZ+lAxgv9PmuU5iNgeha8f5J2NZd2t4UKqk
+         1ChVkucKmN/tKs4wbmKya8DB1qNaAB2yv/wXoWD5TFB1QFEv7LTI2yi97WWDd8FDhR+t
+         cFgVwYgHcQc+HD4Yv0GxUr5GfON0iYxP7bPUfhXgureWVvLauN6L5A3RInjT3TI8EYMr
+         pbPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
-        b=WthF/NJ5HpZnLEnOy2ZBbOc6SS7GElw6pxWz81xLtkyu+VyrGIotc1UI9KSZb9ZZsj
-         zGGuQtHSNTco3dEVNdee7Mm7Z2muEZWcug5KwFld6ifrT5CMRPpLB5L6mBLzInsG2p7I
-         AHsFukivH3kwgu382CQ0f2rgZJA7df4vnNswUNkmwkWI0RPudP/Ow+ZYp6Qm4Gmwmg8T
-         Udq74bA6D9m4avB5ArgbGQh+lNlqwwZq8tC82eWyOfQ12EIEs4NGD5Mxs4k/OsCUMsSf
-         guXNa+dyaQ+wThauBFIpfFp0aTFkGpIhGeJRMRe4N4R8toUe9MckVMrewJAVoVDNrRYS
-         gA5w==
-X-Gm-Message-State: AOAM533tnIF+Wy5EkZai43Y/EKA2woaZxuE/ezK7L98gulRrXtLVcncM
-        JLXk+aSzxpj9tl0e3Omu02YXZQKsVBHa2vu8ZlU=
-X-Google-Smtp-Source: ABdhPJyr95YBajg0XKAtGm2jESiArSObdnbA+OOxz1jMBuNccawlQpue45fDH/ebYevw7xMfCEUott5vRdFEb5LL6wA=
-X-Received: by 2002:a37:9d14:: with SMTP id g20mr4193044qke.324.1640338946277;
- Fri, 24 Dec 2021 01:42:26 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=Y0EGtTyg3mP/YEUrMu8z7SNmBjPe8bhxbkpOT3BOeas=;
+        b=iCF8CJ+wRR/KteF+htbfdzoS5sbeGLBhUSAuj+rPEka4r97mKk/2Idne0kGqXm06NO
+         JJiPW5PhU+Rn1C4573BY7K/HLnZKnPlN03iUVTMkqfgK6mH6RgI/9JePBcMdig34RQD8
+         0jlA7ROdjijB4VIIZEDTJilaBdNGl0piUyFUJtJdVMkpSCX1toHqEfDWDemKKYf9fw7k
+         QR05O4AsAEvWbvNS0FwPhkoMIb1gicb7BNzd2mVMPOvwKganRrb9fkWlcFpo++Vuey4s
+         jZT1wgqL+gvnVScSlHWNPCHjUR7mOc4u9O9VTsAetr4Ox3kgJDQt7/KvyQoQ0NZR6v2Q
+         l8jw==
+X-Gm-Message-State: AOAM530NLEo6jNz/izcVJcMFSFMfTNHr8QbhOJVprm7pFb0IsurjONcE
+        h6XRlJ2snNOgfQiRL/2SK/k=
+X-Google-Smtp-Source: ABdhPJxgId8CbnICHenDxjk8kfBc4ZQeWE9pLZSIYCh95MrrX/786S1Z+Qljt16iduOlsX2g+w05/Q==
+X-Received: by 2002:a05:651c:b13:: with SMTP id b19mr1239595ljr.298.1640435969772;
+        Sat, 25 Dec 2021 04:39:29 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.97])
+        by smtp.gmail.com with ESMTPSA id c20sm1030611ljf.37.2021.12.25.04.39.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Dec 2021 04:39:28 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------QhlAo1ObBFuXZqz8o3xtSPmU"
+Message-ID: <0c5a424c-4089-9623-9276-9e9473191deb@gmail.com>
+Date:   Sat, 25 Dec 2021 15:39:27 +0300
 MIME-Version: 1.0
-Received: by 2002:ad4:5c62:0:0:0:0:0 with HTTP; Fri, 24 Dec 2021 01:42:26
- -0800 (PST)
-Reply-To: williamsreneta2019@gmail.com
-From:   MISS WILLIAMS <info.turvateealfastar@gmail.com>
-Date:   Fri, 24 Dec 2021 01:42:26 -0800
-Message-ID: <CAM-qQYbWOeZ0BXYNED1JS-+koVcTTcorM_nkymCAUQjs=yjQvg@mail.gmail.com>
-Subject: Greetings Dearest One,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [syzbot] WARNING in __i2c_transfer (2)
+Content-Language: en-US
+To:     syzbot <syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wsa@kernel.org
+References: <000000000000b5e7f105d0d2d165@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000b5e7f105d0d2d165@google.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Greetings Dearest One,
+This is a multi-part message in MIME format.
+--------------QhlAo1ObBFuXZqz8o3xtSPmU
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-How are you today, together with your family?Hope fine.I would like to
-use this opportunity to introduce myself to you. I am Miss Reneta
-Williams, From Benin Republic, West Africa. And my late parents are
-Mr. and Mrs. Dikko Williams; my father was a highly reputable business
-magnet who operated in Benin Republic during his days.
+On 11/15/21 15:19, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    c8c109546a19 Merge tag 'zstd-for-linus-v5.16' of git://git..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10a5bb32b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a262045c4c15a9e0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e417648b303855b91d8a
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: i386
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
+> 
 
-I am writing this mail to you with tears and sorrow from my heart.
-With due respect trust and humanity, I know this mail will come to you
-as a surprise since we haven't known or come across each other before,
-considering the fact that I sourced your email contact through the
-Internet in search of trusted person who can be trusted and will
-assist me.
+#syz test
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
-It is sad to say that he passed away mysteriously in France during one
-of his business trips abroad. Though his sudden death was linked or
-rather suspected to have been masterminded by an uncle of his who
-traveled with him at that time. But God knows the truth! My mother
-died when I was just 6yrs old, and since then my father took me so
-special.
 
-Before his death, he called me and informed me that he has the sum of
-Eighteen Million Five Hundred , United State Dollar
-(USD$18.500,000.00) left in fixed deposit account in one of the
-leading banks in Africa. He further told me that he deposited the
-money in my name, and also gave me all the necessary but legal
-documents to this fund with the bank.
+With regards,
+Pavel Skripkin
+--------------QhlAo1ObBFuXZqz8o3xtSPmU
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
 
-I am 21 years old and a university undergraduate and really don't know
-what to do. Now I want an account overseas where I can transfer this
-funds and after the transaction I will come and reside permanently in
-your country till such a time that it will be convenient for me to
-return back home if I so desire.
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2kyYy1kZXYuYyBiL2RyaXZlcnMvaTJjL2kyYy1k
+ZXYuYwppbmRleCBiY2UwZThiYjc4NTIuLjNiNTRlZmE0YjFlYyAxMDA2NDQKLS0tIGEvZHJp
+dmVycy9pMmMvaTJjLWRldi5jCisrKyBiL2RyaXZlcnMvaTJjL2kyYy1kZXYuYwpAQCAtNTM1
+LDcgKzUzNSw3IEBAIHN0YXRpYyBsb25nIGNvbXBhdF9pMmNkZXZfaW9jdGwoc3RydWN0IGZp
+bGUgKmZpbGUsIHVuc2lnbmVkIGludCBjbWQsIHVuc2lnbmVkIGxvCiAJCQkJICAgc2l6ZW9m
+KHJkd3JfYXJnKSkpCiAJCQlyZXR1cm4gLUVGQVVMVDsKIAotCQlpZiAocmR3cl9hcmcubm1z
+Z3MgPiBJMkNfUkRXUl9JT0NUTF9NQVhfTVNHUykKKwkJaWYgKCFyZHdyX2FyZy5ubXNncyB8
+fCByZHdyX2FyZy5ubXNncyA+IEkyQ19SRFdSX0lPQ1RMX01BWF9NU0dTKQogCQkJcmV0dXJu
+IC1FSU5WQUw7CiAKIAkJcmR3cl9wYSA9IGttYWxsb2NfYXJyYXkocmR3cl9hcmcubm1zZ3Ms
+IHNpemVvZihzdHJ1Y3QgaTJjX21zZyksCg==
+--------------QhlAo1ObBFuXZqz8o3xtSPmU--
 
-The death of my father actually brought sorrow to my life. I also want
-to invest the fund under your care because I am ignorant of business
-world. I am in a sincere desire of your humble assistance in this
-regards. Your suggestions and ideas will be highly regarded.
-
-Now permit me to ask these few questions:
-
-1. Can you honestly help me from your heart?
-
-2. Can I completely trust you?
-
-3. What percentage of the total amount in question will be good for
-you after the money is in your account?
-
-Please, consider this and get back to me as soon as
-possible.Immediately and confirm your willingness on this my
-email(williamsreneta2019@gmail.com), here is one of my Picture and
-also i will inform you more details involved in this matter.
-
-Regards,
-
-Miss Reneta Williams.
