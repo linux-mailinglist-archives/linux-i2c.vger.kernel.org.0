@@ -2,33 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD47D480752
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Dec 2021 09:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B784807A4
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Dec 2021 10:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbhL1IVe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 28 Dec 2021 03:21:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36784 "EHLO
+        id S235846AbhL1JPg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 28 Dec 2021 04:15:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56350 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235547AbhL1IVd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Dec 2021 03:21:33 -0500
+        with ESMTP id S233036AbhL1JPe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 28 Dec 2021 04:15:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 147D76118E;
-        Tue, 28 Dec 2021 08:21:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB991C36AE8;
-        Tue, 28 Dec 2021 08:21:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640679691;
-        bh=AyTvVvui2qlcHtQrKzueO2aVJtq3B/0n6NTMMAVaPv0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kH6mvQE+CbYxtdqKfYIrcnXRRkMOKzNgkkDI4Qj231PIqAVKah1gnHZGbf7pyzYif
-         5Fy29Whi1PzPFIz42NBP1CwIg6Czpkv7Hvsk4tV4vJc5VHnlaMIkb+39JrPmPYspb6
-         8Fb7cSFih5JdAhKULSvypMAJ71q6QDfYXW2GEFIA=
-Date:   Tue, 28 Dec 2021 09:21:23 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E43C6117A;
+        Tue, 28 Dec 2021 09:15:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36527C36AE7;
+        Tue, 28 Dec 2021 09:15:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640682932;
+        bh=GhkQipbGlKDnWFYSWHR8QJ9jDw3XiA0zWUSH0TczCbE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dYWghGQbT+zkKYVLv1Zhab/gyFy9VpZvbxpbFRNzp3Lo5J6P/Q+Wf9wZJ3oL1Y4nF
+         96QRZWFgrpKChm6T6ENMeuTcDkoRMS//XW4vNdMJB4gLdNcNmX96GZTLdULruuieLb
+         emRGzvA33ANfq1HyCg7yWlEMSY81FT51jd/pZeMOMTkwWI2S8tmDueYyTyJr7hwGcG
+         yL5P+Au50kwMpsldooh4cVnB+oQkMDs7kWcv4culv3nNyxGHHdqsdStKVVXhf5e3AJ
+         K3RgIP6/xYabneVHyG9NqbWuq3dYLRaZSL3QAii2RDYrapQzGorXDljBWHF9TwGY4F
+         k139XXS0mA/xw==
+Date:   Tue, 28 Dec 2021 10:15:16 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         John Garry <john.garry@huawei.com>,
         Nick Hu <nickhu@andestech.com>,
@@ -47,7 +51,6 @@ Cc:     Arnd Bergmann <arnd@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Karsten Keil <isdn@linux-pingi.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sathya Prakash <sathya.prakash@broadcom.com>,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
         Suganath Prabu Subramani 
@@ -87,43 +90,76 @@ Cc:     Arnd Bergmann <arnd@kernel.org>,
         dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
         alsa-devel@alsa-project.org
 Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-Message-ID: <YcrJAwsKIxxX18pW@kroah.com>
+Message-ID: <20211228101435.3a55b983@coco.lan>
+In-Reply-To: <YcrJAwsKIxxX18pW@kroah.com>
 References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-2-schnelle@linux.ibm.com>
+        <20211227164317.4146918-2-schnelle@linux.ibm.com>
+        <YcrJAwsKIxxX18pW@kroah.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227164317.4146918-2-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 05:42:46PM +0100, Niklas Schnelle wrote:
-> --- a/drivers/pci/Kconfig
-> +++ b/drivers/pci/Kconfig
-> @@ -23,6 +23,17 @@ menuconfig PCI
->  
->  if PCI
->  
-> +config LEGACY_PCI
-> +	bool "Enable support for legacy PCI devices"
-> +	depends on HAVE_PCI
-> +	help
-> +	   This option enables support for legacy PCI devices. This includes
-> +	   PCI devices attached directly or via a bridge on a PCI Express bus.
-> +	   It also includes compatibility features on PCI Express devices which
-> +	   make use of legacy I/O spaces.
+Em Tue, 28 Dec 2021 09:21:23 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> escreveu:
 
-All you really care about is the "legacy" I/O spaces here, this isn't
-tied to PCI specifically at all, right?
+> On Mon, Dec 27, 2021 at 05:42:46PM +0100, Niklas Schnelle wrote:
+> > --- a/drivers/pci/Kconfig
+> > +++ b/drivers/pci/Kconfig
+> > @@ -23,6 +23,17 @@ menuconfig PCI
+> >  
+> >  if PCI
+> >  
+> > +config LEGACY_PCI
+> > +	bool "Enable support for legacy PCI devices"
+> > +	depends on HAVE_PCI
+> > +	help
+> > +	   This option enables support for legacy PCI devices. This includes
+> > +	   PCI devices attached directly or via a bridge on a PCI Express bus.
+> > +	   It also includes compatibility features on PCI Express devices which
+> > +	   make use of legacy I/O spaces.  
 
-So why not just have a OLD_STYLE_IO config option or something like
-that, to show that it's the i/o functions we care about here, not PCI at
-all?
+This Kconfig doesn't seem what it is needed there, as this should be an 
+arch-dependent feature, and not something that the poor user should be
+aware if a given architecture supports it or not. Also, the above will keep
+causing warnings or errors with randconfigs.
 
-And maybe not call it "old" or "legacy" as time constantly goes forward,
-just describe it as it is, "DIRECT_IO"?
+Also, the "depends on HAVE_CPI" is bogus, as PCI already depends on 
+HAVE_PCI:
 
-thanks,
+	menuconfig PCI
+	bool "PCI support"
+	depends on HAVE_PCI
+	help
+	  This option enables support for the PCI local bus, including
+	  support for PCI-X and the foundations for PCI Express support.
+	  Say 'Y' here unless you know what you are doing.
 
-greg k-h
+So, instead, I would expect that a new HAVE_xxx option would be
+added at arch/*/Kconfig, like:
+
+	config X86
+		...
+		select HAVE_PCI_DIRECT_IO
+
+It would also make sense to document it at Documentation/features/.
+
+> 
+> All you really care about is the "legacy" I/O spaces here, this isn't
+> tied to PCI specifically at all, right?
+> 
+> So why not just have a OLD_STYLE_IO config option or something like
+> that, to show that it's the i/o functions we care about here, not PCI at
+> all?
+> 
+> And maybe not call it "old" or "legacy" as time constantly goes forward,
+> just describe it as it is, "DIRECT_IO"?
+
+Agreed. HAVE_PCI_DIRECT_IO (or something similar) seems a more appropriate
+name for it.
+
+Thanks,
+Mauro
