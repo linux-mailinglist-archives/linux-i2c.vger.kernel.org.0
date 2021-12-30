@@ -2,90 +2,87 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A117B48208F
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Dec 2021 23:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B9648209E
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Dec 2021 23:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240669AbhL3WUH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 Dec 2021 17:20:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45158 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbhL3WUH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Dec 2021 17:20:07 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 250DD61703;
-        Thu, 30 Dec 2021 22:20:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABCCAC36AEA;
-        Thu, 30 Dec 2021 22:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640902806;
-        bh=lmiOwZGX0S5uzJNGEkrULtDPBP7D6YIQ3tUGzVHwFdI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ULroPsqYhYo8PMhsHFouUdixZhSsaUI4lFYN+IqFQYJBprftZR4zWonuHUMrj8+BL
-         8n6kEQD3st2nZGNL4x/+j4JcjkCI1R32oKFHbovKKTxidyd++h8fR9M5o9iQu/gQ/L
-         hFfSJY85mx1TiV+souQKwDcsX+oHngqif81s+lmou9VGfaOSp8Iz0PbQbaQ+0n/Kb3
-         I9XH9WZ2IesKdeKSz3q/u0MJSw3/axTiI1At55Pa1WRPNMUfYvvTR5J+dEas1IraYR
-         6tTGoBWqnbXZrVLd1qzFyE85Ma/hZQZqEDiuCatP03uRqiOXCAJQF1x7KhrXXvWkkA
-         9FgfjGmU+nSMA==
-Date:   Thu, 30 Dec 2021 23:20:03 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     viro@zeniv.linux.org.uk, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
+        id S231871AbhL3W0o (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 Dec 2021 17:26:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230129AbhL3W0m (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Dec 2021 17:26:42 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984F3C061574;
+        Thu, 30 Dec 2021 14:26:41 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id i31so56981027lfv.10;
+        Thu, 30 Dec 2021 14:26:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=1di8ReGKGpe6wTyJlHRA91kyA5EtT09EyzM1i1JSesI=;
+        b=kGPiTfc9BTvy9hv0qYytNhuaT143hcwfOU0ah5wJshyWvKBEf4yOHo6HvesY3Btojr
+         hErGqs1rojh84bLFxtyUjrIttZ1/EFrYKtbfEOuMkJfOCsfVN9Id/axMhF+FpouQTR4N
+         wUGEYTJf8qVT520rOYT68VauvARbKfYVZsP3vZUpXuvXHM7UKQofPF+PsVeTF1JM9qXd
+         385r1H+Ib+RCZeEMJwwD20aPbNWNWfTqPYI1fiadIhpDlApms86VNa+j1BgWiTkR760n
+         wd8OmglL+V6OGot24y8QW0uDsEgm9pNUALreV8RYyryPPmz0xGvgIMb1+ddGLCMQ06PR
+         KBVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1di8ReGKGpe6wTyJlHRA91kyA5EtT09EyzM1i1JSesI=;
+        b=kj/1++EMGymTjgJKNkV24rBihZL3wMNMlE+WZzXt8kTo9JsCbblTYYL9vwf8EwXQY0
+         Pf4J/tvyX9GtdmSh+hC4CckTHi9bXJmh8xA55zMIhSFXWme5+v/2FNmTAtHLUgGNYwOU
+         llpueyAR/9xXZ05SdgwaPcvH3NG5agsq7RFqa34oXJbLngUW2r2TRAfBvwzA+kWwKsWS
+         evZnskMZwzmtgFM3SC3AH0Zid27uqR/pFkMlhLPvSVszb5VIRRJABrH5vtfkKhyaVRlZ
+         lHDqLN3r3gDumRlWIpc1582SGoi4hQO7Tcd+qzz5/wW1nvcTi/Og/e6YKuHBmvs000V1
+         gP3g==
+X-Gm-Message-State: AOAM531vFKve3z/jYy1TljJiC49yaKMkTKsCPeDgDWyCmpGiugHokK6R
+        KfQEBFDVilrm6fWBpMQlc2QEBPrJWIY=
+X-Google-Smtp-Source: ABdhPJz1JuL5I2tfM2wIX/uhmyzBvzpgivawGIPpJzZGC6tdMucVDKJeU/MJDeJTs76aag/3fc31uA==
+X-Received: by 2002:a05:6512:32c1:: with SMTP id f1mr27813710lfg.42.1640903199818;
+        Thu, 30 Dec 2021 14:26:39 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.97])
+        by smtp.gmail.com with ESMTPSA id i24sm1588142ljm.13.2021.12.30.14.26.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 14:26:38 -0800 (PST)
+Message-ID: <f21f8437-dc20-452a-d4cd-2ffa3f031df1@gmail.com>
+Date:   Fri, 31 Dec 2021 01:26:36 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
 Subject: Re: [PATCH v2] i2c: don't pass 0 nmsgs to i2c_transfer
-Message-ID: <Yc4wkyr7QTs8ao5x@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Pavel Skripkin <paskripkin@gmail.com>, viro@zeniv.linux.org.uk,
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>, viro@zeniv.linux.org.uk,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
 References: <20211225142816.6255-1-paskripkin@gmail.com>
- <20211225182418.26839-1-paskripkin@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t9M6b8CoV9TIEXl3"
-Content-Disposition: inline
-In-Reply-To: <20211225182418.26839-1-paskripkin@gmail.com>
+ <20211225182418.26839-1-paskripkin@gmail.com> <Yc4wkyr7QTs8ao5x@kunai>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <Yc4wkyr7QTs8ao5x@kunai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 12/31/21 01:20, Wolfram Sang wrote:
+>> -		if (rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
+>> +		if (!rdwr_arg.nmsgs || rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
+>>  			return -EINVAL;
+> 
+> Shouldn't we check the msgs pointer as well while we are here? Like in
+> the non-compat IOCTL code:
+> 
+> 443  if (!rdwr_arg.msgs || rdwr_arg.nmsgs == 0)
+> 444          return -EINVAL;
+> 
+> 
 
---t9M6b8CoV9TIEXl3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-> -		if (rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
-> +		if (!rdwr_arg.nmsgs || rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
->  			return -EINVAL;
-
-Shouldn't we check the msgs pointer as well while we are here? Like in
-the non-compat IOCTL code:
-
-443  if (!rdwr_arg.msgs || rdwr_arg.nmsgs == 0)
-444          return -EINVAL;
+Sure! Will prepare v2, thanks for review
 
 
-
---t9M6b8CoV9TIEXl3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHOMI4ACgkQFA3kzBSg
-KbbnOw/9FKQb28c62rtFMey5yxWwtChc6G/FQc/W4CuFrz+7JciVgplXBsLKGn5G
-BaSg4sRotUoPu+WevXU3YQzu80cAGEfSy9R60wSjcDV/9AwShOtA8m2lik5do2LB
-D1Y86mPz0SxUimCgudN/pEkOcx73AeqHVJY6tKR7oG+sY0b0iNF28Yit+zfa9Y/B
-QbM8XWSfU2yrYEMh+hUoIQKMdp2qFeIK0VD4St8Xe6O22J9snu/TT5/8Y+l84SSJ
-KUuO2QwewIa+sXX4LThm/zpRlPF4PTNmedAhgCE1mIkySw3ywQxS4OwnZU9YlWkW
-qQtUOUXyI8lMJyvV0CJQowiaYk9H7myvU2ZXh3QlaEVbS80roWNP5WKxIS/4vvDa
-Avq29ecYEhshFQMVwi2XtvvGZyFz7LjWjVz+zzvbyZnWvbze36+z2fwuKjjrif+v
-bIuPTBbceLJ5oXqTautRMQg+tB9NsIWMQEXHOiUB0wt3Gh+gXAb04ZPcPxcNZXnw
-wsPi0rx1v+6n9Lfn98ZUO3HiJapku1VtmsVc3LUMqpYnBNphzVGjwXOeynibqMHK
-NTYDiDNw96t/JRagbH8bQ69mKrTP8n9iloBAqioWSIt8VicnI0wPVUAREo9pnHQr
-Be2u75LZA/oEM2HCLAKS1mRwEyiPn5NVfzVYt+Nyim+WH7PZmDc=
-=pDJU
------END PGP SIGNATURE-----
-
---t9M6b8CoV9TIEXl3--
+With regards,
+Pavel Skripkin
