@@ -2,115 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DDA481CFC
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Dec 2021 15:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FD4481E28
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Dec 2021 17:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239945AbhL3ORo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 30 Dec 2021 09:17:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60437 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239935AbhL3ORo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Dec 2021 09:17:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640873863;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BSl6NhO3rkJbiaCAxgZIg8uGpQxft2WdEugt3YD6tYc=;
-        b=AD1HqlrN41FeiqbOriNCh/Eo64z3D18RDNv+2XKa4jlEdpS/DEtd8/shairkH6tfur2JqI
-        gtqLja94JKvbR3YQR1kDDrR8GzgG38E/BbS/P9pXWDD5hV/l02QPQJnd71lSFRYSloA4mz
-        WwP1taj5/vbVQG9nBNEu7DkL0gnaqU8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-455-C8rdBQgHM3C6QQBFvAQDrA-1; Thu, 30 Dec 2021 09:17:40 -0500
-X-MC-Unique: C8rdBQgHM3C6QQBFvAQDrA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 095551006AA5;
-        Thu, 30 Dec 2021 14:17:38 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.254])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 618017AB49;
-        Thu, 30 Dec 2021 14:17:35 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v2 3/3] serdev: Do not instantiate serdevs on boards with known bogus DSDT entries
-Date:   Thu, 30 Dec 2021 15:17:22 +0100
-Message-Id: <20211230141722.512395-4-hdegoede@redhat.com>
-In-Reply-To: <20211230141722.512395-1-hdegoede@redhat.com>
-References: <20211230141722.512395-1-hdegoede@redhat.com>
+        id S241320AbhL3QgT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 30 Dec 2021 11:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241224AbhL3QgS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 30 Dec 2021 11:36:18 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBD0C061751
+        for <linux-i2c@vger.kernel.org>; Thu, 30 Dec 2021 08:36:18 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id z29so100036228edl.7
+        for <linux-i2c@vger.kernel.org>; Thu, 30 Dec 2021 08:36:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=tJuk50ldQ3muMSuXbgoS9j25a+T88Kj8cRwalO+iQW8=;
+        b=Tl2guSR4m3xEw3rpULIHJ++wqFW/SYEQmQ7WMIbnHy2zYaUoARg7cK9PknZf6cN0W3
+         Peuy4aLjRGAefGaAUwuauVVgDEtZLCzlwjNxLtx80PQlCxoGSnVjxl5sdsVysUIYKcXe
+         ZHEvY5FhgjEl58lOLJ1A9t4h30umP/Ypa+sfhqsYwU7Yrt1WkeUurBVz0ENELi+zsR3u
+         BJQNY1VfxHUUaE/8TT5cdKRGj8c4KYFh+H7dGlxuQ+DG6onDg8Jr518b+Y5yocGrGcCe
+         yh+h+XVHDxXODtQ3qlmex9RXZy1vi5EDfVkrKOrMBn882gkRab822AE3oOXEEvSNp6yc
+         Cq3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=tJuk50ldQ3muMSuXbgoS9j25a+T88Kj8cRwalO+iQW8=;
+        b=EWx4BqozMKL1xouZ9z2JHjSmN3ZhGHciv7fvHPi0z0Zpm8jfjpUHbPiH2L0I3z0pUy
+         hpxrjNo9CXH6XyZ/AoAUe4ubl1zn1JKl1AOW7cgcnaN3v2N8Zgnn+mdOAyti7Jb2fbNm
+         p/q2i6t8yQnROGo60sTsipY1NCVpdcdVM0DIr52MSOqIUuhySP0lmrFOJJWgZAfd0DBy
+         5tvPx8AVVwnZXRYLG/AKu7kHREKmCuD3GN0Pl+BkAto5kzn3SbPIAGO31lrJElAJbWvW
+         nezEUilzpe5oCGmsFlKN1adNYOdVn9VPsb99TzQBBJJdu7ULRLzW6ToB4tVOHPfxqJfC
+         Sibw==
+X-Gm-Message-State: AOAM533QahnOmlExmyZQdxl4umLZDIVcP3Beo7PYJgzKpNi/+4zxENub
+        z1QJRC4Fmdhn0/GGCLU68p/ZMWoSqvozEJzT2Ac=
+X-Google-Smtp-Source: ABdhPJzOomp7dfsSHzp32oQmbyN2PzdvUl16PkfjdGA/zQ1JLDHrj2HPGycg1+BKCtW6WdYSjbqXMvD8Y4OnayGP3mo=
+X-Received: by 2002:a17:907:9805:: with SMTP id ji5mr25733798ejc.431.1640882176818;
+ Thu, 30 Dec 2021 08:36:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Received: by 2002:a05:6402:524a:0:0:0:0 with HTTP; Thu, 30 Dec 2021 08:36:16
+ -0800 (PST)
+From:   saleem norman <norsaleem74@gmail.com>
+Date:   Thu, 30 Dec 2021 08:36:16 -0800
+Message-ID: <CALzdWh_x5jjnnv1r9eGK9qr1a48HO-KCPT0FhG6Jv8RmohjA0g@mail.gmail.com>
+Subject: DEAR FRIEND CONTACTS MY SECRETARY HIS E-MAIL nelson_salah@aol.com.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-x86 ACPI devices which ship with only Android as their factory image use
-older kernels which do not yet support ACPI serdev enumeration, as such
-the serdev information in their ACPI tables is not reliable.
+I'M SORRY BUT HAPPY TO INFORM YOU ABOUT MY SUCCESS IN GETTING THOSE
+FUNDS TRANSFERRED UNDER THE CO-OPERATION OF A NEW PARTNER FROM
+PARAGUAY THOUGH I TRIED MY BEST TO INVOLVE YOU IN THE GOLD/DIAMOND
+BUSINESS BUT GOD DECIDED THE WHOLE SITUATIONS. PRESENTLY AM IN UNITED
+ARAB EMIRATES FOR INVESTMENT PROJECTS WITH MY OWN SHARE OF THE TOTAL
+SUM OF THE MONEY. MEANWHILE, I DIDN'T FORGET YOU=E2=80=99RE PAST EFFORTS AN=
+D
+ATTEMPTS TO ASSIST ME IN TRANSFERRING THOSE FUNDS DESPITE THAT
+EVERYTHING FAILED US SOMEHOW. NOW CONTACT MY SECRETARY IN BURKINA
+FASO. MR. NELSON SALAH BY NAME: HIS E-MAIL nelson_salah@aol.com.
 
-For example on the Asus ME176C tablet the serdev describing the Bluetooth
-HCI points to the serdev_controller connected to the GPS and the other way
-around.
+ASK HIM TO SEND YOU THE VISA CARD TOTAL SUM OF $2.500, 000.00.USD
+WHICH I KEPT FOR YOUR COMPENSATION FOR ALL THE PAST EFFORTS AND
+ATTEMPT TO ASSIST ME IN THIS MATTER. I DEEPLY APPRECIATED YOUR EFFORTS
+AT THAT TIME VERY MUCH. SO FEEL FREE AND KEEP IN TOUCHED WITH MY
+SECRETARY; MR. NELSON SALAH AND INSTRUCT HIM WHERE TO SEND THE VISA
+CARD VALUE SUM OF $2.500, 000.00.USD TO YOU. NOW THIS AMOUNT IS ME AND
+THE NEW PARTNER CONTRIBUTE AND OFFER YOU THIS AMOUNT
+$1.500.000.00.USD. IS FROM MY OWN SHARE WHILE MY NEW PARTNER SUPPORTED
+YOU ALSO WITH SUM OF $ 1000000.USD. FROM HIS OWN SHARE ALSO BECAUSE I
+EXPLAIN THE WHOLE FACTS TO HIM THAT YOU ARE THE FIRST PERSON I
+CONTACTED THAT WANTED TO ASSIST ME WHILE YOU COULD NOT MAKE IT AND HE
+SAID OKAY THERE'S NO PROBLEM.
 
-Use the new acpi_quirk_skip_serdev_enumeration() helper to identify
-known boards with this issue and then either abort adding the serdev
-controller (creating a tty cdev instead) or only create the controller
-leaving the instantation of the serdev itself up to platform code.
+SO YOU HAVE TO KEEP THE WHOLE SECRET ABOUT MY SUCCESS, BECAUSE I
+BELIEVE ONLY YOU KNOW HOW I MADE THIS MONEY SO TRY TO KEEP EVERYTHING
+SECRET. I HOPE YOU UNDERSTAND THE REASON WHY THIS HUGE AMOUNT OF FUNDS
+WAS KEPT FOR YOU? PLEASE DO LET ME KNOW IMMEDIATELY YOU RECEIVE THE
+VISA CARD SO THAT WE CAN SHARE THE JOY AFTER ALL THE SUFFERINGS AT
+THAT TIME; IN THIS MOMENT OF TIME, I'M VERY BUSY HERE BECAUSE OF THE
+INVESTMENT PROJECTS WHICH MYSELF AND THE NEW PARTNER ARE HAVING AT
+HAND, FINALLY;
 
-In the case where only the serdev controller is created the necessary
-serdevs will instead be instantiated by the
-drivers/platform/x86/x86-android-tablets.c kernel module.
+REMEMBER THAT I HAVE ALREADY FORWARD THE INSTRUCTION TO THE SECRETARY
+ON YOUR BEHALF TO RECEIVE THAT MONEY, SO FEEL FREE TO KEEP IN TOUCH
+WITH HIM, SO THAT HE WILL SEND THE VISA CARD VALUE SUM OF
+$2.500,000.00.USD. TWO MILLION FIVE HUNDRED THOUSAND UNITED STATE
+DOLLARS TO YOU WITHOUT ANY DELAY.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/tty/serdev/core.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-index f1324fe99378..92e3433276f8 100644
---- a/drivers/tty/serdev/core.c
-+++ b/drivers/tty/serdev/core.c
-@@ -727,10 +727,24 @@ static acpi_status acpi_serdev_add_device(acpi_handle handle, u32 level,
- static int acpi_serdev_register_devices(struct serdev_controller *ctrl)
- {
- 	acpi_status status;
-+	bool skip;
-+	int ret;
- 
- 	if (!has_acpi_companion(ctrl->dev.parent))
- 		return -ENODEV;
- 
-+	/*
-+	 * Skip registration on boards where the ACPI tables are known to
-+	 * contain buggy devices. Note serdev_controller_add() must still
-+	 * succeed in this case, so that the proper serdev devices can be
-+	 * added "manually" later.
-+	 */
-+	ret = acpi_quirk_skip_serdev_enumeration(ctrl->dev.parent, &skip);
-+	if (ret)
-+		return ret;
-+	if (skip)
-+		return 0;
-+
- 	status = acpi_walk_namespace(ACPI_TYPE_DEVICE, ACPI_ROOT_OBJECT,
- 				     SERDEV_ACPI_MAX_SCAN_DEPTH,
- 				     acpi_serdev_add_device, NULL, ctrl, NULL);
--- 
-2.33.1
-
+BEST REGARDS,
+MR. NORMAN SALEEM.
