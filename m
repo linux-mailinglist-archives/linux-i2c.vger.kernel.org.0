@@ -2,94 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DC4482787
-	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jan 2022 13:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A804828B1
+	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jan 2022 23:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiAAMOu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 1 Jan 2022 07:14:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiAAMOu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 Jan 2022 07:14:50 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572D1C061574
-        for <linux-i2c@vger.kernel.org>; Sat,  1 Jan 2022 04:14:50 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so11294523pjd.1
-        for <linux-i2c@vger.kernel.org>; Sat, 01 Jan 2022 04:14:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
-        b=br3iMhnxMUWKfV+fufH3o0T13yCnTVLJi1Ld3MjyOF/OeoUJ09TV7XTwM+s1GyoqHu
-         uG40cJKnYDx2NO+aRVwkTfPSXaCdCe91/y2j3llyOCHop3RYFK4G7d/H8wB+fDTMVnke
-         jxArEMjREryGrbbA5D1/YziCF5+x/guTeapYvxeMOecIlYDB75BNZnnj6O2LCppAxJAV
-         FluUfpw/4+dfbWZfI/5B/ityr/uBG9z/kYd0yWGpuHBueNM0UHu/WoU0j371eJA5zwtL
-         8Sq7y/RXIbwLvHpK26EMjo92xzoEhfERAZGzVLm6KEfjAnymGus+LaoOdqemFmBuPlW1
-         LXOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
-        b=c7iFVDJ0KoT/Y0IwJiUTlnnBHi3gl4TNZ1gr+JgblnosHAEmELNY+nWzHSMjJv+p9Y
-         +uv+xNgOc63WIytVgAikYyPbPeV8hkGNs4HY9Y7LFmJ7BYlSjRyW4rtJpClH/yKwf138
-         6J//ibRPnluIEzResMg4B5wAl+m7ljCQQBKI8rBWD1mSq8vTmVcz3UBs1CsPuyewlwJK
-         kRbLyHnX2W6bsymMVnYrfCJvBxYxMFP4Otb0mrBDm/QscLaDiLII0vyK1jMX0ixIYLoM
-         hvdoSRy9/sfytvzQ5fch7RX1u8PXR3qErCpQxbijLluIXjS+ih8R4vVtXcH1eVsY7iAv
-         VSVQ==
-X-Gm-Message-State: AOAM531Yi4ZiBWKa1dcFPKSP15qH4fKUQvRs6zMPwo+NSeQq7ODkZjE4
-        juxKlpeJgmr6XODdodvonlc=
-X-Google-Smtp-Source: ABdhPJx55bT9ZYGTqC3n9yZQnbHnKaBe2dJQk6vC5IU8Z9ged6O8JpQyWIyI2TXR+f6nC02aUN5t7Q==
-X-Received: by 2002:a17:90a:1919:: with SMTP id 25mr35311538pjg.181.1641039289974;
-        Sat, 01 Jan 2022 04:14:49 -0800 (PST)
-Received: from [192.168.0.153] ([143.244.48.136])
-        by smtp.gmail.com with ESMTPSA id x31sm34736025pfh.116.2022.01.01.04.14.42
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sat, 01 Jan 2022 04:14:49 -0800 (PST)
-Message-ID: <61d045b9.1c69fb81.8bda6.d9db@mx.google.com>
-From:   yalaiibrahim818@gmail.com
-X-Google-Original-From: suport.prilend@gmail.com
-Content-Type: text/plain; charset="iso-8859-1"
+        id S230300AbiAAWGF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 1 Jan 2022 17:06:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55042 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230239AbiAAWGE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 Jan 2022 17:06:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BDF3B80ABF;
+        Sat,  1 Jan 2022 22:06:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4BDC36AE9;
+        Sat,  1 Jan 2022 22:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641074762;
+        bh=NA2vVEiwfFBZoDxqthTyVBIwwY7BDy7VHK/c+r9PyDg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=n4UOUCjjss33WEIqzQr+K4JCGGR4Cb4YeEsCfvIQm11EnixR+CoRMbRt7cjQPLn12
+         cySK6wmdOSnqJ9lJavh1LsJgXbssdFWfeUAuv5tX+ehlb6wKYTRI9pAbfqocPM4shU
+         v2JST+zzV96t2WdlLo2z8q+xfhWrjlDkx/QErEcqNMKjdSllcNJvFPexdzCllGL6eG
+         ACXxbZvb92dHxfWC95WqG1U0q5Q/BzRvQINCOGezN5bJH1KY+uwD6cl//QhnXJokOH
+         YtVGayZ4elIL4/7LhtVxfZfHr4JYaf70lVVIFdzeNIOmYYcj3zb+YTWn+T201ueT/e
+         INmTe5XnGRGLg==
+Date:   Sat, 1 Jan 2022 23:05:53 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.16
+Message-ID: <YdDQQRos0o8i9nFF@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: RE:
-To:     Recipients <suport.prilend@gmail.com>
-Date:   Sat, 01 Jan 2022 14:14:33 +0200
-Reply-To: andres.stemmet1@gmail.com
-X-Mailer: TurboMailer 2
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="btrY147HGwHQCQQg"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-I want to confide in you to finalize this transaction of mutual benefits. I=
-t may seem strange to you, but it is real. This is a transaction that has n=
-o risk at all, due process shall be followed and it shall be carried out un=
-der the ambit of the financial laws. Being the Chief Financial Officer, BP =
-Plc. I want to trust and put in your care Eighteen Million British Pounds S=
-terling, The funds were acquired from an over-invoiced payment from a past =
-contract executed in one of my departments. I can't successfully achieve th=
-is transaction without presenting you as foreign contractor who will provid=
-e a bank account to receive the funds.
 
-Documentation for the claim of the funds will be legally processed and docu=
-mented, so I will need your full cooperation on this matter for our mutual =
-benefits. We will discuss details if you are interested to work with me to =
-secure this funds. I will appreciate your prompt response in every bit of o=
-ur communication. Stay Blessed and Stay Safe.
+--btrY147HGwHQCQQg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best Regards
+Linus,
+
+I2C has a better input validation for compat ioctls and a documentation
+bugfix for 5.16.
+
+Please pull.
+
+Thanks,
+
+   Wolfram
 
 
-Tel: +44 7537 185910
-Andres  Stemmet
-Email: andres.stemmet1@gmail.com  =
+The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
 
-Chief financial officer
-BP Petroleum p.l.c.
+  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
 
-                                                                           =
-                        Copyright =A9 1996-2021
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+
+for you to fetch changes up to c116fe1e1883ad3eda0a1938a9e3275a98aa51a5:
+
+  Docs: Fixes link to I2C specification (2021-12-31 14:39:28 +0100)
+
+----------------------------------------------------------------
+Deep Majumder (1):
+      Docs: Fixes link to I2C specification
+
+Pavel Skripkin (1):
+      i2c: validate user data in compat ioctl
+
+ Documentation/i2c/summary.rst | 8 +++++---
+ drivers/i2c/i2c-dev.c         | 3 +++
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+--btrY147HGwHQCQQg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHQ0D0ACgkQFA3kzBSg
+KbZTZRAAnwdI6e8x4MNJbsfVFQOrDpUzw+kXRjE2KOLpCp24rGMFOAQ9eubhv9NJ
+vmimb9PnqwahJ19CCGIYMwJlsadg6MHpYR8fX8aR2AlLelug6T1aSnx0J07y2wDH
+dsNHrY3YHhk+aPvnkvmYLopK9yGccmdJTp4Gja95a9p2OTZBB6wf7705ZlGk3jOw
+4XaNO3qMGZNKtNcMCO8TLeJojfnessrymxVj9T03CSiashx9lSAnb7eLfy0GiNYP
+iz6DQBRS3kpYziSt+v4Ktqybmqz/q9cSBSd+1Fc2xAIymWVnvu8in/AZTf1x2MVi
+fFKME5WOkZtNzoqUwy67I5eTFb3jG47cIFv4CuDeyPP/BSTtJDk9FKPvNmllbn0X
+zgZG7IdEns8y2xXgExYJyW7p60dNjpdWXpsU5WWQAppPs+IB3awFC/8DTJImvmj6
+11/75OdPnDPd948uMXMFP8nLLS2jGfGBvTxPs7dsy/+jtZilp/rNsrAc062ob8CS
+9tufAhTyRD4+pqsN+Qe2Z8z6/YZwrWf2Aej/kKyn+sk/AUDQWY9OTViuANSzXDuW
+wBFaCZyIwK69CDjfTBJc+07rtcL49mhVh5wiiP3K2prs6LOnCTxt5cKSFfNmqXNG
+ECGSDij+tsOcVilUFkAiAQlWByF4oD77JJpdt1+pGR4dSiq2aWU=
+=7H5j
+-----END PGP SIGNATURE-----
+
+--btrY147HGwHQCQQg--
