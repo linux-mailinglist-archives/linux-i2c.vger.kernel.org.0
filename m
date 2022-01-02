@@ -2,110 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A804828B1
-	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jan 2022 23:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788D8482ABB
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jan 2022 11:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiAAWGF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 1 Jan 2022 17:06:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55042 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiAAWGE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 Jan 2022 17:06:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BDF3B80ABF;
-        Sat,  1 Jan 2022 22:06:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4BDC36AE9;
-        Sat,  1 Jan 2022 22:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641074762;
-        bh=NA2vVEiwfFBZoDxqthTyVBIwwY7BDy7VHK/c+r9PyDg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n4UOUCjjss33WEIqzQr+K4JCGGR4Cb4YeEsCfvIQm11EnixR+CoRMbRt7cjQPLn12
-         cySK6wmdOSnqJ9lJavh1LsJgXbssdFWfeUAuv5tX+ehlb6wKYTRI9pAbfqocPM4shU
-         v2JST+zzV96t2WdlLo2z8q+xfhWrjlDkx/QErEcqNMKjdSllcNJvFPexdzCllGL6eG
-         ACXxbZvb92dHxfWC95WqG1U0q5Q/BzRvQINCOGezN5bJH1KY+uwD6cl//QhnXJokOH
-         YtVGayZ4elIL4/7LhtVxfZfHr4JYaf70lVVIFdzeNIOmYYcj3zb+YTWn+T201ueT/e
-         INmTe5XnGRGLg==
-Date:   Sat, 1 Jan 2022 23:05:53 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for v5.16
-Message-ID: <YdDQQRos0o8i9nFF@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        id S232161AbiABKWO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Jan 2022 05:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229899AbiABKWO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Jan 2022 05:22:14 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF06FC061574
+        for <linux-i2c@vger.kernel.org>; Sun,  2 Jan 2022 02:22:13 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id v10-20020a05600c214a00b00345e59928eeso13146183wml.0
+        for <linux-i2c@vger.kernel.org>; Sun, 02 Jan 2022 02:22:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=g8Z10qgIS0EarfPNyU/0T6kl3UEk/EndXdl7judHSI4=;
+        b=A5L6sOfCcSNZMKLN21Yzd8wv61rq1ptlP6VMHl28svC8edDTRLEEuB1Y/uuJdnSDVh
+         HFoXDU99IohJPdrYJMA/KcS/1MiNs5u0Ngqn0DBOL7J9+MM7G7LjU3cAaVaDmvegB32N
+         JeuI7K0JXDAsIDh0zNq8IKPVZ/eyrvma6MD81Z3V/X5UM/Hu7SRePYFfVoNYPbkhtXEJ
+         FcUHuQTHyVSuPLLvfVIozq7WCvftHm7Qx3Jf5pd1YsoCcjxtNlAAIjc8S79kr4cNybLP
+         Ni1K1XPXxs+KSwIQ14G9GsrlKs93IcVSwPXY5q8Ku1vnm5QWNTxWhWPJzhplhiqUl7Ve
+         ebiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=g8Z10qgIS0EarfPNyU/0T6kl3UEk/EndXdl7judHSI4=;
+        b=p9QxmVr0r1nS0leocLRnD7C6t1lnn3+2wYdAoM1PfBvCImss/Pjoj0Wsz3O43vm88o
+         0Tsad7b7E+Q/lPzKTxu5RMpW9G2tJ7Cm+MpWmPtZ++qCq0/Iwi8CWHsmnhOWxzYF5D6P
+         fIXuKuas+ZH7hdfqTY4cryS3HET4SyLDGKKnkAn7LWzzz6SXFPaNjLd0f6/YqZaNbI4e
+         PakpKnr4E0JGtHcTBRsPeJU+MJ5nOCxWH+z5+GkONOerkyXXBqdC6387A5B3I/u6xbwL
+         +Vn2OHNtJzTI6U07w+xJhHWH4Y/n6npAv9MFnkclFXFxjEU3a65MKMy7NoSBbzh8OLt1
+         cJUQ==
+X-Gm-Message-State: AOAM5311LgeHcJBEKqQ3rgoIo8VQq1ZDwd/OxITrxuGDiwokhb8FndK/
+        fUqEeB8/aaHUMYzvwqjvrzA=
+X-Google-Smtp-Source: ABdhPJyx/rY1bKvRIkjNhsc7CoF5YE63FtZuY32OJFunLtd9gtaLXX0Cigy1dXppxviXP5R7uQrStg==
+X-Received: by 2002:a1c:f418:: with SMTP id z24mr35685440wma.95.1641118932208;
+        Sun, 02 Jan 2022 02:22:12 -0800 (PST)
+Received: from [192.168.9.102] ([197.211.59.105])
+        by smtp.gmail.com with ESMTPSA id p18sm2495610wmq.23.2022.01.02.02.22.08
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sun, 02 Jan 2022 02:22:11 -0800 (PST)
+Message-ID: <61d17cd3.1c69fb81.3c161.83c6@mx.google.com>
+From:   Margaret Leung KO May-yeee <yusufyaumuhammad@gmail.com>
+X-Google-Original-From: Margaret Leung KO May-yeee
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="btrY147HGwHQCQQg"
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Gesch=C3=A4ftsvorschlag?=
+To:     Recipients <Margaret@vger.kernel.org>
+Date:   Sun, 02 Jan 2022 11:22:03 +0100
+Reply-To: la67737777@gmail.com
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Am Mrs. Margaret Leung I have a business proposal for you reach at: la67737=
+777@gmail.com
 
---btrY147HGwHQCQQg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Linus,
-
-I2C has a better input validation for compat ioctls and a documentation
-bugfix for 5.16.
-
-Please pull.
-
-Thanks,
-
-   Wolfram
-
-
-The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
-
-  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-
-for you to fetch changes up to c116fe1e1883ad3eda0a1938a9e3275a98aa51a5:
-
-  Docs: Fixes link to I2C specification (2021-12-31 14:39:28 +0100)
-
-----------------------------------------------------------------
-Deep Majumder (1):
-      Docs: Fixes link to I2C specification
-
-Pavel Skripkin (1):
-      i2c: validate user data in compat ioctl
-
- Documentation/i2c/summary.rst | 8 +++++---
- drivers/i2c/i2c-dev.c         | 3 +++
- 2 files changed, 8 insertions(+), 3 deletions(-)
-
---btrY147HGwHQCQQg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHQ0D0ACgkQFA3kzBSg
-KbZTZRAAnwdI6e8x4MNJbsfVFQOrDpUzw+kXRjE2KOLpCp24rGMFOAQ9eubhv9NJ
-vmimb9PnqwahJ19CCGIYMwJlsadg6MHpYR8fX8aR2AlLelug6T1aSnx0J07y2wDH
-dsNHrY3YHhk+aPvnkvmYLopK9yGccmdJTp4Gja95a9p2OTZBB6wf7705ZlGk3jOw
-4XaNO3qMGZNKtNcMCO8TLeJojfnessrymxVj9T03CSiashx9lSAnb7eLfy0GiNYP
-iz6DQBRS3kpYziSt+v4Ktqybmqz/q9cSBSd+1Fc2xAIymWVnvu8in/AZTf1x2MVi
-fFKME5WOkZtNzoqUwy67I5eTFb3jG47cIFv4CuDeyPP/BSTtJDk9FKPvNmllbn0X
-zgZG7IdEns8y2xXgExYJyW7p60dNjpdWXpsU5WWQAppPs+IB3awFC/8DTJImvmj6
-11/75OdPnDPd948uMXMFP8nLLS2jGfGBvTxPs7dsy/+jtZilp/rNsrAc062ob8CS
-9tufAhTyRD4+pqsN+Qe2Z8z6/YZwrWf2Aej/kKyn+sk/AUDQWY9OTViuANSzXDuW
-wBFaCZyIwK69CDjfTBJc+07rtcL49mhVh5wiiP3K2prs6LOnCTxt5cKSFfNmqXNG
-ECGSDij+tsOcVilUFkAiAQlWByF4oD77JJpdt1+pGR4dSiq2aWU=
-=7H5j
------END PGP SIGNATURE-----
-
---btrY147HGwHQCQQg--
+Margaret Leung
+Managing Director of Chong Hing Bank
