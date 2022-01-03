@@ -2,101 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D01482F51
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jan 2022 10:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4633C482F8F
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jan 2022 10:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiACJTM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Jan 2022 04:19:12 -0500
-Received: from www.zeus03.de ([194.117.254.33]:45424 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232333AbiACJTL (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Mon, 3 Jan 2022 04:19:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Vn3aJxyDkPL71XRKDgCqDg71rfPI
-        Et7SATEKvTbySz4=; b=OjFanPf8tZJPOAqOtP8VEixy8l0ISOLwe2fVgS2MNIO3
-        yDkOL8m1T/AG6KUOVDTZR4QL00BrsRiLXozxPCrPa1hurvxiUz3WdOBAfncPhBuy
-        LcbMtuPeLh+wZUE+vV3sjJcDkRfL6vEQWtkSzTEPrry72jxFCQVkN3EY0EesTQU=
-Received: (qmail 1589744 invoked from network); 3 Jan 2022 10:19:09 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Jan 2022 10:19:09 +0100
-X-UD-Smtp-Session: l3s3148p1@rCFeA6rU9JogAQnoAFcDAH8Lqh5Pgme7
-Date:   Mon, 3 Jan 2022 10:19:09 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakarprabhakar.csengg@gmail.com
-Subject: Re: [PATCH v2 3/3] i2c: riic: Use platform_get_irq() to get the
- interrupt
-Message-ID: <YdK/jYJTaDQRfOzi@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakarprabhakar.csengg@gmail.com
-References: <20211221175322.7096-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211221175322.7096-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S232375AbiACJoY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Jan 2022 04:44:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55750 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232224AbiACJoY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Jan 2022 04:44:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AD5560FF2;
+        Mon,  3 Jan 2022 09:44:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4581AC36AEE;
+        Mon,  3 Jan 2022 09:44:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641203063;
+        bh=ihGRiJtMqi1KackPQURTxGDLqipQgGwaNxDqfKCAvuA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fcCLtTz7COwnFHF8HDOkCo76M0jaDy9+tnLxfu+o7qoBh/ocL9b4cCQ7AkjGy4RSf
+         3fmAjZAcWDTkXglGrMalXzTA7rx9iiRTAu1dWCESgndBkn9HLghNOvJiU9C6eJ2J9r
+         UE/lzm25TfjR/0FErn78a1+rjr4ALpJMUeZj4ubo01wX6esqmDsHLBlfqJu1dMVWPl
+         IfiC511QnvkiJ1/1KXGHgC+TEgxJDhDV3xdyQ3ce8rozk73MBLuXj7ToI1Qd8aMgk3
+         NvVt98gbNOoDe6xGCrQWgYuJleqiayC6Be6mw7dzDce6ZHD5IP+HxRs8oCwTV7jnhL
+         7u67Wgt+Ln2bw==
+Date:   Mon, 3 Jan 2022 10:44:19 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Sui Chen <suichen@google.com>
+Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        tali.perry1@gmail.com, benjaminfair@google.com, krellan@google.com,
+        joe@perches.com
+Subject: Re: [RFC Patch v2 0/3] I2C statistics as sysfs attributes
+Message-ID: <YdLFc/sJDf8rrPQ6@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Sui Chen <suichen@google.com>, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org, joel@jms.id.au,
+        andrew@aj.id.au, tali.perry1@gmail.com, benjaminfair@google.com,
+        krellan@google.com, joe@perches.com
+References: <20211203023728.3699610-1-suichen@google.com>
+ <YapHznDoqJ+wjx8m@kunai>
+ <CAJOps0u=seskB-YGvLBsHantJohkEX7do-mt7YSZ6zChQMQxbg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LbZOgwvcfKOW/9BI"
+        protocol="application/pgp-signature"; boundary="SG3y9r3TeWn5kgv3"
 Content-Disposition: inline
-In-Reply-To: <20211221175322.7096-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <CAJOps0u=seskB-YGvLBsHantJohkEX7do-mt7YSZ6zChQMQxbg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LbZOgwvcfKOW/9BI
+--SG3y9r3TeWn5kgv3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 21, 2021 at 05:53:22PM +0000, Lad Prabhakar wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->=20
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Applied to for-next, thanks!
+> - Because we're targeting at-scale monitoring of fleets of machines
+>    in large numbers with identical hardware configuration, the
+>    I2C counters (including NACK) can be used for apples-to-apples
+>    comparison, for detecting anomaly, etc., while this may not be
+>    applicable to a single machine.
+
+Okay, I buy this argument. Let's work on this during the next cycle.
+=46rom a glimpse, we need some refactoring, like moving stuff away from
+i2c-dev into the core and probably add a generic stats-struct which can
+be attached to i2c_adapter. But I'll respond to that in more detail to
+v3 when I have a better picture.
 
 
---LbZOgwvcfKOW/9BI
+--SG3y9r3TeWn5kgv3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHSv40ACgkQFA3kzBSg
-KbYujw/+KThxY3hK++tUtGTWh7XlVZponjPor++a2HB4FvXu98o9fOg2edVejNgg
-i4qD6PjSTlbc3axRU39RUxSootrs+IjNV9AxAr/tZvWUDYqGW4GGjtuS1NLcOet4
-EjapfWRN+0CGojyPyylIrld+GDzAXB/kgYaoavFekul8jss9YTfqrL1busKuAH1/
-LvPJEAEj367CJ+GsWTWeO1C9eBvYq566NEHwFx0jYLWLg9at8bSQgjZ6xvSBuiy3
-xtsCuQW4+2Qpb0jqvBJLYtt5SW/UzYT7MjoULLqphriSpui+MZ0BNY8e1dJy9snA
-GHZWAKmICM2sk1QyODulAx6Dyr8pQrk2C8l3lPSc8WJ+UGsrdQdmFRgy4WdHG7cV
-F5loEfmEoMWZiqGPGS+/NCajtb1xbHIZqrRVpSszhausu3FbuqVmMNmhDWQ2nc0i
-QdaF47cBovGd+AKvKfpj/4lro/4qQHRek2Dh3F3Pg7l5ZDABRkdLnN3LxcsT3PLG
-shxiNRkkppXS5NZStyjaas9CsPaj38g8H+XiQFAfPpZ9waw5t8JmJ5bQJ8GRM3WM
-ZS09g39sPv+qw6qkb69NxXRZ+Tj7u1E7wV8MqUD+GPkj6HWDUsGR8neNvKUfk4oN
-3UBcTrjslgdWeODgfFEeeaXQBKFisYZqve362HNu7L/tFtEOBQk=
-=huSE
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHSxXMACgkQFA3kzBSg
+Kbadew//YJJjHVOZvJkbqH10fwSHXbLcfLmRWbC7F3u0BLstTzPTXvm0ESE+4wQS
+nMPzxnZHMzfTDfFObBwzkIVcdoY9msPlCxqgAXfBFDbLVBlca1ANtZbom8t26EYS
+eqWtWtJ09qxIpbjMcecvF0SOcZzSA5CpCGKlpV0gXl5RXD09c9mw1HsB+zZoaKEE
+/58mOG6Evjf0oAUO0oqbi6km3AmYDb74REXcgeL2npsbSkK0vO2vinwSgEOybIUE
+G51tKqW6ESYGS7s2ZlYniaFhcNagy5J9HuXgbvRurX1ebsMsbJ7444qHPbmGP2uf
+ZSu8E2IF9qsCGA1nQGhSsLXGY7OVXSISP3sKyfE7UFTHwTWVV/zebAZZPPfwD9py
+yrokc66kBpWWwV6KLTPt+DJcEwPlVCsyo4vcjAz5+zglIFy9XmidsjZSjPgluAPV
+EkPqx6n6ftylYIJeeKMquqmjKC3oZzNy6rhneVJ0moZRoZXeOF9/UO95qJgiikol
+qYhzD7SW87ceiKFxLYhnj/SH149CxJighnfnMCOlfL4+zKuIKfDeHURRcW+ablyG
+hcfaewyz+MbWhllgAmOmrBfJLCNzKvZCj3I504uLnQ22KYwiangvNOwuLRjSRSJ+
+af1+YoVXg+pY9IcQy+7lP3uXUHWpu3aZq1hfPcn01MHffyQX+A0=
+=RbAX
 -----END PGP SIGNATURE-----
 
---LbZOgwvcfKOW/9BI--
+--SG3y9r3TeWn5kgv3--
