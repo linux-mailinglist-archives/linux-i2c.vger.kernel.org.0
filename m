@@ -2,184 +2,240 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C46483F94
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jan 2022 11:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA404848A7
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jan 2022 20:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiADKGt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Jan 2022 05:06:49 -0500
-Received: from mail-bn7nam10on2049.outbound.protection.outlook.com ([40.107.92.49]:37665
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S230251AbiADTe7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jan 2022 14:34:59 -0500
+Received: from mail-dm3nam07on2072.outbound.protection.outlook.com ([40.107.95.72]:44896
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229731AbiADKGt (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:06:49 -0500
+        id S230041AbiADTe7 (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Tue, 4 Jan 2022 14:34:59 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GzgU1I7t/3JV+3GOX5kPvDDYpcpn8DKEG/F47/XuRbYiZkCZ34/G/ZZ4syXbycqQMNBmxeH+rGWk1xQSKbLXypO9V8pKtWXQ9cKc7WOsHjAl1AL3wxVAeqvMT/TfH/3e60tNWSf8WsHLl/5iCtTpklNlbf4rQyPqdz3kRwspdVkXf1x1Ip9ZvLVqxeKAyz46KW1sF/soq6OHE0IzLhg7+9MFcwmUH6qxVUZGPgtjegbB04OWmYjXIEg0Md84pZdxF+Wxo6p+SjZOjdJp+wlGpEhXgZPzEiSX26CVCDZJsEXnrzTct0GLo+Ok88eoaItYnnNHpCP/+uPEcLVhNVBxkQ==
+ b=nAj6QzrgutdE8lTTQylnmGCfBYClFH3gmcoqfne/NXkTJiDVNvwEPmhtBlmXrYgHpOiL0eJThvZZN1GJ6h9Lz4HC2geVKXU9jYYUvFM68nlVDuQXrxgTgMch+niBnUrbo+id0ak/zf4LeAXQ9MydukSHSjRgp4ovjUhr76vXZdYXlvq9HvYuqTkLxP31+eIF1tiYdrvj5BazqmJ5+r9ORFtjGW9EXXQiJihsMs5i9nu/9ImRsjbfk/B5EBbsDzf8m9wyn2yTNx/7uEJWcmCTSK3Vk72qJhhNU2x7tJqoP8E+kYp1CuQ4yEOQkvu6ERXCGH2mm5X0N56mNatfln0YeA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mTDdHrt0tpfDd/JktQiDGe5pFCDTc/zVV0snoHutoko=;
- b=MQE70vk7DVmu1gUb1NGlueGVJ+yqCE0pXzlTg925FXQ4o5MP4O93kjWFtsbVb3z3eOUTcaCt8VG+TMX/aLvA3nV1KIYNf872+dpn/udZMcQPBZbJXYTLG/+H/0XvSLqd+VJ0kVml1NSK2aw3AQ/6l1vpXX52N2dc0ySBk5MEP4iQ2099QuvKD5FtS6JivDzIZgKwIRnVvOHntDv8X1UC3mprh/vqrMApCvHU5Jl6xyjaXMprvy7ZKNTQDkl4LM0IeLpf3iFIWb6ct90hUFsiB7RGGqysxI+L1hoohpMLfRzyJoM5TudJWMQv7k7UwK8kglkuZYjo8Dk8cQmvv/8ucQ==
+ bh=a1lsqpzfRR4v37zro0Q4ZdkqaIKJR/CtjW14c/yvVr0=;
+ b=PiYOp3ameduwAfB+LXc4Wwb3KbDQgmGGD0rfxfKlmna6+qB2PmJN50efl5MHWbd9stnN306NVhvHFCPdt4q3pu9K+B1gHxdietAVufW2j7MXcBEXAvjHmFIKDqwi2iRBok8A/XvdzDZDADLB6muB7rKOwlKbZ3YK0WJZE561n/3ykre1n6asu7cNIScfWwdTOTlTk08xzbuVoRyoV41qrQ/xdjZjNLUb4ti7ckiUTouvTI/4Iao5NjE9P95qy7LwM0lqgy4D6kPJyH8A74bqr2t683Z7vpTEc1nf0mTtBtaqdAlIp6eqZpTPugFFzWSxLqlOIOI2+VkpbDKoHSWs4Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mTDdHrt0tpfDd/JktQiDGe5pFCDTc/zVV0snoHutoko=;
- b=pdFjdIODrlvkXnO73waiPM56ObO7Pbj8RwNOD6HYKmB5wYZoBpLMVGwwzsvS7M3iRGJF5amB08k/pMl7y3gFs9+BzUyB/DO4oN0ity+Z9cAdspUoP5SRBO6r8inEqz6U8iDv9F5rFyNPe7toNZA/en0xVUOFguspRf/HCJu/p9uItGbcjVmK3FADbzCi0Xitxht+NnsdpRbDpfwiNHVyJlPUvs6OGHh5rsmwo0Heyd/kwOLaVoO4QEScjqHb2lnPAtmqET3800lgVjgxHq8CRIbLUmDTud+XCnB/KtnVgccd2gbrPfbwFZGrZcYgwC+ucpl3kz7Zd7xgBR8nlYFR1w==
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com (2603:10b6:408:11e::22)
- by BN9PR12MB5383.namprd12.prod.outlook.com (2603:10b6:408:104::7) with
+ bh=a1lsqpzfRR4v37zro0Q4ZdkqaIKJR/CtjW14c/yvVr0=;
+ b=L+E3d+HNhrsYy/+h7dI7VJub5vSEaFo3MOZFbrW/NvgMgt4ezm2UaaIp2lSLjlh3CxtLuWTTrP/d1imXl6MSKKIMgpJWKMA3hNPPb7d+KfJKtOa7CLUWZCCB8JZ5+wveXJy+jhND194VYl8T79VO5nxUpj4QaoB018C4ea8LhJI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH0PR12MB5346.namprd12.prod.outlook.com (2603:10b6:610:d5::24)
+ by CH0PR12MB5057.namprd12.prod.outlook.com (2603:10b6:610:e0::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Tue, 4 Jan
- 2022 10:06:47 +0000
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::1476:9fcc:8d54:394f]) by BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::1476:9fcc:8d54:394f%3]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
- 10:06:47 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Wolfram Sang <wsa@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Subject: RE: [PATCH 1/2] device property: Add device_irq_get_byname
-Thread-Topic: [PATCH 1/2] device property: Add device_irq_get_byname
-Thread-Index: AQHX8n7ghAR0sKU4N0uGdTUi4cpNNqw1MEwAgB1x03A=
-Date:   Tue, 4 Jan 2022 10:06:47 +0000
-Message-ID: <BN9PR12MB5273EDC94146B82B00763055C04A9@BN9PR12MB5273.namprd12.prod.outlook.com>
-References: <1639660402-31207-1-git-send-email-akhilrajeev@nvidia.com>
- <1639660402-31207-2-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75VdXw_XvDN=T3fOmNOWsdfQ_xm2090z9uAq77oADPRcMzw@mail.gmail.com>
-In-Reply-To: <CAHp75VdXw_XvDN=T3fOmNOWsdfQ_xm2090z9uAq77oADPRcMzw@mail.gmail.com>
-Accept-Language: en-IN, en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Tue, 4 Jan
+ 2022 19:34:56 +0000
+Received: from CH0PR12MB5346.namprd12.prod.outlook.com
+ ([fe80::4843:2718:efe2:f1aa]) by CH0PR12MB5346.namprd12.prod.outlook.com
+ ([fe80::4843:2718:efe2:f1aa%5]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
+ 19:34:56 +0000
+Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
+ io accesses with mmio accesses
+From:   Terry Bowman <Terry.Bowman@amd.com>
+To:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, thomas.lendacky@amd.com,
+        terry.bowman@amd.com
+Reply-To: Terry.Bowman@amd.com
+References: <20210715221828.244536-1-Terry.Bowman@amd.com>
+ <20210907183720.6e0be6b6@endymion> <20211105170550.746443b9@endymion>
+ <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
+Message-ID: <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com>
+Date:   Tue, 4 Jan 2022 13:34:54 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 618d656c-246f-49d3-815f-08d9cf69eb0b
-x-ms-traffictypediagnostic: BN9PR12MB5383:EE_
-x-microsoft-antispam-prvs: <BN9PR12MB5383FAF9FB67C6571E0ECF62C04A9@BN9PR12MB5383.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7zMoV/0dVVoHSBLlOw/f1vL8TDffeqrQnyXu3lbM5iLrcXVDS4ciFp8MxvJM0JnnIiJjAB7u1FrOSwNdWAe39XW8KzwjF/iGhM1gvG/0nQ+oDoUW46ra6nF60xKfEBA5j3FhA7U2T5CBNrcMRVChpGdHwL++yP7UQOkacMxgyTDEEPYusLVt2YbbeqfZAM2Hd+yFFpRTvYH14SL8jy3t2pu5rO90CadTY+a5N3sL2ykH+zfok8o/7ZG6geFdZLo4iTL0CTTe0ezyeaAr885rW7GhDUtgO9BoGZQrakJ2IdqP++MCv1NAYwmHDovqpN3E93h4os0yTU/+UxEhetbMdpHcmE2T3iAtES2ovkwIBUItQJ/Yc4MofiuraRIEa7nEyAsAPtuhz+3k5KVu69A+dMLBDtOeiDvJ/HL5PDq4xD0ulpvyegzgKrt127u6EmwiiQ/OBinWnzNzi8vV1Gj+5DFzmpEVHnvaXkqsbyIUZV7Y0E/b4NdgjuMyxoy34spgmx3RC19sz3ts3a5uJNT62e7t8pR6fS7MfOAS2/mDIN7nLfaLyLzsG9WqJn6fVbbdcjAkzwUk5ChDR1JkOAPPfpvsc41qepSsccRTAUEKIsqPP7aHSPINoQRbwKOkSz7OJADs6+S1caQTzgIPYF5irFp7JymputT1mxuTQ2f+dsfaa8bbZR9iyePX6u2DG9C3QQEDKXiRUhdclR3aXph8YN+2GUatzXDz1pvjcO84Qo9KLTXGh5d33Pd/+hBLMwH61rYy8lseru/jDkGcyRP5k3kQN4WLOYp4W9qO11pzFpY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5273.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(7416002)(76116006)(54906003)(38070700005)(508600001)(8936002)(66476007)(7696005)(8676002)(966005)(5660300002)(6916009)(9686003)(2906002)(55016003)(6506007)(316002)(53546011)(38100700002)(64756008)(66556008)(66946007)(66446008)(55236004)(4326008)(26005)(71200400001)(52536014)(122000001)(33656002)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TR4wdk0xCqoW6teG48HVWsCp87xN3UBletp01aWyDt7lMenfjKRZ+Pi4OJ+O?=
- =?us-ascii?Q?aAsoGuWAZI9Hpbs6yNOKy9GVq1OdCfaOlol58uJq/WUs9mmPGE7G5dxcFNWx?=
- =?us-ascii?Q?BjljeX/VGyipw2rmdA9kruM6kMIcX4xwwLoaPbI8XyRIyUyLnOC0sf+xRDxI?=
- =?us-ascii?Q?7Y9aXWnEvdu+O2PwfJrC1wL18qeaUKoKYRVTGPkc90fZFRan47oIFE1kribj?=
- =?us-ascii?Q?tnPgV3dW0o4y0I0hjw1PNtV70HblpPcyscEptN1VrgbL1C7HzoDx6yTta057?=
- =?us-ascii?Q?9+1VMGjiTA1w6Tsg3hlUnsRtY+uYlrEws992v4v+xS0p4saXjMgM5qlUYOlU?=
- =?us-ascii?Q?m5gU/FKAr5AiMHnrkim8DxhFowUqwXJhwqLGGoLKBN2L/8qvHtel/LCAQZez?=
- =?us-ascii?Q?GBQu0DKwGqcrrFrOYbi/kw3u3jaQVfXvs+Nnptsp+T6pT5LIIHk9ZHohroC8?=
- =?us-ascii?Q?lIb2NvhH1eSMWgB0VewQjOygnv96JGwbxa4rPvwLikb2RglZq5O9x4qHxFS6?=
- =?us-ascii?Q?89KyXtTvCnkKQzaAm4DhtQWggWsGGg8WtJAwMUhHTRbmhnZ70iuC0XQei9m+?=
- =?us-ascii?Q?A4NrL+wqH9VlWcMjClYnII6wxnS0P9dHr1t43xsJzMYhFToRv20rq8du976e?=
- =?us-ascii?Q?gx0kgT80VSB82VihywkOqDuLfFS86iNKDtivBm+dQIJn7JpJRhGvcorwXPyv?=
- =?us-ascii?Q?KHLbSlzlkfm4CTXdUr0rkhkk4OQqte/Uee4qTpauLdVhhseF/rnnsnDYI+6S?=
- =?us-ascii?Q?SG9VzrE1DYpDT+Cfsz02e/JduYucxcK4N4T6PXrriBPnRt9lqlT3B44r0Lg3?=
- =?us-ascii?Q?wEo+ZMBK/6d0OJvgkSIR4UhOrH22E1yRChsHrm2bQHk7n919F2k8rWTlkNIF?=
- =?us-ascii?Q?KpM5YxNpdJtS9/WzG5F1bYI+HIa+2zT9TtDjzZH2/+2Q7iD6S+hr1qdrA6qz?=
- =?us-ascii?Q?ZjkkcmfPMHmezu5HphhbVXMa1+3T0mmS8LJJE7OjZAn/KrBLiiBZG9TsJdQm?=
- =?us-ascii?Q?2/ND6hCkvO+eh3JmxZS0gelWlicWEtNCnYvPTeZ9o4c9K3XM65RQxxb8gdVk?=
- =?us-ascii?Q?vYYv6axAhdIsAqOFbBwTH4gUiMvblKxU+DpA0P0eh2a2dkOVlwbaXCcFnoog?=
- =?us-ascii?Q?FQt/yUhy9QfNa9I1vP4p53Uwd5kh5W8KEqdF7PT3jR3SiK44BM4C11T0L0qQ?=
- =?us-ascii?Q?9qhSFQxb61nzc4/w9nb2fgeYDB5qd4L2Ha53CggOCkQKXi0KEko4BUrnkF6f?=
- =?us-ascii?Q?1UfHXG4oCURqne/AsqRWsQcU+HWtbWO+A7VYKU9ftgErqcl0vDHnAg74gH8p?=
- =?us-ascii?Q?3HphM0KcKhaWLI6uWF76XIM8qnXocfE1eOulGgXqLbNmRfFJCr3pDLQxoVOE?=
- =?us-ascii?Q?pVG8Vdlt5bO+Cxm9qRQH1B2HBVug4P7JEkrvT55wqCtAYIdDVXNNmcWh3EFM?=
- =?us-ascii?Q?euk/2laHtpPkkqE298hczMyJ3vb1DzLrj3rTY8QO77hZMkPpEQc+JKVrZP+J?=
- =?us-ascii?Q?eVs6YZAXyw/I/9JGr+XO8WIWkg7qXIhOiwxiLm0msaRXWQ+jl8SiyVayF6zo?=
- =?us-ascii?Q?6E0LmjMbxABTY6ImFXNxGx7wTGliw3/Rr+9Qrv84De8crEVcvRMRaEzjUjGP?=
- =?us-ascii?Q?b66ZvJNksn483KEIXIdXqSU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR13CA0039.namprd13.prod.outlook.com
+ (2603:10b6:610:b2::14) To CH0PR12MB5346.namprd12.prod.outlook.com
+ (2603:10b6:610:d5::24)
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8a3bf61e-6e34-4f52-6a74-08d9cfb949eb
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5057:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB50570323396A3B37B82A46CF834A9@CH0PR12MB5057.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CxBzhsvBHijbMRmcEODxrkOHyxwPTdM0glDvTOU73p1f+C9X4iPum3qq4UUYHE3BGDL1EtKkIPKcBKd/or2EKchzpU9b/iEANz2QDG1NYDHXvrLN7e+zmyV2LgpCG77U2aOm1G5Q6OhT0bYVOi+bEN3mqfg2ThebpqKIJBowGeT4rSkPmNnHGjWJK1IPJb3A4Cz12Ez51OH6supJkovlp0Qb2p+5IWB1Xq9wj1fcAUxfK3y+gZlcO16IBIU7ryqzNQzbwYTYnA7nFTwW2Bu7FZ0FCfLddiAsRmPFJNBpwYA74/N4raWW6/4V3YzDJA4b1CXHvXWoOdIV5+LU2aDpG6t8TIyKiVIWrdhzDV/1VyE0RrmQiawKsOsWAfy3idpOKL1SFivPAn3cB1dK6uUhUnW1Lk7ZaRCBVNy7icolIyEb9DZCZUABCa12fxdjsF8cd0Z23svrYiu/nEr/tblo3/tw1Fi+p36SWEWhc1SXj/KSo5ZxPkP000pHUkUijlZfwdgSr0V7YScj8XtegC6R5YKJ2pOaxnaxKt5r/iHlWiPlXF8Xvb2iqWy2UosFCKqKzxljiggBzW0506hI+8ff+qxwOsIsl08Uz47yBMY8m/PrXNp1gIJxSFvTYR0TNcZ7bw+J3Sc4F27s/GogX1b6MzhCFhAIXDmndfRWDHoIdNL2dAfsxSd88KXpSmG8q/7zNmwSofbheW0pGeT48NGmkIDFu/V2J5bB7NQjcmUalLwv45jX6TguGT/nQCwTg7A2VFOrrAnn+GvRk86B2sYXbg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5346.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(36756003)(3450700001)(38100700002)(186003)(53546011)(8676002)(6506007)(86362001)(31686004)(2906002)(8936002)(316002)(66946007)(4326008)(6486002)(2616005)(83380400001)(31696002)(110136005)(6512007)(5660300002)(66476007)(66556008)(508600001)(32563001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZFpneVAzTWtQZWNHWkxheDZlaTE0Uk1YZWp2cC8zcEcxaTcrM3h2bHJiZVRS?=
+ =?utf-8?B?bTlaZWJSWW9JS1RSamg3UjNGRFU1dUgwZW9mcmxZT2lxbFQxbjRwSEd0MEdy?=
+ =?utf-8?B?KzR1WDlwOEUxM0l5b0Zhc0wyNkxsV1hIZ0p2akR1RDd1bHlXcitoTm5PSnNN?=
+ =?utf-8?B?ZExFU3lyRkppMHJueWpzR0xhYzBXOEp3Y3o2aVd2eXZoQlNEU2FNMFgwayt5?=
+ =?utf-8?B?R0plZlZ0bzBDS3phRlEwSzg1WmlrMVlvdFNJcWtCTlo5N0s5MEN6RWhWMXpi?=
+ =?utf-8?B?b216ZlRhUWZJYlpCTFp0Zjdtd2R6bjR1ZFU5NlhRb21JZ3lJR0JDZ0hXR1Fi?=
+ =?utf-8?B?cTlSMHZRdXZseUNmK1Q1ajl3V2VJbFBCNm4vanZQWnM5aFRTeFpsSmlLVG5C?=
+ =?utf-8?B?eW54WGczMzFTNmpYMmNPTTR1TG9TRmJDMi9BcVIxclNheS9rN0c3b1RTaENI?=
+ =?utf-8?B?RStKSUswYkxoRXBNNEZnODVuVFZBWWZUM1hxUFYzNnpaamEveHF4K1FaOTVt?=
+ =?utf-8?B?YmVRWW9iSStOeTNpTzI1UEN3ZGprdlBVQ1VFK1RuSDhjZlRFb05IQmNwVnFZ?=
+ =?utf-8?B?T2dzdlYvSE9ZMzVZTWlQSDRGYytNNW1sQU45ZUlwcmh6NEtRVmpHYThycE1m?=
+ =?utf-8?B?eXFqOVk1V1RiQ2JhK1ViOHNORGw2U2tnSzFQcFpVSGEwS1dCVllkY2RNbUk0?=
+ =?utf-8?B?WFNhU2pJbU0xNzlDbnRlTEVuUVNxUFRYYnp0ajlaVU9SQU1jZWduL3FHcHIx?=
+ =?utf-8?B?Unkwc0FBYS9SUnlKVlJZR05LRTI5YzRJT2UwRk56U3JBQmRzVVJ6ZU94M0xj?=
+ =?utf-8?B?Vy9VY0kxOElkeFYzMzFRMUQ5ejFaQkVGc1R2MkxmK0FRMm81U3hRWFlwWUN5?=
+ =?utf-8?B?TlZybUUxeHROWmV5djNGaVNnNyt5NzRXOUpaUW1BRlMrb2wzQzVzeGNkaEw0?=
+ =?utf-8?B?WCtZMzEwZzdGSHRQU2lzaUp4SHZKS0tDRFRFMVlWVzBrTXg3S1VOdjBlMTg2?=
+ =?utf-8?B?alR3MnIzU3h2NjBJTTZ2L0pxSnNwQ0YvdVNKb2pkT0R5YUorZVJTWmgzTUJw?=
+ =?utf-8?B?MXM1ODB4Z1FieE91SjN0ZzJSL0dmakI0b0FVallEQ0tZWTN4U045M2wrVFpS?=
+ =?utf-8?B?aFJaM2pvaHA4Z2orTE9FZkQ1S242WUxNOTB5WTY4ODFTWnZFaktxSDlnNnR6?=
+ =?utf-8?B?b3N4SGxqanFvbHd0VktMRVZRb2dQN1BwWEJ6amtHZmF2dmRJSGthWDNMYnhz?=
+ =?utf-8?B?S2V1QWppS0lqSVV0QlZVOHF6THJ6cC8xempiV1QyTHYxRjJQeFVadTdNVE43?=
+ =?utf-8?B?RWZTeXhyMmxzUVJsenhQbTJDMUh4aHlLcDRJQ0VheUVoR0JRR0RXYks4cU0v?=
+ =?utf-8?B?dVVGRkMyNTBveWtXcmYrZDNpMGpqVk5pVWRKbU1uYm5SUnA0d1dZejRtUXlT?=
+ =?utf-8?B?Y0dzYmlIQ1NWejFzTW5wWWJ4Znk1QURlTmNSMHI0dVVJY3pJTkdWWlNQK212?=
+ =?utf-8?B?SlVPenQvMWlWNS95MmMwRnpVN3Jxc3gyWCtrYkFUSlZGMmx4QjBYdHNROG9P?=
+ =?utf-8?B?TDhMa2pjRnZDQUttZHZJN2tDRXVhYktGOFV6TW54RWpIU3pqSjBERmF2L2xu?=
+ =?utf-8?B?QXZ3aUVqTTU3MlhaV01abWh0NXlsbk5renhYanV4UEZOWFExeUh2QklrU0FL?=
+ =?utf-8?B?TEdiRkpHYUloQjJiUjR3cjg1TUtzbXA2RXFGSlJ4dHJVczVNMVRNY0J2eWNO?=
+ =?utf-8?B?LzVveHFEQTJkdU1BajV4TWZ4NkRkdU5RNllBNHR2Y3JDNU1yZHhUWWYyQjVQ?=
+ =?utf-8?B?c2pvMUdpcUdVeEFIb1lhcEdhV2E2TVJEelk1aGpjNk1nNUlxRmJSaDlwR3g4?=
+ =?utf-8?B?bzVTam5INENxT1N2RU8rUkk4TUdNSTEwOWpqVkZZbzdVL09SMXgwR2NUNUdq?=
+ =?utf-8?B?S0xJdjRTQUNyNkkwRTI2UDQrUm05Y0xJNGk1UjhPcGhuVzlOMUdOYmxnUnlk?=
+ =?utf-8?B?ZEV0WndSYUNweWxNcFZwd2dpbDg4ZWNsOFQ1c3RMZjYvV3BLTW96ZHh6Smtx?=
+ =?utf-8?B?UFpSZjR1UVlTOU5XTHRkamxWWWhPclJLZjZMdkpkcEUxeTVuOEZuV25PQ2E0?=
+ =?utf-8?B?TDhOMEFnN2RvY1hDaDJSL01WdkhaMW5ZN1Z2RDNsNlBvMGpYclhRQ0Rua3Z3?=
+ =?utf-8?Q?2F9emJOpXN3n2nJAV/1WeEU=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a3bf61e-6e34-4f52-6a74-08d9cfb949eb
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5346.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5273.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 618d656c-246f-49d3-815f-08d9cf69eb0b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jan 2022 10:06:47.0925
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 19:34:56.7731
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +gu2lsJUQ0ujIX/b+Qu8vjHcFQ4YnJNcP7VkArgYV/clK0ij2NEAMBHUsDPat4sWwcJASyo/FMsOZEuW2DKYVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5383
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gv349P86u/jUSpEOm3BOhIF6vFgAiHOl5zur+jwLG5cBMA/4UfQSOkQgkl+o/SlTmt/28WJMSIqWHqPR9usOIw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5057
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> On Thu, Dec 16, 2021 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
-> >
-> > Get interrupt by name from ACPI table as well.
->=20
-> the interrupt resource
->=20
-> > Add option to use 'interrupt-names' in _DSD which can map to interrupt
-> > by index. The implementation is similar to 'interrupt-names' in devicet=
-ree.
-> > Also add a common routine to get irq by name from devicetree and ACPI
-> > table.
-> >
-> > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> > ---
-> >  drivers/base/property.c  | 35 +++++++++++++++++++++++++++++++++++
-> >  include/linux/property.h |  3 +++
-> >  2 files changed, 38 insertions(+)
-> >
-> > diff --git a/drivers/base/property.c b/drivers/base/property.c index
-> > cbe4fa2..7acf4fc 100644
-> > --- a/drivers/base/property.c
-> > +++ b/drivers/base/property.c
-> > @@ -920,6 +920,41 @@ int fwnode_irq_get(const struct fwnode_handle
-> > *fwnode, unsigned int index)  EXPORT_SYMBOL(fwnode_irq_get);
-> >
-> >  /**
-> > + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
-> > + * @fwnode:    Pointer to the firmware node
-> > + * @index:     IRQ name
-> > + *
->=20
-> Needs a description to explain how the name is described.
->=20
-> > + * Returns Linux IRQ number on success, errno otherwise.
-> > + */
-> > +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const
-> > +char *name) {
-> > +       int index;
-> > +
-> > +       if (unlikely(!name))
-> > +               return -EINVAL;
-> > +
-> > +       index =3D fwnode_property_match_string(fwnode, "interrupt-names=
-",
-> name);
-> > +       if (index < 0)
-> > +               return index;
->=20
-> This property ise needs to be described in the ACPI documentation:
-> https://www.kernel.org/doc/html/latest/firmware-
-> guide/acpi/enumeration.html
->=20
-> Perhaps after the DMA section.
-Do you mean to document the complete interrupt usage in ACPI
-including getting interrupt by index or only the named interrupt part?
+Hi Jean and Guenter,
 
-Also please share if anything on the discussion we had previously.
+This is a gentle reminder to review my previous response when possible. Thanks!
 
-Thanks,
-Akhil
+Regards,
+Terry
 
+On 12/13/21 11:48 AM, Terry Bowman wrote:
+> Hi Jean and Guenter,
+> 
+> Jean, Thanks for your responses. I added comments below.
+> 
+> I added Guenter to this email because his input is needed for adding the same
+> changes to the sp5100_tco driver. The sp5100_tco and piix4_smbus driver
+> must use the same synchronization logic for the shared register.
+> 
+> On 11/5/21 11:05, Jean Delvare wrote:
+>> On Tue, 7 Sep 2021 18:37:20 +0200, Jean Delvare wrote:
+>>> More generally, I am worried about the overall design. The driver
+>>> originally used per-access I/O port requesting because keeping the I/O
+>>> ports busy all the time would prevent other drivers from working. Do we
+>>> still need to do the same with the new code? If it is possible and safe
+>>> to have a permanent mapping to the memory ports, that would be a lot
+>>> faster.
+>>>
+> 
+> Permanent mapping would likely improve performance but will not provide the
+> needed synchronization. As you mentioned below the sp5100 driver only uses
+> the DECODEEN register during initialization but the access must be
+> synchronized or an i2c transaction or sp5100_tco timer enable access may be
+> lost. I considered alternatives but most lead to driver coupling or considerable
+> complexity.
+> 
+>>> On the other hand, the read-modify-write cycle in
+>>> piix4_setup_sb800_smba() is unsafe if 2 drivers can actually call
+>>> request_mem_region() on the same memory area successfully.
+>>>
+>>> I'm not opposed to taking your patch with minimal changes (as long as
+>>> the code is safe) and working on performance improvements later.
+>>
+> 
+> I confirmed through testing the request_mem_region() and request_muxed_region() 
+> macros provide exclusive locking. One difference between the 2 macros is the 
+> flag parameter, IORESOURCE_MUXED. request_muxed_region() uses the 
+> IORESOURCE_MUXED flag to retry the region lock if it's already locked. 
+> request_mem_region() does not use the IORESOURCE_MUXED and as a result will 
+> return -EBUSY immediately if the region is already locked.
+> 
+> I must clarify: the piix4_smbus v1 patch uses request_mem_region() which is not 
+> correct because it doesn't retry locking an already locked region.  The driver 
+> must support retrying the lock or piix4_smbus and sp5100_tco drivers may 
+> potentially fail loading. I added proposed piix4_smbus v2 changes below to solve.
+> 
+> I propose reusing the existing request_*() framework from include/linux/ioport.h 
+> and kernel/resource.c. A new helper macro will be required to provide an 
+> interface to the "muxed" iomem locking functionality already present in 
+> kernel/resource.c. The new macro will be similar to request_muxed_region() 
+> but will instead operate on iomem. This should provide the same performance 
+> while using the existing framework.
+> 
+> My plan is to add the following to include/linux/ioport.h in v2. This macro
+> will add the interface for using "muxed" iomem support:
+> #define request_mem_muxed_region(start,n,name)  __request_region(&iomem_resource, (start), (n), (name), IORESOURCE_MUXED)
+> 
+> The proposed changes will need review from more than one subsystem maintainer.
+> The macro addition in include/linux/ioport.h would reside in a
+> different maintainer's tree than this driver. The change to use the
+> request_mem_muxed_region() macro will also be made to the sp5100_tco driver.
+> The v2 review will include maintainers from subsystems owning piix4_smbus
+> driver, sp5100_tco driver, and include/linux/ioport.h.
+> 
+> The details provided above are described in a piix4_smbus context but would also be 
+> applied to the sp5100_tco driver for synchronizing the shared register.
+> 
+> Jean and Guenter, do you have concerns or changes you prefer to the proposal I 
+> described above? 
+> 
+>> I looked some more at the code. I was thinking that maybe if the
+>> registers accessed by the two drivers (i2c-piix4 and sp5100_tco) were
+>> disjoint, then each driver could simply request subsets of the mapped
+>> memory.
+>>
+>> Unfortunately, while most registers are indeed exclusively used by one
+>> of the drivers, there's one register (0x00 = IsaDecode) which is used
+>> by both. So this simple approach isn't possible.
+>>
+>> That being said, the register in question is only accessed at device
+>> initialization time (on the sp5100_tco side, that's in function
+>> sp5100_tco_setupdevice) and only for some devices (Embedded FCH). So
+>> one approach which may work is to let the i2c-piix4 driver instantiate
+>> the watchdog platform device in that case, instead of having sp5100_tco
+>> instantiate its own device as is currently the case. That way, the
+>> i2c-piix4 driver would request the "shared" memory area, perform the
+>> initialization steps for both functions (SMBus and watchdog) and then
+>> instantiate the watchdog device so that sp5100_tco gets loaded and goes
+>> on with the runtime management of the watchdog device.
+>>
+>> If I'm not mistaken, this is what the i2c-i801 driver is already doing
+>> for the watchdog device in all recent Intel chipsets. So maybe the same
+>> approach can work for the i2c-piix4 driver for the AMD chipsets.
+>> However I must confess that I did not try to do it nor am I familiar
+>> with the sp5100_tco driver details, so maybe it's not possible for some
+>> reason.
+>>
+>> If it's not possible then the only safe approach would be to migrate
+>> i2c-piix4 and sp5100_tco to a true MFD setup with 3 separate drivers:
+>> one new MFD PCI driver binding to the PCI device, providing access to
+>> the registers with proper locking, and instantiating the platform
+>> device, one driver for SMBus (basically i2c-piix4 converted to a
+>> platform driver and relying on the MFD driver for register access) and
+>> one driver for the watchdog (basically sp5100_tco converted to a
+>> platform driver and relying on the MFD driver for register access).
+>> That's a much larger change though, so I suppose we'd try avoid it if
+>> at all possible.
+>>
