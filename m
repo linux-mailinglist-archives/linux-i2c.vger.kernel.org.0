@@ -2,139 +2,157 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E53F5484C29
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jan 2022 02:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC6A484C40
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jan 2022 02:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236917AbiAEBhf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 4 Jan 2022 20:37:35 -0500
-Received: from mail-bn8nam08on2042.outbound.protection.outlook.com ([40.107.100.42]:49376
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235917AbiAEBhe (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Tue, 4 Jan 2022 20:37:34 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F5h2IA22NBKho5FAmklzyYKaE32csLaeO3APv763OxEZ06CwoL3hqxWX/OjiyFh23PzPvLIvUGkhthN5tR5ePdBEsIm+kKSSwQKP3yip1CfIswMUJdoWCnEPcT3+VoWYF0ybN+dyhU2DGeoYdPfltdytRraHo36a8KbGIypggOXYhgQ9ZphDAfUGFi5HSVBvRiSc3pc+lmWlPSCdB+hfvxyKVQtSzdPesvqzYIeSF+snSHx8Qwh1IPjUoiVDEQbCZj+uqhAB6UQpthDkbGjknQdxaKfly16B4LV4iWPPV4ZSgaUWzrMo9/XDsyIR1CEYZIZmUUHTLIOVp6e5mewBtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KJJKqMS1iBmbf6VNSxUMeGwzNEl451ZwZrIJsIb93E0=;
- b=Azo5kSssrRRBmvoyVt35bapvGxJ3oiNZHjGpNIbtCFR2mYXZgBpAWfLLXueUWbhnfBthduTiztSonD2eFG8REY5DMPu0aaGlCFEzfKlTGN8Ndp6LsviFJpBuqmW1f1CiRVeup+CQJ+3bsoCpBAsKtDfti/qvZXAFYpi5xPnLc7zE9DuV6CnIoHcmsKu/lKaD2CaBdzwBECqLPGqXAWExvwH9rT21SbMkYORyMF5PIJDWUzsQRxXlEe49hE9KKLB6OdYWexKNwtpuaFhgPPLfSvKn2dQLOcJUyg69UwF92aYFPJxdu/v7xMS853smUTukRWePnjKL6QUVRQVptqZiRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
- dkim=pass header.d=vpitech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KJJKqMS1iBmbf6VNSxUMeGwzNEl451ZwZrIJsIb93E0=;
- b=x8PWXADrEsLRDSgkMb3CIq3xhKWQTF5mgiQWJhRGTFgy8NeI5nFTRpBLNeK8rkBJMOxclGLVGxCX3xj4GxRX6b4cDCBdD44x8hgFDnKWQ6iTfhZwAFTi3V5SJATb4p3bDudayBDuc/336TrvmKKEzObSpFu0VjXK98a2aBzNi0M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vpitech.com;
-Received: from CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:15b::19)
- by CO1P222MB0276.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:15f::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Wed, 5 Jan
- 2022 01:37:30 +0000
-Received: from CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
- ([fe80::acb2:d13e:3a3:c824]) by CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
- ([fe80::acb2:d13e:3a3:c824%9]) with mapi id 15.20.4867.007; Wed, 5 Jan 2022
- 01:37:30 +0000
-Date:   Tue, 4 Jan 2022 18:37:27 -0700
-From:   Alex Henrie <alexh@vpitech.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     linux-i2c@vger.kernel.org, wsa@kernel.org, jdelvare@suse.de,
-        alexhenrie24@gmail.com
-Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
-Message-Id: <20220104183727.95caa694dea38a7ae5fc8c49@vpitech.com>
-In-Reply-To: <20211220104106.e4c0e3d95145cc2f2a91c3d3@vpitech.com>
-References: <20211216173110.82ae177385322c0992d00126@vpitech.com>
-        <a5da4d27-f2cc-9018-5266-9f40d74818ad@marcan.st>
-        <20211217195128.49285f55facfe061655a6279@vpitech.com>
-        <7fb63895-e8fb-c9c3-c5da-f922ae0c69fd@marcan.st>
-        <20211220104106.e4c0e3d95145cc2f2a91c3d3@vpitech.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0193.namprd04.prod.outlook.com
- (2603:10b6:303:86::18) To CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:303:15b::19)
+        id S235813AbiAEBzb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jan 2022 20:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235708AbiAEBza (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Jan 2022 20:55:30 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8410AC061761
+        for <linux-i2c@vger.kernel.org>; Tue,  4 Jan 2022 17:55:29 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id F37A580002;
+        Wed,  5 Jan 2022 14:55:24 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1641347724;
+        bh=kvY+bEeup5Ig6phY7LQasgFR3ppmMuE8olWJR4RbEQ0=;
+        h=From:To:Cc:Subject:Date;
+        b=ThPWn92HgAJ8JoKsvmpd/+WXCpLbD8OeNnvNmB7dfRqwiK7BxvrCCeu8eFn3R6lMU
+         5kF6QWxS5lk8URRlRTwN/hhk/bexxY+Gd4TR3VRZdntKqiUn1IeHQcX41gOn7A2AIM
+         bkurXUBKs/P7t+ySJc+NyV+4QKGMKelrxtNkUKvK+uHap4vRagY/KXoNmALl9En5Wx
+         YGSuuCxiymNUtdtDGsUVjQn6vVmN1vM3y5ZYuzLWbKkN2ewOfQKHDwGXCafHRcZF4C
+         kq7NogyEG0LHJYmwCHYqwdcIyEWvZV/wKHm6OZI2oxwc+wX6WVNuOJ4uNUH1KQdMzA
+         thqA6tRAUdfSQ==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B61d4fa8c0000>; Wed, 05 Jan 2022 14:55:24 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id C7A8D13EE13;
+        Wed,  5 Jan 2022 14:55:24 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id E941A2A1DC7; Wed,  5 Jan 2022 14:53:10 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     wsa@kernel.org, mbizon@freebox.fr
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] i2c: mpc: Avoid out of bounds memory access
+Date:   Wed,  5 Jan 2022 14:53:04 +1300
+Message-Id: <20220105015304.1368234-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 95506c77-2b88-4343-c5ca-08d9cfebf00f
-X-MS-TrafficTypeDiagnostic: CO1P222MB0276:EE_
-X-Microsoft-Antispam-PRVS: <CO1P222MB0276D14261B5E49172408F6FB84B9@CO1P222MB0276.NAMP222.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 68IQeIBqqYZFuiSKO8EO+ZKKFOXpge9vMDyB5aWtF3GqqnTZRYtssRfQr+wmPJcfsbP1ufTWICj89zWBkEejKAbOvYVVNibIIsx772rLYHgJIoWshN5vF2zbSWTmQvmtaBBv+zG7tgktLsLT1CFmS/JT6bMQWUe9pWmmkj99awkb8WPyQ8Ta2T8xdiviGatSysp+L22YEZybfhTuwLZRcDbURWnmEYbb3GyUQIHjI7odDIvhrDxvWi84CXyCBQlAi32OVmm3+mfhv+qxsq+FRikwRWambvb6SQCIFlazZl9ECvaHyjkALjUzNQYkh6J9Nf9yH/0an5UhT0ZGFvzxbG+Vkz8nVrUuJl1SOKjcuwo3Q0WPvr2ENVvLF/XJkXuIe3B712F/W/7saQ8cDfrnlsjn1m57NFddWqL+Meg/F0gFB67DhyCc1yzymFwIyLIchiQiViFrcWhxl8dfGW/BAln42P00mwjCz4SXBtBtteOuqSNuUccSAJuCrYMfbZjUVga3E1nWBDhXRnBb9lCgF39+tiGEgH4N/ICtzkC4epJyl8fvgtINR38ua8iX/tOORoBr+QqO14Q5GmP3gYBFQUdrpReqKZtsZIK/fDv4GgIwH+Mc7DV7qBg3IA6tgGclAsxk90clI7DY3rUAuPc9uc1Mf/9mB94l2PZI8x/QpiEk7qQgV3VDOq6rfYqQNzMQEw2tJO7QDakzUOCugjc/CA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(136003)(39840400004)(366004)(376002)(346002)(38100700002)(4326008)(5660300002)(8676002)(2616005)(38350700002)(86362001)(1076003)(508600001)(4744005)(6916009)(66476007)(186003)(6512007)(316002)(26005)(66556008)(6486002)(2906002)(52116002)(66946007)(83380400001)(6506007)(36756003)(6666004)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QydZ+rwgXMxDsPA/eMZYii+emaUlJV4Qd+p0ZEZC/EencnkY4NTe5h+l8AVW?=
- =?us-ascii?Q?F8hQgsy9me8fIuNhvd3eZFR1YSh3Wo/hpX0ur+jIPixYt3M5w7WkeKajOQ8u?=
- =?us-ascii?Q?rCmyWsb7MiRxtwJU78QBR+a6+tLyjTnV0KRLn3jYPZMGGL2JnIBtzKP1bepe?=
- =?us-ascii?Q?TzxR/9dBuZQI5GV6AU5LNzIAQuvcw1sPEtu9/ShChdnPfIRYVq2+KoHwJNyp?=
- =?us-ascii?Q?iMB6mdXkXbffD/+00i8OwbJ1FZH2apgKqJo2PJBORTKwrzpEBnXW4Fs0p0J6?=
- =?us-ascii?Q?zdFGElKDp4Gbf2FwGEapsjinJcnIPppNhjFNLcXMQlnSnJRa7XLYzHWSvaGR?=
- =?us-ascii?Q?MNyqf0iNB2VAhJn+M04edBs8W1H2BGWz0AMm0sGcf3VOSM9OasMlnxLZxiML?=
- =?us-ascii?Q?Sq77Yj39LcBJLNJsMEU/GW273rZ3aOcP9ln7Y80hyM4CcFkltE0uPv+cdN4W?=
- =?us-ascii?Q?b5OdEcPEzrEvfKrV8pDDjsGfGGIH11zSaZu1Fynl3MuR4/B2pqS9clmJXcK6?=
- =?us-ascii?Q?wTiokvaD2ewfwhhXF/U1GR2eaKqMRddNXsCTWSHfzeDliBiqkjw+TwLwG6Iq?=
- =?us-ascii?Q?7Bqn6TCd9gi59I9hbrDLCPf/P3dPp/9CSk4J76X2u2WfxDrbHyQq2r5xh1PP?=
- =?us-ascii?Q?/b6hA/vy3hUdIEox9CnxhJ9CL+/mFctFZ93uVLSM2VvyPGcuVJFcavcVU4iW?=
- =?us-ascii?Q?TVECmntQid1TQkrtT4sFGn+JdLuZfJH35jRcf4mIm/zqJUgOvgVRdOlywKlk?=
- =?us-ascii?Q?9E0IYZ86VcFtye0IfnQJfk3Y+KXcN9UK4Wt3N1pAC4twqZCNGLFdlwqzuCpd?=
- =?us-ascii?Q?TXgUP6vlB1deQmcMZOo3yhzeS5e2Xnx9rpG7brJFyaz6VcxreRgQjmWllaeR?=
- =?us-ascii?Q?BcN0yJ0DlV4FBcOBIW+L3HuSe/XwubHbivhkzf3e7vBtg6l0H2B04jwKAgza?=
- =?us-ascii?Q?+LbD1PB1UFein8GxA60XeeZF5JKPM7fjbQVRy9rY1kuLh+C64WHTtMzsUPvK?=
- =?us-ascii?Q?IIUKFgzOS39vcmZHZ1UlOhLjsPsDPmLX/NzE1f7eUqzhOuvhyj8XbcyloTPz?=
- =?us-ascii?Q?lIOHQe5pdqzzcUuyFxTP16Hm5b4V2isuZi2dOVAdthK3eRiXEGBpxHPUerQR?=
- =?us-ascii?Q?dXVszl1PyYDq8CaqvAkmaKltZkcONKwsZoNT4abvreIgBmQ2OvPY3fRnd30j?=
- =?us-ascii?Q?G40LkDXorI0z/Frty6qn7RAnTQNoyilOiWsSoEUTI+5IZI259CkmBLNTW657?=
- =?us-ascii?Q?ZujwuwbmbotqHNUK1h3wax+h25fqsiOp0JpkhJz2ergsv10ch69zt+6DKa2D?=
- =?us-ascii?Q?CxS2PRScVDveuMI/1WJNAjAla47u/YH8XNOp6X4lybe4tRWmPd5/qzyE3sN9?=
- =?us-ascii?Q?Ihoakxtpn2mHHYtapA9gQJn0cHISwidn5R81AmaFDBecHmW0Pc/7KkbaPQ0a?=
- =?us-ascii?Q?otXTlckIGsuPKHq1heMPDxtXovmsE7JnzQzDc+43Xyh3FHu6gtuwxKxQwq5R?=
- =?us-ascii?Q?2QpodMIsu111svEWpR65Ywn0CWHfaS/e3QLBmFFX5hJ+rr7K6wpPaNXd7vDA?=
- =?us-ascii?Q?UtyfWUIG2zl7/SzwQZlMmtCoMQ9b4tGMVVNDacZnBe3+F7j/mo4qxqFjKJar?=
- =?us-ascii?Q?diEPvIp5Og5odm5LCHdor/k=3D?=
-X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95506c77-2b88-4343-c5ca-08d9cfebf00f
-X-MS-Exchange-CrossTenant-AuthSource: CO1P222MB0212.NAMP222.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 01:37:30.4537
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: per4fvEo7Y79HyvM3Ql5gaaja0lFnXzb/R6efkAcuKG1ui6sjr9oONTMFusGi72YYU41J8p3yqAGSRISycGrzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1P222MB0276
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=HvoI5HbS c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=DghFqjY3_ZEA:10 a=uamDuLK_r6lGlXGo6nQA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Hector,
+When performing an I2C transfer where the last message was a write KASAN
+would complain:
 
-I had an idea today that you might like better. In your proposed patch
-to share the SMBus with the BIOS, the kernel will lock itself out of
-the SMBus if the BIOS uses it unsafely. What if we add a module
-parameter to instead return -EPERM in i801_acpi_io_handler, effectively
-locking the BIOS out of the SMBus instead of locking the kernel out? I
-tried hacking that behavior in and so far it's working well on my
-troublesome machine.
+  BUG: KASAN: slab-out-of-bounds in mpc_i2c_do_action+0x154/0x630
+  Read of size 2 at addr c814e310 by task swapper/2/0
 
--Alex
+  CPU: 2 PID: 0 Comm: swapper/2 Tainted: G    B             5.16.0-rc8 #1
+  Call Trace:
+  [e5ee9d50] [c08418e8] dump_stack_lvl+0x4c/0x6c (unreliable)
+  [e5ee9d70] [c02f8a14] print_address_description.constprop.13+0x64/0x3b0
+  [e5ee9da0] [c02f9030] kasan_report+0x1f0/0x204
+  [e5ee9de0] [c0c76ee4] mpc_i2c_do_action+0x154/0x630
+  [e5ee9e30] [c0c782c4] mpc_i2c_isr+0x164/0x240
+  [e5ee9e60] [c00f3a04] __handle_irq_event_percpu+0xf4/0x3b0
+  [e5ee9ec0] [c00f3d40] handle_irq_event_percpu+0x80/0x110
+  [e5ee9f40] [c00f3e48] handle_irq_event+0x78/0xd0
+  [e5ee9f60] [c00fcfec] handle_fasteoi_irq+0x19c/0x370
+  [e5ee9fa0] [c00f1d84] generic_handle_irq+0x54/0x80
+  [e5ee9fc0] [c0006b54] __do_irq+0x64/0x200
+  [e5ee9ff0] [c0007958] __do_IRQ+0xe8/0x1c0
+  [c812dd50] [e3eaab20] 0xe3eaab20
+  [c812dd90] [c0007a4c] do_IRQ+0x1c/0x30
+  [c812dda0] [c0000c04] ExternalInput+0x144/0x160
+  --- interrupt: 500 at arch_cpu_idle+0x34/0x60
+  NIP:  c000b684 LR: c000b684 CTR: c0019688
+  REGS: c812ddb0 TRAP: 0500   Tainted: G    B              (5.16.0-rc8)
+  MSR:  00029002 <CE,EE,ME>  CR: 22000488  XER: 20000000
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 8020b6b97..442eef67a 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1629,6 +1629,9 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
- 	mutex_lock(&priv->acpi_lock);
- 
- 	if (!priv->acpi_reserved && i801_acpi_is_smbus_ioport(priv, address)) {
-+		mutex_unlock(&priv->acpi_lock);
-+		return -EPERM;
-+
- 		priv->acpi_reserved = true;
- 
- 		dev_warn(&pdev->dev, "BIOS is accessing SMBus registers\n");
+  GPR00: c10ef7fc c812de90 c80ff200 c2394718 00000001 00000001 c10e3f90 0=
+0000003
+  GPR08: 00000000 c0019688 c2394718 fc7d625b 22000484 00000000 21e17000 c=
+208228c
+  GPR16: e3e99284 00000000 ffffffff c2390000 c001bac0 c2082288 c812df60 c=
+001ba60
+  GPR24: c23949c0 00000018 00080000 00000004 c80ff200 00000002 c2348ee4 c=
+2394718
+  NIP [c000b684] arch_cpu_idle+0x34/0x60
+  LR [c000b684] arch_cpu_idle+0x34/0x60
+  --- interrupt: 500
+  [c812de90] [c10e3f90] rcu_eqs_enter.isra.60+0xc0/0x110 (unreliable)
+  [c812deb0] [c10ef7fc] default_idle_call+0xbc/0x230
+  [c812dee0] [c00af0e8] do_idle+0x1c8/0x200
+  [c812df10] [c00af3c0] cpu_startup_entry+0x20/0x30
+  [c812df20] [c001e010] start_secondary+0x5d0/0xba0
+  [c812dff0] [c00028a0] __secondary_start+0x90/0xdc
+
+This happened because we would overrun the i2c->msgs array on the final
+interrupt for the I2C STOP. This didn't happen if the last message was a
+read because there is no interrupt in that case. Ensure that we only
+access the current message if we are not processing a I2C STOP
+condition.
+
+Fixes: 1538d82f4647 ("i2c: mpc: Interrupt driven transfer")
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+ drivers/i2c/busses/i2c-mpc.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+index 53b8da6dbb23..db26cc36e13f 100644
+--- a/drivers/i2c/busses/i2c-mpc.c
++++ b/drivers/i2c/busses/i2c-mpc.c
+@@ -492,7 +492,7 @@ static void mpc_i2c_finish(struct mpc_i2c *i2c, int r=
+c)
+=20
+ static void mpc_i2c_do_action(struct mpc_i2c *i2c)
+ {
+-	struct i2c_msg *msg =3D &i2c->msgs[i2c->curr_msg];
++	struct i2c_msg *msg =3D NULL;
+ 	int dir =3D 0;
+ 	int recv_len =3D 0;
+ 	u8 byte;
+@@ -501,10 +501,13 @@ static void mpc_i2c_do_action(struct mpc_i2c *i2c)
+=20
+ 	i2c->cntl_bits &=3D ~(CCR_RSTA | CCR_MTX | CCR_TXAK);
+=20
+-	if (msg->flags & I2C_M_RD)
+-		dir =3D 1;
+-	if (msg->flags & I2C_M_RECV_LEN)
+-		recv_len =3D 1;
++	if (i2c->action !=3D MPC_I2C_ACTION_STOP) {
++		msg =3D &i2c->msgs[i2c->curr_msg];
++		if (msg->flags & I2C_M_RD)
++			dir =3D 1;
++		if (msg->flags & I2C_M_RECV_LEN)
++			recv_len =3D 1;
++	}
+=20
+ 	switch (i2c->action) {
+ 	case MPC_I2C_ACTION_RESTART:
+@@ -581,7 +584,7 @@ static void mpc_i2c_do_action(struct mpc_i2c *i2c)
+ 		break;
+ 	}
+=20
+-	if (msg->len =3D=3D i2c->byte_posn) {
++	if (msg && msg->len =3D=3D i2c->byte_posn) {
+ 		i2c->curr_msg++;
+ 		i2c->byte_posn =3D 0;
+=20
+--=20
+2.34.1
+
