@@ -2,137 +2,158 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5437A48548D
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jan 2022 15:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D5E485777
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jan 2022 18:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240849AbiAEOat (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jan 2022 09:30:49 -0500
-Received: from mga14.intel.com ([192.55.52.115]:24288 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240845AbiAEOat (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:30:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641393049; x=1672929049;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dRH8ilS94DwdebtNTfOJJdLl0Zq/I3oicrJGE7OIBfc=;
-  b=JqnF8ShPrPTSAf9qrpwIr9FnG3OgT4n+qKCnRKMG1I3sIgdgmyPf5YO6
-   JzahAOA+H1K+WdDPD3ynJw2/WsMC0efI5kirKqE1V7vTwOaYMCY22LGQq
-   Ujodv3jN1Tp1NfcEvH3r7p/PcQWEj062++ipG/p+e3YUXpqg6KtcusZQY
-   GI/rrbszeG/vwvuVRhIf9xIspVl9+AZct/l3rCMX9aZpV86UbowydJU13
-   szC6Hd+qiOu8ieptD3YnRYwF4DbxHoFIUPOf5Ke6rJ2471uoueJjGN/t5
-   1ZqboAyRQDM2l/VRtS8dLj1mC3sQdAq6UJQjw5VBkCnnLbzdJlv2wYakZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242660319"
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="242660319"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 06:19:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="556544892"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 05 Jan 2022 06:19:27 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id B51C649B; Wed,  5 Jan 2022 16:19:37 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Subject: [PATCH v3 5/5] i2c: designware-pci: Switch to use i2c_new_ccgx_ucsi()
-Date:   Wed,  5 Jan 2022 16:19:35 +0200
-Message-Id: <20220105141935.24109-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
-References: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
+        id S242436AbiAERmk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jan 2022 12:42:40 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4352 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242412AbiAERmi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jan 2022 12:42:38 -0500
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTcDP1FRwz67w73;
+        Thu,  6 Jan 2022 01:39:17 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 5 Jan 2022 18:42:31 +0100
+Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 5 Jan
+ 2022 17:42:28 +0000
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Arnd Bergmann" <arnd@arndb.de>
+CC:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Ian Abbott" <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Karsten Keil" <isdn@linux-pingi.de>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "Teddy Wang" <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
+        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
+        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
+        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-watchdog@vger.kernel.org>
+References: <20211229160317.GA1681139@bhelgaas>
+ <e0877e91d7d50299ea5a3ffcee2cf1016458ce10.camel@linux.ibm.com>
+Message-ID: <3f39d8a2-2e57-a671-2926-eb4f2bf20c76@huawei.com>
+Date:   Wed, 5 Jan 2022 17:42:16 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <e0877e91d7d50299ea5a3ffcee2cf1016458ce10.camel@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.27.56]
+X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Instead of open coded variant switch to use i2c_new_ccgx_ucsi().
+On 29/12/2021 16:55, Niklas Schnelle wrote:
+> On Wed, 2021-12-29 at 10:03 -0600, Bjorn Helgaas wrote:
+>> On Wed, Dec 29, 2021 at 01:12:07PM +0100, Mauro Carvalho Chehab wrote:
+>>> Em Wed, 29 Dec 2021 12:45:38 +0100
+>>> Niklas Schnelle<schnelle@linux.ibm.com>  escreveu:
+>>>> ...
+>>>> I do think we agree that once done correctly there is value in
+>>>> such an option independent of HAS_IOPORT only gating inb() etc uses.
+>> I'm not sure I'm convinced about this.  For s390, you could do this
+>> patch series, where you don't define inb() at all, and you add new
+>> dependencies to prevent compile errors.  Or you could define inb() to
+>> return ~0, which is what happens on other platforms when the device is
+>> not present.
+>>
+>>> Personally, I don't see much value on a Kconfig var for legacy PCI I/O
+>>> space. From maintenance PoV, bots won't be triggered if someone use
+>>> HAS_IOPORT instead of the PCI specific one - or vice-versa. So, we
+>>> could end having a mix of both at the wrong places, in long term.
+>>>
+>>> Also, assuming that PCIe hardware will some day abandon support for
+>>> "legacy" PCI I/O space, I guess some runtime logic would be needed,
+>>> in order to work with both kinds of PCIe controllers. So, having a
+>>> Kconfig option won't help much, IMO.
+>>>
+>>> So, my personal preference would be to have just one Kconfig var, but
+>>> I'm ok if the PCI maintainers decide otherwise.
+>> I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
+>> means something old and out of favor; it doesn't say*what*  that
+>> something is.
+>>
+>> I think you're specifically interested in I/O port space usage, and it
+>> seems that you want all PCI drivers that*only*  use I/O port space to
+>> depend on LEGACY_PCI?  Drivers that can use either I/O or memory
+>> space or both would not depend on LEGACY_PCI?  This seems a little
+>> murky and error-prone.
+> I'd like to hear Arnd's opinion on this but you're the PCI maintainer
+> so of course your buy-in would be quite important for such an option.
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
-v3: added tag (Jarkko)
- drivers/i2c/busses/Kconfig                 |  1 +
- drivers/i2c/busses/i2c-designware-pcidrv.c | 30 ++++------------------
- 2 files changed, 6 insertions(+), 25 deletions(-)
+Hi Niklas,
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 0c9b089d1456..e2e8ae7ed2a7 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -578,6 +578,7 @@ config I2C_DESIGNWARE_PCI
- 	tristate "Synopsys DesignWare PCI"
- 	depends on PCI
- 	select I2C_DESIGNWARE_CORE
-+	select I2C_CCGX_UCSI
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  Synopsys DesignWare I2C adapter. Only master mode is supported.
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index ef4250f8852b..2782dddfb087 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -24,6 +24,7 @@
- #include <linux/slab.h>
- 
- #include "i2c-designware-core.h"
-+#include "i2c-ccgx-ucsi.h"
- 
- #define DRIVER_NAME "i2c-designware-pci"
- #define AMD_CLK_RATE_HZ	100000
-@@ -125,26 +126,6 @@ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
- 	return -ENODEV;
- }
- 
-- /*
--  * TODO find a better way how to deduplicate instantiation
--  * of USB PD slave device from nVidia GPU driver.
--  */
--static int navi_amd_register_client(struct dw_i2c_dev *dev)
--{
--	struct i2c_board_info	info;
--
--	memset(&info, 0, sizeof(struct i2c_board_info));
--	strscpy(info.type, "ccgx-ucsi", I2C_NAME_SIZE);
--	info.addr = 0x08;
--	info.irq = dev->irq;
--
--	dev->slave = i2c_new_client_device(&dev->adapter, &info);
--	if (IS_ERR(dev->slave))
--		return PTR_ERR(dev->slave);
--
--	return 0;
--}
--
- static int navi_amd_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
- {
- 	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
-@@ -325,11 +306,10 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	}
- 
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
--		r = navi_amd_register_client(dev);
--		if (r) {
--			dev_err(dev->dev, "register client failed with %d\n", r);
--			return r;
--		}
-+		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, NULL);
-+		if (IS_ERR(dev->slave))
-+			return dev_err_probe(dev->dev, PTR_ERR(dev->slave),
-+					     "register UCSI failed\n");
- 	}
- 
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
--- 
-2.34.1
+I can't see the value in the LEGACY_PCI config - however I don't really 
+understand Arnd's original intention.
 
+It was written that it would allow us to control "whether we have any 
+pre-PCIe devices or those PCIe drivers that need PIO accessors other 
+than ioport_map()/pci_iomap()".
+
+However I just don't see why CONFIG_PCI=y and CONFIG_HAS_IOPORT=y aren't 
+always the gating factor here. Arnd?
+
+Thanks,
+John
