@@ -2,73 +2,158 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4BB4851FD
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jan 2022 12:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF6048549C
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jan 2022 15:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236137AbiAELp1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jan 2022 06:45:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239775AbiAELp1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jan 2022 06:45:27 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FCFC061761
-        for <linux-i2c@vger.kernel.org>; Wed,  5 Jan 2022 03:45:26 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so50919144otj.7
-        for <linux-i2c@vger.kernel.org>; Wed, 05 Jan 2022 03:45:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=E0D180xf84KjktzARqa69RIEL5prOoeDC6G7I5zjJ0g=;
-        b=LNB3nH9+dVWLsxg4oBLp8C+IwnTl4fwLNBovqiR6VQzbAJZnPt3EcJ37AJ1A6qrWIM
-         OYsNv4MieVcob32mBF3zXKts6qqAPqZpcVT/FUY19jF0lyGzYGOz7jkUAQWDUzyIEskd
-         8uOu0ma1y+rInPNmJBrephpp1y83Nw8QK+vS4jth9Rzk1Q+RxFZF6dfnFraESIEOZ+Dv
-         f44CW7UTYb4qDZorEV/JTyvNAYXIdsTN1URk2GSOmnAGIB90Iu+sYvvg4k148iLVTR7q
-         Z9A8k9bBZNY/YtpBZztAn1C97E+2VjSTQBfPP7Io/4MxqwCcHmy/7KnrOzzEeXgcLIjK
-         44Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=E0D180xf84KjktzARqa69RIEL5prOoeDC6G7I5zjJ0g=;
-        b=ag7xcneIKD/OcKCZ4ejY9Oe+gFyPB7wbQ/DV8+VxWThwFPVZvo8vuZURgVWOakUeAr
-         2JuuorHyjZTWjpQLFnkEp9/TIrx/tMcXfa+Q6wAzDJSWZNfWaxs2FItpyFtZzeKE92Bm
-         q0vf8Cj86X5FC6lCAXXgYsZhF1ZIuOzJOzfFRFM5eJ1T1YEB8Ub/2T2cir6KvOu3maZ+
-         qSrbaz+59BmFCJvDONs+GgEzxM+BziJG+tpxTKZIYa2gGdVuDx4pVa0H8W94FdyTB3QD
-         tK7Y3HR3HFBKntpR/exHBaGyCZo67Xm9t8/b397mDI64coq9ePv61DGBYufT/23KeHTo
-         ZbxA==
-X-Gm-Message-State: AOAM530twQtDciJtdd0+cVSda9CeR9Ws4pizNtKvqa8TsNjOZx21+yx4
-        dZNRD4fcBEJgZzKL2DwbCF97tSeSufvZUBEGhII7u/fXpDw=
-X-Google-Smtp-Source: ABdhPJzBKWhshtvhAqcrXwnz1RNdrm5muClaHN8Dt0u3tjJDXfA97UCQEFtMuC7+uGZKpS0S6FIwC6zCuixrFsCnOtc=
-X-Received: by 2002:a9d:2783:: with SMTP id c3mr39451960otb.284.1641383126025;
- Wed, 05 Jan 2022 03:45:26 -0800 (PST)
+        id S240893AbiAEOcS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jan 2022 09:32:18 -0500
+Received: from mga12.intel.com ([192.55.52.136]:39353 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231912AbiAEOcR (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 5 Jan 2022 09:32:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641393137; x=1672929137;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ABu6KFRcKAVHPekzGmRRzaEXwMcsW1byJmvaUzwWsH4=;
+  b=EO6ZIPdJUo5qj15kKnnxN7UoA9fFAKURyqPtOxuOzNqAFyFu1LS8JM3o
+   IBAXF6d9XOI3f5ZOogJxa2esiIjs3DK+I3qQ6wx23/Fmt4qnxObdGU7sZ
+   5TuPFCd/w6JHcs1g79k3pCe+zxd0owWERMz45DtWQQItzHQGLAiFrSMDe
+   lEbTD6ABz8V0Gqy56ZcaPsQ3xTIuP1dBkKyasAINUEZ8bdJydApqPtDJd
+   zjaM6w4EDkjGcrWvHkPv/isypWWpv5nliDDhUKcO5lp2RPXsH2nH/A/CV
+   ZOUfKCpQj5yboCkFhrw4iu/WqHkFi+uNpE/47we8JwvBKE41HT6izwAqe
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="222447853"
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="222447853"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 06:19:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="526549898"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 05 Jan 2022 06:19:27 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9227918E; Wed,  5 Jan 2022 16:19:37 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
+Subject: [PATCH v3 1/5] i2c: Introduce common module to instantiate CCGx UCSI
+Date:   Wed,  5 Jan 2022 16:19:31 +0200
+Message-Id: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CAKfDRXgUvN19PUd_ebRJs-k_ytrGwgA=e6d3QJ9cwJogUGpoyw@mail.gmail.com>
-In-Reply-To: <CAKfDRXgUvN19PUd_ebRJs-k_ytrGwgA=e6d3QJ9cwJogUGpoyw@mail.gmail.com>
-From:   Kristian Evensen <kristian.evensen@gmail.com>
-Date:   Wed, 5 Jan 2022 12:45:15 +0100
-Message-ID: <CAKfDRXjWrS6x7ZTgvuYB=qLABfuDhjS7DrrevytY1a0BhKMfAQ@mail.gmail.com>
-Subject: Re: mt7621 i2c fails with upstream driver
-To:     linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi again,
+Introduce a common module to provide an API to instantiate UCSI device
+for Cypress CCGx Type-C controller. Individual bus drivers need to select
+this one on demand.
 
-On Wed, Jan 5, 2022 at 10:51 AM Kristian Evensen
-<kristian.evensen@gmail.com> wrote:
-> Replacing the new with the old driver makes i2c work again, but I
-> would like to try to avoid that. My knowledge of i2c is very limited,
-> so I wondered if anyone knows what could be wrong or have any
-> suggestions on things I can try to for example change in the driver?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v3: added MODULE_LICENSE(GPL); (Nehal-bakulchandra)
+ drivers/i2c/busses/Kconfig         |  7 +++++++
+ drivers/i2c/busses/Makefile        |  3 +++
+ drivers/i2c/busses/i2c-ccgx-ucsi.c | 30 ++++++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-ccgx-ucsi.h | 11 +++++++++++
+ 4 files changed, 51 insertions(+)
+ create mode 100644 drivers/i2c/busses/i2c-ccgx-ucsi.c
+ create mode 100644 drivers/i2c/busses/i2c-ccgx-ucsi.h
 
-I spent some more time instrumenting the driver. The call that always
-times out is the call to mtk_i2c_master_start() made from
-mtk_i2c_master_xfer(). From what I can tell, this is the first time
-data is written and when I compared with the previous driver, I do not
-find equivalents of master_{start,stop,cmd} writes, I only see direct
-calls to iowrite/ioread.
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 42da31c1ab70..08e24e396e37 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -9,6 +9,13 @@ menu "I2C Hardware Bus support"
+ comment "PC SMBus host controller drivers"
+ 	depends on PCI
+ 
++config I2C_CCGX_UCSI
++	tristate
++	help
++	  A common module to provide an API to instantiate UCSI device
++	  for Cypress CCGx Type-C controller. Individual bus drivers
++	  need to select this one on demand.
++
+ config I2C_ALI1535
+ 	tristate "ALI 1535"
+ 	depends on PCI
+diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+index 1d00dce77098..79405cb5d600 100644
+--- a/drivers/i2c/busses/Makefile
++++ b/drivers/i2c/busses/Makefile
+@@ -6,6 +6,9 @@
+ # ACPI drivers
+ obj-$(CONFIG_I2C_SCMI)		+= i2c-scmi.o
+ 
++# Auxiliary I2C/SMBus modules
++obj-$(CONFIG_I2C_CCGX_UCSI)	+= i2c-ccgx-ucsi.o
++
+ # PC SMBus host controller drivers
+ obj-$(CONFIG_I2C_ALI1535)	+= i2c-ali1535.o
+ obj-$(CONFIG_I2C_ALI1563)	+= i2c-ali1563.o
+diff --git a/drivers/i2c/busses/i2c-ccgx-ucsi.c b/drivers/i2c/busses/i2c-ccgx-ucsi.c
+new file mode 100644
+index 000000000000..092dc92dea9f
+--- /dev/null
++++ b/drivers/i2c/busses/i2c-ccgx-ucsi.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Instantiate UCSI device for Cypress CCGx Type-C controller.
++ * Derived from i2c-designware-pcidrv.c and i2c-nvidia-gpu.c.
++ */
++
++#include <linux/i2c.h>
++#include <linux/export.h>
++#include <linux/module.h>
++#include <linux/string.h>
++
++#include "i2c-ccgx-ucsi.h"
++
++struct software_node;
++
++struct i2c_client *i2c_new_ccgx_ucsi(struct i2c_adapter *adapter, int irq,
++				     const struct software_node *swnode)
++{
++	struct i2c_board_info info = {};
++
++	strscpy(info.type, "ccgx-ucsi", sizeof(info.type));
++	info.addr = 0x08;
++	info.irq = irq;
++	info.swnode = swnode;
++
++	return i2c_new_client_device(adapter, &info);
++}
++EXPORT_SYMBOL_GPL(i2c_new_ccgx_ucsi);
++
++MODULE_LICENSE("GPL");
+diff --git a/drivers/i2c/busses/i2c-ccgx-ucsi.h b/drivers/i2c/busses/i2c-ccgx-ucsi.h
+new file mode 100644
+index 000000000000..739ac7a4b117
+--- /dev/null
++++ b/drivers/i2c/busses/i2c-ccgx-ucsi.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++#ifndef __I2C_CCGX_UCSI_H_
++#define __I2C_CCGX_UCSI_H_
++
++struct i2c_adapter;
++struct i2c_client;
++struct software_node;
++
++struct i2c_client *i2c_new_ccgx_ucsi(struct i2c_adapter *adapter, int irq,
++				     const struct software_node *swnode);
++#endif /* __I2C_CCGX_UCSI_H_ */
+-- 
+2.34.1
 
-Kristian
