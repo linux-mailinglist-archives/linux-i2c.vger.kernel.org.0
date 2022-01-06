@@ -2,158 +2,152 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 702094868D3
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 18:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC28486934
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 18:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242118AbiAFRlZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jan 2022 12:41:25 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4360 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241966AbiAFRlY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 12:41:24 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVD6c3dG6z67wb3;
-        Fri,  7 Jan 2022 01:36:24 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 6 Jan 2022 18:41:19 +0100
-Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 6 Jan
- 2022 17:41:15 +0000
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        "H Hartley Sweeten" <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "Teddy Wang" <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
-        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
-        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
-        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20220105194748.GA215560@bhelgaas>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <74bf4fde-3972-1c36-ca04-58089da0d82b@huawei.com>
-Date:   Thu, 6 Jan 2022 17:41:00 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S242439AbiAFRyR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jan 2022 12:54:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241987AbiAFRyQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 12:54:16 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABC7C061245;
+        Thu,  6 Jan 2022 09:54:16 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id u25so12536725edf.1;
+        Thu, 06 Jan 2022 09:54:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=eZdw4ha7wSUzgu5ld8qzql8IMnrghV9/jOBQI06caAY=;
+        b=iatsx+kVxdpLuJxNT4eblkv/koVpyWHeB1t6cxvQCuctglSTJRs+AU5u+RaKnt2z16
+         SpFKcsKp6J/B4y4jA8EJmrmHAnrcZlb90nzS6d+APOhEu5z/SEm1x4G957cyCDlu1m+Y
+         8Q74jH8QolZN17aIYi8Lrw3EmvYOv1wCSjEA4WcRDV1lvCTeTM7p1/N1zOqBpd6nDl19
+         DM088umPvN+xk1Fby88I4R8Sgr6g0dw/2u8RktVDqbyVcZr6hoAkUR2rEO3e+Kb5/qPZ
+         wh9wtudlpLCOR3BbTpfrRE5T35E5zfqq2gxHGacJx6geXhBvs/q0D+wMXP9coGYl8LrF
+         i8NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eZdw4ha7wSUzgu5ld8qzql8IMnrghV9/jOBQI06caAY=;
+        b=VFWoZhJZhrNI5wA58m9ETXipMHnIMD37U3uUxGowvWJ+9qUfSkE+1VEabPtqATPx4U
+         +EA1nHoP9eTZp0AYpWgSFsZ0yKTx82SVuuDPuvSXVKYAF42+Bzd4/tLBIJjHODYcgwTH
+         c4MX/sOA0PSYxU3YFQFgOoPUMFbHFxFLaBxefulPeoAyIeKIx9n5L+jrXHpPE09AxpXn
+         qVcLMdS3tZYC/ec9vfESFCYVGUNCr0l793kWC9urVQg9utIGw+P21kl2Q3doJ+I2mjlF
+         ucT7HVh9afhpxL/qkgMcuG7O/SLvr06f11haP2ewHIuRG7OZnE8F7CFS1M77M77TP3gf
+         KL5w==
+X-Gm-Message-State: AOAM532VVdmSuYTeM3EJW2TLb4NkvzDxD9c4nZGL6IVkCNBz6m6s/p/o
+        72EeEJvcamyv8+4OJBs2bBHRP30rvoBMPw==
+X-Google-Smtp-Source: ABdhPJybrm8pvFT0nK83X1H1ZNuXhn7ET+WMd7cXZjuPkmAOMDyAGIeaubtHtFjRzOI8+3Rab5O07w==
+X-Received: by 2002:a17:906:c13:: with SMTP id s19mr47297098ejf.330.1641491654809;
+        Thu, 06 Jan 2022 09:54:14 -0800 (PST)
+Received: from [192.168.1.103] (ip-46.34.226.0.o2inet.sk. [46.34.226.0])
+        by smtp.gmail.com with ESMTPSA id b2sm658060ejh.199.2022.01.06.09.54.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jan 2022 09:54:14 -0800 (PST)
+Message-ID: <d28741bf-a461-f4da-2f72-7855023684a1@gmail.com>
+Date:   Thu, 6 Jan 2022 18:54:12 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220105194748.GA215560@bhelgaas>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: Wrong piix4_smbus address / slow trackpoint on Thinkpad P14s gen
+ 2 (AMD)
 Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org
+References: <CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com>
+ <f8c13907-d296-baa6-7637-c5f8aa96b7ff@gmail.com> <YdbnQjxBINyFIRsQ@ninjato>
+From:   =?UTF-8?Q?Miroslav_Bend=c3=adk?= <miroslav.bendik@gmail.com>
+In-Reply-To: <YdbnQjxBINyFIRsQ@ninjato>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.27.56]
-X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 05/01/2022 19:47, Bjorn Helgaas wrote:
->>>>>   ok if the PCI maintainers decide otherwise.
->>>> I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
->>>> means something old and out of favor; it doesn't say*what*  that
->>>> something is.
->>>>
->>>> I think you're specifically interested in I/O port space usage, and it
->>>> seems that you want all PCI drivers that*only*  use I/O port space to
->>>> depend on LEGACY_PCI?  Drivers that can use either I/O or memory
->>>> space or both would not depend on LEGACY_PCI?  This seems a little
->>>> murky and error-prone.
->>> I'd like to hear Arnd's opinion on this but you're the PCI maintainer
->>> so of course your buy-in would be quite important for such an option.
-> I'd like to hear Arnd's opinion, too.  If we do add LEGACY_PCI, I
-> think we need a clear guide for when to use it, e.g., "a PCI driver
-> that uses inb() must depend on LEGACY_PCI" or whatever it is.
-> 
-> I must be missing something because I don't see what we gain from
-> this.  We have PCI drivers, e.g., megaraid [1], for devices that have
-> either MEM or I/O BARs.  I think we want to build drivers like that on
-> any arch that supports PCI.
-> 
-> If the arch doesn't support I/O port space, devices that only have I/O
-> BARs won't work, of course, and hopefully the PCI core and driver can
-> figure that out and gracefully fail the probe.
-> 
-> But that same driver should still work with devices that have MEM
-> BARs.  If inb() isn't always present, I guess we could litter these
-> drivers with #ifdefs, but that would be pretty ugly. 
+Hello,
 
-There were some ifdefs added to the 8250 drivers in Arnd's original 
-patch [0], but it does not seem included here.
+> Do you think this is this the same issue as described in
+ > https://bugzilla.kernel.org/show_bug.cgi?id=214597  <https://bugzilla.kernel.org/show_bug.cgi?id=214597>?
 
-Niklas, what happened to the 8250 and the other driver changes?
+Probably not.
 
-[0] 
-https://lore.kernel.org/lkml/CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com/
+> Isn't the interrupt described in the ACPI tables?
 
-> IMO inb() should
-> be present but do something innocuous like return ~0, as it would if
-> I/O port space is supported but there's no device at that address.
-> 
-> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/megaraid.c?id=v5.15#n4210
-> 
+Probably not. I am just web developer, i am not 100% sure, but i have not seen
+anything usable in ACPI tables:
+https://mireq.linuxos.sk/kernel/p14s_gen2_amd_acpi_tables.tar.xz
 
-That driver would prob not be used on systems which does not support 
-PIO, and so could have a HAS_IOPORT dependency. But it is not strictly 
-necessary.
+Most important section with SMBus is here:
+https://lore.kernel.org/all/CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com/
 
-Anyway, it would be good to have an idea of how much ifdeffery is 
-required in drivers.
+This section looked promising:
 
-Thanks,
-John
+Scope (_SB.I2CB)
+{
+     Device (TPNL)
+     {
+         Name (_HID, "XXXX0000")  // _HID: Hardware ID
+         Name (_CID, "PNP0C50" /* HID Protocol Device (I2C bus) */)  // _CID: Compatible ID
+         Name (_S0W, 0x03)  // _S0W: S0 Device Wake State
+         Name (HID2, 0x00)
+         Name (POIO, 0x00)
+         Name (SBFB, ResourceTemplate ()
+         {
+             I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
+                 AddressingMode7Bit, "\\_SB.I2CB",
+                 0x00, ResourceConsumer, _Y0C, Exclusive,
+                 )
+         })
+         Name (SBFG, ResourceTemplate ()
+         {
+             GpioInt (Level, ActiveLow, ExclusiveAndWake, PullNone, 0x0000,
+                 "\\_SB.GPIO", 0x00, ResourceConsumer, ,
+                 )
+                 {   // Pin list
+                     0x0005
+                 }
+         })
+         CreateWordField (SBFB, \_SB.I2CB.TPNL._Y0C._ADR, BADR)  // _ADR: Address
+         CreateDWordField (SBFB, \_SB.I2CB.TPNL._Y0C._SPE, SPED)  // _SPE: Speed
+         Name (ITML, Package (0x0A)
+         {
+             Package (0x07)
+             {
+                 0x04F3,
+                 0x2A3B,
+                 0x10,
+                 0x01,
+                 0x01,
+                 "ELAN901C",
+                 0x01
+             },
+
+
+but method _STA returned 0x0 (device not present). There is no activity on pin
+5. My device has synaptics trackpoint/touchpad, not elantech.  I think, that
+this section is for touchscreen (not on my device).
+
+More infomations to GPIO:
+
+Following command does nothing if psmouse is loaded without synaptics_intertouch:
+
+gpiomon --num-events=1000 gpiochip0 19
+
+After loading psmouse with intertouch it catches constantly cca 2000 changes/s.
+There are some changes like two rising / falling edges directly behind each
+other. I think, that clok is much faster, than gpiomon monitoring speed,
+catching communication with this command would be useless.
+
+I don't know why there is constant communication from trackpoint/touchpad to
+GPIO 19/20. Maybe some notification mechanism, attention, maybe something which
+stops after clearing some bit, i dont know. Schematic from Lenovo, documentation
+or anything useful wold be great, but whithout this i am just guessing.
+
+Pins 19/20 should be SCL/SDA of I2C3 (from coreboot, id don't know source of pin
+description:
+https://github.com/coreboot/coreboot/blob/cf39336ccfcc363162395bddf65113900aaf19fe/src/soc/amd/cezanne/include/soc/gpio.h#L152
+
