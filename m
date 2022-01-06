@@ -2,196 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5F648699D
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 19:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4D04869DF
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 19:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242631AbiAFSSZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jan 2022 13:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
+        id S242711AbiAFS1m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jan 2022 13:27:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240458AbiAFSSY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 13:18:24 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C95DC061245;
-        Thu,  6 Jan 2022 10:18:24 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id v6so4835255oib.13;
-        Thu, 06 Jan 2022 10:18:24 -0800 (PST)
+        with ESMTP id S242700AbiAFS1m (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 13:27:42 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1552EC061245;
+        Thu,  6 Jan 2022 10:27:42 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id w7so3016786plp.13;
+        Thu, 06 Jan 2022 10:27:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QeMXcbeimfZ2iZTaC2uYjjApoKuqksuCbWt0iqc9mW0=;
-        b=h8qveZFMblwKPmP4v+dpfFOAKP7Ind8RU0uSvRNXfw9dOE4Q8uGDsClaMi+GZGhGWD
-         CrRlE5fwKly0iY803m7UjYt4ryaer0aFN/fBaInP3uHEgre5uhLxHi9nBbtcKuwyq6C0
-         hXP8rJlDYqD2bE6T/LwnBAXzoGXTGA0KpSYImviHci8wiwkPjuLx/bW48DOSvikYsORe
-         ZMRGfqY9gXZR6nmDbbN3VkF0xgYaAVTnntsN7h3qi9tr4D3/aZGvIA8GbiCyxo3DqIwm
-         Y0ZlU3ETMTS8JVhK6d+f3SYyTM1Sa/Ds5kWSBH1FR6mUP2p4DcLhP9H6ebLnjSz7D2+t
-         gFJw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Mskw7uRlhAFhUG1ieckeOXErw6hEhTea/5asqxMmxpk=;
+        b=i/GcDhyaX50tOzDh3q0HK6hf76bXDlavHTpMP1l9tTv/MYIcVbDSpaK6lbV9Lw50bo
+         PZk1n9aH2f04xN/8pNrmF9i1gtFdmBjJwU/cW32nSbm2RZSy3x4Izu8Iv5pNlqBgy7rj
+         3PEwL6pRG9GCSOz7l1CREcgEV8ks93l/ad7kiy9UM7lWvNs0f7vTu0spcBr9xsc4rVZC
+         S+lgtkpixDb8KU96kydlqPSZ7heDqYXeLXL2IyPCaBgLx4IEUumkz63L6C7or8+oEchY
+         gp030+AJSvDk4mUPmz79366wP8JJ6LNTgRKLmYnt6b4A/NNesmluLZfI9joSkMqieTWf
+         6PnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QeMXcbeimfZ2iZTaC2uYjjApoKuqksuCbWt0iqc9mW0=;
-        b=CoV6xzu4i9CMYYjxYWKJi65gznkC5OIelEY1WPeIY9QLhQc+AcImrilYKwDf5bnzhy
-         rSLpZ7x8FpgoyHa9kELsg82fM1rY2M5NWZgqi/8e0IcUzeF7JiJw0zABnVdMfIgeFSwm
-         mVsK5+3kqrx9LN+eOtn9vqyQO7Qv9zCbWHhKAAmcVOCjMtmzgsQHHjPMl9J5DHw6Ig3z
-         y4u4CUHO8FdLyzYSQL7q3uCtQ0OsRV7MHHOhZ9hrC2oXKecLKdJ67z3VWRS/jeWI1wKU
-         sLCFj7KH1oTS3Sz/3WzHyMRLWxtM9ggQLzzKuw0XicngK4IrstrlZCg7aaOpnbcXYbxB
-         0wLA==
-X-Gm-Message-State: AOAM531ih0yd+ZV3EKtppCPzCG1MwYxl7EktPDNjDflk8IUomsbgF3rR
-        F4jhhfzCqJQOQ3s/cuS2nvw=
-X-Google-Smtp-Source: ABdhPJxyjnQZoY3B0XnTlftHR+rJ/X13CxPI2mnbn5z8/hV+FF6GpPS+IDxnY+htkBKPVSSwto6kfw==
-X-Received: by 2002:a05:6808:2207:: with SMTP id bd7mr7123072oib.12.1641493103803;
-        Thu, 06 Jan 2022 10:18:23 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bp11sm551260oib.38.2022.01.06.10.18.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 10:18:23 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Terry.Bowman@amd.com, Jean Delvare <jdelvare@suse.de>,
-        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, thomas.lendacky@amd.com
-References: <20210715221828.244536-1-Terry.Bowman@amd.com>
- <20210907183720.6e0be6b6@endymion> <20211105170550.746443b9@endymion>
- <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
- <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
- io accesses with mmio accesses
-Message-ID: <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net>
-Date:   Thu, 6 Jan 2022 10:18:21 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Mskw7uRlhAFhUG1ieckeOXErw6hEhTea/5asqxMmxpk=;
+        b=l6lLuwChfzZGGM2Qfx0VKnrMtx3FMb4FuXDsmtnCh1mwLjhpJitGKuAjzGrt0+ZxAs
+         D9sbOVSbDLTsX9kEfpocbUlB2Cs9pNDXD4/PXbFohbfSLRJi8ghf6uJGuYy4/wacaC83
+         G/kYbN5OUU1dQiGyNUwMnR4dNUycELsH73AWOKiwa+BhsZplCLj2DWNCYNcIAsx6h+Yy
+         WpnovHtkVf9ylFWUKypvOz7m7tcTBKGtQhNcwryQzpya5GKQPlMlcu35HwU3QJ8jZ+45
+         zwfcKpwguojF37gK7GgVtn5PgeEepx3wIx0JgUDzAaX/WdkYoEY7og1Z5LBYU/tdOz21
+         Kq4A==
+X-Gm-Message-State: AOAM533JD+9nqtuKFfRQ0o2aGm+RvkEKdm7SRX1MQUm4yDDUayXQVfs5
+        GhJ0XAUyqOcrc2LQHU1NG+V9xtAIrhFfF8wz0kDse3Hwrfw=
+X-Google-Smtp-Source: ABdhPJxioa7rcwPE0lFktDCQ6DbH1RYvLWNIoLFDp+0GzCd8NClECEKzb9SGrRzq+r7SW1t8P3DUUPpAX1xAmYQNmtc=
+X-Received: by 2002:a17:90b:17cb:: with SMTP id me11mr11426840pjb.28.1641493661438;
+ Thu, 06 Jan 2022 10:27:41 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com>
+ <f8c13907-d296-baa6-7637-c5f8aa96b7ff@gmail.com>
+In-Reply-To: <f8c13907-d296-baa6-7637-c5f8aa96b7ff@gmail.com>
+From:   Andrea Ippolito <andrea.ippo@gmail.com>
+Date:   Thu, 6 Jan 2022 19:27:05 +0100
+Message-ID: <CAGhUXvCMyVD3aP7Mi+i2hz0A0FePJvPSceubXm=u+4AR+wgesA@mail.gmail.com>
+Subject: Re: Wrong piix4_smbus address / slow trackpoint on Thinkpad P14s gen
+ 2 (AMD)
+To:     =?UTF-8?Q?Miroslav_Bend=C3=ADk?= <miroslav.bendik@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 1/4/22 11:34 AM, Terry Bowman wrote:
-> Hi Jean and Guenter,
-> 
-> This is a gentle reminder to review my previous response when possible. Thanks!
-> 
-> Regards,
-> Terry
-> 
-> On 12/13/21 11:48 AM, Terry Bowman wrote:
->> Hi Jean and Guenter,
->>
->> Jean, Thanks for your responses. I added comments below.
->>
->> I added Guenter to this email because his input is needed for adding the same
->> changes to the sp5100_tco driver. The sp5100_tco and piix4_smbus driver
->> must use the same synchronization logic for the shared register.
->>
->> On 11/5/21 11:05, Jean Delvare wrote:
->>> On Tue, 7 Sep 2021 18:37:20 +0200, Jean Delvare wrote:
->>>> More generally, I am worried about the overall design. The driver
->>>> originally used per-access I/O port requesting because keeping the I/O
->>>> ports busy all the time would prevent other drivers from working. Do we
->>>> still need to do the same with the new code? If it is possible and safe
->>>> to have a permanent mapping to the memory ports, that would be a lot
->>>> faster.
->>>>
->>
->> Permanent mapping would likely improve performance but will not provide the
->> needed synchronization. As you mentioned below the sp5100 driver only uses
->> the DECODEEN register during initialization but the access must be
->> synchronized or an i2c transaction or sp5100_tco timer enable access may be
->> lost. I considered alternatives but most lead to driver coupling or considerable
->> complexity.
->>
->>>> On the other hand, the read-modify-write cycle in
->>>> piix4_setup_sb800_smba() is unsafe if 2 drivers can actually call
->>>> request_mem_region() on the same memory area successfully.
->>>>
->>>> I'm not opposed to taking your patch with minimal changes (as long as
->>>> the code is safe) and working on performance improvements later.
->>>
->>
->> I confirmed through testing the request_mem_region() and request_muxed_region()
->> macros provide exclusive locking. One difference between the 2 macros is the
->> flag parameter, IORESOURCE_MUXED. request_muxed_region() uses the
->> IORESOURCE_MUXED flag to retry the region lock if it's already locked.
->> request_mem_region() does not use the IORESOURCE_MUXED and as a result will
->> return -EBUSY immediately if the region is already locked.
->>
->> I must clarify: the piix4_smbus v1 patch uses request_mem_region() which is not
->> correct because it doesn't retry locking an already locked region.  The driver
->> must support retrying the lock or piix4_smbus and sp5100_tco drivers may
->> potentially fail loading. I added proposed piix4_smbus v2 changes below to solve.
->>
->> I propose reusing the existing request_*() framework from include/linux/ioport.h
->> and kernel/resource.c. A new helper macro will be required to provide an
->> interface to the "muxed" iomem locking functionality already present in
->> kernel/resource.c. The new macro will be similar to request_muxed_region()
->> but will instead operate on iomem. This should provide the same performance
->> while using the existing framework.
->>
->> My plan is to add the following to include/linux/ioport.h in v2. This macro
->> will add the interface for using "muxed" iomem support:
->> #define request_mem_muxed_region(start,n,name)  __request_region(&iomem_resource, (start), (n), (name), IORESOURCE_MUXED)
->>
->> The proposed changes will need review from more than one subsystem maintainer.
->> The macro addition in include/linux/ioport.h would reside in a
->> different maintainer's tree than this driver. The change to use the
->> request_mem_muxed_region() macro will also be made to the sp5100_tco driver.
->> The v2 review will include maintainers from subsystems owning piix4_smbus
->> driver, sp5100_tco driver, and include/linux/ioport.h.
->>
->> The details provided above are described in a piix4_smbus context but would also be
->> applied to the sp5100_tco driver for synchronizing the shared register.
->>
->> Jean and Guenter, do you have concerns or changes you prefer to the proposal I
->> described above?
->>
+Hello Miroslav,
 
-I think you'll need approval from someone with authority to accept the
-suggested change in include/linux/ioport.h. No idea who that would be.
+forgive me if it's a dumb question, but would this also apply to Intel
+platforms, or this kind of stuff chip maker specific?
 
-Guenter
+I got an Intel Tiger Lake.
 
->>> I looked some more at the code. I was thinking that maybe if the
->>> registers accessed by the two drivers (i2c-piix4 and sp5100_tco) were
->>> disjoint, then each driver could simply request subsets of the mapped
->>> memory.
->>>
->>> Unfortunately, while most registers are indeed exclusively used by one
->>> of the drivers, there's one register (0x00 = IsaDecode) which is used
->>> by both. So this simple approach isn't possible.
->>>
->>> That being said, the register in question is only accessed at device
->>> initialization time (on the sp5100_tco side, that's in function
->>> sp5100_tco_setupdevice) and only for some devices (Embedded FCH). So
->>> one approach which may work is to let the i2c-piix4 driver instantiate
->>> the watchdog platform device in that case, instead of having sp5100_tco
->>> instantiate its own device as is currently the case. That way, the
->>> i2c-piix4 driver would request the "shared" memory area, perform the
->>> initialization steps for both functions (SMBus and watchdog) and then
->>> instantiate the watchdog device so that sp5100_tco gets loaded and goes
->>> on with the runtime management of the watchdog device.
->>>
->>> If I'm not mistaken, this is what the i2c-i801 driver is already doing
->>> for the watchdog device in all recent Intel chipsets. So maybe the same
->>> approach can work for the i2c-piix4 driver for the AMD chipsets.
->>> However I must confess that I did not try to do it nor am I familiar
->>> with the sp5100_tco driver details, so maybe it's not possible for some
->>> reason.
->>>
->>> If it's not possible then the only safe approach would be to migrate
->>> i2c-piix4 and sp5100_tco to a true MFD setup with 3 separate drivers:
->>> one new MFD PCI driver binding to the PCI device, providing access to
->>> the registers with proper locking, and instantiating the platform
->>> device, one driver for SMBus (basically i2c-piix4 converted to a
->>> platform driver and relying on the MFD driver for register access) and
->>> one driver for the watchdog (basically sp5100_tco converted to a
->>> platform driver and relying on the MFD driver for register access).
->>> That's a much larger change though, so I suppose we'd try avoid it if
->>> at all possible.
->>>
+Thanks!
+Andrea IPPOLITO
 
+Il giorno gio 6 gen 2022 alle ore 16:03 Miroslav Bend=C3=ADk
+<miroslav.bendik@gmail.com> ha scritto:
+>
+> Address detection does not work because cd6h/cd7h port io can be
+> disabled, but
+> it's accessible using mmio. This patch:
+> https://lore.kernel.org/all/20210715221828.244536-1-Terry.Bowman@amd.com/
+> with
+> modified AMD_PCI_SMBUS_REVISION_MMIO fixed base address detection.
+>
+> Problem with RMI4 touchpad / trackpoint remains, because rmi4-smbus
+> needs host
+> notify feature. I have tried implement this feature, without success.
+> Interrupts
+> on IRQ 7 (SMBus) are generated only for block data transfers, but not for
+> trackpoint / touchpad move actions. I have looked at pinctrl_amd and it
+> looks,
+> that activity is signaled using GPIO. This looks promising:
+>
+> cat /sys/kernel/debug/pinctrl/AMDI0030:00/pingroups:
+>
+> group: i2c0
+> pin 145 (GPIO_145)
+> pin 146 (GPIO_146)
+>
+> group: i2c1
+> pin 147 (GPIO_147)
+> pin 148 (GPIO_148)
+>
+> group: i2c2
+> pin 113 (GPIO_113)
+> pin 114 (GPIO_114)
+>
+> group: i2c3
+> pin 19 (GPIO_19)
+> pin 20 (GPIO_20)
+>
+> After loading psmouse with forced enabled intertouch pin 19/20 started
+> generating events.
+>
