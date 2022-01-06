@@ -2,85 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 503A048621B
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 10:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E0748621F
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 10:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbiAFJ3N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jan 2022 04:29:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52012 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237380AbiAFJ3M (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 04:29:12 -0500
+        id S237420AbiAFJaO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jan 2022 04:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237429AbiAFJaD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 04:30:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C2CC061245
+        for <linux-i2c@vger.kernel.org>; Thu,  6 Jan 2022 01:30:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D3C661AC2
-        for <linux-i2c@vger.kernel.org>; Thu,  6 Jan 2022 09:29:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B96BCC36AEB;
-        Thu,  6 Jan 2022 09:29:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A44AAB81FEF
+        for <linux-i2c@vger.kernel.org>; Thu,  6 Jan 2022 09:30:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E87C36AEB;
+        Thu,  6 Jan 2022 09:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641461351;
-        bh=sFkWcJ+pgWcCd34k/SgKqT6L+iE9l9xET5me3NI3n50=;
+        s=k20201202; t=1641461400;
+        bh=oyUdyjSNxx2Fc2CysWzrYEiNeAMYkOX6CkInjFaX2Og=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ttf2RRlossLF7mtUyscACUEPFaeH8SAyw3Qd+BZfDuEOor9GID76T4x9dk1FLefx/
-         W6ykBtY9GfWYUte8ZBj+KRaw5CbGahDivf+gethodd9FNvjcL50E1NIloa6EwLIF3X
-         aOEIqD1iZq1EA9Nl5RHE2oRF0Tm3Dmf8dMb5/38dj/7pWaauhXMmt/DGcaGk0s7Hbz
-         lissSKej2hQVxqzNU0IlQKFQCzHeggSUfrPikCou8/pc9aFJMAWmxT7D+yfx4F92Xw
-         iDCRN2/OvmQRWxgz3DNv+s+U/mAU/o4tOABlnOot9YOhJloBJK7yp8BkqgdSI2Fe/6
-         sovyv0EPY2PpA==
-Date:   Thu, 6 Jan 2022 10:29:08 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Konstantin Kharlamov <hi-angel@yandex.ru>
-Cc:     linux-i2c@vger.kernel.org, bibby.hsieh@mediatek.com,
-        amd-gfx@lists.freedesktop.org
-Subject: Re: Bug: amdgpu stutter and spam `Fence fallback timer expired`
- after suspend
-Message-ID: <Yda2ZKhvclIxbrad@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Konstantin Kharlamov <hi-angel@yandex.ru>,
-        linux-i2c@vger.kernel.org, bibby.hsieh@mediatek.com,
-        amd-gfx@lists.freedesktop.org
-References: <7143a7147978f4104171072d9f5225d2ce355ec1.camel@yandex.ru>
+        b=nPeeLdkbkp2OiJbWapOp8saXwIPL56t2MEGKB2er/KjB7zKbYJDh0GyO1LbuJfq/k
+         Ki8HcejLIZdPUxGtyINm7UO5bnhJnIaansbdgBLqMaksczcVyYB+hWfKzUN1KxxPrf
+         SOK9mGca1xVSLB+6+9hGstNRLEPwT5b9582autjmVfnAbNjqJt3AXxanaZAQCJ4BP+
+         Si6qbSWWTg3OEeU2BeOSYYCGZMT5TADy02A1KHBPnApbofZNf93SIZn6dGySxcyUmR
+         KKMplK/i/4HqPwQk99gNEt78EVawfzaOq9xJndVfDTCrdakAxlMSthvGHan+TCDXTM
+         zw9K4ePmHYyVA==
+Date:   Thu, 6 Jan 2022 10:29:57 +0100
+From:   "wsa@kernel.org" <wsa@kernel.org>
+To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [bisected][regression] Applications that need amdgpu doesn't run
+ after waking up from suspend
+Message-ID: <Yda2lUHg+RcD2jWc@ninjato>
+Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
+        "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <1295184560.182511.1639075777725.ref@mail.yahoo.com>
+ <1295184560.182511.1639075777725@mail.yahoo.com>
+ <YbJj7xyiPs8HBxC8@kunai>
+ <1394751822.39123.1639136356516@mail.yahoo.com>
+ <1173204999.356114.1639136939857@mail.yahoo.com>
+ <925415165.717231.1641227067217@mail.yahoo.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l9suco8s8577Jsb/"
+        protocol="application/pgp-signature"; boundary="/85u4RD6zmVTlANS"
 Content-Disposition: inline
-In-Reply-To: <7143a7147978f4104171072d9f5225d2ce355ec1.camel@yandex.ru>
+In-Reply-To: <925415165.717231.1641227067217@mail.yahoo.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---l9suco8s8577Jsb/
+--/85u4RD6zmVTlANS
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 
-> Should I send a revert, or is there a way to fix this?
+> The bug is still present in 5.16-rc8. The system boots but suspend/resume issues still exist.
+> Reverting the bad commit on 5.16-rc8 fixes the issue.
 
-You are the second one to report this problem and so far, there has been
-no response from the authors. I will prepare a revert and CC all
-involved people. Thank you for the nagging!
+Thanks for the reports, I will revert the problematic commit.
 
 
---l9suco8s8577Jsb/
+--/85u4RD6zmVTlANS
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHWtmAACgkQFA3kzBSg
-Kba7qxAAkUtqMhuL7R1RN4uGF+PewfyGLRSLbv7Js+pTSOPJuRrH1wwNX/EH+0EL
-Go/DtB4v2368248mVOpj9Ck7DUygUfCzdhc3CbV6TFG+8ouaBdI4KN/vnYOTTRHU
-NFhbuymrHbAaMmts3qQA5P18mTVYJFJnTPMYE7uKqnjU9tzDXxDeC7RS8Np9Eb23
-sA67mZh9sQe90lXpguHWAqf/YYiSp4iKMHEUsRUQvVgC0NWVVw5ZQamHE9uYrIE5
-xI0RaCxC7BsBEaXx101Fjmv5vRRNt4MhJDJpyjB/U3XzysHLFY8vNxIvasND7cWA
-vTZuAJqZolEpWA//2ibimkByGtVjeZLpOYBoVhcws34iSHJsYwXOkpY5OC9Z+fk3
-o6WHEm6g2nd1fd8YlFf2z7d4d2IPc04wpsFmyfK/j6+EqT4SagqvKC6tGDeFHayB
-jWav3ihR3CfGngPqUYxCaRnCmrZ1H8UjlXOY2LqiW+9Uc0DoXq/ZzcSoirBG/iir
-AzxcYRKpCS4h5jVzDU0FFKgEA8OswdYQPOFtmnw2K1hERTT6x4yJ8AIIAYOw0/Qq
-YUmlAqcNFcIkX9oTa50iV72d+RlCRs0bLIhkI/DpCbkKdo3WCxbqV6dzgAL2n7Eo
-5hjgWq8sf70QZsd09ckt6BCWs1/DFMiQ2xZ/bmTl7rose+6hghU=
-=nJls
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHWtpUACgkQFA3kzBSg
+KbZIyA//SllBaYAptXpP5e61o+tsqC9wqx3oQqXFvZm80lRzDBDAXdPYmafsERIh
+PmPbMeksT2eIvWk4aG7k1AFNLbwuUh7NF1a1h+XcJAjDkzIUW6US5iZwvd4OlV3y
+UCJwRDxCC7RuJK136N1oSUp33hbUFlb6LrjWjsSgUT8y0sqtKqRjsW7F+yBFy5iU
+g+5k3yv0Gnfju1qFHKEuguwGhJk4hkkmzH9JcotFBgf0/rDuY9ymGL3CZjUB+vlP
+5dAinFegFHLrnCu2MLaHhwU1kcttz14xlz7HlMFzQxCASl2l+U5bP+UdZKQQX3D1
+vvHfWfgu3Lh+flcXO1m1Htmho4yU/MEpujmLqTR8OhPwDUnv9tFuOgoYISPqXr3T
+gSRtud4XT7xN8t6PxiYPRIKt12OTkB1Ph/zhtsPbzzLSkKsmP0oMCmXy46IIgtPH
+BzNr5qMgWEUmGjKlsVZFAl07HpQjFl2Tj6u1523QhtLgn6JRArLZcJXMVOq963nR
+tlfRL7j0eS7XBAXBZNa8AhZhoOoeylHaTh9wFEMfDHqXgixvkk4gUadk1PHuGusG
+9nhh0Ap0mMAUD7ZSGzJhybHAAPbg9eMCV4jPKQX1B6W9vw8jGTPQGCPmNjjNGFJ+
+ubv/SemLE/+DZJq5myfJgDs3ergiZg6jhtwd50oYg5nxiKsVkrA=
+=kSsq
 -----END PGP SIGNATURE-----
 
---l9suco8s8577Jsb/--
+--/85u4RD6zmVTlANS--
