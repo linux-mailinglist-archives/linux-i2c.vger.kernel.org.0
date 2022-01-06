@@ -2,93 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E7A48649D
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 13:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF4F4864A7
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 13:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239085AbiAFMwQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jan 2022 07:52:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239084AbiAFMwQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 07:52:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA848C061245;
-        Thu,  6 Jan 2022 04:52:15 -0800 (PST)
+        id S239092AbiAFM5p (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jan 2022 07:57:45 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40034 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239070AbiAFM5o (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 07:57:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D873B82106;
-        Thu,  6 Jan 2022 12:52:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3230EC36AE3;
-        Thu,  6 Jan 2022 12:52:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FED6B820D6;
+        Thu,  6 Jan 2022 12:57:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522BAC36AE5;
+        Thu,  6 Jan 2022 12:57:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641473532;
-        bh=sTUfBBZf5cDmvuCRmSZ5GpkMh+CfVe/MIPQg2YkzmdQ=;
+        s=k20201202; t=1641473862;
+        bh=l/UE+revKaXT7Bb0p/V4j8d5w62p/C4OUBxIoaWlMws=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RTBNubVPzHR1b5c3iBRxBTbX1QKb2drLf0TJ25YdTWdDd4+Dh7ypJgXiK/uaKZq1x
-         NOtAMh5NVoca7LQN0cb1gaPe7VrPC/ZDkpWt72r9liB8/QqDqUe3KhmOZ2fQ3+2hdB
-         NkcKAjdDNd4DuMlMKyILVDC+xct1KQPFMKAO6e5J18mNpTEU0TOLKNygWYGl1fr6X2
-         zKrBjMCXS6Z/JbNL3l07LKTUq54mI9tUDyBpoV9vbHYsgYkXP+bFGjwCpkatQGrPor
-         c8o25KHygPpELjpCgkXqes3D4vt7NRGGlmmrM5lEGdexPrkjE2hY+Z3gHJHTziry6o
-         9Ey/4ff6b8XDQ==
-Date:   Thu, 6 Jan 2022 13:52:09 +0100
+        b=puAQWQw2OepEM2ilLggQguUQkjBkI4rshnKO3qDD5JoUIMbGn5yP9tuD8+0Cb95LU
+         yJrMKfv4yhza6IiypxKrSvkBaqxQvVXGXcySErTxUK1X/aoYDLgXrBYaod8XieNJuh
+         /zP5t6+DUmActNuwVxbhOgLVts+BCwjGfBn00N1iB+GOmCqjBafisvf4xiUGKQIzLt
+         I3pZM1M3eTpKLbUpgqZDkiKfuwwUSP0SxLnAuyvpB5SJGyrO5avd0GGKHiF6dTd6F8
+         2HkyfN5vej5bsOVzurRXrx1h/naVYZC5mFMvSegeG9c+iUQ7h4aP7Dr044qunNJT8b
+         KtQpSbrzg1zyw==
+Date:   Thu, 6 Jan 2022 13:57:38 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Miroslav Bendik <miroslav.bendik@gmail.com>
+To:     Miroslav =?utf-8?Q?Bend=C3=ADk?= <miroslav.bendik@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org
 Subject: Re: Wrong piix4_smbus address / slow trackpoint on Thinkpad P14s gen
  2 (AMD)
-Message-ID: <Ydbl+QgVWqjho+dl@ninjato>
+Message-ID: <YdbnQjxBINyFIRsQ@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Miroslav Bendik <miroslav.bendik@gmail.com>,
+        Miroslav =?utf-8?Q?Bend=C3=ADk?= <miroslav.bendik@gmail.com>,
         linux-i2c@vger.kernel.org, linux-input@vger.kernel.org
 References: <CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com>
+ <f8c13907-d296-baa6-7637-c5f8aa96b7ff@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jjpJsdYkgFkZLP3a"
+        protocol="application/pgp-signature"; boundary="o3ME+rrv2v82vae7"
 Content-Disposition: inline
-In-Reply-To: <CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com>
+In-Reply-To: <f8c13907-d296-baa6-7637-c5f8aa96b7ff@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---jjpJsdYkgFkZLP3a
+--o3ME+rrv2v82vae7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Miroslav,
+Hi again,
 
-> On Thinkpad P14s gen 2 with AMD (model 21A00003CK, BIOS R1MET43W - 1.13) SMBus
-> address detection don't work and trackpoint has slow rate (30 Hz) because can't
-> use SMBus. Email is divided to SMBus and trackpoint section, there are issues in
-> both modules.
+> Address detection does not work because cd6h/cd7h port io can be
+> disabled, but it's accessible using mmio. This patch:
+> https://lore.kernel.org/all/20210715221828.244536-1-Terry.Bowman@amd.com/
+> with modified AMD_PCI_SMBUS_REVISION_MMIO fixed base address
+> detection.
 
-Do you think this is this the same issue as described in
-https://bugzilla.kernel.org/show_bug.cgi?id=214597?
+Okay, this patch is stalled because Terry is waiting for review
+comments. I'll mention the high priority.
 
-Thank you for your detailed analysis!
+> Problem with RMI4 touchpad / trackpoint remains, because rmi4-smbus
+> needs host notify feature. I have tried implement this feature,
+> without success. Interrupts on IRQ 7 (SMBus) are generated only for
+> block data transfers, but not for trackpoint / touchpad move actions.
+> I have looked at pinctrl_amd and it looks, that activity is signaled
+> using GPIO. This looks promising:
+
+Isn't the interrupt described in the ACPI tables?
+
+All the best,
 
    Wolfram
 
 
---jjpJsdYkgFkZLP3a
+--o3ME+rrv2v82vae7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHW5fQACgkQFA3kzBSg
-KbYFwRAAmGRtk6P0NMIKeDoLysnElOhU0PirrkhxHWMB/7kNkLhvpu1eR++wBi+I
-P32vvES/be1IwHNJfhRAEjSxdyd9Qunn/inzjz7dE9f+y8wWw16o1mZXQrZGwjpn
-VlmSrM2YyckBDjTX+V+9HuYfEIz/rMQ+1joFX7WjoHitizstgsziYXio440xAxxA
-RgOrrlXxqvNkn/EKqAZvQXUMCi6D5GT/ANkpUHRKvMDtZYT0uYIhHkSa18gzJKBx
-5WcOqHmi6gigCpw3pIE3WgTwUYgfHPzFKanyGmC2j5mQ7H8U0OL5ee5+mSa8MmVU
-vlfbDySHAjs+DFpQ0urNwXWVSMOBfeTyRelsDYe3R0iPLKfgrLYIecGBSUzj2Hkt
-VGEtgwP1FM4cML5QXYV8VsLhC5entIyy16Z8hD8NNmvW3ADI8DnvM2fxatPofT8B
-YOVIK7XHbL2oGgFijTk0N5R8dnbty21qZoj7jLzEi2FEq8p0IZWVqEyAVwgWlNVv
-iaQnkh3lBwkMpGu7x4h9IQskdXGS9Q0SU9JQNLcDNjCyo5ESyqKQn4VOvetJ8E0F
-SKXJbcZZW3zXpZN395ZQMAVbGrm8hdr4f6n1u+4p1qhNV2zV1OkvCiIRQXE9nyzD
-s/dibErk5MNKBPFxtI5o9SvjPzkcEAPuG8F8YPZAiZi4WeDb8ag=
-=tf4W
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHW50EACgkQFA3kzBSg
+KbY8bA//aLJywXLpXOv/idwuijcgWOf3WCGMHER6mxlIhKTJZcnRrjNXMmMOgMMq
+G6oj/W0DnDLwrfDUgMatGVBanX/kcI7UZyowZEYNHd1zVTryX3tHiMVYzG6HR02L
+tLyYmGNqcuit7+wmNYY34QLI36rrI9XFAT3NnBOIrFQBUVZmyBl4ZatPmv1iqlPk
+8kXeptefZ6THLCkXJYhwy7cEms9FMvXOGmcJ97HEDCTxcxWEMSVtknKeqqcAJuPM
+ws7JJzhkA0lV3BOn79JECN05AfbVwVuwXfb3yXYP3yOSozQIrzLF8NEEFJ3LA44F
+qBYewcFN58Q11xIE2bsBJpuxiQrhxRlD0IzUByi+Fh2LIszkdNIeUlTnVkFXMQOb
+wXjymffuGHKY4ysryIg58Se1GN4QfUoFNEhuhX36s7ZN3PSH9tVBcPvz2nBDs7J7
+/6HUTDto8xd12x+5MRnwqQOiuFZFZ/q0Ja7ibaT6uG5M7q1y3LYiVEFyWV/2Tu+x
+nCxUb0NQCvXf9ZljAu9Vdo4XqgoPwsFTWwMk6AbJGpg2LoBH5xOsBp/5sn0zGzUL
+KMPF/3XO1wwa5eQhawyuLUehp6Pz8I9OIuTt5neArScVaXdb5Ce1clM3llqhjPkW
+BuMkOSEYp1a8IosLPgmxq6tTp+wOgcoQiapC4IbDEu4fxvj4zYA=
+=6Jci
 -----END PGP SIGNATURE-----
 
---jjpJsdYkgFkZLP3a--
+--o3ME+rrv2v82vae7--
