@@ -2,137 +2,158 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E37C486578
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 14:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702094868D3
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jan 2022 18:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239695AbiAFNpC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jan 2022 08:45:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58680 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239694AbiAFNpB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 08:45:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 843A1B82105;
-        Thu,  6 Jan 2022 13:45:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A505EC36AE3;
-        Thu,  6 Jan 2022 13:44:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641476699;
-        bh=ntE/Y+7o0IsGTHSw+lmJdSWw0JHksN40xWyROfk/54U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ELqzr9C8O0LJsCjiNHU36w+YcUGG9BIWHkyY4JOpY33l1yPDztjNi9c9zBna9C66x
-         stgAppO8kNN3QlcPkknPvywO0mRGGn1HuZxjSJpOkE8pylh2M9X8nS2AkMP9gPZ3YL
-         5VkYqTqM5HRE5qn1Rt0ndr3L47sQQuaYSofmzCGqTFDpfXql4ghd3EYj3fkNCCGauc
-         VgcJnHp5/0VBWeNuT3MNwHLH1/ou30yaiuyUm2qbmxfaks2GbahBdct8RF/TnLltGI
-         QFlKj0vTWQ4LRLffqgH2jpAtkp5vAHkUxDgbs7PvX1sl+j5PDXxYr8E6LbRawhDiZn
-         Z9DDFSHVToEWQ==
-Date:   Thu, 6 Jan 2022 14:44:56 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     mbizon@freebox.fr, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: mpc: Avoid out of bounds memory access
-Message-ID: <YdbyWBujbFNde6K6@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        mbizon@freebox.fr, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220105015304.1368234-1-chris.packham@alliedtelesis.co.nz>
+        id S242118AbiAFRlZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jan 2022 12:41:25 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4360 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241966AbiAFRlY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jan 2022 12:41:24 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVD6c3dG6z67wb3;
+        Fri,  7 Jan 2022 01:36:24 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 6 Jan 2022 18:41:19 +0100
+Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 6 Jan
+ 2022 17:41:15 +0000
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        "H Hartley Sweeten" <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        "Sathya Prakash" <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "Teddy Wang" <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
+        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
+        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
+        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-watchdog@vger.kernel.org>
+References: <20220105194748.GA215560@bhelgaas>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <74bf4fde-3972-1c36-ca04-58089da0d82b@huawei.com>
+Date:   Thu, 6 Jan 2022 17:41:00 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/JNsJdIKddWpXUvk"
-Content-Disposition: inline
-In-Reply-To: <20220105015304.1368234-1-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20220105194748.GA215560@bhelgaas>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.27.56]
+X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 05/01/2022 19:47, Bjorn Helgaas wrote:
+>>>>>   ok if the PCI maintainers decide otherwise.
+>>>> I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
+>>>> means something old and out of favor; it doesn't say*what*  that
+>>>> something is.
+>>>>
+>>>> I think you're specifically interested in I/O port space usage, and it
+>>>> seems that you want all PCI drivers that*only*  use I/O port space to
+>>>> depend on LEGACY_PCI?  Drivers that can use either I/O or memory
+>>>> space or both would not depend on LEGACY_PCI?  This seems a little
+>>>> murky and error-prone.
+>>> I'd like to hear Arnd's opinion on this but you're the PCI maintainer
+>>> so of course your buy-in would be quite important for such an option.
+> I'd like to hear Arnd's opinion, too.  If we do add LEGACY_PCI, I
+> think we need a clear guide for when to use it, e.g., "a PCI driver
+> that uses inb() must depend on LEGACY_PCI" or whatever it is.
+> 
+> I must be missing something because I don't see what we gain from
+> this.  We have PCI drivers, e.g., megaraid [1], for devices that have
+> either MEM or I/O BARs.  I think we want to build drivers like that on
+> any arch that supports PCI.
+> 
+> If the arch doesn't support I/O port space, devices that only have I/O
+> BARs won't work, of course, and hopefully the PCI core and driver can
+> figure that out and gracefully fail the probe.
+> 
+> But that same driver should still work with devices that have MEM
+> BARs.  If inb() isn't always present, I guess we could litter these
+> drivers with #ifdefs, but that would be pretty ugly. 
 
---/JNsJdIKddWpXUvk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There were some ifdefs added to the 8250 drivers in Arnd's original 
+patch [0], but it does not seem included here.
 
-On Wed, Jan 05, 2022 at 02:53:04PM +1300, Chris Packham wrote:
-> When performing an I2C transfer where the last message was a write KASAN
-> would complain:
->=20
->   BUG: KASAN: slab-out-of-bounds in mpc_i2c_do_action+0x154/0x630
->   Read of size 2 at addr c814e310 by task swapper/2/0
->=20
->   CPU: 2 PID: 0 Comm: swapper/2 Tainted: G    B             5.16.0-rc8 #1
->   Call Trace:
->   [e5ee9d50] [c08418e8] dump_stack_lvl+0x4c/0x6c (unreliable)
->   [e5ee9d70] [c02f8a14] print_address_description.constprop.13+0x64/0x3b0
->   [e5ee9da0] [c02f9030] kasan_report+0x1f0/0x204
->   [e5ee9de0] [c0c76ee4] mpc_i2c_do_action+0x154/0x630
->   [e5ee9e30] [c0c782c4] mpc_i2c_isr+0x164/0x240
->   [e5ee9e60] [c00f3a04] __handle_irq_event_percpu+0xf4/0x3b0
->   [e5ee9ec0] [c00f3d40] handle_irq_event_percpu+0x80/0x110
->   [e5ee9f40] [c00f3e48] handle_irq_event+0x78/0xd0
->   [e5ee9f60] [c00fcfec] handle_fasteoi_irq+0x19c/0x370
->   [e5ee9fa0] [c00f1d84] generic_handle_irq+0x54/0x80
->   [e5ee9fc0] [c0006b54] __do_irq+0x64/0x200
->   [e5ee9ff0] [c0007958] __do_IRQ+0xe8/0x1c0
->   [c812dd50] [e3eaab20] 0xe3eaab20
->   [c812dd90] [c0007a4c] do_IRQ+0x1c/0x30
->   [c812dda0] [c0000c04] ExternalInput+0x144/0x160
->   --- interrupt: 500 at arch_cpu_idle+0x34/0x60
->   NIP:  c000b684 LR: c000b684 CTR: c0019688
->   REGS: c812ddb0 TRAP: 0500   Tainted: G    B              (5.16.0-rc8)
->   MSR:  00029002 <CE,EE,ME>  CR: 22000488  XER: 20000000
->=20
->   GPR00: c10ef7fc c812de90 c80ff200 c2394718 00000001 00000001 c10e3f90 0=
-0000003
->   GPR08: 00000000 c0019688 c2394718 fc7d625b 22000484 00000000 21e17000 c=
-208228c
->   GPR16: e3e99284 00000000 ffffffff c2390000 c001bac0 c2082288 c812df60 c=
-001ba60
->   GPR24: c23949c0 00000018 00080000 00000004 c80ff200 00000002 c2348ee4 c=
-2394718
->   NIP [c000b684] arch_cpu_idle+0x34/0x60
->   LR [c000b684] arch_cpu_idle+0x34/0x60
->   --- interrupt: 500
->   [c812de90] [c10e3f90] rcu_eqs_enter.isra.60+0xc0/0x110 (unreliable)
->   [c812deb0] [c10ef7fc] default_idle_call+0xbc/0x230
->   [c812dee0] [c00af0e8] do_idle+0x1c8/0x200
->   [c812df10] [c00af3c0] cpu_startup_entry+0x20/0x30
->   [c812df20] [c001e010] start_secondary+0x5d0/0xba0
->   [c812dff0] [c00028a0] __secondary_start+0x90/0xdc
->=20
-> This happened because we would overrun the i2c->msgs array on the final
-> interrupt for the I2C STOP. This didn't happen if the last message was a
-> read because there is no interrupt in that case. Ensure that we only
-> access the current message if we are not processing a I2C STOP
-> condition.
->=20
-> Fixes: 1538d82f4647 ("i2c: mpc: Interrupt driven transfer")
-> Reported-by: Maxime Bizon <mbizon@freebox.fr>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Niklas, what happened to the 8250 and the other driver changes?
 
-Applied to for-current, thanks!
+[0] 
+https://lore.kernel.org/lkml/CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com/
 
+> IMO inb() should
+> be present but do something innocuous like return ~0, as it would if
+> I/O port space is supported but there's no device at that address.
+> 
+> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/megaraid.c?id=v5.15#n4210
+> 
 
---/JNsJdIKddWpXUvk
-Content-Type: application/pgp-signature; name="signature.asc"
+That driver would prob not be used on systems which does not support 
+PIO, and so could have a HAS_IOPORT dependency. But it is not strictly 
+necessary.
 
------BEGIN PGP SIGNATURE-----
+Anyway, it would be good to have an idea of how much ifdeffery is 
+required in drivers.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHW8lcACgkQFA3kzBSg
-KbZI1RAAtAxtz3HaWUcwPjkaJUoIoFIOImetynn7oGfWyVLlxeWDnvfvrj+i6nTW
-vTnplfVPhplqSzsQvRVuRJrrGsgeSrMLBTFdtQZEG5b6CaYMOuCdvwoCGOxXZMxR
-dnFySLFH4evLGd9zQAOT0uP69hZ1vmvu7ZoYIVuq8cm+8Q98IgWRfmudSnDSkoB/
-1TBGkesCVqe37uOn9jk7FCF85ZEp9K5bVqhYyjGiZindn45A45lmdkvmPWiWlmxN
-GCZBPOBwAjKLMdS41WvAYVxcfbo2mEqZpRnhuSkvAc6PKNYAMHVBe2oDou7NLaKE
-UHXkBdjlSXO4rwovFMm8L/BWp6Rmqz/UKvdON6Oj4yiHmGE6HryZ7AhRf8Mh/c5K
-vbQxyUJ3iu7rW3OA+EMxM2fXq8P7QtMJcb/otPU/woD/2OeqRUqvkZ9YJ8k81ipc
-qeqaBoArNYsFdw7YhNBwoNyge65I99M3qiL/G23dtnoZ9YJdYlLu5CMxtTdWRKsp
-y9EC1KH4kbTsNYxirmDrvJCLU12Ljl+eqsV5VsQKo9GcVwGSYjVV9WUibX5gcaNH
-2Fnb9zgbkVLwFmh2U+vT29RyKzze1qp6llXXkna5QAlFotD8l2EGuWL52phlZclg
-6EF68jg0IDqJLUdT7IJcXBnUj3lyqsDMXMpvsXF+N3vLYrHW7pM=
-=6n2h
------END PGP SIGNATURE-----
-
---/JNsJdIKddWpXUvk--
+Thanks,
+John
