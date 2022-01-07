@@ -2,134 +2,239 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16485487B31
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jan 2022 18:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65570487C12
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jan 2022 19:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348518AbiAGRQq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Jan 2022 12:16:46 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4373 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348501AbiAGRQp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jan 2022 12:16:45 -0500
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVqWg6H9Pz67ZhV;
-        Sat,  8 Jan 2022 01:11:43 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 18:16:40 +0100
-Received: from [10.47.89.210] (10.47.89.210) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 7 Jan
- 2022 17:16:37 +0000
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        "H Hartley Sweeten" <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "Teddy Wang" <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
-        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
-        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
-        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20220106181409.GA297735@bhelgaas>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <b0e772ed-4c21-3d5a-d890-aba05c41904c@huawei.com>
-Date:   Fri, 7 Jan 2022 17:16:23 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S231393AbiAGSUG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 7 Jan 2022 13:20:06 -0500
+Received: from forward107p.mail.yandex.net ([77.88.28.115]:52960 "EHLO
+        forward107p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230446AbiAGSUF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jan 2022 13:20:05 -0500
+X-Greylist: delayed 161625 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jan 2022 13:20:05 EST
+Received: from iva8-6b29e352664c.qloud-c.yandex.net (iva8-6b29e352664c.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:5b2e:0:640:6b29:e352])
+        by forward107p.mail.yandex.net (Yandex) with ESMTP id A0BF5556C6B9;
+        Fri,  7 Jan 2022 21:20:03 +0300 (MSK)
+Received: from iva1-dcde80888020.qloud-c.yandex.net (iva1-dcde80888020.qloud-c.yandex.net [2a02:6b8:c0c:7695:0:640:dcde:8088])
+        by iva8-6b29e352664c.qloud-c.yandex.net (mxback/Yandex) with ESMTP id euR5bt0U3x-K3fOpt58;
+        Fri, 07 Jan 2022 21:20:03 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1641579603;
+        bh=OrWPYp0vmxROxPJySTPjYtjZfWYS3Oa7auboC1JAC48=;
+        h=In-Reply-To:References:Date:To:From:Subject:Message-ID;
+        b=W64bN0WTTVFJoVj7rHUT2ldQMbxKMbJ4uFZBA0mVOVb50YdbPw5uDPvc4kdql1yEO
+         p/Wk3Vv0Y1JRNtJ2SRQq8I3tiocatscvK6u5BxwiZHB99ieZ5CVaCj5SfreCEfu8YM
+         rR5JNTC8a7DZVhbr/Ymfe+ovlI3HCg+Q0160UzW8=
+Authentication-Results: iva8-6b29e352664c.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by iva1-dcde80888020.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id VkaxZNamsB-K2PaYHfr;
+        Fri, 07 Jan 2022 21:20:02 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+Message-ID: <5849ab287df1b06e141d87bbffdbcd627e999578.camel@yandex.ru>
+Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in
+ adapter"
+From:   Konstantin Kharlamov <hi-angel@yandex.ru>
+To:     wsa@kernel.org, linux-i2c@vger.kernel.org,
+        bibby.hsieh@mediatek.com, amd-gfx@lists.freedesktop.org
+Date:   Fri, 07 Jan 2022 21:20:02 +0300
+In-Reply-To: <20220106122452.18719-1-wsa () kernel ! org>
+References: <20220106122452.18719-1-wsa () kernel ! org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-In-Reply-To: <20220106181409.GA297735@bhelgaas>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.89.210]
-X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 06/01/2022 18:14, Bjorn Helgaas wrote:
->> That driver would prob not be used on systems which does not support PIO,
->> and so could have a HAS_IOPORT dependency. But it is not strictly necessary.
-> I don't want the path of "this driver isn't needed because the device
-> is unlikely to be used on this arch."
+Thank you! I tested it (had to resolve a small conflict), works for me. So, in
+case you need it, the patch is
 
-Sure, that was just a one off example. As I mentioned before, I think 
-that Arnd already did most of the ifdeffery work, but it was not 
-included in this series.
+	Tested-by: Konstantin Kharlamov <hi-angel@yandex.ru>
 
+By the way, shouldn't the patch include a field 
+
+	Cc: <stable@vger.kernel.org> # 5.14+
+
+?
+
+P.S.: sorry, for all mangled up CC fields. For some reason I didn't get your
+email, I found this patch in the archive. And the mbox that archive provides
+breaks all TO and CC fields, so I manually restored addresses that I have.
+
+On Thu, 2022-01-06 at 12:24 +0000, Wolfram Sang wrote:
+> This largely reverts commit 5a7b95fb993ec399c8a685552aa6a8fc995c40bd. It
+> breaks suspend with AMD GPUs, and we couldn't incrementally fix it. So,
+> let's remove the code and go back to the drawing board. We keep the
+> header extension to not break drivers already populating the regulator.
+> We expect to re-add the code handling it soon.
 > 
-> Maybe it's not_always_  possible, but if the device can be plugged
-> into the platform, I think we should be able to build the driver for
-> it.
+> Reported-by: "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
+> Link: https://lore.kernel.org/r/1295184560.182511.1639075777725@mail.yahoo.com
+> Reported-by: Konstantin Kharlamov <hi-angel@yandex.ru>
+> Link:
+> https://lore.kernel.org/r/7143a7147978f4104171072d9f5225d2ce355ec1.camel@yandex.ru
+> BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1850
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> ---
 > 
-> If the device requires I/O port space and the platform doesn't support
-> it, the PCI core or the driver should detect that and give a useful
-> diagnostic.
+> So far, I tested it on a Renesas R-Car M3-N board verifying that I2C
+> still works. I'll apply it to my for-next branch right away to get the
+> buildbots involved as well. But I am still open for comments until I
+> apply it to my for-current branch, probably tomorrow.
 > 
+>  drivers/i2c/i2c-core-base.c | 95 -------------------------------------
+>  1 file changed, 95 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index f193f9058584..73253e667de1 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -466,14 +466,12 @@ static int i2c_smbus_host_notify_to_irq(const struct
+> i2c_client *client)
+>  static int i2c_device_probe(struct device *dev)
+>  {
+>         struct i2c_client       *client = i2c_verify_client(dev);
+> -       struct i2c_adapter      *adap;
+>         struct i2c_driver       *driver;
+>         int status;
+>  
+>         if (!client)
+>                 return 0;
+>  
+> -       adap = client->adapter;
+>         client->irq = client->init_irq;
+>  
+>         if (!client->irq) {
+> @@ -539,14 +537,6 @@ static int i2c_device_probe(struct device *dev)
+>  
+>         dev_dbg(dev, "probe\n");
+>  
+> -       if (adap->bus_regulator) {
+> -               status = regulator_enable(adap->bus_regulator);
+> -               if (status < 0) {
+> -                       dev_err(&adap->dev, "Failed to enable bus
+> regulator\n");
+> -                       goto err_clear_wakeup_irq;
+> -               }
+> -       }
+> -
+>         status = of_clk_set_defaults(dev->of_node, false);
+>         if (status < 0)
+>                 goto err_clear_wakeup_irq;
+> @@ -605,10 +595,8 @@ static int i2c_device_probe(struct device *dev)
+>  static void i2c_device_remove(struct device *dev)
+>  {
+>         struct i2c_client       *client = to_i2c_client(dev);
+> -       struct i2c_adapter      *adap;
+>         struct i2c_driver       *driver;
+>  
+> -       adap = client->adapter;
+>         driver = to_i2c_driver(dev->driver);
+>         if (driver->remove) {
+>                 int status;
+> @@ -623,8 +611,6 @@ static void i2c_device_remove(struct device *dev)
+>         devres_release_group(&client->dev, client->devres_group_id);
+>  
+>         dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
+> -       if (!pm_runtime_status_suspended(&client->dev) && adap->bus_regulator)
+> -               regulator_disable(adap->bus_regulator);
+>  
+>         dev_pm_clear_wake_irq(&client->dev);
+>         device_init_wakeup(&client->dev, false);
+> @@ -634,86 +620,6 @@ static void i2c_device_remove(struct device *dev)
+>                 pm_runtime_put(&client->adapter->dev);
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+> -static int i2c_resume_early(struct device *dev)
+> -{
+> -       struct i2c_client *client = i2c_verify_client(dev);
+> -       int err;
+> -
+> -       if (!client)
+> -               return 0;
+> -
+> -       if (pm_runtime_status_suspended(&client->dev) &&
+> -               client->adapter->bus_regulator) {
+> -               err = regulator_enable(client->adapter->bus_regulator);
+> -               if (err)
+> -                       return err;
+> -       }
+> -
+> -       return pm_generic_resume_early(&client->dev);
+> -}
+> -
+> -static int i2c_suspend_late(struct device *dev)
+> -{
+> -       struct i2c_client *client = i2c_verify_client(dev);
+> -       int err;
+> -
+> -       if (!client)
+> -               return 0;
+> -
+> -       err = pm_generic_suspend_late(&client->dev);
+> -       if (err)
+> -               return err;
+> -
+> -       if (!pm_runtime_status_suspended(&client->dev) &&
+> -               client->adapter->bus_regulator)
+> -               return regulator_disable(client->adapter->bus_regulator);
+> -
+> -       return 0;
+> -}
+> -#endif
+> -
+> -#ifdef CONFIG_PM
+> -static int i2c_runtime_resume(struct device *dev)
+> -{
+> -       struct i2c_client *client = i2c_verify_client(dev);
+> -       int err;
+> -
+> -       if (!client)
+> -               return 0;
+> -
+> -       if (client->adapter->bus_regulator) {
+> -               err = regulator_enable(client->adapter->bus_regulator);
+> -               if (err)
+> -                       return err;
+> -       }
+> -
+> -       return pm_generic_runtime_resume(&client->dev);
+> -}
+> -
+> -static int i2c_runtime_suspend(struct device *dev)
+> -{
+> -       struct i2c_client *client = i2c_verify_client(dev);
+> -       int err;
+> -
+> -       if (!client)
+> -               return 0;
+> -
+> -       err = pm_generic_runtime_suspend(&client->dev);
+> -       if (err)
+> -               return err;
+> -
+> -       if (client->adapter->bus_regulator)
+> -               return regulator_disable(client->adapter->bus_regulator);
+> -       return 0;
+> -}
+> -#endif
+> -
+> -static const struct dev_pm_ops i2c_device_pm = {
+> -       SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late, i2c_resume_early)
+> -       SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
+> -};
+> -
+>  static void i2c_device_shutdown(struct device *dev)
+>  {
+>         struct i2c_client *client = i2c_verify_client(dev);
+> @@ -773,7 +679,6 @@ struct bus_type i2c_bus_type = {
+>         .probe          = i2c_device_probe,
+>         .remove         = i2c_device_remove,
+>         .shutdown       = i2c_device_shutdown,
+> -       .pm             = &i2c_device_pm,
+>  };
+>  EXPORT_SYMBOL_GPL(i2c_bus_type);
+>  
 
-I'm not sure what the driver can say apart from -ENODEV. Or IO port 
-management in resource.c could warn for requesting IO port region when 
-it's unsupported.
-
-Anyway, this same conversion was had with Linus before I got involved. 
-If you think it is worth discussing again then I suppose the authors 
-here need to gain consensus.
-
-Thanks,
-John
