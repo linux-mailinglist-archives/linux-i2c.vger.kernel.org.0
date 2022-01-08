@@ -2,56 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 090CF4881B5
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jan 2022 06:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 189644882F2
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jan 2022 10:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbiAHFlO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jan 2022 00:41:14 -0500
-Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:39182 "EHLO
-        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229708AbiAHFlO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jan 2022 00:41:14 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V1E-kH9_1641620471;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V1E-kH9_1641620471)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 08 Jan 2022 13:41:11 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     wsa+renesas@sang-engineering.com
-Cc:     linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] i2c: sh_mobile: remove unneeded semicolon
-Date:   Sat,  8 Jan 2022 13:41:09 +0800
-Message-Id: <20220108054109.119750-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        id S234087AbiAHJy1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jan 2022 04:54:27 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:49858 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234011AbiAHJy1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jan 2022 04:54:27 -0500
+X-UUID: c0c55eff8b2e41cebddcbafd572e2847-20220108
+X-UUID: c0c55eff8b2e41cebddcbafd572e2847-20220108
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <kewei.xu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1973836362; Sat, 08 Jan 2022 17:54:23 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 8 Jan 2022 17:54:21 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 8 Jan 2022 17:54:21 +0800
+From:   Kewei Xu <kewei.xu@mediatek.com>
+To:     <wsa@the-dreams.de>
+CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
+        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
+        <caiyu.chen@mediatek.com>, <housong.zhang@mediatek.com>,
+        <yuhan.wei@mediatek.com>, <kewei.xu@mediatek.com>,
+        <ryan-jh.yu@mediatek.com>
+Subject: [PATCH 0/2] add i2c support for mt8186
+Date:   Sat, 8 Jan 2022 17:54:16 +0800
+Message-ID: <20220108095418.16602-1-kewei.xu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Eliminate the following coccicheck warning:
-./drivers/i2c/busses/i2c-sh_mobile.c:849:3-4: Unneeded semicolon
+Kewei Xu (2):
+  dt-bindings: i2c: update bindings for MT8186 SoC
+  i2c: mediatek: Add i2c compatible for Mediatek MT8186
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/i2c/busses/i2c-sh_mobile.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/i2c/i2c-mt65xx.txt         |  1 +
+ drivers/i2c/busses/i2c-mt65xx.c                    | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-sh_mobile.c b/drivers/i2c/busses/i2c-sh_mobile.c
-index 9754849dbb23..72f024a0c363 100644
---- a/drivers/i2c/busses/i2c-sh_mobile.c
-+++ b/drivers/i2c/busses/i2c-sh_mobile.c
-@@ -846,7 +846,7 @@ static int sh_mobile_i2c_hook_irqs(struct platform_device *dev, struct sh_mobile
- 				return ret;
- 			}
- 			k++;
--		};
-+		}
- 	} else {
- 		struct resource *res;
- 		resource_size_t n;
--- 
-2.20.1.7.g153144c
+--
+2.18.0
 
