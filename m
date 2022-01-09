@@ -2,114 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 288F14886DF
-	for <lists+linux-i2c@lfdr.de>; Sun,  9 Jan 2022 00:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A8548895B
+	for <lists+linux-i2c@lfdr.de>; Sun,  9 Jan 2022 13:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbiAHXR2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jan 2022 18:17:28 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:58476 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiAHXR1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jan 2022 18:17:27 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AC352A1B;
-        Sun,  9 Jan 2022 00:17:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1641683845;
-        bh=+beRkjOj8CLbVI7wLsj7Ibj+p/hURCH6exnOF8hVnbc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cx/Nd57XLymu9eXJPMwszq9UpDsNzan2ux0lpOq+2onbYNyOIfIRDfVfMHrGDvJ1W
-         FvlE634RPJ/SrK7hGhEC5fmiKCCP/D9+cpoTHVwRQHjFwjnw4vs40l+lwfxfacF5dl
-         1DOhAiVn4PckbIKKN7eWYfMfEmAXRSDDNx86JknA=
-Date:   Sun, 9 Jan 2022 01:17:17 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: i2c: Add regulator to pca954x and
- max735x
-Message-ID: <YdobffwaGYmLwRjW@pendragon.ideasonboard.com>
-References: <20220108185759.2086347-1-patrick.rudolph@9elements.com>
- <20220108185759.2086347-4-patrick.rudolph@9elements.com>
+        id S235508AbiAIMad (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 9 Jan 2022 07:30:33 -0500
+Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:62432 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229654AbiAIMad (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Jan 2022 07:30:33 -0500
+Received: from pop-os.home ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 6XLCnCCcQUujj6XLCnIPoD; Sun, 09 Jan 2022 13:30:31 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 09 Jan 2022 13:30:31 +0100
+X-ME-IP: 90.11.185.88
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH] i2c: ismt: Remove useless DMA-32 fallback configuration
+Date:   Sun,  9 Jan 2022 13:29:45 +0100
+Message-Id: <853d9f9d746864435abf93dfc822fccac5b04f37.1641731339.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220108185759.2086347-4-patrick.rudolph@9elements.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Patrick,
+As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+dev->dma_mask is non-NULL.
+So, if it fails, the 32 bits case will also fail for the same reason.
 
-Thank you for the patch.
 
-On Sat, Jan 08, 2022 at 07:57:57PM +0100, Patrick Rudolph wrote:
-> Add a regulator called vdd also present in datasheets of PCA954x
-> and MAX735x and update the examples.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml | 5 +++++
->  Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml | 5 +++++
->  2 files changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml
-> index dc924ec934ca..93eda07718e8 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-max735x.yaml
-> @@ -57,6 +57,9 @@ properties:
->      description: if present, overrides i2c-mux-idle-disconnect
->      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
->  
-> +  vdd-supply:
-> +    description: A voltage regulator supplying power to the chip.
-> +
->  required:
->    - compatible
->    - reg
-> @@ -75,6 +78,8 @@ examples:
->              #size-cells = <0>;
->              reg = <0x74>;
->  
-> +            vdd-supply = <&p3v3>;
-> +
->              i2c@1 {
->                  #address-cells = <1>;
->                  #size-cells = <0>;
+Simplify code and remove some dead code accordingly.
 
-This should be part of patch 1/4 (or better in my opinion, the two
-binding files should be merged into a single one).
+[1]: https://lkml.org/lkml/2021/6/7/398
 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 9f1726d0356b..b28d05dc956d 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -59,6 +59,9 @@ properties:
->      description: if present, overrides i2c-mux-idle-disconnect
->      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
->  
-> +  vdd-supply:
-> +    description: A voltage regulator supplying power to the chip.
-> +
->  required:
->    - compatible
->    - reg
-> @@ -79,6 +82,8 @@ examples:
->              #size-cells = <0>;
->              reg = <0x74>;
->  
-> +            vdd-supply = <&p3v3>;
-> +
->              interrupt-parent = <&ipic>;
->              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
->              interrupt-controller;
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/i2c/busses/i2c-ismt.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-For this part,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
+diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
+index f4820fd3dc13..951f3511afaa 100644
+--- a/drivers/i2c/busses/i2c-ismt.c
++++ b/drivers/i2c/busses/i2c-ismt.c
+@@ -920,11 +920,8 @@ ismt_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 
+ 	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+ 	if (err) {
+-		err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+-		if (err) {
+-			dev_err(&pdev->dev, "dma_set_mask fail\n");
+-			return -ENODEV;
+-		}
++		dev_err(&pdev->dev, "dma_set_mask fail\n");
++		return -ENODEV;
+ 	}
+ 
+ 	err = ismt_dev_init(priv);
 -- 
-Regards,
+2.32.0
 
-Laurent Pinchart
