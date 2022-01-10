@@ -2,139 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C29E148995F
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jan 2022 14:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711EB489E5E
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jan 2022 18:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbiAJNLr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Jan 2022 08:11:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S238302AbiAJR3D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Jan 2022 12:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiAJNLq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jan 2022 08:11:46 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19388C06175C
-        for <linux-i2c@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id r10so19026416wrc.3
-        for <linux-i2c@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
+        with ESMTP id S238284AbiAJR3C (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jan 2022 12:29:02 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EC5C06173F;
+        Mon, 10 Jan 2022 09:29:02 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id j6-20020a056830240600b00590eab8f4fbso1156570ots.8;
+        Mon, 10 Jan 2022 09:29:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
-        b=Bgie3w5lZXcUpEJsNUNnYT9D80sz6831OKMgWSWMpAMR4c04HQM1hwHkoZ1AqHgJ5M
-         pQJfhFBsNTGc+jfMsWTuSDXhNBe5XPwJ8/UQZKbYcWTDQ68Eu4MBBVsHf0V3Baa+27Pp
-         IUJW/950IUGNsTto2NnsTW49/Cy4Vf+KfgzDT0+KZ2gcb/QkEKg3LEIj8qPJpiII0Qbk
-         buE3CbPl0T8T6omQLXT3KYJBxN98pPIrfxDam1Qs0diPFN43pWVugWbd8LU8WaIGviK3
-         O/t/NLMKhR03EdE8rMi5c8T5epCw09Yzc4YmAU5QrO9ZaREbayNwAtpm1SWYSR1IiBuY
-         5w9A==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7gfWYRvC8m3v/szxt6rnVGDFWH+WIQ1HB5K0b5pwINM=;
+        b=PPbPIV/LeGYUdXkEAmODbYLTtpunWWhlhV4mRxBUZc4DOhsVqf+WkV+Cerlq9W+0PK
+         2tpXw89IQRkDtSSkermTUYFj1KV8Hd9G3O5ilhprVGGXvOz72CTuzEuRB6NYD7WBBnKo
+         1IiGIcM8oZP2membzetBEazFn1ujtE1wzclac+zz+QAa4g+FEQo2GqCjEI3vSHAq9x4c
+         SU3B5eNvY5sBTe/COw2te9GGET52cSBtruU5fBaxrlPB5m//iLgR5G/tP4O2O0FgGCTI
+         sjM0y2sWT9+u1d9WSNDh7KC/iabkn1NkfR4aDJX3k2LBec2lpTTD04SDIjDsZvfB1QRg
+         LI1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
-        b=AN+La1bcMo0++C9TeMiyG7aeyq9a8LJunf4Fv1xq9K6uMlP5nvP7qyVnK2o9a89aBo
-         Xr6F7W68k6hbAKyWWyTJXlzJgWhAEUZX7C//T5o3oh3GQ6HmZb8kVo19XMBsJr9a+WEN
-         LI9aFfU427Y4dpdZmXiehtEZV6N1DxU1YdSt9Hu1D+m049CAd5TIQWHDmSgVm0huZoZg
-         gquXv9rg+/mn+y6dCVDJTIclQSBwZZWz6nBv+R35jemjlz7gdtrZn7fsR8T6d1BA2mJb
-         k9R+tyS2oc9W7Y+5DMN4bInoGDhM8Mx7NY8Y9JFx/HCqZ+XtD3tBcPKKijdMt/gBf5Xc
-         OgTg==
-X-Gm-Message-State: AOAM531q/g7443r1PJ2D8aZD4H4AH2RU9aHk+hxcID0sXKarg8Mj2w+z
-        /6rUmRJT771nsowtFNA2yCmXXhWXIAKDusiuDyOtnsTNKNs=
-X-Google-Smtp-Source: ABdhPJyUuzfRq9+VAp3YIslVsNF7E8r6u+SDvjtiaFw6sfTA9uOxrmlrl9JDay/jDh10uqplhgk07a+YHTpM3Ge0znw=
-X-Received: by 2002:ac2:4c51:: with SMTP id o17mr60639917lfk.558.1641820293776;
- Mon, 10 Jan 2022 05:11:33 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=7gfWYRvC8m3v/szxt6rnVGDFWH+WIQ1HB5K0b5pwINM=;
+        b=2Ejo+8o9abXZ2/OWJDhVXjYU23ZUOFmfXNrvJO48LVNpIYP7Lnsr58csPmHjfSbzNq
+         eUMvFX6lSFEkPanUvQVgc6hvKb9NZNP6x8U6pCuvYvgumh8Z46/BeWM6FKov0ami/KOD
+         Iow8H7HI2H3DfloKmiBYddAEdF0BDALQHrhBQIb2ySBM4lSp4RZr21t6sIw41fuQsp0q
+         ieo3Ke5KCjsI5dynLzJ91XRhtZS/qB0cyg3waVa7ZSvlOdLqSKXapz3EueqrIsI+MRrb
+         MELBXkmeUDmnAFeMl6X+5gCBdlF5cZUHA4RSd1UZhC3ccj1XjEVUrjC4zezRvhjLL8dS
+         BGAw==
+X-Gm-Message-State: AOAM53251rsfHtkO06m/IpKrCmx3LAhQJfTYV7qaONqcfA5rZoO9uiwC
+        b+zVqMjk3Bk/iNmqHL69AiH1nySjkj0=
+X-Google-Smtp-Source: ABdhPJwMyf6Ml71veWa0UvqQDnZpN3v/oN9/brCsvv4Js2K3lIt6cboh47xY6ofJywyTJDujTESNwQ==
+X-Received: by 2002:a9d:bf7:: with SMTP id 110mr634464oth.94.1641835741910;
+        Mon, 10 Jan 2022 09:29:01 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v7sm1237158oiv.46.2022.01.10.09.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 09:29:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Jean Delvare <khali@linux-fr.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 0/2] i2c: smbus: Handle stuck alerts
+Date:   Mon, 10 Jan 2022 09:28:55 -0800
+Message-Id: <20220110172857.2980523-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Received: by 2002:a05:6504:15d1:0:0:0:0 with HTTP; Mon, 10 Jan 2022 05:11:32
- -0800 (PST)
-Reply-To: gtbank107@yahoo.com
-From:   Barr Robert Richter <westernunion.benin982@gmail.com>
-Date:   Mon, 10 Jan 2022 14:11:32 +0100
-Message-ID: <CAP=nHBK9zHzp_=-EVswWQiLxEoc+HV4oqddgtnEqf-9qYab_4Q@mail.gmail.com>
-Subject: Contact GT Bank-Benin to receive your transfer amount of $18.5m US Dollars.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Attn,Dear
-I need you to know that the fear of the LORD is
-the beginning of wisdom, and knowledge of the Holy One is
-understanding. As power of God Most High. And This is the confidence
-we have in approaching God, that if we ask anything according to his
-will, he hears us. I will make you know that Slow and steady wins the race.
-It is your turn to receive your overdue compensation funds total
-amount $18.5Milion  USD.
-I actualized that you will receive your transfer today without any more delay
-No More fee OK, Believe me , I am your Attorney standing here on your favor.
-I just concluded conversation with the Gt Bank Director, Mrs Mary Gate
-And She told me that your transfer is ready today
+While playing with SMBus alert functionality, I noticed the following
+messages if alert was active on more than once device.
 
-So the Bank Asked you to contact them immediately by re-confirming
-your Bank details asap.
-Because this is the Only thing holding this transfer
-If you did not trust me and Mrs Mary Gate,Who Else will you Trust?
-For we are the ones trying to protect your funds here
-and make sure that your funds is secure.
-So Promisingly, I am here to assure you, that Grate Miracle is coming on
-your way, and this funds total amount of $18.500,000 is your
-compensation, entitlement inheritance overdue funds on your name.
-Which you cannot let anything delay you from receiving your funds now,
+smbus_alert 3-000c: SMBALERT# from dev 0x0c, flag 0
+smbus_alert 3-000c: no driver alert()!
 
-Finally i advised you to try your possible best and contact Gt Bank Benin
-once you get this message to receive your transfer $18.5 USD today.
-I know that a journey of thousand miles begins with a single step.
-Always put your best foot forward
-Try as hard as you can, God give you best.
-take my advice and follow the due process of your payment, the
-transfer will be released to
-you smoothly without any hitches or hindrance.
+or:
 
-Contact DR.MRS MARY GATE, Director Gt bank-Benin to receive your
-transfer amount of $18.5m US Dollars
-It was deposited and registered to your name this morning.
-Contact the Bank now to know when they will transfer to your
-country today
+smbus_alert 3-000c: SMBALERT# from dev 0x28, flag 0
 
-Email id: gtbank107@yahoo.com
-Tel/mobile, +229 99069872
-Contact person, Mrs Mary Gate,Director Gt bank-Benin.
-Among the blind the one-eyed man is king
+This is seen if multiple devices assert alert at the same time and at least
+one of them does not or not correctly implement SMBus arbitration.
 
-As you sow, so you shall reap, i want you to receive your funds
-Best things in life are free
-Send to her your Bank Details as i listed here.
+Once it starts, this message repeats forever at high rate.
+Worst case, the problem turn resulted in system crashes after a while.
 
-Your account name-------------
-Your Bank Name----------------
-Account Number----------
-your Bank address----------
-Country-----------
-Your private phone number---------
-Routing Numbers-------------
-Swift Code-----------
+The following two patches fix the problem for me. The first patch
+aborts the endless loop in smbus_alert() if no handler is found
+for an alert address. The second patch sends alerts to all devices
+with alert handler if that situation is observed.
 
-Note, Your funds is %100 Percent ready for
-transfer.
-Everything you do remember that Good things come to those who wait.
-I have done this work for you with my personally effort, Honesty is
-the best policy.
-now your transfer is currently deposited with paying bank this morning.
-It is by the grace of God that I received Christ, having known the truth.
-I had no choice than to do what is lawful and justice in the
-sight of God for eternal life and in the sight of man for witness of
-God & His Mercies and glory upon my life.
+I split the changes into two patches since I figured that the first patch
+might be easier to accept. However, both patches are really needed to
+fix the problem for good.
 
-send this needed bank details to the bank today, so that you receive
-your transfer today as
-it is available for your confirmation today.
-Please do your best as a serious person and send the fee urgent, Note
-that this transfer of $18.500.000 M USD is a Gift from God to Bless
-you.
+Note that there is one situation which is not addressed by this set of
+patches: If the corrupted address points to yet another device with alert
+handler on the same bus, the alert handler of that device will be called.
+If it is not a source of the alert, we are back to the original problem.
+I do not know how to address this case.
 
-If you did not contact the bank urgent, finally the Bank will release
-your transfer of $18.500.000M USD to  Mr. David Bollen as your
-representative.
-So not allow another to claim your Money.
-Thanks For your Understanding.
+----------------------------------------------------------------
+Guenter Roeck (2):
+      i2c: smbus: Improve handling of stuck alerts
+      i2c: smbus: Send alert notifications to all devices if source not found
 
-Barr Robert Richter, UN Attorney At Law Court-Benin
+ drivers/i2c/i2c-smbus.c | 64 ++++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 58 insertions(+), 6 deletions(-)
