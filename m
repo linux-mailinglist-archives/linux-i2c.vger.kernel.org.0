@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2A648A29A
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jan 2022 23:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCB048A2A0
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jan 2022 23:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241425AbiAJWTD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Jan 2022 17:19:03 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:34584 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbiAJWTD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jan 2022 17:19:03 -0500
-Received: by mail-oi1-f172.google.com with SMTP id r131so20557643oig.1;
-        Mon, 10 Jan 2022 14:19:02 -0800 (PST)
+        id S1345351AbiAJWUU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Jan 2022 17:20:20 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:43555 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233977AbiAJWUT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jan 2022 17:20:19 -0500
+Received: by mail-ot1-f48.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so16606247otu.10;
+        Mon, 10 Jan 2022 14:20:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=4fI2fNIwN0HoAziyHrYlHNkRkROkw7ilQQ3nQUt41GU=;
-        b=Fvez5mZeUUTmA1abRRFR5T7DL/8+ljKiSk6y3Hlw6Zb3VRRrEMMpSqrwQ0u6JMnodE
-         QxF9ox22+y12JJ/b0jzqv9smaumiZ/npMBbO8BaQrPYwijTeEmrZ7WwLoz84DTC2wI+f
-         znr/UlVSl0M38suX15f+2kFquJ9edQx5CpNBQ6UBKAlVwHfkcT8f6n8auR4r+U0gmUME
-         DZc9yM69Acts4GDYLbdV1zVcUmNOIl+wATi3pMaBz8PtpaxPOMybS232QyAa8Xz1DEp0
-         zw4uHQ3Meu2SjJBI9tQ/Oa/yKjMVp8plxWZI/ENnAp4D+bgev9p66/9sikdLo+dbUAfB
-         v4NQ==
-X-Gm-Message-State: AOAM533GFS1Sl/kdmNfAcK7wL9EGsS/zZDVjsmB5w1sWTkunRZStq6Fk
-        KGxHHpNQuzBnWIQmO3zsTmiXf3Qv9Q==
-X-Google-Smtp-Source: ABdhPJzQUAjvmuKjO91qlwzuYoMB9qXz0jc5g3WW3QfhlYUW6DDCO+pr1K0W6HgeJ43cm88/4t+K+A==
-X-Received: by 2002:a05:6808:144f:: with SMTP id x15mr1055430oiv.166.1641853142440;
-        Mon, 10 Jan 2022 14:19:02 -0800 (PST)
+        bh=PeSN20pAqVXP4xYBzjiPUsBcbTUXz/dWQ6gyplMQuyE=;
+        b=qVIzmEijOh6M6H3OkSVR938px4TS7hXJBx1gAiPCZe8YGB8kZxhmnbTPcBGU9JIgqB
+         EcZ83xwIwiZcwcaZ9FTj1UcJtP7dTb5cB669QeKH8WFLnUmUOWTd9I3oFBesQQIpdklt
+         CiDFpEKY6QQJ0NPi4ttrQicGKlTodgbXIfos4kM0i1xT9BNbrng1J0gCsdexzypGqcNu
+         gVMJC0UmNA1RNWyYhFGgX6Ic+VdBOGqyHx1yvdFJUTtDJF1yLi81PhSwubHoa+dWa6DP
+         j7J9FDv7+QsFmGxKwfodPy5gSigxmXRkMTe77uDRjz+9V/wnEGD2AZfM42k3pXGowOVp
+         rm5w==
+X-Gm-Message-State: AOAM530/JyYvHVVSCunmG/3D986YiAOzTRYs9DIdQpAcLHcNj03JP+G9
+        yD0qF4V+4xXggviLg3X11w==
+X-Google-Smtp-Source: ABdhPJyN+jKWQcdvqhkAoi1UU6Ivt0enW/bd/9izyjbJ5wbc6a1QZbOfV7irZty6bawKnVKgiHiiww==
+X-Received: by 2002:a05:6830:4488:: with SMTP id r8mr1486978otv.120.1641853218616;
+        Mon, 10 Jan 2022 14:20:18 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id y10sm1735448oto.44.2022.01.10.14.19.01
+        by smtp.gmail.com with ESMTPSA id f7sm1713213oti.35.2022.01.10.14.20.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 14:19:01 -0800 (PST)
-Received: (nullmailer pid 1625991 invoked by uid 1000);
-        Mon, 10 Jan 2022 22:19:01 -0000
-Date:   Mon, 10 Jan 2022 16:19:01 -0600
+        Mon, 10 Jan 2022 14:20:17 -0800 (PST)
+Received: (nullmailer pid 1627949 invoked by uid 1000);
+        Mon, 10 Jan 2022 22:20:17 -0000
+Date:   Mon, 10 Jan 2022 16:20:17 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Li-hao Kuo <lhjeff911@gmail.com>
 Cc:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
@@ -45,7 +45,7 @@ Cc:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
         wells.lu@sunplus.com
 Subject: Re: [PATCH v3 2/2] devicetree bindings I2C Add bindings doc for
  Sunplus SP7021
-Message-ID: <Ydyw1bMJB41Cyflb@robh.at.kernel.org>
+Message-ID: <YdyxIecMBQAf9Kyc@robh.at.kernel.org>
 References: <cover.1641188699.git.lhjeff911@gmail.com>
  <9831c3acbbd34ad0d82eec67916f51bff68ae7fe.1641188699.git.lhjeff911@gmail.com>
 MIME-Version: 1.0
@@ -58,6 +58,11 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 On Mon, Jan 03, 2022 at 01:49:23PM +0800, Li-hao Kuo wrote:
 > Add devicetree bindings I2C Add bindings doc for Sunplus SP7021
+
+Please follow the subject format used by other files in the 
+subsystem/directory. This should be clear with 'git log --oneline'.
+'dt-bindings: i2c: ...' in this case.
+
 > 
 > Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
 > ---
@@ -140,9 +145,6 @@ On Mon, Jan 03, 2022 at 01:49:23PM +0800, Li-hao Kuo wrote:
 > +        compatible = "sunplus,sp7021-i2cm";
 > +			reg = <0x9c004600 0x80>, <0x9c004680 0x80>, <0x9c000000 0x80>;
 > +			reg-names = "i2cm", "i2cmdma", "i2cdmapower";
-
-Indentation is messed up. Use spaces.
-
 > +        interrupt-parent = <&intc>;
 > +        interrupts = <174 IRQ_TYPE_LEVEL_HIGH>;
 > +        clocks = <&clkc I2CM0>;
