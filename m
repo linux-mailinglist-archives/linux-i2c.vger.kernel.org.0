@@ -2,208 +2,169 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9E948A219
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jan 2022 22:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2A648A29A
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jan 2022 23:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345042AbiAJVq3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Jan 2022 16:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345041AbiAJVq3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jan 2022 16:46:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031E4C06173F
-        for <linux-i2c@vger.kernel.org>; Mon, 10 Jan 2022 13:46:29 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n72TM-0001u6-SR; Mon, 10 Jan 2022 22:45:00 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n72TB-009atw-Vd; Mon, 10 Jan 2022 22:44:49 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n72TA-0003wz-UN; Mon, 10 Jan 2022 22:44:48 +0100
-Date:   Mon, 10 Jan 2022 22:44:48 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Jaroslav Kysela <perex@perex.cz>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <20220110214448.rp4pcjlaqbjlggvj@pengutronix.de>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <Ydyf93VD8FrV7GH+@smile.fi.intel.com>
+        id S241425AbiAJWTD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Jan 2022 17:19:03 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:34584 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233977AbiAJWTD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jan 2022 17:19:03 -0500
+Received: by mail-oi1-f172.google.com with SMTP id r131so20557643oig.1;
+        Mon, 10 Jan 2022 14:19:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4fI2fNIwN0HoAziyHrYlHNkRkROkw7ilQQ3nQUt41GU=;
+        b=Fvez5mZeUUTmA1abRRFR5T7DL/8+ljKiSk6y3Hlw6Zb3VRRrEMMpSqrwQ0u6JMnodE
+         QxF9ox22+y12JJ/b0jzqv9smaumiZ/npMBbO8BaQrPYwijTeEmrZ7WwLoz84DTC2wI+f
+         znr/UlVSl0M38suX15f+2kFquJ9edQx5CpNBQ6UBKAlVwHfkcT8f6n8auR4r+U0gmUME
+         DZc9yM69Acts4GDYLbdV1zVcUmNOIl+wATi3pMaBz8PtpaxPOMybS232QyAa8Xz1DEp0
+         zw4uHQ3Meu2SjJBI9tQ/Oa/yKjMVp8plxWZI/ENnAp4D+bgev9p66/9sikdLo+dbUAfB
+         v4NQ==
+X-Gm-Message-State: AOAM533GFS1Sl/kdmNfAcK7wL9EGsS/zZDVjsmB5w1sWTkunRZStq6Fk
+        KGxHHpNQuzBnWIQmO3zsTmiXf3Qv9Q==
+X-Google-Smtp-Source: ABdhPJzQUAjvmuKjO91qlwzuYoMB9qXz0jc5g3WW3QfhlYUW6DDCO+pr1K0W6HgeJ43cm88/4t+K+A==
+X-Received: by 2002:a05:6808:144f:: with SMTP id x15mr1055430oiv.166.1641853142440;
+        Mon, 10 Jan 2022 14:19:02 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id y10sm1735448oto.44.2022.01.10.14.19.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 14:19:01 -0800 (PST)
+Received: (nullmailer pid 1625991 invoked by uid 1000);
+        Mon, 10 Jan 2022 22:19:01 -0000
+Date:   Mon, 10 Jan 2022 16:19:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
+        lee.jones@linaro.org, u.kleine-koenig@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, lh.kuo@sunplus.com,
+        wells.lu@sunplus.com
+Subject: Re: [PATCH v3 2/2] devicetree bindings I2C Add bindings doc for
+ Sunplus SP7021
+Message-ID: <Ydyw1bMJB41Cyflb@robh.at.kernel.org>
+References: <cover.1641188699.git.lhjeff911@gmail.com>
+ <9831c3acbbd34ad0d82eec67916f51bff68ae7fe.1641188699.git.lhjeff911@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e2is76odjewy3gr2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ydyf93VD8FrV7GH+@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <9831c3acbbd34ad0d82eec67916f51bff68ae7fe.1641188699.git.lhjeff911@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Mon, Jan 03, 2022 at 01:49:23PM +0800, Li-hao Kuo wrote:
+> Add devicetree bindings I2C Add bindings doc for Sunplus SP7021
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v3:
+>  - Addressed all comments from Mr. Rob Herring.
+>  - Modified the structure and register access method.
+>  - Modifiedthe the YAML file.
+> 
+>  .../devicetree/bindings/i2c/i2c-sunplus.yaml       | 72 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> new file mode 100644
+> index 0000000..ac03041
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/i2c-sunplus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus I2C controller
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +maintainers:
+> +  - Li-hao Kuo <lhjeff911@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sunplus,sp7021-i2cm
+> +      - sunplus,q645-i2cm
+> +
+> +  reg:
+> +    items:
+> +      - description: I2C registers
+> +      - description: I2C DMA registers
+> +      - description: I2C DMA power registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: i2cm
+> +      - const: i2cmdma
+> +      - const: i2cdmapower
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +  - pinctrl-names
+> +  - pinctrl-0
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/sp-sp7021.h>
+> +    #include <dt-bindings/reset/sp-sp7021.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c@9C004600 {
+> +        compatible = "sunplus,sp7021-i2cm";
+> +			reg = <0x9c004600 0x80>, <0x9c004680 0x80>, <0x9c000000 0x80>;
+> +			reg-names = "i2cm", "i2cmdma", "i2cdmapower";
 
---e2is76odjewy3gr2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Indentation is messed up. Use spaces.
 
-On Mon, Jan 10, 2022 at 11:07:03PM +0200, Andy Shevchenko wrote:
-> On Mon, Jan 10, 2022 at 09:10:14PM +0100, Uwe Kleine-K=F6nig wrote:
-> > On Mon, Jan 10, 2022 at 10:54:48PM +0300, Sergey Shtylyov wrote:
-> > > This patch is based on the former Andy Shevchenko's patch:
-> > >=20
-> > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko=
-@linux.intel.com/
-> > >=20
-> > > Currently platform_get_irq_optional() returns an error code even if I=
-RQ
-> > > resource simply has not been found. It prevents the callers from being
-> > > error code agnostic in their error handling:
-> > >=20
-> > > 	ret =3D platform_get_irq_optional(...);
-> > > 	if (ret < 0 && ret !=3D -ENXIO)
-> > > 		return ret; // respect deferred probe
-> > > 	if (ret > 0)
-> > > 		...we get an IRQ...
-> > >=20
-> > > All other *_optional() APIs seem to return 0 or NULL in case an optio=
-nal
-> > > resource is not available. Let's follow this good example, so that the
-> > > callers would look like:
-> > >=20
-> > > 	ret =3D platform_get_irq_optional(...);
-> > > 	if (ret < 0)
-> > > 		return ret;
-> > > 	if (ret > 0)
-> > > 		...we get an IRQ...
-> >=20
-> > The difference to gpiod_get_optional (and most other *_optional) is that
-> > you can use the NULL value as if it were a valid GPIO.
->=20
-> The problem is not only there, but also in the platform_get_irq() and that
-> problem is called vIRQ0. Or as Linus put it "_cookie_" for IRQ, which nev=
-er
-> ever should be 0.
-
-IMHO it's best to avoid yielding zero for a value that should be
-interpreted as an (virtual) irq. Then callers don't even have to
-consider if it's a valid value or not.
-
-> > As this isn't given with for irqs, I don't think changing the return
-> > value has much sense. In my eyes the problem with platform_get_irq() and
-> > platform_get_irq_optional() is that someone considered it was a good
-> > idea that a global function emits an error message. The problem is,
-> > that's only true most of the time. (Sometimes the caller can handle an
-> > error (here: the absence of an irq) just fine, sometimes the generic
-> > error message just isn't as good as a message by the caller could be.
-> > (here: The caller could emit "TX irq not found" which is a much nicer
-> > message than "IRQ index 5 not found".)
-> >=20
-> > My suggestion would be to keep the return value of
-> > platform_get_irq_optional() as is, but rename it to
-> > platform_get_irq_silent() to get rid of the expectation invoked by the
-> > naming similarity that motivated you to change
-> > platform_get_irq_optional().
->=20
-> This won't fix the issue with vIRQ0.
-
-Is the patch about vIRQ0, or did you only start to consider it when I
-said that for gpio NULL is a dummy value? If the former, the commit log
-should better mention that.
-
-Anyhow, I still think renaming platform_get_irq_optional() to
-platform_get_irq_silent() is a good idea and the patches in this thread
-are not.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---e2is76odjewy3gr2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHcqM0ACgkQwfwUeK3K
-7Amxygf+NmX8BzaqLoc9m8fsv49CkQqQKbXt9a0l2gES1hAm8NL2nbgjydEJDcPs
-QJ5X1TL08pb9wPoYcUF7uSwjJx2Vp0f+FEiMtDk2kj5xI38T+86tnyuQw1tNg4Ss
-52foCYQJVIIgIAeMyIvWk14oUMsy4JV/SuT+GZImMq+aM/5+wIF02NZoGzXofThL
-mUNzp+vgTNNhZpF7c0D4orD7SDOCOn2fA/uu2UGk1Nh6m+lgW5qIw5Z0KFPTalKH
-kU/JuEOBD6kdEr84D9EM6SB2l+dOBVJ20F5DL1JItM4qkAK9thM+3ecLPF610K1e
-+N5e1XZXSLS6gpWGBjS9bxMbdZ6Qpg==
-=FQR4
------END PGP SIGNATURE-----
-
---e2is76odjewy3gr2--
+> +        interrupt-parent = <&intc>;
+> +        interrupts = <174 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clkc I2CM0>;
+> +        resets = <&rstc RST_I2CM0>;
+> +        clock-frequency = <100000>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&i2cm0_pins>;
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a06993b..2b8fa55 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18246,6 +18246,7 @@ SUNPLUS I2C CONTROLLER INTERFACE DRIVER
+>  M:	Li-hao Kuo <lhjeff911@gmail.com>
+>  L:	linux-i2c@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+>  F:	drivers/i2c/busses/i2c-sunplus.c
+>  
+>  SUPERH
+> -- 
+> 2.7.4
+> 
+> 
