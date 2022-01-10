@@ -2,76 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20AC348969A
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jan 2022 11:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29E148995F
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jan 2022 14:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244104AbiAJKnP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Jan 2022 05:43:15 -0500
-Received: from mail-vk1-f180.google.com ([209.85.221.180]:41576 "EHLO
-        mail-vk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244131AbiAJKmz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jan 2022 05:42:55 -0500
-Received: by mail-vk1-f180.google.com with SMTP id i37so2931414vkr.8;
-        Mon, 10 Jan 2022 02:42:54 -0800 (PST)
+        id S230401AbiAJNLr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Jan 2022 08:11:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230431AbiAJNLq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jan 2022 08:11:46 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19388C06175C
+        for <linux-i2c@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id r10so19026416wrc.3
+        for <linux-i2c@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
+        b=Bgie3w5lZXcUpEJsNUNnYT9D80sz6831OKMgWSWMpAMR4c04HQM1hwHkoZ1AqHgJ5M
+         pQJfhFBsNTGc+jfMsWTuSDXhNBe5XPwJ8/UQZKbYcWTDQ68Eu4MBBVsHf0V3Baa+27Pp
+         IUJW/950IUGNsTto2NnsTW49/Cy4Vf+KfgzDT0+KZ2gcb/QkEKg3LEIj8qPJpiII0Qbk
+         buE3CbPl0T8T6omQLXT3KYJBxN98pPIrfxDam1Qs0diPFN43pWVugWbd8LU8WaIGviK3
+         O/t/NLMKhR03EdE8rMi5c8T5epCw09Yzc4YmAU5QrO9ZaREbayNwAtpm1SWYSR1IiBuY
+         5w9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7DkOf/RezHhAoR1wNR7F50d5rM5is1Qk6AorSgY7zgE=;
-        b=CZP8YROFyYlGtX6xxWnCTStciwq8pBKuNFqkJmrUH7++0T3OKu092oYu4P/krCTl3g
-         EaiBxIb8t2j66ilRVkWtiP78yaKwH3IYR+e0WSV8z7N/xEF4SLRCIW2hrcafDJyH1l22
-         BFLzxH3yXswNbnjC9S00b1BwKPtyXViVZRAeiWwHtrsHDZ/T9hU0gdcl8B05L3M1+Z6y
-         ZV0bl1/9Epp/WXwfFLpvIjiL1eYYCGJyaUneYBT3p2eA04cZaSzjLCO34WLAyVF3t+uj
-         WqgxuXrt1MoKqWcQcEmW+w025fr2wcfTnLRh5R9Zatbg7Ozxl8Q5kKYE1wDotYua7qVZ
-         25RQ==
-X-Gm-Message-State: AOAM5314eVD4ZaMcSmzAEwVY7sGgkDz5SQgFC+wNRNI1xM6VonFvvVZ/
-        6hOTND8JZLPy7YgAm3NGIgQK435gBxiifA==
-X-Google-Smtp-Source: ABdhPJxF3rHs/4gnq3n2ikfev5UvXpgfTBV6ZfFie5dNfCBmHvAfFe4WbaGu5cc/2o5k3xWW66j/5w==
-X-Received: by 2002:a05:6122:c9e:: with SMTP id ba30mr1677223vkb.17.1641811374377;
-        Mon, 10 Jan 2022 02:42:54 -0800 (PST)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id d198sm1418063vke.44.2022.01.10.02.42.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 02:42:53 -0800 (PST)
-Received: by mail-ua1-f44.google.com with SMTP id r15so22609135uao.3;
-        Mon, 10 Jan 2022 02:42:53 -0800 (PST)
-X-Received: by 2002:ab0:2118:: with SMTP id d24mr25154304ual.78.1641811373530;
- Mon, 10 Jan 2022 02:42:53 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
+        b=AN+La1bcMo0++C9TeMiyG7aeyq9a8LJunf4Fv1xq9K6uMlP5nvP7qyVnK2o9a89aBo
+         Xr6F7W68k6hbAKyWWyTJXlzJgWhAEUZX7C//T5o3oh3GQ6HmZb8kVo19XMBsJr9a+WEN
+         LI9aFfU427Y4dpdZmXiehtEZV6N1DxU1YdSt9Hu1D+m049CAd5TIQWHDmSgVm0huZoZg
+         gquXv9rg+/mn+y6dCVDJTIclQSBwZZWz6nBv+R35jemjlz7gdtrZn7fsR8T6d1BA2mJb
+         k9R+tyS2oc9W7Y+5DMN4bInoGDhM8Mx7NY8Y9JFx/HCqZ+XtD3tBcPKKijdMt/gBf5Xc
+         OgTg==
+X-Gm-Message-State: AOAM531q/g7443r1PJ2D8aZD4H4AH2RU9aHk+hxcID0sXKarg8Mj2w+z
+        /6rUmRJT771nsowtFNA2yCmXXhWXIAKDusiuDyOtnsTNKNs=
+X-Google-Smtp-Source: ABdhPJyUuzfRq9+VAp3YIslVsNF7E8r6u+SDvjtiaFw6sfTA9uOxrmlrl9JDay/jDh10uqplhgk07a+YHTpM3Ge0znw=
+X-Received: by 2002:ac2:4c51:: with SMTP id o17mr60639917lfk.558.1641820293776;
+ Mon, 10 Jan 2022 05:11:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20220108054109.119750-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20220108054109.119750-1-yang.lee@linux.alibaba.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jan 2022 11:42:42 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXLPbrjG0LWPEhMrXvcj017EKPt9Wr9HsmkSczRnadbDg@mail.gmail.com>
-Message-ID: <CAMuHMdXLPbrjG0LWPEhMrXvcj017EKPt9Wr9HsmkSczRnadbDg@mail.gmail.com>
-Subject: Re: [PATCH -next] i2c: sh_mobile: remove unneeded semicolon
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
+Received: by 2002:a05:6504:15d1:0:0:0:0 with HTTP; Mon, 10 Jan 2022 05:11:32
+ -0800 (PST)
+Reply-To: gtbank107@yahoo.com
+From:   Barr Robert Richter <westernunion.benin982@gmail.com>
+Date:   Mon, 10 Jan 2022 14:11:32 +0100
+Message-ID: <CAP=nHBK9zHzp_=-EVswWQiLxEoc+HV4oqddgtnEqf-9qYab_4Q@mail.gmail.com>
+Subject: Contact GT Bank-Benin to receive your transfer amount of $18.5m US Dollars.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 9:55 PM Yang Li <yang.lee@linux.alibaba.com> wrote:
-> Eliminate the following coccicheck warning:
-> ./drivers/i2c/busses/i2c-sh_mobile.c:849:3-4: Unneeded semicolon
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Attn,Dear
+I need you to know that the fear of the LORD is
+the beginning of wisdom, and knowledge of the Holy One is
+understanding. As power of God Most High. And This is the confidence
+we have in approaching God, that if we ask anything according to his
+will, he hears us. I will make you know that Slow and steady wins the race.
+It is your turn to receive your overdue compensation funds total
+amount $18.5Milion  USD.
+I actualized that you will receive your transfer today without any more delay
+No More fee OK, Believe me , I am your Attorney standing here on your favor.
+I just concluded conversation with the Gt Bank Director, Mrs Mary Gate
+And She told me that your transfer is ready today
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+So the Bank Asked you to contact them immediately by re-confirming
+your Bank details asap.
+Because this is the Only thing holding this transfer
+If you did not trust me and Mrs Mary Gate,Who Else will you Trust?
+For we are the ones trying to protect your funds here
+and make sure that your funds is secure.
+So Promisingly, I am here to assure you, that Grate Miracle is coming on
+your way, and this funds total amount of $18.500,000 is your
+compensation, entitlement inheritance overdue funds on your name.
+Which you cannot let anything delay you from receiving your funds now,
 
-Gr{oetje,eeting}s,
+Finally i advised you to try your possible best and contact Gt Bank Benin
+once you get this message to receive your transfer $18.5 USD today.
+I know that a journey of thousand miles begins with a single step.
+Always put your best foot forward
+Try as hard as you can, God give you best.
+take my advice and follow the due process of your payment, the
+transfer will be released to
+you smoothly without any hitches or hindrance.
 
-                        Geert
+Contact DR.MRS MARY GATE, Director Gt bank-Benin to receive your
+transfer amount of $18.5m US Dollars
+It was deposited and registered to your name this morning.
+Contact the Bank now to know when they will transfer to your
+country today
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Email id: gtbank107@yahoo.com
+Tel/mobile, +229 99069872
+Contact person, Mrs Mary Gate,Director Gt bank-Benin.
+Among the blind the one-eyed man is king
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+As you sow, so you shall reap, i want you to receive your funds
+Best things in life are free
+Send to her your Bank Details as i listed here.
+
+Your account name-------------
+Your Bank Name----------------
+Account Number----------
+your Bank address----------
+Country-----------
+Your private phone number---------
+Routing Numbers-------------
+Swift Code-----------
+
+Note, Your funds is %100 Percent ready for
+transfer.
+Everything you do remember that Good things come to those who wait.
+I have done this work for you with my personally effort, Honesty is
+the best policy.
+now your transfer is currently deposited with paying bank this morning.
+It is by the grace of God that I received Christ, having known the truth.
+I had no choice than to do what is lawful and justice in the
+sight of God for eternal life and in the sight of man for witness of
+God & His Mercies and glory upon my life.
+
+send this needed bank details to the bank today, so that you receive
+your transfer today as
+it is available for your confirmation today.
+Please do your best as a serious person and send the fee urgent, Note
+that this transfer of $18.500.000 M USD is a Gift from God to Bless
+you.
+
+If you did not contact the bank urgent, finally the Bank will release
+your transfer of $18.500.000M USD to  Mr. David Bollen as your
+representative.
+So not allow another to claim your Money.
+Thanks For your Understanding.
+
+Barr Robert Richter, UN Attorney At Law Court-Benin
