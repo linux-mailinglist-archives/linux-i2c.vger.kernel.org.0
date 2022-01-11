@@ -2,126 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACF548AB7E
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jan 2022 11:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072C448ABB3
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jan 2022 11:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349306AbiAKKe5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Jan 2022 05:34:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46044 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349276AbiAKKeu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jan 2022 05:34:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641897289;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=37dXUpdzkIbiA2gBAZJxitixVVJbpdeFZbjZh9/Jmo4=;
-        b=RZR61fBF5hs+Nxd9T7A7GLQmLHVsMzGZHrWe9cbRUEmUMJxMUlIda0uUm7XBHTwW/GkULy
-        B+WAKNJncQX74g/HknbyBU1bWUaVACNH7JBsGGC4/t/M41/HFSGj9ug++SNsV1ZHy68umN
-        X/AUP1HOuW0ztiWAtRIIpsp8mi9sDnI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-ooUu6lNeM-G_zZoehctKuA-1; Tue, 11 Jan 2022 05:34:48 -0500
-X-MC-Unique: ooUu6lNeM-G_zZoehctKuA-1
-Received: by mail-ed1-f70.google.com with SMTP id z9-20020a05640240c900b003fea688a17eso1975487edb.10
-        for <linux-i2c@vger.kernel.org>; Tue, 11 Jan 2022 02:34:48 -0800 (PST)
+        id S237965AbiAKKvf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Jan 2022 05:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237719AbiAKKvf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jan 2022 05:51:35 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFE1C06173F;
+        Tue, 11 Jan 2022 02:51:34 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id kc16so18000095qvb.3;
+        Tue, 11 Jan 2022 02:51:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WW/ErXuM7aTThn8DyOtAxfHC+Lf/dAu6aF/ysr/kDtQ=;
+        b=iy8TwFF44l+/tUgYTLhp7Cm+F03uo/wvxz6bjpch4q9ZrjF8KY4CTo4cH0pcLNIPQZ
+         WgmTqDF14LmBZTQ/CK0AJ6CZrQ1V6VVJ+Gur0yR78DsI7OqeyG15uEZr+KwjW7w3ABhE
+         151Tv7E2gmimx0dpdcSfYjPPuWUqmpfXDtEEI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=37dXUpdzkIbiA2gBAZJxitixVVJbpdeFZbjZh9/Jmo4=;
-        b=UWPbF1uey80v+NxWXVHClYB0gold67bg3/dybWDOflgtz3zVmDSKRJcTFXsVrWE2nX
-         MQdwbhPE9iaYuqQ23Gc1mfKqhECgFTwOKzT9heE9+LkBPSTCg2yVMtbYIJPOcDF7tDOx
-         3RsinNDOnRQ1Zwep6NW2CM/lOMqqzGR9pRsInTMr/hhiUBHxeo+AmF0Hw/2Y5T1uMcYd
-         SJ/0bQJ57sG3O2TjUYcbXgd0+QcKMJlDtL9IMympUd371NQTRLN+oG0SpacmRfxq7zqn
-         CJ+9gIe1CuKwb3RabJoBwctjfptbn3RqfEg3yJFyCaW1R/FW1NVSRCjYg/Y+OIDXqRGm
-         iPZw==
-X-Gm-Message-State: AOAM530bUbdnKe/GvZ6LlfrKh9wezV1sdAa9UhiPJ/QEW9YrB4wzaxJ8
-        lVI9vvz44eWzC4pic0DN9d839KRZCE37nYF5u4PCB3OymQbBmj1ro3L5+J1x/rrvqFwJhhKkiaQ
-        mNQ1/XuhKxekLNXxJ1PIx
-X-Received: by 2002:a50:ef11:: with SMTP id m17mr3604253eds.77.1641897287097;
-        Tue, 11 Jan 2022 02:34:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxytfC/4zVyaFEZyJkFMGdlhFnoSEUk7DE69obyXqdBB41oob5wEcvL0/bGVUh6V84FVmzg0w==
-X-Received: by 2002:a50:ef11:: with SMTP id m17mr3604237eds.77.1641897286890;
-        Tue, 11 Jan 2022 02:34:46 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id 26sm3464078ejk.166.2022.01.11.02.34.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 02:34:46 -0800 (PST)
-Message-ID: <42c83ec8-bbac-85e2-9ab5-87e59a679f95@redhat.com>
-Date:   Tue, 11 Jan 2022 11:34:45 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WW/ErXuM7aTThn8DyOtAxfHC+Lf/dAu6aF/ysr/kDtQ=;
+        b=y9iga9Mwl6MJyqvfOCNo0lN6cUHDwrzK19s3hV5fPifp2rLwdIHbYjhP5KbwiYeGCD
+         zA37kM4vm0S+nvf7NN06h3C/tKzFuBUyF0Ptb6n0RXG3WRjCcpna8pydUQ/pTIXbmzBQ
+         Ny+R8nR0mZSMm559LROWb7yDP/BZqqrpxmeyDP2I/H8xZGrgzLgqYq1RA9QklYyxHLuF
+         RYKJFXnTiAq3xPy4smNGWJno2M8TBZvgkkOvPFiGSfTIvwty/yCFNDfsKIxkKZRTWjt4
+         +70vZuiGXV+Maz+aUBoMsxyzMjaKY6WEsw7UQBwSLgaN5/OmBpdqCxeiHBIWklCKlEmJ
+         OPdA==
+X-Gm-Message-State: AOAM5338WYczeZ49GCiOj6hqx6T6q8nsPyHQukoNfMJ21m0V5jiNoK3H
+        dgAqVHDViF2xfgcWfb0pmmszpJ9aCWbY6IdzG+8=
+X-Google-Smtp-Source: ABdhPJwt9p/tA3IkzY4pwfvtSr0KZDZ035KTUfqJ7iLltePV28fkkpcn/7KMIUQ58fumeDWt58a21jTwY1bs+1+spiw=
+X-Received: by 2002:a05:6214:2522:: with SMTP id gg2mr3178151qvb.65.1641898293761;
+ Tue, 11 Jan 2022 02:51:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: Touchpad stickiness on AMD laptops (was Dell Inspiron/XPS)
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andrea Ippolito <andrea.ippo@gmail.com>,
-        dmitry.torokhov@gmail.com, Alex Hung <alex.hung@canonical.com>,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Benjamin Tissoires <btissoir@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <CAGhUXvBw4rzCQrqttyyS=Psxmhppk79c6fDoxPbV91jE7fO_9A@mail.gmail.com>
- <CAGhUXvDNj2v3O==+wWWKPYVzej8Vq+WNiBtPwmYxSQ2dTuLb9Q@mail.gmail.com>
- <CAGhUXvC8eHfxEKzkGN06VvRU6Z0ko7MJ9hF6uXNq+PxRZSbEmQ@mail.gmail.com>
- <70cbe360-6385-2536-32bd-ae803517d2b2@redhat.com> <YdbrLz3tU4ohANDk@ninjato>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YdbrLz3tU4ohANDk@ninjato>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220109132613.122912-1-guoheyi@linux.alibaba.com> <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
+In-Reply-To: <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 11 Jan 2022 10:51:22 +0000
+Message-ID: <CACPK8XcYp9iAD3fjBQCax41C-1UpA+1AQW3epyEooYzNLt7R5g@mail.gmail.com>
+Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after timeout
+To:     Heyi Guo <guoheyi@linux.alibaba.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+On Tue, 11 Jan 2022 at 07:52, Heyi Guo <guoheyi@linux.alibaba.com> wrote:
+>
+> Hi all,
+>
+> Any comments?
+>
+> Thanks,
+>
+> Heyi
+>
+> =E5=9C=A8 2022/1/9 =E4=B8=8B=E5=8D=889:26, Heyi Guo =E5=86=99=E9=81=93:
+> > The memory will be freed by the caller if transfer timeout occurs,
+> > then it would trigger kernel panic if the peer device responds with
+> > something after timeout and triggers the interrupt handler of aspeed
+> > i2c driver.
+> >
+> > Set the msgs pointer to NULL to avoid invalid memory reference after
+> > timeout to fix this potential kernel panic.
 
-On 1/6/22 14:14, Wolfram Sang wrote:
-> Hi Hans,
-> 
-> bumping this old thread because there might be some progress and it
-> still affects quite some people.
-> 
->> But I must be honest here, I don't see much progress being made
->> on this until someone with a significant amount of kernel / hw-enablement
->> experience gets it hands on one of these models. Either because some
-> 
-> So, I am quite optimistic that Andrea's issue is the same one which
-> Miroslav Bendik dived into [1]. I will surely try to help with part of
-> the PIIX I2C driver, but I lack the experience with the RMI4 driver. I
-> wonder if you could have a look and maybe share your thoughts?
-> 
-> Thanks and all the best,
-> 
->    Wolfram
-> 
-> [1] https://lore.kernel.org/r/CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com
+Thanks for the patch. How did you discover this issue? Do you have a
+test I can run to reproduce the crash?
 
-Benjamin Tissoires really is the export on the synaptics PS/2 -> switch to
-smbus mode devices, he did all the initial hw-enablement for them.
+Can you provide a Fixes tag?
 
-Benjamin, see the email Wolfram linked above. It seems that on AMD
-laptops we have synaptics intertouch devices connected to a plain
-PIIX4 compatible I2C controller.
+Do other i2c master drivers do this? I took a quick look at the meson
+driver and it doesn't appear to clear it's pointer to msgs.
 
-So we need to either add support for SMBUS host-notify to the
-PIIX4 smbus driver (at least for AMD parts) or we need to support
-OOB IRQ signalling in the rmi4 code, assuming there is an OOB IRQ
-at all.
-
-I've also added Mario Limonciello from AMD's client group to the Cc,
-
-Mario, we can really use some help / insight from AMD here, both with
-the problem to detect the IO addresses of the AMD PIIX4 compatible
-smbus controller as well as with smbus host-notify support, see:
-
-https://lore.kernel.org/r/CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com
-
-Regards,
-
-Hans
-
+> >
+> > Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
+> >
+> > -------
+> >
+> > Cc: Brendan Higgins <brendanhiggins@google.com>
+> > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> > Cc: Joel Stanley <joel@jms.id.au>
+> > Cc: Andrew Jeffery <andrew@aj.id.au>
+> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> > Cc: linux-i2c@vger.kernel.org
+> > Cc: openbmc@lists.ozlabs.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-aspeed@lists.ozlabs.org
+> > ---
+> >   drivers/i2c/busses/i2c-aspeed.c | 5 +++++
+> >   1 file changed, 5 insertions(+)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-a=
+speed.c
+> > index 67e8b97c0c950..3ab0396168680 100644
+> > --- a/drivers/i2c/busses/i2c-aspeed.c
+> > +++ b/drivers/i2c/busses/i2c-aspeed.c
+> > @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_adapt=
+er *adap,
+> >               spin_lock_irqsave(&bus->lock, flags);
+> >               if (bus->master_state =3D=3D ASPEED_I2C_MASTER_PENDING)
+> >                       bus->master_state =3D ASPEED_I2C_MASTER_INACTIVE;
+> > +             /*
+> > +              * All the buffers may be freed after returning to caller=
+, so
+> > +              * set msgs to NULL to avoid memory reference after freei=
+ng.
+> > +              */
+> > +             bus->msgs =3D NULL;
+> >               spin_unlock_irqrestore(&bus->lock, flags);
+> >
+> >               return -ETIMEDOUT;
