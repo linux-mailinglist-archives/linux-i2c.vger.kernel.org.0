@@ -2,129 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 072C448ABB3
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jan 2022 11:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8F248AC39
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jan 2022 12:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237965AbiAKKvf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Jan 2022 05:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237719AbiAKKvf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jan 2022 05:51:35 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFE1C06173F;
-        Tue, 11 Jan 2022 02:51:34 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id kc16so18000095qvb.3;
-        Tue, 11 Jan 2022 02:51:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WW/ErXuM7aTThn8DyOtAxfHC+Lf/dAu6aF/ysr/kDtQ=;
-        b=iy8TwFF44l+/tUgYTLhp7Cm+F03uo/wvxz6bjpch4q9ZrjF8KY4CTo4cH0pcLNIPQZ
-         WgmTqDF14LmBZTQ/CK0AJ6CZrQ1V6VVJ+Gur0yR78DsI7OqeyG15uEZr+KwjW7w3ABhE
-         151Tv7E2gmimx0dpdcSfYjPPuWUqmpfXDtEEI=
+        id S238485AbiAKLNY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Jan 2022 06:13:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30735 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238339AbiAKLNY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jan 2022 06:13:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641899603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CJn1ZsUO+57yCIA3zW0DEiH6tI8kFy3djSlOrMnh6YQ=;
+        b=EOB0SGZ+FQJPsdE9Ys2C53wA65pssgpgx11CS5jV6EG8QiiPq6wBWia5Wj3b+SeVFE1Wm3
+        bT0zG1Evy0w/6ZwzsafBIZtINtU0oEle+M3qmG+LNDhYAwB8DfN4aRoKLqIaGnFinAtogB
+        Rb71pf2GPME5SoEWksWx+SWrSV5VH9U=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-659-VehzKCY_MzukvxPSLocAFg-1; Tue, 11 Jan 2022 06:13:20 -0500
+X-MC-Unique: VehzKCY_MzukvxPSLocAFg-1
+Received: by mail-pj1-f72.google.com with SMTP id h7-20020a17090a2ec700b001b31de90894so3185112pjs.2
+        for <linux-i2c@vger.kernel.org>; Tue, 11 Jan 2022 03:13:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WW/ErXuM7aTThn8DyOtAxfHC+Lf/dAu6aF/ysr/kDtQ=;
-        b=y9iga9Mwl6MJyqvfOCNo0lN6cUHDwrzK19s3hV5fPifp2rLwdIHbYjhP5KbwiYeGCD
-         zA37kM4vm0S+nvf7NN06h3C/tKzFuBUyF0Ptb6n0RXG3WRjCcpna8pydUQ/pTIXbmzBQ
-         Ny+R8nR0mZSMm559LROWb7yDP/BZqqrpxmeyDP2I/H8xZGrgzLgqYq1RA9QklYyxHLuF
-         RYKJFXnTiAq3xPy4smNGWJno2M8TBZvgkkOvPFiGSfTIvwty/yCFNDfsKIxkKZRTWjt4
-         +70vZuiGXV+Maz+aUBoMsxyzMjaKY6WEsw7UQBwSLgaN5/OmBpdqCxeiHBIWklCKlEmJ
-         OPdA==
-X-Gm-Message-State: AOAM5338WYczeZ49GCiOj6hqx6T6q8nsPyHQukoNfMJ21m0V5jiNoK3H
-        dgAqVHDViF2xfgcWfb0pmmszpJ9aCWbY6IdzG+8=
-X-Google-Smtp-Source: ABdhPJwt9p/tA3IkzY4pwfvtSr0KZDZ035KTUfqJ7iLltePV28fkkpcn/7KMIUQ58fumeDWt58a21jTwY1bs+1+spiw=
-X-Received: by 2002:a05:6214:2522:: with SMTP id gg2mr3178151qvb.65.1641898293761;
- Tue, 11 Jan 2022 02:51:33 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=CJn1ZsUO+57yCIA3zW0DEiH6tI8kFy3djSlOrMnh6YQ=;
+        b=HPfOQNLoywx0HOA80Zdrl8oHd74TJCcw7810E5xd2vLLrbVtvBqw4xtJfBWJblIZiM
+         u2Xb+RzORnAETUopHM8B5i4YXYj9Jp0dAQ7WAOLCmXjEIIyOIis3jIKCVHyxcDu0cSyc
+         8WTadMR5BJVDxlz5GWA4XLDcHfkFns+3SV7iq9G9TRRZbiWXy6a8X5MgHTHAvvVUsOs8
+         HLooSQHTDDB1MbmpcxQxURuHDCkkPzpU8SnI7moQGS0BSOqCvEIZcaSYl4n59asieLGH
+         +SQTuF7jpn9FZDuBkAUbYN0gMm666IRlLc/wmcdFzeCXkpCX3Rb4n7ImdychMh3t1ah5
+         NJWg==
+X-Gm-Message-State: AOAM531g4KiN/gFX9Bu2BLTDHJYIVzl0u/c2xtKcpNugdE60ma0sdTbP
+        XVzCYtizMPDnd/2XRRITehT6wR4dgjKnl7Bog2by/ZnfNZx1W9X90psUAxg+oRAdc42xw6vkhtZ
+        nsgbtZM14oI8DIenbAXLEFESqBCW67ccKPcPc
+X-Received: by 2002:a17:90a:380b:: with SMTP id w11mr2568389pjb.113.1641899599513;
+        Tue, 11 Jan 2022 03:13:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxF/JTj/8l5xS1aq99JcTum7f5Q6llZ/VZkO/th5eIeq1asWLdONyuTs3xJ58A9ZBRt+zKQEiV4xn7ogC3kXmk=
+X-Received: by 2002:a17:90a:380b:: with SMTP id w11mr2568366pjb.113.1641899599281;
+ Tue, 11 Jan 2022 03:13:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20220109132613.122912-1-guoheyi@linux.alibaba.com> <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
-In-Reply-To: <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 11 Jan 2022 10:51:22 +0000
-Message-ID: <CACPK8XcYp9iAD3fjBQCax41C-1UpA+1AQW3epyEooYzNLt7R5g@mail.gmail.com>
-Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after timeout
-To:     Heyi Guo <guoheyi@linux.alibaba.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>
+References: <CAGhUXvBw4rzCQrqttyyS=Psxmhppk79c6fDoxPbV91jE7fO_9A@mail.gmail.com>
+ <CAGhUXvDNj2v3O==+wWWKPYVzej8Vq+WNiBtPwmYxSQ2dTuLb9Q@mail.gmail.com>
+ <CAGhUXvC8eHfxEKzkGN06VvRU6Z0ko7MJ9hF6uXNq+PxRZSbEmQ@mail.gmail.com>
+ <70cbe360-6385-2536-32bd-ae803517d2b2@redhat.com> <YdbrLz3tU4ohANDk@ninjato> <42c83ec8-bbac-85e2-9ab5-87e59a679f95@redhat.com>
+In-Reply-To: <42c83ec8-bbac-85e2-9ab5-87e59a679f95@redhat.com>
+From:   Benjamin Tissoires <btissoir@redhat.com>
+Date:   Tue, 11 Jan 2022 12:13:08 +0100
+Message-ID: <CAO-hwJJ9ALxpd5oRU8SQ3F65hZjDitR=MzmwDk=uiEguaXZYtw@mail.gmail.com>
+Subject: Re: Touchpad stickiness on AMD laptops (was Dell Inspiron/XPS)
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Andrea Ippolito <andrea.ippo@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alex Hung <alex.hung@canonical.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, 11 Jan 2022 at 07:52, Heyi Guo <guoheyi@linux.alibaba.com> wrote:
+On Tue, Jan 11, 2022 at 11:34 AM Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> Hi all,
+> Hi Wolfram,
 >
-> Any comments?
->
-> Thanks,
->
-> Heyi
->
-> =E5=9C=A8 2022/1/9 =E4=B8=8B=E5=8D=889:26, Heyi Guo =E5=86=99=E9=81=93:
-> > The memory will be freed by the caller if transfer timeout occurs,
-> > then it would trigger kernel panic if the peer device responds with
-> > something after timeout and triggers the interrupt handler of aspeed
-> > i2c driver.
+> On 1/6/22 14:14, Wolfram Sang wrote:
+> > Hi Hans,
 > >
-> > Set the msgs pointer to NULL to avoid invalid memory reference after
-> > timeout to fix this potential kernel panic.
+> > bumping this old thread because there might be some progress and it
+> > still affects quite some people.
+> >
+> >> But I must be honest here, I don't see much progress being made
+> >> on this until someone with a significant amount of kernel / hw-enablement
+> >> experience gets it hands on one of these models. Either because some
+> >
+> > So, I am quite optimistic that Andrea's issue is the same one which
+> > Miroslav Bendik dived into [1]. I will surely try to help with part of
+> > the PIIX I2C driver, but I lack the experience with the RMI4 driver. I
+> > wonder if you could have a look and maybe share your thoughts?
+> >
+> > Thanks and all the best,
+> >
+> >    Wolfram
+> >
+> > [1] https://lore.kernel.org/r/CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com
+>
+> Benjamin Tissoires really is the export on the synaptics PS/2 -> switch to
+> smbus mode devices, he did all the initial hw-enablement for them.
+>
+> Benjamin, see the email Wolfram linked above. It seems that on AMD
+> laptops we have synaptics intertouch devices connected to a plain
+> PIIX4 compatible I2C controller.
 
-Thanks for the patch. How did you discover this issue? Do you have a
-test I can run to reproduce the crash?
+Oh, nice (looking at the thread). IIRC last time somebody tried to
+communicate with those touchpads it wasn't working at all.
 
-Can you provide a Fixes tag?
+>
+> So we need to either add support for SMBUS host-notify to the
+> PIIX4 smbus driver (at least for AMD parts) or we need to support
+> OOB IRQ signalling in the rmi4 code, assuming there is an OOB IRQ
+> at all.
 
-Do other i2c master drivers do this? I took a quick look at the meson
-driver and it doesn't appear to clear it's pointer to msgs.
+If the touchpad is using SMBus, we need to have Host Notify. Google
+gave me the following datasheet for PIIX4
+https://www.intel.com/Assets/PDF/datasheet/290562.pdf and it seems we
+would need to enable something in the section 7.3.9.
 
-> >
-> > Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
-> >
-> > -------
-> >
-> > Cc: Brendan Higgins <brendanhiggins@google.com>
-> > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> > Cc: Joel Stanley <joel@jms.id.au>
-> > Cc: Andrew Jeffery <andrew@aj.id.au>
-> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> > Cc: linux-i2c@vger.kernel.org
-> > Cc: openbmc@lists.ozlabs.org
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-aspeed@lists.ozlabs.org
-> > ---
-> >   drivers/i2c/busses/i2c-aspeed.c | 5 +++++
-> >   1 file changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-a=
-speed.c
-> > index 67e8b97c0c950..3ab0396168680 100644
-> > --- a/drivers/i2c/busses/i2c-aspeed.c
-> > +++ b/drivers/i2c/busses/i2c-aspeed.c
-> > @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_adapt=
-er *adap,
-> >               spin_lock_irqsave(&bus->lock, flags);
-> >               if (bus->master_state =3D=3D ASPEED_I2C_MASTER_PENDING)
-> >                       bus->master_state =3D ASPEED_I2C_MASTER_INACTIVE;
-> > +             /*
-> > +              * All the buffers may be freed after returning to caller=
-, so
-> > +              * set msgs to NULL to avoid memory reference after freei=
-ng.
-> > +              */
-> > +             bus->msgs =3D NULL;
-> >               spin_unlock_irqrestore(&bus->lock, flags);
-> >
-> >               return -ETIMEDOUT;
+However, without the hardware it's going to be tough for me to enable :/
+
+For regular I2C touchpads, there is an OOB IRQ we can set up, but when
+the devices are presented and enabled through PS/2 first, they are
+using SMBus only AFAICT.
+
+Cheers,
+Benjamin
+
+>
+> I've also added Mario Limonciello from AMD's client group to the Cc,
+>
+> Mario, we can really use some help / insight from AMD here, both with
+> the problem to detect the IO addresses of the AMD PIIX4 compatible
+> smbus controller as well as with smbus host-notify support, see:
+>
+> https://lore.kernel.org/r/CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com
+>
+> Regards,
+>
+> Hans
+>
+
