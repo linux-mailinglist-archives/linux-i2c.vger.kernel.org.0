@@ -2,51 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D9348A8DC
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jan 2022 08:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38E148A8E8
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jan 2022 08:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235901AbiAKHvK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 11 Jan 2022 02:51:10 -0500
-Received: from mail.BETTERBIZ.PL ([45.86.209.138]:55068 "EHLO
-        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbiAKHvK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jan 2022 02:51:10 -0500
-Received: by mail.betterbiz.pl (Postfix, from userid 1001)
-        id E0D5B828B6; Tue, 11 Jan 2022 02:45:40 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
-        t=1641887469; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
-        h=Date:From:To:Subject:From;
-        b=p1K6c9ieMHMygx8I0QO3GtHA5mZzcst77ed88w7JJNcyNX4m4Jpg6asJNqZBw8Usn
-         9eSqbUeIlFi41vYWZWz+/0QxuabsLMdmd0dLJjIEWh8JkyB/9mjpYdhR1Jao+qbfd8
-         zb443DaIxaatws16Kowz7P/8aJGRgeFOMSZ+o32xJ3mdzkWFJsiCswcYVMe2h+E41i
-         N47ut1mTS0K6g13S/eTZJ+BfYsMv6BoaehrWjr2Aje1rVc4yPY3rb7lvEi/m2jt7AF
-         BieapIpdpL53b1YNgU2NaDhpNHVVxc1ACyaSrFCTufavPgKqluwodf7ldXmtliMClu
-         YQEX3M/+um1Og==
-Received: by mail.betterbiz.pl for <linux-i2c@vger.kernel.org>; Tue, 11 Jan 2022 07:45:38 GMT
-Message-ID: <20220111024500-0.1.o.10bi.0.hh4oj5fvgd@betterbiz.pl>
-Date:   Tue, 11 Jan 2022 07:45:38 GMT
-From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
-To:     <linux-i2c@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.betterbiz.pl
+        id S236084AbiAKHwa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 11 Jan 2022 02:52:30 -0500
+Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:38615 "EHLO
+        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236041AbiAKHw3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 11 Jan 2022 02:52:29 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V1YjgdZ_1641887545;
+Received: from 30.225.139.228(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V1YjgdZ_1641887545)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 11 Jan 2022 15:52:27 +0800
+Message-ID: <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
+Date:   Tue, 11 Jan 2022 15:52:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after
+ timeout
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+References: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
+From:   Heyi Guo <guoheyi@linux.alibaba.com>
+In-Reply-To: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi all,
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Any comments?
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+Thanks,
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+Heyi
 
-
-Pozdrawiam,
-Jakub Daroch
+在 2022/1/9 下午9:26, Heyi Guo 写道:
+> The memory will be freed by the caller if transfer timeout occurs,
+> then it would trigger kernel panic if the peer device responds with
+> something after timeout and triggers the interrupt handler of aspeed
+> i2c driver.
+>
+> Set the msgs pointer to NULL to avoid invalid memory reference after
+> timeout to fix this potential kernel panic.
+>
+> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
+>
+> -------
+>
+> Cc: Brendan Higgins <brendanhiggins@google.com>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Joel Stanley <joel@jms.id.au>
+> Cc: Andrew Jeffery <andrew@aj.id.au>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: linux-i2c@vger.kernel.org
+> Cc: openbmc@lists.ozlabs.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-aspeed@lists.ozlabs.org
+> ---
+>   drivers/i2c/busses/i2c-aspeed.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+> index 67e8b97c0c950..3ab0396168680 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
+>   		spin_lock_irqsave(&bus->lock, flags);
+>   		if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
+>   			bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
+> +		/*
+> +		 * All the buffers may be freed after returning to caller, so
+> +		 * set msgs to NULL to avoid memory reference after freeing.
+> +		 */
+> +		bus->msgs = NULL;
+>   		spin_unlock_irqrestore(&bus->lock, flags);
+>   
+>   		return -ETIMEDOUT;
