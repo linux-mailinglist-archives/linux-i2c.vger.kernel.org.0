@@ -2,79 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A65E48C840
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 17:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A51F48CDD0
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 22:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355168AbiALQ1X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Jan 2022 11:27:23 -0500
-Received: from mga07.intel.com ([134.134.136.100]:23755 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349786AbiALQ1U (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:27:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642004839; x=1673540839;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cNBpfFoHqPuz0zcd6tz8l/vAk1K6ivBaRN+f33DpqwQ=;
-  b=ASct3LNplB69yAqS+n1IhiWag76WsMOuPxygSUcyUwyJpgSym3zReXbK
-   IBi1cj4vKrtniZeoru8N6GtDHdpUNoMra1bqMU2He/qi2kTIGemjxHv9y
-   2jx+WLNvb6r/krRsA1ycLuy1IijnWM7MfEVP7f5JwsysgCyB2WwXyus/z
-   2ZWsWWKCO9J4Jdzwnqv+/bjIxJrRx3HTPETtmgUcPj1JgDwa3+1agDZoL
-   HzfRl/xMMMLvpNLlrGnL6kPZ4FtfKUUupkoI7ykGeZP90a778xYDq+KEj
-   MN+MOpsOjQBFgSVWS4hyAogwg6HUS8q0ZR87emtfiVDIQLgbH7yMcPj/7
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="307120901"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="307120901"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 08:22:59 -0800
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="529239592"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 08:22:42 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n7gNK-009l6p-Ao;
-        Wed, 12 Jan 2022 18:21:26 +0200
-Date:   Wed, 12 Jan 2022 18:21:26 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        id S232919AbiALVcg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Jan 2022 16:32:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230014AbiALVcf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jan 2022 16:32:35 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAE9C061748
+        for <linux-i2c@vger.kernel.org>; Wed, 12 Jan 2022 13:32:34 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7lDU-0003cg-GC; Wed, 12 Jan 2022 22:31:36 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7lDG-009xGd-W3; Wed, 12 Jan 2022 22:31:22 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7lDF-0004hw-SN; Wed, 12 Jan 2022 22:31:21 +0100
+Date:   Wed, 12 Jan 2022 22:31:21 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>, linux-iio@vger.kernel.org,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
         Guenter Roeck <groeck@chromium.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         MTD Maling List <linux-mtd@lists.infradead.org>,
         Linux I2C <linux-i2c@vger.kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
         Khuong Dinh <khuong@os.amperecomputing.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
         "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
         Linux PWM List <linux-pwm@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
         Robert Richter <rric@kernel.org>,
         Saravanan Sekar <sravanhome@gmail.com>,
         Corey Minyard <minyard@acm.org>,
@@ -88,37 +76,34 @@ Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Alex Williamson <alex.williamson@redhat.com>,
         Mark Brown <broonie@kernel.org>,
         Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        openipmi-developer@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
         Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Richard Weinberger <richard@nod.at>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
         Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Cornelia Huck <cohuck@redhat.com>,
         Linux MMC List <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
         Vinod Koul <vkoul@kernel.org>,
         James Morse <james.morse@arm.com>,
         Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
         Brian Norris <computersforpeace@gmail.com>,
-        netdev <netdev@vger.kernel.org>
+        "David S. Miller" <davem@davemloft.net>
 Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <Yd8ABkwagyVevTaE@smile.fi.intel.com>
+Message-ID: <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
 References: <20220110195449.12448-1-s.shtylyov@omp.ru>
  <20220110195449.12448-2-s.shtylyov@omp.ru>
  <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
@@ -126,101 +111,155 @@ References: <20220110195449.12448-1-s.shtylyov@omp.ru>
  <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
  <20220112085009.dbasceh3obfok5dc@pengutronix.de>
  <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <Yd7Z3Qwevb/lEwQZ@lunn.ch>
- <CAMuHMdV2cGvqMppwt9xhpze=pcnHfTozDZMjwT1DkivLD+_nbQ@mail.gmail.com>
- <CAJZ5v0iyAHtDe1kFObQorXOX0Xraxac0j29Dh+8sq7zxzbsmcQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="c63mbqxqltqrb5xh"
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iyAHtDe1kFObQorXOX0Xraxac0j29Dh+8sq7zxzbsmcQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 03:41:38PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Jan 12, 2022 at 2:55 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > Hi Andrew,
-> >
-> > On Wed, Jan 12, 2022 at 2:38 PM Andrew Lunn <andrew@lunn.ch> wrote:
-> > > > If an optional IRQ is not present, drivers either just ignore it (e.g.
-> > > > for devices that can have multiple interrupts or a single muxed IRQ),
-> > > > or they have to resort to polling. For the latter, fall-back handling
-> > > > is needed elsewhere in the driver.
-> > > > To me it sounds much more logical for the driver to check if an
-> > > > optional irq is non-zero (available) or zero (not available), than to
-> > > > sprinkle around checks for -ENXIO. In addition, you have to remember
-> > > > that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
-> > > > (or some other error code) to indicate absence. I thought not having
-> > > > to care about the actual error code was the main reason behind the
-> > > > introduction of the *_optional() APIs.
+
+--c63mbqxqltqrb5xh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jan 12, 2022 at 11:27:02AM +0100, Geert Uytterhoeven wrote:
+> Hi Uwe,
+>=20
+> On Wed, Jan 12, 2022 at 9:51 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > On Wed, Jan 12, 2022 at 09:33:48AM +0100, Geert Uytterhoeven wrote:
+> > > On Mon, Jan 10, 2022 at 10:20 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> > > > On Mon, Jan 10, 2022 at 09:10:14PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > > > On Mon, Jan 10, 2022 at 10:54:48PM +0300, Sergey Shtylyov wrote:
+> > > > > > This patch is based on the former Andy Shevchenko's patch:
+> > > > > >
+> > > > > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shev=
+chenko@linux.intel.com/
+> > > > > >
+> > > > > > Currently platform_get_irq_optional() returns an error code eve=
+n if IRQ
+> > > > > > resource simply has not been found. It prevents the callers fro=
+m being
+> > > > > > error code agnostic in their error handling:
+> > > > > >
+> > > > > >     ret =3D platform_get_irq_optional(...);
+> > > > > >     if (ret < 0 && ret !=3D -ENXIO)
+> > > > > >             return ret; // respect deferred probe
+> > > > > >     if (ret > 0)
+> > > > > >             ...we get an IRQ...
+> > > > > >
+> > > > > > All other *_optional() APIs seem to return 0 or NULL in case an=
+ optional
+> > > > > > resource is not available. Let's follow this good example, so t=
+hat the
+> > > > > > callers would look like:
+> > > > > >
+> > > > > >     ret =3D platform_get_irq_optional(...);
+> > > > > >     if (ret < 0)
+> > > > > >             return ret;
+> > > > > >     if (ret > 0)
+> > > > > >             ...we get an IRQ...
+> > > > >
+> > > > > The difference to gpiod_get_optional (and most other *_optional) =
+is that
+> > > > > you can use the NULL value as if it were a valid GPIO.
+> > > > >
+> > > > > As this isn't given with for irqs, I don't think changing the ret=
+urn
+> > > > > value has much sense.
+> > > >
+> > > > We actually want platform_get_irq_optional() to look different to a=
+ll
+> > > > the other _optional() methods because it is not equivalent. If it
+> > > > looks the same, developers will assume it is the same, and get
+> > > > themselves into trouble.
 > > >
-> > > The *_optional() functions return an error code if there has been a
-> > > real error which should be reported up the call stack. This excludes
-> > > whatever error code indicates the requested resource does not exist,
-> > > which can be -ENODEV etc. If the device does not exist, a magic cookie
-> > > is returned which appears to be a valid resources but in fact is
-> > > not. So the users of these functions just need to check for an error
-> > > code, and fail the probe if present.
-> >
-> > Agreed.
-> >
-> > Note that in most (all?) other cases, the return type is a pointer
-> > (e.g. to struct clk), and NULL is the magic cookie.
-> >
-> > > You seems to be suggesting in binary return value: non-zero
-> > > (available) or zero (not available)
-> >
-> > Only in case of success. In case of a real failure, an error code
-> > must be returned.
-> >
-> > > This discards the error code when something goes wrong. That is useful
-> > > information to have, so we should not be discarding it.
-> >
-> > No, the error code must be retained in case of failure.
-> >
-> > > IRQ don't currently have a magic cookie value. One option would be to
-> > > add such a magic cookie to the subsystem. Otherwise, since 0 is
-> > > invalid, return 0 to indicate the IRQ does not exist.
-> >
-> > Exactly. And using 0 means the similar code can be used as for other
-> > subsystems, where NULL would be returned.
-> >
-> > The only remaining difference is the "dummy cookie can be passed
-> > to other functions" behavior.  Which is IMHO a valid difference,
-> > as unlike with e.g. clk_prepare_enable(), you do pass extra data to
-> > request_irq(), and sometimes you do need to handle the absence of
-> > the interrupt using e.g. polling.
-> >
-> > > The request for a script checking this then makes sense. However, i
-> > > don't know how well coccinelle/sparse can track values across function
-> > > calls. They probably can check for:
-> > >
-> > >    ret = irq_get_optional()
-> > >    if (ret < 0)
-> > >       return ret;
-> > >
-> > > A missing if < 0 statement somewhere later is very likely to be an
-> > > error. A comparison of <= 0 is also likely to be an error. A check for
-> > > > 0 before calling any other IRQ functions would be good. I'm
-> > > surprised such a check does not already existing in the IRQ API, but
-> > > there are probably historical reasons for that.
-> >
-> > There are still a few platforms where IRQ 0 does exist.
-> 
-> Not just a few even.  This happens on a reasonably recent x86 PC:
+> > > Developers already assume it is the same, and thus forget they have
+> > > to check against -ENXIO instead of zero.
 
-Yes, but the timer doesn't use platform_get_irq*() and friends.
+I agree that -ENXIO is unfortunate and -ENOENT would be more in line
+with other functions. I assume it's insane to want to change that.
 
-> rafael@gratch:~/work/linux-pm> head -2 /proc/interrupts
->            CPU0       CPU1       CPU2       CPU3       CPU4       CPU5
->   0:         10          0          0          0          0          0
->  IR-IO-APIC    2-edge
-> timer
+> > Is this an ack for renaming platform_get_irq_optional() to
+> > platform_get_irq_silent()?
+>=20
+> No it isn't ;-)
+>=20
+> If an optional IRQ is not present, drivers either just ignore it (e.g.
+> for devices that can have multiple interrupts or a single muxed IRQ),
+> or they have to resort to polling. For the latter, fall-back handling
+> is needed elsewhere in the driver.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I think irq are not suitable for such a dummy handling. For clocks or
+GPIOs there are cases where just doing nothing in the absence of a
+certain optional clock or GPIO is fine.
 
+I checked a few users of platform_get_irq_optional() and I didn't find a
+single one that doesn't need to differentiate the irq and the no-irq
+case later. Do you know one? If you do, isn't that so exceptional that
+it doesn't justify the idea of a dummy irq value? So until proven
+otherwise I think platform_get_irq_optional() just isn't in the spirit
+of clk_get_optional() and gpiod_get_optional() because there are no use
+cases where a dummy value would be good enough. (Even if request_irq
+would be a noop for a dummy irq value.)
 
+The motivation why platform_get_irq_optional() was introduced was just
+that platform_get_irq() started to emit an error message (in commit
+7723f4c5ecdb8d832f049f8483beb0d1081cedf6) and the (proportional) few
+drivers where the error message was bad needed a variant that doesn't
+emit the error message. Look at
+31a8d8fa84c51d3ab00bf059158d5de6178cf890, the motivation to use
+platform_get_irq_optional() wasn't that it simplifies handling in the
+driver, but that it doesn't emit an error message. Or
+8f5783ad9eb83747471f61f94dbe209fb9fb8a7d, or
+2fd276c3ee4bd42eb034f8954964a5ae74187c6b, or
+55cc33fab5ac9f7e2a97aa7c564e8b35355886d5. Just look at the output of git
+log -Splatform_get_irq_optional to find some more.
+
+That convinces me, that platform_get_irq_optional() is a bad name. The
+only difference to platform_get_irq is that it's silent. And returning
+a dummy irq value (which would make it aligned with the other _optional
+functions) isn't possible.
+
+> To me it sounds much more logical for the driver to check if an
+> optional irq is non-zero (available) or zero (not available), than to
+> sprinkle around checks for -ENXIO. In addition, you have to remember
+> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
+> (or some other error code) to indicate absence. I thought not having
+> to care about the actual error code was the main reason behind the
+> introduction of the *_optional() APIs.
+
+No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
+that you can handle an absent GPIO (or clk) as if it were available.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--c63mbqxqltqrb5xh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHfSKAACgkQwfwUeK3K
+7AlLYgf/TzHojP4Z3A1x+jOxObpLjnDBfLk/J2fJ3fPc7MQFDJwGCubx9/Taculx
+9FL859wRU0HEqwefh3A61whyx3wDxBePJWJBBvU1jVZE12XHbvfARqHXYlZH3/rs
++NUE/+WdKRh5YlDkOacjJ2x0lj7zudpEqvRquEuCaHNFX1bshPpw723FFZSyVLV3
+8sZFHYevwi62q3h1gUPq6tUZib+WVnmCnladf6UYgGxgJQLu/YdvCm5+lp6N6H8u
+orUVG5PWROmD0F2c504T2qCD7O0hwj+667BfsU5JBAODQJm8dB47BGxjdoU52a2F
+mMckMccinC+jzqqzaJB4DTX2lMD57Q==
+=ndjr
+-----END PGP SIGNATURE-----
+
+--c63mbqxqltqrb5xh--
