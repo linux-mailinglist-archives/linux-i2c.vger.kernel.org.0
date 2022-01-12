@@ -2,94 +2,203 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7242448C3E7
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 13:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A42F48C3F4
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 13:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353122AbiALMZS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Jan 2022 07:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353123AbiALMZO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jan 2022 07:25:14 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C784C06173F
-        for <linux-i2c@vger.kernel.org>; Wed, 12 Jan 2022 04:25:14 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id v1so3309364ioj.10
-        for <linux-i2c@vger.kernel.org>; Wed, 12 Jan 2022 04:25:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r0Ed94N6PJ1HQvpwsTDcBAz1gPfqabvU1XtB9N89ivo=;
-        b=i9YELGkPrF9QildKnEB0Dl461a8mPFeJ9M7JKTP5U2yLPD5Qyis0LkkhVGUzbd0RpI
-         /P9zvBLoXiB15zji+qwH/xUWw+pRZlU1+I1m4SRLHwC6H8/GEBbhK+sL4dz43TxBPrHP
-         fdSDxAOsL7O3hf1tG/sWVsfWRSmoMvMLYA4Dw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r0Ed94N6PJ1HQvpwsTDcBAz1gPfqabvU1XtB9N89ivo=;
-        b=dgZSFtExG+CrMTppOEpq5ZLmxejScQJ6sP74twzxuehqTrtQp7eXAHH2WpViqtv7+V
-         ZcPyCMSUgIfnkxvwBGLnAt+nPHTVSihXkzSsrzE58Jj128LlgzJaTz9j5rZmejOocm6L
-         TgI8ocIiFSMq9I4a1d4xVKSFwiVLZYu5wnnvA3DH400ydLgWB5CLMhccYqXwWLpT21VA
-         HqgFGVsrcKh9vLtavOeHkftFAgfEz2yxsfsBgfDscxYtp7e19UlsJrT+P/Gy6z8xJ7Xz
-         1WIhl1kB0nRq9wkHmhwp0qmF1ygSzQYzCIVpL29i9oC1URHcsKMpcTfgbhOYfWPPpI0m
-         jw/g==
-X-Gm-Message-State: AOAM533odrKHJpyjxYSCcfSjHNK5iecEO8dPi/XXnXo3mjc9CBZJThPV
-        AOWMRKxgmaClglU23AU63fNgn/pMpy4JYNcIRiWIhkMY4QE=
-X-Google-Smtp-Source: ABdhPJz3aWTJ6YHXl+DNpQfRBduYGsa3dA2FrH3qublefl99BTefVU7PwBsvrZTCfAWITEprI8dsA0VWgDMC1jSTU/M=
-X-Received: by 2002:a05:6602:17d0:: with SMTP id z16mr4259571iox.204.1641990313893;
- Wed, 12 Jan 2022 04:25:13 -0800 (PST)
+        id S1353134AbiALM3g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Jan 2022 07:29:36 -0500
+Received: from mga14.intel.com ([192.55.52.115]:52070 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240498AbiALM3e (ORCPT <rfc822;linux-i2c@vger.kernel.org>);
+        Wed, 12 Jan 2022 07:29:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641990574; x=1673526574;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7u2c/+u/7900R51hbSn1pNSHHzU5y3Q///2YVkNposY=;
+  b=j3c7xL3T2Cx1Zsd+ppfFG6/CLjSSvIJEAw4QTVLA6tB2AraYJYhd2MhQ
+   ZzwteHKVxIL0j09G0CGrLjs+Yro29FNWzMSWriqRlEDzj0tuAV+6MAFce
+   FxTZzPfLKL4DYBDV/MG/fFU2d3uqphYsKxOsBZpYCZm676LIkOEOk1zA9
+   GHKd9J8xpYg0QAEoK5ZNSMQlG6vUCblq0FvaR7feDvp7FDMvq+JraGwJw
+   W9CyF2x/uvu0S31lIiDY42CwPpi3G+glyavjQR2Zi03QCWHNKWIQ/lEsp
+   eSrSqKHqfOgdBq6Q9asQ14gg6ZzaY/nwB0wugaZ2F5mzvSs3JUVVIJWL4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="243922983"
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="243922983"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 04:29:32 -0800
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="691367097"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 04:29:15 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1n7cjO-009gDi-VM;
+        Wed, 12 Jan 2022 14:27:58 +0200
+Date:   Wed, 12 Jan 2022 14:27:58 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        openipmi-developer@lists.sourceforge.net,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <Yd7JTvfblG0Ge4AN@smile.fi.intel.com>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
- <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
- <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
-In-Reply-To: <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 12 Jan 2022 20:24:48 +0800
-Message-ID: <CAJMQK-g1pqg05K+ZL0R3i67gitEVoZQ2jbOuL=Q2djBr45soAg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
-To:     Tareque Md Hanif <tarequemd.hanif@yahoo.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 6:58 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> hi Konstantin and Tareque,
->
-> Can you help provide logs if we apply
-> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
-> 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
->
-Another thing might be helpful to test with:
-
-after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
-1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
-i2c_resume_early) and function i2c_suspend_late() and
-i2c_resume_early().
-2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
-NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
-
-Does it still fail if we do 1 or 2?
-
-Sorry that we don't have a platform with intel CPU and amd GPU
-combination to test with.
-
-
-> Thanks
->
-> On Wed, Jan 12, 2022 at 6:02 PM Tareque Md Hanif
-> <tarequemd.hanif@yahoo.com> wrote:
+On Wed, Jan 12, 2022 at 11:27:02AM +0100, Geert Uytterhoeven wrote:
+> On Wed, Jan 12, 2022 at 9:51 AM Uwe Kleine-König
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > On Wed, Jan 12, 2022 at 09:33:48AM +0100, Geert Uytterhoeven wrote:
+> > > On Mon, Jan 10, 2022 at 10:20 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> > > > On Mon, Jan 10, 2022 at 09:10:14PM +0100, Uwe Kleine-König wrote:
+> > > > > On Mon, Jan 10, 2022 at 10:54:48PM +0300, Sergey Shtylyov wrote:
+> > > > > > This patch is based on the former Andy Shevchenko's patch:
+> > > > > >
+> > > > > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/
+> > > > > >
+> > > > > > Currently platform_get_irq_optional() returns an error code even if IRQ
+> > > > > > resource simply has not been found. It prevents the callers from being
+> > > > > > error code agnostic in their error handling:
+> > > > > >
+> > > > > >     ret = platform_get_irq_optional(...);
+> > > > > >     if (ret < 0 && ret != -ENXIO)
+> > > > > >             return ret; // respect deferred probe
+> > > > > >     if (ret > 0)
+> > > > > >             ...we get an IRQ...
+> > > > > >
+> > > > > > All other *_optional() APIs seem to return 0 or NULL in case an optional
+> > > > > > resource is not available. Let's follow this good example, so that the
+> > > > > > callers would look like:
+> > > > > >
+> > > > > >     ret = platform_get_irq_optional(...);
+> > > > > >     if (ret < 0)
+> > > > > >             return ret;
+> > > > > >     if (ret > 0)
+> > > > > >             ...we get an IRQ...
+> > > > >
+> > > > > The difference to gpiod_get_optional (and most other *_optional) is that
+> > > > > you can use the NULL value as if it were a valid GPIO.
+> > > > >
+> > > > > As this isn't given with for irqs, I don't think changing the return
+> > > > > value has much sense.
+> > > >
+> > > > We actually want platform_get_irq_optional() to look different to all
+> > > > the other _optional() methods because it is not equivalent. If it
+> > > > looks the same, developers will assume it is the same, and get
+> > > > themselves into trouble.
+> > >
+> > > Developers already assume it is the same, and thus forget they have
+> > > to check against -ENXIO instead of zero.
 > >
-> >
-> > On 1/12/22 15:51, Wolfram Sang wrote:
-> > > would the reporters of the
-> > > regression be available for further testing?
-> > Sure. I am available.
+> > Is this an ack for renaming platform_get_irq_optional() to
+> > platform_get_irq_silent()?
+> 
+> No it isn't ;-)
+> 
+> If an optional IRQ is not present, drivers either just ignore it (e.g.
+> for devices that can have multiple interrupts or a single muxed IRQ),
+> or they have to resort to polling. For the latter, fall-back handling
+> is needed elsewhere in the driver.
+> To me it sounds much more logical for the driver to check if an
+> optional irq is non-zero (available) or zero (not available), than to
+> sprinkle around checks for -ENXIO. In addition, you have to remember
+> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
+> (or some other error code) to indicate absence. I thought not having
+> to care about the actual error code was the main reason behind the
+> introduction of the *_optional() APIs.
+
+For the record, I'm on the same page with Geert.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
