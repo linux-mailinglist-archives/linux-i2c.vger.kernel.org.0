@@ -2,54 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE0248C797
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 16:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC82648C7AF
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 16:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354793AbiALPuZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Jan 2022 10:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        id S1354849AbiALPzj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Jan 2022 10:55:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354854AbiALPuH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jan 2022 10:50:07 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8EFC06173F;
-        Wed, 12 Jan 2022 07:50:06 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id m4so11576791edb.10;
-        Wed, 12 Jan 2022 07:50:06 -0800 (PST)
+        with ESMTP id S1354850AbiALPze (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jan 2022 10:55:34 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425FBC061748;
+        Wed, 12 Jan 2022 07:55:34 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id q25so11813843edb.2;
+        Wed, 12 Jan 2022 07:55:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TFgnthO3d7FtM/wAdBTZ92v0qtPDXktX81ZqG9bJ8fQ=;
-        b=oHnNrjevdOSf7DCrODGMrKZepHOtsK8oes2SyeUHeIt+wfP9iycEkNz1RsQGaRJrac
-         HogSgaWGQC0QrF8YPXmJ1GPRxJ56iWijWV7acvSETdim6p80qAVMvQwY80Xc+QCbxX7S
-         jn4X5Zd5SUF9rbltiPTehuSakvsgvoVBWIDB0Yfo19KYgBRN44GQM+C3FJgshYMBJEXO
-         jfnj649uZYEypaHs/XGOImVZC2jt5/8pKe6FlKNILwda6cjJY7xXaK2Mdu/5oDm4Zgjf
-         z7wcnuffcY0MRR2i6v0/tjQguZRLIfg7NvFSKmT+4HzC5uvzzA4J2LnTTiyViSvkNWc8
-         EZug==
+        bh=7sr5SESFFMB446XWLFZjyV/pitsS2bsWKxu5hETTxNM=;
+        b=Z2DtGmZd15CFngreVTZS0S8eF7cgf7qNpMDbsRgyUrblkJjHI85j+s6mkaq75JZm5o
+         wEHEL2I0wXsvGpLtxUUV3rqwVXnDb9feupL/z2lSXJsWxcZChRN/j/W939f9yB725iag
+         qwklSKX1aENX/c5ItiOJhEtnVOmv+ZUs847RBU4EICM221XSsQ3t3XhFirGFoFl6TQbN
+         TCPPw7eTuOSJ22n3HaBTIAhTJFOURowETCLAj3qkYfN6YBf3S8zSBpj2BXJ3DvOXUxWZ
+         DRwAEny9Wdzxhgu3ndh5BcOqPEmvCa78a6+JiO7U/ZskfFkwVW4k9gxFhducOkDqRLwH
+         1jUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TFgnthO3d7FtM/wAdBTZ92v0qtPDXktX81ZqG9bJ8fQ=;
-        b=EmX/PycxocwlamQxh4mE3C48mcHm8zhIo9W1/cg9yGpPJTZm+SNPwNMcNfjmxjbFMq
-         ATCnQiKBNOYUdtJWnKrqzHkQSi1AKS1gbxqIpi3xv8j13kXutSMIkqanxLSJcA7AA0BK
-         1hQDuSFkvxEt1g9jJXmrJJ1KhTnYYQwJHUcP6iDeSxKbXWdWwc5uFPwmYIbGO1hhYgK9
-         S3UWCCwdxcYiKjmpLcAaCh+ZXhPzZucMUrtqjQuzTnthOy7vEFjXh14NNNGI22lFu8yG
-         ROoNX7tUt9kMyBwT/BtFWtlTZs+6YQNJdvQKAM6foARs4bTNFI8t+wOioHIvu0J+yNnA
-         RIfg==
-X-Gm-Message-State: AOAM531zO2Lu5pkeoCrS1vgwnKAR2ej5sMWgxmhwPc+WWPRdhijDo/JU
-        KiOD9ank/W+SbxYNb+3yj1WjcdUD6yD6d+0tu5LXEfniveqcAQ==
-X-Google-Smtp-Source: ABdhPJzFVjXJLI/i85mTVwe5RLCXGOeh2iqt8RVc5alU8UFqmMzCpW8UorxBo0fdR0maPO19R/4OcBSn4B8y+jSYA18=
-X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr225773edc.125.1642002605272;
- Wed, 12 Jan 2022 07:50:05 -0800 (PST)
+        bh=7sr5SESFFMB446XWLFZjyV/pitsS2bsWKxu5hETTxNM=;
+        b=CBApm3Yb4z6wThdpfKHk4VlQhPo1Abhrcy/hzHu//qHjFaBijfQGsZV7XYtckNvIId
+         YFfBYNtyzJ5eOpFzKbNPgMiOi7pR9nb4HvzxTQKa6aUrk618Wm6NBqFVu4juOPzGhVLP
+         OqGqTVDf10NYR0pCJzrDzx/kAXRg+/2gVKqBgbQgXGA3UplchEUSCyu7rstzmZlOam8i
+         APLaosKmoeWZCj6AzxelIqV5fa8e5lndtvLp5ocOjMYFZgnoA0VpxM4Jl7NGeJZAbIIg
+         3I8QcvWBVSW+v/LS/jIBuIEb+9Wmrwkrr81tJkn8/NmYhD2i0THsjXL3N+zUCm9Zxg3P
+         O9Cg==
+X-Gm-Message-State: AOAM5330Afd96KBXUwp4yAFUfNxUcCtlipqnFfQuqFnWhYxYJlDxeEAE
+        K23tysQ82SPEJqkat+eSt53rhtBSQlfuY6m+8Ow=
+X-Google-Smtp-Source: ABdhPJzJXO9xzC/S0TQ24Y7YhDy0ls0vhKKyoj7GKS7LG+kDSY0DZTNtnzQnsn3WgzH7kNxAQFLNTr838SaKfW72fS4=
+X-Received: by 2002:a05:6402:2696:: with SMTP id w22mr270559edd.296.1642002932831;
+ Wed, 12 Jan 2022 07:55:32 -0800 (PST)
 MIME-Version: 1.0
-References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com> <1641996862-26960-3-git-send-email-akhilrajeev@nvidia.com>
-In-Reply-To: <1641996862-26960-3-git-send-email-akhilrajeev@nvidia.com>
+References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com> <1641996862-26960-2-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1641996862-26960-2-git-send-email-akhilrajeev@nvidia.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 12 Jan 2022 17:48:18 +0200
-Message-ID: <CAHp75VewfGiRuT4iBLWZ3YQZdmLfgGGPX180quVZu_NVjz7-cQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] docs: firmware-guide: ACPI: Add named interrupt doc
+Date:   Wed, 12 Jan 2022 17:53:45 +0200
+Message-ID: <CAHp75Vc+uN8MTM4cSMQ5gk7GvgkZwJ7aoKwnFiNjQVM4QTqPVg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] device property: Add device_irq_get_byname
 To:     Akhil R <akhilrajeev@nvidia.com>
 Cc:     Christian Koenig <christian.koenig@amd.com>,
         Dmitry Osipenko <digetx@gmail.com>,
@@ -69,77 +69,62 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 4:15 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+On Wed, Jan 12, 2022 at 4:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
 
-Thanks for doing this, very helpful! My comments below.
+In the subject line: device_irq_get_byname()
 
-> Added details and example for named interrupts in the ACPI Table
+> Get interrupt by name from ACPI table as well.
 
-Table.
+an interrupt
+the ACPI
+
+> Add option to use 'interrupt-names' in _DSD which can map to interrupt by
+
+can be mapped
+Interrupt() resource
+
+(The last one is very important to point out this is only about
+Interrupt() resources for now).
+
+> index. The implementation is similar to 'interrupt-names' in devicetree.
+
+the Device Tree
+
+> Also add a common routine to get irq by name from devicetree and ACPI
+
+IRQ
+Device Tree
+
+> table.
 
 ...
 
-> +Named Interrupts
-> +================
+>  /**
+> + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
+> + * @fwnode:    Pointer to the firmware node
+> + * @name:      IRQ name in interrupt-names property in fwnode
+> + *
+> + * Returns Linux IRQ number on success, errno otherwise.
+
+negative errno
+
+> + */
+> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+> +{
+> +       int index;
+
+> +       if (unlikely(!name))
+
+Don't use unlikely() here.
+
+> +               return -EINVAL;
 > +
-> +Drivers with ACPI node can have names to interrupts in ACPI table which
-> +can be used to get the irq number in the driver.
-
-IRQ
-
-> +The interrupt name can be listed in _DSD as 'interrupt-names'. The names
-> +should be listed as an array of strings which will map to the Interrupt
-> +property in ACPI table corresponding to its index.
-
-'Interrupt property' --> 'Interrupt() resource'
-
-the ACPI
-
-> +The table below shows an example of its usage::
+> +       index = fwnode_property_match_string(fwnode, "interrupt-names",  name);
+> +       if (index < 0)
+> +               return index;
 > +
-> +       Device (DEV0) {
-> +               ...
-> +               Name (_CRS, ResourceTemplate() {
-> +                       ...
-> +                       Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {
-> +                               0x20,
-> +                               0x24
-> +                       }
-> +               })
-> +
-> +               Name (_DSD, Package () {
-> +                       ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-> +                       Package () {
-> +                               Package () {"interrupt-names",
-> +                                       Package (2) {"default", "alert"}},
-> +                       }
-
-                       Package () {
-                               Package () {
-                                        "interrupt-names", Package ()
-{"default", "alert"}
-                               },
-                       }
-
-> +                       ...
-> +               })
-> +       }
-
-Please, drop the indentation to just 4 spaces.
-
-> +The interrupt name 'default' will correspond to 0x20 in Interrupt property
-
-Interrupt() resource
-
-> +and 'alert' to 0x24.
-> +
-> +The driver can call the function - device_irq_get_byname with the device
-
-device_irq_get_byname()
-
-> +and interrupt name as arguments to get the corresponding irq number.
-
-IRQ
+> +       return fwnode_irq_get(fwnode, index);
+> +}
 
 -- 
 With Best Regards,
