@@ -2,125 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0B448C402
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 13:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7242448C3E7
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jan 2022 13:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353145AbiALMaI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 12 Jan 2022 07:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
+        id S1353122AbiALMZS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 12 Jan 2022 07:25:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240498AbiALMaI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jan 2022 07:30:08 -0500
-X-Greylist: delayed 513 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Jan 2022 04:30:07 PST
-Received: from server00.inetadmin.eu (server00.inetadmin.eu [IPv6:2a01:390:1:2:e1b1:2:0:d7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB06BC06173F;
-        Wed, 12 Jan 2022 04:30:07 -0800 (PST)
-Received: from [192.168.1.103] (ip-46.34.226.0.o2inet.sk [46.34.226.0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: miroslav@wisdomtech.sk)
-        by server00.inetadmin.eu (Postfix) with ESMTPSA id 709D413A569;
-        Wed, 12 Jan 2022 13:21:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wisdomtech.sk;
-        s=dkiminetadmin; t=1641990089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PrJWjC6rXy/yziDCyLYQTnCgivshgKBhKhOEpfD/N0Q=;
-        b=kVwogiEB7OXO3+wwYhozP2E3z5QphjWPAVi/fCUvECmjE/5Mqnqm0h6Pael4O3vB+/nA+h
-        D9si/yy1gPEnP8R6sAYFRbpU+X8bhFaigfyaWorpKt4Y0jqj/3O71CCKmcA1C0+AZrOhRN
-        ZCYQ+MRHZP4PUk8Ogak5vZcEV2+kEQg=
-Message-ID: <596d6af1-d67c-b9aa-0496-bd898350865c@wisdomtech.sk>
-Date:   Wed, 12 Jan 2022 13:21:27 +0100
+        with ESMTP id S1353123AbiALMZO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 12 Jan 2022 07:25:14 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C784C06173F
+        for <linux-i2c@vger.kernel.org>; Wed, 12 Jan 2022 04:25:14 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id v1so3309364ioj.10
+        for <linux-i2c@vger.kernel.org>; Wed, 12 Jan 2022 04:25:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r0Ed94N6PJ1HQvpwsTDcBAz1gPfqabvU1XtB9N89ivo=;
+        b=i9YELGkPrF9QildKnEB0Dl461a8mPFeJ9M7JKTP5U2yLPD5Qyis0LkkhVGUzbd0RpI
+         /P9zvBLoXiB15zji+qwH/xUWw+pRZlU1+I1m4SRLHwC6H8/GEBbhK+sL4dz43TxBPrHP
+         fdSDxAOsL7O3hf1tG/sWVsfWRSmoMvMLYA4Dw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r0Ed94N6PJ1HQvpwsTDcBAz1gPfqabvU1XtB9N89ivo=;
+        b=dgZSFtExG+CrMTppOEpq5ZLmxejScQJ6sP74twzxuehqTrtQp7eXAHH2WpViqtv7+V
+         ZcPyCMSUgIfnkxvwBGLnAt+nPHTVSihXkzSsrzE58Jj128LlgzJaTz9j5rZmejOocm6L
+         TgI8ocIiFSMq9I4a1d4xVKSFwiVLZYu5wnnvA3DH400ydLgWB5CLMhccYqXwWLpT21VA
+         HqgFGVsrcKh9vLtavOeHkftFAgfEz2yxsfsBgfDscxYtp7e19UlsJrT+P/Gy6z8xJ7Xz
+         1WIhl1kB0nRq9wkHmhwp0qmF1ygSzQYzCIVpL29i9oC1URHcsKMpcTfgbhOYfWPPpI0m
+         jw/g==
+X-Gm-Message-State: AOAM533odrKHJpyjxYSCcfSjHNK5iecEO8dPi/XXnXo3mjc9CBZJThPV
+        AOWMRKxgmaClglU23AU63fNgn/pMpy4JYNcIRiWIhkMY4QE=
+X-Google-Smtp-Source: ABdhPJz3aWTJ6YHXl+DNpQfRBduYGsa3dA2FrH3qublefl99BTefVU7PwBsvrZTCfAWITEprI8dsA0VWgDMC1jSTU/M=
+X-Received: by 2002:a05:6602:17d0:: with SMTP id z16mr4259571iox.204.1641990313893;
+ Wed, 12 Jan 2022 04:25:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Touchpad stickiness on AMD laptops (was Dell Inspiron/XPS)
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Benjamin Tissoires <btissoir@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andrea Ippolito <andrea.ippo@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alex Hung <alex.hung@canonical.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>
-References: <CAGhUXvBw4rzCQrqttyyS=Psxmhppk79c6fDoxPbV91jE7fO_9A@mail.gmail.com>
- <CAGhUXvDNj2v3O==+wWWKPYVzej8Vq+WNiBtPwmYxSQ2dTuLb9Q@mail.gmail.com>
- <CAGhUXvC8eHfxEKzkGN06VvRU6Z0ko7MJ9hF6uXNq+PxRZSbEmQ@mail.gmail.com>
- <70cbe360-6385-2536-32bd-ae803517d2b2@redhat.com> <YdbrLz3tU4ohANDk@ninjato>
- <42c83ec8-bbac-85e2-9ab5-87e59a679f95@redhat.com>
- <CAO-hwJJ9ALxpd5oRU8SQ3F65hZjDitR=MzmwDk=uiEguaXZYtw@mail.gmail.com>
- <5409e747-0c51-24e2-7ffa-7dd9c8a7aec7@amd.com> <Yd6SRl7sm8zS85Al@ninjato>
-From:   =?UTF-8?Q?Miroslav_Bend=c3=adk?= <miroslav@wisdomtech.sk>
-In-Reply-To: <Yd6SRl7sm8zS85Al@ninjato>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
+ <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
+ <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
+In-Reply-To: <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Wed, 12 Jan 2022 20:24:48 +0800
+Message-ID: <CAJMQK-g1pqg05K+ZL0R3i67gitEVoZQ2jbOuL=Q2djBr45soAg@mail.gmail.com>
+Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
+To:     Tareque Md Hanif <tarequemd.hanif@yahoo.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
- > IIRC tests done by Miroslav showed that interrupt 7 was used for
- > completing SMBus Block transfers and alike, but not for HostNotify. He
- > suspects this is wired via GPIO somehow.
+On Wed, Jan 12, 2022 at 6:58 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> hi Konstantin and Tareque,
+>
+> Can you help provide logs if we apply
+> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
+> 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
+>
+Another thing might be helpful to test with:
 
-This is just speculation. It may be routed to GPIO pin, but think it's more
-likely that AMD implements host notify. I have looked at windwos drivers and
-there is only SMBus driver bundled with synaptics.
+after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
+1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
+i2c_resume_early) and function i2c_suspend_late() and
+i2c_resume_early().
+2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
+NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
 
-Lets look at https://www.intel.com/Assets/PDF/datasheet/290562.pdf 
-(PIIX4 from
-Intel). There is SMBSLVCNT register (page 152). Last bit (Slave Enable) 
-should
-enable interrupt on host notify if slave address matches content of SMBSLVC.
-This register is described on page 135 (SMBUS SLAVE COMMAND). Registers are
-accessible using PCI configuration registers. I have tried this code before
-enabling interrupts without success:
+Does it still fail if we do 1 or 2?
 
-pci_write_config_word(dev, SMBSLVC, 0x2c); // synaptics
+Sorry that we don't have a platform with intel CPU and amd GPU
+combination to test with.
 
-I don't know if this PDF is relevant for AMD. Newest documentation from AMD,
-which i found is:
-https://www.amd.com/system/files/TechDocs/55072_AMD_Family_15h_Models_70h-7Fh_BKDG.pdf
 
-This document describes SMBusSlaveControl on same address (0x08) and 
-SlaveEnable
-looks almost identical.
-
-The interesting part is:
-
-"address that matches the host controller slave port of 10h, a command field
-that matches the SMBus slave control register, and a match of corresponding
-enabled events"
-
-Slave device should send address 10h automatically. Enabled events can 
-be set
-using SMBusSlaveEvent register. I have enabled all (set 0xff to 0x0a / 0x0b
-registers), but i don't know how to set "command field". There is no 
-register
-named "command field". Intel has SMBSLVC, but i can't find corresponding
-register on AMD.
-
-Constant activity on I2C pins can be repeated host notify request from 
-synaptics.
-
-Last interesting fact:
-
-I have recorded register value (except 0x02 and 0x07) after each SMBus
-transaction. This is from last 2 transactions:
-
-0200 0004 5801 0000 0fa9 00ff ff00 a8aa
-0200 0001 5802 0000 0fa9 40ff ff00 a8aa
-
-Every call has SMBusSlaveEvent (register 0x0a) 0x00 except of last 
-command after
-which device is initialized. After this call register has value 0x40. I have
-written 0xff to this register to enable all events in probe function. I 
-don't
-know why it's 0x00 until last transaction.
-
+> Thanks
+>
+> On Wed, Jan 12, 2022 at 6:02 PM Tareque Md Hanif
+> <tarequemd.hanif@yahoo.com> wrote:
+> >
+> >
+> > On 1/12/22 15:51, Wolfram Sang wrote:
+> > > would the reporters of the
+> > > regression be available for further testing?
+> > Sure. I am available.
